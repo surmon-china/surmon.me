@@ -14,8 +14,14 @@
   </footer>
 </template>
 
+<script>
+export default {
+  name: 'footer'
+}
+</script>
+
 <style lang="stylus">
-  @import '../../stylus/variables'
+  // @import '../../stylus/variables'
   footer
     background-color white
     
@@ -23,5 +29,5 @@
       padding 1em
       font-size .9em
       text-align center
-      color $gray-light
+      color #333
 </style>
