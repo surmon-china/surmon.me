@@ -4,6 +4,12 @@
   </aside>
 </template>
 
+<script>
+export default {
+  name: 'aside'
+}
+</script>
+
 <style lang="stylus" scoped>
   aside
     position absolute
