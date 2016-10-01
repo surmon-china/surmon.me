@@ -1,5 +1,41 @@
+<template>
+  <header class="header">
+    <div class="container">
+      <ul class="header-logo">
+        <li class="header-logo-image">
+          <a class="logo-link">
+            <img src="/images/logo-header.svg" class="logo-image">
+          </a>
+        </li>
+        <li class="header-logo-slogan">
+          <span class="header-logo-slogan-text  text-primary">高质量的技术社区</span>
+        </li>
+      </ul>
+
+      <ul class="header-action">
+        <li class="header-action-input">
+          <div class="action-input-block">
+            <i class="icon icon-search"></i>
+            <input type="input" placeholder="输入关键字搜索" class="search-input">
+          </div>
+        </li>
+        <li class="header-action-btn">
+          <a href="" class="btn follow-button">关注</a>
+          <a href="" class="btn favorite-button">收藏</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+</template>
+
+<script>
+export default {
+  name: 'header'
+}
+</script>
+
 <style lang="stylus">
-  @import '../../stylus/variables'
+  // @import '../../stylus/variables'
   .header
     position fixed
     z-index 5
@@ -7,7 +43,7 @@
     left 0
     right 0
     background white
-    border-bottom 1px solid $gray-lighter
+    border-bottom 1px solid #333
     height 4em
 
     .header-logo,
@@ -52,12 +88,12 @@
               
               .search-input
                 border 1px solid #ddd
-                border-radius $border-radius-sm
+                border-radius $3em
                 width 16em
                 height 2.4em
                 padding .5em
                 font-size .8em
-                color $gray-light
+                color #333
                 letter-spacing .05em
               
         &.header-action-btn
@@ -67,33 +103,3 @@
             padding: 1.7em 0.75em
             line-height: 4.4em
 </style>
-
-<template>
-  <header class="header">
-    <div class="container">
-      <ul class="header-logo">
-        <li class="header-logo-image">
-          <a v-link="'/'" class="logo-link">
-            <img src="/images/logo-header.svg" class="logo-image">
-          </a>
-        </li>
-        <li class="header-logo-slogan">
-          <span class="header-logo-slogan-text  text-primary">高质量的技术社区</span>
-        </li>
-      </ul>
-
-      <ul class="header-action">
-        <li class="header-action-input">
-          <div class="action-input-block">
-            <i class="icon icon-search"></i>
-            <input type="input" placeholder="输入关键字搜索" class="search-input">
-          </div>
-        </li>
-        <li class="header-action-btn">
-          <a href="" class="btn follow-button">关注</a>
-          <a href="" class="btn favorite-button">收藏</a>
-        </li>
-      </ul>
-    </div>
-  </header>
-</template>
