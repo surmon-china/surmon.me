@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <header-view></header-view>
-      <div id="main" class="main">
-        <div class="container">
+      <div id="main" class="container">
+        <div class="row">
           <nav-view></nav-view>
-          <article class="article">
+          <article class="article-content">
             <router-view  class="router-view"
                           keep-alive
                           transition
@@ -22,8 +22,6 @@
 
 import { Header, Footer, Aside, Nav } from './components/layout'
 
-console.log(Header)
-
 export default {
   name: 'app',
   components: {
@@ -35,33 +33,24 @@ export default {
 }
 </script>
 
-<style>
-html {
-  height: 100%;
-}
+<style lang="scss">
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding-top: 5em;
+  }
 
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
+  #main {
+    width: 1140px;
+    position: relative;
 
-#app {
-  color: #2c3e50;
-  margin-top: -100px;
-  max-width: 600px;
-  font-family: Source Sans Pro, Helvetica, sans-serif;
-  text-align: center;
-}
-
-#app a {
-  color: #42b983;
-  text-decoration: none;
-}
-
-.logo {
-  width: 100px;
-  height: 100px
-}
+    .article-content {
+      // width: 40em;
+      min-height: 400px;
+      margin: 0 20em 0 11em;
+      position: relative;
+    }
+  }
 </style>
