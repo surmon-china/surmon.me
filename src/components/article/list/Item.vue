@@ -1,5 +1,5 @@
 <style lang="stylus">
-  @import '../../stylus/variables'
+  // @import '../../stylus/variables'
   .article-list-item
     border-bottom 1px dashed $gray-lighter
     // margin-bottom 1em
@@ -100,7 +100,7 @@
 
 export default {
 
-  name: 'ListItemView',
+  name: 'ArticleListItem',
 
   props: {
     item: Object

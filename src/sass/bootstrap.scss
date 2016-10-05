@@ -1,3 +1,13 @@
+/*!
+ * Bootstrap v4.0.0-alpha.4 (http://getbootstrap.com)
+ * Copyright 2011-2016 The Bootstrap Authors
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+
+
+// Core variables and mixins
+@import "~bootstrap/scss/custom";
 
 // variables
 @import "variables.scss";
@@ -5,58 +15,51 @@
 // Iconfont
 @import "iconfont.scss";
 
-// Core variables and mixins
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+// mixins
+@import "~bootstrap/scss/mixins";
 
 // Reset and dependencies
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/normalize";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/print";
-// @import "~bootstrap-sass/assets/stylesheets/bootstrap/glyphicons";
+@import "~bootstrap/scss/normalize";
+@import "~bootstrap/scss/print";
 
 // Core CSS
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/scaffolding";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/type";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/code";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/grid";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/tables";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/forms";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/buttons";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/images";
+@import "~bootstrap/scss/code";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/tables";
+@import "~bootstrap/scss/forms";
+@import "~bootstrap/scss/buttons";
 
 // Components
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/component-animations";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/dropdowns";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/button-groups";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/input-groups";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/navs";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/navbar";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/breadcrumbs";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/pagination";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/pager";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/labels";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/badges";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/jumbotron";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/thumbnails";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/alerts";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/progress-bars";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/media";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/list-group";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/panels";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/responsive-embed";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/wells";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/close";
+@import "~bootstrap/scss/animation";
+@import "~bootstrap/scss/dropdown";
+@import "~bootstrap/scss/button-group";
+@import "~bootstrap/scss/input-group";
+@import "~bootstrap/scss/custom-forms";
+@import "~bootstrap/scss/nav";
+@import "~bootstrap/scss/navbar";
+@import "~bootstrap/scss/card";
+@import "~bootstrap/scss/breadcrumb";
+@import "~bootstrap/scss/pagination";
+@import "~bootstrap/scss/tags";
+@import "~bootstrap/scss/jumbotron";
+@import "~bootstrap/scss/alert";
+@import "~bootstrap/scss/progress";
+@import "~bootstrap/scss/media";
+@import "~bootstrap/scss/list-group";
+@import "~bootstrap/scss/responsive-embed";
+@import "~bootstrap/scss/close";
 
 // Components w/ JavaScript
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/modals";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/tooltip";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/popovers";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/carousel";
+@import "~bootstrap/scss/modal";
+@import "~bootstrap/scss/tooltip";
+@import "~bootstrap/scss/popover";
+@import "~bootstrap/scss/carousel";
 
 // Utility classes
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/utilities";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities";
-
-// Bootswatch - Theme
-@import "bootswatch.scss";
+@import "~bootstrap/scss/utilities";
 
 // Animate.css
 @import "animate.scss";
