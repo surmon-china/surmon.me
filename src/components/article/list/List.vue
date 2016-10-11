@@ -1,13 +1,13 @@
-<style lang="stylus">
-  .articles
-    .article-lists
-      margin-bottom 1em
-      background-color white
-      min-height 1em
-      overflow hidden
-      
-    .article-load
-      background-color white
+<style lang="scss">
+  .articles {
+
+    .article-lists {
+      margin-bottom: 1em;
+      // background-color: white;
+      min-height: 1em;
+      overflow: hidden;
+    }
+  }
 </style>
 
 <template>
@@ -15,18 +15,12 @@
 
     <!-- 列表 -->
     <div class="article-lists">
-      <list-item-view
-        v-for="item in articles"
-        :item="item"
-        :index="$index"
-        track-by="$index">
-      </list-item-view>
+      <list-item v-for="item in articles.data" :item="item"></list-item>
     </div>
 
     <!-- 加载更多 -->
     <div class="article-load">
-      <span class="loading">加载中...</span>
-      <span class="no-more">没有更多</span>
+      <button class="btn btn-block btn-primary">加载更多</button>
     </div>
 
   </div>
@@ -35,17 +29,17 @@
 <script>
 
 // 引入其他模块
-import ListItemView from './ListItemView.vue'
+import ListItem from './Item.vue'
 
 // 定义模块
 export default {
 
   // 组件（模块）名称
-  name: 'ArticleListsView',
+  name: 'article-lists',
 
   // 依赖组件
   components: {
-    ListItemView
+    ListItem
   },
 
   // 绑定的数据
@@ -57,24 +51,15 @@ export default {
   // },
 
   props: {
-    articles: Array
-  },
-
-  // 本View下的子路由
-  route: {
-    data ({ to }) {
-      // const page = +to.params.page
-      // document.title = 'Vue.js HN Clone'
-      // return store.fetchItemsByPage(page).then(items => ({
-      //   page,
-      //   items
-      // }))
+    articles: {
+      type: Object,
+      default: {}
     }
   },
 
   // 创建时
   created () {
-    console.log('文章列表组件被创建')
+    console.log('文章列表组件被创建', this)
     // store.on('topstories-updated', this.update)
   },
 
@@ -91,13 +76,6 @@ export default {
       //   this.items = items
       // })
     }
-  },
-
-  // 私有过滤器
-  filters: {
-    // formatItemIndex (index) {
-    //   return (this.page - 1) * store.storiesPerPage + index + 1
-    // }
   }
 }
 </script>
