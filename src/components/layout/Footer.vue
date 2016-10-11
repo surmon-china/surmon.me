@@ -23,9 +23,10 @@ export default {
 <style lang="stylus">
   // @import '../../stylus/variables'
   footer
+    margin-top: 20px
     background-color white
-    
-    .footer-content 
+
+    .footer-content
       padding 1em
       font-size .9em
       text-align center

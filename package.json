@@ -16,7 +16,11 @@
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.4",
     "vue": "^2.0.1",
-    "vue-router": "^2.0.0"
+    "vue-awesome-swiper": "^1.2.0",
+    "vue-codemirror": "^2.0.0",
+    "vue-router": "^2.0.0",
+    "vue-touch-ripple": "^2.2.1",
+    "vue-video-player": "^2.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",

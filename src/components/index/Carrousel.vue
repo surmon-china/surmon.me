@@ -1,13 +1,12 @@
 <template>
   <div class="carrousel">
     <swiper class="swiper" :options="swiperOption">
-      <swiper-slide class="item" v-for="slide in [1, 2, 3, 4, 5]">
-        <div>初始化后的Swiper实例{{ slide }}</div>
+      <swiper-slide class="item" v-for="slide in slides">
+        <div>
+          <img :src="slide.src">
+        </div>
       </swiper-slide>
       <div class="swiper-pagination"  slot="pagination"></div>
-      <!-- <div class="swiper-button-prev" slot="button-prev"></div> -->
-      <!-- <div class="swiper-button-next" slot="button-next"></div> -->
-      <!-- <div class="swiper-scrollbar"   slot="scrollbar"></div> -->
     </swiper>
   </div>
 </template>
@@ -17,19 +16,25 @@
     name: 'carrousel',
     data() {
       return {
+        slides: [{
+          src: 'http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/09/7916805876895932453.jpg&h=208&w=644&q=90&zc=1',
+        }, {
+          src: 'http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/09/9b0ebdca3e038f08.png&h=208&w=644&q=90&zc=1',
+        },{
+          src: 'http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/themes/Surmon/images/random/2.jpg&h=208&w=644&q=100&zc=1',
+        },{
+          src: 'http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/08/53475e1b938c5.jpg&h=208&w=644&q=90&zc=1',
+        },{
+          src: 'http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/09/7916805876895932453.jpg&h=208&w=644&q=90&zc=1',
+        }],
         swiperOption: {
           autoplay: 3000,
-          // direction : 'vertical',
-          // grabCursor : true,
           setWrapperSize :true,
           autoHeight: true,
           pagination : '.swiper-pagination',
           paginationClickable :true,
-          // prevButton:'.swiper-button-prev',
-          // nextButton:'.swiper-button-next',
-          // scrollbar:'.swiper-scrollbar',
           mousewheelControl : true,
-          observeParents:true,
+          observeParents:true
         }
       }
     }
@@ -41,7 +46,7 @@
     height: 13em;
     margin-bottom: 1em;
     background-color: white;
-    
+
     .swiper-container {
     }
   }
