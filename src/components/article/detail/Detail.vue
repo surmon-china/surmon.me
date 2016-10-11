@@ -1,64 +1,67 @@
+<style lang="stylus">
+  .article
+
+    .detail, .metas, .related, .comment
+      background-color white
+      margin-bottom 1em
+
+    .detail
+
+      .title
+        text-align center
+</style>
+
 <template>
   <div class="article">
-    文章详情页
-    <h3>{{ article.title }}</h3>
-    <div v-html="article.content"></div>
+    <div class="detail">
+      <h3 class="title">{{ article.title }}</h3>
+      <div class="content" v-html="article.content"></div>
+    </div>
+    <div class="metas">
+      这里是一些文章的相关信息
+    </div>
+    <div class="related">
+      <ul class="article-lists">
+        <li class="item" v-for="item in [1,2,3,4,5]">这里是相关文章</li>
+      </ul>
+    </div>
+    <div class="comment">
+      这里是文章的评论
+    </div>
   </div>
 </template>
 
 <script>
 
   // 服务
-  import ArticleService from '../../../services/ArticleService.js'
+  // import ArticleService from '../../../services/ArticleService.js'
 
   export default {
 
     // 模块名称
-    name: 'ArticleDetail',
+    name: 'article-detail',
 
     // 声明 props 获取数据
     // props: {
     //   article: Object
     // },
 
-    data () {
+    data() {
       return {
-        article: {}
+        article: {
+          title: 'JS 原型继承和类式继承',
+          thumb: 'http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/09/2329141422-0.jpg&h=180&w=300&q=90&zc=1',
+          description: '前言 一个多月前，卤煮读了一篇翻译过来的外国人写的技术博客。此君在博客中将js中的类（构造）继承和原型继承做了一些比较，并且得出了结论：建议诸位在开发是用原型继承。文中提到了各种原型继承的优点，详细的露珠不一一说明介绍了。这篇文章的名字是为什么原型继承很重要，有兴趣的同学可以去看，此文有些深度，值得反复阅读。今天这篇文章也来谈谈js中的继承方式以及它们的优缺点。 类式继承（构造函数） ',
+          content: '我是文章内容',
+          date: '2016-10-10',
+          meta: {
+            views: 100,
+            comments: 20,
+          },
+          tag: ['tag1', 'tag2'],
+          category: [{ name: '分类1' }, { name: '分类1' }, { name: '分类1' }]
+        }
       }
-    },
-
-    // 创建前
-    init () {
-      // console.log('文章详情页组件被初始化')
-    },
-
-    // 创建时
-    created () {
-      // let slug = this.$router._currentRoute.params.article_slug;
-      // console.log('文章详情页组件被创建', slug)
-    },
-
-    // 编译前
-    beforeCompile () {
-      // console.log('文章详情页组件编译前')
-    },
-
-    // 编译后
-    compiled () {
-      // console.log('文章详情页组件编译完成')
-    },
-
-    // 编译结束和 $el 第一次插入文档之后
-    ready () {
-      // console.log('文章详情页组件 编译结束和 $el 第一次插入文档之后')
-    },
-
-    // Dom属性变更
-    attached () {
-      let slug = this.$router._currentRoute.params.article_slug;
-      console.log('文章详情页组件 重加载', slug)
-      this.getArticleDetail({ slug: slug })
-      // console.log('文章详情页组件 Dom属性变更（加载）')
     },
 
     // Dom属性删除
@@ -82,20 +85,7 @@
 
     methods: {
       getArticleDetail (params) {
-        console.log(params);
-        ArticleService.getItem(this, params).then(response => {
-          console.log(response)
-          let article = response.data;
-          if (article.code == 1) this.article = article.result;
-          if (article.code == 0) alert(article.message);
-        }, error => {
-          console.log(error)
-        })
       }
     }
   }
 </script>
-
-<style lang="stylus">
-
-</style>

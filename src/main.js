@@ -19,12 +19,17 @@ import routerMap from './routerMap'
 import App from './App'
 
 // Components
-import awesomeSwiper from 'components/common/vue-awesome-swiper'
+import AwesomeSwiper from 'vue-awesome-swiper'
+import CodeMirror from 'vue-codemirror'
+import VideoPlayer from 'vue-video-player'
+import TouchRipple from 'vue-touch-ripple'
 
 // app use
 Vue.use(VueRouter)
-Vue.use(awesomeSwiper)
-
+Vue.use(AwesomeSwiper)
+Vue.use(CodeMirror)
+Vue.use(VideoPlayer)
+Vue.use(TouchRipple)
 
 // 配置路由
 const router = new VueRouter({
