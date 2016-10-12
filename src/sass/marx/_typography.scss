@@ -1,0 +1,149 @@
+body {
+  color: $text;
+  font-family: $font-family;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  padding-top: $navbar-height + 1em;
+  background-color: $body-bg;
+}
+
+p {
+  margin: 0;
+  margin-bottom: $md-pad;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: inherit;
+  font-family: inherit;
+  line-height: inherit;
+}
+
+h1 {
+  border-bottom: $border;
+  font-size: $font-size-h1;
+  font-weight: 500;
+  margin: $lg-pad 0 $md-pad;
+}
+
+h2 {
+  font-size: $font-size-h2;
+  font-weight: 500;
+  margin: $lg-pad 0 $md-pad;
+}
+
+h3 {
+  font-size: $font-size-h3;
+  font-weight: 500;
+  margin: $md-pad 0 $xs-pad;
+}
+
+h4 {
+  font-size: $font-size-h4;
+  font-weight: 600;
+  margin: $md-pad 0 $xs-pad;
+}
+
+h5 {
+  font-size: $font-size-h5;
+  font-weight: 600;
+  margin: $md-pad 0 $xs-pad;
+}
+
+h6 {
+  color: $secondary;
+  font-size: $font-size-h6;
+  font-weight: 600;
+  margin: $md-pad 0 $xs-pad;
+}
+
+small {
+  color: $secondary;
+  vertical-align: bottom;
+}
+
+pre {
+  background: $grey;
+  color: $text;
+  display: block;
+  font-family: $monospace;
+  font-size: $font-size-base;
+  margin: $md-pad 0;
+  padding: $md-pad;
+  white-space: pre-wrap;
+}
+
+code {
+  color: $text;
+  font-family: $monospace;
+  font-size: $font-size-base;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+a {
+  color: $link-color;
+
+  &:hover,
+  &:focus {
+    color: $primary;
+    text-decoration: underline;
+  }
+}
+
+dl {
+  margin-bottom: $md-pad;
+}
+
+dd {
+  margin-left: $xlg-pad;
+}
+
+ul,
+ol {
+  margin-bottom: $sm-pad;
+  padding-left: $xlg-pad;
+  vertical-align: baseline;
+}
+
+blockquote {
+  border-left: 2px solid $primary;
+  font-family: $serif;
+  font-style: italic;
+  margin: $md-pad 0;
+  padding-left: $md-pad;
+}
+
+figcaption {
+  font-family: $serif;
+}
+
+u {
+  text-decoration: underline;
+}
+
+s {
+  text-decoration: line-through;
+}
+
+sup {
+  font-size: $font-size-small;
+  vertical-align: super;
+}
+
+sub {
+  font-size: $font-size-small;
+  vertical-align: sub;
+}
+
+mark {
+  background: $yellow;
+}

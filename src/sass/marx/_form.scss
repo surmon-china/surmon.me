@@ -1,0 +1,157 @@
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="week"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+select {
+  background: $white;
+  border: $border;
+  border-radius: $br;
+  color: $text;
+  display: inline-block;
+  padding: $xs-pad;
+  vertical-align: middle;
+}
+
+input[type="color"], {
+  background: $white;
+  border: $border;
+  border-radius: $br;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+
+input:not([type]) {
+  -webkit-appearance: none;
+  background-clip: padding-box;
+  border: $border;
+  border-radius: $br;
+  display: inline-block;
+  padding: $sm-pad;
+  text-align: left;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+select:focus,
+textarea:focus {
+  border-color: $primary;
+}
+
+input:not([type]):focus {
+  border-color: $primary;
+}
+
+input[type="file"]:focus,
+input[type="radio"]:focus,
+input[type="checkbox"]:focus {
+  outline: 1px thin $dividers;
+}
+
+input[type="text"][disabled],
+input[type="password"][disabled],
+input[type="email"][disabled],
+input[type="url"][disabled],
+input[type="date"][disabled],
+input[type="month"][disabled],
+input[type="time"][disabled],
+input[type="datetime"][disabled],
+input[type="datetime-local"][disabled],
+input[type="week"][disabled],
+input[type="number"][disabled],
+input[type="search"][disabled],
+input[type="tel"][disabled],
+input[type="color"][disabled],
+select[disabled],
+textarea[disabled] {
+  background-color: $dividers;
+  color: $secondary;
+  cursor: not-allowed;
+}
+
+input:not([type])[disabled] {
+  background-color: $dividers;
+  color: $secondary;
+  cursor: not-allowed;
+}
+
+input[readonly],
+select[readonly],
+textarea[readonly] {
+  border-color: $dividers;
+  color: $secondary;
+}
+
+input:focus:invalid,
+textarea:focus:invalid,
+select:focus:invalid {
+  border-color: darken($red, 10);
+  color: $red;
+}
+
+input[type="file"]:focus:invalid:focus,
+input[type="radio"]:focus:invalid:focus,
+input[type="checkbox"]:focus:invalid:focus {
+  outline-color: $red;
+}
+
+select {
+  -webkit-appearance: menulist-button;
+  border: $border;
+  vertical-align: sub;
+}
+
+select[multiple] {
+  height: auto;
+}
+
+label {
+  line-height: 2;
+}
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: $sm-pad 0;
+}
+
+legend {
+  border-bottom: $border;
+  color: $text;
+  display: block;
+  margin-bottom: $sm-pad;
+  padding: $sm-pad 0;
+  width: 100%;
+}
+
+textarea {
+  background: $white;
+  border: $border;
+  border-radius: $br;
+  display: block;
+  margin-bottom: $sm-pad;
+  max-width: 100%;
+  padding: $sm-pad;
+  vertical-align: middle;
+}

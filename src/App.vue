@@ -1,55 +1,45 @@
 <template>
   <div id="app">
+    <background></background>
     <header-view></header-view>
-      <div id="main" class="container">
-        <div class="row">
-          <nav-view></nav-view>
-          <article class="article-content">
-            <router-view  class="router-view"
-                          keep-alive
-                          transition
-                          transition-mode="out-in">
-            </router-view>
-          </article>
-          <aside-view></aside-view>
-        </div>
+    <main id="main">
+      <nav-view></nav-view>
+      <div class="article-content">
+        <router-view  class="router-view"
+                      keep-alive
+                      transition
+                      transition-mode="out-in">
+        </router-view>
       </div>
+      <aside-view></aside-view>
+    </main>
     <footer-view></footer-view>
   </div>
 </template>
 
 <script>
+  import { Background, Header, Footer, Aside, Nav } from './components/layout'
+  export default {
+    name: 'app',
+    components: {
+      Background,
+      headerView: Header,
+      footerView: Footer,
+      asideView: Aside,
+      navView: Nav,
 
-import { Header, Footer, Aside, Nav } from './components/layout'
-
-export default {
-  name: 'app',
-  components: {
-    headerView: Header,
-    footerView: Footer,
-    asideView: Aside,
-    navView: Nav
+    }
   }
-}
 </script>
 
 <style lang="scss">
-  body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding-top: 5em;
-  }
-
-  #main {
-    width: 1140px;
+  main {
     position: relative;
 
     .article-content {
-      // width: 40em;
+      width: 43em;
       min-height: 400px;
-      margin: 0 20em 0 11em;
+      margin: 0 20em 0 12em;
       position: relative;
     }
   }

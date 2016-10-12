@@ -9,11 +9,11 @@ export default [{
   }, {
     name: 'tag',
     path: '/tag/:tag_slug',
-    component: appView.Index
+    component: appView.Tag
   },  {
     name: 'category',
     path: '/category/:category_slug',
-    component: appView.Index
+    component: appView.Tag
   }, {
     name: 'detail',
     path: '/article/:article_id',
