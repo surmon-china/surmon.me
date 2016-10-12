@@ -1,0 +1,36 @@
+table {
+  border-top: $border;
+  margin-bottom: $md-pad;
+}
+
+caption {
+  padding: $sm-pad 0;
+}
+
+thead th {
+  border: 0;
+  border-bottom: 2px solid $dividers;
+  text-align: left;
+}
+
+tr {
+  margin-bottom: $sm-pad;
+}
+
+th,
+td {
+  border-bottom: $border;
+  padding: $md-pad;
+  vertical-align: inherit;
+}
+
+tfoot tr {
+  text-align: left;
+}
+
+tfoot td {
+  color: $secondary;
+  font-size: $sm-pad;
+  font-style: italic;
+  padding: $md-pad $xs-pad;
+}

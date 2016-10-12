@@ -1,0 +1,53 @@
+input[type=submit],
+input[type=reset],
+button {
+  background: $primary;
+  border: $border;
+  border-radius: $br;
+  color: $white;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0;
+  padding: $sm-pad $md-pad;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+input[type=submit]::-moz-focus-inner,
+input[type=reset]::-moz-focus-inner,
+button::-moz-focus-inner {
+  padding: 0;
+}
+
+input[type=submit]:hover,
+input[type=reset]:hover,
+button:hover {
+  background: darken($primary, 10);
+  border-color: 1px solid $secondary;
+}
+
+input[type=submit]:active,
+input[type=reset]:active,
+button:active {
+  background: darken($primary, 10);
+  border-color: 1px solid $secondary;
+  box-shadow: inset 0 0 4px 0 rgba(0, 0, 0, .2);
+  outline-offset: -2px;
+}
+
+input[type=submit]:focus,
+input[type=reset]:focus,
+button:focus {
+  background: darken($primary, 10);
+  border-color: 1px solid $secondary;
+  box-shadow: inset 0 0 4px 0 rgba(0, 0, 0, .2);
+  outline: 0;
+}
+
+input[type=submit]:disabled,
+button:disabled {
+  background: $dividers;
+  color: $disabled;
+  cursor: not-allowed;
+}

@@ -5,7 +5,7 @@
 */
 
 // Bootstrap
-import 'sass/bootstrap.scss'
+import 'sass/app.scss'
 
 
 // Libs
