@@ -1,8 +1,8 @@
 *, *:hover {
-  @include transition(background-color .25s linear, 
-                      color .05s linear, 
-                      opacity .25s linear, 
-                      filter .25s linear, 
+  @include transition(background-color .25s linear,
+                      color .05s linear,
+                      opacity .25s linear,
+                      filter .25s linear,
                       visibility .25s linear,
                       transform .25s linear);
 }
@@ -14,64 +14,7 @@
   margin-bottom: 0px;
 }
 
-.form-horizontal {
-
-  .checkbox {
-    margin: 0;
-    padding: 0;
-  }
-}
-
-// 跑马灯
-.carousel-inner  {
-
-  > .item {
-
-    > img {
-      margin: 0 auto;
-    }
-  }
-}
-
-.carousel-control {
-  background: none;
-  background-image: none!important;
-
-  .carousel-btn {
-    position: absolute;
-    top: 50%;
-    width: 28px;
-    height: 52px;
-    margin-top: -52px;
-    background-repeat: no-repeat;
-    background-size: contain;
-
-    &.left {
-      background-image: url(/static/images/jinchongzi/pre.png);
-    }
-
-    &.right {
-      background-image: url(/static/images/jinchongzi/next.png);
-    }
-  }
-}
-
-.carousel-indicators li {
-    display: inline-block;
-    text-indent: -999px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin: 0;
-    margin-right: 30px;
-    width: 14px !important;
-    height: 14px !important;
-    border-width: 1px;
-    border-color: rgba(51, 51, 51, 0);
-    background-color: rgba(51, 51, 51, 0.5) !important;
-    box-sizing: border-box;
-
-    &.active {
-      margin-right: 30px;
-      background-color: rgba(black,.5) !important;
-    }
+.container {
+  width: $container-width;
+  margin: 0 auto;
 }

@@ -9,30 +9,33 @@
     .item-content {
       display: block;
       overflow: hidden;
-      height: 8.5em;
-      padding: 1em;
+      height: 9em;
+      padding: .5em;
       // border-bottom: 1px dashed #e4e4e4;
 
       .item-thumb {
         float: left;
-        width: 9em;
+        width: 12em;
 
         .item-thumb-img {
           max-width: 100%;
-          height: 6.5em;
+          height: 8em;
         }
       }
 
       .item-body {
         float: right;
-        width: 28em;
-        height: 6.5em;
+        width: 29em;
+        height: 8em;
         padding-top: .2em;
 
         .item-title {
-          // padding: .3em .1em;
-          // padding-top: .3em;
           font-weight: bold;
+          color: #333;
+
+          h5 {
+            margin-top: 0;
+          }
         }
 
         .item-description {
@@ -45,7 +48,8 @@
           text-overflow: ellipsis;
           word-break: break-all;
           -webkit-box-orient: vertical;
-          -webkit-line-clamp: 2;
+          -webkit-line-clamp: 3;
+          line-height: 1.6em;
         }
 
         .item-meta {
@@ -66,33 +70,35 @@
   <div class="article-list-item">
     <div class="item-content">
       <div class="item-thumb">
-          <img class="item-thumb-img"
-               src="http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/11/20120815211519_LZsce.thumb_.600_0.jpeg&h=96&w=144&q=100&zc=1"
-               alt="Generic placeholder image">
+        <router-link to="/article/asdasdasd" class="item">
+         <img class="item-thumb-img" src="http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/11/20120815211519_LZsce.thumb_.600_0.jpeg&h=96&w=144&q=100&zc=1">
+        </router-link>
       </div>
       <div class="item-body">
-        <h6 class="item-title">{{ item.title }}</h6>
+        <router-link to="/article/asdasdasd" class="item-title">
+          <h5>{{ item.title }}</h5>
+        </router-link>
         <p class="item-description">{{ item.description }}</p>
         <div class="item-meta">
           <span class="date">
-            <i class="iconfont icon-clock"></i>
+            <!-- <i class="iconfont icon-clock"></i> -->
             <span>{{ item.date }}</span>
           </span>
           <span class="views">
-            <i class="iconfont icon-eye"></i>
+            <!-- <i class="iconfont icon-eye"></i> -->
             <span>{{ item.meta.views || 0 }}</span>
           </span>
           <span class="comment">
-            <i class="iconfont icon-comment"></i>
+            <!-- <i class="iconfont icon-comment"></i> -->
             <span>{{ item.meta.comments }}</span>
           </span>
           <span class="tag">
-            <i class="iconfont icon-tag"></i>
+            <!-- <i class="iconfont icon-tag"></i> -->
             <span v-if="!item.tag.length">无</span>
             <span v-for="tag in item.tag">{{ tag.name }}</span>
           </span>
           <span class="category">
-            <i class="iconfont icon-list"></i>
+            <!-- <i class="iconfont icon-list"></i> -->
             <span v-if="!item.category.length">未分类</span>
             <span v-for="category in item.category">{{ category.name }}</span>
           </span>

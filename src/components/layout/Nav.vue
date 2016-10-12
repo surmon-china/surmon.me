@@ -1,33 +1,33 @@
 <template>
   <div class="aside-nav">
-    <ul class="list-group">
-      <router-link to="/" class="list-group-item active">
-        <i class="icon icon-ass"></i>
-        <span>首页</span>
+    <ul class="nav-list">
+      <router-link to="/" class="item active">
+        <i class="iconfont icon-home"></i>
+        <span>Home</span>
       </router-link>
-      <router-link to="/article/001" class="list-group-item">
-        <i class="icon icon-ass"></i>
-        <span>文章详情</span>
+      <router-link to="/article/001" class="item">
+        <i class="iconfont icon-code"></i>
+        <span>Code</span>
       </router-link>
-      <router-link to="/data/2015-10-10" class="list-group-item">
-        <i class="icon icon-ass"></i>
-        <span>时间文章列表</span>
+      <router-link to="/data/2015-10-10" class="item">
+        <i class="iconfont icon-tag"></i>
+        <span>Think</span>
       </router-link>
-      <router-link to="/category/javascript" class="list-group-item">
-        <i class="icon icon-ass"></i>
-        <span>分类文章列表</span>
+      <router-link to="/category/javascript" class="item">
+        <i class="iconfont icon-netease-music"></i>
+        <span>Music</span>
       </router-link>
-      <router-link to="/tag/javascript" class="list-group-item">
-        <i class="icon icon-ass"></i>
-        <span>某标签文章列表</span>
+      <router-link to="/tag/javascript" class="item">
+        <i class="iconfont icon-hulianwang"></i>
+        <span>Movie</span>
       </router-link>
-      <router-link to="/guestbook" class="list-group-item">
-        <i class="icon icon-ass"></i>
-        <span>单独页面</span>
-      </router-link>
-      <router-link to="/" class="list-group-item">
-        <i class="icon icon-ass"></i>
+      <router-link to="/guestbook" class="item">
+        <i class="iconfont icon-user"></i>
         <span>About</span>
+      </router-link>
+      <router-link to="/" class="item">
+        <i class="iconfont icon-liuyan"></i>
+        <span>Guestbook</span>
       </router-link>
     </ul>
   </div>
@@ -51,13 +51,36 @@ export default {
     position: fixed;
     top: 5em;
     display: inline-block;
-    width: 10em;
+    width: 11em;
+    background-color: #fff;
 
-    .list-group {
+    .nav-list {
+      padding: .5em;
 
-      .list-group-item {
+      .item {
+        // font-size: .9em;
         border: none;
         border-radius: 0;
+        display: block;
+        width: 100%;
+        height: 3em;
+        line-height: 3em;
+        padding: 0 1em;
+        text-decoration: none;
+
+        &:hover {
+          background-color: #eee;
+        }
+
+        &.active {
+          background-color: #eee;
+          font-weight: 700;
+          // border-left: 3px solid #006cff;
+        }
+
+        .iconfont {
+          margin-right: 1em;
+        }
       }
     }
   }
