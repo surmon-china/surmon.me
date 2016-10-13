@@ -1,18 +1,20 @@
 // container
 $container-width: 75em;
 $body-bg: #eee;
+$module-bg: rgba(255,255,255,0.6);
+$module-hover-bg: rgba(197,197,197,0.4);
 
 //Other
-$navbar-height: 4em;
+$navbar-height: 4.5em;
 
 
 //Basic stylings
 $br: 4px;
 $xs-pad: 4px;
 $sm-pad: 8px;
-$md-pad: 16px;
-$lg-pad: 20px;
-$xlg-pad: 40px;
+$md-pad: 1.2em;
+$lg-pad: 1.5em;
+$xlg-pad: 3em;
 $trans: .3s;
 
 //Breakpoints
@@ -27,16 +29,17 @@ $yellow: #ffeb3b;
 $grey: #efefef;
 $white: #fff;
 $black: #000;
+$black-light: #555;
 
 //Text
-$text: rgba(0, 0, 0, .8);
+$text: $black-light;
 $secondary: rgba(0, 0, 0, .54);
 $disabled: rgba(0, 0, 0, .38);
 $dividers: rgba(0, 0, 0, .12);
 
 //Links
-$link-color: $primary;
-$link-hover-color: darken($link-color, 15%);
+$link-color: $text;
+$link-hover-color: darken($link-color, 20%);
 
 //Font
 $sans-serif: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", "微软雅黑", sans-serif;

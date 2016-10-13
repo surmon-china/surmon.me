@@ -4,7 +4,6 @@ body {
   font-size: $font-size-base;
   line-height: $line-height-base;
   padding-top: $navbar-height + 1em;
-  background-color: $body-bg;
 }
 
 p {
@@ -94,8 +93,8 @@ a {
 
   &:hover,
   &:focus {
-    color: $primary;
-    text-decoration: underline;
+    color: $link-hover-color;
+    // text-decoration: underline;
   }
 }
 
