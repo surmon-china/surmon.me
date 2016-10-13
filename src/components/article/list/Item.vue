@@ -1,83 +1,17 @@
-<style lang="scss">
-
-  .article-list-item {
-    // border-bottom: 1px dashed $gray-lighter;
-    margin-bottom: 1em;
-    // padding: 1em;
-    background-color: white;
-
-    .item-content {
-      display: block;
-      overflow: hidden;
-      height: 9em;
-      padding: .5em;
-      // border-bottom: 1px dashed #e4e4e4;
-
-      .item-thumb {
-        float: left;
-        width: 12em;
-
-        .item-thumb-img {
-          max-width: 100%;
-          height: 8em;
-        }
-      }
-
-      .item-body {
-        float: right;
-        width: 29em;
-        height: 8em;
-        padding-top: .2em;
-
-        .item-title {
-          font-weight: bold;
-          color: #333;
-
-          h5 {
-            margin-top: 0;
-          }
-        }
-
-        .item-description {
-          font-size: .9em;
-          margin: 0;
-          margin-bottom: 0.3em;
-          display: -webkit-box;
-          display: -moz-box;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          word-break: break-all;
-          -webkit-box-orient: vertical;
-          -webkit-line-clamp: 3;
-          line-height: 1.6em;
-        }
-
-        .item-meta {
-          font-size: .9em;
-          height: 1.6em;
-          line-height: 2em;
-
-          span {
-            margin-right: .5em;
-          }
-        }
-      }
-    }
-  }
-</style>
-
 <template>
   <div class="article-list-item">
     <div class="item-content">
       <div class="item-thumb">
-        <router-link to="/article/asdasdasd" class="item">
-         <img class="item-thumb-img" src="http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/11/20120815211519_LZsce.thumb_.600_0.jpeg&h=96&w=144&q=100&zc=1">
+        <router-link to="/article/asdasdasd">
+         <img class="item-thumb-img" src="http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/11/20120815211519_LZsce.thumb_.600_0.jpeg&h=112&w=180&q=100&zc=1">
         </router-link>
       </div>
       <div class="item-body">
-        <router-link to="/article/asdasdasd" class="item-title">
-          <h5>{{ item.title }}</h5>
-        </router-link>
+        <h5 class="item-title">
+          <router-link to="/article/asdasdasd">
+            {{ item.title }}
+          </router-link>
+        </h5>
         <p class="item-description">{{ item.description }}</p>
         <div class="item-meta">
           <span class="date">
@@ -131,3 +65,95 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  @import '../../../sass/variables';
+  @import '../../../sass/mixins';
+  .article-list-item {
+    margin-bottom: 1em;
+    background-color: $module-bg;
+
+    &:last-child {
+      margin: 0;
+    }
+
+    &:hover {
+      background-color: $module-hover-bg;
+    }
+
+    .item-content {
+      display: block;
+      overflow: hidden;
+      height: 9.5em;
+      padding: .5em;
+
+      .item-thumb {
+        float: left;
+        width: 12em;
+        height: 8.5em;
+        overflow: hidden;
+
+        .item-thumb-img {
+          max-width: auto;
+          height: 8.5em;
+          @include css3-prefix(opacity, 1);
+          @include css3-prefix(filter, grayscale(0.3));
+          @include css3-prefix(transform, translateX(0));
+
+          &:hover {
+            @include css3-prefix(opacity, .95);
+            @include css3-prefix(filter, grayscale(0));
+            @include css3-prefix(transform, translateX(-.5em));
+          }
+        }
+      }
+
+      .item-body {
+        float: right;
+        width: 28.5em;
+        height: 8.5em;
+
+        .item-title {
+          font-weight: bold;
+          color: #333;
+          margin-top: .2em;
+          margin-bottom: .5em;
+
+          > a {
+            margin-left: 0;
+
+            &:hover {
+              display: inline-block;
+              text-decoration: underline;
+              margin-left: .5em;
+            }
+          }
+        }
+
+        .item-description {
+          font-size: .9em;
+          margin: 0;
+          margin-bottom: 0.3em;
+          display: -webkit-box;
+          display: -moz-box;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          word-break: break-all;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 3;
+          line-height: 1.8em;
+        }
+
+        .item-meta {
+          font-size: .9em;
+          height: 1.6em;
+          line-height: 2em;
+
+          span {
+            margin-right: .5em;
+          }
+        }
+      }
+    }
+  }
+</style>

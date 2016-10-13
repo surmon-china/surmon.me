@@ -20,15 +20,18 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-  // @import '../../stylus/variables'
-  footer
-    margin-top: 20px
-    background-color white
+<style lang="scss">
+  @import '../../sass/variables';
+  footer {
+    margin-top: 20px;
+    background-color: $module-bg;
 
-    .footer-content
-      padding 1em
-      font-size .9em
-      text-align center
-      color #333
+    .footer-content {
+      padding: 1em;
+      font-size: .9em;
+      text-align: center;
+      color: #333;
+      text-transform: uppercase;
+    }
+  }
 </style>

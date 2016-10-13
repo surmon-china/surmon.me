@@ -13,8 +13,6 @@ input[type="search"],
 input[type="tel"],
 select {
   background: $white;
-  border: $border;
-  border-radius: $br;
   color: $text;
   display: inline-block;
   padding: $xs-pad;
@@ -23,8 +21,6 @@ select {
 
 input[type="color"], {
   background: $white;
-  border: $border;
-  border-radius: $br;
   display: inline-block;
   vertical-align: middle;
 }
@@ -33,10 +29,7 @@ input[type="color"], {
 input:not([type]) {
   -webkit-appearance: none;
   background-clip: padding-box;
-  border: $border;
-  border-radius: $br;
   display: inline-block;
-  padding: $sm-pad;
   text-align: left;
 }
 
@@ -118,7 +111,6 @@ input[type="checkbox"]:focus:invalid:focus {
 
 select {
   -webkit-appearance: menulist-button;
-  border: $border;
   vertical-align: sub;
 }
 
@@ -147,11 +139,8 @@ legend {
 
 textarea {
   background: $white;
-  border: $border;
-  border-radius: $br;
   display: block;
   margin-bottom: $sm-pad;
   max-width: 100%;
-  padding: $sm-pad;
   vertical-align: middle;
 }

@@ -18,10 +18,8 @@ main {
 }
 
 footer {
-  border-top: $border;
   clear: both;
   display: inline-block;
-  float: left;
   max-width: 100%;
   padding: $md-pad 0;
   text-align: center;
@@ -40,8 +38,8 @@ hr {
 
 img {
   height: auto;
-  max-width: 100%;
-  vertical-align: baseline;
+  // max-width: 100%;
+  // vertical-align: baseline;
 }
 
 @media screen and (max-width: $small-breakpoint) {

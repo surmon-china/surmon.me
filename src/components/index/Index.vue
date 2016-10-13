@@ -5,7 +5,7 @@
     <carrousel></carrousel>
 
     <!-- 文章列表 -->
-    <article-list :articles="articles"></article-list>
+    <article-list :articles="articles" @loadmore="addArticle"></article-list>
 
   </div>
 </template>
@@ -42,12 +42,13 @@
       }
       return {
         page: 1,
+        article,
         articles: {
           pagenation: {
             current_page: 1,
             total: 10
           },
-          data: [article, article, article, article, article]
+          data: [article, article, article, article, article, article, article, article, article, article]
         }
       }
     },
@@ -61,11 +62,17 @@
     methods: {
       codeChange(newCode) {
         this.code = newCode
+      },
+      addArticle() {
+        let newArticle = this.article
+        newArticle.title = '我是新增的文章' + this.articles.data.length
+        this.articles.data.push(newArticle)
+        this.articles.data.push(newArticle)
       }
     }
   }
 
 </script>
 
-<style lang="stylus" scoped>
+<style lang="scss" scoped>
 </style>
