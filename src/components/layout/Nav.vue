@@ -1,6 +1,11 @@
 <template>
   <div class="aside-nav">
-    <ul class="nav-list">
+    <div class="user" v-if="false">
+      <router-link to="/about">
+        <img src="/static/images/gravatar.jpg">
+      </router-link>
+    </div>
+    <nav class="nav-list">
       <router-link to="/" class="item active">
         <i class="iconfont icon-home"></i>
         <span>Home</span>
@@ -18,7 +23,7 @@
         <span>Music</span>
       </router-link>
       <router-link to="/tag/javascript" class="item">
-        <i class="iconfont icon-hulianwang"></i>
+        <i class="iconfont icon-movie"></i>
         <span>Movie</span>
       </router-link>
       <router-link to="/guestbook" class="item">
@@ -27,9 +32,9 @@
       </router-link>
       <router-link to="/" class="item">
         <i class="iconfont icon-liuyan"></i>
-        <span>Guestbook</span>
+        <span>上来</span>
       </router-link>
-    </ul>
+    </nav>
   </div>
 </template>
 
@@ -42,40 +47,45 @@ export default {
 <style lang="scss">
   @import '../../sass/variables';
   .aside-nav {
-    // position: fixed;
-    // top: 5em;
-    // display: inline-block;
-    // width: 10em;
-    // background-color: white;
-    // padding: .5em;
     position: fixed;
-    top: 5em;
+    top: 5.5em;
     display: inline-block;
-    width: 11em;
-    background-color: #fff;
+    width: 11.5em;
+    // background-color: $module-bg;
+
+    .user {
+      padding: .5em;
+      border-bottom: 1px dashed #eee;
+    }
 
     .nav-list {
-      padding: .5em;
+      padding: 0;
+      margin: 0;
 
       .item {
-        // font-size: .9em;
+        font-size: 1.1em;
         border: none;
-        border-radius: 0;
         display: block;
         width: 100%;
         height: 3em;
         line-height: 3em;
         padding: 0 1em;
         text-decoration: none;
+        text-transform: uppercase;
+        font-weight: 500;
+        border-radius: 1px;
+        color: #777;
 
         &:hover {
-          background-color: #eee;
+          color: $primary;
         }
 
+        // &.router-link-active
         &.active {
           background-color: #eee;
           font-weight: 700;
-          // border-left: 3px solid #006cff;
+          color: $primary;
+          background-color: $module-bg;
         }
 
         .iconfont {

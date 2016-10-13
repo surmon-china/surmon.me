@@ -1,26 +1,14 @@
-<style lang="scss">
-  .articles {
-
-    .article-lists {
-      margin-bottom: 1em;
-      // background-color: white;
-      min-height: 1em;
-      overflow: hidden;
-    }
-  }
-</style>
-
 <template>
   <div class="articles">
 
     <!-- 列表 -->
     <div class="article-lists">
-      <list-item v-for="item in articles.data" :item="item"></list-item>
+      <list-item v-for="(item, index) in articles.data" :item="item" :key="index"></list-item>
     </div>
 
     <!-- 加载更多 -->
     <div class="article-load">
-      <button class="btn btn-block btn-primary">加载更多</button>
+      <button class="btn-loadmore" @click="addArticle">加载更多</button>
     </div>
 
   </div>
@@ -43,12 +31,13 @@ export default {
   },
 
   // 绑定的数据
-  // data () {
-  //   return {
-  //     page: 1,
-  //     items: datas
-  //   }
-  // },
+  data () {
+    return {
+      page: 1,
+      count: 10
+      // items: datas
+    }
+  },
 
   props: {
     articles: {
@@ -60,7 +49,6 @@ export default {
   // 创建时
   created () {
     console.log('文章列表组件被创建', this)
-    // store.on('topstories-updated', this.update)
   },
 
   // 销毁时
@@ -68,14 +56,38 @@ export default {
     // store.removeListener('topstories-updated', this.update)
   },
 
-  // 包含方法
   methods: {
-    update () {
-      // 通过fetch获取资源
-      // store.fetchItemsByPage(this.page).then(items => {
-      //   this.items = items
-      // })
+    addArticle() {
+      // console.log(this.articles)
+      this.$emit('loadmore')
     }
   }
 }
 </script>
+
+<style lang="scss">
+  @import '../../../sass/variables';
+  .articles {
+
+    .article-lists {
+      margin-bottom: 1em;
+      min-height: 1em;
+      overflow: hidden;
+    }
+
+    .article-load {
+
+      .btn-loadmore {
+        width: 100%;
+        display: block;
+        height: 3em;
+        line-height: 3em;
+        background-color: $module-bg;
+
+        &:hover {
+          background-color: $module-hover-bg;
+        }
+      }
+    }
+  }
+</style>

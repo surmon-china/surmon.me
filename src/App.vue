@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <body>
     <background></background>
     <header-view></header-view>
     <main id="main">
@@ -14,7 +14,7 @@
       <aside-view></aside-view>
     </main>
     <footer-view></footer-view>
-  </div>
+  </body>
 </template>
 
 <script>
@@ -37,9 +37,9 @@
     position: relative;
 
     .article-content {
-      width: 43em;
+      width: 42.5em;
       min-height: 400px;
-      margin: 0 20em 0 12em;
+      margin: 0 20em 0 12.5em;
       position: relative;
     }
   }
