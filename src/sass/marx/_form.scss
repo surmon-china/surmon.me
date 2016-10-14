@@ -1,3 +1,8 @@
+input,
+input:focus {
+  @include css3-prefix(outline, none);
+}
+
 input[type="text"],
 input[type="password"],
 input[type="email"],

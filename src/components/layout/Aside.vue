@@ -59,6 +59,20 @@
         </li>
       </ul>
     </div>
+    <div class="aside-calendar">
+      我是日历
+    </div>
+    <div class="aside-ad">
+      我是广告
+    </div>
+    <div class="aside-tag">
+      <ul class="aside-tag-list">
+        <li class="list-item">
+          <i class="index"></i>
+          <router-link to="/tag/python3" class="title">python3</router-link>
+        </li>
+      </ul>
+    </div>
   </aside>
 </template>
 
@@ -79,8 +93,15 @@ export default {
     width: 19em;
     margin: 0;
 
-    .aside-search {
+    .aside-search,
+    .aside-article,
+    .aside-calendar,
+    .aside-ad,
+    .aside-tag, {
       background-color: $module-bg;
+    }
+
+    .aside-search {
       margin-bottom: 1em;
 
       > .search-box {
@@ -94,15 +115,24 @@ export default {
           height: 2em;
           line-height: 2em;
           float: left;
+
+          &:hover {
+            background-color: darken($module-hover-bg, 20%);
+          }
         }
 
         > .search-input {
-          padding: .5em;
+          padding: 0 .5em;
           margin-right: 0;
         }
 
         > .search-btn {
           width: 2em;
+          background-color: darken($module-hover-bg, 20%);
+
+          &:hover {
+            background-color: darken($module-hover-bg, 40%);
+          }
         }
 
         > .rss-btn {
@@ -113,7 +143,7 @@ export default {
     }
 
     .aside-article {
-      background-color: $module-bg;
+      margin-bottom: 1em;
 
       > .title {
         height: 3em;
@@ -136,7 +166,7 @@ export default {
           display: block;
           height: 1.9em;
           line-height: 1.9em;
-          padding-left: 1em;
+          padding: 0 1em;
           margin-bottom: .5em;
           color: #333;
           @include text-overflow();
@@ -171,6 +201,21 @@ export default {
           }
         }
       }
+    }
+
+    .aside-calendar {
+      padding: 1em;
+      margin-bottom: 1em;
+    }
+
+    .aside-ad {
+      padding: 1em;
+      margin-bottom: 1em;
+    }
+
+    .aside-tag {
+      padding: 1em;
+      margin-bottom: 1em;
     }
   }
 </style>
