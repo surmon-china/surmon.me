@@ -32,7 +32,7 @@
       </router-link>
       <router-link to="/" class="item">
         <i class="iconfont icon-liuyan"></i>
-        <span>上来</span>
+        <span>Guestbook</span>
       </router-link>
     </nav>
   </div>
@@ -63,7 +63,6 @@ export default {
       margin: 0;
 
       .item {
-        font-size: 1.1em;
         border: none;
         display: block;
         width: 100%;
@@ -72,9 +71,15 @@ export default {
         padding: 0 1em;
         text-decoration: none;
         text-transform: uppercase;
-        font-weight: 500;
+        font-weight: 700;
         border-radius: 1px;
         color: #777;
+        font-family: CenturyGothic;
+        margin-bottom: .5em;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
 
         &:hover {
           color: $primary;
@@ -83,13 +88,15 @@ export default {
         // &.router-link-active
         &.active {
           background-color: #eee;
-          font-weight: 700;
+          font-weight: bold;
           color: $primary;
           background-color: $module-bg;
         }
 
         .iconfont {
+          width: 1em;
           margin-right: 1em;
+          display: inline-block;
         }
       }
     }
