@@ -68,7 +68,8 @@ export default {
 
           .navbar-slogan {
             color: $primary;
-            text-transform: uppercase;
+            font-family: CenturyGothic;
+            // text-transform: uppercase;
           }
 
           .navbar-link {
