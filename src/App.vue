@@ -1,5 +1,5 @@
 <template>
-  <body>
+  <div>
     <background></background>
     <header-view></header-view>
     <main id="main">
@@ -14,7 +14,7 @@
       <aside-view></aside-view>
     </main>
     <footer-view></footer-view>
-  </body>
+  </div>
 </template>
 
 <script>

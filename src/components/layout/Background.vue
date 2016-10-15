@@ -21,8 +21,6 @@
         const POINT = 35
 
         let canvas = this.$el
-        console.log(this)
-        console.log(canvas)
             canvas.width = WIDTH
             canvas.height = HEIGHT
         let context = canvas.getContext('2d')
