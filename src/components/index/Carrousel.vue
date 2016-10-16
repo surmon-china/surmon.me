@@ -45,6 +45,7 @@
           title: 'JS 原型继承和类式继承...'
         }],
         swiperOption: {
+          name: 'currentSwiper',
           autoplay: 3000,
           setWrapperSize :true,
           autoHeight: true,

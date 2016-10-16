@@ -249,8 +249,8 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../sass/variables';
-  @import '../../sass/mixins';
+  @import '../../../sass/variables';
+  @import '../../../sass/mixins';
   aside {
     position: absolute;
     top: 0;
