@@ -28,7 +28,7 @@
         <span v-if="day.getMonth()+1 != currentMonth" class="other-month">{{ day.getDate() }}</span>
         <span v-else class="item" :class="{ 'active': day.getFullYear() == new Date().getFullYear() && day.getMonth() == new Date().getMonth() && day.getDate() == new Date().getDate() }">
           <!--today-->
-          <router-link :to="'data/' + formatDate(day.getFullYear(), day.getMonth() + 1, day.getDate())">{{ day.getDate() }}</router-link>
+          <router-link :to="'date/' + formatDate(day.getFullYear(), day.getMonth() + 1, day.getDate())">{{ day.getDate() }}</router-link>
         </span>
       </li>
     </ul>
@@ -135,7 +135,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../sass/variables';
+  @import '../../../sass/variables';
   .calendar-box {
 
     .months {
@@ -213,13 +213,13 @@
           display: block;
           border-radius: 100%;
 
-          > span {
-            // display: block;
+          > a {
+            display: block;
             // cursor: pointer;
           }
 
           &:hover {
-            background-color: lighten($module-hover-bg, 15%);
+            background-color: lighten($module-hover-bg, 10%);
           }
 
           &.active {

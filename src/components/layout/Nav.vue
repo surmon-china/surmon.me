@@ -1,36 +1,35 @@
 <template>
   <div class="aside-nav">
-    <div class="user" v-if="false">
-      <router-link to="/about">
-        <img src="/static/images/gravatar.jpg">
-      </router-link>
-    </div>
     <nav class="nav-list">
-      <router-link to="/" class="item active">
+      <router-link :to="'/'" class="item" exact>
         <i class="iconfont icon-home"></i>
         <span>Home</span>
       </router-link>
-      <router-link to="/article/001" class="item">
+      <router-link to="/category/code" class="item">
         <i class="iconfont icon-code"></i>
         <span>Code</span>
       </router-link>
-      <router-link to="/data/2015-10-10" class="item">
+      <router-link to="/project" class="item">
+        <i class="iconfont icon-tool"></i>
+        <span>Project</span>
+      </router-link>
+      <router-link to="/category/think" class="item">
         <i class="iconfont icon-tag"></i>
         <span>Think</span>
       </router-link>
-      <router-link to="/category/javascript" class="item">
+      <router-link to="/category/music" class="item">
         <i class="iconfont icon-netease-music"></i>
         <span>Music</span>
       </router-link>
-      <router-link to="/tag/javascript" class="item">
+      <router-link to="/category/movie" class="item">
         <i class="iconfont icon-movie"></i>
         <span>Movie</span>
       </router-link>
-      <router-link to="/guestbook" class="item">
+      <router-link to="/about" class="item">
         <i class="iconfont icon-user"></i>
         <span>About</span>
       </router-link>
-      <router-link to="/" class="item">
+      <router-link to="/guestbook" class="item">
         <i class="iconfont icon-liuyan"></i>
         <span>Guestbook</span>
       </router-link>
@@ -52,11 +51,6 @@ export default {
     display: inline-block;
     width: 11.5em;
     // background-color: $module-bg;
-
-    .user {
-      padding: .5em;
-      border-bottom: 1px dashed #eee;
-    }
 
     .nav-list {
       padding: 0;
@@ -85,8 +79,7 @@ export default {
           color: $primary;
         }
 
-        // &.router-link-active
-        &.active {
+        &.router-link-active {
           background-color: #eee;
           font-weight: bold;
           color: $primary;

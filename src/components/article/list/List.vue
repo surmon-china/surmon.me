@@ -48,7 +48,7 @@ export default {
 
   // 创建时
   created () {
-    console.log('文章列表组件被创建', this)
+    // console.log('文章列表组件被创建', this)
   },
 
   // 销毁时

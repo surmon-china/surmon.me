@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <div id="app">
     <background></background>
     <header-view></header-view>
     <main id="main">
       <nav-view></nav-view>
       <div class="article-content">
-        <router-view  class="router-view"
-                      keep-alive
-                      transition
-                      transition-mode="out-in">
-        </router-view>
+        <transition name="slide-up">
+          <keep-alive>
+            <router-view  class="router-view"></router-view>
+          </keep-alive>
+        </transition>
       </div>
       <aside-view></aside-view>
     </main>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-  import { Background, Header, Footer, Aside, Nav } from './components/layout'
+  import { Background, Header, Footer, Aside, Nav } from 'components/layout'
   export default {
     name: 'app',
     components: {
@@ -26,8 +26,7 @@
       headerView: Header,
       footerView: Footer,
       asideView: Aside,
-      navView: Nav,
-
+      navView: Nav
     }
   }
 </script>

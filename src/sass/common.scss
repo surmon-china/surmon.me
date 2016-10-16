@@ -25,3 +25,15 @@
   font-family: 'CenturyGothic';
   src: url('/static/fonts/CenturyGothic.ttf');
 }
+
+
+.slide-up-enter-active, .slide-up-leave-active {
+  transition: all .7s cubic-bezier(0, 1.2, 1, 0.5);
+  opacity: .7;
+  transform: translate3d(0, 4em, 0);
+}
+.slide-up-enter, .slide-up-leave-active {
+  // transition: all 5s cubic-bezier(0, 1.23, 1, 0.47);
+  opacity: .3;
+  transform: translate3d(0, 4em, 0);
+}
