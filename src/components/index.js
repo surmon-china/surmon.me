@@ -1,9 +1,11 @@
 import Index from './index/Index.vue'
-import Detail from './article/detail/Detail.vue'
-import Tag from './article/tag/List.vue'
+import Article from './article'
+import Page from './page'
+import Project from './page/projects'
 
 module.exports = {
   Index,
-  Detail,
-  Tag
+  Page,
+  Article,
+  Project
 }
