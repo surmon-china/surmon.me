@@ -1,11 +1,11 @@
 <template>
   <div class="carrousel">
     <swiper class="swiper" :options="swiperOption">
-      <swiper-slide class="item" v-for="slide in slides">
+      <swiper-slide class="item" v-for="(slide, index) in slides">
         <div class="content">
           <img :src="slide.src">
           <router-link to="/article/asdasdasd">
-            <h5 class="title">{{ slide.title }}</h5>
+            <h5 class="title">{{ index + slide.title }}</h5>
           </router-link>
         </div>
       </swiper-slide>
@@ -19,31 +19,11 @@
     name: 'carrousel',
     data() {
       return {
-        slides: [{
+        slide: {
           src: 'http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/09/7916805876895932453.jpg&h=210&w=595&q=90&zc=1',
           title: ' 一个只有高手分享的技术社区，立即加入...'
-        }, {
-          src: 'http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/09/9b0ebdca3e038f08.png&h=210&w=595&q=90&zc=1',
-          title: 'JS 原型继承和类式继承...'
-        },{
-          src: 'http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/themes/Surmon/images/random/2.jpg&h=210&w=595&q=100&zc=1',
-          title: ' 一个只有高手分享的技术社区，立即加入...'
-        },{
-          src: 'http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/08/53475e1b938c5.jpg&h=210&w=595&q=90&zc=1',
-          title: 'JS 原型继承和类式继承...'
-        },{
-          src: 'http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/09/7916805876895932453.jpg&h=210&w=595&q=90&zc=1',
-          title: 'JS 原型继承和类式继承...'
-        },{
-          src: 'http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/09/7916805876895932453.jpg&h=210&w=595&q=90&zc=1',
-          title: 'JS 原型继承和类式继承...'
-        },{
-          src: 'http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/09/7916805876895932453.jpg&h=210&w=595&q=90&zc=1',
-          title: 'JS 原型继承和类式继承...'
-        },{
-          src: 'http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/09/7916805876895932453.jpg&h=210&w=595&q=90&zc=1',
-          title: 'JS 原型继承和类式继承...'
-        }],
+        },
+        slides: [],
         swiperOption: {
           name: 'currentSwiper',
           autoplay: 3000,
@@ -56,6 +36,14 @@
           grabCursor : true
         }
       }
+    },
+    mounted() {
+      // console.log('幻灯初始化', this)
+      let _this = this
+      setInterval(function() {
+        // console.log('push')
+        if (_this.slides.length < 5) _this.slides.push(_this.slide)
+      }, 3000)
     }
   }
 </script>

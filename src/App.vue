@@ -7,7 +7,7 @@
       <div class="article-content">
         <transition name="slide-up">
           <keep-alive>
-            <router-view  class="router-view"></router-view>
+            <router-view class="router-view"></router-view>
           </keep-alive>
         </transition>
       </div>
