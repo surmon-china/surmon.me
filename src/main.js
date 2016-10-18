@@ -23,8 +23,15 @@ import CodeMirror from 'vue-codemirror'
 import VideoPlayer from 'vue-video-player'
 import TouchRipple from 'vue-touch-ripple'
 import AwesomeSwiper from 'vue-awesome-swiper'
+import DuoShuo from 'components/common/vue-duoshuo'
+
+DuoShuo.config({
+  shortName: 'surmon-localhost',
+  unstable: true
+})
 
 // app use
+Vue.use(DuoShuo)
 Vue.use(VueRouter)
 Vue.use(CodeMirror)
 Vue.use(VideoPlayer)

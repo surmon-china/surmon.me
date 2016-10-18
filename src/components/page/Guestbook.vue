@@ -1,4 +1,37 @@
+<template>
+  <div class="page">
+    <div class="detail">
+      <div class="content">
+        <div class="guestbook-banner">
+          <img src="http://surmon.me/wp-content/themes/Surmon/images/guestbook/guestbook_1.jpg">
+          <span>此心光明 亦复何言</span>
+        </div>
+      </div>
+    </div>
+    <div class="comment">
+      <duoshuo data-thread-key="123" data-title="我是留言板" data-url="http://localhost:8080/guestbook"></duoshuo>
+    </div>
+  </div>
+</template>
+
+<script>
+
+  export default {
+
+    // 模块名称
+    name: 'guestbook',
+    data() {
+      return {
+        page: {
+          title: 'Guestbook',
+          content: `<img src="http://surmon.me/wp-content/themes/Surmon/images/guestbook/guestbook_1.jpg">`
+        }
+      }
+    }
+  }
+</script>
 <style lang="scss" scoped>
+  @import '../../sass/mixins';
   @import '../../sass/variables';
   .page {
 
@@ -12,62 +45,43 @@
       }
 
       .content {
+        width: 100%;
+        height: 17em;
+        overflow:  hidden;
 
-        img {
-          max-width: 100%;
-        }
+        .guestbook-banner {
+          position: relative;
+          overflow: hidden;
+          width: 100%;
+          height: 17em;
+          border: 0;
 
-        p {
-          line-height: 1.8em;
-          text-indent: 2em;
-          margin-bottom: 1em;
-        }
+          img {
+            margin-top: -5em;
+            @include css3-prefix(transition, all .5s);
 
-        h3 {
-          margin: 1em 0;
-          padding-left: 0;
-          color: #666;
-          line-height: 1.8em;
-          font-weight: 700;
-          text-indent: 0;
+            &:hover {
+              margin-top: -6em;
+              @include css3-prefix(transform, rotate(3deg) scale(1.1));
+              @include css3-prefix(transition, all .5s);
+            }
+          }
+
+          span {
+            position: absolute;
+            right: 2em;
+            bottom: 2em;
+            display: block;
+            font-weight: 700;
+            opacity: .5;
+            cursor: pointer;
+            padding: 0 1em;
+            height: 2em;
+            line-height: 2em;
+            background-color: $module-bg;
+          }
         }
       }
     }
   }
 </style>
-
-<template>
-  <div class="page">
-    <div class="detail">
-      <div class="content" v-html="page.content"></div>
-    </div>
-    <div class="comment">
-      sfsdf
-      <comment></comment>
-    </div>
-  </div>
-</template>
-
-<script>
-
-  import Comment from 'components/article'
-
-  export default {
-
-    // 模块名称
-    name: 'guestbook',
-
-    components: {
-      Comment
-    },
-
-    data() {
-      return {
-        page: {
-          title: 'Guestbook',
-          content: `<img src="http://surmon.me/wp-content/themes/Surmon/images/guestbook/guestbook_1.jpg">`
-        }
-      }
-    }
-  }
-</script>
