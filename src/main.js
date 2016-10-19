@@ -10,6 +10,7 @@ import 'sass/app.scss'
 
 // Libs
 import Vue from 'vue'
+import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 
 // config
@@ -27,10 +28,11 @@ import DuoShuo from 'components/common/vue-duoshuo'
 
 DuoShuo.config({
   shortName: 'surmon-localhost',
-  unstable: true
+  // unstable: true
 })
 
 // app use
+Vue.use(Vuex)
 Vue.use(DuoShuo)
 Vue.use(VueRouter)
 Vue.use(CodeMirror)

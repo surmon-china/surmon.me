@@ -1,23 +1,20 @@
 <template>
-  <div class="vue-duoshuo">
-    <div class="ds-thread" data-thread-key="123" data-title="我是留言板" data-url="http://localhost:8080/guestbook"></div>
-  </div>
+  <div class="ds-thread"></div>
 </template>
 
 <script>
-
-export default {
-  name: 'vue-duoshuo',
-  props: ['dataThreadKey', 'dataTitle', 'dataUrl'],
-  data: function() {
-    return {
+  export default {
+    name: 'vue-duoshuo',
+    props: ['dataUrl'],
+    mounted: function() {
+      // console.log('初始化')
+      if (this.dataUrl) this.$el.setAttribute('data-url', this.dataUrl)
+      if (window.DUOSHUO) DUOSHUO.EmbedThread(this.$el)
+    },
+    ready: function() {
+      // console.log('初始化')
+      if (this.dataUrl) this.$el.setAttribute('data-url', this.dataUrl)
+      if (window.DUOSHUO) DUOSHUO.EmbedThread(this.$el)
     }
-  },
-  mounted: function() {
-    console.log(this)
   }
-}
 </script>
-
-<style>
-</style>
