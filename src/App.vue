@@ -4,14 +4,18 @@
     <header-view></header-view>
     <main id="main">
       <nav-view></nav-view>
-      <div class="article-content">
+      <div class="article-content" :class="{ 'pullpage': pageCols == 2 }">
         <transition name="slide-up">
           <keep-alive>
             <router-view class="router-view"></router-view>
           </keep-alive>
         </transition>
       </div>
-      <aside-view></aside-view>
+      <transition name="slide-right">
+        <keep-alive>
+          <aside-view v-if="pageCols == 3"></aside-view>
+        </keep-alive>
+      </transition>
     </main>
     <footer-view></footer-view>
   </div>
@@ -27,6 +31,25 @@
       footerView: Footer,
       asideView: Aside,
       navView: Nav
+    },
+    computed: {
+      pageCols () {
+        return this.$store.state.pageCols
+      }
+    },
+    mounted () {
+      this.changePageCol()
+    },
+    watch: {
+      '$route'() {
+        this.changePageCol()
+      }
+    },
+    methods: {
+      changePageCol() {
+        const col = this.$route.meta.fullPage ? 2 : 3
+        this.$store.commit('SET_PAGE_COL', col)
+      }
     }
   }
 </script>
@@ -41,6 +64,10 @@
       margin: 0 0 0 12.5em;
       position: relative;
       overflow: hidden;
+
+      &.pullpage {
+        width: 62.5em;
+      }
     }
   }
 </style>

@@ -21,6 +21,7 @@ export default [{
   // 关于我
     name: 'about',
     path: '/about',
+    meta: { fullPage: true },
     component: appView.Page.About
   },  {
   // 播放器页面
