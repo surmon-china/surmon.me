@@ -36,10 +36,11 @@
     position: relative;
 
     .article-content {
+      float: left;
       width: 42.5em;
-      min-height: 400px;
-      margin: 0 20em 0 12.5em;
+      margin: 0 0 0 12.5em;
       position: relative;
+      overflow: hidden;
     }
   }
 </style>

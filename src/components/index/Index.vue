@@ -48,7 +48,7 @@
             current_page: 1,
             total: 10
           },
-          data: [article, article, article, article, article, article, article, article, article, article]
+          data: [article, article, article, article, article, article, article, article, article, article, article, article, article, article]
         }
       }
     },
