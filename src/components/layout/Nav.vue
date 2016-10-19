@@ -17,7 +17,7 @@
         <i class="iconfont icon-tag"></i>
         <span>Think</span>
       </router-link>
-      <router-link to="/category/music" class="item">
+      <router-link to="/music" class="item">
         <i class="iconfont icon-netease-music"></i>
         <span>Music</span>
       </router-link>

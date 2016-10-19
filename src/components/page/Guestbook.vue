@@ -9,27 +9,18 @@
       </div>
     </div>
     <div class="comment">
-      <duoshuo data-thread-key="123" data-title="我是留言板" data-url="http://localhost:8080/guestbook"></duoshuo>
+      <duoshuo data-thread-key="123" data-title="我是留言板"></duoshuo>
     </div>
   </div>
 </template>
 
 <script>
-
   export default {
-
     // 模块名称
-    name: 'guestbook',
-    data() {
-      return {
-        page: {
-          title: 'Guestbook',
-          content: `<img src="http://surmon.me/wp-content/themes/Surmon/images/guestbook/guestbook_1.jpg">`
-        }
-      }
-    }
+    name: 'Guestbook'
   }
 </script>
+
 <style lang="scss" scoped>
   @import '../../sass/mixins';
   @import '../../sass/variables';
@@ -38,11 +29,6 @@
     .detail {
       margin-bottom: 1em;
       background-color: $module-bg;
-
-      .title {
-        text-align: center;
-        margin: .5em 0 1em 0;
-      }
 
       .content {
         width: 100%;

@@ -2,7 +2,7 @@
   <aside class="aside">
     <div class="aside-search">
       <div class="search-box">
-        <input type="text" name="search" class="search-input">
+        <input type="text" name="search" class="search-input" placeholder="Search...">
         <button class="search-btn">
           <i class="iconfont icon-search"></i>
         </button>
@@ -59,31 +59,25 @@
         </li>
       </ul>
     </div>
-    <div class="aside-ad">
+    <div class="aside-ad" v-if="false">
       <router-link to="http://s.click.taobao.com/ZaXp1Rx" target="_blank" class="ad-box">
         <img src="http://i1.piimg.com/567571/184e5b1a3e1613f5.jpg">
       </router-link>
-    </div>
-    <div class="aside-calendar">
-      <calendar></calendar>
     </div>
     <div class="aside-ad">
       <router-link to="http://s.click.taobao.com/ZaXp1Rx" target="_blank" class="ad-box">
         <img src="http://p1.bpimg.com/567571/e85fb6270effc4c7.jpg">
       </router-link>
     </div>
+    <div class="aside-calendar">
+      <calendar></calendar>
+    </div>
     <div class="aside-tag">
       <ul class="aside-tag-list">
-        <router-link to="/tag/python3" tag="li" class="list-item">
+        <router-link to="/tag/html5" tag="li" class="list-item">
           <a class="title">
-            <i class="iconfont icon-python"></i>
-            <span>Python3</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/angular2" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-socialangular"></i>
-            <span>Angular2</span>
+            <i class="iconfont icon-html5"></i>
+            <span>html5</span>
           </a>
         </router-link>
         <router-link to="/tag/css3" tag="li" class="list-item">
@@ -92,10 +86,10 @@
             <span>css3</span>
           </a>
         </router-link>
-        <router-link to="/tag/php" tag="li" class="list-item">
+        <router-link to="/tag/JavaScript" tag="li" class="list-item">
           <a class="title">
-            <i class="iconfont icon-php"></i>
-            <span>php</span>
+            <i class="iconfont icon-js"></i>
+            <span>JavaScript</span>
           </a>
         </router-link>
         <router-link to="/tag/nodejs" tag="li" class="list-item">
@@ -104,10 +98,34 @@
             <span>nodejs</span>
           </a>
         </router-link>
-        <router-link to="/tag/JavaScript" tag="li" class="list-item">
+        <router-link to="/tag/jquery" tag="li" class="list-item">
           <a class="title">
-            <i class="iconfont icon-js"></i>
-            <span>JavaScript</span>
+            <i class="iconfont icon-jquery"></i>
+            <span>jquery</span>
+          </a>
+        </router-link>
+        <router-link to="/tag/angular2" tag="li" class="list-item">
+          <a class="title">
+            <i class="iconfont icon-socialangular"></i>
+            <span>Angular2</span>
+          </a>
+        </router-link>
+        <router-link to="/tag/react" tag="li" class="list-item">
+          <a class="title">
+            <i class="iconfont icon-react"></i>
+            <span>react</span>
+          </a>
+        </router-link>
+        <router-link to="/tag/php" tag="li" class="list-item">
+          <a class="title">
+            <i class="iconfont icon-php"></i>
+            <span>php</span>
+          </a>
+        </router-link>
+        <router-link to="/tag/python3" tag="li" class="list-item">
+          <a class="title">
+            <i class="iconfont icon-python"></i>
+            <span>Python3</span>
           </a>
         </router-link>
         <router-link to="/tag/chrome" tag="li" class="list-item">
@@ -122,18 +140,6 @@
             <span>linux</span>
           </a>
         </router-link>
-        <router-link to="/tag/stackoverflow" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-stackoverflow"></i>
-            <span>stackoverflow</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/iconsf" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-iconsf"></i>
-            <span>chrome</span>
-          </a>
-        </router-link>
         <router-link to="/tag/ubuntu" tag="li" class="list-item">
           <a class="title">
             <i class="iconfont icon-ubuntu"></i>
@@ -144,12 +150,6 @@
           <a class="title">
             <i class="iconfont icon-windows"></i>
             <span>windows</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/html5" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-html5"></i>
-            <span>html5</span>
           </a>
         </router-link>
         <router-link to="/tag/vr" tag="li" class="list-item">
@@ -188,24 +188,13 @@
             <span>google</span>
           </a>
         </router-link>
-        <router-link to="/tag/databasesql" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-databasesql"></i>
-            <span>databasesql</span>
-          </a>
-        </router-link>
         <router-link to="/tag/redis" tag="li" class="list-item">
           <a class="title">
             <i class="iconfont icon-redis"></i>
             <span>redis</span>
           </a>
         </router-link>
-        <router-link to="/tag/jquery" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-jquery"></i>
-            <span>jquery</span>
-          </a>
-        </router-link>
+
         <router-link to="/tag/wordpress" tag="li" class="list-item">
           <a class="title">
             <i class="iconfont icon-wordpress"></i>
@@ -252,9 +241,10 @@
   @import '../../../sass/variables';
   @import '../../../sass/mixins';
   aside {
-    position: absolute;
-    top: 0;
-    right: 0;
+    // position: absolute;
+    // top: 0;
+    // right: 0;
+    float: right;
     display: block;
     width: 19em;
     margin: 0;
@@ -288,7 +278,7 @@
         }
 
         > .search-input {
-          padding: 0 .5em;
+          // padding: 0 .5em;
           margin-right: 0;
         }
 
