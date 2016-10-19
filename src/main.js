@@ -10,11 +10,11 @@ import 'sass/app.scss'
 
 // Libs
 import Vue from 'vue'
-import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 
 // config
-import routerMap from './routerMap'
+import routes from './routes'
+import store from './store'
 
 // App conponent
 import App from './App'
@@ -32,7 +32,6 @@ DuoShuo.config({
 })
 
 // app use
-Vue.use(Vuex)
 Vue.use(DuoShuo)
 Vue.use(VueRouter)
 Vue.use(CodeMirror)
@@ -42,15 +41,29 @@ Vue.use(AwesomeSwiper)
 
 // 配置路由
 const router = new VueRouter({
+  routes,
   mode: 'history',
   scrollBehavior (to, from, savedPosition) {
     return { y: 0 }
-  },
-  routes: routerMap
+  }
+})
+
+// 路由拦截
+router.beforeEach((route, redirect, next) => {
+
+  // 是否需要通栏
+  /*
+  const fullPage = route.matched.some(m => m.meta.fullPage)
+  if (fullPage) {
+    console.log('需要全屏显示', this)
+  }
+  */
+  next()
 })
 
 // start app
 const app = new Vue({
+  store,
   router,
   render: h => h(App)
 }).$mount('app')

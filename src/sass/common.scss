@@ -33,7 +33,16 @@
   transform: translate3d(0, 4em, 0);
 }
 .slide-up-enter, .slide-up-leave-active {
-  // transition: all 5s cubic-bezier(0, 1.23, 1, 0.47);
   opacity: .3;
   transform: translate3d(0, 4em, 0);
+}
+
+.slide-right-enter-active, .slide-right-leave-active {
+  transition: all .4s cubic-bezier(0, 1.2, 1, 0.5);
+  opacity: .5;
+  transform: translate3d(5em, 0, 0);
+}
+.slide-right-enter, .slide-right-leave-active {
+  opacity: .3;
+  transform: translate3d(5em, 0, 0);
 }

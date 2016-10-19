@@ -1,98 +1,51 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { fetchItem, fetchItems, fetchIdsByType, fetchUser } from './api'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
+
+  // 所有状态
   state: {
-    activeType: null,
-    itemsPerPage: 20,
-    items: {/* [id: number]: Item */},
-    users: {/* [id: string]: User */},
-    lists: {
-      top: [/* number */],
-      new: [],
-      show: [],
-      ask: [],
-      job: []
-    }
+
+    // 页面的栏目展示类型（3栏/2栏）
+    pageCols: 3
   },
 
+  // 网络请求类的一步操作
   actions: {
-    // ensure data for rendering given list type
-    FETCH_LIST_DATA: ({ commit, dispatch, state }, { type }) => {
+
+    // 请求文章列表
+    FETCH_ARTICLE_LIST: ({ commit, dispatch, state }, { type }) => {
+
+      // 可以直接commmit调用mutation方法（commit必须是同步操作）
       commit('SET_ACTIVE_TYPE', { type })
+
+      // 返回一个异步回调（用dispatch来调用异步事件）
+      /*
       return fetchIdsByType(type)
         .then(ids => commit('SET_LIST', { type, ids }))
         .then(() => dispatch('ENSURE_ACTIVE_ITEMS'))
-    },
-
-    // ensure all active items are fetched
-    ENSURE_ACTIVE_ITEMS: ({ dispatch, getters }) => {
-      return dispatch('FETCH_ITEMS', {
-        ids: getters.activeIds
-      })
-    },
-
-    FETCH_ITEMS: ({ commit, state }, { ids }) => {
-      // only fetch items that we don't already have.
-      ids = ids.filter(id => !state.items[id])
-      if (ids.length) {
-        return fetchItems(ids).then(items => commit('SET_ITEMS', { items }))
-      } else {
-        return Promise.resolve()
-      }
-    },
-
-    FETCH_USER: ({ commit, state }, { id }) => {
-      return state.users[id]
-        ? Promise.resolve(state.users[id])
-        : fetchUser(id).then(user => commit('SET_USER', { user }))
+      */
     }
   },
 
+  // 改变状态的方法（必须是同步方法）
   mutations: {
-    SET_ACTIVE_TYPE: (state, { type }) => {
-      state.activeType = type
-    },
 
-    SET_LIST: (state, { type, ids }) => {
-      state.lists[type] = ids
-    },
-
-    SET_ITEMS: (state, { items }) => {
-      items.forEach(item => {
-        if (item) {
-          Vue.set(state.items, item.id, item)
-        }
-      })
-    },
-
-    SET_USER: (state, { user }) => {
-      Vue.set(state.users, user.id, user)
+    // 设置页面栏目
+    SET_PAGE_COL: (state, col) => {
+      state.pageCols = col
     }
   },
 
+  // 数据的过滤及处理
   getters: {
-    // ids of the items that should be currently displayed based on
-    // current list type and current pagination
-    activeIds (state) {
-      const { activeType, itemsPerPage, lists } = state
-      const page = Number(state.route.params.page) || 1
-      if (activeType) {
-        const start = (page - 1) * itemsPerPage
-        const end = page * itemsPerPage
-        return lists[activeType].slice(start, end)
-      } else {
-        return []
-      }
-    },
 
-    // items that should be currently displayed.
-    // this Array may not be fully fetched.
-    activeItems (state, getters) {
-      return getters.activeIds.map(id => state.items[id]).filter(_ => _)
+    // state是数据存储对象，getters可用于获取当前getters下的其他方法
+    testGetters (state, getters) {
+      // return getters.activeIds.map(id => state.items[id]).filter(_ => _)
+      return []
     }
   }
 })

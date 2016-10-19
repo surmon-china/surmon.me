@@ -74,6 +74,12 @@
     </div>
     <div class="aside-tag">
       <ul class="aside-tag-list">
+        <router-link to="/tag/code" tag="li" class="list-item">
+          <a class="title">
+            <i class="iconfont icon-code"></i>
+            <span>软件工程和设计思想</span>
+          </a>
+        </router-link>
         <router-link to="/tag/html5" tag="li" class="list-item">
           <a class="title">
             <i class="iconfont icon-html5"></i>
@@ -88,14 +94,14 @@
         </router-link>
         <router-link to="/tag/JavaScript" tag="li" class="list-item">
           <a class="title">
-            <i class="iconfont icon-js"></i>
+            <i class="iconfont icon-javascript"></i>
             <span>JavaScript</span>
           </a>
         </router-link>
         <router-link to="/tag/nodejs" tag="li" class="list-item">
           <a class="title">
             <i class="iconfont icon-socialnodejs"></i>
-            <span>nodejs</span>
+            <span>node.js</span>
           </a>
         </router-link>
         <router-link to="/tag/jquery" tag="li" class="list-item">
@@ -116,16 +122,22 @@
             <span>react</span>
           </a>
         </router-link>
+        <router-link to="/tag/vue" tag="li" class="list-item">
+          <a class="title">
+            <i class="iconfont icon-vue"></i>
+            <span>vue.js</span>
+          </a>
+        </router-link>
         <router-link to="/tag/php" tag="li" class="list-item">
           <a class="title">
             <i class="iconfont icon-php"></i>
             <span>php</span>
           </a>
         </router-link>
-        <router-link to="/tag/python3" tag="li" class="list-item">
+        <router-link to="/tag/python" tag="li" class="list-item">
           <a class="title">
             <i class="iconfont icon-python"></i>
-            <span>Python3</span>
+            <span>Python</span>
           </a>
         </router-link>
         <router-link to="/tag/chrome" tag="li" class="list-item">
@@ -184,7 +196,7 @@
         </router-link>
         <router-link to="/tag/google" tag="li" class="list-item">
           <a class="title">
-            <i class="iconfont icon-google2015logo"></i>
+            <i class="iconfont icon-google"></i>
             <span>google</span>
           </a>
         </router-link>
@@ -194,7 +206,18 @@
             <span>redis</span>
           </a>
         </router-link>
-
+        <router-link to="/tag/git" tag="li" class="list-item">
+          <a class="title">
+            <i class="iconfont icon-git"></i>
+            <span>git</span>
+          </a>
+        </router-link>
+        <router-link to="/tag/mongodb" tag="li" class="list-item">
+          <a class="title">
+            <i class="iconfont icon-mongodb"></i>
+            <span>DB</span>
+          </a>
+        </router-link>
         <router-link to="/tag/wordpress" tag="li" class="list-item">
           <a class="title">
             <i class="iconfont icon-wordpress"></i>
@@ -205,12 +228,6 @@
           <a class="title">
             <i class="iconfont icon-zhihu"></i>
             <span>知乎</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/douban" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-douban"></i>
-            <span>豆瓣</span>
           </a>
         </router-link>
         <router-link to="/tag/internet" tag="li" class="list-item">
