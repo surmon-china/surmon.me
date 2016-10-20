@@ -5,9 +5,12 @@
         <div class="about">
             <div class="about-all">
               <div class="about-me">
+                <div class="gravatar">
+                  <img src="/static/images/gravatar.jpg">
+                </div>
                 <p class="item">
                   <i class="iconfont icon-user"></i>
-                  <span>I'm Surmon, a javascript stack developer.</span>
+                  <span>I'm Surmon, a (95后) (小) javascript (鲜) stack (肉) developer.</span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-mail"></i>
@@ -36,9 +39,9 @@
                     <p>基本上擅长：Js, ES6, Angular.js, Ng2, Vue2, Weex, RN, Native Script</p>
                     <p>服务端实践：PHP, Wordpress, Node.js, Express, MongoDB</p>
                     <p>工程实践：Grunt, Gulp, Webpack, npm, babel</p>
-                    <p>比较关注：WebVR, WebRTC, WebComponents...</p>
-                    <p>平时关注：社会工程... 偶尔找找漏洞，扒扒别人，写一写小脚本什么的...</p>
-                    <div>还有一个环游世界的梦想和脚步</div>
+                    <p>比较关注：WebVR, WebRTC, WebComponent, Service Worker...</p>
+                    <p>平时关注：社工... 偶尔找找漏洞，扒扒别人，写一写小脚本什么的...</p>
+                    <div>有一颗环游世界的心</div>
                   </div>
                 </div>
               </div>
@@ -87,6 +90,43 @@
             margin-bottom: 1em;
             background-color: $module-bg;
             overflow: hidden;
+
+            &:before {
+              content: "";
+              display: block;
+              border-width: 0 13em 12em 0;
+              border-color: transparent rgba(238,238,238,0.7) transparent transparent;
+              background: transparent;
+              border-style: solid;
+              width: 0;
+              position: absolute;
+              top: 0;
+              right: 0;
+              z-index: 2;
+              opacity: .6;
+            }
+
+            .gravatar {
+              position: absolute;
+              right: 4em;
+              top: 4em;
+              width: 14em;
+              height: 14em;
+              padding: .3em;
+              border: 1px dashed #ccc;
+              opacity: .8;
+              // filter: blur(1px);
+              @include css3-prefix(transition, transform .7s);
+
+              img {
+                max-width: 100%;
+              }
+
+              &:hover {
+                // filter: blur(0px);
+                @include css3-prefix(transform, rotate(2deg) scale(1.1));
+              }
+            }
 
             .item {
               line-height: 2.5em;

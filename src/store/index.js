@@ -1,53 +1,38 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
 Vue.use(Vuex)
 
-const store = new Vuex.Store({
+// 全局配置
+import options from './modules/options'
 
-  // 所有状态
-  state: {
+// import middlewares from './middlewares'
+// import apps from './modules/apps'
+// import articleList from './modules/article.list'
+// import prenextArticle from './modules/article.prenext'
+// import articleDetail from './modules/article.detail'
+// import auth from './modules/auth'
+// import commentList from './modules/comment.list'
+// import globalVal from './modules/global.val'
+// import logins from './modules/logins'
+// import tagList from './modules/tag.list'
 
-    // 页面的栏目展示类型（3栏/2栏）
-    pageCols: 3
+const debug = process.env.NODE_ENV !== 'production'
+Vue.config.debug = debug
+Vue.config.warnExpressionErrors = false
+
+export default new Vuex.Store({
+  modules: {
+    options,
+    // apps,
+    // articleList,
+    // prenextArticle,
+    // articleDetail,
+    // auth,
+    // commentList,
+    // globalVal,
+    // logins,
+    // tagList
   },
-
-  // 网络请求类的一步操作
-  actions: {
-
-    // 请求文章列表
-    FETCH_ARTICLE_LIST: ({ commit, dispatch, state }, { type }) => {
-
-      // 可以直接commmit调用mutation方法（commit必须是同步操作）
-      commit('SET_ACTIVE_TYPE', { type })
-
-      // 返回一个异步回调（用dispatch来调用异步事件）
-      /*
-      return fetchIdsByType(type)
-        .then(ids => commit('SET_LIST', { type, ids }))
-        .then(() => dispatch('ENSURE_ACTIVE_ITEMS'))
-      */
-    }
-  },
-
-  // 改变状态的方法（必须是同步方法）
-  mutations: {
-
-    // 设置页面栏目
-    SET_PAGE_COL: (state, col) => {
-      state.pageCols = col
-    }
-  },
-
-  // 数据的过滤及处理
-  getters: {
-
-    // state是数据存储对象，getters可用于获取当前getters下的其他方法
-    testGetters (state, getters) {
-      // return getters.activeIds.map(id => state.items[id]).filter(_ => _)
-      return []
-    }
-  }
+  strict: debug,
+  // middlewares
 })
-
-export default store
