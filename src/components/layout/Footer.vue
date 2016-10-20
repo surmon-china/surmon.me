@@ -26,12 +26,16 @@ export default {
     margin-top: 20px;
     background-color: $module-bg;
 
-    .footer-content {
-      padding: 1em;
-      font-size: .9em;
-      text-align: center;
-      color: #333;
-      text-transform: uppercase;
+    .container {
+      position: relative;
+
+      .footer-content {
+        padding: 1em;
+        font-size: .9em;
+        text-align: center;
+        color: #333;
+        text-transform: uppercase;
+      }
     }
   }
 </style>
