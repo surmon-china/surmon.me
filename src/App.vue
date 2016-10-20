@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import { Background, Header, Footer, Aside, Nav } from 'components/layout'
+  import { Background, Header, Footer, Aside, Tool, Nav } from 'components/layout'
   export default {
     name: 'app',
     components: {
@@ -30,11 +30,12 @@
       headerView: Header,
       footerView: Footer,
       asideView: Aside,
+      toolView: Tool,
       navView: Nav
     },
     computed: {
       pageCols () {
-        return this.$store.state.pageCols
+        return this.$store.state.options.pageCols
       }
     },
     mounted () {
@@ -55,6 +56,8 @@
 </script>
 
 <style lang="scss">
+  @import './sass/mixins';
+  @import './sass/variables';
   main {
     position: relative;
 
@@ -64,8 +67,10 @@
       margin: 0 0 0 12.5em;
       position: relative;
       overflow: hidden;
+      @include css3-prefix(transition, width .5s);
 
       &.pullpage {
+        @include css3-prefix(transition, width .5s);
         width: 62.5em;
       }
     }

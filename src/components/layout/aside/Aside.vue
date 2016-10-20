@@ -128,6 +128,23 @@
             <span>vue.js</span>
           </a>
         </router-link>
+        <router-link to="/tag/webpack" tag="li" class="list-item">
+          <a class="title">
+            <i class="iconfont icon-webpack"></i>
+            <span>webpack</span>
+          </a>
+        </router-link>
+        <router-link to="/tag/gulp" tag="li" class="list-item">
+          <a class="title">
+            <i class="iconfont icon-gulp"></i>
+            <span>gulp</span>
+          </a>
+        </router-link>
+        <router-link to="/tag/c-sharp" tag="li" class="list-item">
+          <a class="title">
+            <span>C#</span>
+          </a>
+        </router-link>
         <router-link to="/tag/php" tag="li" class="list-item">
           <a class="title">
             <i class="iconfont icon-php"></i>
