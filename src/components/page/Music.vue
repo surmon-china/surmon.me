@@ -7,6 +7,9 @@
         </div>
       </div>
     </div>
+    <div class="comment">
+      <duoshuo data-thread-key="music" data-title="我是播放器"></duoshuo>
+    </div>
   </div>
 </template>
 
@@ -28,6 +31,11 @@
       .content {
         width: 100%;
         overflow:  hidden;
+
+        .music {
+          padding: 1em;
+          height: 40em;
+        }
       }
     }
   }

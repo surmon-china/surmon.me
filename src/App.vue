@@ -18,6 +18,7 @@
       </transition>
     </main>
     <footer-view></footer-view>
+    <tool-view></tool-view>
   </div>
 </template>
 

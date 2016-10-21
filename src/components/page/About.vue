@@ -46,7 +46,7 @@
                 </div>
               </div>
               <div class="about-map">
-                <iframe src="http://localhost:8080/static/partials/map.html" style="width: 100%; height: 236px;"></iframe>
+                <iframe src="http://localhost:8888/static/partials/map.html" style="width: 100%; height: 236px;"></iframe>
               </div>
               <div class="about-project">
                 <router-link to="/project" class="project-link">
@@ -115,7 +115,6 @@
               padding: .3em;
               border: 1px dashed #ccc;
               opacity: .8;
-              // filter: blur(1px);
               @include css3-prefix(transition, transform .7s);
 
               img {
@@ -123,7 +122,6 @@
               }
 
               &:hover {
-                // filter: blur(0px);
                 @include css3-prefix(transform, rotate(2deg) scale(1.1));
               }
             }
