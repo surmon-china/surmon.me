@@ -27,6 +27,7 @@ export default [{
   // 播放器页面
     name: 'music',
     path: '/music',
+    meta: { fullPage: true },
     component: appView.Page.Music
   }, {
   // 留言板
@@ -47,11 +48,13 @@ export default [{
   // 视频列表页
     name: 'movie',
     path: '/category/movie',
+    meta: { fullPage: true },
     component: appView.Article.Movie.List
   }, {
   // 视频详情页
     name: 'movie-detail',
     path: '/movie/:movie_id',
+    meta: { fullPage: true },
     component: appView.Article.Movie.Detail
   }, {
   // 分类的文章列表页
