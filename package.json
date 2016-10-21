@@ -14,6 +14,7 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "highlight.js": "^9.7.0",
     "vue": "^2.0.1",
     "vue-awesome-swiper": "^2.2.0",
     "vue-codemirror": "^2.0.0",
