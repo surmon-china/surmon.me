@@ -5,21 +5,48 @@
       <div class="content" v-html="article.content"></div>
     </div>
     <div class="metas">
-      <span>本文由 Surmon 于 </span>
-      <router-link to="/" class="navbar-link">2015年-12月-30日</router-link>
-      <span>发布在 [</span>
-      <router-link to="/" class="navbar-link">Code</router-link>
-      <span> ] 分类下，当前已被围观 1,012 次</span>
-      <span>相关标签：</span>
-      <router-link to="/" class="navbar-link">AnjularJS</router-link>
-      <router-link to="/" class="navbar-link">Javascript</router-link>
-      <router-link to="/" class="navbar-link">Vue.js</router-link>
-      <span>原文链接 ：</span>
-      <router-link to="/" class="navbar-link">http://surmon.me/861.html</router-link>
+      <p class="">
+        <span>本文由 Surmon 发布于 </span>
+        <router-link to="/date/2015-12-30" class="navbar-link">2015年-12月-30日</router-link>
+        <span>，当前已被围观 1,012 次</span>
+      </p>
+      <p>
+        <span>相关分类：</span>
+        <router-link to="/" class="navbar-link">Code</router-link>
+        <router-link to="/" class="navbar-link">Think</router-link>
+      </p>
+      <p>
+        <span>相关标签：</span>
+        <router-link to="/" class="navbar-link">AnjularJS</router-link>
+        <router-link to="/" class="navbar-link">Javascript</router-link>
+        <router-link to="/" class="navbar-link">Vue.js</router-link>
+      </p>
+      <p>
+        <span>本站链接：</span>
+        <!-- 点击复制才对 -->
+        <router-link to="/" class="navbar-link">http://surmon.me/861.html</router-link>
+      </p>
+      <p>
+        <span>原文信息：</span>
+        <span>本文原文由尤雨溪发布于segmentfault，已获得转载授权</span>
+      </p>
+      <p>
+        <span>原文链接：</span>
+        <a href="https://segmentfault.com/q/1010000007247723" target="_blank">https://segmentfault.com/q/1010000007247723</a>
+      </p>
+      <div>
+        <span>版权声明：</span>
+        <span>本文内容来自互联网，非本站原创，若侵犯到您的利益请及时<a href="mailto:surmon@foxmail.com" target="_blank">联系我</a>删除</span>
+      </div>
     </div>
     <div class="related">
       <ul class="article-lists">
-        <li class="item" v-for="item in [1,2,3,4,5]">这里是相关文章</li>
+        <li class="item" v-for="item in 8">
+          <a href="http://surmon.me/71.html" class="item-box" rel="bookmark" title="硕士学位的贬值">
+            <img src="http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/07/546841351684.jpg&h=135&w=126&q=90&zc=1" class="thumb" width="111" height="120" title="硕士学位的贬值" alt="硕士学位的贬值">
+            <span class="title">硕士学位的贬值</span>
+          </a>
+        </li>
       </ul>
     </div>
     <div class="comment">
@@ -115,12 +142,12 @@
   .article {
 
     .detail, .metas, .related {
-      padding: 1em 2em;
       margin-bottom: 1em;
       background-color: $module-bg;
     }
 
     .detail {
+      padding: 1em 2em;
 
       .title {
         text-align: center;
@@ -186,15 +213,57 @@
     }
 
     .metas {
+      padding: 1em 2em;
     }
 
     .related {
-      padding: 1em;
+      padding: .8em;
+      overflow: hidden;
 
       .article-lists {
         padding: 0;
         margin: 0;
         list-style: none;
+
+        .item {
+          float: left;
+          margin-right: .8em;
+          margin-bottom: .8em;
+
+          &:nth-child(4),
+          &:nth-child(8) {
+            margin-right: 0;
+          }
+
+          &:nth-child(1n + 5) {
+            margin-bottom: 0;
+          }
+
+          .item-box {
+            display: block;
+            position: relative;
+            width: 9.61em;
+            height: 9em;
+
+            .thumb {
+              width: 100%;
+              height: 100%;
+            }
+
+            .title {
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              height: 2em;
+              line-height: 2em;
+              background-color: rgba(165, 165, 165, 0.7);
+              padding: 0 .5em;
+              color: white;
+              opacity: .8;
+            }
+          }
+        }
       }
     }
   }
