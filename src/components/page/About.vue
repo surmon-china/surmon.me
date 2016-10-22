@@ -46,7 +46,7 @@
                 </div>
               </div>
               <div class="about-map">
-                <iframe src="http://localhost:8888/static/partials/map.html" style="width: 100%; height: 236px;"></iframe>
+                <iframe src="http://localhost:8080/static/partials/map.html" style="width: 100%; height: 236px;"></iframe>
               </div>
               <div class="about-project">
                 <router-link to="/project" class="project-link">
