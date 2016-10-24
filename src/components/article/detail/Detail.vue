@@ -42,10 +42,10 @@
     <div class="related">
       <ul class="article-lists">
         <li class="item" v-for="item in 8">
-          <a href="http://surmon.me/71.html" class="item-box" rel="bookmark" title="硕士学位的贬值">
+          <router-link to="/article/234234234" class="item-box">
             <img src="http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/07/546841351684.jpg&h=135&w=126&q=90&zc=1" class="thumb" width="111" height="120" title="硕士学位的贬值" alt="硕士学位的贬值">
             <span class="title">硕士学位的贬值</span>
-          </a>
+          </router-link>
         </li>
       </ul>
     </div>
@@ -224,6 +224,8 @@
         padding: 0;
         margin: 0;
         list-style: none;
+        overflow: hidden;
+        opacity: .9;
 
         .item {
           float: left;
@@ -244,6 +246,16 @@
             position: relative;
             width: 9.61em;
             height: 9em;
+            overflow: hidden;
+
+            &:hover {
+
+              .thumb {
+                opacity: .9;
+                @include css3-prefix(transform, scale(1.2) rotate(3deg));
+                @include css3-prefix(transition, all 1s);
+              }
+            }
 
             .thumb {
               width: 100%;
