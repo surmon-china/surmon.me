@@ -72,12 +72,18 @@
     <div class="aside-calendar">
       <calendar></calendar>
     </div>
-    <div class="aside-tag">
+    <div class="aside-tag" v-scroll-top>
       <ul class="aside-tag-list">
         <router-link to="/tag/code" tag="li" class="list-item">
           <a class="title">
             <i class="iconfont icon-code"></i>
             <span>软件工程和设计思想</span>
+          </a>
+        </router-link>
+        <router-link to="/tag/base" tag="li" class="list-item">
+          <a class="title">
+            <i class="iconfont icon-code"></i>
+            <span>基础</span>
           </a>
         </router-link>
         <router-link to="/tag/html5" tag="li" class="list-item">
@@ -260,13 +266,34 @@
 
 <script>
 
+  // import
   import Calendar from './Calendar.vue'
 
+  // export
   export default {
     name: 'aside',
-
     components: {
       Calendar
+    },
+    directives: {
+      scrollTop: {
+        inserted(element) {
+
+          // 检测此元素相对于文档Document原点的绝对位置，并且这个值是不变化的
+          const sidebarFixedOffsetTop = parseInt(element.offsetTop)
+
+          // 监听滚动事件
+          window.onscroll = function() {
+            let windowScrollTop = document.body.scrollTop
+            let isFixed = (windowScrollTop - 333) > sidebarFixedOffsetTop
+            if (isFixed && element) element.setAttribute('class','aside-tag fixed')
+            if (!isFixed && element) element.setAttribute('class','aside-tag')
+          }
+        },
+        unbind(element) {
+          window.onscroll = null
+        }
+      }
     }
   }
 </script>
@@ -413,9 +440,15 @@
     }
 
     .aside-tag {
+      width: 19em;
       padding: .8em;
       padding-bottom: 0;
       margin-bottom: 1em;
+
+      &.fixed {
+        position: fixed;
+        top: 5.5em;
+      }
 
       .aside-tag-list {
         list-style: none;

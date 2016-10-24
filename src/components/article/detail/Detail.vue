@@ -136,7 +136,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '../../../sass/mixins';
   @import '../../../sass/variables';
   .article {

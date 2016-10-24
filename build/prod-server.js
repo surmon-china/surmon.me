@@ -1,6 +1,6 @@
 const express = require('express')
 const config = require('../config')
-const fs = require('fs');
+const fs = require('fs')
 
 // default port where dev server listens for incoming traffic
 const port = process.env.PORT || config.dev.port
