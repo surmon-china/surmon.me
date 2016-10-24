@@ -9,7 +9,7 @@
 
     <!-- 加载更多 -->
     <div class="movie-load">
-      <button class="btn-loadmore" @click="addArticle">加载更多</button>
+      <button class="btn-loadmore">加载更多</button>
     </div>
 
   </div>

@@ -26,6 +26,9 @@ import TouchRipple from 'vue-touch-ripple'
 import AwesomeSwiper from 'vue-awesome-swiper'
 import DuoShuo from 'components/common/vue-duoshuo'
 
+// Directive
+
+// Duoshuo Config
 DuoShuo.config({
   shortName: 'surmon-localhost',
   // unstable: true

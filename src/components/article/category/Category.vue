@@ -1,13 +1,18 @@
 <template>
   <div class="article-lists-header">
-    <ul class="tag-list">
-      <li class="item" v-for="tag in 5">
-        <p class="tag-logo">
-          <img src="http://ac-mhke0kuv.clouddn.com/7b5c3eb591b671749fee.png">
-        </p>
-        <div class="name">Vue.js</div>
-      </li>
-    </ul>
+    <div class="header-box" v-if="$route.params.category_slug == 'think'">
+      <p class="logo">
+        <i class="iconfont icon-think"></i>
+      </p>
+      <h5 class="title">这里分享我所收藏的、原创的关于生活、社会、互联网...的一些思考和见解</h5>
+    </div>
+    <div class="header-box" v-if="$route.params.category_slug == 'code'">
+      <!-- <img src="" class="background"> -->
+      <p class="logo">
+        <i class="iconfont icon-code"></i>
+      </p>
+      <h5 class="title">我会在这里记录与编程有关的一切</h5>
+    </div>
   </div>
 </template>
 
@@ -16,34 +21,74 @@
     name: 'article-lists-header',
     data() {
       return {}
+    },
+    watch: {
+      '$route'(route) {
+        console.log(route.params.category_slug)
+      }
     }
   }
 </script>
 
 <style lang="scss" scoped>
+  @import '../../../sass/mixins';
+  @import '../../../sass/variables';
   .article-lists-header {
-    background-color: white;
-    padding: 1em;
     margin-bottom: 1em;
+    position: relative;
+    overflow: hidden;
+    background-color: $module-bg;
 
-    .tag-list {
-      padding: 0;
-      margin: 0;
-      overflow: hidden;
+    .header-box {
+      padding: 1em;
 
-      .item {
-        display: inline-block;
-        float: left;
-        width: 20%;
-        padding: 1em 0;
+      .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: .6;
+        z-index: -1;
+        background-size: cover;
+        background: url('http://surmon.me/wp-content/uploads/2015/07/79_120801145009_1.jpg') $module-bg;
+      }
 
-        .tag-logo {
-          padding: 0 1.5em;
+
+      @keyframes logo-animate {
+        0% {
+          opacity: 1;
+          transform: scale(1);
         }
 
-        .name {
-          text-align: center;
+        33% {
+          opacity: .8;
+          transform: scale(.9) rotateY(0deg);
         }
+
+        66% {
+          opacity: .8;
+          transform: scale(.9) rotateY(360deg);
+        }
+
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .logo {
+        text-align: center;
+
+        .iconfont {
+          font-size: 6em;
+          display: inline-block;
+          animation: logo-animate 5s infinite;
+        }
+      }
+
+      .title {
+        text-align: center;
       }
     }
   }
