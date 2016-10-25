@@ -1,11 +1,13 @@
-import Index from './index/Index.vue'
 import Article from './article'
+import Project from './page/project'
+import Index from './index/Index.vue'
+import Layout from './layout'
 import Page from './page'
-import Project from './page/projects'
 
 module.exports = {
-  Index,
   Page,
+  Index,
+  Layout,
   Article,
   Project
 }

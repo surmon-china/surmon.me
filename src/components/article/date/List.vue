@@ -1,32 +1,20 @@
 <template>
   <div class="index">
-
-    <!-- 时间标题列表，可选年份，月份，日期 -->
-    <date></date>
-
-    <!-- 文章列表 -->
     <article-list :articles="articles"></article-list>
-
   </div>
 </template>
 
 <script>
 
-  // 组件
-  import Date from './Date.vue'
+  // import
   import ArticleList from '../list/List.vue'
 
-
-  // 模块配置
+  // export
   export default {
-    name: 'index-lists',
-
-    // 依赖组件
+    name: 'date-article-list',
     components: {
-      Date,
       ArticleList
     },
-
     data () {
       let article = {
         title: 'JS 原型继承和类式继承',
@@ -50,22 +38,6 @@
           data: [article, article, article, article, article]
         }
       }
-    },
-
-    // 创建时
-    created () {
-      // console.log('首页组件被创建', this)
-    },
-
-    // 包含方法
-    methods: {
-      codeChange(newCode) {
-        this.code = newCode
-      }
     }
   }
-
 </script>
-
-<style lang="stylus" scoped>
-</style>

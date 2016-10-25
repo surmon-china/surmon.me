@@ -21,7 +21,7 @@
         <i class="iconfont icon-netease-music"></i>
         <span>Music</span>
       </router-link>
-      <router-link to="/category/movie" class="item">
+      <router-link to="/category/movie" class="item" v-if="false">
         <i class="iconfont icon-movie"></i>
         <span>Movie</span>
       </router-link>

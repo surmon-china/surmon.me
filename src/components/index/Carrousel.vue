@@ -16,7 +16,7 @@
 
 <script>
   export default {
-    name: 'carrousel',
+    name: 'index-carrousel',
     data() {
       const slide = {
         src: 'http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/09/7916805876895932453.jpg&h=210&w=595&q=90&zc=1',

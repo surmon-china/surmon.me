@@ -11,12 +11,66 @@ export default [{
   // 项目列表页
     name: 'project',
     path: '/project',
-    component: appView.Page.Project
-  }, {
-  // 详细某项目页
-    name: 'project-vue-codemirror',
-    path: '/project/vue-codemirror',
-    component: appView.Project.vueCodemirror
+    meta: { fullPage: true },
+    redirect: '/project/list',
+    component: appView.Layout.Relay,
+    children: [{
+
+      // project list
+      name: 'project-list',
+      path: 'list',
+      meta: { fullPage: true },
+      component: appView.Page.Project
+    }, {
+
+      // vue-codemirror
+      name: 'vue-codemirror',
+      path: 'vue-codemirror',
+      meta: { fullPage: true },
+      component: appView.Project.vueCodemirror
+    }, {
+
+      // vue-touch-ripple
+      name: 'vue-touch-ripple',
+      path: 'vue-touch-ripple',
+      meta: { fullPage: true },
+      component: appView.Project.VueTouchRipple
+    }, {
+
+      // vue-video-player
+      name: 'vue-video-player',
+      path: 'vue-video-player',
+      meta: { fullPage: true },
+      component: appView.Project.VueVideoPlayer
+    }, {
+
+      // vue-awesome-swiper
+      name: 'vue-awesome-swiper',
+      path: 'vue-awesome-swiper',
+      meta: { fullPage: true },
+      component: appView.Project.VueAwesomeSwiper
+    }, {
+
+      // Nodepress
+      name: 'nodepress',
+      path: 'nodepress',
+      meta: { fullPage: true },
+      component: appView.Project.Nodepress
+    }, {
+
+      // WordpressOne
+      name: 'wordpress-One',
+      path: 'wordpress-One',
+      meta: { fullPage: true },
+      component: appView.Project.WordpressOne
+    }, {
+
+      // WordpressSurmon
+      name: 'wordpress-surmon',
+      path: 'wordpress-surmon',
+      meta: { fullPage: true },
+      component: appView.Project.WordpressSurmon
+    }]
   }, {
   // 关于我
     name: 'about',
@@ -37,7 +91,7 @@ export default [{
   }, {
   // 标签的文章列表页
     name: 'tag',
-    path: '/tag/:tag_slug',
+    path: '/tag/:tag',
     component: appView.Article.Tag
   }, {
   // 时间筛选的文章列表页
@@ -59,7 +113,7 @@ export default [{
   }, {
   // 分类的文章列表页
     name: 'category',
-    path: '/category/:category_slug',
+    path: '/category/:category',
     component: appView.Article.Category
   }, {
   // 文章详情页
