@@ -3,11 +3,11 @@
     <div class="detail">
       <div class="content">
         <div class="music">
-          音乐播放器
+          come soon
         </div>
       </div>
     </div>
-    <div class="comment">
+    <div class="comment" v-if="false">
       <duoshuo data-thread-key="music" data-title="我是播放器"></duoshuo>
     </div>
   </div>
@@ -15,7 +15,7 @@
 
 <script>
   export default {
-    name: 'Music'
+    name: 'music'
   }
 </script>
 
@@ -34,7 +34,11 @@
 
         .music {
           padding: 1em;
-          height: 40em;
+          height: 11em;
+          line-height: 9em;
+          text-align: center;
+          font-size: 4em;
+          text-transform: capitalize;
         }
       }
     }

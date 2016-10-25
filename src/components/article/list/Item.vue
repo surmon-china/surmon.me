@@ -8,31 +8,29 @@
       </div>
       <div class="item-body">
         <h5 class="item-title">
-          <router-link to="/article/asdasdasd">
-            {{ item.title }}
-          </router-link>
+          <router-link to="/article/asdasdasd">{{ item.title }}</router-link>
         </h5>
         <p class="item-description">{{ item.description }}</p>
         <div class="item-meta">
           <span class="date">
-            <!-- <i class="iconfont icon-clock"></i> -->
+            <i class="iconfont icon-clock"></i>
             <span>{{ item.date }}</span>
           </span>
           <span class="views">
-            <!-- <i class="iconfont icon-eye"></i> -->
+            <i class="iconfont icon-eye"></i>
             <span>{{ item.meta.views || 0 }}</span>
           </span>
           <span class="comment">
-            <!-- <i class="iconfont icon-comment"></i> -->
+            <i class="iconfont icon-comment"></i>
             <span>{{ item.meta.comments }}</span>
           </span>
           <span class="tag">
-            <!-- <i class="iconfont icon-tag"></i> -->
+            <i class="iconfont icon-tag"></i>
             <span v-if="!item.tag.length">无</span>
             <span v-for="tag in item.tag">{{ tag.name }}</span>
           </span>
           <span class="category">
-            <!-- <i class="iconfont icon-list"></i> -->
+            <i class="iconfont icon-list"></i>
             <span v-if="!item.category.length">未分类</span>
             <span v-for="category in item.category">{{ category.name }}</span>
           </span>
@@ -43,27 +41,12 @@
 </template>
 
 <script>
-
-export default {
-
-  name: 'article-list-item',
-
-  props: {
-    item: Object
-  },
-
-  computed: {
-    // href () {
-    //   return this.item.url || ('#/item/' + this.item.id)
-    // },
-    // showInfo () {
-    //   return this.item.type === 'story' || this.item.type === 'poll'
-    // },
-    // showDomain () {
-    //   return this.item.type === 'story'
-    // }
+  export default {
+    name: 'article-list-item',
+    props: {
+      item: Object
+    }
   }
-}
 </script>
 
 <style lang="scss">

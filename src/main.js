@@ -26,7 +26,11 @@ import TouchRipple from 'vue-touch-ripple'
 import AwesomeSwiper from 'vue-awesome-swiper'
 import DuoShuo from 'components/common/vue-duoshuo'
 
-// Directive
+// fiters
+import filters from './filters'
+
+// use fiters
+Object.keys(filters).forEach(key => Vue.filter(key, filters[key]))
 
 // Duoshuo Config
 DuoShuo.config({

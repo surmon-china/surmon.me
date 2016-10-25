@@ -64,8 +64,7 @@
 
 <script>
   export default {
-    // 模块名称
-    name: 'About'
+    name: 'about'
   }
 </script>
 
