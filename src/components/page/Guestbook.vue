@@ -16,8 +16,7 @@
 
 <script>
   export default {
-    // 模块名称
-    name: 'Guestbook'
+    name: 'guestbook'
   }
 </script>
 

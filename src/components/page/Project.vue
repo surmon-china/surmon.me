@@ -1,8 +1,3 @@
-<style lang="scss" scoped>
-  .projects {
-  }
-</style>
-
 <template>
   <div class="projects">
     <ul class="project-list">
@@ -17,15 +12,16 @@
 </template>
 
 <script>
-
   export default {
-
-    // 模块名称
-    name: 'project-list',
-
+    name: 'project',
     data() {
       return {
       }
     }
   }
 </script>
+
+<style lang="scss" scoped>
+  .projects {
+  }
+</style>

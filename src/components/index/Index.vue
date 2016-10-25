@@ -1,32 +1,25 @@
 <template>
   <div class="index">
-
     <!-- 幻灯 -->
     <carrousel></carrousel>
-
     <!-- 文章列表 -->
     <article-list :articles="articles" @loadmore="addArticle"></article-list>
-
   </div>
 </template>
 
 <script>
 
-  // 组件
+  // import
   import Carrousel from './Carrousel.vue'
   import ArticleList from '../article/list/List.vue'
 
-
-  // 模块配置
+  // export
   export default {
-    name: 'index-lists',
-
-    // 依赖组件
+    name: 'index',
     components: {
       Carrousel,
       ArticleList
     },
-
     data () {
       let article = {
         title: 'JS 原型继承和类式继承',
@@ -52,17 +45,7 @@
         }
       }
     },
-
-    // 创建时
-    created () {
-      // console.log('首页组件被创建', this)
-    },
-
-    // 包含方法
     methods: {
-      codeChange(newCode) {
-        this.code = newCode
-      },
       addArticle() {
         let newArticle = this.article
         newArticle.title = '我是新增的文章' + this.articles.data.length
@@ -71,8 +54,4 @@
       }
     }
   }
-
 </script>
-
-<style lang="scss" scoped>
-</style>

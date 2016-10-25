@@ -4,7 +4,7 @@
     <header-view></header-view>
     <main id="main">
       <nav-view></nav-view>
-      <div class="article-content" :class="{ 'pullpage': pageCols == 2 }">
+      <div class="main-content" :class="{ 'pullpage': pageCols == 2 }">
         <transition name="slide-up">
           <keep-alive>
             <router-view class="router-view"></router-view>
@@ -62,7 +62,7 @@
   main {
     position: relative;
 
-    .article-content {
+    .main-content {
       float: left;
       width: 42.5em;
       margin: 0 0 0 12.5em;

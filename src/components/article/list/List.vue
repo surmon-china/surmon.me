@@ -1,8 +1,13 @@
 <template>
   <div class="articles">
 
+    <!-- 列表头 -->
+    <div class="article-list-header" v-if="['tag', 'date', 'category'].includes($route.name)">
+      <list-header></list-header>
+    </div>
+
     <!-- 列表 -->
-    <div class="article-lists">
+    <div class="article-list">
       <list-item v-for="(item, index) in articles.data" :item="item" :key="index"></list-item>
     </div>
 
@@ -10,66 +15,48 @@
     <div class="article-load">
       <button class="btn-loadmore" @click="addArticle">加载更多</button>
     </div>
-
   </div>
 </template>
 
 <script>
 
-// 引入其他模块
-import ListItem from './Item.vue'
+  // import
+  import ListItem from './Item.vue'
+  import ListHeader from './Header.vue'
 
-// 定义模块
-export default {
-
-  // 组件（模块）名称
-  name: 'article-lists',
-
-  // 依赖组件
-  components: {
-    ListItem
-  },
-
-  // 绑定的数据
-  data () {
-    return {
-      page: 1,
-      count: 10
-      // items: datas
-    }
-  },
-
-  props: {
-    articles: {
-      type: Object,
-      default: {}
-    }
-  },
-
-  // 创建时
-  created () {
-    // console.log('文章列表组件被创建', this)
-  },
-
-  // 销毁时
-  destroyed () {
-    // store.removeListener('topstories-updated', this.update)
-  },
-
-  methods: {
-    addArticle() {
-      // console.log(this.articles)
-      this.$emit('loadmore')
+  // export
+  export default {
+    name: 'article-list',
+    components: {
+      ListItem,
+      ListHeader
+    },
+    props: {
+      articles: {
+        type: Object,
+        default: {}
+      }
+    },
+    methods: {
+      addArticle() {
+        this.$emit('loadmore')
+      }
     }
   }
-}
 </script>
 
 <style lang="scss">
   @import '../../../sass/variables';
   .articles {
 
-    .article-lists {
+    .article-list-header {
+      margin-bottom: 1em;
+      position: relative;
+      overflow: hidden;
+      background-color: $module-bg;
+    }
+
+    .article-list {
       margin-bottom: 1em;
       min-height: 1em;
       overflow: hidden;

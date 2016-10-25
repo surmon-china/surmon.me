@@ -1,10 +1,3 @@
-<style lang="scss" scoped>
-  @import '../../../sass/variables';
-  .project {
-
-  }
-</style>
-
 <template>
   <div class="project">
     <codemirror v-model="code" :options="editorOption"></codemirror>
@@ -14,12 +7,8 @@
 </template>
 
 <script>
-
   export default {
-
-    // 模块名称
     name: 'project-vue-codemirror',
-
     data() {
       return {
         code: 'const a = 10',

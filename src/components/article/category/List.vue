@@ -1,32 +1,20 @@
 <template>
   <div class="index">
-
-    <!-- 标签列表 -->
-    <category></category>
-
-    <!-- 文章列表 -->
     <article-list :articles="articles"></article-list>
-
   </div>
 </template>
 
 <script>
 
   // 组件
-  import Category from './Category.vue'
   import ArticleList from '../list/List.vue'
-
 
   // 模块配置
   export default {
-    name: 'index-lists',
-
-    // 依赖组件
+    name: 'category-article-list',
     components: {
-      Category,
       ArticleList
     },
-
     data () {
       let article = {
         title: 'JS 原型继承和类式继承',
@@ -50,22 +38,6 @@
           data: [article, article, article, article, article]
         }
       }
-    },
-
-    // 创建时
-    created () {
-      // console.log('首页组件被创建', this)
-    },
-
-    // 包含方法
-    methods: {
-      codeChange(newCode) {
-        this.code = newCode
-      }
     }
   }
-
 </script>
-
-<style lang="scss" scoped>
-</style>

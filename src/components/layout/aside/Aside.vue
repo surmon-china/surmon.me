@@ -65,198 +65,19 @@
       </router-link>
     </div>
     <div class="aside-ad">
-      <router-link to="http://s.click.taobao.com/ZaXp1Rx" target="_blank" class="ad-box">
+      <a href="http://s.click.taobao.com/ZaXp1Rx" target="_blank" class="ad-box">
         <img src="http://p1.bpimg.com/567571/e85fb6270effc4c7.jpg">
-      </router-link>
+      </a>
     </div>
     <div class="aside-calendar">
       <calendar></calendar>
     </div>
     <div class="aside-tag" v-scroll-top>
       <ul class="aside-tag-list">
-        <router-link to="/tag/code" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-code"></i>
-            <span>软件工程和设计思想</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/base" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-code"></i>
-            <span>基础</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/html5" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-html5"></i>
-            <span>html5</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/css3" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-css3"></i>
-            <span>css3</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/JavaScript" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-javascript"></i>
-            <span>JavaScript</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/nodejs" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-socialnodejs"></i>
-            <span>node.js</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/jquery" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-jquery"></i>
-            <span>jquery</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/angular2" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-socialangular"></i>
-            <span>Angular2</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/react" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-react"></i>
-            <span>react</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/vue" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-vue"></i>
-            <span>vue.js</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/webpack" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-webpack"></i>
-            <span>webpack</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/gulp" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-gulp"></i>
-            <span>gulp</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/c-sharp" tag="li" class="list-item">
-          <a class="title">
-            <span>C#</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/php" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-php"></i>
-            <span>php</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/python" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-python"></i>
-            <span>Python</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/chrome" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-chrome"></i>
-            <span>chrome</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/linux" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-linux"></i>
-            <span>linux</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/ubuntu" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-ubuntu"></i>
-            <span>ubuntu</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/windows" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-windows"></i>
-            <span>windows</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/vr" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-vr"></i>
-            <span>vr</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/http" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-http"></i>
-            <span>http</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/github" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-github"></i>
-            <span>github</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/mac" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-mac"></i>
-            <span>mac</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/wechat" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-wechat"></i>
-            <span>wechat</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/google" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-google"></i>
-            <span>google</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/redis" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-redis"></i>
-            <span>redis</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/git" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-git"></i>
-            <span>git</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/mongodb" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-mongodb"></i>
-            <span>DB</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/wordpress" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-wordpress"></i>
-            <span>wordpress</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/zhihu" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-zhihu"></i>
-            <span>知乎</span>
-          </a>
-        </router-link>
-        <router-link to="/tag/internet" tag="li" class="list-item">
-          <a class="title">
-            <i class="iconfont icon-internet"></i>
-            <span>其他</span>
+        <router-link :to="'/tag/' + tag.router" tag="li" class="list-item" v-for="tag in tags">
+          <a class="title" :title="tag.title">
+            <i class="iconfont" :class="[tag.icon]"></i>
+            <span>{{ tag.title }}</span>
           </a>
         </router-link>
       </ul>
@@ -268,10 +89,16 @@
 
   // import
   import Calendar from './Calendar.vue'
+  import tags from '../../article/tag/tags'
 
   // export
   export default {
     name: 'aside',
+    data() {
+      return {
+        tags
+      }
+    },
     components: {
       Calendar
     },
