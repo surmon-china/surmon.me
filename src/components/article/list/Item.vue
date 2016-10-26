@@ -2,13 +2,13 @@
   <div class="article-list-item">
     <div class="item-content">
       <div class="item-thumb">
-        <router-link to="/article/asdasdasd">
-         <img class="item-thumb-img" src="http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/11/20120815211519_LZsce.thumb_.600_0.jpeg&h=112&w=180&q=100&zc=1">
+        <router-link :to="'/article/' + item.id">
+          <img class="item-thumb-img" :src="item.thumb">
         </router-link>
       </div>
       <div class="item-body">
         <h5 class="item-title">
-          <router-link to="/article/asdasdasd">{{ item.title }}</router-link>
+          <router-link :to="'/article/' + item.id">{{ item.title }}</router-link>
         </h5>
         <p class="item-description">{{ item.description }}</p>
         <div class="item-meta">
@@ -24,15 +24,15 @@
             <i class="iconfont icon-comment"></i>
             <span>{{ item.meta.comments }}</span>
           </span>
-          <span class="tag">
-            <i class="iconfont icon-tag"></i>
-            <span v-if="!item.tag.length">无</span>
-            <span v-for="tag in item.tag">{{ tag.name }}</span>
-          </span>
           <span class="category">
             <i class="iconfont icon-list"></i>
             <span v-if="!item.category.length">未分类</span>
-            <span v-for="category in item.category">{{ category.name }}</span>
+            <router-link :to="'/category/' + category.slug" v-for="category in item.category">{{ category.name }}</router-link>
+          </span>
+          <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            <span v-if="!item.tag.length">无</span>
+            <router-link :to="'/tag/' + tag.slug" v-for="tag in item.tag">{{ tag.name }}</router-link>
           </span>
         </div>
       </div>
@@ -64,13 +64,13 @@
       background-color: $module-hover-bg;
     }
 
-    .item-content {
+    > .item-content {
       display: block;
       overflow: hidden;
       height: 9.5em;
       padding: .5em;
 
-      .item-thumb {
+      > .item-thumb {
         float: left;
         width: 12em;
         height: 8.5em;
@@ -91,12 +91,12 @@
         }
       }
 
-      .item-body {
+      > .item-body {
         float: right;
         width: 28.5em;
         height: 8.5em;
 
-        .item-title {
+        > .item-title {
           font-weight: bold;
           color: #333;
           margin-top: .2em;
@@ -113,7 +113,7 @@
           }
         }
 
-        .item-description {
+        > .item-description {
           font-size: .9em;
           margin: 0;
           margin-bottom: 0.3em;
@@ -127,13 +127,47 @@
           line-height: 1.8em;
         }
 
-        .item-meta {
+        > .item-meta {
           font-size: .9em;
-          height: 1.6em;
+          height: 2em;
           line-height: 2em;
+          display: block;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
 
-          span {
-            margin-right: .5em;
+          > .date,
+          > .views,
+          > .comment,
+          > .tag,
+          > .category {
+            display: inline-block;
+            float: left;
+            margin-right: 1em;
+
+            > .iconfont {
+              font-size: 1em;
+            }
+          }
+
+          > .tag,
+          > .category {
+
+            a {
+              text-transform: capitalize;
+            }
+          }
+
+          > .tag {
+            margin-right: 0;
+            max-width: 10em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            a {
+              margin-right: .5em;
+            }
           }
         }
       }
