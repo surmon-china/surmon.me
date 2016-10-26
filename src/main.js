@@ -11,6 +11,7 @@ import 'sass/app.scss'
 // Libs
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import VueResource from 'vue-resource'
 
 // config
 import routes from './routes'
@@ -41,6 +42,7 @@ DuoShuo.config({
 // app use
 Vue.use(DuoShuo)
 Vue.use(VueRouter)
+Vue.use(VueResource)
 Vue.use(CodeMirror)
 Vue.use(VideoPlayer)
 Vue.use(TouchRipple)
@@ -57,15 +59,15 @@ const router = new VueRouter({
 
 // 路由拦截
 router.beforeEach((route, redirect, next) => {
-
-  // 是否需要通栏
-  /*
-  const fullPage = route.matched.some(m => m.meta.fullPage)
-  if (fullPage) {
-    console.log('需要全屏显示', this)
-  }
-  */
   next()
+})
+
+// 请求拦截
+Vue.http.interceptors.push((request, next) => {
+  console.log(request)
+  next((response) => {
+    console.log(response)
+  })
 })
 
 // start app

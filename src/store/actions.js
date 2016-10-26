@@ -1,7 +1,28 @@
-import api from '../api'
+import api from './api'
 import * as types from './types'
-import { saveCookie,signOut } from '../utils/authService'
-import img from '../assets/images/shanghai.jpg'
+
+export const getTagList = ({ dispatch }) => {
+  api.tag.getList().then(response => {
+    if(!response.ok){
+      return dispatch(types.GET_TAG_LIST_FAILURE)
+    }
+    dispatch(types.GET_TAG_LIST_SUCCESS, { tagList: response.data.data })
+  }, response => {
+    dispatch(types.GET_TAG_LIST_FAILURE)
+  })
+}
+
+/*
+export const getTagList = ({ dispatch }) => {
+  api.tag.getList().then(response => {
+    if(!response.ok){
+      return dispatch(types.GET_TAG_LIST_FAILURE)
+    }
+    dispatch(types.GET_TAG_LIST_SUCCESS, { tagList: response.data.data })
+  }, response => {
+    dispatch(types.GET_TAG_LIST_FAILURE)
+  })
+}
 
 export const showMsg = ({dispatch}, content,type='error') => {
   dispatch(types.SHOW_MSG, {content:content,type:type})
@@ -64,6 +85,7 @@ export const localLogin = (store, userInfo) => {
     showMsg(store,response.data.error_msg || '登录失败')
   })
 }
+
 export const getUserInfo = ({ dispatch }) => {
   api.getMe().then(response => {
     if(!response.ok){
@@ -87,16 +109,6 @@ export const updateUser = (store,userInfo) => {
   })
 }
 
-export const getTagList = ({ dispatch }) => {
-  api.getTagList().then(response => {
-    if(!response.ok){
-      return dispatch(types.GET_TAG_LIST_FAILURE)
-    }
-    dispatch(types.GET_TAG_LIST_SUCCESS, { tagList: response.data.data })
-  }, response => {
-    dispatch(types.GET_TAG_LIST_FAILURE)
-  })
-}
 
 //更改options
 export const changeOptions = ({ dispatch },options) => {
@@ -158,9 +170,9 @@ export const toggleLike = ({ dispatch }, id) => {
   api.toggleLike(id).then(response => {
     const json = response.data
     if(response.ok){
-      dispatch(types.TOGGLE_LIKE, { 
+      dispatch(types.TOGGLE_LIKE, {
         like_count: json.count,
-        isLike: json.isLike 
+        isLike: json.isLike
       })
     }
   })
@@ -214,3 +226,5 @@ export const getApps = ({ dispatch }) => {
     dispatch(types.FAILURE_GET_APPS)
   })
 }
+
+*/

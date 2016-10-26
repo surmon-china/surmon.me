@@ -76,8 +76,9 @@
       <ul class="aside-tag-list">
         <router-link :to="'/tag/' + tag.router" tag="li" class="list-item" v-for="tag in tags">
           <a class="title" :title="tag.title">
-            <i class="iconfont" :class="[tag.icon]"></i>
+            <i class="iconfont" :class="[tag.icon]" v-if="tag.icon"></i>
             <span>{{ tag.title }}</span>
+            <span>({{ tag.count || 0 }})</span>
           </a>
         </router-link>
       </ul>
@@ -89,14 +90,12 @@
 
   // import
   import Calendar from './Calendar.vue'
-  import tags from '../../article/tag/tags'
 
   // export
   export default {
     name: 'aside',
     data() {
       return {
-        tags
       }
     },
     components: {
@@ -105,10 +104,8 @@
     directives: {
       scrollTop: {
         inserted(element) {
-
           // 检测此元素相对于文档Document原点的绝对位置，并且这个值是不变化的
           const sidebarFixedOffsetTop = parseInt(element.offsetTop)
-
           // 监听滚动事件
           window.onscroll = function() {
             let windowScrollTop = document.body.scrollTop
@@ -121,17 +118,30 @@
           window.onscroll = null
         }
       }
+    },
+    computed: {
+      tags() {
+        return this.$store.state.tagList.tags
+      }
+    },
+    methods: {
+      init() {
+        // 请求最新文章
+        // 请求标签列表
+        console.log(this)
+        this.$store.dispatch('getTagList')
+      }
+    },
+    mounted() {
+      this.init()
     }
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import '../../../sass/variables';
   @import '../../../sass/mixins';
   aside {
-    // position: absolute;
-    // top: 0;
-    // right: 0;
     float: right;
     display: block;
     width: 19em;
@@ -269,6 +279,7 @@
     .aside-tag {
       width: 19em;
       padding: .8em;
+      padding-right: 0;
       padding-bottom: 0;
       margin-bottom: 1em;
 
@@ -299,7 +310,7 @@
 
           .title {
             display: block;
-            padding: 0 .8em;
+            padding: 0 .5em;
             font-family: CenturyGothic, -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", sans-serif;
           }
         }

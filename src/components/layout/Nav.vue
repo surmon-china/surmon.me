@@ -30,7 +30,7 @@
         <span>About</span>
       </router-link>
       <router-link to="/guestbook" class="item">
-        <i class="iconfont icon-liuyan"></i>
+        <i class="iconfont icon-comment"></i>
         <span>Guestbook</span>
       </router-link>
     </nav>

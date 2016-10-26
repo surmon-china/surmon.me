@@ -17,11 +17,11 @@
                   <span><a href="mailto:surmon@foxmail.com" target="_blank" rel="nofollow">Surmon@foxmail.com</a></span>
                 </p>
                 <p class="item">
-                  <i class="iconfont icon-tabcomment"></i>
+                  <i class="iconfont icon-comment-discussion"></i>
                   <span>大本营：<a href="http://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4" target="_blank" rel="nofollow">288325802</a></span>
                 </p>
                 <p class="item">
-                  <i class="iconfont icon-qq"></i>
+                  <i class="iconfont icon-address"></i>
                   <span>欢迎西安的同学请我喝(yue)咖(...)啡</span>
                 </p>
                 <p class="item">

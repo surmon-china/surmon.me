@@ -3,20 +3,29 @@ import {
 	GET_TAG_LIST_FAILURE
 } from '../types'
 
+import { getTagList } from '../actions'
+
+console.log(getTagList)
+
 const state = {
-  items:[]
+  tags:[]
 }
 
 const mutations = {
-  [GET_TAG_LIST_FAILURE](state){
-    state.items = []
+  [GET_TAG_LIST_FAILURE](state) {
+    state.tags = []
   },
-  [GET_TAG_LIST_SUCCESS](state,action){
-    state.items = action.tagList
+  [GET_TAG_LIST_SUCCESS](state, action) {
+    state.tags = action.tagList
   }
+}
+
+const actions = {
+  getTagList
 }
 
 export default {
   state,
+  actions,
   mutations
 }
