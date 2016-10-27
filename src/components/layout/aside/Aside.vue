@@ -94,8 +94,20 @@
   // export
   export default {
     name: 'aside',
-    data() {
-      return {
+    beforeMount (){
+      this.init()
+    },
+    computed: {
+      tags() {
+        return this.$store.state.tagList.tags
+      }
+    },
+    methods: {
+      init() {
+        // 请求最新文章
+        // this.$store.dispatch('GET_NEW_ARTICLE_LIST')
+        // 请求标签列表
+        this.$store.dispatch('GET_TAG_LIST')
       }
     },
     components: {
@@ -118,22 +130,6 @@
           window.onscroll = null
         }
       }
-    },
-    computed: {
-      tags() {
-        return this.$store.state.tagList.tags
-      }
-    },
-    methods: {
-      init() {
-        // 请求最新文章
-        // 请求标签列表
-        console.log(this)
-        this.$store.dispatch('getTagList')
-      }
-    },
-    mounted() {
-      this.init()
     }
   }
 </script>

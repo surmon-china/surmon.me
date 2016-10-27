@@ -1,18 +1,33 @@
 import api from './api'
 import * as types from './types'
 
-export const getTagList = ({ dispatch }) => {
-  api.tag.getList().then(response => {
-    if(!response.ok){
-      return dispatch(types.GET_TAG_LIST_FAILURE)
-    }
-    dispatch(types.GET_TAG_LIST_SUCCESS, { tagList: response.data.data })
-  }, response => {
-    dispatch(types.GET_TAG_LIST_FAILURE)
-  })
+export default {
+
+  // 获取标签列表
+  GET_TAG_LIST({ commit, dispatch, state }, params) {
+    api.tag.getList(params).then(response => {
+      if(response.ok) commit(types.GET_TAG_LIST_SUCCESS, { tagList: response.data.data })
+      if(!response.ok) commit(types.GET_TAG_LIST_FAILURE)
+    }, err => {
+      commit(types.GET_TAG_LIST_FAILURE, err)
+    })
+  }
+
+  /*
+  // 获取最新文章列表
+  GET_NEW_ARTICLE_LIST({ commit, dispatch, state }, params) {
+    // api.tag.getList(params).then(response => {
+    //   if(response.ok) commit(types.GET_TAG_LIST_SUCCESS, { tagList: response.data.data })
+    //   if(!response.ok) commit(types.GET_TAG_LIST_FAILURE)
+    // }, err => {
+    //   commit(types.GET_TAG_LIST_FAILURE, err)
+    // })
+  }
+  */
 }
 
 /*
+
 export const getTagList = ({ dispatch }) => {
   api.tag.getList().then(response => {
     if(!response.ok){
