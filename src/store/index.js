@@ -13,7 +13,7 @@ Vue.config.warnExpressionErrors = false
 import options from './modules/options'
 
 // Tags数据
-import tagList from './modules/tag.list'
+import tag from './modules/tag'
 
 // import apps from './modules/apps'
 // import articleList from './modules/article.list'
@@ -30,7 +30,7 @@ import actions from './actions'
 export default new Vuex.Store({
   modules: {
     options,
-    tagList
+    tag
     // apps,
     // articleList,
     // prenextArticle,
