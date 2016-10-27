@@ -4,18 +4,19 @@
 *
 */
 
+// Third Utils
+window.store = require('store')
+
 // Bootstrap
 import 'sass/app.scss'
-
 
 // Libs
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import VueResource from 'vue-resource'
 
 // config
 import routes from './routes'
-import store from './store'
+import stores from './store'
 
 // App conponent
 import App from './App'
@@ -42,7 +43,6 @@ DuoShuo.config({
 // app use
 Vue.use(DuoShuo)
 Vue.use(VueRouter)
-Vue.use(VueResource)
 Vue.use(CodeMirror)
 Vue.use(VideoPlayer)
 Vue.use(TouchRipple)
@@ -62,17 +62,9 @@ router.beforeEach((route, redirect, next) => {
   next()
 })
 
-// 请求拦截
-Vue.http.interceptors.push((request, next) => {
-  // console.log(request)
-  next((response) => {
-    // console.log(response)
-  })
-})
-
 // start app
 const app = new Vue({
-  store,
+  store: stores,
   router,
   render: h => h(App)
 }).$mount('app')

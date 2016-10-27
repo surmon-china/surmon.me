@@ -99,7 +99,7 @@
     },
     computed: {
       tags() {
-        return this.$store.state.tagList.tags
+        return this.$store.state.tag.list
       }
     },
     methods: {

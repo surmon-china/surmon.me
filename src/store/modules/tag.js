@@ -4,15 +4,15 @@ import {
 } from '../types'
 
 const state = {
-  tags:[]
+  list: []
 }
 
 const mutations = {
   [GET_TAG_LIST_FAILURE](state) {
-    state.tags = []
+    state.list = []
   },
   [GET_TAG_LIST_SUCCESS](state, action) {
-    state.tags = action.tagList
+    state.list = action.tagList
   }
 }
 

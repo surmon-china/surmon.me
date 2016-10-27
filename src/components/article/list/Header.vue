@@ -22,16 +22,11 @@
 </template>
 
 <script>
-
-  // import
-  import tags from '../tag/tags'
-
-  // export
   export default {
     name: 'article-list-header',
     computed: {
       currentTag() {
-        return tags.find((tag, index, arr) => { return tag.router === this.$route.params.tag })
+        return this.$store.state.tag.list.find((tag, index, arr) => { return tag.router === this.$route.params.tag })
       },
       currentDate() {
         return this.$route.params.date

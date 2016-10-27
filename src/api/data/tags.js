@@ -1,4 +1,4 @@
-export default [
+module.exports = [
   {
     router: 'code',
     icon: 'icon-code',
