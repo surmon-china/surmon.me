@@ -64,9 +64,9 @@ router.beforeEach((route, redirect, next) => {
 
 // 请求拦截
 Vue.http.interceptors.push((request, next) => {
-  console.log(request)
+  // console.log(request)
   next((response) => {
-    console.log(response)
+    // console.log(response)
   })
 })
 

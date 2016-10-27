@@ -3,10 +3,6 @@ import {
 	GET_TAG_LIST_FAILURE
 } from '../types'
 
-import { getTagList } from '../actions'
-
-console.log(getTagList)
-
 const state = {
   tags:[]
 }
@@ -20,12 +16,7 @@ const mutations = {
   }
 }
 
-const actions = {
-  getTagList
-}
-
 export default {
   state,
-  actions,
   mutations
 }
