@@ -5,55 +5,51 @@ export default {
 
   // 获取标签列表
   GET_TAG_LIST({ commit, dispatch, state }, params) {
+    commit(types.REQUEST_TAG_LIST)
     api.tag.getList(params).then(response => {
-      if(response.ok) commit(types.GET_TAG_LIST_SUCCESS, { tagList: response.data.data })
+      if(response.ok) commit(types.GET_TAG_LIST_SUCCESS, { list: response.data.data })
       if(!response.ok) commit(types.GET_TAG_LIST_FAILURE)
     }, err => {
       commit(types.GET_TAG_LIST_FAILURE, err)
     })
-  }
+  },
 
-  /*
   // 获取最新文章列表
-  GET_NEW_ARTICLE_LIST({ commit, dispatch, state }, params) {
-    // api.tag.getList(params).then(response => {
-    //   if(response.ok) commit(types.GET_TAG_LIST_SUCCESS, { tagList: response.data.data })
-    //   if(!response.ok) commit(types.GET_TAG_LIST_FAILURE)
-    // }, err => {
-    //   commit(types.GET_TAG_LIST_FAILURE, err)
-    // })
-  }
-  */
+  GET_ARTICLE_LIST({ commit, dispatch, state }, params) {
+    commit(types.REQUEST_ARTICLE_DETAIL)
+    api.article.getList(params).then(response => {
+      if(response.ok) commit(types.GET_ARTICLE_LIST_SUCCESS, { list: response.data.data })
+      if(!response.ok) commit(types.GET_ARTICLE_LIST_FAILURE)
+    }, err => {
+      commit(types.GET_ARTICLE_LIST_FAILURE, err)
+    })
+  },
+
+  // 获取最热文章列表
+  GET_ARTICLE_HOT_LIST({ commit, dispatch, state }, params) {
+    commit(types.REQUEST_ARTICLE_HOT_LIST)
+    api.article.getHot(params).then(response => {
+      if(response.ok) commit(types.GET_ARTICLE_HOT_LIST_SUCCESS, { list: response.data.data })
+      if(!response.ok) commit(types.GET_ARTICLE_HOT_LIST_FAILURE)
+    }, err => {
+      commit(types.GET_ARTICLE_HOT_LIST_FAILURE, err)
+    })
+  },
+
+  // 获取文章详情
+  GET_ARTICLE_DETAIL({ commit, dispatch, state }, params) {
+    commit(types.REQUEST_ARTICLE_DETAIL)
+    api.article.getHot(params).then(response => {
+      if(response.ok) commit(types.GET_ARTICLE_DETAIL_SUCCESS, { detail: response.data.data })
+      if(!response.ok) commit(types.GET_ARTICLE_DETAIL_FAILURE)
+    }, err => {
+      commit(types.GET_ARTICLE_DETAIL_FAILURE, err)
+    })
+  },
+
 }
 
 /*
-
-export const getTagList = ({ dispatch }) => {
-  api.tag.getList().then(response => {
-    if(!response.ok){
-      return dispatch(types.GET_TAG_LIST_FAILURE)
-    }
-    dispatch(types.GET_TAG_LIST_SUCCESS, { tagList: response.data.data })
-  }, response => {
-    dispatch(types.GET_TAG_LIST_FAILURE)
-  })
-}
-
-export const showMsg = ({dispatch}, content,type='error') => {
-  dispatch(types.SHOW_MSG, {content:content,type:type})
-}
-
-export const hideMsg = ({dispatch}) => {
-  dispatch(types.HIDE_MSG)
-}
-
-export const changeStyleMode = ({dispatch}) => {
-  dispatch(types.CHANGE_STYLE_MODE)
-}
-
-export const getCaptchaUrl = ({dispatch}) => {
-  dispatch(types.GET_CAPTCHAURL)
-}
 
 export const getIndexImage = ({dispatch}) => {
   api.getIndexImage().then(response => {

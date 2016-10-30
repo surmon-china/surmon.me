@@ -73,8 +73,9 @@
       <calendar></calendar>
     </div>
     <div class="aside-tag" v-scroll-top>
+      {{ tag.fetching ? '加载中' : '加载完毕' }}
       <ul class="aside-tag-list">
-        <router-link :to="'/tag/' + tag.router" tag="li" class="list-item" v-for="tag in tags">
+        <router-link :to="'/tag/' + tag.router" tag="li" class="list-item" v-for="tag in tag.list">
           <a class="title" :title="tag.title">
             <i class="iconfont" :class="[tag.icon]" v-if="tag.icon"></i>
             <span>{{ tag.title }}</span>
@@ -98,8 +99,8 @@
       this.init()
     },
     computed: {
-      tags() {
-        return this.$store.state.tag.list
+      tag() {
+        return this.$store.state.tag
       }
     },
     methods: {
