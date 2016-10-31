@@ -16,53 +16,13 @@
         <i class="iconfont icon-list"></i>
         <span>热门文章</span>
       </p>
-      <ul class="aside-article-list">
-        <li class="list-item">
+      <beat-loader v-if="article.fetching" />
+      <ul class="aside-article-list" v-if="!article.fetching">
+        <li class="list-item" v-for="article in article.items">
           <i class="index"></i>
-          <router-link to="/article/python3" class="title">Socket，你需要知道的事儿</router-link>
-        </li>
-        <li class="list-item">
-          <i class="index"></i>
-          <router-link to="/article/python3" class="title">和牛人一起用掘金</router-link>
-        </li>
-        <li class="list-item">
-          <i class="index"></i>
-          <router-link to="/article/python3" class="title">25+ 优质实用简洁的个人简历模...</router-link>
-        </li>
-        <li class="list-item">
-          <i class="index"></i>
-          <router-link to="/article/python3" class="title">JavaScript原型详解</router-link>
-        </li>
-        <li class="list-item">
-          <i class="index"></i>
-          <router-link to="/article/python3" class="title">Socket，你需要知道的事儿</router-link>
-        </li>
-        <li class="list-item">
-          <i class="index"></i>
-          <router-link to="/article/python3" class="title">Socket，你需要知道的事儿</router-link>
-        </li>
-        <li class="list-item">
-          <i class="index"></i>
-          <router-link to="/article/python3" class="title">我喜欢一切任性顽劣的偏执</router-link>
-        </li>
-        <li class="list-item">
-          <i class="index"></i>
-          <router-link to="/article/python3" class="title">这个故事，说的是我如何袭击了一次婚礼</router-link>
-        </li>
-        <li class="list-item">
-          <i class="index"></i>
-          <router-link to="/article/python3" class="title">Socket，你需要知道的事儿</router-link>
-        </li>
-        <li class="list-item">
-          <i class="index"></i>
-          <router-link to="/article/python3" class="title">当他好久都不主动联系你，代表他已经尸化得想舍掉这段关系 #周末讨论#对于前男友（</router-link>
+          <router-link :to="'/article/' + article.id" class="title">{{ article.title }}</router-link>
         </li>
       </ul>
-    </div>
-    <div class="aside-ad" v-if="false">
-      <router-link to="http://s.click.taobao.com/ZaXp1Rx" target="_blank" class="ad-box">
-        <img src="http://i1.piimg.com/567571/184e5b1a3e1613f5.jpg">
-      </router-link>
     </div>
     <div class="aside-ad">
       <a href="http://s.click.taobao.com/ZaXp1Rx" target="_blank" class="ad-box">
@@ -73,8 +33,8 @@
       <calendar></calendar>
     </div>
     <div class="aside-tag" v-scroll-top>
-      {{ tag.fetching ? '加载中' : '加载完毕' }}
-      <ul class="aside-tag-list">
+      <beat-loader v-if="tag.fetching" />
+      <ul class="aside-tag-list" v-if="!tag.fetching">
         <router-link :to="'/tag/' + tag.router" tag="li" class="list-item" v-for="tag in tag.list">
           <a class="title" :title="tag.title">
             <i class="iconfont" :class="[tag.icon]" v-if="tag.icon"></i>
@@ -91,28 +51,31 @@
 
   // import
   import Calendar from './Calendar.vue'
+  import BeatLoader from 'components/common/loading/BeatLoader'
 
   // export
   export default {
     name: 'aside',
-    beforeMount (){
+    beforeMount() {
       this.init()
     },
     computed: {
       tag() {
         return this.$store.state.tag
+      },
+      article() {
+        return this.$store.state.article.hot
       }
     },
     methods: {
       init() {
-        // 请求最新文章
-        // this.$store.dispatch('GET_NEW_ARTICLE_LIST')
-        // 请求标签列表
+        this.$store.dispatch('GET_ARTICLE_HOT_LIST')
         this.$store.dispatch('GET_TAG_LIST')
       }
     },
     components: {
-      Calendar
+      Calendar,
+      BeatLoader
     },
     directives: {
       scrollTop: {
