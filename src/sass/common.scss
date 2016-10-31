@@ -20,12 +20,10 @@
   margin: 0 auto;
 }
 
-
 @font-face {
   font-family: 'CenturyGothic';
   src: url('/static/fonts/CenturyGothic.ttf');
 }
-
 
 .slide-up-enter-active, .slide-up-leave-active {
   transition: all .4s cubic-bezier(0, 1.2, 1, 0.5);
@@ -47,3 +45,13 @@
   transform: translate3d(5em, 0, 0);
 }
 
+.slide-left-enter-active, .slide-left-leave-active {
+  transition: all .2s cubic-bezier(0, 1.2, 1, 0.5);
+  opacity: .5;
+  transform: translate3d(2em, 0, 0);
+}
+
+.slide-left-enter, .slide-left-leave-active {
+  opacity: .3;
+  transform: translate3d(2em, 0, 0);
+}

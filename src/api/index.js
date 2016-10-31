@@ -25,7 +25,7 @@ export default {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve({ ok: true, data: { data: require('./data/articles.hot') } })
-        }, 5000)
+        }, 1500)
       })
     },
     getItem(params) {

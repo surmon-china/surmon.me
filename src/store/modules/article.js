@@ -35,10 +35,10 @@ const state = {
 const mutations = {
 
   // List
-  [REQUEST_ARTICLE_LIST](state){
+  [REQUEST_ARTICLE_LIST](state) {
     state.list.fetching = true
   },
-  [GET_ARTICLE_LIST_FAILURE](state){
+  [GET_ARTICLE_LIST_FAILURE](state) {
     state.list.fetching = false
   },
   [GET_ARTICLE_LIST_SUCCESS](state, action){
@@ -47,10 +47,10 @@ const mutations = {
   },
 
   // Hot
-  [REQUEST_ARTICLE_HOT_LIST](state){
+  [REQUEST_ARTICLE_HOT_LIST](state) {
     state.hot.fetching = true
   },
-  [GET_ARTICLE_HOT_LIST_FAILURE](state){
+  [GET_ARTICLE_HOT_LIST_FAILURE](state) {
     state.hot.fetching = false
   },
   [GET_ARTICLE_HOT_LIST_SUCCESS](state, action){
@@ -59,17 +59,16 @@ const mutations = {
   },
 
   // Detail
-  [REQUEST_ARTICLE_DETAIL](state){
+  [REQUEST_ARTICLE_DETAIL](state) {
     state.detail.fetching = true
   },
-  [GET_ARTICLE_DETAIL_FAILURE](state){
+  [GET_ARTICLE_DETAIL_FAILURE](state) {
     state.detail.fetching = false
   },
   [GET_ARTICLE_DETAIL_SUCCESS](state, action){
     state.detail.fetching = false
     state.detail.data = action.detail
   }
-
 }
 
 export default {
