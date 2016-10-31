@@ -9,7 +9,7 @@ export default {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve({ ok: true, data: { data: require('./data/tags') } })
-        }, 1500)
+        }, 5000)
       })
     }
   },
@@ -22,7 +22,11 @@ export default {
     },
     getHot(params) {
       // return Article.get({}, params)
-      return new Promise((resolve, reject) => { resolve({ ok: true, data: { data: require('./data/articles') } })})
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve({ ok: true, data: { data: require('./data/articles.hot') } })
+        }, 5000)
+      })
     },
     getItem(params) {
       return Article.get({ id: params.id }, params)

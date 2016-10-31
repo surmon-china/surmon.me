@@ -1,5 +1,6 @@
 module.exports = [
   {
+    id: 1,
     router: 'code',
     icon: 'icon-code',
     title: '软件工程和设计思想',
