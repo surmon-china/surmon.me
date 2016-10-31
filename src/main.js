@@ -27,6 +27,7 @@ import VideoPlayer from 'vue-video-player'
 import TouchRipple from 'vue-touch-ripple'
 import AwesomeSwiper from 'vue-awesome-swiper'
 import DuoShuo from 'components/common/vue-duoshuo'
+import Loading from 'components/common/vue-loading'
 
 // fiters
 import filters from './filters'
@@ -41,6 +42,7 @@ DuoShuo.config({
 })
 
 // app use
+Vue.use(Loading)
 Vue.use(DuoShuo)
 Vue.use(VueRouter)
 Vue.use(CodeMirror)

@@ -51,17 +51,6 @@ export default {
 
 /*
 
-export const getIndexImage = ({dispatch}) => {
-  api.getIndexImage().then(response => {
-    if(!response.ok){
-      return dispatch(types.GET_INDEX_IMG, {indexImg: img})
-    }
-    dispatch(types.GET_INDEX_IMG, {indexImg: response.data.img})
-  }, response => {
-    dispatch(types.GET_INDEX_IMG, {indexImg: img})
-  })
-}
-
 export const logout = ({dispatch, router}) => {
   signOut()
   dispatch(types.LOGOUT_USER)

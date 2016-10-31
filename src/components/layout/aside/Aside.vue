@@ -16,13 +16,15 @@
         <i class="iconfont icon-list"></i>
         <span>热门文章</span>
       </p>
-      <beat-loader v-if="article.fetching" />
-      <ul class="aside-article-list" v-if="!article.fetching">
-        <li class="list-item" v-for="article in article.items">
+      <transition name="slide-up">
+        <loading v-if="article.fetching" />
+      </transition>
+      <transition-group tag="ul" name="slide-left" class="aside-article-list" v-if="!article.fetching">
+        <li class="item" v-for="article in article.items" :key="article.id">
           <i class="index"></i>
           <router-link :to="'/article/' + article.id" class="title">{{ article.title }}</router-link>
         </li>
-      </ul>
+      </transition-group>
     </div>
     <div class="aside-ad">
       <a href="http://s.click.taobao.com/ZaXp1Rx" target="_blank" class="ad-box">
@@ -33,9 +35,9 @@
       <calendar></calendar>
     </div>
     <div class="aside-tag" v-scroll-top>
-      <beat-loader v-if="tag.fetching" />
+      <loading v-if="tag.fetching" />
       <ul class="aside-tag-list" v-if="!tag.fetching">
-        <router-link :to="'/tag/' + tag.router" tag="li" class="list-item" v-for="tag in tag.list">
+        <router-link :to="'/tag/' + tag.router" tag="li" class="item" v-for="tag in tag.list">
           <a class="title" :title="tag.title">
             <i class="iconfont" :class="[tag.icon]" v-if="tag.icon"></i>
             <span>{{ tag.title }}</span>
@@ -51,7 +53,6 @@
 
   // import
   import Calendar from './Calendar.vue'
-  import BeatLoader from 'components/common/loading/BeatLoader'
 
   // export
   export default {
@@ -74,8 +75,7 @@
       }
     },
     components: {
-      Calendar,
-      BeatLoader
+      Calendar
     },
     directives: {
       scrollTop: {
@@ -157,6 +157,7 @@
     }
 
     .aside-article {
+      overflow: hidden;
       margin-bottom: 1em;
 
       > .title {
@@ -176,7 +177,7 @@
         padding: .5em 0;
         counter-reset: hot-article-list;
 
-        .list-item {
+        .item {
           display: block;
           height: 1.9em;
           line-height: 1.9em;
@@ -254,7 +255,7 @@
         margin: 0;
         overflow: hidden;
 
-        .list-item {
+        .item {
           display: inline-block;
           float: left;
           margin-right: .8em;
