@@ -2,9 +2,11 @@
   <div class="article">
     <div class="detail">
       <h3 class="title">{{ article.title }}</h3>
-      <div class="content" v-html="article.content"></div>
+      <loading v-if="fetching" />
+      <div class="content" v-html="article.content" v-if="!fetching"></div>
     </div>
     <div class="metas">
+      <loading v-if="fetching" />
       <p class="">
         <span>本文由 Surmon 发布于 </span>
         <router-link to="/date/2015-12-30" class="navbar-link">2015年-12月-30日</router-link>
@@ -40,6 +42,7 @@
       </div>
     </div>
     <div class="related">
+      <loading v-if="fetching" />
       <ul class="article-lists">
         <li class="item" v-for="item in 8">
           <router-link to="/article/234234234" class="item-box">
