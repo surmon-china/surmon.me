@@ -16,15 +16,15 @@
         <i class="iconfont icon-list"></i>
         <span>热门文章</span>
       </p>
-      <transition name="slide-up">
-        <loading v-if="article.fetching" />
+      <loading v-if="article.fetching" />
+      <transition name="fade">
+        <ul class="aside-article-list" v-if="!article.fetching">
+          <li class="item" v-for="article in article.items" :key="article.id">
+            <i class="index"></i>
+            <router-link :to="'/article/' + article.id" class="title">{{ article.title }}</router-link>
+          </li>
+        </ul>
       </transition>
-      <transition-group tag="ul" name="slide-left" class="aside-article-list" v-if="!article.fetching">
-        <li class="item" v-for="article in article.items" :key="article.id">
-          <i class="index"></i>
-          <router-link :to="'/article/' + article.id" class="title">{{ article.title }}</router-link>
-        </li>
-      </transition-group>
     </div>
     <div class="aside-ad">
       <a href="http://s.click.taobao.com/ZaXp1Rx" target="_blank" class="ad-box">
@@ -36,15 +36,17 @@
     </div>
     <div class="aside-tag" v-scroll-top>
       <loading v-if="tag.fetching" />
-      <ul class="aside-tag-list" v-if="!tag.fetching">
-        <router-link :to="'/tag/' + tag.router" tag="li" class="item" v-for="tag in tag.list">
-          <a class="title" :title="tag.title">
-            <i class="iconfont" :class="[tag.icon]" v-if="tag.icon"></i>
-            <span>{{ tag.title }}</span>
-            <span>({{ tag.count || 0 }})</span>
-          </a>
-        </router-link>
-      </ul>
+      <transition name="fade">
+        <ul class="aside-tag-list" v-if="!tag.fetching">
+          <router-link :to="'/tag/' + tag.router" tag="li" class="item" v-for="tag in tag.list">
+            <a class="title" :title="tag.title">
+              <i class="iconfont" :class="[tag.icon]" v-if="tag.icon"></i>
+              <span>{{ tag.title }}</span>
+              <span>({{ tag.count || 0 }})</span>
+            </a>
+          </router-link>
+        </ul>
+      </transition>
     </div>
   </aside>
 </template>
@@ -81,10 +83,13 @@
       scrollTop: {
         inserted(element) {
           // 检测此元素相对于文档Document原点的绝对位置，并且这个值是不变化的
-          const sidebarFixedOffsetTop = parseInt(element.offsetTop)
+          let sidebarFixedOffsetTop = parseInt(element.offsetTop)
           // 监听滚动事件
           window.onscroll = function() {
             let windowScrollTop = document.body.scrollTop
+            let newSidebarFixedOffsetTop = parseInt(element.offsetTop)
+            sidebarFixedOffsetTop = (newSidebarFixedOffsetTop !== sidebarFixedOffsetTop && newSidebarFixedOffsetTop !== 77) ? newSidebarFixedOffsetTop : sidebarFixedOffsetTop
+            console.log(sidebarFixedOffsetTop)
             let isFixed = (windowScrollTop - 333) > sidebarFixedOffsetTop
             if (isFixed && element) element.setAttribute('class','aside-tag fixed')
             if (!isFixed && element) element.setAttribute('class','aside-tag')
@@ -156,7 +161,7 @@
       }
     }
 
-    .aside-article {
+    > .aside-article {
       overflow: hidden;
       margin-bottom: 1em;
 
@@ -172,9 +177,10 @@
         }
       }
 
-      .aside-article-list {
+      > .aside-article-list {
         list-style: none;
         padding: .5em 0;
+        margin-bottom: 0;
         counter-reset: hot-article-list;
 
         .item {

@@ -9,7 +9,7 @@ export default {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve({ ok: true, data: { data: require('./data/tags') } })
-        }, 5000)
+        }, 1500)
       })
     }
   },
