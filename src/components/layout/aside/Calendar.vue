@@ -138,16 +138,16 @@
   @import '../../../sass/variables';
   .calendar-box {
 
-    .months {
+    > .months {
       margin-bottom: .5em;
 
-      .month-list {
+      > .month-list {
         padding: 0;
         margin: 0;
         list-style: none;
         overflow: hidden;
 
-        li {
+        > li {
           float: left;
           height: 2em;
           line-height: 2em;
@@ -178,15 +178,15 @@
       }
     }
 
-    .days,
-    .weekdays {
+    > .days,
+    > .weekdays {
       list-style: none;
       padding: 0;
       margin: 0;
       overflow: hidden;
       margin-bottom: .5em;
 
-      li {
+      > li {
         display: inline-block;
         float: left;
         width: calc(100% / 7);
@@ -194,14 +194,15 @@
       }
     }
 
-    .weekdays {
+    > .weekdays {
       height: 2em;
       line-height: 2em;
     }
 
-    .days {
+    > .days {
+      margin-bottom: 0;
 
-      li {
+      > li {
         line-height: 2.5em;
 
         > .other-month {
