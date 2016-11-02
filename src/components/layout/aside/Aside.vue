@@ -19,7 +19,7 @@
       <loading v-if="article.fetching" />
       <transition name="fade">
         <ul class="aside-article-list" v-if="!article.fetching">
-          <li class="item" v-for="article in article.items" :key="article.id">
+          <li class="item" v-for="article in article.data.data" :key="article.id">
             <i class="index"></i>
             <router-link :to="'/article/' + article.id" class="title">{{ article.title }}</router-link>
           </li>
@@ -38,7 +38,7 @@
       <loading v-if="tag.fetching" />
       <transition name="fade">
         <ul class="aside-tag-list" v-if="!tag.fetching">
-          <router-link :to="'/tag/' + tag.router" tag="li" class="item" v-for="tag in tag.list">
+          <router-link :to="'/tag/' + tag.router" tag="li" class="item" v-for="tag in tag.data.data">
             <a class="title" :title="tag.title">
               <i class="iconfont" :class="[tag.icon]" v-if="tag.icon"></i>
               <span>{{ tag.title }}</span>
@@ -83,14 +83,13 @@
       scrollTop: {
         inserted(element) {
           // 检测此元素相对于文档Document原点的绝对位置，并且这个值是不变化的
-          let sidebarFixedOffsetTop = parseInt(element.offsetTop)
+          let sidebarFixedOffsetTop = element.offsetTop
           // 监听滚动事件
           window.onscroll = function() {
-            let windowScrollTop = document.body.scrollTop
-            let newSidebarFixedOffsetTop = parseInt(element.offsetTop)
+            const windowScrollTop = document.body.scrollTop
+            const newSidebarFixedOffsetTop = element.offsetTop
             sidebarFixedOffsetTop = (newSidebarFixedOffsetTop !== sidebarFixedOffsetTop && newSidebarFixedOffsetTop !== 77) ? newSidebarFixedOffsetTop : sidebarFixedOffsetTop
-            console.log(sidebarFixedOffsetTop)
-            let isFixed = (windowScrollTop - 333) > sidebarFixedOffsetTop
+            const isFixed = windowScrollTop > sidebarFixedOffsetTop
             if (isFixed && element) element.setAttribute('class','aside-tag fixed')
             if (!isFixed && element) element.setAttribute('class','aside-tag')
           }

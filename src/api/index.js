@@ -8,7 +8,7 @@ export default {
       // return Tag.get({}, params)
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          resolve({ ok: true, data: { data: require('./data/tags') } })
+          resolve({ ok: true, data: { data: require('./data/tags.list') } })
         }, 1500)
       })
     }
@@ -18,7 +18,11 @@ export default {
   article: {
     getList(params) {
       // return Article.get({}, params)
-      return new Promise((resolve, reject) => { resolve({ ok: true, data: { data: require('./data/articles') } })})
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve({ ok: true, data: { data: require('./data/articles.list') } })
+        }, 1500)
+      })
     },
     getHot(params) {
       // return Article.get({}, params)
