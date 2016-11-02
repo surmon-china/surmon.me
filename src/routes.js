@@ -12,13 +12,12 @@ export default [{
     name: 'project',
     path: '/project',
     meta: { fullPage: true },
-    redirect: '/project/list',
     component: appView.Layout.Relay,
     children: [{
 
       // project list
       name: 'project-list',
-      path: 'list',
+      path: '',
       meta: { fullPage: true },
       component: appView.Page.Project
     }, {

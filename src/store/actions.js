@@ -7,7 +7,7 @@ export default {
   GET_TAG_LIST({ commit, dispatch, state }, params) {
     commit(types.REQUEST_TAG_LIST)
     api.tag.getList(params).then(response => {
-      if(response.ok) commit(types.GET_TAG_LIST_SUCCESS, { list: response.data.data })
+      if(response.ok) commit(types.GET_TAG_LIST_SUCCESS, { data: response.data.data })
       if(!response.ok) commit(types.GET_TAG_LIST_FAILURE)
     }, err => {
       commit(types.GET_TAG_LIST_FAILURE, err)
@@ -18,7 +18,7 @@ export default {
   GET_ARTICLE_LIST({ commit, dispatch, state }, params) {
     commit(types.REQUEST_ARTICLE_DETAIL)
     api.article.getList(params).then(response => {
-      if(response.ok) commit(types.GET_ARTICLE_LIST_SUCCESS, { list: response.data.data })
+      if(response.ok) commit(types.GET_ARTICLE_LIST_SUCCESS, { data: response.data.data })
       if(!response.ok) commit(types.GET_ARTICLE_LIST_FAILURE)
     }, err => {
       commit(types.GET_ARTICLE_LIST_FAILURE, err)
@@ -29,7 +29,7 @@ export default {
   GET_ARTICLE_HOT_LIST({ commit, dispatch, state }, params) {
     commit(types.REQUEST_ARTICLE_HOT_LIST)
     api.article.getHot(params).then(response => {
-      if(response.ok) commit(types.GET_ARTICLE_HOT_LIST_SUCCESS, { list: response.data.data })
+      if(response.ok) commit(types.GET_ARTICLE_HOT_LIST_SUCCESS, { data: response.data.data })
       if(!response.ok) commit(types.GET_ARTICLE_HOT_LIST_FAILURE)
     }, err => {
       commit(types.GET_ARTICLE_HOT_LIST_FAILURE, err)
@@ -40,7 +40,7 @@ export default {
   GET_ARTICLE_DETAIL({ commit, dispatch, state }, params) {
     commit(types.REQUEST_ARTICLE_DETAIL)
     api.article.getHot(params).then(response => {
-      if(response.ok) commit(types.GET_ARTICLE_DETAIL_SUCCESS, { detail: response.data.data })
+      if(response.ok) commit(types.GET_ARTICLE_DETAIL_SUCCESS, { data: response.data.data })
       if(!response.ok) commit(types.GET_ARTICLE_DETAIL_FAILURE)
     }, err => {
       commit(types.GET_ARTICLE_DETAIL_FAILURE, err)

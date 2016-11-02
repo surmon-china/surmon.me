@@ -6,14 +6,17 @@
       <list-header></list-header>
     </div>
 
+    <!-- loading -->
+    <loading v-if="articles.fetching" />
+
     <!-- 列表 -->
-    <div class="article-list">
-      <list-item v-for="(item, index) in articles.data" :item="item" :key="index"></list-item>
+    <div class="article-list" v-if="!articles.fetching">
+      <list-item v-for="(item, index) in articles.data.data" :item="item" :key="index"></list-item>
     </div>
 
     <!-- 加载更多 -->
-    <div class="article-load">
-      <button class="btn-loadmore" @click="addArticle">加载更多</button>
+    <div class="article-load" v-if="!articles.fetching">
+      <button class="btn-loadmore" @click="$emit('loadmore')">加载更多</button>
     </div>
   </div>
 </template>
@@ -35,11 +38,6 @@
       articles: {
         type: Object,
         default: {}
-      }
-    },
-    methods: {
-      addArticle() {
-        this.$emit('loadmore')
       }
     }
   }

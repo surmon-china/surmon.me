@@ -20,11 +20,13 @@ import {
 const state = {
   hot: {
     fetching: false,
-    items: []
+    data: {}
   },
   list: {
     fetching: false,
-    items: []
+    data: {
+      data: []
+    }
   },
   detail: {
     fetching: false,
@@ -43,7 +45,9 @@ const mutations = {
   },
   [GET_ARTICLE_LIST_SUCCESS](state, action){
     state.list.fetching = false
-    state.list.items = [...state.list.items, ...action.list]
+    const newArticleList = [...state.list.data.data, ...action.data.data]
+    state.list.data = action.data
+    state.list.data.data = newArticleList
   },
 
   // Hot
@@ -55,7 +59,7 @@ const mutations = {
   },
   [GET_ARTICLE_HOT_LIST_SUCCESS](state, action){
     state.hot.fetching = false
-    state.hot.items = action.list
+    state.hot.data = action.data
   },
 
   // Detail
@@ -67,7 +71,7 @@ const mutations = {
   },
   [GET_ARTICLE_DETAIL_SUCCESS](state, action){
     state.detail.fetching = false
-    state.detail.data = action.detail
+    state.detail.data = action.data
   }
 }
 
