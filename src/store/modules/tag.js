@@ -6,7 +6,9 @@ import {
 
 const state = {
   fetching: false,
-  list: []
+  data: {
+    data: []
+  }
 }
 
 const mutations = {
@@ -15,11 +17,11 @@ const mutations = {
   },
   [GET_TAG_LIST_FAILURE](state) {
     state.fetching = false
-    state.list = []
+    state.data = {}
   },
   [GET_TAG_LIST_SUCCESS](state, action) {
     state.fetching = false
-    state.list = action.list
+    state.data = action.data
   }
 }
 

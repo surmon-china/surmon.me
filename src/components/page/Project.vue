@@ -7,6 +7,12 @@
           <span>Vue-Codemirror</span>
         </router-link>
       </li>
+      <li>
+        <router-link to="/project/vue-video-player" class="item">
+          <i class="iconfont icon-code"></i>
+          <span>Vue-video-player</span>
+        </router-link>
+      </li>
     </ul>
   </div>
 </template>
