@@ -22,7 +22,7 @@
     "vue-resource": "^1.0.3",
     "vue-router": "^2.0.0",
     "vue-touch-ripple": "^2.2.1",
-    "vue-video-player": "^2.2.1",
+    "vue-video-player": "^2.3.2",
     "vuex": "^2.0.0"
   },
   "devDependencies": {

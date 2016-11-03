@@ -62,3 +62,7 @@
 .fade-enter, .fade-leave-active {
   opacity: 0
 }
+
+.fade-move {
+  transition: transform 1s;
+}

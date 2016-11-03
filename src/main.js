@@ -41,6 +41,12 @@ DuoShuo.config({
   // unstable: true
 })
 
+VideoPlayer.config({
+  youtube: false,
+  switcher: false,
+  hls: false
+})
+
 // app use
 Vue.use(Loading)
 Vue.use(DuoShuo)
