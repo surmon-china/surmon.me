@@ -56,6 +56,7 @@
     position: relative;
     width: 100%;
     min-height: 50px;
+    height: 100%;
 
     > .spinner-inner {
       width: 80px;

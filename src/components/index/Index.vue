@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <carrousel></carrousel>
+    <carrousel :articles="articles"></carrousel>
     <article-list :articles="articles" @loadmore="loadmoreArticle"></article-list>
   </div>
 </template>
@@ -15,7 +15,8 @@
   export default {
     name: 'index',
     beforeMount() {
-      this.init()
+      this.$store.commit('CLEAR_ARTICLE_LIST')
+      this.$store.dispatch('GET_ARTICLE_LIST')
     },
     components: {
       Carrousel,
@@ -27,11 +28,8 @@
       }
     },
     methods: {
-      init() {
-        this.$store.dispatch('GET_ARTICLE_LIST')
-      },
       loadmoreArticle() {
-        console.log('loadmore')
+        this.$store.dispatch('GET_ARTICLE_LIST')
       }
     }
   }
