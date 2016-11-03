@@ -16,7 +16,7 @@
       ArticleList
     },
     beforeMount() {
-      this.init()
+      this.getArticleList()
     },
     computed: {
       articles() {
@@ -24,11 +24,17 @@
       }
     },
     methods: {
-      init() {
+      getArticleList() {
+        this.$store.commit('CLEAR_ARTICLE_LIST')
         this.$store.dispatch('GET_ARTICLE_LIST')
       },
       loadmoreArticle() {
-        console.log('loadmore')
+        this.$store.dispatch('GET_ARTICLE_LIST')
+      }
+    },
+    watch: {
+      '$route'() {
+        this.getArticleList()
       }
     }
   }

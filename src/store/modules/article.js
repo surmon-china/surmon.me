@@ -1,6 +1,7 @@
 import {
 
   // List
+  CLEAR_ARTICLE_LIST,
   REQUEST_ARTICLE_LIST,
   GET_ARTICLE_LIST_FAILURE,
   GET_ARTICLE_LIST_SUCCESS,
@@ -11,6 +12,7 @@ import {
   GET_ARTICLE_HOT_LIST_SUCCESS,
 
   // Detail
+  CLEAR_ARTICLE_DETAIL,
   REQUEST_ARTICLE_DETAIL,
   GET_ARTICLE_DETAIL_FAILURE,
   GET_ARTICLE_DETAIL_SUCCESS
@@ -37,6 +39,9 @@ const state = {
 const mutations = {
 
   // List
+  [CLEAR_ARTICLE_LIST](state) {
+    state.list.data = { data: [] }
+  },
   [REQUEST_ARTICLE_LIST](state) {
     state.list.fetching = true
   },
@@ -63,6 +68,9 @@ const mutations = {
   },
 
   // Detail
+  [CLEAR_ARTICLE_DETAIL](state) {
+    state.detail.data = {}
+  },
   [REQUEST_ARTICLE_DETAIL](state) {
     state.detail.fetching = true
   },
