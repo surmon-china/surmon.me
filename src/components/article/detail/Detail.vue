@@ -2,8 +2,10 @@
   <div class="article">
     <div class="detail">
       <h3 class="title">{{ article.title }}</h3>
-      <loading v-if="fetching" />
-      <div class="content" v-html="article.content" v-if="!fetching"></div>
+      <loading v-if="fetching"/>
+      <transition name="fade">
+        <div class="content" v-html="article.content" v-if="!fetching"></div>
+      </transition>
     </div>
     <div class="metas">
       <loading v-if="fetching" />
@@ -65,16 +67,30 @@
 
   export default {
     name: 'article-detail',
+    beforeMount() {
+      this.getArticle()
+    },
     computed: {
-      article () {
+      article() {
         return this.$store.state.article.detail.data
       },
-      fetching () {
+      fetching() {
         return this.$store.state.article.detail.fetching
       }
     },
-    mounted () {
+    mounted() {
       hljs.initHighlightingOnLoad()
+    },
+    methods: {
+      getArticle() {
+        this.$store.commit('CLEAR_ARTICLE_DETAIL')
+        this.$store.dispatch('GET_ARTICLE_DETAIL', { id: this.$route.params.article_id })
+      }
+    },
+    watch: {
+      '$route'() {
+        this.getArticle()
+      }
     }
   }
 </script>

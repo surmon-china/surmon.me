@@ -39,7 +39,7 @@ export default {
   // 获取文章详情
   GET_ARTICLE_DETAIL({ commit, dispatch, state }, params) {
     commit(types.REQUEST_ARTICLE_DETAIL)
-    api.article.getHot(params).then(response => {
+    api.article.getItem(params).then(response => {
       if(response.ok) commit(types.GET_ARTICLE_DETAIL_SUCCESS, { data: response.data.data })
       if(!response.ok) commit(types.GET_ARTICLE_DETAIL_FAILURE)
     }, err => {

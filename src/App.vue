@@ -6,9 +6,9 @@
       <nav-view></nav-view>
       <div class="main-content" :class="{ 'pullpage': pageCols == 2 }">
         <transition name="slide-up">
-          <keep-alive>
+          <!-- <keep-alive> -->
             <router-view class="router-view"></router-view>
-          </keep-alive>
+          <!-- </keep-alive> -->
         </transition>
       </div>
       <transition name="slide-right">
