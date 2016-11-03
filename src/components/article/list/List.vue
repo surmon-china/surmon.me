@@ -6,17 +6,20 @@
       <list-header></list-header>
     </div>
 
-    <!-- loading -->
-    <loading v-if="articles.fetching" />
-
     <!-- 列表 -->
-    <div class="article-list" v-if="!articles.fetching">
-      <list-item v-for="(item, index) in articles.data.data" :item="item" :key="index"></list-item>
+    <div class="article-list">
+      <loading class="article-loading" v-if="articles.fetching" />
+      <transition-group name="fade" tag="div">
+        <list-item v-for="(item, index) in articles.data.data" :item="item" :key="index"></list-item>
+      </transition-group>
     </div>
 
     <!-- 加载更多 -->
-    <div class="article-load" v-if="!articles.fetching">
-      <button class="btn-loadmore" @click="$emit('loadmore')">加载更多</button>
+    <div class="article-load">
+      <button class="btn-loadmore" @click="$emit('loadmore')" :disabled="articles.fetching">
+        <span v-if="!articles.fetching">加载更多</span>
+        <span v-if="articles.fetching">加载中</span>
+      </button>
     </div>
   </div>
 </template>
@@ -47,22 +50,28 @@
   @import '../../../sass/variables';
   .articles {
 
-    .article-list-header {
+    > .article-list-header {
       margin-bottom: 1em;
       position: relative;
       overflow: hidden;
       background-color: $module-bg;
     }
 
-    .article-list {
+    > .article-list {
       margin-bottom: 1em;
       min-height: 1em;
       overflow: hidden;
+
+      > .article-loading {
+          height: 10em;
+          background-color: $module-bg;
+          display: flex;
+      }
     }
 
-    .article-load {
+    > .article-load {
 
-      .btn-loadmore {
+      > .btn-loadmore {
         width: 100%;
         display: block;
         height: 3em;

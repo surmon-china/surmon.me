@@ -16,7 +16,7 @@ export default {
 
   // 获取最新文章列表
   GET_ARTICLE_LIST({ commit, dispatch, state }, params) {
-    commit(types.REQUEST_ARTICLE_DETAIL)
+    commit(types.REQUEST_ARTICLE_LIST)
     api.article.getList(params).then(response => {
       if(response.ok) commit(types.GET_ARTICLE_LIST_SUCCESS, { data: response.data.data })
       if(!response.ok) commit(types.GET_ARTICLE_LIST_FAILURE)
