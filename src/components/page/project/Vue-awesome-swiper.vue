@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: 'project-vue-awesome-swiper',
+    name: 'Project-Vue-Awesome-Swiper',
     data() {
       return {
       }

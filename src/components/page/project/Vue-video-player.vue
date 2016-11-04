@@ -7,7 +7,7 @@
 
 <script>
   export default {
-    name: 'project-vue-video-player',
+    name: 'Project-Vue-Video-Player',
     data () {
       return {
         videoOptions: {

@@ -47,7 +47,6 @@ export default {
       width: 100%;
       height: 4.5em;
       background-color: $module-bg;
-      // border-bottom: 1px solid #f1f1f1;
       z-index: 999;
 
       .navbar-container {
@@ -69,7 +68,6 @@ export default {
           .navbar-slogan {
             color: $primary;
             font-family: CenturyGothic;
-            // text-transform: uppercase;
           }
 
           .navbar-link {

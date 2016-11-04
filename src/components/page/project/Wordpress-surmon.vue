@@ -1,12 +1,12 @@
 <template>
   <div class="project">
-    我是Wordpress-one
+    我是Wordpress-Surmon
   </div>
 </template>
 
 <script>
   export default {
-    name: 'project-wordpress-one',
+    name: 'Project-Wordpress-Surmon',
     data() {
       return {
       }

@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: 'project-nodepress',
+    name: 'Project-Nodepress',
     data() {
       return {
       }

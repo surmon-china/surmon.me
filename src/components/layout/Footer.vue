@@ -23,7 +23,7 @@ export default {
 <style lang="scss">
   @import '../../sass/variables';
   footer {
-    margin-top: 20px;
+    margin-top: 1em;
     background-color: $module-bg;
 
     .container {
@@ -33,7 +33,6 @@ export default {
         padding: 1em;
         font-size: .9em;
         text-align: center;
-        color: #333;
         text-transform: uppercase;
       }
     }
