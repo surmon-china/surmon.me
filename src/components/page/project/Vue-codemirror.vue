@@ -8,7 +8,7 @@
 
 <script>
   export default {
-    name: 'project-vue-codemirror',
+    name: 'Project-Vue-Codemirror',
     data() {
       return {
         code: 'const a = 10',

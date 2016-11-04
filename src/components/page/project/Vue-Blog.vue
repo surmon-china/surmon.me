@@ -1,12 +1,12 @@
 <template>
   <div class="project">
-    我是Wordpress-One
+    我是vue-blog
   </div>
 </template>
 
 <script>
   export default {
-    name: 'Project-Wordpress-One',
+    name: 'Project-Vue-Blog',
     data() {
       return {
       }
