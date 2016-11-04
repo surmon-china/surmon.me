@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: 'project-vue-touch-ripple',
+    name: 'Project-Vue-Touch-Ripple',
     data() {
       return {
       }

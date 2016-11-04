@@ -41,6 +41,7 @@ const mutations = {
   // List
   [CLEAR_ARTICLE_LIST](state) {
     state.list.data = { data: [] }
+    // console.log('clear list', state.list.data.data)
   },
   [REQUEST_ARTICLE_LIST](state) {
     state.list.fetching = true
@@ -50,9 +51,12 @@ const mutations = {
   },
   [GET_ARTICLE_LIST_SUCCESS](state, action){
     state.list.fetching = false
-    const newArticleList = [...state.list.data.data, ...action.data.data]
-    state.list.data = action.data
-    state.list.data.data = newArticleList
+    // console.log(action.data.data)
+    state.list.data.data  = [...state.list.data.data, ...action.data.data]
+    // const newArticleList = [...state.list.data.data, ...action.data.data]
+    // state.list.data = action.data
+    // state.list.data.data = newArticleList
+    // console.log('article list success', state.list.data.data)
   },
 
   // Hot
