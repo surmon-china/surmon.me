@@ -16,9 +16,10 @@
 
     <!-- 加载更多 -->
     <div class="article-load">
-      <button class="btn-loadmore" @click="$emit('loadmore')" :disabled="articles.fetching">
-        <span v-if="!articles.fetching">加载更多</span>
-        <span v-if="articles.fetching">加载中</span>
+      <button class="btn-loadmore" @click="$emit('loadmore')" :disabled="articles.fetching || !canLoadMore">
+        <span v-if="!articles.fetching && canLoadMore">加载更多</span>
+        <span v-if="articles.fetching && canLoadMore">加载中</span>
+        <span v-if="!canLoadMore">没有更多</span>
       </button>
     </div>
   </div>
@@ -32,7 +33,7 @@
 
   // export
   export default {
-    name: 'article-list',
+    name: 'Article-List',
     components: {
       ListItem,
       ListHeader
@@ -42,11 +43,17 @@
         type: Object,
         default: {}
       }
-    }
+    },
+    computed: {
+      canLoadMore() {
+        const hasArticles = this.articles && this.articles.data && this.articles.data.pagination
+        return hasArticles ? this.articles.data.pagination.current_page < this.articles.data.pagination.total_page : false
+      }
+    },
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '../../../sass/variables';
   .articles {
 

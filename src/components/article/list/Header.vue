@@ -23,10 +23,10 @@
 
 <script>
   export default {
-    name: 'article-list-header',
+    name: 'Article-List-Header',
     computed: {
       currentTag() {
-        return this.$store.state.tag.data.data.find((tag, index, arr) => { return tag.router === this.$route.params.tag })
+        return this.$store.state.tag.data.data.find((tag, index, arr) => tag.router === this.$route.params.tag)
       },
       currentDate() {
         return this.$route.params.date
@@ -60,7 +60,7 @@
       }
     }
 
-    .logo {
+    > .logo {
       text-align: center;
 
       .iconfont {
@@ -70,7 +70,7 @@
       }
     }
 
-    .title {
+    > .title {
       text-align: center;
       text-transform: capitalize;
     }

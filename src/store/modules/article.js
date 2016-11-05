@@ -5,6 +5,7 @@ import {
   REQUEST_ARTICLE_LIST,
   GET_ARTICLE_LIST_FAILURE,
   GET_ARTICLE_LIST_SUCCESS,
+  ADD_ARTICLE_LIST_SUCCESS,
 
   // Hot
   REQUEST_ARTICLE_HOT_LIST,
@@ -32,7 +33,9 @@ const state = {
   },
   detail: {
     fetching: false,
-    data: {}
+    data: {
+      data: {}
+    }
   }
 }
 
@@ -50,6 +53,10 @@ const mutations = {
     state.list.fetching = false
   },
   [GET_ARTICLE_LIST_SUCCESS](state, action){
+    state.list.fetching = false
+    state.list.data = action.data
+  },
+  [ADD_ARTICLE_LIST_SUCCESS](state, action){
     state.list.fetching = false
     // console.log(action.data.data)
     state.list.data.data  = [...state.list.data.data, ...action.data.data]
@@ -73,7 +80,7 @@ const mutations = {
 
   // Detail
   [CLEAR_ARTICLE_DETAIL](state) {
-    state.detail.data = {}
+    state.detail.data = { data: {} }
   },
   [REQUEST_ARTICLE_DETAIL](state) {
     state.detail.fetching = true

@@ -16,12 +16,12 @@
       ArticleList
     },
     beforeMount() {
-      // console.log('index Archive')
-      // if (this.$route.name === 'index') this.getArticleList()
-    },
-    activated() {
-      console.log('Archive list activated')
+      // console.log('Archive list beforeMount')
       this.getArticleList()
+    },
+    deactivated() {
+      // console.log('Archive list deactivated')
+      this.$store.commit('CLEAR_ARTICLE_LIST')
     },
     computed: {
       articles() {
@@ -29,25 +29,27 @@
       }
     },
     methods: {
+      getParams(more) {
+        let params = {}
+        const route = this.$route.name
+        if (Object.is(route, 'tag')) params.tag = this.$route.params.tag
+        if (Object.is(route, 'date')) params.date = this.$route.params.date
+        if (Object.is(route, 'category')) params.category = this.$route.params.category
+        Object.assign(params, more || {})
+        return params
+      },
       getArticleList() {
-        const isFetching = this.articles.fetching
-        console.log('我被请求了', this.articles.fetching)
-        // 如果正在由之前的请求发生，应该取消之前的请求，然后继续请求
-        if (isFetching) {
-          // console.log('应该取消之前的请求，然后继续请求')
-          // this.$store.dispatch('CANCEL_GET_ARTICLE_LIST')
-        }
         this.$store.commit('CLEAR_ARTICLE_LIST')
-        this.$store.dispatch('GET_ARTICLE_LIST')
+        this.$store.dispatch('GET_ARTICLE_LIST', this.getParams())
       },
       loadmoreArticle() {
-        this.$store.dispatch('GET_ARTICLE_LIST')
+        this.$store.dispatch('GET_ARTICLE_LIST', this.getParams({ page: this.articles.data.pagination.current_page + 1 }))
       }
     },
     watch: {
       '$route'() {
-        // console.log(this, 'Archive route change')
-        const isSwitchArchive = ['index', 'tag', 'date', 'category'].includes(this.$route.name)
+        // console.log(this.$route, 'Archive route change')
+        const isSwitchArchive = ['tag', 'date', 'category'].includes(this.$route.name)
         if (isSwitchArchive) this.getArticleList()
         if (!isSwitchArchive) this.$store.commit('CLEAR_ARTICLE_LIST')
       }

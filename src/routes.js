@@ -123,6 +123,11 @@ export default [{
     path: '/guestbook',
     component: appView.Page.Guestbook
   }, {
+  // Page页面
+    name: 'page',
+    path: '/page/:page_slug',
+    component: appView.Page.Page
+  }, {
   // 标签的文章列表页
     name: 'tag',
     path: '/tag/:tag',

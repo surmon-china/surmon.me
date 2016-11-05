@@ -6,9 +6,11 @@
 
 // Third Utils
 window.store = require('store')
+window.hljs = require('highlight.js')
 
-// Bootstrap
+// Style
 import 'sass/app.scss'
+import 'highlight.js/styles/agate.css'
 
 // Libs
 import Vue from 'vue'

@@ -50,7 +50,7 @@
     methods: {
       changePageCol() {
         const col = this.$route.meta.fullPage ? 2 : 3
-        this.$store.commit('SET_PAGE_COL', col)
+        if (this.pageCols !== col) this.$store.commit('SET_PAGE_COL', col)
       }
     }
   }

@@ -91,7 +91,7 @@
 
 <script>
   export default {
-    name: 'project',
+    name: 'Project',
     data() {
       return {
       }
