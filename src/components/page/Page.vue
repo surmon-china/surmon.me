@@ -2,20 +2,17 @@
   <div class="page">
     <div class="detail">
       <div class="content">
-        <div class="music">
-          come soon
-        </div>
       </div>
     </div>
-    <div class="comment" v-if="false">
-      <duoshuo data-thread-key="music" data-title="我是播放器"></duoshuo>
+    <div class="comment">
+      <duoshuo data-thread-key="page" data-title="我是留言板"></duoshuo>
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'Music'
+    name: 'Page'
   }
 </script>
 
@@ -30,16 +27,8 @@
 
       .content {
         width: 100%;
+        height: 17em;
         overflow:  hidden;
-
-        .music {
-          padding: 1em;
-          height: 11em;
-          line-height: 9em;
-          text-align: center;
-          font-size: 4em;
-          text-transform: capitalize;
-        }
       }
     }
   }

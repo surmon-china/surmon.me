@@ -42,7 +42,7 @@
 
 <script>
   export default {
-    name: 'article-list-item',
+    name: 'Article-List-Item',
     props: {
       item: Object
     }

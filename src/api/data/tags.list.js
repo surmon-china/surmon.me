@@ -1,7 +1,10 @@
 module.exports = {
-  pagenation: {
-    current_page: 1,
-    total: 10
+  code: 1,
+  pagination: {
+    total: 67,
+    per_page: 100,
+    total_page: 1,
+    current_page: 1
   },
   data: [
     {

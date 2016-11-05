@@ -55,41 +55,48 @@
       </ul>
     </div>
     <div class="comment">
-      <duoshuo data-thread-key="article" data-title="我是文章详情"></duoshuo>
+      <duoshuo :data-thread-key="`article-${$route.params.article_id}`" data-title="我是文章详情"></duoshuo>
     </div>
   </div>
 </template>
 
 <script>
-
-  import hljs from 'highlight.js'
-  import 'highlight.js/styles/agate.css'
-
   export default {
     name: 'article-detail',
     beforeMount() {
       this.getArticle()
     },
+    deactivated() {
+      this.$store.commit('CLEAR_ARTICLE_DETAIL')
+    },
+    updated() {
+      if (!!Object.keys(this.article).length) {
+        setTimeout(function () {
+          const code = document.getElementsByTagName('code')
+          if (code.length) hljs.highlightBlock(code[0])
+        }, 500)
+      }
+    },
     computed: {
       article() {
-        return this.$store.state.article.detail.data
+        return this.$store.state.article.detail.data.data || {}
       },
       fetching() {
         return this.$store.state.article.detail.fetching
       }
     },
-    mounted() {
-      hljs.initHighlightingOnLoad()
-    },
     methods: {
       getArticle() {
+        // console.log('请求文章详情')
         this.$store.commit('CLEAR_ARTICLE_DETAIL')
         this.$store.dispatch('GET_ARTICLE_DETAIL', { id: this.$route.params.article_id })
       }
     },
     watch: {
       '$route'() {
-        this.getArticle()
+        const isSwitchArticle = Object.is(this.$route.name, 'detail')
+        if (isSwitchArticle) this.getArticle()
+        if (!isSwitchArticle) this.$store.commit('CLEAR_ARTICLE_DETAIL')
       }
     }
   }
@@ -147,7 +154,8 @@
         pre {}
 
         code {
-          padding: 2em 2em 1em 2em;
+          display: block;
+          padding: 2em 2em 1.5em 2em;
           background-color: rgba(0, 0, 0, 0.8);
           position: relative;
           overflow: visible;

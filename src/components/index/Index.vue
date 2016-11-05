@@ -1,7 +1,7 @@
 <template>
   <div class="index">
-    <carrousel :articles="articles"/>
-    <archive/>
+    <carrousel :articles="articles"></carrousel>
+    <article-list :articles="articles" @loadmore="loadmoreArticle"></article-list>
   </div>
 </template>
 
@@ -9,18 +9,35 @@
 
   // import
   import Carrousel from './Carrousel.vue'
-  import Archive from '../article/list/Archive.vue'
+  import ArticleList from '../article/list/list.vue'
 
   // export
   export default {
     name: 'index',
     components: {
       Carrousel,
-      Archive
+      ArticleList
+    },
+    activated() {
+      // console.log('Index activated')
+      this.getArticleList()
+    },
+    deactivated() {
+      // console.log('Index deactivated')
+      this.$store.commit('CLEAR_ARTICLE_LIST')
     },
     computed: {
       articles() {
         return this.$store.state.article.list
+      }
+    },
+    methods: {
+      getArticleList() {
+        this.$store.commit('CLEAR_ARTICLE_LIST')
+        this.$store.dispatch('GET_ARTICLE_LIST')
+      },
+      loadmoreArticle() {
+        this.$store.dispatch('GET_ARTICLE_LIST', { page: this.articles.data.pagination.current_page + 1 })
       }
     }
   }

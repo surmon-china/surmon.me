@@ -18,7 +18,10 @@ export default {
   GET_ARTICLE_LIST({ commit, dispatch, state }, params) {
     commit(types.REQUEST_ARTICLE_LIST)
     api.article.getList(params).then(response => {
-      if(response.ok) commit(types.GET_ARTICLE_LIST_SUCCESS, { data: response.data.data })
+      if(response.ok) {
+        const isAdd = params && params.page && params.page > 1
+        commit(isAdd ? types.ADD_ARTICLE_LIST_SUCCESS : types.GET_ARTICLE_LIST_SUCCESS, { data: response.data.data })
+      }
       if(!response.ok) commit(types.GET_ARTICLE_LIST_FAILURE)
     }, err => {
       commit(types.GET_ARTICLE_LIST_FAILURE, err)
