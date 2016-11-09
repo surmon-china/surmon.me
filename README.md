@@ -1,6 +1,6 @@
 # vue-blog
 
-> Vue-Blog By Vue2.0
+> Vue-Blog By Vue2.0 && Vuex
 
 ## Build Setup
 
