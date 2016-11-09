@@ -3,6 +3,7 @@
     <codemirror v-model="code" :options="editorOption"></codemirror>
     <pre>{{ code }}</pre>
     <textarea v-model="code"></textarea>
+    <p>Codemirror</p>
   </div>
 </template>
 

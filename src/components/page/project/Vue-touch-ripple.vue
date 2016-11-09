@@ -1,6 +1,6 @@
 <template>
   <div class="project">
-    我是Vue-touch-ripple
+    <p>我是Vue-touch-ripple</p>
   </div>
 </template>
 

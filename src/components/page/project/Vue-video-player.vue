@@ -1,6 +1,6 @@
 <template>
   <div class="project">
-    我是Vue-video-player
+    <p>我是Vue-video-player</p>
     <video-player :options="videoOptions" @playerStateChanged="playerStateChanged"></video-player>
   </div>
 </template>
