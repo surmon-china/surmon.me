@@ -9,7 +9,7 @@
 
   // import
   import Carrousel from './Carrousel.vue'
-  import ArticleList from '../article/list/list.vue'
+  import ArticleList from '../article/list/List.vue'
 
   // export
   export default {
