@@ -1,6 +1,6 @@
 <template>
   <div class="project">
-    我是Vue-awesome-swiper
+    <p>我是Vue-awesome-swiper</p>
   </div>
 </template>
 

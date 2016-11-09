@@ -1,6 +1,6 @@
 <template>
   <div class="project">
-    我是Wordpress-One
+    <p>我是Wordpress-One</p>
   </div>
 </template>
 
