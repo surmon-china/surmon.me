@@ -8,7 +8,7 @@ import WordpressMetro from './Wordpress-Metro.vue'
 import WordpressThink from './Wordpress-Think.vue'
 import WordpressSurmon from './Wordpress-Surmon.vue'
 
-import VueCodemirror from './vue-Codemirror.vue'
+import VueCodemirror from './Vue-Codemirror.vue'
 import VueTouchRipple from './Vue-Touch-Ripple.vue'
 import VueVideoPlayer from './Vue-Video-Player.vue'
 import VueAwesomeSwiper from './Vue-Awesome-Swiper.vue'
