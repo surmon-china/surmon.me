@@ -15,19 +15,19 @@ module.exports = {
 
     /*Possible Errors*/
 
-    // 数组和对象键值对最后一个逗号， 
+    // 数组和对象键值对最后一个逗号，
 
-    // never参数：不能带末尾的逗号, 
+    // never参数：不能带末尾的逗号,
 
-    // always参数：必须带末尾的逗号，  
+    // always参数：必须带末尾的逗号，
 
-    // always-multiline：多行模式必须带逗号，单行模式不能带逗号  
+    // always-multiline：多行模式必须带逗号，单行模式不能带逗号
     "comma-dangle": [2, "never"],
 
     // 禁止在条件表达式中使用赋值语句
     "no-cond-assign": 2,
 
-    // 禁止使用console 
+    // 禁止使用console
     "no-console": 0,
 
     // 禁止在条件中使用常量表达式 if(true) if(1)
@@ -42,7 +42,7 @@ module.exports = {
     // 函数参数禁止重名
     "no-dupe-args": 2,
 
-    // 在创建对象字面量时不允许键重复 
+    // 在创建对象字面量时不允许键重复
     "no-dupe-keys": 2,
 
     // 在switch语句中禁止重复的case
@@ -121,28 +121,28 @@ module.exports = {
     // 数值方法的回调函数中强制写return语句
     "array-callback-return": 2,
 
-    // 当在代码块中用var声明变量，并在代码块外使用时报错 
+    // 当在代码块中用var声明变量，并在代码块外使用时报错
     "block-scoped-var": 0,
 
     // 用来控制函数的复杂度，分支超过5时报错
     "complexity": [0, 5],
 
-    // 不同分支的return语句不能返回不同的类型，要么一致要么都没有  
+    // 不同分支的return语句不能返回不同的类型，要么一致要么都没有
     "consistent-return": 0,
 
-    //  if else while for do后面的代码块是否需要{ }包围，参数：  
+    //  if else while for do后面的代码块是否需要{ }包围，参数：
 
-    //  multi         只有块中有多行语句时才需要{ }包围  
+    //  multi         只有块中有多行语句时才需要{ }包围
 
     //  multi-line    只有块中有多行语句时才需要{ }包围, 但是块中的执行语句只有一行时，块中的语句只能跟和if语句在同一行。
 
-    //                 if (foo) foo++; else doSomething();  
+    //                 if (foo) foo++; else doSomething();
 
-    //  multi-or-nest 只有块中有多行语句时才需要{ }包围, 如果块中的执行语句只有一行，执行语句可以另起一行也可以跟在if语句后面    
+    //  multi-or-nest 只有块中有多行语句时才需要{ }包围, 如果块中的执行语句只有一行，执行语句可以另起一行也可以跟在if语句后面
 
-    //  [2, "multi", "consistent"] 保持前后语句的{ }一致  
+    //  [2, "multi", "consistent"] 保持前后语句的{ }一致
 
-    //  default: [2, "all"] 全都需要{ }包围  
+    //  default: [2, "all"] 全都需要{ }包围
     "curly": 2,
 
     // 所有的switch语句都必须要有一个default分支
@@ -150,24 +150,24 @@ module.exports = {
 
     //  在书写对象的属性或方法时，新的一行代码可以以. 开头，也可以以. 结束。
 
-    //  强制统一object.key中 . 的位置，参数:  
+    //  强制统一object.key中 . 的位置，参数:
 
-    //       property，'.'号应与属性在同一行  
+    //       property，'.'号应与属性在同一行
 
-    //       object, '.' 号应与对象名在同一行  
+    //       object, '.' 号应与对象名在同一行
     "dot-location": [2, "property"],
 
-    //  强制使用.号取属性  
+    //  强制使用.号取属性
 
-    //  参数： allowKeywords：true  使用保留字做属性名时，只能使用.方式取属性  
+    //  参数： allowKeywords：true  使用保留字做属性名时，只能使用.方式取属性
 
-    //                        false 使用保留字做属性名时, 只能使用[]方式取属性 
+    //                        false 使用保留字做属性名时, 只能使用[]方式取属性
 
-    //                        e.g [2, {"allowKeywords": false}]  
+    //                        e.g [2, {"allowKeywords": false}]
 
-    //         allowPattern:  当属性名匹配提供的正则表达式时，允许使用[]方式取值,否则只能用.号取值 
+    //         allowPattern:  当属性名匹配提供的正则表达式时，允许使用[]方式取值,否则只能用.号取值
 
-    //                        e.g [2, {"allowPattern": "^[a-z]+(_[a-z]+)+$"}]  
+    //                        e.g [2, {"allowPattern": "^[a-z]+(_[a-z]+)+$"}]
     "dot-notation": [2, { "allowKeywords": true }],
 
     // 在进行比较时，必须使用全等=== 和完全不等!==
@@ -223,7 +223,7 @@ module.exports = {
     // 如果没有添加break等终止语句或者没有添加注释语句，将会抛出错误
     "no-fallthrough": 2,
 
-    // 在使用浮点小数时，不能够省略小数点前面的数或者后面的数，必须写。比如.2 2. 应该写2.2 2.0 
+    // 在使用浮点小数时，不能够省略小数点前面的数或者后面的数，必须写。比如.2 2. 应该写2.2 2.0
     "no-floating-decimal": 2,
 
     // 禁止隐式转换，为了消除简写的类型转换
@@ -430,24 +430,24 @@ module.exports = {
 
     /*Stylistic Issues*/
 
-    //  用数组字面量定义数组时数组元素前后是否加空格， 
+    //  用数组字面量定义数组时数组元素前后是否加空格，
 
     //  never参数： 数组元素前后不能带空格，
 
-    //  always参数：数组元素前后必须留空格  
+    //  always参数：数组元素前后必须留空格
     "array-bracket-spacing": [2, "never"],
 
     // 在单行代码块中，代码块前后是否需要留空格
 
     //  always参数：默认，前后必须留空格
 
-    //  never参数： 前后不能带空格  
+    //  never参数： 前后不能带空格
     "block-spacing": [2, "always"],
 
     // 大括号的样式，比如下面的大括号语法采用『1tbs』,允许单行样式
     "brace-style": [2, "1tbs", { "allowSingleLine": true }],
 
-    // 强制使用驼峰命名  
+    // 强制使用驼峰命名
     "camelcase": 0,
 
     // 规定了逗号前后的空白，默认配置规定逗号前面没有空白，而逗号后面需要留空白
@@ -463,7 +463,7 @@ module.exports = {
 
     // 如果一个变量被指定为this对象的别名，那么这个变量就不能够用来赋其他值，只能够用来保存this对象。
 
-    // 如果this对象明确被赋值给了一个变量，那么这个变量应该是配置中指定的那个变量名。     
+    // 如果this对象明确被赋值给了一个变量，那么这个变量应该是配置中指定的那个变量名。
     "consistent-this": [0, "self"],
 
     // 该规则规定文件最后强制换行，仅需留一空行
@@ -478,13 +478,13 @@ module.exports = {
 
     // 函数表达式是通过var等声明变量的关键字开头，然后跟函数名，再后面是function本身。在使用函数表达式定义函数前调用函数会报错
 
-    //  统一定义函数是所采用的方式，参数：  
+    //  统一定义函数是所采用的方式，参数：
 
-    //     declaration: 强制使用方法声明的方式，function f(){} e.g [2, "declaration"]  
+    //     declaration: 强制使用方法声明的方式，function f(){} e.g [2, "declaration"]
 
-    //     expression：强制使用方法表达式的方式，默认方式，var f = function() {}  e.g [2, "expression"]  
+    //     expression：强制使用方法表达式的方式，默认方式，var f = function() {}  e.g [2, "expression"]
 
-    //     allowArrowFunctions: declaration风格中允许箭头函数。 e.g [2, "declaration", {"allowArrowFunctions":true}]  
+    //     allowArrowFunctions: declaration风格中允许箭头函数。 e.g [2, "declaration", {"allowArrowFunctions":true}]
     "func-style": [2, "expression"],
 
     // 规定了标识符命名的黑名单
@@ -638,7 +638,7 @@ module.exports = {
 
     // 尽管ASI允许我们使用更加自由的代码风格，但是它也可能使得你的代码并不是按你期许的方式运行
 
-    // 两个可选参数，always 和never 
+    // 两个可选参数，always 和never
 
     // 默认配置always，要求在行末加上分号。
     "semi": [0, "always"],
