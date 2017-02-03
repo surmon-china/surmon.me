@@ -1,3 +1,4 @@
+
 export const state = {
   hot: {
     fetching: false,
@@ -26,7 +27,14 @@ export const mutations = {
 
   // List
   CLEAR_LIST(state) {
-    state.list.data = { data: [] }
+    state.list.data = {
+      result: {
+        pagination: {
+          current_page: 0
+        },
+        data: []
+      }
+    }
   },
   REQUEST_LIST(state) {
     state.list.fetching = true

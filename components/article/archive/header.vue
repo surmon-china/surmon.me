@@ -2,12 +2,12 @@
   <div class="header-box">
     <p class="logo">
       <i class="iconfont icon-clock" v-if="currentDate"></i>
-      <i class="iconfont icon-code"  v-if="$route.params.category == 'code'"></i>
-      <i class="iconfont icon-think" v-if="$route.params.category == 'think'"></i>
+      <i class="iconfont icon-code"  v-if="$route.params.category_slug == 'code'"></i>
+      <i class="iconfont icon-think" v-if="$route.params.category_slug == 'think'"></i>
       <i class="iconfont" :class="[currentTag.icon]" v-if="currentTag"></i>
     </p>
-    <h5 class="title" v-if="$route.params.category == 'code'">这里记录与编程有关的一切</h5>
-    <h5 class="title" v-if="$route.params.category == 'think'">这里分享我所收藏的、原创的关于生活、社会、互联网...的一些思考和见解</h5>
+    <h5 class="title" v-if="$route.params.category_slug == 'code'">这里记录与编程有关的一切</h5>
+    <h5 class="title" v-if="$route.params.category_slug == 'think'">这里分享我所收藏的、原创的关于生活、社会、互联网...的一些思考和见解</h5>
     <h5 class="title" v-if="currentTag">
       <span>{{ currentTag.title }}</span>
       <span>-</span>
@@ -23,7 +23,7 @@
 
 <script>
   export default {
-    name: 'Article-List-Header',
+    name: 'article-list-header',
     computed: {
       currentTag() {
         // return this.$store.state.tag.data.data.find((tag, index, arr) => tag.router === this.$route.params.tag)
