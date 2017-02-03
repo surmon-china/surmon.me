@@ -1,36 +1,26 @@
-# vue-blog
+# surmon.me
 
-> Vue-Blog By Vue2.0 && Vuex
+> Vue-Blog By Vue2.0 && Vuex && Nuxt.js
 
-# Build Setup
+## Build Setup
 
-```bash
+``` bash
 # install dependencies
-npm install
+$ npm install # Or yarn install
 
-# serve with hot reload at localhost:8080
-npm run dev
+# serve with hot reload at localhost:3000
+$ npm run dev
 
-# build for production with minification
-npm run build
+# build for production and launch server
+$ npm run build
+$ npm start
 
-# run unit tests
-npm run unit
+# generate static project
+$ npm run generate
 
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
-
-# serve in production mode
-npm start
+# lint test
+$ npm run lint
 ```
-
-# 单元测试
-使用Karma + PhantomJS测试组件（UI、逻辑）
-使用coverage生成查看测试覆盖率检查报告
-
 
 # 目录结构
 ```
