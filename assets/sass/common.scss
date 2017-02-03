@@ -1,0 +1,78 @@
+*, *:hover {
+  @include transition(background-color .25s linear,
+                      color .05s linear,
+                      margin .25s linear,
+                      opacity .25s linear,
+                      filter .25s linear,
+                      visibility .25s linear,
+                      transform .25s linear);
+}
+
+.radio, .checkbox {
+  display: inline-block;
+  margin-top: 0px;
+  padding-top: 0px;
+  margin-bottom: 0px;
+}
+
+.container {
+  width: $container-width;
+  margin: 0 auto;
+}
+
+#canvas-background {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background-color: #eee;
+}
+
+@font-face {
+  font-family: 'CenturyGothic';
+  src: url('/static/fonts/CenturyGothic.TTF');
+}
+
+.slide-up-enter-active, .slide-up-leave-active {
+  transition: all .4s cubic-bezier(0, 1.2, 1, 0.5);
+  opacity: .7;
+  transform: translate3d(0, 4em, 0);
+}
+.slide-up-enter, .slide-up-leave-active {
+  opacity: .3;
+  transform: translate3d(0, 4em, 0);
+}
+
+.slide-left-enter-active, .slide-left-leave-active {
+  transition: all .2s cubic-bezier(0, 1.2, 1, 0.5);
+  opacity: .5;
+  transform: translate3d(2em, 0, 0);
+}
+
+.slide-left-enter, .slide-left-leave-active {
+  opacity: .3;
+  transform: translate3d(2em, 0, 0);
+}
+
+.slide-right-enter-active, .slide-right-leave-active {
+  transition: all .4s cubic-bezier(0, 1.2, 1, 0.5);
+  opacity: .5;
+  transform: translate3d(5em, 0, 0);
+}
+.slide-right-enter, .slide-right-leave-active {
+  opacity: .3;
+  transform: translate3d(5em, 0, 0);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .8s
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
+}
+
+.fade-move {
+  transition: transform 1s;
+}
