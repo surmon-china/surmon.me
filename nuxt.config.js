@@ -19,7 +19,6 @@ module.exports = {
     vendor: [
       'axios', 
       // '~plugins/vue-loading',
-      '~plugins/vue-awesome-swiper',
     ],
     // 为JS和Vue文件定制babel配置。https://nuxtjs.org/api/configuration-build/#analyze
     babel: {
@@ -42,7 +41,7 @@ module.exports = {
     // '~plugins/filters',
     '~plugins/vue-loading',
     // '~plugins/vue-duoshuo',
-    '~plugins/vue-awesome-swiper',
+    // '~plugins/vue-awesome-swiper',
   ],
   // 头部配置
   head: {
@@ -58,6 +57,7 @@ module.exports = {
   },
   // Nuxt.js 让你可以定义全局 CSS 文件、模块、库（每个页面都会被引入）
   css: [
+    // 'swiper/dist/css/swiper.css',
     'highlight.js/styles/agate.css',
     { src: '~assets/sass/app.scss', lang: 'sass' }
   ],

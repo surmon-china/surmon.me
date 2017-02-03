@@ -1,4 +1,9 @@
-import Vue from 'vue'
-import VueAwesomeSwiper from '~utils/vue-awesome-swiper'
+// import Vue from 'vue'
 
-Vue.use(VueAwesomeSwiper)
+// console.log(process.BROWSER_BUILD);
+
+// if (process.BROWSER_BUILD) {
+// 	let { swiper, swiperSlide } = require('~utils/vue-awesome-swiper')
+//   Vue.component('swiper', swiper)
+//   Vue.component('swiper-slide', swiperSlide)
+// }

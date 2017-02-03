@@ -8,7 +8,10 @@
 
     <!-- 列表 -->
     <div class="article-list">
-      <loading class="article-loading" v-if="articles.fetching" />
+      <loading class="article-loading" v-if="articles.fetching"></loading>
+      <div class="article-errmsg" v-if="!articles.fetching && !articles.data.result.data.length">
+        <span>无色声香味触发</span>
+      </div>
       <transition-group name="fade" tag="div">
         <list-item v-for="(item, index) in articles.data.result.data" :item="item" :key="index"></list-item>
       </transition-group>
@@ -74,9 +77,17 @@
       overflow: hidden;
 
       > .article-loading {
-          height: 10em;
-          background-color: $module-bg;
-          display: flex;
+        height: 10em;
+        background-color: $module-bg;
+        display: flex;
+      }
+
+      > .article-errmsg {
+        height: 10em;
+        line-height: 10em;
+        background-color: $module-bg;
+        text-align: center;
+        color: rgba(0, 0, 0, 0.38);
       }
     }
 
