@@ -6,15 +6,23 @@
 </template>
 
 <script>
-  import Carrousel from '~components/article/archive/carrousel.vue'
-  import ArticleList from '~components/article/archive/list.vue'
+  import Carrousel from '~components/article/archive/carrousel'
+  import ArticleList from '~components/article/archive/list'
   import Service from '~plugins/axios'
 
   export default {
     name: 'index',
-    async fetch ({ env, store }) {
-      let { data } = await Service.get(`${env.baseUrl}article`)
-      store.commit('article/GET_LIST_SUCCESS', data)
+    fetch ({ store }) {
+      store.commit('article/CLEAR_LIST')
+      return Service.get(`/article`).then(({ data }) => {
+        if (Object.is(data.code, 1)) {
+          store.commit('article/GET_LIST_SUCCESS', data)
+        } else {
+          store.commit('article/GET_LIST_FAILURE')
+        }
+      }).catch(err => {
+        store.commit('article/GET_LIST_FAILURE')
+      })
     },
     components: {
       Carrousel,

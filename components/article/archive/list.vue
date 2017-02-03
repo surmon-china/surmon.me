@@ -29,11 +29,11 @@
 </template>
 
 <script>
-  import ListItem from './Item.vue'
-  import ListHeader from './Header.vue'
+  import ListItem from './item.vue'
+  import ListHeader from './header.vue'
 
   export default {
-    name: 'Article-List',
+    name: 'article-list',
     components: {
       ListItem,
       ListHeader

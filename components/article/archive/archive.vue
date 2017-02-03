@@ -5,10 +5,10 @@
 </template>
 
 <script>
-  import ArticleList from './List.vue'
+  import ArticleList from './list.vue'
 
   export default {
-    name: 'Article-Archive',
+    name: 'article-archive',
     props: {
       articles: {
         type: Object,

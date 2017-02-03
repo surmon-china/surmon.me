@@ -12,7 +12,7 @@
             </router-link>
           </div>
         </swiper-slide>
-        <div class="swiper-pagination"  slot="pagination"></div>
+        <div class="swiper-pagination" slot="pagination"></div>
       </swiper>
     </transition>
   </div>
