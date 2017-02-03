@@ -1,6 +1,6 @@
 # surmon.me
 
-> Vue-Blog By Vue2.0 && Vuex && Nuxt.js
+> Vue-Blog By Nuxt.js
 
 ## Build Setup
 

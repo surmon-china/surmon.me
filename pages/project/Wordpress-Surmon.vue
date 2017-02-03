@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: 'Project-Wordpress-Surmon',
+    name: 'project-wordpress-surmon',
     data() {
       return {
       }

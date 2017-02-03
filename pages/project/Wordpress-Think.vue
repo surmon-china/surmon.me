@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: 'Project-Wordpress-Think',
+    name: 'project-wordpress-think',
     data() {
       return {
       }

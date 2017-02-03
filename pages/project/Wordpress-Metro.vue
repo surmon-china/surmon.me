@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: 'Project-Wordpress-Metro',
+    name: 'project-wordpress-metro',
     data() {
       return {
       }
