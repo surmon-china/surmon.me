@@ -49,15 +49,13 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../../sass/mixins';
-  @import '../../../sass/variables';
-
+  @import '~assets/sass/mixins';
+  @import '~assets/sass/variables';
   .spinner-box {
     position: relative;
     width: 100%;
     min-height: 50px;
     height: 100%;
-
     > .spinner-inner {
       width: 80px;
       height: 30px;
@@ -66,7 +64,6 @@
       left: 50%;
       margin-left: -40px;
       margin-top: -15px;
-
       > .la-ball-beat {
         display: block;
         position: relative;
@@ -75,7 +72,6 @@
         color: #fff;
         width: 80px;
         height: 30px;
-
         > div {
           position: relative;
           box-sizing: border-box;
@@ -87,38 +83,31 @@
           margin: 5px;
           background-color: $module-hover-bg;
           @include css3-prefix(animation, ball-beat 0.7s -0.15s infinite linear);
-
           &:nth-child(2n-1) {
             @include css3-prefix(animation-delay, -.5s);
           }
         }
-
         &.la-sm {
           width: 26px;
           height: 8px;
-
           > div {
             width: 8px;
             height: 8px;
             margin: 3px;
           }
         }
-
         &.la-2x {
           width: 108px;
           height: 36px;
-
           > div {
             width: 20px;
             height: 20px;
             margin: 8px;
           }
         }
-
         &.la-3x {
           width: 162px;
           height: 54px;
-
           > div {
             width: 30px;
             height: 30px;
@@ -128,7 +117,6 @@
       }
     }
   }
-
   @include keyframes(ball-beat) {
     50% {
       opacity: .2;

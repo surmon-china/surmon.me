@@ -1,13 +1,13 @@
 <template>
   <div class="project">
     <p>我是Vue-video-player</p>
-    <video-player :options="videoOptions" @playerStateChanged="playerStateChanged"></video-player>
+    <!-- <video-player :options="videoOptions" @playerStateChanged="playerStateChanged"></video-player> -->
   </div>
 </template>
 
 <script>
   export default {
-    name: 'Project-Vue-Video-Player',
+    name: 'project-vue-video-player',
     data () {
       return {
         videoOptions: {

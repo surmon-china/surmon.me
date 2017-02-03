@@ -1,12 +1,12 @@
 <template>
   <div class="project">
-    我是网易云
+    我是Wordpress-metro
   </div>
 </template>
 
 <script>
   export default {
-    name: 'project-vue-netease-cloud-music',
+    name: 'project-vue-os',
     data() {
       return {
       }
