@@ -22,6 +22,14 @@ $ npm run generate
 $ npm run lint
 ```
 
+#todos
+- 路由meta信息需要定义
+- 多个列表页是否合为一个组件
+- movie的单独列表页和详情页
+- 音乐播放器的实现
+- 多种文案合并为json，随机展示
+- 
+
 # 目录结构
 ```
 vue-blog/
