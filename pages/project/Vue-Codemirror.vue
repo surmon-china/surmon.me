@@ -1,6 +1,6 @@
 <template>
   <div class="project">
-    <codemirror v-model="code" :options="editorOption"></codemirror>
+    <!-- <codemirror v-model="code" :options="editorOption"></codemirror> -->
     <pre>{{ code }}</pre>
     <textarea v-model="code"></textarea>
     <p>Codemirror</p>
@@ -9,7 +9,7 @@
 
 <script>
   export default {
-    name: 'Project-Vue-Codemirror',
+    name: 'project-vue-codemirror',
     data() {
       return {
         code: 'const a = 10',

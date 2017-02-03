@@ -3,7 +3,7 @@
  * @author Surmon.me
  */
 
-const LoadingComponent = require('./Loading.vue')
+const LoadingComponent = require('./loading.vue')
 const loading = {
   install: function(Vue) {
     Vue.component('loading', LoadingComponent)

@@ -19,34 +19,33 @@
 </template>
 
 <script>
-  import { Background, Header, Footer, Aside, Tool, Nav } from '~components'
+  import { Background, Header, Footer, Aside, Tool, Nav } from '~components/layout'
   export default {
     name: 'app',
     components: {
       Background,
-      headerView: Header,
-      footerView: Footer,
-      asideView: Aside,
-      toolView: Tool,
-      navView: Nav
+      HeaderView: Header,
+      FooterView: Footer,
+      AsideView: Aside,
+      ToolView: Tool,
+      NavView: Nav
     },
     computed: {
       pageCols () {
-        // return this.$store.state.options.pageCols
-        return 3
+        return this.$store.state.options.pageCols
       }
     },
     mounted () {
-      this.changePageCol()
-    },
-    watch: {
-      '$route'() {
-        this.changePageCol()
-      }
+      // this.changePageCol()
+      this.$router.afterEach((route) => {
+        // console.log('当前route', route);
+        // this.changePageCol()
+      })
     },
     methods: {
       changePageCol() {
         const col = this.$route.meta.fullPage ? 2 : 3
+        // if (['about', ]) {}
         if (this.pageCols !== col) this.$store.commit('SET_PAGE_COL', col)
       }
     }

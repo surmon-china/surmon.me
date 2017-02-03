@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: 'Project-Wordpress-One',
+    name: 'project-wordpress-one',
     data() {
       return {
       }

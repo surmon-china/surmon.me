@@ -1,5 +1,5 @@
-import { domain, textOverflow, numberFormat } from './HtmlFilter.js'
-import { fromNow, toYMD, toHMS } from './TimeFilter.js'
+import { domain, textOverflow, numberFormat } from './html-filter.js'
+import { fromNow, toYMD, toHMS } from './time-filter.js'
 
 module.exports = {
   domain,

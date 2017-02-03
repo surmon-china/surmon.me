@@ -6,7 +6,7 @@
             <div class="about-all">
               <div class="about-me">
                 <div class="gravatar">
-                  <img src="/static/images/gravatar.jpg">
+                  <img src="/images/gravatar.jpg">
                 </div>
                 <p class="item">
                   <i class="iconfont icon-user"></i>
@@ -46,7 +46,7 @@
                 </div>
               </div>
               <div class="about-map">
-                <iframe src="http://localhost:8080/static/partials/map.html" style="width: 100%; height: 236px;"></iframe>
+                <iframe src="http://localhost:3000/partials/map.html" style="width: 100%; height: 236px;"></iframe>
               </div>
               <div class="about-project">
                 <router-link to="/project" class="project-link">
@@ -64,7 +64,7 @@
 
 <script>
   export default {
-    name: 'About'
+    name: 'about'
   }
 </script>
 

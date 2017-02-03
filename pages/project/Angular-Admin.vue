@@ -8,7 +8,7 @@
 
 <script>
   export default {
-    name: 'Project-Angular-Admin',
+    name: 'project-angular-admin',
     data() {
       return {
         pageDetail: ''
