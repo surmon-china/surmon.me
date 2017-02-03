@@ -1,6 +1,10 @@
 module.exports = {
   root: true,
   parser: 'babel-eslint',
+  env: {
+    browser: true,
+    node: true
+  },
   parserOptions: {
     sourceType: 'module'
   },
@@ -106,12 +110,6 @@ module.exports = {
 
     // 保证typeof 操作符返回的结果必须和上面六个字符串作比较
     "valid-typeof": 2,
-
-
-
-
-
-
 
     /*Best Practices*/
 
