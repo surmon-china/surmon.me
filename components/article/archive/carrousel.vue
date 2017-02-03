@@ -1,8 +1,8 @@
 <template>
   <div class="carrousel">
-    <loading class="article-loading" v-if="articles.fetching"/>
-    <transition name="fade">
-      <!-- <swiper class="swiper" :options="swiperOption" v-if="articles.data.result.data.length">
+    <loading class="article-loading" v-if="!articles.data.result.data.length"/>
+    <transition name="fade" v-if="false">
+      <swiper class="swiper" :options="swiperOption" v-if="articles.data.result.data.length">
         <swiper-slide class="item" v-for="(article, index) in articles.data.result.data.slice(0, 9)">
           <div class="content">
             <img :data-src="article.thumb" class="swiper-lazy">
@@ -13,7 +13,7 @@
           </div>
         </swiper-slide>
         <div class="swiper-pagination"  slot="pagination"></div>
-      </swiper> -->
+      </swiper>
     </transition>
   </div>
 </template>
