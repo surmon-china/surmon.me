@@ -1,13 +1,13 @@
 <template>
   <div class="carrousel">
-    <loading class="article-loading" v-if="!articles.data.result.data.length"/>
+    <loading-box class="article-loading" v-if="!articles.data.result.data.length"></loading-box>
     <transition name="fade" v-if="false">
       <swiper class="swiper" :options="swiperOption" v-if="articles.data.result.data.length">
         <swiper-slide class="item" v-for="(article, index) in articles.data.result.data.slice(0, 9)">
           <div class="content">
             <img :data-src="article.thumb" class="swiper-lazy">
             <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-            <router-link :to="'/article/' + article.id" class="title">
+            <router-link :to="`/article/${article.id}`" class="title">
               <span>{{ index + article.title }}</span>
             </router-link>
           </div>

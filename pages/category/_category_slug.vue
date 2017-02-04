@@ -11,9 +11,13 @@
 
   export default {
     name: 'category-article-list',
+    validate ({ params }) {
+      return !!params.category_slug;
+    },
     fetch({ env, store, params: { category_slug } }) {
       store.commit('article/CLEAR_LIST')
-      return Service.get(`/article`, { params: { category_slug }}).then(({ data }) => {
+      return Service.get(`/article`, { params: { category_slug }})
+      .then(({ data }) => {
         if (Object.is(data.code, 1)) {
           store.commit('article/GET_LIST_SUCCESS', data)
         } else {
@@ -28,7 +32,7 @@
       ArticleList
     },
     mounted() {
-      console.log(this.defaultParams, this.nextPageParams);
+      // console.log(this.defaultParams, this.nextPageParams);
     },
     computed: {
       articles() {
@@ -48,7 +52,7 @@
     methods: {
       loadmoreArticle() {
         console.log(this.nextPageParams);
-        this.$store.dispatch('loadMoreArticle', this.nextPageParams)
+        this.$store.dispatch('loadMoreArticles', this.nextPageParams)
       }
     }
   }

@@ -19,6 +19,11 @@ export const fromNow = time => {
   if (between >= 86400) return pluralize(~~(between / 86400), ' 天')
 }
 
+// 转换为本地时间格式
+export const toLocalString = date => {
+  return date ?  new Date(date).toLocaleString() : date
+}
+
 // YMDHMS时间转换过滤器
 export const toYMD = date => {
   return date ? date.toString().substr(0, 10) : date
