@@ -32,13 +32,17 @@
     },
     computed: {
       pageCols () {
-        return this.$store.state.options.pageCols
+        return this.$store.state.option.pageCols
+      },
+      severOptions() {
+        return this.$store.state.option.severOptions
       }
     },
     mounted () {
       // this.changePageCol()
       this.$router.afterEach((route) => {
-        // console.log('当前route', route);
+        // const fullPages = []
+        console.log('当前route', route)
         // this.changePageCol()
       })
     },
@@ -46,7 +50,7 @@
       changePageCol() {
         const col = this.$route.meta.fullPage ? 2 : 3
         // if (['about', ]) {}
-        if (this.pageCols !== col) this.$store.commit('SET_PAGE_COL', col)
+        if (this.pageCols !== col) this.$store.commit('option/SET_PAGE_COL', col)
       }
     }
   }

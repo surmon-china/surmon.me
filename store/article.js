@@ -1,8 +1,15 @@
+/*
+* 文章数据状态
+*/
 
 export const state = {
   hot: {
     fetching: false,
-    data: {}
+    data: {
+      result: {
+        data: []
+      }
+    }
   },
   list: {
     fetching: false,
@@ -18,7 +25,9 @@ export const state = {
   detail: {
     fetching: false,
     data: {
-      data: {}
+      result: {
+        data: {}
+      }
     }
   }
 }
@@ -48,7 +57,8 @@ export const mutations = {
   },
   ADD_LIST_SUCCESS(state, action) {
     state.list.fetching = false
-    state.list.data.result.data = [...state.list.data.result.data, ...action.result.data]
+    state.list.data.result.data.push.apply(state.list.data.result.data, action.result.data)
+    // state.list.data.result.data = [...state.list.data.result.data, ...action.result.data]
     state.list.data.result.pagination = action.result.pagination
   },
 
@@ -61,12 +71,16 @@ export const mutations = {
   },
   GET_HOT_LIST_SUCCESS(state, action){
     state.hot.fetching = false
-    state.hot.data = action.data
+    state.hot.data = action
   },
 
   // Detail
   CLEAR_DETAIL(state) {
-    state.detail.data = { data: {} }
+    state.detail.data = {
+      result: { 
+        data: {}
+      }
+    }
   },
   REQUEST_DETAIL(state) {
     state.detail.fetching = true
@@ -74,8 +88,8 @@ export const mutations = {
   GET_DETAIL_FAILURE(state) {
     state.detail.fetching = false
   },
-  GET_DETAIL_SUCCESS(state, action){
+  GET_DETAIL_SUCCESS(state, action) {
     state.detail.fetching = false
-    state.detail.data = action.data
+    state.detail.data = action
   }
 }

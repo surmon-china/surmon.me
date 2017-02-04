@@ -6,7 +6,7 @@
 const LoadingComponent = require('./loading.vue')
 const loading = {
   install: function(Vue) {
-    Vue.component('loading', LoadingComponent)
+    Vue.component('loading-box', LoadingComponent)
   }
 }
 module.exports = loading

@@ -1,0 +1,27 @@
+<template>
+  <div class="empty-box">
+    <slot></slot>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'vue-empty'
+  }
+</script>
+
+<style lang="scss" scoped>
+  @import '~assets/sass/mixins';
+  @import '~assets/sass/variables';
+  .empty-box {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-height: 5em;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background: $module-bg;
+  }
+</style>

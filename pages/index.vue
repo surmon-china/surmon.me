@@ -40,7 +40,7 @@
     },
     methods: {
       loadmoreArticle() {
-        this.$store.dispatch('loadMoreArticle', this.nextPageParams)
+        this.$store.dispatch('loadMoreArticles', this.nextPageParams)
       }
     }
   }

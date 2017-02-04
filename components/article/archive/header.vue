@@ -2,20 +2,20 @@
   <div class="header-box">
     <p class="logo">
       <i class="iconfont icon-clock" v-if="currentDate"></i>
-      <i class="iconfont icon-code"  v-if="$route.params.category_slug == 'code'"></i>
-      <i class="iconfont icon-think" v-if="$route.params.category_slug == 'think'"></i>
-      <i class="iconfont" :class="[currentTag.icon]" v-if="currentTag"></i>
+      <i class="iconfont" v-if="currentTag" :class="[currentTagIconClass]"></i>
+      <i class="iconfont icon-code"  v-if="Object.is($route.params.category_slug, 'code')"></i>
+      <i class="iconfont icon-think" v-if="Object.is($route.params.category_slug, 'think')"></i>
     </p>
-    <h5 class="title" v-if="$route.params.category_slug == 'code'">这里记录与编程有关的一切</h5>
-    <h5 class="title" v-if="$route.params.category_slug == 'think'">这里分享我所收藏的、原创的关于生活、社会、互联网...的一些思考和见解</h5>
+    <h5 class="title" v-if="Object.is($route.params.category_slug, 'code')">这里记录与编程有关的一切</h5>
+    <h5 class="title" v-if="Object.is($route.params.category_slug, 'think')">生活、思考、互联网</h5>
     <h5 class="title" v-if="currentTag">
-      <span>{{ currentTag.title }}</span>
-      <span>-</span>
-      <span>{{ currentTag.introduction || '暂无介绍' }}</span>
+      <span>{{ currentTag.name }}</span>
+      <span>&nbsp;-&nbsp;</span>
+      <span>{{ currentTag.description || '暂无介绍' }}</span>
     </h5>
     <h5 class="title" v-if="currentDate">
       <span>发布于</span>
-      <span>{{ currentDate }}</span>
+      <span>&nbsp;{{ currentDate }}&nbsp;</span>
       <span>的所有文章</span>
     </h5>
   </div>
@@ -26,12 +26,16 @@
     name: 'article-list-header',
     computed: {
       currentTag() {
-        // return this.$store.state.tag.data.data.find((tag, index, arr) => tag.router === this.$route.params.tag)
-        return {}
+        return this.$store.state.tag.data.result.data.find((tag, index, arr) => {
+          return Object.is(tag.slug, this.$route.params.tag_slug)
+        })
+      },
+      currentTagIconClass() {
+        const currentTagIcon = this.currentTag.extend.find(t => t.icon)
+        return currentTagIcon ? currentTagIcon.icon : 'icon-tag'
       },
       currentDate() {
-        // return this.$route.params.date
-        return {}
+        return this.$route.params.date
       }
     }
   }

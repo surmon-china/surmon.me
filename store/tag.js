@@ -8,10 +8,10 @@ export const state = {
 }
 
 export const mutations = {
-  REQUEST_TAG_LIST(state) {
+  REQUEST_LIST(state) {
     state.fetching = true
   },
-  GET_TAG_LIST_FAILURE(state) {
+  GET_LIST_FAILURE(state) {
     state.fetching = false
     state.data = {
       result: {
@@ -19,8 +19,8 @@ export const mutations = {
       }
     }
   },
-  GET_TAG_LIST_SUCCESS(state, action) {
+  GET_LIST_SUCCESS(state, action) {
     state.fetching = false
-    state.data = action.data
+    state.data = action
   }
 }
