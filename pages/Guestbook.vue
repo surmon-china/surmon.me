@@ -3,20 +3,25 @@
     <div class="detail">
       <div class="content">
         <div class="guestbook-banner">
-          <img src="http://surmon.me/wp-content/themes/Surmon/images/guestbook/guestbook_1.jpg">
+          <img src="/images/guestbook.jpg">
           <span>此心光明 亦复何言</span>
         </div>
       </div>
     </div>
     <div class="comment">
-      <duoshuo-box data-thread-key="guestbook" data-title="我是留言板"></duoshuo-box>
+      <!-- <duoshuo-box data-thread-key="guestbook" data-title="我是留言板"></duoshuo-box> -->
     </div>
   </div>
 </template>
 
 <script>
+  import Service from '~plugins/axios'
+
   export default {
-    name: 'guestbook'
+    name: 'guestbook',
+    head: {
+      title: 'Guestbook',
+    }
   }
 </script>
 
@@ -43,12 +48,12 @@
 
           img {
             margin-top: -5em;
-            @include css3-prefix(transition, all .5s);
+            @include css3-prefix(transition, all 1s);
 
             &:hover {
               margin-top: -6em;
-              @include css3-prefix(transform, rotate(3deg) scale(1.1));
-              @include css3-prefix(transition, all .5s);
+              @include css3-prefix(transform, rotate(2deg) scale(1.1));
+              @include css3-prefix(transition, all 1s);
             }
           }
 

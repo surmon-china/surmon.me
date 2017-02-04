@@ -1,23 +1,20 @@
 const path = require('path')
 
 module.exports = {
-  dev: (process.env.NODE_ENV !== 'production'),
-  env: {
-    baseUrl: process.env.baseUrl || (process.env.NODE_ENV === 'production' ? 'http://api.surmon.me/' : 'http://localhost:8000/')
-  },
-  // Nuxt.js 使用 lru-cache 提供组件缓存功能以获得更好的渲染性能。
   cache: true,
-  // 构建配置
+  loading: { color: '#2196f3' },
   build: {
     // 对webpack的扩展
-    extend (webpackConfig) {
+    extend(webpackConfig) {
       webpackConfig.resolve.alias['~utils'] = path.join(__dirname, 'utils');
       webpackConfig.resolve.alias['~filters'] = path.join(__dirname, 'filters');
       webpackConfig.resolve.alias['~services'] = path.join(__dirname, 'services');
     },
-    // Nuxt.js 允许你在自动生成的 vendor.bundle.js 文件中添加一些模块，以减少应用 bundle 的体积。这里说的是一些你所依赖的第三方模块 (比如 axios)
+    // 将重复引用的第三方模块添加到vendor.bundle.js
     vendor: [
-      'axios', 
+      'axios',
+      'mini-toastr',
+      'vue-notifications',
       // '~plugins/vue-loading',
     ],
     // 为JS和Vue文件定制babel配置。https://nuxtjs.org/api/configuration-build/#analyze
@@ -30,28 +27,21 @@ module.exports = {
       comments: false
     }
   },
-  router: {
-    // linkActiveClass: 'active-link',
-    scrollBehavior(to, from, savedPosition) {
-      return { x: 0, y: 0 }
-    },
-    extendRoutes(routes) {
-      // Update 
-      console.log(routes)
-      // routes.find((r) => r.path.includes('pages/product/_id.vue')).path = '/produtos/:id'
-    }
+  dev: (process.env.NODE_ENV !== 'production'),
+  env: {
+    baseUrl: process.env.baseUrl || (process.env.NODE_ENV === 'production' ? 'http://api.surmon.me/' : 'http://localhost:8000/')
   },
   plugins: [
-    '~plugins/axios',
-    '~plugins/filters',
-    '~plugins/vue-empty',
-    '~plugins/vue-loading',
+    '~plugins/axios.js',
+    '~plugins/filters.js',
+    '~plugins/vue-empty.js',
+    '~plugins/vue-loading.js',
     // '~plugins/vue-duoshuo',
     // '~plugins/vue-awesome-swiper',
+    '~plugins/vue-notifications.js',
   ],
-  // 头部配置
   head: {
-    title: 'Surmon.me - Talk is cheap. Show me the code',
+    titleTemplate: '%s - Talk is cheap. Show me the code',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'initial-scale=1, maximum-scale=1, user-scalable=no' },
@@ -59,17 +49,19 @@ module.exports = {
       { hid: 'description', name: 'description', content: '凡心所向 素履所往 生如逆旅 一苇以航' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-  // Nuxt.js 让你可以定义全局 CSS 文件、模块、库（每个页面都会被引入）
+  router: {
+    linkActiveClass: 'link-active',
+    scrollBehavior(to, from, savedPosition) {
+      return { x: 0, y: 0 }
+    },
+    extendRoutes(routes) {}
+  },
   css: [
     // 'swiper/dist/css/swiper.css',
     'highlight.js/styles/agate.css',
     { src: '~assets/sass/app.scss', lang: 'sass' }
-  ],
-  /*
-  ** Customize the progress-bar color
-  */
-  loading: { color: '#2196f3' }
+  ]
 }

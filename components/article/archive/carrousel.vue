@@ -1,7 +1,9 @@
 <template>
   <div class="carrousel">
-    <loading-box class="article-loading" v-if="!articles.data.result.data.length"></loading-box>
-    <transition name="fade" v-if="false">
+    <transition name="module">
+      <loading-box class="article-loading" v-if="!articles.data.result.data.length"></loading-box>
+    </transition>
+    <transition name="module" v-if="false">
       <swiper class="swiper" :options="swiperOption" v-if="articles.data.result.data.length">
         <swiper-slide class="item" v-for="(article, index) in articles.data.result.data.slice(0, 9)">
           <div class="content">

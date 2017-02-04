@@ -15,7 +15,10 @@
 
 <script>
   export default {
-    name: 'music'
+    name: 'music',
+    head: {
+      title: 'Music',
+    },
   }
 </script>
 

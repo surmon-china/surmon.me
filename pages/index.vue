@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <carrousel :articles="articles"></carrousel>
+    <carrousel :articles="articles" @click.native="showLoginError"></carrousel>
     <article-list :articles="articles" @loadmore="loadmoreArticle"></article-list>
   </div>
 </template>
@@ -10,23 +10,33 @@
   import ArticleList from '~components/article/archive/list'
   import Service from '~plugins/axios'
 
+  let miniToastr
+  if (process.BROWSER_BUILD) {
+    miniToastr = require('mini-toastr')
+  }
+
   export default {
     name: 'index',
+    head: {
+      title: 'Surmon.me',
+    },
     fetch ({ store }) {
-      store.commit('article/CLEAR_LIST')
-      return Service.get(`/article`).then(({ data }) => {
-        if (Object.is(data.code, 1)) {
-          store.commit('article/GET_LIST_SUCCESS', data)
-        } else {
-          store.commit('article/GET_LIST_FAILURE')
-        }
-      }).catch(err => {
-        store.commit('article/GET_LIST_FAILURE')
-      })
+      return store.dispatch('loadArticles')
     },
     components: {
       Carrousel,
       ArticleList
+    },
+    mounted() {
+      console.log('index mounted')
+      miniToastr.init()
+    },
+    notifications: {
+      showLoginError: {
+        title: 'Welcome!',
+        message: 'Hello from nuxt.js',
+        type: 'info'
+      }
     },
     computed: {
       articles() {
@@ -40,7 +50,7 @@
     },
     methods: {
       loadmoreArticle() {
-        this.$store.dispatch('loadMoreArticles', this.nextPageParams)
+        this.$store.dispatch('loadArticles', this.nextPageParams)
       }
     }
   }

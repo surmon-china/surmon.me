@@ -9,10 +9,8 @@
 <script>
   export default {
     name: 'project-angular-admin',
-    data() {
-      return {
-        pageDetail: ''
-      }
+    head: {
+      title: 'Angular-Admin - Project'
     }
   }
 </script>

@@ -7,9 +7,8 @@
 <script>
   export default {
     name: 'project-nodepress',
-    data() {
-      return {
-      }
+    head: {
+      title: 'Nodepress - Project'
     }
   }
 </script>

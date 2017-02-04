@@ -2,16 +2,19 @@
   <div class="articles">
 
     <!-- 列表头 -->
-    <div class="article-list-header" v-if="!Object.is($route.name, 'index')">
-      <list-header></list-header>
-    </div>
+    <transition name="module">
+      <div class="article-list-header" v-if="!Object.is($route.name, 'index')">
+        <list-header></list-header>
+      </div>
+    </transition>
 
     <!-- 列表 -->
     <div class="article-list">
-      <loading-box class="article-loading" v-if="articles.fetching"></loading-box>
-      <empty-box v-if="!articles.fetching && !articles.data.result.data.length">
-        <slot>暂无数据</slot>
-      </empty-box>
+      <transition name="module">
+        <empty-box v-if="!articles.fetching && !articles.data.result.data.length">
+          <slot>暂无数据</slot>
+        </empty-box>
+      </transition>
       <transition-group name="fade" tag="div">
         <list-item v-for="(item, index) in articles.data.result.data" :item="item" :key="index"></list-item>
       </transition-group>
@@ -49,6 +52,9 @@
           }
         }
       }
+    },
+    mounted() {
+      // console.log('article-list mounted')
     },
     computed: {
       canLoadMore() {

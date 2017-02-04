@@ -31,6 +31,7 @@
         })
       },
       currentTagIconClass() {
+        if (!this.currentTag) return ''
         const currentTagIcon = this.currentTag.extend.find(t => t.icon)
         return currentTagIcon ? currentTagIcon.icon : 'icon-tag'
       },
