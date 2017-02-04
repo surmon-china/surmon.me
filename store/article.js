@@ -58,7 +58,6 @@ export const mutations = {
   ADD_LIST_SUCCESS(state, action) {
     state.list.fetching = false
     state.list.data.result.data.push.apply(state.list.data.result.data, action.result.data)
-    // state.list.data.result.data = [...state.list.data.result.data, ...action.result.data]
     state.list.data.result.pagination = action.result.pagination
   },
 

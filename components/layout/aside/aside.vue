@@ -209,6 +209,7 @@
           }
 
           .title {
+            font-size: .9em;
 
             &:hover {
               margin-left: .5em;

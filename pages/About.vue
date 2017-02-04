@@ -3,59 +3,61 @@
     <div class="detail">
       <div class="content">
         <div class="about">
-            <div class="about-all">
-              <div class="about-me">
-                <div class="gravatar">
-                  <img src="/images/gravatar.jpg">
-                </div>
-                <p class="item">
-                  <i class="iconfont icon-user"></i>
-                  <span>I'm Surmon, a (95后) (小) javascript (鲜) stack (肉) developer.</span>
-                </p>
-                <p class="item">
-                  <i class="iconfont icon-mail"></i>
-                  <span><a href="mailto:surmon@foxmail.com" target="_blank" rel="nofollow">Surmon@foxmail.com</a></span>
-                </p>
-                <p class="item">
-                  <i class="iconfont icon-comment-discussion"></i>
-                  <span>大本营：<a href="http://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4" target="_blank" rel="nofollow">288325802</a></span>
-                </p>
-                <p class="item">
-                  <i class="iconfont icon-address"></i>
-                  <span>欢迎西安的同学请我喝(yue)咖(...)啡</span>
-                </p>
-                <p class="item">
-                  <i class="iconfont icon-github"></i>
-                  <span><a href="https://github.com/surmon-china" target="_blank" rel="nofollow">爱我就给我Star</a></span>
-                </p>
-                <p class="item">
-                  <i class="iconfont icon-music"></i>
-                  <span>Folk, Jazz-HipHop, EM, Rock, PostRock, New Age</a></span>
-                </p>
-                <div class="item">
-                  <i class="iconfont icon-code"></i>
-                  <div class="skills">
-                    <p>差不多精通：H5/CSS, JQuery, Ps, Bootstrap</p>
-                    <p>基本上擅长：Js, ES6, Angular.js, Ng2, Vue2, Weex, RN, Native Script</p>
-                    <p>服务端实践：PHP, Wordpress, Node.js, Express, MongoDB</p>
-                    <p>工程实践：Grunt, Gulp, Webpack, npm, babel</p>
-                    <p>比较关注：WebVR, WebRTC, WebComponent, Service Worker...</p>
-                    <p>平时关注：社工... 偶尔找找漏洞，扒扒别人，写一写小脚本什么的...</p>
-                    <div>有一颗环游世界的心</div>
-                  </div>
-                </div>
+          <div class="about-all">
+            <div class="about-me">
+              <div class="gravatar">
+                <img src="/images/gravatar.jpg">
               </div>
-              <div class="about-map">
-                <iframe src="http://localhost:3000/partials/map.html" style="width: 100%; height: 236px;"></iframe>
-              </div>
-              <div class="about-project">
-                <router-link to="/project" class="project-link">
-                  <p class="title">To my Project</p>
-                  <p class="item">前去了解更多关于我的开源项目的进展</p>
-                  <p class="item">オープンソースプロジェクトの進捗状況を理解するために、</p>
-                </router-link>
+              <p class="item">
+                <i class="iconfont icon-user"></i>
+                <span>I'm Surmon, a (95后) (小) javascript (鲜) stack (肉) developer.</span>
+              </p>
+              <p class="item">
+                <i class="iconfont icon-mail"></i>
+                <a href="mailto:surmon@foxmail.com" target="_blank" rel="nofollow">Surmon@foxmail.com</a>
+              </p>
+              <p class="item">
+                <i class="iconfont icon-comment-discussion"></i>
+                <span>国家套路委员会：</span>
+                <a target="_blank" 
+                   rel="nofollow" 
+                   href="http://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4">288325802</a>
+              </p>
+              <p class="item">
+                <i class="iconfont icon-address"></i>
+                <span>欢迎西安的同学请我喝(yue)咖(...)啡</span>
+              </p>
+              <p class="item">
+                <i class="iconfont icon-github"></i>
+                <a href="https://github.com/surmon-china" target="_blank" rel="nofollow">寂寞交友主页</a>
+              </p>
+              <p class="item">
+                <i class="iconfont icon-music"></i>
+                <span>Folk, Jazz-HipHop, EM, Rock, PostRock, New Ag</span>
+              </p>
+              <div class="item">
+                <i class="iconfont icon-code"></i>
+                <div class="skills">
+                  <p>擅长：H5/C3/4, JQuery, Ps, Bootstrap, Js, ES6, Ng1, Ng2, Vue2, Weex, RN...</p>
+                  <p>实践：PHP, Wordpress, Node.js, Express, MongoDB, Mysql, Redis, Linux...</p>
+                  <p>工程：Grunt, Gulp, Webpack, Npm, Yarn, Babel...</p>
+                  <p>关注：WebVR, WebRTC, WebComponent, Service Worker, AR, VR, AI...</p>
+                  <p>一般不接私活，如果价格不高的话；技术过硬 过硬 硬 略...</p>
+                  <p></p>
+                </div>
               </div>
             </div>
+            <div class="about-map">
+              <iframe src="/partials/map.html" style="width: 100%; height: 236px;"></iframe>
+            </div>
+            <div class="about-project">
+              <router-link to="/project" class="project-link">
+                <p class="title">To my Project</p>
+                <p class="item">前去了解更多关于我的开源项目的进展</p>
+                <p class="item">オープンソースプロジェクトの進捗状況を理解するために、</p>
+              </router-link>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -64,7 +66,10 @@
 
 <script>
   export default {
-    name: 'about'
+    name: 'about',
+    head: {
+      title: 'About Surmon'
+    }
   }
 </script>
 

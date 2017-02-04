@@ -12,20 +12,10 @@
   export default {
     name: 'category-article-list',
     validate ({ params }) {
-      return !!params.category_slug;
+      return (!!params.category_slug && ['think', 'code'].includes(params.category_slug));
     },
-    fetch({ env, store, params: { category_slug } }) {
-      store.commit('article/CLEAR_LIST')
-      return Service.get(`/article`, { params: { category_slug }})
-      .then(({ data }) => {
-        if (Object.is(data.code, 1)) {
-          store.commit('article/GET_LIST_SUCCESS', data)
-        } else {
-          store.commit('article/GET_LIST_FAILURE')
-        }
-      }).catch(err => {
-        store.commit('article/GET_LIST_FAILURE')
-      })
+    fetch({ store, params }) {
+      return store.dispatch('loadArticles', params)
     },
     components: {
       Carrousel,
@@ -52,7 +42,7 @@
     methods: {
       loadmoreArticle() {
         console.log(this.nextPageParams);
-        this.$store.dispatch('loadMoreArticles', this.nextPageParams)
+        this.$store.dispatch('loadArticles', this.nextPageParams)
       }
     }
   }

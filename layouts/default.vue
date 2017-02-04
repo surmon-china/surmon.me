@@ -4,12 +4,14 @@
     <header-view></header-view>
     <main id="main">
       <nav-view></nav-view>
-      <div class="main-content" :class="{ 'pullpage': pageCols == 2 }">
-        <nuxt></nuxt>
-      </div>
-      <transition name="slide-right">
+      <div class="main-content" :class="{ 'full-column': fullColumn }">
         <keep-alive>
-          <aside-view v-if="pageCols == 3"></aside-view>
+          <nuxt></nuxt>
+        </keep-alive>
+      </div>
+      <transition name="aside">
+        <keep-alive>
+          <aside-view v-if="!fullColumn"></aside-view>
         </keep-alive>
       </transition>
     </main>
@@ -31,26 +33,29 @@
       NavView: Nav
     },
     computed: {
-      pageCols () {
-        return this.$store.state.option.pageCols
+      fullColumn () {
+        return this.$store.state.option.fullColumn
       },
-      severOptions() {
-        return this.$store.state.option.severOptions
+      serverOptions() {
+        return this.$store.state.option.serverOptions
       }
     },
     mounted () {
-      // this.changePageCol()
-      this.$router.afterEach((route) => {
-        // const fullPages = []
-        console.log('当前route', route)
-        // this.changePageCol()
-      })
+      this.init()
     },
     methods: {
+      init() {
+        this.changePageCol()
+        this.$router.afterEach((route) => {
+          this.changePageCol()
+        })
+      },
       changePageCol() {
-        const col = this.$route.meta.fullPage ? 2 : 3
-        // if (['about', ]) {}
-        if (this.pageCols !== col) this.$store.commit('option/SET_PAGE_COL', col)
+        const fullColumnPageNames = ['about', 'music', 'project']
+        const fullColumn = fullColumnPageNames.includes(this.$route.name) || this.$route.path.includes('/project/')
+        if (!Object.is(this.fullColumn, fullColumn)) {
+          this.$store.commit('option/SET_FULL_COLUMU', fullColumn)
+        }
       }
     }
   }
@@ -68,11 +73,11 @@
       margin: 0 0 0 12.5em;
       position: relative;
       overflow: hidden;
-      @include css3-prefix(transition, width .5s);
+      @include css3-prefix(transition, width .35s);
 
-      &.pullpage {
-        @include css3-prefix(transition, width .5s);
+      &.full-column {
         width: 62.5em;
+        @include css3-prefix(transition, width .35s);
       }
     }
   }

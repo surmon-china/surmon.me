@@ -7,8 +7,10 @@
   "dependencies": {
     "axios": "^0.15.3",
     "highlight.js": "^9.9.0",
+    "mini-toastr": "^0.3.10",
     "nuxt": "latest",
-    "vue-awesome-swiper": "^2.3.1"
+    "vue-awesome-swiper": "^2.3.1",
+    "vue-notifications": "^0.7.6"
   },
   "scripts": {
     "dev": "nuxt",
