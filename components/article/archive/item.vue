@@ -125,12 +125,12 @@
           margin-bottom: 0.3em;
           height: 5em;
           line-height: 1.8em;
-          word-break: break-all;
+          // word-break: break-all;
           overflow: hidden;
           text-overflow: ellipsis;
           display: -webkit-box;
-          -webkit-line-clamp: 3;
           -webkit-box-orient: vertical;
+          -webkit-line-clamp: 3;
         }
 
         > .item-meta {

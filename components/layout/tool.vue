@@ -2,9 +2,11 @@
   <div id="tools">
     <div class="container">
       <div class="tools-list">
-        <button class="feedback">
+        <a class="feedback" 
+           href="tencent://Message/?Uin=794939078&websiteName=surmon.me=&Menu=yes"
+           target="_blank">
           <i class="iconfont icon-comment"></i>
-        </button>
+        </a>
         <button class="to-top" @click="totop">
           <i class="iconfont icon-totop"></i>
         </button>
@@ -55,6 +57,7 @@
           display: block;
           width: 3em;
           height: 3em;
+          line-height: 3em;
           text-align: center;
           background-color: $module-bg;
 

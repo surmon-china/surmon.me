@@ -5,8 +5,8 @@
 export const state = {
 
   // 页面的栏目展示类型（3栏/2栏）
-  pageCols: 3,
-  severOptions: {
+  fullColumn: false,
+  serverOptions: {
     fetching: false,
     data: {
       result: {}
@@ -17,20 +17,20 @@ export const state = {
 export const mutations = {
 
 	// 设置栏目结构
-  SET_PAGE_COL(state, col) {
-    state.pageCols = col
+  SET_FULL_COLUMU(state, action) {
+    state.fullColumn = action
   },
 
   // 获取服务端配置
   REQUEST_OPTIONS(state) {
-    state.severOptions.fetching = true
+    state.serverOptions.fetching = true
   },
   REQUEST_FAILURE(state) {
-    state.severOptions.fetching = false
-    state.severOptions.data = { result: {}}
+    state.serverOptions.fetching = false
+    state.serverOptions.data = { result: {}}
   },
   REQUEST_SUCCESS(state, action) {
-    state.severOptions.fetching = false
-    state.severOptions.data = action
+    state.serverOptions.fetching = false
+    state.serverOptions.data = action
   }
 }

@@ -11,21 +11,14 @@
 
   export default {
     name: 'tag-article-list',
+    head: {
+      // title: `Tag - ${this.}`
+    },
     validate ({ params }) {
       return !!params.tag_slug;
     },
-    fetch({ env, store, params: { tag_slug } }) {
-      store.commit('article/CLEAR_LIST')
-      return Service.get(`/article`, { params: { tag_slug }})
-      .then(({ data }) => {
-        if (Object.is(data.code, 1)) {
-          store.commit('article/GET_LIST_SUCCESS', data)
-        } else {
-          store.commit('article/GET_LIST_FAILURE')
-        }
-      }).catch(err => {
-        store.commit('article/GET_LIST_FAILURE')
-      })
+    fetch({ store, params }) {
+      return store.dispatch('loadArticles', params)
     },
     components: {
       Carrousel,
@@ -52,7 +45,7 @@
     methods: {
       loadmoreArticle() {
         console.log(this.nextPageParams);
-        this.$store.dispatch('loadMoreArticles', this.nextPageParams)
+        this.$store.dispatch('loadArticles', this.nextPageParams)
       }
     }
   }

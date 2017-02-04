@@ -7,9 +7,8 @@
 <script>
   export default {
     name: 'project-nuxtjs-blog',
-    data() {
-      return {
-      }
+    head: {
+      title: 'Nuxtjs - Project'
     }
   }
 </script>

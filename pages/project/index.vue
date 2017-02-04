@@ -92,9 +92,8 @@
 <script>
   export default {
     name: 'project',
-    data() {
-      return {
-      }
+    head: {
+      title: 'Project'
     }
   }
 </script>

@@ -78,7 +78,7 @@ export default {
           color: $primary;
         }
 
-        &.nuxt-link-active {
+        &.link-active {
           background-color: #eee;
           font-weight: bold;
           color: $primary;
