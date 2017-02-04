@@ -7,7 +7,10 @@
 */
 
 // url对象（a）
-const urlParser = document.createElement('a')
+let urlParser = {};
+if (process.BROWSER_BUILD) {
+	urlParser = document.createElement('a')
+}
 
 // 域名过滤器，传入url，返回域名
 export const domain = url => {

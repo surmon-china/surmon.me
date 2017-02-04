@@ -21,7 +21,7 @@
         <i class="iconfont icon-netease-music"></i>
         <span>Music</span>
       </nuxt-link>
-      <nuxt-link to="/category/movie" class="item">
+      <nuxt-link to="/category/movie" class="item" v-if="false">
         <i class="iconfont icon-movie"></i>
         <span>Movie</span>
       </nuxt-link>

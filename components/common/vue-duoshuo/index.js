@@ -23,7 +23,7 @@ const duoshuo = {
   },
   install: function(Vue) {
     includeDuoshuo(unstable)
-    Vue.component('duoshuo', DuoshuoComponent)
+    Vue.component('duoshuo-box', DuoshuoComponent)
   }
 }
 module.exports = duoshuo

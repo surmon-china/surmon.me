@@ -34,11 +34,17 @@ module.exports = {
     // linkActiveClass: 'active-link',
     scrollBehavior(to, from, savedPosition) {
       return { x: 0, y: 0 }
+    },
+    extendRoutes(routes) {
+      // Update 
+      console.log(routes)
+      // routes.find((r) => r.path.includes('pages/product/_id.vue')).path = '/produtos/:id'
     }
   },
   plugins: [
     '~plugins/axios',
-    // '~plugins/filters',
+    '~plugins/filters',
+    '~plugins/vue-empty',
     '~plugins/vue-loading',
     // '~plugins/vue-duoshuo',
     // '~plugins/vue-awesome-swiper',
@@ -49,7 +55,8 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'initial-scale=1, maximum-scale=1, user-scalable=no' },
-      { hid: 'description', content: "Nuxt.js project" }
+      { name: 'keywords', content: 'surmon, 司马萌, 前端技术开发'},
+      { hid: 'description', name: 'description', content: '凡心所向 素履所往 生如逆旅 一苇以航' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' }

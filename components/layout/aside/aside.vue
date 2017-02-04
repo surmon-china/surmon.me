@@ -6,9 +6,9 @@
         <button class="search-btn">
           <i class="iconfont icon-search"></i>
         </button>
-        <button class="rss-btn">
-          <i class="iconfont icon-rss"></i>
-        </button>
+        <a class="sitemap-btn" href="/site-map.xml" target="_blank">
+          <i class="iconfont icon-sitemap"></i>
+        </a>
       </div>
     </div>
     <div class="aside-article">
@@ -16,15 +16,18 @@
         <i class="iconfont icon-list"></i>
         <span>热门文章</span>
       </p>
-      <!-- <loading v-if="article.fetching"></loading> -->
-<!--       <transition name="fade">
+      <loading-box v-if="article.fetching"></loading-box>
+      <empty-box v-if="!article.fetching && !article.data.result.data.length">
+        <slot>暂无数据</slot>
+      </empty-box> 
+      <transition name="fade">
         <ul class="aside-article-list" v-if="!article.fetching">
-          <li class="item" v-for="article in article.data.data" :key="article.id">
+          <li class="item" v-for="article in article.data.result.data" :key="article.id">
             <i class="index"></i>
-            <router-link :to="'/article/' + article.id" class="title">{{ article.title }}</router-link>
+            <router-link :to="`/article/${article.id}`" class="title">{{ article.title }}</router-link>
           </li>
         </ul>
-      </transition> -->
+      </transition>
     </div>
     <div class="aside-ad">
       <a href="http://s.click.taobao.com/ZaXp1Rx" target="_blank" class="ad-box">
@@ -35,19 +38,23 @@
       <calendar></calendar>
     </div>
     <div class="aside-tag" v-scroll-top>
-      {{ tag }}
-      <loading v-if="tag.fetching"></loading>
-<!--       <transition name="fade">
+      <loading-box v-if="tag.fetching"></loading-box>
+      <empty-box v-if="!tag.fetching && !tag.data.result.data.length">
+        <slot>暂无数据</slot>
+      </empty-box>
+      <transition name="fade">
         <ul class="aside-tag-list" v-if="!tag.fetching">
-          <router-link :to="'/tag/' + tag.slug" tag="li" class="item" v-for="tag in tag.data.result.data">
+          <router-link :to="`/tag/${tag.slug}`" tag="li" class="item" v-for="tag in tag.data.result.data">
             <a class="title" :title="tag.title">
-              <i class="iconfont" :class="[tag.icon]" v-if="tag.icon"></i>
-              <span>{{ tag.title }}</span>
+              <i class="iconfont" 
+                 :class="[tag.extend.find(t => t.icon).icon]" 
+                 v-if="tag.extend.find(t => t.icon)"></i>
+              <span>{{ tag.name }}</span>
               <span>({{ tag.count || 0 }})</span>
             </a>
           </router-link>
         </ul>
-      </transition> -->
+      </transition>
     </div>
   </aside>
 </template>
@@ -56,22 +63,12 @@
   import Calendar from './calendar.vue'
   export default {
     name: 'aside',
-    beforeMount() {
-      // console.log(this);
-      this.init()
-    },
     computed: {
       tag() {
         return this.$store.state.tag
       },
-      // article() {
-      //   return this.$store.state.article.hot
-      // }
-    },
-    methods: {
-      init() {
-        // this.$store.dispatch('GET_ARTICLE_HOT_LIST')
-        // this.$store.dispatch('GET_TAG_LIST', { per_page: 200 })
+      article() {
+        return this.$store.state.article.hot
       }
     },
     components: {
@@ -126,7 +123,7 @@
 
         > .search-input,
         > .search-btn,
-        > .rss-btn {
+        > .sitemap-btn {
           background-color: $module-hover-bg;
           height: 2em;
           line-height: 2em;
@@ -151,7 +148,8 @@
           }
         }
 
-        > .rss-btn {
+        > .sitemap-btn {
+          text-align: center;
           float: right;
           width: 4em;
         }

@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="comment">
-      <duoshuo data-thread-key="guestbook" data-title="我是留言板"></duoshuo>
+      <duoshuo-box data-thread-key="guestbook" data-title="我是留言板"></duoshuo-box>
     </div>
   </div>
 </template>

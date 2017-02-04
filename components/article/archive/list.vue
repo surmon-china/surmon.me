@@ -2,16 +2,16 @@
   <div class="articles">
 
     <!-- 列表头 -->
-    <div class="article-list-header" v-if="['tag', 'date', 'category'].includes($route.name)">
+    <div class="article-list-header" v-if="!Object.is($route.name, 'index')">
       <list-header></list-header>
     </div>
 
     <!-- 列表 -->
     <div class="article-list">
-      <loading class="article-loading" v-if="articles.fetching"></loading>
-      <div class="article-errmsg" v-if="!articles.fetching && !articles.data.result.data.length">
-        <span>无色声香味触发</span>
-      </div>
+      <loading-box class="article-loading" v-if="articles.fetching"></loading-box>
+      <empty-box v-if="!articles.fetching && !articles.data.result.data.length">
+        <slot>暂无数据</slot>
+      </empty-box>
       <transition-group name="fade" tag="div">
         <list-item v-for="(item, index) in articles.data.result.data" :item="item" :key="index"></list-item>
       </transition-group>
@@ -56,7 +56,7 @@
         const hasArticles = this.articles.data.result.pagination
         return hasArticles ? (current_page < total_page) : false
       }
-    },
+    }
   }
 </script>
 
