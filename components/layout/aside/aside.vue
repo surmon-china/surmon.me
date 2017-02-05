@@ -18,15 +18,19 @@
       </p>
       <loading-box v-if="article.fetching"></loading-box>
       <transition name="module">
-        <empty-box v-if="!article.fetching && !article.data.result.data.length">
+        <empty-box v-if="!article.fetching && !article.data.response.length">
           <slot>暂无数据</slot>
         </empty-box>
       </transition>
       <transition name="fade">
         <ul class="aside-article-list" v-if="!article.fetching">
-          <li class="item" v-for="article in article.data.result.data" :key="article.id">
+          <li class="item" v-for="article in article.data.response" :key="article.id">
             <i class="index"></i>
-            <router-link :to="`/article/${article.id}`" class="title">{{ article.title }}</router-link>
+            <router-link class="title" 
+                         :title="`${article.title} - [ ${article.comments} 条评论 ]`"
+                         :to="`/article/${article.thread_key}`">
+              <span>{{ article.title }}</span>
+            </router-link>
           </li>
         </ul>
       </transition>

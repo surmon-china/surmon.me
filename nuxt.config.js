@@ -13,9 +13,10 @@ module.exports = {
     // 将重复引用的第三方模块添加到vendor.bundle.js
     vendor: [
       'axios',
+      'clipboard',
+      'highlight.js',
       'mini-toastr',
       'vue-notifications',
-      // '~plugins/vue-loading',
     ],
     // 为JS和Vue文件定制babel配置。https://nuxtjs.org/api/configuration-build/#analyze
     babel: {
@@ -33,23 +34,34 @@ module.exports = {
   },
   plugins: [
     '~plugins/axios.js',
+    '~plugins/clipboard.js',
+    '~plugins/highlight.js',
     '~plugins/filters.js',
     '~plugins/vue-empty.js',
     '~plugins/vue-loading.js',
-    // '~plugins/vue-duoshuo',
+    '~plugins/vue-duoshuo.js',
     '~plugins/vue-awesome-swiper',
     '~plugins/vue-notifications.js',
   ],
   head: {
-    titleTemplate: '%s | Surmon.me - Talk is cheap. Show me the code',
+    title: 'Surmon.me - Talk is cheap. Show me the code',
+    titleTemplate: '%s | Surmon.me',
+    __dangerouslyDisableSanitizers: ['script'],
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'initial-scale=1, maximum-scale=1, user-scalable=no' },
-      { name: 'keywords', content: 'surmon, 司马萌, 前端技术开发'},
+      { hid: 'keywords', name: 'keywords', content: 'surmon, 司马萌, 前端技术开发, javascript' },
       { hid: 'description', name: 'description', content: '凡心所向 素履所往 生如逆旅 一苇以航' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      { innerHTML: 'window.duoshuoQuery = { short_name: "localhost-3000" }', type: 'text/javascript' },
+      { src: 'http://static.duoshuo.com/embed.js' }
+    ],
+    noscript: [
+      { innerHTML: 'This website requires JavaScript.' }
     ]
   },
   router: {

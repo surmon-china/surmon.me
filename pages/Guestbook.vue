@@ -9,18 +9,19 @@
       </div>
     </div>
     <div class="comment">
-      <!-- <duoshuo-box data-thread-key="guestbook" data-title="我是留言板"></duoshuo-box> -->
+      <duoshuo-box title="Guestbook"
+                   thread-key="guestbook"
+                   url="http://surmon.me/guestbook">
+      </duoshuo-box>
     </div>
   </div>
 </template>
 
 <script>
-  import Service from '~plugins/axios'
-
   export default {
     name: 'guestbook',
     head: {
-      title: 'Guestbook',
+      title: 'Guestbook'
     }
   }
 </script>

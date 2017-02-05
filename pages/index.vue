@@ -14,9 +14,6 @@
 
   export default {
     name: 'index',
-    head: {
-      title: 'Home',
-    },
     fetch ({ store }) {
       return Promise.all([
         store.dispatch('loadArticles'),

@@ -30,9 +30,10 @@ export const actions = {
   },
 
   // 获取最热文章列表
-  loadHotArticles({ commit }, params = {}) {
+  loadHotArticles({ commit }) {
     commit('article/REQUEST_HOT_LIST')
-    return Service.get('/article', { params })
+    const params = { short_name: 'surmon', num_items: 10, range: 'all' }
+    return Service.get('http://api.duoshuo.com/sites/listTopThreads.json', { params })
     .then(response => {
       const success = Object.is(response.statusText, 'OK')
       if(success) commit('article/GET_HOT_LIST_SUCCESS', response.data)
@@ -81,6 +82,9 @@ export const actions = {
     }, err => {
       commit('article/GET_DETAIL_FAILURE', err)
     })
-  }
+  },
+
+  // 根据唯一key获取多说评论http://api.duoshuo.com/threads/listPosts.json?short_name=localhost-3000&thread_key=guestbook&page=1&limit=50
+  
 
 }
