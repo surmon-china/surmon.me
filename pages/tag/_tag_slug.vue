@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <article-list :articles="articles" @loadmore="loadmoreArticle"></article-list>
+    <article-list :article="article" @loadmore="loadmoreArticle"></article-list>
   </div>
 </template>
 
@@ -11,14 +11,17 @@
 
   export default {
     name: 'tag-article-list',
-    head: {
-      // title: `Tag - ${this.}`
-    },
     validate ({ params }) {
       return !!params.tag_slug;
     },
     fetch({ store, params }) {
       return store.dispatch('loadArticles', params)
+    },
+    head () {
+      const title = this.defaultParams.tag_slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+      return {
+        title: `${title} | Tag`
+      }
     },
     components: {
       Carrousel,
@@ -28,7 +31,7 @@
       // console.log(this.defaultParams, this.nextPageParams);
     },
     computed: {
-      articles() {
+      article() {
         return this.$store.state.article.list
       },
       defaultParams() {
@@ -38,7 +41,7 @@
       },
       nextPageParams() {
         return Object.assign({
-          page: this.articles.data.result.pagination.current_page + 1
+          page: this.article.data.result.pagination.current_page + 1
         }, this.defaultParams)
       }
     },

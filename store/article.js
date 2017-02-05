@@ -25,9 +25,7 @@ export const state = {
   detail: {
     fetching: false,
     data: {
-      result: {
-        data: {}
-      }
+      result: {}
     }
   }
 }
@@ -76,9 +74,7 @@ export const mutations = {
   // Detail
   CLEAR_DETAIL(state) {
     state.detail.data = {
-      result: { 
-        data: {}
-      }
+      result: {}
     }
   },
   REQUEST_DETAIL(state) {

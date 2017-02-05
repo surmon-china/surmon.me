@@ -42,6 +42,19 @@ export const actions = {
     })
   },
 
+  // 获取公告列表
+  loadAnnouncements({ commit }, params = {}) {
+    commit('announcement/REQUEST_LIST')
+    return Service.get('/announcement', { params })
+    .then(response => {
+      const success = Object.is(response.statusText, 'OK')
+      if(success) commit('announcement/GET_LIST_SUCCESS', response.data)
+      if(!success) commit('announcement/GET_LIST_FAILURE')
+    }, err => {
+      commit('announcement/GET_LIST_FAILURE', err)
+    })
+  },
+
   // 获取文章列表
   loadArticles({ commit }, params = { page: 1 }) {
     commit('article/REQUEST_LIST')
@@ -58,9 +71,9 @@ export const actions = {
   },
 
   // 获取文章详情
-  loadArticleDetail({ commit, dispatch, state }, params = {}) {
+  loadArticleDetail({ commit }, params = {}) {
     commit('article/REQUEST_DETAIL')
-    Service.get(`/article/${ params.article._id }`)
+    return Service.get(`/article/${ params.article_id }`)
     .then(response => {
       const success = Object.is(response.statusText, 'OK')
       if(success) commit('article/GET_DETAIL_SUCCESS', response.data)

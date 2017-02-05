@@ -1,11 +1,11 @@
 <template>
   <div class="carrousel">
     <transition name="module">
-      <loading-box class="article-loading" v-if="!articles.data.result.data.length"></loading-box>
+      <loading-box class="article-loading" v-if="!article.data.result.data.length"></loading-box>
     </transition>
-    <transition name="module" v-if="false">
-      <swiper class="swiper" :options="swiperOption" v-if="articles.data.result.data.length">
-        <swiper-slide class="item" v-for="(article, index) in articles.data.result.data.slice(0, 9)">
+    <transition name="module">
+      <swiper class="swiper" :options="swiperOption" v-if="article.data.result.data.length">
+        <swiper-slide class="item" v-for="(article, index) in article.data.result.data.slice(0, 9)">
           <div class="content">
             <img :data-src="article.thumb" class="swiper-lazy">
             <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
@@ -26,7 +26,7 @@
     data() {
       return {
         swiperOption: {
-          autoplay: 1000,
+          autoplay: 3500,
           setWrapperSize :true,
           autoHeight: true,
           pagination : '.swiper-pagination',
@@ -40,7 +40,7 @@
       }
     },
     props: {
-      articles: {
+      article: {
         type: Object,
         default: {
           result: {

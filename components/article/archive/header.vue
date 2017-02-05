@@ -32,8 +32,8 @@
       },
       currentTagIconClass() {
         if (!this.currentTag) return ''
-        const currentTagIcon = this.currentTag.extend.find(t => t.icon)
-        return currentTagIcon ? currentTagIcon.icon : 'icon-tag'
+        const currentTagIcon = this.currentTag.extends.find(t => Object.is(t.name, 'icon'))
+        return currentTagIcon ? currentTagIcon.value : 'icon-tag'
       },
       currentDate() {
         return this.$route.params.date
