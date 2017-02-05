@@ -1,50 +1,43 @@
 <template>
   <div class="index">
-    <carrousel :articles="articles" @click.native="showLoginError"></carrousel>
-    <article-list :articles="articles" @loadmore="loadmoreArticle"></article-list>
+    <carrousel :article="article"></carrousel>
+    <announcement :announcement="announcement"></announcement>
+    <article-list :article="article" @loadmore="loadmoreArticle"></article-list>
   </div>
 </template>
 
 <script>
   import Carrousel from '~components/article/archive/carrousel'
+  import Announcement from '~components/article/archive/announcement'
   import ArticleList from '~components/article/archive/list'
   import Service from '~plugins/axios'
-
-  let miniToastr
-  if (process.BROWSER_BUILD) {
-    miniToastr = require('mini-toastr')
-  }
 
   export default {
     name: 'index',
     head: {
-      title: 'Surmon.me',
+      title: 'Home',
     },
     fetch ({ store }) {
-      return store.dispatch('loadArticles')
+      return Promise.all([
+        store.dispatch('loadArticles'),
+        store.dispatch('loadAnnouncements')
+      ])
     },
     components: {
       Carrousel,
+      Announcement,
       ArticleList
     },
-    mounted() {
-      console.log('index mounted')
-      miniToastr.init()
-    },
-    notifications: {
-      showLoginError: {
-        title: 'Welcome!',
-        message: 'Hello from nuxt.js',
-        type: 'info'
-      }
-    },
     computed: {
-      articles() {
+      article() {
         return this.$store.state.article.list
+      },
+      announcement() {
+        return this.$store.state.announcement
       },
       nextPageParams() {
         return {
-          page: this.articles.data.result.pagination.current_page + 1
+          page: this.article.data.result.pagination.current_page + 1
         }
       }
     },

@@ -11,20 +11,22 @@
     <!-- 列表 -->
     <div class="article-list">
       <transition name="module">
-        <empty-box v-if="!articles.fetching && !articles.data.result.data.length">
+        <empty-box v-if="!article.fetching && !article.data.result.data.length">
           <slot>暂无数据</slot>
         </empty-box>
       </transition>
-      <transition-group name="fade" tag="div">
-        <list-item v-for="(item, index) in articles.data.result.data" :item="item" :key="index"></list-item>
-      </transition-group>
+      <transition name="module">
+        <transition-group name="fade" tag="div">
+          <list-item v-for="(item, index) in article.data.result.data" :item="item" :key="index"></list-item>
+        </transition-group>
+      </transition>
     </div>
 
     <!-- 加载更多 -->
     <div class="article-load">
-      <button class="btn-loadmore" @click="$emit('loadmore')" :disabled="articles.fetching || !canLoadMore">
-        <span v-if="!articles.fetching && canLoadMore">加载更多</span>
-        <span v-if="articles.fetching && canLoadMore">加载中</span>
+      <button class="btn-loadmore" @click="$emit('loadmore')" :disabled="article.fetching || !canLoadMore">
+        <span v-if="!article.fetching && canLoadMore">加载更多</span>
+        <span v-if="article.fetching && canLoadMore">加载中</span>
         <span v-if="!canLoadMore">没有更多</span>
       </button>
     </div>
@@ -42,7 +44,7 @@
       ListHeader
     },
     props: {
-      articles: {
+      article: {
         type: Object,
         default: {
           data: {
@@ -58,8 +60,8 @@
     },
     computed: {
       canLoadMore() {
-        const { current_page, total_page } = this.articles.data.result.pagination
-        const hasArticles = this.articles.data.result.pagination
+        const { current_page, total_page } = this.article.data.result.pagination
+        const hasArticles = this.article.data.result.pagination
         return hasArticles ? (current_page < total_page) : false
       }
     }
