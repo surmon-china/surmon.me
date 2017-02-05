@@ -68,7 +68,7 @@
   export default {
     name: 'about',
     head: {
-      title: 'About Surmon'
+      title: 'About'
     }
   }
 </script>

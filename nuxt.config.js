@@ -37,11 +37,11 @@ module.exports = {
     '~plugins/vue-empty.js',
     '~plugins/vue-loading.js',
     // '~plugins/vue-duoshuo',
-    // '~plugins/vue-awesome-swiper',
+    '~plugins/vue-awesome-swiper',
     '~plugins/vue-notifications.js',
   ],
   head: {
-    titleTemplate: '%s - Talk is cheap. Show me the code',
+    titleTemplate: '%s | Surmon.me - Talk is cheap. Show me the code',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'initial-scale=1, maximum-scale=1, user-scalable=no' },
@@ -60,7 +60,7 @@ module.exports = {
     extendRoutes(routes) {}
   },
   css: [
-    // 'swiper/dist/css/swiper.css',
+    'swiper/dist/css/swiper.css',
     'highlight.js/styles/agate.css',
     { src: '~assets/sass/app.scss', lang: 'sass' }
   ]

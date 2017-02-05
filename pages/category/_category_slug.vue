@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <article-list :articles="articles" @loadmore="loadmoreArticle"></article-list>
+    <article-list :article="article" @loadmore="loadmoreArticle"></article-list>
   </div>
 </template>
 
@@ -17,6 +17,12 @@
     fetch({ store, params }) {
       return store.dispatch('loadArticles', params)
     },
+    head () {
+      const title = this.defaultParams.category_slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+      return {
+        title: `${title} | Category`
+      }
+    },
     components: {
       Carrousel,
       ArticleList
@@ -25,7 +31,7 @@
       // console.log(this.defaultParams, this.nextPageParams);
     },
     computed: {
-      articles() {
+      article() {
         return this.$store.state.article.list
       },
       defaultParams() {
@@ -35,7 +41,7 @@
       },
       nextPageParams() {
         return Object.assign({
-          page: this.articles.data.result.pagination.current_page + 1
+          page: this.article.data.result.pagination.current_page + 1
         }, this.defaultParams)
       }
     },
