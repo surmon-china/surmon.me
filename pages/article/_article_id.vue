@@ -1,107 +1,121 @@
 <template>
   <div class="article">
     <div class="detail">
-      <h3 class="title">{{ article.data.result.title || '...' }}</h3>
-      <loading-box v-if="article.fetching"></loading-box>
+      <h3 class="title">{{ article.title || '...' }}</h3>
+      <loading-box v-if="fetching"></loading-box>
       <transition name="module">
-        <div class="content" v-html="article.data.result.content" v-if="!article.fetching"></div>
+        <div class="content" 
+             v-html="article.content" 
+             v-if="!fetching"
+             v-highlightjs></div>
       </transition>
     </div>
     <div class="metas">
       <transition name="module">
-        <loading-box v-if="article.fetching"></loading-box>
+        <loading-box v-if="fetching"></loading-box>
       </transition>
       <p class="">
-        <span>本文由 Surmon 发布于 </span>
-        <router-link to="/date/2015-12-30" class="navbar-link">2015年-12月-30日</router-link>
-        <span>，当前已被围观 1,012 次</span>
-      </p>
-      <p>
-        <span>相关分类：</span>
-        <router-link to="/" class="navbar-link">Code</router-link>
-        <router-link to="/" class="navbar-link">Think</router-link>
+        <span>本文于</span>
+        <span>&nbsp;</span>
+        <router-link :to="`/date/${new Date(article.date).toLocaleString().substr(0, 8).replace(/\//g, '-')}`" 
+                     :title="new Date(article.date).toLocaleString().substr(0, 11)"
+                     class="navbar-link">
+          <span>{{ new Date(article.date).toLocaleString().substr(0, 11) }}</span>
+        </router-link>
+        <span>&nbsp;发布在&nbsp;</span>
+        <router-link class="navbar-link" 
+                     :to="`/category/${category.slug}`"
+                     :title="category.description || category.name"
+                     v-for="category in article.category">
+          <span>{{ category.name }}</span>
+        </router-link>
+        <span>&nbsp;分类下，当前已被围观&nbsp;</span>
+        <span>{{ article.meta.views || 0 }}</span>
+        <span>&nbsp;次</span>
       </p>
       <p>
         <span>相关标签：</span>
-        <span v-if="!article.data.result.tags.length">无相关标签</span>
+        <span v-if="!article.tag.length">无相关标签</span>
         <router-link class="navbar-link" 
-                     :to="`/tag/${tag.silg}`"
-                     v-for="tag in article.data.result.tags">
+                     :to="`/tag/${tag.slug}`"
+                     :title="tag.description || tag.name"
+                     v-for="(tag, index) in article.tag">
           <span>{{ tag.name }}</span>
+          <span v-if="article.tag.length && article.tag[index + 1]">、</span>
         </router-link>
-        <router-link to="/" class="navbar-link">Javascript</router-link>
-        <router-link to="/" class="navbar-link">Vue.js</router-link>
       </p>
       <p>
         <span>永久地址：</span>
-        <!-- 点击复制才对 -->
-        <router-link to="/" class="navbar-link">http://surmon.me/861.html</router-link>
+        <a href="" 
+           ref="copy_url_btn"
+           class="navbar-link"
+           :data-clipboard-text="`http://surmon.me/article/${this.article.id}`"
+           @click.prevent="">http://surmon.me/article/{{ article.id }}</a>
       </p>
-<!--       <p>
-        <span>原文信息：</span>
-        <span>本文原文由尤雨溪发布于segmentfault，已获得转载授权</span>
-      </p>
-      <p>
-        <span>原文链接：</span>
-        <a href="https://segmentfault.com/q/1010000007247723" target="_blank">https://segmentfault.com/q/1010000007247723</a>
-      </p> -->
       <div>
         <span>版权声明：</span>
-        <span>本文内容来自互联网，非本站原创，若侵犯到您的利益请及时<a href="mailto:surmon@foxmail.com" target="_blank">联系我</a>删除</span>
+        <span>本文内容可能来自互联网，若侵犯到您的利益请及时&nbsp;</span>
+        <a href="mailto:surmon@foxmail.com" target="_blank">Email me</a>
+        <span>&nbsp;处理</span>
       </div>
     </div>
-    <div class="related">
-      <loading-box v-if="article.fetching"></loading-box>
+    <div class="related" v-if="article.related && article.related.length">
       <ul class="article-lists">
-        <li class="item" v-for="item in 8">
-          <router-link to="/article/234234234" class="item-box">
-            <img src="http://surmon.me/wp-content/themes/Surmon/timthumb.php?src=http://surmon.me/wp-content/uploads/2015/07/546841351684.jpg&h=135&w=126&q=90&zc=1" class="thumb" width="111" height="120" title="硕士学位的贬值" alt="硕士学位的贬值">
-            <span class="title">硕士学位的贬值</span>
+        <li class="item" v-for="article in article.related.slice(0, 8)">
+          <router-link :to="`/article/${article.id}`" :title="article.title" class="item-box">
+            <img :src="article.thumb" class="thumb" :alt="article.title">
+            <span class="title">{{ article.title }}</span>
           </router-link>
         </li>
       </ul>
     </div>
     <div class="comment">
-      <!-- <duoshuo :data-thread-key="`article-${$route.params.article_id}`" data-title="我是文章详情"></duoshuo> -->
+      <duoshuo-box v-if="!fetching && article.title"
+                   :title="article.title"
+                   :thread-key="article.id"
+                   :url="`http://surmon.me/article/${article.id}`">
+      </duoshuo-box>
     </div>
   </div>
 </template>
 
 <script>
+  import Clipboard from '~plugins/clipboard'
+
   export default {
     name: 'article-detail',
     validate ({ params }) {
       return (!!params.article_id && !Object.is(Number(params.article_id), NaN));
     },
-    head() {
-      return {
-        title: 'Article'
-      }
-    },
     fetch ({ store, params }) {
       return Promise.all([
-        store.dispatch('loadArticleDetail', params),
-        // store.dispatch('loadRelatedArticles')
+        store.dispatch('loadArticleDetail', params)
       ])
     },
-    updated() {
-      // if (!!Object.keys(this.article).length) {
-      //   setTimeout(function () {
-      //     const code = document.getElementsByTagName('code')
-      //     if (code.length) hljs.highlightBlock(code[0])
-      //   }, 500)
-      // }
+    head() {
+      return {
+        title: this.article.title,
+        meta: [
+          { hid: 'keywords', name: 'keywords', content: this.article.keywords.join(',') },
+          { hid: 'description', name: 'description', content: this.article.description }
+        ]
+      }
+    },
+    mounted() {
+      // console.log('detail mounted')
+      this.clipboard()
     },
     computed: {
       article() {
-        return this.$store.state.article.detail
+        return this.$store.state.article.detail.data.result
+      },
+      fetching() {
+        return this.$store.state.article.detail.fetching
       }
     },
     methods: {
-      getArticle() {
-        // console.log('请求文章详情')
-        // this.$store.commit('CLEAR_ARTICLE_DETAIL')
-        // this.$store.dispatch('GET_ARTICLE_DETAIL', { id: this.$route.params.article_id })
+      clipboard() {
+        this.clipboard = new Clipboard(this.$refs.copy_url_btn)
       }
     }
   }
@@ -161,18 +175,16 @@
           }
         }
 
-        pre {}
-
+        pre,
         code {
-          display: block;
-          padding: 2em 2em 1.5em 2em;
+          padding: 3.5em 1em 1em 1em;
+          line-height: 1.6em;
           background-color: rgba(0, 0, 0, 0.8);
           position: relative;
-          overflow: visible;
 
           &:before {
             color: white;
-            content: attr(lang);
+            content: attr(lang)" CODE";
             height: 2.5em;
             line-height: 2.5em;
             font-size: 1.1em;

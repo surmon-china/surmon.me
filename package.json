@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.15.3",
+    "clipboard": "^1.5.16",
     "highlight.js": "^9.9.0",
     "mini-toastr": "^0.3.10",
     "nuxt": "latest",

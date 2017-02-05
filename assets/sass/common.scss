@@ -67,31 +67,31 @@
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .35s
+  transition: opacity .25s
 }
 .fade-enter, .fade-leave-active {
   opacity: 0
 }
 .fade-move {
-  transition: transform .35s;
+  transition: transform .25s;
 }
 
 .page-enter-active, .page-leave-active {
-  transition: opacity .35s
+  transition: opacity .25s
 }
 .page-enter, .page-leave-active {
   opacity: 0
 }
 
 .module-enter-active, .module-leave-active {
-  transition: opacity .35s
+  transition: opacity .25s
 }
 .module-enter, .module-leave-active {
   opacity: 0
 }
 
 .aside-enter-active {
-  transition: opacity .35s cubic-bezier(1, -1.17, 1, -1.17);
+  transition: opacity .25s cubic-bezier(1, -1.17, 1, -1.17);
 }
 .aside-leave-active {
   transition: opacity 0s

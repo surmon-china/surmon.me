@@ -5,11 +5,7 @@
 export const state = {
   hot: {
     fetching: false,
-    data: {
-      result: {
-        data: []
-      }
-    }
+    data: { response: [] }
   },
   list: {
     fetching: false,
