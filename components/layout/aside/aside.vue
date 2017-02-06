@@ -16,24 +16,19 @@
         <i class="iconfont icon-list"></i>
         <span>热门文章</span>
       </p>
-      <loading-box v-if="article.fetching"></loading-box>
-      <transition name="module">
-        <empty-box v-if="!article.fetching && !article.data.response.length">
-          <slot>暂无数据</slot>
-        </empty-box>
-      </transition>
-      <transition name="fade">
-        <ul class="aside-article-list" v-if="!article.fetching">
-          <li class="item" v-for="article in article.data.response" :key="article.id">
-            <i class="index"></i>
-            <router-link class="title" 
-                         :title="`${article.title} - [ ${article.comments} 条评论 ]`"
-                         :to="`/article/${article.thread_key}`">
-              <span>{{ article.title }}</span>
-            </router-link>
-          </li>
-        </ul>
-      </transition>
+      <empty-box v-if="!articleFetching && !articles.length">
+        <slot>No Result Hot Articles.</slot>
+      </empty-box>
+      <ul class="aside-article-list" v-if="!articleFetching && articles.length">
+        <li class="item" v-for="article in articles" :key="article.id">
+          <i class="index"></i>
+          <router-link class="title" 
+                       :title="`${article.title} - [ ${article.comments} 条评论 ]`"
+                       :to="`/article/${article.thread_key}`">
+            <span>{{ article.title }}</span>
+          </router-link>
+        </li>
+      </ul>
     </div>
     <div class="aside-ad">
       <a href="http://s.click.taobao.com/ZaXp1Rx" target="_blank" class="ad-box">
@@ -44,25 +39,21 @@
       <calendar></calendar>
     </div>
     <div class="aside-tag" v-scroll-top>
-      <loading-box v-if="tag.fetching"></loading-box>
-      <empty-box v-if="!tag.fetching && !tag.data.result.data.length">
-        <slot>暂无数据</slot>
+      <empty-box v-if="!tagFetching && !tags.length">
+        <slot>No Result Tags.</slot>
       </empty-box>
-      <transition name="fade">
-        {{ tag.data.result.data }}
-        <ul class="aside-tag-list" v-if="!tag.fetching">
-          <router-link :to="`/tag/${tag.slug}`" tag="li" class="item" v-for="tag in tag.data.result.data">
-            <a class="title" :title="tag.title">
-              <i class="iconfont" 
-                 :class="[tag.extends.find(t => Object.is(t.name, 'icon')).value]" 
-                 v-if="tag.extends.find(t => Object.is(t.name, 'icon'))"></i>
-              <span>&nbsp;</span>
-              <span>{{ tag.name }}</span>
-              <span>({{ tag.count || 0 }})</span>
-            </a>
-          </router-link>
-        </ul>
-      </transition>
+      <ul class="aside-tag-list" v-if="!tagFetching && tags.length">
+        <router-link :to="`/tag/${tag.slug}`" tag="li" class="item" v-for="tag in tags">
+          <a class="title" :title="tag.title">
+            <i class="iconfont" 
+               :class="[tag.extends.find(t => Object.is(t.name, 'icon')).value]" 
+               v-if="tag.extends.find(t => Object.is(t.name, 'icon'))"></i>
+            <span>&nbsp;</span>
+            <span>{{ tag.name }}</span>
+            <span>({{ tag.count || 0 }})</span>
+          </a>
+        </router-link>
+      </ul>
     </div>
   </aside>
 </template>
@@ -72,12 +63,21 @@
   export default {
     name: 'aside',
     computed: {
-      tag() {
-        return this.$store.state.tag
+      tags() {
+        return this.$store.state.tag.data.result.data
       },
-      article() {
-        return this.$store.state.article.hot
-      }
+      tagFetching() {
+        return this.$store.state.tag.fetching
+      },
+      articles() {
+        const articles = this.$store.state.article.hot.data.response || []
+        const gbIndex = articles.findIndex(r => Object.is(r.thread_key, 'guestbook'))
+        if (gbIndex > -1) articles.splice(gbIndex, 1)
+        return articles
+      },
+      articleFetching() {
+        return this.$store.state.article.hot.fetching
+      },
     },
     components: {
       Calendar
@@ -143,7 +143,6 @@
         }
 
         > .search-input {
-          // padding: 0 .5em;
           margin-right: 0;
         }
 
@@ -257,6 +256,11 @@
       &.fixed {
         position: fixed;
         top: 5.5em;
+      }
+
+      .empty-box {
+        padding-right: .8em;
+        padding-bottom: .8em;
       }
 
       .aside-tag-list {

@@ -4,9 +4,7 @@
       <loading-box class="announcement-loading" v-if="!announcement.data.result.data.length"></loading-box>
     </transition>
     <div class="title">
-      <i class="iconfont icon-radio"></i>
-      <span>&nbsp;</span>
-      <span>Announcements：</span>
+      <i class="iconfont icon-horn"></i>
     </div>
     <transition name="module">
       <swiper class="swiper" :options="swiperOption" v-if="announcement.data.result.data.length">
@@ -30,13 +28,14 @@
     data() {
       return {
         swiperOption: {
+          autoplay: 3500,
           setWrapperSize :true,
           direction: 'vertical',
           nextButton: '.swiper-button-next',
           prevButton: '.swiper-button-prev',
           slidesPerView: 1,
           paginationClickable: true,
-          spaceBetween: 30,
+          autoplayDisableOnInteraction: false,
           loop: true
         }
       }
@@ -54,7 +53,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import '~assets/sass/variables';
   @import '~assets/sass/mixins';
   .announcement {
@@ -67,17 +66,13 @@
 
     > .title {
       float: left;
-      width: 30%;
+      width: 10%;
       text-align: center;
-
-      > .iconfont {
-        font-size: 1em;
-      }
     }
 
     > .swiper {
       float: right;
-      width: 70%;
+      width: 90%;
 
       .item {
 

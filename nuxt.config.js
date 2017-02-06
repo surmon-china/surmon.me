@@ -1,4 +1,9 @@
 const path = require('path')
+const isProdMode = process.env.NODE_ENV === 'production'
+const nuxtConfig = {
+  api: process.env.baseUrl || (isProdMode ? 'http://api.surmon.me/' : 'http://localhost:8000/'),
+  duoshuoShortName: (isProdMode ? 'surmon' : 'localhost-3000')
+}
 
 module.exports = {
   cache: true,
@@ -25,12 +30,13 @@ module.exports = {
         'transform-async-to-generator',
         'transform-runtime'
       ],
-      comments: false
+      comments: true
     }
   },
   dev: (process.env.NODE_ENV !== 'production'),
   env: {
-    baseUrl: process.env.baseUrl || (process.env.NODE_ENV === 'production' ? 'http://api.surmon.me/' : 'http://localhost:8000/')
+    baseUrl: nuxtConfig.api,
+    duoshuoShortName: nuxtConfig.duoshuoShortName
   },
   plugins: [
     '~plugins/axios.js',
@@ -40,6 +46,7 @@ module.exports = {
     '~plugins/vue-empty.js',
     '~plugins/vue-loading.js',
     '~plugins/vue-duoshuo.js',
+    // '~plugins/vue-disqus.js',
     '~plugins/vue-awesome-swiper',
     '~plugins/vue-notifications.js',
   ],
@@ -57,7 +64,7 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [
-      { innerHTML: 'window.duoshuoQuery = { short_name: "localhost-3000" }', type: 'text/javascript' },
+      { innerHTML: `window.duoshuoQuery = { short_name: '${nuxtConfig.duoshuoShortName}' }`, type: 'text/javascript' },
       { src: 'http://static.duoshuo.com/embed.js' }
     ],
     noscript: [
