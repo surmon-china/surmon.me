@@ -1,6 +1,6 @@
 <template>
   <div class="empty-box">
-    <slot></slot>
+    <slot>No Result Data.</slot>
   </div>
 </template>
 
@@ -22,6 +22,5 @@
     text-align: center;
     justify-content: center;
     align-items: center;
-    background: $module-bg;
   }
 </style>
