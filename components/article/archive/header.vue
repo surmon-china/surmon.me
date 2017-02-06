@@ -1,22 +1,38 @@
 <template>
   <div class="header-box">
     <p class="logo">
+      <!-- data -->
       <i class="iconfont icon-clock" v-if="currentDate"></i>
+      <!-- tag -->
       <i class="iconfont" v-if="currentTag" :class="[currentTagIconClass]"></i>
-      <i class="iconfont icon-code"  v-if="Object.is($route.params.category_slug, 'code')"></i>
-      <i class="iconfont icon-think" v-if="Object.is($route.params.category_slug, 'think')"></i>
+      <!-- category -->
+      <i class="iconfont icon-code"  v-if="Object.is(currentCategory, 'code')"></i>
+      <i class="iconfont icon-think" v-if="Object.is(currentCategory, 'think')"></i>
+      <!-- search -->
+      <i class="iconfont icon-search" v-if="currentKeyword"></i>
     </p>
-    <h5 class="title" v-if="Object.is($route.params.category_slug, 'code')">这里记录与编程有关的一切</h5>
-    <h5 class="title" v-if="Object.is($route.params.category_slug, 'think')">生活、思考、互联网</h5>
+    <!-- category -->
+    <h5 class="title" v-if="Object.is(currentCategory, 'code')">这里记录与编程有关的一切</h5>
+    <h5 class="title" v-if="Object.is(currentCategory, 'think')">生活、思考、互联网</h5>
+    <!-- tag -->
     <h5 class="title" v-if="currentTag">
       <span>{{ currentTag.name }}</span>
       <span>&nbsp;-&nbsp;</span>
       <span>{{ currentTag.description || '暂无介绍' }}</span>
     </h5>
+    <!-- data -->
     <h5 class="title" v-if="currentDate">
       <span>发布于</span>
       <span>&nbsp;{{ currentDate }}&nbsp;</span>
       <span>的所有文章</span>
+    </h5>
+      <!-- search -->
+    <h5 class="title" v-if="currentKeyword">
+      <span>和</span>
+      <span>&nbsp;"</span>
+      <span>{{ currentKeyword }}</span>
+      <span>"&nbsp;</span>
+      <span>有关的所有文章</span>
     </h5>
   </div>
 </template>
@@ -37,6 +53,12 @@
       },
       currentDate() {
         return this.$route.params.date
+      },
+      currentKeyword() {
+        return this.$route.params.keyword
+      },
+      currentCategory() {
+        return this.$route.params.category_slug
       }
     }
   }

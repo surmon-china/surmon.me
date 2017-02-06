@@ -2,13 +2,20 @@
   <aside class="aside">
     <div class="aside-search">
       <div class="search-box">
-        <input type="text" name="search" class="search-input" placeholder="Search...">
-        <button class="search-btn">
+        <input id="keyword" 
+               list="keywords"
+               type="search" 
+               name="search" 
+               class="search-input" 
+               placeholder="Search..."
+               v-model.trim="keyword"
+               @keyup.enter="toSearch">
+        <button class="search-btn" @click="toSearch">
           <i class="iconfont icon-search"></i>
         </button>
-        <a class="sitemap-btn" href="/site-map.xml" target="_blank">
+        <router-link to="/sitemap" class="sitemap-btn">
           <i class="iconfont icon-sitemap"></i>
-        </a>
+        </router-link>
       </div>
     </div>
     <div class="aside-article">
@@ -62,6 +69,19 @@
   import Calendar from './calendar.vue'
   export default {
     name: 'aside',
+    data() {
+      return {
+        keyword: ''
+      }
+    },
+    components: {
+      Calendar
+    },
+    mounted() {
+      if (Object.is(this.$route.name, 'search-keyword')) {
+        this.keyword = this.$route.params.keyword
+      }
+    },
     computed: {
       tags() {
         return this.$store.state.tag.data.result.data
@@ -79,8 +99,15 @@
         return this.$store.state.article.hot.fetching
       },
     },
-    components: {
-      Calendar
+    methods: {
+      toSearch() {
+        const keyword = this.keyword
+        const paramsKeyword = this.$route.params.keyword
+        const isSearchPage = Object.is(this.$route.name, 'search-keyword')
+        if (keyword && (isSearchPage ? !Object.is(paramsKeyword, keyword) : true)) {
+          this.$router.push({ name: 'search-keyword', params: { keyword }})
+        }
+      }
     },
     directives: {
       scrollTop: {

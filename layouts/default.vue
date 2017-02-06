@@ -41,6 +41,7 @@
       }
     },
     mounted () {
+      console.log(this)
       this.init()
     },
     methods: {
@@ -51,7 +52,7 @@
         })
       },
       changePageCol() {
-        const fullColumnPageNames = ['about', 'music', 'project']
+        const fullColumnPageNames = ['about', 'music', 'project', 'sitemap']
         const fullColumn = fullColumnPageNames.includes(this.$route.name) || this.$route.path.includes('/project/')
         if (!Object.is(this.fullColumn, fullColumn)) {
           this.$store.commit('option/SET_FULL_COLUMU', fullColumn)

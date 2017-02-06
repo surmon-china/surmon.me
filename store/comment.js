@@ -1,6 +1,6 @@
 export const state = {
   fetching: false,
-  data: { result: {} }
+  data: { result: {}}
 }
 
 export const mutations = {
@@ -16,6 +16,5 @@ export const mutations = {
   GET_LIST_SUCCESS(state, action) {
     state.fetching = false
     state.data = action
-    console.log('action', action)
   }
 }
