@@ -1,7 +1,9 @@
 <template>
   <div class="carrousel">
     <transition name="module">
-      <loading-box class="article-loading" v-if="!article.data.result.data.length"></loading-box>
+      <empty-box class="article-empty-box" v-if="!article.data.result.data.length">
+        <slot>No Result Article.</slot>
+      </empty-box>
     </transition>
     <transition name="module">
       <swiper class="swiper" :options="swiperOption" v-if="article.data.result.data.length">
