@@ -11,15 +11,13 @@
     <!-- 列表 -->
     <div class="article-list">
       <transition name="module">
-        <empty-box v-if="!article.fetching && !article.data.result.data.length">
-          <slot>暂无数据</slot>
+        <empty-box class="article-empty-box" v-if="!article.fetching && !article.data.result.data.length">
+          <slot>No Result Article.</slot>
         </empty-box>
       </transition>
-      <transition name="module">
-        <transition-group name="fade" tag="div">
-          <list-item v-for="(item, index) in article.data.result.data" :item="item" :key="index"></list-item>
-        </transition-group>
-      </transition>
+      <transition-group name="fade" tag="div">
+        <list-item v-for="(item, index) in article.data.result.data" :item="item" :key="index"></list-item>
+      </transition-group>
     </div>
 
     <!-- 加载更多 -->
@@ -55,9 +53,6 @@
         }
       }
     },
-    mounted() {
-      // console.log('article-list mounted')
-    },
     computed: {
       canLoadMore() {
         const { current_page, total_page } = this.article.data.result.pagination
@@ -83,6 +78,10 @@
       margin-bottom: 1em;
       min-height: 1em;
       overflow: hidden;
+
+      > .article-empty-box {
+        background-color: $module-bg;
+      }
 
       > .article-loading {
         height: 10em;

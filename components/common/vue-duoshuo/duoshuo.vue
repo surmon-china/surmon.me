@@ -1,10 +1,5 @@
 <template>
-  <div class="comment-box">
-    <div class="hidden-comment">
-      {{ this.$store.comment }}
-    </div>
-    <div class="duoshuo-comment" ref="duoshuo"></div>
-  </div>
+  <div class="comment-box"></div>
 </template>
 
 <script>
@@ -22,17 +17,11 @@
       }
     },
     mounted() {
-      console.log()
-      if (this.url) this.$refs.duoshuo.setAttribute('data-url', this.url)
-      if (this.title) this.$refs.duoshuo.setAttribute('data-title', this.title)
-      if (this.threadKey) this.$refs.duoshuo.setAttribute('data-thread-key', this.threadKey)
-      this.$refs.duoshuo.setAttribute('class', 'ds-thread')
-      if (window.DUOSHUO) DUOSHUO.EmbedThread(this.$refs.duoshuo)
-    },
-    computed: {
-      comments() {
-        return this.$store.comment
-      }
+      if (this.url) this.$el.setAttribute('data-url', this.url)
+      if (this.title) this.$el.setAttribute('data-title', this.title)
+      if (this.threadKey) this.$el.setAttribute('data-thread-key', this.threadKey)
+      this.$el.setAttribute('class', 'ds-thread comment-box')
+      if (window.DUOSHUO) DUOSHUO.EmbedThread(this.$el)
     }
   }
 </script>
@@ -40,7 +29,7 @@
 <style lang="scss" scoped>
   @import '~assets/sass/mixins';
   @import '~assets/sass/variables';
-  .duoshuo-comment {
+  .comment-box {
     padding: 1em;
     background-color: $module-bg;
   }

@@ -9,6 +9,7 @@
       </div>
     </div>
     <div class="comment">
+      <comment-hidden-box></comment-hidden-box>
       <duoshuo-box title="Guestbook"
                    thread-key="guestbook"
                    url="http://surmon.me/guestbook">
@@ -22,6 +23,11 @@
     name: 'guestbook',
     head: {
       title: 'Guestbook'
+    },
+    computed: {
+      comments() {
+        return this.$store.state.comment.data
+      }
     }
   }
 </script>

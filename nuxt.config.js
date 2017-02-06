@@ -46,6 +46,7 @@ module.exports = {
     '~plugins/vue-empty.js',
     '~plugins/vue-loading.js',
     '~plugins/vue-duoshuo.js',
+    '~plugins/vue-comment-hidden.js',
     // '~plugins/vue-disqus.js',
     '~plugins/vue-awesome-swiper',
     '~plugins/vue-notifications.js',
@@ -56,12 +57,14 @@ module.exports = {
     __dangerouslyDisableSanitizers: ['script'],
     meta: [
       { charset: 'utf-8' },
+      { name: 'author', content: 'surmon@foxmail.com' },
       { name: 'viewport', content: 'initial-scale=1, maximum-scale=1, user-scalable=no' },
       { hid: 'keywords', name: 'keywords', content: 'surmon, 司马萌, 前端技术开发, javascript' },
       { hid: 'description', name: 'description', content: '凡心所向 素履所往 生如逆旅 一苇以航' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'author', type: 'text/plain', href: '/humans.txt' }
     ],
     script: [
       { innerHTML: `window.duoshuoQuery = { short_name: '${nuxtConfig.duoshuoShortName}' }`, type: 'text/javascript' },

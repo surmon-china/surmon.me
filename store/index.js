@@ -6,14 +6,14 @@ export const actions = {
   nuxtServerInit(store, { params, route }) {
     const initAppData = [
       store.dispatch('loadTagList'),
-      store.dispatch('loadHotArticles'),
-    ];
-    const isGb = Object.is(route.name, 'guestbook');
-    const thread_key = params.article_id || isGb ? 'guestbook' : false;
+      store.dispatch('loadHotArticles')
+    ]
+    const isGb = Object.is(route.name, 'guestbook')
+    const thread_key = params.article_id || (isGb ? 'guestbook' : false)
     if (thread_key) {
-      initAppData.push(store.dispatch('loadCommentsByThirdKey', { thread_key }));
-    };
-    return Promise.all(initAppData);
+      initAppData.push(store.dispatch('loadCommentsByThirdKey', { thread_key }))
+    }
+    return Promise.all(initAppData)
   },
 
   // 获取标签列表
@@ -51,7 +51,6 @@ export const actions = {
     return Service.get('http://api.duoshuo.com/threads/listPosts.json', { params })
     .then(response => {
       const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 0)
-      console.log('response', response.data)
       if(success) commit('comment/GET_LIST_SUCCESS', response.data)
       if(!success) commit('comment/GET_LIST_FAILURE')
     }, err => {
