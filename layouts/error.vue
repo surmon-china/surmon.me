@@ -1,16 +1,13 @@
 <template>
-  <section class="container">
-    <img src="../assets/images/logo.png" alt="Nuxt.js Logo" />
-    <h1 class="title">
-      {{ error.statusCode }}
-    </h1>
-    <h2 class="info">
-      {{ error.message }}
-    </h2>
-    <nuxt-link class="button" to="/" v-if="error.statusCode === 404">
-      Homepage
-    </nuxt-link>
-  </section>
+  <div class="error">
+    <div class="error-content">
+      <h1 class="error-code">{{ error.statusCode }}</h1>
+      <div class="error-wrapper-message">
+        <h2 class="error-message">{{ error.message }}</h2>
+      </div>
+      <p v-if="error.statusCode === 404"><nuxt-link class="error-link" to="/">Back to the home page</nuxt-link></p>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -19,19 +16,23 @@
   }
 </script>
 
-<style scoped>
-  .title {
-    margin-top: 15px;
-    font-size: 5em;
-  }
-  
-  .info {
-    font-weight: 300;
-    color: #9aabb1;
-    margin: 0;
-  }
+<style lang="scss">
+  @import '~assets/sass/mixins';
+  @import '~assets/sass/variables';
+  .error {
+    position: relative;
+    background-color: $module-bg;
+    min-height: 10em;
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+    padding: 2em 0;
 
-  .button {
-    margin-top: 50px;
+    .error-content {
+
+      .error-code {
+        font-size: 6rem;
+      }
+    }
   }
 </style>

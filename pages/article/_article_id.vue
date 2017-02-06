@@ -70,6 +70,7 @@
       </ul>
     </div>
     <div class="comment">
+      <comment-hidden-box v-if="!fetching && article.title"></comment-hidden-box>
       <duoshuo-box v-if="!fetching && article.title"
                    :title="article.title"
                    :thread-key="article.id"

@@ -4,11 +4,16 @@
       <div class="footer-content">
         <span>陕ICP备13004859号</span>
         <span> - </span>
-        <span>
-          <a href="">SITEMAP</a>
-        </span>
+        <a class="sitemap-btn" href="/sitemap.xml" target="_blank">SITEMAP</a>
         <span> - </span>
-        <span>Powered By NodePress Dsigned By Surmon used Vue.js</span>
+        <span>Powered By </span>
+        <router-link to="/project/nodepress">NodePress</router-link>
+        <span> and </span>
+        <router-link to="/project/nuxtjs-blog">Nuxt.js</router-link>
+        <span>. Dsigned By </span>
+        <router-link to="/about">Surmon</router-link>
+        <span> used </span>
+        <a class="sitemap-btn" href="https://cn.vuejs.org/" target="_blank" ref="nofollow">Vue.js</a>
       </div>
     </div>
   </footer>
