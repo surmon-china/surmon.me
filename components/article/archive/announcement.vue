@@ -1,7 +1,9 @@
 <template>
   <div class="announcement">
     <transition name="module">
-      <loading-box class="announcement-loading" v-if="!announcement.data.result.data.length"></loading-box>
+      <empty-box class="announcement-empty-box" v-if="!announcement.data.result.data.length">
+        <slot>No Result Announcement.</slot>
+      </empty-box>
     </transition>
     <div class="title">
       <i class="iconfont icon-horn"></i>
@@ -63,6 +65,10 @@
     margin-bottom: 1em;
     overflow: hidden;
     background-color: $module-bg;
+
+    .announcement-empty-box {
+      min-height: auto;
+    }
 
     > .title {
       float: left;
