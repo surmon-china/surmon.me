@@ -32,6 +32,7 @@
           pagination : '.swiper-pagination',
           paginationClickable :true,
           mousewheelControl : true,
+          autoplayDisableOnInteraction: false,
           observeParents:true,
           grabCursor : true,
           preloadImages: false,
