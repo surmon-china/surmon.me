@@ -39,7 +39,7 @@
         <h3 class="title">tags</h3>
         <ul class="tag-list">
           <li class="item" v-for="tag in tags">
-            <router-link :to="`/tag/${tag.id}`" :title="tag.description">{{ tag.name }}</router-link>
+            <router-link :to="`/tag/${tag.slug}`" :title="tag.description">{{ tag.name }}</router-link>
           </li>
         </ul>
       </div>
@@ -75,23 +75,21 @@
       title: 'Sitemap'
     },
     fetch ({ store }) {
-      return Promise.all([
-        store.dispatch('loadSitemapArticles', { per_page: 500 }),
-        store.dispatch('loadSitemapCategories', { per_page: 100 })
-      ])
+      return store.dispatch('loadSitemapArticles', { per_page: 500 })
     },
     computed: {
       articles() {
         return this.$store.state.sitemap.articles
       },
       categories() {
-        return this.$store.state.sitemap.categories
+        return this.$store.state.category
       },
       tags() {
         return this.$store.state.tag.data.result.data
       }
     },
     methods: {
+      // 设置文章简介展开折叠
       toggleArticleDescriptionOpen(index) {
         const articles = this.articles.data.result.data
         this.$set(articles[index], 'open', !articles[index].open)

@@ -19,11 +19,10 @@ module.exports = {
     // 将重复引用的第三方模块添加到vendor.bundle.js
     vendor: [
       'axios',
+      'swiper',
       'cheerio',
       'clipboard',
-      'highlight.js',
-      'mini-toastr',
-      'vue-notifications',
+      'highlight.js'
     ],
     // 为JS和Vue文件定制babel配置。https://nuxtjs.org/api/configuration-build/#analyze
     babel: {
@@ -46,13 +45,12 @@ module.exports = {
     '~plugins/clipboard.js',
     '~plugins/highlight.js',
     '~plugins/filters.js',
+    '~plugins/swiper.js',
     '~plugins/vue-empty.js',
+    // '~plugins/vue-disqus.js',
     '~plugins/vue-loading.js',
     '~plugins/vue-duoshuo.js',
-    '~plugins/vue-comment-hidden.js',
-    // '~plugins/vue-disqus.js',
-    '~plugins/vue-awesome-swiper',
-    '~plugins/vue-notifications.js'
+    '~plugins/vue-comment-hidden.js'
   ],
   head: {
     title: 'Surmon.me - Talk is cheap. Show me the code',

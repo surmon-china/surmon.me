@@ -1,6 +1,13 @@
+/*
+*
+* 根数据状态 存放全局数据和异步方法
+*
+*/
+
 import Service from '~plugins/axios'
 import { buildArticleRelatedTag } from '~utils/article-tag-releted'
 
+// global getters
 export const getters = {
   articleDetailContent(state) {
 
@@ -16,14 +23,17 @@ export const getters = {
   }
 }
 
+// global actions
 export const actions = {
 
   // 全局服务初始化
   nuxtServerInit(store, { params, route }) {
     const initAppData = [
       store.dispatch('loadTagList'),
+      store.dispatch('loadCategories'),
       store.dispatch('loadHotArticles')
     ]
+    // 判断首次服务端渲染时请求评论信息做seo
     const isGb = Object.is(route.name, 'guestbook')
     const thread_key = params.article_id || (isGb ? 'guestbook' : false)
     if (thread_key) {
@@ -46,10 +56,24 @@ export const actions = {
     })
   },
 
+  // 获取分类列表
+  loadCategories({ commit }, params = { per_page: 100 }) {
+    commit('category/REQUEST_LIST')
+    return Service.get('/category', { params })
+    .then(response => {
+      const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
+      if(success) commit('category/GET_LIST_SUCCESS', response.data)
+      if(!success) commit('category/GET_LIST_FAILURE')
+    })
+    .catch(err => {
+      commit('category/GET_LIST_FAILURE', err)
+    })
+  },
+
   // 获取最热文章列表
   loadHotArticles({ commit }) {
     commit('article/REQUEST_HOT_LIST')
-    const params = { short_name: process.env.duoshuoShortName, num_items: 10, range: 'all' }
+    const params = { short_name: process.env.duoshuoShortName, num_items: 15, range: 'all' }
     return Service.get('http://api.duoshuo.com/sites/listTopThreads.json', { params })
     .then(response => {
       const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 0)
@@ -99,21 +123,6 @@ export const actions = {
     })
     .catch(err => {
       commit('sitemap/GET_ARTICLES_FAILURE', err)
-    })
-  },
-
-  // 获取地图分类列表
-  loadSitemapCategories({ commit }, params = { page: 1 }) {
-    commit('sitemap/REQUEST_CATEGORY')
-    return Service.get('/category', { params })
-    .then(response => {
-      const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
-      const commitName =  `sitemap/GET_CATEGORY_SUCCESS`
-      if(success) commit(commitName, response.data)
-      if(!success) commit('sitemap/GET_CATEGORY_FAILURE')
-    })
-    .catch(err => {
-      commit('sitemap/GET_CATEGORY_FAILURE', err)
     })
   },
 

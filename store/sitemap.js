@@ -1,19 +1,10 @@
 /*
+*
 * 网站地图需要使用的文章数据状态
+*
 */
 
 export const state = {
-  categories: {
-    fetching: false,
-    data: {
-      result: {
-        pagination: {
-          current_page: 0
-        },
-        data: []
-      }
-    }
-  },
   articles: {
     fetching: false,
     data: {
@@ -37,16 +28,5 @@ export const mutations = {
   GET_ARTICLES_SUCCESS(state, action) {
     state.articles.fetching = false
     state.articles.data = action
-  },
-
-  REQUEST_CATEGORY(state) {
-    state.categories.fetching = true
-  },
-  GET_CATEGORY_FAILURE(state) {
-    state.categories.fetching = false
-  },
-  GET_CATEGORY_SUCCESS(state, action) {
-    state.categories.fetching = false
-    state.categories.data = action
-  },
+  }
 }

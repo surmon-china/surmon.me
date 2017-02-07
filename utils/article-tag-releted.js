@@ -13,7 +13,9 @@ export const buildArticleRelatedTag = (content, tags) => {
   // 正则替换方法
   const buildTagLink = string => {
     return string.replace(tagReg, tag => {
-      const slug = tags.find(t => Object.is(t.name, tag)).slug
+      const findedTag = tags.find(t => Object.is(t.name, tag))
+      if (!findedTag) return tag
+      const slug = findedTag.slug
       const command = `window.$nuxt.$router.push({ path: \'/tag/${tag}\' });return false`
       return `<a href=\"/tag/${slug}\" onclick=\"${command}\">${tag}</a>`
     })

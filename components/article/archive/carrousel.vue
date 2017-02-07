@@ -6,11 +6,11 @@
       </empty-box>
     </transition>
     <transition name="module">
-      <div class="swiper-container" v-if="article.data.result.data.length">
+      <div class="swiper-container swiper" ref="swiper" v-if="article.data.result.data.length">
         <div class="swiper-wrapper">
           <div class="swiper-slide item" v-for="(article, index) in article.data.result.data.slice(0, 9)">
             <div class="content">
-              <img :data-src="article.thumb" class="swiper-lazy">
+              <img :data-src="buildThumb(article.thumb)" class="swiper-lazy">
               <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
               <router-link :to="`/article/${article.id}`" class="title">
                 <span>{{ index + article.title }}</span>
@@ -52,6 +52,28 @@
             data: []
           }
         }
+      }
+    },
+    mounted() {
+      this.initSwiper()
+    },
+    beforeDestroy() {
+      this.destroySwiper()
+    },
+    methods: {
+      initSwiper() {
+        if (!this.swiper) {
+          this.swiper = new Swiper(this.$refs.swiper, this.swiperOption)
+        }
+      },
+      destroySwiper() {
+        if (!this.swiper) {
+          this.swiper.destroy()
+        }
+      },
+      buildThumb(thumb) {
+        if (!thumb) return '/images/thumb-carrousel.jpg'
+        return `${thumb}?imageView2/1/w/595/h/210/interlace/0/q/100|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/388/fill/I0VGRUZFRg==/dissolve/36/gravity/SouthWest/dx/15/dy/9`
       }
     }
   }
