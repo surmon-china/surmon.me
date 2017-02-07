@@ -71,6 +71,36 @@ export const actions = {
     })
   },
 
+  // 获取地图文章列表
+  loadSitemapArticles({ commit }, params = { page: 1 }) {
+    commit('sitemap/REQUEST_ARTICLES')
+    return Service.get('/article', { params })
+    .then(response => {
+      const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
+      const commitName =  `sitemap/GET_ARTICLES_SUCCESS`
+      if(success) commit(commitName, response.data)
+      if(!success) commit('sitemap/GET_ARTICLES_FAILURE')
+    })
+    .catch(err => {
+      commit('sitemap/GET_ARTICLES_FAILURE', err)
+    })
+  },
+
+  // 获取地图分类列表
+  loadSitemapCategories({ commit }, params = { page: 1 }) {
+    commit('sitemap/REQUEST_CATEGORY')
+    return Service.get('/category', { params })
+    .then(response => {
+      const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
+      const commitName =  `sitemap/GET_CATEGORY_SUCCESS`
+      if(success) commit(commitName, response.data)
+      if(!success) commit('sitemap/GET_CATEGORY_FAILURE')
+    })
+    .catch(err => {
+      commit('sitemap/GET_CATEGORY_FAILURE', err)
+    })
+  },
+
   // 获取文章列表
   loadArticles({ commit }, params = { page: 1 }) {
     commit('article/REQUEST_LIST')
