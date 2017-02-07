@@ -15,9 +15,17 @@ module.exports = {
       webpackConfig.resolve.alias['~filters'] = path.join(__dirname, 'filters');
       webpackConfig.resolve.alias['~services'] = path.join(__dirname, 'services');
     },
+    plugins: [
+      new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery'
+      })
+    ],
     // 将重复引用的第三方模块添加到vendor.bundle.js
     vendor: [
       'axios',
+      'jquery',
       'clipboard',
       'highlight.js',
       'mini-toastr',
@@ -49,7 +57,7 @@ module.exports = {
     '~plugins/vue-comment-hidden.js',
     // '~plugins/vue-disqus.js',
     '~plugins/vue-awesome-swiper',
-    '~plugins/vue-notifications.js',
+    '~plugins/vue-notifications.js'
   ],
   head: {
     title: 'Surmon.me - Talk is cheap. Show me the code',
