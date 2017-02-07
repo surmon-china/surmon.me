@@ -7,7 +7,7 @@ export const buildArticleRelatedTag = (content, tags) => {
   const tagReg = eval(`/${tagNames.join('|')}/ig`)
 
   // 初始化node-dom环境
-  const $ = cheerio.load(content)
+  const $ = cheerio.load(content, { decodeEntities: false })
   const $content = $().not('pre')[0].children
 
   // 正则替换方法
