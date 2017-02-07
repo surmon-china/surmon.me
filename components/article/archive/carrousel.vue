@@ -6,18 +6,20 @@
       </empty-box>
     </transition>
     <transition name="module">
-      <swiper class="swiper" :options="swiperOption" v-if="article.data.result.data.length">
-        <swiper-slide class="item" v-for="(article, index) in article.data.result.data.slice(0, 9)">
-          <div class="content">
-            <img :data-src="article.thumb" class="swiper-lazy">
-            <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-            <router-link :to="`/article/${article.id}`" class="title">
-              <span>{{ index + article.title }}</span>
-            </router-link>
+      <div class="swiper-container" v-if="article.data.result.data.length">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide item" v-for="(article, index) in article.data.result.data.slice(0, 9)">
+            <div class="content">
+              <img :data-src="article.thumb" class="swiper-lazy">
+              <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+              <router-link :to="`/article/${article.id}`" class="title">
+                <span>{{ index + article.title }}</span>
+              </router-link>
+            </div>
           </div>
-        </swiper-slide>
-        <div class="swiper-pagination" slot="pagination"></div>
-      </swiper>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
     </transition>
   </div>
 </template>
