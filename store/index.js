@@ -17,7 +17,7 @@ export const actions = {
   },
 
   // 获取标签列表
-  loadTagList({ commit }, params = {}) {
+  loadTagList({ commit }, params = { per_page: 100 }) {
     commit('tag/REQUEST_LIST')
     return Service.get('/tag', { params })
     .then(response => {

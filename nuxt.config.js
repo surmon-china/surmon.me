@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 const isProdMode = process.env.NODE_ENV === 'production'
 const nuxtConfig = {
   api: process.env.baseUrl || (isProdMode ? 'http://api.surmon.me/' : 'http://localhost:8000/'),
@@ -15,17 +16,10 @@ module.exports = {
       webpackConfig.resolve.alias['~filters'] = path.join(__dirname, 'filters');
       webpackConfig.resolve.alias['~services'] = path.join(__dirname, 'services');
     },
-    plugins: [
-      new webpack.ProvidePlugin({
-        $: 'jquery',
-        jQuery: 'jquery',
-        'window.jQuery': 'jquery'
-      })
-    ],
     // 将重复引用的第三方模块添加到vendor.bundle.js
     vendor: [
       'axios',
-      'jquery',
+      'cheerio',
       'clipboard',
       'highlight.js',
       'mini-toastr',
@@ -48,6 +42,7 @@ module.exports = {
   },
   plugins: [
     '~plugins/axios.js',
+    '~plugins/cheerio.js',
     '~plugins/clipboard.js',
     '~plugins/highlight.js',
     '~plugins/filters.js',
