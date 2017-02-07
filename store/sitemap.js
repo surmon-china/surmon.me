@@ -28,7 +28,6 @@ export const state = {
 }
 
 export const mutations = {
-
   REQUEST_ARTICLES(state) {
     state.articles.fetching = true
   },
@@ -39,11 +38,7 @@ export const mutations = {
     state.articles.fetching = false
     state.articles.data = action
   },
-  SET_ARTICLE_DESCRIPTION_OPEN(state, { index }) {
-    const article = state.articles.data.result.data[index]
-    console.log(article)
-    article.open = !article.open
-  },
+
   REQUEST_CATEGORY(state) {
     state.categories.fetching = true
   },

@@ -4,7 +4,7 @@
       <h3 class="title">{{ article.title || '...' }}</h3>
       <transition name="module">
         <div class="content" 
-             v-html="article.content" 
+             v-html="buildArticleRelatedTag(article.content)" 
              v-if="!fetching && article.title"
              v-highlightjs></div>
       </transition>
@@ -114,6 +114,9 @@
       },
       fetching() {
         return this.$store.state.article.detail.fetching
+      },
+      tags() {
+        return this.$store.state.tag.data
       }
     },
     methods: {
@@ -121,6 +124,25 @@
         if (this.article.title) {
           this.clipboard = new Clipboard(this.$refs.copy_url_btn)
         }
+      },
+      buildArticleRelatedTag(content) {
+        if (!Object.is(this.tags.code, 1)) return content
+        const tags = this.tags.result.data
+        const tagNames = tags.map(t => t.name)
+        const tagReg = eval(`/${tagNames.join('|')}/ig`) 
+        // console.log(content, tags, tagNames, tagNames.join('|'), tagReg, '可以构造正则了')
+        const $content = $(content).not('pre').not('img').not('a')
+        // console.log($content)
+        // Array.from(a).map(e => {
+        //   const text = $(e).text()
+        //   console.log($(e).text(text.replace('javascript', '<a href="">我就是javascript</a>')))
+        // })
+        return content.replace(tagReg, tag => {
+          const slug = tags.find(t => Object.is(t.name, tag)).slug
+          const command = `window.$nuxt.$router.push({ path: '/tag/${tag}' });return false`
+          // console.log(tag, slug, command)
+          return `<a href="/tag/${slug}" onclick="${command}">${tag}</a>`
+        })
       }
     }
   }
