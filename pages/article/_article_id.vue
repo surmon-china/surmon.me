@@ -4,7 +4,7 @@
       <h3 class="title">{{ article.title || '...' }}</h3>
       <transition name="module">
         <div class="content" 
-             v-html="buildArticleRelatedTag(article.content)" 
+             v-html="articleContent" 
              v-if="!fetching && article.title"
              v-highlightjs></div>
       </transition>
@@ -83,7 +83,6 @@
 
 <script>
   import Clipboard from '~plugins/clipboard'
-  import cheerio from '~plugins/cheerio'
 
   export default {
     name: 'article-detail',
@@ -113,6 +112,9 @@
       article() {
         return this.$store.state.article.detail.data.result
       },
+      articleContent () {
+        return this.$store.getters['articleDetailContent']
+      },
       fetching() {
         return this.$store.state.article.detail.fetching
       },
@@ -125,43 +127,6 @@
         if (this.article.title) {
           this.clipboard = new Clipboard(this.$refs.copy_url_btn)
         }
-      },
-      buildArticleRelatedTag(content) {
-        // 如果数据不成功，则不构造
-        if (!Object.is(this.tags.code, 1)) return content
-        // 初始化标签数据
-        const tags = this.tags.result.data
-        const tagNames = tags.map(t => t.name)
-        const tagReg = eval(`/${tagNames.join('|')}/ig`) 
-        // 初始化node-dom环境
-        const $ = cheerio.load(content)
-        const $content = $().not('pre')[0].children
-        console.log($content)
-        // 正则替换方法
-        const buildTagLink = string => {
-          return string.replace(tagReg, tag => {
-            const slug = tags.find(t => Object.is(t.name, tag)).slug
-            const command = `window.$nuxt.$router.push({ path: '/tag/${tag}' });return false`
-            return `<a href="/tag/${slug}" onclick="${command}">${tag}</a>`
-          })
-        }
-        // 递归遍历所有内容
-        const buildTextNode = nodes => {
-          nodes.forEach(node => {
-            if (node.data) {
-              node.data = buildTagLink(node.data)
-              console.log(node)
-            } else if (node.children && node.children.length) {
-              buildTextNode(node.children)
-            }
-          })
-        }
-
-        buildTextNode($content)
-
-        console.log($.text())
-        return $.html()
-        // return content
       }
     }
   }
@@ -189,6 +154,15 @@
       }
 
       > .content {
+
+        a {
+          font-weight: bold;
+          margin: 0 .1em;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
 
         img {
           max-width: 80%;
