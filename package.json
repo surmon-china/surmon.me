@@ -8,6 +8,7 @@
     "axios": "^0.15.3",
     "clipboard": "^1.5.16",
     "highlight.js": "^9.9.0",
+    "jquery": "^3.1.1",
     "mini-toastr": "^0.3.10",
     "nuxt": "latest",
     "vue-awesome-swiper": "^2.3.1",

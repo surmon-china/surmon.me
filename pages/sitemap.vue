@@ -9,18 +9,58 @@
               <router-link :to="`/article/${article.id}`"
                            :title="article.title">《{{ article.title }}》</router-link>
               <span>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-              <a href="" @click.prevent="toggleArticleDescriptionOpen(index)">展开描述</a>
+              <a href="" @click.prevent="toggleArticleDescriptionOpen(index)">
+                <span>{{ article.open ? '收起' : '展开' }}描述</span>
+              </a>
             </p>
-            123 {{ article.open }}
-            <p :class="[(article.open ? 'open' : '')]">{{ article.description }}</p>
+            <transition name="module">
+              <p v-show="article.open">{{ article.description }}</p>
+            </transition>
           </li>
         </ul>
       </div>
+      <br>
+      <div class="categories">
+        <h3 class="title">categories</h3>
+        <ul class="categories-list" v-if="Object.is(categories.data.code, 1)">
+          <li class="item" v-for="(category, index) in categories.data.result.data">
+            <p>
+              <router-link class="name"
+                           :to="`/category/${category.slug}`"
+                           :title="category.name">{{ category.name }}</router-link>
+              <span>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;</span>
+              <span>{{ category.description }}</span>
+            </p>
+          </li>
+        </ul>
+      </div>
+      <br>
       <div class="tags">
         <h3 class="title">tags</h3>
         <ul class="tag-list">
-          <li v-for="tag in tags">
-            <router-link :to="`/tag/${tag.id}`">{{ tag.name }}</router-link>
+          <li class="item" v-for="tag in tags">
+            <router-link :to="`/tag/${tag.id}`" :title="tag.description">{{ tag.name }}</router-link>
+          </li>
+        </ul>
+      </div>
+      <br>
+      <div class="pages">
+        <h3 class="title">pages</h3>
+        <ul class="page-list">
+          <li class="item">
+            <router-link to="/">Home</router-link>
+          </li>
+          <li class="item">
+            <router-link to="/project">Project</router-link>
+          </li>
+          <li class="item">
+            <router-link to="/about">About</router-link>
+          </li>
+          <li class="item">
+            <router-link to="/guestbook">Guestbook</router-link>
+          </li>
+          <li class="item">
+            <a href="/sitemap.xml" target="_blank">XML SiteMap</a>
           </li>
         </ul>
       </div>
@@ -53,7 +93,8 @@
     },
     methods: {
       toggleArticleDescriptionOpen(index) {
-        this.$store.commit('sitemap/SET_ARTICLE_DESCRIPTION_OPEN', { index })
+        const articles = this.articles.data.result.data
+        this.$set(articles[index], 'open', !articles[index].open)
       }
     }
   }
@@ -69,8 +110,14 @@
     
     .sitemap {
 
+      a {
+        text-decoration: underline;
+      }
+
       .tags,
-      .articles {
+      .pages,
+      .articles,
+      .categories {
 
         .title {
           margin: 0em 0 1em;
@@ -79,16 +126,35 @@
         }
       }
 
-      .articles {
+      .tags,
+      .pages {
 
-        .article-list {
+        .tag-list,
+        .page-list {
+          overflow: hidden;
 
-          li {
+          .item {
+            float: left;
+            display: inline-block;
+            margin-right: 1.5em;
             margin-bottom: 1em;
+            font-size: 1.1em;
           }
         }
       }
-      .tags {}
+
+      .categories {
+
+        .categories-list {
+
+          .item {
+
+            .name {
+              font-size: 1.1em;
+            }
+          }
+        }
+      }
     }
   }
 </style>
