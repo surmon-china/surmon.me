@@ -2,19 +2,20 @@
   <div class="article">
     <div class="detail">
       <h3 class="title">{{ article.title || '...' }}</h3>
-      <loading-box v-if="fetching"></loading-box>
       <transition name="module">
         <div class="content" 
              v-html="article.content" 
-             v-if="!fetching"
+             v-if="!fetching && article.title"
              v-highlightjs></div>
       </transition>
-    </div>
-    <div class="metas">
       <transition name="module">
-        <loading-box v-if="fetching"></loading-box>
+        <empty-box class="article-empty-box" v-if="!fetching && !article.title">
+          <slot>No Result Article.</slot>
+        </empty-box>
       </transition>
-      <p class="">
+    </div>
+    <div class="metas" v-if="!fetching && article.title">
+      <p class="item">
         <span>本文于</span>
         <span>&nbsp;</span>
         <router-link :to="`/date/${new Date(article.date).toLocaleString().substr(0, 8).replace(/\//g, '-')}`" 
@@ -89,21 +90,22 @@
       return (!!params.article_id && !Object.is(Number(params.article_id), NaN));
     },
     fetch ({ store, params }) {
-      return Promise.all([
-        store.dispatch('loadArticleDetail', params)
-      ])
+      return store.dispatch('loadArticleDetail', params)
     },
     head() {
+      const article = this.article
       return {
-        title: this.article.title,
+        title: article.title || 'No Result Data.',
         meta: [
-          { hid: 'keywords', name: 'keywords', content: this.article.keywords.join(',') },
-          { hid: 'description', name: 'description', content: this.article.description }
+          { hid: 'keywords', 
+            name: 'keywords', 
+            content: (article.keywords ? article.keywords.join(',') : article.title) || ''
+          },
+          { hid: 'description', name: 'description', content: article.description }
         ]
       }
     },
     mounted() {
-      // console.log('detail mounted')
       this.clipboard()
     },
     computed: {
@@ -116,7 +118,9 @@
     },
     methods: {
       clipboard() {
-        this.clipboard = new Clipboard(this.$refs.copy_url_btn)
+        if (this.article.title) {
+          this.clipboard = new Clipboard(this.$refs.copy_url_btn)
+        }
       }
     }
   }
