@@ -1,3 +1,9 @@
+/*
+*
+* 公告数据状态
+*
+*/
+
 export const state = {
   fetching: false,
   data: {

@@ -18,16 +18,11 @@
       return store.dispatch('loadArticles', params)
     },
     head() {
-      return {
-        title: `${this.defaultParams.date} | Date`
-      }
+      return { title: `${this.defaultParams.date} | Date` }
     },
     components: {
       Carrousel,
       ArticleList
-    },
-    mounted() {
-      // console.log(this.defaultParams, this.nextPageParams);
     },
     computed: {
       article() {
@@ -46,7 +41,6 @@
     },
     methods: {
       loadmoreArticle() {
-        console.log(this.nextPageParams);
         this.$store.dispatch('loadArticles', this.nextPageParams)
       }
     }

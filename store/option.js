@@ -1,11 +1,15 @@
 /*
+*
 * 全局设置数据状态
+*
 */
 
 export const state = {
 
   // 页面的栏目展示类型（3栏/2栏）
   fullColumn: false,
+
+  // 服务端的配置
   serverOptions: {
     fetching: false,
     data: {
