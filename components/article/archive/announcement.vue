@@ -9,17 +9,19 @@
       <i class="iconfont icon-horn"></i>
     </div>
     <transition name="module">
-      <swiper class="swiper" :options="swiperOption" v-if="announcement.data.result.data.length">
-        <swiper-slide class="item" v-for="(announcement, index) in announcement.data.result.data.slice(0, 9)">
-          <div class="content" v-html="announcement.content"></div>
-        </swiper-slide>
-        <div class="swiper-button-prev" slot="button-prev">
+      <div class="swiper-container swiper" ref="swiper" v-if="announcement.data.result.data.length">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide item" v-for="(announcement, index) in announcement.data.result.data.slice(0, 9)">
+            <div class="content" v-html="announcement.content"></div>
+          </div>
+        </div>
+        <div class="swiper-button-prev">
           <i class="iconfont icon-announcement-prev"></i>
         </div>
-        <div class="swiper-button-next" slot="button-next">
+        <div class="swiper-button-next">
           <i class="iconfont icon-announcement-next"></i>
         </div>
-      </swiper>
+      </div>
     </transition>
   </div>
 </template>
@@ -49,6 +51,24 @@
           result: {
             data: []
           }
+        }
+      }
+    },
+    mounted() {
+      this.initSwiper()
+    },
+    beforeDestroy() {
+      this.destroySwiper()
+    },
+    methods: {
+      initSwiper() {
+        if (!this.swiper) {
+          this.swiper = new Swiper(this.$refs.swiper, this.swiperOption)
+        }
+      },
+      destroySwiper() {
+        if (!this.swiper) {
+          this.swiper.destroy()
         }
       }
     }

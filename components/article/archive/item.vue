@@ -3,7 +3,7 @@
     <div class="item-content">
       <div class="item-thumb">
         <router-link :to="`/article/${item.id}`">
-          <img class="item-thumb-img" :src="item.thumb">
+          <img class="item-thumb-img" :src="buildThumb(item.thumb)">
         </router-link>
       </div>
       <div class="item-body">
@@ -46,6 +46,12 @@
     name: 'article-list-item',
     props: {
       item: Object
+    },
+    methods: {
+      buildThumb(thumb) {
+        if (!thumb) return '/images/thumb-article.jpg'
+        return `${thumb}?imageView2/1/w/175/h/119/interlace/0/q/100|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/260/fill/I0VGRUZFRg==/dissolve/36/gravity/SouthWest/dx/10/dy/3`
+      }
     }
   }
 </script>
@@ -141,14 +147,15 @@
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          word-wrap: normal;
 
           > .date,
           > .views,
           > .comment,
           > .tag,
           > .category {
-            display: inline-block;
-            float: left;
+            // display: inline-block;
+            // float: left;
             margin-right: 1em;
 
             > .iconfont {
@@ -168,10 +175,6 @@
 
           > .tag {
             margin-right: 0;
-            max-width: 10em;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
           }
         }
       }

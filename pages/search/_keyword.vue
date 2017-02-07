@@ -18,8 +18,7 @@
     },
     head () {
       return {
-        title: `${this.defaultParams.keyword} | Search`
-      }
+        title: `${this.defaultParams.keyword} | Search` }
     },
     components: {
       ArticleList

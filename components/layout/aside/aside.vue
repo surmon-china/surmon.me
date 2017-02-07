@@ -90,9 +90,8 @@
         return this.$store.state.tag.fetching
       },
       articles() {
-        const articles = this.$store.state.article.hot.data.response || []
-        const gbIndex = articles.findIndex(r => Object.is(r.thread_key, 'guestbook'))
-        if (gbIndex > -1) articles.splice(gbIndex, 1)
+        let articles = this.$store.state.article.hot.data.response || []
+        articles = articles.filter(a => !Object.is(Number(a.thread_key), NaN) && !!a.title)
         return articles
       },
       articleFetching() {

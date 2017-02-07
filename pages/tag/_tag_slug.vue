@@ -23,16 +23,23 @@
         title: `${title} | Tag`
       }
     },
+    created() {
+      if (!this.currentTag) {
+        this.$router.back()
+      }
+    },
     components: {
       Carrousel,
       ArticleList
     },
-    mounted() {
-      // console.log(this.defaultParams, this.nextPageParams);
-    },
     computed: {
       article() {
         return this.$store.state.article.list
+      },
+      currentTag() {
+        return this.$store.state.tag.data.result.data.find((tag, index, arr) => {
+          return Object.is(tag.slug, this.$route.params.tag_slug)
+        })
       },
       defaultParams() {
         return {
@@ -47,7 +54,6 @@
     },
     methods: {
       loadmoreArticle() {
-        console.log(this.nextPageParams);
         this.$store.dispatch('loadArticles', this.nextPageParams)
       }
     }

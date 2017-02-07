@@ -12,27 +12,32 @@
   export default {
     name: 'category-article-list',
     validate ({ params }) {
-      return (!!params.category_slug && ['think', 'code'].includes(params.category_slug));
+      return !!params.category_slug
     },
     fetch({ store, params }) {
       return store.dispatch('loadArticles', params)
     },
-    head () {
+    head() {
       const title = this.defaultParams.category_slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
-      return {
-        title: `${title} | Category`
+      return { title: `${title} | Category` }
+    },
+    created() {
+      if (!this.currentCategory) {
+        this.$router.back()
       }
     },
     components: {
       Carrousel,
       ArticleList
     },
-    mounted() {
-      // console.log(this.defaultParams, this.nextPageParams);
-    },
     computed: {
       article() {
         return this.$store.state.article.list
+      },
+      currentCategory() {
+        return this.$store.state.category.data.result.data.find((category) => {
+          return Object.is(category.slug, this.$route.params.category_slug)
+        })
       },
       defaultParams() {
         return {
@@ -47,7 +52,6 @@
     },
     methods: {
       loadmoreArticle() {
-        console.log(this.nextPageParams);
         this.$store.dispatch('loadArticles', this.nextPageParams)
       }
     }

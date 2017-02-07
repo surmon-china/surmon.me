@@ -42,8 +42,7 @@
                   <p>实践：PHP, Wordpress, Node.js, Express, MongoDB, Mysql, Redis, Linux...</p>
                   <p>工程：Grunt, Gulp, Webpack, Npm, Yarn, Babel...</p>
                   <p>关注：WebVR, WebRTC, WebComponent, Service Worker, AR, VR, AI...</p>
-                  <p>一般不接私活，如果价格不高的话；技术过硬 过硬 硬 略...</p>
-                  <p></p>
+                  <p>技术过<b>硬</b></p>
                 </div>
               </div>
             </div>

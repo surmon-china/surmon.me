@@ -44,8 +44,7 @@
       </p>
       <p class="item">
         <span>永久地址：</span>
-        <span href="" 
-              ref="copy_url_btn"
+        <span ref="copy_url_btn"
               class="site-url"
               :data-clipboard-text="`http://surmon.me/article/${this.article.id}`">
               <span>http://surmon.me/article/{{ article.id }}</span>
@@ -62,7 +61,7 @@
       <ul class="article-lists">
         <li class="item" v-for="article in article.related.slice(0, 8)">
           <router-link :to="`/article/${article.id}`" :title="article.title" class="item-box">
-            <img :src="article.thumb" class="thumb" :alt="article.title">
+            <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title">
             <span class="title">{{ article.title }}</span>
           </router-link>
         </li>
@@ -125,6 +124,10 @@
         if (this.article.title) {
           this.clipboard = new Clipboard(this.$refs.copy_url_btn)
         }
+      },
+      buildThumb(thumb) {
+        if (!thumb) return '/images/thumb-releted.jpg'
+        return `${thumb}?imageView2/1/w/135/h/126/interlace/0/q/100|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/260/fill/I0VGRUZFRg==/dissolve/36/gravity/SouthEast/dx/10/dy/5`
       }
     }
   }
@@ -285,6 +288,8 @@
             > .thumb {
               width: 100%;
               height: 100%;
+              @include css3-prefix(transform, scale(1) rotate(0deg));
+              @include css3-prefix(transition, all 1s);
             }
 
             > .title {
@@ -294,10 +299,15 @@
               width: 100%;
               height: 2em;
               line-height: 2em;
-              background-color: rgba(165, 165, 165, 0.7);
+              background-color: rgba(165, 165, 165, 0.5);
               padding: 0 .5em;
               color: white;
-              opacity: .8;
+              opacity: .6;
+              font-size: .9em;
+              text-align: center;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
             }
           }
         }

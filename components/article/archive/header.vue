@@ -6,19 +6,21 @@
       <!-- tag -->
       <i class="iconfont" v-if="currentTag" :class="[currentTagIconClass]"></i>
       <!-- category -->
-      <i class="iconfont icon-code"  v-if="Object.is(currentCategory, 'code')"></i>
-      <i class="iconfont icon-think" v-if="Object.is(currentCategory, 'think')"></i>
+      <i class="iconfont icon-code"  v-if="currentCategoryIsCode"></i>
+      <i class="iconfont icon-think" v-if="currentCategoryIsThink"></i>
+      <i class="iconfont icon-category" v-if="currentCategoryIsOther"></i>
       <!-- search -->
       <i class="iconfont icon-search" v-if="currentKeyword"></i>
     </p>
     <!-- category -->
-    <h5 class="title" v-if="Object.is(currentCategory, 'code')">这里记录与编程有关的一切</h5>
-    <h5 class="title" v-if="Object.is(currentCategory, 'think')">生活、思考、互联网</h5>
+    <h5 class="title" v-if="currentCategory">
+      <span>{{ currentCategory.description || 'Nothing.' }}</span>
+    </h5>
     <!-- tag -->
     <h5 class="title" v-if="currentTag">
       <span>{{ currentTag.name }}</span>
       <span>&nbsp;-&nbsp;</span>
-      <span>{{ currentTag.description || '暂无介绍' }}</span>
+      <span>{{ currentTag.description || 'Nothing.' }}</span>
     </h5>
     <!-- data -->
     <h5 class="title" v-if="currentDate">
@@ -58,7 +60,18 @@
         return this.$route.params.keyword
       },
       currentCategory() {
-        return this.$route.params.category_slug
+        return this.$store.state.category.data.result.data.find((category, index, arr) => {
+          return Object.is(category.slug, this.$route.params.category_slug)
+        })
+      },
+      currentCategoryIsThink() {
+        return this.currentCategory && Object.is(this.currentCategory.slug, 'think')
+      },
+      currentCategoryIsCode() {
+        return this.currentCategory && Object.is(this.currentCategory.slug, 'code')
+      },
+      currentCategoryIsOther() {
+        return this.currentCategory && !this.currentCategoryIsThink && !this.currentCategoryIsCode
       }
     }
   }
