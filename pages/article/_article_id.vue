@@ -83,6 +83,7 @@
 
 <script>
   import Clipboard from '~plugins/clipboard'
+  import cheerio from '~plugins/cheerio'
 
   export default {
     name: 'article-detail',
@@ -126,23 +127,41 @@
         }
       },
       buildArticleRelatedTag(content) {
+        // 如果数据不成功，则不构造
         if (!Object.is(this.tags.code, 1)) return content
+        // 初始化标签数据
         const tags = this.tags.result.data
         const tagNames = tags.map(t => t.name)
         const tagReg = eval(`/${tagNames.join('|')}/ig`) 
-        // console.log(content, tags, tagNames, tagNames.join('|'), tagReg, '可以构造正则了')
-        const $content = $(content).not('pre').not('img').not('a')
-        // console.log($content)
-        // Array.from(a).map(e => {
-        //   const text = $(e).text()
-        //   console.log($(e).text(text.replace('javascript', '<a href="">我就是javascript</a>')))
-        // })
-        return content.replace(tagReg, tag => {
-          const slug = tags.find(t => Object.is(t.name, tag)).slug
-          const command = `window.$nuxt.$router.push({ path: '/tag/${tag}' });return false`
-          // console.log(tag, slug, command)
-          return `<a href="/tag/${slug}" onclick="${command}">${tag}</a>`
-        })
+        // 初始化node-dom环境
+        const $ = cheerio.load(content)
+        const $content = $().not('pre')[0].children
+        console.log($content)
+        // 正则替换方法
+        const buildTagLink = string => {
+          return string.replace(tagReg, tag => {
+            const slug = tags.find(t => Object.is(t.name, tag)).slug
+            const command = `window.$nuxt.$router.push({ path: '/tag/${tag}' });return false`
+            return `<a href="/tag/${slug}" onclick="${command}">${tag}</a>`
+          })
+        }
+        // 递归遍历所有内容
+        const buildTextNode = nodes => {
+          nodes.forEach(node => {
+            if (node.data) {
+              node.data = buildTagLink(node.data)
+              console.log(node)
+            } else if (node.children && node.children.length) {
+              buildTextNode(node.children)
+            }
+          })
+        }
+
+        buildTextNode($content)
+
+        console.log($.text())
+        return $.html()
+        // return content
       }
     }
   }
