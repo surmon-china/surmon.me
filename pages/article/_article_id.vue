@@ -18,9 +18,9 @@
       <p class="item">
         <span>本文于</span>
         <span>&nbsp;</span>
-        <router-link :to="`/date/${new Date(article.date).toLocaleString().substr(0, 8).replace(/\//g, '-')}`" 
-                     :title="new Date(article.date).toLocaleString().substr(0, 11)">
-          <span>{{ new Date(article.date).toLocaleString().substr(0, 11) }}</span>
+        <router-link :to="`/date/${new Date(article.create_time).toLocaleString().substr(0, 8).replace(/\//g, '-')}`" 
+                     :title="new Date(article.create_time).toLocaleString().substr(0, 11)">
+          <span>{{ new Date(article.create_time).toLocaleString().substr(0, 11) }}</span>
         </router-link>
         <span>&nbsp;发布在&nbsp;</span>
         <router-link :to="`/category/${category.slug}`"
@@ -127,7 +127,7 @@
       },
       buildThumb(thumb) {
         if (!thumb) return '/images/thumb-releted.jpg'
-        return `${thumb}?imageView2/1/w/135/h/126/interlace/0/q/100|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/260/fill/I0VGRUZFRg==/dissolve/36/gravity/SouthEast/dx/10/dy/5`
+        return `${thumb}?imageView2/1/w/270/h/224/interlace/0/q/100`
       }
     }
   }
@@ -272,9 +272,10 @@
           > .item-box {
             display: block;
             position: relative;
-            width: 9.61em;
-            height: 9em;
             overflow: hidden;
+            width: 9.6em;
+            height: 8em;
+            opacity: .8;
 
             &:hover {
 
@@ -302,7 +303,7 @@
               background-color: rgba(165, 165, 165, 0.5);
               padding: 0 .5em;
               color: white;
-              opacity: .6;
+              opacity: .8;
               font-size: .9em;
               text-align: center;
               overflow: hidden;

@@ -18,7 +18,7 @@
               </p>
               <p class="item">
                 <i class="iconfont icon-comment-discussion"></i>
-                <span>国家套路委员会：</span>
+                <span>国套委：</span>
                 <a target="_blank" 
                    rel="nofollow" 
                    href="http://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4">288325802</a>
@@ -35,14 +35,18 @@
                 <i class="iconfont icon-music"></i>
                 <span>Folk, Jazz-HipHop, EM, Rock, PostRock, New Ag</span>
               </p>
+              <p class="item">
+                <i class="iconfont icon-like"></i>
+                <span>love code. love beauty. love life.</span>
+              </p>
               <div class="item">
                 <i class="iconfont icon-code"></i>
                 <div class="skills">
-                  <p>擅长：H5/C3/4, JQuery, Ps, Bootstrap, Js, ES6, Ng1, Ng2, Vue2, Weex, RN...</p>
-                  <p>实践：PHP, Wordpress, Node.js, Express, MongoDB, Mysql, Redis, Linux...</p>
-                  <p>工程：Grunt, Gulp, Webpack, Npm, Yarn, Babel...</p>
-                  <p>关注：WebVR, WebRTC, WebComponent, Service Worker, AR, VR, AI...</p>
-                  <p>技术过<b>硬</b></p>
+                  <!-- <p>擅长：H5/C3/4, JQuery, Ps, Bootstrap, Js, ES6, Ng1, Ng2, Vue2, Weex, RN...</p> -->
+                  <!-- <p>实践：PHP, Wordpress, Node.js, Express, MongoDB, Mysql, Redis, Linux...</p> -->
+                  <!-- <p>工程：Grunt, Gulp, Webpack, Npm, Yarn, Babel...</p> -->
+                  <!-- <p>关注：WebVR, WebRTC, WebComponent, Service Worker, AR, VR, AI...</p> -->
+                  <p>技术. 过<b>硬</b></p>
                 </div>
               </div>
             </div>
@@ -141,7 +145,6 @@
                 margin-right: 2em;
                 display: inline-block;
                 color: #777;
-                font-size: 1em;
                 float: left;
               }
 

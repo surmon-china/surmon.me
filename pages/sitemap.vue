@@ -28,7 +28,9 @@
               <router-link class="name"
                            :to="`/category/${category.slug}`"
                            :title="category.name">{{ category.name }}</router-link>
-              <span>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;</span>
+              <span>&nbsp;</span>
+              <span>（{{ category.count || 0 }}）</span>
+              <span>&nbsp;-&nbsp;&nbsp;</span>
               <span>{{ category.description }}</span>
             </p>
           </li>
@@ -40,6 +42,8 @@
         <ul class="tag-list">
           <li class="item" v-for="tag in tags">
             <router-link :to="`/tag/${tag.slug}`" :title="tag.description">{{ tag.name }}</router-link>
+            <span>&nbsp;</span>
+            <span>（{{ tag.count || 0 }}）</span>
           </li>
         </ul>
       </div>
