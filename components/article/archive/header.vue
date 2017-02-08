@@ -6,9 +6,7 @@
       <!-- tag -->
       <i class="iconfont" v-if="currentTag" :class="[currentTagIconClass]"></i>
       <!-- category -->
-      <i class="iconfont icon-code"  v-if="currentCategoryIsCode"></i>
-      <i class="iconfont icon-think" v-if="currentCategoryIsThink"></i>
-      <i class="iconfont icon-category" v-if="currentCategoryIsOther"></i>
+      <i class="iconfont"  v-if="currentCategory" :class="[currentCategoryIconClass]"></i>
       <!-- search -->
       <i class="iconfont icon-search" v-if="currentKeyword"></i>
     </p>
@@ -53,25 +51,21 @@
         const currentTagIcon = this.currentTag.extends.find(t => Object.is(t.name, 'icon'))
         return currentTagIcon ? currentTagIcon.value : 'icon-tag'
       },
-      currentDate() {
-        return this.$route.params.date
-      },
-      currentKeyword() {
-        return this.$route.params.keyword
-      },
       currentCategory() {
         return this.$store.state.category.data.result.data.find((category, index, arr) => {
           return Object.is(category.slug, this.$route.params.category_slug)
         })
       },
-      currentCategoryIsThink() {
-        return this.currentCategory && Object.is(this.currentCategory.slug, 'think')
+      currentCategoryIconClass() {
+        if (!this.currentCategory) return ''
+        const currentCategoryIcon = this.currentCategory.extends.find(t => Object.is(t.name, 'icon'))
+        return currentCategoryIcon ? currentCategoryIcon.value : 'icon-category'
       },
-      currentCategoryIsCode() {
-        return this.currentCategory && Object.is(this.currentCategory.slug, 'code')
+      currentDate() {
+        return this.$route.params.date
       },
-      currentCategoryIsOther() {
-        return this.currentCategory && !this.currentCategoryIsThink && !this.currentCategoryIsCode
+      currentKeyword() {
+        return this.$route.params.keyword
       }
     }
   }
