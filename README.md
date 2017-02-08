@@ -1,4 +1,4 @@
-# surmon.me
+# Surmon.me
 
 > Vue-Blog By Nuxt.js
 
@@ -15,7 +15,7 @@ $ npm run dev
 $ npm run build
 $ npm start
 
-# generate static project
+# generate static project 生成静态html
 $ npm run generate
 
 # lint test
@@ -25,15 +25,17 @@ $ npm run lint
 #todos
 
 - ~~默认文章缩略图需要设计为<>图标~~
-- fav.ico
-- 轮播图幻灯，需要设计的默认缩略图
+- ~~fav.ico~~
+- ~~轮播图幻灯，需要设计的默认缩略图~~
 - ~~文章列表图片需要和七牛端设置配合~~
-- 相关文章图片太大，一行调整为5个
+- ~~相关文章图片太大，一行调整为5个~~
 
-- 文章浏览数统计索引
-- 标签包含文章数统计索引
-- 文章评论回调
-- 服务端需要一个转接接口 用于服务project对github的代理访问
+- ~~轮播图取消异步加载？~~
+- ~~文章页列表文章白哦提过长会换行~~
+
+- ~~文章浏览数统计索引~~
+- ~~列表head中显示查询的结果总数统计~~
+- ~~标签包含文章数统计索引~~
 
 - ~~搜索功能~~
 - ~~文章详情需要一个过滤器，生成tag内链（貌似做不到）~~
@@ -41,9 +43,19 @@ $ npm run lint
 - ~~每个页面隐藏生成多说的评论数据用于SEO~~
 - ~~一个message-box组件用于错误处理，且多种文案合并为json，随机展示~~
 
+- ~~about 页面的知乎微博~~
+- ~~侧边栏添加知乎链接~~
+
+- ~~readme完善~~
+
+- 上线自动部署
+- 全站https
+- 文章评论回调
 - 网站地图需要生成一个xml页面
 - 路由meta信息需要定义（1.0版本的中间件来实现）
 - error.vue不支持自定义布局，1.0改进
+
+- ~~服务端需要一个转接接口 用于服务project对github的代理访问~~
 - ~~vue2有bug~~
 - ~~vue-meta__dangerouslyDisableSanitizers有bug~~
 
@@ -58,71 +70,35 @@ $ npm run lint
 
 # 目录结构
 ```
-vue-blog/
+nuxt.js-blog/
    |
-   ├──build/                     * webpack构建配置
+   ├──assets/                    * 经webpack处理的静态资源
+   |
+   ├──components/                * webpack构建配置
+   |
+   ├──components/                * 所有组件
    │   │
-   │   └──webpack.base.conf.js   * Webpack工程的基础配置（可配置：命令 + 入口 + 插件）
-   |
-   ├──config/                    * webpack构建配置
-   |
-   ├──dist/                      * 压缩编译后输出的文件（最终产出文件）
+   │   │──common                 * 全局公共组件
    │   │
-   │   │──index.html             * 压缩编译后输出的主页
+   │   └──layout                 * 布局组件
    │   │
-   │   └──static                 * 压缩编译后输出的资源文件
-   │        │
-   │        └──***               * 包含开发模式的static文件夹 + webpack自动编译出的静态资源
+   │   └──*****                  * 其他复用组件
    |
-   ├──static/                    * 开发模式的静态资源目录
+   ├──filters/                   * 过滤器
    │
-   ├──test/                      * 测试
-   │   │
-   │   │──e2e                    * 端对端测试
-   │   │
-   │   └──unit                   * 单元测试
+   ├──layouts/                   * Nuxt.js宿主元素布局模板，默认default
    |
-   ├──src/                       * 开发文件
-   │   |
-   │   ├──App.vue                * 根组件
+   ├──pages/                     * Nuxt.js的页面文件，会根据文件生成路由
+   │
+   │──plugins/                   * 第三方组件 + 自有js库
+   │
+   │──static/                    * 不经编译器处理的静态资源
+   │
+   │──store/                     * 全局数据状态管理
    │   │
-   │   ├──main.js                * 程序入口（路由拦截器）
+   │   ├──*******                * 各数据模块
    │   │
-   │   ├──config.js              * 全局配置
-   │   │
-   │   ├──routes.js              * 路由
-   │   │
-   │   ├──directives/            * 指令
-   │   │
-   │   ├──filters/               * 过滤器
-   │   │
-   │   ├──sass/                  * Iconfont + 公共scss样式 + Mixins +　...
-   │   │
-   │   ├──api/                   * vue-resource 封装的RestFul HTTP服务（请求拦截器）
-   │   │
-   │   ├──components/            * 组件
-   │   │   │
-   │   │   ├──common             * 公共组件
-   │   │   │
-   │   │   ├──index              * 首页组件
-   │   │   │
-   │   │   ├──layout             * 页面的菜单/路由
-   │   │   │
-   │   │   ├──article            * 文章相关
-   │   │   │
-   │   │   └──page               * 单独页面
-   │   │
-   │   └──store/                 * 全局数据状态管理
-   │       │
-   │       ├──modules            * 模块
-   │       │
-   │       ├──actions            * 异步处理（对api资源的操作）
-   │       │
-   │       ├──types              * 所有命名
-   │       │
-   │       ├──article            * store入口对象
-   │       │
-   │       └──index              * 单独页面
+   │   └──index                  * 根模块（actions）
    │
    │──package.json               * what npm uses to manage it's dependencies
    │
@@ -131,5 +107,7 @@ vue-blog/
    │──.babelrc                   * Babel配置
    │
    │──.gitignore                 * Git忽略文件配置
+   │
+   │──nuxt.config.js             * Nuxt.js程序配置
    │
    └──.editorconfig              * 编码风格配置
