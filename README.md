@@ -4,7 +4,7 @@
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 $ npm install # Or yarn install
 
@@ -22,7 +22,7 @@ $ npm run generate
 $ npm run lint
 ```
 
-#todos
+# todos
 
 - ~~默认文章缩略图需要设计为<>图标~~
 - ~~fav.ico~~
@@ -106,3 +106,4 @@ nuxt.js-blog/
    │──nuxt.config.js             * Nuxt.js程序配置
    │
    └──.editorconfig              * 编码风格配置
+```
