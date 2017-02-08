@@ -10,8 +10,7 @@
         <div class="swiper-wrapper">
           <div class="swiper-slide item" v-for="(article, index) in article.data.result.data.slice(0, 9)">
             <div class="content">
-              <img :data-src="buildThumb(article.thumb)" class="swiper-lazy">
-              <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+              <img :src="buildThumb(article.thumb)">
               <router-link :to="`/article/${article.id}`" class="title">
                 <span>{{ index + article.title }}</span>
               </router-link>
@@ -73,7 +72,7 @@
       },
       buildThumb(thumb) {
         if (!thumb) return '/images/thumb-carrousel.jpg'
-        return `${thumb}?imageView2/1/w/595/h/210/interlace/0/q/100|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/388/fill/I0VGRUZFRg==/dissolve/36/gravity/SouthWest/dx/15/dy/9`
+        return `${thumb}?imageView2/1/w/1190/h/420/interlace/0/q/100|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/698/fill/I0ZGRkZGRg==/dissolve/27/gravity/SouthWest/dx/30/dy/15`
       }
     }
   }

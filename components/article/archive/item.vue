@@ -14,16 +14,16 @@
         <div class="item-meta">
           <span class="date">
             <i class="iconfont icon-clock"></i>
-            <span>{{ item.date | toLocalString | toYMD }}</span>
+            <span>{{ item.create_time | toLocalString | toYMD }}</span>
           </span>
           <span class="views">
             <i class="iconfont icon-eye"></i>
-            <span>{{ item.meta ? item.meta.views : 0 }}</span>
+            <span>{{ item.meta.views || 0 }}</span>
           </span>
-<!--           <span class="comment">
+          <span class="comment">
             <i class="iconfont icon-comment"></i>
-            <span>{{ item.meta.comments }}</span>
-          </span> -->
+            <span>{{ item.comment.length || 0 }}</span>
+          </span>
           <span class="category">
             <i class="iconfont icon-list"></i>
             <span v-if="!item.category.length">未分类</span>
@@ -50,7 +50,7 @@
     methods: {
       buildThumb(thumb) {
         if (!thumb) return '/images/thumb-article.jpg'
-        return `${thumb}?imageView2/1/w/175/h/119/interlace/0/q/100|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/260/fill/I0VGRUZFRg==/dissolve/36/gravity/SouthWest/dx/10/dy/3`
+        return `${thumb}?imageView2/1/w/350/h/238/interlace/0/q/100|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/456/fill/I0ZGRkZGRg==/dissolve/20/gravity/SouthWest/dx/15/dy/7`
       }
     }
   }
@@ -113,6 +113,9 @@
           color: #333;
           margin-top: .2em;
           margin-bottom: .5em;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
 
           > a {
             margin-left: 0;
