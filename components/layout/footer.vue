@@ -7,9 +7,9 @@
         <a class="sitemap-btn" href="/sitemap.xml" target="_blank">SITEMAP</a>
         <span> - </span>
         <span>Powered By </span>
-        <router-link to="/project/nodepress">NodePress</router-link>
+        <router-link to="/project">NodePress</router-link>
         <span> and </span>
-        <router-link to="/project/nuxtjs-blog">Nuxt.js</router-link>
+        <router-link to="/project">Nuxt.js</router-link>
         <span>. Dsigned By </span>
         <router-link to="/about">Surmon</router-link>
         <span> used </span>

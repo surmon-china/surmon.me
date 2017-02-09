@@ -18,7 +18,8 @@
       return store.dispatch('loadArticles', params)
     },
     head () {
-      const title = this.defaultParams.tag_slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+      const slug = this.defaultParams.tag_slug || ''
+      const title = slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
       return {
         title: `${title} | Tag`
       }

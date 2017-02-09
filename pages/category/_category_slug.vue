@@ -18,8 +18,11 @@
       return store.dispatch('loadArticles', params)
     },
     head() {
-      const title = this.defaultParams.category_slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
-      return { title: `${title} | Category` }
+      const slug = this.defaultParams.category_slug || ''
+      const title = slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+      return { 
+        title: `${title} | Category` 
+      }
     },
     created() {
       if (!this.currentCategory) {
@@ -35,7 +38,7 @@
         return this.$store.state.article.list
       },
       currentCategory() {
-        return this.$store.state.category.data.result.data.find((category) => {
+        return this.$store.state.category.data.result.data.find(category => {
           return Object.is(category.slug, this.$route.params.category_slug)
         })
       },

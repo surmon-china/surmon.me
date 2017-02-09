@@ -80,6 +80,7 @@ export const mutations = {
   },
   GET_DETAIL_FAILURE(state) {
     state.detail.fetching = false
+    state.detail.data = { result: {} }
   },
   GET_DETAIL_SUCCESS(state, action) {
     state.detail.fetching = false
