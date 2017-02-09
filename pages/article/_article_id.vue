@@ -2,71 +2,76 @@
   <div class="article">
     <div class="detail">
       <h3 class="title">{{ article.title || '...' }}</h3>
-      <transition name="module">
-        <div class="content" 
-             v-html="articleContent" 
-             v-if="!fetching && article.title"
-             v-highlightjs></div>
-      </transition>
-      <transition name="module">
+      <transition name="module" mode="out-in">
         <empty-box class="article-empty-box" v-if="!fetching && !article.title">
           <slot>No Result Article.</slot>
         </empty-box>
       </transition>
+      <transition name="module" mode="out-in">
+        <div class="content" 
+             v-html="articleContent" 
+             v-if="!fetching && article.title"
+             v-highlightjs>
+        </div>
+      </transition>
     </div>
-    <div class="metas" v-if="!fetching && article.title">
-      <p class="item">
-        <span>本文于</span>
-        <span>&nbsp;</span>
-        <router-link :to="`/date/${new Date(article.create_time).toLocaleString().substr(0, 8).replace(/\//g, '-')}`" 
-                     :title="new Date(article.create_time).toLocaleString().substr(0, 11)">
-          <span>{{ new Date(article.create_time).toLocaleString().substr(0, 11) }}</span>
-        </router-link>
-        <span>&nbsp;发布在&nbsp;</span>
-        <router-link :to="`/category/${category.slug}`"
-                     :title="category.description || category.name"
-                     v-for="category in article.category">
-          <span>{{ category.name }}</span>
-        </router-link>
-        <span>&nbsp;分类下，当前已被围观&nbsp;</span>
-        <span>{{ article.meta.views || 0 }}</span>
-        <span>&nbsp;次</span>
-      </p>
-      <p class="item">
-        <span>相关标签：</span>
-        <span v-if="!article.tag.length">无相关标签</span>
-        <router-link :to="`/tag/${tag.slug}`"
-                     :title="tag.description || tag.name"
-                     v-for="(tag, index) in article.tag">
-          <span>{{ tag.name }}</span>
-          <span v-if="article.tag.length && article.tag[index + 1]">、</span>
-        </router-link>
-      </p>
-      <p class="item">
-        <span>永久地址：</span>
-        <span ref="copy_url_btn"
-              class="site-url"
-              :data-clipboard-text="`http://surmon.me/article/${this.article.id}`">
-              <span>http://surmon.me/article/{{ article.id }}</span>
-        </span>
-      </p>
-      <div class="item">
-        <span>版权声明：</span>
-        <span>本文内容可能来自互联网，若侵犯到您的利益请及时&nbsp;</span>
-        <a href="mailto:surmon@foxmail.com" target="_blank">Email me</a>
-        <span>&nbsp;处理</span>
-      </div>
-    </div>
-    <div class="related" v-if="article.related && article.related.length">
-      <ul class="article-lists">
-        <li class="item" v-for="article in article.related.slice(0, 8)">
-          <router-link :to="`/article/${article.id}`" :title="article.title" class="item-box">
-            <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title">
-            <span class="title">{{ article.title }}</span>
+    <transition name="module" mode="out-in">
+      <div class="metas" v-if="!fetching && article.title">
+        <p class="item">
+          <span>本文于</span>
+          <span>&nbsp;</span>
+          <router-link :title="new Date(article.create_time).toLocaleString().substr(0, 11)"
+                       :to="`/date/${new Date(article.create_time).toLocaleString().substr(0, 8).replace(/\//g, '-')}`">
+            <span>{{ new Date(article.create_time).toLocaleString().substr(0, 11) }}</span>
           </router-link>
-        </li>
-      </ul>
-    </div>
+          <span>&nbsp;发布在&nbsp;</span>
+          <router-link :to="`/category/${category.slug}`"
+                       :title="category.description || category.name"
+                       v-for="category in article.category">
+            <span>{{ category.name }}</span>
+          </router-link>
+          <span>&nbsp;分类下，当前已被围观&nbsp;</span>
+          <span>{{ article.meta.views || 0 }}</span>
+          <span>&nbsp;次</span>
+        </p>
+        <p class="item">
+          <span>相关标签：</span>
+          <span v-if="!article.tag.length">无相关标签</span>
+          <router-link :to="`/tag/${tag.slug}`"
+                       :title="tag.description || tag.name"
+                       v-for="(tag, index) in article.tag">
+            <span>{{ tag.name }}</span>
+            <span v-if="article.tag.length && article.tag[index + 1]">、</span>
+          </router-link>
+        </p>
+        <p class="item">
+          <span>永久地址：</span>
+          <span ref="copy_url_btn"
+                class="site-url"
+                :data-clipboard-text="`http://surmon.me/article/${this.article.id}`">
+                <span>http://surmon.me/article/{{ article.id }}</span>
+          </span>
+        </p>
+        <div class="item">
+          <span>版权声明：</span>
+          <span>本文内容可能来自互联网，若侵犯到您的利益请及时&nbsp;</span>
+          <a href="mailto:surmon@foxmail.com" target="_blank">Email me</a>
+          <span>&nbsp;处理</span>
+        </div>
+      </div>
+    </transition>
+    <transition name="module" mode="out-in">
+      <div class="related" v-if="article.related && article.related.length">
+        <ul class="article-lists">
+          <li class="item" v-for="article in article.related.slice(0, 8)">
+            <router-link :to="`/article/${article.id}`" :title="article.title" class="item-box">
+              <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title">
+              <span class="title">{{ article.title }}</span>
+            </router-link>
+          </li>
+        </ul>
+      </div>
+    </transition>
     <div class="comment">
       <comment-hidden-box v-if="!fetching && article.title"></comment-hidden-box>
       <duoshuo-box v-if="!fetching && article.title"

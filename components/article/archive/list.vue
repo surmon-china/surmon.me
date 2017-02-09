@@ -10,14 +10,14 @@
 
     <!-- 列表 -->
     <div class="article-list">
-      <transition name="module">
+      <transition name="module" mode="out-in">
         <empty-box class="article-empty-box" v-if="!article.fetching && !article.data.result.data.length">
           <slot>No Result Article.</slot>
         </empty-box>
+        <transition-group name="fade" tag="div">
+          <list-item v-for="(item, index) in article.data.result.data" :item="item" :key="index"></list-item>
+        </transition-group>
       </transition>
-      <transition-group name="fade" tag="div">
-        <list-item v-for="(item, index) in article.data.result.data" :item="item" :key="index"></list-item>
-      </transition-group>
     </div>
 
     <!-- 加载更多 -->
