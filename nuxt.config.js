@@ -1,10 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
-const isProdMode = process.env.NODE_ENV === 'production'
-const nuxtConfig = {
-  api: process.env.baseUrl || (isProdMode ? 'http://api.surmon.me/' : 'http://localhost:8000/'),
-  duoshuoShortName: (isProdMode ? 'surmon' : 'localhost-3000')
-}
+const apiConfig = require('./api.config')
+// console.log('nuxtConfig', apiConfig)
 
 module.exports = {
   cache: true,
@@ -36,8 +33,8 @@ module.exports = {
   },
   dev: (process.env.NODE_ENV !== 'production'),
   env: {
-    baseUrl: nuxtConfig.api,
-    duoshuoShortName: nuxtConfig.duoshuoShortName
+    baseUrl: apiConfig.baseUrl,
+    duoshuoShortName: apiConfig.duoshuoShortName
   },
   plugins: [
     '~plugins/axios.js',
@@ -48,7 +45,7 @@ module.exports = {
     '~plugins/swiper.js',
     '~plugins/vue-empty.js',
     // '~plugins/vue-disqus.js',
-    '~plugins/vue-loading.js',
+    // '~plugins/vue-loading.js',
     '~plugins/vue-duoshuo.js',
     '~plugins/vue-comment-hidden.js'
   ],
@@ -68,8 +65,8 @@ module.exports = {
       { rel: 'author', type: 'text/plain', href: '/humans.txt' }
     ],
     script: [
-      { innerHTML: `window.duoshuoQuery = { short_name: '${nuxtConfig.duoshuoShortName}' }`, type: 'text/javascript' },
-      { src: 'http://static.duoshuo.com/embed.js' }
+      { innerHTML: `window.duoshuoQuery = { short_name: '${apiConfig.duoshuoShortName}' }`, type: 'text/javascript' },
+      { src: 'https://static.duoshuo.com/embed.js' }
     ],
     noscript: [
       { innerHTML: 'This website requires JavaScript.' }
