@@ -27,8 +27,9 @@
           <span>&nbsp;发布在&nbsp;</span>
           <router-link :to="`/category/${category.slug}`"
                        :title="category.description || category.name"
-                       v-for="category in article.category">
+                       v-for="(category, index) in article.category">
             <span>{{ category.name }}</span>
+            <span v-if="article.category.length && article.category[index + 1]">、</span>
           </router-link>
           <span>&nbsp;分类下，当前已被围观&nbsp;</span>
           <span>{{ article.meta.views || 0 }}</span>

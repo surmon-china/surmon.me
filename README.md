@@ -52,14 +52,14 @@ $ npm run lint
 - ~~vue2有bug~~
 - ~~vue-meta__dangerouslyDisableSanitizers有bug~~
 
-- 添加百度统计代码
-- 上线自动部署
-- 全站https
-- 文章评论回调
-- 网站地图需要生成一个xml页面
-- 路由meta信息需要定义（1.0版本的中间件来实现）
+- ~~google统计代码~~
+- ~~上线自动部署~~
+- ~~全站https~~
+- ~~网站地图需要生成一个xml页面~~
+- ~~路由meta信息需要定义（1.0版本的中间件来实现）~~
 - error.vue不支持自定义布局，1.0改进
 
+- 文章评论回调
 - 音乐播放器的实现
 - movie的单独列表页和详情页
 
