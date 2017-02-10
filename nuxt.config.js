@@ -1,7 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 const apiConfig = require('./api.config')
-// console.log('nuxtConfig', apiConfig)
 
 module.exports = {
   cache: true,
@@ -37,6 +36,7 @@ module.exports = {
     duoshuoShortName: apiConfig.duoshuoShortName
   },
   plugins: [
+    '~plugins/ga.js',
     '~plugins/axios.js',
     '~plugins/cheerio.js',
     '~plugins/clipboard.js',
@@ -73,6 +73,7 @@ module.exports = {
     ]
   },
   router: {
+    middleware: ['change-page-col'],
     linkActiveClass: 'link-active',
     scrollBehavior(to, from, savedPosition) {
       return { x: 0, y: 0 }

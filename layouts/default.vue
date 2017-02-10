@@ -35,27 +35,6 @@
     computed: {
       fullColumn () {
         return this.$store.state.option.fullColumn
-      },
-      serverOptions() {
-        return this.$store.state.option.serverOptions
-      }
-    },
-    mounted () {
-      this.init()
-    },
-    methods: {
-      init() {
-        this.changePageCol()
-        this.$router.afterEach((route) => {
-          this.changePageCol()
-        })
-      },
-      changePageCol() {
-        const fullColumnPageNames = ['about', 'music', 'project', 'sitemap']
-        const fullColumn = fullColumnPageNames.includes(this.$route.name) || this.$route.path.includes('/project/')
-        if (!Object.is(this.fullColumn, fullColumn)) {
-          this.$store.commit('option/SET_FULL_COLUMU', fullColumn)
-        }
       }
     }
   }
