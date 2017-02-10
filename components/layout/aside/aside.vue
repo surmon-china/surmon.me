@@ -27,7 +27,7 @@
         <slot>No Result Hot Articles.</slot>
       </empty-box>
       <ul class="aside-article-list" v-if="!articleFetching && articles.length">
-        <li class="item" v-for="article in articles" :key="article.id">
+        <li class="item" v-for="article in articles.slice(0, 10)" :key="article.id">
           <i class="index"></i>
           <router-link class="title" 
                        :title="`${article.title} - [ ${article.comments} 条评论 ]`"
