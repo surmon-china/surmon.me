@@ -9,7 +9,8 @@
     "cheerio": "^0.22.0",
     "clipboard": "^1.5.16",
     "highlight.js": "^9.9.0",
-    "nuxt": "latest"
+    "nuxt": "latest",
+    "swiper": "^3.4.1"
   },
   "scripts": {
     "dev": "nuxt",
