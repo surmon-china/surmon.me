@@ -74,7 +74,7 @@ export const actions = {
   loadHotArticles({ commit }) {
     commit('article/REQUEST_HOT_LIST')
     const params = { short_name: process.env.duoshuoShortName, num_items: 15, range: 'all' }
-    return Service.get('http://api.duoshuo.com/sites/listTopThreads.json', { params })
+    return Service.get('https://api.duoshuo.com/sites/listTopThreads.json', { params })
     .then(response => {
       const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 0)
       if(success) commit('article/GET_HOT_LIST_SUCCESS', response.data)
@@ -84,11 +84,11 @@ export const actions = {
     })
   },
 
-  // 根据唯一key获取多说评论  http://api.duoshuo.com/threads/listPosts.json?short_name=localhost-3000&thread_key=guestbook&page=1&limit=50
+  // 根据唯一key获取多说评论  https://api.duoshuo.com/threads/listPosts.json?short_name=localhost-3000&thread_key=guestbook&page=1&limit=50
   loadCommentsByThirdKey({ commit }, { thread_key }) {
     commit('comment/REQUEST_LIST')
     const params = { short_name: process.env.duoshuoShortName, limit: 50, page: 1, thread_key }
-    return Service.get('http://api.duoshuo.com/threads/listPosts.json', { params })
+    return Service.get('https://api.duoshuo.com/threads/listPosts.json', { params })
     .then(response => {
       const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 0)
       if(success) commit('comment/GET_LIST_SUCCESS', response.data)

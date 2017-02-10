@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
+import apiConfig from '../api.config'
 
 // 拦截器
 axios.interceptors.request.use(function (config) {
@@ -19,6 +20,7 @@ axios.interceptors.response.use(function (response) {
 
 Vue.prototype.$http = axios;
 
+// console.log('axiosConfig', apiConfig.baseUrl)
 export default axios.create({
-  baseURL: process.env.baseURL || 'http://localhost:8000'
+  baseURL: apiConfig.baseUrl
 });

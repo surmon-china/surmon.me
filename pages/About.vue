@@ -21,7 +21,7 @@
                 <span>国套委：</span>
                 <a target="_blank" 
                    rel="nofollow" 
-                   href="http://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4">288325802</a>
+                   href="https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4">288325802</a>
               </p>
               <p class="item">
                 <i class="iconfont icon-address"></i>

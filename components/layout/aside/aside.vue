@@ -38,8 +38,8 @@
       </ul>
     </div>
     <div class="aside-ad">
-      <a href="http://s.click.taobao.com/ZaXp1Rx" target="_blank" class="ad-box">
-        <img src="http://p1.bpimg.com/567571/e85fb6270effc4c7.jpg">
+      <a href="https://s.click.taobao.com/ZaXp1Rx" target="_blank" class="ad-box">
+        <img src="https://p1.bpimg.com/567571/e85fb6270effc4c7.jpg">
       </a>
     </div>
     <div class="aside-calendar">

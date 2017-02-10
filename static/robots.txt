@@ -1,4 +1,4 @@
 # robots.txt
 User-agent: *
 Disallow:
-Sitemap: http://surmon.me/sitemap.xml
+Sitemap: https://surmon.me/sitemap.xml
