@@ -2,7 +2,6 @@ module.exports = {
   apps: [
     {
       name: "surmon.me",
-      instances: 1,
       watch: true,
       script: "npm",
       args: "run start",
