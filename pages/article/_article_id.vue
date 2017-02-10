@@ -48,8 +48,8 @@
           <span>永久地址：</span>
           <span ref="copy_url_btn"
                 class="site-url"
-                :data-clipboard-text="`http://surmon.me/article/${this.article.id}`">
-                <span>http://surmon.me/article/{{ article.id }}</span>
+                :data-clipboard-text="`https://surmon.me/article/${this.article.id}`">
+                <span>https://surmon.me/article/{{ article.id }}</span>
           </span>
         </p>
         <div class="item">
@@ -77,7 +77,7 @@
       <duoshuo-box v-if="!fetching && article.title"
                    :title="article.title"
                    :thread-key="article.id"
-                   :url="`http://surmon.me/article/${article.id}`">
+                   :url="`https://surmon.me/article/${article.id}`">
       </duoshuo-box>
     </div>
   </div>

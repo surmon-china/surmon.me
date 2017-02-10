@@ -12,7 +12,7 @@
       <comment-hidden-box></comment-hidden-box>
       <duoshuo-box title="Guestbook"
                    thread-key="guestbook"
-                   url="http://surmon.me/guestbook">
+                   url="https://surmon.me/guestbook">
       </duoshuo-box>
     </div>
   </div>

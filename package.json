@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Nuxt.js project",
   "author": "surmon <surmon@foxmail.com>",
-  "private": true,
+  "private": false,
   "dependencies": {
     "axios": "^0.15.3",
     "cheerio": "^0.22.0",
@@ -13,8 +13,8 @@
   },
   "scripts": {
     "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
+    "build": "NODE_ENV=production nuxt build",
+    "start": "NODE_ENV=production nuxt start",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },

@@ -10,7 +10,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import '~assets/sass/mixins';
   @import '~assets/sass/variables';
   .empty-box {
