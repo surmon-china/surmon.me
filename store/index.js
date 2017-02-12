@@ -5,23 +5,6 @@
 */
 
 import Service from '~plugins/axios'
-import { buildArticleRelatedTag } from '~utils/article-tag-releted'
-
-// global getters
-export const getters = {
-  articleDetailContent(state) {
-
-    // 判断文章数据状态
-    if (!Object.is(state.article.detail.data.code, 1)) return ''
-    const content = state.article.detail.data.result.content
-
-    // 判断标签数据状态
-    if (!Object.is(state.tag.data.code, 1)) return content || ''
-    const tags = state.tag.data.result.data
-
-    return buildArticleRelatedTag(content, tags)
-  }
-}
 
 // global actions
 export const actions = {

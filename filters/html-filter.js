@@ -6,18 +6,6 @@
 *
 */
 
-// url对象（a）
-let urlParser = {};
-if (process.BROWSER_BUILD) {
-	urlParser = document.createElement('a')
-}
-
-// 域名过滤器，传入url，返回域名
-export const domain = url => {
-  urlParser.href = url
-  return urlParser.hostname
-}
-
 // 文字溢出过滤器
 export const textOverflow = (text, length) => {
   const _length = length || text.length

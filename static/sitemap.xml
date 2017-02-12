@@ -11,5 +11,10 @@
 <url> <loc>https://surmon.me/tag/javascript</loc> <changefreq>daily</changefreq> <priority>0.6</priority> </url>
 <url> <loc>https://surmon.me/category/code</loc> <changefreq>daily</changefreq> <priority>0.6</priority> </url>
 <url> <loc>https://surmon.me/category/think</loc> <changefreq>daily</changefreq> <priority>0.6</priority> </url>
+<url> <loc>https://surmon.me/article/30</loc> <lastmod>2017-02-11T11:29:50.071Z</lastmod> <changefreq>daily</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://surmon.me/article/29</loc> <lastmod>2017-02-11T11:25:57.412Z</lastmod> <changefreq>daily</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://surmon.me/article/28</loc> <lastmod>2017-02-11T11:19:09.816Z</lastmod> <changefreq>daily</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://surmon.me/article/27</loc> <lastmod>2017-02-11T07:43:56.336Z</lastmod> <changefreq>daily</changefreq> <priority>0.8</priority> </url>
+<url> <loc>https://surmon.me/article/26</loc> <lastmod>2017-02-09T03:17:15.021Z</lastmod> <changefreq>daily</changefreq> <priority>0.8</priority> </url>
 <url> <loc>https://surmon.me/article/25</loc> <lastmod>2017-02-08T16:38:18.171Z</lastmod> <changefreq>daily</changefreq> <priority>0.8</priority> </url>
 </urlset>
