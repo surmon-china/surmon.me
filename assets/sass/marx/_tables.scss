@@ -8,8 +8,8 @@ caption {
 }
 
 thead th {
-  border: 0;
-  border-bottom: 2px solid $dividers;
+  // border-bottom: 2px solid $dividers;
+  background-color: $module-hover-bg;
   text-align: left;
 }
 
@@ -19,8 +19,11 @@ tr {
 
 th,
 td {
-  border-bottom: $border;
-  padding: $md-pad;
+  // border-bottom: $border;
+  // padding: $md-pad;
+  vertical-align: inherit;
+  border: 1px solid #ddd;
+  padding: .8rem 1.5rem;
   vertical-align: inherit;
 }
 

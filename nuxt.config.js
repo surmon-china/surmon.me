@@ -16,6 +16,7 @@ module.exports = {
     vendor: [
       'axios',
       'swiper',
+      'marked',
       'cheerio',
       'clipboard',
       'highlight.js'
@@ -43,6 +44,7 @@ module.exports = {
     '~plugins/highlight.js',
     '~plugins/filters.js',
     '~plugins/swiper.js',
+    '~plugins/marked.js',
     '~plugins/vue-empty.js',
     // '~plugins/vue-disqus.js',
     // '~plugins/vue-loading.js',
@@ -82,7 +84,7 @@ module.exports = {
   },
   css: [
     'swiper/dist/css/swiper.css',
-    'highlight.js/styles/agate.css',
+    'highlight.js/styles/ocean.css',
     { src: '~assets/sass/app.scss', lang: 'sass' }
   ]
 }
