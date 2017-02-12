@@ -5,6 +5,7 @@ $module-bg: rgba(255,255,255,0.6);
 $module-hover-bg: rgba(197,197,197,0.4);
 
 //Other
+$radius: 2px;
 $navbar-height: 4.5em;
 
 //Basic stylings
@@ -48,13 +49,13 @@ $font-family: $sans-serif;
 
 //Typography
 $font-size-base: 14px;
-$font-size-large: 1.2em;
-$font-size-small: .85em;
+$font-size-large: 1.2rem;
+$font-size-small: .85rem;
 $font-size-h1: 2rem;
 $font-size-h2: 1.75rem;
 $font-size-h3: 1.5rem;
-$font-size-h4: 1.2em;
-$font-size-h5: $font-size-base;
+$font-size-h4: 1.2rem;
+$font-size-h5: 1rem;
 $font-size-h6: $font-size-small;
 $line-height-base: 1.4;
 

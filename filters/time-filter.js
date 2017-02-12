@@ -26,7 +26,9 @@ export const toLocalString = date => {
 
 // YMDHMS时间转换过滤器
 export const toYMD = date => {
-  return date ? date.toString().substr(0, 11) : date
+  if (!date) return date
+  let string = date.toString()
+  return string.substr(0, string.indexOf('午') + 1)
 }
 
 // 秒转为小时分钟过滤器
