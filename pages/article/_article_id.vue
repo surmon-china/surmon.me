@@ -272,18 +272,24 @@
           }
         }
 
+        code {
+          color: #bd4147;
+        }
+
         pre {
           margin-bottom: 1em;
 
           > code {
             margin: 0;
-            padding: 3.8em 1em 1em 1em;
+            padding: 1em;
             line-height: 1.6em;
             background-color: rgba(0, 0, 0, 0.8);
             position: relative;
             display: block;
+            // font-size: .95em;
             color: rgba(255, 255, 255, 0.87);
 
+            /*
             &:before {
               color: white;
               content: "CODE "attr(class);
@@ -300,6 +306,7 @@
               text-transform: uppercase;
               text-align: center;
             }
+            */
           }
         }
       }
