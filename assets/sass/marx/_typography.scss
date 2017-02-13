@@ -78,7 +78,7 @@ pre {
 
 code {
   // color: $text;
-  font-family: mono,Consolas,Monaco,'Andale Mono',Consolas,Courier New, "Microsoft YaHei", "微软雅黑";
+  // font-family: mono,Consolas,Monaco,'Andale Mono',Consolas,Courier New, "Microsoft YaHei", "微软雅黑";
   // font-size: $font-size-base;
   line-height: 2em;
   margin: 0;
@@ -86,6 +86,7 @@ code {
   vertical-align: baseline;
   word-break: break-all;
   word-wrap: break-word;
+  overflow: auto;
 }
 
 a {
@@ -115,8 +116,11 @@ ol {
 
 blockquote {
   margin: $md-pad 0;
-  padding: $md-pad;
   text-indent: 0em;
+  background-color: $module-hover-bg;
+  border-left: .5em solid #aaa;
+  padding: .5em 1em;
+  padding-left: 1.5em;
 }
 
 figcaption {
