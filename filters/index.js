@@ -1,8 +1,7 @@
-import { domain, textOverflow, numberFormat } from './html-filter.js'
+import { textOverflow, numberFormat } from './html-filter.js'
 import { fromNow, toYMD, toHMS, toLocalString } from './time-filter.js'
 
 module.exports = {
-  domain,
   textOverflow,
   numberFormat,
 

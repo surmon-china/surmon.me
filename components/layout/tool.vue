@@ -7,7 +7,7 @@
            target="_blank">
           <i class="iconfont icon-comment"></i>
         </a>
-        <button class="to-top" @click="totop">
+        <button class="to-top" @click="totop()">
           <i class="iconfont icon-totop"></i>
         </button>
       </div>
@@ -19,18 +19,31 @@
   export default {
     name: 'tool',
     methods: {
-      totop() {
-        const scrollTo = (element, to, duration) => {
-          if (duration <= 0) return
-          const difference = to - element.scrollTop
-          const perTick = difference / duration * 10
-          setTimeout(() => {
-            element.scrollTop = element.scrollTop + perTick
-            if (element.scrollTop == to) return
-            scrollTo(element, to, duration - 10)
-          }, 10)
+      totop(acceleration = 0.1, stime = 10) {
+        let [x1, y1, x2, y2, x3, y3] = [0, 0, 0, 0, 0, 0]
+        if (document.documentElement) {
+          x1 = document.documentElement.scrollLeft || 0
+          y1 = document.documentElement.scrollTop || 0
         }
-        scrollTo(document.body, 0, 160)
+        if (document.body) {
+          x2 = document.body.scrollLeft || 0
+          y2 = document.body.scrollTop || 0
+        }
+        x3 = window.scrollX || 0
+        y3 = window.scrollY || 0
+        // 滚动条到页面顶部的水平距离
+        let x = Math.max(x1, Math.max(x2, x3))
+        // 滚动条到页面顶部的垂直距离
+        let y = Math.max(y1, Math.max(y2, y3))
+        // 滚动距离 = 目前距离 / 速度, 因为距离原来越小, 速度是大于 1 的数, 所以滚动距离会越来越小
+        let speeding = 1 + acceleration
+        window.scrollTo(Math.floor(x / speeding), Math.floor(y / speeding))
+        // 如果距离不为零, 继续调用函数
+        if(x > 0 || y > 0) {
+          window.setTimeout(() => {
+            this.totop(acceleration, stime)
+          }, stime)
+        }
       }
     }
   }
