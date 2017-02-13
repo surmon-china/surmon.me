@@ -38,7 +38,7 @@
       </ul>
     </div>
     <div class="aside-ad">
-      <a href="https://s.click.taobao.com/ZaXp1Rx" target="_blank" class="ad-box">
+      <a href="https://s.click.taobao.com/ZaXp1Rx" target="_blank" rel="external nofollow" class="ad-box">
         <img src="https://p1.bpimg.com/567571/e85fb6270effc4c7.jpg">
       </a>
     </div>
