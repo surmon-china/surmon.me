@@ -11,29 +11,29 @@
       <i class="iconfont icon-search" v-if="currentKeyword"></i>
     </p>
     <!-- category -->
-    <h5 class="title" v-if="currentCategory">
+    <h4 class="title" v-if="currentCategory">
       <span>{{ currentCategory.description || 'Nothing.' }}</span>
-    </h5>
+    </h4>
     <!-- tag -->
-    <h5 class="title" v-if="currentTag">
+    <h4 class="title" v-if="currentTag">
       <span>{{ currentTag.name }}</span>
       <span>&nbsp;-&nbsp;</span>
       <span>{{ currentTag.description || 'Nothing.' }}</span>
-    </h5>
+    </h4>
     <!-- data -->
-    <h5 class="title" v-if="currentDate">
+    <h4 class="title" v-if="currentDate">
       <span>发布于</span>
       <span>&nbsp;{{ currentDate }}&nbsp;</span>
       <span>的所有文章</span>
-    </h5>
+    </h4>
       <!-- search -->
-    <h5 class="title" v-if="currentKeyword">
+    <h4 class="title" v-if="currentKeyword">
       <span>和</span>
       <span>&nbsp;"</span>
       <span>{{ currentKeyword }}</span>
       <span>"&nbsp;</span>
       <span>有关的所有文章</span>
-    </h5>
+    </h4>
   </div>
 </template>
 
@@ -107,6 +107,7 @@
     }
 
     > .title {
+      font-size: 1em;
       text-align: center;
       text-transform: capitalize;
     }

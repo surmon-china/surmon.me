@@ -7,9 +7,9 @@
         </router-link>
       </div>
       <div class="item-body">
-        <h5 class="item-title">
+        <h4 class="item-title">
           <router-link :to="`/article/${item.id}`">{{ item.title }}</router-link>
-        </h5>
+        </h4>
         <p class="item-description">{{ item.description }}</p>
         <div class="item-meta">
           <span class="date">
