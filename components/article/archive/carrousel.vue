@@ -12,7 +12,7 @@
             <div class="content">
               <img :src="buildThumb(article.thumb)">
               <router-link :to="`/article/${article.id}`" class="title">
-                <span>{{ index + article.title }}</span>
+                <span>{{ article.title }}</span>
               </router-link>
             </div>
           </div>
