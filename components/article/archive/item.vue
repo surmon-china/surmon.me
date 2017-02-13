@@ -109,6 +109,7 @@
         height: 8.5em;
 
         > .item-title {
+          font-size: 1em;
           font-weight: bold;
           color: #333;
           margin-top: .2em;
