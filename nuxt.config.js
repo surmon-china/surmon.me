@@ -68,7 +68,7 @@ module.exports = {
     ],
     script: [
       { innerHTML: `window.duoshuoQuery = { short_name: '${apiConfig.duoshuoShortName}' }`, type: 'text/javascript' },
-      { src: 'https://static.duoshuo.com/embed.js' }
+      { src: '/scripts/duoshuo.embed.js' }
     ],
     noscript: [
       { innerHTML: 'This website requires JavaScript.' }
