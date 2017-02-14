@@ -15,13 +15,16 @@
         </keep-alive>
       </transition>
     </main>
-    <footer-view></footer-view>
     <tool-view></tool-view>
+    <!-- <share-view></share-view> -->
+    <footer-view></footer-view>
   </div>
 </template>
 
 <script>
+  // import Share from '~components/layout/share'
   import { Background, Header, Footer, Aside, Tool, Nav } from '~components/layout'
+  // console.log(Share)
   export default {
     name: 'app',
     components: {
@@ -29,6 +32,7 @@
       HeaderView: Header,
       FooterView: Footer,
       AsideView: Aside,
+      // ShareView: Share,
       ToolView: Tool,
       NavView: Nav
     },

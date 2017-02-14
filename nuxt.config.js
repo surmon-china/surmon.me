@@ -39,6 +39,7 @@ module.exports = {
   plugins: [
     '~plugins/ga.js',
     '~plugins/axios.js',
+    '~plugins/share.js',
     '~plugins/cheerio.js',
     '~plugins/clipboard.js',
     '~plugins/highlight.js',
@@ -59,7 +60,7 @@ module.exports = {
       { charset: 'utf-8' },
       { name: 'author', content: 'surmon@foxmail.com' },
       { name: 'viewport', content: 'initial-scale=1, maximum-scale=1, user-scalable=no' },
-      { hid: 'keywords', name: 'keywords', content: 'surmon, 司马萌, 前端技术开发, javascript' },
+      { hid: 'keywords', name: 'keywords', content: 'surmon, 司马萌, 前端技术开发, javascript技术' },
       { hid: 'description', name: 'description', content: '凡心所向 素履所往 生如逆旅 一苇以航' }
     ],
     link: [
@@ -67,8 +68,42 @@ module.exports = {
       { rel: 'author', type: 'text/plain', href: '/humans.txt' }
     ],
     script: [
-      { innerHTML: `window.duoshuoQuery = { short_name: '${apiConfig.duoshuoShortName}' }`, type: 'text/javascript' },
-      { src: '/scripts/duoshuo.embed.js' }
+      { type: 'text/javascript',
+        innerHTML: `
+          window.duoshuoQuery = { 
+            short_name: '${apiConfig.duoshuoShortName}' 
+          }`
+          // document.ready = () => {
+          //   var a2a_config = a2a_config || {};
+          //   a2a_config.linkname = "Surmon.me";
+          //   a2a_config.linkurl = "https://surmon.me";
+          //   a2a_config.onclick = 1;
+          //   a2a_config.locale = "zh-CN";
+          //   // a2a_config.prioritize = ["wechat", "sina_weibo", "linkedin", "twitter", "qzone", "facebook", "google_plus", "wordpress"];
+            
+          //   (function(){
+          //     var a2a_config = a2a_config || {};
+          //     a2a_config.locale = "zh-CN";
+          //     var a = document.createElement('script');
+          //     a.type = 'text/javascript';
+          //     a.async = true;
+          //     a.src = 'https://static.addtoany.com/menu/page.js';
+          //     var s = document.getElementsByTagName('script')[0];
+          //     s.parentNode.insertBefore(a, s);
+          //   })();
+          //   window.onNuxtReady((app) => {
+          //     app.$nuxt.$on('routeChanged', (to, from) => {
+          //       setTimeout(() => {
+          //         console.log('refresh')
+          //         a2a.init('page', { target: '.article-share' });
+          //       }, 500)
+          //     })
+          //   })
+          // }
+        // `
+      },
+      { src: '/scripts/duoshuo.embed.js' },
+      // { src: 'https://static.addtoany.com/menu/page.js', type: 'text/javascript', async: 'async' }
     ],
     noscript: [
       { innerHTML: 'This website requires JavaScript.' }

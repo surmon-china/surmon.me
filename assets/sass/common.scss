@@ -35,6 +35,55 @@
   src: url('/fonts/CenturyGothic.TTF');
 }
 
+.a2a_menu {
+  border: none!important;
+  border-radius: 0px!important;
+  padding: .2em!important;
+
+  &.a2a_full {
+
+    > .a2a_full_header {
+      padding: .5em 1em!important;
+
+      > .a2a_menu_find_container {
+        border: none!important;
+        border-radius: 0!important;
+        background-color: #e6e6e6!important;
+
+        span.a2a_s_find {
+
+          svg {
+            background-color: transparent!important;
+          }
+        }
+      }
+    }
+
+    > .a2a_full_services {
+      padding: .2em .5em!important;
+    }
+
+    > .a2a_full_footer {
+      display: none!important;
+    }
+
+    a {
+      color: #000!important;
+      font-size: 14px!important;
+      margin-bottom: .5em!important;
+    }
+  }
+}
+
+#a2apage_dropdown {
+  display: none!important;
+}
+
+#a2apage_show_more_less {
+  color: inherit!important;
+  padding: .5em!important;
+}
+
 .slide-up-enter-active, .slide-up-leave-active {
   transition: all .4s cubic-bezier(0, 1.2, 1, 0.5);
   opacity: .7;
