@@ -64,6 +64,9 @@ $ npm run lint
 - ~~代码高亮在高亮插件（jsdom+marked）解析的部分，把code的class找到lang给pre~~
 - ~~滚动时需要平滑滚动~~
 
+- ~~多数https~~
+- ~~同步文章到多说~~
+
 - error.vue不支持自定义布局，1.0改进
 - 音乐播放器的实现
 - movie的单独列表页和详情页
