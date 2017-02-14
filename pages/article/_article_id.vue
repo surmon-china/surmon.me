@@ -12,6 +12,25 @@
         </div>
       </transition>
     </div>
+    <div class="share-box" v-if="!fetching && article.title">
+      <div class="a2a_kit a2a_kit_size_32 a2a_default_style article-share">
+        <a class="a2a_button_wechat"></a>
+        <a class="a2a_button_sina_weibo"></a>
+        <a class="a2a_button_qzone"></a>
+        <a class="a2a_button_douban"></a>
+        <a class="a2a_button_renren"></a>
+        <a class="a2a_button_evernote"></a>
+        <a class="a2a_button_facebook"></a>
+        <a class="a2a_button_twitter"></a>
+        <a class="a2a_button_google_plus"></a>
+        <a class="a2a_button_pinterest"></a>
+        <a class="a2a_button_wordpress"></a>
+        <a class="a2a_button_linkedin"></a>
+        <a class="a2a_button_email"></a>
+        <a class="a2a_button_copy_link"></a>
+        <a class="a2a_dd" @click="fullShareMenu()"></a>
+      </div>
+    </div>
     <transition name="module" mode="out-in">
       <div class="metas" v-if="!fetching && article.title">
         <p class="item">
@@ -148,6 +167,9 @@
       }
     },
     methods: {
+      fullShareMenu() {
+        window.a2a.show_full()
+      },
       clipboard() {
         if (this.article.title) {
           this.clipboard = new Clipboard(this.$refs.copy_url_btn)
@@ -307,6 +329,34 @@
               text-align: center;
             }
             */
+          }
+        }
+      }
+    }
+
+    > .share-box {
+      padding: .8em;
+      margin-bottom: 1em;
+      background-color: $module-bg;
+
+      .article-share {
+
+        a {
+          padding: 0;
+          margin-right: .47em;
+
+          .a2a_svg {
+            border-radius: 0;
+            padding: .4em;
+            filter: grayscale(.8);
+
+            &:hover {
+              filter: grayscale(0);
+            }
+          }
+
+          &:last-of-type {
+            margin-right: 0;
           }
         }
       }
