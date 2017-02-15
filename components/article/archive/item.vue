@@ -10,7 +10,7 @@
         <h4 class="item-title">
           <router-link :to="`/article/${item.id}`">{{ item.title }}</router-link>
         </h4>
-        <p class="item-description">{{ item.description }}</p>
+        <p class="item-description" style="-webkit-box-orient: vertical;">{{ item.description }}</p>
         <div class="item-meta">
           <span class="date">
             <i class="iconfont icon-clock"></i>
@@ -135,12 +135,9 @@
           margin-bottom: 0.3em;
           height: 5em;
           line-height: 1.8em;
-          // word-break: break-all;
           overflow: hidden;
           text-overflow: ellipsis;
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
+          @include clamp(3);
         }
 
         > .item-meta {
