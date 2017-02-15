@@ -39,7 +39,7 @@ module.exports = {
   plugins: [
     '~plugins/ga.js',
     '~plugins/axios.js',
-    '~plugins/share.js',
+    // '~plugins/share.js',
     '~plugins/cheerio.js',
     '~plugins/clipboard.js',
     '~plugins/highlight.js',
