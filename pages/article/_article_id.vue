@@ -263,7 +263,7 @@
         blockquote {
 
           p {
-            text-indent: 0em;
+            // text-indent: 0em;
 
             &:last-child {
               margin-bottom: 0;
