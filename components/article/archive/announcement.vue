@@ -12,7 +12,7 @@
       <div class="swiper-container swiper" ref="swiper" v-if="announcement.data.result.data.length">
         <div class="swiper-wrapper">
           <div class="swiper-slide item" v-for="(announcement, index) in announcement.data.result.data.slice(0, 9)">
-            <div class="content" v-html="announcement.content"></div>
+            <div class="content" v-html="markedContent(announcement.content)"></div>
           </div>
         </div>
         <div class="swiper-button-prev">
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+  import marked from '~plugins/marked'
   export default {
     name: 'index-announcement',
     data() {
@@ -70,6 +71,9 @@
         if (!this.swiper) {
           this.swiper.destroy()
         }
+      },
+      markedContent(content) {
+        return marked(content)
       }
     }
   }
