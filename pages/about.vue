@@ -46,7 +46,7 @@
                   <!-- <p>实践：PHP, Wordpress, Node.js, Express, MongoDB, Mysql, Redis, Linux...</p> -->
                   <!-- <p>工程：Grunt, Gulp, Webpack, Npm, Yarn, Babel...</p> -->
                   <!-- <p>关注：WebVR, WebRTC, WebComponent, Service Worker, AR, VR, AI...</p> -->
-                  <p>技术. 过<b>硬</b></p>
+                  <p>技术过<b>硬</b>.<span>&nbsp;&nbsp;</span>向往硅谷</p>
                 </div>
               </div>
             </div>

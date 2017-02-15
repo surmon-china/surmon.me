@@ -348,9 +348,11 @@
           .a2a_svg {
             border-radius: 0;
             padding: .4em;
+            opacity: .6;
             filter: grayscale(.8);
 
             &:hover {
+              opacity: 1;
               filter: grayscale(0);
             }
           }
