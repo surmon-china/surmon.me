@@ -85,23 +85,8 @@
 <script>
   import ShareBox from '~components/layout/share'
   import Clipboard from '~plugins/clipboard'
-  import Hljs from '~plugins/highlight.js'
   import marked from '~plugins/marked'
   import buildArticleRelatedTag from '~utils/article-tag-releted'
-
-  marked.setOptions({
-    renderer: new marked.Renderer(),
-    gfm: true,
-    tables: true,
-    breaks: false,
-    pedantic: false,
-    sanitize: false,
-    smartLists: true,
-    smartypants: false,
-    highlight(code) {
-      return Hljs.highlightAuto(code).value;
-    }
-  });
 
   export default {
     name: 'article-detail',
