@@ -216,7 +216,15 @@
           display: block;
           text-align: center;
           border-radius: $radius;
+          transform: rotate(0deg);
           border: .7rem solid $module-hover-bg;
+          transition: .25s border, .25s transform;
+
+          &:hover {
+            transform: rotate(1deg);
+            border-color: rgba(144, 144, 144, 0.3);
+            transition: .25s border, .25s transform;
+          }
         }
 
         code {
