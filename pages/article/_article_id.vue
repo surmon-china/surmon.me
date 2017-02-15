@@ -8,29 +8,10 @@
         </empty-box>
       </transition>
       <transition name="module" mode="out-in">
-        <div class="content" v-html="articleContent" v-if="!fetching && article.content">
-        </div>
+        <div class="content" v-html="articleContent" v-if="!fetching && article.content"></div>
       </transition>
     </div>
-    <div class="share-box" v-if="!fetching && article.title">
-      <div class="a2a_kit a2a_kit_size_32 a2a_default_style article-share">
-        <a class="a2a_button_wechat"></a>
-        <a class="a2a_button_sina_weibo"></a>
-        <a class="a2a_button_qzone"></a>
-        <a class="a2a_button_douban"></a>
-        <a class="a2a_button_renren"></a>
-        <a class="a2a_button_evernote"></a>
-        <a class="a2a_button_facebook"></a>
-        <a class="a2a_button_twitter"></a>
-        <a class="a2a_button_google_plus"></a>
-        <a class="a2a_button_pinterest"></a>
-        <a class="a2a_button_wordpress"></a>
-        <a class="a2a_button_linkedin"></a>
-        <a class="a2a_button_email"></a>
-        <a class="a2a_button_copy_link"></a>
-        <a class="a2a_dd" @click="fullShareMenu()"></a>
-      </div>
-    </div>
+    <share-box class="article-share" v-if="!fetching && article.content"></share-box>
     <transition name="module" mode="out-in">
       <div class="metas" v-if="!fetching && article.title">
         <p class="item">
@@ -102,6 +83,7 @@
 </template>
 
 <script>
+  import ShareBox from '~components/layout/share'
   import Clipboard from '~plugins/clipboard'
   import Hljs from '~plugins/highlight.js'
   import marked from '~plugins/marked'
@@ -141,6 +123,9 @@
           { hid: 'description', name: 'description', content: article.description }
         ]
       }
+    },
+    components: {
+      ShareBox
     },
     mounted() {
       this.clipboard()
@@ -334,33 +319,13 @@
       }
     }
 
-    > .share-box {
+    .article-share {
       padding: .8em;
       margin-bottom: 1em;
       background-color: $module-bg;
 
-      .article-share {
-
-        a {
-          padding: 0;
-          margin-right: .47em;
-
-          .a2a_svg {
-            border-radius: 0;
-            padding: .4em;
-            opacity: .6;
-            filter: grayscale(.8);
-
-            &:hover {
-              opacity: 1;
-              filter: grayscale(0);
-            }
-          }
-
-          &:last-of-type {
-            margin-right: 0;
-          }
-        }
+      > .share-box {
+        
       }
     }
 

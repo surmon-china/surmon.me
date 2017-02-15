@@ -35,53 +35,72 @@
   src: url('/fonts/CenturyGothic.TTF');
 }
 
-.a2a_menu {
-  border: none!important;
-  border-radius: 0px!important;
-  padding: .2em!important;
+#share {
 
-  &.a2a_full {
+  &.article-share {
 
-    > .a2a_full_header {
-      padding: .5em 1em!important;
+    > .share-box {
+      opacity: .6;
 
-      > .a2a_menu_find_container {
-        border: none!important;
-        border-radius: 0!important;
-        background-color: #e6e6e6!important;
+      &:hover {
+        opacity: 1;
+      }
 
-        span.a2a_s_find {
+      > .share-link {
+        width: 3em;
+        height: 2.2em;
+        line-height: 2.3em;
+        background-color: #eee;
+        margin-right: .445em;
 
-          svg {
-            background-color: transparent!important;
-          }
+        > .iconfont {
+          font-size: 1.3em;
+        }
+
+        &:last-child {
+          margin-right: 0;
         }
       }
     }
+  }
 
-    > .a2a_full_services {
-      padding: .2em .5em!important;
-    }
+  &.sidebar-share {
+    position: fixed;
+    top: 25%;
+    left: 0;
+    width: 4em;
 
-    > .a2a_full_footer {
-      display: none!important;
-    }
+    > .share-box {
+      opacity: .4;
 
-    a {
-      color: #000!important;
-      font-size: 14px!important;
-      margin-bottom: .5em!important;
+      &:hover {
+        opacity: 1;
+      }
+
+      > .share-link {
+        width: 3em;
+        height: 2.5em;
+        line-height: 2.6em;
+        background-color: rgba(195, 195, 195, 0.5);
+
+        > .iconfont {
+          font-size: 1.3em;
+        }
+
+        &.renren,
+        &.evernote,
+        &.google-plus,
+        &.linkedin,
+        &.mail {
+          display: none;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
     }
   }
-}
-
-#a2apage_dropdown {
-  display: none!important;
-}
-
-#a2apage_show_more_less {
-  color: inherit!important;
-  padding: .5em!important;
 }
 
 .slide-up-enter-active, .slide-up-leave-active {
