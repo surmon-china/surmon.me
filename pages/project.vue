@@ -189,7 +189,8 @@
           }
 
           > .title {
-            margin-bottom: 1em;
+            font-weight: bold;
+            margin-bottom: 1.2em;
             text-transform: capitalize;
           }
 
