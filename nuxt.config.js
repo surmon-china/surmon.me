@@ -73,33 +73,33 @@ module.exports = {
           window.duoshuoQuery = { 
             short_name: '${apiConfig.duoshuoShortName}' 
           }`
-          // document.ready = () => {
-          //   var a2a_config = a2a_config || {};
-          //   a2a_config.linkname = "Surmon.me";
-          //   a2a_config.linkurl = "https://surmon.me";
-          //   a2a_config.onclick = 1;
-          //   a2a_config.locale = "zh-CN";
-          //   // a2a_config.prioritize = ["wechat", "sina_weibo", "linkedin", "twitter", "qzone", "facebook", "google_plus", "wordpress"];
+        //   document.ready = () => {
+        //     var a2a_config = a2a_config || {};
+        //     a2a_config.linkname = "Surmon.me";
+        //     a2a_config.linkurl = "https://surmon.me";
+        //     a2a_config.onclick = 1;
+        //     a2a_config.locale = "zh-CN";
+        //     // a2a_config.prioritize = ["wechat", "sina_weibo", "linkedin", "twitter", "qzone", "facebook", "google_plus", "wordpress"];
             
-          //   (function(){
-          //     var a2a_config = a2a_config || {};
-          //     a2a_config.locale = "zh-CN";
-          //     var a = document.createElement('script');
-          //     a.type = 'text/javascript';
-          //     a.async = true;
-          //     a.src = 'https://static.addtoany.com/menu/page.js';
-          //     var s = document.getElementsByTagName('script')[0];
-          //     s.parentNode.insertBefore(a, s);
-          //   })();
-          //   window.onNuxtReady((app) => {
-          //     app.$nuxt.$on('routeChanged', (to, from) => {
-          //       setTimeout(() => {
-          //         console.log('refresh')
-          //         a2a.init('page', { target: '.article-share' });
-          //       }, 500)
-          //     })
-          //   })
-          // }
+        //     (function(){
+        //       var a2a_config = a2a_config || {};
+        //       a2a_config.locale = "zh-CN";
+        //       var a = document.createElement('script');
+        //       a.type = 'text/javascript';
+        //       a.async = true;
+        //       a.src = 'https://static.addtoany.com/menu/page.js';
+        //       var s = document.getElementsByTagName('script')[0];
+        //       s.parentNode.insertBefore(a, s);
+        //     })();
+        //     window.onNuxtReady((app) => {
+        //       app.$nuxt.$on('routeChanged', (to, from) => {
+        //         setTimeout(() => {
+        //           console.log('refresh')
+        //           a2a.init('page', { target: '.article-share' });
+        //         }, 500)
+        //       })
+        //     })
+        //   }
         // `
       },
       { src: '/scripts/duoshuo.embed.js' },

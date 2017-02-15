@@ -91,7 +91,9 @@
       },
       articles() {
         let articles = this.$store.state.article.hot.data.response || []
-        articles = articles.filter(a => !Object.is(Number(a.thread_key), NaN) && !!a.title)
+        articles = articles.filter(a => {
+          return !!a.thread_key && !Object.is(Number(a.thread_key), NaN) && !!a.title
+        })
         return articles
       },
       articleFetching() {
