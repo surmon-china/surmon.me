@@ -16,7 +16,7 @@
       </transition>
     </main>
     <tool-view></tool-view>
-    <share-view></share-view>
+    <share-view class="sidebar-share"></share-view>
     <footer-view></footer-view>
   </div>
 </template>
