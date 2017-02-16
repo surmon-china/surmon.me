@@ -202,7 +202,7 @@
           text-align: center;
           border-radius: $radius;
           transform: rotate(0deg);
-          border: .7rem solid $module-hover-bg;
+          border: .5rem solid $module-hover-bg;
           transition: .25s border, .25s transform;
 
           &:hover {
