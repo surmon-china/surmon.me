@@ -1,6 +1,8 @@
 # Surmon.me
 
-> Vue-Blog By Nuxt.js
+> Vue-Blog By Nuxt.js + Vue.js + Vuex + Vue-router + Axios 
+
+> [Online Blog](https://surmon.me/)
 
 ## Build Setup
 
@@ -22,7 +24,7 @@ $ npm run generate
 $ npm run lint
 ```
 
-# todos
+## Todos 更新记录
 
 - ~~默认文章缩略图需要设计为<>图标~~
 - ~~fav.ico~~
@@ -47,39 +49,33 @@ $ npm run lint
 - ~~多说功能需要整合且生效~~
 - ~~热门文章的接口需要和多说整合~~
 - ~~readme完善~~
-
-- ~~服务端需要一个转接接口 用于服务project对github的代理访问~~
 - ~~vue2有bug~~
 - ~~vue-meta__dangerouslyDisableSanitizers有bug~~
-
 - ~~google统计代码~~
 - ~~上线自动部署~~
 - ~~全站https~~
 - ~~网站地图需要生成一个xml页面~~
 - ~~路由meta信息需要定义（1.0版本的中间件来实现）~~
-
 - ~~时间日期裁剪不能以字数决定~~
 - ~~文章页标题太小，代码高亮插件取消掉标题~~
 - ~~文章评论回调~~
 - ~~代码高亮在高亮插件（jsdom+marked）解析的部分，把code的class找到lang给pre~~
 - ~~滚动时需要平滑滚动~~
-
 - ~~多数https~~
 - ~~同步文章到多说~~
-- ~控制台加个人信息~
-- ~图片要有hover渐变效果~
+- ~~控制台加个人信息~~
+- ~~图片要有hover渐变效果~~
 
+- 图片可以在tag解析时，解析图片，给图片绑定事件，导致图片弹窗
 - error.vue不支持自定义布局，1.0改进
 - 音乐播放器的实现
 - movie的单独列表页和详情页
 
-# 目录结构
+## 目录结构
 ```
 nuxt.js-blog/
    |
-   ├──assets/                    * 经webpack处理的静态资源
-   |
-   ├──components/                * webpack构建配置
+   ├──assets/                    * 需经webpack处理的静态资源
    |
    ├──components/                * 所有组件
    │   │
@@ -89,15 +85,15 @@ nuxt.js-blog/
    │   │
    │   └──*****                  * 其他复用组件
    │
-   │──middleware/                * Nuxt.js中间件
+   │──middleware/                * Nuxt.js中间件，c/s渲染均会在路由改变前执行，需next/返回promise，支持异步
    |
    ├──filters/                   * 过滤器
    │
-   ├──layouts/                   * Nuxt.js宿主元素布局模板，默认default
+   ├──layouts/                   * Nuxt.js宿主元素布局模板，默认default，目前不可更改，error为渲染失败时的页面模板，目前不可指定layout属性
    |
    ├──pages/                     * Nuxt.js的页面文件，会根据文件生成路由
    │
-   │──plugins/                   * 第三方组件 + 自有js库
+   │──plugins/                   * 第三方组件 + 自有js库 + 其他插件性质的脚本
    │
    │──static/                    * 不经编译器处理的静态资源
    │
@@ -105,9 +101,9 @@ nuxt.js-blog/
    │   │
    │   ├──*******                * 各数据模块
    │   │
-   │   └──index                  * 根模块（actions）
+   │   └──index                  * 根模块（因为异步操作较少，目前仅用来存放actions）
    │
-   │──package.json               * what npm uses to manage it's dependencies
+   │──package.json               * 包信息
    │
    │──.eslintrc.js               * Eslint配置
    │
@@ -116,6 +112,8 @@ nuxt.js-blog/
    │──.gitignore                 * Git忽略文件配置
    │
    │──nuxt.config.js             * Nuxt.js程序配置
+   │
+   │──ecosystem.config           * pm2部署配置（日志文件的路径需要自己修改）
    │
    └──.editorconfig              * 编码风格配置
 ```
