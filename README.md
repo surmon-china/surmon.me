@@ -1,8 +1,13 @@
-# Surmon.me
+## Surmon.me
 
 > Vue-Blog By Nuxt.js + Vue.js + Vuex + Vue-router + Axios 
 
 > [Online Blog](https://surmon.me/)
+
+## 首页
+
+![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshot/index.png)
+
 
 ## Build Setup
 
