@@ -3,7 +3,10 @@ const webpack = require('webpack')
 const apiConfig = require('./api.config')
 
 module.exports = {
-  cache: true,
+  cache: {
+    max: 20,
+    maxAge: 600000
+  },
   loading: { color: '#2196f3' },
   build: {
     // 对webpack的扩展
