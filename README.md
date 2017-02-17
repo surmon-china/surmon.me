@@ -1,8 +1,10 @@
 ## Surmon.me
 
-> Vue-Blog By Nuxt.js + Vue.js + Vuex + Vue-router + Axios 
+Vue-Blog By Nuxt.js + Vue.js + Vuex + Vue-router + Axios 
 
-> [Online Blog](https://surmon.me/)
+[Online Blog](https://surmon.me/)
+
+If you want to run the applaction, you need install the [nodepress](https://github.com/surmon-china/nodepress) service.
 
 ## 首页
 

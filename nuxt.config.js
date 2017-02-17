@@ -12,6 +12,7 @@ module.exports = {
     // 对webpack的扩展
     extend(webpackConfig) {
       webpackConfig.resolve.alias['~utils'] = path.join(__dirname, 'utils');
+      webpackConfig.resolve.alias['~static'] = path.join(__dirname, 'static');
       webpackConfig.resolve.alias['~filters'] = path.join(__dirname, 'filters');
       webpackConfig.resolve.alias['~services'] = path.join(__dirname, 'services');
     },

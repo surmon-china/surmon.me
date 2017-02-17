@@ -1,5 +1,8 @@
 <template>
-  <canvas id="canvas-background"></canvas>
+  <div class="global-background">
+    <div class="background-image"></div>
+    <canvas class="background-canvas" ref="canvas"></canvas>
+  </div>
 </template>
 
 <script>
@@ -16,7 +19,7 @@
         const HEIGHT = window.innerHeight
         const POINT = 35
 
-        let canvas = this.$el
+        let canvas = this.$refs.canvas
             canvas.width = WIDTH
             canvas.height = HEIGHT
         let context = canvas.getContext('2d')
@@ -123,3 +126,30 @@
     }
   }
 </script>
+
+<style lang="scss">
+  @import '~assets/sass/variables';
+  .global-background {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background-color: #eee;
+
+    .background-image {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: .3;
+      background: url(~static/images/background.png);
+    }
+
+    .background-canvas {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+  }
+</style>
