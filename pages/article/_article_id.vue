@@ -137,9 +137,6 @@
       }
     },
     methods: {
-      fullShareMenu() {
-        window.a2a.show_full()
-      },
       clipboard() {
         if (this.article.title) {
           this.clipboard = new Clipboard(this.$refs.copy_url_btn)
@@ -196,19 +193,20 @@
         }
 
         img {
-          max-width: 80%;
+          max-width: 100%;
           margin: 0 auto;
           display: block;
           text-align: center;
           border-radius: $radius;
-          transform: rotate(0deg);
           border: .5rem solid $module-hover-bg;
-          transition: .25s border, .25s transform;
+          transition: all .25s;
+          opacity: .7;
+          filter: grayscale(.6);
 
           &:hover {
-            transform: rotate(1deg);
-            border-color: rgba(144, 144, 144, 0.3);
-            transition: .25s border, .25s transform;
+            opacity: 1;
+            filter: grayscale(0);
+            transition: all .25s;
           }
         }
 
