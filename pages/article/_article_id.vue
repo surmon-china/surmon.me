@@ -200,8 +200,8 @@
           border-radius: $radius;
           border: .5rem solid $module-hover-bg;
           transition: all .25s;
-          opacity: .7;
-          filter: grayscale(.6);
+          opacity: .9;
+          filter: grayscale(.05);
 
           &:hover {
             opacity: 1;
