@@ -3,10 +3,10 @@
     <ul class="comment-list">
       <li class="comment-item"  v-for="(comment, id) in comments.parentPosts">
         <span>来自</span>
-        <img :src="comment.author.avatar_url" :alt="comment.author.name" :title="comment.author.name">
+        <img :src="replaceSSL(comment.author.avatar_url)" :alt="comment.author.name" :title="comment.author.name">
         <span class="author">{{ comment.author.name }}</span>
         <span>的评论：</span>
-        <p class="content" v-html="comment.message"></p>
+        <p class="content" v-html="replaceSSL(comment.message)"></p>
         <span>发布于</span> 
         <span>{{ new Date(comment.created_at).toLocaleString() }}</span>
         <span>发布来自</span>
@@ -23,6 +23,11 @@
     computed: {
       comments() {
         return this.$store.state.comment.data
+      }
+    },
+    methods: {
+      replaceSSL(html) {
+        return html.replace(/http:\/\//ig, 'https://')
       }
     }
   }
