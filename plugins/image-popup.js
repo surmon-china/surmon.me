@@ -1,0 +1,47 @@
+/*
+** 只在生成模式的客户端中使用
+*/
+
+if (process.BROWSER_BUILD && process.env.NODE_ENV === 'production') {
+
+  // 销毁图片弹窗
+  const closeImgPopup = () => {
+    let mask = document.getElementById('image-popup')
+    if (mask) {
+      window.onscroll = null
+      mask.setAttribute('class', '')
+      setTimeout(() => {
+        if (mask) {
+          document.body.removeChild(mask)
+        }
+      }, 350)
+    }
+  }
+
+  // 打开图片弹窗
+  const openImgPopup = src => {
+    if (!src) return false
+    let image = document.createElement('img')
+    image.src = src
+    let oldMask = document.getElementById('image-popup')
+    if (oldMask) document.body.removeChild(oldMask)
+    let mask = document.createElement('div')
+    mask.setAttribute('id', 'image-popup')
+    mask.appendChild(image)
+    document.body.appendChild(mask)
+    setTimeout(() => {
+      mask.setAttribute('class', 'display')
+    }, 100)
+    // 监听滚动和点击事件
+    window.onscroll = closeImgPopup
+    mask.onclick = e => {
+      if (!Object.is(e.target.tagName, 'IMG')) {
+        closeImgPopup()
+      }
+    }
+  }
+
+  window.utils = window.utils || {}
+  window.utils.openImgPopup = openImgPopup
+  window.utils.closeImgPopup = closeImgPopup
+}

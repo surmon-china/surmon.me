@@ -42,6 +42,11 @@ const buildArticleRelatedTag = (content, tags) => {
   const buildTextNode = nodes => {
     nodes.forEach((node, index) => {
       if (!['pre', 'code', 'a'].includes(node.tagName)) {
+        // 处理图片
+        if (Object.is(node.tagName, 'img') && node.attribs && node.attribs.src) {
+          $(node).attr('onclick', `window.utils.openImgPopup(\'${node.attribs.src}\')`)
+        }
+        // 处理标签关系
         if (node.data) {
           $(node).replaceWith(buildTagLink(node.data))
         } else if (node.children && node.children.length) {
