@@ -201,11 +201,10 @@
           border: .5rem solid $module-hover-bg;
           transition: all .25s;
           opacity: .9;
-          filter: grayscale(.05);
+          cursor: pointer;
 
           &:hover {
             opacity: 1;
-            filter: grayscale(0);
             transition: all .25s;
           }
         }
