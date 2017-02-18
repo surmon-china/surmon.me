@@ -116,14 +116,14 @@
           // 检测此元素相对于文档Document原点的绝对位置，并且这个值是不变化的
           let sidebarFixedOffsetTop = element.offsetTop
           // 监听滚动事件
-          window.onscroll = function() {
+          window.addEventListener('scroll', e => {
             const windowScrollTop = document.body.scrollTop
             const newSidebarFixedOffsetTop = element.offsetTop
             sidebarFixedOffsetTop = (newSidebarFixedOffsetTop !== sidebarFixedOffsetTop && newSidebarFixedOffsetTop !== 77) ? newSidebarFixedOffsetTop : sidebarFixedOffsetTop
             const isFixed = windowScrollTop > sidebarFixedOffsetTop
             if (isFixed && element) element.setAttribute('class','aside-tag fixed')
             if (!isFixed && element) element.setAttribute('class','aside-tag')
-          }
+          })
         },
         unbind(element) {
           window.onscroll = null
