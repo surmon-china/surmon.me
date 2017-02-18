@@ -28,10 +28,6 @@
                 <span>欢迎西安的同学请我喝(yue)咖(...)啡</span>
               </p>
               <p class="item">
-                <i class="iconfont icon-github"></i>
-                <a href="https://github.com/surmon-china" target="_blank" rel="nofollow">寂寞交友主页</a>
-              </p>
-              <p class="item">
                 <i class="iconfont icon-music"></i>
                 <span>Folk, Jazz-HipHop, EM, Rock, PostRock, New Ag</span>
               </p>
@@ -39,15 +35,54 @@
                 <i class="iconfont icon-like"></i>
                 <span>love code. love beauty. love life.</span>
               </p>
+              <p class="item">
+                <i class="iconfont icon-coffee"></i>
+                <span class="accounts">
+                  <a href="https://github.com/surmon-china" 
+                     target="_blank" 
+                     rel="external nofollow">
+                    <i class="iconfont icon-github"></i>
+                  </a>
+                  <a href="https://stackoverflow.com/users/6222535/surmon?tab=profile" 
+                     target="_blank" 
+                     rel="external nofollow">
+                    <i class="iconfont icon-stackoverflow"></i>
+                  </a>
+                  <a href="https://segmentfault.com/u/surmon" 
+                     target="_blank" 
+                     rel="external nofollow">
+                    <i class="iconfont icon-segmentfault"></i>
+                  </a>
+                  <a href="https://www.quora.com/profile/Surmon" 
+                     target="_blank" 
+                     rel="external nofollow">
+                    <i class="iconfont icon-quora"></i>
+                  </a>
+                  <a href="https://www.zhihu.com/people/surmon/activities" 
+                     target="_blank" 
+                     rel="external nofollow">
+                    <i class="iconfont icon-zhihu"></i>
+                  </a>
+                  <a href="https://weibo.com/nocower" 
+                     target="_blank" 
+                     rel="external nofollow">
+                    <i class="iconfont icon-weibo"></i>
+                  </a>
+                  <a href="https://twitter.com/surmon_me" 
+                     target="_blank" 
+                     rel="external nofollow">
+                    <i class="iconfont icon-twitter"></i>
+                  </a>
+                  <a href="https://www.facebook.com/surmon.me" 
+                     target="_blank" 
+                     rel="external nofollow">
+                    <i class="iconfont icon-facebook"></i>
+                  </a>
+                </span>
+              </p>
               <div class="item">
                 <i class="iconfont icon-code"></i>
-                <div class="skills">
-                  <!-- <p>擅长：H5/C3/4, JQuery, Ps, Bootstrap, Js, ES6, Ng1, Ng2, Vue2, Weex, RN...</p> -->
-                  <!-- <p>实践：PHP, Wordpress, Node.js, Express, MongoDB, Mysql, Redis, Linux...</p> -->
-                  <!-- <p>工程：Grunt, Gulp, Webpack, Npm, Yarn, Babel...</p> -->
-                  <!-- <p>关注：WebVR, WebRTC, WebComponent, Service Worker, AR, VR, AI...</p> -->
-                  <p>技术过<b>硬</b>.<span>&nbsp;&nbsp;</span>向往硅谷</p>
-                </div>
+                <span class="skills">技术过<b>硬</b>.<span>&nbsp;&nbsp;</span>向往硅谷</span>
               </div>
             </div>
             <div class="about-map">
@@ -141,15 +176,19 @@
                 margin-bottom: 0;
               }
 
-              .iconfont {
+              > .iconfont {
                 margin-right: 2em;
                 display: inline-block;
-                color: #777;
-                float: left;
+                color: rgba(191, 191, 191, 0.5);
+                width: 2rem;
+                text-align: center;
               }
 
-              .skills {
-                float: left;
+              > .accounts {
+
+                > a {
+                  margin-right: 1.5em;
+                }
               }
             }
           }
