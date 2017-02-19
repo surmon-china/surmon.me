@@ -64,7 +64,7 @@ module.exports = {
       { charset: 'utf-8' },
       { name: 'author', content: 'surmon@foxmail.com' },
       { name: 'viewport', content: 'initial-scale=1, maximum-scale=1, user-scalable=no' },
-      { hid: 'keywords', name: 'keywords', content: 'surmon, 司马萌, 前端技术开发, javascript技术' },
+      { hid: 'keywords', name: 'keywords', content: 'surmon,马赐崇,nocower,司马萌,前端技术开发,javascript技术' },
       { hid: 'description', name: 'description', content: '凡心所向 素履所往 生如逆旅 一苇以航' }
     ],
     link: [
