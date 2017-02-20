@@ -53,6 +53,7 @@ module.exports = {
     '~plugins/image-popup.js',
     // '~plugins/vue-disqus.js',
     // '~plugins/vue-loading.js',
+    '~plugins/baidu-seo-push.js',
     '~plugins/vue-duoshuo.js',
     '~plugins/vue-comment-hidden.js'
   ],
