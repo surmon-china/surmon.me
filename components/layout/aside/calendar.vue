@@ -5,8 +5,13 @@
       <ul class="month-list">
         <li class="arrow prev" @click="pickPre(currentYear, currentMonth)">❮</li>
         <li class="year-month">
-            <span class="choose-year">{{ currentYear }}年{{ currentMonth }}月{{ currentDay }}日</span>
-            <span class="choose-time">{{ currentTime }}</span>
+          <span class="choose-year">
+            <span>{{ currentYear }}</span>
+            <span>年</span>
+            <span>{{ currentMonth }}</span>
+            <span>月</span>
+            <span>{{ currentDay }}</span>
+            <span>日</span>
         </li>
         <li class="arrow next" @click="pickNext(currentYear, currentMonth)">❯</li>
       </ul>
@@ -44,50 +49,39 @@
         currentMonth: 1,
         currentYear: 1970,
         currentWeek: 1,
-        currentTime: '',
         days: []
       }
     },
-
     mounted() {
       this.initData(null)
-      this.updateTime()
     },
     methods: {
-
       initData(cur) {
-        let date;
-        if (cur) {
-          date = new Date(cur);
-        } else {
-          date = new Date();
-        }
+        let date = cur ? new Date(cur) : new Date()
         this.currentDay = date.getDate()
         this.currentYear = date.getFullYear()
         this.currentMonth = date.getMonth() + 1
         this.currentWeek = date.getDay()
         if (this.currentWeek == 0) this.currentWeek = 7
-        let str = this.formatDate(this.currentYear, this.currentMonth, this.currentDay);
+        let str = this.formatDate(this.currentYear, this.currentMonth, this.currentDay)
         // console.log("today:" + str + "," + this.currentWeek);
-        this.days.length = 0;
+        this.days.length = 0
         // 今天是周日，放在第一行第7个位置，前面6个
         for (var i = this.currentWeek - 1; i >= 0; i--) {
-          var d = new Date(str);
-          d.setDate(d.getDate() - i);
+          var d = new Date(str)
+          d.setDate(d.getDate() - i)
           // console.log("y:" + d.getDate());
-          this.days.push(d);
+          this.days.push(d)
         }
         for (var i = 1; i <= 35 - this.currentWeek; i++) {
-          var d = new Date(str);
-          d.setDate(d.getDate() + i);
-          this.days.push(d);
+          var d = new Date(str)
+          d.setDate(d.getDate() + i)
+          this.days.push(d)
         }
       },
-
       pick(date) {
         alert(this.formatDate(date.getFullYear(), date.getMonth() + 1, date.getDate()))
       },
-
       pickPre(year, month) {
         //  setDate(0); 上月最后一天
         //  setDate(-1); 上月倒数第二天
@@ -96,17 +90,14 @@
         d.setDate(0);
         this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
       },
-
       pickNext(year, month) {
         var d = new Date(this.formatDate(year, month, 1));
         d.setDate(35);
         this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
       },
-
       pickYear(year, month) {
         alert(year + "," + month);
       },
-
       // 返回 类似 2016-01-02 格式的字符串
       formatDate(year, month, day) {
         var y = year;
@@ -115,21 +106,6 @@
         var d = day;
         if (d < 10) d = "0" + d;
         return y + "-" + m + "-" + d
-      },
-
-      updateTime() {
-        let _this = this
-        const showLocale = function() {
-          const objD = new Date()
-          let hh = objD.getHours()
-          if(hh < 10) hh = '0' + hh
-          let mm = objD.getMinutes()
-          if(mm < 10) mm = '0' + mm
-          let ss = objD.getSeconds()
-          if(ss < 10) ss = '0' + ss
-          if (['59', '00'].includes(ss) || !_this.currentTime) _this.currentTime = `${hh} : ${mm}`
-        }
-        setInterval(showLocale, 1000)
       }
     }
   }
