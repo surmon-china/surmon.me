@@ -50,6 +50,7 @@ module.exports = {
     '~plugins/swiper.js',
     '~plugins/marked.js',
     '~plugins/vue-empty.js',
+    '~plugins/copy-right.js',
     '~plugins/image-popup.js',
     // '~plugins/vue-disqus.js',
     // '~plugins/vue-loading.js',
