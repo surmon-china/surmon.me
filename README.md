@@ -33,6 +33,7 @@ $ npm run lint
 
 ## Todos 更新记录
 
+- ~~新增垃圾回收程序（idle-gc），解决内存溢出问题~~
 - ~~增加百度自动push功能~~
 - ~~修复多说https处理引起的bug~~
 - ~~默认文章缩略图需要设计为<>图标~~
@@ -125,7 +126,9 @@ nuxt.js-blog/
    │
    │──nuxt.config.js             * Nuxt.js程序配置
    │
-   │──ecosystem.config           * pm2部署配置（日志文件的路径需要自己修改）
+   │──server.js                  * Nuxt.js程序入口文件（节省内存 + 优化内存）
+   │
+   │──ecosystem.config           * pm2部署配置（日志文件的路径需要自行修改）
    │
    └──.editorconfig              * 编码风格配置
 ```
