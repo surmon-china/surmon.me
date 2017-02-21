@@ -115,8 +115,10 @@
             padding: 0 .5em;
             height: 2em;
             line-height: 2em;
-            font-size: 15px;
+            font-size: 1em;
             font-weight: bold;
+            border-radius: 1px;
+            letter-spacing: .3px;
 
             &:hover {
               background-color: $module-hover-bg;

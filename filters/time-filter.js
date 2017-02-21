@@ -27,8 +27,8 @@ export const toLocalString = date => {
 // YMDHMS时间转换过滤器
 export const toYMD = date => {
   if (!date) return date
-  let string = date.toString()
-  return string.substr(0, string.indexOf('午') + 1)
+  date = new Date(date)
+  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours() > 11 ? '下午' : '上午'}`
 }
 
 // 秒转为小时分钟过滤器

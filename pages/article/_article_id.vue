@@ -53,15 +53,17 @@
         </p>
         <div class="item">
           <span>版权声明：</span>
-          <span>本文内容可能来自互联网，若侵犯到您的利益请及时&nbsp;</span>
-          <a href="mailto:surmon@foxmail.com" target="_blank">Email me</a>
-          <span>&nbsp;处理</span>
+          <span>自由转载-署名-非商业性使用</span>
+          <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+          <a href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
+             target="_blank"
+             rel="external nofollow">Creative Commons BY-NC 3.0 CN</a>
         </div>
       </div>
     </transition>
     <transition name="module" mode="out-in">
       <div class="related" v-if="article.related && article.related.length">
-        <ul class="article-lists">
+        <ul class="article-lists" :class="{ 'less': article.related.length < 5 }">
           <li class="item" v-for="article in article.related.slice(0, 8)">
             <router-link :to="`/article/${article.id}`" :title="article.title" class="item-box">
               <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title">
@@ -148,13 +150,13 @@
       },
       buildDateTitle(date) {
         if (!date) return date
-        let string = new Date(date).toLocaleString().toString()
-        return string.substr(0, string.indexOf('午') + 1)
+        date = new Date(date)
+        return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours() > 11 ? '下午' : '上午'}`
       },
       buildDateLink(date) {
         if (!date) return date
-        let string = new Date(date).toLocaleString().toString()
-        return `/date/${string.substr(0, string.indexOf(' ') + 1).replace(/\//g, '-')}`
+        date = new Date(date)
+        return `/date/${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
       }
     }
   }
@@ -358,6 +360,13 @@
         list-style: none;
         overflow: hidden;
         opacity: .9;
+
+        &.less {
+
+          > .item:nth-child(-n + 4) {
+            margin-bottom: 0;
+          }
+        }
 
         > .item {
           float: left;

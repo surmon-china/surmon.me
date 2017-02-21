@@ -14,7 +14,7 @@
         <div class="item-meta">
           <span class="date">
             <i class="iconfont icon-clock"></i>
-            <span>{{ item.create_time | toLocalString | toYMD }}</span>
+            <span>{{ item.create_time | toYMD }}</span>
           </span>
           <span class="views">
             <i class="iconfont icon-eye"></i>
