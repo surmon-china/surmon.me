@@ -25,5 +25,5 @@ if (config.dev) {
 
 // Listen the server
 app.listen(port, host)
-gc.start(7500)
+gc.start(6600)
 console.log('Server listening on ' + host + ':' + port) // eslint-disable-line no-console
