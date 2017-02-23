@@ -17,9 +17,9 @@
         <p class="item">
           <span>本文于</span>
           <span>&nbsp;</span>
-          <router-link :title="buildDateTitle(article.create_time)"
-                       :to="buildDateLink(article.create_time)">
-            <span>{{ buildDateTitle(article.create_time) }}</span>
+          <router-link :title="buildDateTitle(article.create_at)"
+                       :to="buildDateLink(article.create_at)">
+            <span>{{ buildDateTitle(article.create_at) }}</span>
           </router-link>
           <span>&nbsp;发布在&nbsp;</span>
           <router-link :to="`/category/${category.slug}`"
