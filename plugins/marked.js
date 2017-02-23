@@ -15,4 +15,21 @@ marked.setOptions({
   }
 })
 
-export default marked
+const renderer = new marked.Renderer()
+console.log(renderer)
+renderer.link = (href, title, text) => {
+  const isSelf = href.includes('surmon.me')
+  return `<a href="${href}" target="_blank" title="${title || text}" ${isSelf ? '' : 'rel="external nofollow"'}>${text}</a>`
+}
+
+renderer.image = (href, title, text) => {
+  const isSelf = href.includes('surmon.me')
+  return `<a href="${href}" target="_blank" title="${title || text}" ${isSelf ? '' : 'rel="external nofollow"'}>${text}</a>`
+}
+
+renderer.text = (href, title, text) => {
+  const isSelf = href.includes('surmon.me')
+  return `<a href="${href}" target="_blank" title="${title || text}" ${isSelf ? '' : 'rel="external nofollow"'}>${text}</a>`
+}
+
+export default content => marked(content, { renderer })
