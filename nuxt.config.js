@@ -21,7 +21,6 @@ module.exports = {
       'axios',
       'swiper',
       'marked',
-      'cheerio',
       'clipboard',
       'highlight.js'
     ],
@@ -43,9 +42,7 @@ module.exports = {
   plugins: [
     '~plugins/ga.js',
     '~plugins/axios.js',
-    '~plugins/cheerio.js',
     '~plugins/clipboard.js',
-    '~plugins/highlight.js',
     '~plugins/filters.js',
     '~plugins/swiper.js',
     '~plugins/marked.js',

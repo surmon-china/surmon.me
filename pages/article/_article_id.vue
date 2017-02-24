@@ -65,7 +65,9 @@
       <div class="related" v-if="article.related && article.related.length">
         <ul class="article-lists" :class="{ 'less': article.related.length < 5 }">
           <li class="item" v-for="article in article.related.slice(0, 8)">
-            <router-link :to="`/article/${article.id}`" :title="article.title" class="item-box">
+            <router-link :to="`/article/${article.id}`" 
+                         :title="article.title" 
+                         class="item-box">
               <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title">
               <span class="title">{{ article.title }}</span>
             </router-link>
@@ -88,7 +90,6 @@
   import ShareBox from '~components/layout/share'
   import Clipboard from '~plugins/clipboard'
   import marked from '~plugins/marked'
-  import buildArticleRelatedTag from '~utils/article-tag-releted'
 
   export default {
     name: 'article-detail',
@@ -122,14 +123,10 @@
         return this.$store.state.article.detail.data.result
       },
       articleContent () {
-        let content = this.article.content || ''
+        let content = this.article.content
         if (!content) return ''
-        content = marked(content)
-        if (!Object.is(this.tags.code, 1)) return content
-        const tags = this.tags.result.data
-        const newcontent = buildArticleRelatedTag(content, tags)
-        // console.log('content:', content, 'tags:', tags, 'newcontent:', newcontent)
-        return newcontent
+        const hasTags = Object.is(this.tags.code, 1) && !!this.tags.result.data.length
+        return marked(content, hasTags ? this.tags.result.data : false)
       },
       fetching() {
         return this.$store.state.article.detail.fetching
@@ -189,6 +186,10 @@
           font-weight: bold;
           margin: 0 .1em;
 
+          &.image-link {
+            margin: 0;
+          }
+
           &:hover {
             text-decoration: underline;
           }
@@ -209,13 +210,6 @@
             opacity: 1;
             transition: all .25s;
           }
-        }
-
-        code {
-          padding: .3em .5em;
-          margin: 0 .5em;
-          border-radius: $radius;
-          background-color: $module-hover-bg;
         }
 
         p {
@@ -281,39 +275,88 @@
 
         code {
           color: #bd4147;
+          padding: .3em .5em;
+          margin: 0 .5em;
+          border-radius: $radius;
+          background-color: $module-hover-bg;
         }
 
         pre {
+          display: block;
+          position: relative;
+          overflow: hidden;
           margin-bottom: 1em;
+          padding-left: 2.5em;
+          background-color: rgba(0, 0, 0, 0.8);
+
+          &:before {
+            color: white;
+            content: attr(data-lang)" CODE";
+            height: 2.8em;
+            line-height: 2.8em;
+            font-size: 1em;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            font-weight: 700;
+            background-color: rgba(68, 68, 68, 0.9);
+            display: block;
+            text-transform: uppercase;
+            text-align: center;
+          }
+
+          > .code-lines {
+            position: absolute;
+            left: 0;
+            top: 2.8em;
+            margin: 0;
+            padding: 1em 0;
+            width: 2.5em;
+            height: calc(100% - 2.8em);
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.2);
+
+            > .code-line-number {
+              padding: 0;
+              position: relative;
+              list-style-type: none;
+              line-height: 1.6em;
+              transition: background-color .05s;
+
+              &:hover {
+                &:before {
+                  display: block;
+                  opacity: 1;
+                  visibility: visible;
+                }
+              }
+
+              &:before {
+                content: '';
+                height: 1.6em;
+                position: absolute;
+                top: 0;
+                left: 2.5em;
+                width: 66em;
+                background-color: rgba(154, 154, 154, 0.2);
+                display: none;
+                visibility: hidden;
+                opacity: 0;
+              }
+            }
+          }
 
           > code {
             margin: 0;
             padding: 1em;
-            line-height: 1.6em;
-            background-color: rgba(0, 0, 0, 0.8);
-            position: relative;
+            float: left;
+            width: 100%;
+            height: 100%;
             display: block;
-            // font-size: .95em;
+            line-height: 1.6em;
             color: rgba(255, 255, 255, 0.87);
-
-            /*
-            &:before {
-              color: white;
-              content: "CODE "attr(class);
-              height: 2.8em;
-              line-height: 2.8em;
-              font-size: 1em;
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: 100%;
-              font-weight: 700;
-              background-color: rgba(68, 68, 68, 0.9);
-              display: block;
-              text-transform: uppercase;
-              text-align: center;
-            }
-            */
+            background-color: transparent;
           }
         }
       }
