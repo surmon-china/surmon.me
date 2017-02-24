@@ -14,7 +14,7 @@
         <span>Project</span>
       </nuxt-link>
       <nuxt-link to="/category/think" class="item">
-        <i class="iconfont icon-tag"></i>
+        <i class="iconfont icon-think"></i>
         <span>Think</span>
       </nuxt-link>
       <nuxt-link to="/music" class="item">
