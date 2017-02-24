@@ -14,7 +14,13 @@
 
 <script>
   export default {
-    props: ['error']
+    props: ['error'],
+    mounted() {
+      this.$store.commit('option/SET_ERROR_COLUMU', true)
+    },
+    beforeDestroy() {
+      this.$store.commit('option/SET_ERROR_COLUMU', false)
+    }
   }
 </script>
 
@@ -33,7 +39,7 @@
     .error-content {
 
       .error-code {
-        font-size: 6rem;
+        font-size: 9rem;
       }
     }
   }
