@@ -7,7 +7,7 @@
            target="_blank">
           <i class="iconfont icon-vue"></i>
           <h3 class="title">vue-awesome-swiper</h3>
-          <p class="desc">支持Vue全版本的幻灯轮播图组件</p>
+          <p class="desc">支持Vue的幻灯轮播图组件</p>
         </a>
       </li>
       <li class="item">
@@ -16,7 +16,7 @@
            target="_blank">
           <i class="iconfont icon-vue"></i>
           <h3 class="title">Vue-video-player</h3>
-          <p class="desc">适用于Vue全版本的视频播放器组件</p>
+          <p class="desc">适用于Vue的视频播放器组件</p>
         </a>
       </li>
       <li class="item">
@@ -48,6 +48,33 @@
       </li>
       <li class="item">
         <a class="item-content"
+           href="https://github.com/surmon-china/vue-quill-editor" 
+           target="_blank">
+          <i class="iconfont icon-vue"></i>
+          <h3 class="title">vue-quill-editor</h3>
+          <p class="desc">适用于Vue的富文本编辑器</p>
+        </a>
+      </li>
+      <li class="item">
+        <a class="item-content"
+           href="https://github.com/surmon-china/surmon.me" 
+           target="_blank">
+          <i class="iconfont icon-code"></i>
+          <h3 class="title">nuxt-blog</h3>
+          <p class="desc">基于Nuxt.js搭建的博客程序（本站前端）</p>
+        </a>
+      </li>
+      <li class="item">
+        <a class="item-content"
+           href="https://github.com/surmon-china/vue-netease-music" 
+           target="_blank">
+          <i class="iconfont icon-netease-music"></i>
+          <h3 class="title">vue-netease-music</h3>
+          <p class="desc">适用于Vue的网易云音乐播放器（开发中）</p>
+        </a>
+      </li>
+      <li class="item">
+        <a class="item-content"
            href="https://github.com/surmon-china/nodepress" 
            target="_blank">
           <i class="iconfont icon-nodejs"></i>
@@ -75,20 +102,11 @@
       </li>
       <li class="item">
         <a class="item-content"
-           href="https://github.com/surmon-china/surmon.me" 
+           href="https://github.com/surmon-china/deploy" 
            target="_blank">
-          <i class="iconfont icon-code"></i>
-          <h3 class="title">vue-blog</h3>
-          <p class="desc">基于Vue2搭建的博客程序（本站前端）</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/vue-music" 
-           target="_blank">
-          <i class="iconfont icon-netease-music"></i>
-          <h3 class="title">vue-netease-music</h3>
-          <p class="desc">适用于Vue的网易云音乐播放器（开发中）</p>
+          <i class="iconfont icon-deploy"></i>
+          <h3 class="title">deploy</h3>
+          <p class="desc">一个简易的Github Webhooks自动热部署方案</p>
         </a>
       </li>
       <li class="item">
@@ -97,7 +115,7 @@
            target="_blank">
           <i class="iconfont icon-wordpress"></i>
           <h3 class="title">One</h3>
-          <p class="desc">一款小清新的Wordpress主题</p>
+          <p class="desc">一款小清新的Wordpress博客风格主题</p>
         </a>
       </li>
       <li class="item">

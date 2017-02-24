@@ -3,12 +3,15 @@
     <div class="item-content">
       <div class="item-thumb">
         <router-link :to="`/article/${item.id}`">
-          <img class="item-thumb-img" :src="buildThumb(item.thumb)">
+          <img class="item-thumb-img" 
+               :src="buildThumb(item.thumb)"
+               :alt="item.title"
+               :title="item.title">
         </router-link>
       </div>
       <div class="item-body">
         <h4 class="item-title">
-          <router-link :to="`/article/${item.id}`">{{ item.title }}</router-link>
+          <router-link :to="`/article/${item.id}`" :title="item.title">{{ item.title }}</router-link>
         </h4>
         <p class="item-description" style="-webkit-box-orient: vertical;">{{ item.description }}</p>
         <div class="item-meta">
