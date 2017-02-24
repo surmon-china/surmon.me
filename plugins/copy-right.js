@@ -4,23 +4,27 @@
 
 if (process.BROWSER_BUILD && process.env.NODE_ENV === 'production') {
  
-  const copyText =  [ '',
-                      '著作权归作者所有。',
-                      '商业转载请联系作者获得授权，非商业转载请注明出处。',
-                      '作者：Surmon',
-                      '链接：' + location.href,
-                      '来源：Surmon.me',
-                      ''
-                    ].join('</br>')
+  const copyText = () => {
+    return [ '',
+             '著作权归作者所有。',
+             '商业转载请联系作者获得授权，非商业转载请注明出处。',
+             '作者：Surmon',
+             '链接：' + location.href,
+             '来源：Surmon.me',
+             ''
+           ].join('\n')
+  }
+  
+
 
   // 拼接成html
   const buildText = content => {
-    return content + copyText
+    return content + copyText()
   }
 
   // 拼接成html
   const buildHtml = content => {
-    return content + copyText
+    return content + copyText()
   }
 
   document.addEventListener('copy', e => {

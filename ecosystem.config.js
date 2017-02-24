@@ -6,7 +6,7 @@ module.exports = {
       cwd: "./",
       script: "server.js",
       args: "cross-env",
-      max_memory_restart: "188M",
+      max_memory_restart: "268M",
       log_date_format: "YYYY-MM-DD HH:mm Z",
       error_file: "/usr/local/wwwlogs/surmon.me/error.log",
       out_file: "/usr/local/wwwlogs/surmon.me/out.log",

@@ -37,8 +37,11 @@
         </li>
       </ul>
     </div>
-    <div class="aside-ad">
-      <a href="https://s.click.taobao.com/ZaXp1Rx" target="_blank" rel="external nofollow" class="ad-box">
+    <div class="aside-ad" v-if="false">
+      <a href="https://s.click.taobao.com/ZaXp1Rx" 
+         target="_blank" 
+         rel="external nofollow" 
+         class="ad-box">
         <img src="https://p1.bpimg.com/567571/e85fb6270effc4c7.jpg">
       </a>
     </div>
@@ -50,8 +53,11 @@
         <slot>No Result Tags.</slot>
       </empty-box>
       <ul class="aside-tag-list" v-if="!tagFetching && tags.length">
-        <router-link :to="`/tag/${tag.slug}`" tag="li" class="item" v-for="tag in tags">
-          <a class="title" :title="tag.title">
+        <router-link tag="li"
+                     class="item"
+                     :to="`/tag/${tag.slug}`"
+                     v-for="tag in tags">
+          <a class="title" :title="tag.description">
             <i class="iconfont" 
                :class="[tag.extends.find(t => Object.is(t.name, 'icon')).value]" 
                v-if="tag.extends.find(t => Object.is(t.name, 'icon'))"></i>
