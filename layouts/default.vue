@@ -3,15 +3,19 @@
     <background></background>
     <header-view></header-view>
     <main id="main">
-      <nav-view></nav-view>
-      <div class="main-content" :class="{ 'full-column': fullColumn }">
+      <transition name="module">
+        <keep-alive>
+          <nav-view v-if="!errorColumn"></nav-view>
+        </keep-alive>
+      </transition>
+      <div class="main-content" :class="{ 'full-column': fullColumn, 'error-column': errorColumn }">
         <keep-alive>
           <nuxt></nuxt>
         </keep-alive>
       </div>
       <transition name="aside">
         <keep-alive>
-          <aside-view v-if="!fullColumn"></aside-view>
+          <aside-view v-if="!fullColumn && !errorColumn"></aside-view>
         </keep-alive>
       </transition>
     </main>
@@ -37,6 +41,9 @@
     computed: {
       fullColumn () {
         return this.$store.state.option.fullColumn
+      },
+      errorColumn () {
+        return this.$store.state.option.errorColumn
       }
     }
   }
@@ -58,6 +65,12 @@
 
       &.full-column {
         width: 62.5em;
+        @include css3-prefix(transition, width .35s);
+      }
+
+      &.error-column {
+        width: 100%;
+        margin: 0;
         @include css3-prefix(transition, width .35s);
       }
     }

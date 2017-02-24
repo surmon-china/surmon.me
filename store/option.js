@@ -8,6 +8,7 @@ export const state = {
 
   // 页面的栏目展示类型（3栏/2栏）
   fullColumn: false,
+  errorColumn: false,
 
   // 服务端的配置
   serverOptions: {
@@ -23,6 +24,11 @@ export const mutations = {
 	// 设置栏目结构
   SET_FULL_COLUMU(state, action) {
     state.fullColumn = action
+  },
+
+  // 设置错误页面模板
+  SET_ERROR_COLUMU(state, action) {
+    state.errorColumn = action
   },
 
   // 获取服务端配置
