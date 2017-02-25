@@ -4,6 +4,7 @@
       <li class="item">
         <a class="item-content" 
            href="https://github.com/surmon-china/vue-awesome-swiper" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-vue"></i>
           <h3 class="title">vue-awesome-swiper</h3>
@@ -13,6 +14,7 @@
       <li class="item">
         <a class="item-content"
            href="https://github.com/surmon-china/vue-video-player" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-vue"></i>
           <h3 class="title">Vue-video-player</h3>
@@ -22,6 +24,7 @@
       <li class="item">
         <a class="item-content"
            href="https://github.com/surmon-china/vue-codemirror" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-vue"></i>
           <h3 class="title">Vue-Codemirror</h3>
@@ -31,6 +34,7 @@
       <li class="item">
         <a class="item-content"
            href="https://github.com/surmon-china/vue-touch-ripple" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-vue"></i>
           <h3 class="title">vue-touch-ripple</h3>
@@ -40,6 +44,7 @@
       <li class="item">
         <a class="item-content"
            href="https://github.com/surmon-china/vue-drag-zone" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-vue"></i>
           <h3 class="title">vue-drag-zone</h3>
@@ -49,6 +54,7 @@
       <li class="item">
         <a class="item-content"
            href="https://github.com/surmon-china/vue-quill-editor" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-vue"></i>
           <h3 class="title">vue-quill-editor</h3>
@@ -58,6 +64,7 @@
       <li class="item">
         <a class="item-content"
            href="https://github.com/surmon-china/surmon.me" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-code"></i>
           <h3 class="title">nuxt-blog</h3>
@@ -67,6 +74,7 @@
       <li class="item">
         <a class="item-content"
            href="https://github.com/surmon-china/vue-netease-music" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-netease-music"></i>
           <h3 class="title">vue-netease-music</h3>
@@ -76,6 +84,7 @@
       <li class="item">
         <a class="item-content"
            href="https://github.com/surmon-china/nodepress" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-nodejs"></i>
           <h3 class="title">nodepress</h3>
@@ -85,6 +94,7 @@
       <li class="item">
         <a class="item-content"
            href="https://github.com/surmon-china/angular-admin" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-angularjs"></i>
           <h3 class="title">angular-admin</h3>
@@ -94,6 +104,7 @@
       <li class="item">
         <a class="item-content"
            href="https://github.com/surmon-china/ng2-quill-editor" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-angularjs"></i>
           <h3 class="title">ng2-quill-editor</h3>
@@ -103,6 +114,7 @@
       <li class="item">
         <a class="item-content"
            href="https://github.com/surmon-china/deploy" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-deploy"></i>
           <h3 class="title">deploy</h3>
@@ -112,6 +124,7 @@
       <li class="item">
         <a class="item-content"
            href="https://github.com/surmon-china/wordpress-theme-one" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-wordpress"></i>
           <h3 class="title">One</h3>
@@ -121,6 +134,7 @@
       <li class="item">
         <a class="item-content"
            href="https://github.com/surmon-china/wordpress-theme-surmon" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-wordpress"></i>
           <h3 class="title">Surmon</h3>
@@ -130,6 +144,7 @@
       <li class="item">
         <a class="item-content"
            href="https://github.com/surmon-china/wordpress-theme-metro" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-wordpress"></i>
           <h3 class="title">Metro</h3>
@@ -139,6 +154,7 @@
       <li class="item">
         <a class="item-content"
            href="https://github.com/surmon-china/wordpress-theme-think" 
+           rel="external nofollow"
            target="_blank">
           <i class="iconfont icon-wordpress"></i>
           <h3 class="title">think</h3>
