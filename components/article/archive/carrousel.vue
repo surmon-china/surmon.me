@@ -8,7 +8,7 @@
     <transition name="module">
       <div class="swiper-container swiper" ref="swiper" v-if="article.data.result.data.length">
         <div class="swiper-wrapper">
-          <div class="swiper-slide item" v-for="(article, index) in article.data.result.data.slice(0, 9)">
+          <div class="swiper-slide item" v-for="(article, index) in article.data.result.data.slice(0, 9)" :key="index">
             <div class="content">
               <img :src="buildThumb(article.thumb)">
               <router-link :to="`/article/${article.id}`" class="title">
