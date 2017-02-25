@@ -36,8 +36,7 @@ module.exports = {
   },
   dev: (process.env.NODE_ENV !== 'production'),
   env: {
-    baseUrl: apiConfig.baseUrl,
-    duoshuoShortName: apiConfig.duoshuoShortName
+    baseUrl: apiConfig.baseUrl
   },
   plugins: [
     '~plugins/ga.js',
@@ -49,11 +48,9 @@ module.exports = {
     '~plugins/vue-empty.js',
     '~plugins/copy-right.js',
     '~plugins/image-popup.js',
-    // '~plugins/vue-disqus.js',
-    // '~plugins/vue-loading.js',
-    '~plugins/baidu-seo-push.js',
-    '~plugins/vue-duoshuo.js',
-    '~plugins/vue-comment-hidden.js'
+    '~plugins/vue-loading.js',
+    '~plugins/vue-comment.js',
+    '~plugins/baidu-seo-push.js'
   ],
   head: {
     title: 'Surmon.me - Talk is cheap. Show me the code',
@@ -73,16 +70,12 @@ module.exports = {
     script: [
       { type: 'text/javascript',
         innerHTML: `
-          window.duoshuoQuery = { 
-            short_name: '${apiConfig.duoshuoShortName}' 
-          }
           document.ready = () => {
-            console.clear()
+            // console.clear()
             console.log("%cTalk is cheap. Show me the code %csurmon@foxmail.com", "color:#666;font-size:3em;","color:#666;font-size:13px;")
           }
           `
-      },
-      { src: '/scripts/duoshuo.embed.js' }
+      }
     ],
     noscript: [
       { innerHTML: 'This website requires JavaScript.' }
