@@ -10,12 +10,10 @@ export const state = {
   fullColumn: false,
   errorColumn: false,
 
-  // 服务端的配置
-  serverOptions: {
+  // 服务端博主信息
+  adminInfo: {
     fetching: false,
-    data: {
-      result: {}
-    }
+    data: {}
   }
 }
 
@@ -31,16 +29,16 @@ export const mutations = {
     state.errorColumn = action
   },
 
-  // 获取服务端配置
-  REQUEST_OPTIONS(state) {
-    state.serverOptions.fetching = true
+  // 获取服务端配置的管理员信息
+  REQUEST_ADMIN_INFO(state) {
+    state.adminInfo.fetching = true
   },
-  REQUEST_FAILURE(state) {
-    state.serverOptions.fetching = false
-    state.serverOptions.data = { result: {}}
+  REQUEST_ADMIN_INFO_SUCCESS(state, action) {
+    state.adminInfo.fetching = false
+    state.adminInfo.data = action.result
   },
-  REQUEST_SUCCESS(state, action) {
-    state.serverOptions.fetching = false
-    state.serverOptions.data = action
+  REQUEST_ADMIN_INFO_FAILURE(state) {
+    state.adminInfo.fetching = false
+    state.adminInfo.data = {}
   }
 }

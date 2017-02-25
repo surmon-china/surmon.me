@@ -6,11 +6,11 @@
           <div class="about-all">
             <div class="about-me">
               <div class="gravatar">
-                <img src="/images/gravatar.jpg">
+                <img :src="gravatar">
               </div>
               <p class="item">
                 <i class="iconfont icon-user"></i>
-                <span>I'm Surmon, a (95后) (小) javascript (鲜) stack (肉) developer.</span>
+                <span>I'm Surmon, a (95+) (小) javascript (鲜) stack (肉) developer.</span>
               </p>
               <p class="item">
                 <i class="iconfont icon-mail"></i>
@@ -107,6 +107,11 @@
     name: 'about',
     head: {
       title: 'About'
+    },
+    computed: {
+      gravatar() {
+        return this.$store.state.option.adminInfo.data.gravatar || '/images/gravatar.jpg'
+      }
     }
   }
 </script>
