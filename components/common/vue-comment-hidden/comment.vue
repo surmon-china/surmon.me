@@ -27,7 +27,7 @@
     },
     methods: {
       replaceSSL(html) {
-        return !!html ? html.replace(/http:\/\//ig, 'https://') : html
+        return !!html ? html.replace(/http:\/\//ig, '/proxy/') : html
       }
     }
   }
