@@ -12,6 +12,7 @@ export const actions = {
   // 全局服务初始化
   nuxtServerInit(store, { params, route }) {
     const initAppData = [
+      store.dispatch('loadAdminInfo'),
       store.dispatch('loadTagList'),
       store.dispatch('loadCategories'),
       store.dispatch('loadHotArticles')
@@ -23,6 +24,19 @@ export const actions = {
       initAppData.push(store.dispatch('loadCommentsByThirdKey', { thread_key }))
     }
     return Promise.all(initAppData)
+  },
+
+  // 获取博主资料
+  loadAdminInfo({ commit }) {
+    commit('option/REQUEST_ADMIN_INFO')
+    return Service.get('/auth')
+    .then(response => {
+      const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
+      if(success) commit('option/REQUEST_ADMIN_INFO_SUCCESS', response.data)
+      if(!success) commit('option/REQUEST_ADMIN_INFO_FAILURE')
+    }, err => {
+      commit('option/REQUEST_ADMIN_INFO_FAILURE', err)
+    })
   },
 
   // 获取标签列表
@@ -122,19 +136,6 @@ export const actions = {
     })
     .catch(err => {
       commit('article/GET_LIST_FAILURE', err)
-    })
-  },
-
-  // 获取文章详情
-  loadArticleDetail({ commit }, params = {}) {
-    commit('article/REQUEST_DETAIL')
-    return Service.get(`/article/${ params.article_id }`)
-    .then(response => {
-      const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
-      if(success) commit('article/GET_DETAIL_SUCCESS', response.data)
-      if(!success) commit('article/GET_DETAIL_FAILURE')
-    }, err => {
-      commit('article/GET_DETAIL_FAILURE', err)
     })
   }
 }
