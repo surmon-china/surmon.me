@@ -59,5 +59,5 @@ export const toHMS = (sec, type, h_slug, m_slug, s_slug) => {
   const second_slug = s_slug != undefined ? s_slug : ''
 
   const time = (hour_display ? hours + hour_slug : '') + (minute_display ? minutes + minute_slug : '') + (second_display ? seconds + second_slug : '')
-  return time;
+  return time
 }
