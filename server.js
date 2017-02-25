@@ -18,7 +18,8 @@ app.use(nuxt.render)
 if (config.dev) {
   nuxt.build()
   .catch((error) => {
-    console.error(error) // eslint-disable-line no-console
+  	// eslint-disable-line no-console
+    console.error(error)
     process.exit(1)
   })
 }
@@ -26,4 +27,5 @@ if (config.dev) {
 // Listen the server
 app.listen(port, host)
 gc.start(6600)
-console.log('Server listening on ' + host + ':' + port) // eslint-disable-line no-console
+// eslint-disable-line no-console
+console.log('Server listening on ' + host + ':' + port)

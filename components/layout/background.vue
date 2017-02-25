@@ -120,7 +120,6 @@
             draw()
           }, 10)
         }
-        
         startInit()
       }
     }

@@ -4,7 +4,6 @@ import { fromNow, toYMD, toHMS, toLocalString } from './time-filter.js'
 module.exports = {
   textOverflow,
   numberFormat,
-
   fromNow,
   toYMD,
   toHMS,
