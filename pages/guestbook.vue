@@ -9,11 +9,10 @@
       </div>
     </div>
     <div class="comment">
-      <comment-hidden-box></comment-hidden-box>
-      <duoshuo-box title="Guestbook"
+      <comment-box title="Guestbook"
                    thread-key="guestbook"
                    url="https://surmon.me/guestbook">
-      </duoshuo-box>
+      </comment-box>
     </div>
   </div>
 </template>
@@ -26,7 +25,7 @@
     },
     computed: {
       comments() {
-        return this.$store.state.comment.data
+        return this.$store.state.comment.guestbook.data
       }
     }
   }
