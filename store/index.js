@@ -137,5 +137,18 @@ export const actions = {
     .catch(err => {
       commit('article/GET_LIST_FAILURE', err)
     })
+  },
+
+  // 获取文章详情
+  loadArticleDetail({ commit }, params = {}) {
+    commit('article/REQUEST_DETAIL')
+    return Service.get(`/article/${ params.article_id }`)
+    .then(response => {
+      const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
+      if(success) commit('article/GET_DETAIL_SUCCESS', response.data)
+      if(!success) commit('article/GET_DETAIL_FAILURE')
+    }, err => {
+      commit('article/GET_DETAIL_FAILURE', err)
+    })
   }
 }
