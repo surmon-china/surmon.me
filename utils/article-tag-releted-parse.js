@@ -37,6 +37,8 @@ export default (text, tags) => {
              Object.is(firstUpperCase(t.name), tag)
     })
     if (!findedTag) return tag
+    // 如果找到匹配的，但是text文字首字符为#，则证明是外站连接，则不解析
+    if (Object.is(text[0], '#'))  return tag
     const slug = findedTag.slug
     const command = `window.$nuxt.$router.push({ path: \'/tag/${slug}\' });return false`
     return `<a href=\"/tag/${slug}\" title=\"${findedTag.description}\" onclick=\"${command}\">${tag}</a>`
