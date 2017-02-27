@@ -12,9 +12,12 @@
         <span>条评论</span>
       </div>
       <div class="sort">
-        <a href="" class="sort-btn" @click.stop.prevent="">最新</a>
-        <a href="" class="sort-btn actived" @click.stop.prevent="">最早</a>
-        <a href="" class="sort-btn" @click.stop.prevent="">最新</a>
+        <a href="" class="sort-btn" 
+                   @click.stop.prevent="">最新</a>
+        <a href="" class="sort-btn actived" 
+                   @click.stop.prevent="">最早</a>
+        <a href="" class="sort-btn" 
+                   @click.stop.prevent="">最新</a>
       </div>
     </div>
     <ul class="comment-list">
@@ -36,13 +39,10 @@
             <span class="location">中国 西安</span>
             <!-- <span class="reply-count">18</span> -->
           </div>
-          <div class="cm-content" v-if="[4,7,9].includes(comment)">----------著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。作者：Surmon链接：https://surmo业转载请联系作者获得授权，非商业转载请注明出处。作者：Surmon链接：https://surmon著作权归作者所有。
-          商业转载请联系作者获得授权，非商业转载请注明出处。
-          </div>
           <div class="cm-content" v-if="[1,2,3,5,6,8].includes(comment)">学习了赞一个</div>
-          <div class="cm-content" v-else="comment == 2">
-            <span class="reply">回复 Lindyang:</span>
-             so？
+          <div class="cm-content" v-else>
+            <span class="reply">回复 Lindyang：</span>
+            <span>so？你想证明啥</span>
           </div>
           <div class="cm-footer">
             <span class="create_at">2017年12月4日 下午</span>
@@ -59,21 +59,87 @@
     </ul>
     <div class="post-box">
       <div class="user">
-        <div class="name"></div>
-        <div class="email"></div>
-        <div class="site"></div>
-      </div>
-      <div class="gravatar"></div>
-      <div class="editor">
-        <div class="markdown"></div>
-        <div class="editor-tools">
-          <span>插入表情</span>
-          <span>插入图片</span>
-          <span>插入连接</span>
-          <span>插入代码</span>
-          <button>发布</button>
+        <div class="name">
+          <input type="text" placeholder="name *">
         </div>
-        <div class="preview">预览内容</div>
+        <div class="email">
+          <input type="text" placeholder="email *">
+        </div>
+        <div class="site">
+          <input type="text" placeholder="site">
+        </div>
+      </div>
+      <div class="editor-box">
+        <div class="user">
+          <div class="gravatar">
+            <img src="https://avatar.duoshuo.com/avatar-50/912/312375.jpg" alt="">
+          </div>
+          <p class="name">Surmon</p>
+        </div>
+        <div class="editor">
+          <div class="markdown" 
+               ref="markdown"
+               contenteditable="true"
+               @keyup="commentContentChange($event)"></div>
+          <div class="editor-tools">
+            <a href="" 
+               class="emoji" 
+               title="emoji"
+               @click.stop.prevent="">
+              <i class="iconfont icon-emoji"></i>
+              <div class="emoji-box">
+                <ul class="emoji-list">
+                  <li class="item" @click="insertEmoji('😃')">😃</li>
+                  <li class="item" @click="insertEmoji('😂')">😂</li>
+                  <li class="item" @click="insertEmoji('😅')">😅</li>
+                  <li class="item" @click="insertEmoji('😉')">😉</li>
+                  <li class="item" @click="insertEmoji('😌')">😌</li>
+                  <li class="item" @click="insertEmoji('😔')">😔</li>
+                  <li class="item" @click="insertEmoji('😓')">😓</li>
+                  <li class="item" @click="insertEmoji('😢')">😢</li>
+                  <li class="item" @click="insertEmoji('😍')">😍</li>
+                  <li class="item" @click="insertEmoji('😘')">😘</li>
+                  <li class="item" @click="insertEmoji('😜')">😜</li>
+                  <li class="item" @click="insertEmoji('😡')">😡</li>
+                  <li class="item" @click="insertEmoji('😭')">😭</li>
+                  <li class="item" @click="insertEmoji('😱')">😱</li>
+                  <li class="item" @click="insertEmoji('😳')">😳</li>
+                  <li class="item" @click="insertEmoji('😵')">😵</li>
+                  <li class="item" @click="insertEmoji('🙏')">🙏</li>
+                  <li class="item" @click="insertEmoji('👌')">👌</li>
+                  <li class="item" @click="insertEmoji('👍')">👍</li>
+                  <li class="item" @click="insertEmoji('👎')">👎</li>
+                  <li class="item" @click="insertEmoji('👏')">👏</li>
+                </ul>
+              </div>
+            </a>
+            <a href="" 
+               class="image" 
+               title="image"
+               @click.stop.prevent="insertContent('image')">
+              <i class="iconfont icon-image"></i>
+            </a>
+            <a href="" 
+               class="link" 
+               title="link"
+               @click.stop.prevent="insertContent('link')">
+              <i class="iconfont icon-link-horizontal"></i>
+            </a>
+            <a href="" 
+               class="code" 
+               title="code"
+               @click.stop.prevent="insertContent('code')">
+              <i class="iconfont icon-code-comment"></i>
+            </a>
+            <a href="" 
+               class="preview" 
+               title="preview"
+               @click.stop.prevent="preview">
+              <i class="iconfont icon-eye"></i>
+            </a>
+            <button class="submit">发布</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -82,9 +148,42 @@
 <script>
   export default {
     name: 'vue-comment',
+    data() {
+      return {
+        comemntContentHtml: '',
+        comemntContentText: ''
+      }
+    },
     methods: {
       replaceSSL(html) {
         return !!html ? html.replace(/http:\/\//ig, '/proxy/') : html
+      },
+      commentContentChange() {
+        const html = this.$refs.markdown.innerHTML
+        const text = this.$refs.markdown.innerText
+        if (!Object.is(html, this.comemntContentHtml)) {
+          this.comemntContentHtml = html
+        }
+        this.comemntContentText = text
+      },
+      updateCommentContent(content) {
+        if (content) this.comemntContentHtml += content
+        this.$refs.markdown.innerHTML = this.comemntContentHtml
+        this.commentContentChange()
+      },
+      insertContent(type) {
+        const contents = {
+          image: `<div>![](https://)</div>`,
+          link: `<div>[](https://)</div>`,
+          code: '<div>```javascript<br><br>```</div>'
+        }
+        this.updateCommentContent(contents[type])
+      },
+      insertEmoji(emoji) {
+        this.updateCommentContent(emoji)
+      },
+      preview() {
+        console.log('preview')
       }
     }
   }
@@ -100,9 +199,9 @@
     > .tools {
       display: flex;
       padding: 1em 0;
-      justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #ddd;
+      justify-content: space-between;
+      border-bottom: 1px solid $module-hover-bg;
       margin-bottom: .6em;
 
       > .like {
@@ -145,7 +244,6 @@
           > .cm-avatar {
 
             > a {
-
               > img {
                 transition: transform .5s ease-out;
                 transform: rotate(360deg);
@@ -154,7 +252,7 @@
           }
 
           > .cm-body {
-            background-color: rgba(180, 180, 180, 0.5);
+            background-color: darken($module-hover-bg, 20%);
           }
         }
 
@@ -162,12 +260,12 @@
           display: block;
           position: absolute;
           left: 0;
-          top: 2.1em;
-          background-color: #eee;
+          top: 2em;
+          background-color: $module-hover-bg;
 
           > a {
             display: block;
-            border: .3em solid #eee;
+            border: .3em solid $module-bg;
             width: 4em;
             height: 4em;
 
@@ -183,8 +281,8 @@
           display: block;
           width: 100%;
           height: 100%;
-          padding: .8em .8em .8em 3.5em;
-          background-color: rgba(220, 220, 220, 0.5);
+          padding: .6em .6em .6em 3.2em;
+          background-color: $module-hover-bg;
 
           > .cm-header {
             display: flex;
@@ -195,6 +293,7 @@
             > .user-name {
               font-weight: bold;
               margin-right: .8em;
+              font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
 
               &:hover {
                 text-decoration: underline;
@@ -233,6 +332,7 @@
 
             > .reply {
               color: #999;
+              font-weight: bold;
             }
           }
 
@@ -242,8 +342,8 @@
             > .create_at,
             > .reply,
             > .like {
-              font-size: .9em;
-              margin-right: .8em;
+              font-size: .8em;
+              margin-right: 1em;
             }
 
             > .create_at {
@@ -261,11 +361,6 @@
 
               &:hover {
                 opacity: 1;
-
-                // > .iconfont {
-                // opacity: .8;
-                // margin-right: .5em;
-                // }
               }
             }
           }
@@ -274,7 +369,157 @@
     }
 
     > .post-box {
+      display: block;
+      border-top: 1px dashed darken($module-hover-bg, 30%);
+      margin-top: 1rem;
+      padding-top: 1rem;
 
+      > .user {
+        width: 100%;
+        height: 2em;
+        display: flex;
+        margin-bottom: 1rem;
+        padding-left: 5em;
+
+        > .name,
+        > .email,
+        > .site {
+          font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
+          flex-grow: 1;
+
+          > input {
+            width: 100%;
+            background-color: $module-hover-bg;
+
+            &:focus,
+            &:hover {
+              background-color: darken($module-hover-bg, 10%);
+            }
+          }
+        }
+
+        > .name,
+        > .email {
+          margin-right: 1em;
+        }
+      }
+
+      > .editor-box {
+        width: 100%;
+        display: flex;
+
+        > .user {
+          margin-right: 1em;
+
+          > .gravatar {
+            display: block;
+            border: .3em solid #eee;
+            margin-bottom: .5em;
+            width: 4em;
+            height: 4em;
+            background-color: darken($module-hover-bg, 20%);
+
+            > img {
+              width: 100%;
+              height: 100%;
+              transition: transform .5s ease-out;
+            }
+          }
+
+          > .name {
+            text-align: center;
+            font-weight: bold;
+            font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
+          }
+        }
+
+        > .editor {
+          flex-grow: 1;
+          position: relative;
+
+          > .markdown {
+            min-height: 6em;
+            max-height: 20em;
+            overflow: auto;
+            outline: none;
+            padding: .5em;
+            cursor: auto;
+            font-size: .9em;
+            line-height: 1.6em;
+            background-color: $module-hover-bg;
+
+            &:hover {
+              background-color: darken($module-hover-bg, 10%);
+            }
+          }
+
+          > .editor-tools {
+            height: 2em;
+            line-height: 2em;
+            background-color: darken($module-hover-bg, 20%);
+
+            > .emoji {
+
+              > .emoji-box {
+                display: none;
+                position: absolute;
+                bottom: 2.4rem;
+                left: 0;
+                font-size: 1.3em;
+                background-color: $module-bg;
+
+                > .emoji-list {
+                  list-style: none;
+                  padding: 0;
+                  margin: 0;
+                  display: flex;
+                  flex-wrap: wrap;
+
+                  > .item {
+                    padding: 0 .4em;
+                    cursor: pointer;
+
+                    &:hover {
+                      background-color: $module-hover-bg;
+                    }
+                  }
+                }
+              }
+
+              &:hover {
+                > .emoji-box {
+                  display: block;
+                }
+              }
+            }
+
+            > .emoji,
+            > .image,
+            > .link,
+            > .code,
+            > .preview {
+              width: 2em;
+              height: 2em;
+              text-align: center;
+              display: inline-block;
+
+              &:hover {
+                background-color: darken($module-hover-bg, 20%);
+              }
+            }
+
+            > .submit {
+              float: right;
+              width: 7em;
+              background-color: darken($module-hover-bg, 15%);
+
+              &:hover {
+                background-color: darken($module-hover-bg, 40%);
+              }
+            }
+          }
+        }
+      }
     }
   }
 </style>
