@@ -61,7 +61,11 @@ module.exports = {
       { name: 'author', content: 'surmon@foxmail.com' },
       { name: 'viewport', content: 'initial-scale=1, maximum-scale=1, user-scalable=no' },
       { hid: 'keywords', name: 'keywords', content: 'surmon,马赐崇,司马萌,前端技术开发,javascript技术,worddpress 主题' },
-      { hid: 'description', name: 'description', content: '凡心所向 素履所往 生如逆旅 一苇以航' }
+      { hid: 'description', name: 'description', content: '凡心所向 素履所往 生如逆旅 一苇以航' },
+      { hid: 'weibo_type', property: 'og:type', content: 'webpage' },
+      { hid: 'weibo_url', property: 'og:url', content: 'https://surmon.me' },
+      { hid: 'weibo_title', property: 'og:title', content: 'Surmon.me - Talk is cheap. Show me the code' },
+      { hid: 'weibo_description', property: 'og:description', content: '凡心所向 素履所往 生如逆旅 一苇以航' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
