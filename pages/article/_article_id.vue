@@ -76,9 +76,9 @@
       </div>
     </transition>
     <div class="comment">
-      <comment-box v-if="!fetching && article.title"
-                   :post-id="article.id"
-                   :like="article.meta.likes">
+      <comment-box :post-id="article.id"
+                   :likes="article.meta.likes"
+                   v-if="!fetching && article.title">
       </comment-box>
     </div>
   </div>
