@@ -56,6 +56,10 @@ module.exports = {
     title: 'Surmon.me - Talk is cheap. Show me the code',
     titleTemplate: '%s | Surmon.me',
     __dangerouslyDisableSanitizers: ['script'],
+    htmlAttrs: {
+      xmlns: 'http://www.w3.org/1999/xhtml',
+      lang: 'zh'
+    },
     meta: [
       { charset: 'utf-8' },
       { name: 'author', content: 'surmon@foxmail.com' },

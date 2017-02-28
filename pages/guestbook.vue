@@ -9,10 +9,7 @@
       </div>
     </div>
     <div class="comment">
-      <comment-box title="Guestbook"
-                   thread-key="guestbook"
-                   url="https://surmon.me/guestbook">
-      </comment-box>
+      <comment-box post-id="guestbook"></comment-box>
     </div>
   </div>
 </template>
