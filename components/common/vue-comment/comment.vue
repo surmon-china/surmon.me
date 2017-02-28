@@ -3,7 +3,7 @@
     <div class="tools">
       <div class="total">
         <div class="count">
-          <strong class="count">20</strong>
+          <strong class="count">{{ comment.data.pagination.total || 0 }}</strong>
           <span>&nbsp;</span>
           <span>条评论</span>
         </div>
@@ -12,7 +12,7 @@
            :class="{ liked: pageLiked }"
            @click.stop.prevent="likePage">
           <i class="iconfont icon-like"></i>
-          <strong>7</strong>
+          <strong>{{ likes || 0 }}</strong>
           <span>人喜欢</span>
         </a>
       </div>
@@ -31,31 +31,30 @@
            @click.stop.prevent="sortComemnts(3)">最新</a>
       </div>
     </div>
+    <div class="empty-box" v-if="!comment.data.data.length">Go right to the heart of the matter.</div>
     <ul class="comment-list">
-      <li class="comment-item" v-for="comment in 10">
+      <li class="comment-item" v-for="comment in comment.data.data">
         <div class="cm-avatar">
-          <a href="" @click.stop.prevent="clickUser()">
-            <img src="https://avatar.duoshuo.com/avatar-50/772/311955.jpg" alt="">
+          <a :href="comment.author.site" @click.stop.prevent="clickUser(comment)">
+            <img :alt="comment.author.name || '匿名用户'"
+                 :src="comment.author.gravatar || '/images/anonymous.jpg'">
           </a>
         </div>
         <div class="cm-body">
           <div class="cm-header">
-            <a href="" class="user-name" @click.stop.prevent="clickUser()">Surmon</a>
-            <span class="os">
-              <span class="os_mac"><i class="iconfont icon-mac"></i>Mac OS X</span>
-            </span>
-            <span class="ua">
-              <span class="ua_chrome"><i class="iconfont icon-internet"></i>Chrome|56</span>
-            </span>
-            <span class="location">中国 西安</span>
+            <a :href="comment.author.site" 
+               class="user-name" 
+               @click.stop.prevent="clickUser(comment)">{{ comment.author.name | firstUpperCase }}</a>
+            <span class="os" v-html="OSParse(comment.agent)" v-if="comment.agent"></span>
+            <span class="ua" v-html="UAParse(comment.agent)" v-if="comment.agent"></span>
+            <span class="location">{{ comment.ip_location }}</span>
           </div>
-          <div class="cm-content" v-if="[1,2,3,5,6,8].includes(comment)">学习了赞一个</div>
-          <div class="cm-content" v-else>
-            <span class="reply">回复 Lindyang：</span>
-            <span>so？你想证明啥</span>
+          <div class="cm-content" v-html="marked(comment.content)">
+            <!-- <span class="reply">回复 Lindyang：</span> -->
+            <!-- <div>so？你想证明啥</div> -->
           </div>
           <div class="cm-footer">
-            <span class="create_at">2017年12月4日 下午</span>
+            <span class="create_at">{{ comment.create_at | timeAgo }}</span>
             <a href="" class="reply" @click.stop.prevent="">
               <i class="iconfont icon-reply"></i>
               <span>回复</span>
@@ -70,13 +69,13 @@
     <div class="post-box">
       <div class="user">
         <div class="name">
-          <input type="text" placeholder="name *">
+          <input type="text" required placeholder="name *" v-model="user.name">
         </div>
         <div class="email">
-          <input type="text" placeholder="email *">
+          <input type="email" required placeholder="email *" v-model="user.email">
         </div>
         <div class="site">
-          <input type="text" placeholder="site">
+          <input type="url" placeholder="site" v-model="user.site">
         </div>
       </div>
       <div class="editor-box">
@@ -84,7 +83,6 @@
           <div class="gravatar">
             <img src="https://avatar.duoshuo.com/avatar-50/912/312375.jpg" alt="">
           </div>
-          <p class="name">Surmon</p>
         </div>
         <div class="editor">
           <div class="markdown">
@@ -98,10 +96,7 @@
                  v-html="marked(comemntContentText)"></div>
           </div>
           <div class="editor-tools">
-            <a href="" 
-               class="emoji" 
-               title="emoji"
-               @click.stop.prevent>
+            <a href="" class="emoji" title="emoji" @click.stop.prevent>
               <i class="iconfont icon-emoji"></i>
               <div class="emoji-box">
                 <ul class="emoji-list">
@@ -129,22 +124,13 @@
                 </ul>
               </div>
             </a>
-            <a href="" 
-               class="image" 
-               title="image"
-               @click.stop.prevent="insertContent('image')">
+            <a href="" class="image" title="image" @click.stop.prevent="insertContent('image')">
               <i class="iconfont icon-image"></i>
             </a>
-            <a href="" 
-               class="link" 
-               title="link"
-               @click.stop.prevent="insertContent('link')">
+            <a href="" class="link" title="link" @click.stop.prevent="insertContent('link')">
               <i class="iconfont icon-link-horizontal"></i>
             </a>
-            <a href="" 
-               class="code" 
-               title="code"
-               @click.stop.prevent="insertContent('code')">
+            <a href="" class="code" title="code" @click.stop.prevent="insertContent('code')">
               <i class="iconfont icon-code-comment"></i>
             </a>
             <a href="" 
@@ -153,7 +139,7 @@
                @click.stop.prevent="previewMode = !previewMode">
               <i class="iconfont icon-eye"></i>
             </a>
-            <button class="submit">发布</button>
+            <button class="submit" @click="submitComment">发布</button>
           </div>
         </div>
       </div>
@@ -163,21 +149,55 @@
 
 <script>
   import marked from '~plugins/marked'
+  import { UAParse, OSParse } from '~utils/comment-ua-parse'
   export default {
     name: 'vue-comment',
+    fetch() {
+      console.log('fetch', this)
+      return store.dispatch('loadCommentsByPostId')
+    },
     data() {
       return {
         sortMode: 2,
         previewMode: false,
         pageLiked: false,
         comemntContentHtml: '',
-        comemntContentText: ''
+        comemntContentText: '',
+        user: {
+          name: '',
+          email: '',
+          site: '',
+          gravatar: ''
+        }
+      }
+    },
+    props: {
+      likes: {
+        type: [String, Number],
+        required: true
+      },
+      postId: {
+        type: [String, Number],
+        required: true
+      }
+    },
+    computed: {
+      isArticlePage() {
+        return !!this.$route.params.article_id
+      },
+      isGuestbookPage() {
+        return Object.is(this.$route.name, 'guestbook')
+      },
+      comment() {
+        return this.$store.state.comment
       }
     },
     methods: {
-      replaceSSL(html) {
-        return !!html ? html.replace(/http:\/\//ig, '/proxy/') : html
-      },
+      UAParse,
+      OSParse,
+      // replaceSSL(html) {
+      //   return !!html ? html.replace(/http:\/\//ig, '/proxy/') : html
+      // },
       commentContentChange() {
         const html = this.$refs.markdown.innerHTML
         const text = this.$refs.markdown.innerText
@@ -202,9 +222,7 @@
       insertEmoji(emoji) {
         this.updateCommentContent(emoji)
       },
-      marked(content) {
-        return marked(content)
-      },
+      marked: content => marked(content),
       sortComemnts(type) {
         console.log(type)
       },
@@ -220,12 +238,28 @@
       },
       likeCommentmoment() {
         console.log('喜欢某条评论', moment)
+      },
+      submitComment() {
+        const emailReg = /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/
+        const urlReg = /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/
+        if (!this.user.name) return alert('请输入名字')
+        if (!this.user.email) return alert('请输入邮箱')
+        if (!emailReg.test(this.user.email)) return alert('邮箱不合法')
+        if (this.user.site && !urlReg.test(this.user.site)) return alert('链接不合法')
+        if(!this.comemntContentText) return alert('请输入内容')
+        console.log('发布评论', this)
+        this.$store.dispatch('postComment', {
+          post_id: this.postId,
+          content: this.comemntContentText,
+          author: this.user,
+          agent: navigator.userAgent
+        })
       }
     }
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import '~assets/sass/mixins';
   @import '~assets/sass/variables';
   .comment-box {
@@ -280,6 +314,11 @@
           }
         }
       }
+    }
+
+    > .empty-box {
+      font-weight: bold;
+      text-align: center;
     }
 
     > .comment-list {
@@ -375,6 +414,93 @@
               color: $disabled;
               font-weight: bold;
             }
+
+            code {
+              color: #bd4147;
+              padding: .3em .5em;
+              margin: 0 .5em;
+              border-radius: $radius;
+              background-color: $module-hover-bg;
+            }
+
+            pre {
+              display: block;
+              position: relative;
+              overflow: hidden;
+              margin-bottom: 1em;
+              padding-left: 2.5em;
+              background-color: rgba(0, 0, 0, 0.8);
+
+              &:before {
+                color: white;
+                content: attr(data-lang)" CODE";
+                height: 2.8em;
+                line-height: 2.8em;
+                font-size: 1em;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                font-weight: 700;
+                background-color: rgba(68, 68, 68, 0.9);
+                display: block;
+                text-transform: uppercase;
+                text-align: center;
+              }
+
+              > .code-lines {
+                position: absolute;
+                left: 0;
+                top: 2.8em;
+                margin: 0;
+                padding: 1em 0;
+                width: 2.5em;
+                height: calc(100% - 2.8em);
+                text-align: center;
+                background-color: rgba(0, 0, 0, 0.2);
+
+                > .code-line-number {
+                  padding: 0;
+                  position: relative;
+                  list-style-type: none;
+                  line-height: 1.6em;
+                  transition: background-color .05s;
+
+                  &:hover {
+                    &:before {
+                      display: block;
+                      opacity: 1;
+                      visibility: visible;
+                    }
+                  }
+
+                  &:before {
+                    content: '';
+                    height: 1.6em;
+                    position: absolute;
+                    top: 0;
+                    left: 2.5em;
+                    width: 66em;
+                    background-color: rgba(154, 154, 154, 0.2);
+                    display: none;
+                    visibility: hidden;
+                    opacity: 0;
+                  }
+                }
+              }
+
+              > code {
+                margin: 0;
+                padding: 1em;
+                float: left;
+                width: 100%;
+                height: 100%;
+                display: block;
+                line-height: 1.6em;
+                color: rgba(255, 255, 255, 0.87);
+                background-color: transparent;
+              }
+            }
           }
 
           > .cm-footer {
@@ -465,12 +591,6 @@
               height: 100%;
               transition: transform .5s ease-out;
             }
-          }
-
-          > .name {
-            text-align: center;
-            font-weight: bold;
-            font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
           }
         }
 
