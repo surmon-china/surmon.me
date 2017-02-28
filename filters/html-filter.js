@@ -18,3 +18,8 @@ export const numberFormat = text => {
   const _number = Number(text)
   return (!isNaN(_number)) ? (_number.toFixed(2)) : text
 }
+
+// 首字母大写
+export const firstUpperCase = str => {
+  return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+}

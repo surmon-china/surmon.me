@@ -14,6 +14,15 @@ export const state = {
   adminInfo: {
     fetching: false,
     data: {}
+  },
+
+  globalOption: {
+    fetching: false,
+    data: {
+      meta: {
+        likes: 0
+      }
+    }
   }
 }
 
@@ -40,5 +49,18 @@ export const mutations = {
   REQUEST_ADMIN_INFO_FAILURE(state) {
     state.adminInfo.fetching = false
     state.adminInfo.data = {}
+  },
+
+  // 获取服务端配置
+  REQUEST_GLOBAL_OPTIONS(state) {
+    state.globalOption.fetching = true
+  },
+  REQUEST_GLOBAL_OPTIONS_SUCCESS(state, action) {
+    state.globalOption.fetching = false
+    state.globalOption.data = action.result
+  },
+  REQUEST_GLOBAL_OPTIONS_FAILURE(state) {
+    state.globalOption.fetching = false
+    state.globalOption.data = {}
   }
 }

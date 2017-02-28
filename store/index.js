@@ -12,16 +12,20 @@ export const actions = {
   // 全局服务初始化
   nuxtServerInit(store, { params, route }) {
     const initAppData = [
+      // 配置数据
       store.dispatch('loadAdminInfo'),
+      store.dispatch('loadGlobalOption'),
+      // 内容数据
       store.dispatch('loadTagList'),
       store.dispatch('loadCategories'),
       store.dispatch('loadHotArticles')
     ]
-    // 判断首次服务端渲染时请求评论信息做seo
-    const isGb = Object.is(route.name, 'guestbook')
-    const thread_key = params.article_id || (isGb ? 'guestbook' : false)
-    if (thread_key) {
-      initAppData.push(store.dispatch('loadCommentsByThirdKey', { thread_key }))
+    // 首次服务端渲染时渲染评论数据
+    const isGuestbook = Object.is(route.name, 'guestbook')
+    const post_id = params.article_id || (isGuestbook ? 0 : false)
+    if (!Object.is(post_id, false)) {
+      console.log('loadCommentsByPostId')
+      initAppData.push(store.dispatch('loadCommentsByPostId', { post_id }))
     }
     return Promise.all(initAppData)
   },
@@ -39,8 +43,21 @@ export const actions = {
     })
   },
 
+  // 获取全局配置
+  loadGlobalOption({ commit }) {
+    commit('option/REQUEST_GLOBAL_OPTIONS')
+    return Service.get('/option')
+    .then(response => {
+      const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
+      if(success) commit('option/REQUEST_GLOBAL_OPTIONS_SUCCESS', response.data)
+      if(!success) commit('option/REQUEST_GLOBAL_OPTIONS_FAILURE')
+    }, err => {
+      commit('option/REQUEST_GLOBAL_OPTIONS_FAILURE', err)
+    })
+  },
+
   // 获取标签列表
-  loadTagList({ commit }, params = { per_page: 100 }) {
+  loadTagList({ commit }, params = { per_page: 160 }) {
     commit('tag/REQUEST_LIST')
     return Service.get('/tag', { params })
     .then(response => {
@@ -70,8 +87,7 @@ export const actions = {
   // 获取最热文章列表
   loadHotArticles({ commit }) {
     commit('article/REQUEST_HOT_LIST')
-    const params = { short_name: process.env.duoshuoShortName, num_items: 15, range: 'all' }
-    return Service.get('https://api.duoshuo.com/sites/listTopThreads.json', { params })
+    return Service.get('/article', { params: { hot: 1 }})
     .then(response => {
       const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 0)
       if(success) commit('article/GET_HOT_LIST_SUCCESS', response.data)
@@ -81,17 +97,45 @@ export const actions = {
     })
   },
 
-  // 根据唯一key获取多说评论  https://api.duoshuo.com/threads/listPosts.json?short_name=localhost-3000&thread_key=guestbook&page=1&limit=50
-  loadCommentsByThirdKey({ commit }, { thread_key }) {
+  // 根据post-id获取评论
+  loadCommentsByPostId({ commit }, params) {
+    params.per_page = params.per_page || 50
+    console.log('loadCommentsByPostId', params)
     commit('comment/REQUEST_LIST')
-    const params = { short_name: process.env.duoshuoShortName, limit: 50, page: 1, thread_key }
-    return Service.get('https://api.duoshuo.com/threads/listPosts.json', { params })
+    return Service.get('/comment', { params })
     .then(response => {
-      const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 0)
+      const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
+      console.log(success, response.statusText, response.data)
       if(success) commit('comment/GET_LIST_SUCCESS', response.data)
       if(!success) commit('comment/GET_LIST_FAILURE')
     }, err => {
       commit('comment/GET_LIST_FAILURE', err)
+    })
+  },
+
+  // 发布评论
+  postComment({ commit }, comment) {
+    commit('comment/POST_ITEM')
+    return Service.post('/comment', comment)
+    .then(response => {
+      const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
+      if(success) commit('comment/POST_ITEM_SUCCESS', response.data)
+      if(!success) commit('comment/POST_ITEM_FAILURE')
+    }, err => {
+      commit('comment/POST_ITEM_FAILURE', err)
+    })
+  },
+
+  // 喜欢某个页面或主站 || 为某条回复点赞
+  likeArticleOrPageOrComment({ commit }, like) {
+    return Service.post('/like', like)
+    .then(response => {
+      const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
+      if(success) {
+        // commit('comment/POST_ITEM_SUCCESS', response.data)
+      }
+    }, err => {
+      console.log('喜欢失败')
     })
   },
 

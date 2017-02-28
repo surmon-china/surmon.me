@@ -9,7 +9,9 @@
       </div>
     </div>
     <div class="comment">
-      <comment-box post-id="guestbook"></comment-box>
+      <comment-box :post-id="0" 
+                   :likes="$store.state.option.globalOption.data.meta.likes">
+      </comment-box>
     </div>
   </div>
 </template>
@@ -19,11 +21,6 @@
     name: 'guestbook',
     head: {
       title: 'Guestbook'
-    },
-    computed: {
-      comments() {
-        return this.$store.state.comment.guestbook.data
-      }
     }
   }
 </script>
