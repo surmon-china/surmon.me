@@ -528,15 +528,15 @@
               > .emoji-box {
                 display: none;
                 position: absolute;
-                bottom: 2.4rem;
+                bottom: 2em;
                 left: 0;
-                font-size: 1.3em;
                 background-color: $module-bg;
 
                 > .emoji-list {
                   list-style: none;
                   padding: 0;
                   margin: 0;
+                  font-size: 1.3em;
                   display: flex;
                   flex-wrap: wrap;
 

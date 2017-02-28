@@ -76,12 +76,10 @@
       </div>
     </transition>
     <div class="comment">
-      <comment-hidden-box v-if="!fetching && article.title"></comment-hidden-box>
-      <duoshuo-box v-if="!fetching && article.title"
-                   :title="article.title"
-                   :thread-key="article.id"
-                   :url="`https://surmon.me/article/${article.id}`">
-      </duoshuo-box>
+      <comment-box v-if="!fetching && article.title"
+                   :post-id="article.id"
+                   :like="article.meta.likes">
+      </comment-box>
     </div>
   </div>
 </template>
