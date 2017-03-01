@@ -24,7 +24,6 @@ export const actions = {
     const isGuestbook = Object.is(route.name, 'guestbook')
     const post_id = params.article_id || (isGuestbook ? 0 : false)
     if (!Object.is(post_id, false)) {
-      console.log('loadCommentsByPostId')
       initAppData.push(store.dispatch('loadCommentsByPostId', { post_id }))
     }
     return Promise.all(initAppData)
@@ -99,13 +98,15 @@ export const actions = {
 
   // 根据post-id获取评论
   loadCommentsByPostId({ commit }, params) {
+    params.page = params.page || 1
     params.per_page = params.per_page || 50
-    console.log('loadCommentsByPostId', params)
+    if (Object.is(params.page, 1)) {
+      commit('comment/CLEAR_LIST')
+    }
     commit('comment/REQUEST_LIST')
     return Service.get('/comment', { params })
     .then(response => {
       const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
-      console.log(success, response.statusText, response.data)
       if(success) commit('comment/GET_LIST_SUCCESS', response.data)
       if(!success) commit('comment/GET_LIST_FAILURE')
     }, err => {
@@ -119,10 +120,16 @@ export const actions = {
     return Service.post('/comment', comment)
     .then(response => {
       const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
-      if(success) commit('comment/POST_ITEM_SUCCESS', response.data)
-      if(!success) commit('comment/POST_ITEM_FAILURE')
+      if(success) {
+        commit('comment/POST_ITEM_SUCCESS', response.data)
+        return Promise.resolve(response.data)
+      } else {
+        commit('comment/POST_ITEM_FAILURE')
+        return Promise.solve(response.data)
+      }
     }, err => {
       commit('comment/POST_ITEM_FAILURE', err)
+      return Promise.solve(err)
     })
   },
 

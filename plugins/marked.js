@@ -31,6 +31,7 @@ const linkParse = (href, title, text) => {
 
 // 对图片进行弹窗处理
 const imageParse = (src, title, alt) => {
+  src = src.replace(/^http:\/\//ig, "/proxy/")
   return `<img src="${src}" 
                title="${title || alt || 'surmon.me'}" 
                alt="${alt || title || src}" 
