@@ -16,6 +16,7 @@ export const timeAgo = time => {
   time = time instanceof Date ? time : new Date(time)
   const between = Date.now() / 1000 - (Number(time) / 1000)
   if (between < 3600) {
+    if (Object.is(~~(between / 60), 0)) return '刚刚'
     return pluralize(~~(between / 60), ' 分钟')
   } else if (between < 86400) {
     return pluralize(~~(between / 3600), ' 小时')
