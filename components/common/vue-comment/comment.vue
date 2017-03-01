@@ -35,39 +35,48 @@
     <ul class="comment-list">
       <li class="comment-item" v-for="comment in comment.data.data">
         <div class="cm-avatar">
-          <a :href="comment.author.site" @click.stop.prevent="clickUser(comment)">
+          <a target="_blank"
+             rel="external nofollow"
+             :href="comment.author.site" 
+             @click.stop="clickUser($event, comment.author)">
             <img :alt="comment.author.name || '匿名用户'"
                  :src="comment.author.gravatar || '/images/anonymous.jpg'">
           </a>
         </div>
         <div class="cm-body">
           <div class="cm-header">
-            <a :href="comment.author.site" 
-               class="user-name" 
-               @click.stop.prevent="clickUser(comment)">{{ comment.author.name | firstUpperCase }}</a>
+            <a class="user-name" 
+               target="_blank" 
+               rel="external nofollow"
+               :href="comment.author.site" 
+               @click.stop="clickUser($event, comment.author)">{{ comment.author.name | firstUpperCase }}</a>
             <span class="os" v-html="OSParse(comment.agent)" v-if="comment.agent"></span>
             <span class="ua" v-html="UAParse(comment.agent)" v-if="comment.agent"></span>
-            <span class="location">{{ comment.ip_location }}</span>
+            <span class="location" v-if="comment.ip_location">{{ comment.ip_location }}</span>
           </div>
-          <div class="cm-content" v-html="marked(comment.content)">
-            <!-- <span class="reply">回复 Lindyang：</span> -->
-            <!-- <div>so？你想证明啥</div> -->
+          <div class="cm-content">
+            <!-- <p class="reply">回复 Lindyang：</p> -->
+            <div v-html="marked(comment.content)"></div>
           </div>
           <div class="cm-footer">
             <span class="create_at">{{ comment.create_at | timeAgo }}</span>
-            <a href="" class="reply" @click.stop.prevent="">
+            <a href="" class="reply" @click.stop.prevent="replyComment(comment)">
               <i class="iconfont icon-reply"></i>
               <span>回复</span>
             </a>
-            <a href="" class="like" @click.stop.prevent="">
+            <a href="" 
+               class="like" 
+               :class="{ liked: commentLiked(comment.id) }"
+               @click.stop.prevent="likeComment(comment)">
               <i class="iconfont icon-zan"></i>
-              <span>顶(10)</span></a>
+              <span>顶&nbsp;({{ comment.likes }})</span></a>
           </div>
         </div>
       </li>
     </ul>
     <div class="post-box">
-      <div class="user">
+      <!-- 用户编辑部分 -->
+      <div class="user" v-if="!userCacheMode || userCacheEditing">
         <div class="name">
           <input type="text" required placeholder="name *" v-model="user.name">
         </div>
@@ -77,11 +86,29 @@
         <div class="site">
           <input type="url" placeholder="site" v-model="user.site">
         </div>
+        <div class="save" v-if="userCacheEditing">
+          <a>保存</a>
+        </div>
+      </div>
+      <!-- 用户设置部分 -->
+      <div class="user" v-if="userCacheMode && !userCacheEditing">
+        <div class="edit">
+          <strong class="name">{{ user.name | firstUpperCase }}</strong>
+          <a href="" class="setting" @click.stop.prevent>
+            <i class="iconfont icon-setting"></i>
+            <span>账户设置</span>
+            <ul class="user-tool">
+              <li @click.stop.prevent="userCacheEditing = true">编辑信息</li>
+              <li @click.stop.prevent="claerUserCache">清空信息</li>
+            </ul>
+          </a>
+        </div>
       </div>
       <div class="editor-box">
         <div class="user">
           <div class="gravatar">
-            <img src="https://avatar.duoshuo.com/avatar-50/912/312375.jpg" alt="">
+            <img :alt="user.name || '匿名用户'"
+                 :src="user.gravatar || '/images/anonymous.jpg'">
           </div>
         </div>
         <div class="editor">
@@ -93,7 +120,7 @@
             </div>
             <div class="markdown-preview" 
                  :class="{ active: previewMode }"
-                 v-html="marked(comemntContentText)"></div>
+                 v-html="previewContent"></div>
           </div>
           <div class="editor-tools">
             <a href="" class="emoji" title="emoji" @click.stop.prevent>
@@ -133,10 +160,7 @@
             <a href="" class="code" title="code" @click.stop.prevent="insertContent('code')">
               <i class="iconfont icon-code-comment"></i>
             </a>
-            <a href="" 
-               class="preview" 
-               title="preview"
-               @click.stop.prevent="previewMode = !previewMode">
+            <a href="" class="preview" title="preview" @click.stop.prevent="togglePreviewMode">
               <i class="iconfont icon-eye"></i>
             </a>
             <button class="submit" @click="submitComment">发布</button>
@@ -152,22 +176,28 @@
   import { UAParse, OSParse } from '~utils/comment-ua-parse'
   export default {
     name: 'vue-comment',
-    fetch() {
-      console.log('fetch', this)
-      return store.dispatch('loadCommentsByPostId')
-    },
     data() {
       return {
+        // 评论排序
         sortMode: 2,
-        previewMode: false,
-        pageLiked: false,
+        // 编辑器相关
         comemntContentHtml: '',
         comemntContentText: '',
+        previewContent: '',
+        previewMode: false,
+        // 用户相关
+        userCacheMode: false,
+        userCacheEditing: false,
         user: {
           name: '',
           email: '',
           site: '',
           gravatar: ''
+        },
+        // 用户历史数据
+        historyLikes: {
+          pages: [],
+          comments: []
         }
       }
     },
@@ -182,6 +212,9 @@
       }
     },
     computed: {
+      pageLiked() {
+        return this.historyLikes.pages.includes(this.postId)
+      },
       isArticlePage() {
         return !!this.$route.params.article_id
       },
@@ -192,12 +225,36 @@
         return this.$store.state.comment
       }
     },
+    mounted() {
+      this.initUser()
+      this.loadComemntList()
+    },
     methods: {
+      marked,
       UAParse,
       OSParse,
-      // replaceSSL(html) {
-      //   return !!html ? html.replace(/http:\/\//ig, '/proxy/') : html
-      // },
+      // 初始化本地用户即本地用户的点赞历史
+      initUser() {
+        if (localStorage) {
+          const user = localStorage.getItem('user')
+          const historyLikes = localStorage.getItem('user_like_history')
+          if (user) {
+            this.user = JSON.parse(user)
+            this.userCacheMode = true
+          }
+          if (historyLikes) this.historyLikes = JSON.parse(historyLikes)
+        }
+      },
+      // 清空用户数据
+      claerUserCache() {
+        this.userCacheMode = false
+        this.userCacheEditing = false
+        localStorage.removeItem('user')
+        Object.keys(this.user).forEach(key => {
+          this.user[key] = ''
+        })
+      },
+      // 编辑器相关
       commentContentChange() {
         const html = this.$refs.markdown.innerHTML
         const text = this.$refs.markdown.innerText
@@ -208,6 +265,11 @@
       },
       updateCommentContent(content) {
         if (content) this.comemntContentHtml += content
+        this.$refs.markdown.innerHTML = this.comemntContentHtml
+        this.commentContentChange()
+      },
+      clearCommentContent(content) {
+        this.comemntContentHtml = ''
         this.$refs.markdown.innerHTML = this.comemntContentHtml
         this.commentContentChange()
       },
@@ -222,23 +284,48 @@
       insertEmoji(emoji) {
         this.updateCommentContent(emoji)
       },
-      marked: content => marked(content),
+      // 切换预览模式
+      togglePreviewMode() {
+        this.previewContent = this.marked(this.comemntContentText)
+        this.previewMode = !this.previewMode
+      },
+      // 评论排序
       sortComemnts(type) {
         console.log(type)
       },
+      // 点击用户
+      clickUser(event, user) {
+        if (!user.site) event.preventDefault()
+      },
+      // 回复评论
+      replyComment(comment) {
+        console.log('回复某条评论', comment)
+      },
+      // 喜欢当前页面
       likePage() {
-        this.pageLiked = true
+        if (this.pageLiked) return false
+        // 发送喜欢请求，成功后执行以下操作：更改数据
         console.log('被喜欢了')
+        this.historyLikes.pages.push(this.postId)
+        localStorage.setItem('user_like_history', JSON.stringify(this.historyLikes))
       },
-      clickUser(user) {
-        console.log('点击了某个用户', user)
+      // 获取某条评论是否被点赞
+      commentLiked(comment_id) {
+        return this.historyLikes.comments.includes(comment_id)
       },
-      replyComment(moment) {
-        console.log('回复某条评论', moment)
+      // 点赞某条评论
+      likeComment(comment) {
+        if (this.commentLiked(comment.id)) return false
+        // 发送喜欢请求，成功后执行以下操作：更改数据
+        console.log('喜欢某条评论', comment)
+        this.historyLikes.comments.push(comment.id)
+        localStorage.setItem('user_like_history', JSON.stringify(this.historyLikes))
       },
-      likeCommentmoment() {
-        console.log('喜欢某条评论', moment)
+      // 获取评论列表
+      loadComemntList(page = 1) {
+        this.$store.dispatch('loadCommentsByPostId', { page, post_id: this.postId })
       },
+      // 提交评论
       submitComment() {
         const emailReg = /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/
         const urlReg = /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/
@@ -247,12 +334,18 @@
         if (!emailReg.test(this.user.email)) return alert('邮箱不合法')
         if (this.user.site && !urlReg.test(this.user.site)) return alert('链接不合法')
         if(!this.comemntContentText) return alert('请输入内容')
+        // 内容不能超过50行，也不能超过800字
         console.log('发布评论', this)
         this.$store.dispatch('postComment', {
           post_id: this.postId,
           content: this.comemntContentText,
           author: this.user,
           agent: navigator.userAgent
+        }).then(data => {
+          // 发布成功后清空评论框内容并更新本地信息
+          this.clearCommentContent()
+          localStorage.setItem('user', JSON.stringify(this.user))
+          this.userCache = true
         })
       }
     }
@@ -415,6 +508,10 @@
               font-weight: bold;
             }
 
+            p {
+              margin: 0;
+            }
+
             code {
               color: #bd4147;
               padding: .3em .5em;
@@ -517,6 +614,10 @@
               color: $disabled;
             }
 
+            > .liked {
+              color: $red;
+            }
+
             > .reply,
             > .like {
               opacity: .8;
@@ -547,6 +648,53 @@
         display: flex;
         margin-bottom: 1rem;
         padding-left: 5em;
+
+        > .edit {
+          flex-grow: 1;
+          text-align: right;
+          line-height: 2em;
+          position: relative;
+
+          > .name {
+            font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
+          }
+
+          > .setting {
+            margin-left: 1rem;
+            font-size: 1rem;
+            display: inline-block;
+
+            &:hover {
+
+              > .user-tool {
+                display: block;
+              }
+            }
+
+            > .iconfont {
+              margin-right: .5rem;
+            }
+
+            > .user-tool {
+              display: none;
+              position: absolute;
+              right: 0;
+              top: 2em;
+              margin: 0;
+              padding: 0;
+              padding-top: .5rem;
+              list-style-type: square;
+              z-index: 99;
+            }
+          }
+        }
+
+        > .save {
+          width: 10%;
+          margin-left: 1em;
+          flex-grow: 1;
+          font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
+        }
 
         > .name,
         > .email,
@@ -580,10 +728,9 @@
 
           > .gravatar {
             display: block;
-            border: .3em solid #eee;
             margin-bottom: .5em;
-            width: 4em;
-            height: 4em;
+            width: 4rem;
+            height: 4rem;
             background-color: darken($module-hover-bg, 20%);
 
             > img {

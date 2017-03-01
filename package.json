@@ -12,6 +12,7 @@
     "highlight.js": "^9.9.0",
     "idle-gc": "^1.0.1",
     "marked": "^0.3.6",
+    "node-localstorage": "^1.3.0",
     "nuxt": "latest",
     "swiper": "^3.4.1"
   },

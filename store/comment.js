@@ -18,6 +18,13 @@ export const mutations = {
   REQUEST_LIST(state) {
     state.fetching = true
   },
+  // 清空评论
+  CLEAR_LIST(state) {
+    state.data = { 
+      data: [],
+      pagination: {}
+    }
+  },
   GET_LIST_SUCCESS(state, action) {
     state.fetching = false
     state.data = action.result
@@ -36,7 +43,8 @@ export const mutations = {
   },
   POST_ITEM_SUCCESS(state, action) {
     state.fetching = false
-    console.log(action)
+    state.data.pagination.total += 1
+    state.data.data.push(action.result)
   },
   POST_ITEM_FAILURE(state) {
     state.fetching = false
