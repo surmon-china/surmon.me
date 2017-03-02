@@ -125,7 +125,7 @@ export const actions = {
         return Promise.resolve(response.data)
       } else {
         commit('comment/POST_ITEM_FAILURE')
-        return Promise.solve(response.data)
+        return Promise.solve(response)
       }
     }, err => {
       commit('comment/POST_ITEM_FAILURE', err)
