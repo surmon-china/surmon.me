@@ -19,91 +19,104 @@
       <div class="sort">
         <a href="" 
            class="sort-btn"
-           :class="{ actived: Object.is(sortMode, 1) }" 
-           @click.stop.prevent="sortComemnts(1)">最新</a>
+           :class="{ actived: Object.is(sortMode, -1) }" 
+           @click.stop.prevent="sortComemnts(-1)">最新</a>
         <a href="" 
            class="sort-btn"
-           :class="{ actived: Object.is(sortMode, 2) }"
-           @click.stop.prevent="sortComemnts(2)">最早</a>
+           :class="{ actived: Object.is(sortMode, 1) }"
+           @click.stop.prevent="sortComemnts(1)">最早</a>
         <a href="" 
            class="sort-btn"
-           :class="{ actived: Object.is(sortMode, 3) }" 
-           @click.stop.prevent="sortComemnts(3)">最新</a>
+           :class="{ actived: Object.is(sortMode, 2) }" 
+           @click.stop.prevent="sortComemnts(2)">最热</a>
       </div>
     </div>
-    <div class="empty-box" v-if="!comment.data.data.length">Go right to the heart of the matter.</div>
-    <ul class="comment-list">
-      <li class="comment-item" v-for="comment in comment.data.data">
-        <div class="cm-avatar">
-          <a target="_blank"
-             rel="external nofollow"
-             :href="comment.author.site" 
-             @click.stop="clickUser($event, comment.author)">
-            <img :alt="comment.author.name || '匿名用户'"
-                 :src="comment.author.gravatar || '/images/anonymous.jpg'">
-          </a>
-        </div>
-        <div class="cm-body">
-          <div class="cm-header">
-            <a class="user-name" 
-               target="_blank" 
-               rel="external nofollow"
-               :href="comment.author.site" 
-               @click.stop="clickUser($event, comment.author)">{{ comment.author.name | firstUpperCase }}</a>
-            <span class="os" v-html="OSParse(comment.agent)" v-if="comment.agent"></span>
-            <span class="ua" v-html="UAParse(comment.agent)" v-if="comment.agent"></span>
-            <span class="location" v-if="comment.ip_location">{{ comment.ip_location }}</span>
-          </div>
-          <div class="cm-content">
-            <!-- <p class="reply">回复 Lindyang：</p> -->
-            <div v-html="marked(comment.content)"></div>
-          </div>
-          <div class="cm-footer">
-            <span class="create_at">{{ comment.create_at | timeAgo }}</span>
-            <a href="" class="reply" @click.stop.prevent="replyComment(comment)">
-              <i class="iconfont icon-reply"></i>
-              <span>回复</span>
-            </a>
-            <a href="" 
-               class="like" 
-               :class="{ liked: commentLiked(comment.id) }"
-               @click.stop.prevent="likeComment(comment)">
-              <i class="iconfont icon-zan"></i>
-              <span>顶&nbsp;({{ comment.likes }})</span></a>
-          </div>
-        </div>
-      </li>
-    </ul>
-    <div class="post-box">
+    <transition name="module" mode="out-in">
+      <div class="empty-box" v-if="!comment.data.data.length && !comment.fetching">Go right to the heart of the matter.</div>
+      <loading-box v-else-if="comment.fetching"></loading-box>
+      <div class="list-box" v-else>
+        <transition-group name="fade" tag="ul" class="comment-list">
+          <li class="comment-item" v-for="(comment, index) in comment.data.data" key="index">
+            <div class="cm-avatar">
+              <a target="_blank"
+                 rel="external nofollow"
+                 :href="comment.author.site" 
+                 @click.stop="clickUser($event, comment.author)">
+                <img :alt="comment.author.name || '匿名用户'"
+                     :src="comment.author.gravatar || '/images/anonymous.jpg'">
+              </a>
+            </div>
+            <div class="cm-body">
+              <div class="cm-header">
+                <a class="user-name" 
+                   target="_blank" 
+                   rel="external nofollow"
+                   :href="comment.author.site" 
+                   @click.stop="clickUser($event, comment.author)">{{ comment.author.name | firstUpperCase }}</a>
+                <span class="os" v-html="OSParse(comment.agent)" v-if="comment.agent"></span>
+                <span class="ua" v-html="UAParse(comment.agent)" v-if="comment.agent"></span>
+                <span class="location" v-if="comment.ip_location">
+                  <span>{{ comment.ip_location.country }}</span>
+                  <span>&nbsp;-&nbsp;</span>
+                  <span>{{ comment.ip_location.city }}</span>
+                </span>
+              </div>
+              <div class="cm-content">
+                <!-- <p class="reply">回复 Lindyang：</p> -->
+                <div v-html="marked(comment.content)"></div>
+              </div>
+              <div class="cm-footer">
+                <span class="create_at">{{ comment.create_at | timeAgo }}</span>
+                <a href="" class="reply" @click.stop.prevent="replyComment(comment)">
+                  <i class="iconfont icon-reply"></i>
+                  <span>回复</span>
+                </a>
+                <a href="" 
+                   class="like" 
+                   :class="{ liked: commentLiked(comment.id) }"
+                   @click.stop.prevent="likeComment(comment)">
+                  <i class="iconfont icon-zan"></i>
+                  <span>顶&nbsp;({{ comment.likes }})</span></a>
+              </div>
+            </div>
+          </li>
+        </transition-group>
+      </div>
+    </transition>
+    <form class="post-box">
       <!-- 用户编辑部分 -->
-      <div class="user" v-if="!userCacheMode || userCacheEditing">
-        <div class="name">
-          <input type="text" required placeholder="name *" v-model="user.name">
+      <transition name="module" mode="out-in">
+        <div class="user" v-if="!userCacheMode || userCacheEditing">
+          <div class="name">
+            <input type="text" required placeholder="name *" v-model="user.name">
+          </div>
+          <div class="email">
+            <input type="email" required placeholder="email *" v-model="user.email">
+          </div>
+          <div class="site">
+            <input type="url" placeholder="site" v-model="user.site">
+          </div>
+          <div class="save" v-if="userCacheEditing">
+            <button type="submit" @click="updateUserCache($event)">
+              <i class="iconfont icon-success"></i>
+            </button>
+          </div>
         </div>
-        <div class="email">
-          <input type="email" required placeholder="email *" v-model="user.email">
+        <!-- 用户设置部分 -->
+        <div class="user" v-if="userCacheMode && !userCacheEditing">
+          <div class="edit">
+            <strong class="name">{{ user.name | firstUpperCase }}</strong>
+            <a href="" class="setting" @click.stop.prevent>
+              <i class="iconfont icon-setting"></i>
+              <span>账户设置</span>
+              <ul class="user-tool">
+                <li @click.stop.prevent="userCacheEditing = true">编辑信息</li>
+                <li @click.stop.prevent="claerUserCache">清空信息</li>
+              </ul>
+            </a>
+          </div>
         </div>
-        <div class="site">
-          <input type="url" placeholder="site" v-model="user.site">
-        </div>
-        <div class="save" v-if="userCacheEditing">
-          <a>保存</a>
-        </div>
-      </div>
-      <!-- 用户设置部分 -->
-      <div class="user" v-if="userCacheMode && !userCacheEditing">
-        <div class="edit">
-          <strong class="name">{{ user.name | firstUpperCase }}</strong>
-          <a href="" class="setting" @click.stop.prevent>
-            <i class="iconfont icon-setting"></i>
-            <span>账户设置</span>
-            <ul class="user-tool">
-              <li @click.stop.prevent="userCacheEditing = true">编辑信息</li>
-              <li @click.stop.prevent="claerUserCache">清空信息</li>
-            </ul>
-          </a>
-        </div>
-      </div>
+      </transition>
       <div class="editor-box">
         <div class="user">
           <div class="gravatar">
@@ -163,11 +176,11 @@
             <a href="" class="preview" title="preview" @click.stop.prevent="togglePreviewMode">
               <i class="iconfont icon-eye"></i>
             </a>
-            <button class="submit" @click="submitComment">发布</button>
+            <button class="submit" type="submit" @click="submitComment($event)">发布</button>
           </div>
         </div>
       </div>
-    </div>
+    </form>
   </div>
 </template>
 
@@ -179,7 +192,7 @@
     data() {
       return {
         // 评论排序
-        sortMode: 2,
+        sortMode: 1,
         // 编辑器相关
         comemntContentHtml: '',
         comemntContentText: '',
@@ -230,20 +243,34 @@
       this.loadComemntList()
     },
     methods: {
-      marked,
       UAParse,
       OSParse,
+      marked(content) {
+        return marked(content, false, false)
+      },
       // 初始化本地用户即本地用户的点赞历史
       initUser() {
         if (localStorage) {
           const user = localStorage.getItem('user')
           const historyLikes = localStorage.getItem('user_like_history')
+          if (historyLikes) this.historyLikes = JSON.parse(historyLikes)
           if (user) {
             this.user = JSON.parse(user)
             this.userCacheMode = true
           }
-          if (historyLikes) this.historyLikes = JSON.parse(historyLikes)
         }
+      },
+      // 更新用户数据
+      updateUserCache(event) {
+        event.preventDefault()
+        const emailReg = /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/
+        const urlReg = /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/
+        if (!this.user.name) return alert('请输入名字')
+        if (!this.user.email) return alert('请输入邮箱')
+        if (!emailReg.test(this.user.email)) return alert('邮箱不合法')
+        if (this.user.site && !urlReg.test(this.user.site)) return alert('链接不合法')
+        localStorage.setItem('user', JSON.stringify(this.user))
+        this.userCacheEditing = false
       },
       // 清空用户数据
       claerUserCache() {
@@ -290,8 +317,9 @@
         this.previewMode = !this.previewMode
       },
       // 评论排序
-      sortComemnts(type) {
-        console.log(type)
+      sortComemnts(sort) {
+        this.sortMode = sort
+        this.loadComemntList({ sort })
       },
       // 点击用户
       clickUser(event, user) {
@@ -309,10 +337,6 @@
         this.historyLikes.pages.push(this.postId)
         localStorage.setItem('user_like_history', JSON.stringify(this.historyLikes))
       },
-      // 获取某条评论是否被点赞
-      commentLiked(comment_id) {
-        return this.historyLikes.comments.includes(comment_id)
-      },
       // 点赞某条评论
       likeComment(comment) {
         if (this.commentLiked(comment.id)) return false
@@ -321,12 +345,17 @@
         this.historyLikes.comments.push(comment.id)
         localStorage.setItem('user_like_history', JSON.stringify(this.historyLikes))
       },
+      // 获取某条评论是否被点赞
+      commentLiked(comment_id) {
+        return this.historyLikes.comments.includes(comment_id)
+      },
       // 获取评论列表
-      loadComemntList(page = 1) {
-        this.$store.dispatch('loadCommentsByPostId', { page, post_id: this.postId })
+      loadComemntList(params = {}) {
+        this.$store.dispatch('loadCommentsByPostId', Object.assign(params, { post_id: this.postId }))
       },
       // 提交评论
-      submitComment() {
+      submitComment(event) {
+        event.preventDefault()
         const emailReg = /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/
         const urlReg = /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/
         if (!this.user.name) return alert('请输入名字')
@@ -345,7 +374,9 @@
           // 发布成功后清空评论框内容并更新本地信息
           this.clearCommentContent()
           localStorage.setItem('user', JSON.stringify(this.user))
-          this.userCache = true
+          this.userCacheMode = true
+        }).catch(err => {
+          console.log(err)
         })
       }
     }
@@ -403,6 +434,7 @@
           margin-left: 1em;
 
           &.actived {
+            color: $black;
             font-weight: bold;
           }
         }
@@ -414,221 +446,225 @@
       text-align: center;
     }
 
-    > .comment-list {
-      padding: 0;
-      margin: 0;
-      list-style-type: none;
+    > .list-box {
 
-      > .comment-item {
-        position: relative;
-        padding: .6em 0 .6em 1.5em;
+      > .comment-list {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
 
-        &:hover {
+        > .comment-item {
+          position: relative;
+          padding: .6em 0 .6em 1.5em;
+
+          &:hover {
+
+            > .cm-avatar {
+
+              > a {
+                > img {
+                  transition: transform .5s ease-out;
+                  transform: rotate(360deg);
+                }
+              }
+            }
+
+            > .cm-body {
+              background-color: darken($module-hover-bg, 20%);
+            }
+          }
 
           > .cm-avatar {
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 2em;
+            background-color: $module-hover-bg;
 
             > a {
+              display: block;
+              border: .3em solid $module-bg;
+              width: 4em;
+              height: 4em;
+
               > img {
+                width: 100%;
+                height: 100%;
                 transition: transform .5s ease-out;
-                transform: rotate(360deg);
               }
             }
           }
 
           > .cm-body {
-            background-color: darken($module-hover-bg, 20%);
-          }
-        }
-
-        > .cm-avatar {
-          display: block;
-          position: absolute;
-          left: 0;
-          top: 2em;
-          background-color: $module-hover-bg;
-
-          > a {
             display: block;
-            border: .3em solid $module-bg;
-            width: 4em;
-            height: 4em;
+            width: 100%;
+            height: 100%;
+            padding: .6em .6em .6em 3.2em;
+            background-color: $module-hover-bg;
 
-            > img {
-              width: 100%;
-              height: 100%;
-              transition: transform .5s ease-out;
-            }
-          }
-        }
-
-        > .cm-body {
-          display: block;
-          width: 100%;
-          height: 100%;
-          padding: .6em .6em .6em 3.2em;
-          background-color: $module-hover-bg;
-
-          > .cm-header {
-            display: flex;
-            justify-content: flex-start;
-            align-items: baseline;
-            position: relative;
-
-            > .user-name {
-              font-weight: bold;
-              margin-right: .8em;
-              font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
-
-              &:hover {
-                text-decoration: underline;
-              } 
-            }
-
-            > .os,
-            > .ua,
-            > .location {
-              color: $disabled;
-              font-size: .8em;
-              margin-right: .8em;
-
-              .iconfont {
-                margin-right: .2em;
-              }
-            }
-          }
-
-          > .cm-content {
-            font-size: .95em;
-            line-height: 2em;
-            margin: .5em 0;
-            word-wrap: break-word;
-
-            > .reply {
-              color: $disabled;
-              font-weight: bold;
-            }
-
-            p {
-              margin: 0;
-            }
-
-            code {
-              color: #bd4147;
-              padding: .3em .5em;
-              margin: 0 .5em;
-              border-radius: $radius;
-              background-color: $module-hover-bg;
-            }
-
-            pre {
-              display: block;
+            > .cm-header {
+              display: flex;
+              justify-content: flex-start;
+              align-items: baseline;
               position: relative;
-              overflow: hidden;
-              margin-bottom: 1em;
-              padding-left: 2.5em;
-              background-color: rgba(0, 0, 0, 0.8);
 
-              &:before {
-                color: white;
-                content: attr(data-lang)" CODE";
-                height: 2.8em;
-                line-height: 2.8em;
-                font-size: 1em;
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                font-weight: 700;
-                background-color: rgba(68, 68, 68, 0.9);
-                display: block;
-                text-transform: uppercase;
-                text-align: center;
+              > .user-name {
+                font-weight: bold;
+                margin-right: .8em;
+                font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
+
+                &:hover {
+                  text-decoration: underline;
+                } 
               }
 
-              > .code-lines {
-                position: absolute;
-                left: 0;
-                top: 2.8em;
-                margin: 0;
-                padding: 1em 0;
-                width: 2.5em;
-                height: calc(100% - 2.8em);
-                text-align: center;
-                background-color: rgba(0, 0, 0, 0.2);
+              > .os,
+              > .ua,
+              > .location {
+                color: $disabled;
+                font-size: .8em;
+                margin-right: .8em;
 
-                > .code-line-number {
-                  padding: 0;
-                  position: relative;
-                  list-style-type: none;
-                  line-height: 1.6em;
-                  transition: background-color .05s;
-
-                  &:hover {
-                    &:before {
-                      display: block;
-                      opacity: 1;
-                      visibility: visible;
-                    }
-                  }
-
-                  &:before {
-                    content: '';
-                    height: 1.6em;
-                    position: absolute;
-                    top: 0;
-                    left: 2.5em;
-                    width: 66em;
-                    background-color: rgba(154, 154, 154, 0.2);
-                    display: none;
-                    visibility: hidden;
-                    opacity: 0;
-                  }
+                .iconfont {
+                  margin-right: .2em;
                 }
               }
+            }
 
-              > code {
+            > .cm-content {
+              font-size: .95em;
+              line-height: 2em;
+              margin: .5em 0;
+              word-wrap: break-word;
+
+              > .reply {
+                color: $disabled;
+                font-weight: bold;
+              }
+
+              p {
                 margin: 0;
-                padding: 1em;
-                float: left;
-                width: 100%;
-                height: 100%;
+              }
+
+              code {
+                color: #bd4147;
+                padding: .3em .5em;
+                margin: 0 .5em;
+                border-radius: $radius;
+                background-color: $module-hover-bg;
+              }
+
+              pre {
                 display: block;
-                line-height: 1.6em;
-                color: rgba(255, 255, 255, 0.87);
-                background-color: transparent;
+                position: relative;
+                overflow: hidden;
+                margin-bottom: 1em;
+                padding-left: 2.5em;
+                background-color: rgba(0, 0, 0, 0.8);
+
+                &:before {
+                  color: white;
+                  content: attr(data-lang)" CODE";
+                  height: 2.8em;
+                  line-height: 2.8em;
+                  font-size: 1em;
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  font-weight: 700;
+                  background-color: rgba(68, 68, 68, 0.9);
+                  display: block;
+                  text-transform: uppercase;
+                  text-align: center;
+                }
+
+                > .code-lines {
+                  position: absolute;
+                  left: 0;
+                  top: 2.8em;
+                  margin: 0;
+                  padding: 1em 0;
+                  width: 2.5em;
+                  height: calc(100% - 2.8em);
+                  text-align: center;
+                  background-color: rgba(0, 0, 0, 0.2);
+
+                  > .code-line-number {
+                    padding: 0;
+                    position: relative;
+                    list-style-type: none;
+                    line-height: 1.6em;
+                    transition: background-color .05s;
+
+                    &:hover {
+                      &:before {
+                        display: block;
+                        opacity: 1;
+                        visibility: visible;
+                      }
+                    }
+
+                    &:before {
+                      content: '';
+                      height: 1.6em;
+                      position: absolute;
+                      top: 0;
+                      left: 2.5em;
+                      width: 66em;
+                      background-color: rgba(154, 154, 154, 0.2);
+                      display: none;
+                      visibility: hidden;
+                      opacity: 0;
+                    }
+                  }
+                }
+
+                > code {
+                  margin: 0;
+                  padding: 1em;
+                  float: left;
+                  width: 100%;
+                  height: 100%;
+                  display: block;
+                  line-height: 1.6em;
+                  color: rgba(255, 255, 255, 0.87);
+                  background-color: transparent;
+                }
               }
             }
-          }
 
-          > .cm-footer {
-            display: flex;
+            > .cm-footer {
+              display: flex;
 
-            > .create_at,
-            > .reply,
-            > .like {
-              font-size: .8em;
-              margin-right: 1em;
-            }
+              > .create_at,
+              > .reply,
+              > .like {
+                font-size: .8em;
+                margin-right: 1em;
+              }
 
-            > .create_at {
-              color: $disabled;
-            }
+              > .create_at {
+                color: $disabled;
+              }
 
-            > .liked {
-              color: $red;
-            }
+              > .liked {
+                color: $red;
+                font-weight: bold;
+              }
 
-            > .reply,
-            > .like {
-              opacity: .8;
-
-              > .iconfont {
+              > .reply,
+              > .like {
                 opacity: .8;
-                margin-right: .2em;
-              }
 
-              &:hover {
-                opacity: 1;
+                > .iconfont {
+                  opacity: .8;
+                  margin-right: .2em;
+                }
+
+                &:hover {
+                  opacity: 1;
+                }
               }
             }
           }
@@ -645,9 +681,10 @@
       > .user {
         width: 100%;
         height: 2em;
+        line-height: 2em;
         display: flex;
         margin-bottom: 1rem;
-        padding-left: 5em;
+        padding-left: 5.2rem;
 
         > .edit {
           flex-grow: 1;
@@ -693,7 +730,19 @@
           width: 10%;
           margin-left: 1em;
           flex-grow: 1;
+          line-height: 2em;
+          text-align: center;
           font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
+
+          > button {
+            display: block;
+            width: 100%;
+            background-color: $module-hover-bg;
+
+            &:hover {
+              background-color: darken($module-hover-bg, 10%);
+            }
+          }
         }
 
         > .name,
@@ -704,6 +753,7 @@
 
           > input {
             width: 100%;
+            height: 2em;
             background-color: $module-hover-bg;
 
             &:focus,
