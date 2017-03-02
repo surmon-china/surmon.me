@@ -67,9 +67,14 @@ renderer.link = linkParse
 renderer.code = codeParse
 renderer.image = imageParse
 
-export default (content, tags) => {
+export default (content, tags, parseHtml) => {
 
   // 所有非链接的关键字进行内链处理
   if (tags && tags.length) renderer.text = text => buildTagLink(text, tags)
+
+  // 如果是解析评论，则不解析html内容
+  if (!parseHtml) marked.setOptions({ sanitize: true })
+
+  // 返回解析内容
   return marked(content, { renderer })
 }
