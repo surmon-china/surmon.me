@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-box">
+  <div class="comment-box" id="comment-box">
     <div class="tools">
       <div class="total">
         <div class="count">
@@ -36,14 +36,17 @@
       <loading-box v-else-if="comment.fetching"></loading-box>
       <div class="list-box" v-else>
         <transition-group name="fade" tag="ul" class="comment-list">
-          <li class="comment-item" v-for="(comment, index) in comment.data.data" key="index">
+          <li class="comment-item" 
+              :id="`comment-item-${comment.id}`" 
+              key="index"
+              v-for="(comment, index) in comment.data.data">
             <div class="cm-avatar">
               <a target="_blank"
                  rel="external nofollow"
                  :href="comment.author.site" 
                  @click.stop="clickUser($event, comment.author)">
                 <img :alt="comment.author.name || '匿名用户'"
-                     :src="comment.author.gravatar || '/images/anonymous.jpg'">
+                     :src="gravatar(comment.author.email) || '/images/anonymous.jpg'">
               </a>
             </div>
             <div class="cm-body">
@@ -60,9 +63,17 @@
                   <span>&nbsp;-&nbsp;</span>
                   <span>{{ comment.ip_location.city }}</span>
                 </span>
+                <span class="flool">#{{ comment.id }}</span>
               </div>
               <div class="cm-content">
-                <!-- <p class="reply">回复 Lindyang：</p> -->
+                <p class="reply" v-if="!!comment.pid">
+                  <span>回复 </span>
+                  <a href="" @click.stop.prevent="toSomeAnchorById(`comment-item-${comment.pid}`)">
+                    <span>#{{ comment.pid }}&nbsp;</span>
+                    <strong>@{{ fondReplyParent(comment.pid) }}</strong>
+                  </a>
+                  <span>：</span>
+                </p>
                 <div v-html="marked(comment.content)"></div>
               </div>
               <div class="cm-footer">
@@ -83,18 +94,27 @@
         </transition-group>
       </div>
     </transition>
-    <form class="post-box">
+    <form class="post-box" name="comment" id="post-box">
       <!-- 用户编辑部分 -->
       <transition name="module" mode="out-in">
         <div class="user" v-if="!userCacheMode || userCacheEditing">
           <div class="name">
-            <input type="text" required placeholder="name *" v-model="user.name">
+            <input required
+                   type="text" 
+                   name="name"
+                   placeholder="name *" 
+                   v-model="user.name">
           </div>
           <div class="email">
-            <input type="email" required placeholder="email *" v-model="user.email">
+            <input required
+                   type="email" 
+                   name="email"
+                   placeholder="email *" 
+                   v-model="user.email" 
+                   @blur="upadteUserGravatar">
           </div>
           <div class="site">
-            <input type="url" placeholder="site" v-model="user.site">
+            <input type="url" name="url" placeholder="site" v-model="user.site">
           </div>
           <div class="save" v-if="userCacheEditing">
             <button type="submit" @click="updateUserCache($event)">
@@ -125,10 +145,20 @@
           </div>
         </div>
         <div class="editor">
+          <div class="will-reply" v-if="!!pid">
+            <div class="reply-user">
+              <a href="" @click.stop.prevent="toSomeAnchorById(`comment-item-${replyCommentSlef.id}`)">
+                <strong>@{{ replyCommentSlef.author.name }}：</strong>
+              </a>
+              <a href="" class="cancel iconfont icon-cancel" @click.stop.prevent="cancelComment"></a>
+            </div>
+            <div class="reply-preview" v-html="marked(replyCommentSlef.content)"></div>
+          </div>
           <div class="markdown">
             <div class="markdown-editor" 
                  ref="markdown"
                  contenteditable="true"
+                 placeholder="Show me the code."
                  @keyup="commentContentChange($event)">
             </div>
             <div class="markdown-preview" 
@@ -185,12 +215,16 @@
 </template>
 
 <script>
+  import axios from '~plugins/axios'
   import marked from '~plugins/marked'
+  import gravatar from '~plugins/gravatar'
   import { UAParse, OSParse } from '~utils/comment-ua-parse'
   export default {
     name: 'vue-comment',
     data() {
       return {
+        // 父级评论
+        pid: 0,
         // 评论排序
         sortMode: 1,
         // 编辑器相关
@@ -205,12 +239,16 @@
           name: '',
           email: '',
           site: '',
-          gravatar: ''
+          gravatar: null
         },
         // 用户历史数据
         historyLikes: {
           pages: [],
           comments: []
+        },
+        regexs: {
+          email: /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/,
+          url: /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/
         }
       }
     },
@@ -236,6 +274,9 @@
       },
       comment() {
         return this.$store.state.comment
+      },
+      replyCommentSlef() {
+        return this.comment.data.data.find(comment => Object.is(comment.id, this.pid))
       }
     },
     mounted() {
@@ -245,8 +286,20 @@
     methods: {
       UAParse,
       OSParse,
+      // markdown解析服务
       marked(content) {
         return marked(content, false, false)
+      },
+      // 头像服务
+      gravatar(email) {
+        if (!this.regexs.email.test(email)) return null
+        let gravatar_url = gravatar.url(email, { 
+          size: '96', 
+          rating: 'pg',
+          default: 'https://gravatar.surmon.me/anonymous.jpg', 
+          protocol: 'https'
+        });
+        return gravatar_url.replace('https://s.gravatar.com/avatar', 'https://gravatar.surmon.me')
       },
       // 初始化本地用户即本地用户的点赞历史
       initUser() {
@@ -256,6 +309,7 @@
           if (historyLikes) this.historyLikes = JSON.parse(historyLikes)
           if (user) {
             this.user = JSON.parse(user)
+            this.upadteUserGravatar()
             this.userCacheMode = true
           }
         }
@@ -263,12 +317,10 @@
       // 更新用户数据
       updateUserCache(event) {
         event.preventDefault()
-        const emailReg = /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/
-        const urlReg = /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/
         if (!this.user.name) return alert('请输入名字')
         if (!this.user.email) return alert('请输入邮箱')
-        if (!emailReg.test(this.user.email)) return alert('邮箱不合法')
-        if (this.user.site && !urlReg.test(this.user.site)) return alert('链接不合法')
+        if (!this.regexs.email.test(this.user.email)) return alert('邮箱不合法')
+        if (this.user.site && !this.regexs.url.test(this.user.site)) return alert('链接不合法')
         localStorage.setItem('user', JSON.stringify(this.user))
         this.userCacheEditing = false
       },
@@ -280,6 +332,11 @@
         Object.keys(this.user).forEach(key => {
           this.user[key] = ''
         })
+      },
+      // 更新当前用户头像
+      upadteUserGravatar() {
+        const emailIsVerified = this.regexs.email.test(this.user.email)
+        this.user.gravatar = emailIsVerified ? this.gravatar(this.user.email) : null
       },
       // 编辑器相关
       commentContentChange() {
@@ -325,9 +382,27 @@
       clickUser(event, user) {
         if (!user.site) event.preventDefault()
       },
+      // 跳转到某条指定的id位置
+      toSomeAnchorById(id) {
+        const targetDom = document.getElementById(id)
+        if (!targetDom) return false
+        let targetScrollTop = targetDom.offsetTop
+        window.scrollTo(0, targetScrollTop)
+      },
       // 回复评论
       replyComment(comment) {
-        console.log('回复某条评论', comment)
+        this.pid = comment.id
+        this.toSomeAnchorById('post-box')
+      },
+      // 取消回复
+      cancelComment() {
+        this.toSomeAnchorById(`comment-item-${this.replyCommentSlef.id}`)
+        this.pid = 0
+      },
+      // 找到回复来源
+      fondReplyParent(comment_id) {
+        const parent = this.comment.data.data.find(comment => Object.is(comment.id, comment_id))
+        return parent ? parent.author.name : null
       },
       // 喜欢当前页面
       likePage() {
@@ -355,28 +430,31 @@
       },
       // 提交评论
       submitComment(event) {
+        // 为了使用原生表单拦截，不使用事件修饰符
         event.preventDefault()
-        const emailReg = /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/
-        const urlReg = /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/
         if (!this.user.name) return alert('请输入名字')
         if (!this.user.email) return alert('请输入邮箱')
-        if (!emailReg.test(this.user.email)) return alert('邮箱不合法')
-        if (this.user.site && !urlReg.test(this.user.site)) return alert('链接不合法')
-        if(!this.comemntContentText) return alert('请输入内容')
-        // 内容不能超过50行，也不能超过800字
-        console.log('发布评论', this)
+        if (!this.regexs.email.test(this.user.email)) return alert('邮箱不合法')
+        if (this.user.site && !this.regexs.url.test(this.user.site)) return alert('链接不合法')
+        if(!this.comemntContentText || !this.comemntContentText.replace(/\s/g, '')) return alert('请输入内容')
+        const lineOverflow = this.comemntContentText.split('\n').length > 36
+        const lengthOverflow = this.comemntContentText.length > 2000
+        if(lineOverflow || lengthOverflow) return alert('内容需要在2000字/36行以内')
         this.$store.dispatch('postComment', {
+          pid: this.pid,
           post_id: this.postId,
           content: this.comemntContentText,
           author: this.user,
           agent: navigator.userAgent
         }).then(data => {
           // 发布成功后清空评论框内容并更新本地信息
+          this.pid = 0
           this.clearCommentContent()
           localStorage.setItem('user', JSON.stringify(this.user))
           this.userCacheMode = true
         }).catch(err => {
-          console.log(err)
+          console.warn('评论发布失败', err)
+          alert('发布失败，原因？控制台喽')
         })
       }
     }
@@ -386,6 +464,66 @@
 <style lang="scss">
   @import '~assets/sass/mixins';
   @import '~assets/sass/variables';
+  .cm-content,
+  .reply-preview,
+  .markdown-preview {
+    p {
+      margin: 0;
+    }
+
+    code {
+      color: #bd4147;
+      padding: .3em .5em;
+      margin: 0 .5em;
+      border-radius: $radius;
+      background-color: $module-hover-bg;
+    }
+
+    pre {
+      display: flex;
+      position: relative;
+      overflow: hidden;
+      margin-top: .6em;
+      margin-bottom: 1em;
+      padding-top: 2.5em;
+      align-items: flex-end;
+      border-radius: $radius;
+      background-color: rgba(0, 0, 0, 0.8);
+
+      &:before {
+        color: white;
+        content: attr(data-lang)" CODE";
+        height: 2.5em;
+        line-height: 2.5em;
+        font-size: 1em;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        font-weight: 700;
+        background-color: rgba(68, 68, 68, 0.9);
+        display: block;
+        text-transform: uppercase;
+        text-align: center;
+      }
+
+      > .code-lines {
+        display: none;
+      }
+
+      > code {
+        margin: 0;
+        padding: 1em;
+        float: left;
+        width: 100%;
+        height: 100%;
+        display: block;
+        line-height: 1.6em;
+        color: rgba(255, 255, 255, 0.87);
+        background-color: transparent;
+      }
+    }
+  }
   .comment-box {
     background-color: $module-bg;
     padding: 1em;
@@ -503,9 +641,7 @@
             background-color: $module-hover-bg;
 
             > .cm-header {
-              display: flex;
-              justify-content: flex-start;
-              align-items: baseline;
+              display: block;
               position: relative;
 
               > .user-name {
@@ -529,6 +665,15 @@
                   margin-right: .2em;
                 }
               }
+
+              > .flool {
+                color: $dividers;
+                font-weight: 900;
+                font-size: .8em;
+                display: inline-block;
+                line-height: 2rem;
+                float: right;
+              }
             }
 
             > .cm-content {
@@ -540,97 +685,6 @@
               > .reply {
                 color: $disabled;
                 font-weight: bold;
-              }
-
-              p {
-                margin: 0;
-              }
-
-              code {
-                color: #bd4147;
-                padding: .3em .5em;
-                margin: 0 .5em;
-                border-radius: $radius;
-                background-color: $module-hover-bg;
-              }
-
-              pre {
-                display: block;
-                position: relative;
-                overflow: hidden;
-                margin-bottom: 1em;
-                padding-left: 2.5em;
-                background-color: rgba(0, 0, 0, 0.8);
-
-                &:before {
-                  color: white;
-                  content: attr(data-lang)" CODE";
-                  height: 2.8em;
-                  line-height: 2.8em;
-                  font-size: 1em;
-                  position: absolute;
-                  top: 0;
-                  left: 0;
-                  width: 100%;
-                  font-weight: 700;
-                  background-color: rgba(68, 68, 68, 0.9);
-                  display: block;
-                  text-transform: uppercase;
-                  text-align: center;
-                }
-
-                > .code-lines {
-                  position: absolute;
-                  left: 0;
-                  top: 2.8em;
-                  margin: 0;
-                  padding: 1em 0;
-                  width: 2.5em;
-                  height: calc(100% - 2.8em);
-                  text-align: center;
-                  background-color: rgba(0, 0, 0, 0.2);
-
-                  > .code-line-number {
-                    padding: 0;
-                    position: relative;
-                    list-style-type: none;
-                    line-height: 1.6em;
-                    transition: background-color .05s;
-
-                    &:hover {
-                      &:before {
-                        display: block;
-                        opacity: 1;
-                        visibility: visible;
-                      }
-                    }
-
-                    &:before {
-                      content: '';
-                      height: 1.6em;
-                      position: absolute;
-                      top: 0;
-                      left: 2.5em;
-                      width: 66em;
-                      background-color: rgba(154, 154, 154, 0.2);
-                      display: none;
-                      visibility: hidden;
-                      opacity: 0;
-                    }
-                  }
-                }
-
-                > code {
-                  margin: 0;
-                  padding: 1em;
-                  float: left;
-                  width: 100%;
-                  height: 100%;
-                  display: block;
-                  line-height: 1.6em;
-                  color: rgba(255, 255, 255, 0.87);
-                  background-color: transparent;
-                }
               }
             }
 
@@ -794,6 +848,38 @@
         > .editor {
           flex-grow: 1;
           position: relative;
+          overflow: hidden;
+
+          > .will-reply {
+            font-size: .95em;
+            margin-bottom: 1em;
+
+            > .reply-user {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 1rem;
+              padding: 0 1rem;
+              height: 2.6em;
+              line-height: 2.6em;
+              background-color: $module-hover-bg;
+
+               &:hover {
+                background-color: darken($module-hover-bg, 10%);
+              }
+            }
+
+            > .reply-preview {
+              max-height: 10em;
+              overflow: auto;
+              padding: 1rem;
+
+              background-color: $module-hover-bg;
+
+               &:hover {
+                background-color: darken($module-hover-bg, 10%);
+              }
+            }
+          }
 
           > .markdown {
             position: relative;
@@ -801,14 +887,23 @@
 
             > .markdown-editor {
               min-height: 6em;
-              max-height: 20em;
+              max-height: 36em;
               overflow: auto;
               outline: none;
               padding: .5em;
               cursor: auto;
-              font-size: .9em;
+              font-size: .95em;
               line-height: 1.8em;
               background-color: $module-hover-bg;
+
+              &:empty:before{
+                content: attr(placeholder);
+                color: $disabled;
+              }
+
+              &:focus{
+                content:none;
+              }
 
               &:hover {
                 background-color: darken($module-hover-bg, 10%);
