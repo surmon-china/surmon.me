@@ -16,6 +16,7 @@ export const state = {
     data: {}
   },
 
+  // 服务端设置的全局配置
   globalOption: {
     fetching: false,
     data: {
@@ -62,5 +63,10 @@ export const mutations = {
   REQUEST_GLOBAL_OPTIONS_FAILURE(state) {
     state.globalOption.fetching = false
     state.globalOption.data = {}
+  },
+
+  // 喜欢本站
+  LIKE_SITE(state, action) {
+    state.globalOption.data.meta.likes ++
   }
 }

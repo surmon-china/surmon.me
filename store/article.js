@@ -85,5 +85,13 @@ export const mutations = {
   GET_DETAIL_SUCCESS(state, action) {
     state.detail.fetching = false
     state.detail.data = action
+  },
+
+  // 喜欢某篇文章
+  LIKE_ARTICLE(state, action) {
+    let article = state.detail.data.result
+    if (Object.is(article.id, action.id)) {
+      state.detail.data.result.meta.likes ++
+    }
   }
 }

@@ -125,11 +125,11 @@ export const actions = {
         return Promise.resolve(response.data)
       } else {
         commit('comment/POST_ITEM_FAILURE')
-        return Promise.solve(response)
+        return Promise.reject(response.data)
       }
     }, err => {
       commit('comment/POST_ITEM_FAILURE', err)
-      return Promise.solve(err)
+      return Promise.reject(err)
     })
   },
 
@@ -139,10 +139,24 @@ export const actions = {
     .then(response => {
       const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
       if(success) {
-        // commit('comment/POST_ITEM_SUCCESS', response.data)
+        let mutation
+        switch(like.type) {
+          case 1:
+            mutation = 'comment/LIKE_ITEM'
+            break
+          case 2:
+            mutation = Object.is(like.id, 0) ? 'option/LIKE_SITE' : 'article/LIKE_ARTICLE'
+            break
+          default:
+            break
+        }
+        commit(mutation, like)
+        return Promise.resolve(response.data)
+      } else {
+        return Promise.reject(response.data)
       }
     }, err => {
-      console.log('喜欢失败')
+      return Promise.reject(err)
     })
   },
 

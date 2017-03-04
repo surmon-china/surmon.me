@@ -94,6 +94,20 @@
         </transition-group>
       </div>
     </transition>
+    <transition name="module">
+      <div class="pagination-box" v-if="comment.data.pagination.total_page > 1">
+        <ul class="pagination-list">
+          <li class="item" v-for="item in comment.data.pagination.total_page">
+            <a href="" 
+               class="pagination-btn" 
+               :class="{ 'active disabled': Object.is(item, comment.data.pagination.current_page) }"
+               @click.stop.prevent="Object.is(item, comment.data.pagination.current_page) 
+               ? false 
+               : loadComemntList({ page: item })">{{ item }}</a>
+          </li>
+        </ul>
+      </div>
+    </transition>
     <form class="post-box" name="comment" id="post-box">
       <!-- 用户编辑部分 -->
       <transition name="module" mode="out-in">
@@ -145,15 +159,20 @@
           </div>
         </div>
         <div class="editor">
-          <div class="will-reply" v-if="!!pid">
-            <div class="reply-user">
-              <a href="" @click.stop.prevent="toSomeAnchorById(`comment-item-${replyCommentSlef.id}`)">
-                <strong>@{{ replyCommentSlef.author.name }}：</strong>
-              </a>
-              <a href="" class="cancel iconfont icon-cancel" @click.stop.prevent="cancelComment"></a>
+          <transition name="module">
+            <div class="will-reply" v-if="!!pid">
+              <div class="reply-user">
+                <span>
+                  <span>回复 </span>
+                  <a href="" @click.stop.prevent="toSomeAnchorById(`comment-item-${replyCommentSlef.id}`)">
+                    <strong>#{{ replyCommentSlef.id }} @{{ replyCommentSlef.author.name }}：</strong>
+                  </a>
+                </span>
+                <a href="" class="cancel iconfont icon-cancel" @click.stop.prevent="cancelCommentReply"></a>
+              </div>
+              <div class="reply-preview" v-html="marked(replyCommentSlef.content)"></div>
             </div>
-            <div class="reply-preview" v-html="marked(replyCommentSlef.content)"></div>
-          </div>
+          </transition>
           <div class="markdown">
             <div class="markdown-editor" 
                  ref="markdown"
@@ -281,7 +300,12 @@
     },
     mounted() {
       this.initUser()
-      this.loadComemntList()
+      if (!this.comment.data.pagination.total_page) {
+        this.loadComemntList()
+      }
+    },
+    destroyed() {
+      this.$store.commit('comment/CLEAR_LIST')
     },
     methods: {
       UAParse,
@@ -345,11 +369,22 @@
         if (!Object.is(html, this.comemntContentHtml)) {
           this.comemntContentHtml = html
         }
-        this.comemntContentText = text
+        if (!Object.is(text, this.comemntContentText)) {
+          this.comemntContentText = text
+        }
       },
-      updateCommentContent(content) {
-        if (content) this.comemntContentHtml += content
-        this.$refs.markdown.innerHTML = this.comemntContentHtml
+      updateCommentContent({ start, end }) {
+        if (!start && !end) return false
+        // 如果选中了内容，咋把选中的内容替换，否则在光标位置插入新内容
+        const selectedText = (window.getSelection || document.getSelection)().toString()
+        const currentText = this.$refs.markdown.innerText
+        if (!!selectedText) {
+          const newText = currentText.replace(selectedText, start + selectedText + end)
+          this.$refs.markdown.innerText = newText
+        } else {
+          this.$refs.markdown.innerText = this.$refs.markdown.innerText += (start + end)
+          this.$refs.markdown.scrollTop = this.$refs.markdown.scrollHeight
+        }
         this.commentContentChange()
       },
       clearCommentContent(content) {
@@ -359,9 +394,18 @@
       },
       insertContent(type) {
         const contents = {
-          image: `<div>![](https://)</div>`,
-          link: `<div>[](https://)</div>`,
-          code: '<div>```javascript<br><br>```</div>'
+          image: {
+            start: `![`,
+            end: `](https://)`
+          },
+          link: {
+            start: `![`,
+            end: `](https://)`
+          },
+          code: {
+            start: '\n```javascript\n',
+            end: '\n```'
+          }
         }
         this.updateCommentContent(contents[type])
       },
@@ -376,7 +420,7 @@
       // 评论排序
       sortComemnts(sort) {
         this.sortMode = sort
-        this.loadComemntList({ sort })
+        this.loadComemntList()
       },
       // 点击用户
       clickUser(event, user) {
@@ -386,8 +430,36 @@
       toSomeAnchorById(id) {
         const targetDom = document.getElementById(id)
         if (!targetDom) return false
+        let isNeedToTop = !Object.is(id, 'post-box')
         let targetScrollTop = targetDom.offsetTop
-        window.scrollTo(0, targetScrollTop)
+        const totop = (acceleration = 0.1, stime = 10) => {
+          let currentScrollTop = Math.max.apply(Math, [
+            window.scrollY || 0, 
+            document.body.scrollTop || 0, 
+            document.documentElement.scrollTop || 0
+          ])
+          let stepScroll
+          if (isNeedToTop) stepScroll = Math.floor(currentScrollTop / (1 + acceleration))
+          if (!isNeedToTop) stepScroll = currentScrollTop + ((targetScrollTop - acceleration) / (acceleration * 66))
+          window.scrollTo(0, stepScroll)
+          if((isNeedToTop && (currentScrollTop > targetDom.offsetTop)) ||
+            (!isNeedToTop && ((currentScrollTop + window.innerHeight) < targetDom.offsetTop))) {
+            window.setTimeout(() => {
+              totop(acceleration, stime)
+            }, stime)
+          }
+        }
+        totop()
+        // 如果是进入编辑模式，则需要激活光标
+        if (!isNeedToTop) {
+          let p = this.$refs.markdown
+          let s = window.getSelection()
+          let r = document.createRange()
+          r.setStart(p, p.childElementCount)
+          r.setEnd(p, p.childElementCount)
+          s.removeAllRanges()
+          s.addRange(r)
+        }
       },
       // 回复评论
       replyComment(comment) {
@@ -395,8 +467,7 @@
         this.toSomeAnchorById('post-box')
       },
       // 取消回复
-      cancelComment() {
-        this.toSomeAnchorById(`comment-item-${this.replyCommentSlef.id}`)
+      cancelCommentReply() {
         this.pid = 0
       },
       // 找到回复来源
@@ -407,18 +478,28 @@
       // 喜欢当前页面
       likePage() {
         if (this.pageLiked) return false
-        // 发送喜欢请求，成功后执行以下操作：更改数据
-        console.log('被喜欢了')
-        this.historyLikes.pages.push(this.postId)
-        localStorage.setItem('user_like_history', JSON.stringify(this.historyLikes))
+        this.$store.dispatch('likeArticleOrPageOrComment', { type: 2, id: this.postId })
+        .then(data => {
+          this.historyLikes.pages.push(this.postId)
+          localStorage.setItem('user_like_history', JSON.stringify(this.historyLikes))
+        })
+        .catch(err => {
+          console.warn('喜欢失败', err)
+          alert('操作失败，原因 => 控制台')
+        })
       },
       // 点赞某条评论
       likeComment(comment) {
         if (this.commentLiked(comment.id)) return false
-        // 发送喜欢请求，成功后执行以下操作：更改数据
-        console.log('喜欢某条评论', comment)
-        this.historyLikes.comments.push(comment.id)
-        localStorage.setItem('user_like_history', JSON.stringify(this.historyLikes))
+        this.$store.dispatch('likeArticleOrPageOrComment', { type: 1, id: comment.id })
+        .then(data => {
+          this.historyLikes.comments.push(comment.id)
+          localStorage.setItem('user_like_history', JSON.stringify(this.historyLikes))
+        })
+        .catch(err => {
+          console.warn('评论点赞失败', err)
+          alert('操作失败，原因 => 控制台')
+        })
       },
       // 获取某条评论是否被点赞
       commentLiked(comment_id) {
@@ -426,6 +507,7 @@
       },
       // 获取评论列表
       loadComemntList(params = {}) {
+        params.sort = this.sortMode
         this.$store.dispatch('loadCommentsByPostId', Object.assign(params, { post_id: this.postId }))
       },
       // 提交评论
@@ -448,13 +530,14 @@
           agent: navigator.userAgent
         }).then(data => {
           // 发布成功后清空评论框内容并更新本地信息
-          this.pid = 0
+          this.cancelCommentReply()
           this.clearCommentContent()
           localStorage.setItem('user', JSON.stringify(this.user))
           this.userCacheMode = true
+          this.previewMode = false
         }).catch(err => {
           console.warn('评论发布失败', err)
-          alert('发布失败，原因？控制台喽')
+          alert('发布失败，原因 => 控制台')
         })
       }
     }
@@ -720,6 +803,41 @@
                   opacity: 1;
                 }
               }
+            }
+          }
+        }
+      }
+    }
+
+    > .pagination-box {
+      margin-top: 1rem;
+
+      > .pagination-list {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        list-style-type: none;
+
+        > .item {
+          margin: 0 0.5em;
+
+          > .pagination-btn {
+            display: inline-block;
+            width: 2em;
+            height: 2em;
+            display: inline-block;
+            line-height: 2em;
+            text-align: center;
+
+            &.disabled {
+              cursor: no-drop;
+              opacity: .5;
+            }
+
+            &.active,
+            &:hover {
+              background-color: $module-hover-bg;
             }
           }
         }
