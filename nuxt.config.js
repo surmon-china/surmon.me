@@ -45,6 +45,7 @@ module.exports = {
     '~plugins/filters.js',
     '~plugins/swiper.js',
     '~plugins/marked.js',
+    '~plugins/gravatar.js',
     '~plugins/vue-empty.js',
     '~plugins/copy-right.js',
     '~plugins/image-popup.js',
