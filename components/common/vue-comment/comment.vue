@@ -419,8 +419,10 @@
       },
       // 评论排序
       sortComemnts(sort) {
-        this.sortMode = sort
-        this.loadComemntList()
+        if (!Object.is(this.sortMode, sort)) {
+          this.sortMode = sort
+          this.loadComemntList()
+        }
       },
       // 点击用户
       clickUser(event, user) {
