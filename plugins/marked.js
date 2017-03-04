@@ -18,7 +18,7 @@ marked.setOptions({
 
 const renderer = new marked.Renderer()
 
-// 对连接进行权重分散和新窗处理
+// 对连接进行权重防流和新窗处理
 const linkParse = (href, title, text) => {
   const isSelf = href.includes('surmon.me')
   const textIsImage = text.includes('<img')
