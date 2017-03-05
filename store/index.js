@@ -96,9 +96,10 @@ export const actions = {
     })
   },
 
-  // 根据post-id获取评论
+  // 根据post-id获取评论列表
   loadCommentsByPostId({ commit }, params) {
     params.page = params.page || 1
+    params.sort = params.sort || -1
     params.per_page = params.per_page || 50
     if (Object.is(params.page, 1)) {
       commit('comment/CLEAR_LIST')
@@ -107,7 +108,10 @@ export const actions = {
     return Service.get('/comment', { params })
     .then(response => {
       const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
-      if(success) commit('comment/GET_LIST_SUCCESS', response.data)
+      if(success) {
+        if (Object.is(params.sort, -1)) response.data.result.data.reverse()
+        commit('comment/GET_LIST_SUCCESS', response.data)
+      }
       if(!success) commit('comment/GET_LIST_FAILURE')
     }, err => {
       commit('comment/GET_LIST_FAILURE', err)
