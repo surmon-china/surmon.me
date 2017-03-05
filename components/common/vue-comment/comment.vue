@@ -245,7 +245,7 @@
         // 父级评论
         pid: 0,
         // 评论排序
-        sortMode: 1,
+        sortMode: -1,
         // 编辑器相关
         comemntContentHtml: '',
         comemntContentText: '',
@@ -373,7 +373,7 @@
           this.comemntContentText = text
         }
       },
-      updateCommentContent({ start, end }) {
+      updateCommentContent({ start = '', end = '' }) {
         if (!start && !end) return false
         // 如果选中了内容，咋把选中的内容替换，否则在光标位置插入新内容
         const selectedText = (window.getSelection || document.getSelection)().toString()
@@ -410,7 +410,7 @@
         this.updateCommentContent(contents[type])
       },
       insertEmoji(emoji) {
-        this.updateCommentContent(emoji)
+        this.updateCommentContent({ end: emoji })
       },
       // 切换预览模式
       togglePreviewMode() {
