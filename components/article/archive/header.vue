@@ -42,7 +42,7 @@
     name: 'article-list-header',
     computed: {
       currentTag() {
-        return this.$store.state.tag.data.result.data.find((tag, index, arr) => {
+        return this.$store.state.tag.data.data.find((tag, index, arr) => {
           return Object.is(tag.slug, this.$route.params.tag_slug)
         })
       },
@@ -52,7 +52,7 @@
         return currentTagIcon ? currentTagIcon.value : 'icon-tag'
       },
       currentCategory() {
-        return this.$store.state.category.data.result.data.find((category, index, arr) => {
+        return this.$store.state.category.data.data.find((category, index, arr) => {
           return Object.is(category.slug, this.$route.params.category_slug)
         })
       },

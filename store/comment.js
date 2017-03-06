@@ -42,12 +42,12 @@ export const mutations = {
     state.posting = true
   },
   POST_ITEM_SUCCESS(state, action) {
-    state.fetching = false
+    state.posting = false
     state.data.pagination.total += 1
     state.data.data.push(action.result)
   },
   POST_ITEM_FAILURE(state) {
-    state.fetching = false
+    state.posting = false
   },
 
   // 喜欢某条评论

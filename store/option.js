@@ -62,7 +62,6 @@ export const mutations = {
   },
   REQUEST_GLOBAL_OPTIONS_FAILURE(state) {
     state.globalOption.fetching = false
-    state.globalOption.data = {}
   },
 
   // 喜欢本站
