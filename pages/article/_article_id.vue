@@ -118,13 +118,13 @@
     },
     computed: {
       article() {
-        return this.$store.state.article.detail.data.result
+        return this.$store.state.article.detail.data
       },
       articleContent () {
         let content = this.article.content
         if (!content) return ''
-        const hasTags = Object.is(this.tags.code, 1) && !!this.tags.result.data.length
-        return marked(content, hasTags ? this.tags.result.data : false)
+        const hasTags = Object.is(this.tags.code, 1) && !!this.tags.data.length
+        return marked(content, hasTags ? this.tags.data : false)
       },
       fetching() {
         return this.$store.state.article.detail.fetching

@@ -3,8 +3,9 @@
     <div class="sitemap">
       <div class="articles">
         <h3 class="title">articles</h3>
-        <ul class="article-list" v-if="Object.is(articles.data.code, 1)">
-          <li v-for="(article, index) in articles.data.result.data">
+        <p v-if="!articles.length">暂无文章</p>
+        <ul class="article-list" v-else>
+          <li v-for="(article, index) in articles">
             <p>
               <router-link :to="`/article/${article.id}`"
                            :title="article.title">《{{ article.title }}》</router-link>
@@ -22,8 +23,9 @@
       <br>
       <div class="categories">
         <h3 class="title">categories</h3>
-        <ul class="categories-list" v-if="Object.is(categories.data.code, 1)">
-          <li class="item" v-for="(category, index) in categories.data.result.data">
+        <p v-if="!categories.length">暂无分类</p>
+        <ul class="categories-list" v-else>
+          <li class="item" v-for="(category, index) in categories">
             <p>
               <router-link class="name"
                            :to="`/category/${category.slug}`"
@@ -39,7 +41,8 @@
       <br>
       <div class="tags">
         <h3 class="title">tags</h3>
-        <ul class="tag-list">
+        <p v-if="!tags.length">暂无标签</p>
+        <ul class="tag-list" v-else>
           <li class="item" v-for="tag in tags">
             <router-link :to="`/tag/${tag.slug}`" :title="tag.description">{{ tag.name }}</router-link>
             <span>&nbsp;</span>
@@ -83,19 +86,19 @@
     },
     computed: {
       articles() {
-        return this.$store.state.sitemap.articles
+        return this.$store.state.sitemap.articles.data.data
       },
       categories() {
-        return this.$store.state.category
+        return this.$store.state.category.data.data
       },
       tags() {
-        return this.$store.state.tag.data.result.data
+        return this.$store.state.tag.data.data
       }
     },
     methods: {
       // 设置文章简介展开折叠
       toggleArticleDescriptionOpen(index) {
-        const articles = this.articles.data.result.data
+        const articles = this.articles
         this.$set(articles[index], 'open', !articles[index].open)
       }
     }

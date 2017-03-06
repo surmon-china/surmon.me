@@ -38,7 +38,7 @@
         return this.$store.state.article.list
       },
       currentTag() {
-        return this.$store.state.tag.data.result.data.find((tag, index, arr) => {
+        return this.$store.state.tag.data.data.find((tag, index, arr) => {
           return Object.is(tag.slug, this.$route.params.tag_slug)
         })
       },
@@ -49,7 +49,7 @@
       },
       nextPageParams() {
         return Object.assign({
-          page: this.article.data.result.pagination.current_page + 1
+          page: this.article.data.pagination.current_page + 1
         }, this.defaultParams)
       }
     },

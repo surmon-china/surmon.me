@@ -23,10 +23,6 @@
            @click.stop.prevent="sortComemnts(-1)">最新</a>
         <a href="" 
            class="sort-btn"
-           :class="{ actived: Object.is(sortMode, 1) }"
-           @click.stop.prevent="sortComemnts(1)">最早</a>
-        <a href="" 
-           class="sort-btn"
            :class="{ actived: Object.is(sortMode, 2) }" 
            @click.stop.prevent="sortComemnts(2)">最热</a>
       </div>
@@ -70,7 +66,7 @@
                   <span>回复 </span>
                   <a href="" @click.stop.prevent="toSomeAnchorById(`comment-item-${comment.pid}`)">
                     <span>#{{ comment.pid }}&nbsp;</span>
-                    <strong>@{{ fondReplyParent(comment.pid) }}</strong>
+                    <strong v-if="fondReplyParent(comment.pid)">@{{ fondReplyParent(comment.pid) }}</strong>
                   </a>
                   <span>：</span>
                 </p>
@@ -96,7 +92,7 @@
     </transition>
     <transition name="module">
       <div class="pagination-box" v-if="comment.data.pagination.total_page > 1">
-        <ul class="pagination-list">
+        <ul class="pagination-list" v-if="Object.is(sortMode, 2)">
           <li class="item" v-for="item in comment.data.pagination.total_page">
             <a href="" 
                class="pagination-btn" 
@@ -104,6 +100,24 @@
                @click.stop.prevent="Object.is(item, comment.data.pagination.current_page) 
                ? false 
                : loadComemntList({ page: item })">{{ item }}</a>
+          </li>
+        </ul>
+        <ul class="pagination-list" v-else>
+          <li class="item">
+            <a href="" class="pagination-btn prev disabled" @click.stop.prevent>— old</a>
+          </li>
+          <li class="item" v-for="item in comment.data.pagination.total_page">
+            <a href="" 
+               class="pagination-btn" 
+               :class="{ 'active disabled': paginationReverseActive(item) }"
+               @click.stop.prevent="paginationReverseActive(item)
+                  ? false 
+                  : loadComemntList({ 
+                      page: comment.data.pagination.total_page + 1 - item 
+                  })">{{ item }}</a>
+          </li>
+          <li class="item">
+            <a href="" class="pagination-btn next disabled" @click.stop.prevent>new —</a>
           </li>
         </ul>
       </div>
@@ -225,7 +239,12 @@
             <a href="" class="preview" title="preview" @click.stop.prevent="togglePreviewMode">
               <i class="iconfont icon-eye"></i>
             </a>
-            <button class="submit" type="submit" @click="submitComment($event)">发布</button>
+            <button class="submit" 
+                    type="submit" 
+                    :disabled="comment.posting"
+                    @click="submitComment($event)">
+              <span>{{ comment.posting ? '发布中...' : '发布' }}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -296,6 +315,9 @@
       },
       replyCommentSlef() {
         return this.comment.data.data.find(comment => Object.is(comment.id, this.pid))
+      },
+      blacklist() {
+        return this.$store.state.option.globalOption.data.blacklist
       }
     },
     mounted() {
@@ -424,6 +446,11 @@
           this.loadComemntList()
         }
       },
+      // 翻页反向计算
+      paginationReverseActive(index) {
+        const pagination = this.comment.data.pagination
+        return Object.is(index, pagination.total_page + 1 - pagination.current_page)
+      },
       // 点击用户
       clickUser(event, user) {
         if (!user.site) event.preventDefault()
@@ -524,6 +551,15 @@
         const lineOverflow = this.comemntContentText.split('\n').length > 36
         const lengthOverflow = this.comemntContentText.length > 2000
         if(lineOverflow || lengthOverflow) return alert('内容需要在2000字/36行以内')
+        // 使用服务单配置的黑名单在本地校验邮箱和关键字
+        if (this.blacklist.mails.includes(this.user.email) || 
+           (this.blacklist.keywords.length && 
+            eval(`/${this.blacklist.keywords.join('|')}/ig`).test(this.comemntContentText))) {
+          alert('发布失败，原因 => 控制台');
+          console.warn('评论发布失败\n1：邮箱被列入黑名单\n2：内容包含黑名单关键词');
+          return false;
+        }
+        if (!this.user.site) delete this.user.site
         this.$store.dispatch('postComment', {
           pid: this.pid,
           post_id: this.postId,
@@ -532,11 +568,11 @@
           agent: navigator.userAgent
         }).then(data => {
           // 发布成功后清空评论框内容并更新本地信息
+          this.previewMode = false
+          this.userCacheMode = true
           this.cancelCommentReply()
           this.clearCommentContent()
           localStorage.setItem('user', JSON.stringify(this.user))
-          this.userCacheMode = true
-          this.previewMode = false
         }).catch(err => {
           console.warn('评论发布失败', err)
           alert('发布失败，原因 => 控制台')
@@ -812,7 +848,7 @@
     }
 
     > .pagination-box {
-      margin-top: 1rem;
+      margin-top: .5rem;
 
       > .pagination-list {
         margin: 0;
@@ -826,11 +862,21 @@
 
           > .pagination-btn {
             display: inline-block;
-            width: 2em;
-            height: 2em;
+            width: 2rem;
+            height: 2rem;
             display: inline-block;
-            line-height: 2em;
+            line-height: 2rem;
             text-align: center;
+
+            &.prev,
+            &.next {
+              width: 5em;
+              font-size: .9em;
+
+              &:hover {
+                background: none;
+              }
+            }
 
             &.disabled {
               cursor: no-drop;

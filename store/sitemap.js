@@ -7,14 +7,7 @@
 export const state = {
   articles: {
     fetching: false,
-    data: {
-      result: {
-        pagination: {
-          current_page: 0
-        },
-        data: []
-      }
-    }
+    data: { data: [] }
   }
 }
 
@@ -27,6 +20,6 @@ export const mutations = {
   },
   GET_ARTICLES_SUCCESS(state, action) {
     state.articles.fetching = false
-    state.articles.data = action
+    state.articles.data = action.result
   }
 }

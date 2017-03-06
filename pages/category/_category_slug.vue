@@ -38,7 +38,7 @@
         return this.$store.state.article.list
       },
       currentCategory() {
-        return this.$store.state.category.data.result.data.find(category => {
+        return this.$store.state.category.data.data.find(category => {
           return Object.is(category.slug, this.$route.params.category_slug)
         })
       },
@@ -49,7 +49,7 @@
       },
       nextPageParams() {
         return Object.assign({
-          page: this.article.data.result.pagination.current_page + 1
+          page: this.article.data.pagination.current_page + 1
         }, this.defaultParams)
       }
     },
