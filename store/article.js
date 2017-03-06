@@ -7,24 +7,20 @@
 export const state = {
   hot: {
     fetching: false,
-    data: { response: [] }
+    data: { data: [] }
   },
   list: {
     fetching: false,
     data: {
-      result: {
-        pagination: {
-          current_page: 0
-        },
-        data: []
-      }
+      pagination: {
+        current_page: 0
+      },
+      data: []
     }
   },
   detail: {
     fetching: false,
-    data: {
-      result: {}
-    }
+    data: {}
   }
 }
 
@@ -49,12 +45,12 @@ export const mutations = {
   },
   GET_LIST_SUCCESS(state, action) {
     state.list.fetching = false
-    state.list.data = action
+    state.list.data = action.result
   },
   ADD_LIST_SUCCESS(state, action) {
     state.list.fetching = false
-    state.list.data.result.data.push.apply(state.list.data.result.data, action.result.data)
-    state.list.data.result.pagination = action.result.pagination
+    state.list.data.data.push.apply(state.list.data.data, action.result.data)
+    state.list.data.pagination = action.result.pagination
   },
 
   // Hot
@@ -66,32 +62,30 @@ export const mutations = {
   },
   GET_HOT_LIST_SUCCESS(state, action){
     state.hot.fetching = false
-    state.hot.data = action
+    state.hot.data = action.result
   },
 
   // Detail
   CLEAR_DETAIL(state) {
-    state.detail.data = {
-      result: {}
-    }
+    state.detail.data = {}
   },
   REQUEST_DETAIL(state) {
     state.detail.fetching = true
   },
   GET_DETAIL_FAILURE(state) {
     state.detail.fetching = false
-    state.detail.data = { result: {} }
+    state.detail.data = {}
   },
   GET_DETAIL_SUCCESS(state, action) {
     state.detail.fetching = false
-    state.detail.data = action
+    state.detail.data = action.result
   },
 
   // 喜欢某篇文章
   LIKE_ARTICLE(state, action) {
-    let article = state.detail.data.result
+    let article = state.detail.data
     if (Object.is(article.id, action.id)) {
-      state.detail.data.result.meta.likes ++
+      state.detail.data.meta.likes ++
     }
   }
 }

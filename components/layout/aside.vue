@@ -23,16 +23,16 @@
         <i class="iconfont icon-list"></i>
         <span>热门文章</span>
       </p>
-      <empty-box v-if="!articleFetching && !articles.length">
+      <empty-box v-if="!article.fetching && !article.data.data.length">
         <slot>No Result Hot Articles.</slot>
       </empty-box>
-      <ul class="aside-article-list" v-if="!articleFetching && articles.length">
-        <li class="item" v-for="article in articles.slice(0, 10)" :key="article.id">
+      <ul class="aside-article-list" v-if="!article.fetching && article.data.data.length">
+        <li class="item" :key="item.id" v-for="item in article.data.data.slice(0, 10)">
           <i class="index"></i>
           <router-link class="title" 
-                       :title="`${article.title} - [ ${article.comments} 条评论 ]`"
-                       :to="`/article/${article.thread_key}`">
-            <span>{{ article.title }}</span>
+                       :title="`${item.title} - [ ${item.meta.comments} 条评论 - ${item.meta.likes} 人喜欢 ]`"
+                       :to="`/article/${item.id}`">
+            <span>{{ item.title }}</span>
           </router-link>
         </li>
       </ul>
@@ -49,21 +49,21 @@
       <calendar></calendar>
     </div>
     <div class="aside-tag" v-scroll-top>
-      <empty-box v-if="!tagFetching && !tags.length">
+      <empty-box v-if="!tag.fetching && !tag.data.data.length">
         <slot>No Result Tags.</slot>
       </empty-box>
-      <ul class="aside-tag-list" v-if="!tagFetching && tags.length">
+      <ul class="aside-tag-list" v-if="!tag.fetching && tag.data.data.length">
         <router-link tag="li"
                      class="item"
-                     :to="`/tag/${tag.slug}`"
-                     v-for="tag in tags">
-          <a class="title" :title="tag.description">
+                     :to="`/tag/${item.slug}`"
+                     v-for="item in tag.data.data">
+          <a class="title" :title="item.description">
             <i class="iconfont" 
-               :class="[tag.extends.find(t => Object.is(t.name, 'icon')).value]" 
-               v-if="tag.extends.find(t => Object.is(t.name, 'icon'))"></i>
+               :class="[item.extends.find(t => Object.is(t.name, 'icon')).value]" 
+               v-if="item.extends.find(t => Object.is(t.name, 'icon'))"></i>
             <span>&nbsp;</span>
-            <span>{{ tag.name }}</span>
-            <span>({{ tag.count || 0 }})</span>
+            <span>{{ item.name }}</span>
+            <span>({{ item.count || 0 }})</span>
           </a>
         </router-link>
       </ul>
@@ -89,22 +89,12 @@
       }
     },
     computed: {
-      tags() {
-        return this.$store.state.tag.data.result.data
+      tag() {
+        return this.$store.state.tag
       },
-      tagFetching() {
-        return this.$store.state.tag.fetching
-      },
-      articles() {
-        let articles = this.$store.state.article.hot.data.response || []
-        articles = articles.filter(a => {
-          return !!a.thread_key && !Object.is(Number(a.thread_key), NaN) && !!a.title
-        })
-        return articles
-      },
-      articleFetching() {
-        return this.$store.state.article.hot.fetching
-      },
+      article() {
+        return this.$store.state.article.hot
+      }
     },
     methods: {
       toSearch() {

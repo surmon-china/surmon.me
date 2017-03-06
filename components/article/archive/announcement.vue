@@ -1,7 +1,7 @@
 <template>
   <div class="announcement">
     <transition name="module">
-      <empty-box class="announcement-empty-box" v-if="!announcement.data.result.data.length">
+      <empty-box class="announcement-empty-box" v-if="!announcement.data.data.length">
         <slot>No Result Announcement.</slot>
       </empty-box>
     </transition>
@@ -9,11 +9,11 @@
       <i class="iconfont icon-horn"></i>
     </div>
     <transition name="module">
-      <div class="swiper-container swiper" ref="swiper" v-if="announcement.data.result.data.length">
+      <div class="swiper-container swiper" ref="swiper" v-if="announcement.data.data.length">
         <div class="swiper-wrapper">
           <div class="swiper-slide item"
                :key="index"
-               v-for="(announcement, index) in announcement.data.result.data.slice(0, 9)">
+               v-for="(announcement, index) in announcement.data.data.slice(0, 9)">
             <div class="content" v-html="markedContent(announcement.content)"></div>
           </div>
         </div>
@@ -49,12 +49,7 @@
     },
     props: {
       announcement: {
-        type: Object,
-        default: {
-          result: {
-            data: []
-          }
-        }
+        type: Object
       }
     },
     mounted() {

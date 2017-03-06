@@ -1,14 +1,14 @@
 <template>
   <div class="carrousel">
     <transition name="module">
-      <empty-box class="article-empty-box" v-if="!article.data.result.data.length">
+      <empty-box class="article-empty-box" v-if="!article.data.data.length">
         <slot>No Result Article.</slot>
       </empty-box>
     </transition>
     <transition name="module">
-      <div class="swiper-container swiper" ref="swiper" v-if="article.data.result.data.length">
+      <div class="swiper-container swiper" ref="swiper" v-if="article.data.data.length">
         <div class="swiper-wrapper">
-          <div class="swiper-slide item" v-for="(article, index) in article.data.result.data.slice(0, 9)" :key="index">
+          <div class="swiper-slide item" v-for="(article, index) in article.data.data.slice(0, 9)" :key="index">
             <div class="content">
               <img :src="buildThumb(article.thumb)">
               <router-link :to="`/article/${article.id}`" class="title">
@@ -45,12 +45,7 @@
     },
     props: {
       article: {
-        type: Object,
-        default: {
-          result: {
-            data: []
-          }
-        }
+        type: Object
       }
     },
     mounted() {

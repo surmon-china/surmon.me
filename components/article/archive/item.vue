@@ -23,17 +23,21 @@
             <i class="iconfont icon-eye"></i>
             <span>{{ item.meta.views || 0 }}</span>
           </span>
-          <span class="comment">
+          <span class="comments">
             <i class="iconfont icon-comment"></i>
-            <span>{{ item.comment.length || 0 }}</span>
+            <span>{{ item.meta.comments || 0 }}</span>
           </span>
-          <span class="category">
+          <span class="likes">
+            <i class="iconfont icon-like"></i>
+            <span>{{ item.meta.likes || 0 }}</span>
+          </span>
+          <span class="categories">
             <i class="iconfont icon-list"></i>
             <span v-if="!item.category.length">未分类</span>
             <router-link :to="`/category/${category.slug}`" 
                          v-for="category in item.category">{{ category.name }}</router-link>
           </span>
-          <span class="tag">
+          <span class="tags" v-show="false">
             <i class="iconfont icon-tag"></i>
             <span v-if="!item.tag.length">无</span>
             <router-link :to="`/tag/${tag.slug}`" v-for="tag in item.tag">{{ tag.name }}</router-link>
@@ -147,19 +151,29 @@
           font-size: .9em;
           height: 2em;
           line-height: 2em;
-          display: block;
+          display: flex;
+          justify-content: flex-start;
+          align-items: baseline;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
           word-wrap: normal;
 
+          > .views {
+            min-width: 4rem;
+          }
+
+          > .likes,
+          > .comments {
+            min-width: 3em;
+          }
+
           > .date,
           > .views,
-          > .comment,
-          > .tag,
-          > .category {
-            // display: inline-block;
-            // float: left;
+          > .comments,
+          > .likes,
+          > .tags,
+          > .categories {
             margin-right: 1em;
 
             > .iconfont {
@@ -168,8 +182,8 @@
             }
           }
 
-          > .tag,
-          > .category {
+          > .tags,
+          > .categories {
 
             a {
               text-transform: capitalize;
@@ -177,7 +191,7 @@
             }
           }
 
-          > .tag {
+          > .tags {
             margin-right: 0;
           }
         }

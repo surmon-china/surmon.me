@@ -88,7 +88,7 @@ export const actions = {
     commit('article/REQUEST_HOT_LIST')
     return Service.get('/article', { params: { hot: 1 }})
     .then(response => {
-      const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 0)
+      const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
       if(success) commit('article/GET_HOT_LIST_SUCCESS', response.data)
       if(!success) commit('article/GET_HOT_LIST_FAILURE')
     }, err => {
@@ -98,8 +98,8 @@ export const actions = {
 
   // 根据post-id获取评论列表
   loadCommentsByPostId({ commit }, params) {
-    params.page = params.page || 1
     params.sort = params.sort || -1
+    params.page = params.page || 1
     params.per_page = params.per_page || 50
     if (Object.is(params.page, 1)) {
       commit('comment/CLEAR_LIST')
@@ -109,7 +109,7 @@ export const actions = {
     .then(response => {
       const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
       if(success) {
-        if (Object.is(params.sort, -1)) response.data.result.data.reverse()
+        if (Object.is(params.sort, -1)) response.data.result.data.reverse();
         commit('comment/GET_LIST_SUCCESS', response.data)
       }
       if(!success) commit('comment/GET_LIST_FAILURE')
