@@ -80,7 +80,7 @@
                 </a>
                 <a href="" 
                    class="like" 
-                   :class="{ liked: commentLiked(comment.id) }"
+                   :class="{ liked: commentLiked(comment.id), active: !!comment.likes }"
                    @click.stop.prevent="likeComment(comment)">
                   <i class="iconfont icon-zan"></i>
                   <span>顶&nbsp;({{ comment.likes }})</span></a>
@@ -821,6 +821,11 @@
 
               > .create_at {
                 color: $disabled;
+              }
+
+              > .active {
+                color: $black;
+                font-weight: bold;
               }
 
               > .liked {
