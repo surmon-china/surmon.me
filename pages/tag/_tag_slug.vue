@@ -12,7 +12,7 @@
   export default {
     name: 'tag-article-list',
     validate ({ params }) {
-      return !!params.tag_slug;
+      return !!params.tag_slug
     },
     fetch({ store, params }) {
       return store.dispatch('loadArticles', params)

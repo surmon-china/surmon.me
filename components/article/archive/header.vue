@@ -1,39 +1,43 @@
 <template>
   <div class="header-box">
     <p class="logo">
-      <!-- data -->
-      <i class="iconfont icon-clock" v-if="currentDate"></i>
-      <!-- tag -->
-      <i class="iconfont" v-if="currentTag" :class="[currentTagIconClass]"></i>
-      <!-- category -->
-      <i class="iconfont"  v-if="currentCategory" :class="[currentCategoryIconClass]"></i>
-      <!-- search -->
-      <i class="iconfont icon-search" v-if="currentKeyword"></i>
+      <transition name="module" mode="out-in">
+        <!-- data -->
+        <i class="iconfont icon-clock" v-if="currentDate"></i>
+        <!-- tag -->
+        <i class="iconfont" v-else-if="currentTag" :class="[currentTagIconClass]"></i>
+        <!-- category -->
+        <i class="iconfont"  v-else-if="currentCategory" :class="[currentCategoryIconClass]"></i>
+        <!-- search -->
+        <i class="iconfont icon-search" v-else-if="currentKeyword"></i>
+      </transition>
     </p>
-    <!-- category -->
-    <h4 class="title" v-if="currentCategory">
-      <span>{{ currentCategory.description || 'Nothing.' }}</span>
-    </h4>
-    <!-- tag -->
-    <h4 class="title" v-if="currentTag">
-      <span>{{ currentTag.name }}</span>
-      <span>&nbsp;-&nbsp;</span>
-      <span>{{ currentTag.description || 'Nothing.' }}</span>
-    </h4>
-    <!-- data -->
-    <h4 class="title" v-if="currentDate">
-      <span>发布于</span>
-      <span>&nbsp;{{ currentDate }}&nbsp;</span>
-      <span>的所有文章</span>
-    </h4>
-      <!-- search -->
-    <h4 class="title" v-if="currentKeyword">
-      <span>和</span>
-      <span>&nbsp;"</span>
-      <span>{{ currentKeyword }}</span>
-      <span>"&nbsp;</span>
-      <span>有关的所有文章</span>
-    </h4>
+    <transition name="module" mode="out-in">
+      <!-- category -->
+      <h4 class="title" v-if="currentCategory">
+        <span>{{ currentCategory.description || 'Nothing.' }}</span>
+      </h4>
+      <!-- tag -->
+      <h4 class="title" v-else-if="currentTag">
+        <span>{{ currentTag.name }}</span>
+        <span>&nbsp;-&nbsp;</span>
+        <span>{{ currentTag.description || 'Nothing.' }}</span>
+      </h4>
+      <!-- data -->
+      <h4 class="title" v-else-if="currentDate">
+        <span>发布于</span>
+        <span>&nbsp;{{ currentDate }}&nbsp;</span>
+        <span>的所有文章</span>
+      </h4>
+        <!-- search -->
+      <h4 class="title" v-else-if="currentKeyword">
+        <span>和</span>
+        <span>&nbsp;"</span>
+        <span>{{ currentKeyword }}</span>
+        <span>"&nbsp;</span>
+        <span>有关的所有文章</span>
+      </h4>
+    </transition>
   </div>
 </template>
 

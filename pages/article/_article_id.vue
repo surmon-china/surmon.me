@@ -92,7 +92,7 @@
   export default {
     name: 'article-detail',
     validate ({ params }) {
-      return (!!params.article_id && !Object.is(Number(params.article_id), NaN));
+      return (!!params.article_id && !Object.is(Number(params.article_id), NaN))
     },
     fetch ({ store, params }) {
       return store.dispatch('loadArticleDetail', params)

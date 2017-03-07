@@ -14,18 +14,18 @@
         <empty-box class="article-empty-box" v-if="!article.fetching && !article.data.data.length">
           <slot>No Result Article.</slot>
         </empty-box>
+        <transition-group name="fade" tag="div" v-else>
+          <list-item v-for="(item, index) in article.data.data" :item="item" :key="index"></list-item>
+        </transition-group>
       </transition>
-      <transition-group name="fade" tag="div">
-        <list-item v-for="(item, index) in article.data.data" :item="item" :key="index"></list-item>
-      </transition-group>
     </div>
 
     <!-- 加载更多 -->
     <div class="article-load">
       <button class="btn-loadmore" @click="$emit('loadmore')" :disabled="article.fetching || !canLoadMore">
         <span v-if="!article.fetching && canLoadMore">加载更多</span>
-        <span v-if="article.fetching && canLoadMore">加载中</span>
-        <span v-if="!canLoadMore">没有更多</span>
+        <span v-else-if="article.fetching && canLoadMore">加载中</span>
+        <span v-else-if="!canLoadMore">没有更多</span>
       </button>
     </div>
   </div>

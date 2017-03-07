@@ -151,7 +151,7 @@
           </div>
         </div>
         <!-- 用户设置部分 -->
-        <div class="user" v-if="userCacheMode && !userCacheEditing">
+        <div class="user" v-else-if="userCacheMode && !userCacheEditing">
           <div class="edit">
             <strong class="name">{{ user.name | firstUpperCase }}</strong>
             <a href="" class="setting" @click.stop.prevent>
@@ -239,8 +239,8 @@
             <a href="" class="preview" title="preview" @click.stop.prevent="togglePreviewMode">
               <i class="iconfont icon-eye"></i>
             </a>
-            <button class="submit" 
-                    type="submit" 
+            <button type="submit" 
+                    class="submit" 
                     :disabled="comment.posting"
                     @click="submitComment($event)">
               <span>{{ comment.posting ? '发布中...' : '发布' }}</span>
