@@ -26,11 +26,11 @@
       <empty-box v-if="!article.fetching && !article.data.data.length">
         <slot>No Result Hot Articles.</slot>
       </empty-box>
-      <ul class="aside-article-list" v-if="!article.fetching && article.data.data.length">
+      <ul class="aside-article-list" v-else-if="!article.fetching && article.data.data.length">
         <li class="item" :key="item.id" v-for="item in article.data.data.slice(0, 10)">
           <i class="index"></i>
           <router-link class="title" 
-                       :title="`${item.title} - [ ${item.meta.comments} 条评论 - ${item.meta.likes} 人喜欢 ]`"
+                       :title="`${item.title} - [ ${item.meta.comments} 条评论 | ${item.meta.likes} 人喜欢 ]`"
                        :to="`/article/${item.id}`">
             <span>{{ item.title }}</span>
           </router-link>
@@ -52,7 +52,7 @@
       <empty-box v-if="!tag.fetching && !tag.data.data.length">
         <slot>No Result Tags.</slot>
       </empty-box>
-      <ul class="aside-tag-list" v-if="!tag.fetching && tag.data.data.length">
+      <ul class="aside-tag-list" v-else-if="!tag.fetching && tag.data.data.length">
         <router-link tag="li"
                      class="item"
                      :to="`/tag/${item.slug}`"

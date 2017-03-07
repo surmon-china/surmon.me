@@ -1,12 +1,10 @@
 <template>
   <div class="carrousel">
-    <transition name="module">
+    <transition name="module" mode="out-in">
       <empty-box class="article-empty-box" v-if="!article.data.data.length">
         <slot>No Result Article.</slot>
       </empty-box>
-    </transition>
-    <transition name="module">
-      <div class="swiper-container swiper" ref="swiper" v-if="article.data.data.length">
+      <div class="swiper-container swiper" ref="swiper" v-else>
         <div class="swiper-wrapper">
           <div class="swiper-slide item" v-for="(article, index) in article.data.data.slice(0, 9)" :key="index">
             <div class="content">

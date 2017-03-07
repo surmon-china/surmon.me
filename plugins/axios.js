@@ -7,17 +7,17 @@ let service = axios.create({
 })
 
 // 拦截器
-service.interceptors.request.use(function (config) {
+service.interceptors.request.use(config => {
   return config
-}, function (error) {
+}, error => {
   return Promise.reject(error)
 })
 
-service.interceptors.response.use(function (response) {
+service.interceptors.response.use(response => {
   return response
-}, function (error) {
+}, error => {
   return Promise.reject(error)
 })
 
-Vue.prototype.$http = axios;
+Vue.prototype.$http = axios
 export default service

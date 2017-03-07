@@ -109,7 +109,7 @@ export const actions = {
     .then(response => {
       const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
       if(success) {
-        if (Object.is(params.sort, -1)) response.data.result.data.reverse();
+        if (Object.is(params.sort, -1)) response.data.result.data.reverse()
         commit('comment/GET_LIST_SUCCESS', response.data)
       }
       if(!success) commit('comment/GET_LIST_FAILURE')

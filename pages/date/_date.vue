@@ -12,7 +12,7 @@
   export default {
     name: 'data-article-list',
     validate ({ params }) {
-      return !!params.date;
+      return !!params.date
     },
     fetch({ store, params }) {
       return store.dispatch('loadArticles', params)
