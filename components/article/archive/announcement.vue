@@ -68,7 +68,7 @@
         }
       },
       markedContent(content) {
-        return marked(content)
+        return marked(content, null, true)
       }
     }
   }
