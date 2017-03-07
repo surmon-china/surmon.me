@@ -1,15 +1,13 @@
 <template>
   <div class="announcement">
-    <transition name="module">
-      <empty-box class="announcement-empty-box" v-if="!announcement.data.data.length">
-        <slot>No Result Announcement.</slot>
-      </empty-box>
-    </transition>
     <div class="title">
       <i class="iconfont icon-horn"></i>
     </div>
-    <transition name="module">
-      <div class="swiper-container swiper" ref="swiper" v-if="announcement.data.data.length">
+    <transition name="module" mode="out-in">
+      <empty-box class="announcement-empty-box" v-if="!announcement.data.data.length">
+        <slot>No Result Announcement.</slot>
+      </empty-box>
+      <div class="swiper-container swiper" ref="swiper" v-else>
         <div class="swiper-wrapper">
           <div class="swiper-slide item"
                :key="index"

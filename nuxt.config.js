@@ -21,6 +21,7 @@ module.exports = {
       'axios',
       'swiper',
       'marked',
+      'gravatar',
       'clipboard',
       'highlight.js'
     ],
