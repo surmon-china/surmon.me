@@ -124,7 +124,7 @@
         let content = this.article.content
         if (!content) return ''
         const hasTags = Object.is(this.tags.code, 1) && !!this.tags.data.length
-        return marked(content, hasTags ? this.tags.data : false)
+        return marked(content, hasTags ? this.tags.data : false, true)
       },
       fetching() {
         return this.$store.state.article.detail.fetching
