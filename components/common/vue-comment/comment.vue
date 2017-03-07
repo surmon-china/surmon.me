@@ -334,7 +334,7 @@
       OSParse,
       // markdown解析服务
       marked(content) {
-        return marked(content, false, false)
+        return marked(content, null, false)
       },
       // 头像服务
       gravatar(email) {
