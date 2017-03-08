@@ -19,7 +19,7 @@
   },
   "scripts": {
     "dev": "nodemon --exec node server.js",
-    "build": "NODE_ENV=production nuxt build",
+    "build": "cross-env NODE_ENV=production nuxt build",
     "start": "cross-env NODE_ENV=production node server.js",
     "precommit": "npm run lint",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
