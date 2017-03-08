@@ -257,6 +257,7 @@
   import marked from '~plugins/marked'
   import gravatar from '~plugins/gravatar'
   import { UAParse, OSParse } from '~utils/comment-ua-parse'
+  import { scrollTo } from '~utils/scroll-to-anywhere'
   export default {
     name: 'vue-comment',
     data() {
@@ -458,36 +459,19 @@
       // 跳转到某条指定的id位置
       toSomeAnchorById(id) {
         const targetDom = document.getElementById(id)
-        if (!targetDom) return false
-        let isNeedToTop = !Object.is(id, 'post-box')
-        let targetScrollTop = targetDom.offsetTop
-        const totop = (acceleration = 0.1, stime = 10) => {
-          let currentScrollTop = Math.max.apply(Math, [
-            window.scrollY || 0, 
-            document.body.scrollTop || 0, 
-            document.documentElement.scrollTop || 0
-          ])
-          let stepScroll
-          if (isNeedToTop) stepScroll = Math.floor(currentScrollTop / (1 + acceleration))
-          if (!isNeedToTop) stepScroll = currentScrollTop + ((targetScrollTop - acceleration) / (acceleration * 66))
-          window.scrollTo(0, stepScroll)
-          if((isNeedToTop && (currentScrollTop > targetDom.offsetTop)) ||
-            (!isNeedToTop && ((currentScrollTop + window.innerHeight) < targetDom.offsetTop))) {
-            window.setTimeout(() => {
-              totop(acceleration, stime)
-            }, stime)
+        if (targetDom) {
+          let isToEditor = Object.is(id, 'post-box')
+          scrollTo(targetDom, 200, { offset: isToEditor ? 0 : -300 })
+          // 如果是进入编辑模式，则需要激活光标
+          if (isToEditor) {
+            let p = this.$refs.markdown
+            let s = window.getSelection()
+            let r = document.createRange()
+            r.setStart(p, p.childElementCount)
+            r.setEnd(p, p.childElementCount)
+            s.removeAllRanges()
+            s.addRange(r)
           }
-        }
-        totop()
-        // 如果是进入编辑模式，则需要激活光标
-        if (!isNeedToTop) {
-          let p = this.$refs.markdown
-          let s = window.getSelection()
-          let r = document.createRange()
-          r.setStart(p, p.childElementCount)
-          r.setEnd(p, p.childElementCount)
-          s.removeAllRanges()
-          s.addRange(r)
         }
       },
       // 回复评论
@@ -588,6 +572,11 @@
   .cm-content,
   .reply-preview,
   .markdown-preview {
+    font-size: 1em;
+    line-height: 2em;
+    margin: .5em 0;
+    word-wrap: break-word;
+
     p {
       margin: 0;
     }
@@ -799,9 +788,6 @@
 
             > .cm-content {
               font-size: .95em;
-              line-height: 2em;
-              margin: .5em 0;
-              word-wrap: break-word;
 
               > .reply {
                 color: $disabled;
@@ -1098,6 +1084,7 @@
               width: 100%;
               height: 0;
               overflow: auto;
+              margin: 0;
               padding: .5em;
               @include css3-prefix(transform, translateY(-100%));
               background-color: rgba(235, 235, 235, 0.85);
