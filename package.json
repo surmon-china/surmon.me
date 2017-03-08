@@ -6,6 +6,7 @@
   "private": false,
   "dependencies": {
     "axios": "^0.15.3",
+    "bezier-easing": "^2.0.3",
     "clipboard": "^1.5.16",
     "cross-env": "^3.1.4",
     "express": "^4.14.1",

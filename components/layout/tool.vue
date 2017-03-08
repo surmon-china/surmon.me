@@ -16,23 +16,12 @@
 </template>
 
 <script>
+  import { scrollTo, easing } from '~utils/scroll-to-anywhere'
   export default {
     name: 'tool',
     methods: {
-      totop(acceleration = 0.1, stime = 10) {
-        let currentScrollTop = Math.max.apply(Math, [
-          window.scrollY || 0, 
-          document.body.scrollTop || 0, 
-          document.documentElement.scrollTop || 0
-        ])
-        // 滚动距离 = 目前距离 / 速度, 因为距离原来越小, 速度是大于 1 的数, 所以滚动距离会越来越小
-        window.scrollTo(0, Math.floor(currentScrollTop / (1 + acceleration)))
-        // 如果距离还没到
-        if(currentScrollTop > 0) {
-          window.setTimeout(() => {
-            this.totop(acceleration, stime)
-          }, stime)
-        }
+      totop() {
+        scrollTo('body', 300, { easing: easing['ease-in'] })
       }
     }
   }
