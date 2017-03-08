@@ -835,7 +835,6 @@
                 }
 
                 &.actived {
-                  color: $black;
                   font-weight: bold;
 
                   &:hover {
