@@ -80,7 +80,7 @@
                 </a>
                 <a href="" 
                    class="like" 
-                   :class="{ liked: commentLiked(comment.id), active: !!comment.likes }"
+                   :class="{ liked: commentLiked(comment.id), actived: !!comment.likes }"
                    @click.stop.prevent="likeComment(comment)">
                   <i class="iconfont icon-zan"></i>
                   <span>顶&nbsp;({{ comment.likes }})</span></a>
@@ -96,7 +96,7 @@
           <li class="item" v-for="item in comment.data.pagination.total_page">
             <a href="" 
                class="pagination-btn" 
-               :class="{ 'active disabled': Object.is(item, comment.data.pagination.current_page) }"
+               :class="{ 'actived disabled': Object.is(item, comment.data.pagination.current_page) }"
                @click.stop.prevent="Object.is(item, comment.data.pagination.current_page) 
                ? false 
                : loadComemntList({ page: item })">{{ item }}</a>
@@ -109,7 +109,7 @@
           <li class="item" v-for="item in comment.data.pagination.total_page">
             <a href="" 
                class="pagination-btn" 
-               :class="{ 'active disabled': paginationReverseActive(item) }"
+               :class="{ 'actived disabled': paginationReverseActive(item) }"
                @click.stop.prevent="paginationReverseActive(item)
                   ? false 
                   : loadComemntList({ 
@@ -195,7 +195,7 @@
                  @keyup="commentContentChange($event)">
             </div>
             <div class="markdown-preview" 
-                 :class="{ active: previewMode }"
+                 :class="{ actived: previewMode }"
                  v-html="previewContent"></div>
           </div>
           <div class="editor-tools">
@@ -823,14 +823,25 @@
                 color: $disabled;
               }
 
-              > .active {
-                color: $black;
-                font-weight: bold;
-              }
+              > .like {
 
-              > .liked {
-                color: $red;
-                font-weight: bold;
+                &:hover {
+                  color: $red;
+                }
+
+                &.liked {
+                  color: $red;
+                  font-weight: bold;
+                }
+
+                &.actived {
+                  color: $black;
+                  font-weight: bold;
+
+                  &:hover {
+                    color: $red;
+                  }
+                }
               }
 
               > .reply,
@@ -888,7 +899,7 @@
               opacity: .5;
             }
 
-            &.active,
+            &.actived,
             &:hover {
               background-color: $module-hover-bg;
             }
@@ -1093,7 +1104,7 @@
               background-color: rgba(235, 235, 235, 0.85);
               transition: transform .2s;
 
-              &.active {
+              &.actived {
                 height: 100%;
                 transition: transform .2s;
                 @include css3-prefix(transform, translateY(0));
