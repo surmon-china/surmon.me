@@ -2,7 +2,6 @@ module.exports = {
   apps: [
     {
       name: "surmon.me",
-      cwd: "./",
       script: "server.js",
       args: "cross-env",
       max_memory_restart: "198M",
