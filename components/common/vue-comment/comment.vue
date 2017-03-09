@@ -219,11 +219,20 @@
                   <li class="item" @click="insertEmoji('😱')">😱</li>
                   <li class="item" @click="insertEmoji('😳')">😳</li>
                   <li class="item" @click="insertEmoji('😵')">😵</li>
+                  <li class="item" @click="insertEmoji('🌚')">🌚</li>
                   <li class="item" @click="insertEmoji('🙏')">🙏</li>
+                  <li class="item" @click="insertEmoji('👆')">👆</li>
+                  <li class="item" @click="insertEmoji('👇')">👇</li>
                   <li class="item" @click="insertEmoji('👌')">👌</li>
                   <li class="item" @click="insertEmoji('👍')">👍</li>
                   <li class="item" @click="insertEmoji('👎')">👎</li>
+                  <li class="item" @click="insertEmoji('💪')">💪</li>
                   <li class="item" @click="insertEmoji('👏')">👏</li>
+                  <li class="item" @click="insertEmoji('🌻')">🌻</li>
+                  <li class="item" @click="insertEmoji('🌹')">🌹</li>
+                  <li class="item" @click="insertEmoji('💊')">💊</li>
+                  <li class="item" @click="insertEmoji('🇨🇳')">🇨🇳</li>
+                  <li class="item" @click="insertEmoji('🇺🇸')">🇺🇸</li>
                 </ul>
               </div>
             </a>
@@ -422,7 +431,7 @@
             end: `](https://)`
           },
           link: {
-            start: `![`,
+            start: `[`,
             end: `](https://)`
           },
           code: {
@@ -577,6 +586,12 @@
     margin: .5em 0;
     word-wrap: break-word;
 
+    img {
+      margin: .5rem 0;
+      max-width: 100%;
+      border-radius: 2px;
+    }
+
     p {
       margin: 0;
     }
@@ -591,12 +606,13 @@
 
     pre {
       display: flex;
+      align-items: baseline;
+      flex-wrap: wrap-reverse;
       position: relative;
       overflow: hidden;
       margin-top: .6em;
       margin-bottom: 1em;
       padding-top: 2.5em;
-      align-items: flex-end;
       border-radius: $radius;
       background-color: rgba(0, 0, 0, 0.8);
 
