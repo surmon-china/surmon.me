@@ -13,10 +13,6 @@
                 <span>I'm Surmon, a (95+) (小) javascript (鲜) stack (肉) developer.</span>
               </p>
               <p class="item">
-                <i class="iconfont icon-mail"></i>
-                <a href="mailto:surmon@foxmail.com" target="_blank" rel="nofollow">Surmon@foxmail.com</a>
-              </p>
-              <p class="item">
                 <i class="iconfont icon-comment-discussion"></i>
                 <span>国套委：</span>
                 <a target="_blank" 
@@ -38,6 +34,11 @@
               <p class="item">
                 <i class="iconfont icon-coffee"></i>
                 <span class="accounts">
+                  <a href="mailto:surmon@foxmail.com" 
+                     target="_blank" 
+                     rel="external nofollow">
+                    <i class="iconfont icon-mail"></i>
+                  </a>
                   <a href="https://github.com/surmon-china" 
                      target="_blank" 
                      rel="external nofollow">
@@ -82,7 +83,7 @@
               </p>
               <div class="item">
                 <i class="iconfont icon-code"></i>
-                <span class="skills">技术过<b>硬</b>.<span>&nbsp;&nbsp;</span>向往硅谷</span>
+                <span class="skills">凡心所向，素履所往；生如逆旅，一苇以航</span>
               </div>
             </div>
             <div class="about-map">
