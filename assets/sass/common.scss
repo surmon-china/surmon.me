@@ -10,7 +10,8 @@
 
 ::-webkit-scrollbar {
   width: .5rem;
-  background: rgba(197, 197, 197, 0.4);
+  height: .5rem;
+  background: hsla(0, 0%, 100%, 0.6);
 }
 
 ::-webkit-scrollbar-track {
