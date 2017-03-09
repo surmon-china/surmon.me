@@ -280,6 +280,8 @@
       &.fixed {
         position: fixed;
         top: 5.5em;
+        max-height: calc(100% - 8em - 4.5em);
+        overflow-y: auto;
       }
 
       .empty-box {
