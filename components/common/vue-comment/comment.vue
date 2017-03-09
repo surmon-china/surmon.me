@@ -56,7 +56,7 @@
                 <span class="ua" v-html="UAParse(comment.agent)" v-if="comment.agent"></span>
                 <span class="location" v-if="comment.ip_location">
                   <span>{{ comment.ip_location.country }}</span>
-                  <span>&nbsp;-&nbsp;</span>
+                  <span v-if="comment.ip_location.country && comment.ip_location.city">&nbsp;-&nbsp;</span>
                   <span>{{ comment.ip_location.city }}</span>
                 </span>
                 <span class="flool">#{{ comment.id }}</span>
