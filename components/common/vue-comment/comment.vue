@@ -262,7 +262,6 @@
 </template>
 
 <script>
-  import axios from '~plugins/axios'
   import marked from '~plugins/marked'
   import gravatar from '~plugins/gravatar'
   import { UAParse, OSParse } from '~utils/comment-ua-parse'
