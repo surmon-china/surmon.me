@@ -6,7 +6,6 @@
 
 <script>
   import ArticleList from '~components/article/archive/list'
-  import Service from '~plugins/axios'
 
   export default {
     name: 'category-article-list',
