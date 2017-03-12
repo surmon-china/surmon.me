@@ -1,7 +1,7 @@
 <template>
   <footer class="footer">
-    <div class="container">
-      <div class="footer-content">
+    <div class="container" :class="{ mobile: mobileLayout }">
+      <div class="footer-content" v-if="!mobileLayout">
         <span>陕ICP备13004859号</span>
         <span> - </span>
         <a class="sitemap-btn" href="/sitemap.xml" target="_blank">SITEMAP</a>
@@ -15,13 +15,19 @@
         <span> used </span>
         <a class="sitemap-btn" href="https://cn.vuejs.org/" target="_blank" rel="external nofollow">Vue.js</a>
       </div>
+      <div class="footer-content" v-if="mobileLayout">Surmon.me</div>
     </div>
   </footer>
 </template>
 
 <script>
   export default {
-    name: 'footer'
+    name: 'footer',
+    computed: {
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
+      }
+    }
   }
 </script>
 
@@ -33,6 +39,10 @@
 
     .container {
       position: relative;
+
+      &.mobile {
+        width: 100%;
+      }
 
       .footer-content {
         padding: 1em;

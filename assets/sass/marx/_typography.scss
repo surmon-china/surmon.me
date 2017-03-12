@@ -5,6 +5,10 @@ body {
   line-height: $line-height-base;
   padding-top: $navbar-height + 1em;
   -webkit-font-smoothing: antialiased;
+
+  &.mobile {
+    background-color: $module-hover-bg;
+  }
 }
 
 p {

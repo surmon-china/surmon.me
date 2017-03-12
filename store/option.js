@@ -10,6 +10,9 @@ export const state = {
   fullColumn: false,
   errorColumn: false,
 
+  // 是否为移动端
+  mobileLayout: false,
+
   // 服务端博主信息
   adminInfo: {
     fetching: false,
@@ -27,7 +30,16 @@ export const state = {
   }
 }
 
+export const getters = {
+  mobileLayout: state => state.mobileLayout
+}
+
 export const mutations = {
+
+  // 设置是否移动端状态
+  SET_MOBILE_LAYOUT(state, action) {
+    state.mobileLayout = action
+  },
 
 	// 设置栏目结构
   SET_FULL_COLUMU(state, action) {
