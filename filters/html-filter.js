@@ -13,13 +13,7 @@ export const textOverflow = (text, length) => {
   return cansub ? (text.substr(0, _length) + '...') : text
 }
 
-// 价格自动+.00
-export const numberFormat = text => {
-  const _number = Number(text)
-  return (!isNaN(_number)) ? (_number.toFixed(2)) : text
-}
-
 // 首字母大写
 export const firstUpperCase = str => {
-  return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+  return !!str ? str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase()) : str
 }
