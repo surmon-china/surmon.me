@@ -151,7 +151,12 @@
       buildDateLink(date) {
         if (!date) return date
         date = new Date(date)
-        return `/date/${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+        let year = date.getFullYear()
+        let month = (date.getMonth() + 1).toString()
+        let day = date.getDate().toString()
+        month = Object.is(month.length, 1) ? `0${month}` : month
+        day = Object.is(day.length, 1) ? `0${day}` : day
+        return `/date/${year}-${month}-${day}`
       }
     }
   }
