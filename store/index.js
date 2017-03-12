@@ -10,7 +10,11 @@ import Service from '~plugins/axios'
 export const actions = {
 
   // 全局服务初始化
-  nuxtServerInit(store, { params, route }) {
+  nuxtServerInit(store, { params, route, isServer, req }) {
+    // 检查设备类型
+    const userAgent = isServer ? req.headers['user-agent'] : navigator.userAgent
+    const isMobile = /(iPhone|iPod|Opera Mini|Android.*Mobile|NetFront|PSP|BlackBerry|Windows Phone)/ig.test(userAgent)
+    store.commit('option/SET_MOBILE_LAYOUT', isMobile)
     const initAppData = [
       // 配置数据
       store.dispatch('loadAdminInfo'),

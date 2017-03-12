@@ -1,26 +1,31 @@
 <template>
   <div id="app">
-    <background></background>
-    <header-view></header-view>
-    <main id="main">
+    <background v-if="!mobileLayout"></background>
+    <header-view v-if="!mobileLayout"></header-view>
+    <main id="main" :class="{ 'mobile': mobileLayout }">
       <transition name="module">
         <keep-alive>
-          <nav-view v-if="!errorColumn"></nav-view>
+          <nav-view v-if="!errorColumn && !mobileLayout"></nav-view>
         </keep-alive>
       </transition>
-      <div class="main-content" :class="{ 'full-column': fullColumn, 'error-column': errorColumn }">
+      <div class="main-content" 
+           :class="{ 
+             'full-column': fullColumn, 
+             'error-column': errorColumn,
+             'mobile-layout': mobileLayout
+            }">
         <keep-alive>
           <nuxt></nuxt>
         </keep-alive>
       </div>
       <transition name="aside">
         <keep-alive>
-          <aside-view v-if="!fullColumn && !errorColumn"></aside-view>
+          <aside-view v-if="!fullColumn && !errorColumn && !mobileLayout"></aside-view>
         </keep-alive>
       </transition>
     </main>
     <tool-view></tool-view>
-    <share-view class="sidebar-share"></share-view>
+    <share-view class="sidebar-share" v-if="!mobileLayout"></share-view>
     <footer-view></footer-view>
   </div>
 </template>
@@ -29,6 +34,13 @@
   import { Background, Header, Footer, Aside, Share, Tool, Nav } from '~components/layout'
   export default {
     name: 'app',
+    head() {
+      return !this.mobileLayout ? {} : {
+        bodyAttrs: {
+          class: 'mobile' 
+        }
+      }
+    },
     components: {
       Background,
       HeaderView: Header,
@@ -44,9 +56,13 @@
       },
       errorColumn () {
         return this.$store.state.option.errorColumn
+      },
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
       }
     },
     mounted() {
+      console.log(this)
       if (process.env.NODE_ENV === 'production') {
         console.clear()
         console.log("%cTalk is cheap. Show me the code %csurmon@foxmail.com", "color:#666;font-size:3em;","color:#666;font-size:13px;")
@@ -68,6 +84,12 @@
       position: relative;
       overflow: hidden;
       @include css3-prefix(transition, width .35s);
+
+      &.mobile-layout {
+        width: 100%;
+        margin: 0;
+        padding: 1rem;
+      }
 
       &.full-column {
         width: 62.5em;

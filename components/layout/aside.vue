@@ -3,6 +3,7 @@
     <div class="aside-search">
       <div class="search-box">
         <input id="keyword" 
+               required 
                list="keywords"
                type="search" 
                name="search" 

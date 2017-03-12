@@ -1,7 +1,7 @@
 <template>
   <div class="article-list-item">
-    <div class="item-content">
-      <div class="item-thumb">
+    <div class="item-content" :class="{ mobile: mobileLayout }">
+      <div class="item-thumb" v-if="!mobileLayout">
         <router-link :to="`/article/${item.id}`">
           <img class="item-thumb-img" 
                :src="buildThumb(item.thumb)"
@@ -58,6 +58,11 @@
       buildThumb(thumb) {
         if (!thumb) return '/images/thumb-article.jpg'
         return `${thumb}?imageView2/1/w/350/h/238/interlace/0/q/100|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/456/fill/I0ZGRkZGRg==/dissolve/20/gravity/SouthWest/dx/15/dy/7`
+      }
+    },
+    computed: {
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
       }
     }
   }
@@ -193,6 +198,19 @@
 
           > .tags {
             margin-right: 0;
+          }
+        }
+      }
+
+       &.mobile {
+        height: auto;
+
+        > .item-body {
+          width: 100%;
+          height: auto;
+
+          > .item-description {
+            height: auto;
           }
         }
       }

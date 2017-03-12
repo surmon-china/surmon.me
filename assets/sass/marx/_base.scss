@@ -7,14 +7,16 @@ aside,
 details,
 summary {
   margin: 0 auto;
-  // margin-bottom: $md-pad;
   width: 100%;
 }
 
 main {
   display: block;
-  margin: 0 auto;
-  width: $large-breakpoint;
+  width: $container-width;
+
+  &.mobile {
+    width: $mobile-container-width;
+  }
 }
 
 footer {
