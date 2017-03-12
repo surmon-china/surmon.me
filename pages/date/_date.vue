@@ -11,7 +11,7 @@
   export default {
     name: 'data-article-list',
     validate ({ params }) {
-      return !!params.date
+      return !Object.is(new Date(params.date).toString(), 'Invalid Date')
     },
     fetch({ store, params }) {
       return store.dispatch('loadArticles', params)
