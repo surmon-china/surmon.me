@@ -64,7 +64,7 @@
         }
       },
       destroySwiper() {
-        if (!this.swiper) {
+        if (this.swiper) {
           this.swiper.destroy()
         }
       },

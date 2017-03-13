@@ -29,7 +29,7 @@
           </keep-alive>
         </transition>
       </main>
-      <tool-view></tool-view>
+      <tool-view v-if="!mobileLayout"></tool-view>
       <share-view class="sidebar-share" v-if="!mobileLayout"></share-view>
       <footer-view v-if="!mobileLayout"></footer-view>
       <mobile-footer v-if="mobileLayout"></mobile-footer>
