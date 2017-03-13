@@ -1,5 +1,5 @@
 <template>
-  <div class="article">
+  <div class="article" :class="{ mobile: mobileLayout }">
     <div class="detail">
       <h2 class="title">{{ article.title || '...' }}</h2>
       <transition name="module" mode="out-in">
@@ -68,8 +68,9 @@
             <router-link :to="`/article/${article.id}`" 
                          :title="article.title" 
                          class="item-box">
-              <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title">
-              <span class="title">{{ article.title }}</span>
+              <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title" v-if="!mobileLayout">
+              <span class="title" v-if="!mobileLayout">{{ article.title }}</span>
+              <span class="mobile-title" v-if="mobileLayout">《{{ article.title }}》 - [ 继续阅读 ]</span>
             </router-link>
           </li>
         </ul>
@@ -131,6 +132,9 @@
       },
       tags() {
         return this.$store.state.tag.data
+      },
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
       }
     },
     methods: {
@@ -166,6 +170,36 @@
   @import '~assets/sass/mixins';
   @import '~assets/sass/variables';
   .article {
+
+    &.mobile {
+
+      > .metas {
+        padding: 1em;
+        line-height: 2.3em;
+
+        > .item {
+          margin: 0;
+        }
+      }
+
+      > .related {
+
+        > .article-lists {
+
+          > .item {
+            float: none;
+            margin: 0;
+
+            > .item-box {
+              width: 100%;
+              height: 2.2em;
+              line-height: 2.2em;
+              opacity: 2;
+            }
+          }
+        }
+      }
+    }
 
     > .detail,
     > .metas,

@@ -1,11 +1,11 @@
 <template>
-  <div class="page">
+  <div class="page" :class="{ mobile: mobileLayout }">
     <div class="detail">
       <div class="content">
         <div class="about">
           <div class="about-all">
             <div class="about-me">
-              <div class="gravatar">
+              <div class="gravatar" v-if="!mobileLayout">
                 <img :src="gravatar">
               </div>
               <p class="item">
@@ -111,7 +111,13 @@
     },
     computed: {
       gravatar() {
-        return this.$store.state.option.adminInfo.data.gravatar || '/images/gravatar.jpg'
+        let gravatar = this.$store.state.option.adminInfo.data.gravatar
+        return !!gravatar 
+                ? `${gravatar}?imageView2/1/w/360/h/360/interlace/1/q/75|imageslim` 
+                : '/images/gravatar.jpg'
+      },
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
       }
     }
   }
@@ -122,14 +128,44 @@
   @import '~assets/sass/variables';
   .page {
 
-    .detail {
+    &.mobile {
+
+      > .detail {
+        margin: 0;
+
+        > .content {
+
+          > .about {
+
+            > .about-all {
+
+              > .about-me {
+                padding: 1em;
+              }
+
+              > .about-project {
+
+                > .project-link {
+
+                  > .title {
+                    font-size: 2em;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    > .detail {
       margin-bottom: 1em;
 
-      .content {
+      > .content {
         width: 100%;
         overflow:  hidden;
 
-        .about {
+        > .about {
 
           .about-me {
             width: 100%;
