@@ -137,10 +137,14 @@
     },
     mounted() {
       this.clipboard()
-      this.initSwiper()
+      if (!this.mobileLayout && !this.swiper && this.article.related && this.article.related.length) {
+        this.swiper = new Swiper(this.$refs.swiper, this.swiperOption)
+      }
     },
     beforeDestroy() {
-      this.destroySwiper()
+      if (!this.mobileLayout && this.swiper && this.swiper.destroy) {
+        this.swiper.destroy()
+      }
     },
     watch: {
       'article'(newVol, oldVol) {
@@ -173,16 +177,6 @@
       }
     },
     methods: {
-      initSwiper() {
-        if (!this.swiper && !this.mobileLayout) {
-          this.swiper = new Swiper(this.$refs.swiper, this.swiperOption)
-        }
-      },
-      destroySwiper() {
-        if (this.swiper && !this.mobileLayout) {
-          this.swiper.destroy()
-        }
-      },
       clipboard() {
         if (this.article.title) {
           this.clipboard = new Clipboard(this.$refs.copy_url_btn)
