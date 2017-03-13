@@ -54,7 +54,7 @@
                    @click.stop="clickUser($event, comment.author)">{{ comment.author.name | firstUpperCase }}</a>
                 <span class="os" v-html="OSParse(comment.agent)" v-if="comment.agent"></span>
                 <span class="ua" v-html="UAParse(comment.agent)" v-if="comment.agent"></span>
-                <span class="location" v-if="comment.ip_location">
+                <span class="location" v-if="comment.ip_location && !mobileLayout">
                   <span>{{ comment.ip_location.country }}</span>
                   <span v-if="comment.ip_location.country && comment.ip_location.city">&nbsp;-&nbsp;</span>
                   <span>{{ comment.ip_location.city }}</span>
@@ -692,6 +692,7 @@
           }
 
           > .save {
+            width: 30%;
             margin-bottom: 0;
           }
         }

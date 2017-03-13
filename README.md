@@ -6,10 +6,15 @@ Vue-Blog By Nuxt.js + Vue.js + Vuex + Vue-router + Axios
 
 If you want to run the applaction, you need install the [nodepress](https://github.com/surmon-china/nodepress) service.
 
-## 首页
+## PC
 
 ![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshot/index.png)
 
+## Mobile
+
+![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshot/mobile.png)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshot/mobile-comment.png)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshot/mobile-sidebar.png)
 
 ## Build Setup
 
@@ -87,6 +92,7 @@ $ npm run lint
 - ~~error.vue不支持自定义布局，1.0改进~~
 - ~~反向代理需要做域名判断~~
 - ~~增加评论功能~~
+- ~~增加移动设备适应~~
 
 - graphql-js + Restful查询数据库
 - 音乐播放器的实现，也做就做完善的

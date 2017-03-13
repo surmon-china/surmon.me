@@ -1,5 +1,5 @@
 <template>
-  <div class="article-list-item">
+  <div class="article-list-item" @click="toDetail">
     <div class="item-content" :class="{ mobile: mobileLayout }">
       <div class="item-thumb" v-if="!mobileLayout">
         <router-link :to="`/article/${item.id}`">
@@ -58,6 +58,11 @@
       buildThumb(thumb) {
         if (!thumb) return '/images/thumb-article.jpg'
         return `${thumb}?imageView2/1/w/350/h/238/interlace/0/q/100|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/456/fill/I0ZGRkZGRg==/dissolve/20/gravity/SouthWest/dx/15/dy/7`
+      },
+      toDetail() {
+        if (this.mobileLayout) {
+          this.$router.push(`/article/${this.item.id}`)
+        }
       }
     },
     computed: {

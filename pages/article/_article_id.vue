@@ -61,21 +61,31 @@
         </div>
       </div>
     </transition>
-    <transition name="module" mode="out-in">
-      <div class="related" v-if="article.related && article.related.length">
-        <ul class="article-lists" :class="{ 'less': article.related.length < 5 }">
-          <li class="item" v-for="article in article.related.slice(0, 8)">
+    <div class="related" v-if="article.related && article.related.length && !mobileLayout">
+      <div class="swiper-container article-list swiper" ref="swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide item" v-for="(article, index) in article.related" :key="index">
             <router-link :to="`/article/${article.id}`" 
                          :title="article.title" 
                          class="item-box">
-              <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title" v-if="!mobileLayout">
-              <span class="title" v-if="!mobileLayout">{{ article.title }}</span>
-              <span class="mobile-title" v-if="mobileLayout">《{{ article.title }}》 - [ 继续阅读 ]</span>
+              <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title">
+              <span class="title">{{ article.title }}</span>
             </router-link>
-          </li>
-        </ul>
+          </div>
+        </div>
       </div>
-    </transition>
+    </div>
+    <div class="related" v-if="article.related && article.related.length && mobileLayout">
+      <ul class="article-list">
+        <li class="item" v-for="article in article.related.slice(0, 8)">
+          <router-link :to="`/article/${article.id}`" 
+                       :title="article.title + '- [ 继续阅读 ]'" 
+                       class="item-link">
+            <span class="title">《{{ article.title }}》- [ 继续阅读 ]</span>
+          </router-link>
+        </li>
+      </ul>
+    </div>
     <div class="comment">
       <comment-box :post-id="article.id"
                    :likes="article.meta.likes"
@@ -111,11 +121,36 @@
         ]
       }
     },
-    components: {
-      ShareBox
+    data() {
+      return {
+        swiperOption: {
+          autoplay: 3500,
+          setWrapperSize :true,
+          mousewheelControl : true,
+          autoplayDisableOnInteraction: false,
+          observeParents:true,
+          grabCursor : true,
+          slidesPerView: 'auto',
+          spaceBetween: 14
+        }
+      }
     },
     mounted() {
       this.clipboard()
+      this.initSwiper()
+    },
+    beforeDestroy() {
+      this.destroySwiper()
+    },
+    watch: {
+      'article'(newVol, oldVol) {
+        if (newVol && newVol.title && this.swiper) {
+          this.swiper.update(true)
+        }
+      }
+    },
+    components: {
+      ShareBox
     },
     computed: {
       article() {
@@ -138,6 +173,16 @@
       }
     },
     methods: {
+      initSwiper() {
+        if (!this.swiper && !this.mobileLayout) {
+          this.swiper = new Swiper(this.$refs.swiper, this.swiperOption)
+        }
+      },
+      destroySwiper() {
+        if (this.swiper && !this.mobileLayout) {
+          this.swiper.destroy()
+        }
+      },
       clipboard() {
         if (this.article.title) {
           this.clipboard = new Clipboard(this.$refs.copy_url_btn)
@@ -145,7 +190,7 @@
       },
       buildThumb(thumb) {
         if (!thumb) return '/images/thumb-releted.jpg'
-        return `${thumb}?imageView2/1/w/270/h/224/interlace/0/q/100`
+        return `${thumb}?imageView2/1/w/290/h/224/interlace/0/q/100`
       },
       buildDateTitle(date) {
         if (!date) return date
@@ -183,18 +228,23 @@
       }
 
       > .related {
+        height: auto;
 
-        > .article-lists {
+        > .article-list {
+          padding: 0;
+          margin: 0;
+          list-style: none;
+          overflow: hidden;
+          opacity: .9;
 
           > .item {
-            float: none;
-            margin: 0;
 
-            > .item-box {
+            > .item-link {
+              display: block;
               width: 100%;
               height: 2.2em;
               line-height: 2.2em;
-              opacity: 2;
+              @include text-overflow();
             }
           }
         }
@@ -431,77 +481,60 @@
     }
 
     > .related {
-      padding: .8em;
+      padding: 1em;
       overflow: hidden;
+      height: 10em;
 
-      > .article-lists {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        overflow: hidden;
-        opacity: .9;
+      > .swiper-container.article-list {
 
-        &.less {
+        > .swiper-wrapper {
+          height: 8em;
+          overflow: hidden;
 
-          > .item:nth-child(-n + 4) {
-            margin-bottom: 0;
-          }
-        }
+          > .swiper-slide.item {
+            width: auto;
 
-        > .item {
-          float: left;
-          margin-right: .8em;
-          margin-bottom: .8em;
+            > .item-box {
+              display: block;
+              position: relative;
+              overflow: hidden;
+              width: auto;
+              height: 100%;
+              opacity: .8;
 
-          &:nth-child(4),
-          &:nth-child(8) {
-            margin-right: 0;
-          }
+              &:hover {
 
-          &:nth-child(1n + 5) {
-            margin-bottom: 0;
-          }
+                .thumb {
+                  opacity: .9;
+                  @include css3-prefix(transform, scale(1.2) rotate(3deg));
+                  @include css3-prefix(transition, all 1s);
+                }
+              }
 
-          > .item-box {
-            display: block;
-            position: relative;
-            overflow: hidden;
-            width: 9.6em;
-            height: 8em;
-            opacity: .8;
-
-            &:hover {
-
-              .thumb {
-                opacity: .9;
-                @include css3-prefix(transform, scale(1.2) rotate(3deg));
+              > .thumb {
+                width: auto;
+                height: 100%;
+                @include css3-prefix(transform, scale(1) rotate(0deg));
                 @include css3-prefix(transition, all 1s);
               }
-            }
 
-            > .thumb {
-              width: 100%;
-              height: 100%;
-              @include css3-prefix(transform, scale(1) rotate(0deg));
-              @include css3-prefix(transition, all 1s);
-            }
-
-            > .title {
-              position: absolute;
-              bottom: 0;
-              left: 0;
-              width: 100%;
-              height: 2em;
-              line-height: 2em;
-              background-color: rgba(165, 165, 165, 0.5);
-              padding: 0 .5em;
-              color: white;
-              opacity: .8;
-              font-size: .9em;
-              text-align: center;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
+              > .title {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: calc(100% - 1em);
+                height: 2em;
+                line-height: 2em;
+                background-color: rgba(165, 165, 165, 0.5);
+                padding: 0 .5em;
+                color: white;
+                opacity: .8;
+                font-size: .9em;
+                text-align: center;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
             }
           }
         }
