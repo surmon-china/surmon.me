@@ -12,6 +12,8 @@ export const state = {
 
   // 是否为移动端
   mobileLayout: false,
+  // 移动端侧边栏
+  mobileSidebar: false,
 
   // 服务端博主信息
   adminInfo: {
@@ -39,6 +41,11 @@ export const mutations = {
   // 设置是否移动端状态
   SET_MOBILE_LAYOUT(state, action) {
     state.mobileLayout = action
+  },
+
+  // 切换移动端侧边栏
+  SET_MOBILE_SIDEBAR(state, action) {
+    state.mobileSidebar = action
   },
 
 	// 设置栏目结构

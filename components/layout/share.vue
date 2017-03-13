@@ -1,6 +1,6 @@
 <template>
   <div id="share">
-    <div class="share-box">
+    <div class="share-box" :class="{ mobile: mobileLayout }">
       <a title="微信" 
          rel="nofollow"
          class="share-link wechat"
@@ -86,6 +86,9 @@
     computed: {
       url() {
         return `https://surmon.me${this.$route.fullPath}`
+      },
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
       }
     },
     methods: {
@@ -132,6 +135,27 @@
   #share {
 
     .share-box {
+
+      &.mobile {
+        width: 100%;
+        display: flex;
+
+        > .share-link {
+          display: none;
+
+          &[class*="wechat"],
+          &[class*="weibo"],
+          &[class*="qzone"] {
+            width: auto;
+            flex-grow: 1;
+            display: inline-block;
+          }
+
+          &[class*="qzone"] {
+            margin: 0;
+          }
+        }
+      }
 
       > .share-link {
         cursor: pointer;

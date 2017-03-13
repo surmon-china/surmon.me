@@ -1,5 +1,5 @@
 <template>
-  <div class="header-box">
+  <div class="header-box" :class="{ mobile: mobileLayout }">
     <p class="logo">
       <transition name="module" mode="out-in">
         <!-- data -->
@@ -70,6 +70,9 @@
       },
       currentKeyword() {
         return this.$route.params.keyword
+      },
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
       }
     }
   }
@@ -80,6 +83,16 @@
   @import '~assets/sass/variables';
   .header-box {
     padding: 1em;
+
+    &.mobile {
+
+      > .logo {
+
+        > .iconfont {
+          font-size: 3em;
+        }
+      }
+    }
 
     @keyframes logo-animate {
       0% {

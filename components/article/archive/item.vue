@@ -211,6 +211,20 @@
 
           > .item-description {
             height: auto;
+            margin-bottom: .5em;
+          }
+
+          > .item-meta {
+            justify-content: space-between;
+
+            > .date,
+            > .views,
+            > .comments,
+            > .likes,
+            > .tags,
+            > .categories {
+              margin: 0;
+            }
           }
         }
       }

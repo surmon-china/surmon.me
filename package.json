@@ -16,6 +16,7 @@
     "marked": "^0.3.6",
     "node-localstorage": "^1.3.0",
     "nuxt": "latest",
+    "slideout": "^1.0.1",
     "swiper": "^3.4.1"
   },
   "scripts": {

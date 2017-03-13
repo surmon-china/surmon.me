@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-box" id="comment-box">
+  <div class="comment-box" id="comment-box" :class="{ mobile: mobileLayout }">
     <div class="tools">
       <div class="total">
         <div class="count">
@@ -36,7 +36,7 @@
               :id="`comment-item-${comment.id}`" 
               key="index"
               v-for="(comment, index) in comment.data.data">
-            <div class="cm-avatar">
+            <div class="cm-avatar" v-if="!mobileLayout">
               <a target="_blank"
                  rel="external nofollow"
                  :href="comment.author.site" 
@@ -167,7 +167,7 @@
       </transition>
       <div class="editor-box">
         <div class="user">
-          <div class="gravatar">
+          <div class="gravatar" v-if="!mobileLayout">
             <img :alt="user.name || '匿名用户'"
                  :src="user.gravatar || '/images/anonymous.jpg'">
           </div>
@@ -327,6 +327,9 @@
       },
       blacklist() {
         return this.$store.state.option.globalOption.data.blacklist
+      },
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
       }
     },
     mounted() {
@@ -649,9 +652,58 @@
       }
     }
   }
-  .comment-box {
+
+  #comment-box {
     background-color: $module-bg;
     padding: 1em;
+
+    &.mobile {
+
+      > .list-box {
+
+        > .comment-list {
+
+          > .comment-item {
+            padding: 0;
+            margin-bottom: 1rem;
+
+            > .cm-body {
+              padding: .6em;
+            }
+          }
+        }
+      }
+
+      > .post-box {
+
+        > .user {
+          padding: 0;
+          height: auto;
+          flex-direction: column;
+
+          > .name,
+          > .email,
+          > .site,
+          > .save {
+            width: 80%;
+            margin-left: 0;
+            margin-right: 0;
+            margin-bottom: 1rem;
+          }
+
+          > .save {
+            margin-bottom: 0;
+          }
+        }
+
+        > .editor-box {
+
+          > .user {
+            margin: 0;
+          }
+        }
+      }
+    }
 
     > .tools {
       display: flex;
