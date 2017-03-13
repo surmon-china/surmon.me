@@ -1,5 +1,5 @@
 <template>
-  <div class="projects">
+  <div class="projects" :class="{ mobile: mobileLayout }">
     <ul class="project-list">
       <li class="item">
         <a class="item-content" 
@@ -170,6 +170,11 @@
     name: 'project',
     head: {
       title: 'Project'
+    },
+    computed: {
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
+      }
     }
   }
 </script>
@@ -179,6 +184,41 @@
   @import '~assets/sass/variables';
   .projects {
     min-height: 40em;
+
+    &.mobile {
+      min-height: auto;
+
+      > .project-list {
+
+        > .item {
+          width: 100%;
+          height: auto;
+          float: none;
+
+          &:last-child {
+            margin: 0;
+          }
+
+          > .item-content {
+            width: 100%;
+            height: auto;
+
+            > .title {
+              margin: 1em 0;
+            }
+
+            > .iconfont {
+              font-size: 3em;
+            }
+
+            > .desc {
+              text-indent: 0;
+              text-align: center;
+            }
+          }
+        }
+      }
+    }
 
     > .project-list {
       padding: 0;

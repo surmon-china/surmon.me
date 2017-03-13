@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page" :class="{ mobile: mobileLayout }">
     <div class="detail">
       <div class="content">
         <div class="guestbook-banner">
@@ -21,6 +21,11 @@
     name: 'guestbook',
     head: {
       title: 'Guestbook'
+    },
+    computed: {
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
+      }
     }
   }
 </script>
@@ -29,6 +34,20 @@
   @import '~assets/sass/mixins';
   @import '~assets/sass/variables';
   .page {
+
+    &.mobile {
+
+      > .detail {
+
+        > .content {
+          height: 11em;
+
+          > .guestbook-banner {
+            height: 11em;
+          }
+        }
+      }
+    }
 
     .detail {
       margin-bottom: 1em;

@@ -1,5 +1,5 @@
 <template>
-  <div class="carrousel">
+  <div class="carrousel" :class="{ mobile: mobileLayout }">
     <transition name="module" mode="out-in">
       <empty-box class="article-empty-box" v-if="!article.data.data.length">
         <slot>No Result Article.</slot>
@@ -52,6 +52,11 @@
     beforeDestroy() {
       this.destroySwiper()
     },
+    computed: {
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
+      }
+    },
     methods: {
       initSwiper() {
         if (!this.swiper) {
@@ -64,8 +69,9 @@
         }
       },
       buildThumb(thumb) {
-        if (!thumb) return '/images/thumb-carrousel.jpg'
-        return `${thumb}?imageView2/1/w/1190/h/420/interlace/0/q/100|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/698/fill/I0ZGRkZGRg==/dissolve/27/gravity/SouthWest/dx/30/dy/15`
+        return thumb
+               ? `${thumb}?imageView2/1/w/${this.mobileLayout ? '768' : '1190'}/h/${this.mobileLayout ? '271' : '420'}/interlace/0/q/100|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/698/fill/I0ZGRkZGRg==/dissolve/27/gravity/SouthWest/dx/30/dy/15`
+               : `/images/${this.mobileLayout ? 'mobile-' : ''}thumb-carrousel.jpg`
       }
     }
   }
@@ -101,9 +107,9 @@
 
           > .title {
             position: absolute;
-            top: 1.5em;
-            right: 2em;
-            background-color: $module-bg;
+            top: 1.5rem;
+            right: 2rem;
+            background-color: rgba($module-bg, .25);
             margin: 0;
             padding: 0 .5em;
             height: 2em;
@@ -116,6 +122,20 @@
             &:hover {
               background-color: $module-hover-bg;
             }
+          }
+        }
+      }
+    }
+
+    &.mobile {
+      height: auto;
+
+      > .swiper {
+
+        .item {
+
+          > .content {
+            height: auto;
           }
         }
       }

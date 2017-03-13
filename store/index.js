@@ -21,9 +21,12 @@ export const actions = {
       store.dispatch('loadGlobalOption'),
       // 内容数据
       store.dispatch('loadTagList'),
-      store.dispatch('loadCategories'),
-      store.dispatch('loadHotArticles')
+      store.dispatch('loadCategories')
     ]
+    // 如果不是移动端的话，则请求热门文章
+    if (!isMobile) {
+      initAppData.push(store.dispatch('loadHotArticles'))
+    }
     // 首次服务端渲染时渲染评论数据
     const isGuestbook = Object.is(route.name, 'guestbook')
     const post_id = params.article_id || (isGuestbook ? 0 : false)
