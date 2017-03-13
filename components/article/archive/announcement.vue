@@ -63,7 +63,7 @@
         }
       },
       destroySwiper() {
-        if (!this.swiper) {
+        if (this.swiper) {
           this.swiper.destroy()
         }
       },
@@ -105,9 +105,12 @@
           width: 100%;
           position: relative;
           overflow: hidden;
+          @include text-overflow();
 
           p {
+            width: 90%;
             margin: 0;
+            @include text-overflow();
           }
 
           a {

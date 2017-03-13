@@ -34,6 +34,10 @@ select:-webkit-autofill {
   box-shadow: 0 0 0px 1000px rgb(230, 230, 230) inset; 
 }
 
+a {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
 .radio, .checkbox {
   display: inline-block;
   margin-top: 0px;
