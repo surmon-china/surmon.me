@@ -107,7 +107,7 @@ export const actions = {
   loadCommentsByPostId({ commit }, params) {
     params.sort = params.sort || -1
     params.page = params.page || 1
-    params.per_page = params.per_page || 50
+    params.per_page = params.per_page || 88
     if (Object.is(params.page, 1)) {
       commit('comment/CLEAR_LIST')
     }
