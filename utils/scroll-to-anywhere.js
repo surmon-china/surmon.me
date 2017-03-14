@@ -60,7 +60,12 @@ exports.scrollTo = (element, duration = 500, options) => {
   _.on(page, events, abortFn)
 
   let initialY = window.pageYOffset
-  let elementY = initialY + element.getBoundingClientRect().top
+  let elementY = 0
+  if (Object.is(typeof element, 'number')) {
+    elementY = element
+  } else {
+    elementY = initialY + element.getBoundingClientRect().top
+  }
   let targetY = document.body.scrollHeight - elementY < window.innerHeight
       ? document.body.scrollHeight - window.innerHeight
       : elementY

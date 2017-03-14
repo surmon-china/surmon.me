@@ -24,7 +24,7 @@ export const UAParse = e => {
 		outputer = '<span class="ua_lbbrowser"><i class="iconfont icon-internet"></i>猎豹安全浏览器'
 	} else if (r = e.match(/MicroMessenger\/([^\s]+)/ig)) {
 		let r1 = r[0].split("/")
-		outputer = `<span class="ua_qq"><i class="iconfont icon-weichat"></i>微信 | ${r1[1].split('/')[0]}`
+		outputer = `<span class="ua_qq"><i class="iconfont icon-wechat"></i>微信 | ${r1[1].split('/')[0]}`
 	} else if (r = e.match(/QQBrowser\/([^\s]+)/ig)) {
 		let r1 = r[0].split("/")
 		outputer = `<span class="ua_qq"><i class="iconfont icon-internet"></i>QQ浏览器 | ${r1[1].split('/')[0]}`
