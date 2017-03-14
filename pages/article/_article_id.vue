@@ -148,7 +148,7 @@
     },
     watch: {
       'article'(newVol, oldVol) {
-        if (newVol && newVol.title && this.swiper) {
+        if (newVol && newVol.title && this.swiper && this.swiper.update) {
           this.swiper.update(true)
         }
       }
@@ -499,7 +499,7 @@
               &:hover {
 
                 .thumb {
-                  opacity: .9;
+                  opacity: 1;
                   @include css3-prefix(transform, scale(1.2) rotate(3deg));
                   @include css3-prefix(transition, all 1s);
                 }
