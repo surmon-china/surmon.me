@@ -78,6 +78,8 @@ export const OSParse = e => {
 		os = '<span class="os_ubuntu">Ubuntu'
 	} else if (e.match(/linux/ig)) {
 		os = '<span class="os_linux"><i class="iconfont icon-linux"></i>Linux'
+	} else if (e.match(/iphone/ig)) {
+		os = '<span class="os_mac"><i class="iconfont icon-mac"></i>iPhone OS'
 	} else if (e.match(/mac/ig)) {
 		os = '<span class="os_mac"><i class="iconfont icon-mac"></i>Mac OS X'
 	} else if (e.match(/unix/ig)) {
