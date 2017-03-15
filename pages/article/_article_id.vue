@@ -345,6 +345,10 @@
               background-color: rgba(230, 230, 230, 0.7);
             }
 
+            > p {
+              text-indent: 0;
+            }
+
             > ul {
 
               &:last-child {
