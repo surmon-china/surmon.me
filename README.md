@@ -12,7 +12,7 @@ If you want to run the applaction, you need install the [nodepress](https://gith
 
 ## Mobile
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshot/mobile-full.png)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshot/mobile-full.jpg)
 
 ## Build Setup
 
@@ -26,9 +26,6 @@ $ npm run dev
 # build for production and launch server
 $ npm run build
 $ npm start
-
-# generate static project 生成静态html
-$ npm run generate
 
 # lint test
 $ npm run lint
