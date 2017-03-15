@@ -109,7 +109,8 @@
             position: absolute;
             top: 1.5rem;
             right: 2rem;
-            background-color: rgba($module-bg, .25);
+            color: #333;
+            background-color: rgba($module-hover-bg, .5);
             margin: 0;
             padding: 0 .5em;
             height: 2em;
@@ -120,7 +121,8 @@
             letter-spacing: .3px;
 
             &:hover {
-              background-color: $module-hover-bg;
+              color: #000;
+              background-color: rgba($module-hover-bg, .9);
             }
           }
         }
