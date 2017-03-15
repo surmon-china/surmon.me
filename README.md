@@ -93,6 +93,7 @@ $ npm run lint
 - ~~反向代理需要做域名判断~~
 - ~~增加评论功能~~
 - ~~增加移动设备适应~~
+- ~~watchTabActive~~
 
 - graphql-js + Restful查询数据库
 - 音乐播放器的实现，也做就做完善的
