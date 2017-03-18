@@ -9,4 +9,5 @@ const comment = {
     Vue.component('comment-box', CommentComponent)
   }
 }
+
 module.exports = comment

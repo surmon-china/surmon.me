@@ -59,24 +59,24 @@
     },
     methods: {
       initData(cur) {
-        let date = cur ? new Date(cur) : new Date()
+        const date = cur ? new Date(cur) : new Date()
         this.currentDay = date.getDate()
         this.currentYear = date.getFullYear()
         this.currentMonth = date.getMonth() + 1
         this.currentWeek = date.getDay()
         if (this.currentWeek == 0) this.currentWeek = 7
-        let str = this.formatDate(this.currentYear, this.currentMonth, this.currentDay)
+        const str = this.formatDate(this.currentYear, this.currentMonth, this.currentDay)
         // console.log("today:" + str + "," + this.currentWeek)
         this.days.length = 0
         // 今天是周日，放在第一行第7个位置，前面6个
         for (let i = this.currentWeek - 1; i >= 0; i--) {
-          let d = new Date(str)
+          const d = new Date(str)
           d.setDate(d.getDate() - i)
           // console.log("y:" + d.getDate())
           this.days.push(d)
         }
         for (let i = 1; i <= 35 - this.currentWeek; i++) {
-          let d = new Date(str)
+          const d = new Date(str)
           d.setDate(d.getDate() + i)
           this.days.push(d)
         }
@@ -88,12 +88,12 @@
         //  setDate(0); 上月最后一天
         //  setDate(-1); 上月倒数第二天
         //  setDate(dx) 参数dx为 上月最后一天的前后dx天
-        let d = new Date(this.formatDate(year, month, 1))
+        const d = new Date(this.formatDate(year, month, 1))
         d.setDate(0)
         this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
       },
       pickNext(year, month) {
-        let d = new Date(this.formatDate(year, month, 1))
+        const d = new Date(this.formatDate(year, month, 1))
         d.setDate(35)
         this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
       },
@@ -102,7 +102,7 @@
       },
       // 返回 类似 2016-01-02 格式的字符串
       formatDate(year, month, day) {
-        let y = year
+        const y = year
         let m = month
         if (m < 10) m = "0" + m
         let d = day

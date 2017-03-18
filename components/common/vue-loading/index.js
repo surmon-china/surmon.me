@@ -9,4 +9,5 @@ const loading = {
     Vue.component('loading-box', LoadingComponent)
   }
 }
+
 module.exports = loading

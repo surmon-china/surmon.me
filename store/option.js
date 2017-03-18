@@ -48,7 +48,7 @@ export const mutations = {
     state.mobileSidebar = action
   },
 
-	// 设置栏目结构
+  // 设置栏目结构
   SET_FULL_COLUMU(state, action) {
     state.fullColumn = action
   },

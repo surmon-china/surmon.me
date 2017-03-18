@@ -9,4 +9,5 @@ const empty = {
     Vue.component('empty-box', EmptyComponent)
   }
 }
+
 module.exports = empty

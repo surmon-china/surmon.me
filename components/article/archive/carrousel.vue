@@ -4,7 +4,7 @@
       <empty-box class="article-empty-box" v-if="!article.data.data.length">
         <slot>No Result Article.</slot>
       </empty-box>
-      <div class="swiper-container swiper" ref="swiper" v-else>
+      <div class="swiper" v-swiper:swiper="swiperOption" v-else>
         <div class="swiper-wrapper">
           <div class="swiper-slide item" v-for="(article, index) in article.data.data.slice(0, 9)" :key="index">
             <div class="content">
@@ -28,14 +28,14 @@
       return {
         swiperOption: {
           autoplay: 3500,
-          setWrapperSize :true,
+          setWrapperSize: true,
           autoHeight: true,
-          pagination : '.swiper-pagination',
-          paginationClickable :true,
-          mousewheelControl : true,
+          pagination: '.swiper-pagination',
+          paginationClickable: true,
+          mousewheelControl: true,
           autoplayDisableOnInteraction: false,
-          observeParents:true,
-          grabCursor : true,
+          observeParents: true,
+          grabCursor: true,
           preloadImages: false,
           lazyLoading: true
         }
@@ -46,28 +46,12 @@
         type: Object
       }
     },
-    mounted() {
-      this.initSwiper()
-    },
-    beforeDestroy() {
-      this.destroySwiper()
-    },
     computed: {
       mobileLayout() {
         return this.$store.state.option.mobileLayout
       }
     },
     methods: {
-      initSwiper() {
-        if (!this.swiper) {
-          this.swiper = new Swiper(this.$refs.swiper, this.swiperOption)
-        }
-      },
-      destroySwiper() {
-        if (this.swiper && this.swiper.destroy) {
-          this.swiper.destroy()
-        }
-      },
       buildThumb(thumb) {
         return thumb
                ? `${thumb}?imageView2/1/w/${this.mobileLayout ? '768' : '1190'}/h/${this.mobileLayout ? '271' : '420'}/interlace/0/q/100|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/698/fill/I0ZGRkZGRg==/dissolve/27/gravity/SouthWest/dx/30/dy/15`
@@ -83,6 +67,7 @@
   .carrousel {
     height: 15em;
     margin-bottom: 1em;
+    position: relative;
     background-color: $module-bg;
 
     > .swiper {
