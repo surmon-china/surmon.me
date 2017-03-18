@@ -1,7 +1,6 @@
-let swiper = {}
+import Vue from 'vue'
 
 if (process.BROWSER_BUILD) {
-	const swiper = window.Swiper = require('swiper')
+	const VueAwesomeSwiper = require('vue-awesome-swiper/ssr')
+	Vue.use(VueAwesomeSwiper)
 }
-
-export default swiper

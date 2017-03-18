@@ -8,17 +8,17 @@ if (process.BROWSER_BUILD && process.env.NODE_ENV === 'production') {
   ** https://zz.bdstatic.com/linksubmit/push.js
   */
   const baiduPush = href => {
-  	!function(){
-	    let e = /([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi
-	    let r = href || window.location.href
-	    let t = document.referrer
-	    if (!e.test(r)) {
-	      let o = "https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif"
-	      t ? (o += "?r=" + encodeURIComponent(document.referrer), r && (o += "&l=" + r)) : r && (o += "?l=" + r)
-	      let i = new Image
-	      i.src = o
-	    }
-		}(window)
+    !function(){
+      let e = /([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi
+      let r = href || window.location.href
+      let t = document.referrer
+      if (!e.test(r)) {
+        let o = "https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif"
+        t ? (o += "?r=" + encodeURIComponent(document.referrer), r && (o += "&l=" + r)) : r && (o += "?l=" + r)
+        let i = new Image
+        i.src = o
+      }
+    }(window)
   }
 
   baiduPush()

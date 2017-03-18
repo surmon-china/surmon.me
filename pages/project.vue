@@ -8,7 +8,7 @@
            target="_blank">
           <i class="iconfont icon-vue"></i>
           <h3 class="title">vue-awesome-swiper</h3>
-          <p class="desc">支持Vue的幻灯轮播图组件</p>
+          <p class="desc">支持Vue的幻灯轮播图组件，基于Swiper3</p>
         </a>
       </li>
       <li class="item">

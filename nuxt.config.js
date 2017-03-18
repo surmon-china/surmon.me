@@ -33,7 +33,20 @@ module.exports = {
         'transform-runtime'
       ],
       comments: true
+    },
+    // Run ESLINT on save
+    /*
+    extend (config, ctx) {
+      if (ctx.isClient) {
+        config.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules)/
+        })
+      }
     }
+    */
   },
   dev: (process.env.NODE_ENV !== 'production'),
   env: {

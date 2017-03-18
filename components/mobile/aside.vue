@@ -49,7 +49,7 @@
     name: 'mobile-aside',
     computed: {
       gravatar() {
-        let gravatar = this.$store.state.option.adminInfo.data.gravatar
+        const gravatar = this.$store.state.option.adminInfo.data.gravatar
         return !!gravatar 
                 ? `${gravatar}?imageView2/1/w/180/h/180/interlace/1/q/75|imageslim` 
                 : '/images/gravatar.jpg'
