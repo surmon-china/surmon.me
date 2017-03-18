@@ -6,7 +6,7 @@ if (process.BROWSER_BUILD && process.env.NODE_ENV === 'production') {
 
   // 销毁图片弹窗
   const closeImgPopup = () => {
-    let mask = document.getElementById('image-popup')
+    const mask = document.getElementById('image-popup')
     if (mask) {
       window.onscroll = null
       mask.setAttribute('class', '')
@@ -21,11 +21,11 @@ if (process.BROWSER_BUILD && process.env.NODE_ENV === 'production') {
   // 打开图片弹窗
   const openImgPopup = src => {
     if (!src) return false
-    let image = document.createElement('img')
+    const image = document.createElement('img')
     image.src = src
-    let oldMask = document.getElementById('image-popup')
+    const oldMask = document.getElementById('image-popup')
     if (oldMask) document.body.removeChild(oldMask)
-    let mask = document.createElement('div')
+    const mask = document.createElement('div')
     mask.setAttribute('id', 'image-popup')
     mask.appendChild(image)
     document.body.appendChild(mask)

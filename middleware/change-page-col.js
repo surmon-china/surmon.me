@@ -4,5 +4,5 @@ export default function ({ route, store }, next) {
   if (!Object.is(store.state.option.fullColumn, fullColumn)) {
     store.commit('option/SET_FULL_COLUMU', fullColumn)
   }
-	next()
+  next()
 }

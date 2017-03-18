@@ -1,2 +1,7 @@
 build/*.js
 config/*.js
+.nuxt/*.js
+.nuxt/*.vue
+plugins/ga.js
+plugins/copy-right.js
+plugins/baidu-seo-push.js

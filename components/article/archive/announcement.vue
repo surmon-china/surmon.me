@@ -7,7 +7,7 @@
       <empty-box class="announcement-empty-box" v-if="!announcement.data.data.length">
         <slot>No Result Announcement.</slot>
       </empty-box>
-      <div class="swiper-container swiper" ref="swiper" v-else>
+      <div class="swiper" v-swiper:swiper="swiperOption" v-else>
         <div class="swiper-wrapper">
           <div class="swiper-slide item"
                :key="index"
@@ -34,7 +34,7 @@
       return {
         swiperOption: {
           autoplay: 3500,
-          setWrapperSize :true,
+          setWrapperSize: true,
           direction: 'vertical',
           nextButton: '.swiper-button-next',
           prevButton: '.swiper-button-prev',
@@ -50,23 +50,7 @@
         type: Object
       }
     },
-    mounted() {
-      this.initSwiper()
-    },
-    beforeDestroy() {
-      this.destroySwiper()
-    },
     methods: {
-      initSwiper() {
-        if (!this.swiper) {
-          this.swiper = new Swiper(this.$refs.swiper, this.swiperOption)
-        }
-      },
-      destroySwiper() {
-        if (this.swiper && this.swiper.destroy) {
-          this.swiper.destroy()
-        }
-      },
       markedContent(content) {
         return marked(content, null, true)
       }
@@ -83,6 +67,7 @@
     font-size: .9em;
     margin-bottom: 1em;
     overflow: hidden;
+    position: relative;
     background-color: $module-bg;
 
     .announcement-empty-box {

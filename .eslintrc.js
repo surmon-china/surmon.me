@@ -9,7 +9,7 @@ module.exports = {
     sourceType: 'module'
   },
   //  https:// github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
-  extends: 'standard',
+  // extends: 'standard',
   //  required to lint *.vue files
   plugins: [
     'html'
@@ -26,7 +26,7 @@ module.exports = {
     // always参数：必须带末尾的逗号，
 
     // always-multiline：多行模式必须带逗号，单行模式不能带逗号
-    "comma-dangle": [2, "never"],
+    "comma-dangle": [0, "never"],
 
     // 禁止在条件表达式中使用赋值语句
     "no-cond-assign": 2,
@@ -175,7 +175,7 @@ module.exports = {
     "guard-for-in": 2,
 
     // 代码中禁止使用alert, confirm, and prompt
-    "no-alert": 2,
+    "no-alert": 0,
 
     // 禁止使用arguments.caller和arguments.callee
     "no-caller": 2,
@@ -191,7 +191,7 @@ module.exports = {
     "no-div-regex": 2,
 
     // 在if else语句中，如果else语句中只含有一个return语句，那么完全可以不使用else语句，直接return。
-    "no-else-return": 2,
+    "no-else-return": 0,
 
     // 不允许空函数
     "no-empty-function": 0,
@@ -200,7 +200,7 @@ module.exports = {
     "no-empty-pattern": 2,
 
     // 保证了在和null比较时使用===和!==，而不能够使用==和!=
-    "no-eq-null": 2,
+    "no-eq-null": 0,
 
     // 禁止使用eval函数
     "no-eval": 2,
@@ -348,7 +348,6 @@ module.exports = {
     // 使用严格模式
     "strict": 2,
 
-
     /*Variables*/
 
     // 变量声明时必须赋初值
@@ -358,7 +357,7 @@ module.exports = {
     "no-catch-shadow": 2,
 
     // 禁止使用delete删除var声明的变量
-    "no-delete-var": 2,
+    "no-delete-var": 0,
 
     // 防止label和声明的变量重名
     "no-label-var": 2,
@@ -367,7 +366,7 @@ module.exports = {
     "no-restricted-globals": [2, "event"],
 
     // 禁止声明外部作用域中已定义的变量
-    "no-shadow": 2,
+    "no-shadow": 0,
 
     // 声明变量时禁止覆盖JavaScript中的一些保留关键字，比如NaN、Infinity、undefined、eval、arguments等。
     "no-shadow-restricted-names": 2,
@@ -388,39 +387,37 @@ module.exports = {
     "no-use-before-define": 0,
 
 
-
-
     /*Node.js and CommonJS*/
 
     // 强制回调后return，避免多次调用回调
-    "callback-return": 2,
+    "callback-return": 0,
 
     // 强制require()出现在模块作用域的顶部
-    "global-require": 2,
+    "global-require": 0,
 
     //  如果函数有err入参(err或者error),在函数体内必须进行处理
-    "handle-callback-err": [2, "^(err|error)$"],
+    "handle-callback-err": [0, "^(err|error)$"],
 
     // 声明时不能混用声明类型
-    "no-mixed-requires": 2,
+    "no-mixed-requires": 0,
 
     // 禁止把require方法和new操作符一起使用。
-    "no-new-require": 2,
+    "no-new-require": 0,
 
     // 不能使用__dirname或__filename做路径拼接
-    "no-path-concat": 2,
+    "no-path-concat": 0,
 
     // 禁止使用process.env
-    "no-process-env": 2,
+    "no-process-env": 0,
 
     // 禁止使用process.exit()
-    "no-process-exit": 2,
+    "no-process-exit": 0,
 
     // 禁用使用指定模块，使用了就会报错
-    "no-restricted-modules": [2, "fs"],
+    "no-restricted-modules": [0, "fs"],
 
     // 禁止使用同步方法，建议使用异步方法
-    "no-sync": 2,
+    "no-sync": 0,
 
 
 
@@ -433,7 +430,7 @@ module.exports = {
     //  never参数： 数组元素前后不能带空格，
 
     //  always参数：数组元素前后必须留空格
-    "array-bracket-spacing": [2, "never"],
+    "array-bracket-spacing": [0, "never"],
 
     // 在单行代码块中，代码块前后是否需要留空格
 
@@ -495,7 +492,7 @@ module.exports = {
     "id-match": [0, "^[a-z]+([A-Z][a-z]+)*$", { "properties": false }],
 
     //  统一代码缩进方式，默认值是4 spaces.
-    "indent": 2,
+    "indent": 0,
 
     // 规定了在JSX中的属性值是使用单引号还是双引号,默认使用双引号
     "jsx-quotes": [2, "prefer-double"],
@@ -504,7 +501,7 @@ module.exports = {
     "key-spacing": [2, { "beforeColon": false, "afterColon": true }],
 
     //  规定了keyword前后是否需要留一个空格
-    "keyword-spacing": [2, { "before": true, "after": true, "overrides": {} }],
+    "keyword-spacing": [0, { "before": true, "after": true, "overrides": {} }],
 
     // 统一换行符，"\n" unix(for LF) and "\r\n" for windows(CRLF)，默认unix
     "linebreak-style": 0,
@@ -567,13 +564,13 @@ module.exports = {
     "no-negated-condition": 0,
 
     // 三元操作符禁止嵌套
-    "no-nested-ternary": 2,
+    "no-nested-ternary": 0,
 
     // 禁止使用new Object()来构造对象
-    "no-new-object": 2,
+    "no-new-object": 0,
 
     // 禁止使用++，--
-    "no-plusplus": 2,
+    "no-plusplus": 0,
 
     // 禁止使用某些特定的JavaScript语法，例如FunctionDeclaration 和 WithStatement
     "no-restricted-syntax": [0, "FunctionExpression", "WithStatement"],
@@ -618,7 +615,7 @@ module.exports = {
     "quotes": [0, "single", "avoid-escape"],
 
     // 注释格式要求JSDoc格式
-    "require-jsdoc": [2, {
+    "require-jsdoc": [0, {
 
         "require": {
 
@@ -654,7 +651,7 @@ module.exports = {
     "space-before-blocks": [2, "always"],
 
     // 函数定义时，function关键字后面的小括号前是否需要加空格
-    "space-before-function-paren": [2, "always"],
+    "space-before-function-paren": [0, "always"],
 
     // 规定圆括号内部的空格。规定是否需要在(右边，或者)左边加空格。
     "space-in-parens": [2, "never"],
@@ -673,10 +670,7 @@ module.exports = {
     "spaced-comment": [2, "always", { "markers": ["global", "globals", "eslint", "eslint-disable", "*package", "!", ","] }],
 
     // 要求在正则表达式的双斜杠外面加一个圆括号，来消除歧义
-    "wrap-regex": 2,
-
-
-
+    "wrap-regex": 0,
 
 
     /*ECMAScript 6*/

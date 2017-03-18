@@ -2,7 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import apiConfig from '../api.config'
 
-let service = axios.create({
+const service = axios.create({
   baseURL: apiConfig.baseUrl
 })
 

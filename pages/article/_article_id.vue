@@ -62,7 +62,7 @@
       </div>
     </transition>
     <div class="related" v-if="article.related && article.related.length && !mobileLayout">
-      <div class="swiper-container article-list swiper" ref="swiper">
+      <div class="article-list swiper" v-swiper:swiper="swiperOption">
         <div class="swiper-wrapper">
           <div class="swiper-slide item" v-for="(article, index) in article.related" :key="index">
             <router-link :to="`/article/${article.id}`" 
@@ -137,21 +137,6 @@
     },
     mounted() {
       this.clipboard()
-      if (!this.mobileLayout && !this.swiper && this.article.related && this.article.related.length) {
-        this.swiper = new Swiper(this.$refs.swiper, this.swiperOption)
-      }
-    },
-    beforeDestroy() {
-      if (!this.mobileLayout && this.swiper && this.swiper.destroy) {
-        this.swiper.destroy()
-      }
-    },
-    watch: {
-      'article'(newVol, oldVol) {
-        if (newVol && newVol.title && this.swiper && this.swiper.update) {
-          this.swiper.update(true)
-        }
-      }
     },
     components: {
       ShareBox
@@ -483,7 +468,7 @@
       overflow: hidden;
       height: 10em;
 
-      > .swiper-container.article-list {
+      > .swiper.article-list {
 
         > .swiper-wrapper {
           height: 8em;

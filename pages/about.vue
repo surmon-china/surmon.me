@@ -111,7 +111,7 @@
     },
     computed: {
       gravatar() {
-        let gravatar = this.$store.state.option.adminInfo.data.gravatar
+        const gravatar = this.$store.state.option.adminInfo.data.gravatar
         return !!gravatar 
                 ? `${gravatar}?imageView2/1/w/360/h/360/interlace/1/q/75|imageslim` 
                 : '/images/gravatar.jpg'
