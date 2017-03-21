@@ -138,7 +138,7 @@
            target="_blank">
           <i class="iconfont icon-wordpress"></i>
           <h3 class="title">Surmon</h3>
-          <p class="desc">前博客（Wordpress）主题</p>
+          <p class="desc">前博客Wordpress-BLOG主题</p>
         </a>
       </li>
       <li class="item">
@@ -148,7 +148,7 @@
            target="_blank">
           <i class="iconfont icon-wordpress"></i>
           <h3 class="title">Metro</h3>
-          <p class="desc">仿Ipc.me的Wordpress主题</p>
+          <p class="desc">仿Ipc.me的Wordpress-CMS主题</p>
         </a>
       </li>
       <li class="item">
@@ -158,7 +158,7 @@
            target="_blank">
           <i class="iconfont icon-wordpress"></i>
           <h3 class="title">think</h3>
-          <p class="desc">仿云景论坛门户首页的Wordpress主题</p>
+          <p class="desc">仿远景论坛门户首页的Wordpress-CMS主题</p>
         </a>
       </li>
     </ul>
