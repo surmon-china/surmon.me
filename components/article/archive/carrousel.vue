@@ -68,6 +68,7 @@
     height: 15em;
     margin-bottom: 1em;
     position: relative;
+    overflow: hidden;
     background-color: $module-bg;
 
     > .swiper {
