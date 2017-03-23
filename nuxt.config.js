@@ -19,6 +19,7 @@ module.exports = {
     // 将重复引用的第三方模块添加到vendor.bundle.js
     vendor: [
       'axios',
+      'howler',
       'swiper',
       'marked',
       'gravatar',
@@ -55,6 +56,7 @@ module.exports = {
   plugins: [
     '~plugins/ga.js',
     '~plugins/axios.js',
+    '~plugins/howler.js',
     '~plugins/clipboard.js',
     '~plugins/filters.js',
     '~plugins/swiper.js',
