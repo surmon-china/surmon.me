@@ -8,12 +8,10 @@
         <span> - </span>
         <span>Powered By </span>
         <router-link to="/project">NodePress</router-link>
-        <span> and </span>
+        <span>、</span>
         <router-link to="/project">Nuxt.js</router-link>
-        <span>. Dsigned By </span>
-        <router-link to="/about">Surmon</router-link>
-        <span> used </span>
-        <a class="sitemap-btn" href="https://cn.vuejs.org/" target="_blank" rel="external nofollow">Vue.js</a>
+        <span> and solitude. Dsigned By </span>
+        <router-link to="/about">Me</router-link>
       </div>
     </div>
   </footer>
