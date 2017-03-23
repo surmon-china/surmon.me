@@ -1,8 +1,22 @@
 export default function ({ route, store }, next) {
-  const fullColumnPageNames = ['about', 'music', 'project', 'sitemap']
+
+	// fullColumn
+  const fullColumnPageNames = ['about', 'project', 'sitemap']
   const fullColumn = fullColumnPageNames.includes(route.name)
+  
+  // set fullColumn
   if (!Object.is(store.state.option.fullColumn, fullColumn)) {
     store.commit('option/SET_FULL_COLUMU', fullColumn)
   }
+
+	// errorColumn
+  const errorColumn = Object.is(route.name, 'music')
+
+  // set errorColumn
+  if (!Object.is(store.state.option.errorColumn, errorColumn)) {
+  	store.commit('option/SET_ERROR_COLUMU', errorColumn)
+  }
+
+  // next
   next()
 }
