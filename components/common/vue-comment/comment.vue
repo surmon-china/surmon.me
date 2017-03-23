@@ -352,9 +352,9 @@
       gravatar(email) {
         if (!this.regexs.email.test(email)) return null
         let gravatar_url = gravatar.url(email, { 
-          size: '96', 
-          rating: 'pg',
-          default: 'https://gravatar.surmon.me/anonymous.jpg', 
+          // size: '96', 
+          // rating: 'pg',
+          // default: 'https://gravatar.surmon.me/anonymous.jpg', 
           protocol: 'https'
         });
         return gravatar_url.replace('https://s.gravatar.com/avatar', 'https://gravatar.surmon.me')
