@@ -4,8 +4,20 @@
 *
 */
 
+import musicPlayerBuilder from '~utils/music-player'
+
 export const state = {
   player: null,
+  playerState: {
+    seek: 0,
+    index: 0,
+    volume: 0.6,
+    wave: false,
+    muted: false,
+    loading: false,
+    playing: false,
+    progress: 0
+  },
   list: {
     fetching: false,
     data: null
@@ -20,10 +32,20 @@ export const state = {
   }
 }
 
+export const getters = {
+  currentSong: state => {
+    if (state.list.data) {
+      return state.list.data.tracks[state.playerState.index]
+    } else {
+      return null
+    }
+  }
+}
+
 export const mutations = {
 
-  INIT_PLAYER(state, action) {
-    state.player = action
+  INIT_PLAYER(state) {
+    musicPlayerBuilder(state, mutations)
   },
 
   REQUEST_LIST(state) {
@@ -42,16 +64,12 @@ export const mutations = {
     state.song.fetching = true
   },
   GET_SONG_FAILURE(state) {
-    state.song.fetching = false
     state.song.data = null
+    state.song.fetching = false
   },
   GET_SONG_SUCCESS(state, action) {
-    state.song.fetching = false
     state.song.data = action.result
-  },
-  SET_CURRENT_SONG(state, action) {
     state.song.fetching = false
-    state.song.data = action
   },
   
   REQUEST_LRC(state) {
