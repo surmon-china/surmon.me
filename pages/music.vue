@@ -1,35 +1,65 @@
 <template>
-  <div class="page">
-    <div class="detail">
-      <div class="content">
-        <button @click="">上一曲</button>
-        <button @click="">下一曲</button>
-        <button @click="">暂停</button>
-        <button @click="">播放</button>
-        <button @click="">静音</button>
-        <p>音量</p>
-        <p>进度条</p>
-        <hr>
-        <div v-if="currentSong.data">
-          <p>曲名 {{ currentSong.data.name }}</p>
-          <p>艺术家 <span v-for="artist in currentSong.data.artists">{{ artist.name }}</span></p>
-          <p>曲风 {{ currentSong.data.album.type }}</p>
-          <p>封面 <img :src="currentSong.data.album.picUrl"></p>
+  <div class="page" :style="{ height: height + 'px' }">
+    <div class="player">
+      <div class="prev-song" @click="prevSong">
+        <i class="iconfont icon-music-prev"></i>
+      </div>
+      <div class="album-box">
+        <div class="circle-progress">
+          <svg viewBox="0 0 100 100">
+            <path class="circle-progress-circle-track" 
+                  :d="trackPath" 
+                  stroke="rgba(197, 197, 197, 0.4)" 
+                  :stroke-width="relativeStrokeWidth" 
+                  fill="none">
+            </path>
+            <path class="circle-progress-circle-path" 
+                  :d="trackPath" 
+                  stroke-linecap="bevel" 
+                  stroke="rgba(190, 190, 190, 0.7)" 
+                  :stroke-width="relativeStrokeWidth" 
+                  fill="none" 
+                  :style="circlePathStyle">
+            </path>
+          </svg>
         </div>
-        <p v-if="currentSongLrc.data">歌词 {{ currentSongLrc }}</p>
-        <div class="music">
-          come soon
+        <div class="song-bg-box" :class="{ 'playing': playerState.playing }" v-if="true">
+          <img :src="currentSong.album.picUrl" v-if="currentSong">
+          <span v-else>无</span>
+        </div>
+        <div class="toggle-box">
+          <transition name="module" mode="out-in">
+            <button class="toggle-btn" @click="togglePlay" v-if="playerState.playing">
+              <i class="iconfont icon-music-pause"></i>
+            </button>
+            <button class="toggle-btn" @click="togglePlay" v-else>
+              <i class="iconfont icon-music-play"></i>
+            </button>
+          </transition>
+        </div>
+        <div class="toggle-muted">
+          <button class="muted-btn" @click="toggleMuted">
+            <i class="iconfont" :class="[playerState.muted ? 'icon-music-muted' : 'icon-music-volume']"></i>
+          </button>
         </div>
       </div>
+      <div class="next-song" @click="nextSong">
+        <i class="iconfont icon-music-next"></i>
+      </div>
     </div>
-    <div class="comment" v-if="false">
-      <duoshuo data-thread-key="music" data-title="我是播放器"></duoshuo>
+    <div class="song-info" v-if="currentSong">
+      <h3>
+        <span>{{ currentSong.name }}</span>
+        <span> By </span>
+        <span v-for="artist in currentSong.artists">{{ artist.name }}</span>
+        <span> / </span>
+        <span>{{ currentSong.album.type || 'unknow' }}</span>
+      </h3>
     </div>
   </div>
 </template>
 
 <script>
-  import howler from '~plugins/howler'
   export default {
     name: 'music',
     head: {
@@ -37,14 +67,8 @@
     },
     data() {
       return {
-        proxyPath: 'https://surmon.me/proxy/',
-        playerState: {
-          ready: false
-        }
+        height: 0
       }
-    },
-    fetch ({ store }) {
-      return store.dispatch('loadMuiscPlayerList')
     },
     created() {
       if (this.$store.state.option.mobileLayout) {
@@ -52,82 +76,63 @@
       }
     },
     mounted() {
-      if (this.playerlist.data) {
-        this.playerState.ready = true
-        this.initPlayer()
-      }
+      this.updateScreenHeight()
+      window.addEventListener('resize', this.updateScreenHeight)
+    },
+    beforeDestroy() {
+      window.removeEventListener('resize', this.updateScreenHeight)
     },
     computed: {
       player() {
         return this.$store.state.music.player
       },
-      playerlist() {
-        return this.$store.state.music.list
+      playerState() {
+        return this.$store.state.music.playerState
       },
       currentSong() {
-        return this.$store.state.music.song
+        return this.$store.getters['music/currentSong']
       },
-      currentSongLrc() {
-        return this.$store.state.music.lrc
+      relativeStrokeWidth() {
+        return (15 / 450 * 100).toFixed(1)
+      },
+      trackPath() {
+        var radius = parseInt(50 - parseFloat(this.relativeStrokeWidth) / 2, 10)
+        return `M 50 50 m 0 -${radius} a ${radius} ${radius} 0 1 1 0 ${radius * 2} a ${radius} ${radius} 0 1 1 0 -${radius * 2}`
+      },
+      perimeter() {
+        var radius = 50 - parseFloat(this.relativeStrokeWidth) / 2
+        return 2 * Math.PI * radius
+      },
+      circlePathStyle() {
+        var perimeter = this.perimeter
+        return {
+          strokeDasharray: `${perimeter}px,${perimeter}px`,
+          strokeDashoffset: (1 - (this.playerState.progress) / 100) * perimeter + 'px',
+          transition: 'stroke-dashoffset 0.6s ease 0s, stroke 0.6s ease'
+        };
       }
     },
     methods: {
-      initPlayer() {
-
-        // 判断全局是否存在播放器
-        if (this.player) {
-          return false
+      updateScreenHeight(event) {
+        const screenHeight = window.innerHeight
+        const minHeight = 14 * 60
+        if (screenHeight > minHeight) {
+          this.height = screenHeight - (14 * 12)
+        } else {
+          this.height = minHeight
         }
-
-        console.log(this.playerlist)
-        const src = this.playerlist.data.tracks.map(song => {
-          return song.mp3Url.replace(/(http:\/\/|https:\/\/)/ig, this.proxyPath)
-        })
-
-        this.$store.commit('music/INIT_PLAYER', new Howl({
-          src,
-          autoplay: false,
-          loop: true,
-          volume: 0.8,
-        }))
-
-        // 加载后自动播放
-        this.player.once('load', () => {
-          console.log('load')
-          this.player.play()
-        })
-
-        // 播放时获取设置当前活动歌曲，及获取歌词
-        this.player.once('play', () => {
-          const currentSrc = this.player._src
-          const currentSong = this.playerlist.data.tracks.find(song => {
-            return song.mp3Url.includes(currentSrc.replace(this.proxyPath, ''))
-          })
-          if (currentSong) {
-            this.$store.commit('music/SET_CURRENT_SONG', currentSong)
-            this.$store.dispatch('loadMuiscSongLrc', { song_id: currentSong.id })
-          }
-        })
-
-        this.player.once('end', () => {
-          console.log('end')
-        })
-
-        console.log(this.player)
       },
-      play() {},
-      skipToSong(index) {
-
-        // Stop the current track.
-        if (this.playlist[this.index].howl) {
-          this.playlist[this.index].howl.stop();
-        }
-
-        // Reset progress.
-        progress.style.width = '0%'
-
-        // Play the new track.
-        this.play(index)
+      togglePlay() {
+        this.player.togglePlay()
+      },
+      toggleMuted() {
+        this.player.toggleMuted()
+      },
+      prevSong() {
+        this.player.prevSong()
+      },
+      nextSong() {
+        this.player.nextSong()
       }
     }
   }
@@ -138,23 +143,123 @@
   @import '~assets/sass/variables';
   .page {
 
-    .detail {
-      margin-bottom: 1em;
-      background-color: $module-bg;
+    > .player {
+      padding: 10% 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
 
-      .content {
-        width: 100%;
-        overflow:  hidden;
+      > .prev-song,
+      > .next-song {
+        cursor: pointer;
+        width: 3rem;
 
-        .music {
-          padding: 1em;
-          height: 11em;
-          line-height: 9em;
-          text-align: center;
-          font-size: 4em;
-          text-transform: capitalize;
+        &:hover {
+
+          > .iconfont {
+            color: $text;
+          }
+        }
+
+        > .iconfont {
+          font-size: 3em;
+          color: $dividers;
         }
       }
+
+      > .album-box {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 38rem;
+        height: 38rem;
+        opacity: .9;
+
+        &:hover {
+          opacity: 1;
+        }
+
+        @keyframes rotation {
+          from { transform: rotate(0deg) }
+          to { transform: rotate(360deg) }
+        }
+
+        > .song-bg-box {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          padding: 1rem;
+          overflow: hidden;
+          border-radius: 100%;
+          animation: rotation 26s linear infinite;
+          animation-play-state: paused;
+
+          &.playing {
+            animation-play-state: running;
+          }
+
+          > img {
+            max-width: 100%;
+            border-radius: 100%;
+          }
+        }
+
+        > .toggle-box {
+          z-index: 9;
+
+          > .toggle-btn {
+            width: 6rem;
+            height: 6rem;
+            line-height: 6.4rem;
+            text-align: center;
+            background-color: $module-bg;
+            border-radius: 100%;
+            opacity: .5;
+
+            &:hover {
+              opacity: .8;
+              transform: scale(1.2);
+            }
+
+            > .iconfont {
+              color: #fff;
+              font-size: 3em;
+            }
+          }
+        }
+
+        > .toggle-muted {
+          position: absolute;
+          bottom: 15%;
+
+          > .muted-btn {
+
+            > .iconfont {
+              font-size: 2em;
+              color: $module-hover-bg;
+            }
+
+            &:hover {
+
+              > .iconfont {
+                color: $module-bg;
+              }
+            }
+          }
+        }
+
+        > .circle-progress {
+          width: 100%;
+          height: 100%;
+          display: block;
+          position: absolute;
+        }
+      }
+    }
+
+    > .song-info {
+      text-align: center;
     }
   }
 </style>

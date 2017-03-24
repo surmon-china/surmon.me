@@ -234,7 +234,10 @@ export const actions = {
     return Service.get('/music/638949385')
     .then(response => {
       const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
-      if(success) commit('music/GET_LIST_SUCCESS', response.data)
+      if(success) {
+        commit('music/GET_LIST_SUCCESS', response.data)
+        commit('music/INIT_PLAYER')
+      }
       if(!success) commit('music/GET_LIST_FAILURE')
     }, err => {
       commit('music/GET_LIST_FAILURE', err)

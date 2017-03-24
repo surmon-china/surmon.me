@@ -51,6 +51,9 @@
     },
     mounted() {
       this.watchTabActive()
+      if (!this.mobileLayout) {
+        this.$store.dispatch('loadMuiscPlayerList')
+      }
       if (process.env.NODE_ENV === 'production') {
         console.clear()
         console.log("%cTalk is cheap. Show me the code %csurmon@foxmail.com", "color:#666;font-size:3em;","color:#666;font-size:13px;")
@@ -84,7 +87,9 @@
     },
     methods: {
       closeMobileSidebar() {
-        this.$store.commit('option/SET_MOBILE_SIDEBAR', false)
+        if (this.mobileLayout) {
+          this.$store.commit('option/SET_MOBILE_SIDEBAR', false)
+        }
       },
       watchTabActive() {
         let reallyDocumentTitle
