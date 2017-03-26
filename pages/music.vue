@@ -1,9 +1,9 @@
 <template>
   <div class="page" :style="{ height: height + 'px' }">
     <div class="player">
-      <div class="prev-song" @click="prevSong">
+      <button class="prev-song" @click="prevSong">
         <i class="iconfont icon-music-prev"></i>
-      </div>
+      </button>
       <div class="album-box">
         <div class="circle-progress">
           <svg viewBox="0 0 100 100">
@@ -25,7 +25,7 @@
         </div>
         <div class="song-bg-box" :class="{ 'playing': playerState.playing }" v-if="true">
           <img :src="currentSong.album.picUrl" v-if="currentSong">
-          <span v-else>无</span>
+          <img src="/images/music-bg.jpg" v-else>
         </div>
         <div class="toggle-box">
           <transition name="module" mode="out-in">
@@ -43,9 +43,9 @@
           </button>
         </div>
       </div>
-      <div class="next-song" @click="nextSong">
+      <button class="next-song" @click="nextSong">
         <i class="iconfont icon-music-next"></i>
-      </div>
+      </button>
     </div>
     <div class="song-info" v-if="currentSong">
       <h3>
@@ -115,24 +115,32 @@
     methods: {
       updateScreenHeight(event) {
         const screenHeight = window.innerHeight
-        const minHeight = 14 * 60
-        if (screenHeight > minHeight) {
+        const minHeight = 14 * 53
+        if (screenHeight - 14 * 4 > minHeight) {
           this.height = screenHeight - (14 * 12)
         } else {
           this.height = minHeight
         }
       },
       togglePlay() {
-        this.player.togglePlay()
+        if (this.playerState.ready) {
+          this.player.togglePlay()
+        }
       },
       toggleMuted() {
-        this.player.toggleMuted()
+        if (this.playerState.ready) {
+          this.player.toggleMuted()
+        }
       },
       prevSong() {
-        this.player.prevSong()
+        if (this.playerState.ready) {
+          this.player.prevSong()
+        }
       },
       nextSong() {
-        this.player.nextSong()
+        if (this.playerState.ready) {
+          this.player.nextSong()
+        }
       }
     }
   }
@@ -142,12 +150,17 @@
   @import '~assets/sass/mixins';
   @import '~assets/sass/variables';
   .page {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 
     > .player {
-      padding: 10% 0;
       display: flex;
       justify-content: space-around;
       align-items: center;
+      margin-bottom: 2em;
+      width: 100%;
 
       > .prev-song,
       > .next-song {
