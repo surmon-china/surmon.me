@@ -17,6 +17,7 @@ export default state => {
       return {
         howl: null,
         id: song.id,
+        html5: true,
         name: song.name,
         album: song.album,
         artists: song.artists,
@@ -40,7 +41,7 @@ export default state => {
       }
     }
 
-    console.log(playerList)
+    // console.log(playerList)
 
     // 实例化player
     state.player = {
@@ -50,14 +51,18 @@ export default state => {
         // 实例前拦截
         index = Object.is(typeof index, 'number') ? index : state.playerState.index
         const currentOldSong = playerList[state.playerState.index]
+
         // 如果目标歌曲已存在实例
         if (currentOldSong && currentOldSong.howl) {
+
           // 如果目标歌曲和正在当前实例歌曲相同，且处于播放状态，则终止
           if (Object.is(index, state.playerState.index) && currentOldSong.howl.playing()) {
             return false
-          // 否则停止当前正在播放歌曲（停止则）
+
+          // 否则停止当前正在播放歌曲，停止所有正在播放的歌曲
           } else if (currentOldSong.howl.playing()) {
             currentOldSong.howl.stop()
+            Howler._howls.forEach(h => h.stop())
           }
         }
 
@@ -126,13 +131,15 @@ export default state => {
       
       // 暂停
       pause() {
+        // pause current track
         let sound = playerList[state.playerState.index]
         if (sound.howl && sound.howl.playing()) {
-          sound.howl.fade(state.playerState.volume, 0, 600, sound.song_id)
-          setTimeout(() => {
-            sound.howl.pause()
-          }, 600)
+          // sound.howl.fade(state.playerState.volume, 0, 200, sound.song_id)
+          sound.howl.pause()
         }
+
+        // pause all track
+        Howler._howls.forEach(h => h.pause())
       },
 
       // 播放暂停切换
@@ -165,6 +172,10 @@ export default state => {
           currentTrack.howl.stop()
         }
 
+        // stop all track
+        Howler._howls.forEach(h => h.stop())
+
+
         // Reset progress.
         state.playerState.progress = 0
 
@@ -187,5 +198,7 @@ export default state => {
       }
     }
     state.player.play()
+
+    state.playerState.ready = true
   }
 }

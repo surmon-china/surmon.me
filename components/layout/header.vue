@@ -12,26 +12,26 @@
             <button class="prev-song btn" @click="prevSong">
               <i class="iconfont icon-music-prev"></i>
             </button>
-            <transition name="module" mode="out-in">
-              <button class="toggle-play btn" @click="togglePlay" v-if="playerState.playing">
-                <i class="iconfont icon-music-pause"></i>
-              </button>
-              <button class="toggle-play btn" @click="togglePlay" v-else>
-                <i class="iconfont icon-music-play"></i>
-              </button>
-            </transition>
+            <button class="toggle-play btn" @click="togglePlay">
+                <i class="iconfont" :class="[playerState.playing ? 'icon-music-pause' : 'icon-music-play']"></i>
+            </button>
             <button class="next-song btn" @click="nextSong">
               <i class="iconfont icon-music-next"></i>
             </button>
             <button class="muted-toggle btn" @click="toggleMuted">
               <i class="iconfont" :class="[playerState.muted ? 'icon-music-muted' : 'icon-music-volume']"></i>
             </button>
-            <button class="muted-toggle btn" @click="toggleMuted">
-              <i class="iconfont icon-music-dance"></i>
-            </button>
           </div>
           <div class="song" v-if="currentSong">
-            <nuxt-link to="/music" class="link">{{ currentSong.name || 'unknow' }}</nuxt-link>
+            <nuxt-link to="/music" 
+                       class="link" 
+                       :title="`${currentSong.name} / ${currentSong.album.type || 'unknow'}`">
+              <span>{{ currentSong.name }}</span>
+              <span> By </span>
+              <span v-for="artist in currentSong.artists">{{ artist.name }}</span>
+              <span> / </span>
+              <span>{{ currentSong.album.type || 'unknow' }}</span>
+            </nuxt-link>
           </div>
         </div>
       </div>
@@ -55,16 +55,24 @@ export default {
   },
   methods: {
     togglePlay() {
-      this.player.togglePlay()
+      if (this.playerState.ready) {
+        this.player.togglePlay()
+      }
     },
     toggleMuted() {
-      this.player.toggleMuted()
+      if (this.playerState.ready) {
+        this.player.toggleMuted()
+      }
     },
     prevSong() {
-      this.player.prevSong()
+      if (this.playerState.ready) {
+        this.player.prevSong()
+      }
     },
     nextSong() {
-      this.player.nextSong()
+      if (this.playerState.ready) {
+        this.player.nextSong()
+      }
     }
   }
 }
@@ -115,28 +123,50 @@ export default {
         }
 
         .navbar-player {
-          color: $dividers;
           width: 13em;
           display: flex;
           flex-direction: column;
           align-items: inherit;
           justify-content: center;
           @include text-overflow();
+          opacity: .2;
 
-          > .panel {
-
-            > .btn {
-              
-            }
+          &:hover {
+            opacity: 1;
           }
 
-          .iconfont {
-            color: $dividers;
+          > .panel {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: .2rem;
+
+            > .btn {
+              margin-right: 1em;
+
+              &:hover {
+
+                > .iconfont {
+                  color: $link-hover-color;
+                }
+              }
+            }
           }
 
           > .song {
             font-size: 1rem;
             @include text-overflow();
+
+            > .link {
+              color: $dividers;
+
+              &:hover {
+                color: $link-hover-color;
+              }
+            }
+          }
+
+          .iconfont {
+            color: $dividers;
           }
         }
       }
