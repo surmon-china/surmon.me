@@ -24,8 +24,7 @@
           </svg>
         </div>
         <div class="song-bg-box" :class="{ 'playing': playerState.playing }" v-if="true">
-          <img :src="currentSong.album.picUrl" v-if="currentSong">
-          <img src="/images/music-bg.jpg" v-else>
+          <img :src="currentSongPicUrl">
         </div>
         <div class="toggle-box">
           <transition name="module" mode="out-in">
@@ -91,6 +90,14 @@
       },
       currentSong() {
         return this.$store.getters['music/currentSong']
+      },
+      currentSongPicUrl() {
+        if (this.currentSong) {
+          let picUrl = this.currentSong.album.picUrl
+          return picUrl ? picUrl.replace('http://', '/proxy/') : '/images/music-bg.jpg'
+        } else {
+          return '/images/music-bg.jpg'
+        }
       },
       relativeStrokeWidth() {
         return (15 / 450 * 100).toFixed(1)
