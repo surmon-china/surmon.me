@@ -94,10 +94,10 @@ $ npm run lint
 - ~~增加评论功能~~
 - ~~增加移动设备适应~~
 - ~~watchTabActive~~
+- ~~音乐播放器的实现~~
 
-- graphql-js + Restful查询数据库
-- 音乐播放器的实现，也做就做完善的
 - movie的单独列表页和详情页
+- graphql-js + Restful查询数据库
 
 ## 目录结构
 ```

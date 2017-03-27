@@ -15,14 +15,14 @@
     "howler": "^2.0.3",
     "idle-gc": "^1.0.1",
     "marked": "^0.3.6",
-    "node-localstorage": "^1.3.0",
-    "nuxt": "latest",
+    "nuxt": "^latest",
     "vue-awesome-swiper": "^2.3.8"
   },
   "scripts": {
     "dev": "nodemon --exec node server.js",
     "build": "cross-env NODE_ENV=production nuxt build",
     "start": "cross-env NODE_ENV=production node server.js",
+    "analyz": "cross-env NODE_ENV=production npm_config_report=true npm run build",
     "precommit": "npm run lint",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },

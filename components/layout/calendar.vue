@@ -12,6 +12,7 @@
             <span>月</span>
             <span>{{ currentDay }}</span>
             <span>日</span>
+          </span>
         </li>
         <li class="arrow next" @click="pickNext(currentYear, currentMonth)">❯</li>
       </ul>
