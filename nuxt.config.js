@@ -9,14 +9,20 @@ module.exports = {
   },
   loading: { color: '#2196f3' },
   build: {
+    // analyze: true,
+    publicPath: '/ssr/',
     // 对webpack的扩展
     extend(webpackConfig) {
       webpackConfig.resolve.alias['~utils'] = path.join(__dirname, 'utils');
       webpackConfig.resolve.alias['~static'] = path.join(__dirname, 'static');
       webpackConfig.resolve.alias['~filters'] = path.join(__dirname, 'filters');
       webpackConfig.resolve.alias['~services'] = path.join(__dirname, 'services');
+      webpackConfig.module.rules.push({
+        test: /\.scss$/,
+        loader: 'vue-style-loader!css-loader!sass-loader'
+      })
     },
-    // 将重复引用的第三方模块添加到vendor.bundle.js
+    // 将重复引用的(第三方/自有)模块添加到vendor.bundle.js
     vendor: [
       'axios',
       'howler',
@@ -72,7 +78,7 @@ module.exports = {
   head: {
     title: 'Surmon.me - Talk is cheap. Show me the code',
     titleTemplate: '%s | Surmon.me',
-    __dangerouslyDisableSanitizers: ['script'],
+    // __dangerouslyDisableSanitizers: ['script'],
     htmlAttrs: {
       xmlns: 'http://www.w3.org/1999/xhtml',
       lang: 'zh'
@@ -92,11 +98,13 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'author', type: 'text/plain', href: '/humans.txt' }
     ],
+    /*
     script: [
       { type: 'text/javascript',
         innerHTML: ``
       }
     ],
+    */
     noscript: [
       { innerHTML: 'This website requires JavaScript.' }
     ]

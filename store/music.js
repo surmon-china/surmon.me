@@ -45,7 +45,7 @@ export const getters = {
 export const mutations = {
 
   INIT_PLAYER(state) {
-    musicPlayerBuilder(state, mutations)
+    musicPlayerBuilder(state)
   },
 
   REQUEST_LIST(state) {

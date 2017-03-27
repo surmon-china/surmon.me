@@ -56,8 +56,9 @@
       <ul class="aside-tag-list" v-else-if="!tag.fetching && tag.data.data.length">
         <router-link tag="li"
                      class="item"
+                     :key="index"
                      :to="`/tag/${item.slug}`"
-                     v-for="item in tag.data.data">
+                     v-for="(item, index) in tag.data.data">
           <a class="title" :title="item.description">
             <i class="iconfont" 
                :class="[item.extends.find(t => Object.is(t.name, 'icon')).value]" 

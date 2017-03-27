@@ -25,7 +25,7 @@
               </p>
               <p class="item">
                 <i class="iconfont icon-music"></i>
-                <span>Folk, Jazz-HipHop, EM, Rock, PostRock, New Ag</span>
+                <nuxt-link to="/music">Folk, Jazz-HipHop, EM, Rock, PostRock, New Ag</nuxt-link>
               </p>
               <p class="item">
                 <i class="iconfont icon-like"></i>
@@ -159,7 +159,6 @@
     }
 
     > .detail {
-      margin-bottom: 1em;
 
       > .content {
         width: 100%;
