@@ -22,7 +22,8 @@
             <span>{{ buildDateTitle(article.create_at) }}</span>
           </router-link>
           <span>&nbsp;发布在&nbsp;</span>
-          <router-link :to="`/category/${category.slug}`"
+          <router-link :key="index"
+                       :to="`/category/${category.slug}`"
                        :title="category.description || category.name"
                        v-for="(category, index) in article.category">
             <span>{{ category.name }}</span>
@@ -36,7 +37,8 @@
         <p class="item">
           <span>相关标签：</span>
           <span v-if="!article.tag.length">无相关标签</span>
-          <router-link :to="`/tag/${tag.slug}`"
+          <router-link :key="index"
+                       :to="`/tag/${tag.slug}`"
                        :title="tag.description || tag.name"
                        v-for="(tag, index) in article.tag">
             <span>{{ tag.name }}</span>
@@ -77,7 +79,7 @@
     </div>
     <div class="related" v-if="article.related && article.related.length && mobileLayout">
       <ul class="article-list">
-        <li class="item" v-for="article in article.related.slice(0, 8)">
+        <li class="item" v-for="(article, index) in article.related.slice(0, 8)" :key="index">
           <router-link :to="`/article/${article.id}`" 
                        :title="article.title + '- [ 继续阅读 ]'" 
                        class="item-link">

@@ -34,13 +34,16 @@
           <span class="categories">
             <i class="iconfont icon-list"></i>
             <span v-if="!item.category.length">未分类</span>
-            <router-link :to="`/category/${category.slug}`" 
-                         v-for="category in item.category">{{ category.name }}</router-link>
+            <router-link :key="index"
+                         :to="`/category/${category.slug}`" 
+                         v-for="(category, index) in item.category">{{ category.name }}</router-link>
           </span>
           <span class="tags" v-show="false">
             <i class="iconfont icon-tag"></i>
             <span v-if="!item.tag.length">无</span>
-            <router-link :to="`/tag/${tag.slug}`" v-for="tag in item.tag">{{ tag.name }}</router-link>
+            <router-link :key="index" 
+                         :to="`/tag/${tag.slug}`" 
+                         v-for="(tag, index) in item.tag">{{ tag.name }}</router-link>
           </span>
         </div>
       </div>

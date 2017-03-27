@@ -119,7 +119,7 @@ export default state => {
 
         // Begin playing the sound.
         song.song_id = song.howl.play()
-        song.howl.fade(0, state.playerState.volume, 5000, song.song_id)
+        song.howl.fade(0, state.playerState.volume, 3000, song.song_id)
 
         // 更新播放器状态
         if (song.howl.state() === 'loaded') {
