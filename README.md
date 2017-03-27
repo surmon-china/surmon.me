@@ -21,7 +21,7 @@ If you want to run the applaction, you need install the [nodepress](https://gith
 
 ## Webpack Bundle 
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshot/webpack-bundle-analyze.jpg)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshot/webpack-bundle-analyze.png)
 
 ## Build Setup
 
