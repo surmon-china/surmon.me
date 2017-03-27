@@ -10,7 +10,9 @@ module.exports = {
   loading: { color: '#2196f3' },
   build: {
     // analyze: true,
-    publicPath: '/ssr/',
+    // analyze: {
+    //   analyzerMode: 'static'
+    // },
     // 对webpack的扩展
     extend(webpackConfig) {
       webpackConfig.resolve.alias['~utils'] = path.join(__dirname, 'utils');

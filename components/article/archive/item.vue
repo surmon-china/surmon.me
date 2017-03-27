@@ -60,7 +60,7 @@
     methods: {
       buildThumb(thumb) {
         if (!thumb) return '/images/thumb-article.jpg'
-        return `${thumb}?imageView2/1/w/350/h/238/interlace/0/q/100|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/456/fill/I0ZGRkZGRg==/dissolve/20/gravity/SouthWest/dx/15/dy/7`
+        return `${thumb}?imageView2/1/w/350/h/238/format/webp/interlace/1/q/75|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/460/fill/I0ZGRkZGRg==/dissolve/23/gravity/SouthWest/dx/15/dy/7|imageslim`
       },
       toDetail() {
         if (this.mobileLayout) {
