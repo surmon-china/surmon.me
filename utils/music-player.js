@@ -101,10 +101,15 @@ export default state => {
           },
           onloaderror() {
             // 发现404就直接从播放列表移除
+            song.howl.stop()
             song.howl.unload()
+            song.howl = null
             playerList.splice(playerList.findIndex(s => Object.is(s.id, song.id)), 1)
+            state.list.data.tracks.splice(state.list.data.tracks.findIndex(s => Object.is(s.name, song.name)), 1)
             state.playerState.wave = false
             state.playerState.playing = true
+            let index = state.playerState.index - 1
+            state.playerState.index = (index < 0) ? 0 : index
             state.player.nextSong()
           },
           onvolume() {
@@ -174,7 +179,6 @@ export default state => {
 
         // stop all track
         Howler._howls.forEach(h => h.stop())
-
 
         // Reset progress.
         state.playerState.progress = 0

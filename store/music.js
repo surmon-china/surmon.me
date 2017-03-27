@@ -8,11 +8,11 @@ import musicPlayerBuilder from '~utils/music-player'
 
 export const state = {
   playerState: {
-    ready: false,
     seek: 0,
     index: 0,
     volume: 0.4,
     wave: false,
+    ready: false,
     muted: false,
     loading: false,
     playing: false,
