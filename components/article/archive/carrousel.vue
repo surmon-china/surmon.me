@@ -53,9 +53,15 @@
     },
     methods: {
       buildThumb(thumb) {
-        return thumb
-               ? `${thumb}?imageView2/1/w/${this.mobileLayout ? '768' : '1190'}/h/${this.mobileLayout ? '271' : '420'}/interlace/0/q/100|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/698/fill/I0ZGRkZGRg==/dissolve/27/gravity/SouthWest/dx/30/dy/15`
-               : `/images/${this.mobileLayout ? 'mobile-' : ''}thumb-carrousel.jpg`
+        if (thumb) {
+          if (this.mobileLayout) {
+            return `${thumb}?imageView2/1/w/768/h/271/format/webp/interlace/1/q/80|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/560/fill/I0ZGRkZGRg==/dissolve/30/gravity/SouthWest/dx/30/dy/15|imageslim`
+          } else {
+            return `${thumb}?imageView2/1/w/1190/h/420/format/webp/interlace/1/q/80|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/680/fill/I0ZGRkZGRg==/dissolve/30/gravity/SouthWest/dx/30/dy/15|imageslim`
+          }
+        } else {
+          return `/images/${this.mobileLayout ? 'mobile-' : ''}thumb-carrousel.jpg`
+        }
       }
     }
   }
