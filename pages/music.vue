@@ -23,7 +23,7 @@
             </path>
           </svg>
         </div>
-        <div class="song-bg-box" :class="{ 'playing': playerState.playing }" v-if="true">
+        <div class="song-bg-box" :class="{ 'playing': playerState.playing }">
           <img :src="currentSongPicUrl">
         </div>
         <div class="toggle-box">

@@ -28,7 +28,7 @@
            target="_blank">
           <i class="iconfont icon-vue"></i>
           <h3 class="title">Vue-Codemirror</h3>
-          <p class="desc">为Vue程序添加一个代码编辑器</p>
+          <p class="desc">为Vue应用添加一个代码编辑器</p>
         </a>
       </li>
       <li class="item">
@@ -38,7 +38,7 @@
            target="_blank">
           <i class="iconfont icon-vue"></i>
           <h3 class="title">vue-touch-ripple</h3>
-          <p class="desc">轻松为Vue程序添加点击波纹特效</p>
+          <p class="desc">轻松为Vue应用添加点击波纹特效</p>
         </a>
       </li>
       <li class="item">
@@ -68,7 +68,7 @@
            target="_blank">
           <i class="iconfont icon-code"></i>
           <h3 class="title">nuxt-blog</h3>
-          <p class="desc">基于Nuxt.js搭建的博客程序（本站前端）</p>
+          <p class="desc">基于Nuxt.js搭建的博客应用（本站前端）</p>
         </a>
       </li>
       <li class="item">
@@ -88,7 +88,7 @@
            target="_blank">
           <i class="iconfont icon-nodejs"></i>
           <h3 class="title">nodepress</h3>
-          <p class="desc">使用Node.js + MongoDB搭建的博客服务端程序</p>
+          <p class="desc">使用Node.js + MongoDB搭建的博客服务端应用</p>
         </a>
       </li>
       <li class="item">
@@ -98,7 +98,7 @@
            target="_blank">
           <i class="iconfont icon-angularjs"></i>
           <h3 class="title">angular-admin</h3>
-          <p class="desc">基于Angular2搭建的博客后台管理程序</p>
+          <p class="desc">基于Angular4搭建的博客后台管理应用</p>
         </a>
       </li>
       <li class="item">

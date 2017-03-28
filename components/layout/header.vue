@@ -33,6 +33,7 @@
               <span>{{ currentSong.album.type || 'unknow' }}</span>
             </nuxt-link>
           </div>
+          <img :src="currentSongPicUrl" v-show="false">
         </div>
       </div>
     </nav>
@@ -51,6 +52,14 @@ export default {
     },
     currentSong() {
       return this.$store.getters['music/currentSong']
+    },
+    currentSongPicUrl() {
+      if (this.currentSong) {
+        let picUrl = this.currentSong.album.picUrl
+        return picUrl ? picUrl.replace('http://', '/proxy/') : '/images/music-bg.jpg'
+      } else {
+        return '/images/music-bg.jpg'
+      }
     }
   },
   methods: {
