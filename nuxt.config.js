@@ -31,6 +31,7 @@ module.exports = {
       'swiper',
       'marked',
       'gravatar',
+      'particles.js',
       'clipboard',
       'highlight.js'
     ],
@@ -70,6 +71,7 @@ module.exports = {
     '~plugins/swiper.js',
     '~plugins/marked.js',
     '~plugins/gravatar.js',
+    '~plugins/particles.js',
     '~plugins/vue-empty.js',
     '~plugins/copy-right.js',
     '~plugins/image-popup.js',
