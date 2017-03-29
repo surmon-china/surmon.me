@@ -1,7 +1,7 @@
 <template>
   <div class="page" :style="{ height: height + 'px' }">
     <div class="player">
-      <button class="prev-song" @click="prevSong">
+      <button class="prev-song" @click="prevSong" :disabled="!playerState.ready">
         <i class="iconfont icon-music-prev"></i>
       </button>
       <div class="album-box">
@@ -28,21 +28,21 @@
         </div>
         <div class="toggle-box">
           <transition name="module" mode="out-in">
-            <button class="toggle-btn" @click="togglePlay" v-if="playerState.playing">
+            <button class="toggle-btn" @click="togglePlay" v-if="playerState.playing" :disabled="!playerState.ready">
               <i class="iconfont icon-music-pause"></i>
             </button>
-            <button class="toggle-btn" @click="togglePlay" v-else>
+            <button class="toggle-btn" @click="togglePlay" v-else :disabled="!playerState.ready">
               <i class="iconfont icon-music-play"></i>
             </button>
           </transition>
         </div>
         <div class="toggle-muted">
-          <button class="muted-btn" @click="toggleMuted">
+          <button class="muted-btn" @click="toggleMuted" :disabled="!playerState.ready">
             <i class="iconfont" :class="[playerState.muted ? 'icon-music-muted' : 'icon-music-volume']"></i>
           </button>
         </div>
       </div>
-      <button class="next-song" @click="nextSong">
+      <button class="next-song" @click="nextSong" :disabled="!playerState.ready">
         <i class="iconfont icon-music-next"></i>
       </button>
     </div>

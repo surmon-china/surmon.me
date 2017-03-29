@@ -16,6 +16,7 @@
     "idle-gc": "^1.0.1",
     "marked": "^0.3.6",
     "nuxt": "^latest",
+    "particles.js": "^2.0.0",
     "vue-awesome-swiper": "^2.3.8"
   },
   "scripts": {

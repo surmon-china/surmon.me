@@ -9,16 +9,16 @@
         </div>
         <div class="navbar-player">
           <div class="panel">
-            <button class="prev-song btn" @click="prevSong">
+            <button class="prev-song btn" @click="prevSong" :disabled="!playerState.ready">
               <i class="iconfont icon-music-prev"></i>
             </button>
-            <button class="toggle-play btn" @click="togglePlay">
+            <button class="toggle-play btn" @click="togglePlay" :disabled="!playerState.ready">
                 <i class="iconfont" :class="[playerState.playing ? 'icon-music-pause' : 'icon-music-play']"></i>
             </button>
-            <button class="next-song btn" @click="nextSong">
+            <button class="next-song btn" @click="nextSong" :disabled="!playerState.ready">
               <i class="iconfont icon-music-next"></i>
             </button>
-            <button class="muted-toggle btn" @click="toggleMuted">
+            <button class="muted-toggle btn" @click="toggleMuted" :disabled="!playerState.ready">
               <i class="iconfont" :class="[playerState.muted ? 'icon-music-muted' : 'icon-music-volume']"></i>
             </button>
           </div>
