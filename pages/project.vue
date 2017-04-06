@@ -1,164 +1,14 @@
 <template>
   <div class="projects" :class="{ mobile: mobileLayout }">
     <ul class="project-list">
-      <li class="item">
+      <li class="item" v-for="(project, index) in projects">
         <a class="item-content" 
-           href="https://github.com/surmon-china/vue-awesome-swiper" 
            rel="external nofollow"
+           :href="project.link"
            target="_blank">
-          <i class="iconfont icon-vue"></i>
-          <h3 class="title">vue-awesome-swiper</h3>
-          <p class="desc">支持Vue的幻灯轮播图组件，基于Swiper3</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/vue-video-player" 
-           rel="external nofollow"
-           target="_blank">
-          <i class="iconfont icon-vue"></i>
-          <h3 class="title">Vue-video-player</h3>
-          <p class="desc">适用于Vue的视频播放器组件</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/vue-codemirror" 
-           rel="external nofollow"
-           target="_blank">
-          <i class="iconfont icon-vue"></i>
-          <h3 class="title">Vue-Codemirror</h3>
-          <p class="desc">为Vue应用添加一个代码编辑器</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/vue-touch-ripple" 
-           rel="external nofollow"
-           target="_blank">
-          <i class="iconfont icon-vue"></i>
-          <h3 class="title">vue-touch-ripple</h3>
-          <p class="desc">轻松为Vue应用添加点击波纹特效</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/vue-drag-zone" 
-           rel="external nofollow"
-           target="_blank">
-          <i class="iconfont icon-vue"></i>
-          <h3 class="title">vue-drag-zone</h3>
-          <p class="desc">拖动可以改变父子组件的布局尺寸</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/vue-quill-editor" 
-           rel="external nofollow"
-           target="_blank">
-          <i class="iconfont icon-vue"></i>
-          <h3 class="title">vue-quill-editor</h3>
-          <p class="desc">适用于Vue的富文本编辑器</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/surmon.me" 
-           rel="external nofollow"
-           target="_blank">
-          <i class="iconfont icon-code"></i>
-          <h3 class="title">nuxt-blog</h3>
-          <p class="desc">基于Nuxt.js搭建的博客应用（本站前端）</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/vue-netease-music" 
-           rel="external nofollow"
-           target="_blank">
-          <i class="iconfont icon-netease-music"></i>
-          <h3 class="title">vue-netease-music</h3>
-          <p class="desc">适用于Vue的网易云音乐播放器（开发中）</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/nodepress" 
-           rel="external nofollow"
-           target="_blank">
-          <i class="iconfont icon-nodejs"></i>
-          <h3 class="title">nodepress</h3>
-          <p class="desc">使用Node.js + MongoDB搭建的博客服务端应用</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/angular-admin" 
-           rel="external nofollow"
-           target="_blank">
-          <i class="iconfont icon-angularjs"></i>
-          <h3 class="title">angular-admin</h3>
-          <p class="desc">基于Angular4搭建的博客后台管理应用</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/ng2-quill-editor" 
-           rel="external nofollow"
-           target="_blank">
-          <i class="iconfont icon-angularjs"></i>
-          <h3 class="title">ng2-quill-editor</h3>
-          <p class="desc">适用于Angular2的Quill富文本编辑器</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/deploy" 
-           rel="external nofollow"
-           target="_blank">
-          <i class="iconfont icon-deploy"></i>
-          <h3 class="title">deploy</h3>
-          <p class="desc">一个简易的Github Webhooks自动热部署方案</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/wordpress-theme-one" 
-           rel="external nofollow"
-           target="_blank">
-          <i class="iconfont icon-wordpress"></i>
-          <h3 class="title">One</h3>
-          <p class="desc">一款小清新的Wordpress博客风格主题</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/wordpress-theme-surmon" 
-           rel="external nofollow"
-           target="_blank">
-          <i class="iconfont icon-wordpress"></i>
-          <h3 class="title">Surmon</h3>
-          <p class="desc">前博客Wordpress-BLOG主题</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/wordpress-theme-metro" 
-           rel="external nofollow"
-           target="_blank">
-          <i class="iconfont icon-wordpress"></i>
-          <h3 class="title">Metro</h3>
-          <p class="desc">仿Ipc.me的Wordpress-CMS主题</p>
-        </a>
-      </li>
-      <li class="item">
-        <a class="item-content"
-           href="https://github.com/surmon-china/wordpress-theme-think" 
-           rel="external nofollow"
-           target="_blank">
-          <i class="iconfont icon-wordpress"></i>
-          <h3 class="title">think</h3>
-          <p class="desc">仿远景论坛门户首页的Wordpress-CMS主题</p>
+          <i class="iconfont" :class="[project.icon]"></i>
+          <h3 class="title">{{ project.name }}</h3>
+          <p class="desc">{{ project.desc }}</p>
         </a>
       </li>
     </ul>
@@ -170,6 +20,108 @@
     name: 'project',
     head: {
       title: 'Project'
+    },
+    data() {
+      return {
+        projects: [
+          {
+            link: 'https://github.com/surmon-china/vue-awesome-swiper',
+            icon: 'icon-vue',
+            name: 'vue-awesome-swiper',
+            desc: '基于Swiper3构建，用于支持Vue的幻灯轮播图组件'
+          },
+          {
+            link: 'https://github.com/surmon-china/vue-video-player',
+            icon: 'icon-vue',
+            name: 'vue-video-player',
+            desc: '适用于Vue的视频播放器组件'
+          },
+          {
+            link: 'https://github.com/surmon-china/vue-codemirror',
+            icon: 'icon-vue',
+            name: 'vue-codemirror',
+            desc: '为Vue应用添加一个代码编辑器'
+          },
+          {
+            link: 'https://github.com/surmon-china/vue-touch-ripple',
+            icon: 'icon-vue',
+            name: 'vue-touch-ripple',
+            desc: '轻松为Vue应用添加点击波纹特效'
+          },
+          {
+            link: 'https://github.com/surmon-china/vue-drag-zone',
+            icon: 'icon-vue',
+            name: 'vue-drag-zone',
+            desc: '拖动可以改变父子组件的布局尺寸'
+          },
+          {
+            link: 'https://github.com/surmon-china/vue-quill-editor',
+            icon: 'icon-vue',
+            name: 'vue-quill-editor',
+            desc: '适用于Vue的富文本编辑器'
+          },
+          {
+            link: 'https://github.com/surmon-china/surmon.me',
+            icon: 'icon-code',
+            name: 'surmon.me',
+            desc: '基于Nuxt.js搭建的SSR博客Web端应用'
+          },
+          {
+            link: 'https://github.com/surmon-china/surmon.me.native',
+            icon: 'icon-react',
+            name: 'surmon.me.native',
+            desc: '基于react-native搭建的博客移动端应用'
+          },
+          {
+            link: 'https://github.com/surmon-china/nodepress',
+            icon: 'icon-nodejs',
+            name: 'nodepress',
+            desc: '使用Node.js + MongoDB搭建的博客服务端应用'
+          },
+          {
+            link: 'https://github.com/surmon-china/angular-admin',
+            icon: 'icon-angularjs',
+            name: 'angular-admin',
+            desc: '基于Angular4搭建的博客Web端后台管理应用'
+          },
+          {
+            link: 'https://github.com/surmon-china/ng2-quill-editor',
+            icon: 'icon-angularjs',
+            name: 'ng2-quill-editor',
+            desc: '适用于Angular2的Quill富文本编辑器'
+          },
+          {
+            link: 'https://github.com/surmon-china/deploy',
+            icon: 'icon-deploy',
+            name: 'deploy',
+            desc: '一个简易的Github Webhooks自动热部署方案'
+          },
+          {
+            link: 'https://github.com/surmon-china/wordpress-theme-one',
+            icon: 'icon-wordpress',
+            name: 'One',
+            desc: '一款小清新的Wordpress博客风格主题'
+          },
+          {
+            link: 'https://github.com/surmon-china/wordpress-theme-surmon',
+            icon: 'icon-wordpress',
+            name: 'Surmon',
+            desc: '前博客Wordpress-BLOG主题'
+          },
+          {
+            link: 'https://github.com/surmon-china/wordpress-theme-metro',
+            icon: 'icon-wordpress',
+            name: 'Metro',
+            desc: '仿Ipc.me的Wordpress-CMS主题'
+          },
+          {
+            link: 'https://github.com/surmon-china/wordpress-theme-think',
+            icon: 'icon-wordpress',
+            name: 'think',
+            desc: '仿远景论坛门户首页的Wordpress-CMS主题'
+          }
+        ]
+      }
     },
     computed: {
       mobileLayout() {

@@ -33,6 +33,11 @@
         <i class="iconfont icon-comment"></i>
         <span>Guestbook</span>
       </nuxt-link>
+      <div class="item-hr"></div>
+      <nuxt-link to="/app" class="item app">
+        <i class="iconfont icon-app"></i>
+        <span>App</span>
+      </nuxt-link>
     </nav>
   </div>
 </template>
@@ -55,7 +60,12 @@ export default {
       padding: 0;
       margin: 0;
 
-      .item {
+      > .item-hr {
+            margin: 2em 1em 1em 1em;
+    border-top: 1px dashed #d6d6d6;
+      }
+
+      > .item {
         border: none;
         display: block;
         width: 100%;
@@ -69,6 +79,11 @@ export default {
         color: #777;
         font-family: CenturyGothic;
         margin-bottom: .5em;
+
+        &.app {
+          // margin-top: 0em;
+          // color: $primary;
+        }
 
         &:last-child {
           margin-bottom: 0;

@@ -1,17 +1,17 @@
+
 @font-face {font-family: "iconfont";
-  src: url('//at.alicdn.com/t/font_oblcm28nyplul3di.eot?t=1490385535884'); /* IE9*/
-  src: url('//at.alicdn.com/t/font_oblcm28nyplul3di.eot?t=1490385535884#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('//at.alicdn.com/t/font_oblcm28nyplul3di.woff?t=1490385535884') format('woff'), /* chrome, firefox */
-  url('//at.alicdn.com/t/font_oblcm28nyplul3di.ttf?t=1490385535884') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('//at.alicdn.com/t/font_oblcm28nyplul3di.svg?t=1490385535884#iconfont') format('svg'); /* iOS 4.1- */
+  src: url('//at.alicdn.com/t/font_l5imkf20co5pzaor.eot?t=1491495725451'); /* IE9*/
+  src: url('//at.alicdn.com/t/font_l5imkf20co5pzaor.eot?t=1491495725451#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('//at.alicdn.com/t/font_l5imkf20co5pzaor.woff?t=1491495725451') format('woff'), /* chrome, firefox */
+  url('//at.alicdn.com/t/font_l5imkf20co5pzaor.ttf?t=1491495725451') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('//at.alicdn.com/t/font_l5imkf20co5pzaor.svg?t=1491495725451#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .iconfont {
-  font-family: "iconfont" !important;
-  font-size: 1em;
-  font-style: normal;
+  font-family:"iconfont" !important;
+  font-size:1em;
+  font-style:normal;
   -webkit-font-smoothing: antialiased;
-  -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
 
@@ -233,8 +233,6 @@
 
 .icon-chrome1:before { content: "\e6aa"; }
 
-.icon-react:before { content: "\e684"; }
-
 .icon-c1:before { content: "\e68b"; }
 
 .icon-qzone:before { content: "\e68c"; }
@@ -287,11 +285,11 @@
 
 .icon-vr:before { content: "\e67c"; }
 
-.icon-vue:before { content: "\e64c"; }
-
 .icon-csharp:before { content: "\e634"; }
 
 .icon-webpack:before { content: "\e643"; }
+
+.icon-app:before { content: "\e62d"; }
 
 .icon-quora:before { content: "\e6e5"; }
 
@@ -302,6 +300,8 @@
 .icon-radio:before { content: "\e6a4"; }
 
 .icon-evernote:before { content: "\e725"; }
+
+.icon-react:before { content: "\e770"; }
 
 .icon-prev-top:before { content: "\e7da"; }
 
@@ -316,3 +316,7 @@
 .icon-link-horizontal:before { content: "\e8e7"; }
 
 .icon-totop:before { content: "\e8e8"; }
+
+.icon-vue:before { content: "\e680"; }
+
+.icon-vuejs:before { content: "\e62b"; }
