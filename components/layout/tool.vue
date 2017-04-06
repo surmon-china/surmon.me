@@ -3,7 +3,7 @@
     <div class="container">
       <div class="tools-list">
         <a class="feedback" 
-           href="tencent://Message/?Uin=794939078&websiteName=surmon.me=&Menu=yes"
+           href="mailto:surmon@foxmail.com"
            target="_blank">
           <i class="iconfont icon-comment"></i>
         </a>
