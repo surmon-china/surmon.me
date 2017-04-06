@@ -99,6 +99,11 @@ $ npm run lint
 - ~~增加移动设备适应~~
 - ~~watchTabActive~~
 - ~~音乐播放器的实现~~
+- ~~邮件分享有bug~~
+- ~~关于我添加linked~~
+- ~~添加app下载页~~
+- app下载按钮的位置和移动端下载页需要适配
+- http://music.163.com/#/playlist?id=638949385
 
 - movie的单独列表页和详情页
 - graphql-js + Restful查询数据库

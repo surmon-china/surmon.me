@@ -64,7 +64,7 @@
       <a title="email" 
          rel="nofollow"
          class="share-link mail"
-         @click.prevent="shareWindow(`mailto:?subject=%E5%A4%9A%E5%B7%B4%E8%83%BA%20%7C%20Surmon.me&body=https%3A%2F%2Fsurmon.me%2Farticle%2F3`)">
+         @click.prevent="shareWindow(`mailto:?subject=${title()}&body=${url}`)">
         <i class="iconfont icon-mail"></i>
       </a>
       <span ref="share_copy_btn"
@@ -101,7 +101,8 @@
         catch (err) { return 'Surmon.me' }
       },
       shareWindow(url) {
-        url = url.includes('mailto') ? url : encodeURI(url)
+        url = url.includes('mailto') ? url.replace(/\s|\||Surmon.me/g, '') : encodeURI(url)
+        // console.log(url)
         // 给打开的窗口命名
         let winName = "newWin"
         // screen.availWidth 获得屏幕宽度
@@ -110,17 +111,17 @@
         // 左右居中： (屏幕宽度 - 窗口宽度)/2
         // 上下居中： (屏幕高度 - 窗口高度)/2
         // 窗口宽度,需要设置
-        let awidth = screen.availWidth/6*2
+        let awidth = screen.availWidth / 6 * 2
         // 窗口高度,需要设置
-        let aheight = screen.availHeight/5*2
+        let aheight = screen.availHeight / 5 * 2
         // 窗口顶部位置,一般不需要改
-        let atop = (screen.availHeight - aheight)/2
+        let atop = (screen.availHeight - aheight) / 2
         // 窗口放中央,一般不需要改
-        let aleft = (screen.availWidth - awidth)/2
+        let aleft = (screen.availWidth - awidth) / 2
         // 新窗口的参数
-        let param0 = "scrollbars=0,status=0,menubar=0,resizable=2,location=0"
+        let param0 = 'scrollbars=0,status=0,menubar=0,resizable=2,location=0'
         // 新窗口的左部位置，顶部位置，宽度，高度
-        let params = "top=" + atop + ",left=" + aleft + ",width=" + awidth + ",height=" + aheight + "," + param0
+        let params = `top=${atop},left=${aleft},width=${awidth},height=${aheight},${param0}`
         // 打开新窗口
         const win = window.open(url, winName, params)
         // 新窗口获得焦点

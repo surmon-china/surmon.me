@@ -64,6 +64,11 @@
                      rel="external nofollow">
                     <i class="iconfont icon-zhihu"></i>
                   </a>
+                  <a href="https://www.linkedin.com/in/surmon-ma-713bb6a2/" 
+                     target="_blank" 
+                     rel="external nofollow">
+                    <i class="iconfont icon-linkedin"></i>
+                  </a>
                   <a href="https://weibo.com/nocower" 
                      target="_blank" 
                      rel="external nofollow">
