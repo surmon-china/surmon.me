@@ -39,6 +39,10 @@
           <i class="iconfont icon-comment"></i>
           <span>Guestbook</span>
         </nuxt-link>
+        <nuxt-link to="/app" class="item app">
+        <i class="iconfont icon-app"></i>
+        <span>App</span>
+      </nuxt-link>
       </nav>
     </div>
   </aside>
@@ -64,6 +68,7 @@
   aside {
     display: block;
     overflow: auto;
+    position: relative;
     width: 100%;
     height: 100%;
     margin: 0;
@@ -133,18 +138,30 @@
           font-family: CenturyGothic;
           margin-bottom: .5em;
 
+          &.app {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            color: $primary;
+
+            &.link-active {
+              background-color: transparent;
+            }
+          }
+
           &:last-child {
             margin-bottom: 0;
           }
 
           &:hover {
             color: $primary;
+            background-color: $body-bg;
           }
 
           &.link-active {
-            background-color: #eee;
-            font-weight: bold;
             color: $primary;
+            font-weight: bold;
             background-color: $body-bg;
           }
 
