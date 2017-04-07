@@ -35,7 +35,7 @@
           <i class="iconfont icon-user"></i>
           <span>About</span>
         </nuxt-link>
-        <nuxt-link to="/guestbook" class="item">
+        <nuxt-link to="/guestbook" class="item guestbook">
           <i class="iconfont icon-comment"></i>
           <span>Guestbook</span>
         </nuxt-link>
@@ -138,11 +138,12 @@
           font-family: CenturyGothic;
           margin-bottom: .5em;
 
+          &.guestbook {
+            margin-bottom: 0;
+          }
+
           &.app {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
+            border-top: 1px solid darken($mobile-aside-bg, 5%);
             color: $primary;
 
             &.link-active {
