@@ -1,5 +1,7 @@
 <template>
-  <div class="page" :style="{ height: height + 'px' }">
+  <div class="page" 
+       :style="{ height: height }" 
+       :class="{ mobile: mobileLayout }">
     <div class="app">
       <div class="logo">
         <img src="/images/app-logo.png" alt="app-logo">
@@ -7,11 +9,11 @@
       <h2 class="title">Surmon.me</h2>
       <p class="desc">Talk is cheap. Show me the code</p>
       <div class="screen">
-        <img src="/images/app-hot.png" class="screen" alt="app-hot">
+        <img src="/images/app-hot.png" class="screen-img" alt="app-hot">
         <div class="download">
           <img src="/images/app-qrcode.png" class="qrcode" alt="qrcode">
-          <a target="_blank" href="/app/surmon.me.apk" class="btn">Android</a>
-          <a target="_blank" href="/app/surmon.me.ipa" class="btn">Ios</a>
+          <a target="_blank" href="https://static.surmon.me/app/surmon.me.apk" class="btn">Android</a>
+          <a target="_blank" href="https://static.surmon.me/app/surmon.me.ipa" class="btn">Ios</a>
         </div>
       </div>
     </div>
@@ -29,6 +31,11 @@
         height: 0
       }
     },
+    computed: {
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
+      }
+    },
     mounted() {
       this.updateScreenHeight()
       window.addEventListener('resize', this.updateScreenHeight)
@@ -38,12 +45,16 @@
     },
     methods: {
       updateScreenHeight(event) {
-        const screenHeight = window.innerHeight
-        const minHeight = 14 * 62
-        if (screenHeight - 14 * 4 > minHeight) {
-          this.height = screenHeight - (14 * 12)
+        if (this.mobileLayout) {
+          this.height = 'auto'
         } else {
-          this.height = minHeight
+          const screenHeight = window.innerHeight
+          const minHeight = 14 * 62
+          if (screenHeight - 14 * 4 > minHeight) {
+            this.height = `${screenHeight - (14 * 12)}px`
+          } else {
+            this.height = `${minHeight}px`
+          }
         }
       }
     }
@@ -58,6 +69,29 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
+
+    &.mobile {
+
+      > .app {
+
+        > .screen {
+          width: 100%;
+          margin-top: 3rem;
+          margin-bottom: 1rem;
+          text-align: center;
+
+          > .screen-img {
+            opacity: .4;
+            width: 90%;
+          }
+
+          > .download {
+            opacity: 1;
+            visibility: visible;
+          }
+        }
+      }
+    }
 
     > .app {
 
@@ -88,7 +122,7 @@
 
         &:hover {
 
-          > .screen {
+          > .screen-img {
             opacity: .4;
           }
 
@@ -98,7 +132,7 @@
           }
         }
 
-        > .screen {
+        > .screen-img {
           width: 100%;
         }
 
@@ -126,7 +160,7 @@
             height: 2.8rem;
             line-height: 2.6rem;
             color: $primary;
-            background-color: $white;
+            background-color: $module-bg;
             margin-top: 2rem;
             border:  1px solid $primary;
             border-radius: .2rem;
@@ -135,7 +169,7 @@
 
             &:hover {
               color: $white;
-              background-color: darken($primary, 5%);
+              background-color: rgba($primary, 0.6);
             }
           }
         }
