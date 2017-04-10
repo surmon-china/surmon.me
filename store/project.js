@@ -30,7 +30,8 @@ export const mutations = {
         description: rep.description,
         open_issues_count: rep.open_issues_count,
         stargazers_count: rep.stargazers_count,
-        watchers_count: rep.watchers_count
+        created_at: rep.created_at,
+        language: rep.language
       }
     })
     // console.log(newRepositories)
