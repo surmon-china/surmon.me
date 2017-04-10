@@ -228,6 +228,24 @@ export const actions = {
     })
   },
 
+  // 获取开源项目列表
+  loadGithubRepositories({ commit, state }) {
+    // 如果数据已存在，则直接返回Promise成功，并返回数据
+    if (state.project.repositories.data.length) {
+      return Promise.resolve(state.project.repositories.data)
+    }
+    // 不存在则请求新数据
+    commit('project/REQUEST_GUTHUB_REPOSITORIES')
+    return Service.get(`/github`)
+    .then(response => {
+      const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
+      if(success) commit('project/REQUEST_GUTHUB_REPOSITORIES_SUCCESS', response.data)
+      if(!success) commit('project/REQUEST_GUTHUB_REPOSITORIES_FAILURE')
+    }, err => {
+      commit('project/REQUEST_GUTHUB_REPOSITORIES_FAILURE', err)
+    })
+  },
+
   // 获取歌曲列表
   loadMuiscPlayerList({ commit }) {
     commit('music/REQUEST_LIST')
