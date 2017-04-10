@@ -12,10 +12,6 @@
           <p class="description" style="-webkit-box-orient: vertical;">{{ project.description }}</p>
           <hr>
           <p class="meta">
-            <span class="item watch">
-              <i class="iconfont icon-eye"></i>
-              <span>{{ project.watchers_count }}</span>
-            </span>
             <span class="item star">
               <i class="iconfont icon-star"></i>
               <span>{{ project.stargazers_count }}</span>
