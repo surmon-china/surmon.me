@@ -34,6 +34,7 @@
             </nuxt-link>
           </div>
           <img :src="currentSongPicUrl" v-show="false">
+          <img src="/images/app-hot.png" v-show="false">
         </div>
       </div>
     </nav>
