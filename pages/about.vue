@@ -18,10 +18,11 @@
                 <a target="_blank" 
                    rel="nofollow" 
                    href="https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4">288325802</a>
+                <span>.</span>
               </p>
               <p class="item">
                 <i class="iconfont icon-music"></i>
-                <nuxt-link to="/music">Folk, Jazz-HipHop, EM, Rock, PostRock, New Ag</nuxt-link>
+                <nuxt-link to="/music">Folk, Jazz-HipHop, EM, Rock, PostRock, New Ag.</nuxt-link>
               </p>
               <p class="item">
                 <i class="iconfont icon-like"></i>
@@ -49,6 +50,11 @@
                      target="_blank" 
                      rel="external nofollow">
                     <i class="iconfont icon-segmentfault"></i>
+                  </a>
+                  <a href="https://juejin.im/user/5735611ac4c9710060f8fa5e" 
+                     target="_blank" 
+                     rel="external nofollow">
+                    <i class="iconfont icon-juejin"></i>
                   </a>
                   <a href="https://www.quora.com/profile/Surmon" 
                      target="_blank" 
@@ -84,7 +90,7 @@
               </p>
               <div class="item">
                 <i class="iconfont icon-code"></i>
-                <span class="skills">凡心所向，素履所往；生如逆旅，一苇以航</span>
+                <span class="skills">凡心所向，素履所往；生如逆旅，一苇以航。</span>
               </div>
             </div>
             <div class="about-map">
@@ -171,6 +177,7 @@
             width: 100%;
             height: auto;
             padding: 2em 3em;
+            padding-bottom: 5em;
             margin-bottom: 1em;
             background-color: $module-bg;
             overflow: hidden;
@@ -233,7 +240,7 @@
                   margin-right: 1.5em;
 
                   > .iconfont {
-                    font-size: 1.4666rem;
+                    font-size: 1.5666rem;
                   }
                 }
               }
