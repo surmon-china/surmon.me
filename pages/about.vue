@@ -14,14 +14,10 @@
               </p>
               <p class="item">
                 <i class="iconfont icon-comment-discussion"></i>
-                <span>国套委：</span>
+                <span>Taolu committee: </span>
                 <a target="_blank" 
                    rel="nofollow" 
                    href="https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4">288325802</a>
-              </p>
-              <p class="item">
-                <i class="iconfont icon-address"></i>
-                <span>欢迎西安的同学请我喝(yue)咖(...)啡</span>
               </p>
               <p class="item">
                 <i class="iconfont icon-music"></i>
@@ -183,7 +179,7 @@
               content: "";
               display: block;
               border-width: 0 13em 12em 0;
-              border-color: transparent rgba(238,238,238,0.7) transparent transparent;
+              border-color: transparent rgba(238,238,238,0.6) transparent transparent;
               background: transparent;
               border-style: solid;
               width: 0;
@@ -196,11 +192,11 @@
 
             .gravatar {
               position: absolute;
-              right: 4em;
-              top: 4em;
-              width: 14em;
-              height: 14em;
-              padding: .3em;
+              right: 4rem;
+              top: 4rem;
+              width: 14rem;
+              height: 14rem;
+              padding: .36rem;
               border: 1px dashed #ccc;
               opacity: .8;
               @include css3-prefix(transition, transform .7s);
@@ -223,17 +219,22 @@
               }
 
               > .iconfont {
-                margin-right: 2em;
+                width: 2rem;
+                font-size: 1.5rem;
+                text-align: center;
+                margin-right: 2rem;
                 display: inline-block;
                 color: rgba(191, 191, 191, 0.5);
-                width: 2rem;
-                text-align: center;
               }
 
               > .accounts {
 
                 > a {
                   margin-right: 1.5em;
+
+                  > .iconfont {
+                    font-size: 1.4666rem;
+                  }
                 }
               }
             }
