@@ -1,21 +1,22 @@
 <template>
-  <div class="page">
+  <div class="page" :class="{ mobile: mobileLayout }">
     <div class="sitemap">
       <div class="articles">
         <h3 class="title">articles</h3>
         <p v-if="!articles.length">暂无文章</p>
         <ul class="article-list" v-else>
-          <li v-for="(article, index) in articles">
-            <p>
-              <router-link :to="`/article/${article.id}`"
+          <li class="item" v-for="(article, index) in articles">
+            <p class="item-content">
+              <router-link class="link"
+                           :to="`/article/${article.id}`"
                            :title="article.title">《{{ article.title }}》</router-link>
-              <span>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-              <a href="" @click.prevent="toggleArticleDescriptionOpen(index)">
+              <span class="sign">&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;</span>
+              <a class="toggle" href="" @click.prevent="toggleArticleDescriptionOpen(index)">
                 <span>{{ article.open ? '收起' : '展开' }}描述</span>
               </a>
             </p>
             <transition name="module">
-              <p v-show="article.open">{{ article.description }}</p>
+              <p v-show="article.open" class="item-description">{{ article.description }}</p>
             </transition>
           </li>
         </ul>
@@ -93,6 +94,9 @@
       },
       tags() {
         return this.$store.state.tag.data.data
+      },
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
       }
     },
     methods: {
@@ -113,6 +117,36 @@
     background-color: $module-bg;
     overflow: hidden;
     
+    &.mobile {
+      padding: 1.666rem;
+
+      ul {
+        padding-left: 1.666rem;
+
+        &.article-list {
+
+          > .item {
+
+            > .item-content {
+
+              > .link {
+                display: block;
+                margin-bottom: 1rem;
+              }
+
+              > .sign {
+                display: none;
+              }
+
+              > .toggle {
+
+              }
+            }
+          }
+        }
+      }
+    }
+
     .sitemap {
 
       a {
@@ -128,6 +162,19 @@
           margin: 0em 0 1em;
           font-weight: bold;
           text-transform: capitalize;
+        }
+      }
+
+      .articles {
+
+        .article-list {
+
+          > .item {
+
+            > .item-description {
+              line-height: 2.16rem;
+            }
+          }
         }
       }
 

@@ -274,9 +274,9 @@
 
     .aside-tag {
       width: 19em;
-      padding: .8em;
-      padding-right: 0;
-      padding-bottom: 0;
+      padding-left: 1rem;
+      border-top: 1rem solid transparent;
+      border-bottom: 1rem solid transparent;
       margin-bottom: 1em;
 
       &.fixed {
@@ -300,8 +300,8 @@
         .item {
           display: inline-block;
           float: left;
-          margin-right: .8em;
-          margin-bottom: .8em;
+          margin-right: 1rem;
+          margin-bottom: 1rem;
           height: 2em;
           line-height: 2em;
           text-transform: capitalize;
@@ -309,6 +309,10 @@
 
           &:hover {
             background-color: darken($module-hover-bg, 40%);
+          }
+
+          &:last-child {
+            margin: 0;
           }
 
           .title {

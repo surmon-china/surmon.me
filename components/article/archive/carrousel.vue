@@ -122,6 +122,7 @@
     }
 
     &.mobile {
+      min-height: 8rem;
       height: auto;
 
       > .swiper {
@@ -129,6 +130,7 @@
         .item {
 
           > .content {
+            min-height: 8rem;
             height: auto;
           }
         }
