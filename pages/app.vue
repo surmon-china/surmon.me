@@ -75,6 +75,7 @@
       min-height: 36rem;
 
       > .app {
+        padding-top: 1em;
 
         > .screen {
           width: 100%;

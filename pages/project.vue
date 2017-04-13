@@ -1,12 +1,15 @@
 <template>
   <div class="projects" :class="{ mobile: mobileLayout }">
     <ul class="project-list">
-      <li class="item" v-for="(project, index) in projects">
-        <a class="item-content" 
+      <li class="item" 
+          :key="index"
+          :class="{ last: buildLastClass(index) }"
+          v-for="(project, index) in projects">
+        <a target="_blank"
+           class="item-content" 
            rel="external nofollow"
            :href="project.html_url"
-           :title="project.description"
-           target="_blank">
+           :title="project.description">
           <i class="iconfont" :class="[buildIcon(project)]"></i>
           <h3 class="title">{{ project.name }}</h3>
           <p class="description" style="-webkit-box-orient: vertical;">{{ project.description }}</p>
@@ -49,6 +52,18 @@
       }
     },
     methods: {
+      buildLastClass(index) {
+        const projects = this.projects
+        
+        // 取余
+        if (projects.length % 4) {
+          return index >= (projects.length - projects.length % 4)
+        
+        // 取整
+        } else {
+          return index >= projects.length - 4
+        }
+      },
       buildIcon(project) {
         switch(true) {
           case project.name.toLowerCase().includes('vue'):
@@ -106,6 +121,10 @@
           flex-grow: 1;
           margin-right: 0;
 
+          &.last {
+            margin-bottom: 1rem;
+          }
+
           &:last-child {
             margin: 0;
           }
@@ -144,6 +163,10 @@
         margin-bottom: 1rem;
         width: 23.9%;
         height: 23rem;
+
+        &.last {
+          margin-bottom: 0;
+        }
 
         &:nth-child(4n + 0) {
           margin-right: 0;

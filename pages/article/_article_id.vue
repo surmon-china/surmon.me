@@ -466,7 +466,9 @@
     }
 
     > .related {
-      padding: 1em;
+      padding: 1em 0;
+      border-width: 0 1em;
+      border-color: $module-bg;
       overflow: hidden;
       height: 10em;
 

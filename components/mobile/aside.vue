@@ -143,6 +143,7 @@
           }
 
           &.app {
+            margin-top: 1rem;
             border-top: 1px solid darken($mobile-aside-bg, 5%);
             color: $primary;
 
