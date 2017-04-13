@@ -93,14 +93,14 @@
                 <span class="skills">凡心所向，素履所往；生如逆旅，一苇以航。</span>
               </div>
             </div>
-            <div class="about-map">
+            <div class="about-map" v-if="!mobileLayout">
               <iframe src="/partials/map.html" style="width: 100%; height: 236px;"></iframe>
             </div>
             <div class="about-project">
               <router-link to="/project" class="project-link">
                 <p class="title">To my Project</p>
                 <p class="item">前去了解更多关于我的开源项目的进展</p>
-                <p class="item">オープンソースプロジェクトの進捗状況を理解するために、</p>
+                <p class="item" v-if="!mobileLayout">オープンソースプロジェクトの進捗状況を理解するために、</p>
               </router-link>
             </div>
           </div>
@@ -148,11 +148,29 @@
 
               > .about-me {
                 padding: 1em;
+
+                > .item {
+                  @include text-overflow();
+
+                  > .iconfont {
+                    margin-right: 1rem;
+                  }
+
+                  > .accounts {
+                    bottom: auto;
+                  }
+                }
+              }
+
+              > .about-map {
+                display: none;
               }
 
               > .about-project {
+                height: auto;
 
                 > .project-link {
+                  height: auto;
 
                   > .title {
                     font-size: 2em;
