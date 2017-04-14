@@ -5,7 +5,7 @@
         <a class="feedback" 
            href="mailto:surmon@foxmail.com"
            target="_blank">
-          <i class="iconfont icon-comment"></i>
+          <i class="iconfont icon-feedback"></i>
         </a>
         <button class="to-top" 
                 @click="totop"
