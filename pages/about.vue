@@ -56,15 +56,20 @@
                      rel="external nofollow">
                     <i class="iconfont icon-juejin"></i>
                   </a>
-                  <a href="https://www.quora.com/profile/Surmon" 
+                  <a href="https://www.v2ex.com/member/surmon" 
                      target="_blank" 
                      rel="external nofollow">
-                    <i class="iconfont icon-quora"></i>
+                    <i class="iconfont icon-v2ex"></i>
                   </a>
                   <a href="https://www.zhihu.com/people/surmon/activities" 
                      target="_blank" 
                      rel="external nofollow">
                     <i class="iconfont icon-zhihu"></i>
+                  </a>
+                  <a href="https://www.quora.com/profile/Surmon" 
+                     target="_blank" 
+                     rel="external nofollow">
+                    <i class="iconfont icon-quora"></i>
                   </a>
                   <a href="https://www.linkedin.com/in/surmon-ma-713bb6a2/" 
                      target="_blank" 
