@@ -162,7 +162,7 @@
         margin-right: 1rem;
         margin-bottom: 1rem;
         width: 23.9%;
-        height: 23rem;
+        height: 26rem;
 
         &.last {
           margin-bottom: 0;
@@ -221,7 +221,7 @@
               color: $secondary;
 
               > .iconfont {
-                margin-right: .4rem;
+                margin-right: .6rem;
               }
             }
           }
