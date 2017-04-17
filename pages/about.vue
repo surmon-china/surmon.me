@@ -5,97 +5,105 @@
         <div class="about">
           <div class="about-all">
             <div class="about-me">
-              <div class="gravatar" v-if="!mobileLayout">
-                <img :src="gravatar">
+              <div class="desc">
+                <p class="item">
+                  <i class="iconfont icon-user"></i>
+                  <span>I'm Surmon, a (95+) (小) Javascript (鲜) stack (肉) developer.</span>
+                </p>
+                <p class="item">
+                  <i class="iconfont icon-comment-discussion"></i>
+                  <span>Taolu committee: </span>
+                  <a target="_blank" 
+                     rel="nofollow" 
+                     href="https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4">288325802</a>
+                  <span>.</span>
+                </p>
+                <p class="item">
+                  <i class="iconfont icon-music"></i>
+                  <nuxt-link to="/music">Folk, Jazz-HipHop, EM, Rock, PostRock, New Ag.</nuxt-link>
+                </p>
+                <p class="item">
+                  <i class="iconfont icon-like"></i>
+                  <span>love code. love beauty. love life.</span>
+                </p>
+                <p class="item">
+                  <i class="iconfont icon-coffee"></i>
+                  <span class="accounts">
+                    <a href="mailto:surmon@foxmail.com" 
+                       target="_blank" 
+                       rel="external nofollow">
+                      <i class="iconfont icon-mail"></i>
+                    </a>
+                    <a href="https://github.com/surmon-china" 
+                       target="_blank" 
+                       rel="external nofollow">
+                      <i class="iconfont icon-github"></i>
+                    </a>
+                    <a href="https://stackoverflow.com/users/6222535/surmon?tab=profile" 
+                       target="_blank" 
+                       rel="external nofollow">
+                      <i class="iconfont icon-stackoverflow"></i>
+                    </a>
+                    <a href="https://segmentfault.com/u/surmon" 
+                       target="_blank" 
+                       rel="external nofollow">
+                      <i class="iconfont icon-segmentfault"></i>
+                    </a>
+                    <a href="https://juejin.im/user/5735611ac4c9710060f8fa5e" 
+                       target="_blank" 
+                       rel="external nofollow">
+                      <i class="iconfont icon-juejin"></i>
+                    </a>
+                    <a href="https://www.v2ex.com/member/surmon" 
+                       target="_blank" 
+                       rel="external nofollow">
+                      <i class="iconfont icon-v2ex"></i>
+                    </a>
+                    <a href="https://www.zhihu.com/people/surmon/activities" 
+                       target="_blank" 
+                       rel="external nofollow">
+                      <i class="iconfont icon-zhihu"></i>
+                    </a>
+                    <a href="https://www.quora.com/profile/Surmon" 
+                       target="_blank" 
+                       rel="external nofollow">
+                      <i class="iconfont icon-quora"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/surmon-ma-713bb6a2/" 
+                       target="_blank" 
+                       rel="external nofollow">
+                      <i class="iconfont icon-linkedin"></i>
+                    </a>
+                    <a href="https://weibo.com/nocower" 
+                       target="_blank" 
+                       rel="external nofollow">
+                      <i class="iconfont icon-weibo"></i>
+                    </a>
+                    <a href="https://twitter.com/surmon_me" 
+                       target="_blank" 
+                       rel="external nofollow">
+                      <i class="iconfont icon-twitter"></i>
+                    </a>
+                    <a href="https://www.facebook.com/surmon.me" 
+                       target="_blank" 
+                       rel="external nofollow">
+                      <i class="iconfont icon-facebook"></i>
+                    </a>
+                  </span>
+                </p>
+                <p class="item">
+                  <i class="iconfont icon-code"></i>
+                  <span class="skills">凡心所向，素履所往；生如逆旅，一苇以航。</span>
+                </p>
               </div>
-              <p class="item">
-                <i class="iconfont icon-user"></i>
-                <span>I'm Surmon, a (95+) (小) javascript (鲜) stack (肉) developer.</span>
-              </p>
-              <p class="item">
-                <i class="iconfont icon-comment-discussion"></i>
-                <span>Taolu committee: </span>
-                <a target="_blank" 
-                   rel="nofollow" 
-                   href="https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4">288325802</a>
-                <span>.</span>
-              </p>
-              <p class="item">
-                <i class="iconfont icon-music"></i>
-                <nuxt-link to="/music">Folk, Jazz-HipHop, EM, Rock, PostRock, New Ag.</nuxt-link>
-              </p>
-              <p class="item">
-                <i class="iconfont icon-like"></i>
-                <span>love code. love beauty. love life.</span>
-              </p>
-              <p class="item">
-                <i class="iconfont icon-coffee"></i>
-                <span class="accounts">
-                  <a href="mailto:surmon@foxmail.com" 
-                     target="_blank" 
-                     rel="external nofollow">
-                    <i class="iconfont icon-mail"></i>
-                  </a>
-                  <a href="https://github.com/surmon-china" 
-                     target="_blank" 
-                     rel="external nofollow">
-                    <i class="iconfont icon-github"></i>
-                  </a>
-                  <a href="https://stackoverflow.com/users/6222535/surmon?tab=profile" 
-                     target="_blank" 
-                     rel="external nofollow">
-                    <i class="iconfont icon-stackoverflow"></i>
-                  </a>
-                  <a href="https://segmentfault.com/u/surmon" 
-                     target="_blank" 
-                     rel="external nofollow">
-                    <i class="iconfont icon-segmentfault"></i>
-                  </a>
-                  <a href="https://juejin.im/user/5735611ac4c9710060f8fa5e" 
-                     target="_blank" 
-                     rel="external nofollow">
-                    <i class="iconfont icon-juejin"></i>
-                  </a>
-                  <a href="https://www.v2ex.com/member/surmon" 
-                     target="_blank" 
-                     rel="external nofollow">
-                    <i class="iconfont icon-v2ex"></i>
-                  </a>
-                  <a href="https://www.zhihu.com/people/surmon/activities" 
-                     target="_blank" 
-                     rel="external nofollow">
-                    <i class="iconfont icon-zhihu"></i>
-                  </a>
-                  <a href="https://www.quora.com/profile/Surmon" 
-                     target="_blank" 
-                     rel="external nofollow">
-                    <i class="iconfont icon-quora"></i>
-                  </a>
-                  <a href="https://www.linkedin.com/in/surmon-ma-713bb6a2/" 
-                     target="_blank" 
-                     rel="external nofollow">
-                    <i class="iconfont icon-linkedin"></i>
-                  </a>
-                  <a href="https://weibo.com/nocower" 
-                     target="_blank" 
-                     rel="external nofollow">
-                    <i class="iconfont icon-weibo"></i>
-                  </a>
-                  <a href="https://twitter.com/surmon_me" 
-                     target="_blank" 
-                     rel="external nofollow">
-                    <i class="iconfont icon-twitter"></i>
-                  </a>
-                  <a href="https://www.facebook.com/surmon.me" 
-                     target="_blank" 
-                     rel="external nofollow">
-                    <i class="iconfont icon-facebook"></i>
-                  </a>
-                </span>
-              </p>
-              <div class="item">
-                <i class="iconfont icon-code"></i>
-                <span class="skills">凡心所向，素履所往；生如逆旅，一苇以航。</span>
+              <div class="gravatar" v-if="!mobileLayout">
+                <div class="background">
+                  <img src="/images/about-background.jpg" alt="background" class="image">
+                </div>
+                <img :src="gravatar" class="avatar">
+                <h2 class="name"><strong>Surmon</strong></h2>
+                <p class="skill">JS Stack Developer.</p>
+                <a class="favorite" href="" @click.stop.prevent="">Favorite</a>
               </div>
             </div>
             <div class="about-map" v-if="!mobileLayout">
@@ -152,17 +160,20 @@
             > .about-all {
 
               > .about-me {
-                padding: 1em;
 
-                > .item {
-                  @include text-overflow();
+                > .desc {
+                  padding: 1em;
 
-                  > .iconfont {
-                    margin-right: 1rem;
-                  }
+                  > .item {
+                    @include text-overflow();
 
-                  > .accounts {
-                    bottom: auto;
+                    > .iconfont {
+                      margin-right: 1rem;
+                    }
+
+                    > .accounts {
+                      bottom: auto;
+                    }
                   }
                 }
               }
@@ -199,71 +210,126 @@
           .about-me {
             width: 100%;
             height: auto;
-            padding: 2em 3em;
-            padding-bottom: 5em;
             margin-bottom: 1em;
-            background-color: $module-bg;
             overflow: hidden;
-
-            &:before {
-              content: "";
-              display: block;
-              border-width: 0 13em 12em 0;
-              border-color: transparent rgba(238,238,238,0.6) transparent transparent;
-              background: transparent;
-              border-style: solid;
-              width: 0;
-              position: absolute;
-              top: 0;
-              right: 0;
-              z-index: 2;
-              opacity: .6;
-            }
+            display: flex;
+            justify-content: space-between;
 
             .gravatar {
-              position: absolute;
-              right: 4rem;
-              top: 4rem;
-              width: 14rem;
-              height: 14rem;
-              padding: .36rem;
-              border: 1px dashed #ccc;
-              opacity: .8;
-              @include css3-prefix(transition, transform .7s);
+              width: 25%;
+              display: flex;
+              align-items: center;
+              flex-direction: column;
+              position: relative;
+              justify-content: flex-start;
+              background-color: $module-bg;
 
-              img {
-                max-width: 100%;
+              @keyframes aboutbg {
+                0% { transform: translate3d(0%, 0%, 0) }
+                25% { transform: translate3d(-50%, -60%, 0) }
+                50% { transform: translate3d(-50%, 0%, 0) }
+                75% { transform: translate3d(0%, -60%, 0) }
+                100% { transform: translate3d(0%, 0%, 0) }
+              }
+
+              > .background {
+                content: "";
+                display: block;
+                position: absolute;
+                width: 100%;
+                height: 30%;
+                top: 0;
+                right: 0;
+                z-index: 0;
+                overflow: hidden;
+
+                > .image {
+                  width: 200%;
+                  animation: aboutbg 88s linear infinite;
+                }
               }
 
               &:hover {
-                @include css3-prefix(transform, rotate(2deg) scale(1.1));
+
+                > .avatar {
+                  @include css3-prefix(transform, rotate(360deg));
+                }
+              }
+
+              > .avatar {
+                width: 40%;
+                z-index: 1;
+                margin-top: 26%;
+                max-width: 100%;
+                border-radius: 100%;
+                border: .4rem solid $module-bg;
+                box-sizing: content-box;
+                @include css3-prefix(transition, transform 1s);
+              }
+
+              > .skill {
+                margin-top: .466rem;
+              }
+
+              > .favorite {
+                margin-top: 1.666rem;
+                display: inline-block;
+                color: $primary;
+                border: 1px solid $primary;
+                border-radius: 1px;
+                width: 56%;
+                height: 2.68rem;
+                text-align: center;
+                line-height: 2.46rem;
+
+                &:hover {
+                  color: $white;
+                  background-color: $primary;
+                }
               }
             }
 
-            .item {
-              line-height: 2.5em;
-              min-height: 2.5em;
+            > .desc {
+              width: 73%;
+              padding: 2em 3em;
+              background-color: $module-bg;
 
-              &:last-child {
-                margin-bottom: 0;
-              }
+              .item {
+                line-height: 2.5em;
+                min-height: 2.5em;
 
-              > .iconfont {
-                width: 2rem;
-                font-size: 1.5rem;
-                text-align: center;
-                margin-right: 2rem;
-                display: inline-block;
-                color: rgba(191, 191, 191, 0.5);
-              }
+                &:first-child {
 
-              > .accounts {
+                  > span {
+                    display: inline-block;
 
-                > a {
-                  margin-right: 1.5em;
+                    &::first-letter {
+                      font-size: $font-size-h1;
+                    }
+                  }
+                }
 
-                  > .iconfont {
-                    font-size: 1.5666rem;
+                &:last-child {
+                  margin-bottom: 0;
+                }
+
+                > .iconfont {
+                  width: 2rem;
+                  font-size: 1.5rem;
+                  text-align: center;
+                  margin-right: 2rem;
+                  display: inline-block;
+                  color: rgba(191, 191, 191, 0.5);
+                }
+
+                > .accounts {
+
+                  > a {
+                    margin-right: 1.5em;
+
+                    > .iconfont {
+                      font-size: 1.5666rem;
+                    }
                   }
                 }
               }
@@ -280,14 +346,14 @@
 
           .about-project {
             width: 100%;
-            height: 14em;
+            height: 16em;
             padding: .5em;
             overflow: hidden;
             background-color: $module-bg;
 
             .project-link {
-              height: 13em;
-              padding-top: 1.5em;
+              height: 15em;
+              padding-top: 3rem;
               display: block;
               text-align: center;
 
