@@ -96,7 +96,7 @@
                   <span class="skills">凡心所向，素履所往；生如逆旅，一苇以航。</span>
                 </p>
               </div>
-              <div class="gravatar" v-if="!mobileLayout">
+              <div class="gravatar">
                 <div class="background">
                   <img src="/images/about-background.jpg" alt="background" class="image">
                 </div>
@@ -160,8 +160,25 @@
             > .about-all {
 
               > .about-me {
+                flex-direction: column-reverse;
+
+                > .gravatar {
+                  width: 100%;
+                  margin-bottom: 1rem;
+
+                  > .name,
+                  > .skill {
+                    margin: 1rem 0;
+                  }
+
+                  > .favorite {
+                    margin: 1rem 0;
+                    margin-bottom: 2rem;
+                  }
+                }
 
                 > .desc {
+                  width: 100%;
                   padding: 1em;
 
                   > .item {
