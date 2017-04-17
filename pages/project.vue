@@ -162,7 +162,7 @@
         margin-right: 1rem;
         margin-bottom: 1rem;
         width: 23.9%;
-        height: 26rem;
+        height: 23.33rem;
 
         &.last {
           margin-bottom: 0;
