@@ -102,13 +102,17 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'author', type: 'text/plain', href: '/humans.txt' }
     ],
-    /*
     script: [
-      { type: 'text/javascript',
-        innerHTML: ``
+      /*
+      { 
+        async: 'async',
+        defer: 'defer',
+        type: 'text/javascript',
+        src: 'https://platform.linkedin.com/badges/js/profile.js'
+        // innerHTML: ``
       }
+      */
     ],
-    */
     noscript: [
       { innerHTML: 'This website requires JavaScript.' }
     ]
