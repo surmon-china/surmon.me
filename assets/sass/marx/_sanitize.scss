@@ -325,6 +325,7 @@ small {
 // specify the border styling of tables
 
 table {
+	width: 100%;
 	border-collapse: if(variable-exists(table-border-collapse), $table-border-collapse, collapse);
 	border-spacing: if(variable-exists(table-border-spacing), $table-border-spacing, 0);
 }
