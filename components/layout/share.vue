@@ -78,6 +78,7 @@
 </template>
 
 <script>
+  import Clipboard from '~plugins/clipboard'
   export default {
     name: 'share',
     mounted() {
