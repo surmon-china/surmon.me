@@ -15,10 +15,10 @@ module.exports = {
     // },
     // 对webpack的扩展
     extend(webpackConfig) {
-      webpackConfig.resolve.alias['~utils'] = path.join(__dirname, 'utils');
-      webpackConfig.resolve.alias['~static'] = path.join(__dirname, 'static');
-      webpackConfig.resolve.alias['~filters'] = path.join(__dirname, 'filters');
-      webpackConfig.resolve.alias['~services'] = path.join(__dirname, 'services');
+      webpackConfig.resolve.alias['~utils'] = path.join(__dirname, 'utils')
+      webpackConfig.resolve.alias['~static'] = path.join(__dirname, 'static')
+      webpackConfig.resolve.alias['~filters'] = path.join(__dirname, 'filters')
+      webpackConfig.resolve.alias['~services'] = path.join(__dirname, 'services')
       webpackConfig.module.rules.push({
         test: /\.scss$/,
         loader: 'vue-style-loader!css-loader!sass-loader'
@@ -63,21 +63,21 @@ module.exports = {
     baseUrl: apiConfig.baseUrl
   },
   plugins: [
-    '~plugins/ga.js',
-    '~plugins/axios.js',
-    '~plugins/howler.js',
-    '~plugins/clipboard.js',
-    '~plugins/filters.js',
-    '~plugins/swiper.js',
-    '~plugins/marked.js',
-    '~plugins/gravatar.js',
-    '~plugins/particles.js',
-    '~plugins/vue-empty.js',
-    '~plugins/copy-right.js',
-    '~plugins/image-popup.js',
-    '~plugins/vue-loading.js',
-    '~plugins/vue-comment.js',
-    '~plugins/baidu-seo-push.js'
+    { src: '~plugins/ga.js', ssr: false },
+    { src: '~plugins/axios.js' },
+    { src: '~plugins/howler.js' },
+    { src: '~plugins/clipboard.js', ssr: false },
+    { src: '~plugins/filters.js' },
+    { src: '~plugins/swiper.js', ssr: false },
+    { src: '~plugins/marked.js' },
+    { src: '~plugins/gravatar.js' },
+    { src: '~plugins/particles.js', ssr: false },
+    { src: '~plugins/vue-empty.js' },
+    { src: '~plugins/copy-right.js', ssr: false },
+    { src: '~plugins/image-popup.js', ssr: false },
+    { src: '~plugins/vue-loading.js' },
+    { src: '~plugins/vue-comment.js' },
+    { src: '~plugins/baidu-seo-push.js', ssr: false }
   ],
   head: {
     title: 'Surmon.me - Talk is cheap. Show me the code',
@@ -95,7 +95,7 @@ module.exports = {
       { name: 'HandheldFriendly', content: 'True' },
       { name: 'apple-mobile-web-app-capable', content: 'yes' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1.0, user-scalable=no' },
-      { hid: 'keywords', name: 'keywords', content: 'surmon,马赐崇,司马萌萌,前端技术开发,javascript技术' },
+      { hid: 'keywords', name: 'keywords', content: 'surmon,马赐崇,司马萌,Vue教程,前端技术开发,javascript技术' },
       { hid: 'description', name: 'description', content: '凡心所向 素履所往 生如逆旅 一苇以航' }
     ],
     link: [

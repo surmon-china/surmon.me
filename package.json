@@ -15,20 +15,22 @@
     "howler": "^2.0.3",
     "idle-gc": "^1.0.1",
     "marked": "^0.3.6",
-    "nuxt": "^latest",
+    "nuxt": "^0.10.6",
     "particles.js": "^2.0.0",
     "vue-awesome-swiper": "^2.3.8"
   },
   "scripts": {
+    "precommit": "npm run lint",
     "dev": "nodemon --exec node server.js",
     "build": "cross-env NODE_ENV=production nuxt build",
     "start": "cross-env NODE_ENV=production node server.js",
     "analyz": "cross-env NODE_ENV=production nuxt build --analyzer",
-    "precommit": "npm run lint",
+    "install": "cnpm i --python=python2.7 --save",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
+    "babel-preset-stage-2": "^6.24.1",
     "eslint": "^3.14.1",
     "eslint-config-standard": "^6.2.1",
     "eslint-loader": "^1.6.3",
