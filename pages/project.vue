@@ -162,7 +162,7 @@
         margin-right: 1rem;
         margin-bottom: 1rem;
         width: 23.9%;
-        height: 23.33rem;
+        // height: 23.33rem;
 
         &.last {
           margin-bottom: 0;
@@ -212,7 +212,7 @@
           }
 
           > .meta {
-            margin: 0;
+            margin-bottom: .5rem;
             display: flex;
             justify-content: space-around;
 

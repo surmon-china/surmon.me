@@ -29,4 +29,4 @@ if (config.dev) {
 app.listen(port, host)
 gc.start(6600)
 // eslint-disable-line no-console
-console.log(`Server listening on ${host} : ${port}, at ${new Date().toLocaleString()}`)
+console.log(`Nuxt.js SSR Server listening on ${host} : ${port}, at ${new Date().toLocaleString()}`)

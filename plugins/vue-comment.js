@@ -1,3 +1,4 @@
+
 import Vue from 'vue'
 import VueComment from '~components/common/vue-comment'
 
