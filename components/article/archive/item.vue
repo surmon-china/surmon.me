@@ -97,6 +97,17 @@
       height: 9.5em;
       padding: .5em;
 
+      &:hover {
+
+        > .item-thumb {
+
+          .item-thumb-img {
+            @include css3-prefix(opacity, .95);
+            @include css3-prefix(transform, translateX(-.5em));
+          }
+        }
+      }
+
       > .item-thumb {
         float: left;
         width: 12em;
@@ -112,14 +123,7 @@
           border-color: transparent;
           background-color: #c0c0c0;
           @include css3-prefix(opacity, 1);
-          @include css3-prefix(filter, grayscale(0.3));
           @include css3-prefix(transform, translateX(0));
-
-          &:hover {
-            @include css3-prefix(opacity, .95);
-            @include css3-prefix(filter, grayscale(0));
-            @include css3-prefix(transform, translateX(-.5em));
-          }
         }
       }
 

@@ -49,6 +49,11 @@
                        rel="external nofollow">
                       <i class="iconfont icon-segmentfault"></i>
                     </a>
+                    <a href="https://leetcode.com/surmon" 
+                       target="_blank" 
+                       rel="external nofollow">
+                      <i class="iconfont icon-algorithm"></i>
+                    </a>
                     <a href="https://juejin.im/user/5735611ac4c9710060f8fa5e" 
                        target="_blank" 
                        rel="external nofollow">
