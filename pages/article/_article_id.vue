@@ -162,9 +162,9 @@
         let content = this.article.content
         if (!content) return ''
         const hasTags = Object.is(this.tags.code, 1) && !!this.tags.data.length
-        if (content.length > 11688 && !this.fullContentEd) {
+        if (content.length > 13688 && !this.fullContentEd) {
           this.canReadMore = true
-          let shortContent = content.substring(0, 9888)
+          let shortContent = content.substring(0, 11688)
           let lastH4Index = shortContent.lastIndexOf('#### ')
           let lastH3Index = shortContent.lastIndexOf('### ')
           let lastCodeIndex = shortContent.lastIndexOf('\n```')
@@ -184,7 +184,7 @@
                 lastReadindex = lastH3Index
                             break
                           default:
-                lastReadindex = 9888
+                lastReadindex = 11688
                             break
           }
           shortContent = shortContent.substring(0, lastReadindex)
