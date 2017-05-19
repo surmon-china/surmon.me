@@ -18,6 +18,9 @@ marked.setOptions({
 
 const renderer = new marked.Renderer()
 
+// 段落解析
+const paragraphParse = text => `<p>${text}</p>`
+
 // 对连接进行权重防流和新窗处理
 const linkParse = (href, title, text) => {
   const isSelf = href.includes('surmon.me')
@@ -26,7 +29,7 @@ const linkParse = (href, title, text) => {
              target="_blank" 
              class="${textIsImage ? 'image-link' : 'link'}"
              title="${title || (textIsImage ? href : text)}" 
-             ${isSelf ? '' : 'rel="external nofollow"'}>${text}</a>`
+             ${isSelf ? '' : 'rel="external nofollow"'}>${text}</a>`.replace(/\s+/g, ' ').replace('\n', '')
 }
 
 // 对图片进行弹窗处理
@@ -35,7 +38,7 @@ const imageParse = (src, title, alt) => {
   return `<img src="${src}" 
                title="${title || alt || 'surmon.me'}" 
                alt="${alt || title || src}" 
-               onclick="if(window.utils) window.utils.openImgPopup('${src}')"/>`
+               onclick="if(window.utils) window.utils.openImgPopup('${src}')"/>`.replace(/\s+/g, ' ').replace('\n', '')
 }
 
 // 代码解析器（行号处理）
@@ -48,24 +51,25 @@ const codeParse = function(code, lang, escaped) {
     }
   }
   const lineNums = code.split('\n').map((l, i) => {
-    return `<li class="code-line-number">${i + 1}</li>`
+    return `<li class="code-line-number">${i + 1}</li>`.replace(/\s+/g, ' ')
   }).join('')
   if (!lang) {
     return `<pre>
               <ul class="code-lines">${lineNums}</ul>
               <code>${(escaped ? code : escape(code, true))}\n</code>
-            </pre>`
+            </pre>`.replace('\n', '')
   } else {
     return `<pre data-lang="${lang}">
-            <ul class="code-lines">${lineNums}</ul>
-            <code class="${this.options.langPrefix}${escape(lang, true)}">${(escaped ? code : escape(code, true))}\n</code>
-          </pre>\n`
+              <ul class="code-lines">${lineNums}</ul>
+              <code class="${this.options.langPrefix}${escape(lang, true)}">${(escaped ? code : escape(code, true))}\n</code>
+            </pre>\n`.replace('\n', '')
   }
 }
 
 renderer.link = linkParse
 renderer.code = codeParse
 renderer.image = imageParse
+renderer.paragraph = paragraphParse
 
 export default (content, tags, parseHtml = false) => {
 

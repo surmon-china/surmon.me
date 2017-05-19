@@ -14,7 +14,7 @@ module.exports = {
     //   analyzerMode: 'static'
     // },
     // 对webpack的扩展
-    extend(webpackConfig) {
+    extend(webpackConfig, { dev, isClient, isServer }) {
       webpackConfig.resolve.alias['~utils'] = path.join(__dirname, 'utils')
       webpackConfig.resolve.alias['~static'] = path.join(__dirname, 'static')
       webpackConfig.resolve.alias['~filters'] = path.join(__dirname, 'filters')

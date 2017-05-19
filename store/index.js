@@ -15,6 +15,7 @@ export const actions = {
     const userAgent = isServer ? req.headers['user-agent'] : navigator.userAgent
     const isMobile = /(iPhone|iPod|Opera Mini|Android.*Mobile|NetFront|PSP|BlackBerry|Windows Phone)/ig.test(userAgent)
     store.commit('option/SET_MOBILE_LAYOUT', isMobile)
+    store.commit('option/SET_USER_AGENT', userAgent)
     const initAppData = [
       // 配置数据
       store.dispatch('loadAdminInfo'),
@@ -223,8 +224,10 @@ export const actions = {
       const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
       if(success) commit('article/GET_DETAIL_SUCCESS', response.data)
       if(!success) commit('article/GET_DETAIL_FAILURE')
+      return Promise.resolve(response.data)
     }, err => {
       commit('article/GET_DETAIL_FAILURE', err)
+      return Promise.reject(err)
     })
   },
 

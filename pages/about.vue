@@ -209,6 +209,8 @@
 
                 > .project-link {
                   height: auto;
+                  padding-top: 2rem;
+                  overflow: hidden;
 
                   > .title {
                     font-size: 2em;

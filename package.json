@@ -15,7 +15,7 @@
     "howler": "^2.0.3",
     "idle-gc": "^1.0.1",
     "marked": "^0.3.6",
-    "nuxt": "^0.10.6",
+    "nuxt": "^0.10.7",
     "particles.js": "^2.0.0",
     "vue-awesome-swiper": "^2.3.8"
   },
@@ -37,6 +37,7 @@
     "eslint-plugin-html": "^2.0.0",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
+    "html-minifier": "^3.5.0",
     "node-sass": "^4.5.0",
     "sass-loader": "^4.1.1"
   }
