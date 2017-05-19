@@ -49,13 +49,17 @@
     computed: {
       mobileLayout() {
         return this.$store.state.option.mobileLayout
+      },
+      userAgent() {
+        return this.$store.state.option.userAgent
       }
     },
     methods: {
       buildThumb(thumb) {
         if (thumb) {
           if (this.mobileLayout) {
-            return `${thumb}?imageView2/1/w/768/h/271/format/webp/interlace/1/q/80|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/560/fill/I0ZGRkZGRg==/dissolve/30/gravity/SouthWest/dx/30/dy/15|imageslim`
+            let isIos  = (/(iPhone|iPad|iPod|iOS)/i.test(this.userAgent))
+            return `${thumb}?imageView2/1/w/768/h/271/format/${isIos ? 'jpeg' : 'webp'}/interlace/1/q/80|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/560/fill/I0ZGRkZGRg==/dissolve/30/gravity/SouthWest/dx/30/dy/15|imageslim`
           } else {
             return `${thumb}?imageView2/1/w/1190/h/420/format/webp/interlace/1/q/80|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/680/fill/I0ZGRkZGRg==/dissolve/30/gravity/SouthWest/dx/30/dy/15|imageslim`
           }

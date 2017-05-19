@@ -6,7 +6,7 @@ export default state => {
   if (!state.player) {
 
     // config
-    const playList = state.list.data.tracks
+    const playList = state.list.data.tracks.filter(s => !!s.detail)
     const proxyPath = 'https://surmon.me/proxy/'
 
     // 如果存在有效数据，则实例化播放器
@@ -19,12 +19,13 @@ export default state => {
         id: song.id,
         html5: true,
         name: song.name,
-        album: song.album,
-        artists: song.artists,
-        duration: song.duration,
-        src: song.mp3Url.replace(/(http:\/\/|https:\/\/)/ig, proxyPath)
+        album: song.al || {},
+        artists: song.ar || {},
+        duration: song.dt || 200,
+        src: song.detail.url.replace(/(http:\/\/|https:\/\/)/ig, proxyPath)
       }
     })
+    state.list.data.tracks = playerList
 
     const playerStep = () => {
 
@@ -68,6 +69,7 @@ export default state => {
 
         // cache or instance
         const song = playerList[index]
+        if (!song) return false
         song.howl = song.howl || new Howl({
           src: [song.src],
           autoplay: false,

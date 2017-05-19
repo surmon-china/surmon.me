@@ -10,6 +10,14 @@
       <transition name="module" mode="out-in">
         <div class="content" v-html="articleContent" v-if="!fetching && article.content"></div>
       </transition>
+      <transition name="module" mode="out-in">
+        <div class="readmore" v-if="canReadMore">
+          <button class="readmore-btn" :disabled="readMoreLoading" @click="readMore()">
+            <span>{{ !readMoreLoading ? '阅读余下全文' : '渲染中...' }}</span>
+            <i class="iconfont icon-next-bottom"></i>
+          </button>
+        </div>
+      </transition>
     </div>
     <share-box class="article-share" v-if="!fetching && article.content"></share-box>
     <transition name="module" mode="out-in">
@@ -134,7 +142,10 @@
           grabCursor : true,
           slidesPerView: 'auto',
           spaceBetween: 14
-        }
+        },
+        canReadMore: false,
+        fullContentEd: false,
+        readMoreLoading: false
       }
     },
     mounted() {
@@ -147,11 +158,41 @@
       article() {
         return this.$store.state.article.detail.data
       },
-      articleContent () {
+      articleContent() {
         let content = this.article.content
         if (!content) return ''
         const hasTags = Object.is(this.tags.code, 1) && !!this.tags.data.length
-        return marked(content, hasTags ? this.tags.data : false, true)
+        if (content.length > 11688 && !this.fullContentEd) {
+          this.canReadMore = true
+          let shortContent = content.substring(0, 9888)
+          let lastH4Index = shortContent.lastIndexOf('#### ')
+          let lastH3Index = shortContent.lastIndexOf('### ')
+          let lastCodeIndex = shortContent.lastIndexOf('\n```')
+          let lastLineIndex = shortContent.lastIndexOf('\n')
+          let lastReadindex = 0
+          switch(true) {
+            case lastCodeIndex > -1:
+                lastReadindex = lastCodeIndex
+                            break
+            case lastLineIndex > -1:
+                lastReadindex = lastLineIndex
+                            break
+            case lastH4Index > -1:
+                lastReadindex = lastH4Index
+                            break
+            case lastH3Index > -1:
+                lastReadindex = lastH3Index
+                            break
+                          default:
+                lastReadindex = 9888
+                            break
+          }
+          shortContent = shortContent.substring(0, lastReadindex)
+          return marked(shortContent, hasTags ? this.tags.data : false, true)
+        } else {
+          this.canReadMore = false
+          return marked(content, hasTags ? this.tags.data : false, true)
+        }
       },
       fetching() {
         return this.$store.state.article.detail.fetching
@@ -164,6 +205,14 @@
       }
     },
     methods: {
+      readMore() {
+        this.readMoreLoading = true
+        this.$nextTick(() => {
+          setTimeout(() => {
+            this.fullContentEd = true
+          }, 0)
+        })
+      },
       clipboard() {
         if (this.article.title) {
           this.clipboard = new Clipboard(this.$refs.copy_url_btn)
@@ -432,6 +481,60 @@
           }
         }
       }
+
+      @keyframes readmorebtn {
+        0% { 
+          transform: translate3d(0, 0, 0);
+          background-color: $module-hover-bg;
+        }
+        25% { 
+          transform: translate3d(0, .5rem, 0);
+          background-color: $primary;
+          color: white;
+        }
+        50% { 
+          transform: translate3d(0, 0, 0);
+          background-color: $module-hover-bg;
+        }
+        75% { 
+          transform: translate3d(0, .5rem, 0);
+          background-color: $primary;
+          color: white;
+        }
+        100% { 
+          transform: translate3d(0, 0, 0);
+          background-color: $module-hover-bg;
+        }
+      }
+
+      > .readmore {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: .8rem;
+
+        > .readmore-btn {
+          width: 80%;
+          text-align: center;
+          height: 3rem;
+          line-height: 3rem;
+          background-color: $module-hover-bg;
+          animation: readmorebtn 4s linear infinite;
+
+          &[disabled] {
+            cursor: no-drop;
+          }
+
+          &:hover {
+            background-color: $primary!important;
+            color: white!important;
+          }
+
+          > .iconfont {
+            margin-left: .5rem;
+          }
+        }
+      }
     }
 
     .article-share {
@@ -440,7 +543,6 @@
       background-color: $module-bg;
 
       > .share-box {
-        
       }
     }
 

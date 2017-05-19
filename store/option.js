@@ -14,6 +14,8 @@ export const state = {
   mobileLayout: false,
   // 移动端侧边栏
   mobileSidebar: false,
+  // ua
+  userAgent: '',
 
   // 服务端博主信息
   adminInfo: {
@@ -37,6 +39,11 @@ export const getters = {
 }
 
 export const mutations = {
+
+  // 设置UA
+  SET_USER_AGENT(state, action) {
+    state.userAgent = action
+  },
 
   // 设置是否移动端状态
   SET_MOBILE_LAYOUT(state, action) {
