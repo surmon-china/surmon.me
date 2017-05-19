@@ -9,7 +9,7 @@
       <h2 class="title">Surmon.me</h2>
       <p class="desc">Talk is cheap. Show me the code</p>
       <div class="screen">
-        <img src="/images/app-hot.jpg" class="screen-img" alt="app-hot">
+        <img src="/images/app-hot.gif" class="screen-img" alt="app-hot">
         <div class="download">
           <img src="/images/app-qrcode.png" class="qrcode" alt="qrcode">
           <a target="_blank" href="https://static.surmon.me/app/surmon.me.apk" class="btn">Android</a>
