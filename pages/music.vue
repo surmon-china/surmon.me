@@ -171,7 +171,6 @@
 
       > .prev-song,
       > .next-song {
-        cursor: pointer;
         width: 3rem;
 
         &:hover {
