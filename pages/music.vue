@@ -52,7 +52,7 @@
         <span> By </span>
         <span v-for="artist in currentSong.artists">{{ artist.name }}</span>
         <span> / </span>
-        <span>{{ currentSong.album.type || 'unknow' }}</span>
+        <span>{{ currentSong.album.name || 'unknow' }}</span>
       </h3>
     </div>
   </div>
