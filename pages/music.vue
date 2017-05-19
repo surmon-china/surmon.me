@@ -213,6 +213,7 @@
           border-radius: 100%;
           animation: rotation 26s linear infinite;
           animation-play-state: paused;
+          background-color: $disabled;
 
           &.playing {
             animation-play-state: running;
