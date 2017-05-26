@@ -18,7 +18,7 @@ export const mutations = {
   REQUEST_GUTHUB_REPOSITORIES_SUCCESS(state, action) {
     state.repositories.fetching = false
     const newRepositories = action.result
-    .filter(rep => !rep.description.startsWith('#'))
+    .filter(rep => !Object.is(rep.description[0], '#'))
     .map(rep => {
       return {
         html_url: rep.html_url,
