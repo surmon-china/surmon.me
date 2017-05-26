@@ -22,12 +22,12 @@ export const mutations = {
     .map(rep => {
       return {
         html_url: rep.html_url,
-        name: rep.name,
+        name: rep.name || ' ',
         fork: rep.fork,
         forks: rep.forks,
         is_private: rep.private,
         forks_count: rep.forks_count,
-        description: rep.description,
+        description: rep.description || ' ',
         open_issues_count: rep.open_issues_count,
         stargazers_count: rep.stargazers_count,
         created_at: rep.created_at,
