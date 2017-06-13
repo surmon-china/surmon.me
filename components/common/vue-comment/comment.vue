@@ -409,7 +409,7 @@
       },
       updateCommentContent({ start = '', end = '' }) {
         if (!start && !end) return false
-        // 如果选中了内容，咋把选中的内容替换，否则在光标位置插入新内容
+        // 如果选中了内容，则把选中的内容替换，否则在光标位置插入新内容
         const selectedText = (window.getSelection || document.getSelection)().toString()
         const currentText = this.$refs.markdown.innerText
         if (!!selectedText) {
