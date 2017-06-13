@@ -1,5 +1,4 @@
 const Nuxt = require('nuxt')
-const gc   = require('idle-gc')
 const app  =  require('express')()
 const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 3000
@@ -27,6 +26,5 @@ if (config.dev) {
 
 // Listen the server
 app.listen(port, host)
-gc.start(6600)
 // eslint-disable-line no-console
 console.log(`Nuxt.js SSR Server listening on ${host} : ${port}, at ${new Date().toLocaleString()}`)
