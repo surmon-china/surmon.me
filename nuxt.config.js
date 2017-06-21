@@ -62,7 +62,9 @@ module.exports = {
   env: {
     baseUrl: apiConfig.baseUrl
   },
+  offline: true,
   plugins: [
+    { src: '~plugins/offline.js', ssr: false },
     { src: '~plugins/ga.js', ssr: false },
     { src: '~plugins/axios.js' },
     { src: '~plugins/howler.js' },

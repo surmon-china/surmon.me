@@ -1,12 +1,16 @@
 
 import howler from '~plugins/howler'
+import Service from '~plugins/axios'
 
 export default state => {
 
   if (!state.player) {
 
+    // console.log('init player!', state.list.data)
+    // return false
+
     // config
-    const playList = state.list.data.tracks.filter(s => !!s.detail)
+    const playList = state.list.data.tracks
     const proxyPath = 'https://surmon.me/proxy/'
 
     // 如果存在有效数据，则实例化播放器
@@ -20,13 +24,14 @@ export default state => {
         html5: true,
         name: song.name,
         album: song.al || {},
-        artists: song.ar || {},
+        artists: song.ar || [],
         duration: song.dt || 200,
-        src: song.detail.url.replace(/(http:\/\/|https:\/\/)/ig, proxyPath)
+        src: null
       }
     })
     state.list.data.tracks = playerList
 
+    // 进度条的一帧帧更新
     const playerStep = () => {
 
       // Get the Howl we want to manipulate.
@@ -47,11 +52,17 @@ export default state => {
     // 实例化player
     state.player = {
 
+      // 播放
       play (index) {
 
         // 实例前拦截
         index = Object.is(typeof index, 'number') ? index : state.playerState.index
+
+        // 目标歌曲
+        state.playerState.targetIndex = index
         const currentOldSong = playerList[state.playerState.index]
+
+        // console.log('播放', index)
 
         // 如果目标歌曲已存在实例
         if (currentOldSong && currentOldSong.howl) {
@@ -67,73 +78,119 @@ export default state => {
           }
         }
 
-        // cache or instance
+        // 实例化播放轨
         const song = playerList[index]
+
+        // 如果目标歌曲不存在则不进行
         if (!song) return false
-        song.howl = song.howl || new Howl({
-          src: [song.src],
-          autoplay: false,
-          loop: false,
-          html5: true,
-          volume: state.playerState.volume,
-          onplay() {
-            state.playerState.wave = true
-            state.playerState.loading = false
-            state.playerState.playing = true
-            state.playerState.progress = 0
-            requestAnimationFrame(playerStep)
-          },
-          onload() {
-            state.playerState.wave = true
-            state.playerState.playing = true
-          },
-          onend() {
-            state.playerState.wave = false
-            state.playerState.playing = true
-            state.player.nextSong()
-          },
-          onpause() {
-            state.playerState.wave = false
-            state.playerState.playing = false
-          },
-          onstop() {
-            state.playerState.wave = false
-            state.playerState.playing = false
-            state.playerState.progress = 100
-          },
-          onloaderror() {
-            // 发现404就直接从播放列表移除
+
+        // 从播放列表移除无效歌曲
+        const errAndNextSong = song => {
+          if (song.howl) {
             song.howl.stop()
             song.howl.unload()
-            song.howl = null
-            playerList.splice(playerList.findIndex(s => Object.is(s.id, song.id)), 1)
-            state.list.data.tracks.splice(state.list.data.tracks.findIndex(s => Object.is(s.name, song.name)), 1)
-            state.playerState.wave = false
-            state.playerState.playing = true
-            let index = state.playerState.index - 1
-            state.playerState.index = (index < 0) ? 0 : index
-            state.player.nextSong()
-          },
-          onvolume() {
-            state.playerState.volume = Howler.volume()
           }
-        })
-
-        // Begin playing the sound.
-        song.song_id = song.howl.play()
-        song.howl.fade(0, state.playerState.volume, 3000, song.song_id)
-
-        // 更新播放器状态
-        if (song.howl.state() === 'loaded') {
-          state.playerState.loading = false
+          song.howl = null
+          playerList.splice(playerList.findIndex(s => Object.is(s.id, song.id)), 1)
+          state.list.data.tracks.splice(state.list.data.tracks.findIndex(s => Object.is(s.name, song.name)), 1)
+          state.playerState.wave = false
           state.playerState.playing = true
-        } else {
-          state.playerState.loading = true
-          state.playerState.playing = false
+          let index = state.playerState.index - 1
+          state.playerState.index = (index < 0) ? 0 : index
+          state.player.nextSong()
+          state.playerState.ready = true
+        } 
+
+        // 实例播放轨方法
+        const buildHowl = song => {
+          song.howl = song.howl || new Howl({
+            loop: false,
+            html5: true,
+            autoplay: false,
+            volume: state.playerState.volume,
+            src: [(song.src || ' ').replace(/(http:\/\/|https:\/\/)/ig, proxyPath)],
+            onplay() {
+              state.playerState.ready = true
+              state.playerState.wave = true
+              state.playerState.loading = false
+              state.playerState.playing = true
+              state.playerState.progress = 0
+              requestAnimationFrame(playerStep)
+            },
+            onload() {
+              state.playerState.wave = true
+              state.playerState.playing = true
+            },
+            onend() {
+              state.playerState.wave = false
+              state.playerState.playing = true
+              state.player.nextSong()
+            },
+            onpause() {
+              state.playerState.wave = false
+              state.playerState.playing = false
+            },
+            onstop() {
+              state.playerState.wave = false
+              state.playerState.playing = false
+              state.playerState.progress = 100
+            },
+            onloaderror() {
+              errAndNextSong(song)
+            },
+            onvolume() {
+              state.playerState.volume = Howler.volume()
+            }
+          })
+
+          // Begin playing the sound.
+          // console.log('播放歌曲', song.src)
+          song.song_id = song.howl.play()
+          song.howl.fade(0, state.playerState.volume, 3000, song.song_id)
+
+          // 更新播放器状态
+          if (song.howl.state() === 'loaded') {
+            state.playerState.loading = false
+            state.playerState.playing = true
+          } else {
+            state.playerState.loading = true
+            state.playerState.playing = false
+          }
+
+          // 更新当前活动歌曲的索引（在歌曲实例并播放成功的情况下才完成）
+          state.playerState.index = index
+          state.playerState.targetIndex = index
         }
 
-        // 更新当前活动歌曲的索引
-        state.playerState.index = index
+        // 如果已有有效地址，则进入实例阶段，否则请求地址后进行
+        if (song.src) {
+          buildHowl(song)
+        } else {
+          state.playerState.ready = false
+          // console.log('请求这首音乐地址', song)
+          Service.get(`/music/url/${ song.id }`).then(response => {
+            const success = Object.is(response.statusText, 'OK') && 
+                            Object.is(response.data.code, 1) && 
+                            Object.is(response.data.result.code, 200) &&
+                            !!response.data.result.data.length
+            if (success) {
+              // console.log('地址有效', response)
+              song.src = response.data.result.data[0].url
+
+              // console.log('得到异步数据', '要播放这一首：', state.playerState.targetIndex, '异步数据的id是：', song.id, '目标歌曲的id是', playerList[state.playerState.targetIndex].id)
+              // 用户可能是在频繁切换，这里判断如果当前歌曲下标不是请求的歌曲，则仅仅赋值src，不做播放器构建
+              if (song.id == playerList[state.playerState.targetIndex].id) {
+                buildHowl(song)
+              }
+            } else {
+              // console.log('地址无效', response)
+              errAndNextSong(song)
+            }
+          }, err => {
+            // console.log('请求失败', err)
+            errAndNextSong(song)
+          })
+        }
       },
       
       // 暂停
@@ -191,14 +248,16 @@ export default state => {
 
       // 上一首
       prevSong() {
-        let index = state.playerState.index - 1
+        // let index = state.playerState.index - 1
+        let index = state.playerState.targetIndex - 1
         index = (index < 0) ? playerList.length - 1 : index
         state.player.skipToSong(index)
       },
 
       // 下一首
       nextSong() {
-        let index = state.playerState.index + 1
+        // let index = state.playerState.index + 1
+        let index = state.playerState.targetIndex + 1
         index = (index >= playerList.length) ? 0 : index
         state.player.skipToSong(index)
       }

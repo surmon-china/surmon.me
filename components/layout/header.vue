@@ -7,7 +7,7 @@
           <span class="navbar-slogan">Talk is cheap. Show me the code</span>
           <router-link to="/" class="navbar-link"></router-link>
         </div>
-        <div class="navbar-player" v-if="false">
+        <div class="navbar-player">
           <div class="panel">
             <button class="prev-song btn" @click="prevSong" :disabled="!playerState.ready">
               <i class="iconfont icon-music-prev"></i>
@@ -33,8 +33,6 @@
               <span>{{ currentSong.album.name || 'unknow' }}</span>
             </nuxt-link>
           </div>
-          <!-- <img :src="currentSongPicUrl" v-show="false"> -->
-          <!-- <img src="/images/app-hot.png" v-show="false"> -->
         </div>
       </div>
     </nav>
@@ -44,7 +42,6 @@
 <script>
 export default {
   name: 'header',
-  /*
   computed: {
     player() {
       return this.$store.state.music.player
@@ -86,7 +83,6 @@ export default {
       }
     }
   }
-  */
 }
 </script>
 

@@ -213,15 +213,18 @@
           border-radius: 100%;
           animation: rotation 26s linear infinite;
           animation-play-state: paused;
-          background-color: $disabled;
 
           &.playing {
             animation-play-state: running;
           }
 
           > img {
-            max-width: 100%;
+            width: 100%;
+            height: 100%;
             border-radius: 100%;
+            background-color: darkgray;
+            background-image: url('/images/music-bg.jpg');
+            background-size: cover;
           }
         }
 

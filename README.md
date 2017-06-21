@@ -103,8 +103,9 @@ $ npm run lint
 - ~~关于我添加linked~~
 - ~~添加app下载页~~
 - ~~app下载按钮的位置,下载按钮背景颜色改为模块背景色半透明，文件不能放在服务器，太慢了，和移动端下载页需要适配~~
-- http://music.163.com/#/playlist?id=638949385
-- 播放器挂了，挂了就挂了吧
+- ~~http://music.163.com/#/playlist?id=638949385~~
+- ~~修复了播放器~~
+- ~~升级了Nuxt，且使用了offline-plugin实现离线应用~~
 - graphql-js + Restful查询数据库
 
 ## 目录结构
