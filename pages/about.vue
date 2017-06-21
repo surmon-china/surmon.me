@@ -108,7 +108,8 @@
                 <img :src="gravatar" class="avatar">
                 <h2 class="name"><strong>Surmon</strong></h2>
                 <p class="skill">JS Stack Developer.</p>
-                <a class="favorite" href="" @click.stop.prevent="">Favorite</a>
+                <a class="followme" href="" @click.stop.prevent="">Follow me</a>
+                <div class="wechat"></div>
               </div>
             </div>
             <div class="about-map" v-if="!mobileLayout">
@@ -137,6 +138,7 @@
     computed: {
       gravatar() {
         const gravatar = this.$store.state.option.adminInfo.data.gravatar
+        return '/images/gravatar.jpg'
         return !!gravatar 
                 ? `${gravatar}?imageView2/1/w/360/h/360/interlace/1/q/75|imageslim` 
                 : '/images/gravatar.jpg'
@@ -278,6 +280,12 @@
                 > .avatar {
                   @include css3-prefix(transform, rotate(360deg));
                 }
+
+
+                > .wechat {
+                  visibility: visible;
+                  opacity: .8;
+                }
               }
 
               > .avatar {
@@ -295,7 +303,7 @@
                 margin-top: .466rem;
               }
 
-              > .favorite {
+              > .followme {
                 margin-top: 1.666rem;
                 display: inline-block;
                 color: $primary;
@@ -310,6 +318,20 @@
                   color: $white;
                   background-color: $primary;
                 }
+              }
+
+              > .wechat {
+                opacity: 0;
+                visibility: hidden;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image: url('/images/wechat.jpg');
+                background-size: contain;
+                background-position: bottom;
+                z-index: 9;
               }
             }
 

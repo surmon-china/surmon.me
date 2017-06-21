@@ -252,7 +252,7 @@ export const actions = {
   // 获取歌曲列表
   loadMuiscPlayerList({ commit }) {
     commit('music/REQUEST_LIST')
-    return Service.get('/music/638949385')
+    return Service.get('/music/list/638949385')
     .then(response => {
       const success = Object.is(response.statusText, 'OK') && Object.is(response.data.code, 1)
       if(success) {
