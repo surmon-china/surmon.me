@@ -10,6 +10,7 @@ export const state = {
   playerState: {
     seek: 0,
     index: 0,
+    targetIndex: 0,
     volume: 0.4,
     wave: false,
     ready: false,
@@ -45,7 +46,7 @@ export const getters = {
 export const mutations = {
 
   INIT_PLAYER(state) {
-    // musicPlayerBuilder(state)
+    musicPlayerBuilder(state)
   },
 
   REQUEST_LIST(state) {

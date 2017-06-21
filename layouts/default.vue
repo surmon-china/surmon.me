@@ -52,7 +52,7 @@
     mounted() {
       this.watchTabActive()
       if (!this.mobileLayout) {
-        // this.$store.dispatch('loadMuiscPlayerList')
+        this.$store.dispatch('loadMuiscPlayerList')
       }
       if (process.env.NODE_ENV === 'production') {
         console.clear()
