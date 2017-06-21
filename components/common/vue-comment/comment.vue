@@ -588,6 +588,10 @@
     margin: .5em 0;
     word-wrap: break-word;
 
+    a {
+      text-decoration: underline;
+    }
+
     img {
       margin: .5rem 0;
       max-width: 100%;
