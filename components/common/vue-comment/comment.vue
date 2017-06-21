@@ -864,6 +864,10 @@
               > .reply {
                 color: $disabled;
                 font-weight: bold;
+
+                > a {
+                  text-decoration: none;
+                }
               }
             }
 
