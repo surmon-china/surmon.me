@@ -94,6 +94,12 @@
           case project.description.toLowerCase().includes('react'):
             return 'icon-react'
             break;
+          case project.description.toLowerCase().includes('netease'):
+            return 'icon-netease-music'
+            break;
+          case project.description.toLowerCase().includes('music'):
+            return 'icon-music'
+            break;
           default:
             return 'icon-code'
             break; 
