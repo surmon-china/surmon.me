@@ -165,28 +165,12 @@
         if (content.length > 13688 && !this.fullContentEd) {
           this.canReadMore = true
           let shortContent = content.substring(0, 11688)
-          let lastH4Index = shortContent.lastIndexOf('#### ')
-          let lastH3Index = shortContent.lastIndexOf('### ')
-          let lastCodeIndex = shortContent.lastIndexOf('\n```')
-          let lastLineIndex = shortContent.lastIndexOf('\n')
-          let lastReadindex = 0
-          switch(true) {
-            case lastCodeIndex > -1:
-                lastReadindex = lastCodeIndex
-                            break
-            case lastLineIndex > -1:
-                lastReadindex = lastLineIndex
-                            break
-            case lastH4Index > -1:
-                lastReadindex = lastH4Index
-                            break
-            case lastH3Index > -1:
-                lastReadindex = lastH3Index
-                            break
-                          default:
-                lastReadindex = 11688
-                            break
-          }
+          let lastH4Index = shortContent.lastIndexOf('\n####')
+          let lastH3Index = shortContent.lastIndexOf('\n###')
+          let lastCodeIndex = shortContent.lastIndexOf('\n\n```')
+          let lastLineIndex = shortContent.lastIndexOf('\n\n**')
+          let lastReadindex = Math.max(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex);
+          // console.log(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex, 'min', lastReadindex)
           shortContent = shortContent.substring(0, lastReadindex)
           return marked(shortContent, hasTags ? this.tags.data : false, true)
         } else {
