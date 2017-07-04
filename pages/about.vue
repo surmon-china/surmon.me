@@ -74,7 +74,7 @@
                        rel="external nofollow">
                       <i class="iconfont icon-quora"></i>
                     </a>
-                    <a href="https://www.linkedin.com/in/surmon-ma-713bb6a2/" 
+                    <a href="https://www.linkedin.com/in/surmon" 
                        target="_blank" 
                        rel="external nofollow">
                       <i class="iconfont icon-linkedin"></i>
@@ -93,6 +93,11 @@
                        target="_blank" 
                        rel="external nofollow">
                       <i class="iconfont icon-facebook"></i>
+                    </a>
+                    <a href="https://www.instagram.com/surmon.me/" 
+                       target="_blank" 
+                       rel="external nofollow">
+                      <i class="iconfont icon-instagram"></i>
                     </a>
                   </span>
                 </p>
@@ -370,7 +375,7 @@
                 > .accounts {
 
                   > a {
-                    margin-right: 1.5em;
+                    margin-right: 1.35em;
 
                     > .iconfont {
                       font-size: 1.5666rem;
