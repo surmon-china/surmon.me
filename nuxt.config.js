@@ -82,8 +82,8 @@ module.exports = {
     { src: '~plugins/baidu-seo-push.js', ssr: false }
   ],
   head: {
-    title: 'Surmon.me - Talk is cheap. Show me the code',
-    titleTemplate: '%s | Surmon.me',
+    title: 'Surmon.me - 阅读生活 - Talk is cheap. Show me the code',
+    titleTemplate: '%s | 阅读生活 | Surmon.me',
     // __dangerouslyDisableSanitizers: ['script'],
     htmlAttrs: {
       xmlns: 'http://www.w3.org/1999/xhtml',
