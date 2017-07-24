@@ -20,11 +20,11 @@
                 </p>
                 <p class="item">
                   <i class="iconfont icon-music"></i>
-                  <nuxt-link to="/music">Folk, Jazz-HipHop, EM, Rock, PostRock, New Ag.</nuxt-link>
+                  <nuxt-link to="/music">Folk, Jazz-HipHop, EM, Rock, PostRock, Punk Rock, New Age.</nuxt-link>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-like"></i>
-                  <span>love code. love beauty. love life.</span>
+                  <span>code. beauty. life.</span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-coffee"></i>
@@ -44,11 +44,11 @@
                        rel="external nofollow">
                       <i class="iconfont icon-stackoverflow"></i>
                     </a>
-                    <a href="https://segmentfault.com/u/surmon" 
+           <!--          <a href="https://segmentfault.com/u/surmon" 
                        target="_blank" 
                        rel="external nofollow">
                       <i class="iconfont icon-segmentfault"></i>
-                    </a>
+                    </a> -->
                     <a href="https://leetcode.com/surmon" 
                        target="_blank" 
                        rel="external nofollow">
@@ -103,7 +103,7 @@
                 </p>
                 <p class="item">
                   <i class="iconfont icon-code"></i>
-                  <span class="skills">凡心所向，素履所往；生如逆旅，一苇以航。</span>
+                  <span class="skills">Talk is cheap. let me fuck.</span>
                 </p>
               </div>
               <div class="gravatar">
