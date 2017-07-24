@@ -103,7 +103,7 @@
                 </p>
                 <p class="item">
                   <i class="iconfont icon-code"></i>
-                  <span class="skills">Talk is cheap. let me fuck.</span>
+                  <span class="skills">Talk is cheap. let's fuck it.</span>
                 </p>
               </div>
               <div class="gravatar">
