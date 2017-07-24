@@ -111,7 +111,7 @@ export default {
           position: relative;
           align-items: center;
           padding-left: .5em;
-          width: 34em;
+          width: 30em;
           justify-content: space-between;
 
           .navbar-logo {
