@@ -4,7 +4,7 @@
       <div class="navbar-container container">
         <div class="navbar-header">
           <img src="/images/logo.svg" class="navbar-logo">
-          <span class="navbar-slogan">阅读生活&nbsp;&nbsp;-&nbsp;&nbsp;Talk is cheap. Show me the code</span>
+          <span class="navbar-slogan">Talk is cheap. Show me the code</span>
           <router-link to="/" class="navbar-link"></router-link>
         </div>
         <div class="navbar-player">
