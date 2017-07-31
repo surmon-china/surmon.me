@@ -4,10 +4,12 @@
 *
 */
 
-export const state = {
-  articles: {
-    fetching: false,
-    data: { data: [] }
+export const state = () => {
+  return {
+    articles: {
+      fetching: false,
+      data: { data: [] }
+    }
   }
 }
 

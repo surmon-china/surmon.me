@@ -33,7 +33,10 @@
         <i class="iconfont icon-comment"></i>
         <span>Guestbook</span>
       </nuxt-link>
-      <div class="item-hr"></div>
+      <a href="https://errend.io" target="_blank" class="item errend">
+        <i class="iconfont icon-debug"></i>
+        <span>Errend.io</span>
+      </a>
       <nuxt-link to="/app" class="item app">
         <i class="iconfont icon-app"></i>
         <span>App</span>
@@ -60,11 +63,6 @@ export default {
       padding: 0;
       margin: 0;
 
-      > .item-hr {
-            margin: 2em 1em 1em 1em;
-    border-top: 1px dashed #d6d6d6;
-      }
-
       > .item {
         border: none;
         display: block;
@@ -80,9 +78,12 @@ export default {
         font-family: CenturyGothic;
         margin-bottom: .5em;
 
-        &.app {
-          // margin-top: 0em;
-          // color: $primary;
+        &.errend {
+          margin: 1rem 0;
+          height: 5rem;
+          line-height: 5rem;
+          border-top: 1px dashed #d6d6d6;
+          border-bottom: 1px dashed #d6d6d6;
         }
 
         &:last-child {

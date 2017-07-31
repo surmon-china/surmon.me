@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import marked from '~plugins/marked'
+  import marked from '~/plugins/marked'
   export default {
     name: 'index-announcement',
     data() {
