@@ -169,7 +169,8 @@ export default state => {
           state.playerState.ready = false
           // console.log('请求这首音乐地址', song)
           Service.get(`/music/url/${ song.id }`).then(response => {
-            const success = Object.is(response.statusText, 'OK') && 
+            const success = response.status && 
+                            response.data && 
                             Object.is(response.data.code, 1) && 
                             Object.is(response.data.result.code, 200) &&
                             !!response.data.result.data.length
