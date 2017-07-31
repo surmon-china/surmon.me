@@ -25,7 +25,7 @@
 </template>
 
 <script>
-  import { scrollTo, easing } from '~utils/scroll-to-anywhere'
+  import { scrollTo, easing } from '~/utils/scroll-to-anywhere'
   export default {
     name: 'tool',
     data() {

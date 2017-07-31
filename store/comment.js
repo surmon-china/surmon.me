@@ -4,12 +4,14 @@
 *
 */
 
-export const state = {
-  fetching: false,
-  posting: false,
-  data: { 
-    data: [],
-    pagination: {}
+export const state = () => {
+  return {
+    fetching: false,
+    posting: false,
+    data: { 
+      data: [],
+      pagination: {}
+    }
   }
 }
 

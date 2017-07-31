@@ -106,9 +106,9 @@
 </template>
 
 <script>
-  import ShareBox from '~components/layout/share'
-  import Clipboard from '~plugins/clipboard'
-  import marked from '~plugins/marked'
+  import Clipboard from 'clipboard'
+  import marked from '~/plugins/marked'
+  import ShareBox from '~/components/layout/share'
 
   export default {
     name: 'article-detail',

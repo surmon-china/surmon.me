@@ -3,10 +3,10 @@
  * @author Surmon.me
  */
 
-const CommentComponent = require('./comment.vue')
+const vueComment = require('./comment.vue')
 const comment = {
   install: function(Vue) {
-    Vue.component('comment-box', CommentComponent)
+    Vue.component('comment-box', vueComment.default || vueComment)
   }
 }
 

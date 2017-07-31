@@ -4,32 +4,34 @@
 *
 */
 
-import musicPlayerBuilder from '~utils/music-player'
+import musicPlayerBuilder from '~/utils/music-player'
 
-export const state = {
-  playerState: {
-    seek: 0,
-    index: 0,
-    targetIndex: 0,
-    volume: 0.4,
-    wave: false,
-    ready: false,
-    muted: false,
-    loading: false,
-    playing: false,
-    progress: 0
-  },
-  list: {
-    fetching: false,
-    data: null
-  },
-  song: {
-    fetching: false,
-    data: null
-  },
-  lrc: {
-    fetching: false,
-    data: null
+export const state = () => {
+  return {
+    playerState: {
+      seek: 0,
+      index: 0,
+      targetIndex: 0,
+      volume: 0.4,
+      wave: false,
+      ready: false,
+      muted: false,
+      loading: false,
+      playing: false,
+      progress: 0
+    },
+    list: {
+      fetching: false,
+      data: null
+    },
+    song: {
+      fetching: false,
+      data: null
+    },
+    lrc: {
+      fetching: false,
+      data: null
+    }
   }
 }
 

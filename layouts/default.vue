@@ -38,8 +38,8 @@
 </template>
 
 <script>
-  import { Background, Header, Footer, Aside, Share, Tool, Nav } from '~components/layout'
-  import { MobileHeader, MobileFooter, MobileAside } from '~components/mobile'
+  import { Background, Header, Footer, Aside, Share, Tool, Nav } from '~/components/layout'
+  import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
   export default {
     name: 'app',
     head() {

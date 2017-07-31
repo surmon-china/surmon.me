@@ -262,10 +262,10 @@
 </template>
 
 <script>
-  import marked from '~plugins/marked'
-  import gravatar from '~plugins/gravatar'
-  import { UAParse, OSParse } from '~utils/comment-ua-parse'
-  import { scrollTo } from '~utils/scroll-to-anywhere'
+  import marked from '~/plugins/marked'
+  import gravatar from '~/plugins/gravatar'
+  import { UAParse, OSParse } from '~/utils/comment-ua-parse'
+  import { scrollTo } from '~/utils/scroll-to-anywhere'
   export default {
     name: 'vue-comment',
     data() {
@@ -375,8 +375,8 @@
       // 更新用户数据
       updateUserCache(event) {
         event.preventDefault()
-        if (!this.user.name) return alert('请输入名字')
-        if (!this.user.email) return alert('请输入邮箱')
+        if (!this.user.name) return alert('名字？')
+        if (!this.user.email) return alert('邮箱？')
         if (!this.regexs.email.test(this.user.email)) return alert('邮箱不合法')
         if (this.user.site && !this.regexs.url.test(this.user.site)) return alert('链接不合法')
         localStorage.setItem('user', JSON.stringify(this.user))
@@ -538,11 +538,11 @@
       submitComment(event) {
         // 为了使用原生表单拦截，不使用事件修饰符
         event.preventDefault()
-        if (!this.user.name) return alert('请输入名字')
-        if (!this.user.email) return alert('请输入邮箱')
+        if (!this.user.name) return alert('名字？')
+        if (!this.user.email) return alert('邮箱？')
         if (!this.regexs.email.test(this.user.email)) return alert('邮箱不合法')
         if (this.user.site && !this.regexs.url.test(this.user.site)) return alert('链接不合法')
-        if(!this.comemntContentText || !this.comemntContentText.replace(/\s/g, '')) return alert('请输入内容')
+        if(!this.comemntContentText || !this.comemntContentText.replace(/\s/g, '')) return alert('内容？')
         const lineOverflow = this.comemntContentText.split('\n').length > 36
         const lengthOverflow = this.comemntContentText.length > 2000
         if(lineOverflow || lengthOverflow) return alert('内容需要在2000字/36行以内')

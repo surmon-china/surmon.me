@@ -4,23 +4,25 @@
 *
 */
 
-export const state = {
-  hot: {
-    fetching: false,
-    data: { data: [] }
-  },
-  list: {
-    fetching: false,
-    data: {
-      pagination: {
-        current_page: 0
-      },
-      data: []
+export const state = () => {
+  return {
+    hot: {
+      fetching: false,
+      data: { data: [] }
+    },
+    list: {
+      fetching: false,
+      data: {
+        pagination: {
+          current_page: 0
+        },
+        data: []
+      }
+    },
+    detail: {
+      fetching: false,
+      data: {}
     }
-  },
-  detail: {
-    fetching: false,
-    data: {}
   }
 }
 
