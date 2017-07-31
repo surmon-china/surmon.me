@@ -7,6 +7,7 @@ module.exports = {
     max: 20,
     maxAge: 600000
   },
+  // offline: true,
   loading: { color: '#2196f3' },
   build: {
     // analyze: true,
@@ -14,15 +15,18 @@ module.exports = {
     //   analyzerMode: 'static'
     // },
     // 对webpack的扩展
-    extend(webpackConfig, { dev, isClient, isServer }) {
+    extend(webpackConfig, { isDev, isClient, isServer }) {
+      /*
       webpackConfig.resolve.alias['~utils'] = path.join(__dirname, 'utils')
       webpackConfig.resolve.alias['~static'] = path.join(__dirname, 'static')
       webpackConfig.resolve.alias['~filters'] = path.join(__dirname, 'filters')
       webpackConfig.resolve.alias['~services'] = path.join(__dirname, 'services')
-      webpackConfig.module.rules.push({
-        test: /\.scss$/,
-        loader: 'vue-style-loader!css-loader!sass-loader'
-      })
+      console.log(webpackConfig.module.rules)
+      // webpackConfig.module.rules.push({
+      //   test: /\.scss$/,
+      //   use: ['vue-style-loader?sourceMap', 'css-loader?sourceMap', 'sass-loader']
+      // })
+      */
     },
     // 将重复引用的(第三方/自有)模块添加到vendor.bundle.js
     vendor: [
@@ -31,8 +35,8 @@ module.exports = {
       'swiper',
       'marked',
       'gravatar',
-      'particles.js',
       'clipboard',
+      'particles.js',
       'highlight.js'
     ],
     // 为JS和Vue文件定制babel配置。https://nuxtjs.org/api/configuration-build/#analyze
@@ -62,24 +66,22 @@ module.exports = {
   env: {
     baseUrl: apiConfig.baseUrl
   },
-  offline: true,
   plugins: [
-    { src: '~plugins/offline.js', ssr: false },
-    { src: '~plugins/ga.js', ssr: false },
-    { src: '~plugins/axios.js' },
-    { src: '~plugins/howler.js' },
-    { src: '~plugins/clipboard.js', ssr: false },
-    { src: '~plugins/filters.js' },
-    { src: '~plugins/swiper.js', ssr: false },
-    { src: '~plugins/marked.js' },
-    { src: '~plugins/gravatar.js' },
-    { src: '~plugins/particles.js', ssr: false },
-    { src: '~plugins/vue-empty.js' },
-    { src: '~plugins/copy-right.js', ssr: false },
-    { src: '~plugins/image-popup.js', ssr: false },
-    { src: '~plugins/vue-loading.js' },
-    { src: '~plugins/vue-comment.js' },
-    { src: '~plugins/baidu-seo-push.js', ssr: false }
+    { src: '~/plugins/axios.js' },
+    { src: '~/plugins/howler.js' },
+    { src: '~/plugins/filters.js' },
+    { src: '~/plugins/marked.js' },
+    { src: '~/plugins/gravatar.js' },
+    { src: '~/plugins/ga.js', ssr: false },
+    // { src: '~/plugins/offline.js', ssr: false },
+    { src: '~/plugins/swiper.js', ssr: false },
+    { src: '~/plugins/clipboard.js' },
+    { src: '~/plugins/particles.js', ssr: false },
+    { src: '~/plugins/copy-right.js', ssr: false },
+    { src: '~/plugins/image-popup.js', ssr: false },
+    { src: '~/plugins/vue-empty.js' },
+    { src: '~/plugins/vue-loading.js' },
+    { src: '~/plugins/vue-comment.js' }
   ],
   head: {
     title: 'Surmon.me - Talk is cheap. Show me the code',

@@ -1,6 +1,6 @@
 
-import howler from '~plugins/howler'
-import Service from '~plugins/axios'
+import howler from '~/plugins/howler'
+import Service from '~/plugins/axios'
 
 export default state => {
 

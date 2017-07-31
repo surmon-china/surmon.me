@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import ArticleList from '~components/article/archive/list'
+  import ArticleList from '~/components/article/archive/list'
 
   export default {
     name: 'category-article-list',

@@ -7,10 +7,10 @@
 </template>
 
 <script>
-  import Carrousel from '~components/article/archive/carrousel'
-  import Announcement from '~components/article/archive/announcement'
-  import ArticleList from '~components/article/archive/list'
-  import Service from '~plugins/axios'
+  import Carrousel from '~/components/article/archive/carrousel'
+  import Announcement from '~/components/article/archive/announcement'
+  import ArticleList from '~/components/article/archive/list'
+  import Service from '~/plugins/axios'
 
   export default {
     name: 'index',

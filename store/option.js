@@ -4,31 +4,33 @@
 *
 */
 
-export const state = {
+export const state = () => {
+  return {
 
-  // 页面的栏目展示类型（3栏/2栏）
-  fullColumn: false,
-  errorColumn: false,
+    // 页面的栏目展示类型（3栏/2栏）
+    fullColumn: false,
+    errorColumn: false,
 
-  // 是否为移动端
-  mobileLayout: false,
-  // 移动端侧边栏
-  mobileSidebar: false,
-  // ua
-  userAgent: '',
+    // 是否为移动端
+    mobileLayout: false,
+    // 移动端侧边栏
+    mobileSidebar: false,
+    // ua
+    userAgent: '',
 
-  // 服务端博主信息
-  adminInfo: {
-    fetching: false,
-    data: {}
-  },
+    // 服务端博主信息
+    adminInfo: {
+      fetching: false,
+      data: {}
+    },
 
-  // 服务端设置的全局配置
-  globalOption: {
-    fetching: false,
-    data: {
-      meta: {
-        likes: 0
+    // 服务端设置的全局配置
+    globalOption: {
+      fetching: false,
+      data: {
+        meta: {
+          likes: 0
+        }
       }
     }
   }
