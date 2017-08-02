@@ -1,3 +1,9 @@
+
+* {
+  border-radius: 0;
+  box-shadow: none;
+}
+
 *, *:hover {
   @include transition(background-color .25s linear,
                       color .05s linear,
@@ -26,6 +32,20 @@
   &:hover {
     background-color: rgba(95,95,95, .7);
   }
+}
+
+// swiper
+.swiper-wrapper {
+  z-index: 1;
+}
+
+.swiper-pagination {
+  z-index: 2;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  z-index: 3;
 }
 
 input:-webkit-autofill, 
@@ -213,3 +233,64 @@ a {
 .aside-enter, .aside-leave-active {
   opacity: 0
 }
+
+@keyframes barrage-in {
+  0%   { 
+    background: chartreuse;
+    transform: translate3d(0, -100%, 0);
+  }
+  12%  { 
+    background: green;
+    transform: translate3d(0, 0%, 0);
+  }
+  24%  { 
+    background: red;
+    transform: translate3d(0, -40%, 0);
+  }
+  36%  { 
+    background: darkviolet;
+    transform: translate3d(0, 0%, 0);
+  }
+  60% { 
+    background: pink;
+    transform: translate3d(0, -20%, 0);
+  }
+  72% { 
+    background: yellow;
+    transform: translate3d(0, 0%, 0);
+  }
+  86% { 
+    background: white;
+    transform: translate3d(0, -10%, 0);
+  }
+  100% { 
+    background: black;
+    transform: translate3d(0, 0%, 0);
+  }
+}
+
+.barrage-enter-active {
+  // opacity: .5;
+  animation: barrage-in 2s;
+}
+.barrage-leave-active {
+  // opacity: .5;
+  animation: barrage-in 2s reverse;
+}
+
+// .barrage-enter-active, .barrage-leave-active {
+//   transition: all .2s cubic-bezier(0, 1.2, 1, 0.5);
+//   opacity: .7;
+//   animation: barrage .1s;
+//   // transform: scale(2);
+//   transform: rotate(90deg);
+//   transform-origin: right bottom;
+//   // transform: translate3d(0, -100%, 0);
+// }
+// .barrage-enter, .barrage-leave-active {
+//   opacity: .3;
+//   // transform: scale(2);
+//   transform: rotate(90deg);
+//   transform-origin: right bottom;
+//   // transform: translate3d(0, 100%, 0);
+// }

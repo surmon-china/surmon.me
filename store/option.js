@@ -15,6 +15,10 @@ export const state = () => {
     mobileLayout: false,
     // 移动端侧边栏
     mobileSidebar: false,
+
+    // 是否开启弹幕
+    openBarrage: false,
+
     // ua
     userAgent: '',
 
@@ -95,5 +99,14 @@ export const mutations = {
   // 喜欢本站
   LIKE_SITE(state, action) {
     state.globalOption.data.meta.likes ++
+  },
+
+  // 切换弹幕状态
+  updateBarrageState(state, action) {
+    if (action !== undefined) {
+      state.openBarrage = !!action
+    } else {
+      state.openBarrage = !state.openBarrage
+    }
   }
 }

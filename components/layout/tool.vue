@@ -2,6 +2,9 @@
   <div id="tools">
     <div class="container">
       <div class="tools-list">
+        <button class="barrage" :class="{ active: barrageState }" @click="openBarrage">
+          <i class="iconfont icon-barrage"></i>
+        </button>
         <a class="feedback" 
            href="mailto:surmon@foxmail.com"
            target="_blank">
@@ -34,6 +37,11 @@
         bottomBtnMouseOver: false
       }
     },
+    computed: {
+      barrageState() {
+        return this.$store.state.option.openBarrage
+      }
+    },
     methods: {
       totop() {
         scrollTo('body', 300, { easing: easing['ease-in'] })
@@ -62,6 +70,9 @@
           }
         }
         window.requestAnimationFrame(step)
+      },
+      openBarrage() {
+        this.$store.commit('option/updateBarrageState')
       }
     }
   }
@@ -71,6 +82,7 @@
   @import '~assets/sass/variables';
   #tools {
     position: fixed;
+    z-index: 9;
     width: 100%;
     bottom: 20em;
 
@@ -83,6 +95,7 @@
         width: 3em;
         height: 7em;
 
+        > .barrage,
         > .to-top,
         > .to-bottom,
         > .feedback {
@@ -95,6 +108,51 @@
 
           &:hover {
             background-color: $module-hover-bg;
+          }
+        }
+
+        @keyframes defaultBtnBg {
+          0%   {
+            color: white;
+            background: chartreuse;
+          }
+          12%  {
+            color: white;
+            background: green;
+          }
+          24%  {
+            color: white;
+            background: red;
+          }
+          36%  {
+            color: white;
+            background: darkviolet;
+          }
+          60% {
+            color: white;
+            background: pink;
+          }
+          72% {
+            color: $text;
+            background: yellow;
+          }
+          86% {
+            color: $text;
+            background: white;
+          }
+          100% {
+            color: white;
+            background: black;
+          }
+        }
+
+        > .barrage {
+          color: white;
+          animation: defaultBtnBg 10s infinite;
+
+          &.active {
+            background-color: $module-hover-bg;
+            animation: defaultBtnBg steps(1) 1.666s infinite;
           }
         }
 
