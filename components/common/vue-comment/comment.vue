@@ -713,6 +713,7 @@
     > .tools {
       display: flex;
       padding: 1em 0;
+      padding-top: 0;
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid $module-hover-bg;
@@ -764,6 +765,8 @@
     > .empty-box {
       font-weight: bold;
       text-align: center;
+      height: 5rem;
+      line-height: 5rem;
     }
 
     > .list-box {
