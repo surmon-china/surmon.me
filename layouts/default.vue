@@ -4,7 +4,10 @@
       <mobile-aside :class="{ open: mobileSidebar }"></mobile-aside>
     </div>
     <div id="app-main" :class="{ open: mobileSidebar }" @click="closeMobileSidebar">
-      <background v-if="!mobileLayout"></background>
+      <!-- <background v-if="!mobileLayout"></background> -->
+      <transition name="barrage">
+        <barrage v-if="!mobileLayout" v-show="barrageState"></barrage>
+      </transition>
       <header-view v-if="!mobileLayout"></header-view>
       <mobile-header v-if="mobileLayout"></mobile-header>
       <main id="main" :class="{ 'mobile': mobileLayout }">
@@ -38,7 +41,7 @@
 </template>
 
 <script>
-  import { Background, Header, Footer, Aside, Share, Tool, Nav } from '~/components/layout'
+  import { Background, Barrage, Header, Footer, Aside, Share, Tool, Nav } from '~/components/layout'
   import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
   export default {
     name: 'app',
@@ -60,6 +63,7 @@
       }
     },
     components: {
+      Barrage,
       Background,
       HeaderView: Header,
       FooterView: Footer,
@@ -83,6 +87,9 @@
       },
       mobileSidebar() {
         return this.$store.state.option.mobileSidebar
+      },
+      barrageState() {
+        return this.$store.state.option.openBarrage
       }
     },
     methods: {

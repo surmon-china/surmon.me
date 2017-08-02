@@ -37,7 +37,8 @@ module.exports = {
       'gravatar',
       'clipboard',
       'particles.js',
-      'highlight.js'
+      'highlight.js',
+      'socket.io-client'
     ],
     // 为JS和Vue文件定制babel配置。https://nuxtjs.org/api/configuration-build/#analyze
     babel: {
@@ -64,7 +65,8 @@ module.exports = {
   },
   dev: (process.env.NODE_ENV !== 'production'),
   env: {
-    baseUrl: apiConfig.baseUrl
+    baseUrl: apiConfig.baseUrl,
+    HOST_URL: process.env.HOST_URL || 'http://localhost:3000'
   },
   plugins: [
     { src: '~/plugins/axios.js' },

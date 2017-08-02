@@ -96,17 +96,17 @@ export default {
       top: 0;
       left: 0;
       width: 100%;
-      height: 4.5em;
+      height: $header-height;
       background-color: $module-bg;
       z-index: 999;
 
       .navbar-container {
-        height: 4.5em;
+        height: $header-height;
         display: flex;
         justify-content: space-between;
 
         .navbar-header {
-          height: 4.5em;
+          height: $header-height;
           display: flex;
           position: relative;
           align-items: center;
