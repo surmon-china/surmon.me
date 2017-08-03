@@ -2,15 +2,15 @@
   <div class="global-barrage">
     <div class="barrage-box">
       <div class="message-box">
-        <ul class="barrages-list">
-          <li class="chat page">
-            <div class="chatArea">
-              <ul class="messages" ref="messages">
-                <li class="message" v-for="message in messages">
-                  {{ message }}
-                </li>
-              </ul>
-            </div>
+        <ul class="barrages-list" ref="messages">
+          <!-- 所有li都是absolute top = 随机值 * li.height，left = 随机值 * 一个随机值 -->
+          <!-- 所有Li静态syle中的translateX(100%) 然后push进去，利用transition-group将每个li的translateX变为 -100% -->
+          <!-- transition-group动画中可以使用animation也可以使用transition -->
+          <li class="item" 
+              v-for="message in messages"
+              :class="[`size-${message.style.size}`, `color-${message.style.color}`]">
+            <span class="gravatar"></span>
+            <span class="content" v-text="message.text"></span>
           </li>
         </ul>
       </div>
@@ -37,8 +37,13 @@
           <input type="text" 
                  class="input" 
                  v-model="message" 
-                 placeholder="回车...射"
+                 placeholder="Let's fuck"
                  @keyup.enter="sendMessage"/>
+          <div class="count">
+            <span>{{ counts.users }}人</span>
+            <span>&nbsp;|&nbsp;</span>
+            <span>{{ counts.count }}发</span>
+          </div>
         </div>
       </div>
     </div>
@@ -52,6 +57,10 @@
       const sizes = ['粗大', '很大', '大']
       const colors = ['老王绿', '原谅绿', '姨妈红', '基佬紫', '百合粉', '东莞黄', '李太白', '木耳黑']
       return {
+        counts: {
+          users: 0,
+          count: 0
+        },
         socket,
         message: '',
         messages: [],
@@ -69,18 +78,22 @@
         return this.sizes[this.sizeIndex]
       }
     },
-    // asyncData (context, callback) {
-    //   socket.emit('last-messages', function (messages) {
-    //     callback(null, {
-    //       messages,
-    //       message: ''
-    //     })
-    //   })
-    // },
     beforeMount() {
+      this.socket.emit('last-messages', messages => {
+        this.messages = messages
+      })
+      this.socket.emit('barrage-count', counts => {
+        this.counts = counts
+      })
+      this.socket.on('update-barrage-count', counts => {
+        this.counts = counts
+      })
       this.socket.on('new-message', message => {
         this.messages.push(message)
       })
+    },
+    mounted() {
+      this.scrollToBottom()
     },
     methods: {
       sendMessage() {
@@ -92,12 +105,24 @@
             size: this.sizeIndex,
             color: this.colorIndex
           },
-          date: new Date().toJSON()
+          date: new Date().getTime()
         }
         this.socket.emit('send-message', message)
         this.messages.push(message)
+        this.counts.count += 1
         this.message = ''
+      },
+      scrollToBottom () {
+        this.$nextTick(() => {
+          this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
+        })
+      },
+      transferDate(timestamp) {
+        return new Date(timestamp).toLocaleString()
       }
+    },
+    watch: {
+      messages: 'scrollToBottom'
     }
   }
 </script>
@@ -171,6 +196,14 @@
       > .message-box {
         height: 100%;
         width: 100%;
+
+        > .barrages-list {
+          list-style: barrages-list;
+
+          > .item {
+
+          }
+        }
       }
 
       > .input-box {
@@ -182,9 +215,17 @@
         > .input-inner {
           display: flex;
           margin: 0 auto;
-          width: 40rem;
+          width: 42rem;
           height: 4rem;
           background-color: rgba($module-bg, .9);
+
+          > .count {
+            width: 8rem;
+            height: 4rem;
+            line-height: 4rem;
+            text-align: center;
+            border-left: 1px dashed darken($module-bg, 10%);
+          }
 
           > .size,
           > .color {
