@@ -235,62 +235,26 @@ a {
 }
 
 @keyframes barrage-in {
-  0%   { 
-    background: chartreuse;
-    transform: translate3d(0, -100%, 0);
-  }
-  12%  { 
-    background: green;
-    transform: translate3d(0, 0%, 0);
-  }
-  24%  { 
-    background: red;
-    transform: translate3d(0, -40%, 0);
-  }
-  36%  { 
-    background: darkviolet;
-    transform: translate3d(0, 0%, 0);
-  }
-  60% { 
-    background: pink;
-    transform: translate3d(0, -20%, 0);
-  }
-  72% { 
-    background: yellow;
-    transform: translate3d(0, 0%, 0);
-  }
-  86% { 
-    background: white;
-    transform: translate3d(0, -10%, 0);
-  }
-  100% { 
-    background: black;
-    transform: translate3d(0, 0%, 0);
-  }
+  0%  { transform: translate3d(0, -100%, 0) }
+  20%, 50%, 70%, 100% { transform: translate3d(0, 0, 0) }
+  40%  { transform: translate3d(0, -26%, 0) }
+  60% { transform: translate3d(0, -20.6%, 0) }
+  80% { transform: translate3d(0, -12%, 0) }
+  90% { transform: translate3d(0, -4%, 0) }
+}
+
+@keyframes barrage-out {
+  0%  { transform: translate3d(0, 0, 0) }
+  100%  { transform: translate3d(0, -100%, 0) }
 }
 
 .barrage-enter-active {
-  // opacity: .5;
-  animation: barrage-in 2s;
+  animation-duration: 1.111s; 
+  animation-fill-mode: both; 
+  animation-name: barrage-in;
 }
 .barrage-leave-active {
-  // opacity: .5;
-  animation: barrage-in 2s reverse;
+  animation-duration: .666s; 
+  animation-fill-mode: both; 
+  animation-name: barrage-out;
 }
-
-// .barrage-enter-active, .barrage-leave-active {
-//   transition: all .2s cubic-bezier(0, 1.2, 1, 0.5);
-//   opacity: .7;
-//   animation: barrage .1s;
-//   // transform: scale(2);
-//   transform: rotate(90deg);
-//   transform-origin: right bottom;
-//   // transform: translate3d(0, -100%, 0);
-// }
-// .barrage-enter, .barrage-leave-active {
-//   opacity: .3;
-//   // transform: scale(2);
-//   transform: rotate(90deg);
-//   transform-origin: right bottom;
-//   // transform: translate3d(0, 100%, 0);
-// }

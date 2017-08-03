@@ -1,3 +1,4 @@
+const fs = require('fs')
 const app  =  require('express')()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
@@ -5,6 +6,9 @@ const { Nuxt, Builder } = require('nuxt')
 const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 3000
 process.noDeprecation = true
+
+// extend
+const debounce = require('./utils/debounce.js')
 
 app.set('port', port)
 
@@ -33,14 +37,43 @@ server.listen(port, host)
 console.log(`Nuxt.js SSR Server listening on ${host}:${port}, at ${new Date().toLocaleString()}`)
 
 // Socket.io
-const messages = []
+const defaultBarrages = require('./data/barrages.default.json') || []
+const messages = require('./data/barrages.json') || []
+if (!messages.length) {
+  messages.push(...defaultBarrages)
+}
+
+// 更新本地文件数据
+const updateLocalBarragesFile = () => {
+  fs.writeFile('./data/barrages.json', JSON.stringify(messages.slice(-1000)), err => {
+    if (err) {
+      console.log('最新聊天记录保存失败')
+    } else {
+      console.log('最新聊天记录保存成功!')
+    }
+  })
+}
+
+// 30秒为一个周期，保存一次最新弹幕记录
+const updateDebounce = debounce(updateLocalBarragesFile, 1000 * 30)
+
 io.on('connection', socket => {
-	console.log('new socket.io user!')
-  socket.on('last-message', callback => {
+  socket.on('last-messages', callback => {
     callback(messages.slice(-50))
+  })
+  socket.on('barrage-count', callback => {
+    callback({
+      users: Object.keys(socket.rooms).length,
+      count: messages.length
+    })
   })
   socket.on('send-message', message => {
     messages.push(message)
     socket.broadcast.emit('new-message', message)
+    socket.broadcast.emit('update-barrage-count', {
+      users: Object.keys(socket.rooms).length,
+      count: messages.length
+    })
+    updateDebounce()
   })
 })

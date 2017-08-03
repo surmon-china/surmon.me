@@ -4,7 +4,7 @@
       <mobile-aside :class="{ open: mobileSidebar }"></mobile-aside>
     </div>
     <div id="app-main" :class="{ open: mobileSidebar }" @click="closeMobileSidebar">
-      <!-- <background v-if="!mobileLayout"></background> -->
+      <background v-if="!mobileLayout"></background>
       <transition name="barrage">
         <barrage v-if="!mobileLayout" v-show="barrageState"></barrage>
       </transition>
