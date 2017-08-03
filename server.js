@@ -47,23 +47,32 @@ if (!messages.length) {
 const updateLocalBarragesFile = () => {
   fs.writeFile('./data/barrages.json', JSON.stringify(messages.slice(-1000)), err => {
     if (err) {
-      console.log('最新聊天记录保存失败')
+      console.log('最新聊天记录保存失败', err)
     } else {
-      console.log('最新聊天记录保存成功!')
+      // console.log('最新聊天记录保存成功!')
     }
   })
 }
 
 // 30秒为一个周期，保存一次最新弹幕记录
 const updateDebounce = debounce(updateLocalBarragesFile, 1000 * 30)
+let socketClients = 0
 
 io.on('connection', socket => {
+  // 每次有新人加入，都更新客户端数量
+  io.clients((error, clients) => {
+    if (error) {
+      console.log('客户端数获取失败', error)
+    } else {
+      socketClients = clients.length
+    }
+  })
   socket.on('last-messages', callback => {
     callback(messages.slice(-50))
   })
   socket.on('barrage-count', callback => {
     callback({
-      users: Object.keys(socket.rooms).length,
+      users: socketClients,
       count: messages.length
     })
   })
@@ -71,7 +80,7 @@ io.on('connection', socket => {
     messages.push(message)
     socket.broadcast.emit('new-message', message)
     socket.broadcast.emit('update-barrage-count', {
-      users: Object.keys(socket.rooms).length,
+      users: socketClients,
       count: messages.length
     })
     updateDebounce()

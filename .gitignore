@@ -13,3 +13,5 @@ package-lock.json
 dist
 
 sitemap.xml
+
+data/barrages.json
