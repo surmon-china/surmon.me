@@ -1,18 +1,23 @@
-<template>
-  <div class="global-barrage">
+ <template>
+  <div class="global-barrage" :class="{ active: barrageState }">
     <div class="barrage-box">
-      <div class="message-box">
-        <ul class="barrages-list" ref="messages">
-          <!-- 所有li都是absolute top = 随机值 * li.height，left = 随机值 * 一个随机值 -->
-          <!-- 所有Li静态syle中的translateX(100%) 然后push进去，利用transition-group将每个li的translateX变为 -100% -->
-          <!-- transition-group动画中可以使用animation也可以使用transition -->
+      <div class="message-box" ref="messageBox">
+        <transition-group tag="ul" 
+                          name="barrages-list" 
+                          class="barrages-list" 
+                          ref="messages"
+                          @enter="messageEnter"
+                          @leave="messageLeave">
           <li class="item" 
-              v-for="message in messages"
+              :key="message.text"
+              :index="index"
+              :new="message.new"
+              v-for="(message, index) in messages"
               :class="[`size-${message.style.size}`, `color-${message.style.color}`]">
             <span class="gravatar"></span>
             <span class="content" v-text="message.text"></span>
           </li>
-        </ul>
+        </transition-group>
       </div>
       <div class="input-box">
         <div class="input-inner">
@@ -76,6 +81,9 @@
       },
       currentSize() {
         return this.sizes[this.sizeIndex]
+      },
+      barrageState() {
+        return this.$store.state.option.openBarrage
       }
     },
     beforeMount() {
@@ -92,9 +100,6 @@
         this.messages.push(message)
       })
     },
-    mounted() {
-      this.scrollToBottom()
-    },
     methods: {
       sendMessage() {
         const text = this.message.trim()
@@ -108,21 +113,41 @@
           date: new Date().getTime()
         }
         this.socket.emit('send-message', message)
+        message.new = true
         this.messages.push(message)
         this.counts.count += 1
         this.message = ''
       },
-      scrollToBottom () {
-        this.$nextTick(() => {
-          this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight
-        })
-      },
       transferDate(timestamp) {
         return new Date(timestamp).toLocaleString()
+      },
+      randomPer(pre = 3) {
+        return Math.floor(Math.random() * pre + 1)
+      },
+      messageLeave(element, done) {
+        // 获取渲染容器高度
+        const innerHeight = document.documentElement.clientHeight - 63
+        const innerCount = innerHeight / 30
+        const randomCount = this.randomPer(innerCount) - 1
+        element.style.top = randomCount / innerCount * 100 + '%'
+        // 新消息不再添加左边距
+        if (!element.attributes.new) {
+          element.style.left = this.randomPer(4) * 10 + '%'
+        }
+        setTimeout(done, 28000)
+      },
+      messageEnter(element, done) {
+        done()
       }
     },
     watch: {
-      messages: 'scrollToBottom'
+      messages() {
+        if (this.messages.length) {
+          this.$nextTick(() => {
+            this.messages.shift()
+          })
+        }
+      }
     }
   }
 </script>
@@ -177,6 +202,54 @@
     color: black;
   }
 
+  @keyframes barrage-in {
+    0%  { transform: translate3d(0, -100%, 0) }
+    25%, 50%, 75%, 100% { transform: translate3d(0, 0, 0) }
+    37%  { transform: translate3d(0, -26%, 0) }
+    62% { transform: translate3d(0, -18.6%, 0) }
+    88% { transform: translate3d(0, -9%, 0) }
+  }
+
+  @keyframes barrage-out {
+    0%  { transform: translate3d(0, 0, 0) }
+    100%  { transform: translate3d(0, -100%, 0) }
+  }
+
+  @keyframes inputBg {
+    0%   {
+      color: white;
+      background: chartreuse;
+    }
+    12%  {
+      color: white;
+      background: green;
+    }
+    24%  {
+      color: white;
+      background: red;
+    }
+    36%  {
+      color: white;
+      background: darkviolet;
+    }
+    60% {
+      color: white;
+      background: pink;
+    }
+    72% {
+      color: $text;
+      background: yellow;
+    }
+    86% {
+      color: $text;
+      background: white;
+    }
+    100% {
+      color: white;
+      background: black;
+    }
+  }
+
   .global-barrage {
     position: fixed;
     width: 100%;
@@ -184,7 +257,21 @@
     top: 0;
     left: 0;
     z-index: 8;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate3d(0, -100%, 0);
     background-color: #b7b7b7c4;
+    animation-duration: .666s; 
+    animation-fill-mode: both; 
+    animation-name: barrage-out;
+
+    &.active {
+      opacity: 1;
+      visibility: visible;
+      animation-duration: 1.111s; 
+      animation-fill-mode: both; 
+      animation-name: barrage-in;
+    }
 
     > .barrage-box {
       height: 100%;
@@ -196,12 +283,34 @@
       > .message-box {
         height: 100%;
         width: 100%;
+        display: block;
+        position: relative;
 
         > .barrages-list {
-          list-style: barrages-list;
+          list-style: square;
+          display: block;
+          width: 100%;
+          height: 100%;
+          padding: 0;
+          margin: 0;
+
+          @keyframes barrages-list-out {
+            0%  { transform: translate3d(100%, 0, 0) }
+            90% { transform: translate3d(-100%, 0, 0) }
+          }
+
+          .barrages-list-leave-active {
+            animation-duration: 30s; 
+            animation-fill-mode: both; 
+            animation-name: barrages-list-out;
+          }
 
           > .item {
-
+            width: auto;
+            min-width: 100%;
+            display: block;
+            position: absolute;
+            transform: translate3d(-100%, 0, 0);
           }
         }
       }
@@ -220,7 +329,8 @@
           background-color: rgba($module-bg, .9);
 
           > .count {
-            width: 8rem;
+            width: auto;
+            min-width: 9rem;
             height: 4rem;
             line-height: 4rem;
             text-align: center;
@@ -281,6 +391,11 @@
             margin: 0 auto;
             flex-grow: 1;
             padding: 1rem;
+
+            &:hover,
+            &:focus {
+              animation: inputBg 10s infinite;
+            }
           }
         }
       }
