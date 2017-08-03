@@ -34,6 +34,10 @@
   }
 }
 
+[v-cloak] {
+  display: none!important;
+}
+
 // swiper
 .swiper-wrapper {
   z-index: 1;
@@ -232,29 +236,4 @@ a {
 }
 .aside-enter, .aside-leave-active {
   opacity: 0
-}
-
-@keyframes barrage-in {
-  0%  { transform: translate3d(0, -100%, 0) }
-  20%, 50%, 70%, 100% { transform: translate3d(0, 0, 0) }
-  40%  { transform: translate3d(0, -26%, 0) }
-  60% { transform: translate3d(0, -20.6%, 0) }
-  80% { transform: translate3d(0, -12%, 0) }
-  90% { transform: translate3d(0, -4%, 0) }
-}
-
-@keyframes barrage-out {
-  0%  { transform: translate3d(0, 0, 0) }
-  100%  { transform: translate3d(0, -100%, 0) }
-}
-
-.barrage-enter-active {
-  animation-duration: 1.111s; 
-  animation-fill-mode: both; 
-  animation-name: barrage-in;
-}
-.barrage-leave-active {
-  animation-duration: .666s; 
-  animation-fill-mode: both; 
-  animation-name: barrage-out;
 }
