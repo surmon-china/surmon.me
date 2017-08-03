@@ -66,7 +66,7 @@ module.exports = {
   dev: (process.env.NODE_ENV !== 'production'),
   env: {
     baseUrl: apiConfig.baseUrl,
-    HOST_URL: process.env.HOST_URL || 'http://localhost:3000'
+    HOST_URL: apiConfig.socketHost
   },
   plugins: [
     { src: '~/plugins/axios.js' },
