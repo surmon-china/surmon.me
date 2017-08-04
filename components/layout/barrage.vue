@@ -136,11 +136,14 @@
         // 获取渲染容器高度
         const innerHeight = document.documentElement.clientHeight - 63
         const innerCount = innerHeight / 30
-        const randomCount = this.randomPer(innerCount) - 1
-        element.style.top = randomCount / innerCount * 100 + '%'
+        let randomCount = this.randomPer(innerCount) - 3
+        randomCount = randomCount < 0 ? 1 : randomCount
+        let topPre = randomCount / innerCount * 100
+        topPre = (topPre > 88) ? 86 : topPre
+        element.style.top = topPre + '%'
         // 新消息不再添加左边距
         if (!element.attributes.new) {
-          element.style.left = this.randomPer(4) * 10 + '%'
+          element.style.left = this.randomPer(6) * 10 + '%'
         }
         setTimeout(done, 28000)
       },
@@ -214,8 +217,8 @@
     0%  { transform: translate3d(0, -100%, 0) }
     25%, 50%, 75%, 100% { transform: translate3d(0, 0, 0) }
     37%  { transform: translate3d(0, -24%, 0) }
-    62% { transform: translate3d(0, -16.6%, 0) }
-    88% { transform: translate3d(0, -7%, 0) }
+    62% { transform: translate3d(0, -12%, 0) }
+    88% { transform: translate3d(0, -5%, 0) }
   }
 
   @keyframes barrage-out {
@@ -223,39 +226,22 @@
     100%  { transform: translate3d(0, -100%, 0) }
   }
 
-  @keyframes inputBg {
-    0%   {
-      color: white;
-      background: chartreuse;
-    }
-    12%  {
-      color: white;
-      background: green;
-    }
-    24%  {
-      color: white;
-      background: red;
-    }
-    36%  {
-      color: white;
-      background: darkviolet;
-    }
-    60% {
-      color: white;
-      background: pink;
-    }
-    72% {
-      color: $text;
-      background: yellow;
-    }
-    86% {
-      color: $text;
-      background: white;
-    }
-    100% {
-      color: white;
-      background: black;
-    }
+  @keyframes input-box-in {
+    0%  { transform: translate3d(0, -2000%, 0) }
+    65%  { transform: translate3d(0, 100%, 0) }
+    80%  { transform: translate3d(0, -80%, 0) }
+    100%  { transform: translate3d(0, 0, 0) }
+  }
+
+  @keyframes inputColor {
+    0%  { color: chartreuse }
+    12% { color: green }
+    24% { color: red }
+    36% { color: darkviolet }
+    60% { color: pink }
+    72% { color: yellow }
+    86% { color: white }
+    100% { color: black }
   }
 
   .global-barrage {
@@ -268,18 +254,44 @@
     opacity: 0;
     visibility: hidden;
     transform: translate3d(0, -100%, 0);
-    animation-duration: .666s; 
+    animation-duration: .5s; 
     animation-fill-mode: both; 
     animation-name: barrage-out;
     background-color: #b7b7b7c4;
     background-color: rgba(183, 183, 183, 0.7);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    perspective: 1000;
+    -webkit-perspective: 1000;
+
+    > .barrage-box {
+
+      > .input-box {
+        transition: transform 5s;
+        transform: translate3d(0, -2000%, 0);
+      }
+    }
 
     &.active {
       opacity: 1;
       visibility: visible;
-      animation-duration: 1.111s; 
+      animation-duration: 1.556s;
       animation-fill-mode: both; 
       animation-name: barrage-in;
+      animation-timing-function: ease;
+
+      > .barrage-box {
+
+        > .input-box {
+          // transition: transform 5s;
+          animation-delay: 1.6s;
+          animation-duration: .5s; 
+          animation-fill-mode: both; 
+          animation-name: input-box-in;
+          animation-timing-function: ease;
+          // transform: translate3d(0, 0, 0);
+        }
+      }
     }
 
     > .barrage-box {
@@ -335,7 +347,7 @@
           margin: 0 auto;
           width: 42rem;
           height: 4rem;
-          background-color: rgba($module-bg, .9);
+          background-color: rgba($module-bg, .7);
 
           > .count {
             width: auto;
@@ -400,10 +412,12 @@
             margin: 0 auto;
             flex-grow: 1;
             padding: 1rem;
+            background-color: rgba($module-bg, .3);
 
             &:hover,
             &:focus {
-              animation: inputBg 10s infinite;
+              background-color: rgba($module-bg, .5);
+              animation: inputColor 10s infinite;
             }
           }
         }
