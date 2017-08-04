@@ -127,8 +127,7 @@
             return seed / (233280.0)
         }
         const rand = number => {
-            today = new Date()
-            seed = today.getTime()
+            const seed = new Date().getTime()
             return Math.ceil(rnd(seed) * number)
         }
         return rand(pre)
