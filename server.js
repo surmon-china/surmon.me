@@ -45,7 +45,7 @@ if (!messages.length) {
 
 // 更新本地文件数据
 const updateLocalBarragesFile = () => {
-  fs.writeFile('./data/barrages.json', JSON.stringify(messages.slice(-1000)), err => {
+  fs.writeFile('./data/barrages.json', JSON.stringify(messages), err => {
     if (err) {
       console.log('最新聊天记录保存失败', err)
     } else {
@@ -68,7 +68,7 @@ io.on('connection', socket => {
     }
   })
   socket.on('last-messages', callback => {
-    callback(messages.slice(-50))
+    callback(messages.slice(-266))
   })
   socket.on('barrage-count', callback => {
     callback({
