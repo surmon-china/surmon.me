@@ -205,9 +205,9 @@
   @keyframes barrage-in {
     0%  { transform: translate3d(0, -100%, 0) }
     25%, 50%, 75%, 100% { transform: translate3d(0, 0, 0) }
-    37%  { transform: translate3d(0, -26%, 0) }
-    62% { transform: translate3d(0, -18.6%, 0) }
-    88% { transform: translate3d(0, -9%, 0) }
+    37%  { transform: translate3d(0, -24%, 0) }
+    62% { transform: translate3d(0, -16.6%, 0) }
+    88% { transform: translate3d(0, -7%, 0) }
   }
 
   @keyframes barrage-out {
@@ -260,10 +260,11 @@
     opacity: 0;
     visibility: hidden;
     transform: translate3d(0, -100%, 0);
-    background-color: #b7b7b7c4;
     animation-duration: .666s; 
     animation-fill-mode: both; 
     animation-name: barrage-out;
+    background-color: #b7b7b7c4;
+    background-color: rgba(183, 183, 183, 0.7);
 
     &.active {
       opacity: 1;
