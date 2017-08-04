@@ -122,7 +122,16 @@
         return new Date(timestamp).toLocaleString()
       },
       randomPer(pre = 3) {
-        return Math.floor(Math.random() * pre + 1)
+        const rnd = seed => {
+            seed = (seed * 9301 + 49297) % 233280
+            return seed / (233280.0)
+        }
+        const rand = number => {
+            today = new Date()
+            seed = today.getTime()
+            return Math.ceil(rnd(seed) * number)
+        }
+        return rand(pre)
       },
       messageLeave(element, done) {
         // 获取渲染容器高度
