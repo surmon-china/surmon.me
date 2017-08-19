@@ -2,15 +2,15 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-content">
-        <span>陕ICP备13004859号</span>
-        <span> - </span>
+        <!-- <span>陕ICP备13004859号</span> -->
+        <!-- <span> - </span> -->
         <a class="sitemap-btn" href="/sitemap.xml" target="_blank">SITEMAP</a>
-        <span> - </span>
+        <span> &nbsp; </span>
         <span>Powered By </span>
         <router-link to="/project">NodePress</router-link>
         <span>、</span>
         <router-link to="/project">Nuxt.js</router-link>
-        <span> and solitude. Dsigned By </span>
+        <span> and solitude. &nbsp; Designed By </span>
         <router-link to="/about">Me</router-link>
       </div>
     </div>

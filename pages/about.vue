@@ -113,8 +113,11 @@
                 <img :src="gravatar" class="avatar">
                 <h2 class="name"><strong>Surmon</strong></h2>
                 <p class="skill">JS Stack Developer.</p>
-                <a class="followme" href="" @click.stop.prevent="">Follow me</a>
-                <div class="wechat"></div>
+                <a class="followme" 
+                   href="" 
+                   @click.stop.prevent=""
+                   v-if="!mobileLayout">Follow me</a>
+                <div class="wechat" v-if="!mobileLayout"></div>
               </div>
             </div>
             <div class="about-map" v-if="!mobileLayout">
@@ -176,6 +179,14 @@
                 > .gravatar {
                   width: 100%;
                   margin-bottom: 1rem;
+
+                  > .background {
+                    height: 40%;
+                  }
+
+                  > .avatar {
+                    margin-top: 10%;
+                  }
 
                   > .name,
                   > .skill {
