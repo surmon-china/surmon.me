@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-cloak>
     <div id="app-aside" v-if="mobileLayout" :class="{ open: mobileSidebar }">
       <mobile-aside :class="{ open: mobileSidebar }"></mobile-aside>
     </div>
@@ -123,6 +123,10 @@
   @import '~assets/sass/mixins';
   @import '~assets/sass/variables';
   #app {
+
+    &[v-cloak] {
+      -webkit-text-fill-color: transparent;
+    }
 
     #app-aside {
       width: 68%;
