@@ -106,6 +106,10 @@ $ npm run lint
 - ~~http://music.163.com/#/playlist?id=638949385~~
 - ~~修复了播放器~~
 - ~~升级了Nuxt，且使用了offline-plugin实现离线应用~~
+- ~~增加弹幕功能~~
+- ~~优化宽屏阅读功能~~
+- ~~优化播放器~~
+- ~~优化移动端样式~~
 - graphql-js + Restful查询数据库
 
 ## 目录结构

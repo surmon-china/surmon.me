@@ -554,7 +554,7 @@
     > .related {
       padding: 1em 0;
       border-width: 0 1em;
-      border-color: $module-bg;
+      border-color: transparent;
       overflow: hidden;
       height: 10em;
 
