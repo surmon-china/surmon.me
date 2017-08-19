@@ -125,6 +125,7 @@
   #app {
 
     &[v-cloak] {
+      color: transparent;
       -webkit-text-fill-color: transparent;
     }
 
