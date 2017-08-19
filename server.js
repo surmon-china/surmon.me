@@ -68,7 +68,7 @@ io.on('connection', socket => {
     }
   })
   socket.on('last-messages', callback => {
-    callback(messages.slice(-266))
+    callback(messages.slice(-66))
   })
   socket.on('barrage-count', callback => {
     callback({

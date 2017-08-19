@@ -531,7 +531,7 @@
     }
 
     > .metas {
-      padding: 1em 2em;
+      padding: 1em 1.5em;
 
       > .item {
 

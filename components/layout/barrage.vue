@@ -128,7 +128,8 @@
         }
         const rand = number => {
             const seed = new Date().getTime()
-            return Math.ceil(rnd(seed) * number)
+            return rnd(seed) * number + Math.random()
+            // return Math.ceil(rnd(seed) * number)
         }
         return rand(pre)
       },
