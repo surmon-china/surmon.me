@@ -166,13 +166,12 @@
             background-color: $module-bg;
             margin-top: 2rem;
             border:  1px solid $primary;
-            border-radius: .2rem;
             text-align: center;
             text-transform: uppercase;
 
             &:hover {
               color: $white;
-              background-color: rgba($primary, 0.6);
+              background-color: rgba($primary, 0.9);
             }
           }
         }
