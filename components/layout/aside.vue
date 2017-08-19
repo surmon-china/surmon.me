@@ -49,26 +49,40 @@
     <div class="aside-calendar">
       <calendar></calendar>
     </div>
-    <div class="aside-tag" v-scroll-top>
-      <empty-box v-if="!tag.fetching && !tag.data.data.length">
-        <slot>No Result Tags.</slot>
-      </empty-box>
-      <ul class="aside-tag-list" v-else-if="!tag.fetching && tag.data.data.length">
-        <router-link tag="li"
-                     class="item"
-                     :key="index"
-                     :to="`/tag/${item.slug}`"
-                     v-for="(item, index) in tag.data.data">
-          <a class="title" :title="item.description">
-            <i class="iconfont" 
-               :class="[item.extends.find(t => Object.is(t.name, 'icon')).value]" 
-               v-if="item.extends.find(t => Object.is(t.name, 'icon'))"></i>
-            <span>&nbsp;</span>
-            <span>{{ item.name }}</span>
-            <span>({{ item.count || 0 }})</span>
-          </a>
-        </router-link>
-      </ul>
+    <div class="aside-fixed-box" v-scroll-top>
+      <div class="aside-tag">
+        <empty-box v-if="!tag.fetching && !tag.data.data.length">
+          <slot>No Result Tags.</slot>
+        </empty-box>
+        <ul class="aside-tag-list" v-else-if="!tag.fetching && tag.data.data.length">
+          <router-link tag="li"
+                       class="item"
+                       :key="index"
+                       :to="`/tag/${item.slug}`"
+                       v-for="(item, index) in tag.data.data">
+            <a class="title" :title="item.description">
+              <i class="iconfont" 
+                 :class="[item.extends.find(t => Object.is(t.name, 'icon')).value]" 
+                 v-if="item.extends.find(t => Object.is(t.name, 'icon'))"></i>
+              <span>&nbsp;</span>
+              <span>{{ item.name }}</span>
+              <span>({{ item.count || 0 }})</span>
+            </a>
+          </router-link>
+        </ul>
+      </div>
+      <div class="aside-tools" v-if="isArticlePage">
+        <div class="full-column" @click="setFullColumu">
+          <span>通栏阅读</span>
+          <span>&nbsp;&nbsp;</span>
+          <i class="iconfont icon-read"></i>
+        </div>
+        <div class="full-page" @click="fullScreen">
+          <span>全屏阅读</span>
+          <span>&nbsp;&nbsp;</span>
+          <i class="iconfont icon-fullscreen"></i>
+        </div>        
+      </div>
     </div>
   </aside>
 </template>
@@ -96,6 +110,9 @@
       },
       article() {
         return this.$store.state.article.hot
+      },
+      isArticlePage() {
+        return this.$route.name === 'article-article_id'
       }
     },
     methods: {
@@ -106,6 +123,19 @@
         if (keyword && (isSearchPage ? !Object.is(paramsKeyword, keyword) : true)) {
           this.$router.push({ name: 'search-keyword', params: { keyword }})
         }
+      },
+      setFullColumu() {
+        this.$store.commit('option/SET_ERROR_COLUMU', true)
+      },
+      fullScreen() {
+        this.setFullColumu()
+        const docElm = document.documentElement
+        // const docElm = document.getElementById('main-content')
+        const requestEvent = docElm.requestFullscreen || 
+                             docElm.mozRequestFullScreen || 
+                             docElm.webkitRequestFullScreen ||
+                             docElm.msRequestFullscreen
+        if(requestEvent) requestEvent.bind(docElm)()
       }
     },
     directives: {
@@ -115,12 +145,14 @@
           let sidebarFixedOffsetTop = element.offsetTop
           // 监听滚动事件
           window.addEventListener('scroll', e => {
-            const windowScrollTop = document.body.scrollTop
+            const windowScrollTop = document.documentElement.scrollTop || 
+                                    window.pageYOffset || 
+                                    document.body.scrollTop
             const newSidebarFixedOffsetTop = element.offsetTop
             sidebarFixedOffsetTop = (newSidebarFixedOffsetTop !== sidebarFixedOffsetTop && newSidebarFixedOffsetTop !== 77) ? newSidebarFixedOffsetTop : sidebarFixedOffsetTop
             const isFixed = windowScrollTop > sidebarFixedOffsetTop
-            if (isFixed && element) element.setAttribute('class','aside-tag fixed')
-            if (!isFixed && element) element.setAttribute('class','aside-tag')
+            if (isFixed && element) element.setAttribute('class','aside-fixed-box fixed')
+            if (!isFixed && element) element.setAttribute('class','aside-fixed-box')
           })
         },
         unbind(element) {
@@ -272,53 +304,81 @@
       }
     }
 
-    .aside-tag {
-      width: 19em;
-      padding-left: 1rem;
-      border-top: 1rem solid transparent;
-      border-bottom: 1rem solid transparent;
-      margin-bottom: 1em;
+    .aside-fixed-box {
 
       &.fixed {
         position: fixed;
         top: 5.5em;
-        max-height: calc(100% - 8em - 4.5em);
-        overflow-y: auto;
+
+        > .aside-tag {
+          max-height: calc(100vh - 8em - 4.5em - 3em);
+          overflow-y: auto;
+        }
       }
 
-      .empty-box {
-        padding-right: .8em;
-        padding-bottom: .8em;
-      }
+      > .aside-tools {
 
-      .aside-tag-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        overflow: hidden;
-
-        .item {
-          display: inline-block;
-          float: left;
+        > .full-column {
           margin-right: 1rem;
-          margin-bottom: 1rem;
-          height: 2em;
-          line-height: 2em;
-          text-transform: capitalize;
-          background-color: $module-hover-bg;
+        }
+
+        > .full-column,
+        > .full-page {
+          display: inline-block;
+          width: calc((100% - 1rem) / 2;
+          height: 3rem;
+          line-height: 3rem;
+          text-align: center;
+          background-color: $module-bg;
+          cursor: pointer;
 
           &:hover {
-            background-color: darken($module-hover-bg, 40%);
+            background-color: $module-hover-bg;
           }
+        }
+      }
 
-          &:last-child {
-            margin: 0;
-          }
+      > .aside-tag {
+        width: 19em;
+        padding-left: 1rem;
+        border-top: 1rem solid transparent;
+        border-bottom: 1rem solid transparent;
+        margin-bottom: 1em;
 
-          .title {
-            display: block;
-            padding: 0 .5em;
-            font-family: CenturyGothic, -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", sans-serif;
+        .empty-box {
+          padding-right: .8em;
+          padding-bottom: .8em;
+        }
+
+        .aside-tag-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          overflow: hidden;
+
+          .item {
+            display: inline-block;
+            float: left;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            height: 2em;
+            line-height: 2em;
+            text-transform: capitalize;
+            background-color: $module-hover-bg;
+
+            &:hover {
+              background-color: darken($module-hover-bg, 40%);
+            }
+
+            &:last-child {
+              margin: 0;
+            }
+
+            .title {
+              display: block;
+              padding: 0 .5em;
+              font-family: CenturyGothic, -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", sans-serif;
+            }
           }
         }
       }

@@ -14,7 +14,8 @@
             <nav-view v-if="!errorColumn && !mobileLayout"></nav-view>
           </keep-alive>
         </transition>
-        <div class="main-content" 
+        <div id="main-content" 
+             class="main-content" 
              :class="{ 
                'full-column': fullColumn, 
                'error-column': errorColumn,
@@ -52,6 +53,7 @@
     },
     mounted() {
       this.watchTabActive()
+      // this.watchFullScreen()
       if (!this.mobileLayout) {
         this.$store.dispatch('loadMuiscPlayerList')
       }
@@ -103,6 +105,15 @@
             document.title = reallyDocumentTitle
           }
         }, false)
+      },
+      watchFullScreen() {
+        const fullscreenchange = event => {
+          console.log('fullscreenchange', event)
+        }
+        document.addEventListener("fullscreenchange", fullscreenchange, false)
+        document.addEventListener("mozfullscreenchange", fullscreenchange, false)
+        document.addEventListener("webkitfullscreenchange", fullscreenchange, false)
+        document.addEventListener("msfullscreenchange", fullscreenchange, false)
       }
     }
   }
@@ -150,6 +161,18 @@
           position: relative;
           overflow: hidden;
           @include css3-prefix(transition, width .35s);
+
+          &:-moz-full-screen {
+            overflow-y: auto;
+          }
+           
+          &:-webkit-full-screen {
+            overflow-y: auto;
+          }
+            
+          &:fullscreen {
+            overflow-y: auto;
+          }
 
           &.full-column {
             width: 62.5em;

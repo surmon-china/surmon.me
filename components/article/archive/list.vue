@@ -25,7 +25,7 @@
       <button class="btn-loadmore" @click="$emit('loadmore')" :disabled="article.fetching || !canLoadMore">
         <span v-if="!article.fetching && canLoadMore">加载更多</span>
         <span v-else-if="article.fetching && canLoadMore">加载中</span>
-        <span v-else-if="!canLoadMore">我是有底线的</span>
+        <span v-else-if="!canLoadMore">这是底线</span>
       </button>
     </div>
   </div>
