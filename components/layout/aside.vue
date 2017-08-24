@@ -90,7 +90,7 @@
 <script>
   import Calendar from './calendar.vue'
   export default {
-    name: 'aside',
+    name: 'layout-aside',
     data() {
       return {
         keyword: ''

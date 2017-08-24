@@ -19,7 +19,7 @@
 
 <script>
   export default {
-    name: 'footer'
+    name: 'layout-footer'
   }
 </script>
 
