@@ -47,7 +47,7 @@
 
 <script>
 export default {
-  name: 'nav'
+  name: 'layout-nav'
 }
 </script>
 

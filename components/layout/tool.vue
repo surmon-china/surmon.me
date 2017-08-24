@@ -72,7 +72,7 @@
         window.requestAnimationFrame(step)
       },
       openBarrage() {
-        this.$store.commit('option/updateBarrageState')
+        this.$store.commit('option/UPDATE_BARRAGE_STATE')
       }
     }
   }

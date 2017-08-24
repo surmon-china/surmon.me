@@ -36,7 +36,9 @@ export const state = () => {
           likes: 0
         }
       }
-    }
+    },
+
+    emoji233333: null
   }
 }
 
@@ -102,11 +104,16 @@ export const mutations = {
   },
 
   // 切换弹幕状态
-  updateBarrageState(state, action) {
+  UPDATE_BARRAGE_STATE(state, action) {
     if (action !== undefined) {
       state.openBarrage = !!action
     } else {
       state.openBarrage = !state.openBarrage
     }
+  },
+
+  // 设置 emoji233333 实例
+  SET_EMOJI_INSTANCE(state, action) {
+    state.emoji233333 = action
   }
 }

@@ -4,6 +4,7 @@
       <mobile-aside :class="{ open: mobileSidebar }"></mobile-aside>
     </div>
     <div id="app-main" :class="{ open: mobileSidebar }" @click="closeMobileSidebar">
+      <canvas class="global-emoji" :class="{ active: emoji233333.kichikuing }" ref="emoji"></canvas>
       <background v-if="!mobileLayout"></background>
       <barrage v-if="!mobileLayout" v-cloak></barrage>
       <header-view v-if="!mobileLayout"></header-view>
@@ -57,6 +58,20 @@
       if (!this.mobileLayout) {
         this.$store.dispatch('loadMuiscPlayerList')
       }
+      if (process.browser) {
+        const emojiBase = this.$refs.emoji
+        emojiBase.width = document.documentElement.clientWidth || document.body.clientWidth
+        emojiBase.height = document.documentElement.clientHeight || document.body.clientHeight
+        const emoji233333 = new window.Emoji233333({
+          base: emojiBase,
+          scale: 0.7,
+          speed: 12,
+          increaseSpeed: 0.4,
+          density: 5,
+          staggered: true
+        })
+        this.$store.commit('option/SET_EMOJI_INSTANCE', emoji233333)
+      }
       if (process.env.NODE_ENV === 'production') {
         console.clear()
         console.log("%cTalk is cheap. Show me the code %csurmon@foxmail.com", "color:#666;font-size:3em;","color:#666;font-size:13px;")
@@ -76,6 +91,9 @@
       MobileAside
     },
     computed: {
+      emoji233333() {
+        return this.$store.state.option.emoji233333 || {}
+      },
       fullColumn () {
         return this.$store.state.option.fullColumn
       },
@@ -154,6 +172,16 @@
       &.open {
         transition: $mobile-aisde-transition;
         transform: translateX(68%);
+      }
+
+      > .global-emoji {
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        &.active {
+          z-index: 99999;
+        }
       }
 
       main {
