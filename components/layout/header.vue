@@ -41,7 +41,7 @@
 
 <script>
 export default {
-  name: 'header',
+  name: 'layout-header',
   computed: {
     player() {
       return this.$store.state.music.player

@@ -75,6 +75,7 @@ module.exports = {
     { src: '~/plugins/marked.js' },
     { src: '~/plugins/gravatar.js' },
     { src: '~/plugins/ga.js', ssr: false },
+    { src: '~/plugins/emoji-233333.js', ssr: false },
     // { src: '~/plugins/offline.js', ssr: false },
     { src: '~/plugins/swiper.js', ssr: false },
     { src: '~/plugins/clipboard.js' },

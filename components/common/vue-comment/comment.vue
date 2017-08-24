@@ -328,6 +328,9 @@
       blacklist() {
         return this.$store.state.option.globalOption.data.blacklist
       },
+      emoji233333() {
+        return this.$store.state.option.emoji233333
+      },
       mobileLayout() {
         return this.$store.state.option.mobileLayout
       }
@@ -563,6 +566,11 @@
           agent: navigator.userAgent
         }).then(data => {
           // 发布成功后清空评论框内容并更新本地信息
+          if (data.result.content.includes('2333')) {
+            if (this.emoji233333 && this.emoji233333.launch) {
+              this.emoji233333.launch()
+            }
+          }
           this.previewMode = false
           this.userCacheMode = true
           this.cancelCommentReply()
