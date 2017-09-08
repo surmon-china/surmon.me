@@ -377,7 +377,7 @@
             .title {
               display: block;
               padding: 0 .5em;
-              font-family: CenturyGothic, -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", sans-serif;
+              font-family: $sans-serif;
             }
           }
         }
