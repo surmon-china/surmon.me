@@ -111,7 +111,7 @@ export default {
           position: relative;
           align-items: center;
           padding-left: .5em;
-          width: 30em;
+          width: 29em;
           justify-content: space-between;
 
           .navbar-logo {
@@ -120,7 +120,7 @@ export default {
 
           .navbar-slogan {
             color: $primary;
-            font-family: CenturyGothic;
+            font-family: DINRegular, CenturyGothic;
           }
 
           .navbar-link {

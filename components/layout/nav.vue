@@ -75,7 +75,7 @@ export default {
         font-weight: 700;
         border-radius: 1px;
         color: #777;
-        font-family: CenturyGothic;
+        font-family: DINRegular, CenturyGothic;
         margin-bottom: .5em;
 
         &.errend {
