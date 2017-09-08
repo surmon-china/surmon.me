@@ -20,7 +20,7 @@
                 </p>
                 <p class="item">
                   <i class="iconfont icon-music"></i>
-                  <nuxt-link to="/music">Folk, Jazz-HipHop, EM, Rock, PostRock, Punk Rock, New Age.</nuxt-link>
+                  <nuxt-link to="/music">Jazz-HipHop, Electronic, Rock, PostRock, Punk Rock.</nuxt-link>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-like"></i>
@@ -104,6 +104,19 @@
                 <p class="item">
                   <i class="iconfont icon-code"></i>
                   <span class="skills">Talk is cheap. let's fuck it.</span>
+                </p>
+                <p class="item">
+                  <i class="iconfont icon-friend"></i>
+                  <span class="friends">
+                    <a href="http://skyrover.me/about" 
+                       target="_blank" 
+                       rel="external nofollow">「 skyrover 」</i>
+                    </a>
+                    <a href="http://www.bubblypoker.com/about" 
+                       target="_blank" 
+                       rel="external nofollow">「 Jooger 」</i>
+                    </a>
+                  </span>
                 </p>
               </div>
               <div class="gravatar">
@@ -381,6 +394,30 @@
                   margin-right: 2rem;
                   display: inline-block;
                   color: rgba(191, 191, 191, 0.5);
+
+                  &.icon-code {
+                    color: gray;
+                  }
+
+                  &.icon-like {
+                    color: moccasin;
+                  }
+
+                  &.icon-coffee {
+                    color: brown;
+                  }
+
+                  &.icon-friend {
+                    color: green;
+                  }
+                }
+
+                > .friends {
+
+                  > a {
+                    margin-right: 1em;
+                    text-transform: capitalize;
+                  }
                 }
 
                 > .accounts {
