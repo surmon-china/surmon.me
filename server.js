@@ -58,7 +58,9 @@ const updateLocalBarragesFile = () => {
 const updateDebounce = debounce(updateLocalBarragesFile, 1000 * 30)
 let socketClients = 0
 
+// 弹幕和视频
 io.on('connection', socket => {
+
   // 每次有新人加入，都更新客户端数量
   io.clients((error, clients) => {
     if (error) {
@@ -67,15 +69,18 @@ io.on('connection', socket => {
       socketClients = clients.length
     }
   })
+  // 最后一批弹幕记录
   socket.on('last-messages', callback => {
     callback(messages.slice(-66))
   })
+  // 弹幕总数量
   socket.on('barrage-count', callback => {
     callback({
       users: socketClients,
       count: messages.length
     })
   })
+  // 广播弹幕
   socket.on('send-message', message => {
     messages.push(message)
     socket.broadcast.emit('new-message', message)
@@ -84,5 +89,18 @@ io.on('connection', socket => {
       count: messages.length
     })
     updateDebounce()
+  })
+  // 新增RTC媒体流
+  socket.on('rtc-ice-candidate', candidate => {
+    // console.log('服务端收到 rtc-ice-candidate', candidate)
+    socket.broadcast.emit('rtc-ice-candidate', candidate)
+  })
+  socket.on('rtc-offer', sdp => {
+    // console.log('服务端收到 rtc-offer', sdp)
+    socket.broadcast.emit('rtc-offer', sdp)
+  })
+  socket.on('rtc-answer', sdp => {
+    // console.log('服务端收到 rtc-answer', sdp)
+    socket.broadcast.emit('rtc-answer', sdp)
   })
 })

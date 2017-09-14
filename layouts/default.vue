@@ -7,6 +7,7 @@
       <canvas class="global-emoji" :class="{ active: emoji233333.kichikuing }" ref="emoji"></canvas>
       <background v-if="!mobileLayout"></background>
       <barrage v-if="!mobileLayout" v-cloak></barrage>
+      <webrtc v-if="!mobileLayout" v-cloak></webrtc>
       <header-view v-if="!mobileLayout"></header-view>
       <mobile-header v-if="mobileLayout"></mobile-header>
       <main id="main" :class="{ 'mobile': mobileLayout }">
@@ -41,7 +42,7 @@
 </template>
 
 <script>
-  import { Background, Barrage, Header, Footer, Aside, Share, Tool, Nav } from '~/components/layout'
+  import { Background, Barrage, Webrtc, Header, Footer, Aside, Share, Tool, Nav } from '~/components/layout'
   import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
   export default {
     name: 'app',
@@ -78,6 +79,7 @@
       }
     },
     components: {
+      Webrtc,
       Barrage,
       Background,
       HeaderView: Header,
@@ -91,6 +93,9 @@
       MobileAside
     },
     computed: {
+      openWebrtc() {
+        return this.$store.state.option.openWebrtc
+      },
       emoji233333() {
         return this.$store.state.option.emoji233333 || {}
       },

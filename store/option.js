@@ -13,11 +13,15 @@ export const state = () => {
 
     // 是否为移动端
     mobileLayout: false,
+
     // 移动端侧边栏
     mobileSidebar: false,
 
     // 是否开启弹幕
     openBarrage: false,
+
+    // 是否开启rtc
+    openWebrtc: false,
 
     // ua
     userAgent: '',
