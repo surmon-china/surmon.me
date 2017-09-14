@@ -1,21 +1,41 @@
 <template>
-  <div class="global-webrtc active">
-    <div class="local-stream">
-      <div class="stream-inner">
-        <video id="localVideo" autoplay :src="localStream"></video>
-        <br> 
-        <span>禁用/启用视频</span>
-        <span>禁用/启用音量</span>
-        <span>更换滤镜</span>
-        <span>更换头像边框</span>
+  <div class="global-webrtc">
+    <div class="webrtc-box">
+      <div class="stream-box" 
+           :class="[ stream.local ? 'local' : 'remote']"
+           v-for="stream in streams">
+        <div class="empty-msg">
+          <!-- 本机用户 -->
+          <span class="text" v-if="stream.local">Long time no see.</span>
+          <!-- 远程用户 -->
+          <span class="text" v-else>吴彦祖</span>
+        </div>
+        <video autoplay
+               :id="stream.id" 
+               :ref="stream.id" 
+               :src="stream.src">
+        </video>
+        <!-- 仅本机用户 -->
+        <div class="tools" v-if="stream.local">
+          <button class="video">
+            <i class="iconfont" :class="[true ? 'icon-carema-disabled' : 'icon-carema']"></i>
+          </button>
+          <button class="audio">
+            <i class="iconfont" :class="[true ? 'icon-mic-disabled' : 'icon-mic']"></i>
+          </button>
+          <div class="filter">
+            <i class="icon-filter"></i>
+            <span>Blur</span>
+            <ul class="filters">
+              <li class="item">Blur</li>
+              <li class="item">Blur</li>
+              <li class="item">Blur</li>
+              <li class="item">Blur</li>
+              <li class="item">Blur</li>
+            </ul>
+          </div>
+        </div>          
       </div>
-    </div>
-    <div class="remote-streams">
-      <video autoplay
-             :id="stream.id" 
-             :ref="stream.id" 
-             :src="stream.src"
-             v-for="stream in remoteStreams"></video>
     </div>
   </div>
 </template>
@@ -27,6 +47,7 @@
     data() {
       return {
         SimpleWebRTC,
+        streams: [],
         localStream: null,
         remoteStreams: []
       }
@@ -73,10 +94,20 @@
       webrtc.on('localStream', function (stream) {
         stream.filter = '我是滤镜啊'
         console.log('本地媒体可用', stream)
-        self.localStream = URL.createObjectURL(stream)
-        // var button = document.querySelector('form>button');
-        // if (button) button.removeAttribute('disabled');
-        // $('#localVolume').show();
+        const src = URL.createObjectURL(stream)
+        self.streams.unshift({
+          local: true,
+          id: 'localVideo',
+          ref: 'localVideo',
+          src: src
+        })
+        // 模拟远程用户
+        const mockStream = {
+          id: 'remoteVideo',
+          ref: 'remoteVideo',
+          src: src
+        }
+        self.streams.push(...[mockStream, mockStream, mockStream, mockStream, mockStream, mockStream, mockStream, mockStream, mockStream, mockStream, mockStream, mockStream, mockStream, mockStream])
       })
 
       // 媒体请求被拒绝
@@ -244,20 +275,76 @@
     top: 0;
     left: 0;
     z-index: 8;
-    opacity: 0;
-    visibility: hidden;
-    transform: translate3d(0, -100%, 0);
-    background-color: #b7b7b7c4;
+    padding-top: $header-height * 2;
     background-color: rgba(183, 183, 183, 0.7);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    -webkit-perspective: 1000;
-    perspective: 1000;
 
-    &.active {
-      opacity: 1;
-      visibility: visible;
-      transform: translate3d(0, 0, 0);
+    > .webrtc-box {
+      position: relative;
+      margin: 0 auto;
+      overflow: hidden;
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 80%;
+      max-height: calc(100vh - 16rem);
+
+      > .stream-box {
+        height: auto;
+        margin-right: 1rem;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: center;
+        position: relative;
+        background-color: $module-bg;
+        border: .8rem solid rgba($module-bg, .2);
+        overflow-y: hidden;
+
+        &.local {
+          width: 50%;
+          max-width: 40rem;
+          min-height: 26rem;
+          max-height: 30rem;
+        }
+
+        &.remote {
+          width: 20%;
+          max-width: 20rem;
+          min-height: 12rem;
+          max-height: 16rem;
+        }
+
+        > video {
+          width: 100%;
+          height: auto;
+          object-fit: cover;
+        }
+
+        > .empty-msg,
+        > .tools {
+          position: absolute;
+        }
+
+        > .empty-msg {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 2rem;
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: -1;
+
+          > .text {
+            color: #676767;
+          }
+        }
+
+        > .tools {
+          left: 0;
+          bottom: 0;
+        }
+      }
     }
   }
 </style>

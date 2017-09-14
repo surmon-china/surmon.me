@@ -4,10 +4,15 @@
       <mobile-aside :class="{ open: mobileSidebar }"></mobile-aside>
     </div>
     <div id="app-main" :class="{ open: mobileSidebar }" @click="closeMobileSidebar">
-      <canvas class="global-emoji" :class="{ active: emoji233333.kichikuing }" ref="emoji"></canvas>
+      <canvas class="global-emoji" 
+              ref="emoji"
+              :class="{ active: emoji233333 && emoji233333.kichikuing }">
+      </canvas>
       <background v-if="!mobileLayout"></background>
       <barrage v-if="!mobileLayout" v-cloak></barrage>
-      <webrtc v-if="!mobileLayout" v-cloak></webrtc>
+      <transition name="fade">
+        <webrtc v-if="!mobileLayout && openWebrtc" v-cloak></webrtc>
+      </transition>
       <header-view v-if="!mobileLayout"></header-view>
       <mobile-header v-if="mobileLayout"></mobile-header>
       <main id="main" :class="{ 'mobile': mobileLayout }">
@@ -36,7 +41,7 @@
       <tool-view v-if="!mobileLayout && !Object.is($route.name, 'music')"></tool-view>
       <share-view class="sidebar-share" v-if="!mobileLayout"></share-view>
       <footer-view v-if="!mobileLayout"></footer-view>
-      <mobile-footer v-if="mobileLayout"></mobile-footer>
+      <mobile-footer v-else></mobile-footer>
     </div>
   </div>
 </template>
@@ -44,6 +49,7 @@
 <script>
   import { Background, Barrage, Webrtc, Header, Footer, Aside, Share, Tool, Nav } from '~/components/layout'
   import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
+  import EventBus from '~/utils/event-bus'
   export default {
     name: 'app',
     head() {
@@ -71,7 +77,8 @@
           density: 5,
           staggered: true
         })
-        this.$store.commit('option/SET_EMOJI_INSTANCE', emoji233333)
+        EventBus.emoji233333 = emoji233333
+        this.$root.$EventBus = EventBus
       }
       if (process.env.NODE_ENV === 'production') {
         console.clear()
@@ -97,7 +104,7 @@
         return this.$store.state.option.openWebrtc
       },
       emoji233333() {
-        return this.$store.state.option.emoji233333 || {}
+        return EventBus.emoji233333
       },
       fullColumn () {
         return this.$store.state.option.fullColumn

@@ -59,6 +59,7 @@
 </template>
 
 <script>
+  import EventBus from '~/utils/event-bus'
   export default {
     name: 'music',
     head: {
@@ -83,10 +84,10 @@
     },
     computed: {
       player() {
-        return this.$store.state.music.player
+        return EventBus.player.player
       },
       playerState() {
-        return this.$store.state.music.playerState
+        return EventBus.player.playerState
       },
       currentSong() {
         return this.$store.getters['music/currentSong']
