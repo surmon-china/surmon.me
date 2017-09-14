@@ -1,5 +1,6 @@
 import Background from './background.vue'
 import Barrage from './barrage.vue'
+import Webrtc from './webrtc.vue'
 import Header from './header.vue'
 import Footer from './footer.vue'
 import Share from './share.vue'
@@ -10,6 +11,7 @@ import Nav from './nav.vue'
 module.exports = {
   Background,
   Barrage,
+  Webrtc,
   Header,
   Footer,
   Aside,
