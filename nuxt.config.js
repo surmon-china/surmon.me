@@ -38,6 +38,7 @@ module.exports = {
       'clipboard',
       'particles.js',
       'highlight.js',
+      'simplewebrtc',
       'socket.io-client'
     ],
     // 为JS和Vue文件定制babel配置。https://nuxtjs.org/api/configuration-build/#analyze
@@ -76,7 +77,7 @@ module.exports = {
     { src: '~/plugins/gravatar.js' },
     { src: '~/plugins/ga.js', ssr: false },
     { src: '~/plugins/emoji-233333.js', ssr: false },
-    // { src: '~/plugins/offline.js', ssr: false },
+    // { src: '~/plugins/webrtc.js', ssr: false },
     { src: '~/plugins/swiper.js', ssr: false },
     { src: '~/plugins/clipboard.js' },
     { src: '~/plugins/particles.js', ssr: false },

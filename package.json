@@ -18,6 +18,7 @@
     "nuxt": "^1.0.0-rc3",
     "offline-plugin": "^4.8.1",
     "particles.js": "^2.0.0",
+    "simplewebrtc": "^3.0.1",
     "socket.io": "^2.0.3",
     "socket.io-client": "^2.0.3",
     "vue-awesome-swiper": "^2.3.8"
