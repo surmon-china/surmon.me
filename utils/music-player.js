@@ -263,8 +263,8 @@ export default state => {
         state.player.skipToSong(index)
       }
     }
-    state.player.play()
 
+    state.player.play()
     state.playerState.ready = true
   }
 }

@@ -2,21 +2,41 @@
   <div id="tools">
     <div class="container">
       <div class="tools-list">
-        <button class="barrage" :class="{ active: barrageState }" @click="openBarrage">
+        <button class="webrtc" 
+                title="webrtc"
+                @click="toggleWebrtc"
+                :disabled="barrageState"
+                :class="{ 
+                  active: webrtcState,
+                  close: barrageState
+                }">
+          <i class="iconfont icon-webrtc"></i>
+        </button>
+        <button class="barrage" 
+                title="barrage"
+                @click="toggleBarrage" 
+                :disabled="webrtcState"
+                :class="{ 
+                  active: barrageState,
+                  close: webrtcState
+                }">
           <i class="iconfont icon-barrage"></i>
         </button>
         <a class="feedback" 
+           title="feedback"
            href="mailto:surmon@foxmail.com"
            target="_blank">
           <i class="iconfont icon-feedback"></i>
         </a>
         <button class="to-top" 
+                title="to-top"
                 @click="totop"
                 @mouseover="topBtnMouseOver = true;slowMoveToAnyWhere()"
                 @mouseleave="topBtnMouseOver = false">
           <i class="iconfont icon-totop"></i>
         </button>
         <button class="to-bottom" 
+                title="to-bottom"
                 @click="toBottom" 
                 @mouseover="bottomBtnMouseOver = true;slowMoveToAnyWhere()"
                 @mouseleave="bottomBtnMouseOver = false">
@@ -40,6 +60,9 @@
     computed: {
       barrageState() {
         return this.$store.state.option.openBarrage
+      },
+      webrtcState() {
+        return this.$store.state.option.openWebrtc
       }
     },
     methods: {
@@ -71,8 +94,11 @@
         }
         window.requestAnimationFrame(step)
       },
-      openBarrage() {
+      toggleBarrage() {
         this.$store.commit('option/UPDATE_BARRAGE_STATE')
+      },
+      toggleWebrtc() {
+        this.$store.commit('option/UPDATE_WEBRTC_STATE')
       }
     }
   }
@@ -84,7 +110,7 @@
     position: fixed;
     z-index: 9;
     width: 100%;
-    bottom: 20em;
+    bottom: 26rem;
 
     > .container {
       position: relative;
@@ -95,6 +121,7 @@
         width: 3em;
         height: 7em;
 
+        > .webrtc,
         > .barrage,
         > .to-top,
         > .to-bottom,
@@ -146,6 +173,29 @@
           }
         }
 
+        @keyframes webrtc {
+          0%   {
+            color: white;
+            background: $primary;
+          }
+          100% {
+            color: $primary;
+            background: white;
+          }
+        }
+
+        > .webrtc {
+          animation: webrtc 3s infinite;
+
+          &.active {
+            animation: webrtc .5s infinite;
+          }
+
+          &.close {
+            animation: none;
+          }
+        }
+
         > .barrage {
           color: white;
           animation: defaultBtnBg 10s infinite;
@@ -153,6 +203,11 @@
           &.active {
             background-color: $module-hover-bg;
             animation: defaultBtnBg steps(1) 1.666s infinite;
+          }
+
+          &.close {
+            color: $link-color;
+            animation: none;
           }
         }
 

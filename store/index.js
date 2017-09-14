@@ -5,6 +5,7 @@
 */
 
 import Service from '~/plugins/axios'
+import EventBus from '~/utils/event-bus'
 
 // global actions
 export const actions = {
@@ -251,43 +252,43 @@ export const actions = {
 
   // 获取歌曲列表
   loadMuiscPlayerList({ commit }) {
-    commit('music/REQUEST_LIST')
+    EventBus.REQUEST_LIST()
     return Service.get('/music/list/638949385')
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
       if(success) {
-        commit('music/GET_LIST_SUCCESS', response.data)
-        commit('music/INIT_PLAYER')
+        EventBus.GET_LIST_SUCCESS(response.data)
+        EventBus.INIT_PLAYER()
       }
-      if(!success) commit('music/GET_LIST_FAILURE')
+      if(!success) EventBus.GET_LIST_FAILURE()
     }, err => {
-      commit('music/GET_LIST_FAILURE', err)
+      EventBus.GET_LIST_FAILURE(err)
     })
   },
 
   // 获取歌曲详情
   loadMuiscSongDetail({ commit }, params = {}) {
-    commit('music/REQUEST_SONG')
+    EventBus.REQUEST_SONG()
     return Service.get(`/music/song/${ params.song_id }`)
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) commit('music/GET_SONG_SUCCESS', response.data)
-      if(!success) commit('music/GET_SONG_FAILURE')
+      if(success) EventBus.GET_SONG_SUCCESS(response.data)
+      if(!success) EventBus.GET_SONG_FAILURE()
     }, err => {
-      commit('music/GET_SONG_FAILURE', err)
+      EventBus.GET_SONG_FAILURE(err)
     })
   },
 
   // 获取歌曲歌词
   loadMuiscSongLrc({ commit }, params = {}) {
-    commit('music/REQUEST_LRC')
+    EventBus.REQUEST_LRC()
     return Service.get(`/music/lrc/${ params.song_id }`)
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) commit('music/GET_LRC_SUCCESS', response.data)
-      if(!success) commit('music/GET_LRC_FAILURE')
+      if(success) EventBus.GET_LRC_SUCCESS(response.data)
+      if(!success) EventBus.GET_LRC_FAILURE()
     }, err => {
-      commit('music/GET_LRC_FAILURE', err)
+      EventBus.GET_LRC_FAILURE(err)
     })
   }
 }
