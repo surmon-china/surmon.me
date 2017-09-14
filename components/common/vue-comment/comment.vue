@@ -263,6 +263,7 @@
 
 <script>
   import marked from '~/plugins/marked'
+  import EventBus from '~/utils/event-bus'
   import gravatar from '~/plugins/gravatar'
   import { UAParse, OSParse } from '~/utils/comment-ua-parse'
   import { scrollTo } from '~/utils/scroll-to-anywhere'
@@ -327,9 +328,6 @@
       },
       blacklist() {
         return this.$store.state.option.globalOption.data.blacklist
-      },
-      emoji233333() {
-        return this.$store.state.option.emoji233333
       },
       mobileLayout() {
         return this.$store.state.option.mobileLayout
@@ -567,8 +565,9 @@
         }).then(data => {
           // 发布成功后清空评论框内容并更新本地信息
           if (data.result.content.includes('2333')) {
-            if (this.emoji233333 && this.emoji233333.launch) {
-              this.emoji233333.launch()
+            const emoji233333 = EventBus.emoji233333
+            if (emoji233333 && emoji233333.launch) {
+              emoji233333.launch()
             }
           }
           this.previewMode = false

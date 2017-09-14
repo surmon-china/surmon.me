@@ -13,7 +13,7 @@
               <i class="iconfont icon-music-prev"></i>
             </button>
             <button class="toggle-play btn" @click="togglePlay" :disabled="!playerState.ready">
-                <i class="iconfont" :class="[playerState.playing ? 'icon-music-pause' : 'icon-music-play']"></i>
+              <i class="iconfont" :class="[playerState.playing ? 'icon-music-pause' : 'icon-music-play']"></i>
             </button>
             <button class="next-song btn" @click="nextSong" :disabled="!playerState.ready">
               <i class="iconfont icon-music-next"></i>
@@ -40,50 +40,51 @@
 </template>
 
 <script>
-export default {
-  name: 'layout-header',
-  computed: {
-    player() {
-      return this.$store.state.music.player
-    },
-    playerState() {
-      return this.$store.state.music.playerState
-    },
-    currentSong() {
-      return this.$store.getters['music/currentSong']
-    },
-    currentSongPicUrl() {
-      if (this.currentSong) {
-        let picUrl = this.currentSong.album.picUrl
-        return picUrl ? picUrl.replace('http://', '/proxy/') : '/images/music-bg.jpg'
-      } else {
-        return '/images/music-bg.jpg'
-      }
-    }
-  },
-  methods: {
-    togglePlay() {
-      if (this.playerState.ready) {
-        this.player.togglePlay()
+  import EventBus from '~/utils/event-bus'
+  export default {
+    name: 'layout-header',
+    computed: {
+      player() {
+        return EventBus.player.player
+      },
+      playerState() {
+        return EventBus.player.playerState
+      },
+      currentSong() {
+        return EventBus.currentSong
+      },
+      currentSongPicUrl() {
+        if (this.currentSong) {
+          let picUrl = this.currentSong.album.picUrl
+          return picUrl ? picUrl.replace('http://', '/proxy/') : '/images/music-bg.jpg'
+        } else {
+          return '/images/music-bg.jpg'
+        }
       }
     },
-    toggleMuted() {
-      if (this.playerState.ready) {
-        this.player.toggleMuted()
-      }
-    },
-    prevSong() {
-      if (this.playerState.ready) {
-        this.player.prevSong()
-      }
-    },
-    nextSong() {
-      if (this.playerState.ready) {
-        this.player.nextSong()
+    methods: {
+      togglePlay() {
+        if (this.playerState.ready) {
+          this.player.togglePlay()
+        }
+      },
+      toggleMuted() {
+        if (this.playerState.ready) {
+          this.player.toggleMuted()
+        }
+      },
+      prevSong() {
+        if (this.playerState.ready) {
+          this.player.prevSong()
+        }
+      },
+      nextSong() {
+        if (this.playerState.ready) {
+          this.player.nextSong()
+        }
       }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
