@@ -1,21 +1,21 @@
  <template>
   <div class="global-barrage" :class="{ active: barrageState }">
     <div class="barrage-box">
-      <div class="message-box" ref="messageBox">
+      <div class="barrage-box" ref="barrageBox">
         <transition-group tag="ul" 
                           name="barrages-list" 
                           class="barrages-list" 
-                          ref="messages"
-                          @enter="messageEnter"
-                          @leave="messageLeave">
+                          ref="barrages"
+                          @enter="barrageEnter"
+                          @leave="barrageLeave">
           <li class="item" 
-              :key="message.text"
+              :key="barrage.text"
               :index="index"
-              :new="message.new"
-              v-for="(message, index) in messages"
-              :class="[`size-${message.style.size}`, `color-${message.style.color}`]">
+              :new="barrage.new"
+              v-for="(barrage, index) in barrages"
+              :class="[`size-${barrage.style.size}`, `color-${barrage.style.color}`]">
             <span class="gravatar"></span>
-            <span class="content" v-text="message.text"></span>
+            <span class="content" v-text="barrage.text"></span>
           </li>
         </transition-group>
       </div>
@@ -41,9 +41,9 @@
           </div>
           <input type="text" 
                  class="input" 
-                 v-model="message" 
+                 v-model="barrage" 
                  placeholder="Let's fuck"
-                 @keyup.enter="sendMessage"/>
+                 @keyup.enter="sendbarrage"/>
           <div class="count">
             <span>{{ counts.users }}人</span>
             <span>&nbsp;|&nbsp;</span>
@@ -67,8 +67,8 @@
           count: 0
         },
         socket,
-        message: '',
-        messages: [],
+        barrage: '',
+        barrages: [],
         sizes,
         colors,
         sizeIndex: sizes.length - 1,
@@ -87,24 +87,24 @@
       }
     },
     beforeMount() {
-      this.socket.emit('last-messages', messages => {
-        this.messages = messages
+      this.socket.emit('barrage-last-list', barrages => {
+        this.barrages = barrages
       })
       this.socket.emit('barrage-count', counts => {
         this.counts = counts
       })
-      this.socket.on('update-barrage-count', counts => {
+      this.socket.on('barrage-update-count', counts => {
         this.counts = counts
       })
-      this.socket.on('new-message', message => {
-        this.messages.push(message)
+      this.socket.on('barrage-create', barrage => {
+        this.barrages.push(barrage)
       })
     },
     methods: {
-      sendMessage() {
-        const text = this.message.trim()
+      sendbarrage() {
+        const text = this.barrage.trim()
         if (!text) return
-        const message = {
+        const barrage = {
           text,
           style: {
             size: this.sizeIndex,
@@ -112,11 +112,11 @@
           },
           date: new Date().getTime()
         }
-        this.socket.emit('send-message', message)
-        message.new = true
-        this.messages.push(message)
+        this.socket.emit('barrage-send', barrage)
+        barrage.new = true
+        this.barrages.push(barrage)
         this.counts.count += 1
-        this.message = ''
+        this.barrage = ''
       },
       transferDate(timestamp) {
         return new Date(timestamp).toLocaleString()
@@ -133,7 +133,7 @@
         }
         return rand(pre)
       },
-      messageLeave(element, done) {
+      barrageLeave(element, done) {
         // 获取渲染容器高度
         const innerHeight = document.documentElement.clientHeight - 63
         const innerCount = innerHeight / 30
@@ -148,15 +148,15 @@
         }
         setTimeout(done, 28000)
       },
-      messageEnter(element, done) {
+      barrageEnter(element, done) {
         done()
       }
     },
     watch: {
-      messages() {
-        if (this.messages.length) {
+      barrages() {
+        if (this.barrages.length) {
           this.$nextTick(() => {
-            this.messages.shift()
+            this.barrages.shift()
           })
         }
       }
@@ -302,7 +302,7 @@
       display: block;
       margin-top: $header-height;
 
-      > .message-box {
+      > .barrage-box {
         height: 100%;
         width: 100%;
         display: block;

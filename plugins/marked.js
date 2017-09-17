@@ -1,5 +1,5 @@
 import marked from 'marked'
-import Hljs from 'highlight.js'
+import Hljs from '~/plugins/highlight.js'
 import buildTagLink from '~/utils/article-tag-releted-parse.js'
 
 marked.setOptions({

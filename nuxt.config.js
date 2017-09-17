@@ -28,6 +28,12 @@ module.exports = {
       // })
       */
     },
+    plugins: [
+      // new webpack.ContextReplacementPlugin(
+      //   /highlight\.js\/lib\/languages$/,
+      //   new RegExp(`^./(${['javascript', 'python', 'bash', 'css', 'html', 'php', 'go', 'less', 'json', 'scss', 'nginx', 'shell', 'sql', 'stylus', 'typescript'].join('|')})$`),
+      // ),
+    ],
     // 将重复引用的(第三方/自有)模块添加到vendor.bundle.js
     vendor: [
       'axios',
@@ -37,7 +43,6 @@ module.exports = {
       'gravatar',
       'clipboard',
       'particles.js',
-      'highlight.js',
       'simplewebrtc',
       'socket.io-client'
     ],
@@ -75,11 +80,11 @@ module.exports = {
     { src: '~/plugins/filters.js' },
     { src: '~/plugins/marked.js' },
     { src: '~/plugins/gravatar.js' },
+    { src: '~/plugins/highlight.js' },
+    { src: '~/plugins/clipboard.js' },
     { src: '~/plugins/ga.js', ssr: false },
     { src: '~/plugins/emoji-233333.js', ssr: false },
-    // { src: '~/plugins/webrtc.js', ssr: false },
     { src: '~/plugins/swiper.js', ssr: false },
-    { src: '~/plugins/clipboard.js' },
     { src: '~/plugins/particles.js', ssr: false },
     { src: '~/plugins/copy-right.js', ssr: false },
     { src: '~/plugins/image-popup.js', ssr: false },
