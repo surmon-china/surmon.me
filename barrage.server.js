@@ -1,4 +1,6 @@
 
+const fs = require('fs')
+
 // extend
 const underscore = require('./utils/underscore-simple.js')
 

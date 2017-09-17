@@ -19,10 +19,6 @@ If you want to run the applaction, you need install the [nodepress](https://gith
 
 ![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshot/mobile-full.jpg)
 
-## Webpack Bundle 
-
-![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshot/webpack-bundle-analyze.png)
-
 ## Build Setup
 
 ```bash
