@@ -49,12 +49,14 @@
 
 <script>
   import { scrollTo, easing } from '~/utils/scroll-to-anywhere'
+  const underscore = require('~/utils/underscore-simple.js')
   export default {
     name: 'tool',
     data() {
       return {
         topBtnMouseOver: false,
-        bottomBtnMouseOver: false
+        bottomBtnMouseOver: false,
+        _toggleWebrtc: null
       }
     },
     computed: {
@@ -98,7 +100,14 @@
         this.$store.commit('option/UPDATE_BARRAGE_STATE')
       },
       toggleWebrtc() {
-        this.$store.commit('option/UPDATE_WEBRTC_STATE')
+        if (this._toggleWebrtc) {
+          this._toggleWebrtc()
+        } else {
+          this._toggleWebrtc = underscore.throttle(() => {
+            this.$store.commit('option/UPDATE_WEBRTC_STATE')
+          }, 1666)
+          this._toggleWebrtc()
+        }
       }
     }
   }
