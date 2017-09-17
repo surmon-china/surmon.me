@@ -1,5 +1,5 @@
 const fs = require('fs')
-const app  =  require('express')()
+const app = require('express')()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const { Nuxt, Builder } = require('nuxt')
@@ -8,8 +8,8 @@ const port = process.env.PORT || 3000
 process.noDeprecation = true
 
 // extend
-const debounce = require('./utils/debounce.js')
-
+const webrtcServer = require('./webrtc.server.js')
+const barrageServer = require('./barrage.server.js')
 app.set('port', port)
 
 // Import and Set Nuxt.js options
@@ -18,7 +18,6 @@ config.dev = !(process.env.NODE_ENV === 'production')
 
 // Init Nuxt.js
 const nuxt = new Nuxt(config)
-
 app.use(nuxt.render)
 
 // Build only in dev mode
@@ -33,74 +32,12 @@ if (config.dev) {
 
 // Listen the server
 server.listen(port, host)
+
 // eslint-disable-line no-console
 console.log(`Nuxt.js SSR Server listening on ${host}:${port}, at ${new Date().toLocaleString()}`)
 
-// Socket.io
-const defaultBarrages = require('./data/barrages.default.json') || []
-const messages = require('./data/barrages.json') || []
-if (!messages.length) {
-  messages.push(...defaultBarrages)
-}
+// barrage server
+barrageServer(io)
 
-// 更新本地文件数据
-const updateLocalBarragesFile = () => {
-  fs.writeFile('./data/barrages.json', JSON.stringify(messages), err => {
-    if (err) {
-      console.log('最新聊天记录保存失败', err)
-    } else {
-      // console.log('最新聊天记录保存成功!')
-    }
-  })
-}
-
-// 30秒为一个周期，保存一次最新弹幕记录
-const updateDebounce = debounce(updateLocalBarragesFile, 1000 * 30)
-let socketClients = 0
-
-// 弹幕和视频
-io.on('connection', socket => {
-
-  // 每次有新人加入，都更新客户端数量
-  io.clients((error, clients) => {
-    if (error) {
-      console.log('客户端数获取失败', error)
-    } else {
-      socketClients = clients.length
-    }
-  })
-  // 最后一批弹幕记录
-  socket.on('last-messages', callback => {
-    callback(messages.slice(-66))
-  })
-  // 弹幕总数量
-  socket.on('barrage-count', callback => {
-    callback({
-      users: socketClients,
-      count: messages.length
-    })
-  })
-  // 广播弹幕
-  socket.on('send-message', message => {
-    messages.push(message)
-    socket.broadcast.emit('new-message', message)
-    socket.broadcast.emit('update-barrage-count', {
-      users: socketClients,
-      count: messages.length
-    })
-    updateDebounce()
-  })
-  // 新增RTC媒体流
-  socket.on('rtc-ice-candidate', candidate => {
-    // console.log('服务端收到 rtc-ice-candidate', candidate)
-    socket.broadcast.emit('rtc-ice-candidate', candidate)
-  })
-  socket.on('rtc-offer', sdp => {
-    // console.log('服务端收到 rtc-offer', sdp)
-    socket.broadcast.emit('rtc-offer', sdp)
-  })
-  socket.on('rtc-answer', sdp => {
-    // console.log('服务端收到 rtc-answer', sdp)
-    socket.broadcast.emit('rtc-answer', sdp)
-  })
-})
+// webrtc Server
+webrtcServer(io)

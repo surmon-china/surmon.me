@@ -15,6 +15,7 @@
     "highlight.js": "^9.9.0",
     "howler": "^2.0.3",
     "marked": "^0.3.6",
+    "node-uuid": "^1.4.8",
     "nuxt": "^1.0.0-rc11",
     "offline-plugin": "^4.8.1",
     "particles.js": "^2.0.0",
@@ -28,6 +29,7 @@
   "scripts": {
     "precommit": "npm run lint",
     "dev": "nodemon --exec node server.js",
+    "dev:tool": "devtool ./server.js --watch",
     "build": "cross-env NODE_ENV=production nuxt build",
     "start": "cross-env NODE_ENV=production node server.js",
     "analyz": "cross-env NODE_ENV=production nuxt build --analyzer",

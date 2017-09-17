@@ -9,6 +9,21 @@
   src: url('/fonts/DIN-Regular.ttf');
 }
 
+::selection {
+    background: $primary; 
+    color: $white;
+}
+
+::-moz-selection {
+    background: $primary; 
+    color: $white;
+}
+
+::-webkit-selection {
+    background: $primary; 
+    color: $white;
+}
+
 * {
   border-radius: 0;
   box-shadow: none;
