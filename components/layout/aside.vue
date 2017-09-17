@@ -202,6 +202,8 @@
 
         > .search-input {
           margin-right: 0;
+          width: calc(100% - 7em);
+          box-sizing: border-box;
         }
 
         > .search-btn {

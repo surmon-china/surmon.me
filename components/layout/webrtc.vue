@@ -144,13 +144,32 @@
       }
     },
     beforeDestroy() {
-      this.webrtc.stopLocalVideo()
-      this.webrtc.leaveRoom()
-      this.webrtc.disconnect()
-      this.webrtc = null
+      if (this.webrtc) {
+        this.webrtc.stopLocalVideo()
+        this.webrtc.leaveRoom()
+        this.webrtc.disconnect()
+        this.webrtc = null
+      }
       this.streams = []
     },
     mounted() {
+
+      let getUserMedia = navigator.getUserMedia || 
+                         navigator.webkitGetUserMedia || 
+                         navigator.mozGetUserMedia || 
+                         navigator.msGetUserMedia
+
+      if (!getUserMedia && (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
+        getUserMedia = navigator.mediaDevices.getUserMedia
+      }
+
+      if (!getUserMedia) {
+        window.alert('不支持')
+        this.$store.commit('option/UPDATE_WEBRTC_STATE', false)
+        return false
+      } else {
+        navigator.getUserMedia = getUserMedia
+      }
 
       const self = this
       const room = 'surmon.me'
