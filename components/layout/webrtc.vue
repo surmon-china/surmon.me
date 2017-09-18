@@ -327,7 +327,7 @@
 
       // remote p2p/ice failure
       webrtc.on('connectivityError', peer => {
-        const targetStream = self.getStreamByPeerId(peerId)
+        const targetStream = self.getStreamByPeerId(peer.id)
         if (targetStream) {
           targetStream.state = -1
         }
