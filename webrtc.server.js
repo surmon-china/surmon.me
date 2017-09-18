@@ -8,8 +8,6 @@ const uuid = require('node-uuid')
 const crypto = require('crypto')
 const apiConfig = require('./api.config')
 
-// todo: turnn server created 改变服务端和客户端的服务器list通讯方式，增加上username 和 密码
-
 const config = {
   rooms: {
     maxClients: 30
@@ -149,13 +147,15 @@ const parseWebrtcServer = io => {
       }
     })
 
+    /*
     // support for logging full webrtc traces to stdout
     // useful for large-scale error monitoring
     client.on('trace', data => {
-      // console.log('trace', JSON.stringify(
-      //   [data.type, data.session, data.prefix, data.peer, data.time, data.value]
-      // ))
+      console.log('trace', JSON.stringify(
+        [data.type, data.session, data.prefix, data.peer, data.time, data.value]
+      ))
     })
+    */
 
     /*
     // 为 TURN 认证创建共享密钥
@@ -185,6 +185,7 @@ const parseWebrtcServer = io => {
     client.emit('turnservers', credentials)
     client.emit('turnservers', config.turnservers)
     */
+
   })
 }
 
