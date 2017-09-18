@@ -6,20 +6,36 @@
 
 const uuid = require('node-uuid')
 const crypto = require('crypto')
+const apiConfig = require('./api.config')
+
+// todo: turnn server created 改变服务端和客户端的服务器list通讯方式，增加上username 和 密码
 
 const config = {
   rooms: {
     maxClients: 30
   },
-  stunservers: [{
-    urls: 'stun:stun.l.google.com:19302'
-  }],
+  stunservers: [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun1.l.google.com:19302' },
+    { urls: 'stun:stun2.l.google.com:19302' },
+    { urls: 'stun:stun3.l.google.com:19302' },
+    { urls: 'stun:stun4.l.google.com:19302' },
+    { urls: 'stun:stun.ekiga.net' },
+    { urls: 'stun:stun.ideasip.com' },
+    { urls: 'stun:stun.rixtelecom.se' },
+    { urls: 'stun:stun.schlund.de' },
+    { urls: 'stun:stun.stunprotocol.org:3478' },
+    { urls: 'stun:stun.voiparound.com' },
+    { urls: 'stun:stun.voipbuster.com' },
+    { urls: 'stun:stun.voipstunt.com' },
+    { urls: 'stun:stun.voxgratia.org' }
+  ],
   turnservers: [
-    // {
-    //   urls: ['turn:your.turn.servers.here'],
-    //   secret: 'turnserversharedsecret',
-    //   expiry: 86400
-    // }
+    {
+      urls: ['turn:121.42.55.33:3478'],
+      secret: '0x43200e73d48b1f9295d569da7f9101ab',
+      expiry: 86400
+    }
   ]
 }
 
@@ -141,9 +157,7 @@ const parseWebrtcServer = io => {
       // ))
     })
 
-    // tell client about stun and turn servers and generate nonces
-    client.emit('stunservers', config.stunservers || [])
-
+    /*
     // 为 TURN 认证创建共享密钥
     // 该过程在 draft-uberti-behave-turn-rest 中描述
     const credentials = []
@@ -163,7 +177,14 @@ const parseWebrtcServer = io => {
       })
     }
 
+    // tell client about stun and turn servers and generate nonces
+    // console.log('server send stuns', config.stunservers || [])
+    client.emit('stunservers', config.stunservers || [])
+    
+    console.log('server send turnservers', config.turnservers, credentials)
     client.emit('turnservers', credentials)
+    client.emit('turnservers', config.turnservers)
+    */
   })
 }
 

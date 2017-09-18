@@ -182,7 +182,23 @@
         autoAdjustMic: true,
         autoRequestMedia: true,
         detectSpeakingEvents: true,
-        url: apiConfig.socketHost
+        url: apiConfig.socketHost,
+        // 自动选择流模式
+        // iceTransportPolicy: 'relay',
+        peerConnectionConfig:{
+          // 自动选择流模式
+          // iceTransports: 'relay',
+          iceServers: [
+            {
+              urls: [
+                'stun:121.42.55.33:3478',
+                'turn:121.42.55.33:3478'
+              ],
+              username: 'surmon',
+              credential: 'surmon',
+            }
+          ]
+        }
       })
       self.webrtc = webrtc
 
@@ -190,6 +206,16 @@
       webrtc.on('connectionReady', sessionId => {
         self.localStream.peerId = sessionId
       })
+
+      /*
+      webrtc.on('stunservers', stunservers => {
+        console.log('client stunservers', stunservers)
+      })
+
+      webrtc.on('turnservers', turnservers => {
+        console.log('client turnservers', turnservers)
+      })
+      */
 
       // 用于唯一标识符
       const buildStreamId = peer => `remote-video-${webrtc.getDomId(peer)}`
@@ -268,24 +294,24 @@
               switch (peer.pc.iceConnectionState) {
                 case 'checking':
                   stream.state = 1
-                  // console.log('远程媒体状态：Connecting to stream...')
+                  // console.log('远程媒体状态：Connecting to stream...', peer)
                   break
                 case 'connected':
                 case 'completed':
                   stream.state = 2
-                  // console.log('远程媒体状态：Connection established.')
+                  // console.log('远程媒体状态：Connection established.', peer)
                   break
                 case 'disconnected':
                   stream.state = 3
-                  // console.log('远程媒体状态：Disconnected.')
+                  // console.log('远程媒体状态：Disconnected.', peer)
                   break
                 case 'failed':
                   stream.state = -1
-                  // console.log('远程媒体状态：Connection failed.')
+                  // console.log('远程媒体状态：Connection failed.', peer)
                   break
                 case 'closed':
                   stream.state = 4
-                  // console.log('远程媒体状态：Connection closed.')
+                  // console.log('远程媒体状态：Connection closed.', peer)
                   break
               }
             }
