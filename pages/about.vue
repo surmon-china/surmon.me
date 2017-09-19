@@ -59,11 +59,11 @@
                        rel="external nofollow">
                       <i class="iconfont icon-juejin"></i>
                     </a>
-                    <a href="https://www.v2ex.com/member/surmon" 
+          <!--           <a href="https://www.v2ex.com/member/surmon" 
                        target="_blank" 
                        rel="external nofollow">
                       <i class="iconfont icon-v2ex"></i>
-                    </a>
+                    </a> -->
                     <a href="https://www.zhihu.com/people/surmon/activities" 
                        target="_blank" 
                        rel="external nofollow">
@@ -129,7 +129,7 @@
                 <a class="followme" 
                    href="" 
                    @click.stop.prevent=""
-                   v-if="!mobileLayout">Follow me</a>
+                   v-if="!mobileLayout">Friend me</a>
                 <div class="wechat" v-if="!mobileLayout"></div>
               </div>
             </div>
