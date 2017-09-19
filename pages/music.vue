@@ -90,7 +90,7 @@
         return EventBus.player.playerState
       },
       currentSong() {
-        return this.$store.getters['music/currentSong']
+        return EventBus.currentSong
       },
       currentSongPicUrl() {
         if (this.currentSong) {
