@@ -46,6 +46,9 @@ function safeCb(cb) {
   }
 }
 
+// 存储所有filter
+let filters = {}
+
 const parseWebrtcServer = io => {
 
   // webrtc
@@ -59,6 +62,7 @@ const parseWebrtcServer = io => {
 
     // 取消订阅
     function removeFeed(type) {
+      delete filters[client.id]
       if (client.room) {
         io.sockets.in(client.room).emit('remove', {
           id: client.id,
@@ -97,6 +101,15 @@ const parseWebrtcServer = io => {
       client.join(name)
       client.room = name
     }
+
+    // 监听用户滤镜改变
+    client.on('webrtc-set-filter', filterDetail => {
+      filters[filterDetail.peerId] = filterDetail.filter
+      client.broadcast.emit('webrtc-set-filter', filterDetail)
+    })
+
+    // 向新用户广播所有已有滤镜
+    client.emit('webrtc-filters', filters)
 
     // pass a message to another id
     client.on('message', details => {

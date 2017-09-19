@@ -97,6 +97,7 @@
           disabledMic: false,
           disabledCarema: false
         },
+        remoteFilters: [],
         streams: [],
         filters: ['normal', 'grayscale', 'sepia', 'hue-rotate', 'invert', 'blur'],
         names: ['吴彦祖', '王祖贤', '刘恺威', '奥黛丽 赫本', '任达华', '陈冠希', '张曼玉', '刘青云', '甄子丹', '刘德华', '张学友', '黎明', '周润发', '王杰', '黄家驹', '吴孟达', '周星驰', '鹿晗', '黄子韬', '李易峰', '薛之谦', '韩红', '张柏芝', '谢霆锋', '成龙', '梁朝伟', '刘嘉玲', '张家辉', '梁家辉', '吴镇宇', '黄秋生', '古天乐', '余文乐']
@@ -126,7 +127,7 @@
       sendFilterToAll(type) {
         if (this.localStream.peerId) {
           this.streams[0].filter = type
-          this.webrtc.sendToAll('filter', {
+          this.webrtc.connection.connection.emit('webrtc-set-filter', {
             peerId: this.localStream.peerId,
             filter: type
           })
@@ -271,14 +272,15 @@
 
       // 接收到一个信号源
       webrtc.on('videoAdded', (video, peer) => {
-        // console.log('接收新的信号源', peer)
+        // console.log('接收新的信号源', peer, self.remoteFilters)
+        const filter = self.remoteFilters[peer.id]
         const id = buildStreamId(peer)
         const names = self.names
         const remoteStream = {
           id: id, 
           ref: id,
           state: 0,
-          filter: 0,
+          filter: filter || 0,
           volume: 0,
           disabledMic: false,
           disabledCarema: false,
@@ -359,15 +361,18 @@
         }
       })
 
+      // 远程滤镜们
+      webrtc.connection.connection.on('webrtc-filters', filters => {
+        this.remoteFilters = filters
+      })
+
       // 远程滤镜改变
-      webrtc.connection.on('message', message => {
-        if (message.type === 'filter') {
-          const peerId = message.payload.peerId
-          const filter = message.payload.filter
-          const targetStream = self.getStreamByPeerId(peerId)
-          if (targetStream) {
-            targetStream.filter = filter
-          }
+      webrtc.connection.connection.on('webrtc-set-filter', filterDetail => {
+        const peerId = filterDetail.peerId
+        const filter = filterDetail.filter
+        const targetStream = self.getStreamByPeerId(peerId)
+        if (targetStream) {
+          targetStream.filter = filter
         }
       })
 
