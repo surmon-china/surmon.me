@@ -13,7 +13,7 @@
     "express": "^4.14.1",
     "gravatar": "^1.6.0",
     "highlight.js": "^9.9.0",
-    "howler": "^2.0.3",
+    "howler": "^2.0.4",
     "marked": "^0.3.6",
     "node-uuid": "^1.4.8",
     "nuxt": "^1.0.0-rc11",
