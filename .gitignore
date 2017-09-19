@@ -7,7 +7,7 @@ npm-debug.log
 package-lock.json
 
 # Nuxt build
-# .nuxt
+.nuxt
 
 # Nuxt generate
 dist
