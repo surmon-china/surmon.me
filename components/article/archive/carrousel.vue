@@ -136,6 +136,11 @@
           > .content {
             min-height: 8rem;
             height: auto;
+
+            > .title {
+              max-width: 75%;
+              @include text-overflow;
+            }
           }
         }
       }
