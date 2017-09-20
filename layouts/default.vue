@@ -50,6 +50,7 @@
   import { Background, Barrage, Webrtc, Header, Footer, Aside, Share, Tool, Nav } from '~/components/layout'
   import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
   import EventBus from '~/utils/event-bus'
+  import consoleSlogan from '~/utils/console-slogan'
   export default {
     name: 'app',
     head() {
@@ -81,10 +82,7 @@
         this.$root.$EventBus = EventBus
       }
       if (process.env.NODE_ENV === 'production') {
-        setTimeout(() => {
-          console.clear()
-          console.log("%cTalk is cheap. Show me the code %csurmon@foxmail.com", "color:#666;font-size:3em;","color:#666;font-size:13px;")
-        }, 1000)
+        consoleSlogan()
       }
     },
     components: {
