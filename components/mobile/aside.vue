@@ -135,7 +135,7 @@
           font-weight: 700;
           border-radius: 1px;
           color: $module-bg;
-          font-family: CenturyGothic;
+          // font-family: CenturyGothic;
           margin-bottom: .5em;
 
           &.guestbook {
