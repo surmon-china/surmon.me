@@ -266,11 +266,5 @@ export default state => {
 
     // state.player.play()
     state.playerState.ready = true
-    window.onload = () => {
-      // console.log('可以自动播放了', state)
-      if (state && state.player) {
-        state.player.play()
-      }
-    }
   }
 }
