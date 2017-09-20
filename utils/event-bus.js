@@ -11,7 +11,6 @@ import musicPlayerBuilder from '~/utils/music-player'
 export default new Vue({
   data() {
     return {
-      windowLoaded: false,
       emoji233333: null,
       player: {
         playerState: {

@@ -35,6 +35,10 @@
           </div>
         </div>
       </div>
+      <div class="pre-load">
+        <img v-if="preload" :src="currentSongPicUrl" alt="song-thumb">
+        <img v-if="preload" src="/images/app-hot.png" alt="app-download">
+      </div>
     </nav>
   </header>
 </template>
@@ -43,6 +47,21 @@
   import EventBus from '~/utils/event-bus'
   export default {
     name: 'layout-header',
+    data() {
+      return {
+        preload: false
+      }
+    },
+    mounted() {
+      if (process.browser) {
+        const self = this
+        window.addEventListener('load', event => {
+          window.setTimeout(() => {
+            self.preload = true
+          }, 2000)
+        })
+      }
+    },
     computed: {
       player() {
         return EventBus.player.player
@@ -178,6 +197,13 @@
             color: $dividers;
           }
         }
+      }
+
+      > .pre-load {
+        visibility: hidden;
+        width: 0;
+        height: 0;
+        opacity: 0;
       }
     }
   }
