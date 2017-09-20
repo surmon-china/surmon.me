@@ -38,6 +38,8 @@
       <div class="pre-load">
         <img v-if="preload" :src="currentSongPicUrl" alt="song-thumb">
         <img v-if="preload" src="/images/app-hot.png" alt="app-download">
+        <img v-if="preload" src="/images/app-logo.png" alt="app-logo">
+        <img v-if="preload" src="/images/about-background.jpg" alt="background">
       </div>
     </nav>
   </header>
