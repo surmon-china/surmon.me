@@ -202,7 +202,7 @@
 
         > .search-input {
           margin-right: 0;
-          width: calc(100% - 7em);
+          width: calc(100% - 6.5em);
           box-sizing: border-box;
         }
 
