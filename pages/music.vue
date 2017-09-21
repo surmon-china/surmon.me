@@ -237,7 +237,7 @@
           > .toggle-btn {
             width: 6rem;
             height: 6rem;
-            line-height: 6.4rem;
+            line-height: 6rem;
             text-align: center;
             background-color: $module-bg;
             border-radius: 100%;
