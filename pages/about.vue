@@ -112,7 +112,7 @@
                        target="_blank" 
                        rel="external nofollow">「 skyrover 」</i>
                     </a>
-                    <a href="http://www.bubblypoker.com/about" 
+                    <a href="http://jooger.me/about" 
                        target="_blank" 
                        rel="external nofollow">「 Jooger 」</i>
                     </a>
@@ -396,11 +396,11 @@
                   color: rgba(191, 191, 191, 0.5);
 
                   &.icon-code {
-                    color: gray;
+                    color: black;
                   }
 
                   &.icon-like {
-                    color: moccasin;
+                    color: pink;
                   }
 
                   &.icon-coffee {

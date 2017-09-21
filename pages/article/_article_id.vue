@@ -359,7 +359,7 @@
 
           > li {
             line-height: 1.8em;
-            padding: .5em;
+            padding: .5em .8em;
 
             &:hover {
               background-color: rgba(230, 230, 230, 0.7);
