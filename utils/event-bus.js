@@ -6,7 +6,6 @@
 */
 
 import Vue from 'vue'
-import consoleSlogan from '~/utils/console-slogan'
 import musicPlayerBuilder from '~/utils/music-player'
 export default new Vue({
   data() {
@@ -53,14 +52,6 @@ export default new Vue({
     INIT_PLAYER() {
       const player = this.player
       musicPlayerBuilder(player)
-      setTimeout(() => {
-        if (player.player && player.player.play) {
-          player.player.play()
-          setTimeout(() => {
-            consoleSlogan()
-          }, 666)
-        }
-      }, 1666)
     },
 
     REQUEST_LIST() {

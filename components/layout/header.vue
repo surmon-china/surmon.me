@@ -36,6 +36,7 @@
         </div>
       </div>
       <div class="pre-load">
+        <img src="https://www.gravatar.com/avatar/fa6719aa3cb274e29e9bec58459e8425?s=200" alt="">
         <img v-if="preload" :src="currentSongPicUrl" alt="song-thumb">
         <img v-if="preload" src="/images/app-hot.png" alt="app-download">
         <img v-if="preload" src="/images/app-logo.png" alt="app-logo">
@@ -47,6 +48,7 @@
 
 <script>
   import EventBus from '~/utils/event-bus'
+  import consoleSlogan from '~/utils/console-slogan'
   export default {
     name: 'layout-header',
     data() {
@@ -57,10 +59,22 @@
     mounted() {
       if (process.browser) {
         const self = this
+        const player = EventBus.player
+        const play = () => {
+          if (player.playerState.ready && player.player && player.player.play) {
+            player.player.play()
+            setTimeout(() => {
+              consoleSlogan()
+            }, 666)
+          } else {
+            setTimeout(play, 1666)
+          }
+        }
         window.addEventListener('load', event => {
           window.setTimeout(() => {
             self.preload = true
-          }, 2000)
+            play()
+          }, 1666)
         })
       }
     },
