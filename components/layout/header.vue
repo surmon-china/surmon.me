@@ -36,7 +36,6 @@
         </div>
       </div>
       <div class="pre-load">
-        <img src="https://www.gravatar.com/avatar/fa6719aa3cb274e29e9bec58459e8425?s=200" alt="">
         <img v-if="preload" :src="currentSongPicUrl" alt="song-thumb">
         <img v-if="preload" src="/images/app-hot.png" alt="app-download">
         <img v-if="preload" src="/images/app-logo.png" alt="app-logo">
