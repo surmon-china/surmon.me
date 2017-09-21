@@ -29,7 +29,7 @@
       </empty-box>
       <ul class="aside-article-list" v-else-if="!article.fetching && article.data.data.length">
         <li class="item" :key="item.id" v-for="item in article.data.data.slice(0, 10)">
-          <i class="index"></i>
+          <span class="index"></span>
           <router-link class="title" 
                        :title="`${item.title} - [ ${item.meta.comments} 条评论  |  ${item.meta.likes} 人喜欢 ]`"
                        :to="`/article/${item.id}`">
@@ -202,7 +202,7 @@
 
         > .search-input {
           margin-right: 0;
-          width: calc(100% - 6.5em);
+          width: calc(100% - 6.5em - 1px);
           box-sizing: border-box;
         }
 
