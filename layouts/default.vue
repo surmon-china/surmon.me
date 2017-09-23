@@ -81,9 +81,7 @@
         EventBus.emoji233333 = emoji233333
         this.$root.$EventBus = EventBus
       }
-      if (process.env.NODE_ENV === 'production') {
-        consoleSlogan()
-      }
+      consoleSlogan()
     },
     components: {
       Webrtc,

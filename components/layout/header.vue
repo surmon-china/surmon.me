@@ -39,7 +39,10 @@
         <img v-if="preload" :src="currentSongPicUrl" alt="song-thumb">
         <img v-if="preload" src="/images/app-hot.png" alt="app-download">
         <img v-if="preload" src="/images/app-logo.png" alt="app-logo">
-        <img v-if="preload" src="/images/about-background.jpg" alt="background">
+        <img v-if="preload" src="/images/about-background-be-1.jpg" alt="background">
+        <img v-if="preload" src="/images/about-background-be-2.jpg" alt="background">
+        <img v-if="preload" src="/images/about-background-star-1.png" alt="background">
+        <img v-if="preload" src="/images/about-background-star-2.png" alt="background">
       </div>
     </nav>
   </header>

@@ -120,12 +120,23 @@
                 </p>
               </div>
               <div class="gravatar">
-                <div class="background">
-                  <img src="/images/about-background.jpg" alt="background" class="image">
+                <div class="background be-2">
+                  <img src="/images/about-background-be-2.jpg" alt="background" class="image">
+                </div>
+                <div class="background be-1">
+                  <img src="/images/about-background-be-1.jpg" alt="background" class="image">
+                </div>
+                <div class="background star-1">
+                  <img src="/images/about-background-star-1.png" alt="background-star" class="image">
+                </div>
+                <div class="background star-2">
+                  <img src="/images/about-background-star-2.png" alt="background-star" class="image">
                 </div>
                 <img :src="gravatar" class="avatar">
-                <h2 class="name"><strong>Surmon</strong></h2>
-                <p class="skill">JS Stack Developer.</p>
+                <div class="desc">
+                  <h2 class="name"><strong>Surmon</strong></h2>
+                  <p class="skill">JS Stack Developer.</p>
+                </div>
                 <a class="followme" 
                    href="" 
                    @click.stop.prevent=""
@@ -158,6 +169,7 @@
     },
     computed: {
       gravatar() {
+        // const gravatar = null
         const gravatar = this.$store.state.option.adminInfo.data.gravatar
         return !!gravatar 
                 ? `${gravatar}?imageView2/1/w/360/h/360/interlace/1/q/75|imageslim` 
@@ -192,18 +204,46 @@
                 > .gravatar {
                   width: 100%;
                   margin-bottom: 1rem;
+                  flex-direction: row;
+                  padding: 1rem 0;
 
                   > .background {
-                    height: 40%;
+                    height: 50%;
+
+                    &.star-1,
+                    &.star-2 {
+
+                      > .image {
+                         width: 4rem;
+                       }
+                    }
+
+                    > .image {
+                      width: 200%;
+                      height: auto;
+                    }
                   }
 
                   > .avatar {
-                    margin-top: 10%;
+                    width: 25%;
+                    margin-top: 0;
+                    margin-left: 6%;
                   }
 
-                  > .name,
-                  > .skill {
-                    margin: 1rem 0;
+                  > .desc {
+                    width: 50%;
+                    margin-left: 5%;
+                    text-align: left;
+                    z-index: 1;
+
+                    > .name {
+                      color: $white;
+                    }
+
+                    > .name,
+                    > .skill {
+                      margin: 1rem 0;
+                    }
                   }
 
                   > .favorite {
@@ -215,9 +255,10 @@
                 > .desc {
                   width: 100%;
                   padding: 1em;
+                  overflow-x: auto;
 
                   > .item {
-                    @include text-overflow();
+                    white-space: nowrap;
 
                     > .iconfont {
                       margin-right: 1rem;
@@ -278,12 +319,28 @@
               justify-content: flex-start;
               background-color: $module-bg;
 
-              @keyframes aboutbg {
+              @keyframes aboutbg-be-1 {
                 0% { transform: translate3d(0%, 0%, 0) }
-                25% { transform: translate3d(-50%, -60%, 0) }
+                25% { transform: translate3d(-50%, -50%, 0) }
                 50% { transform: translate3d(-50%, 0%, 0) }
-                75% { transform: translate3d(0%, -60%, 0) }
+                75% { transform: translate3d(0%, -50%, 0) }
                 100% { transform: translate3d(0%, 0%, 0) }
+              }
+
+              @keyframes aboutbg-be-2 {
+                0% { transform: translate3d(0%, 0%, 0) }
+                25% { transform: translate3d(0%, -50%, 0) }
+                50% { transform: translate3d(-20%, 0%, 0) }
+                75% { transform: translate3d(-30%, -50%, 0) }
+                100% { transform: translate3d(0%, 0%, 0) }
+              }
+
+              @keyframes aboutbg-star {
+                0% { opacity: 1; }
+                25% { opacity: .5; }
+                50% { opacity: .8; }
+                75% { opacity: .2; }
+                100% { opacity: 1; }
               }
 
               > .background {
@@ -291,15 +348,43 @@
                 display: block;
                 position: absolute;
                 width: 100%;
-                height: 30%;
+                height: 26%;
                 top: 0;
                 right: 0;
                 z-index: 0;
                 overflow: hidden;
 
-                > .image {
-                  width: 200%;
-                  animation: aboutbg 88s linear infinite;
+                &.be-1 {
+                  opacity: .66;
+
+                  > .image {
+                    width: auto;
+                    height: 200%;
+                    animation: aboutbg-be-1 88s linear infinite;
+                  }
+                }
+
+                &.be-2 {
+                  opacity: 1;
+
+                  > .image {
+                    width: auto;
+                    height: 200%;
+                    animation: aboutbg-be-2 66s linear infinite;
+                  }
+                }
+
+                &.star-1,
+                &.star-2 {
+                  width: auto;
+                  height: auto;
+                  right: 1rem;
+
+                  > .image {
+                    width: 5rem;
+                    height: auto;
+                    animation: aboutbg-star 6s linear infinite;
+                  }
                 }
               }
 
@@ -327,8 +412,12 @@
                 @include css3-prefix(transition, transform 1s);
               }
 
-              > .skill {
-                margin-top: .466rem;
+              > .desc {
+                text-align: center;
+
+                > .skill {
+                  margin-top: .466rem;
+                }
               }
 
               > .followme {
@@ -352,7 +441,7 @@
                 opacity: 0;
                 visibility: hidden;
                 position: absolute;
-                top: 0;
+                top: .6rem;
                 left: 0;
                 width: 100%;
                 height: 100%;
