@@ -263,6 +263,20 @@
           }
         }
       }
+
+      > .detail {
+
+        > .content {
+
+          pre {
+            padding-left: 0;
+
+            > .code-lines {
+              display: none;
+            }
+          }
+        }
+      }
     }
 
     > .detail,

@@ -23,7 +23,7 @@
     "socket.io": "^2.0.3",
     "socket.io-client": "^2.0.3",
     "vue": "^2.4.3",
-    "vue-awesome-swiper": "^2.3.8",
+    "vue-awesome-swiper": "^2.6.4",
     "vuex": "^2.4.0"
   },
   "scripts": {
