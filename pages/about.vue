@@ -208,7 +208,7 @@
                   padding: 1rem 0;
 
                   > .background {
-                    height: 50%;
+                    height: 100%;
 
                     &.star-1,
                     &.star-2 {
@@ -235,10 +235,7 @@
                     margin-left: 5%;
                     text-align: left;
                     z-index: 1;
-
-                    > .name {
-                      color: $white;
-                    }
+                    color: $white;
 
                     > .name,
                     > .skill {
