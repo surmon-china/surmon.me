@@ -33,6 +33,7 @@
               <span>{{ currentSong.album.name || 'unknow' }}</span>
             </nuxt-link>
           </div>
+          <div class="song" v-else>Music is the eye of ear.</div>
         </div>
       </div>
       <div class="pre-load">

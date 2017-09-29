@@ -10,7 +10,7 @@
         <router-link to="/project">NodePress</router-link>
         <span>、</span>
         <router-link to="/project">Nuxt.js</router-link>
-        <span> and solitude. &nbsp; Designed By </span>
+        <span> and solitarily. &nbsp; Designed By </span>
         <router-link to="/about">Me</router-link>
       </div>
     </div>

@@ -62,15 +62,21 @@ export default state => {
         state.playerState.targetIndex = index
         const currentOldSong = playerList[state.playerState.index]
 
-        // console.log('播放', index)
+        // console.log('播放', index, currentOldSong, currentOldSong.howl)
 
         // 如果目标歌曲已存在实例
         if (currentOldSong && currentOldSong.howl) {
 
           // 如果目标歌曲和正在当前实例歌曲相同，且处于播放状态，则终止
-          if (Object.is(index, state.playerState.index) && currentOldSong.howl.playing()) {
-            return false
+          // console.log(index, state.playerState.index, Object.is(index, state.playerState.index))
+          if (Object.is(index, state.playerState.index)) {
 
+            if (!currentOldSong.howl.playing()) {
+              currentOldSong.song_id = currentOldSong.howl.play()
+              currentOldSong.howl.fade(0, state.playerState.volume, 1000, currentOldSong.song_id)
+            }
+            return false
+            
           // 否则停止当前正在播放歌曲，停止所有正在播放的歌曲
           } else if (currentOldSong.howl.playing()) {
             currentOldSong.howl.stop()
