@@ -22,8 +22,11 @@ If you want to run the applaction, you need install the [nodepress](https://gith
 ## Build Setup
 
 ```bash
-# install dependencies
-$ npm install # Or yarn install
+# 使用 nodemon 在开发环境下工作
+sudo npm i nodemon -g
+
+# install dependencies 依赖 python2.7
+$ npm install [--python=python2.7] # Or yarn install
 
 # serve with hot reload at localhost:3000
 $ npm run dev

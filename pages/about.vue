@@ -103,7 +103,7 @@
                 </p>
                 <p class="item">
                   <i class="iconfont icon-code"></i>
-                  <span class="skills">Talk is cheap. let's fuck it.</span>
+                  <span class="skills">Talk is cheap. fuck me.</span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-friend"></i>
@@ -149,9 +149,8 @@
             </div>
             <div class="about-project">
               <router-link to="/project" class="project-link">
-                <p class="title">To my Project</p>
-                <p class="item">前去了解更多关于我的开源项目的进展</p>
-                <p class="item" v-if="!mobileLayout">オープンソースプロジェクトの進捗状況を理解するために、</p>
+                <p class="title">Get More Project</p>
+                <p class="item">了解更多关于我的开源项目的进展</p>
               </router-link>
             </div>
           </div>
@@ -277,7 +276,7 @@
 
                 > .project-link {
                   height: auto;
-                  padding-top: 2rem;
+                  padding-top: 1rem;
                   overflow: hidden;
 
                   > .title {
@@ -537,9 +536,10 @@
 
             .project-link {
               height: 15em;
-              padding-top: 3rem;
-              display: block;
-              text-align: center;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              flex-direction: column;
 
               &:hover {
                 background-color: $module-hover-bg;

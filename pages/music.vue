@@ -46,14 +46,15 @@
         <i class="iconfont icon-music-next"></i>
       </button>
     </div>
-    <div class="song-info" v-if="currentSong">
-      <h3>
+    <div class="song-info">
+      <h3 v-if="currentSong">
         <span>{{ currentSong.name }}</span>
         <span> By </span>
         <span v-for="artist in currentSong.artists">{{ artist.name }}</span>
         <span> / </span>
         <span>{{ currentSong.album.name || 'unknow' }}</span>
       </h3>
+      <h3 v-else>Kind words are the music of the world.</h3>
     </div>
   </div>
 </template>

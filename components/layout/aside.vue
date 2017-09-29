@@ -147,6 +147,7 @@
           window.addEventListener('scroll', e => {
             const windowScrollTop = document.documentElement.scrollTop || 
                                     window.pageYOffset || 
+                                    window.scrollY ||
                                     document.body.scrollTop
             const newSidebarFixedOffsetTop = element.offsetTop
             sidebarFixedOffsetTop = (newSidebarFixedOffsetTop !== sidebarFixedOffsetTop && newSidebarFixedOffsetTop !== 77) ? newSidebarFixedOffsetTop : sidebarFixedOffsetTop
