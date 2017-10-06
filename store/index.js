@@ -15,6 +15,18 @@ export const actions = {
     // 检查设备类型
     const userAgent = isServer ? req.headers['user-agent'] : navigator.userAgent
     const isMobile = /(iPhone|iPod|Opera Mini|Android.*Mobile|NetFront|PSP|BlackBerry|Windows Phone)/ig.test(userAgent)
+    const isOpera = userAgent.includes('Opera')
+    const isIE = userAgent.includes('compatible') && userAgent.includes('MSIE') && !isOpera
+    const isSafari = userAgent.includes('Safari') && !userAgent.includes('Chrome')
+    const isEdge = userAgent.includes('Edge')
+    const isFF = userAgent.includes('Firefox')
+    const isBB = userAgent.includes('BlackBerry')
+    const isChrome = userAgent.includes('Chrome')
+    const isMaxthon = userAgent.includes('Maxthon')
+    const isIos = /(iPhone|iPad|iPod|iOS)/i.test(this.userAgent)
+    const mustJpg = (isIos || isFF || isMaxthon || isSafari || isBB || isIE || isEdge)
+    store.commit('option/SET_IMG_EXT', mustJpg ? 'jpeg' : 'webp')
+    // console.log(mustJpg ? 'jpeg' : 'webp')
     store.commit('option/SET_MOBILE_LAYOUT', isMobile)
     store.commit('option/SET_USER_AGENT', userAgent)
     const initAppData = [

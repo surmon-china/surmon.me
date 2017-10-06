@@ -186,6 +186,9 @@
       },
       mobileLayout() {
         return this.$store.state.option.mobileLayout
+      },
+      imgExt() {
+        return this.$store.state.option.imgExt
       }
     },
     methods: {
@@ -204,7 +207,7 @@
       },
       buildThumb(thumb) {
         if (!thumb) return '/images/thumb-releted.jpg'
-        return `${thumb}?imageView2/1/w/300/h/230/format/webp/interlace/1/q/80|imageslim`
+        return `${thumb}?imageView2/1/w/300/h/230/format/${this.imgExt}/interlace/1/q/80|imageslim`
       },
       buildDateTitle(date) {
         if (!date) return date
