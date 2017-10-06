@@ -57,20 +57,23 @@
     props: {
       item: Object
     },
+    computed: {
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
+      },
+      imgExt() {
+        return this.$store.state.option.imgExt
+      }
+    },
     methods: {
       buildThumb(thumb) {
         if (!thumb) return '/images/thumb-article.jpg'
-        return `${thumb}?imageView2/1/w/350/h/238/format/webp/interlace/1/q/75|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/460/fill/I0ZGRkZGRg==/dissolve/23/gravity/SouthWest/dx/15/dy/7|imageslim`
+        return `${thumb}?imageView2/1/w/350/h/238/format/${this.imgExt}/interlace/1/q/75|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/460/fill/I0ZGRkZGRg==/dissolve/23/gravity/SouthWest/dx/15/dy/7|imageslim`
       },
       toDetail() {
         if (this.mobileLayout) {
           this.$router.push(`/article/${this.item.id}`)
         }
-      }
-    },
-    computed: {
-      mobileLayout() {
-        return this.$store.state.option.mobileLayout
       }
     }
   }

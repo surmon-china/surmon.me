@@ -11,6 +11,9 @@ export const state = () => {
     fullColumn: false,
     errorColumn: false,
 
+    // 图片格式
+    imgExt: 'webp',
+
     // 是否为移动端
     mobileLayout: false,
 
@@ -53,6 +56,11 @@ export const mutations = {
   // 设置UA
   SET_USER_AGENT(state, action) {
     state.userAgent = action
+  },
+
+  // 设置图片格式
+  SET_IMG_EXT(state, action) {
+    state.imgExt = action
   },
 
   // 设置是否移动端状态
