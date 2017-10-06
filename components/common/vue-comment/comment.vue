@@ -839,7 +839,7 @@
               > .user-name {
                 font-weight: bold;
                 margin-right: .8em;
-                font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
+                // font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
 
                 &:hover {
                   text-decoration: underline;
@@ -1000,7 +1000,7 @@
           position: relative;
 
           > .name {
-            font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
+            // font-family: DINRegular, -apple-system, Microsoft YaHei, Arial, Helvetica, sans-serif;
           }
 
           > .setting {
@@ -1039,7 +1039,7 @@
           flex-grow: 1;
           line-height: 2em;
           text-align: center;
-          font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
+          // font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
 
           > button {
             display: block;
@@ -1055,7 +1055,7 @@
         > .name,
         > .email,
         > .site {
-          font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
+          // font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
           flex-grow: 1;
 
           > input {

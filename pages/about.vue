@@ -8,7 +8,7 @@
               <div class="desc">
                 <p class="item">
                   <i class="iconfont icon-user"></i>
-                  <span>I'm Surmon, a (95+) (小) Javascript (鲜) stack (肉) developer.</span>
+                  <span><span class="first-letter">I</span>'m Surmon, a (95+) (小) Javascript (鲜) stack (肉) developer.</span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-comment-discussion"></i>
@@ -400,7 +400,7 @@
               > .avatar {
                 width: 40%;
                 z-index: 1;
-                margin-top: 26%;
+                margin-top: 5rem;
                 max-width: 100%;
                 border-radius: 100%;
                 border: .4rem solid $module-bg;
@@ -460,9 +460,9 @@
                 &:first-child {
 
                   > span {
-                    display: inline-block;
+                    display: inline;
 
-                    &::first-letter {
+                    > .first-letter {
                       font-size: $font-size-h1;
                     }
                   }
