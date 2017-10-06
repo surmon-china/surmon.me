@@ -55,9 +55,10 @@ export default {
   @import '~assets/sass/variables';
   .aside-nav {
     position: fixed;
-    top: 5.5em;
     display: inline-block;
     width: 11.5em;
+    top: 5.5em;
+    left: calc((100% - 75em) / 2);
 
     .nav-list {
       padding: 0;

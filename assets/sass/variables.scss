@@ -49,7 +49,7 @@ $link-color: $text;
 $link-hover-color: darken($link-color, 20%);
 
 //Font
-$sans-serif: -apple-system, DINRegular, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", "微软雅黑", sans-serif;
+$sans-serif: DINRegular, -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", "微软雅黑", sans-serif;
 $serif: Georgia, Times, 'Times New Roman', serif;
 $monospace: Menlo, Monaco, Consolas, 'Courier New', monospace;
 $font-family: $sans-serif;
