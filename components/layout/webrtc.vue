@@ -14,12 +14,24 @@
           <!-- 远程用户 -->
           <span class="text" v-else>{{ stream.name }}</span>
         </div>
-        <video autoplay
-               :class="[`filter-${filters[stream.filter]}`]"
-               :id="stream.id" 
-               :ref="stream.id" 
-               :src="stream.src">
-        </video>
+        <div class="content-box" :class="[`filter-${filters[stream.filter]}`]">
+          <video autoplay
+                 playsinline
+                 preload="auto"
+                 height="340" 
+                 :id="stream.id" 
+                 :ref="stream.id" 
+                 :src="stream.src"
+                 :width="stream.local ? 540 : 300"
+                 :height="stream.local ? 340 : 200">
+          </video>
+          <canvas class="face-mask" 
+                  ref="localCanvas"
+                  :width="stream.local ? 540 : 300" 
+                  :height="stream.local ? 340 : 200">
+          </canvas>
+        </div>
+        
         <div class="name" v-if="!stream.local">
           <span>{{ stream.name }}</span>
           <span class="state">
@@ -85,6 +97,10 @@
 <script>
   import SimpleWebRTC from '~/plugins/webrtc.js'
   import apiConfig from '~/api.config.js'
+  if (process.browser) {
+    const clmtrackr = require('clmtrackr')
+    window.clmtrackr = clmtrackr.default || clmtrackr
+  }
   export default {
     name: 'webrtc',
     data() {
@@ -104,6 +120,27 @@
       }
     },
     methods: {
+      initFaceTrackr() {
+        const ctracker = this.ctracker
+        const videoInput = this.$refs.localVideo[0]
+        videoInput.play()
+        ctracker.start(videoInput)
+        // console.log('videoInput', videoInput)
+        // console.log('开始面部追踪', ctracker.getScore())
+        const drawCanvas = this.$refs.localCanvas[0]
+        const drawCanvasCtx = drawCanvas.getContext('2d')
+        window.ctracker = ctracker
+        ctracker.draw(drawCanvas)
+        function drawLoop() {
+          requestAnimFrame(drawLoop)
+          drawCanvasCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+          // psrElement.innerHTML = "score :" + ctrack.getScore().toFixed(4);
+          if (ctracker.getCurrentPosition()) {
+            ctracker.draw(drawCanvas)
+          }
+        }
+        drawLoop()
+      },
       toggleMute(disable) {
         if (disable) {
           this.webrtc.mute()
@@ -155,6 +192,13 @@
     },
     mounted() {
 
+      // { useWebGL : true }
+      const ctracker = new window.clmtrackr.tracker()
+      ctracker.init()
+      this.ctracker = ctracker
+      window.ctracker = ctracker
+      console.log('初始化追踪器')
+
       let getUserMedia = navigator.getUserMedia || 
                          navigator.webkitGetUserMedia || 
                          navigator.mozGetUserMedia || 
@@ -175,8 +219,18 @@
       const self = this
       const room = 'surmon.me'
 
+      // 用于唯一标识符
+      const buildStreamId = peer => `remote-video-${webrtc.getDomId(peer)}`
+
+      // 解析音量变化
+      const parseVol = volume => {
+        if (volume < -45) volume = -45
+        if (volume > -20) volume = -20
+        return volume
+      }
+
       // create our webrtc connection
-      const webrtc = new SimpleWebRTC({
+      const webrtc = self.webrtc = new SimpleWebRTC({
         localVideoEl: '',
         remoteVideosEl: '',
         debug: false,
@@ -201,36 +255,26 @@
           ]
         }
       })
-      self.webrtc = webrtc
+
+      // 远程滤镜们
+      webrtc.connection.connection.on('webrtc-filters', filters => {
+        this.remoteFilters = filters
+      })
+
+      // 远程滤镜改变
+      webrtc.connection.connection.on('webrtc-set-filter', filterDetail => {
+        const peerId = filterDetail.peerId
+        const filter = filterDetail.filter
+        const targetStream = self.getStreamByPeerId(peerId)
+        if (targetStream) {
+          targetStream.filter = filter
+        }
+      })
 
       // 存储本地流 id
       webrtc.on('connectionReady', sessionId => {
         self.localStream.peerId = sessionId
       })
-
-      /*
-      webrtc.on('stunservers', stunservers => {
-        console.log('client stunservers', stunservers)
-      })
-
-      webrtc.on('turnservers', turnservers => {
-        console.log('client turnservers', turnservers)
-      })
-      */
-
-      // 用于唯一标识符
-      const buildStreamId = peer => `remote-video-${webrtc.getDomId(peer)}`
-
-      // 解析音量变化
-      const parseVol = volume => {
-        if (volume < -45) {
-          volume = -45
-        }
-        if (volume > -20) {
-          volume = -20
-        }
-        return volume
-      }
 
       // 本地的一切准备好时
       webrtc.on('readyToCall', () => {
@@ -240,13 +284,18 @@
       // 当媒体请求被允许可用时
       webrtc.on('localStream', stream => {
         self.localStream.ok = true
-        const src = URL.createObjectURL(stream)
+        // const src = URL.createObjectURL(stream)
         self.streams.unshift({
           local: true,
           filter: 0,
           id: 'localVideo',
           ref: 'localVideo',
-          src: src
+          src: URL.createObjectURL(stream)
+        })
+
+        this.$nextTick(() => {
+          console.log('启动人脸识别')
+          this.initFaceTrackr()
         })
 
         /*
@@ -295,25 +344,25 @@
             if (stream) {
               switch (peer.pc.iceConnectionState) {
                 case 'checking':
+                  // 远程媒体状态：Connecting to stream...
                   stream.state = 1
-                  // console.log('远程媒体状态：Connecting to stream...', peer)
                   break
                 case 'connected':
                 case 'completed':
+                  // 远程媒体状态：Connection established.
                   stream.state = 2
-                  // console.log('远程媒体状态：Connection established.', peer)
                   break
                 case 'disconnected':
+                  // 远程媒体状态：Disconnected.
                   stream.state = 3
-                  // console.log('远程媒体状态：Disconnected.', peer)
                   break
                 case 'failed':
+                  // 远程媒体状态：Connection failed.
                   stream.state = -1
-                  // console.log('远程媒体状态：Connection failed.', peer)
                   break
                 case 'closed':
+                  // 远程媒体状态：Connection closed.
                   stream.state = 4
-                  // console.log('远程媒体状态：Connection closed.', peer)
                   break
               }
             }
@@ -331,6 +380,19 @@
         }
       })
 
+      // local p2p/ice failure
+      webrtc.on('iceFailed', peer => {
+        self.localStream.ok = false
+      })
+
+      // remote p2p/ice failure
+      webrtc.on('connectivityError', peer => {
+        const targetStream = self.getStreamByPeerId(peer.id)
+        if (targetStream) {
+          targetStream.state = -1
+        }
+      })
+
       // 本地信号源音量改变
       webrtc.on('volumeChange', (volume, treshold) => {
         if (String(volume) !== '-Infinity') {
@@ -345,34 +407,6 @@
           if (stream) {
             stream.volume = parseVol(volume)
           }
-        }
-      })
-
-      // local p2p/ice failure
-      webrtc.on('iceFailed', peer => {
-        self.localStream.ok = false
-      })
-
-      // remote p2p/ice failure
-      webrtc.on('connectivityError', peer => {
-        const targetStream = self.getStreamByPeerId(peer.id)
-        if (targetStream) {
-          targetStream.state = -1
-        }
-      })
-
-      // 远程滤镜们
-      webrtc.connection.connection.on('webrtc-filters', filters => {
-        this.remoteFilters = filters
-      })
-
-      // 远程滤镜改变
-      webrtc.connection.connection.on('webrtc-set-filter', filterDetail => {
-        const peerId = filterDetail.peerId
-        const filter = filterDetail.filter
-        const targetStream = self.getStreamByPeerId(peerId)
-        if (targetStream) {
-          targetStream.filter = filter
         }
       })
 
@@ -403,6 +437,16 @@
           }
         })
       })
+
+      /*
+      webrtc.on('stunservers', stunservers => {
+        console.log('client stunservers', stunservers)
+      })
+
+      webrtc.on('turnservers', turnservers => {
+        console.log('client turnservers', turnservers)
+      })
+      */
     }
   }
 </script>
@@ -498,10 +542,11 @@
           }
         }
 
-        > video {
+        > .content-box {
+          display: block;
           width: 100%;
-          height: auto;
-          object-fit: cover;
+          height: 100%;
+          position: relative;
 
           &.filter-grayscale {
             filter: grayscale(1);
@@ -517,6 +562,20 @@
           }
           &.filter-blur {
             filter: blur(1rem);
+          }
+
+          > video {
+            width: 100%;
+            // height: auto;
+            object-fit: cover;
+          }
+
+          > .face-mask {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
           }
         }
 

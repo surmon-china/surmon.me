@@ -113,6 +113,7 @@ $ npm run lint
 - ~~优化包依赖的问题~~
 - ~~增加基于WebRTC的在线视频功能~~
 - ~~新增C++版本的 TURN Server~~
+- ~~增加人脸识别功能~~
 - graphql-js + Restful查询数据库
 
 ## 目录结构
