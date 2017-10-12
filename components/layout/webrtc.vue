@@ -18,17 +18,16 @@
           <video autoplay
                  playsinline
                  preload="auto"
-                 height="340" 
                  :id="stream.id" 
                  :ref="stream.id" 
                  :src="stream.src"
                  :width="stream.local ? 540 : 300"
-                 :height="stream.local ? 340 : 200">
+                 :height="stream.local ? 345 : 200">
           </video>
           <face-ctracker class="face-mask" 
                          :ref-id="stream.id" 
                          :width="stream.local ? 540 : 300"
-                         :height="stream.local ? 340 : 200">
+                         :height="stream.local ? 345 : 200">
           </face-ctracker>
         </div>
         
