@@ -1,4 +1,3 @@
 
-const particlesJS = require('particles.js')
-
+import particlesJS from 'particles.js'
 export default particlesJS
