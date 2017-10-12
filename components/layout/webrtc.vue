@@ -25,11 +25,11 @@
                  :width="stream.local ? 540 : 300"
                  :height="stream.local ? 340 : 200">
           </video>
-          <canvas class="face-mask" 
-                  ref="localCanvas"
-                  :width="stream.local ? 540 : 300" 
-                  :height="stream.local ? 340 : 200">
-          </canvas>
+          <face-ctracker class="face-mask" 
+                         :ref-id="stream.id" 
+                         :width="stream.local ? 540 : 300"
+                         :height="stream.local ? 340 : 200">
+          </face-ctracker>
         </div>
         
         <div class="name" v-if="!stream.local">
@@ -97,12 +97,12 @@
 <script>
   import SimpleWebRTC from '~/plugins/webrtc.js'
   import apiConfig from '~/api.config.js'
-  if (process.browser) {
-    const clmtrackr = require('clmtrackr')
-    window.clmtrackr = clmtrackr.default || clmtrackr
-  }
+  import faceCtracker from './face-ctracker.vue'
   export default {
     name: 'webrtc',
+    components: {
+      faceCtracker
+    },
     data() {
       return {
         SimpleWebRTC,
@@ -120,27 +120,6 @@
       }
     },
     methods: {
-      initFaceTrackr() {
-        const ctracker = this.ctracker
-        const videoInput = this.$refs.localVideo[0]
-        videoInput.play()
-        ctracker.start(videoInput)
-        // console.log('videoInput', videoInput)
-        // console.log('开始面部追踪', ctracker.getScore())
-        const drawCanvas = this.$refs.localCanvas[0]
-        const drawCanvasCtx = drawCanvas.getContext('2d')
-        window.ctracker = ctracker
-        ctracker.draw(drawCanvas)
-        function drawLoop() {
-          requestAnimFrame(drawLoop)
-          drawCanvasCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-          // psrElement.innerHTML = "score :" + ctrack.getScore().toFixed(4);
-          if (ctracker.getCurrentPosition()) {
-            ctracker.draw(drawCanvas)
-          }
-        }
-        drawLoop()
-      },
       toggleMute(disable) {
         if (disable) {
           this.webrtc.mute()
@@ -191,13 +170,6 @@
       this.streams = []
     },
     mounted() {
-
-      // { useWebGL : true }
-      const ctracker = new window.clmtrackr.tracker()
-      ctracker.init()
-      this.ctracker = ctracker
-      window.ctracker = ctracker
-      console.log('初始化追踪器')
 
       let getUserMedia = navigator.getUserMedia || 
                          navigator.webkitGetUserMedia || 
@@ -291,11 +263,6 @@
           id: 'localVideo',
           ref: 'localVideo',
           src: URL.createObjectURL(stream)
-        })
-
-        this.$nextTick(() => {
-          console.log('启动人脸识别')
-          this.initFaceTrackr()
         })
 
         /*

@@ -56,7 +56,8 @@
       return {
         topBtnMouseOver: false,
         bottomBtnMouseOver: false,
-        _toggleWebrtc: null
+        toggleWebrtcFn: null,
+        firstOpenWeRtc: true
       }
     },
     computed: {
@@ -100,13 +101,20 @@
         this.$store.commit('option/UPDATE_BARRAGE_STATE')
       },
       toggleWebrtc() {
-        if (this._toggleWebrtc) {
-          this._toggleWebrtc()
+        if (this.firstOpenWeRtc && !this.webrtcState) {
+          if (!window.confirm('实验室功能需要 WebRTC、WebGL、Canvas 等技术的支持，可能占用较多 CPU/GPU 资源，甚至死机，要继续？')) {
+            this.$store.commit('option/UPDATE_WEBRTC_STATE', false)
+            return false
+          }
+          this.firstOpenWeRtc = false
+        }
+        if (this.toggleWebrtcFn) {
+          this.toggleWebrtcFn()
         } else {
-          this._toggleWebrtc = underscore.throttle(() => {
+          this.toggleWebrtcFn = underscore.throttle(() => {
             this.$store.commit('option/UPDATE_WEBRTC_STATE')
           }, 1666)
-          this._toggleWebrtc()
+          this.toggleWebrtcFn()
         }
       }
     }
