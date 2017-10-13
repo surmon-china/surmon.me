@@ -4,7 +4,7 @@
          :class="[ aligenLeft ? 'aligenLeft' : '' ]">
       <div class="stream-box" 
            :class="[ stream.local ? 'local' : 'remote']"
-           v-for="stream in streams">
+           v-for="(stream, index) in streams">
         <div class="empty-msg">
           <!-- 本机用户 -->
           <span class="text" v-if="stream.local">
@@ -21,14 +21,15 @@
                  :id="stream.id" 
                  :ref="stream.id" 
                  :src="stream.src"
-                 :width="stream.local ? 540 : 300"
-                 :height="stream.local ? 345 : 200">
+                 :width="getVideoElementSize(index).width"
+                 :height="getVideoElementSize(index).height">
           </video>
           <!-- 当前视频的美颜功能是否开启 -->
           <face-ctracker class="face-mask" 
+                         v-if="!localStream.disabledCarema && !!stream.beauty"
                          :ref-id="stream.id" 
-                         :width="stream.local ? 540 : 300"
-                         :height="stream.local ? 345 : 200">
+                         :width="getVideoElementSize(index).width"
+                         :height="getVideoElementSize(index).height">
           </face-ctracker>
         </div>
         <div class="name" v-if="!stream.local">
@@ -63,7 +64,7 @@
           </button>
           <button class="beauty" 
                   :class="{ active: !localStream.disabledBeauty }"
-                  @click="toggleBeauty(!localStream.disabledBeauty)">
+                  @click="toggleBeauty(localStream.disabledBeauty)">
             <i class="iconfont icon-meiyan"></i>
             <span>美颜</span>
           </button>
@@ -86,6 +87,9 @@
           </button>
           <button class="audio" disabled :class="{ active: !stream.disabledMic }">
             <i class="iconfont" :class="[stream.disabledMic ? 'icon-mic-disabled' : 'icon-mic']"></i>
+          </button>
+          <button class="beauty" disabled :class="{ active: stream.beauty }">
+            <i class="iconfont icon-meiyan"></i>
           </button>
           <span class="filter">
             <span class="current">
@@ -112,20 +116,40 @@
       return {
         SimpleWebRTC,
         localStream: {
+          ok: true,
           volume: -45,
           peerId: null,
-          ok: true,
           disabledMic: false,
           disabledCarema: false,
           disabledBeauty: true
         },
         remoteFilters: [],
+        remoteBeautys: [],
         streams: [],
         filters: ['normal', 'grayscale', 'sepia', 'hue-rotate', 'invert', 'blur'],
         names: ['吴彦祖', '王祖贤', '刘恺威', '奥黛丽 赫本', '任达华', '陈冠希', '张曼玉', '刘青云', '甄子丹', '刘德华', '张学友', '黎明', '周润发', '王杰', '黄家驹', '吴孟达', '周星驰', '鹿晗', '黄子韬', '李易峰', '薛之谦', '韩红', '张柏芝', '谢霆锋', '成龙', '梁朝伟', '刘嘉玲', '张家辉', '梁家辉', '吴镇宇', '黄秋生', '古天乐', '余文乐']
       }
     },
     methods: {
+      // 计算 video 元素的尺寸
+      getVideoElementSize(index) {
+        if (index === 0) {
+          return {
+            width: 540,
+            height: 345
+          }
+        } else if ([1, 2].includes(index)) {
+          return {
+            width: 400,
+            height: 345
+          }
+        } else {
+          return {
+            width: 270,
+            height: 200
+          }
+        }
+      },
       toggleMute(disable) {
         if (disable) {
           this.webrtc.mute()
@@ -143,7 +167,7 @@
         this.localStream.disabledCarema = disable
       },
       toggleBeauty(beauty) {
-        this.localStream.disabledBeauty = beauty
+        this.localStream.disabledBeauty = !beauty
         if (this.localStream.peerId) {
           this.streams[0].beauty = beauty
           this.webrtc.connection.connection.emit('webrtc-set-beauty', {
@@ -249,6 +273,11 @@
         this.remoteFilters = filters
       })
 
+      // 远程美颜们
+      webrtc.connection.connection.on('webrtc-beautys', beautys => {
+        this.remoteBeautys = beautys
+      })
+
       // 远程滤镜改变
       webrtc.connection.connection.on('webrtc-set-filter', filterDetail => {
         const peerId = filterDetail.peerId
@@ -256,6 +285,16 @@
         const targetStream = self.getStreamByPeerId(peerId)
         if (targetStream) {
           targetStream.filter = filter
+        }
+      })
+
+      // 远程美颜改变
+      webrtc.connection.connection.on('webrtc-set-beauty', beautyDetail => {
+        const peerId = beautyDetail.peerId
+        const beauty = beautyDetail.beauty
+        const targetStream = self.getStreamByPeerId(peerId)
+        if (targetStream) {
+          targetStream.beauty = beauty
         }
       })
 
@@ -272,23 +311,24 @@
       // 当媒体请求被允许可用时
       webrtc.on('localStream', stream => {
         self.localStream.ok = true
-        // const src = URL.createObjectURL(stream)
         self.streams.unshift({
           local: true,
           filter: 0,
+          beauty: false,
           id: 'localVideo',
           ref: 'localVideo',
           src: URL.createObjectURL(stream)
         })
 
-        /*
         // 模拟远程用户
+        /*
         const names = self.names
         const mockStream = {
-          src: src,
+          src: URL.createObjectURL(stream),
           name: names[Math.floor(Math.random() * names.length)],
           filter: 0,
           volume: 0,
+          beauty: true,
           id: 'remoteVideo',
           ref: 'remoteVideo'
         }
@@ -306,6 +346,7 @@
       webrtc.on('videoAdded', (video, peer) => {
         // console.log('接收新的信号源', peer, self.remoteFilters)
         const filter = self.remoteFilters[peer.id]
+        const beauty = self.remoteBeautys[peer.id]
         const id = buildStreamId(peer)
         const names = self.names
         const remoteStream = {
@@ -313,6 +354,7 @@
           ref: id,
           state: 0,
           filter: filter || 0,
+          beauty: beauty || false,
           volume: 0,
           disabledMic: false,
           disabledCarema: false,
@@ -610,6 +652,7 @@
           bottom: 1rem;
 
           > button,
+          > .beauty,
           > .filter {
             width: 4rem;
             height: 3rem;
@@ -624,6 +667,15 @@
 
             &.active {
               background-color: rgba($module-bg, .9);
+            }
+          }
+
+          > .beauty {
+            width: auto;
+            padding: 0 1rem;
+
+            > .iconfont {
+              margin-right: 1rem;
             }
           }
 
