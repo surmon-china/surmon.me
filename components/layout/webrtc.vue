@@ -24,13 +24,13 @@
                  :width="stream.local ? 540 : 300"
                  :height="stream.local ? 345 : 200">
           </video>
+          <!-- 当前视频的美颜功能是否开启 -->
           <face-ctracker class="face-mask" 
                          :ref-id="stream.id" 
                          :width="stream.local ? 540 : 300"
                          :height="stream.local ? 345 : 200">
           </face-ctracker>
         </div>
-        
         <div class="name" v-if="!stream.local">
           <span>{{ stream.name }}</span>
           <span class="state">
@@ -60,6 +60,12 @@
                   :class="{ active: !localStream.disabledMic }"
                   @click="toggleMute(!localStream.disabledMic)">
             <i class="iconfont" :class="[localStream.disabledMic ? 'icon-mic-disabled' : 'icon-mic']"></i>
+          </button>
+          <button class="beauty" 
+                  :class="{ active: !localStream.disabledBeauty }"
+                  @click="toggleBeauty(!localStream.disabledBeauty)">
+            <i class="iconfont icon-meiyan"></i>
+            <span>美颜</span>
           </button>
           <div class="filter" :class="{ active: stream.filter !== 0 }">
             <span class="current">
@@ -110,7 +116,8 @@
           peerId: null,
           ok: true,
           disabledMic: false,
-          disabledCarema: false
+          disabledCarema: false,
+          disabledBeauty: true
         },
         remoteFilters: [],
         streams: [],
@@ -134,6 +141,16 @@
           this.webrtc.resumeVideo()
         }
         this.localStream.disabledCarema = disable
+      },
+      toggleBeauty(beauty) {
+        this.localStream.disabledBeauty = beauty
+        if (this.localStream.peerId) {
+          this.streams[0].beauty = beauty
+          this.webrtc.connection.connection.emit('webrtc-set-beauty', {
+            peerId: this.localStream.peerId,
+            beauty: beauty
+          })
+        }
       },
       getStreamByPeerId(id) {
         return this.streams.find(stream => stream.id.includes(id))
