@@ -6,6 +6,7 @@
 
 import Service from '~/plugins/axios'
 import EventBus from '~/utils/event-bus'
+import UaParse from '~/utils/ua-parse'
 
 // global actions
 export const actions = {
@@ -14,16 +15,7 @@ export const actions = {
   nuxtServerInit(store, { params, route, isServer, req }) {
     // 检查设备类型
     const userAgent = isServer ? req.headers['user-agent'] : navigator.userAgent
-    const isMobile = /(iPhone|iPod|Opera Mini|Android.*Mobile|NetFront|PSP|BlackBerry|Windows Phone)/ig.test(userAgent)
-    const isOpera = userAgent.includes('Opera')
-    const isIE = userAgent.includes('compatible') && userAgent.includes('MSIE') && !isOpera
-    const isSafari = userAgent.includes('Safari') && !userAgent.includes('Chrome')
-    const isEdge = userAgent.includes('Edge')
-    const isFF = userAgent.includes('Firefox')
-    const isBB = userAgent.includes('BlackBerry')
-    const isChrome = userAgent.includes('Chrome')
-    const isMaxthon = userAgent.includes('Maxthon')
-    const isIos = /(iPhone|iPad|iPod|iOS)/i.test(this.userAgent)
+    const { isMobile, isOpera, isIE, isSafari, isEdge, isFF, isBB, isChrome, isMaxthon, isIos } = UaParse(userAgent)
     const mustJpg = (isIos || isFF || isMaxthon || isSafari || isBB || isIE || isEdge)
     store.commit('option/SET_IMG_EXT', mustJpg ? 'jpeg' : 'webp')
     // console.log(mustJpg ? 'jpeg' : 'webp')
