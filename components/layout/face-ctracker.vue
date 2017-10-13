@@ -54,7 +54,8 @@
       buildTrackerByNative() {
 
         // 初始化检测器
-        const { image, video, canvas, canvasCTX } = this.$data
+        const image = this.image = new Image()
+        const { video, canvas, canvasCTX } = this.$data
         const tracker = this.tracker = new FaceDetector()
         const videoCanvas = this.$refs.videoCanvas
         const videoCanvasCTX = videoCanvas.getContext('2d')
@@ -84,11 +85,23 @@
       },
       // 使用 clmtrackr
       buildTrackerByClmtrackr() {
-        const { image, video, canvas, canvasCTX } = this.$data
+        const { video, canvas, canvasCTX } = this.$data
         const tracker = this.tracker = new clmtrackr.tracker({ useWebGL : true })
         tracker.init()
         tracker.start(video)
-        const hatTitles = ['闭嘴！我们很相爱！', '过来我告诉你个秘密']
+        const hatTitles = [
+          '王',
+          '闭嘴！我们两个很相爱！',
+          '过来我告诉你个秘密！',
+          '惊不惊喜，意不意外！',
+          '老子无所畏惧！',
+          '我戴，我戴，行了吧！',
+          '我蝴蝶结没掉吧！',
+          '我戴，我戴，行了吧！',
+          '是我让你自由过了头！',
+          '你在和谁组队！'
+        ]
+        const currentHatTitle = hatTitles[Math.floor(Math.random() * hatTitles.length)]
         // 画椭圆
         const EllipseTwo = (context, x, y, a, b) => {
           context.save()
@@ -105,7 +118,7 @@
           context.font = "1.2rem '微软雅黑'"
           context.fillStyle = 'white'
           context.textAlign = 'center'
-          context.fillText('闭嘴！我们很相爱！', x, y)
+          context.fillText(currentHatTitle, x, y)
         }
         // 画帽子
         const deawHat = positions => {
@@ -137,8 +150,6 @@
       }
     },
     mounted() {
-      console.log('face-ctracker', this)
-      this.image = new Image()
       this.canvas = this.$refs.canvas
       this.canvasCTX = this.canvas.getContext('2d')
       this.video = this.$parent.$refs[this.refId][0]
