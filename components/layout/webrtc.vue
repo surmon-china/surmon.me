@@ -25,12 +25,12 @@
                  :height="getVideoElementSize(index).height">
           </video>
           <!-- 当前视频的美颜功能是否开启 -->
-          <!-- <face-ctracker class="face-mask" 
+          <face-ctracker class="face-mask" 
                          v-if="!localStream.disabledCarema && !!stream.beauty"
                          :ref-id="stream.id" 
                          :width="getVideoElementSize(index).width"
                          :height="getVideoElementSize(index).height">
-          </face-ctracker> -->
+          </face-ctracker>
         </div>
         <div class="name" v-if="!stream.local">
           <span>{{ stream.name }}</span>
@@ -106,24 +106,11 @@
 <script>
   import SimpleWebRTC from '~/plugins/webrtc.js'
   import apiConfig from '~/api.config.js'
-  // import faceCtracker from './face-ctracker.vue'
+  import faceCtracker from './face-ctracker.vue'
   export default {
     name: 'webrtc',
     components: {
-      /*
-      faceCtracker: () => ({
-        // 需要加载的组件。应当是一个 Promise
-        component: import('./face-ctracker.vue'),
-        // 加载中应当渲染的组件
-        // loading: LoadingComp,
-        // 出错时渲染的组件
-        // error: ErrorComp,
-        // 渲染加载中组件前的等待时间。默认：200ms。
-        delay: 600,
-        // 最长等待时间。超出此时间则渲染错误组件。默认：Infinity
-        timeout: 3000
-      })
-      */
+      faceCtracker
     },
     data() {
       return {
