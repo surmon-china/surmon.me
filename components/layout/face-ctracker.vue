@@ -86,7 +86,10 @@
       // 使用 clmtrackr
       buildTrackerByClmtrackr() {
         const { video, canvas, canvasCTX } = this.$data
-        const tracker = this.tracker = new clmtrackr.tracker({ useWebGL : true })
+        const tracker = this.tracker = new clmtrackr.tracker({
+          useWebGL: true,
+          stopOnConvergence: true
+        })
         tracker.init()
         tracker.start(video)
         const hatTitles = [
