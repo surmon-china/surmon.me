@@ -41,7 +41,6 @@ module.exports = {
       'swiper',
       'marked',
       'gravatar',
-      // 'clmtrackr',
       'clipboard',
       'particles.js',
       'simplewebrtc',
@@ -84,6 +83,7 @@ module.exports = {
     { src: '~/plugins/highlight.js' },
     { src: '~/plugins/clipboard.js' },
     { src: '~/plugins/ga.js', ssr: false },
+    { src: '~/plugins/clmtrackr.js', ssr: false },
     { src: '~/plugins/emoji-233333.js', ssr: false },
     { src: '~/plugins/image-popup.js', ssr: false },
     { src: '~/plugins/copy-right.js', ssr: false },
@@ -96,7 +96,6 @@ module.exports = {
   head: {
     title: 'Surmon.me - Talk is cheap. Show me the code',
     titleTemplate: '%s | Surmon.me',
-    // __dangerouslyDisableSanitizers: ['script'],
     htmlAttrs: {
       xmlns: 'http://www.w3.org/1999/xhtml',
       lang: 'zh'
@@ -117,16 +116,15 @@ module.exports = {
       { rel: 'author', type: 'text/plain', href: '/humans.txt' }
     ],
     script: [
-      /*
       { 
-        async: 'async',
-        defer: 'defer',
-        type: 'text/javascript',
-        src: 'https://platform.linkedin.com/badges/js/profile.js'
+        // async: 'async',
+        // defer: 'defer',
+        // type: 'text/javascript',
+        // src: '/scripts/clmtrackr.js'
         // innerHTML: ``
       }
-      */
     ],
+    // __dangerouslyDisableSanitizers: ['script'],
     noscript: [
       { innerHTML: 'This website requires JavaScript.' }
     ]

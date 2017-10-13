@@ -6,12 +6,6 @@
 </template>
 
 <script>
-  let clmtrackr = null
-  if (process.browser) {
-    clmtrackr = require('clmtrackr')
-    clmtrackr = clmtrackr.default || clmtrackr
-    window.clmtrackr = clmtrackr
-  }
   export default {
     name: 'face-ctracker',
     data() {
@@ -85,8 +79,12 @@
       },
       // 使用 clmtrackr
       buildTrackerByClmtrackr() {
+        if (!window.clm) {
+          window.alert('识别库加载失败，美不了了')
+          return false
+        }
         const { video, canvas, canvasCTX } = this.$data
-        const tracker = this.tracker = new clmtrackr.tracker({
+        const tracker = this.tracker = new window.clm.tracker({
           useWebGL: true,
           stopOnConvergence: true
         })
