@@ -41,7 +41,7 @@ module.exports = {
       'swiper',
       'marked',
       'gravatar',
-      'clmtrackr',
+      // 'clmtrackr',
       'clipboard',
       'particles.js',
       'simplewebrtc',

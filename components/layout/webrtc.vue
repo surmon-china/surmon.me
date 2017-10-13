@@ -106,11 +106,22 @@
 <script>
   import SimpleWebRTC from '~/plugins/webrtc.js'
   import apiConfig from '~/api.config.js'
-  import faceCtracker from './face-ctracker.vue'
+  // import faceCtracker from './face-ctracker.vue'
   export default {
     name: 'webrtc',
     components: {
-      faceCtracker
+      faceCtracker: () => ({
+        // 需要加载的组件。应当是一个 Promise
+        component: import('./face-ctracker.vue'),
+        // 加载中应当渲染的组件
+        // loading: LoadingComp,
+        // 出错时渲染的组件
+        // error: ErrorComp,
+        // 渲染加载中组件前的等待时间。默认：200ms。
+        delay: 600,
+        // 最长等待时间。超出此时间则渲染错误组件。默认：Infinity
+        timeout: 3000
+      })
     },
     data() {
       return {
