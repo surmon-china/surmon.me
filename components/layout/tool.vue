@@ -128,7 +128,7 @@
     position: fixed;
     z-index: 9;
     width: 100%;
-    bottom: 26rem;
+    bottom: 30rem;
 
     > .container {
       position: relative;
