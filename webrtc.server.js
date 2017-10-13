@@ -48,6 +48,7 @@ function safeCb(cb) {
 
 // 存储所有filter
 let filters = {}
+let beautys = {}
 
 const parseWebrtcServer = io => {
 
@@ -110,6 +111,15 @@ const parseWebrtcServer = io => {
 
     // 向新用户广播所有已有滤镜
     client.emit('webrtc-filters', filters)
+
+    // 监听用户美颜改变
+    client.on('webrtc-set-beauty', beautyDetail => {
+      beautys[beautyDetail.peerId] = beautyDetail.beauty
+      client.broadcast.emit('webrtc-set-beauty', beautyDetail)
+    })
+
+    // 向新用户广播所有已有梅美颜
+    client.emit('webrtc-beautys', beautys)
 
     // pass a message to another id
     client.on('message', details => {
