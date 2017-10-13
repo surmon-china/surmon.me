@@ -102,9 +102,9 @@
       },
       toggleWebrtc() {
         if (this.firstOpenWeRtc && !this.webrtcState) {
-          if (!window.confirm('实验室功能需要 WebRTC、WebGL、Canvas 等技术的支持，可能占用较多 CPU/GPU 资源，甚至死机、起火、爆炸，继续？')) {
+          if (!window.confirm('实验室功能需要 WebRTC、WebGL、Canvas 等技术的支持，可能占用较多 CPU/GPU 资源，甚至死机、起火、爆炸、毁灭，继续？')) {
             this.$store.commit('option/UPDATE_WEBRTC_STATE', false)
-            window.alert('切')
+            window.alert('滚滚滚')
             return false
           }
           this.firstOpenWeRtc = false
