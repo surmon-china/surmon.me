@@ -15,6 +15,9 @@
           <strong>{{ likes || 0 }}</strong>
           <span>人喜欢</span>
         </a>
+        <a href="" class="shang" @click.stop.prevent="shang">
+          <i class="iconfont icon-shang"></i>
+        </a>
       </div>
       <div class="sort">
         <a href="" 
@@ -203,36 +206,7 @@
               <i class="iconfont icon-emoji"></i>
               <div class="emoji-box">
                 <ul class="emoji-list">
-                  <li class="item" @click="insertEmoji('😃')">😃</li>
-                  <li class="item" @click="insertEmoji('😂')">😂</li>
-                  <li class="item" @click="insertEmoji('😅')">😅</li>
-                  <li class="item" @click="insertEmoji('😉')">😉</li>
-                  <li class="item" @click="insertEmoji('😌')">😌</li>
-                  <li class="item" @click="insertEmoji('😔')">😔</li>
-                  <li class="item" @click="insertEmoji('😓')">😓</li>
-                  <li class="item" @click="insertEmoji('😢')">😢</li>
-                  <li class="item" @click="insertEmoji('😍')">😍</li>
-                  <li class="item" @click="insertEmoji('😘')">😘</li>
-                  <li class="item" @click="insertEmoji('😜')">😜</li>
-                  <li class="item" @click="insertEmoji('😡')">😡</li>
-                  <li class="item" @click="insertEmoji('😭')">😭</li>
-                  <li class="item" @click="insertEmoji('😱')">😱</li>
-                  <li class="item" @click="insertEmoji('😳')">😳</li>
-                  <li class="item" @click="insertEmoji('😵')">😵</li>
-                  <li class="item" @click="insertEmoji('🌚')">🌚</li>
-                  <li class="item" @click="insertEmoji('🙏')">🙏</li>
-                  <li class="item" @click="insertEmoji('👆')">👆</li>
-                  <li class="item" @click="insertEmoji('👇')">👇</li>
-                  <li class="item" @click="insertEmoji('👌')">👌</li>
-                  <li class="item" @click="insertEmoji('👍')">👍</li>
-                  <li class="item" @click="insertEmoji('👎')">👎</li>
-                  <li class="item" @click="insertEmoji('💪')">💪</li>
-                  <li class="item" @click="insertEmoji('👏')">👏</li>
-                  <li class="item" @click="insertEmoji('🌻')">🌻</li>
-                  <li class="item" @click="insertEmoji('🌹')">🌹</li>
-                  <li class="item" @click="insertEmoji('💊')">💊</li>
-                  <li class="item" @click="insertEmoji('🇨🇳')">🇨🇳</li>
-                  <li class="item" @click="insertEmoji('🇺🇸')">🇺🇸</li>
+                  <li class="item" @click="insertEmoji(e)" v-for="e in emojis">{{ e }}</li>
                 </ul>
               </div>
             </a>
@@ -297,7 +271,8 @@
         regexs: {
           email: /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/,
           url: /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/
-        }
+        },
+        emojis: ['😃', '😂', '😅', '😉', '😌', '😔', '😓', '😢', '😍', '😘', '😜', '😡', '😭', '😱', '😳', '😵', '🌚', '🙏', '👆', '👇', '👌', '👍', '👎', '💪', '👏', '🌻', '🌹', '💊', '🇨🇳', '🇺🇸']
       }
     },
     props: {
@@ -345,6 +320,9 @@
     methods: {
       UAParse,
       OSParse,
+      shang() {
+        window.utils.openImgPopup('/images/shang.jpg', 'shang')
+      },
       // markdown解析服务
       marked(content) {
         return marked(content, null, false)
@@ -731,9 +709,28 @@
         font-size: 1em;
 
         > .like,
+        > .shang,
         > .count {
           padding: .2em .5em;
           background-color: $module-hover-bg;
+        }
+
+        @keyframes shangBtnBg {
+          0%   {
+            background: rgba($primary, .8);
+          }
+          50% {
+            background: rgba(#50a849, .8);
+          }
+          100% {
+            background: rgba($primary, .8);
+          }
+        }
+
+        > .shang {
+          margin-left: .5em;
+          color: white;
+          animation: shangBtnBg 1s infinite;
         }
 
         > .like {
