@@ -112,17 +112,31 @@ a {
   opacity: 0;
   overflow: hidden;
   visibility: hidden;
-  background-color: rgba(80, 80, 80, 0.5);
+  transition: all .08s;
+  background-color: transparent;
 
   > img {
     max-width: 90%;
     max-height: 90%;
+    transform: scale(.8);
+    transition: all .08s;
     border: .5em solid rgba(210, 210, 210, 0.5);
-  }
+
+    &.shang {
+      width: 30rem;
+    }
+  }  
 
   &.display {
     opacity: 1;
     visibility: visible;
+    transition: all .08s;
+    background-color: rgba(80, 80, 80, 0.5);
+
+    > img {
+      transform: scale(1);
+      transition: all .08s;
+    }
   }
 }
 

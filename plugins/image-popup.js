@@ -2,7 +2,7 @@
 ** 只在生成模式的客户端中使用
 */
 
-if (process.env.NODE_ENV === 'production') {
+if (process.browser) {
 
   // 销毁图片弹窗
   const closeImgPopup = () => {
@@ -19,10 +19,13 @@ if (process.env.NODE_ENV === 'production') {
   }
 
   // 打开图片弹窗
-  const openImgPopup = src => {
+  const openImgPopup = (src, className) => {
     if (!src) return false
     const image = document.createElement('img')
     image.src = src
+    if (className) {
+      image.setAttribute('class', className)
+    }
     const oldMask = document.getElementById('image-popup')
     if (oldMask) document.body.removeChild(oldMask)
     const mask = document.createElement('div')
