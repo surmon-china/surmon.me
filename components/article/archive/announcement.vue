@@ -1,7 +1,7 @@
 <template>
   <div class="announcement">
     <div class="title">
-      <i class="iconfont icon-horn"></i>
+      <i class="iconfont icon-clock-stroke"></i>
     </div>
     <transition name="module" mode="out-in">
       <empty-box class="announcement-empty-box" v-if="!announcement.data.data.length">
@@ -78,6 +78,10 @@
       float: left;
       width: 10%;
       text-align: center;
+
+      > .iconfont {
+        font-size: 1.3rem;
+      }
     }
 
     > .swiper {
