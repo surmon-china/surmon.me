@@ -94,7 +94,7 @@
                        rel="external nofollow">
                       <i class="iconfont icon-facebook"></i>
                     </a>
-                    <a href="https://www.instagram.com/surmon.me/" 
+                    <a href="https://www.instagram.com/surmon666/" 
                        target="_blank" 
                        rel="external nofollow">
                       <i class="iconfont icon-instagram"></i>
@@ -112,9 +112,13 @@
                        target="_blank" 
                        rel="external nofollow">「 skyrover 」</i>
                     </a>
-                    <a href="http://jooger.me/about" 
+                    <a href="https://jooger.me/about" 
                        target="_blank" 
                        rel="external nofollow">「 Jooger 」</i>
+                    </a>
+                    <a href="https://biji.io" 
+                       target="_blank" 
+                       rel="external nofollow">「 Tokin 」</i>
                     </a>
                   </span>
                 </p>
