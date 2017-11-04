@@ -46,7 +46,7 @@
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
     "html-minifier": "^3.5.0",
-    "node-sass": "^4.5.0",
+    "node-sass": "^4.6.0",
     "sass-loader": "^4.1.1"
   }
 }
