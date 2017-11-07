@@ -15,7 +15,7 @@
       </transition>
       <header-view v-if="!mobileLayout"></header-view>
       <mobile-header v-if="mobileLayout"></mobile-header>
-      <main id="main" :class="{ 'mobile': mobileLayout }">
+      <main id="main" :class="{ 'mobile': mobileLayout, [$route.name]: true }">
         <transition name="module">
           <keep-alive>
             <nav-view v-if="!errorColumn && !mobileLayout"></nav-view>
@@ -26,7 +26,8 @@
              :class="{ 
                'full-column': fullColumn, 
                'error-column': errorColumn,
-               'mobile-layout': mobileLayout
+               'mobile-layout': mobileLayout,
+               [$route.name]: true
               }">
           <keep-alive>
             <nuxt></nuxt>
@@ -38,8 +39,8 @@
           </keep-alive>
         </transition>
       </main>
-      <tool-view v-if="!mobileLayout && !Object.is($route.name, 'music')"></tool-view>
-      <share-view class="sidebar-share" v-if="!mobileLayout"></share-view>
+      <tool-view v-if="!mobileLayout && !['app', 'music', 'service'].includes($route.name)"></tool-view>
+      <share-view class="sidebar-share" v-if="!mobileLayout && !['service'].includes($route.name)"></share-view>
       <footer-view v-if="!mobileLayout"></footer-view>
       <mobile-footer v-else></mobile-footer>
     </div>
@@ -198,6 +199,10 @@
       main {
         position: relative;
 
+        &.service {
+          width: 100%;
+        }
+
         .main-content {
           float: left;
           width: 42.5em;
@@ -234,6 +239,11 @@
             margin: 0;
             padding: 1rem;
             padding-top: $navbar-height + 1;
+          }
+
+          &.service {
+            width: 100%;
+            margin: -1em 0;
           }
         }
       }

@@ -10,7 +10,7 @@ export default function ({ route, store }, next) {
   }
 
 	// errorColumn
-  const errorColumn = ['music', 'app'].includes(route.name)
+  const errorColumn = ['music', 'app', 'service'].includes(route.name)
 
   // set errorColumn
   if (!Object.is(store.state.option.errorColumn, errorColumn)) {

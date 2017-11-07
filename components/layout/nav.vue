@@ -29,6 +29,10 @@
         <i class="iconfont icon-user"></i>
         <span>About</span>
       </nuxt-link>
+      <nuxt-link to="/service" class="item">
+        <i class="iconfont icon-zan-top"></i>
+        <span>Service</span>
+      </nuxt-link>
       <nuxt-link to="/guestbook" class="item">
         <i class="iconfont icon-comment"></i>
         <span>Guestbook</span>
