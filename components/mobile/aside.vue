@@ -40,9 +40,9 @@
           <span>Guestbook</span>
         </nuxt-link>
         <nuxt-link to="/app" class="item app">
-        <i class="iconfont icon-app"></i>
-        <span>App</span>
-      </nuxt-link>
+          <i class="iconfont icon-app"></i>
+          <span>App</span>
+        </nuxt-link>
       </nav>
     </div>
   </aside>

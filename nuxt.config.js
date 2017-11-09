@@ -3,17 +3,19 @@ const webpack = require('webpack')
 const apiConfig = require('./api.config')
 
 module.exports = {
-  cache: {
-    max: 20,
-    maxAge: 600000
-  },
-  // offline: true,
+  offline: true,
   loading: { color: '#2196f3' },
+  cache: {
+    max: 100,
+    maxAge: 1000 * 60 * 15
+  },
   build: {
     // analyze: true,
     // analyze: {
     //   analyzerMode: 'static'
     // },
+    // 设置 cdn 地址
+    // publicPath: 'https://cdn.surmon.me',
     // 对webpack的扩展
     extend(webpackConfig, { isDev, isClient, isServer }) {
       /*
@@ -83,6 +85,7 @@ module.exports = {
     { src: '~/plugins/highlight.js' },
     { src: '~/plugins/clipboard.js' },
     { src: '~/plugins/ga.js', ssr: false },
+    { src: '~/plugins/offline.js', ssr: false },
     { src: '~/plugins/clmtrackr.js', ssr: false },
     { src: '~/plugins/emoji-233333.js', ssr: false },
     { src: '~/plugins/image-popup.js', ssr: false },

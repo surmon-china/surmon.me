@@ -258,8 +258,8 @@
           iceServers: [
             {
               urls: [
-                'stun:121.42.55.33:3478',
-                'turn:121.42.55.33:3478'
+                'stun:47.96.19.254:3478',
+                'turn:47.96.19.254:3478'
               ],
               username: 'surmon',
               credential: 'surmon',

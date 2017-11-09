@@ -37,7 +37,17 @@
         <i class="iconfont icon-comment"></i>
         <span>Guestbook</span>
       </nuxt-link>
-      <a href="https://errend.io" target="_blank" class="item errend">
+      <a href="https://s.click.taobao.com/FZYtKYw" 
+         rel="external nofollow"
+         class="item taobao"
+         target="_blank">
+        <i class="iconfont icon-taobao"></i>
+        <span>Taoao</span>
+      </a>
+      <a href="https://errend.io"
+         rel="external nofollow"
+         class="item errend"
+         target="_blank">
         <i class="iconfont icon-debug"></i>
         <span>Errend.io</span>
       </a>
@@ -83,20 +93,30 @@ export default {
         font-family: DINRegular, CenturyGothic;
         margin-bottom: .5em;
 
+
+        &:hover {
+          color: $primary;
+        }
+        
+        &.taobao,
         &.errend {
-          margin: 1rem 0;
           height: 5rem;
           line-height: 5rem;
-          border-top: 1px dashed #d6d6d6;
           border-bottom: 1px dashed #d6d6d6;
+        }
+
+        &.taobao {
+          color: #ff5000;
+          margin-bottom: 0;
+          border-top: 1px dashed #d6d6d6;
+
+          > .iconfont {
+            color: #ff5000;
+          }
         }
 
         &:last-child {
           margin-bottom: 0;
-        }
-
-        &:hover {
-          color: $primary;
         }
 
         &.link-active {

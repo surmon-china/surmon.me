@@ -3,7 +3,10 @@
     <div class="service">
       <div class="banner">
         <div class="banner-content container">
-          <div class="box"></div>
+          <h2 class="title">Talk is cheap. Show me the code</h2>
+          <div class="submit">
+            <button class="submit-btn" @click="submitProject">Fuck me</button>
+          </div>
         </div>
       </div>
       <div class="module">
@@ -61,31 +64,39 @@
         <div class="step-content container">
           <ul class="step-list">
             <li class="item">
-              <p class="icon"></p>
-              <p class="name">提交需求</p>
-              <p class="desc">确定项目要求</p>
+              <p class="name">1. 提交需求</p>
+              <p class="desc">提供完善成熟的需求文档</p>
+              <p class="desc">提供清晰的设计图或目标站</p>
             </li>
             <li class="item">
-              <p class="icon"></p>
-              <p class="name">确认需求</p>
-              <p class="desc">确认报价周期</p>
+              <p class="name">2. 确认需求</p>
+              <p class="desc">确认报价及开发周期</p>
+              <p class="desc">协商开发周期和要点</p>
             </li>
             <li class="item">
-              <p class="icon"></p>
-              <p class="name">预付开发</p>
-              <p class="desc">预付50%，开始开发</p>
+              <p class="name">3. 预付开发</p>
+              <p class="desc">转账预付50%</p>
+              <p class="desc">进入开发流程</p>
             </li>
             <li class="item">
-              <p class="icon"></p>
-              <p class="name">预览反馈</p>
-              <p class="desc">提供预览审核，迭代更新</p>
+              <p class="name">4. 预收修正</p>
+              <p class="desc">提供预览审核</p>
+              <p class="desc">根据需求修正</p>
             </li>
             <li class="item">
-              <p class="icon"></p>
-              <p class="name">交付维护</p>
-              <p class="desc">支付尾款，交付项目，持续维护</p>
+              <p class="name">5. 交付维护</p>
+              <p class="desc">付清尾款，交付项目</p>
+              <p class="desc">一定周期内持续维护</p>
             </li>
           </ul>
+        </div>
+      </div>
+      <br>
+      <br>
+      <div class="rule" v-if="false">
+        <div class="rule-content container">
+          <p>仅接受 2k + 的项目</p>
+          <p>仅接受工期 < 2个月的项目</p>
         </div>
       </div>
     </div>
@@ -99,8 +110,10 @@
       title: 'Service'
     },
     methods: {
-      sendMail() {
-        console.log('应该有事先的基本模板')
+      submitProject() {
+        const subject = `嗨！Surmon，久仰大名！`
+        const body = `Hi! 我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
+        window.location.href = `mailto:surmon@foxmail.com?subject=${subject}&body=${body}`
       }
     }
   }
@@ -115,11 +128,43 @@
       width: 100%;
 
       > .banner {
-        height: 36rem;
+        height: 30rem;
         background: $module-bg url('/images/service.jpg');
         background-size: cover;
-        background-position: bottom;
+        background-position: center 60%;
         background-attachment: fixed;
+
+        > .banner-content {
+          height: 30rem;
+          overflow: hidden;
+          text-align: center;
+
+          > .title {
+            color: $white;
+            margin-top: 8rem;
+            font-size: $font-size-h1 * 2;
+          }
+
+          > .submit {
+
+            > .submit-btn {
+              color: $white;
+              border: 1px solid;
+              border-color: $white;
+              width: 10rem;
+              height: 3em;
+              line-height: 3rem;
+              text-align: center;
+              letter-spacing: 1px;
+              font-weight: bold;
+
+              &:hover {
+                color: $primary;
+                border-color: $primary;
+              }
+            }
+          }
+        }
       }
 
       > .module {
@@ -173,13 +218,14 @@
           > .step-list {
             margin: 0;
             padding: 0;
+            padding-top: 1rem;
             list-style-type: none;
             display: flex;
             justify-content: space-between;
 
             > .item {
-              width: 19%;
-              height: 23rem;
+              width: 20%;
+              height: auto;
               padding: 1em;
               text-align: center;
 
@@ -200,6 +246,15 @@
               }
             }
           }
+        }
+      }
+
+      > .rule {
+
+        > .rule-content {
+          margin: 2em auto;
+          text-align: center;
+          background-color: $module-bg;
         }
       }
     }
