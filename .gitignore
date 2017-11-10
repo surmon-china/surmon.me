@@ -9,6 +9,9 @@ package-lock.json
 # Nuxt build
 .nuxt
 
+analytics.js
+/static/scripts/analytics.js
+
 # Nuxt generate
 dist
 
