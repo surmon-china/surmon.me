@@ -19,7 +19,7 @@ const updateGAScript = () => {
       
     }).catch(error => {
       // 1小时更新
-      console.log('GA 脚本更新网络连接失败', new Date())
+      console.log('GA 脚本更新网络连接失败', new Date(), error)
       setTimeout(doUpdate, 1000 * 60 * 60 * 1)
     })
   }
