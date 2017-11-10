@@ -39,14 +39,21 @@
       </nuxt-link>
       <a href="https://s.click.taobao.com/FZYtKYw" 
          rel="external nofollow"
-         class="item taobao"
+         class="item ad taobao"
          target="_blank">
         <i class="iconfont icon-taobao"></i>
-        <span>Taoao</span>
+        <span>Taobao</span>
+      </a>
+      <a href="https://s.click.taobao.com/gO4hGYw" 
+         rel="external nofollow"
+         class="item ad aliyun"
+         target="_blank">
+        <i class="iconfont icon-aliyun"></i>
+        <span>Aliyun</span>
       </a>
       <a href="https://errend.io"
          rel="external nofollow"
-         class="item errend"
+         class="item ad errend"
          target="_blank">
         <i class="iconfont icon-debug"></i>
         <span>Errend.io</span>
@@ -60,9 +67,9 @@
 </template>
 
 <script>
-export default {
-  name: 'layout-nav'
-}
+  export default {
+    name: 'layout-nav'
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -98,20 +105,27 @@ export default {
           color: $primary;
         }
         
-        &.taobao,
-        &.errend {
+        &.ad {
           height: 5rem;
           line-height: 5rem;
+          margin: 0;
           border-bottom: 1px dashed #d6d6d6;
         }
 
         &.taobao {
           color: #ff5000;
-          margin-bottom: 0;
           border-top: 1px dashed #d6d6d6;
 
           > .iconfont {
             color: #ff5000;
+          }
+        }
+
+        &.aliyun {
+          color: black;
+
+          > .iconfont {
+            color: black;
           }
         }
 

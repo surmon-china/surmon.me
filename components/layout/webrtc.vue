@@ -104,8 +104,8 @@
 </template>
 
 <script>
-  import SimpleWebRTC from '~/plugins/webrtc.js'
-  import apiConfig from '~/api.config.js'
+  import apiConfig from '~/api.config'
+  import SimpleWebRTC from '~/plugins/webrtc'
   import faceCtracker from './face-ctracker.vue'
   export default {
     name: 'webrtc',

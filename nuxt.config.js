@@ -1,10 +1,13 @@
 const path = require('path')
 const webpack = require('webpack')
 const apiConfig = require('./api.config')
+const isProdMode = Object.is(process.env.NODE_ENV, 'production')
 
 module.exports = {
   offline: true,
-  loading: { color: '#2196f3' },
+  loading: {
+    color: '#2196f3'
+  },
   cache: {
     max: 100,
     maxAge: 1000 * 60 * 15
@@ -15,27 +18,32 @@ module.exports = {
     //   analyzerMode: 'static'
     // },
     // 设置 cdn 地址
-    // publicPath: 'https://cdn.surmon.me',
+    publicPath: apiConfig.cdnUrl + '/_nuxt',
     // 对webpack的扩展
     extend(webpackConfig, { isDev, isClient, isServer }) {
-      /*
-      webpackConfig.resolve.alias['~utils'] = path.join(__dirname, 'utils')
-      webpackConfig.resolve.alias['~static'] = path.join(__dirname, 'static')
-      webpackConfig.resolve.alias['~filters'] = path.join(__dirname, 'filters')
-      webpackConfig.resolve.alias['~services'] = path.join(__dirname, 'services')
-      console.log(webpackConfig.module.rules)
-      // webpackConfig.module.rules.push({
-      //   test: /\.scss$/,
-      //   use: ['vue-style-loader?sourceMap', 'css-loader?sourceMap', 'sass-loader']
-      // })
-      */
+      // webpackConfig.resolve.alias['~utils'] = path.join(__dirname, 'utils')
+      // webpackConfig.resolve.alias['~static'] = path.join(__dirname, 'static')
+      // webpackConfig.resolve.alias['~filters'] = path.join(__dirname, 'filters')
+      // webpackConfig.resolve.alias['~services'] = path.join(__dirname, 'services')
+      if (isProdMode) {
+        const vueLoader = webpackConfig.module.rules.find(loader => loader.loader === 'vue-loader')
+        if (vueLoader) {
+          // 处理 Template 中的 cdn 地址
+          vueLoader.options.loaders.html = path.resolve(__dirname, './extend/html-cdn-loader')
+          // 处理 CSS 中的 cdn 地址
+          const vueLoaders = vueLoader.options.loaders
+          for (cssLoader in vueLoaders) {
+            if (Array.isArray(vueLoaders[cssLoader])) {
+              vueLoaders[cssLoader].forEach(loader => {
+                if (loader.loader === 'css-loader') {
+                  loader.options.root = apiConfig.cdnUrl
+                }
+              })
+            }
+          }
+        }
+      }
     },
-    plugins: [
-      // new webpack.ContextReplacementPlugin(
-      //   /highlight\.js\/lib\/languages$/,
-      //   new RegExp(`^./(${['javascript', 'python', 'bash', 'css', 'html', 'php', 'go', 'less', 'json', 'scss', 'nginx', 'shell', 'sql', 'stylus', 'typescript'].join('|')})$`),
-      // ),
-    ],
     // 将重复引用的(第三方/自有)模块添加到vendor.bundle.js
     vendor: [
       'axios',
@@ -48,7 +56,7 @@ module.exports = {
       'simplewebrtc',
       'socket.io-client'
     ],
-    // 为JS和Vue文件定制babel配置。https://nuxtjs.org/api/configuration-build/#analyze
+    // 为 JS 和 Vue 文件定制 babel 配置。https://nuxtjs.org/api/configuration-build/#analyze
     babel: {
       presets: ['es2015', 'stage-2'],
       plugins: [
@@ -71,12 +79,13 @@ module.exports = {
     }
     */
   },
-  dev: (process.env.NODE_ENV !== 'production'),
+  dev: isProdMode,
   env: {
     baseUrl: apiConfig.baseUrl,
     HOST_URL: apiConfig.socketHost
   },
   plugins: [
+    { src: '~/plugins/cdn.js' },
     { src: '~/plugins/axios.js' },
     { src: '~/plugins/howler.js' },
     { src: '~/plugins/filters.js' },

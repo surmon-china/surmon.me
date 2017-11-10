@@ -35,10 +35,35 @@
           <i class="iconfont icon-user"></i>
           <span>About</span>
         </nuxt-link>
+        <nuxt-link to="/service" class="item">
+          <i class="iconfont icon-zan-top"></i>
+          <span>Service</span>
+        </nuxt-link>
         <nuxt-link to="/guestbook" class="item guestbook">
           <i class="iconfont icon-comment"></i>
           <span>Guestbook</span>
         </nuxt-link>
+        <a href="https://s.click.taobao.com/p08gGYw" 
+           rel="external nofollow"
+           class="item ad taobao"
+           target="_blank">
+          <i class="iconfont icon-taobao"></i>
+          <span>Taobao</span>
+        </a>
+        <a href="https://s.click.taobao.com/gO4hGYw" 
+           rel="external nofollow"
+           class="item ad aliyun"
+           target="_blank">
+          <i class="iconfont icon-aliyun"></i>
+          <span>Aliyun</span>
+        </a>
+        <a href="https://errend.io"
+           rel="external nofollow"
+           class="item ad errend"
+           target="_blank">
+          <i class="iconfont icon-debug"></i>
+          <span>Errend.io</span>
+        </a>
         <nuxt-link to="/app" class="item app">
           <i class="iconfont icon-app"></i>
           <span>App</span>
@@ -56,7 +81,7 @@
         const gravatar = this.$store.state.option.adminInfo.data.gravatar
         return !!gravatar 
                 ? `${gravatar}?imageView2/1/w/180/h/180/interlace/1/q/75|imageslim` 
-                : '/images/gravatar.jpg'
+                : `${cdnUrl}/images/gravatar.jpg`
       }
     }
   }
@@ -138,13 +163,34 @@
           // font-family: CenturyGothic;
           margin-bottom: .5em;
 
-          &.guestbook {
-            margin-bottom: 0;
+          &.ad {
+            height: 4rem;
+            line-height: 4rem;
+            margin: 0;
+            border-bottom: 1px solid darken($mobile-aside-bg, 5%);
+          }
+
+          &.taobao {
+            color: #ff5000;
+            background: $module-bg;
+            border-top: 1px solid darken($mobile-aside-bg, 5%);
+
+            > .iconfont {
+              color: #ff5000;
+            }
+          }
+
+          &.aliyun {
+            color: black;
+            background: $module-bg;
+
+            > .iconfont {
+              color: black;
+            }
           }
 
           &.app {
             margin-top: 1rem;
-            border-top: 1px solid darken($mobile-aside-bg, 5%);
             color: $primary;
 
             &.link-active {

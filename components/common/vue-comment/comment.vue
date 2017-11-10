@@ -45,7 +45,7 @@
                  :href="comment.author.site" 
                  @click.stop="clickUser($event, comment.author)">
                 <img :alt="comment.author.name || '匿名用户'"
-                     :src="gravatar(comment.author.email) || '/images/anonymous.jpg'">
+                     :src="gravatar(comment.author.email) || `${cdnUrl}/images/anonymous.jpg`">
               </a>
             </div>
             <div class="cm-body">
@@ -172,7 +172,7 @@
         <div class="user">
           <div class="gravatar" v-if="!mobileLayout">
             <img :alt="user.name || '匿名用户'"
-                 :src="user.gravatar || '/images/anonymous.jpg'">
+                 :src="user.gravatar || `${cdnUrl}/images/anonymous.jpg`">
           </div>
         </div>
         <div class="editor">
@@ -321,7 +321,7 @@
       UAParse,
       OSParse,
       shang() {
-        window.utils.openImgPopup('/images/shang.jpg', 'shang')
+        window.utils.openImgPopup(`${this.cdnUrl}/images/shang.jpg`, 'shang')
       },
       // markdown解析服务
       marked(content) {
