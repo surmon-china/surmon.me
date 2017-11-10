@@ -81,7 +81,7 @@
         const gravatar = this.$store.state.option.adminInfo.data.gravatar
         return !!gravatar 
                 ? `${gravatar}?imageView2/1/w/180/h/180/interlace/1/q/75|imageslim` 
-                : `${cdnUrl}/images/gravatar.jpg`
+                : `${this.cdnUrl}/images/gravatar.jpg`
       }
     }
   }
