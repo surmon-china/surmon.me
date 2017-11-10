@@ -262,8 +262,9 @@
 
             > .item {
               width: 19%;
-              height: 23rem;
+              height: auto;
               padding: 1em;
+              overflow: hidden;
               text-align: center;
               background-color: $module-bg;
 

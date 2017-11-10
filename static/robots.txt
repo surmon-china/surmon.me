@@ -1,4 +1,7 @@
 # robots.txt
 User-agent: *
-Disallow:
+Disallow: 
+Disallow: /bin/
+Disallow: /proxy
 Sitemap: https://surmon.me/sitemap.xml
+Sitemap: https://surmon.me/sitemap

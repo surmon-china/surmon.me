@@ -44,11 +44,6 @@
                        rel="external nofollow">
                       <i class="iconfont icon-stackoverflow"></i>
                     </a>
-           <!--          <a href="https://segmentfault.com/u/surmon" 
-                       target="_blank" 
-                       rel="external nofollow">
-                      <i class="iconfont icon-segmentfault"></i>
-                    </a> -->
                     <a href="https://leetcode.com/surmon" 
                        target="_blank" 
                        rel="external nofollow">
@@ -59,11 +54,6 @@
                        rel="external nofollow">
                       <i class="iconfont icon-juejin"></i>
                     </a>
-          <!--           <a href="https://www.v2ex.com/member/surmon" 
-                       target="_blank" 
-                       rel="external nofollow">
-                      <i class="iconfont icon-v2ex"></i>
-                    </a> -->
                     <a href="https://www.zhihu.com/people/surmon/activities" 
                        target="_blank" 
                        rel="external nofollow">
