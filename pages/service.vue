@@ -1,11 +1,11 @@
 <template>
-  <div class="page">
+  <div class="page" :class="{ mobile: mobileLayout }">
     <div class="service">
       <div class="banner">
         <div class="banner-content container">
           <h2 class="title">Talk is cheap. Show me the code</h2>
           <div class="submit">
-            <button class="submit-btn" @click="submitProject">Fuck me</button>
+            <button class="submit-btn" @click="submitProject">EMail me</button>
           </div>
         </div>
       </div>
@@ -66,7 +66,7 @@
             <li class="item">
               <p class="name">1. 提交需求</p>
               <p class="desc">提供完善成熟的需求文档</p>
-              <p class="desc">提供清晰的设计图或目标站</p>
+              <p class="desc">提供清晰可用的设计图</p>
             </li>
             <li class="item">
               <p class="name">2. 确认需求</p>
@@ -91,12 +91,9 @@
           </ul>
         </div>
       </div>
-      <br>
-      <br>
-      <div class="rule" v-if="false">
+      <div class="rule">
         <div class="rule-content container">
-          <p>仅接受 2k + 的项目</p>
-          <p>仅接受工期 < 2个月的项目</p>
+          <p class="text">不仿站，不设计，不比稿，单项目 2k 起，大型项目工期至多 1个月，仅程序实现；若能接受，请 EMail 我（可能是最好的 Web 开发者之一）</p>
         </div>
       </div>
     </div>
@@ -112,8 +109,13 @@
     methods: {
       submitProject() {
         const subject = `嗨！Surmon，久仰大名！`
-        const body = `Hi! 我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
+        const body = `我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
         window.location.href = `mailto:surmon@foxmail.com?subject=${subject}&body=${body}`
+      }
+    },
+    computed: {
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
       }
     }
   }
@@ -123,6 +125,84 @@
   @import '~assets/sass/mixins';
   @import '~assets/sass/variables';
   .page {
+
+    &.mobile {
+
+      > .service {
+
+        > .banner {
+          height: 15rem;
+
+          > .banner-content {
+            width: 100%;
+            height: 15rem;
+
+            > .title {
+              margin: 3rem;
+              font-size: $font-size-h1;
+            }
+          }
+        }
+
+        > .module {
+          margin: 0 auto;
+          margin-top: 1rem;
+
+          > .module-content {
+            width: 100%;
+
+            > .module-list {
+              flex-direction: column;
+
+              > .item {
+                width: 100%;
+                height: auto;
+                margin-bottom: 1rem;
+              }
+            }
+          }
+        }
+
+        > .step {
+          padding: 0;
+          background-color: transparent;
+
+          > .step-content {
+            width: 100%;
+
+            > .step-list {
+              padding: 0;
+              flex-direction: column;
+
+              > .item {
+                width: 100%;
+                height: auto;
+                margin-bottom: 1rem;
+                padding-bottom: 0;
+                background-color: $module-bg;
+              }
+            }
+          }
+        }
+
+        > .rule {
+          height: auto;
+          line-height: 3rem;
+          margin-bottom: 1em;
+
+          > .rule-content {
+            width: 100%;
+            padding: 1rem;
+            text-align: left;
+            text-indent: 2em;
+
+            > .text {
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
 
     > .service {
       width: 100%;
@@ -157,6 +237,7 @@
               text-align: center;
               letter-spacing: 1px;
               font-weight: bold;
+              text-transform: uppercase;
 
               &:hover {
                 color: $primary;
@@ -250,11 +331,15 @@
       }
 
       > .rule {
+        height: 5rem;
+        line-height: 5rem;
+        background-color: $primary;
 
         > .rule-content {
-          margin: 2em auto;
+          color: $white;
+          margin: 0 auto;
+          margin-bottom: -1em;
           text-align: center;
-          background-color: $module-bg;
         }
       }
     }

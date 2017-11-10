@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import socket from '~/plugins/socket.io.js'
+  import socket from '~/plugins/socket.io'
   export default {
     name: 'webrtc',
     data() {

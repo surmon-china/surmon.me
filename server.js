@@ -1,4 +1,6 @@
-const app = require('express')()
+
+const express = require('express')
+const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const { Nuxt, Builder } = require('nuxt')
@@ -7,12 +9,13 @@ const port = process.env.PORT || 3000
 process.noDeprecation = true
 
 // extend
-const webrtcServer = require('./webrtc.server.js')
-const barrageServer = require('./barrage.server.js')
+const webrtcServer = require('./webrtc.server')
+const barrageServer = require('./barrage.server')
+const updateGAScript = require('./utils/update-analytics')
 app.set('port', port)
 
 // Import and Set Nuxt.js options
-const config = require('./nuxt.config.js')
+const config = require('./nuxt.config')
 config.dev = !(process.env.NODE_ENV === 'production')
 
 // Init Nuxt.js
@@ -34,6 +37,9 @@ server.listen(port, host)
 
 // eslint-disable-line no-console
 console.log(`Nuxt.js SSR Server listening on ${host}:${port}, at ${new Date().toLocaleString()}`)
+
+// 更新 GA 脚本
+updateGAScript()
 
 // barrage server
 barrageServer(io)

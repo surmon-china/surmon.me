@@ -176,7 +176,7 @@
         const gravatar = this.$store.state.option.adminInfo.data.gravatar
         return !!gravatar 
                 ? `${gravatar}?imageView2/1/w/360/h/360/interlace/1/q/75|imageslim` 
-                : '/images/gravatar.jpg'
+                : `${this.cdnUrl}/images/gravatar.jpg`
       },
       mobileLayout() {
         return this.$store.state.option.mobileLayout

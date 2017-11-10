@@ -49,7 +49,7 @@
 
 <script>
   import { scrollTo, easing } from '~/utils/scroll-to-anywhere'
-  const underscore = require('~/utils/underscore-simple.js')
+  const underscore = require('~/utils/underscore-simple')
   export default {
     name: 'tool',
     data() {

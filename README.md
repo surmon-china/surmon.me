@@ -5,7 +5,7 @@
 
 ## Surmon.me
 
-Vue-Blog By Nuxt.js + Vuex + Vue-router + Axios 
+My Blog By Nuxt.js
 
 [Online Blog - https://surmon.me](https://surmon.me/)
 
