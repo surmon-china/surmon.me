@@ -77,8 +77,10 @@
       }
     },
     mounted() {
-      this.updateScreenHeight()
-      window.addEventListener('resize', this.updateScreenHeight)
+      if (process.browser) {
+        this.updateScreenHeight()
+        window.addEventListener('resize', this.updateScreenHeight)
+      }
     },
     beforeDestroy() {
       window.removeEventListener('resize', this.updateScreenHeight)
