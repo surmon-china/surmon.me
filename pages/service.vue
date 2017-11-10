@@ -139,7 +139,7 @@
 
             > .title {
               margin: 3rem;
-              font-size: $font-size-h1;
+              font-size: $font-size-h2;
             }
           }
         }

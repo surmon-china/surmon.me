@@ -100,9 +100,9 @@
           let picUrl = this.currentSong.album.picUrl
           return picUrl 
                  ? picUrl.replace('http://', '/proxy/') + '?param=600y600' 
-                 : `${cdnUrl}/images/music-bg.jpg`
+                 : `${this.cdnUrl}/images/music-bg.jpg`
         } else {
-          return `${cdnUrl}/images/music-bg.jpg`
+          return `${this.cdnUrl}/images/music-bg.jpg`
         }
       },
       relativeStrokeWidth() {
