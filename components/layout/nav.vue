@@ -100,7 +100,6 @@
         font-family: DINRegular, CenturyGothic;
         margin-bottom: .5em;
 
-
         &:hover {
           color: $primary;
         }
@@ -130,6 +129,7 @@
         }
 
         &:last-child {
+          margin-top: 1rem;
           margin-bottom: 0;
         }
 
