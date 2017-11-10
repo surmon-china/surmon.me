@@ -48,10 +48,10 @@
 </template>
 
 <script>
-  import { Background, Barrage, Webrtc, Header, Footer, Aside, Share, Tool, Nav } from '~/components/layout'
-  import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
   import EventBus from '~/utils/event-bus'
   import consoleSlogan from '~/utils/console-slogan'
+  import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
+  import { Background, Barrage, Webrtc, Header, Footer, Aside, Share, Tool, Nav } from '~/components/layout'
   export default {
     name: 'app',
     head() {
@@ -244,6 +244,10 @@
           &.service {
             width: 100%;
             margin: -1em 0;
+
+            &.mobile-layout {
+              margin: 0;
+            }
           }
         }
       }

@@ -40,6 +40,7 @@
         <img v-if="preload" :src="currentSongPicUrl" alt="song-thumb">
         <img v-if="preload" src="/images/app-hot.png" alt="app-download">
         <img v-if="preload" src="/images/app-logo.png" alt="app-logo">
+        <img v-if="preload" src="/images/service.jpg" alt="service">
         <img v-if="preload" src="/images/about-background-be-1.jpg" alt="background">
         <img v-if="preload" src="/images/about-background-be-2.jpg" alt="background">
         <img v-if="preload" src="/images/about-background-star-1.png" alt="background">
@@ -50,6 +51,7 @@
 </template>
 
 <script>
+  const apiConfig = require('~/api.config')
   import EventBus from '~/utils/event-bus'
   import consoleSlogan from '~/utils/console-slogan'
   export default {
@@ -96,9 +98,9 @@
           let picUrl = this.currentSong.album.picUrl
           return picUrl 
                  ? picUrl.replace('http://', '/proxy/') + '?param=600y600' 
-                 : '/images/music-bg.jpg'
+                 : `${this.cdnUrl}/images/music-bg.jpg`
         } else {
-          return '/images/music-bg.jpg'
+          return `${this.cdnUrl}/images/music-bg.jpg`
         }
       }
     },

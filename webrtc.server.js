@@ -4,8 +4,8 @@
  *
 */
 
-const uuid = require('node-uuid')
 const crypto = require('crypto')
+const uuid = require('node-uuid')
 const apiConfig = require('./api.config')
 
 const config = {
@@ -30,7 +30,7 @@ const config = {
   ],
   turnservers: [
     {
-      urls: ['turn:121.42.55.33:3478'],
+      urls: ['turn:47.96.19.254:3478'],
       secret: '0x43200e73d48b1f9295d569da7f9101ab',
       expiry: 86400
     }
@@ -82,10 +82,8 @@ const parseWebrtcServer = io => {
       if (typeof name !== 'string') return
       // check if maximum number of clients reached
       const romeCount = Object.keys(io.sockets.sockets)
-      if (config.rooms && config.rooms.maxClients > 0 &&
-          romeCount >= config.rooms.maxClients) {
-          safeCb(cb)('full')
-          return
+      if (config.rooms && config.rooms.maxClients > 0 && romeCount >= config.rooms.maxClients) {
+          return safeCb(cb)('full')
       }
       removeFeed()
       safeCb(cb)(null, (name => {

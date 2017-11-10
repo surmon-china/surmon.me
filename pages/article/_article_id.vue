@@ -206,7 +206,7 @@
         }
       },
       buildThumb(thumb) {
-        if (!thumb) return '/images/thumb-releted.jpg'
+        if (!thumb) return `${this.cdnUrl}/images/thumb-releted.jpg`
         return `${thumb}?imageView2/1/w/300/h/230/format/${this.imgExt}/interlace/1/q/80|imageslim`
       },
       buildDateTitle(date) {
@@ -299,6 +299,12 @@
       }
 
       > .content {
+
+        iframe {
+          width: 100%;
+          margin-bottom: 1em;
+          background-color: black;
+        }
 
         a {
           font-weight: bold;

@@ -2,7 +2,7 @@
 const fs = require('fs')
 
 // extend
-const underscore = require('./utils/underscore-simple.js')
+const underscore = require('./utils/underscore-simple')
 
 // init
 const defaultBarrages = require('./data/barrages.default.json') || []
