@@ -11,7 +11,7 @@ const updateGAScript = () => {
       if (res.status === 200) {
         // 10小时更新
         fs.writeFileSync(path.join(__dirname, '..', 'static', 'scripts') + '/analytics.js', res.data)
-        console.log('\nGA 脚本更新成功', new Date())
+        // console.log('GA 脚本更新成功', new Date())
         setTimeout(doUpdate, 1000 * 60 * 60 * 10)
       } else {
         console.log('GA 脚本更新失败', new Date(), res.data)
