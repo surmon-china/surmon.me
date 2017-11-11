@@ -41,7 +41,7 @@
     <div class="aside-ad" v-if="false">
       <a href="https://s.click.taobao.com/ZaXp1Rx" 
          target="_blank" 
-         rel="external nofollow" 
+         rel="external nofollow noopener" 
          class="ad-box">
         <img src="https://p1.bpimg.com/567571/e85fb6270effc4c7.jpg">
       </a>
@@ -154,7 +154,7 @@
             const isFixed = windowScrollTop > sidebarFixedOffsetTop
             if (isFixed && element) element.setAttribute('class','aside-fixed-box fixed')
             if (!isFixed && element) element.setAttribute('class','aside-fixed-box')
-          })
+          }, { passive: true })
         },
         unbind(element) {
           window.onscroll = null

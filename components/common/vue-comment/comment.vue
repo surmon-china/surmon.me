@@ -41,7 +41,7 @@
               v-for="(comment, index) in comment.data.data">
             <div class="cm-avatar" v-if="!mobileLayout">
               <a target="_blank"
-                 rel="external nofollow"
+                 rel="external nofollow noopener"
                  :href="comment.author.site" 
                  @click.stop="clickUser($event, comment.author)">
                 <img :alt="comment.author.name || '匿名用户'"
@@ -52,7 +52,7 @@
               <div class="cm-header">
                 <a class="user-name" 
                    target="_blank" 
-                   rel="external nofollow"
+                   rel="external nofollow noopener"
                    :href="comment.author.site" 
                    @click.stop="clickUser($event, comment.author)">{{ comment.author.name | firstUpperCase }}</a>
                 <span class="os" v-html="OSParse(comment.agent)" v-if="comment.agent"></span>

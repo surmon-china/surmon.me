@@ -29,7 +29,7 @@ const linkParse = (href, title, text) => {
              target="_blank" 
              class="${textIsImage ? 'image-link' : 'link'}"
              title="${title || (textIsImage ? href : text)}" 
-             ${isSelf ? '' : 'rel="external nofollow"'}>${text}</a>`.replace(/\s+/g, ' ').replace('\n', '')
+             ${isSelf ? '' : 'rel="external nofollow noopenter"'}>${text}</a>`.replace(/\s+/g, ' ').replace('\n', '')
 }
 
 // 对图片进行弹窗处理
