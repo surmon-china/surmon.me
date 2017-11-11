@@ -39,6 +39,11 @@
                        rel="external nofollow noopenter">
                       <i class="iconfont icon-github"></i>
                     </a>
+                    <a href="https://surmon.taobao.com" 
+                       target="_blank" 
+                       rel="external nofollow noopenter">
+                      <i class="iconfont icon-taobao"></i>
+                    </a>
                     <a href="https://stackoverflow.com/users/6222535/surmon?tab=profile" 
                        target="_blank" 
                        rel="external nofollow noopenter">
