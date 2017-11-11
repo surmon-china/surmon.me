@@ -7,7 +7,7 @@
           v-for="(project, index) in projects">
         <a target="_blank"
            class="item-content" 
-           rel="external nofollow"
+           rel="external nofollow noopenter"
            :href="project.html_url"
            :title="project.description">
           <i class="iconfont" :class="[buildIcon(project)]"></i>

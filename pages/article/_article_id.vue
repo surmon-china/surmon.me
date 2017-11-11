@@ -67,7 +67,7 @@
           <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
           <a href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
              target="_blank"
-             rel="external nofollow">Creative Commons BY-NC 3.0 CN</a>
+             rel="external nofollow noopenter">Creative Commons BY-NC 3.0 CN</a>
         </div>
       </div>
     </transition>

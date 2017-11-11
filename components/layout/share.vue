@@ -2,74 +2,74 @@
   <div id="share">
     <div class="share-box" :class="{ mobile: mobileLayout }">
       <a title="微信" 
-         rel="nofollow"
+         rel="nofollow noopener"
          class="share-link wechat"
          @click.prevent="shareWindow(`http://qr.topscan.com/api.php?text=${url}&w=300&el=h&m=10`)">
         <i class="iconfont icon-wechat"></i>
       </a>
       <a title="微博" 
-         rel="nofollow"
+         rel="nofollow noopener"
          class="share-link weibo"
          @click.prevent="shareWindow(`http://service.weibo.com/share/share.php?url=${url}&title=${title()}&source=${url}&sourceUrl=${url}&content=${description()}`)">
         <i class="iconfont icon-weibo"></i>
       </a>
       <a title="QQ空间" 
-         rel="nofollow"
+         rel="nofollow noopener"
          class="share-link qzone"
          @click.prevent="shareWindow(`http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${url}&title=${title()}&summary=${description()}&site=${url}`)">
         <i class="iconfont icon-qzone"></i>
       </a>
       <a title="豆瓣" 
-         rel="nofollow"
+         rel="nofollow noopener"
          class="share-link douban"
          @click.prevent="shareWindow(`https://www.douban.com/recommend/?url=${url}&title=${title()}`)">
         <i class="iconfont icon-douban"></i>
       </a>
       <a title="人人网" 
-         rel="nofollow"
+         rel="nofollow noopener"
          class="share-link renren"
          @click.prevent="shareWindow(`http://widget.renren.com/dialog/share?resourceUrl=${url}&srcUrl=${url}&title=${title()}&description=${description()}`)">
         <i class="iconfont icon-renren"></i>
       </a>
       <a title="印象笔记" 
-         rel="nofollow"
+         rel="nofollow noopener"
          class="share-link evernote"
          @click.prevent="shareWindow(`https://www.evernote.com/clip.action?url=${url}&title=${title()}`)">
         <i class="iconfont icon-evernote"></i>
       </a>
       <a title="twitter" 
-         rel="nofollow"
+         rel="nofollow noopener"
          class="share-link twitter"
          @click.prevent="shareWindow(`http://twitter.com/share?text=${title()}&url=${url}`)">
         <i class="iconfont icon-twitter"></i>
       </a>
       <a title="facebook" 
-         rel="nofollow"
+         rel="nofollow noopener"
          class="share-link facebook"
          @click.prevent="shareWindow(`https://www.facebook.com/sharer/sharer.php?u=${url}`)">
         <i class="iconfont icon-facebook"></i>
       </a>
       <a title="google plus" 
-         rel="nofollow"
+         rel="nofollow noopener"
          class="share-link google-plus"
          @click.prevent="shareWindow(`https://plus.google.com/share?url=${url}`)">
         <i class="iconfont icon-google-plus"></i>
       </a>
       <a title="linkedin" 
-         rel="nofollow"
+         rel="nofollow noopener"
          class="share-link linkedin"
          @click.prevent="shareWindow(`http://www.linkedin.com/shareArticle?title=${title()}&summary=${description()}&mini=true&url=${url}`)">
         <i class="iconfont icon-linkedin"></i>
       </a>
       <a title="email" 
-         rel="nofollow"
+         rel="nofollow noopener"
          class="share-link mail"
          @click.prevent="shareWindow(`mailto:?subject=${title()}&body=${url}`)">
         <i class="iconfont icon-mail"></i>
       </a>
       <span ref="share_copy_btn"
             class="share-link link" 
-            rel="nofollow"
+            rel="nofollow noopener"
             :data-clipboard-text="url">
         <i class="iconfont icon-link"></i>
       </span>

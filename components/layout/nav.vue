@@ -38,21 +38,21 @@
         <span>Guestbook</span>
       </nuxt-link>
       <a href="https://s.click.taobao.com/vkjaBYw" 
-         rel="external nofollow"
+         rel="external nofollow noopener"
          class="item ad taobao"
          target="_blank">
         <i class="iconfont icon-taobao"></i>
         <span>Taobao</span>
       </a>
       <a href="https://s.click.taobao.com/gflYBYw" 
-         rel="external nofollow"
+         rel="external nofollow noopener"
          class="item ad aliyun"
          target="_blank">
         <i class="iconfont icon-aliyun"></i>
         <span>Aliyun</span>
       </a>
       <a href="https://errend.io"
-         rel="external nofollow"
+         rel="external nofollow noopener"
          class="item ad errend"
          target="_blank">
         <i class="iconfont icon-debug"></i>
