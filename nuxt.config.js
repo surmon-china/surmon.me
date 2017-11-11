@@ -110,6 +110,7 @@ module.exports = {
     titleTemplate: '%s | Surmon.me',
     htmlAttrs: {
       xmlns: 'http://www.w3.org/1999/xhtml',
+      manifest: 'surmon.me',
       lang: 'zh'
     },
     meta: [
