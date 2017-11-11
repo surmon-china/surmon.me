@@ -43,14 +43,14 @@
           <i class="iconfont icon-comment"></i>
           <span>Guestbook</span>
         </nuxt-link>
-        <a href="https://s.click.taobao.com/p08gGYw" 
+        <a href="https://s.click.taobao.com/gzUaBYw" 
            rel="external nofollow"
            class="item ad taobao"
            target="_blank">
           <i class="iconfont icon-taobao"></i>
           <span>Taobao</span>
         </a>
-        <a href="https://s.click.taobao.com/gO4hGYw" 
+        <a href="https://s.click.taobao.com/gflYBYw" 
            rel="external nofollow"
            class="item ad aliyun"
            target="_blank">
