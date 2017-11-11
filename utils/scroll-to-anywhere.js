@@ -10,7 +10,7 @@ const _ = {
       events = [events]
     }
     events.forEach(event => {
-      element.addEventListener(event, handler)
+      element.addEventListener(event, handler, { passive: true })
     })
   },
   off(element, events, handler) {
