@@ -31,15 +31,15 @@
         <button class="to-top" 
                 title="to-top"
                 @click="totop"
-                @mouseover="topBtnMouseOver = true;slowMoveToAnyWhere()"
-                @mouseleave="topBtnMouseOver = false">
+                @mouseover="setButtonState('top', true, true)"
+                @mouseleave="setButtonState('top', false)">
           <i class="iconfont icon-totop"></i>
         </button>
         <button class="to-bottom" 
                 title="to-bottom"
                 @click="toBottom" 
-                @mouseover="bottomBtnMouseOver = true;slowMoveToAnyWhere()"
-                @mouseleave="bottomBtnMouseOver = false">
+                @mouseover="setButtonState('bottom', true, true)"
+                @mouseleave="setButtonState('bottom', false)">
           <i class="iconfont icon-tobottom"></i>
         </button>
       </div>
@@ -57,7 +57,8 @@
         topBtnMouseOver: false,
         bottomBtnMouseOver: false,
         toggleWebrtcFn: null,
-        firstOpenWeRtc: true
+        firstOpenWeRtc: true,
+        animationFrameId: null
       }
     },
     computed: {
@@ -75,6 +76,11 @@
       toBottom() {
         scrollTo(window.scrollY + window.innerHeight, 300, { easing: easing['ease-in'] })
       },
+      setButtonState(position, state, start) {
+        this[(Object.is(position, 'bottom') ? 'bottomBtnMouseOver' : 'topBtnMouseOver')] = state
+        window.cancelAnimationFrame(this.animationFrameId)
+        start && this.slowMoveToAnyWhere()
+      },
       slowMoveToAnyWhere() {
         const step = () => {
           let targetScrollY = window.scrollY
@@ -90,12 +96,13 @@
           if (!canScrollTo) return false
           window.scrollTo(0, targetScrollY)
           if (this.bottomBtnMouseOver || this.topBtnMouseOver) {
-            window.requestAnimationFrame(step)
+            this.animationFrameId = window.requestAnimationFrame(step)
           } else {
+            window.cancelAnimationFrame(this.animationFrameId)
             return false
           }
         }
-        window.requestAnimationFrame(step)
+        this.animationFrameId = window.requestAnimationFrame(step)
       },
       toggleBarrage() {
         this.$store.commit('option/UPDATE_BARRAGE_STATE')

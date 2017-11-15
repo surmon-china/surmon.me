@@ -4,7 +4,7 @@
       <div class="footer-content">
         <!-- <span>陕ICP备13004859号</span> -->
         <!-- <span> - </span> -->
-        <a class="sitemap-btn" href="/sitemap.xml" target="_blank">SITEMAP</a>
+        <a class="sitemap-btn" href="/sitemap.xml" target="_blank">SITEMAP.XML</a>
         <span> &nbsp; </span>
         <span>Powered By </span>
         <router-link to="/project">NodePress</router-link>
