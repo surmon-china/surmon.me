@@ -13,7 +13,7 @@
         <h4 class="item-title">
           <router-link :to="`/article/${item.id}`" :title="item.title">{{ item.title }}</router-link>
         </h4>
-        <p class="item-description" style="-webkit-box-orient: vertical;">{{ item.description }}</p>
+        <p class="item-description" style="-webkit-box-orient: vertical;" v-html="item.description"></p>
         <div class="item-meta">
           <span class="date">
             <i class="iconfont icon-clock"></i>

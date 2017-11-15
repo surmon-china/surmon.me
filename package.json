@@ -28,7 +28,7 @@
   },
   "scripts": {
     "precommit": "npm run lint",
-    "dev": "nodemon --exec node server.js",
+    "dev": "node server.js",
     "dev:tool": "devtool ./server.js --watch",
     "build": "cross-env NODE_ENV=production nuxt build",
     "start": "cross-env NODE_ENV=production node server.js",
