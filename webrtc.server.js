@@ -31,7 +31,7 @@ const config = {
   turnservers: [
     {
       urls: ['turn:47.96.19.254:3478'],
-      secret: '0x43200e73d48b1f9295d569da7f9101ab',
+      secret: '0x93b261cb9987e8c984812326000ddb69',
       expiry: 86400
     }
   ]
