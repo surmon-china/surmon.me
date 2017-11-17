@@ -6,6 +6,7 @@
 
 const crypto = require('crypto')
 const uuid = require('node-uuid')
+const argv = require('yargs').argv
 const apiConfig = require('./api.config')
 
 const config = {
@@ -30,8 +31,8 @@ const config = {
   ],
   turnservers: [
     {
-      urls: ['turn:47.96.19.254:3478'],
-      secret: '0x93b261cb9987e8c984812326000ddb69',
+      urls: [argv.rtc_uri],
+      secret: argv.rtc_key,
       expiry: 86400
     }
   ]
