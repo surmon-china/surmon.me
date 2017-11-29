@@ -20,6 +20,12 @@ if (process.env.NODE_ENV === 'production') {
   */
   window.onNuxtReady((app) => {
     /*
+    ** 加载页
+    */
+    ga('set', 'page', app.$route.fullPath)
+    ga('send', 'pageview')
+
+    /*
     ** 每次页面路由发生改变时
     */
     app.$nuxt.$on('routeChanged', (to, from) => {
