@@ -143,8 +143,8 @@
         inserted(element) {
           // 检测此元素相对于文档Document原点的绝对位置，并且这个值是不变化的
           let sidebarFixedOffsetTop = element.offsetTop
-          // 监听滚动事件
-          window.addEventListener('scroll', e => {
+          // 处理
+          const parseScroll = () => {
             const windowScrollTop = document.documentElement.scrollTop || 
                                     window.pageYOffset || 
                                     window.scrollY ||
@@ -154,7 +154,11 @@
             const isFixed = windowScrollTop > sidebarFixedOffsetTop
             if (isFixed && element) element.setAttribute('class','aside-fixed-box fixed')
             if (!isFixed && element) element.setAttribute('class','aside-fixed-box')
-          }, { passive: true })
+          }
+          // 初始化应用
+          parseScroll()
+          // 监听滚动事件
+          window.addEventListener('scroll', parseScroll, { passive: true })
         },
         unbind(element) {
           window.onscroll = null
