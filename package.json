@@ -1,15 +1,19 @@
 {
   "name": "surmon.me",
   "version": "1.0.0",
-  "description": "Nuxt.js project",
-  "author": "surmon <surmon@foxmail.com>",
+  "description": "Surmon.me blog",
+  "author": {
+    "name": "Surmon",
+    "email": "surmon@foxmail.com",
+    "url": "http://surmon.me"
+  },
   "private": false,
   "dependencies": {
     "axios": "^0.16.2",
     "bezier-easing": "^2.0.3",
     "clipboard": "^1.7.1",
     "cross-env": "^3.1.4",
-    "emoji-233333": "^0.1.3",
+    "emoji-233333": "^0.2.2",
     "express": "^4.14.1",
     "gravatar": "^1.6.0",
     "highlight.js": "^9.9.0",
@@ -23,7 +27,7 @@
     "socket.io": "^2.0.3",
     "socket.io-client": "^2.0.3",
     "vue": "^2.4.3",
-    "vue-awesome-swiper": "^2.6.4",
+    "vue-awesome-swiper": "^3.0.2",
     "vuex": "^2.4.0",
     "yargs": "^10.0.3"
   },
