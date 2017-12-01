@@ -8,7 +8,7 @@
         <div class="swiper-wrapper">
           <div class="swiper-slide item" v-for="(article, index) in article.data.data.slice(0, 9)" :key="index">
             <div class="content">
-              <img :src="buildThumb(article.thumb)">
+              <img :src="buildThumb(article.thumb)" :alt="article.title">
               <router-link :to="`/article/${article.id}`" class="title">
                 <span>{{ article.title }}</span>
               </router-link>
@@ -27,17 +27,21 @@
     data() {
       return {
         swiperOption: {
-          autoplay: 3500,
+          autoplay: {
+            delay: 3500,
+            disableOnInteraction: false
+          },
+          pagination: {
+            clickable: true,
+            el: '.swiper-pagination'
+          },
           setWrapperSize: true,
           autoHeight: true,
-          pagination: '.swiper-pagination',
-          paginationClickable: true,
-          mousewheelControl: true,
-          autoplayDisableOnInteraction: false,
+          mousewheel: true,
           observeParents: true,
           grabCursor: true,
           preloadImages: false,
-          lazyLoading: true
+          lazy: true
         }
       }
     },

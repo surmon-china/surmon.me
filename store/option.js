@@ -23,6 +23,9 @@ export const state = () => {
     // 是否开启弹幕
     openBarrage: false,
 
+    // 弹幕是否已首次渲染
+    barrageMounted: false,
+
     // 是否开启rtc
     openWebrtc: false,
 
@@ -119,6 +122,9 @@ export const mutations = {
       state.openBarrage = !!action
     } else {
       state.openBarrage = !state.openBarrage
+    }
+    if (state.openBarrage && !state.barrageMounte) {
+      state.barrageMounted = true
     }
   },
 

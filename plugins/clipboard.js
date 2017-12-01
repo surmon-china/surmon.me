@@ -1,8 +1,8 @@
 
-const Clipboard = require('clipboard')
+import Clipboard from 'clipboard'
 
 if (process.browser) {
-	window.Clipboard = Clipboard
+  window.Clipboard = Clipboard
 }
 
 export default {}

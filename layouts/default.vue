@@ -4,12 +4,9 @@
       <mobile-aside :class="{ open: mobileSidebar }"></mobile-aside>
     </div>
     <div id="app-main" :class="{ open: mobileSidebar }" @click="closeMobileSidebar">
-      <canvas class="global-emoji" 
-              ref="emoji"
-              :class="{ active: emoji233333 && emoji233333.kichikuing }">
-      </canvas>
+      <emojo-rain></emojo-rain>
       <background v-if="!mobileLayout"></background>
-      <barrage v-if="!mobileLayout" v-cloak></barrage>
+      <barrage v-if="!mobileLayout && barrageMounted" v-cloak></barrage>
       <transition name="fade">
         <webrtc v-if="!mobileLayout && openWebrtc" v-cloak></webrtc>
       </transition>
@@ -48,10 +45,9 @@
 </template>
 
 <script>
-  import EventBus from '~/utils/event-bus'
   import consoleSlogan from '~/utils/console-slogan'
   import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
-  import { Background, Barrage, Webrtc, Header, Footer, Aside, Share, Tool, Nav } from '~/components/layout'
+  import { Background, EmojoRain, Barrage, Webrtc, Header, Footer, Aside, Share, Tool, Nav } from '~/components/layout'
   export default {
     name: 'app',
     head() {
@@ -67,26 +63,12 @@
       if (!this.mobileLayout) {
         this.$store.dispatch('loadMuiscPlayerList')
       }
-      if (process.browser) {
-        const emojiBase = this.$refs.emoji
-        emojiBase.width = document.documentElement.clientWidth || document.body.clientWidth
-        emojiBase.height = document.documentElement.clientHeight || document.body.clientHeight
-        const emoji233333 = new window.Emoji233333({
-          base: emojiBase,
-          scale: 0.7,
-          speed: 12,
-          increaseSpeed: 0.4,
-          density: 5,
-          staggered: true
-        })
-        EventBus.emoji233333 = emoji233333
-        this.$root.$EventBus = EventBus
-      }
       consoleSlogan()
     },
     components: {
       Webrtc,
       Barrage,
+      EmojoRain,
       Background,
       HeaderView: Header,
       FooterView: Footer,
@@ -102,8 +84,8 @@
       openWebrtc() {
         return this.$store.state.option.openWebrtc
       },
-      emoji233333() {
-        return EventBus.emoji233333
+      barrageMounted() {
+        return this.$store.state.option.barrageMounted
       },
       fullColumn () {
         return this.$store.state.option.fullColumn
@@ -165,9 +147,9 @@
       left: 0;
       height: 100%;
       z-index: 9999;
-      background-color: $mobile-aside-bg;
       transform: translateX(-100%);
       transition: $mobile-aisde-transition;
+      background-color: $mobile-aside-bg;
 
       &.open {
         overflow: hidden;
@@ -183,17 +165,6 @@
       &.open {
         transition: $mobile-aisde-transition;
         transform: translateX(68%);
-      }
-
-      > .global-emoji {
-        position: fixed;
-        z-index: -1;
-        top: 0;
-        left: 0;
-
-        &.active {
-          z-index: 99999;
-        }
       }
 
       main {
