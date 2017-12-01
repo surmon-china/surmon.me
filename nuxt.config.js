@@ -18,10 +18,10 @@ module.exports = {
     publicPath: apiConfig.cdnUrl + '/_nuxt/',
     // 对webpack的扩展
     extend(webpackConfig, { isDev, isClient, isServer }) {
-      // webpackConfig.resolve.alias['~utils'] = path.join(__dirname, 'utils')
-      // webpackConfig.resolve.alias['~static'] = path.join(__dirname, 'static')
-      // webpackConfig.resolve.alias['~filters'] = path.join(__dirname, 'filters')
-      // webpackConfig.resolve.alias['~services'] = path.join(__dirname, 'services')
+      // 处理 Swiper4 下的 dom7 模块的语法问题
+      webpackConfig.resolve.alias['swiper$'] = 'swiper/dist/js/swiper.js'
+      webpackConfig.resolve.alias['dom7$'] = 'dom7/dist/dom7.js'
+      // console.log('webpackConfig', webpackConfig)
       if (isProdMode) {
         const vueLoader = webpackConfig.module.rules.find(loader => loader.loader === 'vue-loader')
         if (vueLoader) {

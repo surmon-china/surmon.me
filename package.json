@@ -27,7 +27,7 @@
     "socket.io": "^2.0.3",
     "socket.io-client": "^2.0.3",
     "vue": "^2.4.3",
-    "vue-awesome-swiper": "^3.0.2",
+    "vue-awesome-swiper": "^3.0.3",
     "vuex": "^2.4.0",
     "yargs": "^10.0.3"
   },
