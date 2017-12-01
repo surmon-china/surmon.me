@@ -1,11 +1,13 @@
+[![GitHub stars](https://img.shields.io/github/stars/surmon-china/surmon.me.svg?style=flat-square)](https://github.com/surmon-china/surmon.me/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/surmon-china/surmon.me.svg?style=flat-square)](https://github.com/surmon-china/surmon.me/issues)
 [![GitHub forks](https://img.shields.io/github/forks/surmon-china/surmon.me.svg?style=flat-square)](https://github.com/surmon-china/surmon.me/network)
-[![GitHub stars](https://img.shields.io/github/stars/surmon-china/surmon.me.svg?style=flat-square)](https://github.com/surmon-china/surmon.me/stargazers)
+[![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg?style=flat-square)](https://github.com/surmon-china/surmon.me)
+[![](https://badge.juejin.im/entry/58ff969861ff4b00667ca82e/likes.svg?style=flat-square)](https://juejin.im/post/58ff960ba22b9d0065b722cd)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/surmon-china/surmon.me.svg?style=flat-square)](https://twitter.com/intent/tweet?url=https://github.com/surmon-china/surmon.me)
 
 ## Surmon.me
 
-My Blog By Nuxt.js
+My blog by [Nuxt.js](https://github.com/nuxt)
 
 [Online Blog - https://surmon.me](https://surmon.me/)
 
