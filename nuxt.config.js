@@ -14,9 +14,6 @@ module.exports = {
   },
   build: {
     // analyze: true,
-    // analyze: {
-    //   analyzerMode: 'static'
-    // },
     // 设置 cdn 地址
     publicPath: apiConfig.cdnUrl + '/_nuxt/',
     // 对webpack的扩展

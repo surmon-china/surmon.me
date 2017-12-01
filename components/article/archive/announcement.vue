@@ -33,14 +33,20 @@
     data() {
       return {
         swiperOption: {
-          autoplay: 3500,
+           autoplay: {
+            delay: 3500,
+            disableOnInteraction: false
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+          },
+          pagination: {
+            clickable: true
+          },
+          slidesPerView: 1,
           setWrapperSize: true,
           direction: 'vertical',
-          nextButton: '.swiper-button-next',
-          prevButton: '.swiper-button-prev',
-          slidesPerView: 1,
-          paginationClickable: true,
-          autoplayDisableOnInteraction: false,
           loop: true
         }
       }
