@@ -134,6 +134,7 @@
                    type="text" 
                    name="name"
                    placeholder="name *" 
+                   autocomplete="on"
                    v-model="user.name">
           </div>
           <div class="email">
@@ -141,11 +142,12 @@
                    type="email" 
                    name="email"
                    placeholder="email *" 
+                   autocomplete="on"
                    v-model="user.email" 
                    @blur="upadteUserGravatar">
           </div>
           <div class="site">
-            <input type="url" name="url" placeholder="site" v-model="user.site">
+            <input type="url" name="url" placeholder="site" autocomplete="on" v-model="user.site">
           </div>
           <div class="save" v-if="userCacheEditing">
             <button type="submit" @click="updateUserCache($event)">
@@ -542,10 +544,38 @@
           agent: navigator.userAgent
         }).then(data => {
           // 发布成功后清空评论框内容并更新本地信息
-          if (data.result.content.includes('2333')) {
-            const emoji233333 = EventBus.emoji233333
-            if (emoji233333 && emoji233333.launch) {
-              emoji233333.launch()
+          const content = data.result.content
+          const emoji233333 = EventBus.emoji233333
+          if (emoji233333 && emoji233333.launch) {
+            // 为表情做一次缓冲
+            const preImage = (url, callback) => {  
+              const img = new Image()
+              img.src = url
+              if (img.complete) return callback(img)
+              img.onload = () => callback(img)
+            }
+            if (content.includes('2333') || content.includes('哈哈')) {
+              const emoji = emoji233333.defaultEmoji
+              emoji233333.update({
+                emoji,
+                speed: 12,
+                staggered: true,
+                increaseSpeed: 0.4,
+              })
+              preImage(emoji, emoji233333.launch.bind(emoji233333))
+            } else if (content.includes('666')) {
+              const emoji = '/images/emojis/666.png'
+              emoji233333.update({
+                emoji,
+                speed: 12,
+                staggered: true,
+                increaseSpeed: 0.4
+              })
+              preImage(emoji, emoji233333.launch.bind(emoji233333))
+            } else if (content.includes('呵呵')) {
+              const emoji = '/images/emojis/hehe.png'
+              emoji233333.update({ emoji, staggered: false, speed: 8, increaseSpeed: 0.04 })
+              preImage(emoji, emoji233333.launch.bind(emoji233333))
             }
           }
           this.previewMode = false
