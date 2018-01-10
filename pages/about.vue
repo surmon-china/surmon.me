@@ -20,7 +20,7 @@
                 </p>
                 <p class="item">
                   <i class="iconfont icon-music"></i>
-                  <nuxt-link to="/music">Jazz-HipHop, Electronic, Rock, PostRock, Punk Rock.</nuxt-link>
+                  <nuxt-link to="/music">Jazz-HipHop, Electronic, Disco, Rock, Punk.</nuxt-link>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-like"></i>
@@ -40,17 +40,20 @@
                       <i class="iconfont icon-github"></i>
                     </a>
                     <a href="https://surmon.taobao.com" 
-                       target="_blank" 
+                       target="_blank"
+                       v-if="false"
                        rel="external nofollow noopenter">
                       <i class="iconfont icon-taobao"></i>
                     </a>
                     <a href="https://stackoverflow.com/users/6222535/surmon?tab=profile" 
-                       target="_blank" 
+                       target="_blank"
+                       v-if="false"
                        rel="external nofollow noopenter">
                       <i class="iconfont icon-stackoverflow"></i>
                     </a>
                     <a href="https://leetcode.com/surmon" 
-                       target="_blank" 
+                       target="_blank"
+                       v-if="false"
                        rel="external nofollow noopenter">
                       <i class="iconfont icon-algorithm"></i>
                     </a>
@@ -65,12 +68,14 @@
                       <i class="iconfont icon-zhihu"></i>
                     </a>
                     <a href="https://www.quora.com/profile/Surmon" 
-                       target="_blank" 
+                       target="_blank"
+                       v-if="false"
                        rel="external nofollow noopenter">
                       <i class="iconfont icon-quora"></i>
                     </a>
                     <a href="https://www.linkedin.com/in/surmon" 
-                       target="_blank" 
+                       target="_blank"
+                       v-if="false"
                        rel="external nofollow noopenter">
                       <i class="iconfont icon-linkedin"></i>
                     </a>
