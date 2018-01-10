@@ -112,11 +112,13 @@
 
   export default {
     name: 'article-detail',
-    validate ({ params }) {
+    validate ({ params, store }) {
       return (!!params.article_id && !Object.is(Number(params.article_id), NaN))
     },
-    fetch ({ store, params }) {
-      return store.dispatch('loadArticleDetail', params)
+    fetch ({ store, params, error }) {
+      return store.dispatch('loadArticleDetail', params).catch(err => {
+        error({ statusCode: 404, message: '众里寻他 我已不再' })
+      })
     },
     head() {
       const article = this.article
