@@ -10,8 +10,13 @@
 
   export default {
     name: 'category-article-list',
-    validate ({ params }) {
-      return !!params.category_slug
+    validate ({ params, store }) {
+      if (!params.category_slug) {
+        return false
+      }
+      return store.state.category.data.data.find(category => {
+        return Object.is(category.slug, params.category_slug)
+      })
     },
     fetch({ store, params }) {
       return store.dispatch('loadArticles', params)

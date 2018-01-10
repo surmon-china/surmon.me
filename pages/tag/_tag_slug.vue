@@ -10,8 +10,13 @@
 
   export default {
     name: 'tag-article-list',
-    validate ({ params }) {
-      return !!params.tag_slug
+    validate ({ params, store }) {
+      if (!params.tag_slug) {
+        return false
+      }
+      return store.state.tag.data.data.find((tag, index, arr) => {
+        return Object.is(tag.slug, params.tag_slug)
+      })
     },
     fetch({ store, params }) {
       return store.dispatch('loadArticles', params)
