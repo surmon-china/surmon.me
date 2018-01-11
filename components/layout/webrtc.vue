@@ -477,7 +477,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~assets/sass/variables';
+
   .global-webrtc {
     position: fixed;
     width: 100%;

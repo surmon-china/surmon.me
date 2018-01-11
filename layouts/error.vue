@@ -3,7 +3,7 @@
     <div class="error-content">
       <h1 class="error-code">{{ error.statusCode }}</h1>
       <div class="error-wrapper-message">
-        <h2 class="error-message">{{ error.message }}</h2>
+        <h2 class="error-message">{{ error.message || '众里寻他 我已不再' }}</h2>
       </div>
       <p>
         <nuxt-link class="error-link" to="/">Back to the home page</nuxt-link>
@@ -14,6 +14,7 @@
 
 <script>
   export default {
+    layout: 'empty',
     props: ['error'],
     mounted() {
       this.$store.commit('option/SET_ERROR_COLUMU', true)

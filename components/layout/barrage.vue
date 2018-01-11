@@ -9,7 +9,7 @@
                           @enter="barrageEnter"
                           @leave="barrageLeave">
           <li class="item" 
-              :key="barrage.text"
+              :key="index"
               :index="index"
               :new="barrage.new"
               v-for="(barrage, index) in barrages"

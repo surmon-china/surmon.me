@@ -160,8 +160,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~assets/sass/mixins';
-  @import '~assets/sass/variables';
   .page {
     display: flex;
     justify-content: center;

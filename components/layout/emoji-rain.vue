@@ -40,7 +40,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~assets/sass/variables';
  
   .global-emoji-rain {
     position: fixed;

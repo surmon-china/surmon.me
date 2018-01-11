@@ -9,6 +9,7 @@
   },
   "private": false,
   "dependencies": {
+    "@nuxtjs/pwa": "^2.0.5",
     "axios": "^0.16.2",
     "bezier-easing": "^2.0.3",
     "clipboard": "^1.7.1",
@@ -20,15 +21,13 @@
     "howler": "^2.0.4",
     "marked": "^0.3.6",
     "node-uuid": "^1.4.8",
-    "nuxt": "^1.0.0-rc11",
+    "nuxt": "^1.0.0",
     "offline-plugin": "^4.8.1",
     "particles.js": "^2.0.0",
     "simplewebrtc": "^3.0.1",
     "socket.io": "^2.0.3",
     "socket.io-client": "^2.0.3",
-    "vue": "^2.4.3",
-    "vue-awesome-swiper": "^3.0.3",
-    "vuex": "^2.4.0",
+    "vue-awesome-swiper": "^3.1.0",
     "yargs": "^10.0.3"
   },
   "scripts": {
@@ -43,6 +42,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
+    "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "eslint": "^3.14.1",
     "eslint-config-standard": "^6.2.1",

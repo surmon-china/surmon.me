@@ -37,7 +37,7 @@
         <transition-group name="fade" tag="ul" class="comment-list">
           <li class="comment-item" 
               :id="`comment-item-${comment.id}`" 
-              key="index"
+              :key="index"
               v-for="(comment, index) in comment.data.data">
             <div class="cm-avatar" v-if="!mobileLayout">
               <a target="_blank"
@@ -593,8 +593,6 @@
 </script>
 
 <style lang="scss">
-  @import '~assets/sass/mixins';
-  @import '~assets/sass/variables';
   .cm-content,
   .reply-preview,
   .markdown-preview {

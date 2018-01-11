@@ -80,8 +80,6 @@
 </script>
 
 <style lang="scss">
-  @import '~assets/sass/variables';
-  @import '~assets/sass/mixins';
   .article-list-item {
     margin-bottom: 1em;
     background-color: $module-bg;

@@ -12,9 +12,9 @@ import UaParse from '~/utils/ua-parse'
 export const actions = {
 
   // 全局服务初始化
-  nuxtServerInit(store, { params, route, isServer, req }) {
+  nuxtServerInit(store, { params, route, req }) {
     // 检查设备类型
-    const userAgent = isServer ? req.headers['user-agent'] : navigator.userAgent
+    const userAgent = process.server ? req.headers['user-agent'] : navigator.userAgent
     const { isMobile, isOpera, isIE, isSafari, isEdge, isFF, isBB, isChrome, isMaxthon, isIos } = UaParse(userAgent)
     const mustJpg = (isIos || isFF || isMaxthon || isSafari || isBB || isIE || isEdge)
     store.commit('option/SET_IMG_EXT', mustJpg ? 'jpeg' : 'webp')
