@@ -65,8 +65,6 @@
 </script>
 
 <style lang="scss">
-  @import '~assets/sass/variables';
-  @import '~assets/sass/mixins';
   .announcement {
     height: 2.8em;
     line-height: 2.8em;
