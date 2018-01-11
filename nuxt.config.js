@@ -17,7 +17,7 @@ module.exports = {
     // 设置 cdn 地址
     publicPath: apiConfig.cdnUrl + '/_nuxt/',
     // 对webpack的扩展
-    extend(webpackConfig, { isDev, isClient, isServer }) {
+    extend(webpackConfig) {
       // 处理 Swiper4 下的 dom7 模块的语法问题
       webpackConfig.resolve.alias['swiper$'] = 'swiper/dist/js/swiper.js'
       webpackConfig.resolve.alias['dom7$'] = 'dom7/dist/dom7.js'
@@ -65,7 +65,7 @@ module.exports = {
     // Run ESLINT on save
     /*
     extend (config, ctx) {
-      if (ctx.isClient) {
+      if (process.client) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
@@ -75,6 +75,10 @@ module.exports = {
       }
     }
     */
+    styleResources: {
+      scss: './assets/sass/init.scss',
+      options: {}
+    }
   },
   dev: isProdMode,
   env: {
@@ -139,6 +143,9 @@ module.exports = {
       { innerHTML: 'This website requires JavaScript.' }
     ]
   },
+  modules: [
+    // '@nuxtjs/pwa'
+  ],
   router: {
     middleware: ['change-page-col'],
     linkActiveClass: 'link-active',

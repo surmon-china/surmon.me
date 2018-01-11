@@ -11,8 +11,6 @@
 </script>
 
 <style lang="scss">
-  @import '~assets/sass/mixins';
-  @import '~assets/sass/variables';
   .empty-box {
     position: relative;
     display: flex;

@@ -1,4 +1,15 @@
 
+// 为了处理部分模块不兼容的问题，暂时 Hack
+const consolewarn = console.warn
+global.console.warn = function() {
+  if (arguments && arguments[0].toString().includes('context.isServer') ||
+      arguments && arguments[0].toString().includes('context.isClient')) {
+    return false
+  } else {
+    consolewarn.apply(consolewarn, arguments)
+  }
+}
+
 const express = require('express')
 const app = express()
 const server = require('http').Server(app)

@@ -169,8 +169,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~assets/sass/variables';
-  @import '~assets/sass/mixins';
   aside {
     float: right;
     display: block;

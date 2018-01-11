@@ -231,8 +231,6 @@
 </script>
 
 <style lang="scss">
-  @import '~assets/sass/mixins';
-  @import '~assets/sass/variables';
   .article {
 
     &.mobile {

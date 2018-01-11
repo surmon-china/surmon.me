@@ -11,10 +11,7 @@
   export default {
     name: 'category-article-list',
     validate ({ params, store }) {
-      if (!params.category_slug) {
-        return false
-      }
-      return store.state.category.data.data.find(category => {
+      return !!params.category_slug && store.state.category.data.data.find(category => {
         return Object.is(category.slug, params.category_slug)
       })
     },

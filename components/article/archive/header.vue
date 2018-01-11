@@ -79,8 +79,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~assets/sass/mixins';
-  @import '~assets/sass/variables';
   .header-box {
     padding: 1em;
 

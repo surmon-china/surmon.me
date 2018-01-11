@@ -11,7 +11,7 @@
                            :to="`/article/${article.id}`"
                            :title="article.title">《{{ article.title }}》</router-link>
               <span class="sign">&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-              <a class="toggle" href="" @click.prevent="toggleArticleDescriptionOpen(index)">
+              <a class="toggle" href="" @click.prevent="$store.commit('sitemap/TOGGLE_ARTICLE_OPEN', index)">
                 <span>{{ article.open ? '收起' : '展开' }}描述</span>
               </a>
             </p>
@@ -98,20 +98,11 @@
       mobileLayout() {
         return this.$store.state.option.mobileLayout
       }
-    },
-    methods: {
-      // 设置文章简介展开折叠
-      toggleArticleDescriptionOpen(index) {
-        const articles = this.articles
-        this.$set(articles[index], 'open', !articles[index].open)
-      }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  @import '~assets/sass/mixins';
-  @import '~assets/sass/variables';
   .page {
     padding: 2em 3em;
     background-color: $module-bg;

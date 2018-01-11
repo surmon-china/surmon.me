@@ -4,6 +4,8 @@
 *
 */
 
+import Vue from 'vue'
+
 export const state = () => {
   return {
     articles: {
@@ -23,5 +25,11 @@ export const mutations = {
   GET_ARTICLES_SUCCESS(state, action) {
     state.articles.fetching = false
     state.articles.data = action.result
+  },
+  TOGGLE_ARTICLE_OPEN(state, index) {
+    const article = state.articles.data.data[index]
+    if (article) {
+      Vue.set(article, 'open', !article.open)
+    }
   }
 }
