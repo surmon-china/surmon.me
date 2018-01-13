@@ -21,7 +21,7 @@
     "howler": "^2.0.4",
     "marked": "^0.3.6",
     "node-uuid": "^1.4.8",
-    "nuxt": "^1.0.0",
+    "nuxt": "^1.1.0",
     "offline-plugin": "^4.8.1",
     "particles.js": "^2.0.0",
     "simplewebrtc": "^3.0.1",
