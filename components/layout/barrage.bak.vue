@@ -1,16 +1,23 @@
-<template>
+ <template>
   <div class="global-barrage" :class="{ active: barrageState }">
     <div class="barrage-box">
-      <div class="list-box" ref="barrageBox">
-        <ul class="barrages-list">
-          <barrage-item :id="barrage.id"
-                        :key="barrage.id"
-                        :barrage="barrage"
-                        :delay="config.delay"
-                        @end="handleAnimationEnd"
-                        v-for="barrage in barrages">
-          </barrage-item>
-        </ul>
+      <div class="barrage-box" ref="barrageBox">
+        <transition-group tag="ul" 
+                          name="barrages-list" 
+                          class="barrages-list" 
+                          ref="barrages"
+                          @enter="barrageEnter"
+                          @leave="barrageLeave">
+          <li class="item"
+              :key="index"
+              :index="index"
+              :new="barrage.new"
+              v-for="(barrage, index) in barrages"
+              :class="[`size-${barrage.style.size}`, `color-${barrage.style.color}`]">
+            <span class="gravatar"></span>
+            <span class="content" v-text="barrage.text"></span>
+          </li>
+        </transition-group>
       </div>
       <div class="input-box">
         <div class="input-inner">
@@ -50,31 +57,20 @@
 
 <script>
   import socket from '~/plugins/socket.io.js'
-  import BarrageItem from './barrage-item.vue'
   export default {
-    name: 'barrage',
-    components: {
-      BarrageItem
-    },
     data() {
       const sizes = ['粗大', '很大', '大']
       const colors = ['老王绿', '原谅绿', '姨妈红', '基佬紫', '百合粉', '东莞黄', '李太白', '木耳黑']
       return {
-        sizes,
-        colors,
-        socket,
         counts: {
           users: 0,
           count: 0
         },
-        config: {
-          delay: 10,
-          moveDelay: 3
-        },
+        socket,
         barrage: '',
         barrages: [],
-        moveTimer: null,
-        barrageLimit: 0,
+        sizes,
+        colors,
         sizeIndex: sizes.length - 1,
         colorIndex: colors.length - 1
       }
@@ -92,20 +88,8 @@
     },
     beforeMount() {
       this.socket.emit('barrage-last-list', barrages => {
-        barrages.forEach((b, i) => b.id = i + 1)
-        // 生成随机的时间，push 进不同的内容，而不是一次性赋值
-        const moveBarrages = () => {
-          if (barrages.length) {
-            // console.log('moveBarrages， 还有', barrages.length)
-            this.barrages.push(barrages[0])
-            barrages.splice(0, 1)
-            if (barrages.length) {
-              this.moveTimer = setTimeout(moveBarrages, parseInt(this.randomPer(this.config.moveDelay)) * 100)
-            }
-          }
-        }
-        moveBarrages()
-        this.barrageLimit = barrages.length + 2
+        this.barrages = barrages
+        console.log('this.barrages', this.barrages)
       })
       this.socket.emit('barrage-count', counts => {
         this.counts = counts
@@ -116,12 +100,6 @@
       this.socket.on('barrage-create', barrage => {
         this.barrages.push(barrage)
       })
-    },
-    beforeDestroy() {
-      if (this.moveTimer) {
-        clearTimeout(this.moveTimer)
-      }
-      this.clearBarrages()
     },
     methods: {
       // 发布弹幕
@@ -137,7 +115,7 @@
           date: new Date().getTime()
         }
         this.socket.emit('barrage-send', barrage)
-        barrage.id = this.barrageLimit++
+        barrage.new = true
         this.barrages.push(barrage)
         this.counts.count += 1
         this.barrage = ''
@@ -146,7 +124,6 @@
       transferDate(timestamp) {
         return new Date(timestamp).toLocaleString()
       },
-      // 计算随机数
       randomPer(pre = 3) {
         const rnd = seed => {
             seed = (seed * 9301 + 49297) % 233280
@@ -159,21 +136,38 @@
         }
         return rand(pre)
       },
-      // 清空动画队列
-      clearBarrages() {
-        this.barrages = []
-      },
-      handleAnimationEnd(id) {
-        const targetIndex = this.barrages.findIndex(barrage => barrage.id === id)
-        if (targetIndex > -1) {
-          this.barrages.splice(targetIndex, 1)
+      barrageLeave(element, done) {
+        // 获取渲染容器高度
+        const innerHeight = document.documentElement.clientHeight - 63
+        const innerCount = innerHeight / 30
+        let randomCount = this.randomPer(innerCount) - 3
+        randomCount = randomCount < 0 ? 1 : randomCount
+        let topPre = randomCount / innerCount * 100
+        topPre = (topPre > 88) ? 86 : topPre
+        element.style.top = topPre + '%'
+        // 新消息不再添加左边距
+        if (!element.attributes.new) {
+          element.style.left = this.randomPer(6) * 10 + '%'
         }
+        setTimeout(done, 28000)
+      },
+      barrageEnter(element, done) {
+        done()
       }
+    },
+    watch: {
+      // barrages() {
+      //   if (this.barrages.length) {
+      //     this.$nextTick(() => {
+      //       this.barrages.shift()
+      //     })
+      //   }
+      // }
     }
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '~assets/sass/variables';
 
   // 字体尺寸
@@ -222,10 +216,6 @@
   .color-7 {
     color: black;
   }
-</style>
-
-<style lang="scss" scoped>
-  @import '~assets/sass/variables';
 
   @keyframes barrage-in {
     0%  { transform: translate3d(0, -100%, 0) }
@@ -278,6 +268,14 @@
     perspective: 1000;
     -webkit-perspective: 1000;
 
+    > .barrage-box {
+
+      > .input-box {
+        transition: transform 5s;
+        transform: translate3d(0, -2000%, 0);
+      }
+    }
+
     &.active {
       opacity: 1;
       visibility: visible;
@@ -301,13 +299,13 @@
     }
 
     > .barrage-box {
+      height: 100%;
       width: 100%;
-      display: block;
       position: relative;
+      display: block;
       margin-top: $header-height;
-      height: calc(100vh - #{$navbar-height});
 
-      > .list-box {
+      > .barrage-box {
         height: 100%;
         width: 100%;
         display: block;
@@ -331,6 +329,14 @@
             animation-fill-mode: both; 
             animation-name: barrages-list-out;
           }
+
+          > .item {
+            width: auto;
+            min-width: 100%;
+            display: block;
+            position: absolute;
+            transform: translate3d(-100%, 0, 0);
+          }
         }
       }
 
@@ -339,8 +345,6 @@
         position: absolute;
         bottom: 40%;
         width: 100%;
-        transition: transform 5s;
-        transform: translate3d(0, -2000%, 0);
 
         > .input-inner {
           display: flex;
