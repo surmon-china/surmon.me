@@ -53,6 +53,7 @@ module.exports = {
       'simplewebrtc',
       'socket.io-client'
     ],
+    maxChunkSize: 350000,
     // 为 JS 和 Vue 文件定制 babel 配置。https://nuxtjs.org/api/configuration-build/#analyze
     babel: {
       presets: ['es2015', 'stage-2'],
