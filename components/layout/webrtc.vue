@@ -14,7 +14,7 @@
           <!-- 远程用户 -->
           <span class="text" v-else>{{ stream.name }}</span>
         </div>
-        <div class="content-box" :class="[`filter-${filters[stream.filter]}`]">
+        <div class="content-box" :class="`filter-${filters[stream.filter]}`">
           <video autoplay
                  playsinline
                  preload="auto"
@@ -64,7 +64,7 @@
           </button>
           <button class="beauty" 
                   :class="{ active: !localStream.disabledBeauty }"
-                  @click="toggleBeauty(localStream.disabledBeauty)">
+                  @click="toggleBeauty()">
             <i class="iconfont icon-meiyan"></i>
             <span>美颜</span>
           </button>
@@ -166,13 +166,15 @@
         }
         this.localStream.disabledCarema = disable
       },
-      toggleBeauty(beauty) {
-        this.localStream.disabledBeauty = !beauty
+      toggleBeauty() {
+        this.localStream.disabledBeauty = !this.localStream.disabledBeauty
+        if (this.streams.length && this.streams[0] && this.streams[0].local) {
+          this.streams[0].beauty = !this.localStream.disabledBeauty
+        }
         if (this.localStream.peerId) {
-          this.streams[0].beauty = beauty
           this.webrtc.connection.connection.emit('webrtc-set-beauty', {
+            beauty,
             peerId: this.localStream.peerId,
-            beauty: beauty
           })
         }
       },
@@ -181,8 +183,10 @@
       },
       // 向所有媒体广播滤镜
       sendFilterToAll(type) {
-        if (this.localStream.peerId) {
+        if (this.streams.length && this.streams[0] && this.streams[0].local) {
           this.streams[0].filter = type
+        }
+        if (this.localStream.peerId) {
           this.webrtc.connection.connection.emit('webrtc-set-filter', {
             peerId: this.localStream.peerId,
             filter: type
@@ -221,7 +225,7 @@
       }
 
       if (!getUserMedia) {
-        window.alert('不支持')
+        window.alert('不支持我有什么办法')
         this.$store.commit('option/UPDATE_WEBRTC_STATE', false)
         return false
       } else {
@@ -305,6 +309,7 @@
 
       // 本地的一切准备好时
       webrtc.on('readyToCall', () => {
+        // console.log('本机一切就绪')
         webrtc.joinRoom(room)
       })
 
