@@ -16,7 +16,9 @@
               </a>
             </p>
             <transition name="module">
-              <p v-show="article.open" class="item-description">{{ article.description }}</p>
+              <p v-show="article.open" class="item-description">
+                <span>{{ article.description || '空空如也' }}</span>
+              </p>
             </transition>
           </li>
         </ul>
