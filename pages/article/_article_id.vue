@@ -136,11 +136,13 @@
     data() {
       return {
         swiperOption: {
-          autoplay: 3500,
-          setWrapperSize :true,
-          mousewheelControl : true,
-          autoplayDisableOnInteraction: false,
-          observeParents:true,
+          setWrapperSize: true,
+          mousewheel: true,
+          autoplay: {
+            delay: 3500,
+            disableOnInteraction: false,
+          },
+          observeParents: true,
           grabCursor : true,
           slidesPerView: 'auto',
           spaceBetween: 14
