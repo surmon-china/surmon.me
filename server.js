@@ -1,4 +1,7 @@
 
+// env
+const isProdMode = Object.is(process.env.NODE_ENV, 'production')
+
 // 为了处理部分模块不兼容的问题，暂时 Hack
 const consolewarn = console.warn
 global.console.warn = function() {
@@ -13,21 +16,24 @@ global.console.warn = function() {
 const express = require('express')
 const app = express()
 const server = require('http').Server(app)
-const io = require('socket.io')(server)
+const io = require('socket.io')(server, {
+  // serveClient: false,
+  transports: ['websocket']
+})
 const { Nuxt, Builder } = require('nuxt')
-const host = process.env.HOST || '127.0.0.1'
+const host = !isProdMode ? '0.0.0.0' : (process.env.HOST || '127.0.0.1')
 const port = process.env.PORT || 3000
 process.noDeprecation = true
 
 // extend
-const webrtcServer = require('./webrtc.server')
-const barrageServer = require('./barrage.server')
+const webrtcServer = require('./servers/webrtc.server')
+const barrageServer = require('./servers/barrage.server')
 const updateGAScript = require('./utils/update-analytics')
 app.set('port', port)
 
 // Import and Set Nuxt.js options
 const config = require('./nuxt.config')
-config.dev = !(process.env.NODE_ENV === 'production')
+config.dev = !isProdMode
 
 // Init Nuxt.js
 const nuxt = new Nuxt(config)

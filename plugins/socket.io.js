@@ -1,4 +1,7 @@
 
+import apiConfig from '~/api.config'
 import io from 'socket.io-client'
-const socket = io(process.env.HOST_URL)
+const socket = io(apiConfig.socketHost, {
+  transports: ['websocket']
+})
 export default socket
