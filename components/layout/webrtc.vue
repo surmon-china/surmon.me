@@ -106,6 +106,7 @@
 <script>
   import apiConfig from '~/api.config'
   import SimpleWebRTC from '~/plugins/webrtc'
+  import socketio from '~/plugins/socket.io'
   import faceCtracker from './face-ctracker.vue'
   export default {
     name: 'webrtc',
@@ -114,7 +115,6 @@
     },
     data() {
       return {
-        SimpleWebRTC,
         localStream: {
           ok: true,
           volume: -45,
@@ -173,7 +173,7 @@
         }
         if (this.localStream.peerId) {
           this.webrtc.connection.connection.emit('webrtc-set-beauty', {
-            beauty,
+            beauty: this.streams[0].beauty,
             peerId: this.localStream.peerId,
           })
         }
@@ -186,6 +186,7 @@
         if (this.streams.length && this.streams[0] && this.streams[0].local) {
           this.streams[0].filter = type
         }
+        // console.log('切换滤镜', this.localStream.peerId, this.localStream);
         if (this.localStream.peerId) {
           this.webrtc.connection.connection.emit('webrtc-set-filter', {
             peerId: this.localStream.peerId,
@@ -208,7 +209,7 @@
       if (this.webrtc) {
         this.webrtc.stopLocalVideo()
         this.webrtc.leaveRoom()
-        this.webrtc.disconnect()
+        // this.webrtc.disconnect()
         this.webrtc = null
       }
       this.streams = []
@@ -245,11 +246,22 @@
         return volume
       }
 
-      // create our webrtc connection
-      const webrtc = self.webrtc = new SimpleWebRTC({
+      // 创建 webrtc 实例连接
+      const webrtc = this.webrtc = new SimpleWebRTC({
+        socketio: {},
+        connection: {
+          connection: socketio,
+          on: socketio.on,
+          disconnect: socketio.disconnect,
+          getSessionid: () => socketio.id,
+          emit() {
+            socketio.emit.apply(socketio, arguments)
+          }
+        },
         localVideoEl: '',
         remoteVideosEl: '',
         debug: false,
+        // debug: process.env.NODE_ENV !== 'production',
         autoAdjustMic: true,
         autoRequestMedia: true,
         detectSpeakingEvents: true,
@@ -272,15 +284,7 @@
         }
       })
 
-      // 远程滤镜们
-      webrtc.connection.connection.on('webrtc-filters', filters => {
-        this.remoteFilters = filters
-      })
-
-      // 远程美颜们
-      webrtc.connection.connection.on('webrtc-beautys', beautys => {
-        this.remoteBeautys = beautys
-      })
+      // console.log('socketio', socketio, 'connection', webrtc.connection)
 
       // 远程滤镜改变
       webrtc.connection.connection.on('webrtc-set-filter', filterDetail => {
@@ -302,8 +306,21 @@
         }
       })
 
+      // 远程滤镜们
+      webrtc.connection.connection.emit('webrtc-filters', filters => {
+        // console.log('收到 webrtc-filters', filters)
+        this.remoteFilters = filters
+      })
+
+      // 远程美颜们
+      webrtc.connection.connection.emit('webrtc-beautys', beautys => {
+        // console.log('收到 webrtc-beautys', beautys)
+        this.remoteBeautys = beautys
+      })
+
       // 存储本地流 id
       webrtc.on('connectionReady', sessionId => {
+        // console.log('本机 connectionReady')
         self.localStream.peerId = sessionId
       })
 
@@ -315,6 +332,7 @@
 
       // 当媒体请求被允许可用时
       webrtc.on('localStream', stream => {
+        // console.log('本机媒体可用')
         self.localStream.ok = true
         self.streams.unshift({
           local: true,
@@ -324,6 +342,17 @@
           ref: 'localVideo',
           src: URL.createObjectURL(stream)
         })
+
+        // 因为组件被激活时，socket 极有可能链接，所以库内部的逻辑转移到此处判断和处理
+        // https://github.com/andyet/SimpleWebRTC/blob/master/src/simplewebrtc.js#L441
+        if (webrtc.connection.connection.connected) {
+          if (webrtc.connection.connection.id) {
+            self.localStream.peerId = webrtc.connection.connection.id
+            webrtc.sessionReady = true
+            webrtc.testReadiness()
+            // console.log('搞事情了', webrtc)
+          }
+        }
 
         // 模拟远程用户
         /*
@@ -358,9 +387,9 @@
           id: id, 
           ref: id,
           state: 0,
+          volume: 0,
           filter: filter || 0,
           beauty: beauty || false,
-          volume: 0,
           disabledMic: false,
           disabledCarema: false,
           src: URL.createObjectURL(peer.stream),
@@ -417,6 +446,7 @@
 
       // remote p2p/ice failure
       webrtc.on('connectivityError', peer => {
+        // console.log('远程媒体链接失败')
         const targetStream = self.getStreamByPeerId(peer.id)
         if (targetStream) {
           targetStream.state = -1

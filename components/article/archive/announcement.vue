@@ -33,7 +33,7 @@
     data() {
       return {
         swiperOption: {
-           autoplay: {
+          autoplay: {
             delay: 3500,
             disableOnInteraction: false
           },
