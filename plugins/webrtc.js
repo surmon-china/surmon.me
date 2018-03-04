@@ -1,10 +1,13 @@
 
 import SimpleWebRTC from 'simplewebrtc'
+
 // 妈的就为了删一行注释
+// https://github.com/andyet/SimpleWebRTC/blob/master/src/simplewebrtc.js#L327
 SimpleWebRTC.prototype.joinRoom = function (name, cb) {
     var self = this;
     this.roomName = name;
     this.connection.emit('join', name, function (err, roomDescription) {
+        // console.log('join CB', err, roomDescription);
         if (err) {
             self.emit('error', err);
         } else {
@@ -36,4 +39,5 @@ SimpleWebRTC.prototype.joinRoom = function (name, cb) {
         self.emit('joinedRoom', name);
     });
 };
+
 export default SimpleWebRTC
