@@ -4,9 +4,11 @@
 *
 */
 
+import Vue from 'vue'
 import Service from '~/plugins/axios'
 import EventBus from '~/utils/event-bus'
 import UaParse from '~/utils/ua-parse'
+import { scrollTo, easing } from '~/utils/scroll-to-anywhere'
 
 // global actions
 export const actions = {
@@ -48,8 +50,8 @@ export const actions = {
     return Service.get('/auth')
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) commit('option/REQUEST_ADMIN_INFO_SUCCESS', response.data)
-      if(!success) commit('option/REQUEST_ADMIN_INFO_FAILURE')
+      if (success) commit('option/REQUEST_ADMIN_INFO_SUCCESS', response.data)
+      if (!success) commit('option/REQUEST_ADMIN_INFO_FAILURE')
     }, err => {
       commit('option/REQUEST_ADMIN_INFO_FAILURE', err)
     })
@@ -61,8 +63,8 @@ export const actions = {
     return Service.get('/option')
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) commit('option/REQUEST_GLOBAL_OPTIONS_SUCCESS', response.data)
-      if(!success) commit('option/REQUEST_GLOBAL_OPTIONS_FAILURE')
+      if (success) commit('option/REQUEST_GLOBAL_OPTIONS_SUCCESS', response.data)
+      if (!success) commit('option/REQUEST_GLOBAL_OPTIONS_FAILURE')
     }, err => {
       commit('option/REQUEST_GLOBAL_OPTIONS_FAILURE', err)
     })
@@ -74,8 +76,8 @@ export const actions = {
     return Service.get('/tag', { params })
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) commit('tag/GET_LIST_SUCCESS', response.data)
-      if(!success) commit('tag/GET_LIST_FAILURE')
+      if (success) commit('tag/GET_LIST_SUCCESS', response.data)
+      if (!success) commit('tag/GET_LIST_FAILURE')
     })
     .catch(err => {
       commit('tag/GET_LIST_FAILURE', err)
@@ -88,8 +90,8 @@ export const actions = {
     return Service.get('/category', { params })
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) commit('category/GET_LIST_SUCCESS', response.data)
-      if(!success) commit('category/GET_LIST_FAILURE')
+      if (success) commit('category/GET_LIST_SUCCESS', response.data)
+      if (!success) commit('category/GET_LIST_FAILURE')
     })
     .catch(err => {
       commit('category/GET_LIST_FAILURE', err)
@@ -102,8 +104,8 @@ export const actions = {
     return Service.get('/article', { params: { hot: 1 }})
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) commit('article/GET_HOT_LIST_SUCCESS', response.data)
-      if(!success) commit('article/GET_HOT_LIST_FAILURE')
+      if (success) commit('article/GET_HOT_LIST_SUCCESS', response.data)
+      if (!success) commit('article/GET_HOT_LIST_FAILURE')
     }, err => {
       commit('article/GET_HOT_LIST_FAILURE', err)
     })
@@ -121,11 +123,11 @@ export const actions = {
     return Service.get('/comment', { params })
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) {
+      if (success) {
         if (Object.is(params.sort, -1)) response.data.result.data.reverse()
         commit('comment/GET_LIST_SUCCESS', response.data)
       }
-      if(!success) commit('comment/GET_LIST_FAILURE')
+      if (!success) commit('comment/GET_LIST_FAILURE')
     }, err => {
       commit('comment/GET_LIST_FAILURE', err)
     })
@@ -137,7 +139,7 @@ export const actions = {
     return Service.post('/comment', comment)
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) {
+      if (success) {
         commit('comment/POST_ITEM_SUCCESS', response.data)
         return Promise.resolve(response.data)
       } else {
@@ -155,7 +157,7 @@ export const actions = {
     return Service.post('/like', like)
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) {
+      if (success) {
         let mutation
         switch(like.type) {
           case 1:
@@ -183,8 +185,8 @@ export const actions = {
     return Service.get('/announcement', { params })
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) commit('announcement/GET_LIST_SUCCESS', response.data)
-      if(!success) commit('announcement/GET_LIST_FAILURE')
+      if (success) commit('announcement/GET_LIST_SUCCESS', response.data)
+      if (!success) commit('announcement/GET_LIST_FAILURE')
     }, err => {
       commit('announcement/GET_LIST_FAILURE', err)
     })
@@ -197,8 +199,8 @@ export const actions = {
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
       const commitName =  `sitemap/GET_ARTICLES_SUCCESS`
-      if(success) commit(commitName, response.data)
-      if(!success) commit('sitemap/GET_ARTICLES_FAILURE')
+      if (success) commit(commitName, response.data)
+      if (!success) commit('sitemap/GET_ARTICLES_FAILURE')
     })
     .catch(err => {
       commit('sitemap/GET_ARTICLES_FAILURE', err)
@@ -211,10 +213,18 @@ export const actions = {
     return Service.get('/article', { params })
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      const isFirstPage = params.page && params.page > 1
-      const commitName =  `article/${isFirstPage ? 'ADD' : 'GET'}_LIST_SUCCESS`
-      if(success) commit(commitName, response.data)
-      if(!success) commit('article/GET_LIST_FAILURE')
+      const loadMore = params.page && params.page > 1
+      const commitName =  `article/${loadMore ? 'ADD' : 'GET'}_LIST_SUCCESS`
+      if (success) {
+        commit(commitName, response.data)
+        if (loadMore && process.browser) {
+          Vue.nextTick(() => {
+            scrollTo(document.body.clientHeight, 300, { easing: easing['ease-in'] })
+          })
+        }
+      } else {
+        commit('article/GET_LIST_FAILURE')
+      }
     })
     .catch(err => {
       commit('article/GET_LIST_FAILURE', err)
@@ -227,8 +237,8 @@ export const actions = {
     return Service.get(`/article/${ params.article_id }`)
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) commit('article/GET_DETAIL_SUCCESS', response.data)
-      if(!success) commit('article/GET_DETAIL_FAILURE')
+      if (success) commit('article/GET_DETAIL_SUCCESS', response.data)
+      if (!success) commit('article/GET_DETAIL_FAILURE')
       return Promise.resolve(response.data)
     }, err => {
       commit('article/GET_DETAIL_FAILURE', err)
@@ -247,8 +257,8 @@ export const actions = {
     return Service.get(`/github`)
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) commit('project/REQUEST_GUTHUB_REPOSITORIES_SUCCESS', response.data)
-      if(!success) commit('project/REQUEST_GUTHUB_REPOSITORIES_FAILURE')
+      if (success) commit('project/REQUEST_GUTHUB_REPOSITORIES_SUCCESS', response.data)
+      if (!success) commit('project/REQUEST_GUTHUB_REPOSITORIES_FAILURE')
     }, err => {
       commit('project/REQUEST_GUTHUB_REPOSITORIES_FAILURE', err)
     })
@@ -260,11 +270,11 @@ export const actions = {
     return Service.get('/music/list/638949385')
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) {
+      if (success) {
         EventBus.GET_LIST_SUCCESS(response.data)
         EventBus.INIT_PLAYER()
       }
-      if(!success) EventBus.GET_LIST_FAILURE()
+      if (!success) EventBus.GET_LIST_FAILURE()
     }, err => {
       EventBus.GET_LIST_FAILURE(err)
     })
@@ -276,8 +286,8 @@ export const actions = {
     return Service.get(`/music/song/${ params.song_id }`)
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) EventBus.GET_SONG_SUCCESS(response.data)
-      if(!success) EventBus.GET_SONG_FAILURE()
+      if (success) EventBus.GET_SONG_SUCCESS(response.data)
+      if (!success) EventBus.GET_SONG_FAILURE()
     }, err => {
       EventBus.GET_SONG_FAILURE(err)
     })
@@ -289,8 +299,8 @@ export const actions = {
     return Service.get(`/music/lrc/${ params.song_id }`)
     .then(response => {
       const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if(success) EventBus.GET_LRC_SUCCESS(response.data)
-      if(!success) EventBus.GET_LRC_FAILURE()
+      if (success) EventBus.GET_LRC_SUCCESS(response.data)
+      if (!success) EventBus.GET_LRC_FAILURE()
     }, err => {
       EventBus.GET_LRC_FAILURE(err)
     })
