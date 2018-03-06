@@ -219,7 +219,7 @@ export const actions = {
         commit(commitName, response.data)
         if (loadMore && process.browser) {
           Vue.nextTick(() => {
-            scrollTo(document.body.clientHeight, 300, { easing: easing['ease-in'] })
+            scrollTo(window.scrollY + (window.innerHeight * 0.8), 300, { easing: easing['ease-in'] })
           })
         }
       } else {
