@@ -54,7 +54,6 @@
 <script>
   const apiConfig = require('~/api.config')
   import EventBus from '~/utils/event-bus'
-  import consoleSlogan from '~/utils/console-slogan'
   export default {
     name: 'layout-header',
     data() {
@@ -64,23 +63,8 @@
     },
     mounted() {
       if (process.browser) {
-        const self = this
-        const player = EventBus.player
-        const play = () => {
-          if (player.playerState.ready && player.player && player.player.play) {
-            player.player.play()
-            setTimeout(() => {
-              consoleSlogan()
-            }, 666)
-          } else {
-            setTimeout(play, 1666)
-          }
-        }
-        window.addEventListener('load', event => {
-          window.setTimeout(() => {
-            self.preload = true
-            play()
-          }, 1666)
+        window.addLoadedTask(() => {
+          this.preload = true;
         })
       }
     },
@@ -96,7 +80,7 @@
       },
       currentSongPicUrl() {
         if (this.currentSong) {
-          let picUrl = this.currentSong.album.picUrl
+          const picUrl = this.currentSong.album.picUrl
           return picUrl 
                  ? picUrl.replace('http://', '/proxy/') + '?param=600y600' 
                  : `${this.cdnUrl}/images/music-bg.jpg`

@@ -92,7 +92,9 @@
     },
     beforeMount() {
       this.socket.emit('barrage-last-list', barrages => {
-        barrages.forEach((b, i) => b.id = i + 1)
+        barrages.forEach((b, i) => {
+          b.id = i + 1
+        })
         // 生成随机的时间，push 进不同的内容，而不是一次性赋值
         const moveBarrages = () => {
           if (barrages.length) {
@@ -100,7 +102,7 @@
             this.barrages.push(barrages[0])
             barrages.splice(0, 1)
             if (barrages.length) {
-              this.moveTimer = setTimeout(moveBarrages, parseInt(this.randomPer(this.config.moveDelay)) * 100)
+              this.moveTimer = setTimeout(moveBarrages, parseInt(this.randomPer(this.config.moveDelay), 0) * 100)
             }
           }
         }

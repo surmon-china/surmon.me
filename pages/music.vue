@@ -97,7 +97,7 @@
       },
       currentSongPicUrl() {
         if (this.currentSong) {
-          let picUrl = this.currentSong.album.picUrl
+          const picUrl = this.currentSong.album.picUrl
           return picUrl 
                  ? picUrl.replace('http://', '/proxy/') + '?param=600y600' 
                  : `${this.cdnUrl}/images/music-bg.jpg`
@@ -109,15 +109,15 @@
         return (15 / 450 * 100).toFixed(1)
       },
       trackPath() {
-        var radius = parseInt(50 - parseFloat(this.relativeStrokeWidth) / 2, 10)
+        const radius = parseInt(50 - parseFloat(this.relativeStrokeWidth) / 2, 10)
         return `M 50 50 m 0 -${radius} a ${radius} ${radius} 0 1 1 0 ${radius * 2} a ${radius} ${radius} 0 1 1 0 -${radius * 2}`
       },
       perimeter() {
-        var radius = 50 - parseFloat(this.relativeStrokeWidth) / 2
+        const radius = 50 - parseFloat(this.relativeStrokeWidth) / 2
         return 2 * Math.PI * radius
       },
       circlePathStyle() {
-        var perimeter = this.perimeter
+        const perimeter = this.perimeter
         return {
           strokeDasharray: `${perimeter}px,${perimeter}px`,
           strokeDashoffset: (1 - (this.playerState.progress) / 100) * perimeter + 'px',

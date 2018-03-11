@@ -1,5 +1,7 @@
 /*
-** 只在生成模式的客户端中使用
+ *
+ * 百度SEO服务
+ *
 */
 
 if (process.env.NODE_ENV === 'production') {

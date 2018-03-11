@@ -14,6 +14,17 @@ module.exports = {
   plugins: [
     'html'
   ],
+  globals: {
+    Set: true,
+    Howl: true,
+    window: true,
+    Reflect: true,
+    Promise: true,
+    document: true,
+    localStorage: true,
+    FaceDetector: true,
+    requestAnimFrame: true,
+  },
   //  add your custom rules here
   rules: {
 
@@ -29,7 +40,7 @@ module.exports = {
     "comma-dangle": [0, "never"],
 
     // 禁止在条件表达式中使用赋值语句
-    "no-cond-assign": 2,
+    "no-cond-assign": 0,
 
     // 禁止使用console
     "no-console": 0,
@@ -65,7 +76,7 @@ module.exports = {
     "no-extra-boolean-cast": 2,
 
     // 禁止使用多余的圆括号
-    "no-extra-parens": 2,
+    "no-extra-parens": 0,
 
     // 禁止多余的冒号
     "no-extra-semi": 2,
@@ -98,7 +109,7 @@ module.exports = {
     "no-unexpected-multiline": 0,
 
     // 禁止有执行不到的代码
-    "no-unreachable": 2,
+    "no-unreachable": 0,
 
     // 禁止和NaN作比较,推荐使用isNaN方法
     "use-isnan": 2,
@@ -141,7 +152,7 @@ module.exports = {
     //  [2, "multi", "consistent"] 保持前后语句的{ }一致
 
     //  default: [2, "all"] 全都需要{ }包围
-    "curly": 2,
+    "curly": 0,
 
     // 所有的switch语句都必须要有一个default分支
     "default-case": 2,
@@ -203,7 +214,7 @@ module.exports = {
     "no-eq-null": 0,
 
     // 禁止使用eval函数
-    "no-eval": 2,
+    "no-eval": 0,
 
     // 禁止扩展native对象，不能向native的对象上面添加属性
     "no-extend-native": 2,
@@ -225,7 +236,10 @@ module.exports = {
     "no-floating-decimal": 2,
 
     // 禁止隐式转换，为了消除简写的类型转换
-    "no-implicit-coercion": 2,
+    "no-implicit-coercion": 0,
+
+    // 禁止不必要的布尔转换
+    "no-extra-boolean-cast": 0,
 
     // 禁止在全局作用域里声明变量或函数
     "no-implicit-globals": 2,
@@ -737,7 +751,7 @@ module.exports = {
     "prefer-const": 1,
 
     // 推荐使用Reflect上的方法替代以前老方法
-    "prefer-reflect": 2,
+    "prefer-reflect": 1,
 
     //  在ES2015(ES6)中推荐使用剩余参数(...rest)代替arguments变量
     "prefer-rest-params": 2,
@@ -755,7 +769,7 @@ module.exports = {
     "template-curly-spacing": [2, "never"],
 
     // yield*表达式中的*号前后是否留空格，默认after，比如yield* other()
-    "yield-star-spacing": [2, "after"]
+    "yield-star-spacing": [2, "after"],
 
   }
 }

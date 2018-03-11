@@ -5,9 +5,9 @@
 */
 
 import Vue from 'vue'
-import Service from '~/plugins/axios'
-import EventBus from '~/utils/event-bus'
-import UaParse from '~/utils/ua-parse'
+import service from '~/plugins/axios'
+import eventBus from '~/utils/event-bus'
+import uaParse from '~/utils/ua-parse'
 import { scrollTo, easing } from '~/utils/scroll-to-anywhere'
 
 // global actions
@@ -17,7 +17,7 @@ export const actions = {
   nuxtServerInit(store, { params, route, req }) {
     // 检查设备类型
     const userAgent = process.server ? req.headers['user-agent'] : navigator.userAgent
-    const { isMobile, isOpera, isIE, isSafari, isEdge, isFF, isBB, isChrome, isMaxthon, isIos } = UaParse(userAgent)
+    const { isMobile, isOpera, isIE, isSafari, isEdge, isFF, isBB, isChrome, isMaxthon, isIos } = uaParse(userAgent)
     const mustJpg = (isIos || isFF || isMaxthon || isSafari || isBB || isIE || isEdge)
     store.commit('option/SET_IMG_EXT', mustJpg ? 'jpeg' : 'webp')
     // console.log(mustJpg ? 'jpeg' : 'webp')
@@ -47,9 +47,9 @@ export const actions = {
   // 获取博主资料
   loadAdminInfo({ commit }) {
     commit('option/REQUEST_ADMIN_INFO')
-    return Service.get('/auth')
+    return service.get('/auth')
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
+      const success = response.status && response.data && Object.is(response.data.code, 1)
       if (success) commit('option/REQUEST_ADMIN_INFO_SUCCESS', response.data)
       if (!success) commit('option/REQUEST_ADMIN_INFO_FAILURE')
     }, err => {
@@ -60,9 +60,9 @@ export const actions = {
   // 获取全局配置
   loadGlobalOption({ commit }) {
     commit('option/REQUEST_GLOBAL_OPTIONS')
-    return Service.get('/option')
+    return service.get('/option')
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
+      const success = response.status && response.data && Object.is(response.data.code, 1)
       if (success) commit('option/REQUEST_GLOBAL_OPTIONS_SUCCESS', response.data)
       if (!success) commit('option/REQUEST_GLOBAL_OPTIONS_FAILURE')
     }, err => {
@@ -73,9 +73,9 @@ export const actions = {
   // 获取标签列表
   loadTagList({ commit }, params = { per_page: 160 }) {
     commit('tag/REQUEST_LIST')
-    return Service.get('/tag', { params })
+    return service.get('/tag', { params })
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
+      const success = response.status && response.data && Object.is(response.data.code, 1)
       if (success) commit('tag/GET_LIST_SUCCESS', response.data)
       if (!success) commit('tag/GET_LIST_FAILURE')
     })
@@ -87,9 +87,9 @@ export const actions = {
   // 获取分类列表
   loadCategories({ commit }, params = { per_page: 100 }) {
     commit('category/REQUEST_LIST')
-    return Service.get('/category', { params })
+    return service.get('/category', { params })
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
+      const success = response.status && response.data && Object.is(response.data.code, 1)
       if (success) commit('category/GET_LIST_SUCCESS', response.data)
       if (!success) commit('category/GET_LIST_FAILURE')
     })
@@ -101,9 +101,9 @@ export const actions = {
   // 获取最热文章列表
   loadHotArticles({ commit }) {
     commit('article/REQUEST_HOT_LIST')
-    return Service.get('/article', { params: { hot: 1 }})
+    return service.get('/article', { params: { hot: 1 }})
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
+      const success = response.status && response.data && Object.is(response.data.code, 1)
       if (success) commit('article/GET_HOT_LIST_SUCCESS', response.data)
       if (!success) commit('article/GET_HOT_LIST_FAILURE')
     }, err => {
@@ -120,9 +120,9 @@ export const actions = {
       commit('comment/CLEAR_LIST')
     }
     commit('comment/REQUEST_LIST')
-    return Service.get('/comment', { params })
+    return service.get('/comment', { params })
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
+      const success = response.status && response.data && Object.is(response.data.code, 1)
       if (success) {
         if (Object.is(params.sort, -1)) response.data.result.data.reverse()
         commit('comment/GET_LIST_SUCCESS', response.data)
@@ -136,9 +136,9 @@ export const actions = {
   // 发布评论
   postComment({ commit }, comment) {
     commit('comment/POST_ITEM')
-    return Service.post('/comment', comment)
+    return service.post('/comment', comment)
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
+      const success = response.status && response.data && Object.is(response.data.code, 1)
       if (success) {
         commit('comment/POST_ITEM_SUCCESS', response.data)
         return Promise.resolve(response.data)
@@ -154,9 +154,9 @@ export const actions = {
 
   // 喜欢某个页面或主站 || 为某条回复点赞
   likeArticleOrPageOrComment({ commit }, like) {
-    return Service.post('/like', like)
+    return service.post('/like', like)
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
+      const success = response.status && response.data && Object.is(response.data.code, 1)
       if (success) {
         let mutation
         switch(like.type) {
@@ -182,9 +182,9 @@ export const actions = {
   // 获取公告列表
   loadAnnouncements({ commit }, params = {}) {
     commit('announcement/REQUEST_LIST')
-    return Service.get('/announcement', { params })
+    return service.get('/announcement', { params })
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
+      const success = response.status && response.data && Object.is(response.data.code, 1)
       if (success) commit('announcement/GET_LIST_SUCCESS', response.data)
       if (!success) commit('announcement/GET_LIST_FAILURE')
     }, err => {
@@ -195,9 +195,9 @@ export const actions = {
   // 获取地图文章列表
   loadSitemapArticles({ commit }, params = { page: 1 }) {
     commit('sitemap/REQUEST_ARTICLES')
-    return Service.get('/article', { params })
+    return service.get('/article', { params })
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
+      const success = response.status && response.data && Object.is(response.data.code, 1)
       const commitName =  `sitemap/GET_ARTICLES_SUCCESS`
       if (success) commit(commitName, response.data)
       if (!success) commit('sitemap/GET_ARTICLES_FAILURE')
@@ -210,9 +210,9 @@ export const actions = {
   // 获取文章列表
   loadArticles({ commit }, params = { page: 1 }) {
     commit('article/REQUEST_LIST')
-    return Service.get('/article', { params })
+    return service.get('/article', { params })
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
+      const success = response.status && response.data && Object.is(response.data.code, 1)
       const loadMore = params.page && params.page > 1
       const commitName =  `article/${loadMore ? 'ADD' : 'GET'}_LIST_SUCCESS`
       if (success) {
@@ -234,9 +234,9 @@ export const actions = {
   // 获取文章详情
   loadArticleDetail({ commit }, params = {}) {
     commit('article/REQUEST_DETAIL')
-    return Service.get(`/article/${ params.article_id }`)
+    return service.get(`/article/${params.article_id}`)
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
+      const success = response.status && response.data && Object.is(response.data.code, 1)
       if (success) commit('article/GET_DETAIL_SUCCESS', response.data)
       if (!success) commit('article/GET_DETAIL_FAILURE')
       return Promise.resolve(response.data)
@@ -254,9 +254,9 @@ export const actions = {
     }
     // 不存在则请求新数据
     commit('project/REQUEST_GUTHUB_REPOSITORIES')
-    return Service.get(`/github`)
+    return service.get(`/github`)
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
+      const success = response.status && response.data && Object.is(response.data.code, 1)
       if (success) commit('project/REQUEST_GUTHUB_REPOSITORIES_SUCCESS', response.data)
       if (!success) commit('project/REQUEST_GUTHUB_REPOSITORIES_FAILURE')
     }, err => {
@@ -266,43 +266,43 @@ export const actions = {
 
   // 获取歌曲列表
   loadMuiscPlayerList({ commit }) {
-    EventBus.REQUEST_LIST()
-    return Service.get('/music/list/638949385')
+    eventBus.requestMusicList()
+    return service.get('/music/list/638949385')
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
+      const success = response.status && response.data && Object.is(response.data.code, 1)
       if (success) {
-        EventBus.GET_LIST_SUCCESS(response.data)
-        EventBus.INIT_PLAYER()
+        eventBus.getMusicListSuccess(response.data)
+        eventBus.initPlayer()
       }
-      if (!success) EventBus.GET_LIST_FAILURE()
+      if (!success) eventBus.getMusicListFailure()
     }, err => {
-      EventBus.GET_LIST_FAILURE(err)
+      eventBus.getMusicListFailure(err)
     })
   },
 
   // 获取歌曲详情
   loadMuiscSongDetail({ commit }, params = {}) {
-    EventBus.REQUEST_SONG()
-    return Service.get(`/music/song/${ params.song_id }`)
+    eventBus.requestSong()
+    return service.get(`/music/song/${params.song_id}`)
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if (success) EventBus.GET_SONG_SUCCESS(response.data)
-      if (!success) EventBus.GET_SONG_FAILURE()
+      const success = response.status && response.data && Object.is(response.data.code, 1)
+      if (success) eventBus.getSongSuccess(response.data)
+      if (!success) eventBus.getSongFailure()
     }, err => {
-      EventBus.GET_SONG_FAILURE(err)
+      eventBus.getSongFailure(err)
     })
   },
 
   // 获取歌曲歌词
   loadMuiscSongLrc({ commit }, params = {}) {
-    EventBus.REQUEST_LRC()
-    return Service.get(`/music/lrc/${ params.song_id }`)
+    eventBus.requestLrc()
+    return service.get(`/music/lrc/${params.song_id}`)
     .then(response => {
-      const success = !!response.status && response.data && Object.is(response.data.code, 1)
-      if (success) EventBus.GET_LRC_SUCCESS(response.data)
-      if (!success) EventBus.GET_LRC_FAILURE()
+      const success = response.status && response.data && Object.is(response.data.code, 1)
+      if (success) eventBus.getLrcSuccess(response.data)
+      if (!success) eventBus.getLrcFailure()
     }, err => {
-      EventBus.GET_LRC_FAILURE(err)
+      eventBus.getLrcFailure(err)
     })
   }
 }
