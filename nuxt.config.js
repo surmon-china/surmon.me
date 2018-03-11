@@ -1,7 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const apiConfig = require('./api.config')
-const i18nConfig = require('./i18n.config')
+// const i18nConfig = require('./i18n.config')
 const isProdMode = Object.is(process.env.NODE_ENV, 'production')
 
 module.exports = {
