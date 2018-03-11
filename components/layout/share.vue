@@ -94,35 +94,43 @@
     },
     methods: {
       description() {
-        try { if (document) return document.getElementsByName('description')[0].getAttribute('content') } 
-        catch (err) { return '' }
+        try {
+          if (document) {
+            return document.getElementsByName('description')[0].getAttribute('content')
+          }
+        } catch (err) { 
+          return ''
+        }
       },
       title() {
-        try { if (document) return document.title } 
-        catch (err) { return 'Surmon.me' }
+        try {
+          if (document) return document.title
+        } catch (err) {
+          return 'Surmon.me'
+        }
       },
       shareWindow(url) {
         url = url.includes('mailto') ? url.replace(/\s|\||Surmon.me/g, '') : encodeURI(url)
         // console.log(url)
         // 给打开的窗口命名
-        let winName = "newWin"
+        const winName = "newWin"
         // screen.availWidth 获得屏幕宽度
         // screen.availHeight 获得屏幕高度
         // 居中的算法是：
         // 左右居中： (屏幕宽度 - 窗口宽度)/2
         // 上下居中： (屏幕高度 - 窗口高度)/2
         // 窗口宽度,需要设置
-        let awidth = screen.availWidth / 6 * 2
+        const awidth = screen.availWidth / 6 * 2
         // 窗口高度,需要设置
-        let aheight = screen.availHeight / 5 * 2
+        const aheight = screen.availHeight / 5 * 2
         // 窗口顶部位置,一般不需要改
-        let atop = (screen.availHeight - aheight) / 2
+        const atop = (screen.availHeight - aheight) / 2
         // 窗口放中央,一般不需要改
-        let aleft = (screen.availWidth - awidth) / 2
+        const aleft = (screen.availWidth - awidth) / 2
         // 新窗口的参数
-        let param0 = 'scrollbars=0,status=0,menubar=0,resizable=2,location=0'
+        const param0 = 'scrollbars=0,status=0,menubar=0,resizable=2,location=0'
         // 新窗口的左部位置，顶部位置，宽度，高度
-        let params = `top=${atop},left=${aleft},width=${awidth},height=${aheight},${param0}`
+        const params = `top=${atop},left=${aleft},width=${awidth},height=${aheight},${param0}`
         // 打开新窗口
         const win = window.open(url, winName, params)
         // 新窗口获得焦点

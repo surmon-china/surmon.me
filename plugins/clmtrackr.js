@@ -5,17 +5,15 @@
 */
 
 import apiConfig from '~/api.config'
-import UaParse from '~/utils/ua-parse'
+import uaParse from '~/utils/ua-parse'
 if (process.browser) {
-  const { isMobile } = UaParse(navigator.userAgent)
+  const { isMobile } = uaParse(navigator.userAgent)
   if (!isMobile) {
-    window.addEventListener('load', event => {
-      window.setTimeout(() => {
-        const clmtrackrScript = document.createElement('script')
-        clmtrackrScript.src = `${apiConfig.cdnUrl}/scripts/clmtrackr.js`
-        clmtrackrScript.defer = 'defer'
-        document.body.appendChild(clmtrackrScript)
-      }, 0)
+    window.addLoadedTask(() => {
+      const clmtrackrScript = document.createElement('script')
+      clmtrackrScript.src = `${apiConfig.cdnUrl}/scripts/clmtrackr.js`
+      clmtrackrScript.defer = 'defer'
+      document.body.appendChild(clmtrackrScript)
     })
   }
 }

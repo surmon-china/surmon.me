@@ -53,7 +53,7 @@ if (config.dev) {
 server.listen(port, host)
 
 // eslint-disable-line no-console
-console.log(`Nuxt.js SSR Server listening on ${host}:${port}, at ${new Date().toLocaleString()}`)
+console.log(`Nuxt.js SSR Server listening on ${host}:${port}, at ${new Date().toLocaleString()}, env: ${process.env.NODE_ENV}`)
 
 // 更新 GA 脚本
 updateGAScript()

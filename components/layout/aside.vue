@@ -152,8 +152,8 @@
             const newSidebarFixedOffsetTop = element.offsetTop
             sidebarFixedOffsetTop = (newSidebarFixedOffsetTop !== sidebarFixedOffsetTop && newSidebarFixedOffsetTop !== 77) ? newSidebarFixedOffsetTop : sidebarFixedOffsetTop
             const isFixed = windowScrollTop > sidebarFixedOffsetTop
-            if (isFixed && element) element.setAttribute('class','aside-fixed-box fixed')
-            if (!isFixed && element) element.setAttribute('class','aside-fixed-box')
+            if (isFixed && element) element.setAttribute('class', 'aside-fixed-box fixed')
+            if (!isFixed && element) element.setAttribute('class', 'aside-fixed-box')
           }
           // 初始化应用
           parseScroll()

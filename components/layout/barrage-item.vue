@@ -68,7 +68,7 @@
         randomCount = randomCount < 0 ? 1 : randomCount
         let topPre = randomCount / innerCount * 100
         topPre = (topPre > 88) ? 86 : topPre
-        return `${parseInt(topPre)}%`
+        return `${parseInt(topPre, 0)}%`
       },
       startAnimation() {
 

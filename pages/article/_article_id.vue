@@ -143,7 +143,7 @@
             disableOnInteraction: false,
           },
           observeParents: true,
-          grabCursor : true,
+          grabCursor: true,
           slidesPerView: 'auto',
           spaceBetween: 14
         },
@@ -163,17 +163,17 @@
         return this.$store.state.article.detail.data
       },
       articleContent() {
-        let content = this.article.content
+        const content = this.article.content
         if (!content) return ''
         const hasTags = Object.is(this.tags.code, 1) && !!this.tags.data.length
         if (content.length > 13688 && !this.fullContentEd) {
           this.canReadMore = true
           let shortContent = content.substring(0, 11688)
-          let lastH4Index = shortContent.lastIndexOf('\n####')
-          let lastH3Index = shortContent.lastIndexOf('\n###')
-          let lastCodeIndex = shortContent.lastIndexOf('\n\n```')
-          let lastLineIndex = shortContent.lastIndexOf('\n\n**')
-          let lastReadindex = Math.max(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex);
+          const lastH4Index = shortContent.lastIndexOf('\n####')
+          const lastH3Index = shortContent.lastIndexOf('\n###')
+          const lastCodeIndex = shortContent.lastIndexOf('\n\n```')
+          const lastLineIndex = shortContent.lastIndexOf('\n\n**')
+          const lastReadindex = Math.max(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex);
           // console.log(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex, 'min', lastReadindex)
           shortContent = shortContent.substring(0, lastReadindex)
           return marked(shortContent, hasTags ? this.tags.data : false, true)
@@ -221,7 +221,7 @@
       buildDateLink(date) {
         if (!date) return date
         date = new Date(date)
-        let year = date.getFullYear()
+        const year = date.getFullYear()
         let month = (date.getMonth() + 1).toString()
         let day = date.getDate().toString()
         month = Object.is(month.length, 1) ? `0${month}` : month

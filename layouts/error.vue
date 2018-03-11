@@ -63,6 +63,7 @@
       }
 
       > .error-code {
+        text-transform: uppercase;
         font-size: 12rem;
         margin: 0;
       }

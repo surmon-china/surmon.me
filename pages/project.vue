@@ -40,7 +40,7 @@
     head: {
       title: 'Project'
     },
-    fetch ({ store }) {
+    fetch({ store }) {
       return store.dispatch('loadGithubRepositories')
     },
     computed: {

@@ -30,6 +30,11 @@
   import marked from '~/plugins/marked'
   export default {
     name: 'index-announcement',
+    props: {
+      announcement: {
+        type: Object
+      }
+    },
     data() {
       return {
         swiperOption: {
@@ -49,11 +54,6 @@
           direction: 'vertical',
           loop: true
         }
-      }
-    },
-    props: {
-      announcement: {
-        type: Object
       }
     },
     methods: {

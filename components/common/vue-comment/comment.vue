@@ -55,8 +55,8 @@
                    rel="external nofollow noopener"
                    :href="comment.author.site" 
                    @click.stop="clickUser($event, comment.author)">{{ comment.author.name | firstUpperCase }}</a>
-                <span class="os" v-html="OSParse(comment.agent)" v-if="comment.agent"></span>
-                <span class="ua" v-html="UAParse(comment.agent)" v-if="comment.agent"></span>
+                <span class="os" v-html="osParse(comment.agent)" v-if="comment.agent"></span>
+                <span class="ua" v-html="uaParse(comment.agent)" v-if="comment.agent"></span>
                 <span class="location" v-if="comment.ip_location && !mobileLayout">
                   <span>{{ comment.ip_location.country }}</span>
                   <span v-if="comment.ip_location.country && comment.ip_location.city">&nbsp;-&nbsp;</span>
@@ -239,9 +239,9 @@
 
 <script>
   import marked from '~/plugins/marked'
-  import EventBus from '~/utils/event-bus'
+  import eventBus from '~/utils/event-bus'
   import gravatar from '~/plugins/gravatar'
-  import { UAParse, OSParse } from '~/utils/comment-ua-parse'
+  import { uaParse, osParse } from '~/utils/comment-ua-parse'
   import { scrollTo } from '~/utils/scroll-to-anywhere'
   export default {
     name: 'vue-comment',
@@ -292,7 +292,7 @@
         return this.historyLikes.pages.includes(this.postId)
       },
       isArticlePage() {
-        return !!this.$route.params.article_id
+        return this.$route.params.article_id
       },
       isGuestbookPage() {
         return Object.is(this.$route.name, 'guestbook')
@@ -320,8 +320,8 @@
       this.$store.commit('comment/CLEAR_LIST')
     },
     methods: {
-      UAParse,
-      OSParse,
+      uaParse,
+      osParse,
       shang() {
         window.utils.openImgPopup(`${this.cdnUrl}/images/shang.jpg`, 'shang')
       },
@@ -332,7 +332,7 @@
       // 头像服务
       gravatar(email) {
         if (!this.regexs.email.test(email)) return null
-        let gravatar_url = gravatar.url(email, { 
+        const gravatar_url = gravatar.url(email, { 
           // size: '96', 
           // rating: 'pg',
           // default: 'https://gravatar.surmon.me/anonymous.jpg', 
@@ -452,13 +452,13 @@
       toSomeAnchorById(id) {
         const targetDom = document.getElementById(id)
         if (targetDom) {
-          let isToEditor = Object.is(id, 'post-box')
+          const isToEditor = Object.is(id, 'post-box')
           scrollTo(targetDom, 200, { offset: isToEditor ? 0 : -300 })
           // 如果是进入编辑模式，则需要激活光标
           if (isToEditor) {
-            let p = this.$refs.markdown
-            let s = window.getSelection()
-            let r = document.createRange()
+            const p = this.$refs.markdown
+            const s = window.getSelection()
+            const r = document.createRange()
             r.setStart(p, p.childElementCount)
             r.setEnd(p, p.childElementCount)
             s.removeAllRanges()
@@ -535,7 +535,9 @@
           console.warn('评论发布失败\n1：邮箱被列入黑名单\n2：内容包含黑名单关键词');
           return false;
         }
-        if (!this.user.site) delete this.user.site
+        if (!this.user.site) {
+          Reflect.deleteProperty(this.user, 'site')
+        }
         this.$store.dispatch('postComment', {
           pid: this.pid,
           post_id: this.postId,
@@ -545,7 +547,7 @@
         }).then(data => {
           // 发布成功后清空评论框内容并更新本地信息
           const content = data.result.content
-          const emoji233333 = EventBus.emoji233333
+          const emoji233333 = eventBus.emoji233333
           if (emoji233333 && emoji233333.launch) {
             // 为表情做一次缓冲
             const preImage = (url, callback) => {  

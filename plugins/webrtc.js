@@ -1,3 +1,8 @@
+/*
+ *
+ * WebRTC
+ *
+*/
 
 import SimpleWebRTC from 'simplewebrtc'
 

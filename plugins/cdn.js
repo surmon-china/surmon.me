@@ -1,3 +1,8 @@
+/*
+ *
+ * CDN服务
+ *
+*/
 
 import Vue from 'vue'
 import apiConfig from '~/api.config'
