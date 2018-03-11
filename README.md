@@ -117,6 +117,13 @@ $ npm run lint
 - ~~新增C++版本的 TURN Server~~
 - ~~增加人脸识别功能~~
 - ~~增加了一个叫美颜的功能~~
+- ~~初始化异步任务管理的优化~~
+- ~~代码检查的优化~~
+- ~~一些代码细节的优化~~
+- ~~播放器的有优化~~
+- PWA 的适配 https://pwa.nuxtjs.org/modules/workbox.html
+- i18n 的 适配 https://github.com/nuxt-community/nuxt-i18n
+- 右侧广告的添加
 - graphql-js + Restful查询数据库
 
 ## 目录结构

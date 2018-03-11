@@ -11,7 +11,7 @@
   export default {
     name: 'tag-article-list',
     validate ({ params, store }) {
-      return !!params.tag_slug && store.state.tag.data.data.find((tag, index, arr) => {
+      return params.tag_slug && store.state.tag.data.data.find((tag, index, arr) => {
         return Object.is(tag.slug, params.tag_slug)
       })
     },

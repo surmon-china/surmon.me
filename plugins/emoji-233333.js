@@ -1,3 +1,8 @@
+/*
+ *
+ * 留言表情雨
+ *
+*/
 
 import Emoji233333 from 'emoji-233333'
 

@@ -45,7 +45,6 @@
 </template>
 
 <script>
-  import consoleSlogan from '~/utils/console-slogan'
   import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
   import { Background, EmojoRain, Barrage, Webrtc, Header, Footer, Aside, Share, Tool, Nav } from '~/components/layout'
   export default {
@@ -63,7 +62,6 @@
       if (!this.mobileLayout) {
         this.$store.dispatch('loadMuiscPlayerList')
       }
-      consoleSlogan()
     },
     components: {
       Webrtc,

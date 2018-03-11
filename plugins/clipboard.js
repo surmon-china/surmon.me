@@ -1,3 +1,8 @@
+/*
+ *
+ * Clipboard
+ *
+*/
 
 import Clipboard from 'clipboard'
 

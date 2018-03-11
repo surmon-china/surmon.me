@@ -1,10 +1,10 @@
 const path = require('path')
 const webpack = require('webpack')
 const apiConfig = require('./api.config')
+const i18nConfig = require('./i18n.config')
 const isProdMode = Object.is(process.env.NODE_ENV, 'production')
 
 module.exports = {
-  offline: true,
   loading: {
     color: '#2196f3'
   },
@@ -64,18 +64,16 @@ module.exports = {
       comments: true
     },
     // Run ESLINT on save
-    /*
-    extend (config, ctx) {
-      if (process.client) {
+    extend(config, ctx) {
+      if (ctx.isClient) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/
+          exclude: [/(node_modules)/, /underscore-simple/, /webrtc/]
         })
       }
-    }
-    */
+    },
     styleResources: {
       scss: './assets/sass/init.scss',
       options: {}
@@ -88,6 +86,7 @@ module.exports = {
   },
   plugins: [
     { src: '~/plugins/cdn.js' },
+    { src: '~/plugins/loaded-task.js' },
     { src: '~/plugins/axios.js' },
     { src: '~/plugins/howler.js' },
     { src: '~/plugins/filters.js' },
@@ -96,7 +95,6 @@ module.exports = {
     { src: '~/plugins/highlight.js' },
     { src: '~/plugins/clipboard.js' },
     { src: '~/plugins/ga.js', ssr: false },
-    { src: '~/plugins/offline.js', ssr: false },
     { src: '~/plugins/clmtrackr.js', ssr: false },
     { src: '~/plugins/emoji-233333.js', ssr: false },
     { src: '~/plugins/image-popup.js', ssr: false },
@@ -123,7 +121,7 @@ module.exports = {
       { name: 'HandheldFriendly', content: 'True' },
       { name: 'apple-mobile-web-app-capable', content: 'yes' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1.0, user-scalable=no' },
-      { hid: 'keywords', name: 'keywords', content: 'surmon,马赐崇,司马萌,Vue教程,前端技术开发,javascript技术' },
+      { hid: 'keywords', name: 'keywords', content: 'surmon,马赐崇,司马萌,Vue开发者,前端技术开发,javascript技术' },
       { hid: 'description', name: 'description', content: '凡心所向 素履所往 生如逆旅 一苇以航' }
     ],
     link: [
@@ -145,7 +143,8 @@ module.exports = {
     ]
   },
   modules: [
-    // '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    // ['nuxt-i18n', i18nConfig],
   ],
   router: {
     middleware: ['change-page-col'],

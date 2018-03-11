@@ -1,6 +1,7 @@
 
 import howler from '~/plugins/howler'
 import Service from '~/plugins/axios'
+const { Howler, Howl } = howler
 
 export default state => {
 
@@ -101,7 +102,7 @@ export default state => {
           state.list.data.tracks.splice(state.list.data.tracks.findIndex(s => Object.is(s.name, song.name)), 1)
           state.playerState.wave = false
           state.playerState.playing = true
-          let index = state.playerState.index - 1
+          const index = state.playerState.index - 1
           state.playerState.index = (index < 0) ? 0 : index
           state.player.nextSong()
           state.playerState.ready = true
@@ -174,12 +175,12 @@ export default state => {
         } else {
           state.playerState.ready = false
           // console.log('请求这首音乐地址', song)
-          Service.get(`/music/url/${ song.id }`).then(response => {
+          Service.get(`/music/url/${song.id}`).then(response => {
             const success = response.status && 
                             response.data && 
                             Object.is(response.data.code, 1) && 
                             Object.is(response.data.result.code, 200) &&
-                            !!response.data.result.data.length
+                            response.data.result.data.length
             if (success) {
               // console.log('地址有效', response)
               song.src = response.data.result.data[0].url
@@ -203,7 +204,7 @@ export default state => {
       // 暂停
       pause() {
         // pause current track
-        let sound = playerList[state.playerState.index]
+        const sound = playerList[state.playerState.index]
         if (sound.howl && sound.howl.playing()) {
           // sound.howl.fade(state.playerState.volume, 0, 200, sound.song_id)
           sound.howl.pause()

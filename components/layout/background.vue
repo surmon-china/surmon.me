@@ -13,7 +13,7 @@
     },
     methods: {
       buildBackground() {
-        particlesJS('particles-background', {
+        window.particlesJS('particles-background', {
           "particles": {
             "number": {
               "value": 30,

@@ -1,5 +1,7 @@
 /*
-** 只在生成模式的客户端中使用
+ *
+ * 复制拦截器
+ *
 */
 
 if (process.env.NODE_ENV === 'production') {

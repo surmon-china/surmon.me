@@ -7,11 +7,13 @@
 
 import Vue from 'vue'
 import musicPlayerBuilder from '~/utils/music-player'
+
 export default new Vue({
   data() {
     return {
       emoji233333: null,
       player: {
+        player: null,
         playerState: {
           seek: 0,
           index: 0,
@@ -49,43 +51,45 @@ export default new Vue({
     }
   },
   methods: {
-    INIT_PLAYER() {
-      const player = this.player
-      musicPlayerBuilder(player)
+    initPlayer() {
+      musicPlayerBuilder(this.player)
+      if (this.player.playerState.ready && this.player.player.play) {
+        window.addLoadedTask(this.player.player.play)
+      }
     },
 
-    REQUEST_LIST() {
+    requestMusicList() {
       this.player.list.fetching = true
     },
-    GET_LIST_FAILURE() {
+    getMusicListFailure() {
       this.player.list.fetching = false
       this.player.list.data = null
     },
-    GET_LIST_SUCCESS(action) {
+    getMusicListSuccess(action) {
       this.player.list.fetching = false
       this.player.list.data = action.result
     },
 
-    REQUEST_SONG() {
+    requestSong() {
       this.player.song.fetching = true
     },
-    GET_SONG_FAILURE() {
+    getSongFailure() {
       this.player.song.data = null
       this.player.song.fetching = false
     },
-    GET_SONG_SUCCESS(action) {
+    getSongSuccess(action) {
       this.player.song.data = action.result
       this.player.song.fetching = false
     },
     
-    REQUEST_LRC() {
+    requestLrc() {
       this.player.lrc.fetching = true
     },
-    GET_LRC_FAILURE() {
+    getLrcFailure() {
       this.player.lrc.fetching = false
       this.player.lrc.data = null
     },
-    GET_LRC_SUCCESS(action) {
+    getLrcSuccess(action) {
       this.player.lrc.fetching = false
       this.player.lrc.data = action.result
     }

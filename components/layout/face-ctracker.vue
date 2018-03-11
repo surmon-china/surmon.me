@@ -84,7 +84,8 @@
           return false
         }
         const { video, canvas, canvasCTX } = this.$data
-        const tracker = this.tracker = new window.clm.tracker({
+        const Tracker = window.clm.tracker
+        const tracker = this.tracker = new Tracker({
           useWebGL: true,
           stopOnConvergence: true
         })
@@ -104,7 +105,7 @@
         ]
         const currentHatTitle = hatTitles[Math.floor(Math.random() * hatTitles.length)]
         // 画椭圆
-        const EllipseTwo = (context, x, y, a, b) => {
+        const ellipseTwo = (context, x, y, a, b) => {
           context.save()
           const r = (a > b) ? a : b
           const ratioX = a / r
@@ -128,7 +129,7 @@
           const hatYCenter = positions[33][1] - ((positions[37][1] - positions[33][1]) * 2)
           // 横向半径应该为 脸部宽度
           const hatWidth = positions[14][0] - positions[0][0]
-          EllipseTwo(canvasCTX, hatXCenter, hatYCenter, hatWidth / 2, 26)
+          ellipseTwo(canvasCTX, hatXCenter, hatYCenter, hatWidth / 2, 26)
         }
         // 绘制
         const drawLoop = () => {

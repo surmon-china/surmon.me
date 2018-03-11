@@ -1,6 +1,7 @@
+
 export default function ({ route, store }, next) {
 
-	// fullColumn
+  // fullColumn
   const fullColumnPageNames = ['about', 'project', 'sitemap']
   const fullColumn = fullColumnPageNames.includes(route.name)
   
@@ -9,12 +10,12 @@ export default function ({ route, store }, next) {
     store.commit('option/SET_FULL_COLUMU', fullColumn)
   }
 
-	// errorColumn
+  // errorColumn
   const errorColumn = ['music', 'app', 'service'].includes(route.name)
 
   // set errorColumn
   if (!Object.is(store.state.option.errorColumn, errorColumn)) {
-  	store.commit('option/SET_ERROR_COLUMU', errorColumn)
+    store.commit('option/SET_ERROR_COLUMU', errorColumn)
   }
 
   // next
