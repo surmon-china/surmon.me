@@ -67,10 +67,7 @@
          @click.prevent="shareWindow(`mailto:?subject=${title()}&body=${url}`)">
         <i class="iconfont icon-mail"></i>
       </a>
-      <span ref="share_copy_btn"
-            class="share-link link" 
-            rel="nofollow noopener"
-            :data-clipboard-text="url">
+      <span class="share-link link" @click="copyPageUrl">
         <i class="iconfont icon-link"></i>
       </span>
     </div>
@@ -78,12 +75,8 @@
 </template>
 
 <script>
-  import Clipboard from 'clipboard'
   export default {
     name: 'share',
-    mounted() {
-      this.clipboard = new Clipboard(this.$refs.share_copy_btn)
-    },
     computed: {
       url() {
         return `https://surmon.me${this.$route.fullPath}`
@@ -93,6 +86,9 @@
       }
     },
     methods: {
+      copyPageUrl() {
+        this.$root.$copyToClipboard(this.url)
+      },
       description() {
         try {
           if (document) {
@@ -113,7 +109,7 @@
         url = url.includes('mailto') ? url.replace(/\s|\||Surmon.me/g, '') : encodeURI(url)
         // console.log(url)
         // 给打开的窗口命名
-        const winName = "newWin"
+        const winName = 'newWin'
         // screen.availWidth 获得屏幕宽度
         // screen.availHeight 获得屏幕高度
         // 居中的算法是：

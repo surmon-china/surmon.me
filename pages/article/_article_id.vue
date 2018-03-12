@@ -55,9 +55,7 @@
         </p>
         <p class="item">
           <span>永久地址：</span>
-          <span ref="copy_url_btn"
-                class="site-url"
-                :data-clipboard-text="`https://surmon.me/article/${this.article.id}`">
+          <span class="site-url" @click="copyArticleUrl">
                 <span>https://surmon.me/article/{{ article.id }}</span>
           </span>
         </p>
@@ -106,14 +104,14 @@
 </template>
 
 <script>
-  import Clipboard from 'clipboard'
+  import { mapState } from 'vuex'
   import marked from '~/plugins/marked'
   import ShareBox from '~/components/layout/share'
 
   export default {
     name: 'article-detail',
     validate ({ params, store }) {
-      return (!!params.article_id && !Object.is(Number(params.article_id), NaN))
+      return params.article_id && !isNaN(Number(params.article_id))
     },
     fetch ({ store, params, error }) {
       return store.dispatch('loadArticleDetail', params).catch(err => {
@@ -152,16 +150,17 @@
         readMoreLoading: false
       }
     },
-    mounted() {
-      this.clipboard()
-    },
     components: {
       ShareBox
     },
     computed: {
-      article() {
-        return this.$store.state.article.detail.data
-      },
+      ...mapState({
+        tags: state => state.tag.data,
+        imgExt: state => state.option.imgExt,
+        article: state => state.article.detail.data,
+        fetching: state => state.article.detail.fetching,
+        mobileLayout: state => state.option.mobileLayout,
+      }),
       articleContent() {
         const content = this.article.content
         if (!content) return ''
@@ -181,18 +180,6 @@
           this.canReadMore = false
           return marked(content, hasTags ? this.tags.data : false, true)
         }
-      },
-      fetching() {
-        return this.$store.state.article.detail.fetching
-      },
-      tags() {
-        return this.$store.state.tag.data
-      },
-      mobileLayout() {
-        return this.$store.state.option.mobileLayout
-      },
-      imgExt() {
-        return this.$store.state.option.imgExt
       }
     },
     methods: {
@@ -204,9 +191,10 @@
           }, 0)
         })
       },
-      clipboard() {
+      copyArticleUrl() {
         if (this.article.title) {
-          this.clipboard = new Clipboard(this.$refs.copy_url_btn)
+          // console.log('要复制了', `https://surmon.me/article/${this.article.id}`, this.$root.$copyToClipboard)
+          this.$root.$copyToClipboard(`https://surmon.me/article/${this.article.id}`)
         }
       },
       buildThumb(thumb) {

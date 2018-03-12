@@ -1,5 +1,8 @@
 <template>
   <div id="app" v-cloak>
+    <div id="app-tools">
+      <input type="text" v-model="clipboardText" class="clipboard-input" ref="clipboard">
+    </div>
     <div id="app-aside" v-if="mobileLayout" :class="{ open: mobileSidebar }">
       <mobile-aside :class="{ open: mobileSidebar }"></mobile-aside>
     </div>
@@ -45,6 +48,8 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+  import eventBus from '~/utils/event-bus'
   import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
   import { Background, EmojoRain, Barrage, Webrtc, Header, Footer, Aside, Share, Tool, Nav } from '~/components/layout'
   export default {
@@ -56,12 +61,19 @@
         }
       }
     },
+    data() {
+      return {
+        clipboardText: ''
+      }
+    },
     mounted() {
-      this.watchTabActive()
       // this.watchFullScreen()
+      this.watchTabActive()
       if (!this.mobileLayout) {
         this.$store.dispatch('loadMuiscPlayerList')
       }
+      this.$root.$eventBus = eventBus
+      this.$root.$copyToClipboard = this.copyToClipboard
     },
     components: {
       Webrtc,
@@ -79,26 +91,16 @@
       MobileAside
     },
     computed: {
-      openWebrtc() {
-        return this.$store.state.option.openWebrtc
-      },
-      barrageMounted() {
-        return this.$store.state.option.barrageMounted
-      },
-      fullColumn () {
-        return this.$store.state.option.fullColumn
-      },
-      errorColumn () {
-        return this.$store.state.option.errorColumn
-      },
-      mobileLayout() {
-        return this.$store.state.option.mobileLayout
-      },
-      mobileSidebar() {
-        return this.$store.state.option.mobileSidebar
-      }
+      ...mapState('option', ['openWebrtc', 'barrageMounted', 'fullColumn', 'errorColumn', 'mobileLayout', 'mobileSidebar'])
     },
     methods: {
+      copyToClipboard(text) {
+        this.clipboardText = text
+        setTimeout(() => {
+          this.$refs.clipboard.select()
+          document.execCommand('Copy')
+        })
+      },
       closeMobileSidebar() {
         if (this.mobileLayout) {
           this.$store.commit('option/SET_MOBILE_SIDEBAR', false)
@@ -136,6 +138,12 @@
     &[v-cloak] {
       color: transparent;
       -webkit-text-fill-color: transparent;
+    }
+
+    #app-tools {
+      height: 0px;
+      opacity: 0;
+      // overflow: hidden;
     }
 
     #app-aside {
