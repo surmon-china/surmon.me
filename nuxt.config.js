@@ -118,6 +118,12 @@ module.exports = {
       { name: 'MobileOptimized', content: '320' },
       { name: 'HandheldFriendly', content: 'True' },
       { name: 'apple-mobile-web-app-capable', content: 'yes' },
+      { name: 'apple-mobile-web-app-status-bar-style', content: 'black' },
+      { name: 'apple-mobile-web-app-title', content: 'Surmon.me' },
+      { name: 'apple-touch-icon', content: '/static/icon.png' },
+      { name: 'msapplication-TileImage', content: '/static/icon.png' },
+      { name: 'msapplication-TileColor', content: '#0088f5' },
+      { name: 'format-detection', content: 'telephone=no' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1.0, user-scalable=no' },
       { hid: 'keywords', name: 'keywords', content: 'surmon,马赐崇,司马萌,Vue开发者,前端技术开发,javascript技术' },
       { hid: 'description', name: 'description', content: '凡心所向 素履所往 生如逆旅 一苇以航' }
@@ -139,6 +145,20 @@ module.exports = {
     noscript: [
       { innerHTML: 'This website requires JavaScript.' }
     ]
+  },
+  manifest: {
+    // start_url: '.',
+    name: 'Surmon.me',
+    short_name: 'Surmon',
+    theme_color: '#0088f5',
+    display: 'standalone',
+    background_color: "#eee",
+    description: 'Talk is cheap. Show me the code.',
+    lang: 'zh'
+  },
+  icon: {
+    // iconSrc: '/static/icon.png',
+    sizes: [16, 120, 144, 152, 192, 384, 512]
   },
   modules: [
     '@nuxtjs/pwa',
