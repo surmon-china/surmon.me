@@ -96,9 +96,12 @@
     methods: {
       copyToClipboard(text) {
         this.clipboardText = text
+        // 维护中间量用于给拦截器做标识
+        window.clickCopy = true
         setTimeout(() => {
           this.$refs.clipboard.select()
           document.execCommand('Copy')
+          window.clickCopy = false
         })
       },
       closeMobileSidebar() {
