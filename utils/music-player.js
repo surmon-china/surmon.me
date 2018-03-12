@@ -1,6 +1,6 @@
 
 import howler from '~/plugins/howler'
-import Service from '~/plugins/axios'
+import service from '~/plugins/axios'
 const { Howler, Howl } = howler
 
 export default state => {
@@ -175,7 +175,7 @@ export default state => {
         } else {
           state.playerState.ready = false
           // console.log('请求这首音乐地址', song)
-          Service.get(`/music/url/${song.id}`).then(response => {
+          service.get(`/music/url/${song.id}`).then(response => {
             const success = response.status && 
                             response.data && 
                             Object.is(response.data.code, 1) && 

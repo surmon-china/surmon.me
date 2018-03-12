@@ -238,11 +238,13 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   import marked from '~/plugins/marked'
   import eventBus from '~/utils/event-bus'
   import gravatar from '~/plugins/gravatar'
-  import { uaParse, osParse } from '~/utils/comment-ua-parse'
   import { scrollTo } from '~/utils/scroll-to-anywhere'
+  import { uaParse, osParse } from '~/utils/comment-ua-parse'
+  
   export default {
     name: 'vue-comment',
     data() {
@@ -288,6 +290,11 @@
       }
     },
     computed: {
+      ...mapState({
+        comment: state => state.comment,
+        mobileLayout: state => state.option.mobileLayout,
+        blacklist: state => state.option.globalOption.data.blacklist,
+      }),
       pageLiked() {
         return this.historyLikes.pages.includes(this.postId)
       },
@@ -297,17 +304,8 @@
       isGuestbookPage() {
         return Object.is(this.$route.name, 'guestbook')
       },
-      comment() {
-        return this.$store.state.comment
-      },
       replyCommentSlef() {
         return this.comment.data.data.find(comment => Object.is(comment.id, this.pid))
-      },
-      blacklist() {
-        return this.$store.state.option.globalOption.data.blacklist
-      },
-      mobileLayout() {
-        return this.$store.state.option.mobileLayout
       }
     },
     mounted() {

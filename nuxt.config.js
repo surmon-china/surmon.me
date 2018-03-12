@@ -48,7 +48,6 @@ module.exports = {
       'swiper',
       'marked',
       'gravatar',
-      'clipboard',
       'particles.js',
       'simplewebrtc',
       'socket.io-client'
@@ -93,7 +92,6 @@ module.exports = {
     { src: '~/plugins/marked.js' },
     { src: '~/plugins/gravatar.js' },
     { src: '~/plugins/highlight.js' },
-    { src: '~/plugins/clipboard.js' },
     { src: '~/plugins/ga.js', ssr: false },
     { src: '~/plugins/clmtrackr.js', ssr: false },
     { src: '~/plugins/emoji-233333.js', ssr: false },

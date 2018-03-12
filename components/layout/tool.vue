@@ -48,6 +48,7 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   import { scrollTo, easing } from '~/utils/scroll-to-anywhere'
   const underscore = require('~/utils/underscore-simple')
   export default {
@@ -62,12 +63,10 @@
       }
     },
     computed: {
-      barrageState() {
-        return this.$store.state.option.openBarrage
-      },
-      webrtcState() {
-        return this.$store.state.option.openWebrtc
-      }
+      ...mapState('option', {
+        barrageState: 'openBarrage',
+        webrtcState: 'openWebrtc'
+      })
     },
     methods: {
       totop() {

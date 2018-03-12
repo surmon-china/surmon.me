@@ -79,6 +79,7 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   export default {
     name: 'sitemap',
     head: {
@@ -88,18 +89,12 @@
       return store.dispatch('loadSitemapArticles', { per_page: 500 })
     },
     computed: {
-      articles() {
-        return this.$store.state.sitemap.articles.data.data
-      },
-      categories() {
-        return this.$store.state.category.data.data
-      },
-      tags() {
-        return this.$store.state.tag.data.data
-      },
-      mobileLayout() {
-        return this.$store.state.option.mobileLayout
-      }
+      ...mapState({
+        tags: state => state.tag.data.data,
+        categories: state => state.category.data.data,
+        articles: state => state.sitemap.articles.data.data,
+        mobileLayout: state => state.option.mobileLayout,
+      })
     }
   }
 </script>
