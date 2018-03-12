@@ -38,12 +38,12 @@
         </li>
       </ul>
     </div>
-    <div class="aside-ad" v-if="false">
-      <a href="https://s.click.taobao.com/ZaXp1Rx" 
-         target="_blank" 
-         rel="external nofollow noopener" 
+    <div class="aside-ad">
+      <a href="https://s.click.taobao.com/6JBRDTw"
+         rel="external nofollow noopener"
+         target="_blank"
          class="ad-box">
-        <img src="https://p1.bpimg.com/567571/e85fb6270effc4c7.jpg">
+        <img src="/images/mammon/aliyun-300-100.jpg">
       </a>
     </div>
     <div class="aside-calendar">
@@ -88,6 +88,7 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   import Calendar from './calendar.vue'
   export default {
     name: 'layout-aside',
@@ -105,12 +106,10 @@
       }
     },
     computed: {
-      tag() {
-        return this.$store.state.tag
-      },
-      article() {
-        return this.$store.state.article.hot
-      },
+      ...mapState({
+        tag: state => state.tag,
+        article: state => state.article.hot,
+      }),
       isArticlePage() {
         return this.$route.name === 'article-article_id'
       }
@@ -296,15 +295,19 @@
     }
 
     .aside-ad {
-      padding: .8em;
+      // padding: .8em;
       margin-bottom: 1em;
 
       > .ad-box {
-        opacity: .8;
+        opacity: .88;
+
+        &:hover {
+          opacity: 1;
+        }
 
         img {
           max-width: 100%;
-          border-top: 1px solid #1c4767;
+          // border-top: 1px solid #1c4767;
         }
       }
     }

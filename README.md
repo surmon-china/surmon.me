@@ -121,10 +121,10 @@ $ npm run lint
 - ~~代码检查的优化~~
 - ~~一些代码细节的优化~~
 - ~~播放器的有优化~~
-- 分享的剪切板需重构 去掉库 https://surmon.me/article/80
+- ~~分享的剪切板需重构去掉库https://surmon.me/article/80~~
+- ~~右侧广告的添加~~
 - PWA 的适配 https://pwa.nuxtjs.org/modules/workbox.html
 - i18n 的 适配 https://github.com/nuxt-community/nuxt-i18n
-- 右侧广告的添加
 - graphql-js + RESTful 查询数据库
 
 ## 目录结构

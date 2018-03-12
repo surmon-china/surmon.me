@@ -6,12 +6,12 @@
 </template>
 
 <script>
-  import EventBus from '~/utils/event-bus'
+  import eventBus from '~/utils/event-bus'
   export default {
     name: 'global-emoji-rain',
     computed: {
       emoji233333() {
-        return EventBus.emoji233333
+        return eventBus.emoji233333
       }
     },
     methods: {
@@ -28,8 +28,7 @@
             density: 5,
             staggered: true
           })
-          EventBus.emoji233333 = emoji233333
-          this.$root.$EventBus = EventBus
+          eventBus.emoji233333 = emoji233333
         }
       }
     },

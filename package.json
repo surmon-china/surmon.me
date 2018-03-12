@@ -12,7 +12,6 @@
     "@nuxtjs/pwa": "^2.0.8",
     "axios": "^0.16.2",
     "bezier-easing": "^2.0.3",
-    "clipboard": "^1.7.1",
     "cross-env": "^3.1.4",
     "emoji-233333": "^0.2.2",
     "express": "^4.14.1",

@@ -22,6 +22,7 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   export default {
     name: 'index-carrousel',
     data() {
@@ -51,12 +52,7 @@
       }
     },
     computed: {
-      mobileLayout() {
-        return this.$store.state.option.mobileLayout
-      },
-      imgExt() {
-        return this.$store.state.option.imgExt
-      }
+      ...mapState('option', ['imgExt', 'mobileLayout'])
     },
     methods: {
       buildThumb(thumb) {

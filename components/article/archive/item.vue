@@ -52,18 +52,14 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   export default {
     name: 'article-list-item',
     props: {
       item: Object
     },
     computed: {
-      mobileLayout() {
-        return this.$store.state.option.mobileLayout
-      },
-      imgExt() {
-        return this.$store.state.option.imgExt
-      }
+      ...mapState('option', ['imgExt', 'mobileLayout'])
     },
     methods: {
       buildThumb(thumb) {
