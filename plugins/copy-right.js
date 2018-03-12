@@ -4,7 +4,7 @@
  *
 */
 
-if (process.env.NODE_ENV === 'production') {
+if (process.browser) {
  
   const copyText = () => {
     return [ '',
@@ -17,8 +17,6 @@ if (process.env.NODE_ENV === 'production') {
            ].join('\n')
   }
   
-
-
   // 拼接成html
   const buildText = content => {
     return content + copyText()
@@ -31,9 +29,11 @@ if (process.env.NODE_ENV === 'production') {
 
   document.addEventListener('copy', e => {
     if(!window.getSelection) return
-    const content = window.getSelection().toString()
-    e.clipboardData.setData('text/plain', buildText(content))
-    e.clipboardData.setData('text/html', buildHtml(content))
-    e.preventDefault()
+    if (!window.clickCopy) {
+      const content = window.getSelection().toString()
+      e.clipboardData.setData('text/plain', buildText(content))
+      e.clipboardData.setData('text/html', buildHtml(content))
+      e.preventDefault()
+    }
   })
 }
