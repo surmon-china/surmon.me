@@ -6,7 +6,7 @@ const isProdMode = Object.is(process.env.NODE_ENV, 'production')
 
 module.exports = {
   loading: {
-    color: '#2196f3'
+    color: '#0088f5'
   },
   cache: {
     max: 100,
@@ -133,7 +133,7 @@ module.exports = {
       { rel: 'author', type: 'text/plain', href: '/humans.txt' }
     ],
     script: [
-      { 
+      {
         // async: 'async',
         // defer: 'defer',
         // type: 'text/javascript',
