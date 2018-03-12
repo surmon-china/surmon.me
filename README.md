@@ -123,7 +123,7 @@ $ npm run lint
 - ~~播放器的有优化~~
 - ~~分享的剪切板需重构去掉库https://surmon.me/article/80~~
 - ~~右侧广告的添加~~
-- PWA 的适配 https://pwa.nuxtjs.org/modules/workbox.html
+- ~~PWA的适配https://pwa.nuxtjs.org/modules/workbox.html~~
 - i18n 的 适配 https://github.com/nuxt-community/nuxt-i18n
 - graphql-js + RESTful 查询数据库
 
