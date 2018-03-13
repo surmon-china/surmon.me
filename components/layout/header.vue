@@ -5,7 +5,7 @@
         <div class="navbar-header">
           <img src="/images/logo.svg" class="navbar-logo">
           <span class="navbar-slogan">Talk is cheap. Show me the code</span>
-          <router-link to="/" class="navbar-link"></router-link>
+          <nuxt-link to="/" class="navbar-link"></nuxt-link>
         </div>
         <div class="navbar-player">
           <div class="panel">

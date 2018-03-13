@@ -13,10 +13,10 @@ export const state = () => {
     list: {
       fetching: false,
       data: {
+        data: [],
         pagination: {
           current_page: 0
-        },
-        data: []
+        }
       }
     },
     detail: {
@@ -31,11 +31,9 @@ export const mutations = {
   // List
   CLEAR_LIST(state) {
     state.list.data = {
-      result: {
-        pagination: {
-          current_page: 0
-        },
-        data: []
+      data: [],
+      pagination: {
+        current_page: 0
       }
     }
   },

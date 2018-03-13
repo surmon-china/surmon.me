@@ -25,18 +25,18 @@
         <p class="item">
           <span>本文于</span>
           <span>&nbsp;</span>
-          <router-link :title="buildDateTitle(article.create_at)"
+          <nuxt-link :title="buildDateTitle(article.create_at)"
                        :to="buildDateLink(article.create_at)">
             <span>{{ buildDateTitle(article.create_at) }}</span>
-          </router-link>
+          </nuxt-link>
           <span>&nbsp;发布在&nbsp;</span>
-          <router-link :key="index"
-                       :to="`/category/${category.slug}`"
-                       :title="category.description || category.name"
-                       v-for="(category, index) in article.category">
+          <nuxt-link :key="index"
+                     :to="`/category/${category.slug}`"
+                     :title="category.description || category.name"
+                     v-for="(category, index) in article.category">
             <span>{{ category.name }}</span>
             <span v-if="article.category.length && article.category[index + 1]">、</span>
-          </router-link>
+          </nuxt-link>
           <span v-if="!article.category.length">未知</span>
           <span>&nbsp;分类下，当前已被围观&nbsp;</span>
           <span>{{ article.meta.views || 0 }}</span>
@@ -45,13 +45,13 @@
         <p class="item">
           <span>相关标签：</span>
           <span v-if="!article.tag.length">无相关标签</span>
-          <router-link :key="index"
-                       :to="`/tag/${tag.slug}`"
-                       :title="tag.description || tag.name"
-                       v-for="(tag, index) in article.tag">
+          <nuxt-link :key="index"
+                     :to="`/tag/${tag.slug}`"
+                     :title="tag.description || tag.name"
+                     v-for="(tag, index) in article.tag">
             <span>{{ tag.name }}</span>
             <span v-if="article.tag.length && article.tag[index + 1]">、</span>
-          </router-link>
+          </nuxt-link>
         </p>
         <p class="item">
           <span>永久地址：</span>
@@ -73,12 +73,12 @@
       <div class="article-list swiper" v-swiper:swiper="swiperOption">
         <div class="swiper-wrapper">
           <div class="swiper-slide item" v-for="(article, index) in article.related" :key="index">
-            <router-link :to="`/article/${article.id}`" 
+            <nuxt-link :to="`/article/${article.id}`" 
                          :title="article.title" 
                          class="item-box">
               <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title">
               <span class="title">{{ article.title }}</span>
-            </router-link>
+            </nuxt-link>
           </div>
         </div>
       </div>
@@ -86,11 +86,11 @@
     <div class="related" v-if="article.related && article.related.length && mobileLayout">
       <ul class="article-list">
         <li class="item" v-for="(article, index) in article.related.slice(0, 8)" :key="index">
-          <router-link :to="`/article/${article.id}`" 
+          <nuxt-link :to="`/article/${article.id}`" 
                        :title="article.title + '- [ 继续阅读 ]'" 
                        class="item-link">
             <span class="title">《{{ article.title }}》- [ 继续阅读 ]</span>
-          </router-link>
+          </nuxt-link>
         </li>
       </ul>
     </div>

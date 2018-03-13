@@ -5,12 +5,16 @@
 </template>
 
 <script>
-  import Carrousel from '~/components/article/archive/carrousel'
-  import ArticleList from '~/components/article/archive/list'
+  import Carrousel from '~/components/archive/carrousel'
+  import ArticleList from '~/components/archive/list'
 
   export default {
     name: 'category-article-list',
-    validate ({ params, store }) {
+    components: {
+      Carrousel,
+      ArticleList
+    },
+    validate({ params, store }) {
       return !!params.category_slug && store.state.category.data.data.find(category => {
         return Object.is(category.slug, params.category_slug)
       })
@@ -29,10 +33,6 @@
       if (!this.currentCategory) {
         this.$router.back()
       }
-    },
-    components: {
-      Carrousel,
-      ArticleList
     },
     computed: {
       article() {

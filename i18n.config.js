@@ -2,35 +2,34 @@
 module.exports = {
   locales: [
     {
+      code: 'zh',
+      iso: 'zh-CN',
+      name: '简体中文'
+    },
+    {
       code: 'en',
       iso: 'en-US',
       name: 'English'
-    },
-    {
-      code: 'fr',
-      iso: 'fr-FR',
-      name: 'Français'
     }
   ],
-  defaultLocale: 'en',
+  defaultLocale: 'zh',
+  redirectRootToLocale: 'zh',
+  detectBrowserLanguage: true,
   noPrefixDefaultLocale: true,
-  redirectRootToLocale: 'en',
   vueI18n: {
+    fallbackLocale: 'zh',
     messages: {
-      fr: {
-        home: 'Accueil',
-        about: 'À propos',
-        category: 'Catégorie'
+      zh: {
+        home: '主页',
+        about: '众里寻他',
       },
       en: {
-        home: 'Homepage',
-        about: 'About us',
-        category: 'Category'
-      }
+        home: 'Home',
+        about: 'About',
+      },
     },
-    fallbackLocale: 'en'
   },
-  ignorePaths: [
-    '/fr/notlocalized'
-  ]
+  // ignorePaths: [
+  //   '/en/notlocalized'
+  // ]
 }
