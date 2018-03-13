@@ -1,49 +1,50 @@
 <template>
-  <div class="article-list-item" @click="toDetail">
+  <div class="article-list-item">
     <div class="item-content" :class="{ mobile: mobileLayout }">
       <div class="item-thumb" v-if="!mobileLayout">
-        <router-link :to="`/article/${item.id}`">
+        <nuxt-link :to="`/article/${article.id}`">
           <img class="item-thumb-img" 
-               :src="buildThumb(item.thumb)"
-               :alt="item.title"
-               :title="item.title">
-        </router-link>
+               :src="buildThumb(article.thumb)"
+               :alt="article.title"
+               :title="article.title">
+        </nuxt-link>
       </div>
       <div class="item-body">
         <h4 class="item-title">
-          <router-link :to="`/article/${item.id}`" :title="item.title">{{ item.title }}</router-link>
+          <nuxt-link :to="`/article/${article.id}`" :title="article.title">{{ article.title }}</nuxt-link>
         </h4>
-        <p class="item-description" style="-webkit-box-orient: vertical;" v-html="item.description"></p>
+        <p class="item-description" style="-webkit-box-orient: vertical;" v-html="article.description"></p>
         <div class="item-meta">
           <span class="date">
             <i class="iconfont icon-clock"></i>
-            <span>{{ item.create_at | toYMD }}</span>
+            <span>{{ article.create_at | toYMD }}</span>
           </span>
           <span class="views">
             <i class="iconfont icon-eye"></i>
-            <span>{{ item.meta.views || 0 }}</span>
+            <span>{{ article.meta.views || 0 }}</span>
           </span>
           <span class="comments">
             <i class="iconfont icon-comment"></i>
-            <span>{{ item.meta.comments || 0 }}</span>
+            <span>{{ article.meta.comments || 0 }}</span>
           </span>
           <span class="likes">
             <i class="iconfont icon-like"></i>
-            <span>{{ item.meta.likes || 0 }}</span>
+            <span>{{ article.meta.likes || 0 }}</span>
           </span>
           <span class="categories">
             <i class="iconfont icon-list"></i>
-            <span v-if="!item.category.length">未分类</span>
-            <router-link :key="index"
-                         :to="`/category/${category.slug}`" 
-                         v-for="(category, index) in item.category">{{ category.name }}</router-link>
+            <nuxt-link :key="index"
+                         :to="`/category/${category.slug}`"
+                         v-if="article.category && article.category.length"
+                         v-for="(category, index) in article.category">{{ category.name }}</nuxt-link>
+            <span v-else>未分类</span>
           </span>
           <span class="tags" v-show="false">
             <i class="iconfont icon-tag"></i>
-            <span v-if="!item.tag.length">无</span>
-            <router-link :key="index" 
+            <span v-if="!article.tag.length">无</span>
+            <nuxt-link :key="index" 
                          :to="`/tag/${tag.slug}`" 
-                         v-for="(tag, index) in item.tag">{{ tag.name }}</router-link>
+                         v-for="(tag, index) in article.tag">{{ tag.name }}</nuxt-link>
           </span>
         </div>
       </div>
@@ -56,7 +57,7 @@
   export default {
     name: 'article-list-item',
     props: {
-      item: Object
+      article: Object
     },
     computed: {
       ...mapState('option', ['imgExt', 'mobileLayout'])
@@ -65,17 +66,12 @@
       buildThumb(thumb) {
         if (!thumb) return `${this.cdnUrl}/images/thumb-article.jpg`
         return `${thumb}?imageView2/1/w/350/h/238/format/${this.imgExt}/interlace/1/q/75|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/460/fill/I0ZGRkZGRg==/dissolve/23/gravity/SouthWest/dx/15/dy/7|imageslim`
-      },
-      toDetail() {
-        if (this.mobileLayout) {
-          this.$router.push(`/article/${this.item.id}`)
-        }
       }
     }
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .article-list-item {
     margin-bottom: 1em;
     background-color: $module-bg;

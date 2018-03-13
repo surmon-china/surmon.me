@@ -3,7 +3,7 @@
 
     <!-- 列表头 -->
     <transition name="module">
-      <div class="article-list-header" v-if="!Object.is($route.name, 'index')">
+      <div class="article-list-header" v-if="!$route.name.includes('index')">
         <list-header></list-header>
       </div>
     </transition>
@@ -11,12 +11,15 @@
     <!-- 列表 -->
     <div class="article-list">
       <transition name="module" mode="out-in">
-        <empty-box class="article-empty-box" v-if="!article.fetching && !article.data.data.length">
+        <transition-group name="fade" tag="div" v-if="article.data.data && article.data.data.length">
+          <list-item :key="index"
+                     :article="item"
+                     @click.native="toDetail(item)"
+                     v-for="(item, index) in article.data.data"></list-item>
+        </transition-group>
+        <empty-box class="article-empty-box" v-else>
           <slot>No Result Article.</slot>
         </empty-box>
-        <transition-group name="fade" tag="div" v-else>
-          <list-item v-for="(item, index) in article.data.data" :item="item" :key="index"></list-item>
-        </transition-group>
       </transition>
     </div>
 
@@ -47,10 +50,20 @@
       }
     },
     computed: {
+      mobileLayout() {
+        return this.$store.state.option.mobileLayout
+      },
       canLoadMore() {
         const { current_page, total_page } = this.article.data.pagination
         const hasArticles = this.article.data.pagination
         return hasArticles ? (current_page < total_page) : false
+      }
+    },
+    methods: {
+      toDetail(article) {
+        if (this.mobileLayout) {
+          this.$router.push(`/article/${article.id}`)
+        }
       }
     }
   }

@@ -152,10 +152,10 @@
               <iframe src="/partials/map.html" style="width: 100%; height: 236px;"></iframe>
             </div>
             <div class="about-project">
-              <router-link to="/project" class="project-link">
+              <nuxt-link to="/project" class="project-link">
                 <p class="title">Get More Project</p>
                 <p class="item">了解更多关于我的开源项目的进展</p>
-              </router-link>
+              </nuxt-link>
             </div>
           </div>
         </div>

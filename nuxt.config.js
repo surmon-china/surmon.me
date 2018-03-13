@@ -162,7 +162,7 @@ module.exports = {
   },
   modules: [
     '@nuxtjs/pwa',
-    // ['nuxt-i18n', i18nConfig],
+    // ['nuxt-i18n', i18nConfig]
   ],
   router: {
     middleware: ['change-page-col'],

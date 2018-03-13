@@ -7,11 +7,11 @@
         <a class="sitemap-btn" href="/sitemap.xml" target="_blank">SITEMAP.XML</a>
         <span> &nbsp; </span>
         <span>Powered By </span>
-        <router-link to="/project">NodePress</router-link>
+        <nuxt-link to="/project">NodePress</nuxt-link>
         <span>、</span>
-        <router-link to="/project">Nuxt.js</router-link>
+        <nuxt-link to="/project">Nuxt.js</nuxt-link>
         <span> and solitarily. &nbsp; Designed By </span>
-        <router-link to="/about">Me</router-link>
+        <nuxt-link to="/about">Me</nuxt-link>
       </div>
     </div>
   </footer>
