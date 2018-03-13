@@ -1,29 +1,36 @@
 
-const fs = require('fs')
+// const fs = require('fs')
+const path = require('path')
+const fs = require('fs-extra')
 
 // extend
 const underscore = require('../utils/underscore-simple')
 
+// file
+const dataPath = path.join(__dirname, '..', 'data/')
+const dataFile = dataPath + 'barrages.json'
+const defaultFile = dataPath + 'barrages.default.json'
+
 // init
-const defaultBarrages = require('../data/barrages.default.json') || []
-const barrages = require('../data/barrages.json') || []
+fs.ensureFileSync(dataFile)
+fs.ensureFileSync(defaultFile)
+const barrages = fs.readJsonSync(dataFile, { throws: false }) || []
+const defaultBarrages = fs.readJsonSync(defaultFile, { throws: false }) || []
 if (!barrages.length) {
   barrages.push(...defaultBarrages)
 }
 
 // 更新本地文件数据
 const updateLocalBarragesFile = () => {
-  fs.writeFile('../data/barrages.json', JSON.stringify(barrages), err => {
-    if (err) {
-      console.log('最新弹幕记录保存失败', err)
-    } else {
-      // console.log('最新聊天记录保存成功!')
-    }
+  fs.outputJson(dataFile, barrages).then(() => {
+    // console.log('最新聊天记录保存成功!')
+  }).catch(err => {
+    console.log('最新弹幕记录保存失败', err)
   })
 }
 
 // 30秒为一个周期，保存一次最新弹幕记录
-const updateDebounce = underscore.debounce(updateLocalBarragesFile, 1000 * 30)
+const updateDebounce = underscore.debounce(updateLocalBarragesFile, 1000)
 let socketClients = 0
 
 const barrageServer = io => {
