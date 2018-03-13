@@ -14,9 +14,9 @@
         <button class="search-btn" @click="toSearch">
           <i class="iconfont icon-search"></i>
         </button>
-        <router-link to="/sitemap" class="sitemap-btn">
+        <nuxt-link to="/sitemap" class="sitemap-btn">
           <i class="iconfont icon-sitemap"></i>
-        </router-link>
+        </nuxt-link>
       </div>
     </div>
     <div class="aside-article">
@@ -30,11 +30,11 @@
       <ul class="aside-article-list" v-else-if="!article.fetching && article.data.data.length">
         <li class="item" :key="item.id" v-for="item in article.data.data.slice(0, 10)">
           <span class="index"></span>
-          <router-link class="title" 
+          <nuxt-link class="title" 
                        :title="`${item.title} - [ ${item.meta.comments} 条评论  |  ${item.meta.likes} 人喜欢 ]`"
                        :to="`/article/${item.id}`">
             <span>{{ item.title }}</span>
-          </router-link>
+          </nuxt-link>
         </li>
       </ul>
     </div>
@@ -55,7 +55,7 @@
           <slot>No Result Tags.</slot>
         </empty-box>
         <ul class="aside-tag-list" v-else-if="!tag.fetching && tag.data.data.length">
-          <router-link tag="li"
+          <nuxt-link tag="li"
                        class="item"
                        :key="index"
                        :to="`/tag/${item.slug}`"
@@ -68,7 +68,7 @@
               <span>{{ item.name }}</span>
               <span>({{ item.count || 0 }})</span>
             </a>
-          </router-link>
+          </nuxt-link>
         </ul>
       </div>
       <div class="aside-tools" v-if="isArticlePage">

@@ -7,9 +7,9 @@
         <ul class="article-list" v-else>
           <li class="item" v-for="(article, index) in articles">
             <p class="item-content">
-              <router-link class="link"
+              <nuxt-link class="link"
                            :to="`/article/${article.id}`"
-                           :title="article.title">《{{ article.title }}》</router-link>
+                           :title="article.title">《{{ article.title }}》</nuxt-link>
               <span class="sign">&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;</span>
               <a class="toggle" href="" @click.prevent="$store.commit('sitemap/TOGGLE_ARTICLE_OPEN', index)">
                 <span>{{ article.open ? '收起' : '展开' }}描述</span>
@@ -30,9 +30,9 @@
         <ul class="categories-list" v-else>
           <li class="item" v-for="(category, index) in categories">
             <p>
-              <router-link class="name"
+              <nuxt-link class="name"
                            :to="`/category/${category.slug}`"
-                           :title="category.name">{{ category.name }}</router-link>
+                           :title="category.name">{{ category.name }}</nuxt-link>
               <span>&nbsp;</span>
               <span>（{{ category.count || 0 }}）</span>
               <span>&nbsp;-&nbsp;&nbsp;</span>
@@ -47,7 +47,7 @@
         <p v-if="!tags.length">暂无标签</p>
         <ul class="tag-list" v-else>
           <li class="item" v-for="tag in tags">
-            <router-link :to="`/tag/${tag.slug}`" :title="tag.description">{{ tag.name }}</router-link>
+            <nuxt-link :to="`/tag/${tag.slug}`" :title="tag.description">{{ tag.name }}</nuxt-link>
             <span>&nbsp;</span>
             <span>（{{ tag.count || 0 }}）</span>
           </li>
@@ -58,16 +58,16 @@
         <h3 class="title">pages</h3>
         <ul class="page-list">
           <li class="item">
-            <router-link to="/">Home</router-link>
+            <nuxt-link to="/">Home</nuxt-link>
           </li>
           <li class="item">
-            <router-link to="/project">Project</router-link>
+            <nuxt-link to="/project">Project</nuxt-link>
           </li>
           <li class="item">
-            <router-link to="/about">About</router-link>
+            <nuxt-link to="/about">About</nuxt-link>
           </li>
           <li class="item">
-            <router-link to="/guestbook">Guestbook</router-link>
+            <nuxt-link to="/guestbook">Guestbook</nuxt-link>
           </li>
           <li class="item">
             <a href="/sitemap.xml" target="_blank">XML SiteMap</a>

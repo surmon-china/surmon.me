@@ -209,6 +209,9 @@ export const actions = {
 
   // 获取文章列表
   loadArticles({ commit }, params = { page: 1 }) {
+    if (Object.is(params.page, 1)) {
+      commit('article/CLEAR_LIST')
+    }
     commit('article/REQUEST_LIST')
     return service.get('/article', { params })
     .then(response => {

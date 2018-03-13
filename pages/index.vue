@@ -8,12 +8,12 @@
 
 <script>
   import Service from '~/plugins/axios'
-  import ArticleList from '~/components/article/archive/list'
-  import Carrousel from '~/components/article/archive/carrousel'
-  import Announcement from '~/components/article/archive/announcement'
+  import ArticleList from '~/components/archive/list'
+  import Carrousel from '~/components/archive/carrousel'
+  import Announcement from '~/components/archive/announcement'
   export default {
     name: 'index',
-    fetch ({ store }) {
+    fetch({ store }) {
       return Promise.all([
         store.dispatch('loadArticles'),
         store.dispatch('loadAnnouncements')
