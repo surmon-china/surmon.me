@@ -30,7 +30,7 @@ const updateLocalBarragesFile = () => {
 }
 
 // 30秒为一个周期，保存一次最新弹幕记录
-const updateDebounce = underscore.debounce(updateLocalBarragesFile, 1000)
+const updateDebounce = underscore.debounce(updateLocalBarragesFile, 1000 * 30)
 let socketClients = 0
 
 const barrageServer = io => {
