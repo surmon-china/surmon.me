@@ -16,12 +16,27 @@ module.exports = {
     // analyze: true,
     // 设置 cdn 地址
     publicPath: apiConfig.cdnUrl + '/_nuxt/',
+    postcss: {
+      plugins: {
+        'postcss-custom-properties': {
+          warnings: false
+        }
+      }
+    },
     // 对webpack的扩展
-    extend(webpackConfig) {
+    extend(webpackConfig, { isClient }) {
       // 处理 Swiper4 下的 dom7 模块的语法问题
       webpackConfig.resolve.alias['swiper$'] = 'swiper/dist/js/swiper.js'
       webpackConfig.resolve.alias['dom7$'] = 'dom7/dist/dom7.js'
-      // console.log('webpackConfig', webpackConfig)
+      console.log('webpackConfig', webpackConfig)
+      if (isClient) {
+        webpackConfig.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: [/(node_modules)/, /underscore-simple/, /webrtc/]
+        })
+      }
       if (isProdMode) {
         const vueLoader = webpackConfig.module.rules.find(loader => loader.loader === 'vue-loader')
         if (vueLoader) {
@@ -64,14 +79,7 @@ module.exports = {
     },
     // Run ESLINT on save
     extend(config, ctx) {
-      if (ctx.isClient) {
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: [/(node_modules)/, /underscore-simple/, /webrtc/]
-        })
-      }
+      
     },
     styleResources: {
       scss: './assets/sass/init.scss',

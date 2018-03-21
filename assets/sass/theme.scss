@@ -1,0 +1,27 @@
+
+
+#app {
+
+  &.default {
+
+    $primary: #0088f5;
+    $text: #555;
+
+    --body-bg: #eee;
+    --module-bg: rgba(255, 255, 255, 0.6);
+    --module-hover-bg: rgba(197, 197, 197, 0.5);
+    --module-hover-bg-opacity-9: rgba(197, 197, 197, 0.9); // 0.2
+
+    --primary-color: $primary;
+    --primary-opacity-9-color: rgba($primary, 0.9);
+    --primary-opacity-5-color: rgba($primary, 0.5);
+
+    --text-color: $text;
+    --text-secondary: rgba(0, 0, 0, .54);
+    --text-disabled: rgba(0, 0, 0, .38);
+    --text-dividers: rgba(0, 0, 0, .26);
+
+    --link-color: $text;
+    --link-hover-color: darken($text, 20%);
+  }
+}

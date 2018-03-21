@@ -114,7 +114,7 @@
           height: auto;
           min-height: 8.5em;
           border-color: transparent;
-          background-color: #c0c0c0;
+          background-color: $module-hover-bg;
           @include css3-prefix(opacity, 1);
           @include css3-prefix(transform, translateX(0));
         }
@@ -147,25 +147,25 @@
         }
 
         > .item-description {
-          font-size: .9em;
+          height: 5em;
           margin: 0;
           margin-bottom: 0.3em;
-          height: 5em;
-          line-height: 1.8em;
           overflow: hidden;
+          font-size: .9em;
+          line-height: 1.8em;
           text-overflow: ellipsis;
           @include clamp(3);
         }
 
         > .item-meta {
-          font-size: .9em;
           height: 2em;
-          line-height: 2em;
           display: flex;
           justify-content: flex-start;
           align-items: baseline;
-          white-space: nowrap;
           overflow: hidden;
+          font-size: .9em;
+          line-height: 2em;
+          white-space: nowrap;
           text-overflow: ellipsis;
           word-wrap: normal;
 

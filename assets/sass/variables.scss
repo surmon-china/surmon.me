@@ -1,11 +1,39 @@
-// Container
-$container-width: 75em;
-$header-height: 4.5em;
-$mobile-container-width: 100%;
-$body-bg: #eee;
-$module-bg: rgba(255,255,255,0.6);
-$module-hover-bg: rgba(197,197,197,0.4);
 
+// PC Theme Color
+$body-bg: var(--body-bg);
+$module-bg: var(--module-bg);
+$module-hover-bg: var(--module-hover-bg);
+$module-hover-bg-opacity-9: var(--module-hover-bg-opacity-9);
+
+$primary: var(--primary-color);
+$primary-opacity-9: var(--primary-opacity-9-color);
+$primary-opacity-5: var(--primary-opacity-5-color);
+
+// Text
+$text: var(--text-color);
+$secondary: var(--text-secondary);
+$disabled: var(--text-disabled);
+$dividers: var(--text-dividers);
+
+// Links
+$link-color: var(--link-color);
+$link-hover-color: var(--link-hover-color);
+
+// ------------------------------
+
+// Colors
+$accent: #64ffda;
+$red: #f44336;
+$yellow: #ffeb3b;
+$grey: #efefef;
+$white: #fff;
+$black: #000;
+$black-light: #555;
+
+// Container
+$header-height: 4.5em;
+$container-width: 75em;
+$mobile-container-width: 100%;
 
 // Mobile
 $mobile-aside-bg: #34393d;
@@ -27,26 +55,6 @@ $trans: .3s;
 // Breakpoints
 $small-breakpoint: 400px;
 $large-breakpoint: $container-width;
-
-// Colors
-$primary: #0088f5;
-$accent: #64ffda;
-$red: #f44336;
-$yellow: #ffeb3b;
-$grey: #efefef;
-$white: #fff;
-$black: #000;
-$black-light: #555;
-
-// Text
-$text: $black-light;
-$secondary: rgba(0, 0, 0, .54);
-$disabled: rgba(0, 0, 0, .38);
-$dividers: rgba(0, 0, 0, .26);
-
-// Links
-$link-color: $text;
-$link-hover-color: darken($link-color, 20%);
 
 // Font
 $sans-serif: DINRegular, -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", "微软雅黑", sans-serif;

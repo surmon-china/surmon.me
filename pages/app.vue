@@ -169,7 +169,7 @@
 
             &:hover {
               color: $white;
-              background-color: rgba($primary, 0.9);
+              background-color: $primary-opacity-9;
             }
           }
         }
