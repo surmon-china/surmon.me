@@ -349,7 +349,7 @@
           margin: 0 auto;
           width: 42rem;
           height: 4rem;
-          background-color: rgba($module-bg, .7);
+          // background-color: rgba($module-bg, .7);
 
           > .count {
             width: auto;
@@ -357,14 +357,14 @@
             height: 4rem;
             line-height: 4rem;
             text-align: center;
-            border-left: 1px dashed darken($module-bg, 10%);
+            // border-left: 1px dashed darken($module-bg, 10%);
           }
 
           > .size,
           > .color {
             width: 7rem;
             position: relative;
-            border-right: 1px dashed darken($module-bg, 10%);
+            // border-right: 1px dashed darken($module-bg, 10%);
 
             &:hover {
 
@@ -403,7 +403,7 @@
                 cursor: pointer;
 
                 &:hover {
-                  background-color: rgba($module-bg, .7);
+                  // background-color: rgba($module-bg, .7);
                 }
               }
             }
@@ -414,11 +414,11 @@
             margin: 0 auto;
             flex-grow: 1;
             padding: 1rem;
-            background-color: rgba($module-bg, .3);
+            // background-color: rgba($module-bg, .3);
 
             &:hover,
             &:focus {
-              background-color: rgba($module-bg, .5);
+              // background-color: rgba($module-bg, .5);
               animation: inputColor 10s infinite;
             }
           }

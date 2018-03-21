@@ -198,7 +198,7 @@
           float: left;
 
           &:hover {
-            background-color: darken($module-hover-bg, 20%);
+            // background-color: darken($module-hover-bg, 20%);
           }
         }
 
@@ -210,10 +210,10 @@
 
         > .search-btn {
           width: 2em;
-          background-color: darken($module-hover-bg, 20%);
+          // background-color: darken($module-hover-bg, 20%);
 
           &:hover {
-            background-color: darken($module-hover-bg, 40%);
+            // background-color: darken($module-hover-bg, 40%);
           }
         }
 
@@ -375,7 +375,7 @@
             background-color: $module-hover-bg;
 
             &:hover {
-              background-color: darken($module-hover-bg, 40%);
+              // background-color: darken($module-hover-bg, 40%);
             }
 
             &:last-child {
