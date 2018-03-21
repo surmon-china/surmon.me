@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-cloak>
+  <div id="app" class="default" v-cloak>
     <div id="app-tools">
       <input type="text" v-model="clipboardText" class="clipboard-input" ref="clipboard">
     </div>
@@ -134,8 +134,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~assets/sass/mixins';
-  @import '~assets/sass/variables';
   #app {
 
     &[v-cloak] {

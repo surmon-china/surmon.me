@@ -110,10 +110,10 @@
 
   export default {
     name: 'article-detail',
-    validate ({ params, store }) {
+    validate({ params, store }) {
       return params.article_id && !isNaN(Number(params.article_id))
     },
-    fetch ({ store, params, error }) {
+    fetch({ store, params, error }) {
       return store.dispatch('loadArticleDetail', params).catch(err => {
         error({ statusCode: 404, message: '众里寻他 我已不再' })
       })

@@ -546,7 +546,7 @@
         justify-content: center;
         position: relative;
         background-color: $module-bg;
-        border: .666rem solid rgba($module-bg, .2);
+        // border: .666rem solid rgba($module-bg, .2);
         overflow-y: hidden;
 
         &.local {
@@ -697,11 +697,11 @@
             background-color: $module-bg;
 
             &:hover {
-              background-color: rgba($module-bg, .8);
+              // background-color: rgba($module-bg, .8);
             }
 
             &.active {
-              background-color: rgba($module-bg, .9);
+              // background-color: rgba($module-bg, .9);
             }
           }
 
@@ -753,7 +753,7 @@
                 cursor: pointer;
 
                 &:hover {
-                  background-color: rgba($module-bg, .8);
+                  // background-color: rgba($module-bg, .8);
                 }
               }
             }

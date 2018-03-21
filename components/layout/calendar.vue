@@ -145,7 +145,7 @@
             cursor: pointer;
 
             &:hover {
-              background-color: darken($module-hover-bg, 15%);
+              // background-color: darken($module-hover-bg, 15%);
             }
 
             &.prev {
@@ -208,7 +208,7 @@
           }
 
           &:hover {
-            background-color: lighten($module-hover-bg, 10%);
+            // background-color: lighten($module-hover-bg, 10%);
           }
 
           &.active {

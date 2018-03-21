@@ -70,7 +70,7 @@
     left: 0;
     width: 100%;
     height: $navbar-height;
-    background-color: rgba($module-bg, .9);
+    // background-color: rgba($module-bg, .9);
     z-index: 999;
 
     .search {

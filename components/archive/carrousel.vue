@@ -105,7 +105,7 @@
             top: 1.5rem;
             right: 2rem;
             color: #333;
-            background-color: rgba($module-hover-bg, .5);
+            background-color: $module-hover-bg;
             margin: 0;
             padding: 0 .5em;
             height: 2em;
@@ -117,7 +117,7 @@
 
             &:hover {
               color: #000;
-              background-color: rgba($module-hover-bg, .9);
+              background-color: $module-hover-bg-opacity-9;
             }
           }
         }
