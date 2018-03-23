@@ -129,7 +129,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~assets/sass/variables';
   .global-background {
     position: fixed;
     width: 100%;
@@ -137,7 +136,7 @@
     top: 0;
     left: 0;
     z-index: -1;
-    background-color: #eee;
+    background-color: $body-bg;
 
     .background-image {
       position: absolute;

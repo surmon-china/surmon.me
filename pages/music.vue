@@ -250,7 +250,7 @@
             }
 
             > .iconfont {
-              color: #fff;
+              color: $text-reversal;
               font-size: 3em;
             }
           }

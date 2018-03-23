@@ -155,7 +155,7 @@ a {
         width: calc((100% - (.445em * 11)) / 12);
         height: 2.2em;
         line-height: 2.3em;
-        background-color: #eee;
+        background-color: $body-bg;
         margin-right: .445em;
 
         > .iconfont {
