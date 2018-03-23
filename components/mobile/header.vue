@@ -63,7 +63,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~assets/sass/variables';
   header {
     position: fixed;
     top: 0;
