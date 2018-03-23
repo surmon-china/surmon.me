@@ -28,8 +28,9 @@ module.exports = {
       // 处理 Swiper4 下的 dom7 模块的语法问题
       webpackConfig.resolve.alias['swiper$'] = 'swiper/dist/js/swiper.js'
       webpackConfig.resolve.alias['dom7$'] = 'dom7/dist/dom7.js'
-      console.log('webpackConfig', webpackConfig)
+      // console.log('webpackConfig', webpackConfig)
       if (isClient) {
+        // Run ESLINT on save
         webpackConfig.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
@@ -76,10 +77,6 @@ module.exports = {
         'transform-runtime'
       ],
       comments: true
-    },
-    // Run ESLINT on save
-    extend(config, ctx) {
-      
     },
     styleResources: {
       scss: './assets/sass/init.scss',
