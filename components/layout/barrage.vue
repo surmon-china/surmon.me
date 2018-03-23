@@ -227,7 +227,6 @@
 </style>
 
 <style lang="scss" scoped>
-  @import '~assets/sass/variables';
 
   @keyframes barrage-in {
     0%  { transform: translate3d(0, -100%, 0) }
@@ -273,8 +272,7 @@
     animation-duration: .5s; 
     animation-fill-mode: both; 
     animation-name: barrage-out;
-    background-color: #b7b7b7c4;
-    background-color: rgba(183, 183, 183, 0.7);
+    background-color: $module-hover-bg-darken-20;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     perspective: 1000;
@@ -349,7 +347,7 @@
           margin: 0 auto;
           width: 42rem;
           height: 4rem;
-          // background-color: rgba($module-bg, .7);
+          background-color: $module-bg-opacity-8;
 
           > .count {
             width: auto;
@@ -392,7 +390,7 @@
               left: 0;
               width: 100%;
               height: auto;
-              background-color: $module-bg;
+              background-color: $module-bg-opacity-8;
               visibility: hidden;
               opacity: 0;
 
@@ -403,7 +401,7 @@
                 cursor: pointer;
 
                 &:hover {
-                  // background-color: rgba($module-bg, .7);
+                  background-color: $module-bg-opacity-8;
                 }
               }
             }
@@ -414,12 +412,12 @@
             margin: 0 auto;
             flex-grow: 1;
             padding: 1rem;
-            // background-color: rgba($module-bg, .3);
+            background-color: $module-bg-opacity-5;
 
             &:hover,
             &:focus {
-              // background-color: rgba($module-bg, .5);
-              animation: inputColor 10s infinite;
+              background-color: $module-bg-opacity-9;
+              animation: inputColor steps(1) .6s infinite;
             }
           }
         }

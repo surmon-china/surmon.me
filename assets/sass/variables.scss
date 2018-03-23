@@ -1,10 +1,16 @@
 
 // PC Theme Color
 $body-bg: var(--body-bg);
+
 $module-bg: var(--module-bg);
+$module-bg-opacity-5: var(--module-bg-opacity-5);
+$module-bg-opacity-8: var(--module-bg-opacity-8);
+$module-bg-opacity-9: var(--module-bg-opacity-9);
+
 $module-hover-bg: var(--module-hover-bg);
-$module-hover-bg-opacity-9: var(--module-hover-bg-opacity-9);
 $module-hover-bg-opaqueness: var(--module-hover-bg-opaqueness);
+$module-hover-bg-opacity-3: var(--module-hover-bg-opacity-3);
+$module-hover-bg-opacity-9: var(--module-hover-bg-opacity-9);
 $module-hover-bg-darken-10: var(--module-hover-bg-darken-10);
 $module-hover-bg-darken-20: var(--module-hover-bg-darken-20);
 $module-hover-bg-darken-40: var(--module-hover-bg-darken-40);
@@ -17,11 +23,13 @@ $primary-opacity-5: var(--primary-opacity-5-color);
 $text: var(--text-color);
 $text-dark: var(--text-dark);
 $text-darken: var(--text-darken);
+$text-light: var(--text-light);
 $secondary: var(--text-secondary);
 $disabled: var(--text-disabled);
 $dividers: var(--text-dividers);
 
 $white: var(--text-reversal);
+$text-reversal: var(--text-reversal);
 
 // Links
 $link-color: var(--link-color);

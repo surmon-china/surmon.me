@@ -521,7 +521,7 @@
     left: 0;
     z-index: 8;
     padding-top: $header-height * 2;
-    background-color: rgba(183, 183, 183, 0.7);
+    background-color: $module-hover-bg-darken-20;
 
     > .webrtc-box {
       position: relative;
@@ -546,7 +546,7 @@
         justify-content: center;
         position: relative;
         background-color: $module-bg;
-        // border: .666rem solid rgba($module-bg, .2);
+        border: .666rem solid $module-bg-opacity-5;
         overflow-y: hidden;
 
         &.local {
@@ -657,7 +657,7 @@
           z-index: -1;
 
           > .text {
-            color: #676767;
+            color: $secondary;
           }
         }
 
@@ -697,11 +697,11 @@
             background-color: $module-bg;
 
             &:hover {
-              // background-color: rgba($module-bg, .8);
+              background-color: $module-bg-opacity-8;
             }
 
             &.active {
-              // background-color: rgba($module-bg, .9);
+              background-color: $module-bg-opacity-9;
             }
           }
 
@@ -718,8 +718,8 @@
             width: auto;
             padding: 0 1rem;
             margin: 0;
-            position: relative;
             float: right;
+            position: relative;
             display: inline-block;
 
             &:hover {
@@ -753,7 +753,7 @@
                 cursor: pointer;
 
                 &:hover {
-                  // background-color: rgba($module-bg, .8);
+                  background-color: $module-bg-opacity-8;
                 }
               }
             }

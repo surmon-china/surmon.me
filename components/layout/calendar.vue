@@ -116,7 +116,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~assets/sass/variables';
   .calendar-box {
     min-height: 17em;
 
@@ -145,7 +144,7 @@
             cursor: pointer;
 
             &:hover {
-              // background-color: darken($module-hover-bg, 15%);
+              background-color: $module-hover-bg-darken-10;
             }
 
             &.prev {
@@ -208,7 +207,7 @@
           }
 
           &:hover {
-            // background-color: lighten($module-hover-bg, 10%);
+            background-color: $module-hover-bg-opacity-3;
           }
 
           &.active {

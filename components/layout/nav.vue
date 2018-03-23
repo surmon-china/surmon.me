@@ -73,7 +73,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~assets/sass/variables';
   .aside-nav {
     position: fixed;
     display: inline-block;
@@ -96,7 +95,7 @@
         text-transform: uppercase;
         font-weight: 700;
         border-radius: 1px;
-        color: #777;
+        color: $secondary;
         font-family: DINRegular, CenturyGothic;
         margin-bottom: .5em;
 
@@ -108,12 +107,12 @@
           height: 5rem;
           line-height: 5rem;
           margin: 0;
-          border-bottom: 1px dashed #d6d6d6;
+          border-bottom: 1px dashed $module-hover-bg;
         }
 
         &.taobao {
           color: #ff5000;
-          border-top: 1px dashed #d6d6d6;
+          border-top: 1px dashed $module-hover-bg;
 
           > .iconfont {
             color: #ff5000;
@@ -134,7 +133,6 @@
         }
 
         &.link-active {
-          background-color: #eee;
           font-weight: bold;
           color: $primary;
           background-color: $module-bg;
