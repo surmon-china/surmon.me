@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="default" v-cloak>
+  <div id="app" :class="theme" v-cloak>
     <div id="app-tools">
       <input type="text" v-model="clipboardText" class="clipboard-input" ref="clipboard">
     </div>
@@ -15,6 +15,7 @@
       </transition>
       <header-view v-if="!mobileLayout"></header-view>
       <mobile-header v-if="mobileLayout"></mobile-header>
+      <theme-view v-if="!mobileLayout" @theme="setTheme"></theme-view>
       <main id="main" :class="{ 'mobile': mobileLayout, [$route.name]: true }">
         <transition name="module">
           <keep-alive>
@@ -51,7 +52,7 @@
   import { mapState } from 'vuex'
   import eventBus from '~/utils/event-bus'
   import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
-  import { Background, EmojoRain, Barrage, Webrtc, Header, Footer, Aside, Share, Tool, Nav } from '~/components/layout'
+  import { Background, EmojoRain, Barrage, Webrtc, Header, Footer, Aside, Share, Theme, Tool, Nav } from '~/components/layout'
   export default {
     name: 'app',
     head() {
@@ -63,7 +64,8 @@
     },
     data() {
       return {
-        clipboardText: ''
+        theme: 'default',
+        clipboardText: '',
       }
     },
     mounted() {
@@ -84,6 +86,7 @@
       FooterView: Footer,
       AsideView: Aside,
       ShareView: Share,
+      ThemeView: Theme,
       ToolView: Tool,
       NavView: Nav,
       MobileHeader,
@@ -94,6 +97,9 @@
       ...mapState('option', ['openWebrtc', 'barrageMounted', 'fullColumn', 'errorColumn', 'mobileLayout', 'mobileSidebar'])
     },
     methods: {
+      setTheme(theme) {
+        this.theme = theme
+      },
       copyToClipboard(text) {
         this.clipboardText = text
         // 维护中间量用于给拦截器做标识
