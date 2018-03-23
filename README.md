@@ -142,7 +142,7 @@ nuxt.js-blog/
    │   │
    │   └──*****                  * 其他复用组件
    │
-   │──middleware/                * Nuxt.js中间件，c/s渲染均会在路由改变前执行，需next/返回promise，支持异步
+   │──middleware/                * Nuxt.js 中间件，c/s  渲染均会在路由改变前执行，需 next/返回promise，支持异步
    |
    ├──filters/                   * 过滤器
    │
