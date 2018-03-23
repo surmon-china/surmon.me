@@ -71,8 +71,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~assets/sass/variables';
-  @import '~assets/sass/mixins';
   .carrousel {
     height: 15em;
     margin-bottom: 1em;
@@ -104,8 +102,7 @@
             position: absolute;
             top: 1.5rem;
             right: 2rem;
-            color: #333;
-            background-color: $module-hover-bg;
+            color: $link-color;
             margin: 0;
             padding: 0 .5em;
             height: 2em;
@@ -114,9 +111,10 @@
             font-weight: bold;
             border-radius: 1px;
             letter-spacing: .3px;
+            background-color: $module-hover-bg;
 
             &:hover {
-              color: #000;
+              color: $text-darken;
               background-color: $module-hover-bg-opacity-9;
             }
           }

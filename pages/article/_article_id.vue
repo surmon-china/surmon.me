@@ -375,7 +375,7 @@
             padding: .5em .8em;
 
             &:hover {
-              background-color: rgba(230, 230, 230, 0.7);
+              background-color: $module-hover-bg;
             }
 
             > p {

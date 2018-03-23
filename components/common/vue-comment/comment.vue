@@ -769,7 +769,7 @@
           }
 
           &:hover {
-            // background-color: darken($module-hover-bg, 20%);
+            background-color: $module-hover-bg-darken-20;
           }
 
           &.liked {
@@ -825,7 +825,7 @@
             }
 
             > .cm-body {
-              // background-color: darken($module-hover-bg, 20%);
+              background-color: $module-hover-bg-darken-20;
             }
           }
 
@@ -1006,7 +1006,7 @@
 
     > .post-box {
       display: block;
-      // border-top: 1px dashed darken($module-hover-bg, 30%);
+      border-top: 1px dashed $module-hover-bg-darken-20;
       margin-top: 1rem;
       padding-top: 1rem;
 
@@ -1072,7 +1072,7 @@
             background-color: $module-hover-bg;
 
             &:hover {
-              // background-color: darken($module-hover-bg, 10%);
+              background-color: $module-hover-bg-darken-10;
             }
           }
         }
@@ -1090,7 +1090,7 @@
 
             &:focus,
             &:hover {
-              // background-color: darken($module-hover-bg, 10%);
+              background-color: $module-hover-bg-darken-10;
             }
           }
         }
@@ -1113,7 +1113,7 @@
             margin-bottom: .5em;
             width: 4rem;
             height: 4rem;
-            // background-color: darken($module-hover-bg, 20%);
+            background-color: $module-hover-bg-darken-20;
 
             > img {
               width: 100%;
@@ -1142,7 +1142,7 @@
               background-color: $module-hover-bg;
 
                &:hover {
-                // background-color: darken($module-hover-bg, 10%);
+                background-color: $module-hover-bg-darken-10;
               }
             }
 
@@ -1154,7 +1154,7 @@
               background-color: $module-hover-bg;
 
                &:hover {
-                // background-color: darken($module-hover-bg, 10%);
+                background-color: $module-hover-bg-darken-10;
               }
             }
           }
@@ -1184,7 +1184,7 @@
               }
 
               &:hover {
-                // background-color: darken($module-hover-bg, 10%);
+                background-color: $module-hover-bg-darken-10;
               }
             }
 
@@ -1212,7 +1212,7 @@
           > .editor-tools {
             height: 2em;
             line-height: 2em;
-            // background-color: darken($module-hover-bg, 20%);
+            background-color: $module-hover-bg-opacity-9;
 
             > .emoji {
 
@@ -1260,17 +1260,17 @@
               display: inline-block;
 
               &:hover {
-                // background-color: darken($module-hover-bg, 20%);
+                background-color: $module-hover-bg-darken-20;
               }
             }
 
             > .submit {
               float: right;
               width: 7em;
-              // background-color: darken($module-hover-bg, 15%);
+              background-color: $module-hover-bg-darken-20;
 
               &:hover {
-                // background-color: darken($module-hover-bg, 40%);
+                background-color: $module-hover-bg-darken-40;
               }
             }
           }

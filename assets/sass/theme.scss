@@ -6,17 +6,26 @@
 
     $primary: #0088f5;
     $text: #555;
+    $white: #fff;
+    $module-hover-bg: rgba(197, 197, 197, 0.5);
 
     --body-bg: #eee;
     --module-bg: rgba(255, 255, 255, 0.6);
-    --module-hover-bg: rgba(197, 197, 197, 0.5);
-    --module-hover-bg-opacity-9: rgba(197, 197, 197, 0.9); // 0.2
+    --module-hover-bg: $module-hover-bg;
+    --module-hover-bg-opacity-9: rgba($module-hover-bg, 0.9);
+    --module-hover-bg-opaqueness: rgba($module-hover-bg, 0);
+    --module-hover-bg-darken-10: darken($module-hover-bg, 10%);
+    --module-hover-bg-darken-20: darken($module-hover-bg, 20%);
+    --module-hover-bg-darken-40: darken($module-hover-bg, 40%);
 
     --primary-color: $primary;
     --primary-opacity-9-color: rgba($primary, 0.9);
     --primary-opacity-5-color: rgba($primary, 0.5);
 
     --text-color: $text;
+    --text-reversal: $white;
+    --text-dark: #333;
+    --text-darken: #111;
     --text-secondary: rgba(0, 0, 0, .54);
     --text-disabled: rgba(0, 0, 0, .38);
     --text-dividers: rgba(0, 0, 0, .26);

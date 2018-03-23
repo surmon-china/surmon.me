@@ -375,7 +375,7 @@
             background-color: $module-hover-bg;
 
             &:hover {
-              // background-color: darken($module-hover-bg, 40%);
+              background-color: $module-hover-bg-darken-40;
             }
 
             &:last-child {
