@@ -128,7 +128,7 @@
         > .item-title {
           font-size: 1em;
           font-weight: bold;
-          color: #333;
+          color: $link-hover-color;
           margin-top: .2em;
           margin-bottom: .5em;
           overflow: hidden;

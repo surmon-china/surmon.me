@@ -39,7 +39,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255, 255, 255, .6);
+    background-color: $module-bg;
 
     @keyframes error-item {
       0% {
@@ -55,8 +55,8 @@
     > .error-content {
 
       > .error-code,
-      > .error-wrapper-message,
-      > .error-link {
+      > .error-link,
+      > .error-wrapper-message {
         animation: error-item ease-out both .5s .3s;
       }
 

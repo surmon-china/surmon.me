@@ -135,6 +135,7 @@
 
 <style lang="scss" scoped>
   #app {
+    color: $text;
 
     &[v-cloak] {
       color: transparent;
