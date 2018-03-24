@@ -69,7 +69,7 @@
     left: 0;
     width: 100%;
     height: $navbar-height;
-    // background-color: rgba($module-bg, .9);
+    background-color: $module-bg-opacity-9;
     z-index: 999;
 
     .search {
@@ -81,7 +81,7 @@
       left: 0;
       z-index: 9999;
       opacity: 0;
-      background-color: #fff;
+      background-color: $white;
       transform: translateY(-100%);
 
       > .input {
