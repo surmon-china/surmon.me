@@ -13,7 +13,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '~assets/sass/variables';
   footer {
     margin: 0;
     padding: 1rem 0;
