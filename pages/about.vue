@@ -116,6 +116,10 @@
                        target="_blank" 
                        rel="external nofollow noopenter">「 Jooger 」</i>
                     </a>
+                    <a href="https://blog.jimmylv.info" 
+                       target="_blank" 
+                       rel="external nofollow noopenter">「 JimmyLv 」</i>
+                    </a>
                     <a href="https://biji.io" 
                        target="_blank" 
                        rel="external nofollow noopenter">「 Tokin 」</i>
