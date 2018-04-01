@@ -54,7 +54,14 @@ export default new Vue({
     initPlayer() {
       musicPlayerBuilder(this.player)
       if (this.player.playerState.ready && this.player.player.play) {
-        window.addLoadedTask(this.player.player.play)
+        // window.addLoadedTask(this.player.player.play)
+        window.addLoadedTask(() => {
+          // this.player.player.play()
+          window.onmousemove = () => {
+            this.player.player.play()
+            window.onmousemove = null
+          }
+        })
       }
     },
 

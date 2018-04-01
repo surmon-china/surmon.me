@@ -43,13 +43,23 @@
          rel="external nofollow noopener"
          target="_blank"
          class="ad-box">
-        <img src="/images/mammon/aliyun-300-100.jpg">
+        <img src="/images/mammon/aliyun-300-100.jpg" alt="aliyun-ad">
       </a>
     </div>
     <div class="aside-calendar">
       <calendar></calendar>
     </div>
-    <div class="aside-fixed-box" v-scroll-top>
+    <div class="aside-fixed-box" :class="{ fixed: fixedMode.fixed }" v-scroll-top>
+      <transition name="fade">
+        <div class="aside-ad" v-show="fixedMode.fixed">
+          <a href="https://s.click.taobao.com/6JBRDTw"
+             rel="external nofollow noopener"
+             target="_blank"
+             class="ad-box">
+            <img src="/images/mammon/aliyun-300-100.jpg" alt="aliyun-ad">
+          </a>
+        </div>
+      </transition>
       <div class="aside-tag">
         <empty-box v-if="!tag.fetching && !tag.data.data.length">
           <slot>No Result Tags.</slot>
@@ -94,7 +104,12 @@
     name: 'layout-aside',
     data() {
       return {
-        keyword: ''
+        keyword: '',
+        fixedMode: {
+          fixed: false,
+          element: null,
+          sidebarFixedOffsetTop: 0
+        }
       }
     },
     components: {
@@ -134,33 +149,40 @@
                              docElm.mozRequestFullScreen || 
                              docElm.webkitRequestFullScreen ||
                              docElm.msRequestFullscreen
-        if(requestEvent) requestEvent.bind(docElm)()
+        if (requestEvent) requestEvent.bind(docElm)()
+      },
+      parseScroll() {
+        const element = this.fixedMode.element
+        const sidebarFixedOffsetTop = this.fixedMode.sidebarFixedOffsetTop
+        const windowScrollTop = document.documentElement.scrollTop || 
+                                window.pageYOffset || 
+                                window.scrollY ||
+                                document.body.scrollTop
+        const newSidebarFixedOffsetTop = element.offsetTop
+        this.fixedMode.sidebarFixedOffsetTop = (newSidebarFixedOffsetTop !== sidebarFixedOffsetTop &&
+                                                newSidebarFixedOffsetTop !== 77)
+                                              ? newSidebarFixedOffsetTop
+                                              : sidebarFixedOffsetTop
+        const isFixed = windowScrollTop > sidebarFixedOffsetTop
+        this.fixedMode.fixed = isFixed && element
       }
     },
     directives: {
       scrollTop: {
-        inserted(element) {
+        inserted(element, b, VNode) {
+          // context
+          const context = VNode.context
+          // element
+          context.fixedMode.element = element
           // 检测此元素相对于文档Document原点的绝对位置，并且这个值是不变化的
-          let sidebarFixedOffsetTop = element.offsetTop
-          // 处理
-          const parseScroll = () => {
-            const windowScrollTop = document.documentElement.scrollTop || 
-                                    window.pageYOffset || 
-                                    window.scrollY ||
-                                    document.body.scrollTop
-            const newSidebarFixedOffsetTop = element.offsetTop
-            sidebarFixedOffsetTop = (newSidebarFixedOffsetTop !== sidebarFixedOffsetTop && newSidebarFixedOffsetTop !== 77) ? newSidebarFixedOffsetTop : sidebarFixedOffsetTop
-            const isFixed = windowScrollTop > sidebarFixedOffsetTop
-            if (isFixed && element) element.setAttribute('class', 'aside-fixed-box fixed')
-            if (!isFixed && element) element.setAttribute('class', 'aside-fixed-box')
-          }
+          context.fixedMode.sidebarFixedOffsetTop = element.offsetTop
           // 初始化应用
-          parseScroll()
+          context.parseScroll()
           // 监听滚动事件
-          window.addEventListener('scroll', parseScroll, { passive: true })
+          window.addEventListener('scroll', context.parseScroll, { passive: true })
         },
-        unbind(element) {
-          window.onscroll = null
+        unbind(element, b, VNode) {
+          window.removeEventListener('scroll', VNode.context.parseScroll)
         }
       }
     }
@@ -168,10 +190,12 @@
 </script>
 
 <style lang="scss" scoped>
+  $aside-width: 19em;
+
   aside {
     float: right;
     display: block;
-    width: 19em;
+    width: $aside-width;
     margin: 0;
 
     .aside-search,
@@ -295,7 +319,7 @@
     }
 
     .aside-ad {
-      // padding: .8em;
+      width: 100%;
       margin-bottom: 1em;
 
       > .ad-box {
@@ -313,13 +337,14 @@
     }
 
     .aside-fixed-box {
+      width: $aside-width;
 
       &.fixed {
         position: fixed;
         top: 5.5em;
 
         > .aside-tag {
-          max-height: calc(100vh - 8em - 4.5em - 3em);
+          max-height: calc(100vh - 8em - 4.5em - 3em - 4em);
           overflow-y: auto;
         }
       }
