@@ -344,7 +344,7 @@
         top: 5.5em;
 
         > .aside-tag {
-          max-height: calc(100vh - 8em - 4.5em - 3em - 4em);
+          max-height: calc(100vh - 8em - 4.5em - 3em - 8em);
           overflow-y: auto;
         }
       }
