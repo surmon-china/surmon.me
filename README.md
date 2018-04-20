@@ -125,7 +125,7 @@ $ npm run lint
 - ~~右侧广告的添加~~
 - ~~PWA的适配https://pwa.nuxtjs.org/modules/workbox.html~~
 - ~~增加多主题适配~~
-- i18n 的 适配 https://github.com/nuxt-community/nuxt-i18n
+- i18n 的适配（有毛病） https://github.com/nuxt-community/nuxt-i18n 
 - graphql-js + RESTful 查询数据库
 
 ## 目录结构
