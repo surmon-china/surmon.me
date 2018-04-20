@@ -53,7 +53,6 @@
                     </a>
                     <a href="https://leetcode.com/surmon" 
                        target="_blank"
-                       v-if="false"
                        rel="external nofollow noopenter">
                       <i class="iconfont icon-algorithm"></i>
                     </a>
