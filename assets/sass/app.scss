@@ -1,13 +1,13 @@
 @charset "UTF-8";
 
-// theme
-@import "theme.scss";
-
 // variables
 @import "variables.scss";
 
 // mixins
 @import "mixins.scss";
+
+// theme
+@import "theme.scss";
 
 // css reset
 @import "marx/marx.scss";
