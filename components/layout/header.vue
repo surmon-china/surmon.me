@@ -52,7 +52,6 @@
 </template>
 
 <script>
-  const apiConfig = require('~/api.config')
   import EventBus from '~/utils/event-bus'
   export default {
     name: 'layout-header',
