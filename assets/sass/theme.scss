@@ -1,36 +1,36 @@
 
 @mixin css-var($text, $white, $black, $primary, $body-bg, $module-hover-bg) {
 
-  --body-bg: $body-bg;
+  #{--body-bg}: $body-bg;
 
-  --module-bg: rgba($white, 0.6);
-  --module-bg-opacity-5: rgba($white, 0.5);
-  --module-bg-opacity-8: rgba($white, 0.8);
-  --module-bg-opacity-9: rgba($white, 0.9);
+  #{--module-bg}: rgba($white, 0.6);
+  #{--module-bg-opacity-5}: rgba($white, 0.5);
+  #{--module-bg-opacity-8}: rgba($white, 0.8);
+  #{--module-bg-opacity-9}: rgba($white, 0.9);
 
-  --module-hover-bg: $module-hover-bg;
-  --module-hover-bg-opaqueness: rgba($module-hover-bg, 0);
-  --module-hover-bg-opacity-3: rgba($module-hover-bg, 0.3);
-  --module-hover-bg-opacity-9: rgba($module-hover-bg, 0.9);
-  --module-hover-bg-darken-10: darken($module-hover-bg, 10%);
-  --module-hover-bg-darken-20: darken($module-hover-bg, 20%);
-  --module-hover-bg-darken-40: darken($module-hover-bg, 40%);
+  #{--module-hover-bg}: $module-hover-bg;
+  #{--module-hover-bg-opaqueness}: rgba($module-hover-bg, 0);
+  #{--module-hover-bg-opacity-3}: rgba($module-hover-bg, 0.3);
+  #{--module-hover-bg-opacity-9}: rgba($module-hover-bg, 0.9);
+  #{--module-hover-bg-darken-10}: darken($module-hover-bg, 10%);
+  #{--module-hover-bg-darken-20}: darken($module-hover-bg, 20%);
+  #{--module-hover-bg-darken-40}: darken($module-hover-bg, 40%);
 
-  --primary-color: $primary;
-  --primary-opacity-9-color: rgba($primary, 0.9);
-  --primary-opacity-5-color: rgba($primary, 0.5);
+  #{--primary-color}: $primary;
+  #{--primary-opacity-9-color}: rgba($primary, 0.9);
+  #{--primary-opacity-5-color}: rgba($primary, 0.5);
 
-  --text-color: $text;
-  --text-reversal: $white;
-  --text-light: lighter($text, 20%); // #777
-  --text-dark: darken($text, 20%); // #333
-  --text-darken: darken($text, 40%); // #333
-  --text-secondary: rgba($black, .54);
-  --text-disabled: rgba($black, .38);
-  --text-dividers: rgba($black, .26);
+  #{--text-color}: $text;
+  #{--text-reversal}: $white;
+  #{--text-light}: lighter($text, 20%); // #777
+  #{--text-dark}: darken($text, 20%); // #333
+  #{--text-darken}: darken($text, 40%); // #333
+  #{--text-secondary}: rgba($black, .54);
+  #{--text-disabled}: rgba($black, .38);
+  #{--text-dividers}: rgba($black, .26);
 
-  --link-color: $text;
-  --link-hover-color: darken($text, 20%);
+  #{--link-color}: $text;
+  #{--link-hover-color}: darken($text, 20%);
 }
 
 #app {

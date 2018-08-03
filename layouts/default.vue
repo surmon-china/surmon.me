@@ -18,9 +18,9 @@
       <theme-view v-if="!mobileLayout" @theme="setTheme"></theme-view>
       <main id="main" :class="{ 'mobile': mobileLayout, [$route.name]: true }">
         <transition name="module">
-          <keep-alive>
-            <nav-view v-if="!errorColumn && !mobileLayout"></nav-view>
-          </keep-alive>
+          <!-- <keep-alive> -->
+            <nav-view v-if="!errorColumn && !mobileLayout" keep-alive></nav-view>
+          <!-- </keep-alive> -->
         </transition>
         <div id="main-content" 
              class="main-content" 
@@ -30,14 +30,14 @@
                'mobile-layout': mobileLayout,
                [$route.name]: true
               }">
-          <keep-alive>
+          <!-- <keep-alive> -->
             <nuxt></nuxt>
-          </keep-alive>
+          <!-- </keep-alive> -->
         </div>
         <transition name="aside">
-          <keep-alive>
-            <aside-view v-if="!fullColumn && !errorColumn && !mobileLayout"></aside-view>
-          </keep-alive>
+          <!-- <keep-alive> -->
+            <aside-view v-if="!fullColumn && !errorColumn && !mobileLayout" keep-alive></aside-view>
+          <!-- </keep-alive> -->
         </transition>
       </main>
       <tool-view v-if="!mobileLayout && !['app', 'music', 'service'].includes($route.name)"></tool-view>
@@ -58,14 +58,14 @@
     head() {
       return !this.mobileLayout ? {} : {
         bodyAttrs: {
-          class: 'mobile' 
+          class: 'mobile'
         }
       }
     },
     data() {
       return {
         theme: 'default',
-        clipboardText: '',
+        clipboardText: ''
       }
     },
     mounted() {
