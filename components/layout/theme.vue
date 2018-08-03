@@ -52,9 +52,9 @@
   }
 
   @keyframes themeBtn {
-    0%  { transform: translateX(2.5rem) }
+    0%  { transform: translateX(2.2rem) }
     50% { transform: translateX(3rem) }
-    100% { transform: translateX(2.5rem) }
+    100% { transform: translateX(2.2rem) }
   }
 
   #theme {
