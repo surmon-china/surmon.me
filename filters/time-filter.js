@@ -7,21 +7,22 @@
 */
 
 // 取剩余秒
-const pluralize = (time, label) => {
-  return time + label + '前'
+const pluralize = (time, label, en) => {
+  return time + label + (en ? ' ago' : '前')
 }
 
 // 相对时间过滤器，传入时间，返回距离今天有多久
-export const timeAgo = time => {
+export const timeAgo = (time, language) => {
+  const en = language && language === 'en'
   time = time instanceof Date ? time : new Date(time)
   const between = Date.now() / 1000 - (Number(time) / 1000)
   if (between < 3600) {
-    if (Object.is(~~(between / 60), 0)) return '刚刚'
-    return pluralize(~~(between / 60), ' 分钟')
+    if (Object.is(~~(between / 60), 0)) return (en ? 'just now' : '刚刚')
+    return pluralize(~~(between / 60), (en ? ' minutes' : ' 分钟'), en)
   } else if (between < 86400) {
-    return pluralize(~~(between / 3600), ' 小时')
+    return pluralize(~~(between / 3600), (en ? ' hours' : ' 小时'), en)
   } else {
-    return pluralize(~~(between / 86400), ' 天')
+    return pluralize(~~(between / 86400), (en ? ' days' : ' 天'), en)
   }
 }
 
@@ -31,8 +32,10 @@ export const toLocalString = date => {
 }
 
 // YMDHMS时间转换过滤器
-export const toYMD = date => {
+export const toYMD = (date, language) => {
   if (!date) return date
   date = new Date(date)
-  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours() > 11 ? '下午' : '上午'}`
+  const am = (language && language === 'en') ? 'am' : '上午'
+  const pm = (language && language === 'en') ? 'pm' : '下午'
+  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours() > 11 ? pm : am}`
 }

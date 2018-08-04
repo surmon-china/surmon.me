@@ -4,8 +4,15 @@
 *
 */
 
+import i18nConfig from '~/i18n.config'
 export const state = () => {
   return {
+
+    // 默认语言
+    language: i18nConfig.default,
+
+    // 节能模式
+    powerSavingMode: false,
 
     // 页面的栏目展示类型（3栏/2栏）
     fullColumn: false,
@@ -135,5 +142,15 @@ export const mutations = {
     } else {
       state.openWebrtc = !state.openWebrtc
     }
+  },
+
+  // 切换节电模式
+  TOGGLE_POWER_SAVING_MODE(state, action) {
+    state.powerSavingMode = action
+  },
+
+  // 切换语言
+  SWITCH_LANGUAGE(state, action) {
+    state.language = action
   }
 }

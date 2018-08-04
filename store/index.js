@@ -23,6 +23,10 @@ export const actions = {
     // console.log(mustJpg ? 'jpeg' : 'webp')
     store.commit('option/SET_MOBILE_LAYOUT', isMobile)
     store.commit('option/SET_USER_AGENT', userAgent)
+    // 如果是移动端，则设置语言为中文
+    if (isMobile) {
+      store.commit('option/SWITCH_LANGUAGE', 'zh')
+    }
     const initAppData = [
       // 配置数据
       store.dispatch('loadAdminInfo'),

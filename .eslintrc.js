@@ -184,7 +184,7 @@ module.exports = {
     "eqeqeq": [0, "allow-null"],
 
     // 在for-in 循环中要使用if语句
-    "guard-for-in": 2,
+    "guard-for-in": 0,
 
     // 代码中禁止使用alert, confirm, and prompt
     "no-alert": 0,

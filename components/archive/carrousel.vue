@@ -2,7 +2,7 @@
   <div class="carrousel" :class="{ mobile: mobileLayout }">
     <transition name="module" mode="out-in">
       <empty-box class="article-empty-box" v-if="!article.data.data.length">
-        <slot>No Result Article.</slot>
+        <slot v-text="$i18n.text.article.empty">No Result Article.</slot>
       </empty-box>
       <div class="swiper" v-swiper:swiper="swiperOption" v-else>
         <div class="swiper-wrapper">
