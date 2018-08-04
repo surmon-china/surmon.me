@@ -7,13 +7,19 @@
         <img src="/images/app-logo.png" alt="app-logo">
       </div>
       <h2 class="title">Surmon.me</h2>
-      <p class="desc">Talk is cheap. Show me the code</p>
+      <p class="desc" v-text="$i18n.text.slogan">Talk is cheap. Show me the code</p>
       <div class="screen">
         <img src="/images/app-hot.png" class="screen-img" alt="app-hot">
         <div class="download">
           <img src="/images/app-qrcode.png" class="qrcode" alt="qrcode">
-          <a target="_blank" href="https://static.surmon.me/app/surmon.me.apk" class="btn">Android</a>
-          <a target="_blank" href="https://static.surmon.me/app/surmon.me.ipa" class="btn">Ios</a>
+          <a target="_blank"
+             href="https://static.surmon.me/app/surmon.me.apk"
+             class="btn"
+             v-text="$i18n.text.device.android">Android</a>
+          <a target="_blank"
+             href="https://static.surmon.me/app/surmon.me.ipa"
+             class="btn"
+             v-text="$i18n.text.device.ios">Ios</a>
         </div>
       </div>
     </div>

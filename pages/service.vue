@@ -3,9 +3,9 @@
     <div class="service">
       <div class="banner">
         <div class="banner-content container">
-          <h2 class="title">Talk is cheap. Show me the code</h2>
+          <h2 class="title" v-text="$i18n.text.service.slogan">Talk is cheap. Show me the code</h2>
           <div class="submit">
-            <button class="submit-btn" @click="submitProject">EMail me</button>
+            <button class="submit-btn"  v-text="$i18n.text.service.emailMe" @click="submitProject">EMail me</button>
           </div>
         </div>
       </div>

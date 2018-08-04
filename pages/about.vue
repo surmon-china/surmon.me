@@ -8,11 +8,13 @@
               <div class="desc">
                 <p class="item">
                   <i class="iconfont icon-user"></i>
-                  <span><span class="first-letter">I</span>'m Surmon, a (95+) (小) Javascript (鲜) stack (肉) developer.</span>
+                  <span v-if="langEn"><span class="first-letter">I</span>'m Surmon, a (95+) (小) Javascript (鲜) stack (肉) developer.</span>
+                  <span v-else><span class="first-letter">我</span>，一只 95 后小藏獒，路在八面，家在远方</span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-comment-discussion"></i>
-                  <span>Taolu committee: </span>
+                  <span v-if="langEn">Taolu committee: </span>
+                  <span v-else>国家套路委员会：</span>
                   <a target="_blank" 
                      rel="external nofollow noopenter"
                      href="https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4">288325802</a>
@@ -24,7 +26,8 @@
                 </p>
                 <p class="item">
                   <i class="iconfont icon-like"></i>
-                  <span>code. beauty. life.</span>
+                  <span v-if="langEn">code. beauty. whisky. music. vagrant.</span>
+                  <span v-else>爱酒、肉、女人、音乐、编程、流浪</span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-coffee"></i>
@@ -47,7 +50,6 @@
                     </a>
                     <a href="https://stackoverflow.com/users/6222535/surmon?tab=profile" 
                        target="_blank"
-                       v-if="false"
                        rel="external nofollow noopenter">
                       <i class="iconfont icon-stackoverflow"></i>
                     </a>
@@ -68,13 +70,11 @@
                     </a>
                     <a href="https://www.quora.com/profile/Surmon" 
                        target="_blank"
-                       v-if="false"
                        rel="external nofollow noopenter">
                       <i class="iconfont icon-quora"></i>
                     </a>
                     <a href="https://www.linkedin.com/in/surmon" 
                        target="_blank"
-                       v-if="false"
                        rel="external nofollow noopenter">
                       <i class="iconfont icon-linkedin"></i>
                     </a>
@@ -82,6 +82,11 @@
                        target="_blank" 
                        rel="external nofollow noopenter">
                       <i class="iconfont icon-weibo"></i>
+                    </a>
+                    <a href="https://space.bilibili.com/27940710/#/video" 
+                       target="_blank" 
+                       rel="external nofollow noopenter">
+                      <i class="iconfont icon-bilibili"></i>
                     </a>
                     <a href="https://twitter.com/surmon_me" 
                        target="_blank" 
@@ -102,7 +107,8 @@
                 </p>
                 <p class="item">
                   <i class="iconfont icon-code"></i>
-                  <span class="skills">Talk is cheap. fuck me.</span>
+                  <span class="skills" v-if="langEn">Talk is cheap. fuck me.</span>
+                  <span v-else>生活竟然以为它在操我</span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-friend"></i>
@@ -147,7 +153,7 @@
                 <a class="followme" 
                    href="" 
                    @click.stop.prevent=""
-                   v-if="!mobileLayout">Friend me</a>
+                   v-if="!mobileLayout">{{ langEn ? 'Friend me' : '我在这儿' }}</a>
                 <div class="wechat" v-if="!mobileLayout"></div>
               </div>
             </div>
@@ -174,6 +180,12 @@
       title: 'About'
     },
     computed: {
+      language() {
+        return this.$store.state.option.language
+      },
+      langEn() {
+        return this.$store.state.option.language === 'en'
+      },
       gravatar() {
         // const gravatar = null
         const gravatar = this.$store.state.option.adminInfo.data.gravatar
