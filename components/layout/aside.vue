@@ -26,7 +26,7 @@
         <span v-text="$i18n.text.article.hotlist">热门文章</span>
       </p>
       <empty-box v-if="!article.fetching && !article.data.data.length">
-        <slot v-text="$i18n.text.article.empty">No Result Hot Articles.</slot>
+        <slot>{{ $i18n.text.article.empty || 'No Result Hot Articles.' }}</slot>
       </empty-box>
       <ul class="aside-article-list" v-else-if="!article.fetching && article.data.data.length">
         <li class="item" :key="item.id" v-for="item in article.data.data.slice(0, 10)">
@@ -63,7 +63,7 @@
       </transition>
       <div class="aside-tag">
         <empty-box v-if="!tag.fetching && !tag.data.data.length">
-          <slot v-text="$i18.text.tag.empty">No Result Tags.</slot>
+          <slot>{{ $i18.text.tag.empty || 'No Result Tags.' }}</slot>
         </empty-box>
         <ul class="aside-tag-list" v-else-if="!tag.fetching && tag.data.data.length">
           <nuxt-link tag="li"

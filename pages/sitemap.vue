@@ -83,8 +83,11 @@
   import { mapState } from 'vuex'
   export default {
     name: 'sitemap',
-    head: {
-      title: 'Sitemap'
+    head() {
+      const isEn = this.$store.state.option.language === 'en'
+      return {
+        title: `${isEn ? '' : this.$i18n.nav.map + ' | '}Sitemap`,
+      }
     },
     fetch ({ store }) {
       return store.dispatch('loadSitemapArticles', { per_page: 500 })

@@ -63,8 +63,11 @@
   import EventBus from '~/utils/event-bus'
   export default {
     name: 'music',
-    head: {
-      title: 'Music',
+    head() {
+      const isEn = this.$store.state.option.language === 'en'
+      return {
+        title: `${isEn ? '' : this.$i18n.nav.music + ' | '}Music`,
+      }
     },
     data() {
       return {

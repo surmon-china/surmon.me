@@ -7,7 +7,7 @@
              class="input" 
              required 
              v-model.trim="keyword" 
-             placeholder="Search..." 
+             :placeholder="$i18n.text.search" 
              @keyup.enter.stop.prevent="toSearch">
       <span class="close" @click.stop.prevent="search = false">
         <i class="iconfont icon-cancel"></i>
