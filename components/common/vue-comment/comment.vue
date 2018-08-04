@@ -13,7 +13,7 @@
            @click.stop.prevent="likePage">
           <i class="iconfont icon-like"></i>
           <strong>{{ likes || 0 }}</strong>
-          <span v-text="$i18n.text.comment.like">人喜欢</span>
+          <span v-text="(mobileLayout && isGuestbookPage && language === 'zh') ? '人喜欢' : $i18n.text.comment.like"></span>
         </a>
         <a href="" class="shang" @click.stop.prevent="shang">
           <i class="iconfont icon-shang"></i>
