@@ -18,7 +18,7 @@
                      v-for="(item, index) in article.data.data"></list-item>
         </transition-group>
         <empty-box class="article-empty-box" v-else>
-          <slot v-text="$i18n.text.article.empty">No Result Article.</slot>
+          <slot>{{ $i18n.text.article.empty || 'No Result Article.' }}</slot>
         </empty-box>
       </transition>
     </div>

@@ -9,7 +9,7 @@
                 <p class="item">
                   <i class="iconfont icon-user"></i>
                   <span v-if="langEn"><span class="first-letter">I</span>'m Surmon, a (95+) (小) Javascript (鲜) stack (肉) developer.</span>
-                  <span v-else><span class="first-letter">我</span>，一只 95 后小藏獒，路在八面，家在远方</span>
+                  <span v-else><span class="first-letter">我</span>，一只 95 后小藏獒，路在四面，家在八方</span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-comment-discussion"></i>
@@ -108,7 +108,7 @@
                 <p class="item">
                   <i class="iconfont icon-code"></i>
                   <span class="skills" v-if="langEn">Talk is cheap. fuck me.</span>
-                  <span v-else>生活竟然以为它在操我</span>
+                  <span v-else>能做一切</span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-friend"></i>
@@ -153,7 +153,7 @@
                 <a class="followme" 
                    href="" 
                    @click.stop.prevent=""
-                   v-if="!mobileLayout">{{ langEn ? 'Friend me' : '我在这儿' }}</a>
+                   v-if="!mobileLayout">{{ langEn ? 'Friend me' : '众里寻他' }}</a>
                 <div class="wechat" v-if="!mobileLayout"></div>
               </div>
             </div>
@@ -176,8 +176,11 @@
 <script>
   export default {
     name: 'about',
-    head: {
-      title: 'About'
+    head() {
+      const isEn = this.$store.state.option.language === 'en'
+      return {
+        title: `${isEn ? '' : this.$i18n.nav.about + ' | '}About`
+      }
     },
     computed: {
       language() {

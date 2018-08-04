@@ -46,7 +46,7 @@
                        :to="`/category/${category.slug}`"
                        v-if="article.category && article.category.length"
                        v-for="(category, index) in article.category"
-                       v-text="$i18n.nav[category.name]">{{ category.name }}</nuxt-link>
+                       v-text="$i18n.nav[category.slug]">{{ category.name }}</nuxt-link>
             <span v-else v-text="$i18n.text.category.empty">未分类</span>
           </span>
           <span class="tags" v-show="false">
