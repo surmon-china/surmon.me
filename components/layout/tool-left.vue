@@ -4,7 +4,7 @@
       <div class="item language"
            title="Switch language"
            :class="language"
-           @click="tooggleLanguage">{{ lang }}</div>
+           @click="tooggleLanguage">{{ language }}</div>
       <div class="item power" 
            title="Power save mode" 
            :class="powerSavingMode ? 'on' : 'off'"
@@ -18,10 +18,7 @@
   export default {
     name: 'tool-left',
     computed: {
-      ...mapState('option', ['language', 'powerSavingMode']),
-      lang() {
-        return this.language === 'en' ? 'en' : '中'
-      }
+      ...mapState('option', ['language', 'powerSavingMode'])
     },
     methods: {
       tooggleLanguage() {

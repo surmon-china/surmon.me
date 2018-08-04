@@ -1,5 +1,5 @@
 module.exports = {
-  default: 'en',
+  default: 'zh',
   languages: [
     {
       code: 'zh',
@@ -78,7 +78,7 @@ module.exports = {
           en: 'Talk is cheap. Show me the code'
         },
         emailMe: {
-          zh: '众里寻他',
+          zh: '即破楼兰',
           en: 'Email ME'
         }
       },
@@ -318,11 +318,11 @@ module.exports = {
           en: 'Go right to the heart of the matter.'
         },
         count: {
-          zh: '条评论',
+          zh: '条看法',
           en: 'comments'
         },
         like: {
-          zh: '人喜欢',
+          zh: '人觉得还行',
           en: ' likes'
         },
         new: {
