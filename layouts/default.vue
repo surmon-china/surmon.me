@@ -124,7 +124,7 @@
       },
       watchFullScreen() {
         const fullscreenchange = event => {
-          console.log('fullscreenchange', event)
+          // console.log('fullscreenchange', event)
         }
         document.addEventListener("fullscreenchange", fullscreenchange, false)
         document.addEventListener("mozfullscreenchange", fullscreenchange, false)
