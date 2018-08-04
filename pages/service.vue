@@ -103,8 +103,11 @@
 <script>
   export default {
     name: 'service',
-    head: {
-      title: 'Service'
+    head() {
+      const isEn = this.$store.state.option.language === 'en'
+      return {
+        title: `${isEn ? '' : this.$i18n.nav.service + ' | '}Service`,
+      }
     },
     methods: {
       submitProject() {

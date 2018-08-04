@@ -37,8 +37,11 @@
 <script>
   export default {
     name: 'project',
-    head: {
-      title: 'Project'
+    head() {
+      const isEn = this.$store.state.option.language === 'en'
+      return {
+        title: `${isEn ? '' : this.$i18n.nav.project + ' | '}Project`,
+      }
     },
     fetch({ store }) {
       return store.dispatch('loadGithubRepositories')
