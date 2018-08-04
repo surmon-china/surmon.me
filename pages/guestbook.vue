@@ -19,8 +19,11 @@
 <script>
   export default {
     name: 'guestbook',
-    head: {
-      title: 'Guestbook'
+    head() {
+      const isEn = this.$store.state.option.language === 'en'
+      return {
+        title: `${isEn ? '' : this.$i18n.nav.guestbook + ' | '}Guestbook`,
+      }
     },
     computed: {
       mobileLayout() {
