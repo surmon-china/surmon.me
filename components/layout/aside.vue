@@ -7,8 +7,9 @@
                list="keywords"
                type="search" 
                name="search" 
-               class="search-input" 
-               placeholder="Search..."
+               class="search-input"
+               :class="language"
+               :placeholder="$i18n.text.search"
                v-model.trim="keyword"
                @keyup.enter="toSearch">
         <button class="search-btn" @click="toSearch">
@@ -22,16 +23,16 @@
     <div class="aside-article">
       <p class="title">
         <i class="iconfont icon-list"></i>
-        <span>热门文章</span>
+        <span v-text="$i18n.text.article.hotlist">热门文章</span>
       </p>
       <empty-box v-if="!article.fetching && !article.data.data.length">
-        <slot>No Result Hot Articles.</slot>
+        <slot v-text="$i18n.text.article.empty">No Result Hot Articles.</slot>
       </empty-box>
       <ul class="aside-article-list" v-else-if="!article.fetching && article.data.data.length">
         <li class="item" :key="item.id" v-for="item in article.data.data.slice(0, 10)">
           <span class="index"></span>
           <nuxt-link class="title" 
-                       :title="`${item.title} - [ ${item.meta.comments} 条评论  |  ${item.meta.likes} 人喜欢 ]`"
+                       :title="`${item.title} - [ ${item.meta.comments} ${$i18n.text.comment.count}  |  ${item.meta.likes} ${$i18n.text.comment.like} ]`"
                        :to="`/article/${item.id}`">
             <span>{{ item.title }}</span>
           </nuxt-link>
@@ -62,7 +63,7 @@
       </transition>
       <div class="aside-tag">
         <empty-box v-if="!tag.fetching && !tag.data.data.length">
-          <slot>No Result Tags.</slot>
+          <slot v-text="$i18.text.tag.empty">No Result Tags.</slot>
         </empty-box>
         <ul class="aside-tag-list" v-else-if="!tag.fetching && tag.data.data.length">
           <nuxt-link tag="li"
@@ -83,12 +84,12 @@
       </div>
       <div class="aside-tools" v-if="isArticlePage">
         <div class="full-column" @click="setFullColumu">
-          <span>通栏阅读</span>
+          <span v-text="$i18n.text.article.fullcolread">通栏阅读</span>
           <span>&nbsp;&nbsp;</span>
           <i class="iconfont icon-read"></i>
         </div>
         <div class="full-page" @click="fullScreen">
-          <span>全屏阅读</span>
+          <span v-text="$i18n.text.article.fullscreenread">全屏阅读</span>
           <span>&nbsp;&nbsp;</span>
           <i class="iconfont icon-fullscreen"></i>
         </div>        
@@ -124,6 +125,7 @@
       ...mapState({
         tag: state => state.tag,
         article: state => state.article.hot,
+        language: state => state.option.language
       }),
       isArticlePage() {
         return this.$route.name === 'article-article_id'
@@ -259,6 +261,7 @@
         margin: 0;
         padding: 0 .8em;
         border-bottom: 1px dashed $body-bg;
+        text-transform: uppercase;
 
         .iconfont {
           margin-right: .5em;

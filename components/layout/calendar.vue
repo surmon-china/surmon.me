@@ -7,25 +7,22 @@
         <li class="year-month">
           <span class="choose-year">
             <span>{{ currentYear }}</span>
-            <span>年</span>
+            <span>{{ languageIsEn ? 'Y' : '年' }}&nbsp;</span>
             <span>{{ currentMonth }}</span>
-            <span>月</span>
+            <span>{{ languageIsEn ? 'M' : '月' }}&nbsp;</span>
             <span>{{ currentDay }}</span>
-            <span>日</span>
+            <span>{{ languageIsEn ? 'D' : '日' }}</span>
           </span>
         </li>
         <li class="arrow next" @click="pickNext(currentYear, currentMonth)">❯</li>
       </ul>
     </div>
     <!-- 星期 -->
-    <ul class="weekdays">
-      <li>一</li>
-      <li>二</li>
-      <li>三</li>
-      <li>四</li>
-      <li>五</li>
-      <li>六</li>
-      <li>日</li>
+    <ul class="weekdays" v-if="languageIsEn">
+      <li v-for="day in weeksEn">{{ day }}</li>
+    </ul>
+    <ul class="weekdays" v-else>
+      <li v-for="day in weeksZh">{{ day }}</li>
     </ul>
     <!-- 日期 -->
     <ul class="days">
@@ -53,11 +50,18 @@
         currentMonth: 1,
         currentYear: 1970,
         currentWeek: 1,
-        days: []
+        days: [],
+        weeksZh: ['一', '二', '三', '四', '五', '六', '七'],
+        weeksEn: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
       }
     },
     mounted() {
       this.initData(null)
+    },
+    computed: {
+      languageIsEn() {
+        return this.$store.state.option.language === 'en'
+      }
     },
     methods: {
       initData(cur) {

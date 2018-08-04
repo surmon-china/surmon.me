@@ -5,7 +5,7 @@
     </div>
     <transition name="module" mode="out-in">
       <empty-box class="announcement-empty-box" v-if="!announcement.data.data.length">
-        <slot>No Result Announcement.</slot>
+        <slot v-text="$i18n.text.announcement.empty">No Result Announcement.</slot>
       </empty-box>
       <div class="swiper" v-swiper:swiper="swiperOption" v-else>
         <div class="swiper-wrapper">
