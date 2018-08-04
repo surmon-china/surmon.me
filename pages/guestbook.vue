@@ -4,7 +4,7 @@
       <div class="content">
         <div class="guestbook-banner">
           <img src="/images/guestbook.jpg">
-          <span>此心光明 亦复何言</span>
+          <span v-text="$i18n.text.guestbook">此心光明 亦复何言</span>
         </div>
       </div>
     </div>

@@ -1,8 +1,11 @@
 const path = require('path')
 const webpack = require('webpack')
 const apiConfig = require('./api.config')
-// const i18nConfig = require('./i18n.config')
+const i18nConfig = require('./i18n.config')
 const isProdMode = Object.is(process.env.NODE_ENV, 'production')
+const langIsEn = i18nConfig.default === 'en'
+
+const slogan = langIsEn ? 'Talk is cheap. Show me the code.' : '欢喜勇猛，向死而生'
 
 module.exports = {
   loading: {
@@ -97,8 +100,8 @@ module.exports = {
     { src: '~/plugins/marked.js' },
     { src: '~/plugins/gravatar.js' },
     { src: '~/plugins/highlight.js' },
+    { src: '~/plugins/i18n.js' },
     { src: '~/plugins/ga.js', ssr: false },
-    { src: '~/plugins/clmtrackr.js', ssr: false },
     { src: '~/plugins/emoji-233333.js', ssr: false },
     { src: '~/plugins/image-popup.js', ssr: false },
     { src: '~/plugins/copy-right.js', ssr: false },
@@ -109,12 +112,12 @@ module.exports = {
     { src: '~/plugins/vue-comment.js' }
   ],
   head: {
-    title: 'Surmon.me - Talk is cheap. Show me the code',
+    title: `Surmon.me - ${slogan}`,
     titleTemplate: '%s | Surmon.me',
     htmlAttrs: {
       xmlns: 'http://www.w3.org/1999/xhtml',
       // manifest: 'surmon.me',
-      lang: 'zh'
+      lang: i18nConfig.default || 'zh'
     },
     meta: [
       { charset: 'utf-8' },
@@ -131,7 +134,7 @@ module.exports = {
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1.0, user-scalable=no' },
       { hid: 'keywords', name: 'keywords', content: 'surmon,马赐崇,司马萌,Vue开发者,前端技术开发,javascript技术' },
-      { hid: 'description', name: 'description', content: '凡心所向 素履所往 生如逆旅 一苇以航' }
+      { hid: 'description', name: 'description', content: '凡心所向，素履所往，生如逆旅，一苇以航' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -158,16 +161,15 @@ module.exports = {
     theme_color: '#0088f5',
     display: 'standalone',
     background_color: "#eee",
-    description: 'Talk is cheap. Show me the code.',
-    lang: 'zh'
+    description: slogan,
+    lang: i18nConfig.default || 'zh'
   },
   icon: {
     // iconSrc: '/static/icon.png',
     sizes: [16, 120, 144, 152, 192, 384, 512]
   },
   modules: [
-    '@nuxtjs/pwa',
-    // ['nuxt-i18n', i18nConfig]
+    '@nuxtjs/pwa'
   ],
   router: {
     middleware: ['change-page-col'],

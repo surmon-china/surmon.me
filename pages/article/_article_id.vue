@@ -1,10 +1,21 @@
 <template>
   <div class="article" :class="{ mobile: mobileLayout }">
     <div class="detail">
+      <div class="oirigin"
+            v-if="!fetching && article.title"
+            :class="{
+              self: !article.origin,
+              other: article.origin === 1,
+              hybrid: article.origin === 2
+            }">
+        <span v-if="!article.origin" v-text="$i18n.text.origin.original">原创</span>
+        <span v-else-if="article.origin === 1" v-text="$i18n.text.origin.reprint">转载</span>
+        <span v-else-if="article.origin === 2" v-text="$i18n.text.origin.hybrid">混撰</span>
+      </div>
       <h2 class="title">{{ article.title || '...' }}</h2>
       <transition name="module" mode="out-in">
         <empty-box class="article-empty-box" v-if="!fetching && !article.title">
-          <slot>No Result Article.</slot>
+          <slot v-text="$i18n.text.article.empty">No Result Article.</slot>
         </empty-box>
       </transition>
       <transition name="module" mode="out-in">
@@ -13,7 +24,7 @@
       <transition name="module" mode="out-in">
         <div class="readmore" v-if="canReadMore">
           <button class="readmore-btn" :disabled="readMoreLoading" @click="readMore()">
-            <span>{{ !readMoreLoading ? '阅读余下全文' : '渲染中...' }}</span>
+            <span>{{ !readMoreLoading ? $i18n.text.article.readAll : $i18n.text.article.rendering }}</span>
             <i class="iconfont icon-next-bottom"></i>
           </button>
         </div>
@@ -22,7 +33,27 @@
     <share-box class="article-share" v-if="!fetching && article.content"></share-box>
     <transition name="module" mode="out-in">
       <div class="metas" v-if="!fetching && article.title">
-        <p class="item">
+        <p class="item" v-if="languageIsEn">
+          <span>Article created at</span>
+          <span>&nbsp;</span>
+          <nuxt-link :title="buildDateTitle(article.create_at)"
+                       :to="buildDateLink(article.create_at)">
+            <span>{{ buildDateTitle(article.create_at) }}</span>
+          </nuxt-link>
+          <span>&nbsp;in category&nbsp;</span>
+          <nuxt-link :key="index"
+                     :to="`/category/${category.slug}`"
+                     :title="category.description || category.name"
+                     v-for="(category, index) in article.category">
+            <span>{{ category.name }}</span>
+            <span v-if="article.category.length && article.category[index + 1]">、</span>
+          </nuxt-link>
+          <span v-if="!article.category.length">no catgory</span>
+          <span>,&nbsp;&nbsp;</span>
+          <span>{{ article.meta.views || 0 }}</span>
+          <span>&nbsp;Views</span>
+        </p>
+        <p class="item" v-else>
           <span>本文于</span>
           <span>&nbsp;</span>
           <nuxt-link :title="buildDateTitle(article.create_at)"
@@ -34,7 +65,7 @@
                      :to="`/category/${category.slug}`"
                      :title="category.description || category.name"
                      v-for="(category, index) in article.category">
-            <span>{{ category.name }}</span>
+            <span>{{ $i18n.nav[category.name] }}</span>
             <span v-if="article.category.length && article.category[index + 1]">、</span>
           </nuxt-link>
           <span v-if="!article.category.length">未知</span>
@@ -43,8 +74,8 @@
           <span>&nbsp;次</span>
         </p>
         <p class="item">
-          <span>相关标签：</span>
-          <span v-if="!article.tag.length">无相关标签</span>
+          <span class="title" :class="language">{{ languageIsEn ? 'Related tags:' : '相关标签：' }}</span>
+          <span v-if="!article.tag.length" v-text="$i18n.text.tag.empty">无相关标签</span>
           <nuxt-link :key="index"
                      :to="`/tag/${tag.slug}`"
                      :title="tag.description || tag.name"
@@ -54,15 +85,17 @@
           </nuxt-link>
         </p>
         <p class="item">
-          <span>永久地址：</span>
+          <span class="title" :class="language">{{ languageIsEn ? 'Article Address:' : '永久地址：' }}</span>
           <span class="site-url" @click="copyArticleUrl">
                 <span>https://surmon.me/article/{{ article.id }}</span>
           </span>
         </p>
         <div class="item">
-          <span>版权声明：</span>
-          <span>自由转载-署名-非商业性使用</span>
-          <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+          <span class="title" :class="language">{{ languageIsEn ? 'Copyright Clarify:' : '版权声明：' }}</span>
+          <span v-if="!languageIsEn">
+            <span>自由转载-署名-非商业性使用</span>
+            <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+          </span>
           <a href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
              target="_blank"
              rel="external nofollow noopenter">Creative Commons BY-NC 3.0 CN</a>
@@ -155,12 +188,16 @@
     },
     computed: {
       ...mapState({
+        language: state => state.option.language,
         tags: state => state.tag.data,
         imgExt: state => state.option.imgExt,
         article: state => state.article.detail.data,
         fetching: state => state.article.detail.fetching,
         mobileLayout: state => state.option.mobileLayout,
       }),
+      languageIsEn() {
+        return this.language === 'en'
+      },
       articleContent() {
         const content = this.article.content
         if (!content) return ''
@@ -204,7 +241,9 @@
       buildDateTitle(date) {
         if (!date) return date
         date = new Date(date)
-        return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours() > 11 ? '下午' : '上午'}`
+        const am = this.languageIsEn ? 'AM' : '上午'
+        const pm = this.languageIsEn ? 'PM' : '下午'
+        return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours() > 11 ? pm : am}`
       },
       buildDateLink(date) {
         if (!date) return date
@@ -231,6 +270,11 @@
 
         > .item {
           margin: 0;
+
+          > .title.en {
+            width: auto;
+            margin-right: 1rem;
+          }
         }
       }
 
@@ -281,6 +325,36 @@
 
     > .detail {
       padding: 1em 2em;
+      position: relative;
+      overflow: hidden;
+
+      > .oirigin {
+        position: absolute;
+        top: -0.9rem;
+        left: -2.4rem;
+        transform: rotate(-45deg);
+        width: 7rem;
+        height: 4rem;
+        line-height: 5.8rem;
+        text-align: center;
+        transform-origin: center;
+        color: white;
+        font-weight: bold;
+        font-size: $font-size-small;
+        text-transform: uppercase;
+
+        &.self {
+          background-color: rgba(#4caf50, .8);
+        }
+
+        &.other {
+          background-color: rgba(#ff5722, .8);
+        }
+
+        &.hybrid {
+          background-color: rgba($primary, .8);
+        }
+      }
 
       > .title {
         text-align: center;
@@ -547,9 +621,15 @@
       padding: 1em 1.5em;
 
       > .item {
+        word-break: break-all;
 
         a:hover {
           text-decoration: underline;
+        }
+
+        > .title.en {
+          width: 10rem;
+          display: inline-block;
         }
 
         .site-url {

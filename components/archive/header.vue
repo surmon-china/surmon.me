@@ -25,17 +25,29 @@
       </h4>
       <!-- data -->
       <h4 class="title" v-else-if="currentDate">
-        <span>发布于</span>
-        <span>&nbsp;{{ currentDate }}&nbsp;</span>
-        <span>的所有文章</span>
+        <span v-if="languageIsEn">
+          <span>{{ currentDate }}&nbsp;</span>
+          <span>articles</span>
+        </span>
+        <span v-else>
+          <span>发布于</span>
+          <span>&nbsp;{{ currentDate }}&nbsp;</span>
+          <span>的所有文章</span>
+        </span>
       </h4>
         <!-- search -->
       <h4 class="title" v-else-if="currentKeyword">
-        <span>和</span>
-        <span>&nbsp;"</span>
-        <span>{{ currentKeyword }}</span>
-        <span>"&nbsp;</span>
-        <span>有关的所有文章</span>
+        <span v-if="languageIsEn">
+          <span>"{{ currentKeyword }}"</span>
+          <span> related articles</span>
+        </span>
+        <span v-else>
+          <span>和</span>
+          <span>&nbsp;"</span>
+          <span>{{ currentKeyword }}</span>
+          <span>"&nbsp;</span>
+          <span>有关的所有文章</span>
+        </span>
       </h4>
     </transition>
   </div>
@@ -45,6 +57,9 @@
   export default {
     name: 'article-list-header',
     computed: {
+      languageIsEn() {
+        return this.$store.state.option.language === 'en'
+      },
       currentTag() {
         return this.$store.state.tag.data.data.find((tag, index, arr) => {
           return Object.is(tag.slug, this.$route.params.tag_slug)

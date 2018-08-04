@@ -2,10 +2,10 @@
   <div id="tools">
     <div class="container">
       <div class="tools-list">
-        <button class="webrtc" 
-                title="webrtc"
+        <button class="webrtc"
+                :title="$i18n.text.webrtc"
                 @click="toggleWebrtc"
-                :disabled="barrageState"
+                :disabled="barrageState || powerSavingMode"
                 :class="{ 
                   active: webrtcState,
                   close: barrageState
@@ -13,7 +13,7 @@
           <i class="iconfont icon-webrtc"></i>
         </button>
         <button class="barrage" 
-                title="barrage"
+                :title="$i18n.text.barrage.name"
                 @click="toggleBarrage" 
                 :disabled="webrtcState"
                 :class="{ 
@@ -23,20 +23,20 @@
           <i class="iconfont icon-barrage"></i>
         </button>
         <a class="feedback" 
-           title="feedback"
+           :title="$i18n.text.feedback"
            href="mailto:surmon@foxmail.com"
            target="_blank">
           <i class="iconfont icon-feedback"></i>
         </a>
         <button class="to-top" 
-                title="to-top"
+                :title="$i18n.text.totop"
                 @click="totop"
                 @mouseover="setButtonState('top', true, true)"
                 @mouseleave="setButtonState('top', false)">
           <i class="iconfont icon-totop"></i>
         </button>
         <button class="to-bottom" 
-                title="to-bottom"
+                :title="$i18n.text.tobottom"
                 @click="toBottom" 
                 @mouseover="setButtonState('bottom', true, true)"
                 @mouseleave="setButtonState('bottom', false)">
@@ -52,7 +52,7 @@
   import { scrollTo, easing } from '~/utils/scroll-to-anywhere'
   const underscore = require('~/utils/underscore-simple')
   export default {
-    name: 'tool',
+    name: 'tool-right',
     data() {
       return {
         topBtnMouseOver: false,
@@ -64,8 +64,10 @@
     },
     computed: {
       ...mapState('option', {
+        language: 'language',
+        webrtcState: 'openWebrtc',
         barrageState: 'openBarrage',
-        webrtcState: 'openWebrtc'
+        powerSavingMode: 'powerSavingMode'
       })
     },
     methods: {
@@ -107,10 +109,17 @@
         this.$store.commit('option/UPDATE_BARRAGE_STATE')
       },
       toggleWebrtc() {
+        const isEn = this.language === 'en'
         if (this.firstOpenWeRtc && !this.webrtcState) {
-          if (!window.confirm('实验室功能需要 WebRTC、WebGL、Canvas 等技术的支持，可能占用较多 CPU/GPU 资源，甚至死机、起火、爆炸、毁灭，继续？')) {
+          let confirmText
+          if (isEn) {
+            confirmText = 'Will open WebRTC、WebGL、Canvas, ready?'
+          } else {
+            confirmText = '实验室功能需要 WebRTC、WebGL、Canvas 等技术的支持，可能占用较多 CPU/GPU 资源，甚至死机、起火、爆炸、毁灭，继续？'
+          }
+          if (!window.confirm(confirmText)) {
             this.$store.commit('option/UPDATE_WEBRTC_STATE', false)
-            window.alert('滚滚滚')
+            window.alert(isEn ? 'Sorry~' : '滚滚滚')
             return false
           }
           this.firstOpenWeRtc = false

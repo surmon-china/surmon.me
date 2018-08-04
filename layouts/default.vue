@@ -7,20 +7,18 @@
       <mobile-aside :class="{ open: mobileSidebar }"></mobile-aside>
     </div>
     <div id="app-main" :class="{ open: mobileSidebar }" @click="closeMobileSidebar">
-      <emojo-rain></emojo-rain>
+      <emojo-rain v-if="!powerSavingMode"></emojo-rain>
       <background v-if="!mobileLayout"></background>
       <barrage v-if="!mobileLayout && barrageMounted" v-cloak></barrage>
       <transition name="fade">
-        <webrtc v-if="!mobileLayout && openWebrtc" v-cloak></webrtc>
+        <webrtc v-if="!mobileLayout && !powerSavingMode && openWebrtc" v-cloak></webrtc>
       </transition>
       <header-view v-if="!mobileLayout"></header-view>
       <mobile-header v-if="mobileLayout"></mobile-header>
-      <theme-view v-if="!mobileLayout" @theme="setTheme"></theme-view>
+      <theme-view v-if="!mobileLayout && !powerSavingMode" @theme="setTheme"></theme-view>
       <main id="main" :class="{ 'mobile': mobileLayout, [$route.name]: true }">
         <transition name="module">
-          <!-- <keep-alive> -->
-            <nav-view v-if="!errorColumn && !mobileLayout" keep-alive></nav-view>
-          <!-- </keep-alive> -->
+          <nav-view v-if="!errorColumn && !mobileLayout" keep-alive></nav-view>
         </transition>
         <div id="main-content" 
              class="main-content" 
@@ -30,18 +28,15 @@
                'mobile-layout': mobileLayout,
                [$route.name]: true
               }">
-          <!-- <keep-alive> -->
-            <nuxt></nuxt>
-          <!-- </keep-alive> -->
+          <nuxt></nuxt>
         </div>
         <transition name="aside">
-          <!-- <keep-alive> -->
-            <aside-view v-if="!fullColumn && !errorColumn && !mobileLayout" keep-alive></aside-view>
-          <!-- </keep-alive> -->
+          <aside-view v-if="!fullColumn && !errorColumn && !mobileLayout" keep-alive></aside-view>
         </transition>
       </main>
-      <tool-view v-if="!mobileLayout && !['app', 'music', 'service'].includes($route.name)"></tool-view>
       <share-view class="sidebar-share" v-if="!mobileLayout && !['service'].includes($route.name)"></share-view>
+      <tool-left v-if="!mobileLayout && !['service'].includes($route.name)"></tool-left>
+      <tool-right v-if="!mobileLayout && !['app', 'music', 'service'].includes($route.name)"></tool-right>
       <footer-view v-if="!mobileLayout"></footer-view>
       <mobile-footer v-else></mobile-footer>
     </div>
@@ -52,7 +47,7 @@
   import { mapState } from 'vuex'
   import eventBus from '~/utils/event-bus'
   import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
-  import { Background, EmojoRain, Barrage, Webrtc, Header, Footer, Aside, Share, Theme, Tool, Nav } from '~/components/layout'
+  import { Background, EmojoRain, ToolLeft, ToolRight, Barrage, Webrtc, Header, Footer, Aside, Share, Theme, Nav } from '~/components/layout'
   export default {
     name: 'app',
     head() {
@@ -81,20 +76,21 @@
       Webrtc,
       Barrage,
       EmojoRain,
+      ToolLeft,
+      ToolRight,
       Background,
       HeaderView: Header,
       FooterView: Footer,
       AsideView: Aside,
       ShareView: Share,
       ThemeView: Theme,
-      ToolView: Tool,
       NavView: Nav,
       MobileHeader,
       MobileFooter,
       MobileAside
     },
     computed: {
-      ...mapState('option', ['openWebrtc', 'barrageMounted', 'fullColumn', 'errorColumn', 'mobileLayout', 'mobileSidebar'])
+      ...mapState('option', ['openWebrtc', 'powerSavingMode', 'barrageMounted', 'fullColumn', 'errorColumn', 'mobileLayout', 'mobileSidebar'])
     },
     methods: {
       setTheme(theme) {

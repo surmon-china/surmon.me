@@ -1,15 +1,28 @@
 <template>
   <div class="global-background">
     <div class="background-image"></div>
-    <div id="particles-background" class="background-canvas"></div>
+    <div id="particles-background"
+         class="background-canvas"
+         v-if="!powerSavingMode"></div>
   </div>
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   export default {
     name: 'background',
     mounted() {
       this.buildBackground()
+    },
+    computed: {
+      ...mapState('option', ['powerSavingMode'])
+    },
+    watch: {
+      powerSavingMode(on) {
+        if (!on) {
+          this.$nextTick(this.buildBackground)
+        }
+      }
     },
     methods: {
       buildBackground() {
