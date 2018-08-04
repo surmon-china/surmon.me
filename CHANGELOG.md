@@ -1,9 +1,9 @@
 
-# TODO LIST
+## TODO LIST
 - graphql-js + RESTful 查询数据库
 - 增加文章详情页，根据 H2、H3、H4 的标题锚点索引功能
 
-# CHANGELOG
+## CHANGELOG
 
 ### v1.2.0
 - 改进在开发模式下，主题变量失效无法预览的问题
