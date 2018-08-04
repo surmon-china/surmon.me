@@ -32,85 +32,90 @@
                 <p class="item">
                   <i class="iconfont icon-coffee"></i>
                   <span class="accounts">
-                    <a href="mailto:surmon@foxmail.com" 
-                       target="_blank" 
-                       rel="external nofollow noopenter">
-                      <i class="iconfont icon-mail"></i>
-                    </a>
-                    <a href="https://github.com/surmon-china" 
-                       target="_blank" 
-                       rel="external nofollow noopenter">
-                      <i class="iconfont icon-github"></i>
-                    </a>
-                    <a href="https://surmon.taobao.com" 
-                       target="_blank"
-                       v-if="false"
-                       rel="external nofollow noopenter">
-                      <i class="iconfont icon-taobao"></i>
-                    </a>
-                    <a href="https://stackoverflow.com/users/6222535/surmon?tab=profile" 
-                       target="_blank"
-                       rel="external nofollow noopenter">
-                      <i class="iconfont icon-stackoverflow"></i>
-                    </a>
-                    <a href="https://leetcode.com/surmon" 
-                       target="_blank"
-                       rel="external nofollow noopenter">
-                      <i class="iconfont icon-algorithm"></i>
-                    </a>
-                    <a href="https://juejin.im/user/5735611ac4c9710060f8fa5e" 
-                       target="_blank" 
-                       rel="external nofollow noopenter">
-                      <i class="iconfont icon-juejin"></i>
-                    </a>
-                    <a href="https://www.zhihu.com/people/surmon/activities" 
-                       target="_blank" 
-                       rel="external nofollow noopenter">
-                      <i class="iconfont icon-zhihu"></i>
-                    </a>
-                    <a href="https://www.quora.com/profile/Surmon" 
-                       target="_blank"
-                       rel="external nofollow noopenter">
-                      <i class="iconfont icon-quora"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/in/surmon" 
-                       target="_blank"
-                       rel="external nofollow noopenter">
-                      <i class="iconfont icon-linkedin"></i>
-                    </a>
-                    <a href="https://weibo.com/nocower" 
-                       target="_blank" 
-                       rel="external nofollow noopenter">
-                      <i class="iconfont icon-weibo"></i>
-                    </a>
-                    <a href="https://space.bilibili.com/27940710/#/video" 
-                       target="_blank" 
-                       rel="external nofollow noopenter">
-                      <i class="iconfont icon-bilibili"></i>
-                    </a>
-                    <a href="https://twitter.com/surmon_me" 
-                       target="_blank" 
-                       rel="external nofollow noopenter">
-                      <i class="iconfont icon-twitter"></i>
-                    </a>
-                    <a href="https://www.facebook.com/surmon.me" 
-                       target="_blank" 
-                       rel="external nofollow noopenter">
-                      <i class="iconfont icon-facebook"></i>
-                    </a>
-                    <a href="https://www.instagram.com/surmon666/" 
-                       target="_blank" 
-                       rel="external nofollow noopenter">
-                      <i class="iconfont icon-instagram"></i>
-                    </a>
+                    <span>
+                      <a href="mailto:surmon@foxmail.com" 
+                         target="_blank" 
+                         rel="external nofollow noopenter">
+                        <i class="iconfont icon-mail"></i>
+                      </a>
+                      <a href="https://github.com/surmon-china" 
+                         target="_blank" 
+                         rel="external nofollow noopenter">
+                        <i class="iconfont icon-github"></i>
+                      </a>
+                      <a href="https://juejin.im/user/5735611ac4c9710060f8fa5e" 
+                         target="_blank" 
+                         rel="external nofollow noopenter">
+                        <i class="iconfont icon-juejin"></i>
+                      </a>
+                      <a href="https://www.zhihu.com/people/surmon/activities" 
+                         target="_blank" 
+                         rel="external nofollow noopenter">
+                        <i class="iconfont icon-zhihu"></i>
+                      </a>
+                      <a href="https://weibo.com/nocower" 
+                         target="_blank" 
+                         rel="external nofollow noopenter">
+                        <i class="iconfont icon-weibo"></i>
+                      </a>
+                      <a href="https://space.bilibili.com/27940710/#/video" 
+                         target="_blank" 
+                         rel="external nofollow noopenter">
+                        <i class="iconfont icon-bilibili"></i>
+                      </a>
+                    </span>
+                    <span v-if="!mobileLayout">
+                      <a href="https://surmon.taobao.com" 
+                         target="_blank"
+                         v-if="false"
+                         rel="external nofollow noopenter">
+                        <i class="iconfont icon-taobao"></i>
+                      </a>
+                      <a href="https://stackoverflow.com/users/6222535/surmon?tab=profile" 
+                         target="_blank"
+                         rel="external nofollow noopenter">
+                        <i class="iconfont icon-stackoverflow"></i>
+                      </a>
+                      <a href="https://leetcode.com/surmon" 
+                         target="_blank"
+                         rel="external nofollow noopenter">
+                        <i class="iconfont icon-algorithm"></i>
+                      </a>
+                      
+                      <a href="https://www.quora.com/profile/Surmon" 
+                         target="_blank"
+                         rel="external nofollow noopenter">
+                        <i class="iconfont icon-quora"></i>
+                      </a>
+                      <a href="https://www.linkedin.com/in/surmon" 
+                         target="_blank"
+                         rel="external nofollow noopenter">
+                        <i class="iconfont icon-linkedin"></i>
+                      </a>
+                      <a href="https://twitter.com/surmon_me" 
+                         target="_blank" 
+                         rel="external nofollow noopenter">
+                        <i class="iconfont icon-twitter"></i>
+                      </a>
+                      <a href="https://www.facebook.com/surmon.me" 
+                         target="_blank" 
+                         rel="external nofollow noopenter">
+                        <i class="iconfont icon-facebook"></i>
+                      </a>
+                      <a href="https://www.instagram.com/surmon666/" 
+                         target="_blank" 
+                         rel="external nofollow noopenter">
+                        <i class="iconfont icon-instagram"></i>
+                      </a>
+                    </span>
                   </span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-code"></i>
                   <span class="skills" v-if="langEn">Talk is cheap. fuck me.</span>
-                  <span v-else>能做一切</span>
+                  <span v-else>能做什么 ？<strong>一切</strong></span>
                 </p>
-                <p class="item">
+                <p class="item" v-if="!mobileLayout">
                   <i class="iconfont icon-friend"></i>
                   <span class="friends">
                     <a href="http://skyrover.me/about" 
@@ -224,7 +229,7 @@
                   width: 100%;
                   margin-bottom: 1rem;
                   flex-direction: row;
-                  padding: 1rem 0;
+                  padding: 2rem 0;
 
                   > .background {
                     height: 100%;
@@ -271,7 +276,7 @@
                 > .desc {
                   width: 100%;
                   padding: 1em;
-                  overflow-x: auto;
+                  overflow: hidden;
 
                   > .item {
                     white-space: nowrap;
@@ -527,7 +532,7 @@
 
                 > .accounts {
 
-                  > a {
+                  a {
                     margin-right: 1.35em;
 
                     > .iconfont {
@@ -545,6 +550,30 @@
             margin-bottom: 1em;
             overflow: hidden;
             background-color: $module-bg;
+            position: relative;
+
+            &:hover {
+              &:before {
+                opacity: 1;
+              }
+            }
+
+            &:before {
+              content: 'Take me, Anywhere';
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              top: 0;
+              left: 0;
+              line-height: 21rem;
+              font-size: $font-size-h1 * 1.3;
+              background-color: $module-hover-bg-darken-40;
+              color: $white;
+              font-weight: bold;
+              text-align: center;
+              opacity: 0;
+              transition: opacity .2s;
+            }
           }
 
           .about-project {
