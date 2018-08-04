@@ -105,8 +105,8 @@
 
 <script>
   import apiConfig from '~/api.config'
-  import SimpleWebRTC from '~/plugins/webrtc'
   import socketio from '~/plugins/socket.io'
+  import SimpleWebRTC from '~/plugins/webrtc'
   import faceCtracker from './face-ctracker.vue'
   export default {
     name: 'webrtc',
@@ -115,6 +115,8 @@
     },
     data() {
       return {
+        clmtrackrLibLoading: false,
+        clmtrackrLoaded: false,
         localStream: {
           ok: true,
           volume: -45,
@@ -167,15 +169,34 @@
         this.localStream.disabledCarema = disable
       },
       toggleBeauty() {
-        this.localStream.disabledBeauty = !this.localStream.disabledBeauty
-        if (this.streams.length && this.streams[0] && this.streams[0].local) {
-          this.streams[0].beauty = !this.localStream.disabledBeauty
-        }
-        if (this.localStream.peerId) {
-          this.webrtc.connection.connection.emit('webrtc-set-beauty', {
-            beauty: this.streams[0].beauty,
-            peerId: this.localStream.peerId,
+        if (window.clm && window.clm.tracker) {
+          this.localStream.disabledBeauty = !this.localStream.disabledBeauty
+          if (this.streams.length && this.streams[0] && this.streams[0].local) {
+            this.streams[0].beauty = !this.localStream.disabledBeauty
+          }
+          if (this.localStream.peerId) {
+            this.webrtc.connection.connection.emit('webrtc-set-beauty', {
+              beauty: this.streams[0].beauty,
+              peerId: this.localStream.peerId,
+            })
+          }
+        } else if (!self.clmtrackrLoaded && !self.clmtrackrLibLoading) {
+          const self = this
+          window.addLoadedTask(() => {
+            const clmtrackrScript = document.createElement('script')
+            clmtrackrScript.onload = () => {
+              self.clmtrackrLibLoading = false
+              self.clmtrackrLoaded = true
+              alert('人脸识别库加载成功！期待吴彦祖王祖贤的现身~')
+            }
+            clmtrackrScript.defer = 'defer'
+            clmtrackrScript.src = `${apiConfig.cdnUrl}/scripts/clmtrackr.js`
+            document.body.appendChild(clmtrackrScript)
           })
+          this.clmtrackrLibLoading = true
+          alert('人脸识别库加载中...大概半分钟，稍后再打开美颜~')
+        } else {
+          alert('不是说过了！人脸识别库加载中...大概半分钟，半分钟很久吗！！!')
         }
       },
       getStreamByPeerId(id) {

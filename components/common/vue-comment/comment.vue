@@ -5,7 +5,7 @@
         <div class="count">
           <strong class="count">{{ comment.data.pagination.total || 0 }}</strong>
           <span>&nbsp;</span>
-          <span>条评论</span>
+          <span v-text="$i18n.text.comment.count">条评论</span>
         </div>
         <a href="" 
            class="like" 
@@ -13,7 +13,7 @@
            @click.stop.prevent="likePage">
           <i class="iconfont icon-like"></i>
           <strong>{{ likes || 0 }}</strong>
-          <span>人喜欢</span>
+          <span v-text="$i18n.text.comment.like">人喜欢</span>
         </a>
         <a href="" class="shang" @click.stop.prevent="shang">
           <i class="iconfont icon-shang"></i>
@@ -23,15 +23,19 @@
         <a href="" 
            class="sort-btn"
            :class="{ actived: Object.is(sortMode, -1) }" 
-           @click.stop.prevent="sortComemnts(-1)">最新</a>
+           @click.stop.prevent="sortComemnts(-1)"
+           v-text="$i18n.text.comment.new">最新</a>
         <a href="" 
            class="sort-btn"
            :class="{ actived: Object.is(sortMode, 2) }" 
-           @click.stop.prevent="sortComemnts(2)">最热</a>
+           @click.stop.prevent="sortComemnts(2)"
+           v-text="$i18n.text.comment.hot">最热</a>
       </div>
     </div>
     <transition name="module" mode="out-in">
-      <div class="empty-box" v-if="!comment.data.data.length && !comment.fetching">Go right to the heart of the matter.</div>
+      <div class="empty-box"
+           v-if="!comment.data.data.length && !comment.fetching"
+           v-text="$i18n.text.comment.empty">Go right to the heart of the matter.</div>
       <loading-box v-else-if="comment.fetching"></loading-box>
       <div class="list-box" v-else>
         <transition-group name="fade" tag="ul" class="comment-list">
@@ -44,7 +48,7 @@
                  rel="external nofollow noopener"
                  :href="comment.author.site" 
                  @click.stop="clickUser($event, comment.author)">
-                <img :alt="comment.author.name || '匿名用户'"
+                <img :alt="comment.author.name || $i18n.text.comment.anonymous"
                      :src="gravatar(comment.author.email) || `${cdnUrl}/images/anonymous.jpg`">
               </a>
             </div>
@@ -66,7 +70,8 @@
               </div>
               <div class="cm-content">
                 <p class="reply" v-if="!!comment.pid">
-                  <span>回复 </span>
+                  <span v-text="$i18n.text.comment.reply">回复</span>
+                  <span>&nbsp;</span>
                   <a href="" @click.stop.prevent="toSomeAnchorById(`comment-item-${comment.pid}`)">
                     <span>#{{ comment.pid }}&nbsp;</span>
                     <strong v-if="fondReplyParent(comment.pid)">@{{ fondReplyParent(comment.pid) }}</strong>
@@ -76,17 +81,19 @@
                 <div v-html="marked(comment.content)"></div>
               </div>
               <div class="cm-footer">
-                <span class="create_at">{{ comment.create_at | timeAgo }}</span>
+                <span class="create_at">{{ comment.create_at | timeAgo(language) }}</span>
                 <a href="" class="reply" @click.stop.prevent="replyComment(comment)">
                   <i class="iconfont icon-reply"></i>
-                  <span>回复</span>
+                  <span v-text="$i18n.text.comment.reply">回复</span>
                 </a>
                 <a href="" 
                    class="like" 
                    :class="{ liked: commentLiked(comment.id), actived: !!comment.likes }"
                    @click.stop.prevent="likeComment(comment)">
                   <i class="iconfont icon-zan"></i>
-                  <span>顶&nbsp;({{ comment.likes }})</span></a>
+                  <span v-text="$i18n.text.comment.ding">顶</span>
+                  <span>&nbsp;({{ comment.likes }})</span>
+                </a>
               </div>
             </div>
           </li>
@@ -107,7 +114,10 @@
         </ul>
         <ul class="pagination-list" v-else>
           <li class="item">
-            <a href="" class="pagination-btn prev disabled" @click.stop.prevent>— old</a>
+            <a href="" class="pagination-btn prev disabled" @click.stop.prevent>
+              <span>— </span>
+              <span v-text="$i18n.text.comment.pagenation.old">old</span>
+            </a>
           </li>
           <li class="item" v-for="item in comment.data.pagination.total_page">
             <a href="" 
@@ -120,7 +130,10 @@
                   })">{{ item }}</a>
           </li>
           <li class="item">
-            <a href="" class="pagination-btn next disabled" @click.stop.prevent>new —</a>
+            <a href="" class="pagination-btn next disabled" @click.stop.prevent>
+              <span v-text="$i18n.text.comment.pagenation.new">new</span>
+              <span> —</span>
+            </a>
           </li>
         </ul>
       </div>
@@ -133,21 +146,28 @@
             <input required
                    type="text" 
                    name="name"
-                   placeholder="name *" 
+                   :class="language"
                    autocomplete="on"
+                   :placeholder="$i18n.text.comment.profile.name + ' *'"
                    v-model="user.name">
           </div>
           <div class="email">
             <input required
                    type="email" 
                    name="email"
-                   placeholder="email *" 
+                   :class="language"
+                   :placeholder="$i18n.text.comment.profile.email + ' *'"
                    autocomplete="on"
                    v-model="user.email" 
                    @blur="upadteUserGravatar">
           </div>
           <div class="site">
-            <input type="url" name="url" placeholder="site" autocomplete="on" v-model="user.site">
+            <input type="url"
+                   name="url"
+                   :class="language"
+                   autocomplete="on"
+                   :placeholder="$i18n.text.comment.profile.site"
+                   v-model="user.site">
           </div>
           <div class="save" v-if="userCacheEditing">
             <button type="submit" @click="updateUserCache($event)">
@@ -161,10 +181,12 @@
             <strong class="name">{{ user.name | firstUpperCase }}</strong>
             <a href="" class="setting" @click.stop.prevent>
               <i class="iconfont icon-setting"></i>
-              <span>账户设置</span>
+              <span class="account-setting" v-text="$i18n.text.comment.setting.account">账户设置</span>
               <ul class="user-tool">
-                <li @click.stop.prevent="userCacheEditing = true">编辑信息</li>
-                <li @click.stop.prevent="claerUserCache">清空信息</li>
+                <li @click.stop.prevent="userCacheEditing = true"
+                    v-text="$i18n.text.comment.setting.edit">编辑信息</li>
+                <li @click.stop.prevent="claerUserCache"
+                    v-text="$i18n.text.comment.setting.clear">清空信息</li>
               </ul>
             </a>
           </div>
@@ -173,7 +195,7 @@
       <div class="editor-box">
         <div class="user">
           <div class="gravatar" v-if="!mobileLayout">
-            <img :alt="user.name || '匿名用户'"
+            <img :alt="user.name || $i18n.text.comment.anonymous"
                  :src="user.gravatar || `${cdnUrl}/images/anonymous.jpg`">
           </div>
         </div>
@@ -182,7 +204,8 @@
             <div class="will-reply" v-if="!!pid">
               <div class="reply-user">
                 <span>
-                  <span>回复 </span>
+                  <span v-text="$i18n.text.comment.reply">回复</span>
+                  <span>&nbsp;</span>
                   <a href="" @click.stop.prevent="toSomeAnchorById(`comment-item-${replyCommentSlef.id}`)">
                     <strong>#{{ replyCommentSlef.id }} @{{ replyCommentSlef.author.name }}：</strong>
                   </a>
@@ -196,7 +219,7 @@
             <div class="markdown-editor" 
                  ref="markdown"
                  contenteditable="true"
-                 placeholder="Show me the code."
+                 :placeholder="$i18n.text.comment.placeholder"
                  @keyup="commentContentChange($event)">
             </div>
             <div class="markdown-preview" 
@@ -228,7 +251,7 @@
                     class="submit" 
                     :disabled="comment.posting"
                     @click="submitComment($event)">
-              <span>{{ comment.posting ? '发布中...' : '发布' }}</span>
+              <span>{{ comment.posting ? $i18n.text.comment.submiting : $i18n.text.comment.submit }}</span>
             </button>
           </div>
         </div>
@@ -276,7 +299,7 @@
           email: /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/,
           url: /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/
         },
-        emojis: ['😃', '😂', '😅', '😉', '😌', '😔', '😓', '😢', '😍', '😘', '😜', '😡', '😭', '😱', '😳', '😵', '🌚', '🙏', '👆', '👇', '👌', '👍', '👎', '💪', '👏', '🌻', '🌹', '💊', '🇨🇳', '🇺🇸']
+        emojis: ['😃', '😂', '😅', '😉', '😌', '😔', '😓', '😢', '😍', '😘', '😜', '😡', '😤', '😭', '😱', '😳', '😵', '🌚', '🙏', '👆', '👇', '👌', '🤘', '👍', '👎', '💪', '👏', '🌻', '🌹', '💊', '🇨🇳', '🇺🇸', '🇯🇵 ', '🚩', '🐶', '❤️', '💔', '💩', '👻']
       }
     },
     props: {
@@ -292,6 +315,7 @@
     computed: {
       ...mapState({
         comment: state => state.comment,
+        language: state => state.option.language,
         mobileLayout: state => state.option.mobileLayout,
         blacklist: state => state.option.globalOption.data.blacklist,
       }),
@@ -354,10 +378,18 @@
       // 更新用户数据
       updateUserCache(event) {
         event.preventDefault()
-        if (!this.user.name) return alert('名字？')
-        if (!this.user.email) return alert('邮箱？')
-        if (!this.regexs.email.test(this.user.email)) return alert('邮箱不合法')
-        if (this.user.site && !this.regexs.url.test(this.user.site)) return alert('链接不合法')
+        if (!this.user.name) {
+          return alert(this.$i18n.text.comment.profile.name + '?')
+        }
+        if (!this.user.email) {
+          return alert(this.$i18n.text.comment.profile.email + '?')
+        }
+        if (!this.regexs.email.test(this.user.email)) {
+          return alert(this.$i18n.text.comment.profile.emailerr)
+        }
+        if (this.user.site && !this.regexs.url.test(this.user.site)) {
+          return alert(this.$i18n.text.comment.profile.siteerr)
+        }
         localStorage.setItem('user', JSON.stringify(this.user))
         this.userCacheEditing = false
       },
@@ -488,7 +520,7 @@
         })
         .catch(err => {
           console.warn('喜欢失败', err)
-          alert('操作失败，原因 => 控制台')
+          alert(this.$i18n.text.comment.profile.actionerr)
         })
       },
       // 点赞某条评论
@@ -501,7 +533,7 @@
         })
         .catch(err => {
           console.warn('评论点赞失败', err)
-          alert('操作失败，原因 => 控制台')
+          alert(this.$i18n.text.comment.profile.actionerr)
         })
       },
       // 获取某条评论是否被点赞
@@ -517,21 +549,33 @@
       submitComment(event) {
         // 为了使用原生表单拦截，不使用事件修饰符
         event.preventDefault()
-        if (!this.user.name) return alert('名字？')
-        if (!this.user.email) return alert('邮箱？')
-        if (!this.regexs.email.test(this.user.email)) return alert('邮箱不合法')
-        if (this.user.site && !this.regexs.url.test(this.user.site)) return alert('链接不合法')
-        if(!this.comemntContentText || !this.comemntContentText.replace(/\s/g, '')) return alert('内容？')
+        if (!this.user.name) {
+          return alert(this.$i18n.text.comment.profile.name + '?')
+        }
+        if (!this.user.email) {
+          return alert(this.$i18n.text.comment.profile.email + '?')
+        }
+        if (!this.regexs.email.test(this.user.email)) {
+          return alert(this.$i18n.text.comment.profile.emailerr)
+        }
+        if (this.user.site && !this.regexs.url.test(this.user.site)) {
+          return alert(this.$i18n.text.comment.profile.siteerr)
+        }
+        if(!this.comemntContentText || !this.comemntContentText.replace(/\s/g, '')) {
+          return alert(this.$i18n.text.comment.profile.content + '?')
+        }
         const lineOverflow = this.comemntContentText.split('\n').length > 36
         const lengthOverflow = this.comemntContentText.length > 2000
-        if(lineOverflow || lengthOverflow) return alert('内容需要在2000字/36行以内')
+        if(lineOverflow || lengthOverflow) {
+          return alert(this.$i18n.text.comment.profile.contenterr)
+        }
         // 使用服务单配置的黑名单在本地校验邮箱和关键字
         if (this.blacklist.mails.includes(this.user.email) || 
            (this.blacklist.keywords.length && 
             eval(`/${this.blacklist.keywords.join('|')}/ig`).test(this.comemntContentText))) {
-          alert('发布失败，原因 => 控制台');
-          console.warn('评论发布失败\n1：邮箱被列入黑名单\n2：内容包含黑名单关键词');
-          return false;
+          alert(this.$i18n.text.comment.profile.submiterr)
+          console.warn('评论发布失败\n1：邮箱被列入黑名单\n2：内容包含黑名单关键词')
+          return false
         }
         if (!this.user.site) {
           Reflect.deleteProperty(this.user, 'site')
@@ -585,7 +629,7 @@
           localStorage.setItem('user', JSON.stringify(this.user))
         }).catch(err => {
           console.warn('评论发布失败', err)
-          alert('发布失败，原因 => 控制台')
+          alert(this.$i18n.text.comment.profile.submiterr)
         })
       }
     }
@@ -1029,9 +1073,10 @@
           }
 
           > .setting {
-            margin-left: 1rem;
             font-size: 1rem;
+            margin-left: 1rem;
             display: inline-block;
+            position: relative;
 
             &:hover {
 
@@ -1044,6 +1089,10 @@
               margin-right: .5rem;
             }
 
+            > .account-setting {
+              text-transform: capitalize;
+            }
+
             > .user-tool {
               display: none;
               position: absolute;
@@ -1054,6 +1103,16 @@
               padding-top: .5rem;
               list-style-type: square;
               z-index: 99;
+              color: $white;
+
+              > li {
+                padding: 0 1rem;
+                background-color: rgba(green, 0.5);
+              }
+
+              > li:hover {
+                background-color: rgba(green, 0.8);
+              }
             }
           }
         }

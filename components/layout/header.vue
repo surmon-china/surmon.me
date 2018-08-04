@@ -4,8 +4,8 @@
       <div class="navbar-container container">
         <div class="navbar-header">
           <img src="/images/logo.svg" class="navbar-logo">
-          <span class="navbar-slogan">Talk is cheap. Show me the code</span>
-          <nuxt-link to="/" class="navbar-link"></nuxt-link>
+          <span class="navbar-slogan">{{ $i18n.text.slogan }}</span>
+          <nuxt-link to="/" class="navbar-link" :title="$i18n.text.slogan"></nuxt-link>
         </div>
         <div class="navbar-player">
           <div class="panel">
@@ -33,7 +33,7 @@
               <span>{{ currentSong.album.name || 'unknow' }}</span>
             </nuxt-link>
           </div>
-          <div class="song" v-else>Music is the eye of ear.</div>
+          <div class="song" v-else>{{ $i18n.text.music.empty }}</div>
         </div>
       </div>
       <div class="pre-load">
@@ -139,10 +139,11 @@
           align-items: center;
           padding-left: .5em;
           width: 29em;
-          justify-content: space-between;
+          // justify-content: space-between;
 
           .navbar-logo {
             width: 11rem;
+            margin-right: 4rem;
 
             .logo-st {
               fill: $primary;

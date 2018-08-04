@@ -18,17 +18,21 @@
                      v-for="(item, index) in article.data.data"></list-item>
         </transition-group>
         <empty-box class="article-empty-box" v-else>
-          <slot>No Result Article.</slot>
+          <slot v-text="$i18n.text.article.empty">No Result Article.</slot>
         </empty-box>
       </transition>
     </div>
 
     <!-- 加载更多 -->
     <div class="article-load">
-      <button class="btn-loadmore" @click="$emit('loadmore')" :disabled="article.fetching || !canLoadMore">
-        <span v-if="!article.fetching && canLoadMore">或许有更多</span>
-        <span v-else-if="article.fetching && canLoadMore">加载中</span>
-        <span v-else-if="!canLoadMore">这是底线</span>
+      <button class="btn-loadmore" @click="$emit('loadmore')"
+              :disabled="article.fetching || !canLoadMore">
+        <span v-if="!article.fetching && canLoadMore"
+              v-text="$i18n.text.article.loadmore">或许有更多</span>
+        <span v-else-if="article.fetching && canLoadMore"
+              v-text="$i18n.text.article.loading">加载中</span>
+        <span v-else-if="!canLoadMore"
+              v-text="$i18n.text.article.nomore">这是底线</span>
       </button>
     </div>
   </div>
@@ -111,6 +115,7 @@
         height: 3em;
         line-height: 3em;
         background-color: $module-bg;
+        text-transform: uppercase;
 
         &:hover {
           background-color: $module-hover-bg;

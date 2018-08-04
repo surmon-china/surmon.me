@@ -3,6 +3,15 @@
     <div class="item-content" :class="{ mobile: mobileLayout }">
       <div class="item-thumb" v-if="!mobileLayout">
         <nuxt-link :to="`/article/${article.id}`">
+          <span class="item-oirigin" :class="{
+            self: !article.origin,
+            other: article.origin === 1,
+            hybrid: article.origin === 2
+          }">
+            <span v-if="!article.origin" v-text="$i18n.text.origin.original">原创</span>
+            <span v-else-if="article.origin === 1" v-text="$i18n.text.origin.reprint">转载</span>
+            <span v-else-if="article.origin === 2" v-text="$i18n.text.origin.hybrid">混撰</span>
+          </span>
           <img class="item-thumb-img" 
                :src="buildThumb(article.thumb)"
                :alt="article.title"
@@ -11,13 +20,13 @@
       </div>
       <div class="item-body">
         <h4 class="item-title">
-          <nuxt-link :to="`/article/${article.id}`" :title="article.title">{{ article.title }}</nuxt-link>
+          <nuxt-link :to="`/article/${article.id}`" :title="article.title" v-text="article.title"></nuxt-link>
         </h4>
         <p class="item-description" style="-webkit-box-orient: vertical;" v-html="article.description"></p>
         <div class="item-meta">
           <span class="date">
             <i class="iconfont icon-clock"></i>
-            <span>{{ article.create_at | toYMD }}</span>
+            <span>{{ article.create_at | toYMD(language) }}</span>
           </span>
           <span class="views">
             <i class="iconfont icon-eye"></i>
@@ -34,14 +43,15 @@
           <span class="categories">
             <i class="iconfont icon-list"></i>
             <nuxt-link :key="index"
-                         :to="`/category/${category.slug}`"
-                         v-if="article.category && article.category.length"
-                         v-for="(category, index) in article.category">{{ category.name }}</nuxt-link>
-            <span v-else>未分类</span>
+                       :to="`/category/${category.slug}`"
+                       v-if="article.category && article.category.length"
+                       v-for="(category, index) in article.category"
+                       v-text="$i18n.nav[category.name]">{{ category.name }}</nuxt-link>
+            <span v-else v-text="$i18n.text.category.empty">未分类</span>
           </span>
           <span class="tags" v-show="false">
             <i class="iconfont icon-tag"></i>
-            <span v-if="!article.tag.length">无</span>
+            <span v-if="!article.tag.length" v-text="$i18n.text.tag.empty">无</span>
             <nuxt-link :key="index" 
                          :to="`/tag/${tag.slug}`" 
                          v-for="(tag, index) in article.tag">{{ tag.name }}</nuxt-link>
@@ -60,7 +70,7 @@
       article: Object
     },
     computed: {
-      ...mapState('option', ['imgExt', 'mobileLayout'])
+      ...mapState('option', ['imgExt', 'language', 'mobileLayout'])
     },
     methods: {
       buildThumb(thumb) {
@@ -94,6 +104,10 @@
 
         > .item-thumb {
 
+          .item-oirigin {
+            opacity: 1;
+          }
+
           .item-thumb-img {
             @include css3-prefix(opacity, .95);
             @include css3-prefix(transform, translateX(-.5em));
@@ -106,6 +120,36 @@
         width: 12em;
         height: 8.5em;
         overflow: hidden;
+        position: relative;
+
+        .item-oirigin {
+          // width: 4rem;
+          height: 2.1rem;
+          line-height: 2.1rem;
+          left: 0;
+          top: 0;
+          position: absolute;
+          z-index: 9;
+          font-size: $font-size-small;
+          text-align: center;
+          color: #fff;
+          border-bottom-right-radius: 1px;
+          opacity: .4;
+          padding: 0 .8rem;
+          text-transform: uppercase;
+
+          &.self {
+            background-color: rgba(#4caf50, .5);
+          }
+
+          &.other {
+            background-color: rgba(#ff5722, .5);
+          }
+
+          &.hybrid {
+            background-color: rgba($primary, .5);
+          }
+        }
 
         .item-thumb-img {
           min-width: 100%;
@@ -168,6 +212,10 @@
           white-space: nowrap;
           text-overflow: ellipsis;
           word-wrap: normal;
+
+          > .date {
+            text-transform: uppercase;
+          }
 
           > .views {
             min-width: 4rem;
