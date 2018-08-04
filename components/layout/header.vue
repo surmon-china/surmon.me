@@ -4,7 +4,7 @@
       <div class="navbar-container container">
         <div class="navbar-header">
           <img src="/images/logo.svg" class="navbar-logo">
-          <span class="navbar-slogan">{{ $i18n.text.slogan }}</span>
+          <span class="navbar-slogan" v-text="$i18n.text.slogan"></span>
           <nuxt-link to="/" class="navbar-link" :title="$i18n.text.slogan"></nuxt-link>
         </div>
         <div class="navbar-player">

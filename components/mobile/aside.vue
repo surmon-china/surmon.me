@@ -6,56 +6,58 @@
       </div>
       <div class="profile">
         <h3 class="name">Surmon</h3>
-        <p class="email">Talk is cheap. Show me the code</p>
+        <p class="email" v-text="$i18n.text.slogan">Talk is cheap. Show me the code</p>
       </div>
     </div>
     <div class="aside-nav">
       <nav class="nav-list">
         <nuxt-link :to="'/'" class="item" exact>
           <i class="iconfont icon-home"></i>
-          <span>Home</span>
+          <span v-text="$i18n.nav.home">Home</span>
         </nuxt-link>
         <nuxt-link to="/category/code" class="item">
           <i class="iconfont icon-code"></i>
-          <span>Code</span>
+          <span v-text="$i18n.nav.code">Code</span>
         </nuxt-link>
         <nuxt-link to="/project" class="item">
           <i class="iconfont icon-tool"></i>
-          <span>Project</span>
+          <span v-text="$i18n.nav.project">Project</span>
         </nuxt-link>
         <nuxt-link to="/category/think" class="item">
           <i class="iconfont icon-think"></i>
-          <span>Think</span>
+          <span v-text="$i18n.nav.think">Think</span>
         </nuxt-link>
         <nuxt-link to="/sitemap" class="item">
           <i class="iconfont icon-netease-music"></i>
-          <span>Sitemap</span>
+          <span v-text="$i18n.nav.map">Sitemap</span>
         </nuxt-link>
         <nuxt-link to="/about" class="item">
           <i class="iconfont icon-user"></i>
-          <span>About</span>
+          <span v-text="$i18n.nav.about">About</span>
         </nuxt-link>
         <nuxt-link to="/service" class="item">
           <i class="iconfont icon-zan-top"></i>
-          <span>Service</span>
+          <span v-text="$i18n.nav.service">Service</span>
         </nuxt-link>
         <nuxt-link to="/guestbook" class="item guestbook">
           <i class="iconfont icon-comment"></i>
-          <span>Guestbook</span>
+          <span v-text="$i18n.nav.guestbook">Guestbook</span>
         </nuxt-link>
         <a href="https://s.click.taobao.com/gzUaBYw" 
            rel="external nofollow noopener"
            class="item ad taobao"
+           v-if="false"
            target="_blank">
           <i class="iconfont icon-taobao"></i>
-          <span>Taobao</span>
+          <span v-text="$i18n.nav.taobao">Taobao</span>
         </a>
         <a href="https://s.click.taobao.com/aFwPDTw" 
            rel="external nofollow noopener"
            class="item ad aliyun"
+           v-if="false"
            target="_blank">
           <i class="iconfont icon-aliyun"></i>
-          <span>Aliyun</span>
+          <span v-text="$i18n.nav.aliyun">Aliyun</span>
         </a>
         <a href="https://errend.io"
            rel="external nofollow noopener"
@@ -66,7 +68,7 @@
         </a>
         <nuxt-link to="/app" class="item app">
           <i class="iconfont icon-app"></i>
-          <span>App</span>
+          <span v-text="$i18n.nav.app">App</span>
         </nuxt-link>
       </nav>
     </div>

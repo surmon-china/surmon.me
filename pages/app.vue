@@ -29,8 +29,11 @@
 <script>
   export default {
     name: 'app',
-    head: {
-      title: 'App',
+    head() {
+      const isEn = this.$store.state.option.language === 'en'
+      return {
+        title: `${isEn ? '' : this.$i18n.nav.app + ' | '}App`,
+      }
     },
     data() {
       return {
