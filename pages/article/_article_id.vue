@@ -303,6 +303,10 @@
 
       > .detail {
 
+        > .oirigin {
+          font-size: $font-size-base;
+        }
+
         > .content {
 
           pre {
