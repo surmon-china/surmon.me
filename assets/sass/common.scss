@@ -63,6 +63,23 @@
   display: none!important;
 }
 
+input {
+
+  &.zh {
+    &::placeholder {
+      text-indent: .3rem;
+      font-size: $font-size-small;
+    }
+  }
+
+  &.en {
+    &::placeholder {
+      text-indent: .1rem;
+      text-transform: capitalize;
+    }
+  }
+}
+
 // swiper
 .swiper-wrapper {
   z-index: 1;
@@ -171,7 +188,7 @@ a {
 
   &.sidebar-share {
     position: fixed;
-    top: 25%;
+    top: 20%;
     left: 0;
     width: 4em;
 
