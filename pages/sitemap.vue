@@ -33,7 +33,7 @@
               <nuxt-link class="name"
                            :to="`/category/${category.slug}`"
                            :title="category.name"
-                           v-text="$i18n.nav[category.name]">{{ category.name }}</nuxt-link>
+                           v-text="$i18n.nav[category.slug]">{{ category.name }}</nuxt-link>
               <span>&nbsp;</span>
               <span>（{{ category.count || 0 }}）</span>
               <span>&nbsp;-&nbsp;&nbsp;</span>
