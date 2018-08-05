@@ -206,7 +206,7 @@ module.exports = {
           en: 'No Result Article.'
         },
         hotlist: {
-          zh: '热门文章',
+          zh: '群贤毕至',
           en: 'hot'
         },
         loadmore: {
