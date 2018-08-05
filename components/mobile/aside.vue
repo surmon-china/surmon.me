@@ -28,7 +28,7 @@
           <span v-text="$i18n.nav.think">Think</span>
         </nuxt-link>
         <nuxt-link to="/sitemap" class="item">
-          <i class="iconfont icon-netease-music"></i>
+          <i class="iconfont icon-sitemap"></i>
           <span v-text="$i18n.nav.map">Sitemap</span>
         </nuxt-link>
         <nuxt-link to="/about" class="item">
@@ -62,6 +62,7 @@
         <a href="https://errend.io"
            rel="external nofollow noopener"
            class="item ad errend"
+           v-if="false"
            target="_blank">
           <i class="iconfont icon-debug"></i>
           <span>Errend.io</span>
