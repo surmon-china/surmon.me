@@ -65,7 +65,7 @@
                      :to="`/category/${category.slug}`"
                      :title="category.description || category.name"
                      v-for="(category, index) in article.category">
-            <span>{{ $i18n.nav[category.name] }}</span>
+            <span>{{ $i18n.nav[category.slug] }}</span>
             <span v-if="article.category.length && article.category[index + 1]">、</span>
           </nuxt-link>
           <span v-if="!article.category.length">未知</span>
