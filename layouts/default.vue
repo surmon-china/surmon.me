@@ -7,6 +7,7 @@
       <mobile-aside :class="{ open: mobileSidebar }"></mobile-aside>
     </div>
     <div id="app-main" :class="{ open: mobileSidebar }" @click="closeMobileSidebar">
+      <wall-flower-box v-if="!mobileLayout && !powerSavingMode"></wall-flower-box>
       <emojo-rain v-if="!powerSavingMode"></emojo-rain>
       <background v-if="!mobileLayout"></background>
       <barrage v-if="!mobileLayout && barrageMounted" v-cloak></barrage>

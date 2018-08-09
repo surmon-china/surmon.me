@@ -236,7 +236,7 @@ module.exports = {
       },
       comment: {
         empty: {
-          zh: '等待你的捷足先登',
+          zh: '期待你的捷足先登',
           en: 'Go right to the heart of the matter.'
         },
         anonymous: {
