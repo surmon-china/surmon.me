@@ -109,7 +109,8 @@ module.exports = {
     { src: '~/plugins/swiper.js', ssr: false },
     { src: '~/plugins/vue-empty.js' },
     { src: '~/plugins/vue-loading.js' },
-    { src: '~/plugins/vue-comment.js' }
+    { src: '~/plugins/vue-comment.js' },
+    { src: '~/plugins/vue-wall-flower.js' }
   ],
   head: {
     title: `Surmon.me - ${slogan}`,
