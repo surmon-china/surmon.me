@@ -30,9 +30,9 @@
         let offText = ''
         const isEn = this.language === 'en'
         if (isEn) {
-          psmText = 'Canvas background, comment emoji rain, WebRTC, Theme'
+          psmText = 'Canvas background, comment emoji rain, WebRTC, Theme、core socialist values'
         } else {
-          psmText = 'Canvas 动态背景、留言表情雨侦测、WebRTC 视频会话、主题色系切换'
+          psmText = 'Canvas 动态背景、留言表情雨侦测、WebRTC 视频会话、主题色系切换、社会主义价值观'
         }
         if (isEn) {
           onText = `Open「 Power Saving Mode 」will close ${psmText}，sure?`
