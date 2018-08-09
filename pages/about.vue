@@ -27,7 +27,7 @@
                 <p class="item">
                   <i class="iconfont icon-like"></i>
                   <span v-if="langEn">code. beauty. whisky. music. vagrant.</span>
-                  <span v-else>爱酒、肉、女人、音乐、编程、流浪</span>
+                  <span v-else>爱酒、爱肉、爱妹子、音乐、编程、流浪</span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-coffee"></i>
@@ -113,22 +113,26 @@
                 <p class="item">
                   <i class="iconfont icon-code"></i>
                   <span class="skills" v-if="langEn">Talk is cheap. fuck me.</span>
-                  <span v-else>能做什么 ？<strong>一切</strong></span>
+                  <span v-else>我生有涯愿无尽，心期填海力移山</span>
                 </p>
                 <p class="item" v-if="!mobileLayout">
                   <i class="iconfont icon-friend"></i>
                   <span class="friends">
                     <a href="http://skyrover.me/about" 
-                       target="_blank" 
+                       target="_blank"
                        rel="external nofollow noopenter">「 skyrover 」</i>
                     </a>
                     <a href="https://jooger.me/about" 
-                       target="_blank" 
+                       target="_blank"
                        rel="external nofollow noopenter">「 Jooger 」</i>
                     </a>
                     <a href="https://blog.jimmylv.info" 
-                       target="_blank" 
+                       target="_blank"
                        rel="external nofollow noopenter">「 JimmyLv 」</i>
+                    </a>
+                    <a href="https://www.funens.com" 
+                       target="_blank"
+                       rel="external nofollow noopenter">「 Channg 」</i>
                     </a>
                     <a href="https://biji.io" 
                        target="_blank" 
