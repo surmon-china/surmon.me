@@ -79,7 +79,7 @@ module.exports = {
     // 禁止使用多余的圆括号
     "no-extra-parens": 0,
 
-    // 禁止多余的冒号
+    // 禁止多余的分号
     "no-extra-semi": 2,
 
     // 禁止重复的函数声明

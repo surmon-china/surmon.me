@@ -9,6 +9,14 @@
   src: url('/fonts/DIN-Regular.ttf');
 }
 
+@font-face {font-family: 'webfont';
+  src: url('//at.alicdn.com/t/webfont_lfy2krusqbo.eot'); /* IE9*/
+  src: url('//at.alicdn.com/t/webfont_lfy2krusqbo.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('//at.alicdn.com/t/webfont_lfy2krusqbo.woff') format('woff'), /* chrome、firefox */
+  url('//at.alicdn.com/t/webfont_lfy2krusqbo.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('//at.alicdn.com/t/webfont_lfy2krusqbo.svg#思源黑体-粗') format('svg'); /* iOS 4.1- */
+}
+
 ::selection {
     background: $primary; 
     color: $white;
