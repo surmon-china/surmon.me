@@ -5,6 +5,9 @@
 
 ## CHANGELOG
 
+### v1.2.2
+- 更新 iconfont
+
 ### v1.2.1
 
 - 更新文案
