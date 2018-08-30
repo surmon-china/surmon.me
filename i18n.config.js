@@ -15,7 +15,7 @@ module.exports = {
   data: {
     nav: {
       home: {
-        zh: '正殿',
+        zh: '明殿',
         en: 'Home'
       },
       think: {
@@ -27,7 +27,7 @@ module.exports = {
         en: 'code'
       },
       project: {
-        zh: '空宝阁',
+        zh: '穷宝阁',
         en: 'project'
       },
       music: {
@@ -35,15 +35,15 @@ module.exports = {
         en: 'music'
       },
       about: {
-        zh: '吾生',
+        zh: '狂浪生',
         en: 'about'
       },
       service: {
-        zh: '吾道',
+        zh: '德道',
         en: 'service'
       },
       guestbook: {
-        zh: '百鸣院',
+        zh: '百鸣苑',
         en: 'Guestbook'
       },
       taobao: {
