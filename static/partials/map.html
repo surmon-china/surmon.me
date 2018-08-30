@@ -21,9 +21,8 @@
 <script>
     var map = new AMap.Map('container', {
         resizeEnable: true,
-        center: [114.323426, 32.781389],
-        zoom: 6
-        // zoom: 8
+        center: [121.445314, 31.223493],
+        zoom: 10
     });
     map.setLang('zh_en');
     var contextMenu = new AMap.ContextMenu();  //创建右键菜单
@@ -45,7 +44,6 @@
         contextMenu.open(map, e.lnglat);
         contextMenuPositon = e.lnglat;
     });
-    /*
     var marker = new AMap.Marker({
         position: map.getCenter(),
         draggable: true,
@@ -55,7 +53,6 @@
     marker.setMap(map);
     // 设置点标记的动画效果，此处为弹跳效果
     marker.setAnimation('AMAP_ANIMATION_BOUNCE');
-    */
 </script>
 </body>
 </html>
