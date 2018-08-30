@@ -31,7 +31,7 @@ module.exports = {
         en: 'project'
       },
       music: {
-        zh: '乐府',
+        zh: '乐斋',
         en: 'music'
       },
       about: {
