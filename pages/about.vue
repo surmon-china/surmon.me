@@ -9,7 +9,7 @@
                 <p class="item">
                   <i class="iconfont icon-user"></i>
                   <span v-if="langEn"><span class="first-letter">I</span>'m Surmon, a (95+) (小) Javascript (鲜) stack (肉) developer.</span>
-                  <span v-else><span class="first-letter">我</span>，一只 95 后小藏獒，路在四面，家在八方</span>
+                  <span v-else><span class="first-letter">我</span>，仍然是，一只藏獒</span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-comment-discussion"></i>
@@ -27,7 +27,7 @@
                 <p class="item">
                   <i class="iconfont icon-like"></i>
                   <span v-if="langEn">code. beauty. whisky. music. vagrant.</span>
-                  <span v-else>爱酒、爱肉、爱妹子、音乐、编程、流浪</span>
+                  <span v-else>爱酒肉、爱妹子、玩音乐、偶尔编程、长期流浪</span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-coffee"></i>
@@ -556,6 +556,7 @@
             background-color: $module-bg;
             position: relative;
 
+            /*
             &:hover {
               &:before {
                 opacity: 1;
@@ -578,6 +579,7 @@
               opacity: 0;
               transition: opacity .2s;
             }
+            */
           }
 
           .about-project {

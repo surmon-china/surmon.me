@@ -8,17 +8,17 @@
         <div class="circle-progress">
           <svg viewBox="0 0 100 100">
             <path class="circle-progress-circle-track" 
-                  :d="trackPath" 
                   stroke="rgba(197, 197, 197, 0.4)" 
-                  :stroke-width="relativeStrokeWidth" 
-                  fill="none">
+                  fill="none"
+                  :d="trackPath" 
+                  :stroke-width="relativeStrokeWidth" >
             </path>
             <path class="circle-progress-circle-path" 
-                  :d="trackPath" 
-                  stroke-linecap="bevel" 
                   stroke="rgba(190, 190, 190, 0.7)" 
-                  :stroke-width="relativeStrokeWidth" 
+                  stroke-linecap="bevel" 
                   fill="none" 
+                  :d="trackPath" 
+                  :stroke-width="relativeStrokeWidth" 
                   :style="circlePathStyle">
             </path>
           </svg>
