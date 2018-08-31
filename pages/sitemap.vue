@@ -17,7 +17,7 @@
             </p>
             <transition name="module">
               <p v-show="article.open" class="item-description">
-                <span>{{ article.description || $i18n.text.article.empty }}</span>
+                <span v-html="article.description || $i18n.text.article.empty"></span>
               </p>
             </transition>
           </li>
