@@ -26,6 +26,8 @@
     },
     methods: {
       buildBackground() {
+        // 暂时关闭动画
+        return false
         window.particlesJS('particles-background', {
           "particles": {
             "number": {
