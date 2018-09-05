@@ -9,7 +9,10 @@
                 <p class="item">
                   <i class="iconfont icon-user"></i>
                   <span v-if="langEn"><span class="first-letter">I</span>'m Surmon, a (95+) (小) Javascript (鲜) stack (肉) developer.</span>
-                  <span v-else><span class="first-letter">我</span>，仍然是，一只藏獒</span>
+                  <span v-else>
+                    <span class="first-letter">我</span>
+                    <span>，灼热的青莲，</span>
+                    <strong>独一的美</strong></span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-comment-discussion"></i>
@@ -27,7 +30,10 @@
                 <p class="item">
                   <i class="iconfont icon-like"></i>
                   <span v-if="langEn">code. beauty. whisky. music. vagrant.</span>
-                  <span v-else>爱酒肉、爱妹子、玩音乐、偶尔编程、长期流浪</span>
+                  <span v-else>
+                    <span>恋何物？</span>
+                    <strong>酒池肉林、日夜笙歌、浪碟游蜂、五音六律、目营心匠、桀骜不羁</strong>
+                  </span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-coffee"></i>
@@ -113,7 +119,9 @@
                 <p class="item">
                   <i class="iconfont icon-code"></i>
                   <span class="skills" v-if="langEn">Talk is cheap. fuck me.</span>
-                  <span v-else>我生有涯愿无尽，心期填海力移山</span>
+                  <span v-else>
+                    <strong>我生有涯愿无尽，心期填海力移山</strong>
+                  </span>
                 </p>
                 <p class="item" v-if="!mobileLayout">
                   <i class="iconfont icon-friend"></i>

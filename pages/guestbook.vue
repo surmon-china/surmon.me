@@ -84,11 +84,13 @@
             display: block;
             font-weight: 700;
             opacity: .5;
-            cursor: pointer;
+            cursor: progress;
             padding: 0 1em;
+            padding-left: 3rem;
             height: 2em;
             line-height: 2em;
-            background-color: $module-bg;
+            color: $body-bg;
+            background: linear-gradient(to left, $module-bg, $module-hover-bg-opacity-3, transparent);
           }
         }
       }
