@@ -33,7 +33,7 @@
         <i class="iconfont icon-zan-top"></i>
         <span v-text="$i18n.nav.service"></span>
       </nuxt-link>
-      <nuxt-link to="/guestbook" class="item">
+      <nuxt-link to="/guestbook" class="item guestbook">
         <i class="iconfont icon-comment"></i>
         <span v-text="$i18n.nav.guestbook"></span>
       </nuxt-link>
@@ -136,6 +136,10 @@
           font-weight: bold;
           color: $primary;
           background-color: $module-bg;
+
+          &.guestbook {
+            background: linear-gradient(to bottom, $module-bg, transparent);
+          }
         }
 
         .iconfont {

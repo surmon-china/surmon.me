@@ -104,14 +104,15 @@
             right: 2rem;
             color: $link-color;
             margin: 0;
-            padding: 0 .5em;
+            padding: 0 .6em;
             height: 2em;
             line-height: 2em;
             font-size: 1em;
             font-weight: bold;
             border-radius: 1px;
             letter-spacing: .3px;
-            background-color: $module-hover-bg;
+            -webkit-background-clip: text;
+            background: linear-gradient(to right, transparent, $module-hover-bg-opacity-3, $module-hover-bg, $module-bg);
 
             &:hover {
               color: $text-darken;
