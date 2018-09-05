@@ -103,29 +103,6 @@
 
         &.language {
 
-          $enBG: rgb(0, 43, 127);
-          $zhBG: #F40002;
-
-          &.en {
-            background-color: rgba($enBG, .7);
-
-            &:hover {
-              &:before {
-                background-color: rgba($enBG, 1);
-              }
-            }
-          }
-
-          &.zh {
-            background-color: rgba($zhBG, .7);
-
-            &:hover {
-              &:before {
-                background-color: rgba($zhBG, 1);
-              }
-            }
-          }
-
           &:before {
             content: 'LANG';
             width: 100%;
@@ -140,6 +117,29 @@
           &:hover {
             &:before {
               opacity: 1;
+            }
+          }
+
+          $enBG: rgb(0, 43, 127);
+          $zhBG: #F40002;
+
+          &.en {
+            background: linear-gradient(to bottom left, rgba($enBG, .6), $enBG);
+
+            &:hover {
+              &:before {
+                background: linear-gradient(to bottom left, $zhBG, $enBG);
+              }
+            }
+          }
+
+          &.zh {
+            background: linear-gradient(to bottom right, rgba($zhBG, .6), $zhBG);
+
+            &:hover {
+              &:before {
+                background: linear-gradient(to bottom left, $enBG, $zhBG);
+              }
             }
           }
         }
