@@ -5,7 +5,7 @@
       <ul class="theme-list">
         <li class="item"
             :class="key"
-            :style="{ 'background-color': value }"
+            :style="computedStyle(key)"
             @click="setTheme(key)"
             v-for="(value, key) in themes"></li>
       </ul>
@@ -33,6 +33,17 @@
       setTheme(key) {
         this.theme = key
         this.$emit('theme', key)
+      },
+      computedStyle(key) {
+        return {}
+        const themes = Object.keys(this.themes)
+        const currentIndex = themes.indexOf(key)
+        const current = this.themes[key]
+        const prev = this.themes[themes[currentIndex - 1]] || current
+        const next = this.themes[themes[currentIndex + 1]] || current
+        return {
+          background: `linear-gradient(to bottom, ${current} 60%, ${next} 100%)`
+        }
       }
     }
   }
@@ -89,6 +100,18 @@
         padding: 0;
         margin: 0;
         width: 2rem;
+        overflow: hidden;
+        border-top-left-radius: 1rem;
+        border-bottom-left-radius: 1rem;
+        background: linear-gradient(
+          to bottom,
+          #0088f5 16.6%,
+          #bfbf9b 33.2%,
+          purple 49.8%,
+          green 66.6%,
+          red 83.2%,
+          black 100%
+        );
 
         > .item {
           width: 2rem;
@@ -96,16 +119,8 @@
           float: left;
           cursor: pointer;
           display: inline-block;
-          background-color: #000;
-          opacity: .7;
-
-          &:first-child {
-            border-top-left-radius: 100%;
-          }
-
-          &:last-child {
-            border-bottom-left-radius: 100%;
-          }
+          background-color: rgba(white, .5);
+          opacity: 0;
 
           &:hover {
             opacity: .9;
