@@ -97,6 +97,10 @@ input {
   z-index: 2;
 }
 
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background: white;
+}
+
 .swiper-button-prev,
 .swiper-button-next {
   z-index: 3;
