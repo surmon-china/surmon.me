@@ -5,6 +5,13 @@
 
 ## CHANGELOG
 
+### v1.2.5
+- Update Nuxt to v1.4.2
+- Update Vue vue-server-renderer vue-template-compiler to 2.5.17
+- 修复评论文案错别字
+- 增加 Logo 光影效果
+- 增加 Header 水波纹
+
 ### v1.2.4
 - 优化 大部分背景层更新为渐变设计
 
