@@ -314,7 +314,7 @@ module.exports = {
           },
         },
         placeholder: {
-          zh: '愿你的见解一阵见血',
+          zh: '愿你的见解一针见血',
           en: 'Go right to the heart of the matter.'
         },
         count: {
