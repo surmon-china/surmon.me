@@ -3,6 +3,7 @@
     <nav class="navbar">
       <div class="navbar-container container">
         <div class="navbar-header">
+          <span class="navbar-blank"></span>
           <img src="/images/logo.svg" class="navbar-logo">
           <span class="navbar-slogan" v-text="$i18n.text.slogan"></span>
           <nuxt-link to="/" class="navbar-link" :title="$i18n.text.slogan"></nuxt-link>
@@ -139,7 +140,53 @@
           align-items: center;
           padding-left: .5em;
           width: 29em;
-          // justify-content: space-between;
+          position: relative;
+          overflow: hidden;
+
+          @keyframes logo-blink {
+            0% {
+              opacity: 0;
+              transform: translateX(-10%);
+            }
+            5% { opacity: 1 }
+            35% { opacity: 1 }
+            39% { opacity: 0 }
+            50% { opacity: .8 }
+            60% { opacity: .8 }
+            65% {
+              opacity: .8;
+              transform: translateX(100%);
+            }
+            70% {
+              opacity: 0;
+              transform: translateX(100%);
+            }
+            100% {
+              opacity: 0;
+              transform: translateX(100%);
+            }
+          }
+
+          > .navbar-blank {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 60%;
+            height: 100%;
+            opacity: 0;
+            animation: logo-blink 8s ease-in 1s infinite;
+
+            &:before {
+              content: '';
+              width: 11rem;
+              height: 3rem;
+              position: absolute;
+              top: 15%;
+              left: 0;
+              transform: rotate(-45deg);
+              background: radial-gradient(white, rgba(255, 255, 255, .2), rgba(255, 255, 255, 0));
+            }
+          }
 
           .navbar-logo {
             width: 11rem;
