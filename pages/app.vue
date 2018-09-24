@@ -13,11 +13,11 @@
         <div class="download">
           <img src="/images/app-qrcode.png" class="qrcode" alt="qrcode">
           <a target="_blank"
-             href="https://static.surmon.me/app/surmon.me.apk"
+             :href="`${cdnUrl}/app/surmon.me.apk`"
              class="btn"
              v-text="$i18n.text.device.android">Android</a>
           <a target="_blank"
-             href="https://static.surmon.me/app/surmon.me.ipa"
+             :href="`${cdnUrl}/app/surmon.me.ipa`"
              class="btn"
              v-text="$i18n.text.device.ios">Ios</a>
         </div>
@@ -170,15 +170,15 @@
             height: 2.8rem;
             line-height: 2.6rem;
             color: $primary;
-            background-color: $module-bg;
             margin-top: 2rem;
             border:  1px solid $primary;
             text-align: center;
             text-transform: uppercase;
+            background: $module-bg;
 
             &:hover {
               color: $white;
-              background-color: $primary-opacity-9;
+              background: linear-gradient(to bottom right, $module-bg-opacity-9, $primary-opacity-9);
             }
           }
         }
