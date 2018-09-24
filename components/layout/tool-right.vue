@@ -170,7 +170,7 @@
           }
         }
 
-        @keyframes defaultBtnBg {
+        @keyframes default-btn-bg {
           0%   {
             color: white;
             background: chartreuse;
@@ -230,11 +230,11 @@
 
         > .barrage {
           color: white;
-          animation: defaultBtnBg 10s infinite;
+          animation: default-btn-bg 10s infinite;
 
           &.active {
             background-color: $module-hover-bg;
-            animation: defaultBtnBg steps(1) 1.666s infinite;
+            animation: default-btn-bg steps(1) 1.666s infinite;
           }
 
           &.close {
