@@ -32,6 +32,9 @@
       <nuxt-link to="/service" class="item">
         <i class="iconfont icon-zan-top"></i>
         <span v-text="$i18n.nav.service"></span>
+        <span class="superscript">
+          <i class="iconfont icon-hot"></i>
+        </span>
       </nuxt-link>
       <nuxt-link to="/guestbook" class="item guestbook">
         <i class="iconfont icon-comment"></i>
@@ -98,9 +101,30 @@
         color: $secondary;
         font-family: DINRegular, CenturyGothic;
         margin-bottom: .5em;
+        position: relative;
 
         &:hover {
           color: $primary;
+        }
+
+        > .superscript {
+          margin-left: 1rem;
+
+          @keyframes superscript-icon-color {
+            0%   { color: chartreuse }
+            15%  { color: green }
+            30%  { color: red }
+            45%  { color: darkviolet }
+            60% { color: pink }
+            86% { color: blue }
+            100% { color: black }
+          }
+
+          > .iconfont {
+            color: red;
+            tranisiton: color 0s;
+            animation: superscript-icon-color 1s infinite;
+          }
         }
         
         &.ad {

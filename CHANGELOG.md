@@ -5,6 +5,12 @@
 
 ## CHANGELOG
 
+### v1.2.6
+- 修复 APP 下载地址
+- 更新你服务页文案
+- 优化菜单按钮
+- 更新 iconfont 图标
+
 ### v1.2.5
 - Update Nuxt to v1.4.2
 - Update Vue vue-server-renderer vue-template-compiler to 2.5.17
