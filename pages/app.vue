@@ -167,18 +167,20 @@
 
           > .btn {
             width: 12rem;
-            height: 2.8rem;
-            line-height: 2.6rem;
+            // height: 2.8rem;
+            line-height: 2.68rem;
             color: $primary;
             margin-top: 2rem;
-            border:  1px solid $primary;
+            border:  1px solid;
+            border-color: $primary;
             text-align: center;
             text-transform: uppercase;
             background: $module-bg;
 
             &:hover {
               color: $white;
-              background: linear-gradient(to bottom right, $module-bg-opacity-9, $primary-opacity-9);
+              border-color: $primary-opacity-5;
+              background: linear-gradient(to bottom right, rgba(white, .8), $primary-opacity-9, rgba(green, .7));
             }
           }
         }
