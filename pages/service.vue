@@ -93,7 +93,7 @@
       </div>
       <div class="rule">
         <div class="rule-content container">
-          <p class="text">设计、开发、运维，一切可支撑；需求不清、预算不足、结算不利，全部都拒绝；如果你觉得自己需要一位优秀的工程师实施，请 EMail 我；非常优秀，没有之一</p>
+          <p class="text">设计、开发、运维，一切可支撑；需求不清、预算不足、结算不利，全部都拒绝；如果你需要一位出色省心的的全栈工程师，请 EMail 我；非常优秀，没有之一</p>
         </div>
       </div>
     </div>
