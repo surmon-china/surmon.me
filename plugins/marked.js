@@ -88,7 +88,6 @@ export default (content, tags, parseHtml = false) => {
   // 如果是解析评论，则不解析html内容
   marked.setOptions({ sanitize: !parseHtml })
 
-  // console.log('content', content)
   if (typeof content != 'string') {
     return ''
   }

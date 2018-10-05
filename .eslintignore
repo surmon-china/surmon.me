@@ -2,7 +2,7 @@ build/*.js
 config/*.js
 .nuxt/*.js
 .nuxt/*.vue
-utils/ga.js
+utils/underscore-simple.js
 plugins/ga.js
 plugins/copy-right.js
 plugins/baidu-seo-push.js
