@@ -80,7 +80,8 @@ module.exports = {
       'particles.js',
       'simplewebrtc',
       'bezier-easing',
-      'socket.io-client'
+      'socket.io-client',
+      '~/plugins/marked.js'
     ],
     maxChunkSize: 350000,
     // 为 JS 和 Vue 文件定制 babel 配置。https://nuxtjs.org/api/configuration-build/#analyze

@@ -35,7 +35,6 @@ export const mutations = {
         language: rep.language
       }
     })
-    // console.log(newRepositories)
     state.repositories.data = newRepositories
   },
   REQUEST_GUTHUB_REPOSITORIES_FAILURE(state) {
