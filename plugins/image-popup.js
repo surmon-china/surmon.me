@@ -12,9 +12,7 @@ if (process.browser) {
       window.onscroll = null
       mask.setAttribute('class', '')
       setTimeout(() => {
-        if (mask) {
-          document.body.removeChild(mask)
-        }
+        mask && document.body.removeChild(mask)
       }, 350)
     }
   }
@@ -28,7 +26,9 @@ if (process.browser) {
       image.setAttribute('class', className)
     }
     const oldMask = document.getElementById('image-popup')
-    if (oldMask) document.body.removeChild(oldMask)
+    if (oldMask) {
+      document.body.removeChild(oldMask)
+    }
     const mask = document.createElement('div')
     mask.setAttribute('id', 'image-popup')
     mask.appendChild(image)
