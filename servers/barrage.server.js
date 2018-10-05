@@ -1,3 +1,8 @@
+/**
+ * @file 弹幕服务 / Commonjs module
+ * @author Surmon <surmon@foxmail.com>
+ */
+
 const path = require('path')
 const fs = require('fs-extra')
 

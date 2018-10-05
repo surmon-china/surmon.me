@@ -1,3 +1,8 @@
+/**
+ * @file I18n config / Commonjs module
+ * @author Surmon <surmon@foxmail.com>
+ */
+
 module.exports = {
   default: 'zh',
   languages: [

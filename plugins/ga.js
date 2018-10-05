@@ -1,8 +1,7 @@
-/*
- *
- * GA 统计服务
- *
-*/
+/**
+ * @file GA 统计服务 / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 if (process.env.NODE_ENV === 'production') {
   /*

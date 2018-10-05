@@ -1,5 +1,8 @@
+/**
+ * @file 评论模块 UA、OS 解析器 / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
-// ua解析
 export const uaParse = e => {
 	let r = new Array
 	let outputer = ''

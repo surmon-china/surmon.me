@@ -103,7 +103,7 @@
     <transition name="module">
       <div class="pagination-box" v-if="comment.data.pagination.total_page > 1">
         <ul class="pagination-list" v-if="Object.is(sortMode, 2)">
-          <li class="item" v-for="item in comment.data.pagination.total_page">
+          <li class="item" :key="index" v-for="(item, index) in comment.data.pagination.total_page">
             <a href="" 
                class="pagination-btn" 
                :class="{ 'actived disabled': Object.is(item, comment.data.pagination.current_page) }"
@@ -119,7 +119,7 @@
               <span v-text="$i18n.text.comment.pagenation.old">old</span>
             </a>
           </li>
-          <li class="item" v-for="item in comment.data.pagination.total_page">
+          <li class="item" :key="index" v-for="(item, index) in comment.data.pagination.total_page">
             <a href="" 
                class="pagination-btn" 
                :class="{ 'actived disabled': paginationReverseActive(item) }"
@@ -231,7 +231,10 @@
               <i class="iconfont icon-emoji"></i>
               <div class="emoji-box">
                 <ul class="emoji-list">
-                  <li class="item" @click="insertEmoji(e)" v-for="e in emojis">{{ e }}</li>
+                  <li class="item"
+                      :key="index"
+                      @click="insertEmoji(emoji)"
+                      v-for="(emoji, index) in emojis">{{ emoji }}</li>
                 </ul>
               </div>
             </a>
