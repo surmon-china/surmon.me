@@ -1,6 +1,6 @@
 /**
- * Vue-comment-box
- * @author Surmon.me
+ * @file Vue-comment-box component / ES module
+ * @author Surmon <surmon@foxmail.com>
  */
 
 const vueComment = require('./comment.vue')
@@ -10,4 +10,4 @@ const comment = {
   }
 }
 
-module.exports = comment
+export default comment

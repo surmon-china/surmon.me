@@ -128,23 +128,28 @@
                   <span class="friends">
                     <a href="http://skyrover.me/about" 
                        target="_blank"
-                       rel="external nofollow noopenter">「 skyrover 」</i>
+                       rel="external nofollow noopenter">
+                       「 skyrover 」
                     </a>
                     <a href="https://jooger.me/about" 
                        target="_blank"
-                       rel="external nofollow noopenter">「 Jooger 」</i>
+                       rel="external nofollow noopenter">
+                       「 Jooger 」
                     </a>
                     <a href="https://blog.jimmylv.info" 
                        target="_blank"
-                       rel="external nofollow noopenter">「 JimmyLv 」</i>
+                       rel="external nofollow noopenter">
+                       「 JimmyLv 」
                     </a>
                     <a href="https://www.funens.com" 
                        target="_blank"
-                       rel="external nofollow noopenter">「 Channg 」</i>
+                       rel="external nofollow noopenter">
+                       「 Channg 」
                     </a>
                     <a href="https://biji.io" 
                        target="_blank" 
-                       rel="external nofollow noopenter">「 Tokin 」</i>
+                       rel="external nofollow noopenter">
+                       「 Tokin 」
                     </a>
                   </span>
                 </p>

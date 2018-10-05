@@ -1,3 +1,8 @@
+/**
+ * @file Layout components / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
+
 import Background from './background.vue'
 import EmojoRain from './emoji-rain.vue'
 import ToolLeft from './tool-left.vue'

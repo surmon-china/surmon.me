@@ -1,6 +1,6 @@
-/**
- * Vue-loading
- * @author Surmon.me
+ /**
+ * @file Vue-loading component / ES module
+ * @author Surmon <surmon@foxmail.com>
  */
 
 const LoadingComponent = require('./loading.vue')
@@ -10,4 +10,4 @@ const loading = {
   }
 }
 
-module.exports = loading
+export default loading
