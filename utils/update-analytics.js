@@ -18,12 +18,14 @@ const updateGAScript = () => {
   const doUpdate = () => {
     axios.get('http://www.google-analytics.com/analytics.js', { timeout: 6000 }).then(res => {
       if (res.status === 200) {
-        // 成功的话，24小时更新一次
+
+        // 成功，24小时更新一次
         fs.writeFileSync(path.join(__dirname, '..', 'static', 'scripts') + '/analytics.js', res.data)
         consola.info('GA 脚本更新成功', new Date())
         setTimeout(doUpdate, UPDATE_TIME.HOURS_24)
       } else {
-        // 成功的话，1小时更新一次
+
+        // 失败，1小时更新一次
         consola.info('GA 脚本更新失败', new Date(), res.data)
         setTimeout(doUpdate, UPDATE_TIME.HOURS_1)
       }

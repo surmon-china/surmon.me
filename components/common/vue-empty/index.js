@@ -1,6 +1,6 @@
 /**
- * Vue-empty
- * @author Surmon.me
+ * @file Vue-empty component / ES module
+ * @author Surmon <surmon@foxmail.com>
  */
 
 const EmptyComponent = require('./empty.vue')
@@ -10,4 +10,4 @@ const empty = {
   }
 }
 
-module.exports = empty
+export default empty

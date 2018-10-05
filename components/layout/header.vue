@@ -29,7 +29,7 @@
                        :title="`${currentSong.name} / ${currentSong.album.name || 'unknow'}`">
               <span>{{ currentSong.name }}</span>
               <span> By </span>
-              <span v-for="artist in currentSong.artists">{{ artist.name }}</span>
+              <span :key="index" v-for="(artist, index) in currentSong.artists">{{ artist.name }}</span>
               <span> / </span>
               <span>{{ currentSong.album.name || 'unknow' }}</span>
             </nuxt-link>
