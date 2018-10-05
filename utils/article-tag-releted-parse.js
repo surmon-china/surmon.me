@@ -21,13 +21,14 @@ export default (text, tags) => {
   tagNames.sort((p, n) => p.length < n.length)
   const tagReg = eval(`/${tagNames.join('|')}/ig`)
 
-  // 如果字符被tagNames包含，即字符本身是个单词，即字符本身是连接，则直接返回字符，不再处理
+  // 如果字符被 tagNames 包含，即字符本身是个单词，即字符本身是连接，则直接返回字符，不再处理
   if (tagNames.includes(text)) {
     return text
   }
 
   // 正则替换方法
   return text.replace(tagReg, tag => {
+
     // 找到本身为自身、大写为自身、小写为自身、首字母大写为自身
     const findedTag = tags.find(t => {
       return Object.is(t.name, tag) || 
@@ -35,9 +36,10 @@ export default (text, tags) => {
              Object.is(t.name.toUpperCase(), tag) || 
              Object.is(firstUpperCase(t.name), tag)
     })
-    if (!findedTag) return tag
-    // 如果找到匹配的，但是text文字首字符为#，则证明是外站连接，则不解析
-    if (text[0] === '#') return tag
+
+    // 找不到，或找到匹配的，但 text 字首为#，则证明是外站连接，则不解析
+    if (!findedTag || text[0] === '#') return tag
+
     const slug = findedTag.slug
     const command = `window.$nuxt.$router.push({ path: \'/tag/${slug}\' });return false`
     return `<a href=\"/tag/${slug}\" title=\"${findedTag.description}\" onclick=\"${command}\">${tag}</a>`

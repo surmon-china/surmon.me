@@ -1,10 +1,7 @@
-/*
-*
-* HTML编译输出过滤器
-*
-* Description
-*
-*/
+/**
+ * @file Text Filters / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 // 文字溢出过滤器
 export const textOverflow = (text, length) => {
