@@ -11,7 +11,7 @@ import Aside from './aside.vue'
 import Theme from './theme.vue'
 import Nav from './nav.vue'
 
-module.exports = {
+export {
   Background,
   EmojoRain,
   ToolLeft,

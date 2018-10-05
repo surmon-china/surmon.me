@@ -1,8 +1,7 @@
-/*
-*
-* 评论数据状态
-*
-*/
+/**
+ * @file 评论数据状态 / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 export const state = () => {
   return {

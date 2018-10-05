@@ -122,7 +122,7 @@
 
           > .iconfont {
             color: red;
-            tranisiton: color 0s;
+            transition: color 0s;
             animation: superscript-icon-color 1s infinite;
           }
         }

@@ -53,8 +53,8 @@
             <i class="iconfont icon-tag"></i>
             <span v-if="!article.tag.length" v-text="$i18n.text.tag.empty">无</span>
             <nuxt-link :key="index" 
-                         :to="`/tag/${tag.slug}`" 
-                         v-for="(tag, index) in article.tag">{{ tag.name }}</nuxt-link>
+                       :to="`/tag/${tag.slug}`" 
+                       v-for="(tag, index) in article.tag">{{ tag.name }}</nuxt-link>
           </span>
         </div>
       </div>

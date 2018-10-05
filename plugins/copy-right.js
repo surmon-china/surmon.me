@@ -1,8 +1,7 @@
-/*
- *
- * 复制拦截器
- *
-*/
+/**
+ * @file 复制拦截器 / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 if (process.browser) {
  

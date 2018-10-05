@@ -1,3 +1,7 @@
+/**
+ * @file lodash 简洁版防抖节流 / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 const _ = {}
 

@@ -1,3 +1,7 @@
+/**
+ * @file UA 解析器 / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 export default userAgent => ({
   isEdge: userAgent.includes('Edge'),
@@ -7,7 +11,9 @@ export default userAgent => ({
   isChrome: userAgent.includes('Chrome'),
   isMaxthon: userAgent.includes('Maxthon'),
   isIos: /(iPhone|iPad|iPod|iOS)/i.test(userAgent),
+  isIE: ['compatible', 'MSIE'].every(n => userAgent.includes(n)),
   isSafari: userAgent.includes('Safari') && !userAgent.includes('Chrome'),
-  isIE: userAgent.includes('compatible') && userAgent.includes('MSIE') && !userAgent.includes('Opera'),
-  isMobile: /(iPhone|iPod|Opera Mini|Android.*Mobile|NetFront|PSP|BlackBerry|Windows Phone)/ig.test(userAgent)
+  isMobile: /(iPhone|iPod|Opera Mini|Android.*Mobile|NetFront|PSP|BlackBerry|Windows Phone)/gi.test(
+    userAgent
+  )
 })

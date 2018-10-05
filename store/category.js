@@ -1,10 +1,9 @@
-/*
-*
-* 分类数据状态
-*
-*/
+/**
+ * @file 分类数据状态 / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
-export const state = () => {
+ export const state = () => {
   return {
     fetching: false,
     data: { data: [] }

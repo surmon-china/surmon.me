@@ -1,13 +1,26 @@
+/**
+ * @file App config / Commonjs module
+ * @author Surmon <surmon@foxmail.com>
+ */
+
 const path = require('path')
 const webpack = require('webpack')
 const apiConfig = require('./api.config')
 const i18nConfig = require('./i18n.config')
-const isProdMode = Object.is(process.env.NODE_ENV, 'production')
-const langIsEn = i18nConfig.default === 'en'
 
-const slogan = langIsEn ? 'Talk is cheap. Show me the code.' : '欢喜勇猛，向死而生'
+const isProdMode = Object.is(process.env.NODE_ENV, 'production')
+const htmlLang = i18nConfig.default || 'zh'
+const htmlSlogan = htmlLang === 'zh'
+                    ? '欢喜勇猛，向死而生'
+                    : 'Talk is cheap. Show me the code.'
 
 module.exports = {
+  mode: 'universal',
+  dev: !isProdMode,
+  env: {
+    baseUrl: apiConfig.baseUrl,
+    HOST_URL: apiConfig.socketHost
+  },
   loading: {
     color: '#0088f5'
   },
@@ -27,12 +40,11 @@ module.exports = {
       }
     },
     // 对webpack的扩展
-    extend(webpackConfig, { isClient }) {
+    extend(webpackConfig, { isDev, isClient }) {
       // 处理 Swiper4 下的 dom7 模块的语法问题
-      webpackConfig.resolve.alias['swiper$'] = 'swiper/dist/js/swiper.js'
-      webpackConfig.resolve.alias['dom7$'] = 'dom7/dist/dom7.js'
-      // console.log('webpackConfig', webpackConfig)
-      if (isClient) {
+      webpackConfig.resolve.alias.swiper$ = 'swiper/dist/js/swiper.js'
+      webpackConfig.resolve.alias.dom7$ = 'dom7/dist/dom7.js'
+      if (isDev && isClient) {
         // Run ESLINT on save
         webpackConfig.module.rules.push({
           enforce: 'pre',
@@ -48,13 +60,10 @@ module.exports = {
           vueLoader.options.loaders.html = path.resolve(__dirname, './extend/html-cdn-loader')
           // 处理 CSS 中的 cdn 地址
           const vueLoaders = vueLoader.options.loaders
-          for (cssLoader in vueLoaders) {
+          for (const cssLoader in vueLoaders) {
             if (Array.isArray(vueLoaders[cssLoader])) {
-              vueLoaders[cssLoader].forEach(loader => {
-                if (loader.loader === 'css-loader') {
-                  loader.options.root = apiConfig.cdnUrl
-                }
-              })
+              const targetLoader = vueLoaders[cssLoader].find(loader => loader.loader === 'css-loader')
+              targetLoader && (targetLoader.options.root = apiConfig.cdnUrl)
             }
           }
         }
@@ -67,17 +76,26 @@ module.exports = {
       'swiper',
       'marked',
       'gravatar',
+      'highlight.js',
       'particles.js',
       'simplewebrtc',
+      'bezier-easing',
       'socket.io-client'
     ],
     maxChunkSize: 350000,
     // 为 JS 和 Vue 文件定制 babel 配置。https://nuxtjs.org/api/configuration-build/#analyze
     babel: {
-      presets: ['es2015', 'stage-2'],
+      presets({ isServer }) {
+        return [
+          [
+            "@nuxtjs/babel-preset-app",
+            { targets: isServer ? { node: "10.4.0" } : { chrome: 69 } }
+          ]
+        ]
+      },
       plugins: [
-        'transform-async-to-generator',
-        'transform-runtime'
+        '@babel/plugin-transform-runtime',
+        '@babel/plugin-transform-async-to-generator'
       ],
       comments: true
     },
@@ -86,39 +104,25 @@ module.exports = {
       options: {}
     }
   },
-  dev: isProdMode,
-  env: {
-    baseUrl: apiConfig.baseUrl,
-    HOST_URL: apiConfig.socketHost
-  },
   plugins: [
-    { src: '~/plugins/cdn.js' },
+    { src: '~/plugins/vue-extend.js' },
     { src: '~/plugins/loaded-task.js' },
-    { src: '~/plugins/axios.js' },
-    { src: '~/plugins/howler.js' },
-    { src: '~/plugins/filters.js' },
     { src: '~/plugins/marked.js' },
     { src: '~/plugins/gravatar.js' },
     { src: '~/plugins/highlight.js' },
-    { src: '~/plugins/i18n.js' },
     { src: '~/plugins/ga.js', ssr: false },
+    { src: '~/plugins/swiper.js', ssr: false },
     { src: '~/plugins/emoji-233333.js', ssr: false },
     { src: '~/plugins/image-popup.js', ssr: false },
     { src: '~/plugins/copy-right.js', ssr: false },
-    { src: '~/plugins/particles.js', ssr: false },
-    { src: '~/plugins/swiper.js', ssr: false },
-    { src: '~/plugins/vue-empty.js' },
-    { src: '~/plugins/vue-loading.js' },
-    { src: '~/plugins/vue-comment.js' },
-    { src: '~/plugins/vue-wall-flower.js' }
+    // { src: '~/plugins/particles.js', ssr: false }
   ],
   head: {
-    title: `Surmon.me - ${slogan}`,
+    title: `Surmon.me - ${htmlSlogan}`,
     titleTemplate: '%s | Surmon.me',
     htmlAttrs: {
       xmlns: 'http://www.w3.org/1999/xhtml',
-      // manifest: 'surmon.me',
-      lang: i18nConfig.default || 'zh'
+      lang: htmlLang
     },
     meta: [
       { charset: 'utf-8' },
@@ -134,43 +138,33 @@ module.exports = {
       { name: 'msapplication-TileColor', content: '#0088f5' },
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1.0, user-scalable=no' },
-      { hid: 'keywords', name: 'keywords', content: 'surmon,马赐崇,司马萌,Vue开发者,前端技术开发,javascript技术' },
+      { hid: 'keywords', name: 'keywords', content: 'Surmon,马赐崇,司马萌,Vue开发者,前端技术开发,javascript技术' },
       { hid: 'description', name: 'description', content: '凡心所向，素履所往，生如逆旅，一苇以航' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'author', type: 'text/plain', href: '/humans.txt' }
     ],
-    script: [
-      {
-        // async: 'async',
-        // defer: 'defer',
-        // type: 'text/javascript',
-        // src: '/scripts/clmtrackr.js'
-        // innerHTML: ``
-      }
-    ],
-    // __dangerouslyDisableSanitizers: ['script'],
     noscript: [
       { innerHTML: 'This website requires JavaScript.' }
     ]
   },
   manifest: {
-    // start_url: '.',
     name: 'Surmon.me',
     short_name: 'Surmon',
     theme_color: '#0088f5',
     display: 'standalone',
     background_color: "#eee",
-    description: slogan,
-    lang: i18nConfig.default || 'zh'
+    description: htmlSlogan,
+    lang: htmlLang
   },
   icon: {
-    // iconSrc: '/static/icon.png',
+    iconSrc: '/static/icon.png',
     sizes: [16, 120, 144, 152, 192, 384, 512]
   },
   modules: [
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    '@nuxtjs/axios',
   ],
   router: {
     middleware: ['change-page-col'],

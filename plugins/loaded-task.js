@@ -1,8 +1,7 @@
-/*
- *
- * 客户端初始化服务
- *
-*/
+/**
+ * @file 客户端初始化任务管理器 / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 import consoleSlogan from '~/utils/console-slogan'
 

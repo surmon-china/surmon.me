@@ -1,8 +1,7 @@
-/*
- *
- * WebRTC
- *
-*/
+/**
+ * @file SimpleWebRTC / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 import SimpleWebRTC from 'simplewebrtc'
 

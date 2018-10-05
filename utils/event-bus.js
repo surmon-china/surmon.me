@@ -1,12 +1,10 @@
-
-/*
-*
-* 一些无法适用于 store 的数据状态
-*
-*/
+/**
+ * @file 一些无法适用于 Store 的数据状态 / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 import Vue from 'vue'
-import musicPlayerBuilder from '~/utils/music-player'
+import musicPlayerBuilder from '~/utils/music-player-builder'
 
 export default new Vue({
   data() {

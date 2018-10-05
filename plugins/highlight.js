@@ -1,10 +1,9 @@
-/*
- *
- * 代码高亮
- *
-*/
+/**
+ * @file highlight.js / Commonjs module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
-const Hljs = require('highlight.js/lib/highlight')
+ const Hljs = require('highlight.js/lib/highlight')
 
 Hljs.registerLanguage('go', require('highlight.js/lib/languages/go'))
 Hljs.registerLanguage('css', require('highlight.js/lib/languages/css'))
