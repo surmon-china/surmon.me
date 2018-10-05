@@ -148,7 +148,7 @@
 
         > .download {
           opacity: 0;
-          visible: hidden;
+          visibility: hidden;
           position: absolute;
           width: 100%;
           height: 100%;
@@ -167,7 +167,6 @@
 
           > .btn {
             width: 12rem;
-            // height: 2.8rem;
             line-height: 2.68rem;
             color: $primary;
             margin-top: 2rem;
@@ -180,7 +179,7 @@
             &:hover {
               color: $white;
               border-color: $primary-opacity-5;
-              background: linear-gradient(to bottom right, rgba(white, .8), $primary-opacity-9, rgba(green, .7));
+              background: linear-gradient(to bottom right, rgba(white, .8), $primary-opacity-9, rgba(white, .6), rgba(green, .7));
             }
           }
         }

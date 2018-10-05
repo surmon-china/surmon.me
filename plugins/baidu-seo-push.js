@@ -1,8 +1,7 @@
-/*
- *
- * 百度SEO服务
- *
-*/
+/**
+ * @file 客户端百度 SEO 服务 / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 if (process.env.NODE_ENV === 'production') {
   /*
@@ -29,7 +28,7 @@ if (process.env.NODE_ENV === 'production') {
   ** 应用挂载后
   */
   window.onNuxtReady((app) => {
-    app.$nuxt.$on('routeChanged', (to, from) => {
+    app.$nuxt.$on('routeChanged', to => {
       baiduPush(window.location.origin + to.fullPath)
     })
   })

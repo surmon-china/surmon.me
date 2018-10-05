@@ -1,61 +1,59 @@
-/*
-*
-* 全局设置数据状态
-*
-*/
+/**
+ * @file 全局设置数据状态 / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 import i18nConfig from '~/i18n.config'
-export const state = () => {
-  return {
 
-    // 默认语言
-    language: i18nConfig.default,
+export const state = () => ({
 
-    // 节能模式
-    powerSavingMode: false,
+  // 默认语言
+  language: i18nConfig.default,
 
-    // 页面的栏目展示类型（3栏/2栏）
-    fullColumn: false,
-    errorColumn: false,
+  // 节能模式
+  powerSavingMode: false,
 
-    // 图片格式
-    imgExt: 'webp',
+  // 页面的栏目展示类型（3栏/2栏）
+  fullColumn: false,
+  errorColumn: false,
 
-    // 是否为移动端
-    mobileLayout: false,
+  // 图片格式
+  imgExt: 'webp',
 
-    // 移动端侧边栏
-    mobileSidebar: false,
+  // 是否为移动端
+  mobileLayout: false,
 
-    // 是否开启弹幕
-    openBarrage: false,
+  // 移动端侧边栏
+  mobileSidebar: false,
 
-    // 弹幕是否已首次渲染
-    barrageMounted: false,
+  // 是否开启弹幕
+  openBarrage: false,
 
-    // 是否开启rtc
-    openWebrtc: false,
+  // 弹幕是否已首次渲染
+  barrageMounted: false,
 
-    // ua
-    userAgent: '',
+  // 是否开启rtc
+  openWebrtc: false,
 
-    // 服务端博主信息
-    adminInfo: {
-      fetching: false,
-      data: {}
-    },
+  // ua
+  userAgent: '',
 
-    // 服务端设置的全局配置
-    globalOption: {
-      fetching: false,
-      data: {
-        meta: {
-          likes: 0
-        }
+  // 服务端博主信息
+  adminInfo: {
+    fetching: false,
+    data: {}
+  },
+
+  // 服务端设置的全局配置
+  globalOption: {
+    fetching: false,
+    data: {
+      meta: {
+        likes: 0
       }
     }
   }
-}
+})
 
 export const getters = {
   mobileLayout: state => state.mobileLayout

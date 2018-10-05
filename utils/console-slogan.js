@@ -1,3 +1,7 @@
+/**
+ * @file console.solgan / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 export default () => {
   if (process.browser && process.env.NODE_ENV === 'production') {

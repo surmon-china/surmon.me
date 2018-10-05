@@ -1,3 +1,7 @@
+/**
+ * @file 滑动到任何目的地 / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 const BezierEasing = require('bezier-easing')
 
@@ -23,18 +27,17 @@ const _ = {
   }
 }
 
-exports.easing = {
+export const easing = {
   ease: [0.25, 0.1, 0.25, 1.0],
-  linear: [0.00, 0.0, 1.00, 1.0],
-  'ease-in': [0.42, 0.0, 1.00, 1.0],
-  'ease-out': [0.00, 0.0, 0.58, 1.0],
+  linear: [0, 0.0, 1, 1.0],
+  'ease-in': [0.42, 0.0, 1, 1.0],
+  'ease-out': [0, 0.0, 0.58, 1.0],
   'ease-in-out': [0.42, 0.0, 0.58, 1.0]
 }
 
-exports.scrollTo = (element, duration = 500, options) => {
-
+export const scrollTo = (element, duration = 500, options) => {
   options = options || {}
-  options.easing = exports.easing.ease 
+  options.easing = easing.ease
 
   if (typeof element === 'string') {
     element = _.$(element)
@@ -65,7 +68,9 @@ exports.scrollTo = (element, duration = 500, options) => {
   } else {
     elementY = initialY + element.getBoundingClientRect().top
   }
-  let targetY = document.body.scrollHeight - elementY < window.innerHeight
+
+  let targetY =
+    document.body.scrollHeight - elementY < window.innerHeight
       ? document.body.scrollHeight - window.innerHeight
       : elementY
 

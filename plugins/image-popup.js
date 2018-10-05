@@ -1,8 +1,7 @@
-/*
- *
- * 图片弹窗
- *
-*/
+/**
+ * @file 图片弹窗服务 / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 if (process.browser) {
 

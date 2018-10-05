@@ -1,8 +1,7 @@
-/*
-*
-* 网站地图需要使用的文章数据状态
-*
-*/
+/**
+ * @file 网站地图需要使用的文章数据状态 / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 import Vue from 'vue'
 

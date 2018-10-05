@@ -7,7 +7,6 @@
 </template>
 
 <script>
-  import Service from '~/plugins/axios'
   import ArticleList from '~/components/archive/list'
   import Carrousel from '~/components/archive/carrousel'
   import Announcement from '~/components/archive/announcement'

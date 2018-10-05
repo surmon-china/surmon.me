@@ -1,8 +1,7 @@
-/*
- *
- * 文档解析服务
- *
-*/
+/**
+ * @file 文档解析服务 / ES module
+ * @author Surmon <surmon@foxmail.com>
+ */
 
 import marked from 'marked'
 import Hljs from '~/plugins/highlight'
