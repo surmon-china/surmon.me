@@ -99,14 +99,7 @@
         return EventBus.currentSong
       },
       currentSongPicUrl() {
-        if (this.currentSong) {
-          const picUrl = this.currentSong.album.picUrl
-          return picUrl 
-                 ? picUrl.replace('http://', '/proxy/') + '?param=600y600' 
-                 : `${this.cdnUrl}/images/music-bg.jpg`
-        } else {
-          return `${this.cdnUrl}/images/music-bg.jpg`
-        }
+        return EventBus.currentSongPicUrl
       },
       relativeStrokeWidth() {
         return (15 / 450 * 100).toFixed(1)
@@ -117,7 +110,8 @@
       },
       perimeter() {
         const radius = 50 - parseFloat(this.relativeStrokeWidth) / 2
-        return 2 * Math.PI * radius
+        const result  = 2 * Math.PI * radius
+        return result
       },
       circlePathStyle() {
         const perimeter = this.perimeter

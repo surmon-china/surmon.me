@@ -3,7 +3,7 @@
  * @author Surmon <surmon@foxmail.com>
  */
 
-const isProdMode = Object.is(process.env.NODE_ENV, 'production')
+const { isProdMode } = require('./environment')
 
 module.exports = {
   cdnUrl: isProdMode ? 'https://cdn.surmon.me' : '',

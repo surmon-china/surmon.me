@@ -5,6 +5,7 @@
 
 const path = require('path')
 const fs = require('fs-extra')
+const consola = require('consola')
 
 // extend
 const underscore = require('../utils/underscore-simple')
@@ -28,7 +29,7 @@ const updateLocalBarragesFile = () => {
   fs.outputJson(dataFile, barrages).then(() => {
     // console.log('最新聊天记录保存成功!')
   }).catch(err => {
-    console.log('最新弹幕记录保存失败', err)
+    consola.info('最新弹幕记录保存失败', err)
   })
 }
 
@@ -44,7 +45,7 @@ const barrageServer = io => {
     // 每次有新人加入，都更新客户端数量
     io.clients((error, clients) => {
       if (error) {
-        console.log('客户端数获取失败', error)
+        consola.info('客户端数获取失败', error)
       } else {
         socketClients = clients.length
       }

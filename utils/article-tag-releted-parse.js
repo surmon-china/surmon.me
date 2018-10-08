@@ -6,19 +6,32 @@
 export default (text, tags) => {
 
   // 首字母大写
-  const firstUpperCase = str => {
+  const toFirstUpperCase = str => {
     return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
   }
 
   // 初始化标签数据（本身、全小写、全大写、首字母大写）
+  const tagNames = Object.keys(tags.reduce((tagNames, { name: tagName }, index) => {
+    const lowerCase = tagName.toLowerCase()
+    const upperCase = tagName.toUpperCase()
+    const firstUpperCase = toFirstUpperCase(tagName)
+    ;[tagName, lowerCase, upperCase, firstUpperCase].forEach(name => {
+      !tagNames[name] && (tagNames[name] = null)
+    })
+    return tagNames
+  }, {})).sort((p, n) => p.length < n.length)
+
+  /*
+  旧方案
   const selfTags = tags.map(t => t.name)
   const lowerCaseTags = tags.map(t => t.name.toLowerCase())
   const upperCaseTags = tags.map(t => t.name.toUpperCase())
-  const firstUpperCaseTags = tags.map(t => firstUpperCase(t.name))
-
-  // 构造正则
+  const firstUpperCaseTags = tags.map(t => toFirstUpperCase(t.name))
   const tagNames = Array.from(new Set([...selfTags, ...lowerCaseTags, ...upperCaseTags, ...firstUpperCaseTags]))
   tagNames.sort((p, n) => p.length < n.length)
+  */
+
+  // 构造正则
   const tagReg = eval(`/${tagNames.join('|')}/ig`)
 
   // 如果字符被 tagNames 包含，即字符本身是个单词，即字符本身是连接，则直接返回字符，不再处理
@@ -31,10 +44,10 @@ export default (text, tags) => {
 
     // 找到本身为自身、大写为自身、小写为自身、首字母大写为自身
     const findedTag = tags.find(t => {
-      return Object.is(t.name, tag) || 
-             Object.is(t.name.toLowerCase(), tag) || 
-             Object.is(t.name.toUpperCase(), tag) || 
-             Object.is(firstUpperCase(t.name), tag)
+      return Object.is(t.name, tag) ||
+             Object.is(t.name.toLowerCase(), tag) ||
+             Object.is(t.name.toUpperCase(), tag) ||
+             Object.is(toFirstUpperCase(t.name), tag)
     })
 
     // 找不到，或找到匹配的，但 text 字首为#，则证明是外站连接，则不解析

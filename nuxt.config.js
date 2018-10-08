@@ -7,8 +7,8 @@ const path = require('path')
 const webpack = require('webpack')
 const apiConfig = require('./api.config')
 const i18nConfig = require('./i18n.config')
+const { isProdMode } = require('./environment')
 
-const isProdMode = Object.is(process.env.NODE_ENV, 'production')
 const htmlLang = i18nConfig.default || 'zh'
 const htmlSlogan = htmlLang === 'zh'
                     ? '欢喜勇猛，向死而生'
@@ -42,8 +42,8 @@ module.exports = {
     // 对webpack的扩展
     extend(webpackConfig, { isDev, isClient }) {
       // 处理 Swiper4 下的 dom7 模块的语法问题
-      webpackConfig.resolve.alias.swiper$ = 'swiper/dist/js/swiper.js'
       webpackConfig.resolve.alias.dom7$ = 'dom7/dist/dom7.js'
+      webpackConfig.resolve.alias.swiper$ = 'swiper/dist/js/swiper.js'
       if (isDev && isClient) {
         // Run ESLINT on save
         webpackConfig.module.rules.push({
@@ -77,7 +77,7 @@ module.exports = {
       'marked',
       'gravatar',
       'highlight.js',
-      'particles.js',
+      // 'particles.js',
       'simplewebrtc',
       'bezier-easing',
       'socket.io-client',

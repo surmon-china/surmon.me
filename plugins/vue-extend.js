@@ -18,6 +18,7 @@ const i18nData = i18nTransfer(i18nConfig)
 
 // cdn
 Vue.prototype.cdnUrl = apiConfig.cdnUrl
+Vue.prototype.proxyUrl = apiConfig.proxyUrl
 
 // filters
 Object.keys(filters).forEach(key => Vue.filter(key, filters[key]))

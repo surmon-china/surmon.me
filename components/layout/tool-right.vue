@@ -26,7 +26,7 @@
            :title="$i18n.text.feedback"
            href="mailto:surmon@foxmail.com"
            target="_blank">
-          <i class="iconfont icon-feedback"></i>
+          <i class="iconfont icon-mail"></i>
         </a>
         <button class="to-top" 
                 :title="$i18n.text.totop"
