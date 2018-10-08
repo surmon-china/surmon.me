@@ -4,7 +4,7 @@
  */
 
 const apiConfig = require('../api.config')
-const isProdMode = Object.is(process.env.NODE_ENV, 'production')
+const { isProdMode } = require('../environment')
 
 module.exports = source => {
   if (isProdMode) {

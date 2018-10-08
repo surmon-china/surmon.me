@@ -9,14 +9,14 @@
   },
   "private": false,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon server.js --watch server",
+    "dev": "cross-env NODE_ENV=development nodemon server.js --watch server.js",
     "dev:tool": "devtool ./server.js --watch",
     "build": "nuxt build",
     "analyz": "nuxt build --analyzer",
     "generate": "nuxt generate",
     "start": "cross-env NODE_ENV=production node server.js",
     "install": "cnpm i --python=python2.7",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "lint": "eslint --ext .js,.vue --ignore-path .eslintignore .",
     "format": "prettier-eslint --write *.js,*.vue"
   },
   "dependencies": {
@@ -63,6 +63,7 @@
     "nodemon": "^1.11.0",
     "prettier": "1.14.3",
     "prettier-eslint-cli": "^4.7.1",
+    "request": "^2.88.0",
     "sass-loader": "^7.0.3"
   }
 }
