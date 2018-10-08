@@ -3,33 +3,44 @@
  * @author Surmon <surmon@foxmail.com>
  */
 
+// Modules
 const http = require('http')
 const consola = require('consola')
 const express = require('express')
 const socketio = require('socket.io')
 const { Nuxt, Builder } = require('nuxt')
 
-const app = express()
-const server = new http.Server(app)
-const io = socketio(server, { transports: ['websocket'] })
-
-const isProdMode = Object.is(process.env.NODE_ENV, 'production')
-const host = isProdMode ? (process.env.HOST || '127.0.0.1') : '0.0.0.0'
-const port = process.env.PORT || 3000
-
+// Config & ENV
 process.noDeprecation = true
+
+const config = require('./nuxt.config')
+const { isProdMode } = require('./environment')
+const port = process.env.PORT || 3000
+const host = isProdMode ? (process.env.HOST || '127.0.0.1') : '0.0.0.0'
 
 // Server extends
 const webrtcServer = require('./servers/webrtc.server')
 const barrageServer = require('./servers/barrage.server')
 const updateGAScript = require('./utils/update-analytics')
 
-// Init Nuxt
-const config = require('./nuxt.config')
+// App
+const app = express()
 const nuxt = new Nuxt(config)
+const server = new http.Server(app)
+const io = socketio(server, { transports: ['websocket'] })
 
-app.set('port', port)
+// App dev proxy server
+if (config.dev) {
+  app.get('/proxy/*', (req, res) => {
+    const targetUrl = 'http://' + req.url.replace('/proxy/', '')
+    require('request').get(targetUrl).pipe(res)
+  })
+}
+
+// App config
 app.use(nuxt.render)
+app.set('port', port)
+
 
 // Build only in dev mode
 if (config.dev) {

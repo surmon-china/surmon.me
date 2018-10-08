@@ -59,7 +59,7 @@ const webrtcServer = io => {
 
     // 取消订阅
     const removeFeed = type => {
-      delete filters[socket.id]
+      Reflect.deleteProperty(filters, socket.id)
       if (socket.room) {
         io.sockets.in(socket.room).emit('remove', {
           id: socket.id,
@@ -195,7 +195,7 @@ const webrtcServer = io => {
 
     /*
     // 为 TURN 认证创建共享密钥
-    // 该过程在 draft-uberti-behave-turn-rest 中描述
+    // 该过程在 draft-uberti-behave-turn-rest 中描述
     const credentials = []
     // allow selectively vending turn credentials based on origin.
     const origin = socket.handshake.headers.origin

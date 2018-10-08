@@ -46,6 +46,17 @@ export default new Vue({
       } else {
         return null
       }
+    },
+    currentSongPicUrl() {
+      const defaultImage = `${this.cdnUrl}/images/music-bg.jpg`
+      if (this.currentSong) {
+        const picUrl = this.currentSong.album.picUrl
+        return picUrl
+                ? picUrl.replace('http://', this.proxyUrl) + '?param=600y600' 
+                : defaultImage
+      } else {
+        return defaultImage
+      }
     }
   },
   methods: {
