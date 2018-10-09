@@ -3,7 +3,7 @@
  * @author Surmon.me
  */
 
-import VueWallFlower from './garden.vue'
+import VueWallFlower from './garden'
 
 const wallFlower = {
   install(Vue) {

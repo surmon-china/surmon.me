@@ -4,7 +4,7 @@
     <div class="localSteam">
       <video id="local-steam" autoplay :src="localSteam" v-if="localSteam"></video>
     </div>
-    <video id="video" autoplay :src="video" v-for="video in videos"></video>
+    <video id="video" autoplay :src="video" :key="index" v-for="(video, index) in videos"></video>
   </div>
 </template>
 

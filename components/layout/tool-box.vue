@@ -49,10 +49,12 @@
 
 <script>
   import { mapState } from 'vuex'
-  import { scrollTo, easing } from '~/utils/scroll-to-anywhere'
-  const underscore = require('~/utils/underscore-simple')
+  import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
+  import underscore from '~/utils/underscore-simple'
+
+  console.log('scrollTo', scrollTo, 'Easing', Easing, 'underscore', underscore)
   export default {
-    name: 'tool-right',
+    name: 'tool-box',
     data() {
       return {
         topBtnMouseOver: false,
@@ -72,10 +74,10 @@
     },
     methods: {
       totop() {
-        scrollTo('body', 300, { easing: easing['ease-in'] })
+        scrollTo('body', 300, { easing: Easing['ease-in'] })
       },
       toBottom() {
-        scrollTo(window.scrollY + window.innerHeight, 300, { easing: easing['ease-in'] })
+        scrollTo(window.scrollY + window.innerHeight, 300, { easing: Easing['ease-in'] })
       },
       setButtonState(position, state, start) {
         this[(Object.is(position, 'bottom') ? 'bottomBtnMouseOver' : 'topBtnMouseOver')] = state

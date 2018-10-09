@@ -7,7 +7,7 @@ import Vue from 'vue'
 import apiConfig from '~/api.config'
 import uaDevice from '~/utils/ua-device'
 import eventBus from '~/utils/event-bus'
-import { scrollTo, easing } from '~/utils/scroll-to-anywhere'
+import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
 
 const API_PREFIX = apiConfig.baseUrl
 
@@ -253,7 +253,7 @@ export const actions = {
           commit(commitName, getResData(response))
           if (loadMore && process.browser) {
             Vue.nextTick(() => {
-              scrollTo(window.scrollY + (window.innerHeight * 0.8), 300, { easing: easing['ease-in'] })
+              scrollTo(window.scrollY + (window.innerHeight * 0.8), 300, { easing: Easing['ease-in'] })
             })
           }
         } else {

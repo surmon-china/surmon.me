@@ -27,7 +27,7 @@ const _ = {
   }
 }
 
-export const easing = {
+export const Easing = {
   ease: [0.25, 0.1, 0.25, 1.0],
   linear: [0, 0.0, 1, 1.0],
   'ease-in': [0.42, 0.0, 1, 1.0],
@@ -37,7 +37,7 @@ export const easing = {
 
 export const scrollTo = (element, duration = 500, options) => {
   options = options || {}
-  options.easing = easing.ease
+  options.easing = Easing.ease
 
   if (typeof element === 'string') {
     element = _.$(element)

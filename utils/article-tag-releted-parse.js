@@ -1,5 +1,5 @@
 /**
- * @file 文章->标签内链关系构造器 / ES module
+ * @file 文章 -> 标签内链关系构造器 / ES module
  * @author Surmon <surmon@foxmail.com>
  */
 
