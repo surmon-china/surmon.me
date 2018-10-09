@@ -16,7 +16,7 @@
 <script>
   import { mapState } from 'vuex'
   export default {
-    name: 'tool-left',
+    name: 'language-psm',
     computed: {
       ...mapState('option', ['language', 'powerSavingMode'])
     },

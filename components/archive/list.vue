@@ -28,11 +28,11 @@
       <button class="btn-loadmore" @click="$emit('loadmore')"
               :disabled="article.fetching || !canLoadMore">
         <span v-if="!article.fetching && canLoadMore"
-              v-text="$i18n.text.article.loadmore">或许有更多</span>
+              v-text="$i18n.text.article.loadmore">得不到的永远在骚动</span>
         <span v-else-if="article.fetching && canLoadMore"
               v-text="$i18n.text.article.loading">加载中</span>
         <span v-else-if="!canLoadMore"
-              v-text="$i18n.text.article.nomore">这是底线</span>
+              v-text="$i18n.text.article.nomore">留在山河</span>
       </button>
     </div>
   </div>

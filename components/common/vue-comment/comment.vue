@@ -564,12 +564,12 @@
         if (this.user.site && !this.regexs.url.test(this.user.site)) {
           return alert(this.$i18n.text.comment.profile.siteerr)
         }
-        if(!this.comemntContentText || !this.comemntContentText.replace(/\s/g, '')) {
+        if (!this.comemntContentText || !this.comemntContentText.replace(/\s/g, '')) {
           return alert(this.$i18n.text.comment.profile.content + '?')
         }
         const lineOverflow = this.comemntContentText.split('\n').length > 36
         const lengthOverflow = this.comemntContentText.length > 2000
-        if(lineOverflow || lengthOverflow) {
+        if (lineOverflow || lengthOverflow) {
           return alert(this.$i18n.text.comment.profile.contenterr)
         }
         // 使用服务单配置的黑名单在本地校验邮箱和关键字

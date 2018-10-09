@@ -2,7 +2,8 @@
   <div class="global-webrtc">
     <div class="webrtc-box"
          :class="[ aligenLeft ? 'aligenLeft' : '' ]">
-      <div class="stream-box" 
+      <div class="stream-box"
+           :key="index"
            :class="[ stream.local ? 'local' : 'remote']"
            v-for="(stream, index) in streams">
         <div class="empty-msg">
@@ -74,7 +75,7 @@
               <span class="name">{{ filters[stream.filter] }}</span>
             </span>
             <ul class="filter-list">
-              <li class="item" @click="sendFilterToAll(index)" v-for="(filter, index) in filters">
+              <li class="item" @click="sendFilterToAll(index)" :key="index" v-for="(filter, index) in filters">
                 <span>{{ filter }}</span>
               </li>
             </ul>
@@ -107,7 +108,7 @@
   import apiConfig from '~/api.config'
   import socketio from '~/plugins/socket.io'
   import SimpleWebRTC from '~/plugins/webrtc'
-  import faceCtracker from './face-ctracker.vue'
+  import faceCtracker from './face-ctracker'
   export default {
     name: 'webrtc',
     components: {
@@ -740,8 +741,8 @@
             padding: 0 1rem;
             margin: 0;
             float: right;
+            display: block;
             position: relative;
-            display: inline-block;
 
             &:hover {
 

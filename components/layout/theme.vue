@@ -4,6 +4,7 @@
       <div class="active-theme" :class="themes[theme]"></div>
       <ul class="theme-list">
         <li class="item"
+            :key="key"
             :class="key"
             :style="computedStyle(key)"
             @click="setTheme(key)"
@@ -118,7 +119,7 @@
           height: 2rem;
           float: left;
           cursor: pointer;
-          display: inline-block;
+          display: block;
           background-color: rgba(white, .5);
           opacity: 0;
 

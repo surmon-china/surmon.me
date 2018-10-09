@@ -3,10 +3,11 @@
  * @author Surmon <surmon@foxmail.com>
  */
 
-const vueComment = require('./comment.vue')
+import vueComment from './comment'
+
 const comment = {
-  install: function(Vue) {
-    Vue.component('comment-box', vueComment.default || vueComment)
+  install(Vue) {
+    Vue.component('comment-box', vueComment)
   }
 }
 

@@ -215,15 +215,15 @@ module.exports = {
           en: 'hot'
         },
         loadmore: {
-          zh: '或许有更多',
+          zh: '人面桃花',
           en: 'loadmore'
         },
         loading: {
-          zh: '加载中',
+          zh: '山河入梦',
           en: 'loading'
         },
         nomore: {
-          zh: '这是底线',
+          zh: '春尽江南',
           en: 'no more'
         }
       },

@@ -36,8 +36,8 @@
         </transition>
       </main>
       <share-view class="sidebar-share" v-if="!mobileLayout && !['service'].includes($route.name)"></share-view>
-      <tool-left v-if="!mobileLayout && !['service'].includes($route.name)"></tool-left>
-      <tool-right v-if="!mobileLayout && !['app', 'music', 'service'].includes($route.name)"></tool-right>
+      <language-psm v-if="!mobileLayout && !['service'].includes($route.name)"></language-psm>
+      <tool-box v-if="!mobileLayout && !['app', 'music', 'service'].includes($route.name)"></tool-box>
       <footer-view v-if="!mobileLayout"></footer-view>
       <mobile-footer v-else></mobile-footer>
     </div>
@@ -48,7 +48,7 @@
   import { mapState } from 'vuex'
   import eventBus from '~/utils/event-bus'
   import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
-  import { Background, EmojoRain, ToolLeft, ToolRight, Barrage, Webrtc, Header, Footer, Aside, Share, Theme, Nav } from '~/components/layout'
+  import { Background, EmojoRain, LanguagePsm, ToolBox, Barrage, Webrtc, Header, Footer, Aside, Share, Theme, Nav } from '~/components/layout'
   export default {
     name: 'app',
     head() {
@@ -77,8 +77,8 @@
       Webrtc,
       Barrage,
       EmojoRain,
-      ToolLeft,
-      ToolRight,
+      LanguagePsm,
+      ToolBox,
       Background,
       HeaderView: Header,
       FooterView: Footer,
