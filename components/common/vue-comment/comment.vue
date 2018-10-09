@@ -60,7 +60,7 @@
                    :href="comment.author.site" 
                    @click.stop="clickUser($event, comment.author)">{{ comment.author.name | firstUpperCase }}</a>
                 <span class="os" v-html="osParse(comment.agent)" v-if="comment.agent"></span>
-                <span class="ua" v-html="uaParse(comment.agent)" v-if="comment.agent"></span>
+                <span class="ua" v-html="browserParse(comment.agent)" v-if="comment.agent"></span>
                 <span class="location" v-if="comment.ip_location && !mobileLayout">
                   <span>{{ comment.ip_location.country }}</span>
                   <span v-if="comment.ip_location.country && comment.ip_location.city">&nbsp;-&nbsp;</span>
@@ -266,10 +266,10 @@
 <script>
   import { mapState } from 'vuex'
   import marked from '~/plugins/marked'
-  import eventBus from '~/utils/event-bus'
   import gravatar from '~/plugins/gravatar'
+  import eventBus from '~/utils/event-bus'
   import { scrollTo } from '~/utils/scroll-to-anywhere'
-  import { uaParse, osParse } from '~/utils/comment-ua-parse'
+  import { browserParse, osParse } from '~/utils/ua-os-browser'
   
   export default {
     name: 'vue-comment',
@@ -345,7 +345,7 @@
       this.$store.commit('comment/CLEAR_LIST')
     },
     methods: {
-      uaParse,
+      browserParse,
       osParse,
       shang() {
         window.utils.openImgPopup(`${this.cdnUrl}/images/shang.jpg`, 'shang')

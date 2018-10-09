@@ -5,7 +5,7 @@
 
 import Vue from 'vue'
 import apiConfig from '~/api.config'
-import uaParse from '~/utils/ua-parse'
+import uaDevice from '~/utils/ua-device'
 import eventBus from '~/utils/event-bus'
 import { scrollTo, easing } from '~/utils/scroll-to-anywhere'
 
@@ -30,7 +30,7 @@ export const actions = {
 
     // 检查设备类型
     const userAgent = process.server ? req.headers['user-agent'] : navigator.userAgent
-    const { isMobile, isOpera, isIE, isSafari, isEdge, isFF, isBB, isChrome, isMaxthon, isIos } = uaParse(userAgent)
+    const { isMobile, isOpera, isIE, isSafari, isEdge, isFF, isBB, isChrome, isMaxthon, isIos } = uaDevice(userAgent)
     const mustJpg = (isIos || isFF || isMaxthon || isSafari || isBB || isIE || isEdge)
 
     store.commit('option/SET_USER_AGENT', userAgent)
