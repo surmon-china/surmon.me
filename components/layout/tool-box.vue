@@ -51,8 +51,6 @@
   import { mapState } from 'vuex'
   import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
   import underscore from '~/utils/underscore-simple'
-
-  console.log('scrollTo', scrollTo, 'Easing', Easing, 'underscore', underscore)
   export default {
     name: 'tool-box',
     data() {
