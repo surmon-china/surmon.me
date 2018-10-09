@@ -5,10 +5,10 @@
 
 import Background from './background.vue'
 import EmojoRain from './emoji-rain.vue'
-import ToolLeft from './tool-left.vue'
-import ToolRight from './tool-right.vue'
-import Barrage from './barrage.vue'
-import Webrtc from './webrtc.vue'
+import LanguagePsm from './language-psm.vue'
+import Barrage from './barrage/main.vue'
+import Webrtc from './webrtc/main.vue'
+import ToolBox from './tool-box.vue'
 import Header from './header.vue'
 import Footer from './footer.vue'
 import Share from './share.vue'
@@ -19,8 +19,8 @@ import Nav from './nav.vue'
 export {
   Background,
   EmojoRain,
-  ToolLeft,
-  ToolRight,
+  LanguagePsm,
+  ToolBox,
   Barrage,
   Webrtc,
   Header,

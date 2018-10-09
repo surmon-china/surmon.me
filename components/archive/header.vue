@@ -13,16 +13,19 @@
       </transition>
     </p>
     <transition name="module" mode="out-in">
+
       <!-- category -->
       <h4 class="title" v-if="currentCategory">
         <span>{{ currentCategory.description || 'Nothing.' }}</span>
       </h4>
+
       <!-- tag -->
       <h4 class="title" v-else-if="currentTag">
         <span>{{ currentTag.name }}</span>
         <span>&nbsp;-&nbsp;</span>
         <span>{{ currentTag.description || 'Nothing.' }}</span>
       </h4>
+
       <!-- data -->
       <h4 class="title" v-else-if="currentDate">
         <span v-if="languageIsEn">
@@ -35,7 +38,8 @@
           <span>的所有文章</span>
         </span>
       </h4>
-        <!-- search -->
+
+      <!-- search -->
       <h4 class="title" v-else-if="currentKeyword">
         <span v-if="languageIsEn">
           <span>"{{ currentKeyword }}"</span>

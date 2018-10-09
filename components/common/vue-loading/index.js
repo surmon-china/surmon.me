@@ -3,10 +3,11 @@
  * @author Surmon <surmon@foxmail.com>
  */
 
-const LoadingComponent = require('./loading.vue')
+import LoadingComponent from './loading'
+
 const loading = {
-  install: function(Vue) {
-    Vue.component('loading-box', LoadingComponent.default || LoadingComponent)
+  install(Vue) {
+    Vue.component(LoadingComponent.name, LoadingComponent)
   }
 }
 

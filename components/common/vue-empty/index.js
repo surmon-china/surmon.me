@@ -3,10 +3,11 @@
  * @author Surmon <surmon@foxmail.com>
  */
 
-const EmptyComponent = require('./empty.vue')
+import EmptyComponent from './empty'
+
 const empty = {
-  install: function(Vue) {
-    Vue.component('empty-box', EmptyComponent.default || EmptyComponent)
+  install(Vue) {
+    Vue.component('empty-box', EmptyComponent)
   }
 }
 
