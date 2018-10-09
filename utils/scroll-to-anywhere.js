@@ -53,6 +53,7 @@ export const scrollTo = (element, duration = 500, options) => {
     'keyup',
     'touchmove'
   ]
+  
   let abort = false
 
   const abortFn = function() {
@@ -61,8 +62,8 @@ export const scrollTo = (element, duration = 500, options) => {
 
   _.on(page, events, abortFn)
 
-  const initialY = window.pageYOffset
   let elementY = 0
+  const initialY = window.pageYOffset
   if (Object.is(typeof element, 'number')) {
     elementY = element
   } else {
@@ -84,8 +85,12 @@ export const scrollTo = (element, duration = 500, options) => {
 
   const done = function() {
     _.off(page, events, abortFn)
-    if (abort && options.onCancel) options.onCancel()
-    if (!abort && options.onDone) options.onDone()
+    if (abort && options.onCancel) {
+      options.onCancel()
+    }
+    if (!abort && options.onDone) {
+      options.onDone()
+    }
   }
 
   if (!diff) return
