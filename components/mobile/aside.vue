@@ -36,7 +36,7 @@
           <span v-text="$i18n.nav.about">About</span>
         </nuxt-link>
         <nuxt-link to="/service" class="item">
-          <i class="iconfont icon-zan-top"></i>
+          <i class="iconfont icon-zan"></i>
           <span v-text="$i18n.nav.service">Service</span>
         </nuxt-link>
         <nuxt-link to="/guestbook" class="item guestbook">
