@@ -181,14 +181,14 @@ a {
       }
 
       > .share-link {
-        width: calc((100% - (.445em * 11)) / 12);
+        width: calc((100% - (.8rem * 11)) / 12);
         height: 2.2em;
         line-height: 2.3em;
         background-color: $body-bg;
-        margin-right: .445em;
+        margin-right: .5rem;
 
         > .iconfont {
-          font-size: 1.3em;
+          font-size: 1.2em;
         }
 
         &:last-child {

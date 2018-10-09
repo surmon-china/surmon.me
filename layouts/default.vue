@@ -91,7 +91,15 @@
       MobileAside
     },
     computed: {
-      ...mapState('option', ['openWebrtc', 'powerSavingMode', 'barrageMounted', 'fullColumn', 'errorColumn', 'mobileLayout', 'mobileSidebar'])
+      ...mapState('option', [
+        'openWebrtc',
+        'powerSavingMode',
+        'barrageMounted',
+        'fullColumn',
+        'errorColumn',
+        'mobileLayout',
+        'mobileSidebar'
+      ])
     },
     methods: {
       setTheme(theme) {

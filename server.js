@@ -41,7 +41,6 @@ if (config.dev) {
 app.use(nuxt.render)
 app.set('port', port)
 
-
 // Build only in dev mode
 if (config.dev) {
 	const builder = new Builder(nuxt)
