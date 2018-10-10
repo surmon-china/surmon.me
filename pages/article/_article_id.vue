@@ -61,13 +61,14 @@
             <span>{{ buildDateTitle(article.create_at) }}</span>
           </nuxt-link>
           <span>&nbsp;发布在&nbsp;</span>
-          <nuxt-link :key="index"
-                     :to="`/category/${category.slug}`"
-                     :title="category.description || category.name"
-                     v-for="(category, index) in article.category">
-            <span>{{ $i18n.nav[category.slug] }}</span>
+          <span :key="index"
+                v-for="(category, index) in article.category">
+            <nuxt-link :to="`/category/${category.slug}`"
+                      :title="category.description || category.name">
+              <span>{{ $i18n.nav[category.slug] }}</span>
+            </nuxt-link>
             <span v-if="article.category.length && article.category[index + 1]">、</span>
-          </nuxt-link>
+          </span>
           <span v-if="!article.category.length">未知</span>
           <span>&nbsp;分类下，当前已被围观&nbsp;</span>
           <span>{{ article.meta.views || 0 }}</span>
@@ -76,13 +77,14 @@
         <p class="item">
           <span class="title" :class="language">{{ languageIsEn ? 'Related tags:' : '相关标签：' }}</span>
           <span v-if="!article.tag.length" v-text="$i18n.text.tag.empty">无相关标签</span>
-          <nuxt-link :key="index"
-                     :to="`/tag/${tag.slug}`"
-                     :title="tag.description || tag.name"
-                     v-for="(tag, index) in article.tag">
-            <span>{{ tag.name }}</span>
+          <span :key="index"
+                v-for="(tag, index) in article.tag">
+            <nuxt-link :to="`/tag/${tag.slug}`"
+                      :title="tag.description || tag.name">
+              <span>{{ tag.name }}</span>
+            </nuxt-link>
             <span v-if="article.tag.length && article.tag[index + 1]">、</span>
-          </nuxt-link>
+          </span>
         </p>
         <p class="item">
           <span class="title" :class="language">{{ languageIsEn ? 'Article Address:' : '永久地址：' }}</span>
@@ -119,10 +121,11 @@
     <div class="related" v-if="article.related && article.related.length && mobileLayout">
       <ul class="article-list">
         <li class="item" v-for="(article, index) in article.related.slice(0, 8)" :key="index">
-          <nuxt-link :to="`/article/${article.id}`" 
-                       :title="article.title + '- [ 继续阅读 ]'" 
-                       class="item-link">
-            <span class="title">《{{ article.title }}》- [ 继续阅读 ]</span>
+          <nuxt-link class="item-link"
+                     :to="`/article/${article.id}`" 
+                     :title="`「 ${article.title} 」- 继续阅读`">
+            <span class="title">「 {{ article.title }} 」</span>
+            <small>- 继续阅读</small>
           </nuxt-link>
         </li>
       </ul>
@@ -344,17 +347,17 @@
         line-height: 5.8rem;
         text-align: center;
         transform-origin: center;
-        color: white;
+        color: $white;
         font-weight: bold;
         font-size: $font-size-small;
         text-transform: uppercase;
 
         &.self {
-          background-color: rgba(#4caf50, .8);
+          background-color: rgba($accent, .8);
         }
 
         &.other {
-          background-color: rgba(#ff5722, .8);
+          background-color: rgba($red, .8);
         }
 
         &.hybrid {
@@ -681,6 +684,10 @@
                   @include css3-prefix(transform, scale(1.2) rotate(3deg));
                   @include css3-prefix(transition, all 1s);
                 }
+
+                > .title {
+                  opacity: 1;
+                }
               }
 
               > .thumb {
@@ -691,6 +698,7 @@
               }
 
               > .title {
+                opacity: .4;
                 position: absolute;
                 bottom: 0;
                 left: 0;

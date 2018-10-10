@@ -22,7 +22,7 @@
     </div>
     <div class="aside-article">
       <p class="title">
-        <i class="iconfont icon-list"></i>
+        <i class="iconfont icon-hotfill"></i>
         <span v-text="$i18n.text.article.hotlist">热门文章</span>
       </p>
       <empty-box v-if="!article.fetching && !article.data.data.length">
@@ -281,6 +281,27 @@
           color: $text-dark;
           @include text-overflow();
 
+          &:nth-child(1) {
+            .index {
+              color: $white;
+              background-color: rgba($primary, .6);
+            }
+          }
+
+          &:nth-child(2) {
+            .index {
+              color: $white;
+              background-color: rgba($accent, .6);
+            }
+          }
+
+          &:nth-child(3) {
+            .index {
+              color: $white;
+              background-color: rgba($red, .6);
+            }
+          }
+
           &:last-child {
             margin: 0;
           }
@@ -332,7 +353,6 @@
 
         img {
           max-width: 100%;
-          // border-top: 1px solid #1c4767;
         }
       }
     }
@@ -359,7 +379,7 @@
         > .full-column,
         > .full-page {
           display: inline-block;
-          width: calc((100% - 1rem) / 2);
+          width: calc((100% - 1.3rem) / 2);
           height: 3rem;
           line-height: 3rem;
           text-align: center;

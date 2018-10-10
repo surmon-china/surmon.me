@@ -9,10 +9,10 @@
             <p class="item-content">
               <nuxt-link class="link"
                            :to="`/article/${article.id}`"
-                           :title="article.title">《{{ article.title }}》</nuxt-link>
+                           :title="article.title">「 {{ article.title }} 」</nuxt-link>
               <span class="sign">&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;</span>
               <a class="toggle" href="" @click.prevent="$store.commit('sitemap/TOGGLE_ARTICLE_OPEN', index)">
-                <span v-text="$i18n.text.action[article.open ? 'close' : 'open']"></span>
+                <small v-text="$i18n.text.action[article.open ? 'close' : 'open']"></small>
               </a>
             </p>
             <transition name="module">
@@ -129,10 +129,6 @@
               > .sign {
                 display: none;
               }
-
-              > .toggle {
-
-              }
             }
           }
         }
@@ -140,12 +136,13 @@
     }
 
     .sitemap {
+      text-transform: capitalize;
 
       a {
         text-decoration: underline;
 
         &.toggle {
-          text-transform: capitalize;
+          text-decoration: blink;
         }
       }
 
