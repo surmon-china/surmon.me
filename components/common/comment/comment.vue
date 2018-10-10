@@ -270,6 +270,7 @@
   import eventBus from '~/utils/event-bus'
   import { scrollTo } from '~/utils/scroll-to-anywhere'
   import { browserParse, osParse } from '~/utils/ua-os-browser'
+  import { localUser, localHistoryLikes } from '~/utils/local-storage'
   
   export default {
     name: 'vue-comment',
@@ -367,15 +368,13 @@
       },
       // 初始化本地用户即本地用户的点赞历史
       initUser() {
-        if (localStorage) {
-          const user = localStorage.getItem('user')
-          const historyLikes = localStorage.getItem('user_like_history')
-          if (historyLikes) this.historyLikes = JSON.parse(historyLikes)
-          if (user) {
-            this.user = JSON.parse(user)
-            this.upadteUserGravatar()
-            this.userCacheMode = true
-          }
+        const user = localUser.get()
+        const historyLikes = localHistoryLikes.get()
+        historyLikes && (this.historyLikes = historyLikes)
+        if (user) {
+          this.user = user
+          this.upadteUserGravatar()
+          this.userCacheMode = true
         }
       },
       // 更新用户数据
@@ -393,14 +392,14 @@
         if (this.user.site && !this.regexs.url.test(this.user.site)) {
           return alert(this.$i18n.text.comment.profile.siteerr)
         }
-        localStorage.setItem('user', JSON.stringify(this.user))
+        localUser.set(this.user)
         this.userCacheEditing = false
       },
       // 清空用户数据
       claerUserCache() {
         this.userCacheMode = false
         this.userCacheEditing = false
-        localStorage.removeItem('user')
+        localUser.remove()
         Object.keys(this.user).forEach(key => {
           this.user[key] = ''
         })
@@ -519,7 +518,7 @@
         this.$store.dispatch('likeArticleOrPageOrComment', { type: 2, id: this.postId })
         .then(data => {
           this.historyLikes.pages.push(this.postId)
-          localStorage.setItem('user_like_history', JSON.stringify(this.historyLikes))
+          localHistoryLikes.set(this.historyLikes)
         })
         .catch(err => {
           console.warn('喜欢失败', err)
@@ -532,7 +531,7 @@
         this.$store.dispatch('likeArticleOrPageOrComment', { type: 1, id: comment.id })
         .then(data => {
           this.historyLikes.comments.push(comment.id)
-          localStorage.setItem('user_like_history', JSON.stringify(this.historyLikes))
+          localHistoryLikes.set(this.historyLikes)
         })
         .catch(err => {
           console.warn('评论点赞失败', err)
@@ -629,7 +628,7 @@
           this.userCacheMode = true
           this.cancelCommentReply()
           this.clearCommentContent()
-          localStorage.setItem('user', JSON.stringify(this.user))
+          localUser.set(this.user)
         }).catch(err => {
           console.warn('评论发布失败', err)
           alert(this.$i18n.text.comment.profile.submiterr)

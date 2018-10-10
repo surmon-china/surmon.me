@@ -9,10 +9,11 @@ import apiConfig from '~/api.config'
 import i18nConfig from '~/i18n.config'
 import i18nTransfer from '~/utils/i18n-transfer'
 
-import VueEmpty from '~/components/common/vue-empty'
-import VueLoading from '~/components/common/vue-loading'
-import VueComment from '~/components/common/vue-comment'
-import VueWallFlower from '~/components/common/vue-wall-flower'
+import EmptyBox from '~/components/common/empty'
+import LoadingBox from '~/components/common/loading'
+import CommentBox from '~/components/common/comment'
+import WallFlowerBox from '~/components/common/wall-flower'
+import ColorBlockBox from '~/components/common/color-block'
 
 const i18nData = i18nTransfer(i18nConfig)
 
@@ -24,10 +25,11 @@ Vue.prototype.proxyUrl = apiConfig.proxyUrl
 Object.keys(filters).forEach(key => Vue.filter(key, filters[key]))
 
 // components
-Vue.use(VueEmpty)
-Vue.use(VueComment)
-Vue.use(VueLoading)
-Vue.use(VueWallFlower)
+Vue.use(EmptyBox)
+Vue.use(CommentBox)
+Vue.use(LoadingBox)
+Vue.use(WallFlowerBox)
+Vue.use(ColorBlockBox)
 
 // mixins
 Vue.mixin({

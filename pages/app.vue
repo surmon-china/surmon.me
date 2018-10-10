@@ -179,7 +179,7 @@
             &:hover {
               color: $white;
               border-color: $primary-opacity-5;
-              background: linear-gradient(to bottom right, rgba(white, .8), $primary-opacity-9, rgba(white, .6), rgba(green, .7));
+              background: linear-gradient(to bottom right, $module-hover-bg-opacity-3, $primary-opacity-9, $white, rgba($accent, .7));
             }
           }
         }

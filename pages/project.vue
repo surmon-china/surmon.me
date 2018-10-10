@@ -10,7 +10,7 @@
            rel="external nofollow noopenter"
            :href="project.html_url"
            :title="project.description">
-          <i class="iconfont" :class="[buildIcon(project)]"></i>
+          <i class="iconfont" :class="buildIcon(project).icon" :style="{ color: buildIcon(project).color }"></i>
           <h3 class="title">{{ project.name }}</h3>
           <p class="description" style="-webkit-box-orient: vertical;">{{ project.description }}</p>
           <hr>
@@ -68,45 +68,81 @@
         }
       },
       buildIcon(project) {
-        switch(true) {
-          case project.name.toLowerCase().includes('vue'):
-          case project.description.toLowerCase().includes('vue'):
-            return 'icon-vue'
-            break;
-          case project.name.toLowerCase().includes('node'):
-            return 'icon-nodejs'
-            break;
-          case project.name.toLowerCase().includes('angular'):
-          case project.name.toLowerCase().includes('ng2'):
-            return 'icon-angularjs'
-            break;
-          case project.name.toLowerCase().includes('chrome'):
-            return 'icon-chrome'
-            break;
-          case project.name.toLowerCase().includes('jquery'):
-            return 'icon-jquery'
-            break;
-          case project.name.toLowerCase().includes('wordpress'):
-            return 'icon-wordpress'
-            break;
-          case project.name.toLowerCase().includes('linux'):
-          case project.description.toLowerCase().includes('linux'):
-            return 'icon-linux'
-            break;
-          case project.name.toLowerCase().includes('react'):
-          case project.description.toLowerCase().includes('react'):
-            return 'icon-react'
-            break;
-          case project.description.toLowerCase().includes('netease'):
-            return 'icon-netease-music'
-            break;
-          case project.description.toLowerCase().includes('music'):
-            return 'icon-music'
-            break;
-          default:
-            return 'icon-code'
-            break; 
-        }
+        const isIncludeName = key => project.name.toLowerCase().includes(key)
+        const isIncludeDesc = key => project.description.toLowerCase().includes(key)
+
+        const iconRules = [{
+            desc: 'netease',
+            icon: 'netease-music',
+            color: '#ab3419'
+          }, {
+            name: 'surmon',
+            icon: 'think',
+            color: '#0088f5'
+          }, {
+            name: 'emoji',
+            color: '#f4c449'
+          }, {
+            name: 'vue',
+            desc: 'vue',
+            icon: 'vuejs-gray',
+            color: '#62b287'
+          }, {
+            name: 'chrome',
+            color: '#4aa066'
+          }, {
+            name: 'jquery',
+            color: '#8bcdf1'
+          }, {
+            name: 'linux',
+            color: '#030303'
+          }, {
+            desc: 'music',
+            color: '#ab3419'
+          }, {
+            name: 'react',
+            color: '#eafef7'
+          }, {
+            name: 'theme',
+            color: 'rgb(245, 119, 0)'
+          }, {
+            name: 'wordpress',
+            color: '#24282d'
+          }, {
+            name: 'javascript',
+            color: '#f4c449'
+          }, {
+            name: 'wallpaper',
+            color: '#2c343d'
+          }, {
+            name: 'node',
+            icon: 'nodejs',
+            color: '#8dbb39'
+          }, {
+            name: 'angular',
+            icon: 'angularjs',
+            color: '#cc3427'
+          }, {
+            name: 'ngx',
+            icon: 'angularjs',
+            color: '#cc3427'
+          }
+        ]
+
+        const targetRule = iconRules.find(rule => {
+          const includeName = rule.name ? isIncludeName(rule.name) : false
+          const includeDesc = rule.desc ? isIncludeDesc(rule.desc) : false
+          return includeName || includeDesc
+        })
+
+        const targetIcon = targetRule
+                            ? (targetRule.icon || targetRule.name || targetRule.desc)
+                            : 'code'
+
+        const defaultColor = 'inherit'
+        const targetColor = targetRule ? targetRule.color || defaultColor : defaultColor
+
+        return { icon: `icon-${targetIcon}`, color: targetColor }
       }
     }
   }

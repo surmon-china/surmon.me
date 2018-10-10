@@ -4,6 +4,7 @@
     <!-- 列表头 -->
     <transition name="module">
       <div class="article-list-header" v-if="!$route.name.includes('index')">
+        <!-- <color-block-box :left="-130" border="right" color="accent" /> -->
         <list-header></list-header>
       </div>
     </transition>
@@ -25,6 +26,7 @@
 
     <!-- 加载更多 -->
     <div class="article-load">
+      <color-block-box :left="75" border="left" color="red" />
       <button class="btn-loadmore" @click="$emit('loadmore')"
               :disabled="article.fetching || !canLoadMore">
         <span v-if="!article.fetching && canLoadMore"
@@ -108,12 +110,18 @@
     }
 
     > .article-load {
+      position: relative;
+      overflow: hidden;
 
       > .btn-loadmore {
         width: 100%;
         display: block;
         height: 3em;
+        padding-right: 2rem;
         line-height: 3em;
+        text-align: right;
+        color: $white;
+        font-family: webfont;
         background-color: $module-bg;
         text-transform: uppercase;
 
