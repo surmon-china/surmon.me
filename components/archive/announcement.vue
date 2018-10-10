@@ -1,7 +1,8 @@
 <template>
   <div class="announcement">
+    <color-block-box :left="-66" color="primary" />
     <div class="title">
-      <i class="iconfont icon-clock-stroke"></i>
+      <i class="iconfont icon-radio"></i>
     </div>
     <transition name="module" mode="out-in">
       <empty-box class="announcement-empty-box" v-if="!announcement.data.data.length">
@@ -73,6 +74,7 @@
     overflow: hidden;
     position: relative;
     background-color: $module-bg;
+    color: $white;
 
     .announcement-empty-box {
       min-height: auto;

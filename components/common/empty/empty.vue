@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: 'vue-empty'
+    name: 'empty-box'
   }
 </script>
 

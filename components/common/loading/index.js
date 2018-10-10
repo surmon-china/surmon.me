@@ -1,5 +1,5 @@
  /**
- * @file Vue-loading component / ES module
+ * @file Loading component / ES module
  * @author Surmon <surmon@foxmail.com>
  */
 

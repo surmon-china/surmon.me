@@ -318,7 +318,7 @@
                   overflow: hidden;
 
                   > .item {
-                    white-space: nowrap;
+                    @include text-overflow();
 
                     > .iconfont {
                       margin-right: 1rem;
@@ -573,62 +573,60 @@
 
                   a {
                     margin-right: 1.35em;
-                    filter: saturate(50%);
 
                     > .iconfont {
                       font-size: 1.6rem;
                     }
 
                     &:hover {
-                      filter: saturate(100%);
-                    }
 
-                    &.github {
-                      color: #24282d;
-                    }
+                      &.github {
+                        color: #24282d;
+                      }
 
-                    &.juejin {
-                      color: #2b6df6;
-                    }
+                      &.juejin {
+                        color: #2b6df6;
+                      }
 
-                    &.zhihu {
-                      color: #3582f7;
-                    }
+                      &.zhihu {
+                        color: #3582f7;
+                      }
 
-                    &.weibo {
-                      color: #d53437;
-                    }
+                      &.weibo {
+                        color: #d53437;
+                      }
 
-                    &.youtube {
-                      color: #ec3323;
-                    }
+                      &.youtube {
+                        color: #ec3323;
+                      }
 
-                    &.bilibili {
-                      color: #449fd1;
-                    }
+                      &.bilibili {
+                        color: #449fd1;
+                      }
 
-                    &.stackoverflow {
-                      color: #e6863d;
-                    }
+                      &.stackoverflow {
+                        color: #e6863d;
+                      }
 
-                    &.algorithm {
-                      color: #fea116;
-                    }
+                      &.algorithm {
+                        color: #fea116;
+                      }
 
-                    &.quora {
-                      color: #b92b27;
-                    }
+                      &.quora {
+                        color: #b92b27;
+                      }
 
-                    &.linkedin {
-                      color: #478cc5;
-                    }
+                      &.linkedin {
+                        color: #478cc5;
+                      }
 
-                    &.twitter {
-                      color: #499feb;
-                    }
+                      &.twitter {
+                        color: #499feb;
+                      }
 
-                    &.instagram {
-                      color: #000;
+                      &.instagram {
+                        color: #000;
+                      }
                     }
                   }
                 }

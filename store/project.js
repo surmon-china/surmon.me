@@ -18,7 +18,11 @@ export const mutations = {
   },
   REQUEST_GUTHUB_REPOSITORIES_SUCCESS(state, action) {
     state.repositories.fetching = false
-    state.repositories.data = action.result.filter(rep => !rep.description || !rep.description.startsWith('#'))
+    state.repositories.data = action.result.filter(rep => {
+      return !rep.description || !rep.description.startsWith('#')
+    }).sort((a, b) => {
+      return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    })
   },
   REQUEST_GUTHUB_REPOSITORIES_FAILURE(state) {
     state.repositories.fetching = false

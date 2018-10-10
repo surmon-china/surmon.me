@@ -37,7 +37,7 @@
             <span>{{ article.meta.comments || 0 }}</span>
           </span>
           <span class="likes">
-            <i class="iconfont icon-like"></i>
+            <i class="iconfont icon-like" :class="{ liked: isLiked }"></i>
             <span>{{ article.meta.likes || 0 }}</span>
           </span>
           <span class="categories">
@@ -64,10 +64,16 @@
 
 <script>
   import { mapState } from 'vuex'
+  import { localUser, localHistoryLikes } from '~/utils/local-storage'
   export default {
     name: 'article-list-item',
     props: {
       article: Object
+    },
+    data() {
+      return {
+        isLiked: false
+      }
     },
     computed: {
       ...mapState('option', ['imgExt', 'language', 'mobileLayout'])
@@ -77,6 +83,10 @@
         if (!thumb) return `${this.cdnUrl}/images/thumb-article.jpg`
         return `${thumb}?imageView2/1/w/350/h/238/format/${this.imgExt}/interlace/1/q/75|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/460/fill/I0ZGRkZGRg==/dissolve/23/gravity/SouthWest/dx/15/dy/7|imageslim`
       }
+    },
+    mounted() {
+      const historyLikes = localHistoryLikes.get()
+      this.isLiked = historyLikes && historyLikes.pages.includes(this.article.id)
     }
   }
 </script>
@@ -123,7 +133,6 @@
         position: relative;
 
         .item-oirigin {
-          // width: 4rem;
           height: 2.1rem;
           line-height: 2.1rem;
           left: 0;
@@ -132,18 +141,18 @@
           z-index: 9;
           font-size: $font-size-small;
           text-align: center;
-          color: #fff;
+          color: $white;
           border-bottom-right-radius: 1px;
           opacity: .4;
           padding: 0 .8rem;
           text-transform: uppercase;
 
           &.self {
-            background-color: rgba(#4caf50, .5);
+            background-color: rgba($accent, .5);
           }
 
           &.other {
-            background-color: rgba(#ff5722, .5);
+            background-color: rgba($red, .5);
           }
 
           &.hybrid {
@@ -219,6 +228,13 @@
 
           > .views {
             min-width: 4rem;
+          }
+
+          > .likes {
+
+            > .liked {
+              color: $red;
+            }
           }
 
           > .likes,

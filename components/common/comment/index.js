@@ -1,5 +1,5 @@
 /**
- * @file Vue-comment-box component / ES module
+ * @file Comment box component / ES module
  * @author Surmon <surmon@foxmail.com>
  */
 
