@@ -134,7 +134,7 @@
         // 绘制
         const drawLoop = () => {
           if (this.destroyed) return
-          requestAnimFrame(drawLoop)
+          requestAnimationFrame(drawLoop)
           canvasCTX.clearRect(0, 0, video.width, video.height)
           const positions = tracker.getCurrentPosition()
           if (positions) {

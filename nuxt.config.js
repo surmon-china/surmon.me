@@ -8,7 +8,7 @@ const path = require('path')
 const webpack = require('webpack')
 const apiConfig = require('./api.config')
 const i18nConfig = require('./i18n.config')
-const { isProdMode } = require('./environment')
+const { isProdMode, isDevMode } = require('./environment')
 
 const htmlLang = i18nConfig.default || 'zh'
 const htmlSlogan = htmlLang === 'zh'
@@ -17,7 +17,7 @@ const htmlSlogan = htmlLang === 'zh'
 
 module.exports = {
   mode: 'universal',
-  dev: !isProdMode,
+  dev: isDevMode,
   env: {
     baseUrl: apiConfig.baseUrl,
     HOST_URL: apiConfig.socketHost
