@@ -1,6 +1,7 @@
 /**
  * @file Layout components / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module components/layout/index
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 import Background from './background.vue'

@@ -1,12 +1,13 @@
 /**
  * @file WebRTC 服务 / Commonjs module
- * @author Surmon <surmon@foxmail.com>
+ * @module server/wertc
+ * @author Surmon <https://github.com/surmon-china>
  * remote: https://github.com/andyet/signalmaster/blob/master/sockets.js
  */
 
 const crypto = require('crypto')
 const uuid = require('node-uuid')
-const argv = require('yargs').argv
+const { argv } = require('yargs')
 
 const config = {
   rooms: {

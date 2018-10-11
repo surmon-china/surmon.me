@@ -1,9 +1,12 @@
 /**
  * @file 图片弹窗服务 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module plugins/image-popup
+ * @author Surmon <https://github.com/surmon-china>
  */
 
-if (process.browser) {
+import { isBrowser } from '~/environment'
+
+if (isBrowser) {
 
   // 销毁图片弹窗
   const closeImgPopup = () => {

@@ -1,9 +1,10 @@
 /**
  * @file 分类数据状态 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module store/category
+ * @author Surmon <https://github.com/surmon-china>
  */
 
- export const state = () => {
+export const state = () => {
   return {
     fetching: false,
     data: { data: [] }

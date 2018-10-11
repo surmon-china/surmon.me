@@ -19,15 +19,15 @@
     </div>
     <!-- 星期 -->
     <ul class="weekdays" v-if="languageIsEn">
-      <li v-for="day in weeksEn">{{ day }}</li>
+      <li :key="index" v-for="(day, index) in weeksEn">{{ day }}</li>
     </ul>
     <ul class="weekdays" v-else>
-      <li v-for="day in weeksZh">{{ day }}</li>
+      <li :key="index" v-for="(day, index) in weeksZh">{{ day }}</li>
     </ul>
     <!-- 日期 -->
     <ul class="days">
       <loading-box v-if="!days.length" class="loading-box"></loading-box>
-      <li v-for="day in days">
+      <li :key="index" v-for="(day, index) in days">
         <!--本月-->
         <span v-if="day.getMonth() + 1 != currentMonth" 
               class="other-month">{{ day.getDate() }}</span>
@@ -60,7 +60,7 @@
     },
     computed: {
       languageIsEn() {
-        return this.$store.state.option.language === 'en'
+        return this.$store.getters['option/langIsEn']
       }
     },
     methods: {
@@ -172,7 +172,7 @@
       margin-bottom: .5em;
 
       > li {
-        display: inline-block;
+        display: block;
         float: left;
         width: calc(100% / 7);
         text-align: center;

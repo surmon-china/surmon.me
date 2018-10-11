@@ -104,9 +104,8 @@
   export default {
     name: 'service',
     head() {
-      const isEn = this.$store.state.option.language === 'en'
       return {
-        title: `${isEn ? '' : this.$i18n.nav.service + ' | '}Service`,
+        title: `${this.langIsEn ? '' : this.$i18n.nav.service + ' | '}Service`
       }
     },
     methods: {
@@ -121,6 +120,9 @@
       }
     },
     computed: {
+      langIsEn() {
+        return this.$store.getters['option/langIsEn']
+      },
       mobileLayout() {
         return this.$store.state.option.mobileLayout
       }

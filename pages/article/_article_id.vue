@@ -199,7 +199,7 @@
         mobileLayout: state => state.option.mobileLayout,
       }),
       languageIsEn() {
-        return this.language === 'en'
+        return this.$store.getters['option/langIsEn']
       },
       articleContent() {
         const content = this.article.content
@@ -621,9 +621,6 @@
       padding: .8em;
       margin-bottom: 1em;
       background-color: $module-bg;
-
-      > .share-box {
-      }
     }
 
     > .metas {

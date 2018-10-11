@@ -1,6 +1,7 @@
 /**
  * @file gravatar / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module plugins/gravatar
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 import gravatar from 'gravatar'

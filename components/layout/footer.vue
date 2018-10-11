@@ -39,7 +39,7 @@
     name: 'layout-footer',
     computed: {
       languageIsEn() {
-        return this.$store.state.option.language === 'en'
+        return this.$store.getters['option/langIsEn']
       }
     }
   }

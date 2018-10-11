@@ -1,6 +1,7 @@
 /**
  * @file 一些无法适用于 Store 的数据状态 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module utils/event-bus
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 import Vue from 'vue'

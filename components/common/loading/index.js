@@ -1,6 +1,7 @@
  /**
  * @file Loading component / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module components/common/loading
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 import LoadingComponent from './loading'

@@ -1,6 +1,7 @@
 /**
  * @file 响应布局-中间件 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module middleware/change-page-col
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 export default ({ route, store }, next) => {

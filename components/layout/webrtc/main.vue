@@ -106,9 +106,11 @@
 
 <script>
   import apiConfig from '~/api.config'
+  import { isDevMode } from '~/environment'
   import socketio from '~/plugins/socket.io'
   import SimpleWebRTC from '~/plugins/webrtc'
   import faceCtracker from './face-ctracker'
+  
   export default {
     name: 'webrtc',
     components: {
@@ -283,7 +285,7 @@
         localVideoEl: '',
         remoteVideosEl: '',
         debug: false,
-        // debug: process.env.NODE_ENV !== 'production',
+        debug: isDevMode,
         autoAdjustMic: true,
         autoRequestMedia: true,
         detectSpeakingEvents: true,

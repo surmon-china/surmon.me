@@ -1,6 +1,7 @@
 /**
  * @file App config / Commonjs module
- * @author Surmon <surmon@foxmail.com>
+ * @module nuxt.config
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 const path = require('path')

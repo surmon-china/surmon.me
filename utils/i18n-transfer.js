@@ -1,6 +1,7 @@
 /**
  * @file i18n languages transfer service / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module utils/i18n-transfer
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 export default i18nConfig => {

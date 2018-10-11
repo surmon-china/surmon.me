@@ -1,6 +1,7 @@
 /**
  * @file 公告数据状态 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module store/announcement
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 export const state = () => {

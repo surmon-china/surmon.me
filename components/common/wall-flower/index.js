@@ -1,6 +1,7 @@
  /**
  * @file Wall flower component / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module components/common/wall-flower
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 import WallFlowerComponent from './garden'

@@ -1,6 +1,7 @@
 /**
  * @file 全局设置数据状态 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module store/option
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 import i18nConfig from '~/i18n.config'
@@ -56,7 +57,8 @@ export const state = () => ({
 })
 
 export const getters = {
-  mobileLayout: state => state.mobileLayout
+  mobileLayout: state => state.mobileLayout,
+  langIsEn: state => state.language === 'en'
 }
 
 export const mutations = {

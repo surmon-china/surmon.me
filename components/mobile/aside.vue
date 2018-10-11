@@ -82,9 +82,9 @@
     computed: {
       gravatar() {
         const gravatar = this.$store.state.option.adminInfo.data.gravatar
-        return !!gravatar 
-                ? `${gravatar}?imageView2/1/w/180/h/180/interlace/1/q/75|imageslim` 
-                : `${this.cdnUrl}/images/gravatar.jpg`
+        return gravatar 
+          ? `${gravatar}?imageView2/1/w/180/h/180/interlace/1/q/75|imageslim` 
+          : `${this.cdnUrl}/images/gravatar.jpg`
       }
     }
   }

@@ -1,6 +1,7 @@
 /**
  * @file Comment box component / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module components/common/comment
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 import vueComment from './comment'

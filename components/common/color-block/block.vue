@@ -14,11 +14,11 @@
     name: 'color-block-box',
     props: {
       left: Number,
+      color: String,
       border: {
         type: String,
         default: 'right'
-      },
-      color: String
+      }
     }
   }
 </script>

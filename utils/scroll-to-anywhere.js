@@ -1,6 +1,7 @@
 /**
  * @file 滑动到任何目的地 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module utils/scroll-to-anywhere
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 const BezierEasing = require('bezier-easing')

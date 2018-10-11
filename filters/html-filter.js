@@ -1,6 +1,7 @@
 /**
  * @file Text Filters / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module filters/html-filter
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 // 文字溢出过滤器

@@ -54,6 +54,8 @@
 
 <script>
   import EventBus from '~/utils/event-bus'
+  import { isBrowser } from '~/environment'
+
   export default {
     name: 'layout-header',
     data() {
@@ -62,7 +64,7 @@
       }
     },
     mounted() {
-      if (process.browser) {
+      if (isBrowser) {
         window.addLoadedTask(() => {
           this.preload = true;
         })

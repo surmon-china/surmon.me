@@ -1,6 +1,7 @@
 /**
  * @file Time Filters / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module filters/time-filter
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 // 取剩余秒
