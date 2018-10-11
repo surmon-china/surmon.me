@@ -285,7 +285,7 @@
         localVideoEl: '',
         remoteVideosEl: '',
         debug: false,
-        debug: isDevMode,
+        // debug: isDevMode,
         autoAdjustMic: true,
         autoRequestMedia: true,
         detectSpeakingEvents: true,

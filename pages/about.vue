@@ -8,7 +8,7 @@
               <div class="desc">
                 <p class="item">
                   <i class="iconfont icon-user"></i>
-                  <span v-if="langEn"><span class="first-letter">I</span>'m Surmon, a (95+) (小) Javascript (鲜) stack (肉) developer.</span>
+                  <span v-if="langIsEn"><span class="first-letter">I</span>'m Surmon, a (95+) (小) Javascript (鲜) stack (肉) developer.</span>
                   <span v-else>
                     <span class="first-letter">我</span>
                     <span>，灼热的青莲，</span>
@@ -16,7 +16,7 @@
                 </p>
                 <p class="item">
                   <i class="iconfont icon-comment-discussion"></i>
-                  <span v-if="langEn">Taolu committee: </span>
+                  <span v-if="langIsEn">Taolu committee: </span>
                   <span v-else>国家套路委员会：</span>
                   <a target="_blank" 
                      rel="external nofollow noopenter"
@@ -29,7 +29,7 @@
                 </p>
                 <p class="item">
                   <i class="iconfont icon-like"></i>
-                  <span v-if="langEn">code. beauty. whisky. music. vagrant.</span>
+                  <span v-if="langIsEn">code. beauty. whisky. music. vagrant.</span>
                   <span v-else>
                     <span>恋何物？</span>
                     <strong>酒池肉林、日夜笙歌、浪碟游蜂、五音六律、目营心匠、桀骜不羁</strong>
@@ -140,7 +140,7 @@
                 </p>
                 <p class="item">
                   <i class="iconfont icon-code"></i>
-                  <span class="skills" v-if="langEn">Talk is cheap. fuck me.</span>
+                  <span class="skills" v-if="langIsEn">Talk is cheap. fuck me.</span>
                   <span v-else>
                     <strong>我生有涯愿无尽，心期填海力移山</strong>
                   </span>
@@ -197,7 +197,7 @@
                 <a class="followme" 
                    href="" 
                    @click.stop.prevent=""
-                   v-if="!mobileLayout">{{ langEn ? 'Friend me' : '众里寻他' }}</a>
+                   v-if="!mobileLayout">{{ langIsEn ? 'Friend me' : '众里寻他' }}</a>
                 <div class="wechat" v-if="!mobileLayout"></div>
               </div>
             </div>
