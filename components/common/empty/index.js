@@ -1,6 +1,7 @@
 /**
  * @file Empty box component / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module components/common/empty
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 import EmptyComponent from './empty'

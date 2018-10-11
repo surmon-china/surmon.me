@@ -1,6 +1,7 @@
 /**
  * @file 评论数据状态 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module store/comment
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 export const state = () => {
@@ -53,7 +54,9 @@ export const mutations = {
 
   // 喜欢某条评论
   LIKE_ITEM(state, action) {
-    const comment = state.data.data.find(comment => Object.is(comment.id, action.id))
-    if (comment) comment.likes++
+    const comment = state.data.data.find(comment => comment.id === action.id)
+    if (comment) {
+      comment.likes++
+    }
   }
 }

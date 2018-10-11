@@ -1,6 +1,7 @@
 /**
  * @file vue-awesome-swiper / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module plugins/swiper
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 import Vue from 'vue'

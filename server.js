@@ -1,6 +1,7 @@
 /**
  * @file App 入口 / Commonjs module
- * @author Surmon <surmon@foxmail.com>
+ * @module server
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 // Modules
@@ -14,9 +15,9 @@ const { Nuxt, Builder } = require('nuxt')
 process.noDeprecation = true
 
 const config = require('./nuxt.config')
-const { isProdMode } = require('./environment')
-const port = process.env.PORT || 3000
-const host = isProdMode ? (process.env.HOST || '127.0.0.1') : '0.0.0.0'
+const { isProdMode, environment } = require('./environment')
+const port = environment.PORT || 3000
+const host = isProdMode ? (environment.HOST || '127.0.0.1') : '0.0.0.0'
 
 // Server extends
 const webrtcServer = require('./servers/webrtc.server')
@@ -56,7 +57,7 @@ server.listen(port, host)
 // App ready
 consola.ready({
   badge: true,
-  message: `Nuxt.js SSR Server listening on ${host}:${port}, at ${new Date().toLocaleString()}, env: ${process.env.NODE_ENV}`
+  message: `Nuxt.js SSR Server listening on ${host}:${port}, at ${new Date().toLocaleString()}, env: ${environment.NODE_ENV}`
 })
 
 // 更新 GA 脚本

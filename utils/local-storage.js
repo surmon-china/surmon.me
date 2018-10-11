@@ -1,6 +1,7 @@
 /**
  * @file 本机数据状态 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module utils/local-storage
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 const getData = key => localStorage.getItem(key)

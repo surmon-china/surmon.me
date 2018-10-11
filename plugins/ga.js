@@ -1,9 +1,12 @@
 /**
  * @file GA 统计服务 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module plugins/ga
+ * @author Surmon <https://github.com/surmon-china>
  */
 
-if (process.env.NODE_ENV === 'production') {
+import { isProdMode } from '~/environment'
+
+if (isProdMode) {
   /*
   ** Google 统计分析脚本
   */

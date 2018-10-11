@@ -62,7 +62,7 @@
     name: 'article-list-header',
     computed: {
       languageIsEn() {
-        return this.$store.state.option.language === 'en'
+        return this.$store.getters['option/langIsEn']
       },
       currentTag() {
         return this.$store.state.tag.data.data.find((tag, index, arr) => {

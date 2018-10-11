@@ -1,6 +1,7 @@
 /**
  * @file Filters / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module filters/index
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 import { textOverflow, firstUpperCase } from './html-filter.js'

@@ -221,22 +221,17 @@
   export default {
     name: 'about',
     head() {
-      const isEn = this.$store.state.option.language === 'en'
       return {
-        title: `${isEn ? '' : this.$i18n.nav.about + ' | '}About`
+        title: `${this.langIsEn ? '' : this.$i18n.nav.about + ' | '}About`
       }
     },
     computed: {
-      language() {
-        return this.$store.state.option.language
-      },
-      langEn() {
-        return this.$store.state.option.language === 'en'
+      langIsEn() {
+        return this.$store.getters['option/langIsEn']
       },
       gravatar() {
-        // const gravatar = null
         const gravatar = this.$store.state.option.adminInfo.data.gravatar
-        return !!gravatar 
+        return gravatar
                 ? `${gravatar}?imageView2/1/w/360/h/360/interlace/1/q/75|imageslim` 
                 : `${this.cdnUrl}/images/gravatar.jpg`
       },
