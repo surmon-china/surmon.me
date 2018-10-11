@@ -1,6 +1,7 @@
 /**
  * @file 网站地图需要使用的文章数据状态 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module store/sitemap
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 import Vue from 'vue'

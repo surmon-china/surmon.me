@@ -30,9 +30,8 @@
   export default {
     name: 'app',
     head() {
-      const isEn = this.$store.state.option.language === 'en'
       return {
-        title: `${isEn ? '' : this.$i18n.nav.app + ' | '}App`,
+        title: `${this.langIsEn ? '' : this.$i18n.nav.app + ' | '}App`
       }
     },
     data() {
@@ -41,6 +40,9 @@
       }
     },
     computed: {
+      langIsEn() {
+        return this.$store.getters['option/langIsEn']
+      },
       mobileLayout() {
         return this.$store.state.option.mobileLayout
       }

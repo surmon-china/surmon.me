@@ -1,10 +1,23 @@
 /**
  * @file Environment / Commonjs module
- * @author Surmon <surmon@foxmail.com>
+ * @module environment
+ * @author Surmon <https://github.com/surmon-china>
  */
 
-const isProdMode = Object.is(process.env.NODE_ENV, 'production')
+const environment = process.env
+const isDevMode = Object.is(environment.NODE_ENV, 'development')
+const isProdMode = Object.is(environment.NODE_ENV, 'production')
+
+const isStatic = process && process.static
+const isServer = process && process.server
+const isBrowser = process && process.browser
 
 module.exports = {
-  isProdMode
+  isDevMode,
+  isProdMode,
+  environment,
+  
+  isStatic,
+  isBrowser,
+  isServer
 }

@@ -1,6 +1,7 @@
 /**
  * @file 文章 -> 标签内链关系构造器 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module utils/article-tag-releted-parse
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 export default (text, tags) => {
@@ -20,16 +21,6 @@ export default (text, tags) => {
     })
     return tagNames
   }, {})).sort((p, n) => p.length < n.length)
-
-  /*
-  旧方案
-  const selfTags = tags.map(t => t.name)
-  const lowerCaseTags = tags.map(t => t.name.toLowerCase())
-  const upperCaseTags = tags.map(t => t.name.toUpperCase())
-  const firstUpperCaseTags = tags.map(t => toFirstUpperCase(t.name))
-  const tagNames = Array.from(new Set([...selfTags, ...lowerCaseTags, ...upperCaseTags, ...firstUpperCaseTags]))
-  tagNames.sort((p, n) => p.length < n.length)
-  */
 
   // 构造正则
   const tagReg = eval(`/${tagNames.join('|')}/ig`)

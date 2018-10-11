@@ -28,7 +28,7 @@
         let psmText = ''
         let onText = ''
         let offText = ''
-        const isEn = this.language === 'en'
+        const isEn = this.$store.getters['option/langIsEn']
         if (isEn) {
           psmText = 'Canvas background, comment emoji rain, WebRTC, Theme、core socialist values'
         } else {

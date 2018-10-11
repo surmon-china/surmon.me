@@ -84,15 +84,17 @@
   export default {
     name: 'sitemap',
     head() {
-      const isEn = this.$store.state.option.language === 'en'
       return {
-        title: `${isEn ? '' : this.$i18n.nav.map + ' | '}Sitemap`,
+        title: `${this.langIsEn ? '' : this.$i18n.nav.map + ' | '}Sitemap`
       }
     },
     fetch ({ store }) {
       return store.dispatch('loadSitemapArticles', { per_page: 500 })
     },
     computed: {
+      langIsEn() {
+        return this.$store.getters['option/langIsEn']
+      },
       ...mapState({
         tags: state => state.tag.data.data,
         categories: state => state.category.data.data,

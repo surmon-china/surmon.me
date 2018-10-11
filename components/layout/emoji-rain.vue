@@ -7,6 +7,8 @@
 
 <script>
   import eventBus from '~/utils/event-bus'
+  import { isBrowser } from '~/environment'
+
   export default {
     name: 'global-emoji-rain',
     computed: {
@@ -16,7 +18,7 @@
     },
     methods: {
       buildEmojiBase() {
-        if (process.browser) {
+        if (isBrowser) {
           const emojiBase = this.$refs.emoji
           emojiBase.width = document.documentElement.clientWidth || document.body.clientWidth
           emojiBase.height = document.documentElement.clientHeight || document.body.clientHeight

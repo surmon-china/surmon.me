@@ -1,6 +1,7 @@
 /**
  * @file Api config / Commonjs module
- * @author Surmon <surmon@foxmail.com>
+ * @module api.config
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 const { isProdMode } = require('./environment')

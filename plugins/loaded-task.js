@@ -1,11 +1,13 @@
 /**
  * @file 客户端初始化任务管理器 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module plugins/loaded-task
+ * @author Surmon <https://github.com/surmon-china>
  */
 
+import { isBrowser, isServer } from '~/environment'
 import consoleSlogan from '~/utils/console-slogan'
 
-if (process.browser) {
+if (isBrowser) {
 
   // 执行任务
   const doTask = task => {

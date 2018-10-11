@@ -1,9 +1,10 @@
 /**
  * @file highlight.js / Commonjs module
- * @author Surmon <surmon@foxmail.com>
+ * @module plugins/highlight
+ * @author Surmon <https://github.com/surmon-china>
  */
 
- const Hljs = require('highlight.js/lib/highlight')
+const Hljs = require('highlight.js/lib/highlight')
 
 Hljs.registerLanguage('go', require('highlight.js/lib/languages/go'))
 Hljs.registerLanguage('css', require('highlight.js/lib/languages/css'))

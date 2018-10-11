@@ -1,3 +1,11 @@
+/**
+ * @file Api config / Commonjs module
+ * @module eslint.config
+ * @author Surmon <https://github.com/surmon-china>
+*/
+
+const { isProdMode } = require('./environment')
+
 module.exports = {
   root: true,
   env: {
@@ -58,7 +66,7 @@ module.exports = {
     "no-control-regex": 2,
 
     // 禁止使用debugger语句
-    "no-debugger": process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    "no-debugger": isProdMode ? 'error' : 'off',
 
     // 函数参数禁止重名
     "no-dupe-args": 2,

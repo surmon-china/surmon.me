@@ -1,6 +1,7 @@
 /**
  * @file 弹幕服务 / Commonjs module
- * @author Surmon <surmon@foxmail.com>
+ * @module server/barrage
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 const path = require('path')
@@ -50,10 +51,12 @@ const barrageServer = io => {
         socketClients = clients.length
       }
     })
+
     // 最后一批弹幕记录
     socket.on('barrage-last-list', callback => {
       callback(barrages.slice(-66))
     })
+
     // 弹幕总数量
     socket.on('barrage-count', callback => {
       callback({
@@ -61,6 +64,7 @@ const barrageServer = io => {
         count: barrages.length
       })
     })
+
     // 广播弹幕
     socket.on('barrage-send', barrage => {
       barrages.push(barrage)

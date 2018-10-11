@@ -38,15 +38,17 @@
   export default {
     name: 'project',
     head() {
-      const isEn = this.$store.state.option.language === 'en'
       return {
-        title: `${isEn ? '' : this.$i18n.nav.project + ' | '}Project`,
+        title: `${this.langIsEn ? '' : this.$i18n.nav.project + ' | '}Project`
       }
     },
     fetch({ store }) {
       return store.dispatch('loadGithubRepositories')
     },
     computed: {
+      langIsEn() {
+        return this.$store.getters['option/langIsEn']
+      },
       projects() {
         return this.$store.state.project.repositories.data
       },

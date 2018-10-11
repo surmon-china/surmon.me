@@ -1,10 +1,12 @@
 /**
  * @file 根数据状态,存放全局数据和异步方法 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module store/entry
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 import Vue from 'vue'
 import apiConfig from '~/api.config'
+import { isBrowser, isServer } from '~/environment'
 import uaDevice from '~/utils/ua-device'
 import eventBus from '~/utils/event-bus'
 import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
@@ -29,7 +31,7 @@ export const actions = {
   nuxtServerInit(store, { req, params, route }) {
 
     // 检查设备类型
-    const userAgent = process.server ? req.headers['user-agent'] : navigator.userAgent
+    const userAgent = isServer ? req.headers['user-agent'] : navigator.userAgent
     const { isMobile, isOpera, isIE, isSafari, isEdge, isFF, isBB, isChrome, isMaxthon, isIos } = uaDevice(userAgent)
     const mustJpg = (isIos || isFF || isMaxthon || isSafari || isBB || isIE || isEdge)
 
@@ -251,7 +253,7 @@ export const actions = {
         const commitName =  `article/${loadMore ? 'ADD' : 'GET'}_LIST_SUCCESS`
         if (success) {
           commit(commitName, getResData(response))
-          if (loadMore && process.browser) {
+          if (loadMore && isBrowser) {
             Vue.nextTick(() => {
               scrollTo(window.scrollY + (window.innerHeight * 0.8), 300, { easing: Easing['ease-in'] })
             })

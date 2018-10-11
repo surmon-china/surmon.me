@@ -61,12 +61,13 @@
 
 <script>
   import EventBus from '~/utils/event-bus'
+  import { isBrowser } from '~/environment'
+
   export default {
     name: 'music',
     head() {
-      const isEn = this.$store.state.option.language === 'en'
       return {
-        title: `${isEn ? '' : this.$i18n.nav.music + ' | '}Music`,
+        title: `${this.langIsEn ? '' : this.$i18n.nav.music + ' | '}Music`
       }
     },
     data() {
@@ -80,7 +81,7 @@
       }
     },
     mounted() {
-      if (process.browser) {
+      if (isBrowser) {
         this.updateScreenHeight()
         window.addEventListener('resize', this.updateScreenHeight)
       }
@@ -89,6 +90,9 @@
       window.removeEventListener('resize', this.updateScreenHeight)
     },
     computed: {
+      langIsEn() {
+        return this.$store.getters['option/langIsEn']
+      },
       player() {
         return EventBus.player.player
       },
@@ -132,25 +136,20 @@
           this.height = minHeight
         }
       },
+      checkPLayerState(action) {
+        this.playerState.ready && action()
+      },
       togglePlay() {
-        if (this.playerState.ready) {
-          this.player.togglePlay()
-        }
+        this.checkPLayerState(this.player.togglePlay)
       },
       toggleMuted() {
-        if (this.playerState.ready) {
-          this.player.toggleMuted()
-        }
+        this.checkPLayerState(this.player.toggleMuted)
       },
       prevSong() {
-        if (this.playerState.ready) {
-          this.player.prevSong()
-        }
+        this.checkPLayerState(this.player.prevSong)
       },
       nextSong() {
-        if (this.playerState.ready) {
-          this.player.nextSong()
-        }
+        this.checkPLayerState(this.player.nextSong)
       }
     }
   }

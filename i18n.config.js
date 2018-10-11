@@ -1,6 +1,7 @@
 /**
  * @file I18n config / Commonjs module
- * @author Surmon <surmon@foxmail.com>
+ * @module i18n.config
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 module.exports = {

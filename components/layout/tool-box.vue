@@ -49,8 +49,9 @@
 
 <script>
   import { mapState } from 'vuex'
-  import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
   import underscore from '~/utils/underscore-simple'
+  import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
+
   export default {
     name: 'tool-box',
     data() {
@@ -78,7 +79,7 @@
         scrollTo(window.scrollY + window.innerHeight, 300, { easing: Easing['ease-in'] })
       },
       setButtonState(position, state, start) {
-        this[(Object.is(position, 'bottom') ? 'bottomBtnMouseOver' : 'topBtnMouseOver')] = state
+        this[position === 'bottom' ? 'bottomBtnMouseOver' : 'topBtnMouseOver'] = state
         window.cancelAnimationFrame(this.animationFrameId)
         start && this.slowMoveToAnyWhere()
       },
@@ -94,7 +95,9 @@
             targetScrollY = currentScrollY
           }
           const canScrollTo = targetScrollY > 0 && targetScrollY < currentScrollY
-          if (!canScrollTo) return false
+          if (!canScrollTo) {
+            return false
+          }
           window.scrollTo(0, targetScrollY)
           if (this.bottomBtnMouseOver || this.topBtnMouseOver) {
             this.animationFrameId = window.requestAnimationFrame(step)
@@ -109,14 +112,11 @@
         this.$store.commit('option/UPDATE_BARRAGE_STATE')
       },
       toggleWebrtc() {
-        const isEn = this.language === 'en'
+        const isEn = this.$store.getters['option/langIsEn']
         if (this.firstOpenWeRtc && !this.webrtcState) {
-          let confirmText
-          if (isEn) {
-            confirmText = 'Will open WebRTC、WebGL、Canvas, ready?'
-          } else {
-            confirmText = '实验室功能需要 WebRTC、WebGL、Canvas 等技术的支持，可能占用较多 CPU/GPU 资源，甚至死机、起火、爆炸、毁灭，继续？'
-          }
+          const confirmText = isEn
+            ? 'Will open WebRTC、WebGL、Canvas, ready?'
+            : '实验室功能需要 WebRTC、WebGL、Canvas 等技术的支持，可能占用较多 CPU/GPU 资源，甚至死机、起火、爆炸、毁灭，继续？'
           if (!window.confirm(confirmText)) {
             this.$store.commit('option/UPDATE_WEBRTC_STATE', false)
             window.alert(isEn ? 'Sorry~' : '滚滚滚')

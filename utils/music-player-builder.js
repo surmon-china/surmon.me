@@ -1,6 +1,7 @@
 /**
  * @file 播放器构造器 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module utils/music-player-builder
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 import service from 'axios'

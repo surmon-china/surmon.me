@@ -1,9 +1,12 @@
 /**
  * @file 复制拦截器 / ES module
- * @author Surmon <surmon@foxmail.com>
+ * @module plugins/copy-right
+ * @author Surmon <https://github.com/surmon-china>
  */
 
-if (process.browser) {
+import { isBrowser } from '~/environment'
+
+if (isBrowser) {
  
   const copyText = () => {
     return [ '',
@@ -27,7 +30,7 @@ if (process.browser) {
   }
 
   document.addEventListener('copy', e => {
-    if(!window.getSelection) return
+    if (!window.getSelection) return
     if (!window.clickCopy) {
       const content = window.getSelection().toString()
       e.clipboardData.setData('text/plain', buildText(content))
