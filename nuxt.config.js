@@ -30,7 +30,7 @@ module.exports = {
   build: {
     // analyze: true,
     // 设置 cdn 地址
-    publicPath: apiConfig.cdnUrl + '/_nuxt/',
+    publicPath: apiConfig.cdnUrl,
     postcss: {
       plugins: {
         'postcss-custom-properties': {
