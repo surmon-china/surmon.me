@@ -1,8 +1,8 @@
-/*
- *
- * WebRTC
- *
-*/
+/**
+ * @file SimpleWebRTC / ES module
+ * @module plugins/wertc
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import SimpleWebRTC from 'simplewebrtc'
 

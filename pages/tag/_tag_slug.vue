@@ -21,9 +21,7 @@
     head () {
       const slug = this.defaultParams.tag_slug || ''
       const title = slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
-      return {
-        title: `${title} | Tag`
-      }
+      return { title: `${title} | Tag` }
     },
     created() {
       if (!this.currentTag) {

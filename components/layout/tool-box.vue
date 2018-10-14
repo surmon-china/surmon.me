@@ -26,7 +26,7 @@
            :title="$i18n.text.feedback"
            href="mailto:surmon@foxmail.com"
            target="_blank">
-          <i class="iconfont icon-feedback"></i>
+          <i class="iconfont icon-mail"></i>
         </a>
         <button class="to-top" 
                 :title="$i18n.text.totop"
@@ -49,10 +49,11 @@
 
 <script>
   import { mapState } from 'vuex'
-  import { scrollTo, easing } from '~/utils/scroll-to-anywhere'
-  const underscore = require('~/utils/underscore-simple')
+  import underscore from '~/utils/underscore-simple'
+  import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
+
   export default {
-    name: 'tool-right',
+    name: 'tool-box',
     data() {
       return {
         topBtnMouseOver: false,
@@ -72,13 +73,13 @@
     },
     methods: {
       totop() {
-        scrollTo('body', 300, { easing: easing['ease-in'] })
+        scrollTo('body', 300, { easing: Easing['ease-in'] })
       },
       toBottom() {
-        scrollTo(window.scrollY + window.innerHeight, 300, { easing: easing['ease-in'] })
+        scrollTo(window.scrollY + window.innerHeight, 300, { easing: Easing['ease-in'] })
       },
       setButtonState(position, state, start) {
-        this[(Object.is(position, 'bottom') ? 'bottomBtnMouseOver' : 'topBtnMouseOver')] = state
+        this[position === 'bottom' ? 'bottomBtnMouseOver' : 'topBtnMouseOver'] = state
         window.cancelAnimationFrame(this.animationFrameId)
         start && this.slowMoveToAnyWhere()
       },
@@ -94,7 +95,9 @@
             targetScrollY = currentScrollY
           }
           const canScrollTo = targetScrollY > 0 && targetScrollY < currentScrollY
-          if (!canScrollTo) return false
+          if (!canScrollTo) {
+            return false
+          }
           window.scrollTo(0, targetScrollY)
           if (this.bottomBtnMouseOver || this.topBtnMouseOver) {
             this.animationFrameId = window.requestAnimationFrame(step)
@@ -106,17 +109,16 @@
         this.animationFrameId = window.requestAnimationFrame(step)
       },
       toggleBarrage() {
+        this.$ga.event('弹幕功能', '切换', 'tool')
         this.$store.commit('option/UPDATE_BARRAGE_STATE')
       },
       toggleWebrtc() {
-        const isEn = this.language === 'en'
+        this.$ga.event('WebRTC', '切换', 'tool')
+        const isEn = this.$store.getters['option/langIsEn']
         if (this.firstOpenWeRtc && !this.webrtcState) {
-          let confirmText
-          if (isEn) {
-            confirmText = 'Will open WebRTC、WebGL、Canvas, ready?'
-          } else {
-            confirmText = '实验室功能需要 WebRTC、WebGL、Canvas 等技术的支持，可能占用较多 CPU/GPU 资源，甚至死机、起火、爆炸、毁灭，继续？'
-          }
+          const confirmText = isEn
+            ? 'Will open WebRTC、WebGL、Canvas, ready?'
+            : '实验室功能需要 WebRTC、WebGL、Canvas 等技术的支持，可能占用较多 CPU/GPU 资源，甚至死机、起火、爆炸、毁灭，继续？'
           if (!window.confirm(confirmText)) {
             this.$store.commit('option/UPDATE_WEBRTC_STATE', false)
             window.alert(isEn ? 'Sorry~' : '滚滚滚')

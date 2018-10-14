@@ -39,7 +39,7 @@
     name: 'layout-footer',
     computed: {
       languageIsEn() {
-        return this.$store.state.option.language === 'en'
+        return this.$store.getters['option/langIsEn']
       }
     }
   }
@@ -49,6 +49,7 @@
   footer {
     margin-top: 1em;
     background-color: $module-bg;
+    // border-bottom: 2px solid $primary-opacity-5;
 
     .container {
       position: relative;

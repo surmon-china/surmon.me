@@ -60,7 +60,7 @@
                    :href="comment.author.site" 
                    @click.stop="clickUser($event, comment.author)">{{ comment.author.name | firstUpperCase }}</a>
                 <span class="os" v-html="osParse(comment.agent)" v-if="comment.agent"></span>
-                <span class="ua" v-html="uaParse(comment.agent)" v-if="comment.agent"></span>
+                <span class="ua" v-html="browserParse(comment.agent)" v-if="comment.agent"></span>
                 <span class="location" v-if="comment.ip_location && !mobileLayout">
                   <span>{{ comment.ip_location.country }}</span>
                   <span v-if="comment.ip_location.country && comment.ip_location.city">&nbsp;-&nbsp;</span>
@@ -103,7 +103,7 @@
     <transition name="module">
       <div class="pagination-box" v-if="comment.data.pagination.total_page > 1">
         <ul class="pagination-list" v-if="Object.is(sortMode, 2)">
-          <li class="item" v-for="item in comment.data.pagination.total_page">
+          <li class="item" :key="index" v-for="(item, index) in comment.data.pagination.total_page">
             <a href="" 
                class="pagination-btn" 
                :class="{ 'actived disabled': Object.is(item, comment.data.pagination.current_page) }"
@@ -119,7 +119,7 @@
               <span v-text="$i18n.text.comment.pagenation.old">old</span>
             </a>
           </li>
-          <li class="item" v-for="item in comment.data.pagination.total_page">
+          <li class="item" :key="index" v-for="(item, index) in comment.data.pagination.total_page">
             <a href="" 
                class="pagination-btn" 
                :class="{ 'actived disabled': paginationReverseActive(item) }"
@@ -231,7 +231,10 @@
               <i class="iconfont icon-emoji"></i>
               <div class="emoji-box">
                 <ul class="emoji-list">
-                  <li class="item" @click="insertEmoji(e)" v-for="e in emojis">{{ e }}</li>
+                  <li class="item"
+                      :key="index"
+                      @click="insertEmoji(emoji)"
+                      v-for="(emoji, index) in emojis">{{ emoji }}</li>
                 </ul>
               </div>
             </a>
@@ -263,10 +266,11 @@
 <script>
   import { mapState } from 'vuex'
   import marked from '~/plugins/marked'
-  import eventBus from '~/utils/event-bus'
   import gravatar from '~/plugins/gravatar'
+  import eventBus from '~/utils/event-bus'
   import { scrollTo } from '~/utils/scroll-to-anywhere'
-  import { uaParse, osParse } from '~/utils/comment-ua-parse'
+  import { browserParse, osParse } from '~/utils/ua-os-browser'
+  import { localUser, localHistoryLikes } from '~/utils/local-storage'
   
   export default {
     name: 'vue-comment',
@@ -342,9 +346,10 @@
       this.$store.commit('comment/CLEAR_LIST')
     },
     methods: {
-      uaParse,
+      browserParse,
       osParse,
       shang() {
+        this.$ga.event('内容赞赏', '点击', 'tool')
         window.utils.openImgPopup(`${this.cdnUrl}/images/shang.jpg`, 'shang')
       },
       // markdown解析服务
@@ -364,15 +369,13 @@
       },
       // 初始化本地用户即本地用户的点赞历史
       initUser() {
-        if (localStorage) {
-          const user = localStorage.getItem('user')
-          const historyLikes = localStorage.getItem('user_like_history')
-          if (historyLikes) this.historyLikes = JSON.parse(historyLikes)
-          if (user) {
-            this.user = JSON.parse(user)
-            this.upadteUserGravatar()
-            this.userCacheMode = true
-          }
+        const user = localUser.get()
+        const historyLikes = localHistoryLikes.get()
+        historyLikes && (this.historyLikes = historyLikes)
+        if (user) {
+          this.user = user
+          this.upadteUserGravatar()
+          this.userCacheMode = true
         }
       },
       // 更新用户数据
@@ -390,14 +393,14 @@
         if (this.user.site && !this.regexs.url.test(this.user.site)) {
           return alert(this.$i18n.text.comment.profile.siteerr)
         }
-        localStorage.setItem('user', JSON.stringify(this.user))
+        localUser.set(this.user)
         this.userCacheEditing = false
       },
       // 清空用户数据
       claerUserCache() {
         this.userCacheMode = false
         this.userCacheEditing = false
-        localStorage.removeItem('user')
+        localUser.remove()
         Object.keys(this.user).forEach(key => {
           this.user[key] = ''
         })
@@ -516,7 +519,7 @@
         this.$store.dispatch('likeArticleOrPageOrComment', { type: 2, id: this.postId })
         .then(data => {
           this.historyLikes.pages.push(this.postId)
-          localStorage.setItem('user_like_history', JSON.stringify(this.historyLikes))
+          localHistoryLikes.set(this.historyLikes)
         })
         .catch(err => {
           console.warn('喜欢失败', err)
@@ -529,7 +532,7 @@
         this.$store.dispatch('likeArticleOrPageOrComment', { type: 1, id: comment.id })
         .then(data => {
           this.historyLikes.comments.push(comment.id)
-          localStorage.setItem('user_like_history', JSON.stringify(this.historyLikes))
+          localHistoryLikes.set(this.historyLikes)
         })
         .catch(err => {
           console.warn('评论点赞失败', err)
@@ -561,12 +564,12 @@
         if (this.user.site && !this.regexs.url.test(this.user.site)) {
           return alert(this.$i18n.text.comment.profile.siteerr)
         }
-        if(!this.comemntContentText || !this.comemntContentText.replace(/\s/g, '')) {
+        if (!this.comemntContentText || !this.comemntContentText.replace(/\s/g, '')) {
           return alert(this.$i18n.text.comment.profile.content + '?')
         }
         const lineOverflow = this.comemntContentText.split('\n').length > 36
         const lengthOverflow = this.comemntContentText.length > 2000
-        if(lineOverflow || lengthOverflow) {
+        if (lineOverflow || lengthOverflow) {
           return alert(this.$i18n.text.comment.profile.contenterr)
         }
         // 使用服务单配置的黑名单在本地校验邮箱和关键字
@@ -626,7 +629,7 @@
           this.userCacheMode = true
           this.cancelCommentReply()
           this.clearCommentContent()
-          localStorage.setItem('user', JSON.stringify(this.user))
+          localUser.set(this.user)
         }).catch(err => {
           console.warn('评论发布失败', err)
           alert(this.$i18n.text.comment.profile.submiterr)

@@ -1,48 +1,52 @@
-// env
-const isProdMode = Object.is(process.env.NODE_ENV, 'production')
+/**
+ * @file App 入口 / Commonjs module
+ * @module server
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
-// 为了处理部分模块不兼容的问题，暂时 Hack
-const consolewarn = console.warn
-global.console.warn = function() {
-  if (arguments && arguments[0].toString().includes('context.isServer') ||
-      arguments && arguments[0].toString().includes('context.isClient')) {
-    return false
-  } else {
-    consolewarn.apply(consolewarn, arguments)
-  }
-}
-
+// Modules
+const http = require('http')
+const consola = require('consola')
 const express = require('express')
-const app = express()
-const server = require('http').Server(app)
-const io = require('socket.io')(server, {
-  transports: ['websocket']
-})
+const socketio = require('socket.io')
 const { Nuxt, Builder } = require('nuxt')
-const host = !isProdMode ? '0.0.0.0' : (process.env.HOST || '127.0.0.1')
-const port = process.env.PORT || 3000
+
+// Config & ENV
 process.noDeprecation = true
 
-// extend
+const config = require('./nuxt.config')
+const { isProdMode, environment } = require('./environment')
+const port = environment.PORT || 3000
+const host = isProdMode ? (environment.HOST || '127.0.0.1') : '0.0.0.0'
+
+// Server extends
 const webrtcServer = require('./servers/webrtc.server')
 const barrageServer = require('./servers/barrage.server')
 const updateGAScript = require('./utils/update-analytics')
-app.set('port', port)
 
-// Import and Set Nuxt.js options
-const config = require('./nuxt.config')
-config.dev = !isProdMode
-
-// Init Nuxt.js
+// App
+const app = express()
 const nuxt = new Nuxt(config)
+const server = new http.Server(app)
+const io = socketio(server, { transports: ['websocket'] })
+
+// App dev proxy server
+if (config.dev) {
+  app.get('/proxy/*', (req, res) => {
+    const targetUrl = 'http://' + req.url.replace('/proxy/', '')
+    require('request').get(targetUrl).pipe(res)
+  })
+}
+
+// App config
 app.use(nuxt.render)
+app.set('port', port)
 
 // Build only in dev mode
 if (config.dev) {
 	const builder = new Builder(nuxt)
   builder.build().catch((error) => {
-  	// eslint-disable-line no-console
-    console.error(error)
+    consola.error(error)
     process.exit(1)
   })
 }
@@ -50,8 +54,11 @@ if (config.dev) {
 // Listen the server
 server.listen(port, host)
 
-// eslint-disable-line no-console
-console.log(`Nuxt.js SSR Server listening on ${host}:${port}, at ${new Date().toLocaleString()}, env: ${process.env.NODE_ENV}`)
+// App ready
+consola.ready({
+  badge: true,
+  message: `Nuxt.js SSR Server listening on ${host}:${port}, at ${new Date().toLocaleString()}, env: ${environment.NODE_ENV}`
+})
 
 // 更新 GA 脚本
 updateGAScript()

@@ -1,8 +1,8 @@
-/*
- *
- * 文档解析服务
- *
-*/
+/**
+ * @file 文档解析服务 / ES module
+ * @module plugins/marked
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import marked from 'marked'
 import Hljs from '~/plugins/highlight'
@@ -44,7 +44,7 @@ const imageParse = (src, title, alt) => {
   return `<img src="${src}" 
                title="${title || alt || 'surmon.me'}" 
                alt="${alt || title || src}" 
-               onclick="if(window.utils) window.utils.openImgPopup('${src}')"/>`.replace(/\s+/g, ' ').replace('\n', '')
+               onclick="if (window.utils) window.utils.openImgPopup('${src}')"/>`.replace(/\s+/g, ' ').replace('\n', '')
 }
 
 // 代码解析器（行号处理）
@@ -89,7 +89,6 @@ export default (content, tags, parseHtml = false) => {
   // 如果是解析评论，则不解析html内容
   marked.setOptions({ sanitize: !parseHtml })
 
-  // console.log('content', content)
   if (typeof content != 'string') {
     return ''
   }

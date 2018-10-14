@@ -16,39 +16,31 @@
 <script>
   import { mapState } from 'vuex'
   export default {
-    name: 'tool-left',
+    name: 'language-psm',
     computed: {
       ...mapState('option', ['language', 'powerSavingMode'])
     },
     methods: {
       tooggleLanguage() {
+        this.$ga.event('系统语言', '切换', 'tool')
         this.$store.commit('option/SWITCH_LANGUAGE', Object.is(this.language, 'en') ? 'zh' : 'en')
       },
       toogglePowerSaveMode() {
-        let psmText = ''
-        let onText = ''
-        let offText = ''
-        const isEn = this.language === 'en'
-        if (isEn) {
-          psmText = 'Canvas background, comment emoji rain, WebRTC, Theme、core socialist values'
-        } else {
-          psmText = 'Canvas 动态背景、留言表情雨侦测、WebRTC 视频会话、主题色系切换、社会主义价值观'
-        }
-        if (isEn) {
-          onText = `Open「 Power Saving Mode 」will close ${psmText}，sure?`
-          offText = `Close「 Power Saving Mode 」will open ${psmText}，sure?`
-        } else {
-          onText = `开启「 Power Saving Mode 节能模式 」将会关闭 ${psmText} 这些功能，可能导致你无碍冲浪、流连忘返、无法自拔，还要关闭？`
-          offText = `关闭「 Power Saving Mode 节能模式 」将会开启 ${psmText} 这些功能，可能会导致死机、起火、爆炸等风险，还要开启？`
-        }
-        if (this.powerSavingMode) {
-          if (confirm(offText)) {
-            this.$store.commit('option/TOGGLE_POWER_SAVING_MODE', false)
-          }
-        } else {
-          if (confirm(onText)) {
-            this.$store.commit('option/TOGGLE_POWER_SAVING_MODE', true)
-          }
+        this.$ga.event('节能模式', '切换', 'tool')
+        const isEn = this.$store.getters['option/langIsEn']
+        const psmText = isEn
+          ? 'Canvas background, comment emoji rain, WebRTC, Theme、core socialist values'
+          : 'Canvas 动态背景、留言表情雨侦测、WebRTC 视频会话、主题色系切换、社会主义价值观'
+        const onText = isEn
+          ? `Open「 Power Saving Mode 」will close ${psmText}，sure?`
+          : `开启「 Power Saving Mode 节能模式 」将会关闭 ${psmText} 这些功能，可能导致你无碍冲浪、流连忘返、无法自拔，还要关闭？`
+        const offText = isEn
+          ? `Close「 Power Saving Mode 」will open ${psmText}，sure?`
+          : `关闭「 Power Saving Mode 节能模式 」将会开启 ${psmText} 这些功能，可能会导致死机、起火、爆炸等风险，还要开启？`
+        if (this.powerSavingMode && confirm(offText)) {
+          this.$store.commit('option/TOGGLE_POWER_SAVING_MODE', false)
+        } else if (confirm(onText)) {
+          this.$store.commit('option/TOGGLE_POWER_SAVING_MODE', true)
         }
       }
     }
@@ -66,7 +58,7 @@
   #tool-left {
     position: fixed;
     left: 0;
-    top: 66%;
+    top: 50%;
 
     > .tool-box {
       width: 4rem;

@@ -1,45 +1,65 @@
 <template>
   <div id="app" :class="theme" v-cloak>
     <div id="app-tools">
-      <input type="text" v-model="clipboardText" class="clipboard-input" ref="clipboard">
+      <input type="text" v-model="clipboardText" class="clipboard-input" ref="clipboard" />
     </div>
-    <div id="app-aside" v-if="mobileLayout" :class="{ open: mobileSidebar }">
-      <mobile-aside :class="{ open: mobileSidebar }"></mobile-aside>
+    <div id="app-aside" v-if="mobileLayout" :class="mobileSidebarOpenClass">
+      <mobile-aside :class="mobileSidebarOpenClass" />
     </div>
-    <div id="app-main" :class="{ open: mobileSidebar }" @click="closeMobileSidebar">
-      <wall-flower-box v-if="!mobileLayout && !powerSavingMode"></wall-flower-box>
-      <emojo-rain v-if="!powerSavingMode"></emojo-rain>
-      <background v-if="!mobileLayout"></background>
-      <barrage v-if="!mobileLayout && barrageMounted" v-cloak></barrage>
-      <transition name="fade">
-        <webrtc v-if="!mobileLayout && !powerSavingMode && openWebrtc" v-cloak></webrtc>
-      </transition>
-      <header-view v-if="!mobileLayout"></header-view>
-      <mobile-header v-if="mobileLayout"></mobile-header>
-      <theme-view v-if="!mobileLayout && !powerSavingMode" @theme="setTheme"></theme-view>
+    <div id="app-main" :class="mobileSidebarOpenClass" @click="closeMobileSidebar">
+
+      <!-- header -->
+      <header-view v-if="!mobileLayout" />
+      <mobile-header v-else />
+
+      <!-- common pc full -->
+      <template v-if="!mobileLayout">
+        <background />
+        <barrage v-if="barrageMounted" v-cloak />
+        <wall-flower-box v-if="!powerSavingMode" />
+        <transition name="fade">
+          <wallpaper-wall v-if="openWallpaper" v-cloak />
+        </transition>
+        <transition name="fade">
+          <webrtc v-if="!powerSavingMode && openWebrtc" v-cloak />
+        </transition>
+      </template>
+
+      <!-- pc and mobile -->
+      <emojo-rain v-if="!powerSavingMode" />
+
+      <!-- main -->
       <main id="main" :class="{ 'mobile': mobileLayout, [$route.name]: true }">
         <transition name="module">
-          <nav-view v-if="!errorColumn && !mobileLayout" keep-alive></nav-view>
+          <nav-view v-if="!errorColumn && !mobileLayout" keep-alive />
         </transition>
         <div id="main-content" 
              class="main-content" 
-             :class="{ 
-               'full-column': fullColumn, 
+             :class="{
+               'full-column': fullColumn,
                'error-column': errorColumn,
                'mobile-layout': mobileLayout,
                [$route.name]: true
               }">
-          <nuxt></nuxt>
+          <nuxt />
         </div>
         <transition name="aside">
-          <aside-view v-if="!fullColumn && !errorColumn && !mobileLayout" keep-alive></aside-view>
+          <aside-view v-if="!fullColumn && !errorColumn && !mobileLayout" keep-alive />
         </transition>
       </main>
-      <share-view class="sidebar-share" v-if="!mobileLayout && !['service'].includes($route.name)"></share-view>
-      <tool-left v-if="!mobileLayout && !['service'].includes($route.name)"></tool-left>
-      <tool-right v-if="!mobileLayout && !['app', 'music', 'service'].includes($route.name)"></tool-right>
-      <footer-view v-if="!mobileLayout"></footer-view>
-      <mobile-footer v-else></mobile-footer>
+
+      <!-- common pc -->
+      <template v-if="!mobileLayout">
+        <theme-view v-if="!powerSavingMode" @theme="setTheme" />
+        <share-view class="sidebar-share" v-if="isNotServicePage" />
+        <language-psm v-if="isNotServicePage" />
+        <wallpaper-switch v-if="isNotServicePage" />
+        <tool-box v-if="isNotFullColPage" />
+      </template>
+
+      <!-- footer -->
+      <footer-view v-if="!mobileLayout" />
+      <mobile-footer v-else />
     </div>
   </div>
 </template>
@@ -48,7 +68,22 @@
   import { mapState } from 'vuex'
   import eventBus from '~/utils/event-bus'
   import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
-  import { Background, EmojoRain, ToolLeft, ToolRight, Barrage, Webrtc, Header, Footer, Aside, Share, Theme, Nav } from '~/components/layout'
+  import {
+    WallpaperSwitch,
+    WallpaperWall,
+    Background,
+    EmojoRain,
+    LanguagePsm,
+    ToolBox,
+    Barrage,
+    Webrtc,
+    Header,
+    Footer,
+    Aside,
+    Share,
+    Theme,
+    Nav
+  } from '~/components/layout'
   export default {
     name: 'app',
     head() {
@@ -68,6 +103,8 @@
       // this.watchFullScreen()
       this.watchTabActive()
       if (!this.mobileLayout) {
+        this.$store.dispatch('loadWallpapers')
+        this.$store.dispatch('loadWallpaperStory')
         this.$store.dispatch('loadMuiscPlayerList')
       }
       this.$root.$eventBus = eventBus
@@ -76,9 +113,11 @@
     components: {
       Webrtc,
       Barrage,
+      ToolBox,
       EmojoRain,
-      ToolLeft,
-      ToolRight,
+      LanguagePsm,
+      WallpaperWall,
+      WallpaperSwitch,
       Background,
       HeaderView: Header,
       FooterView: Footer,
@@ -91,7 +130,28 @@
       MobileAside
     },
     computed: {
-      ...mapState('option', ['openWebrtc', 'powerSavingMode', 'barrageMounted', 'fullColumn', 'errorColumn', 'mobileLayout', 'mobileSidebar'])
+      ...mapState('option', [
+        'openWebrtc',
+        'openWallpaper',
+        'powerSavingMode',
+        'barrageMounted',
+        'fullColumn',
+        'errorColumn',
+        'mobileLayout',
+        'mobileSidebar'
+      ]),
+      mobileSidebarOpenClass() {
+        return { open: this.mobileSidebar }
+      },
+      isPcAndNotPsm() {
+        return !this.mobileLayout && !this.powerSavingMode
+      },
+      isNotServicePage() {
+        return this.$route.name !== 'service'
+      },
+      isNotFullColPage() {
+        return !['app', 'music', 'service'].includes(this.$route.name)
+      }
     },
     methods: {
       setTheme(theme) {
@@ -148,7 +208,6 @@
     #app-tools {
       height: 0px;
       opacity: 0;
-      // overflow: hidden;
     }
 
     #app-aside {

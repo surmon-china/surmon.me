@@ -50,7 +50,7 @@
       <h3 v-if="currentSong">
         <span>{{ currentSong.name }}</span>
         <span> By </span>
-        <span v-for="artist in currentSong.artists">{{ artist.name }}</span>
+        <span :key="index" v-for="(artist, index) in currentSong.artists">{{ artist.name }}</span>
         <span> / </span>
         <span>{{ currentSong.album.name || 'unknow' }}</span>
       </h3>
@@ -61,12 +61,13 @@
 
 <script>
   import EventBus from '~/utils/event-bus'
+  import { isBrowser } from '~/environment'
+
   export default {
     name: 'music',
     head() {
-      const isEn = this.$store.state.option.language === 'en'
       return {
-        title: `${isEn ? '' : this.$i18n.nav.music + ' | '}Music`,
+        title: `${this.langIsEn ? '' : this.$i18n.nav.music + ' | '}Music`
       }
     },
     data() {
@@ -80,7 +81,7 @@
       }
     },
     mounted() {
-      if (process.browser) {
+      if (isBrowser) {
         this.updateScreenHeight()
         window.addEventListener('resize', this.updateScreenHeight)
       }
@@ -89,6 +90,9 @@
       window.removeEventListener('resize', this.updateScreenHeight)
     },
     computed: {
+      langIsEn() {
+        return this.$store.getters['option/langIsEn']
+      },
       player() {
         return EventBus.player.player
       },
@@ -99,14 +103,7 @@
         return EventBus.currentSong
       },
       currentSongPicUrl() {
-        if (this.currentSong) {
-          const picUrl = this.currentSong.album.picUrl
-          return picUrl 
-                 ? picUrl.replace('http://', '/proxy/') + '?param=600y600' 
-                 : `${this.cdnUrl}/images/music-bg.jpg`
-        } else {
-          return `${this.cdnUrl}/images/music-bg.jpg`
-        }
+        return EventBus.currentSongPicUrl
       },
       relativeStrokeWidth() {
         return (15 / 450 * 100).toFixed(1)
@@ -117,7 +114,8 @@
       },
       perimeter() {
         const radius = 50 - parseFloat(this.relativeStrokeWidth) / 2
-        return 2 * Math.PI * radius
+        const result  = 2 * Math.PI * radius
+        return result
       },
       circlePathStyle() {
         const perimeter = this.perimeter
@@ -138,25 +136,20 @@
           this.height = minHeight
         }
       },
+      checkPLayerState(action) {
+        this.playerState.ready && action()
+      },
       togglePlay() {
-        if (this.playerState.ready) {
-          this.player.togglePlay()
-        }
+        this.checkPLayerState(this.player.togglePlay)
       },
       toggleMuted() {
-        if (this.playerState.ready) {
-          this.player.toggleMuted()
-        }
+        this.checkPLayerState(this.player.toggleMuted)
       },
       prevSong() {
-        if (this.playerState.ready) {
-          this.player.prevSong()
-        }
+        this.checkPLayerState(this.player.prevSong)
       },
       nextSong() {
-        if (this.playerState.ready) {
-          this.player.nextSong()
-        }
+        this.checkPLayerState(this.player.nextSong)
       }
     }
   }
