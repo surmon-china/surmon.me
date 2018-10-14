@@ -34,6 +34,7 @@
       setTheme(key) {
         this.theme = key
         this.$emit('theme', key)
+        this.$ga.event('多色主题', '切换', 'tool')
       },
       computedStyle(key) {
         return {}

@@ -63,7 +63,7 @@
       </transition>
       <div class="aside-tag">
         <empty-box v-if="!tag.fetching && !tag.data.data.length">
-          <slot>{{ $i18.text.tag.empty || 'No Result Tags.' }}</slot>
+          <slot>{{ $i18n.text.tag.empty || 'No Result Tags.' }}</slot>
         </empty-box>
         <ul class="aside-tag-list" v-else-if="!tag.fetching && tag.data.data.length">
           <nuxt-link tag="li"
@@ -371,15 +371,13 @@
       }
 
       > .aside-tools {
-
-        > .full-column {
-          margin-right: 1rem;
-        }
+        display: flex;
+        justify-content: space-between;
 
         > .full-column,
         > .full-page {
           display: inline-block;
-          width: calc((100% - 1.3rem) / 2);
+          width: calc((100% - 1em) / 2);
           height: 3rem;
           line-height: 3rem;
           text-align: center;
@@ -411,8 +409,7 @@
           overflow: hidden;
 
           .item {
-            display: block;
-            float: left;
+            display: inline-block;
             margin-right: 1rem;
             margin-bottom: 1rem;
             height: 2em;

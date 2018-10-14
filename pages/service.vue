@@ -110,6 +110,7 @@
     },
     methods: {
       submitProject() {
+        this.$ga.event('咨询邮件', '点击', 'tool')
         const subject = `嗨！Surmon，久仰大名！`
         const body = `我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
         let mailAddress = 'mailto:surmon@foxmail.com'

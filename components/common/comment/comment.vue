@@ -349,6 +349,7 @@
       browserParse,
       osParse,
       shang() {
+        this.$ga.event('内容赞赏', '点击', 'tool')
         window.utils.openImgPopup(`${this.cdnUrl}/images/shang.jpg`, 'shang')
       },
       // markdown解析服务

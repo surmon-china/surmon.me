@@ -1,5 +1,5 @@
 <template>
-  <div class="global-webrtc">
+  <div id="global-webrtc">
     <div class="webrtc-box"
          :class="[ aligenLeft ? 'aligenLeft' : '' ]">
       <div class="stream-box"
@@ -536,8 +536,7 @@
 </script>
 
 <style lang="scss" scoped>
-
-  .global-webrtc {
+  #global-webrtc {
     position: fixed;
     width: 100%;
     height: 100%;
