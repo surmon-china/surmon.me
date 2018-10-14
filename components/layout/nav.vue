@@ -30,7 +30,7 @@
         <span v-text="$i18n.nav.about"></span>
       </nuxt-link>
       <nuxt-link to="/service" class="item">
-        <i class="iconfont icon-zan-top"></i>
+        <i class="iconfont icon-zan"></i>
         <span v-text="$i18n.nav.service"></span>
         <span class="superscript">
           <i class="iconfont icon-hot"></i>
@@ -122,7 +122,7 @@
 
           > .iconfont {
             color: red;
-            tranisiton: color 0s;
+            transition: color 0s;
             animation: superscript-icon-color 1s infinite;
           }
         }

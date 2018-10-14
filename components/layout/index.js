@@ -1,9 +1,17 @@
+/**
+ * @file Layout components / ES module
+ * @module components/layout/index
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
+import WallpaperSwitch from './wallpaper/switch.vue'
+import WallpaperWall from './wallpaper/wall.vue'
+import LanguagePsm from './language-psm.vue'
 import Background from './background.vue'
 import EmojoRain from './emoji-rain.vue'
-import ToolLeft from './tool-left.vue'
-import ToolRight from './tool-right.vue'
-import Barrage from './barrage.vue'
-import Webrtc from './webrtc.vue'
+import Barrage from './barrage/main.vue'
+import Webrtc from './webrtc/main.vue'
+import ToolBox from './tool-box.vue'
 import Header from './header.vue'
 import Footer from './footer.vue'
 import Share from './share.vue'
@@ -11,11 +19,13 @@ import Aside from './aside.vue'
 import Theme from './theme.vue'
 import Nav from './nav.vue'
 
-module.exports = {
+export {
+  WallpaperSwitch,
+  WallpaperWall,
+  LanguagePsm,
   Background,
   EmojoRain,
-  ToolLeft,
-  ToolRight,
+  ToolBox,
   Barrage,
   Webrtc,
   Header,

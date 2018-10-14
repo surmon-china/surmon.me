@@ -1,13 +1,13 @@
-/*
- *
+/**
+ * @file WebRTC 服务 / Commonjs module
+ * @module server/wertc
+ * @author Surmon <https://github.com/surmon-china>
  * remote: https://github.com/andyet/signalmaster/blob/master/sockets.js
- *
-*/
+ */
 
 const crypto = require('crypto')
 const uuid = require('node-uuid')
-const argv = require('yargs').argv
-const apiConfig = require('../api.config')
+const { argv } = require('yargs')
 
 const config = {
   rooms: {
@@ -38,19 +38,14 @@ const config = {
   ]
 }
 
-// 过滤回调函数
-function safeCb(cb) {
-  if (typeof cb === 'function') {
-    return cb
-  } else {
-    return function () {}
-  }
-}
-
 // 存储所有filter
-let filters = {}
-let beautys = {}
+const filters = {}
+const beautys = {}
 
+// 过滤回调函数
+const safeCb = cb => (typeof cb === 'function') ? cb : (() => {})
+
+// 服务
 const webrtcServer = io => {
 
   // webrtc
@@ -64,8 +59,8 @@ const webrtcServer = io => {
     }
 
     // 取消订阅
-    function removeFeed(type) {
-      delete filters[socket.id]
+    const removeFeed = type => {
+      Reflect.deleteProperty(filters, socket.id)
       if (socket.room) {
         io.sockets.in(socket.room).emit('remove', {
           id: socket.id,
@@ -79,7 +74,7 @@ const webrtcServer = io => {
     }
 
     // 加入房间
-    function join(name, cb) {
+    const join = (name, cb) => {
       // sanity check
       if (typeof name !== 'string') return
       // check if maximum number of sockets reached
@@ -201,7 +196,7 @@ const webrtcServer = io => {
 
     /*
     // 为 TURN 认证创建共享密钥
-    // 该过程在 draft-uberti-behave-turn-rest 中描述
+    // 该过程在 draft-uberti-behave-turn-rest 中描述
     const credentials = []
     // allow selectively vending turn credentials based on origin.
     const origin = socket.handshake.headers.origin

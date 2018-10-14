@@ -1,3 +1,8 @@
+/**
+ * @file lodash 简洁版防抖节流 / Commonjs module
+ * @module utils/underscore-simple
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 const _ = {}
 

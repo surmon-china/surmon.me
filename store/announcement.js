@@ -1,8 +1,8 @@
-/*
-*
-* 公告数据状态
-*
-*/
+/**
+ * @file 公告数据状态 / ES module
+ * @module store/announcement
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 export const state = () => {
   return {

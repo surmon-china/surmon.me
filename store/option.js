@@ -1,64 +1,67 @@
-/*
-*
-* 全局设置数据状态
-*
-*/
+/**
+ * @file 全局设置数据状态 / ES module
+ * @module store/option
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import i18nConfig from '~/i18n.config'
-export const state = () => {
-  return {
 
-    // 默认语言
-    language: i18nConfig.default,
+export const state = () => ({
 
-    // 节能模式
-    powerSavingMode: false,
+  // 默认语言
+  language: i18nConfig.default,
 
-    // 页面的栏目展示类型（3栏/2栏）
-    fullColumn: false,
-    errorColumn: false,
+  // 节能模式
+  powerSavingMode: false,
 
-    // 图片格式
-    imgExt: 'webp',
+  // 页面的栏目展示类型（3栏/2栏）
+  fullColumn: false,
+  errorColumn: false,
 
-    // 是否为移动端
-    mobileLayout: false,
+  // 图片格式
+  imgExt: 'webp',
 
-    // 移动端侧边栏
-    mobileSidebar: false,
+  // 是否为移动端
+  mobileLayout: false,
 
-    // 是否开启弹幕
-    openBarrage: false,
+  // 移动端侧边栏
+  mobileSidebar: false,
 
-    // 弹幕是否已首次渲染
-    barrageMounted: false,
+  // 是否开启弹幕
+  openBarrage: false,
 
-    // 是否开启rtc
-    openWebrtc: false,
+  // 弹幕是否已首次渲染
+  barrageMounted: false,
 
-    // ua
-    userAgent: '',
+  // 是否开启rtc
+  openWebrtc: false,
 
-    // 服务端博主信息
-    adminInfo: {
-      fetching: false,
-      data: {}
-    },
+  // 山河入梦
+  openWallpaper: false,
 
-    // 服务端设置的全局配置
-    globalOption: {
-      fetching: false,
-      data: {
-        meta: {
-          likes: 0
-        }
+  // ua
+  userAgent: '',
+
+  // 服务端博主信息
+  adminInfo: {
+    fetching: false,
+    data: {}
+  },
+
+  // 服务端设置的全局配置
+  globalOption: {
+    fetching: false,
+    data: {
+      meta: {
+        likes: 0
       }
     }
   }
-}
+})
 
 export const getters = {
-  mobileLayout: state => state.mobileLayout
+  mobileLayout: state => state.mobileLayout,
+  langIsEn: state => state.language === 'en'
 }
 
 export const mutations = {
@@ -125,11 +128,7 @@ export const mutations = {
 
   // 切换弹幕状态
   UPDATE_BARRAGE_STATE(state, action) {
-    if (action !== undefined) {
-      state.openBarrage = Boolean(action)
-    } else {
-      state.openBarrage = !Boolean(state.openBarrage)
-    }
+    state.openBarrage = action !== undefined ? !!action : !state.openBarrage
     if (state.openBarrage && !state.barrageMounte) {
       state.barrageMounted = true
     }
@@ -137,16 +136,17 @@ export const mutations = {
 
   // 切换RTC状态
   UPDATE_WEBRTC_STATE(state, action) {
-    if (action !== undefined) {
-      state.openWebrtc = !!action
-    } else {
-      state.openWebrtc = !state.openWebrtc
-    }
+    state.openWebrtc = action !== undefined ? !!action : !state.openWebrtc
   },
 
   // 切换节电模式
   TOGGLE_POWER_SAVING_MODE(state, action) {
     state.powerSavingMode = action
+  },
+
+  // 切换墙纸开关
+  TOGGLE_WALLPAPER(state, action) {
+    state.openWallpaper = action !== undefined ? !!action : !state.openWallpaper
   },
 
   // 切换语言

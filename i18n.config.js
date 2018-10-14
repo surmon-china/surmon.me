@@ -1,3 +1,9 @@
+/**
+ * @file I18n config / Commonjs module
+ * @module i18n.config
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 module.exports = {
   default: 'zh',
   languages: [
@@ -210,15 +216,15 @@ module.exports = {
           en: 'hot'
         },
         loadmore: {
-          zh: '或许有更多',
+          zh: '山河入梦',
           en: 'loadmore'
         },
         loading: {
-          zh: '加载中',
+          zh: '人面桃花',
           en: 'loading'
         },
         nomore: {
-          zh: '这是底线',
+          zh: '春尽江南',
           en: 'no more'
         }
       },

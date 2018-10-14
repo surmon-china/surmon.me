@@ -1,8 +1,8 @@
-/*
-*
-* 文章数据状态
-*
-*/
+/**
+ * @file 文章数据状态 / ES module
+ * @module store/article
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 export const state = () => {
   return {
@@ -84,7 +84,7 @@ export const mutations = {
   // 喜欢某篇文章
   LIKE_ARTICLE(state, action) {
     const article = state.detail.data
-    if (Object.is(article.id, action.id)) {
+    if (article.id === action.id) {
       state.detail.data.meta.likes++
     }
   }

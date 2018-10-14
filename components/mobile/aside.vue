@@ -36,7 +36,7 @@
           <span v-text="$i18n.nav.about">About</span>
         </nuxt-link>
         <nuxt-link to="/service" class="item">
-          <i class="iconfont icon-zan-top"></i>
+          <i class="iconfont icon-zan"></i>
           <span v-text="$i18n.nav.service">Service</span>
         </nuxt-link>
         <nuxt-link to="/guestbook" class="item guestbook">
@@ -82,9 +82,9 @@
     computed: {
       gravatar() {
         const gravatar = this.$store.state.option.adminInfo.data.gravatar
-        return !!gravatar 
-                ? `${gravatar}?imageView2/1/w/180/h/180/interlace/1/q/75|imageslim` 
-                : `${this.cdnUrl}/images/gravatar.jpg`
+        return gravatar 
+          ? `${gravatar}?imageView2/1/w/180/h/180/interlace/1/q/75|imageslim` 
+          : `${this.cdnUrl}/images/gravatar.jpg`
       }
     }
   }

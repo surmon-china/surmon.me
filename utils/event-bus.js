@@ -1,12 +1,11 @@
-
-/*
-*
-* 一些无法适用于 store 的数据状态
-*
-*/
+/**
+ * @file 一些无法适用于 Store 的数据状态 / ES module
+ * @module utils/event-bus
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import Vue from 'vue'
-import musicPlayerBuilder from '~/utils/music-player'
+import musicPlayerBuilder from '~/utils/music-player-builder'
 
 export default new Vue({
   data() {
@@ -47,6 +46,17 @@ export default new Vue({
         return this.player.list.data.tracks[this.player.playerState.index]
       } else {
         return null
+      }
+    },
+    currentSongPicUrl() {
+      const defaultImage = `${this.cdnUrl}/images/music-bg.jpg`
+      if (this.currentSong) {
+        const picUrl = this.currentSong.album.picUrl
+        return picUrl
+                ? picUrl.replace('http://', this.proxyUrl) + '?param=600y600' 
+                : defaultImage
+      } else {
+        return defaultImage
       }
     }
   },

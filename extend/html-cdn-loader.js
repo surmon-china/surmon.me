@@ -1,11 +1,16 @@
+/**
+ * @file Webpack CDN 解析器 / Commonjs module
+ * @module extend/html-cdn-loader
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
-const apiConfig = require('../api.config')
-const isProdMode = Object.is(process.env.NODE_ENV, 'production')
+const { cdnUrl } = require('../api.config')
+const { isProdMode } = require('../environment')
 
 module.exports = source => {
   if (isProdMode) {
-    source = source.replace(/src="\/images\//g, `src="${apiConfig.cdnUrl}/images/`)
-    // source = source.replace(/src="\/partials\//g, `src="${apiConfig.cdnUrl}/partials/`)
+    source = source.replace(/src="\/images\//g, `src="${cdnUrl}/images/`)
+    // source = source.replace(/src="\/partials\//g, `src="${cdnUrl}/partials/`)
   }
   return source
 }

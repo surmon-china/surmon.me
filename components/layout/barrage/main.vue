@@ -17,7 +17,8 @@
           <div class="size">
             <div class="active size" :class="['s-' + sizeIndex]">{{ currentSize }}</div>
             <ul class="size list">
-              <li class="item" 
+              <li class="item"
+                  :key="index"
                   :class="['s-' + index]"
                   v-for="(size, index) in sizes" 
                   @click="sizeIndex = index">{{ size }}</li>
@@ -26,7 +27,8 @@
           <div class="color">
             <div class="active color" :class="['color-' + colorIndex]">{{ currentColor }}</div>
             <ul class="color list">
-              <li class="item" 
+              <li class="item"
+                  :key="index"
                   :class="['color-' + index]"
                   v-for="(color, index) in colors"
                   @click="colorIndex = index">{{ color }}</li>
@@ -49,8 +51,8 @@
 </template>
 
 <script>
-  import socket from '~/plugins/socket.io.js'
-  import BarrageItem from './barrage-item.vue'
+  import socket from '~/plugins/socket.io'
+  import BarrageItem from './item'
   export default {
     name: 'barrage',
     components: {
