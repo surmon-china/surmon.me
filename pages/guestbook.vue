@@ -9,9 +9,7 @@
       </div>
     </div>
     <div class="comment">
-      <comment-box :post-id="0" 
-                   :likes="$store.state.option.globalOption.data.meta.likes">
-      </comment-box>
+      <comment-box :post-id="0" :likes="$store.state.option.globalOption.data.meta.likes" />
     </div>
   </div>
 </template>
@@ -20,12 +18,14 @@
   export default {
     name: 'guestbook',
     head() {
-      const isEn = this.$store.state.option.language === 'en'
       return {
-        title: `${isEn ? '' : this.$i18n.nav.guestbook + ' | '}Guestbook`,
+        title: `${this.langIsEn ? '' : this.$i18n.nav.guestbook + ' | '}Guestbook`
       }
     },
     computed: {
+      langIsEn() {
+        return this.$store.getters['option/langIsEn']
+      },
       mobileLayout() {
         return this.$store.state.option.mobileLayout
       }

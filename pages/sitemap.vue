@@ -5,14 +5,14 @@
         <h3 class="title" v-text="$i18n.text.article.name">articles</h3>
         <p v-if="!articles.length" v-text="$i18n.text.article.empty">暂无文章</p>
         <ul class="article-list" v-else>
-          <li class="item" v-for="(article, index) in articles">
+          <li class="item" :key="index" v-for="(article, index) in articles">
             <p class="item-content">
               <nuxt-link class="link"
                            :to="`/article/${article.id}`"
-                           :title="article.title">《{{ article.title }}》</nuxt-link>
+                           :title="article.title">「 {{ article.title }} 」</nuxt-link>
               <span class="sign">&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;</span>
               <a class="toggle" href="" @click.prevent="$store.commit('sitemap/TOGGLE_ARTICLE_OPEN', index)">
-                <span v-text="$i18n.text.action[article.open ? 'close' : 'open']"></span>
+                <small v-text="$i18n.text.action[article.open ? 'close' : 'open']"></small>
               </a>
             </p>
             <transition name="module">
@@ -28,12 +28,12 @@
         <h3 class="title" v-text="$i18n.text.category.name">categories</h3>
         <p v-if="!categories.length" v-text="$i18n.text.article.empty">暂无分类</p>
         <ul class="categories-list" v-else>
-          <li class="item" v-for="(category, index) in categories">
+          <li class="item" :key="index" v-for="(category, index) in categories">
             <p>
               <nuxt-link class="name"
-                           :to="`/category/${category.slug}`"
-                           :title="category.name"
-                           v-text="$i18n.nav[category.slug]">{{ category.name }}</nuxt-link>
+                         :to="`/category/${category.slug}`"
+                         :title="category.name"
+                         v-text="$i18n.nav[category.slug]">{{ category.name }}</nuxt-link>
               <span>&nbsp;</span>
               <span>（{{ category.count || 0 }}）</span>
               <span>&nbsp;-&nbsp;&nbsp;</span>
@@ -47,7 +47,7 @@
         <h3 class="title" v-text="$i18n.text.tag.name">tags</h3>
         <p v-if="!tags.length" v-text="$i18n.text.article.empty">暂无标签</p>
         <ul class="tag-list" v-else>
-          <li class="item" v-for="tag in tags">
+          <li class="item" :key="index" v-for="(tag, index) in tags">
             <nuxt-link :to="`/tag/${tag.slug}`" :title="tag.description">{{ tag.name }}</nuxt-link>
             <span>&nbsp;</span>
             <span>（{{ tag.count || 0 }}）</span>
@@ -84,15 +84,17 @@
   export default {
     name: 'sitemap',
     head() {
-      const isEn = this.$store.state.option.language === 'en'
       return {
-        title: `${isEn ? '' : this.$i18n.nav.map + ' | '}Sitemap`,
+        title: `${this.langIsEn ? '' : this.$i18n.nav.map + ' | '}Sitemap`
       }
     },
-    fetch ({ store }) {
+    fetch({ store }) {
       return store.dispatch('loadSitemapArticles', { per_page: 500 })
     },
     computed: {
+      langIsEn() {
+        return this.$store.getters['option/langIsEn']
+      },
       ...mapState({
         tags: state => state.tag.data.data,
         categories: state => state.category.data.data,
@@ -129,10 +131,6 @@
               > .sign {
                 display: none;
               }
-
-              > .toggle {
-
-              }
             }
           }
         }
@@ -140,12 +138,13 @@
     }
 
     .sitemap {
+      text-transform: capitalize;
 
       a {
         text-decoration: underline;
 
         &.toggle {
-          text-transform: capitalize;
+          text-decoration: blink;
         }
       }
 
@@ -183,7 +182,7 @@
 
           .item {
             float: left;
-            display: inline-block;
+            display: block;
             margin-right: 1.5em;
             margin-bottom: 1em;
             font-size: 1.1em;

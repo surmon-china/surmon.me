@@ -25,7 +25,7 @@
     head() {
       const slug = this.defaultParams.category_slug || ''
       const title = slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
-      const isEn = this.$store.state.option.language === 'en'
+      const isEn = this.$store.getters['option/langIsEn']
       const zhTitle = isEn ? '' : `${this.$i18n.nav[slug]} | `
       return { 
         title: `${zhTitle}${title} | Category` 

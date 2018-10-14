@@ -1,23 +1,23 @@
+/**
+ * @file 响应布局-中间件 / ES module
+ * @module middleware/change-page-col
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
-export default function ({ route, store }, next) {
+export default ({ route, store }, next) => {
 
-  // fullColumn
-  const fullColumnPageNames = ['about', 'project', 'sitemap']
-  const fullColumn = fullColumnPageNames.includes(route.name)
+  // columns
+  const fullColumn = ['about', 'project', 'sitemap'].includes(route.name)
+  const errorColumn = ['music', 'app', 'service'].includes(route.name)
   
-  // set fullColumn
-  if (!Object.is(store.state.option.fullColumn, fullColumn)) {
+  // set columns
+  if (store.state.option.fullColumn !== fullColumn) {
     store.commit('option/SET_FULL_COLUMU', fullColumn)
   }
-
-  // errorColumn
-  const errorColumn = ['music', 'app', 'service'].includes(route.name)
-
-  // set errorColumn
-  if (!Object.is(store.state.option.errorColumn, errorColumn)) {
+  
+  if (store.state.option.errorColumn !== errorColumn) {
     store.commit('option/SET_ERROR_COLUMU', errorColumn)
   }
 
-  // next
   next()
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="articles">
 
-    <!-- 列表头 -->
+    <!-- 非首页列表头 -->
     <transition name="module">
       <div class="article-list-header" v-if="!$route.name.includes('index')">
         <list-header></list-header>
@@ -25,14 +25,14 @@
 
     <!-- 加载更多 -->
     <div class="article-load">
-      <button class="btn-loadmore" @click="$emit('loadmore')"
-              :disabled="article.fetching || !canLoadMore">
-        <span v-if="!article.fetching && canLoadMore"
-              v-text="$i18n.text.article.loadmore">或许有更多</span>
-        <span v-else-if="article.fetching && canLoadMore"
-              v-text="$i18n.text.article.loading">加载中</span>
-        <span v-else-if="!canLoadMore"
-              v-text="$i18n.text.article.nomore">这是底线</span>
+      <color-block-box :left="75" border="left" color="red" />
+      <button class="btn-loadmore" @click="$emit('loadmore')" :disabled="article.fetching || !canLoadMore">
+        <span class="icon">
+          <i class="iconfont icon-peachblossom"></i>
+        </span>
+        <span v-if="!article.fetching && canLoadMore" v-text="$i18n.text.article.loadmore"></span>
+        <span v-else-if="article.fetching && canLoadMore" v-text="$i18n.text.article.loading"></span>
+        <span v-else-if="!canLoadMore" v-text="$i18n.text.article.nomore"></span>
       </button>
     </div>
   </div>
@@ -93,29 +93,46 @@
       }
 
       > .article-loading {
+        display: flex;
         height: 10em;
         background-color: $module-bg;
-        display: flex;
       }
 
       > .article-errmsg {
         height: 10em;
         line-height: 10em;
-        background-color: $module-bg;
         text-align: center;
+        background-color: $module-bg;
         color: rgba(0, 0, 0, 0.38);
       }
     }
 
     > .article-load {
+      position: relative;
+      overflow: hidden;
 
       > .btn-loadmore {
         width: 100%;
-        display: block;
         height: 3em;
+        padding: 0 2rem;
         line-height: 3em;
+        color: $white;
+        font-family: webfont;
         background-color: $module-bg;
         text-transform: uppercase;
+        display: flex;
+        justify-content: space-between;
+
+        @keyframes loadmore-btn-icon-color {
+          0% { color: $red }
+          100% { color: $accent }
+        }
+
+        > .icon {
+          > .iconfont {
+            animation: loadmore-btn-icon-color 2s infinite;
+          }
+        }
 
         &:hover {
           background-color: $module-hover-bg;

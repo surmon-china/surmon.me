@@ -29,7 +29,7 @@
                        :title="`${currentSong.name} / ${currentSong.album.name || 'unknow'}`">
               <span>{{ currentSong.name }}</span>
               <span> By </span>
-              <span v-for="artist in currentSong.artists">{{ artist.name }}</span>
+              <span :key="index" v-for="(artist, index) in currentSong.artists">{{ artist.name }}</span>
               <span> / </span>
               <span>{{ currentSong.album.name || 'unknow' }}</span>
             </nuxt-link>
@@ -54,6 +54,8 @@
 
 <script>
   import EventBus from '~/utils/event-bus'
+  import { isBrowser } from '~/environment'
+
   export default {
     name: 'layout-header',
     data() {
@@ -62,7 +64,7 @@
       }
     },
     mounted() {
-      if (process.browser) {
+      if (isBrowser) {
         window.addLoadedTask(() => {
           this.preload = true;
         })
@@ -79,14 +81,7 @@
         return EventBus.currentSong
       },
       currentSongPicUrl() {
-        if (this.currentSong) {
-          const picUrl = this.currentSong.album.picUrl
-          return picUrl 
-                 ? picUrl.replace('http://', '/proxy/') + '?param=600y600' 
-                 : `${this.cdnUrl}/images/music-bg.jpg`
-        } else {
-          return `${this.cdnUrl}/images/music-bg.jpg`
-        }
+        return EventBus.currentSongPicUrl
       }
     },
     methods: {

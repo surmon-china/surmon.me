@@ -9,27 +9,29 @@
   src: url('/fonts/DIN-Regular.ttf');
 }
 
-@font-face {font-family: 'webfont';
-  src: url('//at.alicdn.com/t/webfont_lfy2krusqbo.eot'); /* IE9*/
-  src: url('//at.alicdn.com/t/webfont_lfy2krusqbo.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('//at.alicdn.com/t/webfont_lfy2krusqbo.woff') format('woff'), /* chrome、firefox */
-  url('//at.alicdn.com/t/webfont_lfy2krusqbo.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-  url('//at.alicdn.com/t/webfont_lfy2krusqbo.svg#思源黑体-粗') format('svg'); /* iOS 4.1- */
+/* 人面桃花山河入梦春尽江南富强民主文明和谐自由平等公正法治爱国敬业诚信友善 */
+@font-face {
+  font-family: 'webfont';
+  src: url('//at.alicdn.com/t/webfont_pdeql1wnff9.eot'); /* IE9*/
+  src: url('//at.alicdn.com/t/webfont_pdeql1wnff9.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('//at.alicdn.com/t/webfont_pdeql1wnff9.woff') format('woff'), /* chrome、firefox */
+  url('//at.alicdn.com/t/webfont_pdeql1wnff9.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('//at.alicdn.com/t/webfont_pdeql1wnff9.svg#NotoSansHans-Black') format('svg'); /* iOS 4.1- */
 }
 
 ::selection {
-    background: $primary; 
-    color: $white;
+  background: $primary; 
+  color: $white;
 }
 
 ::-moz-selection {
-    background: $primary; 
-    color: $white;
+  background: $primary; 
+  color: $white;
 }
 
 ::-webkit-selection {
-    background: $primary; 
-    color: $white;
+  background: $primary; 
+  color: $white;
 }
 
 * {
@@ -98,7 +100,7 @@ input {
 }
 
 .swiper-pagination-bullet.swiper-pagination-bullet-active {
-  background: white;
+  background: $white;
 }
 
 .swiper-button-prev,
@@ -175,20 +177,21 @@ a {
 
     > .share-box {
       opacity: .6;
+      display: flex;
+      justify-content: space-between;
 
       &:hover {
         opacity: 1;
       }
 
       > .share-link {
-        width: calc((100% - (.445em * 11)) / 12);
-        height: 2.2em;
-        line-height: 2.3em;
+        width: calc((100% - (1em * 11)) / 12);
+        height: 2.5em;
+        line-height: 2.5em;
         background-color: $body-bg;
-        margin-right: .445em;
 
         > .iconfont {
-          font-size: 1.3em;
+          font-size: 1.2em;
         }
 
         &:last-child {
@@ -200,7 +203,7 @@ a {
 
   &.sidebar-share {
     position: fixed;
-    top: 20%;
+    top: 16%;
     left: 0;
     width: 4em;
 

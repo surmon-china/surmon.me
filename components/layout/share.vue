@@ -1,71 +1,14 @@
 <template>
   <div id="share">
     <div class="share-box" :class="{ mobile: mobileLayout }">
-      <a title="微信" 
+      <a :title="social.name" 
          rel="nofollow noopener"
-         class="share-link wechat"
-         @click.prevent="shareWindow(`http://qr.topscan.com/api.php?text=${url}&w=300&el=h&m=10`)">
-        <i class="iconfont icon-wechat"></i>
-      </a>
-      <a title="微博" 
-         rel="nofollow noopener"
-         class="share-link weibo"
-         @click.prevent="shareWindow(`http://service.weibo.com/share/share.php?url=${url}&title=${title()}&source=${url}&sourceUrl=${url}&content=${description()}`)">
-        <i class="iconfont icon-weibo"></i>
-      </a>
-      <a title="QQ空间" 
-         rel="nofollow noopener"
-         class="share-link qzone"
-         @click.prevent="shareWindow(`http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${url}&title=${title()}&summary=${description()}&site=${url}`)">
-        <i class="iconfont icon-qzone"></i>
-      </a>
-      <a title="豆瓣" 
-         rel="nofollow noopener"
-         class="share-link douban"
-         @click.prevent="shareWindow(`https://www.douban.com/recommend/?url=${url}&title=${title()}`)">
-        <i class="iconfont icon-douban"></i>
-      </a>
-      <a title="人人网" 
-         rel="nofollow noopener"
-         class="share-link renren"
-         @click.prevent="shareWindow(`http://widget.renren.com/dialog/share?resourceUrl=${url}&srcUrl=${url}&title=${title()}&description=${description()}`)">
-        <i class="iconfont icon-renren"></i>
-      </a>
-      <a title="印象笔记" 
-         rel="nofollow noopener"
-         class="share-link evernote"
-         @click.prevent="shareWindow(`https://www.evernote.com/clip.action?url=${url}&title=${title()}`)">
-        <i class="iconfont icon-evernote"></i>
-      </a>
-      <a title="twitter" 
-         rel="nofollow noopener"
-         class="share-link twitter"
-         @click.prevent="shareWindow(`http://twitter.com/share?text=${title()}&url=${url}`)">
-        <i class="iconfont icon-twitter"></i>
-      </a>
-      <a title="facebook" 
-         rel="nofollow noopener"
-         class="share-link facebook"
-         @click.prevent="shareWindow(`https://www.facebook.com/sharer/sharer.php?u=${url}`)">
-        <i class="iconfont icon-facebook"></i>
-      </a>
-      <a title="google plus" 
-         rel="nofollow noopener"
-         class="share-link google-plus"
-         @click.prevent="shareWindow(`https://plus.google.com/share?url=${url}`)">
-        <i class="iconfont icon-google-plus"></i>
-      </a>
-      <a title="linkedin" 
-         rel="nofollow noopener"
-         class="share-link linkedin"
-         @click.prevent="shareWindow(`http://www.linkedin.com/shareArticle?title=${title()}&summary=${description()}&mini=true&url=${url}`)">
-        <i class="iconfont icon-linkedin"></i>
-      </a>
-      <a title="email" 
-         rel="nofollow noopener"
-         class="share-link mail"
-         @click.prevent="shareWindow(`mailto:?subject=${title()}&body=${url}`)">
-        <i class="iconfont icon-mail"></i>
+         class="share-link"
+         :key="index"
+         :class="social.class || social.name"
+         v-for="(social, index) in socials"
+         @click.prevent="shareWindow(social.name, social.url)">
+        <i class="iconfont" :class="`icon-${social.icon || social.class || social.name}`"></i>
       </a>
       <span class="share-link link" @click="copyPageUrl">
         <i class="iconfont icon-link"></i>
@@ -77,6 +20,64 @@
 <script>
   export default {
     name: 'share',
+    data() {
+      return {
+        socials: [
+          {
+            name: '微信',
+            class: 'wechat',
+            url: () => `http://qr.topscan.com/api.php?text=${this.url}&w=300&el=h&m=10`
+          },
+          {
+            name: '微博',
+            class: 'weibo',
+            url: () => `http://service.weibo.com/share/share.php?url=${this.url}&title=${this.title()}&source=${this.url}&sourceUrl=${this.url}&content=${this.description()}`
+          },
+          {
+            name: 'QQ空间',
+            class: 'qzone',
+            url: () => `http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${this.url}&title=${this.title()}&summary=${this.description()}&site=${this.url}`
+          },
+          {
+            name: '豆瓣',
+            class: 'douban',
+            url: () => `https://www.douban.com/recommend/?url=${this.url}&title=${this.title()}`
+          },
+          {
+            name: '人人',
+            class: 'renren',
+            url: () => `http://widget.renren.com/dialog/share?resourceUrl=${this.url}&srcUrl=${this.url}&title=${this.title()}&description=${this.description()}`
+          },
+          {
+            name: '印象笔记',
+            class: 'evernote',
+            url: () => `https://www.evernote.com/clip.action?url=${this.url}&title=${this.title()}`
+          },
+          {
+            name: 'twitter',
+            url: () => `http://twitter.com/share?text=${this.title()}&url=${this.url}`
+          },
+          {
+            name: 'facebook',
+            url: () => `https://www.facebook.com/sharer/sharer.php?u=${this.url}`
+          },
+          {
+            name: 'google plus',
+            class: 'google-plus',
+            url: () => `https://plus.google.com/share?url=${this.url}`
+          },
+          {
+            name: 'linkedin',
+            url: () => `http://www.linkedin.com/shareArticle?title=${this.title()}&summary=${this.description()}&mini=true&url=${this.url}`
+          },
+          {
+            name: 'email',
+            class: 'mail',
+            url: () => `mailto:?subject=${this.title()}&body=${this.url}`
+          }
+        ]
+      }
+    },
     computed: {
       url() {
         return `https://surmon.me${this.$route.fullPath}`
@@ -87,6 +88,7 @@
     },
     methods: {
       copyPageUrl() {
+        this.$ga.social('主站复制', '分享', this.url)
         this.$root.$copyToClipboard(this.url)
       },
       description() {
@@ -105,16 +107,21 @@
           return 'Surmon.me'
         }
       },
-      shareWindow(url) {
-        url = url.includes('mailto') ? url.replace(/\s|\||Surmon.me/g, '') : encodeURI(url)
-        // console.log(url)
+      shareWindow(social, url) {
+        const targetUrl = url().includes('mailto')
+          ? url().replace(/\s|\||Surmon.me/g, '')
+          : encodeURI(url())
+        this.$ga.social(social, '分享', targetUrl)
+        /*
+        * screen.availWidth 获得屏幕宽度
+        * screen.availHeight 获得屏幕高度
+        * 居中的算法是：
+        * 左右居中： (屏幕宽度 - 窗口宽度)/2
+        * 上下居中： (屏幕高度 - 窗口高度)/2
+        *
+        */
         // 给打开的窗口命名
-        const winName = 'newWin'
-        // screen.availWidth 获得屏幕宽度
-        // screen.availHeight 获得屏幕高度
-        // 居中的算法是：
-        // 左右居中： (屏幕宽度 - 窗口宽度)/2
-        // 上下居中： (屏幕高度 - 窗口高度)/2
+        const windowName = '分享 Surmon.me'
         // 窗口宽度,需要设置
         const awidth = screen.availWidth / 6 * 2
         // 窗口高度,需要设置
@@ -124,20 +131,19 @@
         // 窗口放中央,一般不需要改
         const aleft = (screen.availWidth - awidth) / 2
         // 新窗口的参数
-        const param0 = 'scrollbars=0,status=0,menubar=0,resizable=2,location=0'
+        const baseParam = 'scrollbars=0,status=0,menubar=0,resizable=2,location=0'
         // 新窗口的左部位置，顶部位置，宽度，高度
-        const params = `top=${atop},left=${aleft},width=${awidth},height=${aheight},${param0}`
+        const params = `top=${atop},left=${aleft},width=${awidth},height=${aheight},${baseParam}`
         // 打开新窗口
-        const win = window.open(url, winName, params)
+        const _window = window.open(targetUrl, windowName, params)
         // 新窗口获得焦点
-        win.focus()
+        _window.focus()
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-
   #share {
 
     .share-box {

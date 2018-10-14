@@ -1,9 +1,7 @@
 <template>
   <div class="global-background">
     <div class="background-image"></div>
-    <div id="particles-background"
-         class="background-canvas"
-         v-if="!powerSavingMode"></div>
+    <div id="particles-background" class="background-canvas" v-if="!powerSavingMode"></div>
   </div>
 </template>
 

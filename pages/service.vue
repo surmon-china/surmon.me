@@ -104,13 +104,13 @@
   export default {
     name: 'service',
     head() {
-      const isEn = this.$store.state.option.language === 'en'
       return {
-        title: `${isEn ? '' : this.$i18n.nav.service + ' | '}Service`,
+        title: `${this.langIsEn ? '' : this.$i18n.nav.service + ' | '}Service`
       }
     },
     methods: {
       submitProject() {
+        this.$ga.event('咨询邮件', '点击', 'tool')
         const subject = `嗨！Surmon，久仰大名！`
         const body = `我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
         let mailAddress = 'mailto:surmon@foxmail.com'
@@ -121,6 +121,9 @@
       }
     },
     computed: {
+      langIsEn() {
+        return this.$store.getters['option/langIsEn']
+      },
       mobileLayout() {
         return this.$store.state.option.mobileLayout
       }

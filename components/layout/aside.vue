@@ -22,7 +22,7 @@
     </div>
     <div class="aside-article">
       <p class="title">
-        <i class="iconfont icon-list"></i>
+        <i class="iconfont icon-hotfill"></i>
         <span v-text="$i18n.text.article.hotlist">热门文章</span>
       </p>
       <empty-box v-if="!article.fetching && !article.data.data.length">
@@ -32,8 +32,8 @@
         <li class="item" :key="item.id" v-for="item in article.data.data.slice(0, 10)">
           <span class="index"></span>
           <nuxt-link class="title" 
-                       :title="`${item.title} - [ ${item.meta.comments} ${$i18n.text.comment.count}  |  ${item.meta.likes} ${$i18n.text.comment.like} ]`"
-                       :to="`/article/${item.id}`">
+                     :to="`/article/${item.id}`"
+                     :title="`${item.title} - 「 ${item.meta.comments} ${$i18n.text.comment.count} | ${item.meta.likes} ${$i18n.text.comment.like} 」`">
             <span>{{ item.title }}</span>
           </nuxt-link>
         </li>
@@ -44,7 +44,7 @@
          rel="external nofollow noopener"
          target="_blank"
          class="ad-box">
-        <img src="/images/mammon/aliyun-300-100.jpg" alt="aliyun-ad">
+        <img src="/images/mammon/aliyun-300-100.jpg" alt="aliyun-ad" />
       </a>
     </div>
     <div class="aside-calendar">
@@ -57,20 +57,20 @@
              rel="external nofollow noopener"
              target="_blank"
              class="ad-box">
-            <img src="/images/mammon/aliyun-300-100.jpg" alt="aliyun-ad">
+            <img src="/images/mammon/aliyun-300-100.jpg" alt="aliyun-ad" />
           </a>
         </div>
       </transition>
       <div class="aside-tag">
         <empty-box v-if="!tag.fetching && !tag.data.data.length">
-          <slot>{{ $i18.text.tag.empty || 'No Result Tags.' }}</slot>
+          <slot>{{ $i18n.text.tag.empty || 'No Result Tags.' }}</slot>
         </empty-box>
         <ul class="aside-tag-list" v-else-if="!tag.fetching && tag.data.data.length">
           <nuxt-link tag="li"
-                       class="item"
-                       :key="index"
-                       :to="`/tag/${item.slug}`"
-                       v-for="(item, index) in tag.data.data">
+                     class="item"
+                     :key="index"
+                     :to="`/tag/${item.slug}`"
+                     v-for="(item, index) in tag.data.data">
             <a class="title" :title="item.description">
               <i class="iconfont" 
                  :class="[item.extends.find(t => Object.is(t.name, 'icon')).value]" 
@@ -146,9 +146,8 @@
       fullScreen() {
         this.setFullColumu()
         const docElm = document.documentElement
-        // const docElm = document.getElementById('main-content')
-        const requestEvent = docElm.requestFullscreen || 
-                             docElm.mozRequestFullScreen || 
+        const requestEvent = docElm.requestFullscreen ||
+                             docElm.mozRequestFullScreen ||
                              docElm.webkitRequestFullScreen ||
                              docElm.msRequestFullscreen
         if (requestEvent) requestEvent.bind(docElm)()
@@ -161,8 +160,7 @@
                                 window.scrollY ||
                                 document.body.scrollTop
         const newSidebarFixedOffsetTop = element.offsetTop
-        this.fixedMode.sidebarFixedOffsetTop = (newSidebarFixedOffsetTop !== sidebarFixedOffsetTop &&
-                                                newSidebarFixedOffsetTop !== 77)
+        this.fixedMode.sidebarFixedOffsetTop = (newSidebarFixedOffsetTop !== sidebarFixedOffsetTop && newSidebarFixedOffsetTop !== 77)
                                               ? newSidebarFixedOffsetTop
                                               : sidebarFixedOffsetTop
         const isFixed = windowScrollTop > sidebarFixedOffsetTop
@@ -283,6 +281,27 @@
           color: $text-dark;
           @include text-overflow();
 
+          &:nth-child(1) {
+            .index {
+              color: $white;
+              background-color: rgba($primary, .6);
+            }
+          }
+
+          &:nth-child(2) {
+            .index {
+              color: $white;
+              background-color: rgba($accent, .6);
+            }
+          }
+
+          &:nth-child(3) {
+            .index {
+              color: $white;
+              background-color: rgba($red, .6);
+            }
+          }
+
           &:last-child {
             margin: 0;
           }
@@ -334,7 +353,6 @@
 
         img {
           max-width: 100%;
-          // border-top: 1px solid #1c4767;
         }
       }
     }
@@ -353,15 +371,13 @@
       }
 
       > .aside-tools {
-
-        > .full-column {
-          margin-right: 1rem;
-        }
+        display: flex;
+        justify-content: space-between;
 
         > .full-column,
         > .full-page {
           display: inline-block;
-          width: calc((100% - 1rem) / 2;
+          width: calc((100% - 1em) / 2);
           height: 3rem;
           line-height: 3rem;
           text-align: center;
@@ -394,7 +410,6 @@
 
           .item {
             display: inline-block;
-            float: left;
             margin-right: 1rem;
             margin-bottom: 1rem;
             height: 2em;

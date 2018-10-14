@@ -1,8 +1,8 @@
-/*
-*
-* 分类数据状态
-*
-*/
+/**
+ * @file 分类数据状态 / ES module
+ * @module store/category
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 export const state = () => {
   return {

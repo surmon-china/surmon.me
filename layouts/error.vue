@@ -3,7 +3,6 @@
     <div class="error-content">
       <h1 class="error-code">{{ error.statusCode }}</h1>
       <div class="error-wrapper-message">
-        <!-- <h2 class="error-message">{{ error.message || '众里寻他 我已不再' }}</h2> -->
         <h2 class="error-message">众里寻他 我已不再</h2>
       </div>
       <p class="error-link">
