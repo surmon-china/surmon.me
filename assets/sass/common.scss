@@ -20,18 +20,18 @@
 }
 
 ::selection {
-    background: $primary; 
-    color: $white;
+  background: $primary; 
+  color: $white;
 }
 
 ::-moz-selection {
-    background: $primary; 
-    color: $white;
+  background: $primary; 
+  color: $white;
 }
 
 ::-webkit-selection {
-    background: $primary; 
-    color: $white;
+  background: $primary; 
+  color: $white;
 }
 
 * {
@@ -177,17 +177,18 @@ a {
 
     > .share-box {
       opacity: .6;
+      display: flex;
+      justify-content: space-between;
 
       &:hover {
         opacity: 1;
       }
 
       > .share-link {
-        width: calc((100% - (.8rem * 11)) / 12);
-        height: 2.2em;
-        line-height: 2.3em;
+        width: calc((100% - (1em * 11)) / 12);
+        height: 2.5em;
+        line-height: 2.5em;
         background-color: $body-bg;
-        margin-right: .5rem;
 
         > .iconfont {
           font-size: 1.2em;
@@ -202,7 +203,7 @@ a {
 
   &.sidebar-share {
     position: fixed;
-    top: 20%;
+    top: 16%;
     left: 0;
     width: 4em;
 

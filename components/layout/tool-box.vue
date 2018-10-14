@@ -109,9 +109,11 @@
         this.animationFrameId = window.requestAnimationFrame(step)
       },
       toggleBarrage() {
+        this.$ga.event('弹幕功能', '切换', 'tool')
         this.$store.commit('option/UPDATE_BARRAGE_STATE')
       },
       toggleWebrtc() {
+        this.$ga.event('WebRTC', '切换', 'tool')
         const isEn = this.$store.getters['option/langIsEn']
         if (this.firstOpenWeRtc && !this.webrtcState) {
           const confirmText = isEn

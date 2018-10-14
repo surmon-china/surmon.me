@@ -216,11 +216,11 @@ module.exports = {
           en: 'hot'
         },
         loadmore: {
-          zh: '人面桃花',
+          zh: '山河入梦',
           en: 'loadmore'
         },
         loading: {
-          zh: '山河入梦',
+          zh: '人面桃花',
           en: 'loading'
         },
         nomore: {

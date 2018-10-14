@@ -275,6 +275,8 @@
 
         > .item {
           margin: 0;
+          padding: 0;
+          border: none;
 
           > .title.en {
             width: auto;
@@ -618,15 +620,17 @@
     }
 
     .article-share {
-      padding: .8em;
+      padding: 1em;
       margin-bottom: 1em;
       background-color: $module-bg;
     }
 
     > .metas {
-      padding: 1em 1.5em;
+      padding: 1em;
 
       > .item {
+        border-left: solid .5em $body-bg;
+        padding-left: 1rem;
         word-break: break-all;
 
         a:hover {

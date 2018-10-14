@@ -36,6 +36,9 @@ export const state = () => ({
   // 是否开启rtc
   openWebrtc: false,
 
+  // 山河入梦
+  openWallpaper: false,
+
   // ua
   userAgent: '',
 
@@ -125,11 +128,7 @@ export const mutations = {
 
   // 切换弹幕状态
   UPDATE_BARRAGE_STATE(state, action) {
-    if (action !== undefined) {
-      state.openBarrage = Boolean(action)
-    } else {
-      state.openBarrage = !Boolean(state.openBarrage)
-    }
+    state.openBarrage = action !== undefined ? !!action : !state.openBarrage
     if (state.openBarrage && !state.barrageMounte) {
       state.barrageMounted = true
     }
@@ -137,16 +136,17 @@ export const mutations = {
 
   // 切换RTC状态
   UPDATE_WEBRTC_STATE(state, action) {
-    if (action !== undefined) {
-      state.openWebrtc = !!action
-    } else {
-      state.openWebrtc = !state.openWebrtc
-    }
+    state.openWebrtc = action !== undefined ? !!action : !state.openWebrtc
   },
 
   // 切换节电模式
   TOGGLE_POWER_SAVING_MODE(state, action) {
     state.powerSavingMode = action
+  },
+
+  // 切换墙纸开关
+  TOGGLE_WALLPAPER(state, action) {
+    state.openWallpaper = action !== undefined ? !!action : !state.openWallpaper
   },
 
   // 切换语言
