@@ -93,11 +93,9 @@ ecosystem.config.js
 sitemap.xml
 
 # barrages
-barrages.json
 data/barrages.json
 /data/barrages.json
 
 # analytics
-analytics.js
 static/scripts/analytics.js
 /static/scripts/analytics.js

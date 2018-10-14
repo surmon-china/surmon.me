@@ -11,9 +11,7 @@ const i18nConfig = require('./i18n.config')
 const { isProdMode, isDevMode } = require('./environment')
 
 const htmlLang = i18nConfig.default || 'zh'
-const htmlSlogan = htmlLang === 'zh'
-                    ? '欢喜勇猛，向死而生'
-                    : 'Talk is cheap. Show me the code.'
+const htmlSlogan = htmlLang === 'zh' ? '欢喜勇猛，向死而生' : 'Talk is cheap. Show me the code.'
 
 module.exports = {
   mode: 'universal',
@@ -40,6 +38,22 @@ module.exports = {
         }
       }
     },
+    // 单独提取 css
+    extractCSS: true,
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          /*
+          styles: {
+            name: 'styles',
+            test: /\.(css|vue)$/,
+            chunks: 'all',
+            enforce: true
+          }
+          */
+        }
+      }
+    },
     // 对webpack的扩展
     extend(webpackConfig, { isDev, isClient }) {
       // 处理 Swiper4 下的 dom7 模块的语法问题
@@ -58,7 +72,7 @@ module.exports = {
         const vueLoader = webpackConfig.module.rules.find(loader => loader.loader === 'vue-loader')
         if (vueLoader) {
           // 处理 Template 中的 cdn 地址
-          vueLoader.options.loaders.html = path.resolve(__dirname, './extend/html-cdn-loader')
+          // vueLoader.options.loaders.html = path.resolve(__dirname, './extend/html-cdn-loader')
           // 处理 CSS 中的 cdn 地址
           const vueLoaders = vueLoader.options.loaders
           for (const cssLoader in vueLoaders) {
@@ -81,8 +95,7 @@ module.exports = {
       // 'particles.js',
       'simplewebrtc',
       'bezier-easing',
-      'socket.io-client',
-      '~/plugins/marked.js'
+      'socket.io-client'
     ],
     maxChunkSize: 350000,
     // 为 JS 和 Vue 文件定制 babel 配置。https://nuxtjs.org/api/configuration-build/#analyze
@@ -112,8 +125,8 @@ module.exports = {
     { src: '~/plugins/marked.js' },
     { src: '~/plugins/gravatar.js' },
     { src: '~/plugins/highlight.js' },
-    { src: '~/plugins/ga.js', ssr: false },
     { src: '~/plugins/swiper.js', ssr: false },
+    { src: '~/plugins/analytics.js', ssr: false },
     { src: '~/plugins/emoji-233333.js', ssr: false },
     { src: '~/plugins/image-popup.js', ssr: false },
     { src: '~/plugins/copy-right.js', ssr: false },

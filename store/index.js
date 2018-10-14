@@ -308,6 +308,48 @@ export const actions = {
       })
   },
 
+  // 获取今日壁纸
+  loadWallpapers({ commit, state }) {
+
+    // 如果数据已存在，则直接返回Promise成功，并返回数据
+    if (state.wallpaper.papers.data) {
+      return Promise.resolve(state.wallpaper.papers.data)
+    }
+
+    // 不存在则请求新数据
+    commit('wallpaper/REQUEST_WALLPAPERS')
+    return this.$axios.$get(`${API_PREFIX}/wallpaper/list?size=8`)
+      .then(response => {
+        resIsSuccess(response)
+          ? commit('wallpaper/REQUEST_WALLPAPERS_SUCCESS', getResData(response))
+          : commit('wallpaper/REQUEST_WALLPAPERS_FAILURE')
+      })
+      .catch(err => {
+        commit('wallpaper/REQUEST_WALLPAPERS_FAILURE', err)
+      })
+  },
+
+  // 获取今日壁纸故事
+  loadWallpaperStory({ commit, state }) {
+
+    // 如果数据已存在，则直接返回Promise成功，并返回数据
+    if (state.wallpaper.story.data) {
+      return Promise.resolve(state.wallpaper.story.data)
+    }
+
+    // 不存在则请求新数据
+    commit('wallpaper/REQUEST_STORY')
+    return this.$axios.$get(`${API_PREFIX}/wallpaper/story`)
+      .then(response => {
+        resIsSuccess(response)
+          ? commit('wallpaper/REQUEST_STORY_SUCCESS', getResData(response))
+          : commit('wallpaper/REQUEST_STORY_FAILURE')
+      })
+      .catch(err => {
+        commit('wallpaper/REQUEST_STORY_FAILURE', err)
+      })
+  },
+
   // 获取歌曲列表
   loadMuiscPlayerList({ commit }) {
     eventBus.requestMusicList()

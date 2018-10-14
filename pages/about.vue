@@ -39,44 +39,44 @@
                   <i class="iconfont icon-coffee"></i>
                   <span class="accounts">
                     <span>
-                      <a href="https://github.com/surmon-china" 
+                      <a href="https://github.com/surmon-china"
                          target="_blank"
                          class="github"
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-github"></i>
                       </a>
-                      <a href="mailto:surmon@foxmail.com" 
+                      <a href="mailto:surmon@foxmail.com"
                          target="_blank"
                          v-if="false"
                          class="mail"
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-mail"></i>
                       </a>
-                      <a href="https://juejin.im/user/5735611ac4c9710060f8fa5e" 
+                      <a href="https://juejin.im/user/5735611ac4c9710060f8fa5e"
                          target="_blank"
                          class="juejin"
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-juejin"></i>
                       </a>
-                      <a href="https://www.zhihu.com/people/surmon/activities" 
+                      <a href="https://www.zhihu.com/people/surmon/activities"
                          target="_blank"
                          class="zhihu"
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-zhihu"></i>
                       </a>
-                      <a href="https://weibo.com/nocower" 
+                      <a href="https://weibo.com/nocower"
                          target="_blank"
                          class="weibo"
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-weibo"></i>
                       </a>
-                      <a href="https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w" 
+                      <a href="https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w"
                          target="_blank"
                          class="youtube"
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-youtube"></i>
                       </a>
-                      <a href="https://space.bilibili.com/27940710/#/video" 
+                      <a href="https://space.bilibili.com/27940710/#/video"
                          target="_blank"
                          class="bilibili"
                          rel="external nofollow noopenter">
@@ -84,52 +84,52 @@
                       </a>
                     </span>
                     <span v-if="!mobileLayout">
-                      <a href="https://surmon.taobao.com" 
+                      <a href="https://surmon.taobao.com"
                          target="_blank"
                          v-if="false"
                          class="taobao"
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-taobao"></i>
                       </a>
-                      <a href="https://stackoverflow.com/users/6222535/surmon?tab=profile" 
+                      <a href="https://stackoverflow.com/users/6222535/surmon?tab=profile"
                          target="_blank"
                          class="stackoverflow"
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-stackoverflow"></i>
                       </a>
-                      <a href="https://leetcode.com/surmon" 
+                      <a href="https://leetcode.com/surmon"
                          target="_blank"
                          class="algorithm"
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-algorithm"></i>
                       </a>
                       
-                      <a href="https://www.quora.com/profile/Surmon" 
+                      <a href="https://www.quora.com/profile/Surmon"
                          target="_blank"
                          class="quora"
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-quora"></i>
                       </a>
-                      <a href="https://www.linkedin.com/in/surmon" 
+                      <a href="https://www.linkedin.com/in/surmon"
                          target="_blank"
                          class="linkedin"
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-linkedin"></i>
                       </a>
-                      <a href="https://twitter.com/surmon_me" 
+                      <a href="https://twitter.com/surmon_me"
                          target="_blank"
                          class="twitter"
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-twitter"></i>
                       </a>
-                      <a href="https://www.facebook.com/surmon.me" 
+                      <a href="https://www.facebook.com/surmon.me"
                          target="_blank"
                          v-if="false"
                          class="facebook"
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-facebook"></i>
                       </a>
-                      <a href="https://www.instagram.com/surmon666/" 
+                      <a href="https://www.instagram.com/surmon666/"
                          target="_blank"
                          class="instagram"
                          rel="external nofollow noopenter">
@@ -176,7 +176,7 @@
                   </span>
                 </p>
               </div>
-              <div class="gravatar">
+              <div class="gravatar" @click="followMe">
                 <div class="background be-2">
                   <img src="/images/about-background-be-2.jpg" alt="background" class="image">
                 </div>
@@ -223,6 +223,11 @@
     head() {
       return {
         title: `${this.langIsEn ? '' : this.$i18n.nav.about + ' | '}About`
+      }
+    },
+    methods: {
+      followMe() {
+        this.$ga.event('加微信码', '点击', 'tool')
       }
     },
     computed: {

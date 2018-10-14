@@ -4,9 +4,11 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import WallpaperSwitch from './wallpaper/switch.vue'
+import WallpaperWall from './wallpaper/wall.vue'
+import LanguagePsm from './language-psm.vue'
 import Background from './background.vue'
 import EmojoRain from './emoji-rain.vue'
-import LanguagePsm from './language-psm.vue'
 import Barrage from './barrage/main.vue'
 import Webrtc from './webrtc/main.vue'
 import ToolBox from './tool-box.vue'
@@ -18,9 +20,11 @@ import Theme from './theme.vue'
 import Nav from './nav.vue'
 
 export {
+  WallpaperSwitch,
+  WallpaperWall,
+  LanguagePsm,
   Background,
   EmojoRain,
-  LanguagePsm,
   ToolBox,
   Barrage,
   Webrtc,

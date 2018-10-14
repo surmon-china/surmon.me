@@ -88,7 +88,7 @@
         title: `${this.langIsEn ? '' : this.$i18n.nav.map + ' | '}Sitemap`
       }
     },
-    fetch ({ store }) {
+    fetch({ store }) {
       return store.dispatch('loadSitemapArticles', { per_page: 500 })
     },
     computed: {
