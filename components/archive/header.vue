@@ -112,6 +112,7 @@
 
 <style lang="scss" scoped>
   .header-box {
+    color: $white;
     height: 16.4rem;
     display: flex;
     flex-direction: column;
