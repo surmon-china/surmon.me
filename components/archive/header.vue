@@ -1,8 +1,6 @@
 <template>
-  <div class="header-box" :class="{ mobile: mobileLayout, bg: !!currentCategoryBackground }">
-    <div class="background"
-         v-if="currentCategoryBackground"
-         :style="{ 'background-image': `url(${currentCategoryBackground})` }"></div>
+  <div class="header-box" :class="{ mobile: mobileLayout }">
+    <div class="background" :style="{ 'background-image': `url(${currentBackgroundImage})` }"></div>
     <div class="logo-box">
       <p class="logo">
         <transition name="module" mode="out-in">
@@ -94,8 +92,10 @@
       currentCategoryIconClass() {
         return this.getExtendsValue(this.currentCategory, 'icon') || 'icon-category'
       },
-      currentCategoryBackground() {
-        return this.getExtendsValue(this.currentCategory, 'background') || '/images/service.jpg'
+      currentBackgroundImage() {
+        const tagBg = this.getExtendsValue(this.currentTag, 'background')
+        const cateBg = this.getExtendsValue(this.currentCategory, 'background')
+        return tagBg || cateBg || '/images/service.jpg'
       },
       currentDate() {
         return this.$route.params.date
@@ -116,10 +116,6 @@
     display: flex;
     flex-direction: column;
     position: relative;
-
-    &.bg {
-      color: $white;
-    }
 
     &.mobile {
       height: 12rem;
