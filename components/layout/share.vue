@@ -70,11 +70,13 @@
             name: 'linkedin',
             url: () => `http://www.linkedin.com/shareArticle?title=${this.title()}&summary=${this.description()}&mini=true&url=${this.url}`
           },
+          /*
           {
             name: 'email',
             class: 'mail',
             url: () => `mailto:?subject=${this.title()}&body=${this.url}`
           }
+          */
         ]
       }
     },
@@ -149,8 +151,6 @@
     .share-box {
 
       &.mobile {
-        width: 100%;
-        display: flex;
 
         > .share-link {
           display: none;
@@ -158,13 +158,7 @@
           &[class*="wechat"],
           &[class*="weibo"],
           &[class*="qzone"] {
-            width: auto;
-            flex-grow: 1;
             display: inline-block;
-          }
-
-          &[class*="qzone"] {
-            margin: 0;
           }
         }
       }

@@ -159,6 +159,13 @@
                 background-color: $module-hover-bg-opacity-9;
               }
             }
+
+            > .btn {
+
+              &[disabled] {
+                opacity: .6;
+              }
+            }
           }
         }
       }

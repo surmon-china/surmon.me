@@ -42,7 +42,7 @@
     }
 
     &.primary {
-      background-color: $primary-opacity-9;
+      background-color: $primary;
       border-color: $accent;
     }
 

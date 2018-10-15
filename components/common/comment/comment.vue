@@ -4,8 +4,7 @@
       <div class="total">
         <div class="count">
           <strong class="count">{{ comment.data.pagination.total || 0 }}</strong>
-          <span>&nbsp;</span>
-          <span v-text="$i18n.text.comment.count">条评论</span>
+          <span v-text="$i18n.text.comment.count"></span>
         </div>
         <a href="" 
            class="like" 
@@ -13,7 +12,7 @@
            @click.stop.prevent="likePage">
           <i class="iconfont icon-like"></i>
           <strong>{{ likes || 0 }}</strong>
-          <span v-text="(mobileLayout && isGuestbookPage && language === 'zh') ? '人喜欢' : $i18n.text.comment.like"></span>
+          <span v-text="(mobileLayout && !languageIsEn) ? '人喜欢' : $i18n.text.comment.like"></span>
         </a>
         <a href="" class="shang" @click.stop.prevent="shang">
           <i class="iconfont icon-shang"></i>
@@ -323,6 +322,9 @@
         mobileLayout: state => state.option.mobileLayout,
         blacklist: state => state.option.globalOption.data.blacklist,
       }),
+      languageIsEn() {
+        return this.$store.getters['option/langIsEn']
+      },
       pageLiked() {
         return this.historyLikes.pages.includes(this.postId)
       },
@@ -812,7 +814,7 @@
           margin-left: .5em;
 
           > .iconfont {
-            margin-right: .5em;
+            margin-right: .5rem;
           }
 
           &:hover {
