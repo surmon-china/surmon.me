@@ -328,7 +328,7 @@ module.exports = {
           en: 'comments'
         },
         like: {
-          zh: '人觉得还行',
+          zh: '人觉得有点牛逼',
           en: ' likes'
         },
         new: {

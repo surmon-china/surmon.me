@@ -33,7 +33,7 @@
     > .wallpaper-box {
       width: 4rem;
       height: 8rem;
-      opacity: .4;
+      opacity: .6;
       display: block;
       position: relative;
       transform: translateX(-$offset * 2);

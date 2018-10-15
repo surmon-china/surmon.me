@@ -4,6 +4,7 @@
 - 增加文章详情页，根据 H2、H3、H4 的标题锚点索引功能
 - 拆分超过 600 行的组件
 - ~~为所有文件增加规范的 JSDOC 信息~~
+- markd 解析内链有问题，https://surmon.me/article/121 git -> github
 
 ## CHANGELOG
 

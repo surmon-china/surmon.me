@@ -100,11 +100,12 @@
 
           > .title {
             position: absolute;
+            margin: 0;
             top: 1.5rem;
             right: 2rem;
             color: $link-color;
-            margin: 0;
-            padding: 0 .6em;
+            padding-right: .6em;
+            padding-left: 1em;
             height: 2em;
             line-height: 2em;
             font-size: 1em;
@@ -112,11 +113,14 @@
             border-radius: 1px;
             letter-spacing: .3px;
             -webkit-background-clip: text;
-            background: linear-gradient(to right, transparent, $module-hover-bg-opacity-3, $module-hover-bg, $module-bg);
+            // background-color: $module-hover-bg-opacity-9;
+            background: linear-gradient(to right, transparent 2%, $module-hover-bg, $module-hover-bg-opacity-9, $module-bg);
 
             &:hover {
               color: $text-darken;
-              background-color: $module-hover-bg-opacity-9;
+              // background: none;
+              padding-left: .6em;
+              background-color: $module-bg;
             }
           }
         }
