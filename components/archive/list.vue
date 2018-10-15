@@ -25,7 +25,7 @@
 
     <!-- 加载更多 -->
     <div class="article-load">
-      <color-block-box :left="75" border="left" color="red" />
+      <color-block-box :left="btnColorBlockLeft" border="left" color="red" />
       <button class="btn-loadmore" @click="$emit('loadmore')" :disabled="article.fetching || !canLoadMore">
         <span class="icon">
           <i class="iconfont icon-peachblossom"></i>
@@ -56,6 +56,9 @@
     computed: {
       mobileLayout() {
         return this.$store.state.option.mobileLayout
+      },
+      btnColorBlockLeft() {
+        return this.mobileLayout ? 60 : 75
       },
       canLoadMore() {
         const { current_page, total_page } = this.article.data.pagination
@@ -122,6 +125,10 @@
         text-transform: uppercase;
         display: flex;
         justify-content: space-between;
+
+        &[disabled] {
+          opacity: .7;
+        }
 
         @keyframes loadmore-btn-icon-color {
           0% { color: $red }

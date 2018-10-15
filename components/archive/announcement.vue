@@ -1,6 +1,6 @@
 <template>
   <div class="announcement">
-    <color-block-box :left="-66" color="primary" />
+    <color-block-box :left="colorBlockLeft" color="primary" />
     <div class="title">
       <i class="iconfont icon-radio"></i>
     </div>
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   import marked from '~/plugins/marked'
   export default {
     name: 'index-announcement',
@@ -60,6 +61,12 @@
     methods: {
       markedContent(content) {
         return marked(content, null, true)
+      }
+    },
+    computed: {
+      ...mapState('option', ['mobileLayout']),
+      colorBlockLeft() {
+        return this.mobileLayout ? -58 : -66
       }
     }
   }

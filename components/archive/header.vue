@@ -112,7 +112,7 @@
 
 <style lang="scss" scoped>
   .header-box {
-    height: 15.7rem;
+    height: 16.4rem;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -122,9 +122,17 @@
     }
 
     &.mobile {
-      .logo {
-        > .iconfont {
-          font-size: 3em;
+      height: 12rem;
+
+      > .logo-box {
+        height: 8.6rem;
+
+        > .logo {
+          line-height: 8.6rem;
+
+          > .iconfont {
+            font-size: 5em;
+          }
         }
       }
     }
@@ -154,7 +162,6 @@
       background-color: $module-bg;
       position: absolute;
       display: block;
-      opacity: .9;
       width: 100%;
       height: 100%;
       top: 0;
@@ -181,7 +188,7 @@
 
     > .title-box {
       height: 4rem;
-      line-height: 2.2rem;
+      line-height: 2.5rem;
 
       > .title {
         margin: 0;

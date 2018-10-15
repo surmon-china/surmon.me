@@ -104,32 +104,36 @@
         </div>
       </div>
     </transition>
-    <div class="related" v-if="article.related && article.related.length && !mobileLayout">
-      <div class="article-list swiper" v-swiper:swiper="swiperOption">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide item" v-for="(article, index) in article.related" :key="index">
-            <nuxt-link :to="`/article/${article.id}`" 
-                         :title="article.title" 
-                         class="item-box">
-              <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title">
-              <span class="title">{{ article.title }}</span>
-            </nuxt-link>
+    <template v-if="article.related && article.related.length">
+      <div class="related" v-if="!mobileLayout">
+        <div class="article-list swiper" v-swiper:swiper="swiperOption">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide item" v-for="(article, index) in article.related" :key="index">
+              <nuxt-link :to="`/article/${article.id}`" 
+                          :title="article.title" 
+                          class="item-box">
+                <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title">
+                <span class="title">{{ article.title }}</span>
+              </nuxt-link>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="related" v-if="article.related && article.related.length && mobileLayout">
-      <ul class="article-list">
-        <li class="item" v-for="(article, index) in article.related.slice(0, 8)" :key="index">
-          <nuxt-link class="item-link"
-                     :to="`/article/${article.id}`" 
-                     :title="`「 ${article.title} 」- 继续阅读`">
-            <span class="title">「 {{ article.title }} 」</span>
-            <small>- 继续阅读</small>
-          </nuxt-link>
-        </li>
-      </ul>
-    </div>
+      <div class="related" v-else>
+        <ul class="article-list">
+          <li class="item" v-for="(article, index) in article.related.slice(0, 8)" :key="index">
+            <nuxt-link class="item-link"
+                      :to="`/article/${article.id}`" 
+                      :title="`「 ${article.title} 」- 继续阅读`">
+              <span class="sign">《</span>
+              <span class="title">{{ article.title }}</span>
+              <span class="sign">》</span>
+              <small class="tip">- 继续阅读</small>
+            </nuxt-link>
+          </li>
+        </ul>
+      </div>
+    </template>
     <div class="comment">
       <comment-box :post-id="article.id"
                    :likes="article.meta.likes"
@@ -270,7 +274,6 @@
     &.mobile {
 
       > .metas {
-        padding: 1em;
         line-height: 2.3em;
 
         > .item {
@@ -298,11 +301,21 @@
           > .item {
 
             > .item-link {
-              display: block;
+              display: flex;
               width: 100%;
               height: 2.2em;
               line-height: 2.2em;
-              @include text-overflow();
+
+              > .title {
+                border-bottom: 1px solid;
+                display: inline-block;
+                max-width: 70%;
+                @include text-overflow();
+              }
+
+              > .tip {
+                display: inline-block;
+              }
             }
           }
         }

@@ -1,19 +1,23 @@
 <template>
   <div class="page" :class="{ mobile: mobileLayout }">
     <div class="sitemap">
-      <div class="articles">
+      <div class="module articles">
         <h3 class="title" v-text="$i18n.text.article.name">articles</h3>
         <p v-if="!articles.length" v-text="$i18n.text.article.empty">暂无文章</p>
         <ul class="article-list" v-else>
           <li class="item" :key="index" v-for="(article, index) in articles">
             <p class="item-content">
               <nuxt-link class="link"
-                           :to="`/article/${article.id}`"
-                           :title="article.title">「 {{ article.title }} 」</nuxt-link>
-              <span class="sign">&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-              <a class="toggle" href="" @click.prevent="$store.commit('sitemap/TOGGLE_ARTICLE_OPEN', index)">
-                <small v-text="$i18n.text.action[article.open ? 'close' : 'open']"></small>
-              </a>
+                         :to="`/article/${article.id}`"
+                         :title="article.title">「 {{ article.title }} 」</nuxt-link>
+              <span class="sign">&nbsp;&nbsp;-&nbsp;&nbsp;</span>
+              <small>
+                <a class="toggle-link"
+                   href=""
+                   @click.prevent="$store.commit('sitemap/TOGGLE_ARTICLE_OPEN', index)"
+                   v-text="$i18n.text.action[article.open ? 'close' : 'open']">
+                </a>
+              </small>
             </p>
             <transition name="module">
               <p v-show="article.open" class="item-description">
@@ -24,38 +28,36 @@
         </ul>
       </div>
       <br>
-      <div class="categories">
+      <div class="module categories">
         <h3 class="title" v-text="$i18n.text.category.name">categories</h3>
         <p v-if="!categories.length" v-text="$i18n.text.article.empty">暂无分类</p>
         <ul class="categories-list" v-else>
           <li class="item" :key="index" v-for="(category, index) in categories">
-            <p>
+            <p class="item-content">
               <nuxt-link class="name"
                          :to="`/category/${category.slug}`"
                          :title="category.name"
                          v-text="$i18n.nav[category.slug]">{{ category.name }}</nuxt-link>
-              <span>&nbsp;</span>
               <span>（{{ category.count || 0 }}）</span>
-              <span>&nbsp;-&nbsp;&nbsp;</span>
+              <span>&nbsp;-&nbsp;</span>
               <span>{{ category.description }}</span>
             </p>
           </li>
         </ul>
       </div>
       <br>
-      <div class="tags">
+      <div class="module tags">
         <h3 class="title" v-text="$i18n.text.tag.name">tags</h3>
         <p v-if="!tags.length" v-text="$i18n.text.article.empty">暂无标签</p>
         <ul class="tag-list" v-else>
           <li class="item" :key="index" v-for="(tag, index) in tags">
             <nuxt-link :to="`/tag/${tag.slug}`" :title="tag.description">{{ tag.name }}</nuxt-link>
-            <span>&nbsp;</span>
             <span>（{{ tag.count || 0 }}）</span>
           </li>
         </ul>
       </div>
       <br>
-      <div class="pages">
+      <div class="module pages">
         <h3 class="title" v-text="$i18n.text.page.name">pages</h3>
         <ul class="page-list">
           <li class="item">
@@ -123,7 +125,7 @@
 
             > .item-content {
 
-              > .link {
+              .toggle-link {
                 display: block;
                 margin-bottom: 1rem;
               }
@@ -141,33 +143,35 @@
       text-transform: capitalize;
 
       a {
-        text-decoration: underline;
+        border-bottom: 1px solid;
 
-        &.toggle {
-          text-decoration: blink;
+        &.toggle-link {
+          border: none;
         }
       }
 
-      .tags,
-      .pages,
-      .articles,
-      .categories {
+      $margin-bottom: 1.2em;
+
+      .module {
+        font-size: 1em;
 
         .title {
-          margin: 0em 0 1em;
+          margin: 0em 0 $margin-bottom * 0.9;
           font-weight: bold;
           text-transform: capitalize;
         }
       }
 
       .articles {
-
         .article-list {
-
           > .item {
 
+            > .item-content {
+              margin-bottom: $margin-bottom;
+            }
+
             > .item-description {
-              line-height: 2.16rem;
+              line-height: 2em;
             }
           }
         }
@@ -175,7 +179,6 @@
 
       .tags,
       .pages {
-
         .tag-list,
         .page-list {
           overflow: hidden;
@@ -184,21 +187,23 @@
             float: left;
             display: block;
             margin-right: 1.5em;
-            margin-bottom: 1em;
-            font-size: 1.1em;
+          }
+        }
+      }
+
+      .tags {
+        .tag-list {
+          .item {
+            margin-bottom: $margin-bottom;
           }
         }
       }
 
       .categories {
-
         .categories-list {
-
           .item {
-
             .name {
               text-transform: capitalize;
-              font-size: 1.1em;
             }
           }
         }

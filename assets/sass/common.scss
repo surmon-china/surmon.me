@@ -180,12 +180,19 @@ a {
       display: flex;
       justify-content: space-between;
 
+      &.mobile {
+
+        >.share-link {
+          width: calc((100% - (1em * 2)) / 3);
+        }
+      }
+
       &:hover {
         opacity: 1;
       }
 
       > .share-link {
-        width: calc((100% - (1em * 11)) / 12);
+        width: calc((100% - (1em * 10)) / 11);
         height: 2.5em;
         line-height: 2.5em;
         background-color: $body-bg;
