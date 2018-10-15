@@ -75,7 +75,6 @@
               <i class="iconfont" 
                  :class="[item.extends.find(t => Object.is(t.name, 'icon')).value]" 
                  v-if="item.extends.find(t => Object.is(t.name, 'icon'))"></i>
-              <span>&nbsp;</span>
               <span>{{ item.name }}</span>
               <span>({{ item.count || 0 }})</span>
             </a>
