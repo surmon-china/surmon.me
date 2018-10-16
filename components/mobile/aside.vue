@@ -28,7 +28,7 @@
           <span v-text="$i18n.nav.think">Think</span>
         </nuxt-link>
         <nuxt-link to="/sitemap" class="item">
-          <i class="iconfont icon-sitemap"></i>
+          <i class="iconfont icon-peachblossom"></i>
           <span v-text="$i18n.nav.map">Sitemap</span>
         </nuxt-link>
         <nuxt-link to="/about" class="item">
