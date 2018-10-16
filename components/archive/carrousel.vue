@@ -114,7 +114,7 @@
             letter-spacing: .3px;
             -webkit-background-clip: text;
             // background-color: $module-hover-bg-opacity-9;
-            background: linear-gradient(to right, transparent 1%, $module-bg, $module-hover-bg, $module-hover-bg-opacity-9);
+            background: linear-gradient(90deg, transparent 0%, $module-bg 4em, $module-hover-bg-opacity-9, $white);
 
             &:hover {
               color: $text-darken;
