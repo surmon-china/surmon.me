@@ -116,6 +116,9 @@
     padding: 2em 3em;
     background-color: $module-bg;
     overflow: hidden;
+
+    $border-guide: 1px solid;
+    $margin-guide: 1.2em;
     
     &.mobile {
       padding: 1.666rem;
@@ -140,8 +143,8 @@
 
                 > .title {
                   margin: 0;
-                  max-width: 90%;
-                  border-bottom: 1px solid;
+                  max-width: 88%;
+                  border-bottom: $border-guide;
                   @include text-overflow();
                 }
               }
@@ -165,22 +168,20 @@
       text-transform: capitalize;
 
       a {
-        border-bottom: 1px solid;
+        border-bottom: $border-guide;
 
         &.toggle-link {
           border: none;
         }
       }
 
-      $margin-bottom: 1.2em;
-
       .module {
         font-size: 1em;
 
         .title {
-          margin: 0em 0 $margin-bottom * 0.9;
           font-weight: bold;
           text-transform: capitalize;
+          margin: 0em 0 $margin-guide * 0.9;
         }
       }
 
@@ -189,19 +190,22 @@
           > .item {
 
             > .item-content {
-              margin-bottom: $margin-bottom;
+              margin-bottom: $margin-guide;
 
               > .link {
                 border: none;
 
                 > .title {
-                  border-bottom: 1px solid;
+                  font-weight: normal;
+                  border-bottom: $border-guide;
                 }
               }
             }
 
             > .item-description {
               line-height: 2em;
+              margin-top: -$margin-guide * 0.7;
+              padding-left: $margin-guide * 0.7;
             }
           }
         }
@@ -216,8 +220,8 @@
           .item {
             float: left;
             display: block;
-            margin-right: $margin-bottom;
-            margin-bottom: $margin-bottom;
+            margin-right: $margin-guide;
+            margin-bottom: $margin-guide;
           }
         }
       }
