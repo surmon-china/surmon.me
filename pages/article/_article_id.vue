@@ -307,9 +307,8 @@
               line-height: 2.2em;
 
               > .title {
-                border-bottom: 1px solid;
-                display: inline-block;
                 max-width: 70%;
+                display: inline-block;
                 @include text-overflow();
               }
 
@@ -651,7 +650,7 @@
         }
 
         > .title.en {
-          width: 10rem;
+          width: 11rem;
           display: inline-block;
         }
 
