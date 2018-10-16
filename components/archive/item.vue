@@ -273,7 +273,7 @@
 
        &.mobile {
         height: auto;
-        padding: 1rem;
+        padding: 1rem 1em;
 
         > .item-body {
           width: 100%;

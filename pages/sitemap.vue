@@ -9,7 +9,11 @@
             <p class="item-content">
               <nuxt-link class="link"
                          :to="`/article/${article.id}`"
-                         :title="article.title">「 {{ article.title }} 」</nuxt-link>
+                         :title="article.title">
+                <span class="sign">「 </span>
+                <span class="title">{{ article.title }}</span>
+                <span class="sign"> 」</span>
+              </nuxt-link>
               <span class="sign">&nbsp;&nbsp;-&nbsp;&nbsp;</span>
               <small>
                 <a class="toggle-link"
@@ -125,9 +129,27 @@
 
             > .item-content {
 
+              > .link {
+                display: flex;
+                border: none;
+
+                > .sign,
+                > .title {
+                  display: inline-block;
+                }
+
+                > .title {
+                  margin: 0;
+                  max-width: 90%;
+                  border-bottom: 1px solid;
+                  @include text-overflow();
+                }
+              }
+
               .toggle-link {
+                padding-left: 1em;
                 display: block;
-                margin-bottom: 1rem;
+                margin: 1em 0;
               }
 
               > .sign {
@@ -168,6 +190,14 @@
 
             > .item-content {
               margin-bottom: $margin-bottom;
+
+              > .link {
+                border: none;
+
+                > .title {
+                  border-bottom: 1px solid;
+                }
+              }
             }
 
             > .item-description {
@@ -186,14 +216,7 @@
           .item {
             float: left;
             display: block;
-            margin-right: 1.5em;
-          }
-        }
-      }
-
-      .tags {
-        .tag-list {
-          .item {
+            margin-right: $margin-bottom;
             margin-bottom: $margin-bottom;
           }
         }

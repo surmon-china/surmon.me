@@ -1,4 +1,3 @@
-
 @font-face {
   font-family: 'CenturyGothic';
   src: url('/fonts/CenturyGothic.TTF');
@@ -75,18 +74,10 @@
 
 input {
 
-  &.zh {
-    &::placeholder {
-      text-indent: .3rem;
-      font-size: $font-size-small;
-    }
-  }
-
-  &.en {
-    &::placeholder {
-      text-indent: .1rem;
-      text-transform: capitalize;
-    }
+  &::placeholder {
+    text-indent: .4rem;
+    font-size: $font-size-base * 0.9;
+    text-transform: capitalize;
   }
 }
 
