@@ -157,6 +157,7 @@
       background-size: cover;
       background-blend-mode: darken;
       background-color: $module-bg;
+      background-position: center center;
       position: absolute;
       display: block;
       width: 100%;
