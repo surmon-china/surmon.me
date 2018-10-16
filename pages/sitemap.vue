@@ -159,6 +159,10 @@
                 display: none;
               }
             }
+
+            > .item-description {
+              margin-top: -$margin-guide * 0.7;
+            }
           }
         }
       }
@@ -204,7 +208,6 @@
 
             > .item-description {
               line-height: 2em;
-              margin-top: -$margin-guide * 0.7;
               padding-left: $margin-guide * 0.7;
             }
           }
