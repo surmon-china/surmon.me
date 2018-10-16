@@ -136,8 +136,8 @@
         .item {
 
           > .content {
-            min-height: 8rem;
-            height: auto;
+            // min-height: 8rem;
+            height: calc((100vw - 2rem) * 0.353);
 
             > .title {
               max-width: 75%;
