@@ -318,7 +318,7 @@ export const actions = {
 
     // 不存在则请求新数据
     commit('wallpaper/REQUEST_WALLPAPERS')
-    return this.$axios.$get(`${API_PREFIX}/wallpaper/list?size=8`)
+    return this.$axios.$get(`${API_PREFIX}/wallpaper/list`)
       .then(response => {
         resIsSuccess(response)
           ? commit('wallpaper/REQUEST_WALLPAPERS_SUCCESS', getResData(response))
