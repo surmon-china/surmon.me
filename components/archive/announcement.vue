@@ -1,6 +1,10 @@
 <template>
   <div class="announcement">
-    <color-block-box :left="colorBlockLeft" :gray="!this.mobileLayout" color="primary" />
+    <color-block-box 
+      :left="colorBlockLeft"
+      :gray="!this.mobileLayout"
+      :color="this.mobileLayout ? 'primary' : ''"
+    />
     <div class="title">
       <i class="iconfont icon-radio"></i>
     </div>
