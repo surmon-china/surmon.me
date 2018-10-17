@@ -56,7 +56,15 @@
       > .error-code,
       > .error-link,
       > .error-wrapper-message {
+        color: $black-light;
         animation: error-item ease-out both .5s .3s;
+      }
+
+      .link {
+
+        &:hover {
+          border-bottom: 1px solid;
+        }
       }
 
       > .error-code {

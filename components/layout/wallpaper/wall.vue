@@ -1,10 +1,13 @@
 <template>
   <div id="wallpaper-wall">
     <div class="wall-box">
-      <div class="picture-box">
-        <img class="picture" :src="wallpaperUrl" :alt="subTitle">
+      <div class="picture-box" ref="picture-box">
+        <img class="picture"
+             :src="currentWallpaperUrl"
+             :alt="subTitle"
+             :class="classes[index]">
       </div>
-      <div class="story-box">
+      <div class="story-box" :class="classes[index]">
         <div class="empty" v-if="!currentWallpaper">挂了</div>
         <div class="content" v-else>
           <h2 class="title" v-if="isToday">{{ todayStory.title }}</h2>
@@ -40,17 +43,43 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   export default {
     name: 'wallpaper-wall',
     data() {
       return {
-        index: 0
+        index: 0,
+        classes: {}
       }
     },
     methods: {
       close() {
         this.$store.commit('option/TOGGLE_WALLPAPER', false)
+      },
+      setPaperImageClass(index) {
+        // 由于用户窗口可能发生变化，所以每次都重新计算
+        const pictureBox = this.$refs['picture-box']
+        const { clientWidth, clientHeight } = pictureBox
+        const sizeRadio = clientWidth / clientHeight
+        const image = new Image()
+        image.onload = () => {
+          const { width, height } = image
+          const imageRadio = width / height
+          const className = imageRadio > sizeRadio ? 'full-height' : 'full-width'
+          Vue.set(this.classes, index, className)
+        }
+        image.src = this.currentWallpaperUrl
       }
+    },
+    watch: {
+      index(index) {
+        this.$nextTick(() => {
+          this.setPaperImageClass(index)
+        })
+      }
+    },
+    mounted() {
+      this.setPaperImageClass(0)
     },
     computed: {
       wallpapers() {
@@ -62,7 +91,7 @@
       currentWallpaper() {
         return this.wallpapers && this.wallpapers.length && this.wallpapers[this.index]
       },
-      wallpaperUrl() {
+      currentWallpaperUrl() {
         return this.currentWallpaper ? this.currentWallpaper.defaultUrl : ''
       },
       link() {
@@ -113,6 +142,17 @@
         width: 100%;
         height: 100%;
         overflow: auto;
+
+        > .picture {
+
+          &.full-width {
+            width: 100%;
+          }
+
+          &.full-height {
+            height: 100%;
+          }
+        }
       }
 
       > .story-box {
@@ -122,6 +162,10 @@
         bottom: 5px;
         width: 100%;
         height: auto;
+
+        &.full-width {
+           bottom: 0;
+        }
 
         > .content {
           color: $white;
