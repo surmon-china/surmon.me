@@ -121,7 +121,7 @@
           }
 
           > .iconfont {
-            color: red;
+            color: $red;
             transition: color 0s;
             animation: superscript-icon-color 1s infinite;
           }
@@ -148,6 +148,14 @@
 
           > .iconfont {
             color: black;
+          }
+        }
+
+         &.app {
+          color: $primary;
+
+          > .iconfont {
+            color: $primary;
           }
         }
 

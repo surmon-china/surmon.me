@@ -1,6 +1,6 @@
 <template>
   <div class="announcement">
-    <color-block-box :left="colorBlockLeft" color="primary" />
+    <color-block-box :left="colorBlockLeft" :gray="!this.mobileLayout" color="primary" />
     <div class="title">
       <i class="iconfont icon-radio"></i>
     </div>
@@ -51,10 +51,11 @@
           pagination: {
             clickable: true
           },
+          allowTouchMove: false,
           slidesPerView: 1,
           setWrapperSize: true,
           direction: 'vertical',
-          loop: true
+          // loop: true
         }
       }
     },
@@ -75,7 +76,7 @@
 <style lang="scss">
   .announcement {
     height: 2.8em;
-    line-height: 2.8em;
+    line-height: 2.75em;
     font-size: .9em;
     margin-bottom: 1em;
     overflow: hidden;
@@ -106,7 +107,6 @@
         > .content {
           width: 100%;
           position: relative;
-          overflow: hidden;
           @include text-overflow();
 
           p {
@@ -134,6 +134,7 @@
         line-height: 1em;
         background-image: none;
         color: $module-hover-bg;
+        cursor: pointer;
 
         &:hover {
           color: $text;

@@ -83,7 +83,7 @@
       margin-bottom: 1em;
       position: relative;
       overflow: hidden;
-      background-color: $module-bg;
+      background-color: $module-bg-opacity-5;
     }
 
     > .article-list {

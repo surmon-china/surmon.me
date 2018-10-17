@@ -1,6 +1,9 @@
 <template>
   <div class="header-box" :class="{ mobile: mobileLayout }">
-    <div class="background" :style="{ 'background-image': `url(${currentBackgroundImage})` }"></div>
+    <div class="background" :style="{
+      'background-color': currentBackgroundColor,
+      'background-image': `url(${currentBackgroundImage})`
+    }"></div>
     <div class="logo-box">
       <p class="logo">
         <transition name="module" mode="out-in">
@@ -96,6 +99,11 @@
         const tagBg = this.getExtendsValue(this.currentTag, 'background')
         const cateBg = this.getExtendsValue(this.currentCategory, 'background')
         return tagBg || cateBg || '/images/service.jpg'
+      },
+      currentBackgroundColor() {
+        const tagBg = this.getExtendsValue(this.currentTag, 'bgcolor')
+        const cateBg = this.getExtendsValue(this.currentCategory, 'bgcolor')
+        return tagBg || cateBg || 'transparent'
       },
       currentDate() {
         return this.$route.params.date
