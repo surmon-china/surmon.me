@@ -36,7 +36,7 @@
     &.gray {
       opacity: .9;
       filter: grayscale(100%);
-      background-color: #656565;
+      background-color: #888888;
       border-color: #b5b5b5;
     }
 
