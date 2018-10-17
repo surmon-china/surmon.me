@@ -2,6 +2,7 @@
   <div class="color-block-box" 
       :style="{ transform: `rotate(-60deg) translateY(${left}%)` }" 
       :class="{
+        gray: gray,
         [color]: true,
         'border-left': border === 'left',
         'border-right': border === 'right'
@@ -13,6 +14,7 @@
   export default {
     name: 'color-block-box',
     props: {
+      gray: Boolean,
       left: Number,
       color: String,
       border: {
@@ -30,6 +32,13 @@
     display: flex;
     width: 100%;
     padding-bottom: 50%;
+
+    &.gray {
+      opacity: .9;
+      filter: grayscale(100%);
+      background-color: #656565;
+      border-color: #b5b5b5;
+    }
 
     &.border-right {
       border-bottom-width: 1rem;

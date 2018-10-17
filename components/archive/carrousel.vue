@@ -112,6 +112,9 @@
             font-weight: bold;
             border-radius: 1px;
             letter-spacing: .3px;
+            max-width: 75%;
+            @include text-overflow;
+
             -webkit-background-clip: text;
             // background-color: $module-hover-bg-opacity-9;
             background: linear-gradient(90deg, transparent 0%, $module-bg 4em, $module-bg-opacity-9, $white);
@@ -128,20 +131,17 @@
     }
 
     &.mobile {
-      min-height: 8rem;
-      height: auto;
+      height: calc((100vw - 2rem) * .35);
 
       > .swiper {
 
         .item {
 
           > .content {
-            // min-height: 8rem;
-            height: calc((100vw - 2rem) * 0.353);
 
             > .title {
-              max-width: 75%;
-              @include text-overflow;
+              right: 1.7rem;
+              max-width: 70%;
             }
           }
         }
