@@ -1,10 +1,6 @@
 <template>
   <div class="announcement">
-    <color-block-box 
-      :left="colorBlockLeft"
-      :gray="!this.mobileLayout"
-      :color="this.mobileLayout ? 'primary' : ''"
-    />
+    <color-block-box :left="-58" :gray="true"/>
     <div class="title">
       <i class="iconfont icon-radio"></i>
     </div>
@@ -69,10 +65,7 @@
       }
     },
     computed: {
-      ...mapState('option', ['mobileLayout']),
-      colorBlockLeft() {
-        return this.mobileLayout ? -58 : -66
-      }
+      ...mapState('option', ['mobileLayout'])
     }
   }
 </script>
