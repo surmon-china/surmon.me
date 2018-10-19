@@ -127,7 +127,8 @@
         justify-content: space-between;
 
         &[disabled] {
-          opacity: .7;
+          opacity:  .9;
+          background-color: $module-bg-opacity-5;
         }
 
         @keyframes loadmore-btn-icon-color {

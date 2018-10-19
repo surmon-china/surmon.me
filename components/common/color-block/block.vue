@@ -3,7 +3,7 @@
       :style="{ transform: `rotate(-60deg) translateY(${left}%)` }" 
       :class="{
         gray: gray,
-        [color]: true,
+        [color || '']: true,
         'border-left': border === 'left',
         'border-right': border === 'right'
       }"
@@ -33,13 +33,6 @@
     width: 100%;
     padding-bottom: 50%;
 
-    &.gray {
-      opacity: .9;
-      filter: grayscale(100%);
-      background-color: #888888;
-      border-color: #b5b5b5;
-    }
-
     &.border-right {
       border-bottom-width: 1rem;
       border-bottom-style: solid;
@@ -63,6 +56,14 @@
     &.red {
       background-color: $red;
       border-color: $accent;
+    }
+
+    &.gray {
+      opacity: .7;
+      // filter: grayscale(100%);
+      // background-color: #888888;
+      border-color: #b5b5b5;
+      background: linear-gradient(150deg, $black 0%, $black 50%, $module-bg 90%);
     }
   }
 </style>
