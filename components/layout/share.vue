@@ -62,11 +62,6 @@
             url: () => `https://www.facebook.com/sharer/sharer.php?u=${this.url}`
           },
           {
-            name: 'google plus',
-            class: 'google-plus',
-            url: () => `https://plus.google.com/share?url=${this.url}`
-          },
-          {
             name: 'linkedin',
             url: () => `http://www.linkedin.com/shareArticle?title=${this.title()}&summary=${this.description()}&mini=true&url=${this.url}`
           },

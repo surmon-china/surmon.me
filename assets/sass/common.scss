@@ -184,7 +184,7 @@ a {
       }
 
       > .share-link {
-        width: calc((100% - (1em * 10)) / 11);
+        width: calc((100% - (1em * 9)) / 10);
         height: 2.5em;
         line-height: 2.5em;
         background-color: $body-bg;
@@ -224,7 +224,6 @@ a {
 
         &.renren,
         &.evernote,
-        &.google-plus,
         &.linkedin,
         &.mail {
           display: none;
