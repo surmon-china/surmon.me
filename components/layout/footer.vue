@@ -24,7 +24,7 @@
           <nuxt-link to="/project">NodePress</nuxt-link>
           <span>、</span>
           <nuxt-link to="/project">Nuxt.js</nuxt-link>
-          <span>&nbsp;和日月星辰&nbsp;强力驱动&nbsp;</span>
+          <span>&nbsp;和&nbsp;日月星辰&nbsp;强力驱动&nbsp;</span>
           <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
           <nuxt-link to="/about">吾之臂躯</nuxt-link>
           <span>&nbsp;行针步线</span>
