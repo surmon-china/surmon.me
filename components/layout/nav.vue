@@ -99,7 +99,7 @@
         font-weight: 700;
         border-radius: 1px;
         color: $secondary;
-        font-family: DINRegular, CenturyGothic;
+        font-family: DINRegular;
         margin-bottom: .5em;
         position: relative;
 
