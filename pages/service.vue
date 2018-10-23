@@ -281,7 +281,7 @@
               }
 
               > .icon {
-                background-color: $body-bg;
+                // background-color: $body-bg;
 
                 > .iconfont {
                   font-size: 4em;
