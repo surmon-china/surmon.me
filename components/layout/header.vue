@@ -194,7 +194,7 @@
 
           .navbar-slogan {
             color: $primary;
-            font-family: DINRegular, CenturyGothic;
+            font-family: DINRegular;
           }
 
           .navbar-link {
