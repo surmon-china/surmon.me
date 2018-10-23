@@ -281,6 +281,7 @@
               }
 
               > .icon {
+                background-color: $body-bg;
 
                 > .iconfont {
                   font-size: 4em;
@@ -288,7 +289,7 @@
               }
 
               > .name {
-                font-size: 1.5em;
+                font-size: 1.3em;
                 font-weight: bold;
               }
 
@@ -327,7 +328,7 @@
               }
 
               > .name {
-                font-size: 1.5em;
+                font-size: 1.2em;
                 font-weight: bold;
               }
 
