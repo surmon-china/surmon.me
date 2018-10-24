@@ -47,14 +47,30 @@
       </button>
     </div>
     <div class="song-info">
-      <h3 v-if="currentSong">
-        <span>{{ currentSong.name }}</span>
-        <span> By </span>
-        <span :key="index" v-for="(artist, index) in currentSong.artists">{{ artist.name }}</span>
-        <span> / </span>
-        <span>{{ currentSong.album.name || 'unknow' }}</span>
+      <h3 class="name">
+        <span v-if="currentSong">
+          <span>{{ currentSong.name }}</span>
+          <span> By </span>
+          <span :key="index" v-for="(artist, index) in currentSong.artists">{{ artist.name }}</span>
+          <span> / </span>
+          <span>{{ currentSong.album.name || 'unknow' }}</span>
+        </span>
+        <span v-else>Kind words are the music of the world.</span>
       </h3>
-      <h3 v-else>Kind words are the music of the world.</h3>
+      <p class="lrc">
+        <span v-if="currentSongLrc.fetching">歌词加载中...</span>
+        <span v-else>
+          <span v-if="!songLrcContent">暂无歌词</span>
+          <span v-else>
+            <span v-if="songLrcContent.version < 3">非滚动歌词，所以我就不显示了</span>
+            <span v-else>
+              <transition name="module" mode="out-in">
+                <span class="lrc-text" :key="currentTimeLrc" v-text="currentTimeLrc"></span>
+              </transition>
+            </span>
+          </span>
+        </span>
+      </p>
     </div>
   </div>
 </template>
@@ -101,6 +117,41 @@
       },
       currentSong() {
         return EventBus.currentSong
+      },
+      currentSongLrc() {
+        return EventBus.player.lrc
+      },
+      songLrcContent() {
+        const lrc = this.currentSongLrc.data
+        if (!lrc || lrc.nolyric) {
+          return null
+        } else {
+          return lrc.lrc
+        }
+      },
+      songLrcArr() {
+        return this.songLrcContent.lyric.split('\n').map(timeSentence => {
+          let time = /\[([^\[\]]*)\]/.exec(timeSentence)
+          time = time && time.length && time[1]
+          time = time && time.split(':').map(t => Number(t))
+          time = time && time.length && time.length > 1 && time[0] * 60 + time[1]
+          time = time || ''
+          let sentence = /([^\]]+)$/.exec(timeSentence)
+          sentence = sentence && sentence.length && sentence[1]
+          sentence = sentence || ''
+          return { time, sentence }
+        }).filter(ts => ts.time)
+      },
+      currentTimeLrc() {
+        const currentTime = this.playerState.seek
+        if (!this.songLrcArr.length) {
+          return '无滚动歌词'
+        }
+        const targetSentence = this.songLrcArr.find((ts, i, a) => {
+          const next = a[i + 1]
+          return ts.time <= currentTime && next && next.time > currentTime
+        })
+        return targetSentence ? targetSentence.sentence : '...'
       },
       currentSongPicUrl() {
         return EventBus.currentSongPicUrl
@@ -150,6 +201,18 @@
       },
       nextSong() {
         this.checkPLayerState(this.player.nextSong)
+      },
+      getSongLrc(song_id) {
+        EventBus.getLrcFailure()
+        this.$store.dispatch('loadMuiscSongLrc', song_id)
+      }
+    },
+    watch: {
+      currentSong() {
+        const song = this.currentSong
+        if (song && song.id) {
+          this.getSongLrc(song.id)
+        }
       }
     }
   }
@@ -283,6 +346,24 @@
 
     > .song-info {
       text-align: center;
+      
+      > .name {
+        margin-bottom: 1em;
+      }
+
+      > .lrc {
+
+        @keyframes lrc-text {
+          0% { color: $primary }
+          33% { color: $red }
+          66% { color: $accent }
+        }
+
+        .lrc-text {
+          color: $primary;
+          // animation: lrc-text 5s linear infinite;
+        }
+      }
     }
   }
 </style>
