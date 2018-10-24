@@ -366,9 +366,9 @@ export const actions = {
   },
 
   // 获取歌曲详情
-  loadMuiscSongDetail({ commit }, params = {}) {
+  loadMuiscSongDetail({ commit }, song_id) {
     eventBus.requestSong()
-    return this.$axios.$get(`${API_PREFIX}/music/song/${params.song_id}`)
+    return this.$axios.$get(`${API_PREFIX}/music/song/${song_id}`)
     .then(response => {
       resIsSuccess(response)
         ? eventBus.getSongSuccess(getResData(response))
@@ -378,9 +378,9 @@ export const actions = {
   },
 
   // 获取歌曲歌词
-  loadMuiscSongLrc({ commit }, params = {}) {
+  loadMuiscSongLrc({ commit }, song_id) {
     eventBus.requestLrc()
-    return this.$axios.$get(`${API_PREFIX}/music/lrc/${params.song_id}`)
+    return this.$axios.$get(`${API_PREFIX}/music/lrc/${song_id}`)
     .then(response => {
       resIsSuccess(response)
         ? eventBus.getLrcSuccess(getResData(response))
