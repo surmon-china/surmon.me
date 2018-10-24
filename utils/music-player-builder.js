@@ -49,6 +49,7 @@ export default state => {
 
     // Determine our current seek position.
     const seek = sound.seek() || 0
+    state.playerState.seek = seek
     state.playerState.progress = (seek / sound.duration()) * 100
 
     // If the sound is still playing, continue stepping.
