@@ -32,7 +32,7 @@ export const actions = {
 
     // 检查设备类型
     const userAgent = isServer ? req.headers['user-agent'] : navigator.userAgent
-    const { isMobile, isOpera, isIE, isSafari, isEdge, isFF, isBB, isChrome, isMaxthon, isIos } = uaDevice(userAgent)
+    const { isMobile, isOpera, isIE, isSafari, isEdge, isFF, isBB, isChrome, isMaxthon, isIos } = uaDevice(userAgent || '')
     const mustJpg = (isIos || isFF || isMaxthon || isSafari || isBB || isIE || isEdge)
 
     store.commit('option/SET_USER_AGENT', userAgent)
