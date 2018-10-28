@@ -213,7 +213,7 @@
         > .item-meta {
           height: 2em;
           display: flex;
-          justify-content: flex-start;
+          justify-content: space-between;
           align-items: baseline;
           overflow: hidden;
           font-size: .9em;
@@ -285,7 +285,6 @@
           }
 
           > .item-meta {
-            justify-content: space-between;
 
             > .date,
             > .views,
