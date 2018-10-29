@@ -79,6 +79,7 @@
             color: '#ab3419'
           }, {
             name: 'react',
+            desc: 'react',
             color: '#5dd4fa'
           }, {
             name: 'surmon',
