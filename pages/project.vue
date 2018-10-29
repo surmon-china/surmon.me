@@ -78,6 +78,9 @@
             icon: 'netease-music',
             color: '#ab3419'
           }, {
+            name: 'react',
+            color: '#5dd4fa'
+          }, {
             name: 'surmon',
             icon: 'think',
             color: '#0088f5'
@@ -101,9 +104,6 @@
           }, {
             desc: 'music',
             color: '#ab3419'
-          }, {
-            name: 'react',
-            color: '#eafef7'
           }, {
             name: 'theme',
             color: 'rgb(245, 119, 0)'
@@ -265,8 +265,13 @@
               font-weight: 400;
               color: $secondary;
 
+              &.star {
+                color: $text-light;
+                font-weight: bold;
+              }
+
               > .iconfont {
-                margin-right: .6rem;
+                margin-right: .3rem;
               }
             }
           }
