@@ -1,6 +1,6 @@
 <template>
   <div class="announcement">
-    <color-block-box :left="-58" :gray="true"/>
+    <color-block-box :left="-59" :gray="true"/>
     <div class="title">
       <i class="iconfont icon-radio"></i>
     </div>
