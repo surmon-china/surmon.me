@@ -52,9 +52,16 @@
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-mail"></i>
                       </a>
+                      <a href="https://t.me/surmon"
+                         target="_blank"
+                         class="telegram"
+                         rel="external nofollow noopenter">
+                        <i class="iconfont icon-telegram"></i>
+                      </a>
                       <a href="https://juejin.im/user/5735611ac4c9710060f8fa5e"
                          target="_blank"
                          class="juejin"
+                         v-if="false"
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-juejin"></i>
                       </a>
@@ -113,6 +120,7 @@
                       <a href="https://www.linkedin.com/in/surmon"
                          target="_blank"
                          class="linkedin"
+                         v-if="false"
                          rel="external nofollow noopenter">
                         <i class="iconfont icon-linkedin"></i>
                       </a>
@@ -586,6 +594,10 @@
 
                       &.juejin {
                         color: #2b6df6;
+                      }
+
+                      &.telegram {
+                        color: #54a5dd;
                       }
 
                       &.zhihu {
