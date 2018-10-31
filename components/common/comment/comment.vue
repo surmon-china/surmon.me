@@ -658,6 +658,7 @@
       margin: .5rem 0;
       max-width: 100%;
       border-radius: 2px;
+      cursor: pointer;
     }
 
     p {
