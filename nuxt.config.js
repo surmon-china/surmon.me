@@ -162,13 +162,13 @@ module.exports = {
     ],
     script: [
       {
-        body: true,
+        // body: true,
         async: 'async',
         type: 'text/javascript',
         src: '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
       },
       {
-        body: true,
+        // body: true,
         type: 'text/javascript',
         innerHTML: `(adsbygoogle = window.adsbygoogle || []).push({
           google_ad_client: "ca-pub-4710915636313788",
