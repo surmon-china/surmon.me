@@ -160,9 +160,26 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'author', type: 'text/plain', href: '/humans.txt' }
     ],
+    script: [
+      {
+        body: true,
+        async: 'async',
+        type: 'text/javascript',
+        src: '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
+      },
+      {
+        body: true,
+        type: 'text/javascript',
+        innerHTML: `(adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-4710915636313788",
+          enable_page_level_ads: true
+        });`
+      }
+    ],
     noscript: [
       { innerHTML: 'This website requires JavaScript.' }
-    ]
+    ],
+    __dangerouslyDisableSanitizers: ['script']
   },
   manifest: {
     name: 'Surmon.me',

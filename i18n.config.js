@@ -53,7 +53,8 @@ module.exports = {
         en: 'Guestbook'
       },
       taobao: {
-        zh: '淘宝',
+        // zh: '淘宝',
+        zh: '双十一',
         en: 'taobao'
       },
       aliyun: {

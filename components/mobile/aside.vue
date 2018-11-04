@@ -43,7 +43,7 @@
           <i class="iconfont icon-comment"></i>
           <span v-text="$i18n.nav.guestbook">Guestbook</span>
         </nuxt-link>
-        <a href="https://s.click.taobao.com/gzUaBYw" 
+        <a href="https://s.click.taobao.com/XjxqYKw" 
            rel="external nofollow noopener"
            class="item ad taobao"
            v-if="false"
@@ -51,7 +51,7 @@
           <i class="iconfont icon-taobao"></i>
           <span v-text="$i18n.nav.taobao">Taobao</span>
         </a>
-        <a href="https://s.click.taobao.com/aFwPDTw" 
+        <a href="https://s.click.taobao.com/JFqqYKw" 
            rel="external nofollow noopener"
            class="item ad aliyun"
            v-if="false"
