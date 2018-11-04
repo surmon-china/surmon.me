@@ -40,14 +40,14 @@
         <i class="iconfont icon-comment"></i>
         <span v-text="$i18n.nav.guestbook"></span>
       </nuxt-link>
-      <a href="https://s.click.taobao.com/vkjaBYw" 
+      <a href="https://s.click.taobao.com/W5wqYKw" 
          rel="external nofollow noopener"
          class="item ad taobao"
          target="_blank">
         <i class="iconfont icon-taobao"></i>
         <span v-text="$i18n.nav.taobao"></span>
       </a>
-      <a href="https://s.click.taobao.com/gflYBYw" 
+      <a href="https://s.click.taobao.com/JFqqYKw" 
          rel="external nofollow noopener"
          class="item ad aliyun"
          target="_blank">
