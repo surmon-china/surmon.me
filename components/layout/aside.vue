@@ -42,7 +42,7 @@
     <div class="aside-calendar">
       <calendar></calendar>
     </div>
-    <div class="aside-ad">
+    <div class="aside-ad" v-if="renderAd">
       <adsense-aside></adsense-aside>
     </div>
     <div class="aside-fixed-box" :class="{ fixed: fixedMode.fixed }" v-scroll-top>
@@ -99,6 +99,7 @@
     name: 'layout-aside',
     data() {
       return {
+        renderAd: true,
         keyword: '',
         fixedMode: {
           fixed: false,
@@ -111,6 +112,7 @@
       Calendar
     },
     mounted() {
+      this.updateAd()
       if (Object.is(this.$route.name, 'search-keyword')) {
         this.keyword = this.$route.params.keyword
       }
@@ -133,6 +135,12 @@
         if (keyword && (isSearchPage ? !Object.is(paramsKeyword, keyword) : true)) {
           this.$router.push({ name: 'search-keyword', params: { keyword }})
         }
+      },
+      updateAd() {
+        this.renderAd = false
+        this.$nextTick(() => {
+          this.renderAd = true
+        })
       },
       setFullColumu() {
         this.$store.commit('option/SET_ERROR_COLUMU', true)

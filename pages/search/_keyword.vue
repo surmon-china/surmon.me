@@ -9,7 +9,7 @@
 
   export default {
     name: 'category-article-list',
-    validate ({ params }) {
+    validate({ params }) {
       return !!params.keyword
     },
     fetch({ store, params }) {
