@@ -102,12 +102,8 @@ a {
 
     > .adsense-wrapper {
       padding: 1rem;
-
-      > .adsbygoogle {
-        // width: 250px!important;
-        // height: 250px!important;
-        overflow: hidden;
-      }
+      display: flex;
+      justify-content: center;
     }
   }
 
