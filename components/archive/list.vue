@@ -59,8 +59,7 @@
     },
     data() {
       return {
-        renderAd: true,
-        updateAd: null
+        renderAd: true
       }
     },
     computed: {
@@ -77,12 +76,7 @@
       }
     },
     mounted() {
-      this.updateAd = underscore.debounce(() => {
-        this.renderAd = false
-        this.$nextTick(() => {
-          this.renderAd = true
-        })
-      }, 1666, true)
+      this.updateAd()
     },
     methods: {
       toDetail(article) {
@@ -90,13 +84,11 @@
           this.$router.push(`/article/${article.id}`)
         }
       },
-    },
-    watch: {
-      article: {
-        deep: true,
-        handler() {
-          this.updateAd ? this.updateAd() : null
-        }
+      updateAd() {
+        this.renderAd = false
+        this.$nextTick(() => {
+          this.renderAd = true
+        })
       }
     }
   }

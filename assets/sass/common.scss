@@ -97,6 +97,7 @@ a {
 .adsense {
   width: 100%;
   height: auto;
+  position: relative;
 
   &.adsense-article {
 
@@ -118,6 +119,11 @@ a {
       display: flex;
       justify-content: center;
 
+      &:before {
+        width: $font-size-h1;
+        line-height: 3rem;
+      }
+
       > .adsbygoogle {
         width: 250px;
         height: 250px;
@@ -130,6 +136,7 @@ a {
 
     > .adsense-wrapper {
       padding: .5em;
+      background-color: $module-bg;
 
       > .adsbygoogle {
         height: 7.5rem;
@@ -140,7 +147,22 @@ a {
 }
 
 .adsense-wrapper {
-  background-color: $module-bg;
+  position: relative;
+
+  &:before {
+    content: '向我的衣食父母鞠躬';
+    position: absolute;
+    text-align: center;
+    font-size: $font-size-h1;
+    font-weight: bold;
+    color: $dividers;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    z-index: -1;
+    letter-spacing: .5rem;
+    transform: translate(-50%, -50%);
+  }
 }
 
 // swiper
