@@ -11,7 +11,7 @@
       <Adsense
         root-class="adsense-wrapper"
         data-ad-client="ca-pub-4710915636313788"
-        data-ad-slot="9192348255">
+        data-ad-slot="3013952710">
       </Adsense>
     </no-ssr>
   </div>
