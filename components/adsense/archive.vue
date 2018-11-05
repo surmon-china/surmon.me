@@ -2,7 +2,8 @@
   <div class="adsense adsense-archive">
     <no-ssr>
       <InFeedAdsense
-        data-ad-layout-key="-gr+2t+6c-62-53"
+        root-class="adsense-wrapper"
+        data-ad-layout-key="-h9-n+3k-8d+6y"
         data-ad-client="ca-pub-4710915636313788"
         data-ad-slot="1148538406">
       </InFeedAdsense>
