@@ -125,12 +125,12 @@ module.exports = {
     { src: '~/plugins/marked.js' },
     { src: '~/plugins/gravatar.js' },
     { src: '~/plugins/highlight.js' },
+    { src: '~/plugins/adsense.js', ssr: true },
     { src: '~/plugins/swiper.js', ssr: false },
     { src: '~/plugins/analytics.js', ssr: false },
     { src: '~/plugins/emoji-233333.js', ssr: false },
     { src: '~/plugins/image-popup.js', ssr: false },
     { src: '~/plugins/copy-right.js', ssr: false },
-    { src: '~/plugins/adsense.js', ssr: false }
     // { src: '~/plugins/particles.js', ssr: false }
   ],
   head: {
