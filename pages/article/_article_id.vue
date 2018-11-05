@@ -30,7 +30,7 @@
         </div>
       </transition>
     </div>
-    <div class="ad" v-if="!fetching && article.content">
+    <div class="ad" v-if="renderAd">
       <adsense-article></adsense-article>
     </div>
     <share-box class="article-share" v-if="!fetching && article.content"></share-box>
@@ -174,6 +174,9 @@
         ]
       }
     },
+    mounted() {
+      this.updateAd()
+    },
     data() {
       return {
         swiperOption: {
@@ -190,7 +193,8 @@
         },
         canReadMore: false,
         fullContentEd: false,
-        readMoreLoading: false
+        readMoreLoading: false,
+        renderAd: true
       }
     },
     components: {
@@ -238,6 +242,12 @@
           setTimeout(() => {
             this.fullContentEd = true
           }, 0)
+        })
+      },
+      updateAd() {
+        this.renderAd = false
+        this.$nextTick(() => {
+          this.renderAd = true
         })
       },
       copyArticleUrl() {
