@@ -2,7 +2,6 @@
   <div class="index">
     <carrousel :article="article"></carrousel>
     <announcement :announcement="announcement"></announcement>
-    <adsense-archive></adsense-archive>
     <article-list :article="article" @loadmore="loadmoreArticle"></article-list>
   </div>
 </template>
