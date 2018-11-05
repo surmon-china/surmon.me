@@ -98,6 +98,16 @@ a {
   width: 100%;
   height: auto;
 
+  &.adsense-aside {
+
+    > .adsense-wrapper {
+      > .adsbygoogle {
+        height: 16em!important;
+        overflow: hidden;
+      }
+    }
+  }
+
   &.adsense-archive {
     margin-bottom: 1em;
 
