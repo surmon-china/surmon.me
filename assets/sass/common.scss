@@ -98,6 +98,19 @@ a {
   width: 100%;
   height: auto;
 
+  &.adsense-article {
+
+    > .adsense-wrapper {
+      display: flex;
+      justify-content: center;
+
+      > .adsbygoogle {
+        width: 595px;
+        height: 60px;
+      }
+    }
+  }
+
   &.adsense-aside {
 
     > .adsense-wrapper {
@@ -108,7 +121,6 @@ a {
       > .adsbygoogle {
         width: 250px;
         height: 250px;
-        // overflow: hidden;
       }
     }
   }
@@ -120,7 +132,7 @@ a {
       padding: .5em;
 
       > .adsbygoogle {
-        height: 7.4rem!important;
+        height: 7.5rem;
         overflow: hidden;
       }
     }
