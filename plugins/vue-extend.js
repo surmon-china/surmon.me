@@ -16,6 +16,9 @@ import CommentBox from '~/components/common/comment'
 import WallFlowerBox from '~/components/common/wall-flower'
 import ColorBlockBox from '~/components/common/color-block'
 
+// adsense
+import AdsenseComponents from '~/components/adsense'
+
 const i18nData = i18nTransfer(i18nConfig)
 
 // cdn
@@ -31,6 +34,9 @@ Vue.use(CommentBox)
 Vue.use(LoadingBox)
 Vue.use(WallFlowerBox)
 Vue.use(ColorBlockBox)
+
+// adsense
+Vue.use(AdsenseComponents)
 
 // mixins
 Vue.mixin({
