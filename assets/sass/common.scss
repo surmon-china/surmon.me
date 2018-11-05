@@ -97,7 +97,14 @@ a {
 .adsense {
   width: 100%;
   height: auto;
+}
+
+.adsense-wrapper {
   background-color: $module-bg;
+
+  > .adsbygoogle {
+    height: 7em!important;
+  }
 }
 
 // swiper
