@@ -125,7 +125,7 @@ module.exports = {
     { src: '~/plugins/marked.js' },
     { src: '~/plugins/gravatar.js' },
     { src: '~/plugins/highlight.js' },
-    { src: '~/plugins/adsense.js', ssr: true },
+    { src: '~/plugins/adsense.js', ssr: false },
     { src: '~/plugins/swiper.js', ssr: false },
     { src: '~/plugins/analytics.js', ssr: false },
     { src: '~/plugins/emoji-233333.js', ssr: false },
@@ -162,6 +162,7 @@ module.exports = {
       { rel: 'author', type: 'text/plain', href: '/humans.txt' }
     ],
     script: [
+      /*
       {
         body: true,
         async: 'async',
@@ -177,6 +178,7 @@ module.exports = {
           enable_page_level_ads: false
         });`
       }
+      */
     ],
     noscript: [
       { innerHTML: 'This website requires JavaScript.' }

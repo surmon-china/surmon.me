@@ -5,6 +5,9 @@
  */
 
 import Vue from 'vue'
-import AdsenseComponents from '~/components/adsense'
+import Ads from 'vue-google-adsense'
 
-Vue.use(AdsenseComponents)
+Vue.use(require('vue-script2'))
+Vue.use(Ads.Adsense)
+Vue.use(Ads.InArticleAdsense)
+Vue.use(Ads.InFeedAdsense)
