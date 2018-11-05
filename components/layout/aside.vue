@@ -40,12 +40,7 @@
       </ul>
     </div>
     <div class="aside-ad">
-      <a href="https://s.click.taobao.com/6JBRDTw"
-         rel="external nofollow noopener"
-         target="_blank"
-         class="ad-box">
-        <img src="/images/mammon/aliyun-300-100.jpg" alt="aliyun-ad" />
-      </a>
+      <adsense-aside></adsense-aside>
     </div>
     <div class="aside-calendar">
       <calendar></calendar>
