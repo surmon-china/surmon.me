@@ -8,6 +8,9 @@
       </div>
     </transition>
 
+    <!-- 广告啦 -->
+    <adsense-archive></adsense-archive>
+
     <!-- 列表 -->
     <div class="article-list">
       <transition name="module" mode="out-in">
