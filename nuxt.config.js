@@ -103,8 +103,8 @@ module.exports = {
       presets({ isServer }) {
         return [
           [
-            "@nuxtjs/babel-preset-app",
-            { targets: isServer ? { node: "10.4.0" } : { chrome: 69 } }
+            '@nuxtjs/babel-preset-app',
+            { targets: isServer ? { node: '10.4.0' } : { chrome: 69 } }
           ]
         ]
       },
@@ -130,6 +130,7 @@ module.exports = {
     { src: '~/plugins/emoji-233333.js', ssr: false },
     { src: '~/plugins/image-popup.js', ssr: false },
     { src: '~/plugins/copy-right.js', ssr: false },
+    { src: '~/plugins/adsense.js', ssr: false }
     // { src: '~/plugins/particles.js', ssr: false }
   ],
   head: {
@@ -162,17 +163,18 @@ module.exports = {
     ],
     script: [
       {
-        // body: true,
+        body: true,
         async: 'async',
         type: 'text/javascript',
         src: '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
       },
       {
-        // body: true,
+        body: true,
         type: 'text/javascript',
-        innerHTML: `(adsbygoogle = window.adsbygoogle || []).push({
-          google_ad_client: "ca-pub-4710915636313788",
-          enable_page_level_ads: true
+        innerHTML: `
+        (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: 'ca-pub-4710915636313788',
+          enable_page_level_ads: false
         });`
       }
     ],
@@ -186,7 +188,7 @@ module.exports = {
     short_name: 'Surmon',
     theme_color: '#0088f5',
     display: 'standalone',
-    background_color: "#eee",
+    background_color: '#eee',
     description: htmlSlogan,
     lang: htmlLang
   },

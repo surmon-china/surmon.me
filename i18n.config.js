@@ -33,7 +33,7 @@ module.exports = {
         en: 'code'
       },
       project: {
-        zh: '穷宝阁',
+        zh: '琼宝阁',
         en: 'project'
       },
       music: {

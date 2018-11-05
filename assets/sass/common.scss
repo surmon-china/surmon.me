@@ -35,22 +35,6 @@
   color: $white;
 }
 
-* {
-  outline: none;
-  box-shadow: none;
-  border-radius: 0;
-}
-
-*, *:hover {
-  @include transition(background-color .25s linear,
-                      color .05s linear,
-                      margin .25s linear,
-                      opacity .25s linear,
-                      filter .25s linear,
-                      visibility .25s linear,
-                      transform .25s linear);
-}
-
 ::-webkit-scrollbar {
   width: .5rem;
   height: .5rem;
@@ -75,6 +59,22 @@
   display: none!important;
 }
 
+* {
+  outline: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+*, *:hover {
+  @include transition(background-color .25s linear,
+                      color .05s linear,
+                      margin .25s linear,
+                      opacity .25s linear,
+                      filter .25s linear,
+                      visibility .25s linear,
+                      transform .25s linear);
+}
+
 input {
 
   &::placeholder {
@@ -82,6 +82,23 @@ input {
     font-size: $font-size-base * 0.9;
     text-transform: capitalize;
   }
+}
+
+input:-webkit-autofill, 
+textarea:-webkit-autofill, 
+select:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px rgb(230, 230, 230) inset; 
+}
+
+a {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+// adsense
+.adsense {
+  width: 100%;
+  height: auto;
+  background-color: $module-bg;
 }
 
 // swiper
@@ -100,16 +117,6 @@ input {
 .swiper-button-prev,
 .swiper-button-next {
   z-index: 3;
-}
-
-input:-webkit-autofill, 
-textarea:-webkit-autofill, 
-select:-webkit-autofill {
-  box-shadow: 0 0 0px 1000px rgb(230, 230, 230) inset; 
-}
-
-a {
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 .radio, .checkbox {
