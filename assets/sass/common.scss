@@ -97,14 +97,24 @@ a {
 .adsense {
   width: 100%;
   height: auto;
+
+  &.adsense-archive {
+    margin-bottom: 1em;
+    height: auto;
+
+    > .adsense-wrapper {
+      padding: .5em;
+
+      > .adsbygoogle {
+        height: 7em!important;
+        overflow: hidden;
+      }
+    }
+  }
 }
 
 .adsense-wrapper {
   background-color: $module-bg;
-
-  > .adsbygoogle {
-    height: 7em!important;
-  }
 }
 
 // swiper
