@@ -30,7 +30,7 @@
         </div>
       </transition>
     </div>
-    <div class="ad">
+    <div class="ad" v-if="!fetching && article.content">
       <adsense-article></adsense-article>
     </div>
     <share-box class="article-share" v-if="!fetching && article.content"></share-box>
