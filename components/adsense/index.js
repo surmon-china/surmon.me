@@ -11,8 +11,8 @@ import AdsenseArticle from './article'
 const adsense = {
   install(Vue) {
     Vue.component(AdsenseAside.name, AdsenseAside)
-    Vue.component(AdsenseArticle.name, AdsenseArticle)
     Vue.component(AdsenseArchive.name, AdsenseArchive)
+    Vue.component(AdsenseArticle.name, AdsenseArticle)
   }
 }
 
