@@ -30,6 +30,9 @@
         </div>
       </transition>
     </div>
+    <div class="ad">
+      <adsense-article></adsense-article>
+    </div>
     <share-box class="article-share" v-if="!fetching && article.content"></share-box>
     <transition name="module" mode="out-in">
       <div class="metas" v-if="!fetching && article.title">
@@ -340,6 +343,7 @@
     }
 
     > .detail,
+    > .ad,
     > .metas,
     > .related {
       margin-bottom: 1em;
