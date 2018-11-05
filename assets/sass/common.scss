@@ -104,6 +104,12 @@ a {
       padding: 1rem;
       display: flex;
       justify-content: center;
+
+      > .adsbygoogle {
+        width: 250px;
+        height: 250px;
+        // overflow: hidden;
+      }
     }
   }
 
