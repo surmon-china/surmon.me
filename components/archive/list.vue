@@ -9,7 +9,7 @@
     </transition>
 
     <!-- 广告啦 -->
-    <adsense-archive></adsense-archive>
+    <adsense-archive v-if="renderAd"></adsense-archive>
 
     <!-- 列表 -->
     <div class="article-list">
@@ -44,6 +44,7 @@
 <script>
   import ListItem from './item.vue'
   import ListHeader from './header.vue'
+  import underscore from '~/utils/underscore-simple'
 
   export default {
     name: 'article-list',
@@ -54,6 +55,12 @@
     props: {
       article: {
         type: Object
+      }
+    },
+    data() {
+      return {
+        renderAd: true,
+        updateAd: null
       }
     },
     computed: {
@@ -69,10 +76,26 @@
         return hasArticles ? (current_page < total_page) : false
       }
     },
+    mounted() {
+      this.updateAd = underscore.debounce(() => {
+        this.renderAd = false
+        this.$nextTick(() => {
+          this.renderAd = true
+        })
+      }, 1666, true)
+    },
     methods: {
       toDetail(article) {
         if (this.mobileLayout) {
           this.$router.push(`/article/${article.id}`)
+        }
+      },
+    },
+    watch: {
+      article: {
+        deep: true,
+        handler() {
+          this.updateAd ? this.updateAd() : null
         }
       }
     }
