@@ -101,8 +101,11 @@ a {
   &.adsense-aside {
 
     > .adsense-wrapper {
+      padding: 1rem;
+
       > .adsbygoogle {
-        height: 226px!important;
+        width: 250px!important;
+        height: 250px!important;
         overflow: hidden;
       }
     }
