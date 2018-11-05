@@ -5,9 +5,6 @@
  */
 
 import Vue from 'vue'
-import { isBrowser } from '~/environment'
 import AdsenseComponents from '~/components/adsense'
 
-if (isBrowser) {
-  Vue.use(AdsenseComponents)
-}
+Vue.use(AdsenseComponents)
