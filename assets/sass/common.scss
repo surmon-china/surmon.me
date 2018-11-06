@@ -100,13 +100,14 @@ a {
   position: relative;
 
   &.adsense-article {
+    padding: 1em;
 
     > .adsense-wrapper {
-      padding: 1em;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 7rem;
+      overflow: hidden;
 
       > .adsbygoogle {
         width: 100%;
