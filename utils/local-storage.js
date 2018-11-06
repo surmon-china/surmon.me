@@ -4,24 +4,24 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-const getData = key => localStorage.getItem(key)
-const delData = key => localStorage.removeItem(key)
-const setData = (key, data) => localStorage.setItem(key, data)
+export const get = key => localStorage.getItem(key)
+export const del = key => localStorage.removeItem(key)
+export const set = (key, data) => localStorage.setItem(key, data)
 
 export const localUser = {
   get() {
-    const user = getData('user')
+    const user = get('user')
     return user ? JSON.parse(user) : null
   },
-  remove: () => delData('user'),
-  set: user => setData('user', JSON.stringify(user))
+  remove: () => del('user'),
+  set: user => set('user', JSON.stringify(user))
 }
 
 export const localHistoryLikes = {
   get() {
-    const historyLikes = getData('user_like_history')
+    const historyLikes = get('user_like_history')
     return historyLikes ? JSON.parse(historyLikes) : null
   },
-  remove: () => delData('user_like_history'),
-  set: data => setData('user_like_history', JSON.stringify(data))
+  remove: () => del('user_like_history'),
+  set: data => set('user_like_history', JSON.stringify(data))
 }

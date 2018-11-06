@@ -63,7 +63,7 @@
       // filter: grayscale(100%);
       // background-color: #888888;
       border-color: #b5b5b5;
-      background: linear-gradient(90deg, $black 0%, $black 50%, $module-bg 90%);
+      background: linear-gradient(90deg, $theme-black 0%, $theme-black 50%, $module-bg 90%);
     }
   }
 </style>
