@@ -30,9 +30,11 @@
         </div>
       </transition>
     </div>
-    <div class="ad" v-if="renderAd">
-      <adsense-article></adsense-article>
-    </div>
+    <transition name="module" mode="out-in">
+      <div class="ad" v-if="renderAd">
+        <adsense-article></adsense-article>
+      </div>
+    </transition>
     <share-box class="article-share" v-if="!fetching && article.content"></share-box>
     <transition name="module" mode="out-in">
       <div class="metas" v-if="!fetching && article.title">

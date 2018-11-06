@@ -130,7 +130,7 @@ a {
 
       > .adsbygoogle {
         width: 250px;
-        height: 250px;
+        height: 30rem;
       }
     }
   }
@@ -145,6 +145,17 @@ a {
       > .adsbygoogle {
         height: 7.5rem;
         overflow: hidden;
+      }
+    }
+
+    &.mobile {
+      
+      > .adsense-wrapper {
+        padding: 1rem;
+  
+        > .adsbygoogle {
+          height: 6rem;
+        }
       }
     }
   }
