@@ -186,6 +186,7 @@
           .navbar-logo {
             width: 11rem;
             margin-right: 4rem;
+            filter: $theme-logo-rotate;
 
             .logo-st {
               fill: $primary;

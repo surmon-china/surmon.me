@@ -4,6 +4,8 @@ $cdn-url: 'https://surmon.me';
 
 // PC Theme Color
 $body-bg: var(--body-bg);
+$theme-black: var(--theme-black);
+$theme-logo-rotate: var(--theme-logo-rotate);
 
 $module-bg: var(--module-bg);
 $module-bg-opacity-5: var(--module-bg-opacity-5);
@@ -39,7 +41,7 @@ $link-color: var(--link-color);
 $link-hover-color: var(--link-hover-color);
 
 // Colors
-$primary: #0088f5;
+// $primary: #0088f5;
 $accent: #4caf50;
 $red: #ff5722;
 $yellow: #ffeb3b;

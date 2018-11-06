@@ -93,6 +93,18 @@ a {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+.radio, .checkbox {
+  display: inline-block;
+  margin-top: 0px;
+  padding-top: 0px;
+  margin-bottom: 0px;
+}
+
+.container {
+  width: $container-width;
+  margin: 0 auto;
+}
+
 // adsense
 .adsense {
   width: 100%;
@@ -198,16 +210,24 @@ a {
   z-index: 3;
 }
 
-.radio, .checkbox {
-  display: inline-block;
-  margin-top: 0px;
-  padding-top: 0px;
-  margin-bottom: 0px;
-}
+// app
+#app {
 
-.container {
-  width: $container-width;
-  margin: 0 auto;
+  &:not(.default) {
+
+    #app-main {
+
+      header {
+
+        .navbar-header {
+
+          .navbar-blank {
+            display: none;
+          }
+        }
+      }
+    }
+  }
 }
 
 #image-popup {
