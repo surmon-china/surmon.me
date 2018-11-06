@@ -67,6 +67,7 @@
 <script>
   import { mapState } from 'vuex'
   import eventBus from '~/utils/event-bus'
+  import * as utilsLocalStorage from '~/utils/local-storage'
   import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
   import {
     WallpaperSwitch,
@@ -100,13 +101,14 @@
       }
     },
     mounted() {
-      // this.watchFullScreen()
-      this.watchTabActive()
       if (!this.mobileLayout) {
+        this.setHistoryTheme()
         this.$store.dispatch('loadWallpapers')
         this.$store.dispatch('loadWallpaperStory')
         this.$store.dispatch('loadMuiscPlayerList')
       }
+      // this.watchFullScreen()
+      this.watchTabActive()
       this.$root.$eventBus = eventBus
       this.$root.$copyToClipboard = this.copyToClipboard
     },
@@ -154,8 +156,14 @@
       }
     },
     methods: {
+      setHistoryTheme() {
+        const historyTheme = utilsLocalStorage.get('theme')
+        const theme = historyTheme || this.theme
+        this.setTheme(theme)
+      },
       setTheme(theme) {
         this.theme = theme
+        utilsLocalStorage.set('theme', theme)
       },
       copyToClipboard(text) {
         this.clipboardText = text
