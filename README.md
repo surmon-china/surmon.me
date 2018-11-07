@@ -11,7 +11,7 @@ My blog by [Nuxt.js](https://github.com/nuxt)
 
 [Online Site - https://surmon.me](https://surmon.me/)
 
-If you want to run the application, you need install the [nodepress](https://github.com/surmon-china/nodepress) service.
+If you want to run the application, you need install the [nodepress](https://github.com/surmon-china/nodepress) service and [sre](https://github.com/surmon-china/sre.surmon.me) service.
 
 ### CHANGELOG
 
