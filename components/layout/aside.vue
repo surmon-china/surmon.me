@@ -288,7 +288,7 @@
           &:nth-child(1) {
             .index {
               color: $white;
-              background-color: rgba($primary, .6);
+              background-color: $primary-opacity-5;
             }
           }
 
