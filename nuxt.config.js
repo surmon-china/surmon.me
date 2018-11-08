@@ -143,6 +143,7 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { 'http-equiv': 'cleartype', content: 'on' },
+      { 'http-equiv': 'x-dns-prefetch-control', content: 'on' },
       { name: 'author', content: 'surmon@foxmail.com' },
       { name: 'MobileOptimized', content: '320' },
       { name: 'HandheldFriendly', content: 'True' },
@@ -158,6 +159,18 @@ module.exports = {
       { hid: 'description', name: 'description', content: '凡心所向，素履所往，生如逆旅，一苇以航' }
     ],
     link: [
+      { rel: 'dns-prefetch', href: '//surmon.me' },
+      { rel: 'dns-prefetch', href: '//api.surmon.me' },
+      { rel: 'dns-prefetch', href: '//cdn.surmon.me' },
+      { rel: 'dns-prefetch', href: '//static.surmon.me' },
+      { rel: 'dns-prefetch', href: '//gravatar.surmon.me' },
+      { rel: 'dns-prefetch', href: '//at.alicdn.com' },
+      { rel: 'dns-prefetch', href: '//fonts.gstatic.com' },
+      { rel: 'dns-prefetch', href: '//adservice.google.com' },
+      { rel: 'dns-prefetch', href: '//fonts.googleapis.com' },
+      { rel: 'dns-prefetch', href: '//googleads.g.doubleclick.net' },
+      { rel: 'dns-prefetch', href: '//tpc.googlesyndication.com' },
+      { rel: 'dns-prefetch', href: '//www.google-analytics.com' },
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'author', type: 'text/plain', href: '/humans.txt' }
     ],
