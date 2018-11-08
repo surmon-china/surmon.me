@@ -70,8 +70,6 @@
         }
       },
       buildIcon(project) {
-        const isIncludeName = key => project.name.toLowerCase().includes(key)
-        const isIncludeDesc = key => project.description.toLowerCase().includes(key)
 
         const iconRules = [{
             desc: 'netease',
@@ -81,6 +79,17 @@
             name: 'react',
             desc: 'react',
             color: '#5dd4fa'
+          }, {
+            name: 'linux',
+            color: '#000000'
+          }, {
+            name: 'deploy',
+            icon: 'linux',
+            color: '#000000'
+          }, {
+            name: 'sre',
+            icon: 'linux',
+            color: '#000000'
           }, {
             name: 'surmon',
             icon: 'think',
@@ -99,9 +108,6 @@
           }, {
             name: 'jquery',
             color: '#8bcdf1'
-          }, {
-            name: 'linux',
-            color: '#030303'
           }, {
             desc: 'music',
             color: '#ab3419'
@@ -132,6 +138,8 @@
           }
         ]
 
+        const isIncludeName = key => project.name.toLowerCase().includes(key)
+        const isIncludeDesc = key => project.description.toLowerCase().includes(key)
         const targetRule = iconRules.find(rule => {
           const includeName = rule.name ? isIncludeName(rule.name) : false
           const includeDesc = rule.desc ? isIncludeDesc(rule.desc) : false
