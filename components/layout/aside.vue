@@ -39,6 +39,7 @@
         </li>
       </ul>
     </div>
+    <aside-ad></aside-ad>
     <div class="aside-calendar">
       <calendar></calendar>
     </div>
@@ -48,16 +49,11 @@
       </div>
     </transition>
     <div class="aside-fixed-box" :class="{ fixed: fixedMode.fixed }" v-scroll-top>
-      <transition name="fade">
-        <div class="aside-ad" v-show="fixedMode.fixed">
-          <a href="https://s.click.taobao.com/6JBRDTw"
-             rel="external nofollow noopener"
-             target="_blank"
-             class="ad-box">
-            <img src="/images/mammon/aliyun-300-100.jpg" alt="aliyun-ad" />
-          </a>
-        </div>
-      </transition>
+      <no-ssr>
+        <transition name="fade">
+          <aside-ad v-if="fixedMode.fixed"></aside-ad>
+        </transition>
+      </no-ssr>
       <div class="aside-tag">
         <empty-box v-if="!tag.fetching && !tag.data.data.length">
           <slot>{{ $i18n.text.tag.empty || 'No Result Tags.' }}</slot>
@@ -96,7 +92,8 @@
 
 <script>
   import { mapState } from 'vuex'
-  import Calendar from './calendar.vue'
+  import AsideAd from './aside-ad'
+  import Calendar from './calendar'
   export default {
     name: 'layout-aside',
     data() {
@@ -111,6 +108,7 @@
       }
     },
     components: {
+      AsideAd,
       Calendar
     },
     mounted() {
