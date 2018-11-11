@@ -63,7 +63,7 @@ const common = {
         ad: {
           link: isMobile ? links.mobile.alitrip : links.pc.alitrip,
           title: '有梦就出发吧！',
-          img: imagePath + 'alitrip-270-224.jpg'
+          img: imagePath + 'alitrip-290-224.jpg'
         }
       }
     ]
@@ -71,7 +71,7 @@ const common = {
     const defaultAliyunAd = {
       link: links.common.aliyun,
       title: '一款优秀的弹性主机很重要！',
-      img: imagePath + 'aliyun-270-224.jpg'
+      img: imagePath + 'aliyun-290-224.jpg'
     }
     
     const findAd = ads.find(ad => isCategory(ad.tags))
