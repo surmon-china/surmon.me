@@ -44,7 +44,8 @@
           <span v-text="$i18n.nav.guestbook">Guestbook</span>
         </nuxt-link>
         <a
-          :href="ads.taobao" 
+          :href="ads.taobao"
+          v-if="false"
           rel="external nofollow noopener"
           class="item ad taobao"
           target="_blank">
@@ -53,6 +54,7 @@
         </a>
         <a
           :href="ads.aliyun" 
+          v-if="false"
           rel="external nofollow noopener"
           class="item ad aliyun"
           target="_blank">
