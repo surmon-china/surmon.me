@@ -186,8 +186,8 @@ export default state => {
         service.get(`${apiPath}/music/url/${song.id}`).then(response => {
           const success = response.status &&
                           response.data &&
-                          Object.is(response.data.code, 1) &&
-                          Object.is(response.data.result.code, 200) &&
+                          response.data.code === 1 &&
+                          response.data.result.code === 200 &&
                           response.data.result.data.length
           if (success) {
             // console.log('地址有效', response)

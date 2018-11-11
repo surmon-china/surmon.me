@@ -2,16 +2,17 @@
   <aside class="aside">
     <div class="aside-search">
       <div class="search-box">
-        <input id="keyword" 
-               required 
-               list="keywords"
-               type="search" 
-               name="search" 
-               class="search-input"
-               :class="language"
-               :placeholder="$i18n.text.search"
-               v-model.trim="keyword"
-               @keyup.enter="toSearch">
+        <input
+          id="keyword" 
+          required 
+          list="keywords"
+          type="search" 
+          name="search" 
+          class="search-input"
+          :class="language"
+          :placeholder="$i18n.text.search"
+          v-model.trim="keyword"
+          @keyup.enter="toSearch">
         <button class="search-btn" @click="toSearch">
           <i class="iconfont icon-search"></i>
         </button>
@@ -31,18 +32,21 @@
       <ul class="aside-article-list" v-else-if="!article.fetching && article.data.data.length">
         <li class="item" :key="item.id" v-for="item in article.data.data.slice(0, 10)">
           <span class="index"></span>
-          <nuxt-link class="title" 
-                     :to="`/article/${item.id}`"
-                     :title="`${item.title} - 「 ${item.meta.comments} ${$i18n.text.comment.count} | ${item.meta.likes} ${$i18n.text.comment.like} 」`">
+          <nuxt-link
+            class="title" 
+            :to="`/article/${item.id}`"
+            :title="`${item.title} - 「 ${item.meta.comments} ${$i18n.text.comment.count} | ${item.meta.likes} ${$i18n.text.comment.like} 」`">
             <span>{{ item.title }}</span>
           </nuxt-link>
         </li>
       </ul>
     </div>
-    <aside-ad></aside-ad>
-    <div class="aside-calendar">
-      <calendar></calendar>
-    </div>
+    <aside-ad ref="asideAd" @slideChange="slideChange"></aside-ad>
+    <no-ssr>
+      <div class="aside-calendar">
+        <calendar></calendar>
+      </div>
+    </no-ssr>
     <transition name="module">
       <div class="aside-ad" v-if="renderAd">
         <adsense-aside></adsense-aside>
@@ -51,7 +55,7 @@
     <div class="aside-fixed-box" :class="{ fixed: fixedMode.fixed }" v-scroll-top>
       <no-ssr>
         <transition name="fade">
-          <aside-ad v-if="fixedMode.fixed"></aside-ad>
+          <aside-ad :initIndex="adIndex" @slideChange="changeAsideAdSwiper" v-if="fixedMode.fixed"></aside-ad>
         </transition>
       </no-ssr>
       <div class="aside-tag">
@@ -59,11 +63,12 @@
           <slot>{{ $i18n.text.tag.empty || 'No Result Tags.' }}</slot>
         </empty-box>
         <ul class="aside-tag-list" v-else-if="!tag.fetching && tag.data.data.length">
-          <nuxt-link tag="li"
-                     class="item"
-                     :key="index"
-                     :to="`/tag/${item.slug}`"
-                     v-for="(item, index) in tag.data.data">
+          <nuxt-link
+            tag="li"
+            class="item"
+            :key="index"
+            :to="`/tag/${item.slug}`"
+            v-for="(item, index) in tag.data.data">
             <a class="title" :title="item.description">
               <i class="iconfont" 
                  :class="[item.extends.find(t => Object.is(t.name, 'icon')).value]" 
@@ -98,6 +103,7 @@
     name: 'layout-aside',
     data() {
       return {
+        adIndex: 0,
         renderAd: true,
         keyword: '',
         fixedMode: {
@@ -113,7 +119,7 @@
     },
     mounted() {
       this.updateAd()
-      if (Object.is(this.$route.name, 'search-keyword')) {
+      if (this.$route.name === 'search-keyword') {
         this.keyword = this.$route.params.keyword
       }
     },
@@ -132,7 +138,7 @@
         const keyword = this.keyword
         const paramsKeyword = this.$route.params.keyword
         const isSearchPage = Object.is(this.$route.name, 'search-keyword')
-        if (keyword && (isSearchPage ? !Object.is(paramsKeyword, keyword) : true)) {
+        if (keyword && (isSearchPage ? (paramsKeyword !== keyword) : true)) {
           this.$router.push({ name: 'search-keyword', params: { keyword }})
         }
       },
@@ -141,6 +147,12 @@
         this.$nextTick(() => {
           this.renderAd = true
         })
+      },
+      slideChange(index) {
+        this.adIndex = index
+      },
+      changeAsideAdSwiper(index) {
+        this.$refs.asideAd.swiper.slideToLoop(index)
       },
       setFullColumu() {
         this.$store.commit('option/SET_ERROR_COLUMU', true)

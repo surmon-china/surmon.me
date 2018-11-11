@@ -5,12 +5,18 @@
             v-if="!fetching && article.title"
             :class="{
               self: !article.origin,
-              other: article.origin === 1,
-              hybrid: article.origin === 2
+              other: article.origin === constants.ORIGIN_STATE.reprint,
+              hybrid: article.origin === constants.ORIGIN_STATE.hybrid
             }">
-        <span v-if="!article.origin" v-text="$i18n.text.origin.original">原创</span>
-        <span v-else-if="article.origin === 1" v-text="$i18n.text.origin.reprint">转载</span>
-        <span v-else-if="article.origin === 2" v-text="$i18n.text.origin.hybrid">混撰</span>
+        <span
+          v-if="!article.origin"
+          v-text="$i18n.text.origin.original">原创</span>
+        <span
+          v-else-if="article.origin === constants.ORIGIN_STATE.reprint"
+          v-text="$i18n.text.origin.reprint">转载</span>
+        <span
+          v-else-if="article.origin === constants.ORIGIN_STATE.hybrid"
+          v-text="$i18n.text.origin.hybrid">混撰</span>
       </div>
       <h2 class="title">{{ article.title || '...' }}</h2>
       <transition name="module" mode="out-in">
@@ -24,7 +30,7 @@
       <transition name="module" mode="out-in">
         <div class="readmore" v-if="canReadMore">
           <button class="readmore-btn" :disabled="readMoreLoading" @click="readMore()">
-            <span>{{ !readMoreLoading ? $i18n.text.article.readAll : $i18n.text.article.rendering }}</span>
+            <span>{{ readMoreLoading ? $i18n.text.article.rendering : $i18n.text.article.readAll }}</span>
             <i class="iconfont icon-next-bottom"></i>
           </button>
         </div>
@@ -41,15 +47,15 @@
         <p class="item" v-if="languageIsEn">
           <span>Article created at</span>
           <span>&nbsp;</span>
-          <nuxt-link :title="buildDateTitle(article.create_at)"
-                       :to="buildDateLink(article.create_at)">
+          <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
             <span>{{ buildDateTitle(article.create_at) }}</span>
           </nuxt-link>
           <span>&nbsp;in category&nbsp;</span>
-          <nuxt-link :key="index"
-                     :to="`/category/${category.slug}`"
-                     :title="category.description || category.name"
-                     v-for="(category, index) in article.category">
+          <nuxt-link
+            :key="index"
+            :to="`/category/${category.slug}`"
+            :title="category.description || category.name"
+            v-for="(category, index) in article.category">
             <span>{{ category.name }}</span>
             <span v-if="article.category.length && article.category[index + 1]">、</span>
           </nuxt-link>
@@ -61,15 +67,12 @@
         <p class="item" v-else>
           <span>本文于</span>
           <span>&nbsp;</span>
-          <nuxt-link :title="buildDateTitle(article.create_at)"
-                       :to="buildDateLink(article.create_at)">
+          <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
             <span>{{ buildDateTitle(article.create_at) }}</span>
           </nuxt-link>
           <span>&nbsp;发布在&nbsp;</span>
-          <span :key="index"
-                v-for="(category, index) in article.category">
-            <nuxt-link :to="`/category/${category.slug}`"
-                      :title="category.description || category.name">
+          <span :key="index" v-for="(category, index) in article.category">
+            <nuxt-link :to="`/category/${category.slug}`" :title="category.description || category.name">
               <span>{{ $i18n.nav[category.slug] }}</span>
             </nuxt-link>
             <span v-if="article.category.length && article.category[index + 1]">、</span>
@@ -82,10 +85,8 @@
         <p class="item">
           <span class="title" :class="language">{{ languageIsEn ? 'Related tags:' : '相关标签：' }}</span>
           <span v-if="!article.tag.length" v-text="$i18n.text.tag.empty">无相关标签</span>
-          <span :key="index"
-                v-for="(tag, index) in article.tag">
-            <nuxt-link :to="`/tag/${tag.slug}`"
-                      :title="tag.description || tag.name">
+          <span :key="index" v-for="(tag, index) in article.tag">
+            <nuxt-link :to="`/tag/${tag.slug}`" :title="tag.description || tag.name">
               <span>{{ tag.name }}</span>
             </nuxt-link>
             <span v-if="article.tag.length && article.tag[index + 1]">、</span>
@@ -94,7 +95,7 @@
         <p class="item">
           <span class="title" :class="language">{{ languageIsEn ? 'Article Address:' : '永久地址：' }}</span>
           <span class="site-url" @click="copyArticleUrl">
-                <span>https://surmon.me/article/{{ article.id }}</span>
+            <span>https://surmon.me/article/{{ article.id }}</span>
           </span>
         </p>
         <div class="item">
@@ -113,10 +114,12 @@
       <div class="related" v-if="!mobileLayout">
         <div class="article-list swiper" v-swiper:swiper="swiperOption">
           <div class="swiper-wrapper">
-            <div class="swiper-slide item" v-for="(article, index) in article.related" :key="index">
-              <nuxt-link :to="`/article/${article.id}`" 
-                          :title="article.title" 
-                          class="item-box">
+            <div class="swiper-slide item" v-for="(article, index) in articleRelateds" :key="index">
+              <a v-if="article.ad" class="item-box" :href="article.link" rel="external nofollow noopener" target="_blank">
+                <img :src="article.img" class="thumb" :alt="article.title">
+                <span class="title">{{ article.title }}</span>
+              </a>
+              <nuxt-link v-else :to="`/article/${article.id}`" :title="article.title" class="item-box">
                 <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title">
                 <span class="title">{{ article.title }}</span>
               </nuxt-link>
@@ -126,10 +129,14 @@
       </div>
       <div class="related" v-else>
         <ul class="article-list">
-          <li class="item" v-for="(article, index) in article.related.slice(0, 8)" :key="index">
-            <nuxt-link class="item-link"
-                      :to="`/article/${article.id}`" 
-                      :title="`「 ${article.title} 」- 继续阅读`">
+          <li class="item" v-for="(article, index) in articleRelateds" :key="index">
+            <a v-if="article.ad" class="item-box" :href="article.link" rel="external nofollow noopener" target="_blank">
+              <span class="sign">《</span>
+              <span class="title">{{ article.title }}</span>
+              <span class="sign">》</span>
+              <small class="tip">- 狠狠地阅读</small>
+            </a>
+            <nuxt-link v-else class="item-link" :to="`/article/${article.id}`" :title="`「 ${article.title} 」- 继续阅读`">
               <span class="sign">《</span>
               <span class="title">{{ article.title }}</span>
               <span class="sign">》</span>
@@ -140,21 +147,21 @@
       </div>
     </template>
     <div class="comment">
-      <comment-box :post-id="article.id"
-                   :likes="article.meta.likes"
-                   v-if="!fetching && article.title">
-      </comment-box>
+      <comment-box :post-id="article.id" :likes="article.meta.likes" v-if="!fetching && article.title" />
     </div>
   </div>
 </template>
 
 <script>
   import { mapState } from 'vuex'
+  import adConfig from '~/ad.config'
   import marked from '~/plugins/marked'
   import ShareBox from '~/components/layout/share'
-
   export default {
     name: 'article-detail',
+    components: {
+      ShareBox
+    },
     validate({ params, store }) {
       return params.article_id && !isNaN(Number(params.article_id))
     },
@@ -183,15 +190,17 @@
       return {
         swiperOption: {
           setWrapperSize: true,
-          mousewheel: true,
+          simulateTouch: false,
+          mousewheel: {
+            sensitivity: 1,
+          },
           autoplay: {
             delay: 3500,
             disableOnInteraction: false,
           },
           observeParents: true,
           grabCursor: true,
-          slidesPerView: 'auto',
-          spaceBetween: 14
+          slidesPerView: 'auto'
         },
         canReadMore: false,
         fullContentEd: false,
@@ -199,11 +208,9 @@
         renderAd: true
       }
     },
-    components: {
-      ShareBox
-    },
     computed: {
       ...mapState({
+        constants: state => state.option.constants,
         language: state => state.option.language,
         tags: state => state.tag.data,
         imgExt: state => state.option.imgExt,
@@ -235,6 +242,12 @@
           this.canReadMore = false
           return marked(content, hasTags ? this.tags.data : false, true)
         }
+      },
+      articleRelateds() {
+        const relateds = [...this.article.related].slice(0, 10)
+        const adArticle = adConfig.common.articleRelated(this.tags.data, this.mobileLayout)
+        adArticle && relateds.splice(2, 0, adArticle)
+        return relateds
       }
     },
     methods: {
@@ -263,20 +276,28 @@
         return `${thumb}?imageView2/1/w/300/h/230/format/${this.imgExt}/interlace/1/q/80|imageslim`
       },
       buildDateTitle(date) {
-        if (!date) return date
+        if (!date) {
+          return date
+        }
         date = new Date(date)
         const am = this.languageIsEn ? 'AM' : '上午'
         const pm = this.languageIsEn ? 'PM' : '下午'
-        return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours() > 11 ? pm : am}`
+        const year = date.getFullYear()
+        const month = date.getMonth() + 1
+        const day = date.getDate()
+        const meridiem = date.getHours() > 11 ? pm : am
+        return `${year}/${month}/${day} ${meridiem}`
       },
       buildDateLink(date) {
-        if (!date) return date
+        if (!date) {
+          return date
+        }
         date = new Date(date)
         const year = date.getFullYear()
         let month = (date.getMonth() + 1).toString()
         let day = date.getDate().toString()
-        month = Object.is(month.length, 1) ? `0${month}` : month
-        day = Object.is(day.length, 1) ? `0${day}` : day
+        month = month.length === 1 ? `0${month}` : month
+        day = day.length === 1 ? `0${day}` : day
         return `/date/${year}-${month}-${day}`
       }
     }
@@ -399,6 +420,10 @@
         text-align: center;
         margin: 1em 0 1.5em 0;
         font-weight: 700;
+      }
+
+      > .article-empty-box {
+        min-height: 16rem;
       }
 
       > .content {
@@ -697,6 +722,11 @@
 
           > .swiper-slide.item {
             width: auto;
+            margin-right: 1rem;
+
+            &:last-child {
+              margin-right: 0;
+            }
 
             > .item-box {
               display: block;
@@ -710,7 +740,7 @@
 
                 .thumb {
                   opacity: 1;
-                  @include css3-prefix(transform, scale(1.2) rotate(3deg));
+                  @include css3-prefix(transform, scale(1.2) rotate(2deg));
                   @include css3-prefix(transition, all 1s);
                 }
 
@@ -727,17 +757,16 @@
               }
 
               > .title {
-                opacity: .4;
                 position: absolute;
                 bottom: 0;
                 left: 0;
                 width: calc(100% - 1em);
                 height: 2em;
                 line-height: 2em;
-                background-color: rgba(165, 165, 165, 0.5);
+                background-color: $module-hover-bg-darken-10;
                 padding: 0 .5em;
-                color: white;
-                opacity: .8;
+                color: $white;
+                opacity: .4;
                 font-size: .9em;
                 text-align: center;
                 overflow: hidden;

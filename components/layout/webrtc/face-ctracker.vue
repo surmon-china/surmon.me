@@ -1,11 +1,12 @@
 <template>
   <div class="face-ctracker">
     <canvas ref="canvas" :width="width" :height="height"></canvas>
-    <canvas ref="videoCanvas" :width="width" :height="height" v-if="mode === 1"></canvas>
+    <canvas ref="videoCanvas" :width="width" :height="height" v-if="mode === modes.native"></canvas>
   </div>
 </template>
 
 <script>
+  import { modes } from './util'
   export default {
     name: 'face-ctracker',
     data() {
@@ -28,21 +29,18 @@
       // 识别模式：1 原生模式、2 clmtrackr
       mode: {
         type: Number,
-        default: 2
+        default: modes.clmtrackr
       }
+    },
+    computed: {
+      modes: () => modes
     },
     methods: {
       initTracker() {
-        switch (this.mode) {
-          case 1:
-            this.buildTrackerByNative()
-            break
-          case 2:
-            this.buildTrackerByClmtrackr()
-            break
-          default:
-            break
-        }
+        const isNativeMode = this.mode === modes.native
+        isNativeMode
+          ? this.buildTrackerByNative()
+          : this.buildTrackerByClmtrackr()
       },
       // 开启 chrome 原生模式
       buildTrackerByNative() {

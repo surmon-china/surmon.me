@@ -6,9 +6,9 @@
 
 import Vue from 'vue'
 import apiConfig from '~/api.config'
-import { isBrowser, isServer } from '~/environment'
 import uaDevice from '~/utils/ua-device'
 import eventBus from '~/utils/event-bus'
+import { isBrowser, isServer } from '~/environment'
 import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
 
 const API_PREFIX = apiConfig.baseUrl
@@ -45,6 +45,8 @@ export const actions = {
     }
 
     const initAppData = [
+      // 同构常量
+      store.dispatch('loadConstants'),
       // 配置数据
       store.dispatch('loadAdminInfo'),
       store.dispatch('loadGlobalOption'),
@@ -66,6 +68,19 @@ export const actions = {
     }
 
     return Promise.all(initAppData)
+  },
+
+  // 获取同构常量
+  loadConstants({ commit }) {
+    return this.$axios.$get(`${API_PREFIX}/constants`)
+      .then(response => {
+        resIsSuccess(response)
+          ? commit('option/SET_CONSTANTS', getResData(response))
+          : console.log('也是一个永远不会发生的异常：同构常量获取失败：', response)
+      })
+      .catch(err => {
+        console.warn('获取同构常量错误，实际上这个错误永远也不会发生', err)
+      })
   },
 
   // 获取博主资料
@@ -138,13 +153,16 @@ export const actions = {
       })
   },
 
-  // 根据post-id获取评论列表
-  loadCommentsByPostId({ commit }, params) {
+  // 根据 post-id 获取评论列表
+  loadCommentsByPostId({ state, commit }, params) {
+
+    const constants = state.option.constants
+    const SORT_TYPE = constants && constants.SORT_TYPE || { desc: -1 }
 
     params = Object.assign({
       page: 1,
-      sort: -1,
-      per_page: 88
+      per_page: 88,
+      sort: SORT_TYPE.desc
     }, params)
     
     if (params.page === 1) {
@@ -156,7 +174,7 @@ export const actions = {
       .then(response => {
         if (resIsSuccess(response)) {
           const data = getResData(response)
-          Object.is(params.sort, -1) && data.result.data.reverse()
+          Object.is(params.sort, SORT_TYPE.desc) && data.result.data.reverse()
           commit('comment/GET_LIST_SUCCESS', data)
         } else {
           commit('comment/GET_LIST_FAILURE')
@@ -188,22 +206,18 @@ export const actions = {
   },
 
   // 喜欢某个页面或主站 || 为某条回复点赞
-  likeArticleOrPageOrComment({ commit }, like) {
+  likeArticleOrPageOrComment({ state, commit }, like) {
+    const { LIKE_TYPE, COMMENT_POST_TYPE } = state.option.constants
     return this.$axios.$post(`${API_PREFIX}/like`, like)
       .then(response => {
         const data = getResData(response)
         if (resIsSuccess(response)) {
-          let mutation
-          switch(like.type) {
-            case 1:
-              mutation = 'comment/LIKE_ITEM'
-              break
-            case 2:
-              mutation = Object.is(like.id, 0) ? 'option/LIKE_SITE' : 'article/LIKE_ARTICLE'
-              break
-            default:
-              break
-          }
+          const isLikePage = like.type === LIKE_TYPE.page
+          const isLikeComment = like.type === LIKE_TYPE.comment
+          const isLikeSite = like.id === COMMENT_POST_TYPE.guestbook
+          const mutation = isLikeComment
+            ? 'comment/LIKE_ITEM'
+            : (isLikeSite ? 'option/LIKE_SITE' : 'article/LIKE_ARTICLE')
           commit(mutation, like)
           return Promise.resolve(data)
         } else {
@@ -250,7 +264,8 @@ export const actions = {
       .then(response => {
         const success = resIsSuccess(response)
         const loadMore = params.page && params.page > 1
-        const commitName =  `article/${loadMore ? 'ADD' : 'GET'}_LIST_SUCCESS`
+        const actionName = loadMore ? 'ADD' : 'GET'
+        const commitName =  `article/${actionName}_LIST_SUCCESS`
         if (success) {
           commit(commitName, getResData(response))
           if (loadMore && isBrowser) {
@@ -351,7 +366,7 @@ export const actions = {
   },
 
   // 获取歌曲列表
-  loadMuiscPlayerList({ commit }) {
+  loadMuiscPlayerList() {
     eventBus.requestMusicList()
     return this.$axios.$get(`${API_PREFIX}/music/list/638949385`)
     .then(response => {
@@ -366,7 +381,7 @@ export const actions = {
   },
 
   // 获取歌曲详情
-  loadMuiscSongDetail({ commit }, song_id) {
+  loadMuiscSongDetail(_, song_id) {
     eventBus.requestSong()
     return this.$axios.$get(`${API_PREFIX}/music/song/${song_id}`)
     .then(response => {
@@ -378,7 +393,7 @@ export const actions = {
   },
 
   // 获取歌曲歌词
-  loadMuiscSongLrc({ commit }, song_id) {
+  loadMuiscSongLrc(_, song_id) {
     eventBus.requestLrc()
     return this.$axios.$get(`${API_PREFIX}/music/lrc/${song_id}`)
     .then(response => {
