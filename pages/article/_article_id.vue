@@ -130,7 +130,7 @@
       <div class="related" v-else>
         <ul class="article-list">
           <li class="item" v-for="(article, index) in articleRelateds" :key="index">
-            <a v-if="article.ad" class="item-box" :href="article.link" rel="external nofollow noopener" target="_blank">
+            <a v-if="article.ad" class="item-link" :href="article.link" rel="external nofollow noopener" target="_blank">
               <span class="sign">《</span>
               <span class="title">{{ article.title }}</span>
               <span class="sign">》</span>
