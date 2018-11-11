@@ -1,6 +1,6 @@
 <template>
   <div class="aside-ad">
-    <div class="swiper" v-swiper:swiper="swiperOption">
+    <div class="swiper" v-swiper:swiper="swiperOption" @slideChange="slideChange">
       <div class="swiper-wrapper">
         <div class="swiper-slide item" v-for="(ad, index) in ads" :key="index">
           <div class="content">
@@ -20,15 +20,30 @@
 </template>
 
 <script>
+  import adConfig from '~/ad.config'
   export default {
     name: 'aside-ad',
-    data() {
-      return {
-        swiperOption: {
+    props: {
+      initIndex: {
+        type: Number,
+        default: 0
+      }
+    },
+    methods: {
+      slideChange() {
+        this.$emit('slideChange', this.swiper.realIndex)
+      }
+    },
+    computed: {
+      ads: () => adConfig.pc.asideSwiper,
+      swiperOption() {
+        return {
+          initialSlide: this.initIndex,
+          loop: true,
           simulateTouch: false,
           direction : 'vertical',
           autoplay: {
-            delay: 2500,
+            delay: 2960,
             disableOnInteraction: false
           },
           pagination: {
@@ -41,25 +56,7 @@
           observeParents: true,
           preloadImages: false,
           lazy: true
-        },
-        ads: [
-          {
-            url: 'https://s.click.taobao.com/6JBRDTw',
-            src: '/images/mammon/aliyun-300-100.jpg'
-          },
-          {
-            url: 'https://s.click.taobao.com/EshFMKw',
-            src: '/images/mammon/tmail-1111-300-100.jpg'
-          },
-          {
-            url: 'https://s.click.taobao.com/mqUFMKw',
-            src: '/images/mammon/aliyun-1111-300-100.jpg'
-          },
-          {
-            url: 'https://s.click.taobao.com/5OFFMKw',
-            src: '/images/mammon/taobao-300-100.jpg'
-          }
-        ]
+        }
       }
     }
   }

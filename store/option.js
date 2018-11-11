@@ -8,6 +8,9 @@ import i18nConfig from '~/i18n.config'
 
 export const state = () => ({
 
+  // 同构常量
+  constants: null,
+
   // 默认语言
   language: i18nConfig.default,
 
@@ -65,6 +68,11 @@ export const getters = {
 }
 
 export const mutations = {
+
+  // 设置常量
+  SET_CONSTANTS(state, action) {
+    state.constants = action.result
+  },
 
   // 设置UA
   SET_USER_AGENT(state, action) {

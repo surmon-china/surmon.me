@@ -40,24 +40,27 @@
         <i class="iconfont icon-comment"></i>
         <span v-text="$i18n.nav.guestbook"></span>
       </nuxt-link>
-      <a href="https://s.click.taobao.com/W5wqYKw" 
-         rel="external nofollow noopener"
-         class="item ad taobao"
-         target="_blank">
+      <a
+        :href="ads.taobao"
+        rel="external nofollow noopener"
+        class="item ad taobao"
+        target="_blank">
         <i class="iconfont icon-taobao"></i>
         <span v-text="$i18n.nav.taobao"></span>
       </a>
-      <a href="https://s.click.taobao.com/JFqqYKw" 
-         rel="external nofollow noopener"
-         class="item ad aliyun"
-         target="_blank">
+      <a
+        :href="ads.aliyun"
+        rel="external nofollow noopener"
+        class="item ad aliyun"
+        target="_blank">
         <i class="iconfont icon-aliyun"></i>
         <span v-text="$i18n.nav.aliyun"></span>
       </a>
-      <a href="https://errend.io"
-         rel="external nofollow noopener"
-         class="item ad errend"
-         target="_blank">
+      <a
+        href="https://errend.io"
+        rel="external nofollow noopener"
+        class="item ad errend"
+        target="_blank">
         <i class="iconfont icon-debug"></i>
         <span>Errend.io</span>
       </a>
@@ -70,8 +73,12 @@
 </template>
 
 <script>
+  import adConfig from '~/ad.config'
   export default {
-    name: 'layout-nav'
+    name: 'layout-nav',
+    computed: {
+      ads: () => adConfig.pc.nav
+    }
   }
 </script>
 

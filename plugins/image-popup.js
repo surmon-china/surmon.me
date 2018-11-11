@@ -42,7 +42,7 @@ if (isBrowser) {
     // 监听滚动和点击事件
     window.onscroll = closeImgPopup
     mask.onclick = e => {
-      if (!Object.is(e.target.tagName, 'IMG')) {
+      if (e.target.tagName !== 'IMG') {
         closeImgPopup()
       }
     }

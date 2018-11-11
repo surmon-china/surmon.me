@@ -21,13 +21,13 @@
       <div class="sort">
         <a href="" 
            class="sort-btn"
-           :class="{ actived: Object.is(sortMode, -1) }" 
-           @click.stop.prevent="sortComemnts(-1)"
+           :class="{ actived: Object.is(sortMode, constants.SORT_TYPE.desc) }" 
+           @click.stop.prevent="sortComemnts(constants.SORT_TYPE.desc)"
            v-text="$i18n.text.comment.new">最新</a>
         <a href="" 
            class="sort-btn"
-           :class="{ actived: Object.is(sortMode, 2) }" 
-           @click.stop.prevent="sortComemnts(2)"
+           :class="{ actived: Object.is(sortMode, constants.SORT_TYPE.hot) }" 
+           @click.stop.prevent="sortComemnts(constants.SORT_TYPE.hot)"
            v-text="$i18n.text.comment.hot">最热</a>
       </div>
     </div>
@@ -101,7 +101,7 @@
     </transition>
     <transition name="module">
       <div class="pagination-box" v-if="comment.data.pagination.total_page > 1">
-        <ul class="pagination-list" v-if="Object.is(sortMode, 2)">
+        <ul class="pagination-list" v-if="Object.is(sortMode, constants.SORT_TYPE.hot)">
           <li class="item" :key="index" v-for="(item, index) in comment.data.pagination.total_page">
             <a href="" 
                class="pagination-btn" 
@@ -215,15 +215,18 @@
             </div>
           </transition>
           <div class="markdown">
-            <div class="markdown-editor" 
-                 ref="markdown"
-                 contenteditable="true"
-                 :placeholder="$i18n.text.comment.placeholder"
-                 @keyup="commentContentChange($event)">
+            <div
+              class="markdown-editor"
+              ref="markdown"
+              contenteditable="true"
+              :placeholder="$i18n.text.comment.placeholder"
+              @keyup="commentContentChange($event)">
             </div>
-            <div class="markdown-preview" 
-                 :class="{ actived: previewMode }"
-                 v-html="previewContent"></div>
+            <div
+              class="markdown-preview" 
+              :class="{ actived: previewMode }"
+              v-html="previewContent">
+            </div>
           </div>
           <div class="editor-tools">
             <a href="" class="emoji" title="emoji" @click.stop.prevent>
@@ -233,7 +236,8 @@
                   <li class="item"
                       :key="index"
                       @click="insertEmoji(emoji)"
-                      v-for="(emoji, index) in emojis">{{ emoji }}</li>
+                      v-for="(emoji, index) in emojis"
+                      v-text="emoji"></li>
                 </ul>
               </div>
             </a>
@@ -318,6 +322,7 @@
     computed: {
       ...mapState({
         comment: state => state.comment,
+        constants: state => state.option.constants,
         language: state => state.option.language,
         mobileLayout: state => state.option.mobileLayout,
         blacklist: state => state.option.globalOption.data.blacklist,
@@ -469,7 +474,7 @@
       },
       // 评论排序
       sortComemnts(sort) {
-        if (!Object.is(this.sortMode, sort)) {
+        if (this.sortMode !== sort) {
           this.sortMode = sort
           this.loadComemntList()
         }
@@ -518,7 +523,10 @@
       // 喜欢当前页面
       likePage() {
         if (this.pageLiked) return false
-        this.$store.dispatch('likeArticleOrPageOrComment', { type: 2, id: this.postId })
+        this.$store.dispatch('likeArticleOrPageOrComment', {
+          type: this.constants.LIKE_TYPE.page,
+          id: this.postId
+        })
         .then(data => {
           this.historyLikes.pages.push(this.postId)
           localHistoryLikes.set(this.historyLikes)
@@ -531,7 +539,10 @@
       // 点赞某条评论
       likeComment(comment) {
         if (this.commentLiked(comment.id)) return false
-        this.$store.dispatch('likeArticleOrPageOrComment', { type: 1, id: comment.id })
+        this.$store.dispatch('likeArticleOrPageOrComment', {
+          type: this.constants.LIKE_TYPE.comment,
+          id: comment.id
+        })
         .then(data => {
           this.historyLikes.comments.push(comment.id)
           localHistoryLikes.set(this.historyLikes)
@@ -588,8 +599,8 @@
         this.$store.dispatch('postComment', {
           pid: this.pid,
           post_id: this.postId,
-          content: this.comemntContentText,
           author: this.user,
+          content: this.comemntContentText,
           agent: navigator.userAgent
         }).then(data => {
           // 发布成功后清空评论框内容并更新本地信息

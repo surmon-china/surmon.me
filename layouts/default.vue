@@ -14,14 +14,17 @@
 
       <!-- common pc full -->
       <template v-if="!mobileLayout">
-        <background />
-        <barrage v-if="barrageMounted" v-cloak />
-        <wall-flower-box v-if="!powerSavingMode" />
+        <no-ssr>
+          <!-- <cursor-box /> -->
+          <background />
+          <barrage v-if="barrageMounted" v-cloak />
+          <wall-flower-box v-if="!powerSavingMode" />
+          <transition name="fade">
+            <webrtc v-if="!powerSavingMode && openWebrtc" v-cloak />
+          </transition>
+        </no-ssr>
         <transition name="fade">
           <wallpaper-wall v-if="openWallpaper" v-cloak />
-        </transition>
-        <transition name="fade">
-          <webrtc v-if="!powerSavingMode && openWebrtc" v-cloak />
         </transition>
       </template>
 
@@ -81,6 +84,7 @@
     Header,
     Footer,
     Aside,
+    // Cursor,
     Share,
     Theme,
     Nav
@@ -121,6 +125,7 @@
       WallpaperWall,
       WallpaperSwitch,
       Background,
+      // // CursorBox: Cursor,
       HeaderView: Header,
       FooterView: Footer,
       AsideView: Aside,

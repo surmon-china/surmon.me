@@ -70,7 +70,9 @@
     name: 'article-list-header',
     methods: {
       getExtendsValue(target, key) {
-        if (!target || !target.extends.length) return null
+        if (!target || !target.extends.length) {
+          return null
+        }
         const targetExtend = target.extends.find(t => Object.is(t.name, key))
         return targetExtend ? targetExtend.value : null
       }

@@ -54,8 +54,7 @@
           allowTouchMove: false,
           slidesPerView: 1,
           setWrapperSize: true,
-          direction: 'vertical',
-          // loop: true
+          direction: 'vertical'
         }
       }
     },
