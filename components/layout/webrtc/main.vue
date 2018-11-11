@@ -1,11 +1,11 @@
 <template>
   <div id="global-webrtc">
-    <div class="webrtc-box"
-         :class="[ aligenLeft ? 'aligenLeft' : '' ]">
-      <div class="stream-box"
-           :key="index"
-           :class="[ stream.local ? 'local' : 'remote']"
-           v-for="(stream, index) in streams">
+    <div class="webrtc-box" :class="aligenLeft ? 'aligenLeft' : ''">
+      <div
+        class="stream-box"
+        :key="index"
+        :class="stream.local ? 'local' : 'remote'"
+        v-for="(stream, index) in streams">
         <div class="empty-msg">
           <!-- 本机用户 -->
           <span class="text" v-if="stream.local">
@@ -16,56 +16,62 @@
           <span class="text" v-else>{{ stream.name }}</span>
         </div>
         <div class="content-box" :class="`filter-${filters[stream.filter]}`">
-          <video autoplay
-                 playsinline
-                 preload="auto"
-                 :id="stream.id" 
-                 :ref="stream.id" 
-                 :src="stream.src"
-                 :width="getVideoElementSize(index).width"
-                 :height="getVideoElementSize(index).height">
+          <video
+            autoplay
+            playsinline
+            preload="auto"
+            :id="stream.id"
+            :ref="stream.id"
+            :src="stream.src"
+            :width="getVideoElementSize(index).width"
+            :height="getVideoElementSize(index).height">
           </video>
           <!-- 当前视频的美颜功能是否开启 -->
-          <face-ctracker class="face-mask" 
-                         v-if="!localStream.disabledCarema && !!stream.beauty"
-                         :ref-id="stream.id" 
-                         :width="getVideoElementSize(index).width"
-                         :height="getVideoElementSize(index).height">
+          <face-ctracker
+            class="face-mask" 
+            v-if="!localStream.disabledCarema && !!stream.beauty"
+            :ref-id="stream.id" 
+            :width="getVideoElementSize(index).width"
+            :height="getVideoElementSize(index).height">
           </face-ctracker>
         </div>
         <div class="name" v-if="!stream.local">
           <span>{{ stream.name }}</span>
           <span class="state">
-            <span v-if="stream.state === 0">正在赶来的路上</span>
-            <span v-else-if="stream.state === 1">连接中</span>
-            <span v-else-if="stream.state === 2">连接成功</span>
-            <span v-else-if="stream.state === 3">失败</span>
-            <span v-else-if="stream.state === 4">已离开</span>
-            <span v-else-if="stream.state === -1">各种失败，来不了了</span>
+            <span v-if="!stream.state">正在赶来的路上</span>
+            <span v-else-if="stream.state === stream.checking">连接中</span>
+            <span v-else-if="stream.state === stream.connected">连接成功</span>
+            <span v-else-if="stream.state === stream.disconnected">失败</span>
+            <span v-else-if="stream.state === stream.closed">已离开</span>
+            <span v-else-if="stream.state === stream.failed">各种失败，来不了了</span>
           </span>
         </div>
-        <meter class="volume" 
-               min="-45" 
-               max="-20" 
-               high="-25" 
-               low="-40" 
-               :value="stream.local ? localStream.volume : stream.volume">
+        <meter
+          class="volume" 
+          min="-45" 
+          max="-20" 
+          high="-25" 
+          low="-40" 
+          :value="stream.local ? localStream.volume : stream.volume">
         </meter>
         <!-- 仅本机用户 -->
         <div class="tools" v-if="stream.local">
-          <button class="video" 
-                  :class="{ active: !localStream.disabledCarema }"
-                  @click="toggleCarema(!localStream.disabledCarema)">
+          <button
+            class="video" 
+            :class="{ active: !localStream.disabledCarema }"
+            @click="toggleCarema(!localStream.disabledCarema)">
             <i class="iconfont" :class="[localStream.disabledCarema ? 'icon-carema-disabled' : 'icon-carema']"></i>
           </button>
-          <button class="audio" 
-                  :class="{ active: !localStream.disabledMic }"
-                  @click="toggleMute(!localStream.disabledMic)">
+          <button
+            class="audio" 
+            :class="{ active: !localStream.disabledMic }"
+            @click="toggleMute(!localStream.disabledMic)">
             <i class="iconfont" :class="[localStream.disabledMic ? 'icon-mic-disabled' : 'icon-mic']"></i>
           </button>
-          <button class="beauty" 
-                  :class="{ active: !localStream.disabledBeauty }"
-                  @click="toggleBeauty()">
+          <button
+            class="beauty" 
+            :class="{ active: !localStream.disabledBeauty }"
+            @click="toggleBeauty()">
             <i class="iconfont icon-meiyan"></i>
             <span>美颜</span>
           </button>
@@ -105,11 +111,12 @@
 </template>
 
 <script>
-  import apiConfig from '~/api.config'
   import { isDevMode } from '~/environment'
+  import apiConfig from '~/api.config'
   import socketio from '~/plugins/socket.io'
   import SimpleWebRTC from '~/plugins/webrtc'
   import faceCtracker from './face-ctracker'
+  import { states } from './util'
   
   export default {
     name: 'webrtc',
@@ -139,36 +146,19 @@
       // 计算 video 元素的尺寸
       getVideoElementSize(index) {
         if (index === 0) {
-          return {
-            width: 540,
-            height: 345
-          }
-        } else if ([1, 2].includes(index)) {
-          return {
-            width: 400,
-            height: 345
-          }
-        } else {
-          return {
-            width: 270,
-            height: 200
-          }
+          return { width: 540, height: 345 }
         }
+        if (index === 1 || index === 2) {
+          return { width: 400, height: 345 }
+        }
+        return { width: 270, height: 200 }
       },
       toggleMute(disable) {
-        if (disable) {
-          this.webrtc.mute()
-        } else {
-          this.webrtc.unmute()
-        }
+        disable ? this.webrtc.mute() : this.webrtc.unmute()
         this.localStream.disabledMic = disable
       },
       toggleCarema(disable) {
-        if (disable) {
-          this.webrtc.pauseVideo()
-        } else {
-          this.webrtc.resumeVideo()
-        }
+        disable ? this.webrtc.pauseVideo() : this.webrtc.resumeVideo()
         this.localStream.disabledCarema = disable
       },
       toggleBeauty() {
@@ -220,13 +210,12 @@
       }
     },
     computed: {
+      states() {
+        return states
+      },
       aligenLeft() {
         const count = this.streams.length
-        if (count > 3 && (count - 3) % 5 > 0) {
-          return true
-        } else {
-          return false
-        }
+        return !!(count > 3 && (count - 3) % 5 > 0)
       }
     },
     beforeDestroy() {
@@ -410,7 +399,7 @@
         const remoteStream = {
           id: id, 
           ref: id,
-          state: 0,
+          state: states.checking,
           volume: 0,
           filter: filter || 0,
           beauty: beauty || false,
@@ -425,28 +414,10 @@
           peer.pc.on('iceConnectionStateChange', event => {
             const stream = self.getStreamByPeerId(peer.id)
             if (stream) {
-              switch (peer.pc.iceConnectionState) {
-                case 'checking':
-                  // 远程媒体状态：Connecting to stream...
-                  stream.state = 1
-                  break
-                case 'connected':
-                case 'completed':
-                  // 远程媒体状态：Connection established.
-                  stream.state = 2
-                  break
-                case 'disconnected':
-                  // 远程媒体状态：Disconnected.
-                  stream.state = 3
-                  break
-                case 'failed':
-                  // 远程媒体状态：Connection failed.
-                  stream.state = -1
-                  break
-                case 'closed':
-                  // 远程媒体状态：Connection closed.
-                  stream.state = 4
-                  break
+              const state = peer.pc.iceConnectionState
+              const stateCode = states[state]
+              if (stateCode !== undefined) {
+                stream.state = stateCode
               }
             }
           })
@@ -473,7 +444,7 @@
         // console.log('远程媒体链接失败')
         const targetStream = self.getStreamByPeerId(peer.id)
         if (targetStream) {
-          targetStream.state = -1
+          targetStream.state = states.failed
         }
       })
 

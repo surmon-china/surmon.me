@@ -43,19 +43,19 @@
           <i class="iconfont icon-comment"></i>
           <span v-text="$i18n.nav.guestbook">Guestbook</span>
         </nuxt-link>
-        <a href="https://s.click.taobao.com/XjxqYKw" 
-           rel="external nofollow noopener"
-           class="item ad taobao"
-           v-if="false"
-           target="_blank">
+        <a
+          :href="ads.taobao" 
+          rel="external nofollow noopener"
+          class="item ad taobao"
+          target="_blank">
           <i class="iconfont icon-taobao"></i>
           <span v-text="$i18n.nav.taobao">Taobao</span>
         </a>
-        <a href="https://s.click.taobao.com/JFqqYKw" 
-           rel="external nofollow noopener"
-           class="item ad aliyun"
-           v-if="false"
-           target="_blank">
+        <a
+          :href="ads.aliyun" 
+          rel="external nofollow noopener"
+          class="item ad aliyun"
+          target="_blank">
           <i class="iconfont icon-aliyun"></i>
           <span v-text="$i18n.nav.aliyun">Aliyun</span>
         </a>
@@ -77,9 +77,11 @@
 </template>
 
 <script>
+  import adConfig from '~/ad.config'
   export default {
     name: 'mobile-aside',
     computed: {
+      ads: () => adConfig.mobile.aside,
       gravatar() {
         const gravatar = this.$store.state.option.adminInfo.data.gravatar
         return gravatar 

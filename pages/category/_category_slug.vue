@@ -15,7 +15,7 @@
       ArticleList
     },
     validate({ params, store }) {
-      return !!params.category_slug && store.state.category.data.data.find(category => {
+      return params.category_slug && store.state.category.data.data.some(category => {
         return Object.is(category.slug, params.category_slug)
       })
     },

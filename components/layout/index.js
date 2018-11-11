@@ -14,6 +14,7 @@ import Webrtc from './webrtc/main.vue'
 import ToolBox from './tool-box.vue'
 import Header from './header.vue'
 import Footer from './footer.vue'
+// import Cursor from './cursor.vue'
 import Share from './share.vue'
 import Aside from './aside.vue'
 import Theme from './theme.vue'
@@ -30,6 +31,7 @@ export {
   Webrtc,
   Header,
   Footer,
+  // Cursor,
   Aside,
   Share,
   Theme,

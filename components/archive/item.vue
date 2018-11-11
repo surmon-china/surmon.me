@@ -3,19 +3,28 @@
     <div class="item-content" :class="{ mobile: mobileLayout }">
       <div class="item-thumb" v-if="!mobileLayout">
         <nuxt-link :to="`/article/${article.id}`">
-          <span class="item-oirigin" :class="{
-            self: !article.origin,
-            other: article.origin === 1,
-            hybrid: article.origin === 2
-          }">
-            <span v-if="!article.origin" v-text="$i18n.text.origin.original">原创</span>
-            <span v-else-if="article.origin === 1" v-text="$i18n.text.origin.reprint">转载</span>
-            <span v-else-if="article.origin === 2" v-text="$i18n.text.origin.hybrid">混撰</span>
+          <span
+            class="item-oirigin"
+            :class="{
+              self: !article.origin,
+              other: article.origin === constants.ORIGIN_STATE.reprint,
+              hybrid: article.origin === constants.ORIGIN_STATE.hybrid
+            }">
+            <span
+              v-if="!article.origin"
+              v-text="$i18n.text.origin.original">原创</span>
+            <span
+              v-else-if="article.origin === constants.ORIGIN_STATE.reprint"
+              v-text="$i18n.text.origin.reprint">转载</span>
+            <span
+              v-else-if="article.origin === constants.ORIGIN_STATE.hybrid"
+              v-text="$i18n.text.origin.hybrid">混撰</span>
           </span>
-          <img class="item-thumb-img" 
-               :src="buildThumb(article.thumb)"
-               :alt="article.title"
-               :title="article.title">
+          <img 
+            class="item-thumb-img" 
+            :src="buildThumb(article.thumb)"
+            :alt="article.title"
+            :title="article.title" />
         </nuxt-link>
       </div>
       <div class="item-body">
@@ -42,19 +51,21 @@
           </span>
           <span class="categories">
             <i class="iconfont icon-list"></i>
-            <nuxt-link :key="index"
-                       :to="`/category/${category.slug}`"
-                       v-if="article.category && article.category.length"
-                       v-for="(category, index) in article.category"
-                       v-text="$i18n.nav[category.slug]">{{ category.name }}</nuxt-link>
+            <nuxt-link
+              :key="index"
+              :to="`/category/${category.slug}`"
+              v-if="article.category && article.category.length"
+              v-for="(category, index) in article.category"
+              v-text="$i18n.nav[category.slug]">{{ category.name }}</nuxt-link>
             <span v-else v-text="$i18n.text.category.empty">未分类</span>
           </span>
           <span class="tags" v-show="false">
             <i class="iconfont icon-tag"></i>
             <span v-if="!article.tag.length" v-text="$i18n.text.tag.empty">无</span>
-            <nuxt-link :key="index" 
-                       :to="`/tag/${tag.slug}`" 
-                       v-for="(tag, index) in article.tag">{{ tag.name }}</nuxt-link>
+            <nuxt-link
+              :key="index" 
+              :to="`/tag/${tag.slug}`" 
+              v-for="(tag, index) in article.tag">{{ tag.name }}</nuxt-link>
           </span>
         </div>
       </div>
@@ -76,7 +87,7 @@
       }
     },
     computed: {
-      ...mapState('option', ['imgExt', 'language', 'mobileLayout'])
+      ...mapState('option', ['imgExt', 'language', 'mobileLayout', 'constants'])
     },
     methods: {
       buildThumb(thumb) {
