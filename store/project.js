@@ -22,7 +22,7 @@ export const mutations = {
     state.repositories.data = action.result.filter(rep => {
       return !rep.description || !rep.description.startsWith('#')
     }).sort((a, b) => {
-      return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     })
   },
   REQUEST_GUTHUB_REPOSITORIES_FAILURE(state) {
