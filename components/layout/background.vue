@@ -151,7 +151,7 @@
     z-index: -1;
     background-color: $body-bg;
 
-    .background-image {
+    > .background-image {
       position: absolute;
       width: 100%;
       height: 100%;
@@ -159,7 +159,7 @@
       background: url(/images/background.png);
     }
 
-    .background-canvas {
+    > .background-canvas {
       position: absolute;
       width: 100%;
       height: 100%;
