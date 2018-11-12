@@ -20,12 +20,12 @@
       </div>
       <h2 class="title">{{ article.title || '...' }}</h2>
       <transition name="module" mode="out-in">
-        <empty-box class="article-empty-box" v-if="!fetching && !article.title">
-          <slot v-text="$i18n.text.article.empty">No Result Article.</slot>
-        </empty-box>
-      </transition>
-      <transition name="module" mode="out-in">
-        <div class="content" v-html="articleContent" v-if="!fetching && article.content"></div>
+        <template v-if="!fetching">
+          <empty-box class="article-empty-box" v-if="!article.content">
+            <slot v-text="$i18n.text.article.empty"></slot>
+          </empty-box>
+          <div class="content" v-else v-html="articleContent"></div>
+        </template>
       </transition>
       <transition name="module" mode="out-in">
         <div class="readmore" v-if="canReadMore">
@@ -41,113 +41,113 @@
         <adsense-article></adsense-article>
       </div>
     </transition>
-    <share-box class="article-share" v-if="!fetching && article.content"></share-box>
-    <transition name="module" mode="out-in">
-      <div class="metas" v-if="!fetching && article.title">
-        <p class="item" v-if="languageIsEn">
-          <span>Article created at</span>
-          <span>&nbsp;</span>
-          <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
-            <span>{{ buildDateTitle(article.create_at) }}</span>
+    <share-box class="article-share"></share-box>
+    <div class="metas">
+      <p class="item" v-if="languageIsEn">
+        <span>Article created at</span>
+        <span>&nbsp;</span>
+        <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
+          <span>{{ buildDateTitle(article.create_at) }}</span>
+        </nuxt-link>
+        <span>&nbsp;in category&nbsp;</span>
+        <nuxt-link
+          :key="index"
+          :to="`/category/${category.slug}`"
+          :title="category.description || category.name"
+          v-for="(category, index) in article.category">
+          <span>{{ category.name }}</span>
+          <span v-if="article.category.length && article.category[index + 1]">、</span>
+        </nuxt-link>
+        <span v-if="!article.category.length">no catgory</span>
+        <span>,&nbsp;&nbsp;</span>
+        <span>{{ article.meta.views || 0 }}</span>
+        <span>&nbsp;Views</span>
+      </p>
+      <p class="item" v-else>
+        <span>本文于</span>
+        <span>&nbsp;</span>
+        <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
+          <span>{{ buildDateTitle(article.create_at) }}</span>
+        </nuxt-link>
+        <span>&nbsp;发布在&nbsp;</span>
+        <span :key="index" v-for="(category, index) in article.category">
+          <nuxt-link :to="`/category/${category.slug}`" :title="category.description || category.name">
+            <span>{{ $i18n.nav[category.slug] }}</span>
           </nuxt-link>
-          <span>&nbsp;in category&nbsp;</span>
-          <nuxt-link
-            :key="index"
-            :to="`/category/${category.slug}`"
-            :title="category.description || category.name"
-            v-for="(category, index) in article.category">
-            <span>{{ category.name }}</span>
-            <span v-if="article.category.length && article.category[index + 1]">、</span>
+          <span v-if="article.category.length && article.category[index + 1]">、</span>
+        </span>
+        <span v-if="!article.category.length">未知</span>
+        <span>&nbsp;分类下，当前已被围观&nbsp;</span>
+        <span>{{ article.meta.views || 0 }}</span>
+        <span>&nbsp;次</span>
+      </p>
+      <p class="item">
+        <span class="title" :class="language">{{ languageIsEn ? 'Related tags:' : '相关标签：' }}</span>
+        <span v-if="!article.tag.length" v-text="$i18n.text.tag.empty">无相关标签</span>
+        <span :key="index" v-for="(tag, index) in article.tag">
+          <nuxt-link :to="`/tag/${tag.slug}`" :title="tag.description || tag.name">
+            <span>{{ tag.name }}</span>
           </nuxt-link>
-          <span v-if="!article.category.length">no catgory</span>
-          <span>,&nbsp;&nbsp;</span>
-          <span>{{ article.meta.views || 0 }}</span>
-          <span>&nbsp;Views</span>
-        </p>
-        <p class="item" v-else>
-          <span>本文于</span>
-          <span>&nbsp;</span>
-          <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
-            <span>{{ buildDateTitle(article.create_at) }}</span>
-          </nuxt-link>
-          <span>&nbsp;发布在&nbsp;</span>
-          <span :key="index" v-for="(category, index) in article.category">
-            <nuxt-link :to="`/category/${category.slug}`" :title="category.description || category.name">
-              <span>{{ $i18n.nav[category.slug] }}</span>
-            </nuxt-link>
-            <span v-if="article.category.length && article.category[index + 1]">、</span>
-          </span>
-          <span v-if="!article.category.length">未知</span>
-          <span>&nbsp;分类下，当前已被围观&nbsp;</span>
-          <span>{{ article.meta.views || 0 }}</span>
-          <span>&nbsp;次</span>
-        </p>
-        <p class="item">
-          <span class="title" :class="language">{{ languageIsEn ? 'Related tags:' : '相关标签：' }}</span>
-          <span v-if="!article.tag.length" v-text="$i18n.text.tag.empty">无相关标签</span>
-          <span :key="index" v-for="(tag, index) in article.tag">
-            <nuxt-link :to="`/tag/${tag.slug}`" :title="tag.description || tag.name">
-              <span>{{ tag.name }}</span>
-            </nuxt-link>
-            <span v-if="article.tag.length && article.tag[index + 1]">、</span>
-          </span>
-        </p>
-        <p class="item">
-          <span class="title" :class="language">{{ languageIsEn ? 'Article Address:' : '永久地址：' }}</span>
-          <span class="site-url" @click="copyArticleUrl">
-            <span>https://surmon.me/article/{{ article.id }}</span>
-          </span>
-        </p>
-        <div class="item">
-          <span class="title" :class="language">{{ languageIsEn ? 'Copyright Clarify:' : '版权声明：' }}</span>
-          <span v-if="!languageIsEn">
-            <span>自由转载-署名-非商业性使用</span>
-            <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-          </span>
-          <a href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
-             target="_blank"
-             rel="external nofollow noopenter">Creative Commons BY-NC 3.0 CN</a>
-        </div>
+          <span v-if="article.tag.length && article.tag[index + 1]">、</span>
+        </span>
+      </p>
+      <p class="item">
+        <span class="title" :class="language">{{ languageIsEn ? 'Article Address:' : '永久地址：' }}</span>
+        <span class="site-url" @click="copyArticleUrl">
+          <span>https://surmon.me/article/{{ article.id }}</span>
+        </span>
+      </p>
+      <div class="item">
+        <span class="title" :class="language">{{ languageIsEn ? 'Copyright Clarify:' : '版权声明：' }}</span>
+        <span v-if="!languageIsEn">
+          <span>自由转载-署名-非商业性使用</span>
+          <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+        </span>
+        <a href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
+            target="_blank"
+            rel="external nofollow noopenter">Creative Commons BY-NC 3.0 CN</a>
       </div>
-    </transition>
-    <template v-if="article.related && article.related.length">
-      <div class="related" v-if="!mobileLayout">
-        <div class="article-list swiper" v-swiper:swiper="swiperOption">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide item" v-for="(article, index) in articleRelateds" :key="index">
-              <a v-if="article.ad" class="item-box" :href="article.link" rel="external nofollow noopener" target="_blank">
-                <img :src="article.img" class="thumb" :alt="article.title">
-                <span class="title">{{ article.title }}</span>
-              </a>
-              <nuxt-link v-else :to="`/article/${article.id}`" :title="article.title" class="item-box">
-                <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title">
-                <span class="title">{{ article.title }}</span>
-              </nuxt-link>
+    </div>
+    <transition name="module" mode="out-in">
+      <template v-if="article.related && article.related.length">
+        <div class="related" v-if="!mobileLayout">
+          <div class="article-list swiper" v-swiper:swiper="swiperOption">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide item" v-for="(article, index) in articleRelateds" :key="index">
+                <a v-if="article.ad" class="item-box" :href="article.link" rel="external nofollow noopener" target="_blank">
+                  <img :src="article.img" class="thumb" :alt="article.title">
+                  <span class="title">{{ article.title }}</span>
+                </a>
+                <nuxt-link v-else :to="`/article/${article.id}`" :title="article.title" class="item-box">
+                  <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title">
+                  <span class="title">{{ article.title }}</span>
+                </nuxt-link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="related" v-else>
-        <ul class="article-list">
-          <li class="item" v-for="(article, index) in articleRelateds" :key="index">
-            <a v-if="article.ad" class="item-link" :href="article.link" rel="external nofollow noopener" target="_blank">
-              <span class="sign">《</span>
-              <span class="title">{{ article.title }}</span>
-              <span class="sign">》</span>
-              <small class="tip">- 狠狠地阅读</small>
-            </a>
-            <nuxt-link v-else class="item-link" :to="`/article/${article.id}`" :title="`「 ${article.title} 」- 继续阅读`">
-              <span class="sign">《</span>
-              <span class="title">{{ article.title }}</span>
-              <span class="sign">》</span>
-              <small class="tip">- 继续阅读</small>
-            </nuxt-link>
-          </li>
-        </ul>
-      </div>
-    </template>
+        <div class="related" v-else>
+          <ul class="article-list">
+            <li class="item" v-for="(article, index) in articleRelateds" :key="index">
+              <a v-if="article.ad" class="item-link" :href="article.link" rel="external nofollow noopener" target="_blank">
+                <span class="sign">《</span>
+                <span class="title">{{ article.title }}</span>
+                <span class="sign">》</span>
+                <small class="tip">- 狠狠地阅读</small>
+              </a>
+              <nuxt-link v-else class="item-link" :to="`/article/${article.id}`" :title="`「 ${article.title} 」- 继续阅读`">
+                <span class="sign">《</span>
+                <span class="title">{{ article.title }}</span>
+                <span class="sign">》</span>
+                <small class="tip">- 继续阅读</small>
+              </nuxt-link>
+            </li>
+          </ul>
+        </div>
+      </template>
+    </transition>
     <div class="comment">
-      <comment-box :post-id="article.id" :likes="article.meta.likes" v-if="!fetching && article.title" />
+      <comment-box :post-id="article.id" :likes="article.meta.likes" />
     </div>
   </div>
 </template>
