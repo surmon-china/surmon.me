@@ -11,8 +11,10 @@
                   <span v-if="langIsEn"><span class="first-letter">I</span>'m Surmon, a (95+) (小) Javascript (鲜) stack (肉) developer.</span>
                   <span v-else>
                     <span class="first-letter">我</span>
-                    <span>，灼热的青莲，</span>
-                    <strong>独一的美</strong></span>
+                    <span>，从污秽和淤泥中复苏</span>
+                    <!-- <span>，灼热的青莲，</span> -->
+                    <!-- <strong>独一的美</strong> -->
+                  </span>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-comment-discussion"></i>
