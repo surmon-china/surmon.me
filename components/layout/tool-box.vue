@@ -2,44 +2,49 @@
   <div id="tools">
     <div class="container">
       <div class="tools-list">
-        <button class="webrtc"
-                :title="$i18n.text.webrtc"
-                @click="toggleWebrtc"
-                :disabled="barrageState || powerSavingMode"
-                :class="{ 
-                  active: webrtcState,
-                  close: barrageState
-                }">
+        <button
+          class="webrtc"
+          :title="$i18n.text.webrtc"
+          @click="toggleWebrtc"
+          :disabled="barrageState || powerSavingMode"
+          :class="{ 
+            active: webrtcState,
+            close: barrageState
+          }">
           <i class="iconfont icon-webrtc"></i>
         </button>
-        <button class="barrage" 
-                :title="$i18n.text.barrage.name"
-                @click="toggleBarrage" 
-                :disabled="webrtcState"
-                :class="{ 
-                  active: barrageState,
-                  close: webrtcState
-                }">
+        <button
+          class="barrage" 
+          :title="$i18n.text.barrage.name"
+          @click="toggleBarrage" 
+          :disabled="webrtcState"
+          :class="{ 
+            active: barrageState,
+            close: webrtcState
+          }">
           <i class="iconfont icon-barrage"></i>
         </button>
-        <a class="feedback" 
-           :title="$i18n.text.feedback"
-           href="mailto:surmon@foxmail.com"
-           target="_blank">
+        <a
+          class="feedback"
+          target="_blank"
+          href="mailto:surmon@foxmail.com"
+          :title="$i18n.text.feedback">
           <i class="iconfont icon-mail"></i>
         </a>
-        <button class="to-top" 
-                :title="$i18n.text.totop"
-                @click="totop"
-                @mouseover="setButtonState('top', true, true)"
-                @mouseleave="setButtonState('top', false)">
+        <button
+          class="to-top"
+          :title="$i18n.text.totop"
+          @click="totop"
+          @mouseover="setButtonState('top', true, true)"
+          @mouseleave="setButtonState('top', false)">
           <i class="iconfont icon-totop"></i>
         </button>
-        <button class="to-bottom" 
-                :title="$i18n.text.tobottom"
-                @click="toBottom" 
-                @mouseover="setButtonState('bottom', true, true)"
-                @mouseleave="setButtonState('bottom', false)">
+        <button
+          class="to-bottom"
+          :title="$i18n.text.tobottom"
+          @click="toBottom"
+          @mouseover="setButtonState('bottom', true, true)"
+          @mouseleave="setButtonState('bottom', false)">
           <i class="iconfont icon-tobottom"></i>
         </button>
       </div>
@@ -209,12 +214,12 @@
 
         @keyframes webrtc {
           0%   {
-            color: white;
+            color: $white;
             background: $primary;
           }
           100% {
             color: $primary;
-            background: white;
+            background: $white;
           }
         }
 
@@ -231,7 +236,7 @@
         }
 
         > .barrage {
-          color: white;
+          color: $white;
           animation: default-btn-bg 10s infinite;
 
           &.active {
