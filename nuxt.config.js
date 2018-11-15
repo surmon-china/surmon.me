@@ -169,8 +169,9 @@ module.exports = {
       { rel: 'dns-prefetch', href: '//adservice.google.com' },
       { rel: 'dns-prefetch', href: '//fonts.googleapis.com' },
       { rel: 'dns-prefetch', href: '//googleads.g.doubleclick.net' },
-      { rel: 'dns-prefetch', href: '//tpc.googlesyndication.com' },
       { rel: 'dns-prefetch', href: '//www.google-analytics.com' },
+      { rel: 'dns-prefetch', href: '//tpc.googlesyndication.com' },
+      { rel: 'dns-prefetch', href: '//pagead2.googlesyndication.com' },
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'author', type: 'text/plain', href: '/humans.txt' }
     ],
