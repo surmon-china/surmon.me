@@ -11,7 +11,7 @@ import { isBrowser, isProdMode } from '~/environment'
 if (isBrowser) {
   
   // 新版本解决方案
-  window.onNuxtReady((app) => {
+  window.onNuxtReady(app => {
     Vue.use(VueAnalytics, {
       id: 'UA-84887611-3',
       router: window.$nuxt.$router,
@@ -22,6 +22,9 @@ if (isBrowser) {
       },
       debug: {
         sendHitTask: isProdMode
+      },
+      onReady() {
+        Vue.$ga.require('displayfeatures')
       }
     })
   })
