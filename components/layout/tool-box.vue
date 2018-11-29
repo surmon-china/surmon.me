@@ -26,7 +26,6 @@
         </button>
         <a
           class="feedback"
-          target="_blank"
           href="mailto:surmon@foxmail.com"
           :title="$i18n.text.feedback">
           <i class="iconfont icon-mail"></i>
