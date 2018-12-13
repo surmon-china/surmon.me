@@ -83,7 +83,7 @@
           height: 100%;
           line-height: 1.6rem;
           padding-top: .2rem;
-          font-family: webfont;
+          font-family: webfont-bolder;
           text-align: center;
           color: $primary;
         }

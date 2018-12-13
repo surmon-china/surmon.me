@@ -76,6 +76,7 @@
       > .error-wrapper-message {
 
         > .error-message {
+          font-family: webfont-bolder, DINRegular;
           margin-top: 0;
         }
       }

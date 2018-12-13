@@ -140,7 +140,7 @@
         padding: 0 2rem;
         line-height: 3em;
         color: $white;
-        font-family: webfont;
+        font-family: webfont-bolder;
         background-color: $module-bg;
         text-transform: uppercase;
         display: flex;
