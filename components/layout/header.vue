@@ -195,7 +195,7 @@
 
           .navbar-slogan {
             color: $primary;
-            font-family: DINRegular;
+            font-family: webfont-normal, DINRegular;
           }
 
           .navbar-link {

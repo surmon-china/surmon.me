@@ -231,6 +231,7 @@
             color: $white;
             margin-top: 8rem;
             font-size: $font-size-h1 * 2;
+            font-family: webfont-bold, DINRegular;
           }
 
           > .submit {
