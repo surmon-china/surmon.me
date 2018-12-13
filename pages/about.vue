@@ -11,7 +11,7 @@
                   <span v-if="langIsEn"><span class="first-letter">I</span>'m Surmon, a (95+) (小) Javascript (鲜) stack (肉) developer.</span>
                   <span v-else>
                     <span class="first-letter">浪</span>
-                    <span>碟游蜂，迈步九云中</span>
+                    <span>蝶游蜂，迈步九云中</span>
                   </span>
                 </p>
                 <p class="item">
@@ -561,7 +561,7 @@
                 min-height: 2.5em;
 
                 &.webfont {
-                  font-family: webfont;
+                  font-family: webfont-bolder;
                 }
 
                 &:first-child {
@@ -585,22 +585,18 @@
                   text-align: center;
                   margin-right: 2rem;
                   display: inline-block;
-                  color: rgba(191, 191, 191, 0.5);
+                  color: rgba($black, 0.2);
 
                   &.icon-code {
-                    color: black;
+                    color: $black;
                   }
 
                   &.icon-like {
-                    color: pink;
-                  }
-
-                  &.icon-coffee {
-                    color: brown;
+                    color: $red;
                   }
 
                   &.icon-friend {
-                    color: green;
+                    color: $accent;
                   }
                 }
 

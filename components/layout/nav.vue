@@ -106,7 +106,8 @@
         font-weight: 700;
         border-radius: 1px;
         color: $secondary;
-        font-family: DINRegular;
+        font-family: webfont-normal, DINRegular;
+        letter-spacing: 0.5px;
         margin-bottom: .5em;
         position: relative;
 
