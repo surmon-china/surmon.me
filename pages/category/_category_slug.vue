@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <article-list :article="article" @loadmore="loadmoreArticle"></article-list>
+    <article-list :article="article" @loadmore="loadmoreArticles" />
   </div>
 </template>
 
@@ -15,18 +15,18 @@
       ArticleList
     },
     validate({ params, store }) {
-      return params.category_slug && store.state.category.data.data.some(category => {
+      return params.category_slug && store.state.category.data.some(category => {
         return Object.is(category.slug, params.category_slug)
       })
     },
     fetch({ store, params }) {
-      return store.dispatch('loadArticles', params)
+      return store.dispatch('article/fetchList', params)
     },
     head() {
       const slug = this.defaultParams.category_slug || ''
       const title = slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
-      const isEn = this.$store.getters['option/langIsEn']
-      const zhTitle = isEn ? '' : `${this.$i18n.nav[slug]} | `
+      const isEnLang = this.$store.getters['global/isEnLang']
+      const zhTitle = isEnLang ? '' : `${this.$i18n.nav[slug]} | `
       return { 
         title: `${zhTitle}${title} | Category` 
       }
@@ -41,7 +41,7 @@
         return this.$store.state.article.list
       },
       currentCategory() {
-        return this.$store.state.category.data.data.find(category => {
+        return this.$store.state.category.data.find(category => {
           return Object.is(category.slug, this.$route.params.category_slug)
         })
       },
@@ -57,8 +57,8 @@
       }
     },
     methods: {
-      loadmoreArticle() {
-        this.$store.dispatch('loadArticles', this.nextPageParams)
+      loadmoreArticles() {
+        this.$store.dispatch('article/fetchList', this.nextPageParams)
       }
     }
   }

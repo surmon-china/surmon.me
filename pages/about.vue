@@ -1,5 +1,5 @@
 <template>
-  <div class="page" :class="{ mobile: mobileLayout }">
+  <div class="page" :class="{ mobile: isMobile }">
     <div class="detail">
       <div class="content">
         <div class="about">
@@ -8,7 +8,9 @@
               <div class="desc">
                 <p class="item webfont">
                   <i class="iconfont icon-user"></i>
-                  <span v-if="langIsEn"><span class="first-letter">I</span>'m Surmon, a (95+) (小) Javascript (鲜) stack (肉) developer.</span>
+                  <span v-if="isEnLang">
+                    <span class="first-letter">I</span>'m Surmon, a (95+) (小) Javascript (鲜) stack (肉) developer.
+                  </span>
                   <span v-else>
                     <span class="first-letter">浪</span>
                     <span>蝶游蜂，迈步九云中</span>
@@ -16,11 +18,13 @@
                 </p>
                 <p class="item">
                   <i class="iconfont icon-comment-discussion"></i>
-                  <span v-if="langIsEn">Taolu committee: </span>
+                  <span v-if="isEnLang">Taolu committee:</span>
                   <span v-else>国家套路委员会：</span>
-                  <a target="_blank" 
-                     rel="external nofollow noopenter"
-                     href="https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4">288325802</a>
+                  <a
+                    target="_blank"
+                    rel="external nofollow noopenter"
+                    href="https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4"
+                  >288325802</a>
                   <span>.</span>
                 </p>
                 <p class="item">
@@ -29,7 +33,7 @@
                 </p>
                 <p class="item webfont">
                   <i class="iconfont icon-like"></i>
-                  <span v-if="langIsEn">code. beauty. whisky. music. vagrant.</span>
+                  <span v-if="isEnLang">code. beauty. whisky. music. vagrant.</span>
                   <span v-else>
                     <span>恋何物？</span>
                     <span>酒池肉林、日夜笙歌、依翠偎红、五音六律、目营心匠、桀骜不羁</span>
@@ -106,13 +110,13 @@
                         <i class="iconfont icon-bilibili"></i>
                       </a>
                     </span>
-                    <span v-if="!mobileLayout">
+                    <span v-if="!isMobile">
                       <a
                         href="https://surmon.taobao.com"
                         target="_blank"
                         v-if="false"
                         class="taobao"
-                         rel="external nofollow noopenter"
+                        rel="external nofollow noopenter"
                       >
                         <i class="iconfont icon-taobao"></i>
                       </a>
@@ -179,65 +183,80 @@
                 </p>
                 <p class="item webfont">
                   <i class="iconfont icon-code"></i>
-                  <span class="skills" v-if="langIsEn">Talk is cheap. fuck me.</span>
+                  <span class="skills" v-if="isEnLang">Talk is cheap. fuck me.</span>
                   <span v-else>
                     <span v-if="getRandomSkill()">吾生有涯愿无尽，心期填海力移山</span>
                     <span v-else>酒醒只在花前坐，酒醉还来花下眠</span>
                   </span>
                 </p>
-                <p class="item" v-if="!mobileLayout">
+                <p class="item" v-if="!isMobile">
                   <i class="iconfont icon-friend"></i>
                   <span class="friends">
                     <a
-                      href="http://skyrover.me/about" 
+                      href="http://skyrover.me/about"
                       target="_blank"
                       rel="external nofollow noopenter"
-                    >
-                       「 skyrover 」
-                    </a>
+                    >「 skyrover 」</a>
                     <a
-                      href="https://blog.jimmylv.info" 
+                      href="https://blog.jimmylv.info"
                       target="_blank"
                       rel="external nofollow noopenter"
-                    >
-                       「 JimmyLv 」
-                    </a>
+                    >「 JimmyLv 」</a>
                     <a
-                      href="https://www.funens.com" 
+                      href="https://www.funens.com"
                       target="_blank"
                       rel="external nofollow noopenter"
-                    >
-                       「 Channg 」
-                    </a>
+                    >「 Channg 」</a>
                   </span>
                 </p>
               </div>
-              <div class="gravatar" @click="followMe">
+              <!-- todo: 这里换做鼠标移入事件 -->
+              <div class="gravatar" @click="handleFollowMe">
                 <div class="background be-2">
-                  <img src="/images/about-background-be-2.jpg" alt="background" class="image">
+                  <img
+                    src="/images/about-background-be-2.jpg"
+                    alt="background"
+                    class="image"
+                  >
                 </div>
                 <div class="background be-1">
-                  <img src="/images/about-background-be-1.jpg" alt="background" class="image">
+                  <img
+                    src="/images/about-background-be-1.jpg"
+                    alt="background"
+                    class="image"
+                  >
                 </div>
                 <div class="background star-1">
-                  <img src="/images/about-background-star-1.png" alt="background-star" class="image">
+                  <img
+                    src="/images/about-background-star-1.png"
+                    alt="background-star"
+                    class="image"
+                  >
                 </div>
                 <div class="background star-2">
-                  <img src="/images/about-background-star-2.png" alt="background-star" class="image">
+                  <img
+                    src="/images/about-background-star-2.png"
+                    alt="background-star"
+                    class="image"
+                  >
                 </div>
                 <img :src="gravatar" class="avatar">
                 <div class="desc">
-                  <h2 class="name"><strong>Surmon</strong></h2>
+                  <h2 class="name">
+                    <strong>Surmon</strong>
+                  </h2>
                   <p class="skill">JS Stack Developer.</p>
                 </div>
-                <a class="followme" 
-                   href="" 
-                   @click.stop.prevent=""
-                   v-if="!mobileLayout">{{ langIsEn ? 'Friend me' : '众里寻他' }}</a>
-                <div class="wechat" v-if="!mobileLayout"></div>
+                <a
+                  class="followme"
+                  href
+                  @click.stop.prevent
+                  v-if="!isMobile"
+                >{{ isEnLang ? 'Friend me' : '众里寻他' }}</a>
+                <div class="wechat" v-if="!isMobile"></div>
               </div>
             </div>
-            <div class="about-map" v-if="!mobileLayout">
+            <div class="about-map" v-if="!isMobile">
               <iframe src="/partials/map.html" style="width: 100%; height: 236px;"></iframe>
             </div>
             <div class="about-project">
@@ -258,11 +277,11 @@
     name: 'about',
     head() {
       return {
-        title: `${this.langIsEn ? '' : this.$i18n.nav.about + ' | '}About`
+        title: `${this.isEnLang ? '' : this.$i18n.nav.about + ' | '}About`
       }
     },
     methods: {
-      followMe() {
+      handleFollowMe() {
         this.$ga.event('加微信码', '点击', 'tool')
       },
       getRandomSkill() {
@@ -270,17 +289,17 @@
       }
     },
     computed: {
-      langIsEn() {
-        return this.$store.getters['option/langIsEn']
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
+      },
+      isMobile() {
+        return this.$store.state.global.isMobile
       },
       gravatar() {
-        const gravatar = this.$store.state.option.adminInfo.data.gravatar
+        const gravatar = this.$store.state.global.adminInfo.data.gravatar
         return gravatar
           ? `${gravatar}?imageView2/1/w/360/h/360/interlace/1/q/75|imageslim` 
           : `${this.cdnUrl}/images/gravatar.jpg`
-      },
-      mobileLayout() {
-        return this.$store.state.option.mobileLayout
       }
     }
   }

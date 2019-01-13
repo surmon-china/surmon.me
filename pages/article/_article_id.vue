@@ -1,22 +1,24 @@
 <template>
-  <div class="article" :class="{ mobile: mobileLayout }">
+  <div class="article" :class="{ mobile: isMobile }">
     <div class="detail">
-      <div class="oirigin"
-            v-if="!fetching && article.title"
-            :class="{
-              self: !article.origin,
-              other: article.origin === constants.ORIGIN_STATE.reprint,
-              hybrid: article.origin === constants.ORIGIN_STATE.hybrid
-            }">
+      <div
+        class="oirigin"
+        v-if="!fetching && article.title"
+        :class="{
+          self: !article.origin,
+          other: article.origin === constants.OriginState.Reprint,
+          hybrid: article.origin === constants.OriginState.Hybrid
+        }"
+      >
+        <span v-if="!article.origin" v-text="$i18n.text.origin.original">原创</span>
         <span
-          v-if="!article.origin"
-          v-text="$i18n.text.origin.original">原创</span>
+          v-else-if="article.origin === constants.OriginState.Reprint"
+          v-text="$i18n.text.origin.Reprint"
+        >转载</span>
         <span
-          v-else-if="article.origin === constants.ORIGIN_STATE.reprint"
-          v-text="$i18n.text.origin.reprint">转载</span>
-        <span
-          v-else-if="article.origin === constants.ORIGIN_STATE.hybrid"
-          v-text="$i18n.text.origin.hybrid">混撰</span>
+          v-else-if="article.origin === constants.OriginState.Hybrid"
+          v-text="$i18n.text.origin.Hybrid"
+        >混撰</span>
       </div>
       <h2 class="title">{{ article.title || '...' }}</h2>
       <transition name="module" mode="out-in">
@@ -43,10 +45,13 @@
     </transition>
     <share-box class="article-share"></share-box>
     <div class="metas">
-      <p class="item" v-if="languageIsEn">
+      <p class="item" v-if="isEnLang">
         <span>Article created at</span>
         <span>&nbsp;</span>
-        <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
+        <nuxt-link
+          :title="buildDateTitle(article.create_at)"
+          :to="buildDateLink(article.create_at)"
+        >
           <span>{{ buildDateTitle(article.create_at) }}</span>
         </nuxt-link>
         <span>&nbsp;in category&nbsp;</span>
@@ -54,7 +59,8 @@
           :key="index"
           :to="`/category/${category.slug}`"
           :title="category.description || category.name"
-          v-for="(category, index) in article.category">
+          v-for="(category, index) in article.category"
+        >
           <span>{{ category.name }}</span>
           <span v-if="article.category.length && article.category[index + 1]">、</span>
         </nuxt-link>
@@ -66,12 +72,18 @@
       <p class="item" v-else>
         <span>本文于</span>
         <span>&nbsp;</span>
-        <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
+        <nuxt-link
+          :title="buildDateTitle(article.create_at)"
+          :to="buildDateLink(article.create_at)"
+        >
           <span>{{ buildDateTitle(article.create_at) }}</span>
         </nuxt-link>
         <span>&nbsp;发布在&nbsp;</span>
         <span :key="index" v-for="(category, index) in article.category">
-          <nuxt-link :to="`/category/${category.slug}`" :title="category.description || category.name">
+          <nuxt-link
+            :to="`/category/${category.slug}`"
+            :title="category.description || category.name"
+          >
             <span>{{ $i18n.nav[category.slug] }}</span>
           </nuxt-link>
           <span v-if="article.category.length && article.category[index + 1]">、</span>
@@ -82,7 +94,10 @@
         <span>&nbsp;次</span>
       </p>
       <p class="item">
-        <span class="title" :class="language">{{ languageIsEn ? 'Related tags:' : '相关标签：' }}</span>
+        <span
+          class="title"
+          :class="language"
+        >{{ isEnLang ? 'Related tags:' : '相关标签：' }}</span>
         <span v-if="!article.tag.length" v-text="$i18n.text.tag.empty">无相关标签</span>
         <span :key="index" v-for="(tag, index) in article.tag">
           <nuxt-link :to="`/tag/${tag.slug}`" :title="tag.description || tag.name">
@@ -92,34 +107,55 @@
         </span>
       </p>
       <p class="item">
-        <span class="title" :class="language">{{ languageIsEn ? 'Article Address:' : '永久地址：' }}</span>
+        <span class="title" :class="language">{{ isEnLang ? 'Article Address:' : '永久地址：' }}</span>
         <span class="site-url" @click="copyArticleUrl">
           <span>https://surmon.me/article/{{ article.id }}</span>
         </span>
       </p>
       <div class="item">
-        <span class="title" :class="language">{{ languageIsEn ? 'Copyright Clarify:' : '版权声明：' }}</span>
-        <span v-if="!languageIsEn">
+        <span class="title" :class="language">{{ isEnLang ? 'Copyright Clarify:' : '版权声明：' }}</span>
+        <span v-if="!isEnLang">
           <span>自由转载-署名-非商业性使用</span>
           <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
         </span>
-        <a href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
-            target="_blank"
-            rel="external nofollow noopenter">Creative Commons BY-NC 3.0 CN</a>
+        <a
+          target="_blank"
+          rel="external nofollow noopenter"
+          href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
+        >Creative Commons BY-NC 3.0 CN</a>
       </div>
     </div>
     <transition name="module" mode="out-in">
       <template v-if="article.related && article.related.length">
-        <div class="related" v-if="!mobileLayout">
+        <div class="related" v-if="!isMobile">
           <div class="article-list swiper" v-swiper:swiper="swiperOption">
             <div class="swiper-wrapper">
-              <div class="swiper-slide item" v-for="(article, index) in articleRelateds" :key="index">
-                <a v-if="article.ad" class="item-box" :href="article.link" rel="external nofollow noopener" target="_blank">
+              <div
+                class="swiper-slide item"
+                v-for="(article, index) in articleRelateds"
+                :key="index"
+              >
+                <a
+                  v-if="article.ad"
+                  class="item-box"
+                  :href="article.link"
+                  rel="external nofollow noopener"
+                  target="_blank"
+                >
                   <img :src="article.img" class="thumb" :alt="article.title">
                   <span class="title">{{ article.title }}</span>
                 </a>
-                <nuxt-link v-else :to="`/article/${article.id}`" :title="article.title" class="item-box">
-                  <img :src="buildThumb(article.thumb)" class="thumb" :alt="article.title">
+                <nuxt-link
+                  v-else
+                  :to="`/article/${article.id}`"
+                  :title="article.title"
+                  class="item-box"
+                >
+                  <img
+                    :src="buildThumb(article.thumb)"
+                    class="thumb"
+                    :alt="article.title"
+                  >
                   <span class="title">{{ article.title }}</span>
                 </nuxt-link>
               </div>
@@ -129,13 +165,24 @@
         <div class="related" v-else>
           <ul class="article-list">
             <li class="item" v-for="(article, index) in articleRelateds" :key="index">
-              <a v-if="article.ad" class="item-link" :href="article.link" rel="external nofollow noopener" target="_blank">
+              <a
+                v-if="article.ad"
+                class="item-link"
+                :href="article.link"
+                rel="external nofollow noopener"
+                target="_blank"
+              >
                 <span class="sign">《</span>
                 <span class="title">{{ article.title }}</span>
                 <span class="sign">》</span>
                 <small class="tip">- 狠狠地阅读</small>
               </a>
-              <nuxt-link v-else class="item-link" :to="`/article/${article.id}`" :title="`「 ${article.title} 」- 继续阅读`">
+              <nuxt-link
+                v-else
+                class="item-link"
+                :to="`/article/${article.id}`"
+                :title="`「 ${article.title} 」- 继续阅读`"
+              >
                 <span class="sign">《</span>
                 <span class="title">{{ article.title }}</span>
                 <span class="sign">》</span>
@@ -154,9 +201,9 @@
 
 <script>
   import { mapState } from 'vuex'
-  import adConfig from '~/ad.config'
   import marked from '~/plugins/marked'
-  import ShareBox from '~/components/layout/share'
+  import adConfig from '~/config/ad.config'
+  import ShareBox from '~/components/widget/share'
   export default {
     name: 'article-detail',
     components: {
@@ -166,7 +213,7 @@
       return params.article_id && !isNaN(Number(params.article_id))
     },
     fetch({ store, params, error }) {
-      return store.dispatch('loadArticleDetail', params).catch(err => {
+      return store.dispatch('article/fetchDetail', params).catch(err => {
         error({ statusCode: 404, message: '众里寻他 我已不再' })
       })
     },
@@ -175,7 +222,8 @@
       return {
         title: article.title || 'No Result Data.',
         meta: [
-          { hid: 'keywords', 
+          {
+            hid: 'keywords', 
             name: 'keywords', 
             content: (article.keywords ? article.keywords.join(',') : article.title) || ''
           },
@@ -210,16 +258,16 @@
     },
     computed: {
       ...mapState({
-        constants: state => state.option.constants,
-        language: state => state.option.language,
+        constants: state => state.global.constants,
+        language: state => state.global.language,
         tags: state => state.tag.data,
-        imgExt: state => state.option.imgExt,
+        imageExt: state => state.global.imageExt,
         article: state => state.article.detail.data,
         fetching: state => state.article.detail.fetching,
-        mobileLayout: state => state.option.mobileLayout,
+        isMobile: state => state.global.isMobile,
       }),
-      languageIsEn() {
-        return this.$store.getters['option/langIsEn']
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
       },
       articleContent() {
         const content = this.article.content
@@ -245,7 +293,7 @@
       },
       articleRelateds() {
         const relateds = [...this.article.related].slice(0, 10)
-        const adArticle = adConfig.common.articleRelated(this.tags.data, this.mobileLayout)
+        const adArticle = adConfig.common.articleRelated(this.tags.data, this.isMobile)
         adArticle && relateds.splice(2, 0, adArticle)
         return relateds
       }
@@ -267,21 +315,21 @@
       },
       copyArticleUrl() {
         if (this.article.title) {
-          // console.log('要复制了', `https://surmon.me/article/${this.article.id}`, this.$root.$copyToClipboard)
           this.$root.$copyToClipboard(`https://surmon.me/article/${this.article.id}`)
         }
       },
       buildThumb(thumb) {
-        if (!thumb) return `${this.cdnUrl}/images/thumb-releted.jpg`
-        return `${thumb}?imageView2/1/w/300/h/230/format/${this.imgExt}/interlace/1/q/80|imageslim`
+        return thumb
+          ? `${thumb}?imageView2/1/w/300/h/230/format/${this.imageExt}/interlace/1/q/80|imageslim`
+          : `${this.cdnUrl}/images/thumb-releted.jpg`
       },
       buildDateTitle(date) {
         if (!date) {
           return date
         }
         date = new Date(date)
-        const am = this.languageIsEn ? 'AM' : '上午'
-        const pm = this.languageIsEn ? 'PM' : '下午'
+        const am = this.isEnLang ? 'AM' : '上午'
+        const pm = this.isEnLang ? 'PM' : '下午'
         const year = date.getFullYear()
         const month = date.getMonth() + 1
         const day = date.getDate()
@@ -411,7 +459,7 @@
           background-color: rgba($red, .8);
         }
 
-        &.hybrid {
+        &.Hybrid {
           background-color: rgba($primary, .8);
         }
       }

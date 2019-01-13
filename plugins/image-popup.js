@@ -41,8 +41,8 @@ if (isBrowser) {
     }, 100)
     // 监听滚动和点击事件
     window.onscroll = closeImgPopup
-    mask.onclick = e => {
-      if (e.target.tagName !== 'IMG') {
+    mask.onclick = event => {
+      if (event.target.tagName !== 'IMG') {
         closeImgPopup()
       }
     }

@@ -10,26 +10,38 @@ export const state = () => {
   return {
     articles: {
       fetching: false,
-      data: { data: [] }
+      data: []
     }
   }
 }
 
 export const mutations = {
-  REQUEST_ARTICLES(state) {
-    state.articles.fetching = true
+  updateArticleListFetching(state, action) {
+    state.articles.fetching = action
   },
-  GET_ARTICLES_FAILURE(state) {
-    state.articles.fetching = false
-  },
-  GET_ARTICLES_SUCCESS(state, action) {
-    state.articles.fetching = false
+  updateArticleListData(state, action) {
     state.articles.data = action.result
   },
-  TOGGLE_ARTICLE_OPEN(state, index) {
-    const article = state.articles.data.data[index]
+  updateArticleOpenState(state, index, open) {
+    const article = state.articles.data[index]
     if (article) {
-      Vue.set(article, 'open', !article.open)
+      Vue.set(article, 'open', open != null ? open : !article.open)
     }
   }
+}
+
+export const actions = {
+
+  // 获取地图文章列表
+  fetchArticles({ commit }, params) {
+    commit('updateArticleListFetching', true)
+    return this.$axios.$get(`/article`, { params })
+      .then(response => {
+        commit(`updateArticleListData`, response)
+        commit('updateArticleListFetching', false)
+      })
+      .catch(error => {
+        commit('updateArticleListFetching', false)
+      })
+  },
 }

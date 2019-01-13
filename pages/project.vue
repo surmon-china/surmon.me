@@ -1,18 +1,29 @@
 <template>
-  <div class="projects" :class="{ mobile: mobileLayout }">
+  <div class="projects" :class="{ mobile: isMobile }">
     <ul class="project-list">
-      <li class="item" 
-          :key="index"
-          :class="{ last: buildLastClass(index) }"
-          v-for="(project, index) in projects">
-        <a target="_blank"
-           class="item-content" 
-           rel="external nofollow noopenter"
-           :href="project.html_url"
-           :title="project.description">
-          <i class="iconfont" :class="buildIcon(project).icon" :style="{ color: buildIcon(project).color }"></i>
+      <li
+        class="item"
+        :key="index"
+        :class="{ last: buildLastClass(index) }"
+        v-for="(project, index) in projects"
+      >
+        <a
+          target="_blank"
+          class="item-content"
+          rel="external nofollow noopenter"
+          :href="project.html_url"
+          :title="project.description"
+        >
+          <i
+            class="iconfont"
+            :class="buildIcon(project).icon"
+            :style="{ color: buildIcon(project).color }"
+          ></i>
           <h3 class="title">{{ project.name }}</h3>
-          <p class="description" style="-webkit-box-orient: vertical;">{{ project.description }}</p>
+          <p
+            class="description"
+            style="-webkit-box-orient: vertical;"
+          >{{ project.description }}</p>
           <hr>
           <p class="meta">
             <span class="item star">
@@ -39,35 +50,29 @@
     name: 'project',
     head() {
       return {
-        title: `${this.langIsEn ? '' : this.$i18n.nav.project + ' | '}Project`
+        title: `${this.isEnLang ? '' : this.$i18n.nav.project + ' | '}Project`
       }
     },
     fetch({ store }) {
-      return store.dispatch('loadGithubRepositories')
+      return store.dispatch('project/fetchRepositories')
     },
     computed: {
-      langIsEn() {
-        return this.$store.getters['option/langIsEn']
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
+      },
+      isMobile() {
+        return this.$store.state.global.isMobile
       },
       projects() {
         return this.$store.state.project.repositories.data
-      },
-      mobileLayout() {
-        return this.$store.state.option.mobileLayout
       }
     },
     methods: {
       buildLastClass(index) {
         const projects = this.projects
-        
-        // 取余
-        if (projects.length % 4) {
-          return index >= (projects.length - projects.length % 4)
-        
-        // 取整
-        } else {
-          return index >= projects.length - 4
-        }
+        return projects.length % 4
+          ? index >= (projects.length - projects.length % 4) // 取余
+          : index >= projects.length - 4 // 取整
       },
       buildIcon(project) {
 
@@ -147,8 +152,8 @@
         })
 
         const targetIcon = targetRule
-                            ? (targetRule.icon || targetRule.name || targetRule.desc)
-                            : 'code'
+          ? targetRule.icon || targetRule.name || targetRule.desc
+          : 'code'
 
         const defaultColor = 'inherit'
         const targetColor = targetRule ? targetRule.color || defaultColor : defaultColor

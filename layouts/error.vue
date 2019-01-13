@@ -17,10 +17,10 @@
     layout: 'empty',
     props: ['error'],
     mounted() {
-      this.$store.commit('option/SET_ERROR_COLUMU', true)
+      this.$store.commit('global/updateErrorColumn', true)
     },
     beforeDestroy() {
-      this.$store.commit('option/SET_ERROR_COLUMU', false)
+      this.$store.commit('global/updateErrorColumn', false)
     }
   }
 </script>

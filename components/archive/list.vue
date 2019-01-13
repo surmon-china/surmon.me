@@ -4,26 +4,28 @@
     <!-- 非首页列表头 -->
     <transition name="module">
       <div class="article-list-header" v-if="!$route.name.includes('index')">
-        <list-header></list-header>
+        <list-header />
       </div>
     </transition>
 
     <!-- 广告啦 -->
     <transition name="module">
-      <component :is="mobileLayout ? 'adsense-archive-mobile' : 'adsense-archive'" v-if="renderAd"></component>
+      <component :is="isMobile ? 'adsense-archive-mobile' : 'adsense-archive'" v-if="renderAd" />
     </transition>
 
     <!-- 列表 -->
     <div class="article-list">
       <transition name="module" mode="out-in">
         <transition-group name="fade" tag="div" v-if="article.data.data && article.data.data.length">
-          <list-item :key="index"
-                     :article="item"
-                     @click.native="toDetail(item)"
-                     v-for="(item, index) in article.data.data"></list-item>
+          <list-item
+            :key="index"
+            :article="item"
+            @click.native="toDetail(item)"
+            v-for="(item, index) in article.data.data"
+          />
         </transition-group>
         <empty-box class="article-empty-box" v-else>
-          <slot>{{ $i18n.text.article.empty || 'No Result Article.' }}</slot>
+          <slot>{{ $i18n.text.article.empty }}</slot>
         </empty-box>
       </transition>
     </div>
@@ -65,11 +67,11 @@
       }
     },
     computed: {
-      mobileLayout() {
-        return this.$store.state.option.mobileLayout
+      isMobile() {
+        return this.$store.state.global.isMobile
       },
       btnColorBlockLeft() {
-        return this.mobileLayout ? 60 : 75
+        return this.isMobile ? 60 : 75
       },
       canLoadMore() {
         const { current_page, total_page } = this.article.data.pagination
@@ -82,7 +84,7 @@
     },
     methods: {
       toDetail(article) {
-        if (this.mobileLayout) {
+        if (this.isMobile) {
           this.$router.push(`/article/${article.id}`)
         }
       },

@@ -4,20 +4,26 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import Vue from 'vue'
+import { isBrowser } from '~/environment'
+import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
+
+const getDefaultListData = () => {
+  return {
+    data: [],
+    pagination: {}
+  }
+}
+
 export const state = () => {
   return {
-    hot: {
-      fetching: false,
-      data: { data: [] }
-    },
     list: {
       fetching: false,
-      data: {
-        data: [],
-        pagination: {
-          current_page: 0
-        }
-      }
+      data: getDefaultListData()
+    },
+    hotList: {
+      fetching: false,
+      data: []
     },
     detail: {
       fetching: false,
@@ -28,64 +34,105 @@ export const state = () => {
 
 export const mutations = {
 
-  // List
-  CLEAR_LIST(state) {
-    state.list.data = {
-      data: [],
-      pagination: {
-        current_page: 0
-      }
-    }
+  // 文章列表
+  updateListFetchig(state, action) {
+    state.list.fetching = action
   },
-  REQUEST_LIST(state) {
-    state.list.fetching = true
+  updateListData(state, action) {
+    state.list.data = action
   },
-  GET_LIST_FAILURE(state) {
-    state.list.fetching = false
-  },
-  GET_LIST_SUCCESS(state, action) {
-    state.list.fetching = false
-    state.list.data = action.result
-  },
-  ADD_LIST_SUCCESS(state, action) {
-    state.list.fetching = false
-    state.list.data.data.push(...action.result.data)
-    state.list.data.pagination = action.result.pagination
+  updateExistingListData(state, action) {
+    state.list.data.data.push(...action.data)
+    state.list.data.pagination = action.pagination
   },
 
-  // Hot
-  REQUEST_HOT_LIST(state) {
-    state.hot.fetching = true
+  // 热门文章
+  updateHotListFetchig(state, action) {
+    state.hotList.fetching = action
   },
-  GET_HOT_LIST_FAILURE(state) {
-    state.hot.fetching = false
-  },
-  GET_HOT_LIST_SUCCESS(state, action) {
-    state.hot.fetching = false
-    state.hot.data = action.result
+  updateHotListData(state, action) {
+    state.hotList.data = action.result.data
   },
 
-  // Detail
-  CLEAR_DETAIL(state) {
-    state.detail.data = {}
+  // 文章详情
+  updateDetailFetchig(state, action) {
+    state.detail.fetching = action
   },
-  REQUEST_DETAIL(state) {
-    state.detail.fetching = true
-  },
-  GET_DETAIL_FAILURE(state) {
-    state.detail.fetching = false
-    state.detail.data = {}
-  },
-  GET_DETAIL_SUCCESS(state, action) {
-    state.detail.fetching = false
+  updateDetailData(state, action) {
     state.detail.data = action.result
   },
 
   // 喜欢某篇文章
-  LIKE_ARTICLE(state, action) {
+  updateLikesIncrement(state) {
     const article = state.detail.data
-    if (article.id === action.id) {
-      state.detail.data.meta.likes++
-    }
+    article && article.meta.likes++
+  }
+}
+
+export const actions = {
+
+  // 获取文章列表
+  fetchList({ commit }, params = {}) {
+
+    const isRestart = !params.page || params.page === 1
+    const loadMore = params.page && params.page > 1
+
+    // 清空已有数据
+    isRestart &&
+    commit('updateListData', getDefaultListData())
+    commit('updateListFetchig', true)
+
+    return this.$axios.$get(`/article`, { params })
+      .then(response => {
+        commit('updateListFetchig', false)
+        loadMore
+          ? commit('updateListData', response.result)
+          : commit('updateExistingListData', response.result)
+        if (loadMore && isBrowser) {
+          Vue.nextTick(() => {
+            scrollTo(
+              window.scrollY + (window.innerHeight * 0.8),
+              300,
+              { easing: Easing['ease-in'] }
+            )
+          })
+        }
+      })
+      .catch(error => commit('updateListFetchig', false))
+  },
+
+  // 获取最热文章列表
+  fetchHotList({ commit }) {
+    commit('updateHotListFetchig', true)
+    return this.$axios.$get(`/article`, { params: { cache: 1, sort: 2 }})
+      .then(response => {
+        commit('updateHotListData', response)
+        commit('updateHotListFetchig', false)
+      })
+      .catch(error => commit('updateHotListFetchig', false))
+  },
+
+  // 获取文章详情
+  fetchDetail({ commit }, params = {}) {
+    commit('updateDetailFetchig', true)
+    return this.$axios.$get(`/${params.article_id}`)
+      .then(response => {
+        commit('updateDetailData', response)
+        commit('updateDetailFetchig', false)
+        return Promise.resolve(response)
+      })
+      .catch(error => {
+        commit('updateDetailFetchig', false)
+        return Promise.reject(error)
+      })
+  },
+
+  // 喜欢文章
+  fetchLikeArticle({ commit }, article_id) {
+    return this.$axios.$patch(`/like/article`, { article_id })
+      .then(response => {
+        commit('updateLikesIncrement')
+        return Promise.resolve(response)
+      })
   }
 }
