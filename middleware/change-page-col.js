@@ -11,12 +11,12 @@ export default ({ route, store }, next) => {
   const errorColumn = ['music', 'app', 'service'].includes(route.name)
   
   // set columns
-  if (store.state.option.fullColumn !== fullColumn) {
-    store.commit('option/SET_FULL_COLUMU', fullColumn)
+  if (store.state.global.fullColumn !== fullColumn) {
+    store.commit('global/updateFullColumn', fullColumn)
   }
   
-  if (store.state.option.errorColumn !== errorColumn) {
-    store.commit('option/SET_ERROR_COLUMU', errorColumn)
+  if (store.state.global.errorColumn !== errorColumn) {
+    store.commit('global/updateErrorColumn', errorColumn)
   }
 
   next()

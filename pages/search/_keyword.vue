@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <article-list :article="article" @loadmore="loadmoreArticle"></article-list>
+    <article-list :article="article" @loadmore="loadmoreArticle" />
   </div>
 </template>
 
@@ -13,7 +13,7 @@
       return !!params.keyword
     },
     fetch({ store, params }) {
-      return store.dispatch('loadArticles', params)
+      return store.dispatch('article/fetchList', params)
     },
     head () {
       return {
@@ -40,7 +40,7 @@
     },
     methods: {
       loadmoreArticle() {
-        this.$store.dispatch('loadArticles', this.nextPageParams)
+        this.$store.dispatch('article/fetchList', this.nextPageParams)
       }
     }
   }

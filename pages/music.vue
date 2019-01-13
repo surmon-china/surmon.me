@@ -7,20 +7,22 @@
       <div class="album-box">
         <div class="circle-progress">
           <svg viewBox="0 0 100 100">
-            <path class="circle-progress-circle-track" 
-                  stroke="rgba(197, 197, 197, 0.4)" 
-                  fill="none"
-                  :d="trackPath" 
-                  :stroke-width="relativeStrokeWidth" >
-            </path>
-            <path class="circle-progress-circle-path" 
-                  stroke="rgba(190, 190, 190, 0.7)" 
-                  stroke-linecap="bevel" 
-                  fill="none" 
-                  :d="trackPath" 
-                  :stroke-width="relativeStrokeWidth" 
-                  :style="circlePathStyle">
-            </path>
+            <path
+              class="circle-progress-circle-track"
+              stroke="rgba(197, 197, 197, 0.4)"
+              fill="none"
+              :d="trackPath"
+              :stroke-width="relativeStrokeWidth"
+            ></path>
+            <path
+              class="circle-progress-circle-path"
+              stroke="rgba(190, 190, 190, 0.7)"
+              stroke-linecap="bevel"
+              fill="none"
+              :d="trackPath"
+              :stroke-width="relativeStrokeWidth"
+              :style="circlePathStyle"
+            ></path>
           </svg>
         </div>
         <div class="song-bg-box" :class="{ 'playing': playerState.playing }">
@@ -28,17 +30,27 @@
         </div>
         <div class="toggle-box">
           <transition name="module" mode="out-in">
-            <button class="toggle-btn" @click="togglePlay" v-if="playerState.playing" :disabled="!playerState.ready">
+            <button
+              class="toggle-btn"
+              @click="togglePlay"
+              v-if="playerState.playing"
+              :disabled="!playerState.ready"
+            >
               <i class="iconfont icon-music-pause"></i>
             </button>
-            <button class="toggle-btn" @click="togglePlay" v-else :disabled="!playerState.ready">
+            <button
+              class="toggle-btn"
+              @click="togglePlay"
+              v-else
+              :disabled="!playerState.ready"
+            >
               <i class="iconfont icon-music-play"></i>
             </button>
           </transition>
         </div>
         <div class="toggle-muted">
           <button class="muted-btn" @click="toggleMuted" :disabled="!playerState.ready">
-            <i class="iconfont" :class="[playerState.muted ? 'icon-music-muted' : 'icon-music-volume']"></i>
+            <i class="iconfont" :class="playerState.muted ? 'icon-music-muted' : 'icon-music-volume'"></i>
           </button>
         </div>
       </div>
@@ -50,9 +62,9 @@
       <h3 class="name">
         <span v-if="currentSong">
           <span>{{ currentSong.name }}</span>
-          <span> By </span>
+          <span>By</span>
           <span :key="index" v-for="(artist, index) in currentSong.artists">{{ artist.name }}</span>
-          <span> / </span>
+          <span>/</span>
           <span>{{ currentSong.album.name || 'unknow' }}</span>
         </span>
         <span v-else>Kind words are the music of the world.</span>
@@ -76,14 +88,13 @@
 </template>
 
 <script>
-  import EventBus from '~/utils/event-bus'
+  import music from '~/expansions/music'
   import { isBrowser } from '~/environment'
-
   export default {
     name: 'music',
     head() {
       return {
-        title: `${this.langIsEn ? '' : this.$i18n.nav.music + ' | '}Music`
+        title: `${this.isEnLang ? '' : this.$i18n.nav.music + ' | '}Music`
       }
     },
     data() {
@@ -92,7 +103,7 @@
       }
     },
     created() {
-      if (this.$store.state.option.mobileLayout) {
+      if (this.$store.state.global.isMobile) {
         this.$router.back()
       }
     },
@@ -106,20 +117,20 @@
       window.removeEventListener('resize', this.updateScreenHeight)
     },
     computed: {
-      langIsEn() {
-        return this.$store.getters['option/langIsEn']
-      },
-      player() {
-        return EventBus.player.player
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
       },
       playerState() {
-        return EventBus.player.playerState
+        return music.state
       },
       currentSong() {
-        return EventBus.currentSong
+        return music.currentSong
       },
       currentSongLrc() {
-        return EventBus.player.lrc
+        return music.lrc
+      },
+      currentSongPicUrl() {
+        return music.currentSongPicUrl
       },
       songLrcContent() {
         const lrc = this.currentSongLrc.data
@@ -153,9 +164,6 @@
         })
         return targetSentence ? targetSentence.sentence : '...'
       },
-      currentSongPicUrl() {
-        return EventBus.currentSongPicUrl
-      },
       relativeStrokeWidth() {
         return (15 / 450 * 100).toFixed(1)
       },
@@ -187,32 +195,28 @@
           this.height = minHeight
         }
       },
-      checkPLayerState(action) {
-        this.playerState.ready && action()
-      },
       togglePlay() {
-        this.checkPLayerState(this.player.togglePlay)
+        music.humanizeOperation(music.player.togglePlay)
       },
       toggleMuted() {
-        this.checkPLayerState(this.player.toggleMuted)
+        music.humanizeOperation(music.player.toggleMuted)
       },
       prevSong() {
-        this.checkPLayerState(this.player.prevSong)
+        music.humanizeOperation(music.player.prevSong)
       },
       nextSong() {
-        this.checkPLayerState(this.player.nextSong)
+        music.humanizeOperation(music.player.nextSong)
       },
-      getSongLrc(song_id) {
-        EventBus.getLrcFailure()
-        this.$store.dispatch('loadMuiscSongLrc', song_id)
+      fetchSongLrc() {
+        const song = this.currentSong
+        if (song && song.id) {
+          music.fetchSongLrc.bind(music)(song.id)
+        }
       }
     },
     watch: {
       currentSong() {
-        const song = this.currentSong
-        if (song && song.id) {
-          this.getSongLrc(song.id)
-        }
+        this.fetchSongLrc()
       }
     }
   }

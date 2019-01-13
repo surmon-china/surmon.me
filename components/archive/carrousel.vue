@@ -1,12 +1,16 @@
 <template>
-  <div class="carrousel" :class="{ mobile: mobileLayout }">
+  <div class="carrousel" :class="{ mobile: isMobile }">
     <transition name="module" mode="out-in">
       <empty-box class="article-empty-box" v-if="!article.data.data.length">
-        <slot>{{ $i18n.text.article.empty || 'No Result Article.' }}</slot>
+        <slot>{{ $i18n.text.article.empty }}</slot>
       </empty-box>
       <div class="swiper" v-swiper:swiper="swiperOption" v-else>
         <div class="swiper-wrapper">
-          <div class="swiper-slide item" v-for="(article, index) in article.data.data.slice(0, 9)" :key="index">
+          <div
+            :key="index"
+            class="swiper-slide item"
+            v-for="(article, index) in article.data.data.slice(0, 9)"
+          >
             <div class="content">
               <img :src="buildThumb(article.thumb)" :alt="article.title">
               <nuxt-link :to="`/article/${article.id}`" class="title">
@@ -52,18 +56,18 @@
       }
     },
     computed: {
-      ...mapState('option', ['imgExt', 'mobileLayout'])
+      ...mapState('global', ['imageExt', 'isMobile'])
     },
     methods: {
       buildThumb(thumb) {
         if (thumb) {
-          if (this.mobileLayout) {
-            return `${thumb}?imageView2/1/w/768/h/271/format/${this.imgExt}/interlace/1/q/80|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/560/fill/I0ZGRkZGRg==/dissolve/30/gravity/SouthWest/dx/30/dy/15|imageslim`
+          if (this.isMobile) {
+            return `${thumb}?imageView2/1/w/768/h/271/format/${this.imageExt}/interlace/1/q/80|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/560/fill/I0ZGRkZGRg==/dissolve/30/gravity/SouthWest/dx/30/dy/15|imageslim`
           } else {
-            return `${thumb}?imageView2/1/w/1190/h/420/format/${this.imgExt}/interlace/1/q/80|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/680/fill/I0ZGRkZGRg==/dissolve/30/gravity/SouthWest/dx/30/dy/15|imageslim`
+            return `${thumb}?imageView2/1/w/1190/h/420/format/${this.imageExt}/interlace/1/q/80|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/680/fill/I0ZGRkZGRg==/dissolve/30/gravity/SouthWest/dx/30/dy/15|imageslim`
           }
         } else {
-          return `${this.cdnUrl}/images/${this.mobileLayout ? 'mobile-' : ''}thumb-carrousel.jpg`
+          return `${this.cdnUrl}/images/${this.isMobile ? 'mobile-' : ''}thumb-carrousel.jpg`
         }
       }
     }

@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <article-list :article="article" @loadmore="loadmoreArticle"></article-list>
+    <article-list :article="article" @loadmore="loadmoreArticle" />
   </div>
 </template>
 
@@ -14,7 +14,7 @@
       return new Date(params.date).toString() !== 'Invalid Date'
     },
     fetch({ store, params }) {
-      return store.dispatch('loadArticles', params)
+      return store.dispatch('article/fetchList', params)
     },
     head() {
       return { title: `${this.defaultParams.date} | Date` }
@@ -40,7 +40,7 @@
     },
     methods: {
       loadmoreArticle() {
-        this.$store.dispatch('loadArticles', this.nextPageParams)
+        this.$store.dispatch('article/fetchList', this.nextPageParams)
       }
     }
   }

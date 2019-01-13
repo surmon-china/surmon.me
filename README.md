@@ -19,11 +19,11 @@ If you want to run the application, you need install the [nodepress](https://git
 
 ## PC
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshot/pc.jpg)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshots/pc.jpg)
 
 ## Mobile
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshot/mobile-full.jpg)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshots/mobile-full.jpg)
 
 ## Build Setup
 

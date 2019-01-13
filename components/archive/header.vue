@@ -1,18 +1,21 @@
 <template>
-  <div class="header-box" :class="{ mobile: mobileLayout }">
-    <div class="background" :style="{
-      'background-color': currentBackgroundColor,
-      'background-image': `url(${currentBackgroundImage})`
-    }"></div>
+  <div class="header-box" :class="{ mobile: isMobile }">
+    <div
+      class="background"
+      :style="{
+        'background-color': currentBackgroundColor,
+        'background-image': `url(${currentBackgroundImage})`
+      }"
+    ></div>
     <div class="logo-box">
       <p class="logo">
         <transition name="module" mode="out-in">
           <!-- data -->
           <i class="iconfont icon-clock" v-if="currentDate"></i>
           <!-- tag -->
-          <i class="iconfont" v-else-if="currentTag" :class="[currentTagIconClass]"></i>
+          <i class="iconfont" v-else-if="currentTag" :class="currentTagIconClass"></i>
           <!-- category -->
-          <i class="iconfont"  v-else-if="currentCategory" :class="[currentCategoryIconClass]"></i>
+          <i class="iconfont" v-else-if="currentCategory" :class="currentCategoryIconClass"></i>
           <!-- search -->
           <i class="iconfont icon-search" v-else-if="currentKeyword"></i>
         </transition>
@@ -20,7 +23,6 @@
     </div>
     <div class="title-box">
       <transition name="module" mode="out-in">
-
         <!-- category -->
         <h4 class="title" v-if="currentCategory">
           <span>{{ currentCategory.description || 'Nothing.' }}</span>
@@ -35,7 +37,7 @@
 
         <!-- data -->
         <h4 class="title" v-else-if="currentDate">
-          <span v-if="languageIsEn">
+          <span v-if="isEnLang">
             <span>{{ currentDate }}&nbsp;</span>
             <span>articles</span>
           </span>
@@ -48,9 +50,9 @@
 
         <!-- search -->
         <h4 class="title" v-else-if="currentKeyword">
-          <span v-if="languageIsEn">
+          <span v-if="isEnLang">
             <span>"{{ currentKeyword }}"</span>
-            <span> related articles</span>
+            <span>related articles</span>
           </span>
           <span v-else>
             <span>和</span>
@@ -78,8 +80,8 @@
       }
     },
     computed: {
-      languageIsEn() {
-        return this.$store.getters['option/langIsEn']
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
       },
       currentTag() {
         return this.$store.state.tag.data.data.find((tag, index, arr) => {
@@ -113,8 +115,8 @@
       currentKeyword() {
         return this.$route.params.keyword
       },
-      mobileLayout() {
-        return this.$store.state.option.mobileLayout
+      isMobile() {
+        return this.$store.state.global.isMobile
       }
     }
   }

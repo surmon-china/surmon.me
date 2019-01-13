@@ -1,5 +1,5 @@
 <template>
-  <div class="page" :class="{ mobile: mobileLayout }">
+  <div class="page" :class="{ mobile: isMobile }">
     <div class="sitemap">
       <div class="module articles">
         <h3 class="title" v-text="$i18n.text.article.name">articles</h3>
@@ -7,20 +7,23 @@
         <ul class="article-list" v-else>
           <li class="item" :key="index" v-for="(article, index) in articles">
             <p class="item-content">
-              <nuxt-link class="link"
-                         :to="`/article/${article.id}`"
-                         :title="article.title">
-                <span class="sign">「 </span>
+              <nuxt-link
+                class="link"
+                :to="`/article/${article.id}`"
+                :title="article.title"
+              >
+                <span class="sign">「</span>
                 <span class="title">{{ article.title }}</span>
-                <span class="sign"> 」</span>
+                <span class="sign">」</span>
               </nuxt-link>
               <span class="sign">&nbsp;&nbsp;-&nbsp;&nbsp;</span>
               <small>
-                <a class="toggle-link"
-                   href=""
-                   @click.prevent="$store.commit('sitemap/TOGGLE_ARTICLE_OPEN', index)"
-                   v-text="$i18n.text.action[article.open ? 'close' : 'open']">
-                </a>
+                <a
+                  class="toggle-link"
+                  href
+                  @click.prevent="$store.commit('sitemap/TOGGLE_ARTICLE_OPEN', index)"
+                  v-text="$i18n.text.action[article.open ? 'close' : 'open']"
+                ></a>
               </small>
             </p>
             <transition name="module">
@@ -38,10 +41,12 @@
         <ul class="categories-list" v-else>
           <li class="item" :key="index" v-for="(category, index) in categories">
             <p class="item-content">
-              <nuxt-link class="name"
-                         :to="`/category/${category.slug}`"
-                         :title="category.name"
-                         v-text="$i18n.nav[category.slug]">{{ category.name }}</nuxt-link>
+              <nuxt-link
+                class="name"
+                :to="`/category/${category.slug}`"
+                :title="category.name"
+                v-text="$i18n.nav[category.slug]"
+              >{{ category.name }}</nuxt-link>
               <span>（{{ category.count || 0 }}）</span>
               <span>&nbsp;-&nbsp;</span>
               <span>{{ category.description }}</span>
@@ -91,21 +96,21 @@
     name: 'sitemap',
     head() {
       return {
-        title: `${this.langIsEn ? '' : this.$i18n.nav.map + ' | '}Sitemap`
+        title: `${this.isEnLang ? '' : this.$i18n.nav.map + ' | '}Sitemap`
       }
     },
     fetch({ store }) {
-      return store.dispatch('loadSitemapArticles', { per_page: 500 })
+      return store.dispatch('sitemap/fetchArticles', { per_page: 666 })
     },
     computed: {
-      langIsEn() {
-        return this.$store.getters['option/langIsEn']
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
       },
       ...mapState({
-        tags: state => state.tag.data.data,
-        categories: state => state.category.data.data,
-        articles: state => state.sitemap.articles.data.data,
-        mobileLayout: state => state.option.mobileLayout,
+        tags: state => state.tag.data,
+        categories: state => state.category.data,
+        articles: state => state.sitemap.articles.data,
+        isMobile: state => state.global.isMobile,
       })
     }
   }

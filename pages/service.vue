@@ -1,11 +1,18 @@
 <template>
-  <div class="page" :class="{ mobile: mobileLayout }">
+  <div class="page" :class="{ mobile: isMobile }">
     <div class="service">
       <div class="banner">
         <div class="banner-content container">
-          <h2 class="title" v-text="$i18n.text.service.slogan">Talk is cheap. Show me the code</h2>
+          <h2
+            class="title"
+            v-text="$i18n.text.service.slogan"
+          >Talk is cheap. Show me the code</h2>
           <div class="submit">
-            <button class="submit-btn"  v-text="$i18n.text.service.emailMe" @click="submitProject">EMail me</button>
+            <button
+              class="submit-btn"
+              v-text="$i18n.text.service.emailMe"
+              @click="submitProject"
+            >EMail me</button>
           </div>
         </div>
       </div>
@@ -39,7 +46,7 @@
               <p class="desc">ReactNative 应用开发</p>
               <p class="desc">Electron 应用开发</p>
             </li>
-             <li class="item">
+            <li class="item">
               <p class="icon">
                 <i class="iconfont icon-wechat"></i>
               </p>
@@ -93,7 +100,8 @@
       </div>
       <div class="rule">
         <div class="rule-content container">
-          <p class="text">设计、开发、运维，一切可支撑；需求不清、预算不足、结算不利，全部都拒绝；如果你需要一位出色省心的的全栈工程师，请 EMail 我；非常优秀，没有之一</p>
+          <!-- 设计、开发、运维，一切可支撑；需求不清、预算不足、结算不利，全部都拒绝 -->
+          <p class="text">如果你需要一位出色、省心、优秀、帅气、完美的的全栈工程师，请 EMail 我；非常优秀，没有之一</p>
         </div>
       </div>
     </div>
@@ -105,7 +113,7 @@
     name: 'service',
     head() {
       return {
-        title: `${this.langIsEn ? '' : this.$i18n.nav.service + ' | '}Service`
+        title: `${this.isEnLang ? '' : this.$i18n.nav.service + ' | '}Service`
       }
     },
     methods: {
@@ -114,18 +122,18 @@
         const subject = `嗨！Surmon，久仰大名！`
         const body = `我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
         let mailAddress = 'mailto:surmon@foxmail.com'
-        if (!this.mobileLayout) {
+        if (!this.isMobile) {
           mailAddress += `?subject=${subject}&body=${body}`
         }
         window.location.href = mailAddress
       }
     },
     computed: {
-      langIsEn() {
-        return this.$store.getters['option/langIsEn']
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
       },
-      mobileLayout() {
-        return this.$store.state.option.mobileLayout
+      isMobile() {
+        return this.$store.state.global.isMobile
       }
     }
   }

@@ -1,18 +1,20 @@
 <template>
   <div class="announcement">
-    <color-block-box :left="-59" :gray="true"/>
+    <color-block-box :left="-59" :gray="true" />
     <div class="title">
       <i class="iconfont icon-radio"></i>
     </div>
     <transition name="module" mode="out-in">
-      <empty-box class="announcement-empty-box" v-if="!announcement.data.data.length">
-        <slot>{{ $i18n.text.announcement.empty || 'No Result Announcement.' }}</slot>
+      <empty-box class="announcement-empty-box" v-if="!announcement.data.length">
+        <slot>{{ $i18n.text.announcement.empty }}</slot>
       </empty-box>
       <div class="swiper" v-swiper:swiper="swiperOption" v-else>
         <div class="swiper-wrapper">
-          <div class="swiper-slide item"
-               :key="index"
-               v-for="(announcement, index) in announcement.data.data.slice(0, 9)">
+          <div
+            :key="index"
+            class="swiper-slide item"
+            v-for="(announcement, index) in announcement.data"
+          >
             <div class="content" v-html="markedContent(announcement.content)"></div>
           </div>
         </div>
@@ -62,9 +64,6 @@
       markedContent(content) {
         return marked(content, null, true)
       }
-    },
-    computed: {
-      ...mapState('option', ['mobileLayout'])
     }
   }
 </script>

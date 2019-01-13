@@ -4,59 +4,95 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+const getDefaultListData = () => {
+  return {
+    data: [],
+    pagination: {}
+  }
+}
+
 export const state = () => {
   return {
     fetching: false,
     posting: false,
-    data: { 
-      data: [],
-      pagination: {}
-    }
+    data: getDefaultListData()
   }
 }
 
 export const mutations = {
-  // 获取评论
-  REQUEST_LIST(state) {
-    state.fetching = true
+
+  // 请求列表
+  updateListFetchig(state, action) {
+    state.fetching = action
   },
-  // 清空评论
-  CLEAR_LIST(state) {
-    state.data = { 
-      data: [],
-      pagination: {}
-    }
-  },
-  GET_LIST_SUCCESS(state, action) {
-    state.fetching = false
-    state.data = action.result
-  },
-  GET_LIST_FAILURE(state) {
-    state.fetching = false
-    state.data = { 
-      data: [],
-      pagination: {}
-    }
+  updateListData(state, action) {
+    state.data = action
   },
 
   // 发布评论
-  POST_ITEM(state) {
-    state.posting = true
+  updatePostFetchig(state, action) {
+    state.posting = action
   },
-  POST_ITEM_SUCCESS(state, action) {
-    state.posting = false
+  updateListNewItemData(state, action) {
     state.data.pagination.total += 1
     state.data.data.push(action.result)
   },
-  POST_ITEM_FAILURE(state) {
-    state.posting = false
-  },
 
   // 喜欢某条评论
-  LIKE_ITEM(state, action) {
-    const comment = state.data.data.find(comment => comment.id === action.id)
-    if (comment) {
-      comment.likes++
-    }
+  updateLikesIncrement(state, action) {
+    state.data.data.find(comment => {
+      const isMatched = comment.id === action.id
+      isMatched && comment.likes++
+      return isMatched
+    })
+  }
+}
+
+export const actions = {
+
+  fetchList({ commit }, params = {}) {
+    
+    // 修正参数
+    params = Object.assign({ page: 1, per_page: 88, sort: -1 }, params)
+
+    const isRestart = params.page === 1
+    const isDescSort = params.sort === -1
+
+    // 清空数据
+    isRestart &&
+    commit('updateListData', getDefaultListData())
+    commit('updateListFetchig', true)
+    
+    return this.$axios.$get(`/comment`, { params })
+      .then(response => {
+        isDescSort && response.result.data.reverse()
+        commit('updateListData', response.result)
+        commit('updateListFetchig', false)
+      })
+      .catch(error => commit('updateListFetchig', false))
+  },
+
+  // 发布评论
+  fetchPostComment({ commit }, comment) {
+    commit('updatePostFetchig', true)
+    return this.$axios.$post(`/comment`, comment)
+      .then(response => {
+        commit('updateListNewItemData', response)
+        commit('updatePostFetchig', false)
+        return Promise.resolve(response)
+      })
+      .catch(error => {
+        commit('updatePostFetchig', false)
+        return Promise.reject(error)
+      })
+  },
+
+  // 喜欢评论
+  fetchLikeComment({ commit }, comment) {
+    return this.$axios.$patch(`/like/comment`, { comment_id: comment.id })
+      .then(response => {
+        commit('updateLikesIncrement', comment)
+        return Promise.resolve(response)
+      })
   }
 }

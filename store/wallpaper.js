@@ -18,26 +18,55 @@ export const state = () => {
 }
 
 export const mutations = {
-  REQUEST_WALLPAPERS(state) {
-    state.papers.fetching = true
+  updatePapersFetching(state, action) {
+    state.papers.fetching = action
   },
-  REQUEST_WALLPAPERS_SUCCESS(state, action) {
-    state.papers.fetching = false
+  updatePapersData(state, action) {
     state.papers.data = action.result
   },
-  REQUEST_WALLPAPERS_FAILURE(state) {
-    state.papers.fetching = false
-    state.papers.data = null
+  updateStoryFetching(state, action) {
+    state.story.fetching = action
   },
-  REQUEST_STORY(state) {
-    state.story.fetching = true
-  },
-  REQUEST_STORY_SUCCESS(state, action) {
-    state.story.fetching = false
+  updateStoryData(state, action) {
     state.story.data = action.result
-  },
-  REQUEST_STORY_FAILURE(state) {
-    state.story.fetching = false
-    state.story.data = null
   }
+}
+
+export const actions = {
+  
+  // 获取今日壁纸
+  fetchPapers({ commit, state }) {
+
+    // 如果数据已存在，则直接返回 Promise 成功，并返回数据
+    if (state.papers.data) {
+      return Promise.resolve(state.papers.data)
+    }
+
+    // 不存在则请求新数据
+    commit('updatePapersFetching', true)
+    return this.$axios.$get(`/wallpaper/list`)
+      .then(response => {
+        commit('updatePapersData', response)
+        commit('updatePapersFetching', false)
+      })
+      .catch(error => commit('updatePapersFetching', false))
+  },
+
+  // 获取今日壁纸故事
+  fetchStory({ commit, state }) {
+
+    // 如果数据已存在，则直接返回 Promise 成功，并返回数据
+    if (state.story.data) {
+      return Promise.resolve(state.story.data)
+    }
+
+    // 不存在则请求新数据
+    commit('updateStoryFetching', true)
+    return this.$axios.$get(`/wallpaper/story`)
+      .then(response => {
+        commit('updateStoryData', response)
+        commit('updateStoryFetching', false)
+      })
+      .catch(error => commit('updateStoryFetching', false))
+  },
 }

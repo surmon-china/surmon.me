@@ -1,5 +1,5 @@
 <template>
-  <div class="page" :class="{ mobile: mobileLayout }">
+  <div class="page" :class="{ mobile: isMobile }">
     <div class="detail">
       <div class="content">
         <div class="guestbook-banner">
@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="comment">
-      <comment-box :post-id="0" :likes="$store.state.option.globalOption.data.meta.likes" />
+      <comment-box :post-id="0" :likes="$store.state.global.appOption.data.meta.likes" />
     </div>
   </div>
 </template>
@@ -19,15 +19,15 @@
     name: 'guestbook',
     head() {
       return {
-        title: `${this.langIsEn ? '' : this.$i18n.nav.guestbook + ' | '}Guestbook`
+        title: `${this.isEnLang ? '' : this.$i18n.nav.guestbook + ' | '}Guestbook`
       }
     },
     computed: {
-      langIsEn() {
-        return this.$store.getters['option/langIsEn']
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
       },
-      mobileLayout() {
-        return this.$store.state.option.mobileLayout
+      isMobile() {
+        return this.$store.state.global.isMobile
       }
     }
   }

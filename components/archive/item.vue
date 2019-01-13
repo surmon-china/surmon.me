@@ -1,37 +1,50 @@
 <template>
   <div class="article-list-item">
-    <div class="item-content" :class="{ mobile: mobileLayout }">
-      <div class="item-thumb" v-if="!mobileLayout">
+    <div class="item-content" :class="{ mobile: isMobile }">
+      <div class="item-thumb" v-if="!isMobile">
         <nuxt-link :to="`/article/${article.id}`">
           <span
             class="item-oirigin"
             :class="{
               self: !article.origin,
-              other: article.origin === constants.ORIGIN_STATE.reprint,
-              hybrid: article.origin === constants.ORIGIN_STATE.hybrid
-            }">
+              other: article.origin === constants.OriginState.Reprint,
+              hybrid: article.origin === constants.OriginState.Hybrid
+            }"
+          >
             <span
               v-if="!article.origin"
-              v-text="$i18n.text.origin.original">原创</span>
+              v-text="$i18n.text.origin.original"
+            >原创</span>
             <span
-              v-else-if="article.origin === constants.ORIGIN_STATE.reprint"
-              v-text="$i18n.text.origin.reprint">转载</span>
+              v-else-if="article.origin === constants.OriginState.Reprint"
+              v-text="$i18n.text.origin.reprint"
+            >转载</span>
             <span
-              v-else-if="article.origin === constants.ORIGIN_STATE.hybrid"
-              v-text="$i18n.text.origin.hybrid">混撰</span>
+              v-else-if="article.origin === constants.OriginState.Hybrid"
+              v-text="$i18n.text.origin.hybrid"
+            >混撰</span>
           </span>
-          <img 
-            class="item-thumb-img" 
+          <img
+            class="item-thumb-img"
             :src="buildThumb(article.thumb)"
             :alt="article.title"
-            :title="article.title" />
+            :title="article.title"
+          >
         </nuxt-link>
       </div>
       <div class="item-body">
         <h4 class="item-title">
-          <nuxt-link :to="`/article/${article.id}`" :title="article.title" v-text="article.title"></nuxt-link>
+          <nuxt-link
+            :to="`/article/${article.id}`"
+            :title="article.title"
+            v-text="article.title"
+          ></nuxt-link>
         </h4>
-        <p class="item-description" style="-webkit-box-orient: vertical;" v-html="article.description"></p>
+        <p
+          class="item-description"
+          style="-webkit-box-orient: vertical;"
+          v-html="article.description"
+        ></p>
         <div class="item-meta">
           <span class="date">
             <i class="iconfont icon-clock"></i>
@@ -54,18 +67,25 @@
             <nuxt-link
               :key="index"
               :to="`/category/${category.slug}`"
-              v-if="article.category && article.category.length"
               v-for="(category, index) in article.category"
-              v-text="$i18n.nav[category.slug]">{{ category.name }}</nuxt-link>
-            <span v-else v-text="$i18n.text.category.empty">未分类</span>
+              v-text="$i18n.nav[category.slug]"
+            >{{ category.name }}</nuxt-link>
+            <span
+              v-if="!article.category.ledngth"
+              v-text="$i18n.text.category.empty"
+            >未分类</span>
           </span>
           <span class="tags" v-show="false">
             <i class="iconfont icon-tag"></i>
-            <span v-if="!article.tag.length" v-text="$i18n.text.tag.empty">无</span>
+            <span
+              v-if="!article.tag.length"
+              v-text="$i18n.text.tag.empty"
+            >无</span>
             <nuxt-link
-              :key="index" 
-              :to="`/tag/${tag.slug}`" 
-              v-for="(tag, index) in article.tag">{{ tag.name }}</nuxt-link>
+              :key="index"
+              :to="`/tag/${tag.slug}`"
+              v-for="(tag, index) in article.tag"
+            >{{ tag.name }}</nuxt-link>
           </span>
         </div>
       </div>
@@ -76,6 +96,7 @@
 <script>
   import { mapState } from 'vuex'
   import { localUser, localHistoryLikes } from '~/utils/local-storage'
+
   export default {
     name: 'article-list-item',
     props: {
@@ -87,12 +108,13 @@
       }
     },
     computed: {
-      ...mapState('option', ['imgExt', 'language', 'mobileLayout', 'constants'])
+      ...mapState('global', ['imageExt', 'language', 'isMobile', 'constants'])
     },
     methods: {
       buildThumb(thumb) {
-        if (!thumb) return `${this.cdnUrl}/images/thumb-article.jpg`
-        return `${thumb}?imageView2/1/w/350/h/238/format/${this.imgExt}/interlace/1/q/75|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/460/fill/I0ZGRkZGRg==/dissolve/23/gravity/SouthWest/dx/15/dy/7|imageslim`
+        return thumb
+          ? `${thumb}?imageView2/1/w/350/h/238/format/${this.imageExt}/interlace/1/q/75|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/460/fill/I0ZGRkZGRg==/dissolve/23/gravity/SouthWest/dx/15/dy/7|imageslim`
+          : `${this.cdnUrl}/images/thumb-article.jpg`
       }
     },
     mounted() {
