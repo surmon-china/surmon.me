@@ -7,20 +7,29 @@
 export const state = () => {
   return {
     fetching: false,
-    data: { data: [] }
+    data: []
   }
 }
 
 export const mutations = {
-  REQUEST_LIST(state) {
-    state.fetching = true
+  updateFetching(state, action) {
+    state.fetching = action
   },
-  GET_LIST_SUCCESS(state, action) {
-    state.fetching = false
-    state.data = action.result
-  },
-  GET_LIST_FAILURE(state) {
-    state.fetching = false
-    state.data = { data: [] }
+  updateListData(state, action) {
+    state.data = action.result.data
+  }
+}
+
+export const actions = {
+  fetchList({ commit }, params) {
+    commit('updateFetching', true)
+    return this.$axios.$get(`/category`, { params })
+      .then(response => {
+        commit('updateListData', response)
+        commit('updateFetching', false)
+      })
+      .catch(error => {
+        commit('updateFetching', false)
+      })
   }
 }

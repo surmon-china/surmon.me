@@ -1,8 +1,8 @@
 <template>
   <div class="index">
-    <carrousel :article="article"></carrousel>
-    <announcement :announcement="announcement"></announcement>
-    <article-list :article="article" @loadmore="loadmoreArticle"></article-list>
+    <carrousel :article="article" />
+    <announcement :announcement="announcement" />
+    <article-list :article="article" @loadmore="loadmoreArticle" />
   </div>
 </template>
 
@@ -15,8 +15,8 @@
     name: 'index',
     fetch({ store }) {
       return Promise.all([
-        store.dispatch('loadArticles'),
-        store.dispatch('loadAnnouncements')
+        store.dispatch('article/fetchList'),
+        store.dispatch('announcement/fetchList')
       ])
     },
     components: {
@@ -39,7 +39,7 @@
     },
     methods: {
       loadmoreArticle() {
-        this.$store.dispatch('loadArticles', this.nextPageParams)
+        this.$store.dispatch('article/fetchList', this.nextPageParams)
       }
     }
   }

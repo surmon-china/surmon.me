@@ -1,7 +1,5 @@
 <template>
-  <div class="page" 
-       :style="{ height: height }" 
-       :class="{ mobile: mobileLayout }">
+  <div class="page" :style="{ height: height }" :class="{ mobile: isMobile }">
     <div class="app">
       <div class="logo">
         <img src="/images/app-logo.png" alt="app-logo">
@@ -12,14 +10,18 @@
         <img src="/images/app-hot.png" class="screen-img" alt="app-hot">
         <div class="download">
           <img src="/images/app-qrcode.png" class="qrcode" alt="qrcode">
-          <a target="_blank"
-             :href="`${cdnUrl}/app/surmon.me.apk`"
-             class="btn"
-             v-text="$i18n.text.device.android">Android</a>
-          <a target="_blank"
-             :href="`${cdnUrl}/app/surmon.me.ipa`"
-             class="btn"
-             v-text="$i18n.text.device.ios">Ios</a>
+          <a
+            target="_blank"
+            :href="`${cdnUrl}/app/surmon.me.apk`"
+            class="btn"
+            v-text="$i18n.text.device.android"
+          >Android（expired）</a>
+          <a
+            target="_blank"
+            :href="`${cdnUrl}/app/surmon.me.ipa`"
+            class="btn"
+            v-text="$i18n.text.device.ios"
+          >Ios</a>
         </div>
       </div>
     </div>
@@ -31,7 +33,7 @@
     name: 'app',
     head() {
       return {
-        title: `${this.langIsEn ? '' : this.$i18n.nav.app + ' | '}App`
+        title: `${this.isEnLang ? '' : this.$i18n.nav.app + ' | '}App`
       }
     },
     data() {
@@ -40,11 +42,11 @@
       }
     },
     computed: {
-      langIsEn() {
-        return this.$store.getters['option/langIsEn']
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
       },
-      mobileLayout() {
-        return this.$store.state.option.mobileLayout
+      isMobile() {
+        return this.$store.state.global.isMobile
       }
     },
     mounted() {
@@ -56,7 +58,7 @@
     },
     methods: {
       updateScreenHeight(event) {
-        if (this.mobileLayout) {
+        if (this.isMobile) {
           this.height = 'auto'
         } else {
           const screenHeight = window.innerHeight

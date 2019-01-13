@@ -6,18 +6,17 @@
 
 import Vue from 'vue'
 import filters from '~/filters'
-import apiConfig from '~/api.config'
-import i18nConfig from '~/i18n.config'
+import apiConfig from '~/config/api.config'
+import i18nConfig from '~/config/i18n.config'
 import i18nTransfer from '~/utils/i18n-transfer'
 
-import EmptyBox from '~/components/common/empty'
-import LoadingBox from '~/components/common/loading'
-import CommentBox from '~/components/common/comment'
-import WallFlowerBox from '~/components/common/wall-flower'
-import ColorBlockBox from '~/components/common/color-block'
+import EmptyBox from '~/components/global/empty'
+import LoadingBox from '~/components/global/loading'
+import CommentBox from '~/components/global/comment'
+import ColorBlockBox from '~/components/global/color-block'
 
 // adsense
-import AdsenseComponents from '~/components/adsense'
+import AdsenseComponents from '~/components/global/adsense'
 
 const i18nData = i18nTransfer(i18nConfig)
 
@@ -32,7 +31,6 @@ Object.keys(filters).forEach(key => Vue.filter(key, filters[key]))
 Vue.use(EmptyBox)
 Vue.use(CommentBox)
 Vue.use(LoadingBox)
-Vue.use(WallFlowerBox)
 Vue.use(ColorBlockBox)
 
 // adsense
@@ -42,7 +40,7 @@ Vue.use(AdsenseComponents)
 Vue.mixin({
   computed: {
     $i18n() {
-      return i18nData[this.$store.state.option.language]
+      return i18nData[this.$store.state.global.language]
     }
   }
 })

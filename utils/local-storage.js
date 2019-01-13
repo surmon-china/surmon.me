@@ -4,24 +4,20 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import systemConstants from '~/constants/system'
+
 export const get = key => localStorage.getItem(key)
 export const del = key => localStorage.removeItem(key)
 export const set = (key, data) => localStorage.setItem(key, data)
 
-export const localUser = {
+export const buildStorageReader = key => ({
   get() {
-    const user = get('user')
-    return user ? JSON.parse(user) : null
+    const data = get(key)
+    return data ? JSON.parse(data) : null
   },
-  remove: () => del('user'),
-  set: user => set('user', JSON.stringify(user))
-}
+  remove: () => del(key),
+  set: data => set(key, JSON.stringify(data))
+})
 
-export const localHistoryLikes = {
-  get() {
-    const historyLikes = get('user_like_history')
-    return historyLikes ? JSON.parse(historyLikes) : null
-  },
-  remove: () => del('user_like_history'),
-  set: data => set('user_like_history', JSON.stringify(data))
-}
+export const localUser = buildStorageReader(systemConstants.StorageField.User)
+export const localHistoryLikes = buildStorageReader(systemConstants.StorageField.UserLikeHistory)

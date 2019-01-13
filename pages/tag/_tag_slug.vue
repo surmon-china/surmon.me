@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <article-list :article="article" @loadmore="loadmoreArticle"></article-list>
+    <article-list :article="article" @loadmore="loadmoreArticle" />
   </div>
 </template>
 
@@ -11,12 +11,12 @@
   export default {
     name: 'tag-article-list',
     validate ({ params, store }) {
-      return params.tag_slug && store.state.tag.data.data.some((tag, index, arr) => {
+      return params.tag_slug && store.state.tag.data.some((tag, index, arr) => {
         return Object.is(tag.slug, params.tag_slug)
       })
     },
     fetch({ store, params }) {
-      return store.dispatch('loadArticles', params)
+      return store.dispatch('article/fetchList', params)
     },
     head () {
       const slug = this.defaultParams.tag_slug || ''
@@ -37,7 +37,7 @@
         return this.$store.state.article.list
       },
       currentTag() {
-        return this.$store.state.tag.data.data.find((tag, index, arr) => {
+        return this.$store.state.tag.data.find((tag, index, arr) => {
           return Object.is(tag.slug, this.$route.params.tag_slug)
         })
       },
@@ -54,7 +54,7 @@
     },
     methods: {
       loadmoreArticle() {
-        this.$store.dispatch('loadArticles', this.nextPageParams)
+        this.$store.dispatch('article/fetchList', this.nextPageParams)
       }
     }
   }
