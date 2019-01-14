@@ -22,7 +22,7 @@ module.exports = {
     nav: {
       home: {
         zh: '明殿',
-        en: 'Home'
+        en: 'home'
       },
       think: {
         zh: '无色庵',
@@ -38,7 +38,7 @@ module.exports = {
       },
       vlog: {
         zh: '天涯未远',
-        en: 'Vlog'
+        en: 'vlog'
       },
       music: {
         zh: '乐斋',
@@ -297,15 +297,15 @@ module.exports = {
             en: 'Site is not legitimate!'
           },
           contenterr: {
-            zh: '内容需要在2000字/36行以内',
+            zh: '内容需要在 2000字/36行 以内',
             en: 'Content requirements are within 2000 words / 36 lines!'
           },
           submiterr: {
-            zh: '发布失败，原因 => 控制台',
+            zh: '发布失败，原因 -> 控制台',
             en: 'Submit err, get err in dev console!'
           },
           actionerr: {
-            zh: '操作失败，原因 => 控制台',
+            zh: '操作失败，原因 -> 控制台',
             en: 'Action err, get err in dev console!'
           },
         },

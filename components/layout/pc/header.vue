@@ -31,7 +31,7 @@
             >
               <span>{{ currentSong.name }}</span>
               <span>By</span>
-              <span :key="index" v-for="(artist, index) in currentSong.artists">{{ artist.name }}</span>
+              <span :key="index" v-for="(artist, index) in currentSong.artists" v-text="artist.name"></span>
               <span>/</span>
               <span>{{ currentSong.album.name || 'unknow' }}</span>
             </nuxt-link>

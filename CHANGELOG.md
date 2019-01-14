@@ -2,7 +2,7 @@
 ## TODO LIST
 - graphql-js + RESTful 查询数据库
 - 增加文章详情页，根据 H2、H3、H4 的标题锚点索引功能
-- 拆分超过 600 行的组件
+- ~~拆分超过 600 行的组件~~
 - ~~为所有文件增加规范的 JSDOC 信息~~
 - markd 解析内链有问题，https://surmon.me/article/121 git -> github
 
@@ -14,6 +14,8 @@
 - 优化编码风格
 - 优化 markdown 解析器
 - 优化结构组织
+- 增加 Vlog 业务模块
+- 优化 category、tag 在 i18n 下的表现
 
 ### v2.0.0
 

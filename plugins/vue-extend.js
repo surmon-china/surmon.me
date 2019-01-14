@@ -8,7 +8,7 @@ import Vue from 'vue'
 import filters from '~/filters'
 import apiConfig from '~/config/api.config'
 import i18nConfig from '~/config/i18n.config'
-import i18nTransfer from '~/utils/i18n-transfer'
+import i18nTransfer from '~/transforms/i18n-transfer'
 
 import EmptyBox from '~/components/global/empty'
 import LoadingBox from '~/components/global/loading'

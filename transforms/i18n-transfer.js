@@ -1,10 +1,11 @@
 /**
- * @file i18n languages transfer service / ES module
- * @module utils/i18n-transfer
+ * @file i18n 语言格式转换器 / ES module
+ * @module transforms/i18n-transfer
  * @author Surmon <https://github.com/surmon-china>
  */
 
 export default i18nConfig => {
+
   const languages = i18nConfig.languages.map(lang => lang.code)
   const languageDatas = i18nConfig.data
   const productData = {}

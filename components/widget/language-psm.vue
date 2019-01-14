@@ -19,26 +19,32 @@
 
 <script>
   import { mapState } from 'vuex'
+  import systemConstants from '~/constants/system'
   export default {
     name: 'language-psm',
     computed: {
-      ...mapState('global', ['language', 'powerSavingMode'])
+      ...mapState('global', ['language', 'powerSavingMode']),
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
+      }
     },
     methods: {
       tooggleLanguage() {
         this.$ga.event('系统语言', '切换', 'tool')
-        this.$store.commit('global/updateLanguage', Object.is(this.language, 'en') ? 'zh' : 'en')
+        this.$store.commit(
+          'global/updateLanguage',
+          this.isEnLang ? systemConstants.Language.Zh : systemConstants.Language.En
+        )
       },
       toogglePowerSaveMode() {
         this.$ga.event('节能模式', '切换', 'tool')
-        const isEn = this.$store.getters['global/isEnLang']
-        const psmText = isEn
+        const psmText = isEnLang
           ? 'Canvas background, comment emoji rain, WebRTC, Theme、core socialist values'
           : 'Canvas 动态背景、留言表情雨侦测、WebRTC 视频会话、主题色系切换、社会主义价值观'
-        const onText = isEn
+        const onText = isEnLang
           ? `Open「 Power Saving Mode 」will close ${psmText}，sure?`
           : `开启「 Power Saving Mode 节能模式 」将会关闭 ${psmText} 这些功能，可能导致你无碍冲浪、流连忘返、无法自拔，还要关闭？`
-        const offText = isEn
+        const offText = isEnLang
           ? `Close「 Power Saving Mode 」will open ${psmText}，sure?`
           : `关闭「 Power Saving Mode 节能模式 」将会开启 ${psmText} 这些功能，可能会导致死机、起火、爆炸等风险，还要开启？`
         if (this.powerSavingMode && confirm(offText)) {

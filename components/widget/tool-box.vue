@@ -4,8 +4,8 @@
       <div class="tools-list">
         <button
           class="webrtc"
-          :title="$i18n.text.webrtc"
           @click="toggleWebrtc"
+          :title="$i18n.text.webrtc"
           :disabled="barrageState || powerSavingMode"
           :class="{ 
             active: webrtcState,
@@ -16,8 +16,8 @@
         </button>
         <button
           class="barrage"
-          :title="$i18n.text.barrage.name"
           @click="toggleBarrage"
+          :title="$i18n.text.barrage.name"
           :disabled="webrtcState"
           :class="{ 
             active: barrageState,
@@ -74,7 +74,10 @@
         webrtcState: 'openWebrtc',
         barrageState: 'openBarrage',
         powerSavingMode: 'powerSavingMode'
-      })
+      }),
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
+      }
     },
     methods: {
       totop() {
@@ -119,14 +122,13 @@
       },
       toggleWebrtc() {
         this.$ga.event('WebRTC', '切换', 'tool')
-        const isEn = this.$store.getters['global/isEnLang']
         if (this.firstOpenWeRtc && !this.webrtcState) {
-          const confirmText = isEn
+          const confirmText = this.isEnLang
             ? 'Will open WebRTC、WebGL、Canvas, ready?'
             : '实验室功能需要 WebRTC、WebGL、Canvas 等技术的支持，可能占用较多 CPU/GPU 资源，甚至死机、起火、爆炸、毁灭，继续？'
           if (!window.confirm(confirmText)) {
             this.$store.commit('global/updateWebRTCState', false)
-            window.alert(isEn ? 'Sorry~' : '滚滚滚')
+            window.alert(this.isEnLang ? 'Sorry~' : '滚滚滚')
             return false
           }
           this.firstOpenWeRtc = false

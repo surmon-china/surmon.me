@@ -38,62 +38,73 @@
 #app {
 
   &.default {
-    @include css-var($text: #555,
-                     $white: #fff,
-                     $black: #000,
-                     $primary: #0088f5,
-                     $body-bg: #eee,
-                     $module-hover-bg: rgba(197, 197, 197, 0.5),
-                     $logo-rotate: none);
+    @include css-var(
+      $text: #555,
+      $white: #fff,
+      $black: #000,
+      $primary: #0088f5,
+      $body-bg: #eee,
+      $module-hover-bg: rgba(197, 197, 197, 0.5),
+      $logo-rotate: none);
   }
 
   &.beige {
-    @include css-var($text: #555,
-                     $white: #bfbf9b,
-                     $black: #000,
-                     $primary: rgb(172, 141, 5),
-                     $body-bg: #bfbf9b,
-                     $module-hover-bg: rgba(201, 178, 115, 0.5),
-                     $logo-rotate: hue-rotate(200deg));
+    @include css-var(
+      $text: #555,
+      $white: #bfbf9b,
+      $black: #000,
+      $primary: rgb(172, 141, 5),
+      $body-bg: #bfbf9b,
+      $module-hover-bg: rgba(201, 178, 115, 0.5),
+      $logo-rotate: hue-rotate(200deg)
+    );
   }
 
   &.gay {
-    @include css-var($text: rgb(110, 4, 105),
-                     $white: rgb(251, 140, 255),
-                     $black: rgb(68, 0, 51),
-                     $primary: purple,
-                     $body-bg: purple,
-                     $module-hover-bg: rgba(206, 41, 192, 0.6),
-                     $logo-rotate: hue-rotate(80deg) brightness(60%));
+    @include css-var(
+      $text: rgb(110, 4, 105),
+      $white: rgb(251, 140, 255),
+      $black: rgb(68, 0, 51),
+      $primary: purple,
+      $body-bg: purple,
+      $module-hover-bg: rgba(206, 41, 192, 0.6),
+      $logo-rotate: hue-rotate(80deg) brightness(60%)
+    );
   }
 
   &.wang {
-    @include css-var($text: rgb(9, 80, 36),
-                     $white: rgb(137, 207, 71),
-                     $black: rgba(0, 58, 19, 0.8),
-                     $primary: green,
-                     $body-bg: green,
-                     $module-hover-bg: rgba(56, 184, 84, 0.5),
-                     $logo-rotate: hue-rotate(280deg) brightness(60%));
+    @include css-var(
+      $text: rgb(9, 80, 36),
+      $white: rgb(137, 207, 71),
+      $black: rgba(0, 58, 19, 0.8),
+      $primary: green,
+      $body-bg: green,
+      $module-hover-bg: rgba(56, 184, 84, 0.5),
+      $logo-rotate: hue-rotate(280deg) brightness(60%)
+    );
   }
 
   &.red {
-    @include css-var($text: rgb(59, 3, 3),
-                     $white: rgba(128, 17, 17, 0.9),
-                     $black: rgb(104, 11, 11),
-                     $primary: rgba(39, 0, 0, 0.9),
-                     $body-bg: red,
-                     $module-hover-bg: rgba(80, 16, 16, 0.7),
-                     $logo-rotate: hue-rotate(130deg) brightness(30%));
+    @include css-var(
+      $text: rgb(59, 3, 3),
+      $white: rgba(128, 17, 17, 0.9),
+      $black: rgb(104, 11, 11),
+      $primary: rgba(39, 0, 0, 0.9),
+      $body-bg: red,
+      $module-hover-bg: rgba(80, 16, 16, 0.7),
+      $logo-rotate: hue-rotate(130deg) brightness(30%)
+    );
   }
 
   &.dark {
-    @include css-var($text: #fff,
-                     $white: #000,
-                     $black: #fff,
-                     $primary: #fff,
-                     $body-bg: #000,
-                     $module-hover-bg: rgba(0, 0, 0, 0.5),
-                     $logo-rotate: hue-rotate(30deg) brightness(180%) grayscale(100%));
+    @include css-var(
+      $text: #fff,
+      $white: #000,
+      $black: #fff,
+      $primary: #fff,
+      $body-bg: #000,
+      $module-hover-bg: rgba(0, 0, 0, 0.5),
+      $logo-rotate: hue-rotate(30deg) brightness(180%) grayscale(100%)
+    );
   }
 }
