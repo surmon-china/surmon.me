@@ -40,24 +40,59 @@ export default new Vue({
   },
   computed: {
     currentSong() {
-      const player = this.player
-      return player && this.list.data
+      return this.player && this.list.data
         ? this.list.data.tracks[this.state.index]
         : null
     },
     currentSongPicUrl() {
-      const defaultImage = `${this.cdnUrl}/images/music-bg.jpg`
-      if (this.currentSong) {
-        const pictureUrl = this.currentSong.album.picUrl
-        return pictureUrl
-          ? pictureUrl.replace('http://', this.proxyUrl) + '?param=600y600' 
-          : defaultImage
-      } else {
-        return defaultImage
+      const defaultUrl = `${this.cdnUrl}/images/music-bg.jpg`
+      const pictureUrl = this.currentSong && this.currentSong.album.picUrl
+      return pictureUrl
+        ? pictureUrl.replace('http://', this.proxyUrl) + '?param=600y600'
+        : defaultUrl
+    },
+    currentSongLrcContent() {
+      const lrc = this.lrc.data
+      return (!lrc || lrc.nolyric) ? null : lrc.lrc
+    },
+    currentSongLrcArr() {
+      return this.currentSongLrcContent.lyric.split('\n').map(timeSentence => {
+        let time = /\[([^\[\]]*)\]/.exec(timeSentence)
+        time = time && time.length && time[1]
+        time = time && time.split(':').map(t => Number(t))
+        time = time && time.length && time.length > 1 && time[0] * 60 + time[1]
+        time = time || ''
+        let sentence = /([^\]]+)$/.exec(timeSentence)
+        sentence = sentence && sentence.length && sentence[1]
+        sentence = sentence || ''
+        return { time, sentence }
+      }).filter(timestamp => timestamp.time)
+    },
+    currentSongRealTimeLrc() {
+      const currentTime = this.state.seek
+      if (!this.currentSongLrcArr.length) {
+        return '无滚动歌词'
       }
+      const targetSentence = this.currentSongLrcArr.find((timestamp, index, array) => {
+        const next = array[index + 1]
+        return timestamp.time <= currentTime && next && next.time > currentTime
+      })
+      return targetSentence ? targetSentence.sentence : '...'
+    },
+  },
+  watch: {
+    currentSong() {
+      this.fetchSongLrcWhenChangeSong()
     }
   },
   methods: {
+    // 当歌曲切换时重新请求歌词
+    fetchSongLrcWhenChangeSong() {
+      const song = this.currentSong
+      if (song && song.id) {
+        this.fetchSongLrc(song.id)
+      }
+    },
     // 安全操作
     humanizeOperation(action) {
       this.state.ready && action.bind(this.player)()
