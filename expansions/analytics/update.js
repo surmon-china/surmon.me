@@ -1,6 +1,6 @@
 /**
  * @file GA 更新器 / Commonjs module
- * @module utils/update-analytics
+ * @module expansions/analytics/update
  * @author Surmon <https://github.com/surmon-china>
  */
 
