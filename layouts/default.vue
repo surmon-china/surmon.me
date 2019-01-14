@@ -9,7 +9,7 @@
 
 <script>
   import PcMainView from '~/components/layout/pc/main'
-  import * as humanizedStorage from '~/utils/local-storage'
+  import * as humanizedStorage from '~/transforms/local-storage'
   export default {
     name: 'app',
     components: {

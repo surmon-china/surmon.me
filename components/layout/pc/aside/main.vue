@@ -101,10 +101,9 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
   import AsideAd from './ad'
   import Calendar from './calendar'
-
+  import { mapState } from 'vuex'
   export default {
     name: 'ps-aside',
     components: {
@@ -192,7 +191,7 @@
     },
     directives: {
       scrollTop: {
-        inserted(element, b, VNode) {
+        inserted(element, _, VNode) {
           // context
           const context = VNode.context
           // element
@@ -204,7 +203,7 @@
           // 监听滚动事件
           window.addEventListener('scroll', context.parseScroll, { passive: true })
         },
-        unbind(element, b, VNode) {
+        unbind(element, _, VNode) {
           window.removeEventListener('scroll', VNode.context.parseScroll)
         }
       }

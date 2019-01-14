@@ -293,7 +293,7 @@
   import gravatar from '~/plugins/gravatar'
   import { scrollTo } from '~/utils/scroll-to-anywhere'
   import { browserParse, osParse } from '~/utils/ua-os-browser'
-  import { localUser, localHistoryLikes } from '~/utils/local-storage'
+  import { localUser, localHistoryLikes } from '~/transforms/local-storage'
   
   export default {
     name: 'vue-comment',
@@ -370,7 +370,7 @@
       }
     },
     destroyed() {
-      this.$store.commit('comment/CLEAR_LIST')
+      this.$store.commit('comment/clearListData')
     },
     methods: {
       browserParse,

@@ -11,34 +11,21 @@
               hybrid: article.origin === constants.OriginState.Hybrid
             }"
           >
-            <span
-              v-if="!article.origin"
-              v-text="$i18n.text.origin.original"
-            >原创</span>
-            <span
-              v-else-if="article.origin === constants.OriginState.Reprint"
-              v-text="$i18n.text.origin.reprint"
-            >转载</span>
-            <span
-              v-else-if="article.origin === constants.OriginState.Hybrid"
-              v-text="$i18n.text.origin.hybrid"
-            >混撰</span>
+            <span v-if="!article.origin" v-text="$i18n.text.origin.original"></span>
+            <span v-else-if="article.origin === constants.OriginState.Reprint" v-text="$i18n.text.origin.reprint"></span>
+            <span v-else-if="article.origin === constants.OriginState.Hybrid" v-text="$i18n.text.origin.hybrid"></span>
           </span>
           <img
             class="item-thumb-img"
             :src="buildThumb(article.thumb)"
             :alt="article.title"
             :title="article.title"
-          >
+          />
         </nuxt-link>
       </div>
       <div class="item-body">
         <h4 class="item-title">
-          <nuxt-link
-            :to="`/article/${article.id}`"
-            :title="article.title"
-            v-text="article.title"
-          ></nuxt-link>
+          <nuxt-link :to="`/article/${article.id}`" :title="article.title" v-text="article.title" />
         </h4>
         <p
           class="item-description"
@@ -64,28 +51,27 @@
           </span>
           <span class="categories">
             <i class="iconfont icon-list"></i>
-            <nuxt-link
-              :key="index"
-              :to="`/category/${category.slug}`"
-              v-for="(category, index) in article.category"
-              v-text="$i18n.nav[category.slug]"
-            >{{ category.name }}</nuxt-link>
-            <span
-              v-if="!article.category.ledngth"
-              v-text="$i18n.text.category.empty"
-            >未分类</span>
+            <template v-if="article.category.length">
+              <nuxt-link
+                :key="index"
+                :to="`/category/${category.slug}`"
+                v-for="(category, index) in article.category"
+                v-text="isEnLang ? category.slug : category.name"
+              />
+            </template>
+            <span v-else v-text="$i18n.text.category.empty"></span>
           </span>
-          <span class="tags" v-show="false">
+          <span class="tags" v-if="false">
             <i class="iconfont icon-tag"></i>
-            <span
-              v-if="!article.tag.length"
-              v-text="$i18n.text.tag.empty"
-            >无</span>
-            <nuxt-link
-              :key="index"
-              :to="`/tag/${tag.slug}`"
-              v-for="(tag, index) in article.tag"
-            >{{ tag.name }}</nuxt-link>
+            <template v-if="article.tag.length">
+              <nuxt-link
+                :key="index"
+                :to="`/tag/${tag.slug}`"
+                v-for="(tag, index) in article.tag"
+                v-text="isEnLang ? tag.slug : tag.name"
+              />
+            </template>
+            <span v-else v-text="$i18n.text.tag.empty"></span>
           </span>
         </div>
       </div>
@@ -95,7 +81,7 @@
 
 <script>
   import { mapState } from 'vuex'
-  import { localUser, localHistoryLikes } from '~/utils/local-storage'
+  import { localUser, localHistoryLikes } from '~/transforms/local-storage'
 
   export default {
     name: 'article-list-item',
@@ -108,7 +94,10 @@
       }
     },
     computed: {
-      ...mapState('global', ['imageExt', 'language', 'isMobile', 'constants'])
+      ...mapState('global', ['imageExt', 'language', 'isMobile', 'constants']),
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
+      },
     },
     methods: {
       buildThumb(thumb) {

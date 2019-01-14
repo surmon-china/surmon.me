@@ -21,7 +21,7 @@
         <i class="iconfont icon-netease-music"></i>
         <span v-text="$i18n.nav.music"></span>
       </nuxt-link>
-      <nuxt-link to="/category/vlog" class="item">
+      <nuxt-link to="/vlog" class="item">
         <i class="iconfont icon-movie"></i>
         <span v-text="$i18n.nav.vlog"></span>
       </nuxt-link>
@@ -157,6 +157,7 @@
 
         &.aliyun {
           color: black;
+          border-top: 1px dashed $module-hover-bg;
 
           > .iconfont {
             color: black;

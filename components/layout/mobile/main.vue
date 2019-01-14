@@ -71,7 +71,7 @@
 <script>
   import { mapState } from 'vuex'
   import eventBus from '~/utils/event-bus'
-  import * as humanizedStorage from '~/utils/local-storage'
+  import * as humanizedStorage from '~/transforms/local-storage'
   import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
   import {
     WallpaperSwitch,

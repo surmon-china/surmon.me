@@ -28,6 +28,9 @@ export const mutations = {
   updateListData(state, action) {
     state.data = action
   },
+  clearListData(state) {
+    state.data = getDefaultListData()
+  },
 
   // 发布评论
   updatePostFetchig(state, action) {
@@ -50,13 +53,19 @@ export const mutations = {
 
 export const actions = {
 
-  fetchList({ commit }, params = {}) {
+  fetchList({ commit, rootState }, params = {}) {
+
+    const { SortType } = rootState.global.constants
     
     // 修正参数
-    params = Object.assign({ page: 1, per_page: 88, sort: -1 }, params)
+    params = Object.assign({
+      page: 1,
+      per_page: 88,
+      sort: SortType.Desc
+    }, params)
 
     const isRestart = params.page === 1
-    const isDescSort = params.sort === -1
+    const isDescSort = params.sort === SortType.Desc
 
     // 清空数据
     isRestart &&

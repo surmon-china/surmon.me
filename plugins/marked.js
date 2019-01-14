@@ -6,7 +6,7 @@
 
 import marked from 'marked'
 import Hljs from '~/plugins/highlight'
-import buildTagLink from '~/utils/article-tag-releted-parse'
+import buildTagLink from '~/transforms/article-tag-releted-parse'
 
 marked.setOptions({
   renderer: new marked.Renderer(),

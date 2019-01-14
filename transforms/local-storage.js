@@ -1,6 +1,6 @@
 /**
  * @file 本机数据状态 / ES module
- * @module utils/local-storage
+ * @module transforms/local-storage
  * @author Surmon <https://github.com/surmon-china>
  */
 

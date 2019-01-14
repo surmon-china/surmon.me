@@ -102,9 +102,10 @@ export const actions = {
   },
 
   // 获取最热文章列表
-  fetchHotList({ commit }) {
+  fetchHotList({ commit, rootState }) {
+    const { SortType } = rootState.global.constants
     commit('updateHotListFetchig', true)
-    return this.$axios.$get(`/article`, { params: { cache: 1, sort: 2 }})
+    return this.$axios.$get(`/article`, { params: { cache: 1, sort: SortType.Hot }})
       .then(response => {
         commit('updateHotListData', response)
         commit('updateHotListFetchig', false)
@@ -115,7 +116,7 @@ export const actions = {
   // 获取文章详情
   fetchDetail({ commit }, params = {}) {
     commit('updateDetailFetchig', true)
-    return this.$axios.$get(`/${params.article_id}`)
+    return this.$axios.$get(`/article/${params.article_id}`)
       .then(response => {
         commit('updateDetailData', response)
         commit('updateDetailFetchig', false)

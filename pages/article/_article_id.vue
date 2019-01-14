@@ -3,32 +3,18 @@
     <div class="detail">
       <div
         class="oirigin"
-        v-if="!fetching && article.title"
         :class="{
           self: !article.origin,
           other: article.origin === constants.OriginState.Reprint,
           hybrid: article.origin === constants.OriginState.Hybrid
         }"
       >
-        <span v-if="!article.origin" v-text="$i18n.text.origin.original">原创</span>
-        <span
-          v-else-if="article.origin === constants.OriginState.Reprint"
-          v-text="$i18n.text.origin.Reprint"
-        >转载</span>
-        <span
-          v-else-if="article.origin === constants.OriginState.Hybrid"
-          v-text="$i18n.text.origin.Hybrid"
-        >混撰</span>
+        <span v-if="!article.origin" v-text="$i18n.text.origin.original"></span>
+        <span v-else-if="article.origin === constants.OriginState.Reprint" v-text="$i18n.text.origin.reprint"></span>
+        <span v-else-if="article.origin === constants.OriginState.Hybrid" v-text="$i18n.text.origin.hybrid"></span>
       </div>
       <h2 class="title">{{ article.title || '...' }}</h2>
-      <transition name="module" mode="out-in">
-        <template v-if="!fetching">
-          <empty-box class="article-empty-box" v-if="!article.content">
-            <slot v-text="$i18n.text.article.empty"></slot>
-          </empty-box>
-          <div class="content" v-else v-html="articleContent"></div>
-        </template>
-      </transition>
+      <div class="content" v-html="articleContent"></div>
       <transition name="module" mode="out-in">
         <div class="readmore" v-if="canReadMore">
           <button class="readmore-btn" :disabled="readMoreLoading" @click="readMore()">
@@ -40,18 +26,15 @@
     </div>
     <transition name="module" mode="out-in">
       <div class="ad" v-if="renderAd">
-        <adsense-article></adsense-article>
+        <adsense-article />
       </div>
     </transition>
-    <share-box class="article-share"></share-box>
+    <share-box class="article-share" />
     <div class="metas">
       <p class="item" v-if="isEnLang">
         <span>Article created at</span>
         <span>&nbsp;</span>
-        <nuxt-link
-          :title="buildDateTitle(article.create_at)"
-          :to="buildDateLink(article.create_at)"
-        >
+        <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
           <span>{{ buildDateTitle(article.create_at) }}</span>
         </nuxt-link>
         <span>&nbsp;in category&nbsp;</span>
@@ -72,19 +55,13 @@
       <p class="item" v-else>
         <span>本文于</span>
         <span>&nbsp;</span>
-        <nuxt-link
-          :title="buildDateTitle(article.create_at)"
-          :to="buildDateLink(article.create_at)"
-        >
+        <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
           <span>{{ buildDateTitle(article.create_at) }}</span>
         </nuxt-link>
         <span>&nbsp;发布在&nbsp;</span>
         <span :key="index" v-for="(category, index) in article.category">
-          <nuxt-link
-            :to="`/category/${category.slug}`"
-            :title="category.description || category.name"
-          >
-            <span>{{ $i18n.nav[category.slug] }}</span>
+          <nuxt-link :to="`/category/${category.slug}`" :title="category.description || category.name">
+            <span>{{ isEnLang ? category.slug : category.name }}</span>
           </nuxt-link>
           <span v-if="article.category.length && article.category[index + 1]">、</span>
         </span>
@@ -94,14 +71,11 @@
         <span>&nbsp;次</span>
       </p>
       <p class="item">
-        <span
-          class="title"
-          :class="language"
-        >{{ isEnLang ? 'Related tags:' : '相关标签：' }}</span>
-        <span v-if="!article.tag.length" v-text="$i18n.text.tag.empty">无相关标签</span>
+        <span class="title" :class="language">{{ isEnLang ? 'Related tags:' : '相关标签：' }}</span>
+        <span v-if="!article.tag.length" v-text="$i18n.text.tag.empty"></span>
         <span :key="index" v-for="(tag, index) in article.tag">
           <nuxt-link :to="`/tag/${tag.slug}`" :title="tag.description || tag.name">
-            <span>{{ tag.name }}</span>
+            <span>{{ isEnLang ? tag.slug : tag.name }}</span>
           </nuxt-link>
           <span v-if="article.tag.length && article.tag[index + 1]">、</span>
         </span>
@@ -130,11 +104,7 @@
         <div class="related" v-if="!isMobile">
           <div class="article-list swiper" v-swiper:swiper="swiperOption">
             <div class="swiper-wrapper">
-              <div
-                class="swiper-slide item"
-                v-for="(article, index) in articleRelateds"
-                :key="index"
-              >
+              <div class="swiper-slide item" :key="index" v-for="(article, index) in relatedArticles">
                 <a
                   v-if="article.ad"
                   class="item-box"
@@ -164,7 +134,7 @@
         </div>
         <div class="related" v-else>
           <ul class="article-list">
-            <li class="item" v-for="(article, index) in articleRelateds" :key="index">
+            <li class="item" v-for="(article, index) in relatedArticles" :key="index">
               <a
                 v-if="article.ad"
                 class="item-link"
@@ -251,7 +221,7 @@
           slidesPerView: 'auto'
         },
         canReadMore: false,
-        fullContentEd: false,
+        isRenderFullContent: false,
         readMoreLoading: false,
         renderAd: true
       }
@@ -270,12 +240,13 @@
         return this.$store.getters['global/isEnLang']
       },
       articleContent() {
-        const content = this.article.content
+        const { content } = this.article
         if (!content) {
           return ''
         }
-        const hasTags = this.tags.data && this.tags.data.length
-        if (content.length > 13688 && !this.fullContentEd) {
+        // 文章内容过多，则进行分段处理，避免渲染时间太长
+        const hasTags = this.tags && this.tags.length
+        if (content.length > 13688 && !this.isRenderFullContent) {
           this.canReadMore = true
           let shortContent = content.substring(0, 11688)
           const lastH4Index = shortContent.lastIndexOf('\n####')
@@ -285,15 +256,15 @@
           const lastReadindex = Math.max(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex);
           // console.log(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex, 'min', lastReadindex)
           shortContent = shortContent.substring(0, lastReadindex)
-          return marked(shortContent, hasTags ? this.tags.data : false, true)
+          return marked(shortContent, hasTags ? this.tags : false, true)
         } else {
           this.canReadMore = false
-          return marked(content, hasTags ? this.tags.data : false, true)
+          return marked(content, hasTags ? this.tags : false, true)
         }
       },
-      articleRelateds() {
+      relatedArticles() {
         const relateds = [...this.article.related].slice(0, 10)
-        const adArticle = adConfig.common.articleRelated(this.tags.data, this.isMobile)
+        const adArticle = adConfig.common.articleRelated(this.tags, this.isMobile)
         adArticle && relateds.splice(2, 0, adArticle)
         return relateds
       }
@@ -303,7 +274,7 @@
         this.readMoreLoading = true
         this.$nextTick(() => {
           setTimeout(() => {
-            this.fullContentEd = true
+            this.isRenderFullContent = true
           }, 0)
         })
       },
