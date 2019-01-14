@@ -84,7 +84,7 @@
         return this.$store.getters['global/isEnLang']
       },
       currentTag() {
-        return this.$store.state.tag.data.data.find((tag, index, arr) => {
+        return this.$store.state.tag.data.find((tag, index, arr) => {
           return Object.is(tag.slug, this.$route.params.tag_slug)
         })
       },
@@ -92,7 +92,7 @@
         return this.getExtendsValue(this.currentTag, 'icon') || 'icon-tag'
       },
       currentCategory() {
-        return this.$store.state.category.data.data.find((category, index, arr) => {
+        return this.$store.state.category.data.find((category, index, arr) => {
           return Object.is(category.slug, this.$route.params.category_slug)
         })
       },

@@ -13,12 +13,12 @@ export default music => {
   const playList = music.list.data.tracks
 
   if (music.player) {
-    console.warn('Player was inited!', music.player)
+    console.warn('播放器已构建', music.player)
     return music.player
   }
 
   if (!playList.length) {
-    console.warn('PlayList is empty!')
+    console.warn('播放列表为空，无法初始化')
     return false
   }
 
