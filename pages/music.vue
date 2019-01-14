@@ -72,12 +72,12 @@
       <p class="lrc">
         <span v-if="currentSongLrc.fetching">歌词加载中...</span>
         <span v-else>
-          <span v-if="!songLrcContent">暂无歌词</span>
+          <span v-if="!currentSongLrcContent">暂无歌词</span>
           <span v-else>
-            <span v-if="songLrcContent.version < 3">非滚动歌词，所以我就不显示了</span>
+            <span v-if="currentSongLrcContent.version < 3">非滚动歌词，所以我就不显示了</span>
             <span v-else>
               <transition name="module" mode="out-in">
-                <span class="lrc-text" :key="currentTimeLrc" v-text="currentTimeLrc"></span>
+                <span class="lrc-text" :key="currentSongRealTimeLrc" v-text="currentSongRealTimeLrc"></span>
               </transition>
             </span>
           </span>
@@ -132,37 +132,11 @@
       currentSongPicUrl() {
         return music.currentSongPicUrl
       },
-      songLrcContent() {
-        const lrc = this.currentSongLrc.data
-        if (!lrc || lrc.nolyric) {
-          return null
-        } else {
-          return lrc.lrc
-        }
+      currentSongLrcContent() {
+        return music.currentSongLrcContent
       },
-      songLrcArr() {
-        return this.songLrcContent.lyric.split('\n').map(timeSentence => {
-          let time = /\[([^\[\]]*)\]/.exec(timeSentence)
-          time = time && time.length && time[1]
-          time = time && time.split(':').map(t => Number(t))
-          time = time && time.length && time.length > 1 && time[0] * 60 + time[1]
-          time = time || ''
-          let sentence = /([^\]]+)$/.exec(timeSentence)
-          sentence = sentence && sentence.length && sentence[1]
-          sentence = sentence || ''
-          return { time, sentence }
-        }).filter(ts => ts.time)
-      },
-      currentTimeLrc() {
-        const currentTime = this.playerState.seek
-        if (!this.songLrcArr.length) {
-          return '无滚动歌词'
-        }
-        const targetSentence = this.songLrcArr.find((ts, i, a) => {
-          const next = a[i + 1]
-          return ts.time <= currentTime && next && next.time > currentTime
-        })
-        return targetSentence ? targetSentence.sentence : '...'
+      currentSongRealTimeLrc() {
+        return music.currentSongRealTimeLrc
       },
       relativeStrokeWidth() {
         return (15 / 450 * 100).toFixed(1)
@@ -207,18 +181,7 @@
       nextSong() {
         music.humanizeOperation(music.player.nextSong)
       },
-      fetchSongLrc() {
-        const song = this.currentSong
-        if (song && song.id) {
-          music.fetchSongLrc.bind(music)(song.id)
-        }
-      }
     },
-    watch: {
-      currentSong() {
-        this.fetchSongLrc()
-      }
-    }
   }
 </script>
 
