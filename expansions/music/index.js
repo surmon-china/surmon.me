@@ -1,6 +1,6 @@
 /**
- * @file 一些无法适用于 Store 的数据状态 / ES module
- * @module utils/event-bus
+ * @file 音乐（外挂应用）/ ES module
+ * @module expansions/music
  * @author Surmon <https://github.com/surmon-china>
  */
 
