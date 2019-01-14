@@ -29,19 +29,19 @@
       <loading-box v-if="!days.length" class="loading-box"></loading-box>
       <li :key="index" v-for="(day, index) in days">
         <!--本月-->
-        <span
-          v-if="day.getMonth() + 1 != currentMonth"
-          class="other-month"
-        >{{ day.getDate() }}</span>
+        <span v-if="day.getMonth() + 1 != currentMonth" class="other-month">{{ day.getDate() }}</span>
         <span
           v-else
           class="item"
-          :class="{ 'active': day.getFullYear() == new Date().getFullYear() && day.getMonth() == new Date().getMonth() && day.getDate() == new Date().getDate() }"
+          :class="{
+            'active':
+              day.getFullYear() == new Date().getFullYear() &&
+              day.getMonth() == new Date().getMonth() &&
+              day.getDate() == new Date().getDate()
+          }"
         >
           <!--today-->
-          <nuxt-link
-            :to="`/date/${ formatDate(day.getFullYear(), day.getMonth() + 1, day.getDate())}`"
-          >{{ day.getDate() }}</nuxt-link>
+          <nuxt-link :to="`/date/${ formatDate(day.getFullYear(), day.getMonth() + 1, day.getDate())}`">{{ day.getDate() }}</nuxt-link>
         </span>
       </li>
     </ul>

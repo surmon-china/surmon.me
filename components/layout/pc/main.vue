@@ -55,7 +55,7 @@
   import ShareBox from '~/components/widget/share'
   import ThemeSwitch from '~/components/widget/theme'
   import music from '~/expansions/music'
-  import * as humanizedStorage from '~/utils/local-storage'
+  import * as humanizedStorage from '~/transforms/local-storage'
 
   export default {
     name: 'pc-main',
@@ -71,7 +71,7 @@
       this.$store.dispatch('wallpaper/fetchPapers')
       this.$store.dispatch('wallpaper/fetchStory')
       this.$root.$music = music
-      this.$root.$music.initPlayer()
+      this.$root.$music.state.ready || this.$root.$music.initPlayer()
     },
     computed: {
       ...mapState('global', [

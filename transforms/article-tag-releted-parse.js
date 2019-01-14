@@ -1,6 +1,6 @@
 /**
  * @file 文章 -> 标签内链关系构造器 / ES module
- * @module utils/article-tag-releted-parse
+ * @module transforms/article-tag-releted-parse
  * @author Surmon <https://github.com/surmon-china>
  */
 
