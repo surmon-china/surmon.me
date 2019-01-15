@@ -10,6 +10,9 @@ import systemConstants from '~/constants/system'
 
 export const state = () => ({
 
+  // 主题
+  theme: systemConstants.Theme.Default,
+
   // 同构常量
   constants: stateConstants,
 
@@ -22,30 +25,30 @@ export const state = () => ({
   // 默认语言
   language: i18nConfig.default,
 
-  // 节能模式
-  powerSavingMode: false,
-
   // 页面的栏目展示类型（3栏/2栏）
-  fullColumn: false,
-  errorColumn: false,
+  isTwoColumns: false,
+  isThreeColumns: false,
 
   // 是否为移动端
   isMobile: false,
 
   // 移动端侧边栏
-  mobileSidebar: false,
+  onMobileSidebar: false,
 
   // 是否开启弹幕
-  openBarrage: false,
+  onBarrage: false,
 
   // 弹幕是否已首次渲染
-  barrageMounted: false,
+  isMountedBarrage: false,
+
+  // 节能模式
+  onPowerSavingMode: false,
 
   // 是否开启rtc
-  openWebrtc: false,
+  onWebrtc: false,
 
   // 山河入梦
-  openWallpaper: false,
+  onWallpaper: false,
 
   // 服务端博主信息
   adminInfo: {},
@@ -53,7 +56,7 @@ export const state = () => ({
   // 服务端设置的全局配置
   appOption: {
     fetching: false,
-    data: {}
+    data: null
   }
 })
 
@@ -63,6 +66,11 @@ export const getters = {
 }
 
 export const mutations = {
+
+  // 设置主题
+  updateTheme(state, action) {
+    state.theme = action
+  },
 
   // 设置常量
   updateConstants(state, action) {
@@ -80,23 +88,23 @@ export const mutations = {
   },
 
   // 设置是否移动端状态
-  updateMobileLayout(state, action) {
+  updateMobileLayoutState(state, action) {
     state.isMobile = action
   },
 
   // 切换移动端侧边栏
-  updateMobileSidebar(state, action) {
-    state.mobileSidebar = action
+  updateMobileSidebarOnState(state, action) {
+    state.onMobileSidebar = action
   },
 
-  // 设置栏目结构
-  updateFullColumn(state, action) {
-    state.fullColumn = action
+  // 设置两栏页面结构
+  updateTwoColumnsState(state, action) {
+    state.isTwoColumns = action
   },
 
-  // 设置错误页面模板
-  updateErrorColumn(state, action) {
-    state.errorColumn = action
+  // 设置三栏页面结构
+  updateThreeColumnsState(state, action) {
+    state.isThreeColumns = action
   },
 
   // 喜欢本站
@@ -105,26 +113,26 @@ export const mutations = {
   },
 
   // 切换弹幕状态
-  updateBarrageState(state, action) {
-    state.openBarrage = action != null ? !!action : !state.openBarrage
-    if (state.openBarrage && !state.barrageMounte) {
-      state.barrageMounted = true
+  updateBarrageOnState(state, action) {
+    state.onBarrage = action != null ? !!action : !state.onBarrage
+    if (state.onBarrage && !state.barrageMounte) {
+      state.isMountedBarrage = true
     }
   },
 
   // 切换RTC状态
-  updateWebRTCState(state, action) {
-    state.openWebrtc = action != null ? !!action : !state.openWebrtc
+  updateWebRtcOnState(state, action) {
+    state.onWebrtc = action != null ? !!action : !state.onWebrtc
   },
 
   // 切换节电模式
-  updatePowerSavingMode(state, action) {
-    state.powerSavingMode = action
+  updatePowerSavingOnMode(state, action) {
+    state.onPowerSavingMode = action
   },
 
   // 切换墙纸开关
-  updateWallpaperState(state, action) {
-    state.openWallpaper = action != null ? !!action : !state.openWallpaper
+  updateWallpaperOnState(state, action) {
+    state.onWallpaper = action != null ? !!action : !state.onWallpaper
   },
 
   // 切换语言

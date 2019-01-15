@@ -1,6 +1,6 @@
 <template>
   <div id="wallpaper">
-    <div class="wallpaper-box" @click="openWallpaper">
+    <div class="wallpaper-box" @click="onWallpaper">
       <div class="up">
         <span class="title">山河入梦</span>
       </div>
@@ -13,9 +13,9 @@
   export default {
     name: 'wallpaper-switch',
     methods: {
-      openWallpaper() {
+      onWallpaper() {
         this.$ga.event('今日壁纸', '切换', 'tool')
-        this.$store.commit('global/updateWallpaperState', true)
+        this.$store.commit('global/updateWallpaperOnState', true)
       }
     }
   }

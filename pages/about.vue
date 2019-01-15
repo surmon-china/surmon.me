@@ -280,6 +280,9 @@
         title: `${this.isEnLang ? '' : this.$i18n.nav.about + ' | '}About`
       }
     },
+    fetch({ store }) {
+      return store.dispatch('global/fetchAdminInfo')
+    },
     methods: {
       handleFollowMe() {
         this.$ga.event('加微信码', '点击', 'tool')
@@ -296,7 +299,7 @@
         return this.$store.state.global.isMobile
       },
       gravatar() {
-        const gravatar = this.$store.state.global.adminInfo.data.gravatar
+        const gravatar = this.$store.state.global.adminInfo.gravatar
         return gravatar
           ? `${gravatar}?imageView2/1/w/360/h/360/interlace/1/q/75|imageslim` 
           : `${this.cdnUrl}/images/gravatar.jpg`

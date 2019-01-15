@@ -44,8 +44,8 @@
           <li
             class="comment-item"
             :id="`comment-item-${comment.id}`"
-            :key="index"
-            v-for="(comment, index) in comment.data.data"
+            :key="comment.id"
+            v-for="comment in comment.data.data"
           >
             <div class="cm-avatar" v-if="!isMobile">
               <a
@@ -297,6 +297,16 @@
   
   export default {
     name: 'vue-comment',
+    props: {
+      likes: {
+        type: [String, Number],
+        required: true
+      },
+      postId: {
+        type: [String, Number],
+        required: true
+      }
+    },
     data() {
       return {
         // 父级评论
@@ -329,16 +339,6 @@
         emojis: ['😃', '😂', '😅', '😉', '😌', '😔', '😓', '😢', '😍', '😘', '😜', '😡', '😤', '😭', '😱', '😳', '😵', '🌚', '🙏', '👆', '👇', '👌', '🤘', '👍', '👎', '💪', '👏', '🌻', '🌹', '💊', '🇨🇳', '🇺🇸', '🇯🇵 ', '🚩', '🐶', '❤️', '💔', '💩', '👻']
       }
     },
-    props: {
-      likes: {
-        type: [String, Number],
-        required: true
-      },
-      postId: {
-        type: [String, Number],
-        required: true
-      }
-    },
     computed: {
       ...mapState({
         comment: state => state.comment,
@@ -365,6 +365,7 @@
     },
     mounted() {
       this.initUser()
+      this.initAppOptionBlackList()
       if (!this.comment.data.pagination.total_page) {
         this.loadComemntList()
       }
@@ -375,6 +376,21 @@
     methods: {
       browserParse,
       osParse,
+      // 初始化本地用户即本地用户的点赞历史
+      initUser() {
+        const user = localUser.get()
+        const historyLikes = localHistoryLikes.get()
+        historyLikes && (this.historyLikes = historyLikes)
+        if (user) {
+          this.user = user
+          this.upadteUserGravatar()
+          this.userCacheMode = true
+        }
+      },
+      // 初始化黑名单
+      initAppOptionBlackList() {
+        this.$store.dispatch('global/fetchAppOption')
+      },
       shang() {
         this.$ga.event('内容赞赏', '点击', 'tool')
         window.utils.openImgPopup(`${this.cdnUrl}/images/shang.jpg`, 'shang')
@@ -393,17 +409,6 @@
           protocol: 'https'
         });
         return gravatar_url.replace('https://s.gravatar.com/avatar', 'https://gravatar.surmon.me')
-      },
-      // 初始化本地用户即本地用户的点赞历史
-      initUser() {
-        const user = localUser.get()
-        const historyLikes = localHistoryLikes.get()
-        historyLikes && (this.historyLikes = historyLikes)
-        if (user) {
-          this.user = user
-          this.upadteUserGravatar()
-          this.userCacheMode = true
-        }
       },
       // 更新用户数据
       updateUserCache(event) {
@@ -613,7 +618,7 @@
            (this.blacklist.keywords.length && 
             eval(`/${this.blacklist.keywords.join('|')}/ig`).test(this.comemntContentText))) {
           alert(this.$i18n.text.comment.profile.submiterr)
-          console.warn('评论发布失败\n1：邮箱被列入黑名单\n2：内容包含黑名单关键词')
+          console.warn('评论发布失败\n1：被 Akismet 过滤\n2：邮箱/IP 被列入黑名单\n3：内容包含黑名单关键词')
           return false
         }
         if (!this.user.site) {
@@ -666,8 +671,8 @@
           this.cancelCommentReply()
           this.clearCommentContent()
           localUser.set(this.user)
-        }).catch(err => {
-          console.warn('评论发布失败', err)
+        }).catch(error => {
+          console.warn('评论发布失败，可能原因：被 Akismet 过滤，或者：\n', error)
           alert(this.$i18n.text.comment.profile.submiterr)
         })
       }
@@ -832,7 +837,7 @@
             background: $primary-opacity-9;
           }
           50% {
-            background: rgba(#50a849, .8);
+            background: rgba($accent, .8);
           }
           100% {
             background: $primary-opacity-9;

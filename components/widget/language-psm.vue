@@ -10,9 +10,9 @@
       <div
         class="item power"
         title="Power save mode"
-        :class="powerSavingMode ? 'on' : 'off'"
+        :class="onPowerSavingMode ? 'on' : 'off'"
         @click="toogglePowerSaveMode"
-      >{{ $i18n.text.action[powerSavingMode ? 'on' : 'off'] }}</div>
+      >{{ $i18n.text.action[onPowerSavingMode ? 'on' : 'off'] }}</div>
     </div>
   </div>
 </template>
@@ -23,7 +23,7 @@
   export default {
     name: 'language-psm',
     computed: {
-      ...mapState('global', ['language', 'powerSavingMode']),
+      ...mapState('global', ['language', 'onPowerSavingMode']),
       isEnLang() {
         return this.$store.getters['global/isEnLang']
       }
@@ -47,10 +47,10 @@
         const offText = isEnLang
           ? `Close「 Power Saving Mode 」will open ${psmText}，sure?`
           : `关闭「 Power Saving Mode 节能模式 」将会开启 ${psmText} 这些功能，可能会导致死机、起火、爆炸等风险，还要开启？`
-        if (this.powerSavingMode && confirm(offText)) {
-          this.$store.commit('global/updatePowerSavingMode', false)
+        if (this.onPowerSavingMode && confirm(offText)) {
+          this.$store.commit('global/updatePowerSavingOnMode', false)
         } else if (confirm(onText)) {
-          this.$store.commit('global/updatePowerSavingMode', true)
+          this.$store.commit('global/updatePowerSavingOnMode', true)
         }
       }
     }

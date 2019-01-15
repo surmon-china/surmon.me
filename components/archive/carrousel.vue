@@ -29,6 +29,11 @@
   import { mapState } from 'vuex'
   export default {
     name: 'index-carrousel',
+    props: {
+      article: {
+        type: Object
+      }
+    },
     data() {
       return {
         swiperOption: {
@@ -48,11 +53,6 @@
           preloadImages: false,
           lazy: true
         }
-      }
-    },
-    props: {
-      article: {
-        type: Object
       }
     },
     computed: {

@@ -16,7 +16,7 @@
     <nav class="navbar">
       <div class="navbar-container">
         <div class="navbar-header">
-          <a href class="navbar-menu" @click.stop.prevent="toggleSidebar(!mobileSidebar)">
+          <a href class="navbar-menu" @click.stop.prevent="toggleSidebar(!onMobileSidebar)">
             <i class="iconfont icon-menu"></i>
           </a>
           <nuxt-link to="/" class="navbar-logo">
@@ -41,8 +41,8 @@
       }
     },
     computed: {
-      mobileSidebar() {
-        return this.$store.state.global.mobileSidebar
+      onMobileSidebar() {
+        return this.$store.state.global.onMobileSidebar
       }
     },
     watch: {
@@ -56,7 +56,7 @@
         this.$router.push({ name: 'search-keyword', params: { keyword: this.keyword }})
       },
       toggleSidebar(open) {
-        this.$store.commit('global/updateMobileSidebar', open)
+        this.$store.commit('global/updateMobileSidebarOnState', open)
       }
     }
   }

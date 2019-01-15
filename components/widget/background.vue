@@ -1,7 +1,7 @@
 <template>
   <div class="global-background">
     <div class="background-image"></div>
-    <div id="particles-background" class="background-canvas" v-if="!powerSavingMode"></div>
+    <div id="particles-background" class="background-canvas" v-if="!onPowerSavingMode"></div>
   </div>
 </template>
 
@@ -13,10 +13,10 @@
       this.buildBackground()
     },
     computed: {
-      ...mapState('global', ['powerSavingMode'])
+      ...mapState('global', ['onPowerSavingMode'])
     },
     watch: {
-      powerSavingMode(on) {
+      onPowerSavingMode(on) {
         if (!on) {
           this.$nextTick(this.buildBackground)
         }
