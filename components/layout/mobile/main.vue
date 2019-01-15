@@ -3,10 +3,10 @@
     <div id="app-tools">
       <input type="text" v-model="clipboardText" class="clipboard-input" ref="clipboard">
     </div>
-    <div id="app-aside" v-if="isMobile" :class="mobileSidebarOpenClass">
-      <mobile-aside :class="mobileSidebarOpenClass" />
+    <div id="app-aside" v-if="isMobile" :class="onMobileSidebarOpenClass">
+      <mobile-aside :class="onMobileSidebarOpenClass" />
     </div>
-    <div id="app-main" :class="mobileSidebarOpenClass" @click="closeMobileSidebar">
+    <div id="app-main" :class="onMobileSidebarOpenClass" @click="closeMobileSidebar">
       <!-- header -->
       <header-view v-if="!isMobile" />
       <mobile-header v-else/>
@@ -16,31 +16,31 @@
         <no-ssr>
           <!-- <cursor-box /> -->
           <background/>
-          <barrage v-if="barrageMounted" v-cloak/>
-          <wall-flower-box v-if="!powerSavingMode" />
+          <barrage v-if="isMountedBarrage" v-cloak/>
+          <wall-flower-box v-if="!onPowerSavingMode" />
           <transition name="fade">
-            <webrtc v-if="!powerSavingMode && openWebrtc" v-cloak/>
+            <webrtc v-if="!onPowerSavingMode && onWebrtc" v-cloak/>
           </transition>
         </no-ssr>
         <transition name="fade">
-          <wallpaper-wall v-if="openWallpaper" v-cloak/>
+          <wallpaper-wall v-if="onWallpaper" v-cloak/>
         </transition>
       </template>
 
       <!-- pc and mobile -->
-      <emojo-rain v-if="!powerSavingMode" />
+      <emojo-rain v-if="!onPowerSavingMode" />
 
       <!-- main -->
       <main id="main" :class="{ 'mobile': isMobile, [$route.name]: true }">
         <transition name="module">
-          <nav-view v-if="!errorColumn && !isMobile" keep-alive/>
+          <nav-view v-if="!isThreeColumns && !isMobile" keep-alive/>
         </transition>
         <div
           id="main-content"
           class="main-content"
           :class="{
-               'full-column': fullColumn,
-               'error-column': errorColumn,
+               'full-column': isTwoColumns,
+               'error-column': isThreeColumns,
                'mobile-layout': isMobile,
                [$route.name]: true
               }"
@@ -48,13 +48,13 @@
           <nuxt/>
         </div>
         <transition name="aside">
-          <aside-view v-if="!fullColumn && !errorColumn && !isMobile" keep-alive/>
+          <aside-view v-if="!isTwoColumns && !isThreeColumns && !isMobile" keep-alive/>
         </transition>
       </main>
 
       <!-- common pc -->
       <template v-if="!isMobile">
-        <theme-view v-if="!powerSavingMode" @theme="setTheme" />
+        <theme-view v-if="!onPowerSavingMode" @theme="setTheme" />
         <share-view class="sidebar-share" v-if="isNotServicePage" />
         <language-psm v-if="isNotServicePage" />
         <wallpaper-switch v-if="isNotServicePage" />
@@ -137,20 +137,20 @@
     },
     computed: {
       ...mapState('global', [
-        'openWebrtc',
-        'openWallpaper',
-        'powerSavingMode',
-        'barrageMounted',
-        'fullColumn',
-        'errorColumn',
+        'onWebrtc',
+        'onWallpaper',
+        'onPowerSavingMode',
+        'isMountedBarrage',
+        'isTwoColumns',
+        'isThreeColumns',
         'isMobile',
-        'mobileSidebar'
+        'onMobileSidebar'
       ]),
-      mobileSidebarOpenClass() {
-        return { open: this.mobileSidebar }
+      onMobileSidebarOpenClass() {
+        return { open: this.onMobileSidebar }
       },
       isPcAndNotPsm() {
-        return !this.isMobile && !this.powerSavingMode
+        return !this.isMobile && !this.onPowerSavingMode
       },
       isNotServicePage() {
         return this.$route.name !== 'service'
@@ -181,7 +181,7 @@
       },
       closeMobileSidebar() {
         if (this.isMobile) {
-          this.$store.commit('global/updateMobileSidebar', false)
+          this.$store.commit('global/updateMobileSidebarOnState', false)
         }
       },
       watchTabActive() {

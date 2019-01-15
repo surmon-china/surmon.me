@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="comment">
-      <comment-box :post-id="0" :likes="$store.state.global.appOption.data.meta.likes" />
+      <comment-box :post-id="0" :likes="siteLikes" />
     </div>
   </div>
 </template>
@@ -22,7 +22,14 @@
         title: `${this.isEnLang ? '' : this.$i18n.nav.guestbook + ' | '}Guestbook`
       }
     },
+    fetch({ store }) {
+      return store.dispatch('global/fetchAppOption')
+    },
     computed: {
+      siteLikes() {
+        const appOption = this.$store.state.global.appOption.data
+        return appOption ? appOption.meta.likes : 0
+      },
       isEnLang() {
         return this.$store.getters['global/isEnLang']
       },

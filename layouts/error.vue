@@ -17,10 +17,10 @@
     layout: 'empty',
     props: ['error'],
     mounted() {
-      this.$store.commit('global/updateErrorColumn', true)
+      this.$store.commit('global/updateThreeColumnsState', true)
     },
     beforeDestroy() {
-      this.$store.commit('global/updateErrorColumn', false)
+      this.$store.commit('global/updateThreeColumnsState', false)
     }
   }
 </script>

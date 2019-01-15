@@ -9,6 +9,15 @@ exports.Language = {
   En: 'en',
 }
 
+exports.Theme = {
+  Default: 'default',
+  Beige: 'beige',
+  Gay: 'gay',
+  Wang: 'wang',
+  Red: 'red',
+  Dark: 'dark'
+}
+
 exports.ImageExt = {
   Webp: 'webp',
   Jpg: 'jpeg',

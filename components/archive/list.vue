@@ -18,10 +18,10 @@
       <transition name="module" mode="out-in">
         <transition-group name="fade" tag="div" v-if="article.data.data && article.data.data.length">
           <list-item
-            :key="index"
-            :article="item"
-            @click.native="toDetail(item)"
-            v-for="(item, index) in article.data.data"
+            :key="articleItem.id"
+            :article="articleItem"
+            @click.native="toDetail(articleItem)"
+            v-for="articleItem in article.data.data"
           />
         </transition-group>
         <empty-box class="article-empty-box" v-else>

@@ -96,7 +96,7 @@
         return this.sizes[this.sizeIndex]
       },
       barrageState() {
-        return this.$store.state.global.openBarrage
+        return this.$store.state.global.onBarrage
       }
     },
     beforeMount() {
@@ -160,13 +160,12 @@
       // 计算随机数
       randomPer(pre = 3) {
         const rnd = seed => {
-            seed = (seed * 9301 + 49297) % 233280
-            return seed / (233280.0)
+          seed = (seed * 9301 + 49297) % 233280
+          return seed / (233280.0)
         }
         const rand = number => {
-            const seed = new Date().getTime()
-            return rnd(seed) * number + Math.random()
-            // return Math.ceil(rnd(seed) * number)
+          const seed = new Date().getTime()
+          return rnd(seed) * number + Math.random()
         }
         return rand(pre)
       },

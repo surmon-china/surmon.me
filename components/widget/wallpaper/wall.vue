@@ -62,7 +62,7 @@
     },
     methods: {
       close() {
-        this.$store.commit('global/updateWallpaperState', false)
+        this.$store.commit('global/updateWallpaperOnState', false)
       },
       setPaperImageClass(index) {
         // 由于用户窗口可能发生变化，所以每次都重新计算

@@ -3,34 +3,34 @@
     <header-view/>
     <no-ssr>
       <background/>
-      <barrage v-if="barrageMounted" v-cloak/>
-      <wall-flower v-if="!powerSavingMode" />
+      <barrage v-if="isMountedBarrage" v-cloak/>
+      <wall-flower v-if="!onPowerSavingMode" />
       <transition name="fade">
-        <webrtc v-if="!powerSavingMode && openWebrtc" v-cloak/>
+        <webrtc v-if="!onPowerSavingMode && onWebrtc" v-cloak/>
       </transition>
       <transition name="fade">
-        <wallpaper-wall v-if="openWallpaper" v-cloak/>
+        <wallpaper-wall v-if="onWallpaper" v-cloak/>
       </transition>
-      <emoji-rain v-if="!powerSavingMode" />
+      <emoji-rain v-if="!onPowerSavingMode" />
       <language-psm v-if="isNotServicePage" />
       <wallpaper-switch v-if="isNotServicePage" />
-      <theme-switch v-if="!powerSavingMode && isNotServicePage" @theme="setTheme" />
+      <theme-switch v-if="!onPowerSavingMode && isNotServicePage" />
       <share-box v-if="isNotServicePage" class="sidebar-share" />
       <tool-box v-if="isNotFullColPage" />
     </no-ssr>
     <main id="main" :class="{ 'full-view': isFullViewWidth }">
       <transition name="module">
-        <nav-view v-if="!errorColumn" keep-alive/>
+        <nav-view v-if="!isThreeColumns" keep-alive/>
       </transition>
       <div
         id="main-content"
         class="main-content"
-        :class="{ 'full-column': fullColumn, 'error-column': errorColumn, 'full-view': isFullViewWidth }"
+        :class="{ 'full-column': isTwoColumns, 'error-column': isThreeColumns, 'full-view': isFullViewWidth }"
       >
-        <nuxt></nuxt>
+        <nuxt />
       </div>
       <transition name="aside">
-        <aside-view v-if="!fullColumn && !errorColumn" keep-alive/>
+        <aside-view v-if="!isTwoColumns && !isThreeColumns" keep-alive/>
       </transition>
     </main>
     <footer-view/>
@@ -55,7 +55,6 @@
   import ShareBox from '~/components/widget/share'
   import ThemeSwitch from '~/components/widget/theme'
   import music from '~/expansions/music'
-  import * as humanizedStorage from '~/transforms/local-storage'
 
   export default {
     name: 'pc-main',
@@ -65,7 +64,6 @@
       HeaderView, FooterView, AsideView, NavView, // 布局
     },
     mounted() {
-      this.setHistoryTheme()
       this.watchTabActive()
       // this.watchFullScreen()
       this.$store.dispatch('wallpaper/fetchPapers')
@@ -75,7 +73,7 @@
     },
     computed: {
       ...mapState('global', [
-        'openWebrtc', 'openWallpaper', 'powerSavingMode', 'barrageMounted', 'fullColumn', 'errorColumn'
+        'onWebrtc', 'onWallpaper', 'onPowerSavingMode', 'isMountedBarrage', 'isTwoColumns', 'isThreeColumns'
       ]),
       isNotServicePage() {
         return this.$route.name !== 'service'
@@ -88,15 +86,6 @@
       }
     },
     methods: {
-      setTheme(theme) {
-        this.$emit('setTheme', theme)
-      },
-      setHistoryTheme() {
-        const historyTheme = humanizedStorage.get('theme')
-        if (historyTheme) {
-          this.setTheme(historyTheme)
-        }
-      },
       watchTabActive() {
         // todo2 -> 彩蛋
         let reallyDocumentTitle

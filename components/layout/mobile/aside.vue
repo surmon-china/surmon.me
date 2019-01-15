@@ -6,42 +6,42 @@
       </div>
       <div class="profile">
         <h3 class="name">Surmon</h3>
-        <p class="email" v-text="$i18n.text.slogan">Talk is cheap. Show me the code</p>
+        <p class="email" v-text="$i18n.text.slogan"></p>
       </div>
     </div>
     <div class="aside-nav">
       <nav class="nav-list">
         <nuxt-link :to="'/'" class="item" exact>
           <i class="iconfont icon-home"></i>
-          <span v-text="$i18n.nav.home">Home</span>
+          <span v-text="$i18n.nav.home"></span>
         </nuxt-link>
         <nuxt-link to="/category/code" class="item">
           <i class="iconfont icon-code"></i>
-          <span v-text="$i18n.nav.code">Code</span>
+          <span v-text="$i18n.nav.code"></span>
         </nuxt-link>
         <nuxt-link to="/project" class="item">
           <i class="iconfont icon-tool"></i>
-          <span v-text="$i18n.nav.project">Project</span>
+          <span v-text="$i18n.nav.project"></span>
         </nuxt-link>
         <nuxt-link to="/category/think" class="item">
           <i class="iconfont icon-think"></i>
-          <span v-text="$i18n.nav.think">Think</span>
+          <span v-text="$i18n.nav.think"></span>
         </nuxt-link>
         <nuxt-link to="/sitemap" class="item">
           <i class="iconfont icon-peachblossom"></i>
-          <span v-text="$i18n.nav.map">Sitemap</span>
+          <span v-text="$i18n.nav.map"></span>
         </nuxt-link>
         <nuxt-link to="/about" class="item">
           <i class="iconfont icon-user"></i>
-          <span v-text="$i18n.nav.about">About</span>
+          <span v-text="$i18n.nav.about"></span>
         </nuxt-link>
         <nuxt-link to="/service" class="item">
           <i class="iconfont icon-zan"></i>
-          <span v-text="$i18n.nav.service">Service</span>
+          <span v-text="$i18n.nav.service"></span>
         </nuxt-link>
         <nuxt-link to="/guestbook" class="item guestbook">
           <i class="iconfont icon-comment"></i>
-          <span v-text="$i18n.nav.guestbook">Guestbook</span>
+          <span v-text="$i18n.nav.guestbook"></span>
         </nuxt-link>
         <a
           :href="ads.taobao"
@@ -51,7 +51,7 @@
           target="_blank"
         >
           <i class="iconfont icon-taobao"></i>
-          <span v-text="$i18n.nav.taobao">Taobao</span>
+          <span v-text="$i18n.nav.taobao"></span>
         </a>
         <a
           :href="ads.aliyun"
@@ -61,7 +61,7 @@
           target="_blank"
         >
           <i class="iconfont icon-aliyun"></i>
-          <span v-text="$i18n.nav.aliyun">Aliyun</span>
+          <span v-text="$i18n.nav.aliyun"></span>
         </a>
         <a
           href="https://errend.io"
@@ -75,7 +75,7 @@
         </a>
         <nuxt-link to="/app" class="item app">
           <i class="iconfont icon-app"></i>
-          <span v-text="$i18n.nav.app">App</span>
+          <span v-text="$i18n.nav.app"></span>
         </nuxt-link>
       </nav>
     </div>
@@ -86,10 +86,13 @@
   import adConfig from '~/config/ad.config'
   export default {
     name: 'mobile-aside',
+    mounted() {
+      return this.$store.dispatch('global/fetchAdminInfo')
+    },
     computed: {
       ads: () => adConfig.mobile.aside,
       gravatar() {
-        const gravatar = this.$store.state.global.adminInfo.data.gravatar
+        const gravatar = this.$store.state.global.adminInfo.gravatar
         return gravatar 
           ? `${gravatar}?imageView2/1/w/180/h/180/interlace/1/q/75|imageslim` 
           : `${this.cdnUrl}/images/gravatar.jpg`

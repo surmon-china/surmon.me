@@ -246,7 +246,7 @@
 
       if (!getUserMedia) {
         window.alert('不支持我有什么办法')
-        this.$store.commit('global/updateWebRTCState', false)
+        this.$store.commit('global/updateWebRtcOnState', false)
         return false
       } else {
         navigator.getUserMedia = getUserMedia
@@ -392,7 +392,7 @@
       // 媒体请求被拒绝
       webrtc.on('localMediaError', err => {
         window.alert('切')
-        self.$store.commit('global/updateWebRTCState', false)
+        self.$store.commit('global/updateWebRtcOnState', false)
       })
 
       // 接收到一个信号源
