@@ -19,7 +19,7 @@ export const mutations = {
   },
   updateRepositoriesData(state, action) {
     state.repositories.data = action.result
-      .filter(repo => !repo.description || !repo.description.startsWith('#'))
+      .filter(repo => !repo.fork && (!repo.description || !repo.description.startsWith('#')))
       .sort((prev, next) => next.stargazers_count - prev.stargazers_count)
   },
 }

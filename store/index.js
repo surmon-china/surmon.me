@@ -20,7 +20,7 @@ export const actions = {
     const mustJpg = isIos || isFF || isMaxthon || isSafari || isBB || isIE || isEdge
 
     store.commit('global/updateUserAgent', userAgent)
-    store.commit('global/updateMobileLayout', isMobile)
+    store.commit('global/updateMobileLayoutState', isMobile)
     store.commit('global/updateImageExt', mustJpg ? systemConstants.ImageExt.Jpg : systemConstants.ImageExt.Webp)
 
     // 如果是移动端，则设置语言为中文
@@ -32,8 +32,8 @@ export const actions = {
       // 同构常量
       // store.dispatch('global/fetchConstants'),
       // 配置数据
-      store.dispatch('global/fetchAdminInfo'),
-      store.dispatch('global/fetchAppOption'),
+      // store.dispatch('global/fetchAdminInfo'),
+      // store.dispatch('global/fetchAppOption'),
       // 内容数据
       store.dispatch('tag/fetchList'),
       store.dispatch('category/fetchList')
@@ -46,7 +46,7 @@ export const actions = {
 
     // 首次服务端渲染时渲染评论数据
     const isGuestbook = route.name === 'guestbook'
-    const post_id = params.article_id || isGuestbook ? stateConstants.CommentPostType.Guestbook : null
+    const post_id = params.article_id || (isGuestbook ? stateConstants.CommentPostType.Guestbook : null)
 
     if (post_id != null) {
       initFetchAppData.push(store.dispatch('comment/fetchList', { post_id }))

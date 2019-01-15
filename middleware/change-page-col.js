@@ -7,16 +7,16 @@
 export default ({ route, store }, next) => {
 
   // columns
-  const fullColumn = ['about', 'project', 'sitemap'].includes(route.name)
-  const errorColumn = ['music', 'app', 'service'].includes(route.name)
+  const isTwoColumns = ['about', 'project', 'sitemap'].includes(route.name)
+  const isThreeColumns = ['music', 'app', 'service'].includes(route.name)
   
   // set columns
-  if (store.state.global.fullColumn !== fullColumn) {
-    store.commit('global/updateFullColumn', fullColumn)
+  if (store.state.global.isTwoColumns !== isTwoColumns) {
+    store.commit('global/updateTwoColumnsState', isTwoColumns)
   }
   
-  if (store.state.global.errorColumn !== errorColumn) {
-    store.commit('global/updateErrorColumn', errorColumn)
+  if (store.state.global.isThreeColumns !== isThreeColumns) {
+    store.commit('global/updateThreeColumnsState', isThreeColumns)
   }
 
   next()

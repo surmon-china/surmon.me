@@ -12,7 +12,7 @@ const consola = require('consola')
 const underscore = require('../utils/underscore-simple')
 
 // file
-const dataPath = path.join(__dirname, '..', 'data/')
+const dataPath = path.join(__dirname, '..', 'data') + '/'
 const dataFile = dataPath + 'barrages.json'
 const defaultFile = dataPath + 'barrages.default.json'
 

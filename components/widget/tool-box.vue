@@ -6,7 +6,7 @@
           class="webrtc"
           @click="toggleWebrtc"
           :title="$i18n.text.webrtc"
-          :disabled="barrageState || powerSavingMode"
+          :disabled="barrageState || onPowerSavingMode"
           :class="{ 
             active: webrtcState,
             close: barrageState
@@ -71,9 +71,9 @@
     computed: {
       ...mapState('global', {
         language: 'language',
-        webrtcState: 'openWebrtc',
-        barrageState: 'openBarrage',
-        powerSavingMode: 'powerSavingMode'
+        webrtcState: 'onWebrtc',
+        barrageState: 'onBarrage',
+        onPowerSavingMode: 'onPowerSavingMode'
       }),
       isEnLang() {
         return this.$store.getters['global/isEnLang']
@@ -118,7 +118,7 @@
       },
       toggleBarrage() {
         this.$ga.event('弹幕功能', '切换', 'tool')
-        this.$store.commit('global/updateBarrageState')
+        this.$store.commit('global/updateBarrageOnState')
       },
       toggleWebrtc() {
         this.$ga.event('WebRTC', '切换', 'tool')
@@ -127,7 +127,7 @@
             ? 'Will open WebRTC、WebGL、Canvas, ready?'
             : '实验室功能需要 WebRTC、WebGL、Canvas 等技术的支持，可能占用较多 CPU/GPU 资源，甚至死机、起火、爆炸、毁灭，继续？'
           if (!window.confirm(confirmText)) {
-            this.$store.commit('global/updateWebRTCState', false)
+            this.$store.commit('global/updateWebRtcOnState', false)
             window.alert(this.isEnLang ? 'Sorry~' : '滚滚滚')
             return false
           }
@@ -137,7 +137,7 @@
           this.toggleWebrtcFn()
         } else {
           this.toggleWebrtcFn = underscore.throttle(() => {
-            this.$store.commit('global/updateWebRTCState')
+            this.$store.commit('global/updateWebRtcOnState')
           }, 1666)
           this.toggleWebrtcFn()
         }
