@@ -55,6 +55,7 @@
   import ShareBox from '~/components/widget/share'
   import ThemeSwitch from '~/components/widget/theme'
   import music from '~/expansions/music'
+  import { setEggTitle, resetTitle } from '~/utils/title-egg'
 
   export default {
     name: 'pc-main',
@@ -87,15 +88,9 @@
     },
     methods: {
       watchTabActive() {
-        // todo2 -> 彩蛋
-        let reallyDocumentTitle
         document.addEventListener('visibilitychange', event => {
-          if (event.target.hidden || event.target.webkitHidden) {
-            reallyDocumentTitle = document.title
-            document.title = '皮皮虾，快回来！'
-          } else {
-            document.title = reallyDocumentTitle
-          }
+          const isHidden = event.target.hidden || event.target.webkitHidden
+          isHidden ? setEggTitle() : resetTitle()
         }, false)
       },
       watchFullScreen() {
