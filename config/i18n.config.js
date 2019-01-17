@@ -94,12 +94,12 @@ module.exports = {
       },
       device: {
         android: {
-          zh: '安卓',
-          en: 'Android'
+          zh: '安卓（重构中）',
+          en: 'Android (expired)'
         },
         ios: {
-          zh: '苹果',
-          en: 'IOS'
+          zh: '苹果（重构中）',
+          en: 'IOS (expired)'
         }
       },
       webrtc: {

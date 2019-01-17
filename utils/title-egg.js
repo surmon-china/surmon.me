@@ -5,6 +5,7 @@
  */
 
 import { isBrowser } from '~/environment'
+import { titles } from '~/config/egg.config'
 
 let rollTimer = null
 let eggTitle = ''
@@ -14,52 +15,9 @@ const now = new Date()
 const today = now.getDate()
 const tomonth = now.getMonth() + 1
 const toyear = now.getFullYear()
-const defaultEgg = `今天是 ${tomonth} 月 ${today} 日，祝你快乐~ `
+const defaultEgg = `你好啊，怪物史莱克，今天是 ${tomonth} 🈷️ ${today} 日，又是有趣的一天~ `
 
-// 彩蛋表
-const eggs = [
-  {
-    day: 1,
-    month: 1,
-    title: '🎁 元旦快乐！'
-  },
-  {
-    day: 28,
-    month: 1,
-    year: 2019,
-    title: `🎁 今日小年，新年快乐！`
-  },
-  {
-    day: 4,
-    month: 2,
-    year: 2019,
-    title: '🎁 除夕快乐！'
-  },
-  {
-    day: 5,
-    month: 2,
-    year: 2019,
-    title: '🎁 新年快乐！'
-  },
-  {
-    day: 14,
-    month: 2,
-    title: '🎁 有情人终成眷属！'
-  },
-  {
-    day: 19,
-    month: 2,
-    year: 2019,
-    title: '🎁 元宵节快乐！'
-  },
-  {
-    day: 8,
-    month: 3,
-    title: '🎁 女神节快乐！'
-  },
-]
-
-const matchedEgg = eggs.find(egg => {
+const matchedEgg = titles.find(egg => {
   const isToday = egg.day === today
   const isTomonth = egg.month == null || egg.month === tomonth
   const isToyear = egg.year == null || egg.year === toyear

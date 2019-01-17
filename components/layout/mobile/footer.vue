@@ -1,14 +1,19 @@
 <template>
   <footer class="footer">
     <div class="container">
-      <div class="footer-content">©{{ new Date().getFullYear() }}&nbsp;&nbsp;Surmon.me</div>
+      <div class="footer-content">©{{ year }}&nbsp;&nbsp;Surmon.me</div>
     </div>
   </footer>
 </template>
 
 <script>
   export default {
-    name: 'mobile-footer'
+    name: 'mobile-footer',
+    computed: {
+      year() {
+        return new Date().getFullYear()
+      }
+    }
   }
 </script>
 

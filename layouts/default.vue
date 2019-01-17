@@ -2,20 +2,23 @@
   <div id="app" :class="theme" v-cloak>
     <Clipboard />
     <PcMainView v-if="!isMobile" />
-    <!-- <MobileMainView v-else /> -->
+    <MobileMainView v-else />
   </div>
 </template>
 
 <script>
   import PcMainView from '~/components/layout/pc/main'
-  // import MobileMainView from '~/components/layout/mobile/main'
+  import MobileMainView from '~/components/layout/mobile/main'
   import Clipboard from '~/components/widget/clipboard'
   export default {
     name: 'app',
+    head() {
+      return this.isMobile ? { bodyAttrs: { class: 'mobile' }} : {}
+    },
     components: {
       Clipboard,
       PcMainView,
-      // MobileMainView
+      MobileMainView
     },
     computed: {
       theme() {
