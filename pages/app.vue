@@ -15,13 +15,13 @@
             :href="`${cdnUrl}/app/surmon.me.apk`"
             class="btn"
             v-text="$i18n.text.device.android"
-          >Android（expired）</a>
+          ></a>
           <a
             target="_blank"
             :href="`${cdnUrl}/app/surmon.me.ipa`"
             class="btn"
             v-text="$i18n.text.device.ios"
-          >Ios</a>
+          ></a>
         </div>
       </div>
     </div>

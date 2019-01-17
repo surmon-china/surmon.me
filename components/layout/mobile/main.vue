@@ -1,226 +1,61 @@
 <template>
-  <div id="app" :class="theme" v-cloak>
-    <div id="app-tools">
-      <input type="text" v-model="clipboardText" class="clipboard-input" ref="clipboard">
+  <div id="app-mobile">
+    <div id="app-aside" :class="onMobileSidebarOpenClass">
+      <aside-view :class="onMobileSidebarOpenClass" />
     </div>
-    <div id="app-aside" v-if="isMobile" :class="onMobileSidebarOpenClass">
-      <mobile-aside :class="onMobileSidebarOpenClass" />
-    </div>
-    <div id="app-main" :class="onMobileSidebarOpenClass" @click="closeMobileSidebar">
-      <!-- header -->
-      <header-view v-if="!isMobile" />
-      <mobile-header v-else/>
-
-      <!-- common pc full -->
-      <template v-if="!isMobile">
-        <no-ssr>
-          <!-- <cursor-box /> -->
-          <background/>
-          <barrage v-if="isMountedBarrage" v-cloak/>
-          <wall-flower-box v-if="!onPowerSavingMode" />
-          <transition name="fade">
-            <webrtc v-if="!onPowerSavingMode && onWebrtc" v-cloak/>
-          </transition>
-        </no-ssr>
-        <transition name="fade">
-          <wallpaper-wall v-if="onWallpaper" v-cloak/>
-        </transition>
-      </template>
-
-      <!-- pc and mobile -->
-      <emojo-rain v-if="!onPowerSavingMode" />
-
-      <!-- main -->
-      <main id="main" :class="{ 'mobile': isMobile, [$route.name]: true }">
-        <transition name="module">
-          <nav-view v-if="!isThreeColumns && !isMobile" keep-alive/>
-        </transition>
-        <div
-          id="main-content"
-          class="main-content"
-          :class="{
-               'full-column': isTwoColumns,
-               'error-column': isThreeColumns,
-               'mobile-layout': isMobile,
-               [$route.name]: true
-              }"
-        >
+    <div id="app-main" :class="onMobileSidebarOpenClass" ref="appMain">
+      <header-view />
+      <emoji-rain v-if="!onPowerSavingMode" />
+      <main id="main">
+        <div id="main-content" class="main-content">
           <nuxt/>
         </div>
-        <transition name="aside">
-          <aside-view v-if="!isTwoColumns && !isThreeColumns && !isMobile" keep-alive/>
-        </transition>
       </main>
-
-      <!-- common pc -->
-      <template v-if="!isMobile">
-        <theme-view v-if="!onPowerSavingMode" @theme="setTheme" />
-        <share-view class="sidebar-share" v-if="isNotServicePage" />
-        <language-psm v-if="isNotServicePage" />
-        <wallpaper-switch v-if="isNotServicePage" />
-        <tool-box v-if="isNotFullColPage" />
-      </template>
-
-      <!-- footer -->
-      <footer-view v-if="!isMobile" />
-      <mobile-footer v-else/>
+      <footer-view />
     </div>
   </div>
 </template>
 
 <script>
   import { mapState } from 'vuex'
-  import eventBus from '~/utils/event-bus'
-  import * as humanizedStorage from '~/transforms/local-storage'
-  import { MobileHeader, MobileFooter, MobileAside } from '~/components/mobile'
-  import {
-    WallpaperSwitch,
-    WallpaperWall,
-    Background,
-    EmojoRain,
-    LanguagePsm,
-    ToolBox,
-    Barrage,
-    Webrtc,
-    Header,
-    Footer,
-    Aside,
-    Share,
-    Theme,
-    Nav
-  } from '~/components/layout'
+  import HeaderView from './header'
+  import FooterView from './footer'
+  import AsideView from './aside'
+  import EmojiRain from '~/components/widget/emoji-rain'
   export default {
-    name: 'app',
-    head() {
-      return !this.isMobile ? {} : {
-        bodyAttrs: {
-          class: 'mobile'
-        }
-      }
-    },
-    data() {
-      return {
-        theme: 'default',
-        clipboardText: ''
-      }
-    },
-    mounted() {
-      if (!this.isMobile) {
-        this.setHistoryTheme()
-        this.$store.dispatch('wallpaper/fetchPapers')
-        this.$store.dispatch('wallpaper/fetchStory')
-        this.$store.dispatch('fetchSongList')
-      }
-      // this.watchFullScreen()
-      this.watchTabActive()
-      this.$root.$eventBus = eventBus
-      this.$root.$copyToClipboard = this.copyToClipboard
-    },
+    name: 'mobile-app',
     components: {
-      Webrtc,
-      Barrage,
-      ToolBox,
-      EmojoRain,
-      LanguagePsm,
-      WallpaperWall,
-      WallpaperSwitch,
-      Background,
-      HeaderView: Header,
-      FooterView: Footer,
-      AsideView: Aside,
-      ShareView: Share,
-      ThemeView: Theme,
-      NavView: Nav,
-      MobileHeader,
-      MobileFooter,
-      MobileAside
+      HeaderView,
+      FooterView,
+      AsideView,
+      EmojiRain
     },
     computed: {
-      ...mapState('global', [
-        'onWebrtc',
-        'onWallpaper',
-        'onPowerSavingMode',
-        'isMountedBarrage',
-        'isTwoColumns',
-        'isThreeColumns',
-        'isMobile',
-        'onMobileSidebar'
-      ]),
+      ...mapState('global', ['onMobileSidebar', 'onPowerSavingMode']),
       onMobileSidebarOpenClass() {
         return { open: this.onMobileSidebar }
       },
-      isPcAndNotPsm() {
-        return !this.isMobile && !this.onPowerSavingMode
-      },
-      isNotServicePage() {
-        return this.$route.name !== 'service'
-      },
-      isNotFullColPage() {
-        return !['app', 'music', 'service'].includes(this.$route.name)
-      }
     },
     methods: {
-      setHistoryTheme() {
-        const historyTheme = humanizedStorage.get('theme')
-        const theme = historyTheme || this.theme
-        this.setTheme(theme)
-      },
-      setTheme(theme) {
-        this.theme = theme
-        humanizedStorage.set('theme', theme)
-      },
-      copyToClipboard(text) {
-        this.clipboardText = text
-        // 维护中间量用于给拦截器做标识
-        window.clickCopy = true
-        setTimeout(() => {
-          this.$refs.clipboard.select()
-          document.execCommand('Copy')
-          window.clickCopy = false
-        })
-      },
-      closeMobileSidebar() {
-        if (this.isMobile) {
+      closeMobileSidebar(event) {
+        if (this.onMobileSidebar) {
           this.$store.commit('global/updateMobileSidebarOnState', false)
+          event.cancelBubble = true
+          event.stopPropagation()
+          event.preventDefault()
+          return false
         }
-      },
-      watchTabActive() {
-        let reallyDocumentTitle
-        document.addEventListener('visibilitychange', event => {
-          if (event.target.hidden || event.target.webkitHidden) {
-            reallyDocumentTitle = document.title
-            document.title = '皮皮虾，快回来！'
-          } else {
-            document.title = reallyDocumentTitle
-          }
-        }, false)
-      },
-      watchFullScreen() {
-        const fullscreenchange = event => {
-          // console.log('fullscreenchange', event)
-        }
-        document.addEventListener("fullscreenchange", fullscreenchange, false)
-        document.addEventListener("mozfullscreenchange", fullscreenchange, false)
-        document.addEventListener("webkitfullscreenchange", fullscreenchange, false)
-        document.addEventListener("msfullscreenchange", fullscreenchange, false)
       }
-    }
+    },
+    mounted() {
+      this.$refs.appMain.addEventListener('click', this.closeMobileSidebar, true)
+    },
   }
 </script>
 
 <style lang="scss" scoped>
-  #app {
+  #app-mobile {
     color: $text;
-
-    &[v-cloak] {
-      color: transparent;
-      -webkit-text-fill-color: transparent;
-    }
-
-    #app-tools {
-      height: 0px;
-      opacity: 0;
-    }
 
     #app-aside {
       width: 68%;
@@ -251,57 +86,15 @@
 
       main {
         position: relative;
-
-        &.service {
-          width: 100%;
-        }
+        width: 100%;
 
         .main-content {
-          float: left;
-          width: 42.5em;
-          margin: 0 0 0 12.5em;
           position: relative;
           overflow: hidden;
+          width: 100%;
+          margin: 0;
+          padding: $navbar-height + 1em 1rem 1rem;
           @include css3-prefix(transition, width .35s);
-
-          &:-moz-full-screen {
-            overflow-y: auto;
-          }
-           
-          &:-webkit-full-screen {
-            overflow-y: auto;
-          }
-            
-          &:fullscreen {
-            overflow-y: auto;
-          }
-
-          &.full-column {
-            width: 62.5em;
-            @include css3-prefix(transition, width .35s);
-          }
-
-          &.error-column {
-            width: 100%;
-            margin: 0;
-            @include css3-prefix(transition, width .35s);
-          }
-
-          &.mobile-layout {
-            width: 100%;
-            margin: 0;
-            padding: 1rem;
-            padding-top: $navbar-height + 1;
-          }
-
-          &.service {
-            width: 100%;
-            margin: -1em 0;
-
-            &.mobile-layout {
-              margin: 0;
-            }
-          }
         }
       }
     }
