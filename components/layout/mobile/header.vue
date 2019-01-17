@@ -2,6 +2,7 @@
   <header class="header">
     <form class="search" :class="{ actived: search }" @submit.stop.prevent="toSearch()">
       <input
+        ref="input"
         type="text"
         class="input"
         required
@@ -13,6 +14,9 @@
         <i class="iconfont icon-cancel"></i>
       </span>
     </form>
+    <transition name="module">
+      <div v-if="search" class="search-mask"></div>
+    </transition>
     <nav class="navbar">
       <div class="navbar-container">
         <div class="navbar-header">
@@ -22,7 +26,7 @@
           <nuxt-link to="/" class="navbar-logo">
             <img src="/images/logo.svg">
           </nuxt-link>
-          <a href class="navbar-search" @click.stop.prevent="search = !search">
+          <a href class="navbar-search" @click.stop.prevent="openSearch">
             <i class="iconfont icon-search"></i>
           </a>
         </div>
@@ -52,6 +56,12 @@
       }
     },
     methods: {
+      openSearch() {
+        this.search = true
+        this.$nextTick(() => {
+          this.$refs.input.focus()
+        })
+      },
       toSearch() {
         this.$router.push({ name: 'search-keyword', params: { keyword: this.keyword }})
       },
@@ -72,14 +82,25 @@
     background-color: $module-bg-opacity-9;
     z-index: 999;
 
+    .search-mask {
+      position: fixed;
+      z-index: 0;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      background-color: $module-hover-bg-darken-10;
+    }
+
     .search {
       position: absolute;
       display: flex;
+      z-index: 9999;
       width: 100%;
       height: $navbar-height;
       top: 0;
       left: 0;
-      z-index: 9999;
       opacity: 0;
       background-color: $white;
       transform: translateY(-100%);
