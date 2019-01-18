@@ -6,13 +6,12 @@
 
 const path = require('path')
 const fs = require('fs-extra')
-const consola = require('consola')
 
 // extend
 const underscore = require('../utils/underscore-simple')
 
 // file
-const dataPath = path.join(__dirname, '..', 'data') + '/'
+const dataPath = path.resolve(__dirname, '..', 'data') + '/'
 const dataFile = dataPath + 'barrages.json'
 const defaultFile = dataPath + 'barrages.default.json'
 
@@ -30,7 +29,7 @@ const updateLocalBarragesFile = () => {
   fs.outputJson(dataFile, barrages).then(() => {
     // console.log('最新聊天记录保存成功!')
   }).catch(err => {
-    consola.info('最新弹幕记录保存失败', err)
+    console.warn('最新弹幕记录保存失败', err)
   })
 }
 
@@ -38,7 +37,7 @@ const updateLocalBarragesFile = () => {
 const updateDebounce = underscore.debounce(updateLocalBarragesFile, 1000 * 30)
 let socketClients = 0
 
-const barrageServer = io => {
+const barrageService = io => {
 
   // 弹幕
   io.on('connection', socket => {
@@ -46,7 +45,7 @@ const barrageServer = io => {
     // 每次有新人加入，都更新客户端数量
     io.clients((error, clients) => {
       if (error) {
-        consola.info('客户端数获取失败', error)
+        console.warn('弹幕 socket 客户端数获取失败', error)
       } else {
         socketClients = clients.length
       }
@@ -78,4 +77,4 @@ const barrageServer = io => {
   })
 }
 
-module.exports = barrageServer
+module.exports = barrageService

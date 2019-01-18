@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-export default ({ route, store }, next) => {
+export default ({ route, store }) => {
 
   // columns
   const isTwoColumns = ['about', 'project', 'sitemap'].includes(route.name)
@@ -18,6 +18,4 @@ export default ({ route, store }, next) => {
   if (store.state.global.isThreeColumns !== isThreeColumns) {
     store.commit('global/updateThreeColumnsState', isThreeColumns)
   }
-
-  next()
 }

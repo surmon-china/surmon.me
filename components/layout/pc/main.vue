@@ -27,7 +27,7 @@
         class="main-content"
         :class="{ 'full-column': isTwoColumns, 'error-column': isThreeColumns, 'full-view': isFullViewWidth }"
       >
-        <nuxt />
+        <nuxt :nuxtChildKey="$route.name" keep-alive />
       </div>
       <transition name="aside">
         <aside-view v-if="!isTwoColumns && !isThreeColumns" keep-alive/>

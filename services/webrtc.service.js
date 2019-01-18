@@ -46,7 +46,7 @@ const beautys = {}
 const safeCb = cb => (typeof cb === 'function') ? cb : (() => {})
 
 // 服务
-const webrtcServer = io => {
+const webrtcService = io => {
 
   // webrtc
   io.on('connection', socket => {
@@ -225,4 +225,4 @@ const webrtcServer = io => {
   })
 }
 
-module.exports = webrtcServer
+module.exports = webrtcService

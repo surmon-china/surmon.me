@@ -1,5 +1,5 @@
 <template>
-  <div class="aside-nav">
+  <div id="nav" class="aside-nav">
     <nav is="nav" class="nav-list">
       <nuxt-link :to="'/'" class="item" exact>
         <i class="iconfont icon-home"></i>

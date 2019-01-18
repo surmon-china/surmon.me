@@ -31,6 +31,10 @@
           <i class="iconfont icon-peachblossom"></i>
           <span v-text="$i18n.nav.map"></span>
         </nuxt-link>
+        <nuxt-link to="/vlog" class="item">
+          <i class="iconfont icon-movie"></i>
+          <span v-text="$i18n.nav.vlog"></span>
+        </nuxt-link>
         <nuxt-link to="/about" class="item">
           <i class="iconfont icon-user"></i>
           <span v-text="$i18n.nav.about"></span>
