@@ -7,7 +7,6 @@
 const fs = require('fs')
 const path = require('path')
 const axios = require('axios')
-const consola = require('consola')
 
 const UPDATE_TIME = {
   HOURS_1: 1000 * 60 * 60 * 1,
@@ -18,18 +17,18 @@ const UPDATE_TIME = {
 const updateGAScript = () => {
   (function doUpdate() {
     axios.get('http://www.google-analytics.com/analytics.js', { timeout: 6000 })
-      .then(res => {
-        if (res.status === 200) {
-          fs.writeFileSync(path.join(__dirname, '..', '..', 'static', 'scripts') + '/analytics.js', res.data)
-          consola.info('GA 脚本更新成功', new Date())
+      .then(response => {
+        if (response.status === 200) {
+          fs.writeFileSync(path.resolve(__dirname, '..', 'static', 'scripts') + '/analytics.js', response.data)
+          console.log('GA 脚本更新成功', new Date())
           setTimeout(doUpdate, UPDATE_TIME.HOURS_24)
         } else {
-          consola.info('GA 脚本更新失败', new Date(), res.data)
+          console.warn('GA 脚本更新失败', new Date(), response.data)
           setTimeout(doUpdate, UPDATE_TIME.HOURS_1)
         }
       })
       .catch(error => {
-        consola.info('GA 脚本更新网络连接失败', new Date(), error)
+        console.warn('GA 脚本更新网络连接失败', new Date(), error)
         setTimeout(doUpdate, UPDATE_TIME.HOURS_1)
       })
   }())

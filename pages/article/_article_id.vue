@@ -202,6 +202,7 @@
       }
     },
     mounted() {
+      console.log('重新渲染了')
       this.updateAd()
     },
     data() {
