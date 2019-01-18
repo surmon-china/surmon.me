@@ -95,10 +95,6 @@ module.exports = {
           ]
         ]
       }
-    },
-    styleResources: {
-      scss: './assets/sass/init.scss',
-      options: {}
     }
   },
   plugins: [
@@ -177,6 +173,7 @@ module.exports = {
   },
   modules: [
     '@nuxtjs/pwa',
+    '@nuxtjs/style-resources',
     ['@nuxtjs/axios', { baseURL: apiConfig.baseUrl }]
   ],
   router: {
@@ -191,5 +188,8 @@ module.exports = {
     'swiper/dist/css/swiper.css',
     'highlight.js/styles/ocean.css',
     { src: '~assets/sass/app.scss', lang: 'sass' }
-  ]
+  ],
+  styleResources: {
+    scss: './assets/sass/init.scss',
+  }
 }
