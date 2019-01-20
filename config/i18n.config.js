@@ -37,7 +37,7 @@ module.exports = {
         en: 'project'
       },
       vlog: {
-        zh: '天涯未远',
+        zh: '天涯',
         en: 'vlog'
       },
       music: {

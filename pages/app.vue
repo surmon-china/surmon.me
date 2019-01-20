@@ -49,11 +49,11 @@
         return this.$store.state.global.isMobile
       }
     },
-    mounted() {
+    activated() {
       this.updateScreenHeight()
       window.addEventListener('resize', this.updateScreenHeight)
     },
-    beforeDestroy() {
+    deactivated() {
       window.removeEventListener('resize', this.updateScreenHeight)
     },
     methods: {

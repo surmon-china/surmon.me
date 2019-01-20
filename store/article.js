@@ -59,7 +59,7 @@ export const mutations = {
     state.detail.fetching = action
   },
   updateDetailData(state, action) {
-    state.detail.data = action.result
+    state.detail.data = action
   },
 
   // 喜欢某篇文章
@@ -116,9 +116,10 @@ export const actions = {
   // 获取文章详情
   fetchDetail({ commit }, params = {}) {
     commit('updateDetailFetchig', true)
+    commit('updateDetailData', {})
     return this.$axios.$get(`/article/${params.article_id}`)
       .then(response => {
-        commit('updateDetailData', response)
+        commit('updateDetailData', response.result)
         commit('updateDetailFetchig', false)
         return Promise.resolve(response)
       })

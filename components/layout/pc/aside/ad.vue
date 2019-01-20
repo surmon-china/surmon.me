@@ -10,7 +10,7 @@
               target="_blank"
               class="ad-box"
             >
-              <img :src="ad.src" alt="aliyun-ad">
+              <img :src="ad.src" alt="aliyun-ad" />
             </a>
           </div>
         </div>

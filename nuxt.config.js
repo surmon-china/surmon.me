@@ -12,7 +12,7 @@ const i18nConfig = require('./config/i18n.config')
 const systemConstants = require('./constants/system')
 const { isProdMode, isDevMode } = require('./environment')
 
-const htmlLang = i18nConfig.default || systemConstants.language.Zh
+const htmlLang = i18nConfig.default || systemConstants.Language.Zh
 const htmlSlogan = i18nConfig.data.text.slogan[htmlLang]
 
 module.exports = {
@@ -109,6 +109,7 @@ module.exports = {
     { src: '~/plugins/analytics', ssr: false },
     { src: '~/plugins/emoji-233333', ssr: false },
     { src: '~/plugins/image-popup', ssr: false },
+    { src: '~/plugins/iframe-popup', ssr: false },
     { src: '~/plugins/copy-right', ssr: false },
     // { src: '~/plugins/particles', ssr: false }
   ],
