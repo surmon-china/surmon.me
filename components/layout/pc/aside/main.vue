@@ -27,11 +27,11 @@
         <i class="iconfont icon-hotfill"></i>
         <span v-text="$i18n.text.article.hotlist"></span>
       </p>
-      <empty-box v-if="!article.fetching && !article.data.length">
+      <empty-box v-if="!articles.length">
         <slot>{{ $i18n.text.article.empty }}</slot>
       </empty-box>
-      <ul class="aside-article-list" v-else-if="!article.fetching && article.data.length">
-        <li class="item" :key="item.id" v-for="item in article.data">
+      <ul class="aside-article-list" v-else>
+        <li class="item" :key="item.id" v-for="item in articles">
           <span class="index"></span>
           <nuxt-link
             class="title"
@@ -44,14 +44,12 @@
       </ul>
     </div>
     <aside-ad ref="asideAd" @slideChange="handleSlideChange" />
-    <no-ssr>
-      <div class="aside-calendar">
-        <calendar/>
-      </div>
-    </no-ssr>
+    <div class="aside-calendar">
+      <calendar />
+    </div>
     <transition name="module">
       <div class="aside-ad" v-if="renderAd">
-        <adsense-aside/>
+        <adsense-aside />
       </div>
     </transition>
     <div class="aside-fixed-box" :class="{ fixed: fixedMode.fixed }" v-scroll-top>
@@ -61,16 +59,16 @@
         </transition>
       </no-ssr>
       <div class="aside-tag">
-        <empty-box v-if="!tag.fetching && !tag.data.length">
+        <empty-box v-if="!tags.length">
           <slot>{{ $i18n.text.tag.empty }}</slot>
         </empty-box>
-        <ul class="aside-tag-list" v-else-if="!tag.fetching && tag.data.length">
+        <ul class="aside-tag-list" v-else>
           <nuxt-link
             tag="li"
             class="item"
             :key="index"
             :to="`/tag/${item.slug}`"
-            v-for="(item, index) in tag.data"
+            v-for="(item, index) in tags"
           >
             <a class="title" :title="item.description">
               <i
@@ -130,8 +128,8 @@
     },
     computed: {
       ...mapState({
-        tag: state => state.tag,
-        article: state => state.article.hotList,
+        tags: state => state.tag.data,
+        articles: state => state.article.hotList.data,
         language: state => state.global.language
       }),
       isArticlePage() {

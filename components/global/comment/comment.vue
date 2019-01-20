@@ -1,51 +1,75 @@
 <template>
   <div class="comment-box" id="comment-box" :class="{ mobile: isMobile }">
     <div class="tools">
-      <div class="total">
-        <div class="count">
-          <strong class="count">{{ comment.data.pagination.total || 0 }}</strong>
-          <span v-text="$i18n.text.comment.count"></span>
+      <template v-if="fetching">
+        <div class="total-skeleton">
+          <skeleton-line class="count-skeleton" />
+          <skeleton-line class="like-skeleton" />
         </div>
-        <a href class="like" :class="{ liked: pageLiked }" @click.stop.prevent="likePage">
-          <i class="iconfont icon-like"></i>
-          <strong>{{ likes || 0 }}</strong>
-          <span v-text="(isMobile && !languageIsEn) ? '人喜欢' : $i18n.text.comment.like"></span>
-        </a>
-        <a href class="shang" @click.stop.prevent="shang">
-          <i class="iconfont icon-shang"></i>
-        </a>
-      </div>
-      <div class="sort">
-        <a
-          href
-          class="sort-btn"
-          :class="{ actived: Object.is(sortMode, constants.SortType.Desc) }"
-          @click.stop.prevent="sortComemnts(constants.SortType.Desc)"
-          v-text="$i18n.text.comment.new"
-        >最新</a>
-        <a
-          href
-          class="sort-btn"
-          :class="{ actived: Object.is(sortMode, constants.SortType.Hot) }"
-          @click.stop.prevent="sortComemnts(constants.SortType.Hot)"
-          v-text="$i18n.text.comment.hot"
-        >最热</a>
-      </div>
+        <div class="sort-skeleton">
+          <skeleton-line />
+        </div>
+      </template>
+      <template v-else>
+        <div class="total">
+          <div class="count">
+            <strong class="count">{{ comment.pagination.total || 0 }}</strong>
+            <span v-text="$i18n.text.comment.count"></span>
+          </div>
+          <a href class="like" :class="{ liked: isLikedPage }" @click.stop.prevent="likePage">
+            <i class="iconfont icon-like"></i>
+            <strong>{{ likes || 0 }}</strong>
+            <span v-text="(isMobile && !isEnLang) ? '人喜欢' : $i18n.text.comment.like"></span>
+          </a>
+          <a href class="shang" @click.stop.prevent="shang">
+            <i class="iconfont icon-shang"></i>
+          </a>
+        </div>
+        <div class="sort">
+          <a
+            href
+            class="sort-btn"
+            :class="{ actived: Object.is(sortMode, constants.SortType.Desc) }"
+            @click.stop.prevent="sortComemnts(constants.SortType.Desc)"
+            v-text="$i18n.text.comment.new"
+          >最新</a>
+          <a
+            href
+            class="sort-btn"
+            :class="{ actived: Object.is(sortMode, constants.SortType.Hot) }"
+            @click.stop.prevent="sortComemnts(constants.SortType.Hot)"
+            v-text="$i18n.text.comment.hot"
+          >最热</a>
+        </div>
+      </template>
     </div>
-    <transition name="module" mode="out-in">
+    <template v-if="isFetching">
+      <div class="list-box list-skeleton">
+        <ul class="comment-list">
+          <li class="comment-item" :key="item" v-for="item in 5">
+            <div class="gravatar">
+              <skeleton-base />
+            </div>
+            <div class="content">
+              <skeleton-paragraph :lines="4" />
+            </div>
+          </li>
+        </ul>
+      </div>
+    </template>
+    <template v-else>
       <div
         class="empty-box"
-        v-if="!comment.data.data.length && !comment.fetching"
+        v-if="!comment.data.length"
         v-text="$i18n.text.comment.empty"
-      >Go right to the heart of the matter.</div>
-      <loading-box v-else-if="comment.fetching"></loading-box>
+      ></div>
       <div class="list-box" v-else>
         <transition-group name="fade" tag="ul" class="comment-list">
           <li
             class="comment-item"
             :id="`comment-item-${comment.id}`"
             :key="comment.id"
-            v-for="comment in comment.data.data"
+            v-for="comment in comment.data"
           >
             <div class="cm-avatar" v-if="!isMobile">
               <a
@@ -111,16 +135,16 @@
           </li>
         </transition-group>
       </div>
-    </transition>
+    </template>
     <transition name="module">
-      <div class="pagination-box" v-if="comment.data.pagination.total_page > 1">
+      <div class="pagination-box" v-if="comment.pagination.total_page > 1">
         <ul class="pagination-list" v-if="Object.is(sortMode, constants.SortType.Hot)">
-          <li class="item" :key="index" v-for="(item, index) in comment.data.pagination.total_page">
+          <li class="item" :key="index" v-for="(item, index) in comment.pagination.total_page">
             <a
               href
               class="pagination-btn"
-              :class="{ 'actived disabled': Object.is(item, comment.data.pagination.current_page) }"
-              @click.stop.prevent="Object.is(item, comment.data.pagination.current_page) 
+              :class="{ 'actived disabled': Object.is(item, comment.pagination.current_page) }"
+              @click.stop.prevent="Object.is(item, comment.pagination.current_page) 
                ? false 
                : loadComemntList({ page: item })"
             >{{ item }}</a>
@@ -133,7 +157,7 @@
               <span v-text="$i18n.text.comment.pagenation.old">old</span>
             </a>
           </li>
-          <li class="item" :key="index" v-for="(item, index) in comment.data.pagination.total_page">
+          <li class="item" :key="index" v-for="(item, index) in comment.pagination.total_page">
             <a
               href
               class="pagination-btn"
@@ -141,7 +165,7 @@
               @click.stop.prevent="paginationReverseActive(item)
                 ? false 
                 : loadComemntList({ 
-                    page: comment.data.pagination.total_page + 1 - item 
+                    page: comment.pagination.total_page + 1 - item 
                 })"
             >{{ item }}</a>
           </li>
@@ -277,8 +301,13 @@
             <a href class="preview" title="preview" @click.stop.prevent="togglePreviewMode">
               <i class="iconfont icon-eye"></i>
             </a>
-            <button type="submit" class="submit" :disabled="comment.posting" @click="submitComment($event)">
-              <span>{{ comment.posting ? $i18n.text.comment.submiting : $i18n.text.comment.submit }}</span>
+            <button
+              type="submit"
+              class="submit"
+              :disabled="commentPosting || isFetching"
+              @click="submitComment($event)"
+            >
+              <span v-text="commentPosting ? $i18n.text.comment.submiting : $i18n.text.comment.submit"></span>
             </button>
           </div>
         </div>
@@ -298,13 +327,15 @@
   export default {
     name: 'vue-comment',
     props: {
+      fetching: {
+        type: Boolean,
+        default: false
+      },
       likes: {
         type: [String, Number],
-        required: true
       },
       postId: {
         type: [String, Number],
-        required: true
       }
     },
     data() {
@@ -341,16 +372,21 @@
     },
     computed: {
       ...mapState({
-        comment: state => state.comment,
+        comment: state => state.comment.data,
+        commentFetching: state => state.comment.fetching,
+        commentPosting: state => state.comment.posting,
         constants: state => state.global.constants,
         language: state => state.global.language,
         isMobile: state => state.global.isMobile,
         blacklist: state => state.global.appOption.data.blacklist,
       }),
-      languageIsEn() {
+      isFetching() {
+        return this.fetching || this.commentFetching
+      },
+      isEnLang() {
         return this.$store.getters['global/isEnLang']
       },
-      pageLiked() {
+      isLikedPage() {
         return this.historyLikes.pages.includes(this.postId)
       },
       isArticlePage() {
@@ -360,17 +396,20 @@
         return Object.is(this.$route.name, 'guestbook')
       },
       replyCommentSlef() {
-        return this.comment.data.data.find(comment => Object.is(comment.id, this.pid))
+        return this.comment.data.find(comment => Object.is(comment.id, this.pid))
       }
     },
     mounted() {
       this.initUser()
       this.initAppOptionBlackList()
-      if (!this.comment.data.pagination.total_page) {
+      if (!this.comment.pagination.total_page && !this.fetching) { // 判断服务端已请求造成多余的请求
         this.loadComemntList()
       }
     },
     destroyed() {
+      this.$store.commit('comment/clearListData')
+    },
+    deactivated() {
       this.$store.commit('comment/clearListData')
     },
     methods: {
@@ -506,7 +545,7 @@
       },
       // 翻页反向计算
       paginationReverseActive(index) {
-        const pagination = this.comment.data.pagination
+        const pagination = this.comment.pagination
         return Object.is(index, pagination.total_page + 1 - pagination.current_page)
       },
       // 点击用户
@@ -542,12 +581,12 @@
       },
       // 找到回复来源
       fondReplyParent(comment_id) {
-        const parent = this.comment.data.data.find(comment => Object.is(comment.id, comment_id))
+        const parent = this.comment.data.find(comment => Object.is(comment.id, comment_id))
         return parent ? parent.author.name : null
       },
       // 喜欢当前页面
       likePage() {
-        if (this.pageLiked) {
+        if (this.isLikedPage) {
           return false
         }
         this.$store.dispatch(
@@ -675,6 +714,13 @@
           console.warn('评论发布失败，可能原因：被 Akismet 过滤，或者：\n', error)
           alert(this.$i18n.text.comment.profile.submiterr)
         })
+      }
+    },
+    watch: {
+      postId(postId) {
+        if (postId != null) {
+          this.loadComemntList()
+        }
       }
     }
   }
@@ -821,6 +867,30 @@
       border-bottom: 1px solid $module-hover-bg;
       margin-bottom: .6em;
 
+      .count-skeleton,
+      .like-skeleton,
+      .sort-skeleton {
+        height: 2rem;
+      }
+      
+      .total-skeleton {
+        display: flex;
+        width: 70%;
+
+        .count-skeleton {
+          width: 20%;
+          margin-right: 1rem;
+        }
+
+        .like-skeleton {
+          width: 40%;
+        }
+      }
+      
+      .sort-skeleton {
+        width: 20%;
+      }
+
       > .total {
         display: flex;
         font-size: 1em;
@@ -879,6 +949,25 @@
             color: $black;
             font-weight: bold;
           }
+        }
+      }
+    }
+
+    > .list-skeleton {
+
+      .comment-item {
+        padding-left: 0!important;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        .gravatar {
+          width: 5rem;
+          height: 5rem;
+        }
+
+        .content {
+          width: calc((100% - 5rem) * 0.9);
         }
       }
     }

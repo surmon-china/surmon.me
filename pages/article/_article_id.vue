@@ -1,172 +1,198 @@
 <template>
-  <div class="article" :class="{ mobile: isMobile }">
+  <article class="article" :class="{ mobile: isMobile }">
     <div class="detail">
-      <div
-        class="oirigin"
-        :class="{
-          self: !article.origin,
-          other: article.origin === constants.OriginState.Reprint,
-          hybrid: article.origin === constants.OriginState.Hybrid
-        }"
-      >
-        <span v-if="!article.origin" v-text="$i18n.text.origin.original"></span>
-        <span v-else-if="article.origin === constants.OriginState.Reprint" v-text="$i18n.text.origin.reprint"></span>
-        <span v-else-if="article.origin === constants.OriginState.Hybrid" v-text="$i18n.text.origin.hybrid"></span>
-      </div>
-      <h2 class="title">{{ article.title || '...' }}</h2>
-      <div class="content" v-html="articleContent"></div>
+      <transition name="module">
+        <div
+          v-if="!isFetching"
+          class="oirigin"
+          :class="{
+            self: !article.origin,
+            other: article.origin === constants.OriginState.Reprint,
+            hybrid: article.origin === constants.OriginState.Hybrid
+          }"
+        >
+          <span v-if="!article.origin" v-text="$i18n.text.origin.original"></span>
+          <span v-else-if="article.origin === constants.OriginState.Reprint" v-text="$i18n.text.origin.reprint"></span>
+          <span v-else-if="article.origin === constants.OriginState.Hybrid" v-text="$i18n.text.origin.hybrid"></span>
+        </div>
+      </transition>
       <transition name="module" mode="out-in">
-        <div class="readmore" v-if="canReadMore">
-          <button class="readmore-btn" :disabled="readMoreLoading" @click="readMore()">
-            <span>{{ readMoreLoading ? $i18n.text.article.rendering : $i18n.text.article.readAll }}</span>
-            <i class="iconfont icon-next-bottom"></i>
-          </button>
+        <div class="skeleton" v-if="isFetching">
+          <no-ssr>
+            <skeleton-line class="title" />
+            <skeleton-paragraph class="content" :lines="9" line-height="1.2em" />
+          </no-ssr>
+        </div>
+        <div class="knowledge" v-else>
+          <h2 class="title">{{ article.title }}</h2>
+          <div class="content" v-html="articleContent"></div>
+          <transition name="module" mode="out-in">
+            <div class="readmore" v-if="canReadMore">
+              <button class="readmore-btn" :disabled="readMoreLoading" @click="readMore()">
+                <span>{{ readMoreLoading ? $i18n.text.article.rendering : $i18n.text.article.readAll }}</span>
+                <i class="iconfont icon-next-bottom"></i>
+              </button>
+            </div>
+          </transition>
         </div>
       </transition>
     </div>
-    <transition name="module" mode="out-in">
-      <div class="ad" v-if="renderAd">
-        <adsense-article />
-      </div>
-    </transition>
-    <share-box class="article-share" />
-    <div class="metas">
-      <p class="item" v-if="isEnLang">
-        <span>Article created at</span>
-        <span>&nbsp;</span>
-        <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
-          <span>{{ buildDateTitle(article.create_at) }}</span>
-        </nuxt-link>
-        <span>&nbsp;in category&nbsp;</span>
-        <nuxt-link
-          :key="index"
-          :to="`/category/${category.slug}`"
-          :title="category.description || category.name"
-          v-for="(category, index) in article.category"
-        >
-          <span>{{ category.name }}</span>
-          <span v-if="article.category.length && article.category[index + 1]">、</span>
-        </nuxt-link>
-        <span v-if="!article.category.length">no catgory</span>
-        <span>,&nbsp;&nbsp;</span>
-        <span>{{ article.meta.views || 0 }}</span>
-        <span>&nbsp;Views</span>
-      </p>
-      <p class="item" v-else>
-        <span>本文于</span>
-        <span>&nbsp;</span>
-        <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
-          <span>{{ buildDateTitle(article.create_at) }}</span>
-        </nuxt-link>
-        <span>&nbsp;发布在&nbsp;</span>
-        <span :key="index" v-for="(category, index) in article.category">
-          <nuxt-link :to="`/category/${category.slug}`" :title="category.description || category.name">
-            <span>{{ isEnLang ? category.slug : category.name }}</span>
-          </nuxt-link>
-          <span v-if="article.category.length && article.category[index + 1]">、</span>
-        </span>
-        <span v-if="!article.category.length">未知</span>
-        <span>&nbsp;分类下，当前已被围观&nbsp;</span>
-        <span>{{ article.meta.views || 0 }}</span>
-        <span>&nbsp;次</span>
-      </p>
-      <p class="item">
-        <span class="title" :class="language">{{ isEnLang ? 'Related tags:' : '相关标签：' }}</span>
-        <span v-if="!article.tag.length" v-text="$i18n.text.tag.empty"></span>
-        <span :key="index" v-for="(tag, index) in article.tag">
-          <nuxt-link :to="`/tag/${tag.slug}`" :title="tag.description || tag.name">
-            <span>{{ isEnLang ? tag.slug : tag.name }}</span>
-          </nuxt-link>
-          <span v-if="article.tag.length && article.tag[index + 1]">、</span>
-        </span>
-      </p>
-      <p class="item">
-        <span class="title" :class="language">{{ isEnLang ? 'Article Address:' : '永久地址：' }}</span>
-        <span class="site-url" @click="copyArticleUrl">
-          <span>https://surmon.me/article/{{ article.id }}</span>
-        </span>
-      </p>
-      <div class="item">
-        <span class="title" :class="language">{{ isEnLang ? 'Copyright Clarify:' : '版权声明：' }}</span>
-        <span v-if="!isEnLang">
-          <span>自由转载-署名-非商业性使用</span>
-          <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-        </span>
-        <a
-          target="_blank"
-          rel="external nofollow noopenter"
-          href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
-        >Creative Commons BY-NC 3.0 CN</a>
-      </div>
-    </div>
-    <transition name="module" mode="out-in">
-      <template v-if="article.related && article.related.length">
-        <div class="related" v-if="!isMobile">
-          <div class="article-list swiper" v-swiper:swiper="swiperOption">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide item" :key="index" v-for="(article, index) in relatedArticles">
-                <a
-                  v-if="article.ad"
-                  class="item-box"
-                  :href="article.link"
-                  rel="external nofollow noopener"
-                  target="_blank"
-                >
-                  <img :src="article.img" class="thumb" :alt="article.title">
-                  <span class="title">{{ article.title }}</span>
-                </a>
-                <nuxt-link
-                  v-else
-                  :to="`/article/${article.id}`"
-                  :title="article.title"
-                  class="item-box"
-                >
-                  <img
-                    :src="buildThumb(article.thumb)"
-                    class="thumb"
-                    :alt="article.title"
-                  >
-                  <span class="title">{{ article.title }}</span>
-                </nuxt-link>
-              </div>
-            </div>
-          </div>
+    <no-ssr>
+      <transition name="module">
+        <div class="ad" v-if="renderAd && !isFetching">
+          <adsense-article />
         </div>
-        <div class="related" v-else>
-          <ul class="article-list">
-            <li class="item" v-for="(article, index) in relatedArticles" :key="index">
-              <a
-                v-if="article.ad"
-                class="item-link"
-                :href="article.link"
-                rel="external nofollow noopener"
-                target="_blank"
-              >
-                <span class="sign">《</span>
-                <span class="title">{{ article.title }}</span>
-                <span class="sign">》</span>
-                <small class="tip">- 狠狠地阅读</small>
-              </a>
-              <nuxt-link
-                v-else
-                class="item-link"
-                :to="`/article/${article.id}`"
-                :title="`「 ${article.title} 」- 继续阅读`"
-              >
-                <span class="sign">《</span>
-                <span class="title">{{ article.title }}</span>
-                <span class="sign">》</span>
-                <small class="tip">- 继续阅读</small>
-              </nuxt-link>
-            </li>
-          </ul>
+      </transition>
+    </no-ssr>
+    <transition name="module">
+      <share-box class="article-share" v-if="!isFetching" />
+    </transition>
+    <div class="metas">
+      <skeleton-paragraph v-if="isFetching" :align="true" :lines="4" line-height="1.2em" />
+      <template v-else>
+        <p class="item" v-if="isEnLang">
+          <span>Article created at</span>
+          <span>&nbsp;</span>
+          <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
+            <span>{{ buildDateTitle(article.create_at) }}</span>
+          </nuxt-link>
+          <span>&nbsp;in category&nbsp;</span>
+          <nuxt-link
+            :key="index"
+            :to="`/category/${category.slug}`"
+            :title="category.description || category.name"
+            v-for="(category, index) in article.category"
+          >
+            <span>{{ category.name }}</span>
+            <span v-if="article.category.length && article.category[index + 1]">、</span>
+          </nuxt-link>
+          <span v-if="!article.category.length">no catgory</span>
+          <span>,&nbsp;&nbsp;</span>
+          <span>{{ article.meta.views || 0 }}</span>
+          <span>&nbsp;Views</span>
+        </p>
+        <p class="item" v-else>
+          <span>本文于</span>
+          <span>&nbsp;</span>
+          <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
+            <span>{{ buildDateTitle(article.create_at) }}</span>
+          </nuxt-link>
+          <span>&nbsp;发布在&nbsp;</span>
+          <span :key="index" v-for="(category, index) in article.category">
+            <nuxt-link :to="`/category/${category.slug}`" :title="category.description || category.name">
+              <span>{{ isEnLang ? category.slug : category.name }}</span>
+            </nuxt-link>
+            <span v-if="article.category.length && article.category[index + 1]">、</span>
+          </span>
+          <span v-if="!article.category.length">未知</span>
+          <span>&nbsp;分类下，当前已被围观&nbsp;</span>
+          <span>{{ article.meta.views || 0 }}</span>
+          <span>&nbsp;次</span>
+        </p>
+        <p class="item">
+          <span class="title" :class="language">{{ isEnLang ? 'Related tags:' : '相关标签：' }}</span>
+          <span v-if="!article.tag.length" v-text="$i18n.text.tag.empty"></span>
+          <span :key="index" v-for="(tag, index) in article.tag">
+            <nuxt-link :to="`/tag/${tag.slug}`" :title="tag.description || tag.name">
+              <span>{{ isEnLang ? tag.slug : tag.name }}</span>
+            </nuxt-link>
+            <span v-if="article.tag.length && article.tag[index + 1]">、</span>
+          </span>
+        </p>
+        <p class="item">
+          <span class="title" :class="language">{{ isEnLang ? 'Article Address:' : '永久地址：' }}</span>
+          <span class="site-url" @click="copyArticleUrl">
+            <span>https://surmon.me/article/{{ article.id }}</span>
+          </span>
+        </p>
+        <div class="item">
+          <span class="title" :class="language">{{ isEnLang ? 'Copyright Clarify:' : '版权声明：' }}</span>
+          <span v-if="!isEnLang">
+            <span>自由转载-署名-非商业性使用</span>
+            <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+          </span>
+          <a
+            target="_blank"
+            rel="external nofollow noopenter"
+            href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
+          >Creative Commons BY-NC 3.0 CN</a>
         </div>
       </template>
-    </transition>
-    <div class="comment">
-      <comment-box :post-id="article.id" :likes="article.meta.likes" />
     </div>
-  </div>
+    <div class="related" v-if="isFetching">
+      <no-ssr>
+        <skeleton-paragraph class="skeleton" v-if="isMobile" :lines="4" line-height="1em" />
+        <ul class="skeleton-list" v-else>
+          <skeleton-base class="article" :key="item" v-for="item in 4" />
+        </ul>
+      </no-ssr>
+    </div>
+    <div class="related" v-else-if="article.related && article.related.length">
+      <div class="article-list swiper" v-if="!isMobile" v-swiper:swiper="swiperOption">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide item" :key="index" v-for="(article, index) in relatedArticles">
+            <a
+              v-if="article.ad"
+              class="item-box"
+              :href="article.link"
+              rel="external nofollow noopener"
+              target="_blank"
+            >
+              <img :src="article.img" class="thumb" :alt="article.title">
+              <span class="title">{{ article.title }}</span>
+            </a>
+            <nuxt-link
+              v-else
+              :to="`/article/${article.id}`"
+              :title="article.title"
+              class="item-box"
+            >
+              <img
+                :src="buildThumb(article.thumb)"
+                class="thumb"
+                :alt="article.title"
+              >
+              <span class="title">{{ article.title }}</span>
+            </nuxt-link>
+          </div>
+        </div>
+      </div>
+      <ul class="article-list" v-else>
+        <li class="item" v-for="(article, index) in relatedArticles" :key="index">
+          <a
+            v-if="article.ad"
+            class="item-link"
+            :href="article.link"
+            rel="external nofollow noopener"
+            target="_blank"
+          >
+            <span class="sign">《</span>
+            <span class="title">{{ article.title }}</span>
+            <span class="sign">》</span>
+            <small class="tip">- 狠狠地阅读</small>
+          </a>
+          <nuxt-link
+            v-else
+            class="item-link"
+            :to="`/article/${article.id}`"
+            :title="`「 ${article.title} 」- 继续阅读`"
+          >
+            <span class="sign">《</span>
+            <span class="title">{{ article.title }}</span>
+            <span class="sign">》</span>
+            <small class="tip">- 继续阅读</small>
+          </nuxt-link>
+        </li>
+      </ul>
+    </div>
+    <div class="comment">
+      <comment-box
+        :fetching="isFetching"
+        :post-id="article.id"
+        :likes="article.meta && article.meta.likes"
+      />
+    </div>
+  </article>
 </template>
 
 <script>
@@ -190,7 +216,7 @@
     head() {
       const article = this.article
       return {
-        title: article.title || 'No Result Data.',
+        title: article.title || '...',
         meta: [
           {
             hid: 'keywords', 
@@ -200,10 +226,6 @@
           { hid: 'description', name: 'description', content: article.description }
         ]
       }
-    },
-    mounted() {
-      console.log('重新渲染了')
-      this.updateAd()
     },
     data() {
       return {
@@ -227,6 +249,9 @@
         renderAd: true
       }
     },
+    activated() {
+      this.updateAd()
+    },
     computed: {
       ...mapState({
         constants: state => state.global.constants,
@@ -234,7 +259,7 @@
         tags: state => state.tag.data,
         imageExt: state => state.global.imageExt,
         article: state => state.article.detail.data,
-        fetching: state => state.article.detail.fetching,
+        isFetching: state => state.article.detail.fetching,
         isMobile: state => state.global.isMobile,
       }),
       isEnLang() {
@@ -382,13 +407,16 @@
           font-size: $font-size-base;
         }
 
-        > .content {
+        > .knowledge {
 
-          pre {
-            padding-left: 0;
+          > .content {
 
-            > .code-lines {
-              display: none;
+            pre {
+              padding-left: 0;
+
+              > .code-lines {
+                display: none;
+              }
             }
           }
         }
@@ -407,6 +435,20 @@
       padding: 1em 2em;
       position: relative;
       overflow: hidden;
+
+      > .skeleton {
+        
+        .title {
+          width: 60%;
+          height: 26px;
+          margin: 2rem auto;
+        }
+
+        .content {
+          margin-top: 3rem;
+          margin-bottom: 1rem;
+        }
+      }
 
       > .oirigin {
         position: absolute;
@@ -436,203 +478,202 @@
         }
       }
 
-      > .title {
-        text-align: center;
-        margin: 1em 0 1.5em 0;
-        font-weight: 700;
-      }
+      > .knowledge {
 
-      > .article-empty-box {
-        min-height: 16rem;
-      }
-
-      > .content {
-
-        iframe {
-          width: 100%;
-          margin-bottom: 1em;
-          background-color: black;
-        }
-
-        a {
-          font-weight: bold;
-          margin: 0 .1em;
-
-          &.image-link {
-            margin: 0;
-          }
-
-          &:hover {
-            text-decoration: underline;
-          }
-        }
-
-        img {
-          max-width: 100%;
-          margin: 0 auto;
-          display: block;
+        > .title {
           text-align: center;
-          border-radius: $radius;
-          border: .5rem solid $module-hover-bg;
-          transition: all .25s;
-          opacity: .9;
-          cursor: pointer;
-
-          &:hover {
-            opacity: 1;
-            transition: all .25s;
-          }
-        }
-
-        p {
-          line-height: 2.2em;
-          text-indent: 2em;
-          margin-bottom: 1em;
-
-          &.text-center {
-            text-align: center;
-          }
-
-          &.text-right {
-            text-align: right;
-          }
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-          margin: 1.5rem 0;
-          padding-left: 0;
-          line-height: 1.8em;
+          margin: 1em 0 1.5em 0;
           font-weight: 700;
-          text-indent: 0;
         }
 
-        blockquote {
+        > .content {
 
-          p {
-            // text-indent: 0em;
-
-            &:last-child {
-              margin-bottom: 0;
-            }
+          iframe {
+            width: 100%;
+            margin-bottom: 1em;
+            background-color: black;
           }
-        }
 
-        ul {
-          list-style-type: square;
-        }
+          a {
+            font-weight: bold;
+            margin: 0 .1em;
 
-        ul, ol {
-
-          > li {
-            line-height: 1.8em;
-            padding: .5em .8em;
+            &.image-link {
+              margin: 0;
+            }
 
             &:hover {
-              background-color: $module-hover-bg;
+              text-decoration: underline;
+            }
+          }
+
+          img {
+            max-width: 100%;
+            margin: 0 auto;
+            display: block;
+            text-align: center;
+            border-radius: $radius;
+            border: .5rem solid $module-hover-bg;
+            transition: all .25s;
+            opacity: .9;
+            cursor: pointer;
+
+            &:hover {
+              opacity: 1;
+              transition: all .25s;
+            }
+          }
+
+          p {
+            line-height: 2.2em;
+            text-indent: 2em;
+            margin-bottom: 1em;
+
+            &.text-center {
+              text-align: center;
             }
 
-            > p {
-              text-indent: 0;
+            &.text-right {
+              text-align: right;
             }
+          }
 
-            > ul {
+          h1,
+          h2,
+          h3,
+          h4,
+          h5,
+          h6 {
+            margin: 1.5rem 0;
+            padding-left: 0;
+            line-height: 1.8em;
+            font-weight: 700;
+            text-indent: 0;
+          }
+
+          blockquote {
+
+            p {
+              // text-indent: 0em;
 
               &:last-child {
                 margin-bottom: 0;
               }
             }
           }
-        }
 
-        code {
-          color: #bd4147;
-          padding: .3em .5em;
-          margin: 0 .5em;
-          border-radius: $radius;
-          background-color: $module-hover-bg;
-        }
-
-        pre {
-          display: block;
-          position: relative;
-          overflow: hidden;
-          margin-bottom: 1em;
-          padding-left: 2.5em;
-          background-color: rgba(0, 0, 0, 0.8);
-
-          &:before {
-            color: white;
-            content: attr(data-lang)" CODE";
-            height: 2.8em;
-            line-height: 2.8em;
-            font-size: 1em;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            font-weight: 700;
-            background-color: rgba(68, 68, 68, 0.9);
-            display: block;
-            text-transform: uppercase;
-            text-align: center;
+          ul {
+            list-style-type: square;
           }
 
-          > .code-lines {
-            position: absolute;
-            left: 0;
-            top: 2.8em;
-            margin: 0;
-            padding: 1em 0;
-            width: 2.5em;
-            height: calc(100% - 2.8em);
-            text-align: center;
-            background-color: rgba(0, 0, 0, 0.2);
+          ul, ol {
 
-            > .code-line-number {
-              padding: 0;
-              position: relative;
-              list-style-type: none;
-              line-height: 1.6em;
-              transition: background-color .05s;
+            > li {
+              line-height: 1.8em;
+              padding: .5em .8em;
 
               &:hover {
-                &:before {
-                  display: block;
-                  opacity: 1;
-                  visibility: visible;
-                }
+                background-color: $module-hover-bg;
               }
 
-              &:before {
-                content: '';
-                height: 1.6em;
-                position: absolute;
-                top: 0;
-                left: 2.5em;
-                width: 66em;
-                background-color: rgba(154, 154, 154, 0.2);
-                display: none;
-                visibility: hidden;
-                opacity: 0;
+              > p {
+                text-indent: 0;
+              }
+
+              > ul {
+
+                &:last-child {
+                  margin-bottom: 0;
+                }
               }
             }
           }
 
-          > code {
-            margin: 0;
-            padding: 1em;
-            float: left;
-            width: 100%;
-            height: 100%;
+          code {
+            color: #bd4147;
+            padding: .3em .5em;
+            margin: 0 .5em;
+            border-radius: $radius;
+            background-color: $module-hover-bg;
+          }
+
+          pre {
             display: block;
-            line-height: 1.6em;
-            color: rgba(255, 255, 255, 0.87);
-            background-color: transparent;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 1em;
+            padding-left: 2.5em;
+            background-color: rgba(0, 0, 0, 0.8);
+
+            &:before {
+              color: white;
+              content: attr(data-lang)" CODE";
+              height: 2.8em;
+              line-height: 2.8em;
+              font-size: 1em;
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              font-weight: 700;
+              background-color: rgba(68, 68, 68, 0.9);
+              display: block;
+              text-transform: uppercase;
+              text-align: center;
+            }
+
+            > .code-lines {
+              position: absolute;
+              left: 0;
+              top: 2.8em;
+              margin: 0;
+              padding: 1em 0;
+              width: 2.5em;
+              height: calc(100% - 2.8em);
+              text-align: center;
+              background-color: rgba(0, 0, 0, 0.2);
+
+              > .code-line-number {
+                padding: 0;
+                position: relative;
+                list-style-type: none;
+                line-height: 1.6em;
+                transition: background-color .05s;
+
+                &:hover {
+                  &:before {
+                    display: block;
+                    opacity: 1;
+                    visibility: visible;
+                  }
+                }
+
+                &:before {
+                  content: '';
+                  height: 1.6em;
+                  position: absolute;
+                  top: 0;
+                  left: 2.5em;
+                  width: 66em;
+                  background-color: rgba(154, 154, 154, 0.2);
+                  display: none;
+                  visibility: hidden;
+                  opacity: 0;
+                }
+              }
+            }
+
+            > code {
+              margin: 0;
+              padding: 1em;
+              float: left;
+              width: 100%;
+              height: 100%;
+              display: block;
+              line-height: 1.6em;
+              color: rgba(255, 255, 255, 0.87);
+              background-color: transparent;
+            }
           }
         }
       }
@@ -733,6 +774,23 @@
       border-color: transparent;
       overflow: hidden;
       height: 10em;
+
+      > .skeleton-list {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+
+        .article {
+          width: calc((100% - 2rem) / 4);
+          margin-right: 1rem;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
 
       > .swiper.article-list {
 

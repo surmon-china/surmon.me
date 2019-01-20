@@ -107,13 +107,13 @@
         this.$router.back()
       }
     },
-    mounted() {
+    activated() {
       if (isBrowser) {
         this.updateScreenHeight()
         window.addEventListener('resize', this.updateScreenHeight)
       }
     },
-    beforeDestroy() {
+    deactivated() {
       window.removeEventListener('resize', this.updateScreenHeight)
     },
     computed: {

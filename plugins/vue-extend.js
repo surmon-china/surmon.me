@@ -14,6 +14,7 @@ import EmptyBox from '~/components/global/empty'
 import LoadingBox from '~/components/global/loading'
 import CommentBox from '~/components/global/comment'
 import ColorBlockBox from '~/components/global/color-block'
+import SkeletonBox from '~/components/global/skeleton'
 
 // adsense
 import AdsenseComponents from '~/components/global/adsense'
@@ -32,6 +33,7 @@ Vue.use(EmptyBox)
 Vue.use(CommentBox)
 Vue.use(LoadingBox)
 Vue.use(ColorBlockBox)
+Vue.use(SkeletonBox)
 
 // adsense
 Vue.use(AdsenseComponents)

@@ -1,183 +1,124 @@
 <template>
-  <div class="projects" :class="{ mobile: isMobile }">
-    <ul class="project-list">
+  <div class="videos" :class="{ mobile: isMobile }">
+    <ul class="video-list">
       <li
         class="item"
         :key="index"
-        :class="{ last: buildLastClass(index) }"
-        v-for="(project, index) in projects"
+        v-for="(video, index) in videoList"
+        @click="handlePlay(video)"
       >
-        <a
-          target="_blank"
-          class="item-content"
-          rel="external nofollow noopenter"
-          :href="project.html_url"
-          :title="project.description"
-        >
-          <i
-            class="iconfont"
-            :class="buildIcon(project).icon"
-            :style="{ color: buildIcon(project).color }"
-          ></i>
-          <h3 class="title">{{ project.name }}</h3>
-          <p
-            class="description"
-            style="-webkit-box-orient: vertical;"
-          >{{ project.description }}</p>
-          <hr>
-          <p class="meta">
-            <span class="item star">
-              <i class="iconfont icon-star"></i>
-              <span>{{ project.stargazers_count }}</span>
-            </span>
-            <span class="item fork">
-              <i class="iconfont icon-git-fork"></i>
-              <span>{{ project.forks_count }}</span>
-            </span>
-            <span class="item issues">
-              <i class="iconfont icon-git-issue"></i>
-              <span>{{ project.open_issues_count }}</span>
-            </span>
-          </p>
-        </a>
+        <div class="thumb">
+          <div class="mask">
+            <div class="button">
+              <i class="iconfont icon-music-play"></i>
+            </div>
+          </div>
+          <div class="background" :style="{
+            'background-image': `url(${getThumbUrl(video.pic)})`
+          }"></div>
+        </div>
+        <h3 class="title" v-text="video.title"></h3>
+        <p class="description" style="-webkit-box-orient: vertical;" v-text="video.description || '-'"></p>
+        <hr class="split">
+        <p class="meta">
+          <span class="item favorites">
+            <i class="iconfont icon-like"></i>
+            <span>{{ video.favorites }}</span>
+          </span>
+          <span class="item play">
+            <i class="iconfont icon-video-play"></i>
+            <span>{{ video.play }}</span>
+          </span>
+          <span class="item comment">
+            <i class="iconfont icon-comment"></i>
+            <span>{{ video.comment }}</span>
+          </span>
+          <span class="item created">
+            <i class="iconfont icon-clock"></i>
+            <span>{{ (video.created * 1000) | timeAgo(language) }}</span>
+          </span>
+        </p>
       </li>
     </ul>
+    <div class="loadmore">
+      <a
+        href="https://space.bilibili.com/27940710/video"
+        target="_blank"
+        class="button"
+        rel="external nofollow noopenter"
+        :disabled="isFetching || !isCanLoadMore"
+      >
+        <span class="icon">
+          <i class="iconfont icon-peachblossom"></i>
+        </span>
+        <span v-text="$i18n.text.article.loadmore"></span>
+      </a>
+    </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'project',
+    name: 'vlog',
     head() {
       return {
-        title: `${this.isEnLang ? '' : this.$i18n.nav.project + ' | '}Project`
+        title: `${this.isEnLang ? '' : this.$i18n.nav.vlog + ' | '}Vlog`
       }
     },
     fetch({ store }) {
-      return store.dispatch('fetchRepositories')
+      return store.dispatch('vlog/fetchVideos')
     },
     computed: {
+      language() {
+        return this.$store.state.global.language
+      },
       isEnLang() {
         return this.$store.getters['global/isEnLang']
       },
       isMobile() {
         return this.$store.state.global.isMobile
       },
-      projects() {
-        return this.$store.state.project.repositories.data
+      video() {
+        return this.$store.state.vlog.video.data
+      },
+      videoList() {
+        return this.video.vlist
+      },
+      isFetching() {
+        return this.video.fetching
+      },
+      isCanLoadMore() {
+        const { pages, count } = this.video
+        return !!count && pages > 1
       }
     },
     methods: {
-      buildLastClass(index) {
-        const projects = this.projects
-        
-        // 取余
-        if (projects.length % 4) {
-          return index >= (projects.length - projects.length % 4)
-        
-        // 取整
-        } else {
-          return index >= projects.length - 4
-        }
+      getThumbUrl(url) {
+        return this.proxyUrl + url.replace('//', '')
       },
-      buildIcon(project) {
-
-        const iconRules = [{
-            desc: 'netease',
-            icon: 'netease-music',
-            color: '#ab3419'
-          }, {
-            name: 'react',
-            desc: 'react',
-            color: '#5dd4fa'
-          }, {
-            name: 'linux',
-            color: '#000000'
-          }, {
-            name: 'deploy',
-            icon: 'linux',
-            color: '#000000'
-          }, {
-            name: 'sre',
-            icon: 'linux',
-            color: '#000000'
-          }, {
-            name: 'surmon',
-            icon: 'think',
-            color: '#0088f5'
-          }, {
-            name: 'emoji',
-            color: '#f4c449'
-          }, {
-            name: 'vue',
-            desc: 'vue',
-            icon: 'vuejs-gray',
-            color: '#62b287'
-          }, {
-            name: 'chrome',
-            color: '#4aa066'
-          }, {
-            name: 'jquery',
-            color: '#8bcdf1'
-          }, {
-            desc: 'music',
-            color: '#ab3419'
-          }, {
-            name: 'theme',
-            color: 'rgb(245, 119, 0)'
-          }, {
-            name: 'wordpress',
-            color: '#24282d'
-          }, {
-            name: 'javascript',
-            color: '#f4c449'
-          }, {
-            name: 'wallpaper',
-            color: '#2c343d'
-          }, {
-            name: 'node',
-            icon: 'nodejs',
-            color: '#8dbb39'
-          }, {
-            name: 'angular',
-            icon: 'angularjs',
-            color: '#cc3427'
-          }, {
-            name: 'ngx',
-            icon: 'angularjs',
-            color: '#cc3427'
+      handlePlay(video) {
+        if (this.isMobile) {
+          window.open(`https://www.bilibili.com/video/av${video.aid}`)
+        } else {
+          if (window.utils) {
+            const music = this.$root.$music
+            music && music.humanizeOperation(music.player.pause)
+            window.utils.openIframePopup(`//player.bilibili.com/player.html?aid=${video.aid}&page=1`)
           }
-        ]
-
-        const isIncludeName = key => project.name.toLowerCase().includes(key)
-        const isIncludeDesc = key => project.description.toLowerCase().includes(key)
-        const targetRule = iconRules.find(rule => {
-          const includeName = rule.name ? isIncludeName(rule.name) : false
-          const includeDesc = rule.desc ? isIncludeDesc(rule.desc) : false
-          return includeName || includeDesc
-        })
-
-        const targetIcon = targetRule
-          ? targetRule.icon || targetRule.name || targetRule.desc
-          : 'code'
-
-        const defaultColor = 'inherit'
-        const targetColor = targetRule ? targetRule.color || defaultColor : defaultColor
-
-        return { icon: `icon-${targetIcon}`, color: targetColor }
+        }
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  .projects {
+  .videos {
     min-height: 40em;
 
     &.mobile {
       min-height: auto;
 
-      > .project-list {
+      > .video-list {
 
         > .item {
           width: 100%;
@@ -185,36 +126,11 @@
           float: none;
           flex-grow: 1;
           margin-right: 0;
-
-          &.last {
-            margin-bottom: 1rem;
-          }
-
-          &:last-child {
-            margin: 0;
-          }
-
-          > .item-content {
-            width: 100%;
-            height: auto;
-
-            > .title {
-              margin: 1em 0;
-            }
-
-            > .iconfont {
-              font-size: 3em;
-            }
-
-            > .description {
-              height: auto;
-            }
-          }
         }
       }
     }
 
-    > .project-list {
+    > .video-list {
       padding: 0;
       margin: 0;
       display: flex;
@@ -224,77 +140,145 @@
       justify-content: flex-start;
 
       > .item {
+        display: block;
         margin-right: 1rem;
         margin-bottom: 1rem;
-        width: 23.9%;
-        // height: 23.33rem;
+        width: calc((100% - 2rem) / 3);
+        height: 23rem;
+        cursor: pointer;
+        background-color: $module-bg;
+        transition: transform 1s, background-color .5s;
 
-        &.last {
-          margin-bottom: 0;
+        &:hover {
+          background-color: $module-hover-bg;
+          transition: transform 1s, background-color .5s;
+
+          > .thumb {
+
+            .mask {
+              opacity: 1;
+              visibility: visible;
+            }
+
+            .background {
+              @include css3-prefix(transform, rotate(2deg) scale(1.1));
+            }
+          }
+
+          > .split {
+            border-color: $module-hover-bg-darken-10;
+          }
         }
 
-        &:nth-child(4n + 0) {
+        &:nth-child(3n + 0) {
           margin-right: 0;
         }
 
-        > .item-content {
-          display: block;
+        > .thumb {
           width: 100%;
-          height: 100%;
-          padding: 1rem;
-          text-align: center;
-          background-color: $module-bg;
-          transition: transform 1s, background-color .5s;
+          height: 13rem;
+          position: relative;
+          overflow: hidden;
 
-          &:hover {
-            background-color: $module-hover-bg;
-            transition: transform 1s, background-color .5s;
+          .background {
+            width: 100%;
+            height: 100%;
+            background-color: $body-bg;
+            background-size: cover;
+            @include css3-prefix(transform, rotate(0deg) scale(1));
+            @include css3-prefix(transition, transform 1s);
           }
 
-          > .iconfont {
-            display: block;
-            height: 1.3em;
-            font-size: 6rem;
-          }
-
-          > .title {
-            @include text-overflow();
-            padding: 0 1em;
-            margin-bottom: 1.2em;
-            font-weight: bold;
-            text-transform: capitalize;
-          }
-
-          > .description {
-            margin-bottom: 1rem;
-            text-align: left;
-            line-height: 2em;
-            text-indent: 1.6em;
-            height: 4em;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            @include clamp(2);
-          }
-
-          > .meta {
-            margin-bottom: .5rem;
+          .mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
+            align-items: center;
+            z-index: 9;
+            background-color: $module-hover-bg-opacity-3;
 
-            > .item {
-              font-weight: 400;
-              color: $secondary;
-
-              &.star {
-                color: $text-light;
-                font-weight: bold;
-              }
-
-              > .iconfont {
-                margin-right: .3rem;
-              }
+            .button {
+              width: 5rem;
+              height: 5rem;
+              line-height: 5rem;
+              text-align: center;
+              font-size: 3rem;
+              background: $module-bg-opacity-5;
+              border-radius: 100%;
             }
           }
+        }
+
+        > .title {
+          @include text-overflow();
+          padding: 0 1rem;
+          margin: 1rem 0;
+          font-weight: bold;
+          text-transform: capitalize;
+        }
+
+        > .description {
+          text-align: left;
+          padding: 0 1rem;
+          margin-bottom: 1rem;
+          line-height: 2rem;
+          height: 2rem;
+          text-overflow: ellipsis;
+          @include clamp(1);
+        }
+
+        > .split {
+          border-color: $body-bg;
+          margin: 0;
+        }
+
+        > .meta {
+          margin: 0;
+          height: 3rem;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          font-size: 1rem;
+
+          > .item {
+            font-weight: 400;
+            color: $secondary;
+
+            .iconfont {
+              margin-right: .3rem;
+            }
+          }
+        }
+      }
+    }
+
+    > .loadmore {
+
+      > .button {
+        display: block;
+        width: 100%;
+        height: 3.8rem;
+        line-height: 3.8rem;
+        text-align: center;
+        background-color: $module-bg;
+
+        &[disabled] {
+          opacity: .9;
+          background-color: $module-bg-opacity-5;
+        }
+
+        &:hover {
+          background-color: $module-hover-bg;
+        }
+
+        > .icon {
+          margin-right: 1rem;
         }
       }
     }

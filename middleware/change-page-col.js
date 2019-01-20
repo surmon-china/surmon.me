@@ -7,7 +7,7 @@
 export default ({ route, store }) => {
 
   // columns
-  const isTwoColumns = ['about', 'project', 'sitemap'].includes(route.name)
+  const isTwoColumns = ['about', 'project', 'vlog', 'sitemap'].includes(route.name)
   const isThreeColumns = ['music', 'app', 'service'].includes(route.name)
   
   // set columns

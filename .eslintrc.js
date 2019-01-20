@@ -1,5 +1,5 @@
 /**
- * @file Api config / Commonjs module
+ * @file Eslint config / Commonjs module
  * @module eslint.config
  * @author Surmon <https://github.com/surmon-china>
 */
