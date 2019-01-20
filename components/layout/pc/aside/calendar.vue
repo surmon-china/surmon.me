@@ -7,26 +7,28 @@
         <li class="year-month">
           <span class="choose-year">
             <span>{{ currentYear }}</span>
-            <span>{{ languageIsEn ? 'Y' : '年' }}&nbsp;</span>
+            <span>{{ isEnLang ? 'Y' : '年' }}&nbsp;</span>
             <span>{{ currentMonth }}</span>
-            <span>{{ languageIsEn ? 'M' : '月' }}&nbsp;</span>
+            <span>{{ isEnLang ? 'M' : '月' }}&nbsp;</span>
             <span>{{ currentDay }}</span>
-            <span>{{ languageIsEn ? 'D' : '日' }}</span>
+            <span>{{ isEnLang ? 'D' : '日' }}</span>
           </span>
         </li>
         <li class="arrow next" @click="pickNext(currentYear, currentMonth)">❯</li>
       </ul>
     </div>
     <!-- 星期 -->
-    <ul class="weekdays" v-if="languageIsEn">
+    <ul class="weekdays" v-if="isEnLang">
       <li :key="index" v-for="(day, index) in weeksEn">{{ day }}</li>
     </ul>
     <ul class="weekdays" v-else>
       <li :key="index" v-for="(day, index) in weeksZh">{{ day }}</li>
     </ul>
     <!-- 日期 -->
-    <ul class="days">
-      <loading-box v-if="!days.length" class="loading-box"></loading-box>
+    <div class="days-loading" v-if="!days.length">
+      <loading-box class="loading" />
+    </div>
+    <ul class="days" v-else>
       <li :key="index" v-for="(day, index) in days">
         <!--本月-->
         <span v-if="day.getMonth() + 1 != currentMonth" class="other-month">{{ day.getDate() }}</span>
@@ -66,7 +68,7 @@
       this.initData(null)
     },
     computed: {
-      languageIsEn() {
+      isEnLang() {
         return this.$store.getters['global/isEnLang']
       }
     },
@@ -191,14 +193,15 @@
       line-height: 2em;
     }
 
+    > .days-loading {
+      width: 100%;
+      height: 14rem;
+    }
+
     > .days {
       min-height: 10em;
       margin-bottom: 0;
       position: relative;
-
-      > .loading-box {
-        transform: translateY(100%);
-      }
 
       > li {
         line-height: 2.5em;

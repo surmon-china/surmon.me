@@ -25,27 +25,22 @@ if (isBrowser) {
     if (!src) return false
     const image = document.createElement('img')
     image.src = src
-    if (className) {
-      image.setAttribute('class', className)
-    }
+    className && image.setAttribute('class', className)
+
     const oldMask = document.getElementById('image-popup')
-    if (oldMask) {
-      document.body.removeChild(oldMask)
-    }
+    oldMask && document.body.removeChild(oldMask)
+
     const mask = document.createElement('div')
     mask.setAttribute('id', 'image-popup')
     mask.appendChild(image)
     document.body.appendChild(mask)
+
     setTimeout(() => {
       mask.setAttribute('class', 'display')
     }, 100)
     // 监听滚动和点击事件
     window.onscroll = closeImgPopup
-    mask.onclick = event => {
-      if (event.target.tagName !== 'IMG') {
-        closeImgPopup()
-      }
-    }
+    mask.onclick = closeImgPopup
   }
 
   window.utils = window.utils || {}

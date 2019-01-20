@@ -2,11 +2,9 @@
   <div class="articles">
 
     <!-- 非首页列表头 -->
-    <transition name="module">
-      <div class="article-list-header" v-if="!$route.name.includes('index')">
-        <list-header />
-      </div>
-    </transition>
+    <div class="article-list-header" v-if="!$route.name.includes('index')">
+      <list-header />
+    </div>
 
     <!-- 广告啦 -->
     <transition name="module">
@@ -33,13 +31,13 @@
     <!-- 加载更多 -->
     <div class="article-load">
       <color-block-box :left="btnColorBlockLeft" border="left" color="red" />
-      <button class="btn-loadmore" @click="$emit('loadmore')" :disabled="article.fetching || !canLoadMore">
+      <button class="btn-loadmore" @click="$emit('loadmore')" :disabled="article.fetching || !isCanLoadMore">
         <span class="icon">
           <i class="iconfont icon-peachblossom"></i>
         </span>
-        <span v-if="!article.fetching && canLoadMore" v-text="$i18n.text.article.loadmore"></span>
-        <span v-else-if="article.fetching && canLoadMore" v-text="$i18n.text.article.loading"></span>
-        <span v-else-if="!canLoadMore" v-text="$i18n.text.article.nomore"></span>
+        <span v-if="!article.fetching && isCanLoadMore" v-text="$i18n.text.article.loadmore"></span>
+        <span v-else-if="article.fetching && isCanLoadMore" v-text="$i18n.text.article.loading"></span>
+        <span v-else-if="!isCanLoadMore" v-text="$i18n.text.article.nomore"></span>
       </button>
     </div>
   </div>
@@ -70,16 +68,16 @@
       isMobile() {
         return this.$store.state.global.isMobile
       },
-      btnColorBlockLeft() {
-        return this.isMobile ? 60 : 75
-      },
-      canLoadMore() {
+      isCanLoadMore() {
         const { current_page, total_page } = this.article.data.pagination
         const hasArticles = this.article.data.pagination
         return hasArticles ? (current_page < total_page) : false
+      },
+      btnColorBlockLeft() {
+        return this.isMobile ? 60 : 75
       }
     },
-    mounted() {
+    activated() {
       this.updateAd()
     },
     methods: {
@@ -148,8 +146,12 @@
         display: flex;
         justify-content: space-between;
 
+        &:hover {
+          background-color: $module-hover-bg;
+        }
+
         &[disabled] {
-          opacity:  .9;
+          opacity: .9;
           background-color: $module-bg-opacity-5;
         }
 
@@ -162,10 +164,6 @@
           > .iconfont {
             animation: loadmore-btn-icon-color 2s infinite;
           }
-        }
-
-        &:hover {
-          background-color: $module-hover-bg;
         }
       }
     }

@@ -210,8 +210,7 @@
                   </span>
                 </p>
               </div>
-              <!-- todo: 这里换做鼠标移入事件 -->
-              <div class="gravatar" @click="handleFollowMe">
+              <div class="gravatar">
                 <div class="background be-2">
                   <img
                     src="/images/about-background-be-2.jpg"
@@ -253,11 +252,16 @@
                   @click.stop.prevent
                   v-if="!isMobile"
                 >{{ isEnLang ? 'Friend me' : '众里寻他' }}</a>
-                <div class="wechat" v-if="!isMobile"></div>
+                <div class="wechat" @mouseenter="handleFollowMe" v-if="!isMobile"></div>
               </div>
             </div>
             <div class="about-map" v-if="!isMobile">
-              <iframe src="/partials/map.html" style="width: 100%; height: 236px;"></iframe>
+              <loading-box class="loading" v-if="isLoadedMap" />
+              <iframe
+                class="iframe"
+                src="/partials/map.html"
+                @load="handleMapLoaded"
+              ></iframe>
             </div>
             <div class="about-project">
               <nuxt-link to="/project" class="project-link">
@@ -283,9 +287,17 @@
     fetch({ store }) {
       return store.dispatch('global/fetchAdminInfo')
     },
+    data() {
+      return {
+        isLoadedMap: false
+      }
+    },
     methods: {
       handleFollowMe() {
         this.$ga.event('加微信码', '点击', 'tool')
+      },
+      handleMapLoaded() {
+        this.isLoadedMap = true
       },
       getRandomSkill() {
         return !!Math.floor(Math.random() * 2)
@@ -707,30 +719,18 @@
             background-color: $module-bg;
             position: relative;
 
-            /*
-            &:hover {
-              &:before {
-                opacity: 1;
-              }
-            }
-
-            &:before {
-              content: 'Take me, Anywhere';
+            > .loading {
               position: absolute;
-              width: 100%;
-              height: 100%;
               top: 0;
               left: 0;
-              line-height: 21rem;
-              font-size: $font-size-h1 * 1.3;
-              background-color: $module-hover-bg-darken-40;
-              color: $white;
-              font-weight: bold;
-              text-align: center;
-              opacity: 0;
-              transition: opacity .2s;
+              width: 100%;
+              height: 100%;
             }
-            */
+            
+            > .iframe {
+              width: 100%;
+              height: 19rem;
+            }
           }
 
           .about-project {

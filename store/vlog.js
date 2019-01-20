@@ -6,7 +6,7 @@
 
 export const state = () => {
   return {
-    videos: {
+    video: {
       fetching: false,
       data: {
         vlist: []
@@ -16,33 +16,33 @@ export const state = () => {
 }
 
 export const mutations = {
-  updateRepositoriesFetching(state, action) {
-    state.repositories.fetching = action
+  updateVideoFetching(state, action) {
+    state.video.fetching = action
   },
-  updateRepositoriesData(state, action) {
-    state.repositories.data = action.result
-      .filter(repo => !repo.description || !repo.description.startsWith('#'))
-      .sort((prev, next) => next.stargazers_count - prev.stargazers_count)
+  updateVideoData(state, action) {
+    state.video.data = action.result
   },
 }
 
 export const actions = {
 
-  // 获取开源项目列表
-  fetchRepositories({ commit, state }) {
+  // 获取视频列表
+  fetchVideos({ commit, state }, params = {}) {
 
-    // 如果数据已存在，则直接返回 Promise 成功，并返回数据
-    if (state.repositories.data.length) {
-      return Promise.resolve(state.project.repositories.data)
+    params.per_page = params.per_page || 66
+
+    // 如果数据已存在，则直接返回
+    if (state.video.data.length) {
+      return Promise.resolve(state.project.video.data)
     }
 
     // 不存在则请求新数据
-    commit('updateRepositoriesFetching', true)
-    return this.$axios.$get('/expansion/github')
+    commit('updateVideoFetching', true)
+    return this.$axios.$get('/bilibili/list', { params })
       .then(response => {
-        commit('updateRepositoriesData', response)
-        commit('updateRepositoriesFetching', false)
+        commit('updateVideoData', response)
+        commit('updateVideoFetching', false)
       })
-      .catch(error => commit('updateRepositoriesFetching', false))
+      .catch(error => commit('updateVideoFetching', false))
   },
 }

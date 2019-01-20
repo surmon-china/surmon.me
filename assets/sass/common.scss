@@ -261,7 +261,8 @@ a {
   }
 }
 
-#image-popup {
+#image-popup,
+#iframe-popup {
   position: fixed;
   display: flex;
   top: 0;
@@ -277,9 +278,8 @@ a {
   transition: all .08s;
   background-color: transparent;
 
-  > img {
-    max-width: 90%;
-    max-height: 90%;
+  > img,
+  > iframe {
     transform: scale(.8);
     transition: all .08s;
     border: .5em solid rgba(210, 210, 210, 0.5);
@@ -287,7 +287,17 @@ a {
     &.shang {
       width: 30rem;
     }
-  }  
+  }
+
+  > img {
+    max-width: 90%;
+    max-height: 90%;
+  }
+  
+  > iframe {
+    width: 90%;
+    height: 90%;
+  }
 
   &.display {
     opacity: 1;
@@ -295,7 +305,8 @@ a {
     transition: all .08s;
     background-color: rgba(80, 80, 80, 0.5);
 
-    > img {
+    > img,
+    > iframe {
       transform: scale(1);
       transition: all .08s;
     }
