@@ -95,11 +95,11 @@ module.exports = {
       device: {
         android: {
           zh: '安卓（重构中）',
-          en: 'Android (expired)'
+          en: 'Android (X)'
         },
         ios: {
           zh: '苹果（重构中）',
-          en: 'IOS (expired)'
+          en: 'IOS (X)'
         }
       },
       webrtc: {

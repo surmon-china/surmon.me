@@ -315,7 +315,7 @@ a {
 
 #share {
 
-  &.article-share {
+  &.article {
 
     > .share-box {
       opacity: .6;
@@ -350,7 +350,7 @@ a {
     }
   }
 
-  &.sidebar-share {
+  &.sidebar {
     position: fixed;
     top: 16%;
     left: 0;

@@ -1,7 +1,7 @@
 <template>
   <div class="comment-box" id="comment-box" :class="{ mobile: isMobile }">
-    <div class="tools">
-      <template v-if="fetching">
+    <transition name="module" mode="out-in">
+      <div class="tools" key="skeleton" v-if="fetching">
         <div class="total-skeleton">
           <skeleton-line class="count-skeleton" />
           <skeleton-line class="like-skeleton" />
@@ -9,8 +9,8 @@
         <div class="sort-skeleton">
           <skeleton-line />
         </div>
-      </template>
-      <template v-else>
+      </div>
+      <div class="tools" key="tools" v-else>
         <div class="total">
           <div class="count">
             <strong class="count">{{ comment.pagination.total || 0 }}</strong>
@@ -41,10 +41,10 @@
             v-text="$i18n.text.comment.hot"
           >最热</a>
         </div>
-      </template>
-    </div>
-    <template v-if="isFetching">
-      <div class="list-box list-skeleton">
+      </div>
+    </transition>
+    <transition name="module" mode="out-in">
+      <div class="list-box list-skeleton" key="skeleton" v-if="isFetching">
         <ul class="comment-list">
           <li class="comment-item" :key="item" v-for="item in 5">
             <div class="gravatar">
@@ -56,14 +56,13 @@
           </li>
         </ul>
       </div>
-    </template>
-    <template v-else>
       <div
+        key="empty"
         class="empty-box"
-        v-if="!comment.data.length"
+        v-else-if="!comment.data.length"
         v-text="$i18n.text.comment.empty"
       ></div>
-      <div class="list-box" v-else>
+      <div class="list-box" key="list" v-else>
         <transition-group name="fade" tag="ul" class="comment-list">
           <li
             class="comment-item"
@@ -135,7 +134,7 @@
           </li>
         </transition-group>
       </div>
-    </template>
+    </transition>
     <transition name="module">
       <div class="pagination-box" v-if="comment.pagination.total_page > 1">
         <ul class="pagination-list" v-if="Object.is(sortMode, constants.SortType.Hot)">
@@ -323,7 +322,6 @@
   import { scrollTo } from '~/utils/scroll-to-anywhere'
   import { browserParse, osParse } from '~/utils/ua-os-browser'
   import { localUser, localHistoryLikes } from '~/transforms/local-storage'
-  
   export default {
     name: 'vue-comment',
     props: {
@@ -332,10 +330,11 @@
         default: false
       },
       likes: {
-        type: [String, Number],
+        type: Number,
       },
       postId: {
-        type: [String, Number],
+        type: Number,
+        required: true
       }
     },
     data() {
@@ -375,12 +374,16 @@
         comment: state => state.comment.data,
         commentFetching: state => state.comment.fetching,
         commentPosting: state => state.comment.posting,
+        isServerInited: state => state.comment.serverInited,
         constants: state => state.global.constants,
         language: state => state.global.language,
         isMobile: state => state.global.isMobile,
         blacklist: state => state.global.appOption.data.blacklist,
       }),
       isFetching() {
+        // 1. 宿主组件还在加载时，列表和 tool 都呈加载状态
+        // 2. 宿主组件加载完成，如果自己还在请求，则列表呈加载状态
+        // 3. 自己已请求完，宿主组件还在加载，列表和 tool 都呈加载状态
         return this.fetching || this.commentFetching
       },
       isEnLang() {
@@ -402,9 +405,11 @@
     mounted() {
       this.initUser()
       this.initAppOptionBlackList()
-      if (!this.comment.pagination.total_page && !this.fetching) { // 判断服务端已请求造成多余的请求
-        this.loadComemntList()
-      }
+    },
+    activated() {
+      // 1. 如果是首屏（服务端已预加载数据），则不发起请求（废弃）
+      // 2. 由其他页面进入文章页时，发起请求
+      this.loadComemntList()
     },
     destroyed() {
       this.$store.commit('comment/clearListData')
@@ -717,8 +722,12 @@
       }
     },
     watch: {
-      postId(postId) {
-        if (postId != null) {
+      // 这里只能监听文章 -> 文章之间的变化
+      $route(to, from) {
+        const isValidPostId = this.postId != null && !isNaN(this.postId)
+        const isValidRoute = [to, from].every(route => route.name === 'article-article_id')
+        const isNotGuestbook = this.postId !== this.constants.CommentPostType.Guestbook
+        if (isValidPostId && isValidRoute && isNotGuestbook) {
           this.loadComemntList()
         }
       }

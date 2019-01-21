@@ -4,6 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import { fetchDelay } from '~/utils/fetch-delay'
+
 const getDefaultListData = () => {
   return {
     data: [],
@@ -72,11 +74,13 @@ export const actions = {
     commit('updateListData', getDefaultListData())
     commit('updateListFetchig', true)
     
+    const delay = fetchDelay()
+    
     return this.$axios.$get(`/comment`, { params })
       .then(response => {
         isDescSort && response.result.data.reverse()
         commit('updateListData', response.result)
-        commit('updateListFetchig', false)
+        delay(() => commit('updateListFetchig', false))
       })
       .catch(error => commit('updateListFetchig', false))
   },
