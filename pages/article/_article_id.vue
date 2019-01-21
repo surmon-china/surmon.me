@@ -1,5 +1,5 @@
 <template>
-  <article class="article" :class="{ mobile: isMobile }">
+  <article id="article" class="article" :class="{ mobile: isMobile }">
     <div class="detail">
       <transition name="module">
         <div
@@ -17,13 +17,13 @@
         </div>
       </transition>
       <transition name="module" mode="out-in">
-        <div class="skeleton" v-if="isFetching">
+        <div class="skeleton" key="skeleton" v-if="isFetching">
           <no-ssr>
             <skeleton-line class="title" />
             <skeleton-paragraph class="content" :lines="9" line-height="1.2em" />
           </no-ssr>
         </div>
-        <div class="knowledge" v-else>
+        <div class="knowledge" key="knowledge" v-else>
           <h2 class="title">{{ article.title }}</h2>
           <div class="content" v-html="articleContent"></div>
           <transition name="module" mode="out-in">
@@ -38,18 +38,31 @@
       </transition>
     </div>
     <no-ssr>
-      <transition name="module">
-        <div class="ad" v-if="renderAd && !isFetching">
-          <adsense-article />
-        </div>
-      </transition>
+      <div class="ad">
+        <transition name="module" mode="out-in">
+          <skeleton-paragraph class="ad-skeleton" key="skeleton" v-if="isFetching" :lines="4" line-height="1em" />
+          <adsense-article key="adsense" v-else-if="renderAd" />
+        </transition>
+      </div>
     </no-ssr>
-    <transition name="module">
-      <share-box class="article-share" v-if="!isFetching" />
-    </transition>
-    <div class="metas">
-      <skeleton-paragraph v-if="isFetching" :align="true" :lines="4" line-height="1.2em" />
-      <template v-else>
+    <div class="share">
+      <transition name="module" mode="out-in">
+        <div class="skeleton" key="skeleton" v-if="isFetching">
+          <skeleton-base
+            :style="{ width: `calc((100% - (1em * ${isMobile ? 2 : 9})) / ${isMobile ? 3 : 10})` }"
+            :radius="0"
+            :key="item"
+            v-for="item in (isMobile ? 3 : 10)"
+          />
+        </div>
+        <share-box key="share" class="article" v-else />
+      </transition>
+    </div>
+    <transition name="module" mode="out-in">
+      <div class="metas" key="skeleton" v-if="isFetching">
+        <skeleton-paragraph :align="true" :lines="4" line-height="1.2em" />
+      </div>
+      <div class="metas" key="metas" v-else>
         <p class="item" v-if="isEnLang">
           <span>Article created at</span>
           <span>&nbsp;</span>
@@ -117,78 +130,78 @@
             href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
           >Creative Commons BY-NC 3.0 CN</a>
         </div>
-      </template>
-    </div>
-    <div class="related" v-if="isFetching">
-      <no-ssr>
+      </div>
+    </transition>
+    <transition name="module" mode="out-in">
+      <div class="related" key="skeleton" v-if="isFetching">
         <skeleton-paragraph class="skeleton" v-if="isMobile" :lines="4" line-height="1em" />
         <ul class="skeleton-list" v-else>
           <skeleton-base class="article" :key="item" v-for="item in 4" />
         </ul>
-      </no-ssr>
-    </div>
-    <div class="related" v-else-if="article.related && article.related.length">
-      <div class="article-list swiper" v-if="!isMobile" v-swiper:swiper="swiperOption">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide item" :key="index" v-for="(article, index) in relatedArticles">
+      </div>
+      <div class="related" key="related" v-else-if="article.related && article.related.length">
+        <div class="article-list swiper" v-if="!isMobile" v-swiper:swiper="swiperOption">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide item" :key="index" v-for="(article, index) in relatedArticles">
+              <a
+                v-if="article.ad"
+                class="item-box"
+                :href="article.link"
+                rel="external nofollow noopener"
+                target="_blank"
+              >
+                <img :src="article.img" class="thumb" :alt="article.title">
+                <span class="title">{{ article.title }}</span>
+              </a>
+              <nuxt-link
+                v-else
+                :to="`/article/${article.id}`"
+                :title="article.title"
+                class="item-box"
+              >
+                <img
+                  :src="buildThumb(article.thumb)"
+                  class="thumb"
+                  :alt="article.title"
+                >
+                <span class="title">{{ article.title }}</span>
+              </nuxt-link>
+            </div>
+          </div>
+        </div>
+        <ul class="article-list" v-else>
+          <li class="item" v-for="(article, index) in relatedArticles" :key="index">
             <a
               v-if="article.ad"
-              class="item-box"
+              class="item-link"
               :href="article.link"
               rel="external nofollow noopener"
               target="_blank"
             >
-              <img :src="article.img" class="thumb" :alt="article.title">
+              <span class="sign">《</span>
               <span class="title">{{ article.title }}</span>
+              <span class="sign">》</span>
+              <small class="tip">- 狠狠地阅读</small>
             </a>
             <nuxt-link
               v-else
+              class="item-link"
               :to="`/article/${article.id}`"
-              :title="article.title"
-              class="item-box"
+              :title="`「 ${article.title} 」- 继续阅读`"
             >
-              <img
-                :src="buildThumb(article.thumb)"
-                class="thumb"
-                :alt="article.title"
-              >
+              <span class="sign">《</span>
               <span class="title">{{ article.title }}</span>
+              <span class="sign">》</span>
+              <small class="tip">- 继续阅读</small>
             </nuxt-link>
-          </div>
-        </div>
+          </li>
+        </ul>
       </div>
-      <ul class="article-list" v-else>
-        <li class="item" v-for="(article, index) in relatedArticles" :key="index">
-          <a
-            v-if="article.ad"
-            class="item-link"
-            :href="article.link"
-            rel="external nofollow noopener"
-            target="_blank"
-          >
-            <span class="sign">《</span>
-            <span class="title">{{ article.title }}</span>
-            <span class="sign">》</span>
-            <small class="tip">- 狠狠地阅读</small>
-          </a>
-          <nuxt-link
-            v-else
-            class="item-link"
-            :to="`/article/${article.id}`"
-            :title="`「 ${article.title} 」- 继续阅读`"
-          >
-            <span class="sign">《</span>
-            <span class="title">{{ article.title }}</span>
-            <span class="sign">》</span>
-            <small class="tip">- 继续阅读</small>
-          </nuxt-link>
-        </li>
-      </ul>
-    </div>
+    </transition>
     <div class="comment">
       <comment-box
         :fetching="isFetching"
-        :post-id="article.id"
+        :post-id="routeArticleId"
         :likes="article.meta && article.meta.likes"
       />
     </div>
@@ -264,6 +277,9 @@
       }),
       isEnLang() {
         return this.$store.getters['global/isEnLang']
+      },
+      routeArticleId() {
+        return Number(this.$route.params.article_id)
       },
       articleContent() {
         const { content } = this.article
@@ -429,6 +445,13 @@
     > .related {
       margin-bottom: 1em;
       background-color: $module-bg;
+    }
+
+    > .ad {
+
+      .ad-skeleton {
+        padding: 1em;
+      }
     }
 
     > .detail {
@@ -733,10 +756,16 @@
       }
     }
 
-    .article-share {
+    .share {
       padding: 1em;
       margin-bottom: 1em;
       background-color: $module-bg;
+
+      > .skeleton {
+        display: flex;
+        justify-content: space-between;
+        height: 3rem;
+      }
     }
 
     > .metas {

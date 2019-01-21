@@ -23,6 +23,10 @@ exports.music = {
   id: '638949385',
 }
 
+exports.fetch = {
+  delay: 888,
+}
+
 exports.color = {
   primary: '#0088f5'
 }
