@@ -7,6 +7,7 @@
 import Vue from 'vue'
 import { isBrowser } from '~/environment'
 import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
+import { fetchDelay } from '~/utils/fetch-delay'
 
 const getDefaultListData = () => {
   return {
@@ -115,13 +116,20 @@ export const actions = {
 
   // 获取文章详情
   fetchDetail({ commit }, params = {}) {
+    const delay = fetchDelay(
+      isBrowser && window.$nuxt.$route.name !== 'article-article_id' ? 0 : null
+    )
     commit('updateDetailFetchig', true)
     commit('updateDetailData', {})
     return this.$axios.$get(`/article/${params.article_id}`)
       .then(response => {
         commit('updateDetailData', response.result)
-        commit('updateDetailFetchig', false)
-        return Promise.resolve(response)
+        return new Promise(resolve => {
+          delay(() => {
+            commit('updateDetailFetchig', false)
+            resolve(response)
+          })
+        }) 
       })
       .catch(error => {
         commit('updateDetailFetchig', false)

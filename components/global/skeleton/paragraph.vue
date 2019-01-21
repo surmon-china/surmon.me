@@ -54,7 +54,7 @@
           height: this.lineHeight,
           marginBottom: index === this.lines - 1
             ? '0'
-            : `${this.lineHeight * 0.75}em`
+            : `calc(${this.lineHeight} * 0.75)`
         }
         const pos = index % 3
         if (!!pos) {

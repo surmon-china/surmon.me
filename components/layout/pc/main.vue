@@ -15,7 +15,7 @@
       <language-psm v-if="isNotServicePage" />
       <wallpaper-switch v-if="isNotServicePage" />
       <theme-switch v-if="!onPowerSavingMode && isNotServicePage" />
-      <share-box v-if="isNotServicePage" class="sidebar-share" />
+      <share-box v-if="isNotServicePage" class="sidebar" />
       <tool-box v-if="isNotFullColPage" />
     </no-ssr>
     <main id="main" :class="{ 'full-view': isFullViewWidth }">
