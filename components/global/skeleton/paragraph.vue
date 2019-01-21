@@ -52,7 +52,9 @@
       getLineStyle(index) {
         const style = {
           height: this.lineHeight,
-          marginBottom: index === this.lines - 1 ? '0' : `calc(${this.lineHeight} * 0.75)`
+          marginBottom: index === this.lines - 1
+            ? '0'
+            : `${this.lineHeight * 0.75}em`
         }
         const pos = index % 3
         if (!!pos) {
