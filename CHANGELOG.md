@@ -4,13 +4,14 @@
 - 增加文章详情页，根据 H2、H3、H4 的标题锚点索引功能
 - ~~拆分超过 600 行的组件~~
 - ~~为所有文件增加规范的 JSDOC 信息~~
-- markd 解析内链有问题，https://surmon.me/article/121 git -> github
+- ~~markd 解析内链有问题，https://surmon.me/article/121 git -> github~~
 
 ## CHANGELOG
 
 ### 2.1.0
 
-- 优化 Store 命名
+- 优化 Store 设计
+- 优化 Comment 业务模块逻辑
 - 优化编码风格
 - 优化 markdown 解析器
 - 优化结构组织

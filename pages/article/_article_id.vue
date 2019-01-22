@@ -461,6 +461,8 @@
       padding: 1em 2em;
       position: relative;
       overflow: hidden;
+      height: auto;
+      transition: height .25s;
 
       > .skeleton {
         

@@ -8,7 +8,7 @@
       <emoji-rain v-if="!onPowerSavingMode" />
       <main id="main">
         <div id="main-content" class="main-content">
-          <nuxt/>
+          <nuxt :nuxtChildKey="$route.name" keep-alive />
         </div>
       </main>
       <footer-view />

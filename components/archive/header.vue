@@ -11,13 +11,13 @@
       <p class="logo">
         <transition name="module" mode="out-in">
           <!-- data -->
-          <i class="iconfont icon-clock" v-if="currentDate"></i>
+          <i class="iconfont icon-clock" key="date" v-if="currentDate"></i>
           <!-- tag -->
-          <i class="iconfont" v-else-if="currentTag" :class="currentTagIconClass"></i>
+          <i class="iconfont" key="tag" v-else-if="currentTag" :class="currentTagIconClass"></i>
           <!-- category -->
-          <i class="iconfont" v-else-if="currentCategory" :class="currentCategoryIconClass"></i>
+          <i class="iconfont" key="category" v-else-if="currentCategory" :class="currentCategoryIconClass"></i>
           <!-- search -->
-          <i class="iconfont icon-search" v-else-if="currentKeyword"></i>
+          <i class="iconfont icon-search" key="search" v-else-if="currentKeyword"></i>
         </transition>
       </p>
     </div>
@@ -25,14 +25,14 @@
       <transition name="module" mode="out-in">
         <!-- category -->
         <h4 class="title" v-if="currentCategory">
-          <span>{{ currentCategory.description || 'Nothing.' }}</span>
+          <span>{{ currentCategory.description || '...' }}</span>
         </h4>
 
         <!-- tag -->
         <h4 class="title" v-else-if="currentTag">
           <span>{{ currentTag.name }}</span>
           <span>&nbsp;-&nbsp;</span>
-          <span>{{ currentTag.description || 'Nothing.' }}</span>
+          <span>{{ currentTag.description || '...' }}</span>
         </h4>
 
         <!-- data -->

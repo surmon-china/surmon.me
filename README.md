@@ -25,6 +25,10 @@ If you want to run the application, you need install the [nodepress](https://git
 
 ![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshots/mobile-full.jpg)
 
+## Analyze
+
+![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshots/analyze-2019-zip.png)
+
 ## Build Setup
 
 ```bash
