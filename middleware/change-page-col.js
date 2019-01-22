@@ -4,11 +4,23 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import systemConstants from '~/constants/system'
+
 export default ({ route, store }) => {
 
   // columns
-  const isTwoColumns = ['about', 'project', 'vlog', 'sitemap'].includes(route.name)
-  const isThreeColumns = ['music', 'app', 'service'].includes(route.name)
+  const isTwoColumns = [
+    systemConstants.Route.About,
+    systemConstants.Route.Project,
+    systemConstants.Route.Vlog,
+    systemConstants.Route.Sitemap
+  ].includes(route.name)
+
+  const isThreeColumns = [
+    systemConstants.Route.Music,
+    systemConstants.Route.App,
+    systemConstants.Route.Service
+  ].includes(route.name)
   
   // set columns
   if (store.state.global.isTwoColumns !== isTwoColumns) {

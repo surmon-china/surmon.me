@@ -2,7 +2,7 @@
   <div class="articles">
 
     <!-- 非首页列表头 -->
-    <div class="article-list-header" v-if="!$route.name.includes('index')">
+    <div class="article-list-header" v-if="!isIndexRoute">
       <list-header />
     </div>
 
@@ -47,7 +47,7 @@
   import ListItem from './item.vue'
   import ListHeader from './header.vue'
   import underscore from '~/utils/underscore-simple'
-
+  import { isIndexRoute } from '~/utils/route'
   export default {
     name: 'article-list',
     components: {
@@ -72,6 +72,9 @@
         const { current_page, total_page } = this.article.data.pagination
         const hasArticles = this.article.data.pagination
         return hasArticles ? (current_page < total_page) : false
+      },
+      isIndexRoute() {
+        return isIndexRoute(this.$route.name)
       },
       btnColorBlockLeft() {
         return this.isMobile ? 60 : 75

@@ -23,7 +23,10 @@
       }
     },
     fetch({ store }) {
-      return store.dispatch('global/fetchAppOption')
+      return Promise.all([
+        store.dispatch('global/fetchAppOption'),
+        store.dispatch('comment/fetchList', { post_id: 0 })
+      ])
     },
     computed: {
       siteLikes() {

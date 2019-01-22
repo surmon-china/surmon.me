@@ -136,7 +136,7 @@
       </div>
     </transition>
     <transition name="module">
-      <div class="pagination-box" v-if="comment.pagination.total_page > 1">
+      <div class="pagination-box" v-if="!isFetching && comment.pagination.total_page > 1">
         <ul class="pagination-list" v-if="Object.is(sortMode, constants.SortType.Hot)">
           <li class="item" :key="index" v-for="(item, index) in comment.pagination.total_page">
             <a
@@ -321,6 +321,7 @@
   import gravatar from '~/plugins/gravatar'
   import { scrollTo } from '~/utils/scroll-to-anywhere'
   import { browserParse, osParse } from '~/utils/ua-os-browser'
+  import { isArticleDetailRoute, isGuestbookRoute } from '~/utils/route'
   import { localUser, localHistoryLikes } from '~/transforms/local-storage'
   export default {
     name: 'vue-comment',
@@ -374,7 +375,6 @@
         comment: state => state.comment.data,
         commentFetching: state => state.comment.fetching,
         commentPosting: state => state.comment.posting,
-        isServerInited: state => state.comment.serverInited,
         constants: state => state.global.constants,
         language: state => state.global.language,
         isMobile: state => state.global.isMobile,
@@ -396,20 +396,21 @@
         return this.$route.params.article_id
       },
       isGuestbookPage() {
-        return Object.is(this.$route.name, 'guestbook')
+        return isGuestbookRoute(this.$route.name)
       },
       replyCommentSlef() {
         return this.comment.data.find(comment => Object.is(comment.id, this.pid))
       }
     },
     mounted() {
-      this.initUser()
       this.initAppOptionBlackList()
     },
     activated() {
-      // 1. 如果是首屏（服务端已预加载数据），则不发起请求（废弃）
-      // 2. 由其他页面进入文章页时，发起请求
-      this.loadComemntList()
+      this.initUser()
+      // 1. 组件不再负责初始加载评论列表数据的职责
+      // 2. 组件仅负责初评论列表数据翻页、排序的职责
+      // 3. 当容器组件还在请求时，组件全量 Loading
+      // 4. 当只有评论列表在请求时，列表单独 Loading
     },
     destroyed() {
       this.$store.commit('comment/clearListData')
@@ -719,17 +720,6 @@
           console.warn('评论发布失败，可能原因：被 Akismet 过滤，或者：\n', error)
           alert(this.$i18n.text.comment.profile.submiterr)
         })
-      }
-    },
-    watch: {
-      // 这里只能监听文章 -> 文章之间的变化
-      $route(to, from) {
-        const isValidPostId = this.postId != null && !isNaN(this.postId)
-        const isValidRoute = [to, from].every(route => route.name === 'article-article_id')
-        const isNotGuestbook = this.postId !== this.constants.CommentPostType.Guestbook
-        if (isValidPostId && isValidRoute && isNotGuestbook) {
-          this.loadComemntList()
-        }
       }
     }
   }

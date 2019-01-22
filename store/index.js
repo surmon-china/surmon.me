@@ -6,7 +6,6 @@
 
 import { isServer } from '~/environment'
 import uaDevice from '~/utils/ua-device'
-import stateConstants from '~/constants/state'
 import systemConstants from '~/constants/system'
 
 export const actions = {
@@ -28,6 +27,7 @@ export const actions = {
       store.commit('global/updateLanguage', systemConstants.Language.Zh)
     }
 
+    // 初始化时的全局任务
     const initFetchAppData = [
       // 同构常量
       // store.dispatch('global/fetchConstants'),
@@ -42,14 +42,6 @@ export const actions = {
     // 如果不是移动端的话，则请求热门文章
     if (!isMobile) {
       initFetchAppData.push(store.dispatch('article/fetchHotList'))
-    }
-
-    // 首次服务端渲染时渲染评论数据
-    const isGuestbook = route.name === 'guestbook'
-    const post_id = params.article_id || (isGuestbook ? stateConstants.CommentPostType.Guestbook : null)
-
-    if (post_id != null) {
-      initFetchAppData.push(store.dispatch('comment/fetchList', { post_id }))
     }
 
     return Promise.all(initFetchAppData)
