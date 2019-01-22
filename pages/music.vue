@@ -31,6 +31,7 @@
         <div class="toggle-box">
           <transition name="module" mode="out-in">
             <button
+              key="pause"
               class="toggle-btn"
               @click="togglePlay"
               v-if="playerState.playing"
@@ -39,6 +40,7 @@
               <i class="iconfont icon-music-pause"></i>
             </button>
             <button
+              key="play"
               class="toggle-btn"
               @click="togglePlay"
               v-else

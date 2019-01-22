@@ -13,9 +13,9 @@
           <!-- data -->
           <i class="iconfont icon-clock" key="date" v-if="currentDate"></i>
           <!-- tag -->
-          <i class="iconfont" key="tag" v-else-if="currentTag" :class="currentTagIconClass"></i>
+          <i class="iconfont" :key="`tag${currentTagIconClass}`" v-else-if="currentTag" :class="currentTagIconClass"></i>
           <!-- category -->
-          <i class="iconfont" key="category" v-else-if="currentCategory" :class="currentCategoryIconClass"></i>
+          <i class="iconfont" :key="`category${currentCategoryIconClass}`" v-else-if="currentCategory" :class="currentCategoryIconClass"></i>
           <!-- search -->
           <i class="iconfont icon-search" key="search" v-else-if="currentKeyword"></i>
         </transition>
@@ -24,19 +24,19 @@
     <div class="title-box">
       <transition name="module" mode="out-in">
         <!-- category -->
-        <h4 class="title" v-if="currentCategory">
+        <h4 class="title" :key="`category${currentCategory.description}`" v-if="currentCategory">
           <span>{{ currentCategory.description || '...' }}</span>
         </h4>
 
         <!-- tag -->
-        <h4 class="title" v-else-if="currentTag">
+        <h4 class="title" :key="`tag${currentTag.name}`" v-else-if="currentTag">
           <span>{{ currentTag.name }}</span>
           <span>&nbsp;-&nbsp;</span>
           <span>{{ currentTag.description || '...' }}</span>
         </h4>
 
-        <!-- data -->
-        <h4 class="title" v-else-if="currentDate">
+        <!-- date -->
+        <h4 class="title" :key="`date${currentDate}`" v-else-if="currentDate">
           <span v-if="isEnLang">
             <span>{{ currentDate }}&nbsp;</span>
             <span>articles</span>
@@ -49,7 +49,7 @@
         </h4>
 
         <!-- search -->
-        <h4 class="title" v-else-if="currentKeyword">
+        <h4 class="title" :key="`search${currentKeyword}`" v-else-if="currentKeyword">
           <span v-if="isEnLang">
             <span>"{{ currentKeyword }}"</span>
             <span>related articles</span>
