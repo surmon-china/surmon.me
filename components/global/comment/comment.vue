@@ -46,7 +46,7 @@
     <transition name="module" mode="out-in">
       <div class="list-box list-skeleton" key="skeleton" v-if="isFetching">
         <ul class="comment-list">
-          <li class="comment-item" :key="item" v-for="item in 5">
+          <li class="comment-item" :key="item" v-for="item in (isMobile ? 3 : 5)">
             <div class="gravatar">
               <skeleton-base />
             </div>

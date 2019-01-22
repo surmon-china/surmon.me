@@ -14,7 +14,7 @@
     <!-- 列表 -->
     <div class="article-list">
       <transition name="module" mode="out-in">
-        <transition-group name="fade" tag="div" v-if="article.data.data && article.data.data.length">
+        <transition-group key="list" name="fade" tag="div" v-if="article.data.data && article.data.data.length">
           <list-item
             :key="articleItem.id"
             :article="articleItem"
@@ -22,7 +22,7 @@
             v-for="articleItem in article.data.data"
           />
         </transition-group>
-        <empty-box class="article-empty-box" v-else>
+        <empty-box key="empty" class="article-empty-box" v-else>
           <slot>{{ $i18n.text.article.empty }}</slot>
         </empty-box>
       </transition>

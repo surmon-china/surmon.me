@@ -31,8 +31,8 @@ module.exports = {
     maxAge: 1000 * 60 * 15
   },
   build: {
-    analyze: false, // 分析
-    maxChunkSize: 350000, // 单个包最大尺寸
+    analyze: process.argv.join('').includes('analyze'), // 分析
+    maxChunkSize: 360000, // 单个包最大尺寸
     extractCSS: true, // 单独提取 css
     publicPath: apiConfig.cdnUrl + '/_nuxt/',
     postcss: {
@@ -41,12 +41,31 @@ module.exports = {
     optimization: {
       splitChunks: {
         cacheGroups: {
+          expansions: {
+            name: 'expansions',
+            test(module) {
+              return /swiper|233333|howler|marked|rtcpeerconnection|webrtc|highlight/.test(module.context);
+            },
+            chunks: 'initial',
+            priority: 10,
+          },
+          vendors: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10
+          },
+          default: {
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true
+          },
+          // page -> 合并组件会导致执行异常
           /*
-          styles: {
-            name: 'styles',
+          page: {
+            name: 'page',
             test: /\.(css|vue)$/,
             chunks: 'all',
-            enforce: true
+            enforce: true,
+            priority: -20
           }
           */
         }
