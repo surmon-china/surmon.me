@@ -183,7 +183,7 @@
           .background {
             width: 100%;
             height: 100%;
-            background-color: $body-bg;
+            background-color: $module-hover-bg-darken-10;
             background-size: cover;
             @include css3-prefix(transform, rotate(0deg) scale(1));
             @include css3-prefix(transition, transform 1s);
