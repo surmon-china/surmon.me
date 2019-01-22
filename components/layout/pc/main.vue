@@ -3,15 +3,7 @@
     <header-view/>
     <no-ssr>
       <background/>
-      <barrage v-if="isMountedBarrage" v-cloak/>
       <wall-flower v-if="!onPowerSavingMode" />
-      <transition name="fade">
-        <webrtc v-if="!onPowerSavingMode && onWebrtc" v-cloak/>
-      </transition>
-      <transition name="fade">
-        <wallpaper-wall v-if="onWallpaper" v-cloak/>
-      </transition>
-      <emoji-rain v-if="!onPowerSavingMode" />
       <language-psm v-if="isNotServicePage" />
       <wallpaper-switch v-if="isNotServicePage" />
       <theme-switch v-if="!onPowerSavingMode && isNotServicePage" />
@@ -33,6 +25,16 @@
         <aside-view v-if="!isTwoColumns && !isThreeColumns" keep-alive/>
       </transition>
     </main>
+    <no-ssr>
+      <barrage v-if="isMountedBarrage" v-cloak/>
+      <transition name="fade">
+        <webrtc v-if="!onPowerSavingMode && onWebrtc" v-cloak/>
+      </transition>
+      <transition name="fade">
+        <wallpaper-wall v-if="onWallpaper" v-cloak/>
+      </transition>
+      <emoji-rain v-if="!onPowerSavingMode" />
+    </no-ssr>
     <footer-view/>
   </div>
 </template>

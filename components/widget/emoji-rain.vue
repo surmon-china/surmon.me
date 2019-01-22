@@ -11,9 +11,9 @@
 
   export default {
     name: 'global-emoji-rain',
-    computed: {
-      emoji233333() {
-        return this.$root.$emoji233333
+    data() {
+      return {
+        emoji233333: {}
       }
     },
     methods: {
@@ -22,7 +22,7 @@
           const emojiBase = this.$refs.emoji
           emojiBase.width = document.documentElement.clientWidth || document.body.clientWidth
           emojiBase.height = document.documentElement.clientHeight || document.body.clientHeight
-          this.$root.$emoji233333 = new window.Emoji233333({
+          this.emoji233333 = new window.Emoji233333({
             base: emojiBase,
             scale: 0.7,
             speed: 12,
@@ -30,6 +30,7 @@
             density: 5,
             staggered: true
           })
+          this.$root.$emoji233333 = this.emoji233333
         }
       }
     },
