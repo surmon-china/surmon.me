@@ -79,8 +79,10 @@ export const actions = {
     return this.$axios.$get(`/comment`, { params })
       .then(response => {
         isDescSort && response.result.data.reverse()
-        commit('updateListData', response.result)
-        delay(() => commit('updateListFetchig', false))
+        delay(() => {
+          commit('updateListData', response.result)
+          commit('updateListFetchig', false)
+        })
       })
       .catch(error => commit('updateListFetchig', false))
   },

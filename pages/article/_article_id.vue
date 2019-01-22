@@ -222,9 +222,12 @@
       return params.article_id && !isNaN(Number(params.article_id))
     },
     fetch({ store, params, error }) {
-      return store.dispatch('article/fetchDetail', params).catch(err => {
-        error({ statusCode: 404, message: '众里寻他 我已不再' })
-      })
+      return Promise.all([
+        store.dispatch('article/fetchDetail', params).catch(err => {
+          error({ statusCode: 404, message: '众里寻他 我已不再' })
+        }),
+        store.dispatch('comment/fetchList', { post_id: params.article_id })
+      ])
     },
     head() {
       const article = this.article

@@ -18,6 +18,20 @@ exports.Theme = {
   Dark: 'dark'
 }
 
+exports.Route = {
+  Index: 'index',
+  ArticleDetail: 'article-article_id',
+  SearchArchive: 'search-keyword',
+  Guestbook: 'guestbook',
+  Service: 'service',
+  App: 'app',
+  Music: 'music',
+  About: 'about',
+  Project: 'project',
+  Vlog: 'vlog',
+  Sitemap: 'sitemap',
+}
+
 exports.ImageExt = {
   Webp: 'webp',
   Jpg: 'jpeg',
