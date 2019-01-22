@@ -180,7 +180,7 @@
     <form class="post-box" name="comment" id="post-box">
       <!-- 用户编辑部分 -->
       <transition name="module" mode="out-in">
-        <div class="user" v-if="!userCacheMode || userCacheEditing">
+        <div class="user" key="edit" v-if="!userCacheMode || userCacheEditing">
           <div class="name">
             <input
               required
@@ -221,7 +221,7 @@
           </div>
         </div>
         <!-- 用户设置部分 -->
-        <div class="user" v-else-if="userCacheMode && !userCacheEditing">
+        <div class="user" key="user" v-else-if="userCacheMode && !userCacheEditing">
           <div class="edit">
             <strong class="name">{{ user.name | firstUpperCase }}</strong>
             <a href class="setting" @click.stop.prevent>
@@ -249,7 +249,7 @@
         </div>
         <div class="editor">
           <transition name="module">
-            <div class="will-reply" v-if="!!pid">
+            <div class="will-reply" key="reply" v-if="!!pid">
               <div class="reply-user">
                 <span>
                   <span v-text="$i18n.text.comment.reply">回复</span>

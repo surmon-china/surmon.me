@@ -48,7 +48,7 @@
       <calendar />
     </div>
     <transition name="module">
-      <div class="aside-ad" v-if="renderAd">
+      <div class="aside-ad" key="ad" v-if="renderAd">
         <adsense-aside />
       </div>
     </transition>
