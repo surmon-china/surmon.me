@@ -8,13 +8,13 @@ import appConfig from '~/config/app.config'
 import { isBrowser } from '~/environment'
 
 // 恢复默认
-export const fetchDelay = (delay) => {
+export const fetchDelay = delay => {
   
   // 一个卑鄙的手段
   delay = delay != null ? delay : appConfig.fetch.delay
   const start = new Date().getTime()
 
-  return (action) => {
+  return action => {
 
     // 卑鄙手段
     const end = new Date().getTime()
@@ -24,5 +24,5 @@ export const fetchDelay = (delay) => {
     isDelay
       ? setTimeout(action, timeout)
       : action()
-  } 
+  }
 }

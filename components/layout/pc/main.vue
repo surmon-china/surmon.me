@@ -56,6 +56,8 @@
   import ThemeSwitch from '~/components/widget/theme'
   import music from '~/expansions/music'
   import { setEggTitle, resetTitle } from '~/utils/title-egg'
+  import { isServiceRoute } from '~/utils/route'
+  import systemConstants from '~/constants/system'
 
   export default {
     name: 'pc-main',
@@ -77,13 +79,17 @@
         'onWebrtc', 'onWallpaper', 'onPowerSavingMode', 'isMountedBarrage', 'isTwoColumns', 'isThreeColumns'
       ]),
       isNotServicePage() {
-        return this.$route.name !== 'service'
-      },
-      isNotFullColPage() {
-        return !['app', 'music', 'service'].includes(this.$route.name)
+        return !isServiceRoute(this.$route.name)
       },
       isFullViewWidth() {
-        return ['service'].includes(this.$route.name)
+        return isServiceRoute(this.$route.name)
+      },
+      isNotFullColPage() {
+        return ![
+          systemConstants.Route.App,
+          systemConstants.Route.Music,
+          systemConstants.Route.Service,
+        ].includes(this.$route.name)
       }
     },
     methods: {

@@ -102,6 +102,8 @@
   import AsideAd from './ad'
   import Calendar from './calendar'
   import { mapState } from 'vuex'
+  import { Route } from '~/constants/system'
+  import { isArticleDetailRoute, isSearchArchiveRoute } from '~/utils/route'
   export default {
     name: 'ps-aside',
     components: {
@@ -122,7 +124,7 @@
     },
     mounted() {
       this.updateAd()
-      if (this.$route.name === 'search-keyword') {
+      if (isSearchArchiveRoute(this.$route.name)) {
         this.keyword = this.$route.params.keyword
       }
     },
@@ -133,7 +135,7 @@
         language: state => state.global.language
       }),
       isArticlePage() {
-        return this.$route.name === 'article-article_id'
+        return isArticleDetailRoute(this.$route.name)
       }
     },
     methods: {
@@ -146,9 +148,9 @@
       handleSearch() {
         const keyword = this.keyword
         const paramsKeyword = this.$route.params.keyword
-        const isSearchPage = Object.is(this.$route.name, 'search-keyword')
+        const isSearchPage = isSearchArchiveRoute(this.$route.name)
         if (keyword && (isSearchPage ? (paramsKeyword !== keyword) : true)) {
-          this.$router.push({ name: 'search-keyword', params: { keyword }})
+          this.$router.push({ name: Route.SearchArchive, params: { keyword }})
         }
       },
       handleSlideChange(index) {
