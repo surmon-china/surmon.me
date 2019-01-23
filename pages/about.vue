@@ -256,12 +256,7 @@
               </div>
             </div>
             <div class="about-map" v-if="!isMobile">
-              <loading-box class="loading" v-if="isLoadedMap" />
-              <iframe
-                class="iframe"
-                src="/partials/map.html"
-                @load="handleMapLoaded"
-              ></iframe>
+              <iframe class="iframe" src="/partials/map.html"></iframe>
             </div>
             <div class="about-project">
               <nuxt-link to="/project" class="project-link">
@@ -287,17 +282,9 @@
     fetch({ store }) {
       return store.dispatch('global/fetchAdminInfo')
     },
-    data() {
-      return {
-        isLoadedMap: false
-      }
-    },
     methods: {
       handleFollowMe() {
         this.$ga.event('加微信码', '点击', 'tool')
-      },
-      handleMapLoaded() {
-        this.isLoadedMap = true
       },
       getRandomSkill() {
         return !!Math.floor(Math.random() * 2)
@@ -718,14 +705,6 @@
             overflow: hidden;
             background-color: $module-bg;
             position: relative;
-
-            > .loading {
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-            }
             
             > .iframe {
               width: 100%;

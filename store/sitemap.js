@@ -19,8 +19,8 @@ export const mutations = {
   updateArticleListFetching(state, action) {
     state.articles.fetching = action
   },
-  updateArticleListData(state, action) {
-    state.articles.data = action.result
+  updateArticleListData(state, result) {
+    state.articles.data = result.data
   },
   updateArticleOpenState(state, index, open) {
     const article = state.articles.data[index]
@@ -37,7 +37,7 @@ export const actions = {
     commit('updateArticleListFetching', true)
     return this.$axios.$get(`/article`, { params })
       .then(response => {
-        commit(`updateArticleListData`, response)
+        commit(`updateArticleListData`, response.result)
         commit('updateArticleListFetching', false)
       })
       .catch(error => {

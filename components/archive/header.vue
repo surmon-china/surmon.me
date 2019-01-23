@@ -13,9 +13,9 @@
           <!-- data -->
           <i class="iconfont icon-clock" key="date" v-if="currentDate"></i>
           <!-- tag -->
-          <i class="iconfont" :key="`tag${currentTagIconClass}`" v-else-if="currentTag" :class="currentTagIconClass"></i>
+          <i class="iconfont" key="tag" v-else-if="currentTag" :class="currentTagIconClass"></i>
           <!-- category -->
-          <i class="iconfont" :key="`category${currentCategoryIconClass}`" v-else-if="currentCategory" :class="currentCategoryIconClass"></i>
+          <i class="iconfont" key="category" v-else-if="currentCategory" :class="currentCategoryIconClass"></i>
           <!-- search -->
           <i class="iconfont icon-search" key="search" v-else-if="currentKeyword"></i>
         </transition>
