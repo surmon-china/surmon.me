@@ -77,7 +77,7 @@ export const actions = {
   fetchList({ commit }, params = {}) {
 
     const isRestart = !params.page || params.page === 1
-    const loadMore = params.page && params.page > 1
+    const isLoadMore = params.page && params.page > 1
 
     // 清空已有数据
     isRestart &&
@@ -87,10 +87,10 @@ export const actions = {
     return this.$axios.$get(`/article`, { params })
       .then(response => {
         commit('updateListFetchig', false)
-        loadMore
-          ? commit('updateListData', response.result)
-          : commit('updateExistingListData', response.result)
-        if (loadMore && isBrowser) {
+        isLoadMore
+          ? commit('updateExistingListData', response.result)
+          : commit('updateListData', response.result)
+        if (isLoadMore && isBrowser) {
           Vue.nextTick(() => {
             scrollTo(
               window.scrollY + (window.innerHeight * 0.8),
