@@ -14,7 +14,9 @@
     name: 'wallpaper-switch',
     methods: {
       onWallpaper() {
+        alert('Bing 被墙了我有什么办法！')
         this.$ga.event('今日壁纸', '切换', 'tool')
+        return false
         this.$store.commit('global/updateWallpaperOnState', true)
       }
     }
