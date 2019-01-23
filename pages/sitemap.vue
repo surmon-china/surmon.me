@@ -2,22 +2,22 @@
   <div class="page" :class="{ mobile: isMobile }">
     <div class="sitemap">
       <div class="module articles">
-        <h3 class="title" v-text="$i18n.text.article.name">articles</h3>
-        <p v-if="!articles.length" v-text="$i18n.text.article.empty">暂无文章</p>
+        <h3 class="title" v-text="$i18n.text.article.name"></h3>
+        <p v-if="!articles.length" v-text="$i18n.text.article.empty"></p>
         <ul class="article-list" v-else>
           <li class="item" :key="index" v-for="(article, index) in articles">
             <p class="item-content">
-              <nuxt-link class="link" :to="`/article/${article.id}`" :title="article.title">
+              <a class="link" :href="`/article/${article.id}`" target="_blank" :title="article.title">
                 <span class="sign">「</span>
                 <span class="title">{{ article.title }}</span>
                 <span class="sign">」</span>
-              </nuxt-link>
+              </a>
               <span class="sign">&nbsp;&nbsp;-&nbsp;&nbsp;</span>
               <small>
                 <a
                   href
                   class="toggle-link"
-                  @click.prevent="$store.commit('sitemap/TOGGLE_ARTICLE_OPEN', index)"
+                  @click.prevent="$store.commit('sitemap/updateArticleOpenState', index)"
                   v-text="$i18n.text.action[article.open ? 'close' : 'open']"
                 ></a>
               </small>
@@ -32,17 +32,17 @@
       </div>
       <br>
       <div class="module categories">
-        <h3 class="title" v-text="$i18n.text.category.name">categories</h3>
+        <h3 class="title" v-text="$i18n.text.category.name"></h3>
         <p v-if="!categories.length" v-text="$i18n.text.article.empty"></p>
         <ul class="categories-list" v-else>
           <li class="item" :key="index" v-for="(category, index) in categories">
             <p class="item-content">
-              <nuxt-link
+              <a
                 class="name"
-                :to="`/category/${category.slug}`"
+                target="_blank"
+                :href="`/category/${category.slug}`"
                 :title="category.name"
-                v-text="isEnLang ? category.slug : category.name"
-              />
+              >{{ isEnLang ? category.slug : category.name }}</a>
               <span>（{{ category.count || 0 }}）</span>
               <span>&nbsp;-&nbsp;</span>
               <span>{{ category.description }}</span>
@@ -56,11 +56,11 @@
         <p v-if="!tags.length" v-text="$i18n.text.article.empty">暂无标签</p>
         <ul class="tag-list" v-else>
           <li class="item" :key="index" v-for="(tag, index) in tags">
-            <nuxt-link
-              :to="`/tag/${tag.slug}`"
+            <a
+              target="_blank"
+              :href="`/tag/${tag.slug}`"
               :title="tag.description"
-              v-text="isEnLang ? tag.slug : tag.name"
-            />
+            >{{ isEnLang ? tag.slug : tag.name }}</a>
             <span>（{{ tag.count || 0 }}）</span>
           </li>
         </ul>
@@ -70,22 +70,22 @@
         <h3 class="title" v-text="$i18n.text.page.name">pages</h3>
         <ul class="page-list">
           <li class="item">
-            <nuxt-link to="/" v-text="$i18n.nav['home']" />
+            <a href="/" target="_blank" v-text="$i18n.nav['home']" />
           </li>
           <li class="item">
-            <nuxt-link to="/project" v-text="$i18n.nav['project']" />
+            <a href="/project" target="_blank" v-text="$i18n.nav['project']" />
           </li>
           <li class="item">
-            <nuxt-link to="/about" v-text="$i18n.nav['about']" />
+            <a href="/about" target="_blank" v-text="$i18n.nav['about']" />
           </li>
           <li class="item">
-            <nuxt-link to="/vlog" v-text="$i18n.nav['vlog']" />
+            <a href="/vlog" target="_blank" v-text="$i18n.nav['vlog']" />
           </li>
           <li class="item">
-            <nuxt-link to="/guestbook" v-text="$i18n.nav['guestbook']" />
+            <a href="/guestbook" target="_blank" v-text="$i18n.nav['guestbook']" />
           </li>
           <li class="item">
-            <a href="/sitemap.xml" target="_blank" v-text="$i18n.nav['map']"></a>
+            <a href="/sitemap.xml" target="_blank" v-text="$i18n.nav['map']" />
           </li>
         </ul>
       </div>

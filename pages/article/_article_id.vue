@@ -27,7 +27,7 @@
           <h2 class="title">{{ article.title }}</h2>
           <div class="content" v-html="articleContent"></div>
           <transition name="module" mode="out-in">
-            <div class="readmore" v-if="canReadMore">
+            <div class="readmore" v-if="isCanReadMore">
               <button class="readmore-btn" :disabled="readMoreLoading" @click="readMore()">
                 <span>{{ readMoreLoading ? $i18n.text.article.rendering : $i18n.text.article.readAll }}</span>
                 <i class="iconfont icon-next-bottom"></i>
@@ -259,7 +259,7 @@
           grabCursor: true,
           slidesPerView: 'auto'
         },
-        canReadMore: false,
+        isCanReadMore: false,
         isRenderFullContent: false,
         readMoreLoading: false,
         renderAd: true
@@ -284,6 +284,10 @@
       routeArticleId() {
         return Number(this.$route.params.article_id)
       },
+      articleContentTooMore() {
+        const { content } = this.article
+        return content && content.length > 13688
+      },
       articleContent() {
         const { content } = this.article
         if (!content) {
@@ -291,8 +295,8 @@
         }
         // 文章内容过多，则进行分段处理，避免渲染时间太长
         const hasTags = this.tags && this.tags.length
-        if (content.length > 13688 && !this.isRenderFullContent) {
-          this.canReadMore = true
+        if (this.articleContentTooMore && !this.isRenderFullContent) {
+          this.isCanReadMore = true
           let shortContent = content.substring(0, 11688)
           const lastH4Index = shortContent.lastIndexOf('\n####')
           const lastH3Index = shortContent.lastIndexOf('\n###')
@@ -303,7 +307,7 @@
           shortContent = shortContent.substring(0, lastReadindex)
           return marked(shortContent, hasTags ? this.tags : false, true)
         } else {
-          this.canReadMore = false
+          this.isCanReadMore = false
           return marked(content, hasTags ? this.tags : false, true)
         }
       },
@@ -704,58 +708,58 @@
             }
           }
         }
-      }
 
-      @keyframes readmorebtn {
-        0% { 
-          transform: translate3d(0, 0, 0);
-          background-color: $module-hover-bg;
-        }
-        25% { 
-          transform: translate3d(0, .5rem, 0);
-          background-color: $primary;
-          color: white;
-        }
-        50% { 
-          transform: translate3d(0, 0, 0);
-          background-color: $module-hover-bg;
-        }
-        75% { 
-          transform: translate3d(0, .5rem, 0);
-          background-color: $primary;
-          color: white;
-        }
-        100% { 
-          transform: translate3d(0, 0, 0);
-          background-color: $module-hover-bg;
-        }
-      }
-
-      > .readmore {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        margin-bottom: .8rem;
-
-        > .readmore-btn {
-          width: 80%;
-          text-align: center;
-          height: 3rem;
-          line-height: 3rem;
-          background-color: $module-hover-bg;
-          animation: readmorebtn 4s linear infinite;
-
-          &[disabled] {
-            cursor: no-drop;
+        @keyframes readmorebtn {
+          0% { 
+            transform: translate3d(0, 0, 0);
+            background-color: $module-hover-bg;
           }
-
-          &:hover {
-            background-color: $primary!important;
-            color: white!important;
+          25% { 
+            transform: translate3d(0, .5rem, 0);
+            background-color: $primary;
+            color: white;
           }
+          50% { 
+            transform: translate3d(0, 0, 0);
+            background-color: $module-hover-bg;
+          }
+          75% { 
+            transform: translate3d(0, .5rem, 0);
+            background-color: $primary;
+            color: white;
+          }
+          100% { 
+            transform: translate3d(0, 0, 0);
+            background-color: $module-hover-bg;
+          }
+        }
 
-          > .iconfont {
-            margin-left: .5rem;
+        > .readmore {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          margin-bottom: .8rem;
+
+          > .readmore-btn {
+            width: 80%;
+            text-align: center;
+            height: 3rem;
+            line-height: 3rem;
+            background-color: $module-hover-bg;
+            animation: readmorebtn 4s linear infinite;
+
+            &[disabled] {
+              cursor: no-drop;
+            }
+
+            &:hover {
+              background-color: $primary!important;
+              color: white!important;
+            }
+
+            > .iconfont {
+              margin-left: .5rem;
+            }
           }
         }
       }
