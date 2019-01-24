@@ -5,14 +5,14 @@
       <i class="iconfont icon-radio"></i>
     </div>
     <transition name="module" mode="out-in">
-      <empty-box class="announcement-empty-box" v-if="!announcement.data.length">
+      <empty-box class="announcement-empty-box" key="empty" v-if="!announcement.data.length">
         <slot>{{ $i18n.text.announcement.empty }}</slot>
       </empty-box>
-      <div class="swiper" v-swiper:swiper="swiperOption" v-else>
+      <div class="swiper" key="swiper" v-swiper:swiper="swiperOption" v-else-if="renderSwiper">
         <div class="swiper-wrapper">
           <div
             :key="index"
-            class="swiper-slide item"
+            class="swiper-slide slide-item"
             v-for="(announcement, index) in announcement.data"
           >
             <div class="content" v-html="markedContent(announcement.content)"></div>
@@ -41,7 +41,9 @@
     },
     data() {
       return {
+        renderSwiper: true,
         swiperOption: {
+          height: 34,
           autoplay: {
             delay: 3500,
             disableOnInteraction: false
@@ -64,13 +66,21 @@
       markedContent(content) {
         return marked(content, null, true)
       }
+    },
+    activated() {
+      this.renderSwiper = true
+    },
+    deactivated() {
+      this.renderSwiper = false
     }
   }
 </script>
 
 <style lang="scss">
+  $announcement-height: 2.8em;
+
   .announcement {
-    height: 2.8em;
+    height: $announcement-height;
     line-height: 2.75em;
     font-size: .9em;
     margin-bottom: 1em;
@@ -97,7 +107,8 @@
       float: right;
       width: 90%;
 
-      .item {
+      .slide-item {
+        height: $announcement-height;
 
         > .content {
           width: 100%;
