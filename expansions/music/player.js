@@ -9,7 +9,7 @@ import apiConfig from '~/config/api.config'
 
 export default music => {
 
-  const proxyPath = apiConfig.proxyUrl
+  const proxyPath = apiConfig.proxyUrl + 'music/'
   const playList = music.list.data.tracks
 
   if (music.player) {
