@@ -18,6 +18,7 @@
 - 增加 Vlog 业务模块
 - 使用骨架屏代替 loading
 - 优化 category、tag 在 i18n 下的表现
+- 优化 Swiper 在 SPA 下缺陷
 
 ### v2.0.0
 

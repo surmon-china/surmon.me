@@ -1,8 +1,8 @@
 <template>
   <div class="aside-ad">
-    <div class="swiper" v-swiper:swiper="swiperOption" @slideChange="slideChange">
+    <div class="swiper aside" v-swiper:swiper="swiperOption" @slideChange="slideChange">
       <div class="swiper-wrapper">
-        <div class="swiper-slide item" v-for="(ad, index) in ads" :key="index">
+        <div class="swiper-slide slide-item" v-for="(ad, index) in ads" :key="index">
           <div class="content">
             <a
               :href="ad.url"
@@ -62,6 +62,22 @@
     }
   }
 </script>
+
+<style lang="scss">
+  .aside.swiper {
+
+    .swiper-pagination {
+
+      .swiper-pagination-bullet {
+
+        &.swiper-pagination-bullet-active {
+          height: 1.2rem;
+          border-radius: 10px;
+        }
+      }
+    }
+  }
+</style>
 
 <style lang="scss" scoped>
   .aside-ad {

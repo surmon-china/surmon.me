@@ -1,14 +1,14 @@
 <template>
   <div class="carrousel" :class="{ mobile: isMobile }">
     <transition name="module" mode="out-in">
-      <empty-box class="article-empty-box" v-if="!article.data.data.length">
+      <empty-box class="article-empty-box" key="empty" v-if="!article.data.data.length">
         <slot>{{ $i18n.text.article.empty }}</slot>
       </empty-box>
-      <div class="swiper" v-swiper:swiper="swiperOption" v-else>
+      <div class="swiper index" key="swiper" v-swiper:swiper="swiperOption" v-else-if="renderSwiper">
         <div class="swiper-wrapper">
           <div
             :key="index"
-            class="swiper-slide item"
+            class="swiper-slide slide-item"
             v-for="(article, index) in article.data.data.slice(0, 9)"
           >
             <div class="content">
@@ -36,6 +36,7 @@
     },
     data() {
       return {
+        renderSwiper: true,
         swiperOption: {
           autoplay: {
             delay: 3500,
@@ -46,7 +47,7 @@
             el: '.swiper-pagination'
           },
           setWrapperSize: true,
-          autoHeight: true,
+          // autoHeight: true,
           mousewheel: true,
           observeParents: true,
           grabCursor: true,
@@ -70,13 +71,38 @@
           return `${this.cdnUrl}/images/${this.isMobile ? 'mobile-' : ''}thumb-carrousel.jpg`
         }
       }
+    },
+    activated() {
+      this.renderSwiper = true
+    },
+    deactivated() {
+      this.renderSwiper = false
     }
   }
 </script>
 
+<style lang="scss">
+  .index.swiper {
+
+    .swiper-pagination {
+
+      .swiper-pagination-bullet {
+
+        &.swiper-pagination-bullet-active {
+          width: 2rem;
+          border-radius: 10px;
+        }
+      }
+    }
+  }
+</style>
+
 <style lang="scss" scoped>
+  $pc-carrousel-height: 15em;
+  $mobile-carrousel-height: calc((100vw - 2rem) * .35);
+
   .carrousel {
-    height: 15em;
+    height: $pc-carrousel-height;
     margin-bottom: 1em;
     position: relative;
     overflow: hidden;
@@ -84,11 +110,11 @@
 
     > .swiper {
 
-      .item {
+      .slide-item {
 
         > .content {
           width: 100%;
-          height: 15em;
+          height: $pc-carrousel-height;
           position: relative;
           overflow: hidden;
 
@@ -135,13 +161,14 @@
     }
 
     &.mobile {
-      height: calc((100vw - 2rem) * .35);
+      height: $mobile-carrousel-height;
 
       > .swiper {
 
-        .item {
+        .slide-item {
 
           > .content {
+            height: $mobile-carrousel-height;
 
             > .title {
               right: 1.7rem;
