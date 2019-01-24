@@ -232,8 +232,13 @@ a {
   z-index: 2;
 }
 
-.swiper-pagination-bullet.swiper-pagination-bullet-active {
-  background: $white;
+.swiper-pagination-bullet {
+  transition: width .25s, height .25s, border-radius .25s;
+
+  &.swiper-pagination-bullet-active {
+    opacity: .8;
+    background: $white;
+  }
 }
 
 .swiper-button-prev,

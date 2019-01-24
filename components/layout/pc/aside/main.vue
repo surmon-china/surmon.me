@@ -105,7 +105,7 @@
   import { Route } from '~/constants/system'
   import { isArticleDetailRoute, isSearchArchiveRoute } from '~/utils/route'
   export default {
-    name: 'ps-aside',
+    name: 'pc-aside',
     components: {
       AsideAd,
       Calendar

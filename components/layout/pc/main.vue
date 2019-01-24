@@ -12,7 +12,7 @@
     </no-ssr>
     <main id="main" :class="{ 'full-view': isFullViewWidth }">
       <transition name="module">
-        <nav-view v-if="!isThreeColumns" keep-alive/>
+        <nav-view v-if="!isThreeColumns" />
       </transition>
       <div
         id="main-content"
@@ -22,16 +22,16 @@
         <nuxt :nuxtChildKey="$route.name" keep-alive />
       </div>
       <transition name="aside">
-        <aside-view v-if="!isTwoColumns && !isThreeColumns" keep-alive/>
+        <aside-view key="aside" v-if="!isTwoColumns && !isThreeColumns" />
       </transition>
     </main>
     <no-ssr>
       <barrage v-if="isMountedBarrage" v-cloak/>
       <transition name="fade">
-        <webrtc v-if="!onPowerSavingMode && onWebrtc" v-cloak/>
+        <webrtc key="webrtc" v-if="!onPowerSavingMode && onWebrtc" v-cloak/>
       </transition>
       <transition name="fade">
-        <wallpaper-wall v-if="onWallpaper" v-cloak/>
+        <wallpaper-wall key="wallpaper-wall" v-if="onWallpaper" v-cloak/>
       </transition>
       <emoji-rain v-if="!onPowerSavingMode" />
     </no-ssr>
