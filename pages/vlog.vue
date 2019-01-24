@@ -78,6 +78,9 @@
       isMobile() {
         return this.$store.state.global.isMobile
       },
+      imageExt() {
+        return this.$store.state.global.imageExt
+      },
       video() {
         return this.$store.state.vlog.video.data
       },
@@ -94,7 +97,7 @@
     },
     methods: {
       getThumbUrl(url) {
-        return this.proxyUrl + url.replace('//', '')
+        return `${this.proxyUrl}bilibili/${url.replace('//', '')}@560w_350h.${this.imageExt}`
       },
       handlePlay(video) {
         if (this.isMobile) {
