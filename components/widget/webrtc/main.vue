@@ -178,7 +178,7 @@
               peerId: this.localStream.peerId,
             })
           }
-        } else if (!self.clmtrackrLoaded && !self.clmtrackrLibLoading) {
+        } else if (!this.clmtrackrLoaded && !this.clmtrackrLibLoading) {
           const self = this
           window.addLoadedTask(() => {
             const clmtrackrScript = document.createElement('script')
@@ -186,6 +186,7 @@
               self.clmtrackrLibLoading = false
               self.clmtrackrLoaded = true
               alert('人脸识别库加载成功！期待吴彦祖王祖贤的现身~')
+              self.toggleBeauty()
             }
             clmtrackrScript.defer = 'defer'
             clmtrackrScript.src = `${apiConfig.cdnUrl}/scripts/clmtrackr.js`
