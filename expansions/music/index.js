@@ -48,7 +48,7 @@ export default new Vue({
       const defaultUrl = `${this.cdnUrl}/images/music-bg.jpg`
       const pictureUrl = this.currentSong && this.currentSong.album.picUrl
       return pictureUrl
-        ? pictureUrl.replace('http://', this.proxyUrl) + '?param=600y600'
+        ? pictureUrl.replace('http://', this.proxyUrl + 'music/') + '?param=600y600'
         : defaultUrl
     },
     currentSongLrcContent() {

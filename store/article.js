@@ -120,6 +120,11 @@ export const actions = {
     const delay = fetchDelay(
       (isBrowser && isArticleDetailRoute(window.$nuxt.$route.name)) ? null : 0
     )
+    if (isBrowser) {
+      Vue.nextTick(() => {
+        scrollTo(0, 300, { easing: Easing['ease-in'] })
+      })
+    }
     commit('updateDetailFetchig', true)
     commit('updateDetailData', {})
     return this.$axios.$get(`/article/${params.article_id}`)

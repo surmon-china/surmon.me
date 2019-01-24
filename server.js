@@ -37,10 +37,13 @@ const server = new http.Server(app)
 const io = socketio(server, { transports: ['websocket'] })
 
 if (config.dev) {
-  app.get('/proxy/*', (req, res) => {
-    const targetUrl = 'http://' + req.url.replace('/proxy/', '')
+  const handleProxy = path => (req, res) => {
+    const targetUrl = 'http://' + req.url.replace('/proxy/' + (path ? path + '/' : ''), '')
     require('request').get(targetUrl).pipe(res)
-  })
+  }
+  app.get('/proxy/music/*', handleProxy('music'))
+  app.get('/proxy/bilibili/*', handleProxy('bilibili'))
+  app.get('/proxy/*', handleProxy)
 }
 
 app.use(nuxt.render)
