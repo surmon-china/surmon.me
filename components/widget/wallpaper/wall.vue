@@ -2,12 +2,15 @@
   <div id="wallpaper-wall">
     <div class="wall-box">
       <div class="picture-box" ref="picture-box">
-        <img
-          class="picture"
-          :src="currentWallpaperUrl"
-          :alt="subTitle"
-          :class="classes[index]"
-        >
+        <transition name="module" mode="out-in">
+          <img
+            class="picture"
+            :key="currentWallpaperUrl"
+            :src="currentWallpaperUrl"
+            :alt="subTitle"
+            :class="classes[index]"
+          />
+        </transition>
       </div>
       <div class="story-box" :class="classes[index]">
         <div class="empty" v-if="!currentWallpaper">挂了</div>
@@ -18,22 +21,27 @@
           <p class="para" v-if="isToday">{{ todayStory.para1 }}</p>
           <p class="para" v-if="isToday">{{ todayStory.para2 }}</p>
           <div class="tools">
-            <span class="location" v-if="isToday">
-              <i class="iconfont icon-location"></i>
-              <span>{{ todayStory.attribute }}</span>
-              <span>&nbsp;|&nbsp;</span>
-              <span>{{ todayStory.Continent }}</span>
-            </span>
-            <a
-              class="link"
-              v-if="link"
-              :href="link"
-              target="_blank"
-              rel="external nofollow noopenter"
-            >
-              <i class="iconfont icon-link"></i>
-              <span>相关链接</span>
-            </a>
+            <transition name="module">
+              <span class="location" key="location" v-if="isToday">
+                <i class="iconfont icon-location"></i>
+                <span>{{ todayStory.attribute }}</span>
+                <span>&nbsp;|&nbsp;</span>
+                <span>{{ todayStory.Continent }}</span>
+              </span>
+            </transition>
+            <transition name="module">
+              <a
+                class="link"
+                key="link"
+                v-if="link"
+                :href="link"
+                target="_blank"
+                rel="external nofollow noopenter"
+              >
+                <i class="iconfont icon-link"></i>
+                <span>相关链接</span>
+              </a>
+            </transition>
             <button class="btn" title="上一幅" :disabled="!canNext" @click="index++">
               <i class="iconfont icon-prev"></i>
             </button>
