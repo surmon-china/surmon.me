@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { isServer } from '~/environment'
+import { isServer } from '~/environment/esm'
 import uaDevice from '~/utils/ua-device'
 import systemConstants from '~/constants/system'
 

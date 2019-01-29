@@ -56,7 +56,7 @@
 
 <script>
   import music from '~/expansions/music'
-  import { isBrowser } from '~/environment'
+  import { isBrowser } from '~/environment/esm'
   export default {
     name: 'layout-header',
     data() {

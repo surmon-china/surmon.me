@@ -116,8 +116,7 @@
 
 <script>
   import { states } from './util'
-  import { isDevMode } from '~/environment'
-  import apiConfig from '~/config/api.config'
+  import { isDevMode } from '~/environment/esm'
   import appConfig from '~/config/app.config'
   import socketio from '~/plugins/socket.io'
   import SimpleWebRTC from '~/plugins/webrtc'
@@ -189,7 +188,7 @@
               self.toggleBeauty()
             }
             clmtrackrScript.defer = 'defer'
-            clmtrackrScript.src = `${apiConfig.cdnUrl}/scripts/clmtrackr.js`
+            clmtrackrScript.src = `${self.$apiConfig.cdnUrl}/scripts/clmtrackr.js`
             document.body.appendChild(clmtrackrScript)
           })
           this.clmtrackrLibLoading = true
@@ -285,7 +284,7 @@
         autoAdjustMic: true,
         autoRequestMedia: true,
         detectSpeakingEvents: true,
-        url: apiConfig.socketHost,
+        url: self.$apiConfig.socketHost,
         // 自动选择流模式
         // iceTransportPolicy: 'relay',
         peerConnectionConfig:{

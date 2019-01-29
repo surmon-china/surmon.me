@@ -6,9 +6,9 @@
 
 import Vue from 'vue'
 import filters from '~/filters'
-import apiConfig from '~/config/api.config'
 import i18nConfig from '~/config/i18n.config'
 import i18nTransfer from '~/transforms/i18n-transfer'
+import apiConfig, { cdnUrl, proxyUrl } from '~/config/api.config.esm'
 
 import EmptyBox from '~/components/global/empty'
 import LoadingBox from '~/components/global/loading'
@@ -22,8 +22,9 @@ import AdsenseComponents from '~/components/global/adsense'
 const i18nData = i18nTransfer(i18nConfig)
 
 // cdn
-Vue.prototype.cdnUrl = apiConfig.cdnUrl
-Vue.prototype.proxyUrl = apiConfig.proxyUrl
+Vue.prototype.cdnUrl = cdnUrl
+Vue.prototype.proxyUrl = proxyUrl
+Vue.prototype.$apiConfig = apiConfig
 
 // filters
 Object.keys(filters).forEach(key => Vue.filter(key, filters[key]))

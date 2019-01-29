@@ -58,7 +58,7 @@ module.exports = {
             priority: -20,
             reuseExistingChunk: true
           },
-          // page -> 合并组件会导致执行异常
+          // page -> 合并组件会导致运行异常
           /*
           page: {
             name: 'page',
@@ -122,14 +122,14 @@ module.exports = {
     { src: '~/plugins/marked' },
     { src: '~/plugins/gravatar' },
     { src: '~/plugins/highlight' },
-    { src: '~/plugins/adsense', ssr: false },
-    { src: '~/plugins/swiper', ssr: false },
-    { src: '~/plugins/analytics', ssr: false },
-    { src: '~/plugins/emoji-233333', ssr: false },
-    { src: '~/plugins/image-popup', ssr: false },
-    { src: '~/plugins/iframe-popup', ssr: false },
-    { src: '~/plugins/copy-right', ssr: false },
-    // { src: '~/plugins/particles', ssr: false }
+    { src: '~/plugins/adsense', mode: 'client' },
+    { src: '~/plugins/swiper', mode: 'client' },
+    { src: '~/plugins/analytics', mode: 'client' },
+    { src: '~/plugins/emoji-233333', mode: 'client' },
+    { src: '~/plugins/image-popup', mode: 'client' },
+    { src: '~/plugins/iframe-popup', mode: 'client' },
+    { src: '~/plugins/copy-right', mode: 'client' },
+    // { src: '~/plugins/particles', mode: 'client' }
   ],
   head: {
     title: `${appConfig.meta.title} - ${htmlSlogan}`,

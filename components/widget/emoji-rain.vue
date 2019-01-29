@@ -7,8 +7,7 @@
 </template>
 
 <script>
-  import { isBrowser } from '~/environment'
-
+  import { isBrowser } from '~/environment/esm'
   export default {
     name: 'global-emoji-rain',
     data() {
