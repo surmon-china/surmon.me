@@ -8,6 +8,11 @@
 
 ## CHANGELOG
 
+### 2.1.2
+
+- 升级 Nuxt 至 2.4.0
+- 优化 module
+
 ### 2.1.0
 
 - 优化 Store 设计

@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { isBrowser } from '~/environment'
+import { isBrowser } from '~/environment/esm'
 import Emoji233333 from 'emoji-233333'
 
 if (isBrowser) {

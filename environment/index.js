@@ -5,19 +5,22 @@
  */
 
 const environment = process.env
-const isDevMode = Object.is(environment.NODE_ENV, 'development')
-const isProdMode = Object.is(environment.NODE_ENV, 'production')
+const NODE_ENV = environment.NODE_ENV
+const isDevMode = Object.is(NODE_ENV, 'development')
+const isProdMode = Object.is(NODE_ENV, 'production')
 
 const isStatic = process && process.static
 const isServer = process && process.server
 const isBrowser = process && process.browser
+const isModern = process && process.modern
 
 module.exports = {
+  NODE_ENV,
+  environment,
   isDevMode,
   isProdMode,
-  environment,
-  
   isStatic,
+  isServer,
   isBrowser,
-  isServer
+  isModern
 }

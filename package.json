@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "description": "Surmon.me blog",
   "author": {
     "name": "Surmon",
@@ -33,7 +33,7 @@
     "howler": "^2.0.14",
     "marked": "^0.5.1",
     "node-uuid": "^1.4.8",
-    "nuxt": "^2.3.4",
+    "nuxt": "^2.4.0",
     "particles.js": "^2.0.0",
     "simplewebrtc": "^3.0.2",
     "socket.io": "^2.1.1",
