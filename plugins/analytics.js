@@ -6,7 +6,7 @@
 
 import Vue from 'vue'
 import VueAnalytics from 'vue-analytics'
-import { isBrowser, isProdMode } from '~/environment'
+import { isBrowser, isProdMode } from '~/environment/esm'
 
 if (isBrowser) {
   

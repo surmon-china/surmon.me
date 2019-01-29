@@ -1,0 +1,14 @@
+{
+  "development": {
+    "cdnUrl": "",
+    "proxyUrl": "/proxy/",
+    "baseUrl": "http://localhost:8000",
+    "socketHost": "http://localhost:3000"
+  },
+  "production": {
+    "cdnUrl": "https://cdn.surmon.m",
+    "proxyUrl": "https://surmon.me/proxy/",
+    "baseUrl": "https://api.surmon.me",
+    "socketHost": "https://surmon.me"
+  }
+}

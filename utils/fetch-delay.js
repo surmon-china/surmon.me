@@ -5,7 +5,7 @@
  */
 
 import appConfig from '~/config/app.config'
-import { isBrowser } from '~/environment'
+import { isBrowser } from '~/environment/esm'
 
 // 恢复默认
 export const fetchDelay = delay => {
