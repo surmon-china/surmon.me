@@ -44,7 +44,7 @@ module.exports = {
           expansions: {
             name: 'expansions',
             test(module) {
-              return /swiper|233333|howler|marked|rtcpeerconnection|webrtc|highlight/.test(module.context);
+              return /swiper|233333|howler|marked|favico|rtcpeerconnection|webrtc|highlight/.test(module.context);
             },
             chunks: 'initial',
             priority: 10,
