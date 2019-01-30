@@ -57,7 +57,7 @@
   import ShareBox from '~/components/widget/share'
   import ThemeSwitch from '~/components/widget/theme'
   import music from '~/expansions/music'
-  import { setEggTitle, resetTitle } from '~/utils/title-egg'
+  import { startTitleEgg, resetTitle } from '~/utils/title-egg'
   import { isServiceRoute } from '~/utils/route'
   import systemConstants from '~/constants/system'
 
@@ -69,8 +69,10 @@
       HeaderView, FooterView, AsideView, NavView, // 布局
     },
     mounted() {
-      this.watchTabActive()
+      // const isHidden = document.hidden || document.webkitHidden || document.mozHidden
+      // this.startAllEgg(isHidden)
       // this.watchFullScreen()
+      this.watchTabActive()
       this.$store.dispatch('wallpaper/fetchPapers')
       this.$store.dispatch('wallpaper/fetchStory')
       this.$root.$music = music
@@ -95,15 +97,22 @@
       }
     },
     methods: {
+      startAllEgg(isHidden) {
+        if (isHidden) {
+          startTitleEgg()
+        } else {
+          resetTitle()
+        }
+      },
       watchTabActive() {
         document.addEventListener('visibilitychange', event => {
           const isHidden = event.target.hidden || event.target.webkitHidden
-          isHidden ? setEggTitle() : resetTitle()
+          this.startAllEgg(isHidden)
         }, false)
       },
       watchFullScreen() {
         const fullscreenchange = event => {
-          // console.log('fullscreenchange', event)
+          console.log('fullscreenchange', event)
         }
         document.addEventListener("fullscreenchange", fullscreenchange, false)
         document.addEventListener("mozfullscreenchange", fullscreenchange, false)

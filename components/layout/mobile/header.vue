@@ -5,6 +5,7 @@
         ref="input"
         type="text"
         class="input"
+        list="keywords"
         required
         v-model.trim="keyword"
         :placeholder="$i18n.text.search"
@@ -13,6 +14,11 @@
       <span class="close" @click.stop.prevent="search = false">
         <i class="iconfont icon-cancel"></i>
       </span>
+      <no-ssr>
+        <datalist class="search-keywords" id="keywords" v-if="tags.length">
+          <option class="iiem" :value="tag.name" :label="tag.description" :key="tag.slug" v-for="tag in tags" />
+        </datalist>
+      </no-ssr>
     </form>
     <transition name="module">
       <div v-if="search" class="search-mask"></div>
@@ -45,6 +51,9 @@
       }
     },
     computed: {
+      tags() {
+        return this.$store.state.tag.data
+      },
       onMobileSidebar() {
         return this.$store.state.global.onMobileSidebar
       }

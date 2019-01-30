@@ -122,6 +122,7 @@ module.exports = {
     { src: '~/plugins/marked' },
     { src: '~/plugins/gravatar' },
     { src: '~/plugins/highlight' },
+    { src: '~/plugins/favico', mode: 'client' },
     { src: '~/plugins/adsense', mode: 'client' },
     { src: '~/plugins/swiper', mode: 'client' },
     { src: '~/plugins/analytics', mode: 'client' },
