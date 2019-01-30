@@ -20,6 +20,11 @@
         <nuxt-link to="/sitemap" class="sitemap-btn">
           <i class="iconfont icon-sitemap"></i>
         </nuxt-link>
+        <no-ssr>
+          <datalist class="search-keywords" id="keywords" v-if="tags.length">
+            <option class="iiem" :value="tag.name" :label="tag.description" :key="tag.slug" v-for="tag in tags" />
+          </datalist>
+        </no-ssr>
       </div>
     </div>
     <div class="aside-article">
@@ -252,6 +257,10 @@
           margin-right: 0;
           width: calc(100% - 6.5em - 1px);
           box-sizing: border-box;
+          
+          &::-webkit-calendar-picker-indicator {
+            display: none;
+          }
         }
 
         > .search-btn {
@@ -267,6 +276,11 @@
           text-align: center;
           float: right;
           width: 4em;
+        }
+
+        > .search-keywords {
+
+          > .item {}
         }
       }
     }
