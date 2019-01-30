@@ -77,17 +77,17 @@
             tag="li"
             class="item"
             :key="index"
-            :to="`/tag/${item.slug}`"
-            v-for="(item, index) in tags"
+            :to="`/tag/${tag.slug}`"
+            v-for="(tag, index) in tags"
           >
-            <a class="title" :title="item.description">
+            <a class="title" :title="tag.description">
               <i
                 class="iconfont"
-                :class="item.extends.find(t => Object.is(t.name, 'icon')).value"
-                v-if="item.extends.find(t => Object.is(t.name, 'icon'))"
+                :class="tag.extends.find(t => Object.is(t.name, 'icon')).value"
+                v-if="tag.extends.find(t => Object.is(t.name, 'icon'))"
               ></i>
-              <span>{{ item.name }}</span>
-              <span>({{ item.count || 0 }})</span>
+              <span>{{ isEnLang ? tag.slug : tag.name }}</span>
+              <span>({{ tag.count || 0 }})</span>
             </a>
           </nuxt-link>
         </ul>
