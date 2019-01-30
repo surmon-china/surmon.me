@@ -35,9 +35,11 @@
         <span class="icon">
           <i class="iconfont icon-peachblossom"></i>
         </span>
-        <span v-if="!article.fetching && isCanLoadMore" v-text="$i18n.text.article.loadmore"></span>
-        <span v-else-if="article.fetching && isCanLoadMore" v-text="$i18n.text.article.loading"></span>
-        <span v-else-if="!isCanLoadMore" v-text="$i18n.text.article.nomore"></span>
+        <span class="text">
+          <span v-if="!article.fetching && isCanLoadMore" v-text="$i18n.text.article.loadmore"></span>
+          <span v-else-if="article.fetching && isCanLoadMore" v-text="$i18n.text.article.loading"></span>
+          <span v-else-if="!isCanLoadMore" v-text="$i18n.text.article.nomore"></span>
+        </span>
       </button>
     </div>
   </div>
@@ -143,9 +145,7 @@
         padding: 0 2rem;
         line-height: 3em;
         color: $white;
-        font-family: webfont-bolder;
         background-color: $module-bg;
-        text-transform: uppercase;
         display: flex;
         justify-content: space-between;
 
@@ -167,6 +167,11 @@
           > .iconfont {
             animation: loadmore-btn-icon-color 2s infinite;
           }
+        }
+
+        > .text {
+          text-transform: uppercase;
+          font-family: 'webfont-bolder', 'DINRegular';
         }
       }
     }
