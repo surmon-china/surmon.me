@@ -22,7 +22,12 @@
         </nuxt-link>
         <no-ssr>
           <datalist class="search-keywords" id="keywords" v-if="tags.length">
-            <option class="iiem" :value="tag.name" :label="tag.description" :key="tag.slug" v-for="tag in tags" />
+            <option class="iiem"
+              :value="isEnLang ? tag.slug : tag.name"
+              :label="tag.description"
+              :key="tag.slug"
+              v-for="tag in tags"
+            />
           </datalist>
         </no-ssr>
       </div>
@@ -137,8 +142,11 @@
       ...mapState({
         tags: state => state.tag.data,
         articles: state => state.article.hotList.data,
-        language: state => state.global.language
+        language: state => state.global.language,
       }),
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
+      },
       isArticlePage() {
         return isArticleDetailRoute(this.$route.name)
       }
