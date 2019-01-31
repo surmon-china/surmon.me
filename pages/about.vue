@@ -582,7 +582,7 @@
                 min-height: 2.5em;
 
                 &.webfont {
-                  font-family: webfont-bolder;
+                  font-family: webfont-bolder, DINRegular;
                 }
 
                 &:first-child {
