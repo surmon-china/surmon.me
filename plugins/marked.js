@@ -90,7 +90,7 @@ const codeParse = function(code, lang, escaped) {
       </pre>
     `
     
-  return preHtml.replace(/>\s+</g, '><')
+  return preHtml
 }
 
 renderer.link = linkParse
