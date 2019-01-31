@@ -200,11 +200,11 @@ module.exports = {
           en: 'Full Screen'
         },
         readAll: {
-          zh: '阅读全文',
+          zh: '阅读余下全文',
           en: 'Read all'
         },
         rendering: {
-          zh: '渲染中...',
+          zh: '疯狂渲染中...',
           en: 'rendering...'
         },
         name: {

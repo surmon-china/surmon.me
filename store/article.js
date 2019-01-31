@@ -64,6 +64,15 @@ export const mutations = {
     state.detail.data = action
   },
 
+  // 更新文章阅读全文状态
+  updateDetailRenderedState(state, action) {
+    Vue.set(
+      state.detail.data,
+      'isRenderedFullContent',
+      action == null ? true : action
+    )
+  },
+
   // 喜欢某篇文章
   updateLikesIncrement(state) {
     const article = state.detail.data
