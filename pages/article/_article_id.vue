@@ -700,7 +700,7 @@
             > code {
               margin: 0;
               padding: 1em;
-              padding-top: $code-line-height + 1em;
+              // padding-top: $code-line-height + 1em;
               float: left;
               width: 100%;
               height: 100%;
