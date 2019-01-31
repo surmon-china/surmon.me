@@ -230,7 +230,7 @@
       ])
     },
     head() {
-      const article = this.article
+      const { article } = this
       return {
         title: article.title || '...',
         meta: [
@@ -629,11 +629,10 @@
             background-color: $module-hover-bg;
           }
 
-          $code-line-height: 2.8em;
-          $code-line-width: 2.5em;
-          $code-line-line-height: 1.6em;
-
           pre {
+            $code-line-height: 2.8em;
+            $code-line-width: 2.5em;
+            $code-line-line-height: 1.6em;
             display: block;
             position: relative;
             overflow: hidden;
