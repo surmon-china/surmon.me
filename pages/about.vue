@@ -86,7 +86,7 @@
                         <i class="iconfont icon-zhihu"></i>
                       </a>
                       <a
-                        href="https://weibo.com/nocower"
+                        href="https://weibo.com/surmon"
                         target="_blank"
                         class="weibo"
                         rel="external nofollow noopenter"

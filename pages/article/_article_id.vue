@@ -28,8 +28,8 @@
           <div class="content" v-html="articleContent"></div>
           <transition name="module" mode="out-in">
             <div class="readmore" v-if="isCanReadMore">
-              <button class="readmore-btn" :disabled="readMoreLoading" @click="readMore()">
-                <span>{{ readMoreLoading ? $i18n.text.article.rendering : $i18n.text.article.readAll }}</span>
+              <button class="readmore-btn" :disabled="isReadMoreLoading" @click="readMore()">
+                <span>{{ isReadMoreLoading ? $i18n.text.article.rendering : $i18n.text.article.readAll }}</span>
                 <i class="iconfont icon-next-bottom"></i>
               </button>
             </div>
@@ -259,9 +259,7 @@
           grabCursor: true,
           slidesPerView: 'auto'
         },
-        isCanReadMore: false,
-        isRenderFullContent: false,
-        readMoreLoading: false,
+        isReadMoreLoading: false,
         renderAd: true
       }
     },
@@ -284,32 +282,35 @@
       routeArticleId() {
         return Number(this.$route.params.article_id)
       },
-      articleContentTooMore() {
+      isContentTooMore() {
         const { content } = this.article
         return content && content.length > 13688
       },
+      isCanReadMore() {
+        return this.isContentTooMore && !this.article.isRenderedFullContent
+      },
       articleContent() {
-        const { content } = this.article
+        const { content, isRenderedFullContent } = this.article
         if (!content) {
           return ''
         }
-        // 文章内容过多，则进行分段处理，避免渲染时间太长
         const hasTags = this.tags && this.tags.length
-        if (this.articleContentTooMore && !this.isRenderFullContent) {
-          this.isCanReadMore = true
-          let shortContent = content.substring(0, 11688)
-          const lastH4Index = shortContent.lastIndexOf('\n####')
-          const lastH3Index = shortContent.lastIndexOf('\n###')
-          const lastCodeIndex = shortContent.lastIndexOf('\n\n```')
-          const lastLineIndex = shortContent.lastIndexOf('\n\n**')
-          const lastReadindex = Math.max(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex);
-          // console.log(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex, 'min', lastReadindex)
-          shortContent = shortContent.substring(0, lastReadindex)
-          return marked(shortContent, hasTags ? this.tags : false, true)
-        } else {
-          this.isCanReadMore = false
+
+        // 正常长度，正常渲染
+        if (!this.isContentTooMore || isRenderedFullContent) {
           return marked(content, hasTags ? this.tags : false, true)
         }
+
+        // 内容过多，进行分段处理，避免渲染时间太长
+        let shortContent = content.substring(0, 11688)
+        const lastH4Index = shortContent.lastIndexOf('\n####')
+        const lastH3Index = shortContent.lastIndexOf('\n###')
+        const lastCodeIndex = shortContent.lastIndexOf('\n\n```')
+        const lastLineIndex = shortContent.lastIndexOf('\n\n**')
+        const lastReadindex = Math.max(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex);
+        // console.log(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex, 'min', lastReadindex)
+        shortContent = shortContent.substring(0, lastReadindex)
+        return marked(shortContent, hasTags ? this.tags : false, true)
       },
       relatedArticles() {
         const relateds = [...this.article.related].slice(0, 10)
@@ -320,10 +321,11 @@
     },
     methods: {
       readMore() {
-        this.readMoreLoading = true
+        this.isReadMoreLoading = true
         this.$nextTick(() => {
           setTimeout(() => {
-            this.isRenderFullContent = true
+            this.$store.commit('article/updateDetailRenderedState', true)
+            this.isReadMoreLoading = false
           }, 0)
         })
       },

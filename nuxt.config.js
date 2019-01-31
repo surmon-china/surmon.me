@@ -132,6 +132,11 @@ module.exports = {
     { src: '~/plugins/copy-right', mode: 'client' },
     // { src: '~/plugins/particles', mode: 'client' }
   ],
+  modules: [
+    '@nuxtjs/pwa',
+    '@nuxtjs/style-resources',
+    ['@nuxtjs/axios', { baseURL: apiConfig.baseUrl }]
+  ],
   head: {
     title: `${appConfig.meta.title} - ${htmlSlogan}`,
     titleTemplate: `%s | ${appConfig.meta.title}`,
@@ -178,6 +183,15 @@ module.exports = {
       { innerHTML: 'This website requires JavaScript.' }
     ],
   },
+  workbox: {
+    // runtimeCaching: [
+    //   {
+    //     urlPattern: 'https://my-cdn.com/.*',
+    //     handler: 'networkFirst',
+    //     method: 'GET'
+    //   }
+    // ]
+  },
   manifest: {
     name: appConfig.meta.title,
     short_name: appConfig.meta.author,
@@ -191,11 +205,6 @@ module.exports = {
     iconSrc: '/static/icon.png',
     sizes: [16, 120, 144, 152, 192, 384, 512]
   },
-  modules: [
-    '@nuxtjs/pwa',
-    '@nuxtjs/style-resources',
-    ['@nuxtjs/axios', { baseURL: apiConfig.baseUrl }]
-  ],
   router: {
     middleware: ['change-page-col'],
     linkActiveClass: 'link-active',
