@@ -505,7 +505,7 @@
           background-color: rgba($red, .8);
         }
 
-        &.Hybrid {
+        &.hybrid {
           background-color: rgba($primary, .8);
         }
       }
@@ -519,7 +519,6 @@
         }
 
         > .content {
-
           iframe {
             width: 100%;
             margin-bottom: 1em;
@@ -664,7 +663,7 @@
               margin: 0;
               padding: 1em 0;
               width: $code-line-width;
-              height: calc(100% - $code-line-height);
+              height: calc(100% - #{$code-line-height});
               text-align: center;
               background-color: rgba(0, 0, 0, 0.2);
 
