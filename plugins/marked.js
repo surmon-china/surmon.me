@@ -6,6 +6,7 @@
 
 import marked from 'marked'
 import Hljs from '~/plugins/highlight'
+import appConfig from '~/config/app.config'
 import buildTagLink from '~/transforms/article-tag-releted-parse'
 
 marked.setOptions({
@@ -29,7 +30,7 @@ const paragraphParse = text => `<p>${text}</p>`
 
 // 对连接进行权重防流和新窗处理
 const linkParse = (href, title, text) => {
-  const isSelf = href.includes('surmon.me')
+  const isSelf = href.includes(appConfig.meta.url)
   const textIsImage = text.includes('<img')
   const linkHtml = `
     <a
@@ -50,9 +51,9 @@ const imageParse = (src, title, alt) => {
   src = src.replace(/^http:\/\//ig, "/proxy/")
   const imageHtml = `
     <img
-      src="${src}" 
-      title="${title || alt || 'surmon.me'}" 
-      alt="${alt || title || src}" 
+      src="${src}"
+      title="${title || alt || appConfig.meta.url}" 
+      alt="${alt || title || src}"
       onclick="if (window.utils) window.utils.openImgPopup('${src}')"
     />
   `
@@ -89,7 +90,7 @@ const codeParse = function(code, lang, escaped) {
       </pre>
     `
     
-  return preHtml.replace(/\n/g, ' ')
+  return preHtml.replace(/>\s+</g, '><')
 }
 
 renderer.link = linkParse
