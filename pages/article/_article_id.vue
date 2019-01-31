@@ -629,19 +629,23 @@
             background-color: $module-hover-bg;
           }
 
+          $code-line-height: 2.8em;
+          $code-line-width: 2.5em;
+          $code-line-line-height: 1.6em;
+
           pre {
             display: block;
             position: relative;
             overflow: hidden;
             margin-bottom: 1em;
-            padding-left: 2.5em;
+            padding-left: $code-line-width;
             background-color: rgba(0, 0, 0, 0.8);
 
             &:before {
               color: white;
               content: attr(data-lang)" CODE";
-              height: 2.8em;
-              line-height: 2.8em;
+              height: $code-line-height;
+              line-height: $code-line-height;
               font-size: 1em;
               position: absolute;
               top: 0;
@@ -657,11 +661,11 @@
             > .code-lines {
               position: absolute;
               left: 0;
-              top: 2.8em;
+              top: $code-line-height;
               margin: 0;
               padding: 1em 0;
-              width: 2.5em;
-              height: calc(100% - 2.8em);
+              width: $code-line-width;
+              height: calc(100% - $code-line-height);
               text-align: center;
               background-color: rgba(0, 0, 0, 0.2);
 
@@ -669,7 +673,7 @@
                 padding: 0;
                 position: relative;
                 list-style-type: none;
-                line-height: 1.6em;
+                line-height: $code-line-line-height;
                 transition: background-color .05s;
 
                 &:hover {
@@ -682,10 +686,10 @@
 
                 &:before {
                   content: '';
-                  height: 1.6em;
+                  height: $code-line-line-height;
                   position: absolute;
                   top: 0;
-                  left: 2.5em;
+                  left: $code-line-width;
                   width: 66em;
                   background-color: rgba(154, 154, 154, 0.2);
                   display: none;
@@ -698,11 +702,12 @@
             > code {
               margin: 0;
               padding: 1em;
+              padding-top: $code-line-height + 1em;
               float: left;
               width: 100%;
               height: 100%;
               display: block;
-              line-height: 1.6em;
+              line-height: $code-line-line-height;
               color: rgba(255, 255, 255, 0.87);
               background-color: transparent;
             }
