@@ -26,10 +26,16 @@ marked.setOptions({
 const renderer = new marked.Renderer()
 
 // 段落解析
-const paragraphParse = text => `<p>${text}</p>`
+const paragraphRender = text => `<p>${text}</p>`
+
+// 标题解析
+const headingRender = (text, level, raw) => {
+  const id = raw.toLowerCase().replace(/[^a-zA-Z0-9\u4e00-\u9fa5]+/g, '-');
+  return `<h${level} id=${id} alt=${id} title=${id}>${text}</h${level}>`;
+}
 
 // 对连接进行权重防流和新窗处理
-const linkParse = (href, title, text) => {
+const linkRender = (href, title, text) => {
   const isSelf = href.includes(appConfig.meta.url)
   const textIsImage = text.includes('<img')
   const linkHtml = `
@@ -47,11 +53,12 @@ const linkParse = (href, title, text) => {
 }
 
 // 对图片进行弹窗处理
-const imageParse = (src, title, alt) => {
+const imageRender = (src, title, alt) => {
   src = src.replace(/^http:\/\//ig, "/proxy/")
   const imageHtml = `
     <img
-      src="${src}"
+      class="lozad"
+      data-src="${src}"
       title="${title || alt || appConfig.meta.url}" 
       alt="${alt || title || src}"
       onclick="if (window.utils) window.utils.openImgPopup('${src}')"
@@ -61,7 +68,7 @@ const imageParse = (src, title, alt) => {
 }
 
 // 代码解析器（行号处理）
-const codeParse = function(code, lang, escaped) {
+const codeRender = function(code, lang, escaped) {
 
   if (this.options.highlight) {
     const out = this.options.highlight(code, lang)
@@ -93,10 +100,11 @@ const codeParse = function(code, lang, escaped) {
   return preHtml
 }
 
-renderer.link = linkParse
-renderer.code = codeParse
-renderer.image = imageParse
-renderer.paragraph = paragraphParse
+renderer.link = linkRender
+renderer.code = codeRender
+renderer.image = imageRender
+renderer.heading = headingRender
+renderer.paragraph = paragraphRender
 
 export default (content, tags, parseHtml = false) => {
 
