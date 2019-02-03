@@ -76,6 +76,5 @@
     "prettier-eslint-cli": "^4.7.1",
     "request": "^2.88.0",
     "sass-loader": "^7.0.3"
-  },
-  "__npminstall_done": false
+  }
 }
