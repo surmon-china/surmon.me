@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "2.1.2",
+  "version": "2.1.4",
   "description": "Surmon.me blog",
   "author": {
     "name": "Surmon",
@@ -32,6 +32,7 @@
     "gravatar": "^1.6.0",
     "highlight.js": "^9.12.0",
     "howler": "^2.0.14",
+    "lozad": "^1.8.0",
     "marked": "^0.5.1",
     "node-uuid": "^1.4.8",
     "nuxt": "^2.4.0",

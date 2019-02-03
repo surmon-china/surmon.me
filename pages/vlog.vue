@@ -1,6 +1,6 @@
 <template>
   <div class="videos" :class="{ mobile: isMobile }">
-    <ul class="video-list">
+    <ul class="video-list" ref="videoList">
       <li
         class="item"
         :key="index"
@@ -13,9 +13,13 @@
               <i class="iconfont icon-music-play"></i>
             </div>
           </div>
-          <div class="background" :style="{
-            'background-image': `url(${getThumbUrl(video.pic)})`
-          }"></div>
+          <div
+            class="background lozad"
+            :data-background-image="getThumbUrl(video.pic)"
+            bak-style="{
+              'background-image': `url(${getThumbUrl(video.pic)})`
+            }"
+          ></div>
         </div>
         <h3 class="title" v-text="video.title"></h3>
         <p class="description" style="-webkit-box-orient: vertical;" v-text="video.description || '-'"></p>
@@ -68,6 +72,11 @@
     fetch({ store }) {
       return store.dispatch('vlog/fetchVideos')
     },
+    data() {
+      return {
+        lozadObserver: null
+      }
+    },
     computed: {
       language() {
         return this.$store.state.global.language
@@ -102,14 +111,28 @@
       handlePlay(video) {
         if (this.isMobile) {
           window.open(`https://www.bilibili.com/video/av${video.aid}`)
-        } else {
-          if (window.utils) {
-            const music = this.$root.$music
-            music && music.humanizeOperation(music.player.pause)
-            window.utils.openIframePopup(`//player.bilibili.com/player.html?aid=${video.aid}&page=1`)
-          }
+          return
+        }
+        if (window.utils) {
+          const music = this.$root.$music
+          music && music.humanizeOperation(music.player.pause)
+          window.utils.openIframePopup(`//player.bilibili.com/player.html?aid=${video.aid}&page=1`)
         }
       }
+    },
+    mounted() {
+      const listElement = this.$refs.videoList
+      const lozadElements = listElement && listElement.querySelectorAll('.lozad')
+      if (!lozadElements || !lozadElements.length) {
+        return false
+      }
+      this.lozadObserver = lozad(lozadElements, {
+        loaded: element => element.classList.add('loaded')
+      })
+      this.lozadObserver.observe()
+    },
+    deactivated() {
+      this.lozadObserver = null
     }
   }
 </script>
