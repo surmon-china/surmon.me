@@ -44,7 +44,7 @@ module.exports = {
           expansions: {
             name: 'expansions',
             test(module) {
-              return /swiper|233333|howler|marked|favico|rtcpeerconnection|webrtc|highlight/.test(module.context);
+              return /swiper|233333|howler|lozad|marked|favico|rtcpeerconnection|webrtc|highlight/.test(module.context);
             },
             chunks: 'initial',
             priority: 10,
@@ -122,6 +122,7 @@ module.exports = {
     { src: '~/plugins/marked' },
     { src: '~/plugins/gravatar' },
     { src: '~/plugins/highlight' },
+    { src: '~/plugins/lozad', mode: 'client' },
     { src: '~/plugins/favico', mode: 'client' },
     { src: '~/plugins/adsense', mode: 'client' },
     { src: '~/plugins/swiper', mode: 'client' },

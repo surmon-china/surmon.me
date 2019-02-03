@@ -1,6 +1,6 @@
 <template>
   <article id="article" class="article" :class="{ mobile: isMobile }">
-    <div class="detail">
+    <div class="detail" ref="detail">
       <transition name="module">
         <div
           v-if="!isFetching"
@@ -16,7 +16,7 @@
           <span v-else-if="article.origin === constants.OriginState.Hybrid" v-text="$i18n.text.origin.hybrid"></span>
         </div>
       </transition>
-      <transition name="module" mode="out-in">
+      <transition name="module" mode="out-in" @after-enter="contentAnimatieDone">
         <div class="skeleton" key="skeleton" v-if="isFetching">
           <no-ssr>
             <skeleton-line class="title" />
@@ -25,8 +25,8 @@
         </div>
         <div class="knowledge" key="knowledge" v-else>
           <h2 class="title">{{ article.title }}</h2>
-          <div class="content" v-html="articleContent"></div>
-          <transition name="module" mode="out-in">
+          <div class="content" id="article-content" v-html="articleContent"></div>
+          <transition name="module" mode="out-in" @after-leave="readmoreAnimatieDone">
             <div class="readmore" v-if="isCanReadMore">
               <button class="readmore-btn" :disabled="isReadMoreLoading" @click="readMore()">
                 <span>{{ isReadMoreLoading ? $i18n.text.article.rendering : $i18n.text.article.readAll }}</span>
@@ -210,6 +210,8 @@
 
 <script>
   import { mapState } from 'vuex'
+  import { isBrowser } from '~/environment/esm'
+  import lozad from '~/plugins/lozad'
   import marked from '~/plugins/marked'
   import adConfig from '~/config/ad.config'
   import ShareBox from '~/components/widget/share'
@@ -259,12 +261,21 @@
           grabCursor: true,
           slidesPerView: 'auto'
         },
+        lozadObserver: null,
         isReadMoreLoading: false,
         renderAd: true
       }
     },
+    mounted() {
+      if (isBrowser) {
+        this.observeLozad()
+      }
+    },
     activated() {
       this.updateAd()
+    },
+    deactivated() {
+      this.lozadObserver = null
     },
     computed: {
       ...mapState({
@@ -334,6 +345,25 @@
         this.$nextTick(() => {
           this.renderAd = true
         })
+      },
+      contentAnimatieDone() {
+        this.observeLozad()
+      },
+      readmoreAnimatieDone() {
+        this.observeLozad()
+      },
+      observeLozad() {
+        const contentElement = this.$refs.detail.querySelector('#article-content')
+        const lozadElements = contentElement && contentElement.querySelectorAll('.lozad')
+        if (!lozadElements || !lozadElements.length) {
+          return false
+        }
+        // console.log('计算出的文档:', this.$refs.detail, contentElement, lozadElements)
+        this.lozadObserver = lozad(lozadElements, {
+          loaded: element => element.classList.add('loaded')
+        })
+        this.lozadObserver.observe()
+        // console.log('重新监听 observer', this.lozadObserver)
       },
       copyArticleUrl() {
         if (this.article.title) {
