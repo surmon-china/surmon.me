@@ -16,7 +16,7 @@
           <span v-else-if="article.origin === constants.OriginState.Hybrid" v-text="$i18n.text.origin.hybrid"></span>
         </div>
       </transition>
-      <transition name="module" mode="out-in" @after-enter="contentAnimatieDone">
+      <transition name="module" mode="out-in" @after-enter="contentAnimateDone">
         <div class="skeleton" key="skeleton" v-if="isFetching">
           <no-ssr>
             <skeleton-line class="title" />
@@ -25,14 +25,21 @@
         </div>
         <div class="knowledge" key="knowledge" v-else>
           <h2 class="title">{{ article.title }}</h2>
-          <div class="content" id="article-content" v-html="articleContent"></div>
-          <transition name="module" mode="out-in" @after-leave="readmoreAnimatieDone">
-            <div class="readmore" v-if="isCanReadMore">
+          <div class="content" :id="contentElementIds.content" v-html="articleContent"></div>
+          <transition name="module" mode="out-in" @after-enter="readMoreAnimateDone">
+            <div class="readmore" key="readmore-btn" v-if="isCanReadMore">
               <button class="readmore-btn" :disabled="isReadMoreLoading" @click="readMore()">
                 <span>{{ isReadMoreLoading ? $i18n.text.article.rendering : $i18n.text.article.readAll }}</span>
                 <i class="iconfont icon-next-bottom"></i>
               </button>
             </div>
+            <div
+              class="content"
+              key="more-content"
+              :id="contentElementIds.moreContent"
+              v-else-if="article.isRenderedFullContent"
+              v-html="articleMoreContent"
+            ></div>
           </transition>
         </div>
       </transition>
@@ -261,22 +268,26 @@
           grabCursor: true,
           slidesPerView: 'auto'
         },
-        lozadObserver: null,
+        // lozadObserver: null,
         isReadMoreLoading: false,
-        renderAd: true
+        renderAd: true,
+        contentElementIds: {
+          content: 'article-content',
+          moreContent: 'more-article-content',
+        }
       }
     },
     mounted() {
       if (isBrowser) {
-        this.observeLozad()
+        this.observeLozad(this.contentElementIds.content)
       }
     },
     activated() {
       this.updateAd()
     },
-    deactivated() {
-      this.lozadObserver = null
-    },
+    // deactivated() {
+    //   this.lozadObserver = null
+    // },
     computed: {
       ...mapState({
         constants: state => state.global.constants,
@@ -300,28 +311,45 @@
       isCanReadMore() {
         return this.isContentTooMore && !this.article.isRenderedFullContent
       },
-      articleContent() {
-        const { content, isRenderedFullContent } = this.article
-        if (!content) {
-          return ''
+      moreContentIndex()  {
+        if (!this.isContentTooMore) {
+          return null
         }
-        const hasTags = this.tags && this.tags.length
-
-        // 正常长度，正常渲染
-        if (!this.isContentTooMore || isRenderedFullContent) {
-          return marked(content, hasTags ? this.tags : false, true)
-        }
-
-        // 内容过多，进行分段处理，避免渲染时间太长
-        let shortContent = content.substring(0, 11688)
+        // 坐标优先级：H4 -> H3 -> Code -> \n\n
+        const shortContent = this.article.content.substring(0, 11688)
         const lastH4Index = shortContent.lastIndexOf('\n####')
         const lastH3Index = shortContent.lastIndexOf('\n###')
         const lastCodeIndex = shortContent.lastIndexOf('\n\n```')
         const lastLineIndex = shortContent.lastIndexOf('\n\n**')
-        const lastReadindex = Math.max(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex);
+        const lastReadindex = Math.max(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex)
         // console.log(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex, 'min', lastReadindex)
-        shortContent = shortContent.substring(0, lastReadindex)
-        return marked(shortContent, hasTags ? this.tags : false, true)
+        return lastReadindex
+      },
+      articleContent() {
+        const { content } = this.article
+        if (!content) {
+          return ''
+        }
+        return marked(
+          this.isContentTooMore
+            // 渲染截断部分前半段
+            ? content.substring(0, this.moreContentIndex)
+            // 正常长度，正常渲染
+            : content,
+          this.tags,
+          true
+        )
+      },
+      articleMoreContent() {
+        const { content } = this.article
+        if (!content || !this.isContentTooMore) {
+          return ''
+        }
+        return marked(
+          content.substring(this.moreContentIndex, content.length),
+          this.tags,
+          true
+        )
       },
       relatedArticles() {
         const relateds = [...this.article.related].slice(0, 10)
@@ -346,24 +374,26 @@
           this.renderAd = true
         })
       },
-      contentAnimatieDone() {
-        this.observeLozad()
+      contentAnimateDone() {
+        // console.log('contentAnimateDone')
+        this.observeLozad(this.contentElementIds.content)
       },
-      readmoreAnimatieDone() {
-        this.observeLozad()
+      readMoreAnimateDone() {
+        // console.log('readMoreAnimateDone')
+        this.observeLozad(this.contentElementIds.moreContent)
       },
-      observeLozad() {
-        const contentElement = this.$refs.detail.querySelector('#article-content')
+      observeLozad(elementId) {
+        const contentElement = this.$refs.detail.querySelector(`#${elementId}`)
         const lozadElements = contentElement && contentElement.querySelectorAll('.lozad')
         if (!lozadElements || !lozadElements.length) {
           return false
         }
         // console.log('计算出的文档:', this.$refs.detail, contentElement, lozadElements)
-        this.lozadObserver = lozad(lozadElements, {
+        const lozadObserver = lozad(lozadElements, {
           loaded: element => element.classList.add('loaded')
         })
-        this.lozadObserver.observe()
-        // console.log('重新监听 observer', this.lozadObserver)
+        lozadObserver.observe()
+        // console.log('重新监听 observer', lozadObserver)
       },
       copyArticleUrl() {
         if (this.article.title) {
@@ -551,6 +581,7 @@
         }
 
         > .content {
+
           iframe {
             width: 100%;
             margin-bottom: 1em;
@@ -572,6 +603,7 @@
 
           img {
             max-width: 100%;
+            position: relative;
             margin: 0 auto;
             display: block;
             text-align: center;
@@ -580,6 +612,15 @@
             transition: all .25s;
             opacity: .9;
             cursor: pointer;
+
+            // &::after {
+            //   content: "...";
+            //   height: 100%;
+            //   width: 100%;
+            //   position: absolute;
+            //   left: 0;
+            //   top: 0;
+            // }
 
             &:hover {
               opacity: 1;
