@@ -117,6 +117,7 @@ module.exports = {
     }
   },
   plugins: [
+    { src: '~/plugins/polyfill', mode: 'client' },
     { src: '~/plugins/vue-extend' },
     { src: '~/plugins/loaded-task' },
     { src: '~/plugins/marked' },
