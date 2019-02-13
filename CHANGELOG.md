@@ -12,6 +12,7 @@
 
 - 增加懒加载功能（暂用于文章详情页和 vlog 列表页）
 - 修复 marked 不支持中文 id 的问题
+- 修复 wallpaper humanizeUrl 问题
 
 ### 2.1.2
 
