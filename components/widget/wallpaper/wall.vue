@@ -108,7 +108,7 @@
         return this.wallpapers && this.wallpapers.length && this.wallpapers[this.index]
       },
       currentWallpaperUrl() {
-        return this.currentWallpaper ? this.currentWallpaper.defaultUrl : ''
+        return this.currentWallpaper ? this.currentWallpaper.humanizeUrl : ''
       },
       link() {
         return this.currentWallpaper.copyrightlink || null
