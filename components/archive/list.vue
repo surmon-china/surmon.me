@@ -138,6 +138,7 @@
     > .article-load {
       position: relative;
       overflow: hidden;
+      z-index: 0;
 
       > .btn-loadmore {
         width: 100%;
