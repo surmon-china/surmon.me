@@ -20,7 +20,7 @@ const today = now.getDate()
 const tomonth = now.getMonth() + 1
 const toyear = now.getFullYear()
 const defaultEgg = `你好啊，怪物史莱克，今天是 ${tomonth} 月 ${today} 日，又是有趣的一天~ `
-const defaultFaviconText = `要开心`
+const defaultFaviconText = `请你快乐`
 
 const matchedEgg = titles.find(egg => {
   const isToday = egg.day === today
