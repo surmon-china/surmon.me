@@ -43,7 +43,7 @@
         </div>
       </div>
     </transition>
-    <transition name="module" mode="out-in">
+    <transition name="module" mode="out-in" @after-enter="loadCommentsAnimateDone">
       <div class="list-box list-skeleton" key="skeleton" v-if="isFetching">
         <ul class="comment-list">
           <li class="comment-item" :key="item" v-for="item in (isMobile ? 3 : 5)">
@@ -62,8 +62,8 @@
         v-else-if="!comment.data.length"
         v-text="$i18n.text.comment.empty"
       ></div>
-      <div class="list-box" key="list" v-else>
-        <transition-group name="fade" tag="ul" class="comment-list">
+      <div class="list-box" key="list" ref="commentList" v-else>
+        <transition-group name="fade" tag="ul" class="comment-list" @after-enter="addCommentAnimateDone">
           <li
             class="comment-item"
             :id="`comment-item-${comment.id}`"
@@ -317,6 +317,7 @@
 
 <script>
   import { mapState } from 'vuex'
+  import { isBrowser } from '~/environment/esm'
   import marked from '~/plugins/marked'
   import gravatar from '~/plugins/gravatar'
   import { scrollTo } from '~/utils/scroll-to-anywhere'
@@ -340,6 +341,7 @@
     },
     data() {
       return {
+        lozadObserver: null,
         // 父级评论
         pid: 0,
         // 评论排序
@@ -404,6 +406,9 @@
     },
     mounted() {
       this.initAppOptionBlackList()
+      if (isBrowser) {
+        this.observeLozad()
+      }
     },
     activated() {
       this.initUser()
@@ -416,6 +421,7 @@
       this.$store.commit('comment/clearListData')
     },
     deactivated() {
+      this.lozadObserver = null
       this.$store.commit('comment/clearListData')
     },
     methods: {
@@ -431,6 +437,23 @@
           this.upadteUserGravatar()
           this.userCacheMode = true
         }
+      },
+      loadCommentsAnimateDone() {
+        this.observeLozad()
+      },
+      addCommentAnimateDone() {
+        this.observeLozad()
+      },
+      observeLozad() {
+        const listElement = this.$refs.commentList
+        const lozadElements = listElement && listElement.querySelectorAll('.lozad')
+        if (!lozadElements || !lozadElements.length) {
+          return false
+        }
+        this.lozadObserver = lozad(lozadElements, {
+          loaded: element => element.classList.add('loaded')
+        })
+        this.lozadObserver.observe()
       },
       // 初始化黑名单
       initAppOptionBlackList() {
