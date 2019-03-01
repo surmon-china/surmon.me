@@ -5,14 +5,14 @@
       <ul class="month-list">
         <li class="arrow prev" @click="pickPre(currentYear, currentMonth)">❮</li>
         <li class="year-month">
-          <span class="choose-year">
+          <strong class="choose-year">
             <span>{{ currentYear }}</span>
-            <span>{{ isEnLang ? 'Y' : '年' }}&nbsp;</span>
+            <span>{{ isEnLang ? 'Y' : '年' }}</span>
             <span>{{ currentMonth }}</span>
-            <span>{{ isEnLang ? 'M' : '月' }}&nbsp;</span>
+            <span>{{ isEnLang ? 'M' : '月' }}</span>
             <span>{{ currentDay }}</span>
             <span>{{ isEnLang ? 'D' : '日' }}</span>
-          </span>
+          </strong>
         </li>
         <li class="arrow next" @click="pickNext(currentYear, currentMonth)">❯</li>
       </ul>
