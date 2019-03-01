@@ -95,7 +95,7 @@
             font-weight: 700;
             opacity: .5;
             cursor: progress;
-            padding: 0 1em;
+            padding: 0 .618em;
             padding-left: 3rem;
             height: 2em;
             line-height: 2em;

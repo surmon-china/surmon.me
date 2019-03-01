@@ -35,7 +35,7 @@
     <div class="aside-article">
       <p class="title">
         <i class="iconfont icon-hotfill"></i>
-        <span v-text="$i18n.text.article.hotlist"></span>
+        <strong v-text="$i18n.text.article.hotlist"></strong>
       </p>
       <empty-box v-if="!articles.length">
         <slot>{{ $i18n.text.article.empty }}</slot>
