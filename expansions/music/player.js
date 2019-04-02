@@ -195,7 +195,7 @@ export default music => {
     // 暂停
     pause() {
       const sound = playerList[music.state.index]
-      if (sound.howl && sound.howl.playing()) {
+      if (sound && sound.howl && sound.howl.playing()) {
         // sound.howl.fade(music.state.volume, 0, 200, sound.song_id)
         sound.howl.pause()
       }

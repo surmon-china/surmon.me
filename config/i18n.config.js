@@ -349,7 +349,7 @@ module.exports = {
         },
         submiting: {
           zh: '发射中...',
-          en: 'submitinng'
+          en: 'Submitting'
         }
       }
     }
