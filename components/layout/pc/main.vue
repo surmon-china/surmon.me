@@ -74,7 +74,6 @@
       // this.watchFullScreen()
       this.watchTabActive()
       this.$store.dispatch('wallpaper/fetchPapers')
-      this.$store.dispatch('wallpaper/fetchStory')
       this.$root.$music = music
       this.$root.$music.state.ready || this.$root.$music.initPlayer()
     },

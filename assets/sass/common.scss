@@ -1,6 +1,6 @@
 @font-face {
   font-family: specialSymbol;
-  src: local('PingFang SC'), local("Microsoft Yahei");
+  src: local('PingFang SC'), local('Microsoft Yahei');
   unicode-range: U+02C2, U+02C3, U+003C, U+003E, U+3009;
 }
 
@@ -287,6 +287,9 @@ a {
   > iframe {
     transform: scale(.8);
     transition: all .08s;
+    min-width: 20%;
+    min-height: 20%;
+    background-color: rgba(210, 210, 210, 0.3);
     border: .5em solid rgba(210, 210, 210, 0.5);
 
     &.shang {

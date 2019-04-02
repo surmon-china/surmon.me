@@ -7,7 +7,7 @@
 const http = require('http')
 const express = require('express')
 const socketio = require('socket.io')
-const { Nuxt, Builder } = require('nuxt')
+const { Nuxt, Builder } = require('nuxt-edge')
 const { isProdMode, isDevMode, environment } = require('./environment')
 
 process.noDeprecation = true
@@ -60,9 +60,11 @@ const bootstrap = () => {
   webrtcService(io)
 }
 
-config.dev
-  ? new Builder(nuxt).build().then(bootstrap).catch((error) => {
-      console.error('开发模式启动失败：', error)
-      process.exit(1)
-    })
-  : bootstrap()
+if (config.dev) {
+  new Builder(nuxt).build().then(bootstrap).catch((error) => {
+    console.error('开发模式启动失败：', error)
+    process.exit(1)
+  })
+} else {
+  bootstrap()
+}

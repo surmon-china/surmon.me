@@ -76,6 +76,7 @@ module.exports = {
       // 处理 Swiper4 下的 dom7 模块的语法问题
       webpackConfig.resolve.alias.dom7$ = 'dom7/dist/dom7.js'
       webpackConfig.resolve.alias.swiper$ = 'swiper/dist/js/swiper.js'
+      /*
       if (isDev && isClient) {
         webpackConfig.module.rules.push({
           enforce: 'pre',
@@ -84,6 +85,7 @@ module.exports = {
           exclude: [/(node_modules)/, /underscore-simple/, /webrtc/]
         })
       }
+      */
       if (isProdMode) {
         // 处理 Template 和 CSS 中的 cdn 地址
         const vueLoader = webpackConfig.module.rules.find(loader => loader.loader === 'vue-loader')
@@ -109,8 +111,12 @@ module.exports = {
       presets({ isServer }) {
         return [
           [
-            '@nuxtjs/babel-preset-app',
-            { targets: isServer ? { node: '10.4.0' } : { chrome: 69 } }
+            require.resolve('@nuxtjs/babel-preset-app'),
+            {
+              targets: isServer
+                ? { node: '10.4.0' }
+                : { chrome: 69 }
+            }
           ]
         ]
       }
