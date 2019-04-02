@@ -183,7 +183,7 @@
                 </p>
                 <p class="item webfont">
                   <i class="iconfont icon-code"></i>
-                  <span class="skills" v-if="isEnLang">Talk is cheap. fuck me.</span>
+                  <span class="skills" v-if="isEnLang">Talk is cheap. Give me kiss.</span>
                   <span v-else>
                     <span v-if="getRandomSkill()">吾生有涯愿无尽，心期填海力移山</span>
                     <span v-else>酒醒只在花前坐，酒醉还来花下眠</span>

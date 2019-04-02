@@ -1,42 +1,37 @@
 <template>
   <div id="wallpaper-wall">
     <div class="wall-box">
-      <div class="picture-box" ref="picture-box">
-        <transition name="module" mode="out-in">
-          <img
-            class="picture"
-            :key="currentWallpaperUrl"
-            :src="currentWallpaperUrl"
-            :alt="subTitle"
-            :class="classes[index]"
-          />
-        </transition>
-      </div>
-      <div class="story-box" :class="classes[index]">
+      <transition name="module" mode="out-in">
+        <div
+          class="picture-box"
+          ref="picture-box"
+          :title="currentWallpaper.copyright"
+          :key="currentWallpaperUrl"
+          :style="{
+            backgroundImage: `url(${currentWallpaperUrl})`
+          }"
+        />
+      </transition>
+      <div class="story-box">
         <div class="empty" v-if="!currentWallpaper">挂了</div>
         <div class="content" v-else>
-          <h2 class="title" v-if="isToday">{{ todayStory.title }}</h2>
-          <p class="subb-title" v-if="isToday">{{ subTitle }}</p>
-          <h2 class="title" v-else>{{ subTitle }}</h2>
-          <p class="para" v-if="isToday">{{ todayStory.para1 }}</p>
-          <p class="para" v-if="isToday">{{ todayStory.para2 }}</p>
+          <h2 class="title">{{ currentWallpaper.title }}</h2>
+          <p class="sub-title">{{ currentWallpaper.copyright }}</p>
+          <p class="desc">{{ currentWallpaper.desc }}</p>
           <div class="tools">
             <transition name="module">
-              <span class="location" key="location" v-if="isToday">
+              <span class="location" key="location">
                 <i class="iconfont icon-location"></i>
-                <span>{{ todayStory.attribute }}</span>
-                <span>&nbsp;|&nbsp;</span>
-                <span>{{ todayStory.Continent }}</span>
+                <span>{{ currentWallpaper.bsTitle }}</span>
               </span>
             </transition>
             <transition name="module">
               <a
                 class="link"
                 key="link"
-                v-if="link"
-                :href="link"
                 target="_blank"
                 rel="external nofollow noopenter"
+                :href="currentWallpaper.searchUrl"
               >
                 <i class="iconfont icon-link"></i>
                 <span>相关链接</span>
@@ -59,65 +54,27 @@
 </template>
 
 <script>
-  import Vue from 'vue'
   export default {
     name: 'wallpaper-wall',
     data() {
       return {
-        index: 0,
-        classes: {}
+        index: 0
       }
     },
     methods: {
       close() {
         this.$store.commit('global/updateWallpaperOnState', false)
-      },
-      setPaperImageClass(index) {
-        // 由于用户窗口可能发生变化，所以每次都重新计算
-        const pictureBox = this.$refs['picture-box']
-        const { clientWidth, clientHeight } = pictureBox
-        const sizeRadio = clientWidth / clientHeight
-        const image = new Image()
-        image.onload = () => {
-          const { width, height } = image
-          const imageRadio = width / height
-          const className = imageRadio > sizeRadio ? 'full-height' : 'full-width'
-          Vue.set(this.classes, index, className)
-        }
-        image.src = this.currentWallpaperUrl
       }
-    },
-    watch: {
-      index(index) {
-        this.$nextTick(() => {
-          this.setPaperImageClass(index)
-        })
-      }
-    },
-    mounted() {
-      this.setPaperImageClass(0)
     },
     computed: {
       wallpapers() {
         return this.$store.state.wallpaper.papers.data
-      },
-      todayStory() {
-        return this.$store.state.wallpaper.story.data
       },
       currentWallpaper() {
         return this.wallpapers && this.wallpapers.length && this.wallpapers[this.index]
       },
       currentWallpaperUrl() {
         return this.currentWallpaper ? this.currentWallpaper.humanizeUrl : ''
-      },
-      link() {
-        return this.currentWallpaper.copyrightlink || null
-      },
-      subTitle() {
-        return this.currentWallpaper.title || this.currentWallpaper.copyright
-      },
-      isToday() {
-        return this.index === 0
       },
       canPrev() {
         return this.index > 0
@@ -157,31 +114,18 @@
       > .picture-box {
         width: 100%;
         height: 100%;
-        overflow: auto;
-
-        > .picture {
-
-          &.full-width {
-            width: 100%;
-          }
-
-          &.full-height {
-            height: 100%;
-          }
-        }
+        overflow: hidden;
+        background-repeat: no-repeat;
+        background-size: cover;
       }
 
       > .story-box {
         position: absolute;
         padding: 2rem 4rem;
         background-color: $module-hover-bg;
-        bottom: 5px;
+        bottom: 0;
         width: 100%;
         height: auto;
-
-        &.full-width {
-           bottom: 0;
-        }
 
         > .content {
           color: $white;
@@ -190,7 +134,7 @@
             margin-top: 0;
           }
 
-          > .para {
+          > .desc {
             line-height: 2rem;
           }
 
@@ -198,7 +142,21 @@
             color: $text;
 
             > .link {
-              text-decoration: underline;
+              text-decoration: none;
+
+              > span {
+                position: relative;
+
+                &:after {
+                  content: '';
+                  position: absolute;
+                  bottom: -2px;
+                  left: 0;
+                  width: 100%;
+                  height: 0.5px;
+                  background-color: $text;
+                }
+              }
             }
 
             > .location,

@@ -1,6 +1,6 @@
 <template>
   <div class="videos" :class="{ mobile: isMobile }">
-    <ul class="video-list" ref="videoList">
+    <ul ref="videoList" class="video-list">
       <li
         class="item"
         :key="index"
@@ -10,7 +10,7 @@
         <div class="thumb">
           <div class="mask">
             <div class="button">
-              <i class="iconfont icon-music-play"></i>
+              <i class="iconfont icon-music-play" />
             </div>
           </div>
           <div
@@ -19,10 +19,10 @@
             bak-style="{
               'background-image': `url(${getThumbUrl(video.pic)})`
             }"
-          ></div>
+          />
         </div>
-        <h3 class="title" v-text="video.title"></h3>
-        <p class="description" style="-webkit-box-orient: vertical;" v-text="video.description || '-'"></p>
+        <h3 class="title" v-text="video.title" />
+        <p class="description" style="-webkit-box-orient: vertical;" v-text="video.description || '-'" />
         <hr class="split">
         <p class="meta">
           <span class="item favorites">
@@ -90,17 +90,17 @@
       imageExt() {
         return this.$store.state.global.imageExt
       },
-      video() {
+      videoData() {
         return this.$store.state.vlog.video.data
       },
       videoList() {
-        return this.video.vlist
+        return this.videoData.vlist
       },
       isFetching() {
-        return this.video.fetching
+        return this.videoData.fetching
       },
       isCanLoadMore() {
-        const { pages, count } = this.video
+        const { pages, count } = this.videoData
         return !!count && pages > 1
       }
     },
