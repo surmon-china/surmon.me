@@ -1,8 +1,8 @@
 <template>
-  <div class="adsense adsense-article">
+  <div class="mammon mammon-article">
     <no-ssr>
       <InArticleAdsense
-        root-class="adsense-wrapper"
+        root-class="mammon-wrapper"
         data-ad-client="ca-pub-4710915636313788"
         data-ad-slot="7405264495"
       />

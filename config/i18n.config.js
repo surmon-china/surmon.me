@@ -94,12 +94,12 @@ module.exports = {
       },
       device: {
         android: {
-          zh: '安卓（重构中）',
-          en: 'Android (X)'
+          zh: '安卓',
+          en: 'Android'
         },
         ios: {
-          zh: '苹果（重构中）',
-          en: 'IOS (X)'
+          zh: '苹果',
+          en: 'IOS'
         }
       },
       webrtc: {
@@ -254,7 +254,7 @@ module.exports = {
           en: 'anonymous'
         },
         ding: {
-          zh: '顶',
+          zh: '赞',
           en: 'like'
         },
         reply: {

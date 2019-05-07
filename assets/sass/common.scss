@@ -134,16 +134,16 @@ a {
   margin: 0 auto;
 }
 
-// adsense
-.adsense {
+// mammon
+.mammon {
   width: 100%;
   height: auto;
   position: relative;
 
-  &.adsense-article {
+  &.mammon-article {
     padding: 1em;
 
-    > .adsense-wrapper {
+    > .mammon-wrapper {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -157,9 +157,9 @@ a {
     }
   }
 
-  &.adsense-aside {
+  &.mammon-aside {
 
-    > .adsense-wrapper {
+    > .mammon-wrapper {
       padding: 1rem;
       display: flex;
       justify-content: center;
@@ -177,10 +177,10 @@ a {
     }
   }
 
-  &.adsense-archive {
+  &.mammon-archive {
     margin-bottom: 1em;
 
-    > .adsense-wrapper {
+    > .mammon-wrapper {
       padding: .5em;
       min-height: 6rem;
       background-color: $module-bg;
@@ -193,7 +193,7 @@ a {
 
     &.mobile {
       
-      > .adsense-wrapper {
+      > .mammon-wrapper {
         padding: 1rem;
   
         > .adsbygoogle {
@@ -204,7 +204,7 @@ a {
   }
 }
 
-.adsense-wrapper {
+.mammon-wrapper {
   position: relative;
 
   &:before {
@@ -325,14 +325,14 @@ a {
 
   &.article {
 
-    > .share-box {
+    > .share-base {
       opacity: .6;
       display: flex;
       justify-content: space-between;
 
       &.mobile {
 
-        >.share-link {
+        >.share-ejector {
           width: calc((100% - (1em * 2)) / 3);
         }
       }
@@ -341,7 +341,7 @@ a {
         opacity: 1;
       }
 
-      > .share-link {
+      > .share-ejector {
         width: calc((100% - (1em * 9)) / 10);
         height: 2.5em;
         line-height: 2.5em;
@@ -364,14 +364,14 @@ a {
     left: 0;
     width: 4em;
 
-    > .share-box {
+    > .share-base {
       opacity: .4;
 
       &:hover {
         opacity: 1;
       }
 
-      > .share-link {
+      > .share-ejector {
         width: 3em;
         height: 2.5em;
         line-height: 2.6em;

@@ -30,7 +30,7 @@
           <i class="iconfont icon-mail"></i>
         </a>
         <button
-          class="to-top"
+          class="to-page-top"
           :title="$i18n.text.totop"
           @click="totop"
           @mouseover="setButtonState('top', true, true)"
@@ -39,7 +39,7 @@
           <i class="iconfont icon-totop"></i>
         </button>
         <button
-          class="to-bottom"
+          class="to-page-bottom"
           :title="$i18n.text.tobottom"
           @click="toBottom"
           @mouseover="setButtonState('bottom', true, true)"
@@ -164,8 +164,8 @@
 
         > .webrtc,
         > .barrage,
-        > .to-top,
-        > .to-bottom,
+        > .to-page-top,
+        > .to-page-bottom,
         > .feedback {
           display: block;
           width: 3em;
@@ -252,7 +252,7 @@
           }
         }
 
-        > .to-bottom {
+        > .to-page-bottom {
           height: 2em;
           line-height: 2em;
         }

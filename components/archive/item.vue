@@ -49,7 +49,7 @@
             <i class="iconfont icon-like" :class="{ liked: isLiked }"></i>
             <span>{{ article.meta.likes || 0 }}</span>
           </span>
-          <span class="categories">
+          <span class="categories" v-if="!isMobile">
             <i class="iconfont icon-list"></i>
             <template v-if="article.category.length">
               <nuxt-link

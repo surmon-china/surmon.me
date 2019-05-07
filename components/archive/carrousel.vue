@@ -1,7 +1,7 @@
 <template>
   <div class="carrousel" :class="{ mobile: isMobile }">
     <transition name="module" mode="out-in">
-      <empty-box class="article-empty-box" key="empty" v-if="!article.data.data.length">
+      <empty-box class="article-empty-box" key="empty" v-if="!articleList.length">
         <slot>{{ $i18n.text.article.empty }}</slot>
       </empty-box>
       <div class="swiper index" key="swiper" v-swiper:swiper="swiperOption" v-else-if="renderSwiper">
@@ -9,9 +9,19 @@
           <div
             :key="index"
             class="swiper-slide slide-item"
-            v-for="(article, index) in article.data.data.slice(0, 9)"
+            v-for="(article, index) in articleList.slice(0, 9)"
           >
-            <div class="content">
+            <div class="content" v-if="article.ad">
+              <a
+                :href="article.url"
+                rel="external nofollow noopener"
+                target="_blank"
+              >
+                <img :src="article.src" :alt="article.title">
+                <span class="title">{{ article.title }}</span>
+              </a>
+            </div>
+            <div class="content" v-else>
               <img :src="buildThumb(article.thumb)" :alt="article.title">
               <nuxt-link :to="`/article/${article.id}`" class="title">
                 <span>{{ article.title }}</span>
@@ -27,6 +37,7 @@
 
 <script>
   import { mapState } from 'vuex'
+  import adConfig from '~/config/ad.config'
   export default {
     name: 'index-carrousel',
     props: {
@@ -57,7 +68,15 @@
       }
     },
     computed: {
-      ...mapState('global', ['imageExt', 'isMobile'])
+      ...mapState('global', ['imageExt', 'isMobile']),
+      articleList() {
+        const articles = [...this.article.data.data].slice(0, 9)
+        articles.length && articles.splice(2, 0, {
+          ad: true,
+          ...adConfig.pc.carrousel
+        })
+        return articles
+      }
     },
     methods: {
       buildThumb(thumb) {
@@ -118,17 +137,17 @@
           position: relative;
           overflow: hidden;
 
-          > img {
+          img {
             width: 100%;
-            @include css3-prefix(transform, rotate(0deg) scale(1));
-            @include css3-prefix(transition, transform 1s);
+            @include css3-prefix(transform, scale(1));
+            @include css3-prefix(transition, transform .88s);
 
             &:hover {
-              @include css3-prefix(transform, rotate(2deg) scale(1.1));
+              @include css3-prefix(transform, scale(1.06));
             }
           }
 
-          > .title {
+          .title {
             position: absolute;
             margin: 0;
             top: 1.5rem;
