@@ -1,6 +1,10 @@
 <template>
-  <div class="aside-ad">
-    <div class="swiper aside" v-swiper:swiper="swiperOption" @slideChange="slideChange">
+  <div class="aside-mammon">
+    <div
+      class="swiper aside"
+      v-swiper:swiper="swiperOption"
+      @slideChange="slideChange"
+    >
       <div class="swiper-wrapper">
         <div class="swiper-slide slide-item" v-for="(ad, index) in ads" :key="index">
           <div class="content">
@@ -23,7 +27,7 @@
 <script>
   import adConfig from '~/config/ad.config'
   export default {
-    name: 'aside-ad',
+    name: 'aside-mammon',
     props: {
       initIndex: {
         type: Number,
@@ -80,7 +84,7 @@
 </style>
 
 <style lang="scss" scoped>
-  .aside-ad {
+  .aside-mammon {
     width: 100%;
     overflow: hidden;
 

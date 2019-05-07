@@ -58,7 +58,7 @@
       <calendar />
     </div>
     <transition name="module">
-      <div class="aside-ad" key="ad" v-if="renderAd">
+      <div class="aside-mammon" key="ad" v-if="renderAd">
         <adsense-aside />
       </div>
     </transition>
@@ -236,7 +236,7 @@
     .aside-search,
     .aside-article,
     .aside-calendar,
-    .aside-ad,
+    .aside-mammon,
     .aside-tag, {
       background-color: $module-bg;
     }
@@ -384,7 +384,7 @@
       margin-bottom: 1em;
     }
 
-    .aside-ad {
+    .aside-mammon {
       width: 100%;
       margin-bottom: 1em;
 

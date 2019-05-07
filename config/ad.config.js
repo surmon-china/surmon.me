@@ -7,55 +7,74 @@
 const imagePath = '/images/mammon/'
 const links = {
   common: {
-    aliyun: 'https://s.click.taobao.com/FQVZFKw'
+    // ECS 服务器（N）
+    aliyunECS: 'https://s.click.taobao.com/blPTjAw',
+    // 虚拟主机，轻服务（N）
+    aliyunSWAS: 'https://s.click.taobao.com/bVDTjAw',
   },
   pc: {
+    // 淘宝（O）
     taobao: 'https://s.click.taobao.com/hWjWFKw',
-    alitrip: 'https://s.click.taobao.com/VTsaFKw',
+    // 天猫超市（N）
+    tmailMarket: 'https://s.click.taobao.com/v33TjAw',
+    // 飞猪（N）
+    alitrip: 'https://s.click.taobao.com/jOcNjAw',
+    // 钉钉（O）
     dingding: 'https://s.click.taobao.com/DUIbFKw'
   },
   mobile: {
-    taobao: 'https://s.click.taobao.com/jbDWFKw',
-    alitrip: 'https://s.click.taobao.com/PBVLEKw'
+    // 淘宝（O）
+    taobao: 'https://s.click.taobao.com/wVXNjAw',
+    // 飞猪（N）
+    alitrip: 'https://s.click.taobao.com/7hfNjAw'
   }
 }
 
 // 移动端广告
-const mobile = {
+export const mobile = {
   aside: {
     taobao: links.mobile.taobao,
-    aliyun: links.common.aliyun
+    aliyun: links.common.aliyunECS
   }
 }
 
 // pc 端链接广告
-const pc = {
+export const pc = {
   nav: {
     taobao: links.pc.taobao,
-    aliyun: links.common.aliyun
+    aliyun: links.common.aliyunECS
+  },
+  carrousel: {
+    url: links.common.aliyunSWAS,
+    src: imagePath + 'aliyun-sas-1190-420.jpg',
+    title: '轻量应用服务器（SAS）和 ECS 有什么不同？'
   },
   asideSwiper: [
     {
-      url: links.common.aliyun,
+      url: links.common.aliyunECS,
       src: imagePath + 'aliyun-532-178.jpg'
+    },
+    {
+      url: links.pc.tmailMarket,
+      src: imagePath + 'tmail-532-178.jpg'
+    },
+    // {
+    //   url: links.pc.dingding,
+    //   src: imagePath + 'dingding-532-178.jpg'
+    // },
+    {
+      url: links.pc.alitrip,
+      src: imagePath + 'alitrip-532-178.jpg'
     },
     {
       url: links.pc.taobao,
       src: imagePath + 'taobao-532-178.jpg'
-    },
-    {
-      url: links.pc.dingding,
-      src: imagePath + 'dingding-532-178.jpg'
-    },
-    {
-      url: links.pc.alitrip,
-      src: imagePath + 'alitrip-532-178.jpg'
     }
   ]
 }
 
 // 公共广告
-const common = {
+export const common = {
 
   // 相关文章 -> 智能广告
   articleRelated(tags, isMobile) {
@@ -75,7 +94,7 @@ const common = {
     ]
 
     const defaultAliyunAd = {
-      link: links.common.aliyun,
+      link: links.common.aliyunECS,
       title: '一款优秀的弹性主机很重要！',
       img: imagePath + 'aliyun-290-224.jpg'
     }
