@@ -126,7 +126,7 @@
                   @click.stop.prevent="likeComment(comment)"
                 >
                   <i class="iconfont icon-zan"></i>
-                  <span v-text="$i18n.text.comment.ding">顶</span>
+                  <span v-text="$i18n.text.comment.ding"></span>
                   <span>&nbsp;({{ comment.likes }})</span>
                 </a>
               </div>

@@ -1,10 +1,10 @@
 <template>
   <div id="share">
-    <div class="share-box" :class="{ mobile: isMobile }">
+    <div class="share-base" :class="{ mobile: isMobile }">
       <a
-        :title="social.name"
+        :title="'Share to: ' + social.name"
         rel="nofollow noopener"
-        class="share-link"
+        class="share-ejector"
         :key="index"
         :class="social.class || social.name"
         v-for="(social, index) in socials"
@@ -12,7 +12,7 @@
       >
         <i class="iconfont" :class="`icon-${social.icon || social.class || social.name}`"></i>
       </a>
-      <span class="share-link link" @click="copyPageUrl">
+      <span class="share-ejector link" @click="copyPageUrl">
         <i class="iconfont icon-link"></i>
       </span>
     </div>
@@ -66,14 +66,7 @@
           {
             name: 'linkedin',
             url: () => `http://www.linkedin.com/shareArticle?title=${this.title()}&summary=${this.description()}&mini=true&url=${this.url}`
-          },
-          /*
-          {
-            name: 'email',
-            class: 'mail',
-            url: () => `mailto:?subject=${this.title()}&body=${this.url}`
           }
-          */
         ]
       }
     },
@@ -145,11 +138,11 @@
 <style lang="scss" scoped>
   #share {
 
-    .share-box {
+    .share-base {
 
       &.mobile {
 
-        > .share-link {
+        > .share-ejector {
           display: none;
 
           &[class*="wechat"],
@@ -160,7 +153,7 @@
         }
       }
 
-      > .share-link {
+      > .share-ejector {
         cursor: pointer;
         display: inline-block;
         text-align: center;
@@ -218,6 +211,10 @@
           > .iconfont {
             color: #fff;
           }
+        }
+
+        > .iconfont {
+          display: block !important;
         }
       }
     }

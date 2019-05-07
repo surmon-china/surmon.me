@@ -18,8 +18,9 @@
           ></a>
           <a
             target="_blank"
-            :href="`${cdnUrl}/app/surmon.me.ipa`"
             class="btn"
+            href=""
+            @click.prevent="handleDownloadIOS"
             v-text="$i18n.text.device.ios"
           ></a>
         </div>
@@ -69,6 +70,9 @@
             this.height = `${minHeight}px`
           }
         }
+      },
+      handleDownloadIOS() {
+        alert('不存在的，全世界就我一个用户')
       }
     }
   }
@@ -183,7 +187,14 @@
             &:hover {
               color: $white;
               border-color: $primary-opacity-5;
-              background: linear-gradient(to bottom right, $module-hover-bg-opacity-3, $primary-opacity-9, $white, rgba($accent, .7));
+              background: linear-gradient(
+                to bottom right,
+                rgba($red, .7),
+                $white,
+                $primary-opacity-9,
+                $white,
+                rgba($accent, .7)
+              );
             }
           }
         }

@@ -60,13 +60,13 @@
         <span v-text="$i18n.nav.aliyun"></span>
       </a>
       <a
-        href="https://errend.io"
+        href="https://throwerror.io"
         target="_blank"
         class="item ad errend"
         rel="external nofollow noopener"
       >
         <i class="iconfont icon-debug"></i>
-        <span>Errend.io</span>
+        <span>TE.io</span>
       </a>
       <nuxt-link to="/app" class="item app">
         <i class="iconfont icon-app"></i>

@@ -43,7 +43,11 @@
           }"
         >
           <!--today-->
-          <nuxt-link :to="`/date/${ formatDate(day.getFullYear(), day.getMonth() + 1, day.getDate())}`">{{ day.getDate() }}</nuxt-link>
+          <nuxt-link
+            :to="`/date/${ formatDate(day.getFullYear(), day.getMonth() + 1, day.getDate())}`"
+          >
+            {{ day.getDate() }}
+          </nuxt-link>
         </span>
       </li>
     </ul>

@@ -45,9 +45,9 @@
       </transition>
     </div>
     <no-ssr>
-      <div class="ad">
+      <div class="mammon">
         <transition name="module" mode="out-in">
-          <skeleton-paragraph class="ad-skeleton" key="skeleton" v-if="isFetching" :lines="4" line-height="1em" />
+          <skeleton-paragraph class="mammon-skeleton" key="skeleton" v-if="isFetching" :lines="4" line-height="1em" />
           <adsense-article key="adsense" v-else-if="renderAd" />
         </transition>
       </div>
@@ -56,7 +56,9 @@
       <transition name="module" mode="out-in">
         <div class="skeleton" key="skeleton" v-if="isFetching">
           <skeleton-base
-            :style="{ width: `calc((100% - (1em * ${isMobile ? 2 : 9})) / ${isMobile ? 3 : 10})` }"
+            :style="{
+              width: `calc((100% - (1em * ${isMobile ? 2 : 9})) / ${isMobile ? 3 : 10})`
+            }"
             :radius="0"
             :key="item"
             v-for="item in (isMobile ? 3 : 10)"
@@ -73,7 +75,10 @@
         <p class="item" v-if="isEnLang">
           <span>Article created at</span>
           <span>&nbsp;</span>
-          <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
+          <nuxt-link
+            :title="buildDateTitle(article.create_at)"
+            :to="buildDateLink(article.create_at)"
+          >
             <span>{{ buildDateTitle(article.create_at) }}</span>
           </nuxt-link>
           <span>&nbsp;in category&nbsp;</span>
@@ -83,7 +88,7 @@
             :title="category.description || category.name"
             v-for="(category, index) in article.category"
           >
-            <span>{{ category.name }}</span>
+            <span>{{ category.slug }}</span>
             <span v-if="article.category.length && article.category[index + 1]">、</span>
           </nuxt-link>
           <span v-if="!article.category.length">no catgory</span>
@@ -99,8 +104,11 @@
           </nuxt-link>
           <span>&nbsp;发布在&nbsp;</span>
           <span :key="index" v-for="(category, index) in article.category">
-            <nuxt-link :to="`/category/${category.slug}`" :title="category.description || category.name">
-              <span>{{ isEnLang ? category.slug : category.name }}</span>
+            <nuxt-link
+              :to="`/category/${category.slug}`"
+              :title="category.description || category.name"
+            >
+              <span>{{ category.name }}</span>
             </nuxt-link>
             <span v-if="article.category.length && article.category[index + 1]">、</span>
           </span>
@@ -509,16 +517,16 @@
     }
 
     > .detail,
-    > .ad,
+    > .mammon,
     > .metas,
     > .related {
       margin-bottom: 1em;
       background-color: $module-bg;
     }
 
-    > .ad {
+    > .mammon {
 
-      .ad-skeleton {
+      .mammon-skeleton {
         padding: 1em;
       }
     }
@@ -932,8 +940,8 @@
 
                 .thumb {
                   opacity: 1;
-                  @include css3-prefix(transform, scale(1.2) rotate(2deg));
-                  @include css3-prefix(transition, all 1s);
+                  @include css3-prefix(transform, scale(1.1));
+                  @include css3-prefix(transition, all .88s);
                 }
 
                 > .title {
@@ -944,8 +952,8 @@
               > .thumb {
                 width: auto;
                 height: 100%;
-                @include css3-prefix(transform, scale(1) rotate(0deg));
-                @include css3-prefix(transition, all 1s);
+                @include css3-prefix(transform, scale(1));
+                @include css3-prefix(transition, all .88s);
               }
 
               > .title {

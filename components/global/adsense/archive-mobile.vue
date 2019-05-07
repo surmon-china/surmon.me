@@ -1,8 +1,8 @@
 <template>
-  <div class="adsense adsense-archive mobile">
+  <div class="mammon mammon-archive mobile">
     <no-ssr>
       <InFeedAdsense
-        root-class="adsense-wrapper"
+        root-class="mammon-wrapper"
         data-ad-layout-key="-hw-7+2w-11-86"
         data-ad-client="ca-pub-4710915636313788"
         data-ad-slot="6538975194"
