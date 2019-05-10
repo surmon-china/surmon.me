@@ -47,7 +47,7 @@ export const pc = {
   carrousel: {
     url: links.common.aliyunSWAS,
     src: imagePath + 'aliyun-sas-1190-420.jpg',
-    title: '轻量应用服务器（SAS）和 ECS 有什么不同？'
+    title: '轻量应用服务器（SAS）是啥？'
   },
   asideSwiper: [
     {

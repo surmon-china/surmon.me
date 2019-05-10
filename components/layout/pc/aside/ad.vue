@@ -3,11 +3,20 @@
     <div
       class="swiper aside"
       v-swiper:swiper="swiperOption"
-      @slideChange="slideChange"
+      @slideChange="handleSwiperSlideChange"
+      @transitionStart="handleSwiperTransitionStart"
+      @transitionEnd="handleSwiperTransitionEnd"
     >
       <div class="swiper-wrapper">
-        <div class="swiper-slide slide-item" v-for="(ad, index) in ads" :key="index">
-          <div class="content">
+        <div
+          class="swiper-slide slide-item"
+          v-for="(ad, index) in ads"
+          :key="index"
+        >
+          <div
+            class="content filter"
+            :class="{ 'motion-blur-vertical-small': transitioning }"
+          >
             <a
               :href="ad.url"
               rel="external nofollow noopener"
@@ -19,7 +28,7 @@
           </div>
         </div>
       </div>
-      <div class="swiper-pagination"></div>
+      <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets"></div>
     </div>
   </div>
 </template>
@@ -34,9 +43,20 @@
         default: 0
       }
     },
+    data() {
+      return {
+        transitioning: false
+      }
+    },
     methods: {
-      slideChange() {
+      handleSwiperSlideChange() {
         this.$emit('slideChange', this.swiper.realIndex)
+      },
+      handleSwiperTransitionStart() {
+        this.transitioning = true
+      },
+      handleSwiperTransitionEnd() {
+        this.transitioning = false
       }
     },
     computed: {
