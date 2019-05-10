@@ -4,32 +4,44 @@
       <empty-box class="article-empty-box" key="empty" v-if="!articleList.length">
         <slot>{{ $i18n.text.article.empty }}</slot>
       </empty-box>
-      <div class="swiper index" key="swiper" v-swiper:swiper="swiperOption" v-else-if="renderSwiper">
+      <div
+        key="swiper"
+        class="swiper index"
+        v-swiper:swiper="swiperOption"
+        v-else-if="renderSwiper"
+        @transitionStart="handleSwiperTransitionStart"
+        @transitionEnd="handleSwiperTransitionEnd"
+      >
         <div class="swiper-wrapper">
           <div
             :key="index"
             class="swiper-slide slide-item"
             v-for="(article, index) in articleList.slice(0, 9)"
           >
-            <div class="content" v-if="article.ad">
-              <a
-                :href="article.url"
-                rel="external nofollow noopener"
-                target="_blank"
-              >
-                <img :src="article.src" :alt="article.title">
-                <span class="title">{{ article.title }}</span>
-              </a>
-            </div>
-            <div class="content" v-else>
-              <img :src="buildThumb(article.thumb)" :alt="article.title">
-              <nuxt-link :to="`/article/${article.id}`" class="title">
-                <span>{{ article.title }}</span>
-              </nuxt-link>
+            <div
+              class="content filter"
+              :class="{ 'motion-blur-horizontal': transitioning }"
+            >
+              <template v-if="article.ad">
+                <a
+                  :href="article.url"
+                  target="_blank"
+                  rel="external nofollow noopener"
+                >
+                  <img :src="article.src" :alt="article.title">
+                  <span class="title">{{ article.title }}</span>
+                </a>
+              </template>
+              <template v-else>
+                <img :src="humanizeThumb(article.thumb)" :alt="article.title">
+                <nuxt-link :to="`/article/${article.id}`" class="title">
+                  <span>{{ article.title }}</span>
+                </nuxt-link>
+              </template>
             </div>
           </div>
         </div>
-        <div class="swiper-pagination"></div>
+        <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets"></div>
       </div>
     </transition>
   </div>
@@ -48,6 +60,7 @@
     data() {
       return {
         renderSwiper: true,
+        transitioning: false,
         swiperOption: {
           autoplay: {
             delay: 3500,
@@ -79,7 +92,7 @@
       }
     },
     methods: {
-      buildThumb(thumb) {
+      humanizeThumb(thumb) {
         if (thumb) {
           if (this.isMobile) {
             return `${thumb}?imageView2/1/w/768/h/271/format/${this.imageExt}/interlace/1/q/80|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/560/fill/I0ZGRkZGRg==/dissolve/30/gravity/SouthWest/dx/30/dy/15|imageslim`
@@ -89,6 +102,12 @@
         } else {
           return `${this.cdnUrl}/images/${this.isMobile ? 'mobile-' : ''}thumb-carrousel.jpg`
         }
+      },
+      handleSwiperTransitionStart() {
+        this.transitioning = true
+      },
+      handleSwiperTransitionEnd() {
+        this.transitioning = false
       }
     },
     activated() {
@@ -136,6 +155,10 @@
           height: $pc-carrousel-height;
           position: relative;
           overflow: hidden;
+
+          &.transitioning {
+            filter: url('/images/motion-blur-filter.svg#blur');
+          }
 
           img {
             width: 100%;
