@@ -8,14 +8,25 @@
       <empty-box class="announcement-empty-box" key="empty" v-if="!announcement.data.length">
         <slot>{{ $i18n.text.announcement.empty }}</slot>
       </empty-box>
-      <div class="swiper" key="swiper" v-swiper:swiper="swiperOption" v-else-if="renderSwiper">
+      <div
+        class="swiper"
+        key="swiper"
+        v-swiper:swiper="swiperOption"
+        v-else-if="renderSwiper"
+        @transitionStart="handleSwiperTransitionStart"
+        @transitionEnd="handleSwiperTransitionEnd"
+      >
         <div class="swiper-wrapper">
           <div
             :key="index"
             class="swiper-slide slide-item"
             v-for="(announcement, index) in announcement.data"
           >
-            <div class="content" v-html="markedContent(announcement.content)"></div>
+            <div
+              class="content filter"
+              :class="{ 'motion-blur-vertical-small': transitioning }"
+              v-html="parseByMarked(announcement.content)"
+            ></div>
           </div>
         </div>
         <div class="swiper-button-prev">
@@ -42,6 +53,7 @@
     data() {
       return {
         renderSwiper: true,
+        transitioning: false,
         swiperOption: {
           height: 34,
           autoplay: {
@@ -63,8 +75,14 @@
       }
     },
     methods: {
-      markedContent(content) {
+      parseByMarked(content) {
         return marked(content, null, true)
+      },
+      handleSwiperTransitionStart() {
+        this.transitioning = true
+      },
+      handleSwiperTransitionEnd() {
+        this.transitioning = false
       }
     },
     activated() {
