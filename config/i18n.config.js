@@ -94,11 +94,11 @@ module.exports = {
       },
       device: {
         android: {
-          zh: '安卓',
+          zh: 'Android',
           en: 'Android'
         },
         ios: {
-          zh: '苹果',
+          zh: 'IOS',
           en: 'IOS'
         }
       },

@@ -10,10 +10,15 @@
             :delay="config.delay"
             @end="handleAnimationEnd"
             v-for="barrage in barrages"
-          ></barrage-item>
+          />
         </ul>
       </div>
-      <div class="input-box">
+      <div
+        class="input-box filter"
+        :class="{ 'motion-blur-vertical': transitioning }"
+        @animationstart="handleInputAnimationStart"
+        @animationend="handleInputAnimationEnd"
+      >
         <div class="input-inner">
           <div class="size">
             <div class="active size" :class="'s-' + sizeIndex">{{ currentSize }}</div>
@@ -85,7 +90,8 @@
         moveTimer: null,
         barrageLimit: 0,
         sizeIndex: sizes.length - 1,
-        colorIndex: colors.length - 1
+        colorIndex: colors.length - 1,
+        transitioning: false
       }
     },
     computed: {
@@ -135,6 +141,13 @@
       this.clearBarrages()
     },
     methods: {
+      // 弹幕输入容器动画周期
+      handleInputAnimationStart() {
+        this.transitioning = true
+      },
+      handleInputAnimationEnd() {
+        this.transitioning = false
+      },
       // 发布弹幕
       sendbarrage() {
         const text = this.barrage.trim()
