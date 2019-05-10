@@ -76,10 +76,10 @@
           <span>Article created at</span>
           <span>&nbsp;</span>
           <nuxt-link
-            :title="buildDateTitle(article.create_at)"
-            :to="buildDateLink(article.create_at)"
+            :title="getDateTitle(article.create_at)"
+            :to="getDateLink(article.create_at)"
           >
-            <span>{{ buildDateTitle(article.create_at) }}</span>
+            <span>{{ getDateTitle(article.create_at) }}</span>
           </nuxt-link>
           <span>&nbsp;in category&nbsp;</span>
           <nuxt-link
@@ -99,8 +99,8 @@
         <p class="item" v-else>
           <span>本文于</span>
           <span>&nbsp;</span>
-          <nuxt-link :title="buildDateTitle(article.create_at)" :to="buildDateLink(article.create_at)">
-            <span>{{ buildDateTitle(article.create_at) }}</span>
+          <nuxt-link :title="getDateTitle(article.create_at)" :to="getDateLink(article.create_at)">
+            <span>{{ getDateTitle(article.create_at) }}</span>
           </nuxt-link>
           <span>&nbsp;发布在&nbsp;</span>
           <span :key="index" v-for="(category, index) in article.category">
@@ -155,29 +155,41 @@
         </ul>
       </div>
       <div class="related" key="related" v-else-if="article.related && article.related.length">
-        <div class="article-list swiper" v-if="!isMobile" v-swiper:swiper="swiperOption">
+        <div
+          class="article-list swiper"
+          v-if="!isMobile"
+          v-swiper:swiper="swiperOption"
+          @transitionStart="handleSwiperTransitionStart"
+          @transitionEnd="handleSwiperTransitionEnd"
+        >
           <div class="swiper-wrapper">
-            <div class="swiper-slide item" :key="index" v-for="(article, index) in relatedArticles">
+            <div
+              class="swiper-slide item"
+              :key="index"
+              v-for="(article, index) in relatedArticles"
+            >
               <a
                 v-if="article.ad"
-                class="item-box"
-                :href="article.link"
+                class="item-box filter"
                 rel="external nofollow noopener"
                 target="_blank"
+                :class="{ 'motion-blur-horizontal-small': transitioning }"
+                :href="article.link"
               >
                 <img :src="article.img" class="thumb" :alt="article.title">
                 <span class="title">{{ article.title }}</span>
               </a>
               <nuxt-link
                 v-else
+                class="item-box filter"
+                :class="{ 'motion-blur-horizontal-small': transitioning }"
                 :to="`/article/${article.id}`"
                 :title="article.title"
-                class="item-box"
               >
                 <img
-                  :src="buildThumb(article.thumb)"
-                  class="thumb"
+                  :src="getThumb(article.thumb)"
                   :alt="article.title"
+                  class="thumb"
                 >
                 <span class="title">{{ article.title }}</span>
               </nuxt-link>
@@ -262,6 +274,7 @@
     },
     data() {
       return {
+        transitioning: false,
         swiperOption: {
           setWrapperSize: true,
           simulateTouch: false,
@@ -408,12 +421,12 @@
           this.$root.$copyToClipboard(`https://surmon.me/article/${this.article.id}`)
         }
       },
-      buildThumb(thumb) {
+      getThumb(thumb) {
         return thumb
           ? `${thumb}?imageView2/1/w/300/h/230/format/${this.imageExt}/interlace/1/q/80|imageslim`
           : `${this.cdnUrl}/images/thumb-releted.jpg`
       },
-      buildDateTitle(date) {
+      getDateTitle(date) {
         if (!date) {
           return date
         }
@@ -426,7 +439,7 @@
         const meridiem = date.getHours() > 11 ? pm : am
         return `${year}/${month}/${day} ${meridiem}`
       },
-      buildDateLink(date) {
+      getDateLink(date) {
         if (!date) {
           return date
         }
@@ -437,6 +450,12 @@
         month = month.length === 1 ? `0${month}` : month
         day = day.length === 1 ? `0${day}` : day
         return `/date/${year}-${month}-${day}`
+      },
+      handleSwiperTransitionStart() {
+        this.transitioning = true
+      },
+      handleSwiperTransitionEnd() {
+        this.transitioning = false
       }
     }
   }
