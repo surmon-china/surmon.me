@@ -438,7 +438,7 @@
             &:hover,
             &:focus {
               background-color: $module-bg-opacity-9;
-              animation: inputColor steps(1) .6s infinite;
+              // animation: inputColor steps(1) .6s infinite;
             }
           }
         }
