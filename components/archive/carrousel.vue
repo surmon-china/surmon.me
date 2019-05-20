@@ -112,6 +112,7 @@
     },
     activated() {
       this.renderSwiper = true
+      this.handleSwiperTransitionEnd()
     },
     deactivated() {
       this.renderSwiper = false
