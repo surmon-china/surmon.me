@@ -159,9 +159,9 @@
           class="article-list swiper"
           v-if="!isMobile"
           v-swiper:swiper="swiperOption"
-          @transitionStart="handleSwiperTransitionStart"
-          @transitionEnd="handleSwiperTransitionEnd"
         >
+          <!-- @transitionStart="handleSwiperTransitionStart" -->
+          <!-- @transitionEnd="handleSwiperTransitionEnd" -->
           <div class="swiper-wrapper">
             <div
               class="swiper-slide item"
