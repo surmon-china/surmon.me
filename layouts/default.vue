@@ -1,8 +1,8 @@
 <template>
   <div id="app" :class="theme" v-cloak>
-    <Clipboard />
-    <PcMainView v-if="!isMobile" />
-    <MobileMainView v-else />
+    <clipboard />
+    <pc-main-view v-if="!isMobile" />
+    <mobile-main-view v-else />
   </div>
 </template>
 
@@ -13,7 +13,9 @@
   export default {
     name: 'app',
     head() {
-      return this.isMobile ? { bodyAttrs: { class: 'mobile' }} : {}
+      return this.isMobile
+        ? { bodyAttrs: { class: 'mobile' }}
+        : {}
     },
     components: {
       Clipboard,
