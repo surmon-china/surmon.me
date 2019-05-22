@@ -58,8 +58,13 @@
       <calendar />
     </div>
     <transition name="module">
-      <div class="aside-mammon" key="ad" v-if="renderAd">
-        <adsense-aside />
+      <div class="aside-mammon ali-mama" key="ad">
+        <iframe
+          src="/partials/mammon/aside.html"
+          scrolling="no"
+          frameborder="0"
+          class="mammon-iframe"
+        ></iframe>
       </div>
     </transition>
     <div class="aside-fixed-box" :class="{ fixed: fixedMode.fixed }" v-scroll-top>
@@ -123,7 +128,6 @@
     data() {
       return {
         adIndex: 0,
-        renderAd: true,
         keyword: '',
         fixedMode: {
           fixed: false,
@@ -133,7 +137,6 @@
       }
     },
     mounted() {
-      this.updateAd()
       if (isSearchArchiveRoute(this.$route.name)) {
         this.keyword = this.$route.params.keyword
       }
@@ -152,12 +155,6 @@
       }
     },
     methods: {
-      updateAd() {
-        this.renderAd = false
-        this.$nextTick(() => {
-          this.renderAd = true
-        })
-      },
       handleSearch() {
         const keyword = this.keyword
         const paramsKeyword = this.$route.params.keyword
@@ -237,7 +234,7 @@
     .aside-article,
     .aside-calendar,
     .aside-mammon,
-    .aside-tag, {
+    .aside-tag {
       background-color: $module-bg;
     }
 
@@ -388,15 +385,16 @@
       width: 100%;
       margin-bottom: 1em;
 
-      > .ad-box {
-        opacity: .88;
+      &.ali-mama {
+        height: $aside-width;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-        &:hover {
-          opacity: 1;
-        }
-
-        img {
-          max-width: 100%;
+        > .mammon-iframe {
+          height: 250px;
+          width: 250px;
+          overflow: hidden;
         }
       }
     }

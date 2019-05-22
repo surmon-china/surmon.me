@@ -8,25 +8,23 @@ const imagePath = '/images/mammon/'
 const links = {
   common: {
     // ECS 服务器（N）
-    aliyunECS: 'https://s.click.taobao.com/blPTjAw',
+    aliyunECS: 'https://s.click.taobao.com/L0VDd9w',
     // 虚拟主机，轻服务（N）
-    aliyunSWAS: 'https://s.click.taobao.com/bVDTjAw',
+    aliyunSWAS: 'https://s.click.taobao.com/MkVDd9w',
   },
   pc: {
-    // 淘宝（O）
-    taobao: 'https://s.click.taobao.com/hWjWFKw',
-    // 天猫超市（N）
-    tmailMarket: 'https://s.click.taobao.com/v33TjAw',
+    // 淘宝（N）
+    taobao: 'https://s.click.taobao.com/GsADd9w',
+    // 天猫超市（N - 2019-06-20）
+    tmailMarket: 'https://s.click.taobao.com/O2SDd9w',
     // 飞猪（N）
-    alitrip: 'https://s.click.taobao.com/jOcNjAw',
-    // 钉钉（O）
-    dingding: 'https://s.click.taobao.com/DUIbFKw'
+    alitrip: 'https://s.click.taobao.com/VbDDd9w'
   },
   mobile: {
-    // 淘宝（O）
-    taobao: 'https://s.click.taobao.com/wVXNjAw',
+    // 淘宝（N）
+    taobao: 'https://s.click.taobao.com/qiGDd9w',
     // 飞猪（N）
-    alitrip: 'https://s.click.taobao.com/7hfNjAw'
+    alitrip: 'https://s.click.taobao.com/KKDDd9w'
   }
 }
 
@@ -58,10 +56,6 @@ export const pc = {
       url: links.pc.tmailMarket,
       src: imagePath + 'tmail-532-178.jpg'
     },
-    // {
-    //   url: links.pc.dingding,
-    //   src: imagePath + 'dingding-532-178.jpg'
-    // },
     {
       url: links.pc.alitrip,
       src: imagePath + 'alitrip-532-178.jpg'
