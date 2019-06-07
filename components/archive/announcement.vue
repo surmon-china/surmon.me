@@ -1,6 +1,10 @@
 <template>
-  <div class="announcement">
-    <color-block-box :left="-59" :gray="true" />
+  <div class="announcement" :class="{ mobile: isMobile }">
+    <color-block-box
+      :left="-59"
+      :gray="true"
+      v-if="!this.isMobile"
+    />
     <div class="title">
       <i class="iconfont icon-radio"></i>
     </div>
@@ -41,7 +45,6 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
   import marked from '~/plugins/marked'
   export default {
     name: 'index-announcement',
@@ -72,6 +75,11 @@
           setWrapperSize: true,
           direction: 'vertical'
         }
+      }
+    },
+    computed: {
+      isMobile() {
+        return this.$store.state.global.isMobile
       }
     },
     methods: {
@@ -107,6 +115,10 @@
     position: relative;
     background-color: $module-bg;
     color: $white;
+
+    &.mobile {
+      background-color: $module-hover-bg-darken-10;
+    }
 
     .announcement-empty-box {
       min-height: auto;
