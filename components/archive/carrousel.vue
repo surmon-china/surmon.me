@@ -27,15 +27,16 @@
                   :href="article.url"
                   target="_blank"
                   rel="external nofollow noopener"
+                  class="link"
                 >
                   <img :src="article.src" :alt="article.title">
                   <span class="title">{{ article.title }}</span>
                 </a>
               </template>
               <template v-else>
-                <img :src="humanizeThumb(article.thumb)" :alt="article.title">
-                <nuxt-link :to="`/article/${article.id}`" class="title">
-                  <span>{{ article.title }}</span>
+                <nuxt-link :to="`/article/${article.id}`" class="link">
+                  <img :src="humanizeThumb(article.thumb)" :alt="article.title">
+                  <span class="title">{{ article.title }}</span>
                 </nuxt-link>
               </template>
             </div>
@@ -71,10 +72,12 @@
             el: '.swiper-pagination'
           },
           setWrapperSize: true,
-          // autoHeight: true,
           mousewheel: true,
           observeParents: true,
-          grabCursor: true,
+          // 禁用 PC 拖动手指样式
+          grabCursor: false,
+          // 警用 PC 拖动
+          simulateTouch : false,
           preloadImages: false,
           lazy: true
         }
@@ -159,6 +162,12 @@
 
           &.transitioning {
             filter: url('/images/motion-blur-filter.svg#blur');
+          }
+
+          > .link {
+            display: block;
+            width: 100%;
+            height: 100%;
           }
 
           img {

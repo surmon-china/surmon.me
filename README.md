@@ -7,15 +7,13 @@
 
 ## Surmon.me
 
-My blog by [Nuxt.js](https://github.com/nuxt)
-
-[Online Site - https://surmon.me](https://surmon.me/)
+My blog by [Nuxt.js](https://github.com/nuxt), online site: [https://surmon.me](https://surmon.me/)
 
 If you want to run the application, you need install the [nodepress](https://github.com/surmon-china/nodepress) service and [sre](https://github.com/surmon-china/sre.surmon.me) service.
 
 ### CHANGELOG
 
-[CHANGELOG](https://github.com/surmon-china/surmon.me/blob/master/CHANGELOG.md)
+[CHANGELOG.md](https://github.com/surmon-china/surmon.me/blob/master/CHANGELOG.md)
 
 ## PC
 
