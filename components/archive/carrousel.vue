@@ -199,7 +199,7 @@
 
             -webkit-background-clip: text;
             // background-color: $module-hover-bg-opacity-9;
-            background: linear-gradient(90deg, transparent 0%, $module-bg 4em, $module-bg-opacity-9, $white);
+            background: linear-gradient(90deg, transparent 0%, $module-bg 2em, $module-bg-opacity-9, $white);
 
             &:hover {
               color: $text-darken;
