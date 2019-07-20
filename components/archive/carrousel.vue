@@ -160,10 +160,6 @@
           position: relative;
           overflow: hidden;
 
-          &.transitioning {
-            filter: url('/images/motion-blur-filter.svg#blur');
-          }
-
           > .link {
             display: block;
             width: 100%;
