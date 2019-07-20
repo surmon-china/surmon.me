@@ -49,7 +49,7 @@
   import ListItem from './item.vue'
   import ListHeader from './header.vue'
   import underscore from '~/utils/underscore-simple'
-  import { isIndexRoute } from '~/utils/route'
+  import { isIndexRoute } from '~/services/route-validator'
   export default {
     name: 'article-list',
     components: {

@@ -351,7 +351,7 @@ module.exports = {
     "no-void": 2,
 
     // 生产代码中不能出现warning-comments包含的注释
-    "no-warning-comments": [2, { "terms": ["todo", "fixme", "any other term"], "location": "anywhere" }],
+    "no-warning-comments": [2, { "terms": ["fixme", "any other term"], "location": "anywhere" }],
 
     // 不要使用with语句
     "no-with": 2,

@@ -3,10 +3,10 @@
     <div class="error-content">
       <h1 class="error-code">{{ error.statusCode }}</h1>
       <div class="error-wrapper-message">
-        <h2 class="error-message">众里寻他 我已不再</h2>
+        <h2 class="error-message">{{ $i18n.text.notFound }}</h2>
       </div>
       <p class="error-link">
-        <nuxt-link class="link" to="/">Back to the home page</nuxt-link>
+        <nuxt-link class="link" to="/">{{ $i18n.text.backToHomePage }}</nuxt-link>
       </p>
     </div>
   </div>

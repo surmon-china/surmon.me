@@ -15,8 +15,8 @@ const links = {
   pc: {
     // 淘宝（N）
     taobao: 'https://s.click.taobao.com/GsADd9w',
-    // 天猫超市（N - 2019-06-20）
-    tmailMarket: 'https://s.click.taobao.com/O2SDd9w',
+    // 天猫超市（N）
+    tmailMarket: 'https://s.click.taobao.com/sIVq95w',
     // 飞猪（N）
     alitrip: 'https://s.click.taobao.com/VbDDd9w'
   },

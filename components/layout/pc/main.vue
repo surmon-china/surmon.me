@@ -56,9 +56,9 @@
   import ToolBox from '~/components/widget/tool-box'
   import ShareBox from '~/components/widget/share'
   import ThemeSwitch from '~/components/widget/theme'
-  import music from '~/expansions/music'
-  import { startTitleEgg, resetTitle } from '~/utils/title-egg'
-  import { isServiceRoute } from '~/utils/route'
+  import music from '~/services/music'
+  import { startTitleEgg, resetTitle } from '~/services/title-egg'
+  import { isServiceRoute } from '~/services/route-validator'
   import systemConstants from '~/constants/system'
 
   export default {

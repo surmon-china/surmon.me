@@ -72,11 +72,6 @@ export const mutations = {
     state.theme = action
   },
 
-  // 设置常量
-  updateConstants(state, action) {
-    state.constants = action.result
-  },
-
   // 设置UA
   updateUserAgent(state, action) {
     state.userAgent = action
@@ -158,13 +153,6 @@ export const mutations = {
 }
 
 export const actions = {
-
-  // 获取同构常量
-  fetchConstants({ commit }) {
-    return this.$axios.$get('/expansion/constant')
-      .then(response => commit('updateConstants', response))
-      .catch(error => console.warn('获取同构常量错误', error))
-  },
 
   // 获取博主资料
   fetchAdminInfo({ commit }) {

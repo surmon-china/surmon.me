@@ -7,7 +7,7 @@
 import Vue from 'vue'
 import filters from '~/filters'
 import i18nConfig from '~/config/i18n.config'
-import i18nTransfer from '~/transforms/i18n-transfer'
+import { i18nTransfer } from '~/transforms/i18n'
 import apiConfig, { cdnUrl, proxyUrl } from '~/config/api.config.esm'
 
 import EmptyBox from '~/components/global/empty'

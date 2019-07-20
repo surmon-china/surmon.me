@@ -4,6 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+export const WALLPAPER_API_PATH = '/wallpaper/list'
+
 export const state = () => {
   return {
     papers: {
@@ -34,7 +36,7 @@ export const actions = {
 
     // 不存在则请求新数据
     commit('updatePapersFetching', true)
-    return this.$axios.$get(`/wallpaper/list`)
+    return this.$axios.$get(WALLPAPER_API_PATH)
       .then(response => {
         commit('updatePapersData', response)
         commit('updatePapersFetching', false)

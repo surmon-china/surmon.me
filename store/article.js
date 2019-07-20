@@ -6,9 +6,12 @@
 
 import Vue from 'vue'
 import { isBrowser } from '~/environment/esm'
-import { fetchDelay } from '~/utils/fetch-delay'
-import { isArticleDetailRoute } from '~/utils/route'
+import { fetchDelay } from '~/services/fetch-delay'
+import { isArticleDetailRoute } from '~/services/route-validator'
 import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
+
+export const ARTICLE_API_PATH = '/article'
+export const LIKE_ARTICLE_API_PATH = '/like/article'
 
 const getDefaultListData = () => {
   return {
@@ -93,7 +96,7 @@ export const actions = {
     commit('updateListData', getDefaultListData())
     commit('updateListFetchig', true)
 
-    return this.$axios.$get(`/article`, { params })
+    return this.$axios.$get(ARTICLE_API_PATH, { params })
       .then(response => {
         commit('updateListFetchig', false)
         isLoadMore
@@ -116,7 +119,7 @@ export const actions = {
   fetchHotList({ commit, rootState }) {
     const { SortType } = rootState.global.constants
     commit('updateHotListFetchig', true)
-    return this.$axios.$get(`/article`, { params: { cache: 1, sort: SortType.Hot }})
+    return this.$axios.$get(ARTICLE_API_PATH, { params: { cache: 1, sort: SortType.Hot }})
       .then(response => {
         commit('updateHotListData', response)
         commit('updateHotListFetchig', false)
@@ -136,7 +139,7 @@ export const actions = {
     }
     commit('updateDetailFetchig', true)
     commit('updateDetailData', {})
-    return this.$axios.$get(`/article/${params.article_id}`)
+    return this.$axios.$get(`${ARTICLE_API_PATH}/${params.article_id}`)
       .then(response => {
         return new Promise(resolve => {
           delay(() => {
@@ -154,7 +157,7 @@ export const actions = {
 
   // 喜欢文章
   fetchLikeArticle({ commit }, article_id) {
-    return this.$axios.$patch(`/like/article`, { article_id })
+    return this.$axios.$patch(LIKE_ARTICLE_API_PATH, { article_id })
       .then(response => {
         commit('updateLikesIncrement')
         return Promise.resolve(response)
