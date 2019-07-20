@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://github.com/surmon-china/surmon.me" target="blank">
-    <img src="https://nuxtjs.org/meta_400.png" height="90" alt="surmon.me logo" />
+  <a href="https://github.com/nuxt/nuxt.js" target="blank">
+    <img src="https://nuxtjs.org/meta_400.png" height="90" alt="nuxt logo" />
   </a>
   <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
   <a href="https://github.com/surmon-china/surmon.me" target="blank">
@@ -23,7 +23,7 @@
 
 **使用 [Nuxt.js](https://github.com/nuxt/nuxt.js) 构建的个人网站。**
 
-**onlint site:** https://surmon.me
+**Onlint site:** https://surmon.me
 
 ---
 
