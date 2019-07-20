@@ -55,7 +55,7 @@
 </template>
 
 <script>
-  import music from '~/expansions/music'
+  import music from '~/services/music'
   import { isBrowser } from '~/environment/esm'
   export default {
     name: 'layout-header',

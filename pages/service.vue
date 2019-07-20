@@ -72,8 +72,8 @@
           <ul class="step-list">
             <li class="item">
               <p class="name">1. 提交需求</p>
-              <p class="desc">提供完善成熟的需求文档</p>
-              <p class="desc">提供清晰可用的设计图</p>
+              <p class="desc">提供构思成熟的需求文档</p>
+              <p class="desc">及清晰可用的设计图或原型</p>
             </li>
             <li class="item">
               <p class="name">2. 确认需求</p>
@@ -82,13 +82,13 @@
             </li>
             <li class="item">
               <p class="name">3. 预付开发</p>
-              <p class="desc">转账预付50%或全部</p>
+              <p class="desc">预付部分或全部</p>
               <p class="desc">进入开发流程</p>
             </li>
             <li class="item">
               <p class="name">4. 预收修正</p>
-              <p class="desc">提供预览审核</p>
-              <p class="desc">根据需求修正</p>
+              <p class="desc">提供预览演示</p>
+              <p class="desc">细节修正及调优</p>
             </li>
             <li class="item">
               <p class="name">5. 交付维护</p>
@@ -100,8 +100,7 @@
       </div>
       <div class="rule">
         <div class="rule-content container">
-          <!-- 设计、开发、运维，一切可支撑；需求不清、预算不足、结算不利，全部都拒绝 -->
-          <p class="text">如果你需要一位出色、省心、优秀、帅气、完美的的全栈工程师，请 EMail 我；非常优秀，没有之一</p>
+          <p class="text">如果你认为自己的能力足以支撑一位出色、省心、优秀、帅气、完美的的全栈工程师的生产力，请 EMail 我；非常优秀，没有之一</p>
         </div>
       </div>
     </div>

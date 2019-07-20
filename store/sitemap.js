@@ -5,6 +5,7 @@
  */
 
 import Vue from 'vue'
+import { ARTICLE_API_PATH } from './article'
 
 export const state = () => {
   return {
@@ -35,7 +36,7 @@ export const actions = {
   // 获取地图文章列表
   fetchArticles({ commit }, params) {
     commit('updateArticleListFetching', true)
-    return this.$axios.$get(`/article`, { params })
+    return this.$axios.$get(ARTICLE_API_PATH, { params })
       .then(response => {
         commit(`updateArticleListData`, response.result)
         commit('updateArticleListFetching', false)

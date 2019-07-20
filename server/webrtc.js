@@ -45,8 +45,7 @@ const beautys = {}
 // 过滤回调函数
 const safeCb = cb => (typeof cb === 'function') ? cb : (() => {})
 
-// 服务
-const webrtcService = io => {
+const webrtcServer = io => {
 
   // webrtc
   io.on('connection', socket => {
@@ -225,4 +224,4 @@ const webrtcService = io => {
   })
 }
 
-module.exports = webrtcService
+module.exports = webrtcServer

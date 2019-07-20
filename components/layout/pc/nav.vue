@@ -22,7 +22,7 @@
         <span v-text="$i18n.nav.music"></span>
       </nuxt-link>
       <nuxt-link to="/vlog" class="item">
-        <i class="iconfont icon-vlog"></i>
+        <i class="iconfont icon-live"></i>
         <span v-text="$i18n.nav.vlog"></span>
       </nuxt-link>
       <nuxt-link to="/about" class="item">
@@ -30,7 +30,7 @@
         <span v-text="$i18n.nav.about"></span>
       </nuxt-link>
       <nuxt-link to="/service" class="item">
-        <i class="iconfont icon-zan"></i>
+        <i class="iconfont icon-taichi"></i>
         <span v-text="$i18n.nav.service"></span>
         <span class="superscript">
           <i class="iconfont icon-hot"></i>

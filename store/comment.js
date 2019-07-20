@@ -4,7 +4,10 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { fetchDelay } from '~/utils/fetch-delay'
+import { fetchDelay } from '~/services/fetch-delay'
+
+export const COMMENT_API_PATH = '/comment'
+export const LIKE_COMMENT_API_PATH = '/like/comment'
 
 const getDefaultListData = () => {
   return {
@@ -76,7 +79,7 @@ export const actions = {
     
     const delay = fetchDelay()
     
-    return this.$axios.$get(`/comment`, { params })
+    return this.$axios.$get(COMMENT_API_PATH, { params })
       .then(response => {
         isDescSort && response.result.data.reverse()
         delay(() => {
@@ -90,7 +93,7 @@ export const actions = {
   // 发布评论
   fetchPostComment({ commit }, comment) {
     commit('updatePostFetchig', true)
-    return this.$axios.$post(`/comment`, comment)
+    return this.$axios.$post(COMMENT_API_PATH, comment)
       .then(response => {
         commit('updateListNewItemData', response)
         commit('updatePostFetchig', false)
@@ -104,7 +107,7 @@ export const actions = {
 
   // 喜欢评论
   fetchLikeComment({ commit }, comment) {
-    return this.$axios.$patch(`/like/comment`, { comment_id: comment.id })
+    return this.$axios.$patch(LIKE_COMMENT_API_PATH, { comment_id: comment.id })
       .then(response => {
         commit('updateLikesIncrement', comment)
         return Promise.resolve(response)

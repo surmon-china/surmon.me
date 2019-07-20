@@ -4,6 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+export const PROJECT_API_PATH = '/expansion/github'
+
 export const state = () => {
   return {
     repositories: {
@@ -36,7 +38,7 @@ export const actions = {
 
     // 不存在则请求新数据
     commit('updateRepositoriesFetching', true)
-    return this.$axios.$get('/expansion/github')
+    return this.$axios.$get(PROJECT_API_PATH)
       .then(response => {
         commit('updateRepositoriesData', response.result)
         commit('updateRepositoriesFetching', false)

@@ -18,7 +18,7 @@
           <i class="iconfont icon-search"></i>
         </button>
         <nuxt-link to="/sitemap" class="sitemap-btn">
-          <i class="iconfont icon-sitemap"></i>
+          <i class="iconfont icon-book"></i>
         </nuxt-link>
         <no-ssr>
           <datalist class="search-keywords" id="keywords" v-if="tags.length">
@@ -118,7 +118,7 @@
   import Calendar from './calendar'
   import { mapState } from 'vuex'
   import { Route } from '~/constants/system'
-  import { isArticleDetailRoute, isSearchArchiveRoute } from '~/utils/route'
+  import { isArticleDetailRoute, isSearchArchiveRoute } from '~/services/route-validator'
   export default {
     name: 'pc-aside',
     components: {
@@ -260,7 +260,7 @@
 
         > .search-input {
           margin-right: 0;
-          width: calc(100% - 6.5em - 1px);
+          width: calc(100% - 5.5em - 1px);
           box-sizing: border-box;
           
           &::-webkit-calendar-picker-indicator {
@@ -280,7 +280,11 @@
         > .sitemap-btn {
           text-align: center;
           float: right;
-          width: 4em;
+          width: 3em;
+
+          > .iconfont {
+            font-size: 1.8rem;
+          }
         }
 
         > .search-keywords {

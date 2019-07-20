@@ -1,5 +1,8 @@
 @charset "UTF-8";
 
+// config
+@import "config.scss";
+
 // variables
 @import "variables.scss";
 
@@ -13,7 +16,7 @@
 @import "marx/marx.scss";
 
 // Iconfont
-@import "iconfont.scss";
+@import url($iconfont-url);
 
 // Common style
 @import "common.scss";

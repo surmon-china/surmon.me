@@ -5,13 +5,13 @@
  */
 
 import { isServer } from '~/environment/esm'
-import uaDevice from '~/utils/ua-device'
+import uaDevice from '~/transforms/ua-device'
 import systemConstants from '~/constants/system'
 
 export const actions = {
 
   // 全局服务初始化
-  nuxtServerInit(store, { req, params, route }) {
+  nuxtServerInit(store, { req }) {
 
     // 检查设备类型
     const userAgent = isServer ? req.headers['user-agent'] : navigator.userAgent
@@ -29,8 +29,6 @@ export const actions = {
 
     // 初始化时的全局任务
     const initFetchAppData = [
-      // 同构常量
-      // store.dispatch('global/fetchConstants'),
       // 配置数据
       // store.dispatch('global/fetchAdminInfo'),
       // store.dispatch('global/fetchAppOption'),

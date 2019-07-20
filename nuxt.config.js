@@ -4,8 +4,6 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-const path = require('path')
-const webpack = require('webpack')
 const appConfig = require('./config/app.config')
 const apiConfig = require('./config/api.config')
 const i18nConfig = require('./config/i18n.config')
@@ -17,7 +15,7 @@ const htmlSlogan = i18nConfig.data.text.slogan[htmlLang]
 
 module.exports = {
   mode: 'universal',
-  modern: true, // 编译为现代 ES Module，并自动分辨浏览器输出
+  modern: true,
   dev: isDevMode,
   env: {
     baseUrl: apiConfig.baseUrl,
@@ -58,7 +56,7 @@ module.exports = {
             priority: -20,
             reuseExistingChunk: true
           },
-          // page -> 合并组件会导致运行异常
+          // TODO: 合并组件会导致运行异常
           /*
           page: {
             name: 'page',
@@ -90,7 +88,6 @@ module.exports = {
         // 处理 Template 和 CSS 中的 cdn 地址
         const vueLoader = webpackConfig.module.rules.find(loader => loader.loader === 'vue-loader')
         if (vueLoader) {
-          // vueLoader.options.loaders.html = path.resolve(__dirname, './extend/html-cdn-loader')
           const vueLoaders = vueLoader.options.loaders
           for (const cssLoader in vueLoaders) {
             if (Array.isArray(vueLoaders[cssLoader])) {
@@ -107,19 +104,7 @@ module.exports = {
       plugins: [
         '@babel/plugin-transform-runtime',
         '@babel/plugin-transform-async-to-generator'
-      ],
-      presets({ isServer }) {
-        return [
-          [
-            require.resolve('@nuxtjs/babel-preset-app'),
-            {
-              targets: isServer
-                ? { node: '10.4.0' }
-                : { chrome: 69 }
-            }
-          ]
-        ]
-      }
+      ]
     }
   },
   plugins: [
@@ -143,6 +128,7 @@ module.exports = {
   modules: [
     '@nuxtjs/pwa',
     '@nuxtjs/style-resources',
+    '@nuxtjs/component-cache',
     ['@nuxtjs/axios', { baseURL: apiConfig.baseUrl }]
   ],
   head: {

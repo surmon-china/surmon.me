@@ -1,6 +1,6 @@
 /**
  * @file 评论模块 UA、OS 解析器 / ES module
- * @module utils/browser-os-parse
+ * @module transforms/browser-os-parse
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -8,7 +8,7 @@ const matchUa = (data, key) => data.match(eval(`/${key}/ig`))
 const buildSpan = (span, icon, text) => `<span class="${span}"><i class="iconfont icon-${icon}"></i>${text}</span>`
 
 // 浏览器解析
-export const browserParse = ua => {
+export const browserParser = ua => {
 
   const getR1 = r => r[0].split('/')
   const defaultRule = () => buildSpan('ua_other', 'internet', '其它浏览器')
@@ -89,7 +89,7 @@ export const browserParse = ua => {
 }
 
 // OS 解析
-export const osParse = ua => {
+export const osParser = ua => {
 
   const defaultRule = () => buildSpan('os_other', 'phone', 'Other')
   const matchWin = () => {

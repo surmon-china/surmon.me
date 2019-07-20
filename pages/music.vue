@@ -13,7 +13,8 @@
               fill="none"
               :d="trackPath"
               :stroke-width="relativeStrokeWidth"
-            ></path>
+            >
+            </path>
             <path
               class="circle-progress-circle-path"
               stroke="rgba(190, 190, 190, 0.7)"
@@ -22,7 +23,8 @@
               :d="trackPath"
               :stroke-width="relativeStrokeWidth"
               :style="circlePathStyle"
-            ></path>
+            >
+            </path>
           </svg>
         </div>
         <div class="song-bg-box" :class="{ 'playing': playerState.playing }">
@@ -90,7 +92,7 @@
 </template>
 
 <script>
-  import music from '~/expansions/music'
+  import music from '~/services/music'
   import { isBrowser } from '~/environment/esm'
   export default {
     name: 'music',
