@@ -1,6 +1,6 @@
 /**
  * @file Url 彩蛋 / ES module
- * @module utils/url-egg
+ * @module services/url-egg
  * @author Surmon <https://github.com/surmon-china>
  */
 

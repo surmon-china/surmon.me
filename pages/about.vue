@@ -9,7 +9,7 @@
                 <p class="item webfont">
                   <i class="iconfont icon-user"></i>
                   <span v-if="isEnLang">
-                    <span class="first-letter">I</span>'m Surmon, a (95+) (小) Javascript (鲜) stack (肉) developer.
+                    <span class="first-letter">I</span>'m Surmon, a developer.
                   </span>
                   <span v-else>
                     <span class="first-letter">浪</span>
@@ -18,18 +18,24 @@
                 </p>
                 <p class="item">
                   <i class="iconfont icon-comment-discussion"></i>
-                  <span v-if="isEnLang">Taolu committee:</span>
-                  <span v-else>国家套路委员会：</span>
                   <a
                     target="_blank"
                     rel="external nofollow noopenter"
                     href="https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4"
-                  >288325802</a>
-                  <span>.</span>
+                  >
+                    <span v-if="isEnLang">Taolu committee:</span>
+                    <span v-else>国家套路委员会</span>
+                  </a>
+                  <span>&nbsp;|&nbsp;</span>
+                  <a
+                    target="_blank"
+                    rel="external nofollow noopenter"
+                    href="https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA"
+                  >Telegram group</a>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-music"></i>
-                  <nuxt-link to="/music">Jazz-HipHop, Electronic, Disco, Rock, Punk.</nuxt-link>
+                  <nuxt-link to="/music">Jazz-HipHop, Electronic, Disco, Rock, Punk</nuxt-link>
                 </p>
                 <p class="item webfont">
                   <i class="iconfont icon-like"></i>
@@ -129,12 +135,13 @@
                         <i class="iconfont icon-stackoverflow"></i>
                       </a>
                       <a
-                        href="https://leetcode.com/surmon"
+                        href="https://leetcode-cn.com/u/surmon"
+                        bak-href="https://leetcode.com/surmon"
                         target="_blank"
                         class="algorithm"
                         rel="external nofollow noopenter"
                       >
-                        <i class="iconfont icon-algorithm"></i>
+                        <i class="iconfont icon-leetcode"></i>
                       </a>
                       <a
                         href="https://www.quora.com/profile/Surmon"
@@ -193,7 +200,7 @@
                   <i class="iconfont icon-friend"></i>
                   <span class="friends">
                     <a
-                      href="http://skyrover.me/about"
+                      href="http://skyrover.me"
                       target="_blank"
                       rel="external nofollow noopenter"
                     >「 skyrover 」</a>
@@ -202,11 +209,6 @@
                       target="_blank"
                       rel="external nofollow noopenter"
                     >「 JimmyLv 」</a>
-                    <a
-                      href="https://www.funens.com"
-                      target="_blank"
-                      rel="external nofollow noopenter"
-                    >「 Channg 」</a>
                   </span>
                 </p>
               </div>

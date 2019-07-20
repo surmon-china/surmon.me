@@ -11,7 +11,7 @@
 
 <script>
   import systemConstants from '~/constants/system'
-  import * as humanizedStorage from '~/transforms/local-storage'
+  import * as humanizedStorage from '~/services/local-storage'
   export default {
     name: 'theme',
     data() {

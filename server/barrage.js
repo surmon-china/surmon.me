@@ -37,7 +37,7 @@ const updateLocalBarragesFile = () => {
 const updateDebounce = underscore.debounce(updateLocalBarragesFile, 1000 * 30)
 let socketClients = 0
 
-const barrageService = io => {
+const barrageServer = io => {
 
   // 弹幕
   io.on('connection', socket => {
@@ -77,4 +77,4 @@ const barrageService = io => {
   })
 }
 
-module.exports = barrageService
+module.exports = barrageServer

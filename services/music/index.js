@@ -1,6 +1,6 @@
 /**
  * @file 音乐（外挂应用）/ ES module
- * @module expansions/music
+ * @module services/music
  * @author Surmon <https://github.com/surmon-china>
  */
 

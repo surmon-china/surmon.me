@@ -19,7 +19,7 @@ const updateGAScript = () => {
     axios.get('http://www.google-analytics.com/analytics.js', { timeout: 6000 })
       .then(response => {
         if (response.status === 200) {
-          fs.writeFileSync(path.resolve(__dirname, '..', 'static', 'scripts') + '/analytics.js', response.data)
+          fs.writeFileSync(path.resolve(__dirname, '..', 'static', 'scripts', 'analytics.js'), response.data)
           console.log('GA 脚本更新成功', new Date())
           setTimeout(doUpdate, UPDATE_TIME.HOURS_24)
         } else {

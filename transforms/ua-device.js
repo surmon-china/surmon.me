@@ -1,6 +1,6 @@
 /**
  * @file UA 解析器 / ES module
- * @module utils/ua-device
+ * @module transforms/ua-device
  * @author Surmon <https://github.com/surmon-china>
  */
 

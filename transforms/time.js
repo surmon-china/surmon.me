@@ -1,6 +1,6 @@
 /**
  * @file Time Filters / ES module
- * @module filters/time-filter
+ * @module transforms/time-filter
  * @author Surmon <https://github.com/surmon-china>
  */
 

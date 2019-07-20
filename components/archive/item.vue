@@ -81,7 +81,7 @@
 
 <script>
   import { mapState } from 'vuex'
-  import { localUser, localHistoryLikes } from '~/transforms/local-storage'
+  import { localHistoryLikes } from '~/services/local-storage'
 
   export default {
     name: 'article-list-item',

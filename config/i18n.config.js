@@ -49,7 +49,7 @@ module.exports = {
         en: 'about'
       },
       service: {
-        zh: '德道',
+        zh: '得道',
         en: 'service'
       },
       guestbook: {
@@ -78,13 +78,21 @@ module.exports = {
         zh: '空空如也',
         en: 'No Result Data.'
       },
+      notFound: {
+        zh: '众里寻他 我已不再',
+        en: 'Arrives here at last'
+      },
+      backToHomePage: {
+        zh: '山河万里 长歌归故',
+        en: 'Driveby'
+      },
       guestbook: {
         zh: '此心光明 亦复何言',
         en: 'You have come a long way'
       },
       service: {
         slogan: {
-          zh: '为我一挥手，如听万壑松',
+          zh: '为我一挥手，如临万壑松',
           en: 'Talk is cheap. Show me the code'
         },
         emailMe: {
@@ -247,7 +255,7 @@ module.exports = {
       comment: {
         empty: {
           zh: '期待你的捷足先登',
-          en: 'Go right to the heart of the matter.'
+          en: 'Hit the nail on the head.'
         },
         anonymous: {
           zh: '匿名用户',
@@ -325,7 +333,7 @@ module.exports = {
         },
         placeholder: {
           zh: '愿你的见解一针见血',
-          en: 'Go right to the heart of the matter.'
+          en: 'Hit the nail on the head.'
         },
         count: {
           zh: '条看法',
@@ -345,11 +353,11 @@ module.exports = {
         },
         submit: {
           zh: '发射',
-          en: 'submit'
+          en: 'publish'
         },
         submiting: {
           zh: '发射中...',
-          en: 'Submitting'
+          en: 'publishing'
         }
       }
     }

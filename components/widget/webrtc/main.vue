@@ -351,7 +351,7 @@
 
       // 当媒体请求被允许可用时
       webrtc.on('localStream', stream => {
-        // console.log('本机媒体可用')
+        // console.log('本机媒体可用', stream)
         self.localStream.ok = true
         self.streams.unshift({
           local: true,
