@@ -1,6 +1,7 @@
 
 // cdn 不能直接设为空，因为在生产环境加载资源时，是以 cdn 相对路径计算的
-$cdn-url: 'https://cdn.surmon.me';
+// $cdn-url: 'https://cdn.surmon.me';
 // $cdn-url: 'https://surmon.me';
+$cdn-url: '';
 
 $iconfont-url: '//at.alicdn.com/t/font_64825_afszr2q016.css';
