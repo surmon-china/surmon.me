@@ -142,7 +142,7 @@
 
           .item-thumb-img {
             @include css3-prefix(opacity, .95);
-            @include css3-prefix(transform, translateX(-.5em));
+            @include css3-prefix(transform, translateX(-3px));
           }
         }
       }
@@ -184,8 +184,8 @@
 
         .item-thumb-img {
           min-width: 100%;
-          width: calc(100% + .5em);
-          max-width: calc(100% + .5em);
+          width: calc(100% + 3px);
+          max-width: calc(100% + 3px);
           height: auto;
           min-height: 8.5em;
           border-color: transparent;
