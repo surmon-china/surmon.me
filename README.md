@@ -15,7 +15,6 @@
 [![GitHub forks](https://img.shields.io/github/forks/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/network)
 [![GitHub last commit](https://img.shields.io/github/last-commit/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me)
 [![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me)
-[![Twitter](https://img.shields.io/twitter/url/https/github.com/surmon-china/surmon.me.svg?style=for-the-badge)](https://twitter.com/intent/tweet?url=https://github.com/surmon-china/surmon.me)
 
 ## Introduction
 
