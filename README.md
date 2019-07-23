@@ -23,7 +23,7 @@
 
 **使用 [Nuxt.js](https://github.com/nuxt/nuxt.js) 构建的个人网站。**
 
-**Onlint site:** https://surmon.me
+**Online site:** https://surmon.me
 
 ---
 
