@@ -42,10 +42,10 @@
 
 ```bash
 # 使用 nodemon 在开发环境下工作
-sudo npm i nodemon -g
+$ npm i nodemon -g
 
 # install dependencies 依赖 python2.7
-$ npm install [--python=python2.7] # Or npm run install
+$ npm install [--python=python2.7] # or npm run install
 
 # serve with hot reload at localhost:3000
 $ npm run dev
