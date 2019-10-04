@@ -48,7 +48,7 @@
             type="text"
             class="input"
             v-model="barrage"
-            placeholder="Let's fuck"
+            placeholder="Let's start"
             @keyup.enter="sendbarrage"
           >
           <div class="count">
