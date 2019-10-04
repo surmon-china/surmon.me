@@ -12,7 +12,6 @@
 [![forthebadge](https://forthebadge.com/images/badges/made-with-vue.svg)](https://forthebadge.com)
 [![GitHub stars](https://img.shields.io/github/stars/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/issues)
-[![GitHub forks](https://img.shields.io/github/forks/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/network)
 [![GitHub last commit](https://img.shields.io/github/last-commit/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me)
 [![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me)
 
