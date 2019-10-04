@@ -4,13 +4,10 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [10.x]
-
     steps:
     - uses: actions/checkout@master
     - name: Use Node.js ${{ matrix.node-version }}
@@ -19,7 +16,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Install Dependencies
       run: |
-        npm install
+        npm i
         npm run build
       env:
         CI: true
