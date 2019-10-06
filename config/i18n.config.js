@@ -1,10 +1,10 @@
 /**
- * @file I18n config / Commonjs module
+ * @file I18n config / ES module
  * @module i18n.config
  * @author Surmon <https://github.com/surmon-china>
  */
 
-module.exports = {
+export default {
   default: 'zh',
   languages: [
     {
@@ -90,6 +90,10 @@ module.exports = {
         zh: '此心光明 亦复何言',
         en: 'You have come a long way'
       },
+      wallpaper: {
+        zh: '山河入梦',
+        en: 'Wallpaper'
+      },
       service: {
         slogan: {
           zh: '为我一挥手，如临万壑松',
@@ -165,13 +169,13 @@ module.exports = {
         }
       },
       slogan: {
-        zh: '欢喜勇猛，向死而生',
-        en: 'Talk is cheap. Show me the code.'
+        zh: '來蘇之望，念狂夢猖',
+        en: 'Because the mountain was there.'
       },
       music: {
         empty: {
-          zh: '唯音乐是灵魂最好的解药',
-          en: 'Music is the eye of ear.'
+          zh: '五音六律，七弦八度',
+          en: 'The music, the soul of man.'
         }
       },
       category: {

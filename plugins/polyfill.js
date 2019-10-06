@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { isBrowser } from '~/environment/esm'
+import { isBrowser } from '~/environment'
 import 'intersection-observer'
 
 if (isBrowser) {

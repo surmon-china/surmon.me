@@ -2,7 +2,11 @@
   <div id="wallpaper">
     <div class="wallpaper-box" @click="onWallpaper">
       <div class="up">
-        <span class="title">山河入梦</span>
+        <span
+          class="title"
+          :class="{ en: isEnLang }"
+          v-text="$i18n.text.wallpaper"
+        ></span>
       </div>
       <div class="down"></div>
     </div>
@@ -23,6 +27,9 @@
       }
     },
     computed: {
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
+      },
       wallpapers() {
         return this.$store.state.wallpaper.papers.data
       }
@@ -52,7 +59,6 @@
         transform: translateX(-$offset);
       }
 
-
       @keyframes wall-paper-y {
         0% { transform: translateY(-$offset) }
         50% { transform: translateY($offset) }
@@ -78,6 +84,14 @@
         position: absolute;
       }
 
+      > .down {
+        top: 0;
+        left: $offset;
+        z-index: 1;
+        background-color: $primary;
+        animation: wall-paper-y 1.5s .75s infinite;
+      }
+
       > .up {
         top: 0;
         left: 0;
@@ -87,23 +101,20 @@
 
         > .title {
           display: block;
-          float: right;
-          width: 2rem;
+          width: 100%;
           height: 100%;
-          line-height: 1.6rem;
-          padding-top: .2rem;
-          font-family: webfont-bolder;
+          line-height: 2rem;
+          font-family: webfont-bolder, DINRegular;
           text-align: center;
           color: $primary;
-        }
-      }
+          writing-mode: tb-rl;
+          letter-spacing: 4px;
 
-      > .down {
-        top: 0;
-        left: $offset;
-        z-index: 1;
-        background-color: $primary;
-        animation: wall-paper-y 1.5s .75s infinite;
+          &.en {
+            font-weight: bold;
+            letter-spacing: 0px;
+          }
+        }
       }
     }
   }

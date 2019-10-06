@@ -20,7 +20,7 @@
         <nuxt-link to="/sitemap" class="sitemap-btn">
           <i class="iconfont icon-book"></i>
         </nuxt-link>
-        <no-ssr>
+        <client-only>
           <datalist class="search-keywords" id="keywords" v-if="tags.length">
             <option class="iiem"
               :value="isEnLang ? tag.slug : tag.name"
@@ -29,7 +29,7 @@
               v-for="tag in tags"
             />
           </datalist>
-        </no-ssr>
+        </client-only>
       </div>
     </div>
     <div class="aside-article">
@@ -68,11 +68,11 @@
       </div>
     </transition>
     <div class="aside-fixed-box" :class="{ fixed: fixedMode.fixed }" v-scroll-top>
-      <no-ssr>
+      <client-only>
         <transition name="fade">
           <aside-ad :initIndex="adIndex" @slideChange="handleChangeAdSwiper" v-if="fixedMode.fixed" />
         </transition>
-      </no-ssr>
+      </client-only>
       <div class="aside-tag">
         <empty-box v-if="!tags.length">
           <slot>{{ $i18n.text.tag.empty }}</slot>
@@ -235,7 +235,7 @@
     .aside-calendar,
     .aside-mammon,
     .aside-tag {
-      background-color: $module-bg;
+      @include module-blur-bg();
     }
 
     .aside-search {
@@ -328,21 +328,21 @@
 
           &:nth-child(1) {
             .index {
-              color: $white;
+              color: $reversal;
               background-color: $primary-opacity-5;
             }
           }
 
           &:nth-child(2) {
             .index {
-              color: $white;
+              color: $reversal;
               background-color: rgba($accent, .6);
             }
           }
 
           &:nth-child(3) {
             .index {
-              color: $white;
+              color: $reversal;
               background-color: rgba($red, .6);
             }
           }

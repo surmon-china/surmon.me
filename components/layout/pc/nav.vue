@@ -55,6 +55,7 @@
         target="_blank"
         class="item ad aliyun"
         rel="external nofollow noopener"
+        v-if="false"
       >
         <i class="iconfont icon-aliyun"></i>
         <span v-text="$i18n.nav.aliyun"></span>
@@ -67,6 +68,15 @@
       >
         <i class="iconfont icon-debug"></i>
         <span>TE.io</span>
+      </a>
+      <a
+        href="https://foxfinder.io"
+        target="_blank"
+        class="item ad foxfinder"
+        rel="external nofollow noopener"
+      >
+        <i class="iconfont icon-fox-colour"></i>
+        <span>FF.io</span>
       </a>
       <nuxt-link to="/app" class="item app">
         <i class="iconfont icon-app"></i>
@@ -149,19 +159,19 @@
         &.taobao {
           color: #ff5000;
           border-top: 1px dashed $module-hover-bg;
-
-          > .iconfont {
-            color: #ff5000;
-          }
         }
 
         &.aliyun {
           color: black;
-          border-top: 1px dashed $module-hover-bg;
+        }
 
-          > .iconfont {
-            color: black;
-          }
+        &.errend {
+          color: black;
+          border-top: 1px dashed $module-hover-bg;
+        }
+
+        &.foxfinder {
+          color: #d15d26;
         }
 
          &.app {

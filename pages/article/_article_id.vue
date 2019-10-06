@@ -18,10 +18,10 @@
       </transition>
       <transition name="module" mode="out-in" @after-enter="contentAnimateDone">
         <div class="skeleton" key="skeleton" v-if="isFetching">
-          <no-ssr>
+          <client-only>
             <skeleton-line class="title" />
             <skeleton-paragraph class="content" :lines="9" line-height="1.2em" />
-          </no-ssr>
+          </client-only>
         </div>
         <div class="knowledge" key="knowledge" v-else>
           <h2 class="title">{{ article.title }}</h2>
@@ -44,14 +44,14 @@
         </div>
       </transition>
     </div>
-    <no-ssr>
+    <client-only>
       <div class="mammon">
         <transition name="module" mode="out-in">
           <skeleton-paragraph class="mammon-skeleton" key="skeleton" v-if="isFetching" :lines="4" line-height="1em" />
           <adsense-article key="adsense" v-else-if="renderAd" />
         </transition>
       </div>
-    </no-ssr>
+    </client-only>
     <div class="share">
       <transition name="module" mode="out-in">
         <div class="skeleton" key="skeleton" v-if="isFetching">
@@ -237,7 +237,7 @@
 
 <script>
   import { mapState } from 'vuex'
-  import { isBrowser } from '~/environment/esm'
+  import { isBrowser } from '~/environment'
   import lozad from '~/plugins/lozad'
   import marked from '~/plugins/marked'
   import adConfig from '~/config/ad.config'
@@ -581,7 +581,7 @@
         line-height: 5.8rem;
         text-align: center;
         transform-origin: center;
-        color: $white;
+        color: $reversal;
         font-weight: bold;
         font-size: $font-size-small;
         text-transform: uppercase;
@@ -984,7 +984,7 @@
                 line-height: 2em;
                 background-color: $module-hover-bg-darken-10;
                 padding: 0 .5em;
-                color: $white;
+                color: $reversal;
                 opacity: .4;
                 font-size: .9em;
                 text-align: center;

@@ -116,7 +116,7 @@
 
 <script>
   import { states } from './util'
-  import { isDevMode } from '~/environment/esm'
+  import { isDevMode } from '~/environment'
   import appConfig from '~/config/app.config'
   import socketio from '~/plugins/socket.io'
   import SimpleWebRTC from '~/plugins/webrtc'
@@ -522,6 +522,7 @@
     z-index: 8;
     padding-top: $header-height * 2;
     background-color: $module-hover-bg-darken-20;
+    @include backdrop-blur();
 
     > .webrtc-box {
       position: relative;
@@ -545,9 +546,9 @@
         display: flex;
         justify-content: center;
         position: relative;
-        background-color: $module-bg;
-        border: .666rem solid $module-bg-opacity-5;
         overflow-y: hidden;
+        border: .666rem solid $module-bg-opacity-5;
+        background-color: $module-bg;
 
         &.local {
           width: 40.5%;

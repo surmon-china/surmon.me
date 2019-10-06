@@ -298,6 +298,7 @@
     -webkit-backface-visibility: hidden;
     perspective: 1000;
     -webkit-perspective: 1000;
+    @include backdrop-blur();
 
     &.active {
       opacity: 1;

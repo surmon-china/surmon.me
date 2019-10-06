@@ -1,16 +1,5 @@
 
-@import "config.scss";
-
-@font-face {
-  font-family: specialSymbol;
-  src: local('PingFang SC'), local('Microsoft Yahei');
-  unicode-range: U+02C2, U+02C3, U+003C, U+003E, U+3009;
-}
-
-@font-face {
-  font-family: 'DINRegular';
-  src: url('#{$cdn-url}/fonts/DIN-Regular.ttf');
-}
+@import url('//at.alicdn.com/t/font_64825_trbmdqjbkj.css');
 
 // 为我一挥手，如听万壑松
 @font-face {
@@ -22,14 +11,16 @@
   url('//at.alicdn.com/t/webfont_la9ko9ixhv8.svg#思源黑体-粗') format('svg'); /* iOS 4.1- */
 }
 
-// 欢喜勇猛向死而生明殿宁静寺琼宝阁无色庵乐斋狂浪生德道百鸣苑淘抢购弹性主机客户端
+// 欢喜勇猛向死而生明殿宁静寺琼宝阁无色庵乐斋狂浪生德道百鸣苑淘抢购弹性主机客户端來蘇之望念狂夢猖
 @font-face {
   font-family: 'webfont-normal';
-  src: url('//at.alicdn.com/t/webfont_9byal4xr1xb.eot'); /* IE9*/
-  src: url('//at.alicdn.com/t/webfont_9byal4xr1xb.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('//at.alicdn.com/t/webfont_9byal4xr1xb.woff') format('woff'), /* chrome、firefox */
-  url('//at.alicdn.com/t/webfont_9byal4xr1xb.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-  url('//at.alicdn.com/t/webfont_9byal4xr1xb.svg#NotoSansHans-DemiLight') format('svg'); /* iOS 4.1- */
+  font-display: swap;
+  src: url('//at.alicdn.com/t/webfont_ho87xf2su1j.eot'); /* IE9*/
+  src: url('//at.alicdn.com/t/webfont_ho87xf2su1j.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('//at.alicdn.com/t/webfont_ho87xf2su1j.woff2') format('woff2'),
+  url('//at.alicdn.com/t/webfont_ho87xf2su1j.woff') format('woff'), /* chrome、firefox */
+  url('//at.alicdn.com/t/webfont_ho87xf2su1j.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('//at.alicdn.com/t/webfont_ho87xf2su1j.svg#Alibaba-PuHuiTi-Regular') format('svg'); /* iOS 4.1- */
 }
 
 /* 为我一挥手，如听万壑松众里寻他我已不再酒醒只在花前坐酒醉还来花下眠人面桃花山河入梦春尽江南富强民主文明和谐自由平等公正法治爱国敬业诚信友善浪蝶游蜂迈步九云中酒池肉林日夜笙歌依翠偎红五音六律目营心匠桀骜不羁吾生有涯愿无尽，心期填海力移山 */
@@ -42,23 +33,34 @@
   url('//at.alicdn.com/t/webfont_mxaab9ec8dl.svg#NotoSansHans-Black') format('svg'); /* iOS 4.1- */
 }
 
+@font-face {
+  font-family: specialSymbol;
+  src: local('PingFang SC'), local('Microsoft Yahei');
+  unicode-range: U+02C2, U+02C3, U+003C, U+003E, U+3009;
+}
+
+@font-face {
+  font-family: 'DINRegular';
+  src: url('/fonts/DIN-Regular.ttf');
+}
+
 .iconfont {
   font-size: 1em;
 }
 
 ::selection {
   background: $primary; 
-  color: $white;
+  color: $reversal;
 }
 
 ::-moz-selection {
   background: $primary; 
-  color: $white;
+  color: $reversal;
 }
 
 ::-webkit-selection {
   background: $primary; 
-  color: $white;
+  color: $reversal;
 }
 
 ::-webkit-scrollbar {
@@ -79,13 +81,6 @@
   &:hover {
     background-color: rgba(95,95,95, .7);
   }
-}
-
-body {
-  cursor: url('#{$cdn-url}/images/cursor/black-simple.svg'),
-          url('#{$cdn-url}/images/cursor/black.svg'),
-          url('#{$cdn-url}/images/cursor/blue.svg') 5 5,
-          default;
 }
 
 [v-cloak] {
@@ -145,19 +140,19 @@ a {
 .filter {
 
   &.motion-blur-horizontal {
-    filter: url('#{$origin-url}/images/motion-blur-filter.svg#horizontal');
+    filter: url('/images/motion-blur-filter.svg#horizontal');
   }
 
   &.motion-blur-horizontal-small {
-    filter: url('#{$origin-url}/images/motion-blur-filter.svg#horizontal-small');
+    filter: url('/images/motion-blur-filter.svg#horizontal-small');
   }
 
   &.motion-blur-vertical {
-    filter: url('#{$origin-url}/images/motion-blur-filter.svg#vertical');
+    filter: url('/images/motion-blur-filter.svg#vertical');
   }
 
   &.motion-blur-vertical-small {
-    filter: url('#{$origin-url}/images/motion-blur-filter.svg#vertical-small');
+    filter: url('/images/motion-blur-filter.svg#vertical-small');
   }
 }
 
@@ -264,7 +259,7 @@ a {
 
   &.swiper-pagination-bullet-active {
     opacity: .8;
-    background: $white;
+    background: $reversal;
   }
 }
 

@@ -5,7 +5,7 @@
  */
 
 import Favico from '~/plugins/favico'
-import { isBrowser } from '~/environment/esm'
+import { isBrowser } from '~/environment'
 import { titles } from '~/config/egg.config'
 
 let favicon = null
@@ -19,8 +19,10 @@ const now = new Date()
 const today = now.getDate()
 const tomonth = now.getMonth() + 1
 const toyear = now.getFullYear()
-const defaultEgg = `你好啊，怪物史莱克，今天是 ${tomonth} 月 ${today} 日，又是有趣的一天~ `
-const defaultFaviconText = `请你快乐`
+const defaultEgg = `你好啊，陌生人，今天是 ${tomonth} 月 ${today} 日，又是有趣的一天`
+const defaultFaviconText = '来苏之望'
+const titleInterval = 366
+const favInterval = 466
 
 const matchedEgg = titles.find(egg => {
   const isToday = egg.day === today
@@ -44,7 +46,7 @@ const setTitle = title => {
   }
   const [first, ...content] = title.split('')
   const newTitle = [...content, first].join('')
-  rollTimer = setTimeout(() => setTitle(newTitle), 366)
+  rollTimer = setTimeout(() => setTitle(newTitle), titleInterval)
 }
 
 const setFavicon = () => {
@@ -57,7 +59,7 @@ const setFavicon = () => {
     const position = positions[index % positions.length]
     favicon.badge(text, { position })
     index++
-    faviconTimer = setTimeout(doSetFavicon, 366)
+    faviconTimer = setTimeout(doSetFavicon, favInterval)
   }
   doSetFavicon()
 }

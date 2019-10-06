@@ -172,7 +172,7 @@
           height: 3em;
           line-height: 3em;
           text-align: center;
-          background-color: $module-bg;
+          @include module-blur-bg();
 
           &:hover {
             background-color: $module-hover-bg;
@@ -216,12 +216,12 @@
 
         @keyframes webrtc {
           0%   {
-            color: $white;
+            color: $reversal;
             background: $primary;
           }
           100% {
             color: $primary;
-            background: $white;
+            background: $reversal;
           }
         }
 
@@ -238,7 +238,7 @@
         }
 
         > .barrage {
-          color: $white;
+          color: $reversal;
           animation: default-btn-bg 10s infinite;
 
           &.active {

@@ -12,6 +12,43 @@
 
 ------------------------------------------------------------- */
 
+@mixin visible() {
+  opacity: 1;
+  visibility: visible;
+}
+
+@mixin hidden() {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@mixin backdrop-blur($blur-radius: 5px) {
+  backdrop-filter: blur($blur-radius);
+}
+
+@mixin module-blur-bg() {
+  background-color: $module-bg;
+  // 全部打开影响性能
+  // @include backdrop-blur();
+}
+
+@mixin visibility-transition($time: .25s) {
+  transition: opacity $time, visibility $time;
+}
+
+@mixin box-shadow($alpha: 0.6, $blur-radius: 8px) {
+  box-shadow: rgba($black, $alpha) 0px 0px $blur-radius;
+}
+
+@mixin drop-shadow($alpha: 0.6, $blur-radius: 1px) {
+  filter: drop-shadow(0px 0px $blur-radius rgba($black, $alpha));
+}
+
+@mixin title-shadow() {
+  $text-color: $grey;
+  color: $text-color;
+  text-shadow: 0px 0px 0px $text-color, 0px 0px 2px rgba($black, 0.6), 0px 0px 4px rgba($black, 0.6);
+}
 
 ////
 /// @author Matthieu Aussaguel

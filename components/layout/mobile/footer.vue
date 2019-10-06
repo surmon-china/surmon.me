@@ -21,7 +21,7 @@
   footer {
     margin: 0;
     padding: 1rem 0;
-    background-color: $module-bg;
+    @include module-blur-bg();
 
     .container {
       width: 100%;

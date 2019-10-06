@@ -114,7 +114,7 @@
     overflow: hidden;
     position: relative;
     background-color: $module-bg;
-    color: $white;
+    color: $reversal;
 
     &.mobile {
       background-color: $module-hover-bg-darken-10;

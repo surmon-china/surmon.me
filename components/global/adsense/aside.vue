@@ -1,13 +1,13 @@
 <template>
   <div class="mammon mammon-aside">
-    <no-ssr>
+    <client-only>
       <Adsense
         root-class="mammon-wrapper"
         data-ad-client="ca-pub-4710915636313788"
         data-ad-slot="3013952710"
         data-full-width-responsive="true"
       />
-    </no-ssr>
+    </client-only>
   </div>
 </template>
 
