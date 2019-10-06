@@ -148,7 +148,7 @@
     margin-bottom: 1em;
     position: relative;
     overflow: hidden;
-    background-color: $module-bg;
+    @include module-blur-bg();
 
     > .swiper {
 
@@ -195,7 +195,7 @@
 
             -webkit-background-clip: text;
             // background-color: $module-hover-bg-opacity-9;
-            background: linear-gradient(90deg, transparent 0%, $module-bg 2em, $module-bg-opacity-9, $white);
+            background: linear-gradient(90deg, transparent 0%, $module-bg 2em, $module-bg-opacity-9, $reversal);
 
             &:hover {
               color: $text-darken;

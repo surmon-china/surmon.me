@@ -1,7 +1,7 @@
 <template>
   <div id="app-main">
     <header-view/>
-    <no-ssr>
+    <client-only>
       <background/>
       <wall-flower v-if="!onPowerSavingMode" />
       <language-psm v-if="isNotServicePage" />
@@ -9,7 +9,7 @@
       <theme-switch v-if="!onPowerSavingMode && isNotServicePage" />
       <share-box v-if="isNotServicePage" class="sidebar" />
       <tool-box v-if="isNotFullColPage" />
-    </no-ssr>
+    </client-only>
     <main id="main" :class="{ 'full-view': isFullViewWidth }">
       <transition name="module">
         <nav-view v-if="!isThreeColumns" />
@@ -25,7 +25,7 @@
         <aside-view key="aside" v-if="!isTwoColumns && !isThreeColumns" />
       </transition>
     </main>
-    <no-ssr>
+    <client-only>
       <barrage v-if="isMountedBarrage" v-cloak/>
       <transition name="fade">
         <webrtc key="webrtc" v-if="!onPowerSavingMode && onWebrtc" v-cloak/>
@@ -34,7 +34,7 @@
         <wallpaper-wall key="wallpaper-wall" v-if="onWallpaper" v-cloak/>
       </transition>
       <emoji-rain v-if="!onPowerSavingMode" />
-    </no-ssr>
+    </client-only>
     <footer-view/>
   </div>
 </template>

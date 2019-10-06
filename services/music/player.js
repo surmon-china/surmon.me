@@ -4,12 +4,12 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { proxyUrl } from '~/config/api.config.esm'
+import apiConfig from '~/config/api.config'
 import { Howler, Howl } from 'howler'
 
 export default music => {
 
-  const proxyPath = proxyUrl + 'music/'
+  const proxyPath = apiConfig.proxyUrl + 'music/'
   const playList = music.list.data.tracks
 
   if (music.player) {

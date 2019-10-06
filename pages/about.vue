@@ -96,6 +96,7 @@
                         target="_blank"
                         class="weibo"
                         rel="external nofollow noopenter"
+                        v-if="false"
                       >
                         <i class="iconfont icon-weibo"></i>
                       </a>
@@ -104,6 +105,7 @@
                         target="_blank"
                         class="youtube"
                         rel="external nofollow noopenter"
+                        v-if="false"
                       >
                         <i class="iconfont icon-youtube"></i>
                       </a>
@@ -191,10 +193,7 @@
                 <p class="item webfont">
                   <i class="iconfont icon-code"></i>
                   <span class="skills" v-if="isEnLang">Talk is cheap. Give me kiss.</span>
-                  <span v-else>
-                    <span v-if="getRandomSkill()">吾生有涯愿无尽，心期填海力移山</span>
-                    <span v-else>酒醒只在花前坐，酒醉还来花下眠</span>
-                  </span>
+                  <span v-else>吾生有涯愿无尽，心期填海力移山</span>
                 </p>
                 <p class="item" v-if="!isMobile">
                   <i class="iconfont icon-friend"></i>
@@ -287,9 +286,6 @@
     methods: {
       handleFollowMe() {
         this.$ga.event('加微信码', '点击', 'tool')
-      },
-      getRandomSkill() {
-        return !!Math.floor(Math.random() * 2)
       }
     },
     computed: {
@@ -360,7 +356,7 @@
                     margin-left: 5%;
                     text-align: left;
                     z-index: 1;
-                    color: $white;
+                    color: $reversal;
 
                     > .name,
                     > .skill {
@@ -554,7 +550,7 @@
                 line-height: 2.46rem;
 
                 &:hover {
-                  color: $white;
+                  color: $reversal;
                   background-color: $primary;
                 }
               }

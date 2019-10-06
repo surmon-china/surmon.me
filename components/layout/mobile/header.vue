@@ -14,11 +14,11 @@
       <span class="close" @click.stop.prevent="search = false">
         <i class="iconfont icon-cancel"></i>
       </span>
-      <no-ssr>
+      <client-only>
         <datalist class="search-keywords" id="keywords" v-if="tags.length">
           <option class="iiem" :value="tag.name" :label="tag.description" :key="tag.slug" v-for="tag in tags" />
         </datalist>
-      </no-ssr>
+      </client-only>
     </form>
     <transition name="module">
       <div v-if="search" class="search-mask"></div>
@@ -111,7 +111,7 @@
       top: 0;
       left: 0;
       opacity: 0;
-      background-color: $white;
+      background-color: $reversal;
       transform: translateY(-100%);
 
       > .input {

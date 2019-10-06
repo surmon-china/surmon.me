@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
 */
 
-const { isProdMode } = require('./environment')
+const { isProdMode } = require('esm')(module)('./environment')
 
 module.exports = {
   root: true,

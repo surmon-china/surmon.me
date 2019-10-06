@@ -5,9 +5,9 @@
  */
 
 import io from 'socket.io-client'
-import { socketHost } from '~/config/api.config.esm'
+import apiConfig from '~/config/api.config'
 
-const socket = io(socketHost, {
+const socket = io(apiConfig.socketHost, {
   transports: ['websocket']
 })
 

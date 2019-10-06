@@ -185,14 +185,14 @@
             background: $module-bg;
 
             &:hover {
-              color: $white;
+              color: $reversal;
               border-color: $primary-opacity-5;
               background: linear-gradient(
                 to bottom right,
                 rgba($red, .7),
-                $white,
+                $reversal,
                 $primary-opacity-9,
-                $white,
+                $reversal,
                 rgba($accent, .7)
               );
             }

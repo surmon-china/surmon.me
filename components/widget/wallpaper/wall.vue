@@ -20,21 +20,16 @@
           <p class="desc">{{ currentWallpaper.desc }}</p>
           <div class="tools">
             <transition name="module">
-              <span class="location" key="location">
-                <i class="iconfont icon-location"></i>
-                <span>{{ currentWallpaper.bsTitle }}</span>
-              </span>
-            </transition>
-            <transition name="module">
               <a
-                class="link"
-                key="link"
+                class="location"
+                key="location"
                 target="_blank"
                 rel="external nofollow noopenter"
                 :href="currentWallpaper.searchUrl"
+                :title="currentWallpaper.bsTitle"
               >
-                <i class="iconfont icon-link"></i>
-                <span>相关链接</span>
+                <i class="iconfont icon-location"></i>
+                <span>{{ currentWallpaper.bsTitle }}</span>
               </a>
             </transition>
             <button class="btn" title="上一幅" :disabled="!canNext" @click="index++">
@@ -98,6 +93,7 @@
     left: 0;
     z-index: 1000;
     background-color: $module-hover-bg-darken-20;
+    @include backdrop-blur();
 
     > .wall-box {
       position: relative;
@@ -108,8 +104,9 @@
       align-items: center;
       width: calc(100vw * 0.88);
       height: calc(100vh * 0.88);
-      background-color: $module-bg;
       border: solid .5rem $module-hover-bg;
+      background-color: $module-bg;
+      @include backdrop-blur();
 
       > .picture-box {
         width: 100%;
@@ -128,7 +125,13 @@
         height: auto;
 
         > .content {
-          color: $white;
+          color: $text;
+
+          > .title,
+          > .sub-title,
+          > .desc {
+            @include title-shadow();
+          }
 
           > .title {
             margin-top: 0;
@@ -141,26 +144,13 @@
           > .tools {
             color: $text;
 
-            > .link {
-              text-decoration: none;
-
-              > span {
-                position: relative;
-
-                &:after {
-                  content: '';
-                  position: absolute;
-                  bottom: -2px;
-                  left: 0;
-                  width: 100%;
-                  height: 0.5px;
-                  background-color: $text;
-                }
+            > .location {
+              span {
+                text-decoration: underline;
               }
             }
 
             > .location,
-            > .link,
             > .btn {
               display: block;
               float: left;
@@ -171,7 +161,6 @@
               padding: 0 1rem;
             }
 
-            > .link,
             > .btn {
               &:hover {
                 background-color: $module-hover-bg-opacity-9;

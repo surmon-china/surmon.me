@@ -1,6 +1,16 @@
 
 ## CHANGELOG
 
+### v2.4.0
+- Upgrade dependencies
+- Update js file modules
+- Update package scripts
+- Update logo effect
+- Update style variables
+- Update modules background
+- Update console text and styles
+- Add GitHub actions CI
+
 ### v2.3.0
 - 更新 Nuxt 至 2.8
 - 更新 依赖项

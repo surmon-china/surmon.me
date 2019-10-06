@@ -7,8 +7,9 @@
 const http = require('http')
 const express = require('express')
 const socketio = require('socket.io')
+const requireESM = require('esm')(module)
 const { Nuxt, Builder } = require('nuxt')
-const { isDevMode, environment } = require('../environment')
+const { isDevMode, environment } = requireESM('../environment')
 
 process.noDeprecation = true
 
@@ -22,7 +23,8 @@ global.console = Object.assign(console, {
   error: (...args) => info(color('\x1b[31m%s\x1b[0m'), '[error]', ...args),
 })
 
-const config = require('../nuxt.config')
+// Nuxt: https://github.com/nuxt/nuxt.js/blob/dev/packages/cli/src/utils/config.js#L27
+const config = requireESM('../nuxt.config').default
 const port = environment.PORT || 3000
 const host = environment.HOST || '127.0.0.1'
 

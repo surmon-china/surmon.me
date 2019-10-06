@@ -73,7 +73,7 @@
 
       .follower1 {
         animation: pulse 2s infinite;;
-        background: $white;
+        background: $reversal;
       }
 
       .follower2 {

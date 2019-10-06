@@ -235,7 +235,7 @@
           text-align: center;
 
           > .title {
-            color: $white;
+            color: $reversal;
             margin-top: 8rem;
             font-size: $font-size-h1 * 2;
             font-family: webfont-bold, DINRegular;
@@ -244,9 +244,9 @@
           > .submit {
 
             > .submit-btn {
-              color: $white;
+              color: $reversal;
               border: 1px solid;
-              border-color: $white;
+              border-color: $reversal;
               width: 10rem;
               height: 3em;
               line-height: 3rem;
@@ -354,7 +354,7 @@
         background-color: $primary;
 
         > .rule-content {
-          color: $white;
+          color: $reversal;
           margin: 0 auto;
           margin-bottom: -1em;
           text-align: center;

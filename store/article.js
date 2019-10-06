@@ -5,7 +5,7 @@
  */
 
 import Vue from 'vue'
-import { isBrowser } from '~/environment/esm'
+import { isBrowser } from '~/environment'
 import { fetchDelay } from '~/services/fetch-delay'
 import { isArticleDetailRoute } from '~/services/route-validator'
 import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
