@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { isBrowser, isProdMode } from '~/environment/esm'
+import { isBrowser, isProdMode } from '~/environment'
 
 if (isProdMode && isBrowser) {
   /*

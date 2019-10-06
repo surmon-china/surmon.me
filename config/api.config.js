@@ -1,10 +1,24 @@
 /**
- * @file Api config / Commonjs module
+ * @file Api config / ES module
  * @module api.config
  * @author Surmon <https://github.com/surmon-china>
  */
 
-const apiJson = require('./api.json')
-const { NODE_ENV } = require('../environment')
+import { NODE_ENV } from '../environment'
 
-module.exports = apiJson[NODE_ENV]
+const apiMap = {
+  development: {
+    cdnUrl: '',
+    proxyUrl: '/proxy/',
+    baseUrl: 'http://localhost:8000',
+    socketHost: 'http://localhost:3000'
+  },
+  production: {
+    cdnUrl: 'https://cdn.surmon.me',
+    proxyUrl: 'https://surmon.me/proxy/',
+    baseUrl: 'https://api.surmon.me',
+    socketHost: 'https://surmon.me'
+  }
+}
+
+export default apiMap[NODE_ENV]

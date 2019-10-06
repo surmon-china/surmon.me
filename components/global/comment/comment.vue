@@ -22,7 +22,7 @@
             <span v-text="(isMobile && !isEnLang) ? '人喜欢' : $i18n.text.comment.like"></span>
           </a>
           <a href class="shang" @click.stop.prevent="shang">
-            <i class="iconfont icon-shang"></i>
+            <i class="iconfont icon-hao"></i>
           </a>
         </div>
         <div class="sort">
@@ -317,7 +317,7 @@
 
 <script>
   import { mapState } from 'vuex'
-  import { isBrowser } from '~/environment/esm'
+  import { isBrowser } from '~/environment'
   import marked from '~/plugins/marked'
   import gravatar from '~/plugins/gravatar'
   import { scrollTo } from '~/utils/scroll-to-anywhere'
@@ -1259,7 +1259,7 @@
               padding-top: .5rem;
               list-style-type: square;
               z-index: 99;
-              color: $white;
+              color: $reversal;
 
               > li {
                 padding: 0 1rem;

@@ -48,7 +48,7 @@
 <style lang="scss" scoped>
   footer {
     margin-top: 1em;
-    background-color: $module-bg;
+    @include module-blur-bg();
 
     .container {
       position: relative;

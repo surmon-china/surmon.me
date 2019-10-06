@@ -93,7 +93,7 @@
         cursor: pointer;
         text-transform: uppercase;
         font-weight: bold;
-        color: $white;
+        color: $reversal;
         font-size: $font-size-small;
         position: relative;
         animation: tool-left-item 1s infinite;

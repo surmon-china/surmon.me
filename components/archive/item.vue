@@ -116,7 +116,7 @@
 <style lang="scss" scoped>
   .article-list-item {
     margin-bottom: 1em;
-    background-color: $module-bg;
+    @include module-blur-bg();
 
     &:last-child {
       margin: 0;
@@ -163,7 +163,7 @@
           z-index: 9;
           font-size: $font-size-small;
           text-align: center;
-          color: $white;
+          color: $reversal;
           border-bottom-right-radius: 1px;
           opacity: .4;
           padding: 0 .8rem;

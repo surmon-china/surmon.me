@@ -11,9 +11,9 @@ const fs = require('fs-extra')
 const underscore = require('../utils/underscore-simple')
 
 // file
-const dataPath = path.resolve(__dirname, '..', 'data') + '/'
-const dataFile = dataPath + 'barrages.json'
-const defaultFile = dataPath + 'barrages.default.json'
+const dataPath = path.join(__dirname, '..', 'data')
+const dataFile = path.resolve(dataPath, 'barrages.json')
+const defaultFile = path.resolve(dataPath, 'barrages.default.json')
 
 // init
 fs.ensureFileSync(dataFile)

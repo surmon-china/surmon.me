@@ -1,19 +1,19 @@
 /**
- * @file Nuxt config / Commonjs module
+ * @file Nuxt config / Hybrid module
  * @module nuxt.config
  * @author Surmon <https://github.com/surmon-china>
  */
 
-const appConfig = require('./config/app.config')
-const apiConfig = require('./config/api.config')
-const i18nConfig = require('./config/i18n.config')
-const systemConstants = require('./constants/system')
-const { isProdMode, isDevMode } = require('./environment')
+import appConfig from './config/app.config'
+import apiConfig from './config/api.config'
+import i18nConfig from './config/i18n.config'
+import systemConstants from './constants/system'
+import { isProdMode, isDevMode } from './environment'
 
 const htmlLang = i18nConfig.default || systemConstants.Language.Zh
 const htmlSlogan = i18nConfig.data.text.slogan[htmlLang]
 
-module.exports = {
+export default {
   mode: 'universal',
   modern: true,
   dev: isDevMode,
@@ -29,9 +29,9 @@ module.exports = {
     maxAge: 1000 * 60 * 15
   },
   build: {
-    analyze: process.argv.join('').includes('analyze'), // 分析
-    maxChunkSize: 360000, // 单个包最大尺寸
-    extractCSS: true, // 单独提取 css
+    analyze: process.argv.join('').includes('analyze'),
+    maxChunkSize: 360000,
+    extractCSS: true,
     publicPath: apiConfig.cdnUrl + '/_nuxt/',
     postcss: {
       plugins: { 'postcss-custom-properties': { warnings: false }}
@@ -69,23 +69,21 @@ module.exports = {
         }
       }
     },
-    // 对 webpack 的扩展
+    // Extends for webpack
     extend(webpackConfig, { isDev, isClient }) {
       // 处理 Swiper4 下的 dom7 模块的语法问题
       webpackConfig.resolve.alias.dom7$ = 'dom7/dist/dom7.js'
       webpackConfig.resolve.alias.swiper$ = 'swiper/dist/js/swiper.js'
-      /*
-      if (isDev && isClient) {
-        webpackConfig.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: [/(node_modules)/, /underscore-simple/, /webrtc/]
-        })
-      }
-      */
+      // if (isDev && isClient) {
+      //   webpackConfig.module.rules.push({
+      //     enforce: 'pre',
+      //     test: /\.(js|vue)$/,
+      //     loader: 'eslint-loader',
+      //     exclude: [/(node_modules)/, /underscore-simple/, /webrtc/]
+      //   })
+      // }
       if (isProdMode) {
-        // 处理 Template 和 CSS 中的 cdn 地址
+        // 处理 Template 和 CSS 中的 CDN 地址
         const vueLoader = webpackConfig.module.rules.find(loader => loader.loader === 'vue-loader')
         if (vueLoader) {
           const vueLoaders = vueLoader.options.loaders
@@ -97,14 +95,6 @@ module.exports = {
           }
         }
       }
-    },
-    // 为 JS 和 Vue 文件定制 babel 配置 -> https://nuxtjs.org/api/configuration-build/#analyze
-    babel: {
-      comments: true,
-      plugins: [
-        '@babel/plugin-transform-runtime',
-        '@babel/plugin-transform-async-to-generator'
-      ]
     }
   },
   plugins: [
@@ -202,17 +192,13 @@ module.exports = {
   router: {
     middleware: ['change-page-col'],
     linkActiveClass: 'link-active',
-    extendRoutes(routes) {},
-    scrollBehavior(to, from, savedPosition) {
-      return { x: 0, y: 0 }
-    },
   },
   css: [
     'swiper/dist/css/swiper.css',
     'highlight.js/styles/ocean.css',
-    { src: '~assets/sass/app.scss', lang: 'sass' }
+    '~assets/sass/app.scss',
   ],
   styleResources: {
-    scss: './assets/sass/init.scss',
+    scss: '~/assets/sass/init.scss',
   }
 }

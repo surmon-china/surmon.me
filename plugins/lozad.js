@@ -5,7 +5,7 @@
  */
 
 import lozad from 'lozad'
-import { isBrowser } from '~/environment/esm'
+import { isBrowser } from '~/environment'
 
 if (isBrowser) {
   window.lozad = lozad

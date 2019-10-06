@@ -93,7 +93,7 @@
 
 <script>
   import music from '~/services/music'
-  import { isBrowser } from '~/environment/esm'
+  import { isBrowser } from '~/environment'
   export default {
     name: 'music',
     head() {

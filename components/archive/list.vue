@@ -108,7 +108,7 @@
       margin-bottom: 1em;
       position: relative;
       overflow: hidden;
-      background-color: $module-bg-opacity-5;
+      @include module-blur-bg();
     }
 
     > .article-list {
@@ -117,21 +117,21 @@
       overflow: hidden;
 
       > .article-empty-box {
-        background-color: $module-bg;
+        @include module-blur-bg();
       }
 
       > .article-loading {
         display: flex;
         height: 10em;
-        background-color: $module-bg;
+        @include module-blur-bg();
       }
 
       > .article-errmsg {
         height: 10em;
         line-height: 10em;
         text-align: center;
-        background-color: $module-bg;
         color: rgba(0, 0, 0, 0.38);
+        @include module-blur-bg();
       }
     }
 
@@ -145,7 +145,7 @@
         height: 3em;
         padding: 0 2rem;
         line-height: 3em;
-        color: $white;
+        color: $reversal;
         background-color: $module-bg;
         display: flex;
         justify-content: space-between;
