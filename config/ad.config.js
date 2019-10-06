@@ -8,23 +8,23 @@ const imagePath = '/images/mammon/'
 const links = {
   common: {
     // ECS 服务器（N）
-    aliyunECS: 'https://s.click.taobao.com/L0VDd9w',
+    aliyunECS: 'https://s.click.taobao.com/vyZYGzv',
     // 虚拟主机，轻服务（N）
-    aliyunSWAS: 'https://s.click.taobao.com/MkVDd9w',
+    aliyunSWAS: 'https://s.click.taobao.com/BeUYGzv',
   },
   pc: {
     // 淘宝（N）
-    taobao: 'https://s.click.taobao.com/GsADd9w',
+    taobao: 'https://s.click.taobao.com/Y4HYGzv',
     // 天猫超市（N）
-    tmailMarket: 'https://s.click.taobao.com/sIVq95w',
+    tmailMarket: 'https://s.click.taobao.com/yHMYGzv',
     // 飞猪（N）
-    alitrip: 'https://s.click.taobao.com/VbDDd9w'
+    alitrip: 'https://s.click.taobao.com/NVTYGzv'
   },
   mobile: {
     // 淘宝（N）
     taobao: 'https://s.click.taobao.com/qiGDd9w',
     // 飞猪（N）
-    alitrip: 'https://s.click.taobao.com/KKDDd9w'
+    alitrip: 'https://s.click.taobao.com/rHTYGzv'
   }
 }
 
