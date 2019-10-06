@@ -44,7 +44,7 @@
 $ npm i nodemon -g
 
 # install dependencies 依赖 python2.7
-$ npm install [--python=python2.7] # or npm run install
+$ npm install [--python=python2.7] # or yarn
 
 # serve with hot reload at localhost:3000
 $ npm run dev
