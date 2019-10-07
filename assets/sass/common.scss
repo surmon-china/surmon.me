@@ -87,6 +87,18 @@
   display: none!important;
 }
 
+body {
+  // workaround for svg file
+  &::before {
+    content: '';
+    position: fixed;
+    z-index: -9;
+    height: 0px;
+    opacity: 0;
+    background-image: url('/images/motion-blur-filter.svg');
+  }
+}
+
 * {
   outline: none;
   box-shadow: none;
