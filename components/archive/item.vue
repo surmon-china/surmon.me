@@ -160,7 +160,7 @@
           left: 0;
           top: 0;
           position: absolute;
-          z-index: 9;
+          z-index: 1;
           font-size: $font-size-small;
           text-align: center;
           color: $reversal;
