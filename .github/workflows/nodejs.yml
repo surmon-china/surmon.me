@@ -1,9 +1,9 @@
-name: Build and Deploy
-
+name: Build test and deploy
 on: [push]
 
 jobs:
   build:
+    name: Build test
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -18,8 +18,21 @@ jobs:
       run: npm install yarn -g
     - name: Install Dependencies
       run: yarn
-    - name: Build
+    - name: Build test
       run: yarn build
       env:
         CI: true
         NODE_ENV: production
+  deploy:
+    name: Deploy to server
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH
+        uses: maddox/actions/ssh@master
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          HOST: ${{ secrets.HOST }}
+          USER: ${{ secrets.USER }}
+        with:
+          args: sh /usr/local/wwwroot/surmon.me/.deploy/main.sh
