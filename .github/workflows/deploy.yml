@@ -1,7 +1,6 @@
 name: Deploy to server
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
       - master
 
@@ -10,7 +9,9 @@ jobs:
     name: Build test
     runs-on: ubuntu-latest
     steps:
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Checkout branch to master
+      uses: actions/checkout@master
+    - name: Test
       uses: ./.github/workflows/build-test
   deploy:
     name: Deploy to server
@@ -18,7 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Exec deploy script with SSH
-        if: github.event.pull_request.merged == true
         uses: maddox/actions/ssh@master
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
