@@ -13,6 +13,7 @@ jobs:
       - name: Exec deploy script with SSH
         uses: appleboy/ssh-action@master
         with:
+          command_timeout: 10m
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
