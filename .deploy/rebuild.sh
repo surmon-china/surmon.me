@@ -16,5 +16,6 @@ git checkout master
 # chmod -R 777 $WEB_PATH
 # sync && echo 3 | sudo tee /proc/sys/vm/drop_caches
 echo "[deploy] building..."
-npm run build
+yarn
+yarn build
 echo "[deploy] Rebuild done."
