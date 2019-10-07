@@ -1,7 +1,7 @@
 name: Build test and deploy
 on:
   pull_request:
-    types: [assigned]
+    types: [assigned, opened, synchronize, reopened, closed]
     branches:
       - master
 
@@ -33,6 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: SSH
+        if: github.event.pull_request.merged == true
         uses: maddox/actions/ssh@master
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
