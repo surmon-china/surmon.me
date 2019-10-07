@@ -6,6 +6,8 @@ config/*.js
 static/*
 static/*.js
 
+.deploy/*
+
 .nuxt/*
 .nuxt/*.js
 .nuxt/*.vue
