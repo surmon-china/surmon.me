@@ -6,37 +6,11 @@ on:
       - master
 
 jobs:
-  build:
-    name: Build test
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [10.x]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@master
-        with:
-          ref: master
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install yarn
-        run: npm install yarn -g
-      - name: Install Dependencies
-        run: yarn
-      - name: Build
-        run: yarn build
-        env:
-          CI: true
-          NODE_ENV: production
   deploy:
     name: Deploy to server
-    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: Exec deploy script with SSH
-        if: github.event.pull_request.merged == true
         uses: maddox/actions/ssh@master
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
