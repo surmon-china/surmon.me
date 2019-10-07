@@ -10,8 +10,6 @@ jobs:
     name: Build test
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout to master branch
-      uses: actions/checkout@master
     - name: Use Node.js ${{ matrix.node-version }}
       uses: ./.github/workflows/build-test
   deploy:
