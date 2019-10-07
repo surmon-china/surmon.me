@@ -1,7 +1,7 @@
 name: Build test and deploy
 on:
   pull_request:
-    types: [closed]
+    types: [assigned]
     branches:
       - master
 
