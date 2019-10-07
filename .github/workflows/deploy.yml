@@ -7,6 +7,7 @@ on:
 
 jobs:
   deploy:
+    if: github.event.pull_request.merged == true
     name: Deploy to server
     runs-on: ubuntu-latest
     steps:
