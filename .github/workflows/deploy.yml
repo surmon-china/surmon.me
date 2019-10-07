@@ -11,10 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Exec deploy script with SSH
-        uses: maddox/actions/ssh@master
-        env:
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          HOST: ${{ secrets.HOST }}
-          USER: ${{ secrets.USER }}
+        uses: appleboy/ssh-action@master
         with:
-          args: sh /usr/local/wwwroot/surmon.me/.deploy/main.sh
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          script: sh /usr/local/wwwroot/surmon.me/.deploy/main.sh
+          
+          
