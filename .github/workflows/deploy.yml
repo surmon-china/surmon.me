@@ -1,6 +1,7 @@
 name: Deploy to server
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - master
 
@@ -11,14 +12,17 @@ jobs:
     steps:
     - name: Checkout branch to master
       uses: actions/checkout@master
-    - name: Test
-      uses: ./.github/workflows/build-test
+      with:
+        ref: master
+    - name: Run test
+      uses: ./.github/workflows/build-test.yml
   deploy:
     name: Deploy to server
     needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: Exec deploy script with SSH
+        if: github.event.pull_request.merged == true
         uses: maddox/actions/ssh@master
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
