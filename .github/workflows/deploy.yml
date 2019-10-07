@@ -15,7 +15,7 @@ jobs:
       with:
         ref: master
     - name: Run test
-      uses: ./.github/workflows/build-test.yml
+      uses: ./.github/actions/build-test
   deploy:
     name: Deploy to server
     needs: [build]
