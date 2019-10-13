@@ -1,6 +1,10 @@
 
 ## CHANGELOG
 
+### v2.4.1
+- Update UA transformer
+- Update article GA styles
+
 ### v2.4.0
 - Upgrade dependencies
 - Update js file modules
