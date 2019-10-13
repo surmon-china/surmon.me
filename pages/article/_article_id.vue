@@ -609,6 +609,10 @@
 
         > .content {
 
+          > .google-auto-placed {
+            margin-bottom: 0.618rem;
+          }
+
           iframe {
             width: 100%;
             margin-bottom: 1em;
