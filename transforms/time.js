@@ -6,9 +6,31 @@
 
 import systemConstants from '~/constants/system'
 
-// 取剩余秒
-const pluralize = (time, label, isEnLang) => {
-  return time + label + (isEnLang ? ' ago' : '前')
+const timeTextMap = {
+  [systemConstants.Language.En]: {
+    am: 'am',
+    pm: 'pm',
+    ago: ' ago',
+    just_now: 'Just now',
+    minutes: 'minutes',
+    hours: 'hours',
+    weeks: 'weeks',
+    days: 'days',
+    months: 'months',
+    years: 'years'
+  },
+  [systemConstants.Language.Zh]: {
+    am: '上午',
+    pm: '下午',
+    ago: '前',
+    just_now: '刚刚',
+    minutes: '分钟',
+    hours: '小时',
+    weeks: '周',
+    days: '天',
+    months: '个月',
+    years: '年'
+  }
 }
 
 // 转换为本地时间格式
@@ -18,29 +40,50 @@ export const toLocalString = date => {
 
 // 相对时间过滤器，传入时间，返回距离今天有多久
 export const timeAgo = (time, language) => {
-  const isEnLang = language && language === systemConstants.Language.En
   time = time instanceof Date ? time : new Date(time)
+
   const between = Date.now() / 1000 - (Number(time) / 1000)
-  if (between < 3600) {
-    return Object.is(~~(between / 60), 0)
-      ? isEnLang ? 'just now' : '刚刚'
-      : pluralize(~~(between / 60), (isEnLang ? ' minutes' : ' 分钟'), isEnLang)
-  } else if (between < 86400) {
-    return pluralize(~~(between / 3600), (isEnLang ? ' hours' : ' 小时'), isEnLang)
-  } else {
-    return pluralize(~~(between / 86400), (isEnLang ? ' days' : ' 天'), isEnLang)
+  const textMap = timeTextMap[language || systemConstants.Language.Zh]
+  const hourS = 3600
+  const dayS = hourS * 24
+  const weekS = dayS * 7
+  const monthS = dayS * 30
+  const yearS = monthS * 12
+
+  const pluralize = (time, label) => {
+    return `${time} ${label}${textMap.ago}`
   }
+
+  if (between < hourS) {
+    return Object.is(~~(between / 60), 0)
+      ? textMap.just_now
+      : pluralize(~~(between / 60), textMap.minutes)
+  }
+  if (between < dayS) {
+    return pluralize(~~(between / hourS), textMap.hours)
+  }
+  if (between < weekS) {
+    return pluralize(~~(between / dayS), textMap.days)
+  }
+  if (between < monthS) {
+    return pluralize(~~(between / weekS), textMap.weeks)
+  }
+  if (between < yearS) {
+    return pluralize(~~(between / monthS), textMap.months)
+  }
+  return pluralize(~~(between / yearS), textMap.years)
 }
 
 // YMDHMS 时间转换过滤器
 export const toYMD = (date, language) => {
-  if (!date) return date
+  if (!date) {
+    return date
+  }
   date = new Date(date)
-  const am = (language && language === systemConstants.Language.En) ? 'am' : '上午'
-  const pm = (language && language === systemConstants.Language.En) ? 'pm' : '下午'
+  const textMap = timeTextMap[language || systemConstants.Language.Zh]
   const year = date.getFullYear()
   const month = date.getMonth() + 1
   const day = date.getDate()
-  const hour = date.getHours() > 11 ? pm : am
+  const hour = date.getHours() > 11 ? textMap.pm : textMap.am
   return `${year}/${month}/${day} ${hour}`
 }
