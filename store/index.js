@@ -5,7 +5,7 @@
  */
 
 import { isServer } from '~/environment'
-import uaDevice from '~/transforms/ua-device'
+import { uaParser } from '~/transforms/ua'
 import systemConstants from '~/constants/system'
 
 export const actions = {
@@ -14,9 +14,11 @@ export const actions = {
   nuxtServerInit(store, { req }) {
 
     // 检查设备类型
-    const userAgent = isServer ? req.headers['user-agent'] : navigator.userAgent
-    const { isMobile, isIE, isSafari, isEdge, isFF, isBB, isMaxthon, isIos } = uaDevice(userAgent || '')
-    const mustJpg = isIos || isFF || isMaxthon || isSafari || isBB || isIE || isEdge
+    const userAgent = isServer
+      ? req.headers['user-agent']
+      : navigator.userAgent
+    const { isMobile, isChrome } = uaParser(userAgent)
+    const mustJpg = isMobile || !isChrome
 
     store.commit('global/updateUserAgent', userAgent)
     store.commit('global/updateMobileLayoutState', isMobile)

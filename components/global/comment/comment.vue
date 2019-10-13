@@ -91,9 +91,10 @@
                   rel="external nofollow noopener"
                   :href="comment.author.site"
                   @click.stop="clickUser($event, comment.author)"
-                >{{ comment.author.name | firstUpperCase }}</a>
-                <span class="os" v-html="osParser(comment.agent)" v-if="comment.agent"></span>
-                <span class="ua" v-html="browserParser(comment.agent)" v-if="comment.agent"></span>
+                >
+                  {{ comment.author.name | firstUpperCase }}
+                </a>
+                <comment-ua :ua="comment.agent" v-if="comment.agent"/>
                 <span class="location" v-if="comment.ip_location && !isMobile">
                   <span>{{ comment.ip_location.country }}</span>
                   <span v-if="comment.ip_location.country && comment.ip_location.city">&nbsp;-&nbsp;</span>
@@ -321,11 +322,15 @@
   import marked from '~/plugins/marked'
   import gravatar from '~/plugins/gravatar'
   import { scrollTo } from '~/utils/scroll-to-anywhere'
-  import { browserParser, osParser } from '~/transforms/ua-parser'
   import { isArticleDetailRoute, isGuestbookRoute } from '~/services/route-validator'
   import { localUser, localHistoryLikes } from '~/services/local-storage'
+  import CommentUa from './ua'
+
   export default {
     name: 'vue-comment',
+    components: {
+      CommentUa
+    },
     props: {
       fetching: {
         type: Boolean,
@@ -425,8 +430,6 @@
       this.$store.commit('comment/clearListData')
     },
     methods: {
-      browserParser,
-      osParser,
       // 初始化本地用户即本地用户的点赞历史
       initUser() {
         const user = localUser.get()
@@ -1071,8 +1074,8 @@
                 } 
               }
 
-              > .os,
-              > .ua,
+              .os,
+              .browser,
               > .location {
                 color: $disabled;
                 font-size: .8em;
