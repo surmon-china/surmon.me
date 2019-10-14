@@ -203,13 +203,13 @@ a {
     margin-bottom: 1em;
 
     > .mammon-wrapper {
-      padding: .5em;
-      min-height: 6rem;
+      min-height: 10rem;
+      padding: 1.5rem .5em;
       background-color: $module-bg;
 
       > .adsbygoogle {
-        height: 7.5rem;
-        overflow: hidden;
+        // height: 7.5rem;
+        // overflow: hidden;
       }
     }
 
