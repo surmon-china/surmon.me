@@ -204,10 +204,11 @@ a {
 
     > .mammon-wrapper {
       min-height: 8rem;
-      padding: 1.5rem .5em;
+      padding: .5em;
       background-color: $module-bg;
 
       > .adsbygoogle {
+        margin: 1rem 0;
         // height: 7.5rem;
         // overflow: hidden;
       }
