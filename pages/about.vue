@@ -15,6 +15,14 @@
                     <span class="first-letter">浪</span>
                     <span>蝶游蜂，迈步九云中</span>
                   </span>
+                    <a
+                      class="sponsor"
+                      target="_blank"
+                      href="/sponsor"
+                      rel="external nofollow noopenter"
+                    >
+                      <small>💰{{ isEnLang ? 'Sponsor me' : '赞助吾身' }}</small>
+                    </a>
                 </p>
                 <p class="item">
                   <i class="iconfont icon-comment-discussion"></i>
@@ -578,6 +586,24 @@
               .item {
                 line-height: 2.5em;
                 min-height: 2.5em;
+
+                .sponsor {
+                  font-family: DINRegular;
+                  background-color: $primary;
+                  border-radius: $radius * 2;
+                  margin-left: 0.5rem;
+                  padding: 2px 0.5rem;
+                  opacity: .8;
+                  user-select: none;
+
+                  &:hover {
+                    opacity: 1;
+                  }
+
+                  > small {
+                    color: $text-reversal;
+                  }
+                }
 
                 &.webfont {
                   font-family: webfont-bolder, DINRegular;
