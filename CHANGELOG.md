@@ -5,6 +5,9 @@
 - Update UA transformer
 - Update article GA styles
 
+### v2.4.2
+- Add sponsor page
+
 ### v2.4.0
 - Upgrade dependencies
 - Update js file modules
