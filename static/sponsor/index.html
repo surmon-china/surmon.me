@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="/favicon.ico">
+    <title>Sponsor me.</title>
+  </head>
+  <script>
+    // from: https://matthewrayfield.com/articles/animating-urls-with-javascript-and-emojis/
+    function startAnimation() {
+      var locationEmojis = ['🏻', '🏼', '🏽', '🏾', '🏿'];
+      var titleEmojis = ['🌑', '🌒', '🌓', '🌔', '🌝', '🌖', '🌗', '🌘'];
+      var s = '', i, m;
+      for (let i = 0; i < 10; i ++) {
+        m = Math.floor(locationEmojis.length * ((Math.sin((Date.now()/100) + i)+1)/2));
+        s += '👶' + locationEmojis[m];
+      }
+      location.hash = s;
+      document.title = titleEmojis[Math.floor((Date.now()/100)%titleEmojis.length)] + 'Sponsor me ~ ☕';
+      setTimeout(startAnimation, 50);
+    }
+
+    if (window.frames.length != parent.frames.length) {
+      // console.log('iframe!')
+    } else {
+      startAnimation()
+    }
+  </script>
+  <style>
+    @font-face {
+      font-family: 'DINRegular';
+      src: url('/fonts/DIN-Regular.ttf');
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #efefef;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'DINRegular';
+    }
+    .logo {
+      margin-bottom: 10px;
+    }
+    .url {
+      color: #0088f5;
+      margin-top: 20px;
+      margin-bottom: 100px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .url:hover {
+      text-decoration: underline;
+    }
+    .logo-img {
+      width: 70px;
+      border-radius: 10px;
+    }
+    .main {
+      width: 600px;
+      height: 200px;
+      overflow: hidden;
+      background-color: #fff;
+      background-image: url(/images/sponsor.jpg);
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      display: flex;
+    }
+    .item {
+      width: 25%;
+      position: relative;
+    }
+    .item .link {
+      position: absolute;
+      display: block;
+      width: 30px;
+      height: 23px;
+      height: 16px;
+      overflow: hidden;
+      text-align: center;
+      color: #ffffff;
+      bottom: 0;
+      transition: transform .25s;
+      transform: translateY(90%);
+      opacity: .8;
+    }
+    .item.github .link {
+      background-color: #191819;
+      left: 80px;
+    }
+    .item.paypal .link {
+      background-color: #082165;
+      left: 66px;
+    }
+    .item:hover .link {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .thanks {
+      color: #d2d2d2;
+      margin-top: 4rem;
+    }
+    @media screen and (max-width: 800px), screen and (max-height: 600px) {
+      .foldable {
+        display: none;
+      }
+      .main {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  </style>
+  <body>
+    <a class="logo foldable" href="https://surmon.me" target="_blank">
+      <img src="/images/app-logo.png" alt="logo" class="logo-img">
+    </a>
+    <a class="url foldable" href="https://surmon.me" target="_blank">
+      <span>SURMON.ME</span>
+    </a>
+    <div class="main">
+      <div class="item github">
+        <a
+          target="_blank"
+          title="Open link"
+          href="https://github.com/users/surmon-china/sponsors"
+          ref="external nofollow noopener"
+          class="link"
+        >↑</a>
+      </div>
+      <div class="item paypal">
+        <a
+          target="_blank"
+          title="Open link"
+          href="https://www.paypal.me/surmon"
+          ref="external nofollow noopener"
+          class="link"
+        >↑</a>
+      </div>
+      <div class="item alipay"></div>
+      <div class="item wechat"></div>
+    </div>
+    <h3 class="thanks foldable">Thank You for the Coffee!</h3>
+  </body>
+</html>
