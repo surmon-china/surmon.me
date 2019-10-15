@@ -21,7 +21,7 @@
             <strong>{{ likes || 0 }}</strong>
             <span v-text="(isMobile && !isEnLang) ? '人喜欢' : $i18n.text.comment.like"></span>
           </a>
-          <a href class="shang" @click.stop.prevent="shang">
+          <a href class="sponsor" @click.stop.prevent="sponsor">
             <i class="iconfont icon-hao"></i>
           </a>
         </div>
@@ -462,9 +462,9 @@
       initAppOptionBlackList() {
         this.$store.dispatch('global/fetchAppOption')
       },
-      shang() {
+      sponsor() {
         this.$ga.event('内容赞赏', '点击', 'tool')
-        window.utils.openImgPopup(`${this.cdnUrl}/images/shang.jpg`, 'shang')
+        window.utils.openIframePopup('/sponsor', 'sponsor')
       },
       // markdown解析服务
       marked(content) {
@@ -921,13 +921,13 @@
         font-size: 1em;
 
         > .like,
-        > .shang,
+        > .sponsor,
         > .count {
           padding: .2em .5em;
           background-color: $module-hover-bg;
         }
 
-        @keyframes shangBtnBg {
+        @keyframes sponsorBtnBg {
           0%   {
             background: $primary-opacity-9;
           }
@@ -939,10 +939,10 @@
           }
         }
 
-        > .shang {
+        > .sponsor {
           margin-left: .5em;
           color: white;
-          animation: shangBtnBg 1s infinite;
+          animation: sponsorBtnBg 1s infinite;
         }
 
         > .like {
