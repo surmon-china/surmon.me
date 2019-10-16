@@ -464,7 +464,9 @@
       },
       sponsor() {
         this.$ga.event('内容赞赏', '点击', 'tool')
-        window.utils.openIframePopup('/sponsor', 'sponsor')
+        this.isMobile
+         ? window.utils.openImgPopup('/images/sponsor-mobile.jpg', 'sponsor-mobile')
+         : window.utils.openIframePopup('/sponsor', 'sponsor')
       },
       // markdown解析服务
       marked(content) {
