@@ -17,12 +17,15 @@ export const actions = {
     const userAgent = isServer
       ? req.headers['user-agent']
       : navigator.userAgent
-    const { isMobile, isChrome } = uaParser(userAgent)
-    const mustJpg = isMobile || !isChrome
+    const { isMobile, isWechat, isChrome } = uaParser(userAgent)
 
     store.commit('global/updateUserAgent', userAgent)
     store.commit('global/updateMobileLayoutState', isMobile)
-    store.commit('global/updateImageExt', mustJpg ? systemConstants.ImageExt.Jpg : systemConstants.ImageExt.Webp)
+    store.commit('global/updateImageExt',
+      isMobile || isWechat || !isChrome
+        ? systemConstants.ImageExt.Jpg
+        : systemConstants.ImageExt.Webp
+    )
 
     // 如果是移动端，则设置语言为中文
     if (isMobile) {

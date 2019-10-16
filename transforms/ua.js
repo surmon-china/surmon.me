@@ -22,6 +22,7 @@ export const uaParser = userAgent => {
     isFirefox: isBrowser(['Firefox']),
     isChrome: isBrowser(['Chrome', 'Chromium']),
     isSafari: isBrowser(['Safari']),
+    isWechat: isBrowser(['Wechat']),
     isIos: parseResult.os.name === 'iOS',
     isAndroid: parseResult.os.name === 'Android',
     isMobile: parseResult.device.type === 'mobile'
