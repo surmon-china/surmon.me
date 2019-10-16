@@ -102,6 +102,12 @@ export default {
         emailMe: {
           zh: '即破楼兰',
           en: 'Email ME'
+        },
+      },
+      about: {
+        sponsorMe: {
+          zh: '💰 一口酒钱',
+          en: '💰 Sponsor me'
         }
       },
       device: {

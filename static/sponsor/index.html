@@ -18,7 +18,7 @@
         s += '👶' + locationEmojis[m];
       }
       location.hash = s;
-      document.title = titleEmojis[Math.floor((Date.now()/100)%titleEmojis.length)] + 'Sponsor me ~ ☕';
+      document.title = titleEmojis[Math.floor((Date.now()/100)%titleEmojis.length)] + ' Sponsor me ~ ☕';
       setTimeout(startAnimation, 50);
     }
 
@@ -51,16 +51,19 @@
     }
     .url {
       color: #0088f5;
-      margin-top: 20px;
+      margin-top: 10px;
       margin-bottom: 100px;
-      text-decoration: none;
       font-weight: bold;
     }
-    .url:hover {
+    .url > .link {
+      color: #0088f5;
+      text-decoration: none;
+    }
+    .url > .link:hover {
       text-decoration: underline;
     }
     .logo-img {
-      width: 70px;
+      width: 60px;
       border-radius: 10px;
     }
     .main {
@@ -122,9 +125,9 @@
     <a class="logo foldable" href="https://surmon.me" target="_blank">
       <img src="/images/app-logo.png" alt="logo" class="logo-img">
     </a>
-    <a class="url foldable" href="https://surmon.me" target="_blank">
-      <span>SURMON.ME</span>
-    </a>
+    <span class="url foldable">
+      <a href="https://surmon.me" class="link" target="_blank">SURMON.ME</a>
+    </span>
     <div class="main">
       <div class="item github">
         <a

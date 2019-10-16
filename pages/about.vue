@@ -6,25 +6,22 @@
           <div class="about-all">
             <div class="about-me">
               <div class="desc">
-                <p class="item webfont">
+                <div class="item webfont">
                   <i class="iconfont icon-user"></i>
-                  <span v-if="isEnLang">
-                    <span class="first-letter">I</span>'m Surmon, a developer.
-                  </span>
-                  <span v-else>
-                    <span class="first-letter">浪</span>
-                    <span>蝶游蜂，迈步九云中</span>
-                  </span>
+                  <div class="bio">
+                    <p class="text" v-if="isEnLang">I'm Surmon, a developer.</p>
+                    <p class="text" v-else>浪蝶游蜂，迈步九云中</p>
                     <a
                       class="sponsor"
                       target="_blank"
                       href="/sponsor"
                       rel="external nofollow noopenter"
                     >
-                      <small>💰{{ isEnLang ? 'Sponsor me' : '赞助吾身' }}</small>
+                      <small v-text="$i18n.text.about.sponsorMe"></small>
                     </a>
-                </p>
-                <p class="item">
+                  </div>
+                </div>
+                <div class="item">
                   <i class="iconfont icon-comment-discussion"></i>
                   <a
                     target="_blank"
@@ -40,20 +37,20 @@
                     rel="external nofollow noopenter"
                     href="https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA"
                   >Telegram group</a>
-                </p>
-                <p class="item">
+                </div>
+                <div class="item">
                   <i class="iconfont icon-music"></i>
                   <nuxt-link to="/music">Jazz-HipHop, Electronic, Disco, Rock, Punk</nuxt-link>
-                </p>
-                <p class="item webfont">
+                </div>
+                <div class="item webfont">
                   <i class="iconfont icon-like"></i>
                   <span v-if="isEnLang">code. beauty. whisky. music. vagrant.</span>
                   <span v-else>
                     <span>恋何物？</span>
                     <span>酒池肉林、日夜笙歌、依翠偎红、五音六律、目营心匠、桀骜不羁</span>
                   </span>
-                </p>
-                <p class="item">
+                </div>
+                <div class="item">
                   <i class="iconfont icon-coffee"></i>
                   <span class="accounts">
                     <span>
@@ -197,13 +194,13 @@
                       </a>
                     </span>
                   </span>
-                </p>
-                <p class="item webfont">
+                </div>
+                <div class="item webfont">
                   <i class="iconfont icon-code"></i>
                   <span class="skills" v-if="isEnLang">Talk is cheap. Give me kiss.</span>
                   <span v-else>吾生有涯愿无尽，心期填海力移山</span>
-                </p>
-                <p class="item" v-if="!isMobile">
+                </div>
+                <div class="item" v-if="!isMobile">
                   <i class="iconfont icon-friend"></i>
                   <span class="friends">
                     <a
@@ -217,7 +214,7 @@
                       rel="external nofollow noopenter"
                     >「 JimmyLv 」</a>
                   </span>
-                </p>
+                </div>
               </div>
               <div class="gravatar">
                 <div class="background be-2">
@@ -586,38 +583,10 @@
               .item {
                 line-height: 2.5em;
                 min-height: 2.5em;
-
-                .sponsor {
-                  font-family: DINRegular;
-                  background-color: $primary;
-                  border-radius: $radius * 2;
-                  margin-left: 0.5rem;
-                  padding: 2px 0.5rem;
-                  opacity: .8;
-                  user-select: none;
-
-                  &:hover {
-                    opacity: 1;
-                  }
-
-                  > small {
-                    color: $text-reversal;
-                  }
-                }
+                margin-bottom: 1.2rem;
 
                 &.webfont {
                   font-family: webfont-bolder, DINRegular;
-                }
-
-                &:first-child {
-
-                  > span {
-                    display: inline;
-
-                    > .first-letter {
-                      font-size: $font-size-h1;
-                    }
-                  }
                 }
 
                 &:last-child {
@@ -642,6 +611,38 @@
 
                   &.icon-friend {
                     color: $accent;
+                  }
+                }
+
+                > .bio {
+                  display: inline-block;
+
+                  .text {
+                    display: inline-block;
+                    margin: 0;
+
+                    &::first-letter {
+                      font-size: $font-size-h1;
+                      margin-right: 2px;
+                    }
+                  }
+
+                  .sponsor {
+                    font-family: DINRegular;
+                    background-color: $primary;
+                    border-radius: $radius * 2;
+                    margin-left: 0.5rem;
+                    padding: 2px 0.5rem;
+                    opacity: .8;
+                    user-select: none;
+
+                    &:hover {
+                      opacity: 1;
+                    }
+
+                    > small {
+                      color: $text-reversal;
+                    }
                   }
                 }
 
