@@ -773,7 +773,7 @@
             height: 16em;
             padding: .5em;
             overflow: hidden;
-            background-color: $module-bg-opacity-5;
+            background-color: $module-bg;
 
             .project-link {
               height: 15em;
