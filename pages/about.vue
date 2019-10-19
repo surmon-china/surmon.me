@@ -28,7 +28,7 @@
                     rel="external nofollow noopenter"
                     href="https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4"
                   >
-                    <span v-if="isEnLang">Taolu committee:</span>
+                    <span v-if="isEnLang">QQ group</span>
                     <span v-else>国家套路委员会</span>
                   </a>
                   <span>&nbsp;|&nbsp;</span>
