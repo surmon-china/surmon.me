@@ -27,7 +27,6 @@ export const Route = {
   App: 'app',
   Music: 'music',
   About: 'about',
-  Project: 'project',
   Vlog: 'vlog',
   Sitemap: 'sitemap',
 }
