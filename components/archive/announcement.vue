@@ -6,7 +6,7 @@
       v-if="!this.isMobile"
     />
     <div class="title">
-      <i class="iconfont icon-radio"></i>
+      <i class="iconfont icon-mood-neutral-solid"></i>
     </div>
     <transition name="module" mode="out-in">
       <empty-box class="announcement-empty-box" key="empty" v-if="!announcement.data.length">

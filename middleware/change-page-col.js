@@ -11,7 +11,6 @@ export default ({ route, store }) => {
   // columns
   const isTwoColumns = [
     systemConstants.Route.About,
-    systemConstants.Route.Project,
     systemConstants.Route.Vlog,
     systemConstants.Route.Sitemap
   ].includes(route.name)
