@@ -5,14 +5,14 @@
  */
 
 import AdsenseArchive from './archive'
-import AdsenseResponsive from './responsive'
-import AdsenseArticleMobile from './archive-mobile'
+import AdsenseArchiveMobile from './archive-mobile'
+import AdsenseCommonResponsive from './responsive'
 
 const adsense = {
   install(Vue) {
     Vue.component(AdsenseArchive.name, AdsenseArchive)
-    Vue.component(AdsenseResponsive.name, AdsenseResponsive)
-    Vue.component(AdsenseArticleMobile.name, AdsenseArticleMobile)
+    Vue.component(AdsenseArchiveMobile.name, AdsenseArchiveMobile)
+    Vue.component(AdsenseCommonResponsive.name, AdsenseCommonResponsive)
   }
 }
 
