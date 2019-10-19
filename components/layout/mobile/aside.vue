@@ -19,20 +19,25 @@
           <i class="iconfont icon-code"></i>
           <span v-text="$i18n.nav.code"></span>
         </nuxt-link>
-        <nuxt-link to="/project" class="item">
-          <i class="iconfont icon-tool"></i>
-          <span v-text="$i18n.nav.project"></span>
-        </nuxt-link>
         <nuxt-link to="/category/think" class="item">
           <i class="iconfont icon-think"></i>
           <span v-text="$i18n.nav.think"></span>
         </nuxt-link>
+        <a
+          href="https://github.surmon.me"
+          target="_blank"
+          class="item"
+          rel="external nofollow noopener"
+        >
+          <i class="iconfont icon-tool"></i>
+          <span v-text="$i18n.nav.project"></span>
+        </a>
         <nuxt-link to="/sitemap" class="item">
           <i class="iconfont icon-peachblossom"></i>
           <span v-text="$i18n.nav.map"></span>
         </nuxt-link>
         <nuxt-link to="/vlog" class="item">
-          <i class="iconfont icon-live"></i>
+          <i class="iconfont icon-vlog"></i>
           <span v-text="$i18n.nav.vlog"></span>
         </nuxt-link>
         <nuxt-link to="/about" class="item">
