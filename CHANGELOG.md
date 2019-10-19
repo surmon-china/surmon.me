@@ -1,12 +1,16 @@
 
 ## CHANGELOG
 
-### v2.4.1
-- Update UA transformer
-- Update article GA styles
+### v2.4.3
+- Improve sponsor page
+- Replace project page to link
 
 ### v2.4.2
 - Add sponsor page
+
+### v2.4.1
+- Update UA transformer
+- Update article GA styles
 
 ### v2.4.0
 - Upgrade dependencies
