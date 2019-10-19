@@ -109,7 +109,7 @@
     overflow: hidden;
 
     .swiper {
-      height: 7.4rem;
+      height: 88px;
 
       .swiper-wrapper {
 
