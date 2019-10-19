@@ -4,15 +4,34 @@
       <div class="footer-content">
         <!-- <span>陕ICP备13004859号</span> -->
         <!-- <span> - </span> -->
-        <a class="sitemap-btn" href="/sitemap.xml" target="_blank" v-text="$i18n.nav.map">SITEMAP.XML</a>
+        <a
+          class="sitemap-btn"
+          href="/sitemap.xml"
+          target="_blank"
+          v-text="$i18n.nav.map"
+        />
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
 
         <!-- english -->
         <span v-if="isEnLang">
           <span>Powered By</span>
-          <nuxt-link to="/project">NodePress</nuxt-link>
+          <a
+            target="_blank"
+            class="item"
+            rel="external nofollow noopener"
+            href="https://github.com/surmon-china/nodepress"
+          >
+            NodePress
+          </a>
           <span>、</span>
-          <nuxt-link to="/project">Nuxt.js</nuxt-link>
+          <a
+            target="_blank"
+            class="item"
+            rel="external nofollow noopener"
+            href="https://github.com/surmon-china/surmon.me"
+          >
+            Nuxt.js
+          </a>
           <span>and solitarily.</span>
           <span>&nbsp; Designed By</span>
           <nuxt-link to="/about">Me</nuxt-link>
@@ -21,9 +40,23 @@
         <!-- chinese -->
         <span v-else>
           <span>由&nbsp;</span>
-          <nuxt-link to="/project">NodePress</nuxt-link>
+          <a
+            target="_blank"
+            class="item"
+            rel="external nofollow noopener"
+            href="https://github.com/surmon-china/nodepress"
+          >
+            NodePress
+          </a>
           <span>、</span>
-          <nuxt-link to="/project">Nuxt.js</nuxt-link>
+          <a
+            target="_blank"
+            class="item"
+            rel="external nofollow noopener"
+            href="https://github.com/surmon-china/surmon.me"
+          >
+            Nuxt.js
+          </a>
           <span>&nbsp;和&nbsp;日月星辰&nbsp;强力驱动&nbsp;</span>
           <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
           <nuxt-link to="/about">吾之臂躯</nuxt-link>
@@ -39,7 +72,7 @@
     name: 'pc-footer',
     computed: {
       isEnLang() {
-        return this.$store.state.global.isEnLang
+        return this.$store.getters['global/isEnLang']
       }
     }
   }

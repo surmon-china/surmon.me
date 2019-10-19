@@ -265,10 +265,15 @@
               <iframe class="iframe" src="/partials/map.html"></iframe>
             </div>
             <div class="about-project">
-              <nuxt-link to="/project" class="project-link">
-                <p class="title">Get More Project</p>
+              <a
+                target="_blank"
+                class="project-link"
+                rel="external nofollow noopener"
+                href="https://github.surmon.me"
+              >
+                <p class="title">Get More Projects</p>
                 <p class="item">了解更多关于我的开源项目的进展</p>
-              </nuxt-link>
+              </a>
             </div>
           </div>
         </div>
