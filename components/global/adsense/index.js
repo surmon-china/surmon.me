@@ -4,17 +4,15 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import AdsenseAside from './aside'
 import AdsenseArchive from './archive'
-import AdsenseArticle from './article'
-import AdsenseArticleMobile from './archive-mobile'
+import AdsenseArchiveMobile from './archive-mobile'
+import AdsenseCommonResponsive from './responsive'
 
 const adsense = {
   install(Vue) {
-    Vue.component(AdsenseAside.name, AdsenseAside)
     Vue.component(AdsenseArchive.name, AdsenseArchive)
-    Vue.component(AdsenseArticle.name, AdsenseArticle)
-    Vue.component(AdsenseArticleMobile.name, AdsenseArticleMobile)
+    Vue.component(AdsenseArchiveMobile.name, AdsenseArchiveMobile)
+    Vue.component(AdsenseCommonResponsive.name, AdsenseCommonResponsive)
   }
 }
 

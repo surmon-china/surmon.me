@@ -48,7 +48,7 @@
       <div class="mammon">
         <transition name="module" mode="out-in">
           <skeleton-paragraph class="mammon-skeleton" key="skeleton" v-if="isFetching" :lines="4" line-height="1em" />
-          <adsense-article key="adsense" v-else-if="renderAd" />
+          <adsense-responsive key="adsense" v-else-if="renderAd" />
         </transition>
       </div>
     </client-only>

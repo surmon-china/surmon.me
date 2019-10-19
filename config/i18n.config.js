@@ -33,7 +33,7 @@ export default {
         en: 'code'
       },
       project: {
-        zh: '琼宝阁',
+        zh: '丹室',
         en: 'project'
       },
       vlog: {
@@ -41,7 +41,7 @@ export default {
         en: 'vlog'
       },
       music: {
-        zh: '乐斋',
+        zh: '粉巷',
         en: 'music'
       },
       about: {
@@ -54,7 +54,7 @@ export default {
       },
       guestbook: {
         zh: '百鸣苑',
-        en: 'Guestbook'
+        en: 'guestbook'
       },
       taobao: {
         zh: '淘抢购',
@@ -69,8 +69,8 @@ export default {
         en: 'app'
       },
       map: {
-        zh: '怀柔天下',
-        en: 'SiteMap.XML'
+        zh: '旷日积晷',
+        en: 'sitemap.xml'
       }
     },
     text: {
@@ -175,7 +175,7 @@ export default {
         }
       },
       slogan: {
-        zh: '來蘇之望，念狂夢猖',
+        zh: '來苏之望，念狂梦猖',
         en: 'Because the mountain was there.'
       },
       music: {

@@ -196,9 +196,9 @@ export default {
   css: [
     'swiper/dist/css/swiper.css',
     'highlight.js/styles/ocean.css',
-    '~assets/sass/app.scss',
+    '~assets/styles/app.scss',
   ],
   styleResources: {
-    scss: '~/assets/sass/init.scss',
+    scss: '~/assets/styles/init.scss',
   }
 }

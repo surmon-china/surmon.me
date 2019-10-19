@@ -261,6 +261,15 @@
                 <div class="wechat" @mouseenter="handleFollowMe" v-if="!isMobile"></div>
               </div>
             </div>
+            <a
+              class="about-mammon"
+              rel="external nofollow noopener"
+              target="_blank"
+              :href="adConfig.url"
+              v-if="!isMobile"
+            >
+              <img :src="adConfig.src" />
+            </a>
             <div class="about-map" v-if="!isMobile">
               <iframe class="iframe" src="/partials/map.html"></iframe>
             </div>
@@ -283,6 +292,7 @@
 </template>
 
 <script>
+  import adConfig from '~/config/ad.config'
   export default {
     name: 'about',
     head() {
@@ -299,6 +309,7 @@
       }
     },
     computed: {
+      adConfig: () => adConfig.pc.aboutPage,
       isEnLang() {
         return this.$store.getters['global/isEnLang']
       },
@@ -397,10 +408,6 @@
                     }
                   }
                 }
-              }
-
-              > .about-map {
-                display: none;
               }
 
               > .about-project {
@@ -633,11 +640,14 @@
                   }
 
                   .sponsor {
+                    display: inline-block;
+                    height: 2rem;
+                    line-height: 2rem;
+                    margin-left: 0.5rem;
+                    padding: 0 0.5rem;
                     font-family: DINRegular;
                     background-color: $primary;
                     border-radius: $radius * 2;
-                    margin-left: 0.5rem;
-                    padding: 2px 0.5rem;
                     opacity: .8;
                     user-select: none;
 
@@ -727,6 +737,22 @@
               }
             }
           }
+
+          .about-mammon {
+            display: block;
+            margin-bottom: 1em;
+            background-color: $module-bg;
+            opacity: .8;
+
+            &:hover {
+              opacity: 1;
+            }
+
+            img {
+              width: 100%;
+            }
+          }
+
 
           .about-map {
             width: 100%;

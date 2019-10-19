@@ -11,6 +11,14 @@ const links = {
     aliyunECS: 'https://s.click.taobao.com/vyZYGzv',
     // 虚拟主机，轻服务（N）
     aliyunSWAS: 'https://s.click.taobao.com/BeUYGzv',
+    // Web 防火墙
+    aliyunWaf: 'https://s.click.taobao.com/fZdv8yv',
+    // HTTP 证书
+    aliyunHTTPS: 'https://s.click.taobao.com/BW2v8yv',
+    // 云大使
+    aliyunInvite: 'https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=pu7fghvl',
+    // 全民云计算（ECS）
+    aliyunQWBK: 'https://s.click.taobao.com/fARq8yv'
   },
   pc: {
     // 淘宝（N）
@@ -43,14 +51,18 @@ export const pc = {
     aliyun: links.common.aliyunECS
   },
   carrousel: {
-    url: links.common.aliyunSWAS,
-    src: imagePath + 'aliyun-sas-1190-420.jpg',
-    title: '轻量应用服务器（SAS）是啥？'
+    url: links.common.aliyunWaf,
+    src: imagePath + 'aliyun-banner-1190-420.jpg',
+    title: '网站遇到恶意攻击怎么办？'
+  },
+  aboutPage: {
+    url: links.common.aliyunQWBK,
+    src: imagePath + 'aliyun-ecs-1200-100.png',
   },
   asideSwiper: [
     {
-      url: links.common.aliyunECS,
-      src: imagePath + 'aliyun-532-178.jpg'
+      url: links.common.aliyunHTTPS,
+      src: imagePath + 'aliyun-https-532-178.jpg'
     },
     {
       url: links.pc.tmailMarket,
@@ -59,6 +71,10 @@ export const pc = {
     {
       url: links.pc.alitrip,
       src: imagePath + 'alitrip-532-178.jpg'
+    },
+    {
+      url: links.common.aliyunECS,
+      src: imagePath + 'aliyun-ecs-532-178.jpg'
     },
     {
       url: links.pc.taobao,

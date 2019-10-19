@@ -81,8 +81,9 @@
     transform: translate3d(-50%, -50%, 0);
     transition: opacity .5s;
     color: $primary;
-    font-family: webfont-bolder;
+    font-family: webfont-bolder, $sans-serif;
     font-size: $font-size-h2;
+    user-select: none;
 
     @keyframes flower-playing {
       0%  { transform: translate3d(-50%, -50%, 0); }
