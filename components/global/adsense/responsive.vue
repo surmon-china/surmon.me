@@ -1,10 +1,10 @@
 <template>
-  <div class="mammon mammon-aside">
+  <div class="mammon mammon-article">
     <client-only>
       <Adsense
         root-class="mammon-wrapper"
         data-ad-client="ca-pub-4710915636313788"
-        data-ad-slot="3013952710"
+        data-ad-slot="7405264495"
         :data-full-width-responsive="true"
       />
     </client-only>
@@ -13,7 +13,7 @@
 
 <script>
   export default {
-    name: 'adsense-aside'
+    name: 'adsense-responsive'
   }
 </script>
 

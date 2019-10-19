@@ -53,7 +53,7 @@
         :disabled="isFetching || !isCanLoadMore"
       >
         <span class="icon">
-          <i class="iconfont icon-peachblossom"></i>
+          <i class="iconfont icon-vlog"></i>
         </span>
         <span v-text="$i18n.text.article.loadmore"></span>
       </a>

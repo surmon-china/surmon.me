@@ -48,13 +48,13 @@
             type="text"
             class="input"
             v-model="barrage"
-            placeholder="Let's start"
+            placeholder="Here we go"
             @keyup.enter="sendbarrage"
           >
           <div class="count">
-            <span>{{ counts.users }}人</span>
+            <span>{{ counts.users }} {{ isEnLang ? 'U' : '人' }}</span>
             <span>&nbsp;|&nbsp;</span>
-            <span>{{ counts.count }}发</span>
+            <span>{{ counts.count }} {{ isEnLang ? 'C' : ' 发' }}</span>
           </div>
         </div>
       </div>
@@ -71,8 +71,10 @@
       BarrageItem
     },
     data() {
-      const sizes = ['粗大', '很大', '大']
-      const colors = ['老王绿', '原谅绿', '姨妈红', '基佬紫', '百合粉', '东莞黄', '李太白', '木耳黑']
+      const sizes = this.isEnLang ? ['Strong', 'Large', 'Normal'] : ['粗大', '很大', '大'];
+      const colors = this.isEnLang
+        ? ['Green', 'Green2', 'Red', 'Purple', 'Pink', 'Yellow', 'White', 'Black']
+        : ['老王绿', '原谅绿', '姨妈红', '友情紫', '百合粉', '东莞黄', '李太白', '非常黑'];
       return {
         sizes,
         colors,
@@ -95,6 +97,9 @@
       }
     },
     computed: {
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
+      },
       currentColor() {
         return this.colors[this.colorIndex]
       },
@@ -197,7 +202,7 @@
 </script>
 
 <style lang="scss">
-  @import '~assets/sass/variables';
+  @import '~assets/styles/variables';
 
   // 字体尺寸
   .size-0 {
