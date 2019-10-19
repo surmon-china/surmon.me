@@ -28,9 +28,12 @@
           >
             <div
               class="content filter"
-              :class="{ 'motion-blur-vertical-small': transitioning }"
+              :class="{
+                'motion-blur-vertical-small': transitioning
+              }"
               v-html="parseByMarked(announcement.content)"
             ></div>
+            <div class="date">（{{ announcement.create_at | timeAgo(language) }}）</div>
           </div>
         </div>
         <div class="swiper-button-prev">
@@ -80,6 +83,9 @@
     computed: {
       isMobile() {
         return this.$store.state.global.isMobile
+      },
+      language() {
+        return this.$store.state.global.language
       }
     },
     methods: {
@@ -139,15 +145,18 @@
       width: 90%;
 
       .slide-item {
+        display: flex;
+        justify-content: space-between;
+        width: auto;
+        padding-right: 3rem;
         height: $announcement-height;
 
         > .content {
-          width: 100%;
+          max-width: 76%;
           position: relative;
           @include text-overflow();
 
           p {
-            width: 90%;
             margin: 0;
             @include text-overflow();
           }
@@ -155,6 +164,10 @@
           a {
             text-decoration: underline;
           }
+        }
+
+        .date {
+          color: $dividers;
         }
       }
 
