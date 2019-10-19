@@ -3,7 +3,7 @@
     <color-block-box
       :left="-59"
       :gray="true"
-      v-if="!this.isMobile"
+      v-if="!isMobile"
     />
     <div class="title">
       <i class="iconfont icon-mood-neutral-solid"></i>
@@ -33,7 +33,7 @@
               }"
               v-html="parseByMarked(announcement.content)"
             ></div>
-            <div class="date">（{{ announcement.create_at | timeAgo(language) }}）</div>
+            <div v-if="!isMobile" class="date">（{{ announcement.create_at | timeAgo(language) }}）</div>
           </div>
         </div>
         <div class="swiper-button-prev">
@@ -124,6 +124,14 @@
 
     &.mobile {
       background-color: $module-hover-bg-darken-10;
+
+      > .swiper {
+        .slide-item {
+          > .content {
+            max-width: 88%;
+          }
+        }
+      }
     }
 
     .announcement-empty-box {
