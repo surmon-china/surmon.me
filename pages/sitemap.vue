@@ -79,15 +79,18 @@
             <a href="/vlog" target="_blank" v-text="$i18n.nav.vlog" />
           </li>
           <li class="item">
-            <a href="/guestbook" target="_blank" v-text="$i18n.nav.guestbook" />
-          </li>
-          <li class="item">
             <a
               target="_blank"
               rel="external nofollow noopener"
               href="https://github.surmon.me"
               v-text="$i18n.nav.project"
             />
+          </li>
+          <li class="item">
+            <a href="/service" target="_blank" v-text="$i18n.nav.service" />
+          </li>
+          <li class="item">
+            <a href="/guestbook" target="_blank" v-text="$i18n.nav.guestbook" />
           </li>
           <li class="item">
             <a href="/sitemap.xml" target="_blank" v-text="$i18n.nav.map" />

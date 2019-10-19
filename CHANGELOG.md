@@ -1,6 +1,14 @@
 
 ## CHANGELOG
 
+### v2.4.4
+
+- Remove project page
+- Improve i18n languages
+- Improve sponsor page
+- Update styles
+- Update ads with banner & About page
+
 ### v2.4.3
 - Improve sponsor page
 - Replace project page to link
