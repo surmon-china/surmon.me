@@ -33,9 +33,9 @@ export const actions = {
 
     params.per_page = params.per_page || 66
 
-    // 如果数据已存在，则直接返回
-    if (state.video.data.length) {
-      return Promise.resolve(state.project.video.data)
+    // return data when exists
+    if (state.video.data.vlist.length) {
+      return Promise.resolve(state.video.data)
     }
 
     // 不存在则请求新数据

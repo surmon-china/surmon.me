@@ -2,8 +2,6 @@
   <footer id="footer" class="footer">
     <div class="container">
       <div class="footer-content">
-        <!-- <span>陕ICP备13004859号</span> -->
-        <!-- <span> - </span> -->
         <a
           class="sitemap-btn"
           href="/sitemap.xml"
@@ -11,7 +9,6 @@
           v-text="$i18n.nav.map"
         />
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-
         <!-- english -->
         <span v-if="isEnLang">
           <span>Powered By</span>
@@ -36,7 +33,6 @@
           <span>&nbsp; Designed By</span>
           <nuxt-link to="/about">Me</nuxt-link>
         </span>
-
         <!-- chinese -->
         <span v-else>
           <span>由&nbsp;</span>

@@ -10,7 +10,7 @@
         <span v-text="$i18n.nav.code"></span>
       </nuxt-link>
       <nuxt-link to="/category/think" class="item">
-        <i class="iconfont icon-think"></i>
+        <i class="iconfont icon-thinking"></i>
         <span v-text="$i18n.nav.think"></span>
       </nuxt-link>
       <a
@@ -19,7 +19,7 @@
         class="item"
         rel="external nofollow noopener"
       >
-        <i class="iconfont icon-tool"></i>
+        <i class="iconfont icon-experiment"></i>
         <span v-text="$i18n.nav.project"></span>
       </a>
       <nuxt-link to="/music" class="item">
@@ -35,7 +35,7 @@
         <span v-text="$i18n.nav.about"></span>
       </nuxt-link>
       <nuxt-link to="/service" class="item">
-        <i class="iconfont icon-taichi"></i>
+        <i class="iconfont icon-tool"></i>
         <span v-text="$i18n.nav.service"></span>
         <span class="superscript">
           <i class="iconfont icon-hot"></i>

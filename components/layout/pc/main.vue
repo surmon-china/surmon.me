@@ -17,7 +17,11 @@
       <div
         id="main-content"
         class="main-content"
-        :class="{ 'full-column': isTwoColumns, 'error-column': isThreeColumns, 'full-view': isFullViewWidth }"
+        :class="{
+          'full-column': isTwoColumns,
+          'error-column': isThreeColumns,
+          'full-view': isFullViewWidth
+        }"
       >
         <nuxt :nuxtChildKey="$route.name" keep-alive />
       </div>
@@ -69,9 +73,6 @@
       HeaderView, FooterView, AsideView, NavView, // 布局
     },
     mounted() {
-      // const isHidden = document.hidden || document.webkitHidden || document.mozHidden
-      // this.startAllEgg(isHidden)
-      // this.watchFullScreen()
       this.watchTabActive()
       this.$store.dispatch('wallpaper/fetchPapers')
       this.$root.$music = music
@@ -108,15 +109,6 @@
           const isHidden = event.target.hidden || event.target.webkitHidden
           this.startAllEgg(isHidden)
         }, false)
-      },
-      watchFullScreen() {
-        const fullscreenchange = event => {
-          console.log('fullscreenchange', event)
-        }
-        document.addEventListener("fullscreenchange", fullscreenchange, false)
-        document.addEventListener("mozfullscreenchange", fullscreenchange, false)
-        document.addEventListener("webkitfullscreenchange", fullscreenchange, false)
-        document.addEventListener("msfullscreenchange", fullscreenchange, false)
       }
     }
   }

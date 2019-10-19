@@ -6,7 +6,7 @@
       </div>
       <div class="profile">
         <h3 class="name">Surmon</h3>
-        <p class="email" v-text="$i18n.text.slogan"></p>
+        <p class="slogan" v-text="$i18n.text.slogan"></p>
       </div>
     </div>
     <div class="aside-nav">
@@ -20,7 +20,7 @@
           <span v-text="$i18n.nav.code"></span>
         </nuxt-link>
         <nuxt-link to="/category/think" class="item">
-          <i class="iconfont icon-think"></i>
+          <i class="iconfont icon-thinking"></i>
           <span v-text="$i18n.nav.think"></span>
         </nuxt-link>
         <a
@@ -29,11 +29,11 @@
           class="item"
           rel="external nofollow noopener"
         >
-          <i class="iconfont icon-tool"></i>
+          <i class="iconfont icon-experiment"></i>
           <span v-text="$i18n.nav.project"></span>
         </a>
         <nuxt-link to="/sitemap" class="item">
-          <i class="iconfont icon-peachblossom"></i>
+          <i class="iconfont icon-book"></i>
           <span v-text="$i18n.nav.map"></span>
         </nuxt-link>
         <nuxt-link to="/vlog" class="item">
@@ -45,7 +45,7 @@
           <span v-text="$i18n.nav.about"></span>
         </nuxt-link>
         <nuxt-link to="/service" class="item">
-          <i class="iconfont icon-taichi"></i>
+          <i class="iconfont icon-tool"></i>
           <span v-text="$i18n.nav.service"></span>
         </nuxt-link>
         <nuxt-link to="/guestbook" class="item guestbook">
@@ -154,7 +154,7 @@
           margin-bottom: 1rem;
         }
 
-        > .email {
+        > .slogan {
           color: $primary;
           margin: 0;
           @include text-overflow();
