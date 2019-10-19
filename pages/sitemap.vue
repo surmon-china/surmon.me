@@ -70,22 +70,27 @@
         <h3 class="title" v-text="$i18n.text.page.name">pages</h3>
         <ul class="page-list">
           <li class="item">
-            <a href="/" target="_blank" v-text="$i18n.nav['home']" />
+            <a href="/" target="_blank" v-text="$i18n.nav.home" />
           </li>
           <li class="item">
-            <a href="/project" target="_blank" v-text="$i18n.nav['project']" />
+            <a href="/about" target="_blank" v-text="$i18n.nav.about" />
           </li>
           <li class="item">
-            <a href="/about" target="_blank" v-text="$i18n.nav['about']" />
+            <a href="/vlog" target="_blank" v-text="$i18n.nav.vlog" />
           </li>
           <li class="item">
-            <a href="/vlog" target="_blank" v-text="$i18n.nav['vlog']" />
+            <a href="/guestbook" target="_blank" v-text="$i18n.nav.guestbook" />
           </li>
           <li class="item">
-            <a href="/guestbook" target="_blank" v-text="$i18n.nav['guestbook']" />
+            <a
+              target="_blank"
+              rel="external nofollow noopener"
+              href="https://github.surmon.me"
+              v-text="$i18n.nav.project"
+            />
           </li>
           <li class="item">
-            <a href="/sitemap.xml" target="_blank" v-text="$i18n.nav['map']" />
+            <a href="/sitemap.xml" target="_blank" v-text="$i18n.nav.map" />
           </li>
         </ul>
       </div>

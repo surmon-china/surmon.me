@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "Surmon.me blog",
   "author": {
     "name": "Surmon",
@@ -9,6 +9,11 @@
   },
   "license": "MIT",
   "private": false,
+  "homepage": "https://surmon.me",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/surmon-china/surmon.me"
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server --experimental-modules",
     "dev:tool": "devtool server/index.js --watch",
@@ -39,6 +44,7 @@
     "lozad": "^1.9.0",
     "marked": "0.6.3",
     "node-uuid": "^1.4.8",
+    "normalize.css": "^8.0.1",
     "nuxt": "^2.10.0",
     "particles.js": "^2.0.0",
     "simplewebrtc": "^3.0.2",
