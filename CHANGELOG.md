@@ -6,6 +6,7 @@
 - Remove project page
 - Improve i18n languages
 - Improve sponsor page
+- Improve announcement component
 - Update styles
 - Update ads with banner & About page
 
