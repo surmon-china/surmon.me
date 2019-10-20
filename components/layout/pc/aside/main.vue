@@ -283,13 +283,8 @@
           width: 3em;
 
           > .iconfont {
-            font-size: 1.6rem;
+            font-size: $font-size-h3;
           }
-        }
-
-        > .search-keywords {
-
-          > .item {}
         }
       }
     }

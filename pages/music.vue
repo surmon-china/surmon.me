@@ -74,11 +74,11 @@
         <span v-else>Kind words are the music of the world.</span>
       </h3>
       <p class="lrc">
-        <span v-if="currentSongLrc.fetching">歌词加载中...</span>
+        <span v-if="currentSongLrc.fetching">Loading...</span>
         <span v-else>
-          <span v-if="!currentSongLrcContent">暂无歌词</span>
+          <span v-if="!currentSongLrcContent">No Lyrics</span>
           <span v-else>
-            <span v-if="currentSongLrcContent.version < 3">非滚动歌词，所以我就不显示了</span>
+            <span v-if="currentSongLrcContent.version < 3">Bad Lyrics!</span>
             <span v-else>
               <transition name="module" mode="out-in">
                 <span class="lrc-text" :key="currentSongRealTimeLrc" v-text="currentSongRealTimeLrc"></span>

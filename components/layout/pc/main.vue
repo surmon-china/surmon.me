@@ -10,7 +10,11 @@
       <share-box v-if="isNotServicePage" class="sidebar" />
       <tool-box v-if="isNotFullColPage" />
     </client-only>
-    <main id="main" :class="{ 'full-view': isFullViewWidth }">
+    <main
+      id="main"
+      class="main-container"
+      :class="{ 'full-view': isFullViewWidth }"
+    >
       <transition name="module">
         <nav-view v-if="!isThreeColumns" />
       </transition>
@@ -117,8 +121,10 @@
 <style lang="scss" scoped>
   #app-main {
 
-    main {
+    .main-container {
       position: relative;
+      display: block;
+      width: $container-width;
 
       &.full-view {
         width: 100%;

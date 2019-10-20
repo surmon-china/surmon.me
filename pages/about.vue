@@ -247,9 +247,9 @@
                 </div>
                 <img :src="gravatar" class="avatar">
                 <div class="desc">
-                  <h2 class="name">
+                  <h3 class="name">
                     <strong>Surmon</strong>
-                  </h2>
+                  </h3>
                   <p class="skill">JS Stack Developer.</p>
                 </div>
                 <a
@@ -607,7 +607,7 @@
 
                 > .iconfont {
                   width: 2rem;
-                  font-size: 1.5rem;
+                  font-size: $font-size-h4;
                   text-align: center;
                   margin-right: 2rem;
                   display: inline-block;
@@ -634,7 +634,7 @@
                     margin: 0;
 
                     &::first-letter {
-                      font-size: $font-size-h1;
+                      font-size: $font-size-h2;
                       margin-right: 2px;
                     }
                   }
@@ -675,7 +675,7 @@
                     margin-right: 1.35em;
 
                     > .iconfont {
-                      font-size: 1.6rem;
+                      font-size: $font-size-h4;
                     }
 
                     &:hover {

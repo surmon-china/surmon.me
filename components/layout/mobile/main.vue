@@ -6,7 +6,7 @@
     <div id="app-main" :class="onMobileSidebarOpenClass" ref="appMain">
       <header-view />
       <emoji-rain v-if="!onPowerSavingMode" />
-      <main id="main">
+      <main class="main-container">
         <div id="main-content" class="main-content">
           <nuxt :nuxtChildKey="$route.name" keep-alive />
         </div>
@@ -84,7 +84,7 @@
         transform: translateX(68%);
       }
 
-      main {
+      .main-container {
         position: relative;
         width: 100%;
 
