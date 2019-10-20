@@ -11,7 +11,7 @@
     </div>
     <div class="aside-nav">
       <nav class="nav-list">
-        <nuxt-link :to="'/'" class="item" exact>
+        <nuxt-link to="/" class="item" exact>
           <i class="iconfont icon-home"></i>
           <span v-text="$i18n.nav.home"></span>
         </nuxt-link>
@@ -212,10 +212,6 @@
           &.app {
             margin-top: 1rem;
             color: $primary;
-
-            &.link-active {
-              background-color: transparent;
-            }
           }
 
           &:last-child {
