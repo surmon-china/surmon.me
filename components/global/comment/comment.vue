@@ -1284,6 +1284,7 @@
           > button {
             display: block;
             width: 100%;
+            height: 100%;
             background-color: $module-hover-bg;
 
             &:hover {
@@ -1482,7 +1483,7 @@
             > .submit {
               float: right;
               width: 7em;
-              height: 2em;
+              height: 100%;
               background-color: $module-hover-bg-darken-20;
 
               &:hover {
