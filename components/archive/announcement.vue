@@ -56,7 +56,6 @@
 
 <script>
   import marked from '~/plugins/marked'
-  import { isBrowser } from '~/environment'
   export default {
     name: 'index-announcement',
     props: {
