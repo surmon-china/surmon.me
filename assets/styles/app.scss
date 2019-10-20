@@ -10,8 +10,11 @@
 // theme
 @import "theme.scss";
 
-// css reset
-@import "marx/marx.scss";
+// fonts
+@import "font.scss";
 
-// Common style
+// bast style
+@import "base.scss";
+
+// common style
 @import "common.scss";

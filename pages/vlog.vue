@@ -21,7 +21,7 @@
             }"
           />
         </div>
-        <h3 class="title" v-text="video.title" />
+        <h4 class="title" v-text="video.title" />
         <p class="description" style="-webkit-box-orient: vertical;" v-text="video.description || '-'" />
         <hr class="split">
         <p class="meta">
@@ -234,7 +234,7 @@
               height: 5rem;
               line-height: 5rem;
               text-align: center;
-              font-size: 3rem;
+              font-size: 36px;
               background: $module-bg-opacity-5;
               border-radius: 100%;
             }

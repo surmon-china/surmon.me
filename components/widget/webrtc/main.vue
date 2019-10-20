@@ -651,7 +651,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          font-size: 2rem;
+          font-size: $font-size-h1;
           position: absolute;
           top: 0;
           left: 0;
