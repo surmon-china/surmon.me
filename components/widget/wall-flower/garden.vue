@@ -19,18 +19,9 @@
       return {
         id: 0,
         flowers: [],
+        flowerContents: ['富强', '民主', '文明', '和谐', '自由', '平等', '公正', '法治', '爱国', '敬业', '诚信', '友善'],
         contentIndex: -1
       }
-    },
-    computed: {
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
-      },
-      flowerContents() {
-        return this.isEnLang
-          ? ['Prosperity', 'Democracy', 'Civility', 'Harmony', 'Freedom', 'Equality', 'Justice', 'Rule of Law', 'Patriotism', 'Dedication', 'Integrity', 'Friendship']
-          : ['富强', '民主', '文明', '和谐', '自由', '平等', '公正', '法治', '爱国', '敬业', '诚信', '友善'];
-      },
     },
     methods: {
       eventHandle(event) {

@@ -75,14 +75,14 @@
 
 <style lang="scss" scoped>
   .flower-item {
-    position: fixed;
     opacity: 1;
+    position: fixed;
     display: block;
     transform: translate3d(-50%, -50%, 0);
     transition: opacity .5s;
     color: $primary;
     font-family: webfont-bolder, $sans-serif;
-    font-size: $font-size-h2;
+    font-size: $font-size-h3;
     user-select: none;
 
     @keyframes flower-playing {
