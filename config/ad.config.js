@@ -9,8 +9,8 @@ const links = {
   common: {
     // ECS 服务器（N）
     aliyunECS: 'https://s.click.taobao.com/vyZYGzv',
-    // 虚拟主机，轻服务（N）
-    aliyunSWAS: 'https://s.click.taobao.com/BeUYGzv',
+    // 轻量应用服务器（N）
+    aliyunCPS: 'https://s.click.taobao.com/BeUYGzv#guid-1132710',
     // Web 防火墙
     aliyunWaf: 'https://s.click.taobao.com/fZdv8yv',
     // HTTP 证书
@@ -61,8 +61,8 @@ export const pc = {
   },
   asideSwiper: [
     {
-      url: links.common.aliyunHTTPS,
-      src: imagePath + 'aliyun-https-532-178.jpg'
+      url: links.common.aliyunCPS,
+      src: imagePath + 'aliyun-cps-532-178.jpg'
     },
     {
       url: links.pc.tmailMarket,
@@ -73,8 +73,8 @@ export const pc = {
       src: imagePath + 'alitrip-532-178.jpg'
     },
     {
-      url: links.common.aliyunECS,
-      src: imagePath + 'aliyun-ecs-532-178.jpg'
+      url: links.common.aliyunHTTPS,
+      src: imagePath + 'aliyun-https-532-178.jpg'
     },
     {
       url: links.pc.taobao,

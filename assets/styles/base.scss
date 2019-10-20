@@ -1,0 +1,731 @@
+
+:root, html {
+  font-size: 12px;
+  overflow-y: scroll; // All browsers without overlaying scrollbars
+  box-sizing: border-box;
+  cursor: default;
+  -ms-overflow-style: -ms-autohiding-scrollbar; // Edge 12+, Internet Explorer 11-
+  -webkit-text-size-adjust: 100%; // iOS 8+, Windows Phone 8.1+
+}
+
+[hidden],
+[v-cloak] {
+  display: none !important;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-shadow: none;
+  border-radius: 0;
+  font-size: inherit;
+  line-height: inherit;
+  background-repeat: no-repeat;
+}
+
+*,
+::before,
+::after {
+  box-sizing: inherit;
+}
+
+::before,
+::after {
+  text-decoration: inherit;
+  vertical-align: inherit;
+}
+
+a {
+  text-decoration: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/*
+ * Normalization
+ */
+
+abbr[title] {
+  text-decoration: underline; // Chrome 48+, Edge 12+, Internet Explorer 11-, Safari 9+
+  text-decoration: underline dotted; // Firefox 40+
+}
+
+audio:not([controls]) {
+  display: none; // Chrome 44-, iOS 8+, Safari 9+
+}
+
+b,
+strong {
+  font-weight: bolder; // Edge 12+, Safari 6.2+, and Chrome 18+
+}
+
+button {
+  -webkit-appearance: button; // iOS 8+
+  overflow: visible; // Internet Explorer 11-
+}
+
+button,
+input {
+  &::-moz-focus-inner {
+    border: 0; // Firefox 4+
+    padding: 0; // Firefox 4+
+  }
+
+  &:-moz-focusring {
+    outline: 1px dotted ButtonText; // Firefox 4+
+  }
+}
+
+button,
+select {
+  text-transform: none; // Firefox 40+, Internet Explorer 11-
+}
+
+details {
+  display: block; // Edge 12+, Firefox 40+, Internet Explorer 11-, Windows Phone 8.1+
+}
+
+hr {
+  overflow: visible; // Internet Explorer 11-, Edge 12+
+}
+
+input {
+  border-radius: 0; // iOS 8+
+
+  &[type="button"],
+  &[type="reset"],
+  &[type="submit"] {
+    -webkit-appearance: button; // iOS 8+
+  }
+
+  &[type="number"] {
+    width: auto; // Firefox 36+
+  }
+
+  &[type="search"] {
+    -webkit-appearance: textfield; // Chrome 45+, Safari 9+
+
+    &::-webkit-search-cancel-button,
+    &::-webkit-search-decoration {
+      -webkit-appearance: none; // Chrome 45+, Safari 9+
+    }
+  }
+}
+
+main {
+  display: block; // Android 4.3-, Internet Explorer 11-, Windows Phone 8.1+
+}
+
+progress {
+  display: inline-block; // Internet Explorer 11-, Windows Phone 8.1+
+}
+
+summary {
+  display: block; // Firefox 40+, Internet Explorer 11-, Windows Phone 8.1+
+}
+
+svg:not(:root) {
+  overflow: hidden; // Internet Explorer 11-
+}
+
+template {
+  display: none; // Android 4.3-, Internet Explorer 11-, iOS 7-, Safari 7-, Windows Phone 8.1+
+}
+
+textarea {
+  overflow: auto; // Edge 12+, Internet Explorer 11-
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+}
+
+
+/*
+ * Opinionated defaults
+ */
+
+// specify the margin and padding of all elements
+
+// specify the border style and width of all elements
+
+*,
+::before,
+::after {
+  border-style: solid;
+  border-width: 0;
+}
+
+// remove the tapping delay from clickable elements
+
+a,
+area,
+button,
+input,
+label,
+select,
+textarea,
+[tabindex] {
+  touch-action: manipulation;
+}
+
+// specify the standard appearance of selects
+
+select {
+  -moz-appearance: none;    // Firefox 40+
+  -webkit-appearance: none; // Chrome 45+
+
+  &::-ms-expand {
+    display: none;        // Edge 12+, Internet Explorer 11-
+  }
+
+  &::-ms-value {
+    color: currentColor;  // Edge 12+, Internet Explorer 11-
+  }
+}
+
+// use current current as the default fill of svg elements
+
+svg {
+  fill: currentColor;
+}
+
+// specify the progress cursor of updating elements
+
+[aria-busy="true"] {
+  cursor: progress;
+}
+
+// specify the pointer cursor of trigger elements
+
+[aria-controls] {
+  cursor: pointer;
+}
+
+// specify the unstyled cursor of disabled, not-editable, or otherwise inoperable elements
+
+[aria-disabled] {
+  cursor: default;
+}
+
+// specify the style of visually hidden yet accessible elements
+
+[hidden][aria-hidden="false"] {
+  clip: rect(0 0 0 0);
+  display: inherit;
+  position: absolute;
+
+  &:focus {
+    clip: auto;
+  }
+}
+
+// specify the alignment of media elements
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+  vertical-align: if(variable-exists(media-element-vertical-align), $media-element-vertical-align, middle);
+}
+
+// specify the background color of form elements
+
+button,
+input,
+select,
+textarea {
+  background-color: if(variable-exists(form-element-background-color), $form-element-background-color, transparent);
+  color: if(variable-exists(form-element-color), $form-element-color, inherit);
+}
+
+// specify the minimum height of form elements
+
+button,
+[type="button"],
+[type="date"],
+[type="datetime"],
+[type="datetime-local"],
+[type="email"],
+[type="month"],
+[type="number"],
+[type="password"],
+[type="reset"],
+[type="search"],
+[type="submit"],
+[type="tel"],
+[type="text"],
+[type="time"],
+[type="url"],
+[type="week"],
+select,
+textarea {
+  min-height: if(variable-exists(form-element-min-height), $form-element-min-height, 1.5em);
+}
+
+// specify the font family of code elements
+
+code,
+kbd,
+pre,
+samp {
+  font-family: if(variable-exists(monospace-font-family), $monospace-font-family, monospace), monospace;
+}
+
+// specify the list style of nav lists
+
+nav ol,
+nav ul {
+  list-style: if(variable-exists(nav-list-style), $nav-list-style, none);
+}
+
+// specify the font size of small elements
+
+small {
+  font-size: if(variable-exists(small-font-size), $small-font-size, 75%);
+}
+
+// specify the border styling of tables
+
+table {
+  width: 100%;
+  border-collapse: if(variable-exists(table-border-collapse), $table-border-collapse, collapse);
+  border-spacing: if(variable-exists(table-border-spacing), $table-border-spacing, 0);
+}
+
+// specify the resizability of textareas
+
+textarea {
+  resize: if(variable-exists(textarea-resize), $textarea-resize, vertical);
+}
+
+// specify the background color, font color, and drop shadow of text selections
+
+::-moz-selection {
+  background-color: if(variable-exists(selection-background-color), $selection-background-color, #b3d4fc); // required when declaring ::selection
+  color: if(variable-exists(selection-color), $selection-color, #ffffff);
+  text-shadow: if(variable-exists(selection-text-shadow), $selection-text-shadow, none);
+}
+
+::selection {
+  background-color: if(variable-exists(selection-background-color), $selection-background-color, #b3d4fc); // required when declaring ::selection
+  color: if(variable-exists(selection-color), $selection-color, #ffffff);
+  text-shadow: if(variable-exists(selection-text-shadow), $selection-text-shadow, none);
+}
+
+main,
+header,
+footer,
+article,
+section,
+aside,
+details,
+summary {
+  margin: 0 auto;
+  width: 100%;
+}
+
+footer {
+  clear: both;
+  display: inline-block;
+  max-width: 100%;
+  padding: $md-pad 0;
+  text-align: center;
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+hr {
+  border-top: $border;
+  display: block;
+  margin-bottom: $md-pad;
+  width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+@media screen and (max-width: $small-breakpoint) {
+  article,
+  section,
+  aside {
+    clear: both;
+    display: block;
+    max-width: 100%;
+  }
+}
+
+p {
+  margin: 0;
+  margin-bottom: $md-pad;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: inherit;
+  font-family: inherit;
+  line-height: inherit;
+}
+
+h1 {
+  font-size: $font-size-h1;
+  font-weight: 500;
+  margin: $lg-pad 0 $md-pad;
+}
+
+h2 {
+  font-size: $font-size-h2;
+  font-weight: 500;
+  margin: $lg-pad 0 $md-pad;
+}
+
+h3 {
+  font-size: $font-size-h3;
+  font-weight: 500;
+  margin: $md-pad 0 $xs-pad;
+}
+
+h4 {
+  font-size: $font-size-h4;
+  font-weight: 600;
+  margin: $md-pad 0 $xs-pad;
+}
+
+h5 {
+  font-size: $font-size-h5;
+  font-weight: 600;
+  margin: $md-pad 0 $xs-pad;
+}
+
+h6 {
+  color: $secondary;
+  font-size: $font-size-h6;
+  font-weight: 600;
+  margin: $md-pad 0 $xs-pad;
+}
+
+small {
+  color: $secondary;
+  vertical-align: bottom;
+}
+
+pre {
+  // background: $grey;
+  // color: $text;
+  display: block;
+  // font-family: $monospace;
+  // font-size: $font-size-base;
+  margin: 0;
+  // padding: $md-pad;
+  white-space: pre;
+}
+
+code {
+  // color: $text;
+  // font-family: mono,Consolas,Monaco,'Andale Mono',Consolas,Courier New, "Microsoft YaHei", "微软雅黑";
+  // font-size: $font-size-base;
+  line-height: 2em;
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline;
+  word-break: break-word;
+  word-wrap: break-word;
+  overflow: auto;
+}
+
+a {
+  color: $link-color;
+
+  &:hover,
+  &:focus {
+    color: $link-hover-color;
+  }
+}
+
+dl {
+  margin-bottom: $md-pad;
+}
+
+dd {
+  margin-left: $xlg-pad;
+}
+
+ul,
+ol {
+  margin-bottom: $sm-pad;
+  padding-left: $xlg-pad;
+  vertical-align: baseline;
+}
+
+blockquote {
+  margin: $md-pad 0;
+  text-indent: 0em;
+  background-color: $module-hover-bg;
+  border-left: .5em solid #aaa;
+  padding: .5em 1em;
+  padding-left: 1.5em;
+}
+
+figcaption {
+  font-family: $font-family-base;
+}
+
+u {
+  text-decoration: underline;
+}
+
+s {
+  text-decoration: line-through;
+}
+
+sup {
+  font-size: $font-size-small;
+  vertical-align: super;
+}
+
+sub {
+  font-size: $font-size-small;
+  vertical-align: sub;
+}
+
+mark {
+  background: $yellow;
+}
+
+input,
+input:focus {
+  @include css3-prefix(outline, none);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="week"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+select {
+  background: $reversal;
+  color: $text;
+  display: inline-block;
+  padding: $xs-pad;
+  vertical-align: middle;
+}
+
+input[type="color"] {
+  background: $reversal;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+
+input:not([type]) {
+  -webkit-appearance: none;
+  background-clip: padding-box;
+  display: inline-block;
+  text-align: left;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+select:focus,
+textarea:focus {
+  border-color: $primary;
+}
+
+input:not([type]):focus {
+  border-color: $primary;
+}
+
+input[type="file"]:focus,
+input[type="radio"]:focus,
+input[type="checkbox"]:focus {
+  outline: 1px thin $dividers;
+}
+
+input[type="text"][disabled],
+input[type="password"][disabled],
+input[type="email"][disabled],
+input[type="url"][disabled],
+input[type="date"][disabled],
+input[type="month"][disabled],
+input[type="time"][disabled],
+input[type="datetime"][disabled],
+input[type="datetime-local"][disabled],
+input[type="week"][disabled],
+input[type="number"][disabled],
+input[type="search"][disabled],
+input[type="tel"][disabled],
+input[type="color"][disabled],
+select[disabled],
+textarea[disabled] {
+  background-color: $dividers;
+  color: $secondary;
+  cursor: not-allowed;
+}
+
+input:not([type])[disabled] {
+  background-color: $dividers;
+  color: $secondary;
+  cursor: not-allowed;
+}
+
+input[readonly],
+select[readonly],
+textarea[readonly] {
+  border-color: $dividers;
+  color: $secondary;
+}
+
+input:focus:invalid,
+textarea:focus:invalid,
+select:focus:invalid {
+  border-color: darken($red, 10);
+  color: $red;
+}
+
+input[type="file"]:focus:invalid:focus,
+input[type="radio"]:focus:invalid:focus,
+input[type="checkbox"]:focus:invalid:focus {
+  outline-color: $red;
+}
+
+select {
+  -webkit-appearance: menulist-button;
+  vertical-align: sub;
+}
+
+select[multiple] {
+  height: auto;
+}
+
+label {
+  line-height: 2;
+}
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: $sm-pad 0;
+}
+
+legend {
+  border-bottom: $border;
+  color: $text;
+  display: block;
+  margin-bottom: $sm-pad;
+  padding: $sm-pad 0;
+  width: 100%;
+}
+
+textarea {
+  background: $reversal;
+  display: block;
+  margin-bottom: $sm-pad;
+  max-width: 100%;
+}
+
+input[type=submit],
+input[type=reset],
+button {
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+input[type=submit]::-moz-focus-inner,
+input[type=reset]::-moz-focus-inner,
+button::-moz-focus-inner {
+  padding: 0;
+}
+
+input[type=submit]:active,
+input[type=reset]:active,
+button:active {
+  outline-offset: -2px;
+}
+
+input[type=submit]:focus,
+input[type=reset]:focus,
+button:focus {
+  outline: 0;
+}
+
+input[type=submit]:disabled,
+button:disabled {
+  color: $disabled;
+  cursor: not-allowed;
+}
+
+
+table {
+  border-top: $border;
+  margin-bottom: $md-pad;
+}
+
+caption {
+  padding: $sm-pad 0;
+}
+
+thead th {
+  background-color: $module-hover-bg;
+  text-align: left;
+}
+
+tr {
+  margin-bottom: $sm-pad;
+}
+
+th,
+td {
+  vertical-align: inherit;
+  border: 1px solid #ddd;
+  padding: .8rem 1.5rem;
+  vertical-align: inherit;
+}
+
+tfoot tr {
+  text-align: left;
+}
+
+tfoot td {
+  color: $secondary;
+  font-size: $sm-pad;
+  font-style: italic;
+  padding: $md-pad $xs-pad;
+}
+

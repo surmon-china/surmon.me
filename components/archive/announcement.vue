@@ -6,7 +6,14 @@
       v-if="!isMobile"
     />
     <div class="title">
-      <i class="iconfont icon-mood-neutral-solid"></i>
+      <span
+        class="icon-box"
+        :style="{
+          transform: `rotate(-${windmillTimes * 60}deg)`
+        }"
+      >
+        <i class="iconfont icon-windmill"></i>
+      </span>
     </div>
     <transition name="module" mode="out-in">
       <empty-box class="announcement-empty-box" key="empty" v-if="!announcement.data.length">
@@ -33,7 +40,7 @@
               }"
               v-html="parseByMarked(announcement.content)"
             ></div>
-            <div v-if="!isMobile" class="date">（{{ announcement.create_at | timeAgo(language) }}）</div>
+            <div v-if="!isMobile" class="date">~ {{ announcement.create_at | timeAgo(language) }}</div>
           </div>
         </div>
         <div class="swiper-button-prev">
@@ -59,6 +66,7 @@
     data() {
       return {
         renderSwiper: true,
+        windmillTimes: 0,
         transitioning: false,
         swiperOption: {
           height: 34,
@@ -94,6 +102,7 @@
       },
       handleSwiperTransitionStart() {
         this.transitioning = true
+        this.windmillTimes =  this.swiper.activeIndex || 0
       },
       handleSwiperTransitionEnd() {
         this.transitioning = false
@@ -142,9 +151,11 @@
       float: left;
       width: 10%;
       text-align: center;
+      font-size: $font-size-base;
 
-      > .iconfont {
-        font-size: 1.3rem;
+      .icon-box {
+        transform: rotate(0deg);
+        display: inline-block;
       }
     }
 
