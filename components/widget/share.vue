@@ -36,6 +36,10 @@
             url: () => `http://service.weibo.com/share/share.php?url=${this.url}&title=${this.title()}&source=${this.url}&sourceUrl=${this.url}&content=${this.description()}`
           },
           {
+            name: 'twitter',
+            url: () => `http://twitter.com/share?text=${this.title()}&url=${this.url}`
+          },
+          {
             name: 'QQ空间',
             class: 'qzone',
             url: () => `http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${this.url}&title=${this.title()}&summary=${this.description()}&site=${this.url}`
@@ -54,10 +58,6 @@
             name: '印象笔记',
             class: 'evernote',
             url: () => `https://www.evernote.com/clip.action?url=${this.url}&title=${this.title()}`
-          },
-          {
-            name: 'twitter',
-            url: () => `http://twitter.com/share?text=${this.title()}&url=${this.url}`
           },
           {
             name: 'facebook',
@@ -147,7 +147,7 @@
 
           &[class*="wechat"],
           &[class*="weibo"],
-          &[class*="qzone"] {
+          &[class*="twitter"] {
             display: inline-block;
           }
         }

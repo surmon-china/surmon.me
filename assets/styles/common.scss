@@ -1,51 +1,38 @@
 
-@import url('//at.alicdn.com/t/font_64825_mw3128jff3.css');
+body {
+  color: $text;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  padding-top: $navbar-height + 1em;
+  -webkit-font-smoothing: antialiased;
 
-// 为我一挥手，如听万壑松
-@font-face {
-  font-family: 'webfont-bold';
-  src: url('//at.alicdn.com/t/webfont_la9ko9ixhv8.eot'); /* IE9*/
-  src: url('//at.alicdn.com/t/webfont_la9ko9ixhv8.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('//at.alicdn.com/t/webfont_la9ko9ixhv8.woff') format('woff'), /* chrome、firefox */
-  url('//at.alicdn.com/t/webfont_la9ko9ixhv8.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-  url('//at.alicdn.com/t/webfont_la9ko9ixhv8.svg#思源黑体-粗') format('svg'); /* iOS 4.1- */
+  &.mobile {
+    padding-top: 0;
+    overflow-x: hidden;
+    background-color: rgba(197, 197, 197, 0.5);
+  }
 }
 
-// 欢喜勇猛向死而生明殿宁静寺琼宝阁无色庵乐斋狂浪生德道百鸣苑淘抢购弹性主机客户端來蘇之望念狂夢猖
-@font-face {
-  font-family: 'webfont-normal';
-  font-display: swap;
-  src: url('//at.alicdn.com/t/webfont_ho87xf2su1j.eot'); /* IE9*/
-  src: url('//at.alicdn.com/t/webfont_ho87xf2su1j.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('//at.alicdn.com/t/webfont_ho87xf2su1j.woff2') format('woff2'),
-  url('//at.alicdn.com/t/webfont_ho87xf2su1j.woff') format('woff'), /* chrome、firefox */
-  url('//at.alicdn.com/t/webfont_ho87xf2su1j.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-  url('//at.alicdn.com/t/webfont_ho87xf2su1j.svg#Alibaba-PuHuiTi-Regular') format('svg'); /* iOS 4.1- */
-}
-
-/* 为我一挥手，如听万壑松众里寻他我已不再酒醒只在花前坐酒醉还来花下眠人面桃花山河入梦春尽江南富强民主文明和谐自由平等公正法治爱国敬业诚信友善浪蝶游蜂迈步九云中酒池肉林日夜笙歌依翠偎红五音六律目营心匠桀骜不羁吾生有涯愿无尽，心期填海力移山 */
-@font-face {
-  font-family: 'webfont-bolder';
-  src: url('//at.alicdn.com/t/webfont_mxaab9ec8dl.eot'); /* IE9*/
-  src: url('//at.alicdn.com/t/webfont_mxaab9ec8dl.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('//at.alicdn.com/t/webfont_mxaab9ec8dl.woff') format('woff'), /* chrome、firefox */
-  url('//at.alicdn.com/t/webfont_mxaab9ec8dl.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-  url('//at.alicdn.com/t/webfont_mxaab9ec8dl.svg#NotoSansHans-Black') format('svg'); /* iOS 4.1- */
-}
-
-@font-face {
-  font-family: specialSymbol;
-  src: local('PingFang SC'), local('Microsoft Yahei');
-  unicode-range: U+02C2, U+02C3, U+003C, U+003E, U+3009;
-}
-
-@font-face {
-  font-family: 'DINRegular';
-  src: url('/fonts/DIN-Regular.ttf');
+.container {
+  width: $container-width;
+  margin: 0 auto;
 }
 
 .iconfont {
   font-size: 1em;
+}
+
+*, *:hover {
+  @include transition(
+    background-color $transition-time-normal linear,
+    color .05s linear,
+    margin $transition-time-normal linear,
+    opacity $transition-time-normal linear,
+    filter $transition-time-normal linear,
+    visibility $transition-time-normal linear,
+    transform $transition-time-normal linear
+  );
 }
 
 ::selection {
@@ -83,33 +70,10 @@
   }
 }
 
-[v-cloak] {
-  display: none!important;
-}
-
-* {
-  outline: none;
-  box-shadow: none;
-  border-radius: 0;
-}
-
-*, *:hover {
-  @include transition(
-    background-color .25s linear,
-    color .05s linear,
-    margin .25s linear,
-    opacity .25s linear,
-    filter .25s linear,
-    visibility .25s linear,
-    transform .25s linear
-  );
-}
-
 input {
-
   &::placeholder {
-    text-indent: .4rem;
-    font-size: $font-size-base * 0.9;
+    text-indent: .5em;
+    font-size: $font-size-small;
     text-transform: capitalize;
   }
 }
@@ -120,20 +84,11 @@ select:-webkit-autofill {
   box-shadow: 0 0 0px 1000px rgb(230, 230, 230) inset; 
 }
 
-a {
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-
 .radio, .checkbox {
   display: inline-block;
   margin-top: 0px;
   padding-top: 0px;
   margin-bottom: 0px;
-}
-
-.container {
-  width: $container-width;
-  margin: 0 auto;
 }
 
 // filters
@@ -246,49 +201,7 @@ a {
   }
 }
 
-// swiper
-.swiper-wrapper {
-  z-index: 1;
-}
-
-.swiper-pagination {
-  z-index: 2;
-}
-
-.swiper-pagination-bullet {
-  transition: width .25s, height .25s, border-radius .25s;
-
-  &.swiper-pagination-bullet-active {
-    opacity: .8;
-    background: $reversal;
-  }
-}
-
-.swiper-button-prev,
-.swiper-button-next {
-  z-index: 3;
-}
-
-// app
-#app {
-
-  &:not(.default) {
-
-    #app-main {
-
-      header {
-
-        .navbar-header {
-
-          .navbar-blank {
-            display: none;
-          }
-        }
-      }
-    }
-  }
-}
-
+// popup component
 #image-popup,
 #iframe-popup {
   position: fixed;
@@ -306,7 +219,6 @@ a {
   transition: all .08s;
   background-color: transparent;
   // @include backdrop-blur();
-
 
   > img,
   > iframe {
@@ -347,6 +259,7 @@ a {
   }
 }
 
+// share component
 #share {
 
   &.article {
@@ -421,8 +334,31 @@ a {
   }
 }
 
+// swiper
+.swiper-wrapper {
+  z-index: 1;
+}
+
+.swiper-pagination {
+  z-index: 2;
+}
+
+.swiper-pagination-bullet {
+  transition: width $transition-time-normal, height $transition-time-normal, border-radius $transition-time-normal;
+
+  &.swiper-pagination-bullet-active {
+    opacity: .8;
+    background: $reversal;
+  }
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  z-index: 3;
+}
+
 .slide-up-enter-active, .slide-up-leave-active {
-  transition: all .4s cubic-bezier(0, 1.2, 1, 0.5);
+  transition: all $transition-time-slow cubic-bezier(0, 1.2, 1, 0.5);
   opacity: .7;
   transform: translate3d(0, 4em, 0);
 }
@@ -432,7 +368,7 @@ a {
 }
 
 .slide-left-enter-active, .slide-left-leave-active {
-  transition: all .2s cubic-bezier(0, 1.2, 1, 0.5);
+  transition: all $transition-time-normal cubic-bezier(0, 1.2, 1, 0.5);
   opacity: .5;
   transform: translate3d(2em, 0, 0);
 }
@@ -443,7 +379,7 @@ a {
 }
 
 .slide-right-enter-active, .slide-right-leave-active {
-  transition: all .4s cubic-bezier(0, 1.2, 1, 0.5);
+  transition: all $transition-time-slow cubic-bezier(0, 1.2, 1, 0.5);
   opacity: .5;
   transform: translate3d(5em, 0, 0);
 }
@@ -453,34 +389,34 @@ a {
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .25s
+  transition: opacity $transition-time-normal;
 }
 .fade-enter, .fade-leave-active {
   opacity: 0
 }
 .fade-move {
-  transition: transform .25s;
+  transition: transform $transition-time-normal;
 }
 
 .page-enter-active, .page-leave-active {
-  transition: opacity .25s
+  transition: opacity $transition-time-normal;
 }
 .page-enter, .page-leave-active {
   opacity: 0
 }
 
 .module-enter-active, .module-leave-active {
-  transition: opacity .25s
+  transition: opacity $transition-time-normal;
 }
 .module-enter, .module-leave-active {
   opacity: 0
 }
 
 .aside-enter-active {
-  transition: opacity .25s cubic-bezier(1, -1.17, 1, -1.17);
+  transition: opacity $transition-time-normal cubic-bezier(1, -1.17, 1, -1.17);
 }
 .aside-leave-active {
-  transition: opacity 0s
+  transition: opacity 0s;
 }
 .aside-enter, .aside-leave-active {
   opacity: 0
