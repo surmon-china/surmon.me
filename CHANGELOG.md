@@ -1,6 +1,11 @@
 
 ## CHANGELOG
 
+### v2.4.5
+
+Improve mobile mask logic
+Improve styles with comment
+
 ### v2.4.4
 
 - Remove project page
