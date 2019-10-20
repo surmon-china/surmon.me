@@ -555,7 +555,7 @@
       position: relative;
       overflow: hidden;
       height: auto;
-      transition: height .25s;
+      transition: height $transition-time-normal;
 
       > .skeleton {
         
@@ -602,9 +602,10 @@
       > .knowledge {
 
         > .title {
-          text-align: center;
           margin: 1em 0 1.5em 0;
+          text-align: center;
           font-weight: 700;
+          font-size: $font-size-h2 * .95;
         }
 
         > .content {
@@ -640,7 +641,7 @@
             text-align: center;
             border-radius: $radius;
             border: .5rem solid $module-hover-bg;
-            transition: all .25s;
+            transition: all $transition-time-normal;
             opacity: .9;
             cursor: pointer;
 
@@ -655,7 +656,7 @@
 
             &:hover {
               opacity: 1;
-              transition: all .25s;
+              transition: all $transition-time-normal;
             }
           }
 

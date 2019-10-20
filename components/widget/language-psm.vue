@@ -113,7 +113,7 @@
             top: 0;
             left: 0;
             opacity: 0;
-            transition: opacity .25s;
+            transition: opacity $transition-time-normal;
           }
 
           &:hover {
@@ -166,7 +166,7 @@
             left: 0;
             background-color: rgba($powerBG, 1);
             opacity: 0;
-            transition: opacity .25s;
+            transition: opacity $transition-time-normal;
           }
 
           &:hover {

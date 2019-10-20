@@ -2,7 +2,7 @@
   <div class="page" :class="{ mobile: isMobile }">
     <div class="sitemap">
       <div class="module articles">
-        <h3 class="title" v-text="$i18n.text.article.name"></h3>
+        <h4 class="title" v-text="$i18n.text.article.name"></h4>
         <p v-if="!articles.length" v-text="$i18n.text.article.empty"></p>
         <ul class="article-list" v-else>
           <li class="item" :key="index" v-for="(article, index) in articles">
@@ -32,7 +32,7 @@
       </div>
       <br>
       <div class="module categories">
-        <h3 class="title" v-text="$i18n.text.category.name"></h3>
+        <h4 class="title" v-text="$i18n.text.category.name"></h4>
         <p v-if="!categories.length" v-text="$i18n.text.article.empty"></p>
         <ul class="categories-list" v-else>
           <li class="item" :key="index" v-for="(category, index) in categories">
@@ -52,7 +52,7 @@
       </div>
       <br>
       <div class="module tags">
-        <h3 class="title" v-text="$i18n.text.tag.name">tags</h3>
+        <h4 class="title" v-text="$i18n.text.tag.name">tags</h4>
         <p v-if="!tags.length" v-text="$i18n.text.article.empty">暂无标签</p>
         <ul class="tag-list" v-else>
           <li class="item" :key="index" v-for="(tag, index) in tags">
@@ -67,7 +67,7 @@
       </div>
       <br>
       <div class="module pages">
-        <h3 class="title" v-text="$i18n.text.page.name">pages</h3>
+        <h4 class="title" v-text="$i18n.text.page.name">pages</h4>
         <ul class="page-list">
           <li class="item">
             <a href="/" target="_blank" v-text="$i18n.nav.home" />
@@ -207,6 +207,8 @@
 
       .articles {
         .article-list {
+          list-style: square;
+
           > .item {
 
             > .item-content {
@@ -247,6 +249,8 @@
 
       .categories {
         .categories-list {
+          list-style: square;
+
           .item {
             .name {
               text-transform: capitalize;

@@ -192,7 +192,7 @@
           }
 
           > .song {
-            font-size: 1rem;
+            font-size: $font-size-small;
             @include text-overflow();
 
             > .link {

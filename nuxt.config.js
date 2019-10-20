@@ -194,6 +194,7 @@ export default {
     linkActiveClass: 'link-active',
   },
   css: [
+    'normalize.css/normalize.css',
     'swiper/dist/css/swiper.css',
     'highlight.js/styles/ocean.css',
     '~assets/styles/app.scss',
