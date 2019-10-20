@@ -1,9 +1,14 @@
 <template>
   <div id="app-mobile">
-    <div id="app-aside" :class="onMobileSidebarOpenClass">
-      <aside-view :class="onMobileSidebarOpenClass" />
+    <div id="app-aside" :class="sidebarOpenClass">
+      <aside-view :class="sidebarOpenClass" />
     </div>
-    <div id="app-main" :class="onMobileSidebarOpenClass" ref="appMain">
+    <div id="app-main" :class="sidebarOpenClass">
+      <div
+        class="close-mask"
+        v-if="onMobileSidebar"
+        @click="closeMobileSidebar"
+      />
       <header-view />
       <emoji-rain v-if="!onPowerSavingMode" />
       <main class="main-container">
@@ -32,24 +37,17 @@
     },
     computed: {
       ...mapState('global', ['onMobileSidebar', 'onPowerSavingMode']),
-      onMobileSidebarOpenClass() {
+      sidebarOpenClass() {
         return { open: this.onMobileSidebar }
       },
     },
     methods: {
-      closeMobileSidebar(event) {
+      closeMobileSidebar() {
         if (this.onMobileSidebar) {
           this.$store.commit('global/updateMobileSidebarOnState', false)
-          event.cancelBubble = true
-          event.stopPropagation()
-          event.preventDefault()
-          return false
         }
       }
-    },
-    mounted() {
-      this.$refs.appMain.addEventListener('click', this.closeMobileSidebar, true)
-    },
+    }
   }
 </script>
 
@@ -78,6 +76,16 @@
 
     #app-main {
       transition: $mobile-aisde-transition;
+
+      .close-mask {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        right: 0;
+        bottom: 0;
+        z-index: 99999;
+        background-color: $module-bg-opacity-5;
+      }
 
       &.open {
         transition: $mobile-aisde-transition;
