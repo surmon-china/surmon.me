@@ -124,7 +124,7 @@ select:-webkit-autofill {
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 7rem;
+      min-height: 6rem;
       overflow: hidden;
 
       > .adsbygoogle {
@@ -134,31 +134,11 @@ select:-webkit-autofill {
     }
   }
 
-  &.mammon-aside {
-
-    > .mammon-wrapper {
-      padding: 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      &:before {
-        width: $font-size-h1;
-        line-height: 3rem;
-      }
-
-      > .adsbygoogle {
-        width: 250px;
-        height: 30rem;
-      }
-    }
-  }
-
   &.mammon-archive {
     margin-bottom: 1em;
 
     > .mammon-wrapper {
-      min-height: 8rem;
+      min-height: 7rem;
       padding: .5em;
       background-color: $module-bg;
 
@@ -170,7 +150,7 @@ select:-webkit-autofill {
     }
 
     &.mobile {
-      
+
       > .mammon-wrapper {
         padding: 1rem;
   
