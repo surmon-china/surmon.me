@@ -1229,10 +1229,6 @@
           line-height: 2em;
           position: relative;
 
-          > .name {
-            // font-family: DINRegular, -apple-system, Microsoft YaHei, Arial, Helvetica, sans-serif;
-          }
-
           > .setting {
             font-size: 1rem;
             margin-left: 1rem;
@@ -1284,7 +1280,6 @@
           flex-grow: 1;
           line-height: 2em;
           text-align: center;
-          // font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
 
           > button {
             display: block;
@@ -1300,12 +1295,12 @@
         > .name,
         > .email,
         > .site {
-          // font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
           flex-grow: 1;
 
           > input {
             width: 100%;
             height: 2em;
+            line-height: 2em;
             background-color: $module-hover-bg;
 
             &:focus,
@@ -1487,6 +1482,7 @@
             > .submit {
               float: right;
               width: 7em;
+              height: 2em;
               background-color: $module-hover-bg-darken-20;
 
               &:hover {
