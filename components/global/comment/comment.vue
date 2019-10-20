@@ -276,7 +276,7 @@
           </div>
           <div class="editor-tools">
             <a href class="emoji" title="emoji" @click.stop.prevent>
-              <i class="iconfont icon-emoji"></i>
+              <i class="iconfont icon-mood"></i>
               <div class="emoji-box">
                 <ul class="emoji-list">
                   <li
@@ -1437,6 +1437,9 @@
                 position: absolute;
                 bottom: 2em;
                 left: 0;
+                top: 0;
+                width: 100%;
+                overflow-y: auto;
                 background-color: $module-bg;
 
                 > .emoji-list {
