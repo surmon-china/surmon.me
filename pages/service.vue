@@ -154,7 +154,7 @@
 
             > .title {
               margin: 3rem;
-              font-size: $font-size-h2;
+              font-size: $font-size-h1;
             }
           }
         }
