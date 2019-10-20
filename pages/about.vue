@@ -80,13 +80,12 @@
                         <i class="iconfont icon-telegram"></i>
                       </a>
                       <a
-                        href="https://juejin.im/user/5735611ac4c9710060f8fa5e"
+                        href="https://twitter.com/surmon_me"
                         target="_blank"
-                        class="juejin"
-                        v-if="false"
+                        class="twitter"
                         rel="external nofollow noopenter"
                       >
-                        <i class="iconfont icon-juejin"></i>
+                        <i class="iconfont icon-twitter"></i>
                       </a>
                       <a
                         href="https://www.zhihu.com/people/surmon/activities"
@@ -95,6 +94,14 @@
                         rel="external nofollow noopenter"
                       >
                         <i class="iconfont icon-zhihu"></i>
+                      </a>
+                      <a
+                        href="https://www.instagram.com/surmon666/"
+                        target="_blank"
+                        class="instagram"
+                        rel="external nofollow noopenter"
+                      >
+                        <i class="iconfont icon-instagram"></i>
                       </a>
                       <a
                         href="https://weibo.com/surmon"
@@ -168,14 +175,6 @@
                         <i class="iconfont icon-linkedin"></i>
                       </a>
                       <a
-                        href="https://twitter.com/surmon_me"
-                        target="_blank"
-                        class="twitter"
-                        rel="external nofollow noopenter"
-                      >
-                        <i class="iconfont icon-twitter"></i>
-                      </a>
-                      <a
                         href="https://www.facebook.com/surmon.me"
                         target="_blank"
                         v-if="false"
@@ -183,14 +182,6 @@
                         rel="external nofollow noopenter"
                       >
                         <i class="iconfont icon-facebook"></i>
-                      </a>
-                      <a
-                        href="https://www.instagram.com/surmon666/"
-                        target="_blank"
-                        class="instagram"
-                        rel="external nofollow noopenter"
-                      >
-                        <i class="iconfont icon-instagram"></i>
                       </a>
                     </span>
                   </span>
