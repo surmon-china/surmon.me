@@ -276,7 +276,7 @@
           </div>
           <div class="editor-tools">
             <a href class="emoji" title="emoji" @click.stop.prevent>
-              <i class="iconfont icon-mood"></i>
+              <i class="iconfont icon-emoji"></i>
               <div class="emoji-box">
                 <ul class="emoji-list">
                   <li
