@@ -158,7 +158,7 @@
                         <i class="iconfont icon-leetcode"></i>
                       </a>
                       <a
-                        href="https://www.quora.com/profile/Surmon"
+                        href="https://www.quora.com/profile/Surmon/activity"
                         target="_blank"
                         class="quora"
                         rel="external nofollow noopenter"
