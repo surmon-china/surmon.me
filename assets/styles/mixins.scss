@@ -1,16 +1,9 @@
-/* -------------------------------------------------------------
-  Sass CSS3 Mixins! The Cross-Browser CSS3 Sass Library
-  By: Matthieu Aussaguel, http://www.mynameismatthieu.com, @matthieu_tweets
 
-  List of CSS3 Sass Mixins File to be @imported and @included as you need
-
-  The purpose of this library is to facilitate the use of CSS3 on different browsers avoiding HARD TO READ and NEVER
-  ENDING css files
-
-  note: All CSS3 Properties are being supported by Safari 5
-  more info: http://www.findmebyip.com/litmus/#css3-properties
-
-------------------------------------------------------------- */
+@mixin text-overflow() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 @mixin visible() {
   opacity: 1;
@@ -23,6 +16,7 @@
 }
 
 @mixin backdrop-blur($blur-radius: 5px) {
+  // TODO: 影响性能
   backdrop-filter: blur($blur-radius);
 }
 
@@ -67,6 +61,8 @@
   -webkit-box-orient: vertical;
 }
 
+
+// TODO: 需要移除
 @mixin css3-prefix($property, $value) {
   -webkit-#{$property}: #{$value};
    -khtml-#{$property}: #{$value};
@@ -379,31 +375,6 @@
   @include css3-prefix('transform-origin', $params);
 }
 
-
-// Transform-Style
-/// @param {List} $params - Params
-/// @require {mixin} css3-prefix
-
-@mixin transform-style($style: preserve-3d) {
-  @include css3-prefix('transform-style', $style);
-}
-
-/// Transition
-/// @param {List} $properties - Properties
-/// @require {mixin} css3-prefix
-
-@mixin transition($properties...) {
-
-  @if length($properties) >= 1 {
-    @include css3-prefix('transition', $properties);
-  }
-
-  @else {
-    @include css3-prefix('transition',  "all 0.2s ease-in-out 0s");
-  }
-}
-
-
 /// Triple Borders
 /// @param {Color} $colorOne [#3C3C3C] - Color One
 /// @param {Color} $colorTwo [#999999] - Color Two
@@ -418,43 +389,4 @@
     @include border-radius($radius);
 
     @include css3-prefix('box-shadow', "0 0 0 1px #{$colorTwo}, 0 0 0 2px #{$colorThree}");
-}
-
-
-/// Keyframes
-/// @param {*} $animation-name - Animation name
-/// @content [Animation css]
-
-@mixin keyframes($animation-name) {
-  @-webkit-keyframes #{$animation-name} {
-    @content;
-  }
-  @-moz-keyframes #{$animation-name} {
-    @content;
-  }
-  @-ms-keyframes #{$animation-name} {
-    @content;
-  }
-  @-o-keyframes #{$animation-name} {
-    @content;
-  }
-  @keyframes #{$animation-name} {
-    @content;
-  }
-}
-
-
-/// Animation
-/// @param {*} $str - name duration timing-function delay iteration-count direction fill-mode play-state ([http://www.w3schools.com/cssref/css3_pr_animation.asp](http://www.w3schools.com/cssref/css3_pr_animation.asp))
-/// @require {mixin} css3-prefix
-
-@mixin animation($str) {
-  @include css3-prefix('animation', $str);
-}
-
-
-@mixin text-overflow() {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }

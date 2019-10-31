@@ -2,20 +2,18 @@
   <div class="calendar-box">
     <!-- 年份 月份 -->
     <div class="months">
-      <ul class="month-list">
-        <li class="arrow prev" @click="pickPre(currentYear, currentMonth)">❮</li>
-        <li class="year-month">
-          <strong class="choose-year">
-            <span>{{ currentYear }}</span>
-            <span>{{ isEnLang ? 'Y' : '年' }}</span>
-            <span>{{ currentMonth }}</span>
-            <span>{{ isEnLang ? 'M' : '月' }}</span>
-            <span>{{ currentDay }}</span>
-            <span>{{ isEnLang ? 'D' : '日' }}</span>
-          </strong>
-        </li>
-        <li class="arrow next" @click="pickNext(currentYear, currentMonth)">❯</li>
-      </ul>
+      <span class="item arrow" @click="pickPre(currentYear, currentMonth)">❮</span>
+      <span class="item year-month">
+        <strong class="choose-year">
+          <span>{{ currentYear }}</span>
+          <span>{{ isEnLang ? 'Y' : '年' }}</span>
+          <span>{{ currentMonth }}</span>
+          <span>{{ isEnLang ? 'M' : '月' }}</span>
+          <span>{{ currentDay }}</span>
+          <span>{{ isEnLang ? 'D' : '日' }}</span>
+        </strong>
+      </span>
+      <span class="item arrow" @click="pickNext(currentYear, currentMonth)">❯</span>
     </div>
     <!-- 星期 -->
     <ul class="weekdays" v-if="isEnLang">
@@ -137,40 +135,24 @@
     min-height: 17em;
 
     > .months {
-      margin-bottom: .5em;
+      margin-bottom: $gap;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      justify-content: space-between;
 
-      > .month-list {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        overflow: hidden;
+      .item {
+        height: 2em;
+        line-height: 2em;
+        text-align: center;
 
-        > li {
-          float: left;
-          height: 2em;
-          line-height: 2em;
-          text-align: center;
+        &.arrow {
+          width: 2em;
+          background-color: $module-hover-bg;
+          cursor: pointer;
 
-          &.year-month {
-            width: 11.4em;
-          }
-
-          &.arrow {
-            width: 2em;
-            background-color: $module-hover-bg;
-            cursor: pointer;
-
-            &:hover {
-              background-color: $module-hover-bg-darken-10;
-            }
-
-            &.prev {
-              margin-right: 1em;
-            }
-
-            &.next {
-              margin-left: 1em;
-            }
+          &:hover {
+            background-color: $module-hover-bg-darken-10;
           }
         }
       }
@@ -182,12 +164,12 @@
       padding: 0;
       margin: 0;
       overflow: hidden;
-      margin-bottom: .5em;
+      margin-bottom: $sm-gap;
 
       > li {
         display: block;
         float: left;
-        width: calc(100% / 7);
+        width: 14.28%;
         text-align: center;
       }
     }
@@ -221,7 +203,6 @@
 
           > a {
             display: block;
-            // cursor: pointer;
           }
 
           &:hover {

@@ -8,7 +8,7 @@
 
     <!-- 广告啦 -->
     <transition name="module">
-      <component :is="isMobile ? 'adsense-archive-mobile' : 'adsense-archive'" v-if="renderAd" />
+      <component class="article-list-mammon" :is="isMobile ? 'adsense-archive-mobile' : 'adsense-archive'" v-if="renderAd" />
     </transition>
 
     <!-- 列表 -->
@@ -105,30 +105,59 @@
   .articles {
 
     > .article-list-header {
-      margin-bottom: 1em;
+      margin-bottom: $lg-gap;
       position: relative;
       overflow: hidden;
       @include module-blur-bg();
     }
 
+    > .article-list-mammon {
+      margin-bottom: $lg-gap;
+      background-color: $module-bg;
+
+      &::v-deep .mammon-wrapper {
+        min-height: 6rem;
+        padding: $sm-gap;
+
+        > .adsbygoogle {
+          margin: $sm-gap 0;
+          min-height: 88px;
+          height: auto;
+        }
+      }
+
+      &.mobile {
+
+        &::v-deep .mammon-wrapper {
+          padding: $gap;
+    
+          > .adsbygoogle {
+            margin: 0;
+            height: 6rem;
+          }
+        }
+      }
+    }
+
     > .article-list {
-      margin-bottom: 1em;
-      min-height: 1em;
+      margin-bottom: $lg-gap;
+      min-height: $lg-gap;
       overflow: hidden;
 
       > .article-empty-box {
+        color: $text-secondary;
         @include module-blur-bg();
       }
 
       > .article-loading {
         display: flex;
-        height: 10em;
+        height: $gap * 10;
         @include module-blur-bg();
       }
 
       > .article-errmsg {
-        height: 10em;
-        line-height: 10em;
+        height: $gap * 10;
+        line-height: $gap * 10;
         text-align: center;
         color: rgba(0, 0, 0, 0.38);
         @include module-blur-bg();
@@ -141,14 +170,14 @@
       z-index: 0;
 
       > .btn-loadmore {
-        width: 100%;
-        height: 3em;
-        padding: 0 2rem;
-        line-height: 3em;
-        color: $reversal;
-        background-color: $module-bg;
         display: flex;
         justify-content: space-between;
+        width: 100%;
+        height: $block-button-height;
+        line-height: $block-button-height;
+        padding: 0 ($gap * 2);
+        color: $text-reversal;
+        background-color: $module-bg;
 
         &:hover {
           background-color: $module-hover-bg;

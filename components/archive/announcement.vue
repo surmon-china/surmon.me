@@ -119,17 +119,18 @@
 </script>
 
 <style lang="scss">
-  $announcement-height: 2.8em;
+  $announcement-height: 3rem;
 
   .announcement {
     height: $announcement-height;
     line-height: 2.75em;
-    font-size: .9em;
-    margin-bottom: 1em;
+    font-size: $font-size-h6;
+    margin-bottom: $lg-gap;
     overflow: hidden;
     position: relative;
     background-color: $module-bg;
-    color: $reversal;
+    color: $text-reversal;
+    user-select: none;
 
     &.mobile {
       background-color: $module-hover-bg-darken-10;
@@ -137,7 +138,7 @@
       > .swiper {
         .slide-item {
           > .content {
-            max-width: 88%;
+            max-width: 90%;
           }
         }
       }
@@ -154,8 +155,9 @@
       font-size: $font-size-base;
 
       .icon-box {
-        transform: rotate(0deg);
         display: inline-block;
+        transform: rotate(0deg);
+        transition: transform .5s;
       }
     }
 
@@ -164,10 +166,10 @@
       width: 90%;
 
       .slide-item {
+        width: auto;
         display: flex;
         justify-content: space-between;
-        width: auto;
-        padding-right: 3rem;
+        padding-right: $gap * 3;
         height: $announcement-height;
 
         > .content {
@@ -186,7 +188,7 @@
         }
 
         .date {
-          color: $dividers;
+          color: $text-dividers;
         }
       }
 
@@ -194,7 +196,7 @@
       .swiper-button-next {
         position: absolute;
         left: auto;
-        right: .5em;
+        right: $sm-gap;
         height: 10px;
         margin: 0;
         width: 2em;

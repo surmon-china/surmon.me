@@ -1,11 +1,9 @@
 <template>
-  <div class="page" :class="{ mobile: isMobile }">
+  <div class="guestbook-page" :class="{ mobile: isMobile }">
     <div class="detail">
-      <div class="content">
-        <div class="guestbook-banner">
-          <img src="/images/guestbook.jpg">
-          <span v-text="$i18n.text.guestbook">此心光明 亦复何言</span>
-        </div>
+      <div class="banner">
+        <img class="image" src="/images/guestbook.jpg">
+        <span class="solgan" v-text="$i18n.text.guestbook" />
       </div>
     </div>
     <div class="comment">
@@ -44,64 +42,58 @@
 </script>
 
 <style lang="scss" scoped>
-  .page {
+  .guestbook-page {
 
     &.mobile {
 
       > .detail {
 
-        > .content {
-          height: 11em;
-
-          > .guestbook-banner {
-            height: 11em;
-          }
+        > .banner {
+          height: 12rem;
         }
       }
     }
 
     .detail {
-      margin-bottom: 1em;
+      margin-bottom: $lg-gap;
       background-color: $module-bg;
 
-      .content {
+      .banner {
+        position: relative;
+        overflow: hidden;
         width: 100%;
-        height: 17em;
-        overflow:  hidden;
+        height: 19rem;
+        border: 0;
 
-        .guestbook-banner {
-          position: relative;
-          overflow: hidden;
-          width: 100%;
-          height: 17em;
-          border: 0;
+        .image {
+          margin-top: -$gap * 6;
+          transition: all 1s;
 
-          img {
-            margin-top: -5em;
-            @include css3-prefix(transition, all 1s);
-
-            &:hover {
-              margin-top: -6em;
-              @include css3-prefix(transform, rotate(2deg) scale(1.1));
-              @include css3-prefix(transition, all 1s);
-            }
+          &:hover {
+            transform: rotate(2deg) scale(1.1);
+            transition: all 1s;
           }
+        }
 
-          span {
-            position: absolute;
-            right: 2em;
-            bottom: 2em;
-            display: block;
-            font-weight: 700;
-            opacity: .5;
-            cursor: progress;
-            padding: 0 .618em;
-            padding-left: 3rem;
-            height: 2em;
-            line-height: 2em;
-            color: $body-bg;
-            background: linear-gradient(to left, $module-bg, $module-hover-bg-opacity-3, transparent);
-          }
+        .solgan {
+          position: absolute;
+          right: $lg-gap * 2;
+          bottom: $lg-gap * 2;
+          display: block;
+          font-weight: 700;
+          opacity: .5;
+          cursor: progress;
+          padding: 0 $sm-gap;
+          padding-left: 3rem;
+          height: 2em;
+          line-height: 2em;
+          color: $body-bg;
+          background: linear-gradient(
+            to left,
+            $module-bg,
+            $module-hover-bg-opacity-3,
+            transparent
+          );
         }
       }
     }

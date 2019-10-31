@@ -1,5 +1,5 @@
 <template>
-  <div class="mammon mammon-article">
+  <div class="mammon-box responsive">
     <client-only>
       <Adsense
         root-class="mammon-wrapper"

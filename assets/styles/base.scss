@@ -1,10 +1,8 @@
 
 :root, html {
-  font-size: 12px;
-  overflow-y: scroll; // All browsers without overlaying scrollbars
+  font-size: $font-size-root;
   box-sizing: border-box;
   cursor: default;
-  -ms-overflow-style: -ms-autohiding-scrollbar; // Edge 12+, Internet Explorer 11-
   -webkit-text-size-adjust: 100%; // iOS 8+, Windows Phone 8.1+
 }
 
@@ -28,6 +26,8 @@
 ::before,
 ::after {
   box-sizing: inherit;
+  border-style: solid;
+  border-width: 0;
 }
 
 ::before,
@@ -150,17 +150,6 @@ textarea {
  * Opinionated defaults
  */
 
-// specify the margin and padding of all elements
-
-// specify the border style and width of all elements
-
-*,
-::before,
-::after {
-  border-style: solid;
-  border-width: 0;
-}
-
 // remove the tapping delay from clickable elements
 
 a,
@@ -276,7 +265,7 @@ code,
 kbd,
 pre,
 samp {
-  font-family: if(variable-exists(monospace-font-family), $monospace-font-family, monospace), monospace;
+  font-family: if(variable-exists(monospace-font-family), $font-family-monospace-font-family, monospace), monospace;
 }
 
 // specify the list style of nav lists
@@ -284,40 +273,6 @@ samp {
 nav ol,
 nav ul {
   list-style: if(variable-exists(nav-list-style), $nav-list-style, none);
-}
-
-// specify the font size of small elements
-
-small {
-  font-size: if(variable-exists(small-font-size), $small-font-size, 75%);
-}
-
-// specify the border styling of tables
-
-table {
-  width: 100%;
-  border-collapse: if(variable-exists(table-border-collapse), $table-border-collapse, collapse);
-  border-spacing: if(variable-exists(table-border-spacing), $table-border-spacing, 0);
-}
-
-// specify the resizability of textareas
-
-textarea {
-  resize: if(variable-exists(textarea-resize), $textarea-resize, vertical);
-}
-
-// specify the background color, font color, and drop shadow of text selections
-
-::-moz-selection {
-  background-color: if(variable-exists(selection-background-color), $selection-background-color, #b3d4fc); // required when declaring ::selection
-  color: if(variable-exists(selection-color), $selection-color, #ffffff);
-  text-shadow: if(variable-exists(selection-text-shadow), $selection-text-shadow, none);
-}
-
-::selection {
-  background-color: if(variable-exists(selection-background-color), $selection-background-color, #b3d4fc); // required when declaring ::selection
-  color: if(variable-exists(selection-color), $selection-color, #ffffff);
-  text-shadow: if(variable-exists(selection-text-shadow), $selection-text-shadow, none);
 }
 
 main,
@@ -334,20 +289,12 @@ summary {
 
 footer {
   clear: both;
-  display: inline-block;
-  max-width: 100%;
-  padding: $md-pad 0;
-  text-align: center;
-
-  p {
-    margin-bottom: 0;
-  }
 }
 
 hr {
   border-top: $border;
   display: block;
-  margin-bottom: $md-pad;
+  margin-bottom: 1em;
   width: 100%;
 }
 
@@ -367,7 +314,7 @@ img {
 
 p {
   margin: 0;
-  margin-bottom: $md-pad;
+  margin-bottom: 1em;
 }
 
 h1,
@@ -383,61 +330,54 @@ h6 {
 
 h1 {
   font-size: $font-size-h1;
-  font-weight: 500;
-  margin: $lg-pad 0 $md-pad;
+  font-weight: 700;
+  margin: 1em 0;
 }
 
 h2 {
   font-size: $font-size-h2;
-  font-weight: 500;
-  margin: $lg-pad 0 $md-pad;
+  font-weight: 700;
+  margin: 1em 0;
 }
 
 h3 {
   font-size: $font-size-h3;
-  font-weight: 500;
-  margin: $md-pad 0 $xs-pad;
+  font-weight: 600;
+  margin: 1em 0;
 }
 
 h4 {
   font-size: $font-size-h4;
-  font-weight: 600;
-  margin: $md-pad 0 $xs-pad;
+  font-weight: 500;
+  margin: 1em 0;
 }
 
 h5 {
   font-size: $font-size-h5;
-  font-weight: 600;
-  margin: $md-pad 0 $xs-pad;
+  font-weight: 500;
+  margin: 1em 0;
 }
 
 h6 {
-  color: $secondary;
+  color: $text-secondary;
   font-size: $font-size-h6;
-  font-weight: 600;
-  margin: $md-pad 0 $xs-pad;
+  font-weight: 400;
+  margin: 1em 0;
 }
 
 small {
-  color: $secondary;
+  color: $text-secondary;
   vertical-align: bottom;
+  font-size: $font-size-small;
 }
 
 pre {
-  // background: $grey;
-  // color: $text;
-  display: block;
-  // font-family: $monospace;
-  // font-size: $font-size-base;
   margin: 0;
-  // padding: $md-pad;
+  display: block;
   white-space: pre;
 }
 
 code {
-  // color: $text;
-  // font-family: mono,Consolas,Monaco,'Andale Mono',Consolas,Courier New, "Microsoft YaHei", "微软雅黑";
-  // font-size: $font-size-base;
   line-height: 2em;
   margin: 0;
   padding: 0;
@@ -457,22 +397,22 @@ a {
 }
 
 dl {
-  margin-bottom: $md-pad;
+  margin-bottom: 1em;
 }
 
 dd {
-  margin-left: $xlg-pad;
+  margin-left: 3em;
 }
 
 ul,
 ol {
-  margin-bottom: $sm-pad;
-  padding-left: $xlg-pad;
+  margin-bottom: 1em;
+  padding-left: 3em;
   vertical-align: baseline;
 }
 
 blockquote {
-  margin: $md-pad 0;
+  margin: 1em 0;
   text-indent: 0em;
   background-color: $module-hover-bg;
   border-left: .5em solid #aaa;
@@ -508,7 +448,7 @@ mark {
 
 input,
 input:focus {
-  @include css3-prefix(outline, none);
+  outline: none;
 }
 
 input[type="text"],
@@ -525,19 +465,18 @@ input[type="number"],
 input[type="search"],
 input[type="tel"],
 select {
-  background: $reversal;
+  background: $text-reversal;
   color: $text;
   display: inline-block;
-  padding: $xs-pad;
+  padding: $xs-gap;
   vertical-align: middle;
 }
 
 input[type="color"] {
-  background: $reversal;
+  background: $text-reversal;
   display: inline-block;
   vertical-align: middle;
 }
-
 
 input:not([type]) {
   -webkit-appearance: none;
@@ -572,7 +511,7 @@ input:not([type]):focus {
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
-  outline: 1px thin $dividers;
+  outline: 1px thin $text-dividers;
 }
 
 input[type="text"][disabled],
@@ -591,22 +530,22 @@ input[type="tel"][disabled],
 input[type="color"][disabled],
 select[disabled],
 textarea[disabled] {
-  background-color: $dividers;
-  color: $secondary;
+  background-color: $text-dividers;
+  color: $text-secondary;
   cursor: not-allowed;
 }
 
 input:not([type])[disabled] {
-  background-color: $dividers;
-  color: $secondary;
+  background-color: $text-dividers;
+  color: $text-secondary;
   cursor: not-allowed;
 }
 
 input[readonly],
 select[readonly],
 textarea[readonly] {
-  border-color: $dividers;
-  color: $secondary;
+  border-color: $text-dividers;
+  color: $text-secondary;
 }
 
 input:focus:invalid,
@@ -638,22 +577,22 @@ label {
 fieldset {
   border: 0;
   margin: 0;
-  padding: $sm-pad 0;
+  padding: $sm-gap 0;
 }
 
 legend {
   border-bottom: $border;
   color: $text;
   display: block;
-  margin-bottom: $sm-pad;
-  padding: $sm-pad 0;
+  margin-bottom: $sm-gap;
+  padding: $sm-gap 0;
   width: 100%;
 }
 
 textarea {
-  background: $reversal;
+  background: $text-reversal;
   display: block;
-  margin-bottom: $sm-pad;
+  margin-bottom: 1em;
   max-width: 100%;
 }
 
@@ -687,18 +626,23 @@ button:focus {
 
 input[type=submit]:disabled,
 button:disabled {
-  color: $disabled;
+  color: $text-disabled;
   cursor: not-allowed;
 }
 
 
+// specify the border styling of tables
+
 table {
+  width: 100%;
   border-top: $border;
-  margin-bottom: $md-pad;
+  margin-bottom: 1em;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 caption {
-  padding: $sm-pad 0;
+  padding: $sm-gap 0;
 }
 
 thead th {
@@ -707,14 +651,14 @@ thead th {
 }
 
 tr {
-  margin-bottom: $sm-pad;
+  margin-bottom: $sm-gap;
 }
 
 th,
 td {
   vertical-align: inherit;
-  border: 1px solid #ddd;
-  padding: .8rem 1.5rem;
+  border: $border;
+  padding: .5em 1em;
   vertical-align: inherit;
 }
 
@@ -723,9 +667,9 @@ tfoot tr {
 }
 
 tfoot td {
-  color: $secondary;
-  font-size: $sm-pad;
+  color: $text-secondary;
+  font-size: $sm-gap;
   font-style: italic;
-  padding: $md-pad $xs-pad;
+  padding: 1em $xs-gap;
 }
 

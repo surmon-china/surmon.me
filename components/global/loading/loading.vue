@@ -55,6 +55,17 @@
     min-height: 50px;
     height: 100%;
 
+    @keyframes ball-beat {
+      50% {
+        opacity: .2;
+        transform: scale(0.75);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
     > .spinner-inner {
       width: 80px;
       height: 30px;
@@ -83,11 +94,10 @@
           height: 15px;
           margin: 5px;
           background-color: $module-hover-bg;
-
-          @include css3-prefix(animation, ball-beat 0.7s -0.15s infinite linear);
+          animation: ball-beat 0.7s -0.15s infinite linear;
 
           &:nth-child(2n-1) {
-            @include css3-prefix(animation-delay, -.5s);
+            animation-delay: -.5s;
           }
         }
 
@@ -124,17 +134,6 @@
           }
         }
       }
-    }
-  }
-
-  @include keyframes(ball-beat) {
-    50% {
-      opacity: .2;
-      @include css3-prefix(transform, scale(0.75));
-    }
-    100% {
-      opacity: 1;
-      @include css3-prefix(transform, scale(1));
     }
   }
 </style>

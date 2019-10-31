@@ -101,8 +101,9 @@
           overflow: hidden;
           width: 100%;
           margin: 0;
-          padding: $navbar-height + 1em 1rem 1rem;
-          @include css3-prefix(transition, width .35s);
+          // TODO: 这里有问题
+          padding: ($mobile-header-height + $lg-gap) 1rem 1rem;
+          transition: width .35s;
         }
       }
     }

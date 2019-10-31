@@ -95,7 +95,7 @@
       .swiper-pagination-bullet {
 
         &.swiper-pagination-bullet-active {
-          height: 1.2rem;
+          height: $font-size-base;
           border-radius: 10px;
         }
       }
