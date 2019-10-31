@@ -1,6 +1,6 @@
 <template>
   <div id="nav" class="aside-nav">
-    <nav is="nav" class="nav-list">
+    <nav class="nav-list">
       <nuxt-link :to="'/'" class="item" exact>
         <i class="iconfont icon-home"></i>
         <span v-text="$i18n.nav.home"></span>
@@ -103,45 +103,46 @@
 
 <style lang="scss" scoped>
   .aside-nav {
-    position: fixed;
-    display: inline-block;
-    width: 11.5em;
-    top: 5.5em;
-    left: calc((100% - 75em) / 2);
+    width: $navbar-width;
+    height: auto;
+    margin-right: $lg-gap;
+    user-select: none;
 
     .nav-list {
+      width: $navbar-width;
       padding: 0;
       margin: 0;
+      position: fixed;
 
       > .item {
         border: none;
         display: block;
+        position: relative;
         width: 100%;
         height: 3em;
         line-height: 3em;
-        padding: 0 1em;
+        padding: 0 $lg-gap;
         text-decoration: none;
         text-transform: uppercase;
         font-weight: 700;
         border-radius: 1px;
-        color: $secondary;
+        color: $text-secondary;
         font-family: webfont-normal, DINRegular;
         letter-spacing: 0.5px;
-        margin-bottom: .5em;
-        position: relative;
+        margin-bottom: $sm-gap;
 
         &:hover {
           color: $primary;
         }
 
         > .superscript {
-          margin-left: 1rem;
+          margin-left: $xs-gap;
 
           @keyframes superscript-icon-color {
-            0%   { color: chartreuse }
-            15%  { color: green }
-            30%  { color: red }
-            45%  { color: darkviolet }
+            0%  { color: chartreuse }
+            15% { color: green }
+            30% { color: red }
+            45% { color: darkviolet }
             60% { color: pink }
             86% { color: blue }
             100% { color: black }
@@ -150,6 +151,7 @@
           > .iconfont {
             color: $red;
             transition: color 0s;
+            margin-right: 0;
             animation: superscript-icon-color 1s infinite;
           }
         }

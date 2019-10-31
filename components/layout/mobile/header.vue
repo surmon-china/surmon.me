@@ -87,7 +87,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: $navbar-height;
+    height: $mobile-header-height;
     background-color: $module-bg-opacity-9;
     z-index: 999;
 
@@ -107,24 +107,24 @@
       display: flex;
       z-index: 9999;
       width: 100%;
-      height: $navbar-height;
+      height: $mobile-header-height;
       top: 0;
       left: 0;
       opacity: 0;
-      background-color: $reversal;
+      background-color: $text-reversal;
       transform: translateY(-100%);
 
       > .input {
         width: 80%;
         padding: 1em;
-        height: $navbar-height;
+        height: $mobile-header-height;
       }
 
       > .close {
         width: 20%;
         text-align: center;
-        height: $navbar-height;
-        line-height: $navbar-height;
+        height: $mobile-header-height;
+        line-height: $mobile-header-height;
       }
 
       &.actived {
@@ -136,10 +136,10 @@
     .navbar {
 
       .navbar-container {
-        height: $navbar-height;
+        height: $mobile-header-height;
 
         .navbar-header {
-          height: $navbar-height;
+          height: $mobile-header-height;
           display: flex;
           position: relative;
           align-items: center;
@@ -150,9 +150,9 @@
           .navbar-search {
             border: none;
             display: inline-block;
-            height: $navbar-height;
+            height: $mobile-header-height;
             width: 20%;
-            line-height: $navbar-height;
+            line-height: $mobile-header-height;
             text-align: center;
           }
 

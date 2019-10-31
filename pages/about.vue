@@ -1,11 +1,11 @@
 <template>
-  <div class="page" :class="{ mobile: isMobile }">
+  <div class="about-page" :class="{ mobile: isMobile }">
     <div class="detail">
       <div class="content">
         <div class="about">
           <div class="about-all">
             <div class="about-me">
-              <div class="desc">
+              <div class="description">
                 <div class="item webfont">
                   <i class="iconfont icon-user"></i>
                   <div class="bio">
@@ -51,7 +51,7 @@
                   </span>
                 </div>
                 <div class="item">
-                  <i class="iconfont icon-coffee"></i>
+                  <i class="iconfont icon-social"></i>
                   <span class="accounts">
                     <span>
                       <a
@@ -195,15 +195,12 @@
                   <i class="iconfont icon-friend"></i>
                   <span class="friends">
                     <a
-                      href="http://skyrover.me"
+                      :href="link"
+                      :key="link"
                       target="_blank"
                       rel="external nofollow noopenter"
-                    >「 skyrover 」</a>
-                    <a
-                      href="https://blog.jimmylv.info"
-                      target="_blank"
-                      rel="external nofollow noopenter"
-                    >「 JimmyLv 」</a>
+                      v-for="(link, name) in friendLinks"
+                    >「 {{ name }} 」</a>
                   </span>
                 </div>
               </div>
@@ -237,18 +234,19 @@
                   >
                 </div>
                 <img :src="gravatar" class="avatar">
-                <div class="desc">
+                <div class="description">
                   <h3 class="name">
                     <strong>Surmon</strong>
                   </h3>
                   <p class="skill">JS Stack Developer.</p>
                 </div>
                 <a
-                  class="followme"
                   href
+                  class="followme"
                   @click.stop.prevent
                   v-if="!isMobile"
-                >{{ isEnLang ? 'Friend me' : '众里寻他' }}</a>
+                  v-text="$i18n.text.friendMe"
+                />
                 <div class="wechat" @mouseenter="handleFollowMe" v-if="!isMobile"></div>
               </div>
             </div>
@@ -284,6 +282,7 @@
 
 <script>
   import adConfig from '~/config/ad.config'
+  import appConfig from '~/config/app.config'
   export default {
     name: 'about',
     head() {
@@ -301,6 +300,7 @@
     },
     computed: {
       adConfig: () => adConfig.pc.aboutPage,
+      friendLinks: () => appConfig.friendLinks,
       isEnLang() {
         return this.$store.getters['global/isEnLang']
       },
@@ -318,7 +318,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .page {
+  .about-page {
 
     &.mobile {
 
@@ -363,12 +363,12 @@
                     margin-left: 6%;
                   }
 
-                  > .desc {
+                  > .description {
                     width: 50%;
                     margin-left: 5%;
                     text-align: left;
                     z-index: 1;
-                    color: $reversal;
+                    color: $text-reversal;
 
                     > .name,
                     > .skill {
@@ -382,7 +382,7 @@
                   }
                 }
 
-                > .desc {
+                > .description {
                   width: 100%;
                   padding: 1em;
                   overflow: hidden;
@@ -431,17 +431,168 @@
           .about-me {
             width: 100%;
             height: auto;
-            margin-bottom: 1em;
+            margin-bottom: $lg-gap;
             overflow: hidden;
             display: flex;
             justify-content: space-between;
 
+            > .description {
+              width: 72%;
+              padding: 2rem 3rem;
+              background-color: $module-bg;
+
+              .item {
+                line-height: 2.5em;
+                min-height: 2.5em;
+                margin-bottom: 1.2rem;
+
+                &.webfont {
+                  font-family: 'webfont-bolder', DINRegular;
+                }
+
+                &:last-child {
+                  margin-bottom: 0;
+                }
+
+                > .iconfont {
+                  width: 2em;
+                  font-size: $font-size-h4;
+                  text-align: center;
+                  margin-right: 1em;
+                  display: inline-block;
+                  color: $text-dividers;
+
+                  &.icon-code {
+                    color: $black;
+                  }
+
+                  &.icon-social {
+                    color: $primary;
+                  }
+
+                  &.icon-like {
+                    color: $red;
+                  }
+
+                  &.icon-friend {
+                    color: $accent;
+                  }
+                }
+
+                > .bio {
+                  display: inline-block;
+
+                  .text {
+                    display: inline-block;
+                    margin: 0;
+
+                    &::first-letter {
+                      font-size: $font-size-h2;
+                      margin-right: 2px;
+                    }
+                  }
+
+                  .sponsor {
+                    display: inline-block;
+                    height: 20px;
+                    line-height: 20px;
+                    margin-left: $sm-gap;
+                    padding: 0 $xs-gap;
+                    font-family: DINRegular;
+                    background-color: $primary;
+                    border-radius: $radius * 2;
+                    opacity: .8;
+                    user-select: none;
+
+                    &:hover {
+                      opacity: 1;
+                    }
+
+                    > small {
+                      color: $text-reversal;
+                    }
+                  }
+                }
+
+                > .friends {
+
+                  > a {
+                    margin-right: 1em;
+                    text-transform: capitalize;
+                  }
+                }
+
+                > .accounts {
+
+                  a {
+                    margin-right: 1.4em;
+
+                    > .iconfont {
+                      font-size: $font-size-h4;
+                    }
+
+                    &:hover {
+
+                      &.github {
+                        color: #24282d;
+                      }
+
+                      &.telegram {
+                        color: #54a5dd;
+                      }
+
+                      &.zhihu {
+                        color: #3582f7;
+                      }
+
+                      &.weibo {
+                        color: #d53437;
+                      }
+
+                      &.youtube {
+                        color: #ec3323;
+                      }
+
+                      &.bilibili {
+                        color: #449fd1;
+                      }
+
+                      &.stackoverflow {
+                        color: #e6863d;
+                      }
+
+                      &.algorithm {
+                        color: #fea116;
+                      }
+
+                      &.quora {
+                        color: #b92b27;
+                      }
+
+                      &.linkedin {
+                        color: #478cc5;
+                      }
+
+                      &.twitter {
+                        color: #499feb;
+                      }
+
+                      &.instagram {
+                        color: #000;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
             .gravatar {
-              width: 25%;
+              position: relative;
+              margin-left: $lg-gap;
+              flex-grow: 1;
               display: flex;
               align-items: center;
               flex-direction: column;
-              position: relative;
               justify-content: flex-start;
               background-color: $module-bg;
 
@@ -517,13 +668,11 @@
               &:hover {
 
                 > .avatar {
-                  @include css3-prefix(transform, rotate(360deg));
+                  transform: rotate(360deg);
                 }
 
-
                 > .wechat {
-                  visibility: visible;
-                  opacity: .8;
+                  @include visible();
                 }
               }
 
@@ -533,12 +682,12 @@
                 margin-top: 5rem;
                 max-width: 100%;
                 border-radius: 100%;
-                border: .4rem solid $module-bg;
+                border: 5px solid $module-bg;
                 box-sizing: content-box;
-                @include css3-prefix(transition, transform 1s);
+                transition: transform $transition-time-fast;
               }
 
-              > .desc {
+              > .description {
                 text-align: center;
 
                 > .skill {
@@ -558,180 +707,30 @@
                 line-height: 2.46rem;
 
                 &:hover {
-                  color: $reversal;
+                  color: $text-reversal;
                   background-color: $primary;
                 }
               }
 
               > .wechat {
-                opacity: 0;
-                visibility: hidden;
                 position: absolute;
-                top: .6rem;
                 left: 0;
+                bottom: 0rem;
                 width: 100%;
-                height: 100%;
+                height: 74%;
                 background-image: url('/images/wechat.jpg');
                 background-size: contain;
                 background-position: bottom;
                 z-index: 9;
-              }
-            }
-
-            > .desc {
-              width: 73%;
-              padding: 2em 3em;
-              background-color: $module-bg;
-
-              .item {
-                line-height: 2.5em;
-                min-height: 2.5em;
-                margin-bottom: 1.2rem;
-
-                &.webfont {
-                  font-family: webfont-bolder, DINRegular;
-                }
-
-                &:last-child {
-                  margin-bottom: 0;
-                }
-
-                > .iconfont {
-                  width: 2rem;
-                  font-size: $font-size-h4;
-                  text-align: center;
-                  margin-right: 2rem;
-                  display: inline-block;
-                  color: rgba($black, 0.2);
-
-                  &.icon-code {
-                    color: $black;
-                  }
-
-                  &.icon-like {
-                    color: $red;
-                  }
-
-                  &.icon-friend {
-                    color: $accent;
-                  }
-                }
-
-                > .bio {
-                  display: inline-block;
-
-                  .text {
-                    display: inline-block;
-                    margin: 0;
-
-                    &::first-letter {
-                      font-size: $font-size-h2;
-                      margin-right: 2px;
-                    }
-                  }
-
-                  .sponsor {
-                    display: inline-block;
-                    height: 2rem;
-                    line-height: 2rem;
-                    margin-left: 0.5rem;
-                    padding: 0 0.5rem;
-                    font-family: DINRegular;
-                    background-color: $primary;
-                    border-radius: $radius * 2;
-                    opacity: .8;
-                    user-select: none;
-
-                    &:hover {
-                      opacity: 1;
-                    }
-
-                    > small {
-                      color: $text-reversal;
-                    }
-                  }
-                }
-
-                > .friends {
-
-                  > a {
-                    margin-right: 1em;
-                    text-transform: capitalize;
-                  }
-                }
-
-                > .accounts {
-
-                  a {
-                    margin-right: 1.35em;
-
-                    > .iconfont {
-                      font-size: $font-size-h4;
-                    }
-
-                    &:hover {
-
-                      &.github {
-                        color: #24282d;
-                      }
-
-                      &.juejin {
-                        color: #2b6df6;
-                      }
-
-                      &.telegram {
-                        color: #54a5dd;
-                      }
-
-                      &.zhihu {
-                        color: #3582f7;
-                      }
-
-                      &.weibo {
-                        color: #d53437;
-                      }
-
-                      &.youtube {
-                        color: #ec3323;
-                      }
-
-                      &.bilibili {
-                        color: #449fd1;
-                      }
-
-                      &.stackoverflow {
-                        color: #e6863d;
-                      }
-
-                      &.algorithm {
-                        color: #fea116;
-                      }
-
-                      &.quora {
-                        color: #b92b27;
-                      }
-
-                      &.linkedin {
-                        color: #478cc5;
-                      }
-
-                      &.twitter {
-                        color: #499feb;
-                      }
-
-                      &.instagram {
-                        color: #000;
-                      }
-                    }
-                  }
-                }
+                background-color: #fff;
+                @include hidden();
               }
             }
           }
 
           .about-mammon {
             display: block;
-            margin-bottom: 1em;
+            margin-bottom: $lg-gap;
             background-color: $module-bg;
             opacity: .8;
 
@@ -744,11 +743,10 @@
             }
           }
 
-
           .about-map {
             width: 100%;
-            padding: .5em;
-            margin-bottom: 1em;
+            padding: $sm-gap;
+            margin-bottom: $lg-gap;
             overflow: hidden;
             background-color: $module-bg;
             position: relative;
@@ -760,14 +758,13 @@
           }
 
           .about-project {
-            width: 100%;
-            height: 16em;
-            padding: .5em;
+            padding: $sm-gap;
             overflow: hidden;
             background-color: $module-bg;
 
             .project-link {
-              height: 15em;
+              width: 100%;
+              height: 16rem;
               display: flex;
               justify-content: center;
               align-items: center;

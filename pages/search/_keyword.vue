@@ -1,5 +1,5 @@
 <template>
-  <div class="index">
+  <div class="keyword-archive-page">
     <article-list :article="article" @loadmore="loadmoreArticle" />
   </div>
 </template>

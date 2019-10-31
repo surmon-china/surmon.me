@@ -47,7 +47,7 @@
         const historyTheme = humanizedStorage.get('theme')
         historyTheme && this.setTheme(historyTheme)
       },
-      // 暂时不用
+      // TODO: 暂时不用
       computedStyle(theme) {
         const themes = Object.keys(this.themes)
         const currentIndex = themes.indexOf(theme)
@@ -63,7 +63,6 @@
 </script>
 
 <style lang="scss" scoped>
-
   @keyframes themeColor {
     0%  { border-right-color: chartreuse }
     12% { border-right-color: green }
@@ -84,10 +83,9 @@
   #theme {
     position: fixed;
     right: 0;
-    top: $navbar-height * 1.5;
+    top: $header-height * 1.5;
 
     .theme-box {
-      width: 4.5rem;
       display: flex;
       flex-direction: row;
       justify-content: center;

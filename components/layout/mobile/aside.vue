@@ -133,7 +133,7 @@
       display: flex;
       align-items: flex-start;
       flex-direction: column;
-      padding: 1em;
+      padding: $gap;
       border-bottom: 1px solid darken($mobile-aside-bg, 5%);
 
       > .avatar {

@@ -86,10 +86,11 @@
     computed: {
       ...mapState('global', ['imageExt', 'isMobile']),
       articleList() {
+        const { index, ...otherConfig } = adConfig.pc.carrousel
         const articles = [...this.article.data.data].slice(0, 9)
-        articles.length && articles.splice(2, 0, {
+        articles.length && articles.splice(index, 0, {
           ad: true,
-          ...adConfig.pc.carrousel
+          ...otherConfig
         })
         return articles
       }
@@ -145,9 +146,10 @@
 
   .carrousel {
     height: $pc-carrousel-height;
-    margin-bottom: 1em;
+    margin-bottom: $lg-gap;
     position: relative;
     overflow: hidden;
+    user-select: none;
     @include module-blur-bg();
 
     > .swiper {
@@ -168,11 +170,11 @@
 
           img {
             width: 100%;
-            @include css3-prefix(transform, scale(1));
-            @include css3-prefix(transition, transform .88s);
+            transform: scale(1);
+            transition: transform .88s;
 
             &:hover {
-              @include css3-prefix(transform, scale(1.06));
+              transform: scale(1.06);
             }
           }
 
@@ -194,12 +196,10 @@
             @include text-overflow;
 
             -webkit-background-clip: text;
-            // background-color: $module-hover-bg-opacity-9;
-            background: linear-gradient(90deg, transparent 0%, $module-bg 2em, $module-bg-opacity-9, $reversal);
+            background: linear-gradient(90deg, transparent 0%, $module-bg 2em, $module-bg-opacity-9, $text-reversal);
 
             &:hover {
               color: $text-darken;
-              // background: none;
               padding-left: .6em;
               background-color: $module-bg;
             }

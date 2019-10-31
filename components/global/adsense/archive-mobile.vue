@@ -1,5 +1,5 @@
 <template>
-  <div class="mammon mammon-archive mobile">
+  <div class="mammon-box archive mobile">
     <client-only>
       <InFeedAdsense
         root-class="mammon-wrapper"

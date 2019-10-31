@@ -7,7 +7,7 @@
 import marked from 'marked'
 import Hljs from '~/plugins/highlight'
 import appConfig from '~/config/app.config'
-import buildTagLink from '~/transforms/article-tag-link'
+import relink from '~/transforms/relink'
 
 marked.setOptions({
   renderer: new marked.Renderer(),
@@ -110,7 +110,7 @@ export default (content, tags, parseHtml = false) => {
 
   // 所有非链接的关键字进行内链处理
   renderer.text = tags && tags.length
-    ? text => buildTagLink(text, tags)
+    ? text => relink(text, tags)
     : text => text
 
   // 如果是解析评论，则不解析 html 内容

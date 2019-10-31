@@ -1,68 +1,79 @@
 <template>
-  <div class="page" :class="{ mobile: isMobile }">
+  <div class="service-page" :class="{ mobile: isMobile }">
     <div class="service">
       <div class="banner">
         <div class="banner-content container">
           <h2
             class="title"
             v-text="$i18n.text.service.slogan"
-          ></h2>
+          />
           <div class="submit">
             <button
               class="submit-btn"
               v-text="$i18n.text.service.emailMe"
               @click="submitProject"
-            ></button>
+            />
           </div>
+          <a
+            class="upwork"
+            target="_blank"
+            rel="external nofollow noopenter"
+            href="https://www.upwork.com/freelancers/~0142e621258ac1770d"
+          >
+            <span>(</span>
+            <span>{{ $i18n.text.service.hireMe }}</span>
+            <i class="iconfont icon-upwork"></i>
+            <span>)</span>
+          </a>
         </div>
       </div>
       <div class="module">
         <div class="module-content container">
           <ul class="module-list">
             <li class="item">
-              <p class="icon">
-                <i class="iconfont icon-web"></i>
+              <p class="icon web">
+                <i class="iconfont icon-html5"></i>
               </p>
-              <p class="name">Web Client</p>
-              <p class="desc">Vue 应用开发</p>
-              <p class="desc">React 应用开发</p>
-              <p class="desc">Angular 应用开发</p>
+              <h3 class="name">Web {{ isEnLang ? 'Client' : '客户端' }}</h3>
+              <p class="desc">Vue {{ isEnLang ? 'application' : '应用开发' }}</p>
+              <p class="desc">React {{ isEnLang ? 'application' : '应用开发' }}</p>
+              <p class="desc">Angular {{ isEnLang ? 'application' : '应用开发' }}</p>
             </li>
             <li class="item">
-              <p class="icon">
+              <p class="icon nodejs">
                 <i class="iconfont icon-nodejs"></i>
               </p>
-              <p class="name">Nodejs</p>
-              <p class="desc">Nodejs 整站建设</p>
-              <p class="desc">Nodejs Web 服务开发</p>
-              <p class="desc">Nodejs 命令行工具开发</p>
+              <h3 class="name">Nodejs</h3>
+              <p class="desc">Nodejs {{ isEnLang ? 'application' : '整站建设' }}</p>
+              <p class="desc">Nodejs {{ isEnLang ? 'online bussniess' : 'Web 服务开发' }}</p>
+              <p class="desc">Nodejs {{ isEnLang ? 'CLI application' : '命令行工具开发' }}</p>
             </li>
             <li class="item">
-              <p class="icon">
+              <p class="icon app">
                 <i class="iconfont icon-app"></i>
               </p>
-              <p class="name">Application</p>
-              <p class="desc">Weex 应用开发</p>
-              <p class="desc">ReactNative 应用开发</p>
-              <p class="desc">Electron 应用开发</p>
+              <h3 class="name">Application</h3>
+              <p class="desc">Weex {{ isEnLang ? 'application' : '应用开发' }}</p>
+              <p class="desc">ReactNative {{ isEnLang ? 'application' : '应用开发' }}</p>
+              <p class="desc">Electron {{ isEnLang ? 'application' : '应用开发' }}</p>
             </li>
             <li class="item">
-              <p class="icon">
+              <p class="icon wechat">
                 <i class="iconfont icon-wechat"></i>
               </p>
-              <p class="name">Wechat</p>
-              <p class="desc">H5 开发</p>
-              <p class="desc">公众号开发</p>
-              <p class="desc">小程序开发</p>
+              <h3 class="name">Wechat</h3>
+              <p class="desc">{{ isEnLang ? 'HTML5 page' : 'H5 开发' }}</p>
+              <p class="desc">{{ isEnLang ? 'WeChat official account' : '公众号开发' }}</p>
+              <p class="desc">{{ isEnLang ? 'WeChat mini program' : '小程序开发' }}</p>
             </li>
             <li class="item">
-              <p class="icon">
-                <i class="iconfont icon-consult"></i>
+              <p class="icon consult">
+                <i class="iconfont icon-tool"></i>
               </p>
-              <p class="name">技术咨询</p>
-              <p class="desc">Vue 疑难杂症</p>
-              <p class="desc">业务与技术方案实施</p>
-              <p class="desc">Javascript 相关一切问题</p>
+              <h3 class="name">{{ isEnLang ? 'Consultant' : '技术咨询' }}</h3>
+              <p class="desc">{{ isEnLang ? 'Everything about WEB' : '语言、框架疑难杂症' }}</p>
+              <p class="desc">{{ isEnLang ? 'Business and technical' : '业务与技术方案设计' }}</p>
+              <p class="desc">{{ isEnLang ? 'Technical consultant' : '长期技术顾问指导' }}</p>
             </li>
           </ul>
         </div>
@@ -71,37 +82,35 @@
         <div class="step-content container">
           <ul class="step-list">
             <li class="item">
-              <p class="name">1. 提交需求</p>
-              <p class="desc">提供构思成熟的需求文档</p>
-              <p class="desc">及清晰可用的设计图或原型</p>
+              <h3 class="name">1. {{ isEnLang ? 'Consult' : '提交需求' }}</h3>
+              <p class="desc">{{ isEnLang ? 'Product requirements document' : '提供构思成熟的需求文档' }}</p>
+              <p class="desc">{{ isEnLang ? 'Prototype design document' : '及清晰可用的设计图或原型' }}</p>
             </li>
             <li class="item">
-              <p class="name">2. 确认需求</p>
-              <p class="desc">确认报价及开发周期</p>
-              <p class="desc">协商开发周期和要点</p>
+              <h3 class="name">2. {{ isEnLang ? 'Confirm' : '确认需求' }}</h3>
+              <p class="desc">{{ isEnLang ? 'Price and schedule' : '确认报价及开发周期' }}</p>
+              <p class="desc">{{ isEnLang ? 'Development cycle' : '协商开发周期和要点' }}</p>
             </li>
             <li class="item">
-              <p class="name">3. 预付开发</p>
-              <p class="desc">预付部分或全部</p>
-              <p class="desc">进入开发流程</p>
+              <h3 class="name">3. {{ isEnLang ? 'Develop' : '预付开发' }}</h3>
+              <p class="desc">{{ isEnLang ? 'Payment the trust and deposit' : '预付部分或全部' }}</p>
+              <p class="desc">{{ isEnLang ? 'Develop project' : '进入开发流程' }}</p>
             </li>
             <li class="item">
-              <p class="name">4. 预收修正</p>
-              <p class="desc">提供预览演示</p>
-              <p class="desc">细节修正及调优</p>
+              <h3 class="name">4. {{ isEnLang ? 'Review' : '预收修正' }}</h3>
+              <p class="desc">{{ isEnLang ? 'Review and experience' : '提供预览演示' }}</p>
+              <p class="desc">{{ isEnLang ? 'Fixbug and optimize' : '细节修正及调优' }}</p>
             </li>
             <li class="item">
-              <p class="name">5. 交付维护</p>
-              <p class="desc">付清尾款，交付项目</p>
-              <p class="desc">一定周期内持续维护</p>
+              <h3 class="name">5. {{ isEnLang ? 'Delivery' : '交付维护' }}</h3>
+              <p class="desc">{{ isEnLang ? 'Pay balance' : '付清尾款，交付项目' }}</p>
+              <p class="desc">{{ isEnLang ? 'Maintenance cycle' : '一定周期内持续维护' }}</p>
             </li>
           </ul>
         </div>
       </div>
       <div class="rule">
-        <div class="rule-content container">
-          <p class="text">如果你认为自己的能力足以支撑一位出色、省心、优秀、帅气、完美的的全栈工程师的生产力，请 EMail 我；非常优秀，没有之一</p>
-        </div>
+        <div class="rule-content container">{{ ruleContent }}</div>
       </div>
     </div>
   </div>
@@ -118,12 +127,11 @@
     methods: {
       submitProject() {
         this.$ga.event('咨询邮件', '点击', 'tool')
-        const subject = `嗨！Surmon，久仰大名！`
-        const body = `我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
-        const mailAddress = 'mailto:surmon@foxmail.com' +
-          (this.isMobile
-            ? ''
-            : `?subject=${subject}&body=${body}`)
+        const subject = this.isEnLang ? 'Technical consultant / Surmon.me' : `嗨！Surmon，久仰大名！`
+        const body = this.isEnLang
+          ? 'Hi Surmon, My name is '
+          : `我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
+        const mailAddress = 'mailto:surmon@foxmail.com' + (this.isMobile ? '' : `?subject=${subject}&body=${body}`)
         window.location.href = mailAddress
       }
     },
@@ -133,13 +141,18 @@
       },
       isMobile() {
         return this.$store.state.global.isMobile
+      },
+      ruleContent() {
+        return this.isEnLang
+          ? `"Any application that can be written in JavaScript, will eventually be written in JavaScript."`
+          : '如果你认为自己的能力足以支撑一位出色、省心、优秀、帅气、完美的的全栈工程师的生产力，请 EMail 我；非常优秀，没有之一'
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  .page {
+  .service-page {
 
     &.mobile {
 
@@ -223,30 +236,33 @@
       width: 100%;
 
       > .banner {
-        height: 30rem;
+        height: 31rem;
         background: $module-bg url('/images/service.jpg');
         background-size: cover;
         background-position: center 60%;
         background-attachment: fixed;
 
         > .banner-content {
-          height: 30rem;
+          height: 100%;
           overflow: hidden;
           text-align: center;
 
           > .title {
-            color: $reversal;
-            margin-top: 8rem;
+            color: $text-reversal;
+            margin-top: 7rem;
+            margin-bottom: 4rem;
+            font-weight: 500;
             font-size: $font-size-h1 * 2;
-            font-family: webfont-bold, DINRegular;
+            font-family: 'webfont-bold', DINRegular;
           }
 
           > .submit {
+            margin-bottom: 2rem;
 
             > .submit-btn {
-              color: $reversal;
+              color: $text-reversal;
               border: 1px solid;
-              border-color: $reversal;
+              border-color: $text-reversal;
               width: 10rem;
               height: 3em;
               line-height: 3rem;
@@ -261,11 +277,22 @@
               }
             }
           }
+
+          > .upwork {
+            color: $text-reversal;
+            border-bottom: 1px solid;
+            border-color: transparent;
+
+            &:hover {
+              color: $primary;
+              border-color: $primary;
+            }
+          }
         }
       }
 
       > .module {
-        margin: 2em auto;
+        margin: ($gap * 2) auto;
 
         > .module-content {
 
@@ -277,32 +304,55 @@
             justify-content: space-between;
 
             > .item {
-              width: 19%;
+              flex: 1;
+              width: auto;
               height: auto;
-              padding: 1em;
+              padding-top: $lg-gap;
+              padding-bottom: $gap;
               overflow: hidden;
               text-align: center;
               background-color: $module-bg;
+              margin-right: $lg-gap;
 
-              &:hover {
-                background-color: $module-hover-bg;
+              &:last-child {
+                margin-right: 0;
               }
 
-              > .icon {
-                // background-color: $body-bg;
+              &:hover {
+                background-color: $module-bg-opacity-9;
 
-                > .iconfont {
-                  font-size: 4em;
+                .icon {
+                  &.web {
+                    color: #d45835;
+                  }
+                  &.nodejs {
+                    color: #43853d;
+                  }
+                  &.app {
+                    color: $primary;
+                  }
+                  &.wechat {
+                    color: #6fc04b;
+                  }
+                  &.consult {
+                    color: #CD7F32;
+                  }
+                }
+
+                .desc {
+                  color: $text;
                 }
               }
 
-              > .name {
-                font-size: 1.3em;
-                font-weight: bold;
+              > .icon {
+                > .iconfont {
+                  font-size: $font-size-h3 * 3;
+                }
               }
 
               > .desc {
-                color: $disabled;
+                color: $text-disabled;
+                margin-bottom: 1.2em;
               }
             }
           }
@@ -317,7 +367,6 @@
           > .step-list {
             margin: 0;
             padding: 0;
-            padding-top: 1rem;
             list-style-type: none;
             display: flex;
             justify-content: space-between;
@@ -325,23 +374,12 @@
             > .item {
               width: 20%;
               height: auto;
-              padding: 1em;
+              padding-top: $xs-gap;
+              padding-bottom: $lg-gap;
               text-align: center;
 
-              > .icon {
-
-                > .iconfont {
-                  font-size: 4em;
-                }
-              }
-
-              > .name {
-                font-size: 1.2em;
-                font-weight: bold;
-              }
-
               > .desc {
-                color: $disabled;
+                color: $text-disabled;
               }
             }
           }
@@ -354,9 +392,8 @@
         background-color: $primary;
 
         > .rule-content {
-          color: $reversal;
+          color: $text-reversal;
           margin: 0 auto;
-          margin-bottom: -1em;
           text-align: center;
         }
       }

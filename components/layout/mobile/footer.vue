@@ -29,7 +29,7 @@
 
       .footer-content {
         padding: 1rem;
-        font-size: .9em;
+        font-size: $font-size-h6;
         text-align: center;
         text-transform: uppercase;
       }

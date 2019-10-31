@@ -202,20 +202,18 @@
 </script>
 
 <style lang="scss">
-  @import '~assets/styles/variables';
-
   // 字体尺寸
   .size-0 {
-    font-size: 3rem;
+    font-size: 3em;
     font-weight: bolder;
   }
 
   .size-1 {
-    font-size: 3rem;
+    font-size: 3em;
   }
 
   .size-2 {
-    font-size: 2rem;
+    font-size: 2em;
   }
 
   // 字体颜色
@@ -274,17 +272,6 @@
     100%  { transform: translate3d(0, 0, 0) }
   }
 
-  @keyframes inputColor {
-    0%  { color: chartreuse }
-    12% { color: green }
-    24% { color: red }
-    36% { color: darkviolet }
-    60% { color: pink }
-    72% { color: yellow }
-    86% { color: white }
-    100% { color: black }
-  }
-
   .global-barrage {
     position: fixed;
     width: 100%;
@@ -292,8 +279,6 @@
     top: 0;
     left: 0;
     z-index: 8;
-    opacity: 0;
-    visibility: hidden;
     transform: translate3d(0, -100%, 0);
     animation-duration: .5s; 
     animation-fill-mode: both; 
@@ -303,11 +288,11 @@
     -webkit-backface-visibility: hidden;
     perspective: 1000;
     -webkit-perspective: 1000;
+    @include hidden();
     @include backdrop-blur();
 
     &.active {
-      opacity: 1;
-      visibility: visible;
+      @include visible();
       animation-duration: 1.556s;
       animation-fill-mode: both; 
       animation-name: barrage-in;
@@ -316,23 +301,21 @@
       > .barrage-box {
 
         > .input-box {
-          // transition: transform 5s;
           animation-delay: 1.6s;
           animation-duration: .5s; 
           animation-fill-mode: both; 
           animation-name: input-box-in;
           animation-timing-function: ease;
-          // transform: translate3d(0, 0, 0);
         }
       }
     }
 
     > .barrage-box {
       width: 100%;
+      height: 100%;
       display: block;
       position: relative;
-      margin-top: $header-height;
-      height: calc(100vh - #{$navbar-height});
+      padding-top: $header-height;
 
       > .list-box {
         height: 100%;
@@ -347,6 +330,7 @@
           height: 100%;
           padding: 0;
           margin: 0;
+          user-select: none;
 
           @keyframes barrages-list-out {
             0%  { transform: translate3d(100%, 0, 0) }
@@ -366,6 +350,7 @@
         position: absolute;
         bottom: 40%;
         width: 100%;
+        z-index: 999;
         transition: transform 5s;
         transform: translate3d(0, -2000%, 0);
 
@@ -378,24 +363,21 @@
 
           > .count {
             width: auto;
-            min-width: 9rem;
             height: 4rem;
             line-height: 4rem;
+            padding: 0 $gap;
             text-align: center;
-            // border-left: 1px dashed darken($module-bg, 10%);
           }
 
           > .size,
           > .color {
             width: 7rem;
             position: relative;
-            // border-right: 1px dashed darken($module-bg, 10%);
 
             &:hover {
 
-              & > .list {
-                visibility: visible;
-                opacity: 1;
+              > .list {
+                @include visible();
               }
             }
 
@@ -418,8 +400,7 @@
               width: 100%;
               height: auto;
               background-color: $module-bg-opacity-8;
-              visibility: hidden;
-              opacity: 0;
+              @include hidden();
 
               > .item {
                 height: 3rem;
@@ -444,7 +425,6 @@
             &:hover,
             &:focus {
               background-color: $module-bg-opacity-9;
-              // animation: inputColor steps(1) .6s infinite;
             }
           }
         }

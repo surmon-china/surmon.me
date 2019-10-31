@@ -1,10 +1,21 @@
 
 ## CHANGELOG
 
+### v2.4.6
+
+- Improve styles with PC / Mobile
+- Improve Vlog page animation
+- Improve PC Aside sticky logic
+- Improve PC Aside ad control logic
+- Improve PC Music and App page height logic
+- Improve replace `@include hidden()`
+- Remove `@css3-prefix xxx`
+- Remove background component
+
 ### v2.4.5
 
-Improve mobile mask logic
-Improve styles with comment
+- Improve mobile mask logic
+- Improve styles with comment
 
 ### v2.4.4
 
