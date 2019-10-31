@@ -56,7 +56,9 @@ export default new Vue({
       return (!lrc || lrc.nolyric) ? null : lrc.lrc
     },
     currentSongLrcArr() {
-      return this.currentSongLrcContent.lyric.split('\n').map(timeSentence => {
+      return this.currentSongLrcContent.lyric
+      .split('\n')
+      .map(timeSentence => {
         let time = /\[([^\[\]]*)\]/.exec(timeSentence)
         time = time && time.length && time[1]
         time = time && time.split(':').map(t => Number(t))
@@ -66,7 +68,8 @@ export default new Vue({
         sentence = sentence && sentence.length && sentence[1]
         sentence = sentence || ''
         return { time, sentence }
-      }).filter(timestamp => timestamp.time)
+      })
+      .filter(timestamp => timestamp.time)
     },
     currentSongRealTimeLrc() {
       const currentTime = this.state.seek
@@ -83,33 +86,28 @@ export default new Vue({
   watch: {
     currentSong() {
       this.fetchSongLrcWhenChangeSong()
-    }
+    },
   },
   methods: {
-    // 当歌曲切换时重新请求歌词
     fetchSongLrcWhenChangeSong() {
       const song = this.currentSong
       if (song && song.id) {
         this.fetchSongLrc(song.id)
       }
     },
-    // 安全操作
     humanizeOperation(action) {
       this.state.ready && action.bind(this.player)()
     },
-    // 初始化播放器
     initPlayer() {
       this.fetchSongList().then(_ => {
         this.buildPlayer()
       })
     },
-    // 构建播放器
     buildPlayer() {
       playerBuilder(this)
       if (this.state.ready && this.player.play) {
         // window.addLoadedTask(this.player.play)
         window.addLoadedTask(() => {
-          // this.player.play()
           window.onmousemove = () => {
             this.player.play()
             window.onmousemove = null
@@ -117,7 +115,6 @@ export default new Vue({
         })
       }
     },
-    // 获取歌曲列表
     fetchSongList() {
       this.list.fetching = true
       return window.$nuxt.$axios.$get(`/music/list/${appConfig.music.id}`)
@@ -130,7 +127,6 @@ export default new Vue({
           this.list.data = null
         })
     },
-    // 获取歌曲详情
     fetchSongDetail(song_id) {
       this.song.fetching = true
       return window.$nuxt.$axios.$get(`/music/song/${song_id}`)
@@ -143,7 +139,6 @@ export default new Vue({
           this.song.fetching = false
         })
     },
-    // 获取歌曲歌词
     fetchSongLrc(song_id) {
       this.lrc.fetching = true
       return window.$nuxt.$axios.$get(`/music/lrc/${song_id}`)
@@ -156,7 +151,6 @@ export default new Vue({
           this.lrc.data = null
         })
     },
-    // 获取歌曲地址
     fetchSongUrl(song_id) {
       return window.$nuxt.$axios.$get(`/music/url/${song_id}`)
     }

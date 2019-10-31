@@ -1,21 +1,19 @@
 <template>
-  <div id="share">
-    <div class="share-base" :class="{ mobile: isMobile }">
-      <a
-        :title="'Share to: ' + social.name"
-        rel="nofollow noopener"
-        class="share-ejector"
-        :key="index"
-        :class="social.class || social.name"
-        v-for="(social, index) in socials"
-        @click.prevent="shareWindow(social.name, social.url)"
-      >
-        <i class="iconfont" :class="`icon-${social.icon || social.class || social.name}`"></i>
-      </a>
-      <span class="share-ejector link" @click="copyPageUrl">
-        <i class="iconfont icon-link"></i>
-      </span>
-    </div>
+  <div class="share-box">
+    <a
+      rel="nofollow noopener"
+      class="share-ejector"
+      :key="index"
+      :title="'Share to: ' + social.name"
+      :class="social.class || social.name"
+      v-for="(social, index) in socials"
+      @click.prevent="shareWindow(social.name, social.url)"
+    >
+      <i class="iconfont" :class="`icon-${social.icon || social.class || social.name}`"></i>
+    </a>
+    <span class="share-ejector link" @click="copyPageUrl">
+      <i class="iconfont icon-link"></i>
+    </span>
   </div>
 </template>
 
@@ -73,9 +71,6 @@
     computed: {
       url() {
         return `https://surmon.me${this.$route.fullPath}`
-      },
-      isMobile() {
-        return this.$store.state.global.isMobile
       }
     },
     methods: {
@@ -135,87 +130,71 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  #share {
+<style lang="scss">
+  .share-box {
 
-    .share-base {
+    > .share-ejector {
+      cursor: pointer;
+      display: inline-block;
+      text-align: center;
 
-      &.mobile {
+      &.wechat:hover {
+        background-color: rgb(123, 179, 46);
+      }
 
-        > .share-ejector {
-          display: none;
+      &.weibo:hover {
+        background-color: rgb(230, 22, 45);
+      }
 
-          &[class*="wechat"],
-          &[class*="weibo"],
-          &[class*="twitter"] {
-            display: inline-block;
-          }
+      &.qzone:hover {
+        background-color: rgb(43, 130, 217);
+      }
+
+      &.douban:hover {
+        background-color: rgb(0, 119, 17);
+      }
+
+      &.renren:hover {
+        background-color: rgb(0, 94, 172);
+      }
+
+      &.evernote:hover {
+        background-color: rgb(139, 224, 86);
+      }
+
+      &.twitter:hover {
+        background-color: rgb(85, 172, 238);
+      }
+
+      &.facebook:hover {
+        background-color: rgb(59, 89, 152);
+      }
+
+      &.google-plus:hover {
+        background-color: rgb(221, 75, 57);
+      }
+
+      &.linkedin:hover {
+        background-color: rgb(0, 123, 181);
+      }
+
+      &.mail:hover {
+        background-color: #5dc732;
+      }
+
+      &.link:hover {
+        background-color: #e67a1c;
+      }
+
+      &:hover {
+
+        > .iconfont {
+          color: #fff;
         }
       }
 
-      > .share-ejector {
-        cursor: pointer;
-        display: inline-block;
-        text-align: center;
-
-        &.wechat:hover {
-          background-color: rgb(123, 179, 46);
-        }
-
-        &.weibo:hover {
-          background-color: rgb(230, 22, 45);
-        }
-
-        &.qzone:hover {
-          background-color: rgb(43, 130, 217);
-        }
-
-        &.douban:hover {
-          background-color: rgb(0, 119, 17);
-        }
-
-        &.renren:hover {
-          background-color: rgb(0, 94, 172);
-        }
-
-        &.evernote:hover {
-          background-color: rgb(139, 224, 86);
-        }
-
-        &.twitter:hover {
-          background-color: rgb(85, 172, 238);
-        }
-
-        &.facebook:hover {
-          background-color: rgb(59, 89, 152);
-        }
-
-        &.google-plus:hover {
-          background-color: rgb(221, 75, 57);
-        }
-
-        &.linkedin:hover {
-          background-color: rgb(0, 123, 181);
-        }
-
-        &.mail:hover {
-          background-color: #5dc732;
-        }
-
-        &.link:hover {
-          background-color: #e67a1c;
-        }
-
-        &:hover {
-
-          > .iconfont {
-            color: #fff;
-          }
-        }
-
-        > .iconfont {
-          display: block !important;
-        }
+      > .iconfont {
+        display: block;
       }
     }
   }

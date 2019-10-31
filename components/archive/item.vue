@@ -24,9 +24,9 @@
         </nuxt-link>
       </div>
       <div class="item-body">
-        <h4 class="item-title">
+        <h5 class="item-title">
           <nuxt-link :to="`/article/${article.id}`" :title="article.title" v-text="article.title" />
-        </h4>
+        </h5>
         <p
           class="item-description"
           style="-webkit-box-orient: vertical;"
@@ -115,7 +115,7 @@
 
 <style lang="scss" scoped>
   .article-list-item {
-    margin-bottom: 1em;
+    margin-bottom: $lg-gap;
     @include module-blur-bg();
 
     &:last-child {
@@ -127,10 +127,13 @@
     }
 
     > .item-content {
+      $height: $gap * 11;
+      $padding: $sm-gap;
+      $content-height: $height - ($padding * 2);
       display: block;
       overflow: hidden;
-      height: 9.5em;
-      padding: .5em;
+      height: $height;
+      padding: $padding;
 
       &:hover {
 
@@ -141,8 +144,8 @@
           }
 
           .item-thumb-img {
-            @include css3-prefix(opacity, .95);
-            @include css3-prefix(transform, translateX(-3px));
+            opacity: .95;
+            transform: translateX(-3px);
           }
         }
       }
@@ -150,7 +153,7 @@
       > .item-thumb {
         float: left;
         width: 12em;
-        height: 8.5em;
+        height: $content-height;
         overflow: hidden;
         position: relative;
 
@@ -161,13 +164,13 @@
           top: 0;
           position: absolute;
           z-index: 1;
-          font-size: $font-size-small;
-          text-align: center;
-          color: $reversal;
+          padding: 0 $sm-gap;
           border-bottom-right-radius: 1px;
           opacity: .4;
-          padding: 0 .8rem;
           text-transform: uppercase;
+          text-align: center;
+          font-size: $font-size-small;
+          color: $text-reversal;
 
           &.self {
             background-color: rgba($accent, .5);
@@ -187,59 +190,57 @@
           width: calc(100% + 3px);
           max-width: calc(100% + 3px);
           height: auto;
-          min-height: 8.5em;
+          min-height: $content-height;
           border-color: transparent;
           background-color: $module-hover-bg;
-          @include css3-prefix(opacity, 1);
-          @include css3-prefix(transform, translateX(0));
+          opacity: 1;
+          transform: translateX(0);
         }
       }
 
       > .item-body {
         float: right;
         width: 28.5em;
-        height: 8.5em;
+        height: $content-height;
 
         > .item-title {
-          font-size: 1em;
+          margin-top: 3px;
+          margin-bottom: $sm-gap;
           font-weight: bold;
           color: $link-hover-color;
-          margin-top: .2em;
-          margin-bottom: .5em;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
+          @include text-overflow();
 
           > a {
             margin-left: 0;
+            transition: margin $transition-time-normal linear;
 
             &:hover {
               display: inline-block;
               text-decoration: underline;
-              margin-left: .5em;
+              margin-left: $sm-gap;
             }
           }
         }
 
         > .item-description {
-          height: 5em;
+          height: 5rem;
           margin: 0;
-          margin-bottom: 0.3em;
-          overflow: hidden;
-          font-size: .9em;
+          margin-bottom: $xs-gap;
           line-height: 1.8em;
+          overflow: hidden;
           text-overflow: ellipsis;
+          font-size: $font-size-h6;
           @include clamp(3);
         }
 
         > .item-meta {
           height: 2em;
+          line-height: 2em;
           display: flex;
           justify-content: space-between;
           align-items: baseline;
           overflow: hidden;
-          font-size: .9em;
-          line-height: 2em;
+          font-size: $font-size-small;
           white-space: nowrap;
           text-overflow: ellipsis;
           word-wrap: normal;
@@ -270,11 +271,9 @@
           > .likes,
           > .tags,
           > .categories {
-            margin-right: 1em;
 
             > .iconfont {
-              font-size: 1em;
-              margin-right: .4em;
+              margin-right: $xs-gap;
             }
           }
 
@@ -283,7 +282,7 @@
 
             a {
               text-transform: capitalize;
-              margin-right: .5em;
+              margin-right: $sm-gap;
             }
           }
 

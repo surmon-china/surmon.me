@@ -154,13 +154,13 @@
     bottom: 30rem;
 
     > .container {
+      $size: $lg-gap * 2.8;
       position: relative;
 
       > .tools-list {
         position: absolute;
-        right: -10em;
-        width: 3em;
-        height: 7em;
+        right: -12rem;
+        width: $size;
 
         > .webrtc,
         > .barrage,
@@ -168,9 +168,9 @@
         > .to-page-bottom,
         > .feedback {
           display: block;
-          width: 3em;
-          height: 3em;
-          line-height: 3em;
+          width: $size;
+          height: $size;
+          line-height: $size;
           text-align: center;
           @include module-blur-bg();
 
@@ -216,12 +216,12 @@
 
         @keyframes webrtc {
           0%   {
-            color: $reversal;
+            color: $text-reversal;
             background: $primary;
           }
           100% {
             color: $primary;
-            background: $reversal;
+            background: $text-reversal;
           }
         }
 
@@ -238,7 +238,7 @@
         }
 
         > .barrage {
-          color: $reversal;
+          color: $text-reversal;
           animation: default-btn-bg 10s infinite;
 
           &.active {
@@ -253,8 +253,8 @@
         }
 
         > .to-page-bottom {
-          height: 2em;
-          line-height: 2em;
+          height: $size * 0.6;
+          line-height: $size * 0.6;
         }
       }
     }

@@ -78,6 +78,10 @@ export default {
         zh: '空空如也',
         en: 'No Result Data.'
       },
+      friendMe: {
+        zh: '众里寻他',
+        en: 'Friend me'
+      },
       notFound: {
         zh: '众里寻他 我已不再',
         en: 'Arrives here at last'
@@ -103,6 +107,10 @@ export default {
           zh: '即破楼兰',
           en: 'Email ME'
         },
+        hireMe: {
+          zh: '或在 Upwork 雇佣我',
+          en: 'Hire me on upwork.com',
+        }
       },
       about: {
         sponsorMe: {

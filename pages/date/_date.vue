@@ -1,5 +1,5 @@
 <template>
-  <div class="index">
+  <div class="date-archive-page">
     <article-list :article="article" @loadmore="loadmoreArticle" />
   </div>
 </template>
@@ -9,7 +9,7 @@
   import ArticleList from '~/components/archive/list'
 
   export default {
-    name: 'data-article-list',
+    name: 'date-article-list',
     validate ({ params }) {
       return new Date(params.date).toString() !== 'Invalid Date'
     },

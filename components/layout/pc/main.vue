@@ -6,32 +6,30 @@
       <wall-flower v-if="!onPowerSavingMode" />
       <language-psm v-if="isNotServicePage" />
       <wallpaper-switch v-if="isNotServicePage" />
-      <theme-switch v-if="!onPowerSavingMode && isNotServicePage" />
-      <share-box v-if="isNotServicePage" class="sidebar" />
+      <theme-switch v-if="isNotServicePage && !onPowerSavingMode" />
+      <share-box v-if="isNotServicePage" class="sidebar-share" />
       <tool-box v-if="isNotFullColPage" />
     </client-only>
     <main
       id="main"
       class="main-container"
-      :class="{ 'full-view': isFullViewWidth }"
+      :class="{
+        'full-view': isFullViewWidth
+      }"
     >
-      <transition name="module">
-        <nav-view v-if="!isThreeColumns" />
-      </transition>
+      <nav-view v-if="!isThreeColumns" />
       <div
         id="main-content"
         class="main-content"
         :class="{
-          'full-column': isTwoColumns,
-          'error-column': isThreeColumns,
+          'two-column': isTwoColumns,
+          'three-column': isThreeColumns,
           'full-view': isFullViewWidth
         }"
       >
         <nuxt :nuxtChildKey="$route.name" keep-alive />
       </div>
-      <transition name="aside">
-        <aside-view key="aside" v-if="!isTwoColumns && !isThreeColumns" />
-      </transition>
+      <aside-view key="aside" v-if="!isTwoColumns && !isThreeColumns" />
     </main>
     <client-only>
       <barrage v-if="isMountedBarrage" v-cloak/>
@@ -121,9 +119,45 @@
 <style lang="scss" scoped>
   #app-main {
 
+    .sidebar-share {
+      position: fixed;
+      top: 12%;
+      left: 0;
+      height: auto;
+      max-width: 4rem;
+      display: flex;
+      flex-direction: column;
+      opacity: .4;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      &::v-deep > .share-ejector {
+        width: 3rem;
+        height: 3rem;
+        line-height: 3rem;
+        font-size: 18px;
+        transition: width $transition-time-fast;
+
+        &.renren,
+        &.evernote,
+        &.linkedin,
+        &.mail {
+          display: none;
+        }
+
+        &:hover {
+          width: 120%;
+        }
+      }
+    }
+
     .main-container {
       position: relative;
-      display: block;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
       width: $container-width;
 
       &.full-view {
@@ -131,39 +165,35 @@
       }
 
       .main-content {
-        float: left;
-        width: 42.5em;
-        margin: 0 0 0 12.5em;
+        width: $main-width;
         position: relative;
         overflow: hidden;
-        @include css3-prefix(transition, width .35s);
+        transition: none;
 
         &:-moz-full-screen {
           overflow-y: auto;
         }
-          
+
         &:-webkit-full-screen {
           overflow-y: auto;
         }
-          
+
         &:fullscreen {
           overflow-y: auto;
         }
 
-        &.full-column {
-          width: 62.5em;
-          @include css3-prefix(transition, width .35s);
+        &.two-column {
+          flex-grow: 1;
         }
 
-        &.error-column {
+        &.three-column {
           width: 100%;
           margin: 0;
-          @include css3-prefix(transition, width .35s);
         }
 
         &.full-view {
           width: 100%;
-          margin: -1em 0;
+          margin: -$lg-gap 0;
         }
       }
     }

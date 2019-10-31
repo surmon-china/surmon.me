@@ -76,7 +76,7 @@
             :class="{ active: !localStream.disabledBeauty }"
             @click="toggleBeauty()"
           >
-            <i class="iconfont icon-meiyan"></i>
+            <i class="iconfont icon-face-ai"></i>
             <span>美颜</span>
           </button>
           <div class="filter" :class="{ active: stream.filter !== 0 }">
@@ -522,6 +522,7 @@
     z-index: 8;
     padding-top: $header-height * 2;
     background-color: $module-hover-bg-darken-20;
+    user-select: none;
     @include backdrop-blur();
 
     > .webrtc-box {
@@ -532,22 +533,21 @@
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
-      max-width: 80%;
-      max-height: calc(100vh - 16rem);
-
+      max-width: 88%;
+      max-height: 88%;
       &.aligenLeft {
         justify-content: start;
       }
 
       > .stream-box {
         height: auto;
-        margin-right: 1rem;
-        margin-bottom: 1rem;
+        margin-right: $gap;
+        margin-bottom: $gap;
         display: flex;
         justify-content: center;
         position: relative;
         overflow-y: hidden;
-        border: .666rem solid $module-bg-opacity-5;
+        border: $sm-gap solid $module-bg-opacity-5;
         background-color: $module-bg;
 
         &.local {
@@ -658,7 +658,7 @@
           z-index: -1;
 
           > .text {
-            color: $secondary;
+            color: $text-secondary;
           }
         }
 
@@ -669,14 +669,14 @@
           background-color: $module-bg;
           height: 2.2rem;
           line-height: 2.1rem;
-          padding: 0 1rem;
-          font-size: 1.2rem;
+          padding: 0 $gap;
+          font-size: $font-size-h4;
           opacity: .6;
         }
 
         > .volume {
           position: absolute;
-          left: 1rem;
+          left: $gap;
           bottom: 6rem;
           width: 9rem;
           height: 1rem;
@@ -684,18 +684,19 @@
         }
 
         > .tools {
-          left: 1rem;
-          bottom: 1rem;
+          display: flex;
+          left: $gap;
+          bottom: $lg-gap;
 
           > button,
           > .beauty,
           > .filter {
             width: 4rem;
-            height: 3rem;
+            margin-right: $gap;
             line-height: 3rem;
             text-align: center;
-            margin-right: 1rem;
             background-color: $module-bg;
+            text-transform: uppercase;
 
             &:hover {
               background-color: $module-bg-opacity-8;
@@ -704,43 +705,42 @@
             &.active {
               background-color: $module-bg-opacity-9;
             }
+
+            .iconfont {
+              font-size: $font-size-h4;
+            }
           }
 
           > .beauty {
             width: auto;
-            padding: 0 1rem;
+            padding: 0 $gap;
 
             > .iconfont {
-              margin-right: 1rem;
+              margin-right: $xs-gap;
             }
           }
 
           > .filter {
             width: auto;
-            padding: 0 1rem;
+            padding: 0 $gap;
             margin: 0;
             float: right;
             display: block;
             position: relative;
 
             &:hover {
-
               > .filter-list {
-                visibility: visible;
-                opacity: 1;
+                @include visible();
               }
             }
 
             > .current {
-
               > .name {
-                margin-left: 1rem;
+                margin-left: $xs-gap;
               }
             }
 
             > .filter-list {
-              opacity: 0;
-              visibility: hidden;
               position: absolute;
               bottom: 3rem;
               left: 0;
@@ -749,6 +749,7 @@
               padding: 0;
               list-style: none;
               background-color: $module-bg;
+              @include hidden();
 
               > li {
                 cursor: pointer;
