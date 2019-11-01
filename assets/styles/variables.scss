@@ -70,6 +70,7 @@ $active-content-full-height: calc(100vh - #{$header-height + $lg-gap + $footer-h
 
 // Mobile
 $mobile-header-height: 5rem;
+$mobile-footer-height: $lg-gap * 4;
 $mobile-aside-bg: #34393d;
 $mobile-aisde-transition: all $transition-time-slow ease-out;
 

@@ -152,6 +152,26 @@
     user-select: none;
     @include module-blur-bg();
 
+    &.mobile {
+      margin-bottom: $gap;
+      height: $mobile-carrousel-height;
+
+      > .swiper {
+
+        .slide-item {
+
+          > .content {
+            height: $mobile-carrousel-height;
+
+            > .title {
+              right: 1.7rem;
+              max-width: 70%;
+            }
+          }
+        }
+      }
+    }
+
     > .swiper {
 
       .slide-item {
@@ -202,25 +222,6 @@
               color: $text-darken;
               padding-left: .6em;
               background-color: $module-bg;
-            }
-          }
-        }
-      }
-    }
-
-    &.mobile {
-      height: $mobile-carrousel-height;
-
-      > .swiper {
-
-        .slide-item {
-
-          > .content {
-            height: $mobile-carrousel-height;
-
-            > .title {
-              right: 1.7rem;
-              max-width: 70%;
             }
           }
         }

@@ -19,6 +19,7 @@
             target="_blank"
             rel="external nofollow noopenter"
             href="https://www.upwork.com/freelancers/~0142e621258ac1770d"
+            v-if="!isMobile"
           >
             <span>(</span>
             <span>{{ $i18n.text.service.hireMe }}</span>
@@ -155,18 +156,16 @@
   .service-page {
 
     &.mobile {
-
       > .service {
-
         > .banner {
-          height: 15rem;
+          height: 14rem;
 
           > .banner-content {
             width: 100%;
-            height: 15rem;
 
             > .title {
-              margin: 3rem;
+              margin-top: 3rem;
+              margin-bottom: 2rem;
               font-size: $font-size-h1;
             }
           }
@@ -185,7 +184,12 @@
               > .item {
                 width: 100%;
                 height: auto;
+                margin-right: 0;
                 margin-bottom: 1rem;
+
+                > .icon {
+                  margin-bottom: -0.5em;
+                }
               }
             }
           }
@@ -216,7 +220,6 @@
         > .rule {
           height: auto;
           line-height: 3rem;
-          margin-bottom: 1em;
 
           > .rule-content {
             width: 100%;

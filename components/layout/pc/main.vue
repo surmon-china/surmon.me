@@ -75,7 +75,7 @@
       HeaderView, FooterView, AsideView, NavView, // 布局
     },
     mounted() {
-      this.watchTabActive()
+      this.autoEggWhenTabActive()
       this.$store.dispatch('wallpaper/fetchPapers')
       this.$root.$music = music
       this.$root.$music.state.ready || this.$root.$music.initPlayer()
@@ -99,17 +99,11 @@
       }
     },
     methods: {
-      startAllEgg(isHidden) {
-        if (isHidden) {
-          startTitleEgg()
-        } else {
-          resetTitle()
-        }
-      },
-      watchTabActive() {
+      autoEggWhenTabActive() {
         document.addEventListener('visibilitychange', event => {
-          const isHidden = event.target.hidden || event.target.webkitHidden
-          this.startAllEgg(isHidden)
+          event.target.hidden || event.target.webkitHidden
+            ? startTitleEgg()
+            : resetTitle()
         }, false)
       }
     }
@@ -118,6 +112,12 @@
 
 <style lang="scss" scoped>
   #app-main {
+
+    @media screen and (max-width: 1080px) {
+      .sidebar-share {
+        display: none !important;
+      }
+    }
 
     .sidebar-share {
       position: fixed;

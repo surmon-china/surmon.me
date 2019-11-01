@@ -259,7 +259,7 @@
             >
               <img :src="adConfig.src" />
             </a>
-            <div class="about-map" v-if="!isMobile">
+            <div class="about-map">
               <iframe class="iframe" src="/partials/map.html"></iframe>
             </div>
             <div class="about-project">
@@ -321,24 +321,27 @@
   .about-page {
 
     &.mobile {
-
       > .detail {
         margin: 0;
 
         > .content {
-
           > .about {
-
             > .about-all {
+
+              > .about-me,
+              > .about-map {
+                margin-bottom: $gap;
+              }
 
               > .about-me {
                 flex-direction: column-reverse;
 
                 > .gravatar {
                   width: 100%;
-                  margin-bottom: 1rem;
+                  margin-left: 0;
+                  margin-bottom: $gap;
                   flex-direction: row;
-                  padding: 2rem 0;
+                  padding: $lg-gap 0;
 
                   > .background {
                     height: 100%;
@@ -347,8 +350,8 @@
                     &.star-2 {
 
                       > .image {
-                         width: 4rem;
-                       }
+                        width: 4rem;
+                      }
                     }
 
                     > .image {
@@ -391,23 +394,21 @@
                     @include text-overflow();
 
                     > .iconfont {
-                      margin-right: 1rem;
-                    }
-
-                    > .accounts {
-                      bottom: auto;
+                      margin-right: $sm-gap;
                     }
                   }
                 }
               }
 
-              > .about-project {
-                height: auto;
+              > .about-map {
+                > .iframe {
+                  height: 11rem;
+                }
+              }
 
+              > .about-project {
                 > .project-link {
-                  height: auto;
-                  padding-top: 1rem;
-                  overflow: hidden;
+                  height: 10rem;
 
                   > .title {
                     font-size: 2em;
