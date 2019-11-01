@@ -3,7 +3,7 @@
     <div class="error-content">
       <h1 class="error-code">{{ error.statusCode }}</h1>
       <div class="error-wrapper-message">
-        <h2 class="error-message">{{ $i18n.text.notFound }}</h2>
+        <h2 class="error-message">{{ error.message || $i18n.text.notFound }}</h2>
       </div>
       <p class="error-link">
         <nuxt-link class="link" to="/">{{ $i18n.text.backToHomePage }}</nuxt-link>
@@ -57,7 +57,7 @@
       > .error-link,
       > .error-wrapper-message {
         color: $black-light;
-        animation: error-item ease-out both .5s .3s;
+        animation: error-item ease-out both .6s $transition-time-slow;
       }
 
       .link {
@@ -69,14 +69,16 @@
 
       > .error-code {
         text-transform: uppercase;
-        font-size: 12rem;
+        font-size: 10em;
+        font-weight: normal;
         margin: 0;
       }
 
       > .error-wrapper-message {
 
         > .error-message {
-          font-family: webfont-bolder, DINRegular;
+          font-family: 'webfont-bolder', 'DINRegular';
+          font-weight: normal;
           margin-top: 0;
         }
       }

@@ -1,9 +1,10 @@
 <template>
-  <div class="videos" :class="{ mobile: isMobile }">
+  <div class="vlog-page" :class="{ mobile: isMobile }">
     <ul ref="videoList" class="video-list">
       <li
         class="item"
         :key="index"
+        :title="video.title"
         v-for="(video, index) in videoList"
         @click="handlePlay(video)"
       >
@@ -13,6 +14,7 @@
               <i class="iconfont icon-music-play" />
             </div>
           </div>
+          <span class="length">{{ video.length }}</span>
           <div
             class="background lozad"
             :data-background-image="getThumbUrl(video.pic)"
@@ -21,7 +23,7 @@
             }"
           />
         </div>
-        <h4 class="title" v-text="video.title" />
+        <h5 class="title" v-text="video.title" />
         <p class="description" style="-webkit-box-orient: vertical;" v-text="video.description || '-'" />
         <hr class="split">
         <p class="meta">
@@ -50,7 +52,6 @@
         target="_blank"
         class="button"
         rel="external nofollow noopenter"
-        :disabled="isFetching || !isCanLoadMore"
       >
         <span class="icon">
           <i class="iconfont icon-vlog"></i>
@@ -138,8 +139,8 @@
 </script>
 
 <style lang="scss" scoped>
-  .videos {
-    min-height: 40em;
+  .vlog-page {
+    min-height: 40rem;
 
     &.mobile {
       min-height: auto;
@@ -149,9 +150,17 @@
         > .item {
           width: 100%;
           height: auto;
-          float: none;
           flex-grow: 1;
           margin-right: 0;
+          margin-bottom: $gap;
+
+          > .thumb {
+            height: 10rem;
+          }
+
+          > .split {
+            border-color: $module-hover-bg;
+          }
         }
       }
     }
@@ -167,27 +176,25 @@
 
       > .item {
         display: block;
-        margin-right: 1rem;
-        margin-bottom: 1rem;
-        width: calc((100% - 2rem) / 3);
-        height: 23rem;
-        cursor: pointer;
+        margin-right: $lg-gap;
+        margin-bottom: $lg-gap;
+        width: calc((100% - #{$lg-gap * 2}) / 3);
         background-color: $module-bg;
-        transition: transform 1s, background-color .5s;
+        cursor: pointer;
 
         &:hover {
           background-color: $module-hover-bg;
-          transition: transform 1s, background-color .5s;
 
-          > .thumb {
-
-            .mask {
-              opacity: 1;
-              visibility: visible;
+          .thumb {
+            .background {
+              transform: rotate(2deg) scale(1.1),
             }
 
-            .background {
-              @include css3-prefix(transform, rotate(2deg) scale(1.1));
+            .mask {
+              @include visible();
+              .button {
+                transform: scale(1);
+              }
             }
           }
 
@@ -211,8 +218,24 @@
             height: 100%;
             background-color: $module-hover-bg-darken-10;
             background-size: cover;
-            @include css3-prefix(transform, rotate(0deg) scale(1));
-            @include css3-prefix(transition, transform 1s);
+            background-position: center;
+            transform: rotate(0deg) scale(1);
+            transition: transform $transition-time-slow;
+          }
+
+          .length {
+            display: inline-block;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            z-index: 1;
+            background-color: $module-hover-bg-darken-40;
+            height: $font-size-h2;
+            line-height: $font-size-h2;
+            padding: 0 $sm-gap;
+            opacity: .9;
+            font-size: $font-size-small;
+            @include title-shadow();
           }
 
           .mask {
@@ -221,46 +244,49 @@
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0;
-            visibility: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9;
-            background-color: $module-hover-bg-opacity-3;
+            @include hidden();
 
             .button {
               width: 5rem;
               height: 5rem;
               line-height: 5rem;
               text-align: center;
-              font-size: 36px;
               background: $module-bg-opacity-5;
               border-radius: 100%;
+              color: $module-bg;
+              opacity: .88;
+              font-size: 3em;
+              transform: scale(1.2);
+              transition: transform $transition-time-slow;
             }
           }
         }
 
         > .title {
-          @include text-overflow();
-          padding: 0 1rem;
-          margin: 1rem 0;
+          padding: 0 $gap;
+          margin-top: $gap;
+          margin-bottom: $sm-gap;
           font-weight: bold;
           text-transform: capitalize;
+          @include text-overflow();
         }
 
         > .description {
-          text-align: left;
-          padding: 0 1rem;
-          margin-bottom: 1rem;
+          padding: 0 $gap;
+          margin-bottom: $sm-gap;
           line-height: 2rem;
           height: 2rem;
-          text-overflow: ellipsis;
-          @include clamp(1);
+          font-size: $font-size-h6;
+          @include text-overflow();
         }
 
         > .split {
           border-color: $body-bg;
+          border-top-style: dashed;
           margin: 0;
         }
 
@@ -270,14 +296,14 @@
           display: flex;
           justify-content: space-around;
           align-items: center;
-          font-size: 1rem;
+          font-size: $font-size-h6;
 
           > .item {
             font-weight: 400;
-            color: $secondary;
+            color: $text-secondary;
 
             .iconfont {
-              margin-right: .3rem;
+              margin-right: $xs-gap;
             }
           }
         }
@@ -289,22 +315,17 @@
       > .button {
         display: block;
         width: 100%;
-        height: 3.8rem;
-        line-height: 3.8rem;
-        text-align: center;
+        height: $block-button-height;
+        line-height: $block-button-height;
         background-color: $module-bg;
-
-        &[disabled] {
-          opacity: .9;
-          background-color: $module-bg-opacity-5;
-        }
+        text-align: center;
 
         &:hover {
           background-color: $module-hover-bg;
         }
 
         > .icon {
-          margin-right: 1rem;
+          margin-right: $gap;
         }
       }
     }

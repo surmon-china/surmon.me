@@ -44,7 +44,7 @@
     top: 74%;
     cursor: pointer;
 
-    $offset: .5rem;
+    $offset: 6px;
 
     > .wallpaper-box {
       width: 4rem;
@@ -59,22 +59,10 @@
         transform: translateX(-$offset);
       }
 
-      @keyframes wall-paper-y {
+      @keyframes wallpaper-y {
         0% { transform: translateY(-$offset) }
         50% { transform: translateY($offset) }
         100% { transform: translateY(-$offset) }
-      }
-
-      @keyframes wall-paper-down {
-        0% {
-          transform: translateY(-1rem);
-        }
-        50% {
-          transform: translateY(1rem);
-        }
-        100% {
-          transform: translateY(-1rem);
-        }
       }
 
       > .up,
@@ -89,7 +77,7 @@
         left: $offset;
         z-index: 1;
         background-color: $primary;
-        animation: wall-paper-y 1.5s .75s infinite;
+        animation: wallpaper-y 1.5s .75s infinite;
       }
 
       > .up {
@@ -97,7 +85,7 @@
         left: 0;
         z-index: 2;
         background-color: $yellow;
-        animation: wall-paper-y 1.5s 0s infinite;
+        animation: wallpaper-y 1.5s 0s infinite;
 
         > .title {
           display: block;
@@ -108,7 +96,7 @@
           text-align: center;
           color: $primary;
           writing-mode: tb-rl;
-          letter-spacing: 4px;
+          letter-spacing: $xs-gap;
 
           &.en {
             font-weight: bold;

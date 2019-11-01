@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "2.4.5",
+  "version": "2.4.6",
   "description": "Surmon.me blog",
   "author": {
     "name": "Surmon",
@@ -50,6 +50,7 @@
     "simplewebrtc": "^3.0.2",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
+    "sticky-events": "^3.1.0",
     "ua-parser-js": "^0.7.20",
     "vue-analytics": "^5.17.2",
     "vue-awesome-swiper": "^3.1.3",

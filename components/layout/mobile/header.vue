@@ -20,23 +20,19 @@
         </datalist>
       </client-only>
     </form>
-    <transition name="module">
+    <transition name="fade">
       <div v-if="search" class="search-mask"></div>
     </transition>
     <nav class="navbar">
-      <div class="navbar-container">
-        <div class="navbar-header">
-          <a href class="navbar-menu" @click.stop.prevent="toggleSidebar(!onMobileSidebar)">
-            <i class="iconfont icon-menu"></i>
-          </a>
-          <nuxt-link to="/" class="navbar-logo">
-            <img src="/images/logo.svg">
-          </nuxt-link>
-          <a href class="navbar-search" @click.stop.prevent="openSearch">
-            <i class="iconfont icon-search"></i>
-          </a>
-        </div>
-      </div>
+      <a href class="navbar-menu" @click.stop.prevent="toggleSidebar(!onMobileSidebar)">
+        <i class="iconfont icon-menu"></i>
+      </a>
+      <nuxt-link to="/" class="navbar-logo">
+        <img src="/images/logo.svg">
+      </nuxt-link>
+      <a href class="navbar-search" @click.stop.prevent="openSearch">
+        <i class="iconfont icon-search"></i>
+      </a>
     </nav>
   </header>
 </template>
@@ -87,7 +83,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: $navbar-height;
+    height: $mobile-header-height;
     background-color: $module-bg-opacity-9;
     z-index: 999;
 
@@ -107,24 +103,24 @@
       display: flex;
       z-index: 9999;
       width: 100%;
-      height: $navbar-height;
+      height: $mobile-header-height;
       top: 0;
       left: 0;
       opacity: 0;
-      background-color: $reversal;
+      background-color: $text-reversal;
       transform: translateY(-100%);
 
       > .input {
         width: 80%;
+        height: 100%;
         padding: 1em;
-        height: $navbar-height;
       }
 
       > .close {
         width: 20%;
+        height: 100%;
+        line-height: $mobile-header-height;
         text-align: center;
-        height: $navbar-height;
-        line-height: $navbar-height;
       }
 
       &.actived {
@@ -134,32 +130,23 @@
     }
 
     .navbar {
+      width: 100%;
+      height: $mobile-header-height;
+      display: flex;
+      position: relative;
+      align-items: center;
+      justify-content: space-between;
 
-      .navbar-container {
-        height: $navbar-height;
+      .navbar-menu,
+      .navbar-search {
+        height: 100%;
+        width: 20%;
+        line-height: $mobile-header-height;
+        text-align: center;
+      }
 
-        .navbar-header {
-          height: $navbar-height;
-          display: flex;
-          position: relative;
-          align-items: center;
-          width: 100%;
-          justify-content: space-between;
-
-          .navbar-menu,
-          .navbar-search {
-            border: none;
-            display: inline-block;
-            height: $navbar-height;
-            width: 20%;
-            line-height: $navbar-height;
-            text-align: center;
-          }
-
-          .navbar-logo {
-            width: 30%;
-          }
-        }
+      .navbar-logo {
+        width: 30%;
       }
     }
   }

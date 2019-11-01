@@ -24,19 +24,19 @@
     <div class="title-box">
       <transition name="module" mode="out-in">
         <!-- category -->
-        <h4 class="title" :key="`category${currentCategory.description}`" v-if="currentCategory">
+        <h5 class="title" :key="`category${currentCategory.description}`" v-if="currentCategory">
           <span>{{ currentCategory.description || '...' }}</span>
-        </h4>
+        </h5>
 
         <!-- tag -->
-        <h4 class="title" :key="`tag${currentTag.name}`" v-else-if="currentTag">
+        <h5 class="title" :key="`tag${currentTag.name}`" v-else-if="currentTag">
           <span>{{ currentTag.name }}</span>
           <span>&nbsp;-&nbsp;</span>
           <span>{{ currentTag.description || '...' }}</span>
-        </h4>
+        </h5>
 
         <!-- date -->
-        <h4 class="title" :key="`date${currentDate}`" v-else-if="currentDate">
+        <h5 class="title" :key="`date${currentDate}`" v-else-if="currentDate">
           <span v-if="isEnLang">
             <span>{{ currentDate }}&nbsp;</span>
             <span>articles</span>
@@ -46,10 +46,10 @@
             <span>&nbsp;{{ currentDate }}&nbsp;</span>
             <span>的所有文章</span>
           </span>
-        </h4>
+        </h5>
 
         <!-- search -->
-        <h4 class="title" :key="`search${currentKeyword}`" v-else-if="currentKeyword">
+        <h5 class="title" :key="`search${currentKeyword}`" v-else-if="currentKeyword">
           <span v-if="isEnLang">
             <span>"{{ currentKeyword }}"</span>
             <span>related articles</span>
@@ -61,7 +61,7 @@
             <span>"&nbsp;</span>
             <span>有关的所有文章</span>
           </span>
-        </h4>
+        </h5>
       </transition>
     </div>
   </div>
@@ -124,11 +124,11 @@
 
 <style lang="scss" scoped>
   .header-box {
-    color: $text-reversal;
-    height: 16.4rem;
+    position: relative;
     display: flex;
     flex-direction: column;
-    position: relative;
+    height: 16.4rem;
+    color: $text-reversal;
 
     &.mobile {
       height: 12rem;
@@ -202,7 +202,6 @@
 
       > .title {
         margin: 0;
-        font-size: 1em;
         text-align: center;
         text-transform: capitalize;
       }

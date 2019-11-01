@@ -1,5 +1,5 @@
 <template>
-  <article id="article" class="article" :class="{ mobile: isMobile }">
+  <article class="article-page" :class="{ mobile: isMobile }">
     <div class="detail" ref="detail">
       <transition name="module">
         <div
@@ -47,7 +47,7 @@
     <client-only>
       <div class="mammon">
         <transition name="module" mode="out-in">
-          <skeleton-paragraph class="mammon-skeleton" key="skeleton" v-if="isFetching" :lines="4" line-height="1em" />
+          <skeleton-paragraph key="skeleton" v-if="isFetching" :lines="4" line-height="1em" />
           <adsense-responsive key="adsense" v-else-if="renderAd" />
         </transition>
       </div>
@@ -64,7 +64,7 @@
             v-for="item in (isMobile ? 3 : 10)"
           />
         </div>
-        <share-box key="share" class="article" v-else />
+        <share-box key="share" :class="{ mobile: isMobile }" v-else />
       </transition>
     </div>
     <transition name="module" mode="out-in">
@@ -177,7 +177,9 @@
                 :href="article.link"
               >
                 <img :src="article.img" class="thumb" :alt="article.title">
-                <span class="title">{{ article.title }}</span>
+                <span class="title">
+                  <span class="text">{{ article.title }}</span>
+                </span>
               </a>
               <nuxt-link
                 v-else
@@ -191,7 +193,9 @@
                   :alt="article.title"
                   class="thumb"
                 >
-                <span class="title">{{ article.title }}</span>
+                <span class="title">
+                  <span class="text">{{ article.title }}</span>
+                </span>
               </nuxt-link>
             </div>
           </div>
@@ -208,7 +212,7 @@
               <span class="sign">《</span>
               <span class="title">{{ article.title }}</span>
               <span class="sign">》</span>
-              <small class="tip">- 狠狠地阅读</small>
+              <small class="tip">- more</small>
             </a>
             <nuxt-link
               v-else
@@ -252,9 +256,7 @@
     },
     fetch({ store, params, error }) {
       return Promise.all([
-        store.dispatch('article/fetchDetail', params).catch(err => {
-          error({ statusCode: 404, message: '众里寻他 我已不再' })
-        }),
+        store.dispatch('article/fetchDetail', params).catch(err => error({ statusCode: 404 })),
         store.dispatch('comment/fetchList', { post_id: params.article_id })
       ])
     },
@@ -264,8 +266,8 @@
         title: article.title || '...',
         meta: [
           {
-            hid: 'keywords', 
-            name: 'keywords', 
+            hid: 'keywords',
+            name: 'keywords',
             content: (article.keywords ? article.keywords.join(',') : article.title) || ''
           },
           { hid: 'description', name: 'description', content: article.description }
@@ -462,9 +464,47 @@
 </script>
 
 <style lang="scss">
-  .article {
+  // workaround css scoped
+  .article-page {
+    .share-box {
+      .share-ejector {
+        background-color: $body-bg;
+      } 
+    }
+  }
+</style>
+
+<style lang="scss">
+  .article-page {
 
     &.mobile {
+      > .detail,
+      > .mammon,
+      > .share,
+      > .metas,
+      > .related {
+        margin-bottom: $gap;
+      }
+
+      > .detail {
+        padding: $gap $lg-gap;
+
+        > .oirigin {
+          font-size: $font-size-base;
+        }
+
+        > .knowledge {
+          > .content {
+            pre {
+              padding-left: 0;
+
+              > .code-lines {
+                display: none;
+              }
+            }
+          }
+        }
+      }
 
       > .metas {
         line-height: 2.3em;
@@ -476,7 +516,7 @@
 
           > .title.en {
             width: auto;
-            margin-right: 1rem;
+            margin-right: $gap;
           }
         }
       }
@@ -512,46 +552,39 @@
           }
         }
       }
+    }
 
-      > .detail {
+    > .detail,
+    > .mammon,
+    > .share,
+    > .metas,
+    > .related {
+      margin-bottom: $lg-gap;
+      background-color: $module-bg;
+    }
 
-        > .oirigin {
-          font-size: $font-size-base;
-        }
+    > .mammon {
+      padding: $gap;
 
-        > .knowledge {
+      > .mammon-box {
 
-          > .content {
+        > .mammon-wrapper {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 8rem;
+          overflow: hidden;
 
-            pre {
-              padding-left: 0;
-
-              > .code-lines {
-                display: none;
-              }
-            }
+          > .adsbygoogle {
+            width: 100%;
+            height: 96px;
           }
         }
       }
     }
 
-    > .detail,
-    > .mammon,
-    > .metas,
-    > .related {
-      margin-bottom: 1em;
-      background-color: $module-bg;
-    }
-
-    > .mammon {
-
-      .mammon-skeleton {
-        padding: 1em;
-      }
-    }
-
     > .detail {
-      padding: 1em 2em;
+      padding: 1rem 2rem;
       position: relative;
       overflow: hidden;
       height: auto;
@@ -573,18 +606,18 @@
 
       > .oirigin {
         position: absolute;
-        top: -0.9rem;
-        left: -2.4rem;
+        top: -11px;
+        left: -29px;
         transform: rotate(-45deg);
         width: 7rem;
         height: 4rem;
         line-height: 5.8rem;
         text-align: center;
+        text-transform: uppercase;
         transform-origin: center;
-        color: $reversal;
+        color: $text-reversal;
         font-weight: bold;
         font-size: $font-size-small;
-        text-transform: uppercase;
 
         &.self {
           background-color: rgba($accent, .8);
@@ -611,13 +644,13 @@
         > .content {
 
           > .google-auto-placed {
-            margin-bottom: 0.618rem;
+            margin-bottom: $sm-gap;
           }
 
           iframe {
             width: 100%;
             margin-bottom: 1em;
-            background-color: black;
+            background-color: $theme-black;
           }
 
           a {
@@ -640,19 +673,9 @@
             display: block;
             text-align: center;
             border-radius: $radius;
-            border: .5rem solid $module-hover-bg;
-            transition: all $transition-time-normal;
+            border: $sm-gap solid $module-hover-bg;
             opacity: .9;
             cursor: pointer;
-
-            // &::after {
-            //   content: "...";
-            //   height: 100%;
-            //   width: 100%;
-            //   position: absolute;
-            //   left: 0;
-            //   top: 0;
-            // }
 
             &:hover {
               opacity: 1;
@@ -680,18 +703,13 @@
           h4,
           h5,
           h6 {
-            margin: 1.5rem 0;
-            padding-left: 0;
             line-height: 1.8em;
             font-weight: 700;
             text-indent: 0;
           }
 
           blockquote {
-
             p {
-              // text-indent: 0em;
-
               &:last-child {
                 margin-bottom: 0;
               }
@@ -703,7 +721,6 @@
           }
 
           ul, ol {
-
             > li {
               line-height: 1.8em;
               padding: .5em .8em;
@@ -777,13 +794,12 @@
                 position: relative;
                 list-style-type: none;
                 line-height: $code-line-line-height;
-                transition: background-color .05s;
+                transition: none;
 
                 &:hover {
                   &:before {
                     display: block;
-                    opacity: 1;
-                    visibility: visible;
+                    @include visible();
                   }
                 }
 
@@ -796,8 +812,7 @@
                   width: 66em;
                   background-color: rgba(154, 154, 154, 0.2);
                   display: none;
-                  visibility: hidden;
-                  opacity: 0;
+                  @include hidden();
                 }
               }
             }
@@ -823,7 +838,7 @@
             background-color: $module-hover-bg;
           }
           25% { 
-            transform: translate3d(0, .5rem, 0);
+            transform: translate3d(0, $sm-gap, 0);
             background-color: $primary;
             color: white;
           }
@@ -832,7 +847,7 @@
             background-color: $module-hover-bg;
           }
           75% { 
-            transform: translate3d(0, .5rem, 0);
+            transform: translate3d(0, $sm-gap, 0);
             background-color: $primary;
             color: white;
           }
@@ -846,7 +861,7 @@
           width: 100%;
           display: flex;
           justify-content: center;
-          margin-bottom: .8rem;
+          margin-bottom: $gap;
 
           > .readmore-btn {
             width: 80%;
@@ -866,32 +881,77 @@
             }
 
             > .iconfont {
-              margin-left: .5rem;
+              margin-left: $sm-gap;
             }
           }
         }
       }
     }
 
-    .share {
-      padding: 1em;
-      margin-bottom: 1em;
-      background-color: $module-bg;
+    > .share {
+      padding: $gap;
 
       > .skeleton {
         display: flex;
         justify-content: space-between;
         height: 3rem;
       }
+
+      > .share-box {
+        width: 100%;
+        opacity: .6;
+        display: flex;
+        justify-content: space-between;
+
+        &:hover {
+          opacity: 1;
+        }
+
+        > .share-ejector {
+          flex-grow: 1;
+          width: auto;
+          height: 3rem;
+          line-height: 3rem;
+          margin-right: $gap;
+          font-size: 17px;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+
+        &.mobile {
+          > .share-ejector {
+            width: auto;
+            display: none;
+            flex-grow: 0;
+
+            &[class*="wechat"],
+            &[class*="weibo"],
+            &[class*="twitter"] {
+              display: inline-block;
+              flex-grow: 1;
+            }
+            &[class*="twitter"] {
+              margin-right: 0;
+            }
+          }
+        }
+      }
     }
 
     > .metas {
-      padding: 1em;
+      padding: $gap;
 
       > .item {
-        border-left: solid .5em $body-bg;
-        padding-left: 1rem;
+        margin-bottom: $lg-gap;
+        border-left: solid $sm-gap $body-bg;
+        padding-left: $gap;
         word-break: break-all;
+
+        &:last-child {
+          margin: 0;
+        }
 
         a:hover {
           text-decoration: underline;
@@ -915,21 +975,21 @@
     }
 
     > .related {
-      padding: 1em 0;
-      border-width: 0 1em;
+      padding: $gap 0;
+      border-width: 0 $gap;
       border-color: transparent;
       overflow: hidden;
-      height: 10em;
+      user-select: none;
 
       > .skeleton-list {
         padding: 0;
         margin: 0;
-        height: 100%;
+        height: 9rem;
         overflow: hidden;
         display: flex;
 
         .article {
-          width: calc((100% - 2rem) / 4);
+          width: 12rem;
           margin-right: 1rem;
 
           &:last-child {
@@ -941,12 +1001,12 @@
       > .swiper.article-list {
 
         > .swiper-wrapper {
-          height: 8em;
+          height: 9rem;
           overflow: hidden;
 
           > .swiper-slide.item {
             width: auto;
-            margin-right: 1rem;
+            margin-right: $gap;
 
             &:last-child {
               margin-right: 0;
@@ -964,8 +1024,8 @@
 
                 .thumb {
                   opacity: 1;
-                  @include css3-prefix(transform, scale(1.1));
-                  @include css3-prefix(transition, all .88s);
+                  transform: scale(1.1);
+                  transition: all .88s;
                 }
 
                 > .title {
@@ -976,26 +1036,28 @@
               > .thumb {
                 width: auto;
                 height: 100%;
-                @include css3-prefix(transform, scale(1));
-                @include css3-prefix(transition, all .88s);
+                transform: scale(1);
+                transition: all .88s;
               }
 
               > .title {
                 position: absolute;
                 bottom: 0;
                 left: 0;
-                width: calc(100% - 1em);
+                width: 100%;
                 height: 2em;
                 line-height: 2em;
                 background-color: $module-hover-bg-darken-10;
-                padding: 0 .5em;
-                color: $reversal;
                 opacity: .4;
-                font-size: .9em;
-                text-align: center;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+                color: $text-reversal;
+                font-size: $font-size-h6;
+
+                .text {
+                  display: block;
+                  padding: 0 .5em;
+                  text-align: center;
+                  @include text-overflow();
+                }
               }
             }
           }

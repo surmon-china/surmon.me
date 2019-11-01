@@ -39,10 +39,10 @@
 ## Development Setup
 
 ```bash
-# 使用 nodemon 在开发环境下工作
+# install nodemon
 $ npm i nodemon -g
 
-# install dependencies 依赖 python2.7
+# install dependencies
 $ yarn # or npm install [--python=python2.7]
 
 # serve with hot reload at localhost:3000
