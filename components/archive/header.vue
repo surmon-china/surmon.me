@@ -125,9 +125,9 @@
 <style lang="scss" scoped>
   .header-box {
     position: relative;
-    height: 16.4rem;
     display: flex;
     flex-direction: column;
+    height: 16.4rem;
     color: $text-reversal;
 
     &.mobile {

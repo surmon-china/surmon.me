@@ -1,8 +1,6 @@
 <template>
   <footer class="footer">
-    <div class="container">
-      <div class="footer-content">©{{ year }}&nbsp;&nbsp;Surmon.me</div>
-    </div>
+    <div class="footer-content">©{{ year }}&nbsp;&nbsp;Surmon.me</div>
   </footer>
 </template>
 
@@ -20,19 +18,15 @@
 <style lang="scss" scoped>
   footer {
     margin: 0;
-    padding: 1rem 0;
     @include module-blur-bg();
 
-    .container {
+    .footer-content {
       width: 100%;
-      position: relative;
-
-      .footer-content {
-        padding: 1rem;
-        font-size: $font-size-h6;
-        text-align: center;
-        text-transform: uppercase;
-      }
+      height: $mobile-footer-height;
+      line-height: $mobile-footer-height;
+      font-size: $font-size-h6;
+      text-align: center;
+      text-transform: uppercase;
     }
   }
 </style>

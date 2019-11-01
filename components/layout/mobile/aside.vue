@@ -125,7 +125,6 @@
     &.open {
       opacity: 1;
       transform: scale(1, 1);
-      transition: $mobile-aisde-transition;
     }
 
     > .aside-user {
@@ -151,12 +150,12 @@
 
         > .name {
           font-weight: bold;
-          margin-bottom: 1rem;
+          margin-bottom: $gap;
         }
 
         > .slogan {
-          color: $primary;
           margin: 0;
+          color: $primary;
           @include text-overflow();
         }
       }
@@ -170,18 +169,17 @@
         margin: 0;
 
         .item {
-          border: none;
           display: block;
           width: 100%;
           height: 3em;
           line-height: 3em;
           padding: 0 1em;
+          margin-bottom: .5em;
+          border: none;
           text-decoration: none;
           text-transform: uppercase;
           font-weight: 700;
-          border-radius: 1px;
           color: $module-bg;
-          margin-bottom: .5em;
 
           &.ad {
             height: 4rem;
@@ -210,7 +208,7 @@
           }
 
           &.app {
-            margin-top: 1rem;
+            margin-top: $gap;
             color: $primary;
           }
 

@@ -464,6 +464,7 @@
 </script>
 
 <style lang="scss">
+  // workaround css scoped
   .article-page {
     .share-box {
       .share-ejector {
@@ -477,6 +478,33 @@
   .article-page {
 
     &.mobile {
+      > .detail,
+      > .mammon,
+      > .share,
+      > .metas,
+      > .related {
+        margin-bottom: $gap;
+      }
+
+      > .detail {
+        padding: $gap $lg-gap;
+
+        > .oirigin {
+          font-size: $font-size-base;
+        }
+
+        > .knowledge {
+          > .content {
+            pre {
+              padding-left: 0;
+
+              > .code-lines {
+                display: none;
+              }
+            }
+          }
+        }
+      }
 
       > .metas {
         line-height: 2.3em;
@@ -488,7 +516,7 @@
 
           > .title.en {
             width: auto;
-            margin-right: 1rem;
+            margin-right: $gap;
           }
         }
       }
@@ -519,27 +547,6 @@
 
               > .tip {
                 display: inline-block;
-              }
-            }
-          }
-        }
-      }
-
-      > .detail {
-
-        > .oirigin {
-          font-size: $font-size-base;
-        }
-
-        > .knowledge {
-
-          > .content {
-
-            pre {
-              padding-left: 0;
-
-              > .code-lines {
-                display: none;
               }
             }
           }
@@ -702,10 +709,7 @@
           }
 
           blockquote {
-
             p {
-              // text-indent: 0em;
-
               &:last-child {
                 margin-bottom: 0;
               }
@@ -717,7 +721,6 @@
           }
 
           ul, ol {
-
             > li {
               line-height: 1.8em;
               padding: .5em .8em;
@@ -900,8 +903,25 @@
         display: flex;
         justify-content: space-between;
 
+        &:hover {
+          opacity: 1;
+        }
+
+        > .share-ejector {
+          flex-grow: 1;
+          width: auto;
+          height: 3rem;
+          line-height: 3rem;
+          margin-right: $gap;
+          font-size: 17px;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+
         &.mobile {
-          >.share-ejector {
+          > .share-ejector {
             width: auto;
             display: none;
             flex-grow: 0;
@@ -915,23 +935,6 @@
             &[class*="twitter"] {
               margin-right: 0;
             }
-          }
-        }
-
-        &:hover {
-          opacity: 1;
-        }
-
-        > .share-ejector {
-          flex-grow: 1;
-          width: auto;
-          height: 3rem;
-          line-height: 3rem;
-          font-size: 17px;
-          margin-right: $gap;
-
-          &:last-child {
-            margin-right: 0;
           }
         }
       }

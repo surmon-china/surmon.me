@@ -68,11 +68,7 @@
       </div>
     </transition>
     <div class="aside-sticky-box">
-      <client-only>
-        <transition name="fade">
-          <aside-ad :initIndex="adIndex" @slideChange="handleChangeAdSwiper" v-if="renderStickyAd" />
-        </transition>
-      </client-only>
+      <aside-ad :initIndex="adIndex" @slideChange="handleChangeAdSwiper" v-if="renderStickyAd" />
       <div class="aside-tag">
         <empty-box v-if="!tags.length">
           <slot>{{ $i18n.text.tag.empty }}</slot>

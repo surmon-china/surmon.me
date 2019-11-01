@@ -1,6 +1,6 @@
 <template>
-  <div class="article-list-item">
-    <div class="item-content" :class="{ mobile: isMobile }">
+  <div class="article-list-item" :class="{ mobile: isMobile }">
+    <div class="item-content">
       <div class="item-thumb" v-if="!isMobile">
         <nuxt-link :to="`/article/${article.id}`">
           <span
@@ -136,9 +136,7 @@
       padding: $padding;
 
       &:hover {
-
         > .item-thumb {
-
           .item-oirigin {
             opacity: 1;
           }
@@ -158,19 +156,19 @@
         position: relative;
 
         .item-oirigin {
-          height: 2.1rem;
-          line-height: 2.1rem;
+          position: absolute;
           left: 0;
           top: 0;
-          position: absolute;
+          height: 2.1rem;
+          line-height: 2.1rem;
           z-index: 1;
           padding: 0 $sm-gap;
           border-bottom-right-radius: 1px;
           opacity: .4;
-          text-transform: uppercase;
-          text-align: center;
           font-size: $font-size-small;
           color: $text-reversal;
+          text-align: center;
+          text-transform: uppercase;
 
           &.self {
             background-color: rgba($accent, .5);
@@ -291,10 +289,19 @@
           }
         }
       }
+    }
 
-       &.mobile {
+
+    &.mobile {
+      margin-bottom: $gap;
+
+      &:last-child {
+        margin: 0;
+      }
+
+      > .item-content {
         height: auto;
-        padding: 1rem 1em;
+        padding: $sm-gap $gap;
 
         > .item-body {
           width: 100%;

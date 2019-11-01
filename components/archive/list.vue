@@ -1,5 +1,5 @@
 <template>
-  <div class="articles">
+  <div class="articles" :class="{ mobile: isMobile }">
 
     <!-- 非首页列表头 -->
     <div class="article-list-header" v-if="!isIndexRoute">
@@ -104,6 +104,25 @@
 <style lang="scss" scoped>
   .articles {
 
+    &.mobile {
+      > .article-list,
+      > .article-list-mammon,
+      > .article-list-header {
+        margin-bottom: $gap;
+      }
+
+      > .article-list-mammon {
+        &::v-deep .mammon-wrapper {
+          padding: $gap;
+    
+          > .adsbygoogle {
+            margin: 0;
+            height: 6rem;
+          }
+        }
+      }
+    }
+
     > .article-list-header {
       margin-bottom: $lg-gap;
       position: relative;
@@ -123,18 +142,6 @@
           margin: $sm-gap 0;
           min-height: 88px;
           height: auto;
-        }
-      }
-
-      &.mobile {
-
-        &::v-deep .mammon-wrapper {
-          padding: $gap;
-    
-          > .adsbygoogle {
-            margin: 0;
-            height: 6rem;
-          }
         }
       }
     }

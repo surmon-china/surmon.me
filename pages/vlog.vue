@@ -150,9 +150,17 @@
         > .item {
           width: 100%;
           height: auto;
-          float: none;
           flex-grow: 1;
           margin-right: 0;
+          margin-bottom: $gap;
+
+          > .thumb {
+            height: 10rem;
+          }
+
+          > .split {
+            border-color: $module-hover-bg;
+          }
         }
       }
     }
@@ -210,6 +218,7 @@
             height: 100%;
             background-color: $module-hover-bg-darken-10;
             background-size: cover;
+            background-position: center;
             transform: rotate(0deg) scale(1);
             transition: transform $transition-time-slow;
           }

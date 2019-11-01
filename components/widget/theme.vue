@@ -46,17 +46,6 @@
       setHistoryTheme() {
         const historyTheme = humanizedStorage.get('theme')
         historyTheme && this.setTheme(historyTheme)
-      },
-      // TODO: 暂时不用
-      computedStyle(theme) {
-        const themes = Object.keys(this.themes)
-        const currentIndex = themes.indexOf(theme)
-        const current = this.themes[theme]
-        const prev = this.themes[themes[currentIndex - 1]] || current
-        const next = this.themes[themes[currentIndex + 1]] || current
-        return {
-          background: `linear-gradient(to bottom, ${current} 60%, ${next} 100%)`
-        }
       }
     }
   }
