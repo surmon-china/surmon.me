@@ -13,6 +13,12 @@ export const meta = {
   email: 'i@surmon.me',
 }
 
+export const friendLinks = {
+  'SkyRover': '//skyrover.me',
+  'JimmyLv': '//blog.jimmylv.info',
+  'Jooger': '//jooger.me',
+}
+
 export const webrtc = {
   room: 'surmon.me',
   iceServerUsername: 'surmon',
@@ -36,5 +42,6 @@ export default {
   webrtc,
   music,
   fetch,
-  color
+  color,
+  friendLinks
 }

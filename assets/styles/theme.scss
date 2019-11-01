@@ -1,14 +1,14 @@
 
-@mixin css-var($text, $reversal, $black, $primary, $body-bg, $module-hover-bg, $logo-rotate) {
+@mixin css-var($text, $text-reversal, $black, $primary, $body-bg, $module-hover-bg, $logo-rotate) {
 
   #{--body-bg}: $body-bg;
   #{--theme-black}: $black;
   #{--theme-logo-rotate}: $logo-rotate;
 
-  #{--module-bg}: rgba($reversal, 0.6);
-  #{--module-bg-opacity-5}: rgba($reversal, 0.5);
-  #{--module-bg-opacity-8}: rgba($reversal, 0.8);
-  #{--module-bg-opacity-9}: rgba($reversal, 0.9);
+  #{--module-bg}: rgba($text-reversal, 0.6);
+  #{--module-bg-opacity-5}: rgba($text-reversal, 0.5);
+  #{--module-bg-opacity-8}: rgba($text-reversal, 0.8);
+  #{--module-bg-opacity-9}: rgba($text-reversal, 0.9);
 
   #{--module-hover-bg}: $module-hover-bg;
   #{--module-hover-bg-opaqueness}: rgba($module-hover-bg, 0);
@@ -23,13 +23,13 @@
   #{--primary-opacity-5-color}: rgba($primary, 0.5);
 
   #{--text-color}: $text;
-  #{--text-reversal}: $reversal;
   #{--text-light}: lighter($text, 20%);
   #{--text-dark}: darken($text, 20%);
   #{--text-darken}: darken($text, 40%);
   #{--text-secondary}: rgba($black, .54);
   #{--text-disabled}: rgba($black, .38);
   #{--text-dividers}: rgba($black, .26);
+  #{--text-reversal}: $text-reversal;
 
   #{--link-color}: $text;
   #{--link-hover-color}: darken($text, 20%);
@@ -40,7 +40,7 @@
   &.default {
     @include css-var(
       $text: #555,
-      $reversal: #fff,
+      $text-reversal: #fff,
       $black: #000,
       $primary: #0088f5,
       $body-bg: #eee,
@@ -51,7 +51,7 @@
   &.beige {
     @include css-var(
       $text: #555,
-      $reversal: #bfbf9b,
+      $text-reversal: #bfbf9b,
       $black: #000,
       $primary: rgb(172, 141, 5),
       $body-bg: #bfbf9b,
@@ -63,7 +63,7 @@
   &.gay {
     @include css-var(
       $text: rgb(110, 4, 105),
-      $reversal: rgb(251, 140, 255),
+      $text-reversal: rgb(251, 140, 255),
       $black: rgb(68, 0, 51),
       $primary: purple,
       $body-bg: purple,
@@ -75,7 +75,7 @@
   &.wang {
     @include css-var(
       $text: rgb(9, 80, 36),
-      $reversal: rgb(137, 207, 71),
+      $text-reversal: rgb(137, 207, 71),
       $black: rgba(0, 58, 19, 0.8),
       $primary: green,
       $body-bg: green,
@@ -87,7 +87,7 @@
   &.red {
     @include css-var(
       $text: rgb(59, 3, 3),
-      $reversal: rgba(128, 17, 17, 0.9),
+      $text-reversal: rgba(128, 17, 17, 0.9),
       $black: rgb(104, 11, 11),
       $primary: rgba(39, 0, 0, 0.9),
       $body-bg: red,
@@ -99,7 +99,7 @@
   &.dark {
     @include css-var(
       $text: #fff,
-      $reversal: #000,
+      $text-reversal: #000,
       $black: #fff,
       $primary: #fff,
       $body-bg: #000,

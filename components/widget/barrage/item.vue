@@ -106,11 +106,11 @@
     transform: translate3d(100%, 0, 0);
 
     &.playing {
-      transform: translate3d(calc(-100vw - 200%), 0, 0);
+      transform: translate3d(-110vw, 0, 0);
     }
 
     &.played {
-      visibility: hidden;
+      @include hidden();
     }
   }
 </style>

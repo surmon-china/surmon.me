@@ -93,11 +93,11 @@
         cursor: pointer;
         text-transform: uppercase;
         font-weight: bold;
-        color: $reversal;
+        color: $text-reversal;
         font-size: $font-size-small;
         position: relative;
         animation: tool-left-item 1s infinite;
-        transition: transform .15s;
+        transition: transform $transition-time-normal;
 
         &.power {
           animation-delay: .5s;

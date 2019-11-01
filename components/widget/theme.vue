@@ -46,24 +46,12 @@
       setHistoryTheme() {
         const historyTheme = humanizedStorage.get('theme')
         historyTheme && this.setTheme(historyTheme)
-      },
-      // 暂时不用
-      computedStyle(theme) {
-        const themes = Object.keys(this.themes)
-        const currentIndex = themes.indexOf(theme)
-        const current = this.themes[theme]
-        const prev = this.themes[themes[currentIndex - 1]] || current
-        const next = this.themes[themes[currentIndex + 1]] || current
-        return {
-          background: `linear-gradient(to bottom, ${current} 60%, ${next} 100%)`
-        }
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-
   @keyframes themeColor {
     0%  { border-right-color: chartreuse }
     12% { border-right-color: green }
@@ -84,10 +72,9 @@
   #theme {
     position: fixed;
     right: 0;
-    top: $navbar-height * 1.5;
+    top: $header-height * 1.5;
 
     .theme-box {
-      width: 4.5rem;
       display: flex;
       flex-direction: row;
       justify-content: center;

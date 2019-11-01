@@ -8879,6 +8879,11 @@ stdout-stream@^1.4.0:
   dependencies:
     readable-stream "^2.0.1"
 
+sticky-events@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.npm.taobao.org/sticky-events/download/sticky-events-3.1.0.tgz#dbcdb04514877720f96fb981f351a2dbbc3381cd"
+  integrity sha1-282wRRSHdyD5b7mB81Gi27wzgc0=
+
 stream-browserify@^2.0.1:
   version "2.0.2"
   resolved "https://registry.npm.taobao.org/stream-browserify/download/stream-browserify-2.0.2.tgz#87521d38a44aa7ee91ce1cd2a47df0cb49dd660b"
