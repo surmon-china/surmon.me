@@ -438,7 +438,7 @@
             justify-content: space-between;
 
             > .description {
-              width: 72%;
+              flex-grow: 1;
               padding: 2rem 3rem;
               background-color: $module-bg;
 
@@ -589,6 +589,7 @@
 
             .gravatar {
               position: relative;
+              width: 20rem;
               margin-left: $lg-gap;
               flex-grow: 1;
               display: flex;
