@@ -43,11 +43,8 @@
 
 <style lang="scss" scoped>
   .guestbook-page {
-
     &.mobile {
-
       > .detail {
-
         > .banner {
           height: 12rem;
         }
