@@ -50,11 +50,20 @@ export const pc = {
     taobao: links.pc.taobao,
     aliyun: links.common.aliyunECS
   },
+  // 2019 1111
   carrousel: {
-    url: links.common.aliyunWaf,
-    src: imagePath + 'aliyun-banner-1190-420.jpg',
-    title: '网站遇到恶意攻击怎么办？'
+    url: 'https://www.aliyun.com/1111/2019/group-buying-share?ptCode=48978F811F2376670B0FDDE3FB205EA6647C88CF896EF535&userCode=pu7fghvl&share_source=copy_link',
+    src: imagePath + 'alicloud-1111.jpg',
+    title: '云服务器86元/年，错过再等1年！',
+    index: 0
   },
+  // 2019 normal
+  // carrousel: {
+  //   url: links.common.aliyunWaf,
+  //   src: imagePath + 'aliyun-banner-1190-420.jpg',
+  //   title: '网站遇到恶意攻击怎么办？',
+  //   index: 3
+  // },
   aboutPage: {
     url: links.common.aliyunQWBK,
     src: imagePath + 'aliyun-ecs-1200-100.png',

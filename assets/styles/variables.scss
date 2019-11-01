@@ -21,16 +21,14 @@ $primary: var(--primary-color);
 $primary-opacity-9: var(--primary-opacity-9-color);
 $primary-opacity-5: var(--primary-opacity-5-color);
 
-// Text
+// Text colors
 $text: var(--text-color);
 $text-dark: var(--text-dark);
 $text-darken: var(--text-darken);
 $text-light: var(--text-light);
-$secondary: var(--text-secondary);
-$disabled: var(--text-disabled);
-$dividers: var(--text-dividers);
-
-$reversal: var(--text-reversal);
+$text-secondary: var(--text-secondary);
+$text-disabled: var(--text-disabled);
+$text-dividers: var(--text-dividers);
 $text-reversal: var(--text-reversal);
 
 // Links
@@ -46,51 +44,61 @@ $white: #ffffff;
 $black: #000000;
 $black-light: #555555;
 
-// Container
-$header-height: 4.5em;
-$container-width: 75em;
+// Golden
+$golden-ratio: 0.618;
+
+// Gap
+$gap: 1rem; // ~12px
+$sm-gap: $gap * $golden-ratio; // ~8px
+$xs-gap: $sm-gap / 2; // ~4px
+$lg-gap: $sm-gap * 2; // ~14px
+
+// Times
+$transition-time-fast: .1s;
+$transition-time-normal: .25s;
+$transition-time-slow: .38s;
+
+// PC
+$header-height: 5rem;
+$footer-height: 6rem;
+$container-width: 1050px;
+$navbar-width: 160px;
+$main-width: 595px;
+$aside-width: 266px;
+$block-button-height: 3.4rem;
+$active-content-full-height: calc(100vh - #{$header-height + $lg-gap + $footer-height + $lg-gap});
 
 // Mobile
+$mobile-header-height: 5rem;
+$mobile-footer-height: $lg-gap * 4;
 $mobile-aside-bg: #34393d;
-$mobile-aisde-transition: all 0.35s ease-out;
+$mobile-aisde-transition: all $transition-time-slow ease-out;
 
 // Other
 $radius: 2px;
-$border: 1px solid $dividers;
-$navbar-height: 4.5em;
-
-// Basic stylings
-$br: 4px;
-$xs-pad: 4px;
-$sm-pad: 8px;
-$md-pad: 1.2em;
-$lg-pad: 1.5em;
-$xlg-pad: 3em;
-
-// times
-$transition-time-fast: .1s;
-$transition-time-normal: .25s;
-$transition-time-slow: .4s;
+$border: 1px solid $text-dividers;
 
 // Breakpoints
 $small-breakpoint: 400px;
 $large-breakpoint: $container-width;
 
 // Font
-$sans-serif: SpecialSymbol, DINRegular, -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", "微软雅黑", sans-serif;
-$monospace: Menlo, Monaco, Consolas, 'Courier New', monospace;
-$font-family-base: $sans-serif;
+$font-family-sans-serif: SpecialSymbol, DINRegular, -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", "微软雅黑", sans-serif;
+$font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace;
+$font-family-base: $font-family-sans-serif;
 
 // Typography
-$font-size-base: 14px;
-$font-size-large: $font-size-base * 1.25;
-$font-size-small: $font-size-base * .875;
+$font-size-root: 12px;
 
-$font-size-h1: $font-size-base * 1.7;
-$font-size-h2: $font-size-base * 1.45;
-$font-size-h3: $font-size-base * 1.3;
-$font-size-h4: $font-size-base * 1.15;
-$font-size-h5: $font-size-base;
-$font-size-h6: $font-size-small;
+$font-size-base: 14px;
+$font-size-large: $font-size-base * 1.25; // ~17.5px
+$font-size-small: $font-size-base * .888; // ~12.4px
+
+$font-size-h1: $font-size-base * 1.7; // ~23.8px
+$font-size-h2: $font-size-base * 1.45; // ~20.3px
+$font-size-h3: $font-size-base * 1.3; // ~18.2px
+$font-size-h4: $font-size-base * 1.15; // ~16.1px
+$font-size-h5: $font-size-base;  // ~14px
+$font-size-h6: $font-size-base * 0.95; // ~13.3px
 
 $line-height-base: 1.4;

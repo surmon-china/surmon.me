@@ -154,7 +154,7 @@
           <li class="item">
             <a href class="pagination-btn prev disabled" @click.stop.prevent>
               <span>—</span>
-              <span v-text="$i18n.text.comment.pagenation.old">old</span>
+              <span v-text="$i18n.text.comment.pagenation.old"></span>
             </a>
           </li>
           <li class="item" :key="index" v-for="(item, index) in comment.pagination.total_page">
@@ -166,12 +166,12 @@
                 ? false 
                 : loadComemntList({ 
                     page: comment.pagination.total_page + 1 - item 
-                })"
+                  })"
             >{{ item }}</a>
           </li>
           <li class="item">
             <a href class="pagination-btn next disabled" @click.stop.prevent>
-              <span v-text="$i18n.text.comment.pagenation.new">new</span>
+              <span v-text="$i18n.text.comment.pagenation.new"></span>
               <span>—</span>
             </a>
           </li>
@@ -321,7 +321,7 @@
   import { isBrowser } from '~/environment'
   import marked from '~/plugins/marked'
   import gravatar from '~/plugins/gravatar'
-  import { scrollTo } from '~/utils/scroll-to-anywhere'
+  import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
   import { isArticleDetailRoute, isGuestbookRoute } from '~/services/route-validator'
   import { localUser, localHistoryLikes } from '~/services/local-storage'
   import CommentUa from './ua'
@@ -659,6 +659,7 @@
       },
       // 获取评论列表
       loadComemntList(params = {}) {
+        scrollTo('#comment-box', 180, { easing: Easing['ease-in'] })
         params.sort = this.sortMode
         this.$store.dispatch('comment/fetchList', Object.assign(params, { post_id: this.postId }))
       },
@@ -757,10 +758,10 @@
   .cm-content,
   .reply-preview,
   .markdown-preview {
-    font-size: 1em;
+    margin: $sm-gap 0;
     line-height: 2em;
-    margin: .5em 0;
     word-wrap: break-word;
+    font-size: $font-size-h6;
 
     a {
       text-decoration: underline;
@@ -833,28 +834,24 @@
   }
 
   #comment-box {
+    padding: $gap;
     background-color: $module-bg;
-    padding: 1em;
 
     &.mobile {
-
       > .list-box {
-
         > .comment-list {
-
           > .comment-item {
             padding: 0;
-            margin-bottom: 1rem;
+            margin-top: $gap;
 
             > .cm-body {
-              padding: .6em;
+              padding: $sm-gap $gap;
             }
           }
         }
       }
 
       > .post-box {
-
         > .user {
           padding: 0;
           height: auto;
@@ -867,7 +864,7 @@
             width: 80%;
             margin-left: 0;
             margin-right: 0;
-            margin-bottom: 1rem;
+            margin-bottom: $gap;
           }
 
           > .save {
@@ -877,7 +874,6 @@
         }
 
         > .editor-box {
-
           > .user {
             margin: 0;
           }
@@ -887,12 +883,10 @@
 
     > .tools {
       display: flex;
-      padding: 1em 0;
-      padding-top: 0;
+      padding-bottom: $gap;
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid $module-hover-bg;
-      margin-bottom: .6em;
 
       .count-skeleton,
       .like-skeleton,
@@ -920,12 +914,12 @@
 
       > .total {
         display: flex;
-        font-size: 1em;
 
         > .like,
         > .sponsor,
         > .count {
-          padding: .2em .5em;
+          padding: $xs-gap .5em;
+          margin-right: $sm-gap;
           background-color: $module-hover-bg;
         }
 
@@ -942,16 +936,15 @@
         }
 
         > .sponsor {
-          margin-left: .5em;
+          margin-right: 0;
           color: white;
           animation: sponsorBtnBg 1s infinite;
         }
 
         > .like {
-          margin-left: .5em;
 
           > .iconfont {
-            margin-right: .5rem;
+            margin-right: $xs-gap / 2;
           }
 
           &:hover {
@@ -970,7 +963,7 @@
       > .sort {
 
         > .sort-btn {
-          margin-left: 1em;
+          margin-left: $gap;
 
           &.actived {
             color: $black;
@@ -1002,8 +995,8 @@
     > .empty-box {
       font-weight: bold;
       text-align: center;
-      height: 5rem;
-      line-height: 5rem;
+      height: 6rem;
+      line-height: 6rem;
     }
 
     > .list-box {
@@ -1015,7 +1008,12 @@
 
         > .comment-item {
           position: relative;
-          padding: .6em 0 .6em 1.5em;
+          padding-left: 2rem;
+          margin-top: $lg-gap;
+
+          &:last-child {
+            margin-bottom: $lg-gap;
+          }
 
           &:hover {
 
@@ -1043,7 +1041,7 @@
 
             > a {
               display: block;
-              border: .3em solid $module-bg;
+              border: ($radius * 2) solid $module-bg;
               width: 4em;
               height: 4em;
 
@@ -1059,7 +1057,7 @@
             display: block;
             width: 100%;
             height: 100%;
-            padding: .6em .6em .6em 3.2em;
+            padding: $sm-gap $sm-gap $sm-gap ($lg-gap * 3);
             background-color: $module-hover-bg;
 
             > .cm-header {
@@ -1068,8 +1066,7 @@
 
               > .user-name {
                 font-weight: bold;
-                margin-right: .8em;
-                // font-family: Microsoft YaHei,Arial,Helvetica,sans-serif;
+                margin-right: $gap;
 
                 &:hover {
                   text-decoration: underline;
@@ -1079,30 +1076,29 @@
               .os,
               .browser,
               > .location {
-                color: $disabled;
-                font-size: .8em;
-                margin-right: .8em;
+                color: $text-disabled;
+                font-size: $font-size-small;
+                margin-right: $gap;
 
                 .iconfont {
-                  margin-right: .2em;
+                  margin-right: $xs-gap / 2;
                 }
               }
 
               > .flool {
-                color: $dividers;
-                font-weight: 900;
-                font-size: .8em;
-                display: inline-block;
-                line-height: 2rem;
                 float: right;
+                line-height: 2rem;
+                color: $text-dividers;
+                font-size: $font-size-small;
+                font-weight: 900;
               }
             }
 
             > .cm-content {
-              font-size: .95em;
+              min-height: 3rem;
 
               > .reply {
-                color: $disabled;
+                color: $text-disabled;
                 font-weight: bold;
 
                 > a {
@@ -1117,12 +1113,12 @@
               > .create_at,
               > .reply,
               > .like {
-                font-size: .8em;
-                margin-right: 1em;
+                font-size: $font-size-small;
+                margin-right: $gap;
               }
 
               > .create_at {
-                color: $disabled;
+                color: $text-disabled;
               }
 
               > .like {
@@ -1151,7 +1147,7 @@
 
                 > .iconfont {
                   opacity: .8;
-                  margin-right: .2em;
+                  margin-right: $xs-gap / 2;
                 }
 
                 &:hover {
@@ -1165,7 +1161,7 @@
     }
 
     > .pagination-box {
-      margin-top: .5rem;
+      margin-bottom: $lg-gap;
 
       > .pagination-list {
         margin: 0;
@@ -1188,7 +1184,7 @@
             &.prev,
             &.next {
               width: 5em;
-              font-size: .9em;
+              font-size: $font-size-h6;
 
               &:hover {
                 background: none;
@@ -1211,16 +1207,15 @@
 
     > .post-box {
       display: block;
+      padding-top: $gap;
       border-top: 1px dashed $module-hover-bg-darken-20;
-      margin-top: 1rem;
-      padding-top: 1rem;
 
       > .user {
         width: 100%;
         height: 2em;
         line-height: 2em;
         display: flex;
-        margin-bottom: 1rem;
+        margin-bottom: $gap;
         padding-left: 5.2rem;
 
         > .edit {
@@ -1230,8 +1225,8 @@
           position: relative;
 
           > .setting {
-            font-size: 1rem;
-            margin-left: 1rem;
+            font-size: $font-size-h6;
+            margin-left: $gap;
             display: inline-block;
             position: relative;
 
@@ -1243,7 +1238,7 @@
             }
 
             > .iconfont {
-              margin-right: .5rem;
+              margin-right: $xs-gap;
             }
 
             > .account-setting {
@@ -1260,7 +1255,7 @@
               padding-top: .5rem;
               list-style-type: square;
               z-index: 99;
-              color: $reversal;
+              color: $text-reversal;
 
               > li {
                 padding: 0 1rem;
@@ -1276,13 +1271,12 @@
 
         > .save {
           width: 10%;
-          margin-left: 1em;
+          margin-left: $gap;
           flex-grow: 1;
           line-height: 2em;
           text-align: center;
 
           > button {
-            display: block;
             width: 100%;
             height: 100%;
             background-color: $module-hover-bg;
@@ -1302,6 +1296,7 @@
             width: 100%;
             height: 2em;
             line-height: 2em;
+            text-indent: 3px;
             background-color: $module-hover-bg;
 
             &:focus,
@@ -1313,7 +1308,7 @@
 
         > .name,
         > .email {
-          margin-right: 1em;
+          margin-right: $gap;
         }
       }
 
@@ -1345,14 +1340,14 @@
           overflow: hidden;
 
           > .will-reply {
-            font-size: .95em;
+            font-size: $font-size-h6;
             margin-bottom: 1em;
 
             > .reply-user {
               display: flex;
               justify-content: space-between;
-              margin-bottom: 1rem;
-              padding: 0 1rem;
+              margin-bottom: $gap;
+              padding: 0 $gap;
               height: 2.6em;
               line-height: 2.6em;
               background-color: $module-hover-bg;
@@ -1365,7 +1360,7 @@
             > .reply-preview {
               max-height: 10em;
               overflow: auto;
-              padding: 1rem;
+              padding: $gap;
 
               background-color: $module-hover-bg;
 
@@ -1386,13 +1381,13 @@
               outline: none;
               padding: .5em;
               cursor: auto;
-              font-size: .95em;
+              font-size: $font-size-h6;
               line-height: 1.8em;
               background-color: $module-hover-bg;
 
               &:empty:before{
                 content: attr(placeholder);
-                color: $disabled;
+                color: $text-disabled;
               }
 
               &:focus{
@@ -1413,14 +1408,14 @@
               overflow: auto;
               margin: 0;
               padding: .5em;
-              @include css3-prefix(transform, translateY(-100%));
+              transform: translateY(-100%);
               background-color: rgba(235, 235, 235, 0.85);
               transition: transform .2s;
 
               &.actived {
                 height: 100%;
                 transition: transform .2s;
-                @include css3-prefix(transform, translateY(0));
+                transform: translateY(0);
               }
             }
           }
@@ -1446,7 +1441,7 @@
                   list-style: none;
                   padding: 0;
                   margin: 0;
-                  font-size: 1.3em;
+                  font-size: $font-size-h3;
                   display: flex;
                   flex-wrap: wrap;
 
@@ -1485,7 +1480,7 @@
 
             > .submit {
               float: right;
-              width: 7em;
+              width: 8rem;
               height: 100%;
               background-color: $module-hover-bg-darken-20;
 

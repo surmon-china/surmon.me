@@ -4,7 +4,7 @@ body {
   font-family: $font-family-base;
   font-size: $font-size-base;
   line-height: $line-height-base;
-  padding-top: $navbar-height + 1em;
+  padding-top: $mobile-header-height + $lg-gap;
   -webkit-font-smoothing: antialiased;
 
   &.mobile {
@@ -12,6 +12,17 @@ body {
     overflow-x: hidden;
     background-color: rgba(197, 197, 197, 0.5);
   }
+}
+
+*, *:hover {
+  transition:
+    background-color $transition-time-fast linear,
+    color $transition-time-fast linear,
+    border-color $transition-time-fast linear,
+    filter $transition-time-fast linear,
+    opacity $transition-time-fast linear,
+    visibility $transition-time-fast linear,
+    transform $transition-time-fast linear;
 }
 
 .container {
@@ -23,51 +34,11 @@ body {
   font-size: 1em;
 }
 
-*, *:hover {
-  @include transition(
-    background-color $transition-time-normal linear,
-    color .05s linear,
-    margin $transition-time-normal linear,
-    opacity $transition-time-normal linear,
-    filter $transition-time-normal linear,
-    visibility $transition-time-normal linear,
-    transform $transition-time-normal linear
-  );
-}
-
-::selection {
-  background: $primary; 
-  color: $reversal;
-}
-
-::-moz-selection {
-  background: $primary; 
-  color: $reversal;
-}
-
-::-webkit-selection {
-  background: $primary; 
-  color: $reversal;
-}
-
-::-webkit-scrollbar {
-  width: .5rem;
-  height: .5rem;
-  background: hsla(0, 0%, 100%, 0.6);
-}
-
-::-webkit-scrollbar-track {
-  border-radius: 0;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 0;
-  background-color: rgba(95,95,95,.4);
-  transition: background-color .15s;
-
-  &:hover {
-    background-color: rgba(95,95,95, .7);
-  }
+.radio, .checkbox {
+  display: inline-block;
+  margin-top: 0px;
+  padding-top: 0px;
+  margin-bottom: 0px;
 }
 
 input {
@@ -84,13 +55,40 @@ select:-webkit-autofill {
   box-shadow: 0 0 0px 1000px rgb(230, 230, 230) inset; 
 }
 
-.radio, .checkbox {
-  display: inline-block;
-  margin-top: 0px;
-  padding-top: 0px;
-  margin-bottom: 0px;
+::selection {
+  background: $primary; 
+  color: $text-reversal;
 }
 
+::-moz-selection {
+  background: $primary; 
+  color: $text-reversal;
+}
+
+::-webkit-selection {
+  background: $primary; 
+  color: $text-reversal;
+}
+
+::-webkit-scrollbar {
+  width: $sm-gap;
+  height: $sm-gap;
+  background: hsla(0, 0%, 100%, 0.6);
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 0;
+  background-color: rgba(95, 95, 95, .4);
+  transition: background-color $transition-time-fast;
+
+  &:hover {
+    background-color: rgba(95, 95, 95, .7);
+  }
+}
 // filters
 .filter {
 
@@ -112,73 +110,28 @@ select:-webkit-autofill {
 }
 
 // mammon
-.mammon {
+.mammon-box {
   width: 100%;
   height: auto;
   position: relative;
 
-  &.mammon-article {
-    padding: 1em;
-
-    > .mammon-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 6rem;
-      overflow: hidden;
-
-      > .adsbygoogle {
-        width: 100%;
-        height: 70px;
-      }
-    }
-  }
-
-  &.mammon-archive {
-    margin-bottom: 1em;
-
-    > .mammon-wrapper {
-      min-height: 7rem;
-      padding: .5em;
-      background-color: $module-bg;
-
-      > .adsbygoogle {
-        margin: 1rem 0;
-        min-height: 88px;
-        height: auto;
-      }
-    }
-
-    &.mobile {
-
-      > .mammon-wrapper {
-        padding: 1rem;
+  .mammon-wrapper {
+    position: relative;
   
-        > .adsbygoogle {
-          margin: 0;
-          height: 6rem;
-        }
-      }
+    &:before {
+      content: '向我的衣食父母鞠躬';
+      position: absolute;
+      text-align: center;
+      font-size: $font-size-h1;
+      font-weight: bold;
+      color: $text-dividers;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      z-index: -1;
+      letter-spacing: .2em;
+      transform: translate(-50%, -50%);
     }
-  }
-}
-
-.mammon-wrapper {
-  position: relative;
-
-  &:before {
-    content: '向我的衣食父母鞠躬';
-    position: absolute;
-    text-align: center;
-    font-size: $font-size-h1;
-    font-weight: bold;
-    color: $dividers;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    z-index: -1;
-    letter-spacing: .5rem;
-    transform: translate(-50%, -50%);
   }
 }
 
@@ -194,11 +147,10 @@ select:-webkit-autofill {
   z-index: 999;
   justify-content: center;
   align-items: center;
-  opacity: 0;
   overflow: hidden;
-  visibility: hidden;
   transition: all .08s;
   background-color: transparent;
+  @include hidden();
   // @include backdrop-blur();
 
   > img,
@@ -207,8 +159,8 @@ select:-webkit-autofill {
     transition: all .08s;
     min-width: 20%;
     min-height: 20%;
-    background-color: rgba(210, 210, 210, 0.3);
-    border: .5em solid rgba(210, 210, 210, 0.5);
+    background-color: rgba(255, 255, 255, 0.3);
+    border: $sm-gap solid rgba(210, 210, 210, 0.5);
 
     &.sponsor {
       width: 600px;
@@ -227,8 +179,7 @@ select:-webkit-autofill {
   }
 
   &.display {
-    opacity: 1;
-    visibility: visible;
+    @include visible();
     transition: all .08s;
     background-color: rgba(80, 80, 80, 0.5);
 
@@ -236,81 +187,6 @@ select:-webkit-autofill {
     > iframe {
       transform: scale(1);
       transition: all .08s;
-    }
-  }
-}
-
-// share component
-#share {
-
-  &.article {
-
-    > .share-base {
-      opacity: .6;
-      display: flex;
-      justify-content: space-between;
-
-      &.mobile {
-
-        >.share-ejector {
-          width: calc((100% - (1em * 2)) / 3);
-        }
-      }
-
-      &:hover {
-        opacity: 1;
-      }
-
-      > .share-ejector {
-        width: calc((100% - (1em * 9)) / 10);
-        height: 2.5em;
-        line-height: 2.5em;
-        background-color: $body-bg;
-
-        > .iconfont {
-          font-size: 1.2em;
-        }
-
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-    }
-  }
-
-  &.sidebar {
-    position: fixed;
-    top: 16%;
-    left: 0;
-    width: 4em;
-
-    > .share-base {
-      opacity: .4;
-
-      &:hover {
-        opacity: 1;
-      }
-
-      > .share-ejector {
-        width: 3em;
-        height: 2.5em;
-        line-height: 2.6em;
-
-        > .iconfont {
-          font-size: 1.3em;
-        }
-
-        &.renren,
-        &.evernote,
-        &.linkedin,
-        &.mail {
-          display: none;
-        }
-
-        &:last-child {
-          margin-bottom: 0;
-        }
-      }
     }
   }
 }
@@ -329,7 +205,7 @@ select:-webkit-autofill {
 
   &.swiper-pagination-bullet-active {
     opacity: .8;
-    background: $reversal;
+    background: $text-reversal;
   }
 }
 
@@ -338,6 +214,7 @@ select:-webkit-autofill {
   z-index: 3;
 }
 
+// no used
 .slide-up-enter-active, .slide-up-leave-active {
   transition: all $transition-time-slow cubic-bezier(0, 1.2, 1, 0.5);
   opacity: .7;
@@ -348,25 +225,15 @@ select:-webkit-autofill {
   transform: translate3d(0, 4em, 0);
 }
 
+// no used
 .slide-left-enter-active, .slide-left-leave-active {
   transition: all $transition-time-normal cubic-bezier(0, 1.2, 1, 0.5);
   opacity: .5;
   transform: translate3d(2em, 0, 0);
 }
-
 .slide-left-enter, .slide-left-leave-active {
   opacity: .3;
   transform: translate3d(2em, 0, 0);
-}
-
-.slide-right-enter-active, .slide-right-leave-active {
-  transition: all $transition-time-slow cubic-bezier(0, 1.2, 1, 0.5);
-  opacity: .5;
-  transform: translate3d(5em, 0, 0);
-}
-.slide-right-enter, .slide-right-leave-active {
-  opacity: .3;
-  transform: translate3d(5em, 0, 0);
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -379,8 +246,11 @@ select:-webkit-autofill {
   transition: transform $transition-time-normal;
 }
 
-.page-enter-active, .page-leave-active {
-  transition: opacity $transition-time-normal;
+.page-enter-active {
+  transition: opacity $transition-time-slow;
+}
+.page-leave-active {
+  transition: opacity 0s;
 }
 .page-enter, .page-leave-active {
   opacity: 0
@@ -390,15 +260,5 @@ select:-webkit-autofill {
   transition: opacity $transition-time-normal;
 }
 .module-enter, .module-leave-active {
-  opacity: 0
-}
-
-.aside-enter-active {
-  transition: opacity $transition-time-normal cubic-bezier(1, -1.17, 1, -1.17);
-}
-.aside-leave-active {
-  transition: opacity 0s;
-}
-.aside-enter, .aside-leave-active {
   opacity: 0
 }

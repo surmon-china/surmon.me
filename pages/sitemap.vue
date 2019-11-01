@@ -1,5 +1,5 @@
 <template>
-  <div class="page" :class="{ mobile: isMobile }">
+  <div class="sitemap-page" :class="{ mobile: isMobile }">
     <div class="sitemap">
       <div class="module articles">
         <h4 class="title" v-text="$i18n.text.article.name"></h4>
@@ -30,7 +30,6 @@
           </li>
         </ul>
       </div>
-      <br>
       <div class="module categories">
         <h4 class="title" v-text="$i18n.text.category.name"></h4>
         <p v-if="!categories.length" v-text="$i18n.text.article.empty"></p>
@@ -50,7 +49,6 @@
           </li>
         </ul>
       </div>
-      <br>
       <div class="module tags">
         <h4 class="title" v-text="$i18n.text.tag.name">tags</h4>
         <p v-if="!tags.length" v-text="$i18n.text.article.empty">暂无标签</p>
@@ -65,7 +63,6 @@
           </li>
         </ul>
       </div>
-      <br>
       <div class="module pages">
         <h4 class="title" v-text="$i18n.text.page.name">pages</h4>
         <ul class="page-list">
@@ -128,14 +125,12 @@
 </script>
 
 <style lang="scss" scoped>
-  .page {
-    padding: 2em 3em;
+  .sitemap-page {
+    padding: $gap 3rem;
     background-color: $module-bg;
     overflow: hidden;
-
     $border-guide: 1px solid;
-    $margin-guide: 1.2em;
-    
+
     &.mobile {
       padding: 1.666rem;
 
@@ -177,7 +172,7 @@
             }
 
             > .item-description {
-              margin-top: -$margin-guide * 0.7;
+              margin-top: -$gap;
             }
           }
         }
@@ -196,12 +191,12 @@
       }
 
       .module {
+        margin-bottom: $lg-gap * 2;
         font-size: 1em;
 
         .title {
           font-weight: bold;
           text-transform: capitalize;
-          margin: 0em 0 $margin-guide * 0.9;
         }
       }
 
@@ -212,7 +207,7 @@
           > .item {
 
             > .item-content {
-              margin-bottom: $margin-guide;
+              margin-bottom: 1.2em;
 
               > .link {
                 border: none;
@@ -226,7 +221,7 @@
 
             > .item-description {
               line-height: 2em;
-              padding-left: $margin-guide * 0.7;
+              padding-left: 1em;
             }
           }
         }
@@ -234,15 +229,18 @@
 
       .tags,
       .pages {
+        margin-bottom: $gap;
+
         .tag-list,
         .page-list {
           overflow: hidden;
+          margin: 0;
 
           .item {
             float: left;
             display: block;
-            margin-right: $margin-guide;
-            margin-bottom: $margin-guide;
+            margin-right: $lg-gap;
+            margin-bottom: $lg-gap;
           }
         }
       }

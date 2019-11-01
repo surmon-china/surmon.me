@@ -1,5 +1,5 @@
 <template>
-  <div class="page" :style="{ height: height + 'px' }">
+  <div class="music-page">
     <div class="player">
       <button class="prev-song" @click="prevSong" :disabled="!playerState.ready">
         <i class="iconfont icon-music-prev"></i>
@@ -101,25 +101,6 @@
         title: `${this.isEnLang ? '' : this.$i18n.nav.music + ' | '}Music`
       }
     },
-    data() {
-      return {
-        height: 0
-      }
-    },
-    created() {
-      if (this.$store.state.global.isMobile) {
-        this.$router.back()
-      }
-    },
-    activated() {
-      if (isBrowser) {
-        this.updateScreenHeight()
-        window.addEventListener('resize', this.updateScreenHeight)
-      }
-    },
-    deactivated() {
-      window.removeEventListener('resize', this.updateScreenHeight)
-    },
     computed: {
       isEnLang() {
         return this.$store.getters['global/isEnLang']
@@ -163,16 +144,12 @@
         };
       }
     },
+    created() {
+      if (this.$store.state.global.isMobile) {
+        this.$router.back()
+      }
+    },
     methods: {
-      updateScreenHeight(event) {
-        const screenHeight = window.innerHeight
-        const minHeight = 14 * 53
-        if (screenHeight - 14 * 4 > minHeight) {
-          this.height = screenHeight - (14 * 12)
-        } else {
-          this.height = minHeight
-        }
-      },
       togglePlay() {
         music.humanizeOperation(music.player.togglePlay)
       },
@@ -184,23 +161,25 @@
       },
       nextSong() {
         music.humanizeOperation(music.player.nextSong)
-      },
-    },
+      }
+    }
   }
 </script>
 
 <style lang="scss" scoped>
-  .page {
+  .music-page {
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    min-height: 58rem;
+    height: $active-content-full-height;
 
     > .player {
       display: flex;
       justify-content: space-around;
       align-items: center;
-      margin-bottom: 2em;
+      margin-bottom: 2rem;
       width: 100%;
 
       > .prev-song,
@@ -216,7 +195,7 @@
 
         > .iconfont {
           font-size: 3em;
-          color: $dividers;
+          color: $text-dividers;
         }
       }
 
@@ -242,7 +221,7 @@
           position: absolute;
           width: 100%;
           height: 100%;
-          padding: 1rem;
+          padding: $gap;
           overflow: hidden;
           border-radius: 100%;
           animation: rotation 26s linear infinite;
@@ -269,38 +248,39 @@
             width: 6rem;
             height: 6rem;
             line-height: 6rem;
-            text-align: center;
             background-color: $module-bg;
             border-radius: 100%;
-            opacity: .5;
+            opacity: .8;
+            font-size: 3em;
+            text-align: center;
+            transition: all $transition-time-normal;
 
             &:hover {
-              opacity: .8;
+              opacity: 1;
               transform: scale(1.2);
             }
 
             > .iconfont {
               color: $text-reversal;
-              font-size: 3em;
             }
           }
         }
 
         > .toggle-muted {
           position: absolute;
-          bottom: 15%;
+          top: 15%;
 
           > .muted-btn {
 
             > .iconfont {
               font-size: 2em;
-              color: $module-hover-bg;
+              color: $module-bg;
             }
 
             &:hover {
 
               > .iconfont {
-                color: $module-bg;
+                color: $text-reversal;
               }
             }
           }
@@ -317,22 +297,11 @@
 
     > .song-info {
       text-align: center;
-      
-      > .name {
-        margin-bottom: 1em;
-      }
 
       > .lrc {
 
-        @keyframes lrc-text {
-          0% { color: $primary }
-          33% { color: $red }
-          66% { color: $accent }
-        }
-
         .lrc-text {
           color: $primary;
-          // animation: lrc-text 5s linear infinite;
         }
       }
     }

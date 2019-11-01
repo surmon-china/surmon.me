@@ -102,9 +102,9 @@
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
-      width: calc(100vw * 0.88);
-      height: calc(100vh * 0.88);
-      border: solid .5rem $module-hover-bg;
+      width: 88vw;
+      height: 88vh;
+      border: solid $sm-gap $module-hover-bg;
       background-color: $module-bg;
       @include backdrop-blur();
 
@@ -155,22 +155,20 @@
               display: block;
               float: left;
               background-color: $module-bg;
-              margin-right: 1rem;
+              margin-right: $gap;
               height: 3rem;
               line-height: 3rem;
-              padding: 0 1rem;
-            }
-
-            > .btn {
-              &:hover {
-                background-color: $module-hover-bg-opacity-9;
-              }
+              padding: 0 $gap;
             }
 
             > .btn {
 
               &[disabled] {
                 opacity: .6;
+              }
+
+              &:hover {
+                background-color: $module-hover-bg-opacity-9;
               }
             }
           }

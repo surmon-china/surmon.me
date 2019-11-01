@@ -1,5 +1,5 @@
 <template>
-  <div class="index">
+  <div class="index-page">
     <carrousel :article="article" />
     <announcement :announcement="announcement" />
     <article-list :article="article" @loadmore="loadmoreArticle" />

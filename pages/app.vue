@@ -1,5 +1,5 @@
 <template>
-  <div class="page" :style="{ height: height }" :class="{ mobile: isMobile }">
+  <div class="app-page" :class="{ mobile: isMobile }">
     <div class="app">
       <div class="logo">
         <img src="/images/app-logo.png" alt="app-logo">
@@ -20,7 +20,7 @@
             target="_blank"
             class="btn"
             href=""
-            @click.prevent="handleDownloadIOS"
+            @click.prevent="alert('~')"
             v-text="$i18n.text.device.ios"
           ></a>
         </div>
@@ -37,11 +37,6 @@
         title: `${this.isEnLang ? '' : this.$i18n.nav.app + ' | '}App`
       }
     },
-    data() {
-      return {
-        height: 0
-      }
-    },
     computed: {
       isEnLang() {
         return this.$store.getters['global/isEnLang']
@@ -49,48 +44,25 @@
       isMobile() {
         return this.$store.state.global.isMobile
       }
-    },
-    activated() {
-      this.updateScreenHeight()
-      window.addEventListener('resize', this.updateScreenHeight)
-    },
-    deactivated() {
-      window.removeEventListener('resize', this.updateScreenHeight)
-    },
-    methods: {
-      updateScreenHeight(event) {
-        if (this.isMobile) {
-          this.height = 'auto'
-        } else {
-          const screenHeight = window.innerHeight
-          const minHeight = 14 * 62
-          if (screenHeight - 14 * 4 > minHeight) {
-            this.height = `${screenHeight - (14 * 12)}px`
-          } else {
-            this.height = `${minHeight}px`
-          }
-        }
-      },
-      handleDownloadIOS() {
-        alert('不存在的，全世界就我一个用户')
-      }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  .page {
+  .app-page {
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    min-height: 62rem;
+    min-height: 68rem;
+    height: $active-content-full-height;
 
     &.mobile {
-      min-height: 36rem;
+      min-height: 53rem;
+      height: calc(100vh - #{$mobile-header-height + $lg-gap + $mobile-footer-height + $gap});;
 
       > .app {
-        padding-top: 1em;
+        padding-top: $lg-gap;
 
         > .screen {
           width: 100%;
@@ -104,17 +76,17 @@
           }
 
           > .download {
-            opacity: 1;
-            visibility: visible;
+            @include visible();
           }
         }
       }
     }
 
     > .app {
+      text-align: center;
 
       > .logo {
-        text-align: center;
+        margin-bottom: $lg-gap * 2;
 
         > img {
           width: 6rem;
@@ -125,18 +97,14 @@
       > .title {
         color: $primary;
         font-weight: bold;
-        text-align: center;
         text-transform: uppercase;
-      }
-
-      > .desc {
-        text-align: center;
       }
 
       > .screen {
         margin-top: 5rem;
         width: 36rem;
         position: relative;
+        user-select: none;
 
         &:hover {
 
@@ -145,8 +113,7 @@
           }
 
           > .download {
-            opacity: 1;
-            visibility: visible;
+            @include visible();
           }
         }
 
@@ -155,18 +122,16 @@
         }
 
         > .download {
-          opacity: 0;
-          visibility: hidden;
           position: absolute;
           width: 100%;
           height: 100%;
           top: 0;
           left: 0;
-          border-radius: 1rem;
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
+          @include hidden();
 
           > .qrcode {
             width: 12rem;
@@ -175,24 +140,23 @@
 
           > .btn {
             width: 12rem;
-            line-height: 2.68rem;
+            line-height: $line-height-base * 1.6;
             color: $primary;
             margin-top: 2rem;
-            border:  1px solid;
-            border-color: $primary;
+            border: 1px solid $primary;
             text-align: center;
             text-transform: uppercase;
             background: $module-bg;
 
             &:hover {
-              color: $reversal;
+              color: $text-reversal;
               border-color: $primary-opacity-5;
               background: linear-gradient(
                 to bottom right,
                 rgba($red, .7),
-                $reversal,
+                $text-reversal,
                 $primary-opacity-9,
-                $reversal,
+                $text-reversal,
                 rgba($accent, .7)
               );
             }
