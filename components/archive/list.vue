@@ -152,7 +152,7 @@
       overflow: hidden;
 
       > .article-empty-box {
-        color: $text-secondary;
+        color: $text-disabled;
         @include module-blur-bg();
       }
 

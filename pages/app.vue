@@ -20,7 +20,7 @@
             target="_blank"
             class="btn"
             href=""
-            @click.prevent="alert('~')"
+            @click.prevent="handleDownloadIOS"
             v-text="$i18n.text.device.ios"
           ></a>
         </div>
@@ -43,6 +43,11 @@
       },
       isMobile() {
         return this.$store.state.global.isMobile
+      }
+    },
+    methods: {
+      handleDownloadIOS() {
+        window.alert('!')
       }
     }
   }
