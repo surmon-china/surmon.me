@@ -1036,7 +1036,7 @@
             display: block;
             position: absolute;
             left: 0;
-            top: 2em;
+            top: 2rem;
             background-color: $module-hover-bg;
 
             > a {
@@ -1095,8 +1095,6 @@
             }
 
             > .cm-content {
-              min-height: 3rem;
-
               > .reply {
                 color: $text-disabled;
                 font-weight: bold;

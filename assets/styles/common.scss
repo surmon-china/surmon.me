@@ -157,8 +157,8 @@ select:-webkit-autofill {
   > iframe {
     transform: scale(.8);
     transition: all .08s;
-    min-width: 20%;
-    min-height: 20%;
+    min-width: 10%;
+    min-height: 10%;
     background-color: rgba(255, 255, 255, 0.3);
     border: $sm-gap solid rgba(210, 210, 210, 0.5);
 
