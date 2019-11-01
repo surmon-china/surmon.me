@@ -122,17 +122,18 @@
   $announcement-height: 3rem;
 
   .announcement {
+    position: relative;
+    margin-bottom: $lg-gap;
     height: $announcement-height;
     line-height: 2.75em;
-    font-size: $font-size-h6;
-    margin-bottom: $lg-gap;
     overflow: hidden;
-    position: relative;
-    background-color: $module-bg;
     color: $text-reversal;
+    font-size: $font-size-h6;
+    background-color: $module-bg;
     user-select: none;
 
     &.mobile {
+      margin-bottom: $gap;
       background-color: $module-hover-bg-darken-10;
 
       > .swiper {

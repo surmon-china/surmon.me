@@ -20,23 +20,19 @@
         </datalist>
       </client-only>
     </form>
-    <transition name="module">
+    <transition name="fade">
       <div v-if="search" class="search-mask"></div>
     </transition>
     <nav class="navbar">
-      <div class="navbar-container">
-        <div class="navbar-header">
-          <a href class="navbar-menu" @click.stop.prevent="toggleSidebar(!onMobileSidebar)">
-            <i class="iconfont icon-menu"></i>
-          </a>
-          <nuxt-link to="/" class="navbar-logo">
-            <img src="/images/logo.svg">
-          </nuxt-link>
-          <a href class="navbar-search" @click.stop.prevent="openSearch">
-            <i class="iconfont icon-search"></i>
-          </a>
-        </div>
-      </div>
+      <a href class="navbar-menu" @click.stop.prevent="toggleSidebar(!onMobileSidebar)">
+        <i class="iconfont icon-menu"></i>
+      </a>
+      <nuxt-link to="/" class="navbar-logo">
+        <img src="/images/logo.svg">
+      </nuxt-link>
+      <a href class="navbar-search" @click.stop.prevent="openSearch">
+        <i class="iconfont icon-search"></i>
+      </a>
     </nav>
   </header>
 </template>
@@ -116,15 +112,15 @@
 
       > .input {
         width: 80%;
+        height: 100%;
         padding: 1em;
-        height: $mobile-header-height;
       }
 
       > .close {
         width: 20%;
-        text-align: center;
-        height: $mobile-header-height;
+        height: 100%;
         line-height: $mobile-header-height;
+        text-align: center;
       }
 
       &.actived {
@@ -134,32 +130,23 @@
     }
 
     .navbar {
+      width: 100%;
+      height: $mobile-header-height;
+      display: flex;
+      position: relative;
+      align-items: center;
+      justify-content: space-between;
 
-      .navbar-container {
-        height: $mobile-header-height;
+      .navbar-menu,
+      .navbar-search {
+        height: 100%;
+        width: 20%;
+        line-height: $mobile-header-height;
+        text-align: center;
+      }
 
-        .navbar-header {
-          height: $mobile-header-height;
-          display: flex;
-          position: relative;
-          align-items: center;
-          width: 100%;
-          justify-content: space-between;
-
-          .navbar-menu,
-          .navbar-search {
-            border: none;
-            display: inline-block;
-            height: $mobile-header-height;
-            width: 20%;
-            line-height: $mobile-header-height;
-            text-align: center;
-          }
-
-          .navbar-logo {
-            width: 30%;
-          }
-        }
+      .navbar-logo {
+        width: 30%;
       }
     }
   }

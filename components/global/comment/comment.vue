@@ -154,7 +154,7 @@
           <li class="item">
             <a href class="pagination-btn prev disabled" @click.stop.prevent>
               <span>—</span>
-              <span v-text="$i18n.text.comment.pagenation.old">old</span>
+              <span v-text="$i18n.text.comment.pagenation.old"></span>
             </a>
           </li>
           <li class="item" :key="index" v-for="(item, index) in comment.pagination.total_page">
@@ -171,7 +171,7 @@
           </li>
           <li class="item">
             <a href class="pagination-btn next disabled" @click.stop.prevent>
-              <span v-text="$i18n.text.comment.pagenation.new">new</span>
+              <span v-text="$i18n.text.comment.pagenation.new"></span>
               <span>—</span>
             </a>
           </li>
@@ -659,7 +659,7 @@
       },
       // 获取评论列表
       loadComemntList(params = {}) {
-        scrollTo('body', 300, { easing: Easing['ease-in'] })
+        scrollTo('#comment-box', 180, { easing: Easing['ease-in'] })
         params.sort = this.sortMode
         this.$store.dispatch('comment/fetchList', Object.assign(params, { post_id: this.postId }))
       },
@@ -758,10 +758,10 @@
   .cm-content,
   .reply-preview,
   .markdown-preview {
-    font-size: $font-size-h6;
-    line-height: 2em;
     margin: $sm-gap 0;
+    line-height: 2em;
     word-wrap: break-word;
+    font-size: $font-size-h6;
 
     a {
       text-decoration: underline;
@@ -838,24 +838,20 @@
     background-color: $module-bg;
 
     &.mobile {
-
       > .list-box {
-
         > .comment-list {
-
           > .comment-item {
             padding: 0;
-            margin-bottom: 1rem;
+            margin-top: $gap;
 
             > .cm-body {
-              padding: .6em;
+              padding: $sm-gap $gap;
             }
           }
         }
       }
 
       > .post-box {
-
         > .user {
           padding: 0;
           height: auto;
@@ -868,7 +864,7 @@
             width: 80%;
             margin-left: 0;
             margin-right: 0;
-            margin-bottom: 1rem;
+            margin-bottom: $gap;
           }
 
           > .save {
@@ -878,7 +874,6 @@
         }
 
         > .editor-box {
-
           > .user {
             margin: 0;
           }
@@ -1301,6 +1296,7 @@
             width: 100%;
             height: 2em;
             line-height: 2em;
+            text-indent: 3px;
             background-color: $module-hover-bg;
 
             &:focus,

@@ -58,7 +58,8 @@
     height: $active-content-full-height;
 
     &.mobile {
-      min-height: 36rem;
+      min-height: 53rem;
+      height: calc(100vh - #{$mobile-header-height + $lg-gap + $mobile-footer-height + $gap});;
 
       > .app {
         padding-top: $lg-gap;

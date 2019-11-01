@@ -214,6 +214,7 @@ select:-webkit-autofill {
   z-index: 3;
 }
 
+// no used
 .slide-up-enter-active, .slide-up-leave-active {
   transition: all $transition-time-slow cubic-bezier(0, 1.2, 1, 0.5);
   opacity: .7;
@@ -224,6 +225,7 @@ select:-webkit-autofill {
   transform: translate3d(0, 4em, 0);
 }
 
+// no used
 .slide-left-enter-active, .slide-left-leave-active {
   transition: all $transition-time-normal cubic-bezier(0, 1.2, 1, 0.5);
   opacity: .5;
@@ -255,7 +257,7 @@ select:-webkit-autofill {
 }
 
 .module-enter-active, .module-leave-active {
-  transition: opacity $transition-time-fast;
+  transition: opacity $transition-time-normal;
 }
 .module-enter, .module-leave-active {
   opacity: 0
