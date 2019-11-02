@@ -113,8 +113,8 @@
 <style lang="scss" scoped>
   #app-main {
 
-    @media screen and (max-width: 1080px) {
-      .sidebar-share {
+    @media screen and (max-width: 1200px) {
+      .sidebar-share, #theme {
         display: none !important;
       }
     }
