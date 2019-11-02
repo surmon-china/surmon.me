@@ -37,14 +37,23 @@
       <nuxt-link to="/service" class="item">
         <i class="iconfont icon-tool"></i>
         <span v-text="$i18n.nav.service"></span>
-        <span class="superscript">
-          <i class="iconfont icon-hot"></i>
-        </span>
       </nuxt-link>
       <nuxt-link to="/guestbook" class="item guestbook">
         <i class="iconfont icon-comment"></i>
         <span v-text="$i18n.nav.guestbook"></span>
       </nuxt-link>
+      <a
+        :href="adsForPcNav.holiday"
+        target="_blank"
+        class="item ad holiday"
+        rel="external nofollow noopener"
+      >
+        <i class="iconfont icon-1111"></i>
+        <span>超级红包</span>
+        <span class="superscript">
+          <i class="iconfont icon-hot"></i>
+        </span>
+      </a>
       <a
         :href="adsForPcNav.taobao"
         target="_blank"
@@ -155,7 +164,11 @@
             animation: superscript-icon-color 1s infinite;
           }
         }
-        
+
+        &:not(.ad) + .ad {
+          border-top: 1px dashed $module-hover-bg;
+        }
+
         &.ad {
           height: 5rem;
           line-height: 5rem;
@@ -163,9 +176,12 @@
           border-bottom: 1px dashed $module-hover-bg;
         }
 
+        &.holiday {
+          color: red;
+        }
+
         &.taobao {
           color: #ff5000;
-          border-top: 1px dashed $module-hover-bg;
         }
 
         &.aliyun {
@@ -174,7 +190,6 @@
 
         &.errend {
           color: black;
-          border-top: 1px dashed $module-hover-bg;
         }
 
         &.foxfinder {

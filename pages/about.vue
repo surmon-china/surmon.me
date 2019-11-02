@@ -8,9 +8,8 @@
               <div class="description">
                 <div class="item webfont">
                   <i class="iconfont icon-user"></i>
-                  <div class="bio">
-                    <p class="text" v-if="isEnLang">I'm Surmon, a developer.</p>
-                    <p class="text" v-else>浪蝶游蜂，迈步九云中</p>
+                  <p class="bio">
+                    <span>{{ isEnLang ? `I'm Surmon, a developer.` : `浪蝶游蜂，迈步九云中` }}</span>
                     <a
                       class="sponsor"
                       target="_blank"
@@ -19,7 +18,7 @@
                     >
                       <small v-text="$i18n.text.about.sponsorMe"></small>
                     </a>
-                  </div>
+                  </p>
                 </div>
                 <div class="item">
                   <i class="iconfont icon-comment-discussion"></i>
@@ -361,7 +360,7 @@
                   }
 
                   > .avatar {
-                    width: 25%;
+                    width: 22%;
                     margin-top: 0;
                     margin-left: 6%;
                   }
@@ -482,23 +481,16 @@
 
                 > .bio {
                   display: inline-block;
+                  margin: 0;
 
-                  .text {
-                    display: inline-block;
-                    margin: 0;
-
-                    &::first-letter {
-                      font-size: $font-size-h2;
-                      margin-right: 2px;
-                    }
+                  &::first-letter {
+                    font-size: $font-size-h2;
+                    margin-right: 2px;
                   }
 
                   .sponsor {
-                    display: inline-block;
-                    height: 20px;
-                    line-height: 20px;
                     margin-left: $sm-gap;
-                    padding: 0 $xs-gap;
+                    padding: $xs-gap;
                     font-family: DINRegular;
                     background-color: $primary;
                     border-radius: $radius * 2;
@@ -589,7 +581,7 @@
 
             .gravatar {
               position: relative;
-              width: 20rem;
+              width: 18rem;
               margin-left: $lg-gap;
               flex-grow: 1;
               display: flex;

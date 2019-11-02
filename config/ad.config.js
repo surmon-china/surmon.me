@@ -26,7 +26,12 @@ const links = {
     // 天猫超市（N）
     tmailMarket: 'https://s.click.taobao.com/yHMYGzv',
     // 飞猪（N）
-    alitrip: 'https://s.click.taobao.com/NVTYGzv'
+    alitrip: 'https://s.click.taobao.com/NVTYGzv',
+    // 2019 1111
+    holiday: 'https://s.click.taobao.com/O7xfvwv',
+    holiday2: 'https://s.click.taobao.com/lTFevwv',
+    holidayAliyun: 'https://www.aliyun.com/1111/2019/group-buying-share?ptCode=48978F811F2376670B0FDDE3FB205EA6647C88CF896EF535&userCode=pu7fghvl&share_source=copy_link',
+    holidayAliyun2: 'https://www.aliyun.com/1111/2019/home?userCode=pu7fghvl'
   },
   mobile: {
     // 淘宝（N）
@@ -44,20 +49,27 @@ export const mobile = {
   }
 }
 
-// pc 端链接广告
+// PC 端链接广告
 export const pc = {
   nav: {
     taobao: links.pc.taobao,
-    aliyun: links.common.aliyunECS
+    aliyun: links.common.aliyunECS,
+    holiday: links.pc.holiday,
   },
-  // 2019 1111
+  // TODO: remove when holiday ended
   carrousel: {
-    url: 'https://www.aliyun.com/1111/2019/group-buying-share?ptCode=48978F811F2376670B0FDDE3FB205EA6647C88CF896EF535&userCode=pu7fghvl&share_source=copy_link',
-    src: imagePath + 'alicloud-1111.jpg',
-    title: '云服务器86元/年，错过再等1年！',
-    index: 0
+    index: 0,
+    ...(Math.random() > 0.5 ? ({
+      url: links.pc.holidayAliyun,
+      src: imagePath + 'alicloud-1111-banner-group.jpg',
+      title: '云服务器86元/年，错过再等1年'
+    }) : ({
+      url: links.pc.holidayAliyun2,
+      src: imagePath + 'alicloud-1111-banner.jpg',
+      title: '上云！超级钜惠'
+    }))
   },
-  // 2019 normal
+  // normal
   // carrousel: {
   //   url: links.common.aliyunWaf,
   //   src: imagePath + 'aliyun-banner-1190-420.jpg',
@@ -69,10 +81,19 @@ export const pc = {
     src: imagePath + 'aliyun-ecs-1200-100.png',
   },
   asideSwiper: [
+    // TODO: remove when holiday ended
     {
-      url: links.common.aliyunCPS,
-      src: imagePath + 'aliyun-cps-532-178.jpg'
+      url: links.pc.holiday2,
+      src: imagePath + 'tmail-1111-532-178.jpg'
     },
+    {
+      url: links.pc.holidayAliyun2,
+      src: imagePath + 'aliyun-1111-532-178.jpg'
+    },
+    // {
+    //   url: links.common.aliyunCPS,
+    //   src: imagePath + 'aliyun-cps-532-178.jpg'
+    // },
     {
       url: links.pc.tmailMarket,
       src: imagePath + 'tmail-532-178.jpg'
@@ -85,10 +106,10 @@ export const pc = {
       url: links.common.aliyunHTTPS,
       src: imagePath + 'aliyun-https-532-178.jpg'
     },
-    {
-      url: links.pc.taobao,
-      src: imagePath + 'taobao-532-178.jpg'
-    }
+    // {
+    //   url: links.pc.taobao,
+    //   src: imagePath + 'taobao-532-178.jpg'
+    // }
   ]
 }
 
