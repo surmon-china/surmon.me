@@ -490,7 +490,7 @@
 
                   .sponsor {
                     margin-left: $sm-gap;
-                    padding: $xs-gap;
+                    padding: 1px $xs-gap;
                     font-family: DINRegular;
                     background-color: $primary;
                     border-radius: $radius * 2;
