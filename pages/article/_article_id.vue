@@ -572,12 +572,11 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          min-height: 8rem;
+          min-height: 12rem;
           overflow: hidden;
 
           > .adsbygoogle {
             width: 100%;
-            height: 96px;
           }
         }
       }
