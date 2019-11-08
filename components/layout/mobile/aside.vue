@@ -2,7 +2,7 @@
   <aside class="aside">
     <div class="aside-user">
       <div class="avatar">
-        <img :src="gravatar" alt="Surmon">
+        <img :src="gravatar" alt="Surmon" draggable="false" />
       </div>
       <div class="profile">
         <h3 class="name">Surmon</h3>
@@ -101,10 +101,7 @@
     computed: {
       ads: () => adConfig.mobile.aside,
       gravatar() {
-        const gravatar = this.$store.state.global.adminInfo.gravatar
-        return gravatar 
-          ? `${gravatar}?imageView2/1/w/180/h/180/interlace/1/q/75|imageslim` 
-          : `${this.cdnUrl}/images/gravatar.jpg`
+        return this.$store.state.global.adminInfo.gravatar || `${this.cdnUrl}/images/gravatar.jpg`
       }
     }
   }
