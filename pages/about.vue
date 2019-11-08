@@ -232,7 +232,7 @@
                     class="image"
                   >
                 </div>
-                <img :src="gravatar" class="avatar">
+                <img :src="gravatar" class="avatar" draggable="false" />
                 <div class="description">
                   <h3 class="name">
                     <strong>Surmon</strong>
@@ -307,10 +307,7 @@
         return this.$store.state.global.isMobile
       },
       gravatar() {
-        const gravatar = this.$store.state.global.adminInfo.gravatar
-        return gravatar
-          ? `${gravatar}?imageView2/1/w/360/h/360/interlace/1/q/75|imageslim` 
-          : `${this.cdnUrl}/images/gravatar.jpg`
+        return this.$store.state.global.adminInfo.gravatar || `${this.cdnUrl}/images/gravatar.jpg`
       }
     }
   }
