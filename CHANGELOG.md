@@ -1,6 +1,13 @@
 
 ## CHANGELOG
 
+### v2.4.8
+
+- Upgrade static style
+- Update images style
+- Add tobots.txt for CDN
+- Pause `imageExt`
+
 ### v2.4.6
 
 - Improve styles with PC / Mobile
