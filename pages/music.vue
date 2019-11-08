@@ -28,7 +28,7 @@
           </svg>
         </div>
         <div class="song-bg-box" :class="{ 'playing': playerState.playing }">
-          <img :src="currentSongPicUrl">
+          <img :src="currentSongPicUrl" draggable="false" />
         </div>
         <div class="toggle-box">
           <transition name="module" mode="out-in">

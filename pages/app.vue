@@ -2,14 +2,14 @@
   <div class="app-page" :class="{ mobile: isMobile }">
     <div class="app">
       <div class="logo">
-        <img src="/images/app-logo.png" alt="app-logo">
+        <img src="/images/app-logo.png" alt="app-logo" draggable="false" />
       </div>
       <h2 class="title">Surmon.me</h2>
       <p class="desc" v-text="$i18n.text.slogan">Talk is cheap. Show me the code</p>
       <div class="screen">
-        <img src="/images/app-hot.png" class="screen-img" alt="app-hot">
+        <img src="/images/app-hot.png" class="screen-img" alt="app-hot" />
         <div class="download">
-          <img src="/images/app-qrcode.png" class="qrcode" alt="qrcode">
+          <img src="/images/app-qrcode.png" class="qrcode" alt="qrcode" draggable="false" />
           <a
             target="_blank"
             :href="`${cdnUrl}/app/surmon.me.apk`"
