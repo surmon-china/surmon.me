@@ -79,7 +79,7 @@
               >
                 <img
                   :alt="comment.author.name || $i18n.text.comment.anonymous"
-                  :src="gravatar(comment.author.email) || `${cdnUrl}/images/anonymous.jpg`"
+                  :src="humanizeGravatarUrl(getGravatarUrlByEmail(comment.author.email))"
                 >
               </a>
             </div>
@@ -244,7 +244,7 @@
           <div class="gravatar" v-if="!isMobile">
             <img
               :alt="user.name || $i18n.text.comment.anonymous"
-              :src="user.gravatar || `${cdnUrl}/images/anonymous.jpg`"
+              :src="humanizeGravatarUrl(user.gravatar)"
             >
           </div>
         </div>
@@ -473,15 +473,17 @@
         return marked(content, null, false)
       },
       // 头像服务
-      gravatar(email) {
-        if (!this.regexs.email.test(email)) return null
-        const gravatar_url = gravatar.url(email, { 
-          // size: '96', 
-          // rating: 'pg',
-          // default: 'https://gravatar.surmon.me/anonymous.jpg', 
-          protocol: 'https'
-        });
-        return gravatar_url.replace('https://s.gravatar.com/avatar', 'https://gravatar.surmon.me')
+      getGravatarUrlByEmail(email) {
+        if (!this.regexs.email.test(email)) {
+          return null
+        }
+        return gravatar.url(email, { protocol: 'https' }).replace(
+          'https://s.gravatar.com/avatar',
+          this.$apiConfig.gravatarUrl
+        ) + `?x-oss-process=style/gravatar`
+      },
+      humanizeGravatarUrl(gravatar) {
+        return gravatar || `${this.cdnUrl}/images/anonymous.jpg`
       },
       // 更新用户数据
       updateUserCache(event) {
@@ -512,8 +514,9 @@
       },
       // 更新当前用户头像
       upadteUserGravatar() {
-        const emailIsVerified = this.regexs.email.test(this.user.email)
-        this.user.gravatar = emailIsVerified ? this.gravatar(this.user.email) : null
+        this.user.gravatar = this.regexs.email.test(this.user.email)
+          ? this.getGravatarUrlByEmail(this.user.email)
+          : null
       },
       // 编辑器相关
       commentContentChange() {

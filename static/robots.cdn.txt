@@ -1,0 +1,5 @@
+# robots.txt for cdn domain
+User-agent: *
+Disallow: /
+Sitemap: https://surmon.me/sitemap.xml
+Sitemap: https://surmon.me/sitemap

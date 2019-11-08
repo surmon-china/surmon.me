@@ -102,7 +102,7 @@
     methods: {
       buildThumb(thumb) {
         return thumb
-          ? `${thumb}?imageView2/1/w/350/h/238/format/${this.imageExt}/interlace/1/q/75|watermark/2/text/U3VybW9uLm1l/font/Y2FuZGFyYQ==/fontsize/460/fill/I0ZGRkZGRg==/dissolve/23/gravity/SouthWest/dx/15/dy/7|imageslim`
+          ? `${thumb}?x-oss-process=style/blog.list.item.pc`
           : `${this.cdnUrl}/images/thumb-article.jpg`
       }
     },
