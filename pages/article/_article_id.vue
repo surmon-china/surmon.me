@@ -189,7 +189,7 @@
                 :title="article.title"
               >
                 <img
-                  :src="getThumb(article.thumb)"
+                  :src="getRelatedArticleThumb(article.thumb)"
                   :alt="article.title"
                   class="thumb"
                 >
@@ -423,9 +423,9 @@
           this.$root.$copyToClipboard(`https://surmon.me/article/${this.article.id}`)
         }
       },
-      getThumb(thumb) {
+      getRelatedArticleThumb(thumb) {
         return thumb
-          ? `${thumb}?imageView2/1/w/300/h/230/format/${this.imageExt}/interlace/1/q/80|imageslim`
+          ? `${thumb}?x-oss-process=style/blog.list.item.pc`
           : `${this.cdnUrl}/images/thumb-releted.jpg`
       },
       getDateTitle(date) {
