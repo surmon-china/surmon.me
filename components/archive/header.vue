@@ -24,19 +24,19 @@
     <div class="title-box">
       <transition name="module" mode="out-in">
         <!-- category -->
-        <h5 class="title" :key="`category${currentCategory.description}`" v-if="currentCategory">
+        <h5 class="title" :key="`category-${currentCategory.description}`" v-if="currentCategory">
           <span>{{ currentCategory.description || '...' }}</span>
         </h5>
 
         <!-- tag -->
-        <h5 class="title" :key="`tag${currentTag.name}`" v-else-if="currentTag">
+        <h5 class="title" :key="`tag-${currentTag.name}`" v-else-if="currentTag">
           <span>{{ currentTag.name }}</span>
           <span>&nbsp;-&nbsp;</span>
           <span>{{ currentTag.description || '...' }}</span>
         </h5>
 
         <!-- date -->
-        <h5 class="title" :key="`date${currentDate}`" v-else-if="currentDate">
+        <h5 class="title" :key="`date-${currentDate}`" v-else-if="currentDate">
           <span v-if="isEnLang">
             <span>{{ currentDate }}&nbsp;</span>
             <span>articles</span>
@@ -49,7 +49,7 @@
         </h5>
 
         <!-- search -->
-        <h5 class="title" :key="`search${currentKeyword}`" v-else-if="currentKeyword">
+        <h5 class="title" :key="`search-${currentKeyword}`" v-else-if="currentKeyword">
           <span v-if="isEnLang">
             <span>"{{ currentKeyword }}"</span>
             <span>related articles</span>
@@ -68,6 +68,7 @@
 </template>
 
 <script>
+  import { getFileCDNUrl } from '~/transforms/url'
   export default {
     name: 'article-list-header',
     methods: {
@@ -102,7 +103,7 @@
       currentBackgroundImage() {
         const tagBg = this.getExtendsValue(this.currentTag, 'background')
         const cateBg = this.getExtendsValue(this.currentCategory, 'background')
-        return tagBg || cateBg || '/images/service.jpg'
+        return tagBg || cateBg || getFileCDNUrl('/images/service.jpg')
       },
       currentBackgroundColor() {
         const tagBg = this.getExtendsValue(this.currentTag, 'bgcolor')

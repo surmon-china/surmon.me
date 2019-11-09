@@ -4,7 +4,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-const imagePath = '/images/mammon/'
+import apiConfig from '~/config/api.config'
+
+const imagePath = apiConfig.CDN + '/images/mammon/'
 const links = {
   common: {
     // ECS 服务器（N）

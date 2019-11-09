@@ -245,7 +245,9 @@
   import lozad from '~/plugins/lozad'
   import marked from '~/plugins/marked'
   import adConfig from '~/config/ad.config'
+  import { getFileCDNUrl } from '~/transforms/url'
   import ShareBox from '~/components/widget/share'
+
   export default {
     name: 'article-detail',
     components: {
@@ -426,7 +428,7 @@
       getRelatedArticleThumb(thumb) {
         return thumb
           ? `${thumb}?x-oss-process=style/blog.list.item.pc`
-          : `${this.cdnUrl}/images/thumb-releted.jpg`
+          : getFileCDNUrl('/images/thumb-releted.jpg')
       },
       getDateTitle(date) {
         if (!date) {

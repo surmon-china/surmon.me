@@ -50,7 +50,9 @@
 
 <script>
   import { mapState } from 'vuex'
+  import { getFileCDNUrl } from '~/transforms/url'
   import adConfig from '~/config/ad.config'
+
   export default {
     name: 'index-carrousel',
     props: {
@@ -98,7 +100,7 @@
     methods: {
       humanizeThumb(thumb) {
         if (!thumb) {
-          return `${this.cdnUrl}/images/${this.isMobile ? 'mobile-' : ''}thumb-carrousel.jpg`
+          return getFileCDNUrl(`/images/${this.isMobile ? 'mobile-' : ''}thumb-carrousel.jpg`)
         }
         if (this.isMobile) {
           return `${thumb}?x-oss-process=style/blog.list.banner.mobile`
