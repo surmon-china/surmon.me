@@ -4,12 +4,12 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import apiConfig from '~/config/api.config'
 import { Howler, Howl } from 'howler'
+import { getFileProxyUrl } from '~/transforms/url'
 
 export default music => {
 
-  const proxyPath = apiConfig.proxyUrl + 'music/'
+  const proxyPath = getFileProxyUrl('/music/')
   const playList = music.list.data.tracks
 
   if (music.player) {

@@ -93,6 +93,8 @@
 
 <script>
   import adConfig from '~/config/ad.config'
+  import { getFileCDNUrl } from '~/transforms/url'
+
   export default {
     name: 'mobile-aside',
     mounted() {
@@ -101,7 +103,7 @@
     computed: {
       ads: () => adConfig.mobile.aside,
       gravatar() {
-        return this.$store.state.global.adminInfo.gravatar || `${this.cdnUrl}/images/gravatar.jpg`
+        return this.$store.state.global.adminInfo.gravatar || getFileCDNUrl('/images/gravatar.jpg')
       }
     }
   }

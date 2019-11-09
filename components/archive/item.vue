@@ -81,6 +81,7 @@
 
 <script>
   import { mapState } from 'vuex'
+  import { getFileCDNUrl } from '~/transforms/url'
   import { localHistoryLikes } from '~/services/local-storage'
 
   export default {
@@ -103,7 +104,7 @@
       buildThumb(thumb) {
         return thumb
           ? `${thumb}?x-oss-process=style/blog.list.item.pc`
-          : `${this.cdnUrl}/images/thumb-article.jpg`
+          : getFileCDNUrl('/images/thumb-article.jpg')
       }
     },
     mounted() {

@@ -15,16 +15,12 @@ import LoadingBox from '~/components/global/loading'
 import CommentBox from '~/components/global/comment'
 import ColorBlockBox from '~/components/global/color-block'
 import SkeletonBox from '~/components/global/skeleton'
-
-// adsense
-import AdsenseComponents from '~/components/global/adsense'
+import GoogleAdsense from '~/components/global/adsense'
 
 const i18nData = i18nTransfer(i18nConfig)
 
-// cdn
-Vue.prototype.cdnUrl = apiConfig.cdnUrl
-Vue.prototype.proxyUrl = apiConfig.proxyUrl
-Vue.prototype.$apiConfig = apiConfig
+// apis
+Vue.prototype.$API = apiConfig
 
 // filters
 Object.keys(filters).forEach(key => Vue.filter(key, filters[key]))
@@ -35,9 +31,7 @@ Vue.use(CommentBox)
 Vue.use(LoadingBox)
 Vue.use(ColorBlockBox)
 Vue.use(SkeletonBox)
-
-// adsense
-Vue.use(AdsenseComponents)
+Vue.use(GoogleAdsense)
 
 // mixins
 Vue.mixin({

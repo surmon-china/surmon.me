@@ -93,19 +93,19 @@ select:-webkit-autofill {
 .filter {
 
   &.motion-blur-horizontal {
-    filter: url('https://surmon.me/images/motion-blur-filter.svg#horizontal');
+    filter: cdn-url('/images/motion-blur-filter.svg#horizontal');
   }
 
   &.motion-blur-horizontal-small {
-    filter: url('https://surmon.me/images/motion-blur-filter.svg#horizontal-small');
+    filter: cdn-url('/images/motion-blur-filter.svg#horizontal-small');
   }
 
   &.motion-blur-vertical {
-    filter: url('https://surmon.me/images/motion-blur-filter.svg#vertical');
+    filter: cdn-url('/images/motion-blur-filter.svg#vertical');
   }
 
   &.motion-blur-vertical-small {
-    filter: url('https://surmon.me/images/motion-blur-filter.svg#vertical-small');
+    filter: cdn-url('/images/motion-blur-filter.svg#vertical-small');
   }
 }
 
