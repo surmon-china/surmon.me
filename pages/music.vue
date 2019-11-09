@@ -236,7 +236,7 @@
             height: 100%;
             border-radius: 100%;
             background-color: darkgray;
-            background-image: url('/images/music-bg.jpg');
+            background-image: cdn-url('/images/music-bg.jpg');
             background-size: cover;
           }
         }

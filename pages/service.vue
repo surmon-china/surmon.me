@@ -240,7 +240,7 @@
 
       > .banner {
         height: 31rem;
-        background: $module-bg url('/images/service.jpg');
+        background: $module-bg cdn-url('/images/service.jpg');
         background-size: cover;
         background-position: center 60%;
         background-attachment: fixed;

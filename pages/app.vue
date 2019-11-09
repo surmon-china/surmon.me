@@ -2,24 +2,37 @@
   <div class="app-page" :class="{ mobile: isMobile }">
     <div class="app">
       <div class="logo">
-        <img src="/images/app-logo.png" alt="app-logo" draggable="false" />
+        <img
+          alt="app-logo"
+          draggable="false"
+          :src="'/images/app-logo.png' | byCDN"
+        />
       </div>
       <h2 class="title">Surmon.me</h2>
       <p class="desc" v-text="$i18n.text.slogan">Talk is cheap. Show me the code</p>
       <div class="screen">
-        <img src="/images/app-hot.png" class="screen-img" alt="app-hot" />
+        <img
+          alt="app-hot"
+          class="screen-img"
+          :src="'/images/app-hot.png' | byCDN"
+        />
         <div class="download">
-          <img src="/images/app-qrcode.png" class="qrcode" alt="qrcode" draggable="false" />
+          <img
+            :src="'/images/app-qrcode.png' | byCDN"
+            class="qrcode"
+            alt="qrcode"
+            draggable="false"
+          />
           <a
             target="_blank"
-            :href="`${cdnUrl}/app/surmon.me.apk`"
             class="btn"
+            :href="'/app/surmon.me.apk' | byCDN"
             v-text="$i18n.text.device.android"
           ></a>
           <a
-            target="_blank"
-            class="btn"
             href=""
+            class="btn"
+            target="_blank"
             @click.prevent="handleDownloadIOS"
             v-text="$i18n.text.device.ios"
           ></a>

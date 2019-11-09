@@ -2,7 +2,11 @@
   <div class="guestbook-page" :class="{ mobile: isMobile }">
     <div class="detail">
       <div class="banner">
-        <img class="image" src="/images/guestbook.jpg" draggable="false" />
+        <img
+          class="image"
+          draggable="false"
+          :src="'/images/guestbook.jpg' | byCDN"
+        />
         <span class="solgan" v-text="$i18n.text.guestbook" />
       </div>
     </div>
