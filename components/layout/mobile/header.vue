@@ -28,7 +28,7 @@
         <i class="iconfont icon-menu"></i>
       </a>
       <nuxt-link to="/" class="navbar-logo">
-        <img src="/images/logo.svg">
+        <img :src="'/images/logo.svg' | byCDN" />
       </nuxt-link>
       <a href class="navbar-search" @click.stop.prevent="openSearch">
         <i class="iconfont icon-search"></i>

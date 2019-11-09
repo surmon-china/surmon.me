@@ -7,6 +7,7 @@
 import Vue from 'vue'
 import VueAnalytics from 'vue-analytics'
 import { isBrowser, isProdMode } from '~/environment'
+import { getFileCDNUrl } from '~/transforms/url'
 
 if (isBrowser) {
   
@@ -15,7 +16,7 @@ if (isBrowser) {
     Vue.use(VueAnalytics, {
       id: 'UA-84887611-3',
       router: window.$nuxt.$router,
-      customResourceURL: '/scripts/analytics.js',
+      customResourceURL: getFileCDNUrl('/scripts/analytics.js'),
       autoTracking: {
         exception: true,
         screenview: true

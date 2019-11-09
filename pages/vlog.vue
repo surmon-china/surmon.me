@@ -18,9 +18,6 @@
           <div
             class="background lozad"
             :data-background-image="getThumbUrl(video.pic)"
-            bak-style="{
-              'background-image': `url(${getThumbUrl(video.pic)})`
-            }"
           />
         </div>
         <h5 class="title" v-text="video.title" />
@@ -63,6 +60,8 @@
 </template>
 
 <script>
+  import { getFileProxyUrl } from '~/transforms/url'
+
   export default {
     name: 'vlog',
     head() {
@@ -107,7 +106,7 @@
     },
     methods: {
       getThumbUrl(url) {
-        return `${this.proxyUrl}bilibili/${url.replace('//', '')}@560w_350h.${this.imageExt}`
+        return getFileProxyUrl(`/bilibili/${url.replace('//', '')}@560w_350h.${this.imageExt}`)
       },
       handlePlay(video) {
         if (this.isMobile) {

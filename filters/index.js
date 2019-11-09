@@ -4,13 +4,16 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { textOverflow, firstUpperCase } from '~/transforms/html.js'
-import { timeAgo, toYMD, toLocalString } from '~/transforms/time.js'
+import { textOverflow, firstUpperCase } from '~/transforms/text'
+import { timeAgo, toYMD, toLocalString } from '~/transforms/time'
+import { getFileCDNUrl, getFileProxyUrl } from '~/transforms/url'
 
 export default {
   textOverflow,
   firstUpperCase,
   timeAgo,
   toYMD,
-  toLocalString
+  toLocalString,
+  byCDN: getFileCDNUrl,
+  byProxy: getFileProxyUrl
 }

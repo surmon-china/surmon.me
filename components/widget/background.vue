@@ -156,7 +156,7 @@
       width: 100%;
       height: 100%;
       opacity: .3;
-      background: url('/images/background.png');
+      background: cdn-url('/images/background.png');
     }
 
     > .background-canvas {

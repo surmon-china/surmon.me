@@ -3,6 +3,7 @@
 
 ### v2.4.8
 
+- Improve CDN static
 - Upgrade static style
 - Update images style
 - Add tobots.txt for CDN
