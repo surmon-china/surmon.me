@@ -93,19 +93,19 @@ select:-webkit-autofill {
 .filter {
 
   &.motion-blur-horizontal {
-    filter: cdn-url('/images/motion-blur-filter.svg#horizontal');
+    filter: force-source-url('/images/motion-blur-filter.svg#horizontal');
   }
 
   &.motion-blur-horizontal-small {
-    filter: cdn-url('/images/motion-blur-filter.svg#horizontal-small');
+    filter: force-source-url('/images/motion-blur-filter.svg#horizontal-small');
   }
 
   &.motion-blur-vertical {
-    filter: cdn-url('/images/motion-blur-filter.svg#vertical');
+    filter: force-source-url('/images/motion-blur-filter.svg#vertical');
   }
 
   &.motion-blur-vertical-small {
-    filter: cdn-url('/images/motion-blur-filter.svg#vertical-small');
+    filter: force-source-url('/images/motion-blur-filter.svg#vertical-small');
   }
 }
 

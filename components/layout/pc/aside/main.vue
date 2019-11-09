@@ -63,7 +63,7 @@
           scrolling="no"
           frameborder="0"
           class="mammon-iframe"
-          :src="'/partials/mammon/aside.html' | byCDN"
+          src="/partials/mammon/aside.html"
         />
       </div>
     </transition>
