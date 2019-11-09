@@ -120,6 +120,7 @@
   import appConfig from '~/config/app.config'
   import socketio from '~/plugins/socket.io'
   import SimpleWebRTC from '~/plugins/webrtc'
+  import { getFileCDNUrl } from '~/transforms/url'
   import faceCtracker from './face-ctracker'
   
   export default {
@@ -188,7 +189,7 @@
               self.toggleBeauty()
             }
             clmtrackrScript.defer = 'defer'
-            clmtrackrScript.src = `${self.$apiConfig.cdnUrl}/scripts/clmtrackr.js`
+            clmtrackrScript.src = getFileCDNUrl('/scripts/clmtrackr.js')
             document.body.appendChild(clmtrackrScript)
           })
           this.clmtrackrLibLoading = true
@@ -284,7 +285,7 @@
         autoAdjustMic: true,
         autoRequestMedia: true,
         detectSpeakingEvents: true,
-        url: self.$apiConfig.socketHost,
+        url: self.$API.SOCKET,
         // 自动选择流模式
         // iceTransportPolicy: 'relay',
         peerConnectionConfig:{

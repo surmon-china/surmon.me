@@ -2,7 +2,7 @@
   <header id="header" class="header">
     <div class="header-container container">
       <div class="header-header">
-        <img src="/images/logo.svg" class="header-logo">
+        <img :src="'/images/logo.svg' | byCDN" class="header-logo">
         <span class="header-slogan" v-text="$i18n.text.slogan"></span>
         <nuxt-link to="/" class="header-link" :title="$i18n.text.slogan" />
       </div>
@@ -39,14 +39,14 @@
     </div>
     <div class="pre-load">
       <img v-if="preload" :src="currentSongPicUrl" alt="song-thumb">
-      <img v-if="preload" src="/images/sponsor.jpg" alt="sponsor">
-      <img v-if="preload" src="/images/app-hot.png" alt="app-download">
-      <img v-if="preload" src="/images/app-logo.png" alt="app-logo">
-      <img v-if="preload" src="/images/service.jpg" alt="service">
-      <img v-if="preload" src="/images/about-background-be-1.jpg" alt="background">
-      <img v-if="preload" src="/images/about-background-be-2.jpg" alt="background">
-      <img v-if="preload" src="/images/about-background-star-1.png" alt="background">
-      <img v-if="preload" src="/images/about-background-star-2.png" alt="background">
+      <img v-if="preload" :src="'/images/sponsor.jpg' | byCDN" alt="sponsor">
+      <img v-if="preload" :src="'/images/app-hot.png' | byCDN" alt="app-download">
+      <img v-if="preload" :src="'/images/app-logo.png' | byCDN" alt="app-logo">
+      <img v-if="preload" :src="'/images/service.jpg' | byCDN" alt="service">
+      <img v-if="preload" :src="'/images/about-background-be-1.jpg' | byCDN" alt="background">
+      <img v-if="preload" :src="'/images/about-background-be-2.jpg' | byCDN" alt="background">
+      <img v-if="preload" :src="'/images/about-background-star-1.png' | byCDN" alt="background">
+      <img v-if="preload" :src="'/images/about-background-star-2.png' | byCDN" alt="background">
     </div>
   </header>
 </template>

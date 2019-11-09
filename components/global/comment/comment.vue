@@ -19,7 +19,7 @@
           <a href class="like" :class="{ liked: isLikedPage }" @click.stop.prevent="likePage">
             <i class="iconfont icon-like"></i>
             <strong>{{ likes || 0 }}</strong>
-            <span v-text="(isMobile && !isEnLang) ? '人喜欢' : $i18n.text.comment.like"></span>
+            <span v-text="(isMobile && !isEnLang) ? '赞' : $i18n.text.comment.like"></span>
           </a>
           <a href class="sponsor" @click.stop.prevent="sponsor">
             <i class="iconfont icon-hao"></i>
@@ -94,7 +94,7 @@
                 >
                   {{ comment.author.name | firstUpperCase }}
                 </a>
-                <comment-ua :ua="comment.agent" v-if="comment.agent"/>
+                <comment-ua :ua="comment.agent" v-if="comment.agent" />
                 <span class="location" v-if="comment.ip_location && !isMobile">
                   <span>{{ comment.ip_location.country }}</span>
                   <span v-if="comment.ip_location.country && comment.ip_location.city">&nbsp;-&nbsp;</span>
@@ -227,13 +227,19 @@
             <strong class="name">{{ user.name | firstUpperCase }}</strong>
             <a href class="setting" @click.stop.prevent>
               <i class="iconfont icon-setting"></i>
-              <span class="account-setting" v-text="$i18n.text.comment.setting.account">账户设置</span>
+              <span
+                class="account-setting"
+                v-text="$i18n.text.comment.setting.account"
+              ></span>
               <ul class="user-tool">
                 <li
                   @click.stop.prevent="userCacheEditing = true"
                   v-text="$i18n.text.comment.setting.edit"
-                >编辑信息</li>
-                <li @click.stop.prevent="claerUserCache" v-text="$i18n.text.comment.setting.clear">清空信息</li>
+                ></li>
+                <li
+                  @click.stop.prevent="claerUserCache"
+                  v-text="$i18n.text.comment.setting.clear"
+                ></li>
               </ul>
             </a>
           </div>
@@ -253,7 +259,7 @@
             <div class="will-reply" key="reply" v-if="!!pid">
               <div class="reply-user">
                 <span>
-                  <span v-text="$i18n.text.comment.reply">回复</span>
+                  <span v-text="$i18n.text.comment.reply"></span>
                   <span>&nbsp;</span>
                   <a href @click.stop.prevent="toSomeAnchorById(`comment-item-${replyCommentSlef.id}`)">
                     <strong>#{{ replyCommentSlef.id }} @{{ replyCommentSlef.author.name }}：</strong>
@@ -321,6 +327,7 @@
   import { isBrowser } from '~/environment'
   import marked from '~/plugins/marked'
   import gravatar from '~/plugins/gravatar'
+  import { getFileCDNUrl } from '~/transforms/url'
   import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
   import { isArticleDetailRoute, isGuestbookRoute } from '~/services/route-validator'
   import { localUser, localHistoryLikes } from '~/services/local-storage'
@@ -465,8 +472,9 @@
       sponsor() {
         this.$ga.event('内容赞赏', '点击', 'tool')
         this.isMobile
-         ? window.utils.openImgPopup('/images/sponsor-mobile.jpg', 'sponsor-mobile')
-         : window.utils.openIframePopup('/sponsor', 'sponsor')
+          ? window.utils.openImgPopup(getFileCDNUrl('/images/sponsor-mobile.jpg'), 'sponsor-mobile')
+          // sponsor 业务不使用 CDN
+          : window.utils.openIframePopup('/sponsor', 'sponsor')
       },
       // markdown解析服务
       marked(content) {
@@ -479,11 +487,11 @@
         }
         return gravatar.url(email, { protocol: 'https' }).replace(
           'https://s.gravatar.com/avatar',
-          this.$apiConfig.gravatarUrl
+          this.$API.GRAVATAR
         ) + `?x-oss-process=style/gravatar`
       },
       humanizeGravatarUrl(gravatar) {
-        return gravatar || `${this.cdnUrl}/images/anonymous.jpg`
+        return gravatar || getFileCDNUrl('/images/anonymous.jpg')
       },
       // 更新用户数据
       updateUserCache(event) {
@@ -729,7 +737,7 @@
               })
               preImage(emoji, emoji233333.launch.bind(emoji233333))
             } else if (content.includes('666')) {
-              const emoji = '/images/emojis/666.png'
+              const emoji = getFileCDNUrl('/images/emojis/666.png')
               emoji233333.update({
                 emoji,
                 speed: 12,
@@ -738,7 +746,7 @@
               })
               preImage(emoji, emoji233333.launch.bind(emoji233333))
             } else if (content.includes('呵呵')) {
-              const emoji = '/images/emojis/hehe.png'
+              const emoji = getFileCDNUrl('/images/emojis/hehe.png')
               emoji233333.update({ emoji, staggered: false, speed: 8, increaseSpeed: 0.04 })
               preImage(emoji, emoji233333.launch.bind(emoji233333))
             }

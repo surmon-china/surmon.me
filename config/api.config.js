@@ -6,23 +6,21 @@
 
 import { NODE_ENV } from '../environment'
 
-const gravatarUrl = 'https://static.surmon.me/avatar'
-
-const apiMap = {
+const apisMap = {
   development: {
-    gravatarUrl,
-    cdnUrl: '',
-    proxyUrl: '/proxy/',
-    baseUrl: 'http://localhost:8000',
-    socketHost: 'http://localhost:3000'
+    CDN: '',
+    PROXY: '/proxy',
+    BASE: 'http://localhost:8000',
+    SOCKET: 'http://localhost:3000',
+    GRAVATAR: '/proxy/static.surmon.me/avatar'
   },
   production: {
-    gravatarUrl,
-    cdnUrl: 'https://cdn.surmon.me',
-    proxyUrl: 'https://surmon.me/proxy/',
-    baseUrl: 'https://api.surmon.me',
-    socketHost: 'https://surmon.me'
+    CDN: 'https://cdn.surmon.me',
+    PROXY: 'https://cdn.surmon.me/proxy',
+    BASE: 'https://api.surmon.me',
+    SOCKET: 'https://surmon.me',
+    GRAVATAR: 'https://static.surmon.me/avatar'
   }
 }
 
-export default apiMap[NODE_ENV]
+export default apisMap[NODE_ENV]

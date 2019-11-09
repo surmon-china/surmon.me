@@ -7,6 +7,7 @@
 import marked from 'marked'
 import Hljs from '~/plugins/highlight'
 import appConfig from '~/config/app.config'
+import apiConfig from '~/config/api.config'
 import relink from '~/transforms/relink'
 
 marked.setOptions({
@@ -54,7 +55,8 @@ const linkRender = (href, title, text) => {
 
 // 对图片进行弹窗处理
 const imageRender = (src, title, alt) => {
-  src = src.replace(/^http:\/\//ig, "/proxy/")
+  // 仅替换 HTTP 链接为 proxy
+  src = src.replace(/^http:\/\//ig, `${apiConfig.PROXY}/`)
   const imageHtml = `
     <img
       class="lozad"
