@@ -359,7 +359,8 @@
                   }
 
                   > .avatar {
-                    width: 22%;
+                    width: 6rem;
+                    height: 6rem;
                     margin-top: 0;
                     margin-left: 6%;
                   }
