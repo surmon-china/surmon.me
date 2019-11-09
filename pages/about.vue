@@ -259,7 +259,7 @@
               <img :src="adConfig.src" />
             </a>
             <div class="about-map">
-              <iframe class="iframe" :src="'/partials/map.html' | byCDN"></iframe>
+              <iframe class="iframe" src="/partials/map.html"></iframe>
             </div>
             <div class="about-project">
               <a

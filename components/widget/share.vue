@@ -26,21 +26,21 @@
           {
             name: '微信',
             class: 'wechat',
-            url: () => `http://qr.topscan.com/api.php?text=${this.url}&w=300&el=h&m=10`
+            url: () => `https://qr.topscan.com/api.php?text=${this.url}&w=300&el=h&m=10`
           },
           {
             name: '微博',
             class: 'weibo',
-            url: () => `http://service.weibo.com/share/share.php?url=${this.url}&title=${this.title()}&source=${this.url}&sourceUrl=${this.url}&content=${this.description()}`
+            url: () => `https://service.weibo.com/share/share.php?url=${this.url}&title=${this.title()}&source=${this.url}&sourceUrl=${this.url}&content=${this.description()}`
           },
           {
             name: 'twitter',
-            url: () => `http://twitter.com/share?text=${this.title()}&url=${this.url}`
+            url: () => `https://twitter.com/share?text=${this.title()}&url=${this.url}`
           },
           {
             name: 'QQ空间',
             class: 'qzone',
-            url: () => `http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${this.url}&title=${this.title()}&summary=${this.description()}&site=${this.url}`
+            url: () => `https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${this.url}&title=${this.title()}&summary=${this.description()}&site=${this.url}`
           },
           {
             name: '豆瓣',
@@ -50,7 +50,7 @@
           {
             name: '人人',
             class: 'renren',
-            url: () => `http://widget.renren.com/dialog/share?resourceUrl=${this.url}&srcUrl=${this.url}&title=${this.title()}&description=${this.description()}`
+            url: () => `https://widget.renren.com/dialog/share?resourceUrl=${this.url}&srcUrl=${this.url}&title=${this.title()}&description=${this.description()}`
           },
           {
             name: '印象笔记',
@@ -63,7 +63,7 @@
           },
           {
             name: 'linkedin',
-            url: () => `http://www.linkedin.com/shareArticle?title=${this.title()}&summary=${this.description()}&mini=true&url=${this.url}`
+            url: () => `https://www.linkedin.com/shareArticle?title=${this.title()}&summary=${this.description()}&mini=true&url=${this.url}`
           }
         ]
       }

@@ -6,6 +6,10 @@ $cdn-url: '' !default;
   @return url($cdn-url + $uri);
 }
 
+@function force-source-url($uri) {
+  @return url('https://surmon.me' + $uri);
+}
+
 // PC Theme Color
 $body-bg: var(--body-bg);
 $theme-black: var(--theme-black);
