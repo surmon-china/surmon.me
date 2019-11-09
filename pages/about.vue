@@ -206,28 +206,28 @@
               <div class="gravatar">
                 <div class="background be-2">
                   <img
-                    src="/images/about-background-be-2.jpg"
+                    :src="'/images/about-background-be-2.jpg' | byCDN"
                     alt="background"
                     class="image"
                   >
                 </div>
                 <div class="background be-1">
                   <img
-                    src="/images/about-background-be-1.jpg"
+                    :src="'/images/about-background-be-1.jpg' | byCDN"
                     alt="background"
                     class="image"
                   >
                 </div>
                 <div class="background star-1">
                   <img
-                    src="/images/about-background-star-1.png"
+                    :src="'/images/about-background-star-1.png' | byCDN"
                     alt="background-star"
                     class="image"
                   >
                 </div>
                 <div class="background star-2">
                   <img
-                    src="/images/about-background-star-2.png"
+                    :src="'/images/about-background-star-2.png' | byCDN"
                     alt="background-star"
                     class="image"
                   >
@@ -259,7 +259,7 @@
               <img :src="adConfig.src" />
             </a>
             <div class="about-map">
-              <iframe class="iframe" src="/partials/map.html"></iframe>
+              <iframe class="iframe" :src="'/partials/map.html' | byCDN"></iframe>
             </div>
             <div class="about-project">
               <a
@@ -282,6 +282,8 @@
 <script>
   import adConfig from '~/config/ad.config'
   import appConfig from '~/config/app.config'
+  import { getFileCDNUrl } from '~/transforms/url'
+
   export default {
     name: 'about',
     head() {
@@ -307,7 +309,7 @@
         return this.$store.state.global.isMobile
       },
       gravatar() {
-        return this.$store.state.global.adminInfo.gravatar || `${this.cdnUrl}/images/gravatar.jpg`
+        return this.$store.state.global.adminInfo.gravatar || getFileCDNUrl('/images/gravatar.jpg')
       }
     }
   }
@@ -668,14 +670,15 @@
               }
 
               > .avatar {
-                width: 40%;
+                width: 8rem;
+                height: 8rem;
                 z-index: 1;
                 margin-top: 5rem;
                 max-width: 100%;
                 border-radius: 100%;
                 border: 5px solid $module-bg;
                 box-sizing: content-box;
-                transition: transform $transition-time-fast;
+                transition: transform $transition-time-slow;
               }
 
               > .description {
@@ -709,7 +712,7 @@
                 bottom: 0rem;
                 width: 100%;
                 height: 74%;
-                background-image: url('/images/wechat.jpg');
+                background-image: cdn-url('/images/wechat.jpg');
                 background-size: contain;
                 background-position: bottom;
                 z-index: 9;

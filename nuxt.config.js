@@ -12,14 +12,15 @@ import { isProdMode, isDevMode } from './environment'
 
 const htmlLang = i18nConfig.default || systemConstants.Language.Zh
 const htmlSlogan = i18nConfig.data.text.slogan[htmlLang]
+const SCSS_CDN_VARIABLES_BASE = isProdMode ? ['~assets/styles/cdn.scss'] : []
 
 export default {
   mode: 'universal',
   modern: true,
   dev: isDevMode,
   env: {
-    baseUrl: apiConfig.baseUrl,
-    HOST_URL: apiConfig.socketHost
+    BASE: apiConfig.BASE,
+    HOST_URL: apiConfig.SOCKET
   },
   loading: {
     color: appConfig.color.primary
@@ -32,7 +33,7 @@ export default {
     analyze: process.argv.join('').includes('analyze'),
     maxChunkSize: 360000,
     extractCSS: true,
-    publicPath: apiConfig.cdnUrl + '/_nuxt/',
+    publicPath: apiConfig.CDN + '/_nuxt/',
     postcss: {
       plugins: { 'postcss-custom-properties': { warnings: false }}
     },
@@ -90,7 +91,7 @@ export default {
           for (const cssLoader in vueLoaders) {
             if (Array.isArray(vueLoaders[cssLoader])) {
               const targetLoader = vueLoaders[cssLoader].find(loader => loader.loader === 'css-loader')
-              targetLoader && (targetLoader.options.root = apiConfig.cdnUrl)
+              targetLoader && (targetLoader.options.root = apiConfig.CDN)
             }
           }
         }
@@ -99,7 +100,7 @@ export default {
   },
   plugins: [
     { src: '~/plugins/polyfill', mode: 'client' },
-    { src: '~/plugins/vue-extend' },
+    { src: '~/plugins/extend' },
     { src: '~/plugins/loaded-task' },
     { src: '~/plugins/marked' },
     { src: '~/plugins/gravatar' },
@@ -119,7 +120,7 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/style-resources',
     '@nuxtjs/component-cache',
-    ['@nuxtjs/axios', { baseURL: apiConfig.baseUrl }]
+    ['@nuxtjs/axios', { baseURL: apiConfig.BASE }]
   ],
   head: {
     title: `${appConfig.meta.title} - ${htmlSlogan}`,
@@ -151,7 +152,6 @@ export default {
       { rel: 'dns-prefetch', href: '//api.surmon.me' },
       { rel: 'dns-prefetch', href: '//cdn.surmon.me' },
       { rel: 'dns-prefetch', href: '//static.surmon.me' },
-      { rel: 'dns-prefetch', href: '//gravatar.surmon.me' },
       { rel: 'dns-prefetch', href: '//at.alicdn.com' },
       { rel: 'dns-prefetch', href: '//fonts.gstatic.com' },
       { rel: 'dns-prefetch', href: '//adservice.google.com' },
@@ -197,9 +197,13 @@ export default {
     'normalize.css/normalize.css',
     'swiper/dist/css/swiper.css',
     'highlight.js/styles/ocean.css',
-    '~assets/styles/app.scss',
+    ...SCSS_CDN_VARIABLES_BASE,
+    '~assets/styles/app.scss'
   ],
   styleResources: {
-    scss: '~/assets/styles/init.scss',
+    scss: [
+      ...SCSS_CDN_VARIABLES_BASE,
+      '~/assets/styles/init.scss'
+    ],
   }
 }

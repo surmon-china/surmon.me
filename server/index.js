@@ -42,12 +42,13 @@ if (config.dev) {
   const handleProxy = path => {
     return (req, res) => {
       const targetUrl = 'http://' + req.url.replace('/proxy/' + (path ? path + '/' : ''), '')
+      console.log('Dev proxy request:', targetUrl)
       require('request').get(targetUrl).pipe(res)
     }
   }
   app.get('/proxy/music/*', handleProxy('music'))
   app.get('/proxy/bilibili/*', handleProxy('bilibili'))
-  app.get('/proxy/*', handleProxy)
+  app.get('/proxy/*', handleProxy())
 }
 
 app.use(nuxt.render)

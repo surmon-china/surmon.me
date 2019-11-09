@@ -1,4 +1,11 @@
 
+// url
+$cdn-url: '' !default;
+
+@function cdn-url($uri) {
+  @return url($cdn-url + $uri);
+}
+
 // PC Theme Color
 $body-bg: var(--body-bg);
 $theme-black: var(--theme-black);

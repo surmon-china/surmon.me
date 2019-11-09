@@ -1,6 +1,6 @@
 /**
- * @file Text Filters / ES module
- * @module transforms/html-filter
+ * @file Text transformer / ES module
+ * @module transforms/text
  * @author Surmon <https://github.com/surmon-china>
  */
 

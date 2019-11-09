@@ -7,6 +7,7 @@
 import Vue from 'vue'
 import playerBuilder from './player'
 import appConfig from '~/config/app.config'
+import { getFileCDNUrl, getFileProxyUrl } from '~/transforms/url'
 
 export default new Vue({
   data() {
@@ -45,11 +46,10 @@ export default new Vue({
         : null
     },
     currentSongPicUrl() {
-      const defaultUrl = `${this.cdnUrl}/images/music-bg.jpg`
       const pictureUrl = this.currentSong && this.currentSong.album.picUrl
       return pictureUrl
-        ? pictureUrl.replace('http://', this.proxyUrl + 'music/') + '?param=600y600'
-        : defaultUrl
+        ? getFileProxyUrl(pictureUrl.replace('http://', '/music/') + '?param=600y600')
+        : getFileCDNUrl('/images/music-bg.jpg')
     },
     currentSongLrcContent() {
       const lrc = this.lrc.data

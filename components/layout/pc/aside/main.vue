@@ -60,10 +60,10 @@
     <transition name="module">
       <div class="aside-mammon alimama" key="ad">
         <iframe
-          src="/partials/mammon/aside.html"
           scrolling="no"
           frameborder="0"
           class="mammon-iframe"
+          :src="'/partials/mammon/aside.html' | byCDN"
         />
       </div>
     </transition>
