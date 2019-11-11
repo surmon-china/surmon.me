@@ -47,12 +47,10 @@
         target="_blank"
         class="item ad holiday"
         rel="external nofollow noopener"
+        v-if="false"
       >
         <i class="iconfont icon-1111"></i>
         <span>超级红包</span>
-        <span class="superscript">
-          <i class="iconfont icon-hot"></i>
-        </span>
       </a>
       <a
         :href="adsForPcNav.taobao"
@@ -69,10 +67,12 @@
         target="_blank"
         class="item ad aliyun"
         rel="external nofollow noopener"
-        v-if="false"
       >
         <i class="iconfont icon-aliyun"></i>
         <span v-text="$i18n.nav.aliyun"></span>
+        <span class="superscript">
+          <i class="iconfont icon-hot"></i>
+        </span>
       </a>
       <a
         href="https://throwerror.io"
@@ -185,7 +185,7 @@
         }
 
         &.aliyun {
-          color: black;
+          color: #ff6a00;
         }
 
         &.errend {
