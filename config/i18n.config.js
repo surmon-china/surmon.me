@@ -61,7 +61,7 @@ export default {
         en: 'taobao'
       },
       aliyun: {
-        zh: '弹性主机',
+        zh: '云上爆款',
         en: 'aliyun'
       },
       app: {
