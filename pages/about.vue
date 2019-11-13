@@ -79,6 +79,14 @@
                         <i class="iconfont icon-telegram"></i>
                       </a>
                       <a
+                        href="https://www.linkedin.com/in/surmon"
+                        target="_blank"
+                        class="linkedin"
+                        rel="external nofollow noopenter"
+                      >
+                        <i class="iconfont icon-linkedin"></i>
+                      </a>
+                      <a
                         href="https://twitter.com/surmon_me"
                         target="_blank"
                         class="twitter"
@@ -163,15 +171,6 @@
                         rel="external nofollow noopenter"
                       >
                         <i class="iconfont icon-quora"></i>
-                      </a>
-                      <a
-                        href="https://www.linkedin.com/in/surmon"
-                        target="_blank"
-                        class="linkedin"
-                        v-if="false"
-                        rel="external nofollow noopenter"
-                      >
-                        <i class="iconfont icon-linkedin"></i>
                       </a>
                       <a
                         href="https://www.facebook.com/surmon.me"
