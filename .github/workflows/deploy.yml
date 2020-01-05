@@ -19,5 +19,3 @@ jobs:
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
           script: sh ${{ secrets.WWW_PATH }}/surmon.me/.deploy/main.sh
-          
-          

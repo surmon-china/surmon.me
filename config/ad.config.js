@@ -30,7 +30,7 @@ const links = {
     // 阿里云 云大使（官方活动页）
     aliyunActivity: 'https://www.aliyun.com/activity?source=5176.11533457&userCode=pu7fghvl#promotionArea',
     // 阿里云 云大使（领取优惠券固定）
-    aliyunInvite: 'https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=pu7fghvl',
+    aliyunInvite: 'https://www.aliyun.com/minisite/goods?userCode=pu7fghvl',
     // 阿里云 云大使（云上爆款）
     aliyunHotsale: 'https://www.aliyun.com/acts/hotsale?userCode=pu7fghvl',
     // 2019 1111
