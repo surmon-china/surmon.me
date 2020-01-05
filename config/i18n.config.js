@@ -40,6 +40,10 @@ export default {
         zh: '天涯',
         en: 'vlog'
       },
+      instagram: {
+        zh: '海角',
+        en: 'instagram'
+      },
       music: {
         zh: '粉巷',
         en: 'music'
