@@ -1,8 +1,12 @@
 
 ## CHANGELOG
 
-### v2.4.8
+### v2.4.9
+- Update FUNDING.yml
+- Update README.md
+- Add instagram to navbar menu
 
+### v2.4.8
 - Improve CDN static
 - Upgrade static style
 - Update images style
@@ -10,7 +14,6 @@
 - Pause `imageExt`
 
 ### v2.4.6
-
 - Improve styles with PC / Mobile
 - Improve Vlog page animation
 - Improve PC Aside sticky logic
@@ -21,12 +24,10 @@
 - Remove background component
 
 ### v2.4.5
-
 - Improve mobile mask logic
 - Improve styles with comment
 
 ### v2.4.4
-
 - Remove project page
 - Improve i18n languages
 - Improve sponsor page
