@@ -103,7 +103,7 @@
                         <i class="iconfont icon-zhihu"></i>
                       </a>
                       <a
-                        href="https://www.instagram.com/surmon666/"
+                        href="https://www.instagram.com/surmon666"
                         target="_blank"
                         class="instagram"
                         rel="external nofollow noopenter"
