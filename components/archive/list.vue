@@ -116,7 +116,7 @@
 
         &::v-deep .mammon-ins {
           margin: 0;
-          height: 7rem;
+          height: 88px;
         }
       }
     }
