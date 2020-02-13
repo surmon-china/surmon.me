@@ -44,6 +44,7 @@
     "lodash": "^4.17.15",
     "lozad": "^1.14.0",
     "marked": "0.6.3",
+    "node-sass": "^4.13.1",
     "node-uuid": "^1.4.8",
     "normalize.css": "^8.0.1",
     "nuxt": "^2.11.0",
