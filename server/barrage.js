@@ -24,11 +24,14 @@ if (!barrages.length) {
 
 // 更新本地文件数据
 const updateLocalBarragesFile = () => {
-  fs.outputJson(dataFile, barrages).then(() => {
-    // console.log('最新聊天记录保存成功!')
-  }).catch(err => {
-    console.warn('最新弹幕记录保存失败', err)
-  })
+  fs
+    .outputJson(dataFile, barrages)
+    .then(() => {
+      // console.log('最新聊天记录保存成功!')
+    })
+    .catch(err => {
+      console.warn('最新弹幕记录保存失败', err)
+    })
 }
 
 // 30秒为一个周期，保存一次最新弹幕记录
