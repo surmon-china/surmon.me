@@ -107,7 +107,8 @@
     z-index: $z-index-header;
     background-color: $module-bg;
     user-select: none;
-    @include backdrop-blur();
+    // 过段时间再打开吧，闪屏太严重了
+    // @include backdrop-blur();
 
     .header-container {
       height: 100%;
