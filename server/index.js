@@ -18,9 +18,9 @@ const { log, warn, info } = console
 const color = c => isDevMode ? c : ''
 global.console = Object.assign(console, {
   log: (...args) => log('[log]', ...args),
-  warn: (...args) => warn(color('\x1b[33m%s\x1b[0m'), '[warn]', ...args),
-  info: (...args) => info(color('\x1b[34m%s\x1b[0m'), '[info]', ...args),
-  error: (...args) => info(color('\x1b[31m%s\x1b[0m'), '[error]', ...args),
+  warn: (...args) => warn(color('\x1B[33m%s\x1B[0m'), '[warn]', ...args),
+  info: (...args) => info(color('\x1B[34m%s\x1B[0m'), '[info]', ...args),
+  error: (...args) => info(color('\x1B[31m%s\x1B[0m'), '[error]', ...args),
 })
 
 // Nuxt: https://github.com/nuxt/nuxt.js/blob/dev/packages/cli/src/utils/config.js#L27
@@ -29,7 +29,6 @@ const port = environment.PORT || 3000
 const host = environment.HOST || '127.0.0.1'
 
 // extends
-const webrtcServer = require('./webrtc')
 const barrageServer = require('./barrage')
 const updateGAScript = require('./analytics')
 
@@ -62,7 +61,6 @@ const bootstrap = () => {
   // 启动扩展服务
   updateGAScript()
   barrageServer(io)
-  webrtcServer(io)
 }
 
 if (config.dev) {

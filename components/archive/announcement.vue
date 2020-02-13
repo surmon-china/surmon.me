@@ -1,10 +1,12 @@
 <template>
-  <div class="announcement" :class="{ mobile: isMobile }">
-    <color-block-box
-      :left="-59"
-      :gray="true"
-      v-if="!isMobile"
-    />
+  <div
+    class="announcement"
+    :class="{
+      mobile: isMobile,
+      dark: isDarkTheme
+    }"
+  >
+    <div v-if="!isMobile" class="background"></div>
     <div class="title">
       <span
         class="icon-box"
@@ -12,42 +14,42 @@
           transform: `rotate(-${windmillTimes * 60}deg)`
         }"
       >
-        <i class="iconfont icon-windmill"></i>
+        <i class="iconfont icon-windmill" />
       </span>
     </div>
     <transition name="module" mode="out-in">
-      <empty-box class="announcement-empty-box" key="empty" v-if="!announcement.data.length">
+      <empty-box v-if="!announcement.data.length" key="empty" class="announcement-empty-box">
         <slot>{{ $i18n.text.announcement.empty }}</slot>
       </empty-box>
       <div
-        class="swiper"
+        v-else-if="renderSwiper"
         key="swiper"
         v-swiper:swiper="swiperOption"
-        v-else-if="renderSwiper"
+        class="swiper"
         @transitionStart="handleSwiperTransitionStart"
         @transitionEnd="handleSwiperTransitionEnd"
       >
         <div class="swiper-wrapper">
           <div
+            v-for="(ann, index) in announcement.data"
             :key="index"
             class="swiper-slide slide-item"
-            v-for="(announcement, index) in announcement.data"
           >
             <div
               class="content filter"
               :class="{
-                'motion-blur-vertical-small': transitioning
+                'motion-blur-vertical-small': isEnableFilterStyle(index)
               }"
-              v-html="parseByMarked(announcement.content)"
-            ></div>
-            <div v-if="!isMobile" class="date">~ {{ announcement.create_at | timeAgo(language) }}</div>
+              v-html="parseByMarked(ann.content)"
+            />
+            <div v-if="!isMobile" class="date">~ {{ ann.create_at | timeAgo(language) }}</div>
           </div>
         </div>
         <div class="swiper-button-prev">
-          <i class="iconfont icon-announcement-prev"></i>
+          <i class="iconfont icon-announcement-prev" />
         </div>
         <div class="swiper-button-next">
-          <i class="iconfont icon-announcement-next"></i>
+          <i class="iconfont icon-announcement-next" />
         </div>
       </div>
     </transition>
@@ -57,7 +59,7 @@
 <script>
   import marked from '~/plugins/marked'
   export default {
-    name: 'index-announcement',
+    name: 'IndexAnnouncement',
     props: {
       announcement: {
         type: Object
@@ -92,20 +94,11 @@
       isMobile() {
         return this.$store.state.global.isMobile
       },
+      isDarkTheme() {
+        return this.$store.getters['global/isDarkTheme']
+      },
       language() {
         return this.$store.state.global.language
-      }
-    },
-    methods: {
-      parseByMarked(content) {
-        return marked(content, null, true)
-      },
-      handleSwiperTransitionStart() {
-        this.transitioning = true
-        this.windmillTimes =  this.swiper.activeIndex || 0
-      },
-      handleSwiperTransitionEnd() {
-        this.transitioning = false
       }
     },
     activated() {
@@ -114,6 +107,21 @@
     },
     deactivated() {
       this.renderSwiper = false
+    },
+    methods: {
+      parseByMarked(content) {
+        return marked(content, null, true)
+      },
+      isEnableFilterStyle(index) {
+        return this.transitioning && this.swiper && this.swiper.activeIndex === index
+      },
+      handleSwiperTransitionStart() {
+        this.transitioning = true
+        this.windmillTimes =  this.swiper.activeIndex || 0
+      },
+      handleSwiperTransitionEnd() {
+        this.transitioning = false
+      }
     }
   }
 </script>
@@ -132,6 +140,10 @@
     background-color: $module-bg;
     user-select: none;
 
+    &.dark {
+      color: $text-secondary;
+    }
+
     &.mobile {
       margin-bottom: $gap;
       background-color: $module-hover-bg-darken-10;
@@ -149,6 +161,26 @@
       min-height: auto;
     }
 
+    > .background {
+      position: absolute;
+      width: 66%;
+      height: 100%;
+      background: linear-gradient(66deg, $module-hover-bg-darken-40, $module-hover-bg 90%);
+
+      &::after {
+        $size: 1rem;
+        content: '';
+        display: block;
+        position: absolute;
+        width: $size;
+        height: 200%;
+        top: -50%;
+        right: -($size / 2);
+        background: $body-bg;
+        transform: rotate(18deg);
+      }
+    }
+
     > .title {
       float: left;
       width: 10%;
@@ -158,7 +190,7 @@
       .icon-box {
         display: inline-block;
         transform: rotate(0deg);
-        transition: transform .5s;
+        transition: transform $transition-time-slow;
       }
     }
 
@@ -200,13 +232,14 @@
         right: $sm-gap;
         height: 10px;
         margin: 0;
-        width: 2em;
-        height: 1em;
+        width: 2rem;
+        height: 1rem;
         text-align: center;
-        line-height: 1em;
+        line-height: 1rem;
         background-image: none;
-        color: $module-hover-bg;
+        color: $text-dividers;
         cursor: pointer;
+        @include color-transition();
 
         &:hover {
           color: $text;
@@ -214,11 +247,11 @@
       }
 
       .swiper-button-prev {
-        top: .5em;
+        top: .5rem;
       }
 
       .swiper-button-next {
-        top: 1.5em;
+        top: 1.5rem;
       }
     }
   }

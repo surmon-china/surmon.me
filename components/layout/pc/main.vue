@@ -1,15 +1,24 @@
 <template>
   <div id="app-main">
-    <header-view/>
     <client-only>
-      <background/>
-      <wall-flower v-if="!onPowerSavingMode" />
-      <language-psm v-if="isNotServicePage" />
-      <wallpaper-switch v-if="isNotServicePage" />
-      <theme-switch v-if="isNotServicePage && !onPowerSavingMode" />
-      <share-box v-if="isNotServicePage" class="sidebar-share" />
-      <tool-box v-if="isNotFullColPage" />
+      <figure class="widget">
+        <background />
+        <wallflower />
+        <barrage />
+        <wallpaper-switch v-if="!isFullViewWidth" />
+        <theme-switch v-if="!isFullViewWidth" />
+        <language v-if="!isFullViewWidth" />
+        <tool-box v-if="isNotFullColPage" />
+        <share-box v-if="!isFullViewWidth" class="sidebar-share" />
+        <transition name="fade">
+          <MyMap v-if="onMyMap" key="my-map" />
+        </transition>
+        <transition name="fade">
+          <wallpaper-wall v-if="onWallpaper" key="wallpaper-wall" />
+        </transition>
+      </figure>
     </client-only>
+    <header-view />
     <main
       id="main"
       class="main-container"
@@ -27,66 +36,73 @@
           'full-view': isFullViewWidth
         }"
       >
-        <nuxt :nuxtChildKey="$route.name" keep-alive />
+        <nuxt :nuxt-child-key="$route.name" keep-alive />
       </div>
-      <aside-view key="aside" v-if="!isTwoColumns && !isThreeColumns" />
+      <aside-view v-if="!isTwoColumns && !isThreeColumns" key="aside" />
     </main>
-    <client-only>
-      <barrage v-if="isMountedBarrage" v-cloak/>
-      <transition name="fade">
-        <webrtc key="webrtc" v-if="!onPowerSavingMode && onWebrtc" v-cloak/>
-      </transition>
-      <transition name="fade">
-        <wallpaper-wall key="wallpaper-wall" v-if="onWallpaper" v-cloak/>
-      </transition>
-      <emoji-rain v-if="!onPowerSavingMode" />
-    </client-only>
-    <footer-view/>
+    <footer-view />
   </div>
 </template>
 
 <script>
   import { mapState } from 'vuex'
+  import { isBrowser } from '~/environment'
   import NavView from './nav'
   import HeaderView from './header'
   import FooterView from './footer'
   import AsideView from './aside/main'
   import Barrage from '~/components/widget/barrage/main'
-  import WallFlower from '~/components/widget/wall-flower/garden'
+  import Wallflower from '~/components/widget/wallflower/garden'
   import WallpaperWall from '~/components/widget/wallpaper/wall'
   import WallpaperSwitch from '~/components/widget/wallpaper/switch'
-  import Webrtc from '~/components/widget/webrtc/main'
+  import MyMap from '~/components/widget/my-map'
   import Background from '~/components/widget/background'
-  import EmojiRain from '~/components/widget/emoji-rain'
-  import LanguagePsm from '~/components/widget/language-psm'
-  import ToolBox from '~/components/widget/tool-box'
+  import Language from '~/components/widget/language'
+  import ToolBox from '~/components/widget/toolbox'
   import ShareBox from '~/components/widget/share'
   import ThemeSwitch from '~/components/widget/theme'
-  import music from '~/services/music'
+  import musicPlayer from '~/services/music-player'
   import { startTitleEgg, resetTitle } from '~/services/title-egg'
   import { isServiceRoute } from '~/services/route-validator'
   import systemConstants from '~/constants/system'
 
   export default {
-    name: 'pc-main',
+    name: 'PcMain',
     components: {
-      ToolBox, ShareBox, LanguagePsm, WallpaperSwitch, ThemeSwitch, // 部件/开关
-      Webrtc, EmojiRain, WallFlower, WallpaperWall, Background, Barrage, // 实体
-      HeaderView, FooterView, AsideView, NavView, // 布局
+      // 部件/开关
+      ToolBox,
+      ShareBox,
+      Language,
+      WallpaperSwitch,
+      ThemeSwitch,
+      // 实体
+      MyMap,
+      Wallflower,
+      WallpaperWall,
+      Background,
+      Barrage,
+      // 布局
+      HeaderView,
+      FooterView,
+      AsideView,
+      NavView
     },
     mounted() {
-      this.autoEggWhenTabActive()
-      this.$store.dispatch('wallpaper/fetchPapers')
-      this.$root.$music = music
-      this.$root.$music.state.ready || this.$root.$music.initPlayer()
+      if (isBrowser) {
+        // this.autoEggWhenTabActive()
+        this.$store.commit('global/resetTheme')
+        this.$store.dispatch('wallpaper/fetchPapers')
+        this.$root.$musicPlayer = musicPlayer
+        musicPlayer.ready || musicPlayer.init()
+      }
     },
     computed: {
       ...mapState('global', [
-        'onWebrtc', 'onWallpaper', 'onPowerSavingMode', 'isMountedBarrage', 'isTwoColumns', 'isThreeColumns'
+        'onMyMap',
+        'onWallpaper',
+        'isTwoColumns',
+        'isThreeColumns'
       ]),
-      isNotServicePage() {
-        return !isServiceRoute(this.$route.name)
-      },
       isFullViewWidth() {
         return isServiceRoute(this.$route.name)
       },
@@ -94,17 +110,21 @@
         return ![
           systemConstants.Route.App,
           systemConstants.Route.Music,
-          systemConstants.Route.Service,
+          systemConstants.Route.Service
         ].includes(this.$route.name)
       }
     },
     methods: {
       autoEggWhenTabActive() {
-        document.addEventListener('visibilitychange', event => {
-          event.target.hidden || event.target.webkitHidden
-            ? startTitleEgg()
-            : resetTitle()
-        }, false)
+        document.addEventListener(
+          'visibilitychange',
+          event => {
+            event.target.hidden || event.target.webkitHidden
+              ? startTitleEgg()
+              : resetTitle()
+          },
+          false
+        )
       }
     }
   }
@@ -112,9 +132,12 @@
 
 <style lang="scss" scoped>
   #app-main {
+    padding-top: $mobile-header-height + $lg-gap;
 
     @media screen and (max-width: 1200px) {
-      .sidebar-share, #theme {
+      #theme,
+      #language,
+      .sidebar-share {
         display: none !important;
       }
     }
@@ -127,7 +150,7 @@
       max-width: 4rem;
       display: flex;
       flex-direction: column;
-      opacity: .4;
+      opacity: 0.4;
 
       &:hover {
         opacity: 1;

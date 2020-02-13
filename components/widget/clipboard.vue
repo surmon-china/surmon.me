@@ -1,12 +1,12 @@
 <template>
   <div id="clipboard">
-    <input type="text" v-model="text" class="clipboard-input" ref="clipboard">
+    <input ref="clipboard" v-model="text" type="text" class="clipboard-input">
   </div>
 </template>
 
 <script>
   export default {
-    name: 'clipboard',
+    name: 'Clipboard',
     data() {
       return {
         text: ''

@@ -7,9 +7,11 @@
 import i18nConfig from '~/config/i18n.config'
 import stateConstants from '~/constants/state'
 import systemConstants from '~/constants/system'
+import { getStorageReader } from '~/services/local-storage'
+
+const localThemeReader = getStorageReader(systemConstants.StorageField.Theme)
 
 export const state = () => ({
-
   // 主题
   theme: systemConstants.Theme.Default,
 
@@ -25,6 +27,9 @@ export const state = () => ({
   // 默认语言
   language: i18nConfig.default,
 
+  // 是否墙外
+  isOutsideOfGFW: false,
+
   // 页面的栏目展示类型（3栏/2栏）
   isTwoColumns: false,
   isThreeColumns: false,
@@ -38,14 +43,11 @@ export const state = () => ({
   // 是否开启弹幕
   onBarrage: false,
 
-  // 弹幕是否已首次渲染
-  isMountedBarrage: false,
+  // 是否开启 Webcam
+  onWebcam: false,
 
-  // 节能模式
-  onPowerSavingMode: false,
-
-  // 是否开启rtc
-  onWebrtc: false,
+  // 开启轨迹地图
+  onMyMap: false,
 
   // 山河入梦
   onWallpaper: false,
@@ -62,14 +64,29 @@ export const state = () => ({
 
 export const getters = {
   isMobile: state => state.isMobile,
-  isEnLang: state => state.language === systemConstants.Language.En
+  isEnLang: state => state.language === systemConstants.Language.En,
+  isDarkTheme: state => state.theme === systemConstants.Theme.Dark
 }
 
 export const mutations = {
-
-  // 设置主题
+  // 主题
   updateTheme(state, action) {
-    state.theme = action
+    const themes = [systemConstants.Theme.Default, systemConstants.Theme.Dark]
+    if (themes.includes(action)) {
+      state.theme = action
+      localThemeReader.set(action)
+    }
+  },
+  resetTheme(state) {
+    const historyTheme = localThemeReader.get()
+    if (historyTheme) {
+      const theme =
+        historyTheme === systemConstants.Theme.Dark
+          ? systemConstants.Theme.Dark
+          : systemConstants.Theme.Default
+      state.theme = theme
+      localThemeReader.set(theme)
+    }
   },
 
   // 设置UA
@@ -108,25 +125,22 @@ export const mutations = {
   },
 
   // 切换弹幕状态
-  updateBarrageOnState(state, action) {
+  toggleUpdateBarrageOnState(state, action) {
     state.onBarrage = action != null ? !!action : !state.onBarrage
-    if (state.onBarrage && !state.barrageMounte) {
-      state.isMountedBarrage = true
-    }
   },
 
-  // 切换RTC状态
-  updateWebRtcOnState(state, action) {
-    state.onWebrtc = action != null ? !!action : !state.onWebrtc
+  // 切换 Webcam 状态
+  toggleUpdateWebcamOnState(state, action) {
+    state.onWebcam = action != null ? !!action : !state.onWebcam
   },
 
-  // 切换节电模式
-  updatePowerSavingOnMode(state, action) {
-    state.onPowerSavingMode = action
+  // 切换 MyMap 状态
+  toggleMyMapOnState(state) {
+    state.onMyMap = !state.onMyMap
   },
 
   // 切换墙纸开关
-  updateWallpaperOnState(state, action) {
+  toggleUpdateWallpaperOnState(state, action) {
     state.onWallpaper = action != null ? !!action : !state.onWallpaper
   },
 
@@ -135,12 +149,12 @@ export const mutations = {
     state.language = action
   },
 
-  // 获取服务端配置的管理员信息
+  // 服务端配置的管理员信息
   updateAdminInfo(state, action) {
     state.adminInfo = action.result
   },
 
-  // 获取服务端配置
+  // 服务端配置
   updateAppOptionFetching(state, action) {
     state.appOption.fetching = action
   },
@@ -153,7 +167,6 @@ export const mutations = {
 }
 
 export const actions = {
-
   // 获取博主资料
   fetchAdminInfo({ commit }) {
     return this.$axios
@@ -164,20 +177,20 @@ export const actions = {
   // 获取全局配置
   fetchAppOption({ commit }) {
     commit('updateAppOptionFetching', true)
-    return this.$axios.$get(`/option`)
+    return this.$axios
+      .$get(`/option`)
       .then(response => {
         commit('updateAppOptionData', response)
         commit('updateAppOptionFetching', false)
       })
-      .catch(error => commit('updateAppOptionFetching', false))
+      .catch(() => commit('updateAppOptionFetching', false))
   },
 
   // 喜欢主站
   fetchLikeSite({ commit }) {
-    return this.$axios.$patch(`/like/site`)
-      .then(response => {
-        commit('updateLikesIncrement')
-        return Promise.resolve(response)
-      })
+    return this.$axios.$patch(`/like/site`).then(response => {
+      commit('updateLikesIncrement')
+      return Promise.resolve(response)
+    })
   }
 }
