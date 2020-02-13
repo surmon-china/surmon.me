@@ -225,7 +225,7 @@
           <h3 class="name">
             <strong>Surmon</strong>
           </h3>
-          <p class="skill">Digital nomad.</p>
+          <p class="skill">{{ isEnLang ? 'Digital nomad' : '数字游民' }}</p>
         </div>
         <a
           v-if="!isMobile"
