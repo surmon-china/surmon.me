@@ -8,14 +8,14 @@
   import ArticleList from '~/components/archive/list'
 
   export default {
-    name: 'category-article-list',
+    name: 'CategoryArticleList',
     validate({ params }) {
       return !!params.keyword
     },
     fetch({ store, params }) {
       return store.dispatch('article/fetchList', params)
     },
-    head () {
+    head() {
       return {
         title: `${this.defaultParams.keyword} | Search`
       }
@@ -33,9 +33,12 @@
         }
       },
       nextPageParams() {
-        return Object.assign({
-          page: this.article.data.pagination.current_page + 1
-        }, this.defaultParams)
+        return Object.assign(
+          {
+            page: this.article.data.pagination.current_page + 1
+          },
+          this.defaultParams
+        )
       }
     },
     methods: {

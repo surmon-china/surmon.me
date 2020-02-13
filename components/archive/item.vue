@@ -1,7 +1,7 @@
 <template>
   <div class="article-list-item" :class="{ mobile: isMobile }">
     <div class="item-content">
-      <div class="item-thumb" v-if="!isMobile">
+      <div v-if="!isMobile" class="item-thumb">
         <nuxt-link :to="`/article/${article.id}`">
           <span
             class="item-oirigin"
@@ -10,17 +10,13 @@
               other: article.origin === constants.OriginState.Reprint,
               hybrid: article.origin === constants.OriginState.Hybrid
             }"
-          >
-            <span v-if="!article.origin" v-text="$i18n.text.origin.original"></span>
-            <span v-else-if="article.origin === constants.OriginState.Reprint" v-text="$i18n.text.origin.reprint"></span>
-            <span v-else-if="article.origin === constants.OriginState.Hybrid" v-text="$i18n.text.origin.hybrid"></span>
-          </span>
+          >{{ originText }}</span>
           <img
             class="item-thumb-img"
             :src="buildThumb(article.thumb)"
             :alt="article.title"
             :title="article.title"
-          />
+          >
         </nuxt-link>
       </div>
       <div class="item-body">
@@ -49,25 +45,25 @@
             <i class="iconfont icon-like" :class="{ liked: isLiked }"></i>
             <span>{{ article.meta.likes || 0 }}</span>
           </span>
-          <span class="categories" v-if="!isMobile">
+          <span v-if="!isMobile" class="categories">
             <i class="iconfont icon-list"></i>
             <template v-if="article.category.length">
               <nuxt-link
+                v-for="(category, index) in article.category"
                 :key="index"
                 :to="`/category/${category.slug}`"
-                v-for="(category, index) in article.category"
                 v-text="isEnLang ? category.slug : category.name"
               />
             </template>
             <span v-else v-text="$i18n.text.category.empty"></span>
           </span>
-          <span class="tags" v-if="false">
+          <span v-if="false" class="tags">
             <i class="iconfont icon-tag"></i>
             <template v-if="article.tag.length">
               <nuxt-link
+                v-for="(tag, index) in article.tag"
                 :key="index"
                 :to="`/tag/${tag.slug}`"
-                v-for="(tag, index) in article.tag"
                 v-text="isEnLang ? tag.slug : tag.name"
               />
             </template>
@@ -81,11 +77,14 @@
 
 <script>
   import { mapState } from 'vuex'
-  import { getFileCDNUrl } from '~/transforms/url'
-  import { localHistoryLikes } from '~/services/local-storage'
+  import { getFileCDNUrl } from '~/transformers/url'
+  import { getJSONStorageReader } from '~/services/local-storage'
+  import systemConstants from '~/constants/system'
+
+  const localHistoryLikes = getJSONStorageReader(systemConstants.StorageField.UserLikeHistory)
 
   export default {
-    name: 'article-list-item',
+    name: 'ArticleListItem',
     props: {
       article: Object
     },
@@ -95,10 +94,27 @@
       }
     },
     computed: {
-      ...mapState('global', ['imageExt', 'language', 'isMobile', 'constants']),
+      ...mapState('global', [
+        'imageExt',
+        'language',
+        'isMobile',
+        'constants'
+      ]),
       isEnLang() {
         return this.$store.getters['global/isEnLang']
       },
+      originText() {
+        if (!this.article.origin) {
+          return this.$i18n.text.origin.original
+        }
+        if (this.article.origin === this.constants.OriginState.Reprint) {
+          return this.$i18n.text.origin.reprint
+        }
+        if (this.article.origin === this.constants.OriginState.Hybrid) {
+          return this.$i18n.text.origin.hybrid
+        }
+        return '-'
+      }
     },
     methods: {
       buildThumb(thumb) {
@@ -118,13 +134,14 @@
   .article-list-item {
     margin-bottom: $lg-gap;
     @include module-blur-bg();
-
-    &:last-child {
-      margin: 0;
-    }
+    @include background-transition();
 
     &:hover {
       background-color: $module-hover-bg;
+    }
+
+    &:last-child {
+      margin: 0;
     }
 
     > .item-content {
@@ -137,7 +154,7 @@
       padding: $padding;
 
       &:hover {
-        > .item-thumb {
+        .item-thumb {
           .item-oirigin {
             opacity: 1;
           }
@@ -162,7 +179,7 @@
           top: 0;
           height: 2.1rem;
           line-height: 2.1rem;
-          z-index: 1;
+          z-index:  $z-index-normal + 1;
           padding: 0 $sm-gap;
           border-bottom-right-radius: 1px;
           opacity: .4;
@@ -170,6 +187,7 @@
           color: $text-reversal;
           text-align: center;
           text-transform: uppercase;
+          @include visibility-transition();
 
           &.self {
             background-color: rgba($accent, .5);
@@ -194,6 +212,7 @@
           background-color: $module-hover-bg;
           opacity: 1;
           transform: translateX(0);
+          transition: transform $transition-time-fast, opacity $transition-time-fast;
         }
       }
 
@@ -211,7 +230,7 @@
 
           > a {
             margin-left: 0;
-            transition: margin $transition-time-normal linear;
+            transition: margin $transition-time-normal;
 
             &:hover {
               display: inline-block;
@@ -253,7 +272,6 @@
           }
 
           > .likes {
-
             > .liked {
               color: $red;
             }
@@ -270,7 +288,6 @@
           > .likes,
           > .tags,
           > .categories {
-
             > .iconfont {
               margin-right: $xs-gap;
             }
@@ -278,7 +295,6 @@
 
           > .tags,
           > .categories {
-
             a {
               text-transform: capitalize;
               margin-right: $sm-gap;
@@ -314,7 +330,6 @@
           }
 
           > .item-meta {
-
             > .date,
             > .views,
             > .comments,

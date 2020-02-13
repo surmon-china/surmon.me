@@ -5,19 +5,17 @@
 </template>
 
 <script>
-  import Carrousel from '~/components/archive/carrousel'
   import ArticleList from '~/components/archive/list'
 
   export default {
-    name: 'category-article-list',
+    name: 'CategoryArticleList',
     components: {
-      Carrousel,
       ArticleList
     },
     validate({ params, store }) {
-      return params.category_slug && store.state.category.data.some(category => {
-        return Object.is(category.slug, params.category_slug)
-      })
+      return params.category_slug && store.state.category.data.some(
+        category => category.slug === params.category_slug
+      )
     },
     fetch({ store, params }) {
       return store.dispatch('article/fetchList', params)
@@ -31,19 +29,14 @@
         title: `${zhTitle}${title} | Category` 
       }
     },
-    created() {
-      if (!this.currentCategory) {
-        this.$router.back()
-      }
-    },
     computed: {
       article() {
         return this.$store.state.article.list
       },
       currentCategory() {
-        return this.$store.state.category.data.find(category => {
-          return Object.is(category.slug, this.$route.params.category_slug)
-        })
+        return this.$store.state.category.data.find(
+          category => category.slug === this.$route.params.category_slug
+        )
       },
       defaultParams() {
         return {
@@ -59,6 +52,11 @@
     methods: {
       loadmoreArticles() {
         this.$store.dispatch('article/fetchList', this.nextPageParams)
+      }
+    },
+    created() {
+      if (!this.currentCategory) {
+        this.$router.back()
       }
     }
   }

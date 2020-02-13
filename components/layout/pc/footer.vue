@@ -16,20 +16,15 @@
           class="item"
           rel="external nofollow noopener"
           href="https://github.com/surmon-china/nodepress"
-        >
-          NodePress
-        </a>
+        >NodePress</a>
         <span>、</span>
         <a
           target="_blank"
           class="item"
           rel="external nofollow noopener"
           href="https://github.com/surmon-china/surmon.me"
-        >
-          Nuxt.js
-        </a>
-        <span>and solitarily.</span>
-        <span>&nbsp; Designed By</span>
+        >Nuxt.js</a>
+        <span>and solitarily.&nbsp; Designed By</span>
         <nuxt-link to="/about">Me</nuxt-link>
       </span>
       <!-- chinese -->
@@ -40,20 +35,15 @@
           class="item"
           rel="external nofollow noopener"
           href="https://github.com/surmon-china/nodepress"
-        >
-          NodePress
-        </a>
+        >NodePress</a>
         <span>、</span>
         <a
           target="_blank"
           class="item"
           rel="external nofollow noopener"
           href="https://github.com/surmon-china/surmon.me"
-        >
-          Nuxt.js
-        </a>
-        <span>&nbsp;和&nbsp;日月星辰&nbsp;强力驱动&nbsp;</span>
-        <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+        >Nuxt.js</a>
+        <span>&nbsp;和&nbsp;日月星辰&nbsp;强力驱动&nbsp;&nbsp;|&nbsp;&nbsp;</span>
         <nuxt-link to="/about">吾之臂躯</nuxt-link>
         <span>&nbsp;行针步线</span>
       </span>
@@ -63,7 +53,7 @@
 
 <script>
   export default {
-    name: 'pc-footer',
+    name: 'PcFooter',
     computed: {
       isEnLang() {
         return this.$store.getters['global/isEnLang']

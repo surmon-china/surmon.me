@@ -25,22 +25,21 @@ export const mutations = {
 }
 
 export const actions = {
-  
   // 获取今日壁纸
   fetchPapers({ commit, state }) {
-
-    // 如果数据已存在，则直接返回 Promise 成功，并返回数据
+    // 如果数据已存在，则直接返回数据
     if (state.papers.data) {
       return Promise.resolve(state.papers.data)
     }
 
     // 不存在则请求新数据
     commit('updatePapersFetching', true)
-    return this.$axios.$get(WALLPAPER_API_PATH)
+    return this.$axios
+      .$get(WALLPAPER_API_PATH)
       .then(response => {
         commit('updatePapersData', response)
         commit('updatePapersFetching', false)
       })
-      .catch(error => commit('updatePapersFetching', false))
+      .catch(() => commit('updatePapersFetching', false))
   }
 }
