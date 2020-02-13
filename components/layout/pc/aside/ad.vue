@@ -77,7 +77,7 @@
     },
     methods: {
       isEnableFilterStyle(index) {
-        return this.transitioning && this.swiper && this.swiper.activeIndex === index
+        return this.transitioning && this.swiper && this.swiper.realIndex === index
       },
       handleSwiperSlideChange() {
         this.$emit('slideChange', this.swiper.realIndex)
