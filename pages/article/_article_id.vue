@@ -566,19 +566,12 @@
     > .mammon {
       padding: $gap;
 
-      > .mammon-box {
-        > .mammon-wrapper {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          min-height: 16rem;
-          overflow: hidden;
-
-          > .adsbygoogle {
-            width: 100%;
-            height: 260px;
-          }
-        }
+      .mammon-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 16rem;
+        overflow: hidden;
       }
     }
 
