@@ -77,7 +77,7 @@
             :lines="4"
             line-height="1em"
           />
-          <adsense-responsive v-else-if="renderAd" key="adsense" />
+          <adsense-responsive v-else-if="renderAd" key="adsense" ins-class="mammon-ins" />
         </transition>
       </div>
     </client-only>
@@ -565,13 +565,15 @@
 
     > .mammon {
       padding: $gap;
+      height: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
 
-      .mammon-box {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 16rem;
-        overflow: hidden;
+      .mammon-ins {
+        width: 100%;
+        height: 16rem;
       }
     }
 

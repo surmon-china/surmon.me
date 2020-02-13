@@ -7,7 +7,6 @@
       :data-full-width-responsive="true"
       data-ad-client="ca-pub-4710915636313788"
       data-ad-slot="7405264495"
-      data-ad-format="auto"
     />
   </client-only>
 </template>
