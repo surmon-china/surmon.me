@@ -38,7 +38,6 @@ export const state = () => {
 }
 
 export const mutations = {
-
   // 文章列表
   updateListFetchig(state, action) {
     state.list.fetching = action
@@ -84,19 +83,17 @@ export const mutations = {
 }
 
 export const actions = {
-
   // 获取文章列表
   fetchList({ commit }, params = {}) {
-
     const isRestart = !params.page || params.page === 1
     const isLoadMore = params.page && params.page > 1
 
     // 清空已有数据
-    isRestart &&
-    commit('updateListData', getDefaultListData())
+    isRestart && commit('updateListData', getDefaultListData())
     commit('updateListFetchig', true)
 
-    return this.$axios.$get(ARTICLE_API_PATH, { params })
+    return this.$axios
+      .$get(ARTICLE_API_PATH, { params })
       .then(response => {
         commit('updateListFetchig', false)
         isLoadMore
@@ -104,11 +101,9 @@ export const actions = {
           : commit('updateListData', response.result)
         if (isLoadMore && isBrowser) {
           Vue.nextTick(() => {
-            scrollTo(
-              window.scrollY + (window.innerHeight * 0.8),
-              300,
-              { easing: Easing['ease-in'] }
-            )
+            scrollTo(window.scrollY + window.innerHeight * 0.8, 300, {
+              easing: Easing['ease-in']
+            })
           })
         }
       })
@@ -119,7 +114,8 @@ export const actions = {
   fetchHotList({ commit, rootState }) {
     const { SortType } = rootState.global.constants
     commit('updateHotListFetchig', true)
-    return this.$axios.$get(ARTICLE_API_PATH, { params: { cache: 1, sort: SortType.Hot }})
+    return this.$axios
+      .$get(ARTICLE_API_PATH, { params: { cache: 1, sort: SortType.Hot } })
       .then(response => {
         commit('updateHotListData', response)
         commit('updateHotListFetchig', false)
@@ -130,7 +126,7 @@ export const actions = {
   // 获取文章详情
   fetchDetail({ commit }, params = {}) {
     const delay = fetchDelay(
-      (isBrowser && isArticleDetailRoute(window.$nuxt.$route.name)) ? null : 0
+      isBrowser && isArticleDetailRoute(window.$nuxt.$route.name) ? null : 0
     )
     if (isBrowser) {
       Vue.nextTick(() => {
@@ -139,7 +135,8 @@ export const actions = {
     }
     commit('updateDetailFetchig', true)
     commit('updateDetailData', {})
-    return this.$axios.$get(`${ARTICLE_API_PATH}/${params.article_id}`)
+    return this.$axios
+      .$get(`${ARTICLE_API_PATH}/${params.article_id}`)
       .then(response => {
         return new Promise(resolve => {
           delay(() => {
@@ -147,7 +144,7 @@ export const actions = {
             commit('updateDetailFetchig', false)
             resolve(response)
           })
-        }) 
+        })
       })
       .catch(error => {
         commit('updateDetailFetchig', false)
@@ -157,7 +154,8 @@ export const actions = {
 
   // 喜欢文章
   fetchLikeArticle({ commit }, article_id) {
-    return this.$axios.$patch(LIKE_ARTICLE_API_PATH, { article_id })
+    return this.$axios
+      .$patch(LIKE_ARTICLE_API_PATH, { article_id })
       .then(response => {
         commit('updateLikesIncrement')
         return Promise.resolve(response)

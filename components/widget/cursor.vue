@@ -9,7 +9,7 @@
 
 <script>
   export default {
-    name: 'global-cursor',
+    name: 'GlobalCursor',
     data() {
       return { x: 0, y: 0 }
     },
@@ -40,7 +40,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 999999;
+    z-index: $z-index-top;
     animation: transform 0s;
 
     .cursor {

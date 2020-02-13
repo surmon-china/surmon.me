@@ -1,6 +1,19 @@
 
 ## CHANGELOG
 
+### v2.5.0
+- TypeScript
+- Improve styles
+- Improve About page
+- Improve emoji-rain component
+- Improve relink transformer
+- Add QR Code service
+- Add MyMap module
+- Remove RTC module
+- Remove ColorBlock component
+- Refactoring Music service
+- Refactoring Theme to dark mode
+
 ### v2.4.9
 - Update FUNDING.yml
 - Update README.md

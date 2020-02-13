@@ -5,6 +5,7 @@
  */
 
 import { isBrowser } from '~/environment'
+import appConfig from '~/config/app.config'
 
 if (isBrowser) {
  
@@ -13,9 +14,9 @@ if (isBrowser) {
       '',
       '著作权归作者所有。',
       '商业转载请联系作者获得授权，非商业转载请注明出处。',
-      '作者：Surmon',
+      `作者：${appConfig.meta.author}`,
       '链接：' + location.href,
-      '来源：Surmon.me',
+      `来源：${appConfig.meta.title}`,
       ''
     ].join('\n')
   }
