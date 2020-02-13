@@ -1,13 +1,15 @@
 <template>
   <footer class="footer">
-    <div class="footer-content">©{{ year }}&nbsp;&nbsp;Surmon.me</div>
+    <div class="footer-content">©{{ year }}&nbsp;&nbsp;{{ appConfig.meta.title }}</div>
   </footer>
 </template>
 
 <script>
+  import appConfig from '~/config/app.config'
   export default {
-    name: 'mobile-footer',
+    name: 'MobileFooter',
     computed: {
+      appConfig: () => appConfig,
       year() {
         return new Date().getFullYear()
       }

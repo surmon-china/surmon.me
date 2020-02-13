@@ -5,15 +5,17 @@
 </template>
 
 <script>
-  import Carrousel from '~/components/archive/carrousel'
   import ArticleList from '~/components/archive/list'
 
   export default {
-    name: 'tag-article-list',
-    validate ({ params, store }) {
-      return params.tag_slug && store.state.tag.data.some((tag, index, arr) => {
-        return Object.is(tag.slug, params.tag_slug)
-      })
+    name: 'TagArticleList',
+    components: {
+      ArticleList
+    },
+    validate({ params, store }) {
+      return params.tag_slug && store.state.tag.data.some(
+        tag => tag.slug === params.tag_slug
+      )
     },
     fetch({ store, params }) {
       return store.dispatch('article/fetchList', params)
@@ -28,18 +30,14 @@
         this.$router.back()
       }
     },
-    components: {
-      Carrousel,
-      ArticleList
-    },
     computed: {
       article() {
         return this.$store.state.article.list
       },
       currentTag() {
-        return this.$store.state.tag.data.find((tag, index, arr) => {
-          return Object.is(tag.slug, this.$route.params.tag_slug)
-        })
+        return this.$store.state.tag.data.find(
+          tag => tag.slug === this.$route.params.tag_slug
+        )
       },
       defaultParams() {
         return {
@@ -47,9 +45,10 @@
         }
       },
       nextPageParams() {
-        return Object.assign({
-          page: this.article.data.pagination.current_page + 1
-        }, this.defaultParams)
+        return {
+          page: this.article.data.pagination.current_page + 1,
+          ...this.defaultParams
+        }
       }
     },
     methods: {

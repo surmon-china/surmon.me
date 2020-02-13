@@ -11,7 +11,7 @@
   import Carrousel from '~/components/archive/carrousel'
   import Announcement from '~/components/archive/announcement'
   export default {
-    name: 'index',
+    name: 'Index',
     fetch({ store }) {
       return Promise.all([
         store.dispatch('article/fetchList'),
