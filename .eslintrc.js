@@ -53,6 +53,7 @@ module.exports = {
 
     // import 语句顺序
     'import/order': 'off',
+    'import/no-named-as-default-member': 'off',
 
     // Vue 相关
     'vue/no-unused-components': 'warn',
