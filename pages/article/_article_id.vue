@@ -574,6 +574,7 @@
       .mammon-ins {
         width: 100%;
         height: 16rem;
+        min-height: 16rem;
       }
     }
 
