@@ -3,42 +3,42 @@
     <div class="wall-box">
       <transition name="module" mode="out-in">
         <div
-          class="picture-box"
           ref="picture-box"
-          :title="currentWallpaper.copyright"
           :key="currentWallpaperUrl"
+          class="picture-box"
+          :title="currentWallpaper.copyright"
           :style="{
             backgroundImage: `url(${currentWallpaperUrl})`
           }"
         />
       </transition>
       <div class="story-box">
-        <div class="empty" v-if="!currentWallpaper">挂了</div>
-        <div class="content" v-else>
+        <div v-if="!currentWallpaper" class="empty">挂了</div>
+        <div v-else class="content">
           <h2 class="title">{{ currentWallpaper.title }}</h2>
           <p class="sub-title">{{ currentWallpaper.copyright }}</p>
           <p class="desc">{{ currentWallpaper.desc }}</p>
           <div class="tools">
             <transition name="module">
               <a
-                class="location"
                 key="location"
+                class="location"
                 target="_blank"
                 rel="external nofollow noopenter"
-                :href="currentWallpaper.searchUrl"
+                :href="'//cn.bing.com' + currentWallpaper.copyrightlink"
                 :title="currentWallpaper.bsTitle"
               >
                 <i class="iconfont icon-location"></i>
-                <span>{{ currentWallpaper.bsTitle }}</span>
+                <span class="text">{{ currentWallpaper.bsTitle }}</span>
               </a>
             </transition>
-            <button class="btn" title="上一幅" :disabled="!canNext" @click="index++">
+            <button class="button" title="上一幅" :disabled="!canNext" @click="index++">
               <i class="iconfont icon-prev"></i>
             </button>
-            <button class="btn" title="下一幅" :disabled="!canPrev" @click="index--">
+            <button class="button" title="下一幅" :disabled="!canPrev" @click="index--">
               <i class="iconfont icon-next"></i>
             </button>
-            <button class="btn" title="春尽江南" @click="close">
+            <button class="button" title="春尽江南" @click="close">
               <i class="iconfont icon-cancel"></i>
             </button>
           </div>
@@ -50,7 +50,7 @@
 
 <script>
   export default {
-    name: 'wallpaper-wall',
+    name: 'WallpaperWall',
     data() {
       return {
         index: 0
@@ -58,7 +58,7 @@
     },
     methods: {
       close() {
-        this.$store.commit('global/updateWallpaperOnState', false)
+        this.$store.commit('global/toggleUpdateWallpaperOnState', false)
       }
     },
     computed: {
@@ -91,7 +91,7 @@
     height: 100vh;
     top: 0;
     left: 0;
-    z-index: 1000;
+    z-index: $z-index-top;
     background-color: $module-hover-bg-darken-20;
     @include backdrop-blur();
 
@@ -106,7 +106,6 @@
       height: 88vh;
       border: solid $sm-gap $module-hover-bg;
       background-color: $module-bg;
-      @include backdrop-blur();
 
       > .picture-box {
         width: 100%;
@@ -145,30 +144,30 @@
             color: $text;
 
             > .location {
-              span {
+              .text {
                 text-decoration: underline;
               }
             }
 
             > .location,
-            > .btn {
+            > .button {
               display: block;
               float: left;
-              background-color: $module-bg;
-              margin-right: $gap;
               height: 3rem;
               line-height: 3rem;
               padding: 0 $gap;
-            }
-
-            > .btn {
-
-              &[disabled] {
-                opacity: .6;
-              }
+              margin-right: $gap;
+              background-color: $module-bg;
+              @include background-transition();
 
               &:hover {
                 background-color: $module-hover-bg-opacity-9;
+              }
+            }
+
+            > .button {
+              &[disabled] {
+                opacity: .6;
               }
             }
           }

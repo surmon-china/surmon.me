@@ -8,7 +8,6 @@ import { isBrowser } from '~/environment'
 import consoleSlogan from '~/utils/console-slogan'
 
 if (isBrowser) {
-
   // 执行任务
   const doTask = task => {
     window.setTimeout(task, 666)

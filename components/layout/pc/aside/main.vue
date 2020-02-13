@@ -4,6 +4,7 @@
       <div class="search-box">
         <input
           id="keyword"
+          v-model.trim="keyword"
           required
           list="keywords"
           type="search"
@@ -11,44 +12,44 @@
           class="search-input"
           :class="language"
           :placeholder="$i18n.text.search"
-          v-model.trim="keyword"
           @keyup.enter="handleSearch"
-        />
+        >
         <button class="search-btn" @click="handleSearch">
-          <i class="iconfont icon-search"></i>
+          <i class="iconfont icon-search" />
         </button>
         <client-only>
-          <datalist class="search-keywords" id="keywords" v-if="tags.length">
-            <option class="iiem"
+          <datalist v-if="tags.length" id="keywords" class="search-keywords">
+            <option
+              v-for="tag in tags"
+              :key="tag.slug"
+              class="iiem"
               :value="isEnLang ? tag.slug : tag.name"
               :label="tag.description"
-              :key="tag.slug"
-              v-for="tag in tags"
             />
           </datalist>
         </client-only>
       </div>
       <nuxt-link to="/sitemap" class="sitemap-btn">
-        <i class="iconfont icon-book"></i>
+        <i class="iconfont icon-book" />
       </nuxt-link>
     </div>
     <div class="aside-article">
       <p class="title">
-        <i class="iconfont icon-hotfill"></i>
-        <strong v-text="$i18n.text.article.hotlist"></strong>
+        <i class="iconfont icon-hotfill" />
+        <strong v-text="$i18n.text.article.hotlist" />
       </p>
       <empty-box v-if="!articles.length">
         <slot>{{ $i18n.text.article.empty }}</slot>
       </empty-box>
-      <ul class="aside-article-list" v-else>
-        <li class="item" :key="item.id" v-for="item in articles">
-          <span class="index"></span>
+      <ul v-else class="aside-article-list">
+        <li v-for="item in articles" :key="item.id" class="item">
+          <span class="index" />
           <nuxt-link
             class="title"
             :to="`/article/${item.id}`"
             :title="`${item.title} - 「 ${item.meta.comments} ${$i18n.text.comment.count} | ${item.meta.likes} ${$i18n.text.comment.like} 」`"
           >
-            <span v-text="item.title"></span>
+            <span v-text="item.title" />
           </nuxt-link>
         </li>
       </ul>
@@ -58,7 +59,7 @@
       <calendar />
     </div>
     <transition name="module">
-      <div class="aside-mammon alimama" key="ad">
+      <div key="ad" class="aside-mammon alimama">
         <iframe
           scrolling="no"
           frameborder="0"
@@ -68,25 +69,25 @@
       </div>
     </transition>
     <div class="aside-sticky-box">
-      <aside-ad :initIndex="adIndex" @slideChange="handleChangeAdSwiper" v-if="renderStickyAd" />
+      <aside-ad v-if="renderStickyAd" :init-index="adIndex" @slideChange="handleChangeAdSwiper" />
       <div class="aside-tag">
         <empty-box v-if="!tags.length">
           <slot>{{ $i18n.text.tag.empty }}</slot>
         </empty-box>
-        <ul class="aside-tag-list" v-else>
+        <ul v-else class="aside-tag-list">
           <nuxt-link
+            v-for="(tag, index) in tags"
+            :key="index"
             tag="li"
             class="item"
-            :key="index"
             :to="`/tag/${tag.slug}`"
-            v-for="(tag, index) in tags"
           >
             <a class="title" :title="tag.description">
               <i
+                v-if="tag.extends.find(t => t.name === 'icon')"
+                :class="tag.extends.find(t => t.name === 'icon').value"
                 class="iconfont"
-                :class="tag.extends.find(t => Object.is(t.name, 'icon')).value"
-                v-if="tag.extends.find(t => Object.is(t.name, 'icon'))"
-              ></i>
+              />
               <span class="name">
                 <span>{{ isEnLang ? tag.slug : tag.name }}</span>
                 <span>({{ tag.count || 0 }})</span>
@@ -95,16 +96,16 @@
           </nuxt-link>
         </ul>
       </div>
-      <div class="aside-tools" v-if="isArticlePage">
+      <div v-if="isArticlePage" class="aside-tools">
         <div class="full-column" @click="handleSetFullColumn">
-          <span v-text="$i18n.text.article.fullcolread"></span>
+          <span v-text="$i18n.text.article.fullcolread" />
           <span>&nbsp;&nbsp;</span>
-          <i class="iconfont icon-read"></i>
+          <i class="iconfont icon-read" />
         </div>
         <div class="full-page" @click="handleFullScreen">
-          <span v-text="$i18n.text.article.fullscreenread"></span>
+          <span v-text="$i18n.text.article.fullscreenread" />
           <span>&nbsp;&nbsp;</span>
-          <i class="iconfont icon-fullscreen"></i>
+          <i class="iconfont icon-fullscreen" />
         </div>
       </div>
     </div>
@@ -124,7 +125,7 @@
   let stickyEvents = null
 
   export default {
-    name: 'pc-aside',
+    name: 'PcAside',
     components: {
       AsideAd,
       Calendar
@@ -244,6 +245,7 @@
         height: 2em;
         line-height: 2em;
         background-color: $module-hover-bg;
+        @include background-transition();
 
         &:hover {
           background-color: $module-hover-bg-darken-20;
@@ -266,6 +268,7 @@
         > .search-btn {
           width: 2em;
           background-color: $module-hover-bg-darken-20;
+          @include background-transition();
 
           &:hover {
             background-color: $module-hover-bg-darken-40;
@@ -424,6 +427,7 @@
           line-height: $tool-height;
           text-align: center;
           background-color: $module-bg;
+          @include background-transition();
           cursor: pointer;
 
           &:hover {
@@ -482,12 +486,14 @@
                 width: 2em;
                 text-align: center;
                 background-color: $module-hover-bg-opacity-3;
+                @include background-transition();
               }
 
               .name {
                 display: block;
                 padding: 0 $sm-gap;
                 background-color: $module-hover-bg;
+                @include background-transition();
               }
             }
           }

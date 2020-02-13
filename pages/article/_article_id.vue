@@ -1,6 +1,6 @@
 <template>
   <article class="article-page" :class="{ mobile: isMobile }">
-    <div class="detail" ref="detail">
+    <div ref="detail" class="detail">
       <transition name="module">
         <div
           v-if="!isFetching"
@@ -11,33 +11,57 @@
             hybrid: article.origin === constants.OriginState.Hybrid
           }"
         >
-          <span v-if="!article.origin" v-text="$i18n.text.origin.original"></span>
-          <span v-else-if="article.origin === constants.OriginState.Reprint" v-text="$i18n.text.origin.reprint"></span>
-          <span v-else-if="article.origin === constants.OriginState.Hybrid" v-text="$i18n.text.origin.hybrid"></span>
+          <span v-if="!article.origin">{{ $i18n.text.origin.original }}</span>
+          <span v-else-if="article.origin === constants.OriginState.Reprint">{{
+            $i18n.text.origin.reprint
+          }}</span>
+          <span v-else-if="article.origin === constants.OriginState.Hybrid">{{
+            $i18n.text.origin.hybrid
+          }}</span>
         </div>
       </transition>
       <transition name="module" mode="out-in" @after-enter="contentAnimateDone">
-        <div class="skeleton" key="skeleton" v-if="isFetching">
+        <div v-if="isFetching" key="skeleton" class="skeleton">
           <client-only>
             <skeleton-line class="title" />
-            <skeleton-paragraph class="content" :lines="9" line-height="1.2em" />
+            <skeleton-paragraph
+              class="content"
+              :lines="9"
+              line-height="1.2em"
+            />
           </client-only>
         </div>
-        <div class="knowledge" key="knowledge" v-else>
+        <div v-else key="knowledge" class="knowledge">
           <h2 class="title">{{ article.title }}</h2>
-          <div class="content" :id="contentElementIds.content" v-html="articleContent"></div>
-          <transition name="module" mode="out-in" @after-enter="readMoreAnimateDone">
-            <div class="readmore" key="readmore-btn" v-if="isCanReadMore">
-              <button class="readmore-btn" :disabled="isReadMoreLoading" @click="readMore()">
-                <span>{{ isReadMoreLoading ? $i18n.text.article.rendering : $i18n.text.article.readAll }}</span>
+          <div
+            :id="contentElementIds.content"
+            class="content"
+            v-html="articleContent"
+          ></div>
+          <transition
+            name="module"
+            mode="out-in"
+            @after-enter="readMoreAnimateDone"
+          >
+            <div v-if="isCanReadMore" key="readmore-btn" class="readmore">
+              <button
+                class="readmore-btn"
+                :disabled="isReadMoreLoading"
+                @click="readMore()"
+              >
+                <span>{{
+                  isReadMoreLoading
+                    ? $i18n.text.article.rendering
+                    : $i18n.text.article.readAll
+                }}</span>
                 <i class="iconfont icon-next-bottom"></i>
               </button>
             </div>
             <div
-              class="content"
-              key="more-content"
-              :id="contentElementIds.moreContent"
               v-else-if="article.isRenderedFullContent"
+              :id="contentElementIds.moreContent"
+              key="more-content"
+              class="content"
               v-html="articleMoreContent"
             ></div>
           </transition>
@@ -47,32 +71,37 @@
     <client-only>
       <div class="mammon">
         <transition name="module" mode="out-in">
-          <skeleton-paragraph key="skeleton" v-if="isFetching" :lines="4" line-height="1em" />
-          <adsense-responsive key="adsense" v-else-if="renderAd" />
+          <skeleton-paragraph
+            v-if="isFetching"
+            key="skeleton"
+            :lines="4"
+            line-height="1em"
+          />
+          <adsense-responsive v-else-if="renderAd" key="adsense" />
         </transition>
       </div>
     </client-only>
     <div class="share">
       <transition name="module" mode="out-in">
-        <div class="skeleton" key="skeleton" v-if="isFetching">
+        <div v-if="isFetching" key="skeleton" class="skeleton">
           <skeleton-base
+            v-for="item in (isMobile ? 3 : 10)"
+            :key="item"
             :style="{
               width: `calc((100% - (1em * ${isMobile ? 2 : 9})) / ${isMobile ? 3 : 10})`
             }"
             :radius="0"
-            :key="item"
-            v-for="item in (isMobile ? 3 : 10)"
           />
         </div>
-        <share-box key="share" :class="{ mobile: isMobile }" v-else />
+        <share-box v-else key="share" :class="{ mobile: isMobile }" />
       </transition>
     </div>
     <transition name="module" mode="out-in">
-      <div class="metas" key="skeleton" v-if="isFetching">
+      <div v-if="isFetching" key="skeleton" class="metas">
         <skeleton-paragraph :align="true" :lines="4" line-height="1.2em" />
       </div>
-      <div class="metas" key="metas" v-else>
-        <p class="item" v-if="isEnLang">
+      <div v-else key="metas" class="metas">
+        <p v-if="isEnLang" class="item">
           <span>Article created at</span>
           <span>&nbsp;</span>
           <nuxt-link
@@ -83,10 +112,10 @@
           </nuxt-link>
           <span>&nbsp;in category&nbsp;</span>
           <nuxt-link
+            v-for="(category, index) in article.category"
             :key="index"
             :to="`/category/${category.slug}`"
             :title="category.description || category.name"
-            v-for="(category, index) in article.category"
           >
             <span>{{ category.slug }}</span>
             <span v-if="article.category.length && article.category[index + 1]">、</span>
@@ -96,14 +125,14 @@
           <span>{{ article.meta.views || 0 }}</span>
           <span>&nbsp;Views</span>
         </p>
-        <p class="item" v-else>
+        <p v-else class="item">
           <span>本文于</span>
           <span>&nbsp;</span>
           <nuxt-link :title="getDateTitle(article.create_at)" :to="getDateLink(article.create_at)">
             <span>{{ getDateTitle(article.create_at) }}</span>
           </nuxt-link>
           <span>&nbsp;发布在&nbsp;</span>
-          <span :key="index" v-for="(category, index) in article.category">
+          <span v-for="(category, index) in article.category" :key="index">
             <nuxt-link
               :to="`/category/${category.slug}`"
               :title="category.description || category.name"
@@ -120,7 +149,7 @@
         <p class="item">
           <span class="title" :class="language">{{ isEnLang ? 'Related tags:' : '相关标签：' }}</span>
           <span v-if="!article.tag.length" v-text="$i18n.text.tag.empty"></span>
-          <span :key="index" v-for="(tag, index) in article.tag">
+          <span v-for="(tag, index) in article.tag" :key="index">
             <nuxt-link :to="`/tag/${tag.slug}`" :title="tag.description || tag.name">
               <span>{{ isEnLang ? tag.slug : tag.name }}</span>
             </nuxt-link>
@@ -129,9 +158,7 @@
         </p>
         <p class="item">
           <span class="title" :class="language">{{ isEnLang ? 'Article Address:' : '永久地址：' }}</span>
-          <span class="site-url" @click="copyArticleUrl">
-            <span>https://surmon.me/article/{{ article.id }}</span>
-          </span>
+          <span class="site-url" @click="copyArticleUrl">{{ articleUrl }}</span>
         </p>
         <div class="item">
           <span class="title" :class="language">{{ isEnLang ? 'Copyright Clarify:' : '版权声明：' }}</span>
@@ -148,43 +175,26 @@
       </div>
     </transition>
     <transition name="module" mode="out-in">
-      <div class="related" key="skeleton" v-if="isFetching">
-        <skeleton-paragraph class="skeleton" v-if="isMobile" :lines="4" line-height="1em" />
-        <ul class="skeleton-list" v-else>
-          <skeleton-base class="article" :key="item" v-for="item in 4" />
+      <div v-if="isFetching" key="skeleton" class="related">
+        <skeleton-paragraph v-if="isMobile" class="skeleton" :lines="4" line-height="1em" />
+        <ul v-else class="skeleton-list">
+          <skeleton-base v-for="item in 4" :key="item" class="article" />
         </ul>
       </div>
-      <div class="related" key="related" v-else-if="article.related && article.related.length">
+      <div v-else-if="article.related && article.related.length" key="related" class="related">
         <div
-          class="article-list swiper"
           v-if="!isMobile"
           v-swiper:swiper="swiperOption"
+          class="article-list swiper"
         >
-          <!-- @transitionStart="handleSwiperTransitionStart" -->
-          <!-- @transitionEnd="handleSwiperTransitionEnd" -->
           <div class="swiper-wrapper">
             <div
-              class="swiper-slide item"
-              :key="index"
               v-for="(article, index) in relatedArticles"
+              :key="index"
+              class="swiper-slide item"
             >
-              <a
-                v-if="article.ad"
-                class="item-box filter"
-                rel="external nofollow noopener"
-                target="_blank"
-                :class="{ 'motion-blur-horizontal-small': transitioning }"
-                :href="article.link"
-              >
-                <img :src="article.img" class="thumb" :alt="article.title">
-                <span class="title">
-                  <span class="text">{{ article.title }}</span>
-                </span>
-              </a>
               <nuxt-link
-                v-else
                 class="item-box filter"
-                :class="{ 'motion-blur-horizontal-small': transitioning }"
                 :to="`/article/${article.id}`"
                 :title="article.title"
               >
@@ -200,22 +210,13 @@
             </div>
           </div>
         </div>
-        <ul class="article-list" v-else>
-          <li class="item" v-for="(article, index) in relatedArticles" :key="index">
-            <a
-              v-if="article.ad"
-              class="item-link"
-              :href="article.link"
-              rel="external nofollow noopener"
-              target="_blank"
-            >
-              <span class="sign">《</span>
-              <span class="title">{{ article.title }}</span>
-              <span class="sign">》</span>
-              <small class="tip">- more</small>
-            </a>
+        <ul v-else class="article-list">
+          <li
+            v-for="(article, index) in relatedArticles"
+            :key="index"
+            class="item"
+          >
             <nuxt-link
-              v-else
               class="item-link"
               :to="`/article/${article.id}`"
               :title="`「 ${article.title} 」- 继续阅读`"
@@ -244,12 +245,11 @@
   import { isBrowser } from '~/environment'
   import lozad from '~/plugins/lozad'
   import marked from '~/plugins/marked'
-  import adConfig from '~/config/ad.config'
-  import { getFileCDNUrl } from '~/transforms/url'
+  import { getFileCDNUrl, getArticleDetailPageUrl } from '~/transformers/url'
   import ShareBox from '~/components/widget/share'
 
   export default {
-    name: 'article-detail',
+    name: 'ArticleDetail',
     components: {
       ShareBox
     },
@@ -258,7 +258,9 @@
     },
     fetch({ store, params, error }) {
       return Promise.all([
-        store.dispatch('article/fetchDetail', params).catch(err => error({ statusCode: 404 })),
+        store
+          .dispatch('article/fetchDetail', params)
+          .catch(err => error({ statusCode: 404 })),
         store.dispatch('comment/fetchList', { post_id: params.article_id })
       ])
     },
@@ -272,13 +274,16 @@
             name: 'keywords',
             content: (article.keywords ? article.keywords.join(',') : article.title) || ''
           },
-          { hid: 'description', name: 'description', content: article.description }
+          {
+            hid: 'description',
+            name: 'description',
+            content: article.description
+          }
         ]
       }
     },
     data() {
       return {
-        transitioning: false,
         swiperOption: {
           setWrapperSize: true,
           simulateTouch: false,
@@ -298,7 +303,7 @@
         renderAd: true,
         contentElementIds: {
           content: 'article-content',
-          moreContent: 'more-article-content',
+          moreContent: 'more-article-content'
         }
       }
     },
@@ -329,6 +334,9 @@
       routeArticleId() {
         return Number(this.$route.params.article_id)
       },
+      articleUrl() {
+        return getArticleDetailPageUrl(this.article.id)
+      },
       isContentTooMore() {
         const { content } = this.article
         return content && content.length > 13688
@@ -347,7 +355,6 @@
         const lastCodeIndex = shortContent.lastIndexOf('\n\n```')
         const lastLineIndex = shortContent.lastIndexOf('\n\n**')
         const lastReadindex = Math.max(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex)
-        // console.log(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex, 'min', lastReadindex)
         return lastReadindex
       },
       articleContent() {
@@ -377,10 +384,7 @@
         )
       },
       relatedArticles() {
-        const relateds = [...this.article.related].slice(0, 10)
-        const adArticle = adConfig.common.articleRelated(this.tags, this.isMobile)
-        adArticle && relateds.splice(2, 0, adArticle)
-        return relateds
+        return [...this.article.related].slice(0, 10)
       }
     },
     methods: {
@@ -422,7 +426,7 @@
       },
       copyArticleUrl() {
         if (this.article.title) {
-          this.$root.$copyToClipboard(`https://surmon.me/article/${this.article.id}`)
+          this.$root.$copyToClipboard(this.articleUrl)
         }
       },
       getRelatedArticleThumb(thumb) {
@@ -454,12 +458,6 @@
         month = month.length === 1 ? `0${month}` : month
         day = day.length === 1 ? `0${day}` : day
         return `/date/${year}-${month}-${day}`
-      },
-      handleSwiperTransitionStart() {
-        this.transitioning = true
-      },
-      handleSwiperTransitionEnd() {
-        this.transitioning = false
       }
     }
   }
@@ -531,7 +529,7 @@
           margin: 0;
           list-style: none;
           overflow: hidden;
-          opacity: .9;
+          opacity: 0.9;
 
           > .item {
 
@@ -569,7 +567,6 @@
       padding: $gap;
 
       > .mammon-box {
-
         > .mammon-wrapper {
           display: flex;
           justify-content: center;
@@ -593,7 +590,6 @@
       transition: height $transition-time-normal;
 
       > .skeleton {
-        
         .title {
           width: 60%;
           height: 26px;
@@ -736,7 +732,6 @@
               }
 
               > ul {
-
                 &:last-child {
                   margin-bottom: 0;
                 }
@@ -761,10 +756,10 @@
             overflow: hidden;
             margin-bottom: 1em;
             padding-left: $code-line-width;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba($black, 0.8);
 
             &:before {
-              color: white;
+              color: $white;
               content: attr(data-lang)" CODE";
               height: $code-line-height;
               line-height: $code-line-height;
@@ -789,7 +784,7 @@
               width: $code-line-width;
               height: calc(100% - #{$code-line-height});
               text-align: center;
-              background-color: rgba(0, 0, 0, 0.2);
+              background-color: rgba($black, 0.2);
 
               > .code-line-number {
                 padding: 0;
@@ -822,38 +817,37 @@
             > code {
               margin: 0;
               padding: 1em;
-              // padding-top: $code-line-height + 1em;
               float: left;
               width: 100%;
               height: 100%;
               display: block;
               line-height: $code-line-line-height;
-              color: rgba(255, 255, 255, 0.87);
+              color: rgba($white, 0.87);
               background-color: transparent;
             }
           }
         }
 
         @keyframes readmorebtn {
-          0% { 
+          0% {
             transform: translate3d(0, 0, 0);
             background-color: $module-hover-bg;
           }
-          25% { 
+          25% {
             transform: translate3d(0, $sm-gap, 0);
             background-color: $primary;
-            color: white;
+            color: $white;
           }
-          50% { 
+          50% {
             transform: translate3d(0, 0, 0);
             background-color: $module-hover-bg;
           }
-          75% { 
+          75% {
             transform: translate3d(0, $sm-gap, 0);
             background-color: $primary;
-            color: white;
+            color: $white;
           }
-          100% { 
+          100% {
             transform: translate3d(0, 0, 0);
             background-color: $module-hover-bg;
           }
@@ -878,8 +872,8 @@
             }
 
             &:hover {
-              background-color: $primary!important;
-              color: white!important;
+              background-color: $primary !important;
+              color: $white !important;
             }
 
             > .iconfont {
@@ -928,13 +922,13 @@
             display: none;
             flex-grow: 0;
 
-            &[class*="wechat"],
-            &[class*="weibo"],
-            &[class*="twitter"] {
+            &[class*='wechat'],
+            &[class*='weibo'],
+            &[class*='twitter'] {
               display: inline-block;
               flex-grow: 1;
             }
-            &[class*="twitter"] {
+            &[class*='twitter'] {
               margin-right: 0;
             }
           }
@@ -1023,11 +1017,9 @@
               opacity: .8;
 
               &:hover {
-
                 .thumb {
                   opacity: 1;
                   transform: scale(1.1);
-                  transition: all .88s;
                 }
 
                 > .title {
@@ -1039,7 +1031,7 @@
                 width: auto;
                 height: 100%;
                 transform: scale(1);
-                transition: all .88s;
+                transition: transform $transition-time-normal, opacity $transition-time-fast;
               }
 
               > .title {
@@ -1050,13 +1042,14 @@
                 height: 2em;
                 line-height: 2em;
                 background-color: $module-hover-bg-darken-10;
-                opacity: .4;
+                opacity: 0.4;
                 color: $text-reversal;
                 font-size: $font-size-h6;
+                transition: opacity $transition-time-fast;
 
                 .text {
                   display: block;
-                  padding: 0 .5em;
+                  padding: 0 0.5em;
                   text-align: center;
                   @include text-overflow();
                 }

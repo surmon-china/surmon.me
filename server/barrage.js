@@ -6,9 +6,7 @@
 
 const path = require('path')
 const fs = require('fs-extra')
-
-// extend
-const underscore = require('../utils/underscore-simple')
+const { debounce } = require('lodash')
 
 // file
 const dataPath = path.join(__dirname, '..', 'data')
@@ -34,7 +32,7 @@ const updateLocalBarragesFile = () => {
 }
 
 // 30秒为一个周期，保存一次最新弹幕记录
-const updateDebounce = underscore.debounce(updateLocalBarragesFile, 1000 * 30)
+const updateDebounce = debounce(updateLocalBarragesFile, 1000 * 30)
 let socketClients = 0
 
 const barrageServer = io => {
@@ -58,6 +56,7 @@ const barrageServer = io => {
 
     // 弹幕总数量
     socket.on('barrage-count', callback => {
+      // eslint-disable-next-line standard/no-callback-literal
       callback({
         users: socketClients,
         count: barrages.length

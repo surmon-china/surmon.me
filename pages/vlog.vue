@@ -2,10 +2,10 @@
   <div class="vlog-page" :class="{ mobile: isMobile }">
     <ul ref="videoList" class="video-list">
       <li
-        class="item"
-        :key="index"
-        :title="video.title"
         v-for="(video, index) in videoList"
+        :key="index"
+        class="item"
+        :title="video.title"
         @click="handlePlay(video)"
       >
         <div class="thumb">
@@ -21,7 +21,11 @@
           />
         </div>
         <h5 class="title" v-text="video.title" />
-        <p class="description" style="-webkit-box-orient: vertical;" v-text="video.description || '-'" />
+        <p
+          class="description"
+          style="-webkit-box-orient: vertical;"
+          v-text="video.description || '-'"
+        />
         <hr class="split">
         <p class="meta">
           <span class="item favorites">
@@ -60,10 +64,10 @@
 </template>
 
 <script>
-  import { getFileProxyUrl } from '~/transforms/url'
-
+  /* eslint-disable prettier/prettier */
+  import { getFileProxyUrl } from '~/transformers/url'
   export default {
-    name: 'vlog',
+    name: 'Vlog',
     head() {
       return {
         title: `${this.isEnLang ? '' : this.$i18n.nav.vlog + ' | '}Vlog`
@@ -109,15 +113,13 @@
         return getFileProxyUrl(`/bilibili/${url.replace('//', '')}@560w_350h.${this.imageExt}`)
       },
       handlePlay(video) {
-        if (this.isMobile) {
-          window.open(`https://www.bilibili.com/video/av${video.aid}`)
-          return
-        }
+        window.open(`https://www.bilibili.com/video/av${video.aid}`)
+        /*
         if (window.utils) {
-          const music = this.$root.$music
-          music && music.humanizeOperation(music.player.pause)
+          this.$root.$musicPlayer.pause()
           window.utils.openIframePopup(`//player.bilibili.com/player.html?aid=${video.aid}&page=1`)
         }
+        */
       }
     },
     mounted() {
@@ -126,7 +128,7 @@
       if (!lozadElements || !lozadElements.length) {
         return false
       }
-      this.lozadObserver = lozad(lozadElements, {
+      this.lozadObserver = window.lozad(lozadElements, {
         loaded: element => element.classList.add('loaded')
       })
       this.lozadObserver.observe()
@@ -145,7 +147,6 @@
       min-height: auto;
 
       > .video-list {
-
         > .item {
           width: 100%;
           height: auto;
@@ -180,6 +181,7 @@
         width: calc((100% - #{$lg-gap * 2}) / 3);
         background-color: $module-bg;
         cursor: pointer;
+        @include background-transition();
 
         &:hover {
           background-color: $module-hover-bg;
@@ -219,7 +221,7 @@
             background-size: cover;
             background-position: center;
             transform: rotate(0deg) scale(1);
-            transition: transform $transition-time-slow;
+            @include transform-transition($transition-time-normal);
           }
 
           .length {
@@ -227,12 +229,12 @@
             position: absolute;
             bottom: 0;
             right: 0;
-            z-index: 1;
+            z-index: $z-index-normal + 1;
             background-color: $module-hover-bg-darken-40;
             height: $font-size-h2;
             line-height: $font-size-h2;
             padding: 0 $sm-gap;
-            opacity: .9;
+            opacity: 0.9;
             font-size: $font-size-small;
             @include title-shadow();
           }
@@ -246,8 +248,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 9;
+            z-index: $z-index-normal + 1;
             @include hidden();
+            @include visibility-transition();
 
             .button {
               width: 5rem;
@@ -257,10 +260,10 @@
               background: $module-bg-opacity-5;
               border-radius: 100%;
               color: $module-bg;
-              opacity: .88;
+              opacity: 0.88;
               font-size: 3em;
               transform: scale(1.2);
-              transition: transform $transition-time-slow;
+              @include transform-transition($transition-time-normal);
             }
           }
         }
@@ -310,7 +313,6 @@
     }
 
     > .loadmore {
-
       > .button {
         display: block;
         width: 100%;
@@ -318,6 +320,7 @@
         line-height: $block-button-height;
         background-color: $module-bg;
         text-align: center;
+        @include background-transition();
 
         &:hover {
           background-color: $module-hover-bg;
