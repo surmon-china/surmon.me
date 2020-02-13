@@ -4,11 +4,11 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import VueComment from './comment'
+import Comment from './main'
 
-const comment = {
+export const comment = {
   install(Vue) {
-    Vue.component('comment-box', VueComment)
+    Vue.component('comment-box', Comment)
   }
 }
 
