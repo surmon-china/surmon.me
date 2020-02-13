@@ -1,15 +1,15 @@
 <template>
-  <div class="mammon-box responsive">
-    <client-only>
-      <Adsense
-        :root-class="rootClass || 'mammon-wrapper'"
-        :ins-class="insClass"
-        :data-full-width-responsive="true"
-        data-ad-client="ca-pub-4710915636313788"
-        data-ad-slot="7405264495"
-      />
-    </client-only>
-  </div>
+  <client-only>
+    <Adsense
+      :root-class="rootClass || 'mammon-box'"
+      :ins-class="insClass"
+      :ins-style="insStyle"
+      :data-full-width-responsive="true"
+      data-ad-client="ca-pub-4710915636313788"
+      data-ad-slot="7405264495"
+      data-ad-format="auto"
+    />
+  </client-only>
 </template>
 
 <script>
@@ -18,6 +18,7 @@
     props: {
       insClass: String,
       rootClass: String,
+      insStyle: String
     }
   }
 </script>
