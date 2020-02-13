@@ -5,12 +5,11 @@
 </template>
 
 <script>
-  import Carrousel from '~/components/archive/carrousel'
   import ArticleList from '~/components/archive/list'
 
   export default {
-    name: 'date-article-list',
-    validate ({ params }) {
+    name: 'DateArticleList',
+    validate({ params }) {
       return new Date(params.date).toString() !== 'Invalid Date'
     },
     fetch({ store, params }) {
@@ -20,7 +19,6 @@
       return { title: `${this.defaultParams.date} | Date` }
     },
     components: {
-      Carrousel,
       ArticleList
     },
     computed: {
@@ -33,9 +31,12 @@
         }
       },
       nextPageParams() {
-        return Object.assign({
-          page: this.article.data.pagination.current_page + 1
-        }, this.defaultParams)
+        return Object.assign(
+          {
+            page: this.article.data.pagination.current_page + 1
+          },
+          this.defaultParams
+        )
       }
     },
     methods: {

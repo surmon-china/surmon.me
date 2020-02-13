@@ -1,12 +1,8 @@
 <template>
-  <div id="wallpaper">
-    <div class="wallpaper-box" @click="onWallpaper">
+  <div id="wallpaper-switch" :class="{ dark: isDarkTheme }">
+    <div class="switcher" @click="onWallpaper">
       <div class="up">
-        <span
-          class="title"
-          :class="{ en: isEnLang }"
-          v-text="$i18n.text.wallpaper"
-        ></span>
+        <span class="title" :class="{ en: isEnLang }">{{ $i18n.text.wallpaper }}</span>
       </div>
       <div class="down"></div>
     </div>
@@ -15,12 +11,12 @@
 
 <script>
   export default {
-    name: 'wallpaper-switch',
+    name: 'WallpaperSwitch',
     methods: {
       onWallpaper() {
         this.$ga.event('今日壁纸', '切换', 'tool')
         if (this.wallpapers) {
-          this.$store.commit('global/updateWallpaperOnState', true)
+          this.$store.commit('global/toggleUpdateWallpaperOnState', true)
         } else {
           alert('可能 Bing 又被墙了吧我有什么办法！')
         }
@@ -30,6 +26,9 @@
       isEnLang() {
         return this.$store.getters['global/isEnLang']
       },
+      isDarkTheme() {
+        return this.$store.getters['global/isDarkTheme']
+      },
       wallpapers() {
         return this.$store.state.wallpaper.papers.data
       }
@@ -38,22 +37,28 @@
 </script>
 
 <style lang="scss" scoped>
-  #wallpaper {
+  #wallpaper-switch {
     position: fixed;
     left: 0;
-    top: 74%;
+    top: 70%;
     cursor: pointer;
-
     $offset: 6px;
 
-    > .wallpaper-box {
+    &.dark {
+      .switcher .up .title {
+        color: $text-reversal;
+      }
+    }
+
+    > .switcher {
       width: 4rem;
       height: 8rem;
       opacity: .6;
       display: block;
       position: relative;
       transform: translateX(-$offset * 2);
-      
+      transition: opacity $transition-time-fast, transform $transition-time-fast;
+
       &:hover {
         opacity: .8;
         transform: translateX(-$offset);
@@ -75,7 +80,7 @@
       > .down {
         top: 0;
         left: $offset;
-        z-index: 1;
+        z-index: $z-index-normal + 1;
         background-color: $primary;
         animation: wallpaper-y 1.5s .75s infinite;
       }
@@ -83,7 +88,7 @@
       > .up {
         top: 0;
         left: 0;
-        z-index: 2;
+        z-index: $z-index-normal + 2;
         background-color: $yellow;
         animation: wallpaper-y 1.5s 0s infinite;
 
@@ -92,7 +97,7 @@
           width: 100%;
           height: 100%;
           line-height: 2rem;
-          font-family: webfont-bolder, DINRegular;
+          font-family: 'webfont-bolder', DINRegular;
           text-align: center;
           color: $primary;
           writing-mode: tb-rl;

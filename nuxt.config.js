@@ -29,13 +29,23 @@ export default {
     max: 100,
     maxAge: 1000 * 60 * 15
   },
+  buildModules: [
+    // Doc: https://github.com/nuxt-community/eslint-module
+    '@nuxtjs/eslint-module',
+    '@nuxt/typescript-build'
+  ],
   build: {
     analyze: process.argv.join('').includes('analyze'),
     maxChunkSize: 360000,
     extractCSS: true,
     publicPath: apiConfig.CDN + '/_nuxt/',
     postcss: {
-      plugins: { 'postcss-custom-properties': { warnings: false }}
+      plugins: { 'postcss-custom-properties': { warnings: false } }
+    },
+    babel: {
+      presets() {
+        return [['@nuxt/babel-preset-app', { corejs: { version: 3 } }]]
+      }
     },
     optimization: {
       splitChunks: {
@@ -43,7 +53,7 @@ export default {
           expansions: {
             name: 'expansions',
             test(module) {
-              return /swiper|233333|howler|lozad|marked|favico|rtcpeerconnection|webrtc|highlight/.test(module.context);
+              return /swiper|233333|howler|lozad|marked|favico|amplitude|highlight/.test(module.context);
             },
             chunks: 'initial',
             priority: 10,
@@ -56,41 +66,27 @@ export default {
             minChunks: 2,
             priority: -20,
             reuseExistingChunk: true
-          },
-          // TODO: 合并组件会导致运行异常
-          /*
-          page: {
-            name: 'page',
-            test: /\.(css|vue)$/,
-            chunks: 'all',
-            enforce: true,
-            priority: -20
           }
-          */
         }
       }
     },
     // Extends for webpack
-    extend(webpackConfig, { isDev, isClient }) {
+    extend(webpackConfig) {
       // 处理 Swiper4 下的 dom7 模块的语法问题
       webpackConfig.resolve.alias.dom7$ = 'dom7/dist/dom7.js'
       webpackConfig.resolve.alias.swiper$ = 'swiper/dist/js/swiper.js'
-      // if (isDev && isClient) {
-      //   webpackConfig.module.rules.push({
-      //     enforce: 'pre',
-      //     test: /\.(js|vue)$/,
-      //     loader: 'eslint-loader',
-      //     exclude: [/(node_modules)/, /underscore-simple/, /webrtc/]
-      //   })
-      // }
       if (isProdMode) {
         // 处理 Template 和 CSS 中的 CDN 地址
-        const vueLoader = webpackConfig.module.rules.find(loader => loader.loader === 'vue-loader')
+        const vueLoader = webpackConfig.module.rules.find(
+          loader => loader.loader === 'vue-loader'
+        )
         if (vueLoader) {
           const vueLoaders = vueLoader.options.loaders
           for (const cssLoader in vueLoaders) {
             if (Array.isArray(vueLoaders[cssLoader])) {
-              const targetLoader = vueLoaders[cssLoader].find(loader => loader.loader === 'css-loader')
+              const targetLoader = vueLoaders[cssLoader].find(
+                loader => loader.loader === 'css-loader'
+              )
               targetLoader && (targetLoader.options.root = apiConfig.CDN)
             }
           }
@@ -99,6 +95,7 @@ export default {
     }
   },
   plugins: [
+    '~/plugins/composition-api',
     { src: '~/plugins/polyfill', mode: 'client' },
     { src: '~/plugins/extend' },
     { src: '~/plugins/loaded-task' },
@@ -111,10 +108,9 @@ export default {
     { src: '~/plugins/swiper', mode: 'client' },
     { src: '~/plugins/analytics', mode: 'client' },
     { src: '~/plugins/emoji-233333', mode: 'client' },
-    { src: '~/plugins/image-popup', mode: 'client' },
-    { src: '~/plugins/iframe-popup', mode: 'client' },
     { src: '~/plugins/copy-right', mode: 'client' },
-    // { src: '~/plugins/particles', mode: 'client' }
+    { src: '~/plugins/popup', mode: 'client' },
+    { src: '~/plugins/amplitude', mode: 'client' }
   ],
   modules: [
     '@nuxtjs/pwa',
@@ -154,7 +150,6 @@ export default {
       { rel: 'dns-prefetch', href: '//static.surmon.me' },
       { rel: 'dns-prefetch', href: '//at.alicdn.com' },
       { rel: 'dns-prefetch', href: '//fonts.gstatic.com' },
-      { rel: 'dns-prefetch', href: '//adservice.google.com' },
       { rel: 'dns-prefetch', href: '//fonts.googleapis.com' },
       { rel: 'dns-prefetch', href: '//googleads.g.doubleclick.net' },
       { rel: 'dns-prefetch', href: '//www.google-analytics.com' },
@@ -163,18 +158,7 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'author', type: 'text/plain', href: '/humans.txt' }
     ],
-    noscript: [
-      { innerHTML: 'This website requires JavaScript.' }
-    ],
-  },
-  workbox: {
-    // runtimeCaching: [
-    //   {
-    //     urlPattern: 'https://my-cdn.com/.*',
-    //     handler: 'networkFirst',
-    //     method: 'GET'
-    //   }
-    // ]
+    noscript: [{ innerHTML: 'This website requires JavaScript.' }]
   },
   manifest: {
     name: appConfig.meta.title,
@@ -191,7 +175,7 @@ export default {
   },
   router: {
     middleware: ['change-page-col'],
-    linkActiveClass: 'link-active',
+    linkActiveClass: 'link-active'
   },
   css: [
     'normalize.css/normalize.css',
@@ -204,6 +188,6 @@ export default {
     scss: [
       ...SCSS_CDN_VARIABLES_BASE,
       '~/assets/styles/init.scss'
-    ],
+    ]
   }
 }

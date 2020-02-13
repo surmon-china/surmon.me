@@ -6,36 +6,34 @@
           alt="app-logo"
           draggable="false"
           :src="'/images/app-logo.png' | byCDN"
-        />
+        >
       </div>
-      <h2 class="title">Surmon.me</h2>
-      <p class="desc" v-text="$i18n.text.slogan">Talk is cheap. Show me the code</p>
+      <h2 class="title">{{ appConfig.meta.title }}</h2>
+      <p class="desc">{{ $i18n.text.slogan }}</p>
       <div class="screen">
         <img
           alt="app-hot"
           class="screen-img"
           :src="'/images/app-hot.png' | byCDN"
-        />
+        >
         <div class="download">
           <img
             :src="'/images/app-qrcode.png' | byCDN"
             class="qrcode"
             alt="qrcode"
             draggable="false"
-          />
+          >
           <a
             target="_blank"
             class="btn"
             :href="'/app/surmon.me.apk' | byCDN"
-            v-text="$i18n.text.device.android"
-          ></a>
+          >{{ $i18n.text.device.android }}</a>
           <a
             href=""
             class="btn"
             target="_blank"
             @click.prevent="handleDownloadIOS"
-            v-text="$i18n.text.device.ios"
-          ></a>
+          >{{ $i18n.text.device.ios }}</a>
         </div>
       </div>
     </div>
@@ -43,14 +41,16 @@
 </template>
 
 <script>
+  import appConfig from '~/config/app.config'
   export default {
-    name: 'app',
+    name: 'Application',
     head() {
       return {
         title: `${this.isEnLang ? '' : this.$i18n.nav.app + ' | '}App`
       }
     },
     computed: {
+      appConfig: () => appConfig,
       isEnLang() {
         return this.$store.getters['global/isEnLang']
       },
@@ -125,7 +125,6 @@
         user-select: none;
 
         &:hover {
-
           > .screen-img {
             opacity: .4;
           }
@@ -137,6 +136,7 @@
 
         > .screen-img {
           width: 100%;
+          @include visibility-transition($transition-time-normal);
         }
 
         > .download {
@@ -150,6 +150,7 @@
           justify-content: center;
           align-items: center;
           @include hidden();
+          @include visibility-transition($transition-time-normal);
 
           > .qrcode {
             width: 12rem;
@@ -165,6 +166,7 @@
             text-align: center;
             text-transform: uppercase;
             background: $module-bg;
+            transition: color $transition-time-fast, background $transition-time-fast;
 
             &:hover {
               color: $text-reversal;

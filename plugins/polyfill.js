@@ -8,5 +8,5 @@ import { isBrowser } from '~/environment'
 import 'intersection-observer'
 
 if (isBrowser) {
-  // 
+  // windows.xxx = xxx
 }

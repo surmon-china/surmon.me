@@ -3,20 +3,20 @@
     <form class="search" :class="{ actived: search }" @submit.stop.prevent="toSearch()">
       <input
         ref="input"
+        v-model.trim="keyword"
         type="text"
         class="input"
         list="keywords"
         required
-        v-model.trim="keyword"
         :placeholder="$i18n.text.search"
         @keyup.enter.stop.prevent="toSearch"
-      />
+      >
       <span class="close" @click.stop.prevent="search = false">
         <i class="iconfont icon-cancel"></i>
       </span>
       <client-only>
-        <datalist class="search-keywords" id="keywords" v-if="tags.length">
-          <option class="iiem" :value="tag.name" :label="tag.description" :key="tag.slug" v-for="tag in tags" />
+        <datalist v-if="tags.length" id="keywords" class="search-keywords">
+          <option v-for="tag in tags" :key="tag.slug" class="iiem" :value="tag.name" :label="tag.description" />
         </datalist>
       </client-only>
     </form>
@@ -28,7 +28,7 @@
         <i class="iconfont icon-menu"></i>
       </a>
       <nuxt-link to="/" class="navbar-logo">
-        <img :src="'/images/logo.svg' | byCDN" />
+        <img :src="'/images/logo.svg' | byCDN">
       </nuxt-link>
       <a href class="navbar-search" @click.stop.prevent="openSearch">
         <i class="iconfont icon-search"></i>
@@ -39,7 +39,7 @@
 
 <script>
   export default {
-    name: 'mobile-header',
+    name: 'MobileHeader',
     data() {
       return {
         search: false,
@@ -85,11 +85,11 @@
     width: 100%;
     height: $mobile-header-height;
     background-color: $module-bg-opacity-9;
-    z-index: 999;
+    z-index: $z-index-header;
 
     .search-mask {
       position: fixed;
-      z-index: 0;
+      z-index: $z-index-normal;
       top: 0;
       left: 0;
       width: 100%;
@@ -101,7 +101,7 @@
     .search {
       position: absolute;
       display: flex;
-      z-index: 9999;
+      z-index: $z-index-normal + 1;
       width: 100%;
       height: $mobile-header-height;
       top: 0;

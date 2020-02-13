@@ -4,9 +4,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { textOverflow, firstUpperCase } from '~/transforms/text'
-import { timeAgo, toYMD, toLocalString } from '~/transforms/time'
-import { getFileCDNUrl, getFileProxyUrl } from '~/transforms/url'
+import { textOverflow, firstUpperCase } from '~/transformers/text'
+import { timeAgo, toYMD, toLocalString } from '~/transformers/time'
+import { getFileCDNUrl, getFileProxyUrl } from '~/transformers/url'
 
 export default {
   textOverflow,
