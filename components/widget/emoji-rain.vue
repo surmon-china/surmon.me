@@ -1,53 +1,74 @@
 <template>
-  <canvas
-    class="global-emoji-rain"
-    ref="emoji"
-    :class="{ active: emoji233333 && emoji233333.kichikuing }"
-  ></canvas>
+  <div id="emoji-rain" :class="{ active: kichikuing }">
+    <canvas v-if="chambering" ref="rainBase" class="rain-base"></canvas>
+  </div>
 </template>
 
 <script>
   import { isBrowser } from '~/environment'
+  import { getFileCDNUrl } from '~/transformers/url'
+
   export default {
-    name: 'global-emoji-rain',
+    name: 'EmojiRain',
     data() {
       return {
-        emoji233333: {}
-      }
-    },
-    methods: {
-      buildEmojiBase() {
-        if (isBrowser) {
-          const emojiBase = this.$refs.emoji
-          emojiBase.width = document.documentElement.clientWidth || document.body.clientWidth
-          emojiBase.height = document.documentElement.clientHeight || document.body.clientHeight
-          this.emoji233333 = new window.Emoji233333({
-            base: emojiBase,
-            scale: 0.7,
-            speed: 12,
-            increaseSpeed: 0.4,
-            density: 5,
-            staggered: true
-          })
-          this.$root.$emoji233333 = this.emoji233333
-        }
+        chambering: false,
+        kichikuing: false
       }
     },
     mounted() {
-      this.buildEmojiBase()
+      if (isBrowser) {
+        window.luanchEmojiRain = options => {
+          if (!this.chambering && !this.kichikuing) {
+            this.chambering = true
+            this.$nextTick(() => {
+              let emoji233333 = null
+              const rainBase = this.$refs.rainBase
+              rainBase.width = document.documentElement.clientWidth || document.body.clientWidth
+              rainBase.height = document.documentElement.clientHeight || document.body.clientHeight
+              emoji233333 = new window.Emoji233333({
+                base: rainBase,
+                scale: 0.7,
+                speed: 12,
+                increaseSpeed: 0.4,
+                density: 5,
+                staggered: true,
+                emoji: getFileCDNUrl('/images/emojis/normal.png'),
+                ...options,
+                onStart: () => {
+                  this.kichikuing = true
+                },
+                onEnded: () => {
+                  this.kichikuing = false
+                  this.chambering = false
+                  this.$nextTick(() => {
+                    emoji233333 = null
+                  })
+                }
+              })
+              emoji233333.launch()
+            })
+          }
+        }
+      }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  .global-emoji-rain {
+  #emoji-rain {
     position: fixed;
-    z-index: -1;
     top: 0;
     left: 0;
+    z-index: $z-index-underground;
 
     &.active {
-      z-index: 99999;
+      z-index: $z-index-top;
+    }
+
+    .rain-base {
+      width: 100%;
+      height: 100%;
     }
   }
 </style>

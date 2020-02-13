@@ -1,12 +1,12 @@
 <template>
   <div class="share-box">
     <a
+      v-for="(social, index) in socials"
+      :key="index"
       rel="nofollow noopener"
       class="share-ejector"
-      :key="index"
       :title="'Share to: ' + social.name"
       :class="social.class || social.name"
-      v-for="(social, index) in socials"
       @click.prevent="shareWindow(social.name, social.url)"
     >
       <i class="iconfont" :class="`icon-${social.icon || social.class || social.name}`"></i>
@@ -18,15 +18,17 @@
 </template>
 
 <script>
+  import appConfig from '~/config/app.config'
+  import { getPageUrl } from '~/transformers/url'
   export default {
-    name: 'share',
+    name: 'Share',
     data() {
       return {
         socials: [
           {
             name: '微信',
             class: 'wechat',
-            url: () => `https://qr.topscan.com/api.php?text=${this.url}&w=300&el=h&m=10`
+            url: () => `/partials/qrcode.html?url=${this.url}`
           },
           {
             name: '微博',
@@ -70,7 +72,7 @@
     },
     computed: {
       url() {
-        return `https://surmon.me${this.$route.fullPath}`
+        return getPageUrl(this.$route.fullPath)
       }
     },
     methods: {
@@ -83,15 +85,17 @@
           if (document) {
             return document.getElementsByName('description')[0].getAttribute('content')
           }
-        } catch (err) { 
+        } catch (error) { 
           return ''
         }
       },
       title() {
         try {
-          if (document) return document.title
-        } catch (err) {
-          return 'Surmon.me'
+          if (document) {
+            return document.title
+          }
+        } catch (error) {
+          return appConfig.meta.title
         }
       },
       shareWindow(social, url) {
@@ -108,7 +112,7 @@
         *
         */
         // 给打开的窗口命名
-        const windowName = '分享 Surmon.me'
+        const windowName = `分享 ${appConfig.meta.title}`
         // 窗口宽度,需要设置
         const awidth = screen.availWidth / 6 * 2
         // 窗口高度,需要设置
@@ -132,11 +136,13 @@
 
 <style lang="scss">
   .share-box {
+    @include visibility-transition();
 
     > .share-ejector {
       cursor: pointer;
       display: inline-block;
       text-align: center;
+      @include background-transition();
 
       &.wechat:hover {
         background-color: rgb(123, 179, 46);
@@ -170,16 +176,8 @@
         background-color: rgb(59, 89, 152);
       }
 
-      &.google-plus:hover {
-        background-color: rgb(221, 75, 57);
-      }
-
       &.linkedin:hover {
         background-color: rgb(0, 123, 181);
-      }
-
-      &.mail:hover {
-        background-color: #5dc732;
       }
 
       &.link:hover {
@@ -187,9 +185,8 @@
       }
 
       &:hover {
-
         > .iconfont {
-          color: #fff;
+          color: $white;
         }
       }
 

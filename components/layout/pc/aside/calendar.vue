@@ -2,7 +2,7 @@
   <div class="calendar-box">
     <!-- 年份 月份 -->
     <div class="months">
-      <span class="item arrow" @click="pickPre(currentYear, currentMonth)">❮</span>
+      <span class="item arrow" @click="pickPrevMonth(currentYear, currentMonth)">❮</span>
       <span class="item year-month">
         <strong class="choose-year">
           <span>{{ currentYear }}</span>
@@ -13,21 +13,18 @@
           <span>{{ isEnLang ? 'D' : '日' }}</span>
         </strong>
       </span>
-      <span class="item arrow" @click="pickNext(currentYear, currentMonth)">❯</span>
+      <span class="item arrow" @click="pickNextMonth(currentYear, currentMonth)">❯</span>
     </div>
     <!-- 星期 -->
-    <ul class="weekdays" v-if="isEnLang">
-      <li :key="index" v-for="(day, index) in weeksEn">{{ day }}</li>
-    </ul>
-    <ul class="weekdays" v-else>
-      <li :key="index" v-for="(day, index) in weeksZh">{{ day }}</li>
+    <ul class="weekdays">
+      <li v-for="(day, index) in weeksText" :key="index">{{ day }}</li>
     </ul>
     <!-- 日期 -->
-    <div class="days-loading" v-if="!days.length">
+    <div v-if="!days.length" class="days-loading">
       <loading-box class="loading" />
     </div>
-    <ul class="days" v-else>
-      <li :key="index" v-for="(day, index) in days">
+    <ul v-else class="days">
+      <li v-for="(day, index) in days" :key="index">
         <!--本月-->
         <span v-if="day.getMonth() + 1 != currentMonth" class="other-month">{{ day.getDate() }}</span>
         <span
@@ -43,9 +40,7 @@
           <!--today-->
           <nuxt-link
             :to="`/date/${ formatDate(day.getFullYear(), day.getMonth() + 1, day.getDate())}`"
-          >
-            {{ day.getDate() }}
-          </nuxt-link>
+          >{{ day.getDate() }}</nuxt-link>
         </span>
       </li>
     </ul>
@@ -54,78 +49,78 @@
 
 <script>
   export default {
-    name: 'aside-calendar',
+    name: 'PcAsideCalendar',
     data() {
       return {
         currentDay: 1,
         currentMonth: 1,
         currentYear: 1970,
         currentWeek: 1,
-        days: [],
-        weeksZh: ['一', '二', '三', '四', '五', '六', '七'],
-        weeksEn: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        days: []
       }
-    },
-    mounted() {
-      this.initData(null)
     },
     computed: {
       isEnLang() {
         return this.$store.getters['global/isEnLang']
+      },
+      weeksText() {
+        return this.isEnLang
+          ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          : ['一', '二', '三', '四', '五', '六', '七']
       }
     },
     methods: {
-      initData(cur) {
-        const date = cur ? new Date(cur) : new Date()
+      initDate(current) {
+        const date = current ? new Date(current) : new Date()
         this.currentDay = date.getDate()
         this.currentYear = date.getFullYear()
         this.currentMonth = date.getMonth() + 1
         this.currentWeek = date.getDay()
         if (this.currentWeek == 0) this.currentWeek = 7
-        const str = this.formatDate(this.currentYear, this.currentMonth, this.currentDay)
-        // console.log("today:" + str + "," + this.currentWeek)
+        const strting = this.formatDate(this.currentYear, this.currentMonth, this.currentDay)
+        // console.log("today:" + strting + "," + this.currentWeek)
         this.days.length = 0
         // 今天是周日，放在第一行第7个位置，前面6个
         for (let i = this.currentWeek - 1; i >= 0; i--) {
-          const d = new Date(str)
-          d.setDate(d.getDate() - i)
-          // console.log("y:" + d.getDate())
-          this.days.push(d)
+          const day = new Date(strting)
+          day.setDate(day.getDate() - i)
+          // console.log("y:" + day.getDate())
+          this.days.push(day)
         }
         for (let i = 1; i <= 35 - this.currentWeek; i++) {
-          const d = new Date(str)
-          d.setDate(d.getDate() + i)
-          this.days.push(d)
+          const day = new Date(strting)
+          day.setDate(day.getDate() + i)
+          this.days.push(day)
         }
       },
-      pick(date) {
-        alert(this.formatDate(date.getFullYear(), date.getMonth() + 1, date.getDate()))
-      },
-      pickPre(year, month) {
+      pickPrevMonth(year, month) {
         //  setDate(0); 上月最后一天
         //  setDate(-1); 上月倒数第二天
         //  setDate(dx) 参数dx为 上月最后一天的前后dx天
-        const d = new Date(this.formatDate(year, month, 1))
-        d.setDate(0)
-        this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
+        const day = new Date(this.formatDate(year, month, 1))
+        day.setDate(0)
+        this.initDate(this.formatDate(day.getFullYear(), day.getMonth() + 1, 1))
       },
-      pickNext(year, month) {
-        const d = new Date(this.formatDate(year, month, 1))
-        d.setDate(35)
-        this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
-      },
-      pickYear(year, month) {
-        alert(year + "," + month)
+      pickNextMonth(year, month) {
+        const day = new Date(this.formatDate(year, month, 1))
+        day.setDate(35)
+        this.initDate(
+          this.formatDate(
+            day.getFullYear(),
+            day.getMonth() + 1,
+            1
+          )
+        )
       },
       // 返回 类似 2016-01-02 格式的字符串
       formatDate(year, month, day) {
-        const y = year
-        let m = month
-        if (m < 10) m = '0' + m
-        let d = day
-        if (d < 10) d = '0' + d
-        return y + '-' + m + '-' + d
+        month = month < 10 ? `0${month}` : month
+        day = day < 10 ? `0${day}` : day
+        return `${year}-${month}-${day}`
       }
+    },
+    mounted() {
+      this.initDate(null)
     }
   }
 </script>
@@ -135,8 +130,8 @@
     min-height: 17em;
 
     > .months {
-      margin-bottom: $gap;
       padding: 0;
+      margin-bottom: $gap;
       overflow: hidden;
       display: flex;
       justify-content: space-between;
@@ -149,6 +144,7 @@
         &.arrow {
           width: 2em;
           background-color: $module-hover-bg;
+          @include background-transition();
           cursor: pointer;
 
           &:hover {
@@ -200,6 +196,7 @@
         > .item {
           display: block;
           border-radius: 100%;
+          @include background-transition();
 
           > a {
             display: block;

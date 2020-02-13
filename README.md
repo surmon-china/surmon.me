@@ -34,7 +34,7 @@
 
 ## Screenshot
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshots/pc-dark.png)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshots/pc.png)
 
 ## Development Setup
 

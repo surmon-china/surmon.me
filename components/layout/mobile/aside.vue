@@ -2,7 +2,7 @@
   <aside class="aside">
     <div class="aside-user">
       <div class="avatar">
-        <img :src="gravatar" alt="Surmon" draggable="false" />
+        <img :src="gravatar" alt="Surmon" draggable="false">
       </div>
       <div class="profile">
         <h3 class="name">Surmon</h3>
@@ -24,10 +24,10 @@
           <span v-text="$i18n.nav.think"></span>
         </nuxt-link>
         <a
-          href="https://github.surmon.me"
           target="_blank"
           class="item"
           rel="external nofollow noopener"
+          :href="appConfig.links.project"
         >
           <i class="iconfont icon-experiment"></i>
           <span v-text="$i18n.nav.project"></span>
@@ -52,36 +52,6 @@
           <i class="iconfont icon-comment"></i>
           <span v-text="$i18n.nav.guestbook"></span>
         </nuxt-link>
-        <a
-          :href="ads.taobao"
-          v-if="false"
-          rel="external nofollow noopener"
-          class="item ad taobao"
-          target="_blank"
-        >
-          <i class="iconfont icon-taobao"></i>
-          <span v-text="$i18n.nav.taobao"></span>
-        </a>
-        <a
-          :href="ads.aliyun"
-          v-if="false"
-          rel="external nofollow noopener"
-          class="item ad aliyun"
-          target="_blank"
-        >
-          <i class="iconfont icon-aliyun"></i>
-          <span v-text="$i18n.nav.aliyun"></span>
-        </a>
-        <a
-          href="https://errend.io"
-          rel="external nofollow noopener"
-          class="item ad errend"
-          v-if="false"
-          target="_blank"
-        >
-          <i class="iconfont icon-debug"></i>
-          <span>Errend.io</span>
-        </a>
         <nuxt-link to="/app" class="item app">
           <i class="iconfont icon-app"></i>
           <span v-text="$i18n.nav.app"></span>
@@ -92,21 +62,22 @@
 </template>
 
 <script>
-  import adConfig from '~/config/ad.config'
-  import { getFileCDNUrl } from '~/transforms/url'
+  import Vue from 'vue'
+  import appConfig from '~/config/app.config'
+  import { getFileCDNUrl } from '~/transformers/url'
 
-  export default {
-    name: 'mobile-aside',
+  export default Vue.extend({
+    name: 'MobileAside',
     mounted() {
       return this.$store.dispatch('global/fetchAdminInfo')
     },
     computed: {
-      ads: () => adConfig.mobile.aside,
+      appConfig: () => appConfig,
       gravatar() {
         return this.$store.state.global.adminInfo.gravatar || getFileCDNUrl('/images/gravatar.jpg')
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
@@ -179,32 +150,6 @@
           text-transform: uppercase;
           font-weight: 700;
           color: $module-bg;
-
-          &.ad {
-            height: 4rem;
-            line-height: 4rem;
-            margin: 0;
-            border-bottom: 1px solid darken($mobile-aside-bg, 5%);
-          }
-
-          &.taobao {
-            color: #ff5000;
-            background: $module-bg;
-            border-top: 1px solid darken($mobile-aside-bg, 5%);
-
-            > .iconfont {
-              color: #ff5000;
-            }
-          }
-
-          &.aliyun {
-            color: black;
-            background: $module-bg;
-
-            > .iconfont {
-              color: black;
-            }
-          }
 
           &.app {
             margin-top: $gap;

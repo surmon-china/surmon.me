@@ -25,14 +25,14 @@ export const mutations = {
 export const actions = {
   fetchList({ commit }) {
     commit('updateFetching', true)
-    return this.$axios.$get(TAG_API_PATH, { params: { cache: 1 }})
+    return this.$axios
+      .$get(TAG_API_PATH, { params: { cache: 1 } })
       .then(response => {
         commit('updateListData', response)
         commit('updateFetching', false)
       })
-      .catch(error => {
+      .catch(() => {
         commit('updateFetching', false)
       })
   }
 }
-

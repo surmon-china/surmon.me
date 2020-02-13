@@ -6,15 +6,11 @@
 
 export const Language = {
   Zh: 'zh',
-  En: 'en',
+  En: 'en'
 }
 
 export const Theme = {
   Default: 'default',
-  Beige: 'beige',
-  Gay: 'gay',
-  Wang: 'wang',
-  Red: 'red',
   Dark: 'dark'
 }
 
@@ -28,17 +24,18 @@ export const Route = {
   Music: 'music',
   About: 'about',
   Vlog: 'vlog',
-  Sitemap: 'sitemap',
+  Sitemap: 'sitemap'
 }
 
 export const ImageExt = {
   Webp: 'webp',
-  Jpg: 'jpeg',
+  Jpg: 'jpeg'
 }
 
 export const StorageField = {
+  Theme: 'theme',
   User: 'user',
-  UserLikeHistory: 'user_like_history',
+  UserLikeHistory: 'user_like_history'
 }
 
 export default {
