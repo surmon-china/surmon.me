@@ -236,7 +236,7 @@
         <div v-if="!isMobile" class="wechat" @mouseenter="handleFollowMe"></div>
       </div>
     </div>
-    <a
+    <!-- <a
       v-if="!isMobile"
       class="about-aliyun-mammon"
       rel="external nofollow noopener"
@@ -244,7 +244,7 @@
       :href="adConfig.url"
     >
       <img :src="adConfig.src">
-    </a>
+    </a> -->
     <div class="about-map">
       <iframe class="iframe" src="/partials/map.html" />
     </div>
