@@ -81,8 +81,8 @@
       </div>
     </div>
     <transition name="fade">
-      <div v-if="!isMobile && isReadyMammon" class="mammon container">
-        <adsense-responsive ins-class="mammon-ins" />
+      <div v-if="!isMobile" class="mammon container">
+        <adsense-service-page />
       </div>
     </transition>
     <div class="step">
@@ -124,16 +124,15 @@
 
 <script>
   import appConfig from '~/config/app.config'
+  import AdsenseServicePage from '~/components/common/adsense/service-page'
   export default {
     name: 'Service',
+    components: {
+      AdsenseServicePage
+    },
     head() {
       return {
         title: `${this.isEnLang ? '' : this.$i18n.nav.service + ' | '}Service`
-      }
-    },
-    data() {
-      return {
-        isReadyMammon: false
       }
     },
     methods: {
@@ -166,11 +165,6 @@
           ? `"Any application that can be written in JavaScript, will eventually be written in JavaScript."`
           : '如果你认为自己的能力足以支撑一位出色、省心、优秀、帅气、完美的的全栈工程师的生产力，请 EMail 我；非常优秀，没有之一'
       }
-    },
-    mounted() {
-      this.$nextTick(() => {
-        this.isReadyMammon = true
-      })
     }
   }
 </script>
@@ -435,11 +429,6 @@
       height: auto;
       margin-bottom: $gap * 2;
       background-color: $module-bg;
-
-      &::v-deep .mammon-ins {
-        width: 100%;
-        height: 16rem;
-      }
     }
 
     > .step {
