@@ -10,27 +10,28 @@ export const meta = {
   description: '凡心所向，素履所往，生如逆旅，一苇以航',
   url: 'surmon.me',
   author: 'Surmon',
-  email: 'i@surmon.me',
+  email: 'i@surmon.me'
+}
+
+export const links = {
+  throwerror: 'https://throwerror.io',
+  foxfinder: 'https://foxfinder.io',
+  project: 'https://github.surmon.me',
+  instagram: 'https://www.instagram.com/surmon666'
 }
 
 export const friendLinks = {
   'SkyRover': '//skyrover.me',
   'JimmyLv': '//blog.jimmylv.info',
-  'Jooger': '//jooger.me',
-}
-
-export const webrtc = {
-  room: 'surmon.me',
-  iceServerUsername: 'surmon',
-  iceServerCredential: 'surmon',
+  // 'Jooger': '//jooger.me'
 }
 
 export const music = {
-  id: '638949385',
+  id: '638949385'
 }
 
 export const fetch = {
-  delay: 888,
+  delay: 888
 }
 
 export const color = {
@@ -39,7 +40,7 @@ export const color = {
 
 export default {
   meta,
-  webrtc,
+  links,
   music,
   fetch,
   color,

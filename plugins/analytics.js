@@ -7,11 +7,9 @@
 import Vue from 'vue'
 import VueAnalytics from 'vue-analytics'
 import { isBrowser, isProdMode } from '~/environment'
-import { getFileCDNUrl } from '~/transforms/url'
+import { getFileCDNUrl } from '~/transformers/url'
 
 if (isBrowser) {
-  
-  // 新版本解决方案
   window.onNuxtReady(app => {
     Vue.use(VueAnalytics, {
       id: 'UA-84887611-3',

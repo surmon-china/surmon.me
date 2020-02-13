@@ -5,15 +5,14 @@
     </div>
     <div id="app-main" :class="sidebarOpenClass">
       <div
-        class="close-mask"
         v-if="onMobileSidebar"
+        class="close-mask"
         @click="closeMobileSidebar"
       />
       <header-view />
-      <emoji-rain v-if="!onPowerSavingMode" />
       <main class="main-container">
         <div id="main-content" class="main-content">
-          <nuxt :nuxtChildKey="$route.name" keep-alive />
+          <nuxt :nuxt-child-key="$route.name" keep-alive />
         </div>
       </main>
       <footer-view />
@@ -26,17 +25,15 @@
   import HeaderView from './header'
   import FooterView from './footer'
   import AsideView from './aside'
-  import EmojiRain from '~/components/widget/emoji-rain'
   export default {
-    name: 'mobile-app',
+    name: 'MobileApp',
     components: {
       HeaderView,
       FooterView,
-      AsideView,
-      EmojiRain
+      AsideView
     },
     computed: {
-      ...mapState('global', ['onMobileSidebar', 'onPowerSavingMode']),
+      ...mapState('global', ['onMobileSidebar']),
       sidebarOpenClass() {
         return { open: this.onMobileSidebar }
       },
@@ -54,6 +51,7 @@
 <style lang="scss" scoped>
   #app-mobile {
     color: $text;
+    background-color: $module-hover-bg;
     $aside-width: 68%;
 
     #app-aside {
@@ -62,7 +60,6 @@
       top: 0;
       left: 0;
       height: 100%;
-      z-index: 9999;
       transform: translate3d(-100%, 0 ,0);
       transition: $mobile-aisde-transition;
       background-color: $mobile-aside-bg;
@@ -84,7 +81,7 @@
         height: 100%;
         right: 0;
         bottom: 0;
-        z-index: 99999;
+        z-index: $z-index-top;
         background-color: $module-bg-opacity-5;
       }
 

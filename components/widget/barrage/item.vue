@@ -3,11 +3,12 @@
     class="barrage-item"
     :style="styles"
     :class="[
-        `size-${barrage.style.size}`,
-        `color-${barrage.style.color}`,
-        playing ? 'playing' : '',
-        played ? 'played' : ''
-      ]"
+      `barrage-size-${barrage.style.size}`,
+      `barrage-color-${barrage.style.color}`,
+      barrage.outdated && 'outdated',
+      playing && 'playing',
+      played && 'played'
+    ]"
   >
     <span class="gravatar"></span>
     <span class="content" v-text="barrage.text"></span>
@@ -16,7 +17,7 @@
 
 <script>
   export default {
-    name: 'barrage-item',
+    name: 'BarrageItem',
     props: {
       id: {
         type: Number
@@ -73,9 +74,7 @@
         return `${parseInt(topPre, 0)}%`
       },
       startAnimation() {
-
         this.$nextTick(() => {
-
           // 开始动画
           this.timers.transform = setTimeout(() => {
             this.playing = true
@@ -103,7 +102,13 @@
     right: 0px;
     display: block;
     position: absolute;
+    will-change: transform;
     transform: translate3d(100%, 0, 0);
+
+    &.outdated {
+      opacity: 0.3;
+      border: 1px dotted;
+    }
 
     &.playing {
       transform: translate3d(-110vw, 0, 0);

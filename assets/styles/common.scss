@@ -1,28 +1,10 @@
 
 body {
-  color: $text;
+  overflow-x: hidden;
   font-family: $font-family-base;
   font-size: $font-size-base;
   line-height: $line-height-base;
-  padding-top: $mobile-header-height + $lg-gap;
   -webkit-font-smoothing: antialiased;
-
-  &.mobile {
-    padding-top: 0;
-    overflow-x: hidden;
-    background-color: rgba(197, 197, 197, 0.5);
-  }
-}
-
-*, *:hover {
-  transition:
-    background-color $transition-time-fast linear,
-    color $transition-time-fast linear,
-    border-color $transition-time-fast linear,
-    filter $transition-time-fast linear,
-    opacity $transition-time-fast linear,
-    visibility $transition-time-fast linear,
-    transform $transition-time-fast linear;
 }
 
 .container {
@@ -49,24 +31,24 @@ input {
   }
 }
 
-input:-webkit-autofill, 
-textarea:-webkit-autofill, 
+input:-webkit-autofill,
+textarea:-webkit-autofill,
 select:-webkit-autofill {
-  box-shadow: 0 0 0px 1000px rgb(230, 230, 230) inset; 
+  box-shadow: 0 0 0px 1000px rgb(230, 230, 230) inset;
 }
 
 ::selection {
-  background: $primary; 
+  background: $primary;
   color: $text-reversal;
 }
 
 ::-moz-selection {
-  background: $primary; 
+  background: $primary;
   color: $text-reversal;
 }
 
 ::-webkit-selection {
-  background: $primary; 
+  background: $primary;
   color: $text-reversal;
 }
 
@@ -83,15 +65,15 @@ select:-webkit-autofill {
 ::-webkit-scrollbar-thumb {
   border-radius: 0;
   background-color: rgba(95, 95, 95, .4);
-  transition: background-color $transition-time-fast;
+  @include background-transition();
 
   &:hover {
     background-color: rgba(95, 95, 95, .7);
   }
 }
+
 // filters
 .filter {
-
   &.motion-blur-horizontal {
     filter: force-source-url('/images/motion-blur-filter.svg#horizontal');
   }
@@ -117,7 +99,7 @@ select:-webkit-autofill {
 
   .mammon-wrapper {
     position: relative;
-  
+
     &:before {
       content: '向我的衣食父母鞠躬';
       position: absolute;
@@ -128,7 +110,7 @@ select:-webkit-autofill {
       top: 50%;
       left: 50%;
       width: 100%;
-      z-index: -1;
+      z-index: $z-index-underground;
       letter-spacing: .2em;
       transform: translate(-50%, -50%);
     }
@@ -136,6 +118,10 @@ select:-webkit-autofill {
 }
 
 // popup component
+#iframe-popup {
+  @include backdrop-blur();
+}
+
 #image-popup,
 #iframe-popup {
   position: fixed;
@@ -144,23 +130,24 @@ select:-webkit-autofill {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 999;
+  z-index: $z-index-top;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  transition: all .08s;
-  background-color: transparent;
+  background-color: rgba($black-light, 0.5);
   @include hidden();
-  // @include backdrop-blur();
+  @include visibility-transition();
+
+  &.display {
+    @include visible();
+  }
 
   > img,
   > iframe {
-    transform: scale(.8);
-    transition: all .08s;
     min-width: 10%;
     min-height: 10%;
-    background-color: rgba(255, 255, 255, 0.3);
-    border: $sm-gap solid rgba(210, 210, 210, 0.5);
+    background-color: rgba($white, 0.3);
+    border: $sm-gap solid rgba($grey, 0.3);
 
     &.sponsor {
       width: 600px;
@@ -177,27 +164,15 @@ select:-webkit-autofill {
     width: 90%;
     height: 90%;
   }
-
-  &.display {
-    @include visible();
-    transition: all .08s;
-    background-color: rgba(80, 80, 80, 0.5);
-
-    > img,
-    > iframe {
-      transform: scale(1);
-      transition: all .08s;
-    }
-  }
 }
 
 // swiper
 .swiper-wrapper {
-  z-index: 1;
+  z-index: $z-index-normal + 1;
 }
 
 .swiper-pagination {
-  z-index: 2;
+  z-index: $z-index-normal + 2;
 }
 
 .swiper-pagination-bullet {
@@ -211,7 +186,7 @@ select:-webkit-autofill {
 
 .swiper-button-prev,
 .swiper-button-next {
-  z-index: 3;
+  z-index: $z-index-normal + 3;
 }
 
 // no used

@@ -14,8 +14,11 @@
 
 <script>
   export default {
+    name: 'Error',
     layout: 'empty',
-    props: ['error'],
+    props: {
+      error: Object
+    },
     mounted() {
       this.$store.commit('global/updateThreeColumnsState', true)
     },
@@ -33,7 +36,7 @@
     height: 100%;
     position: fixed;
     overflow: hidden;
-    z-index: 999;
+    z-index: $z-index-top;
     text-align: center;
     display: flex;
     align-items: center;
@@ -52,7 +55,6 @@
     }
 
     > .error-content {
-
       > .error-code,
       > .error-link,
       > .error-wrapper-message {
@@ -61,7 +63,6 @@
       }
 
       .link {
-
         &:hover {
           border-bottom: 1px solid;
         }
@@ -75,9 +76,8 @@
       }
 
       > .error-wrapper-message {
-
         > .error-message {
-          font-family: 'webfont-bolder', 'DINRegular';
+          font-family: 'webfont-bolder', DINRegular;
           font-weight: normal;
           margin-top: 0;
         }

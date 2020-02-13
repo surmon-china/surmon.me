@@ -23,14 +23,12 @@ export const mutations = {
   },
   updateVideoData(state, action) {
     state.video.data = action.result
-  },
+  }
 }
 
 export const actions = {
-
   // 获取视频列表
   fetchVideos({ commit, state }, params = {}) {
-
     params.per_page = params.per_page || 66
 
     // return data when exists
@@ -40,11 +38,12 @@ export const actions = {
 
     // 不存在则请求新数据
     commit('updateVideoFetching', true)
-    return this.$axios.$get(VLOG_API_PATH, { params })
+    return this.$axios
+      .$get(VLOG_API_PATH, { params })
       .then(response => {
         commit('updateVideoData', response)
         commit('updateVideoFetching', false)
       })
-      .catch(error => commit('updateVideoFetching', false))
-  },
+      .catch(() => commit('updateVideoFetching', false))
+  }
 }

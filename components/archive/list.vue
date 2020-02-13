@@ -2,27 +2,27 @@
   <div class="articles" :class="{ mobile: isMobile }">
 
     <!-- 非首页列表头 -->
-    <div class="article-list-header" v-if="!isIndexRoute">
+    <div v-if="!isIndexRoute" class="article-list-header">
       <list-header />
     </div>
 
     <!-- 广告啦 -->
     <transition name="module">
-      <component class="article-list-mammon" :is="isMobile ? 'adsense-archive-mobile' : 'adsense-archive'" v-if="renderAd" />
+      <component :is="isMobile ? 'adsense-archive-mobile' : 'adsense-archive'" v-if="renderAd" class="article-list-mammon" />
     </transition>
 
     <!-- 列表 -->
     <div class="article-list">
       <transition name="module" mode="out-in">
-        <transition-group key="list" name="fade" tag="div" v-if="article.data.data && article.data.data.length">
+        <transition-group v-if="article.data.data && article.data.data.length" key="list" name="fade" tag="div">
           <list-item
+            v-for="articleItem in article.data.data"
             :key="articleItem.id"
             :article="articleItem"
             @click.native="toDetail(articleItem)"
-            v-for="articleItem in article.data.data"
           />
         </transition-group>
-        <empty-box key="empty" class="article-empty-box" v-else>
+        <empty-box v-else key="empty" class="article-empty-box">
           <slot>{{ $i18n.text.article.empty }}</slot>
         </empty-box>
       </transition>
@@ -30,16 +30,15 @@
 
     <!-- 加载更多 -->
     <div class="article-load">
-      <color-block-box :left="btnColorBlockLeft" border="left" color="red" />
-      <button class="btn-loadmore" @click="$emit('loadmore')" :disabled="article.fetching || !isCanLoadMore">
+      <button class="loadmore-button" :disabled="article.fetching || !isCanLoadMore" @click="$emit('loadmore')">
         <span class="icon">
           <i class="iconfont icon-peachblossom"></i>
         </span>
-        <span class="text">
-          <span v-if="!article.fetching && isCanLoadMore" v-text="$i18n.text.article.loadmore"></span>
-          <span v-else-if="article.fetching && isCanLoadMore" v-text="$i18n.text.article.loading"></span>
-          <span v-else-if="!isCanLoadMore" v-text="$i18n.text.article.nomore"></span>
-        </span>
+        <div class="text">
+          <span v-if="!article.fetching && isCanLoadMore">{{ $i18n.text.article.loadmore }}</span>
+          <span v-else-if="article.fetching && isCanLoadMore">{{ $i18n.text.article.loading }}</span>
+          <span v-else-if="!isCanLoadMore">{{ $i18n.text.article.nomore }}</span>
+        </div>
       </button>
     </div>
   </div>
@@ -48,10 +47,11 @@
 <script>
   import ListItem from './item.vue'
   import ListHeader from './header.vue'
-  import underscore from '~/utils/underscore-simple'
   import { isIndexRoute } from '~/services/route-validator'
+  import { getArticleDetailRoute } from '~/transformers/route'
+
   export default {
-    name: 'article-list',
+    name: 'ArticleList',
     components: {
       ListItem,
       ListHeader
@@ -82,13 +82,10 @@
         return this.isMobile ? 60 : 75
       }
     },
-    activated() {
-      this.updateAd()
-    },
     methods: {
       toDetail(article) {
         if (this.isMobile) {
-          this.$router.push(`/article/${article.id}`)
+          this.$router.push(getArticleDetailRoute(article.id))
         }
       },
       updateAd() {
@@ -97,6 +94,9 @@
           this.renderAd = true
         })
       }
+    },
+    activated() {
+      this.updateAd()
     }
   }
 </script>
@@ -127,7 +127,6 @@
       margin-bottom: $lg-gap;
       position: relative;
       overflow: hidden;
-      @include module-blur-bg();
     }
 
     > .article-list-mammon {
@@ -172,43 +171,56 @@
     }
 
     > .article-load {
-      position: relative;
       overflow: hidden;
-      z-index: 0;
+      z-index: $z-index-normal;
 
-      > .btn-loadmore {
+      > .loadmore-button {
         display: flex;
         justify-content: space-between;
         width: 100%;
         height: $block-button-height;
         line-height: $block-button-height;
-        padding: 0 ($gap * 2);
+        padding-left: $gap * 2;
         color: $text-reversal;
         background-color: $module-bg;
+        @include background-transition();
+
+        &[disabled] {
+          opacity: .6;
+        }
+
+        .iconfont {
+          color: $text;
+          @include color-transition();
+        }
 
         &:hover {
           background-color: $module-hover-bg;
-        }
 
-        &[disabled] {
-          opacity: .9;
-          background-color: $module-bg-opacity-5;
-        }
-
-        @keyframes loadmore-btn-icon-color {
-          0% { color: $red }
-          100% { color: $accent }
-        }
-
-        > .icon {
-          > .iconfont {
-            animation: loadmore-btn-icon-color 2s infinite;
+          .iconfont {
+            color: $red
           }
         }
 
         > .text {
+          position: relative;
+          padding: 0 ($gap * 2) 0 ($gap * 3);
           text-transform: uppercase;
-          font-family: 'webfont-bolder', 'DINRegular';
+          font-family: 'webfont-bolder', DINRegular;
+          background: $red;
+
+          &::before {
+            $size: 1rem;
+            content: '';
+            display: block;
+            position: absolute;
+            width: $size;
+            height: 200%;
+            top: -50%;
+            left: -($size / 2);
+            background: $body-bg;
+            transform: rotate(18deg);
+          }
         }
       }
     }
