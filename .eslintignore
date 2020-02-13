@@ -12,9 +12,8 @@ static/*.js
 .nuxt/*.js
 .nuxt/*.vue
 
-utils/underscore-simple.js
+utils/scroll-to-anywhere.ts
 
 plugins/ga.js
-plugins/webrtc.js
 plugins/copy-right.js
 plugins/baidu-seo-push.js

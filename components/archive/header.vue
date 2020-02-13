@@ -1,42 +1,65 @@
 <template>
-  <div class="header-box" :class="{ mobile: isMobile }">
-    <div
-      class="background"
-      :style="{
-        'background-color': currentBackgroundColor,
-        'background-image': `url(${currentBackgroundImage})`
-      }"
-    ></div>
+  <div
+    class="header-box"
+    :class="{
+      mobile: isMobile,
+      dark: isDarkTheme
+    }"
+    :style="{
+      'background-color': currentBackgroundColor,
+      'background-image': `url(${currentBackgroundImage})`
+    }"
+  >
     <div class="logo-box">
       <p class="logo">
         <transition name="module" mode="out-in">
           <!-- data -->
-          <i class="iconfont icon-clock" key="date" v-if="currentDate"></i>
+          <i v-if="currentDate" key="date" class="iconfont icon-clock"></i>
           <!-- tag -->
-          <i class="iconfont" key="tag" v-else-if="currentTag" :class="currentTagIconClass"></i>
+          <i
+            v-else-if="currentTag"
+            key="tag"
+            class="iconfont"
+            :class="currentTagIconClass"
+          ></i>
           <!-- category -->
-          <i class="iconfont" key="category" v-else-if="currentCategory" :class="currentCategoryIconClass"></i>
+          <i
+            v-else-if="currentCategory"
+            key="category"
+            class="iconfont"
+            :class="currentCategoryIconClass"
+          ></i>
           <!-- search -->
-          <i class="iconfont icon-search" key="search" v-else-if="currentKeyword"></i>
+          <i
+            v-else-if="currentKeyword"
+            key="search"
+            class="iconfont icon-search"
+          ></i>
         </transition>
       </p>
     </div>
     <div class="title-box">
       <transition name="module" mode="out-in">
         <!-- category -->
-        <h5 class="title" :key="`category-${currentCategory.description}`" v-if="currentCategory">
+        <h5
+          v-if="currentCategory"
+          :key="`category-${currentCategory.description}`"
+          class="title"
+        >
           <span>{{ currentCategory.description || '...' }}</span>
         </h5>
-
         <!-- tag -->
-        <h5 class="title" :key="`tag-${currentTag.name}`" v-else-if="currentTag">
+        <h5
+          v-else-if="currentTag"
+          :key="`tag-${currentTag.name}`"
+          class="title"
+        >
           <span>{{ currentTag.name }}</span>
           <span>&nbsp;-&nbsp;</span>
           <span>{{ currentTag.description || '...' }}</span>
         </h5>
-
         <!-- date -->
-        <h5 class="title" :key="`date-${currentDate}`" v-else-if="currentDate">
+        <h5 v-else-if="currentDate" :key="`date-${currentDate}`" class="title">
           <span v-if="isEnLang">
             <span>{{ currentDate }}&nbsp;</span>
             <span>articles</span>
@@ -47,9 +70,12 @@
             <span>的所有文章</span>
           </span>
         </h5>
-
         <!-- search -->
-        <h5 class="title" :key="`search-${currentKeyword}`" v-else-if="currentKeyword">
+        <h5
+          v-else-if="currentKeyword"
+          :key="`search-${currentKeyword}`"
+          class="title"
+        >
           <span v-if="isEnLang">
             <span>"{{ currentKeyword }}"</span>
             <span>related articles</span>
@@ -68,33 +94,27 @@
 </template>
 
 <script>
-  import { getFileCDNUrl } from '~/transforms/url'
+  import { getFileCDNUrl } from '~/transformers/url'
   export default {
-    name: 'article-list-header',
-    methods: {
-      getExtendsValue(target, key) {
-        if (!target || !target.extends.length) {
-          return null
-        }
-        const targetExtend = target.extends.find(t => Object.is(t.name, key))
-        return targetExtend ? targetExtend.value : null
-      }
-    },
+    name: 'ArticleListHeader',
     computed: {
       isEnLang() {
         return this.$store.getters['global/isEnLang']
       },
+      isDarkTheme() {
+        return this.$store.getters['global/isDarkTheme']
+      },
       currentTag() {
-        return this.$store.state.tag.data.find((tag, index, arr) => {
-          return Object.is(tag.slug, this.$route.params.tag_slug)
-        })
+        return this.$store.state.tag.data.find(
+          tag => tag.slug === this.$route.params.tag_slug
+        )
       },
       currentTagIconClass() {
         return this.getExtendsValue(this.currentTag, 'icon') || 'icon-tag'
       },
       currentCategory() {
-        return this.$store.state.category.data.find((category, index, arr) => {
-          return Object.is(category.slug, this.$route.params.category_slug)
+        return this.$store.state.category.data.find(category => {
+          return category.slug === this.$route.params.category_slug
         })
       },
       currentCategoryIconClass() {
@@ -108,7 +128,7 @@
       currentBackgroundColor() {
         const tagBg = this.getExtendsValue(this.currentTag, 'bgcolor')
         const cateBg = this.getExtendsValue(this.currentCategory, 'bgcolor')
-        return tagBg || cateBg || 'transparent'
+        return tagBg || cateBg || null
       },
       currentDate() {
         return this.$route.params.date
@@ -119,6 +139,15 @@
       isMobile() {
         return this.$store.state.global.isMobile
       }
+    },
+    methods: {
+      getExtendsValue(target, key) {
+        if (!target || !target.extends.length) {
+          return null
+        }
+        const targetExtend = target.extends.find(t => t.name === key)
+        return targetExtend ? targetExtend.value : null
+      }
     }
   }
 </script>
@@ -128,8 +157,17 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    width: 100%;
     height: 16.4rem;
+    background-size: cover;
+    background-blend-mode: hue;
+    background-color: $module-hover-bg-darken-10;
+    background-position: center center;
     color: $text-reversal;
+
+    &.dark {
+      color: $text;
+    }
 
     &.mobile {
       height: 12rem;
@@ -147,39 +185,6 @@
       }
     }
 
-    @keyframes logo-animate {
-      0% {
-        opacity: 1;
-        transform: scale(1);
-      }
-      33% {
-        opacity: .8;
-        transform: scale(.9) rotateY(0deg);
-      }
-      66% {
-        opacity: .8;
-        transform: scale(.9) rotateY(360deg);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    > .background {
-      background-size: cover;
-      background-blend-mode: darken;
-      background-color: $module-bg;
-      background-position: center center;
-      position: absolute;
-      display: block;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: -1;
-    }
-
     > .logo-box {
       height: 12rem;
       overflow: hidden;
@@ -188,6 +193,21 @@
         margin: 0;
         line-height: 12rem;
         text-align: center;
+
+        @keyframes logo-animate {
+          0% {
+            opacity: 1;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.8;
+            transform: scale(0.9);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
 
         .iconfont {
           font-size: 6em;

@@ -1,48 +1,48 @@
 <template>
   <div class="carrousel" :class="{ mobile: isMobile }">
     <transition name="module" mode="out-in">
-      <empty-box class="article-empty-box" key="empty" v-if="!articleList.length">
+      <empty-box v-if="!articleList.length" key="empty" class="article-empty-box">
         <slot>{{ $i18n.text.article.empty }}</slot>
       </empty-box>
       <div
-        key="swiper"
-        class="swiper index"
-        v-swiper:swiper="swiperOption"
         v-else-if="renderSwiper"
+        key="swiper"
+        v-swiper:swiper="swiperOption"
+        class="swiper index"
         @transitionStart="handleSwiperTransitionStart"
         @transitionEnd="handleSwiperTransitionEnd"
       >
         <div class="swiper-wrapper">
           <div
+            v-for="(_article, index) in articleList.slice(0, 9)"
             :key="index"
             class="swiper-slide slide-item"
-            v-for="(article, index) in articleList.slice(0, 9)"
           >
             <div
               class="content filter"
-              :class="{ 'motion-blur-horizontal': transitioning }"
+              :class="{ 'motion-blur-horizontal': isEnableFilterStyle(index) }"
             >
-              <template v-if="article.ad">
+              <template v-if="_article.ad">
                 <a
-                  :href="article.url"
+                  :href="_article.url"
                   target="_blank"
                   rel="external nofollow noopener"
                   class="link"
                 >
-                  <img :src="article.src" :alt="article.title">
-                  <span class="title">{{ article.title }}</span>
+                  <img :src="_article.src" :alt="_article.title">
+                  <span class="title">{{ _article.title }}</span>
                 </a>
               </template>
               <template v-else>
-                <nuxt-link :to="`/article/${article.id}`" class="link">
-                  <img :src="humanizeThumb(article.thumb)" :alt="article.title">
-                  <span class="title">{{ article.title }}</span>
+                <nuxt-link :to="`/article/${_article.id}`" class="link">
+                  <img :src="humanizeThumb(_article.thumb)" :alt="_article.title">
+                  <span class="title">{{ _article.title }}</span>
                 </nuxt-link>
               </template>
             </div>
           </div>
         </div>
-        <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets"></div>
+        <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets" />
       </div>
     </transition>
   </div>
@@ -50,11 +50,11 @@
 
 <script>
   import { mapState } from 'vuex'
-  import { getFileCDNUrl } from '~/transforms/url'
+  import { getFileCDNUrl } from '~/transformers/url'
   import adConfig from '~/config/ad.config'
 
   export default {
-    name: 'index-carrousel',
+    name: 'IndexCarrousel',
     props: {
       article: {
         type: Object
@@ -79,7 +79,7 @@
           // 禁用 PC 拖动手指样式
           grabCursor: false,
           // 警用 PC 拖动
-          simulateTouch : false,
+          simulateTouch: false,
           preloadImages: false,
           lazy: true
         }
@@ -88,8 +88,12 @@
     computed: {
       ...mapState('global', ['imageExt', 'isMobile']),
       articleList() {
-        const { index, ...otherConfig } = adConfig.pc.carrousel
         const articles = [...this.article.data.data].slice(0, 9)
+        if (!adConfig.carrousel) {
+          return articles
+        }
+
+        const { index, ...otherConfig } = adConfig.carrousel
         articles.length && articles.splice(index, 0, {
           ad: true,
           ...otherConfig
@@ -97,7 +101,17 @@
         return articles
       }
     },
+    activated() {
+      this.renderSwiper = true
+      this.handleSwiperTransitionEnd()
+    },
+    deactivated() {
+      this.renderSwiper = false
+    },
     methods: {
+      isEnableFilterStyle(index) {
+        return this.transitioning && this.swiper && this.swiper.activeIndex === index
+      },
       humanizeThumb(thumb) {
         if (!thumb) {
           return getFileCDNUrl(`/images/${this.isMobile ? 'mobile-' : ''}thumb-carrousel.jpg`)
@@ -113,24 +127,14 @@
       handleSwiperTransitionEnd() {
         this.transitioning = false
       }
-    },
-    activated() {
-      this.renderSwiper = true
-      this.handleSwiperTransitionEnd()
-    },
-    deactivated() {
-      this.renderSwiper = false
     }
   }
 </script>
 
 <style lang="scss">
   .index.swiper {
-
     .swiper-pagination {
-
       .swiper-pagination-bullet {
-
         &.swiper-pagination-bullet-active {
           width: 2rem;
           border-radius: 10px;
@@ -157,9 +161,7 @@
       height: $mobile-carrousel-height;
 
       > .swiper {
-
         .slide-item {
-
           > .content {
             height: $mobile-carrousel-height;
 
@@ -173,10 +175,8 @@
     }
 
     > .swiper {
-
       .slide-item {
-
-        > .content {
+        .content {
           width: 100%;
           height: $pc-carrousel-height;
           position: relative;
@@ -191,7 +191,7 @@
           img {
             width: 100%;
             transform: scale(1);
-            transition: transform .88s;
+            transition: transform $transition-time-slow;
 
             &:hover {
               transform: scale(1.06);
@@ -213,10 +213,13 @@
             border-radius: 1px;
             letter-spacing: .3px;
             max-width: 75%;
-            @include text-overflow;
-
             -webkit-background-clip: text;
             background: linear-gradient(90deg, transparent 0%, $module-bg 2em, $module-bg-opacity-9, $text-reversal);
+            transition:
+              background-color $transition-time-fast,
+              padding $transition-time-fast,
+              color $transition-time-fast;
+            @include text-overflow;
 
             &:hover {
               color: $text-darken;

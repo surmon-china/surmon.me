@@ -32,17 +32,18 @@ export const mutations = {
 }
 
 export const actions = {
-
   // 获取地图文章列表
   fetchArticles({ commit }, params) {
     commit('updateArticleListFetching', true)
-    return this.$axios.$get(ARTICLE_API_PATH, { params })
+    return this.$axios
+      .$get(ARTICLE_API_PATH, { params })
       .then(response => {
         commit(`updateArticleListData`, response.result)
         commit('updateArticleListFetching', false)
       })
       .catch(error => {
+        console.warn('HTTP Sitemap filed:', error)
         commit('updateArticleListFetching', false)
       })
-  },
+  }
 }

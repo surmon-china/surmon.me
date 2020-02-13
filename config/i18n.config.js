@@ -33,7 +33,7 @@ export default {
         en: 'code'
       },
       project: {
-        zh: '丹室',
+        zh: '丹青阁',
         en: 'project'
       },
       vlog: {
@@ -57,7 +57,7 @@ export default {
         en: 'service'
       },
       guestbook: {
-        zh: '百鸣苑',
+        zh: '四方馆',
         en: 'guestbook'
       },
       taobao: {
@@ -116,12 +116,6 @@ export default {
           en: 'Hire me on upwork.com',
         }
       },
-      about: {
-        sponsorMe: {
-          zh: '💰 一口酒钱',
-          en: '💰 Sponsor me'
-        }
-      },
       device: {
         android: {
           zh: 'Android',
@@ -132,18 +126,22 @@ export default {
           en: 'IOS'
         }
       },
-      webrtc: {
-        zh: '视频会议',
-        en: ' WebRTC'
+      webcam: {
+        zh: '见相',
+        en: 'Webcam'
+      },
+      myMap: {
+        zh: '问世',
+        en: 'Liberty, love!'
       },
       barrage: {
         name: {
-          zh: '弹幕吐槽',
+          zh: '畅言',
           en: 'Barrage'
         }
       },
       feedback: {
-        zh: '邮件反馈',
+        zh: '反馈',
         en: 'Feedback'
       },
       totop: {

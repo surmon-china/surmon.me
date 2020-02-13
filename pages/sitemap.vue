@@ -4,8 +4,8 @@
       <div class="module articles">
         <h4 class="title" v-text="$i18n.text.article.name"></h4>
         <p v-if="!articles.length" v-text="$i18n.text.article.empty"></p>
-        <ul class="article-list" v-else>
-          <li class="item" :key="index" v-for="(article, index) in articles">
+        <ul v-else class="article-list">
+          <li v-for="(article, index) in articles" :key="index" class="item">
             <p class="item-content">
               <a class="link" :href="`/article/${article.id}`" target="_blank" :title="article.title">
                 <span class="sign">「</span>
@@ -33,8 +33,8 @@
       <div class="module categories">
         <h4 class="title" v-text="$i18n.text.category.name"></h4>
         <p v-if="!categories.length" v-text="$i18n.text.article.empty"></p>
-        <ul class="categories-list" v-else>
-          <li class="item" :key="index" v-for="(category, index) in categories">
+        <ul v-else class="categories-list">
+          <li v-for="(category, index) in categories" :key="index" class="item">
             <p class="item-content">
               <a
                 class="name"
@@ -50,10 +50,10 @@
         </ul>
       </div>
       <div class="module tags">
-        <h4 class="title" v-text="$i18n.text.tag.name">tags</h4>
-        <p v-if="!tags.length" v-text="$i18n.text.article.empty">暂无标签</p>
-        <ul class="tag-list" v-else>
-          <li class="item" :key="index" v-for="(tag, index) in tags">
+        <h4 class="title" v-text="$i18n.text.tag.name"></h4>
+        <p v-if="!tags.length" v-text="$i18n.text.article.empty"></p>
+        <ul v-else class="tag-list">
+          <li v-for="(tag, index) in tags" :key="index" class="item">
             <a
               target="_blank"
               :href="`/tag/${tag.slug}`"
@@ -64,7 +64,7 @@
         </ul>
       </div>
       <div class="module pages">
-        <h4 class="title" v-text="$i18n.text.page.name">pages</h4>
+        <h4 class="title" v-text="$i18n.text.page.name"></h4>
         <ul class="page-list">
           <li class="item">
             <a href="/" target="_blank" v-text="$i18n.nav.home" />
@@ -79,9 +79,8 @@
             <a
               target="_blank"
               rel="external nofollow noopener"
-              href="https://github.surmon.me"
-              v-text="$i18n.nav.project"
-            />
+              :href="appConfig.links.project"
+            >{{ $i18n.nav.project }}</a>
           </li>
           <li class="item">
             <a href="/service" target="_blank" v-text="$i18n.nav.service" />
@@ -100,8 +99,10 @@
 
 <script>
   import { mapState } from 'vuex'
+  import appConfig from '~/config/app.config'
+
   export default {
-    name: 'sitemap',
+    name: 'Sitemap',
     head() {
       return {
         title: `${this.isEnLang ? '' : this.$i18n.nav.map + ' | '}Sitemap`
@@ -111,15 +112,16 @@
       return store.dispatch('sitemap/fetchArticles', { per_page: 666 })
     },
     computed: {
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
-      },
       ...mapState({
         tags: state => state.tag.data,
         categories: state => state.category.data,
         articles: state => state.sitemap.articles.data,
         isMobile: state => state.global.isMobile,
-      })
+      }),
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
+      },
+      appConfig: () => appConfig
     }
   }
 </script>
@@ -138,11 +140,8 @@
         padding-left: 1.666rem;
 
         &.article-list {
-
           > .item {
-
             > .item-content {
-
               > .link {
                 display: flex;
                 border: none;
@@ -205,7 +204,6 @@
           list-style: square;
 
           > .item {
-
             > .item-content {
               margin-bottom: 1.2em;
 

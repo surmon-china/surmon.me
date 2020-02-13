@@ -3,42 +3,60 @@
     <div class="header-container container">
       <div class="header-header">
         <img :src="'/images/logo.svg' | byCDN" class="header-logo">
-        <span class="header-slogan" v-text="$i18n.text.slogan"></span>
+        <span class="header-slogan">{{ $i18n.text.slogan }}</span>
         <nuxt-link to="/" class="header-link" :title="$i18n.text.slogan" />
       </div>
       <div class="header-player">
         <div class="panel">
-          <button class="prev-song btn" @click="prevSong" :disabled="!playerState.ready">
+          <button
+            class="prev-song button"
+            :disabled="!musicPlayer.ready || musicPlayer.index === 0"
+            @click="musicPlayer.prevSong"
+          >
             <i class="iconfont icon-music-prev"></i>
           </button>
-          <button class="toggle-play btn" @click="togglePlay" :disabled="!playerState.ready">
-            <i class="iconfont" :class="playerState.playing ? 'icon-music-pause' : 'icon-music-play'"></i>
+          <button
+            class="toggle-play button"
+            :disabled="!musicPlayer.ready"
+            @click="musicPlayer.togglePlay"
+          >
+            <i
+              class="iconfont"
+              :class="musicPlayer.playing ? 'icon-music-pause' : 'icon-music-play'"
+            ></i>
           </button>
-          <button class="next-song btn" @click="nextSong" :disabled="!playerState.ready">
+          <button
+            class="next-song button"
+            :disabled="!musicPlayer.ready"
+            @click="musicPlayer.nextSong"
+          >
             <i class="iconfont icon-music-next"></i>
           </button>
-          <button class="muted-toggle btn" @click="toggleMuted" :disabled="!playerState.ready">
-            <i class="iconfont" :class="playerState.muted ? 'icon-music-muted' : 'icon-music-volume'"></i>
+          <button
+            class="muted-toggle button"
+            :disabled="!musicPlayer.ready"
+            @click="musicPlayer.toggleMuted"
+          >
+            <i
+              class="iconfont"
+              :class="musicPlayer.muted ? 'icon-music-muted' : 'icon-music-volume'"
+            ></i>
           </button>
         </div>
-        <div class="song" v-if="currentSong">
+        <div v-if="currentSong" class="song">
           <nuxt-link
             to="/music"
             class="link"
-            :title="`${currentSong.name} / ${currentSong.album.name || 'unknow'}`"
+            :title="`${currentSong.name} / ${currentSong.album || 'unknow'}`"
           >
-            <span>{{ currentSong.name }}</span>
-            <span>By</span>
-            <span :key="index" v-for="(artist, index) in currentSong.artists" v-text="artist.name"></span>
-            <span>/</span>
-            <span>{{ currentSong.album.name || 'unknow' }}</span>
+            <span>{{ currentSong.name }} By {{ currentSong.artist }} / {{ currentSong.album || 'unknow' }}</span>
           </nuxt-link>
         </div>
-        <div class="song" v-else>{{ $i18n.text.music.empty }}</div>
+        <div v-else class="song">{{ $i18n.text.music.empty }}</div>
       </div>
     </div>
     <div class="pre-load">
-      <img v-if="preload" :src="currentSongPicUrl" alt="song-thumb">
+      <img v-if="preload" :src="musicPlayer.currentSongPicUrl" alt="song-thumb">
       <img v-if="preload" :src="'/images/sponsor.jpg' | byCDN" alt="sponsor">
       <img v-if="preload" :src="'/images/app-hot.png' | byCDN" alt="app-download">
       <img v-if="preload" :src="'/images/app-logo.png' | byCDN" alt="app-logo">
@@ -52,10 +70,10 @@
 </template>
 
 <script>
-  import music from '~/services/music'
   import { isBrowser } from '~/environment'
+  import musicPlayer from '~/services/music-player'
   export default {
-    name: 'layout-header',
+    name: 'PcHeader',
     data() {
       return {
         preload: false
@@ -64,33 +82,16 @@
     mounted() {
       if (isBrowser) {
         window.addLoadedTask(() => {
-          this.preload = true;
+          this.preload = true
         })
       }
     },
     computed: {
-      playerState() {
-        return music.state
+      musicPlayer() {
+        return musicPlayer
       },
       currentSong() {
-        return music.currentSong
-      },
-      currentSongPicUrl() {
-        return music.currentSongPicUrl
-      }
-    },
-    methods: {
-      togglePlay() {
-        music.humanizeOperation(music.player.togglePlay)
-      },
-      toggleMuted() {
-        music.humanizeOperation(music.player.toggleMuted)
-      },
-      prevSong() {
-        music.humanizeOperation(music.player.prevSong)
-      },
-      nextSong() {
-        music.humanizeOperation(music.player.nextSong)
+        return musicPlayer.currentSong
       }
     }
   }
@@ -103,7 +104,7 @@
     left: 0;
     width: 100%;
     height: $header-height;
-    z-index: 999;
+    z-index: $z-index-header;
     background-color: $module-bg;
     user-select: none;
     @include backdrop-blur();
@@ -148,7 +149,7 @@
 
         .header-slogan {
           color: $primary;
-          font-family: webfont-normal, DINRegular;
+          font-family: 'webfont-normal', DINRegular;
         }
 
         .header-link {
@@ -164,8 +165,9 @@
         flex-direction: column;
         align-items: inherit;
         justify-content: center;
+        opacity: .3;
         @include text-overflow();
-        opacity: .2;
+        @include visibility-transition();
 
         &:hover {
           opacity: 1;
@@ -176,12 +178,11 @@
           justify-content: flex-start;
           margin-bottom: $xs-gap;
 
-          > .btn {
+          > .button {
             margin-right: $lg-gap;
 
             &:hover {
-
-              > .iconfont {
+              .iconfont {
                 color: $link-hover-color;
               }
             }
@@ -194,6 +195,7 @@
 
           > .link {
             color: $text-dividers;
+            @include color-transition();
 
             &:hover {
               color: $link-hover-color;
@@ -203,6 +205,7 @@
 
         .iconfont {
           color: $text-dividers;
+          @include color-transition();
         }
       }
     }

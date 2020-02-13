@@ -6,7 +6,7 @@
           class="image"
           draggable="false"
           :src="'/images/guestbook.jpg' | byCDN"
-        />
+        >
         <span class="solgan" v-text="$i18n.text.guestbook" />
       </div>
     </div>
@@ -18,7 +18,7 @@
 
 <script>
   export default {
-    name: 'guestbook',
+    name: 'Guestbook',
     head() {
       return {
         title: `${this.isEnLang ? '' : this.$i18n.nav.guestbook + ' | '}Guestbook`

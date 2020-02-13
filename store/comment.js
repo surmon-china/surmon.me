@@ -25,7 +25,6 @@ export const state = () => {
 }
 
 export const mutations = {
-
   // 请求列表
   updateListFetchig(state, action) {
     state.fetching = action
@@ -57,29 +56,30 @@ export const mutations = {
 }
 
 export const actions = {
-
   fetchList({ commit, rootState }, params = {}) {
-
     const { SortType } = rootState.global.constants
-    
+
     // 修正参数
-    params = Object.assign({
-      page: 1,
-      per_page: 88,
-      sort: SortType.Desc
-    }, params)
+    params = Object.assign(
+      {
+        page: 1,
+        per_page: 88,
+        sort: SortType.Desc
+      },
+      params
+    )
 
     const isRestart = params.page === 1
     const isDescSort = params.sort === SortType.Desc
 
     // 清空数据
-    isRestart &&
-    commit('updateListData', getDefaultListData())
+    isRestart && commit('updateListData', getDefaultListData())
     commit('updateListFetchig', true)
-    
+
     const delay = fetchDelay()
-    
-    return this.$axios.$get(COMMENT_API_PATH, { params })
+
+    return this.$axios
+      .$get(COMMENT_API_PATH, { params })
       .then(response => {
         isDescSort && response.result.data.reverse()
         delay(() => {
@@ -93,7 +93,8 @@ export const actions = {
   // 发布评论
   fetchPostComment({ commit }, comment) {
     commit('updatePostFetchig', true)
-    return this.$axios.$post(COMMENT_API_PATH, comment)
+    return this.$axios
+      .$post(COMMENT_API_PATH, comment)
       .then(response => {
         commit('updateListNewItemData', response)
         commit('updatePostFetchig', false)
@@ -107,7 +108,8 @@ export const actions = {
 
   // 喜欢评论
   fetchLikeComment({ commit }, comment) {
-    return this.$axios.$patch(LIKE_COMMENT_API_PATH, { comment_id: comment.id })
+    return this.$axios
+      .$patch(LIKE_COMMENT_API_PATH, { comment_id: comment.id })
       .then(response => {
         commit('updateLikesIncrement', comment)
         return Promise.resolve(response)

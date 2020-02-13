@@ -14,10 +14,10 @@
         <span v-text="$i18n.nav.think"></span>
       </nuxt-link>
       <a
-        href="https://github.surmon.me"
         target="_blank"
         class="item"
         rel="external nofollow noopener"
+        :href="appConfig.links.project"
       >
         <i class="iconfont icon-experiment"></i>
         <span v-text="$i18n.nav.project"></span>
@@ -34,7 +34,7 @@
         target="_blank"
         class="item"
         rel="external nofollow noopener"
-        href="https://www.instagram.com/surmon666/"
+        :href="appConfig.links.instagram"
       >
         <i class="iconfont icon-instagram"></i>
         <span v-text="$i18n.nav.instagram"></span>
@@ -51,28 +51,28 @@
         <i class="iconfont icon-comment"></i>
         <span v-text="$i18n.nav.guestbook"></span>
       </nuxt-link>
-      <a
-        :href="adsForPcNav.holiday"
+      <!-- <a
+        v-if="false"
+        :href="adConfig.nav.holiday"
         target="_blank"
         class="item ad holiday"
         rel="external nofollow noopener"
-        v-if="false"
       >
         <i class="iconfont icon-1111"></i>
         <span>超级红包</span>
       </a>
       <a
-        :href="adsForPcNav.taobao"
+        v-if="false"
+        :href="adConfig.nav.taobao"
         target="_blank"
         class="item ad taobao"
         rel="external nofollow noopener"
-        v-if="false"
       >
         <i class="iconfont icon-taobao"></i>
         <span v-text="$i18n.nav.taobao"></span>
-      </a>
+      </a> -->
       <a
-        :href="adsForPcNav.aliyun"
+        :href="adConfig.nav.aliyun"
         target="_blank"
         class="item ad aliyun"
         rel="external nofollow noopener"
@@ -84,19 +84,19 @@
         </span>
       </a>
       <a
-        href="https://throwerror.io"
         target="_blank"
-        class="item ad errend"
+        class="item ad throwerror"
         rel="external nofollow noopener"
+        :href="appConfig.links.throwerror"
       >
         <i class="iconfont icon-debug"></i>
         <span>TE.io</span>
       </a>
       <a
-        href="https://foxfinder.io"
         target="_blank"
         class="item ad foxfinder"
         rel="external nofollow noopener"
+        :href="appConfig.links.foxfinder"
       >
         <i class="iconfont icon-fox-colour"></i>
         <span>FF.io</span>
@@ -111,10 +111,12 @@
 
 <script>
   import adConfig from '~/config/ad.config'
+  import appConfig from '~/config/app.config'
   export default {
-    name: 'layout-nav',
+    name: 'PcNav',
     computed: {
-      adsForPcNav: () => adConfig.pc.nav
+      adConfig: () => adConfig,
+      appConfig: () => appConfig
     }
   }
 </script>
@@ -145,9 +147,10 @@
         font-weight: 700;
         border-radius: 1px;
         color: $text-secondary;
-        font-family: webfont-normal, DINRegular;
+        font-family: 'webfont-normal', DINRegular;
         letter-spacing: 0.5px;
         margin-bottom: $sm-gap;
+        @include color-transition();
 
         &:hover {
           color: $primary;
@@ -157,20 +160,17 @@
           margin-left: $xs-gap;
 
           @keyframes superscript-icon-color {
-            0%  { color: chartreuse }
-            15% { color: green }
-            30% { color: red }
-            45% { color: darkviolet }
-            60% { color: pink }
-            86% { color: blue }
-            100% { color: black }
+            0% { color: $accent }
+            30% { color: $primary }
+            60% { color: $black }
+            80% { color: $red }
           }
 
           > .iconfont {
+            margin-right: 0;
             color: $red;
             transition: color 0s;
-            margin-right: 0;
-            animation: superscript-icon-color 1s infinite;
+            animation: superscript-icon-color .66s infinite;
           }
         }
 
@@ -181,8 +181,8 @@
         &.ad {
           height: 5rem;
           line-height: 5rem;
-          margin: 0;
           border-bottom: 1px dashed $module-hover-bg;
+          margin: 0;
         }
 
         &.holiday {
@@ -197,7 +197,7 @@
           color: #ff6a00;
         }
 
-        &.errend {
+        &.throwerror {
           color: black;
         }
 
