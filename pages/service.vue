@@ -420,8 +420,9 @@
     }
 
     > .mammon {
-      background-color: $module-bg;
+      height: auto;
       margin-bottom: $gap * 2;
+      background-color: $module-bg;
 
       &::v-deep .mammon-ins {
         height: 16rem;
