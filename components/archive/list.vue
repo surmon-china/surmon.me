@@ -116,7 +116,7 @@
 
         &::v-deep .mammon-ins {
           margin: 0;
-          height: 6.6rem;
+          height: 7rem;
         }
       }
     }
@@ -134,7 +134,7 @@
 
       &::v-deep .mammon-ins {
         margin: $sm-gap 0;
-        min-height: 6rem;
+        min-height: 6.6rem;
         height: auto;
       }
     }

@@ -80,9 +80,11 @@
         </ul>
       </div>
     </div>
-    <div v-if="!isMobile" class="mammon container">
-      <adsense-responsive ins-class="mammon-ins" />
-    </div>
+    <transition name="fade">
+      <div v-if="!isMobile && isReadyMammon" class="mammon container">
+        <adsense-responsive ins-class="mammon-ins" />
+      </div>
+    </transition>
     <div class="step">
       <div class="step-content container">
         <ul class="step-list">
@@ -129,6 +131,11 @@
         title: `${this.isEnLang ? '' : this.$i18n.nav.service + ' | '}Service`
       }
     },
+    data() {
+      return {
+        isReadyMammon: false
+      }
+    },
     methods: {
       submitProject() {
         this.$ga.event('咨询邮件', '点击', 'tool')
@@ -159,6 +166,11 @@
           ? `"Any application that can be written in JavaScript, will eventually be written in JavaScript."`
           : '如果你认为自己的能力足以支撑一位出色、省心、优秀、帅气、完美的的全栈工程师的生产力，请 EMail 我；非常优秀，没有之一'
       }
+    },
+    mounted() {
+      this.$nextTick(() => {
+        this.isReadyMammon = true
+      })
     }
   }
 </script>
