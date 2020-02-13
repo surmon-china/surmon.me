@@ -249,13 +249,7 @@
       <iframe class="iframe" src="/partials/map.html" />
     </div>
     <div v-if="!isMobile" class="about-ga-mammon">
-      <client-only>
-        <Adsense
-          ins-class="mammon-ins"
-          data-ad-client="ca-pub-4710915636313788"
-          data-ad-slot="4117530525"
-        />
-      </client-only>
+      <adsense-responsive ins-class="mammon-ins" />
     </div>
     <div class="about-project">
       <a
@@ -464,31 +458,24 @@
                 &.telegram {
                   background-color: #54a5dd;
                 }
-
                 &.zhihu {
                   background-color: #3582f7;
                 }
-
                 &.youtube {
                   background-color: #ec3323;
                 }
-
                 &.bilibili {
                   background-color: #449fd1;
                 }
-
                 &.stackoverflow {
                   background-color: #e6863d;
                 }
-
                 &.algorithm {
                   background-color: #fea116;
                 }
-
                 &.quora {
                   background-color: #b92b27;
                 }
-
                 &.linkedin {
                   background-color: #478cc5;
                 }
@@ -673,15 +660,14 @@
     }
 
     .about-ga-mammon {
-      $size: 120px;
       width: 100%;
-      height: $size;
+      height: auto;
       overflow: hidden;
       margin-bottom: $lg-gap;
       background-color: $module-bg;
 
       &::v-deep .mammon-ins {
-        height: $size;
+        height: 120px;
       }
     }
 

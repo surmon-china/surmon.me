@@ -6,7 +6,7 @@
       <list-header />
     </div>
 
-    <!-- 广告啦 -->
+    <!-- 广告 -->
     <transition name="module">
       <component :is="isMobile ? 'adsense-archive-mobile' : 'adsense-archive'" v-if="renderAd" class="article-list-mammon" />
     </transition>
@@ -112,13 +112,11 @@
       }
 
       > .article-list-mammon {
-        &::v-deep .mammon-wrapper {
-          padding: $gap;
-    
-          > .adsbygoogle {
-            margin: 0;
-            height: 6rem;
-          }
+        padding: $gap;
+
+        &::v-deep .mammon-ins {
+          margin: 0;
+          height: 6.6rem;
         }
       }
     }
@@ -130,18 +128,14 @@
     }
 
     > .article-list-mammon {
+      padding: $sm-gap;
       margin-bottom: $lg-gap;
       background-color: $module-bg;
 
-      &::v-deep .mammon-wrapper {
+      &::v-deep .mammon-ins {
+        margin: $sm-gap 0;
         min-height: 6rem;
-        padding: $sm-gap;
-
-        > .adsbygoogle {
-          margin: $sm-gap 0;
-          min-height: 88px;
-          height: auto;
-        }
+        height: auto;
       }
     }
 
