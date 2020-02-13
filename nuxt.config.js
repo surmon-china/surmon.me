@@ -70,7 +70,7 @@ export default {
         }
       }
     },
-    // Extends for webpack
+    // extends for webpack
     extend(webpackConfig) {
       // 处理 Swiper4 下的 dom7 模块的语法问题
       webpackConfig.resolve.alias.dom7$ = 'dom7/dist/dom7.js'

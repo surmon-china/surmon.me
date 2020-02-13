@@ -17,7 +17,6 @@ git checkout master
 # sync && echo 3 | sudo tee /proc/sys/vm/drop_caches
 echo "[deploy] building..."
 yarn config set sass-binary-site http://npm.taobao.org/mirrors/node-sass
-# yarn --pure-lockfile
 yarn install --frozen-lockfile
 yarn build
 echo "[deploy] Rebuild done."
