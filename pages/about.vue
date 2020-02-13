@@ -248,9 +248,6 @@
     <div class="about-map">
       <iframe class="iframe" src="/partials/map.html" />
     </div>
-    <div v-if="!isMobile" class="about-ga-mammon">
-      <adsense-responsive ins-class="mammon-ins" />
-    </div>
     <div class="about-project">
       <a
         target="_blank"
@@ -656,18 +653,6 @@
       > .iframe {
         width: 100%;
         height: 19rem;
-      }
-    }
-
-    .about-ga-mammon {
-      width: 100%;
-      height: auto;
-      overflow: hidden;
-      margin-bottom: $lg-gap;
-      background-color: $module-bg;
-
-      &::v-deep .mammon-ins {
-        height: 120px;
       }
     }
 

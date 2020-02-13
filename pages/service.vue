@@ -425,6 +425,7 @@
       background-color: $module-bg;
 
       &::v-deep .mammon-ins {
+        width: 100%;
         height: 16rem;
       }
     }
