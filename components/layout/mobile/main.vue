@@ -1,9 +1,9 @@
 <template>
   <div id="app-mobile">
-    <div id="app-aside" :class="sidebarOpenClass">
-      <aside-view :class="sidebarOpenClass" />
+    <div id="app-aside" :class="asideOpenClass">
+      <aside-view :open="onMobileSidebar" />
     </div>
-    <div id="app-main" :class="sidebarOpenClass">
+    <div id="app-main" :class="asideOpenClass">
       <div
         v-if="onMobileSidebar"
         class="close-mask"
@@ -34,7 +34,7 @@
     },
     computed: {
       ...mapState('global', ['onMobileSidebar']),
-      sidebarOpenClass() {
+      asideOpenClass() {
         return { open: this.onMobileSidebar }
       },
     },
@@ -60,20 +60,23 @@
       top: 0;
       left: 0;
       height: 100%;
+      background-color: $mobile-aside-bg;
       transform: translate3d(-100%, 0 ,0);
       transition: $mobile-aisde-transition;
-      background-color: $mobile-aside-bg;
 
       &.open {
         overflow: hidden;
         transform: translate3d(0, 0 ,0);
-        transition: $mobile-aisde-transition;
         -webkit-overflow-scrolling: touch;
       }
     }
 
     #app-main {
       transition: $mobile-aisde-transition;
+
+      &.open {
+        transform: translate3d($aside-width, 0 ,0);
+      }
 
       .close-mask {
         position: fixed;
@@ -83,11 +86,6 @@
         bottom: 0;
         z-index: $z-index-top;
         background-color: $module-bg-opacity-5;
-      }
-
-      &.open {
-        transition: $mobile-aisde-transition;
-        transform: translate3d($aside-width, 0 ,0);
       }
 
       .main-container {
