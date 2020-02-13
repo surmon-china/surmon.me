@@ -80,6 +80,9 @@
         </ul>
       </div>
     </div>
+    <div v-if="!isMobile" class="mammon container">
+      <adsense-responsive ins-class="mammon-ins" />
+    </div>
     <div class="step">
       <div class="step-content container">
         <ul class="step-list">
@@ -413,6 +416,15 @@
             }
           }
         }
+      }
+    }
+
+    > .mammon {
+      background-color: $module-bg;
+      margin-bottom: $gap * 2;
+
+      &::v-deep .mammon-ins {
+        height: 16rem;
       }
     }
 

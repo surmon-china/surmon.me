@@ -236,7 +236,7 @@
         <div v-if="!isMobile" class="wechat" @mouseenter="handleFollowMe"></div>
       </div>
     </div>
-    <!-- <a
+    <a
       v-if="!isMobile"
       class="about-aliyun-mammon"
       rel="external nofollow noopener"
@@ -244,12 +244,18 @@
       :href="adConfig.url"
     >
       <img :src="adConfig.src">
-    </a> -->
+    </a>
     <div class="about-map">
       <iframe class="iframe" src="/partials/map.html" />
     </div>
     <div v-if="!isMobile" class="about-ga-mammon">
-      <adsense-responsive />
+      <client-only>
+        <Adsense
+          ins-class="mammon-ins"
+          data-ad-client="ca-pub-4710915636313788"
+          data-ad-slot="4117530525"
+        />
+      </client-only>
     </div>
     <div class="about-project">
       <a
@@ -667,14 +673,14 @@
     }
 
     .about-ga-mammon {
-      $size: 12rem;
+      $size: 120px;
       width: 100%;
       height: $size;
       overflow: hidden;
       margin-bottom: $lg-gap;
       background-color: $module-bg;
 
-       &::v-deep .mammon-wrapper {
+      &::v-deep .mammon-ins {
         height: $size;
       }
     }

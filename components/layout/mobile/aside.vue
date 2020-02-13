@@ -1,5 +1,5 @@
 <template>
-  <aside class="aside">
+  <aside class="aside" :class="{ open: open }">
     <div class="aside-user">
       <div class="avatar">
         <img :src="gravatar" alt="Surmon" draggable="false">
@@ -68,6 +68,12 @@
 
   export default Vue.extend({
     name: 'MobileAside',
+    props: {
+      open: {
+        type: Boolean,
+        defualt: false
+      }
+    },
     mounted() {
       return this.$store.dispatch('global/fetchAdminInfo')
     },

@@ -21,7 +21,7 @@
             <strong>{{ likes || 0 }}</strong>
             <span v-text="(isMobile && !isEnLang) ? '赞' : $i18n.text.comment.like" />
           </a>
-          <a href class="sponsor" @click.stop.prevent="sponsor">
+          <a href class="sponsor" @click.stop.prevent="handleSponsor">
             <i class="iconfont icon-hao" />
           </a>
         </div>
@@ -165,9 +165,7 @@
               :class="{ 'actived disabled': paginationReverseActive(item) }"
               @click.stop.prevent="paginationReverseActive(item)
                 ? false 
-                : loadComemntList({ 
-                  page: comment.pagination.total_page + 1 - item 
-                })"
+                : loadComemntList({ page: comment.pagination.total_page + 1 - item })"
             >{{ item }}</a>
           </li>
           <li class="item">
@@ -272,51 +270,53 @@
               <div class="reply-preview" v-html="marked(replyCommentSlef.content)" />
             </div>
           </transition>
-          <div class="markdown">
-            <div
-              ref="markdown"
-              class="markdown-editor"
-              contenteditable="true"
-              :placeholder="$i18n.text.comment.placeholder"
-              @keyup="commentContentChange($event)"
-            />
-            <div class="markdown-preview" :class="{ actived: previewMode }" v-html="previewContent" />
-          </div>
-          <div class="editor-tools">
-            <a href class="emoji" title="emoji" @click.stop.prevent>
-              <i class="iconfont icon-emoji" />
-              <div class="emoji-box">
-                <ul class="emoji-list">
-                  <li
-                    v-for="(emoji, index) in emojis"
-                    :key="index"
-                    class="item"
-                    @click="insertEmoji(emoji)"
-                    v-text="emoji"
-                  />
-                </ul>
-              </div>
-            </a>
-            <a href class="image" title="image" @click.stop.prevent="insertContent('image')">
-              <i class="iconfont icon-image" />
-            </a>
-            <a href class="link" title="link" @click.stop.prevent="insertContent('link')">
-              <i class="iconfont icon-link-horizontal" />
-            </a>
-            <a href class="code" title="code" @click.stop.prevent="insertContent('code')">
-              <i class="iconfont icon-code-comment" />
-            </a>
-            <a href class="preview" title="preview" @click.stop.prevent="togglePreviewMode">
-              <i class="iconfont icon-eye" />
-            </a>
-            <button
-              type="submit"
-              class="submit"
-              :disabled="commentPosting || isFetching"
-              @click="submitComment($event)"
-            >
-              <span v-text="commentPosting ? $i18n.text.comment.submiting : $i18n.text.comment.submit" />
-            </button>
+          <div class="pen">
+            <div class="markdown">
+              <div
+                ref="markdown"
+                class="markdown-editor"
+                contenteditable="true"
+                :placeholder="$i18n.text.comment.placeholder"
+                @keyup="commentContentChange($event)"
+              />
+              <div class="markdown-preview" :class="{ actived: previewMode }" v-html="previewContent" />
+            </div>
+            <div class="pencilbox">
+              <a href class="emoji" title="emoji" @click.stop.prevent>
+                <i class="iconfont icon-emoji" />
+                <div class="emoji-box">
+                  <ul class="emoji-list">
+                    <li
+                      v-for="(emoji, index) in emojis"
+                      :key="index"
+                      class="item"
+                      @click="insertEmoji(emoji)"
+                      v-text="emoji"
+                    />
+                  </ul>
+                </div>
+              </a>
+              <a href class="image" title="image" @click.stop.prevent="insertContent('image')">
+                <i class="iconfont icon-image" />
+              </a>
+              <a href class="link" title="link" @click.stop.prevent="insertContent('link')">
+                <i class="iconfont icon-link-horizontal" />
+              </a>
+              <a href class="code" title="code" @click.stop.prevent="insertContent('code')">
+                <i class="iconfont icon-code-comment" />
+              </a>
+              <a href class="preview" title="preview" @click.stop.prevent="togglePreviewMode">
+                <i class="iconfont icon-eye" />
+              </a>
+              <button
+                type="submit"
+                class="submit"
+                :disabled="commentPosting || isFetching"
+                @click="submitComment($event)"
+              >
+                {{ commentPosting ? $i18n.text.comment.submiting : $i18n.text.comment.submit }}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -338,6 +338,9 @@
 
   const localUser = getJSONStorageReader(systemConstants.StorageField.User)
   const localHistoryLikes = getJSONStorageReader(systemConstants.StorageField.UserLikeHistory)
+  const emailRegex = /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/
+  // eslint-disable-next-line no-useless-escape
+  const urlRegex = /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/
 
   export default {
     name: 'VueComment',
@@ -384,11 +387,6 @@
           pages: [],
           comments: []
         },
-        regexs: {
-          email: /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/,
-          // eslint-disable-next-line no-useless-escape
-          url: /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/
-        },
         emojis: ['😃', '😂', '😅', '😉', '😌', '😔', '😓', '😢', '😍', '😘', '😜', '😡', '😤', '😭', '😱', '😳', '😵', '🌚', '🙏', '👆', '👇', '👌', '🤘', '👍', '👎', '💪', '👏', '🌻', '🌹', '💊', '🇨🇳', '🇺🇸', '🇯🇵 ', '🚩', '🐶', '❤️', '💔', '💩', '👻']
       }
     },
@@ -424,26 +422,6 @@
         return this.comment.data.find(comment => comment.id === this.pid)
       }
     },
-    mounted() {
-      this.initAppOptionBlackList()
-      if (isBrowser) {
-        this.observeLozad()
-      }
-    },
-    activated() {
-      this.initUser()
-      // 1. 组件不再负责初始加载评论列表数据的职责
-      // 2. 组件仅负责初评论列表数据翻页、排序的职责
-      // 3. 当容器组件还在请求时，组件全量 Loading
-      // 4. 当只有评论列表在请求时，列表单独 Loading
-    },
-    destroyed() {
-      this.$store.commit('comment/clearListData')
-    },
-    deactivated() {
-      this.lozadObserver = null
-      this.$store.commit('comment/clearListData')
-    },
     methods: {
       // 初始化本地用户即本地用户的点赞历史
       initUser() {
@@ -477,7 +455,7 @@
       initAppOptionBlackList() {
         this.$store.dispatch('global/fetchAppOption')
       },
-      sponsor() {
+      handleSponsor() {
         this.$ga.event('内容赞赏', '点击', 'tool')
         this.isMobile
           ? window.utils.openImgPopup(
@@ -493,7 +471,7 @@
       },
       // 头像服务
       getGravatarUrlByEmail(email) {
-        if (!this.regexs.email.test(email)) {
+        if (!emailRegex.test(email)) {
           return null
         }
         return gravatar.url(email, { protocol: 'https' }).replace(
@@ -513,10 +491,10 @@
         if (!this.user.email) {
           return alert(this.$i18n.text.comment.profile.email + '?')
         }
-        if (!this.regexs.email.test(this.user.email)) {
+        if (!emailRegex.test(this.user.email)) {
           return alert(this.$i18n.text.comment.profile.emailerr)
         }
-        if (this.user.site && !this.regexs.url.test(this.user.site)) {
+        if (this.user.site && !urlRegex.test(this.user.site)) {
           return alert(this.$i18n.text.comment.profile.siteerr)
         }
         localUser.set(this.user)
@@ -533,7 +511,7 @@
       },
       // 更新当前用户头像
       upadteUserGravatar() {
-        this.user.gravatar = this.regexs.email.test(this.user.email)
+        this.user.gravatar = emailRegex.test(this.user.email)
           ? this.getGravatarUrlByEmail(this.user.email)
           : null
       },
@@ -682,8 +660,11 @@
       // 获取评论列表
       loadComemntList(params = {}) {
         scrollTo('#comment-box', 180, { easing: Easing['ease-in'] })
-        params.sort = this.sortMode
-        this.$store.dispatch('comment/fetchList', Object.assign(params, { post_id: this.postId }))
+        this.$store.dispatch('comment/fetchList', {
+          ...params,
+          sort: this.sortMode,
+          post_id: this.postId
+        })
       },
       // 提交评论
       submitComment(event) {
@@ -695,10 +676,10 @@
         if (!this.user.email) {
           return alert(this.$i18n.text.comment.profile.email + '?')
         }
-        if (!this.regexs.email.test(this.user.email)) {
+        if (!emailRegex.test(this.user.email)) {
           return alert(this.$i18n.text.comment.profile.emailerr)
         }
-        if (this.user.site && !this.regexs.url.test(this.user.site)) {
+        if (this.user.site && !urlRegex.test(this.user.site)) {
           return alert(this.$i18n.text.comment.profile.siteerr)
         }
         if (!this.comemntContentText || !this.comemntContentText.replace(/\s/g, '')) {
@@ -766,6 +747,33 @@
           alert(this.$i18n.text.comment.profile.submiterr)
         })
       }
+    },
+    watch: {
+      isFetching(isFetching) {
+        if (isFetching) {
+          this.cancelCommentReply()
+        }
+      }
+    },
+    mounted() {
+      this.initAppOptionBlackList()
+      if (isBrowser) {
+        this.observeLozad()
+      }
+    },
+    activated() {
+      this.initUser()
+      // 1. 组件不再负责初始加载评论列表数据的职责
+      // 2. 组件仅负责初评论列表数据翻页、排序的职责
+      // 3. 当容器组件还在请求时，组件全量 Loading
+      // 4. 当只有评论列表在请求时，列表单独 Loading
+    },
+    destroyed() {
+      this.$store.commit('comment/clearListData')
+    },
+    deactivated() {
+      this.lozadObserver = null
+      this.$store.commit('comment/clearListData')
     }
   }
 </script>
@@ -1336,7 +1344,6 @@
 
         > .editor {
           flex-grow: 1;
-          position: relative;
           overflow: hidden;
 
           > .will-reply {
@@ -1371,125 +1378,129 @@
             }
           }
 
-          > .markdown {
+          .pen {
             position: relative;
-            overflow: hidden;
 
-            > .markdown-editor {
-              min-height: 6em;
-              max-height: 36em;
-              overflow: auto;
-              outline: none;
-              padding: .5em;
-              cursor: auto;
-              font-size: $font-size-h6;
-              line-height: 1.8em;
-              background-color: $module-hover-bg;
-              @include background-transition();
+            .markdown {
+              position: relative;
+              overflow: hidden;
 
-              &:empty:before {
-                content: attr(placeholder);
-                color: $text-disabled;
+              > .markdown-editor {
+                min-height: 6em;
+                max-height: 36em;
+                overflow: auto;
+                outline: none;
+                padding: .5em;
+                cursor: auto;
+                font-size: $font-size-h6;
+                line-height: 1.8em;
+                background-color: $module-hover-bg;
+                @include background-transition();
+
+                &:empty:before {
+                  content: attr(placeholder);
+                  color: $text-disabled;
+                }
+
+                &:focus {
+                  content:none;
+                }
+
+                &:hover {
+                  background-color: $module-hover-bg-darken-10;
+                }
               }
 
-              &:focus {
-                content:none;
-              }
-
-              &:hover {
-                background-color: $module-hover-bg-darken-10;
-              }
-            }
-
-            > .markdown-preview {
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 0;
-              overflow: auto;
-              margin: 0;
-              padding: .5em;
-              transform: translateY(-100%);
-              background-color: rgba(235, 235, 235, 0.85);
-              transition: transform .2s;
-
-              &.actived {
-                height: 100%;
-                transition: transform .2s;
-                transform: translateY(0);
-              }
-            }
-          }
-
-          > .editor-tools {
-            height: 2em;
-            line-height: 2em;
-            background-color: $module-hover-bg-opacity-9;
-
-            > .emoji {
-              > .emoji-box {
-                display: none;
+              > .markdown-preview {
                 position: absolute;
-                bottom: 2em;
-                left: 0;
                 top: 0;
+                left: 0;
                 width: 100%;
-                overflow-y: auto;
-                background-color: $module-bg;
+                height: 0;
+                overflow: auto;
+                margin: 0;
+                padding: .5em;
+                transform: translateY(-100%);
+                background-color: rgba(235, 235, 235, 0.85);
+                transition: transform .2s;
 
-                > .emoji-list {
-                  list-style: none;
-                  padding: 0;
-                  margin: 0;
-                  font-size: $font-size-h3;
-                  display: flex;
-                  flex-wrap: wrap;
+                &.actived {
+                  height: 100%;
+                  transition: transform .2s;
+                  transform: translateY(0);
+                }
+              }
+            }
 
-                  > .item {
-                    padding: 0 .4em;
-                    cursor: pointer;
-                    @include background-transition();
+            .pencilbox {
+              height: 2em;
+              line-height: 2em;
+              background-color: $module-hover-bg-opacity-9;
 
-                    &:hover {
-                      background-color: $module-hover-bg;
+              > .emoji {
+                > .emoji-box {
+                  display: none;
+                  position: absolute;
+                  bottom: 2em;
+                  left: 0;
+                  top: 0;
+                  width: 100%;
+                  overflow-y: auto;
+                  background-color: $module-bg;
+
+                  > .emoji-list {
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+                    font-size: $font-size-h3;
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    > .item {
+                      padding: 0 .4em;
+                      cursor: pointer;
+                      @include background-transition();
+
+                      &:hover {
+                        background-color: $module-hover-bg;
+                      }
                     }
+                  }
+                }
+
+                &:hover {
+                  > .emoji-box {
+                    display: block;
                   }
                 }
               }
 
-              &:hover {
-                > .emoji-box {
-                  display: block;
+              > .emoji,
+              > .image,
+              > .link,
+              > .code,
+              > .preview {
+                width: 2em;
+                height: 2em;
+                text-align: center;
+                display: inline-block;
+                @include background-transition();
+
+                &:hover {
+                  background-color: $module-hover-bg-darken-20;
                 }
               }
-            }
 
-            > .emoji,
-            > .image,
-            > .link,
-            > .code,
-            > .preview {
-              width: 2em;
-              height: 2em;
-              text-align: center;
-              display: inline-block;
-              @include background-transition();
-
-              &:hover {
+              > .submit {
+                float: right;
+                width: 8rem;
+                height: 100%;
                 background-color: $module-hover-bg-darken-20;
-              }
-            }
+                @include background-transition();
 
-            > .submit {
-              float: right;
-              width: 8rem;
-              height: 100%;
-              background-color: $module-hover-bg-darken-20;
-              @include background-transition();
-
-              &:hover {
-                background-color: $module-hover-bg-darken-40;
+                &:hover {
+                  background-color: $module-hover-bg-darken-40;
+                }
               }
             }
           }
