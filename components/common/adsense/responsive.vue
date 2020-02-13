@@ -2,10 +2,11 @@
   <div class="mammon-box responsive">
     <client-only>
       <Adsense
-        root-class="mammon-wrapper"
+        :root-class="rootClass || 'mammon-wrapper'"
+        :ins-class="insClass"
+        :data-full-width-responsive="true"
         data-ad-client="ca-pub-4710915636313788"
         data-ad-slot="7405264495"
-        :data-full-width-responsive="true"
       />
     </client-only>
   </div>
@@ -13,7 +14,11 @@
 
 <script>
   export default {
-    name: 'AdsenseResponsive'
+    name: 'AdsenseResponsive',
+    props: {
+      insClass: String,
+      rootClass: String,
+    }
   }
 </script>
 
