@@ -97,10 +97,9 @@ export default {
   plugins: [
     '~/plugins/composition-api',
     { src: '~/plugins/polyfill', mode: 'client' },
-    { src: '~/plugins/extend' },
     { src: '~/plugins/loaded-task' },
+    { src: '~/plugins/extend' },
     { src: '~/plugins/marked' },
-    { src: '~/plugins/gravatar' },
     { src: '~/plugins/highlight' },
     { src: '~/plugins/lozad', mode: 'client' },
     { src: '~/plugins/favico', mode: 'client' },
@@ -175,7 +174,10 @@ export default {
   },
   router: {
     middleware: ['change-page-col'],
-    linkActiveClass: 'link-active'
+    linkActiveClass: 'link-active',
+    scrollBehavior(to, from, savedPosition) {
+      return { x: 0, y: 0 }
+    }
   },
   css: [
     'normalize.css/normalize.css',

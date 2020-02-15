@@ -35,7 +35,7 @@
               </template>
               <template v-else>
                 <nuxt-link :to="`/article/${_article.id}`" class="link">
-                  <img :src="humanizeThumb(_article.thumb)" :alt="_article.title">
+                  <img :src="getThumb(_article.thumb)" :alt="_article.title">
                   <span class="title">{{ _article.title }}</span>
                 </nuxt-link>
               </template>
@@ -50,7 +50,7 @@
 
 <script>
   import { mapState } from 'vuex'
-  import { getFileCDNUrl } from '~/transformers/url'
+  import { getBannerArticleThumbnailUrl } from '~/transformers/thumbnail'
   import adConfig from '~/config/ad.config'
 
   export default {
@@ -86,7 +86,9 @@
       }
     },
     computed: {
-      ...mapState('global', ['imageExt', 'isMobile']),
+      isMobile() {
+        return this.$store.state.global.isMobile
+      },
       articleList() {
         const articles = [...this.article.data.data].slice(0, 9)
         if (!adConfig.carrousel) {
@@ -112,14 +114,12 @@
       isEnableFilterStyle(index) {
         return this.transitioning && this.swiper && this.swiper.activeIndex === index
       },
-      humanizeThumb(thumb) {
-        if (!thumb) {
-          return getFileCDNUrl(`/images/${this.isMobile ? 'mobile-' : ''}thumb-carrousel.jpg`)
-        }
-        if (this.isMobile) {
-          return `${thumb}?x-oss-process=style/blog.list.banner.mobile`
-        }
-        return `${thumb}?x-oss-process=style/blog.list.banner.pc`
+      getThumb(thumb) {
+        return getBannerArticleThumbnailUrl(
+          thumb,
+          this.isMobile,
+          this.$store.getters['global/isWebPImage']
+        )
       },
       handleSwiperTransitionStart() {
         this.transitioning = true
