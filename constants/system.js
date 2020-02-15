@@ -28,7 +28,7 @@ export const Route = {
 }
 
 export const ImageExt = {
-  Webp: 'webp',
+  WebP: 'webp',
   Jpg: 'jpeg'
 }
 

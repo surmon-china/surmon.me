@@ -19,7 +19,7 @@
           <a href class="like" :class="{ liked: isLikedPage }" @click.stop.prevent="likePage">
             <i class="iconfont icon-like" />
             <strong>{{ likes || 0 }}</strong>
-            <span v-text="(isMobile && !isEnLang) ? '赞' : $i18n.text.comment.like" />
+            <span>{{ (isMobile && !isEnLang) ? '赞' : $i18n.text.comment.like }}</span>
           </a>
           <a href class="sponsor" @click.stop.prevent="handleSponsor">
             <i class="iconfont icon-hao" />
@@ -107,7 +107,7 @@
                   <span>&nbsp;</span>
                   <a href @click.stop.prevent="toSomeAnchorById(`comment-item-${comment.pid}`)">
                     <span>#{{ comment.pid }}&nbsp;</span>
-                    <strong v-if="fondReplyParent(comment.pid)">@{{ fondReplyParent(comment.pid) }}</strong>
+                    <strong v-if="findReplyParent(comment.pid)">@{{ findReplyParent(comment.pid) }}</strong>
                   </a>
                   <span>：</span>
                 </p>
@@ -244,7 +244,7 @@
           </div>
         </div>
       </transition>
-      <div class="editor-box">
+      <div class="postbox">
         <div class="user">
           <div v-if="!isMobile" class="gravatar">
             <img
@@ -270,54 +270,15 @@
               <div class="reply-preview" v-html="marked(replyCommentSlef.content)" />
             </div>
           </transition>
-          <div class="pen">
-            <div class="markdown">
-              <div
-                ref="markdown"
-                class="markdown-editor"
-                contenteditable="true"
-                :placeholder="$i18n.text.comment.placeholder"
-                @keyup="commentContentChange($event)"
-              />
-              <div class="markdown-preview" :class="{ actived: previewMode }" v-html="previewContent" />
-            </div>
-            <div class="pencilbox">
-              <a href class="emoji" title="emoji" @click.stop.prevent>
-                <i class="iconfont icon-emoji" />
-                <div class="emoji-box">
-                  <ul class="emoji-list">
-                    <li
-                      v-for="(emoji, index) in emojis"
-                      :key="index"
-                      class="item"
-                      @click="insertEmoji(emoji)"
-                      v-text="emoji"
-                    />
-                  </ul>
-                </div>
-              </a>
-              <a href class="image" title="image" @click.stop.prevent="insertContent('image')">
-                <i class="iconfont icon-image" />
-              </a>
-              <a href class="link" title="link" @click.stop.prevent="insertContent('link')">
-                <i class="iconfont icon-link-horizontal" />
-              </a>
-              <a href class="code" title="code" @click.stop.prevent="insertContent('code')">
-                <i class="iconfont icon-code-comment" />
-              </a>
-              <a href class="preview" title="preview" @click.stop.prevent="togglePreviewMode">
-                <i class="iconfont icon-eye" />
-              </a>
-              <button
-                type="submit"
-                class="submit"
-                :disabled="commentPosting || isFetching"
-                @click="submitComment($event)"
-              >
-                {{ commentPosting ? $i18n.text.comment.submiting : $i18n.text.comment.submit }}
-              </button>
-            </div>
-          </div>
+          <comment-pen
+            ref="markdownInput"
+            v-model="draftContent"
+            :enabled-preview-mode="previewMode"
+            :disabled="isPostingComment || isFetching"
+            :is-posting="isPostingComment"
+            @togglePreviewMode="handleTogglePreviewMode"
+            @submit="submitComment"
+          />
         </div>
       </div>
     </form>
@@ -328,13 +289,14 @@
   import { mapState } from 'vuex'
   import { isBrowser } from '~/environment'
   import marked from '~/plugins/marked'
-  import gravatar from '~/plugins/gravatar'
   import systemConstants from '~/constants/system'
   import { getFileCDNUrl } from '~/transformers/url'
+  import { getGravatarByEmail } from '~/transformers/thumbnail'
   import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
   import { isGuestbookRoute } from '~/services/route-validator'
   import { getJSONStorageReader } from '~/services/local-storage'
   import CommentUa from './ua'
+  import CommentPen from './pen'
 
   const localUser = getJSONStorageReader(systemConstants.StorageField.User)
   const localHistoryLikes = getJSONStorageReader(systemConstants.StorageField.UserLikeHistory)
@@ -343,9 +305,10 @@
   const urlRegex = /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/
 
   export default {
-    name: 'VueComment',
+    name: 'Comment',
     components: {
-      CommentUa
+      CommentUa,
+      CommentPen
     },
     props: {
       fetching: {
@@ -369,9 +332,7 @@
         // 评论排序
         sortMode: -1,
         // 编辑器相关
-        comemntContentHtml: '',
-        comemntContentText: '',
-        previewContent: '',
+        draftContent: '',
         previewMode: false,
         // 用户相关
         userCacheMode: false,
@@ -386,25 +347,24 @@
         historyLikes: {
           pages: [],
           comments: []
-        },
-        emojis: ['😃', '😂', '😅', '😉', '😌', '😔', '😓', '😢', '😍', '😘', '😜', '😡', '😤', '😭', '😱', '😳', '😵', '🌚', '🙏', '👆', '👇', '👌', '🤘', '👍', '👎', '💪', '👏', '🌻', '🌹', '💊', '🇨🇳', '🇺🇸', '🇯🇵 ', '🚩', '🐶', '❤️', '💔', '💩', '👻']
+        }
       }
     },
     computed: {
       ...mapState({
         comment: state => state.comment.data,
-        commentFetching: state => state.comment.fetching,
-        commentPosting: state => state.comment.posting,
+        isFetchingComment: state => state.comment.fetching,
+        isPostingComment: state => state.comment.posting,
         constants: state => state.global.constants,
         language: state => state.global.language,
         isMobile: state => state.global.isMobile,
-        blacklist: state => state.global.appOption.data.blacklist,
+        blacklist: state => state.global.appOption.data.blacklist
       }),
       isFetching() {
         // 1. 宿主组件还在加载时，列表和 tool 都呈加载状态
         // 2. 宿主组件加载完成，如果自己还在请求，则列表呈加载状态
         // 3. 自己已请求完，宿主组件还在加载，列表和 tool 都呈加载状态
-        return this.fetching || this.commentFetching
+        return this.fetching || this.isFetchingComment
       },
       isEnLang() {
         return this.$store.getters['global/isEnLang']
@@ -434,6 +394,10 @@
           this.userCacheMode = true
         }
       },
+      // 初始化黑名单
+      initAppOptionBlackList() {
+        this.$store.dispatch('global/fetchAppOption')
+      },
       loadCommentsAnimateDone() {
         this.observeLozad()
       },
@@ -451,33 +415,20 @@
         })
         this.lozadObserver.observe()
       },
-      // 初始化黑名单
-      initAppOptionBlackList() {
-        this.$store.dispatch('global/fetchAppOption')
-      },
       handleSponsor() {
         this.$ga.event('内容赞赏', '点击', 'tool')
         this.isMobile
-          ? window.utils.openImgPopup(
-              getFileCDNUrl('/images/sponsor-mobile.jpg'),
-              'sponsor-mobile'
-            )
+          ? window.utils.openImgPopup(getFileCDNUrl('/images/sponsor-mobile.png'))
           // sponsor 业务不使用 CDN
           : window.utils.openIframePopup('/sponsor', 'sponsor')
       },
-      // markdown解析服务
       marked(content) {
         return marked(content, null, false)
       },
-      // 头像服务
       getGravatarUrlByEmail(email) {
-        if (!emailRegex.test(email)) {
-          return null
-        }
-        return gravatar.url(email, { protocol: 'https' }).replace(
-          'https://s.gravatar.com/avatar',
-          this.$API.GRAVATAR
-        ) + `?x-oss-process=style/gravatar`
+        return emailRegex.test(email)
+          ? getGravatarByEmail(email)
+          : null
       },
       humanizeGravatarUrl(gravatar) {
         return gravatar || getFileCDNUrl('/images/anonymous.jpg')
@@ -511,63 +462,13 @@
       },
       // 更新当前用户头像
       upadteUserGravatar() {
-        this.user.gravatar = emailRegex.test(this.user.email)
-          ? this.getGravatarUrlByEmail(this.user.email)
-          : null
+        this.user.gravatar = this.getGravatarUrlByEmail(this.user.email)
       },
       // 编辑器相关
-      commentContentChange() {
-        const html = this.$refs.markdown.innerHTML
-        const text = this.$refs.markdown.textContent
-        if (html !== this.comemntContentHtml) {
-          this.comemntContentHtml = html
-        }
-        if (text !== this.comemntContentText) {
-          this.comemntContentText = text
-        }
-      },
-      updateCommentContent({ start = '', end = '' }) {
-        if (!start && !end) return false
-        // 如果选中了内容，则把选中的内容替换，否则在光标位置插入新内容
-        const selectedText = (window.getSelection || document.getSelection)().toString()
-        const currentText = this.$refs.markdown.textContent
-        if (!!selectedText) {
-          const newText = currentText.replace(selectedText, start + selectedText + end)
-          this.$refs.markdown.textContent = newText
-        } else {
-          this.$refs.markdown.textContent = this.$refs.markdown.textContent += (start + end)
-          this.$refs.markdown.scrollTop = this.$refs.markdown.scrollHeight
-        }
-        this.commentContentChange()
-      },
       clearCommentContent(content) {
-        this.comemntContentHtml = ''
-        this.$refs.markdown.innerHTML = this.comemntContentHtml
-        this.commentContentChange()
+        this.draftContent = ''
       },
-      insertContent(type) {
-        const contents = {
-          image: {
-            start: `![`,
-            end: `](https://)`
-          },
-          link: {
-            start: `[`,
-            end: `](https://)`
-          },
-          code: {
-            start: '\n```javascript\n',
-            end: '\n```'
-          }
-        }
-        this.updateCommentContent(contents[type])
-      },
-      insertEmoji(emoji) {
-        this.updateCommentContent({ end: emoji })
-      },
-      // 切换预览模式
-      togglePreviewMode() {
-        this.previewContent = this.marked(this.comemntContentText)
+      handleTogglePreviewMode() {
         this.previewMode = !this.previewMode
       },
       // 评论排序
@@ -593,14 +494,8 @@
           const isToEditor = id === 'post-box'
           scrollTo(targetDom, 200, { offset: isToEditor ? 0 : -300 })
           // 如果是进入编辑模式，则需要激活光标
-          if (isToEditor) {
-            const p = this.$refs.markdown
-            const s = window.getSelection()
-            const r = document.createRange()
-            r.setStart(p, p.childElementCount)
-            r.setEnd(p, p.childElementCount)
-            s.removeAllRanges()
-            s.addRange(r)
+          if (isToEditor && this.$refs.markdownInput) {
+            this.$refs.markdownInput.focus()
           }
         }
       },
@@ -614,7 +509,7 @@
         this.pid = 0
       },
       // 找到回复来源
-      fondReplyParent(comment_id) {
+      findReplyParent(comment_id) {
         const parent = this.comment.data.find(comment => comment.id === comment_id)
         return parent ? parent.author.name : null
       },
@@ -659,7 +554,11 @@
       },
       // 获取评论列表
       loadComemntList(params = {}) {
-        scrollTo('#comment-box', 180, { easing: Easing['ease-in'] })
+        // 每次重新获取数据时都需要回到评论框顶部，因为都是新数据
+        scrollTo('#comment-box', 160, {
+          easing: Easing['ease-in'],
+          offset: -80
+        })
         this.$store.dispatch('comment/fetchList', {
           ...params,
           sort: this.sortMode,
@@ -667,9 +566,7 @@
         })
       },
       // 提交评论
-      submitComment(event) {
-        // 为了使用原生表单拦截，不使用事件修饰符
-        event.preventDefault()
+      submitComment() {
         if (!this.user.name) {
           return alert(this.$i18n.text.comment.profile.name + '?')
         }
@@ -682,11 +579,11 @@
         if (this.user.site && !urlRegex.test(this.user.site)) {
           return alert(this.$i18n.text.comment.profile.siteerr)
         }
-        if (!this.comemntContentText || !this.comemntContentText.replace(/\s/g, '')) {
+        if (!this.draftContent || !this.draftContent.replace(/\s/g, '')) {
           return alert(this.$i18n.text.comment.profile.content + '?')
         }
-        const lineOverflow = this.comemntContentText.split('\n').length > 36
-        const lengthOverflow = this.comemntContentText.length > 2000
+        const lineOverflow = this.draftContent.split('\n').length > 36
+        const lengthOverflow = this.draftContent.length > 2000
         if (lineOverflow || lengthOverflow) {
           return alert(this.$i18n.text.comment.profile.contenterr)
         }
@@ -694,7 +591,7 @@
         const { mails, keywords } = this.blacklist
         if (
           mails.includes(this.user.email) ||
-          (keywords.length && eval(`/${keywords.join('|')}/ig`).test(this.comemntContentText))
+          (keywords.length && eval(`/${keywords.join('|')}/ig`).test(this.draftContent))
         ) {
           alert(this.$i18n.text.comment.profile.submiterr)
           console.warn('评论发布失败\n1：被 Akismet 过滤\n2：邮箱/IP 被列入黑名单\n3：内容包含黑名单关键词')
@@ -707,7 +604,7 @@
           pid: this.pid,
           post_id: this.postId,
           author: this.user,
-          content: this.comemntContentText,
+          content: this.draftContent,
           agent: navigator.userAgent
         }).then(data => {
           // 发布成功后清空评论框内容并更新本地信息
@@ -762,17 +659,18 @@
       }
     },
     activated() {
-      this.initUser()
       // 1. 组件不再负责初始加载评论列表数据的职责
       // 2. 组件仅负责初评论列表数据翻页、排序的职责
       // 3. 当容器组件还在请求时，组件全量 Loading
       // 4. 当只有评论列表在请求时，列表单独 Loading
+      this.initUser()
     },
     destroyed() {
       this.$store.commit('comment/clearListData')
     },
     deactivated() {
       this.lozadObserver = null
+      this.cancelCommentReply()
       this.$store.commit('comment/clearListData')
     }
   }
@@ -897,7 +795,7 @@
           }
         }
 
-        > .editor-box {
+        > .postbox {
           > .user {
             margin: 0;
           }
@@ -1320,7 +1218,7 @@
         }
       }
 
-      > .editor-box {
+      > .postbox {
         width: 100%;
         display: flex;
 
@@ -1374,133 +1272,6 @@
 
                &:hover {
                 background-color: $module-hover-bg-darken-10;
-              }
-            }
-          }
-
-          .pen {
-            position: relative;
-
-            .markdown {
-              position: relative;
-              overflow: hidden;
-
-              > .markdown-editor {
-                min-height: 6em;
-                max-height: 36em;
-                overflow: auto;
-                outline: none;
-                padding: .5em;
-                cursor: auto;
-                font-size: $font-size-h6;
-                line-height: 1.8em;
-                background-color: $module-hover-bg;
-                @include background-transition();
-
-                &:empty:before {
-                  content: attr(placeholder);
-                  color: $text-disabled;
-                }
-
-                &:focus {
-                  content:none;
-                }
-
-                &:hover {
-                  background-color: $module-hover-bg-darken-10;
-                }
-              }
-
-              > .markdown-preview {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 0;
-                overflow: auto;
-                margin: 0;
-                padding: .5em;
-                transform: translateY(-100%);
-                background-color: rgba(235, 235, 235, 0.85);
-                transition: transform .2s;
-
-                &.actived {
-                  height: 100%;
-                  transition: transform .2s;
-                  transform: translateY(0);
-                }
-              }
-            }
-
-            .pencilbox {
-              height: 2em;
-              line-height: 2em;
-              background-color: $module-hover-bg-opacity-9;
-
-              > .emoji {
-                > .emoji-box {
-                  display: none;
-                  position: absolute;
-                  bottom: 2em;
-                  left: 0;
-                  top: 0;
-                  width: 100%;
-                  overflow-y: auto;
-                  background-color: $module-bg;
-
-                  > .emoji-list {
-                    list-style: none;
-                    padding: 0;
-                    margin: 0;
-                    font-size: $font-size-h3;
-                    display: flex;
-                    flex-wrap: wrap;
-
-                    > .item {
-                      padding: 0 .4em;
-                      cursor: pointer;
-                      @include background-transition();
-
-                      &:hover {
-                        background-color: $module-hover-bg;
-                      }
-                    }
-                  }
-                }
-
-                &:hover {
-                  > .emoji-box {
-                    display: block;
-                  }
-                }
-              }
-
-              > .emoji,
-              > .image,
-              > .link,
-              > .code,
-              > .preview {
-                width: 2em;
-                height: 2em;
-                text-align: center;
-                display: inline-block;
-                @include background-transition();
-
-                &:hover {
-                  background-color: $module-hover-bg-darken-20;
-                }
-              }
-
-              > .submit {
-                float: right;
-                width: 8rem;
-                height: 100%;
-                background-color: $module-hover-bg-darken-20;
-                @include background-transition();
-
-                &:hover {
-                  background-color: $module-hover-bg-darken-40;
-                }
               }
             }
           }

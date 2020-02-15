@@ -1266,6 +1266,11 @@
   dependencies:
     "@types/webpack" "*"
 
+"@types/gravatar@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.npm.taobao.org/@types/gravatar/download/@types/gravatar-1.8.0.tgz#b69cf72ccd940be4e1af25c5f4c25332a56d6c97"
+  integrity sha1-tpz3LM2UC+ThryXF9MJTMqVtbJc=
+
 "@types/html-minifier@^3.5.3":
   version "3.5.3"
   resolved "https://registry.npm.taobao.org/@types/html-minifier/download/@types/html-minifier-3.5.3.tgz#5276845138db2cebc54c789e0aaf87621a21e84f"
