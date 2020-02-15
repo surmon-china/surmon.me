@@ -36,6 +36,8 @@
 
 ![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshots/pc.png)
 
+![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/screenshots/mobile.png)
+
 ## Development Setup
 
 ```bash

@@ -148,6 +148,10 @@ select:-webkit-autofill {
     &.sponsor {
       width: 600px;
       height: 200px;
+      box-sizing: content-box;
+      border: none;
+      border-left: $gap solid $white;
+      border-right: $gap solid $white;
     }
   }
 
