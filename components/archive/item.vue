@@ -13,7 +13,7 @@
           >{{ originText }}</span>
           <img
             class="item-thumb-img"
-            :src="buildThumb(article.thumb)"
+            :src="getThumb(article.thumb)"
             :alt="article.title"
             :title="article.title"
           >
@@ -78,6 +78,7 @@
 <script>
   import { mapState } from 'vuex'
   import { getFileCDNUrl } from '~/transformers/url'
+  import { getArchiveArticleThumbnailUrl } from '~/transformers/thumbnail'
   import { getJSONStorageReader } from '~/services/local-storage'
   import systemConstants from '~/constants/system'
 
@@ -95,10 +96,9 @@
     },
     computed: {
       ...mapState('global', [
-        'imageExt',
+        'constants',
         'language',
-        'isMobile',
-        'constants'
+        'isMobile'
       ]),
       isEnLang() {
         return this.$store.getters['global/isEnLang']
@@ -117,10 +117,11 @@
       }
     },
     methods: {
-      buildThumb(thumb) {
-        return thumb
-          ? `${thumb}?x-oss-process=style/blog.list.item.pc`
-          : getFileCDNUrl('/images/thumb-article.jpg')
+      getThumb(thumb) {
+        return getArchiveArticleThumbnailUrl(
+          thumb,
+          this.$store.getters['global/isWebPImage']
+        )
       }
     },
     mounted() {

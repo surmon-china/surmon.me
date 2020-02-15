@@ -245,7 +245,8 @@
   import { isBrowser } from '~/environment'
   import lozad from '~/plugins/lozad'
   import marked from '~/plugins/marked'
-  import { getFileCDNUrl, getArticleDetailPageUrl } from '~/transformers/url'
+  import { getArticleDetailPageUrl } from '~/transformers/url'
+  import { getArchiveArticleThumbnailUrl } from '~/transformers/thumbnail'
   import ShareBox from '~/components/widget/share'
 
   export default {
@@ -323,7 +324,6 @@
         constants: state => state.global.constants,
         language: state => state.global.language,
         tags: state => state.tag.data,
-        imageExt: state => state.global.imageExt,
         article: state => state.article.detail.data,
         isFetching: state => state.article.detail.fetching,
         isMobile: state => state.global.isMobile,
@@ -430,9 +430,10 @@
         }
       },
       getRelatedArticleThumb(thumb) {
-        return thumb
-          ? `${thumb}?x-oss-process=style/blog.list.item.pc`
-          : getFileCDNUrl('/images/thumb-releted.jpg')
+        return getArchiveArticleThumbnailUrl(
+          thumb,
+          this.$store.getters['global/isWebPImage']
+        )
       },
       getDateTitle(date) {
         if (!date) {
