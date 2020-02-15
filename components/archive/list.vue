@@ -116,7 +116,7 @@
 
         &::v-deep .mammon-ins {
           margin: 0;
-          height: 80px;
+          height: 81px;
         }
       }
     }
@@ -191,16 +191,17 @@
           background-color: $module-hover-bg;
 
           .iconfont {
-            color: $red
+            color: rgba($red, .6);
           }
         }
 
         > .text {
           position: relative;
+          height: $block-button-height;
           padding: 0 ($gap * 2) 0 ($gap * 3);
-          text-transform: uppercase;
           font-family: 'webfont-bolder', DINRegular;
-          background: $red;
+          text-transform: uppercase;
+          background: rgba($red, .6);
 
           &::before {
             $size: 1rem;
