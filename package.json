@@ -64,6 +64,7 @@
     "@nuxt/typescript-build": "^0.5.6",
     "@nuxtjs/eslint-config-typescript": "^1.0.0",
     "@nuxtjs/eslint-module": "^1.1.0",
+    "@types/gravatar": "^1.8.0",
     "@types/lozad": "^1.9.0",
     "@types/ua-parser-js": "^0.7.33",
     "babel-eslint": "^10.0.3",

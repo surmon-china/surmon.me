@@ -12,19 +12,18 @@ export const actions = {
   nuxtServerInit(store, { req }) {
     // 检查设备类型
     const userAgent = isServer ? req.headers['user-agent'] : navigator.userAgent
-    const { isMobile, isWechat, isChrome } = uaParser(userAgent)
+    const { isMobile, isWechat, isIE, isSafari } = uaParser(userAgent)
 
     store.commit('global/updateUserAgent', userAgent)
-    store.commit('global/updateMobileLayoutState', isMobile)
-    store.commit(
-      'global/updateImageExt',
-      isMobile || isWechat || !isChrome
-        ? systemConstants.ImageExt.Jpg
-        : systemConstants.ImageExt.Webp
-    )
+
+    // 微信/Safari/移动端无法精确判断兼容性，使用 jpg 格式
+    if (isMobile || isWechat || isIE || isSafari) {
+      store.commit('global/updateImageExt', systemConstants.ImageExt.Jpg)
+    }
 
     // 如果是移动端，则设置语言为中文
     if (isMobile) {
+      store.commit('global/updateMobileState', true)
       store.commit('global/updateLanguage', systemConstants.Language.Zh)
     }
 
