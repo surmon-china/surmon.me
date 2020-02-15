@@ -175,6 +175,7 @@ export default {
   router: {
     middleware: ['change-page-col'],
     linkActiveClass: 'link-active',
+    // 竟然废弃了，但是新方案更丑陋
     scrollBehavior(to, from, savedPosition) {
       return { x: 0, y: 0 }
     }
