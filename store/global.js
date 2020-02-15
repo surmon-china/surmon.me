@@ -18,8 +18,8 @@ export const state = () => ({
   // 同构常量
   constants: stateConstants,
 
-  // 图片格式
-  imageExt: systemConstants.ImageExt.Webp,
+  // 图片格式，见 OSS: https://oss.console.aliyun.com/bucket/oss-cn-hangzhou/surmon-static/process/img
+  imageExt: systemConstants.ImageExt.WebP,
 
   // ua
   userAgent: '',
@@ -65,7 +65,8 @@ export const state = () => ({
 export const getters = {
   isMobile: state => state.isMobile,
   isEnLang: state => state.language === systemConstants.Language.En,
-  isDarkTheme: state => state.theme === systemConstants.Theme.Dark
+  isDarkTheme: state => state.theme === systemConstants.Theme.Dark,
+  isWebPImage: state => state.imageExt === systemConstants.ImageExt.WebP,
 }
 
 export const mutations = {
@@ -100,7 +101,7 @@ export const mutations = {
   },
 
   // 设置是否移动端状态
-  updateMobileLayoutState(state, action) {
+  updateMobileState(state, action) {
     state.isMobile = action
   },
 

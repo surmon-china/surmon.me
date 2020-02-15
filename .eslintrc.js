@@ -51,10 +51,6 @@ module.exports = {
       "vueIndentScriptAndStyle": true
     }],
 
-    // import 语句顺序
-    'import/order': 'off',
-    'import/no-named-as-default-member': 'off',
-
     // Vue 相关
     'vue/no-unused-components': 'warn',
     'vue/no-v-html': 'off',
@@ -71,6 +67,11 @@ module.exports = {
       "svg": "always",
       "math": "always"
     }],
+
+    // 其他
+    'import/order': 'off',
+    'import/no-named-as-default-member': 'off',
+    'unicorn/prefer-text-content': 'off',
 
     /*Possible Errors*/
 
