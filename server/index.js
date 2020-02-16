@@ -29,6 +29,7 @@ const port = environment.PORT || 3000
 const host = environment.HOST || '127.0.0.1'
 
 // extends
+const handleRSS = require('./rss')
 const barrageServer = require('./barrage')
 const updateGAScript = require('./analytics')
 
@@ -50,6 +51,7 @@ if (config.dev) {
   app.get('/proxy/*', handleProxy())
 }
 
+app.get('/rss', handleRSS)
 app.use(nuxt.render)
 app.set('port', port)
 
