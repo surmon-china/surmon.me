@@ -65,16 +65,29 @@ const setFavicon = () => {
 }
 
 // 彩蛋
-export const startTitleEgg = () => {
-  reallyTitle = document.title
-  setTitle(eggTitle)
-  setFavicon()
-}
+// export const startTitleEgg = () => {
+//   reallyTitle = document.title
+//   setTitle(eggTitle)
+//   setFavicon()
+// }
 
 // 恢复默认
+// export const resetTitle = () => {
+//   window.clearTimeout(rollTimer)
+//   window.clearTimeout(faviconTimer)
+//   favicon && favicon.reset()
+//   document.title = reallyTitle
+// }
+
+// 仅启用简易版
+export const startTitleEgg = () => {
+  reallyTitle = document.title
+  document.title = 'Uncensored - Pornhub.com'
+  favicon = new Favico({ type: 'rectangle', animation: 'popFade' })
+  favicon.badge('PH')
+}
+
 export const resetTitle = () => {
-  window.clearTimeout(rollTimer)
-  window.clearTimeout(faviconTimer)
   favicon && favicon.reset()
   document.title = reallyTitle
 }
