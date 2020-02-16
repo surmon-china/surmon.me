@@ -98,12 +98,15 @@
           height: 100%;
           line-height: 2rem;
           font-family: 'webfont-bolder', DINRegular;
-          text-align: center;
-          color: $primary;
           writing-mode: tb-rl;
-          letter-spacing: -2px;
+          color: $primary;
+
+          &.zh {
+            letter-spacing: -2px;
+          }
 
           &.en {
+            text-align: center;
             font-weight: bold;
             letter-spacing: 0px;
           }
