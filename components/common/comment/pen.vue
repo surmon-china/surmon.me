@@ -86,15 +86,53 @@
       }
     },
     methods: {
-      focus() {
+      focusPosition(position = 0) {
         const input = this.$refs.input
-        const selection = window.getSelection()
-        const range = document.createRange()
-        const index = input.childNodes.length
-        range.setStart(input, index)
-        range.setEnd(input, index)
-        selection.removeAllRanges()
-        selection.addRange(range)
+        input.focus()
+        // 首位
+        if (!position) {
+          const range = window.getSelection().getRangeAt(0)
+          const clone = range.cloneRange()
+          clone.selectNodeContents(input)
+          clone.setEnd(range.endContainer, range.endOffset)
+          return clone.toString().length
+        }
+
+        // 指定位置
+        let length = 0
+        let abort = false
+        const visit = parentNode => {
+          const nodes = parentNode.childNodes
+          for (let i = 0; i < nodes.length; ++i) {
+            const node = nodes[i]
+            const isNewLine = node.nodeType === 1 && node.tagName === 'BR'
+            // 文本节点且不是换行
+            if (node.nodeType !== 3 && !isNewLine) {
+              visit(node)
+              return
+            }
+
+            length += isNewLine ? 1 : node.textContent.length
+            if (length >= position) {
+              if (abort) {
+                visit(node)
+                return
+              }
+
+              abort = true
+              const selection = document.getSelection()
+              const range = document.createRange()
+              const sub = length - node.textContent.length
+              range.setStart(node, position - sub)
+              range.setEnd(node, position - sub)
+              selection.removeAllRanges()
+              selection.addRange(range)
+              break
+            }
+          }
+        }
+
+        visit(input)
       },
       getInputText() {
         return this.$refs.input.innerText
@@ -106,31 +144,50 @@
         if (!start && !end) {
           return false
         }
-        // 如果选中了内容，则把选中的内容替换，否则追加新内容
+
+        // 如果选中了内容，则把选中的内容替换，
         const currentText = this.getInputText()
         const selection = (window.getSelection || document.getSelection)()
         const selectedText = selection.toString()
         if (selectedText) {
           // TODO: 正则可能会匹配到重复的前面的字符，故不可靠
-          this.setInputText(currentText.replace(selectedText, start + selectedText + end))
+          // 替换所有选中文本 -> 然后定位到所替换文本的最后一个字符
+          // 对于选中逻辑来说，既定的任何单个字符都理解为替换
+          const isInsertReplace = !!start && !end
+          const newSelectedText = isInsertReplace ? start : start + selectedText + end
+          const newText = currentText.replace(selectedText, newSelectedText)
+          // console.log('选中插入', newText)
+          this.setInputText(newText)
+          this.focusPosition(newText.indexOf(newSelectedText) + newSelectedText.length - 1)
         } else {
-          const newText = start + end
-          const selectedPoint = selection.getRangeAt(0)
-          const startPoint = selectedPoint && selectedPoint.startOffset
-          const endPoint = selectedPoint && selectedPoint.endOffset
-          // 若拿到了光标，则在光标位置插入新内容，否则末端追加内容
-          this.setInputText(
-            selectedPoint && startPoint === endPoint && startPoint > 0
-              ? currentText.slice(0, startPoint) + newText + currentText.slice(startPoint)
-              : currentText + newText
-          )
-          this.$refs.input.scrollTop = this.$refs.input.scrollHeight
+          // 否则追加新内容
+          const newInsertText = start + end
+          const selectedRange = (() => {
+            // eslint-disable-next-line no-empty
+            try { return selection.getRangeAt(0) } catch(error) {}
+          })()
+          const startPoint = selectedRange && selectedRange.startOffset
+          const endPoint = selectedRange && selectedRange.endOffset
+          if (selectedRange && startPoint === endPoint && startPoint > 0) {
+            // 若拿到了光标，则在光标位置插入新内容 -> 然后定位到新内容的最后一个字符
+            const newTexts = [currentText.slice(0, startPoint), newInsertText, currentText.slice(startPoint)]
+            // console.log('光标插入', startPoint, newTexts)
+            this.setInputText(newTexts.join(''))
+            this.focusPosition(newTexts[0].length + newTexts[1].length - 1)
+          } else {
+            // 否则末端追加内容，并定位到最后一个字符
+            const newText = currentText + newInsertText
+            // console.log('尾部插入', newText)
+            this.setInputText(newText)
+            this.focusPosition(newText.length - 1)
+            this.$refs.input.scrollTop = this.$refs.input.scrollHeight
+          }
         }
-        this.focus()
+
         this.handleInputChange()
       },
       insertEmoji(emoji) {
-        this.insertContent([emoji])
+        this.insertContent([` ${emoji} `])
       },
       insertImage() {
         this.insertContent([` ![`, `](https://) `])

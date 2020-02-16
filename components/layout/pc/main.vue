@@ -89,7 +89,7 @@
     },
     mounted() {
       if (isBrowser) {
-        // this.autoEggWhenTabActive()
+        this.autoEggWhenTabActive()
         this.$store.commit('global/resetTheme')
         this.$store.dispatch('wallpaper/fetchPapers')
         this.$root.$musicPlayer = musicPlayer

@@ -1,6 +1,11 @@
 
 ## CHANGELOG
 
+### v2.5.2
+- Add RSS service
+- Improve About page
+- Bugfix Comment editor
+
 ### v2.5.0
 - TypeScript
 - Improve styles
