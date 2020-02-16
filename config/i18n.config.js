@@ -130,10 +130,6 @@ export default {
         zh: '见相',
         en: 'Webcam'
       },
-      myMap: {
-        zh: '问世',
-        en: 'Liberty, love!'
-      },
       barrage: {
         name: {
           zh: '畅言',
