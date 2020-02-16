@@ -101,7 +101,7 @@
           text-align: center;
           color: $primary;
           writing-mode: tb-rl;
-          letter-spacing: $xs-gap;
+          letter-spacing: -2px;
 
           &.en {
             font-weight: bold;

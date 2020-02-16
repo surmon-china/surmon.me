@@ -495,7 +495,7 @@
           scrollTo(targetDom, 200, { offset: isToEditor ? 0 : -300 })
           // 如果是进入编辑模式，则需要激活光标
           if (isToEditor && this.$refs.markdownInput) {
-            this.$refs.markdownInput.focus()
+            this.$refs.markdownInput.focusPosition()
           }
         }
       },
@@ -616,7 +616,7 @@
                 speed: 12,
                 staggered: true,
                 increaseSpeed: 0.4,
-                emoji: getFileCDNUrl('/images/emojis/normal.png')
+                emoji: getFileCDNUrl('/images/emojis/haha.png')
               })
             } else if (content.includes('666') || content.includes('赞')) {
               luanchRain({
@@ -631,6 +631,15 @@
                 speed: 8,
                 increaseSpeed: 0.04,
                 emoji: getFileCDNUrl('/images/emojis/hehe.png')
+              })
+            } else if (Math.random() <= 0.6) {
+              // 否则以 60% 的概率随机出现
+              luanchRain({
+                scale: 0.6,
+                staggered: true,
+                speed: 8,
+                increaseSpeed: 0.04,
+                emoji: getFileCDNUrl('/images/emojis/funny.png')
               })
             }
           }

@@ -2,14 +2,14 @@
   <div id="toolbox">
     <div class="container">
       <div class="tools">
-        <button
-          class="compass"
-          :title="$i18n.text.myMap"
-          :disabled="onBarrage"
-          @click="toggleMyMap"
+        <a
+          href="/rss"
+          target="_blank"
+          class="rss"
+          rel="external nofollow noopenter"
         >
-          <i class="iconfont icon-tibet-1" />
-        </button>
+          <i class="iconfont icon-rss" />
+        </a>
         <!-- 暂已移除 RTC & 人脸识别相关业务模块 -->
         <!-- <button
           class="webcam"
@@ -85,7 +85,6 @@
       ...mapState('global', [
         'language',
         'onWebcam',
-        'onMyMap',
         'onBarrage'
       ]),
       isEnLang() {
@@ -135,10 +134,6 @@
         this.$ga.event('弹幕功能', '切换', 'tool')
         this.$store.commit('global/toggleUpdateBarrageOnState')
       },
-      toggleMyMap() {
-        this.$ga.event('轨迹地图', '切换', 'tool')
-        this.$store.commit('global/toggleMyMapOnState')
-      },
       toggleWebcam() {
         this.$ga.event('Webcam', '切换', 'tool')
         if (isFirstOpenWebcam && !this.onWebcam) {
@@ -174,7 +169,7 @@
         right: -12rem;
         width: $size;
 
-        > .compass,
+        > .rss,
         > .webcam,
         > .barrage,
         > .to-page-top,
@@ -243,12 +238,13 @@
           }
         }
 
-        > .compass {
-          color: $primary;
+        > .rss {
+          $color: #f8981d;
+          color: $color;
 
           &:hover {
-            background-color: $primary;
-            color: $text-reversal;
+            background-color: $color;
+            color: $white;
           }
         }
 
