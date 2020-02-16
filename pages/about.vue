@@ -2,7 +2,7 @@
   <div class="about-page" :class="{ mobile: isMobile }">
     <div class="about-me">
       <div class="description">
-        <div class="item webfont">
+        <div class="item">
           <i class="iconfont icon-swordsman" />
           <p class="bio">
             <span>{{ isEnLang ? `I'm Surmon, a digital nomad.` : `浪蝶游蜂，迈步九云中` }}</span>
@@ -170,13 +170,17 @@
             </span>
           </span>
         </div>
-        <div class="item webfont">
+        <div class="item">
           <i class="iconfont icon-like" />
-          <span>{{ isEnLang ? 'code. beauty. whisky. music. vagrant.' : '酒池肉林、日夜笙歌、依翠偎红、五音六律、目营心匠、桀骜不羁' }}</span>
+          <span class="like-text">{{ isEnLang ? 'code. beauty. whisky. music. vagrant.' : '酒池肉林、日夜笙歌、依翠偎红、五音六律、目营心匠、桀骜不羁' }}</span>
         </div>
-        <div class="item webfont">
-          <i class="iconfont icon-code" />
-          <span>{{ isEnLang ? 'Talk is cheap. Show me the code.' : '吾生有涯愿无尽，心期填海力移山' }}</span>
+        <div class="item">
+          <i class="iconfont icon-tibet-1" />
+          <a href class="my-map" @click.stop.prevent="openMyMap">{{
+            isEnLang
+              ? 'Every path I went astray built my Rome.'
+              : '路为纸，地成册，行作笔，心当墨；思无界，行有疆'
+          }}</a>
         </div>
         <div class="item">
           <i class="iconfont icon-friend" />
@@ -301,7 +305,11 @@
     methods: {
       handleFollowMe() {
         this.$ga.event('加微信码', '点击', 'tool')
-      }
+      },
+      openMyMap() {
+        this.$ga.event('轨迹地图', '切换', 'tool')
+        this.$store.commit('global/toggleMyMapOnState')
+      },
     }
   }
 </script>
@@ -332,20 +340,20 @@
             margin-bottom: 0;
           }
 
-          &.webfont {
-            font-family: 'webfont-bolder', 'webfont-normal', DINRegular;
-          }
-
           > .iconfont {
             width: 2em;
-            font-size: $font-size-h4;
-            text-align: center;
             margin-right: 1em;
             display: inline-block;
+            font-size: $font-size-h4;
+            text-align: center;
             color: $text-dividers;
 
-            &.icon-code {
-              color: $black;
+            &.icon-social {
+              color: #ffa800;
+            }
+
+            &.icon-tibet-1 {
+              color: $primary;
             }
 
             &.icon-like {
@@ -359,12 +367,22 @@
 
           > .bio {
             display: inline-block;
+            font-family: 'webfont-bolder', DINRegular;
             margin: 0;
 
             &::first-letter {
               font-size: $font-size-h2;
               margin-right: 2px;
             }
+          }
+
+          > .like-text {
+            font-family: 'webfont-bolder', DINRegular;
+          }
+
+          > .my-map {
+            border-bottom: 1px solid;
+            font-family: 'webfont-bolder', DINRegular;
           }
 
           > .music {
