@@ -2,7 +2,7 @@
   <div id="wallpaper-switch" :class="{ dark: isDarkTheme }">
     <div class="switcher" @click="onWallpaper">
       <div class="up">
-        <span class="title" :class="{ en: isEnLang }">{{ $i18n.text.wallpaper }}</span>
+        <span class="title" :class="language">{{ $i18n.text.wallpaper }}</span>
       </div>
       <div class="down"></div>
     </div>
@@ -23,8 +23,8 @@
       }
     },
     computed: {
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
+      language() {
+        return this.$store.global.language
       },
       isDarkTheme() {
         return this.$store.getters['global/isDarkTheme']
