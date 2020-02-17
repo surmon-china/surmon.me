@@ -24,7 +24,7 @@
     },
     computed: {
       language() {
-        return this.$store.global.language
+        return this.$store.state.global.language
       },
       isDarkTheme() {
         return this.$store.getters['global/isDarkTheme']
