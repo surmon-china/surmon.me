@@ -39,10 +39,7 @@ const updateDebounce = debounce(updateLocalBarragesFile, 1000 * 30)
 let socketClients = 0
 
 const barrageServer = io => {
-
-  // 弹幕
   io.on('connection', socket => {
-
     // 每次有新人加入，都更新客户端数量
     io.clients((error, clients) => {
       if (error) {

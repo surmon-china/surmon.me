@@ -93,8 +93,9 @@ sw.*
 # ecosystem
 ecosystem.config.js
 
-# sitemap
+# syndication
 sitemap.xml
+rss.xml
 
 # barrages
 data/barrages.json
