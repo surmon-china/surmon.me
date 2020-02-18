@@ -3,7 +3,7 @@
     <div class="container">
       <div class="tools">
         <a
-          href="/rss"
+          href="/rss.xml"
           target="_blank"
           class="rss"
           rel="external nofollow noopenter"

@@ -1,6 +1,9 @@
 
 ## CHANGELOG
 
+### v2.5.3
+- Rplace RSS service with xml (nodepress)
+
 ### v2.5.2
 - Add RSS service
 - Improve About page
