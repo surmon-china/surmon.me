@@ -126,7 +126,7 @@
         const text = this.barrage.trim()
         if (!text) return
         const barrage = {
-          text,
+          text: text.slice(0, 40),
           style: {
             size: this.sizeIndex,
             color: this.colorIndex
