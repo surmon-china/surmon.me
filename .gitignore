@@ -94,8 +94,8 @@ sw.*
 ecosystem.config.js
 
 # syndication
-sitemap.xml
-rss.xml
+/static/sitemap.xml
+/static/rss.xml
 
 # barrages
 data/barrages.json
