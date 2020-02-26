@@ -10,6 +10,7 @@
       </div>
       <h2 class="title">{{ appConfig.meta.title }}</h2>
       <p class="desc">{{ $i18n.text.slogan }}</p>
+      <p class="version">v1.1.0 (2020-02-27)</p>
       <div class="screen">
         <img
           alt="app-hot"
@@ -27,13 +28,19 @@
             target="_blank"
             class="btn"
             :href="'/app/surmon.me.apk' | byCDN"
-          >{{ $i18n.text.device.android }}</a>
+          >
+            <i class="iconfont icon-android"></i>
+            <span class="text">{{ $i18n.text.device.android }}</span>
+          </a>
           <a
-            href=""
             class="btn"
             target="_blank"
-            @click.prevent="handleDownloadIOS"
-          >{{ $i18n.text.device.ios }}</a>
+            rel="external nofollow noopenter"
+            href="https://github.com/surmon-china/surmon.me.native#ios"
+          >
+            <i class="iconfont icon-mac"></i>
+            <span class="text">{{ $i18n.text.device.ios }}</span>
+          </a>
         </div>
       </div>
     </div>
@@ -56,11 +63,6 @@
       },
       isMobile() {
         return this.$store.state.global.isMobile
-      }
-    },
-    methods: {
-      handleDownloadIOS() {
-        window.alert('!')
       }
     }
   }
@@ -118,6 +120,10 @@
         text-transform: uppercase;
       }
 
+      > .version {
+        color: $text-dividers;
+      }
+
       > .screen {
         margin-top: 5rem;
         width: 36rem;
@@ -167,6 +173,10 @@
             text-transform: uppercase;
             background: $module-bg;
             transition: color $transition-time-fast, background $transition-time-fast;
+
+            .text {
+              margin-left: $xs-gap;
+            }
 
             &:hover {
               color: $text-reversal;
