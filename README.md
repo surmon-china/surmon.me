@@ -66,4 +66,4 @@ $ yarn lint
 
 **Example:**
 - `local:develop -> remote:develop` -> `CI:Build test`
-- `remote:develop -> remote:master -> merged` -> `CI:Deploy to server`
+- `remote:develop/other -> remote:master -> merged` -> `CI:Deploy to server`
