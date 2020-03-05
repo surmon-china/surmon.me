@@ -10,7 +10,7 @@
       </div>
       <h2 class="title">{{ appConfig.meta.title }}</h2>
       <p class="desc">{{ $i18n.text.slogan }}</p>
-      <p class="version">v1.1.2 (2020-02-27)</p>
+      <p class="version">v1.1.4 (2020-03-06)</p>
       <div class="screen">
         <img
           alt="app-hot"
