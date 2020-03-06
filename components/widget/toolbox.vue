@@ -7,6 +7,7 @@
           target="_blank"
           class="rss"
           rel="external nofollow noopenter"
+          @mousedown="handleRSS"
         >
           <i class="iconfont icon-rss" />
         </a>
@@ -65,6 +66,7 @@
   import { mapState } from 'vuex'
   import throttle from 'lodash/throttle'
   import appConfig from '~/config/app.config'
+  import systemConstants from '~/constants/system'
   import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
 
   let isFirstOpenWebcam = true
@@ -130,12 +132,27 @@
         }
         this.animationFrameId = window.requestAnimationFrame(step)
       },
+      handleRSS() {
+        this.$ga.event(
+          'RSS 订阅',
+          systemConstants.GAEventActions.Click,
+          systemConstants.GAEventTags.Tool
+        )
+      },
       toggleBarrage() {
-        this.$ga.event('弹幕功能', '切换', 'tool')
+        this.$ga.event(
+          '弹幕功能',
+          systemConstants.GAEventActions.Toggle,
+          systemConstants.GAEventTags.Tool
+        )
         this.$store.commit('global/toggleUpdateBarrageOnState')
       },
       toggleWebcam() {
-        this.$ga.event('Webcam', '切换', 'tool')
+        this.$ga.event(
+          'Webcam',
+          systemConstants.GAEventActions.Toggle,
+          systemConstants.GAEventTags.Tool
+        )
         if (isFirstOpenWebcam && !this.onWebcam) {
           const confirmText = this.isEnLang
             ? 'Ready?'
