@@ -417,9 +417,9 @@
       },
       handleSponsor() {
         this.$ga.event(
-          '内容赞赏',
+          '评论赞赏弹窗',
           systemConstants.GAEventActions.Click,
-          systemConstants.GAEventTags.Tool
+          systemConstants.GAEventTags.Comment
         )
         this.isMobile
           ? window.utils.openImgPopup(getFileCDNUrl('/images/sponsor-mobile.png'))
@@ -527,7 +527,11 @@
         if (this.isLikedPage) {
           return false
         }
-        this.$ga.event('喜欢当页', systemConstants.GAEventActions.Click, systemConstants.GAEventTags.Tool)
+        this.$ga.event(
+          '喜欢当页',
+          systemConstants.GAEventActions.Click,
+          systemConstants.GAEventTags.Comment
+        )
         this.$store.dispatch(
           this.postId === this.constants.CommentPostType.Guestbook
             ? 'global/fetchLikeSite'
