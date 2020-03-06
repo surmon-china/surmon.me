@@ -38,10 +38,27 @@ export const StorageField = {
   UserLikeHistory: 'user_like_history'
 }
 
+export const GAEventActions = {
+  Click: '点击',
+  View: '触及',
+  Toggle: '切换'
+}
+
+export const GAEventTags = {
+  Comment: '评论',
+  Share: '分享',
+  Tool: '部件',
+  AppPage: 'page-App',
+  AboutPage: 'page-About',
+  ServicePage: 'page-Service'
+}
+
 export default {
   Language,
   Theme,
   Route,
   ImageExt,
-  StorageField
+  StorageField,
+  GAEventActions,
+  GAEventTags
 }

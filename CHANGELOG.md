@@ -1,6 +1,10 @@
 
 ## CHANGELOG
 
+### v2.5.4
+- Replace App url to GitHub file URL
+- Upgrade GA events
+
 ### v2.5.3
 - Rplace RSS service with xml (nodepress)
 
