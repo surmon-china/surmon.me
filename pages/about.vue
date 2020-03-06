@@ -276,6 +276,7 @@
 <script>
   import adConfig from '~/config/ad.config'
   import appConfig from '~/config/app.config'
+  import systemConstants from '~/constants/system'
   import { getFileCDNUrl } from '~/transformers/url'
 
   export default {
@@ -304,10 +305,18 @@
     },
     methods: {
       handleFollowMe() {
-        this.$ga.event('加微信码', '点击', 'tool')
+        this.$ga.event(
+          '加微信码',
+          systemConstants.GAEventActions.View,
+          systemConstants.GAEventTags.Tool
+        )
       },
       openMyMap() {
-        this.$ga.event('轨迹地图', '切换', 'tool')
+        this.$ga.event(
+          '轨迹地图',
+          systemConstants.GAEventActions.Toggle,
+          systemConstants.GAEventTags.Tool
+        )
         this.$store.commit('global/toggleMyMapOnState')
       },
     }

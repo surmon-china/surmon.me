@@ -29,7 +29,11 @@
           'global/updateLanguage',
           this.isEnLang ? systemConstants.Language.Zh : systemConstants.Language.En
         )
-        this.$ga.event('系统语言', '切换', 'tool')
+        this.$ga.event(
+          '系统语言',
+          systemConstants.GAEventActions.Toggle,
+          systemConstants.GAEventTags.Tool
+        )
       }
     }
   })
