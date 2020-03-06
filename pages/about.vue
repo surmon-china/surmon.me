@@ -14,18 +14,21 @@
             target="_blank"
             href="https://github.com/sponsors/surmon-china"
             rel="external nofollow noopenter"
+            @mousedown="handleSponsor"
           >GitHub Sponsor</a>
           <span>&nbsp;|&nbsp;</span>
           <a
             target="_blank"
             href="https://www.paypal.me/surmon"
             rel="external nofollow noopenter"
+            @mousedown="handleSponsor"
           >PayPal me</a>
           <span>&nbsp;|&nbsp;</span>
           <a
             target="_blank"
             href="/sponsor"
             rel="external nofollow noopenter"
+            @mousedown="handleSponsor"
           >More</a>
         </div>
         <div class="item">
@@ -308,6 +311,13 @@
         this.$ga.event(
           '加微信码',
           systemConstants.GAEventActions.View,
+          systemConstants.GAEventTags.AboutPage
+        )
+      },
+      handleSponsor() {
+        this.$ga.event(
+          '赞赏 Sponsor',
+          systemConstants.GAEventActions.Click,
           systemConstants.GAEventTags.AboutPage
         )
       },
