@@ -308,14 +308,14 @@
         this.$ga.event(
           '加微信码',
           systemConstants.GAEventActions.View,
-          systemConstants.GAEventTags.Tool
+          systemConstants.GAEventTags.AboutPage
         )
       },
       openMyMap() {
         this.$ga.event(
           '轨迹地图',
-          systemConstants.GAEventActions.Toggle,
-          systemConstants.GAEventTags.Tool
+          systemConstants.GAEventActions.View,
+          systemConstants.GAEventTags.AboutPage
         )
         this.$store.commit('global/toggleMyMapOnState')
       },
