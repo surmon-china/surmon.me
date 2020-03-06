@@ -10,7 +10,7 @@
       </div>
       <h2 class="title">{{ appConfig.meta.title }}</h2>
       <p class="desc">{{ $i18n.text.slogan }}</p>
-      <p class="version">v1.1.4 (2020-03-06)</p>
+      <!-- <p class="version">v1.1.4 (2020-03-06)</p> -->
       <div class="screen">
         <img
           alt="app-hot"
@@ -27,7 +27,8 @@
           <a
             target="_blank"
             class="btn"
-            :href="'/app/surmon.me.apk' | byCDN"
+            :href="appConfig.links.appApkFile"
+            @mousedown="handleAndroidApp"
           >
             <i class="iconfont icon-android"></i>
             <span class="text">{{ $i18n.text.device.android }}</span>
@@ -36,10 +37,21 @@
             class="btn"
             target="_blank"
             rel="external nofollow noopenter"
-            href="https://github.com/surmon-china/surmon.me.native#ios"
+            :href="appConfig.links.appProject + '#ios'"
+            @mousedown="handleAppAction('APP IOS')"
           >
             <i class="iconfont icon-mac"></i>
             <span class="text">{{ $i18n.text.device.ios }}</span>
+          </a>
+          <a
+            class="btn code"
+            target="_blank"
+            rel="external nofollow noopenter"
+            :href="appConfig.links.appProject"
+            @mousedown="handleAppAction('APP GitHub 地址')"
+          >
+            <i class="iconfont icon-git"></i>
+            <span class="text">Source Code</span>
           </a>
         </div>
       </div>
@@ -49,6 +61,7 @@
 
 <script>
   import appConfig from '~/config/app.config'
+  import systemConstants from '~/constants/system'
   export default {
     name: 'Application',
     head() {
@@ -63,6 +76,20 @@
       },
       isMobile() {
         return this.$store.state.global.isMobile
+      }
+    },
+    methods: {
+      handleAppAction(name) {
+        this.$ga.event(
+          name,
+          systemConstants.GAEventActions.Click,
+          systemConstants.GAEventTags.AppPage
+        )
+      },
+      handleAndroidApp() {
+        this.handleAppAction('APP Android 下载')
+        window.alert('Android apk 文件托管在 GitHub，希望你可以顺利访问~')
+        window.open(appConfig.links.appApkFile)
       }
     }
   }
@@ -173,6 +200,17 @@
             text-transform: uppercase;
             background: $module-bg;
             transition: color $transition-time-fast, background $transition-time-fast;
+
+            &.code {
+              border-color: $text;
+              color: $text;
+
+              &:hover {
+                background: $primary;
+                border-color: $primary;
+                color: $text-reversal;
+              }
+            }
 
             .text {
               margin-left: $xs-gap;

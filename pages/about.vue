@@ -14,18 +14,21 @@
             target="_blank"
             href="https://github.com/sponsors/surmon-china"
             rel="external nofollow noopenter"
+            @mousedown="handleSponsor"
           >GitHub Sponsor</a>
           <span>&nbsp;|&nbsp;</span>
           <a
             target="_blank"
             href="https://www.paypal.me/surmon"
             rel="external nofollow noopenter"
+            @mousedown="handleSponsor"
           >PayPal me</a>
           <span>&nbsp;|&nbsp;</span>
           <a
             target="_blank"
             href="/sponsor"
             rel="external nofollow noopenter"
+            @mousedown="handleSponsor"
           >More</a>
         </div>
         <div class="item">
@@ -276,6 +279,7 @@
 <script>
   import adConfig from '~/config/ad.config'
   import appConfig from '~/config/app.config'
+  import systemConstants from '~/constants/system'
   import { getFileCDNUrl } from '~/transformers/url'
 
   export default {
@@ -304,10 +308,25 @@
     },
     methods: {
       handleFollowMe() {
-        this.$ga.event('加微信码', '点击', 'tool')
+        this.$ga.event(
+          '加微信码',
+          systemConstants.GAEventActions.View,
+          systemConstants.GAEventTags.AboutPage
+        )
+      },
+      handleSponsor() {
+        this.$ga.event(
+          '赞赏 Sponsor',
+          systemConstants.GAEventActions.Click,
+          systemConstants.GAEventTags.AboutPage
+        )
       },
       openMyMap() {
-        this.$ga.event('轨迹地图', '切换', 'tool')
+        this.$ga.event(
+          '轨迹地图',
+          systemConstants.GAEventActions.View,
+          systemConstants.GAEventTags.AboutPage
+        )
         this.$store.commit('global/toggleMyMapOnState')
       },
     }

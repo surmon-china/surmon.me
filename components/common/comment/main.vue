@@ -416,7 +416,11 @@
         this.lozadObserver.observe()
       },
       handleSponsor() {
-        this.$ga.event('内容赞赏', '点击', 'tool')
+        this.$ga.event(
+          '评论赞赏弹窗',
+          systemConstants.GAEventActions.Click,
+          systemConstants.GAEventTags.Comment
+        )
         this.isMobile
           ? window.utils.openImgPopup(getFileCDNUrl('/images/sponsor-mobile.png'))
           // sponsor 业务不使用 CDN
@@ -501,6 +505,11 @@
       },
       // 回复评论
       replyComment(comment) {
+        this.$ga.event(
+          '欲回评论',
+          systemConstants.GAEventActions.Click,
+          systemConstants.GAEventTags.Comment
+        )
         this.pid = comment.id
         this.toSomeAnchorById('post-box')
       },
@@ -518,6 +527,11 @@
         if (this.isLikedPage) {
           return false
         }
+        this.$ga.event(
+          '喜欢当页',
+          systemConstants.GAEventActions.Click,
+          systemConstants.GAEventTags.Comment
+        )
         this.$store.dispatch(
           this.postId === this.constants.CommentPostType.Guestbook
             ? 'global/fetchLikeSite'
@@ -535,6 +549,11 @@
       },
       // 点赞某条评论
       likeComment(comment) {
+        this.$ga.event(
+          '欲赞评论',
+          systemConstants.GAEventActions.Click,
+          systemConstants.GAEventTags.Comment
+        )
         if (this.getCommentLiked(comment.id)) {
           return false
         }
@@ -567,6 +586,11 @@
       },
       // 提交评论
       submitComment() {
+        this.$ga.event(
+          '欲发评论',
+          systemConstants.GAEventActions.Click,
+          systemConstants.GAEventTags.Comment
+        )
         if (!this.user.name) {
           return alert(this.$i18n.text.comment.profile.name + '?')
         }

@@ -17,6 +17,8 @@ export const links = {
   throwerror: 'https://throwerror.io',
   foxfinder: 'https://foxfinder.io',
   project: 'https://github.surmon.me',
+  appProject: 'https://github.com/surmon-china/surmon.me.native',
+  appApkFile: 'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
   instagram: 'https://www.instagram.com/surmon666'
 }
 

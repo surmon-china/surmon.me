@@ -19,6 +19,7 @@
 
 <script>
   import appConfig from '~/config/app.config'
+  import systemConstants from '~/constants/system'
   import { getPageUrl } from '~/transformers/url'
   export default {
     name: 'Share',
@@ -77,7 +78,8 @@
     },
     methods: {
       copyPageUrl() {
-        this.$ga.social('主站复制', '分享', this.url)
+        this.$ga.social('复制当页链接', systemConstants.GAEventActions.Click, this.url)
+        this.$ga.event('复制当页链接', systemConstants.GAEventActions.Click, systemConstants.GAEventTags.Share)
         this.$root.$copyToClipboard(this.url)
       },
       description() {
@@ -103,6 +105,11 @@
           ? url().replace(/\s|\||Surmon.me/g, '')
           : encodeURI(url())
         this.$ga.social(social, '分享', targetUrl)
+        this.$ga.event(
+          '当页分享',
+          systemConstants.GAEventActions.Click,
+          systemConstants.GAEventTags.Share
+        )
         /*
         * screen.availWidth 获得屏幕宽度
         * screen.availHeight 获得屏幕高度
