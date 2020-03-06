@@ -10,11 +10,16 @@
 </template>
 
 <script>
+  import systemConstants from '~/constants/system'
   export default {
     name: 'WallpaperSwitch',
     methods: {
       onWallpaper() {
-        this.$ga.event('今日壁纸', '切换', 'tool')
+        this.$ga.event(
+          '今日壁纸',
+          systemConstants.GAEventActions.Toggle,
+          systemConstants.GAEventTags.Tool
+        )
         if (this.wallpapers) {
           this.$store.commit('global/toggleUpdateWallpaperOnState', true)
         } else {

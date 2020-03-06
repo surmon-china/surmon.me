@@ -124,6 +124,7 @@
 
 <script>
   import appConfig from '~/config/app.config'
+  import systemConstants from '~/constants/system'
   import AdsenseServicePage from '~/components/common/adsense/service-page'
   export default {
     name: 'Service',
@@ -137,7 +138,11 @@
     },
     methods: {
       submitProject() {
-        this.$ga.event('咨询邮件', '点击', 'tool')
+        this.$ga.event(
+          '咨询邮件',
+          systemConstants.GAEventActions.Click,
+          systemConstants.GAEventTags.ServicePage
+        )
         const subject = this.isEnLang
           ? `Technical consultant / ${appConfig.meta.title}`
           : `嗨！Surmon，久仰大名！`

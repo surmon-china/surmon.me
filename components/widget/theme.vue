@@ -30,7 +30,11 @@
     methods: {
       setTheme(theme) {
         this.$store.commit('global/updateTheme', theme)
-        this.$ga && this.$ga.event('多色主题', '切换', 'tool')
+        this.$ga.event(
+          '反色模式',
+          systemConstants.GAEventActions.Toggle,
+          systemConstants.GAEventTags.Tool
+        )
       },
       toggleTheme() {
         this.setTheme(
