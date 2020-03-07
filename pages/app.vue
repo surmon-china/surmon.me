@@ -28,7 +28,7 @@
             target="_blank"
             class="btn"
             :href="appConfig.links.appApkFile"
-            @mousedown="handleAndroidApp"
+            @click="handleAndroidApp($event)"
           >
             <i class="iconfont icon-android"></i>
             <span class="text">{{ $i18n.text.device.android }}</span>
@@ -86,10 +86,15 @@
           systemConstants.GAEventTags.AppPage
         )
       },
-      handleAndroidApp() {
+      handleAndroidApp(event) {
         this.handleAppAction('APP Android 下载')
-        window.alert('Android apk 文件托管在 GitHub，希望你可以顺利访问~')
-        window.open(appConfig.links.appApkFile)
+        if (!window.confirm(
+          this.isEnLang
+            ? 'Will open raw.githubusercontent.com to download android app...'
+            : 'Android apk 文件托管在 GitHub，希望你可以顺利访问~'
+        )) {
+          event.preventDefault()
+        }
       }
     }
   }
