@@ -93,7 +93,7 @@ export default {
   asideSwiper: [
     {
       url: links.aliyunInvite,
-      src: imagePath + 'aliyun-minisite-532-178.jpg'
+      src: imagePath + 'aliyun-2020-532-178.jpg'
     },
     // {
     //   url: links.aliyunCPS,
