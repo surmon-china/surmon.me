@@ -1,35 +1,27 @@
 <template>
   <div class="aside-mammon">
-    <div
-      v-swiper:swiper="swiperOption"
+    <swiper
+      ref="swiper"
       class="swiper aside"
-      @slideChange="handleSwiperSlideChange"
-      @transitionStart="handleSwiperTransitionStart"
-      @transitionEnd="handleSwiperTransitionEnd"
+      :options="swiperOption"
+      @slide-change="handleSwiperSlideChange"
     >
-      <div class="swiper-wrapper">
-        <div
-          v-for="(ad, index) in ads"
-          :key="index"
-          class="swiper-slide slide-item"
+      <swiper-slide
+        v-for="(ad, index) in ads"
+        :key="index"
+        class="swiper-slide"
+      >
+        <a
+          :href="ad.url"
+          rel="external nofollow noopener"
+          target="_blank"
+          class="content"
         >
-          <div
-            class="content filter"
-            :class="{ 'motion-blur-vertical-small': isEnableFilterStyle(index) }"
-          >
-            <a
-              :href="ad.url"
-              rel="external nofollow noopener"
-              target="_blank"
-              class="ad-box"
-            >
-              <img :src="ad.src" alt="aliyun-ad" draggable="false">
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets" />
-    </div>
+          <img :src="ad.src" alt="aliyun-ad" draggable="false">
+        </a>
+      </swiper-slide>
+      <div slot="pagination" class="swiper-pagination" />
+    </swiper>
   </div>
 </template>
 
@@ -45,13 +37,20 @@
         default: 0
       }
     },
-    data() {
-      return {
-        transitioning: false
-      }
-    },
     computed: {
       ads: () => adConfig.asideSwiper,
+      swiper: {
+        cache: false,
+        get() {
+          return this.$refs.swiper?.$swiper
+        }
+      },
+      currentSlideRealIndex: {
+        cache: false,
+        get() {
+          return this.swiper?.realIndex
+        }
+      },
       swiperOption() {
         return {
           initialSlide: this.initIndex,
@@ -76,17 +75,8 @@
       }
     },
     methods: {
-      isEnableFilterStyle(index) {
-        return this.transitioning && this.swiper && this.swiper.realIndex === index
-      },
       handleSwiperSlideChange() {
-        this.$emit('slideChange', this.swiper.realIndex)
-      },
-      handleSwiperTransitionStart() {
-        this.transitioning = true
-      },
-      handleSwiperTransitionEnd() {
-        this.transitioning = false
+        this.$emit('slide-change', this.currentSlideRealIndex)
       }
     }
   })
@@ -114,16 +104,20 @@
       height: 88px;
 
       .swiper-wrapper {
+        &[style*="300ms"] {
+          .swiper-slide-active {
+            @include blur-filter('vertical-small');
+          }
+        }
+
         .swiper-slide {
           .content {
-            .ad-box {
-              width: 100%;
-              height: 100%;
+            width: 100%;
+            height: 100%;
 
-              img {
-                width: 100%;
-                height: auto;
-              }
+            img {
+              width: 100%;
+              height: auto;
             }
           }
         }

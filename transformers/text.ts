@@ -7,11 +7,11 @@
 // 文字溢出过滤器
 export const textOverflow = (text: string, customLength?: number) => {
   const length = customLength || text.length
-  const cansub = length && text && text.length > length
+  const cansub = length && text?.length > length
   return cansub ? text.substr(0, length) + '...' : text
 }
 
 // 首字母大写
 export const firstUpperCase = (text: string) => {
-  return text && text.toLowerCase().replace(/( |^)[a-z]/g, L => L.toUpperCase())
+  return text?.toLowerCase().replace(/( |^)[a-z]/g, L => L.toUpperCase())
 }

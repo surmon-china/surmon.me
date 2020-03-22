@@ -1,18 +1,22 @@
 # .eslintignore
 
+node_modules
+
 build/*.js
-config/*.js
+# config/*.js
+
+*.discard
 
 static/*
 static/*.js
 
 .deploy/*
 
+.nuxt
 .nuxt/*
 .nuxt/*.js
-.nuxt/*.vue
 
-utils/scroll-to-anywhere.ts
+services/scroller.ts
 
 plugins/ga.js
 plugins/copy-right.js

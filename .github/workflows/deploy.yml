@@ -1,4 +1,4 @@
-name: Deploy to server
+name: Deploy
 on:
   pull_request:
     types: [closed]

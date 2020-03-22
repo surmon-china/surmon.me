@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 /**
  * @file highlight.js / Commonjs module
  * @module plugins/highlight

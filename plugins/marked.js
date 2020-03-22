@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 /**
  * @file 文档解析服务 / ES module
  * @module plugins/marked
@@ -112,7 +111,6 @@ renderer.paragraph = paragraphRender
 
 export default (content, tags, parseHtml = false) => {
   // 所有非链接的关键字进行内链处理
-  // eslint-disable-next-line prettier/prettier
   renderer.text = tags && tags.length
     ? text => relink(text, tags)
     : text => text

@@ -7,21 +7,16 @@
       <div
         v-else-if="renderSwiper"
         key="swiper"
-        v-swiper:swiper="swiperOption"
+        v-swiper="swiperOption"
         class="swiper index"
-        @transitionStart="handleSwiperTransitionStart"
-        @transitionEnd="handleSwiperTransitionEnd"
       >
         <div class="swiper-wrapper">
           <div
             v-for="(_article, index) in articleList.slice(0, 9)"
             :key="index"
-            class="swiper-slide slide-item"
+            class="swiper-slide"
           >
-            <div
-              class="content filter"
-              :class="{ 'motion-blur-horizontal': isEnableFilterStyle(index) }"
-            >
+            <div class="content">
               <template v-if="_article.ad">
                 <a
                   :href="_article.url"
@@ -49,11 +44,12 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import { mapState } from 'vuex'
   import { getBannerArticleThumbnailUrl } from '~/transformers/thumbnail'
   import adConfig from '~/config/ad.config'
 
-  export default {
+  export default Vue.extend({
     name: 'IndexCarrousel',
     props: {
       article: {
@@ -63,7 +59,6 @@
     data() {
       return {
         renderSwiper: true,
-        transitioning: false,
         swiperOption: {
           autoplay: {
             delay: 3500,
@@ -78,7 +73,7 @@
           observeParents: true,
           // 禁用 PC 拖动手指样式
           grabCursor: false,
-          // 警用 PC 拖动
+          // 禁用 PC 拖动
           simulateTouch: false,
           preloadImages: false,
           lazy: true
@@ -105,30 +100,20 @@
     },
     activated() {
       this.renderSwiper = true
-      this.handleSwiperTransitionEnd()
     },
     deactivated() {
       this.renderSwiper = false
     },
     methods: {
-      isEnableFilterStyle(index) {
-        return this.transitioning && this.swiper && this.swiper.activeIndex === index
-      },
       getThumb(thumb) {
         return getBannerArticleThumbnailUrl(
           thumb,
           this.isMobile,
           this.$store.getters['global/isWebPImage']
         )
-      },
-      handleSwiperTransitionStart() {
-        this.transitioning = true
-      },
-      handleSwiperTransitionEnd() {
-        this.transitioning = false
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss">
@@ -161,7 +146,7 @@
       height: $mobile-carrousel-height;
 
       > .swiper {
-        .slide-item {
+        .swiper-slide {
           > .content {
             height: $mobile-carrousel-height;
 
@@ -175,7 +160,16 @@
     }
 
     > .swiper {
-      .slide-item {
+      // Filter for slide when transitioning
+      .swiper-wrapper[style*="300ms"] {
+        .swiper-slide-active {
+          .content {
+            @include blur-filter('horizontal');
+          }
+        }
+      }
+
+      .swiper-slide {
         .content {
           width: 100%;
           height: $pc-carrousel-height;

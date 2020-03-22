@@ -21,35 +21,26 @@
       <empty-box v-if="!announcement.data.length" key="empty" class="announcement-empty-box">
         <slot>{{ $i18n.text.announcement.empty }}</slot>
       </empty-box>
-      <div
-        v-else-if="renderSwiper"
-        key="swiper"
-        v-swiper:swiper="swiperOption"
-        class="swiper"
-        @transitionStart="handleSwiperTransitionStart"
-        @transitionEnd="handleSwiperTransitionEnd"
-      >
-        <div class="swiper-wrapper">
-          <div
-            v-for="(ann, index) in announcement.data"
-            :key="index"
-            class="swiper-slide slide-item"
-          >
+      <div v-else-if="renderSwiper" key="swiper" class="swiper-box">
+        <div v-swiper:swiper="swiperOption" class="swiper">
+          <div class="swiper-wrapper">
             <div
-              class="content filter"
-              :class="{
-                'motion-blur-vertical-small': isEnableFilterStyle(index)
-              }"
-              v-html="parseByMarked(ann.content)"
-            />
-            <div v-if="!isMobile" class="date">~ {{ ann.create_at | timeAgo(language) }}</div>
+              v-for="(ann, index) in announcement.data"
+              :key="index"
+              class="swiper-slide slide-item"
+            >
+              <div class="content" v-html="parseByMarked(ann.content)" />
+              <div v-if="!isMobile" class="date">~ {{ ann.create_at | timeAgo(language) }}</div>
+            </div>
           </div>
         </div>
-        <div class="swiper-button-prev">
-          <i class="iconfont icon-announcement-prev" />
-        </div>
-        <div class="swiper-button-next">
-          <i class="iconfont icon-announcement-next" />
+        <div class="navigation">
+          <div class="button prev" @click="prevSlide">
+            <i class="iconfont icon-announcement-prev" />
+          </div>
+          <div class="button next" @click="nextSlide">
+            <i class="iconfont icon-announcement-next" />
+          </div>
         </div>
       </div>
     </transition>
@@ -57,8 +48,10 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import marked from '~/plugins/marked'
-  export default {
+
+  export default Vue.extend({
     name: 'IndexAnnouncement',
     props: {
       announcement: {
@@ -69,19 +62,11 @@
       return {
         renderSwiper: true,
         windmillTimes: 0,
-        transitioning: false,
         swiperOption: {
           height: 34,
           autoplay: {
             delay: 3500,
             disableOnInteraction: false
-          },
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev'
-          },
-          pagination: {
-            clickable: true
           },
           allowTouchMove: false,
           slidesPerView: 1,
@@ -103,7 +88,6 @@
     },
     activated() {
       this.renderSwiper = true
-      this.handleSwiperTransitionEnd()
     },
     deactivated() {
       this.renderSwiper = false
@@ -112,21 +96,17 @@
       parseByMarked(content) {
         return marked(content, null, true)
       },
-      isEnableFilterStyle(index) {
-        return this.transitioning && this.swiper && this.swiper.activeIndex === index
+      prevSlide() {
+        this.swiper.slidePrev()
       },
-      handleSwiperTransitionStart() {
-        this.transitioning = true
-        this.windmillTimes =  this.swiper.activeIndex || 0
-      },
-      handleSwiperTransitionEnd() {
-        this.transitioning = false
+      nextSlide() {
+        this.swiper.slideNext()
       }
     }
-  }
+  })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   $announcement-height: 3rem;
 
   .announcement {
@@ -194,64 +174,75 @@
       }
     }
 
-    > .swiper {
+    > .swiper-box {
       float: right;
       width: 90%;
+      display: flex;
 
-      .slide-item {
-        width: auto;
-        display: flex;
-        justify-content: space-between;
-        padding-right: $gap * 3;
-        height: $announcement-height;
+      .swiper {
+        flex: 1;
 
-        > .content {
-          max-width: 76%;
-          position: relative;
-          @include text-overflow();
+        // Filter for slide when transitioning
+        .swiper-wrapper[style*="300ms"] {
+          .swiper-slide-active {
+            .content {
+              @include blur-filter('vertical-small');
+            }
+          }
+        }
 
-          p {
-            margin: 0;
+        .slide-item {
+          width: auto;
+          display: flex;
+          justify-content: space-between;
+          height: $announcement-height;
+
+          > .content {
+            max-width: 76%;
+            position: relative;
             @include text-overflow();
+
+            p {
+              margin: 0;
+              @include text-overflow();
+            }
+
+            a {
+              text-decoration: underline;
+            }
           }
 
-          a {
-            text-decoration: underline;
+          .date {
+            color: $text-dividers;
           }
         }
+      }
 
-        .date {
+      .navigation {
+        width: 3rem;
+        height: $announcement-height;
+        display: flex;
+        flex-direction: column;
+
+        .button {
+          height: 50%;
+          text-align: center;
           color: $text-dividers;
+          cursor: pointer;
+          @include color-transition();
+
+          &:hover {
+            color: $text;
+          }
+
+          &.prev {
+            line-height: 1.8;
+          }
+
+          &.next {
+            line-height: 1.2;
+          }
         }
-      }
-
-      .swiper-button-prev,
-      .swiper-button-next {
-        position: absolute;
-        left: auto;
-        right: $sm-gap;
-        height: 10px;
-        margin: 0;
-        width: 2rem;
-        height: 1rem;
-        text-align: center;
-        line-height: 1rem;
-        background-image: none;
-        color: $text-dividers;
-        cursor: pointer;
-        @include color-transition();
-
-        &:hover {
-          color: $text;
-        }
-      }
-
-      .swiper-button-prev {
-        top: .5rem;
-      }
-
-      .swiper-button-next {
-        top: 1.5rem;
       }
     }
   }
