@@ -1,17 +1,17 @@
 <template>
   <div id="nav" class="aside-nav">
-    <nav class="nav-list">
+    <nav class="nav-list" :class="{ en: isEnLang }">
       <nuxt-link :to="'/'" class="item" exact>
         <i class="iconfont icon-home"></i>
-        <span v-text="$i18n.nav.home"></span>
+        <span class="text" v-text="$i18n.nav.home"></span>
       </nuxt-link>
       <nuxt-link to="/category/code" class="item">
         <i class="iconfont icon-code"></i>
-        <span v-text="$i18n.nav.code"></span>
+        <span class="text" v-text="$i18n.nav.code"></span>
       </nuxt-link>
       <nuxt-link to="/category/think" class="item">
         <i class="iconfont icon-thinking"></i>
-        <span v-text="$i18n.nav.think"></span>
+        <span class="text" v-text="$i18n.nav.think"></span>
       </nuxt-link>
       <a
         target="_blank"
@@ -20,15 +20,15 @@
         :href="appConfig.links.project"
       >
         <i class="iconfont icon-experiment"></i>
-        <span v-text="$i18n.nav.project"></span>
+        <span class="text" v-text="$i18n.nav.project"></span>
       </a>
       <nuxt-link to="/music" class="item">
         <i class="iconfont icon-netease-music"></i>
-        <span v-text="$i18n.nav.music"></span>
+        <span class="text" v-text="$i18n.nav.music"></span>
       </nuxt-link>
       <nuxt-link to="/vlog" class="item">
         <i class="iconfont icon-vlog"></i>
-        <span v-text="$i18n.nav.vlog"></span>
+        <span class="text" v-text="$i18n.nav.vlog"></span>
       </nuxt-link>
       <a
         target="_blank"
@@ -37,19 +37,19 @@
         :href="appConfig.links.instagram"
       >
         <i class="iconfont icon-instagram"></i>
-        <span v-text="$i18n.nav.instagram"></span>
+        <span class="text" v-text="$i18n.nav.instagram"></span>
       </a>
       <nuxt-link to="/about" class="item">
         <i class="iconfont icon-user"></i>
-        <span v-text="$i18n.nav.about"></span>
+        <span class="text" v-text="$i18n.nav.about"></span>
       </nuxt-link>
       <nuxt-link to="/service" class="item">
         <i class="iconfont icon-tool"></i>
-        <span v-text="$i18n.nav.service"></span>
+        <span class="text" v-text="$i18n.nav.service"></span>
       </nuxt-link>
       <nuxt-link to="/guestbook" class="item guestbook">
         <i class="iconfont icon-comment"></i>
-        <span v-text="$i18n.nav.guestbook"></span>
+        <span class="text" v-text="$i18n.nav.guestbook"></span>
       </nuxt-link>
       <!-- <a
         v-if="false"
@@ -69,7 +69,7 @@
         rel="external nofollow noopener"
       >
         <i class="iconfont icon-taobao"></i>
-        <span v-text="$i18n.nav.taobao"></span>
+        <span class="text" v-text="$i18n.nav.taobao"></span>
       </a> -->
       <a
         :href="adConfig.nav.aliyun"
@@ -78,7 +78,7 @@
         rel="external nofollow noopener"
       >
         <i class="iconfont icon-aliyun"></i>
-        <span v-text="$i18n.nav.aliyun"></span>
+        <span class="text" v-text="$i18n.nav.aliyun"></span>
         <span class="superscript">
           <i class="iconfont icon-hot"></i>
         </span>
@@ -90,7 +90,7 @@
         :href="appConfig.links.throwerror"
       >
         <i class="iconfont icon-debug"></i>
-        <span>TE.io</span>
+        <span class="text">TE.io</span>
       </a>
       <a
         target="_blank"
@@ -99,11 +99,11 @@
         :href="appConfig.links.foxfinder"
       >
         <i class="iconfont icon-fox-colour"></i>
-        <span>FF.io</span>
+        <span class="text">FF.io</span>
       </a>
       <nuxt-link to="/app" class="item app">
         <i class="iconfont icon-app"></i>
-        <span v-text="$i18n.nav.app"></span>
+        <span class="text" v-text="$i18n.nav.app"></span>
       </nuxt-link>
     </nav>
   </div>
@@ -116,7 +116,10 @@
     name: 'PcNav',
     computed: {
       adConfig: () => adConfig,
-      appConfig: () => appConfig
+      appConfig: () => appConfig,
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
+      }
     }
   }
 </script>
@@ -134,7 +137,15 @@
       margin: 0;
       position: fixed;
 
-      > .item {
+      &.en {
+        .item {
+          .text {
+            font-size: $font-size-h6;
+          }
+        }
+      }
+
+      .item {
         border: none;
         display: block;
         position: relative;
@@ -230,7 +241,7 @@
 
         .iconfont {
           width: 1em;
-          margin-right: 1em;
+          margin-right: $gap;
           display: inline-block;
         }
       }
