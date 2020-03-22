@@ -228,7 +228,7 @@ export default {
           en: 'Read all'
         },
         rendering: {
-          zh: '疯狂渲染中...',
+          zh: '渲染中...',
           en: 'rendering...'
         },
         name: {

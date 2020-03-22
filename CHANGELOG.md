@@ -4,13 +4,22 @@ All notable changes to this project will be documented in this file.
 
 ### v2.5.6 (2020-03-21)
 
-**Update**
+**Add**
 - Add ICP link
+- Add font `SFMonoRegular` for code
+
+**Update**
 - Update README.md badges
 - Update workflows config
+- Update `Code` style
 - Upgrade Swiper component & filter styles
 - Upgrade TypeScript config
 - Upgrade ESlint config
+- Upgrade /pc/layout/toolbox component to composition-api
+
+**Removed**
+- Removed `normalize.css`
+- Removed `node-uuid`
 
 ### v2.5.4
 - Replace App url to GitHub file URL
