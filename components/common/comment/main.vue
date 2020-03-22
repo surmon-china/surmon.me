@@ -744,6 +744,7 @@
     }
 
     pre {
+      $code-header-height: 2.8rem;
       display: flex;
       align-items: baseline;
       flex-wrap: wrap-reverse;
@@ -751,16 +752,16 @@
       overflow: hidden;
       margin-top: .6em;
       margin-bottom: 1em;
-      padding-top: 2.5em;
+      padding-top: $code-header-height;
       border-radius: $radius;
       background-color: rgba(0, 0, 0, 0.8);
 
       &:before {
         color: $white;
         content: attr(data-lang)" CODE";
-        height: 2.5em;
-        line-height: 2.5em;
-        font-size: 1em;
+        height: $code-header-height;
+        line-height: $code-header-height;
+        font-size: $font-size-h6;
         position: absolute;
         top: 0;
         left: 0;
@@ -778,12 +779,13 @@
 
       > code {
         margin: 0;
-        padding: 1em;
+        padding: 1rem;
         float: left;
         width: 100%;
         height: 100%;
         display: block;
-        line-height: 1.6em;
+        font-size: $font-size-h6;
+        line-height: 1.8rem;
         color: rgba(255, 255, 255, 0.87);
         background-color: transparent;
       }
