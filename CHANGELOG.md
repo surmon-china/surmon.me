@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Add font `SFMonoRegular` for code
 
 **Update**
+- Auto language by device
 - Update README.md badges
 - Update workflows config
 - Update `code` style
