@@ -74,10 +74,15 @@
           <skeleton-paragraph
             v-if="isFetching"
             key="skeleton"
-            :lines="4"
+            class="skeleton"
             line-height="1em"
+            :lines="4"
           />
-          <adsense-responsive v-else-if="renderAd" key="adsense" ins-class="mammon-ins" />
+          <adsense-responsive
+            v-else
+            key="adsense"
+            ins-class="mammon-ins"
+          />
         </transition>
       </div>
     </client-only>
@@ -98,7 +103,11 @@
     </div>
     <transition name="module" mode="out-in">
       <div v-if="isFetching" key="skeleton" class="metas">
-        <skeleton-paragraph :align="true" :lines="4" line-height="1.2em" />
+        <skeleton-paragraph
+          :align="true"
+          :lines="4"
+          line-height="1.2em"
+        />
       </div>
       <div v-else key="metas" class="metas">
         <p v-if="isEnLang" class="item">
@@ -176,15 +185,24 @@
     </transition>
     <transition name="module" mode="out-in">
       <div v-if="isFetching" key="skeleton" class="related">
-        <skeleton-paragraph v-if="isMobile" class="skeleton" :lines="4" line-height="1em" />
+        <skeleton-paragraph
+          v-if="isMobile"
+          class="skeleton"
+          :lines="4"
+          line-height="1em"
+        />
         <ul v-else class="skeleton-list">
-          <skeleton-base v-for="item in 4" :key="item" class="article" />
+          <skeleton-base
+            v-for="item in 4"
+            :key="item"
+            class="article"
+          />
         </ul>
       </div>
       <div v-else-if="article.related && article.related.length" key="related" class="related">
         <div
           v-if="!isMobile"
-          v-swiper:swiper="swiperOption"
+          v-swiper:releted="swiperOption"
           class="article-list swiper"
         >
           <div class="swiper-wrapper">
@@ -266,19 +284,18 @@
       ])
     },
     head() {
-      const { article } = this
       return {
-        title: article.title || '...',
+        title: this.article?.title || '...',
         meta: [
           {
             hid: 'keywords',
             name: 'keywords',
-            content: (article.keywords ? article.keywords.join(',') : article.title) || ''
+            content: this.article?.keywords?.join(',') || this.article?.title || ''
           },
           {
             hid: 'description',
             name: 'description',
-            content: article.description
+            content: this.article?.description
           }
         ]
       }
@@ -299,9 +316,7 @@
           grabCursor: true,
           slidesPerView: 'auto'
         },
-        // lozadObserver: null,
         isReadMoreLoading: false,
-        renderAd: true,
         contentElementIds: {
           content: 'article-content',
           moreContent: 'more-article-content'
@@ -313,12 +328,6 @@
         this.observeLozad(this.contentElementIds.content)
       }
     },
-    activated() {
-      this.updateAd()
-    },
-    // deactivated() {
-    //   this.lozadObserver = null
-    // },
     computed: {
       ...mapState({
         constants: state => state.global.constants,
@@ -395,12 +404,6 @@
             this.$store.commit('article/updateDetailRenderedState', true)
             this.isReadMoreLoading = false
           }, 0)
-        })
-      },
-      updateAd() {
-        this.renderAd = false
-        this.$nextTick(() => {
-          this.renderAd = true
         })
       },
       contentAnimateDone() {
@@ -576,6 +579,10 @@
         width: 100%;
         height: 16rem;
         min-height: 16rem;
+      }
+
+      .skeleton {
+        width: 100%;
       }
     }
 

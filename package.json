@@ -49,7 +49,7 @@
     "swiper": "^5.3.6",
     "ua-parser-js": "^0.7.21",
     "vue-analytics": "^5.22.1",
-    "vue-awesome-swiper": "^4.0.3",
+    "vue-awesome-swiper": "^4.0.4",
     "vue-google-adsense": "^1.8.1",
     "vue-script2": "^2.1.0",
     "yargs": "^15.1.0"

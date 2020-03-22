@@ -5,7 +5,7 @@
         <slot>{{ $i18n.text.article.empty }}</slot>
       </empty-box>
       <div
-        v-else-if="renderSwiper"
+        v-else
         key="swiper"
         v-swiper="swiperOption"
         class="swiper index"
@@ -58,7 +58,6 @@
     },
     data() {
       return {
-        renderSwiper: true,
         swiperOption: {
           autoplay: {
             delay: 3500,
@@ -97,12 +96,6 @@
         })
         return articles
       }
-    },
-    activated() {
-      this.renderSwiper = true
-    },
-    deactivated() {
-      this.renderSwiper = false
     },
     methods: {
       getThumb(thumb) {

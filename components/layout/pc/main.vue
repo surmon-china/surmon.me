@@ -36,7 +36,7 @@
           'full-view': isFullViewWidth
         }"
       >
-        <nuxt :nuxt-child-key="$route.name" keep-alive />
+        <nuxt :nuxt-child-key="$route.name" />
       </div>
       <aside-view v-if="!isTwoColumns && !isThreeColumns" key="aside" />
     </main>
