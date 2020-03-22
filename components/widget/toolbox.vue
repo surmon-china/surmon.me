@@ -11,27 +11,10 @@
         >
           <i class="iconfont icon-rss" />
         </a>
-        <!-- 暂已移除 RTC & 人脸识别相关业务模块 -->
-        <!-- <button
-          class="webcam"
-          :title="$i18n.text.webcam"
-          :disabled="onBarrage"
-          :class="{ 
-            active: onWebcam,
-            close: onBarrage
-          }"
-          @click="toggleWebcam"
-        >
-          <i class="iconfont icon-webcam" />
-        </button> -->
         <button
           class="barrage"
           :title="$i18n.text.barrage.name"
-          :disabled="onWebcam"
-          :class="{ 
-            active: onBarrage,
-            close: onWebcam
-          }"
+          :class="{ active: onBarrage }"
           @click="toggleBarrage"
         >
           <i class="iconfont icon-barrage" />
@@ -43,8 +26,8 @@
           class="to-page-top"
           :title="$i18n.text.totop"
           @click="totop"
-          @mouseover="setButtonState('top', true, true)"
-          @mouseleave="setButtonState('top', false)"
+          @mouseover="setTopButtonState(true, true)"
+          @mouseleave="setTopButtonState(false)"
         >
           <i class="iconfont icon-totop" />
         </button>
@@ -52,8 +35,8 @@
           class="to-page-bottom"
           :title="$i18n.text.tobottom"
           @click="toBottom"
-          @mouseover="setButtonState('bottom', true, true)"
-          @mouseleave="setButtonState('bottom', false)"
+          @mouseover="setBottomButtonState(true, true)"
+          @mouseleave="setBottomButtonState(false)"
         >
           <i class="iconfont icon-tobottom" />
         </button>
@@ -62,112 +45,94 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import { PropType, createComponent, ref, computed, onMounted } from '@vue/composition-api'
   import { mapState } from 'vuex'
-  import throttle from 'lodash/throttle'
   import appConfig from '~/config/app.config'
   import systemConstants from '~/constants/system'
   import { scrollTo, Easing } from '~/services/scroller'
 
-  let isFirstOpenWebcam = true
-  const throttleToggleWebcam = throttle(() => {
-    window.$nuxt.$store.commit('global/toggleUpdateWebcamOnState')
-  }, 1666)
-
-  export default {
+  export default createComponent({
     name: 'ToolBox',
-    data() {
-      return {
-        topBtnMouseOver: false,
-        bottomBtnMouseOver: false,
-        animationFrameId: null
-      }
-    },
-    computed: {
-      ...mapState('global', [
-        'language',
-        'onWebcam',
-        'onBarrage'
-      ]),
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
-      },
-      mailUrl() {
-        return 'mailto:' + appConfig.meta.email
-      }
-    },
-    methods: {
-      totop() {
-        scrollTo('body', 300, { easing: Easing['ease-in'] })
-      },
-      toBottom() {
-        scrollTo(window.scrollY + window.innerHeight, 300, { easing: Easing['ease-in'] })
-      },
-      setButtonState(position, state, start) {
-        this[position === 'bottom' ? 'bottomBtnMouseOver' : 'topBtnMouseOver'] = state
-        window.cancelAnimationFrame(this.animationFrameId)
-        start && this.slowMoveToAnyWhere()
-      },
-      slowMoveToAnyWhere() {
+    setup(_, { root }) {
+      const animationFrameId = ref(0)
+      const isTopButtonMouseOver = ref(false)
+      const isBottomButtonMouseOver = ref(false)
+
+      const slowMoveToAnyWhere = () => {
         const step = () => {
           let targetScrollY = window.scrollY
           const currentScrollY = document.body.scrollHeight - window.innerHeight
-          if (this.bottomBtnMouseOver) targetScrollY += 1
-          if (this.topBtnMouseOver) targetScrollY -= 1
+          if (isBottomButtonMouseOver.value) {
+            targetScrollY += 1
+          }
+          if (isTopButtonMouseOver.value) {
+            targetScrollY -= 1
+          }
           if (targetScrollY < 0) {
             targetScrollY = 0
           } else if (targetScrollY >= currentScrollY) {
             targetScrollY = currentScrollY
           }
-          if (!targetScrollY > 0 && targetScrollY < currentScrollY) {
+          const canScrollTo = targetScrollY > 0 && targetScrollY < currentScrollY
+          if (!canScrollTo) {
             return false
           }
           window.scrollTo(0, targetScrollY)
-          if (this.bottomBtnMouseOver || this.topBtnMouseOver) {
-            this.animationFrameId = window.requestAnimationFrame(step)
+          if (isBottomButtonMouseOver.value || isTopButtonMouseOver.value) {
+            animationFrameId.value = window.requestAnimationFrame(step)
           } else {
-            window.cancelAnimationFrame(this.animationFrameId)
+            window.cancelAnimationFrame(animationFrameId.value)
             return false
           }
         }
-        this.animationFrameId = window.requestAnimationFrame(step)
-      },
-      handleRSS() {
-        this.$ga.event(
-          'RSS 订阅',
-          systemConstants.GAEventActions.Click,
-          systemConstants.GAEventTags.Tool
-        )
-      },
-      toggleBarrage() {
-        this.$ga.event(
-          '弹幕功能',
-          systemConstants.GAEventActions.Toggle,
-          systemConstants.GAEventTags.Tool
-        )
-        this.$store.commit('global/toggleUpdateBarrageOnState')
-      },
-      toggleWebcam() {
-        this.$ga.event(
-          'Webcam',
-          systemConstants.GAEventActions.Toggle,
-          systemConstants.GAEventTags.Tool
-        )
-        if (isFirstOpenWebcam && !this.onWebcam) {
-          const confirmText = this.isEnLang
-            ? 'Ready?'
-            : '这需要 WebRTC、WebGL、Canvas 等技术的支持，可能占用较多 CPU/GPU 资源，且我不会收集你的任何信息，继续吗？'
-          if (!window.confirm(confirmText)) {
-            this.$store.commit('global/toggleUpdateWebcamOnState', false)
-            window.alert(this.isEnLang ? '~' : '好')
-            return false
-          }
-          isFirstOpenWebcam = false
+        animationFrameId.value = window.requestAnimationFrame(step)
+      }
+
+      const mailUrl = 'mailto:' + appConfig.meta.email
+      const onBarrage = computed(() => root.$store.state.global.onBarrage)
+
+      return {
+        mailUrl,
+        onBarrage,
+        totop() {
+          scrollTo('body', 300, { easing: Easing['ease-in'] })
+        },
+        toBottom() {
+          scrollTo(
+            window.scrollY + window.innerHeight,
+            300,
+            { easing: Easing['ease-in'] }
+          )
+        },
+        setTopButtonState(state: boolean, isStartSlow = false) {
+          isTopButtonMouseOver.value = state
+          window.cancelAnimationFrame(animationFrameId.value)
+          isStartSlow && slowMoveToAnyWhere()
+        },
+        setBottomButtonState(state: boolean, isStartSlow = false) {
+          isBottomButtonMouseOver.value = state
+          window.cancelAnimationFrame(animationFrameId.value)
+          isStartSlow && slowMoveToAnyWhere()
+        },
+        handleRSS() {
+          root.$ga.event(
+            'RSS 订阅',
+            systemConstants.GAEventActions.Click,
+            systemConstants.GAEventTags.Tool
+          )
+        },
+        toggleBarrage() {
+          root.$ga.event(
+            '弹幕功能',
+            systemConstants.GAEventActions.Toggle,
+            systemConstants.GAEventTags.Tool
+          )
+          root.$store.commit('global/toggleUpdateBarrageOnState')
         }
-        throttleToggleWebcam()
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
@@ -229,29 +194,6 @@
           100% {
             color: $white;
             background: $black;
-          }
-        }
-
-        @keyframes webcam {
-          0% {
-            color: $text-reversal;
-            background: $primary;
-          }
-          100% {
-            color: $primary;
-            background: $text-reversal;
-          }
-        }
-
-        > .webcam {
-          animation: webcam 3s infinite;
-
-          &.active {
-            animation: webcam 0.5s infinite;
-          }
-
-          &.close {
-            animation: none;
           }
         }
 

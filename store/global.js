@@ -43,9 +43,6 @@ export const state = () => ({
   // 是否开启弹幕
   onBarrage: false,
 
-  // 是否开启 Webcam
-  onWebcam: false,
-
   // 开启轨迹地图
   onMyMap: false,
 
@@ -128,11 +125,6 @@ export const mutations = {
   // 切换弹幕状态
   toggleUpdateBarrageOnState(state, action) {
     state.onBarrage = action != null ? !!action : !state.onBarrage
-  },
-
-  // 切换 Webcam 状态
-  toggleUpdateWebcamOnState(state, action) {
-    state.onWebcam = action != null ? !!action : !state.onWebcam
   },
 
   // 切换 MyMap 状态
