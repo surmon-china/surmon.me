@@ -8,7 +8,7 @@ import Vue from 'vue'
 import { isBrowser } from '~/environment'
 import { fetchDelay } from '~/services/fetch-delay'
 import { isArticleDetailRoute } from '~/services/route-validator'
-import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
+import { scrollTo, Easing } from '~/services/scroller'
 
 export const ARTICLE_API_PATH = '/article'
 export const LIKE_ARTICLE_API_PATH = '/like/article'

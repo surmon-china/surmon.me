@@ -2,6 +2,12 @@
   <footer id="footer" class="footer">
     <div class="container">
       <a
+        target="_blank"
+        rel="external nofollow noopener"
+        href="http://www.beian.miit.gov.cn"
+      >陕ICP备13004859号-2</a>
+      <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+      <a
         class="sitemap-btn"
         href="/sitemap.xml"
         target="_blank"

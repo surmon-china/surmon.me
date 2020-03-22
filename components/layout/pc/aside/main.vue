@@ -54,7 +54,12 @@
         </li>
       </ul>
     </div>
-    <aside-ad ref="asideAd" @slideChange="handleSlideChange" />
+    <client-only>
+      <aside-ad
+        ref="asideAd"
+        @slide-change="handleSlideChange"
+      />
+    </client-only>
     <div class="aside-calendar">
       <calendar />
     </div>
@@ -69,7 +74,13 @@
       </div>
     </transition>
     <div class="aside-sticky-box">
-      <aside-ad v-if="renderStickyAd" :init-index="adIndex" @slideChange="handleChangeAdSwiper" />
+      <client-only>
+        <aside-ad
+          v-if="renderStickyAd"
+          :init-index="adIndex"
+          @slide-change="handleChangeAdSwiper"
+        />
+      </client-only>
       <div class="aside-tag">
         <empty-box v-if="!tags.length">
           <slot>{{ $i18n.text.tag.empty }}</slot>
@@ -113,6 +124,7 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import { mapState } from 'vuex'
   import StickyEvents from 'sticky-events'
   import AsideAd from './ad'
@@ -124,7 +136,7 @@
   // polyfill sticky event
   let stickyEvents = null
 
-  export default {
+  export default Vue.extend({
     name: 'PcAside',
     components: {
       AsideAd,
@@ -203,15 +215,16 @@
       handleFullScreen() {
         this.handleSetFullColumn()
         const docElm = document.documentElement
-        const requestEvent =
+        const requestEvent = (
           docElm.requestFullscreen ||
           docElm.mozRequestFullScreen ||
           docElm.webkitRequestFullScreen ||
           docElm.msRequestFullscreen
+        )
         if (requestEvent) requestEvent.bind(docElm)()
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>

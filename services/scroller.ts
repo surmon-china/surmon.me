@@ -1,6 +1,6 @@
 /**
  * @file 滑动到任何目的地 / ES module
- * @module utils/scroll-to-anywhere
+ * @module services/scroller
  * @author Surmon <https://github.com/surmon-china>
  */
 
