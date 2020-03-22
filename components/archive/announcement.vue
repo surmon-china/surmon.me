@@ -11,7 +11,7 @@
       <span
         class="icon-box"
         :style="{
-          transform: `rotate(-${windmillTimes * 60}deg)`
+          transform: `rotate(-${activeIndex * 90}deg)`
         }"
       >
         <i class="iconfont icon-windmill" />
@@ -22,7 +22,11 @@
         <slot>{{ $i18n.text.announcement.empty }}</slot>
       </empty-box>
       <div v-else key="swiper" class="swiper-box">
-        <div v-swiper:swiper="swiperOption" class="swiper">
+        <div
+          v-swiper:swiper="swiperOption"
+          class="swiper"
+          @transition-start="handleSwiperTransitionStart"
+        >
           <div class="swiper-wrapper">
             <div
               v-for="(ann, index) in announcement.data"
@@ -35,10 +39,18 @@
           </div>
         </div>
         <div class="navigation">
-          <div class="button prev" @click="prevSlide">
+          <div
+            class="button prev"
+            :class="{ disabled: activeIndex === 0 }"
+            @click="prevSlide"
+          >
             <i class="iconfont icon-announcement-prev" />
           </div>
-          <div class="button next" @click="nextSlide">
+          <div
+            class="button next"
+            :class="{ disabled: activeIndex === announcement.data.length - 1 }"
+            @click="nextSlide"
+          >
             <i class="iconfont icon-announcement-next" />
           </div>
         </div>
@@ -60,7 +72,7 @@
     },
     data() {
       return {
-        windmillTimes: 0,
+        activeIndex: 0,
         swiperOption: {
           height: 34,
           autoplay: {
@@ -94,6 +106,9 @@
       },
       nextSlide() {
         this.swiper.slideNext()
+      },
+      handleSwiperTransitionStart() {
+        this.activeIndex =  this.swiper.activeIndex || 0
       }
     }
   })
@@ -163,7 +178,7 @@
       .icon-box {
         display: inline-block;
         transform: rotate(0deg);
-        transition: transform $transition-time-slow;
+        transition: transform .3s;
       }
     }
 
@@ -226,6 +241,12 @@
 
           &:hover {
             color: $text;
+          }
+
+          &.disabled {
+            opacity: .8;
+            color: $text-dividers;
+            cursor: no-drop;
           }
 
           &.prev {
