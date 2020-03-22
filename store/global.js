@@ -27,15 +27,15 @@ export const state = () => ({
   // 默认语言
   language: i18nConfig.default,
 
-  // 是否墙外
-  isOutsideOfGFW: false,
-
   // 页面的栏目展示类型（3栏/2栏）
   isTwoColumns: false,
   isThreeColumns: false,
 
   // 是否为移动端
   isMobile: false,
+
+  // 是否中文用户
+  isZHUser: true,
 
   // 移动端侧边栏
   onMobileSidebar: false,
@@ -140,6 +140,11 @@ export const mutations = {
   // 切换语言
   updateLanguage(state, action) {
     state.language = action
+  },
+
+  // 用户身份
+  updateZHState(state, action) {
+    state.isZHUser = action
   },
 
   // 服务端配置的管理员信息
