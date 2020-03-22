@@ -64,7 +64,6 @@
 </template>
 
 <script>
-  /* eslint-disable prettier/prettier */
   import { getFileProxyUrl } from '~/transformers/url'
   export default {
     name: 'Vlog',
