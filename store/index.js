@@ -11,20 +11,27 @@ import systemConstants from '~/constants/system'
 export const actions = {
   nuxtServerInit(store, { req }) {
     // 检查设备类型
+    const userLanguage = isServer ? req.headers['accept-language'] : navigator.language
     const userAgent = isServer ? req.headers['user-agent'] : navigator.userAgent
     const { isMobile, isWechat, isIE, isSafari } = uaParser(userAgent)
+    const isZHUser = !userLanguage || userLanguage.includes(systemConstants.Language.Zh)
 
     store.commit('global/updateUserAgent', userAgent)
+    store.commit('global/updateZHState', isZHUser)
 
     // 微信/Safari/移动端无法精确判断兼容性，使用 jpg 格式
     if (isMobile || isWechat || isIE || isSafari) {
       store.commit('global/updateImageExt', systemConstants.ImageExt.Jpg)
     }
 
-    // 如果是移动端，则设置语言为中文
+    // 如果是非中文地区用户则设置为英文
+    if (!isZHUser) {
+      store.commit('global/updateLanguage', systemConstants.Language.En)
+    }
+
+    // 移动端
     if (isMobile) {
       store.commit('global/updateMobileState', true)
-      store.commit('global/updateLanguage', systemConstants.Language.Zh)
     }
 
     // 初始化时的全局任务
