@@ -9,21 +9,19 @@
 </p>
 
 # Surmon.me
-[![forthebadge](https://forthebadge.com/images/badges/made-with-vue.svg)](https://forthebadge.com)
-[![GitHub stars](https://img.shields.io/github/stars/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/issues)
-[![GitHub last commit](https://img.shields.io/github/last-commit/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me)
-[![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me)
 
-## Introduction
+![vue](https://img.shields.io/badge/MADE%20WITH-VUE-%2342a97a?style=for-the-badge&labelColor=35495d)
+[![GitHub stars](https://img.shields.io/github/stars/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues-raw/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/issues)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/surmon-china/surmon.me/Deploy?style=for-the-badge&label=Deploy)](https://github.com/surmon-china/surmon.me/actions?query=workflow:%22Deploy%22)
+[![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/blob/master/LICENSE)
+
 
 **My personal website and blog, powered by [Nuxt.js](https://github.com/nuxt/nuxt.js).** 
 
 **使用 [Nuxt.js](https://github.com/nuxt/nuxt.js) 构建的个人网站。**
 
 **Online site:** https://surmon.me
-
----
 
 **其他相关项目：**
 - **RESTful API service:** [nodepress](https://github.com/surmon-china/nodepress) powered by [nestjs](https://github.com/nestjs/nest)
@@ -45,7 +43,7 @@
 $ npm i nodemon -g
 
 # install dependencies
-$ yarn # or npm install [--python=python2.7]
+$ yarn # or npm install
 
 # serve with hot reload at localhost:3000
 $ yarn dev # or npm run dev

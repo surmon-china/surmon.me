@@ -1,5 +1,16 @@
 
-## CHANGELOG
+# Changelog
+All notable changes to this project will be documented in this file.
+
+### v2.5.6 (2020-03-21)
+
+**Update**
+- Add ICP link
+- Update README.md badges
+- Update workflows config
+- Upgrade Swiper component & filter styles
+- Upgrade TypeScript config
+- Upgrade ESlint config
 
 ### v2.5.4
 - Replace App url to GitHub file URL
