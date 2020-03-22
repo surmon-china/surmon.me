@@ -286,6 +286,7 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import { mapState } from 'vuex'
   import { isBrowser } from '~/environment'
   import marked from '~/plugins/marked'
@@ -304,7 +305,7 @@
   // eslint-disable-next-line no-useless-escape
   const urlRegex = /^((https|http):\/\/)+[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/
 
-  export default {
+  export default Vue.extend({
     name: 'Comment',
     components: {
       CommentUa,
@@ -688,27 +689,24 @@
       }
     },
     mounted() {
-      this.initAppOptionBlackList()
-      if (isBrowser) {
-        this.observeLozad()
-      }
-    },
-    activated() {
       // 1. 组件不再负责初始加载评论列表数据的职责
       // 2. 组件仅负责初评论列表数据翻页、排序的职责
       // 3. 当容器组件还在请求时，组件全量 Loading
       // 4. 当只有评论列表在请求时，列表单独 Loading
-      this.initUser()
+      this.initAppOptionBlackList()
+      if (isBrowser) {
+        this.observeLozad()
+        this.initUser()
+      }
+    },
+    beforeDestroy() {
+      this.lozadObserver = null
+      this.cancelCommentReply()
     },
     destroyed() {
       this.$store.commit('comment/clearListData')
-    },
-    deactivated() {
-      this.lozadObserver = null
-      this.cancelCommentReply()
-      this.$store.commit('comment/clearListData')
     }
-  }
+  })
 </script>
 
 <style lang="scss">

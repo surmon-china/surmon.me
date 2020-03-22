@@ -8,13 +8,21 @@
 
     <!-- 广告 -->
     <transition name="module">
-      <component :is="isMobile ? 'adsense-archive-mobile' : 'adsense-archive'" v-if="renderAd" class="article-list-mammon" />
+      <component
+        :is="isMobile ? 'adsense-archive-mobile' : 'adsense-archive'"
+        class="article-list-mammon"
+      />
     </transition>
 
     <!-- 列表 -->
     <div class="article-list">
       <transition name="module" mode="out-in">
-        <transition-group v-if="article.data.data && article.data.data.length" key="list" name="fade" tag="div">
+        <transition-group
+          v-if="article.data.data && article.data.data.length"
+          key="list"
+          name="fade"
+          tag="div"
+        >
           <list-item
             v-for="articleItem in article.data.data"
             :key="articleItem.id"
@@ -61,11 +69,6 @@
         type: Object
       }
     },
-    data() {
-      return {
-        renderAd: true
-      }
-    },
     computed: {
       isMobile() {
         return this.$store.state.global.isMobile
@@ -87,16 +90,7 @@
         if (this.isMobile) {
           this.$router.push(getArticleDetailRoute(article.id))
         }
-      },
-      updateAd() {
-        this.renderAd = false
-        this.$nextTick(() => {
-          this.renderAd = true
-        })
       }
-    },
-    activated() {
-      this.updateAd()
     }
   }
 </script>

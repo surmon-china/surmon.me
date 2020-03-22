@@ -168,7 +168,10 @@ export const actions = {
   },
 
   // 获取全局配置
-  fetchAppOption({ commit }) {
+  fetchAppOption({ commit, state }, force = false) {
+    if (!force && state.appOption.data) {
+      return Promise.resolve()
+    }
     commit('updateAppOptionFetching', true)
     return this.$axios
       .$get(`/option`)

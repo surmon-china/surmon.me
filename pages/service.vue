@@ -82,7 +82,7 @@
     </div>
     <transition name="fade">
       <div v-if="!isMobile" class="mammon container">
-        <adsense-service-page />
+        <adsense-responsive ins-style="display:inline-block;width:1050px;height:192px" />
       </div>
     </transition>
     <div class="step">
@@ -125,12 +125,8 @@
 <script>
   import appConfig from '~/config/app.config'
   import systemConstants from '~/constants/system'
-  import AdsenseServicePage from '~/components/common/adsense/service-page'
   export default {
     name: 'Service',
-    components: {
-      AdsenseServicePage
-    },
     head() {
       return {
         title: `${this.isEnLang ? '' : this.$i18n.nav.service + ' | '}Service`
