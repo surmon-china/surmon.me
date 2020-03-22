@@ -59,6 +59,7 @@
       font-weight: bold;
       transition: background $transition-time-normal;
       opacity: 0.4;
+      user-select: none;
       cursor: pointer;
 
       &::before {
