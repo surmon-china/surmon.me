@@ -745,22 +745,23 @@
           }
 
           pre {
-            $code-line-height: 2.8em;
-            $code-line-width: 2.5em;
-            $code-line-line-height: 1.6em;
+            $code-header-height: 2.8rem;
+            $code-number-width: 3rem;
+            $code-row-line-height: 1.8rem;
+            $code-font-size: $font-size-h6;
             display: block;
             position: relative;
             overflow: hidden;
             margin-bottom: 1em;
-            padding-left: $code-line-width;
+            padding-left: $code-number-width;
+            font-size: $code-font-size;
             background-color: rgba($black, 0.8);
 
             &:before {
               color: $white;
               content: attr(data-lang)" CODE";
-              height: $code-line-height;
-              line-height: $code-line-height;
-              font-size: 1em;
+              height: $code-header-height;
+              line-height: $code-header-height;
               position: absolute;
               top: 0;
               left: 0;
@@ -775,11 +776,11 @@
             > .code-lines {
               position: absolute;
               left: 0;
-              top: $code-line-height;
+              top: $code-header-height;
               margin: 0;
-              padding: 1em 0;
-              width: $code-line-width;
-              height: calc(100% - #{$code-line-height});
+              padding: 1rem 0;
+              width: $code-number-width;
+              height: calc(100% - #{$code-header-height});
               text-align: center;
               background-color: rgba($black, 0.2);
 
@@ -787,25 +788,25 @@
                 padding: 0;
                 position: relative;
                 list-style-type: none;
-                line-height: $code-line-line-height;
+                line-height: $code-row-line-height;
+                font-size: $font-size-small;
+                user-select: none;
                 transition: none;
 
                 &:hover {
                   &:before {
-                    display: block;
                     @include visible();
                   }
                 }
 
                 &:before {
                   content: '';
-                  height: $code-line-line-height;
                   position: absolute;
                   top: 0;
-                  left: $code-line-width;
+                  left: $code-number-width;
                   width: 66em;
+                  height: 100%;
                   background-color: rgba(154, 154, 154, 0.2);
-                  display: none;
                   @include hidden();
                 }
               }
@@ -813,12 +814,12 @@
 
             > code {
               margin: 0;
-              padding: 1em;
+              padding: 1rem;
               float: left;
               width: 100%;
               height: 100%;
               display: block;
-              line-height: $code-line-line-height;
+              line-height: $code-row-line-height;
               color: rgba($white, 0.87);
               background-color: transparent;
             }

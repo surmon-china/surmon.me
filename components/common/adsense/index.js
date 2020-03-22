@@ -8,12 +8,12 @@ import AdsenseArchive from './archive'
 import AdsenseArchiveMobile from './archive-mobile'
 import AdsenseCommonResponsive from './responsive'
 
-const adsense = {
+export default {
   install(Vue) {
-    Vue.component(AdsenseArchive.name, AdsenseArchive)
-    Vue.component(AdsenseArchiveMobile.name, AdsenseArchiveMobile)
-    Vue.component(AdsenseCommonResponsive.name, AdsenseCommonResponsive)
+    [
+      AdsenseArchive,
+      AdsenseArchiveMobile,
+      AdsenseCommonResponsive
+    ].forEach(component => Vue.component(component.name, component))
   }
 }
-
-export default adsense
