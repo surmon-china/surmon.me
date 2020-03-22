@@ -11,16 +11,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install yarn
-        run: npm install yarn -g
-      - name: Install Dependencies
-        run: yarn
-      - name: Build
-        run: yarn build
-        env:
-          CI: true
-          NODE_ENV: production
+
+      - name: Install dependencies
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: install
+
+      - name: Lint
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: lint
+
+      - name: Buile test
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: build
