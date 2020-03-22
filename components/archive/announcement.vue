@@ -21,7 +21,7 @@
       <empty-box v-if="!announcement.data.length" key="empty" class="announcement-empty-box">
         <slot>{{ $i18n.text.announcement.empty }}</slot>
       </empty-box>
-      <div v-else-if="renderSwiper" key="swiper" class="swiper-box">
+      <div v-else key="swiper" class="swiper-box">
         <div v-swiper:swiper="swiperOption" class="swiper">
           <div class="swiper-wrapper">
             <div
@@ -60,7 +60,6 @@
     },
     data() {
       return {
-        renderSwiper: true,
         windmillTimes: 0,
         swiperOption: {
           height: 34,
@@ -85,12 +84,6 @@
       language() {
         return this.$store.state.global.language
       }
-    },
-    activated() {
-      this.renderSwiper = true
-    },
-    deactivated() {
-      this.renderSwiper = false
     },
     methods: {
       parseByMarked(content) {
