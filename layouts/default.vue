@@ -15,6 +15,7 @@
   import Clipboard from '~/components/widget/clipboard.vue'
   import PcMainView from '~/components/layout/pc/main.vue'
   import MobileMainView from '~/components/layout/mobile/main.vue'
+  import { isBrowser, isProdMode } from '~/environment'
 
   export default Vue.extend({
     name: 'App',
@@ -30,6 +31,16 @@
       },
       isMobile() {
         return this.$store.state.global.isMobile
+      }
+    },
+    mounted() {
+      if (isBrowser && isProdMode) {
+        console.clear()
+        console.log(
+          `%c${window.$nuxt.$i18n.text.slogan} %csurmon@foxmail.com`,
+          'color:#666;font-size:3em;',
+          'color:#666;font-size:13px;'
+        )
       }
     }
   })

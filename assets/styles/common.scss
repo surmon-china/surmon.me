@@ -75,19 +75,19 @@ select:-webkit-autofill {
 // filters
 .filter {
   &.motion-blur-horizontal {
-    filter: force-source-url('/images/motion-blur-filter.svg#horizontal');
+    @include blur-filter('horizontal');
   }
 
   &.motion-blur-horizontal-small {
-    filter: force-source-url('/images/motion-blur-filter.svg#horizontal-small');
+    @include blur-filter('horizontal-small');
   }
 
   &.motion-blur-vertical {
-    filter: force-source-url('/images/motion-blur-filter.svg#vertical');
+    @include blur-filter('vertical');
   }
 
   &.motion-blur-vertical-small {
-    filter: force-source-url('/images/motion-blur-filter.svg#vertical-small');
+    @include blur-filter('vertical-small');
   }
 }
 

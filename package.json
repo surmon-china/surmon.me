@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "2.5.4",
+  "version": "2.5.6",
   "description": "Surmon.me blog",
   "author": {
     "name": "Surmon",
@@ -9,7 +9,7 @@
   },
   "license": "MIT",
   "private": false,
-  "homepage": "https://surmon.me",
+  "homepage": "https://github.com/surmon-china/surmon.me",
   "repository": {
     "type": "git",
     "url": "https://github.com/surmon-china/surmon.me"
@@ -18,16 +18,13 @@
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server --experimental-modules",
     "build": "nuxt build --no-lock",
     "analyze": "nuxt build --analyzer",
-    "generate": "nuxt generate",
     "start": "cross-env NODE_ENV=production node server/index.js",
-    "install:python": "npm i --python=python2.7",
-    "lint": "NODE_OPTIONS='--max-old-space-size=4096' eslint --ext .ts,.js,.vue --ignore-path .gitignore .",
-    "format": "prettier-eslint --write *.js,*.vue"
+    "lint": "eslint --ext .ts,.js,.vue --ignore-path .eslintignore ."
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.9.5",
     "@nuxtjs/component-cache": "^1.1.5",
-    "@nuxtjs/pwa": "^3.0.0-beta.19",
+    "@nuxtjs/pwa": "^3.0.0-beta.20",
     "@nuxtjs/style-resources": "^1.0.0",
     "@vue/composition-api": "^0.3.4",
     "amplitudejs": "^5.0.3",
@@ -46,35 +43,29 @@
     "marked": "0.6.3",
     "node-uuid": "^1.4.8",
     "normalize.css": "^8.0.1",
-    "nuxt": "^2.11.0",
+    "nuxt": "^2.12.0",
     "request": "^2.88.0",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "sticky-events": "^3.1.1",
+    "swiper": "^5.3.6",
     "ua-parser-js": "^0.7.21",
     "vue-analytics": "^5.22.1",
-    "vue-awesome-swiper": "^3.1.3",
-    "vue-google-adsense": "^1.8.0",
+    "vue-awesome-swiper": "^4.0.3",
+    "vue-google-adsense": "^1.8.1",
     "vue-script2": "^2.1.0",
     "yargs": "^15.1.0"
   },
   "devDependencies": {
-    "@babel/runtime-corejs3": "^7.8.4",
-    "@nuxt/typescript-build": "^0.5.6",
+    "@nuxt/typescript-build": "^0.6.0",
     "@nuxtjs/eslint-config-typescript": "^1.0.0",
-    "@nuxtjs/eslint-module": "^1.1.0",
     "@types/gravatar": "^1.8.0",
     "@types/lozad": "^1.9.0",
+    "@types/swiper": "^5.2.1",
     "@types/ua-parser-js": "^0.7.33",
-    "babel-eslint": "^10.0.3",
-    "core-js": "3",
     "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.0",
-    "eslint-plugin-nuxt": ">=0.5.0",
-    "eslint-plugin-prettier": "^3.1.2",
-    "nodemon": "^2.0.2",
-    "prettier": "^1.19.1",
     "node-sass": "^4.13.1",
+    "nodemon": "^2.0.2",
     "sass-loader": "^8.0.2"
   }
 }
