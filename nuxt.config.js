@@ -143,7 +143,6 @@ export default {
     linkActiveClass: 'link-active'
   },
   css: [
-    'normalize.css/normalize.css',
     'highlight.js/styles/ocean.css',
     'swiper/css/swiper.css',
     ...SCSS_VARIABLES_PRODUCTION,
