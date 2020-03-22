@@ -113,12 +113,6 @@
       },
       handlePlay(video) {
         window.open(`https://www.bilibili.com/video/av${video.aid}`)
-        /*
-        if (window.utils) {
-          this.$root.$musicPlayer.pause()
-          window.utils.openIframePopup(`//player.bilibili.com/player.html?aid=${video.aid}&page=1`)
-        }
-        */
       }
     },
     mounted() {
@@ -132,7 +126,7 @@
       })
       this.lozadObserver.observe()
     },
-    deactivated() {
+    beforeDestroy() {
       this.lozadObserver = null
     }
   }
