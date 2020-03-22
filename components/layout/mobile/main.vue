@@ -12,7 +12,7 @@
       <header-view />
       <main class="main-container">
         <div id="main-content" class="main-content">
-          <nuxt :nuxt-child-key="$route.name" keep-alive />
+          <nuxt :nuxt-child-key="$route.name" />
         </div>
       </main>
       <footer-view />

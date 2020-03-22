@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 **Update**
 - Update README.md badges
 - Update workflows config
-- Update `Code` style
+- Update `code` style
 - Upgrade Swiper component & filter styles
 - Upgrade TypeScript config
 - Upgrade ESlint config
@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 **Removed**
 - Removed `normalize.css`
 - Removed `node-uuid`
+- Removed `keep-alive`
 
 ### v2.5.4
 - Replace App url to GitHub file URL

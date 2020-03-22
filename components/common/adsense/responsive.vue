@@ -5,6 +5,7 @@
       :ins-class="insClass"
       :ins-style="insStyle"
       :data-full-width-responsive="true"
+      :is-non-personalized-ads="false"
       data-ad-client="ca-pub-4710915636313788"
       data-ad-slot="7405264495"
     />

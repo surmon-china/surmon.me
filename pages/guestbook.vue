@@ -26,7 +26,7 @@
     },
     fetch({ store }) {
       return Promise.all([
-        store.dispatch('global/fetchAppOption'),
+        store.dispatch('global/fetchAppOption', true),
         store.dispatch('comment/fetchList', { post_id: 0 })
       ])
     },
