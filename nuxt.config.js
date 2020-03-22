@@ -12,7 +12,7 @@ import { isProdMode, isDevMode } from './environment'
 
 const htmlLang = i18nConfig.default || systemConstants.Language.Zh
 const htmlSlogan = i18nConfig.data.text.slogan[htmlLang]
-const SCSS_CDN_VARIABLES_BASE = isProdMode ? ['~assets/styles/cdn.scss'] : []
+const SCSS_VARIABLES_PRODUCTION = isProdMode ? ['~assets/styles/production.scss'] : []
 
 export default {
   mode: 'universal',
@@ -30,8 +30,6 @@ export default {
     maxAge: 1000 * 60 * 15
   },
   buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
     '@nuxt/typescript-build'
   ],
   build: {
@@ -39,14 +37,6 @@ export default {
     maxChunkSize: 360000,
     extractCSS: true,
     publicPath: apiConfig.CDN + '/_nuxt/',
-    postcss: {
-      plugins: { 'postcss-custom-properties': { warnings: false } }
-    },
-    babel: {
-      presets() {
-        return [['@nuxt/babel-preset-app', { corejs: { version: 3 } }]]
-      }
-    },
     optimization: {
       splitChunks: {
         cacheGroups: {
@@ -66,29 +56,6 @@ export default {
             minChunks: 2,
             priority: -20,
             reuseExistingChunk: true
-          }
-        }
-      }
-    },
-    // extends for webpack
-    extend(webpackConfig) {
-      // 处理 Swiper4 下的 dom7 模块的语法问题
-      webpackConfig.resolve.alias.dom7$ = 'dom7/dist/dom7.js'
-      webpackConfig.resolve.alias.swiper$ = 'swiper/dist/js/swiper.js'
-      if (isProdMode) {
-        // 处理 Template 和 CSS 中的 CDN 地址
-        const vueLoader = webpackConfig.module.rules.find(
-          loader => loader.loader === 'vue-loader'
-        )
-        if (vueLoader) {
-          const vueLoaders = vueLoader.options.loaders
-          for (const cssLoader in vueLoaders) {
-            if (Array.isArray(vueLoaders[cssLoader])) {
-              const targetLoader = vueLoaders[cssLoader].find(
-                loader => loader.loader === 'css-loader'
-              )
-              targetLoader && (targetLoader.options.root = apiConfig.CDN)
-            }
           }
         }
       }
@@ -153,7 +120,6 @@ export default {
       { rel: 'dns-prefetch', href: '//googleads.g.doubleclick.net' },
       { rel: 'dns-prefetch', href: '//www.google-analytics.com' },
       { rel: 'dns-prefetch', href: '//tpc.googlesyndication.com' },
-      { rel: 'dns-prefetch', href: '//pagead2.googlesyndication.com' },
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'author', type: 'text/plain', href: '/humans.txt' }
     ],
@@ -178,14 +144,14 @@ export default {
   },
   css: [
     'normalize.css/normalize.css',
-    'swiper/dist/css/swiper.css',
     'highlight.js/styles/ocean.css',
-    ...SCSS_CDN_VARIABLES_BASE,
+    'swiper/css/swiper.css',
+    ...SCSS_VARIABLES_PRODUCTION,
     '~assets/styles/app.scss'
   ],
   styleResources: {
     scss: [
-      ...SCSS_CDN_VARIABLES_BASE,
+      ...SCSS_VARIABLES_PRODUCTION,
       '~/assets/styles/init.scss'
     ]
   }

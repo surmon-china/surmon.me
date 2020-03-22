@@ -7,20 +7,8 @@
 const { isProdMode } = require('esm')(module)('./environment')
 
 module.exports = {
-  root: true,
-  env: {
-    browser: true,
-    node: true
-  },
   extends: [
-    '@nuxtjs/eslint-config-typescript',
-    'prettier',
-    'prettier/vue',
-    'plugin:prettier/recommended',
-    'plugin:nuxt/recommended'
-  ],
-  plugins: [
-    'prettier'
+    '@nuxtjs/eslint-config-typescript'
   ],
   globals: {
     Set: true,
@@ -38,20 +26,7 @@ module.exports = {
     // Typescript eslint
     '@typescript-eslint/no-unused-vars': 'off',
 
-    // prettier 配置
-    // 需要时再打开为 warn 吧
-    "prettier/prettier": ['off', {
-      "semi": false,
-      "arrowParens": "avoid",
-      "singleQuote": true,
-      "tabWidth": 2,
-      // 禁用代码长度检测
-      "preserve": "preserve",
-      "useTabs": false,
-      "vueIndentScriptAndStyle": true
-    }],
-
-    // Vue 相关
+    // Vue
     'vue/no-unused-components': 'warn',
     'vue/no-v-html': 'off',
     'vue/require-default-prop': 'off',

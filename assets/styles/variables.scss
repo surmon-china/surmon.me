@@ -1,13 +1,14 @@
 
 // url
 $cdn-url: '' !default;
+$source-url: '' !default;
 
 @function cdn-url($uri) {
   @return url($cdn-url + $uri);
 }
 
 @function force-source-url($uri) {
-  @return url('https://surmon.me' + $uri);
+  @return url($source-url + $uri);
 }
 
 // PC theme color

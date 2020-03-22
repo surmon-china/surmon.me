@@ -997,6 +997,10 @@
           height: 9rem;
           overflow: hidden;
 
+          &[style*="300ms"] {
+            @include blur-filter('horizontal-small');
+          }
+
           > .swiper-slide.item {
             width: auto;
             margin-right: $gap;

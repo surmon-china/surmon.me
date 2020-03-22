@@ -292,7 +292,7 @@
   import systemConstants from '~/constants/system'
   import { getFileCDNUrl } from '~/transformers/url'
   import { getGravatarByEmail } from '~/transformers/thumbnail'
-  import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
+  import { scrollTo, Easing } from '~/services/scroller'
   import { isGuestbookRoute } from '~/services/route-validator'
   import { getJSONStorageReader } from '~/services/local-storage'
   import CommentUa from './ua'
@@ -387,11 +387,13 @@
       initUser() {
         const user = localUser.get()
         const historyLikes = localHistoryLikes.get()
-        historyLikes && (this.historyLikes = historyLikes)
         if (user) {
           this.user = user
           this.upadteUserGravatar()
           this.userCacheMode = true
+        }
+        if (historyLikes) {
+          this.historyLikes = historyLikes
         }
       },
       // 初始化黑名单

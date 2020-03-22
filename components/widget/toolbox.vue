@@ -67,7 +67,7 @@
   import throttle from 'lodash/throttle'
   import appConfig from '~/config/app.config'
   import systemConstants from '~/constants/system'
-  import { scrollTo, Easing } from '~/utils/scroll-to-anywhere'
+  import { scrollTo, Easing } from '~/services/scroller'
 
   let isFirstOpenWebcam = true
   const throttleToggleWebcam = throttle(() => {

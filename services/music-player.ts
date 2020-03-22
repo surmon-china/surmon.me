@@ -93,20 +93,18 @@ export default new Vue(
           .map((timeSentence: string) => {
             // eslint-disable-next-line no-useless-escape
             let time: $TODO = /\[([^\[\]]*)\]/.exec(timeSentence)
-            time = time && time.length && time[1]
-            time = time && time.split(':').map((t: string) => Number(t))
-            time =
-              time && time.length && time.length > 1 && time[0] * 60 + time[1]
+            time = time?.length && time[1]
+            time = time?.split(':').map((t: string) => Number(t))
+            time = time?.length && time.length > 1 && time[0] * 60 + time[1]
             time = time || ''
             let sentence: $TODO = /([^\]]+)$/.exec(timeSentence)
-            sentence = sentence && sentence.length && sentence[1]
-            sentence = sentence || ''
+            sentence = sentence?.[1] || ''
             return { time, sentence }
           })
           .filter((timestamp: $TODO) => timestamp.time) as Array<{
-          time: number
-          sentence: string
-        }>
+            time: number
+            sentence: string
+          }>
 
         if (!currentSongLrcs.length) {
           return '-'
