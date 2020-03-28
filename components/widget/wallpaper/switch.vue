@@ -20,7 +20,7 @@
           systemConstants.GAEventActions.Toggle,
           systemConstants.GAEventTags.Tool
         )
-        if (this.wallpapers) {
+        if (this.$store.getters['wallpaper/parpers']) {
           this.$store.commit('global/toggleUpdateWallpaperOnState', true)
         } else {
           alert('可能 Bing 又被墙了吧我有什么办法！')
@@ -33,9 +33,6 @@
       },
       isDarkTheme() {
         return this.$store.getters['global/isDarkTheme']
-      },
-      wallpapers() {
-        return this.$store.state.wallpaper.papers.data
       }
     }
   }
@@ -63,6 +60,7 @@
       position: relative;
       transform: translateX(-$offset * 2);
       transition: opacity $transition-time-fast, transform $transition-time-fast;
+      user-select: none;
 
       &:hover {
         opacity: .8;
@@ -107,13 +105,15 @@
           color: $primary;
 
           &.zh {
-            letter-spacing: -2px;
+            letter-spacing: -2.5px;
           }
 
           &.en {
             text-align: center;
             font-weight: bold;
-            letter-spacing: 0px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: $font-size-small;
           }
         }
       }

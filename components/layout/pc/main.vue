@@ -87,15 +87,6 @@
       AsideView,
       NavView
     },
-    mounted() {
-      if (isBrowser) {
-        this.autoEggWhenTabActive()
-        this.$store.commit('global/resetTheme')
-        this.$store.dispatch('wallpaper/fetchPapers')
-        this.$root.$musicPlayer = musicPlayer
-        musicPlayer.ready || musicPlayer.init()
-      }
-    },
     computed: {
       ...mapState('global', [
         'onMyMap',
@@ -103,6 +94,9 @@
         'isTwoColumns',
         'isThreeColumns'
       ]),
+      isEnLang() {
+        return this.$store.getters['global/isEnLang']
+      },
       isFullViewWidth() {
         return isServiceRoute(this.$route.name)
       },
@@ -125,6 +119,23 @@
           },
           false
         )
+      },
+      fetchWallpaper(isEnLang) {
+        this.$store.dispatch('wallpaper/fetchPapers', isEnLang)
+      }
+    },
+    watch: {
+      isEnLang(isEnLang) {
+        this.fetchWallpaper(isEnLang)
+      }
+    },
+    mounted() {
+      if (isBrowser) {
+        this.autoEggWhenTabActive()
+        this.fetchWallpaper(this.isEnLang)
+        this.$store.commit('global/resetTheme')
+        this.$root.$musicPlayer = musicPlayer
+        musicPlayer.ready || musicPlayer.init()
       }
     }
   }
