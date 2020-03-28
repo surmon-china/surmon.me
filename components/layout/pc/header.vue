@@ -57,7 +57,7 @@
     </div>
     <div class="pre-load">
       <img v-if="preload" :src="musicPlayer.currentSongPicUrl" alt="song-thumb">
-      <img v-if="preload" :src="'/images/sponsor.jpg' | byCDN" alt="sponsor">
+      <img v-if="preload" :src="'/images/sponsor.png' | byCDN" alt="sponsor">
       <img v-if="preload" :src="'/images/app-hot.png' | byCDN" alt="app-download">
       <img v-if="preload" :src="'/images/app-logo.png' | byCDN" alt="app-logo">
       <img v-if="preload" :src="'/images/service.jpg' | byCDN" alt="service">
