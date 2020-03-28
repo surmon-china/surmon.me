@@ -2,6 +2,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+### v2.5.7 (2020-03-27)
+
+**Update**
+- Support i18n wallpaper
+
 ### v2.5.6 (2020-03-21)
 
 **Add**

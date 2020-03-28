@@ -100,7 +100,7 @@ export default {
       },
       wallpaper: {
         zh: '山河入梦',
-        en: 'Wallpaper'
+        en: 'Gallery'
       },
       service: {
         slogan: {
