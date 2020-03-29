@@ -2,6 +2,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+### v2.5.8 (2020-03-29)
+
+**Update**
+- Upgrade vue-awesome-swiper
+- Upgrade `webpack.splitChunks` with `nuxt.config.js`
+
 ### v2.5.7 (2020-03-27)
 
 **Update**

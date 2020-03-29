@@ -119,20 +119,19 @@
           },
           false
         )
-      },
-      fetchWallpaper(isEnLang) {
-        this.$store.dispatch('wallpaper/fetchPapers', isEnLang)
       }
     },
     watch: {
-      isEnLang(isEnLang) {
-        this.fetchWallpaper(isEnLang)
+      isEnLang: {
+        immediate: true,
+        handler(isEnLang) {
+          this.$store.dispatch('wallpaper/fetchPapers', isEnLang)
+        }
       }
     },
     mounted() {
       if (isBrowser) {
         this.autoEggWhenTabActive()
-        this.fetchWallpaper(this.isEnLang)
         this.$store.commit('global/resetTheme')
         this.$root.$musicPlayer = musicPlayer
         musicPlayer.ready || musicPlayer.init()
