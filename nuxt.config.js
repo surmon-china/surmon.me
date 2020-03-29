@@ -43,7 +43,7 @@ export default {
           expansions: {
             name: 'expansions',
             test(module) {
-              return /swiper|233333|lozad|marked|favico|amplitude|highlight/.test(module.context);
+              return /swiper|dom7|233333|lozad|marked|favico|amplitude|highlight|ua-parser|vue-analytics|vue-google-adsense/.test(module.context);
             },
             chunks: 'initial',
             priority: 10,
