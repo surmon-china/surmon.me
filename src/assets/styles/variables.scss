@@ -1,0 +1,121 @@
+
+// url
+$cdn-url: '' !default;
+$source-url: '' !default;
+
+@function cdn-url($uri) {
+  @return url($cdn-url + $uri);
+}
+
+@function force-source-url($uri) {
+  @return url($source-url + $uri);
+}
+
+// PC theme color
+$body-bg: var(--body-bg);
+$theme-black: var(--theme-black);
+$theme-logo-rotate: var(--theme-logo-rotate);
+
+$module-bg: var(--module-bg);
+$module-bg-opacity-5: var(--module-bg-opacity-5);
+$module-bg-opacity-8: var(--module-bg-opacity-8);
+$module-bg-opacity-9: var(--module-bg-opacity-9);
+
+$module-hover-bg: var(--module-hover-bg);
+$module-hover-bg-opaqueness: var(--module-hover-bg-opaqueness);
+$module-hover-bg-opacity-3: var(--module-hover-bg-opacity-3);
+$module-hover-bg-opacity-9: var(--module-hover-bg-opacity-9);
+$module-hover-bg-darken-10: var(--module-hover-bg-darken-10);
+$module-hover-bg-darken-20: var(--module-hover-bg-darken-20);
+$module-hover-bg-darken-40: var(--module-hover-bg-darken-40);
+
+$primary: var(--primary-color);
+$primary-opacity-9: var(--primary-opacity-9-color);
+$primary-opacity-5: var(--primary-opacity-5-color);
+
+// text colors
+$text: var(--text-color);
+$text-dark: var(--text-dark);
+$text-darken: var(--text-darken);
+$text-secondary: var(--text-secondary);
+$text-disabled: var(--text-disabled);
+$text-dividers: var(--text-dividers);
+$text-reversal: var(--text-reversal);
+
+// links
+$link-color: var(--link-color);
+$link-hover-color: var(--link-hover-color);
+
+// colors
+$accent: #4caf50;
+$red: #ff5722;
+$yellow: #ffeb3b;
+$grey: #efefef;
+$white: #ffffff;
+$black: #000000;
+$black-light: #555555;
+
+// golden
+$golden-ratio: 0.618;
+
+// gap
+$gap: 1rem; // ~12px
+$sm-gap: $gap * $golden-ratio; // ~8px
+$xs-gap: $sm-gap / 2; // ~4px
+$lg-gap: $sm-gap * 2; // ~14px
+
+// times
+$transition-time-fast: .1s;
+$transition-time-normal: .25s;
+$transition-time-slow: .38s;
+
+// Z indexs
+$z-index-top: 99999;
+$z-index-header: 999;
+$z-index-toolbox: 9;
+$z-index-normal: 0;
+$z-index-underground: -1;
+
+// other
+$radius: 2px;
+$border: 1px solid $text-dividers;
+
+// PC
+$header-height: 5.1rem;
+$footer-height: 6rem;
+$container-width: 1050px;
+$navbar-width: 160px;
+$main-width: 595px;
+$aside-width: 266px;
+$block-button-height: 3.4rem;
+$active-content-full-height: calc(100vh - #{$header-height + $lg-gap + $footer-height + $lg-gap});
+
+// Mobile
+$mobile-header-height: 5rem;
+$mobile-footer-height: $lg-gap * 4;
+$mobile-aside-bg: #34393d;
+$mobile-aisde-transition: all $transition-time-slow ease-out;
+
+// breakpoints
+$small-breakpoint: 400px;
+$large-breakpoint: $container-width;
+
+// font
+$font-family-sans-serif: SpecialSymbol, DINRegular, -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", "微软雅黑", sans-serif;
+$font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace;
+$font-family-base: $font-family-sans-serif;
+
+// typography
+$font-size-root: 12px;
+$font-size-base: 14px;
+$font-size-large: $font-size-base * 1.25; // ~17.5px
+$font-size-small: $font-size-base * .888; // ~12.4px
+
+$font-size-h1: $font-size-base * 1.7; // ~23.8px
+$font-size-h2: $font-size-base * 1.45; // ~20.3px
+$font-size-h3: $font-size-base * 1.3; // ~18.2px
+$font-size-h4: $font-size-base * 1.15; // ~16.1px
+$font-size-h5: $font-size-base;  // ~14px
+$font-size-h6: $font-size-base * 0.95; // ~13.3px
+
+$line-height-base: 1.4;

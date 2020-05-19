@@ -1,0 +1,81 @@
+
+@mixin text-overflow() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin visible() {
+  opacity: 1;
+  visibility: visible;
+}
+
+@mixin hidden() {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@mixin backdrop-blur($blur-radius: 5px) {
+  backdrop-filter: blur($blur-radius);
+}
+
+@mixin module-blur-bg() {
+  background-color: $module-bg;
+  // 全部打开影响性能
+  // @include backdrop-blur();
+}
+
+@mixin box-shadow($alpha: 0.6, $blur-radius: 8px) {
+  box-shadow: rgba($black, $alpha) 0px 0px $blur-radius;
+}
+
+@mixin drop-shadow($alpha: 0.6, $blur-radius: 1px) {
+  filter: drop-shadow(0px 0px $blur-radius rgba($black, $alpha));
+}
+
+@mixin title-shadow() {
+  $text-color: $grey;
+  color: $text-color;
+  text-shadow: 0px 0px 0px $text-color, 0px 0px 2px rgba($black, 0.6), 0px 0px 4px rgba($black, 0.6);
+}
+
+@mixin transform-transition($time: $transition-time-fast) {
+  transition: transform $time;
+}
+
+@mixin visibility-transition($time: $transition-time-fast) {
+  transition: opacity $time, visibility $time;
+}
+
+@mixin color-transition($time: $transition-time-fast) {
+  transition: color $time;
+}
+
+@mixin background-transition($time: $transition-time-fast) {
+  transition: background-color $time;
+}
+
+@mixin blur-filter($param: 'horizontal') {
+  filter: force-source-url('/images/motion-blur-filter.svg##{$param}');
+}
+
+/// Adds a browser prefix to the property
+/// @param {*} $property Property
+/// @param {*} $value Value
+
+@mixin clamp($lines: 2) {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+}
+
+/// Text Shadow
+/// @param {Size} $x [2px] - X
+/// @param {Size} $y [2px] - Y
+/// @param {Size} $blur [2px] - Blur
+/// @param {Color} $color [rgba(0,0,0,.4)] - Color
+
+@mixin text-shadow($x: 2px, $y: 2px, $blur: 5px, $color: rgba(0,0,0,.4)) {
+    text-shadow: $x $y $blur $color;
+}
