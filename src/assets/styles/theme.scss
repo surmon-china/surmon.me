@@ -1,0 +1,63 @@
+
+@mixin css-var($text, $white, $black, $primary, $body-bg, $module-hover-bg, $logo-rotate) {
+
+  #{--body-bg}: $body-bg;
+  #{--theme-black}: $black;
+  #{--theme-logo-rotate}: $logo-rotate;
+
+  #{--module-bg}: rgba($white, 0.6);
+  #{--module-bg-opacity-5}: rgba($white, 0.5);
+  #{--module-bg-opacity-8}: rgba($white, 0.8);
+  #{--module-bg-opacity-9}: rgba($white, 0.9);
+
+  #{--module-hover-bg}: $module-hover-bg;
+  #{--module-hover-bg-opaqueness}: rgba($module-hover-bg, 0);
+  #{--module-hover-bg-opacity-3}: rgba($module-hover-bg, 0.3);
+  #{--module-hover-bg-opacity-9}: rgba($module-hover-bg, 0.9);
+  #{--module-hover-bg-darken-10}: darken($module-hover-bg, 10%);
+  #{--module-hover-bg-darken-20}: darken($module-hover-bg, 20%);
+  #{--module-hover-bg-darken-40}: darken($module-hover-bg, 40%);
+
+  #{--primary-color}: $primary;
+  #{--primary-opacity-9-color}: rgba($primary, 0.9);
+  #{--primary-opacity-5-color}: rgba($primary, 0.5);
+
+  #{--text-color}: $text;
+  #{--text-light}: lighter($text, 20%);
+  #{--text-dark}: darken($text, 20%);
+  #{--text-darken}: darken($text, 40%);
+  #{--text-secondary}: rgba($black, .54);
+  #{--text-disabled}: rgba($black, .38);
+  #{--text-dividers}: rgba($black, .26);
+  #{--text-reversal}: $white;
+
+  #{--link-color}: $text;
+  #{--link-hover-color}: darken($text, 20%);
+}
+
+#app {
+
+  &.default {
+    @include css-var(
+      $text: #555,
+      $white: #fff,
+      $black: #000,
+      $primary: #0088f5,
+      $body-bg: #eee,
+      $module-hover-bg: rgba(197, 197, 197, 0.5),
+      $logo-rotate: none
+    );
+  }
+
+  &.dark {
+    @include css-var(
+      $text: #fff,
+      $white: #000,
+      $black: #fff,
+      $primary: #fff,
+      $body-bg: #000,
+      $module-hover-bg: rgba(0, 0, 0, 0.5),
+      $logo-rotate: hue-rotate(30deg) brightness(180%) grayscale(100%)
+    );
+  }
+}

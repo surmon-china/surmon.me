@@ -1,0 +1,239 @@
+
+body {
+  overflow-x: hidden;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  width: $container-width;
+  margin: 0 auto;
+}
+
+.iconfont {
+  font-size: 1em;
+}
+
+.radio, .checkbox {
+  display: inline-block;
+  margin-top: 0px;
+  padding-top: 0px;
+  margin-bottom: 0px;
+}
+
+input {
+  &::placeholder {
+    text-indent: .5em;
+    font-size: $font-size-small;
+    text-transform: capitalize;
+  }
+}
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px rgb(230, 230, 230) inset;
+}
+
+::selection {
+  background: $primary;
+  color: $text-reversal;
+}
+
+::-moz-selection {
+  background: $primary;
+  color: $text-reversal;
+}
+
+::-webkit-selection {
+  background: $primary;
+  color: $text-reversal;
+}
+
+::-webkit-scrollbar {
+  width: $sm-gap;
+  height: $sm-gap;
+  background: hsla(0, 0%, 100%, 0.6);
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 0;
+  background-color: rgba(95, 95, 95, .4);
+  @include background-transition();
+
+  &:hover {
+    background-color: rgba(95, 95, 95, .7);
+  }
+}
+
+// filters
+.filter {
+  &.motion-blur-horizontal {
+    @include blur-filter('horizontal');
+  }
+
+  &.motion-blur-horizontal-small {
+    @include blur-filter('horizontal-small');
+  }
+
+  &.motion-blur-vertical {
+    @include blur-filter('vertical');
+  }
+
+  &.motion-blur-vertical-small {
+    @include blur-filter('vertical-small');
+  }
+}
+
+// mammon
+.mammon-box {
+  width: 100%;
+  height: auto;
+  position: relative;
+
+  &::before {
+    content: '向我的衣食父母鞠躬';
+    position: absolute;
+    text-align: center;
+    font-size: $font-size-h1;
+    font-weight: bold;
+    color: $text-dividers;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    z-index: $z-index-underground;
+    letter-spacing: .2em;
+    transform: translate(-50%, -50%);
+  }
+}
+
+// popup component
+#iframe-popup {
+  @include backdrop-blur();
+}
+
+#image-popup,
+#iframe-popup {
+  position: fixed;
+  display: flex;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: $z-index-top;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: rgba($black-light, 0.5);
+  @include hidden();
+  @include visibility-transition();
+
+  &.display {
+    @include visible();
+  }
+
+  > img,
+  > iframe {
+    min-width: 10%;
+    min-height: 10%;
+    background-color: rgba($white, 0.3);
+    border: $sm-gap solid rgba($grey, 0.3);
+
+    &.sponsor {
+      width: 600px;
+      height: 200px;
+      box-sizing: content-box;
+      border: none;
+      border-left: $gap solid $white;
+      border-right: $gap solid $white;
+    }
+  }
+
+  > img {
+    max-width: 90%;
+    max-height: 90%;
+  }
+  
+  > iframe {
+    width: 90%;
+    height: 90%;
+  }
+}
+
+// swiper
+.swiper-wrapper {
+  z-index: $z-index-normal + 1;
+}
+
+.swiper-pagination {
+  z-index: $z-index-normal + 2;
+}
+
+.swiper-pagination-bullet {
+  transition: width $transition-time-normal, height $transition-time-normal, border-radius $transition-time-normal;
+
+  &.swiper-pagination-bullet-active {
+    opacity: .8;
+    background: $text-reversal;
+  }
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  z-index: $z-index-normal + 3;
+}
+
+// no used
+.slide-up-enter-active, .slide-up-leave-active {
+  transition: all $transition-time-slow cubic-bezier(0, 1.2, 1, 0.5);
+  opacity: .7;
+  transform: translate3d(0, 4em, 0);
+}
+.slide-up-enter, .slide-up-leave-active {
+  opacity: .3;
+  transform: translate3d(0, 4em, 0);
+}
+
+// no used
+.slide-left-enter-active, .slide-left-leave-active {
+  transition: all $transition-time-normal cubic-bezier(0, 1.2, 1, 0.5);
+  opacity: .5;
+  transform: translate3d(2em, 0, 0);
+}
+.slide-left-enter, .slide-left-leave-active {
+  opacity: .3;
+  transform: translate3d(2em, 0, 0);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity $transition-time-normal;
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
+}
+.fade-move {
+  transition: transform $transition-time-normal;
+}
+
+.page-enter-active {
+  transition: opacity $transition-time-slow;
+}
+.page-leave-active {
+  transition: opacity 0s;
+}
+.page-enter, .page-leave-active {
+  opacity: 0
+}
+
+.module-enter-active, .module-leave-active {
+  transition: opacity $transition-time-normal;
+}
+.module-enter, .module-leave-active {
+  opacity: 0
+}
