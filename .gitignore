@@ -66,13 +66,9 @@ package-lock.json
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
-# next.js build output
-.next
-
-# nuxt.js build output
-.nuxt
-
-# Nuxt generate
+# Vuniversal dev cache
+.vun
+# Vuniversal build output
 dist
 
 # vuepress build output

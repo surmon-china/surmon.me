@@ -1,23 +1,12 @@
 # .eslintignore
 
-node_modules
-
-build/*.js
-# config/*.js
-
 *.discard
-
-static/*
-static/*.js
-
+node_modules
+build/*.js
+public/*
 .deploy/*
 
-.nuxt
-.nuxt/*
-.nuxt/*.js
-
-services/scroller.ts
-
-plugins/ga.js
-plugins/copy-right.js
-plugins/baidu-seo-push.js
+src/services/scroller.ts
+src/plugins/ga.js
+src/plugins/copy-right.js
+src/plugins/baidu-seo-push.js
