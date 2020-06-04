@@ -50,9 +50,9 @@
         <div class="item">
           <i class="iconfont icon-music" />
           <span class="music">
-            <nuxt-link to="/music">
+            <router-link to="/music">
               Jazz-HipHop, Electronic, Disco, Rock, Popular
-            </nuxt-link>
+            </router-link>
             <a
               href="https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o"
               target="_blank"
@@ -277,10 +277,10 @@
 </template>
 
 <script>
-  import adConfig from '~/config/ad.config'
-  import appConfig from '~/config/app.config'
-  import systemConstants from '~/constants/system'
-  import { getFileCDNUrl } from '~/transformers/url'
+  import adConfig from '/@/config/ad.config'
+  import appConfig from '/@/config/app.config'
+  import systemConstants from '/@/constants/system'
+  import { getFileCDNUrl } from '/@/transformers/url'
 
   export default {
     name: 'About',

@@ -7,9 +7,9 @@
 </template>
 
 <script>
-  import ArticleList from '~/components/archive/list'
-  import Carrousel from '~/components/archive/carrousel'
-  import Announcement from '~/components/archive/announcement'
+  import ArticleList from '/@/components/archive/list'
+  import Carrousel from '/@/components/archive/carrousel'
+  import Announcement from '/@/components/archive/announcement'
   export default {
     name: 'Index',
     fetch({ store }) {

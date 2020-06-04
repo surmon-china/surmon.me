@@ -4,16 +4,16 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import Favico from '~/plugins/favico'
-import { isBrowser } from '~/environment'
-import { titles } from '~/config/egg.config'
+import Favico from 'favico.js'
+import { isClient } from '/@/vuniversal/env'
+import { titles } from '/@/config/egg.config'
 
 let favicon: Favico = null
 let faviconTimer: number
 let rollTimer: number
 let eggTitle = ''
 let faviconText = ''
-let reallyTitle = isBrowser ? document.title : ''
+let reallyTitle = isClient ? document.title : ''
 
 const now = new Date()
 const today = now.getDate()

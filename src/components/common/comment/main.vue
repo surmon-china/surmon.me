@@ -288,14 +288,14 @@
 <script>
   import Vue from 'vue'
   import { mapState } from 'vuex'
-  import { isBrowser } from '~/environment'
-  import marked from '~/plugins/marked'
-  import systemConstants from '~/constants/system'
-  import { getFileCDNUrl } from '~/transformers/url'
-  import { getGravatarByEmail } from '~/transformers/thumbnail'
-  import { scrollTo, Easing } from '~/services/scroller'
-  import { isGuestbookRoute } from '~/services/route-validator'
-  import { getJSONStorageReader } from '~/services/local-storage'
+  import { isClient } from '/@/vuniversal/env'
+  import marked from '/@/plugins/marked'
+  import systemConstants from '/@/constants/system'
+  import { getFileCDNUrl } from '/@/transformers/url'
+  import { getGravatarByEmail } from '/@/transformers/thumbnail'
+  import { scrollTo, Easing } from '/@/services/scroller'
+  import { isGuestbookRoute } from '/@/services/route-validator'
+  import { getJSONStorageReader } from '/@/services/local-storage'
   import CommentUa from './ua'
   import CommentPen from './pen'
 
@@ -694,7 +694,7 @@
       // 3. 当容器组件还在请求时，组件全量 Loading
       // 4. 当只有评论列表在请求时，列表单独 Loading
       this.initAppOptionBlackList()
-      if (isBrowser) {
+      if (isClient) {
         this.observeLozad()
         this.initUser()
       }

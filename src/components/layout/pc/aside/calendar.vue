@@ -38,9 +38,9 @@
           }"
         >
           <!--today-->
-          <nuxt-link
+          <router-link
             :to="`/date/${ formatDate(day.getFullYear(), day.getMonth() + 1, day.getDate())}`"
-          >{{ day.getDate() }}</nuxt-link>
+          >{{ day.getDate() }}</router-link>
         </span>
       </li>
     </ul>

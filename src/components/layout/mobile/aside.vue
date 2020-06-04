@@ -11,18 +11,18 @@
     </div>
     <div class="aside-nav">
       <nav class="nav-list">
-        <nuxt-link to="/" class="item" exact>
+        <router-link to="/" class="item" exact>
           <i class="iconfont icon-home"></i>
           <span v-text="$i18n.nav.home"></span>
-        </nuxt-link>
-        <nuxt-link to="/category/code" class="item">
+        </router-link>
+        <router-link to="/category/code" class="item">
           <i class="iconfont icon-code"></i>
           <span v-text="$i18n.nav.code"></span>
-        </nuxt-link>
-        <nuxt-link to="/category/think" class="item">
+        </router-link>
+        <router-link to="/category/think" class="item">
           <i class="iconfont icon-thinking"></i>
           <span v-text="$i18n.nav.think"></span>
-        </nuxt-link>
+        </router-link>
         <a
           target="_blank"
           class="item"
@@ -32,30 +32,30 @@
           <i class="iconfont icon-experiment"></i>
           <span v-text="$i18n.nav.project"></span>
         </a>
-        <nuxt-link to="/sitemap" class="item">
+        <router-link to="/sitemap" class="item">
           <i class="iconfont icon-book"></i>
           <span v-text="$i18n.nav.map"></span>
-        </nuxt-link>
-        <nuxt-link to="/vlog" class="item">
+        </router-link>
+        <router-link to="/vlog" class="item">
           <i class="iconfont icon-vlog"></i>
           <span v-text="$i18n.nav.vlog"></span>
-        </nuxt-link>
-        <nuxt-link to="/about" class="item">
+        </router-link>
+        <router-link to="/about" class="item">
           <i class="iconfont icon-user"></i>
           <span v-text="$i18n.nav.about"></span>
-        </nuxt-link>
-        <nuxt-link to="/service" class="item">
+        </router-link>
+        <router-link to="/service" class="item">
           <i class="iconfont icon-tool"></i>
           <span v-text="$i18n.nav.service"></span>
-        </nuxt-link>
-        <nuxt-link to="/guestbook" class="item guestbook">
+        </router-link>
+        <router-link to="/guestbook" class="item guestbook">
           <i class="iconfont icon-comment"></i>
           <span v-text="$i18n.nav.guestbook"></span>
-        </nuxt-link>
-        <nuxt-link to="/app" class="item app">
+        </router-link>
+        <router-link to="/app" class="item app">
           <i class="iconfont icon-app"></i>
           <span v-text="$i18n.nav.app"></span>
-        </nuxt-link>
+        </router-link>
       </nav>
     </div>
   </aside>
@@ -63,8 +63,8 @@
 
 <script>
   import Vue from 'vue'
-  import appConfig from '~/config/app.config'
-  import { getFileCDNUrl } from '~/transformers/url'
+  import appConfig from '/@/config/app.config'
+  import { getFileCDNUrl } from '/@/transformers/url'
 
   export default Vue.extend({
     name: 'MobileAside',

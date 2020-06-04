@@ -18,9 +18,9 @@
 </template>
 
 <script>
-  import appConfig from '~/config/app.config'
-  import systemConstants from '~/constants/system'
-  import { getPageUrl } from '~/transformers/url'
+  import appConfig from '/@/config/app.config'
+  import systemConstants from '/@/constants/system'
+  import { getPageUrl } from '/@/transformers/url'
   export default {
     name: 'Share',
     data() {

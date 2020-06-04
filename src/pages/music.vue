@@ -73,8 +73,8 @@
 </template>
 
 <script>
-  import { isBrowser } from '~/environment'
-  import musicPlayer from '~/services/music-player'
+  import { isClient } from '/@/vuniversal/env'
+  import musicPlayer from '/@/services/music-player'
   export default {
     name: 'Music',
     head() {

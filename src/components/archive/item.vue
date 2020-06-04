@@ -2,7 +2,7 @@
   <div class="article-list-item" :class="{ mobile: isMobile }">
     <div class="item-content">
       <div v-if="!isMobile" class="item-thumb">
-        <nuxt-link :to="`/article/${article.id}`">
+        <router-link :to="`/article/${article.id}`">
           <span
             class="item-oirigin"
             :class="{
@@ -17,11 +17,11 @@
             :alt="article.title"
             :title="article.title"
           >
-        </nuxt-link>
+        </router-link>
       </div>
       <div class="item-body">
         <h5 class="item-title">
-          <nuxt-link :to="`/article/${article.id}`" :title="article.title" v-text="article.title" />
+          <router-link :to="`/article/${article.id}`" :title="article.title" v-text="article.title" />
         </h5>
         <p
           class="item-description"
@@ -48,7 +48,7 @@
           <span v-if="!isMobile" class="categories">
             <i class="iconfont icon-list"></i>
             <template v-if="article.category.length">
-              <nuxt-link
+              <router-link
                 v-for="(category, index) in article.category"
                 :key="index"
                 :to="`/category/${category.slug}`"
@@ -60,7 +60,7 @@
           <span v-if="false" class="tags">
             <i class="iconfont icon-tag"></i>
             <template v-if="article.tag.length">
-              <nuxt-link
+              <router-link
                 v-for="(tag, index) in article.tag"
                 :key="index"
                 :to="`/tag/${tag.slug}`"
@@ -77,10 +77,10 @@
 
 <script>
   import { mapState } from 'vuex'
-  import { getFileCDNUrl } from '~/transformers/url'
-  import { getArchiveArticleThumbnailUrl } from '~/transformers/thumbnail'
-  import { getJSONStorageReader } from '~/services/local-storage'
-  import systemConstants from '~/constants/system'
+  import { getFileCDNUrl } from '/@/transformers/url'
+  import { getArchiveArticleThumbnailUrl } from '/@/transformers/thumbnail'
+  import { getJSONStorageReader } from '/@/services/local-storage'
+  import systemConstants from '/@/constants/system'
 
   const localHistoryLikes = getJSONStorageReader(systemConstants.StorageField.UserLikeHistory)
 

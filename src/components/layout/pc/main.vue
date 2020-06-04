@@ -37,6 +37,16 @@
         }"
       >
         <nuxt :nuxt-child-key="$route.name" />
+        <!-- <transition name="fade" mode="out-in">
+          <suspense>
+            <template #default>
+              <router-view />
+            </template>
+            <template #fallback>
+              <loading />
+            </template>
+          </suspense>
+        </transition> -->
       </div>
       <aside-view v-if="!isTwoColumns && !isThreeColumns" key="aside" />
     </main>
@@ -46,25 +56,25 @@
 
 <script>
   import { mapState } from 'vuex'
-  import { isBrowser } from '~/environment'
+  import { isClient } from '/@/vuniversal/env'
   import NavView from './nav'
   import HeaderView from './header'
   import FooterView from './footer'
   import AsideView from './aside/main'
-  import Barrage from '~/components/widget/barrage/main'
-  import Wallflower from '~/components/widget/wallflower/garden'
-  import WallpaperWall from '~/components/widget/wallpaper/wall'
-  import WallpaperSwitch from '~/components/widget/wallpaper/switch'
-  import MyMap from '~/components/widget/my-map'
-  import Background from '~/components/widget/background'
-  import Language from '~/components/widget/language'
-  import ToolBox from '~/components/widget/toolbox'
-  import ShareBox from '~/components/widget/share'
-  import ThemeSwitch from '~/components/widget/theme'
-  import musicPlayer from '~/services/music-player'
-  import { startTitleEgg, resetTitle } from '~/services/title-egg'
-  import { isServiceRoute } from '~/services/route-validator'
-  import systemConstants from '~/constants/system'
+  import Barrage from '/@/components/widget/barrage/main'
+  import Wallflower from '/@/components/widget/wallflower/garden'
+  import WallpaperWall from '/@/components/widget/wallpaper/wall'
+  import WallpaperSwitch from '/@/components/widget/wallpaper/switch'
+  import MyMap from '/@/components/widget/my-map'
+  import Background from '/@/components/widget/background'
+  import Language from '/@/components/widget/language'
+  import ToolBox from '/@/components/widget/toolbox'
+  import ShareBox from '/@/components/widget/share'
+  import ThemeSwitch from '/@/components/widget/theme'
+  import musicPlayer from '/@/services/music-player'
+  import { startTitleEgg, resetTitle } from '/@/services/title-egg'
+  import { isServiceRoute } from '/@/services/route-validator'
+  import systemConstants from '/@/constants/system'
 
   export default {
     name: 'PcMain',
@@ -130,7 +140,7 @@
       }
     },
     mounted() {
-      if (isBrowser) {
+      if (isClient) {
         this.autoEggWhenTabActive()
         this.$store.commit('global/resetTheme')
         this.$root.$musicPlayer = musicPlayer
@@ -166,7 +176,7 @@
         opacity: 1;
       }
 
-      &::v-deep > .share-ejector {
+      &::v-deep(> .share-ejector) {
         width: 3rem;
         height: 3rem;
         line-height: 3rem;

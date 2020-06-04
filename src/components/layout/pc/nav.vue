@@ -1,18 +1,18 @@
 <template>
   <div id="nav" class="aside-nav">
     <nav class="nav-list" :class="{ en: isEnLang }">
-      <nuxt-link :to="'/'" class="item" exact>
+      <router-link :to="'/'" class="item" exact>
         <i class="iconfont icon-home"></i>
         <span class="text" v-text="$i18n.nav.home"></span>
-      </nuxt-link>
-      <nuxt-link to="/category/code" class="item">
+      </router-link>
+      <router-link to="/category/code" class="item">
         <i class="iconfont icon-code"></i>
         <span class="text" v-text="$i18n.nav.code"></span>
-      </nuxt-link>
-      <nuxt-link to="/category/think" class="item">
+      </router-link>
+      <router-link to="/category/think" class="item">
         <i class="iconfont icon-thinking"></i>
         <span class="text" v-text="$i18n.nav.think"></span>
-      </nuxt-link>
+      </router-link>
       <a
         target="_blank"
         class="item"
@@ -22,14 +22,14 @@
         <i class="iconfont icon-experiment"></i>
         <span class="text" v-text="$i18n.nav.project"></span>
       </a>
-      <nuxt-link to="/music" class="item">
+      <router-link to="/music" class="item">
         <i class="iconfont icon-netease-music"></i>
         <span class="text" v-text="$i18n.nav.music"></span>
-      </nuxt-link>
-      <nuxt-link to="/vlog" class="item">
+      </router-link>
+      <router-link to="/vlog" class="item">
         <i class="iconfont icon-vlog"></i>
         <span class="text" v-text="$i18n.nav.vlog"></span>
-      </nuxt-link>
+      </router-link>
       <a
         target="_blank"
         class="item"
@@ -39,18 +39,18 @@
         <i class="iconfont icon-instagram"></i>
         <span class="text" v-text="$i18n.nav.instagram"></span>
       </a>
-      <nuxt-link to="/about" class="item">
+      <router-link to="/about" class="item">
         <i class="iconfont icon-user"></i>
         <span class="text" v-text="$i18n.nav.about"></span>
-      </nuxt-link>
-      <nuxt-link to="/service" class="item">
+      </router-link>
+      <router-link to="/service" class="item">
         <i class="iconfont icon-tool"></i>
         <span class="text" v-text="$i18n.nav.service"></span>
-      </nuxt-link>
-      <nuxt-link to="/guestbook" class="item guestbook">
+      </router-link>
+      <router-link to="/guestbook" class="item guestbook">
         <i class="iconfont icon-comment"></i>
         <span class="text" v-text="$i18n.nav.guestbook"></span>
-      </nuxt-link>
+      </router-link>
       <!-- <a
         v-if="false"
         :href="adConfig.nav.holiday"
@@ -101,17 +101,17 @@
         <i class="iconfont icon-fox-colour"></i>
         <span class="text">FF.io</span>
       </a>
-      <nuxt-link to="/app" class="item app">
+      <router-link to="/app" class="item app">
         <i class="iconfont icon-app"></i>
         <span class="text" v-text="$i18n.nav.app"></span>
-      </nuxt-link>
+      </router-link>
     </nav>
   </div>
 </template>
 
 <script>
-  import adConfig from '~/config/ad.config'
-  import appConfig from '~/config/app.config'
+  import adConfig from '/@/config/ad.config'
+  import appConfig from '/@/config/app.config'
   export default {
     name: 'PcNav',
     computed: {

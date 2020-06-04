@@ -27,9 +27,9 @@
       <a href class="navbar-menu" @click.stop.prevent="toggleSidebar(!onMobileSidebar)">
         <i class="iconfont icon-menu"></i>
       </a>
-      <nuxt-link to="/" class="navbar-logo">
+      <router-link to="/" class="navbar-logo">
         <img :src="'/images/logo.svg' | byCDN">
-      </nuxt-link>
+      </router-link>
       <a href class="navbar-search" @click.stop.prevent="openSearch">
         <i class="iconfont icon-search"></i>
       </a>

@@ -48,9 +48,9 @@
 <script lang="ts">
   import { PropType, createComponent, ref, computed, onMounted } from '@vue/composition-api'
   import { mapState } from 'vuex'
-  import appConfig from '~/config/app.config'
-  import systemConstants from '~/constants/system'
-  import { scrollTo, Easing } from '~/services/scroller'
+  import appConfig from '/@/config/app.config'
+  import systemConstants from '/@/constants/system'
+  import { scrollTo, Easing } from '/@/services/scroller'
 
   export default createComponent({
     name: 'ToolBox',

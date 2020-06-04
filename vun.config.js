@@ -7,11 +7,14 @@ const SCSS_VARIABLES = isProd
   : [SCSS_VARIABLES_INIT]
 
 module.exports = {
-  universal: true,
+  universal: false,
   modern: true,
   clientEntry: './src/client.ts',
   serverEntry: './src/server.ts',
   // template: './src/app.html',
+  dev: {
+    port: 3000
+  },
   env: {
     // BASE: apiConfig.BASE,
     // HOST_URL: apiConfig.SOCKET
@@ -30,6 +33,7 @@ module.exports = {
       // '/vue-drag-zone'
     ]
   },
+  lintOnSave: false,
   build: {
     analyze: true,
     // publicPath: apiConfig.CDN + '/vun/',
@@ -64,6 +68,9 @@ module.exports = {
         }
       }
     }
+  },
+  typescript: {
+    forkTsChecker: false
   },
   webpack(webpackConfig, buildContext) {
     // MARK: Just run in test

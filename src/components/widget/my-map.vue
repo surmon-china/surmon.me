@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import { isDevMode, isBrowser } from '~/environment'
+  import { isDevMode, isClient } from '/@/vuniversal/env'
   export default {
     name: 'MyMap',
     methods: {

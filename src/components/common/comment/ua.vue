@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import { uaParser } from '~/transformers/ua'
+  import { uaParser } from '/@/transformers/ua'
 
   // https://github.com/faisalman/ua-parser-js#methods
   const osIconsNameMap = {

@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import systemConstants from '~/constants/system'
+  import systemConstants from '/@/constants/system'
   export default {
     name: 'WallpaperSwitch',
     methods: {

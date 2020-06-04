@@ -60,8 +60,8 @@
 </template>
 
 <script>
-  import appConfig from '~/config/app.config'
-  import systemConstants from '~/constants/system'
+  import appConfig from '/@/config/app.config'
+  import systemConstants from '/@/constants/system'
   export default {
     name: 'Application',
     head() {

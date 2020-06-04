@@ -5,24 +5,42 @@
  */
 
 import parser from 'ua-parser-js'
+import { Language } from '/@/language/data'
 
 export const uaParser = (userAgent: string) => {
   const parseResult = (parser as $TODO)(userAgent || '')
   const browserName = String(parseResult.browser.name).toLowerCase()
-  const isBrowser = (browsers: string[]) => {
+  const isTargetDevice = (browsers: string[]) => {
     return browsers.some(browser => browser.toLowerCase() === browserName)
   }
 
   return {
     result: parseResult,
-    isIE: isBrowser(['compatible', 'MSIE', 'IE']),
-    isEdge: isBrowser(['Edge']),
-    isFirefox: isBrowser(['Firefox']),
-    isChrome: isBrowser(['Chrome', 'Chromium']),
-    isSafari: isBrowser(['Safari']),
-    isWechat: isBrowser(['Wechat']),
+    isIE: isTargetDevice(['compatible', 'MSIE', 'IE']),
+    isEdge: isTargetDevice(['Edge']),
+    isFirefox: isTargetDevice(['Firefox']),
+    isChrome: isTargetDevice(['Chrome', 'Chromium']),
+    isSafari: isTargetDevice(['Safari']),
+    isWechat: isTargetDevice(['Wechat']),
     isIos: parseResult.os.name === 'iOS',
     isAndroid: parseResult.os.name === 'Android',
     isMobile: parseResult.device.type === 'mobile'
   }
+}
+
+const isTargetLanguageUser = (language: UaLanguage, targetLang: string) => {
+  if (typeof language === 'string') {
+    return language.includes(targetLang)
+  }
+  if (Array.isArray(language)) {
+    return language.some(lang => lang.includes(targetLang))
+  }
+  return false
+}
+export type UaLanguage = string | string[]
+export const isEnUser = (language: UaLanguage) => isTargetLanguageUser(language, Language.En)
+export const isZhUser = (language: UaLanguage) => {
+  return language
+    ? isTargetLanguageUser(language, Language.Zh)
+    : true
 }

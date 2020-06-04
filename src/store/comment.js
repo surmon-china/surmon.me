@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { fetchDelay } from '~/services/fetch-delay'
+import { fetchDelay } from '/@/services/fetch-delay'
 
 export const COMMENT_API_PATH = '/comment'
 export const LIKE_COMMENT_API_PATH = '/like/comment'

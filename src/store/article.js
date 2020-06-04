@@ -5,10 +5,10 @@
  */
 
 import Vue from 'vue'
-import { isBrowser } from '~/environment'
-import { fetchDelay } from '~/services/fetch-delay'
-import { isArticleDetailRoute } from '~/services/route-validator'
-import { scrollTo, Easing } from '~/services/scroller'
+import { isClient } from '/@/vuniversal/env'
+import { fetchDelay } from '/@/services/fetch-delay'
+import { isArticleDetailRoute } from '/@/transformers/route'
+import { scrollTo, Easing } from '/@/services/scroller'
 
 export const ARTICLE_API_PATH = '/article'
 export const LIKE_ARTICLE_API_PATH = '/like/article'
@@ -99,7 +99,7 @@ export const actions = {
         isLoadMore
           ? commit('updateExistingListData', response.result)
           : commit('updateListData', response.result)
-        if (isLoadMore && isBrowser) {
+        if (isLoadMore && isClient) {
           Vue.nextTick(() => {
             scrollTo(window.scrollY + window.innerHeight * 0.8, 300, {
               easing: Easing['ease-in']
@@ -126,9 +126,9 @@ export const actions = {
   // 获取文章详情
   fetchDetail({ commit }, params = {}) {
     const delay = fetchDelay(
-      isBrowser && isArticleDetailRoute(window.$nuxt.$route.name) ? null : 0
+      isClient && isArticleDetailRoute(window.$nuxt.$route.name) ? null : 0
     )
-    if (isBrowser) {
+    if (isClient) {
       Vue.nextTick(() => {
         scrollTo(0, 300, { easing: Easing['ease-in'] })
       })

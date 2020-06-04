@@ -99,7 +99,7 @@
 
 <script>
   import { mapState } from 'vuex'
-  import appConfig from '~/config/app.config'
+  import appConfig from '/@/config/app.config'
 
   export default {
     name: 'Sitemap',
