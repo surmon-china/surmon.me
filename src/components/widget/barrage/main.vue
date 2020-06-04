@@ -61,7 +61,7 @@
 </template>
 
 <script>
-  import socket from '~/plugins/socket.io'
+  import socket from '/@/plugins/socket.io'
   import BarrageItem from './item'
   export default {
     name: 'Barrage',

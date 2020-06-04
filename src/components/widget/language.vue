@@ -9,37 +9,34 @@
   </div>
 </template>
 
-<script>
-  import Vue from 'vue'
-  import systemConstants from '~/constants/system'
+<script lang="ts">
+  import { defineComponent } from 'vue'
+  import { useI18n } from '/@/services/i18n'
+  import { GAEventActions, GAEventTags } from '/@/constants/ga'
 
-  export default Vue.extend({
+  export default defineComponent({
     name: 'Language',
-    computed: {
-      language() {
-        return this.$store.state.global.language
-      },
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
+    setup() {
+      const i18n = useI18n()
+      const tooggleLanguage = () => {
+        i18n.toggle()
+        // this.$ga.event(
+        //   '系统语言',
+        //   GAEventActions.Toggle,
+        //   GAEventTags.Tool
+        // )
       }
-    },
-    methods: {
-      tooggleLanguage() {
-        this.$store.commit(
-          'global/updateLanguage',
-          this.isEnLang ? systemConstants.Language.Zh : systemConstants.Language.En
-        )
-        this.$ga.event(
-          '系统语言',
-          systemConstants.GAEventActions.Toggle,
-          systemConstants.GAEventTags.Tool
-        )
+      return {
+        language: i18n.language,
+        tooggleLanguage
       }
     }
   })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   #language {
     $size: $lg-gap * 2;
     position: fixed;

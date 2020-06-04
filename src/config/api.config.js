@@ -4,9 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { NODE_ENV } from '../environment'
-
-const apisMap = {
+const APIS = {
   development: {
     FE: 'http://localhost:3000',
     BASE: 'http://localhost:8000',
@@ -25,4 +23,4 @@ const apisMap = {
   }
 }
 
-export default apisMap[NODE_ENV]
+export default APIS[process.env.NODE_ENV]

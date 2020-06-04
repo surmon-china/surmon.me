@@ -2,11 +2,11 @@
   <header id="header" class="header">
     <div class="header-container container">
       <div class="header-header">
-        <img :src="'/images/logo.svg' | byCDN" class="header-logo">
-        <span class="header-slogan">{{ $i18n.text.slogan }}</span>
-        <nuxt-link to="/" class="header-link" :title="$i18n.text.slogan" />
+        <uimage cdn src="/images/logo.svg" class="header-logo" />
+        <span class="header-slogan" v-i18n="LANGUAGE_KEYS.APP_SLOGAN"></span>
+        <router-link to="/" class="header-link" :title="t(LANGUAGE_KEYS.APP_SLOGAN)" />
       </div>
-      <div class="header-player">
+      <!-- <div class="header-player">
         <div class="panel">
           <button
             class="prev-song button"
@@ -44,60 +44,54 @@
           </button>
         </div>
         <div v-if="currentSong" class="song">
-          <nuxt-link
+          <router-link
             to="/music"
             class="link"
             :title="`${currentSong.name} / ${currentSong.album || 'unknow'}`"
           >
             <span>{{ currentSong.name }} By {{ currentSong.artist }} / {{ currentSong.album || 'unknow' }}</span>
-          </nuxt-link>
+          </router-link>
         </div>
         <div v-else class="song">{{ $i18n.text.music.empty }}</div>
-      </div>
+      </div> -->
     </div>
     <div class="pre-load">
-      <img v-if="preload" :src="musicPlayer.currentSongPicUrl" alt="song-thumb">
-      <img v-if="preload" :src="'/images/sponsor.png' | byCDN" alt="sponsor">
-      <img v-if="preload" :src="'/images/app-hot.png' | byCDN" alt="app-download">
-      <img v-if="preload" :src="'/images/app-logo.png' | byCDN" alt="app-logo">
-      <img v-if="preload" :src="'/images/service.jpg' | byCDN" alt="service">
-      <img v-if="preload" :src="'/images/about-background-be-1.jpg' | byCDN" alt="background">
-      <img v-if="preload" :src="'/images/about-background-be-2.jpg' | byCDN" alt="background">
-      <img v-if="preload" :src="'/images/about-background-star-1.png' | byCDN" alt="background">
-      <img v-if="preload" :src="'/images/about-background-star-2.png' | byCDN" alt="background">
+      <!-- <uimage defer :src="musicPlayer.currentSongPicUrl" alt="song-thumb" /> -->
+      <uimage defer cdn src="/images/sponsor.png" alt="sponsor" />
+      <uimage defer cdn src="/images/app-hot.png" alt="app-download" />
+      <uimage defer cdn src="/images/app-logo.png" alt="app-logo" />
+      <uimage defer cdn src="/images/service.jpg" alt="service" />
+      <uimage defer cdn src="/images/about-background-be-1.jpg" alt="background" />
+      <uimage defer cdn src="/images/about-background-be-2.jpg" alt="background" />
+      <uimage defer cdn src="/images/about-background-star-1.png" alt="background" />
+      <uimage defer cdn src="/images/about-background-star-2.png" alt="background" />
     </div>
   </header>
 </template>
 
-<script>
-  import { isBrowser } from '~/environment'
-  import musicPlayer from '~/services/music-player'
-  export default {
+<script lang="ts">
+  import { defineComponent, onMounted, ref, computed } from 'vue'
+  import { useI18n } from '/@/services/i18n'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  // import { useMusicPlayer } from '/@/services/music-player'
+
+  export default defineComponent({
     name: 'PcHeader',
-    data() {
+    setup() {
+      const i18n = useI18n()
+      // const musicPlayer = useMusicPlayer()
       return {
-        preload: false
-      }
-    },
-    mounted() {
-      if (isBrowser) {
-        window.addLoadedTask(() => {
-          this.preload = true
-        })
-      }
-    },
-    computed: {
-      musicPlayer() {
-        return musicPlayer
-      },
-      currentSong() {
-        return musicPlayer.currentSong
+        // musicPlayer
+        ...useI18n(),
+        LANGUAGE_KEYS
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .header {
     position: fixed;
     top: 0;

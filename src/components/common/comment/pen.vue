@@ -53,8 +53,8 @@
 
 <script>
   import { mapState } from 'vuex'
-  import { isBrowser } from '~/environment'
-  import marked from '~/plugins/marked'
+  import { isClient } from '/@/vuniversal/env'
+  import marked from '/@/plugins/marked'
 
   export default {
     name: 'CommentPen',

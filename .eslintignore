@@ -6,6 +6,9 @@ build/*.js
 public/*
 .deploy/*
 
+src
+src/*
+src/**/*
 src/services/scroller.ts
 src/plugins/ga.js
 src/plugins/copy-right.js

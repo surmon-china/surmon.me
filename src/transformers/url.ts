@@ -4,8 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import apiConfig from '~/config/api.config'
-import { getArticleDetailRoute } from '~/transformers/route'
+import apiConfig from '/@/config/api.config'
+import { getArticleDetailRoute } from '/@/transformers/route'
 
 export const getFileCDNUrl = (uri: string) => {
   return `${apiConfig.CDN}${uri}`

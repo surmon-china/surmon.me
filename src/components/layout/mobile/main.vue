@@ -22,9 +22,9 @@
 
 <script>
   import { mapState } from 'vuex'
-  import HeaderView from './header'
-  import FooterView from './footer'
-  import AsideView from './aside'
+  import HeaderView from './header.vue'
+  import FooterView from './footer.vue'
+  import AsideView from './aside.vue'
   export default {
     name: 'MobileApp',
     components: {

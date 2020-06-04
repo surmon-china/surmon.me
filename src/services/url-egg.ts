@@ -4,11 +4,11 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { isBrowser } from '~/environment'
+import { isClient } from '/@/vuniversal/env'
 
 let eggTimer: number
 const replaceLocation = (emoji: string) => {
-  if (isBrowser) {
+  if (isClient) {
     const path = window.$nuxt.$route.path
     // location.hash = emoji
     // window.$nuxt.$router.replace(`${path}${emojis ? ('#' + emojis) : ''}`)
@@ -42,7 +42,7 @@ const eggs = [
 ]
 
 export const startUrlEgg = () => {
-  if (isBrowser) {
+  if (isClient) {
     const egg = eggs[1]
     egg()
   }

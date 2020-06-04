@@ -89,7 +89,10 @@
       <div class="step-content container">
         <ul class="step-list">
           <li class="item">
-            <h3 class="name">1. {{ isEnLang ? 'Consult' : '提交需求' }}</h3>
+            <h3 class="name">
+              <span>1. </span>
+              <i18n zh="提交需求" en="Consult" />
+            </h3>
             <p class="desc">{{ isEnLang ? 'Product requirements document' : '提供构思成熟的需求文档' }}</p>
             <p class="desc">{{ isEnLang ? 'Prototype design document' : '及清晰可用的设计图或原型' }}</p>
           </li>
@@ -123,8 +126,8 @@
 </template>
 
 <script>
-  import appConfig from '~/config/app.config'
-  import systemConstants from '~/constants/system'
+  import appConfig from '/@/config/app.config'
+  import systemConstants from '/@/constants/system'
   export default {
     name: 'Service',
     head() {

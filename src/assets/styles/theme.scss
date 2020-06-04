@@ -35,7 +35,7 @@
   #{--link-hover-color}: darken($text, 20%);
 }
 
-#app {
+#app-root {
 
   &.default {
     @include css-var(

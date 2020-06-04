@@ -27,7 +27,7 @@
 
 <script>
   import Vue from 'vue'
-  import adConfig from '~/config/ad.config'
+  import adConfig from '/@/config/ad.config'
 
   export default Vue.extend({
     name: 'PcAsideMammon',

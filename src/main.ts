@@ -1,43 +1,66 @@
-
+import { Request } from 'express'
 import { createSSRApp } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
-import router from './router'
-import store from './store'
+import { createWebHistory, createMemoryHistory } from 'vue-router'
+import { VueEnv } from '/@/vuniversal/env'
+import { createUniversalRouter } from './router'
+import { createUniversalStore } from './store'
+import { createI18n } from '/@/services/i18n'
+import { createTheme, Theme } from '/@/services/theme'
+import enhancer from '/@/services/enhancer'
+import { Language, languages, langMap } from '/@/language/data'
+import { createGlobalState } from './state'
 import App from './app.vue'
-
-// '~/plugins/composition-api',
-// { src: '~/plugins/loaded-task' },
-// { src: '~/plugins/extend' },
-// { src: '~/plugins/marked' },
-// { src: '~/plugins/highlight' },
 
 import 'highlight.js/styles/ocean.css'
 import 'swiper/css/swiper.css'
-import '@/assets/styles/app.scss'
+import '/@/assets/styles/app.scss'
 
-export const createVueApp = () => {
-  const router = createRouter({
-    routes,
-    history: createWebHistory(),
-    async scrollBehavior(to, from, savedPosition) {
-      await scrollWaiter.wait()
-      if (savedPosition) {
-        return savedPosition
-      } else {
-        return { x: 0, y: 0 }
-      }
-    }
+export interface ICreaterContext {
+  target: VueEnv
+  request?: Request
+}
+
+export const createVueApp = (context: ICreaterContext) => {
+  const isServer = context.target === VueEnv.Server
+  const language = isServer
+    ? context.request?.headers['accept-language'] || ''
+    : navigator.language
+  const userAgent = isServer
+    ? context.request?.headers['user-agent'] || ''
+    : navigator.userAgent
+
+  const globalState = createGlobalState({
+    userAgent,
+    language
   })
 
   const app = createSSRApp(App)
-  app.provide('state', globalState)
-  app.use(router)
-  app.use(helmet)
-  app.use(store)
-  app.use(router)
+  const store = createUniversalStore()
+  const router = createUniversalRouter({
+    globalState,
+    history: isServer
+      ? createMemoryHistory()
+      : createWebHistory()
+  })
 
-  return { app, router }
+  const theme = createTheme(Theme.Default)
+  const i18n = createI18n({
+    default: globalState.userAgent.isZhUser
+      ? Language.Zh
+      : Language.En,
+    languages,
+    map: langMap
+  })
+
+  const services = {
+    router,
+    store,
+    globalState,
+    i18n,
+    theme,
+    enhancer
+  }
+
+  Object.values(services).forEach(app.use)
+  return { app, ...services }
 }
-
-
-

@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import systemConstants from '~/constants/system'
+import systemConstants from '/@/constants/system'
 
 const timeTextMap = {
   [systemConstants.Language.En]: {

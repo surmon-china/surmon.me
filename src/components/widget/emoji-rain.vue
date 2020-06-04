@@ -4,58 +4,71 @@
   </div>
 </template>
 
-<script>
-  import { isBrowser } from '~/environment'
-  import { getFileCDNUrl } from '~/transformers/url'
+<script lang="ts">
+  import { defineComponent, ref, reactive, nextTick, onMounted } from 'vue'
+  import Emoji233333 from 'emoji-233333'
+  import { getFileCDNUrl } from '/@/transformers/url'
 
-  export default {
-    name: 'EmojiRain',
-    data() {
-      return {
-        chambering: false,
-        kichikuing: false
-      }
-    },
-    mounted() {
-      if (isBrowser) {
-        window.luanchEmojiRain = options => {
-          if (!this.chambering && !this.kichikuing) {
-            this.chambering = true
-            this.$nextTick(() => {
-              let emoji233333 = null
-              const rainBase = this.$refs.rainBase
-              rainBase.width = document.documentElement.clientWidth || document.body.clientWidth
-              rainBase.height = document.documentElement.clientHeight || document.body.clientHeight
-              emoji233333 = new window.Emoji233333({
-                base: rainBase,
-                scale: 0.7,
-                speed: 12,
-                increaseSpeed: 0.4,
-                density: 5,
-                staggered: true,
-                emoji: getFileCDNUrl('/images/emojis/normal.png'),
-                ...options,
-                onStart: () => {
-                  this.kichikuing = true
-                },
-                onEnded: () => {
-                  this.kichikuing = false
-                  this.chambering = false
-                  this.$nextTick(() => {
-                    emoji233333 = null
-                  })
-                }
-              })
-              emoji233333.launch()
-            })
-          }
-        }
-      }
+  declare global {
+    interface Window {
+      luanchEmojiRain(options: any): void
     }
   }
+
+  export default defineComponent({
+    name: 'EmojiRain',
+    setup() {
+      const rainBase = ref<HTMLElement>(null as any)
+      const state = reactive({
+        chambering: false,
+        kichikuing: false
+      })
+
+      const luanchEmojiRain = options => {
+        if (!state.chambering && !state.kichikuing) {
+          // @ts-ignore
+          rainBase.value.width = document.documentElement.clientWidth || document.body.clientWidth
+          // @ts-ignore
+          rainBase.value.height = document.documentElement.clientHeight || document.body.clientHeight
+          state.chambering = true
+          nextTick(() => {
+            let emoji233333 = new Emoji233333({
+              base: rainBase,
+              scale: 0.7,
+              speed: 12,
+              increaseSpeed: 0.4,
+              density: 5,
+              staggered: true,
+              emoji: getFileCDNUrl('/images/emojis/normal.png'),
+              ...options,
+              onStart: () => {
+                state.kichikuing = true
+              },
+              onEnded: () => {
+                state.kichikuing = false
+                state.chambering = false
+                nextTick(() => {
+                  emoji233333 = null
+                })
+              }
+            })
+            emoji233333.launch()
+          })
+        }
+      }
+
+      onMounted(() => {
+        window.luanchEmojiRain = luanchEmojiRain
+      })
+
+      return { rainBase }
+    }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   #emoji-rain {
     position: fixed;
     top: 0;

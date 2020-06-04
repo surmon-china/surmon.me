@@ -61,7 +61,7 @@
 
 <script>
   import Vue from 'vue'
-  import marked from '~/plugins/marked'
+  import marked from '/@/plugins/marked'
 
   export default Vue.extend({
     name: 'IndexAnnouncement',

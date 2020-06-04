@@ -6,48 +6,47 @@
   </div>
 </template>
 
-<script>
-  import Vue from 'vue'
-  import systemConstants from '~/constants/system'
+<script lang="ts">
+  import { defineComponent, computed } from 'vue'
+  import { useTheme, Theme } from '/@/services/theme'
+  import { GAEventActions, GAEventTags } from '/@/constants/ga'
 
-  export default Vue.extend({
+  export default defineComponent({
     name: 'Theme',
-    computed: {
-      theme() {
-        return this.$store.state.global.theme
-      },
-      themeIcon() {
+    setup() {
+      const theme = useTheme()
+      const themeValue = theme.theme
+      const isDark = computed(() => themeValue.value === Theme.Dark)
+      const themeIcon = computed(() => {
         const themeIconMap = {
-          [systemConstants.Theme.Default]: 'icon-sunny',
-          [systemConstants.Theme.Dark]: 'icon-moon'
+          [Theme.Default]: 'icon-sunny',
+          [Theme.Dark]: 'icon-moon'
         }
-        return themeIconMap[this.theme]
-      },
-      isDarkTheme() {
-        return this.$store.getters['global/isDarkTheme']
+        return themeIconMap[themeValue.value]
+      })
+
+      const toggleTheme = () => {
+        theme.toggle()
+        // this.$ga.event(
+        //   '反色模式',
+        //   GAEventActions.Toggle,
+        //   GAEventTags.Tool
+        // )
       }
-    },
-    methods: {
-      setTheme(theme) {
-        this.$store.commit('global/updateTheme', theme)
-        this.$ga.event(
-          '反色模式',
-          systemConstants.GAEventActions.Toggle,
-          systemConstants.GAEventTags.Tool
-        )
-      },
-      toggleTheme() {
-        this.setTheme(
-          this.isDarkTheme
-            ? systemConstants.Theme.Default
-            : systemConstants.Theme.Dark
-        )
+
+      return {
+        theme: themeValue,
+        themeIcon,
+        isDark,
+        toggleTheme
       }
     }
   })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   #theme {
     position: fixed;
     right: 0;

@@ -29,10 +29,10 @@
                 </a>
               </template>
               <template v-else>
-                <nuxt-link :to="`/article/${_article.id}`" class="link">
+                <router-link :to="`/article/${_article.id}`" class="link">
                   <img :src="getThumb(_article.thumb)" :alt="_article.title">
                   <span class="title">{{ _article.title }}</span>
-                </nuxt-link>
+                </router-link>
               </template>
             </div>
           </div>
@@ -46,8 +46,8 @@
 <script>
   import Vue from 'vue'
   import { mapState } from 'vuex'
-  import { getBannerArticleThumbnailUrl } from '~/transformers/thumbnail'
-  import adConfig from '~/config/ad.config'
+  import { getBannerArticleThumbnailUrl } from '/@/transformers/thumbnail'
+  import adConfig from '/@/config/ad.config'
 
   export default Vue.extend({
     name: 'IndexCarrousel',

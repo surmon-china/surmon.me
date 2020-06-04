@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { getFileCDNUrl } from '~/transformers/url'
+import { getFileCDNUrl } from '/@/transformers/url'
 
 const imagePath = getFileCDNUrl('/images/mammon/')
 const links = {

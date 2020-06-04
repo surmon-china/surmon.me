@@ -64,7 +64,7 @@
 </template>
 
 <script>
-  import { getFileProxyUrl } from '~/transformers/url'
+  import { getFileProxyUrl } from '/@/transformers/url'
   export default {
     name: 'Vlog',
     head() {

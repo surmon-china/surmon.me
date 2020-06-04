@@ -10,14 +10,6 @@ declare module 'vue/types/vue' {
 
 declare global {
   interface Window {
-    lozad: lozad.Selector
-    Emoji233333: $TODO
-    luanchEmojiRain: $TODO
-    Amplitude: $TODO
-
-    // task
-    loaded: boolean
-    loadedTasks: any[]
-    addLoadedTask(fn: any): void
+    // lozad: lozad.Selector
   }
 }

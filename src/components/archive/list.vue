@@ -55,8 +55,8 @@
 <script>
   import ListItem from './item.vue'
   import ListHeader from './header.vue'
-  import { isIndexRoute } from '~/services/route-validator'
-  import { getArticleDetailRoute } from '~/transformers/route'
+  import { isIndexRoute } from '/@/services/route-validator'
+  import { getArticleDetailRoute } from '/@/transformers/route'
 
   export default {
     name: 'ArticleList',
@@ -108,7 +108,7 @@
       > .article-list-mammon {
         padding: $gap;
 
-        &::v-deep .mammon-ins {
+        &::v-deep(.mammon-ins) {
           margin: 0;
           height: 81px;
         }
@@ -126,7 +126,7 @@
       margin-bottom: $lg-gap;
       background-color: $module-bg;
 
-      &::v-deep .mammon-ins {
+      &::v-deep(.mammon-ins) {
         margin: $sm-gap 0;
         height: 100px;
       }

@@ -29,9 +29,9 @@
           </datalist>
         </client-only>
       </div>
-      <nuxt-link to="/sitemap" class="sitemap-btn">
+      <router-link to="/sitemap" class="sitemap-btn">
         <i class="iconfont icon-book" />
-      </nuxt-link>
+      </router-link>
     </div>
     <div class="aside-article">
       <p class="title">
@@ -44,13 +44,13 @@
       <ul v-else class="aside-article-list">
         <li v-for="item in articles" :key="item.id" class="item">
           <span class="index" />
-          <nuxt-link
+          <router-link
             class="title"
             :to="`/article/${item.id}`"
             :title="`${item.title} - 「 ${item.meta.comments} ${$i18n.text.comment.count} | ${item.meta.likes} ${$i18n.text.comment.like} 」`"
           >
             <span v-text="item.title" />
-          </nuxt-link>
+          </router-link>
         </li>
       </ul>
     </div>
@@ -86,7 +86,7 @@
           <slot>{{ $i18n.text.tag.empty }}</slot>
         </empty-box>
         <ul v-else class="aside-tag-list">
-          <nuxt-link
+          <router-link
             v-for="(tag, index) in tags"
             :key="index"
             tag="li"
@@ -104,7 +104,7 @@
                 <span>({{ tag.count || 0 }})</span>
               </span>
             </a>
-          </nuxt-link>
+          </router-link>
         </ul>
       </div>
       <div v-if="isArticlePage" class="aside-tools">
@@ -129,9 +129,9 @@
   import StickyEvents from 'sticky-events'
   import AsideAd from './ad'
   import Calendar from './calendar'
-  import { Route } from '~/constants/system'
-  import { isBrowser } from '~/environment'
-  import { isArticleDetailRoute, isSearchArchiveRoute } from '~/services/route-validator'
+  import { Route } from '/@/constants/system'
+  import { isClient } from '/@/vuniversal/env'
+  import { isArticleDetailRoute, isSearchArchiveRoute } from '/@/services/route-validator'
 
   // polyfill sticky event
   let stickyEvents = null
@@ -153,7 +153,7 @@
       if (isSearchArchiveRoute(this.$route.name)) {
         this.keyword = this.$route.params.keyword
       }
-      if (isBrowser) {
+      if (isClient) {
         this.$nextTick(() => {
           stickyEvents = new StickyEvents({
             enabled: true,

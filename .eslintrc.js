@@ -26,7 +26,6 @@ module.exports = {
     requestAnimFrame: true,
   },
   rules: {
-
     'vue/no-v-html': 'off',
     'vue/singleline-html-element-content-newline': 'off',
     'vue/component-definition-name-casing': 'off',
@@ -54,12 +53,9 @@ module.exports = {
 
     // Vue
     'vue/no-unused-components': 'warn',
-    'vue/no-v-html': 'off',
-    'vue/require-default-prop': 'off',
-    'vue/singleline-html-element-content-newline': 'off',
     'vue/multiline-html-element-content-newline': 'off',
     'vue/order-in-components': 'off',
-    'vue/html-self-closing': ["error",{
+    'vue/html-self-closing': ["error", {
       "html": {
         "void": "never",
         "normal": "any",
@@ -70,11 +66,10 @@ module.exports = {
     }],
 
     // 其他
-    'import/order': 'off',
     'import/no-named-as-default-member': 'off',
     'unicorn/prefer-text-content': 'off',
 
-    /*Possible Errors*/
+    /* Possible Errors*/
 
     // 数组和对象键值对最后一个逗号，
     // never参数：不能带末尾的逗号,
@@ -85,9 +80,6 @@ module.exports = {
     // 禁止在条件表达式中使用赋值语句
     "no-cond-assign": 0,
 
-    // 禁止使用console
-    "no-console": 0,
-
     // 禁止在条件中使用常量表达式 if(true) if(1)
     "no-constant-condition": 2,
 
@@ -95,7 +87,7 @@ module.exports = {
     "no-control-regex": 2,
 
     // 禁止使用debugger语句
-    "no-debugger": isProdMode ? 'error' : 'off',
+    "no-debugger": 'off',
 
     // 函数参数禁止重名
     "no-dupe-args": 2,
@@ -165,7 +157,7 @@ module.exports = {
     // 保证typeof 操作符返回的结果必须和上面六个字符串作比较
     "valid-typeof": 2,
 
-    /*Best Practices*/
+    /* Best Practices*/
 
     // 在声明对象时getter和setter需成对出现
     "accessor-pairs": 2,
@@ -266,9 +258,6 @@ module.exports = {
 
     // 禁止隐式转换，为了消除简写的类型转换
     "no-implicit-coercion": 0,
-
-    // 禁止不必要的布尔转换
-    "no-extra-boolean-cast": 0,
 
     // 禁止在全局作用域里声明变量或函数
     "no-implicit-globals": 2,
@@ -385,12 +374,12 @@ module.exports = {
     // 默认的规则要求，变量写在左边而字面量写在右边
     "yoda": 2,
 
-    /*Strict Mode*/
+    /* Strict Mode*/
 
     // 使用严格模式
     "strict": 2,
 
-    /*Variables*/
+    /* Variables*/
 
     // 变量声明时必须赋初值
     "init-declarations": 0,
@@ -429,7 +418,7 @@ module.exports = {
     "no-use-before-define": 0,
 
 
-    /*Node.js and CommonJS*/
+    /* Node.js and CommonJS*/
     // 强制回调后return，避免多次调用回调
     "callback-return": 0,
 
@@ -461,7 +450,7 @@ module.exports = {
     "no-sync": 0,
 
 
-    /*Stylistic Issues*/
+    /* Stylistic Issues*/
 
     //  用数组字面量定义数组时数组元素前后是否加空格，
     //  never参数： 数组元素前后不能带空格，
@@ -518,9 +507,6 @@ module.exports = {
 
     // 命名检测，标识符命名需和配置中的正则表达式匹配，但是该规则对函数调用无效。
     "id-match": [0, "^[a-z]+([A-Z][a-z]+)*$", { "properties": false }],
-
-    //  统一代码缩进方式，默认值是4 spaces.
-    "indent": 0,
 
     // 规定了在JSX中的属性值是使用单引号还是双引号,默认使用双引号
     "jsx-quotes": [2, "prefer-double"],
@@ -640,9 +626,6 @@ module.exports = {
     // 对象的属性名是否强制加双引号
     "quote-props": [0, "always"],
 
-    // 在JavaScript中有三种方式定义字符串，双引号、单引号、反义符（ECMAScript2015）。规定了字符串定义的方式
-    "quotes": [0, "single", "avoid-escape"],
-
     // 注释格式要求JSDoc格式
     "require-jsdoc": [0, {
         "require": {
@@ -670,9 +653,6 @@ module.exports = {
     // 规定了在代码块前是否需要加空格
     "space-before-blocks": [2, "always"],
 
-    // 函数定义时，function关键字后面的小括号前是否需要加空格
-    "space-before-function-paren": [0, "always"],
-
     // 规定圆括号内部的空格。规定是否需要在(右边，或者)左边加空格。
     "space-in-parens": [2, "never"],
 
@@ -693,17 +673,13 @@ module.exports = {
     "wrap-regex": 0,
 
 
-    /*ECMAScript 6*/
+    /* ECMAScript 6*/
 
     "prefer-promise-reject-errors": 0,
 
     // 箭头函数中，如果函数体里只有一句代码时可以省略大括号
     // 规定是否可以省略大括号
     "arrow-body-style": 0,
-
-    // 箭头函数中，只有一个参数时可以省略圆括号
-    // 规定了参数是否需要圆括号包围
-    "arrow-parens": [0, "always"],
 
     // 规定了箭头函数的箭头前后是否加空格
     "arrow-spacing": [2, { "before": true, "after": true }],
