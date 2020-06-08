@@ -90,16 +90,14 @@ sw.*
 ecosystem.config.js
 
 # syndication
-/static/sitemap.xml
-/static/rss.xml
+public/sitemap.xml
+public/rss.xml
+
+# analytics
+public/scripts/analytics.js
 
 # barrages
 data/barrages.json
-/data/barrages.json
-
-# analytics
-static/scripts/analytics.js
-/static/scripts/analytics.js
 
 # Redis
 dump.rdb
