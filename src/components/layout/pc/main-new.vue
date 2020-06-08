@@ -1,5 +1,8 @@
 <template>
   <div class="pc-main">
+    <Teleport to="#popup" :disabled="disabled">
+      <div>哈哈哈</div>
+    </Teleport>
     <header-view />
     <figure class="widget">
       <language />
@@ -30,7 +33,8 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import { Teleport, ref } from 'vue'
   import { mapState } from 'vuex'
   import { isClient } from '/@/vuniversal/env'
   // import NavView from './nav'
@@ -47,14 +51,13 @@
   import ThemeSwitch from '/@/components/widget/theme.vue'
   // import ToolBox from '/@/components/widget/toolbox'
   // import ShareBox from '/@/components/widget/share'
-  // import musicPlayer from '/@/services/music-player'
-  // import { startTitleEgg, resetTitle } from '/@/services/title-egg'
   // import { isServiceRoute } from '/@/services/route-validator'
   // import systemConstants from '/@/constants/system'
 
   export default {
     name: 'PcMain',
     components: {
+      Teleport,
       // ToolBox,
       // ShareBox,
       Language,
@@ -70,56 +73,16 @@
       // AsideView,
       // NavView
     },
-    // computed: {
-    //   ...mapState('global', [
-    //     'onMyMap',
-    //     'onWallpaper',
-    //     'isTwoColumns',
-    //     'isThreeColumns'
-    //   ]),
-    //   isEnLang() {
-    //     return this.$store.getters['global/isEnLang']
-    //   },
-    //   isFullViewWidth() {
-    //     return isServiceRoute(this.$route.name)
-    //   },
-    //   isNotFullColPage() {
-    //     return ![
-    //       systemConstants.Route.App,
-    //       systemConstants.Route.Music,
-    //       systemConstants.Route.Service
-    //     ].includes(this.$route.name)
-    //   }
-    // },
-    // methods: {
-    //   autoEggWhenTabActive() {
-    //     document.addEventListener(
-    //       'visibilitychange',
-    //       event => {
-    //         event.target.hidden || event.target.webkitHidden
-    //           ? startTitleEgg()
-    //           : resetTitle()
-    //       },
-    //       false
-    //     )
-    //   }
-    // },
-    // watch: {
-    //   isEnLang: {
-    //     immediate: true,
-    //     handler(isEnLang) {
-    //       this.$store.dispatch('wallpaper/fetchPapers', isEnLang)
-    //     }
-    //   }
-    // },
-    // mounted() {
-    //   if (isClient) {
-    //     this.autoEggWhenTabActive()
-    //     this.$store.commit('global/resetTheme')
-    //     this.$root.$musicPlayer = musicPlayer
-    //     musicPlayer.ready || musicPlayer.init()
-    //   }
-    // }
+    setup() {
+      const disabled = ref(true)
+
+      setTimeout(() => {
+        disabled.value = false
+      }, 1666)
+      return {
+        disabled
+      }
+    }
   }
 </script>
 

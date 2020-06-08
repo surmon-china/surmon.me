@@ -5,7 +5,7 @@
  */
 
 import * as amplitude from 'amplitudejs'
-import { App, inject, ref, reactive, computed } from 'vue'
+import { App, Plugin, inject, ref, reactive, computed } from 'vue'
 import { getFileCDNUrl, getFileProxyUrl } from '/@/transformers/url'
 import http from './http'
 
@@ -18,6 +18,7 @@ window.AmplitudeCore = window.AmplitudeCore || {
 export interface MusicConfig {
   albumId: MusicId
   volume?: number
+  autoStart?: boolean
 }
 
 type MusicId = string | number
@@ -345,8 +346,12 @@ const createMusicPlayer = (config: MusicConfig) => {
 
 const MusicPlayerSymbol = Symbol('music-player')
 export type Music = ReturnType<typeof createMusicPlayer>
-export const createMusic = (config: MusicConfig) => {
+export const createMusic = (config: MusicConfig): Music & Plugin => {
   const musicPlayer = createMusicPlayer(config)
+  if (config.autoStart) {
+    musicPlayer.start()
+  }
+
   return {
     ...musicPlayer,
     install(app: App) {

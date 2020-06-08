@@ -4,10 +4,10 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import axios from 'axios'
+import http from './http'
 
 export const ping = (url: string) => {
-  return axios.request({
+  return http.request({
     url,
     method: 'get',
     timeout: 1888

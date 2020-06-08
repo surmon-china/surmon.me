@@ -38,6 +38,19 @@ const createThemeStore = (initTheme: Theme) => {
           ? Theme.Dark
           : Theme.Default
       )
+    } else {
+      // todo!!
+      const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+      const isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+      const isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+      const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+      if (isDarkMode) set(Theme.Dark)
+      if (isLightMode) set(Theme.Default)
+      if (isNotSpecified) {
+        window.matchMedia("(prefers-color-scheme: dark)").addListener(e => e.matches && set(Theme.Dark))
+        window.matchMedia("(prefers-color-scheme: light)").addListener(e => e.matches && set(Theme.Default))
+      }
     }
   }
 

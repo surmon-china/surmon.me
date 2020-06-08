@@ -5,7 +5,6 @@
  */
 
 import { App } from 'vue'
-import filters from '/@/filters'
 import { textOverflow, firstUpperCase } from '/@/transformers/text'
 import { timeAgo, toYMD, toLocalString } from '/@/transformers/time'
 import { getFileCDNUrl, getFileProxyUrl } from '/@/transformers/url'

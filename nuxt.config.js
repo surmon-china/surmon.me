@@ -33,9 +33,5 @@ export default {
   icon: {
     iconSrc: '/static/icon.png',
     sizes: [16, 120, 144, 152, 192, 384, 512]
-  },
-  router: {
-    middleware: ['change-page-col'],
-    linkActiveClass: 'link-active'
   }
 }

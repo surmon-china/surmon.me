@@ -14,5 +14,4 @@ Vue.use(Ads.InArticleAdsense)
 Vue.use(Ads.InFeedAdsense)
 Vue.use(Ads.AutoAdsense, { adClient: 'ca-pub-4710915636313788' })
 
-  // Vue.use(GoogleAdsense)
-
+// Vue.use(GoogleAdsense)
