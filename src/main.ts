@@ -5,6 +5,7 @@ import { VueEnv } from '/@/vuniversal/env'
 import { createUniversalRouter } from './router'
 import { createUniversalStore } from './store'
 import { createI18n } from '/@/services/i18n'
+import { createClientOnlyComponent } from '/@/services/client-only'
 import { createTheme, Theme } from '/@/services/theme'
 import enhancer from '/@/services/enhancer'
 import { Language, languages, langMap } from '/@/language/data'
@@ -49,6 +50,9 @@ export const createVueApp = (context: ICreaterContext) => {
     languages,
     map: langMap
   })
+
+  const ClientOnly = createClientOnlyComponent(context.target)
+  app.component(ClientOnly.name, ClientOnly)
 
   const services = {
     router,

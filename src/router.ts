@@ -41,11 +41,11 @@ const routerMiddleware = (router: Router, state: GlobalState) => {
 }
 
 const routes: RouteRecordRaw[] = [
-  //  {
-  //   path: '/',
-  //   name: RouteName.Index,
-  //   component: async () => import(/* webpackChunkName: 'index' */ './pages/new.vue')
-  // },
+   {
+    path: '/',
+    name: RouteName.Index,
+    component: async () => import(/* webpackChunkName: 'index' */ './pages/new.vue')
+  },
   // {
   //   path: '/',
   //   name: 'index',

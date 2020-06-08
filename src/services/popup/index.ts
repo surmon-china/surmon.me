@@ -6,7 +6,7 @@
 
 import { App, Plugin, inject, readonly, reactive } from 'vue'
 import PopupRootComponent from './popup-root.vue'
-import PopupComponent from './popup.vue'
+import PopupComponent from './popup'
 
 declare global {
   interface Window {

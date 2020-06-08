@@ -113,59 +113,6 @@ select:-webkit-autofill {
   }
 }
 
-// popup component
-#iframe-popup {
-  @include backdrop-blur();
-}
-
-#image-popup,
-#iframe-popup {
-  position: fixed;
-  display: flex;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: $z-index-top;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  background-color: rgba($black-light, 0.5);
-  @include hidden();
-  @include visibility-transition();
-
-  &.display {
-    @include visible();
-  }
-
-  > img,
-  > iframe {
-    min-width: 10%;
-    min-height: 10%;
-    background-color: rgba($white, 0.3);
-    border: $sm-gap solid rgba($grey, 0.3);
-
-    &.sponsor {
-      width: 600px;
-      height: 200px;
-      box-sizing: content-box;
-      border: none;
-      border-left: $gap solid $white;
-      border-right: $gap solid $white;
-    }
-  }
-
-  > img {
-    max-width: 90%;
-    max-height: 90%;
-  }
-  
-  > iframe {
-    width: 90%;
-    height: 90%;
-  }
-}
-
 // swiper
 .swiper-wrapper {
   z-index: $z-index-normal + 1;

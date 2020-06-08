@@ -3,57 +3,57 @@
     <nav class="nav-list" :class="{ en: isEnLang }">
       <router-link :to="'/'" class="item" exact>
         <i class="iconfont icon-home"></i>
-        <span class="text" v-text="$i18n.nav.home"></span>
+        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_HOME" />
       </router-link>
       <router-link to="/category/code" class="item">
         <i class="iconfont icon-code"></i>
-        <span class="text" v-text="$i18n.nav.code"></span>
+        <span class="text" v-i18n="LANGUAGE_KEYS.CATEGORY_CODE" />
       </router-link>
       <router-link to="/category/think" class="item">
         <i class="iconfont icon-thinking"></i>
-        <span class="text" v-text="$i18n.nav.think"></span>
+        <span class="text" v-i18n="LANGUAGE_KEYS.CATEGORY_THINK" />
       </router-link>
       <a
         target="_blank"
         class="item"
         rel="external nofollow noopener"
-        :href="appConfig.links.project"
+        :href="APP_CONFIG.LINKS.project"
       >
         <i class="iconfont icon-experiment"></i>
-        <span class="text" v-text="$i18n.nav.project"></span>
+        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_PROJECT" />
       </a>
       <router-link to="/music" class="item">
         <i class="iconfont icon-netease-music"></i>
-        <span class="text" v-text="$i18n.nav.music"></span>
+        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_MUSIC" />
       </router-link>
       <router-link to="/vlog" class="item">
         <i class="iconfont icon-vlog"></i>
-        <span class="text" v-text="$i18n.nav.vlog"></span>
+        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_VLOG" />
       </router-link>
       <a
         target="_blank"
         class="item"
         rel="external nofollow noopener"
-        :href="appConfig.links.instagram"
+        :href="APP_CONFIG.LINKS.instagram"
       >
         <i class="iconfont icon-instagram"></i>
-        <span class="text" v-text="$i18n.nav.instagram"></span>
+        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_INSTAGRAM" />
       </a>
       <router-link to="/about" class="item">
         <i class="iconfont icon-user"></i>
-        <span class="text" v-text="$i18n.nav.about"></span>
+        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_ABOUT" />
       </router-link>
       <router-link to="/service" class="item">
         <i class="iconfont icon-tool"></i>
-        <span class="text" v-text="$i18n.nav.service"></span>
+        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_SERVICE" />
       </router-link>
       <router-link to="/guestbook" class="item guestbook">
         <i class="iconfont icon-comment"></i>
-        <span class="text" v-text="$i18n.nav.guestbook"></span>
+        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_GUESTBOOK" />
       </router-link>
       <!-- <a
         v-if="false"
-        :href="adConfig.nav.holiday"
+        :href="AD_CONFIG.nav.holiday"
         target="_blank"
         class="item ad holiday"
         rel="external nofollow noopener"
@@ -63,22 +63,22 @@
       </a>
       <a
         v-if="false"
-        :href="adConfig.nav.taobao"
+        :href="AD_CONFIG.nav.taobao"
         target="_blank"
         class="item ad taobao"
         rel="external nofollow noopener"
       >
         <i class="iconfont icon-taobao"></i>
-        <span class="text" v-text="$i18n.nav.taobao"></span>
+        <span class="text" v-i18n="LANGUAGE_KEYS.AD_LINK_TAOBAO" />
       </a> -->
       <a
-        :href="adConfig.nav.aliyun"
+        :href="AD_CONFIG.nav.aliyun"
         target="_blank"
         class="item ad aliyun"
         rel="external nofollow noopener"
       >
         <i class="iconfont icon-aliyun"></i>
-        <span class="text" v-text="$i18n.nav.aliyun"></span>
+        <span class="text" v-i18n="LANGUAGE_KEYS.AD_LINK_ALIYUN" />
         <span class="superscript">
           <i class="iconfont icon-hot"></i>
         </span>
@@ -87,7 +87,7 @@
         target="_blank"
         class="item ad throwerror"
         rel="external nofollow noopener"
-        :href="appConfig.links.throwerror"
+        :href="APP_CONFIG.LINKS.throwerror"
       >
         <i class="iconfont icon-debug"></i>
         <span class="text">TE.io</span>
@@ -96,35 +96,53 @@
         target="_blank"
         class="item ad foxfinder"
         rel="external nofollow noopener"
-        :href="appConfig.links.foxfinder"
+        :href="APP_CONFIG.LINKS.foxfinder"
       >
         <i class="iconfont icon-fox-colour"></i>
         <span class="text">FF.io</span>
       </a>
       <router-link to="/app" class="item app">
         <i class="iconfont icon-app"></i>
-        <span class="text" v-text="$i18n.nav.app"></span>
+        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_APP" />
       </router-link>
     </nav>
   </div>
 </template>
 
-<script>
-  import adConfig from '/@/config/ad.config'
-  import appConfig from '/@/config/app.config'
-  export default {
+<script lang="ts">
+  import * as APP_CONFIG from '/@/config/app.config'
+  import AD_CONFIG from '/@/config/ad.config'
+  import { defineComponent, computed } from 'vue'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { Language } from '/@/language/data'
+  import { getFileCDNUrl } from '/@/transformers/url'
+  import { useI18n } from '/@/services/i18n'
+  import { useStore } from '/@/store'
+  import { useGlobalState } from '/@/state'
+
+  export default defineComponent({
     name: 'PcNav',
-    computed: {
-      adConfig: () => adConfig,
-      appConfig: () => appConfig,
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
+    setup() {
+      const i18n = useI18n()
+      const store = useStore()
+      const globalState = useGlobalState()
+      const isEnLang = computed(() => {
+        i18n.language.value === Language.En
+      })
+
+      return {
+        AD_CONFIG,
+        APP_CONFIG,
+        LANGUAGE_KEYS,
+        isEnLang,
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .aside-nav {
     width: $navbar-width;
     height: auto;

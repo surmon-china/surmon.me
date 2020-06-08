@@ -1,5 +1,5 @@
 /**
- * @file Ads config / ES module
+ * @file Ads config
  * @module ad.config
  * @author Surmon <https://github.com/surmon-china>
  */

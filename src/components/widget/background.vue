@@ -4,19 +4,22 @@
   </div>
 </template>
 
-<script>
-  import Vue from 'vue'
-  export default Vue.extend({
+<script lang="ts">
+  import { defineComponent, ref, computed } from 'vue'
+  import { useTheme, Theme } from '/@/services/theme'
+  export default defineComponent({
     name: 'Background',
-    computed: {
-      isDarkTheme() {
-        return this.$store.getters['global/isDarkTheme']
-      }
+    setup() {
+      const theme = useTheme()
+      const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
+      return { isDarkTheme }
     }
   })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   #background {
     position: fixed;
     width: 100%;

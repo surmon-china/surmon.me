@@ -1,23 +1,27 @@
 <template>
   <footer class="footer">
-    <div class="footer-content">©{{ year }}&nbsp;&nbsp;{{ appConfig.meta.title }}</div>
+    <div class="footer-content">©{{ year }}&nbsp;&nbsp;{{ META.title }}</div>
   </footer>
 </template>
 
-<script>
-  import appConfig from '/@/config/app.config'
-  export default {
+<script lang="ts">
+  import { defineComponent, computed } from 'vue'
+  import { META } from '/@/config/app.config'
+
+  export default defineComponent({
     name: 'MobileFooter',
-    computed: {
-      appConfig: () => appConfig,
-      year() {
-        return new Date().getFullYear()
+    setup() {
+      return {
+        META,
+        year: new Date().getFullYear()
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   footer {
     margin: 0;
     @include module-blur-bg();

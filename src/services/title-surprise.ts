@@ -1,5 +1,5 @@
 /**
- * @file Title 彩蛋 / ES module
+ * @file Title surprise
  * @module services/title-egg
  * @author Surmon <https://github.com/surmon-china>
  */
@@ -64,40 +64,39 @@ const setFavicon = () => {
   doSetFavicon()
 }
 
-// 彩蛋
-// export const startTitleEgg = () => {
-//   reallyTitle = document.title
-//   setTitle(eggTitle)
-//   setFavicon()
-// }
+// Normal
+export const startTitleEffect = () => {
+  reallyTitle = document.title
+  setTitle(eggTitle)
+  setFavicon()
+}
 
-// 恢复默认
-// export const resetTitle = () => {
-//   window.clearTimeout(rollTimer)
-//   window.clearTimeout(faviconTimer)
-//   favicon && favicon.reset()
-//   document.title = reallyTitle
-// }
+export const resetTitle = () => {
+  window.clearTimeout(rollTimer)
+  window.clearTimeout(faviconTimer)
+  favicon && favicon.reset()
+  document.title = reallyTitle
+}
 
-// 仅启用简易版
-export const startTitleEgg = () => {
+// Simple
+export const setEasyTitleEffect = () => {
   reallyTitle = document.title
   document.title = 'Uncensored - Pornhub.com'
   favicon = new Favico({ type: 'rectangle', animation: 'popFade' })
   favicon.badge('PH')
 }
 
-export const resetTitle = () => {
+export const resetEasyTitle = () => {
   favicon && favicon.reset()
   document.title = reallyTitle
 }
 
-export const enableAutoTitleEgg = () => {
+export const enableAutoTitleSurprise = () => {
   document.addEventListener('visibilitychange', event => {
       // @ts-ignore
       event.target?.hidden || event.target?.webkitHidden
-        ? startTitleEgg()
-        : resetTitle()
+        ? setEasyTitleEffect()
+        : resetEasyTitle()
     },
     false
   )
