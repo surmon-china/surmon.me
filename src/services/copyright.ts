@@ -1,5 +1,5 @@
 /**
- * @file 复制拦截器 / ES module
+ * @file 复制拦截器
  * @module plugins/copy-right
  * @author Surmon <https://github.com/surmon-china>
  */
