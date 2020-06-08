@@ -7,9 +7,10 @@
 import marked from 'marked'
 import Hljs from './highlight'
 import appConfig from '../config/app.config'
-import apiConfig from '/@/config/api.config'
+import apiConfig from '../config/api.config'
 import relink from '/@/transformers/relink'
 
+// TODO: 升级 marked 后处理消毒带来的问题
 marked.setOptions({
   renderer: new marked.Renderer(),
   gfm: true,

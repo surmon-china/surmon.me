@@ -5,9 +5,9 @@
  */
 
 import io from 'socket.io-client'
-import apiConfig from '/@/config/api.config'
+import API_CONFIG from '/@/config/api.config'
 
-const socket = io(apiConfig.SOCKET, {
+const socket = io(API_CONFIG.SOCKET, {
   transports: ['websocket']
 })
 

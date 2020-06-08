@@ -91,3 +91,14 @@ export const resetTitle = () => {
   favicon && favicon.reset()
   document.title = reallyTitle
 }
+
+export const enableAutoTitleEgg = () => {
+  document.addEventListener('visibilitychange', event => {
+      // @ts-ignore
+      event.target?.hidden || event.target?.webkitHidden
+        ? startTitleEgg()
+        : resetTitle()
+    },
+    false
+  )
+}

@@ -11,8 +11,6 @@ import { Language, languages, langMap } from '/@/language/data'
 import { createGlobalState } from './state'
 import App from './app.vue'
 
-import 'highlight.js/styles/ocean.css'
-import 'swiper/css/swiper.css'
 import '/@/assets/styles/app.scss'
 
 export interface ICreaterContext {

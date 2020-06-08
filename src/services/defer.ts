@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, inject, reactive } from 'vue'
+import { App, inject, reactive, Plugin } from 'vue'
 
 export type ITask = () => any
 export type IDefer = ReturnType<typeof createDefer>
@@ -15,7 +15,7 @@ declare global {
   }
 }
 
-const createDefer = () => {
+const createDeferStore = () => {
   const state = reactive({
     loaded: false,
     tasks: [] as Array<ITask>
@@ -31,10 +31,9 @@ const createDefer = () => {
   }
 
   const addTask = (task: ITask) => {
+    state.tasks.push(task)
     if (state.loaded) {
       doTask(task)
-    } else {
-      state.tasks.push(task)
     }
   }
 
@@ -43,10 +42,22 @@ const createDefer = () => {
 }
 
 const DeferSymbol = Symbol('defer')
-export default (app: App) => {
-  const defer = window.defer || createDefer()
-  app.provide(DeferSymbol, defer)
-  window.defer = defer
+
+export interface DeferPluginConfig { exportToGlobal?: boolean }
+export type Defer = ReturnType<typeof createDeferStore>
+export const createDefer = (): Defer & Plugin => {
+  const defer = window.defer || createDeferStore()
+
+  return {
+    ...defer,
+    install(app: App, config?: DeferPluginConfig) {
+      app.provide(DeferSymbol, defer)
+
+      if (config?.exportToGlobal) {
+        window.defer = defer
+      }
+    }
+  }
 }
 
 export const useDefer = (): IDefer => {

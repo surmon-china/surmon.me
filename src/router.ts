@@ -40,51 +40,38 @@ const routerMiddleware = (router: Router, state: GlobalState) => {
   })
 }
 
-const getRoutes = (isMobile: boolean): RouteRecordRaw[] => {
-  const routes = [
-    //  {
-    //   path: '/',
-    //   name: RouteName.Index,
-    //   component: async () => import(/* webpackChunkName: 'index' */ './pages/new.vue')
-    // },
-    // {
-    //   path: '/',
-    //   name: 'index',
-    //   component: async () => import(/* webpackChunkName: 'index' */ './pages/index.vue')
-    // },
-    // {
-    //   path: `/about`,
-    //   name: 'about',
-    //   component: async () => import(/* webpackChunkName: 'about' */ './pages/about.vue')
-    // },
-    // {
-    //   path: `/app`,
-    //   name: 'app',
-    //   component: async () => import(/* webpackChunkName: 'app' */ './pages/app.vue')
-    // },
-    // {
-    //   path: `/service`,
-    //   name: 'service',
-    //   component: async () => import(/* webpackChunkName: 'service' */ './pages/service.vue')
-    // },
-    
-  ]
-
-  // if (!isMobile) {
-  //   routes.push({
-  //     name: RouteName.Music,
-  //     path: '/:data(.*)',
-  //     component: ErrorPage
-  //   })
-  // }
-
-  // routes.push({
+const routes: RouteRecordRaw[] = [
+  //  {
+  //   path: '/',
+  //   name: RouteName.Index,
+  //   component: async () => import(/* webpackChunkName: 'index' */ './pages/new.vue')
+  // },
+  // {
+  //   path: '/',
+  //   name: 'index',
+  //   component: async () => import(/* webpackChunkName: 'index' */ './pages/index.vue')
+  // },
+  // {
+  //   path: `/about`,
+  //   name: 'about',
+  //   component: async () => import(/* webpackChunkName: 'about' */ './pages/about.vue')
+  // },
+  // {
+  //   path: `/app`,
+  //   name: 'app',
+  //   component: async () => import(/* webpackChunkName: 'app' */ './pages/app.vue')
+  // },
+  // {
+  //   path: `/service`,
+  //   name: 'service',
+  //   component: async () => import(/* webpackChunkName: 'service' */ './pages/service.vue')
+  // },
+  // {
   //   name: 'error',
   //   path: '/:data(.*)',
   //   component: ErrorPage
-  // })
-  return routes
-}
+  // }
+]
 
 const scrollBehavior: ScrollBehavior = (to, from, savedPosition) => {
   if (savedPosition) {
@@ -101,7 +88,9 @@ export interface RouterConfig {
 export const createUniversalRouter = (config: RouterConfig) => {
   const router = createRouter({
     history: config.history,
-    routes: getRoutes(config.globalState.userAgent.isMobile),
+    routes: config.globalState.userAgent.isMobile
+      ? routes.filter(route => route.name !== RouteName.Music)
+      : routes,
     scrollBehavior
   })
 

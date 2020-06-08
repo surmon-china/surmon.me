@@ -10,6 +10,8 @@ import { Router } from 'vue-router'
 import { isProd } from '/@/vuniversal/env'
 import { getFileCDNUrl } from '/@/transformers/url'
 
+// MARK: https://zh.nuxtjs.org/faq/ga
+
 export const enableAnalytics = (app: App, router: Router) => {
   // app.use(VueAnalytics, {
   //   id: 'UA-84887611-3',

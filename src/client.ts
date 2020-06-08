@@ -1,43 +1,52 @@
 import './polyfill'
 
 import { MUSIC_ALBUM_ID } from '/@/config/app.config'
-import { VueEnv } from '/@/vuniversal/env'
+import { VueEnv, isProd } from '/@/vuniversal/env'
 // import Adsense from '/@/plugins/vue-google-adsense'
 // import Swiper from '/@/plugins/vue-awesome-swiper'
-import defer from '/@/services/defer'
+import { createDefer } from '/@/services/defer'
 import { createMusic } from '/@/services/music'
 import { enableAnalytics } from '/@/services/analytics'
 import { enableCopyright } from '/@/services/copyright'
+import { consoleSolgan } from '/@/services/slogan'
+import { enableBaiduSeoPush } from '/@/services/baidu-seo-push'
 import { exportLozadToGlobal } from '/@/services/lozad'
+import { createPopup } from '/@/services/popup'
+import { enableAutoTitleEgg } from '/@/services/title-egg'
+// import { exportLozadToGlobal } from '/@/services/popup'
 import { Language } from '/@/language/data'
 import { createVueApp } from './main'
 
-// { src: '/@/plugins/lozad', mode: 'client' },
-// { src: '/@/plugins/popup', mode: 'client' },
+const { app, router, store, globalState, theme, i18n } = createVueApp({ target: VueEnv.Client })
+const defer = createDefer()
 
-const vueApp = createVueApp({ target: VueEnv.Client })
-const { app, router, globalState } = vueApp
-
-// plugins
-// @ts-ignore
 // app.use(Swiper)
 // app.use(Adsense)
-app.use(defer)
+app.use(defer, { exportToGlobal: true })
+app.use(createPopup(), { exportToGlobal: true })
 
 // init
-vueApp.globalState.resetOnClient()
-vueApp.theme.resetOnClient()
-vueApp.i18n.set(globalState.userAgent.isZhUser ? Language.Zh : Language.En)
-
-let music
-if (!globalState.userAgent.isMobile) {
-  music = createMusic({ albumId: MUSIC_ALBUM_ID })
-  app.use(music)
-}
+globalState.resetOnClient()
+theme.resetOnClient()
+i18n.set(globalState.userAgent.isZhUser ? Language.Zh : Language.En)
 
 app.mount('#app').$nextTick(() => {
-  // music?.start()
   exportLozadToGlobal()
   enableCopyright()
   enableAnalytics(app, router)
+
+  // Desktop
+  if (!globalState.userAgent.isMobile) {
+    const music = createMusic({ albumId: MUSIC_ALBUM_ID })
+    app.use(music)
+    defer.addTask(music.start)
+    // store.dispatch('wallpaper/fetchPapers', i18n.language)
+    // enableAutoTitleEgg()
+  }
+
+  // Production
+  if (isProd) {
+    enableBaiduSeoPush(router)
+    consoleSolgan(i18n)
+  }
 })

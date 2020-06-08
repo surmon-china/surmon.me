@@ -5,14 +5,18 @@
  */
 
 import axios from 'axios'
-// import CONFIG from '/@/constants/system'
+import API_CONFIG from '/@/config/api.config'
 
 axios.interceptors.response.use(
   response => response,
   error => {
-    console.error('Fetch failed:', error)
+    // TODO: notifition
+    console.debug('Tosta:', error)
     return Promise.reject(error)
   }
 )
 
-export default axios
+export default axios.create({
+  baseURL: API_CONFIG.BASE,
+})
+
