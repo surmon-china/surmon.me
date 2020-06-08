@@ -1,4 +1,4 @@
-import { defineComponent, h } from 'vue'
+import { App, defineComponent, h } from 'vue'
 import { VueEnv } from '/@/vuniversal/env'
 
 export const createClientOnlyComponent = (target: VueEnv) => {
@@ -38,3 +38,10 @@ export const createClientOnlyComponent = (target: VueEnv) => {
     }
   })
 }
+
+export const createClientOnly = (target: VueEnv) => ({
+  install(app: App) {
+    const ClientOnlyComponent = createClientOnlyComponent(target)
+    app.component(ClientOnlyComponent.name, ClientOnlyComponent)
+  }
+})

@@ -1,3 +1,9 @@
+/**
+ * @file App main
+ * @module app.main
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import { Request } from 'express'
 import { createSSRApp } from 'vue'
 import { createWebHistory, createMemoryHistory } from 'vue-router'
@@ -5,7 +11,7 @@ import { VueEnv } from '/@/vuniversal/env'
 import { createUniversalRouter } from './router'
 import { createUniversalStore } from './store'
 import { createI18n } from '/@/services/i18n'
-import { createClientOnlyComponent } from '/@/services/client-only'
+import { createClientOnly } from '/@/services/client-only'
 import { createTheme, Theme } from '/@/services/theme'
 import enhancer from '/@/services/enhancer'
 import { Language, languages, langMap } from '/@/language/data'
@@ -51,10 +57,16 @@ export const createVueApp = (context: ICreaterContext) => {
     map: langMap
   })
 
-  const ClientOnly = createClientOnlyComponent(context.target)
-  app.component(ClientOnly.name, ClientOnly)
+  app.use(router)
+  app.use(store)
+  app.use(globalState)
+  app.use(i18n)
+  app.use(theme)
+  app.use(enhancer)
+  app.use(createClientOnly(context.target))
 
-  const services = {
+  return {
+    app,
     router,
     store,
     globalState,
@@ -62,7 +74,4 @@ export const createVueApp = (context: ICreaterContext) => {
     theme,
     enhancer
   }
-
-  Object.values(services).forEach(app.use)
-  return { app, ...services }
 }
