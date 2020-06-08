@@ -45,9 +45,9 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useI18n } from '/@/services/i18n'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
+  import { useI18n } from '/@/services/i18n'
 
   export default defineComponent({
     name: 'PcFooter',

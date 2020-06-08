@@ -1,18 +1,14 @@
 <template>
-  <div id="app-mobile">
-    <div id="app-aside" :class="asideOpenClass">
-      <aside-view :open="onMobileSidebar" />
+  <div id="mobile-main">
+    <div id="aside" :class="openedAsideClass">
+      <aside-view :open="isOpenedSidebar" />
     </div>
-    <div id="app-main" :class="asideOpenClass">
-      <div
-        v-if="onMobileSidebar"
-        class="close-mask"
-        @click="closeMobileSidebar"
-      />
+    <div id="main" :class="openedAsideClass">
+      <div v-if="isOpenedSidebar" class="close-mask" @click="closeMobileSidebar" />
       <header-view />
       <main class="main-container">
         <div id="main-content" class="main-content">
-          <nuxt :nuxt-child-key="$route.name" />
+          <slot></slot>
         </div>
       </main>
       <footer-view />
@@ -20,36 +16,41 @@
   </div>
 </template>
 
-<script>
-  import { mapState } from 'vuex'
+<script lang="ts">
+  import { defineComponent, computed } from 'vue'
+  import { useStore } from 'vuex'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { getFileCDNUrl } from '/@/transformers/url'
+  import { useGlobalState } from '/@/state'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
   import AsideView from './aside.vue'
+
   export default {
-    name: 'MobileApp',
+    name: 'MobileMain',
     components: {
       HeaderView,
       FooterView,
       AsideView
     },
-    computed: {
-      ...mapState('global', ['onMobileSidebar']),
-      asideOpenClass() {
-        return { open: this.onMobileSidebar }
-      },
-    },
-    methods: {
-      closeMobileSidebar() {
-        if (this.onMobileSidebar) {
-          this.$store.commit('global/updateMobileSidebarOnState', false)
-        }
+    setup() {
+      const globalState = useGlobalState()
+      const isOpenedSidebar = globalState.switchBox.mobileSidebar
+      const openedAsideClass = computed(() => ({ open: isOpenedSidebar }))
+
+      return {
+        isOpenedSidebar,
+        openedAsideClass,
+        closeMobileSidebar: globalState.switchTogglers.mobileSidebar
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  #app-mobile {
+  @import 'src/assets/styles/init.scss';
+
+  #mobile-main {
     color: $text;
     background-color: $module-hover-bg;
     $aside-width: 68%;

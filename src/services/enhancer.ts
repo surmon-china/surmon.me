@@ -5,9 +5,6 @@
  */
 
 import { App } from 'vue'
-import { textOverflow, firstUpperCase } from '/@/transformers/text'
-import { timeAgo, toYMD, toLocalString } from '/@/transformers/time'
-import { getFileCDNUrl, getFileProxyUrl } from '/@/transformers/url'
 import Uimage from '/@/components/common/uimage'
 
 // import EmptyBox from '/@/components/common/empty'
@@ -18,9 +15,6 @@ import Uimage from '/@/components/common/uimage'
 export default function (app: App) {
   // components
   app.component(Uimage.name, Uimage)
-
-  // apis
-  // Vue.prototype.$API = apiConfig
 
   // Vue.component(EmptyBox.name, EmptyBox)
   // Vue.component(LoadingBox.name, LoadingBox)

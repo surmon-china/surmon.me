@@ -47,9 +47,9 @@ export const createGlobalState = (config: GlobalStateConfig) => {
   const layoutColumn = {
     layout: layoutValue,
     setLayoutColumn,
-    isNormalLayout: computed(() => layoutColumn.value === LayoutColumn.Normal),
-    isFullColumeLayout: computed(() => layoutColumn.value === LayoutColumn.Full),
-    isFullScreenLayout: computed(() => layoutColumn.value === LayoutColumn.Screen)
+    isNormalLayout: computed(() => layoutValue.value === LayoutColumn.Normal),
+    isFullColumeLayout: computed(() => layoutValue.value === LayoutColumn.Full),
+    isFullScreenLayout: computed(() => layoutValue.value === LayoutColumn.Screen)
   }
 
   // Aliyun OSS: https://oss.console.aliyun.com/bucket/oss-cn-hangzhou/surmon-static/process/img
@@ -96,7 +96,11 @@ export const createGlobalState = (config: GlobalStateConfig) => {
       liveMap: () => switchBox.liveMap = !switchBox.liveMap,
       wallpaper: () => switchBox.wallpaper = !switchBox.wallpaper,
       barrage: () => switchBox.barrage = !switchBox.barrage,
-      mobileSidebar: () => switchBox.mobileSidebar = !switchBox.mobileSidebar,
+      mobileSidebar: (open?: boolean) => {
+        switchBox.mobileSidebar = open !== null
+          ? !!open
+          : !switchBox.mobileSidebar
+      },
     },
     resetOnClient
   }

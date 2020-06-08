@@ -1,34 +1,44 @@
 <template>
   <header class="header">
-    <form class="search" :class="{ actived: search }" @submit.stop.prevent="toSearch()">
+    <form
+      class="search"
+      :class="{ actived: searchState.open }"
+      @submit.stop.prevent="submitSearch()"
+    >
       <input
-        ref="input"
-        v-model.trim="keyword"
+        :ref="inputElement"
+        v-model.trim="searchState.keyword"
         type="text"
         class="input"
         list="keywords"
         required
-        :placeholder="$i18n.text.search"
-        @keyup.enter.stop.prevent="toSearch"
+        :placeholder="t(LANGUAGE_KEYS.SEARCH_PLACEHOLDER)"
+        @keyup.enter.stop.prevent="submitSearch"
       >
-      <span class="close" @click.stop.prevent="search = false">
+      <span class="close" @click.stop.prevent="cancelSearch">
         <i class="iconfont icon-cancel"></i>
       </span>
       <client-only>
         <datalist v-if="tags.length" id="keywords" class="search-keywords">
-          <option v-for="tag in tags" :key="tag.slug" class="iiem" :value="tag.name" :label="tag.description" />
+          <option
+            v-for="tag in tags"
+            :key="tag.slug"
+            class="iiem"
+            :value="tag.name"
+            :label="tag.description"
+          />
         </datalist>
       </client-only>
     </form>
     <transition name="fade">
-      <div v-if="search" class="search-mask"></div>
+      <div v-if="searchState.open" class="search-mask"></div>
     </transition>
     <nav class="navbar">
-      <a href class="navbar-menu" @click.stop.prevent="toggleSidebar(!onMobileSidebar)">
+      <a href class="navbar-menu" @click.stop.prevent="toggleSidebar">
         <i class="iconfont icon-menu"></i>
       </a>
       <router-link to="/" class="navbar-logo">
-        <img :src="'/images/logo.svg' | byCDN">
+        <uimage cdn src="/images/logo.svg" />
       </router-link>
       <a href class="navbar-search" @click.stop.prevent="openSearch">
         <i class="iconfont icon-search"></i>
@@ -36,48 +46,75 @@
     </nav>
   </header>
 </template>
+<script lang="ts">
+  import * as APP_CONFIG from '/@/config/app.config'
+  import { defineComponent, computed, reactive, ref, toRefs, watch, nextTick } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { useI18n } from '/@/services/i18n'
+  import { useStore } from '/@/store'
+  import { RouteName } from '/@/router'
+  import { useGlobalState } from '/@/state'
 
-<script>
-  export default {
+  export default defineComponent({
     name: 'MobileHeader',
-    data() {
-      return {
-        search: false,
+    setup() {
+      const i18n = useI18n()
+      const store = useStore()
+      const router = useRouter()
+      const globalState = useGlobalState()
+      const tags = store.state.tag.data
+      const isOpenedSidebar = globalState.switchBox.mobileSidebar
+      const toggleSidebar = globalState.switchTogglers.mobileSidebar
+      const inputElement = ref<HTMLInputElement>(null as any)
+      const searchState = reactive({
+        open: false,
         keyword: ''
+      })
+
+      const openSearch = () => {
+        searchState.open = true
+        nextTick(inputElement.value.focus)
       }
-    },
-    computed: {
-      tags() {
-        return this.$store.state.tag.data
-      },
-      onMobileSidebar() {
-        return this.$store.state.global.onMobileSidebar
+      const cancelSearch = () => {
+        searchState.open = false
       }
-    },
-    watch: {
-      '$route'(newVel, oldVel) {
-        this.search = false
-        this.toggleSidebar(false)
-      }
-    },
-    methods: {
-      openSearch() {
-        this.search = true
-        this.$nextTick(() => {
-          this.$refs.input.focus()
+      const submitSearch = () => {
+        router.push({
+          name: RouteName.SearchArchive,
+          params: {
+            keyword: searchState.keyword
+          }
         })
-      },
-      toSearch() {
-        this.$router.push({ name: 'search-keyword', params: { keyword: this.keyword }})
-      },
-      toggleSidebar(open) {
-        this.$store.commit('global/updateMobileSidebarOnState', open)
+      }
+
+      watch(
+        () => router.currentRoute,
+        () => {
+          cancelSearch()
+          toggleSidebar(false)
+        }
+      )
+
+      return {
+        t: i18n.t,
+        LANGUAGE_KEYS,
+        tags,
+        searchState: toRefs(searchState),
+        inputElement,
+        openSearch,
+        submitSearch,
+        cancelSearch,
+        isOpenedSidebar,
+        toggleSidebar
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   header {
     position: fixed;
     top: 0;

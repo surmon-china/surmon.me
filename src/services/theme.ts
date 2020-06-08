@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, inject, ref, computed } from 'vue'
+import { App, inject, ref, readonly, computed } from 'vue'
 import storage from './storage'
 
 export const THEME_STORAGE_KEY = 'theme'
@@ -39,23 +39,25 @@ const createThemeStore = (initTheme: Theme) => {
           : Theme.Default
       )
     } else {
-      // todo!!
-      const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
-      const isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+      const darkQuery = "(prefers-color-scheme: dark)"
+      const lightQuery = "(prefers-color-scheme: light)"
+      const isDarkMode = window.matchMedia(darkQuery).matches
+      const isLightMode = window.matchMedia(lightQuery).matches
       const isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
-      const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-      if (isDarkMode) set(Theme.Dark)
-      if (isLightMode) set(Theme.Default)
-      if (isNotSpecified) {
-        window.matchMedia("(prefers-color-scheme: dark)").addListener(e => e.matches && set(Theme.Dark))
-        window.matchMedia("(prefers-color-scheme: light)").addListener(e => e.matches && set(Theme.Default))
+      if (isDarkMode) {
+        set(Theme.Dark)
+      } else if (isLightMode) {
+        set(Theme.Default)
+      } else if (isNotSpecified) {
+        window.matchMedia(darkQuery).addListener(({ matches }) => matches && set(Theme.Dark))
+        window.matchMedia(lightQuery).addListener(({ matches }) => matches && set(Theme.Default))
       }
     }
   }
 
   return {
-    theme: computed(() => theme.value),
+    theme: readonly(theme),
     set,
     toggle,
     resetOnClient

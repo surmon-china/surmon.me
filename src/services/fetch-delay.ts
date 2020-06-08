@@ -5,7 +5,6 @@
  */
 
 import { DEFAULT_FETCH_DELAY } from '/@/config/app.config'
-import { isClient } from '/@/vuniversal/env'
 
 export const fetchDelay = (delay: number) => {
   // 一个卑鄙的手段
@@ -17,7 +16,7 @@ export const fetchDelay = (delay: number) => {
     const end = new Date().getTime()
     const time = end - start
     const timeout = delay - time
-    const isDelay = isClient && timeout > 0
+    const isDelay = timeout > 0
     isDelay ? window.setTimeout(action, timeout) : action()
   }
 }

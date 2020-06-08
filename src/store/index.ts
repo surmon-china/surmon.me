@@ -4,11 +4,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { createStore } from 'vuex'
+import { createStore, useStore as useVuexStore } from 'vuex'
 import { Request } from 'express'
-import { isServer } from '/@/vuniversal/env'
-import { uaParser } from '/@/transformers/ua'
-import optionModule, { OptionModuleName } from './option'
+import optionModule, { OptionModuleName, OptionModuleActions } from './option'
 
 export type IRootStore = ReturnType<typeof createUniversalStore>
 export const createUniversalStore = () => createStore({
@@ -17,7 +15,10 @@ export const createUniversalStore = () => createStore({
   }
 })
 
-// TODO: 初始化 store？i18n 呢
+export function useStore(): IRootStore {
+  return useVuexStore()
+}
+
 // TODO: 也许 asyncData | component async steup 已经支持细化组件了
 export const initStore = (appContext: any, { target, request: Request }) => {
   const { store, globalState } = appContext
@@ -26,7 +27,8 @@ export const initStore = (appContext: any, { target, request: Request }) => {
   const initFetchAppData = [
     // 内容数据
     store.dispatch('tag/fetchList'),
-    store.dispatch('category/fetchList')
+    store.dispatch('category/fetchList'),
+    store.dispatch(OptionModuleActions.FetchAdminInfo)
   ]
 
   // 如果不是移动端的话，则请求热门文章

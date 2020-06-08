@@ -1,31 +1,29 @@
 <template>
   <div class="pc-main">
-    <Teleport to="#popup" :disabled="disabled">
-      <div>哈哈哈</div>
-    </Teleport>
+    <client-only>
+      <figure class="widget">
+        <background />
+        <language />
+        <theme-switch />
+      </figure>
+    </client-only>
     <header-view />
-    <figure class="widget">
-      <language />
-      <theme-switch />
-    </figure>
     <main
       id="main"
       class="main-container"
-      :class="{
-        'full-view': isFullViewWidth
-      }"
+      :class="{ 'layout-full-page': isFullViewWidth }"
     >
-      <!-- <nav-view v-if="!isThreeColumns" /> -->
+      <nav-view v-if="!layoutColumn.isFullScreenLayout" />
       <div
         id="main-content"
         class="main-content"
         :class="{
-          'two-column': isTwoColumns,
-          'three-column': isThreeColumns,
-          'full-view': isFullViewWidth
+          'layout-normal': layoutColumn.isNormalLayout,
+          'layout-full-column': layoutColumn.isFullColumeLayout,
+          'layout-full-page': layoutColumn.isFullScreenLayout
         }"
       >
-        <slot></slot>
+        <slot />
       </div>
       <!-- <aside-view v-if="!isTwoColumns && !isThreeColumns" key="aside" /> -->
     </main>
@@ -34,30 +32,28 @@
 </template>
 
 <script lang="ts">
-  import { Teleport, ref } from 'vue'
+  import { defineComponent, ref } from 'vue'
   import { mapState } from 'vuex'
   import { isClient } from '/@/vuniversal/env'
-  // import NavView from './nav'
+  import NavView from './nav.vue'
+  // import AsideView from './aside/main'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
-  // import AsideView from './aside/main'
   // import Barrage from '/@/components/widget/barrage/main'
   // import Wallflower from '/@/components/widget/wallflower/garden'
   // import WallpaperWall from '/@/components/widget/wallpaper/wall'
   // import WallpaperSwitch from '/@/components/widget/wallpaper/switch'
   // import MyMap from '/@/components/widget/my-map'
-  // import Background from '/@/components/widget/background'
+  import Background from '/@/components/widget/background.vue'
   import Language from '/@/components/widget/language.vue'
   import ThemeSwitch from '/@/components/widget/theme.vue'
   // import ToolBox from '/@/components/widget/toolbox'
   // import ShareBox from '/@/components/widget/share'
-  // import { isServiceRoute } from '/@/services/route-validator'
-  // import systemConstants from '/@/constants/system'
+  import { useGlobalState } from '/@/state'
 
-  export default {
+  export default defineComponent({
     name: 'PcMain',
     components: {
-      Teleport,
       // ToolBox,
       // ShareBox,
       Language,
@@ -66,24 +62,20 @@
       // MyMap,
       // Wallflower,
       // WallpaperWall,
-      // Background,
+      Background,
       // Barrage,
       HeaderView,
       FooterView,
       // AsideView,
-      // NavView
+      NavView
     },
     setup() {
-      const disabled = ref(true)
-
-      setTimeout(() => {
-        disabled.value = false
-      }, 1666)
+      const globalState = useGlobalState()
       return {
-        disabled
+        layoutColumn: globalState.layoutColumn
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
@@ -141,7 +133,7 @@
       justify-content: space-between;
       width: $container-width;
 
-      &.full-view {
+      &.layout-full-page {
         width: 100%;
       }
 
@@ -163,16 +155,16 @@
           overflow-y: auto;
         }
 
-        &.two-column {
+        &.layout-normal {
           flex-grow: 1;
         }
 
-        &.three-column {
+        &.layout-full-column {
           width: 100%;
           margin: 0;
         }
 
-        &.full-view {
+        &.layout-full-page {
           width: 100%;
           margin: -$lg-gap 0;
         }

@@ -6,67 +6,69 @@
       </div>
       <div class="profile">
         <h3 class="name">Surmon</h3>
-        <p class="slogan" v-text="$i18n.text.slogan"></p>
+        <p class="slogan" v-i18n="LANGUAGE_KEYS.APP_SLOGAN"></p>
       </div>
     </div>
     <div class="aside-nav">
       <nav class="nav-list">
         <router-link to="/" class="item" exact>
           <i class="iconfont icon-home"></i>
-          <span v-text="$i18n.nav.home"></span>
+          <span v-i18n="LANGUAGE_KEYS.PAGE_HOME"></span>
         </router-link>
         <router-link to="/category/code" class="item">
           <i class="iconfont icon-code"></i>
-          <span v-text="$i18n.nav.code"></span>
+          <span v-i18n="LANGUAGE_KEYS.CATEGORY_CODE"></span>
         </router-link>
         <router-link to="/category/think" class="item">
           <i class="iconfont icon-thinking"></i>
-          <span v-text="$i18n.nav.think"></span>
+          <span v-i18n="LANGUAGE_KEYS.think"></span>
         </router-link>
         <a
           target="_blank"
           class="item"
           rel="external nofollow noopener"
-          :href="appConfig.links.project"
+          :href="APP_CONFIG.LINKS.project"
         >
           <i class="iconfont icon-experiment"></i>
-          <span v-text="$i18n.nav.project"></span>
+          <span v-i18n="LANGUAGE_KEYS.PAGE_PROJECT"></span>
         </a>
         <router-link to="/sitemap" class="item">
           <i class="iconfont icon-book"></i>
-          <span v-text="$i18n.nav.map"></span>
+          <span v-i18n="LANGUAGE_KEYS.PAGE_SITEMAP"></span>
         </router-link>
         <router-link to="/vlog" class="item">
           <i class="iconfont icon-vlog"></i>
-          <span v-text="$i18n.nav.vlog"></span>
+          <span v-i18n="LANGUAGE_KEYS.PAGE_VLOG"></span>
         </router-link>
         <router-link to="/about" class="item">
           <i class="iconfont icon-user"></i>
-          <span v-text="$i18n.nav.about"></span>
+          <span v-i18n="LANGUAGE_KEYS.PAGE_ABOUT"></span>
         </router-link>
         <router-link to="/service" class="item">
           <i class="iconfont icon-tool"></i>
-          <span v-text="$i18n.nav.service"></span>
+          <span v-i18n="LANGUAGE_KEYS.PAGE_SERVICE"></span>
         </router-link>
         <router-link to="/guestbook" class="item guestbook">
           <i class="iconfont icon-comment"></i>
-          <span v-text="$i18n.nav.guestbook"></span>
+          <span v-i18n="LANGUAGE_KEYS.PAGE_GUESTBOOK"></span>
         </router-link>
         <router-link to="/app" class="item app">
           <i class="iconfont icon-app"></i>
-          <span v-text="$i18n.nav.app"></span>
+          <span v-i18n="LANGUAGE_KEYS.PAGE_APP"></span>
         </router-link>
       </nav>
     </div>
   </aside>
 </template>
 
-<script>
-  import Vue from 'vue'
-  import appConfig from '/@/config/app.config'
+<script lang="ts">
+  import * as APP_CONFIG from '/@/config/app.config'
+  import { defineComponent, computed } from 'vue'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import { getFileCDNUrl } from '/@/transformers/url'
+  import { useStore } from '/@/store'
 
-  export default Vue.extend({
+  export default defineComponent({
     name: 'MobileAside',
     props: {
       open: {
@@ -74,19 +76,26 @@
         defualt: false
       }
     },
-    mounted() {
-      return this.$store.dispatch('global/fetchAdminInfo')
-    },
-    computed: {
-      appConfig: () => appConfig,
-      gravatar() {
-        return this.$store.state.global.adminInfo.gravatar || getFileCDNUrl('/images/gravatar.jpg')
+    setup() {
+      const store = useStore()
+      console.log('----store', store)
+      const gravatar = computed(() => (
+        store.state.option.adminInfo.gravatar ||
+        getFileCDNUrl('/images/gravatar.jpg')
+      ))
+
+      return {
+        APP_CONFIG,
+        LANGUAGE_KEYS,
+        gravatar
       }
     }
   })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   aside {
     display: block;
     overflow: auto;

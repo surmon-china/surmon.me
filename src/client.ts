@@ -6,14 +6,13 @@ import { VueEnv, isProd } from '/@/vuniversal/env'
 // import Swiper from '/@/plugins/vue-awesome-swiper'
 import { createDefer } from '/@/services/defer'
 import { createMusic } from '/@/services/music'
+import { createPopup } from '/@/services/popup'
+import { consoleSolgan } from '/@/services/slogan'
 import { enableAnalytics } from '/@/services/analytics'
 import { enableCopyright } from '/@/services/copyright'
-import { consoleSolgan } from '/@/services/slogan'
 import { enableBaiduSeoPush } from '/@/services/baidu-seo-push'
+import { enableAutoTitleSurprise } from './services/title-surprise'
 import { exportLozadToGlobal } from '/@/services/lozad'
-import { createPopup } from '/@/services/popup'
-import { enableAutoTitleEgg } from '/@/services/title-egg'
-// import { exportLozadToGlobal } from '/@/services/popup'
 import { Language } from '/@/language/data'
 import { createVueApp } from './main'
 
@@ -41,7 +40,7 @@ app.mount('#app').$nextTick(() => {
     app.use(music)
     defer.addTask(music.start)
     // store.dispatch('wallpaper/fetchPapers', i18n.language)
-    // enableAutoTitleEgg()
+    enableAutoTitleSurprise()
   }
 
   // Production

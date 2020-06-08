@@ -1,8 +1,9 @@
 <template>
   <div v-cloak id="app-root" :class="theme">
-    <!-- <client-only>
-    </client-only> -->
-    <emoji-rain />
+    <client-only>
+      <emoji-rain />
+      <popup-root />
+    </client-only>
     <component :is="layoutComponent">
       <transition name="fade" mode="out-in">
         <suspense>
@@ -21,27 +22,26 @@
 <script lang="ts">
   import { defineComponent, computed, onMounted } from 'vue'
   import { isProd, isClient } from '/@/vuniversal/env'
-  import { useTheme } from '/@/services/theme'
   import { useGlobalState } from '/@/state'
+  import { useTheme } from '/@/services/theme'
   import EmojiRain from '/@/components/widget/emoji-rain.vue'
   import PcMain from '/@/components/layout/pc/main-new.vue'
-  // import MobileMainView from '/@/components/layout/mobile/main.vue'
+  import MobileMain from '/@/components/layout/mobile/main.vue'
 
   export default defineComponent({
     name: 'App',
     components: {
       EmojiRain,
       PcMain,
-      // MobileMainView
+      MobileMain
     },
     setup() {
       const theme = useTheme()
       const globalState = useGlobalState()
       const layoutComponent = computed(() => {
         return globalState.userAgent.isMobile
-          ? PcMain.name
+          ? MobileMain.name
           : PcMain.name
-          // : PcMainView.name
       })
 
       return {
