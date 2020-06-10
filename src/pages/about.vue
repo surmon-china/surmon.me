@@ -184,6 +184,7 @@
               ? 'Every path I went astray built my Rome.'
               : '路为纸，地成册，行作笔，心当墨；思无界，行有疆'
           }}</a>
+          <popup iframe="https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w" class="gmap" />
         </div>
         <div class="item">
           <i class="iconfont icon-friend" />

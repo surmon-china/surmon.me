@@ -1,5 +1,5 @@
 /**
- * @file 骨架屏模块 / ES module
+ * @file 骨架屏模块
  * @module components/skeleton
  * @author Surmon <https://github.com/surmon-china>
  */

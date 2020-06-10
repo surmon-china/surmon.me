@@ -1,5 +1,5 @@
 /**
- * @file Network / ES module
+ * @file Network
  * @module utils/network
  * @author Surmon <https://github.com/surmon-china>
  */

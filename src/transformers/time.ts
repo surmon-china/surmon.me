@@ -1,13 +1,13 @@
 /**
- * @file Time Filters / ES module
- * @module transforms/time-filter
+ * @file Time transformer
+ * @module transformers/time
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import systemConstants from '/@/constants/system'
+import { Language } from '/@/language/data'
 
 const timeTextMap = {
-  [systemConstants.Language.En]: {
+  [Language.En]: {
     am: 'am',
     pm: 'pm',
     ago: ' ago',
@@ -19,7 +19,7 @@ const timeTextMap = {
     months: 'months',
     years: 'years'
   },
-  [systemConstants.Language.Zh]: {
+  [Language.Zh]: {
     am: '上午',
     pm: '下午',
     ago: '前',
@@ -43,7 +43,7 @@ export const timeAgo = (time: string | Date, language: string) => {
   time = time instanceof Date ? time : new Date(time)
 
   const between = Date.now() / 1000 - (Number(time) / 1000)
-  const textMap = timeTextMap[language || systemConstants.Language.Zh]
+  const textMap = timeTextMap[language || Language.Zh]
   const hourS = 3600
   const dayS = hourS * 24
   const weekS = dayS * 7
@@ -80,7 +80,7 @@ export const toYMD = (date: string, language: string) => {
     return date
   }
   const newDate = new Date(date)
-  const textMap = timeTextMap[language || systemConstants.Language.Zh]
+  const textMap = timeTextMap[language || Language.Zh]
   const year = newDate.getFullYear()
   const month = newDate.getMonth() + 1
   const day = newDate.getDate()

@@ -1,43 +1,52 @@
 /**
- * @file 文章数据状态 / ES module
+ * @file Article
  * @module store/article
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import Vue from 'vue'
+// TODO!!!
+import { Module, MutationTree, ActionTree } from 'vuex'
 import { isClient } from '/@/vuniversal/env'
-import { fetchDelay } from '/@/services/fetch-delay'
-import { isArticleDetailRoute } from '/@/transformers/route'
-import { scrollTo, Easing } from '/@/services/scroller'
+import { isArticleDetail } from '/@/transformers/route'
+import { fetchDelay } from '/@/utils/fetch-delay'
+import { scrollTo, Easing } from '/@/utils/scroller'
+import { IRootState } from '.'
+import http from '/@/services/http'
 
 export const ARTICLE_API_PATH = '/article'
 export const LIKE_ARTICLE_API_PATH = '/like/article'
 
+export enum ArticleModuleMutations {
+  UpdateFetching = 'updateFetching',
+  UpdateListData = 'updateListData'
+}
+export enum ArticleModuleActions {
+  FetchList = 'fetchList'
+}
+
 const getDefaultListData = () => {
   return {
-    data: [],
-    pagination: {}
+    data: [] as Array<$TODO>,
+    pagination: {} as $TODO
   }
 }
 
-export const state = () => {
-  return {
-    list: {
-      fetching: false,
-      data: getDefaultListData()
-    },
-    hotList: {
-      fetching: false,
-      data: []
-    },
-    detail: {
-      fetching: false,
-      data: {}
-    }
+const state = () => ({
+  list: {
+    fetching: false,
+    data: getDefaultListData()
+  },
+  hotList: {
+    fetching: false,
+    data: [] as Array<$TODO>
+  },
+  detail: {
+    fetching: false,
+    data: {} as $TODO
   }
-}
+})
 
-export const mutations = {
+const mutations: MutationTree<ArticleState> = {
   // 文章列表
   updateListFetchig(state, action) {
     state.list.fetching = action
@@ -82,7 +91,7 @@ export const mutations = {
   }
 }
 
-export const actions = {
+const actions: ActionTree<ArticleState, IRootState> = {
   // 获取文章列表
   fetchList({ commit }, params = {}) {
     const isRestart = !params.page || params.page === 1
@@ -92,8 +101,8 @@ export const actions = {
     isRestart && commit('updateListData', getDefaultListData())
     commit('updateListFetchig', true)
 
-    return this.$axios
-      .$get(ARTICLE_API_PATH, { params })
+    return http
+      .get(ARTICLE_API_PATH, { params })
       .then(response => {
         commit('updateListFetchig', false)
         isLoadMore
@@ -114,8 +123,8 @@ export const actions = {
   fetchHotList({ commit, rootState }) {
     const { SortType } = rootState.global.constants
     commit('updateHotListFetchig', true)
-    return this.$axios
-      .$get(ARTICLE_API_PATH, { params: { cache: 1, sort: SortType.Hot } })
+    return http
+      .get(ARTICLE_API_PATH, { params: { cache: 1, sort: SortType.Hot } })
       .then(response => {
         commit('updateHotListData', response)
         commit('updateHotListFetchig', false)
@@ -126,7 +135,7 @@ export const actions = {
   // 获取文章详情
   fetchDetail({ commit }, params = {}) {
     const delay = fetchDelay(
-      isClient && isArticleDetailRoute(window.$nuxt.$route.name) ? null : 0
+      isClient && isArticleDetail(window.$nuxt.$route.name) ? null : 0
     )
     if (isClient) {
       Vue.nextTick(() => {
@@ -135,8 +144,8 @@ export const actions = {
     }
     commit('updateDetailFetchig', true)
     commit('updateDetailData', {})
-    return this.$axios
-      .$get(`${ARTICLE_API_PATH}/${params.article_id}`)
+    return http
+      .get(`${ARTICLE_API_PATH}/${params.article_id}`)
       .then(response => {
         return new Promise(resolve => {
           delay(() => {
@@ -154,11 +163,21 @@ export const actions = {
 
   // 喜欢文章
   fetchLikeArticle({ commit }, article_id) {
-    return this.$axios
-      .$patch(LIKE_ARTICLE_API_PATH, { article_id })
+    return http
+      .patch(LIKE_ARTICLE_API_PATH, { article_id })
       .then(response => {
         commit('updateLikesIncrement')
         return Promise.resolve(response)
       })
   }
 }
+
+const articleModule: Module<ArticleState, IRootState> = {
+  namespaced: true,
+  state,
+  mutations,
+  actions
+}
+
+export type ArticleState = ReturnType<typeof state>
+export default articleModule

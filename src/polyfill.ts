@@ -1,5 +1,5 @@
 /**
- * @file polyfill / ES module
+ * @file polyfill
  * @module plugins/polyfill
  * @author Surmon <https://github.com/surmon-china>
  */

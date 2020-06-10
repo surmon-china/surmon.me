@@ -1,10 +1,10 @@
 /**
- * @file 评论数据状态 / ES module
+ * @file 评论数据状态
  * @module store/comment
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { fetchDelay } from '/@/services/fetch-delay'
+import { fetchDelay } from '../utils/fetch-delay'
 
 export const COMMENT_API_PATH = '/comment'
 export const LIKE_COMMENT_API_PATH = '/like/comment'

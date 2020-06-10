@@ -1,5 +1,5 @@
 /**
- * @file 滑动到任何目的地 / ES module
+ * @file 滑动到任何目的地
  * @module services/scroller
  * @author Surmon <https://github.com/surmon-china>
  */

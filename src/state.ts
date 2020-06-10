@@ -1,5 +1,5 @@
 /**
- * @file 全局设置数据状态 / ES module
+ * @file 全局设置数据状态
  * @module store/option
  * @author Surmon <https://github.com/surmon-china>
  */

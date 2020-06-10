@@ -4,7 +4,8 @@
       <figure class="widget">
         <background />
         <language />
-        <theme-switch />
+        <theme />
+        <wallpaper />
       </figure>
     </client-only>
     <header-view />
@@ -25,7 +26,7 @@
       >
         <slot />
       </div>
-      <!-- <aside-view v-if="!isTwoColumns && !isThreeColumns" key="aside" /> -->
+      <!-- <aside-view v-if="layoutColumn.isNormalLayout" key="aside" /> -->
     </main>
     <footer-view />
   </div>
@@ -42,11 +43,11 @@
   // import Barrage from '/@/components/widget/barrage/main'
   // import Wallflower from '/@/components/widget/wallflower/garden'
   // import WallpaperWall from '/@/components/widget/wallpaper/wall'
-  // import WallpaperSwitch from '/@/components/widget/wallpaper/switch'
+  import Wallpaper from '/@/components/widget/wallpaper/main.vue'
   // import MyMap from '/@/components/widget/my-map'
   import Background from '/@/components/widget/background.vue'
   import Language from '/@/components/widget/language.vue'
-  import ThemeSwitch from '/@/components/widget/theme.vue'
+  import Theme from '/@/components/widget/theme.vue'
   // import ToolBox from '/@/components/widget/toolbox'
   // import ShareBox from '/@/components/widget/share'
   import { useGlobalState } from '/@/state'
@@ -57,8 +58,8 @@
       // ToolBox,
       // ShareBox,
       Language,
-      // WallpaperSwitch,
-      ThemeSwitch,
+      Wallpaper,
+      Theme,
       // MyMap,
       // Wallflower,
       // WallpaperWall,

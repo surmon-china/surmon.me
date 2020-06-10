@@ -1,5 +1,5 @@
 /**
- * @file 彩蛋配置 Egg config / ES module
+ * @file Surpres config
  * @module egg.config
  * @author Surmon <https://github.com/surmon-china>
  */

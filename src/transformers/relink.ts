@@ -1,7 +1,6 @@
-/* eslint-disable no-useless-escape */
 /**
- * @file 文章 -> 标签内链关系构造器 / ES module
- * @module transforms/relink
+ * @file Site inner link transformer
+ * @module transformers/relink
  * @author Surmon <https://github.com/surmon-china>
  */
 

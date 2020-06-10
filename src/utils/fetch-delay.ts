@@ -1,5 +1,5 @@
 /**
- * @file 模拟延时器 / ES module
+ * @file 模拟延时器
  * @module services/fetch-delay
  * @author Surmon <https://github.com/surmon-china>
  */

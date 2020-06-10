@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, inject, ref, computed, defineComponent, FunctionDirective } from 'vue'
+import { App, inject, ref, computed, readonly, defineComponent, FunctionDirective } from 'vue'
 
 export interface I18nLanguage {
   code: string
@@ -52,7 +52,7 @@ const createI18nStore = (config: Ii18nConfig) => {
   }
 
   return {
-    language: computed(() => language.value),
+    language: readonly(language),
     set,
     toggle,
     translate,

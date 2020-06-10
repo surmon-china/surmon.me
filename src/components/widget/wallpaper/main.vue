@@ -1,45 +1,68 @@
 <template>
-  <div id="wallpaper-switch" :class="{ dark: isDarkTheme }">
-    <div class="switcher" @click="onWallpaper">
+  <div id="wallpaper" :class="{ dark: isDarkTheme }">
+    <div class="switcher" @click="toggleWallpaper">
       <div class="up">
-        <span class="title" :class="language">{{ $i18n.text.wallpaper }}</span>
+        <span
+          class="title"
+          :class="language"
+          v-i18n="LANGUAGE_KEYS.WALLPAPER"
+        />
       </div>
       <div class="down"></div>
     </div>
   </div>
+  <popup :visible="isOnWallpaper">
+    <span>sadasd 阿三大声道</span>
+  </popup>
 </template>
 
-<script>
-  import systemConstants from '/@/constants/system'
-  export default {
-    name: 'WallpaperSwitch',
-    methods: {
-      onWallpaper() {
-        this.$ga.event(
-          '今日壁纸',
-          systemConstants.GAEventActions.Toggle,
-          systemConstants.GAEventTags.Tool
-        )
-        if (this.$store.getters['wallpaper/parpers']) {
-          this.$store.commit('global/toggleUpdateWallpaperOnState', true)
-        } else {
-          alert('可能 Bing 又被墙了吧我有什么办法！')
-        }
+<script lang="ts">
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { GAEventActions, GAEventTags } from '/@/constants/ga'
+  import { defineComponent, ref, computed, toRef } from 'vue'
+  import { useTheme, Theme } from '/@/services/theme'
+  import { useI18n } from '/@/services/i18n'
+  import { useGlobalState } from '/@/state'
+  import { useStore } from '/@/store'
+
+  export default defineComponent({
+    name: 'Wallpaper',
+    setup() {
+      const i18n = useI18n()
+      const theme = useTheme()
+      const store = useStore()
+      const globalState = useGlobalState()
+      const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
+      const isOnWallpaper = toRef(globalState.switchBox, 'wallpaper')
+      const toggleWallpaper = () => {
+        // this.$ga.event(
+        //   '今日壁纸',
+        //   GAEventActions.Toggle,
+        //   GAEventTags.Tool
+        // )
+        globalState.switchTogglers.wallpaper()
+        // if (store.getters['wallpaper/parpers']) {
+        //   globalState.switchTogglers.wallpaper()
+        // } else {
+        //   alert('可能 Bing 又被墙了吧我有什么办法！')
+        // }
       }
-    },
-    computed: {
-      language() {
-        return this.$store.state.global.language
-      },
-      isDarkTheme() {
-        return this.$store.getters['global/isDarkTheme']
+
+      return {
+        LANGUAGE_KEYS,
+        language: i18n.language,
+        isDarkTheme,
+        isOnWallpaper,
+        toggleWallpaper
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
-  #wallpaper-switch {
+  @import 'src/assets/styles/init.scss';
+
+  #wallpaper {
     position: fixed;
     left: 0;
     top: 70%;
