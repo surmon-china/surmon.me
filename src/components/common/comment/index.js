@@ -1,5 +1,5 @@
 /**
- * @file Comment box component / ES module
+ * @file Comment box component
  * @module components/common/comment
  * @author Surmon <https://github.com/surmon-china>
  */

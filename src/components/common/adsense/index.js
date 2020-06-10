@@ -1,5 +1,5 @@
 /**
- * @file Adsense box component / ES module
+ * @file Adsense box component
  * @module components/adsense
  * @author Surmon <https://github.com/surmon-china>
  */

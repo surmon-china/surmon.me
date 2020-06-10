@@ -1,5 +1,5 @@
 /**
- * @file Route transformer / ES module
+ * @file Route transformer
  * @module transforms/route
  * @author Surmon <https://github.com/surmon-china>
  */

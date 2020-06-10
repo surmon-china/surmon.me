@@ -1,6 +1,6 @@
 /**
- * @file UA 解析器 / ES module
- * @module transforms/ua
+ * @file UA parser
+ * @module transformers/ua
  * @author Surmon <https://github.com/surmon-china>
  */
 

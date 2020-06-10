@@ -1,5 +1,5 @@
 /**
- * @file socket 服务 / ES module
+ * @file socket 服务
  * @module plugins/socket.io
  * @author Surmon <https://github.com/surmon-china>
  */

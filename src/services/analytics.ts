@@ -1,5 +1,5 @@
 /**
- * @file GA 统计服务 / ES module
+ * @file GA 统计服务
  * @module plugins/analytics
  * @author Surmon <https://github.com/surmon-china>
  */

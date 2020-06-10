@@ -1,5 +1,5 @@
 /**
- * @file Text transformer / ES module
+ * @file Text transformer
  * @module transforms/text
  * @author Surmon <https://github.com/surmon-china>
  */

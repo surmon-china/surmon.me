@@ -1,17 +1,30 @@
 /**
- * @file 根数据状态，仅用以调度初始化任务 / ES module
+ * @file Root store
  * @module store/entry
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { createStore, useStore as useVuexStore } from 'vuex'
 import { Request } from 'express'
-import optionModule, { OptionModuleName, OptionModuleActions } from './option'
+import { createStore, useStore as useVuexStore } from 'vuex'
+import optionModule, { OptionModuleActions } from './option'
+import announcementModule from './announcement'
+import categoryModule, { CategoryModuleActions } from './category'
+import tagModule, { TagModuleActions } from './tag'
+import sitemapModule from './sitemap'
+import wallpaperModule from './wallpaper'
+import vlogModule from './vlog'
 
+export type IRootState = any
 export type IRootStore = ReturnType<typeof createUniversalStore>
 export const createUniversalStore = () => createStore({
   modules: {
-    [OptionModuleName]: optionModule
+    announcement: announcementModule,
+    category: categoryModule,
+    tag: tagModule,
+    sitemap: sitemapModule,
+    option: optionModule,
+    wallpaper: wallpaperModule,
+    vlog: vlogModule
   }
 })
 
@@ -19,21 +32,22 @@ export function useStore(): IRootStore {
   return useVuexStore()
 }
 
+// -----------------------
+
 // TODO: 也许 asyncData | component async steup 已经支持细化组件了
 export const initStore = (appContext: any, { target, request: Request }) => {
   const { store, globalState } = appContext
 
-  // 初始化时的全局任务
+  // init task
   const initFetchAppData = [
-    // 内容数据
-    store.dispatch('tag/fetchList'),
-    store.dispatch('category/fetchList'),
+    store.dispatch(TagModuleActions.FetchList),
+    store.dispatch(CategoryModuleActions.FetchList),
     store.dispatch(OptionModuleActions.FetchAdminInfo)
   ]
 
-  // 如果不是移动端的话，则请求热门文章
+  // fetch hot articles when desktop env
   if (!globalState.isMobile) {
-    initFetchAppData.push(store.dispatch('article/fetchHotList'))
+    // initFetchAppData.push(store.dispatch('article/fetchHotList'))
   }
 
   return Promise.all(initFetchAppData)

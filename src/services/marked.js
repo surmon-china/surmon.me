@@ -1,11 +1,11 @@
 /**
- * @file 文档解析服务 / ES module
+ * @file 文档解析服务
  * @module plugins/marked
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import marked from 'marked'
-import Hljs from './highlight'
+import Hljs from '../utils/highlight'
 import appConfig from '../config/app.config'
 import apiConfig from '../config/api.config'
 import relink from '/@/transformers/relink'

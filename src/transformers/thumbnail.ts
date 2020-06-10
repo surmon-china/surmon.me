@@ -1,11 +1,11 @@
 /**
- * @file thumbnail transformer / ES module
+ * @file Thumbnail transformer
  * @module transforms/thumbnail
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import gravatar from 'gravatar'
-import API from '/@/config/api.config'
+import API_CONFIG from '/@/config/api.config'
 import { getFileCDNUrl } from '/@/transformers/url'
 
 export const getBannerArticleThumbnailUrl = (thumb: string, isMobile: boolean, isWebPImage: boolean) => {
@@ -37,7 +37,7 @@ export const getArchiveArticleThumbnailUrl = (thumb: string, isWebPImage: boolea
 
 export const getGravatarByEmail = (email: string) => {
   let avatar = gravatar.url(email, { protocol: 'https' })
-  avatar = avatar.replace('https://s.gravatar.com/avatar', API.GRAVATAR)
+  avatar = avatar.replace('https://s.gravatar.com/avatar', API_CONFIG.GRAVATAR)
   avatar += `?x-oss-process=style/gravatar`
   return avatar
 }

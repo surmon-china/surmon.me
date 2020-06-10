@@ -1,5 +1,5 @@
 /**
- * @file Google Adsense / ES module
+ * @file Google Adsense
  * @module plugins/adsense
  * @author Surmon <https://github.com/surmon-china>
  */

@@ -1,12 +1,13 @@
 /**
- * @file 弹窗服务 / ES module
- * @module plugins/popup
+ * @file 弹窗服务
+ * @module services/popup
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, Plugin, inject, readonly, reactive } from 'vue'
-import PopupRootComponent from './popup-root.vue'
+import { App, Plugin, inject, readonly, reactive, onMounted } from 'vue'
+import PopupRootComponent from './root.vue'
 import PopupComponent from './popup'
+import PopupMediumComponent from './medium'
 
 declare global {
   interface Window {
@@ -14,39 +15,61 @@ declare global {
   }
 }
 
-export enum PopupType {
-  Image = 'img',
-  Video = 'video',
-  Iframe = 'iframe'
-}
-
 const PopupSymbol = Symbol('popup')
 const createPopupStore = () => {
-  const state = reactive({
-    visibility: false,
-    type: null as null | PopupType,
+
+  const image = reactive({
     src: null as null | string,
     props: null as null | object
   })
 
-  const visible = (options: { type: PopupType, src: string, props?: object }) => {
-    state.visibility = true
-    state.src = options.src
-    state.type = options.type
-    state.props = options.props || {}
-  }
+  const state = reactive({
+    visibility: false,
+    isImage: false,
+    // UI options
+    border: true,
+    maskClose: true,
+    scrollClose: true,
+    closeButton: true,
+    // inner
+    $container: null as null | HTMLElement
+  })
 
   const hidden = () => {
+    state.isImage = false
     state.visibility = false
-    state.type = null
-    state.src = null
-    state.props = null
+    image.src = null
+    image.props = null
+  }
+
+  const visible = (options?: Partial<typeof state>) => {
+    hidden()
+    Object.assign(state, {
+      ...options,
+      isImage: false,
+      visibility: true
+    })
+  }
+
+  const vImage = (src: string, props?: any) => {
+    hidden()
+    state.isImage = true
+    state.visibility = true
+    image.src = src
+    image.props = props
+  }
+
+  const $setRoot = (element: HTMLElement) => {
+    state.$container = element
   }
 
   return {
     state: readonly(state),
+    image,
     visible,
     hidden,
+    vImage,
+    $setRoot
   }
 }
 
@@ -58,7 +81,10 @@ export const createPopup = (): Popup & Plugin => {
     ...popupStore,
     install(app: App, config: PopupPluginConfig) {
       app.provide(PopupSymbol, popupStore)
+      // @ts-expect-error
       app.component(PopupComponent.name as string, PopupComponent)
+      // @ts-expect-error
+      app.component(PopupMediumComponent.name as string, PopupMediumComponent)
       app.component(PopupRootComponent.name as string, PopupRootComponent)
       if (config?.exportToGlobal) {
         window.popup = popupStore
@@ -71,87 +97,8 @@ export const usePopup = (): Popup => {
   return inject(PopupSymbol) as Popup
 }
 
-/*
-// 销毁弹窗
-const closePopup = (documentId: string) => new Promise(resolve => {
-  const mask = document.getElementById(documentId)
-  if (mask) {
-    window.onscroll = null
-    mask.setAttribute('class', '')
-    setTimeout(() => {
-      document.body.removeChild(mask)
-      resolve()
-    }, 350)
-  } else {
-    resolve()
-  }
-})
-
-const closeImgPopup = () => closePopup('image-popup')
-const closeIframePopup = () => closePopup('iframe-popup')
-
-// 打开 Iframe 弹窗
-const openIframePopup = (src, className) => {
-  if (!src) return false
-
-  const iframe = document.createElement('iframe')
-  iframe.src = src
-  iframe.scrolling = 'no'
-  iframe.border = 0
-  iframe.frameborder = 'no'
-  iframe.framespacing = 0
-  iframe.allowfullscreen = true
-  className && iframe.setAttribute('class', className)
-
-  const oldMask = document.getElementById('iframe-popup')
-  oldMask && document.body.removeChild(oldMask)
-
-  const mask = document.createElement('div')
-  mask.setAttribute('id', 'iframe-popup')
-  mask.appendChild(iframe)
-  document.body.appendChild(mask)
-  setTimeout(() => {
-    mask.setAttribute('class', 'display')
-  }, 100)
-
-  // 监听滚动和点击事件
-  window.onscroll = closeIframePopup
-  mask.onclick = event => {
-    if (event.target.tagName !== 'IMG') {
-      closeIframePopup()
-    }
-  }
+export const usePopupWithRoot = (fn: () => HTMLElement): Popup => {
+  const popup = usePopup()
+  onMounted(() => popup.$setRoot(fn()))
+  return popup
 }
-
-// 打开图片弹窗
-const openImgPopup = (src: string, className?: string) => {
-  if (!src) return false
-  const image = document.createElement('img')
-  image.src = src
-  if (className) {
-    image.setAttribute('class', className)
-  }
-
-  const oldMask = document.getElementById('image-popup')
-  oldMask && document.body.removeChild(oldMask)
-
-  const mask = document.createElement('div')
-  mask.setAttribute('id', 'image-popup')
-  mask.appendChild(image)
-  document.body.appendChild(mask)
-
-  setTimeout(() => {
-    mask.setAttribute('class', 'display')
-  }, 100)
-  // 监听滚动和点击事件
-  window.onscroll = closeImgPopup
-  mask.onclick = closeImgPopup
-}
-
-export const mountePopupToWindow = () => {
-  window.utils.openImgPopup = openImgPopup
-  window.utils.closeImgPopup = closeImgPopup
-  window.utils.openIframePopup = openIframePopup
-  window.utils.closeIframePopup = closeIframePopup
-}
-*/
