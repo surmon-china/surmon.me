@@ -2,78 +2,77 @@
   <li
     class="flower-item"
     :style="styles"
-    :class="playing ? 'playing' : ''"
-    v-text="options.text"
+    :class="state.playing ? 'playing' : ''"
+    v-text="text"
   ></li>
 </template>
 
-<script>
-  export default {
+<script lang="ts">
+  import { defineComponent, ref, computed, reactive, nextTick, onMounted, onBeforeUnmount } from 'vue'
+  export default defineComponent({
     name: 'WallFlowerItem',
     props: {
       options: {
         type: Object,
         required: true
       },
-      zindex: {
+      zIndex: {
         type: Number,
         required: true
       }
     },
-    data() {
-      return {
+    setup(props, context) {
+      const state = reactive({
         // 播放时长
         delay: 1,
         // 定时器
-        timer: null,
+        timer: null as number | null,
         // 播放状态
         playing: false,
-      }
-    },
-    computed: {
-      styles() {
-        return {
-          top: this.options.y + 'px',
-          left: this.options.x + 'px',
-          'z-index': 99999 + this.zindex,
-        }
-      }
-    },
-    methods: {
-      startAnimation() {
-        this.$nextTick(() => {
+      })
 
-          // 开始动画
+      const styles = computed(() => ({
+        top: props.options.y + 'px',
+        left: props.options.x + 'px',
+        'z-index': 99999 + props.zIndex
+      }))
+
+      const startAnimation = () => {
+        nextTick(() => {
+          // State animation
           setTimeout(() => {
-            this.playing = true
+            state.playing = true
           })
 
-          // 结束动画
-          this.timer = setTimeout(() => {
-            this.playing = false
-            this.$nextTick(() => {
-              this.$emit('end', this.options.id)
-            })
-          }, this.delay * 1000)
+          // End animation
+          state.timer = window.setTimeout(() => {
+            state.playing = false
+            nextTick(() => context.emit('end', props.options.id))
+          }, state.delay * 1000)
         })
       }
-    },
-    ready() {
-      this.startAnimation()
-    },
-    mounted() {
-      this.startAnimation()
-    },
-    beforeDestroy() {
-      if (this.timer) {
-        clearTimeout(this.timer)
-        this.timer = null
+
+      startAnimation()
+      onMounted(startAnimation)
+      onBeforeUnmount(() => {
+        if (state.timer) {
+          clearTimeout(state.timer)
+          state.timer = null
+        }
+      })
+
+      return {
+        state,
+        styles,
+        text: props.options.text
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .flower-item {
     opacity: 1;
     position: fixed;

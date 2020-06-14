@@ -13,18 +13,18 @@
         </a>
         <button
           class="barrage"
-          :title="$i18n.text.barrage.name"
-          :class="{ active: onBarrage }"
+          :title="t(LANGUAGE_KEYS.BARRAGE)"
+          :class="{ active: isOnBarrage }"
           @click="toggleBarrage"
         >
           <i class="iconfont icon-barrage" />
         </button>
-        <a class="feedback" :href="mailUrl" :title="$i18n.text.feedback">
+        <a class="feedback" :href="mailUrl" :title="t(LANGUAGE_KEYS.FEEDBACK)">
           <i class="iconfont icon-mail" />
         </a>
         <button
           class="to-page-top"
-          :title="$i18n.text.totop"
+          :title="t(LANGUAGE_KEYS.TO_TOP)"
           @click="totop"
           @mouseover="setTopButtonState(true, true)"
           @mouseleave="setTopButtonState(false)"
@@ -33,7 +33,7 @@
         </button>
         <button
           class="to-page-bottom"
-          :title="$i18n.text.tobottom"
+          :title="t(LANGUAGE_KEYS.TO_BOTTOM)"
           @click="toBottom"
           @mouseover="setBottomButtonState(true, true)"
           @mouseleave="setBottomButtonState(false)"
@@ -46,15 +46,22 @@
 </template>
 
 <script lang="ts">
-  import { PropType, createComponent, ref, computed, onMounted } from '@vue/composition-api'
+  import { PropType, defineComponent, ref, computed, onMounted } from 'vue'
   import { mapState } from 'vuex'
-  import appConfig from '/@/config/app.config'
-  import systemConstants from '/@/constants/system'
-  import { scrollTo, Easing } from '/@/services/scroller'
+  import { useGlobalState } from '/@/state'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { useI18n } from '/@/services/i18n'
+  import { GAEventActions, GAEventTags } from '/@/constants/ga'
+  import { scrollTo, Easing } from '/@/utils/scroller'
+  import { META } from '/@/config/app.config'
 
-  export default createComponent({
-    name: 'ToolBox',
-    setup(_, { root }) {
+  export default defineComponent({
+    name: 'Toolbox',
+    setup(_) {
+      const i18n = useI18n()
+      const globalState = useGlobalState()
+      const isOnBarrage = computed(() => globalState.switchBox.barrage)
+
       const animationFrameId = ref(0)
       const isTopButtonMouseOver = ref(false)
       const isBottomButtonMouseOver = ref(false)
@@ -89,20 +96,19 @@
         animationFrameId.value = window.requestAnimationFrame(step)
       }
 
-      const mailUrl = 'mailto:' + appConfig.meta.email
-      const onBarrage = computed(() => root.$store.state.global.onBarrage)
-
       return {
-        mailUrl,
-        onBarrage,
+        mailUrl: `mailto:${META.email}`,
+        t: i18n.translate,
+        LANGUAGE_KEYS,
+        isOnBarrage,
         totop() {
-          scrollTo('body', 300, { easing: Easing['ease-in'] })
+          scrollTo('body', 300, { easing: Easing.easeIn })
         },
         toBottom() {
           scrollTo(
             window.scrollY + window.innerHeight,
             300,
-            { easing: Easing['ease-in'] }
+            { easing: Easing.easeIn }
           )
         },
         setTopButtonState(state: boolean, isStartSlow = false) {
@@ -116,19 +122,19 @@
           isStartSlow && slowMoveToAnyWhere()
         },
         handleRSS() {
-          root.$ga.event(
-            'RSS 订阅',
-            systemConstants.GAEventActions.Click,
-            systemConstants.GAEventTags.Tool
-          )
+          // root.$ga.event(
+          //   'RSS 订阅',
+          //   GAEventActions.Click,
+          //   GAEventTags.Tool
+          // )
         },
         toggleBarrage() {
-          root.$ga.event(
-            '弹幕功能',
-            systemConstants.GAEventActions.Toggle,
-            systemConstants.GAEventTags.Tool
-          )
-          root.$store.commit('global/toggleUpdateBarrageOnState')
+          // root.$ga.event(
+          //   '弹幕功能',
+          //   GAEventActions.Toggle,
+          //   GAEventTags.Tool
+          // )
+          globalState.switchTogglers.barrage()
         }
       }
     }
@@ -136,6 +142,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   #toolbox {
     position: fixed;
     z-index: $z-index-toolbox;

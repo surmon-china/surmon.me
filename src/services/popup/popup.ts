@@ -9,20 +9,10 @@
  * )
 */
 
-import { h, defineComponent, watchEffect, Teleport, Fragment, PropType, ExtractPropTypes } from 'vue'
+import { h, defineComponent, watch, Teleport, Fragment, PropType, ExtractPropTypes } from 'vue'
 import { usePopup } from './'
 
-export const PopupProps = {
-  // component options
-  visible: {
-    type: Boolean,
-    default: false
-  },
-  clone: {
-    type: Boolean,
-    default: false
-  },
-  // UI options
+export const PopupUIProps = {
   border: {
     type: Boolean as PropType<boolean>,
     default: true
@@ -37,29 +27,50 @@ export const PopupProps = {
   },
   closeButton: {
     type: Boolean as PropType<boolean>,
-    default: false
+    default: true
   }
 }
 
 export const getOtherProps = (
-  { visible, clone, border, maskClose, scrollClose, closeButton, ...others }
-  : ExtractPropTypes<typeof PopupProps>
+  { border, maskClose, scrollClose, closeButton, ...others }
+  : ExtractPropTypes<typeof PopupUIProps>
 ) => others
 
 export default defineComponent({
   name: 'Popup',
-  props: PopupProps,
+  props: {
+    // component options
+    visible: {
+      type: Boolean,
+      default: false
+    },
+    clone: {
+      type: Boolean,
+      default: false
+    },
+    // UI options
+    ...PopupUIProps
+  },
   setup(props, context) {
     const popup = usePopup()
     const { clone, visible, ...others } = props
 
-    watchEffect(() => {
-      props.visible
+    watch(
+      () => props.visible,
+      visible => visible
         ? popup.visible(others)
         : popup.hidden()
-    }, { flush: 'sync' })
+    )
 
-    // TODO:  onClose emit
+    watch(
+      () => popup.state.visibility,
+      visibility => {
+        if (!visibility) {
+          context.emit('update:visible', false)
+          context.emit('close')
+        }
+      }
+    )
 
     return () => {
       const renderSlotNode = () => context.slots.default?.()

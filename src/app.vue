@@ -25,7 +25,7 @@
   import { useGlobalState } from '/@/state'
   import { useTheme } from '/@/services/theme'
   import EmojiRain from '/@/components/widget/emoji-rain.vue'
-  import PcMain from '/@/components/layout/pc/main-new.vue'
+  import PcMain from '/@/components/layout/pc/main.vue'
   import MobileMain from '/@/components/layout/mobile/main.vue'
 
   export default defineComponent({
