@@ -1,6 +1,6 @@
 <template>
-  <div id="emoji-rain" :class="{ active: kichikuing }">
-    <canvas v-if="chambering" ref="rainBase" class="rain-base"></canvas>
+  <div id="emoji-rain" :class="{ active: state.kichikuing }">
+    <canvas v-if="state.chambering" ref="rainBase" class="rain-base"></canvas>
   </div>
 </template>
 
@@ -26,33 +26,29 @@
 
       const luanchEmojiRain = options => {
         if (!state.chambering && !state.kichikuing) {
-          // @ts-ignore
-          rainBase.value.width = document.documentElement.clientWidth || document.body.clientWidth
-          // @ts-ignore
-          rainBase.value.height = document.documentElement.clientHeight || document.body.clientHeight
           state.chambering = true
           nextTick(() => {
-            let emoji233333 = new Emoji233333({
-              base: rainBase,
+            // @ts-ignore
+            rainBase.value.width = document.documentElement.clientWidth || document.body.clientWidth
+            // @ts-ignore
+            rainBase.value.height = document.documentElement.clientHeight || document.body.clientHeight
+            new Emoji233333({
+              base: rainBase.value,
               scale: 0.7,
               speed: 12,
               increaseSpeed: 0.4,
               density: 5,
               staggered: true,
-              emoji: getFileCDNUrl('/images/emojis/normal.png'),
+              emoji: getFileCDNUrl('/images/emojis/funny.png'),
               ...options,
-              onStart: () => {
+              onStart() {
                 state.kichikuing = true
               },
-              onEnded: () => {
+              onEnded() {
                 state.kichikuing = false
                 state.chambering = false
-                nextTick(() => {
-                  emoji233333 = null
-                })
               }
-            })
-            emoji233333.launch()
+            }).launch()
           })
         }
       }
@@ -61,7 +57,10 @@
         window.luanchEmojiRain = luanchEmojiRain
       })
 
-      return { rainBase }
+      return {
+        state,
+        rainBase
+      }
     }
   })
 </script>

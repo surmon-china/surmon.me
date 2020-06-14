@@ -7,35 +7,34 @@
   </div>
 </template>
 
-<script>
-  export default {
+<script lang="ts">
+  import { defineComponent, ref, computed, reactive, onMounted, onBeforeUnmount } from 'vue'
+  export default defineComponent({
     name: 'GlobalCursor',
-    data() {
-      return { x: 0, y: 0 }
-    },
-    mounted() {
-      document.addEventListener('mousemove', this.getCursorPosition)
-    },
-    beforeDestroy() {
-      document.removeEventListener('mousemove', this.getCursorPosition)
-    },
-    methods: {
-      getCursorPosition(event) {
-        this.x = event.clientY
-        this.y = event.clientX
+    setup() {
+      const state = reactive({ x: 0, y: 0 })
+      const updateCursorPosition = (event: MouseEvent) => {
+        state.x = event.clientY
+        state.y = event.clientX
       }
-    },
-    computed: {
-      positionStyle() {
-        return {
-          transform: `translate3d(${this.y}px, ${this.x}px, 0)`
-        }
+
+      const positionStyle = computed(() => ({
+        transform: `translate3d(${state.y}px, ${state.x}px, 0)`
+      }))
+
+      onMounted(() => document.addEventListener('mousemove', updateCursorPosition))
+      onBeforeUnmount(() => document.removeEventListener('mousemove', updateCursorPosition))
+
+      return {
+        positionStyle
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .global-cursor {
     position: fixed;
     top: 0;

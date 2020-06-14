@@ -1,17 +1,34 @@
 /**
- * @file 滑动到任何目的地
- * @module services/scroller
+ * @file Scroll to anywhere
+ * @module service/scroll-to
  * @author Surmon <https://github.com/surmon-china>
  */
 
-const BezierEasing = require('bezier-easing')
-type ElementEvents = string[]
+import BezierEasing from 'bezier-easing'
+
+export const Easing = {
+  ease: [0.25, 0.1, 0.25, 1.0],
+  linear: [0, 0.0, 1, 1.0],
+  easeIn: [0.42, 0.0, 1, 1.0],
+  easeOut: [0, 0.0, 0.58, 1.0],
+  easeInOut: [0.42, 0.0, 0.58, 1.0]
+}
+
+enum ElementEvent {
+  scroll = 'scroll',
+  mousedown = 'mousedown',
+  wheel = 'wheel',
+  DOMMouseScroll = 'DOMMouseScroll',
+  mousewheel = 'mousewheel',
+  keyup = 'keyup',
+  touchmove = 'touchmove'
+}
 
 const _ = {
   $(selector: string) {
     return document.querySelector(selector)
   },
-  on(element: Element, events: ElementEvents, handler: $TODO) {
+  on(element: Element, events: ElementEvent[], handler: $TODO) {
     if (!Array.isArray(events)) {
       events = [events]
     }
@@ -19,7 +36,7 @@ const _ = {
       element.addEventListener(event, handler, { passive: true })
     })
   },
-  off(element: Element, events: ElementEvents, handler: $TODO) {
+  off(element: Element, events: ElementEvent[], handler: $TODO) {
     if (!Array.isArray(events)) {
       events = [events]
     }
@@ -29,27 +46,19 @@ const _ = {
   }
 }
 
-export const Easing = {
-  ease: [0.25, 0.1, 0.25, 1.0],
-  linear: [0, 0.0, 1, 1.0],
-  'ease-in': [0.42, 0.0, 1, 1.0],
-  'ease-out': [0, 0.0, 0.58, 1.0],
-  'ease-in-out': [0.42, 0.0, 0.58, 1.0]
-}
-
 export const scrollTo = (target: string | number | Element, duration = 500, options: $TODO) => {
   options = options || {}
   options.easing = Easing.ease
 
   const page = _.$('html, body') as Element
-  const events: ElementEvents = [
-    'scroll',
-    'mousedown',
-    'wheel',
-    'DOMMouseScroll',
-    'mousewheel',
-    'keyup',
-    'touchmove'
+  const events: ElementEvent[] = [
+    ElementEvent.scroll,
+    ElementEvent.mousedown,
+    ElementEvent.wheel,
+    ElementEvent.DOMMouseScroll,
+    ElementEvent.mousewheel,
+    ElementEvent.keyup,
+    ElementEvent.touchmove
   ]
 
   let abort = false
@@ -95,11 +104,17 @@ export const scrollTo = (target: string | number | Element, duration = 500, opti
     }
   }
 
-  if (!diff) return
+  if (!diff) {
+    return
+  }
 
   window.requestAnimationFrame(function step(timestamp) {
-    if (abort) return done()
-    if (!start) start = timestamp
+    if (abort) {
+      return done()
+    }
+    if (!start) {
+      start = timestamp
+    }
 
     const time = timestamp - start
     let progress = Math.min(time / duration, 1)

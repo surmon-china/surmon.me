@@ -3,11 +3,11 @@
     <transition name="module" mode="out-in">
       <div
         ref="picture-box"
-        :key="currentWallpaperUrl"
+        :key="currentWallpaper.humanizedImageUrl"
         class="picture-box"
         :title="currentWallpaper.copyright"
         :style="{
-          backgroundImage: `url(${currentWallpaperUrl})`
+          backgroundImage: `url(${currentWallpaper.humanizedImageUrl})`
         }"
       />
     </transition>
@@ -48,37 +48,39 @@
   </div>
 </template>
 
-<script>
-  export default {
+<script lang="ts">
+  import { defineComponent, ref, computed, toRef } from 'vue'
+  import { useStore } from '/@/store'
+  import { useGlobalState } from '/@/state'
+  import { useI18n } from '/@/services/i18n'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { GAEventActions, GAEventTags } from '/@/constants/ga'
+
+  export default defineComponent({
     name: 'WallpaperWall',
-    data() {
+    setup() {
+      const store = useStore()
+      const i18n = useI18n()
+      const globalState = useGlobalState()
+      const index = ref(0)
+
+      // TODO
+      const wallpapers = computed<any[]>(() => store.getters['wallpaper/parpers'](i18n.language))
+      const currentWallpaper = computed(() => {
+        return wallpapers.value?.length && wallpapers.value?.[index.value]
+      })
+
+      const canPrev = computed(() => index.value > 0)
+      const canNext = computed(() => wallpapers.value ? (index.value < wallpapers.value.length - 1) : false)
+
       return {
-        index: 0
-      }
-    },
-    methods: {
-      close() {
-        this.$store.commit('global/toggleUpdateWallpaperOnState', false)
-      }
-    },
-    computed: {
-      wallpapers() {
-        return this.$store.getters['wallpaper/parpers']
-      },
-      currentWallpaper() {
-        return this.wallpapers?.length && this.wallpapers?.[this.index]
-      },
-      currentWallpaperUrl() {
-        return this.currentWallpaper?.humanizedImageUrl
-      },
-      canPrev() {
-        return this.index > 0
-      },
-      canNext() {
-        return this.wallpapers ? (this.index < this.wallpapers.length - 1) : false
+        close: globalState.switchTogglers.wallpaper,
+        currentWallpaper,
+        canPrev,
+        canNext
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>

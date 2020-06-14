@@ -1,168 +1,102 @@
 <template>
-  <div id="app-main">
+  <div class="pc-main">
     <client-only>
       <figure class="widget">
         <background />
         <wallflower />
-        <barrage />
-        <wallpaper-switch v-if="!isFullViewWidth" />
-        <theme-switch v-if="!isFullViewWidth" />
-        <language v-if="!isFullViewWidth" />
-        <tool-box v-if="isNotFullColPage" />
-        <share-box v-if="!isFullViewWidth" class="sidebar-share" />
-        <transition name="fade">
-          <MyMap v-if="onMyMap" key="my-map" />
-        </transition>
-        <transition name="fade">
-          <wallpaper-wall v-if="onWallpaper" key="wallpaper-wall" />
-        </transition>
+        <template v-if="!layoutColumn.isFullScreenLayout">
+          <language />
+          <theme />
+          <share />
+          <wallpaper />
+          <template v-if="!layoutColumn.isFullColumeLayout">
+            <toolbox />
+          </template>
+        </template>
       </figure>
     </client-only>
     <header-view />
     <main
       id="main"
       class="main-container"
-      :class="{
-        'full-view': isFullViewWidth
-      }"
+      :class="{ 'layout-full-page': layoutColumn.isFullScreenLayout }"
     >
-      <nav-view v-if="!isThreeColumns" />
+      <nav-view v-if="!layoutColumn.isFullScreenLayout" />
       <div
         id="main-content"
         class="main-content"
         :class="{
-          'two-column': isTwoColumns,
-          'three-column': isThreeColumns,
-          'full-view': isFullViewWidth
+          'layout-normal': layoutColumn.isNormalLayout,
+          'layout-full-column': layoutColumn.isFullColumeLayout,
+          'layout-full-page': layoutColumn.isFullScreenLayout
         }"
       >
-        <nuxt :nuxt-child-key="$route.name" />
-        <!-- <transition name="fade" mode="out-in">
-          <suspense>
-            <template #default>
-              <router-view />
-            </template>
-            <template #fallback>
-              <loading />
-            </template>
-          </suspense>
-        </transition> -->
+        <slot />
       </div>
-      <aside-view v-if="!isTwoColumns && !isThreeColumns" key="aside" />
+      <!-- <aside-view v-if="layoutColumn.isNormalLayout" key="aside" /> -->
     </main>
     <footer-view />
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import { defineComponent, ref } from 'vue'
   import { mapState } from 'vuex'
   import { isClient } from '/@/vuniversal/env'
-  import NavView from './nav'
-  import HeaderView from './header'
-  import FooterView from './footer'
-  import AsideView from './aside/main'
-  import Barrage from '/@/components/widget/barrage/main'
-  import Wallflower from '/@/components/widget/wallflower/garden'
-  import WallpaperWall from '/@/components/widget/wallpaper/wall'
-  import WallpaperSwitch from '/@/components/widget/wallpaper/switch'
-  import MyMap from '/@/components/widget/my-map'
-  import Background from '/@/components/widget/background'
-  import Language from '/@/components/widget/language'
-  import ToolBox from '/@/components/widget/toolbox'
-  import ShareBox from '/@/components/widget/share'
-  import ThemeSwitch from '/@/components/widget/theme'
-  import musicPlayer from '/@/services/music-player'
-  import { startTitleEgg, resetTitle } from '/@/services/title-egg'
-  import { isServiceRoute } from '/@/services/route-validator'
-  import systemConstants from '/@/constants/system'
+  import NavView from './nav.vue'
+  // import AsideView from './aside/main'
+  import HeaderView from './header.vue'
+  import FooterView from './footer.vue'
+  // import Barrage from '/@/components/widget/barrage/main'
+  import Wallflower from '/@/components/widget/wallflower/garden.vue'
+  import Wallpaper from '/@/components/widget/wallpaper/main.vue'
+  import Background from '/@/components/widget/background.vue'
+  import Language from '/@/components/widget/language.vue'
+  import Theme from '/@/components/widget/theme.vue'
+  import Share from '/@/components/widget/share.vue'
+  import Toolbox from '/@/components/widget/toolbox.vue'
+  import { useGlobalState } from '/@/state'
 
-  export default {
+  export default defineComponent({
     name: 'PcMain',
     components: {
-      // 部件/开关
-      ToolBox,
-      ShareBox,
+      Share,
       Language,
-      WallpaperSwitch,
-      ThemeSwitch,
-      // 实体
-      MyMap,
+      Wallpaper,
+      Theme,
+      Toolbox,
       Wallflower,
-      WallpaperWall,
       Background,
-      Barrage,
-      // 布局
+      // Barrage,
       HeaderView,
       FooterView,
-      AsideView,
+      // AsideView,
       NavView
     },
-    computed: {
-      ...mapState('global', [
-        'onMyMap',
-        'onWallpaper',
-        'isTwoColumns',
-        'isThreeColumns'
-      ]),
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
-      },
-      isFullViewWidth() {
-        return isServiceRoute(this.$route.name)
-      },
-      isNotFullColPage() {
-        return ![
-          systemConstants.Route.App,
-          systemConstants.Route.Music,
-          systemConstants.Route.Service
-        ].includes(this.$route.name)
-      }
-    },
-    methods: {
-      autoEggWhenTabActive() {
-        document.addEventListener(
-          'visibilitychange',
-          event => {
-            event.target.hidden || event.target.webkitHidden
-              ? startTitleEgg()
-              : resetTitle()
-          },
-          false
-        )
-      }
-    },
-    watch: {
-      isEnLang: {
-        immediate: true,
-        handler(isEnLang) {
-          this.$store.dispatch('wallpaper/fetchPapers', isEnLang)
-        }
-      }
-    },
-    mounted() {
-      if (isClient) {
-        this.autoEggWhenTabActive()
-        this.$store.commit('global/resetTheme')
-        this.$root.$musicPlayer = musicPlayer
-        musicPlayer.ready || musicPlayer.init()
+    setup() {
+      const globalState = useGlobalState()
+      return {
+        layoutColumn: globalState.layoutColumn
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
-  #app-main {
+  @import 'src/assets/styles/init.scss';
+
+  .pc-main {
     padding-top: $mobile-header-height + $lg-gap;
 
     @media screen and (max-width: 1200px) {
       #theme,
       #language,
-      .sidebar-share {
+      .main-share {
         display: none !important;
       }
     }
 
-    .sidebar-share {
+    & ::v-deep(.share) {
       position: fixed;
       top: 12%;
       left: 0;
@@ -176,7 +110,7 @@
         opacity: 1;
       }
 
-      &::v-deep(> .share-ejector) {
+      > .share-ejector {
         width: 3rem;
         height: 3rem;
         line-height: 3rem;
@@ -203,7 +137,7 @@
       justify-content: space-between;
       width: $container-width;
 
-      &.full-view {
+      &.layout-full-page {
         width: 100%;
       }
 
@@ -225,16 +159,16 @@
           overflow-y: auto;
         }
 
-        &.two-column {
+        &.layout-normal {
           flex-grow: 1;
         }
 
-        &.three-column {
+        &.layout-full-column {
           width: 100%;
           margin: 0;
         }
 
-        &.full-view {
+        &.layout-full-page {
           width: 100%;
           margin: -$lg-gap 0;
         }

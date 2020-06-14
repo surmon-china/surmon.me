@@ -1,10 +1,10 @@
 <template>
   <div id="wallflower">
-    <ul v-if="flowers.length" class="garden-box">
+    <ul v-if="state.flowers.length" class="garden-box">
       <flower
-        v-for="(flower, index) in flowers"
+        v-for="(flower, index) in state.flowers"
         :key="flower.id"
-        :zindex="index + 1"
+        :z-index="index + 1"
         :options="flower"
         @end="handleAnimationEnd"
       />
@@ -12,51 +12,65 @@
   </div>
 </template>
 
-<script>
-  import Flower from './flower'
-  export default {
+<script lang="ts">
+  import { defineComponent, ref, computed, reactive, onMounted, onBeforeUnmount } from 'vue'
+  import Flower from './flower.vue'
+
+  const FLOWERS = ['富强', '民主', '文明', '和谐', '自由', '平等', '公正', '法治', '爱国', '敬业', '诚信', '友善']
+
+  export interface IFlower {
+    id: number
+    x: number
+    y: number
+    text: string
+  }
+
+  export default defineComponent({
     name: 'WallFlowerGarden',
     components: {
       Flower
     },
-    data() {
-      return {
+    setup() {
+      const state = reactive({
         id: 0,
-        flowers: [],
-        flowerContents: ['富强', '民主', '文明', '和谐', '自由', '平等', '公正', '法治', '爱国', '敬业', '诚信', '友善'],
+        flowers: [] as IFlower[],
         contentIndex: -1
-      }
-    },
-    methods: {
-      eventHandle(event) {
-        this.contentIndex++
-        if (this.contentIndex >= this.flowerContents.length) {
-          this.contentIndex = 0
+      })
+
+      const handleClick = (event: MouseEvent) => {
+        state.contentIndex++
+        if (state.contentIndex >= FLOWERS.length) {
+          state.contentIndex = 0
         }
-        this.flowers.push({
-          id: ++this.id,
+        state.flowers.push({
+          id: ++state.id,
           x: event.x || event.clientX,
           y: event.y || event.clientY,
-          text: this.flowerContents[this.contentIndex]
-        })
-      },
-      handleAnimationEnd(id) {
-        const targetIndex = this.flowers.findIndex(flower => flower.id === id)
+          text: FLOWERS[state.contentIndex]
+        } as IFlower)
+      }
+
+      onMounted(() => window.addEventListener('click', handleClick))
+      onBeforeUnmount(() => window.removeEventListener('click', handleClick))
+
+      const handleAnimationEnd = (id: number) => {
+        const targetIndex = state.flowers.findIndex(flower => flower.id === id)
         if (targetIndex > -1) {
-          this.flowers.splice(targetIndex, 1)
+          state.flowers.splice(targetIndex, 1)
         }
       }
-    },
-    mounted() {
-      window.addEventListener('click', this.eventHandle)
-    },
-    beforeDestroy() {
-      window.removeEventListener('click', this.eventHandle)
+
+      return {
+        state,
+        handleAnimationEnd
+      }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   #wallflower {
     position: fixed;
     width: 100%;

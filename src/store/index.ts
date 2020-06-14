@@ -5,7 +5,7 @@
  */
 
 import { Request } from 'express'
-import { createStore, useStore as useVuexStore } from 'vuex'
+import { Store, createStore, useStore as useVuexStore } from 'vuex'
 import optionModule, { OptionModuleActions } from './option'
 import announcementModule from './announcement'
 import categoryModule, { CategoryModuleActions } from './category'
@@ -16,7 +16,10 @@ import vlogModule from './vlog'
 
 export type IRootState = any
 export type IRootStore = ReturnType<typeof createUniversalStore>
-export const createUniversalStore = () => createStore({
+export const createUniversalStore = () => createStore<{
+  // TODO:!!!
+  announcement: Store<typeof announcementModule>
+}>({
   modules: {
     announcement: announcementModule,
     category: categoryModule,
@@ -27,6 +30,8 @@ export const createUniversalStore = () => createStore({
     vlog: vlogModule
   }
 })
+
+type test = Store<typeof announcementModule>
 
 export function useStore(): IRootStore {
   return useVuexStore()

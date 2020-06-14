@@ -11,22 +11,26 @@
       <div class="down"></div>
     </div>
   </div>
-  <popup :visible="isOnWallpaper">
-    <span>sadasd 阿三大声道</span>
+  <popup v-model:visible="isOnWallpaper">
+    <wallpapers />
   </popup>
 </template>
 
 <script lang="ts">
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { GAEventActions, GAEventTags } from '/@/constants/ga'
   import { defineComponent, ref, computed, toRef } from 'vue'
   import { useTheme, Theme } from '/@/services/theme'
   import { useI18n } from '/@/services/i18n'
   import { useGlobalState } from '/@/state'
   import { useStore } from '/@/store'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { GAEventActions, GAEventTags } from '/@/constants/ga'
+  import Wallpapers from './wall.vue'
 
   export default defineComponent({
     name: 'Wallpaper',
+    components: {
+      Wallpapers
+    },
     setup() {
       const i18n = useI18n()
       const theme = useTheme()
@@ -61,6 +65,10 @@
 
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
+
+  .tess {
+    background-color: red;
+  }
 
   #wallpaper {
     position: fixed;
