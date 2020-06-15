@@ -5,7 +5,7 @@
  */
 
 import * as amplitude from 'amplitudejs'
-import { App, Plugin, inject, ref, reactive, computed } from 'vue'
+import { App, Plugin, inject, readonly, reactive, computed } from 'vue'
 import { getFileCDNUrl, getFileProxyUrl } from '/@/transformers/url'
 import http from './http'
 
@@ -327,7 +327,7 @@ const createMusicPlayer = (config: MusicConfig) => {
   }
 
   return {
-    state,
+    state: readonly(state),
     currentSong,
     currentSongPicUrl,
     currentSongLrcData,
@@ -360,6 +360,6 @@ export const createMusic = (config: MusicConfig): Music & Plugin => {
   }
 }
 
-export const useMusicPlayer = (): Music => {
+export const useMusic = (): Music => {
   return inject(MusicPlayerSymbol) as Music
 }

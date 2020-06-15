@@ -6,57 +6,57 @@
         <span class="header-slogan" v-i18n="LANGUAGE_KEYS.APP_SLOGAN"></span>
         <router-link to="/" class="header-link" :title="t(LANGUAGE_KEYS.APP_SLOGAN)" />
       </div>
-      <!-- <div class="header-player">
+      <div class="header-player" v-if="music">
         <div class="panel">
           <button
             class="prev-song button"
-            :disabled="!musicPlayer.ready || musicPlayer.index === 0"
-            @click="musicPlayer.prevSong"
+            :disabled="!music.state.ready || music.state.index === 0"
+            @click="music.prevSong"
           >
             <i class="iconfont icon-music-prev"></i>
           </button>
           <button
             class="toggle-play button"
-            :disabled="!musicPlayer.ready"
-            @click="musicPlayer.togglePlay"
+            :disabled="!music.state.ready"
+            @click="music.togglePlay"
           >
             <i
               class="iconfont"
-              :class="musicPlayer.playing ? 'icon-music-pause' : 'icon-music-play'"
+              :class="music.state.playing ? 'icon-music-pause' : 'icon-music-play'"
             ></i>
           </button>
           <button
             class="next-song button"
-            :disabled="!musicPlayer.ready"
-            @click="musicPlayer.nextSong"
+            :disabled="!music.state.ready"
+            @click="music.nextSong"
           >
             <i class="iconfont icon-music-next"></i>
           </button>
           <button
             class="muted-toggle button"
-            :disabled="!musicPlayer.ready"
-            @click="musicPlayer.toggleMuted"
+            :disabled="!music.state.ready"
+            @click="music.toggleMuted"
           >
             <i
               class="iconfont"
-              :class="musicPlayer.muted ? 'icon-music-muted' : 'icon-music-volume'"
+              :class="music.state.muted ? 'icon-music-muted' : 'icon-music-volume'"
             ></i>
           </button>
         </div>
-        <div v-if="currentSong" class="song">
+        <div v-if="music.currentSong" class="song">
           <router-link
             to="/music"
             class="link"
-            :title="`${currentSong.name} / ${currentSong.album || 'unknow'}`"
+            :title="`${music.currentSong.name} / ${music.currentSong.album || 'unknow'}`"
           >
-            <span>{{ currentSong.name }} By {{ currentSong.artist }} / {{ currentSong.album || 'unknow' }}</span>
+            <span>{{ music.currentSong.name }} By {{ music.currentSong.artist }} / {{ music.currentSong.album || 'unknow' }}</span>
           </router-link>
         </div>
-        <div v-else class="song">{{ $i18n.text.music.empty }}</div>
-      </div> -->
+        <div v-else class="song" v-i18n="LANGUAGE_KEYS.MUSIC_PLACEHOLDER"></div>
+      </div>
     </div>
     <div class="pre-load">
-      <!-- <uimage defer :src="musicPlayer.currentSongPicUrl" alt="song-thumb" /> -->
+      <uimage defer :src="music.currentSongPicUrl" v-if="music" alt="song-thumb" />
       <uimage defer cdn src="/images/sponsor.png" alt="sponsor" />
       <uimage defer cdn src="/images/app-hot.png" alt="app-download" />
       <uimage defer cdn src="/images/app-logo.png" alt="app-logo" />
@@ -72,17 +72,18 @@
 <script lang="ts">
   import { defineComponent, onMounted, ref, computed } from 'vue'
   import { useI18n } from '/@/services/i18n'
+  import { useMusic } from '/@/services/music'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  // import { useMusicPlayer } from '/@/services/music-player'
 
   export default defineComponent({
     name: 'PcHeader',
     setup() {
       const i18n = useI18n()
-      // const musicPlayer = useMusicPlayer()
+      const music = useMusic()
+
       return {
-        // musicPlayer
-        ...useI18n(),
+        music,
+        t: i18n.t,
         LANGUAGE_KEYS
       }
     }

@@ -39,7 +39,7 @@
 
       const startAnimation = () => {
         nextTick(() => {
-          // State animation
+          // Start animation
           setTimeout(() => {
             state.playing = true
           })

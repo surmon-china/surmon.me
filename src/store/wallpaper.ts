@@ -15,6 +15,9 @@ export enum WallpaperModuleMutations {
   UpdateFetching = 'updateFetching',
   UpdatePapers = 'updatePapers'
 }
+export enum WallpaperModuleGetters {
+  Parpers = 'parpers'
+}
 export enum WallpaperModuleActions {
   FetchPapers = 'fetchPapers'
 }
@@ -27,7 +30,7 @@ const state = () => ({
 })
 
 export const getters: GetterTree<WallpaperState, IRootState> = {
-  parpers(state) {
+  [WallpaperModuleGetters.Parpers](state) {
     return (language: Language) => state.data[language]
   }
 }

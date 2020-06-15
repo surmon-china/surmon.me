@@ -2,6 +2,7 @@
   <div class="pc-main">
     <client-only>
       <figure class="widget">
+        <barrage />
         <background />
         <wallflower />
         <template v-if="!layoutColumn.isFullScreenLayout">
@@ -19,21 +20,22 @@
     <main
       id="main"
       class="main-container"
-      :class="{ 'layout-full-page': layoutColumn.isFullScreenLayout }"
+      :class="{ 'full-page': layoutColumn.isFullScreenLayout }"
     >
-      <nav-view v-if="!layoutColumn.isFullScreenLayout" />
+      <nav-view v-if="layoutColumn.isNormalLayout || layoutColumn.isWideLayout" />
       <div
         id="main-content"
         class="main-content"
         :class="{
           'layout-normal': layoutColumn.isNormalLayout,
+          'layout-wide': layoutColumn.isWideLayout,
           'layout-full-column': layoutColumn.isFullColumeLayout,
           'layout-full-page': layoutColumn.isFullScreenLayout
         }"
       >
         <slot />
       </div>
-      <!-- <aside-view v-if="layoutColumn.isNormalLayout" key="aside" /> -->
+      <aside-view v-if="layoutColumn.isNormalLayout" />
     </main>
     <footer-view />
   </div>
@@ -44,10 +46,10 @@
   import { mapState } from 'vuex'
   import { isClient } from '/@/vuniversal/env'
   import NavView from './nav.vue'
-  // import AsideView from './aside/main'
+  import AsideView from './aside/main.vue'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
-  // import Barrage from '/@/components/widget/barrage/main'
+  import Barrage from '/@/components/widget/barrage/main.vue'
   import Wallflower from '/@/components/widget/wallflower/garden.vue'
   import Wallpaper from '/@/components/widget/wallpaper/main.vue'
   import Background from '/@/components/widget/background.vue'
@@ -67,10 +69,10 @@
       Toolbox,
       Wallflower,
       Background,
-      // Barrage,
+      Barrage,
       HeaderView,
       FooterView,
-      // AsideView,
+      AsideView,
       NavView
     },
     setup() {
@@ -137,7 +139,7 @@
       justify-content: space-between;
       width: $container-width;
 
-      &.layout-full-page {
+      &.full-page {
         width: 100%;
       }
 
