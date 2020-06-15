@@ -21,7 +21,8 @@
   import { useTheme, Theme } from '/@/services/theme'
   import { useI18n } from '/@/services/i18n'
   import { useGlobalState } from '/@/state'
-  import { useStore } from '/@/store'
+  import { useStore, getNamespace, Modules } from '/@/store'
+  import { WallpaperModuleGetters, WallpaperModuleActions } from '/@/store/wallpaper'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/ga'
   import Wallpapers from './wall.vue'
@@ -38,18 +39,23 @@
       const globalState = useGlobalState()
       const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
       const isOnWallpaper = toRef(globalState.switchBox, 'wallpaper')
+      const wallpapers = computed<any[]>(() => {
+        return store.getters[
+          getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Parpers)
+        ](i18n.language)
+      })
+      
       const toggleWallpaper = () => {
         // this.$ga.event(
         //   '今日壁纸',
         //   GAEventActions.Toggle,
         //   GAEventTags.Tool
         // )
-        globalState.switchTogglers.wallpaper()
-        // if (store.getters['wallpaper/parpers']) {
-        //   globalState.switchTogglers.wallpaper()
-        // } else {
-        //   alert('可能 Bing 又被墙了吧我有什么办法！')
-        // }
+        if (wallpapers?.length) {
+          globalState.switchTogglers.wallpaper()
+        } else {
+          alert('可能 Bing 又被墙了吧我有什么办法！')
+        }
       }
 
       return {

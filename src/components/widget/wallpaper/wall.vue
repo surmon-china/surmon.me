@@ -49,8 +49,9 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, toRef } from 'vue'
-  import { useStore } from '/@/store'
+  import { defineComponent, ref, computed, watch, toRef } from 'vue'
+  import { useStore, getNamespace, Modules } from '/@/store'
+  import { WallpaperModuleGetters, WallpaperModuleActions } from '/@/store/wallpaper'
   import { useGlobalState } from '/@/state'
   import { useI18n } from '/@/services/i18n'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -59,19 +60,33 @@
   export default defineComponent({
     name: 'WallpaperWall',
     setup() {
-      const store = useStore()
       const i18n = useI18n()
+      const store = useStore()
       const globalState = useGlobalState()
       const index = ref(0)
 
-      // TODO
-      const wallpapers = computed<any[]>(() => store.getters['wallpaper/parpers'](i18n.language))
+      const wallpapers = computed<any[]>(() => {
+        return store.getters[
+          getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Parpers)
+        ](i18n.language)
+      })
       const currentWallpaper = computed(() => {
         return wallpapers.value?.length && wallpapers.value?.[index.value]
       })
 
       const canPrev = computed(() => index.value > 0)
       const canNext = computed(() => wallpapers.value ? (index.value < wallpapers.value.length - 1) : false)
+
+      watch(
+        () => i18n.language,
+        language => {
+          store.dispatch(
+            getNamespace(Modules.Wallpaper, WallpaperModuleActions.FetchPapers),
+            language
+          )
+        },
+        { immediate: true, flush: 'post' }
+      )
 
       return {
         close: globalState.switchTogglers.wallpaper,

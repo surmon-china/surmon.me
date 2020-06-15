@@ -17,10 +17,12 @@ import { Language } from '/@/language/data'
 import { createVueApp } from './main'
 
 const { app, router, store, globalState, theme, i18n } = createVueApp({ target: VueEnv.Client })
+const music = createMusic({ albumId: MUSIC_ALBUM_ID, autoStart: false })
 const defer = createDefer()
 
 // app.use(Swiper)
 // app.use(Adsense)
+app.use(music)
 app.use(defer, { exportToGlobal: true })
 app.use(createPopup(), { exportToGlobal: true })
 
@@ -31,20 +33,17 @@ i18n.set(globalState.userAgent.isZhUser ? Language.Zh : Language.En)
 
 app.mount('#app').$nextTick(() => {
   exportLozadToGlobal()
-  enableCopyright()
   enableAnalytics(app, router)
 
   // Desktop
   if (!globalState.userAgent.isMobile) {
-    const music = createMusic({ albumId: MUSIC_ALBUM_ID })
-    app.use(music)
     defer.addTask(music.start)
-    // store.dispatch('wallpaper/fetchPapers', i18n.language)
     enableAutoTitleSurprise()
   }
 
   // Production
   if (isProd) {
+    enableCopyright()
     enableBaiduSeoPush(router)
     consoleSolgan(i18n)
   }

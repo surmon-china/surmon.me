@@ -16,10 +16,10 @@ export enum AnnouncementModuleActions {
   FetchList = 'fetchList'
 }
 
-const state = () => ({
+const state ={
   fetching: false,
   data: [] as Array<any>
-})
+}
 
 const mutations: MutationTree<AnnouncementState> = {
   [AnnouncementModuleMutations.UpdateFetching](state, action) {
@@ -52,5 +52,5 @@ const announcementModule: Module<AnnouncementState, IRootState> = {
   actions
 }
 
-export type AnnouncementState = ReturnType<typeof state>
+export type AnnouncementState = typeof state
 export default announcementModule

@@ -14,8 +14,9 @@ export enum ImageExt {
 
 export enum LayoutColumn {
   Normal = 0,
-  Full = 1,
-  Screen = 2
+  Wide = 1,
+  Full = 2,
+  Screen = 3
 }
 
 export interface GlobalStateConfig {
@@ -48,6 +49,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     layout: layoutValue,
     setLayoutColumn,
     isNormalLayout: computed(() => layoutValue.value === LayoutColumn.Normal),
+    isWideLayout: computed(() => layoutValue.value === LayoutColumn.Wide),
     isFullColumeLayout: computed(() => layoutValue.value === LayoutColumn.Full),
     isFullScreenLayout: computed(() => layoutValue.value === LayoutColumn.Screen)
   }

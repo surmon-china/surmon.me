@@ -5,36 +5,54 @@
  */
 
 import { Request } from 'express'
-import { Store, createStore, useStore as useVuexStore } from 'vuex'
-import optionModule, { OptionModuleActions } from './option'
-import announcementModule from './announcement'
-import categoryModule, { CategoryModuleActions } from './category'
-import tagModule, { TagModuleActions } from './tag'
-import sitemapModule from './sitemap'
-import wallpaperModule from './wallpaper'
-import vlogModule from './vlog'
+import { createStore, useStore as useVuexStore } from 'vuex'
+import optionModule, { OptionState, OptionModuleActions } from './option'
+import announcementModule, { AnnouncementState } from './announcement'
+import categoryModule, { CategoryState, CategoryModuleActions } from './category'
+import tagModule, { TagState, TagModuleActions } from './tag'
+import sitemapModule, { SitemapState } from './sitemap'
+import wallpaperModule, { WallpaperState } from './wallpaper'
+import vlogModule, { VlogState } from './vlog'
 
-export type IRootState = any
+export enum Modules {
+  Announcement = 'announcement',
+  Category = 'category',
+  Tag = 'tag',
+  Sitemap = 'sitemap',
+  Option = 'option',
+  Wallpaper = 'wallpaper',
+  Vlog = 'vlog'
+}
+
+export type IRootState = {
+  [Modules.Announcement]: AnnouncementState
+  [Modules.Category]: CategoryState
+  [Modules.Tag]: TagState
+  [Modules.Sitemap]: SitemapState
+  [Modules.Option]: OptionState
+  [Modules.Wallpaper]: WallpaperState
+  [Modules.Vlog]: VlogState
+}
+
 export type IRootStore = ReturnType<typeof createUniversalStore>
-export const createUniversalStore = () => createStore<{
-  // TODO:!!!
-  announcement: Store<typeof announcementModule>
-}>({
+export const createUniversalStore = () => createStore<IRootState>({
   modules: {
-    announcement: announcementModule,
-    category: categoryModule,
-    tag: tagModule,
-    sitemap: sitemapModule,
-    option: optionModule,
-    wallpaper: wallpaperModule,
-    vlog: vlogModule
+    [Modules.Announcement]: announcementModule,
+    [Modules.Category]: categoryModule,
+    [Modules.Tag]: tagModule,
+    [Modules.Sitemap]: sitemapModule,
+    [Modules.Option]: optionModule,
+    [Modules.Wallpaper]: wallpaperModule,
+    [Modules.Vlog]: vlogModule
   }
 })
 
-type test = Store<typeof announcementModule>
-
-export function useStore(): IRootStore {
+export const useStore = (): IRootStore => {
   return useVuexStore()
+}
+
+export const getNamespace = (moduleName: Modules, target: string) => {
+  return `${moduleName}/${target}`
 }
 
 // -----------------------
