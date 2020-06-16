@@ -1,15 +1,10 @@
 # .eslintignore
 
 *.discard
-node_modules
-build/*.js
-public/*
 .deploy/*
+node_modules
+public/*
 
-src
-src/*
-src/**/*
-src/services/scroller.ts
-src/plugins/ga.js
-src/plugins/copy-right.js
-src/plugins/baidu-seo-push.js
+.eslintrc.js
+*.config.js
+*.json
