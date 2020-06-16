@@ -54,6 +54,8 @@ module.exports = {
       }
     }],
 
+    // 禁止在代码中出现没有被使用到的表达式或值
+    'no-unused-expressions': 'off',
     'import/no-named-as-default-member': 'off',
     'unicorn/prefer-text-content': 'off',
     'import/order': 'off',
@@ -337,9 +339,6 @@ module.exports = {
 
     // 禁止使用不被修改的循环条件
     "no-unmodified-loop-condition": 2,
-
-    // 禁止在代码中出现没有被使用到的表达式或值
-    "no-unused-expressions": [2, { "allowShortCircuit": true, "allowTernary": true }],
 
     // 禁止在代码中出现没有被使用到的标签
     "no-unused-labels": 2,
