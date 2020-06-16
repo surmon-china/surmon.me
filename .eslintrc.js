@@ -27,31 +27,13 @@ module.exports = {
   },
   rules: {
     'vue/no-v-html': 'off',
+    'vue/valid-v-slot': 'off',
+    'vue/valid-template-root': 'off',
     'vue/singleline-html-element-content-newline': 'off',
     'vue/component-definition-name-casing': 'off',
     'vue/require-default-prop': 'off',
-    'vue/valid-v-slot': 'off',
     'vue/component-tags-order': 'off',
     'vue/no-use-v-if-with-v-for': 'off',
-    'vue/max-attributes-per-line': ['warn', {
-      singleline: 4,
-      multiline: {
-        max: 1,
-        allowFirstLine: true
-      }
-    }],
-    'import/order': 'off',
-    'indent': 'off',
-    'space-before-function-paren': 'off',
-    'arrow-parens': 'off',
-    'quotes': 'off',
-    'no-console': 'off',
-
-    // ---------------------BAK!!
-    // Typescript eslint
-    '@typescript-eslint/no-unused-vars': 'off',
-
-    // Vue
     'vue/no-unused-components': 'warn',
     'vue/multiline-html-element-content-newline': 'off',
     'vue/order-in-components': 'off',
@@ -64,10 +46,27 @@ module.exports = {
       "svg": "always",
       "math": "always"
     }],
+    'vue/max-attributes-per-line': ['warn', {
+      singleline: 4,
+      multiline: {
+        max: 1,
+        allowFirstLine: true
+      }
+    }],
 
-    // 其他
     'import/no-named-as-default-member': 'off',
     'unicorn/prefer-text-content': 'off',
+    'import/order': 'off',
+    'indent': 'off',
+    'space-before-function-paren': 'off',
+    'arrow-parens': 'off',
+    'quotes': 'off',
+    'no-console': 'off',
+
+    // ---------------------BAK!!
+    // Typescript eslint
+    '@typescript-eslint/no-unused-vars': 'off',
+
 
     /* Possible Errors*/
 

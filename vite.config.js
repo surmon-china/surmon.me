@@ -6,7 +6,7 @@ module.exports = {
     '/@/': path.resolve(__dirname, './src')
   },
   optimizeDeps: {
-    exclude: ['esm', 'fs-extra', 'socket.io', 'request', 'cross-env']
+    exclude: ['esm', 'fs-extra', 'socket.io', 'request', 'cross-env', '@vue/compiler-sfc']
   },
   rollupPluginVueOptions: {
 
