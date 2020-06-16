@@ -29,6 +29,7 @@ module.exports = {
     'vue/no-v-html': 'off',
     'vue/valid-v-slot': 'off',
     'vue/valid-template-root': 'off',
+    'vue/attributes-order': 'off',
     'vue/singleline-html-element-content-newline': 'off',
     'vue/component-definition-name-casing': 'off',
     'vue/require-default-prop': 'off',

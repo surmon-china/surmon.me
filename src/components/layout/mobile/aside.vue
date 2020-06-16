@@ -64,8 +64,8 @@
 <script lang="ts">
   import * as APP_CONFIG from '/@/config/app.config'
   import { defineComponent, computed } from 'vue'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { getFileCDNUrl } from '/@/transformers/url'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import { useStore } from '/@/store'
 
   export default defineComponent({
@@ -78,7 +78,6 @@
     },
     setup() {
       const store = useStore()
-      console.log('----store', store)
       const gravatar = computed(() => (
         store.state.option.adminInfo.gravatar ||
         getFileCDNUrl('/images/gravatar.jpg')
