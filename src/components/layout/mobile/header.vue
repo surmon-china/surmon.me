@@ -6,7 +6,7 @@
       @submit.stop.prevent="submitSearch()"
     >
       <input
-        :ref="inputElement"
+        ref="inputElement"
         v-model.trim="searchState.keyword"
         type="text"
         class="input"
@@ -46,6 +46,7 @@
     </nav>
   </header>
 </template>
+
 <script lang="ts">
   import * as APP_CONFIG from '/@/config/app.config'
   import { defineComponent, computed, reactive, ref, toRefs, watch, nextTick } from 'vue'

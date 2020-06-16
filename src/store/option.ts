@@ -21,7 +21,7 @@ export enum OptionModuleActions {
 }
 
 const state = () => ({
-  adminInfo: {},
+  adminInfo: {} as any,
   appOption: {
     fetching: false,
     data: null as any
