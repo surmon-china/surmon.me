@@ -2,8 +2,8 @@ import './polyfill'
 
 import { MUSIC_ALBUM_ID } from '/@/config/app.config'
 import { VueEnv, isProd } from '/@/vuniversal/env'
-// import Adsense from '/@/plugins/vue-google-adsense'
-// import Swiper from '/@/plugins/vue-awesome-swiper'
+// import swiper from '/@/services/swiper'
+import adsense from '/@/services/adsense'
 import { createDefer } from '/@/services/defer'
 import { createMusic } from '/@/services/music'
 import { createPopup } from '/@/services/popup'
@@ -16,12 +16,12 @@ import { exportLozadToGlobal } from '/@/services/lozad'
 import { Language } from '/@/language/data'
 import { createVueApp } from './main'
 
-const { app, router, store, globalState, theme, i18n } = createVueApp({ target: VueEnv.Client })
+const { app, router, globalState, theme, i18n } = createVueApp({ target: VueEnv.Client })
 const music = createMusic({ albumId: MUSIC_ALBUM_ID, autoStart: false })
 const defer = createDefer()
 
-// app.use(Swiper)
-// app.use(Adsense)
+// app.use(swiper)
+app.use(adsense)
 app.use(music)
 app.use(defer, { exportToGlobal: true })
 app.use(createPopup(), { exportToGlobal: true })
