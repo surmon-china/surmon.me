@@ -1,13 +1,13 @@
 <template>
   <div class="aside-mammon">
     <swiper
-      ref="swiper"
+      ref="swiperElement"
       class="swiper aside"
       :options="swiperOption"
       @slide-change="handleSwiperSlideChange"
     >
       <swiper-slide
-        v-for="(ad, index) in ads"
+        v-for="(ad, index) in AD_CONFIG.asideSwiper"
         :key="index"
         class="swiper-slide"
       >
@@ -20,16 +20,19 @@
           <img :src="ad.src" alt="aliyun-ad" draggable="false">
         </a>
       </swiper-slide>
-      <div slot="pagination" class="swiper-pagination" />
+      <template #pagination>
+        <div class="swiper-pagination" />
+      </template>
     </swiper>
   </div>
 </template>
 
-<script>
-  import Vue from 'vue'
-  import adConfig from '/@/config/ad.config'
+<script lang="ts">
+  import { defineComponent, ref, computed } from 'vue'
+  import Swiper from 'swiper'
+  import AD_CONFIG from '/@/config/ad.config'
 
-  export default Vue.extend({
+  export default defineComponent({
     name: 'PcAsideMammon',
     props: {
       initIndex: {
@@ -37,65 +40,49 @@
         default: 0
       }
     },
-    computed: {
-      ads: () => adConfig.asideSwiper,
-      swiper: {
-        cache: false,
-        get() {
-          return this.$refs.swiper?.$swiper
-        }
-      },
-      currentSlideRealIndex: {
-        cache: false,
-        get() {
-          return this.swiper?.realIndex
-        }
-      },
-      swiperOption() {
-        return {
-          initialSlide: this.initIndex,
-          loop: true,
-          simulateTouch: false,
-          direction: 'vertical',
-          autoplay: {
-            delay: 2960,
-            disableOnInteraction: false
-          },
-          pagination: {
-            clickable: true,
-            el: '.swiper-pagination'
-          },
-          setWrapperSize: true,
-          autoHeight: true,
-          mousewheel: true,
-          observeParents: true,
-          preloadImages: false,
-          lazy: true
-        }
+    setup(props, context) {
+      const swiperElement = ref<any>(null)
+      const swiperInstance = computed<Swiper>(() => swiperElement.value?.$swiper)
+      const currentSlideRealIndex = computed(() => swiperInstance.value?.realIndex)
+      const handleSwiperSlideChange = () => {
+        context.emit('slide-change', currentSlideRealIndex.value)
       }
-    },
-    methods: {
-      handleSwiperSlideChange() {
-        this.$emit('slide-change', this.currentSlideRealIndex)
+
+      const swiperOption = {
+        initialSlide: props.initIndex,
+        loop: true,
+        simulateTouch: false,
+        direction: 'vertical',
+        autoplay: {
+          delay: 2960,
+          disableOnInteraction: false
+        },
+        pagination: {
+          clickable: true,
+          el: '.swiper-pagination'
+        },
+        setWrapperSize: true,
+        autoHeight: true,
+        mousewheel: true,
+        observeParents: true,
+        preloadImages: false,
+        lazy: true
+      }
+
+      return {
+        swiperElement,
+        swiperOption,
+        currentSlideRealIndex,
+        handleSwiperSlideChange,
+        AD_CONFIG
       }
     }
   })
 </script>
 
-<style lang="scss">
-  .aside.swiper {
-    .swiper-pagination {
-      .swiper-pagination-bullet {
-        &.swiper-pagination-bullet-active {
-          height: $font-size-base;
-          border-radius: 10px;
-        }
-      }
-    }
-  }
-</style>
-
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .aside-mammon {
     width: 100%;
     overflow: hidden;
@@ -118,6 +105,15 @@
             img {
               width: 100%;
               height: auto;
+            }
+          }
+        }
+
+        &::v-deep(.swiper-pagination) {
+          .swiper-pagination-bullet {
+            &.swiper-pagination-bullet-active {
+              height: $font-size-base;
+              border-radius: 10px;
             }
           }
         }

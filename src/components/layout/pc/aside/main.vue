@@ -9,7 +9,7 @@
       />
     </client-only>
     <div class="aside-calendar">
-      <calendar />
+      <calendar @click-day="" />
     </div>
     <transition name="module">
       <div key="ad" class="aside-mammon alimama">
@@ -38,8 +38,8 @@
   import Vue from 'vue'
   import { mapState } from 'vuex'
   import StickyEvents from 'sticky-events'
-  import AsideAd from './ad'
-  import Calendar from './calendar'
+  import AsideAd from './ad.vue'
+  import Calendar from '/@/components/common/calendar.vue'
   import { Route } from '/@/constants/system'
   import { isClient } from '/@/vuniversal/env'
   import { isArticleDetailRoute, isSearchArchiveRoute } from '/@/services/route-validator'
@@ -87,9 +87,6 @@
       }),
       isEnLang() {
         return this.$store.getters['global/isEnLang']
-      },
-      isArticlePage() {
-        return isArticleDetailRoute(this.$route.name)
       }
     },
     methods: {
@@ -105,26 +102,14 @@
       },
       handleChangeAdSwiper(index) {
         this.$refs.asideAd.swiper.slideToLoop(index)
-      },
-      handleSetFullColumn() {
-        this.$store.commit('global/updateThreeColumnsState', true)
-      },
-      handleFullScreen() {
-        this.handleSetFullColumn()
-        const docElm = document.documentElement
-        const requestEvent = (
-          docElm.requestFullscreen ||
-          docElm.mozRequestFullScreen ||
-          docElm.webkitRequestFullScreen ||
-          docElm.msRequestFullscreen
-        )
-        if (requestEvent) requestEvent.bind(docElm)()
       }
     }
   })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   #aside {
     display: block;
     width: $aside-width;

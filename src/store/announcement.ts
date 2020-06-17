@@ -16,7 +16,7 @@ export enum AnnouncementModuleActions {
   FetchList = 'fetchList'
 }
 
-const state ={
+const state = {
   fetching: false,
   data: [] as Array<any>
 }

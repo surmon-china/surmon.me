@@ -57,7 +57,7 @@
             : `calc(${this.lineHeight} * 0.75)`
         }
         const position = index % 3
-        if (!!position) {
+        if (position) {
           const margin = 15 * position
           style.width = `${100 - margin}%`
           style.marginLeft = this.align ? '0' : '6%'
