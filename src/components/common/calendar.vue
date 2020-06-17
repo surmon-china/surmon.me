@@ -47,30 +47,31 @@
   </div>
 </template>
 
-<script>
-  export default {
+<script lang="ts">
+  import { defineComponent, computed, reactive, onMounted } from 'vue'
+  import { useI18n } from '/@/services/i18n'
+  import { Language } from '/@/language/data'
+
+  export default defineComponent({
     name: 'PcAsideCalendar',
-    data() {
-      return {
+    setup() {
+      const i18n = useI18n()
+      const state = reactive({
         currentDay: 1,
         currentMonth: 1,
         currentYear: 1970,
         currentWeek: 1,
         days: []
-      }
-    },
-    computed: {
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
-      },
-      weeksText() {
-        return this.isEnLang
-          ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-          : ['一', '二', '三', '四', '五', '六', '七']
-      }
-    },
-    methods: {
-      initDate(current) {
+      })
+
+      const isZhLang = computed(() => i18n.language.value === Language.Zh)
+      const weekDayTexts = computed(() => {
+        return isZhLang.value
+          ? ['一', '二', '三', '四', '五', '六', '七']
+          : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      })
+      
+      const initDate = (current) => {
         const date = current ? new Date(current) : new Date()
         this.currentDay = date.getDate()
         this.currentYear = date.getFullYear()
@@ -92,16 +93,17 @@
           day.setDate(day.getDate() + i)
           this.days.push(day)
         }
-      },
-      pickPrevMonth(year, month) {
+      }
+
+      const pickPrevMonth = (year, month) => {
         //  setDate(0); 上月最后一天
         //  setDate(-1); 上月倒数第二天
         //  setDate(dx) 参数dx为 上月最后一天的前后dx天
         const day = new Date(this.formatDate(year, month, 1))
         day.setDate(0)
         this.initDate(this.formatDate(day.getFullYear(), day.getMonth() + 1, 1))
-      },
-      pickNextMonth(year, month) {
+      }
+      const pickNextMonth = (year, month) => {
         const day = new Date(this.formatDate(year, month, 1))
         day.setDate(35)
         this.initDate(
@@ -111,21 +113,26 @@
             1
           )
         )
-      },
+      }
       // 返回 类似 2016-01-02 格式的字符串
-      formatDate(year, month, day) {
+      const formatDate = (year, month, day) => {
         month = month < 10 ? `0${month}` : month
         day = day < 10 ? `0${day}` : day
         return `${year}-${month}-${day}`
       }
-    },
-    mounted() {
-      this.initDate(null)
+
+      initDate()
+
+      return {
+
+      }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .calendar-box {
     min-height: 17em;
 

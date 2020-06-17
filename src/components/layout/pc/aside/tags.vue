@@ -1,7 +1,7 @@
 <template>
   <div class="aside-tag">
     <empty-box v-if="!tags.length">
-      <slot>{{ $i18n.text.tag.empty }}</slot>
+      <i18n :lkey="LANGUAGE_KEYS.TAG_PLACEHOLDER" />
     </empty-box>
     <ul v-else class="aside-tag-list">
       <router-link
@@ -9,7 +9,7 @@
         :key="index"
         tag="li"
         class="item"
-        :to="`/tag/${tag.slug}`"
+        :to="getTagArchiveRoute(tag.slug)"
       >
         <a class="title" :title="tag.description">
           <i
@@ -18,7 +18,7 @@
             class="iconfont"
           />
           <span class="name">
-            <span>{{ isEnLang ? tag.slug : tag.name }}</span>
+            <span>{{ isZhLang ? tag.name : tag.slug }}</span>
             <span>({{ tag.count || 0 }})</span>
           </span>
         </a>
@@ -26,13 +26,13 @@
     </ul>
   </div>
   <div v-if="isArticlePage" class="aside-tools">
-    <div class="full-column" @click="handleSetFullColumn">
-      <span v-text="$i18n.text.article.fullcolread" />
+    <div class="full-column" @click="setFullColumn">
+      <span v-i18n="LANGUAGE_KEYS.ARTICLE_FULL_COL_READ" />
       <span>&nbsp;&nbsp;</span>
       <i class="iconfont icon-read" />
     </div>
-    <div class="full-page" @click="handleFullScreen">
-      <span v-text="$i18n.text.article.fullscreenread" />
+    <div class="full-page" @click="setFullScreen">
+      <span v-i18n="LANGUAGE_KEYS.ARTICLE_FULL_SCREEN_READ" />
       <span>&nbsp;&nbsp;</span>
       <i class="iconfont icon-fullscreen" />
     </div>
@@ -40,33 +40,54 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
+  import { defineComponent, computed } from 'vue'
+  import { useRoute } from 'vue-router'
   import { useStore } from '/@/store'
   import { RouteName } from '/@/router'
+  import { useGlobalState, LayoutColumn } from '/@/state'
   import { useI18n } from '/@/services/i18n'
-  import { isSearchArchive } from '/@/transformers/route'
-  import { Language } from '/@/language/data'
+  import { getTagArchiveRoute, isArticleDetail } from '/@/transformers/route'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { Language } from '/@/language/data'
 
   export default defineComponent({
     name: 'PcAsideTags',
     setup() {
       const i18n = useI18n()
       const store = useStore()
+      const route = useRoute()
+      const globalState = useGlobalState()
       const tags = computed(() => store.state.tag.data)
+      const isArticlePage = computed(() => isArticleDetail(route.name))
+      const isZhLang = computed(() => i18n.language.value === Language.Zh)
+
+      const setFullColumn = () => {
+        globalState.layoutColumn.setLayoutColumn(LayoutColumn.Full)
+      }
+
+      const setFullScreen = () => {
+        setFullColumn()
+        document.documentElement.requestFullscreen()
+      }
 
       return {
         tags,
         t: i18n.t,
-        LANGUAGE_KEYS
+        LANGUAGE_KEYS,
+        isZhLang,
+        isArticlePage,
+        getTagArchiveRoute,
+        setFullColumn,
+        setFullScreen
       }
     }
   })
 </script>
 
 <style lang="scss" scoped>
-  > .aside-tag {
+  @import 'src/assets/styles/init.scss';
+
+  .aside-tag {
     margin-bottom: 0;
     max-height: calc(100vh - 88px - #{$top-height + $lg-gap + $lg-gap + $tool-height});
     overflow-y: auto;
@@ -133,7 +154,7 @@
     }
   }
 
-  > .aside-tools {
+  .aside-tools {
     margin-top: $lg-gap;
     display: flex;
     justify-content: space-between;

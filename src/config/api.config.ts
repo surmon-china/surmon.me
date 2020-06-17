@@ -24,4 +24,4 @@ const PROD_API = {
   GRAVATAR: 'https://static.surmon.me/avatar'
 }
 
-export default isDev ? DEV_API: PROD_API
+export default isDev ? DEV_API : PROD_API

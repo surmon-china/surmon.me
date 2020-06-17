@@ -51,6 +51,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .aside-article {
     overflow: hidden;
 

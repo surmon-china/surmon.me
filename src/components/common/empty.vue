@@ -1,13 +1,22 @@
 <template>
   <div class="empty-box">
-    <slot>{{ $i18n.text.empty }}</slot>
+    <slot>
+      <i18n :lkey="LANGUAGE_KEYS.EMPTY_PLACEHOLDER" />
+    </slot>
   </div>
 </template>
 
-<script>
-  export default {
-    name: 'EmptyBox'
-  }
+<script lang="ts">
+  import { defineComponent, computed } from 'vue'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  export default defineComponent({
+    name: 'EmptyBox',
+    setup() {
+      return {
+        LANGUAGE_KEYS
+      }
+    }
+  })
 </script>
 
 <style lang="scss">

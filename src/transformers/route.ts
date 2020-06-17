@@ -6,7 +6,11 @@
 
 import { RouteName } from '/@/router'
 
-type RouteRecordName = string | symbol
+type RouteRecordName = string | symbol | null | undefined
+
+export const getTagArchiveRoute = (tagSlug: string) => {
+  return `/tag/${tagSlug}`
+}
 
 export const getArticleDetailRoute = (articleID: string | number) => {
   return `/article/${articleID}`

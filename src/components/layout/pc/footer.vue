@@ -53,9 +53,8 @@
     name: 'PcFooter',
     setup() {
       const i18n = useI18n()
-      const isZhLang = computed(() => {
-        i18n.language.value === Language.Zh
-      })
+      const isZhLang = computed(() => i18n.language.value === Language.Zh)
+
       return {
         isZhLang,
         LANGUAGE_KEYS
