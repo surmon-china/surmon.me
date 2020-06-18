@@ -1,18 +1,25 @@
 <template>
   <aside id="aside" class="aside">
-    <!-- search -->
-    <!-- article -->
+    <div class="search">
+      <aside-search />
+    </div>
+    <div class="article">
+      <aside-article />
+    </div>
     <client-only>
-      <aside-ad
-        ref="asideAd"
-        @slide-change="handleSlideChange"
-      />
+      <div class="mammon">
+        <aside-ad ref="asideAdComponent" @slide-change="handleSlideChange" />
+      </div>
     </client-only>
-    <div class="aside-calendar">
-      <calendar @click-day="" />
+    <div class="calendar">
+      <calendar>
+        <router-link v-slot="humanDate" :to="getDateRoute(humanDate)">
+          {{ humanDate.day }}
+        </router-link>
+      </calendar>
     </div>
     <transition name="module">
-      <div key="ad" class="aside-mammon alimama">
+      <div key="ad" class="ali-ma-ma">
         <iframe
           scrolling="no"
           frameborder="0"
@@ -23,85 +30,105 @@
     </transition>
     <div class="aside-sticky-box">
       <client-only>
-        <aside-ad
-          v-if="renderStickyAd"
-          :init-index="adIndex"
-          @slide-change="handleChangeAdSwiper"
-        />
+        <div class="mammon">
+          <aside-ad
+            v-if="state.renderStickyAd"
+            :init-index="state.adIndex"
+            @slide-change="handleChangeAdSwiper"
+          />
+        </div>
       </client-only>
-      <!-- tag -->
+      <div class="tag">
+        <aside-tag />
+      </div>
+      <div class="tool">
+        <aside-tool />
+      </div>
     </div>
   </aside>
 </template>
 
-<script>
-  import Vue from 'vue'
-  import { mapState } from 'vuex'
+<script lang="ts">
+  import { defineComponent, ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
   import StickyEvents from 'sticky-events'
-  import AsideAd from './ad.vue'
   import Calendar from '/@/components/common/calendar.vue'
-  import { Route } from '/@/constants/system'
   import { isClient } from '/@/vuniversal/env'
-  import { isArticleDetailRoute, isSearchArchiveRoute } from '/@/services/route-validator'
+  import { getDateArchiveRoute } from '/@/transformers/route'
+  import { humanDateToYMD, HumanDate } from '/@/transformers/moment'
+  import AsideSearch from './search.vue'
+  import AsideArticle from './article.vue'
+  import AsideAd from './ad.vue'
+  import AsideTag from './tag.vue'
+  import AsideTool from './tool.vue'
 
-  // polyfill sticky event
-  let stickyEvents = null
-
-  export default Vue.extend({
+  export default defineComponent({
     name: 'PcAside',
     components: {
+      AsideSearch,
+      AsideArticle,
       AsideAd,
-      Calendar
+      Calendar,
+      AsideTag,
+      AsideTool
     },
-    data() {
-      return {
+    setup() {
+      // polyfill sticky event
+      let stickyEvents: any = null
+      const asideAdComponent = ref(null)
+      const state = reactive({
         adIndex: 0,
-        renderStickyAd: false,
+        renderStickyAd: false
+      })
+
+      const getDateRoute = (humanDate: HumanDate) => {
+        return getDateArchiveRoute(humanDateToYMD(humanDate))
       }
-    },
-    mounted() {
-      if (isClient) {
-        this.$nextTick(() => {
+
+      const handleStickyStateChange = (event) => {
+        // workaround: when (main container height >= aside height) & isSticky -> render sticky ad
+        const asideElementHeight = this.$el.clientHeight
+        const mainContentElementHeight = document.getElementById('main-content')?.children[0].clientHeight
+        const isFeasible = mainContentElementHeight >= asideElementHeight
+        state.renderStickyAd = isFeasible && event.detail.isSticky
+      }
+
+      const handleSlideChange = (index) => {
+        state.adIndex = index
+      }
+
+      const handleChangeAdSwiper = (index) => {
+        this.$refs.asideAd.swiper.slideToLoop(index)
+      }
+
+      onMounted(() => {
+        nextTick(() => {
           stickyEvents = new StickyEvents({
             enabled: true,
             stickySelector: '.aside-sticky-box'
           })
           stickyEvents.stickyElements[0].addEventListener(
             StickyEvents.CHANGE,
-            this.handleStickyStateChange
+            handleStickyStateChange
           )
         })
-      }
-    },
-    beforeDestroy() {
-      stickyEvents.stickyElements[0].removeEventListener(
-        StickyEvents.CHANGE,
-        this.handleStickyStateChange
-      )
-      stickyEvents.disableEvents(false)
-      stickyEvents = null
-    },
-    computed: {
-      ...mapState({
-        tags: state => state.tag.data,
-      }),
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
-      }
-    },
-    methods: {
-      handleStickyStateChange(event) {
-        // workaround: when (main container height >= aside height) & isSticky -> render sticky ad
-        const asideElementHeight = this.$el.clientHeight
-        const mainContentElementHeight = document.getElementById('main-content').children[0].clientHeight
-        const isFeasible = mainContentElementHeight >= asideElementHeight
-        this.renderStickyAd = isFeasible && event.detail.isSticky
-      },
-      handleSlideChange(index) {
-        this.adIndex = index
-      },
-      handleChangeAdSwiper(index) {
-        this.$refs.asideAd.swiper.slideToLoop(index)
+      })
+
+      onBeforeUnmount(() => {
+        stickyEvents.stickyElements[0].removeEventListener(
+          StickyEvents.CHANGE,
+          handleStickyStateChange
+        )
+        stickyEvents.disableEvents(false)
+        stickyEvents = null
+      })
+
+      return {
+        state,
+        asideAdComponent,
+        getDateRoute,
+        handleStickyStateChange,
+        handleSlideChange,
+        handleChangeAdSwiper
       }
     }
   })
@@ -117,23 +144,23 @@
     margin-left: $lg-gap;
     user-select: none;
 
-    .aside-search,
-    .aside-article,
-    .aside-calendar,
-    .aside-mammon,
-    .aside-tag {
+    .search,
+    .article,
+    .calendar,
+    .mammon,
+    .tag {
       margin-bottom: $lg-gap;
       @include module-blur-bg();
     }
 
-    .aside-calendar {
+    .calendar {
       padding: $gap;
     }
 
-    .aside-mammon {
+    .mammon {
       width: 100%;
 
-      &.alimama {
+      &.ali-ma-ma {
         height: $aside-width;
         display: flex;
         justify-content: center;

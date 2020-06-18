@@ -9,10 +9,12 @@
   </div>
 </template>
 
-<script>
-  import SkeletonLine from './line'
-  export default {
-    name: 'SkeletonParagraph',
+<script lang="ts">
+  import { defineComponent, computed, CSSProperties } from 'vue'
+  import SkeletonLine from './line.vue'
+
+  export default defineComponent({
+    name: 'SuSkeletonParagraph',
     components: {
       SkeletonLine
     },
@@ -22,10 +24,10 @@
         default: 1
       },
       width: {
-        type: Number,
+        type: Number
       },
       height: {
-        type: Number,
+        type: Number
       },
       align: {
         type: Boolean,
@@ -34,36 +36,34 @@
       lineHeight: {
         type: String,
         default: '1rem'
-      },
-    },
-    computed: {
-      style() {
-        const style = {}
-        if (this.width) {
-          style.width = this.width + 'px'
-        }
-        if (this.height) {
-          style.height = this.height + 'px'
-        }
-        return style
       }
     },
-    methods: {
-      getLineStyle(index) {
-        const style = {
-          height: this.lineHeight,
-          marginBottom: index === this.lines - 1
+    setup(props) {
+      const style = computed<CSSProperties>(() => ({
+        ...(props.width && { width: props.width + 'px' }),
+        ...(props.height && { height: props.height + 'px' })
+      }))
+
+      const getLineStyle = (index: number) => {
+        const style: CSSProperties = {
+          height: props.lineHeight,
+          marginBottom: index === props.lines - 1
             ? '0'
-            : `calc(${this.lineHeight} * 0.75)`
+            : `calc(${props.lineHeight} * 0.75)`
         }
         const position = index % 3
         if (position) {
           const margin = 15 * position
           style.width = `${100 - margin}%`
-          style.marginLeft = this.align ? '0' : '6%'
+          style.marginLeft = props.align ? '0' : '6%'
         }
         return style
       }
+
+      return {
+        style,
+        getLineStyle
+      }
     }
-  }
+  })
 </script>

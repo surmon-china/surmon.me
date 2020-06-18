@@ -98,7 +98,7 @@
       }
     }
 
-    & ::v-deep(.share) {
+    &::v-deep(.share) {
       position: fixed;
       top: 12%;
       left: 0;

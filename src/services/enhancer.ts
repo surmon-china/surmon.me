@@ -6,19 +6,17 @@
 
 import { App } from 'vue'
 import Uimage from '/@/components/common/uimage'
-
-// import EmptyBox from '/@/components/common/empty'
+import Empty from '/@/components/common/empty/base.vue'
+import AutoEmpty from '/@/components/common/empty/auto'
 // import LoadingBox from '/@/components/common/loading'
-// import CommentBox from '/@/components/common/comment'
 // import SkeletonBox from '/@/components/common/skeleton'
 
 export default function (app: App) {
   // components
   app.component(Uimage.name, Uimage)
+  app.component(Empty.name as string, Empty)
+  app.component(AutoEmpty.name, AutoEmpty)
 
-  // Vue.component(EmptyBox.name, EmptyBox)
   // Vue.component(LoadingBox.name, LoadingBox)
-  // TODO: 评论框不再全局注册
-  // Vue.use(CommentBox)
   // Vue.use(SkeletonBox)
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="aside-search">
+  <div class="search">
     <div class="search-box">
       <input
         id="keyword"
@@ -22,7 +22,7 @@
             v-for="tag in tags"
             :key="tag.slug"
             class="iiem"
-            :value="isEnLang ? tag.slug : tag.name"
+            :value="isZhLang ? tag.name : tag.slug"
             :label="tag.description"
           />
         </datalist>
@@ -54,7 +54,7 @@
 
       const keyword = ref('')
       const tags = computed(() => store.state.tag.data)
-      const isEnLang = computed(() => i18n.language.value === Language.En)
+      const isZhLang = computed(() => i18n.language.value === Language.Zh)
 
       onMounted(() => {
         if (isSearchArchive(route.name as string)) {
@@ -74,7 +74,7 @@
       return {
         keyword,
         tags,
-        isEnLang,
+        isZhLang,
         t: i18n.t,
         language: i18n.language,
         LANGUAGE_KEYS
@@ -84,7 +84,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .aside-search {
+  .search {
     padding: $sm-gap;
     width: 100%;
     height: 3em;

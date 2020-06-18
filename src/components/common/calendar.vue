@@ -1,46 +1,36 @@
 <template>
-  <div class="calendar-box">
-    <!-- 年份 月份 -->
+  <div class="calendar">
+    <!-- header -->
     <div class="months">
-      <span class="item arrow" @click="pickPrevMonth(currentYear, currentMonth)">❮</span>
+      <span class="item arrow" @click="toPrevMonth">❮</span>
       <span class="item year-month">
         <strong class="choose-year">
-          <span>{{ currentYear }}</span>
-          <span>{{ isEnLang ? 'Y' : '年' }}</span>
-          <span>{{ currentMonth }}</span>
-          <span>{{ isEnLang ? 'M' : '月' }}</span>
-          <span>{{ currentDay }}</span>
-          <span>{{ isEnLang ? 'D' : '日' }}</span>
+          <span>{{ state.year }}</span>
+          <i18n zh="年" en="Y" />
+          <span>{{ state.month }}</span>
+          <i18n zh="月" en="M" />
+          <span>{{ state.day }}</span>
+          <i18n zh="日" en="D" />
         </strong>
       </span>
-      <span class="item arrow" @click="pickNextMonth(currentYear, currentMonth)">❯</span>
+      <span class="item arrow" @click="toNextMonth">❯</span>
     </div>
-    <!-- 星期 -->
+    <!-- weekdays -->
     <ul class="weekdays">
-      <li v-for="(day, index) in weeksText" :key="index">{{ day }}</li>
+      <li v-for="(day, index) in weekDayTexts" :key="index">{{ day }}</li>
     </ul>
-    <!-- 日期 -->
-    <div v-if="!days.length" class="days-loading">
-      <loading-box class="loading" />
-    </div>
-    <ul v-else class="days">
-      <li v-for="(day, index) in days" :key="index">
-        <!--本月-->
-        <span v-if="day.getMonth() + 1 != currentMonth" class="other-month">{{ day.getDate() }}</span>
+    <!-- days -->
+    <ul class="days">
+      <li v-for="(item, index) in state.table" :key="index">
         <span
-          v-else
           class="item"
           :class="{
-            'active':
-              day.getFullYear() == new Date().getFullYear() &&
-              day.getMonth() == new Date().getMonth() &&
-              day.getDate() == new Date().getDate()
+            today: isToday(item),
+            active: isActive(item),
+            other: item.month !== state.month
           }"
         >
-          <!--today-->
-          <router-link
-            :to="`/date/${ formatDate(day.getFullYear(), day.getMonth() + 1, day.getDate())}`"
-          >{{ day.getDate() }}</router-link>
+          <slot v-bind="item">{{ item.day }}</slot>
         </span>
       </li>
     </ul>
@@ -48,83 +38,89 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, reactive, onMounted } from 'vue'
+  import { defineComponent, computed, reactive } from 'vue'
   import { useI18n } from '/@/services/i18n'
   import { Language } from '/@/language/data'
+  import { dateToHuman, standardizationHumanDate, textHumanizer, HumanDate, TEXT_MAP } from '/@/transformers/moment'
 
   export default defineComponent({
     name: 'PcAsideCalendar',
-    setup() {
+    setup(_, context) {
       const i18n = useI18n()
+      const today = dateToHuman(new Date())
       const state = reactive({
-        currentDay: 1,
-        currentMonth: 1,
-        currentYear: 1970,
-        currentWeek: 1,
-        days: []
+        day: 1,
+        month: 1,
+        year: 1970,
+        week: 1,
+        table: [] as Array<HumanDate>
       })
 
-      const isZhLang = computed(() => i18n.language.value === Language.Zh)
       const weekDayTexts = computed(() => {
-        return isZhLang.value
-          ? ['一', '二', '三', '四', '五', '六', '七']
-          : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        return textHumanizer(i18n.language.value as any)(TEXT_MAP.WEEKDAYS)
       })
-      
-      const initDate = (current) => {
-        const date = current ? new Date(current) : new Date()
-        this.currentDay = date.getDate()
-        this.currentYear = date.getFullYear()
-        this.currentMonth = date.getMonth() + 1
-        this.currentWeek = date.getDay()
-        if (this.currentWeek == 0) this.currentWeek = 7
-        const strting = this.formatDate(this.currentYear, this.currentMonth, this.currentDay)
-        // console.log("today:" + strting + "," + this.currentWeek)
-        this.days.length = 0
-        // 今天是周日，放在第一行第7个位置，前面6个
-        for (let i = this.currentWeek - 1; i >= 0; i--) {
-          const day = new Date(strting)
-          day.setDate(day.getDate() - i)
-          // console.log("y:" + day.getDate())
-          this.days.push(day)
+
+      const setDate = (targetDate: Date | HumanDate) => {
+        const table: HumanDate[] = []
+        const humanDate = targetDate instanceof Date
+          ? dateToHuman(targetDate)
+          : standardizationHumanDate(targetDate)
+
+        // weekend -> first line: 7 | current month
+        for (let i = humanDate.week; i >= 1; i--) {
+          table.push(standardizationHumanDate({
+            ...humanDate,
+            day: humanDate.day - 1
+          }))
         }
-        for (let i = 1; i <= 35 - this.currentWeek; i++) {
-          const day = new Date(strting)
-          day.setDate(day.getDate() + i)
-          this.days.push(day)
+        // current month | last line: 0
+        for (let i = 1; i <= 35 - humanDate.week; i++) {
+          table.push(standardizationHumanDate({
+            ...humanDate,
+            day: humanDate.day + 1
+          }))
         }
+
+        Object.assign(state, {
+          ...humanDate,
+          table
+        })
       }
 
-      const pickPrevMonth = (year, month) => {
-        //  setDate(0); 上月最后一天
-        //  setDate(-1); 上月倒数第二天
-        //  setDate(dx) 参数dx为 上月最后一天的前后dx天
-        const day = new Date(this.formatDate(year, month, 1))
-        day.setDate(0)
-        this.initDate(this.formatDate(day.getFullYear(), day.getMonth() + 1, 1))
+      const toPrevMonth = () => {
+        setDate({
+          ...state,
+          month: state.month - 1,
+          day: 1
+        })
       }
-      const pickNextMonth = (year, month) => {
-        const day = new Date(this.formatDate(year, month, 1))
-        day.setDate(35)
-        this.initDate(
-          this.formatDate(
-            day.getFullYear(),
-            day.getMonth() + 1,
-            1
-          )
+
+      const toNextMonth = () => {
+        setDate({
+          ...state,
+          month: state.month + 1,
+          day: 1
+        })
+      }
+
+      const isSameDay = (target: HumanDate, target2: HumanDate) => {
+        return (
+          target.day === target2.day &&
+          target.month === target2.month &&
+          target.year === target2.year
         )
       }
-      // 返回 类似 2016-01-02 格式的字符串
-      const formatDate = (year, month, day) => {
-        month = month < 10 ? `0${month}` : month
-        day = day < 10 ? `0${day}` : day
-        return `${year}-${month}-${day}`
-      }
 
-      initDate()
+      // init state
+      setDate(new Date())
 
       return {
-
+        state,
+        weekDayTexts,
+        toPrevMonth,
+        toNextMonth,
+        isActive: target => isSameDay(target, state),
+        isToday: target => isSameDay(target, today)
       }
     }
   })
@@ -133,7 +129,7 @@
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
-  .calendar-box {
+  .calendar {
     min-height: 17em;
 
     > .months {
