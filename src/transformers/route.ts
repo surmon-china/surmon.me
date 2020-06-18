@@ -12,6 +12,10 @@ export const getTagArchiveRoute = (tagSlug: string) => {
   return `/tag/${tagSlug}`
 }
 
+export const getDateArchiveRoute = (date: string) => {
+  return `/date/${date}`
+}
+
 export const getArticleDetailRoute = (articleID: string | number) => {
   return `/article/${articleID}`
 }

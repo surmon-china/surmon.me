@@ -2,9 +2,11 @@
   <div class="skeleton base" :style="style"></div>
 </template>
 
-<script>
-  export default {
-    name: 'SkeletonBase',
+<script lang="ts">
+  import { defineComponent, computed, CSSProperties } from 'vue'
+
+  export default defineComponent({
+    name: 'SuSkeletonBase',
     props: {
       width: {
         type: Number,
@@ -21,24 +23,25 @@
         default: 2
       }
     },
-    computed: {
-      style() {
-        const style = {
-          'border-radius': this.circle ? '100%' : `${this.radius}px`,
-        }
-        if (this.width) {
-          style.width = this.width + 'px'
-        }
-        if (this.height) {
-          style.height = this.height + 'px'
-        }
-        return style
+    setup(props) {
+      const style = computed<CSSProperties>(() => ({
+        borderRadius: props.circle
+          ? '100%'
+          : `${props.radius}px`,
+        ...(props.width && { width: props.width + 'px' }),
+        ...(props.height && { height: props.height + 'px' })
+      }))
+
+      return {
+        style
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   $skeleton-background: $body-bg;
   $skeleton-spinner: $module-hover-bg-opacity-3;
 

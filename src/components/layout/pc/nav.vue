@@ -1,7 +1,7 @@
 <template>
   <div id="nav" class="aside-nav">
     <nav class="nav-list" :class="{ en: isEnLang }">
-      <router-link :to="'/'" class="item" exact>
+      <router-link to="/" class="item" exact>
         <i class="iconfont icon-home"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_HOME" />
       </router-link>

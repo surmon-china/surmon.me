@@ -4,10 +4,12 @@
   </div>
 </template>
 
-<script>
-  import SkeletonBase from './base'
-  export default {
-    name: 'SkeletonLine',
+<script lang="ts">
+  import { defineComponent, computed, CSSProperties } from 'vue'
+  import SkeletonBase from './base.vue'
+
+  export default defineComponent({
+    name: 'SuSkeletonLine',
     components: {
       SkeletonBase
     },
@@ -19,19 +21,17 @@
         type: Number,
       }
     },
-    computed: {
-      style() {
-        const style = {}
-        if (this.width) {
-          style.width = this.width + 'px'
-        }
-        if (this.height) {
-          style.height = this.height + 'px'
-        }
-        return style
+    setup(props) {
+      const style = computed<CSSProperties>(() => ({
+        ...(props.width && { width: props.width + 'px' }),
+        ...(props.height && { height: props.height + 'px' })
+      }))
+
+      return {
+        style
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>

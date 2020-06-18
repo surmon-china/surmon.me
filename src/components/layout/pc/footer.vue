@@ -1,12 +1,13 @@
 <template>
   <footer id="footer" class="footer">
     <div class="container">
-      <!-- <a
+      <a
+        v-if="false"
+        class="ipc"
         target="_blank"
         rel="external nofollow noopener"
         href="http://www.beian.miit.gov.cn"
-      >陕ICP备13004859号-2</a>
-      <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span> -->
+      >陕 ICP 备 13004859 号-2</a>
       <a
         class="sitemap-btn"
         href="/sitemap.xml"
@@ -47,16 +48,11 @@
   import { defineComponent, computed } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
-  import { useI18n } from '/@/services/i18n'
 
   export default defineComponent({
     name: 'PcFooter',
     setup() {
-      const i18n = useI18n()
-      const isZhLang = computed(() => i18n.language.value === Language.Zh)
-
       return {
-        isZhLang,
         LANGUAGE_KEYS
       }
     }
@@ -79,6 +75,10 @@
       font-size: $font-size-h6;
       text-align: center;
       text-transform: uppercase;
+
+      .ipc {
+        margin-right: $xs-gap;
+      }
     }
   }
 </style>

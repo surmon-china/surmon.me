@@ -103,7 +103,7 @@
     background-color: $module-bg;
     user-select: none;
     // 过段时间再打开吧，闪屏太严重了
-    // @include backdrop-blur();
+    @include backdrop-blur();
 
     .header-container {
       height: 100%;
