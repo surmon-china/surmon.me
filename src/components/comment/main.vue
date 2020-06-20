@@ -57,7 +57,7 @@
       <div
         v-else-if="!comment.data.length"
         key="empty"
-        class="empty-box"
+        class="su-empty"
         v-text="$i18n.text.comment.empty"
       />
       <div v-else key="list" ref="commentList" class="list-box">
@@ -947,7 +947,7 @@
       }
     }
 
-    > .empty-box {
+    > .su-empty {
       font-weight: bold;
       text-align: center;
       height: 6rem;

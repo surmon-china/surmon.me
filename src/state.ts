@@ -16,7 +16,7 @@ export enum LayoutColumn {
   Normal = 0,
   Wide = 1,
   Full = 2,
-  Screen = 3
+  Page = 3
 }
 
 export interface GlobalStateConfig {
@@ -51,7 +51,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     isNormalLayout: computed(() => layoutValue.value === LayoutColumn.Normal),
     isWideLayout: computed(() => layoutValue.value === LayoutColumn.Wide),
     isFullColumeLayout: computed(() => layoutValue.value === LayoutColumn.Full),
-    isFullScreenLayout: computed(() => layoutValue.value === LayoutColumn.Screen)
+    isFullPageLayout: computed(() => layoutValue.value === LayoutColumn.Page)
   }
 
   // Aliyun OSS: https://oss.console.aliyun.com/bucket/oss-cn-hangzhou/surmon-static/process/img
@@ -95,9 +95,9 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     imageExt,
     switchBox,
     switchTogglers: {
-      liveMap: () => switchBox.liveMap = !switchBox.liveMap,
-      wallpaper: () => switchBox.wallpaper = !switchBox.wallpaper,
-      barrage: () => switchBox.barrage = !switchBox.barrage,
+      liveMap() { switchBox.liveMap = !switchBox.liveMap },
+      wallpaper() { switchBox.wallpaper = !switchBox.wallpaper },
+      barrage() { switchBox.barrage = !switchBox.barrage },
       mobileSidebar: (open?: boolean) => {
         switchBox.mobileSidebar = open !== null
           ? !!open

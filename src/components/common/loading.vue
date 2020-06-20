@@ -12,7 +12,7 @@
 
 <script>
   export default {
-    name: 'LoadingBox',
+    name: 'SuLoading',
     props: {
       loading: {
         type: Boolean,
@@ -49,6 +49,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .spinner-box {
     position: relative;
     width: 100%;

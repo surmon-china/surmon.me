@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, inject, ref, computed, readonly, defineComponent, FunctionDirective } from 'vue'
+import { App, inject, ref, readonly, defineComponent, FunctionDirective } from 'vue'
 
 export interface I18nLanguage {
   code: string

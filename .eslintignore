@@ -1,9 +1,11 @@
 # .eslintignore
 
 *.discard
-.deploy/*
 node_modules
-public/*
+
+.deploy
+public
+patchs
 
 .eslintrc.js
 *.config.js

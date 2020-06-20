@@ -18,9 +18,9 @@
       </span>
     </div>
     <transition name="module" mode="out-in">
-      <empty-box v-if="!announcement.data.length" key="empty" class="announcement-empty-box">
+      <su-empty v-if="!announcement.data.length" key="empty" class="announcement-su-empty">
         <slot>{{ $i18n.text.announcement.empty }}</slot>
-      </empty-box>
+      </su-empty>
       <div v-else key="swiper" class="swiper-box">
         <div
           v-swiper:swiper="swiperOption"
@@ -145,7 +145,7 @@
       }
     }
 
-    .announcement-empty-box {
+    .announcement-su-empty {
       min-height: auto;
     }
 

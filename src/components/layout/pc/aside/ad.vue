@@ -1,5 +1,5 @@
 <template>
-  <div class="aside-mammon">
+  <div class="mammon">
     <swiper
       ref="swiperElement"
       class="swiper aside"
@@ -82,8 +82,9 @@
 
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
+  @import './variables.scss';
 
-  .aside-mammon {
+  .mammon {
     width: 100%;
     overflow: hidden;
 

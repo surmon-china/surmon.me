@@ -4,14 +4,14 @@
       <emoji-rain />
       <popup-root />
     </client-only>
-    <component :is="layoutComponent">
+    <component :is="LayoutComponent">
       <transition name="fade" mode="out-in">
         <suspense>
           <template #default>
             <router-view />
           </template>
           <template #fallback>
-            <loading />
+            <su-loading />
           </template>
         </suspense>
       </transition>
@@ -31,22 +31,20 @@
   export default defineComponent({
     name: 'App',
     components: {
-      EmojiRain,
-      PcMain,
-      MobileMain
+      EmojiRain
     },
     setup() {
       const theme = useTheme()
       const globalState = useGlobalState()
-      const layoutComponent = computed(() => {
+      const LayoutComponent = computed(() => {
         return globalState.userAgent.isMobile
-          ? MobileMain.name
-          : PcMain.name
+          ? MobileMain
+          : PcMain
       })
 
       return {
         theme: theme.theme,
-        layoutComponent,
+        LayoutComponent
       }
     }
   })

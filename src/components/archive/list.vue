@@ -30,9 +30,9 @@
             @click.native="toDetail(articleItem)"
           />
         </transition-group>
-        <empty-box v-else key="empty" class="article-empty-box">
+        <su-empty v-else key="empty" class="article-su-empty">
           <slot>{{ $i18n.text.article.empty }}</slot>
-        </empty-box>
+        </su-empty>
       </transition>
     </div>
 
@@ -137,7 +137,7 @@
       min-height: $lg-gap;
       overflow: hidden;
 
-      > .article-empty-box {
+      > .article-su-empty {
         color: $text-disabled;
         @include module-blur-bg();
       }

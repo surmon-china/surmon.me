@@ -1,25 +1,28 @@
 <template>
-  <aside id="aside" class="aside">
-    <div class="search">
+  <aside id="aside" class="aside" ref="element">
+    <div class="module">
       <aside-search />
     </div>
-    <div class="article">
+    <div class="module">
       <aside-article />
     </div>
     <client-only>
-      <div class="mammon">
+      <div class="module mammon">
         <aside-ad ref="asideAdComponent" @slide-change="handleSlideChange" />
       </div>
     </client-only>
-    <div class="calendar">
+    <div class="module calendar">
       <calendar>
-        <router-link v-slot="humanDate" :to="getDateRoute(humanDate)">
-          {{ humanDate.day }}
-        </router-link>
+        <template #default="humanDate">
+          <!-- TODO: 感觉 sitemap（如果已拉取） 来判断，到底有没有文章数据 -->
+          <router-link :to="getDateRoute(humanDate)">
+            {{ humanDate.day }}
+          </router-link>
+        </template>
       </calendar>
     </div>
     <transition name="module">
-      <div key="ad" class="ali-ma-ma">
+      <div key="ad" class="module ali-ma-ma">
         <iframe
           scrolling="no"
           frameborder="0"
@@ -30,7 +33,7 @@
     </transition>
     <div class="aside-sticky-box">
       <client-only>
-        <div class="mammon">
+        <div class="module mammon">
           <aside-ad
             v-if="state.renderStickyAd"
             :init-index="state.adIndex"
@@ -38,10 +41,10 @@
           />
         </div>
       </client-only>
-      <div class="tag">
+      <div class="module">
         <aside-tag />
       </div>
-      <div class="tool">
+      <div class="module">
         <aside-tool />
       </div>
     </div>
@@ -51,7 +54,7 @@
 <script lang="ts">
   import { defineComponent, ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
   import StickyEvents from 'sticky-events'
-  import Calendar from '/@/components/common/calendar.vue'
+  import Calendar from '/@/components/widget/calendar.vue'
   import { isClient } from '/@/vuniversal/env'
   import { getDateArchiveRoute } from '/@/transformers/route'
   import { humanDateToYMD, HumanDate } from '/@/transformers/moment'
@@ -74,7 +77,8 @@
     setup() {
       // polyfill sticky event
       let stickyEvents: any = null
-      const asideAdComponent = ref(null)
+      const element = ref<HTMLDivElement>(null as any)
+      const asideAdComponent = ref<any>(null)
       const state = reactive({
         adIndex: 0,
         renderStickyAd: false
@@ -86,8 +90,9 @@
 
       const handleStickyStateChange = (event) => {
         // workaround: when (main container height >= aside height) & isSticky -> render sticky ad
-        const asideElementHeight = this.$el.clientHeight
-        const mainContentElementHeight = document.getElementById('main-content')?.children[0].clientHeight
+        const asideElementHeight = element.value.clientHeight
+        // @ts-ignore
+        const mainContentElementHeight = document.getElementById('main-content').children[0].clientHeight
         const isFeasible = mainContentElementHeight >= asideElementHeight
         state.renderStickyAd = isFeasible && event.detail.isSticky
       }
@@ -97,7 +102,7 @@
       }
 
       const handleChangeAdSwiper = (index) => {
-        this.$refs.asideAd.swiper.slideToLoop(index)
+        asideAdComponent.value.swiper.slideToLoop(index)
       }
 
       onMounted(() => {
@@ -124,6 +129,7 @@
 
       return {
         state,
+        element,
         asideAdComponent,
         getDateRoute,
         handleStickyStateChange,
@@ -136,6 +142,7 @@
 
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
+  @import './variables.scss';
 
   #aside {
     display: block;
@@ -144,39 +151,37 @@
     margin-left: $lg-gap;
     user-select: none;
 
-    .search,
-    .article,
-    .calendar,
-    .mammon,
-    .tag {
+    .module {
       margin-bottom: $lg-gap;
       @include module-blur-bg();
-    }
 
-    .calendar {
-      padding: $gap;
-    }
+      &.calendar {
+        padding: $gap;
+      }
 
-    .mammon {
-      width: 100%;
+      &.mammon {
+        width: 100%;
 
-      &.ali-ma-ma {
-        height: $aside-width;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        &.ali-ma-ma {
+          height: $aside-width;
+          display: flex;
+          justify-content: center;
+          align-items: center;
 
-        > .mammon-iframe {
-          height: 250px;
-          width: 250px;
-          overflow: hidden;
+          > .mammon-iframe {
+            height: 250px;
+            width: 250px;
+            overflow: hidden;
+          }
         }
+      }
+
+      &.tools {
+        margin-top: $lg-gap;
       }
     }
 
     .aside-sticky-box {
-      $top-height: $header-height + $lg-gap;
-      $tool-height: 3rem;
       position: sticky;
       top: $top-height;
       width: $aside-width;

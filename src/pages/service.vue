@@ -8,13 +8,14 @@
   >
     <div class="banner">
       <div class="content container">
-        <h2 class="title">{{ $i18n.text.service.slogan }}</h2>
+        <h2 class="title" v-i18n="LANGUAGE_KEYS.PAGE_SERVICE_SLOGAN"></h2>
         <div class="submit">
           <button
             class="email-me"
-            :title="$i18n.text.service.emailMe"
+            title="email me"
             @click="submitProject"
-          >{{ $i18n.text.service.emailMe }}</button>
+            v-i18n="LANGUAGE_KEYS.PAGE_SERVICE_EMAIL_ME"
+          />
         </div>
         <a
           v-if="!isMobile"
@@ -23,7 +24,8 @@
           rel="external nofollow noopenter"
           href="https://www.upwork.com/freelancers/~0142e621258ac1770d"
         >
-          <span>({{ $i18n.text.service.hireMe }}</span>
+          <span>(</span>
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_SERVICE_HIRE_ME" />
           <i class="iconfont icon-upwork"></i>
           <span>)</span>
         </a>
@@ -36,46 +38,46 @@
             <p class="icon web">
               <i class="iconfont icon-html5"></i>
             </p>
-            <h3 class="name">Web {{ isEnLang ? 'Client' : '客户端' }}</h3>
-            <p class="desc">Vue {{ isEnLang ? 'application' : '应用开发' }}</p>
-            <p class="desc">React {{ isEnLang ? 'application' : '应用开发' }}</p>
-            <p class="desc">Angular {{ isEnLang ? 'application' : '应用开发' }}</p>
+            <h3 class="name">Web <i18n en="Client" zh="客户端" /></h3>
+            <p class="desc">Vue <i18n en="application" zh="应用开发" /></p>
+            <p class="desc">React <i18n en="application" zh="应用开发" /></p>
+            <p class="desc">Angular <i18n en="application" zh="应用开发" /></p>
           </li>
           <li class="item">
             <p class="icon nodejs">
               <i class="iconfont icon-nodejs"></i>
             </p>
             <h3 class="name">Nodejs</h3>
-            <p class="desc">Nodejs {{ isEnLang ? 'application' : '整站建设' }}</p>
-            <p class="desc">Nodejs {{ isEnLang ? 'online bussniess' : 'Web 服务开发' }}</p>
-            <p class="desc">Nodejs {{ isEnLang ? 'CLI application' : '命令行工具开发' }}</p>
+            <p class="desc">Nodejs <i18n en="application" zh="整站建设" /></p>
+            <p class="desc">Nodejs <i18n en="Web 服务开发" zh="online bussniess" /></p>
+            <p class="desc">Nodejs <i18n en="命令行工具开发" zh="CLI application" /></p>
           </li>
           <li class="item">
             <p class="icon app">
               <i class="iconfont icon-app"></i>
             </p>
             <h3 class="name">Application</h3>
-            <p class="desc">Weex {{ isEnLang ? 'application' : '应用开发' }}</p>
-            <p class="desc">ReactNative {{ isEnLang ? 'application' : '应用开发' }}</p>
-            <p class="desc">Electron {{ isEnLang ? 'application' : '应用开发' }}</p>
+            <p class="desc">Weex <i18n en="application" zh="应用开发" /></p>
+            <p class="desc">ReactNative <i18n en="application" zh="应用开发" /></p>
+            <p class="desc">Electron <i18n en="application" zh="应用开发" /></p>
           </li>
           <li class="item">
             <p class="icon wechat">
               <i class="iconfont icon-wechat"></i>
             </p>
             <h3 class="name">Wechat</h3>
-            <p class="desc">{{ isEnLang ? 'HTML5 page' : 'H5 开发' }}</p>
-            <p class="desc">{{ isEnLang ? 'WeChat official account' : '公众号开发' }}</p>
-            <p class="desc">{{ isEnLang ? 'WeChat mini program' : '小程序开发' }}</p>
+            <p class="desc"><i18n en="HTML5 page" zh="H5 开发" /></p>
+            <p class="desc"><i18n en="WeChat official account" zh="公众号开发" /></p>
+            <p class="desc"><i18n en="WeChat mini program" zh="小程序开发" /></p>
           </li>
           <li class="item">
             <p class="icon consult">
               <i class="iconfont icon-tool"></i>
             </p>
-            <h3 class="name">{{ isEnLang ? 'Consultant' : '技术咨询' }}</h3>
-            <p class="desc">{{ isEnLang ? 'Everything about WEB' : '语言、框架疑难杂症' }}</p>
-            <p class="desc">{{ isEnLang ? 'Business and technical' : '业务与技术方案设计' }}</p>
-            <p class="desc">{{ isEnLang ? 'Technical consultant' : '长期技术顾问指导' }}</p>
+            <h3 class="name"><i18n en="Consultant" zh="技术咨询" /></h3>
+            <p class="desc"><i18n en="Everything about WEB" zh="语言、框架疑难杂症" /></p>
+            <p class="desc"><i18n en="Business and technical" zh="业务与技术方案设计" /></p>
+            <p class="desc"><i18n en="Technical consultant" zh="长期技术顾问指导" /></p>
           </li>
         </ul>
       </div>
@@ -93,87 +95,94 @@
               <span>1. </span>
               <i18n zh="提交需求" en="Consult" />
             </h3>
-            <p class="desc">{{ isEnLang ? 'Product requirements document' : '提供构思成熟的需求文档' }}</p>
-            <p class="desc">{{ isEnLang ? 'Prototype design document' : '及清晰可用的设计图或原型' }}</p>
+            <p class="desc"><i18n en="Product requirements document" zh="提供构思成熟的需求文档" /></p>
+            <p class="desc"><i18n en="Prototype design document" zh="及清晰可用的设计图或原型" /></p>
           </li>
           <li class="item">
-            <h3 class="name">2. {{ isEnLang ? 'Confirm' : '确认需求' }}</h3>
-            <p class="desc">{{ isEnLang ? 'Price and schedule' : '确认报价及开发周期' }}</p>
-            <p class="desc">{{ isEnLang ? 'Development cycle' : '协商开发周期和要点' }}</p>
+            <h3 class="name">2. <i18n en="Confirm" zh="确认需求" /></h3>
+            <p class="desc"><i18n en="Price and schedule" zh="确认报价及开发周期" /></p>
+            <p class="desc"><i18n en="Development cycle" zh="协商开发周期和要点" /></p>
           </li>
           <li class="item">
-            <h3 class="name">3. {{ isEnLang ? 'Develop' : '预付开发' }}</h3>
-            <p class="desc">{{ isEnLang ? 'Payment the trust and deposit' : '预付部分或全部' }}</p>
-            <p class="desc">{{ isEnLang ? 'Develop project' : '进入开发流程' }}</p>
+            <h3 class="name">3. <i18n en="Develop" zh="预付开发" /></h3>
+            <p class="desc"><i18n en="Payment the trust and deposit" zh="预付部分或全部" /></p>
+            <p class="desc"><i18n en="Develop project" zh="进入开发流程" /></p>
           </li>
           <li class="item">
-            <h3 class="name">4. {{ isEnLang ? 'Review' : '预收修正' }}</h3>
-            <p class="desc">{{ isEnLang ? 'Review and experience' : '提供预览演示' }}</p>
-            <p class="desc">{{ isEnLang ? 'Fixbug and optimize' : '细节修正及调优' }}</p>
+            <h3 class="name">4. <i18n en="Review" zh="预收修正" /></h3>
+            <p class="desc"><i18n en="Review and experience" zh="提供预览演示" /></p>
+            <p class="desc"><i18n en="Fixbug and optimize" zh="细节修正及调优" /></p>
           </li>
           <li class="item">
-            <h3 class="name">5. {{ isEnLang ? 'Delivery' : '交付维护' }}</h3>
-            <p class="desc">{{ isEnLang ? 'Pay balance' : '付清尾款，交付项目' }}</p>
-            <p class="desc">{{ isEnLang ? 'Maintenance cycle' : '一定周期内持续维护' }}</p>
+            <h3 class="name">5. <i18n en="Delivery" zh="交付维护" /></h3>
+            <p class="desc"><i18n en="Pay balance" zh="付清尾款，交付项目" /></p>
+            <p class="desc"><i18n en="Maintenance cycle" zh="一定周期内持续维护" /></p>
           </li>
         </ul>
       </div>
     </div>
     <div class="rule">
-      <div class="rule-content container">{{ ruleContent }}</div>
+      <div class="rule-content container">
+        <i18n
+          zh="如果你认为自己的能力足以支撑一位出色、省心、优秀、帅气、完美的的全栈工程师的生产力，请 EMail 我；非常优秀，没有之一"
+          en="Any application that can be written in JavaScript, will eventually be written in JavaScript."
+        />
+      </div>
     </div>
   </div>
 </template>
 
-<script>
-  import appConfig from '/@/config/app.config'
-  import systemConstants from '/@/constants/system'
-  export default {
+<script lang="ts">
+  import { defineComponent, computed } from 'vue'
+  import { useI18n } from '/@/services/i18n'
+  import { useTheme, Theme } from '/@/services/theme'
+  import { GAEventActions, GAEventTags } from '/@/constants/ga'
+  import { Language } from '/@/language/data'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { useGlobalState } from '/@/state'
+  import * as APP_CONFIG from '/@/config/app.config'
+
+  export default defineComponent({
     name: 'Service',
-    head() {
+    setup() {
+      const i18n = useI18n()
+      const theme = useTheme()
+      const globalState = useGlobalState()
+      const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
+      const isMobile = computed(() => globalState.userAgent.isMobile)
+
+      const handleSubmitEmail = () => {
+        // this.$ga.event(
+        //   '咨询邮件',
+        //   GAEventActions.Click,
+        //   GAEventTags.ServicePage
+        // )
+        const isZhLang =  i18n.language.value === Language.Zh
+        const subject = isZhLang
+          ? `嗨！Surmon，久仰大名！`
+          : `Technical consultant / ${APP_CONFIG.META.title}`
+        const body = isZhLang
+          ? `我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
+          : 'Hi Surmon, My name is '
+        const mailAddress = 'mailto:surmon@foxmail.com' + (isMobile.value ? '' : `?subject=${subject}&body=${body}`)
+
+        // window.location.href = mailAddress
+        window.open(mailAddress)
+      }
+
       return {
-        title: `${this.isEnLang ? '' : this.$i18n.nav.service + ' | '}Service`
-      }
-    },
-    methods: {
-      submitProject() {
-        this.$ga.event(
-          '咨询邮件',
-          systemConstants.GAEventActions.Click,
-          systemConstants.GAEventTags.ServicePage
-        )
-        const subject = this.isEnLang
-          ? `Technical consultant / ${appConfig.meta.title}`
-          : `嗨！Surmon，久仰大名！`
-        const body = this.isEnLang
-          ? 'Hi Surmon, My name is '
-          : `我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
-        const mailAddress =
-          'mailto:surmon@foxmail.com' +
-          (this.isMobile ? '' : `?subject=${subject}&body=${body}`)
-        window.location.href = mailAddress
-      }
-    },
-    computed: {
-      isMobile() {
-        return this.$store.state.global.isMobile
-      },
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
-      },
-      isDarkTheme() {
-        return this.$store.getters['global/isDarkTheme']
-      },
-      ruleContent() {
-        return this.isEnLang
-          ? `"Any application that can be written in JavaScript, will eventually be written in JavaScript."`
-          : '如果你认为自己的能力足以支撑一位出色、省心、优秀、帅气、完美的的全栈工程师的生产力，请 EMail 我；非常优秀，没有之一'
+        isDarkTheme,
+        isMobile,
+        handleSubmitEmail,
+        LANGUAGE_KEYS
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .service-page {
     width: 100%;
 

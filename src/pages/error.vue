@@ -1,6 +1,7 @@
 <template>
   <div class="error">
     <div class="error-content">
+      <h1>li2323sdjlisdj</h1>
       <!-- <h1 class="error-code">{{ error.statusCode }}</h1> -->
       <div class="error-wrapper-message">
         <!-- <h2 class="error-message">{{ error.message || $i18n.text.notFound }}</h2> -->
@@ -22,13 +23,15 @@
     mounted() {
       // this.$store.commit('global/updateThreeColumnsState', true)
     },
-    beforeDestroy() {
+    beforeUnmount() {
       // this.$store.commit('global/updateThreeColumnsState', false)
     }
   }
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .error {
     top: 0;
     left: 0;

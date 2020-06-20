@@ -1,4 +1,6 @@
 const path = require('path')
+
+// const a = "/Users/surmon/Projects/Blog/surmon.me/node_modules/vite/dist/resolver.js"
 module.exports = {
   // root: './src',
   // base: './public',
@@ -8,11 +10,9 @@ module.exports = {
   optimizeDeps: {
     exclude: ['esm', 'fs-extra', 'socket.io', 'request', 'cross-env', '@vue/compiler-sfc']
   },
-  rollupPluginVueOptions: {
-
-  },
   plugins: [
     {
+      /*
       transforms: [
         {
           test: (path) => {
@@ -26,6 +26,7 @@ module.exports = {
           }
         }
       ]
+      */
       /*
       configureServer: ({
         root, // project root directory, absolute path

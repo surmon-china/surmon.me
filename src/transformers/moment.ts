@@ -49,7 +49,7 @@ export const TEXT_MAP = {
   },
   WEEKDAYS: {
     [Language.En]: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    [Language.Zh]: ['一', '二', '三', '四', '五', '六', '七']
+    [Language.Zh]: ['一', '二', '三', '四', '五', '六', '日']
   }
 }
 
@@ -74,30 +74,34 @@ export const dateToHuman = (date: Date) => {
 }
 
 // HumanData -> date
-export const humanToDate = (humanDate: HumanDate) => {
+export const humanToDate = (humanDate: Omit<HumanDate, 'week'>) => {
   const date = new Date()
   date.setDate(humanDate.day)
   date.setFullYear(humanDate.year)
-  date.setMonth(humanDate.week === 7 ? 0 : humanDate.week)
+  date.setMonth(humanDate.month - 1)
   return date
 }
 
-// { month: 13 } -> { month: 1 }
-export const standardizationHumanDate = (humanDate: HumanDate) => {
-  return dateToHuman(humanToDate(humanDate))
-}
-
 // HumanData -> like: 2016-01-02
-export const humanDateToYMD = (humanDate: HumanDate) => {
-  const { year, month, day } = humanDate
-  const _month = month < 10 ? `0${month}` : String(month)
-  const _day = day < 10 ? `0${day}` : String(day)
-  return `${year}-${_month}-${_day}`
+export const humanDateToYMD = ({ year, month, day }: Partial<Omit<HumanDate, 'week'>>) => {
+  const _month = month
+    ? '-' + String(month).padStart(2, '0')
+    : ''
+  const _day = day
+    ? '-' + String(day).padStart(2, '0')
+    : ''
+  return `${year}${_month}${_day}`
 }
 
 // Date -> like: 2016-01-02
 export const dateToYMD = (date: Date) => {
   return humanDateToYMD(dateToHuman(date))
+}
+
+// YMD (2016-01-02) -> Date
+export const ymdToDate = (date: string) => {
+  const [year, month, day] = date.split('-').map(Number)
+  return humanToDate({ year, month, day })
 }
 
 // Date -> local date string

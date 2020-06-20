@@ -15,6 +15,7 @@ export default defineComponent({
     src: String,
     ...PopupUIProps
   },
+  // eslint-disable-next-line vue/no-setup-props-destructure
   setup({ src, ...popupProps }, context) {
     const popup = usePopup()
     const imageProps = getOtherProps(popupProps)
