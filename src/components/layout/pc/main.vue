@@ -2,10 +2,10 @@
   <div class="pc-main">
     <client-only>
       <figure class="widget">
-        <barrage />
+        <!-- <barrage /> -->
         <background />
         <wallflower />
-        <template v-if="!layoutColumn.isFullScreenLayout">
+        <template v-if="!layoutColumn.isFullPageLayout">
           <language />
           <theme />
           <share />
@@ -20,7 +20,7 @@
     <main
       id="main"
       class="main-container"
-      :class="{ 'full-page': layoutColumn.isFullScreenLayout }"
+      :class="{ 'full-page': layoutColumn.isFullPageLayout }"
     >
       <nav-view v-if="layoutColumn.isNormalLayout || layoutColumn.isWideLayout" />
       <div
@@ -30,7 +30,7 @@
           'layout-normal': layoutColumn.isNormalLayout,
           'layout-wide': layoutColumn.isWideLayout,
           'layout-full-column': layoutColumn.isFullColumeLayout,
-          'layout-full-page': layoutColumn.isFullScreenLayout
+          'layout-full-page': layoutColumn.isFullPageLayout
         }"
       >
         <slot />
@@ -49,7 +49,7 @@
   import AsideView from './aside/main.vue'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
-  import Barrage from '/@/components/widget/barrage/main.vue'
+  // import Barrage from '/@/components/widget/barrage/main.vue'
   import Wallflower from '/@/components/widget/wallflower/garden.vue'
   import Wallpaper from '/@/components/widget/wallpaper/main.vue'
   import Background from '/@/components/widget/background.vue'
@@ -69,7 +69,7 @@
       Toolbox,
       Wallflower,
       Background,
-      Barrage,
+      // Barrage,
       HeaderView,
       FooterView,
       AsideView,

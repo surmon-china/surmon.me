@@ -61,8 +61,8 @@
 </template>
 
 <script>
-  import socket from '/@/plugins/socket.io'
-  import BarrageItem from './item'
+  import socket from '/@/services/socket.io'
+  import BarrageItem from './item.vue'
   export default {
     name: 'Barrage',
     components: {
@@ -248,6 +248,8 @@
 </style>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   @keyframes input-box-in {
     0% { transform: translate3d(0, -2000%, 0) }
     65% { transform: translate3d(0, 100%, 0) }

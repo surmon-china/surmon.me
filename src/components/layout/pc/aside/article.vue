@@ -1,19 +1,19 @@
 <template>
-  <div class="aside-article">
+  <div class="article">
     <p class="title">
       <i class="iconfont icon-hotfill" />
-      <strong v-text="$i18n.text.article.hotlist" />
+      <strong v-i18n="LANGUAGE_KEYS.HOT_ARTICLE_LIST_TITLE" />
     </p>
-    <empty-box v-if="!articles.length">
-      <slot>{{ $i18n.text.article.empty }}</slot>
-    </empty-box>
-    <ul v-else class="aside-article-list">
+    <su-empty v-if="!articles.length">
+      <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
+    </su-empty>
+    <ul v-else class="article-list">
       <li v-for="item in articles" :key="item.id" class="item">
         <span class="index" />
         <router-link
           class="title"
-          :to="`/article/${item.id}`"
-          :title="`${item.title} - 「 ${item.meta.comments} ${$i18n.text.comment.count} | ${item.meta.likes} ${$i18n.text.comment.like} 」`"
+          :to="getArticleDetailRoute(item.id)"
+          :title="getArticleTitle(item)"
         >
           <span v-text="item.title" />
         </router-link>
@@ -28,22 +28,29 @@
   import { useStore } from '/@/store'
   import { RouteName } from '/@/router'
   import { useI18n } from '/@/services/i18n'
-  import { isSearchArchive } from '/@/transformers/route'
+  import { isSearchArchive, getArticleDetailRoute } from '/@/transformers/route'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
 
   export default defineComponent({
-    name: 'PcAsideArticles',
+    name: 'PcAsideArticle',
     setup() {
       const i18n = useI18n()
       const store = useStore()
       // TODO: article
-      // @ts-ignore
-      const articles = computed(() => store.state.article.hotList.data)
+      // const articles = computed(() => store.state.article.hotList.data)
+      const articles = []
+
+      const getArticleTitle = (article: any) => {
+        const commentCount = article.meta.comments + i18n.translate(LANGUAGE_KEYS.COMMENT_LIST_COUNT)
+        const likeCount = i18n.translate(LANGUAGE_KEYS.COMMENT_LIKE_COUNT, article.meta.likes)
+        return `${article.title} - 「 ${commentCount} | ${likeCount} 」`
+      }
 
       return {
         articles,
-        t: i18n.t,
+        getArticleTitle,
+        getArticleDetailRoute,
         LANGUAGE_KEYS
       }
     }
@@ -52,8 +59,9 @@
 
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
+  @import './variables.scss';
 
-  .aside-article {
+  .article {
     overflow: hidden;
 
     > .title {
@@ -69,7 +77,7 @@
       }
     }
 
-    > .aside-article-list {
+    > .article-list {
       list-style: none;
       padding: $sm-gap 0;
       margin-bottom: 0;

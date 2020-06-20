@@ -8,11 +8,12 @@ import { Request } from 'express'
 import { createSSRApp } from 'vue'
 import { createWebHistory, createMemoryHistory } from 'vue-router'
 import { VueEnv } from '/@/vuniversal/env'
-import { createUniversalRouter } from './router'
+import { createUniversalRouter, RouteName } from './router'
 import { createUniversalStore } from './store'
 import { createI18n } from '/@/services/i18n'
 import { createClientOnly } from '/@/services/client-only'
 import { createTheme, Theme } from '/@/services/theme'
+import { getLayoutMiddleware } from '/@/services/layout'
 import enhancer from '/@/services/enhancer'
 import { Language, languages, langMap } from '/@/language/data'
 import { createGlobalState } from './state'
@@ -42,11 +43,14 @@ export const createVueApp = (context: ICreaterContext) => {
   const app = createSSRApp(App)
   const store = createUniversalStore()
   const router = createUniversalRouter({
-    globalState,
+    beforeMiddleware: getLayoutMiddleware(globalState),
     history: isServer
       ? createMemoryHistory()
       : createWebHistory()
   })
+  if (globalState.userAgent.isMobile) {
+    router.removeRoute(RouteName.Music)
+  }
 
   const theme = createTheme(Theme.Default)
   const i18n = createI18n({

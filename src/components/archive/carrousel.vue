@@ -1,9 +1,9 @@
 <template>
   <div class="carrousel" :class="{ mobile: isMobile }">
     <transition name="module" mode="out-in">
-      <empty-box v-if="!articleList.length" key="empty" class="article-empty-box">
+      <su-empty v-if="!articleList.length" key="empty" class="article-su-empty">
         <slot>{{ $i18n.text.article.empty }}</slot>
-      </empty-box>
+      </su-empty>
       <div
         v-else
         key="swiper"

@@ -1,11 +1,13 @@
-import { Router, RouteRecordRaw, ScrollBehavior, RouterHistory, createRouter } from 'vue-router'
-import { GlobalState, LayoutColumn } from './state'
+import { RouteRecordRaw, NavigationGuard, PostNavigationGuard, RouterHistory, createRouter } from 'vue-router'
 import ErrorPage from './pages/error.vue'
 
 export enum RouteName {
-  Index = 'index',
-  ArticleDetail = 'article-article_id',
-  SearchArchive = 'search-keyword',
+  Home = 'home',
+  Article = 'article-detail',
+  TagArchive = 'tag-archive',
+  CategoryArchive = 'category-archive',
+  DateArchive = 'date-archive',
+  SearchArchive = 'search-archive',
   Guestbook = 'guestbook',
   Service = 'service',
   App = 'app',
@@ -16,84 +18,105 @@ export enum RouteName {
   Error = 'error'
 }
 
-const routerMiddleware = (router: Router, state: GlobalState) => {
-  router.beforeEach((_, to) => {
-    const isFullColumns = [
-      RouteName.About,
-      RouteName.Vlog,
-      RouteName.Sitemap
-    ].includes((to.name || '') as RouteName)
-
-    const isFullPageColumns = [
-      RouteName.Music,
-      RouteName.App,
-      RouteName.Service
-    ].includes((to.name || '') as RouteName)
-
-    state.layoutColumn.setLayoutColumn(
-      isFullColumns
-        ? LayoutColumn.Full
-        : isFullPageColumns
-          ? LayoutColumn.Screen
-          : LayoutColumn.Normal
-    )
-  })
-}
-
 const routes: RouteRecordRaw[] = [
-   {
+  {
     path: '/',
-    name: RouteName.Index,
-    component: async () => import(/* webpackChunkName: 'index' */ './pages/new.vue')
+    name: RouteName.Home,
+    component: import('./pages/home.vue')
   },
-  // {
-  //   path: '/',
-  //   name: 'index',
-  //   component: async () => import(/* webpackChunkName: 'index' */ './pages/index.vue')
-  // },
-  // {
-  //   path: `/about`,
-  //   name: 'about',
-  //   component: async () => import(/* webpackChunkName: 'about' */ './pages/about.vue')
-  // },
-  // {
-  //   path: `/app`,
-  //   name: 'app',
-  //   component: async () => import(/* webpackChunkName: 'app' */ './pages/app.vue')
-  // },
-  // {
-  //   path: `/service`,
-  //   name: 'service',
-  //   component: async () => import(/* webpackChunkName: 'service' */ './pages/service.vue')
-  // },
-  // {
-  //   name: 'error',
-  //   path: '/:data(.*)',
-  //   component: ErrorPage
-  // }
+  {
+    path: '/sitemap',
+    name: RouteName.Sitemap,
+    component: import('./pages/sitemap.vue')
+  },
+  {
+    path: '/article/:article_id',
+    name: RouteName.Article,
+    component: import('./pages/article/main.vue')
+  },
+  {
+    path: '/category/:category_id',
+    name: RouteName.CategoryArchive,
+    component: import('./pages/category.vue')
+  },
+  {
+    path: '/tag/:tag_id',
+    name: RouteName.TagArchive,
+    component: import('./pages/tag.vue')
+  },
+  {
+    path: '/date/:date',
+    name: RouteName.DateArchive,
+    component: import('./pages/date.vue')
+  },
+  // TODO: 也许就要使用谷歌搜索工具了，或者提供百度或谷歌选项
+  {
+    path: '/search/:keyword',
+    name: RouteName.SearchArchive,
+    component: import('./pages/search.vue')
+  },
+  {
+    path: '/music',
+    name: RouteName.Music,
+    component: import('./pages/music.vue')
+  },
+  {
+    path: '/vlog',
+    name: RouteName.Vlog,
+    component: import('./pages/vlog.vue')
+  },
+  {
+    path: '/about',
+    name: RouteName.About,
+    component: import('./pages/about/main.vue')
+  },
+  {
+    path: '/service',
+    name: RouteName.Service,
+    component: import('./pages/service.vue')
+  },
+  {
+    path: '/guestbook',
+    name: RouteName.Guestbook,
+    component: import('./pages/guestbook.vue')
+  },
+  {
+    path: '/app',
+    name: RouteName.App,
+    component: import('./pages/app.vue')
+  },
+  {
+    name: 'error',
+    path: '/:data(.*)',
+    component: ErrorPage
+  }
 ]
 
-const scrollBehavior: ScrollBehavior = (to, from, savedPosition) => {
-  if (savedPosition) {
-    return savedPosition
-  } else {
-    return { x: 0, y: 0 }
-  }
-}
-
-export interface RouterConfig {
+export interface RouterCreateConfig {
   history: RouterHistory
-  globalState: GlobalState
+  beforeMiddleware?: NavigationGuard
+  afterMiddleware?: PostNavigationGuard
 }
-export const createUniversalRouter = (config: RouterConfig) => {
+export const createUniversalRouter = (config: RouterCreateConfig) => {
   const router = createRouter({
+    routes,
+    strict: true,
     history: config.history,
-    routes: config.globalState.userAgent.isMobile
-      ? routes.filter(route => route.name !== RouteName.Music)
-      : routes,
-    scrollBehavior
+    scrollBehavior(to, from, savedPosition) {
+      return savedPosition || {
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      }
+    }
   })
 
-  routerMiddleware(router, config.globalState)
+  if (config.beforeMiddleware) {
+    router.beforeEach(config.beforeMiddleware)
+  }
+  if (config.afterMiddleware) {
+    router.afterEach(config.afterMiddleware)
+  }
+
   return router
 }

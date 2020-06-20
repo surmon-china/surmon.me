@@ -97,6 +97,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .barrage-item {
     width: auto;
     right: 0px;

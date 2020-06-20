@@ -4,11 +4,13 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import Favico from 'favico.js'
+import FavicoClass from '/@/patchs/favico'
 import { isClient } from '/@/vuniversal/env'
 import { titles } from '/@/config/egg.config'
 
-let favicon: Favico = null
+const Favico = FavicoClass as any
+
+let favicon: any = null
 let faviconTimer: number
 let rollTimer: number
 let eggTitle = ''

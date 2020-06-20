@@ -15,10 +15,10 @@ export enum NodeEnv {
   Test = 'test'
 }
 
-export const NODE_ENV = process.env.NODE_ENV as NodeEnv
-export const isDev = process.env.NODE_ENV === NodeEnv.Development
-export const isProd = process.env.NODE_ENV === NodeEnv.Production
-export const isTest = process.env.NODE_ENV === NodeEnv.Test
+export const NODE_ENV = process.env.NODE_ENV as NodeEnv || import.meta.env?.MODE
+export const isDev = NODE_ENV === NodeEnv.Development || import.meta.env?.DEV
+export const isProd = NODE_ENV === NodeEnv.Production || import.meta.env?.PROD
+export const isTest = NODE_ENV === NodeEnv.Test
 
 export const VUE_ENV = process.env.VUE_ENV as VueEnv
 export const isClient = process.env.VUE_ENV === VueEnv.Client

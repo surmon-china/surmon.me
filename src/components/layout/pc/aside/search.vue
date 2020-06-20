@@ -5,7 +5,6 @@
         id="keyword"
         v-model.trim="keyword"
         required
-        list="keywords"
         type="search"
         name="search"
         class="search-input"
@@ -31,6 +30,7 @@
     <router-link to="/sitemap" class="sitemap-btn">
       <i class="iconfont icon-book" />
     </router-link>
+    <!-- TODO:  重新实现，不再使用 list，而是使用 element 实现，并且 focus 时需要高亮起来 -->
   </div>
 </template>
 
@@ -73,6 +73,7 @@
 
       return {
         keyword,
+        handleSearch,
         tags,
         isZhLang,
         t: i18n.t,
@@ -84,6 +85,9 @@
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+  @import './variables.scss';
+
   .search {
     padding: $sm-gap;
     width: 100%;

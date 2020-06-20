@@ -94,9 +94,9 @@ export const createPopup = (): Popup & Plugin => {
     ...popupStore,
     install(app: App, config: PopupPluginConfig) {
       app.provide(PopupSymbol, popupStore)
-      // @ts-expect-error
+      // @ts-ignore
       app.component(PopupComponent.name as string, PopupComponent)
-      // @ts-expect-error
+      // @ts-ignore
       app.component(PopupImageComponent.name as string, PopupImageComponent)
       app.component(PopupRootComponent.name as string, PopupRootComponent)
       if (config?.exportToGlobal) {

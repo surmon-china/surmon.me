@@ -1,9 +1,9 @@
 <template>
-  <div class="aside-tag">
-    <empty-box v-if="!tags.length">
+  <div class="tag">
+    <su-empty v-if="!tags.length">
       <i18n :lkey="LANGUAGE_KEYS.TAG_PLACEHOLDER" />
-    </empty-box>
-    <ul v-else class="aside-tag-list">
+    </su-empty>
+    <ul v-else class="tag-list">
       <router-link
         v-for="(tag, index) in tags"
         :key="index"
@@ -25,50 +25,26 @@
       </router-link>
     </ul>
   </div>
-  <div v-if="isArticlePage" class="aside-tools">
-    <div class="full-column" @click="setFullColumn">
-      <span v-i18n="LANGUAGE_KEYS.ARTICLE_FULL_COL_READ" />
-      <span>&nbsp;&nbsp;</span>
-      <i class="iconfont icon-read" />
-    </div>
-    <div class="full-page" @click="setFullScreen">
-      <span v-i18n="LANGUAGE_KEYS.ARTICLE_FULL_SCREEN_READ" />
-      <span>&nbsp;&nbsp;</span>
-      <i class="iconfont icon-fullscreen" />
-    </div>
-  </div>
 </template>
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { useRoute } from 'vue-router'
   import { useStore } from '/@/store'
-  import { RouteName } from '/@/router'
-  import { useGlobalState, LayoutColumn } from '/@/state'
   import { useI18n } from '/@/services/i18n'
   import { getTagArchiveRoute, isArticleDetail } from '/@/transformers/route'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
 
   export default defineComponent({
-    name: 'PcAsideTags',
+    name: 'PcAsideTag',
     setup() {
       const i18n = useI18n()
       const store = useStore()
       const route = useRoute()
-      const globalState = useGlobalState()
       const tags = computed(() => store.state.tag.data)
       const isArticlePage = computed(() => isArticleDetail(route.name))
       const isZhLang = computed(() => i18n.language.value === Language.Zh)
-
-      const setFullColumn = () => {
-        globalState.layoutColumn.setLayoutColumn(LayoutColumn.Full)
-      }
-
-      const setFullScreen = () => {
-        setFullColumn()
-        document.documentElement.requestFullscreen()
-      }
 
       return {
         tags,
@@ -76,9 +52,7 @@
         LANGUAGE_KEYS,
         isZhLang,
         isArticlePage,
-        getTagArchiveRoute,
-        setFullColumn,
-        setFullScreen
+        getTagArchiveRoute
       }
     }
   })
@@ -86,8 +60,9 @@
 
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
+  @import './variables.scss';
 
-  .aside-tag {
+  .tag {
     margin-bottom: 0;
     max-height: calc(100vh - 88px - #{$top-height + $lg-gap + $lg-gap + $tool-height});
     overflow-y: auto;
@@ -96,12 +71,12 @@
     border-top: $gap solid transparent;
     border-bottom: $gap solid transparent;
 
-    .empty-box {
+    .su-empty {
       padding-right: $gap;
       padding-bottom: $gap;
     }
 
-    .aside-tag-list {
+    .tag-list {
       list-style: none;
       padding: 0;
       margin: 0;
@@ -150,36 +125,6 @@
             @include background-transition();
           }
         }
-      }
-    }
-  }
-
-  .aside-tools {
-    margin-top: $lg-gap;
-    display: flex;
-    justify-content: space-between;
-
-    > .full-column {
-      margin-right: $sm-gap;
-    }
-
-    > .full-page {
-      margin-left: $sm-gap;
-    }
-
-    > .full-column,
-    > .full-page {
-      display: inline-block;
-      flex-grow: 1;
-      height: $tool-height;
-      line-height: $tool-height;
-      text-align: center;
-      background-color: $module-bg;
-      @include background-transition();
-      cursor: pointer;
-
-      &:hover {
-        background-color: $module-hover-bg;
       }
     }
   }

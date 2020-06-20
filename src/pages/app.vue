@@ -101,6 +101,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .app-page {
     display: flex;
     justify-content: center;
