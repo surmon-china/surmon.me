@@ -6,12 +6,13 @@
 
 import { App, Plugin } from 'vue'
 import Swiper, { SwiperOptions } from 'swiper'
-import { CoreNames } from './constants'
+import { NameId } from './constants'
 import getDirective from './directive'
 import getSwiperComponent from './swiper'
 import SwiperSlideComponent from './slide'
+import { useSwiper, useSwiperRef } from './hooks'
 
-export type InstallFunction = Plugin & {
+type InstallFunction = Plugin & {
   installed?: boolean
 }
 
@@ -21,12 +22,12 @@ const getInstaller = (SwiperClass: typeof Swiper) => {
 
     const SwiperComponent = getSwiperComponent(SwiperClass)
     if (globalOptions) {
-      (SwiperComponent as any).options.props.defaultOptions.default = () => globalOptions
+      SwiperComponent.props.defaultOptions.default = () => globalOptions
     }
   
     app.component(SwiperComponent.name, SwiperComponent)
     app.component(SwiperSlideComponent.name, SwiperSlideComponent)
-    app.directive(CoreNames.SwiperDirective, getDirective(SwiperClass, globalOptions))
+    // app.directive(CoreNames.SwiperDirective, getDirective(SwiperClass, globalOptions))
     install.installed = true
   }
   return install
@@ -34,10 +35,12 @@ const getInstaller = (SwiperClass: typeof Swiper) => {
 
 export default function exporter(SwiperClass: typeof Swiper) {
   return {
+    useSwiper,
+    useSwiperRef,
     version: 'PACKAGE_VERSION',
     install: getInstaller(SwiperClass),
     directive: getDirective(SwiperClass),
-    [CoreNames.SwiperComponent as const]: getSwiperComponent(SwiperClass),
-    [CoreNames.SwiperSlideComponent as const]: SwiperSlideComponent
+    [NameId.SwiperComponent as const]: getSwiperComponent(SwiperClass),
+    [NameId.SwiperSlideComponent as const]: SwiperSlideComponent
   }
 }

@@ -4,9 +4,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { defineComponent, h, PropType } from 'vue'
 import Swiper, { SwiperOptions } from 'swiper'
-import { DEFAULT_CLASSES, SwiperSymbol, CoreNames, ComponentPropNames, ComponentEvents } from './constants'
+import { defineComponent, ref, computed, h, onMounted, onUpdated, onActivated, onBeforeUnmount, nextTick, provide, readonly, PropType, ExtractPropTypes } from 'vue'
+import { DEFAULT_CLASSES, SwiperSymbol, SwiperContext, NameId, ComponentPropNames, ComponentEvents } from './constants'
 import { handleClickSlideEvent, bindSwiperEvents } from './event'
 
 enum SlotNames {
@@ -17,167 +17,159 @@ enum SlotNames {
   NextButton = 'button-next'
 }
 
+const swiperComponentProps = {
+  defaultOptions: {
+    type: Object as PropType<SwiperOptions>,
+    required: false,
+    default: () => ({}) as SwiperOptions
+  },
+  // eslint-disable-next-line vue/require-default-prop
+  options: {
+    type: Object as PropType<SwiperOptions>,
+    required: false
+  },
+  [ComponentPropNames.AutoUpdate]: {
+    type: Boolean,
+    default: true
+  },
+  // https://github.com/surmon-china/vue-awesome-swiper/pull/550/files
+  [ComponentPropNames.AutoDestroy]: {
+    type: Boolean,
+    default: true
+  },
+  // https://github.com/surmon-china/vue-awesome-swiper/pull/388
+  [ComponentPropNames.DeleteInstanceOnDestroy]: {
+    type: Boolean,
+    required: false,
+    default: true
+  },
+  [ComponentPropNames.CleanupStylesOnDestroy]: {
+    type: Boolean,
+    required: false,
+    default: true
+  }
+}
+
 export type SwiperComponent = ReturnType<typeof getSwiperComponent>
+export type SwiperComponentInstance = InstanceType<SwiperComponent>
+export type SwiperComponentProps = ExtractPropTypes<typeof swiperComponentProps>
 export default function getSwiperComponent(SwiperClass: typeof Swiper) {
   return defineComponent({
-    name: CoreNames.SwiperComponent,
-    props: {
-      defaultOptions: {
-        type: Object as PropType<SwiperOptions>,
-        required: false,
-        default: () => ({})
-      },
-      // eslint-disable-next-line vue/require-default-prop
-      options: {
-        type: Object as PropType<SwiperOptions>,
-        required: false
-      },
-      [ComponentPropNames.AutoUpdate]: {
-        type: Boolean,
-        default: true
-      },
-      // https://github.com/surmon-china/vue-awesome-swiper/pull/550/files
-      [ComponentPropNames.AutoDestroy]: {
-        type: Boolean,
-        default: true
-      },
-      // https://github.com/surmon-china/vue-awesome-swiper/pull/388
-      [ComponentPropNames.DeleteInstanceOnDestroy]: {
-        type: Boolean,
-        required: false,
-        default: true
-      },
-      [ComponentPropNames.CleanupStylesOnDestroy]: {
-        type: Boolean,
-        required: false,
-        default: true
-      }
-    },
-    data() {
-      return {
-        [CoreNames.SwiperInstance as const]: null as Swiper | null
-      }
-    },
-    computed: {
-      swiperInstance: {
-        set(swiper: Swiper) {
-          this.$data[CoreNames.SwiperInstance] = swiper
-          this.$data[CoreNames.SwiperInstance] = swiper
-        },
-        get(): Swiper | null {
-          return this[CoreNames.SwiperInstance]
-        }
-      },
-      swiperOptions(): SwiperOptions {
-        return this.options || this.defaultOptions
-      },
-      wrapperClass(): string {
-        return this.swiperOptions.wrapperClass || DEFAULT_CLASSES.wrapperClass
-      }
-    },
-    methods: {
+    name: NameId.SwiperComponent,
+    props: swiperComponentProps,
+    setup(props, context) {
+      // eslint-disable-next-line prefer-const
+      let swiperContext!: SwiperContext
+      const emiter = context.emit
+      const swiperElement = ref<HTMLElement>(null as any as HTMLElement)
+      const swiperInstance = ref<Swiper | null>(null)
+      const swiperOptions = computed(() => props.options || props.defaultOptions)
+      const wrapperClass = computed(() => swiperOptions.value?.wrapperClass || DEFAULT_CLASSES.wrapperClass)
+
       // Feature: click event
-      handleSwiperClick(event: MouseEvent) {
-        handleClickSlideEvent(
-          this.swiperInstance,
-          event,
-          this.$emit.bind(this)
-        )
-      },
-      autoReLoopSwiper() {
-        if (this.swiperInstance && this.swiperOptions.loop) {
+      const handleSwiperClick = (event: MouseEvent) => {
+        if (swiperInstance.value) {
+          handleClickSlideEvent(
+            swiperInstance.value,
+            event,
+            emiter
+          )
+        }
+      }
+
+      const reLoopSwiper = () => {
+        if (swiperInstance.value && swiperOptions.value.loop) {
           // https://github.com/surmon-china/vue-awesome-swiper/issues/593
           // https://github.com/surmon-china/vue-awesome-swiper/issues/544
           // https://github.com/surmon-china/vue-awesome-swiper/pull/545/files
-          const swiper = this.swiperInstance as any
+          const swiper = swiperInstance.value as any
           swiper?.loopDestroy?.()
           swiper?.loopCreate?.()
         }
-      },
-      updateSwiper() {
-        if (this[ComponentPropNames.AutoUpdate] && this.swiperInstance) {
-          this.autoReLoopSwiper()
-          this.swiperInstance?.update?.()
-          this.swiperInstance.navigation?.update?.()
-          this.swiperInstance.pagination?.render?.()
-          this.swiperInstance.pagination?.update?.()
+      }
+
+      const updateSwiper = () => {
+        if (this[ComponentPropNames.AutoUpdate] && swiperInstance.value) {
+          reLoopSwiper()
+          swiperInstance.value?.update?.()
+          swiperInstance.value.navigation?.update?.()
+          swiperInstance.value.pagination?.render?.()
+          swiperInstance.value.pagination?.update?.()
         }
-      },
-      destroySwiper() {
-        if (this[ComponentPropNames.AutoDestroy] && this.swiperInstance) {
+      }
+
+      const destroySwiper = () => {
+        if (this[ComponentPropNames.AutoDestroy] && swiperInstance.value) {
           // https://github.com/surmon-china/vue-awesome-swiper/pull/341
           // https://github.com/surmon-china/vue-awesome-swiper/issues/340
-          if ((this.swiperInstance as any).initialized) {
-            this.swiperInstance?.destroy?.(
-              this.$props[ComponentPropNames.DeleteInstanceOnDestroy] as boolean,
-              this.$props[ComponentPropNames.CleanupStylesOnDestroy] as boolean
+          if ((swiperInstance.value as any).initialized) {
+            swiperInstance.value?.destroy?.(
+              props[ComponentPropNames.DeleteInstanceOnDestroy] as boolean,
+              props[ComponentPropNames.CleanupStylesOnDestroy] as boolean
             )
           }
         }
-      },
-      initSwiper() {
-        this.swiperInstance = new SwiperClass(
-          this.$el as HTMLElement,
-          this.swiperOptions
+      }
+
+      const initSwiper = () => {
+        swiperInstance.value = new SwiperClass(
+          swiperElement.value,
+          swiperOptions.value
         )
         bindSwiperEvents(
-          this.swiperInstance,
-          this.$emit.bind(this)
+          swiperInstance.value,
+          emiter
         )
-        this.$emit(
+        emiter(
           ComponentEvents.Ready,
-          this.swiperInstance
+          swiperContext
         )
       }
-    },
-    provide() {
-      return {
-        [SwiperSymbol as any]: {
-          [CoreNames.SwiperInstance]: this.swiperInstance
-          // ...this.$data,
-          // swiperOptions: this.swiperOptions,
-          // initSwiper: this.initSwiper,
-          // updateSwiper: this.updateSwiper,
-          // destroySwiper: this.destroySwiper,
-          // autoReLoopSwiper: this.autoReLoopSwiper
+
+      swiperContext = Object.freeze({
+        $swiper: readonly(swiperInstance),
+        options: swiperOptions,
+        props,
+        init: initSwiper,
+        update: updateSwiper,
+        reLoop: reLoopSwiper,
+        destroy: destroySwiper
+      })
+
+      onMounted(() => {
+        if (!swiperInstance.value) {
+          initSwiper()
         }
+      })
+
+      // Update swiper when the parent component activated with `keep-alive`.
+      onActivated(updateSwiper)
+      onUpdated(updateSwiper)
+      onBeforeUnmount(() => {
+        // https://github.com/surmon-china/vue-awesome-swiper/commit/2924a9d4d3d1cf51c0d46076410b1f804b2b8a43#diff-7f4e0261ac562c0f354cb91a1ca8864f
+        nextTick(destroySwiper)
+      })
+
+      // Provide context to childen
+      provide(SwiperSymbol, swiperContext)
+
+      return () => {
+        return h('div',
+          {
+            class: DEFAULT_CLASSES.containerClass,
+            ref: swiperElement,
+            onClick: handleSwiperClick
+          },
+          [
+            context.slots[SlotNames.ParallaxBg]?.(),
+            h('div', { class: wrapperClass.value }, context.slots.default?.()),
+            context.slots[SlotNames.Pagination]?.(),
+            context.slots[SlotNames.PrevButton]?.(),
+            context.slots[SlotNames.NextButton]?.(),
+            context.slots[SlotNames.Scrollbar]?.()
+          ]
+        )
       }
-    },
-    mounted() {
-      if (!this.swiperInstance) {
-        this.initSwiper()
-      }
-    },
-    // Update swiper when the parent component activated with `keep-alive`.
-    activated() {
-      this.updateSwiper()
-    },
-    updated() {
-      this.updateSwiper()
-    },
-    beforeUnmount() {
-      // https://github.com/surmon-china/vue-awesome-swiper/commit/2924a9d4d3d1cf51c0d46076410b1f804b2b8a43#diff-7f4e0261ac562c0f354cb91a1ca8864f
-      this.$nextTick(this.destroySwiper)
-    },
-    render() {
-      return h('div',
-        {
-          staticClass: DEFAULT_CLASSES.containerClass,
-          on: {
-            click: this.handleSwiperClick
-          }
-        },
-        [
-          this.$slots[SlotNames.ParallaxBg],
-          h('div', {
-            class: this.wrapperClass
-          }, this.$slots.default),
-          this.$slots[SlotNames.Pagination],
-          this.$slots[SlotNames.PrevButton],
-          this.$slots[SlotNames.NextButton],
-          this.$slots[SlotNames.Scrollbar]
-        ]
-      )
     }
   })
 }

@@ -22,68 +22,68 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: RouteName.Home,
-    component: import('./pages/home.vue')
+    component: () => import('./pages/home.vue')
   },
   {
     path: '/sitemap',
     name: RouteName.Sitemap,
-    component: import('./pages/sitemap.vue')
+    component: () => import('./pages/sitemap.vue')
   },
   {
     path: '/article/:article_id',
     name: RouteName.Article,
-    component: import('./pages/article/main.vue')
+    component: () => import('./pages/article/main.vue')
   },
   {
     path: '/category/:category_id',
     name: RouteName.CategoryArchive,
-    component: import('./pages/category.vue')
+    component: () => import('./pages/category.vue')
   },
   {
     path: '/tag/:tag_id',
     name: RouteName.TagArchive,
-    component: import('./pages/tag.vue')
+    component: () => import('./pages/tag.vue')
   },
   {
     path: '/date/:date',
     name: RouteName.DateArchive,
-    component: import('./pages/date.vue')
+    component: () => import('./pages/date.vue')
   },
   // TODO: 也许就要使用谷歌搜索工具了，或者提供百度或谷歌选项
   {
     path: '/search/:keyword',
     name: RouteName.SearchArchive,
-    component: import('./pages/search.vue')
+    component: () => import('./pages/search.vue')
   },
   {
     path: '/music',
     name: RouteName.Music,
-    component: import('./pages/music.vue')
+    component: () => import('./pages/music.vue')
   },
   {
     path: '/vlog',
     name: RouteName.Vlog,
-    component: import('./pages/vlog.vue')
+    component: () => import('./pages/vlog.vue')
   },
   {
     path: '/about',
     name: RouteName.About,
-    component: import('./pages/about/main.vue')
+    component: () => import('./pages/about/main.vue')
   },
   {
     path: '/service',
     name: RouteName.Service,
-    component: import('./pages/service.vue')
+    component: () => import('./pages/service.vue')
   },
   {
     path: '/guestbook',
     name: RouteName.Guestbook,
-    component: import('./pages/guestbook.vue')
+    component: () => import('./pages/guestbook.vue')
   },
   {
     path: '/app',
     name: RouteName.App,
-    component: import('./pages/app.vue')
+    component: () => import('./pages/app.vue')
   },
   {
     name: 'error',

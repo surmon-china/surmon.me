@@ -1,9 +1,29 @@
 <template>
   <div class="mammon">
+    <!-- <div v-swiper="swiperOption">
+      <div class="swiper-wrapper swiper aside">
+        <div
+          class="swiper-slide"
+          v-for="(ad, index) in AD_CONFIG.asideSwiper"
+          :key="index"
+        >
+          <a
+            :href="ad.url"
+            rel="external nofollow noopener"
+            target="_blank"
+            class="content"
+          >
+            <img :src="ad.src" alt="aliyun-ad" draggable="false">
+          </a>
+        </div>
+      </div>
+      <div class="swiper-pagination" />
+    </div> -->
     <swiper
       ref="swiperElement"
       class="swiper aside"
       :options="swiperOption"
+      @ready="updateSwiperContext"
       @slide-change="handleSwiperSlideChange"
     >
       <swiper-slide
@@ -28,8 +48,9 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
+  import { defineComponent, ref, computed, onMounted } from 'vue'
   import Swiper from 'swiper'
+  import { useSwiperRef, NameId } from '/@/todo/swiper'
   import AD_CONFIG from '/@/config/ad.config'
 
   export default defineComponent({
@@ -41,8 +62,8 @@
       }
     },
     setup(props, context) {
-      const swiperElement = ref<any>(null)
-      const swiperInstance = computed<Swiper>(() => swiperElement.value?.$swiper)
+      const [swiperContext, updateSwiperContext] = useSwiperRef()
+      const swiperInstance = computed(() => swiperContext.value?.$swiper.value)
       const currentSlideRealIndex = computed(() => swiperInstance.value?.realIndex)
       const handleSwiperSlideChange = () => {
         context.emit('slide-change', currentSlideRealIndex.value)
@@ -70,7 +91,7 @@
       }
 
       return {
-        swiperElement,
+        updateSwiperContext,
         swiperOption,
         currentSlideRealIndex,
         handleSwiperSlideChange,

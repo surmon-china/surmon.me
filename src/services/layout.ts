@@ -3,7 +3,7 @@ import { GlobalState, LayoutColumn } from '/@/state'
 import { RouteName } from '/@/router'
 
 export const getLayoutMiddleware = (globalState: GlobalState) => {
-  const middleware: NavigationGuard = (from, to, next) => {
+  const middleware: NavigationGuard = (to, from, next) => {
     const isFullColumns = [
       RouteName.About,
       RouteName.Vlog,
@@ -24,7 +24,6 @@ export const getLayoutMiddleware = (globalState: GlobalState) => {
           : LayoutColumn.Normal
     )
 
-    console.log('-------------------', from, to)
     next()
   }
   return middleware
