@@ -4,16 +4,17 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { DirectiveOptions, VNode } from 'vue'
-import { DirectiveBinding } from 'vue/types/options'
+import { Directive, DirectiveBinding, VNode } from 'vue'
 import Swiper, { SwiperOptions } from 'swiper'
-import { DEFAULT_CLASSES, CoreNames, ComponentEvents, ComponentPropNames } from './constants'
+import { DEFAULT_CLASSES, NameId, ComponentEvents, ComponentPropNames } from './constants'
 import { handleClickSlideEvent, bindSwiperEvents } from './event'
 import { kebabcase } from './utils'
 
 const INSTANCE_NAME_KEY = 'instanceName'
 
-export default function getDirective(SwiperClass: typeof Swiper, globalOptions?: SwiperOptions): DirectiveOptions {
+export default function getDirective(SwiperClass: typeof Swiper, globalOptions?: SwiperOptions): Directive<HTMLElement> {
+
+  const cache: any = {}
 
   const getStandardisedOptionByAttrs = (vnode: VNode, key: string): any => {
     const value = vnode.data?.attrs?.[key]
@@ -28,7 +29,7 @@ export default function getDirective(SwiperClass: typeof Swiper, globalOptions?:
       binding.arg ||
       getStandardisedOptionByAttrs(vnode, INSTANCE_NAME_KEY) ||
       element.id ||
-      CoreNames.SwiperInstance
+      NameId.SwiperInstance
     )
   }
 
@@ -58,20 +59,21 @@ export default function getDirective(SwiperClass: typeof Swiper, globalOptions?:
 
   return {
     // Init
-    bind(element, binding, vnode) {
+    beforeMount(element, binding, vnode) {
       // auto class name
       if (element.className.indexOf(DEFAULT_CLASSES.containerClass) === -1) {
         element.className += ((element.className ? ' ' : '') + DEFAULT_CLASSES.containerClass)
       }
       // bind click event
-      element.addEventListener('click', event => {
+      cache.clickEvent = event => {
         const emitEvent = getEventEmiter(vnode)
         const swiper = getSwiperInstance(element, binding, vnode)
         handleClickSlideEvent(swiper, event, emitEvent)
-      })
+      }
+      element.addEventListener('click', cache.clickEvent)
     },
     // DOM inserted
-    inserted(element, binding, vnode) {
+    mounted(element, binding, vnode) {
       const context = vnode.context
       const swiperOptions = getSwipeOptions(binding)
       const instanceName = getSwiperInstanceName(element, binding, vnode)
@@ -91,7 +93,7 @@ export default function getDirective(SwiperClass: typeof Swiper, globalOptions?:
       }
     },
     // On options changed or DOM updated
-    componentUpdated(element, binding, vnode) {
+    updated(element, binding, vnode) {
       const autoUpdate = getStandardisedOptionByAttrs(
         vnode,
         ComponentPropNames.AutoUpdate
@@ -102,25 +104,26 @@ export default function getDirective(SwiperClass: typeof Swiper, globalOptions?:
           const swiperOptions = getSwipeOptions(binding)
           const isLoop = swiperOptions.loop
           if (isLoop) {
-            ;(swiper as any)?.loopDestroy?.()
+            (swiper as any)?.loopDestroy?.()
           }
           swiper?.update?.()
           swiper.navigation?.update?.()
           swiper.pagination?.render?.()
           swiper.pagination?.update?.()
           if (isLoop) {
-            ;(swiper as any)?.loopCreate?.()
+            (swiper as any)?.loopCreate?.()
             swiper?.update?.()
           }
         }
       }
     },
     // Destroy this directive
-    unbind(element, binding, vnode) {
+    beforeUnmount(element, binding, vnode) {
       const autoDestroy = getStandardisedOptionByAttrs(
         vnode,
         ComponentPropNames.AutoDestroy
       )
+      // todo: remove event listen
       if (getBooleanValueByInput(autoDestroy)) {
         const swiper = getSwiperInstance(element, binding, vnode)
         if (swiper && (swiper as any).initialized) {
@@ -140,6 +143,7 @@ export default function getDirective(SwiperClass: typeof Swiper, globalOptions?:
           )
         }
       }
+      element.removeEventListener('click', cache.clickEvent)
     }
   }
 }

@@ -4,19 +4,28 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { InjectionKey } from 'vue'
-import Swiper, { CommonEvent } from 'swiper'
+import { InjectionKey, Ref } from 'vue'
+import Swiper, { SwiperOptions, CommonEvent } from 'swiper'
+import { SwiperComponentProps } from './swiper'
 
-export enum CoreNames {
+export enum NameId {
   SwiperComponent = 'Swiper',
   SwiperSlideComponent = 'SwiperSlide',
   SwiperDirective = 'swiper',
   SwiperInstance = '$swiper'
 }
 
-export const SwiperSymbol: InjectionKey<{
-  [CoreNames.SwiperInstance]: Swiper
-}> = Symbol('swiper')
+export interface SwiperContext {
+  readonly $swiper: Ref<Swiper | null>
+  readonly options: Ref<SwiperOptions>
+  readonly props: SwiperComponentProps
+  readonly init: () => void
+  readonly update: () => void
+  readonly reLoop: () => void
+  readonly destroy: () => void
+}
+
+export const SwiperSymbol: InjectionKey<SwiperContext> = Symbol('swiper')
 
 export type SwiperClassKey = keyof typeof DEFAULT_CLASSES
 export const DEFAULT_CLASSES = Object.freeze({

@@ -13,7 +13,7 @@
           <button
             class="email-me"
             title="email me"
-            @click="submitProject"
+            @click="handleSubmitEmail"
             v-i18n="LANGUAGE_KEYS.PAGE_SERVICE_EMAIL_ME"
           />
         </div>

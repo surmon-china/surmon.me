@@ -2,7 +2,7 @@ import './polyfill'
 
 import { MUSIC_ALBUM_ID } from '/@/config/app.config'
 import { VueEnv, isProd } from '/@/vuniversal/env'
-// import swiper from '/@/services/swiper'
+import swiper from '/@/services/swiper'
 import adsense from '/@/services/adsense'
 import { createDefer } from '/@/services/defer'
 import { createMusic } from '/@/services/music'
@@ -20,7 +20,7 @@ const { app, router, globalState, theme, i18n } = createVueApp({ target: VueEnv.
 const music = createMusic({ albumId: MUSIC_ALBUM_ID, autoStart: false })
 const defer = createDefer()
 
-// app.use(swiper)
+app.use(swiper)
 app.use(adsense)
 app.use(music)
 app.use(defer, { exportToGlobal: true })
