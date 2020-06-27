@@ -64,12 +64,12 @@
 </template>
 
 <script>
-  import { getFileProxyUrl } from '/@/transformers/url'
+  import { getFileProxyUrl } from '/@/transforms/url'
   export default {
-    name: 'Vlog',
+    name: 'Lens',
     head() {
       return {
-        title: `${this.isEnLang ? '' : this.$i18n.nav.vlog + ' | '}Vlog`
+        title: `${this.isEnLang ? '' : this.$i18n.nav.vlog + ' | '}Lens`
       }
     },
     fetch({ store }) {

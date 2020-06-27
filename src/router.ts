@@ -12,8 +12,9 @@ export enum RouteName {
   Service = 'service',
   App = 'app',
   Music = 'music',
+  Job = 'job',
   About = 'about',
-  Vlog = 'vlog',
+  Lens = 'lens',
   Sitemap = 'sitemap',
   Error = 'error'
 }
@@ -61,14 +62,19 @@ const routes: RouteRecordRaw[] = [
     component: () => import('./pages/music.vue')
   },
   {
-    path: '/vlog',
-    name: RouteName.Vlog,
-    component: () => import('./pages/vlog.vue')
+    path: '/lens',
+    name: RouteName.Lens,
+    component: () => import('./pages/lens.vue')
+  },
+  {
+    path: '/job',
+    name: RouteName.Job,
+    component: () => import('./pages/job.vue')
   },
   {
     path: '/about',
     name: RouteName.About,
-    component: () => import('./pages/about/main.vue')
+    component: () => import('./pages/about.vue')
   },
   {
     path: '/service',

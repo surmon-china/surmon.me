@@ -26,19 +26,14 @@
         <i class="iconfont icon-netease-music"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_MUSIC" />
       </router-link>
-      <router-link to="/vlog" class="item">
-        <i class="iconfont icon-vlog"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_VLOG" />
+      <router-link to="/lens" class="item">
+        <i class="iconfont icon-lens"></i>
+        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_LENS" />
       </router-link>
-      <a
-        target="_blank"
-        class="item"
-        rel="external nofollow noopener"
-        :href="APP_CONFIG.LINKS.instagram"
-      >
-        <i class="iconfont icon-instagram"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_INSTAGRAM" />
-      </a>
+      <router-link to="/job" class="item">
+        <i class="iconfont icon-horse"></i>
+        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_JOB" />
+      </router-link>
       <router-link to="/about" class="item">
         <i class="iconfont icon-user"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_ABOUT" />
@@ -83,7 +78,7 @@
           <i class="iconfont icon-hot"></i>
         </span>
       </a>
-      <a
+      <!-- <a
         target="_blank"
         class="item ad throwerror"
         rel="external nofollow noopener"
@@ -91,7 +86,7 @@
       >
         <i class="iconfont icon-debug"></i>
         <span class="text">TE.io</span>
-      </a>
+      </a> -->
       <a
         target="_blank"
         class="item ad foxfinder"
@@ -115,7 +110,7 @@
   import { defineComponent, computed } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
-  import { getFileCDNUrl } from '/@/transformers/url'
+  import { getFileCDNUrl } from '/@/transforms/url'
   import { useI18n } from '/@/services/i18n'
   import { useStore } from '/@/store'
   import { useGlobalState } from '/@/state'
@@ -261,6 +256,7 @@
           width: 1em;
           margin-right: $gap;
           display: inline-block;
+          font-weight: normal;
         }
       }
     }

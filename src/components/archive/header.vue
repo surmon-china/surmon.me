@@ -94,7 +94,7 @@
 </template>
 
 <script>
-  import { getFileCDNUrl } from '/@/transformers/url'
+  import { getFileCDNUrl } from '/@/transforms/url'
   export default {
     name: 'ArticleListHeader',
     computed: {

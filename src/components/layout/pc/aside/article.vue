@@ -28,7 +28,7 @@
   import { useStore } from '/@/store'
   import { RouteName } from '/@/router'
   import { useI18n } from '/@/services/i18n'
-  import { isSearchArchive, getArticleDetailRoute } from '/@/transformers/route'
+  import { isSearchArchive, getArticleDetailRoute } from '/@/transforms/route'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
 

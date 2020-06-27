@@ -4,102 +4,117 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { Directive, DirectiveBinding, VNode } from 'vue'
+import { ref, Directive, DirectiveBinding, VNode } from 'vue'
 import Swiper, { SwiperOptions } from 'swiper'
-import { DEFAULT_CLASSES, NameId, ComponentEvents, ComponentPropNames } from './constants'
-import { handleClickSlideEvent, bindSwiperEvents } from './event'
-import { kebabcase } from './utils'
+import { DEFAULT_CLASSES, SwiperContext, ComponentPropNames } from './constants'
+import { IProps, swiperComponentProps } from './swiper'
+import { handleClickSlideEvent } from './event'
+import { createSwiperContext } from './context'
+import { kebabcase, littleCamelCase } from './utils'
 
-const INSTANCE_NAME_KEY = 'instanceName'
+interface SwiperElement extends HTMLElement {
+  swiper: Swiper
+  swiperContext: SwiperContext | undefined
+  onForkClick(event: MouseEvent): any
+}
 
-export default function getDirective(SwiperClass: typeof Swiper, globalOptions?: SwiperOptions): Directive<HTMLElement> {
+export default function getDirective(SwiperClass: typeof Swiper, globalOptions?: SwiperOptions): Directive<SwiperElement> {
 
-  const cache: any = {}
-
-  const getStandardisedOptionByAttrs = (vnode: VNode, key: string): any => {
-    const value = vnode.data?.attrs?.[key]
-    return value !== undefined
-      ? value
-      : vnode.data?.attrs?.[kebabcase(key)]
-  }
-
-  // Get swiper instace name in directive
-  const getSwiperInstanceName = (element: HTMLElement, binding: DirectiveBinding, vnode: VNode): string => {
-    return (
-      binding.arg ||
-      getStandardisedOptionByAttrs(vnode, INSTANCE_NAME_KEY) ||
-      element.id ||
-      NameId.SwiperInstance
-    )
-  }
-
-  const getSwiperInstance = (element: HTMLElement, binding: DirectiveBinding, vnode: VNode): Swiper | null => {
-    const instanceName = getSwiperInstanceName(element, binding, vnode)
-    return (vnode.context as any)[instanceName] || null
-  }
+  const componentPropValueMap = Object.keys(swiperComponentProps).reduce(
+    (map, key) => ({ ...map, [key]: swiperComponentProps[key].default })
+  , {})
 
   const getSwipeOptions = (binding: DirectiveBinding): SwiperOptions => {
     return binding.value || globalOptions
   }
 
-  const getBooleanValueByInput = (input: any): boolean => {
+  // Set/Get swiper context/instance in directive by element attr
+  const setElementSwiper = (element: SwiperElement, swiperContext: SwiperContext) => {
+    element.swiperContext = swiperContext
+    element.swiper = element.swiper || swiperContext?.$swiper.value
+  }
+  const getSwiperContext = (element: SwiperElement) => {
+    return element.swiperContext
+  }
+  const getSwiperInstance = (element: SwiperElement) => {
+    return element.swiper || getSwiperContext(element)?.$swiper.value
+  }
+
+  const isTrueValueByInput = (input: any): boolean => {
     return [true, undefined, null, ''].includes(input)
+  }
+
+  const getStandardProps = (vnode: VNode) => {
+    const props = { ...componentPropValueMap, ...vnode.props }
+    Object.keys(props).forEach(key => {
+      const value = props[key]
+      const littleCamelCaseName = littleCamelCase(key)
+      if (value !== undefined && key !== littleCamelCaseName) {
+        props[littleCamelCaseName] = value
+      }
+    })
+    return props
+  }
+
+  const getStandardPropGetter = (vnode: VNode) => {
+    return <V = any>(key: string): V => {
+      const props = getStandardProps(vnode)
+      const value = props[key]
+      return value !== undefined
+        ? value
+        : props[kebabcase(key)]
+    }
   }
 
   // Emit event in Vue directive
   const getEventEmiter = (vnode: VNode) => {
-    const handlers = vnode.data?.on || vnode.componentOptions?.listeners
     return (name: string, ...args: any[]) => {
-      const handle = (handlers as any)?.[name]
-      if (handle) {
-        handle.fns(...args)
-      }
+      const eventName = name.replace(/^\S/, s => 'on' + s.toUpperCase())
+      const getProp = getStandardPropGetter(vnode)
+      const handler = getProp(eventName)
+      handler?.(...args)
     }
   }
 
   return {
     // Init
-    beforeMount(element, binding, vnode) {
+    beforeMount(element, _, vnode) {
       // auto class name
       if (element.className.indexOf(DEFAULT_CLASSES.containerClass) === -1) {
         element.className += ((element.className ? ' ' : '') + DEFAULT_CLASSES.containerClass)
       }
       // bind click event
-      cache.clickEvent = event => {
-        const emitEvent = getEventEmiter(vnode)
-        const swiper = getSwiperInstance(element, binding, vnode)
-        handleClickSlideEvent(swiper, event, emitEvent)
+      element.onForkClick = event => {
+        const swiper = getSwiperInstance(element)
+        if (swiper) {
+          const eventEmiter = getEventEmiter(vnode)
+          handleClickSlideEvent(swiper, event, eventEmiter)
+        }
       }
-      element.addEventListener('click', cache.clickEvent)
+      element.addEventListener('click', element.onForkClick)
     },
     // DOM inserted
     mounted(element, binding, vnode) {
-      const context = vnode.context
       const swiperOptions = getSwipeOptions(binding)
-      const instanceName = getSwiperInstanceName(element, binding, vnode)
-      const emitEvent = getEventEmiter(vnode)
-
-      const vueContext = context as any
-      let swiper: Swiper = vueContext?.[instanceName]
-
-      // Swiper will destroy but not delete instance, when used <keep-alive>
-      if (!swiper || (swiper as any).destroyed) {
-        swiper = new SwiperClass(element, swiperOptions)
-        vueContext[instanceName] = swiper
-        bindSwiperEvents(swiper, emitEvent)
-        emitEvent(ComponentEvents.Ready, swiper)
-        // MARK: Reinstance when the nexttick with <keep-alive>
-        // Vue.nextTick(instancing) | setTimeout(instancing)
-      }
+      const eventEmiter = getEventEmiter(vnode)
+      const props = getStandardProps(vnode)
+      const swiperContext: SwiperContext = createSwiperContext({
+        SwiperClass,
+        props: props as IProps,
+        options: ref(swiperOptions),
+        element: () => element,
+        emiter: eventEmiter,
+        autoCaseSwiperEvent: false
+      })
+      swiperContext.init()
+      setElementSwiper(element, swiperContext)
     },
     // On options changed or DOM updated
     updated(element, binding, vnode) {
-      const autoUpdate = getStandardisedOptionByAttrs(
-        vnode,
-        ComponentPropNames.AutoUpdate
-      )
-      if (getBooleanValueByInput(autoUpdate)) {
-        const swiper = getSwiperInstance(element, binding, vnode)
+      const getProp = getStandardPropGetter(vnode)
+      const autoUpdate = getProp<boolean>(ComponentPropNames.AutoUpdate)
+      if (isTrueValueByInput(autoUpdate)) {
+        const swiper = getSwiperInstance(element)
         if (swiper) {
           const swiperOptions = getSwipeOptions(binding)
           const isLoop = swiperOptions.loop
@@ -118,32 +133,19 @@ export default function getDirective(SwiperClass: typeof Swiper, globalOptions?:
       }
     },
     // Destroy this directive
-    beforeUnmount(element, binding, vnode) {
-      const autoDestroy = getStandardisedOptionByAttrs(
-        vnode,
-        ComponentPropNames.AutoDestroy
-      )
-      // todo: remove event listen
-      if (getBooleanValueByInput(autoDestroy)) {
-        const swiper = getSwiperInstance(element, binding, vnode)
+    beforeUnmount(element, _, vnode) {
+      const getProp = getStandardPropGetter(vnode)
+      const autoDestroy = getProp<boolean>(ComponentPropNames.AutoDestroy)
+      if (isTrueValueByInput(autoDestroy)) {
+        const swiper = getSwiperInstance(element)
         if (swiper && (swiper as any).initialized) {
+          element.removeEventListener('click', element.onForkClick)
           swiper?.destroy?.(
-            getBooleanValueByInput(
-              getStandardisedOptionByAttrs(
-                vnode,
-                ComponentPropNames.DeleteInstanceOnDestroy
-              )
-            ),
-            getBooleanValueByInput(
-              getStandardisedOptionByAttrs(
-                vnode,
-                ComponentPropNames.CleanupStylesOnDestroy
-              )
-            )
+            isTrueValueByInput(getProp(ComponentPropNames.DeleteInstanceOnDestroy)),
+            isTrueValueByInput(getProp(ComponentPropNames.CleanupStylesOnDestroy))
           )
         }
       }
-      element.removeEventListener('click', cache.clickEvent)
     }
   }
 }

@@ -16,5 +16,5 @@ export const useSwiperRef = () => {
   const updateContext = (context: SwiperContext) => {
     swiperContext.value = context
   }
-  return [swiperContext, updateContext] as [typeof swiperContext, typeof updateContext]
+  return [swiperContext, updateContext] as const
 }

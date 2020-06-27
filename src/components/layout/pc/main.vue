@@ -165,6 +165,10 @@
           flex-grow: 1;
         }
 
+        &.layout-wide {
+          flex-grow: 1;
+        }
+
         &.layout-full-column {
           width: 100%;
           margin: 0;

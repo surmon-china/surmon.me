@@ -17,7 +17,7 @@
   import { defineComponent, computed } from 'vue'
   import { useRoute } from 'vue-router'
   import { useGlobalState, LayoutColumn } from '/@/state'
-  import { getTagArchiveRoute, isArticleDetail } from '/@/transformers/route'
+  import { getTagArchiveRoute, isArticleDetail } from '/@/transforms/route'
   import { LANGUAGE_KEYS } from '/@/language/key'
 
   export default defineComponent({

@@ -1,6 +1,6 @@
 /**
  * @file Time transformer
- * @module transformers/moment
+ * @module transforms/moment
  * @author Surmon <https://github.com/surmon-china>
  */
 

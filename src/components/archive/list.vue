@@ -56,7 +56,7 @@
   import ListItem from './item.vue'
   import ListHeader from './header.vue'
   import { isIndexRoute } from '/@/services/route-validator'
-  import { getArticleDetailRoute } from '/@/transformers/route'
+  import { getArticleDetailRoute } from '/@/transforms/route'
 
   export default {
     name: 'ArticleList',

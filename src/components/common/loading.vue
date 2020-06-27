@@ -10,8 +10,9 @@
   </div>
 </template>
 
-<script>
-  export default {
+<script lang="ts">
+  import { defineComponent, ref, h } from 'vue'
+  export default defineComponent({
     name: 'SuLoading',
     props: {
       loading: {
@@ -45,7 +46,7 @@
         }
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>

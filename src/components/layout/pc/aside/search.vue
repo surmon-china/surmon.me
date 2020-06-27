@@ -40,7 +40,7 @@
   import { useStore } from '/@/store'
   import { RouteName } from '/@/router'
   import { useI18n } from '/@/services/i18n'
-  import { isSearchArchive } from '/@/transformers/route'
+  import { isSearchArchive } from '/@/transforms/route'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
 

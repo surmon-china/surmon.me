@@ -263,8 +263,8 @@
   import { isClient } from '/@/vuniversal/env'
   import lozad from '/@/plugins/lozad'
   import marked from '/@/plugins/marked'
-  import { getArticleDetailPageUrl } from '/@/transformers/url'
-  import { getArchiveArticleThumbnailUrl } from '/@/transformers/thumbnail'
+  import { getArticleDetailPageUrl } from '/@/transforms/url'
+  import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
   import ShareBox from '/@/components/widget/share'
 
   export default {

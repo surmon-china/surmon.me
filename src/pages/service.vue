@@ -1,10 +1,7 @@
 <template>
   <div
     class="service-page"
-    :class="{
-      mobile: isMobile,
-      dark: isDarkTheme
-    }"
+    :class="{ mobile: isMobile, dark: isDarkTheme }"
   >
     <div class="banner">
       <div class="content container">
@@ -22,7 +19,7 @@
           class="upwork"
           target="_blank"
           rel="external nofollow noopenter"
-          href="https://www.upwork.com/freelancers/~0142e621258ac1770d"
+          :href="upworkLink"
         >
           <span>(</span>
           <i18n :lkey="LANGUAGE_KEYS.PAGE_SERVICE_HIRE_ME" />
@@ -82,11 +79,13 @@
         </ul>
       </div>
     </div>
-    <transition name="fade">
-      <div v-if="!isMobile" class="mammon container">
-        <adsense-responsive ins-style="display:inline-block;width:1050px;height:192px" />
-      </div>
-    </transition>
+    <template v-if="!isMobile">
+      <client-only>
+        <div class="mammon container">
+          <adsense-responsive ins-style="display:inline-block;width:1050px;height:192px" />
+        </div>
+      </client-only>
+    </template>
     <div class="step">
       <div class="step-content container">
         <ul class="step-list">
@@ -174,6 +173,7 @@
         isDarkTheme,
         isMobile,
         handleSubmitEmail,
+        upworkLink: APP_CONFIG.LINKS.upwork,
         LANGUAGE_KEYS
       }
     }

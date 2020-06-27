@@ -15,6 +15,7 @@
 <script lang="ts">
   import { defineComponent, h, computed } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
+
   export default defineComponent({
     name: 'SuEmpty',
     props: {

@@ -21,7 +21,7 @@
         </router-link>
         <router-link to="/category/think" class="item">
           <i class="iconfont icon-thinking"></i>
-          <span v-i18n="LANGUAGE_KEYS.think"></span>
+          <span v-i18n="LANGUAGE_KEYS.CATEGORY_THINK"></span>
         </router-link>
         <a
           target="_blank"
@@ -38,7 +38,7 @@
         </router-link>
         <router-link to="/vlog" class="item">
           <i class="iconfont icon-vlog"></i>
-          <span v-i18n="LANGUAGE_KEYS.PAGE_VLOG"></span>
+          <span v-i18n="LANGUAGE_KEYS.PAGE_LENS"></span>
         </router-link>
         <router-link to="/about" class="item">
           <i class="iconfont icon-user"></i>
@@ -64,7 +64,7 @@
 <script lang="ts">
   import * as APP_CONFIG from '/@/config/app.config'
   import { defineComponent, computed } from 'vue'
-  import { getFileCDNUrl } from '/@/transformers/url'
+  import { getFileCDNUrl } from '/@/transforms/url'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { useStore } from '/@/store'
 

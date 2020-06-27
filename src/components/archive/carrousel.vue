@@ -2,19 +2,19 @@
   <div class="carrousel" :class="{ mobile: isMobile }">
     <transition name="module" mode="out-in">
       <su-empty v-if="!articleList.length" key="empty" class="article-su-empty">
-        <slot>{{ $i18n.text.article.empty }}</slot>
+        <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
       </su-empty>
       <div
         v-else
         key="swiper"
+        class="swiper"
         v-swiper="swiperOption"
-        class="swiper index"
       >
         <div class="swiper-wrapper">
           <div
+            class="swiper-slide"
             v-for="(_article, index) in articleList.slice(0, 9)"
             :key="index"
-            class="swiper-slide"
           >
             <div class="content">
               <template v-if="_article.ad">
@@ -43,86 +43,82 @@
   </div>
 </template>
 
-<script>
-  import Vue from 'vue'
+<script lang="ts">
+  import { defineComponent, ref, computed } from 'vue'
+  import { useSwiperRef, NameId } from '/@/todo/swiper'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { useGlobalState } from '/@/state'
+  import { timeAgo } from '/@/transforms/moment'
   import { mapState } from 'vuex'
-  import { getBannerArticleThumbnailUrl } from '/@/transformers/thumbnail'
-  import adConfig from '/@/config/ad.config'
+  import { getBannerArticleThumbnailUrl } from '/@/transforms/thumbnail'
+  import AD_CONFIG from '/@/config/ad.config'
+  import * as APP_CONFIG from '/@/config/app.config'
 
-  export default Vue.extend({
-    name: 'IndexCarrousel',
+  export default defineComponent({
+    name: 'ArchiveCarrousel',
     props: {
       article: {
-        type: Object
+        type: Object,
+        required: true
       }
     },
-    data() {
-      return {
-        swiperOption: {
-          autoplay: {
-            delay: 3500,
-            disableOnInteraction: false
-          },
-          pagination: {
-            clickable: true,
-            el: '.swiper-pagination'
-          },
-          setWrapperSize: true,
-          mousewheel: true,
-          observeParents: true,
-          // 禁用 PC 拖动手指样式
-          grabCursor: false,
-          // 禁用 PC 拖动
-          simulateTouch: false,
-          preloadImages: false,
-          lazy: true
+    setup(props) {
+      const globalState = useGlobalState()
+      const isMobile = computed(() => globalState.userAgent.isMobile)
+      const articleList = computed(() => {
+        const articles = [...props.article.data.data].slice(0, 9)
+        if (AD_CONFIG.carrousel) {
+          const { index, ...otherConfig } = AD_CONFIG.carrousel
+          articles.length && articles.splice(index, 0, {
+            ad: true,
+            ...otherConfig
+          })
         }
-      }
-    },
-    computed: {
-      isMobile() {
-        return this.$store.state.global.isMobile
-      },
-      articleList() {
-        const articles = [...this.article.data.data].slice(0, 9)
-        if (!adConfig.carrousel) {
-          return articles
-        }
-
-        const { index, ...otherConfig } = adConfig.carrousel
-        articles.length && articles.splice(index, 0, {
-          ad: true,
-          ...otherConfig
-        })
         return articles
+      })
+
+      const swiperOption = {
+        autoplay: {
+          delay: 3500,
+          disableOnInteraction: false
+        },
+        pagination: {
+          clickable: true,
+          el: '.swiper-pagination'
+        },
+        setWrapperSize: true,
+        mousewheel: true,
+        observeParents: true,
+        // 禁用 PC 拖动手指样式
+        grabCursor: false,
+        // 禁用 PC 拖动
+        simulateTouch: false,
+        preloadImages: false,
+        lazy: true
       }
-    },
-    methods: {
-      getThumb(thumb) {
+
+      const getThumb = (thumb: string): string => {
         return getBannerArticleThumbnailUrl(
           thumb,
-          this.isMobile,
-          this.$store.getters['global/isWebPImage']
+          isMobile.value,
+          globalState.imageExt.isWebP.value
         )
+      }
+
+      return {
+        LANGUAGE_KEYS,
+        isMobile,
+        swiperOption,
+        articleList,
+        getThumb
       }
     }
   })
 </script>
 
-<style lang="scss">
-  .index.swiper {
-    .swiper-pagination {
-      .swiper-pagination-bullet {
-        &.swiper-pagination-bullet-active {
-          width: 2rem;
-          border-radius: 10px;
-        }
-      }
-    }
-  }
-</style>
-
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   $pc-carrousel-height: 15em;
   $mobile-carrousel-height: calc((100vw - 2rem) * .35);
 
@@ -158,6 +154,15 @@
         .swiper-slide-active {
           .content {
             @include blur-filter('horizontal');
+          }
+        }
+      }
+
+      .swiper-pagination {
+        .swiper-pagination-bullet {
+          &.swiper-pagination-bullet-active {
+            width: 2rem;
+            border-radius: 10px;
           }
         }
       }

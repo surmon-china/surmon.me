@@ -77,8 +77,8 @@
 
 <script>
   import { mapState } from 'vuex'
-  import { getFileCDNUrl } from '/@/transformers/url'
-  import { getArchiveArticleThumbnailUrl } from '/@/transformers/thumbnail'
+  import { getFileCDNUrl } from '/@/transforms/url'
+  import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
   import { getJSONStorageReader } from '/@/services/local-storage'
   import systemConstants from '/@/constants/system'
 

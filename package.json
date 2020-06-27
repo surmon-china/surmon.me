@@ -51,13 +51,9 @@
     "vue": "^3.0.0-beta.15",
     "vue-analytics": "^5.22.1",
     "vue-awesome-swiper": "^4.1.1",
-    "vue-codemirror": "^4.0.6",
-    "vue-drag-zone": "^2.0.0-rc1",
     "vue-google-adsense": "^1.8.1",
     "vue-router": "^4.0.0-alpha.13",
     "vue-script2": "^2.1.0",
-    "vue-touch-ripple": "^3.0.0",
-    "vue-video-player": "^5.0.2",
     "vuex": "^4.0.0-beta.2"
   },
   "devDependencies": {
@@ -80,7 +76,7 @@
     "sass": "^1.26.8",
     "ts-jest": "^26.1.0",
     "typescript": "^3.9.5",
-    "vite": "^1.0.0-beta.1",
+    "vite": "^1.0.0-beta.2",
     "vue-jest": "^5.0.0-alpha.0"
   }
 }

@@ -1,7 +1,7 @@
 import { defineComponent, ref, h } from 'vue'
 import { isClient } from '/@/vuniversal/env'
 import { useDefer } from '/@/services/defer'
-import { getFileCDNUrl, getFileProxyUrl } from '/@/transformers/url'
+import { getFileCDNUrl, getFileProxyUrl } from '/@/transforms/url'
 
 export default defineComponent({
   name: 'Uimage',
