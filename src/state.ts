@@ -5,7 +5,7 @@
  */
 
 import { App, inject, ref, computed, reactive } from 'vue'
-import { uaParser, isZhUser } from '/@/transformers/ua'
+import { uaParser, isZhUser } from '/@/transforms/ua'
 
 export enum ImageExt {
   WebP = 'webp',

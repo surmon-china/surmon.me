@@ -8,6 +8,8 @@ import Swiper from 'swiper'
 import { SWIPER_EVENTS, ComponentEvents } from './constants'
 import { kebabcase } from './utils'
 
+export type EventEmiter = (eventName: string, ...args: any) => void
+
 export const handleClickSlideEvent = (swiper: Swiper | null, event: MouseEvent, emit: any): void => {
   if (swiper && !((swiper as any).destroyed)) {
     const eventPath = event.composedPath?.() || (event as any).path
@@ -26,13 +28,15 @@ export const handleClickSlideEvent = (swiper: Swiper | null, event: MouseEvent, 
   }
 }
 
-export const bindSwiperEvents = (swiper: Swiper, emit: any): void => {
+export const bindSwiperEvents = (swiper: Swiper, emit: EventEmiter, autoCase: boolean): void => {
   SWIPER_EVENTS.forEach(eventName => {
     swiper.on(eventName, (...args: any[]) => {
       emit(eventName, ...args)
-      const kebabcaseName = kebabcase(eventName)
-      if (kebabcaseName !== eventName) {
-        emit(kebabcaseName, ...args)
+      if (autoCase) {
+        const kebabcaseName = kebabcase(eventName)
+        if (kebabcaseName !== eventName) {
+          emit(kebabcaseName, ...args)
+        }
       }
     })
   })

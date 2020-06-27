@@ -4,7 +4,6 @@
 
 <script lang="ts">
   import { defineComponent, computed, CSSProperties } from 'vue'
-
   export default defineComponent({
     name: 'SuSkeletonBase',
     props: {

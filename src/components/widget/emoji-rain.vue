@@ -7,7 +7,7 @@
 <script lang="ts">
   import { defineComponent, ref, reactive, nextTick, onMounted } from 'vue'
   import Emoji233333 from 'emoji-233333'
-  import { getFileCDNUrl } from '/@/transformers/url'
+  import { getFileCDNUrl } from '/@/transforms/url'
 
   declare global {
     interface Window {

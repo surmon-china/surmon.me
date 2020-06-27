@@ -4,9 +4,9 @@ import { RouteName } from '/@/router'
 
 export const getLayoutMiddleware = (globalState: GlobalState) => {
   const middleware: NavigationGuard = (to, from, next) => {
-    const isFullColumns = [
+    const isWideColumns = [
       RouteName.About,
-      RouteName.Vlog,
+      RouteName.Lens,
       RouteName.Sitemap
     ].includes((to.name || '') as RouteName)
 
@@ -17,8 +17,8 @@ export const getLayoutMiddleware = (globalState: GlobalState) => {
     ].includes((to.name || '') as RouteName)
 
     globalState.layoutColumn.setLayoutColumn(
-      isFullColumns
-        ? LayoutColumn.Full
+      isWideColumns
+        ? LayoutColumn.Wide
         : isFullPageColumns
           ? LayoutColumn.Page
           : LayoutColumn.Normal

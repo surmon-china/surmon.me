@@ -42,9 +42,9 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '丹青阁',
     [Language.En]: 'project'
   },
-  [LANGUAGE_KEYS.PAGE_VLOG]: {
+  [LANGUAGE_KEYS.PAGE_LENS]: {
     [Language.Zh]: '天涯',
-    [Language.En]: 'vlog'
+    [Language.En]: 'lens'
   },
   [LANGUAGE_KEYS.PAGE_INSTAGRAM]: {
     [Language.Zh]: '海角',
@@ -53,6 +53,10 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   [LANGUAGE_KEYS.PAGE_MUSIC]: {
     [Language.Zh]: '梨园',
     [Language.En]: 'music'
+  },
+  [LANGUAGE_KEYS.PAGE_JOB]: {
+    [Language.Zh]: '伯乐',
+    [Language.En]: 'job'
   },
   [LANGUAGE_KEYS.PAGE_ABOUT]: {
     [Language.Zh]: '狂浪生',

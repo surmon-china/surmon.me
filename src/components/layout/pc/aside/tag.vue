@@ -32,7 +32,7 @@
   import { useRoute } from 'vue-router'
   import { useStore } from '/@/store'
   import { useI18n } from '/@/services/i18n'
-  import { getTagArchiveRoute, isArticleDetail } from '/@/transformers/route'
+  import { getTagArchiveRoute, isArticleDetail } from '/@/transforms/route'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
 

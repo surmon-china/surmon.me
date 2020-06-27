@@ -34,7 +34,7 @@
   import { RouteName } from '/@/router'
   import { useI18n } from '/@/services/i18n'
   import { Language } from '/@/language/data'
-  import { dateToHuman, humanToDate, cloneDate, ymdToDate, textHumanizer, humanDateToYMD, HumanDate, TEXT_MAP } from '/@/transformers/moment'
+  import { dateToHuman, humanToDate, cloneDate, ymdToDate, textHumanizer, humanDateToYMD, HumanDate, TEXT_MAP } from '/@/transforms/moment'
 
   export default defineComponent({
     name: 'PcAsideCalendar',

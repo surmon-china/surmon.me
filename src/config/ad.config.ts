@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { getFileCDNUrl } from '/@/transformers/url'
+import { getFileCDNUrl } from '/@/transforms/url'
 
 const imagePath = getFileCDNUrl('/images/mammon/')
 const links = {
@@ -44,6 +44,7 @@ const links = {
 }
 
 export default {
+  carrousel: false as boolean | any,
   // Banner 随机
   /*
   carrousel: {

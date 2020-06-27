@@ -21,7 +21,7 @@
   import { defineComponent, reactive } from 'vue'
   import { useRoute } from 'vue-router'
   import { GAEventActions, GAEventTags } from '/@/constants/ga'
-  import { getPageUrl } from '/@/transformers/url'
+  import { getPageUrl } from '/@/transforms/url'
   import { copy } from '/@/utils/clipboard'
   import { META } from '/@/config/app.config'
 

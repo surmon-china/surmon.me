@@ -1,7 +1,12 @@
 <template>
   <div class="mammon">
-    <!-- <div v-swiper="swiperOption">
-      <div class="swiper-wrapper swiper aside">
+    <div
+      class="swiper"
+      v-swiper="swiperOption"
+      @ready="updateSwiperContext"
+      @slide-change="handleSwiperSlideChange"
+    >
+      <div class="swiper-wrapper">
         <div
           class="swiper-slide"
           v-for="(ad, index) in AD_CONFIG.asideSwiper"
@@ -18,12 +23,12 @@
         </div>
       </div>
       <div class="swiper-pagination" />
-    </div> -->
+    </div>
     <swiper
       ref="swiperElement"
-      class="swiper aside"
+      class="swiper"
       :options="swiperOption"
-      @ready="updateSwiperContext"
+      @ready="updateSwiperContext2"
       @slide-change="handleSwiperSlideChange"
     >
       <swiper-slide
@@ -48,8 +53,8 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted } from 'vue'
   import Swiper from 'swiper'
+  import { defineComponent, ref, computed, onMounted } from 'vue'
   import { useSwiperRef, NameId } from '/@/todo/swiper'
   import AD_CONFIG from '/@/config/ad.config'
 
@@ -63,6 +68,7 @@
     },
     setup(props, context) {
       const [swiperContext, updateSwiperContext] = useSwiperRef()
+      const [swiperContext2, updateSwiperContext2] = useSwiperRef()
       const swiperInstance = computed(() => swiperContext.value?.$swiper.value)
       const currentSlideRealIndex = computed(() => swiperInstance.value?.realIndex)
       const handleSwiperSlideChange = () => {
@@ -90,8 +96,13 @@
         lazy: true
       }
 
+      onMounted(() => {
+        // console.log('---------', swiperContext, swiperContext2)
+      })
+
       return {
         updateSwiperContext,
+        updateSwiperContext2,
         swiperOption,
         currentSlideRealIndex,
         handleSwiperSlideChange,
@@ -131,7 +142,7 @@
           }
         }
 
-        &::v-deep(.swiper-pagination) {
+        .swiper-pagination {
           .swiper-pagination-bullet {
             &.swiper-pagination-bullet-active {
               height: $font-size-base;

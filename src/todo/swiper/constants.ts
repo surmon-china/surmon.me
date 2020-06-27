@@ -6,20 +6,19 @@
 
 import { InjectionKey, Ref } from 'vue'
 import Swiper, { SwiperOptions, CommonEvent } from 'swiper'
-import { SwiperComponentProps } from './swiper'
+import { IProps } from './swiper'
 
 export enum NameId {
   SwiperComponent = 'Swiper',
   SwiperSlideComponent = 'SwiperSlide',
-  SwiperDirective = 'swiper',
-  SwiperInstance = '$swiper'
+  SwiperDirective = 'swiper'
 }
 
 export interface SwiperContext {
   readonly $swiper: Ref<Swiper | null>
   readonly options: Ref<SwiperOptions>
-  readonly props: SwiperComponentProps
-  readonly init: () => void
+  readonly __props: IProps
+  readonly init: (force?: boolean) => void
   readonly update: () => void
   readonly reLoop: () => void
   readonly destroy: () => void

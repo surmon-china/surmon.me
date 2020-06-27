@@ -8,7 +8,7 @@ import { App } from 'vue'
 import { Router } from 'vue-router'
 // import VueAnalytics from 'vue-analytics'
 import { isProd } from '/@/vuniversal/env'
-import { getFileCDNUrl } from '/@/transformers/url'
+import { getFileCDNUrl } from '/@/transforms/url'
 
 // MARK: https://zh.nuxtjs.org/faq/ga
 

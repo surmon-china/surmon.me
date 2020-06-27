@@ -6,7 +6,7 @@
 
 import * as amplitude from 'amplitudejs'
 import { App, Plugin, inject, readonly, reactive, computed } from 'vue'
-import { getFileCDNUrl, getFileProxyUrl } from '/@/transformers/url'
+import { getFileCDNUrl, getFileProxyUrl } from '/@/transforms/url'
 import http from './http'
 
 // HACK: Fix #387 https://github.com/521dimensions/amplitudejs/issues/387

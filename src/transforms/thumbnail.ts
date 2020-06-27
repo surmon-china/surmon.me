@@ -6,7 +6,7 @@
 
 import gravatar from 'gravatar'
 import API_CONFIG from '/@/config/api.config'
-import { getFileCDNUrl } from '/@/transformers/url'
+import { getFileCDNUrl } from '/@/transforms/url'
 
 export const getBannerArticleThumbnailUrl = (thumb: string, isMobile: boolean, isWebPImage: boolean) => {
   if (!thumb) {

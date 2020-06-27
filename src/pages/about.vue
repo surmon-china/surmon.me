@@ -5,7 +5,10 @@
         <div class="item">
           <i class="iconfont icon-swordsman" />
           <p class="bio">
-            <span>{{ isEnLang ? `I'm Surmon, a digital nomad.` : `浪蝶游蜂，迈步九云中` }}</span>
+            <i18n
+              zh="浪蝶游蜂，迈步九云中"
+              en="I'm Surmon, a digital nomad."
+            />
           </p>
         </div>
         <div class="item">
@@ -14,21 +17,21 @@
             target="_blank"
             href="https://github.com/sponsors/surmon-china"
             rel="external nofollow noopenter"
-            @mousedown="handleSponsor"
+            @mousedown="handleTouchSponsor"
           >GitHub Sponsor</a>
           <span>&nbsp;|&nbsp;</span>
           <a
             target="_blank"
             href="https://www.paypal.me/surmon"
             rel="external nofollow noopenter"
-            @mousedown="handleSponsor"
+            @mousedown="handleTouchSponsor"
           >PayPal me</a>
           <span>&nbsp;|&nbsp;</span>
           <a
             target="_blank"
             href="/sponsor"
             rel="external nofollow noopenter"
-            @mousedown="handleSponsor"
+            @mousedown="handleTouchSponsor"
           >More</a>
         </div>
         <div class="item">
@@ -38,21 +41,21 @@
             rel="external nofollow noopenter"
             href="https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4"
           >
-            <span>{{ isEnLang ? 'QQ group' : '寂寞同性交友群' }}</span>
+            <i18n zh="寂寞同性交友群" en="QQ group" />
           </a>
           <span>&nbsp;|&nbsp;</span>
           <a
             target="_blank"
             rel="external nofollow noopenter"
             href="https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA"
-          >{{ isEnLang ? 'Telegram group' : '电报群' }}</a>
+          >
+            <i18n zh="电报群" en="Telegram group" />
+          </a>
         </div>
         <div class="item">
           <i class="iconfont icon-music" />
           <span class="music">
-            <router-link to="/music">
-              Jazz-HipHop, Electronic, Disco, Rock, Popular
-            </router-link>
+            <router-link to="/music">Jazz-HipHop, Electronic, Disco, Rock, Popular</router-link>
             <a
               href="https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o"
               target="_blank"
@@ -175,22 +178,28 @@
         </div>
         <div class="item">
           <i class="iconfont icon-like" />
-          <span class="like-text">{{ isEnLang ? 'code. beauty. whisky. music. vagrant.' : '酒池肉林、日夜笙歌、依翠偎红、五音六律、目营心匠、桀骜不羁' }}</span>
+          <span class="like-text">
+            <i18n
+              zh="酒池肉林、日夜笙歌、依翠偎红、五音六律、目营心匠、桀骜不羁"
+              en="code. beauty. whisky. music. vagrant."
+            />
+          </span>
         </div>
         <div class="item">
           <i class="iconfont icon-tibet-1" />
-          <a href class="my-map" @click.stop.prevent="openMyMap">{{
-            isEnLang
-              ? 'Every path I went astray built my Rome.'
-              : '路为纸，地成册，行作笔，心当墨；思无界，行有疆'
-          }}</a>
+          <a href class="my-map" @click.stop.prevent="openMyMap">
+            <i18n
+              zh="路为纸，地成册，行作笔，心当墨；思无界，行有疆"
+              en="Every path I went astray built my Rome."
+            />
+          </a>
           <popup iframe="https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w" class="gmap" />
         </div>
         <div class="item">
           <i class="iconfont icon-friend" />
           <span class="friends">
             <a
-              v-for="(link, name) in friendLinks"
+              v-for="(link, name) in APP_CONFIG.FRIEND_LINKS"
               :key="link"
               :href="link"
               target="_blank"
@@ -201,59 +210,58 @@
       </div>
       <div class="gravatar">
         <div class="background be-2">
-          <img
-            :src="'/images/about-background-be-2.jpg' | byCDN"
-            alt="background"
+          <uimage
+            cdn
             class="image"
-          >
+            alt="background"
+            src="/images/about-background-be-2.jpg"
+          />
         </div>
         <div class="background be-1">
-          <img
-            :src="'/images/about-background-be-1.jpg' | byCDN"
-            alt="background"
+          <uimage
+            cdn
             class="image"
-          >
+            alt="background"
+            src="/images/about-background-be-1.jpg"
+          />
         </div>
         <div class="background star-1">
-          <img
-            :src="'/images/about-background-star-1.png' | byCDN"
-            alt="background-star"
+          <uimage
+            cdn
             class="image"
-          >
+            alt="background-star"
+            src="/images/about-background-star-1.png"
+          />
         </div>
         <div class="background star-2">
-          <img
-            :src="'/images/about-background-star-2.png' | byCDN"
-            alt="background-star"
+          <uimage
+            cdn
             class="image"
-          >
+            alt="background-star"
+            src="/images/about-background-star-2.png"
+          />
         </div>
         <img :src="gravatar" class="avatar" draggable="false">
         <div class="description">
           <h3 class="name">
             <strong>Surmon</strong>
           </h3>
-          <p class="skill">{{ isEnLang ? 'Digital nomad' : '数字游民' }}</p>
+          <p class="skill">
+            <i18n zh="数字游民" en="Digital nomad" />
+          </p>
         </div>
-        <a
-          v-if="!isMobile"
-          href
-          class="followme"
-          @click.stop.prevent
-        >{{ $i18n.text.friendMe }}</a>
-        <div v-if="!isMobile" class="wechat" @mouseenter="handleFollowMe"></div>
+        <span v-if="!isMobile" class="followme" v-i18n="LANGUAGE_KEYS.FRIEND_ME" />
+        <div v-if="!isMobile" class="wechat" @mouseenter="handleHoverFollowMe"></div>
       </div>
     </div>
-    <a
-      v-if="!isMobile"
-      class="about-aliyun-mammon"
-      rel="external nofollow noopener"
-      target="_blank"
-      :href="adConfig.url"
-    >
-      <img :src="adConfig.src">
-    </a>
-    <div class="about-map">
+    <div class="sponsor-mammon">
+      <iframe
+        title="Sponsor surmon-china"
+        target="_blank"
+        src="https://github.com/sponsors/surmon-china/card"
+      />
+    </div>
+    <div class="location-map">
       <iframe class="iframe" src="/partials/map.html" />
     </div>
     <div class="about-project">
@@ -261,13 +269,17 @@
         target="_blank"
         class="project-link"
         rel="external nofollow noopener"
-        :href="appConfig.links.project"
+        :href="APP_CONFIG.LINKS.project"
       >
         <p class="title">
           <i class="iconfont icon-experiment" />
-          <span>{{ $i18n.nav.project }}</span>
         </p>
-        <p class="description">{{ isEnLang ? `"What I do,  just keep repeating."` : '了解更多关于我的项目的进展' }}</p>
+        <p class="description">
+          <i18n
+            zh="了解更多关于我的项目的进展"
+            en="What I do,  just keep repeating."
+          />
+        </p>
       </a>
       <div class="animation">
         <div class="wave"></div>
@@ -277,14 +289,17 @@
   </div>
 </template>
 
-<script>
-  import adConfig from '/@/config/ad.config'
-  import appConfig from '/@/config/app.config'
-  import systemConstants from '/@/constants/system'
-  import { getFileCDNUrl } from '/@/transformers/url'
+<script lang="ts">
+  import { defineComponent, ref, computed } from 'vue'
+  import { useGlobalState } from '/@/state'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { GAEventActions, GAEventTags } from '/@/constants/ga'
+  import { getFileCDNUrl } from '/@/transforms/url'
+  import * as APP_CONFIG from '/@/config/app.config'
 
-  export default {
+  export default defineComponent({
     name: 'About',
+    /*
     head() {
       return {
         title: `${this.isEnLang ? '' : this.$i18n.nav.about + ' | '}About`
@@ -293,48 +308,56 @@
     fetch({ store }) {
       return store.dispatch('global/fetchAdminInfo')
     },
-    computed: {
-      appConfig: () => appConfig,
-      adConfig: () => adConfig.aboutPage,
-      friendLinks: () => appConfig.friendLinks,
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
-      },
-      isMobile() {
-        return this.$store.state.global.isMobile
-      },
-      gravatar() {
-        return this.$store.state.global.adminInfo.gravatar || getFileCDNUrl('/images/gravatar.jpg')
+    */
+    setup(props) {
+      const globalState = useGlobalState()
+      const isMobile = computed(() => globalState.userAgent.isMobile)
+      const gravatar = computed(() => {
+        return getFileCDNUrl('/images/gravatar.jpg')
+        // return this.$store.state.global.adminInfo.gravatar || getFileCDNUrl('/images/gravatar.jpg')
+      })
+
+      const handleHoverFollowMe = () => {
+        // this.$ga.event(
+        //   '加微信码',
+        //   GAEventActions.View,
+        //   GAEventTags.AboutPage
+        // )
       }
-    },
-    methods: {
-      handleFollowMe() {
-        this.$ga.event(
-          '加微信码',
-          systemConstants.GAEventActions.View,
-          systemConstants.GAEventTags.AboutPage
-        )
-      },
-      handleSponsor() {
-        this.$ga.event(
-          '赞赏 Sponsor',
-          systemConstants.GAEventActions.Click,
-          systemConstants.GAEventTags.AboutPage
-        )
-      },
-      openMyMap() {
-        this.$ga.event(
-          '轨迹地图',
-          systemConstants.GAEventActions.View,
-          systemConstants.GAEventTags.AboutPage
-        )
-        this.$store.commit('global/toggleMyMapOnState')
-      },
+
+      const handleTouchSponsor = () => {
+        // this.$ga.event(
+        //   '赞赏 Sponsor',
+        //   GAEventActions.Click,
+        //   GAEventTags.AboutPage
+        // )
+      }
+
+      const openMyMap = () => {
+        // this.$ga.event(
+        //   '轨迹地图',
+        //   GAEventActions.View,
+        //   GAEventTags.AboutPage
+        // )
+        globalState.switchTogglers.liveMap()
+      }
+
+      return {
+        APP_CONFIG,
+        LANGUAGE_KEYS,
+        isMobile,
+        gravatar,
+        handleHoverFollowMe,
+        handleTouchSponsor,
+        openMyMap
+      }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .about-page {
     width: 100%;
     overflow:  hidden;
@@ -664,31 +687,33 @@
       }
     }
 
-    .about-aliyun-mammon {
-      display: block;
+    .sponsor-mammon {
+      width: 100%;
+      padding: $sm-gap;
       margin-bottom: $lg-gap;
       background-color: $module-bg;
-      opacity: .8;
-      @include visibility-transition();
 
-      &:hover {
-        opacity: 1;
-      }
-
-      img {
+      > iframe {
         width: 100%;
+        height: 104px;
+        border: none;
+        opacity: .7;
+        @include visibility-transition();
+
+        &:hover {
+          opacity: 1;
+        }
       }
     }
 
-    .about-map {
-      position: relative;
+    .location-map {
       overflow: hidden;
       width: 100%;
       padding: $sm-gap;
       margin-bottom: $lg-gap;
       background-color: $module-bg;
 
-      > .iframe {
+      > iframe {
         width: 100%;
         height: 19rem;
       }
@@ -763,7 +788,7 @@
       margin: 0;
 
       > .about-me,
-      > .about-map {
+      > .location-map {
         margin-bottom: $gap;
       }
 
@@ -834,7 +859,7 @@
         }
       }
 
-      > .about-map {
+      > .location-map {
         > .iframe {
           height: 11rem;
         }

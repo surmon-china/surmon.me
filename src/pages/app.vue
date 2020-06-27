@@ -2,52 +2,55 @@
   <div class="app-page" :class="{ mobile: isMobile }">
     <div class="app">
       <div class="logo">
-        <img
+        <uimage
+          cdn
           alt="app-logo"
           draggable="false"
-          :src="'/images/app-logo.png' | byCDN"
-        >
+          src="/images/app-logo.png"
+        />
       </div>
-      <h2 class="title">{{ appConfig.meta.title }}</h2>
-      <p class="desc">{{ $i18n.text.slogan }}</p>
+      <h2 class="title">{{ APP_CONFIG.META.title }}</h2>
+      <p class="desc" v-i18n="LANGUAGE_KEYS.APP_SLOGAN"></p>
       <!-- <p class="version">v1.1.4 (2020-03-06)</p> -->
       <div class="screen">
-        <img
+        <uimage
+          cdn
           alt="app-hot"
           class="screen-img"
-          :src="'/images/app-hot.png' | byCDN"
-        >
+          src="/images/app-hot.png"
+        />
         <div class="download">
-          <img
-            :src="'/images/app-qrcode.png' | byCDN"
+          <uimage
+            cdn
             class="qrcode"
             alt="qrcode"
             draggable="false"
-          >
+            src="/images/app-qrcode.png"
+          />
           <a
             target="_blank"
             class="btn"
-            :href="appConfig.links.appApkFile"
+            :href="APP_CONFIG.LINKS.appApkFile"
             @click="handleAndroidApp($event)"
           >
             <i class="iconfont icon-android"></i>
-            <span class="text">{{ $i18n.text.device.android }}</span>
+            <span class="text" v-i18n="LANGUAGE_KEYS.DEVICE_ANDROID"></span>
           </a>
           <a
             class="btn"
             target="_blank"
             rel="external nofollow noopenter"
-            :href="appConfig.links.appProject + '#ios'"
+            :href="APP_CONFIG.LINKS.appProject + '#ios'"
             @mousedown="handleAppAction('APP IOS')"
           >
             <i class="iconfont icon-mac"></i>
-            <span class="text">{{ $i18n.text.device.ios }}</span>
+            <span class="text" v-i18n="LANGUAGE_KEYS.DEVICE_IOS"></span>
           </a>
           <a
             class="btn code"
             target="_blank"
             rel="external nofollow noopenter"
-            :href="appConfig.links.appProject"
+            :href="APP_CONFIG.LINKS.appProject"
             @mousedown="handleAppAction('APP GitHub 地址')"
           >
             <i class="iconfont icon-git"></i>
@@ -59,45 +62,55 @@
   </div>
 </template>
 
-<script>
-  import appConfig from '/@/config/app.config'
-  import systemConstants from '/@/constants/system'
-  export default {
+<script lang="ts">
+  import { defineComponent, ref, computed } from 'vue'
+  import { useI18n } from '/@/services/i18n'
+  import { useGlobalState } from '/@/state'
+  import { Language } from '/@/language/data'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { GAEventActions, GAEventTags } from '/@/constants/ga'
+  import * as APP_CONFIG from '/@/config/app.config'
+
+  export default defineComponent({
     name: 'Application',
-    head() {
-      return {
-        title: `${this.isEnLang ? '' : this.$i18n.nav.app + ' | '}App`
+    // head() {
+    //   return {
+    //     title: `${this.isEnLang ? '' : this.$i18n.nav.app + ' | '}App`
+    //   }
+    // },
+    setup() {
+      const i18n = useI18n()
+      const globalState = useGlobalState()
+      const isMobile = computed(() => globalState.userAgent.isMobile)
+
+      const handleAppAction = (name: string) => {
+        // this.$ga.event(
+        //   name,
+        //   GAEventActions.Click,
+        //   GAEventTags.AppPage
+        // )
       }
-    },
-    computed: {
-      appConfig: () => appConfig,
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
-      },
-      isMobile() {
-        return this.$store.state.global.isMobile
-      }
-    },
-    methods: {
-      handleAppAction(name) {
-        this.$ga.event(
-          name,
-          systemConstants.GAEventActions.Click,
-          systemConstants.GAEventTags.AppPage
-        )
-      },
-      handleAndroidApp(event) {
-        this.handleAppAction('APP Android 下载')
+
+      const handleAndroidApp = (event) => {
+        handleAppAction('APP Android 下载')
         if (!window.confirm(
-          this.isEnLang
-            ? 'Will open raw.githubusercontent.com to download android app...'
-            : 'Android apk 文件托管在 GitHub，希望你可以顺利访问~'
+          i18n.language.value === Language.Zh
+            ? 'Android apk 文件托管在 GitHub，希望你可以顺利访问~'
+            : 'Will open raw.githubusercontent.com to download android app...'
         )) {
           event.preventDefault()
         }
       }
+
+      return {
+        APP_CONFIG,
+        LANGUAGE_KEYS,
+        isMobile,
+        handleAppAction,
+        handleAndroidApp
+      }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>

@@ -7,7 +7,7 @@
 // TODO!!!
 import { Module, MutationTree, ActionTree } from 'vuex'
 import { isClient } from '/@/vuniversal/env'
-import { isArticleDetail } from '/@/transformers/route'
+import { isArticleDetail } from '/@/transforms/route'
 import { fetchDelay } from '/@/utils/fetch-delay'
 import { scrollTo, Easing } from '/@/utils/scroller'
 import { IRootState } from '.'

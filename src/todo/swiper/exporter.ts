@@ -27,7 +27,7 @@ const getInstaller = (SwiperClass: typeof Swiper) => {
   
     app.component(SwiperComponent.name, SwiperComponent)
     app.component(SwiperSlideComponent.name, SwiperSlideComponent)
-    // app.directive(CoreNames.SwiperDirective, getDirective(SwiperClass, globalOptions))
+    app.directive(NameId.SwiperDirective, getDirective(SwiperClass, globalOptions))
     install.installed = true
   }
   return install

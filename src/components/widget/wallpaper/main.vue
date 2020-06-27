@@ -40,9 +40,7 @@
       const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
       const isOnWallpaper = toRef(globalState.switchBox, 'wallpaper')
       const wallpapers = computed<any[]>(() => {
-        return store.getters[
-          getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Parpers)
-        ](i18n.language)
+        return store.getters[getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Parpers)](i18n.language)
       })
       
       const toggleWallpaper = () => {
@@ -51,7 +49,7 @@
         //   GAEventActions.Toggle,
         //   GAEventTags.Tool
         // )
-        if (wallpapers?.length) {
+        if (wallpapers.value?.length) {
           globalState.switchTogglers.wallpaper()
         } else {
           alert('可能 Bing 又被墙了吧我有什么办法！')
