@@ -1,12 +1,18 @@
 <template>
-  <div class="vlog-page" :class="{ mobile: isMobile }">
-    <ul ref="videoList" class="video-list">
+  <div class="lens-page" :class="{ mobile: isMobile }">
+    <div class="header">
+      <div class="item">ins</div>
+      <div class="item">douyin</div>
+      <div class="item">bilibili</div>
+      <div class="item">Wechat Channels</div>
+    </div>
+    <ul ref="videoListElement" class="video-list">
       <li
-        v-for="(video, index) in videoList"
-        :key="index"
         class="item"
-        :title="video.title"
         @click="handlePlay(video)"
+        :title="video.title"
+        :key="index"
+        v-for="(video, index) in videoList"
       >
         <div class="thumb">
           <div class="mask">
@@ -42,7 +48,7 @@
           </span>
           <span class="item created">
             <i class="iconfont icon-clock"></i>
-            <span>{{ (video.created * 1000) | timeAgo(language) }}</span>
+            <span>{{ humanlizeDate(video.created) }}</span>
           </span>
         </p>
       </li>
@@ -55,85 +61,98 @@
         rel="external nofollow noopenter"
       >
         <span class="icon">
-          <i class="iconfont icon-vlog"></i>
+          <i class="iconfont icon-lens"></i>
         </span>
-        <span v-text="$i18n.text.article.loadmore"></span>
+        <span v-i18n="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE" />
       </a>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
+  import { useStore, getNamespace, Modules } from '/@/store'
+  import { VlogModuleActions } from '/@/store/vlog'
+  import { useI18n } from '/@/services/i18n'
+  import { LozadObserver } from '/@/services/lozad'
+  import { useGlobalState } from '/@/state'
+  import { Language } from '/@/language/data'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { timeAgo } from '/@/transforms/moment'
   import { getFileProxyUrl } from '/@/transforms/url'
-  export default {
+  import * as APP_CONFIG from '/@/config/app.config'
+
+  export default defineComponent({
     name: 'Lens',
-    head() {
-      return {
-        title: `${this.isEnLang ? '' : this.$i18n.nav.vlog + ' | '}Lens`
-      }
-    },
-    fetch({ store }) {
-      return store.dispatch('vlog/fetchVideos')
-    },
-    data() {
-      return {
-        lozadObserver: null
-      }
-    },
-    computed: {
-      language() {
-        return this.$store.state.global.language
-      },
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
-      },
-      isMobile() {
-        return this.$store.state.global.isMobile
-      },
-      imageExt() {
-        return this.$store.state.global.imageExt
-      },
-      videoData() {
-        return this.$store.state.vlog.video.data
-      },
-      videoList() {
-        return this.videoData.vlist
-      },
-      isFetching() {
-        return this.videoData.fetching
-      },
-      isCanLoadMore() {
-        const { pages, count } = this.videoData
+    // head() {
+    //   return {
+    //     title: `${this.isEnLang ? '' : this.$i18n.nav.vlog + ' | '}Lens`
+    //   }
+    // },
+    async setup() {
+      const i18n = useI18n()
+      const store = useStore()
+      const globalState = useGlobalState()
+      const isMobile = computed(() => globalState.userAgent.isMobile)
+
+      const lozadObserver = ref<LozadObserver | null>(null)
+      const videoListElement = ref<HTMLElement>()
+      const isFetching = computed(() => store.state.vlog.fetching)
+      const videoData = computed(() => store.state.vlog.data)
+      const videoList = computed(() => videoData.value?.vlist)
+      const isCanLoadMore = computed(() => {
+        const { pages, count } = videoData.value
         return !!count && pages > 1
+      })
+
+      const humanlizeDate = (date: number) => {
+        return timeAgo(date * 1000, i18n.language.value as any)
       }
-    },
-    methods: {
-      getThumbUrl(url) {
-        return getFileProxyUrl(`/bilibili/${url.replace('//', '')}@560w_350h.${this.imageExt}`)
-      },
-      handlePlay(video) {
+
+      const getThumbUrl = (url: string) => {
+        return getFileProxyUrl(`/bilibili/${url.replace('//', '')}@560w_350h.${globalState.imageExt.ext.value}`)
+      }
+
+      const handlePlay = (video: any) => {
         window.open(`https://www.bilibili.com/video/av${video.aid}`)
       }
-    },
-    mounted() {
-      const listElement = this.$refs.videoList
-      const lozadElements = listElement && listElement.querySelectorAll('.lozad')
-      if (!lozadElements || !lozadElements.length) {
-        return false
-      }
-      this.lozadObserver = window.lozad(lozadElements, {
-        loaded: element => element.classList.add('loaded')
+
+      onMounted(() => {
+        const lozadElements = videoListElement.value?.querySelectorAll('.lozad')
+        if (!lozadElements || !lozadElements.length) {
+          return false
+        }
+        lozadObserver.value = window.lozad(lozadElements, {
+          loaded: element => element.classList.add('loaded')
+        })
+        lozadObserver.value.observe()
       })
-      this.lozadObserver.observe()
-    },
-    beforeDestroy() {
-      this.lozadObserver = null
+
+      onBeforeUnmount(() => {
+        lozadObserver.value = null
+      })
+
+      await store.dispatch(getNamespace(Modules.Vlog, VlogModuleActions.FetchVideos))
+
+      return {
+        LANGUAGE_KEYS,
+        isMobile,
+        isFetching,
+        videoListElement,
+        videoList,
+        isCanLoadMore,
+        humanlizeDate,
+        getThumbUrl,
+        handlePlay,
+      }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
-  .vlog-page {
+  @import 'src/assets/styles/init.scss';
+
+  .lens-page {
     min-height: 40rem;
 
     &.mobile {

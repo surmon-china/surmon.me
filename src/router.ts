@@ -108,6 +108,7 @@ export const createUniversalRouter = (config: RouterCreateConfig) => {
     routes,
     strict: true,
     history: config.history,
+    linkActiveClass: 'link-active',
     scrollBehavior(to, from, savedPosition) {
       return savedPosition || {
         top: 0,

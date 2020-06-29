@@ -76,7 +76,7 @@
     "sass": "^1.26.8",
     "ts-jest": "^26.1.0",
     "typescript": "^3.9.5",
-    "vite": "^1.0.0-beta.2",
+    "vite": "^1.0.0-beta.8",
     "vue-jest": "^5.0.0-alpha.0"
   }
 }

@@ -2,50 +2,61 @@
   <div class="guestbook-page" :class="{ mobile: isMobile }">
     <div class="detail">
       <div class="banner">
-        <img
+        <uimage
+          cdn
           class="image"
-          draggable="false"
-          :src="'/images/guestbook.jpg' | byCDN"
-        >
-        <span class="solgan" v-text="$i18n.text.guestbook" />
+          src="/images/guestbook.jpg"
+        />
+        <span class="solgan" v-i18n="LANGUAGE_KEYS.GUESTBOOK_SLOGAN" />
       </div>
     </div>
     <div class="comment">
-      <comment-box :post-id="0" :likes="siteLikes" />
+      <!-- <comment-box :post-id="0" :likes="siteLikes" /> -->
     </div>
   </div>
 </template>
 
-<script>
-  export default {
+<script lang="ts">
+  import { defineComponent, ref, computed } from 'vue'
+  import { useStore, Modules, getNamespace } from '/@/store'
+  import { OptionModuleActions, OptionModuleMutations } from '/@/store/option'
+  import { useGlobalState } from '/@/state'
+  import { useI18n } from '/@/services/i18n'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+
+  export default defineComponent({
     name: 'Guestbook',
-    head() {
-      return {
-        title: `${this.isEnLang ? '' : this.$i18n.nav.guestbook + ' | '}Guestbook`
-      }
-    },
-    fetch({ store }) {
-      return Promise.all([
-        store.dispatch('global/fetchAppOption', true),
-        store.dispatch('comment/fetchList', { post_id: 0 })
-      ])
-    },
-    computed: {
-      siteLikes() {
-        const appOption = this.$store.state.global.appOption.data
+    // head() {
+    //   return {
+    //     title: `${this.isEnLang ? '' : this.$i18n.nav.guestbook + ' | '}Guestbook`
+    //   }
+    // },
+    async setup() {
+      const store = useStore()
+      const globalState = useGlobalState()
+      const isMobile = computed(() => globalState.userAgent.isMobile)
+      const siteLikes = () => {
+        const appOption = store.state.option.appOption.data
         return appOption ? appOption.meta.likes : 0
-      },
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
-      },
-      isMobile() {
-        return this.$store.state.global.isMobile
+      }
+
+      await Promise.all([
+        store.dispatch(getNamespace(Modules.Option, OptionModuleActions.FetchAppOption), true),
+        // store.dispatch('comment/fetchList', { post_id: 0 })
+      ])
+
+      return {
+        LANGUAGE_KEYS,
+        isMobile,
+        siteLikes
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .guestbook-page {
     &.mobile {
       > .detail {

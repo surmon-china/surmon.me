@@ -5,8 +5,8 @@
  */
 
 import { Module, MutationTree, ActionTree } from 'vuex'
-import { IRootState } from '.'
 import http from '/@/services/http'
+import { IRootState } from '.'
 
 export const VLOG_API_PATH = '/bilibili/list'
 
@@ -21,7 +21,9 @@ export enum VlogModuleActions {
 const state = () => ({
   fetching: false,
   data: {
-    vlist: []
+    pages: 0,
+    count: 0,
+    vlist: [] as Array<any>
   }
 })
 

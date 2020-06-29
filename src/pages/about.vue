@@ -251,7 +251,16 @@
           </p>
         </div>
         <span v-if="!isMobile" class="followme" v-i18n="LANGUAGE_KEYS.FRIEND_ME" />
-        <div v-if="!isMobile" class="wechat" @mouseenter="handleHoverFollowMe"></div>
+        <div v-if="!isMobile" class="wechat" @mouseenter="handleHoverFollowMe">
+          <uimage
+            cdn
+            class="qrcode"
+            src="/images/wechat-qrcode.jpg"
+          />
+          <span class="tooltip">
+            <i18n zh="扫码加微，解锁灵魂" en="Scan the QR code in WeChat" />
+          </span>
+        </div>
       </div>
     </div>
     <div class="sponsor-mammon">
@@ -636,7 +645,7 @@
         > .avatar {
           width: 8rem;
           height: 8rem;
-          z-index: $z-index-normal + 1;
+          z-index: $z-index-normal + 2;
           margin-top: 5rem;
           max-width: 100%;
           border-radius: 100%;
@@ -647,6 +656,7 @@
 
         > .description {
           text-align: center;
+          color: $text;
 
           > .skill {
             margin-top: .466rem;
@@ -676,13 +686,25 @@
           bottom: 0rem;
           width: 100%;
           height: 74%;
-          background-image: cdn-url('/images/wechat.jpeg');
-          background-size: contain;
-          background-position: bottom;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
           z-index: $z-index-normal + 1;
-          background-color: $white;
+          background-color: $module-bg;
           @include hidden();
           @include visibility-transition();
+
+          .qrcode {
+            margin-top: 3rem;
+            margin-bottom: $gap;
+            width: 80%;
+          }
+
+          .tooltip {
+            color: $text;
+            font-size: $font-size-small;
+          }
         }
       }
     }

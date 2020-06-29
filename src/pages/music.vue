@@ -3,8 +3,8 @@
     <div class="player">
       <button
         class="prev-song"
-        :disabled="!musicPlayer.ready || musicPlayer.index === 0"
-        @click="musicPlayer.prevSong"
+        :disabled="!player.state.ready || player.state.index === 0"
+        @click="player.prevSong"
       >
         <i class="iconfont icon-music-prev"></i>
       </button>
@@ -27,29 +27,36 @@
             />
           </svg>
         </div>
-        <div class="song-bg-box" :class="{ 'playing': musicPlayer.playing }">
-          <img :src="musicPlayer.currentSongPicUrl" draggable="false">
+        <div class="song-bg-box" :class="{ 'playing': player.state.playing }">
+          <img :src="player.currentSongPicUrl" draggable="false">
         </div>
         <div class="toggle-box">
           <transition name="module" mode="out-in">
             <button
-              :key="musicPlayer.playing ? 'pause' : 'play'"
-              :disabled="!musicPlayer.ready"
+              :key="player.state.playing ? 'pause' : 'play'"
+              :disabled="!player.state.ready"
               class="toggle-btn"
-              @click="musicPlayer.togglePlay"
+              @click="player.togglePlay"
             >
-              <i v-if="musicPlayer.playing" class="iconfont icon-music-pause"></i>
+              <i v-if="player.state.playing" class="iconfont icon-music-pause"></i>
               <i v-else class="iconfont icon-music-play"></i>
             </button>
           </transition>
         </div>
         <div class="toggle-muted">
-          <button class="muted-btn" :disabled="!musicPlayer.ready" @click="musicPlayer.toggleMuted">
-            <i class="iconfont" :class="musicPlayer.muted ? 'icon-music-muted' : 'icon-music-volume'"></i>
+          <button class="muted-btn" :disabled="!player.state.ready" @click="player.toggleMuted">
+            <i
+              class="iconfont"
+              :class="player.state.muted ? 'icon-music-muted' : 'icon-music-volume'"
+            />
           </button>
         </div>
       </div>
-      <button class="next-song" :disabled="!musicPlayer.ready" @click="musicPlayer.nextSong">
+      <button
+        class="next-song"
+        :disabled="!player.state.ready"
+        @click="player.nextSong"
+      >
         <i class="iconfont icon-music-next"></i>
       </button>
     </div>
@@ -59,12 +66,11 @@
         <span v-else>Kind words are the music of the world.</span>
       </h3>
       <transition name="fade">
-        <p v-if="musicPlayer.currentSongLrcData && musicPlayer.currentSongLrcData.version >= 3" class="lrc">
+        <p v-if="player.currentSongRealTimeLrc !== null" class="lrc">
           <transition name="module" mode="out-in">
-            <span
-              :key="musicPlayer.currentSongRealTimeLrc"
-              class="lrc-text"
-            >{{ musicPlayer.currentSongRealTimeLrc }}</span>
+            <span :key="player.currentSongRealTimeLrc" class="lrc-text">
+              {{ player.currentSongRealTimeLrc }}
+            </span>
           </transition>
         </p>
       </transition>
@@ -72,54 +78,53 @@
   </div>
 </template>
 
-<script>
-  import { isClient } from '/@/vuniversal/env'
-  import musicPlayer from '/@/services/music-player'
-  export default {
+<script lang="ts">
+  import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
+  import { useI18n } from '/@/services/i18n'
+  import { useMusic } from '/@/services/music'
+
+  export default defineComponent({
     name: 'Music',
-    head() {
+    // head() {
+    //   return {
+    //     title: `${this.isEnLang ? '' : this.$i18n.nav.music + ' | '}Music`
+    //   }
+    // },
+    setup() {
+      const i18n = useI18n()
+      const musicPlayer = useMusic()
+
+      const currentSong = computed(() => {
+        return musicPlayer.currentSong.value
+      })
+
+      const relativeStrokeWidth = parseFloat((15 / 450 * 100).toFixed(1))
+      const radius = 50 - relativeStrokeWidth / 2
+      const perimeter = 2 * Math.PI * radius
+      const trackPath = (() => {
+        const _radius = parseInt(String(radius), 10)
+        return `M 50 50 m 0 -${_radius} a ${_radius} ${_radius} 0 1 1 0 ${_radius * 2} a ${_radius} ${_radius} 0 1 1 0 -${_radius * 2}`
+      })()
+
+      const circlePathStyle = computed(() => ({
+        strokeDasharray: `${perimeter}px, ${perimeter}px`,
+        strokeDashoffset: (1 - (musicPlayer.state.progress) / 100) * perimeter + 'px'
+      }))
+
       return {
-        title: `${this.isEnLang ? '' : this.$i18n.nav.music + ' | '}Music`
-      }
-    },
-    computed: {
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
-      },
-      musicPlayer() {
-        return musicPlayer
-      },
-      currentSong() {
-        return musicPlayer.currentSong
-      },
-      relativeStrokeWidth() {
-        return (15 / 450 * 100).toFixed(1)
-      },
-      trackPath() {
-        const radius = parseInt(50 - parseFloat(this.relativeStrokeWidth) / 2, 10)
-        return `M 50 50 m 0 -${radius} a ${radius} ${radius} 0 1 1 0 ${radius * 2} a ${radius} ${radius} 0 1 1 0 -${radius * 2}`
-      },
-      perimeter() {
-        const radius = 50 - parseFloat(this.relativeStrokeWidth) / 2
-        return 2 * Math.PI * radius
-      },
-      circlePathStyle() {
-        const perimeter = this.perimeter
-        return {
-          strokeDasharray: `${perimeter}px, ${perimeter}px`,
-          strokeDashoffset: (1 - (this.musicPlayer.progress) / 100) * perimeter + 'px'
-        }
-      }
-    },
-    created() {
-      if (this.$store.state.global.isMobile) {
-        this.$router.back()
+        player: musicPlayer,
+        currentSong,
+        trackPath,
+        relativeStrokeWidth,
+        circlePathStyle
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .music-page {
     display: flex;
     justify-content: center;

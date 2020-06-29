@@ -179,7 +179,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.En]: 'off'
   },
   [LANGUAGE_KEYS.APP_SLOGAN]: {
-    [Language.Zh]: '來苏之望，念狂梦猖',
+    [Language.Zh]: '來苏之望',
     [Language.En]: 'Because the mountain was there.'
   },
   [LANGUAGE_KEYS.MUSIC_PLACEHOLDER]: {

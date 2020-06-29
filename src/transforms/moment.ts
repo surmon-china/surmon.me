@@ -110,7 +110,7 @@ export const toLocalString = (date: string) => {
 }
 
 // 相对时间过滤器，传入时间，返回距离今天有多久
-export const timeAgo = (_time: string | Date, language: Language) => {
+export const timeAgo = (_time: string | number | Date, language: Language) => {
   const time = _time instanceof Date ? _time : new Date(_time)
   const between = Date.now() / 1000 - (Number(time) / 1000)
   const hourS = 3600

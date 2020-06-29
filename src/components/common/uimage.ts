@@ -40,6 +40,7 @@ export default defineComponent({
     }
 
     return h('img', {
+      draggable: false,
       ...props,
       src: imageSrc
     })

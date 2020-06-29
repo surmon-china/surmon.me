@@ -67,7 +67,10 @@ const createMusicPlayer = (config: MusicConfig) => {
     data: null as any
   })
 
-  const fetchSongUrl = (songId: MusicId) => http.get<any>(`/music/url/${songId}`)
+  const fetchSongUrl = (songId: MusicId) => {
+    return http.get<any>(`/music/url/${songId}`)
+  }
+
   const fetchSongList = (listId: MusicId) => {
     musicList.fetching = true
     return http.get<any>(`/music/list/${listId}`)
@@ -83,6 +86,7 @@ const createMusicPlayer = (config: MusicConfig) => {
         musicList.fetching = false
       })
   }
+
   const fetchSongLrc = (songId: MusicId) => {
     musicList.fetching = true
     return http.get(`/music/lrc/${songId}`)
@@ -136,16 +140,21 @@ const createMusicPlayer = (config: MusicConfig) => {
       : getFileCDNUrl('/images/music-bg.jpg')
   })
 
-  // eslint-disable-next-line vue/return-in-computed-property
-  const currentSongLrcData = computed<$TODO>(() => {
-    if (state.inited) {
-      const lrc = musicLrc.data
-      return lrc && !lrc.nolyric && lrc.lrc
-    }
-  })
 
-  const currentSongRealTimeLrc = computed<string>(() => {
-    const currentSongLrcs = currentSongLrcData.value.lyric
+  const currentSongRealTimeLrc = computed<string | null>(() => {
+    if (!state.inited) {
+      return null
+    }
+
+    const lrc = musicLrc.data
+    const lyric = lrc && !lrc.nolyric && lrc.lrc
+
+    // not roll
+    if (!lyric || lrc.version < 3) {
+      return null
+    }
+
+    const currentSongLrcs = lyric
       .split('\n')
       .map((timeSentence: string) => {
         // eslint-disable-next-line no-useless-escape
@@ -163,8 +172,9 @@ const createMusicPlayer = (config: MusicConfig) => {
         sentence: string
       }>
 
+    // empty
     if (!currentSongLrcs.length) {
-      return '-'
+      return null
     }
 
     const targetSentence = currentSongLrcs.find(
@@ -330,7 +340,6 @@ const createMusicPlayer = (config: MusicConfig) => {
     state: readonly(state),
     currentSong,
     currentSongPicUrl,
-    currentSongLrcData,
     currentSongRealTimeLrc,
 
     start,

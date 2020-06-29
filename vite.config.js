@@ -10,6 +10,21 @@ module.exports = {
   optimizeDeps: {
     exclude: ['esm', 'fs-extra', 'socket.io', 'request', 'cross-env', '@vue/compiler-sfc']
   },
+  proxy: {
+    '/proxy/bilibili': {
+      // target: 'http://jsonplaceholder.typicode.com',
+      changeOrigin: true,
+      forward: true,
+      rewrite(path) {
+        const proxyPath = `/proxy/bilibili/`
+        const index = path.lastIndexOf(proxyPath)
+        if (index > -1) {
+          return 'http://' + path.slice(proxyPath.length + index)
+        }
+        return path
+      }
+    }
+  },
   plugins: [
     {
       /*

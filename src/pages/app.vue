@@ -11,7 +11,7 @@
       </div>
       <h2 class="title">{{ APP_CONFIG.META.title }}</h2>
       <p class="desc" v-i18n="LANGUAGE_KEYS.APP_SLOGAN"></p>
-      <!-- <p class="version">v1.1.4 (2020-03-06)</p> -->
+      <p class="version">v1.1.4 (2020-03-06)</p>
       <div class="screen">
         <uimage
           cdn
