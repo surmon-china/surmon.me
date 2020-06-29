@@ -7,8 +7,12 @@
 import axios from 'axios'
 import API_CONFIG from '/@/config/api.config'
 
-axios.interceptors.response.use(
-  response => response,
+const http = axios.create({
+  baseURL: API_CONFIG.BASE,
+})
+
+http.interceptors.response.use(
+  response => response.data,
   error => {
     // TODO: notifition
     console.debug('Tosta:', error)
@@ -16,7 +20,4 @@ axios.interceptors.response.use(
   }
 )
 
-export default axios.create({
-  baseURL: API_CONFIG.BASE,
-})
-
+export default http

@@ -7,6 +7,7 @@ export const getLayoutMiddleware = (globalState: GlobalState) => {
     const isWideColumns = [
       RouteName.About,
       RouteName.Lens,
+      RouteName.Job,
       RouteName.Sitemap
     ].includes((to.name || '') as RouteName)
 

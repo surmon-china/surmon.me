@@ -46,7 +46,7 @@
         <i class="iconfont icon-comment"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_GUESTBOOK" />
       </router-link>
-      <!-- <a
+      <a
         v-if="false"
         :href="AD_CONFIG.nav.holiday"
         target="_blank"
@@ -65,7 +65,7 @@
       >
         <i class="iconfont icon-taobao"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.AD_LINK_TAOBAO" />
-      </a> -->
+      </a>
       <a
         :href="AD_CONFIG.nav.aliyun"
         target="_blank"
@@ -78,7 +78,8 @@
           <i class="iconfont icon-hot"></i>
         </span>
       </a>
-      <!-- <a
+      <a
+        v-if="false"
         target="_blank"
         class="item ad throwerror"
         rel="external nofollow noopener"
@@ -86,7 +87,7 @@
       >
         <i class="iconfont icon-debug"></i>
         <span class="text">TE.io</span>
-      </a> -->
+      </a>
       <a
         target="_blank"
         class="item ad foxfinder"

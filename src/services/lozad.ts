@@ -6,9 +6,12 @@
 
 import lozad from 'lozad'
 
+export type LozadSelector = lozad.Selector
+export type LozadObserver = lozad.Observer
+
 declare global {
   interface Window {
-    lozad: lozad.Selector
+    lozad: LozadSelector
   }
 }
 
