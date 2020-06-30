@@ -5,15 +5,13 @@
  */
 
 import { Module, MutationTree, ActionTree } from 'vuex'
-import { IRootState } from '.'
-// import { ARTICLE_API_PATH } from './article'
 import http from '/@/services/http'
-
-export const ARTICLE_API_PATH = '/article'
+import { ARTICLE_API_PATH } from './article'
+import { IRootState } from '.'
 
 export enum SitemapModuleMutations {
-  UpdateArticleFetching = 'updateArticleFetching',
-  UpdateArticlesData = 'updateArticlesData'
+  SetArticlesFetching = 'setArticlesFetching',
+  SetArticlesData = 'setArticlesData'
 }
 export enum SitemapModuleActions {
   FetchArticles = 'fetchArticles'
@@ -22,19 +20,19 @@ export enum SitemapModuleActions {
 const state = () => ({
   articles: {
     fetching: false,
-    data: [] as $TODO[]
+    data: [] as Array<$TODO>
   }
 })
 
 const mutations: MutationTree<SitemapState> = {
-  [SitemapModuleMutations.UpdateArticleFetching](state, action) {
-    state.articles.fetching = action
+  [SitemapModuleMutations.SetArticlesFetching](state, fetching: boolean) {
+    state.articles.fetching = fetching
   },
-  [SitemapModuleMutations.UpdateArticlesData](state, result) {
-    state.articles.data = result.result.data
+  [SitemapModuleMutations.SetArticlesData](state, result) {
+    state.articles.data = result.data
   },
   // TODO: 应该在消费方实现
-  // updateArticleOpenState(state, index, open) {
+  // setArticleOpenState(state, index, open) {
   //   const article = state.articles.data[index]
   //   if (article) {
   //     Vue.set(article, 'open', open != null ? open : !article.open)
@@ -44,11 +42,16 @@ const mutations: MutationTree<SitemapState> = {
 
 const actions: ActionTree<SitemapState, IRootState> = {
   [SitemapModuleActions.FetchArticles]({ commit }, params) {
-    commit(SitemapModuleMutations.UpdateArticleFetching, true)
+    commit(SitemapModuleMutations.SetArticlesFetching, true)
     return http
       .get(ARTICLE_API_PATH, { params })
-      .then(response => commit(SitemapModuleMutations.UpdateArticlesData, response))
-      .finally(() => commit(SitemapModuleMutations.UpdateArticleFetching, false))
+      .then(response => {
+        commit(SitemapModuleMutations.SetArticlesData, response.result)
+        return response
+      })
+      .finally(() => {
+        commit(SitemapModuleMutations.SetArticlesFetching, false)
+      })
   }
 }
 

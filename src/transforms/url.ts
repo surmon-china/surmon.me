@@ -4,21 +4,21 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import apiConfig from '/@/config/api.config'
+import API_CONFIG from '/@/config/api.config'
 import { getArticleDetailRoute } from '/@/transforms/route'
 
 export const getFileCDNUrl = (uri: string) => {
-  return `${apiConfig.CDN}${uri}`
+  return `${API_CONFIG.CDN}${uri}`
 }
 
 export const getFileProxyUrl = (uri: string) => {
-  return `${apiConfig.PROXY}${uri}`
+  return `${API_CONFIG.PROXY}${uri}`
 }
 
 export const getPageUrl = (uri: string) => {
-  return `${apiConfig.FE}${uri}`
+  return `${API_CONFIG.FE}${uri}`
 }
 
-export const getArticleDetailPageUrl = (articleID: string | number) => {
+export const getArticleDetailUrl = (articleID: string | number) => {
   return getPageUrl(getArticleDetailRoute(articleID))
 }

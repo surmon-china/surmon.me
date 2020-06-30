@@ -5,15 +5,15 @@
  */
 
 import { Module, MutationTree, ActionTree, GetterTree } from 'vuex'
+import http from '/@/services/http'
 import { Language } from '/@/language/data'
 import { IRootState } from '.'
-import http from '/@/services/http'
 
 export const WALLPAPER_API_PATH = '/wallpaper/list'
 
 export enum WallpaperModuleMutations {
-  UpdateFetching = 'updateFetching',
-  UpdatePapers = 'updatePapers'
+  SetFetching = 'setFetching',
+  SetPapers = 'setPapers'
 }
 export enum WallpaperModuleGetters {
   Parpers = 'parpers'
@@ -24,7 +24,10 @@ export enum WallpaperModuleActions {
 
 const state = () => ({
   fetching: false,
-  data: {} as {
+  data: {
+    [Language.En]: null as any,
+    [Language.Zh]: null as any
+  } as {
     [lang in Language]: any
   }
 })
@@ -36,31 +39,37 @@ export const getters: GetterTree<WallpaperState, IRootState> = {
 }
 
 const mutations: MutationTree<WallpaperState> = {
-  [WallpaperModuleMutations.UpdateFetching](state, action) {
-    state.fetching = action
+  [WallpaperModuleMutations.SetFetching](state, fetching: boolean) {
+    state.fetching = fetching
   },
-  [WallpaperModuleMutations.UpdatePapers](state, action: { language: Language, papers: any }) {
-    state.data[action.language] = action.papers.result
+  [WallpaperModuleMutations.SetPapers](state, action: { language: Language, papers: any }) {
+    state.data[action.language] = action.papers
   }
 }
 
 const actions: ActionTree<WallpaperState, IRootState> = {
   [WallpaperModuleActions.FetchPapers]({ commit, state }, language: Language) {
-
     // return data when exists
     if (state.data[language]) {
       return Promise.resolve(state.data[language])
     }
 
     const isChinese = language === Language.Zh
-    commit(WallpaperModuleMutations.UpdateFetching, true)
+    const emParam = Number(!isChinese)
+
+    commit(WallpaperModuleMutations.SetFetching, true)
     return http
-      .get(WALLPAPER_API_PATH, { params: { en: Number(!isChinese) }})
-      .then(response => commit(
-        WallpaperModuleMutations.UpdatePapers,
-        { language, papers: response }
-      ))
-      .finally(() => commit(WallpaperModuleMutations.UpdateFetching, false))
+      .get(WALLPAPER_API_PATH, { params: { en: emParam }})
+      .then(response => {
+        commit(
+          WallpaperModuleMutations.SetPapers,
+          { language, papers: response.result }
+        )
+        return response
+      })
+      .finally(() => {
+        commit(WallpaperModuleMutations.SetFetching, false)
+      })
   }
 }
 

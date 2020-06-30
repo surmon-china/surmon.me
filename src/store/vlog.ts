@@ -11,8 +11,8 @@ import { IRootState } from '.'
 export const VLOG_API_PATH = '/bilibili/list'
 
 export enum VlogModuleMutations {
-  UpdateFetching = 'updateFetching',
-  UpdateVideoData = 'updateVideoData'
+  SetFetching = 'setFetching',
+  SetVideoData = 'setVideoData'
 }
 export enum VlogModuleActions {
   FetchVideos = 'fetchVideos'
@@ -20,19 +20,19 @@ export enum VlogModuleActions {
 
 const state = () => ({
   fetching: false,
-  data: {
-    pages: 0,
-    count: 0,
-    vlist: [] as Array<any>
+  data: null as any as {
+    pages: number
+    count: number
+    vlist: Array<any>
   }
 })
 
 const mutations: MutationTree<VlogState> = {
-  [VlogModuleMutations.UpdateFetching](state, action) {
-    state.fetching = action
+  [VlogModuleMutations.SetFetching](state, fetching: boolean) {
+    state.fetching = fetching
   },
-  [VlogModuleMutations.UpdateVideoData](state, action) {
-    state.data = action.result
+  [VlogModuleMutations.SetVideoData](state, data) {
+    state.data = data
   }
 }
 
@@ -45,11 +45,16 @@ const actions: ActionTree<VlogState, IRootState> = {
       return Promise.resolve(state.data)
     }
 
-    commit(VlogModuleMutations.UpdateFetching, true)
+    commit(VlogModuleMutations.SetFetching, true)
     return http
       .get(VLOG_API_PATH, { params })
-      .then(response => commit(VlogModuleMutations.UpdateVideoData, response))
-      .finally(() => commit(VlogModuleMutations.UpdateFetching, false))
+      .then(response => {
+        commit(VlogModuleMutations.SetVideoData, response.result)
+        return response
+      })
+      .finally(() => {
+        commit(VlogModuleMutations.SetFetching, false)
+      })
   }
 }
 

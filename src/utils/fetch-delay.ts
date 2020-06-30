@@ -6,11 +6,9 @@
 
 import { DEFAULT_FETCH_DELAY } from '/@/config/app.config'
 
-export const fetchDelay = (delay: number) => {
+export const fetchDelay = (delay: number = DEFAULT_FETCH_DELAY) => {
   // 一个卑鄙的手段
-  delay = delay != null ? delay : DEFAULT_FETCH_DELAY
   const start = new Date().getTime()
-
   return (action: $TODO) => {
     // 卑鄙手段
     const end = new Date().getTime()

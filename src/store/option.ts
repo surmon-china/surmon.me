@@ -9,19 +9,19 @@ import { IRootState } from '.'
 import http from '/@/services/http'
 
 export enum OptionModuleMutations {
-  UpdateAdminInfo = 'updateAdminInfo',
-  UpdateAppOptionFetching = 'updateAppOptionFetching',
-  UpdateAppOptionData = 'updateAppOptionData',
-  UpdateLikesIncrement = 'updateLikesIncrement',
+  SetAdminInfo = 'setAdminInfo',
+  SetAppOptionFetching = 'setAppOptionFetching',
+  SetAppOptionData = 'setAppOptionData',
+  IncrementAppLikes = 'incrementAppLikes',
 }
 export enum OptionModuleActions {
   FetchAdminInfo = 'fetchAdminInfo',
   FetchAppOption = 'fetchAppOption',
-  PostLikeSite = 'postLikeSite'
+  PostSiteLike = 'postSiteLike'
 }
 
 const state = () => ({
-  adminInfo: {} as any,
+  adminInfo: null as any,
   appOption: {
     fetching: false,
     data: null as any
@@ -30,18 +30,20 @@ const state = () => ({
 
 const mutations: MutationTree<OptionState> = {
   // 服务端配置的管理员信息
-  [OptionModuleMutations.UpdateAdminInfo](state, action) {
-    state.adminInfo = action.result
+  [OptionModuleMutations.SetAdminInfo](state, adminInfo) {
+    state.adminInfo = adminInfo
   },
   // 服务端配置
-  [OptionModuleMutations.UpdateAppOptionFetching](state, action) {
-    state.appOption.fetching = action
+  [OptionModuleMutations.SetAppOptionFetching](state, fetching: boolean) {
+    state.appOption.fetching = fetching
   },
-  [OptionModuleMutations.UpdateAppOptionData](state, action) {
-    state.appOption.data = action.result
+  [OptionModuleMutations.SetAppOptionData](state, appOption) {
+    state.appOption.data = appOption
   },
-  [OptionModuleMutations.UpdateLikesIncrement](state) {
-    state.appOption.data.meta.likes++
+  [OptionModuleMutations.IncrementAppLikes](state) {
+    if (state.appOption.data) {
+      state.appOption.data.meta.likes++
+    }
   }
 }
 
@@ -49,22 +51,31 @@ const actions: ActionTree<OptionState, IRootState> = {
   [OptionModuleActions.FetchAdminInfo]({ commit }) {
     return http
       .get('/auth/admin')
-      .then(response => commit(OptionModuleMutations.UpdateAdminInfo, response))
+      .then(response => {
+        commit(OptionModuleMutations.SetAdminInfo, response.result)
+        return response
+      })
   },
   [OptionModuleActions.FetchAppOption]({ commit, state }, force = false) {
     if (!force && state.appOption.data) {
-      return Promise.resolve()
+      return Promise.resolve(state.appOption.data)
     }
-    commit(OptionModuleMutations.UpdateAppOptionFetching, true)
+
+    commit(OptionModuleMutations.SetAppOptionFetching, true)
     return http
       .get('/option')
-      .then(response => commit(OptionModuleMutations.UpdateAppOptionData, response))
-      .finally(() => commit(OptionModuleMutations.UpdateAppOptionFetching, false))
+      .then(response => {
+        commit(OptionModuleMutations.SetAppOptionData, response.result)
+        return response
+      })
+      .finally(() => {
+        commit(OptionModuleMutations.SetAppOptionFetching, false)
+      })
   },
-  [OptionModuleActions.PostLikeSite]({ commit }) {
+  [OptionModuleActions.PostSiteLike]({ commit }) {
     return http.patch('/like/site').then(response => {
-      commit(OptionModuleMutations.UpdateLikesIncrement)
-      return Promise.resolve(response)
+      commit(OptionModuleMutations.IncrementAppLikes)
+      return response
     })
   }
 }
