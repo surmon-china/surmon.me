@@ -5,12 +5,12 @@
  */
 
 import { Module, MutationTree, ActionTree } from 'vuex'
-import { IRootState } from '.'
 import http from '/@/services/http'
+import { IRootState } from '.'
 
 export enum CategoryModuleMutations {
-  UpdateFetching = 'updateFetching',
-  UpdateListData = 'updateListData'
+  SetFetching = 'setFetching',
+  SetListData = 'setListData'
 }
 export enum CategoryModuleActions {
   FetchList = 'fetchList'
@@ -18,29 +18,29 @@ export enum CategoryModuleActions {
 
 const state = () => ({
   fetching: false,
-  data: [] as Array<any>
+  data: [] as Array<$TODO>
 })
 
 const mutations: MutationTree<CategoryState> = {
-  [CategoryModuleMutations.UpdateFetching](state, action) {
-    state.fetching = action
+  [CategoryModuleMutations.SetFetching](state, fetching: boolean) {
+    state.fetching = fetching
   },
-  [CategoryModuleMutations.UpdateListData](state, action) {
-    state.data = action.result.data
+  [CategoryModuleMutations.SetListData](state, data) {
+    state.data = data
   }
 }
 
 const actions: ActionTree<CategoryState, IRootState> = {
   [CategoryModuleActions.FetchList]({ commit }, params: object) {
-    commit(CategoryModuleMutations.UpdateFetching, true)
+    commit(CategoryModuleMutations.SetFetching, true)
     return http
       .get('/category', { params })
       .then(response => {
-        commit(CategoryModuleMutations.UpdateListData, response)
-        return Promise.resolve(response)
+        commit(CategoryModuleMutations.SetListData, response.result.data)
+        return response
       })
       .finally(() => {
-        commit(CategoryModuleMutations.UpdateFetching, false)
+        commit(CategoryModuleMutations.SetFetching, false)
       })
   }
 }

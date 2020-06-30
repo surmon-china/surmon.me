@@ -2,18 +2,22 @@
   <div class="article-list-item" :class="{ mobile: isMobile }">
     <div class="item-content">
       <div v-if="!isMobile" class="item-thumb">
-        <router-link :to="`/article/${article.id}`">
+        <router-link :to="getArticleDetailRoute(article.id)">
           <span
             class="item-oirigin"
             :class="{
-              self: !article.origin,
-              other: article.origin === constants.OriginState.Reprint,
-              hybrid: article.origin === constants.OriginState.Hybrid
+              self: _isOriginal,
+              other: _isReprint,
+              hybrid: _isHybrid
             }"
-          >{{ originText }}</span>
+          >
+            <i18n :lkey="LANGUAGE_KEYS.ORIGIN_ORIGINAL" v-if="_isOriginal" />
+            <i18n :lkey="LANGUAGE_KEYS.ORIGIN_REPRINT" v-else-if="_isReprint" />
+            <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="_isHybrid" />
+          </span>
           <img
             class="item-thumb-img"
-            :src="getThumb(article.thumb)"
+            :src="getThumbUrl(article.thumb)"
             :alt="article.title"
             :title="article.title"
           >
@@ -21,7 +25,9 @@
       </div>
       <div class="item-body">
         <h5 class="item-title">
-          <router-link :to="`/article/${article.id}`" :title="article.title" v-text="article.title" />
+          <router-link :to="getArticleDetailRoute(article.id)" :title="article.title">
+            {{ article.title }}
+          </router-link>
         </h5>
         <p
           class="item-description"
@@ -31,7 +37,7 @@
         <div class="item-meta">
           <span class="date">
             <i class="iconfont icon-clock"></i>
-            <span>{{ article.create_at | toYMD(language) }}</span>
+            <span>{{ humanlizeDate(article.create_at) }}</span>
           </span>
           <span class="views">
             <i class="iconfont icon-eye"></i>
@@ -51,11 +57,12 @@
               <router-link
                 v-for="(category, index) in article.category"
                 :key="index"
-                :to="`/category/${category.slug}`"
-                v-text="isEnLang ? category.slug : category.name"
-              />
+                :to="getCategoryArchiveRoute(category.slug)"
+              >
+                <i18n :zh="category.name" :en="category.slug" />
+              </router-link>
             </template>
-            <span v-else v-text="$i18n.text.category.empty"></span>
+            <span v-else v-i18n="LANGUAGE_KEYS.CATEGORY_PLACEHOLDER"></span>
           </span>
           <span v-if="false" class="tags">
             <i class="iconfont icon-tag"></i>
@@ -63,11 +70,12 @@
               <router-link
                 v-for="(tag, index) in article.tag"
                 :key="index"
-                :to="`/tag/${tag.slug}`"
-                v-text="isEnLang ? tag.slug : tag.name"
-              />
+                :to="getTagArchiveRoute(tag.slug)"
+              >
+                <i18n :zh="tag.name" :en="tag.slug" />
+              </router-link>
             </template>
-            <span v-else v-text="$i18n.text.tag.empty"></span>
+            <span v-else v-i18n="LANGUAGE_KEYS.TAG_PLACEHOLDER"></span>
           </span>
         </div>
       </div>
@@ -75,62 +83,75 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import { defineComponent, ref, computed, toRefs, onMounted, PropType } from 'vue'
   import { mapState } from 'vuex'
-  import { getFileCDNUrl } from '/@/transforms/url'
+  import { useGlobalState } from '/@/state'
+  import { useI18n } from '/@/services/i18n'
+  import { getJSON } from '/@/services/storage'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { getArticleDetailRoute, getTagArchiveRoute, getCategoryArchiveRoute } from '/@/transforms/route'
   import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
-  import { getJSONStorageReader } from '/@/services/local-storage'
-  import systemConstants from '/@/constants/system'
+  import { isOriginal, isHybrid, isReprint } from '/@/transforms/state'
+  import { timeAgo } from '/@/transforms/moment'
+  import { USER_LIKE_HISTORY } from '/@/constants/storage'
 
-  const localHistoryLikes = getJSONStorageReader(systemConstants.StorageField.UserLikeHistory)
-
-  export default {
+  export default defineComponent({
     name: 'ArticleListItem',
     props: {
-      article: Object
-    },
-    data() {
-      return {
-        isLiked: false
+      article: {
+        type: Object as PropType<any>,
+        required: true
       }
     },
-    computed: {
-      ...mapState('global', [
-        'constants',
-        'language',
-        'isMobile'
-      ]),
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
-      },
-      originText() {
-        if (!this.article.origin) {
-          return this.$i18n.text.origin.original
-        }
-        if (this.article.origin === this.constants.OriginState.Reprint) {
-          return this.$i18n.text.origin.reprint
-        }
-        if (this.article.origin === this.constants.OriginState.Hybrid) {
-          return this.$i18n.text.origin.hybrid
-        }
-        return '-'
+    setup(props) {
+      const i18n = useI18n()
+      const globalState = useGlobalState()
+
+      // eslint-disable-next-line vue/no-setup-props-destructure
+      const { origin } = props.article
+      const isLiked = ref(false)
+      const isMobile = computed(() => globalState.userAgent.isMobile)
+      const _isHybrid = isHybrid(origin)
+      const _isReprint = isReprint(origin)
+      const _isOriginal = !origin || isOriginal(origin)
+
+      const humanlizeDate = (date: string) => {
+        return timeAgo(date, i18n.language.value as any)
       }
-    },
-    methods: {
-      getThumb(thumb) {
+
+      const getThumbUrl = (thumbUrl: string) => {
         return getArchiveArticleThumbnailUrl(
-          thumb,
-          this.$store.getters['global/isWebPImage']
+          thumbUrl,
+          globalState.imageExt.isWebP.value
         )
       }
-    },
-    mounted() {
-      this.isLiked = localHistoryLikes.get()?.pages.includes(this.article.id)
+
+      onMounted(() => {
+        const localHistoryLikes = getJSON(USER_LIKE_HISTORY)
+        isLiked.value = !!localHistoryLikes?.pages?.includes(props.article.id)
+      })
+
+      return {
+        LANGUAGE_KEYS,
+        isLiked,
+        isMobile,
+        isOriginal: isOriginal(props.article.origin),
+        isHybrid: isHybrid(props.article.origin),
+        isReprint: isReprint(props.article.origin),
+        getThumbUrl,
+        getArticleDetailRoute,
+        getCategoryArchiveRoute,
+        getTagArchiveRoute,
+        humanlizeDate
+      }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .article-list-item {
     margin-bottom: $lg-gap;
     @include module-blur-bg();

@@ -9,7 +9,7 @@ export const set = (key: string, data: string) => localStorage.setItem(key, data
 export const remove = (key: string) => localStorage.removeItem(key)
 
 export const setJSON = (key: string, data: any) => set(key, JSON.stringify(data))
-export const getJSON = (key: string): JSON => {
+export const getJSON = <T = any>(key: string): T => {
   const data = get(key)
   return data ? JSON.parse(data) : null
 }

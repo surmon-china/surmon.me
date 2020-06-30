@@ -4,8 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-// TODO!!!
 import { Module, MutationTree, ActionTree } from 'vuex'
+import { SortType } from '/@/constants/state'
 import { isClient } from '/@/vuniversal/env'
 import { isArticleDetail } from '/@/transforms/route'
 import { fetchDelay } from '/@/utils/fetch-delay'
@@ -16,20 +16,31 @@ import http from '/@/services/http'
 export const ARTICLE_API_PATH = '/article'
 export const LIKE_ARTICLE_API_PATH = '/like/article'
 
-export enum ArticleModuleMutations {
-  UpdateFetching = 'updateFetching',
-  UpdateListData = 'updateListData'
-}
-export enum ArticleModuleActions {
-  FetchList = 'fetchList'
+export enum ArticleModuleListMutations {
+  // list
+  SetListData = 'setListData',
+  SetMoreListData = 'setMoreListData',
+  SetListFetchig = 'setListFetchig',
+  // hot list
+  SetHotListData = 'setHotListData',
+  SetHotListFetchig = 'setHotListFetchig',
+  // detail
+  SetDetailData = 'setDetailData',
+  SetDetailFetchig = 'setDetailFetchig',
+  IncrementArticleLikes = 'IncrementArticleLikes'
 }
 
-const getDefaultListData = () => {
-  return {
-    data: [] as Array<$TODO>,
-    pagination: {} as $TODO
-  }
+export enum ArticleModuleActions {
+  FetchList = 'fetchList',
+  FetchHotList = 'fetchHotList',
+  FetchDetail = 'fetchDetail',
+  PostArticleLike = 'postArticleLike'
 }
+
+const getDefaultListData = () => ({
+  data: [] as Array<$TODO>,
+  pagination: null as $TODO
+})
 
 const state = () => ({
   list: {
@@ -42,72 +53,80 @@ const state = () => ({
   },
   detail: {
     fetching: false,
-    data: {} as $TODO
+    data: null as $TODO
   }
 })
 
 const mutations: MutationTree<ArticleState> = {
   // 文章列表
-  updateListFetchig(state, action) {
-    state.list.fetching = action
+  [ArticleModuleListMutations.SetListFetchig](state, fetching: boolean) {
+    state.list.fetching = fetching
   },
-  updateListData(state, action) {
-    state.list.data = action
+  [ArticleModuleListMutations.SetListData](state, articleData) {
+    state.list.data = articleData
   },
-  updateExistingListData(state, action) {
-    state.list.data.data.push(...action.data)
-    state.list.data.pagination = action.pagination
+  [ArticleModuleListMutations.SetMoreListData](state, articleData) {
+    state.list.data.data.push(...articleData.data)
+    state.list.data.pagination = articleData.pagination
   },
 
   // 热门文章
-  updateHotListFetchig(state, action) {
-    state.hotList.fetching = action
+  [ArticleModuleListMutations.SetHotListFetchig](state, fetching: boolean) {
+    state.hotList.fetching = fetching
   },
-  updateHotListData(state, action) {
-    state.hotList.data = action.result.data
+  [ArticleModuleListMutations.SetHotListData](state, hotArticles) {
+    state.hotList.data = hotArticles
   },
 
   // 文章详情
-  updateDetailFetchig(state, action) {
-    state.detail.fetching = action
+  [ArticleModuleListMutations.SetDetailFetchig](state, fetching: boolean) {
+    state.detail.fetching = fetching
   },
-  updateDetailData(state, action) {
-    state.detail.data = action
-  },
-
-  // 更新文章阅读全文状态
-  updateDetailRenderedState(state, action) {
-    Vue.set(
-      state.detail.data,
-      'isRenderedFullContent',
-      action == null ? true : action
-    )
+  [ArticleModuleListMutations.SetDetailData](state, article) {
+    state.detail.data = article
   },
 
   // 喜欢某篇文章
-  updateLikesIncrement(state) {
+  [ArticleModuleListMutations.IncrementArticleLikes](state) {
     const article = state.detail.data
-    article && article.meta.likes++
+    if (article) {
+      article.meta.likes++
+    }
   }
+
+  // 更新文章阅读全文状态
+  // updateDetailRenderedState(state, action) {
+  //   Vue.set(
+  //     state.detail.data,
+  //     'isRenderedFullContent',
+  //     action == null ? true : action
+  //   )
+  // },
 }
 
 const actions: ActionTree<ArticleState, IRootState> = {
   // 获取文章列表
-  fetchList({ commit }, params = {}) {
+  [ArticleModuleActions.FetchList]({ commit }, params: any = {}) {
     const isRestart = !params.page || params.page === 1
-    const isLoadMore = params.page && params.page > 1
+    const isLoadMore = !isRestart && params.page > 1
 
     // 清空已有数据
-    isRestart && commit('updateListData', getDefaultListData())
-    commit('updateListFetchig', true)
+    if (isRestart) {
+      commit(ArticleModuleListMutations.SetListData, getDefaultListData())
+    }
+    commit(ArticleModuleListMutations.SetListFetchig, true)
 
     return http
-      .get(ARTICLE_API_PATH, { params })
+      .get<any>(ARTICLE_API_PATH, { params })
       .then(response => {
-        commit('updateListFetchig', false)
-        isLoadMore
-          ? commit('updateExistingListData', response.result)
-          : commit('updateListData', response.result)
+        commit(
+          isLoadMore
+            ? ArticleModuleListMutations.SetMoreListData
+            : ArticleModuleListMutations.SetListData,
+          response.result
+        )
+        return response
+        /*
         if (isLoadMore && isClient) {
           Vue.nextTick(() => {
             scrollTo(window.scrollY + window.innerHeight * 0.8, 300, {
@@ -115,59 +134,65 @@ const actions: ActionTree<ArticleState, IRootState> = {
             })
           })
         }
+        */
       })
-      .catch(error => commit('updateListFetchig', false))
+      .finally(() => {
+        commit(ArticleModuleListMutations.SetListFetchig, false)
+      })
   },
 
   // 获取最热文章列表
-  fetchHotList({ commit, rootState }) {
-    const { SortType } = rootState.global.constants
-    commit('updateHotListFetchig', true)
+  [ArticleModuleActions.FetchHotList]({ commit }) {
+    commit(ArticleModuleListMutations.SetHotListFetchig, true)
     return http
       .get(ARTICLE_API_PATH, { params: { cache: 1, sort: SortType.Hot } })
       .then(response => {
-        commit('updateHotListData', response)
-        commit('updateHotListFetchig', false)
+        commit(ArticleModuleListMutations.SetHotListData, response.result.data)
+        return response
       })
-      .catch(error => commit('updateHotListFetchig', false))
+      .finally(() => {
+        commit(ArticleModuleListMutations.SetHotListFetchig, false)
+      })
   },
 
   // 获取文章详情
-  fetchDetail({ commit }, params = {}) {
-    const delay = fetchDelay(
-      isClient && isArticleDetail(window.$nuxt.$route.name) ? null : 0
-    )
-    if (isClient) {
-      Vue.nextTick(() => {
-        scrollTo(0, 300, { easing: Easing['ease-in'] })
-      })
-    }
-    commit('updateDetailFetchig', true)
-    commit('updateDetailData', {})
+  [ArticleModuleActions.FetchDetail]({ commit }, params: any = {}) {
+    // 到顶部？也许是不必要的
+    // if (isClient) {
+    //   Vue.nextTick(() => {
+    //     scrollTo(0, 300, { easing: Easing['ease-in'] })
+    //   })
+    // }
+    // const delay = fetchDelay(
+    //   isClient && isArticleDetail(window.$nuxt.$route.name) ? null : 0
+    // )
+    params.delay = params.delay || 0
+    const delay = fetchDelay(params.delay)
+
+    commit(ArticleModuleListMutations.SetDetailFetchig, true)
+    commit(ArticleModuleListMutations.SetDetailData, null)
     return http
       .get(`${ARTICLE_API_PATH}/${params.article_id}`)
       .then(response => {
         return new Promise(resolve => {
           delay(() => {
-            commit('updateDetailData', response.result)
-            commit('updateDetailFetchig', false)
+            commit(ArticleModuleListMutations.SetDetailData, response.result)
             resolve(response)
           })
         })
       })
-      .catch(error => {
-        commit('updateDetailFetchig', false)
-        return Promise.reject(error)
+      .finally(() => {
+        commit(ArticleModuleListMutations.SetDetailFetchig, false)
       })
   },
 
   // 喜欢文章
-  fetchLikeArticle({ commit }, article_id) {
+  [ArticleModuleActions.PostArticleLike]({ commit }, article_id: string) {
     return http
       .patch(LIKE_ARTICLE_API_PATH, { article_id })
       .then(response => {
-        commit('updateLikesIncrement')
-        return Promise.resolve(response)
+        commit(ArticleModuleListMutations.IncrementArticleLikes)
+        return response
       })
   }
 }

@@ -9,8 +9,8 @@ import { IRootState } from '.'
 import http from '/@/services/http'
 
 export enum TagModuleMutations {
-  UpdateFetching = 'updateFetching',
-  UpdateListData = 'updateListData'
+  SetFetching = 'setFetching',
+  SetListData = 'setListData'
 }
 export enum TagModuleActions {
   FetchList = 'fetchList'
@@ -18,29 +18,29 @@ export enum TagModuleActions {
 
 const state = () => ({
   fetching: false,
-  data: [] as Array<any>
+  data: [] as Array<$TODO>
 })
 
 const mutations: MutationTree<TagState> = {
-  [TagModuleMutations.UpdateFetching](state, action) {
-    state.fetching = action
+  [TagModuleMutations.SetFetching](state, fetching: boolean) {
+    state.fetching = fetching
   },
-  [TagModuleMutations.UpdateListData](state, action) {
-    state.data = action.result.data
+  [TagModuleMutations.SetListData](state, result) {
+    state.data = result.data
   }
 }
 
 const actions: ActionTree<TagState, IRootState> = {
   [TagModuleActions.FetchList]({ commit }, params: object) {
-    commit(TagModuleMutations.UpdateFetching, true)
+    commit(TagModuleMutations.SetFetching, true)
     return http
       .get('/tag', { params })
       .then(response => {
-        commit(TagModuleMutations.UpdateListData, response)
-        return Promise.resolve(response)
+        commit(TagModuleMutations.SetListData, response.result)
+        return response
       })
       .finally(() => {
-        commit(TagModuleMutations.UpdateFetching, false)
+        commit(TagModuleMutations.SetFetching, false)
       })
   }
 }

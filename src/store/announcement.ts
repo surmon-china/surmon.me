@@ -9,38 +9,38 @@ import http from '/@/services/http'
 import { IRootState } from '.'
 
 export enum AnnouncementModuleMutations {
-  UpdateFetching = 'updateFetching',
-  UpdateListData = 'updateListData'
+  SetFetching = 'setFetching',
+  SetListData = 'setListData'
 }
 export enum AnnouncementModuleActions {
   FetchList = 'fetchList'
 }
 
-const state = {
+const state = () => ({
   fetching: false,
-  data: [] as Array<any>
-}
+  data: [] as Array<$TODO>
+})
 
 const mutations: MutationTree<AnnouncementState> = {
-  [AnnouncementModuleMutations.UpdateFetching](state, action) {
-    state.fetching = action
+  [AnnouncementModuleMutations.SetFetching](state, fetching: boolean) {
+    state.fetching = fetching
   },
-  [AnnouncementModuleMutations.UpdateListData](state, action) {
-    state.data = action.result.data
+  [AnnouncementModuleMutations.SetListData](state, action) {
+    state.data = action
   }
 }
 
 const actions: ActionTree<AnnouncementState, IRootState> = {
   [AnnouncementModuleActions.FetchList]({ commit }, params: object) {
-    commit(AnnouncementModuleMutations.UpdateFetching, true)
+    commit(AnnouncementModuleMutations.SetFetching, true)
     return http
       .get('/announcement', { params })
       .then(response => {
-        commit(AnnouncementModuleMutations.UpdateListData, response)
-        return Promise.resolve(response)
+        commit(AnnouncementModuleMutations.SetListData, response.result.data)
+        return response
       })
       .finally(() => {
-        commit(AnnouncementModuleMutations.UpdateFetching, false)
+        commit(AnnouncementModuleMutations.SetFetching, false)
       })
   }
 }
@@ -52,5 +52,5 @@ const announcementModule: Module<AnnouncementState, IRootState> = {
   actions
 }
 
-export type AnnouncementState = typeof state
+export type AnnouncementState = ReturnType<typeof state>
 export default announcementModule

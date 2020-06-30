@@ -110,6 +110,7 @@ renderer.image = imageRender
 renderer.heading = headingRender
 renderer.paragraph = paragraphRender
 
+// TODO: 升级并处理消毒问题
 export default (content, tags, parseHtml = false) => {
   // 所有非链接的关键字进行内链处理
   renderer.text = tags && tags.length
