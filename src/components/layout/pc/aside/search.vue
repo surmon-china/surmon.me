@@ -20,9 +20,9 @@
           <option
             v-for="tag in tags"
             :key="tag.slug"
-            class="iiem"
             :value="isZhLang ? tag.name : tag.slug"
             :label="tag.description"
+            class="iiem"
           />
         </datalist>
       </client-only>

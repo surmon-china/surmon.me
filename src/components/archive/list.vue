@@ -1,20 +1,15 @@
 <template>
   <div class="articles" :class="{ mobile: isMobile }">
-
-    <!-- 非首页列表头 -->
-    <div v-if="!isIndexRoute" class="article-list-header">
-      <list-header />
-    </div>
-
-    <!-- 广告 -->
+    <!-- mammon -->
     <transition name="module">
       <component
-        :is="isMobile ? 'adsense-archive-mobile' : 'adsense-archive'"
+        v-if="isMammonEnabled"
         class="article-list-mammon"
+        :is="isMobile ? 'adsense-archive-mobile' : 'adsense-archive'"
       />
     </transition>
 
-    <!-- 列表 -->
+    <!-- list -->
     <div class="article-list">
       <transition name="module" mode="out-in">
         <transition-group
@@ -27,81 +22,118 @@
             v-for="articleItem in article.data.data"
             :key="articleItem.id"
             :article="articleItem"
-            @click.native="toDetail(articleItem)"
+            @click="handleArticleClick(articleItem)"
           />
         </transition-group>
         <su-empty v-else key="empty" class="article-su-empty">
-          <slot>{{ $i18n.text.article.empty }}</slot>
+          <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
         </su-empty>
       </transition>
     </div>
 
-    <!-- 加载更多 -->
+    <!-- loadmore -->
     <div class="article-load">
-      <button class="loadmore-button" :disabled="article.fetching || !isCanLoadMore" @click="$emit('loadmore')">
+      <button
+        class="loadmore-button"
+        :disabled="article.fetching || !isLoadMoreEnabled"
+        @click="handleLoadmore"
+      >
         <span class="icon">
           <i class="iconfont icon-peachblossom"></i>
         </span>
         <div class="text">
-          <span v-if="!article.fetching && isCanLoadMore">{{ $i18n.text.article.loadmore }}</span>
-          <span v-else-if="article.fetching && isCanLoadMore">{{ $i18n.text.article.loading }}</span>
-          <span v-else-if="!isCanLoadMore">{{ $i18n.text.article.nomore }}</span>
+          <span
+            v-if="article.fetching"
+            v-i18n="LANGUAGE_KEYS.ARTICLE_LIST_LOADING"
+          />
+          <span
+            v-else-if="isLoadMoreEnabled"
+            v-i18n="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE"
+          />
+          <span
+            v-else
+            v-i18n="LANGUAGE_KEYS.ARTICLE_LIST_NO_MORE"
+          />
         </div>
       </button>
     </div>
   </div>
 </template>
 
-<script>
-  import ListItem from './item.vue'
-  import ListHeader from './header.vue'
-  import { isIndexRoute } from '/@/services/route-validator'
+<script lang="ts">
+  import { defineComponent, ref, computed, onMounted, PropType } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { useGlobalState } from '/@/state'
+  import { useDefer } from '/@/services/defer'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import { getArticleDetailRoute } from '/@/transforms/route'
+  import ListItem from './item.vue'
 
-  export default {
+  export default defineComponent({
     name: 'ArticleList',
     components: {
-      ListItem,
-      ListHeader
+      ListItem
     },
     props: {
       article: {
-        type: Object
+        type: Object as PropType<any>,
+        required: true
+      },
+      mammon: {
+        type: Boolean,
+        default: true
       }
     },
-    computed: {
-      isMobile() {
-        return this.$store.state.global.isMobile
-      },
-      isCanLoadMore() {
-        const { current_page, total_page } = this.article.data.pagination
-        const hasArticles = this.article.data.pagination
+    setup(props, context) {
+      const defer = useDefer()
+      const router = useRouter()
+      const globalState = useGlobalState()
+      const mammonEnabled = ref(false)
+
+      const isMobile = computed(() => globalState.userAgent.isMobile)
+      const isMammonEnabled = computed(() => props.mammon && mammonEnabled)
+      const isLoadMoreEnabled = computed(() => {
+        const { current_page, total_page } = props.article.data.pagination
+        const hasArticles = props.article.data.pagination
         return hasArticles ? (current_page < total_page) : false
-      },
-      isIndexRoute() {
-        return isIndexRoute(this.$route.name)
-      },
-      btnColorBlockLeft() {
-        return this.isMobile ? 60 : 75
+      })
+
+      const handleLoadmore = () => {
+        context.emit('loadmore')
       }
-    },
-    methods: {
-      toDetail(article) {
-        if (this.isMobile) {
-          this.$router.push(getArticleDetailRoute(article.id))
+
+      const handleArticleClick = (article: $TODO) => {
+        if (isMobile.value) {
+          router.push(getArticleDetailRoute(article.id))
         }
       }
+
+      onMounted(() => {
+        defer.addTask(() => {
+          mammonEnabled.value = true
+        })
+      })
+
+      return {
+        LANGUAGE_KEYS,
+        isMobile,
+        isMammonEnabled,
+        isLoadMoreEnabled,
+        handleLoadmore,
+        handleArticleClick
+      }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .articles {
 
     &.mobile {
       > .article-list,
-      > .article-list-mammon,
-      > .article-list-header {
+      > .article-list-mammon {
         margin-bottom: $gap;
       }
 
@@ -115,13 +147,8 @@
       }
     }
 
-    > .article-list-header {
-      margin-bottom: $lg-gap;
-      position: relative;
-      overflow: hidden;
-    }
-
     > .article-list-mammon {
+      width: 100%;
       padding: $sm-gap;
       margin-bottom: $lg-gap;
       background-color: $module-bg;

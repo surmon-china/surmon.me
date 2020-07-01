@@ -52,7 +52,6 @@
   import { mapState } from 'vuex'
   import { getBannerArticleThumbnailUrl } from '/@/transforms/thumbnail'
   import AD_CONFIG from '/@/config/ad.config'
-  import * as APP_CONFIG from '/@/config/app.config'
 
   export default defineComponent({
     name: 'ArchiveCarrousel',

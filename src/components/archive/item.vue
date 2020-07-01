@@ -1,5 +1,9 @@
 <template>
-  <div class="article-list-item" :class="{ mobile: isMobile }">
+  <div
+    class="article-list-item"
+    :class="{ mobile: isMobile }"
+    @click="handleClick"
+  >
     <div class="item-content">
       <div v-if="!isMobile" class="item-thumb">
         <router-link :to="getArticleDetailRoute(article.id)">
@@ -84,8 +88,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, toRefs, onMounted, PropType } from 'vue'
-  import { mapState } from 'vuex'
+  import { defineComponent, ref, computed, onMounted, PropType } from 'vue'
   import { useGlobalState } from '/@/state'
   import { useI18n } from '/@/services/i18n'
   import { getJSON } from '/@/services/storage'
@@ -104,7 +107,7 @@
         required: true
       }
     },
-    setup(props) {
+    setup(props, context) {
       const i18n = useI18n()
       const globalState = useGlobalState()
 
@@ -115,6 +118,10 @@
       const _isHybrid = isHybrid(origin)
       const _isReprint = isReprint(origin)
       const _isOriginal = !origin || isOriginal(origin)
+
+      const handleClick = (event: MouseEvent) => {
+        context.emit('click', event)
+      }
 
       const humanlizeDate = (date: string) => {
         return timeAgo(date, i18n.language.value as any)
@@ -136,9 +143,10 @@
         LANGUAGE_KEYS,
         isLiked,
         isMobile,
-        isOriginal: isOriginal(props.article.origin),
-        isHybrid: isHybrid(props.article.origin),
-        isReprint: isReprint(props.article.origin),
+        _isHybrid,
+        _isReprint,
+        _isOriginal,
+        handleClick,
         getThumbUrl,
         getArticleDetailRoute,
         getCategoryArchiveRoute,

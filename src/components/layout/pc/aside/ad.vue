@@ -1,34 +1,10 @@
 <template>
   <div class="mammon">
-    <div
-      class="swiper"
-      v-swiper="swiperOption"
-      @ready="updateSwiperContext"
-      @slide-change="handleSwiperSlideChange"
-    >
-      <div class="swiper-wrapper">
-        <div
-          class="swiper-slide"
-          v-for="(ad, index) in AD_CONFIG.asideSwiper"
-          :key="index"
-        >
-          <a
-            :href="ad.url"
-            rel="external nofollow noopener"
-            target="_blank"
-            class="content"
-          >
-            <img :src="ad.src" alt="aliyun-ad" draggable="false">
-          </a>
-        </div>
-      </div>
-      <div class="swiper-pagination" />
-    </div>
     <swiper
       ref="swiperElement"
       class="swiper"
       :options="swiperOption"
-      @ready="updateSwiperContext2"
+      @ready="updateSwiperContext"
       @slide-change="handleSwiperSlideChange"
     >
       <swiper-slide
@@ -68,7 +44,6 @@
     },
     setup(props, context) {
       const [swiperContext, updateSwiperContext] = useSwiperRef()
-      const [swiperContext2, updateSwiperContext2] = useSwiperRef()
       const swiperInstance = computed(() => swiperContext.value?.$swiper.value)
       const currentSlideRealIndex = computed(() => swiperInstance.value?.realIndex)
       const handleSwiperSlideChange = () => {
@@ -96,17 +71,12 @@
         lazy: true
       }
 
-      onMounted(() => {
-        // console.log('---------', swiperContext, swiperContext2)
-      })
-
       return {
+        AD_CONFIG,
         updateSwiperContext,
-        updateSwiperContext2,
         swiperOption,
         currentSlideRealIndex,
-        handleSwiperSlideChange,
-        AD_CONFIG
+        handleSwiperSlideChange
       }
     }
   })

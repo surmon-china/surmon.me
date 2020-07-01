@@ -2,7 +2,7 @@
   <div class="index-page">
     <carrousel :article="article" />
     <announcement :announcement="announcement" />
-    <!-- <article-list :article="article" @loadmore="loadmoreArticle" /> -->
+    <article-list :article="article" @loadmore="loadmoreArticles" />
   </div>
 </template>
 
@@ -10,37 +10,47 @@
   import { defineComponent, ref, computed } from 'vue'
   import { useStore, Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
+  import { AnnouncementModuleActions } from '/@/store/announcement'
   import Carrousel from '/@/components/archive/carrousel.vue'
   import Announcement from '/@/components/archive/announcement.vue'
-  // import ArticleList from '/@/components/archive/list.vue'
+  import ArticleList from '/@/components/archive/list.vue'
+
   export default defineComponent({
     name: 'Index',
     components: {
       Carrousel,
       Announcement,
-      // ArticleList
+      ArticleList
     },
     async setup() {
       const store = useStore()
-      const article = store.state.article.list
-      const announcement = store.state.announcement
+      const article = computed(() => store.state.article.list)
+      const announcement = computed(() => store.state.announcement)
 
-      const loadmoreArticle = () => {
-        store.dispatch(
+      const fetchAnnouncements = () => store.dispatch(
+        getNamespace(Modules.Article, AnnouncementModuleActions.FetchList),
+      )
+
+      const fetchArticles = (params?: any) => {
+        return store.dispatch(
           getNamespace(Modules.Article, ArticleModuleActions.FetchList),
-          { page: article.data.pagination.current_page + 1 }
+          params
         )
       }
 
+      const loadmoreArticles = () => {
+        fetchArticles({ page: article.value.data.pagination?.current_page + 1 })
+      }
+
       await Promise.all([
-        store.dispatch('article/fetchList'),
-        store.dispatch('announcement/fetchList')
+        fetchArticles(),
+        fetchAnnouncements()
       ])
 
       return {
         article,
         announcement,
-        loadmoreArticle
+        loadmoreArticles
       }
     }
   })

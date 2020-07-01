@@ -6,159 +6,80 @@
       dark: isDarkTheme
     }"
     :style="{
-      'background-color': currentBackgroundColor,
-      'background-image': `url(${currentBackgroundImage})`
+      'background-color': backgroundColor,
+      'background-image': `url(${backgroundImageUrl})`
     }"
   >
     <div class="logo-box">
       <p class="logo">
         <transition name="module" mode="out-in">
-          <!-- data -->
-          <i v-if="currentDate" key="date" class="iconfont icon-clock"></i>
-          <!-- tag -->
-          <i
-            v-else-if="currentTag"
-            key="tag"
-            class="iconfont"
-            :class="currentTagIconClass"
-          ></i>
-          <!-- category -->
-          <i
-            v-else-if="currentCategory"
-            key="category"
-            class="iconfont"
-            :class="currentCategoryIconClass"
-          ></i>
-          <!-- search -->
-          <i
-            v-else-if="currentKeyword"
-            key="search"
-            class="iconfont icon-search"
-          ></i>
+          <i key="date" class="iconfont" :class="icon"></i>
         </transition>
       </p>
     </div>
     <div class="title-box">
       <transition name="module" mode="out-in">
-        <!-- category -->
-        <h5
-          v-if="currentCategory"
-          :key="`category-${currentCategory.description}`"
-          class="title"
-        >
-          <span>{{ currentCategory.description || '...' }}</span>
-        </h5>
-        <!-- tag -->
-        <h5
-          v-else-if="currentTag"
-          :key="`tag-${currentTag.name}`"
-          class="title"
-        >
-          <span>{{ currentTag.name }}</span>
-          <span>&nbsp;-&nbsp;</span>
-          <span>{{ currentTag.description || '...' }}</span>
-        </h5>
-        <!-- date -->
-        <h5 v-else-if="currentDate" :key="`date-${currentDate}`" class="title">
-          <span v-if="isEnLang">
-            <span>{{ currentDate }}&nbsp;</span>
-            <span>articles</span>
-          </span>
-          <span v-else>
-            <span>发布于</span>
-            <span>&nbsp;{{ currentDate }}&nbsp;</span>
-            <span>的所有文章</span>
-          </span>
-        </h5>
-        <!-- search -->
-        <h5
-          v-else-if="currentKeyword"
-          :key="`search-${currentKeyword}`"
-          class="title"
-        >
-          <span v-if="isEnLang">
-            <span>"{{ currentKeyword }}"</span>
-            <span>related articles</span>
-          </span>
-          <span v-else>
-            <span>和</span>
-            <span>&nbsp;"</span>
-            <span>{{ currentKeyword }}</span>
-            <span>"&nbsp;</span>
-            <span>有关的所有文章</span>
-          </span>
+        <h5 class="title">
+          <slot></slot>
         </h5>
       </transition>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import { defineComponent, ref, computed } from 'vue'
+  import { useTheme, Theme } from '/@/services/theme'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { useGlobalState } from '/@/state'
+  import { timeAgo } from '/@/transforms/moment'
   import { getFileCDNUrl } from '/@/transforms/url'
-  export default {
+
+  export default defineComponent({
     name: 'ArticleListHeader',
-    computed: {
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
+    props: {
+      backgroundColor: {
+        type: String,
+        required: true
       },
-      isDarkTheme() {
-        return this.$store.getters['global/isDarkTheme']
+      backgroundImage: {
+        type: String,
+        required: true
       },
-      currentTag() {
-        return this.$store.state.tag.data.find(
-          tag => tag.slug === this.$route.params.tag_slug
-        )
-      },
-      currentTagIconClass() {
-        return this.getExtendsValue(this.currentTag, 'icon') || 'icon-tag'
-      },
-      currentCategory() {
-        return this.$store.state.category.data.find(category => {
-          return category.slug === this.$route.params.category_slug
-        })
-      },
-      currentCategoryIconClass() {
-        return this.getExtendsValue(this.currentCategory, 'icon') || 'icon-category'
-      },
-      currentBackgroundImage() {
-        const tagBg = this.getExtendsValue(this.currentTag, 'background')
-        const cateBg = this.getExtendsValue(this.currentCategory, 'background')
-        return tagBg || cateBg || getFileCDNUrl('/images/service.jpg')
-      },
-      currentBackgroundColor() {
-        const tagBg = this.getExtendsValue(this.currentTag, 'bgcolor')
-        const cateBg = this.getExtendsValue(this.currentCategory, 'bgcolor')
-        return tagBg || cateBg || null
-      },
-      currentDate() {
-        return this.$route.params.date
-      },
-      currentKeyword() {
-        return this.$route.params.keyword
-      },
-      isMobile() {
-        return this.$store.state.global.isMobile
+      icon: {
+        type: String,
+        required: true
       }
     },
-    methods: {
-      getExtendsValue(target, key) {
-        if (!target || !target.extends.length) {
-          return null
-        }
-        const targetExtend = target.extends.find(t => t.name === key)
-        return targetExtend ? targetExtend.value : null
+    setup(props) {
+      const theme = useTheme()
+      const globalState = useGlobalState()
+      const isMobile = computed(() => globalState.userAgent.isMobile)
+      const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
+
+      const backgroundImageUrl = computed(() => {
+        return props.backgroundImage || getFileCDNUrl('/images/service.jpg')
+      })
+
+      return {
+        LANGUAGE_KEYS,
+        backgroundImageUrl
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .header-box {
     position: relative;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 16.4rem;
+    margin-bottom: $lg-gap;
     background-size: cover;
     background-blend-mode: hue;
     background-color: $module-hover-bg-darken-10;

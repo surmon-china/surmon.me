@@ -5,9 +5,9 @@
  */
 
 import marked from 'marked'
-import Hljs from '../utils/highlight'
-import appConfig from '../config/app.config'
-import apiConfig from '../config/api.config'
+// import Hljs from '../utils/highlight'
+import * as APP_CONFIG from '/@/config/app.config'
+import API_CONFIG from '/@/config/api.config'
 import relink from '/@/transforms/relink'
 
 // TODO: 升级 marked 后处理消毒带来的问题
@@ -20,9 +20,9 @@ marked.setOptions({
   sanitize: false,
   smartLists: true,
   smartypants: false,
-  highlight(code) {
-    return Hljs.highlightAuto(code).value
-  }
+  // highlight(code) {
+  //   return Hljs.highlightAuto(code).value
+  // }
 })
 
 const renderer = new marked.Renderer()
@@ -38,7 +38,7 @@ const headingRender = (text, level, raw) => {
 
 // 对连接进行权重防流和新窗处理
 const linkRender = (href, title, text) => {
-  const isSelf = href.includes(appConfig.meta.url)
+  const isSelf = href.includes(APP_CONFIG.meta.url)
   const textIsImage = text.includes('<img')
   const linkHtml = `
     <a
@@ -57,12 +57,12 @@ const linkRender = (href, title, text) => {
 // 对图片进行弹窗处理
 const imageRender = (src, title, alt) => {
   // 仅替换 HTTP 链接为 proxy
-  src = src.replace(/^http:\/\//gi, `${apiConfig.PROXY}/`)
+  src = src.replace(/^http:\/\//gi, `${API_CONFIG.PROXY}/`)
   const imageHtml = `
     <img
       class="lozad"
       data-src="${src}"
-      title="${title || alt || appConfig.meta.url}" 
+      title="${title || alt || APP_CONFIG.META.url}" 
       alt="${alt || title || src}"
       onclick="if (window.utils) window.utils.openImgPopup('${src}')"
     />

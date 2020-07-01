@@ -4,9 +4,11 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import gravatar from 'gravatar'
+// import gravatar from 'gravatar'
 import API_CONFIG from '/@/config/api.config'
 import { getFileCDNUrl } from '/@/transforms/url'
+
+// console.log('-------gravatar', gravatar)
 
 export const getBannerArticleThumbnailUrl = (thumb: string, isMobile: boolean, isWebPImage: boolean) => {
   if (!thumb) {
@@ -36,8 +38,9 @@ export const getArchiveArticleThumbnailUrl = (thumb: string, isWebPImage: boolea
 }
 
 export const getGravatarByEmail = (email: string) => {
-  let avatar = gravatar.url(email, { protocol: 'https' })
-  avatar = avatar.replace('https://s.gravatar.com/avatar', API_CONFIG.GRAVATAR)
-  avatar += `?x-oss-process=style/gravatar`
-  return avatar
+  return ''
+  // let avatar = gravatar.url(email, { protocol: 'https' })
+  // avatar = avatar.replace('https://s.gravatar.com/avatar', API_CONFIG.GRAVATAR)
+  // avatar += `?x-oss-process=style/gravatar`
+  // return avatar
 }

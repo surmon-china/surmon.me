@@ -1,48 +1,71 @@
 <template>
   <div class="date-archive-page">
-    <article-list :article="article" @loadmore="loadmoreArticle" />
+    <article-list-header
+      :background-color="null"
+      :background-image="null"
+      icon="icon-clock"
+    >
+      <i18n
+        :zh="`发布于 ${currentDate} 的所有文章`"
+        :en="`${currentDate} articles`"
+      />
+    </article-list-header>
+    <article-list
+      :article="articleData"
+      @loadmore="loadmoreArticles"
+    />
   </div>
 </template>
 
-<script>
-  import ArticleList from '/@/components/archive/list'
+<script lang="ts">
+  import { defineComponent, computed } from 'vue'
+  import { useRouter, useRoute } from 'vue-router'
+  import { useStore, Modules, getNamespace } from '/@/store'
+  import { ArticleModuleActions } from '/@/store/article'
+  import ArticleListHeader from '/@/components/archive/header.vue'
+  import ArticleList from '/@/components/archive/list.vue'
 
-  export default {
-    name: 'DateArticleList',
-    validate({ params }) {
-      return new Date(params.date).toString() !== 'Invalid Date'
-    },
-    fetch({ store, params }) {
-      return store.dispatch('article/fetchList', params)
-    },
-    head() {
-      return { title: `${this.defaultParams.date} | Date` }
-    },
+  export default defineComponent({
+    name: 'DatePage',
     components: {
+      ArticleListHeader,
       ArticleList
     },
-    computed: {
-      article() {
-        return this.$store.state.article.list
-      },
-      defaultParams() {
-        return {
-          date: this.$route.params.date
-        }
-      },
-      nextPageParams() {
-        return Object.assign(
-          {
-            page: this.article.data.pagination.current_page + 1
-          },
-          this.defaultParams
+    async setup() {
+      const store = useStore()
+      const route = useRoute()
+      const router = useRouter()
+
+      const articleData = computed(() => store.state.article.list)
+      const currentDate = computed(() => route.params.date)
+
+      // TODO: 验证参数
+      if (!currentDate.value) {
+        router.back()
+      }
+
+      const fetchArticles = (params: any) => {
+        return store.dispatch(
+          getNamespace(Modules.Article, ArticleModuleActions.FetchList),
+          params
         )
       }
-    },
-    methods: {
-      loadmoreArticle() {
-        this.$store.dispatch('article/fetchList', this.nextPageParams)
+
+      const loadmoreArticles = () => {
+        return fetchArticles({
+          ...route.params,
+          date: route.params.date,
+          page: articleData.value.data.pagination.current_page + 1
+        })
+      }
+
+      await fetchArticles(route.params)
+
+      return {
+        articleData,
+        currentDate,
+        loadmoreArticles,
       }
     }
-  }
+  })
 </script>
