@@ -1,50 +1,74 @@
 <template>
-  <div class="keyword-archive-page">
-    <article-list :article="article" @loadmore="loadmoreArticle" />
+  <div class="search-archive-page">
+    <article-list-header
+      :background-color="null"
+      :background-image="null"
+      icon="icon-search"
+    >
+      <i18n
+        :zh="`和 “${currentKeyword}” 有关的所有文章`"
+        :en="`'${currentKeyword}' related articles`"
+      />
+    </article-list-header>
+    <article-list
+      :article="articleData"
+      @loadmore="loadmoreArticles"
+    />
   </div>
 </template>
 
-<script>
-  import ArticleList from '/@/components/archive/list'
+<script lang="ts">
+  import { defineComponent, computed } from 'vue'
+  import { useRouter, useRoute } from 'vue-router'
+  import { useStore, Modules, getNamespace } from '/@/store'
+  import { ArticleModuleActions } from '/@/store/article'
+  import ArticleListHeader from '/@/components/archive/header.vue'
+  import ArticleList from '/@/components/archive/list.vue'
 
-  export default {
-    name: 'CategoryArticleList',
-    validate({ params }) {
-      return !!params.keyword
-    },
-    fetch({ store, params }) {
-      return store.dispatch('article/fetchList', params)
-    },
-    head() {
-      return {
-        title: `${this.defaultParams.keyword} | Search`
-      }
-    },
+  export default defineComponent({
+    name: 'SearchPage',
     components: {
+      ArticleListHeader,
       ArticleList
     },
-    computed: {
-      article() {
-        return this.$store.state.article.list
-      },
-      defaultParams() {
-        return {
-          keyword: this.$route.params.keyword
-        }
-      },
-      nextPageParams() {
-        return Object.assign(
-          {
-            page: this.article.data.pagination.current_page + 1
-          },
-          this.defaultParams
+    // head() {
+    //   return {
+    //     title: `${this.defaultParams.keyword} | Search`
+    //   }
+    // },
+    async setup() {
+      const store = useStore()
+      const route = useRoute()
+      const router = useRouter()
+
+      const articleData = computed(() => store.state.article.list)
+      const currentKeyword = computed(() => route.params.keyword)
+
+      if (!currentKeyword.value) {
+        router.back()
+      }
+
+      const fetchArticles = (params: any) => {
+        return store.dispatch(
+          getNamespace(Modules.Article, ArticleModuleActions.FetchList),
+          params
         )
       }
-    },
-    methods: {
-      loadmoreArticle() {
-        this.$store.dispatch('article/fetchList', this.nextPageParams)
+
+      const loadmoreArticles = () => {
+        return fetchArticles({
+          keyword: currentKeyword.value,
+          page: articleData.value.data.pagination.current_page + 1
+        })
+      }
+
+      await fetchArticles(route.params)
+
+      return {
+        articleData,
+        currentKeyword,
+        loadmoreArticles,
       }
     }
-  }
+  })
 </script>

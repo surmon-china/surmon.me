@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import * as amplitude from 'amplitudejs'
+import amplitude from 'amplitudejs'
 import { App, Plugin, inject, readonly, reactive, computed } from 'vue'
 import { getFileCDNUrl, getFileProxyUrl } from '/@/transforms/url'
 import http from './http'
@@ -56,7 +56,6 @@ const createMusicPlayer = (config: MusicConfig) => {
   const muted = computed<boolean>(() => state.volume === 0)
 
   // Player data
-  // TODO: 应该和 store 毫无关系了
   const musicList = reactive({
     fetching: false,
     data: null as any

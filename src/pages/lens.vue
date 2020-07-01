@@ -76,11 +76,9 @@
   import { useI18n } from '/@/services/i18n'
   import { LozadObserver } from '/@/services/lozad'
   import { useGlobalState } from '/@/state'
-  import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { timeAgo } from '/@/transforms/moment'
   import { getFileProxyUrl } from '/@/transforms/url'
-  import * as APP_CONFIG from '/@/config/app.config'
 
   export default defineComponent({
     name: 'Lens',

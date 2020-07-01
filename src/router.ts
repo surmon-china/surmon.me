@@ -36,12 +36,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('./pages/article/main.vue')
   },
   {
-    path: '/category/:category_id',
+    path: '/category/:category_slug',
     name: RouteName.CategoryArchive,
     component: () => import('./pages/category.vue')
   },
   {
-    path: '/tag/:tag_id',
+    path: '/tag/:tag_slug',
     name: RouteName.TagArchive,
     component: () => import('./pages/tag.vue')
   },
@@ -50,7 +50,6 @@ const routes: RouteRecordRaw[] = [
     name: RouteName.DateArchive,
     component: () => import('./pages/date.vue')
   },
-  // TODO: 也许就要使用谷歌搜索工具了，或者提供百度或谷歌选项
   {
     path: '/search/:keyword',
     name: RouteName.SearchArchive,

@@ -8,7 +8,10 @@
     </div>
     <client-only>
       <div class="module mammon">
-        <aside-ad ref="asideAdComponent" @slide-change="handleSlideChange" />
+        <aside-ad
+          ref="asideAdComponent"
+          @slide-change="handleSlideChange"
+        />
       </div>
     </client-only>
     <div class="module calendar">
@@ -54,10 +57,9 @@
 <script lang="ts">
   import { defineComponent, ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
   import StickyEvents from 'sticky-events'
-  import Calendar from '/@/components/widget/calendar.vue'
-  import { isClient } from '/@/vuniversal/env'
   import { getDateArchiveRoute } from '/@/transforms/route'
   import { humanDateToYMD, HumanDate } from '/@/transforms/moment'
+  import Calendar from '/@/components/widget/calendar.vue'
   import AsideSearch from './search.vue'
   import AsideArticle from './article.vue'
   import AsideAd from './ad.vue'
@@ -97,11 +99,12 @@
         state.renderStickyAd = isFeasible && event.detail.isSticky
       }
 
-      const handleSlideChange = (index) => {
+      const handleSlideChange = (index: number) => {
         state.adIndex = index
       }
 
-      const handleChangeAdSwiper = (index) => {
+      const handleChangeAdSwiper = (index: number) => {
+        console.log('------handleChangeAdSwiper', asideAdComponent)
         asideAdComponent.value.swiper.slideToLoop(index)
       }
 

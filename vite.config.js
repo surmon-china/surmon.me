@@ -8,7 +8,10 @@ module.exports = {
     '/@/': path.resolve(__dirname, './src')
   },
   optimizeDeps: {
-    exclude: ['esm', 'fs-extra', 'socket.io', 'request', 'cross-env', '@vue/compiler-sfc']
+    link: [],
+    include: ['swiper'],
+    allowNodeBuiltins: ['querystring'],
+    exclude: ['esm', 'fs-extra', 'socket.io', 'request', 'cross-env', '@vue/compiler-sfc', '@vue/server-renderer']
   },
   proxy: {
     '/proxy/bilibili': {
