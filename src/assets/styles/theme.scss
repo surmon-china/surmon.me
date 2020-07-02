@@ -35,29 +35,26 @@
   #{--link-hover-color}: darken($text, 20%);
 }
 
-#app-root {
+@mixin defaultTheme() {
+  @include css-var(
+    $text: #555,
+    $white: #fff,
+    $black: #000,
+    $primary: #0088f5,
+    $body-bg: #eee,
+    $module-hover-bg: rgba(197, 197, 197, 0.5),
+    $logo-rotate: none
+  );
+}
 
-  &.default {
-    @include css-var(
-      $text: #555,
-      $white: #fff,
-      $black: #000,
-      $primary: #0088f5,
-      $body-bg: #eee,
-      $module-hover-bg: rgba(197, 197, 197, 0.5),
-      $logo-rotate: none
-    );
-  }
-
-  &.dark {
-    @include css-var(
-      $text: #fff,
-      $white: #000,
-      $black: #fff,
-      $primary: #fff,
-      $body-bg: #000,
-      $module-hover-bg: rgba(0, 0, 0, 0.5),
-      $logo-rotate: hue-rotate(30deg) brightness(180%) grayscale(100%)
-    );
-  }
+@mixin darkTheme() {
+  @include css-var(
+    $text: #fff,
+    $white: #000,
+    $black: #fff,
+    $primary: #fff,
+    $body-bg: #000,
+    $module-hover-bg: rgba(0, 0, 0, 0.5),
+    $logo-rotate: hue-rotate(30deg) brightness(180%) grayscale(100%)
+  );
 }

@@ -88,7 +88,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.EMPTY_PLACEHOLDER]: {
     [Language.Zh]: '空空如也',
-    [Language.En]: 'No Result Data.'
+    [Language.En]: 'No data'
   },
   [LANGUAGE_KEYS.FRIEND_ME]: {
     [Language.Zh]: '众里寻他',
@@ -180,15 +180,15 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.APP_SLOGAN]: {
     [Language.Zh]: '來苏之望',
-    [Language.En]: 'Because the mountain was there.'
+    [Language.En]: 'Because the mountain was there'
   },
   [LANGUAGE_KEYS.MUSIC_PLACEHOLDER]: {
     [Language.Zh]: '五音六律，七弦八度',
-    [Language.En]: 'The music, the soul of man.'
+    [Language.En]: 'The music, the soul of man'
   },
   [LANGUAGE_KEYS.SEARCH_PLACEHOLDER]: {
     [Language.Zh]: '向外探索，向内觉知',
-    [Language.En]: 'Search...'
+    [Language.En]: 'Search..'
   },
   [LANGUAGE_KEYS.PAGE_TITLE]: {
     [Language.Zh]: '黄卷青灯',
@@ -196,7 +196,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.ANNOUNCEMENT_PLACEHOLDER]: {
     [Language.Zh]: '空空如也',
-    [Language.En]: 'No announcements.'
+    [Language.En]: 'No announcements'
   },
   [LANGUAGE_KEYS.CATEGORY_TITLE]: {
     [Language.Zh]: '分门别类',
@@ -212,7 +212,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.TAG_PLACEHOLDER]: {
     [Language.Zh]: '无标签',
-    [Language.En]: 'No tags.'
+    [Language.En]: 'No tags'
   },
   [LANGUAGE_KEYS.ARTICLE_TITLE]: {
     [Language.Zh]: '文不加点',
@@ -220,7 +220,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.ARTICLE_PLACEHOLDER]: {
     [Language.Zh]: '空空如也',
-    [Language.En]: 'No Result Article.'
+    [Language.En]: 'No articles'
   },
   [LANGUAGE_KEYS.ARTICLE_FULL_COL_READ]: {
     [Language.Zh]: '通栏阅读',
@@ -235,7 +235,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.En]: 'Read all'
   },
   [LANGUAGE_KEYS.ARTICLE_RENDERING]: {
-    [Language.Zh]: '渲染中...',
+    [Language.Zh]: '渲染中..',
     [Language.En]: 'rendering...'
   },
   [LANGUAGE_KEYS.HOT_ARTICLE_LIST_TITLE]: {
@@ -256,7 +256,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.COMMENT_LIST_PLACEHOLDER]: {
     [Language.Zh]: '期待你的捷足先登',
-    [Language.En]: 'Hit the nail on the head.'
+    [Language.En]: 'Hit the nail on the head'
   },
   [LANGUAGE_KEYS.COMMENT_ANONYMOUS]: {
     [Language.Zh]: '匿名用户',
@@ -300,14 +300,14 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.COMMENT_POST_PLACEHOLDER]: {
     [Language.Zh]: '愿你的见解一针见血',
-    [Language.En]: 'Hit the nail on the head.'
+    [Language.En]: 'Hit the nail on the head'
   },
   [LANGUAGE_KEYS.COMMENT_POST_SUBMIT]: {
     [Language.Zh]: '发射',
     [Language.En]: 'publish'
   },
   [LANGUAGE_KEYS.COMMENT_POST_SUBMITTING]: {
-    [Language.Zh]: '发射中...',
+    [Language.Zh]: '发射中..',
     [Language.En]: 'publishing'
   },
   [LANGUAGE_KEYS.COMMENT_POST_ERROR_EMAIL]: {

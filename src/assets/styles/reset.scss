@@ -1,14 +1,7 @@
-
 :root, html {
   font-size: $font-size-root;
   box-sizing: border-box;
   cursor: default;
-  -webkit-text-size-adjust: 100%; // iOS 8+, Windows Phone 8.1+
-}
-
-[hidden],
-[v-cloak] {
-  display: none !important;
 }
 
 * {

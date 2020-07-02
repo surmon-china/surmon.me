@@ -979,6 +979,17 @@
     estree-walker "^0.8.1"
     source-map "^0.6.1"
 
+"@vue/compiler-core@3.0.0-beta.18":
+  version "3.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@vue/compiler-core/-/compiler-core-3.0.0-beta.18.tgz#52cf3e4f1f627230e9affb9da22a408a624e7e50"
+  integrity sha512-3JSSCs11lYuNdfyT5DVB06OeWlT/aAK8JKHLmG8OsXkT0flVSc19mtnqi+EaFhW3rT63qT0fjJfTfU0Wn1PN9Q==
+  dependencies:
+    "@babel/parser" "^7.8.6"
+    "@babel/types" "^7.8.6"
+    "@vue/shared" "3.0.0-beta.18"
+    estree-walker "^0.8.1"
+    source-map "^0.6.1"
+
 "@vue/compiler-dom@3.0.0-beta.17", "@vue/compiler-dom@^3.0.0-beta.14":
   version "3.0.0-beta.17"
   resolved "https://registry.npmjs.org/@vue/compiler-dom/-/compiler-dom-3.0.0-beta.17.tgz#fa19ad2391cd78dcae121cfbeacf6cc3ebd4ff20"
@@ -987,7 +998,15 @@
     "@vue/compiler-core" "3.0.0-beta.17"
     "@vue/shared" "3.0.0-beta.17"
 
-"@vue/compiler-sfc@^3.0.0-beta.14", "@vue/compiler-sfc@^3.0.0-beta.17":
+"@vue/compiler-dom@3.0.0-beta.18":
+  version "3.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@vue/compiler-dom/-/compiler-dom-3.0.0-beta.18.tgz#089b37c71850df28d2304e2d5034461af6065ddf"
+  integrity sha512-vTfZNfn/bfGVJCdQwQN5xeBIaFCYPKp/NZCyMewh0wdju2ewzSmQIzG3gaSqEIxYor/FQmFkGuRRzWJJBmcoUQ==
+  dependencies:
+    "@vue/compiler-core" "3.0.0-beta.18"
+    "@vue/shared" "3.0.0-beta.18"
+
+"@vue/compiler-sfc@^3.0.0-beta.14":
   version "3.0.0-beta.17"
   resolved "https://registry.npmjs.org/@vue/compiler-sfc/-/compiler-sfc-3.0.0-beta.17.tgz#d932a9e5fe9074fb447a6d82f22c52503d1da0dd"
   integrity sha512-MpU0rtDNzSWyhoLCqcov8XyrXIO8lqwA8Nlt7uy/EWndZv/Vw2VQVQYmfQQZzv2fDQ39f4s7LYcgEM5prRHX1Q==
@@ -1005,6 +1024,24 @@
     postcss-selector-parser "^6.0.2"
     source-map "^0.6.1"
 
+"@vue/compiler-sfc@^3.0.0-beta.18":
+  version "3.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@vue/compiler-sfc/-/compiler-sfc-3.0.0-beta.18.tgz#3c4660396ca267b443214c09b71923bce17c5d8e"
+  integrity sha512-RSErTbnKWkI4hAFBTOLg1tCHHVP2hG7NDbf2LVJdf9OWBr9FWoTQaMTby25rJs6aiSch7reNRzToq6XMLagQjQ==
+  dependencies:
+    "@vue/compiler-core" "3.0.0-beta.18"
+    "@vue/compiler-dom" "3.0.0-beta.18"
+    "@vue/compiler-ssr" "3.0.0-beta.18"
+    "@vue/shared" "3.0.0-beta.18"
+    consolidate "^0.15.1"
+    hash-sum "^2.0.0"
+    lru-cache "^5.1.1"
+    merge-source-map "^1.1.0"
+    postcss "^7.0.27"
+    postcss-modules "^3.1.0"
+    postcss-selector-parser "^6.0.2"
+    source-map "^0.6.1"
+
 "@vue/compiler-ssr@3.0.0-beta.17":
   version "3.0.0-beta.17"
   resolved "https://registry.npmjs.org/@vue/compiler-ssr/-/compiler-ssr-3.0.0-beta.17.tgz#4aa276891fc73f928cf09e7afdc1d0439b794b08"
@@ -1012,6 +1049,14 @@
   dependencies:
     "@vue/compiler-dom" "3.0.0-beta.17"
     "@vue/shared" "3.0.0-beta.17"
+
+"@vue/compiler-ssr@3.0.0-beta.18":
+  version "3.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@vue/compiler-ssr/-/compiler-ssr-3.0.0-beta.18.tgz#072048fecd40d39b8762beb73da1ae45f3750bbc"
+  integrity sha512-/W83jw+PToUUX/SouajhwMwewEe66lUiTb4lixZ3f06o0VPJCFCLtZ+WQbN+g2m+iE7DegnkcPq6ly7gflcRXQ==
+  dependencies:
+    "@vue/compiler-dom" "3.0.0-beta.18"
+    "@vue/shared" "3.0.0-beta.18"
 
 "@vue/reactivity@3.0.0-beta.17":
   version "3.0.0-beta.17"
@@ -1037,18 +1082,23 @@
     "@vue/shared" "3.0.0-beta.17"
     csstype "^2.6.8"
 
-"@vue/server-renderer@^3.0.0-beta.17":
-  version "3.0.0-beta.17"
-  resolved "https://registry.npmjs.org/@vue/server-renderer/-/server-renderer-3.0.0-beta.17.tgz#38469652f583fd043b4982b0fd6bdff151d76a11"
-  integrity sha512-E2xiRo0YIajVhHn1MB2hUVHzQm+Wt+U4HGt81nJVghFonxKq6SVp8IWHym+jOoMF+olnO4tOhzpsCcwqKuT7sQ==
+"@vue/server-renderer@^3.0.0-beta.18":
+  version "3.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@vue/server-renderer/-/server-renderer-3.0.0-beta.18.tgz#d4e9e09faf9a5cf06ca55b2036428ec5b847c78f"
+  integrity sha512-2VgKZnMtk8ZnA5ZiYP643CaZQTOjFBTb/jOCgVjOJ18SSkvKzmjXbPgBTR9mpNGR0IT47YL+Ym2XPcKAmPeaGQ==
   dependencies:
-    "@vue/compiler-ssr" "3.0.0-beta.17"
-    "@vue/shared" "3.0.0-beta.17"
+    "@vue/compiler-ssr" "3.0.0-beta.18"
+    "@vue/shared" "3.0.0-beta.18"
 
 "@vue/shared@3.0.0-beta.17":
   version "3.0.0-beta.17"
   resolved "https://registry.npmjs.org/@vue/shared/-/shared-3.0.0-beta.17.tgz#c9df723a3a3a39e47044ae8be60cce51c749ceb3"
   integrity sha512-4vqmNjeY3prPbH2K9hKmXnzfU34ytT+Az971Ybc5WcjG6Vu+gEkXLHAQvQIoi9AYhCCuunvUi1r5IWFhGSHLww==
+
+"@vue/shared@3.0.0-beta.18":
+  version "3.0.0-beta.18"
+  resolved "https://registry.npmjs.org/@vue/shared/-/shared-3.0.0-beta.18.tgz#1326efa98fe49b9ef3effbec88189b88ed7544a7"
+  integrity sha512-wRvQaTHeCt3xxqj3UpMR2JxkkU7ul/9RMqSxGJhOd4Bsp72Md4H83XkijHy8LkPKZWszmxjEpfCYuw9MU0a4kg==
 
 "@vue/test-utils@^2.0.0-alpha.4":
   version "2.0.0-alpha.8"

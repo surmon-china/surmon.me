@@ -5,7 +5,7 @@
       :background-image="currentCategoryImage"
       :icon="currentCategoryIcon"
     >
-      <span>{{ currentCategory.description || '...' }}</span>
+      <span>{{ currentCategory?.description || '...' }}</span>
     </article-list-header>
     <article-list
       :article="articleData"

@@ -41,5 +41,6 @@
     text-align: center;
     justify-content: center;
     align-items: center;
+    color: $text-dividers;
   }
 </style>
