@@ -1,16 +1,15 @@
 <template>
   <div class="mammon">
     <swiper
-      ref="swiperElement"
       class="swiper"
       :options="swiperOption"
       @ready="updateSwiperContext"
-      @slide-change="handleSwiperSlideChange"
+      @slide-change-transition-end="handleSwiperSlideChange"
     >
       <swiper-slide
-        v-for="(ad, index) in AD_CONFIG.asideSwiper"
-        :key="index"
         class="swiper-slide"
+        :key="i"
+        v-for="(ad, i) in AD_CONFIG.asideSwiper"
       >
         <a
           :href="ad.url"
@@ -18,7 +17,7 @@
           target="_blank"
           class="content"
         >
-          <img :src="ad.src" alt="aliyun-ad" draggable="false">
+          <uimage :src="ad.src" alt="aliyun-ad" />
         </a>
       </swiper-slide>
       <template #pagination>
@@ -29,29 +28,24 @@
 </template>
 
 <script lang="ts">
-  import Swiper from 'swiper'
-  import { defineComponent, ref, computed, onMounted } from 'vue'
+  import { defineComponent, computed, onMounted } from 'vue'
   import { useSwiperRef, NameId } from '/@/todo/swiper'
   import AD_CONFIG from '/@/config/ad.config'
 
   export default defineComponent({
     name: 'PcAsideMammon',
     props: {
-      initIndex: {
+      index: {
         type: Number,
         default: 0
+      },
+      ready: {
+        type: Object
       }
     },
     setup(props, context) {
-      const [swiperContext, updateSwiperContext] = useSwiperRef()
-      const swiperInstance = computed(() => swiperContext.value?.$swiper.value)
-      const currentSlideRealIndex = computed(() => swiperInstance.value?.realIndex)
-      const handleSwiperSlideChange = () => {
-        context.emit('slide-change', currentSlideRealIndex.value)
-      }
-
       const swiperOption = {
-        initialSlide: props.initIndex,
+        initialSlide: props.index,
         loop: true,
         simulateTouch: false,
         direction: 'vertical',
@@ -71,11 +65,20 @@
         lazy: true
       }
 
+      const [swiperContext, updateSwiperContext] = useSwiperRef()
+      const swiperInstance = computed(() => swiperContext.value?.$swiper.value)
+      const handleSwiperSlideChange = () => {
+        const realIndex = swiperInstance.value?.realIndex
+        context.emit('update:index', realIndex)
+        context.emit('index-change', realIndex)
+      }
+
+      onMounted(() => context.emit('ready', swiperInstance.value))
+
       return {
         AD_CONFIG,
-        updateSwiperContext,
         swiperOption,
-        currentSlideRealIndex,
+        updateSwiperContext,
         handleSwiperSlideChange
       }
     }

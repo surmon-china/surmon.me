@@ -84,12 +84,8 @@ export const createSwiperContext = (config: ICreateSwiperContextConfig): SwiperC
     )
   }
 
-  const keepReadonly = (value: any) => {
-    return isReadonly(value) ? value : readonly(value)
-  }
-
   swiperContext = Object.freeze({
-    $swiper: keepReadonly(swiperInstance),
+    $swiper: swiperInstance,
     options: swiperOptions,
     __props: swiperProps,
     init: initSwiper,

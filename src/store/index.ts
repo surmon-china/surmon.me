@@ -4,14 +4,13 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { Request } from 'express'
 import { createStore, useStore as useVuexStore } from 'vuex'
-import optionModule, { OptionState, OptionModuleActions } from './option'
+import optionModule, { OptionState } from './option'
 import announcementModule, { AnnouncementState } from './announcement'
-import categoryModule, { CategoryState, CategoryModuleActions } from './category'
-import tagModule, { TagState, TagModuleActions } from './tag'
-import articleModule, { ArticleState, ArticleModuleActions } from './article'
-import commentModule, { CommentState, CommentModuleActions } from './comment'
+import categoryModule, { CategoryState } from './category'
+import tagModule, { TagState } from './tag'
+import articleModule, { ArticleState } from './article'
+import commentModule, { CommentState } from './comment'
 import sitemapModule, { SitemapState } from './sitemap'
 import wallpaperModule, { WallpaperState } from './wallpaper'
 import vlogModule, { VlogState } from './vlog'
@@ -61,27 +60,4 @@ export const useStore = (): IRootStore => {
 
 export const getNamespace = (moduleName: Modules, target: string) => {
   return `${moduleName}/${target}`
-}
-
-// -----------------------
-
-// TODO: 也许 asyncData | component async steup 已经支持细化组件了
-export const initStore = (appContext: any, { target, request: Request }) => {
-  const { store, globalState } = appContext
-
-  // init task
-  const initFetchAppData = [
-    store.dispatch(getNamespace(Modules.Tag, TagModuleActions.FetchList)),
-    store.dispatch(getNamespace(Modules.Category, CategoryModuleActions.FetchList)),
-    store.dispatch(getNamespace(Modules.Option, OptionModuleActions.FetchAdminInfo))
-  ]
-
-  // fetch hot articles when desktop env
-  if (!globalState.isMobile) {
-    initFetchAppData.push(
-      store.dispatch(getNamespace(Modules.Article, ArticleModuleActions.FetchList))
-    )
-  }
-
-  return Promise.all(initFetchAppData)
 }

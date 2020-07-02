@@ -39,12 +39,10 @@
     name: 'ArticleListHeader',
     props: {
       backgroundColor: {
-        type: String,
-        required: true
+        type: String
       },
       backgroundImage: {
-        type: String,
-        required: true
+        type: String
       },
       icon: {
         type: String,

@@ -1,3 +1,9 @@
+@import "./theme.scss";
+
+[hidden],
+[v-cloak] {
+  display: none !important;
+}
 
 body {
   overflow-x: hidden;
@@ -5,6 +11,18 @@ body {
   font-size: $font-size-base;
   line-height: $line-height-base;
   -webkit-font-smoothing: antialiased;
+}
+
+#app-root {
+  color: $text;
+
+  &.default {
+    @include defaultTheme();
+  }
+
+  &.dark {
+    @include darkTheme();
+  }
 }
 
 .container {
@@ -21,6 +39,10 @@ body {
   margin-top: 0px;
   padding-top: 0px;
   margin-bottom: 0px;
+}
+
+.placeholder {
+  color: $text-secondary;
 }
 
 input {

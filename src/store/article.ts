@@ -23,7 +23,7 @@ export enum ArticleModuleListMutations {
   SetListFetchig = 'setListFetchig',
   // hot list
   SetHotListData = 'setHotListData',
-  SetHotListFetchig = 'setHotListFetchig',
+  SetHotListFetched = 'setHotListFetched',
   // detail
   SetDetailData = 'setDetailData',
   SetDetailFetchig = 'setDetailFetchig',
@@ -43,13 +43,13 @@ const getDefaultListData = () => ({
 })
 
 const state = () => ({
+  hotList: {
+    fetched: false,
+    data: [] as Array<$TODO>
+  },
   list: {
     fetching: false,
     data: getDefaultListData()
-  },
-  hotList: {
-    fetching: false,
-    data: [] as Array<$TODO>
   },
   detail: {
     fetching: false,
@@ -71,8 +71,8 @@ const mutations: MutationTree<ArticleState> = {
   },
 
   // 热门文章
-  [ArticleModuleListMutations.SetHotListFetchig](state, fetching: boolean) {
-    state.hotList.fetching = fetching
+  [ArticleModuleListMutations.SetHotListFetched](state, fetched: boolean) {
+    state.hotList.fetched = fetched
   },
   [ArticleModuleListMutations.SetHotListData](state, hotArticles) {
     state.hotList.data = hotArticles
@@ -142,16 +142,16 @@ const actions: ActionTree<ArticleState, IRootState> = {
   },
 
   // 获取最热文章列表
-  [ArticleModuleActions.FetchHotList]({ commit }) {
-    commit(ArticleModuleListMutations.SetHotListFetchig, true)
+  [ArticleModuleActions.FetchHotList]({ state, commit }) {
+    if (state.hotList.fetched) {
+      return Promise.resolve(state.hotList.data)
+    }
     return http
       .get(ARTICLE_API_PATH, { params: { cache: 1, sort: SortType.Hot } })
       .then(response => {
         commit(ArticleModuleListMutations.SetHotListData, response.result.data)
+        commit(ArticleModuleListMutations.SetHotListFetched, true)
         return response
-      })
-      .finally(() => {
-        commit(ArticleModuleListMutations.SetHotListFetchig, false)
       })
   },
 

@@ -4,13 +4,20 @@
       <aside-search />
     </div>
     <div class="module">
-      <aside-article />
+      <suspense>
+        <template #default>
+          <aside-article />
+        </template>
+        <template #fallback>
+          <su-loading />
+        </template>
+      </suspense>
     </div>
     <client-only>
       <div class="module mammon">
         <aside-ad
-          ref="asideAdComponent"
-          @slide-change="handleSlideChange"
+          @index-change="handleStandingAdSlideChange"
+          @ready="handleStandingAdSwiperReady"
         />
       </div>
     </client-only>
@@ -38,9 +45,9 @@
       <client-only>
         <div class="module mammon">
           <aside-ad
-            v-if="state.renderStickyAd"
-            :init-index="state.adIndex"
-            @slide-change="handleChangeAdSwiper"
+            v-if="renderStickyAd"
+            :index="adIndex"
+            @index-change="handleStickyAdIndexChange"
           />
         </div>
       </client-only>
@@ -55,8 +62,9 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+  import Swiper from 'swiper'
   import StickyEvents from 'sticky-events'
+  import { defineComponent, ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
   import { getDateArchiveRoute } from '/@/transforms/route'
   import { humanDateToYMD, HumanDate } from '/@/transforms/moment'
   import Calendar from '/@/components/widget/calendar.vue'
@@ -80,14 +88,22 @@
       // polyfill sticky event
       let stickyEvents: any = null
       const element = ref<HTMLDivElement>(null as any)
-      const asideAdComponent = ref<any>(null)
-      const state = reactive({
-        adIndex: 0,
-        renderStickyAd: false
-      })
+      const adIndex = ref(0)
+      const renderStickyAd = ref(false)
+      const standingSwiperInstance = ref<Swiper>()
 
       const getDateRoute = (humanDate: HumanDate) => {
         return getDateArchiveRoute(humanDateToYMD(humanDate))
+      }
+
+      const handleStandingAdSlideChange = (index: number) => {
+        adIndex.value = index
+      }
+      const handleStandingAdSwiperReady = (swiper: Swiper) => {
+        standingSwiperInstance.value = swiper
+      }
+      const handleStickyAdIndexChange = (index: number) => {
+        standingSwiperInstance.value?.slideToLoop(index)
       }
 
       const handleStickyStateChange = (event) => {
@@ -96,16 +112,7 @@
         // @ts-ignore
         const mainContentElementHeight = document.getElementById('main-content').children[0].clientHeight
         const isFeasible = mainContentElementHeight >= asideElementHeight
-        state.renderStickyAd = isFeasible && event.detail.isSticky
-      }
-
-      const handleSlideChange = (index: number) => {
-        state.adIndex = index
-      }
-
-      const handleChangeAdSwiper = (index: number) => {
-        console.log('------handleChangeAdSwiper', asideAdComponent)
-        asideAdComponent.value.swiper.slideToLoop(index)
+        renderStickyAd.value = isFeasible && event.detail.isSticky
       }
 
       onMounted(() => {
@@ -131,13 +138,14 @@
       })
 
       return {
-        state,
+        adIndex,
+        renderStickyAd,
         element,
-        asideAdComponent,
         getDateRoute,
-        handleStickyStateChange,
-        handleSlideChange,
-        handleChangeAdSwiper
+        handleStandingAdSwiperReady,
+        handleStandingAdSlideChange,
+        handleStickyAdIndexChange,
+        handleStickyStateChange
       }
     }
   })

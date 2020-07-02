@@ -1,20 +1,14 @@
 
 @charset "UTF-8";
 
-// variables
-@import "./variables.scss";
-
-// mixins
-@import "./mixins.scss";
-
-// theme
-@import "./theme.scss";
+// variables & mixins
+@import "./init.scss";
 
 // fonts
 @import "./font.scss";
 
-// bast style
-@import "./base.scss";
+// reset style
+@import "./reset.scss";
 
-// common style
-@import "./common.scss";
+// universal style
+@import "./universal.scss";

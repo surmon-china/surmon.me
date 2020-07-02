@@ -23,29 +23,28 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
-  import { useStore } from '/@/store'
-  import { RouteName } from '/@/router'
+  import { defineComponent, computed } from 'vue'
+  import { useStore, getNamespace, Modules } from '/@/store'
+  import { ArticleModuleActions } from '/@/store/article'
   import { useI18n } from '/@/services/i18n'
-  import { isSearchArchive, getArticleDetailRoute } from '/@/transforms/route'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { isSearchArchive, getArticleDetailRoute } from '/@/transforms/route'
 
   export default defineComponent({
     name: 'PcAsideArticle',
-    setup() {
+    async setup() {
       const i18n = useI18n()
       const store = useStore()
-      // TODO: article
-      // const articles = computed(() => store.state.article.hotList.data)
-      const articles = []
+      const articles = computed(() => store.state.article.hotList.data)
 
       const getArticleTitle = (article: any) => {
         const commentCount = article.meta.comments + i18n.translate(LANGUAGE_KEYS.COMMENT_LIST_COUNT)
         const likeCount = i18n.translate(LANGUAGE_KEYS.COMMENT_LIKE_COUNT, article.meta.likes)
         return `${article.title} - 「 ${commentCount} | ${likeCount} 」`
       }
+
+      await store.dispatch(getNamespace(Modules.Article, ArticleModuleActions.FetchHotList))
 
       return {
         articles,
