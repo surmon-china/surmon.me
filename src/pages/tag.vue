@@ -21,6 +21,7 @@
   import { useRouter, useRoute } from 'vue-router'
   import { useStore, Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
+  import { TagModuleActions } from '/@/store/tag'
   import { getExtendsValue } from '/@/transforms/state'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
@@ -46,28 +47,6 @@
       const route = useRoute()
       const router = useRouter()
 
-      const articleData = computed(() => store.state.article.list)
-      const currentTag = computed(() => {
-        return store.state.tag.data.find(tag => {
-          return tag.slug === route.params.tag_slug
-        })
-      })
-
-      // TODO: 验证参数
-      if (!currentTag.value) {
-        router.back()
-      }
-
-      const currentTagIcon = computed(
-        () => getExtendsValue(currentTag.value, 'icon') || 'icon-tag'
-      )
-      const currentTagImage = computed(
-        () => getExtendsValue(currentTag.value, 'background')
-      )
-      const currentTagColor = computed(
-        () => getExtendsValue(currentTag.value, 'bgcolor')
-      )
-
       const fetchArticles = (params: any) => {
         return store.dispatch(
           getNamespace(Modules.Article, ArticleModuleActions.FetchList),
@@ -83,7 +62,31 @@
         })
       }
 
-      await fetchArticles(route.params)
+      await Promise.all([
+        fetchArticles(route.params),
+        store.dispatch(getNamespace(Modules.Tag, TagModuleActions.FetchList))
+      ])
+
+      const articleData = computed(() => store.state.article.list)
+      const currentTag = computed(() => {
+        return store.state.tag.data.find(tag => {
+          return tag.slug === route.params.tag_slug
+        })
+      })
+
+      if (!currentTag.value) {
+        router.back()
+      }
+
+      const currentTagIcon = computed(
+        () => getExtendsValue(currentTag.value, 'icon') || 'icon-tag'
+      )
+      const currentTagImage = computed(
+        () => getExtendsValue(currentTag.value, 'background')
+      )
+      const currentTagColor = computed(
+        () => getExtendsValue(currentTag.value, 'bgcolor')
+      )
 
       return {
         articleData,

@@ -17,9 +17,9 @@
           class="item"
           :class="{
             today: isToday(item),
-            active: isActivated(item),
             other: item.month !== tableView.month
           }"
+          @click="handleDayClick(item)"
         >
           <slot v-bind="item">{{ item.day }}</slot>
         </span>
@@ -30,17 +30,14 @@
 
 <script lang="ts">
   import { defineComponent, ref, reactive, computed } from 'vue'
-  import { useRoute } from 'vue-router'
-  import { RouteName } from '/@/router'
   import { useI18n } from '/@/services/i18n'
   import { Language } from '/@/language/data'
-  import { dateToHuman, humanToDate, cloneDate, ymdToDate, textHumanizer, humanDateToYMD, HumanDate, TEXT_MAP } from '/@/transforms/moment'
+  import { dateToHuman, humanToDate, cloneDate, isSameHumanDay, textHumanizer, humanDateToYMD, HumanDate, TEXT_MAP } from '/@/transforms/moment'
 
   export default defineComponent({
     name: 'PcAsideCalendar',
     setup(_, context) {
       const i18n = useI18n()
-      const route = useRoute()
       const today = dateToHuman(new Date())
       const tableView = reactive({
         month: 0,
@@ -50,12 +47,6 @@
 
       const weekDayTexts = computed(() => {
         return textHumanizer(i18n.language.value as any)(TEXT_MAP.WEEKDAYS)
-      })
-
-      const routeHumanDate = computed(() => {
-        return route.name === RouteName.DateArchive
-          ? dateToHuman(ymdToDate(route.params as any as string))
-          : null
       })
 
       const headerText = computed(() => {
@@ -119,12 +110,12 @@
         })
       }
 
-      const isSameDay = (target: HumanDate, target2: HumanDate) => {
-        return (
-          target.day === target2.day &&
-          target.month === target2.month &&
-          target.year === target2.year
-        )
+      const handleDayClick = (date: HumanDate) => {
+        if (date.month < tableView.month) {
+          toPrevMonth()
+        } else if (date.month > tableView.month) {
+          toNextMonth()
+        }
       }
 
       // init table
@@ -137,14 +128,10 @@
         tableView,
         headerText,
         weekDayTexts,
-        routeHumanDate,
         toPrevMonth,
         toNextMonth,
-        isToday: target => isSameDay(target, today),
-        isActivated: (target: HumanDate) => (
-          routeHumanDate.value &&
-          isSameDay(target, routeHumanDate.value)
-        )
+        handleDayClick,
+        isToday: target => isSameHumanDay(target, today)
       }
     }
   })

@@ -5,12 +5,7 @@
     </div>
     <div class="module">
       <suspense>
-        <template #default>
-          <aside-article />
-        </template>
-        <template #fallback>
-          <su-loading />
-        </template>
+        <aside-article />
       </suspense>
     </div>
     <client-only>
@@ -24,8 +19,7 @@
     <div class="module calendar">
       <calendar>
         <template #default="humanDate">
-          <!-- TODO: 感觉 sitemap（如果已拉取） 来判断，到底有没有文章数据 -->
-          <router-link :to="getDateRoute(humanDate)">
+          <router-link class="date-link" :to="getDateRoute(humanDate)">
             {{ humanDate.day }}
           </router-link>
         </template>
@@ -52,7 +46,9 @@
         </div>
       </client-only>
       <div class="module">
-        <aside-tag />
+        <suspense>
+          <aside-tag />
+        </suspense>
       </div>
       <div class="module">
         <aside-tool />
@@ -168,6 +164,16 @@
 
       &.calendar {
         padding: $gap;
+
+        .date-link {
+          display: block;
+          border-radius: 100%;
+
+          &.link-active {
+            background-color: $primary;
+            color: $text-reversal;
+          }
+        }
       }
 
       &.mammon {

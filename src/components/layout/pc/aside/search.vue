@@ -8,8 +8,8 @@
         type="search"
         name="search"
         class="search-input"
-        :class="language"
-        :placeholder="t(LANGUAGE_KEYS.SEARCH_PLACEHOLDER)"
+        :class="i18n.language"
+        :placeholder="i18n.t(LANGUAGE_KEYS.SEARCH_PLACEHOLDER)"
         @keyup.enter="handleSearch"
       >
       <button class="search-btn" @click="handleSearch">
@@ -72,13 +72,12 @@
       }
 
       return {
-        keyword,
-        handleSearch,
+        LANGUAGE_KEYS,
+        i18n,
         tags,
         isZhLang,
-        t: i18n.t,
-        language: i18n.language,
-        LANGUAGE_KEYS
+        keyword,
+        handleSearch
       }
     }
   })

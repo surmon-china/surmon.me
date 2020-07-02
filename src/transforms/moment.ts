@@ -93,6 +93,15 @@ export const humanDateToYMD = ({ year, month, day }: Partial<Omit<HumanDate, 'we
   return `${year}${_month}${_day}`
 }
 
+
+export const isSameHumanDay = (target: HumanDate, target2: HumanDate) => {
+  return (
+    target.day === target2.day &&
+    target.month === target2.month &&
+    target.year === target2.year
+  )
+}
+
 // Date -> like: 2016-01-02
 export const dateToYMD = (date: Date) => {
   return humanDateToYMD(dateToHuman(date))
