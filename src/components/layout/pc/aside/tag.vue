@@ -5,23 +5,18 @@
     </su-empty>
     <ul v-else class="tag-list">
       <router-link
-        v-for="(tag, index) in tags"
-        :key="index"
         tag="li"
         class="item"
+        :title="tag.description"
         :to="getTagArchiveRoute(tag.slug)"
+        :key="index"
+        v-for="(tag, index) in tags"
       >
-        <a class="title" :title="tag.description">
-          <i
-            v-if="tag.extends.find(t => t.name === 'icon')"
-            :class="tag.extends.find(t => t.name === 'icon').value"
-            class="iconfont"
-          />
-          <span class="name">
-            <span>{{ isZhLang ? tag.name : tag.slug }}</span>
-            <span>({{ tag.count || 0 }})</span>
-          </span>
-        </a>
+        <i class="iconfont" :class="getTagIcon(tag)" />
+        <span class="name">
+          <i18n :zh="tag.name" :en="tag.slug" />
+          <span class="count">({{ tag.count || 0 }})</span>
+        </span>
       </router-link>
     </ul>
   </div>
@@ -30,28 +25,32 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { useRoute } from 'vue-router'
-  import { useStore } from '/@/store'
+  import { useStore, getNamespace, Modules } from '/@/store'
+  import { TagModuleActions } from '/@/store/tag'
   import { useI18n } from '/@/services/i18n'
-  import { getTagArchiveRoute, isArticleDetail } from '/@/transforms/route'
+  import { getTagArchiveRoute } from '/@/transforms/route'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { Language } from '/@/language/data'
+  import { getExtendsValue } from '/@/transforms/state'
 
   export default defineComponent({
     name: 'PcAsideTag',
-    setup() {
+    async setup() {
       const i18n = useI18n()
       const store = useStore()
       const route = useRoute()
       const tags = computed(() => store.state.tag.data)
-      const isArticlePage = computed(() => isArticleDetail(route.name))
-      const isZhLang = computed(() => i18n.language.value === Language.Zh)
+
+      const getTagIcon = (tag: any) => {
+        return getExtendsValue(tag, 'icon')?.value || 'icon-tag'
+      }
+
+      await store.dispatch(getNamespace(Modules.Tag, TagModuleActions.FetchList))
 
       return {
-        tags,
-        t: i18n.t,
         LANGUAGE_KEYS,
-        isZhLang,
-        isArticlePage,
+        t: i18n.t,
+        tags,
+        getTagIcon,
         getTagArchiveRoute
       }
     }
@@ -90,39 +89,45 @@
         line-height: 2em;
         font-size: $font-size-h6;
         text-transform: capitalize;
-
+        font-family: $font-family-sans-serif;
         &:last-child {
           margin: 0;
         }
 
-        &:hover {
-          .title {
-            .iconfont {
-              background-color: $module-hover-bg;
-            }
+        .iconfont {
+          width: 2em;
+          text-align: center;
+          background-color: $module-hover-bg-opacity-3;
+          @include background-transition();
+        }
 
-            .name {
-              background-color: $module-hover-bg-darken-20;
-            }
+        .name {
+          display: block;
+          padding: 0 $sm-gap;
+          @include background-transition();
+
+          .count {
+            margin-left: $xs-gap;
           }
         }
 
-        .title {
-          display: flex;
-          font-family: $font-family-sans-serif;
+        &.link-active {
+          background-color: $primary;
+          color: $text-reversal;
+        }
 
-          .iconfont {
-            width: 2em;
-            text-align: center;
-            background-color: $module-hover-bg-opacity-3;
-            @include background-transition();
+        &:not(.link-active) {
+          .name {
+            background-color: $module-hover-bg;
           }
 
-          .name {
-            display: block;
-            padding: 0 $sm-gap;
-            background-color: $module-hover-bg;
-            @include background-transition();
+          &:hover {
+            .iconfont {
+              background-color: $module-hover-bg;
+            }
+            .name {
+              background-color: $module-hover-bg-darken-20;
+            }
           }
         }
       }

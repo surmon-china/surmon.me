@@ -61,6 +61,8 @@
 
       return {
         LANGUAGE_KEYS,
+        isMobile,
+        isDarkTheme,
         backgroundImageUrl
       }
     }
