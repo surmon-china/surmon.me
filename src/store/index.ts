@@ -5,11 +5,12 @@
  */
 
 import { createStore, useStore as useVuexStore } from 'vuex'
-import optionModule, { OptionState } from './option'
+import { GlobalState } from '/@/state'
 import announcementModule, { AnnouncementState } from './announcement'
-import categoryModule, { CategoryState } from './category'
-import tagModule, { TagState } from './tag'
-import articleModule, { ArticleState } from './article'
+import optionModule, { OptionState, OptionModuleActions } from './option'
+import articleModule, { ArticleState, ArticleModuleActions } from './article'
+import categoryModule, { CategoryState, CategoryModuleActions } from './category'
+import tagModule, { TagState, TagModuleActions } from './tag'
 import commentModule, { CommentState } from './comment'
 import sitemapModule, { SitemapState } from './sitemap'
 import wallpaperModule, { WallpaperState } from './wallpaper'
@@ -39,8 +40,8 @@ export type IRootState = {
   [Modules.Vlog]: VlogState
 }
 
-export type IRootStore = ReturnType<typeof createUniversalStore>
-export const createUniversalStore = () => createStore<IRootState>({
+export type IRootStore = ReturnType<typeof createVuexStore>
+const createVuexStore = () => createStore<IRootState>({
   modules: {
     [Modules.Announcement]: announcementModule,
     [Modules.Category]: categoryModule,
@@ -55,9 +56,46 @@ export const createUniversalStore = () => createStore<IRootState>({
 })
 
 export const useStore = (): IRootStore => {
-  return useVuexStore()
+  return useVuexStore() as IRootStore
 }
 
 export const getNamespace = (moduleName: Modules, target: string) => {
   return `${moduleName}/${target}`
+}
+
+export interface UniversalStoreConfig {
+  globalState: GlobalState
+}
+export const createUniversalStore = (config: UniversalStoreConfig) => {
+  const store = createVuexStore()
+  const doPrefetchTask = () => {
+    const initFetchTasks = [
+      store.dispatch(getNamespace(Modules.Tag, TagModuleActions.FetchList)),
+      store.dispatch(getNamespace(Modules.Category, CategoryModuleActions.FetchList)),
+      store.dispatch(getNamespace(Modules.Option, OptionModuleActions.FetchAdminInfo))
+    ]
+
+    // fetch hot articles when desktop env
+    if (!config.globalState.userAgent.isMobile) {
+      initFetchTasks.push(
+        store.dispatch(getNamespace(Modules.Article, ArticleModuleActions.FetchHotList))
+      )
+    }
+
+    return Promise.all(initFetchTasks)
+  }
+
+  return Object.assign(store, {
+    serverInit() {
+      return doPrefetchTask()
+    },
+    clientInit() {
+      doPrefetchTask()
+      // TODO: replace state
+      // store.replaceState(JSON.parse(window.__INIT_STATE__))
+    },
+    getServerScript() {
+      return `<script>window.__INIT_STATE__ = ${JSON.stringify(store.state)}</script>`
+    }
+  })
 }

@@ -21,7 +21,7 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
 
   export default defineComponent({
-    name: 'PcAsideTags',
+    name: 'PcAsideTool',
     setup() {
       const route = useRoute()
       const globalState = useGlobalState()

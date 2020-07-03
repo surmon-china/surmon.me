@@ -23,10 +23,7 @@
   import { defineComponent, computed, onMounted } from 'vue'
   import { isProd, isClient } from '/@/vuniversal/env'
   import { useGlobalState } from '/@/state'
-  import { useStore, getNamespace, Modules } from '/@/store'
-  import { OptionModuleActions } from '/@/store/option'
-  import { CategoryModuleActions } from '/@/store/category'
-  import { TagModuleActions } from '/@/store/tag'
+  import { useStore } from '/@/store'
   import { useTheme } from '/@/services/theme'
   import EmojiRain from '/@/components/widget/emoji-rain.vue'
   import PcMain from '/@/components/layout/pc/main.vue'
@@ -46,13 +43,6 @@
           ? MobileMain
           : PcMain
       })
-
-      // TODO: 应该分发至关注点
-      // await Promise.all([
-      //   store.dispatch(getNamespace(Modules.Tag, TagModuleActions.FetchList)),
-      //   store.dispatch(getNamespace(Modules.Category, CategoryModuleActions.FetchList)),
-      //   store.dispatch(getNamespace(Modules.Option, OptionModuleActions.FetchAdminInfo))
-      // ])
 
       return {
         theme: theme.theme,

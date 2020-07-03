@@ -38,16 +38,14 @@ const mutations: MutationTree<VlogState> = {
 
 const actions: ActionTree<VlogState, IRootState> = {
   [VlogModuleActions.FetchVideos]({ commit, state }, params: any = {}) {
-    params.per_page = params.per_page || 66
-
     // return data when exists
-    if (state.data.vlist.length) {
+    if (state.data) {
       return Promise.resolve(state.data)
     }
 
     commit(VlogModuleMutations.SetFetching, true)
     return http
-      .get(VLOG_API_PATH, { params })
+      .get(VLOG_API_PATH, { ...params, per_page: 66 })
       .then(response => {
         commit(VlogModuleMutations.SetVideoData, response.result)
         return response

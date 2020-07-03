@@ -32,11 +32,6 @@
       ArticleListHeader,
       ArticleList
     },
-    // validate({ params, store }) {
-    //   return params.tag_slug && store.state.tag.data.some(
-    //     tag => tag.slug === params.tag_slug
-    //   )
-    // },
     // head() {
     //   const slug = this.defaultParams.tag_slug || ''
     //   const title = slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
@@ -46,6 +41,10 @@
       const store = useStore()
       const route = useRoute()
       const router = useRouter()
+
+      const fetchTags = () => store.dispatch(
+        getNamespace(Modules.Tag, TagModuleActions.FetchList)
+      )
 
       const fetchArticles = (params: any) => {
         return store.dispatch(
@@ -63,8 +62,8 @@
       }
 
       await Promise.all([
+        fetchTags(),
         fetchArticles(route.params),
-        store.dispatch(getNamespace(Modules.Tag, TagModuleActions.FetchList))
       ])
 
       const articleData = computed(() => store.state.article.list)
@@ -76,6 +75,8 @@
 
       if (!currentTag.value) {
         router.back()
+        // throw error?
+        return
       }
 
       const currentTagIcon = computed(

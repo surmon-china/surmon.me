@@ -4,9 +4,7 @@
       <aside-search />
     </div>
     <div class="module">
-      <suspense>
-        <aside-article />
-      </suspense>
+      <aside-article />
     </div>
     <client-only>
       <div class="module mammon">
@@ -46,9 +44,7 @@
         </div>
       </client-only>
       <div class="module">
-        <suspense>
-          <aside-tag />
-        </suspense>
+        <aside-tag />
       </div>
       <div class="module">
         <aside-tool />
