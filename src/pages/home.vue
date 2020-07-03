@@ -31,12 +31,10 @@
         getNamespace(Modules.Article, AnnouncementModuleActions.FetchList),
       )
 
-      const fetchArticles = (params?: any) => {
-        return store.dispatch(
-          getNamespace(Modules.Article, ArticleModuleActions.FetchList),
-          params
-        )
-      }
+      const fetchArticles = (params?: any) => store.dispatch(
+        getNamespace(Modules.Article, ArticleModuleActions.FetchList),
+        params
+      )
 
       const loadmoreArticles = () => {
         fetchArticles({ page: article.value.data.pagination?.current_page + 1 })

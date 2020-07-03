@@ -25,8 +25,7 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { useRoute } from 'vue-router'
-  import { useStore, getNamespace, Modules } from '/@/store'
-  import { TagModuleActions } from '/@/store/tag'
+  import { useStore } from '/@/store'
   import { useI18n } from '/@/services/i18n'
   import { getTagArchiveRoute } from '/@/transforms/route'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -34,7 +33,7 @@
 
   export default defineComponent({
     name: 'PcAsideTag',
-    async setup() {
+    setup() {
       const i18n = useI18n()
       const store = useStore()
       const route = useRoute()
@@ -43,8 +42,6 @@
       const getTagIcon = (tag: any) => {
         return getExtendsValue(tag, 'icon')?.value || 'icon-tag'
       }
-
-      await store.dispatch(getNamespace(Modules.Tag, TagModuleActions.FetchList))
 
       return {
         LANGUAGE_KEYS,

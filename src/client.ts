@@ -16,7 +16,7 @@ import { exportLozadToGlobal } from '/@/services/lozad'
 import { Language } from '/@/language/data'
 import { createVueApp } from './main'
 
-const { app, router, globalState, theme, i18n } = createVueApp({ target: VueEnv.Client })
+const { app, router, globalState, theme, i18n, store } = createVueApp({ target: VueEnv.Client })
 const music = createMusic({ albumId: MUSIC_ALBUM_ID, autoStart: false })
 const defer = createDefer()
 
@@ -30,6 +30,7 @@ app.use(createPopup(), { exportToGlobal: true })
 globalState.resetOnClient()
 theme.resetOnClient()
 i18n.set(globalState.userAgent.isZhUser ? Language.Zh : Language.En)
+store.clientInit()
 
 app.mount('#app').$nextTick(() => {
   exportLozadToGlobal()

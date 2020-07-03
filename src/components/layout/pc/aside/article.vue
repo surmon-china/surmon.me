@@ -24,8 +24,7 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useStore, getNamespace, Modules } from '/@/store'
-  import { ArticleModuleActions } from '/@/store/article'
+  import { useStore } from '/@/store'
   import { useI18n } from '/@/services/i18n'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -33,7 +32,7 @@
 
   export default defineComponent({
     name: 'PcAsideArticle',
-    async setup() {
+    setup() {
       const i18n = useI18n()
       const store = useStore()
       const articles = computed(() => store.state.article.hotList.data)
@@ -43,8 +42,6 @@
         const likeCount = i18n.translate(LANGUAGE_KEYS.COMMENT_LIKE_COUNT, article.meta.likes)
         return `${article.title} - 「 ${commentCount} | ${likeCount} 」`
       }
-
-      await store.dispatch(getNamespace(Modules.Article, ArticleModuleActions.FetchHotList))
 
       return {
         articles,

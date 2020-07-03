@@ -41,7 +41,7 @@ export const createVueApp = (context: ICreaterContext) => {
   })
 
   const app = createSSRApp(App)
-  const store = createUniversalStore()
+  const store = createUniversalStore({ globalState })
   const router = createUniversalRouter({
     beforeMiddleware: getLayoutMiddleware(globalState),
     history: isServer
