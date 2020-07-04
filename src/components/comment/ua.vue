@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span class="ua">
     <span class="os">
       <i
         v-if="osIconName"
