@@ -8,7 +8,7 @@
     </div>
     <client-only>
       <div class="module mammon">
-        <aside-ad
+        <aside-mammon
           @index-change="handleStandingAdSlideChange"
           @ready="handleStandingAdSwiperReady"
         />
@@ -36,7 +36,7 @@
     <div class="aside-sticky-box">
       <client-only>
         <div class="module mammon">
-          <aside-ad
+          <aside-mammon
             v-if="renderStickyAd"
             :index="adIndex"
             @index-change="handleStickyAdIndexChange"
@@ -62,7 +62,7 @@
   import Calendar from '/@/components/widget/calendar.vue'
   import AsideSearch from './search.vue'
   import AsideArticle from './article.vue'
-  import AsideAd from './ad.vue'
+  import AsideMammon from './mammon.vue'
   import AsideTag from './tag.vue'
   import AsideTool from './tool.vue'
 
@@ -71,7 +71,7 @@
     components: {
       AsideSearch,
       AsideArticle,
-      AsideAd,
+      AsideMammon,
       Calendar,
       AsideTag,
       AsideTool

@@ -93,15 +93,6 @@ const mutations: MutationTree<ArticleState> = {
       article.meta.likes++
     }
   }
-
-  // 更新文章阅读全文状态
-  // updateDetailRenderedState(state, action) {
-  //   Vue.set(
-  //     state.detail.data,
-  //     'isRenderedFullContent',
-  //     action == null ? true : action
-  //   )
-  // },
 }
 
 const actions: ActionTree<ArticleState, IRootState> = {
