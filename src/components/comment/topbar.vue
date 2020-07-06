@@ -1,6 +1,6 @@
 <template>
   <transition name="module" mode="out-in">
-    <div v-if="fetching" key="skeleton" class="tools">
+    <div v-if="fetching" key="skeleton" class="topbar">
       <div class="total-skeleton">
         <skeleton-line class="count-skeleton" />
         <skeleton-line class="like-skeleton" />
@@ -9,47 +9,143 @@
         <skeleton-line />
       </div>
     </div>
-    <div v-else key="tools" class="tools">
+    <div v-else key="topbar" class="topbar">
       <div class="total">
         <div class="count">
           <strong class="count">{{ comment.pagination.total || 0 }}</strong>
-          <span>{{ $i18n.text.comment.count }}</span>
+          <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIST_COUNT" />
         </div>
-        <a href class="like" :class="{ liked: isLikedPage }" @click.stop.prevent="likePage">
+        <span
+          class="like"
+          :class="{ liked: _isPageLiked }"
+          @click="handleLikePage"
+        >
           <i class="iconfont icon-like" />
-          <strong>{{ likes || 0 }}</strong>
-          <span>{{ (isMobile && !isEnLang) ? '赞' : $i18n.text.comment.like }}</span>
-        </a>
-        <a href class="sponsor" @click.stop.prevent="handleSponsor">
+          <strong class="count">{{ likes || 0 }}</strong>
+          <template v-if="isZhLang && isMobile">赞</template>
+          <template v-else>
+            <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIKE" />
+          </template>
+        </span>
+        <span class="sponsor" @click="handleSponsor">
           <i class="iconfont icon-hao" />
-        </a>
+        </span>
       </div>
       <div class="sort">
-        <a
-          href
+        <span
           class="sort-btn"
-          :class="{ actived: sortMode === constants.SortType.Desc }"
-          @click.stop.prevent="sortComemnts(constants.SortType.Desc)"
-        >{{ $i18n.text.comment.new }}</a>
-        <a
-          href
+          :class="{ actived: sort === SortType.Desc }"
+          @click="handleSortList(SortType.Desc)"
+          v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_NEW"
+        />
+        <span
           class="sort-btn"
-          :class="{ actived: sortMode === constants.SortType.Hot }"
-          @click.stop.prevent="sortComemnts(constants.SortType.Hot)"
-        >{{ $i18n.text.comment.hot }}</a>
+          :class="{ actived: sort === SortType.Hot }"
+          @click.stop.prevent="handleSortList(SortType.Hot)"
+          v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_HOT"
+        />
       </div>
     </div>
   </transition>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+  import { defineComponent, ref, computed, onMounted } from 'vue'
+  import { isClient } from '/@/vuniversal/env'
+  import { useEnhancer } from '/@/enhancer'
+  import { getNamespace, Modules } from '/@/store'
+  import { ArticleModuleActions } from '/@/store/article'
+  import { OptionModuleActions } from '/@/store/option'
+  import { isPageLiked, likePage } from '/@/transforms/state'
+  import { SortType, CommentPostType } from '/@/constants/state'
+  import { LANGUAGE_KEYS } from '/@/language/key'
 
-}
+  export default defineComponent({
+    name: 'CommentTopbar',
+    props: {
+      fetching: {
+        type: Boolean,
+        required: true
+      },
+      comment: {
+        type: Object,
+        required: true
+      },
+      sort: {
+        type: Number,
+        required: true
+      },
+      likes: {
+        type: Number,
+        required: true
+      },
+      postId: {
+        type: Number,
+        required: true
+      }
+    },
+    setup(props, context) {
+      const { i18n, store, globalState, isMobile, isZhLang } = useEnhancer()
+      const _isPageLiked = ref(false)
+
+      const handleSortList = (sort) => {
+        context.emit('sort', sort)
+      }
+
+      const handleLikePage = async () => {
+        if (_isPageLiked.value) {
+          return false
+        }
+        // this.$ga.event(
+        //   '喜欢当页',
+        //   GAEventActions.Click,
+        //   GAEventTags.Comment
+        // )
+        try {
+          await store.dispatch(
+            props.postId === CommentPostType.Guestbook
+              ? getNamespace(Modules.Option, OptionModuleActions.PostSiteLike)
+              : getNamespace(Modules.Article, ArticleModuleActions.PostArticleLike),
+            props.postId
+          )
+          likePage(props.postId)
+        } catch (error) {
+          console.warn('喜欢失败', error)
+          alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION))
+        }
+      }
+
+      const handleSponsor = () => {
+        // this.$ga.event(
+        //   '评论赞赏弹窗',
+        //   GAEventActions.Click,
+        //   GAEventTags.Comment
+        // )
+        // TODO: 可以使用 popup 组件？
+        // this.isMobile
+          // // ? window.utils.openImgPopup(getFileCDNUrl('/images/sponsor-mobile.png'))
+          // sponsor 业务不使用 CDN
+          // : window.utils.openIframePopup('/sponsor', 'sponsor')
+      }
+
+      onMounted(() => {
+        _isPageLiked.value = isPageLiked(props.postId)
+      })
+
+      return {
+        SortType,
+        LANGUAGE_KEYS,
+        isMobile,
+        isZhLang,
+        _isPageLiked,
+        handleSortList
+      }
+    }
+  })
 </script>
 
 <style lang="scss">
-  .tools {
+  .topbar {
     display: flex;
     padding-bottom: $gap;
     align-items: center;
