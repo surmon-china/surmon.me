@@ -324,11 +324,11 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.COMMENT_POST_ERROR_SUBMIT]: {
     [Language.Zh]: '发布失败，原因 -> 控制台',
-    [Language.En]: 'Submit err, get err in dev console!'
+    [Language.En]: 'Submit failed, get err in dev console!'
   },
   [LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION]: {
     [Language.Zh]: '操作失败，原因 -> 控制台',
-    [Language.En]: 'Action err, get error in dev console!'
+    [Language.En]: 'Action failed, get error in dev console!'
   },
   [LANGUAGE_KEYS.COMMENT_ACCOUNT_SETTING]: {
     [Language.Zh]: '设置账户信息',

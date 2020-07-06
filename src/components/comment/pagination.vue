@@ -41,6 +41,22 @@
   </transition>
 </template>
 
+<script lang="ts">
+  import { defineComponent, ref, computed } from 'vue'
+  export default defineComponent({
+    name: 'CommentPagination',
+    props: {},
+    setup(props, context) {
+      
+      // 翻页反向计算
+      paginationReverseActive(index) {
+        const { pagination } = this.comment
+        return index === pagination.total_page + 1 - pagination.current_page
+      },
+    }
+  })
+</script>
+
 <style lang="scss" scoped>
   .pagination-box {
     margin-bottom: $lg-gap;
