@@ -37,7 +37,7 @@
           >
         </div>
         <div v-if="userCacheEditing" class="save">
-          <button type="submit" @click="updateUserCache($event)">
+          <button type="submit" @click="updateUserProfile">
             <i class="iconfont icon-success" />
           </button>
         </div>
@@ -58,7 +58,7 @@
                 v-text="$i18n.text.comment.setting.edit"
               />
               <li
-                @click.stop.prevent="claerUserCache"
+                @click.stop.prevent="clearUserProfile"
                 v-text="$i18n.text.comment.setting.clear"
               />
             </ul>
@@ -108,46 +108,46 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { email as emailRegex } from '/@/constants/regex'
+  import { useEnhancer } from '/@/enhancer'
+  import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import { getGravatarByEmail } from '/@/transforms/thumbnail'
   import { getFileCDNUrl } from '/@/transforms/url'
 
+  const humanizeGravatarUrl = (gravatar?: string) => {
+    return gravatar || getFileCDNUrl('/images/anonymous.jpg')
+  }
+
   export default defineComponent({
     name: 'CommentPublisher',
-    props: {},
+    props: {
+      profile: {
+        type: Object,
+        required: true
+      }
+    },
     setup(props, context) {
+      const { i18n } = useEnhancer()
 
-      const getGravatarUrlByEmail = (email: string) => {
-        return emailRegex.test(email)
-          ? getGravatarByEmail(email)
-          : null
-      }
-
-      const humanizeGravatarUrl = (gravatar?: string) => {
-        return gravatar || getFileCDNUrl('/images/anonymous.jpg')
-      }
-
-      // 更新用户数据
-      updateUserCache(event) {
+      const updateUserProfile = (event) => {
         event.preventDefault()
-        if (!this.user.name) {
-          return alert(this.$i18n.text.comment.profile.name + '?')
+
+        if (!props.profile.name) {
+          return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_NAME) + '?')
         }
-        if (!this.user.email) {
-          return alert(this.$i18n.text.comment.profile.email + '?')
+        if (!props.profile.email) {
+          return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_EMAIL) + '?')
         }
-        if (!emailRegex.test(this.user.email)) {
-          return alert(this.$i18n.text.comment.profile.emailerr)
+        if (!emailRegex.test(props.profile.email)) {
+          return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_EMAIL))
         }
-        if (this.user.site && !urlRegex.test(this.user.site)) {
-          return alert(this.$i18n.text.comment.profile.siteerr)
+        if (props.profile.site && !urlRegex.test(props.profile.site)) {
+          return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_URL))
         }
-        localUser.set(this.user)
-        this.userCacheEditing = false
+        context.emit('save-profile')
       }
 
-      // 清空用户数据
-      claerUserCache() {
+      const clearUserProfile = () => {
         this.userCacheMode = false
         this.userCacheEditing = false
         localUser.remove()

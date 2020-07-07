@@ -12,7 +12,7 @@
     <div v-else key="topbar" class="topbar">
       <div class="total">
         <div class="count">
-          <strong class="count">{{ comment.pagination.total || 0 }}</strong>
+          <strong class="count">{{ total || 0 }}</strong>
           <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIST_COUNT" />
         </div>
         <span
@@ -67,8 +67,8 @@
         type: Boolean,
         required: true
       },
-      comment: {
-        type: Object,
+      total: {
+        type: Number,
         required: true
       },
       sort: {
@@ -87,6 +87,9 @@
     setup(props, context) {
       const { i18n, store, globalState, isMobile, isZhLang } = useEnhancer()
       const _isPageLiked = ref(false)
+      const initPageLiked = () => {
+        _isPageLiked.value = isPageLiked(props.postId)
+      }
 
       const handleSortList = (sort) => {
         context.emit('sort', sort)
@@ -129,7 +132,7 @@
       }
 
       onMounted(() => {
-        _isPageLiked.value = isPageLiked(props.postId)
+        initPageLiked()
       })
 
       return {
