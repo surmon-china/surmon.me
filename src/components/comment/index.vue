@@ -1,9 +1,11 @@
 <template>
   <div id="comment-box" class="comment-box" :class="{ mobile: isMobile }">
     <comment-topbar
+      :total="commentData.pagination.total"
       :likes="likes"
       :post-id="postId"
       :fetching="isFetching"
+      :sort="state.sort"
       @sort="getSortComments"
     />
     <comment-list
@@ -19,10 +21,11 @@
     />
     <comment-publisher
       :fetching="isFetching"
+      :user="userState"
       :content="penState.content"
       :preview="penState.preview"
-      :user="userState"
-      @to-comment="toSomeAnchorById"
+      @to-comment="scrollToElementAnchor"
+      @save-profile="syncUserState2Storage"
       @submit="submitComment"
     />
   </div>
@@ -33,6 +36,7 @@
   import { useEnhancer } from '/@/enhancer'
   import { isClient } from '/@/vuniversal/env'
   import { getJSON, setJSON } from '/@/services/storage'
+  import { scrollTo } from '/@/utils/scroller'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { getGravatarByEmail } from '/@/transforms/thumbnail'
   import { isArticleDetail, isGuestbook } from '/@/transforms/route'
@@ -49,6 +53,13 @@
     return emailRegex.test(email)
       ? getGravatarByEmail(email)
       : null
+  }
+
+  const scrollToElementAnchor = (elementId: string, offset = 0) => {
+    const targetElement = document.getElementById(elementId)
+    if (targetElement) {
+      scrollTo(targetElement, 200, { offset })
+    }
   }
 
   const luanchEmojiRain = (content: string) => {
@@ -132,10 +143,12 @@
       const userState = reactive({
         cached: false,
         editing: false,
-        name: '',
-        email: '',
-        site: '',
-        gravatar: null
+        profile: {
+          name: '',
+          email: '',
+          site: '',
+          gravatar: null
+        }
       })
 
       const penState = reactive({
@@ -147,16 +160,66 @@
         return commentData.value.data.find(comment => comment.id === state.replyPid)
       })
 
+      const syncUserStorage2State = () => {
+        const user = getJSON(USER)
+        if (user) {
+          Object.assign(userState, {
+            cached: true,
+            profile: {
+              ...user,
+              gravatar: getGravatarUrlByEmail(user.email)
+            }
+          })
+        }
+      }
+
+      const setUserStorage = (profile: any) => {
+        setJSON(USER, profile)
+      }
+
+      const setUserProfile = (profile: any, setStorage = false) => {
+        const _profile = {
+          ...profile,
+          gravatar: getGravatarUrlByEmail(profile.email)
+        }
+        Object.assign(userState, {
+          cached: true,
+          editing: false,
+          profile: _profile
+        })
+        if (setStorage) {
+          setUserStorage(_profile)
+        }
+      }
+
+      const syncUserState2Storage = () => {
+        setUserProfile(userState.profile, true)
+      }
+
       const resetCommentReply = () => {
         state.replyPid = 0
       }
 
-      const clearCommentContent = () => {
+      const clearPenContent = () => {
         penState.content = ''
       }
 
       const togglePenPreview = () => {
         penState.preview = !penState.preview
+      }
+
+      const replyComment = (comment: any) => {
+        // this.$ga.event(
+        //   '欲回评论',
+        //   GAEventActions.Click,
+        //   GAEventTags.Comment
+        // )
+        state.replyPid = comment.id
+        scrollToElementAnchor('post-box', -300)
+        // 激活光标
+        // if (this.$refs.markdownInput) {
+        //   this.$refs.markdownInput.focusPosition()
+        // }
       }
 
       // 获取评论列表
@@ -193,33 +256,37 @@
         //   GAEventActions.Click,
         //   GAEventTags.Comment
         // )
-        if (!userState.name) {
+        if (!userState.profile.name) {
           return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_NAME) + '?')
         }
-        if (!userState.email) {
+        if (!userState.profile.email) {
           return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_EMAIL) + '?')
         }
-        if (!emailRegex.test(userState.email)) {
+        if (!emailRegex.test(userState.profile.email)) {
           return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_EMAIL))
         }
-        if (userState.site && !urlRegex.test(userState.site)) {
+        if (userState.profile.site && !urlRegex.test(userState.profile.site)) {
           return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_URL))
         }
         if (!penState.content || !penState.content.trim()) {
           return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_CONTENT) + '?')
         }
+
         // content length
         const lineOverflow = penState.content.split('\n').length > 36
         const lengthOverflow = penState.content.length > 2000
         if (lineOverflow || lengthOverflow) {
           return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_CONTENT))
         }
+
         // block list
         const { mails, keywords } = blockList.value
-        if (
-          mails.includes(userState.email) ||
-          (keywords.length && eval(`/${keywords.join('|')}/ig`).test(penState.content))
-        ) {
+        const hitMail = mails.includes(userState.profile.email)
+        const hitKeyword = (
+          keywords.length &&
+          eval(`/${keywords.join('|')}/ig`).test(penState.content)
+        )
+        if (hitMail || hitKeyword) {
           alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_SUBMIT))
           console.warn('评论发布失败\n1：被 Akismet 过滤\n2：邮箱/IP 被列入黑名单\n3：内容包含黑名单关键词')
           return false
@@ -232,55 +299,22 @@
             post_id: props.postId,
             content: penState.content,
             agent: globalState.userAgent.original,
-            author: {
-              name: userState.name,
-              email: userState.email,
-              gravatar: userState.gravatar,
-              ...(userState.site && { site: userState.site })
-            }
-          })
-          // reset reply state
-          resetCommentReply()
-          clearCommentContent()
-          // set user profile
-          setJSON(USER, {
-            name: userState.name,
-            email: userState.email,
-            site: userState.site,
-            gravatar: userState.gravatar
+            author: userState.profile
           })
           // clear local data
           penState.preview = false
           userState.cached = true
+          // reset reply state
+          resetCommentReply()
+          clearPenContent()
+          // set user profile
+          syncUserState2Storage()
           // random emoji rain
           luanchEmojiRain(resultData.result.content)
         } catch (error) {
           console.warn('评论发布失败，可能原因：被 Akismet 过滤，或者：\n', error)
           alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_SUBMIT))
         }
-      }
-
-      // 跳转到某条指定的id位置
-      const toSomeAnchorById = (id: string) => {
-        const targetDom = document.getElementById(id)
-        if (targetDom) {
-          const isToEditor = id === 'post-box'
-          scrollTo(targetDom, 200, { offset: isToEditor ? 0 : -300 })
-          // 如果是进入编辑模式，则需要激活光标
-          if (isToEditor && this.$refs.markdownInput) {
-            this.$refs.markdownInput.focusPosition()
-          }
-        }
-      }
-
-      const replyComment = (comment: any) => {
-        // this.$ga.event(
-        //   '欲回评论',
-        //   GAEventActions.Click,
-        //   GAEventTags.Comment
-        // )
-        state.replyPid = comment.id
-        toSomeAnchorById('post-box')
       }
 
       watch(
@@ -298,14 +332,7 @@
         // 3. 当容器组件还在请求时，组件全量 Loading
         // 4. 当只有评论列表在请求时，列表单独 Loading
         store.dispatch('global/fetchAppOption')
-        const user = getJSON(USER)
-        if (user) {
-          Object.assign(userState, {
-            ...user,
-            gravatar: getGravatarUrlByEmail(user.email),
-            cached: true
-          })
-        }
+        syncUserStorage2State()
       })
 
       onBeforeUnmount(() => {
