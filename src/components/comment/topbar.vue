@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted } from 'vue'
+  import { defineComponent, ref, computed, onMounted, PropType } from 'vue'
   import { isClient } from '/@/vuniversal/env'
   import { useEnhancer } from '/@/enhancer'
   import { getNamespace, Modules } from '/@/store'
@@ -72,7 +72,7 @@
         required: true
       },
       sort: {
-        type: Number,
+        type: Number as PropType<SortType>,
         required: true
       },
       likes: {
@@ -85,17 +85,19 @@
       }
     },
     setup(props, context) {
-      const { i18n, store, globalState, isMobile, isZhLang } = useEnhancer()
+      const { i18n, store, isMobile, isZhLang } = useEnhancer()
       const _isPageLiked = ref(false)
       const initPageLiked = () => {
         _isPageLiked.value = isPageLiked(props.postId)
       }
 
-      const handleSortList = (sort) => {
-        context.emit('sort', sort)
+      const handleSortList = (sort: SortType) => {
+        if (sort !== props.sort) {
+          context.emit('sort', sort)
+        }
       }
 
-      const handleLikePage = async () => {
+      const handleLikePage = () => {
         if (_isPageLiked.value) {
           return false
         }
@@ -104,18 +106,18 @@
         //   GAEventActions.Click,
         //   GAEventTags.Comment
         // )
-        try {
-          await store.dispatch(
-            props.postId === CommentPostType.Guestbook
-              ? getNamespace(Modules.Option, OptionModuleActions.PostSiteLike)
-              : getNamespace(Modules.Article, ArticleModuleActions.PostArticleLike),
-            props.postId
-          )
+        store.dispatch(
+          props.postId === CommentPostType.Guestbook
+            ? getNamespace(Modules.Option, OptionModuleActions.PostSiteLike)
+            : getNamespace(Modules.Article, ArticleModuleActions.PostArticleLike),
+          props.postId
+        ).then(() => {
           likePage(props.postId)
-        } catch (error) {
-          console.warn('喜欢失败', error)
-          alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION))
-        }
+        }).catch(error => {
+          const message = i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION)
+          console.warn(message, error)
+          alert(message)
+        })
       }
 
       const handleSponsor = () => {
@@ -148,6 +150,8 @@
 </script>
 
 <style lang="scss">
+  @import 'src/assets/styles/init.scss';
+
   .topbar {
     display: flex;
     padding-bottom: $gap;

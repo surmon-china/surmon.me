@@ -1,68 +1,65 @@
 <template>
   <form id="publisher" class="publisher" name="comment">
-    <!-- 用户编辑部分 -->
+    <!-- profile editor -->
     <transition name="module" mode="out-in">
-      <div v-if="!userCacheMode || userCacheEditing" key="edit" class="user">
+      <div v-if="!cached || editing" key="edit" class="user">
         <div class="name">
           <input
-            v-model="user.name"
+            v-model="userProfile.name"
             required
             type="text"
             name="name"
             autocomplete="on"
-            :class="language"
-            :placeholder="$i18n.text.comment.profile.name + ' *'"
+            :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_NAME) + ' *'"
           >
         </div>
         <div class="email">
           <input
-            v-model="user.email"
+            v-model="userProfile.email"
             required
             type="email"
             name="email"
             autocomplete="on"
-            :class="language"
-            :placeholder="$i18n.text.comment.profile.email + ' *'"
+            :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_EMAIL) + ' *'"
             @blur="upadteUserGravatar"
           >
         </div>
         <div class="site">
           <input
-            v-model="user.site"
+            v-model="userProfile.site"
             type="url"
             name="url"
             autocomplete="on"
-            :class="language"
-            :placeholder="$i18n.text.comment.profile.site"
+            :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_SITE)"
           >
         </div>
-        <div v-if="userCacheEditing" class="save">
-          <button type="submit" @click="updateUserProfile">
+        <div v-if="editing" class="save">
+          <button type="submit" @click="saveUserProfile">
             <i class="iconfont icon-success" />
           </button>
         </div>
       </div>
-      <!-- 用户设置部分 -->
-      <div v-else-if="userCacheMode && !userCacheEditing" key="user" class="user">
+      <!-- profile setting -->
+      <div v-else-if="cached && !editing" key="user" class="user">
         <div class="edit">
-          <strong class="name">{{ user.name | firstUpperCase }}</strong>
-          <a href class="setting" @click.stop.prevent>
+          <strong class="name">{{ firstUpperCase(userProfile.name) }}</strong>
+          <span class="setting">
             <i class="iconfont icon-setting" />
             <span
               class="account-setting"
-              v-text="$i18n.text.comment.setting.account"
+              v-i18n="LANGUAGE_KEYS.COMMENT_ACCOUNT_SETTING"
             />
             <ul class="user-tool">
               <li
-                @click.stop.prevent="userCacheEditing = true"
-                v-text="$i18n.text.comment.setting.edit"
+                @click.stop.prevent="editUserProfile"
+                v-i18n="LANGUAGE_KEYS.COMMENT_ACCOUNT_EDIT"
               />
               <li
                 @click.stop.prevent="clearUserProfile"
-                v-text="$i18n.text.comment.setting.clear"
+                v-i18n="LANGUAGE_KEYS.COMMENT_ACCOUNT_CLEAR"
               />
             </ul>
-          </a>
+          </span>
         </div>
       </div>
     </transition>
@@ -70,37 +67,30 @@
       <div class="user">
         <div v-if="!isMobile" class="gravatar">
           <img
-            :alt="user.name || $i18n.text.comment.anonymous"
-            :src="humanizeGravatarUrl(user.gravatar)"
+            :alt="userProfile.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
+            :src="humanizeGravatarUrl(userProfile.gravatar)"
             draggable="false"
           >
         </div>
       </div>
       <div class="editor">
         <transition name="module">
-          <div v-if="!!pid" key="reply" class="will-reply">
+          <div v-if="!!replyPid" key="reply" class="will-reply">
             <div class="reply-user">
               <span>
-                <span v-text="$i18n.text.comment.reply" />
+                <span v-i18n="LANGUAGE_KEYS.COMMENT_REPLY" />
+                <!-- TODO: CSS -->
                 <span>&nbsp;</span>
-                <a href @click.stop.prevent="toSomeAnchorById(`comment-item-${replyCommentSlef.id}`)">
-                  <strong>#{{ replyCommentSlef.id }} @{{ replyCommentSlef.author.name }}：</strong>
+                <a href @click.stop.prevent="scrollToComment(replyingComment.id)">
+                  <strong>#{{ replyingComment.id }} @{{ replyingComment.author.name }}：</strong>
                 </a>
               </span>
               <a href class="cancel iconfont icon-cancel" @click.stop.prevent="cancelCommentReply" />
             </div>
-            <div class="reply-preview" v-html="marked(replyCommentSlef.content)" />
+            <div class="reply-preview" v-html="marked(replyingComment.content)" />
           </div>
         </transition>
-        <comment-pen
-          ref="markdownInput"
-          v-model="draftContent"
-          :enabled-preview-mode="previewMode"
-          :disabled="isPostingComment || isFetching"
-          :is-posting="isPostingComment"
-          @togglePreviewMode="handleTogglePreviewMode"
-          @submit="submitComment"
-        />
+        <slot name="pen"></slot>
       </div>
     </div>
   </form>
@@ -109,29 +99,51 @@
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
   import { useEnhancer } from '/@/enhancer'
+  import { getGravatarByEmail } from '/@/transforms/thumbnail'
+  import { firstUpperCase } from '/@/transforms/text'
   import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { getGravatarByEmail } from '/@/transforms/thumbnail'
-  import { getFileCDNUrl } from '/@/transforms/url'
-
-  const humanizeGravatarUrl = (gravatar?: string) => {
-    return gravatar || getFileCDNUrl('/images/anonymous.jpg')
-  }
+  import { getCommentElementId, humanizeGravatarUrl } from './helper'
 
   export default defineComponent({
     name: 'CommentPublisher',
     props: {
+      replyPid: {
+        type: Number,
+        required: true
+      },
       profile: {
         type: Object,
+        required: true
+      },
+      cached: {
+        type: Boolean,
+        required: true
+      },
+      editing: {
+        type: Boolean,
         required: true
       }
     },
     setup(props, context) {
-      const { i18n } = useEnhancer()
+      const { i18n, store, isMobile } = useEnhancer()
+      const userProfile = computed({
+        get() {
+          return props.profile
+        },
+        set(newProfile) {
+          context.emit('update:profile', newProfile)
+        }
+      })
 
-      const updateUserProfile = (event) => {
+      const replyingComment = computed(() => {
+        return store.state.comment.comments.data.find(
+          comment => comment.id === props.replyPid
+        )
+      })
+
+      const saveUserProfile = (event) => {
         event.preventDefault()
-
         if (!props.profile.name) {
           return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_NAME) + '?')
         }
@@ -147,23 +159,44 @@
         context.emit('save-profile')
       }
 
-      const clearUserProfile = () => {
-        this.userCacheMode = false
-        this.userCacheEditing = false
-        localUser.remove()
-        Object.keys(this.user).forEach(key => {
-          this.user[key] = ''
-        })
+      const editUserProfile = () => {
+        if (!props.editing) {
+          context.emit('edit-profile')
+        }
       }
 
-      handleTogglePreviewMode() {
-        this.previewMode = !this.previewMode
+      const clearUserProfile = () => {
+        if (props.cached) {
+          context.emit('clear-profile')
+        }
+      }
+
+      const cancelCommentReply = () => {
+        context.emit('cancel-reply')
+      }
+
+      const scrollToComment = (commentId: number) => {
+        context.emit('to-comment', getCommentElementId(commentId))
+      }
+
+      return {
+        t: i18n.t,
+        LANGUAGE_KEYS,
+        firstUpperCase,
+        humanizeGravatarUrl,
+        isMobile,
+        userProfile,
+        replyingComment,
+        saveUserProfile,
+        clearUserProfile
       }
     }
   })
 </script>
 
 <style lang="scss">
+  @import 'src/assets/styles/init.scss';
+
   .publisher {
     display: block;
     padding-top: $gap;

@@ -15,19 +15,33 @@
     />
     <comment-pagination
       :fetching="isFetching"
-      :comments="commentData.data"
       :pagination="commentData.pagination"
+      :sort="state.sort"
       @page="getPageComments"
     />
     <comment-publisher
-      :fetching="isFetching"
-      :user="userState"
-      :content="penState.content"
-      :preview="penState.preview"
+      v-model:profile="userState.profile"
+      :cached="userState.cached"
+      :editing="userState.editing"
+      :reply-pid="state.replyPid"
       @to-comment="scrollToElementAnchor"
-      @save-profile="syncUserState2Storage"
-      @submit="submitComment"
-    />
+      @cancel-reply="resetCommentReply"
+      @edit-profile="editUserProfile"
+      @save-profile="syncUserProfileToStorage"
+      @clear-profile="clearUserProfile"
+    >
+      <template #pen>
+        <comment-pen
+          ref="markdownInput"
+          v-model="penState.content"
+          :preview="penState.preview"
+          :disabled="isPostingComment || isFetching"
+          :posting="isPostingComment"
+          @toggle-preview="togglePenPreview"
+          @submit="submitComment"
+        />
+      </template>
+    </comment-publisher>
   </div>
 </template>
 
@@ -36,7 +50,6 @@
   import { useEnhancer } from '/@/enhancer'
   import { isClient } from '/@/vuniversal/env'
   import { getJSON, setJSON } from '/@/services/storage'
-  import { scrollTo } from '/@/utils/scroller'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { getGravatarByEmail } from '/@/transforms/thumbnail'
   import { isArticleDetail, isGuestbook } from '/@/transforms/route'
@@ -44,23 +57,12 @@
   import { SortType } from '/@/constants/state'
   import { USER } from '/@/constants/storage'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { getGravatarUrlByEmail, scrollToElementAnchor } from './helper'
   import CommentTopbar from './topbar.vue'
   import CommentList from './list.vue'
   import CommentPagination from './pagination/index.vue'
-  import CommentPublisher from './publisher/index.vue'
-
-  const getGravatarUrlByEmail = (email: string) => {
-    return emailRegex.test(email)
-      ? getGravatarByEmail(email)
-      : null
-  }
-
-  const scrollToElementAnchor = (elementId: string, offset = 0) => {
-    const targetElement = document.getElementById(elementId)
-    if (targetElement) {
-      scrollTo(targetElement, 200, { offset })
-    }
-  }
+  import CommentPublisher from './publisher.vue'
+  import CommentPen from './pen.vue'
 
   const luanchEmojiRain = (content: string) => {
     const luanchRain = window.luanchEmojiRain
@@ -103,7 +105,8 @@
       CommentTopbar,
       CommentList,
       CommentPagination,
-      CommentPublisher
+      CommentPublisher,
+      CommentPen
     },
     props: {
       fetching: {
@@ -140,7 +143,7 @@
         replyPid: 0
       })
 
-      const userState = reactive({
+      const initUserState = {
         cached: false,
         editing: false,
         profile: {
@@ -149,18 +152,16 @@
           site: '',
           gravatar: null
         }
-      })
+      }
+      // TODO: profile 也许需要独立才可以双向绑定
+      const userState = reactive({ ...initUserState })
 
       const penState = reactive({
         content: '',
         preview: false
       })
 
-      const replyCommentSlef = computed(() => {
-        return commentData.value.data.find(comment => comment.id === state.replyPid)
-      })
-
-      const syncUserStorage2State = () => {
+      const syncUserStorageToState = () => {
         const user = getJSON(USER)
         if (user) {
           Object.assign(userState, {
@@ -173,27 +174,26 @@
         }
       }
 
-      const setUserStorage = (profile: any) => {
-        setJSON(USER, profile)
-      }
-
-      const setUserProfile = (profile: any, setStorage = false) => {
+      const syncUserProfileToStorage = () => {
         const _profile = {
-          ...profile,
-          gravatar: getGravatarUrlByEmail(profile.email)
+          ...userState.profile,
+          gravatar: getGravatarUrlByEmail(userState.profile.email)
         }
         Object.assign(userState, {
           cached: true,
           editing: false,
           profile: _profile
         })
-        if (setStorage) {
-          setUserStorage(_profile)
-        }
+        setJSON(USER, userState.profile)
       }
 
-      const syncUserState2Storage = () => {
-        setUserProfile(userState.profile, true)
+      const clearUserProfile = () => {
+        Object.assign(userState, { ...initUserState })
+        setJSON(USER, userState.profile)
+      }
+
+      const editUserProfile = () => {
+        userState.editing = true
       }
 
       const resetCommentReply = () => {
@@ -231,23 +231,20 @@
         // })
         store.dispatch('comment/fetchList', {
           ...params,
-          sort: state.replyPid,
+          sort: state.sort,
           post_id: props.postId
         })
       }
 
       const getSortComments = (sort: SortType) => {
-        if (state.replyPid !== sort) {
-          state.replyPid = sort
+        if (state.sort !== sort) {
+          state.sort = sort
           fetchCommentList()
         }
       }
 
-      const getPageComments = (sort: SortType) => {
-        if (state.replyPid !== sort) {
-          state.replyPid = sort
-          fetchCommentList()
-        }
+      const getPageComments = (page: number) => {
+        fetchCommentList({ page })
       }
 
       const submitComment = async () => {
@@ -293,14 +290,13 @@
         }
 
         // post
-        try {
-          const resultData = await store.dispatch('comment/fetchPostComment', {
-            pid: state.replyPid,
-            post_id: props.postId,
-            content: penState.content,
-            agent: globalState.userAgent.original,
-            author: userState.profile
-          })
+        return store.dispatch('comment/fetchPostComment', {
+          pid: state.replyPid,
+          post_id: props.postId,
+          content: penState.content,
+          agent: globalState.userAgent.original,
+          author: userState.profile
+        }).then(resultData => {
           // clear local data
           penState.preview = false
           userState.cached = true
@@ -308,13 +304,13 @@
           resetCommentReply()
           clearPenContent()
           // set user profile
-          syncUserState2Storage()
+          syncUserProfileToStorage()
           // random emoji rain
           luanchEmojiRain(resultData.result.content)
-        } catch (error) {
+        }).catch(error => {
           console.warn('评论发布失败，可能原因：被 Akismet 过滤，或者：\n', error)
           alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_SUBMIT))
-        }
+        })
       }
 
       watch(
@@ -332,7 +328,7 @@
         // 3. 当容器组件还在请求时，组件全量 Loading
         // 4. 当只有评论列表在请求时，列表单独 Loading
         store.dispatch('global/fetchAppOption')
-        syncUserStorage2State()
+        syncUserStorageToState()
       })
 
       onBeforeUnmount(() => {
@@ -351,6 +347,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   #comment-box {
     padding: $gap;
     background-color: $module-bg;
@@ -358,6 +356,8 @@
 </style>
 
 <style lang="scss">
+  @import 'src/assets/styles/init.scss';
+
   .cm-content,
   .reply-preview,
   .markdown-preview {

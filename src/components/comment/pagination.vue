@@ -1,40 +1,30 @@
 <template>
   <transition name="module">
-    <div v-if="!isFetching && comment.pagination.total_page > 1" class="pagination-box">
-      <ul v-if="sortMode === constants.SortType.Hot" class="pagination-list">
-        <li v-for="(item, index) in comment.pagination.total_page" :key="index" class="item">
-          <a
-            href
-            class="pagination-btn"
-            :class="{ 'actived disabled': item === comment.pagination.current_page }"
-            @click.stop.prevent="item === comment.pagination.current_page
-              ? false 
-              : loadComemntList({ page: item })"
-          >{{ item }}</a>
-        </li>
-      </ul>
-      <ul v-else class="pagination-list">
-        <li class="item">
-          <a href class="pagination-btn prev disabled" @click.stop.prevent>
+    <div v-if="!fetching && pagination.total_page > 1" class="pagination">
+      <ul class="pagination-list">
+        <li class="item" v-if="!isHotSort">
+          <span class="pagination-btn prev disabled">
             <span>—</span>
-            <span v-text="$i18n.text.comment.pagenation.old" />
-          </a>
+            <span v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_OLD" />
+          </span>
         </li>
-        <li v-for="(item, index) in comment.pagination.total_page" :key="index" class="item">
-          <a
-            href
+        <li v-for="(item, index) in pagination.total_page" :key="index" class="item">
+          <button
             class="pagination-btn"
-            :class="{ 'actived disabled': paginationReverseActive(item) }"
-            @click.stop.prevent="paginationReverseActive(item)
-              ? false 
-              : loadComemntList({ page: comment.pagination.total_page + 1 - item })"
-          >{{ item }}</a>
+            :class="{
+              actived: isActivePage(item),
+              disabled: isActivePage(item)
+            }"
+            @click="handlePage(item)"
+          >
+            {{ item }}
+          </button>
         </li>
-        <li class="item">
-          <a href class="pagination-btn next disabled" @click.stop.prevent>
-            <span v-text="$i18n.text.comment.pagenation.new" />
+        <li class="item" v-if="!isHotSort">
+          <span class="pagination-btn next disabled">
+            <span v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_NEW" />
             <span>—</span>
-          </a>
+          </span>
         </li>
       </ul>
     </div>
@@ -42,23 +32,58 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
+  import { defineComponent, ref, computed, PropType } from 'vue'
+  import { SortType, CommentPostType } from '/@/constants/state'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+
   export default defineComponent({
     name: 'CommentPagination',
-    props: {},
-    setup(props, context) {
-      
-      // 翻页反向计算
-      paginationReverseActive(index) {
-        const { pagination } = this.comment
-        return index === pagination.total_page + 1 - pagination.current_page
+    props: {
+      fetching: {
+        type: Boolean,
+        required: true
       },
+      sort: {
+        type: Number as PropType<SortType>,
+        required: true
+      },
+      pagination: {
+        type: Object,
+        required: true
+      }
+    },
+    setup(props, context) {
+      const isHotSort = computed(() => props.sort === SortType.Hot)
+      const isActivePage = (index: number) => {
+        return isHotSort.value
+          ? index === props.pagination.current_page
+          : index === props.pagination.total_page + 1 - props.pagination.current_page
+      }
+
+      const handlePage = (page: number) => {
+        if (!isActivePage(page)) {
+          context.emit('page',
+            isHotSort.value
+              ? page
+              : props.pagination.total_page + 1 - page
+          )
+        }
+      }
+
+      return {
+        LANGUAGE_KEYS,
+        isHotSort,
+        isActivePage,
+        handlePage
+      }
     }
   })
 </script>
 
 <style lang="scss" scoped>
-  .pagination-box {
+  @import 'src/assets/styles/init.scss';
+
+  .pagination {
     margin-bottom: $lg-gap;
 
     > .pagination-list {

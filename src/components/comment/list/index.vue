@@ -28,78 +28,14 @@
     />
     <div v-else key="list" ref="commentList" class="list-box">
       <transition-group name="fade" tag="ul" class="comment-list" @after-enter="addCommentAnimateDone">
-        <li
+        <comment-item
           v-for="comment in comment.data"
-          :id="`comment-item-${comment.id}`"
           :key="comment.id"
-          class="comment-item"
-        >
-          <div v-if="!isMobile" class="cm-avatar">
-            <a
-              target="_blank"
-              rel="external nofollow noopener"
-              :href="comment.author.site"
-              @click.stop="clickUser($event, comment.author)"
-            >
-              <img
-                :alt="comment.author.name || $i18n.text.comment.anonymous"
-                :src="humanizeGravatarUrl(getGravatarUrlByEmail(comment.author.email))"
-                draggable="false"
-              >
-            </a>
-          </div>
-          <div class="cm-body">
-            <div class="cm-header">
-              <a
-                class="user-name"
-                target="_blank"
-                rel="external nofollow noopener"
-                :href="comment.author.site"
-                @click.stop="clickUser($event, comment.author)"
-              >
-                {{ comment.author.name | firstUpperCase }}
-              </a>
-              <comment-ua v-if="comment.agent" :ua="comment.agent" />
-              <span v-if="comment.ip_location && !isMobile" class="location">
-                <span>{{ comment.ip_location.country }}</span>
-                <span v-if="comment.ip_location.country && comment.ip_location.city">&nbsp;-&nbsp;</span>
-                <span>{{ comment.ip_location.city }}</span>
-              </span>
-              <span class="flool">#{{ comment.id }}</span>
-            </div>
-            <div class="cm-content">
-              <p v-if="!!comment.pid" class="reply">
-                <span v-text="$i18n.text.comment.reply">回复</span>
-                <span>&nbsp;</span>
-                <a href @click.stop.prevent="toSomeAnchorById(`comment-item-${comment.pid}`)">
-                  <span>#{{ comment.pid }}&nbsp;</span>
-                  <strong v-if="findReplyParent(comment.pid)">@{{ findReplyParent(comment.pid) }}</strong>
-                </a>
-                <span>：</span>
-              </p>
-              <div v-html="marked(comment.content)"></div>
-            </div>
-            <div class="cm-footer">
-              <span class="create_at">{{ comment.create_at | timeAgo(language) }}</span>
-              <a href class="reply" @click.stop.prevent="replyComment(comment)">
-                <i class="iconfont icon-reply" />
-                <span v-text="$i18n.text.comment.reply">回复</span>
-              </a>
-              <a
-                href
-                class="like"
-                :class="{
-                  liked: getCommentLiked(comment.id),
-                  actived: !!comment.likes
-                }"
-                @click.stop.prevent="likeComment(comment)"
-              >
-                <i class="iconfont icon-zan" />
-                <span>{{ $i18n.text.comment.ding }} ({{ comment.likes }})</span>
-              </a>
-            </div>
-          </div>
-        </li>
+          :comment="comment"
+          :liked="comment"
+          @like="likeComment"
+          @reply="replyComment"
+        />
       </transition-group>
     </div>
   </transition>
@@ -143,27 +79,15 @@
       },
       comments: {
         type: Array as PropType<Array<$TODO>>
-      },
-      likes: {
-        type: Array as PropType<Array<number>>,
-        default: []
       }
     },
     setup(props, context) {
       const { i18n, store, globalState, isMobile, isZhLang } = useEnhancer()
       const lozadObserver = ref<LozadObserver | null>(null)
-      let pagesLike: number[] = []
+      let commentsLike: number[] = []
       // init likes
       if (isClient) {
-        pagesLike = getCommentsLike()
-      }
-
-      // 初始化本地用户即本地用户的点赞历史
-      const initUser = () {
-        const historyLikes = storage.getJSON(USER_LIKE_HISTORY)
-        if (historyLikes) {
-          this.historyLikes = historyLikes
-        }
+        commentsLike = getCommentsLike()
       }
 
       const observeLozad = () => {
@@ -186,40 +110,6 @@
         observeLozad()
       }
 
-
-      marked(content) {
-        return marked(content, null, false)
-      },
-      getGravatarUrlByEmail(email) {
-        return emailRegex.test(email)
-          ? getGravatarByEmail(email)
-          : null
-      },
-      humanizeGravatarUrl(gravatar) {
-        return gravatar || getFileCDNUrl('/images/anonymous.jpg')
-      },
-      // 更新用户数据
-      updateUserCache(event) {
-        event.preventDefault()
-        if (!this.user.name) {
-          return alert(this.$i18n.text.comment.profile.name + '?')
-        }
-        if (!this.user.email) {
-          return alert(this.$i18n.text.comment.profile.email + '?')
-        }
-        if (!emailRegex.test(this.user.email)) {
-          return alert(this.$i18n.text.comment.profile.emailerr)
-        }
-        if (this.user.site && !urlRegex.test(this.user.site)) {
-          return alert(this.$i18n.text.comment.profile.siteerr)
-        }
-        localUser.set(this.user)
-        this.userCacheEditing = false
-      },
-      // 点击用户
-      clickUser(event, user) {
-        if (!user.site) event.preventDefault()
-      },
       // 跳转到某条指定的id位置
       toSomeAnchorById(id) {
         const targetDom = document.getElementById(id)
@@ -234,38 +124,34 @@
       },
       // 回复评论
       replyComment(comment) {
-        this.$ga.event(
-          '欲回评论',
-          systemConstants.GAEventActions.Click,
-          systemConstants.GAEventTags.Comment
-        )
-        this.pid = comment.id
-        this.toSomeAnchorById('post-box')
-      },
-      // 找到回复来源
-      findReplyParent(comment_id) {
-        const parent = this.comment.data.find(comment => comment.id === comment_id)
-        return parent ? parent.author.name : null
-      },
+        // this.$ga.event(
+        //   '欲回评论',
+        //   GAEventActions.Click,
+        //   GAEventTags.Comment
+        // )
+        // this.pid = comment.id
+        // this.toSomeAnchorById('post-box')
+      }
+ 
       // 点赞某条评论
       likeComment(comment) {
-        this.$ga.event(
-          '欲赞评论',
-          systemConstants.GAEventActions.Click,
-          systemConstants.GAEventTags.Comment
-        )
-        if (this.getCommentLiked(comment.id)) {
-          return false
-        }
-        this.$store.dispatch('comment/fetchLikeComment', comment)
-          .then(_ => {
-            this.historyLikes.comments.push(comment.id)
-            localHistoryLikes.set(this.historyLikes)
-          })
-          .catch(error => {
-            console.warn('评论点赞失败', error)
-            alert(this.$i18n.text.comment.profile.actionerr)
-          })
+        // this.$ga.event(
+        //   '欲赞评论',
+        //   GAEventActions.Click,
+        //   GAEventTags.Comment
+        // )
+        // if (this.getCommentLiked(comment.id)) {
+        //   return false
+        // }
+        // this.$store.dispatch('comment/fetchLikeComment', comment)
+        //   .then(_ => {
+        //     this.historyLikes.comments.push(comment.id)
+        //     localHistoryLikes.set(this.historyLikes)
+        //   })
+        //   .catch(error => {
+        //     console.warn('评论点赞失败', error)
+        //     alert(this.$i18n.text.comment.profile.actionerr)
+        //   })
       },
       // 获取某条评论是否被点赞
       getCommentLiked(comment_id) {
@@ -288,6 +174,8 @@
 </script>
 
 <style lang="scss">
+  @import 'src/assets/styles/init.scss';
+
   .list-skeleton {
     .comment-item {
       padding-left: 0!important;
