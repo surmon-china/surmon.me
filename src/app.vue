@@ -11,7 +11,7 @@
             <router-view />
           </template>
           <template #fallback>
-            <su-loading />
+            <spin />
           </template>
         </suspense>
       </transition>

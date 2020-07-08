@@ -4,9 +4,9 @@
       <i class="iconfont icon-hotfill" />
       <strong v-i18n="LANGUAGE_KEYS.HOT_ARTICLE_LIST_TITLE" />
     </p>
-    <su-empty v-if="!articles.length">
+    <empty v-if="!articles.length">
       <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
-    </su-empty>
+    </empty>
     <ul v-else class="article-list">
       <li v-for="item in articles" :key="item.id" class="item">
         <span class="index" />

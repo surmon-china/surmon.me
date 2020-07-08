@@ -5,28 +5,30 @@
     @click="handleClick"
   >
     <div class="item-content">
-      <div v-if="!isMobile" class="item-thumb">
-        <router-link :to="getArticleDetailRoute(article.id)">
-          <span
-            class="item-oirigin"
-            :class="{
-              self: _isOriginal,
-              other: _isReprint,
-              hybrid: _isHybrid
-            }"
-          >
-            <i18n :lkey="LANGUAGE_KEYS.ORIGIN_ORIGINAL" v-if="_isOriginal" />
-            <i18n :lkey="LANGUAGE_KEYS.ORIGIN_REPRINT" v-else-if="_isReprint" />
-            <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="_isHybrid" />
-          </span>
-          <img
-            class="item-thumb-img"
-            :src="getThumbUrl(article.thumb)"
-            :alt="article.title"
-            :title="article.title"
-          >
-        </router-link>
-      </div>
+      <desktop-only>
+        <div class="item-thumb">
+          <router-link :to="getArticleDetailRoute(article.id)">
+            <span
+              class="item-oirigin"
+              :class="{
+                self: _isOriginal,
+                other: _isReprint,
+                hybrid: _isHybrid
+              }"
+            >
+              <i18n :lkey="LANGUAGE_KEYS.ORIGIN_ORIGINAL" v-if="_isOriginal" />
+              <i18n :lkey="LANGUAGE_KEYS.ORIGIN_REPRINT" v-else-if="_isReprint" />
+              <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="_isHybrid" />
+            </span>
+            <img
+              class="item-thumb-img"
+              :src="getThumbUrl(article.thumb)"
+              :alt="article.title"
+              :title="article.title"
+            >
+          </router-link>
+        </div>
+      </desktop-only>
       <div class="item-body">
         <h5 class="item-title">
           <router-link :to="getArticleDetailRoute(article.id)" :title="article.title">
@@ -55,19 +57,21 @@
             <i class="iconfont icon-like" :class="{ liked: isLiked }"></i>
             <span>{{ article.meta.likes || 0 }}</span>
           </span>
-          <span v-if="!isMobile" class="categories">
-            <i class="iconfont icon-list"></i>
-            <template v-if="article.category.length">
-              <router-link
-                v-for="(category, index) in article.category"
-                :key="index"
-                :to="getCategoryArchiveRoute(category.slug)"
-              >
-                <i18n :zh="category.name" :en="category.slug" />
-              </router-link>
-            </template>
-            <span v-else v-i18n="LANGUAGE_KEYS.CATEGORY_PLACEHOLDER"></span>
-          </span>
+          <desktop-only>
+            <span class="categories">
+              <i class="iconfont icon-list"></i>
+              <template v-if="article.category.length">
+                <router-link
+                  v-for="(category, index) in article.category"
+                  :key="index"
+                  :to="getCategoryArchiveRoute(category.slug)"
+                >
+                  <i18n :zh="category.name" :en="category.slug" />
+                </router-link>
+              </template>
+              <span v-else v-i18n="LANGUAGE_KEYS.CATEGORY_PLACEHOLDER"></span>
+            </span>
+          </desktop-only>
           <span v-if="false" class="tags">
             <i class="iconfont icon-tag"></i>
             <template v-if="article.tag.length">

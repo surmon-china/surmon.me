@@ -106,74 +106,76 @@
                 <span class="text">Instagram</span>
               </a>
             </span>
-            <span v-if="!isMobile" class="mini">
-              <a
-                href="https://t.me/surmon"
-                target="_blank"
-                class="item telegram"
-                rel="external nofollow noopenter"
-              >
-                <i class="iconfont icon-telegram" />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/surmon"
-                target="_blank"
-                class="item linkedin"
-                rel="external nofollow noopenter"
-              >
-                <i class="iconfont icon-linkedin" />
-              </a>
-              <a
-                href="https://www.zhihu.com/people/surmon"
-                target="_blank"
-                class="item zhihu"
-                rel="external nofollow noopenter"
-              >
-                <i class="iconfont icon-zhihu" />
-              </a>
-              <a
-                v-if="false"
-                href="https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w"
-                target="_blank"
-                class="item youtube"
-                rel="external nofollow noopenter"
-              >
-                <i class="iconfont icon-youtube" />
-              </a>
-              <a
-                href="https://space.bilibili.com/27940710"
-                target="_blank"
-                class="item bilibili"
-                rel="external nofollow noopenter"
-              >
-                <i class="iconfont icon-bilibili" />
-              </a>
-              <a
-                href="https://stackoverflow.com/users/6222535/surmon?tab=profile"
-                target="_blank"
-                class="item stackoverflow"
-                rel="external nofollow noopenter"
-              >
-                <i class="iconfont icon-stackoverflow" />
-              </a>
-              <a
-                href="https://leetcode-cn.com/u/surmon"
-                bak-href="https://leetcode.com/surmon"
-                target="_blank"
-                class="item algorithm"
-                rel="external nofollow noopenter"
-              >
-                <i class="iconfont icon-leetcode" />
-              </a>
-              <a
-                href="https://www.quora.com/profile/Surmon/activity"
-                target="_blank"
-                class="item quora"
-                rel="external nofollow noopenter"
-              >
-                <i class="iconfont icon-quora" />
-              </a>
-            </span>
+            <desktop-only>
+              <span class="mini">
+                <a
+                  href="https://t.me/surmon"
+                  target="_blank"
+                  class="item telegram"
+                  rel="external nofollow noopenter"
+                >
+                  <i class="iconfont icon-telegram" />
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/surmon"
+                  target="_blank"
+                  class="item linkedin"
+                  rel="external nofollow noopenter"
+                >
+                  <i class="iconfont icon-linkedin" />
+                </a>
+                <a
+                  href="https://www.zhihu.com/people/surmon"
+                  target="_blank"
+                  class="item zhihu"
+                  rel="external nofollow noopenter"
+                >
+                  <i class="iconfont icon-zhihu" />
+                </a>
+                <a
+                  v-if="false"
+                  href="https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w"
+                  target="_blank"
+                  class="item youtube"
+                  rel="external nofollow noopenter"
+                >
+                  <i class="iconfont icon-youtube" />
+                </a>
+                <a
+                  href="https://space.bilibili.com/27940710"
+                  target="_blank"
+                  class="item bilibili"
+                  rel="external nofollow noopenter"
+                >
+                  <i class="iconfont icon-bilibili" />
+                </a>
+                <a
+                  href="https://stackoverflow.com/users/6222535/surmon?tab=profile"
+                  target="_blank"
+                  class="item stackoverflow"
+                  rel="external nofollow noopenter"
+                >
+                  <i class="iconfont icon-stackoverflow" />
+                </a>
+                <a
+                  href="https://leetcode-cn.com/u/surmon"
+                  bak-href="https://leetcode.com/surmon"
+                  target="_blank"
+                  class="item algorithm"
+                  rel="external nofollow noopenter"
+                >
+                  <i class="iconfont icon-leetcode" />
+                </a>
+                <a
+                  href="https://www.quora.com/profile/Surmon/activity"
+                  target="_blank"
+                  class="item quora"
+                  rel="external nofollow noopenter"
+                >
+                  <i class="iconfont icon-quora" />
+                </a>
+              </span>
+            </desktop-only>
           </span>
         </div>
         <div class="item">
@@ -250,17 +252,19 @@
             <i18n zh="数字游民" en="Digital nomad" />
           </p>
         </div>
-        <span v-if="!isMobile" class="followme" v-i18n="LANGUAGE_KEYS.FRIEND_ME" />
-        <div v-if="!isMobile" class="wechat" @mouseenter="handleHoverFollowMe">
-          <uimage
-            cdn
-            class="qrcode"
-            src="/images/wechat-qrcode.jpg"
-          />
-          <span class="tooltip">
-            <i18n zh="扫码加微，解锁灵魂" en="Scan the QR code in WeChat" />
-          </span>
-        </div>
+        <desktop-only>
+          <span class="followme" v-i18n="LANGUAGE_KEYS.FRIEND_ME" />
+          <div class="wechat" @mouseenter="handleHoverFollowMe">
+            <uimage
+              cdn
+              class="qrcode"
+              src="/images/wechat-qrcode.jpg"
+            />
+            <span class="tooltip">
+              <i18n zh="扫码加微，解锁灵魂" en="Scan the QR code in WeChat" />
+            </span>
+          </div>
+        </desktop-only>
       </div>
     </div>
     <div class="sponsor-mammon">

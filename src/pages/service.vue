@@ -14,18 +14,19 @@
             v-i18n="LANGUAGE_KEYS.PAGE_SERVICE_EMAIL_ME"
           />
         </div>
-        <a
-          v-if="!isMobile"
-          class="upwork"
-          target="_blank"
-          rel="external nofollow noopenter"
-          :href="upworkLink"
-        >
-          <span>(</span>
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_SERVICE_HIRE_ME" />
-          <i class="iconfont icon-upwork"></i>
-          <span>)</span>
-        </a>
+        <desktop-only>
+          <a
+            class="upwork"
+            target="_blank"
+            rel="external nofollow noopenter"
+            :href="upworkLink"
+          >
+            <span>(</span>
+            <i18n :lkey="LANGUAGE_KEYS.PAGE_SERVICE_HIRE_ME" />
+            <i class="iconfont icon-upwork"></i>
+            <span>)</span>
+          </a>
+        </desktop-only>
       </div>
     </div>
     <div class="module">
@@ -79,13 +80,13 @@
         </ul>
       </div>
     </div>
-    <template v-if="!isMobile">
+    <desktop-only>
       <client-only>
         <div class="mammon container">
           <adsense-responsive ins-style="display:inline-block;width:1050px;height:192px" />
         </div>
       </client-only>
-    </template>
+    </desktop-only>
     <div class="step">
       <div class="step-content container">
         <ul class="step-list">

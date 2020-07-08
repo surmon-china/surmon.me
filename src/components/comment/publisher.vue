@@ -65,13 +65,16 @@
     </transition>
     <div class="postbox">
       <div class="user">
-        <div v-if="!isMobile" class="gravatar">
-          <img
-            :alt="userProfile.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
-            :src="humanizeGravatarUrl(userProfile.gravatar)"
-            draggable="false"
-          >
-        </div>
+        <!-- TODO: 为什么不是 only user 容器 -->
+        <desktop-only>
+          <div class="gravatar">
+            <img
+              :alt="userProfile.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
+              :src="humanizeGravatarUrl(userProfile.gravatar)"
+              draggable="false"
+            >
+          </div>
+        </desktop-only>
       </div>
       <div class="editor">
         <transition name="module">

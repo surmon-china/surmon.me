@@ -1,45 +1,48 @@
 <template>
   <div class="carrousel" :class="{ mobile: isMobile }">
-    <transition name="module" mode="out-in">
-      <su-empty v-if="!articleList.length" key="empty" class="article-su-empty">
-        <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
-      </su-empty>
-      <div
-        v-else
-        key="swiper"
-        class="swiper"
-        v-swiper="swiperOption"
-      >
-        <div class="swiper-wrapper">
-          <div
-            class="swiper-slide"
-            v-for="(_article, index) in articleList.slice(0, 9)"
-            :key="index"
-          >
-            <div class="content">
-              <template v-if="_article.ad">
-                <a
-                  :href="_article.url"
-                  target="_blank"
-                  rel="external nofollow noopener"
-                  class="link"
-                >
-                  <img :src="_article.src" :alt="_article.title">
-                  <span class="title">{{ _article.title }}</span>
-                </a>
-              </template>
-              <template v-else>
-                <router-link :to="`/article/${_article.id}`" class="link">
-                  <img :src="getThumb(_article.thumb)" :alt="_article.title">
-                  <span class="title">{{ _article.title }}</span>
-                </router-link>
-              </template>
+    <placeholder :data="articleList.length">
+      <template #placeholder>
+        <empty class="article-empty">
+          <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
+        </empty>
+      </template>
+      <template #default>
+        <div
+          key="swiper"
+          class="swiper"
+          v-swiper="swiperOption"
+        >
+          <div class="swiper-wrapper">
+            <div
+              class="swiper-slide"
+              v-for="(_article, index) in articleList.slice(0, 9)"
+              :key="index"
+            >
+              <div class="content">
+                <template v-if="_article.ad">
+                  <a
+                    :href="_article.url"
+                    target="_blank"
+                    rel="external nofollow noopener"
+                    class="link"
+                  >
+                    <img :src="_article.src" :alt="_article.title">
+                    <span class="title">{{ _article.title }}</span>
+                  </a>
+                </template>
+                <template v-else>
+                  <router-link :to="`/article/${_article.id}`" class="link">
+                    <img :src="getThumb(_article.thumb)" :alt="_article.title">
+                    <span class="title">{{ _article.title }}</span>
+                  </router-link>
+                </template>
+              </div>
             </div>
           </div>
+          <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets" />
         </div>
-        <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets" />
-      </div>
-    </transition>
+      </template>
+    </placeholder>
   </div>
 </template>
 

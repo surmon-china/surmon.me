@@ -1,8 +1,8 @@
 <template>
   <div class="tag">
-    <su-empty v-if="!tags.length">
+    <empty v-if="!tags.length">
       <i18n :lkey="LANGUAGE_KEYS.TAG_PLACEHOLDER" />
-    </su-empty>
+    </empty>
     <ul v-else class="tag-list">
       <router-link
         tag="li"
@@ -67,7 +67,7 @@
     border-top: $gap solid transparent;
     border-bottom: $gap solid transparent;
 
-    .su-empty {
+    .empty {
       padding-right: $gap;
       padding-bottom: $gap;
     }
