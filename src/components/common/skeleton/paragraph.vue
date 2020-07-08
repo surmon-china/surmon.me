@@ -14,7 +14,7 @@
   import SkeletonLine from './line.vue'
 
   export default defineComponent({
-    name: 'SuSkeletonParagraph',
+    name: 'SkeletonParagraph',
     components: {
       SkeletonLine
     },

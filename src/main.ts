@@ -14,7 +14,7 @@ import { createI18n } from '/@/services/i18n'
 import { createClientOnly } from '/@/services/client-only'
 import { createTheme, Theme } from '/@/services/theme'
 import { getLayoutMiddleware } from '/@/services/layout'
-import enhancer from '/@/services/enhancer'
+import interior from './services/interior'
 import { Language, languages, langMap } from '/@/language/data'
 import { createGlobalState } from './state'
 import App from './app.vue'
@@ -66,7 +66,7 @@ export const createVueApp = (context: ICreaterContext) => {
   app.use(globalState)
   app.use(i18n)
   app.use(theme)
-  app.use(enhancer)
+  app.use(interior)
   app.use(createClientOnly(context.target))
 
   return {
@@ -76,6 +76,6 @@ export const createVueApp = (context: ICreaterContext) => {
     globalState,
     i18n,
     theme,
-    enhancer
+    interior
   }
 }

@@ -9,7 +9,7 @@
   import SkeletonBase from './base.vue'
 
   export default defineComponent({
-    name: 'SuSkeletonLine',
+    name: 'SkeletonLine',
     components: {
       SkeletonBase
     },

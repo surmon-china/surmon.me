@@ -1,69 +1,81 @@
 <template>
-  <transition name="module" mode="out-in">
-    <div v-if="fetching" key="skeleton" class="related">
-      <skeleton-paragraph
-        v-if="isMobile"
-        class="skeleton"
-        :lines="4"
-        line-height="1em"
-      />
-      <ul v-else class="skeleton-list">
-        <skeleton-base
-          v-for="item in 4"
-          :key="item"
-          class="article"
-        />
-      </ul>
-    </div>
-    <div v-else-if="article.related && article.related.length" key="related" class="related">
-      <div
-        v-if="!isMobile"
-        v-swiper:releted="swiperOption"
-        class="article-list swiper"
-      >
-        <div class="swiper-wrapper">
-          <div
-            v-for="(article, index) in relatedArticles"
-            :key="index"
-            class="swiper-slide item"
-          >
-            <router-link
-              class="item-box filter"
-              :to="`/article/${article.id}`"
-              :title="article.title"
-            >
-              <img
-                :src="getRelatedArticleThumb(article.thumb)"
-                :alt="article.title"
-                class="thumb"
-              >
-              <span class="title">
-                <span class="text">{{ article.title }}</span>
-              </span>
-            </router-link>
-          </div>
-        </div>
+  <placeholder :loading="fetching">
+    <template #loading>
+      <div key="skeleton" class="related">
+        <responsive>
+          <template #desktop>
+            <ul class="skeleton-list">
+              <skeleton-base
+                v-for="item in 4"
+                :key="item"
+                class="article"
+              />
+            </ul>
+          </template>
+          <template #mobile>
+            <skeleton-paragraph
+              v-if="isMobile"
+              class="skeleton"
+              :lines="4"
+              line-height="1em"
+            />
+          </template>
+        </responsive>
       </div>
-      <ul v-else class="article-list">
-        <li
-          v-for="(article, index) in relatedArticles"
-          :key="index"
-          class="item"
-        >
-          <router-link
-            class="item-link"
-            :to="`/article/${article.id}`"
-            :title="`「 ${article.title} 」- 继续阅读`"
-          >
-            <span class="sign">《</span>
-            <span class="title">{{ article.title }}</span>
-            <span class="sign">》</span>
-            <small class="tip">- 继续阅读</small>
-          </router-link>
-        </li>
-      </ul>
-    </div>
-  </transition>
+    </template>
+    <template>
+      <div key="related" class="related">
+        <responsive>
+          <template #desktop>
+            <div class="article-list swiper" v-swiper:releted="swiperOption">
+              <div class="swiper-wrapper">
+                <div
+                  v-for="(article, index) in relatedArticles"
+                  :key="index"
+                  class="swiper-slide item"
+                >
+                  <router-link
+                    class="item-box filter"
+                    :to="`/article/${article.id}`"
+                    :title="article.title"
+                  >
+                    <img
+                      :src="getRelatedArticleThumb(article.thumb)"
+                      :alt="article.title"
+                      class="thumb"
+                    >
+                    <span class="title">
+                      <span class="text">{{ article.title }}</span>
+                    </span>
+                  </router-link>
+                </div>
+              </div>
+            </div>
+          </template>
+          <template #mobile>
+            <ul class="article-list">
+              <li
+                v-for="(article, index) in relatedArticles"
+                :key="index"
+                class="item"
+              >
+                <router-link
+                  class="item-link"
+                  :to="`/article/${article.id}`"
+                  :title="`「 ${article.title} 」- 继续阅读`"
+                >
+                  <span class="sign">《</span>
+                  <span class="title">{{ article.title }}</span>
+                  <span class="sign">》</span>
+                  <small class="tip">- 继续阅读</small>
+                </router-link>
+              </li>
+            </ul>
+          </template>
+        </responsive>
+      </div>
+    </template>
+  </placeholder>
 </template>
 
 <script lang="ts">
@@ -72,7 +84,7 @@
   import { useGlobalState } from '/@/state'
 
   export default defineComponent({
-    name: 'CategoryRelated',
+    name: 'ArticleRelated',
     props: {
       fetching: {
         type: Boolean,

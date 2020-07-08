@@ -6,7 +6,9 @@
       dark: isDarkTheme
     }"
   >
-    <div v-if="!isMobile" class="background"></div>
+    <desktop-only>
+      <div class="background"></div>
+    </desktop-only>
     <div class="title">
       <span
         class="icon-box"
@@ -15,46 +17,52 @@
         <i class="iconfont icon-windmill" />
       </span>
     </div>
-    <transition name="module" mode="out-in">
-      <su-empty v-if="!announcement.data.length" key="empty" class="announcement-su-empty">
-        <i18n :lkey="LANGUAGE_KEYS.ANNOUNCEMENT_PLACEHOLDER" />
-      </su-empty>
-      <div v-else key="swiper" class="swiper-box">
-        <div
-          class="swiper"
-          v-swiper="swiperOption"
-          @ready="updateSwiperContext"
-          @transition-start="handleSwiperTransitionStart"
-        >
-          <div class="swiper-wrapper">
+    <placeholder :data="announcement.data.length">
+      <template #placeholder>
+        <empty class="announcement-empty">
+          <i18n :lkey="LANGUAGE_KEYS.ANNOUNCEMENT_PLACEHOLDER" />
+        </empty>
+      </template>
+      <template #default>
+        <div key="swiper" class="swiper-box">
+          <div
+            class="swiper"
+            v-swiper="swiperOption"
+            @ready="updateSwiperContext"
+            @transition-start="handleSwiperTransitionStart"
+          >
+            <div class="swiper-wrapper">
+              <div
+                v-for="(ann, index) in announcement.data"
+                :key="index"
+                class="swiper-slide"
+              >
+                <div class="content" v-html="parseContent(ann.content)" />
+                <desktop-only>
+                  <div class="date">~ {{ humanlizeDate(ann.create_at) }}</div>
+                </desktop-only>
+              </div>
+            </div>
+          </div>
+          <div class="navigation">
             <div
-              v-for="(ann, index) in announcement.data"
-              :key="index"
-              class="swiper-slide"
+              class="button prev"
+              :class="{ disabled: activeIndex === 0 }"
+              @click="prevSlide"
             >
-              <div class="content" v-html="parseContent(ann.content)" />
-              <div v-if="!isMobile" class="date">~ {{ humanlizeDate(ann.create_at) }}</div>
+              <i class="iconfont icon-announcement-prev" />
+            </div>
+            <div
+              class="button next"
+              :class="{ disabled: activeIndex === announcement.data.length - 1 }"
+              @click="nextSlide"
+            >
+              <i class="iconfont icon-announcement-next" />
             </div>
           </div>
         </div>
-        <div class="navigation">
-          <div
-            class="button prev"
-            :class="{ disabled: activeIndex === 0 }"
-            @click="prevSlide"
-          >
-            <i class="iconfont icon-announcement-prev" />
-          </div>
-          <div
-            class="button next"
-            :class="{ disabled: activeIndex === announcement.data.length - 1 }"
-            @click="nextSlide"
-          >
-            <i class="iconfont icon-announcement-next" />
-          </div>
-        </div>
-      </div>
-    </transition>
+      </template>
+    </placeholder>
   </div>
 </template>
 
@@ -67,7 +75,6 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { useGlobalState } from '/@/state'
   import { timeAgo } from '/@/transforms/moment'
-  import * as APP_CONFIG from '/@/config/app.config'
 
   export default defineComponent({
     name: 'ArchiveAnnouncement',
@@ -160,7 +167,7 @@
       }
     }
 
-    .announcement-su-empty {
+    .announcement-empty {
       min-height: auto;
     }
 

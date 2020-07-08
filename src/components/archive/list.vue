@@ -25,9 +25,9 @@
             @click="handleArticleClick(articleItem)"
           />
         </transition-group>
-        <su-empty v-else key="empty" class="article-su-empty">
+        <empty v-else key="empty" class="article-empty">
           <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
-        </su-empty>
+        </empty>
       </transition>
     </div>
 
@@ -164,7 +164,7 @@
       min-height: $lg-gap;
       overflow: hidden;
 
-      > .article-su-empty {
+      > .article-empty {
         color: $text-disabled;
         @include module-blur-bg();
       }

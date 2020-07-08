@@ -1,23 +1,25 @@
 <template>
   <li
     :key="comment.id"
-    :id="`comment-item-${comment.id}`"
+    :id="getCommentElementId(comment.id)"
     class="comment-item"
   >
-    <div v-if="!isMobile" class="cm-avatar">
-      <a
-        target="_blank"
-        rel="external nofollow noopener"
-        :href="comment.author.site"
-        @click.stop="handleClickUser($event, comment.author)"
-      >
-        <img
-          :alt="comment.author.name || $i18n.text.comment.anonymous"
-          :src="humanizeGravatarUrl(getGravatarUrlByEmail(comment.author.email))"
-          draggable="false"
+    <desktop-only>
+      <div class="cm-avatar">
+        <a
+          target="_blank"
+          rel="external nofollow noopener"
+          :href="comment.author.site"
+          @click.stop="handleClickUser($event, comment.author)"
         >
-      </a>
-    </div>
+          <img
+            :alt="comment.author.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
+            :src="humanizeGravatarUrl(getGravatarUrlByEmail(comment.author.email))"
+            draggable="false"
+          >
+        </a>
+      </div>
+    </desktop-only>
     <div class="cm-body">
       <div class="cm-header">
         <a
@@ -30,43 +32,45 @@
           {{ firstUpperCase(comment.author.name) }}
         </a>
         <comment-ua v-if="comment.agent" :ua="comment.agent" />
-        <span v-if="comment.ip_location && !isMobile" class="location">
-          <span>{{ comment.ip_location.country }}</span>
-          <span v-if="comment.ip_location.country && comment.ip_location.city">&nbsp;-&nbsp;</span>
-          <span>{{ comment.ip_location.city }}</span>
-        </span>
+        <desktop-only>
+          <span v-if="comment.ip_location" class="location">
+            <span>{{ comment.ip_location.country }}</span>
+            <span v-if="comment.ip_location.country && comment.ip_location.city">&nbsp;-&nbsp;</span>
+            <span>{{ comment.ip_location.city }}</span>
+          </span>
+        </desktop-only>
         <span class="flool">#{{ comment.id }}</span>
       </div>
       <div class="cm-content">
         <p v-if="!!comment.pid" class="reply">
-          <span v-text="$i18n.text.comment.reply">回复</span>
+          <span v-i18n="LANGUAGE_KEYS.COMMENT_REPLY" />
           <span>&nbsp;</span>
-          <a href @click.stop.prevent="toSomeAnchorById(`comment-item-${comment.pid}`)">
+          <button @click="scrollToCommentItem(comment.pid)">
             <span>#{{ comment.pid }}&nbsp;</span>
             <strong v-if="findReplyParent(comment.pid)">@{{ findReplyParent(comment.pid) }}</strong>
-          </a>
+          </button>
           <span>：</span>
         </p>
-        <div v-html="markedPaese(comment.content)"></div>
+        <div v-html="markedParse(comment.content)"></div>
       </div>
       <div class="cm-footer">
-        <span class="create_at">{{ comment.create_at | timeAgo(language) }}</span>
-        <a href class="reply" @click.stop.prevent="replyComment(comment)">
+        <span class="create_at">{{ humanlizeDate(comment.create_at) }}</span>
+        <button class="reply" @click="replyComment(comment)">
           <i class="iconfont icon-reply" />
-          <span v-text="$i18n.text.comment.reply">回复</span>
-        </a>
-        <a
-          href
+          <span v-i18n="LANGUAGE_KEYS.COMMENT_REPLY" />
+        </button>
+        <button
           class="like"
           :class="{
             liked: liked,
             actived: !!comment.likes
           }"
-          @click.stop.prevent="likeComment(comment)"
+          @click="likeComment(comment)"
         >
           <i class="iconfont icon-zan" />
-          <span>{{ $i18n.text.comment.ding }} ({{ comment.likes }})</span>
-        </a>
+          <span v-text="LANGUAGE_KEYS.COMMENT_LIKE" />
+          <span>({{ comment.likes }})</span>
+        </button>
       </div>
     </div>
   </li>
@@ -78,9 +82,10 @@
   import { useEnhancer } from '/@/enhancer'
   import marked from '/@/services/marked'
   import { getFileCDNUrl } from '/@/transforms/url'
+  import { timeAgo } from '/@/transforms/moment'
   import { firstUpperCase } from '/@/transforms/text'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { getGravatarUrlByEmail, humanizeGravatarUrl } from '../helper'
+  import { getGravatarUrlByEmail, humanizeGravatarUrl, getCommentElementId } from '../helper'
   import CommentUa from './ua.vue'
 
   export default defineComponent({
@@ -89,6 +94,10 @@
       CommentUa,
     },
     props: {
+      comment: {
+        type: Object,
+        required: true
+      },
       liked: {
         type: Boolean,
         default: false
@@ -103,7 +112,7 @@
         }
       }
 
-      const markedPaese = (markdown: string) => {
+      const markedParse = (markdown: string) => {
         return marked(markdown, null, false)
       }
 
@@ -116,11 +125,23 @@
         return parent ? parent.author.name : null
       }
 
+      const humanlizeDate = (date: string) => {
+        return timeAgo(date, i18n.language.value as any)
+      }
+
       const likeComment = (commentId: number) => {
         context.emit('like', commentId)
       }
 
+      const scrollToCommentItem = (commengId) => {
+
+      }
+
       return {
+        t: i18n.t,
+        LANGUAGE_KEYS,
+        humanlizeDate,
+        getCommentElementId,
         firstUpperCase
       }
     }

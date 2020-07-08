@@ -1,52 +1,56 @@
 <template>
-  <transition name="module" mode="out-in">
-    <div v-if="fetching" key="skeleton" class="topbar">
-      <div class="total-skeleton">
-        <skeleton-line class="count-skeleton" />
-        <skeleton-line class="like-skeleton" />
-      </div>
-      <div class="sort-skeleton">
-        <skeleton-line />
-      </div>
-    </div>
-    <div v-else key="topbar" class="topbar">
-      <div class="total">
-        <div class="count">
-          <strong class="count">{{ total || 0 }}</strong>
-          <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIST_COUNT" />
+  <placeholder :loading="fetching">
+    <template #loading>
+      <div class="topbar">
+        <div class="total-skeleton">
+          <skeleton-line class="count-skeleton" />
+          <skeleton-line class="like-skeleton" />
         </div>
-        <span
-          class="like"
-          :class="{ liked: _isPageLiked }"
-          @click="handleLikePage"
-        >
-          <i class="iconfont icon-like" />
-          <strong class="count">{{ likes || 0 }}</strong>
-          <template v-if="isZhLang && isMobile">赞</template>
-          <template v-else>
-            <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIKE" />
-          </template>
-        </span>
-        <span class="sponsor" @click="handleSponsor">
-          <i class="iconfont icon-hao" />
-        </span>
+        <div class="sort-skeleton">
+          <skeleton-line />
+        </div>
       </div>
-      <div class="sort">
-        <span
-          class="sort-btn"
-          :class="{ actived: sort === SortType.Desc }"
-          @click="handleSortList(SortType.Desc)"
-          v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_NEW"
-        />
-        <span
-          class="sort-btn"
-          :class="{ actived: sort === SortType.Hot }"
-          @click.stop.prevent="handleSortList(SortType.Hot)"
-          v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_HOT"
-        />
+    </template>
+    <template #default>
+      <div class="topbar">
+        <div class="total">
+          <div class="count">
+            <strong class="count">{{ total || 0 }}</strong>
+            <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIST_COUNT" />
+          </div>
+          <span
+            class="like"
+            :class="{ liked: _isPageLiked }"
+            @click="handleLikePage"
+          >
+            <i class="iconfont icon-like" />
+            <strong class="count">{{ likes || 0 }}</strong>
+            <template v-if="isZhLang && isMobile">赞</template>
+            <template v-else>
+              <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIKE" />
+            </template>
+          </span>
+          <span class="sponsor" @click="handleSponsor">
+            <i class="iconfont icon-hao" />
+          </span>
+        </div>
+        <div class="sort">
+          <span
+            class="sort-btn"
+            :class="{ actived: sort === SortType.Desc }"
+            @click="handleSortList(SortType.Desc)"
+            v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_NEW"
+          />
+          <span
+            class="sort-btn"
+            :class="{ actived: sort === SortType.Hot }"
+            @click.stop.prevent="handleSortList(SortType.Hot)"
+            v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_HOT"
+          />
+        </div>
       </div>
-    </div>
-  </transition>
+    </template>
+  </placeholder>
 </template>
 
 <script lang="ts">
