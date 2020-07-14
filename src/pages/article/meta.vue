@@ -13,65 +13,50 @@
       <div class="metas">
         <p class="item">
           <i18n>
-            <template #en>
-              <span>Article created at</span>
-              <span>&nbsp;</span>
-              <router-link
-                :title="getDateTitle(article.create_at)"
-                :to="getDateLink(article.create_at)"
-              >
-                <span>{{ getDateTitle(article.create_at) }}</span>
-              </router-link>
-              <span>&nbsp;in category&nbsp;</span>
-              <router-link
-                v-for="(category, index) in article.category"
-                :key="index"
-                :to="`/category/${category.slug}`"
-                :title="category.description || category.name"
-              >
-                <span>{{ category.slug }}</span>
-                <span v-if="article.category.length && article.category[index + 1]">、</span>
-              </router-link>
-              <span v-if="!article.category.length">no catgory</span>
-              <span>,&nbsp;&nbsp;</span>
-              <span>{{ article.meta.views || 0 }}</span>
-              <span>&nbsp;Views</span>
-            </template>
-            <template #zh>
-              <span>本文于</span>
-              <span>&nbsp;</span>
-              <router-link :title="getDateTitle(article.create_at)" :to="getDateLink(article.create_at)">
-                <span>{{ getDateTitle(article.create_at) }}</span>
-              </router-link>
-              <span>&nbsp;发布在&nbsp;</span>
-              <span v-for="(category, index) in article.category" :key="index">
-                <router-link
-                  :to="`/category/${category.slug}`"
-                  :title="category.description || category.name"
-                >
-                  <i18n :zh="category.name" :en="category.slug" />
-                </router-link>
-                <span v-if="article.category.length && article.category[index + 1]">、</span>
-              </span>
-              <span v-if="!article.category.length">未知</span>
-              <span>&nbsp;分类下，当前已被围观&nbsp;</span>
-              <span>{{ article.meta.views || 0 }}</span>
-              <span>&nbsp;次</span>
-            </template>
+            <template #zh>本文于 </template>
+            <template #en>Article created at </template>
+          </i18n>
+          <router-link
+            :title="getDateTitle(article.create_at)"
+            :to="getDateLink(article.create_at)"
+          >
+            <span>{{ getDateTitle(article.create_at) }}</span>
+          </router-link>
+          <i18n>
+            <template #zh> 发布在 </template>
+            <template #en> in category </template>
+          </i18n>
+          <span v-for="(category, index) in article.category" :key="index">
+            <router-link
+              :to="getCategoryArchiveRoute(category.slug)"
+              :title="category.description || category.name"
+            >
+              <i18n :zh="category.name" :en="category.slug" />
+            </router-link>
+            <span v-if="article.category[index + 1]">
+              <i18n zn="、" en="," />
+            </span>
+          </span>
+          <span v-if="!article.category.length">
+            <i18n zh="未知分类下，" en="(no catgory)," />
+          </span>
+          <i18n>
+            <template #zh>当前已被围观 {{ article.meta.views }}次</template>
+            <template #zh>{{ article.meta.views }} views.</template>
           </i18n>
         </p>
         <p class="item">
           <i18n>
             <template #zh>
-              <span class="title en">Related tags:</span>
-            </template>
-            <template #zh>
               <span class="title zh">相关标签：</span>
+            </template>
+            <template #en>
+              <span class="title en">Related tags:</span>
             </template>
           </i18n>
           <placeholder :data="article.tag.length">
             <template #placeholder>
-              <span v-i18n="$i18n.text.tag.empty"></span>
+              <span v-i18n="LANGUAGE_KEYS.TAG_PLACEHOLDER"></span>
             </template>
             <template #default>
               <span v-for="(tag, index) in article.tag" :key="index">
@@ -81,7 +66,7 @@
                 >
                   <i18n :zh="tag.name" :en="tag.slug" />
                 </router-link>
-                <span v-if="article.tag.length && article.tag[index + 1]">
+                <span v-if="article.tag[index + 1]">
                   <i18n zn="、" en="," />
                 </span>
               </span>
@@ -106,13 +91,11 @@
           <i18n>
             <template #zh>
               <span class="title zh">版权声明：</span>
-              <span>自由转载-署名-非商业性使用</span>
-              <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
               <a
                 target="_blank"
                 rel="external nofollow noopenter"
                 href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
-              >署名 - 非商业性使用</a>
+              >自由转载 - 署名 - 非商业性使用</a>
             </template>
             <template #en>
               <span class="title en">Copyright clarify:</span>
@@ -131,9 +114,11 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
   import { useEnhancer } from '/@/enhancer'
+  import { Language } from '/@/language/data'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import { copy } from '/@/utils/clipboard'
+  import { humanizeYMD, dateToYMD } from '/@/transforms/moment'
   import { getPageUrl } from '/@/transforms/url'
   import {
     getArticleDetailRoute,
@@ -155,10 +140,18 @@
       }
     },
     setup(props) {
-      const { isMobile, globalState } = useEnhancer()
+      const { i18n, isMobile, globalState } = useEnhancer()
       const articleUrl = computed(
         () => getPageUrl(getArticleDetailRoute(props.article.id))
       )
+
+      const getDateTitle = (date: string) => {
+        return humanizeYMD(date, i18n.language.value as Language)
+      }
+
+      const getDateLink = (date: string) => {
+        return getDateArchiveRoute(dateToYMD(new Date(date)))
+      }
 
       const copyArticleUrl = () => {
         if (articleUrl.value) {
@@ -166,41 +159,15 @@
         }
       }
 
-      const getDateTitle = (date) => {
-        if (!date) {
-          return date
-        }
-
-        date = new Date(date)
-        const am = this.isEnLang ? 'AM' : '上午'
-        const pm = this.isEnLang ? 'PM' : '下午'
-        const year = date.getFullYear()
-        const month = date.getMonth() + 1
-        const day = date.getDate()
-        const meridiem = date.getHours() > 11 ? pm : am
-        return `${year}/${month}/${day} ${meridiem}`
-      }
-
-      const getDateLink = (date) => {
-        if (!date) {
-          return date
-        }
-        date = new Date(date)
-        const year = date.getFullYear()
-        let month = (date.getMonth() + 1).toString()
-        let day = date.getDate().toString()
-        month = month.length === 1 ? `0${month}` : month
-        day = day.length === 1 ? `0${day}` : day
-        return `/date/${year}-${month}-${day}`
-      }
-
       return {
+        LANGUAGE_KEYS,
         isMobile,
         articleUrl,
         copyArticleUrl,
         getDateTitle,
         getDateLink,
-        getTagArchiveRoute
+        getTagArchiveRoute,
+        getCategoryArchiveRoute
       }
     }
   })

@@ -1,28 +1,30 @@
 <template>
   <div class="share">
-    <transition name="module" mode="out-in">
-      <div v-if="fetching" key="skeleton" class="skeleton">
-        <skeleton-base
-          v-for="item in (isMobile ? 3 : 10)"
-          :key="item"
-          :style="{
-            width: `calc((100% - (1em * ${isMobile ? 2 : 9})) / ${isMobile ? 3 : 10})`
-          }"
-          :radius="0"
-        />
-      </div>
-      <share-box v-else key="share" :class="{ mobile: isMobile }" />
-    </transition>
+    <placeholder :loading="fetching">
+      <template #loading>
+        <div class="skeleton">
+          <skeleton-base
+            v-for="item in skeletonCount"
+            :key="item"
+            :radius="0"
+            :style="{
+              width: `calc((100% - (1em * ${skeletonCount - 1})) / ${skeletonCount})`
+            }"
+          />
+        </div>
+      </template>
+      <template #default>
+        <share-box :class="{ mobile: isMobile }" />
+      </template>
+    </placeholder>
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
-  import { useGlobalState } from '/@/state'
-
+  import { useEnhancer } from '/@/enhancer'
   export default defineComponent({
-    name: 'CategoryShare',
+    name: 'ArticleShare',
     props: {
       fetching: {
         type: Boolean,
@@ -30,26 +32,17 @@
       }
     },
     setup() {
-      const globalState = useGlobalState()
+      const { isMobile } = useEnhancer()
+      const skeletonCount = isMobile.value ? 3 : 10
       return {
-        isMobile: globalState.userAgent.isMobile
+        isMobile,
+        skeletonCount
       }
     }
   })
 </script>
 
-<style lang="scss">
-  // workaround css scoped
-  .article-page {
-    .share-box {
-      .share-ejector {
-        background-color: $body-bg;
-      } 
-    }
-  }
-</style>
-
-<style lang="scss">
+<style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
   .share {

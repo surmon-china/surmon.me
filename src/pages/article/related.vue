@@ -1,20 +1,19 @@
 <template>
   <placeholder :loading="fetching">
     <template #loading>
-      <div key="skeleton" class="related">
+      <div class="related">
         <responsive>
           <template #desktop>
             <ul class="skeleton-list">
               <skeleton-base
+                class="article"
                 v-for="item in 4"
                 :key="item"
-                class="article"
               />
             </ul>
           </template>
           <template #mobile>
             <skeleton-paragraph
-              v-if="isMobile"
               class="skeleton"
               :lines="4"
               line-height="1em"
@@ -24,7 +23,7 @@
       </div>
     </template>
     <template>
-      <div key="related" class="related">
+      <div class="related">
         <responsive>
           <template #desktop>
             <div class="article-list swiper" v-swiper:releted="swiperOption">
