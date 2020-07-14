@@ -11,9 +11,11 @@
 
     <!-- list -->
     <div class="article-list">
-      <transition name="module" mode="out-in">
+      <placeholder
+        :data="article.data.data.length"
+        :p-i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"
+      >
         <transition-group
-          v-if="article.data.data && article.data.data.length"
           key="list"
           name="fade"
           tag="div"
@@ -25,10 +27,7 @@
             @click="handleArticleClick(articleItem)"
           />
         </transition-group>
-        <empty v-else key="empty" class="article-empty">
-          <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
-        </empty>
-      </transition>
+      </placeholder>
     </div>
 
     <!-- loadmore -->

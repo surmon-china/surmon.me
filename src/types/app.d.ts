@@ -10,6 +10,7 @@ declare module 'vue/types/vue' {
 
 declare global {
   interface Window {
+    luanchEmojiRain(options: any): void
     // lozad: lozad.Selector
   }
 }

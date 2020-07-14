@@ -3,6 +3,21 @@ import { getFileCDNUrl } from '/@/transforms/url'
 import { getGravatarByEmail } from '/@/transforms/thumbnail'
 import { scrollTo } from '/@/utils/scroller'
 
+export enum CommentEvent {
+  Reply = 'reply',
+  Like = 'like',
+  Sort = 'sort',
+  Page = 'page',
+  SyncProfile = 'update:profile',
+  SaveProfile = 'save-profile',
+  EditProfile = 'edit-profile',
+  ClearProfile = 'clear-profile',
+  CancelProfile = 'cancel-profile',
+  // pen
+  TogglePreview = 'toggle-preview',
+  Submit = 'submit'
+}
+
 export const getCommentElementId = (commentId: string | number): string => {
   return `comment-item-${commentId}`
 }

@@ -106,7 +106,7 @@
   import { firstUpperCase } from '/@/transforms/text'
   import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { getCommentElementId, humanizeGravatarUrl } from './helper'
+  import { CommentEvent, getCommentElementId, humanizeGravatarUrl, scrollToElementAnchor } from './helper'
 
   export default defineComponent({
     name: 'CommentPublisher',
@@ -135,7 +135,7 @@
           return props.profile
         },
         set(newProfile) {
-          context.emit('update:profile', newProfile)
+          context.emit(CommentEvent.SyncProfile, newProfile)
         }
       })
 
@@ -159,27 +159,27 @@
         if (props.profile.site && !urlRegex.test(props.profile.site)) {
           return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_URL))
         }
-        context.emit('save-profile')
+        context.emit(CommentEvent.SaveProfile)
       }
 
       const editUserProfile = () => {
         if (!props.editing) {
-          context.emit('edit-profile')
+          context.emit(CommentEvent.EditProfile)
         }
       }
 
       const clearUserProfile = () => {
         if (props.cached) {
-          context.emit('clear-profile')
+          context.emit(CommentEvent.ClearProfile)
         }
       }
 
       const cancelCommentReply = () => {
-        context.emit('cancel-reply')
+        context.emit(CommentEvent.CancelProfile)
       }
 
       const scrollToComment = (commentId: number) => {
-        context.emit('to-comment', getCommentElementId(commentId))
+        scrollToElementAnchor(getCommentElementId(commentId))
       }
 
       return {

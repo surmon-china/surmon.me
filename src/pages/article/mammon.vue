@@ -1,26 +1,29 @@
 <template>
   <div class="mammon">
-    <transition name="module" mode="out-in">
-      <skeleton-paragraph
-        v-if="fetching"
-        key="skeleton"
-        class="skeleton"
-        line-height="1em"
-        :lines="4"
-      />
-      <adsense-responsive
-        v-else
-        key="adsense"
-        ins-class="mammon-ins"
-      />
-    </transition>
+    <placeholder :loading="fetching">
+      <template #loading>
+        <skeleton-paragraph
+          v-if="fetching"
+          key="skeleton"
+          class="skeleton"
+          line-height="1em"
+          :lines="4"
+        />
+      </template>
+      <template #default>
+        <adsense-responsive
+          key="adsense"
+          ins-class="mammon-ins"
+        />
+      </template>
+    </placeholder>
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue'
   export default defineComponent({
-    name: 'CategoryMammon',
+    name: 'ArticleMammon',
     props: {
       fetching: {
         type: Boolean,
@@ -30,7 +33,7 @@
   })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
   .mammon {

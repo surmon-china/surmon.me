@@ -127,11 +127,11 @@ export const actions: ActionTree<CommentState, IRootState> = {
   },
 
   // 喜欢评论
-  [CommentModuleActions.PostCommentLike]({ commit }, comment) {
+  [CommentModuleActions.PostCommentLike]({ commit }, commentId) {
     return http
-      .patch(LIKE_COMMENT_API_PATH, { comment_id: comment.id })
+      .patch(LIKE_COMMENT_API_PATH, { comment_id: commentId })
       .then(response => {
-        commit(CommentModuleListMutations.IncrementCommentLikes, comment.id)
+        commit(CommentModuleListMutations.IncrementCommentLikes, commentId)
         return response
       })
   }

@@ -1,24 +1,26 @@
 <template>
   <div class="tag">
-    <empty v-if="!tags.length">
-      <i18n :lkey="LANGUAGE_KEYS.TAG_PLACEHOLDER" />
-    </empty>
-    <ul v-else class="tag-list">
-      <router-link
-        tag="li"
-        class="item"
-        :title="tag.description"
-        :to="getTagArchiveRoute(tag.slug)"
-        :key="index"
-        v-for="(tag, index) in tags"
-      >
-        <i class="iconfont" :class="getTagIcon(tag)" />
-        <span class="name">
-          <i18n :zh="tag.name" :en="tag.slug" />
-          <span class="count">({{ tag.count || 0 }})</span>
-        </span>
-      </router-link>
-    </ul>
+    <placeholder
+      :data="tags.length"
+      :p-i18n-key="LANGUAGE_KEYS.TAG_PLACEHOLDER"
+    >
+      <ul class="tag-list">
+        <router-link
+          tag="li"
+          class="item"
+          :title="tag.description"
+          :to="getTagArchiveRoute(tag.slug)"
+          :key="index"
+          v-for="(tag, index) in tags"
+        >
+          <i class="iconfont" :class="getTagIcon(tag)" />
+          <span class="name">
+            <i18n :zh="tag.name" :en="tag.slug" />
+            <span class="count">({{ tag.count || 0 }})</span>
+          </span>
+        </router-link>
+      </ul>
+    </placeholder>
   </div>
 </template>
 

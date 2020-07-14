@@ -1,5 +1,6 @@
-import { defineComponent, h, Transition } from 'vue'
-import Empty from './empty.vue'
+import { defineComponent, h, Transition, PropType } from 'vue'
+import { LANGUAGE_KEYS } from '/@/language/key'
+import Empty from './empty'
 import Spin from './spin.vue'
 
 /**
@@ -20,20 +21,22 @@ export default defineComponent({
   name: 'Placeholder',
   props: {
     placeholder: String,
+    pI18nKey: String as PropType<LANGUAGE_KEYS>,
     loading: Boolean,
+    transition: Boolean,
     data: [Array, Object as any]
   },
   setup(props, context) {
     return () => {
-      const { data, placeholder, loading } = props
+      const { data, placeholder, pI18nKey, loading, transition } = props
       const isEmptyData = data !== undefined && (
         (Array.isArray(data) && !data.length) ||
         !data
       )
 
       const getPlaceholderView = () => {
-        return placeholder
-          ? h(Empty, { placeholder })
+        return (placeholder || pI18nKey)
+          ? h(Empty, { placeholder, i18nKey: pI18nKey })
           : context.slots.placeholder?.()
       }
 
@@ -50,19 +53,27 @@ export default defineComponent({
         )
       }
 
-      return h(
-        Transition,
-        {
-          name: 'module',
-          mode: 'out-in',
-          onAfterEnter(...args) {
-            context.emit('after-enter', ...args)
-          }
-        },
-        loading
+      const getView = () => {
+        return loading
           ? getLoadingView()
           : getDataView()
-      )
+      }
+
+      if (transition) {
+        return h(
+          Transition,
+          {
+            name: 'module',
+            mode: 'out-in',
+            onAfterEnter(...args) {
+              context.emit('after-enter', ...args)
+            }
+          },
+          getView()
+        )
+      }
+
+      return getView()
     }
   }
 })

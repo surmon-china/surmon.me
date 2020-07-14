@@ -132,15 +132,14 @@
                 >
                   <i class="iconfont icon-zhihu" />
                 </a>
-                <a
-                  v-if="false"
+                <!-- <a
                   href="https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w"
                   target="_blank"
                   class="item youtube"
                   rel="external nofollow noopenter"
                 >
                   <i class="iconfont icon-youtube" />
-                </a>
+                </a> -->
                 <a
                   href="https://space.bilibili.com/27940710"
                   target="_blank"

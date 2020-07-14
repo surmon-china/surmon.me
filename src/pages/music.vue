@@ -38,13 +38,21 @@
               class="toggle-btn"
               @click="player.togglePlay"
             >
-              <i v-if="player.state.playing" class="iconfont icon-music-pause"></i>
-              <i v-else class="iconfont icon-music-play"></i>
+              <i
+                class="iconfont"
+                :class="player.state.playing
+                  ? 'icon-music-pause'
+                  : 'icon-music-play'"
+              ></i>
             </button>
           </transition>
         </div>
         <div class="toggle-muted">
-          <button class="muted-btn" :disabled="!player.state.ready" @click="player.toggleMuted">
+          <button
+            class="muted-btn"
+            :disabled="!player.state.ready"
+            @click="player.toggleMuted"
+          >
             <i
               class="iconfont"
               :class="player.state.muted ? 'icon-music-muted' : 'icon-music-volume'"

@@ -89,12 +89,15 @@
   import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
 
   export default defineComponent({
-    name: 'ArticleDetailContent',
+    name: 'ArticleContent',
     props: {
-      article: Object,
+      article: {
+        type: Object,
+        required: true
+      },
       fetching: {
         type: Boolean,
-        default: false
+        required: true
       }
     },
     setup(props, context) {

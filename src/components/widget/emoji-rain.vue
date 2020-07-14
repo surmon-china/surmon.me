@@ -9,12 +9,6 @@
   import Emoji233333 from 'emoji-233333'
   import { getFileCDNUrl } from '/@/transforms/url'
 
-  declare global {
-    interface Window {
-      luanchEmojiRain(options: any): void
-    }
-  }
-
   export default defineComponent({
     name: 'EmojiRain',
     setup() {
