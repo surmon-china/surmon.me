@@ -3,65 +3,88 @@
     <div class="sitemap">
       <div class="module articles">
         <h4 class="title" v-text="$i18n.text.article.name"></h4>
-        <p v-if="!articles.length" v-text="$i18n.text.article.empty"></p>
-        <ul v-else class="article-list">
-          <li v-for="(article, index) in articles" :key="index" class="item">
-            <p class="item-content">
-              <a class="link" :href="`/article/${article.id}`" target="_blank" :title="article.title">
-                <span class="sign">「</span>
-                <span class="title">{{ article.title }}</span>
-                <span class="sign">」</span>
-              </a>
-              <span class="sign">&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-              <small>
-                <a
-                  href
-                  class="toggle-link"
-                  @click.prevent="$store.commit('sitemap/updateArticleOpenState', index)"
-                  v-text="$i18n.text.action[article.open ? 'close' : 'open']"
-                ></a>
-              </small>
-            </p>
-            <transition name="module">
-              <p v-show="article.open" class="item-description">
-                <span v-html="article.description || $i18n.text.article.empty"></span>
-              </p>
-            </transition>
-          </li>
-        </ul>
+        <!-- TODO: 按照日期分类 -->
+        <placeholder :data="articles.length">
+          <template #placeholder>
+            <p v-text="$i18n.text.article.empty"></p>
+          </template>
+          <template #default>
+            <ul class="article-list">
+              <li v-for="(article, index) in articles" :key="index" class="item">
+                <p class="item-content">
+                  <a class="link" :href="`/article/${article.id}`" target="_blank" :title="article.title">
+                    <span class="sign">「</span>
+                    <span class="title">{{ article.title }}</span>
+                    <span class="sign">」</span>
+                  </a>
+                  <span class="sign">&nbsp;&nbsp;-&nbsp;&nbsp;</span>
+                  <small>
+                    <a
+                      href
+                      class="toggle-link"
+                      @click.prevent="$store.commit('sitemap/updateArticleOpenState', index)"
+                      v-text="$i18n.text.action[article.open ? 'close' : 'open']"
+                    ></a>
+                  </small>
+                </p>
+                <transition name="module">
+                  <p v-show="article.open" class="item-description">
+                    <span v-html="article.description || $i18n.text.article.empty"></span>
+                  </p>
+                </transition>
+              </li>
+            </ul>
+          </template>
+        </placeholder>
       </div>
       <div class="module categories">
         <h4 class="title" v-text="$i18n.text.category.name"></h4>
-        <p v-if="!categories.length" v-text="$i18n.text.article.empty"></p>
-        <ul v-else class="categories-list">
-          <li v-for="(category, index) in categories" :key="index" class="item">
-            <p class="item-content">
-              <a
-                class="name"
-                target="_blank"
-                :href="`/category/${category.slug}`"
-                :title="category.name"
-              >{{ isEnLang ? category.slug : category.name }}</a>
-              <span>（{{ category.count || 0 }}）</span>
-              <span>&nbsp;-&nbsp;</span>
-              <span>{{ category.description }}</span>
-            </p>
-          </li>
-        </ul>
+        <placeholder :data="categories.length">
+          <template #placeholder>
+            <p v-text="$i18n.text.article.empty"></p>
+          </template>
+          <template #default>
+            <ul class="categories-list">
+              <li v-for="(category, index) in categories" :key="index" class="item">
+                <p class="item-content">
+                  <a
+                    class="name"
+                    target="_blank"
+                    :href="`/category/${category.slug}`"
+                    :title="category.name"
+                  >
+                    <i18n :zh="category.name" :en="category.slug" />
+                  </a>
+                  <span>（{{ category.count || 0 }}）</span>
+                  <span>&nbsp;-&nbsp;</span>
+                  <span>{{ category.description }}</span>
+                </p>
+              </li>
+            </ul>
+          </template>
+        </placeholder>
       </div>
       <div class="module tags">
         <h4 class="title" v-text="$i18n.text.tag.name"></h4>
-        <p v-if="!tags.length" v-text="$i18n.text.article.empty"></p>
-        <ul v-else class="tag-list">
-          <li v-for="(tag, index) in tags" :key="index" class="item">
-            <a
-              target="_blank"
-              :href="`/tag/${tag.slug}`"
-              :title="tag.description"
-            >{{ isEnLang ? tag.slug : tag.name }}</a>
-            <span>（{{ tag.count || 0 }}）</span>
-          </li>
-        </ul>
+        <placeholder :data="tags.length">
+          <template #placeholder>
+            <p v-text="$i18n.text.article.empty"></p>
+          </template>
+          <template #default>
+            <ul vclass="tag-list">
+              <li v-for="(tag, index) in tags" :key="index" class="item">
+                <a
+                  target="_blank"
+                  :href="`/tag/${tag.slug}`"
+                  :title="tag.description"
+                >
+                  <i18n :zh="tag.name" :en="tag.slug" />
+                </a>
+                <span>（{{ tag.count || 0 }}）</span>
+              </li>
+            </ul>
+          </template>
+        </placeholder>
       </div>
       <div class="module pages">
         <h4 class="title" v-text="$i18n.text.page.name"></h4>

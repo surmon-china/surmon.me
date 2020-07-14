@@ -20,8 +20,8 @@ export const getDateArchiveRoute = (date: string) => {
   return `/date/${date}`
 }
 
-export const getArticleDetailRoute = (articleID: string | number) => {
-  return `/article/${articleID}`
+export const getArticleDetailRoute = (articleId: string | number) => {
+  return `/article/${articleId}`
 }
 
 export const isArticleDetail = (name: RouteRecordName) => name === RouteName.Article

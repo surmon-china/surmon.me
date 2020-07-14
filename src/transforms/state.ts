@@ -25,26 +25,22 @@ export const getCommentsLike = (): number[] => {
   return getUserLikeHistory()?.comments || []
 }
 
+export const setPagesLike = (pages: number[] = []) => {
+  const json = getUserLikeHistory() || {}
+  json.pages = pages
+  setJSON(USER_LIKE_HISTORY, json)
+}
+
+export const setCommentsLike = (comments: number[] = []) => {
+  const json = getUserLikeHistory() || {}
+  json.comments = comments
+  setJSON(USER_LIKE_HISTORY, json)
+}
+
 export const isPageLiked = (postId: number) => {
   return getPagesLike().includes(postId)
 }
 
 export const isCommentLiked = (commentId: number) => {
   return getCommentsLike().includes(commentId)
-}
-
-export const likePage = (postId: number) => {
-  const json = getUserLikeHistory()
-  if (!json?.page?.includes(postId)) {
-    json.pages.push(postId)
-    setJSON(USER_LIKE_HISTORY, json)
-  }
-}
-
-export const likeComment = (commentId: number) => {
-  const json = getUserLikeHistory()
-  if (!json?.comments?.includes(commentId)) {
-    json.comments.push(commentId)
-    setJSON(USER_LIKE_HISTORY, json)
-  }
 }

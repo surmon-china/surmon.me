@@ -35,6 +35,7 @@
   import { defineComponent, ref, computed, PropType } from 'vue'
   import { SortType, CommentPostType } from '/@/constants/state'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { CommentEvent } from './helper'
 
   export default defineComponent({
     name: 'CommentPagination',
@@ -62,7 +63,7 @@
 
       const handlePage = (page: number) => {
         if (!isActivePage(page)) {
-          context.emit('page',
+          context.emit(CommentEvent.Page,
             isHotSort.value
               ? page
               : props.pagination.total_page + 1 - page

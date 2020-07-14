@@ -1,7 +1,10 @@
 <template>
   <div class="article-page" :class="{ mobile: isMobile }">
     <div class="module">
-      <article-content :article="article" :fetching="fetching" />
+      <article-content
+        :fetching="fetching"
+        :article="article"
+      />
     </div>
     <client-only>
       <div class="module">
@@ -12,16 +15,22 @@
       <article-share :fetching="fetching" />
     </div>
     <div class="module">
-      <article-meta :article="article" :fetching="fetching" />
+      <article-meta
+        :fetching="fetching"
+        :article="article"
+      />
     </div>
     <div class="module">
-      <article-related :articles="relatedArticles" :fetching="fetching" />
+      <article-related
+        :fetching="fetching"
+        :articles="relatedArticles"
+      />
     </div>
     <div class="comment">
       <comment-box
         :fetching="fetching"
         :post-id="articleId"
-        :likes="article.meta && article.meta.likes"
+        :likes="article?.meta?.likes"
       />
     </div>
   </div>

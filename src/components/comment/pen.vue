@@ -63,6 +63,7 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { focusPosition, insertContent } from '/@/utils/editable'
   import marked from '/@/services/marked'
+  import { CommentEvent } from './helper'
 
   export default defineComponent({
     name: 'CommentPen',
@@ -95,7 +96,7 @@
       })
 
       const handleTogglePreview = () => {
-        context.emit('toggle-preview')
+        context.emit(CommentEvent.TogglePreview)
       }
 
       const handleValueChange = (value: string) => {
@@ -117,7 +118,7 @@
 
       const handleSubmit = (event) => {
         event.preventDefault()
-        context.emit('submit', content.value)
+        context.emit(CommentEvent.Submit, content.value)
       }
 
       const insertContentToInput = (before: string, after = '') => {

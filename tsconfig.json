@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "noImplicitAny": false,
+    "jsx": "preserve",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "suppressImplicitAnyIndexErrors": true,
@@ -31,7 +32,7 @@
   "include": [
     "./src/**/*.ts",
     "./src/**/*.js",
-    "./src/**/*.vue", "test.js"
+    "./src/**/*.vue", "test.js", "src/components/comment/list/link.ts"
   ],
   "exclude": ["node_modules", "dist"]
 }

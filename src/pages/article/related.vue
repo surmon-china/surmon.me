@@ -108,6 +108,13 @@
         slidesPerView: 'auto'
       }
 
+      const getRelatedArticleThumb = (thumb) => {
+        return getArchiveArticleThumbnailUrl(
+          thumb,
+          this.$store.getters['global/isWebPImage']
+        )
+      }
+
       return {
         swiperOption,
         isMobile: globalState.userAgent.isMobile

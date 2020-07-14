@@ -15,6 +15,8 @@ declare global {
   }
 }
 
+export const LOZAD_CLASS_NAME = 'lozad'
+
 export const exportLozadToGlobal = () => {
   window.lozad = lozad as any
 }

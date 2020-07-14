@@ -4,7 +4,11 @@
       <aside-view :open="isOpenedSidebar" />
     </div>
     <div id="main" :class="openedAsideClass">
-      <div v-if="isOpenedSidebar" class="close-mask" @click="closeMobileSidebar" />
+      <div
+        v-if="isOpenedSidebar"
+        class="close-mask"
+        @click="closeMobileSidebar"
+      />
       <header-view />
       <main class="main-container">
         <div id="main-content" class="main-content">

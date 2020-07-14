@@ -35,7 +35,6 @@
           :key="comment.id"
           :comment="comment"
           :liked="comment"
-          @to-comment="scrollToComment"
           @like="likeComment"
           @reply="replyComment"
         />
@@ -45,8 +44,10 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted, onBeforeUnmount, onUnmounted, PropType } from 'vue'
-  import { mapState } from 'vuex'
+  import { defineComponent, ref, reactive, computed, onMounted, onBeforeUnmount, PropType } from 'vue'
+  import { useGlobalState } from '/@/state'
+  import { getNamespace, Modules } from '/@/store'
+  import { CommentModuleActions } from '/@/store/comment'
   import { isClient } from '/@/vuniversal/env'
   import { useEnhancer } from '/@/enhancer'
   import marked from '/@/services/marked'
@@ -57,10 +58,11 @@
   import { getGravatarByEmail } from '/@/transforms/thumbnail'
   import { scrollTo, Easing } from '/@/utils/scroller'
   import storage from '/@/services/storage'
-  import { useGlobalState } from '/@/state'
+  import { LOZAD_CLASS_NAME } from '/@/services/lozad'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/ga'
-  import { getCommentsLike } from '/@/transforms/state'
+  import { getCommentsLike, setCommentsLike } from '/@/transforms/state'
+  import { CommentEvent } from '../helper'
   import CommentItem from './item.vue'
 
   export default defineComponent({
@@ -81,22 +83,25 @@
       const { i18n, store, globalState, isMobile, isZhLang } = useEnhancer()
 
       const listElement = ref<HTMLElement>()
-      let lozadObserver = ref<LozadObserver | null>(null)
-      let commentsLike: number[] = []
-      // init likes
+      const lozadObserver = ref<LozadObserver | null>(null)
+      const commentsLike = reactive<number[]>([])
       if (isClient) {
-        commentsLike = getCommentsLike()
+        commentsLike.push(...getCommentsLike())
+      }
+
+      const isLikedComment = (commentId) => {
+        return commentsLike.includes(commentId)
       }
 
       const observeLozad = () => {
-        const lozadElements = listElement.value?.querySelectorAll('.lozad')
+        const lozadElements = listElement.value?.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
         if (!lozadElements || !lozadElements.length) {
           return false
         }
-        lozadObserver = window.lozad(lozadElements, {
+        lozadObserver.value = window.lozad(lozadElements, {
           loaded: element => element.classList.add('loaded')
         })
-        lozadObserver.observe()
+        lozadObserver.value.observe()
       }
 
       const loadCommentsAnimateDone = () => {
@@ -107,54 +112,32 @@
         observeLozad()
       }
 
-      // 跳转到某条指定的id位置
-      const scrollToComment = (commentId: number) => {
-        const targetDom = document.getElementById(id)
-        if (targetDom) {
-          const isToEditor = id === 'post-box'
-          scrollTo(targetDom, 200, { offset: isToEditor ? 0 : -300 })
-          // 如果是进入编辑模式，则需要激活光标
-          if (isToEditor && this.$refs.markdownInput) {
-            this.$refs.markdownInput.focusPosition()
-          }
-        }
-      }
-
-      // 回复评论
-      const replyComment = (comment) => {
-        // this.$ga.event(
-        //   '欲回评论',
-        //   GAEventActions.Click,
-        //   GAEventTags.Comment
-        // )
-        // this.pid = comment.id
-        // this.scrollToComment('post-box')
+      const replyComment = (commentId: number) => {
+        context.emit(CommentEvent.Reply, commentId)
       }
  
-      // 点赞某条评论
-      const likeComment = (comment) => {
+      const likeComment = (commentId: number) => {
         // this.$ga.event(
         //   '欲赞评论',
         //   GAEventActions.Click,
         //   GAEventTags.Comment
         // )
-        // if (this.getCommentLiked(comment.id)) {
-        //   return false
-        // }
-        // this.$store.dispatch('comment/fetchLikeComment', comment)
-        //   .then(_ => {
-        //     this.historyLikes.comments.push(comment.id)
-        //     localHistoryLikes.set(this.historyLikes)
-        //   })
-        //   .catch(error => {
-        //     console.warn('评论点赞失败', error)
-        //     alert(this.$i18n.text.comment.profile.actionerr)
-        //   })
-      }
-
-      // 获取某条评论是否被点赞
-      const getCommentLiked = (comment_id) => {
-        return this.historyLikes.comments.includes(comment_id)
+        if (isLikedComment(commentId)) {
+          return false
+        }
+        store.dispatch(
+          getNamespace(Modules.Comment, CommentModuleActions.PostCommentLike),
+          commentId
+        )
+          .then(_ => {
+            commentsLike.push(commentId)
+            setCommentsLike(commentsLike)
+          })
+          .catch(error => {
+            const message = i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION)
+            console.warn(message, error)
+            alert(message)
+          })
       }
 
       onMounted(() => {
@@ -162,7 +145,7 @@
       })
 
       onBeforeUnmount(() => {
-        lozadObserver = null
+        lozadObserver.value = null
       })
 
       return {

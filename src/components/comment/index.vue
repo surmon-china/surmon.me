@@ -24,7 +24,6 @@
       :cached="userState.cached"
       :editing="userState.editing"
       :reply-pid="state.replyPid"
-      @to-comment="scrollToElementAnchor"
       @cancel-reply="resetCommentReply"
       @edit-profile="editUserProfile"
       @save-profile="syncUserProfileToStorage"

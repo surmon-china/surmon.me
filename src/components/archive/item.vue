@@ -60,31 +60,39 @@
           <desktop-only>
             <span class="categories">
               <i class="iconfont icon-list"></i>
-              <template v-if="article.category.length">
-                <router-link
-                  v-for="(category, index) in article.category"
-                  :key="index"
-                  :to="getCategoryArchiveRoute(category.slug)"
-                >
-                  <i18n :zh="category.name" :en="category.slug" />
-                </router-link>
-              </template>
-              <span v-else v-i18n="LANGUAGE_KEYS.CATEGORY_PLACEHOLDER"></span>
+              <placeholder :transition="false" :data="article.category.length">
+                <template #placeholder>
+                  <span v-i18n="LANGUAGE_KEYS.CATEGORY_PLACEHOLDER" />
+                </template>
+                <template #default>
+                  <router-link
+                    v-for="(category, index) in article.category"
+                    :key="index"
+                    :to="getCategoryArchiveRoute(category.slug)"
+                  >
+                    <i18n :zh="category.name" :en="category.slug" />
+                  </router-link>
+                </template>
+              </placeholder>
             </span>
           </desktop-only>
-          <span v-if="false" class="tags">
+          <!-- <span class="tags">
             <i class="iconfont icon-tag"></i>
-            <template v-if="article.tag.length">
-              <router-link
-                v-for="(tag, index) in article.tag"
-                :key="index"
-                :to="getTagArchiveRoute(tag.slug)"
-              >
-                <i18n :zh="tag.name" :en="tag.slug" />
-              </router-link>
-            </template>
-            <span v-else v-i18n="LANGUAGE_KEYS.TAG_PLACEHOLDER"></span>
-          </span>
+            <placeholder :transition="false" :data="article.tag.length">
+              <template #placeholder>
+                <span v-i18n="LANGUAGE_KEYS.TAG_PLACEHOLDER" />
+              </template>
+              <template #default>
+                <router-link
+                  v-for="(tag, index) in article.tag"
+                  :key="index"
+                  :to="getTagArchiveRoute(tag.slug)"
+                >
+                  <i18n :zh="tag.name" :en="tag.slug" />
+                </router-link>
+              </template>
+            </placeholder>
+          </span> -->
         </div>
       </div>
     </div>

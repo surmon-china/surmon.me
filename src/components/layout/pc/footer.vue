@@ -1,13 +1,12 @@
 <template>
   <footer id="footer" class="footer">
     <div class="container">
-      <a
-        v-if="false"
+      <!-- <a
         class="ipc"
         target="_blank"
         rel="external nofollow noopener"
         href="http://www.beian.miit.gov.cn"
-      >陕 ICP 备 13004859 号-2</a>
+      >陕 ICP 备 13004859 号-2</a> -->
       <a
         class="sitemap-btn"
         href="/sitemap.xml"
@@ -15,14 +14,14 @@
         v-i18n="LANGUAGE_KEYS.PAGE_SITEMAP"
       />
       <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-      <i18n zh="由&nbsp;" en="Powered By&nbsp;" />
+      <i18n zh="由 " en="Powered By " />
       <a
         target="_blank"
         class="item"
         rel="external nofollow noopener"
         href="https://github.com/surmon-china/nodepress"
       >NodePress</a>
-      <i18n zh="、" en=",&nbsp;" />
+      <i18n zh="、" en=", " />
       <a
         target="_blank"
         class="item"
@@ -31,12 +30,12 @@
       >Vuniversal</a>
       <i18n>
         <template #zh>
-          <span>&nbsp;和&nbsp;日月星辰&nbsp;强力驱动&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+          <span> 和 日月星辰 强力驱动  |  </span>
           <router-link to="/about" key="zh">吾之臂躯</router-link>
-          <span>&nbsp;行针步线</span>
+          <span> 行针步线</span>
         </template>
         <template #en>
-          <span>&nbsp;and solitarily.&nbsp; Designed By&nbsp;</span>
+          <span> and solitarily.  Designed By </span>
           <router-link to="/about" key="en">Me</router-link>
         </template>
       </i18n>
