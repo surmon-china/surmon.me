@@ -24,6 +24,10 @@ export const getArticleDetailRoute = (articleId: string | number) => {
   return `/article/${articleId}`
 }
 
+export const getPageRoute = (routeName: RouteName) => {
+  return `/${routeName}`
+}
+
 export const isArticleDetail = (name: RouteRecordName) => name === RouteName.Article
 export const isSearchArchive = (name: RouteRecordName) => name === RouteName.SearchArchive
 export const isGuestbook = (name: RouteRecordName) => name === RouteName.Guestbook

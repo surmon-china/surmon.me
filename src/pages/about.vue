@@ -18,15 +18,19 @@
             href="https://github.com/sponsors/surmon-china"
             rel="external nofollow noopenter"
             @mousedown="handleTouchSponsor"
-          >GitHub Sponsor</a>
-          <span>&nbsp;|&nbsp;</span>
+          >
+            GitHub Sponsor
+          </a>
+          <!-- TODO: css -->
+          <span class="separator">|</span>
           <a
             target="_blank"
             href="https://www.paypal.me/surmon"
             rel="external nofollow noopenter"
             @mousedown="handleTouchSponsor"
           >PayPal me</a>
-          <span>&nbsp;|&nbsp;</span>
+          <!-- TODO: css -->
+          <span class="separator">|</span>
           <a
             target="_blank"
             href="/sponsor"
@@ -43,7 +47,8 @@
           >
             <i18n zh="寂寞同性交友群" en="QQ group" />
           </a>
-          <span>&nbsp;|&nbsp;</span>
+          <!-- TODO: css -->
+          <span class="separator">|</span>
           <a
             target="_blank"
             rel="external nofollow noopenter"

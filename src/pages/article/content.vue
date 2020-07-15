@@ -19,57 +19,58 @@
         <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="_isHybrid" />
       </div>
     </transition>
-    <transition
-      name="module"
-      mode="out-in"
+    <placeholder
+      :loading="fetching"
       @after-enter="handleContentAnimateDone"
     >
-      <div v-if="fetching" key="skeleton" class="skeleton">
-        <client-only>
+      <template #loading>
+        <div class="skeleton">
           <skeleton-line class="title" />
           <skeleton-paragraph
             class="content"
             :lines="9"
             line-height="1.2em"
           />
-        </client-only>
-      </div>
-      <div v-else key="knowledge" class="knowledge">
-        <h2 class="title">{{ article.title }}</h2>
-        <div
-          :id="contentElementIds.default"
-          class="content"
-          v-html="content.default"
-        />
-        <transition
-          name="module"
-          mode="out-in"
-          @after-enter="handleRenderMoreAnimateDone"
-        >
-          <div v-if="isRenderMoreEnabled" key="readmore-btn" class="readmore">
-            <button
-              class="readmore-btn"
-              :disabled="longFormRenderState.rendering"
-              @click="handleRenderMore"
-            >
-              <i18n
-                :lkey="longFormRenderState.rendering
-                  ? LANGUAGE_KEYS.ARTICLE_RENDERING
-                  : LANGUAGE_KEYS.ARTICLE_READ_ALL"
-              />
-              <i class="iconfont icon-next-bottom"></i>
-            </button>
-          </div>
+        </div>
+      </template>
+      <template #default>
+        <div class="knowledge">
+          <h2 class="title">{{ article.title }}</h2>
           <div
-            v-else-if="longFormRenderState.rendered"
-            :id="contentElementIds.leftover"
-            key="more-content"
             class="content"
-            v-html="content.leftover"
-          ></div>
-        </transition>
-      </div>
-    </transition>
+            :id="contentElementIds.default"
+            v-html="content.default"
+          />
+          <transition
+            name="module"
+            mode="out-in"
+            @after-enter="handleRenderMoreAnimateDone"
+          >
+            <div v-if="isRenderMoreEnabled" key="readmore-btn" class="readmore">
+              <button
+                class="readmore-btn"
+                :disabled="longFormRenderState.rendering"
+                @click="handleRenderMore"
+              >
+                <i18n
+                  :lkey="longFormRenderState.rendering
+                    ? LANGUAGE_KEYS.ARTICLE_RENDERING
+                    : LANGUAGE_KEYS.ARTICLE_READ_ALL"
+                />
+                <i class="iconfont icon-next-bottom"></i>
+              </button>
+            </div>
+            <div
+              v-else-if="longFormRenderState.rendered"
+              key="more-content"
+              class="content"
+              :id="contentElementIds.leftover"
+              v-html="content.leftover"
+            />
+          </transition>
+        </div>
+      </template>
+    </placeholder>
   </div>
 </template>
 
@@ -159,7 +160,7 @@
         if (isLongFormContent.value) {
           const index = getContentSplitIndex(content)
           result.default = content.substring(0, index)
-          result.leftover = content.substring(index, content.length)
+          result.leftover = content.substring(index)
         } else {
           result.default = content
           result.leftover = ''

@@ -12,7 +12,12 @@
             <ul class="article-list">
               <li v-for="(article, index) in articles" :key="index" class="item">
                 <p class="item-content">
-                  <a class="link" :href="`/article/${article.id}`" target="_blank" :title="article.title">
+                  <a
+                    class="link"
+                    target="_blank"
+                    :title="article.title"
+                    :href="getArticleDetailRoute(article.id)"
+                  >
                     <span class="sign">「</span>
                     <span class="title">{{ article.title }}</span>
                     <span class="sign">」</span>
@@ -22,7 +27,7 @@
                     <a
                       href
                       class="toggle-link"
-                      @click.prevent="$store.commit('sitemap/updateArticleOpenState', index)"
+                      @click.prevent="handleToggleArticleDescription(article.id)"
                       v-text="$i18n.text.action[article.open ? 'close' : 'open']"
                     ></a>
                   </small>
@@ -50,8 +55,8 @@
                   <a
                     class="name"
                     target="_blank"
-                    :href="`/category/${category.slug}`"
                     :title="category.name"
+                    :href="getCategoryArchiveRoute(category.slug)"
                   >
                     <i18n :zh="category.name" :en="category.slug" />
                   </a>
@@ -75,8 +80,8 @@
               <li v-for="(tag, index) in tags" :key="index" class="item">
                 <a
                   target="_blank"
-                  :href="`/tag/${tag.slug}`"
                   :title="tag.description"
+                  :href="getTagArchiveRoute(tag.slug)"
                 >
                   <i18n :zh="tag.name" :en="tag.slug" />
                 </a>
@@ -102,7 +107,7 @@
             <a
               target="_blank"
               rel="external nofollow noopener"
-              :href="appConfig.links.project"
+              :href="APP_CONFIG.links.project"
             >{{ $i18n.nav.project }}</a>
           </li>
           <li class="item">
@@ -120,33 +125,45 @@
   </div>
 </template>
 
-<script>
-  import { mapState } from 'vuex'
-  import appConfig from '/@/config/app.config'
+<script lang="ts">
+  import { defineComponent, computed } from 'vue'
+  import { useEnhancer } from '/@/enhancer'
+  import { RouteName } from '/@/router'
+  import { getTagArchiveRoute, getCategoryArchiveRoute, getArticleDetailRoute, getPageRoute } from '/@/transforms/route'
+  import * as APP_CONFIG from '/@/config/app.config'
 
-  export default {
+  export default defineComponent({
     name: 'Sitemap',
-    head() {
-      return {
-        title: `${this.isEnLang ? '' : this.$i18n.nav.map + ' | '}Sitemap`
+    // head() {
+    //   return {
+    //     title: `${this.isEnLang ? '' : this.$i18n.nav.map + ' | '}Sitemap`
+    //   }
+    // },
+    // fetch({ store }) {
+    //   return store.dispatch('sitemap/fetchArticles', { per_page: 666 })
+    // },
+    setup() {
+      const { store, isMobile } = useEnhancer()
+      const tags = computed(() => store.state.tag.data)
+      const categories = computed(() => store.state.category.data)
+      const articles = computed(() => store.state.sitemap.articles.data)
+
+      const handleToggleArticleDescription = () => {
+        // store.commit('sitemap/updateArticleOpenState', index)
       }
-    },
-    fetch({ store }) {
-      return store.dispatch('sitemap/fetchArticles', { per_page: 666 })
-    },
-    computed: {
-      ...mapState({
-        tags: state => state.tag.data,
-        categories: state => state.category.data,
-        articles: state => state.sitemap.articles.data,
-        isMobile: state => state.global.isMobile,
-      }),
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
-      },
-      appConfig: () => appConfig
+
+      return {
+        APP_CONFIG,
+        RouteName,
+        getPageRoute,
+        getTagArchiveRoute,
+        getCategoryArchiveRoute,
+        getArticleDetailRoute,
+        isMobile,
+        handleToggleArticleDescription,
+      }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>

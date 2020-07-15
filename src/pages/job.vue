@@ -1,5 +1,5 @@
 <template>
-  <div class="guestbook-page" :class="{ mobile: isMobile }">
+  <div class="job-page" :class="{ mobile: isMobile }">
     <div class="detail">
       <div class="banner">
         <uimage
