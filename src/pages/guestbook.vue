@@ -7,11 +7,17 @@
           class="image"
           src="/images/guestbook.jpg"
         />
-        <span class="solgan" v-i18n="LANGUAGE_KEYS.GUESTBOOK_SLOGAN" />
+        <span
+          class="solgan"
+          v-i18n="LANGUAGE_KEYS.GUESTBOOK_SLOGAN"
+        />
       </div>
     </div>
     <div class="comment">
-      <!-- <comment-box :post-id="0" :likes="siteLikes" /> -->
+      <comment-box
+        :post-id="0"
+        :likes="siteLikes"
+      />
     </div>
   </div>
 </template>

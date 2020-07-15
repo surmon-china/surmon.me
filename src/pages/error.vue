@@ -1,7 +1,6 @@
 <template>
   <div class="error">
     <div class="error-content">
-      <h1>li2323sdjlisdj</h1>
       <!-- <h1 class="error-code">{{ error.statusCode }}</h1> -->
       <div class="error-wrapper-message">
         <!-- <h2 class="error-message">{{ error.message || $i18n.text.notFound }}</h2> -->

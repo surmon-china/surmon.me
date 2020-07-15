@@ -134,22 +134,16 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useI18n } from '/@/services/i18n'
-  import { useTheme, Theme } from '/@/services/theme'
+  import { useEnhancer } from '/@/enhancer'
   import { GAEventActions, GAEventTags } from '/@/constants/ga'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { useGlobalState } from '/@/state'
   import * as APP_CONFIG from '/@/config/app.config'
 
   export default defineComponent({
     name: 'Service',
     setup() {
-      const i18n = useI18n()
-      const theme = useTheme()
-      const globalState = useGlobalState()
-      const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
-      const isMobile = computed(() => globalState.userAgent.isMobile)
+      const { i18n, theme, globalState, isMobile, isDarkTheme } = useEnhancer()
 
       const handleSubmitEmail = () => {
         // this.$ga.event(
@@ -164,7 +158,11 @@
         const body = isZhLang
           ? `我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
           : 'Hi Surmon, My name is '
-        const mailAddress = 'mailto:surmon@foxmail.com' + (isMobile.value ? '' : `?subject=${subject}&body=${body}`)
+        const mailAddress = 'mailto:surmon@foxmail.com' + (
+          isMobile.value
+            ? ''
+            : `?subject=${subject}&body=${body}`
+          )
 
         // window.location.href = mailAddress
         window.open(mailAddress)

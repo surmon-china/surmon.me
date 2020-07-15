@@ -1,7 +1,7 @@
 <template>
-  <placeholder :loading="fetching">
-    <template #loading>
-      <div class="related">
+  <div class="related" :class="{ mobile: isMobile }">
+    <placeholder :loading="fetching">
+      <template #loading>
         <responsive>
           <template #desktop>
             <ul class="skeleton-list">
@@ -20,10 +20,8 @@
             />
           </template>
         </responsive>
-      </div>
-    </template>
-    <template>
-      <div class="related">
+      </template>
+      <template #default>
         <responsive>
           <template #desktop>
             <div class="article-list swiper" v-swiper:releted="swiperOption">
@@ -35,8 +33,8 @@
                 >
                   <router-link
                     class="item-box filter"
-                    :to="`/article/${article.id}`"
                     :title="article.title"
+                    :to="getArticleDetailRoute(article.id)"
                   >
                     <img
                       :src="getRelatedArticleThumb(article.thumb)"
@@ -60,38 +58,41 @@
               >
                 <router-link
                   class="item-link"
-                  :to="`/article/${article.id}`"
-                  :title="`「 ${article.title} 」- 继续阅读`"
+                  :title="article.title"
+                  :to="getArticleDetailRoute(article.id)"
                 >
-                  <span class="sign">《</span>
-                  <span class="title">{{ article.title }}</span>
-                  <span class="sign">》</span>
+                  <span class="title">{{ article.title }} - {{ article.description }}</span>
                   <small class="tip">- 继续阅读</small>
                 </router-link>
               </li>
             </ul>
           </template>
         </responsive>
-      </div>
-    </template>
-  </placeholder>
+      </template>
+    </placeholder>
+  </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
-  import { useGlobalState } from '/@/state'
+  import { defineComponent, computed, PropType } from 'vue'
+  import { useEnhancer } from '/@/enhancer'
+  import { getArticleDetailRoute } from '/@/transforms/route'
+  import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
 
   export default defineComponent({
     name: 'ArticleRelated',
     props: {
+      articles: {
+        type: Array as PropType<$TODO[]>,
+        required: true
+      },
       fetching: {
         type: Boolean,
-        default: false
+        required: true
       }
     },
     setup() {
-      const globalState = useGlobalState()
+      const { store, globalState, isMobile } = useEnhancer()
       const swiperOption = {
         setWrapperSize: true,
         simulateTouch: false,
@@ -107,22 +108,24 @@
         slidesPerView: 'auto'
       }
 
-      const getRelatedArticleThumb = (thumb) => {
+      const getRelatedArticleThumb = (thumb: string) => {
         return getArchiveArticleThumbnailUrl(
           thumb,
-          this.$store.getters['global/isWebPImage']
+          globalState.imageExt.isWebP.value
         )
       }
 
       return {
+        isMobile,
         swiperOption,
-        isMobile: globalState.userAgent.isMobile
+        getArticleDetailRoute,
+        getRelatedArticleThumb
       }
     }
   })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
   .related {

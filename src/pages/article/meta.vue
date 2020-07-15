@@ -1,7 +1,7 @@
 <template>
   <placeholder :loading="fetching">
     <template #loading>
-      <div class="metas">
+      <div class="metas" :class="{ mobile: isMobile }">
         <skeleton-paragraph
           :align="true"
           :lines="4"
@@ -10,7 +10,7 @@
       </div>
     </template>
     <template #default>
-      <div class="metas">
+      <div class="metas" :class="{ mobile: isMobile }">
         <p class="item">
           <i18n>
             <template #zh>本文于 </template>
@@ -76,16 +76,15 @@
         <p class="item">
           <i18n>
             <template #zh>
-              <span class="title en">Article address:</span>
-            </template>
-            <template #zh>
               <span class="title zh">永久地址：</span>
             </template>
+            <template #zh>
+              <span class="title en">Article address:</span>
+            </template>
           </i18n>
-          <span
-            class="site-url"
-            @click="copyArticleUrl"
-          >{{ articleUrl }}</span>
+          <span class="site-url" @click="copyArticleUrl">
+            {{ articleUrl }}
+          </span>
         </p>
         <div class="item">
           <i18n>
