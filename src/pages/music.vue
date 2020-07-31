@@ -55,7 +55,7 @@
           >
             <i
               class="iconfont"
-              :class="player.state.muted ? 'icon-music-muted' : 'icon-music-volume'"
+              :class="player.muted ? 'icon-music-muted' : 'icon-music-volume'"
             />
           </button>
         </div>
@@ -69,10 +69,10 @@
       </button>
     </div>
     <div class="song-info">
-      <h3 class="name">
-        <span v-if="currentSong">{{ currentSong.name }} By {{ currentSong.artist }} / {{ currentSong.album || 'unknow' }}</span>
-        <span v-else>Kind words are the music of the world.</span>
-      </h3>
+      <h4 class="name">
+        <template v-if="currentSong">{{ currentSong.name }} By {{ currentSong.artist }} / {{ currentSong.album || 'unknow' }}</template>
+        <template v-else>Kind words are the music of the world.</template>
+      </h4>
       <transition name="fade">
         <p v-if="player.currentSongRealTimeLrc !== null" class="lrc">
           <transition name="module" mode="out-in">
@@ -87,10 +87,8 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
-  import { useI18n } from '/@/services/i18n'
+  import { defineComponent, computed } from 'vue'
   import { useMusic } from '/@/services/music'
-
   export default defineComponent({
     name: 'Music',
     // head() {
@@ -99,7 +97,6 @@
     //   }
     // },
     setup() {
-      const i18n = useI18n()
       const musicPlayer = useMusic()
 
       const currentSong = computed(() => {
@@ -145,7 +142,6 @@
       display: flex;
       justify-content: space-around;
       align-items: center;
-      margin-bottom: 2rem;
       width: 100%;
 
       > .prev-song,
@@ -201,7 +197,7 @@
             width: 100%;
             height: 100%;
             border-radius: 100%;
-            background-color: darkgray;
+            background-color: $module-bg-darker-1;
             background-image: cdn-url('/images/music-bg.jpg');
             background-size: cover;
           }
@@ -255,11 +251,11 @@
           position: absolute;
 
           .circle-progress-circle-track {
-            stroke: $module-hover-bg;
+            stroke: $module-bg-darker-2;
           }
 
           .circle-progress-circle-path {
-            stroke: $module-hover-bg-darken-20;
+            stroke: $module-bg-darker-4;
             transition: all 0.6s;
           }
         }
@@ -267,6 +263,7 @@
     }
 
     > .song-info {
+      margin-top: $lg-gap * 3;
       text-align: center;
 
       > .lrc {

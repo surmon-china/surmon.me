@@ -4,21 +4,23 @@
       <i class="iconfont icon-hotfill" />
       <strong v-i18n="LANGUAGE_KEYS.HOT_ARTICLE_LIST_TITLE" />
     </p>
-    <empty v-if="!articles.length">
-      <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
-    </empty>
-    <ul v-else class="article-list">
-      <li v-for="item in articles" :key="item.id" class="item">
-        <span class="index" />
-        <router-link
-          class="title"
-          :to="getArticleDetailRoute(item.id)"
-          :title="getArticleTitle(item)"
-        >
-          <span v-text="item.title" />
-        </router-link>
-      </li>
-    </ul>
+    <placeholder
+      :data="articles"
+      :p-i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"
+    >
+      <ul class="article-list">
+        <li v-for="item in articles" :key="item.id" class="item">
+          <span class="index"></span>
+          <router-link
+            class="title"
+            :to="getArticleDetailRoute(item.id)"
+            :title="getArticleTitle(item)"
+          >
+            {{ item.title }}
+          </router-link>
+        </li>
+      </ul>
+    </placeholder>
   </div>
 </template>
 
@@ -65,7 +67,7 @@
       line-height: 3em;
       margin: 0;
       padding: 0 $gap;
-      border-bottom: 1px dashed $body-bg;
+      border-bottom: 1px dotted $module-bg-darker-1;
       text-transform: uppercase;
 
       .iconfont {
@@ -80,18 +82,17 @@
       counter-reset: hot-article-list;
 
       .item {
-        display: block;
+        display: flex;
+        align-items: center;
         height: 1.9em;
-        line-height: 1.9em;
         padding: 0 $gap;
         margin-bottom: $sm-gap;
-        color: $text-dark;
-        @include text-overflow();
+        color: $text-darker;
 
         &:nth-child(1) {
           .index {
             color: $text-reversal;
-            background-color: $primary-opacity-5;
+            background-color: $primary-translucent;
           }
         }
 
@@ -114,16 +115,19 @@
         }
 
         .index {
+          $size: 1.5em;
+          flex-shrink: 0;
           color: $text-secondary;
           counter-increment: hot-article-list;
-          background-color: $module-hover-bg;
-          width: 1.5em;
-          height: 1.5em;
-          line-height: 1.5em;
-          display: inline-block;
+          background-color: $module-bg-darker-1;
+          width: $size;
+          height: $size;
+          line-height: $size;
+          display: block;
           text-align: center;
           margin-right: $sm-gap;
           font-size: $gap;
+          border-radius: $xs-radius;
 
           &::before {
             content: counter(hot-article-list);
@@ -131,7 +135,9 @@
         }
 
         .title {
+          display: block;
           font-size: $font-size-h6;
+          @include text-overflow();
 
           &:hover {
             text-decoration: underline;

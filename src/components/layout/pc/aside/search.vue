@@ -100,11 +100,11 @@
     .sitemap-btn {
       height: 2em;
       line-height: 2em;
-      background-color: $module-hover-bg;
+      background-color: $module-bg-darker-1;
       @include background-transition();
 
       &:hover {
-        background-color: $module-hover-bg-darken-20;
+        background-color: $module-bg-hover;
       }
     }
 
@@ -123,11 +123,11 @@
 
       > .search-btn {
         width: 2em;
-        background-color: $module-hover-bg-darken-20;
+        background-color: $module-bg-darker-3;
         @include background-transition();
 
         &:hover {
-          background-color: $module-hover-bg-darken-40;
+          background-color: $module-bg-darker-4;
         }
       }
     }

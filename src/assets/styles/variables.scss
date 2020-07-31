@@ -16,27 +16,26 @@ $body-bg: var(--body-bg);
 $theme-black: var(--theme-black);
 $theme-logo-rotate: var(--theme-logo-rotate);
 
-$module-bg: var(--module-bg);
-$module-bg-opacity-5: var(--module-bg-opacity-5);
-$module-bg-opacity-8: var(--module-bg-opacity-8);
-$module-bg-opacity-9: var(--module-bg-opacity-9);
-
-$module-hover-bg: var(--module-hover-bg);
-$module-hover-bg-opaqueness: var(--module-hover-bg-opaqueness);
-$module-hover-bg-opacity-3: var(--module-hover-bg-opacity-3);
-$module-hover-bg-opacity-9: var(--module-hover-bg-opacity-9);
-$module-hover-bg-darken-10: var(--module-hover-bg-darken-10);
-$module-hover-bg-darken-20: var(--module-hover-bg-darken-20);
-$module-hover-bg-darken-40: var(--module-hover-bg-darken-40);
-
 $primary: var(--primary-color);
-$primary-opacity-9: var(--primary-opacity-9-color);
-$primary-opacity-5: var(--primary-opacity-5-color);
+$primary-translucent: var(--primary-color-translucent);
+
+$module-bg-darker-1: var(--module-bg-darker-1);
+$module-bg-darker-2: var(--module-bg-darker-2);
+$module-bg-darker-3: var(--module-bg-darker-3);
+$module-bg-darker-4: var(--module-bg-darker-4);
+$module-bg-darker-5: var(--module-bg-darker-5);
+$module-bg-darker-6: var(--module-bg-darker-6);
+$module-bg-darker-7: var(--module-bg-darker-7);
+
+$module-bg: var(--module-bg);
+$module-bg-opaque: var(--module-bg-opaque);
+$module-bg-lighter: var(--module-bg-lighter);
+$module-bg-hover: $module-bg-darker-2;
 
 // text colors
 $text: var(--text-color);
-$text-dark: var(--text-dark);
-$text-darken: var(--text-darken);
+$text-lighter: var(--text-lighter);
+$text-darker: var(--text-darker);
 $text-secondary: var(--text-secondary);
 $text-disabled: var(--text-disabled);
 $text-dividers: var(--text-dividers);
@@ -44,7 +43,7 @@ $text-reversal: var(--text-reversal);
 
 // links
 $link-color: var(--link-color);
-$link-hover-color: var(--link-hover-color);
+$link-color-hover: var(--link-color-hover);
 
 // colors
 $accent: #4caf50;
@@ -55,14 +54,16 @@ $white: #ffffff;
 $black: #000000;
 $black-light: #555555;
 
-// golden
-$golden-ratio: 0.618;
-
 // gap
 $gap: 1rem; // ~12px
-$sm-gap: $gap * $golden-ratio; // ~8px
+$sm-gap: $gap * 0.618; // ~8px
 $xs-gap: $sm-gap / 2; // ~4px
 $lg-gap: $sm-gap * 2; // ~14px
+
+// raduis
+$lg-radius: 6px;
+$sm-radius: 4px;
+$xs-radius: 2px;
 
 // times
 $transition-time-fast: .1s;
@@ -77,7 +78,6 @@ $z-index-normal: 0;
 $z-index-underground: -1;
 
 // other
-$radius: 2px;
 $border: 1px solid $text-dividers;
 
 // PC
@@ -88,7 +88,7 @@ $navbar-width: 160px;
 $main-width: 595px;
 $aside-width: 266px;
 $block-button-height: 3.4rem;
-$active-content-full-height: calc(100vh - #{$header-height + $lg-gap + $footer-height + $lg-gap});
+$active-content-full-height: calc(100vh - #{$header-height + $footer-height});
 
 // Mobile
 $mobile-header-height: 5rem;

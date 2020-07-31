@@ -29,7 +29,7 @@
           />
           <a
             target="_blank"
-            class="btn"
+            class="button"
             :href="APP_CONFIG.LINKS.appApkFile"
             @click="handleAndroidApp($event)"
           >
@@ -37,7 +37,7 @@
             <span class="text" v-i18n="LANGUAGE_KEYS.DEVICE_ANDROID"></span>
           </a>
           <a
-            class="btn"
+            class="button"
             target="_blank"
             rel="external nofollow noopenter"
             :href="APP_CONFIG.LINKS.appProject + '#ios'"
@@ -47,7 +47,7 @@
             <span class="text" v-i18n="LANGUAGE_KEYS.DEVICE_IOS"></span>
           </a>
           <a
-            class="btn code"
+            class="button code"
             target="_blank"
             rel="external nofollow noopenter"
             :href="APP_CONFIG.LINKS.appProject"
@@ -123,6 +123,7 @@
     align-items: center;
     min-height: 68rem;
     height: $active-content-full-height;
+    user-select: none;
 
     &.mobile {
       min-height: 53rem;
@@ -210,12 +211,13 @@
             height: auto;
           }
 
-          > .btn {
+          > .button {
             width: 12rem;
             line-height: $line-height-base * 1.6;
             color: $primary;
             margin-top: 2rem;
             border: 1px solid $primary;
+            border-radius: $xs-radius;
             text-align: center;
             text-transform: uppercase;
             background: $module-bg;
@@ -238,12 +240,12 @@
 
             &:hover {
               color: $text-reversal;
-              border-color: $primary-opacity-5;
+              border-color: $primary-translucent;
               background: linear-gradient(
                 to bottom right,
                 rgba($red, .7),
                 $text-reversal,
-                $primary-opacity-9,
+                $primary,
                 $text-reversal,
                 rgba($accent, .7)
               );

@@ -1,37 +1,33 @@
 <template>
-  <div
-    class="header-box"
-    :class="{
-      mobile: isMobile,
-      dark: isDarkTheme
-    }"
-    :style="{
-      'background-color': backgroundColor,
-      'background-image': `url(${backgroundImageUrl})`
-    }"
-  >
-    <div class="logo-box">
-      <p class="logo">
+  <div class="header" :class="{ mobile: isMobile }">
+    <div
+      class="background"
+      :style="{
+        backgroundColor,
+        backgroundImage: `url(${backgroundImageUrl})`
+      }"
+    />
+    <div class="content">
+      <div class="logo">
         <transition name="module" mode="out-in">
           <i key="date" class="iconfont" :class="icon"></i>
         </transition>
-      </p>
-    </div>
-    <div class="title-box">
-      <transition name="module" mode="out-in">
-        <h5 class="title">
-          <slot></slot>
-        </h5>
-      </transition>
+      </div>
+      <div class="title">
+        <transition name="module" mode="out-in">
+          <h5 class="text">
+            <slot></slot>
+          </h5>
+        </transition>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { useTheme, Theme } from '/@/services/theme'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { useGlobalState } from '/@/state'
+  import { useEnhancer } from '/@/enhancer'
   import { timeAgo } from '/@/transforms/moment'
   import { getFileCDNUrl } from '/@/transforms/url'
 
@@ -50,11 +46,7 @@
       }
     },
     setup(props) {
-      const theme = useTheme()
-      const globalState = useGlobalState()
-      const isMobile = computed(() => globalState.userAgent.isMobile)
-      const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
-
+      const { isMobile } = useEnhancer()
       const backgroundImageUrl = computed(() => {
         return props.backgroundImage || getFileCDNUrl('/images/service.jpg')
       })
@@ -62,7 +54,6 @@
       return {
         LANGUAGE_KEYS,
         isMobile,
-        isDarkTheme,
         backgroundImageUrl
       }
     }
@@ -72,7 +63,7 @@
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
-  .header-box {
+  .header {
     position: relative;
     overflow: hidden;
     display: flex;
@@ -80,40 +71,49 @@
     width: 100%;
     height: 16.4rem;
     margin-bottom: $lg-gap;
-    background-size: cover;
-    background-blend-mode: hue;
-    background-color: $module-hover-bg-darken-10;
-    background-position: center center;
-    color: $text-reversal;
+    color: $white;
+    @include radius-box($lg-radius);
 
-    &.dark {
-      color: $text;
-    }
-
-    &.mobile {
-      height: 12rem;
-
-      > .logo-box {
-        height: 8.6rem;
-
-        > .logo {
-          line-height: 8.6rem;
-
-          > .iconfont {
-            font-size: 5em;
+    &:hover {
+      .background {
+        transform: scale(1);
+      }
+      .content {
+        backdrop-filter: none;
+        .logo {
+          .iconfont {
+            animation: none;
+            transform: scale(1.05);
           }
         }
       }
     }
 
-    > .logo-box {
-      height: 12rem;
-      overflow: hidden;
+    .background {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      background-color: $module-bg;
+      background-size: cover;
+      background-position: center center;
+      transform: scale(1.1);
+      @include transform-transition();
+    }
 
-      > .logo {
-        margin: 0;
+    .content {
+      width: 100%;
+      height: 100%;
+      @include backdrop-blur(1px);
+
+      .logo {
+        height: 12rem;
         line-height: 12rem;
+        margin: 0;
         text-align: center;
+        overflow: hidden;
 
         @keyframes logo-animate {
           0% {
@@ -134,18 +134,33 @@
           font-size: 6em;
           display: inline-block;
           animation: logo-animate 5s infinite;
+          @include transform-transition();
+        }
+      }
+
+      .title {
+        height: 4rem;
+        line-height: 2.5rem;
+
+        .text {
+          margin: 0;
+          text-align: center;
+          text-transform: capitalize;
+          user-select: none;
         }
       }
     }
 
-    > .title-box {
-      height: 4rem;
-      line-height: 2.5rem;
+    &.mobile {
+      height: 12rem;
 
-      > .title {
-        margin: 0;
-        text-align: center;
-        text-transform: capitalize;
+      > .logo {
+        height: 8.6rem;
+        line-height: 8.6rem;
+
+        > .iconfont {
+          font-size: 5em;
+        }
       }
     }
   }

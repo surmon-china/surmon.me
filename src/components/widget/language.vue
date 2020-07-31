@@ -1,7 +1,7 @@
 <template>
   <div id="language">
     <div
-      class="language-switch"
+      class="switcher"
       title="Switch language"
       :class="language"
       @click="tooggleLanguage"
@@ -44,14 +44,15 @@
     top: 20%;
     margin-top: $size;
 
-    > .language-switch {
+    > .switcher {
       position: relative;
       width: $size;
       height: $size;
       line-height: $size;
+      border-bottom-left-radius: $xs-radius;
       text-align: center;
       text-transform: uppercase;
-      color: $text-reversal;
+      color: $white;
       font-size: $font-size-small;
       font-weight: bold;
       transition: background $transition-time-normal;
@@ -88,7 +89,7 @@
         &:hover {
           &::before {
             content: 'ZH';
-            background: linear-gradient(to bottom right, $zhBG, $enBG);
+            background: linear-gradient(to bottom right, $enBG, $zhBG);
           }
         }
       }

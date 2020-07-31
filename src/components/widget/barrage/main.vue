@@ -264,8 +264,8 @@
     top: 0;
     left: 0;
     z-index: $z-index-toolbox - 1;
-    background-color: $module-hover-bg-darken-20;
-    // 由于使用 backdrop-blur，会导致 animation 性能并不好，所以都移除了
+    background-color: $module-bg-darker-6;
+    // 由于使用 backdrop-blur，会导致 animation 性能并不好，所以动画都移除了
     transform: translate3d(0, -100%, 0);
     @include backdrop-blur();
     @include hidden();
@@ -333,7 +333,7 @@
           margin: 0 auto;
           width: 42rem;
           height: 4rem;
-          background-color: $module-bg-opacity-8;
+          background-color: $module-bg-darker-1;
 
           > .count {
             width: auto;
@@ -372,7 +372,7 @@
               left: 0;
               width: 100%;
               height: auto;
-              background-color: $module-bg-opacity-8;
+              background-color: $module-bg-darker-1;
               @include hidden();
               @include visibility-transition();
 
@@ -384,7 +384,7 @@
                 @include background-transition();
 
                 &:hover {
-                  background-color: $module-bg-opacity-8;
+                  background-color: $module-bg-darker-1;
                 }
               }
             }
@@ -395,11 +395,11 @@
             margin: 0 auto;
             flex-grow: 1;
             padding: 1rem;
-            background-color: $module-bg-opacity-5;
+            background-color: $module-bg;
 
             &:hover,
             &:focus {
-              background-color: $module-bg-opacity-9;
+              background-color: $module-bg-darker-1;
             }
           }
         }

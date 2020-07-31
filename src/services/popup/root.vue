@@ -79,7 +79,7 @@
 
         &.border {
           & > ::v-deep(*:not(.close)) {
-            border: solid $sm-gap $module-hover-bg;
+            border: solid $sm-gap $module-bg-hover;
           }
         }
 
@@ -100,7 +100,7 @@
           cursor: pointer;
 
           &:hover {
-            background-color: $module-bg-opacity-9;
+            background-color: $module-bg-darker-1;
           }
 
           .iconfont {

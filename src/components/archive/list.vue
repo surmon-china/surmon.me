@@ -1,18 +1,24 @@
 <template>
-  <div class="articles" :class="{ mobile: isMobile }">
+  <div
+    class="articles"
+    :class="{
+      mobile: isMobile,
+      dark: isDarkTheme
+    }"
+  >
     <!-- mammon -->
-    <transition name="module">
+    <!-- <transition name="module">
       <component
         v-if="isMammonEnabled"
         class="article-list-mammon"
         :is="isMobile ? 'adsense-archive-mobile' : 'adsense-archive'"
       />
-    </transition>
+    </transition> -->
 
     <!-- list -->
     <div class="article-list">
       <placeholder
-        :data="article.data.data.length"
+        :data="articles.length"
         :p-i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"
       >
         <transition-group
@@ -21,7 +27,7 @@
           tag="div"
         >
           <list-item
-            v-for="articleItem in article.data.data"
+            v-for="articleItem in articles"
             :key="articleItem.id"
             :article="articleItem"
             @click="handleArticleClick(articleItem)"
@@ -34,7 +40,7 @@
     <div class="article-load">
       <button
         class="loadmore-button"
-        :disabled="article.fetching || !isLoadMoreEnabled"
+        :disabled="fetching || !isLoadMoreEnabled"
         @click="handleLoadmore"
       >
         <span class="icon">
@@ -42,7 +48,7 @@
         </span>
         <div class="text">
           <span
-            v-if="article.fetching"
+            v-if="fetching"
             v-i18n="LANGUAGE_KEYS.ARTICLE_LIST_LOADING"
           />
           <span
@@ -61,44 +67,53 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted, PropType } from 'vue'
-  import { useRouter } from 'vue-router'
-  import { useGlobalState } from '/@/state'
-  import { useDefer } from '/@/services/defer'
+  import { useEnhancer } from '/@/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import ListItem from './item.vue'
 
+  export enum Events {
+    Loadmore = 'loadmore'
+  }
   export default defineComponent({
     name: 'ArticleList',
     components: {
       ListItem
     },
     props: {
-      article: {
+      articles: {
+        type: Array as PropType<any[]>,
+        required: true
+      },
+      pagination: {
         type: Object as PropType<any>,
         required: true
+      },
+      fetching: {
+        type: Boolean,
+        default: true
       },
       mammon: {
         type: Boolean,
         default: true
       }
     },
+    emits: [
+      Events.Loadmore
+    ],
     setup(props, context) {
-      const defer = useDefer()
-      const router = useRouter()
-      const globalState = useGlobalState()
+      const { router, defer, isMobile, isDarkTheme } = useEnhancer()
       const mammonEnabled = ref(false)
 
-      const isMobile = computed(() => globalState.userAgent.isMobile)
       const isMammonEnabled = computed(() => props.mammon && mammonEnabled)
       const isLoadMoreEnabled = computed(() => {
-        const { current_page, total_page } = props.article.data.pagination
-        const hasArticles = props.article.data.pagination
-        return hasArticles ? (current_page < total_page) : false
+        return props.pagination
+          ? (props.pagination.current_page < props.pagination.total_page)
+          : false
       })
 
       const handleLoadmore = () => {
-        context.emit('loadmore')
+        context.emit(Events.Loadmore)
       }
 
       const handleArticleClick = (article: $TODO) => {
@@ -116,6 +131,7 @@
       return {
         LANGUAGE_KEYS,
         isMobile,
+        isDarkTheme,
         isMammonEnabled,
         isLoadMoreEnabled,
         handleLoadmore,
@@ -129,23 +145,6 @@
   @import 'src/assets/styles/init.scss';
 
   .articles {
-
-    &.mobile {
-      > .article-list,
-      > .article-list-mammon {
-        margin-bottom: $gap;
-      }
-
-      > .article-list-mammon {
-        padding: $gap;
-
-        &::v-deep(.mammon-ins) {
-          margin: 0;
-          height: 81px;
-        }
-      }
-    }
-
     > .article-list-mammon {
       width: 100%;
       padding: $sm-gap;
@@ -163,29 +162,17 @@
       min-height: $lg-gap;
       overflow: hidden;
 
-      > .article-empty {
-        color: $text-disabled;
-        @include module-blur-bg();
-      }
-
       > .article-loading {
         display: flex;
         height: $gap * 10;
-        @include module-blur-bg();
-      }
-
-      > .article-errmsg {
-        height: $gap * 10;
-        line-height: $gap * 10;
-        text-align: center;
-        color: rgba(0, 0, 0, 0.38);
-        @include module-blur-bg();
+        @include common-bg-module();
       }
     }
 
     > .article-load {
       overflow: hidden;
       z-index: $z-index-normal;
+      @include radius-box($sm-radius);
 
       > .loadmore-button {
         display: flex;
@@ -195,8 +182,7 @@
         line-height: $block-button-height;
         padding-left: $gap * 2;
         color: $text-reversal;
-        background-color: $module-bg;
-        @include background-transition();
+        @include common-bg-module($transition-time-fast);
 
         &[disabled] {
           opacity: .6;
@@ -208,8 +194,6 @@
         }
 
         &:hover {
-          background-color: $module-hover-bg;
-
           .iconfont {
             color: rgba($red, .6);
           }
@@ -221,6 +205,7 @@
           padding: 0 ($gap * 2) 0 ($gap * 3);
           font-family: 'webfont-bolder', DINRegular;
           text-transform: uppercase;
+          color: $white;
           background: rgba($red, .6);
 
           &::before {
@@ -235,6 +220,34 @@
             background: $body-bg;
             transform: rotate(18deg);
           }
+        }
+      }
+    }
+
+    &.dark {
+      .article-load {
+        .loadmore-button {
+          .text {
+            &::before {
+              background: $module-bg-darker-1 !important;
+            }
+          }
+        }
+      }
+    }
+
+    &.mobile {
+      > .article-list,
+      > .article-list-mammon {
+        margin-bottom: $gap;
+      }
+
+      > .article-list-mammon {
+        padding: $gap;
+
+        &::v-deep(.mammon-ins) {
+          margin: 0;
+          height: 81px;
         }
       }
     }

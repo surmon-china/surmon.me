@@ -2,9 +2,9 @@
   <div class="calendar">
     <!-- header -->
     <div class="header">
-      <span class="item arrow" @click="toPrevMonth">❮</span>
+      <button class="item arrow" @click="toPrevMonth">❮</button>
       <span class="item year-month">{{ headerText }}</span>
-      <span class="item arrow" @click="toNextMonth">❯</span>
+      <button class="item arrow" @click="toNextMonth">❯</button>
     </div>
     <!-- weekdays -->
     <ul class="weekdays">
@@ -157,12 +157,13 @@
 
         &.arrow {
           width: 2em;
-          background-color: $module-hover-bg;
-          @include background-transition();
+          background-color: $module-bg-darker-1;
+          border-radius: $xs-radius;
           cursor: pointer;
+          @include background-transition();
 
           &:hover {
-            background-color: $module-hover-bg-darken-10;
+            background-color: $module-bg-hover;
           }
         }
 
@@ -216,11 +217,11 @@
           }
 
           &:hover {
-            background-color: $module-hover-bg-opacity-3;
+            background-color: $module-bg-darker-1;
           }
 
           &.today {
-            background-color: $module-hover-bg;
+            background-color: $module-bg-hover;
           }
 
           &.active {

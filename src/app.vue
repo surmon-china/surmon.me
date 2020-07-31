@@ -5,16 +5,14 @@
       <popup-root />
     </client-only>
     <component :is="LayoutComponent">
-      <transition name="fade" mode="out-in">
-        <suspense>
-          <template #default>
-            <router-view />
-          </template>
-          <template #fallback>
-            <spin />
-          </template>
-        </suspense>
-      </transition>
+      <suspense>
+        <template #default>
+          <router-view />
+        </template>
+        <template #fallback>
+          <spin />
+        </template>
+      </suspense>
     </component>
   </div>
 </template>
@@ -26,7 +24,7 @@
   import { useStore } from '/@/store'
   import { useTheme } from '/@/services/theme'
   import EmojiRain from '/@/components/widget/emoji-rain.vue'
-  import PcMain from '/@/components/layout/pc/main.vue'
+  import PcMain from '/@/components/layout/pc/index.vue'
   import MobileMain from '/@/components/layout/mobile/main.vue'
 
   export default defineComponent({

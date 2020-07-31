@@ -147,7 +147,7 @@ const actions: ActionTree<ArticleState, IRootState> = {
   },
 
   // 获取文章详情
-  [ArticleModuleActions.FetchDetail]({ commit }, params: any = {}) {
+  [ArticleModuleActions.FetchDetail]({ commit }, params: any) {
     // 到顶部？也许是不必要的
     // if (isClient) {
     //   Vue.nextTick(() => {

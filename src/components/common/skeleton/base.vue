@@ -42,7 +42,7 @@
   @import 'src/assets/styles/init.scss';
 
   $skeleton-background: $body-bg;
-  $skeleton-spinner: $module-hover-bg-opacity-3;
+  $skeleton-spinner: $module-bg-darker-3;
 
   @keyframes placeHolderShimmer {
     0% {

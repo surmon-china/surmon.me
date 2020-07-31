@@ -1,8 +1,13 @@
 <template>
   <div class="index-page">
-    <carrousel :article="article" />
-    <announcement :announcement="announcement" />
-    <article-list :article="article" @loadmore="loadmoreArticles" />
+    <carrousel :articles="article.data.data" />
+    <announcement :announcements="announcement.data" />
+    <article-list
+      :fetching="article.fetching"
+      :articles="article.data.data"
+      :pagination="article.data.pagination"
+      @loadmore="loadmoreArticles"
+    />
   </div>
 </template>
 
@@ -28,7 +33,7 @@
       const announcement = computed(() => store.state.announcement)
 
       const fetchAnnouncements = () => store.dispatch(
-        getNamespace(Modules.Article, AnnouncementModuleActions.FetchList),
+        getNamespace(Modules.Announcement, AnnouncementModuleActions.FetchList),
       )
 
       const fetchArticles = (params?: any) => store.dispatch(

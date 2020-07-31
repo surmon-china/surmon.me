@@ -91,7 +91,10 @@
       // }
 
       await Promise.all([
-        store.dispatch(getNamespace(Modules.Article, ArticleModuleActions.FetchDetail)),
+        store.dispatch(
+          getNamespace(Modules.Article, ArticleModuleActions.FetchDetail),
+          { article_id: articleId.value }
+        ),
           // .catch(err => error({ statusCode: 404 })),
         store.dispatch(
           getNamespace(Modules.Comment, CommentModuleActions.FetchList),

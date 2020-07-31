@@ -197,13 +197,13 @@
         }
 
         &:not(.ad) + .ad {
-          border-top: 1px dashed $module-hover-bg;
+          border-top: 1px dashed $module-bg-hover;
         }
 
         &.ad {
           height: 5rem;
           line-height: 5rem;
-          border-bottom: 1px dashed $module-hover-bg;
+          border-bottom: 1px dashed $module-bg-hover;
           margin: 0;
         }
 
@@ -244,6 +244,7 @@
           font-weight: bold;
           color: $primary;
           background-color: $module-bg;
+          @include radius-box($sm-radius);
 
           &.guestbook {
             background: linear-gradient(to bottom, $module-bg, transparent);

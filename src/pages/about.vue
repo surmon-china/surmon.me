@@ -18,10 +18,7 @@
             href="https://github.com/sponsors/surmon-china"
             rel="external nofollow noopenter"
             @mousedown="handleTouchSponsor"
-          >
-            GitHub Sponsor
-          </a>
-          <!-- TODO: css -->
+          >GitHub Sponsor</a>
           <span class="separator">|</span>
           <a
             target="_blank"
@@ -29,7 +26,6 @@
             rel="external nofollow noopenter"
             @mousedown="handleTouchSponsor"
           >PayPal me</a>
-          <!-- TODO: css -->
           <span class="separator">|</span>
           <a
             target="_blank"
@@ -47,7 +43,6 @@
           >
             <i18n zh="寂寞同性交友群" en="QQ group" />
           </a>
-          <!-- TODO: css -->
           <span class="separator">|</span>
           <a
             target="_blank"
@@ -137,14 +132,6 @@
                 >
                   <i class="iconfont icon-zhihu" />
                 </a>
-                <!-- <a
-                  href="https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w"
-                  target="_blank"
-                  class="item youtube"
-                  rel="external nofollow noopenter"
-                >
-                  <i class="iconfont icon-youtube" />
-                </a> -->
                 <a
                   href="https://space.bilibili.com/27940710"
                   target="_blank"
@@ -193,12 +180,12 @@
         </div>
         <div class="item">
           <i class="iconfont icon-tibet-1" />
-          <a href class="my-map" @click.stop.prevent="openMyMap">
+          <span class="my-map" @click="openMyMap">
             <i18n
               zh="路为纸，地成册，行作笔，心当墨；思无界，行有疆"
               en="Every path I went astray built my Rome."
             />
-          </a>
+          </span>
           <popup iframe="https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w" class="gmap" />
         </div>
         <div class="item">
@@ -271,13 +258,34 @@
         </desktop-only>
       </div>
     </div>
-    <div class="sponsor-mammon">
-      <iframe
-        title="Sponsor surmon-china"
-        target="_blank"
-        src="https://github.com/sponsors/surmon-china/card"
-      />
-    </div>
+    <template v-if="AD_CONFIG.aboutPageSwiper">
+      <desktop-only>
+        <div class="mammon">
+          <swiper class="swiper" :options="adSwiperOption">
+            <swiper-slide
+              v-for="(item, index) in AD_CONFIG.aboutPageSwiper"
+              :key="index"
+            >
+              <a
+                class="item"
+                rel="external nofollow noopener"
+                target="_blank"
+                :href="item.url"
+              >
+                <img
+                  :src="item.src"
+                  :alt="item.alt || item.title"
+                  :title="item.title || item.alt"
+                >
+              </a>
+            </swiper-slide>
+            <template #pagination>
+              <div class="swiper-pagination" />
+            </template>
+          </swiper>
+        </div>
+      </desktop-only>
+    </template>
     <div class="location-map">
       <iframe class="iframe" src="/partials/map.html" />
     </div>
@@ -312,6 +320,7 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/ga'
   import { getFileCDNUrl } from '/@/transforms/url'
+  import AD_CONFIG from '/@/config/ad.config'
   import * as APP_CONFIG from '/@/config/app.config'
 
   export default defineComponent({
@@ -359,9 +368,29 @@
         globalState.switchTogglers.liveMap()
       }
 
+      const adSwiperOption = {
+        loop: true,
+        direction: 'vertical',
+        autoplay: {
+          delay: 2666,
+          disableOnInteraction: false
+        },
+        pagination: {
+          clickable: true,
+          el: '.swiper-pagination'
+        },
+        autoHeight: true,
+        mousewheel: true,
+        observeParents: true,
+        preloadImages: false,
+        lazy: true
+      }
+
       return {
         APP_CONFIG,
+        AD_CONFIG,
         LANGUAGE_KEYS,
+        adSwiperOption,
         isMobile,
         gravatar,
         handleHoverFollowMe,
@@ -391,6 +420,8 @@
         flex-grow: 1;
         padding: 2rem 3rem;
         background-color: $module-bg;
+        @include radius-box($lg-radius);
+        @include common-bg-module();
 
         > .item {
           line-height: 2.5em;
@@ -398,6 +429,10 @@
           margin-bottom: 1.2rem;
           &:last-child {
             margin-bottom: 0;
+          }
+
+          .separator {
+            margin: 0 $sm-gap;
           }
 
           > .iconfont {
@@ -441,13 +476,18 @@
           }
 
           > .my-map {
+            cursor: pointer;
             border-bottom: 1px solid;
             font-family: 'webfont-bolder', DINRegular;
           }
 
           > .music {
-            .spotify {
+            .spotify,
+            .music-163 {
               margin-left: $xs-gap;
+            }
+
+            .spotify {
               color: #1DB954;
             }
 
@@ -473,12 +513,16 @@
                 line-height: $button-size;
                 padding: 0 $sm-gap;
                 margin-right: $sm-gap;
-                border-radius: $radius * 2;
-                color: $text-reversal;
+                border-radius: $sm-radius;
+                color: $white;
                 user-select: none;
                 @include background-transition();
 
-                > .text {
+                .iconfont {
+                  margin-right: $xs-gap;
+                }
+
+                .text {
                   font-size: $font-size-small;
                 }
 
@@ -518,7 +562,7 @@
                 margin-right: $sm-gap;
                 text-align: center;
                 border-radius: 100%;
-                color: $text-reversal;
+                color: $white;
                 opacity: 0.8;
                 @include visibility-transition();
 
@@ -536,11 +580,8 @@
                 &.zhihu {
                   background-color: #3582f7;
                 }
-                &.youtube {
-                  background-color: #ec3323;
-                }
                 &.bilibili {
-                  background-color: #449fd1;
+                  background-color: #fb7299;
                 }
                 &.stackoverflow {
                   background-color: #e6863d;
@@ -570,6 +611,8 @@
         flex-direction: column;
         justify-content: flex-start;
         background-color: $module-bg;
+        @include radius-box($lg-radius);
+        @include common-bg-module();
 
         @keyframes aboutbg-be-1 {
           0% { transform: translate3d(0%, 0%, 0) }
@@ -676,7 +719,7 @@
           display: inline-block;
           color: $primary;
           border: 1px solid $primary;
-          border-radius: 1px;
+          border-radius: $xs-radius;
           width: 56%;
           height: 2.68rem;
           text-align: center;
@@ -699,7 +742,6 @@
           justify-content: center;
           align-items: center;
           z-index: $z-index-normal + 1;
-          background-color: $module-bg;
           @include hidden();
           @include visibility-transition();
 
@@ -712,26 +754,24 @@
           .tooltip {
             color: $text;
             font-size: $font-size-small;
+            user-select: none;
           }
         }
       }
     }
 
-    .sponsor-mammon {
+    .mammon {
       width: 100%;
-      padding: $sm-gap;
       margin-bottom: $lg-gap;
       background-color: $module-bg;
+      @include radius-box($lg-radius);
 
-      > iframe {
-        width: 100%;
-        height: 104px;
-        border: none;
-        opacity: .7;
-        @include visibility-transition();
+      .swiper {
+        height: 6rem;
 
-        &:hover {
-          opacity: 1;
+        img {
+          width: 100%;
+          @include hover-effect();
         }
       }
     }
@@ -742,24 +782,50 @@
       padding: $sm-gap;
       margin-bottom: $lg-gap;
       background-color: $module-bg;
+      @include radius-box($lg-radius);
+      @include common-bg-module();
 
-      > iframe {
+      iframe {
         width: 100%;
         height: 19rem;
+        border-radius: $xs-radius;
       }
     }
 
     .about-project {
-      padding: $sm-gap;
       overflow: hidden;
       position: relative;
-      background-color: $module-bg;
+      width: 100%;
+      height: 17rem;
+      @include radius-box($lg-radius);
+
+      .project-link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        @include common-bg-module();
+
+        .title {
+          text-transform: uppercase;
+          font-family: 'webfont-normal', DINRegular;
+          margin-bottom: $gap;
+          font-size: 3em;
+        }
+
+        .description {
+          margin-bottom: 3rem;
+        }
+      }
 
       .animation { 
         width: 100%;
         position: absolute;
         bottom: 0;
         left: 0;
+        opacity: .8;
 
         .wave {
           background: url('/images/wave.svg') repeat-x;
@@ -785,31 +851,6 @@
           100% {
             transform: translate3d(-1600px, 0, 0);
           }
-        }
-      }
-
-      .project-link {
-        width: 100%;
-        height: 17rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        @include background-transition();
-
-        &:hover {
-          background-color: $module-hover-bg;
-        }
-
-        .title {
-          text-transform: uppercase;
-          font-family: 'webfont-normal', DINRegular;
-          margin-bottom: $gap;
-          font-size: 3em;
-        }
-
-        .description {
-          margin-bottom: 3rem;
         }
       }
     }

@@ -57,7 +57,7 @@
 
   export default defineComponent({
     name: 'Toolbox',
-    setup(_) {
+    setup() {
       const i18n = useI18n()
       const globalState = useGlobalState()
       const isOnBarrage = computed(() => globalState.switchBox.barrage)
@@ -158,6 +158,16 @@
         position: absolute;
         right: -12rem;
         width: $size;
+        overflow: hidden;
+
+        &:first-child {
+          border-top-left-radius: $xs-radius;
+          border-top-right-radius: $xs-radius;
+        }
+        &:last-child {
+          border-bottom-left-radius: $xs-radius;
+          border-bottom-right-radius: $xs-radius;
+        }
 
         > .rss,
         > .webcam,
@@ -170,12 +180,7 @@
           height: $size;
           line-height: $size;
           text-align: center;
-          @include module-blur-bg();
-          @include background-transition();
-
-          &:hover {
-            background-color: $module-hover-bg;
-          }
+          @include common-bg-module($transition-time-fast);
         }
 
         @keyframes default-btn-bg {
@@ -220,7 +225,7 @@
           animation: default-btn-bg 8s infinite;
 
           &.active {
-            background-color: $module-hover-bg;
+            background-color: $module-bg-hover;
             animation: default-btn-bg steps(1) 1.666s infinite;
           }
 

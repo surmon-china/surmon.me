@@ -15,6 +15,15 @@ const DEV_API = {
   GRAVATAR: '/proxy/static.surmon.me/avatar'
 }
 
+const PROXY_DEV_API = {
+  FE: 'https://surmon.me',
+  BASE: 'https://api.surmon.me',
+  CDN: 'https://surmon.me',
+  PROXY: 'https://cdn.surmon.me/proxy',
+  SOCKET: 'https://surmon.me',
+  GRAVATAR: 'https://static.surmon.me/avatar'
+}
+
 const PROD_API = {
   FE: 'https://surmon.me',
   BASE: 'https://api.surmon.me',
@@ -24,4 +33,5 @@ const PROD_API = {
   GRAVATAR: 'https://static.surmon.me/avatar'
 }
 
-export default isDev ? DEV_API : PROD_API
+export default PROXY_DEV_API
+// export default isDev ? DEV_API : PROD_API

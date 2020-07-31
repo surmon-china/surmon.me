@@ -229,7 +229,7 @@
   })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
   .detail {
@@ -320,8 +320,8 @@
           margin: 0 auto;
           display: block;
           text-align: center;
-          border-radius: $radius;
-          border: $sm-gap solid $module-hover-bg;
+          border-radius: $xs-radius;
+          border: $sm-gap solid $module-bg-hover;
           opacity: .9;
           cursor: pointer;
 
@@ -374,7 +374,7 @@
             padding: .5em .8em;
 
             &:hover {
-              background-color: $module-hover-bg;
+              background-color: $module-bg-hover;
             }
 
             > p {
@@ -393,8 +393,8 @@
           color: #bd4147;
           padding: .3em .5em;
           margin: 0 .5em;
-          border-radius: $radius;
-          background-color: $module-hover-bg;
+          border-radius: $xs-radius;
+          background-color: $module-bg-hover;
         }
 
         pre {
@@ -482,7 +482,7 @@
       @keyframes readmorebtn {
         0% {
           transform: translate3d(0, 0, 0);
-          background-color: $module-hover-bg;
+          background-color: $module-bg-hover;
         }
         25% {
           transform: translate3d(0, $sm-gap, 0);
@@ -491,7 +491,7 @@
         }
         50% {
           transform: translate3d(0, 0, 0);
-          background-color: $module-hover-bg;
+          background-color: $module-bg-hover;
         }
         75% {
           transform: translate3d(0, $sm-gap, 0);
@@ -500,7 +500,7 @@
         }
         100% {
           transform: translate3d(0, 0, 0);
-          background-color: $module-hover-bg;
+          background-color: $module-bg-hover;
         }
       }
 
@@ -515,7 +515,7 @@
           text-align: center;
           height: 3rem;
           line-height: 3rem;
-          background-color: $module-hover-bg;
+          background-color: $module-bg-hover;
           animation: readmorebtn 4s linear infinite;
 
           &[disabled] {

@@ -48,8 +48,10 @@ export const Responsive = defineComponent({
 export const DesktopOnly = defineComponent({
   name: 'DesktopOnly',
   setup(_, context) {
-    return () => {
-      return h(Responsive, { desktop: true }, context.slots)
-    }
+    const globalState = useGlobalState()
+    return () => (
+      !globalState.userAgent.isMobile &&
+      context.slots.default?.()
+    )
   }
 })

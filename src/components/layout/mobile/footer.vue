@@ -24,7 +24,7 @@
 
   footer {
     margin: 0;
-    @include module-blur-bg();
+    @include common-bg-module();
 
     .footer-content {
       width: 100%;

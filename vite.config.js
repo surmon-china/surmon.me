@@ -4,6 +4,10 @@ const path = require('path')
 module.exports = {
   // root: './src',
   // base: './public',
+  hostname: 'surmon.me',
+  port: 443,
+  open: true,
+  https: true,
   alias: {
     '/@/': path.resolve(__dirname, './src')
   },
@@ -14,18 +18,24 @@ module.exports = {
     exclude: ['esm', 'fs-extra', 'socket.io', 'request', 'cross-env', '@vue/compiler-sfc', '@vue/server-renderer']
   },
   proxy: {
-    '/proxy/bilibili': {
-      // target: 'http://jsonplaceholder.typicode.com',
+    '/api': {
+      target: 'https://api.surmon.me',
       changeOrigin: true,
-      forward: true,
-      rewrite(path) {
-        const proxyPath = `/proxy/bilibili/`
-        const index = path.lastIndexOf(proxyPath)
-        if (index > -1) {
-          return 'http://' + path.slice(proxyPath.length + index)
-        }
-        return path
-      }
+      rewrite: path => path.replace(/^\/api/, '')
+    },
+    '/proxy': {
+      target: 'https://surmon.me/proxy',
+      changeOrigin: true,
+      rewrite: path => path.replace(/^\/proxy/, '')
+      // forward: true,
+      // rewrite(path) {
+      //   const proxyPath = `/proxy/bilibili/`
+      //   const index = path.lastIndexOf(proxyPath)
+      //   if (index > -1) {
+      //     return 'http://' + path.slice(proxyPath.length + index)
+      //   }
+      //   return path
+      // }
     }
   },
   plugins: [

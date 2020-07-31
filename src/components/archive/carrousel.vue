@@ -1,5 +1,11 @@
 <template>
-  <div class="carrousel" :class="{ mobile: isMobile }">
+  <div
+    class="carrousel"
+    :class="{
+      mobile: isMobile,
+      dark: isDarkTheme
+    }"
+  >
     <placeholder :data="articleList.length">
       <template #placeholder>
         <empty class="article-empty">
@@ -15,25 +21,33 @@
           <div class="swiper-wrapper">
             <div
               class="swiper-slide"
-              v-for="(_article, index) in articleList.slice(0, 9)"
+              v-for="(article, index) in articleList.slice(0, 9)"
               :key="index"
             >
               <div class="content">
-                <template v-if="_article.ad">
+                <template v-if="article.ad">
                   <a
-                    :href="_article.url"
+                    :href="article.url"
                     target="_blank"
                     rel="external nofollow noopener"
                     class="link"
                   >
-                    <img :src="_article.src" :alt="_article.title">
-                    <span class="title">{{ _article.title }}</span>
+                    <img :src="article.src" :alt="article.title">
+                    <span class="title">{{ article.title }}</span>
                   </a>
                 </template>
                 <template v-else>
-                  <router-link :to="`/article/${_article.id}`" class="link">
-                    <img :src="getThumb(_article.thumb)" :alt="_article.title">
-                    <span class="title">{{ _article.title }}</span>
+                  <router-link :to="`/article/${article.id}`" class="link">
+                    <img :src="getThumbURL(article.thumb)" :alt="article.title">
+                    <div class="title">
+                      <div class="background"></div>
+                      <div class="prospect">
+                        <span
+                          class="text"
+                          :style="{ backgroundImage: `url('${getThumbURL(article.thumb)}')` }"
+                        >{{ article.title }}</span>
+                      </div>
+                    </div>
                   </router-link>
                 </template>
               </div>
@@ -50,7 +64,7 @@
   import { defineComponent, ref, computed } from 'vue'
   import { useSwiperRef, NameId } from '/@/todo/swiper'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { useGlobalState } from '/@/state'
+  import { useEnhancer } from '/@/enhancer'
   import { timeAgo } from '/@/transforms/moment'
   import { mapState } from 'vuex'
   import { getBannerArticleThumbnailUrl } from '/@/transforms/thumbnail'
@@ -59,16 +73,15 @@
   export default defineComponent({
     name: 'ArchiveCarrousel',
     props: {
-      article: {
-        type: Object,
+      articles: {
+        type: Array,
         required: true
       }
     },
     setup(props) {
-      const globalState = useGlobalState()
-      const isMobile = computed(() => globalState.userAgent.isMobile)
+      const { globalState, isMobile, isDarkTheme } = useEnhancer()
       const articleList = computed(() => {
-        const articles = [...props.article.data.data].slice(0, 9)
+        const articles = [...props.articles].slice(0, 9)
         if (AD_CONFIG.carrousel) {
           const { index, ...otherConfig } = AD_CONFIG.carrousel
           articles.length && articles.splice(index, 0, {
@@ -99,7 +112,7 @@
         lazy: true
       }
 
-      const getThumb = (thumb: string): string => {
+      const getThumbURL = (thumb: string): string => {
         return getBannerArticleThumbnailUrl(
           thumb,
           isMobile.value,
@@ -110,9 +123,10 @@
       return {
         LANGUAGE_KEYS,
         isMobile,
+        isDarkTheme,
         swiperOption,
         articleList,
-        getThumb
+        getThumbURL
       }
     }
   })
@@ -121,7 +135,7 @@
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
-  $pc-carrousel-height: 15em;
+  $pc-carrousel-height: 210px;
   $mobile-carrousel-height: calc((100vw - 2rem) * .35);
 
   .carrousel {
@@ -130,27 +144,25 @@
     position: relative;
     overflow: hidden;
     user-select: none;
-    @include module-blur-bg();
+    @include common-bg-module();
+    @include radius-box($lg-radius);
 
-    &.mobile {
-      margin-bottom: $gap;
-      height: $mobile-carrousel-height;
-
-      > .swiper {
-        .swiper-slide {
-          > .content {
-            height: $mobile-carrousel-height;
-
-            > .title {
-              right: 1.7rem;
-              max-width: 70%;
+    &.dark {
+      .swiper-slide {
+        .title {
+          .prospect {
+            .text {
+              -webkit-text-fill-color: $text !important;
             }
           }
         }
       }
     }
 
-    > .swiper {
+    .swiper {
+      width: 595px;
+      height: $pc-carrousel-height;
+
       // Filter for slide when transitioning
       .swiper-wrapper[style*="300ms"] {
         .swiper-slide-active {
@@ -161,10 +173,10 @@
       }
 
       .swiper-pagination {
-        .swiper-pagination-bullet {
+        ::v-deep(.swiper-pagination-bullet) {
           &.swiper-pagination-bullet-active {
             width: 2rem;
-            border-radius: 10px;
+            border-radius: $lg-radius;
           }
         }
       }
@@ -185,7 +197,7 @@
           img {
             width: 100%;
             transform: scale(1);
-            transition: transform $transition-time-slow;
+            transition: transform $transition-time-normal;
 
             &:hover {
               transform: scale(1.06);
@@ -193,32 +205,73 @@
           }
 
           .title {
+            $offset: 6px / 2;
+            display: block;
             position: absolute;
-            margin: 0;
-            top: 1.5rem;
-            right: 2rem;
-            color: $link-color;
-            padding-right: .6em;
-            padding-left: 1em;
-            height: 2em;
-            line-height: 2em;
-            font-size: 1em;
-            font-weight: bold;
-            border-radius: 1px;
-            letter-spacing: .3px;
-            max-width: 75%;
-            -webkit-background-clip: text;
-            background: linear-gradient(90deg, transparent 0%, $module-bg 2em, $module-bg-opacity-9, $text-reversal);
-            transition:
-              background-color $transition-time-fast,
-              padding $transition-time-fast,
-              color $transition-time-fast;
-            @include text-overflow;
+            top: 2rem;
+            right: 2.6rem;
+            opacity: .8;
+            transition: opacity $transition-time-normal;
+
+            .background {
+              content: '';
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              z-index: -1;
+              top: 0;
+              left: 0;
+              background-color: $module-bg;
+              transform: translate3d($offset, -$offset, 0);
+              transition: transform $transition-time-fast;
+            }
+
+            .prospect {
+              padding: 0 1em;
+              height: 2em;
+              line-height: 2em;
+              @include text-overflow;
+              background-color: $module-bg-opaque;
+              background-position: top right;
+              transform: translate3d(- $offset, $offset, 0);
+              transition: transform $transition-time-fast;
+
+              .text {
+                letter-spacing: .3px;
+                font-weight: bold;
+                color: $text;
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+              }
+            }
 
             &:hover {
-              color: $text-darken;
-              padding-left: .6em;
-              background-color: $module-bg;
+              opacity: 1;
+              .background {
+                transform: translate3d(0, 0, 0);
+              }
+              .prospect {
+                transform: translate3d(0, 0, 0);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.mobile {
+      margin-bottom: $gap;
+      height: $mobile-carrousel-height;
+
+      > .swiper {
+        .swiper-slide {
+          > .content {
+            height: $mobile-carrousel-height;
+
+            > .title {
+              right: 1.7rem;
+              max-width: 70%;
             }
           }
         }

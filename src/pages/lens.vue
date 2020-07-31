@@ -1,12 +1,53 @@
 <template>
-  <div class="lens-page" :class="{ mobile: isMobile }">
+  <div
+    class="lens-page"
+    :class="{
+      mobile: isMobile,
+      dark: isDarkTheme
+    }"
+  >
     <div class="header">
-      <div class="item">ins</div>
-      <div class="item">douyin</div>
-      <div class="item">bilibili</div>
-      <div class="item">Wechat Channels</div>
+      <div class="bilibili">
+        <div class="left">
+          <i class="iconfont icon-bilibili"></i>
+          <a
+            href="https://space.bilibili.com/27940710"
+            target="_blank"
+            class="button"
+            rel="external nofollow noopenter"
+          >(゜-゜)つロ 干杯~</a>
+        </div>
+        <uimage class="image" cdn src="/images/bilibili.jpg" />
+      </div>
+      <div class="global">
+        <a
+          class="instagram"
+          href="https://www.instagram.com/surmon666"
+          target="_blank"
+          rel="external nofollow noopenter"
+        >
+          <i class="iconfont icon-instagram"></i>
+          <span class="button">Instagram</span>
+        </a>
+        <a
+          class="youtube"
+          href="https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w"
+          target="_blank"
+          rel="external nofollow noopenter"
+        >
+          <i class="iconfont icon-youtube"></i>
+          <span class="button">YouTube</span>
+        </a>
+      </div>
+      <div class="wechat-channel" data-placeholder="Scan QR code on Wechat">
+        <uimage cdn src="/images/wechat-channel.jpg" />
+      </div>
+      <div class="douyin" data-placeholder="Scan TikCode on Douyin">
+        <uimage cdn src="/images/douyin.jpg" />
+      </div>
     </div>
-    <ul ref="videoListElement" class="video-list">
+    <div class="title-split">Vlogs</div>
+    <ul class="videos" ref="videoListElement">
       <li
         class="item"
         @click="handlePlay(video)"
@@ -61,7 +102,7 @@
         rel="external nofollow noopenter"
       >
         <span class="icon">
-          <i class="iconfont icon-lens"></i>
+          <i class="iconfont icon-bilibili"></i>
         </span>
         <span v-i18n="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE" />
       </a>
@@ -73,9 +114,8 @@
   import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
   import { useStore, getNamespace, Modules } from '/@/store'
   import { VlogModuleActions } from '/@/store/vlog'
-  import { useI18n } from '/@/services/i18n'
   import { LozadObserver } from '/@/services/lozad'
-  import { useGlobalState } from '/@/state'
+  import { useEnhancer } from '/@/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { timeAgo } from '/@/transforms/moment'
   import { getFileProxyUrl } from '/@/transforms/url'
@@ -88,10 +128,7 @@
     //   }
     // },
     async setup() {
-      const i18n = useI18n()
-      const store = useStore()
-      const globalState = useGlobalState()
-      const isMobile = computed(() => globalState.userAgent.isMobile)
+      const { globalState, i18n, store, isMobile, isDarkTheme } = useEnhancer()
 
       const lozadObserver = ref<LozadObserver | null>(null)
       const videoListElement = ref<HTMLElement>()
@@ -135,6 +172,7 @@
       return {
         LANGUAGE_KEYS,
         isMobile,
+        isDarkTheme,
         isFetching,
         videoListElement,
         videoList,
@@ -152,30 +190,187 @@
 
   .lens-page {
     min-height: 40rem;
+    $bilibili-blue-primary: #00a1d6;
+    $bilibili-red-primary: #fb7299;
 
-    &.mobile {
-      min-height: auto;
+    .header {
+      display: flex;
+      width: 100%;
+      height: 200px;
+      margin-bottom: $lg-gap;
 
-      > .video-list {
-        > .item {
-          width: 100%;
-          height: auto;
+      .bilibili,
+      .instagram,
+      .youtube,
+      .wechat-channel,
+      .douyin {
+        @include radius-box($sm-radius);
+      }
+
+      .bilibili {
+        flex-shrink: 0;
+        display: flex;
+        width: 40%;
+        height: 100%;
+        margin-right: $gap;
+        border: 2px solid $bilibili-blue-primary;
+
+        .left {
           flex-grow: 1;
-          margin-right: 0;
-          margin-bottom: $gap;
+          height: 100%;
+          text-align: center;
+          background-color: $bilibili-blue-primary;
+          color: $white;
 
-          > .thumb {
-            height: 10rem;
+          .iconfont {
+            display: block;
+            margin-top: $sm-gap;
+            font-size: 6em;
           }
 
-          > .split {
-            border-color: $module-hover-bg;
+          .button {
+            display: inline-block;
+            margin-top: $sm-gap;
+            color: inherit;
+            height: 2em;
+            line-height: 2em;
+            padding: 0 $gap;
+            border: 1px solid $white;
+            border-radius: $xs-radius;
+            opacity: .8;
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+
+        .image {
+          flex-shrink: 0;
+          height: 100%;
+          width: auto;
+        }
+      }
+
+      .global {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        margin-right: $gap;
+
+        .instagram,
+        .youtube {
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          color: $white;
+          opacity: 0.9;
+          &:hover {
+            opacity: 1;
+          }
+
+          .iconfont {
+            font-size: $font-size-h1;
+            margin-bottom: $gap;
+          }
+
+          .button {
+            display: inline-block;
+            height: 1.6em;
+            line-height: 1.5em;
+            padding: 0 $sm-gap;
+            border: 1px solid $white;
+            border-radius: $xs-radius;
+            font-size: $font-size-small;
+          }
+        }
+
+        .instagram {
+          margin-bottom: $gap;
+          background: #f09433;
+          background: linear-gradient(
+            45deg,
+            #f09433 0%,
+            #e6683c 25%,
+            #dc2743 50%,
+            #cc2366 75%,
+            #bc1888 100%
+          );
+          @include visibility-transition();
+        }
+
+        .youtube {
+          background-color: #ec3323;
+        }
+      }
+
+      .wechat-channel {
+        margin-right: $gap;
+      }
+
+      .wechat-channel,
+      .douyin {
+        position: relative;
+        flex-shrink: 0;
+        height: 100%;
+        background-color: $module-bg;
+        opacity: 0.9;
+        &:hover {
+          opacity: 1;
+        }
+
+        img {
+          width: auto;
+          height: 100%;
+        }
+
+        &::before {
+          $height: 4rem;
+          content: attr(data-placeholder);
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: $height;
+          line-height: $height;
+          text-align: center;
+          font-size: $font-size-small;
+          font-weight: bold;
+          background-color: $module-bg-opaque;
+          @include hidden();
+          @include visibility-transition();
+        }
+
+        &:hover {
+          &::before {
+            @include visible();
           }
         }
       }
     }
 
-    > .video-list {
+    .title-split {
+      margin-bottom: $lg-gap;
+      line-height: 3.6em;
+      border-width: 4px;
+      border-style: dashed;
+      border-color:
+        $bilibili-blue-primary
+        $bilibili-red-primary
+        $bilibili-red-primary
+        $bilibili-blue-primary;
+      background-color: $module-bg-opaque;
+      text-align: center;
+      font-size: $font-size-h3;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: $bilibili-blue-primary;
+      letter-spacing: 5px;
+      user-select: none;
+    }
+
+    .videos {
       padding: 0;
       margin: 0;
       display: flex;
@@ -189,13 +384,11 @@
         margin-right: $lg-gap;
         margin-bottom: $lg-gap;
         width: calc((100% - #{$lg-gap * 2}) / 3);
-        background-color: $module-bg;
         cursor: pointer;
-        @include background-transition();
+        @include radius-box($sm-radius);
+        @include common-bg-module();
 
         &:hover {
-          background-color: $module-hover-bg;
-
           .thumb {
             .background {
               transform: rotate(2deg) scale(1.1),
@@ -209,8 +402,8 @@
             }
           }
 
-          > .split {
-            border-color: $module-hover-bg-darken-10;
+          .title {
+            text-decoration: underline;
           }
         }
 
@@ -218,7 +411,7 @@
           margin-right: 0;
         }
 
-        > .thumb {
+        .thumb {
           width: 100%;
           height: 13rem;
           position: relative;
@@ -227,7 +420,7 @@
           .background {
             width: 100%;
             height: 100%;
-            background-color: $module-hover-bg-darken-10;
+            background-color: $module-bg-darker-2;
             background-size: cover;
             background-position: center;
             transform: rotate(0deg) scale(1);
@@ -240,13 +433,12 @@
             bottom: 0;
             right: 0;
             z-index: $z-index-normal + 1;
-            background-color: $module-hover-bg-darken-40;
+            background-color: rgba($black, 0.6);
             height: $font-size-h2;
             line-height: $font-size-h2;
             padding: 0 $sm-gap;
-            opacity: 0.9;
+            color: $white;
             font-size: $font-size-small;
-            @include title-shadow();
           }
 
           .mask {
@@ -267,9 +459,9 @@
               height: 5rem;
               line-height: 5rem;
               text-align: center;
-              background: $module-bg-opacity-5;
+              background: $module-bg;
               border-radius: 100%;
-              color: $module-bg;
+              color: $text-reversal;
               opacity: 0.88;
               font-size: 3em;
               transform: scale(1.2);
@@ -284,7 +476,6 @@
           margin-bottom: $sm-gap;
           font-weight: bold;
           text-transform: capitalize;
-          @include text-overflow();
         }
 
         > .description {
@@ -293,12 +484,10 @@
           line-height: 2rem;
           height: 2rem;
           font-size: $font-size-h6;
-          @include text-overflow();
         }
 
         > .split {
-          border-color: $body-bg;
-          border-top-style: dashed;
+          border-top: 1px dotted $module-bg-darker-1;
           margin: 0;
         }
 
@@ -308,7 +497,7 @@
           display: flex;
           justify-content: space-around;
           align-items: center;
-          font-size: $font-size-h6;
+          font-size: $font-size-small;
 
           > .item {
             font-weight: 400;
@@ -322,24 +511,55 @@
       }
     }
 
-    > .loadmore {
+    .loadmore {
       > .button {
         display: block;
         width: 100%;
         height: $block-button-height;
         line-height: $block-button-height;
-        background-color: $module-bg;
         text-align: center;
-        @include background-transition();
-
-        &:hover {
-          background-color: $module-hover-bg;
-        }
+        @include common-bg-module();
+        @include radius-box($xs-radius);
 
         > .icon {
           margin-right: $gap;
         }
       }
     }
+
+    &.dark {
+      .videos {
+        .item {
+          .thumb {
+            .button {
+              color: $text-disabled !important;
+            }
+          }
+        }
+      }
+    }
+
+    &.mobile {
+      min-height: auto;
+
+      > .videos {
+        > .item {
+          width: 100%;
+          height: auto;
+          flex-grow: 1;
+          margin-right: 0;
+          margin-bottom: $gap;
+
+          > .thumb {
+            height: 10rem;
+          }
+
+          > .split {
+            border-color: $module-bg-hover;
+          }
+        }
+      }
+    }
+
   }
 </style>

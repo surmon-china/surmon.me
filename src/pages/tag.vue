@@ -10,7 +10,9 @@
       <span>{{ currentTag.description || '...' }}</span>
     </article-list-header>
     <article-list
-      :article="articleData"
+      :fetching="article.fetching"
+      :articles="article.data.data"
+      :pagination="article.data.pagination"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -43,7 +45,7 @@
       const router = useRouter()
 
       const fetchTags = () => store.dispatch(
-        getNamespace(Modules.Tag, TagModuleActions.FetchList)
+        getNamespace(Modules.Tag, TagModuleActions.FetchAll)
       )
 
       const fetchArticles = (params: any) => {
@@ -57,7 +59,7 @@
         return fetchArticles({
           ...route.params,
           tag_slug: route.params.tag_slug,
-          page: articleData.value.data.pagination.current_page + 1
+          page: article.value.data.pagination.current_page + 1
         })
       }
 
@@ -66,7 +68,7 @@
         fetchArticles(route.params),
       ])
 
-      const articleData = computed(() => store.state.article.list)
+      const article = computed(() => store.state.article.list)
       const currentTag = computed(() => {
         return store.state.tag.data.find(tag => {
           return tag.slug === route.params.tag_slug
@@ -90,7 +92,7 @@
       )
 
       return {
-        articleData,
+        article,
         currentTag,
         currentTagIcon,
         currentTagImage,

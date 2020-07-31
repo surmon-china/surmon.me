@@ -1,7 +1,37 @@
 
-@mixin text-overflow() {
+@mixin center-placeholder() {
+  width: 100%;
+  height: auto;
+  position: relative;
+  
+  &::before {
+    content: attr(placeholder);
+    position: absolute;
+    text-align: center;
+    font-size: $font-size-h1;
+    font-weight: bold;
+    color: $text-dividers;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    z-index: $z-index-underground;
+    letter-spacing: .2em;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.center-placeholder {
+  @include center-placeholder;
+}
+
+@mixin radius-box($radius-size) {
+  border-radius: $radius-size;
   overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+@mixin text-overflow($placeholder: ellipsis) {
+  overflow: hidden;
+  text-overflow: $placeholder;
   white-space: nowrap;
 }
 
@@ -17,12 +47,6 @@
 
 @mixin backdrop-blur($blur-radius: 5px) {
   backdrop-filter: blur($blur-radius);
-}
-
-@mixin module-blur-bg() {
-  background-color: $module-bg;
-  // 全部打开影响性能
-  // @include backdrop-blur();
 }
 
 @mixin box-shadow($alpha: 0.6, $blur-radius: 8px) {
@@ -55,6 +79,27 @@
   transition: background-color $time;
 }
 
+@mixin filter-transition($time: $transition-time-fast) {
+  transition: filter $time;
+}
+
+@mixin hover-effect() {
+  filter: brightness(0.96);
+  @include filter-transition($transition-time-fast);
+
+  &:hover {
+    filter: brightness(1.06);
+  }
+}
+
+@mixin common-bg-module($time: $transition-time-normal) {
+  background-color: $module-bg;
+  @include background-transition($time);
+  &:hover {
+    background-color: $module-bg-opaque;
+  }
+}
+
 @mixin blur-filter($param: 'horizontal') {
   filter: force-source-url('/images/motion-blur-filter.svg##{$param}');
 }
@@ -77,5 +122,5 @@
 /// @param {Color} $color [rgba(0,0,0,.4)] - Color
 
 @mixin text-shadow($x: 2px, $y: 2px, $blur: 5px, $color: rgba(0,0,0,.4)) {
-    text-shadow: $x $y $blur $color;
+  text-shadow: $x $y $blur $color;
 }

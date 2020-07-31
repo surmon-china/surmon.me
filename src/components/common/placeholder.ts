@@ -1,9 +1,14 @@
 import { defineComponent, h, Transition, PropType } from 'vue'
 import { LANGUAGE_KEYS } from '/@/language/key'
-import Empty from './empty'
+import Empty from './empty.vue'
 import Spin from './spin.vue'
 
 /**
+ * @example (
+ *  <placeholder :loading="false" :data="data.length" p-i18n-key="LANGUAGE_KEYS.XXX">
+ *    <component />
+ *  </placeholder>
+ * )
  * @example (
  *  <placeholder :loading="false" :data="data.length" placeholder="empty">
  *    <component />
@@ -13,19 +18,28 @@ import Spin from './spin.vue'
  *  <placeholder :loading="true" :data="data.length">
  *    <template #loading> skeleton </template>
  *    <template #placeholder> placeholder </template>
- *    <template> <component /> </template>
+ *    <template #default> <component /> </template>
  *  </placeholder>
  * )
 */
+export enum Events {
+  AfterEnter = 'after-enter'
+}
 export default defineComponent({
   name: 'Placeholder',
   props: {
+    data: {
+      type: [Array, Object, Boolean, Number],
+      default: undefined
+    },
     placeholder: String,
     pI18nKey: String as PropType<LANGUAGE_KEYS>,
     loading: Boolean,
-    transition: Boolean,
-    data: [Array, Object as any]
+    transition: Boolean
   },
+  emits: [
+    Events.AfterEnter
+  ],
   setup(props, context) {
     return () => {
       const { data, placeholder, pI18nKey, loading, transition } = props
@@ -66,7 +80,7 @@ export default defineComponent({
             name: 'module',
             mode: 'out-in',
             onAfterEnter(...args) {
-              context.emit('after-enter', ...args)
+              context.emit(Events.AfterEnter, ...args)
             }
           },
           getView()

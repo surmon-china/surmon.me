@@ -14,7 +14,7 @@ export enum TagModuleMutations {
   SetListData = 'setListData'
 }
 export enum TagModuleActions {
-  FetchList = 'fetchList'
+  FetchAll = 'fetchAll'
 }
 
 const state = () => ({
@@ -36,13 +36,13 @@ const mutations: MutationTree<TagState> = {
 }
 
 const actions: ActionTree<TagState, IRootState> = {
-  [TagModuleActions.FetchList]({ state, commit }, params: object) {
+  [TagModuleActions.FetchAll]({ state, commit }) {
     if (state.fetched) {
       return Promise.resolve(state.data)
     }
     commit(TagModuleMutations.SetFetching, true)
     return http
-      .get('/tag', { params })
+      .get('/tag', { params: { cache: 1 }})
       .then(response => {
         commit(TagModuleMutations.SetListData, response.result)
         commit(TagModuleMutations.SetFetched, true)

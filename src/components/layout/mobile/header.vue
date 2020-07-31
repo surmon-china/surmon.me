@@ -122,7 +122,7 @@
     left: 0;
     width: 100%;
     height: $mobile-header-height;
-    background-color: $module-bg-opacity-9;
+    background-color: $module-bg-darker-1;
     z-index: $z-index-header;
 
     .search-mask {
@@ -133,7 +133,7 @@
       width: 100%;
       height: 100%;
       touch-action: none;
-      background-color: $module-hover-bg-darken-10;
+      background-color: $module-bg-darker-5;
     }
 
     .search {

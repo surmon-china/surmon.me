@@ -39,7 +39,7 @@
           >
             <i
               class="iconfont"
-              :class="music.state.muted ? 'icon-music-muted' : 'icon-music-volume'"
+              :class="music.muted ? 'icon-music-muted' : 'icon-music-volume'"
             ></i>
           </button>
         </div>
@@ -102,7 +102,6 @@
     z-index: $z-index-header;
     background-color: $module-bg;
     user-select: none;
-    // 过段时间再打开吧，闪屏太严重了
     @include backdrop-blur();
 
     .header-container {
@@ -179,7 +178,7 @@
 
             &:hover {
               .iconfont {
-                color: $link-hover-color;
+                color: $link-color-hover;
               }
             }
           }
@@ -194,7 +193,7 @@
             @include color-transition();
 
             &:hover {
-              color: $link-hover-color;
+              color: $link-color-hover;
             }
           }
         }

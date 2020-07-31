@@ -113,26 +113,8 @@ select:-webkit-autofill {
   }
 }
 
-// mammon
 .mammon-box {
-  width: 100%;
-  height: auto;
-  position: relative;
-
-  &::before {
-    content: '向我的衣食父母鞠躬';
-    position: absolute;
-    text-align: center;
-    font-size: $font-size-h1;
-    font-weight: bold;
-    color: $text-dividers;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    z-index: $z-index-underground;
-    letter-spacing: .2em;
-    transform: translate(-50%, -50%);
-  }
+  @extend .center-placeholder;
 }
 
 // swiper
@@ -145,11 +127,19 @@ select:-webkit-autofill {
 }
 
 .swiper-pagination-bullet {
-  transition: width $transition-time-normal, height $transition-time-normal, border-radius $transition-time-normal;
+  // swiper default size
+  border-radius: 8px;
+  transition:
+    width $transition-time-slow,
+    height $transition-time-slow,
+    border-radius $transition-time-slow;
+
+  &:hover {
+    background: $module-bg-darker-1;
+  }
 
   &.swiper-pagination-bullet-active {
-    opacity: .8;
-    background: $text-reversal;
+    background: $module-bg;
   }
 }
 

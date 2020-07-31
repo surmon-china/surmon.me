@@ -103,7 +103,7 @@
           background: linear-gradient(
             to left,
             $module-bg,
-            $module-hover-bg-opacity-3,
+            $module-bg-darker-3,
             transparent
           );
         }

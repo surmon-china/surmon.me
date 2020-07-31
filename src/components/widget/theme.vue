@@ -1,6 +1,6 @@
 <template>
   <div id="theme">
-    <div class="theme-box" :class="theme" @click="toggleTheme">
+    <div class="switcher" :class="theme" @click="toggleTheme">
       <i class="iconfont" :class="themeIcon"></i>
     </div>
   </div>
@@ -52,7 +52,7 @@
     right: 0;
     top: 20%;
 
-    .theme-box {
+    .switcher {
       $size: $lg-gap * 2;
       width: $size;
       height: $size;
@@ -62,6 +62,7 @@
       align-items: center;
       background-color: $module-bg;
       border-left: $xs-gap solid $primary;
+      border-top-left-radius: $xs-radius;
       color: $primary;
       opacity: 0.4;
       user-select: none;

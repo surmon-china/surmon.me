@@ -47,7 +47,7 @@
           </span>
           <i18n zh="：" en=":" />
         </p>
-        <div v-html="markedParse(comment.content)"></div>
+        <div v-html="parseMarkdown(comment.content)"></div>
       </div>
       <div class="cm-footer">
         <span class="create_at">{{ humanlizeDate(comment.create_at) }}</span>
@@ -94,6 +94,7 @@
   export default defineComponent({
     name: 'CommentListItem',
     components: {
+      CommentLink,
       CommentUa,
     },
     props: {
@@ -106,12 +107,16 @@
         default: false
       }
     },
+    emits: [
+      CommentEvent.Reply,
+      CommentEvent.Like
+    ],
     setup(props, context) {
       const { i18n, store, globalState, isMobile, isZhLang } = useEnhancer()
       const comments = computed(() => store.state.comment.comments.data)
 
-      const markedParse = (markdown: string) => {
-        return ''
+      const parseMarkdown = (markdown: string) => {
+        return markdown
         // return marked(markdown, null, false)
       }
 
@@ -147,7 +152,9 @@
         getGravatarUrlByEmail,
         humanizeGravatarUrl,
         getCommentElementId,
-        firstUpperCase
+        getReplyParentCommentText,
+        firstUpperCase,
+        parseMarkdown
       }
     }
   })
@@ -167,7 +174,7 @@
 
     &:hover {
       .cm-body {
-        background-color: $module-hover-bg-darken-20;
+        background-color: $module-bg-darker-6;
       }
     }
 
@@ -176,11 +183,11 @@
       position: absolute;
       left: 0;
       top: $gap * 2;
-      background-color: $module-hover-bg;
+      background-color: $module-bg-hover;
 
       > a {
         display: block;
-        border: ($radius * 2) solid $module-bg;
+        border: ($xs-radius * 2) solid $module-bg;
         width: 4em;
         height: 4em;
 
@@ -196,7 +203,7 @@
       width: 100%;
       height: 100%;
       padding: $sm-gap $sm-gap $sm-gap ($lg-gap * 3);
-      background-color: $module-hover-bg;
+      background-color: $module-bg-hover;
       @include background-transition();
 
       > .cm-header {

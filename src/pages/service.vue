@@ -286,7 +286,7 @@
 
     .banner {
       height: 31rem;
-      background: $module-hover-bg cdn-url('/images/service.jpg');
+      background: $module-bg-hover cdn-url('/images/service.jpg');
       background-size: cover;
       background-position: center 60%;
       background-attachment: fixed;
@@ -310,7 +310,8 @@
 
           .email-me {
             $width: 10rem;
-            $height: 4rem;
+            $height: 3.8rem;
+            @include radius-box($xs-radius);
 
             position: relative;
             width: $width;
@@ -325,29 +326,9 @@
             color: $text-reversal;
             transition: color $transition-time-fast, border-color $transition-time-fast;
 
-            &::after {
-              content: '';
-              display: block;
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: $width;
-              height: $height;
-              pointer-events: none;
-              background-color: transparent;
-              transform: scale(1.8);
-            }
-
             &:hover {
               color: $primary;
               border-color: $primary;
-
-              &::after {
-                background-color: $primary;
-                transform: scale(1);
-                opacity: 0;
-                transition: transform .16s, opacity .16s, background-color 0.25s;
-              }
             }
           }
         }
@@ -356,7 +337,13 @@
           color: $text-reversal;
           border-bottom: 1px solid;
           border-color: transparent;
-          transition: color $transition-time-fast, border-color $transition-time-fast;
+          transition:
+            color $transition-time-fast,
+            border-color $transition-time-fast;
+
+          .iconfont {
+            margin-left: $xs-gap;
+          }
 
           &:hover {
             color: $primary;
@@ -385,16 +372,16 @@
             padding-bottom: $gap;
             overflow: hidden;
             text-align: center;
-            background-color: $module-bg;
-            margin-right: $lg-gap;
-            @include background-transition($transition-time-normal);
+            margin-right: $gap * 2;
+            @include radius-box($sm-radius);
+            @include common-bg-module($transition-time-fast);
 
             &:last-child {
               margin-right: 0;
             }
 
             &:hover {
-              background-color: $module-bg-opacity-9;
+              background-color: $module-bg-opaque;
 
               .icon {
                 &.web {
@@ -420,7 +407,7 @@
             }
 
             > .icon {
-              @include color-transition($transition-time-normal);
+              @include color-transition($transition-time-fast);
 
               > .iconfont {
                 font-size: $font-size-h3 * 3;
@@ -428,7 +415,7 @@
             }
 
             > .desc {
-              @include color-transition($transition-time-normal);
+              @include color-transition($transition-time-fast);
               color: $text-disabled;
               margin-bottom: 1.2em;
             }
@@ -444,7 +431,7 @@
     }
 
     > .step {
-      background-color: $module-bg;
+      @include common-bg-module();
 
       > .step-content {
         > .step-list {
