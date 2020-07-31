@@ -23,21 +23,21 @@
         </template>
       </calendar>
     </div>
-    <transition name="module">
-      <div key="ad" class="module ali-ma-ma">
-        <iframe
-          scrolling="no"
-          frameborder="0"
-          class="mammon-iframe"
-          src="/partials/mammon/aside.html"
-        />
-      </div>
-    </transition>
+    <div
+      class="module ali-ma-ma"
+      :placeholder="t(LANGUAGE_KEYS.AD)"
+    >
+      <iframe
+        scrolling="no"
+        frameborder="0"
+        class="iframe"
+        src="/partials/mammon/aside.html"
+      />
+    </div>
     <div class="aside-sticky-box">
       <client-only>
-        <div class="module mammon">
+        <div class="module mammon" v-if="renderStickyAd">
           <aside-mammon
-            v-if="renderStickyAd"
             :index="adIndex"
             @index-change="handleStickyAdIndexChange"
           />
@@ -57,9 +57,11 @@
   import Swiper from 'swiper'
   import StickyEvents from 'sticky-events'
   import { defineComponent, ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+  import { useEnhancer } from '/@/enhancer'
   import { getDateArchiveRoute } from '/@/transforms/route'
   import { humanDateToYMD, HumanDate } from '/@/transforms/moment'
   import Calendar from '/@/components/widget/calendar.vue'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import AsideSearch from './search.vue'
   import AsideArticle from './article.vue'
   import AsideMammon from './mammon.vue'
@@ -77,6 +79,7 @@
       AsideTool
     },
     setup() {
+      const { i18n } = useEnhancer()
       // polyfill sticky event
       let stickyEvents: any = null
       const element = ref<HTMLDivElement>(null as any)
@@ -130,6 +133,8 @@
       })
 
       return {
+        LANGUAGE_KEYS,
+        t: i18n.t,
         adIndex,
         renderStickyAd,
         element,
@@ -156,7 +161,8 @@
 
     .module {
       margin-bottom: $lg-gap;
-      @include module-blur-bg();
+      @include radius-box($sm-radius);
+      @include common-bg-module();
 
       &.calendar {
         padding: $gap;
@@ -174,18 +180,19 @@
 
       &.mammon {
         width: 100%;
+      }
 
-        &.ali-ma-ma {
-          height: $aside-width;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+      &.ali-ma-ma {
+        @extend .center-placeholder;
+        height: $aside-width;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-          > .mammon-iframe {
-            height: 250px;
-            width: 250px;
-            overflow: hidden;
-          }
+        .iframe {
+          height: 250px;
+          width: 250px;
+          overflow: hidden;
         }
       }
 

@@ -2,7 +2,7 @@
   <placeholder :loading="fetching">
     <template #loading>
       <div class="topbar">
-        <div class="total-skeleton">
+        <div class="statistics-skeleton">
           <skeleton-line class="count-skeleton" />
           <skeleton-line class="like-skeleton" />
         </div>
@@ -13,12 +13,12 @@
     </template>
     <template #default>
       <div class="topbar">
-        <div class="total">
-          <div class="count">
+        <div class="statistics">
+          <div class="total">
             <strong class="count">{{ total || 0 }}</strong>
             <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIST_COUNT" />
           </div>
-          <span
+          <button
             class="like"
             :class="{ liked: _isPageLiked }"
             @click="handleLikePage"
@@ -27,12 +27,12 @@
             <strong class="count">{{ likes || 0 }}</strong>
             <template v-if="isZhLang && isMobile">赞</template>
             <template v-else>
-              <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIKE" />
+              <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIKE_COUNT" />
             </template>
-          </span>
-          <span class="sponsor" @click="handleSponsor">
+          </button>
+          <button class="sponsor" @click="handleSponsor">
             <i class="iconfont icon-hao" />
-          </span>
+          </button>
         </div>
         <div class="sort">
           <span
@@ -60,9 +60,13 @@
   import { getNamespace, Modules } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { OptionModuleActions } from '/@/store/option'
-  import { isPageLiked, likePage } from '/@/transforms/state'
+  import { isPageLiked, getPagesLike, likePage } from '/@/transforms/state'
   import { SortType, CommentPostType } from '/@/constants/state'
   import { LANGUAGE_KEYS } from '/@/language/key'
+
+  export enum Events {
+    Sort = 'sort'
+  }
 
   export default defineComponent({
     name: 'CommentTopbar',
@@ -88,16 +92,16 @@
         required: true
       }
     },
+    emits: [
+      Events.Sort
+    ],
     setup(props, context) {
       const { i18n, store, isMobile, isZhLang } = useEnhancer()
-      const _isPageLiked = ref(false)
-      const initPageLiked = () => {
-        _isPageLiked.value = isPageLiked(props.postId)
-      }
+      const _isPageLiked = isPageLiked(props.postId)
 
       const handleSortList = (sort: SortType) => {
         if (sort !== props.sort) {
-          context.emit('sort', sort)
+          context.emit(Events.Sort, sort)
         }
       }
 
@@ -137,16 +141,14 @@
           // : window.utils.openIframePopup('/sponsor', 'sponsor')
       }
 
-      onMounted(() => {
-        initPageLiked()
-      })
-
       return {
         SortType,
         LANGUAGE_KEYS,
         isMobile,
         isZhLang,
         _isPageLiked,
+        handleSponsor,
+        handleLikePage,
         handleSortList
       }
     }
@@ -161,15 +163,15 @@
     padding-bottom: $gap;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid $module-hover-bg;
+    border-bottom: 1px solid $module-bg-hover;
 
     .count-skeleton,
     .like-skeleton,
     .sort-skeleton {
       height: 2rem;
     }
-    
-    .total-skeleton {
+
+    .statistics-skeleton {
       display: flex;
       width: 70%;
 
@@ -187,44 +189,30 @@
       width: 20%;
     }
 
-    > .total {
+    > .statistics {
       display: flex;
 
       > .like,
       > .sponsor,
-      > .count {
+      > .total {
         padding: $xs-gap .5em;
         margin-right: $sm-gap;
-        background-color: $module-hover-bg;
-      }
+        background-color: $module-bg-hover;
 
-      @keyframes sponsorBtnBg {
-        0% {
-          background: $primary-opacity-9;
+        .count {
+          margin-right: $xs-gap;
         }
-        50% {
-          background: rgba($accent, .8);
-        }
-        100% {
-          background: $primary-opacity-9;
-        }
-      }
-
-      > .sponsor {
-        margin-right: 0;
-        color: $white;
-        animation: sponsorBtnBg 1s infinite;
       }
 
       > .like {
         @include background-transition();
 
         > .iconfont {
-          margin-right: $xs-gap / 2;
+          margin-right: $xs-gap;
         }
 
         &:hover {
-          background-color: $module-hover-bg-darken-20;
+          background-color: $module-bg-darker-6;
         }
 
         &.liked {
@@ -233,6 +221,19 @@
           }
         }
       }
+
+      @keyframes sponsorBtnBg {
+        0% { background: $primary; }
+        50% { background: $accent; }
+        100% { background: $primary; }
+      }
+
+      > .sponsor {
+        margin-right: 0;
+        color: $white;
+        opacity: .8;
+        animation: sponsorBtnBg 1s infinite;
+      }
     }
 
     > .sort {
@@ -240,7 +241,7 @@
         margin-left: $gap;
 
         &.actived {
-          color: $link-hover-color;
+          color: $link-color-hover;
           font-weight: bold;
         }
       }

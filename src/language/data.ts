@@ -130,6 +130,10 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: 'IOS',
     [Language.En]: 'IOS'
   },
+  [LANGUAGE_KEYS.AD]: {
+    [Language.Zh]: '广而告之',
+    [Language.En]: 'AD'
+  },
   [LANGUAGE_KEYS.WEBCAM]: {
     [Language.Zh]: '见相',
     [Language.En]: 'Webcam'
@@ -179,7 +183,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.En]: 'off'
   },
   [LANGUAGE_KEYS.APP_SLOGAN]: {
-    [Language.Zh]: '來苏之望',
+    [Language.Zh]: '来苏之望，风浪马猖',
     [Language.En]: 'Because the mountain was there'
   },
   [LANGUAGE_KEYS.MUSIC_PLACEHOLDER]: {
@@ -187,7 +191,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.En]: 'The music, the soul of man'
   },
   [LANGUAGE_KEYS.SEARCH_PLACEHOLDER]: {
-    [Language.Zh]: '向外探索，向内觉知',
+    [Language.Zh]: '探索与觉知',
     [Language.En]: 'Search..'
   },
   [LANGUAGE_KEYS.PAGE_TITLE]: {
@@ -347,7 +351,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.En]: 'comments'
   },
   [LANGUAGE_KEYS.COMMENT_LIKE_COUNT]: {
-    [Language.Zh]: (peoples: number) => `${peoples} 人觉得有点牛逼`,
-    [Language.En]: (peoples: number) => `${peoples} likes`
+    [Language.Zh]: '人觉得有点牛逼',
+    [Language.En]: 'likes'
   }
 }

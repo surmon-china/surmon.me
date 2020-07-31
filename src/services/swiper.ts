@@ -5,10 +5,10 @@
  */
 
 import { App } from 'vue'
-import { Swiper, Pagination, Mousewheel, Autoplay } from 'swiper/js/swiper.esm'
+import { Swiper, Pagination, Mousewheel, Autoplay } from 'swiper'
 // import exporter from 'vue-awesome-swiper/dist/exporter'
 import exporter from '/@/todo/swiper/exporter'
-import 'swiper/css/swiper.css'
+import 'swiper/swiper-bundle.min.css'
 
 Swiper.use([Pagination, Mousewheel, Autoplay])
 

@@ -70,10 +70,6 @@
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
-  .tess {
-    background-color: red;
-  }
-
   #wallpaper {
     position: fixed;
     left: 0;
@@ -82,8 +78,12 @@
     $offset: 6px;
 
     &.dark {
-      .switcher .up .title {
-        color: $text-reversal;
+      .switcher {
+        .up {
+          .title {
+            color: $text-reversal;
+          }
+        }
       }
     }
 
@@ -113,6 +113,8 @@
         width: 3rem;
         height: 6.8rem;
         position: absolute;
+        border-top-right-radius: $xs-radius;
+        border-bottom-right-radius: $xs-radius;
       }
 
       > .down {

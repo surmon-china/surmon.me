@@ -32,6 +32,7 @@ export enum LANGUAGE_KEYS {
   PAGE_SERVICE_HIRE_ME = 'hire me',
   DEVICE_ANDROID = 'android',
   DEVICE_IOS = 'ios',
+  AD = 'ad',
   WEBCAM = 'webcam',
   BARRAGE = 'barrage',
   FEEDBACK = 'feedback',

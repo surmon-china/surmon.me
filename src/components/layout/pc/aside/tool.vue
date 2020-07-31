@@ -75,7 +75,7 @@
       cursor: pointer;
 
       &:hover {
-        background-color: $module-hover-bg;
+        background-color: $module-bg-hover;
       }
     }
   }

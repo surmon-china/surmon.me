@@ -65,13 +65,17 @@
   import marked from '/@/services/marked'
   import { CommentEvent } from './helper'
 
+  export enum Events {
+    Input = 'input'
+  }
+
   export default defineComponent({
     name: 'CommentPen',
     props: {
-      value: {
-        type: String,
-        required: true
-      },
+      // value: {
+      //   type: String,
+      //   required: true
+      // },
       disabled: {
         type: Boolean,
         required: true
@@ -85,13 +89,19 @@
         required: true
       }
     },
+    emits: [
+      Events.Input,
+      CommentEvent.TogglePreview,
+      CommentEvent.Submit
+    ],
     setup(props, context) {
       const { i18n } = useEnhancer()
       const content = ref('')
       const inputElement = ref<HTMLElement>()
       const previewContent = computed(() => {
         return props.preview
-          ? marked(content.value)
+          ? content.value
+          // ? marked(content.value)
           : null
       })
 
@@ -112,7 +122,7 @@
         const text = inputElement.value?.innerText as string
         if (text !== content.value) {
           content.value = text
-          context.emit('input', text)
+          context.emit(Events.Input, text)
         }
       }
 
@@ -174,7 +184,7 @@
         cursor: auto;
         font-size: $font-size-h6;
         line-height: 1.8em;
-        background-color: $module-hover-bg;
+        background-color: $module-bg-hover;
         @include background-transition();
 
         &:empty:before {
@@ -187,7 +197,7 @@
         }
 
         &:hover {
-          background-color: $module-hover-bg-darken-10;
+          background-color: $module-bg-darker-5;
         }
       }
 
@@ -210,7 +220,7 @@
       line-height: $size;
       display: flex;
       justify-content: space-between;
-      background-color: $module-hover-bg-opacity-9;
+      background-color: $module-bg-darker-4;
 
       .stationery {
         &.disabled {
@@ -230,7 +240,7 @@
           @include background-transition();
 
           &:hover {
-            background-color: $module-hover-bg-darken-20;
+            background-color: $module-bg-darker-6;
           }
         }
 
@@ -259,7 +269,7 @@
                 @include background-transition();
 
                 &:hover {
-                  background-color: $module-hover-bg;
+                  background-color: $module-bg-hover;
                 }
               }
             }
@@ -276,11 +286,11 @@
       > .submit {
         width: 8rem;
         height: $size;
-        background-color: $module-hover-bg-darken-20;
+        background-color: $module-bg-darker-6;
         @include background-transition();
 
         &:hover {
-          background-color: $module-hover-bg-darken-40;
+          background-color: $module-bg-darker-7;
         }
       }
     }

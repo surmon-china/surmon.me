@@ -8,7 +8,9 @@
       <span>{{ currentCategory?.description || '...' }}</span>
     </article-list-header>
     <article-list
-      :article="articleData"
+      :fetching="article.fetching"
+      :articles="article.data.data"
+      :pagination="article.data.pagination"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -56,7 +58,7 @@
       const loadmoreArticles = () => fetchArticles({
         ...route.params,
         category_slug: route.params.category_slug,
-        page: articleData.value.data.pagination.current_page + 1
+        page: article.value.data.pagination.current_page + 1
       })
 
       await Promise.all([
@@ -64,7 +66,7 @@
         fetchArticles(route.params)
       ])
 
-      const articleData = computed(() => store.state.article.list)
+      const article = computed(() => store.state.article.list)
       const currentCategory = computed(() => {
         return store.state.category.data.find(category => {
           return category.slug === route.params.category_slug
@@ -88,7 +90,7 @@
       })
 
       return {
-        articleData,
+        article,
         currentCategory,
         currentCategoryIcon,
         currentCategoryImage,

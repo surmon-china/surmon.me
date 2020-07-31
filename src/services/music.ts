@@ -103,7 +103,7 @@ const createMusicPlayer = (config: MusicConfig) => {
   }
 
   const baseSongList = computed<ISong[]>(() => {
-    const tracks = musicList.data?.tracks
+    const tracks = musicList.data?.tracks || []
     return tracks.map((song: $TODO) => ({
       id: song.id,
       name: song.name,
@@ -337,6 +337,7 @@ const createMusicPlayer = (config: MusicConfig) => {
 
   return {
     state: readonly(state),
+    muted,
     currentSong,
     currentSongPicUrl,
     currentSongRealTimeLrc,

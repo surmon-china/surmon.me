@@ -68,7 +68,7 @@
     height: $footer-height;
     margin-top: $lg-gap;
     user-select: none;
-    @include module-blur-bg();
+    @include common-bg-module();
 
     .container {
       font-size: $font-size-h6;

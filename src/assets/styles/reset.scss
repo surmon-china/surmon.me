@@ -384,7 +384,7 @@ a {
 
   &:hover,
   &:focus {
-    color: $link-hover-color;
+    color: $link-color-hover;
   }
 }
 
@@ -406,7 +406,7 @@ ol {
 blockquote {
   margin: 1em 0;
   text-indent: 0em;
-  background-color: $module-hover-bg;
+  background-color: $module-bg-hover;
   border-left: .5em solid #aaa;
   padding: .5em 1em;
   padding-left: 1.5em;
@@ -638,7 +638,7 @@ caption {
 }
 
 thead th {
-  background-color: $module-hover-bg;
+  background-color: $module-bg-hover;
   text-align: left;
 }
 

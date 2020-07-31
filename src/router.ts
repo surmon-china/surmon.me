@@ -23,7 +23,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: RouteName.Home,
-    component: () => import('./pages/home.vue')
+    component: () => import('./pages/index.vue')
   },
   {
     path: '/sitemap',
@@ -33,7 +33,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/article/:article_id',
     name: RouteName.Article,
-    component: () => import('./pages/article/main.vue')
+    component: () => import('./pages/article/index.vue')
   },
   {
     path: '/category/:category_slug',

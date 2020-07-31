@@ -58,8 +58,8 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getGravatarUrlByEmail, scrollToElementAnchor } from './helper'
   import CommentTopbar from './topbar.vue'
-  import CommentList from './list.vue'
-  import CommentPagination from './pagination/index.vue'
+  import CommentList from './list/index.vue'
+  import CommentPagination from './pagination.vue'
   import CommentPublisher from './publisher.vue'
   import CommentPen from './pen.vue'
 
@@ -339,7 +339,22 @@
       })
 
       return {
-        
+        isMobile,
+        isFetching,
+        isPostingComment,
+        state,
+        userState,
+        penState,
+        editUserProfile,
+        syncUserProfileToStorage,
+        clearUserProfile,
+        togglePenPreview,
+        commentData,
+        replyComment,
+        submitComment,
+        resetCommentReply,
+        getSortComments,
+        getPageComments
       }
     }
   })
@@ -347,7 +362,6 @@
 
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
-
   #comment-box {
     padding: $gap;
     background-color: $module-bg;
@@ -384,8 +398,8 @@
       color: #bd4147;
       padding: .3em .5em;
       margin: 0 .5em;
-      border-radius: $radius;
-      background-color: $module-hover-bg;
+      border-radius: $xs-radius;
+      background-color: $module-bg-hover;
     }
 
     pre {
@@ -398,7 +412,7 @@
       margin-top: .6em;
       margin-bottom: 1em;
       padding-top: $code-header-height;
-      border-radius: $radius;
+      border-radius: $xs-radius;
       background-color: rgba(0, 0, 0, 0.8);
 
       &:before {

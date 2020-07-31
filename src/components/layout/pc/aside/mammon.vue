@@ -114,13 +114,13 @@
             }
           }
         }
+      }
 
-        .swiper-pagination {
-          .swiper-pagination-bullet {
-            &.swiper-pagination-bullet-active {
-              height: $font-size-base;
-              border-radius: 10px;
-            }
+      .swiper-pagination {
+        ::v-deep(.swiper-pagination-bullet) {
+          &.swiper-pagination-bullet-active {
+            height: $font-size-base;
+            border-radius: $lg-radius;
           }
         }
       }

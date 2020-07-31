@@ -4,6 +4,14 @@
     :class="{ mobile: isMobile }"
     @click="handleClick"
   >
+    <desktop-only>
+      <div
+        class="item-background"
+        :style="{
+          backgroundImage: `url(${getThumbUrl(article.thumb)})`
+        }"
+      />
+    </desktop-only>
     <div class="item-content">
       <desktop-only>
         <div class="item-thumb">
@@ -57,6 +65,10 @@
             <i class="iconfont icon-like" :class="{ liked: isLiked }"></i>
             <span>{{ article.meta.likes || 0 }}</span>
           </span>
+          <span class="tags">
+            <i class="iconfont icon-tag"></i>
+            <span>{{ article.tag.length || 0 }}</span>
+          </span>
           <desktop-only>
             <span class="categories">
               <i class="iconfont icon-list"></i>
@@ -66,7 +78,7 @@
                 </template>
                 <template #default>
                   <router-link
-                    v-for="(category, index) in article.category"
+                    v-for="(category, index) in article.category.slice(0, 1)"
                     :key="index"
                     :to="getCategoryArchiveRoute(category.slug)"
                   >
@@ -76,23 +88,6 @@
               </placeholder>
             </span>
           </desktop-only>
-          <!-- <span class="tags">
-            <i class="iconfont icon-tag"></i>
-            <placeholder :transition="false" :data="article.tag.length">
-              <template #placeholder>
-                <span v-i18n="LANGUAGE_KEYS.TAG_PLACEHOLDER" />
-              </template>
-              <template #default>
-                <router-link
-                  v-for="(tag, index) in article.tag"
-                  :key="index"
-                  :to="getTagArchiveRoute(tag.slug)"
-                >
-                  <i18n :zh="tag.name" :en="tag.slug" />
-                </router-link>
-              </template>
-            </placeholder>
-          </span> -->
         </div>
       </div>
     </div>
@@ -111,6 +106,9 @@
   import { isOriginal, isHybrid, isReprint } from '/@/transforms/state'
   import { timeAgo } from '/@/transforms/moment'
 
+  export enum Events {
+    Click = 'click'
+  }
   export default defineComponent({
     name: 'ArticleListItem',
     props: {
@@ -119,6 +117,9 @@
         required: true
       }
     },
+    emits: [
+      Events.Click
+    ],
     setup(props, context) {
       const i18n = useI18n()
       const globalState = useGlobalState()
@@ -132,7 +133,7 @@
       const _isOriginal = !origin || isOriginal(origin)
 
       const handleClick = (event: MouseEvent) => {
-        context.emit('click', event)
+        context.emit(Events.Click, event)
       }
 
       const humanlizeDate = (date: string) => {
@@ -173,16 +174,22 @@
   @import 'src/assets/styles/init.scss';
 
   .article-list-item {
+    position: relative;
     margin-bottom: $lg-gap;
-    @include module-blur-bg();
-    @include background-transition();
-
-    &:hover {
-      background-color: $module-hover-bg;
-    }
+    @include radius-box($sm-radius);
 
     &:last-child {
       margin: 0;
+    }
+
+    .item-background {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background-size: 120%;
+      background-position: 0% 50%;
+      opacity: .06;
     }
 
     > .item-content {
@@ -190,9 +197,10 @@
       $padding: $sm-gap;
       $content-height: $height - ($padding * 2);
       display: block;
-      overflow: hidden;
       height: $height;
       padding: $padding;
+      overflow: hidden;
+      @include common-bg-module($transition-time-fast);
 
       &:hover {
         .item-thumb {
@@ -209,37 +217,36 @@
 
       > .item-thumb {
         float: left;
-        width: 12em;
+        width: 15rem;
         height: $content-height;
         overflow: hidden;
         position: relative;
 
         .item-oirigin {
+          $height: 2.1rem;
+          $opacity: .8;
           position: absolute;
           left: 0;
           top: 0;
-          height: 2.1rem;
-          line-height: 2.1rem;
+          height: $height;
+          line-height: $height;
           z-index:  $z-index-normal + 1;
           padding: 0 $sm-gap;
-          border-bottom-right-radius: 1px;
           opacity: .4;
           font-size: $font-size-small;
-          color: $text-reversal;
+          color: $white;
           text-align: center;
           text-transform: uppercase;
           @include visibility-transition();
 
           &.self {
-            background-color: rgba($accent, .5);
+            background-color: rgba($accent, $opacity);
           }
-
           &.other {
-            background-color: rgba($red, .5);
+            background-color: rgba($red, $opacity);
           }
-
           &.hybrid {
-            background-color: rgba($primary, .5);
+            background-color: rgba($primary, $opacity);
           }
         }
 
@@ -250,7 +257,7 @@
           height: auto;
           min-height: $content-height;
           border-color: transparent;
-          background-color: $module-hover-bg;
+          background-color: $module-bg-hover;
           opacity: 1;
           transform: translateX(0);
           transition: transform $transition-time-fast, opacity $transition-time-fast;
@@ -259,14 +266,14 @@
 
       > .item-body {
         float: right;
-        width: 28.5em;
+        width: 32rem;
         height: $content-height;
 
         > .item-title {
           margin-top: 3px;
           margin-bottom: $sm-gap;
           font-weight: bold;
-          color: $link-hover-color;
+          color: $link-color-hover;
           @include text-overflow();
 
           > a {
@@ -334,7 +341,6 @@
             }
           }
 
-          > .tags,
           > .categories {
             a {
               text-transform: capitalize;

@@ -70,7 +70,7 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
   const store = createVuexStore()
   const doPrefetchTask = () => {
     const initFetchTasks = [
-      store.dispatch(getNamespace(Modules.Tag, TagModuleActions.FetchList)),
+      store.dispatch(getNamespace(Modules.Tag, TagModuleActions.FetchAll)),
       store.dispatch(getNamespace(Modules.Category, CategoryModuleActions.FetchList)),
       store.dispatch(getNamespace(Modules.Option, OptionModuleActions.FetchAdminInfo))
     ]

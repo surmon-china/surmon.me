@@ -42,7 +42,7 @@
           </span>
           <i18n>
             <template #zh>当前已被围观 {{ article.meta.views }}次</template>
-            <template #zh>{{ article.meta.views }} views.</template>
+            <template #en>{{ article.meta.views }} views.</template>
           </i18n>
         </p>
         <p class="item">
@@ -78,7 +78,7 @@
             <template #zh>
               <span class="title zh">永久地址：</span>
             </template>
-            <template #zh>
+            <template #en>
               <span class="title en">Article address:</span>
             </template>
           </i18n>
@@ -203,7 +203,7 @@
         color: $link-color;
 
         &:hover {
-          color: $link-hover-color;
+          color: $link-color-hover;
         }
       }
     }

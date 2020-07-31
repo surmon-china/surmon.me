@@ -7,7 +7,10 @@
     }"
   >
     <desktop-only>
-      <div class="background"></div>
+      <div
+        class="background"
+        :data-content="parseContent(announcements[activeIndex].content)"
+      />
     </desktop-only>
     <div class="title">
       <span
@@ -17,14 +20,9 @@
         <i class="iconfont icon-windmill" />
       </span>
     </div>
-    <placeholder :data="announcement.data.length">
-      <template #placeholder>
-        <empty class="announcement-empty">
-          <i18n :lkey="LANGUAGE_KEYS.ANNOUNCEMENT_PLACEHOLDER" />
-        </empty>
-      </template>
+    <placeholder :data="announcements.length">
       <template #default>
-        <div key="swiper" class="swiper-box">
+        <div class="swiper-box">
           <div
             class="swiper"
             v-swiper="swiperOption"
@@ -33,13 +31,13 @@
           >
             <div class="swiper-wrapper">
               <div
-                v-for="(ann, index) in announcement.data"
+                v-for="(ann, index) in announcements"
                 :key="index"
                 class="swiper-slide"
               >
                 <div class="content" v-html="parseContent(ann.content)" />
                 <desktop-only>
-                  <div class="date">~ {{ humanlizeDate(ann.create_at) }}</div>
+                  <div class="date">{{ humanlizeDate(ann.create_at) }}</div>
                 </desktop-only>
               </div>
             </div>
@@ -54,7 +52,7 @@
             </div>
             <div
               class="button next"
-              :class="{ disabled: activeIndex === announcement.data.length - 1 }"
+              :class="{ disabled: activeIndex === announcements.length - 1 }"
               @click="nextSlide"
             >
               <i class="iconfont icon-announcement-next" />
@@ -79,8 +77,9 @@
   export default defineComponent({
     name: 'ArchiveAnnouncement',
     props: {
-      announcement: {
-        type: Object
+      announcements: {
+        type: Array,
+        required: true
       }
     },
     setup(props) {
@@ -94,7 +93,7 @@
 
       const activeIndex = ref(0)
       const swiperOption = {
-        height: 34,
+        height: 42,
         autoplay: {
           delay: 3500,
           disableOnInteraction: false
@@ -110,7 +109,9 @@
       }
 
       const parseContent = (content) => {
-        return marked(content, null, true)
+        return content
+        // TODO: markdown
+        // return marked(content, null, true)
       }
 
       const prevSlide = () => swiper.value?.slidePrev()
@@ -127,6 +128,8 @@
         activeIndex,
         humanlizeDate,
         parseContent,
+        prevSlide,
+        nextSlide,
         updateSwiperContext,
         handleSwiperTransitionStart
       }
@@ -137,45 +140,67 @@
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
-  $announcement-height: 3rem;
+  $announcement-height: 42px;
+  $title-width: 10%;
+  $content-width: 100% - $title-width;
+  $demarcation-width: 74%;
 
   .announcement {
     position: relative;
     margin-bottom: $lg-gap;
     height: $announcement-height;
-    line-height: 2.75em;
-    overflow: hidden;
-    color: $text-reversal;
+    line-height: $announcement-height;
     font-size: $font-size-h6;
-    background-color: $module-bg;
+    color: $text-secondary;
     user-select: none;
-
-    &.dark {
-      color: $text-secondary;
-    }
+    @include common-bg-module();
+    @include radius-box($xs-radius);
 
     &.mobile {
       margin-bottom: $gap;
-      background-color: $module-hover-bg-darken-10;
+      background-color: $module-bg-darker-5;
 
       > .swiper {
         .swiper-slide {
           > .content {
-            max-width: 90%;
+            max-width: $content-width;
           }
         }
       }
     }
 
-    .announcement-empty {
-      min-height: auto;
+    &.dark {
+      .background {
+        &::after {
+          background: $module-bg-darker-1;
+        }
+      }
     }
 
-    > .background {
+    .background {
       position: absolute;
-      width: 66%;
+      width: $demarcation-width;
       height: 100%;
-      background: linear-gradient(66deg, $module-hover-bg-darken-40, $module-hover-bg 90%);
+      background: linear-gradient(
+        66deg,
+        $module-bg-opaque,
+        $module-bg-lighter
+        66%
+      );
+
+      &::before {
+        content: attr(data-content);
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        font-size: 6em;
+        font-weight: bold;
+        direction: rtl;
+        opacity: .2;
+        z-index: -1;
+        @include text-overflow(clip);
+      }
 
       &::after {
         $size: 1rem;
@@ -193,7 +218,7 @@
 
     > .title {
       float: left;
-      width: 10%;
+      width: $title-width;
       text-align: center;
       font-size: $font-size-base;
 
@@ -206,11 +231,12 @@
 
     > .swiper-box {
       float: right;
-      width: 90%;
       display: flex;
+      width: $content-width;
 
       .swiper {
         flex: 1;
+        height: $announcement-height;
 
         // Filter for slide when transitioning
         .swiper-wrapper[style*="300ms"] {
@@ -230,6 +256,7 @@
           > .content {
             max-width: 76%;
             position: relative;
+            font-weight: bold;
             @include text-overflow();
 
             p {
@@ -244,15 +271,16 @@
 
           .date {
             color: $text-dividers;
+            margin-right: $xs-gap;
           }
         }
       }
 
       .navigation {
-        width: 3rem;
-        height: $announcement-height;
         display: flex;
         flex-direction: column;
+        width: 3rem;
+        height: $announcement-height;
 
         .button {
           height: 50%;
@@ -272,11 +300,11 @@
           }
 
           &.prev {
-            line-height: 1.8;
+            line-height: 2;
           }
 
           &.next {
-            line-height: 1.2;
+            line-height: 1.4;
           }
         }
       }

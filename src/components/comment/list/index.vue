@@ -1,7 +1,7 @@
 <template>
   <placeholder
-    :loading="isFetching"
-    :data="comment.data.length"
+    :loading="fetching"
+    :data="comments.length"
     @after-enter="loadCommentsAnimateDone"
   >
     <template #loading>
@@ -31,10 +31,10 @@
         @after-enter="addCommentAnimateDone"
       >
         <comment-item
-          v-for="comment in comment.data"
+          v-for="comment in comments"
           :key="comment.id"
           :comment="comment"
-          :liked="comment"
+          :liked="isCommentLiked(comment.id)"
           @like="likeComment"
           @reply="replyComment"
         />
@@ -61,7 +61,7 @@
   import { LOZAD_CLASS_NAME } from '/@/services/lozad'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/ga'
-  import { getCommentsLike, setCommentsLike } from '/@/transforms/state'
+  import { getCommentsLike } from '/@/transforms/state'
   import { CommentEvent } from '../helper'
   import CommentItem from './item.vue'
 
@@ -84,12 +84,9 @@
 
       const listElement = ref<HTMLElement>()
       const lozadObserver = ref<LozadObserver | null>(null)
-      const commentsLike = reactive<number[]>([])
-      if (isClient) {
-        commentsLike.push(...getCommentsLike())
-      }
 
-      const isLikedComment = (commentId) => {
+      const commentsLike = getCommentsLike()
+      const isCommentLiked = (commentId: number) => {
         return commentsLike.includes(commentId)
       }
 
@@ -122,16 +119,16 @@
         //   GAEventActions.Click,
         //   GAEventTags.Comment
         // )
-        if (isLikedComment(commentId)) {
+        if (isCommentLiked(commentId)) {
           return false
         }
-        store.dispatch(
-          getNamespace(Modules.Comment, CommentModuleActions.PostCommentLike),
-          commentId
-        )
+        store
+          .dispatch(
+            getNamespace(Modules.Comment, CommentModuleActions.PostCommentLike),
+            commentId
+          )
           .then(_ => {
             commentsLike.push(commentId)
-            setCommentsLike(commentsLike)
           })
           .catch(error => {
             const message = i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION)
@@ -140,10 +137,7 @@
           })
       }
 
-      onMounted(() => {
-        observeLozad()
-      })
-
+      onMounted(() => observeLozad)
       onBeforeUnmount(() => {
         lozadObserver.value = null
       })
@@ -151,7 +145,12 @@
       return {
         LANGUAGE_KEYS,
         firstUpperCase,
-        listElement
+        listElement,
+        loadCommentsAnimateDone,
+        addCommentAnimateDone,
+        isCommentLiked,
+        likeComment,
+        replyComment
       }
     }
   })

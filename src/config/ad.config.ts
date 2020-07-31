@@ -85,10 +85,10 @@ export default {
   },
 
   // About 页面
-  aboutPage: {
+  aboutPageSwiper: [{
     url: links.aliyunInvite,
     src: imagePath + 'aliyun-ecs-1200-100.png',
-  },
+  }],
 
   // 侧边栏轮播
   asideSwiper: [

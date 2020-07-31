@@ -128,6 +128,13 @@
         required: true
       }
     },
+    emits: [
+      CommentEvent.SyncProfile,
+      CommentEvent.SaveProfile,
+      CommentEvent.EditProfile,
+      CommentEvent.ClearProfile,
+      CommentEvent.CancelProfile
+    ],
     setup(props, context) {
       const { i18n, store, isMobile } = useEnhancer()
       const userProfile = computed({
@@ -203,7 +210,7 @@
   .publisher {
     display: block;
     padding-top: $gap;
-    border-top: 1px dashed $module-hover-bg-darken-20;
+    border-top: 1px dashed $module-bg-darker-6;
 
     > .user {
       width: 100%;
@@ -273,11 +280,11 @@
         > button {
           width: 100%;
           height: 100%;
-          background-color: $module-hover-bg;
+          background-color: $module-bg-hover;
           @include background-transition();
 
           &:hover {
-            background-color: $module-hover-bg-darken-10;
+            background-color: $module-bg-darker-5;
           }
         }
       }
@@ -292,12 +299,12 @@
           height: 2em;
           line-height: 2em;
           text-indent: 3px;
-          background-color: $module-hover-bg;
+          background-color: $module-bg-hover;
           @include background-transition();
 
           &:focus,
           &:hover {
-            background-color: $module-hover-bg-darken-10;
+            background-color: $module-bg-darker-5;
           }
         }
       }
@@ -320,7 +327,7 @@
           margin-bottom: .5em;
           width: 4rem;
           height: 4rem;
-          background-color: $module-hover-bg-darken-20;
+          background-color: $module-bg-darker-6;
 
           > img {
             width: 100%;
@@ -345,11 +352,11 @@
             padding: 0 $gap;
             height: 2.6em;
             line-height: 2.6em;
-            background-color: $module-hover-bg;
+            background-color: $module-bg-hover;
             @include background-transition();
 
               &:hover {
-              background-color: $module-hover-bg-darken-10;
+              background-color: $module-bg-darker-5;
             }
           }
 
@@ -357,11 +364,11 @@
             max-height: 10em;
             overflow: auto;
             padding: $gap;
-            background-color: $module-hover-bg;
+            background-color: $module-bg-hover;
             @include background-transition();
 
               &:hover {
-              background-color: $module-hover-bg-darken-10;
+              background-color: $module-bg-darker-5;
             }
           }
         }

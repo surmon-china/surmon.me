@@ -56,7 +56,7 @@
 
   #mobile-main {
     color: $text;
-    background-color: $module-hover-bg;
+    background-color: $module-bg-hover;
     $aside-width: 68%;
 
     #app-aside {
@@ -90,7 +90,7 @@
         right: 0;
         bottom: 0;
         z-index: $z-index-top;
-        background-color: $module-bg-opacity-5;
+        background-color: $module-bg;
       }
 
       .main-container {

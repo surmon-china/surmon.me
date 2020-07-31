@@ -2,11 +2,11 @@
   <div class="sitemap-page" :class="{ mobile: isMobile }">
     <div class="sitemap">
       <div class="module articles">
-        <h4 class="title" v-text="$i18n.text.article.name"></h4>
+        <h4 class="title" v-i18n="LANGUAGE_KEYS.ARTICLE_TITLE" />
         <!-- TODO: 按照日期分类 -->
         <placeholder :data="articles.length">
           <template #placeholder>
-            <p v-text="$i18n.text.article.empty"></p>
+            <p v-i18n="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"></p>
           </template>
           <template #default>
             <ul class="article-list">
@@ -22,31 +22,31 @@
                     <span class="title">{{ article.title }}</span>
                     <span class="sign">」</span>
                   </a>
-                  <span class="sign">&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-                  <small>
-                    <a
-                      href
-                      class="toggle-link"
-                      @click.prevent="handleToggleArticleDescription(article.id)"
-                      v-text="$i18n.text.action[article.open ? 'close' : 'open']"
-                    ></a>
-                  </small>
+                  <!-- TODO: css -->
+                  <span class="sign">-</span>
+                  <button
+                    class="toggle-link"
+                    @click.prevent="handleToggleArticleDescription(article.id)"
+                    v-text="article.open ? 'close' : 'open'"
+                  />
                 </p>
-                <transition name="module">
-                  <p v-show="article.open" class="item-description">
-                    <span v-html="article.description || $i18n.text.article.empty"></span>
-                  </p>
-                </transition>
+                <template v-if="article.description">
+                  <transition name="module">
+                    <p v-show="article.open" class="item-description">
+                      {{ article.description }}
+                    </p>
+                  </transition>
+                </template>
               </li>
             </ul>
           </template>
         </placeholder>
       </div>
       <div class="module categories">
-        <h4 class="title" v-text="$i18n.text.category.name"></h4>
+        <h4 class="title" v-i18n="LANGUAGE_KEYS.CATEGORY_TITLE" />
         <placeholder :data="categories.length">
           <template #placeholder>
-            <p v-text="$i18n.text.article.empty"></p>
+            <p v-i18n="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"></p>
           </template>
           <template #default>
             <ul class="categories-list">
@@ -61,7 +61,8 @@
                     <i18n :zh="category.name" :en="category.slug" />
                   </a>
                   <span>（{{ category.count || 0 }}）</span>
-                  <span>&nbsp;-&nbsp;</span>
+                  <!-- TODO: css -->
+                  <span class="sign">-</span>
                   <span>{{ category.description }}</span>
                 </p>
               </li>
@@ -70,10 +71,10 @@
         </placeholder>
       </div>
       <div class="module tags">
-        <h4 class="title" v-text="$i18n.text.tag.name"></h4>
+        <h4 class="title" v-i18n="LANGUAGE_KEYS.TAG_TITLE" />
         <placeholder :data="tags.length">
           <template #placeholder>
-            <p v-text="$i18n.text.article.empty"></p>
+            <p v-i18n="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"></p>
           </template>
           <template #default>
             <ul vclass="tag-list">
@@ -92,32 +93,57 @@
         </placeholder>
       </div>
       <div class="module pages">
-        <h4 class="title" v-text="$i18n.text.page.name"></h4>
+        <h4 class="title" v-i18n="LANGUAGE_KEYS.PAGE_TITLE" />
         <ul class="page-list">
           <li class="item">
-            <a href="/" target="_blank" v-text="$i18n.nav.home" />
+            <a
+              href="/"
+              target="_blank"
+              v-i18n="LANGUAGE_KEYS.PAGE_HOME"
+            />
           </li>
           <li class="item">
-            <a href="/about" target="_blank" v-text="$i18n.nav.about" />
+            <a
+              href="/about"
+              target="_blank"
+              v-i18n="LANGUAGE_KEYS.PAGE_ABOUT"
+            />
           </li>
           <li class="item">
-            <a href="/vlog" target="_blank" v-text="$i18n.nav.vlog" />
+            <a
+              href="/lens"
+              target="_blank"
+              v-i18n="LANGUAGE_KEYS.PAGE_LENS"
+            />
           </li>
           <li class="item">
             <a
               target="_blank"
               rel="external nofollow noopener"
-              :href="APP_CONFIG.links.project"
-            >{{ $i18n.nav.project }}</a>
+              :href="APP_CONFIG.LINKS.project"
+              v-i18n="LANGUAGE_KEYS.PAGE_PROJECT"
+            />
           </li>
           <li class="item">
-            <a href="/service" target="_blank" v-text="$i18n.nav.service" />
+            <a
+              href="/service"
+              target="_blank"
+              v-i18n="LANGUAGE_KEYS.PAGE_SERVICE"
+            />
           </li>
           <li class="item">
-            <a href="/guestbook" target="_blank" v-text="$i18n.nav.guestbook" />
+            <a
+              href="/guestbook"
+              target="_blank"
+              v-i18n="LANGUAGE_KEYS.PAGE_GUESTBOOK"
+            />
           </li>
           <li class="item">
-            <a href="/sitemap.xml" target="_blank" v-text="$i18n.nav.map" />
+            <a
+              href="/sitemap.xml"
+              target="_blank"
+              v-i18n="LANGUAGE_KEYS.PAGE_SITEMAP"
+            />
           </li>
         </ul>
       </div>
@@ -129,6 +155,7 @@
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { RouteName } from '/@/router'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import { getTagArchiveRoute, getCategoryArchiveRoute, getArticleDetailRoute, getPageRoute } from '/@/transforms/route'
   import * as APP_CONFIG from '/@/config/app.config'
 
@@ -148,11 +175,12 @@
       const categories = computed(() => store.state.category.data)
       const articles = computed(() => store.state.sitemap.articles.data)
 
-      const handleToggleArticleDescription = () => {
+      const handleToggleArticleDescription = (articleId: number) => {
         // store.commit('sitemap/updateArticleOpenState', index)
       }
 
       return {
+        LANGUAGE_KEYS,
         APP_CONFIG,
         RouteName,
         getPageRoute,
@@ -167,6 +195,8 @@
 </script>
 
 <style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
   .sitemap-page {
     padding: $gap 3rem;
     background-color: $module-bg;

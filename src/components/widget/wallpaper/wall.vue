@@ -110,7 +110,7 @@
     align-items: center;
     width: 88vw;
     height: 88vh;
-    border: solid $sm-gap $module-hover-bg;
+    border: solid $sm-gap $module-bg-hover;
     background-color: $module-bg;
 
     > .picture-box {
@@ -124,7 +124,7 @@
     > .story-box {
       position: absolute;
       padding: 2rem 4rem;
-      background-color: $module-hover-bg;
+      background-color: $module-bg-hover;
       bottom: 0;
       width: 100%;
       height: auto;
@@ -163,7 +163,7 @@
           @include background-transition();
 
           &:hover {
-            background-color: $module-hover-bg-opacity-9;
+            background-color: $module-bg-darker-4;
           }
         }
 

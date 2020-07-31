@@ -96,7 +96,7 @@
           width: 15px;
           height: 15px;
           margin: 5px;
-          background-color: $module-hover-bg;
+          background-color: $module-bg-hover;
           animation: ball-beat 0.7s -0.15s infinite linear;
 
           &:nth-child(2n-1) {

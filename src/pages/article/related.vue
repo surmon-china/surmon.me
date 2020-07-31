@@ -203,7 +203,7 @@
               width: 100%;
               height: 2em;
               line-height: 2em;
-              background-color: $module-hover-bg-darken-10;
+              background-color: $module-bg-darker-5;
               opacity: 0.4;
               color: $text-reversal;
               font-size: $font-size-h6;

@@ -1,7 +1,8 @@
 
-import { getJSON, setJSON } from '/@/services/storage'
+import { computed } from 'vue'
+import { getAccesser } from '/@/services/storage'
 import { OriginState } from '/@/constants/state'
-import { USER, USER_LIKE_HISTORY } from '/@/constants/storage'
+import { USER_LIKE_HISTORY } from '/@/constants/storage'
 
 export const isOriginal = (originState: OriginState) => originState === OriginState.Original
 export const isHybrid = (originState: OriginState) => originState === OriginState.Hybrid
@@ -15,32 +16,22 @@ export const getExtendsValue = (target: any, key: string) => {
   return targetExtend ? targetExtend.value : null
 }
 
-const getUserLikeHistory = () => getJSON(USER_LIKE_HISTORY)
+const getUserLikeHistory = () => getAccesser(
+  USER_LIKE_HISTORY, {
+    pages: [] as number [],
+    comments: [] as number []
+  }
+)
 
-export const getPagesLike = (): number[] => {
-  return getUserLikeHistory()?.pages || []
-}
+export const getPagesLike = () => getUserLikeHistory().value.pages
+export const getCommentsLike = () => getUserLikeHistory().value.comments
+export const likePage = (postId: number) => getPagesLike().push(postId)
+export const likeComment = (commentId: number) => getCommentsLike().push(commentId)
 
-export const getCommentsLike = (): number[] => {
-  return getUserLikeHistory()?.comments || []
-}
+export const isPageLiked = (postId: number) => computed(
+  () => getPagesLike().includes(postId)
+)
 
-export const setPagesLike = (pages: number[] = []) => {
-  const json = getUserLikeHistory() || {}
-  json.pages = pages
-  setJSON(USER_LIKE_HISTORY, json)
-}
-
-export const setCommentsLike = (comments: number[] = []) => {
-  const json = getUserLikeHistory() || {}
-  json.comments = comments
-  setJSON(USER_LIKE_HISTORY, json)
-}
-
-export const isPageLiked = (postId: number) => {
-  return getPagesLike().includes(postId)
-}
-
-export const isCommentLiked = (commentId: number) => {
-  return getCommentsLike().includes(commentId)
-}
+export const isCommentLiked = (commentId: number) => computed(
+  () => getCommentsLike().includes(commentId)
+)

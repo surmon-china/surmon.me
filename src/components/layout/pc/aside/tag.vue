@@ -42,7 +42,7 @@
       const tags = computed(() => store.state.tag.data)
 
       const getTagIcon = (tag: any) => {
-        return getExtendsValue(tag, 'icon')?.value || 'icon-tag'
+        return getExtendsValue(tag, 'icon') || 'icon-tag'
       }
 
       return {
@@ -65,20 +65,15 @@
     max-height: calc(100vh - 88px - #{$top-height + $lg-gap + $lg-gap + $tool-height});
     overflow-y: auto;
     width: 100%;
-    padding-left: $gap;
     border-top: $gap solid transparent;
     border-bottom: $gap solid transparent;
-
-    .empty {
-      padding-right: $gap;
-      padding-bottom: $gap;
-    }
 
     .tag-list {
       list-style: none;
       padding: 0;
       margin: 0;
       overflow: hidden;
+      margin-left: $gap;
 
       .item {
         display: inline-flex;
@@ -96,7 +91,7 @@
         .iconfont {
           width: 2em;
           text-align: center;
-          background-color: $module-hover-bg-opacity-3;
+          background-color: $module-bg-darker-1;
           @include background-transition();
         }
 
@@ -111,21 +106,27 @@
         }
 
         &.link-active {
-          background-color: $primary;
-          color: $text-reversal;
+          .iconfont {
+            color: $module-bg-opaque;
+            background-color: $primary-translucent;
+          }
+          .name {
+            background-color: $primary;
+            color: $text-reversal;
+          }
         }
 
         &:not(.link-active) {
           .name {
-            background-color: $module-hover-bg;
+            background-color: $module-bg-hover;
           }
 
           &:hover {
             .iconfont {
-              background-color: $module-hover-bg;
+              background-color: $module-bg-hover;
             }
             .name {
-              background-color: $module-hover-bg-darken-20;
+              background-color: $module-bg-darker-3;
             }
           }
         }
