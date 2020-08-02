@@ -12,7 +12,7 @@ import { getFileCDNUrl } from '/@/transforms/url'
 
 export const getBannerArticleThumbnailUrl = (thumb: string, isMobile: boolean, isWebPImage: boolean) => {
   if (!thumb) {
-    return getFileCDNUrl(`/images/${isMobile ? 'mobile-' : ''}thumb-carrousel.jpg`)
+    return getFileCDNUrl(`/images/${isMobile ? 'mobile-' : ''}thumb/carrousel.jpg`)
   }
   if (isMobile) {
     return `${thumb}?x-oss-process=style/blog.list.banner.mobile`
@@ -27,7 +27,7 @@ export const getBannerArticleThumbnailUrl = (thumb: string, isMobile: boolean, i
 
 export const getArchiveArticleThumbnailUrl = (thumb: string, isWebPImage: boolean) => {
   if (!thumb) {
-    return getFileCDNUrl('/images/thumb-article.jpg')
+    return getFileCDNUrl('/images/thumb/article.jpg')
   }
 
   return `${thumb}?x-oss-process=${

@@ -198,7 +198,7 @@
             height: 100%;
             border-radius: 100%;
             background-color: $module-bg-darker-1;
-            background-image: cdn-url('/images/music-bg.jpg');
+            background-image: cdn-url('/images/page-music/background.jpg');
             background-size: cover;
           }
         }

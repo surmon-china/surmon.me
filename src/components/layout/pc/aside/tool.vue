@@ -1,15 +1,13 @@
 <template>
   <div v-if="isArticlePage" class="tools">
-    <div class="full-column" @click="setFullColumn">
+    <button class="full-column" @click="setFullColumn">
       <span v-i18n="LANGUAGE_KEYS.ARTICLE_FULL_COL_READ" />
-      <span>&nbsp;&nbsp;</span>
       <i class="iconfont icon-read" />
-    </div>
-    <div class="full-page" @click="setFullScreen">
+    </button>
+    <button class="full-page" @click="setFullScreen">
       <span v-i18n="LANGUAGE_KEYS.ARTICLE_FULL_SCREEN_READ" />
-      <span>&nbsp;&nbsp;</span>
       <i class="iconfont icon-fullscreen" />
-    </div>
+    </button>
   </div>
 </template>
 
@@ -70,12 +68,11 @@
       height: $tool-height;
       line-height: $tool-height;
       text-align: center;
-      background-color: $module-bg;
-      @include background-transition();
-      cursor: pointer;
+      @include radius-box($xs-radius);
+      @include common-bg-module();
 
-      &:hover {
-        background-color: $module-bg-hover;
+      .iconfont {
+        margin-left: $gap;
       }
     }
   }

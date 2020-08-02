@@ -27,7 +27,7 @@
       />
     </div>
     <div class="comment">
-      <comment-box
+      <comment
         :fetching="fetching"
         :post-id="articleId"
         :likes="article?.meta?.likes"
@@ -38,11 +38,11 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { useRoute } from 'vue-router'
-  import { useGlobalState } from '/@/state'
-  import { useStore, Modules, getNamespace } from '/@/store'
+  import { useEnhancer } from '/@/enhancer'
+  import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { CommentModuleActions } from '/@/store/comment'
+  import Comment from '/@/components/comment/index.vue'
   import ArticleContent from './content.vue'
   import ArticleMammon from './mammon.vue'
   import ArticleShare from './share.vue'
@@ -52,6 +52,7 @@
   export default defineComponent({
     name: 'ArticleDetail',
     components: {
+      Comment,
       ArticleContent,
       ArticleMammon,
       ArticleShare,
@@ -76,10 +77,7 @@
     //   }
     // },
     async setup() {
-      const route = useRoute()
-      const store = useStore()
-      const globalState = useGlobalState()
-      const isMobile = computed(() => globalState.userAgent.isMobile)
+      const { store, route, globalState, isMobile } = useEnhancer()
       const article = computed(() => store.state.article.detail.data)
       const fetching = computed(() => store.state.article.detail.fetching)
       const articleId = computed(() => Number(route.params.article_id))
@@ -119,7 +117,8 @@
   .article-page {
     .module {
       margin-bottom: $lg-gap;
-      background-color: $module-bg;
+      @include radius-box($sm-radius);
+      @include common-bg-module();
     }
 
     &.mobile {

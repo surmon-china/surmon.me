@@ -136,7 +136,7 @@ const createMusicPlayer = (config: MusicConfig) => {
   const currentSongPicUrl = computed<string>(() => {
     return currentSong.value
       ? currentSong.value.cover_art_url
-      : getFileCDNUrl('/images/music-bg.jpg')
+      : getFileCDNUrl('/images/page-music/background.jpg')
   })
 
 

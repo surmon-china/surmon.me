@@ -13,7 +13,7 @@
         target="_blank"
         v-i18n="LANGUAGE_KEYS.PAGE_SITEMAP"
       />
-      <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+      <span class="separator">|</span>
       <i18n zh="由 " en="Powered By " />
       <a
         target="_blank"
@@ -28,14 +28,18 @@
         rel="external nofollow noopener"
         href="https://github.com/surmon-china/vuniversal"
       >Vuniversal</a>
+      <i18n
+        zh=" 和 日月星辰 强力驱动"
+        en=" and solitarily"
+      />
+      <span class="separator">|</span>
       <i18n>
         <template #zh>
-          <span> 和 日月星辰 强力驱动  |  </span>
           <router-link to="/about" key="zh">吾之臂躯</router-link>
           <span> 行针步线</span>
         </template>
         <template #en>
-          <span> and solitarily.  Designed By </span>
+          <span>Designed By </span>
           <router-link to="/about" key="en">Me</router-link>
         </template>
       </i18n>
@@ -74,6 +78,10 @@
       font-size: $font-size-h6;
       text-align: center;
       text-transform: uppercase;
+
+      .separator {
+        margin: 0 $sm-gap;
+      }
 
       .ipc {
         margin-right: $xs-gap;

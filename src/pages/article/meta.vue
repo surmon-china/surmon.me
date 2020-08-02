@@ -13,20 +13,25 @@
       <div class="metas" :class="{ mobile: isMobile }">
         <p class="item">
           <i18n>
-            <template #zh>本文于 </template>
-            <template #en>Article created at </template>
+            <template #zh>本文于</template>
+            <template #en>Article created at</template>
           </i18n>
           <router-link
+            class="date-link"
             :title="getDateTitle(article.create_at)"
             :to="getDateLink(article.create_at)"
           >
             <span>{{ getDateTitle(article.create_at) }}</span>
           </router-link>
           <i18n>
-            <template #zh> 发布在 </template>
-            <template #en> in category </template>
+            <template #zh>发布在</template>
+            <template #en>in category</template>
           </i18n>
-          <span v-for="(category, index) in article.category" :key="index">
+          <span
+            class="category-links"
+            v-for="(category, index) in article.category"
+            :key="index"
+          >
             <router-link
               :to="getCategoryArchiveRoute(category.slug)"
               :title="category.description || category.name"
@@ -40,8 +45,9 @@
           <span v-if="!article.category.length">
             <i18n zh="未知分类下，" en="(no catgory)," />
           </span>
+          <span class="separator">|</span>
           <i18n>
-            <template #zh>当前已被围观 {{ article.meta.views }}次</template>
+            <template #zh>当前已被围观 {{ article.meta.views }} 次</template>
             <template #en>{{ article.meta.views }} views.</template>
           </i18n>
         </p>
@@ -180,9 +186,10 @@
 
     > .item {
       margin-bottom: $lg-gap;
-      border-left: solid $sm-gap $body-bg;
-      padding-left: $gap;
+      line-height: 1.4em;
       word-break: break-all;
+      padding-left: $gap;
+      border-left: 6px solid $module-bg-darker-1;
 
       &:last-child {
         margin: 0;
@@ -190,6 +197,16 @@
 
       a:hover {
         text-decoration: underline;
+      }
+
+      .date-link,
+      .category-links,
+      .separator {
+        margin: 0 $sm-gap;
+      }
+
+      .separator {
+        margin-left: 0;
       }
 
       > .title.en {

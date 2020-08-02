@@ -1,28 +1,16 @@
 import { NavigationGuard } from 'vue-router'
 import { GlobalState, LayoutColumn } from '/@/state'
-import { RouteName } from '/@/router'
 
 export const getLayoutMiddleware = (globalState: GlobalState) => {
-  const middleware: NavigationGuard = (to, from, next) => {
-    const isWideColumns = [
-      RouteName.About,
-      RouteName.Lens,
-      RouteName.Job,
-      RouteName.Sitemap
-    ].includes((to.name || '') as RouteName)
-
-    const isFullPageColumns = [
-      RouteName.Music,
-      RouteName.App,
-      RouteName.Service
-    ].includes((to.name || '') as RouteName)
-
+  const middleware: NavigationGuard = (to, _, next) => {
     globalState.layoutColumn.setLayoutColumn(
-      isWideColumns
+      to.meta.layout === LayoutColumn.Wide
         ? LayoutColumn.Wide
-        : isFullPageColumns
-          ? LayoutColumn.Page
-          : LayoutColumn.Normal
+        : to.meta.layout === LayoutColumn.Full
+          ? LayoutColumn.Full
+          : to.meta.layout === LayoutColumn.Page
+            ? LayoutColumn.Page
+            : LayoutColumn.Normal
     )
 
     next()

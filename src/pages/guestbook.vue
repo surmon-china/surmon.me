@@ -1,10 +1,16 @@
 <template>
-  <div class="guestbook-page" :class="{ mobile: isMobile }">
-    <div class="detail">
-      <div class="banner">
-        <uimage cdn class="image" src="/images/guestbook.jpg" />
-        <span class="solgan" v-i18n="LANGUAGE_KEYS.GUESTBOOK_SLOGAN" />
-      </div>
+  <div
+    class="guestbook-page"
+    :class="{
+      mobile: isMobile,
+      dark: isDarkTheme
+    }"
+  >
+    <div class="banner">
+      <uimage cdn class="image" src="/images/page-guestbook/banner.jpg" />
+      <span class="solgan">
+        <span class="text" v-i18n="LANGUAGE_KEYS.GUESTBOOK_SLOGAN" />
+      </span>
     </div>
     <div class="comment">
       <comment :post-id="0" :likes="siteLikes" />
@@ -14,10 +20,10 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { useStore, Modules, getNamespace } from '/@/store'
+  import { Modules, getNamespace } from '/@/store'
   import { OptionModuleActions, OptionModuleMutations } from '/@/store/option'
   import { CommentModuleActions } from '/@/store/comment'
-  import { useGlobalState } from '/@/state'
+  import { useEnhancer } from '/@/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import Comment from '/@/components/comment/index.vue'
 
@@ -32,22 +38,27 @@
       Comment
     },
     async setup() {
-      const store = useStore()
-      const globalState = useGlobalState()
-      const isMobile = computed(() => globalState.userAgent.isMobile)
+      const { store, isMobile, isDarkTheme } = useEnhancer()
       const siteLikes = computed(() => {
         const appOption = store.state.option.appOption.data
         return appOption ? appOption.meta.likes : 0
       })
 
       await Promise.all([
-        store.dispatch(getNamespace(Modules.Option, OptionModuleActions.FetchAppOption), true),
-        store.dispatch(getNamespace(Modules.Comment, CommentModuleActions.FetchList), { post_id: 0 })
+        store.dispatch(
+          getNamespace(Modules.Option, OptionModuleActions.FetchAppOption),
+          true
+        ),
+        store.dispatch(
+          getNamespace(Modules.Comment, CommentModuleActions.FetchList),
+          { post_id: 0 }
+        )
       ])
 
       return {
         LANGUAGE_KEYS,
         isMobile,
+        isDarkTheme,
         siteLikes
       }
     }
@@ -58,58 +69,73 @@
   @import 'src/assets/styles/init.scss';
 
   .guestbook-page {
-    .detail {
+    .banner {
+      position: relative;
+      overflow: hidden;
       margin-bottom: $lg-gap;
+      width: 100%;
+      height: 19rem;
+      border: 0;
+      background-color: $module-bg;
+      @include radius-box($lg-radius);
 
-      .banner {
-        position: relative;
-        overflow: hidden;
-        width: 100%;
-        height: 19rem;
-        border: 0;
-        background-color: $module-bg;
-        @include radius-box($lg-radius);
+      .image {
+        margin-top: - ($gap * 6);
+        transition: all $transition-time-slow;
 
-        .image {
-          margin-top: -$gap * 6;
-          transition: all 1s;
-
-          &:hover {
-            transform: rotate(2deg) scale(1.1);
-            transition: all 1s;
-          }
+        &:hover {
+          transform: rotate(2deg) scale(1.1);
         }
+      }
 
+      .solgan {
+        $size: 2em;
+        display: block;
+        position: absolute;
+        right: $lg-gap * 2;
+        bottom: $lg-gap * 2;
+        height: $size;
+        line-height: $size;
+        padding: 0 $sm-gap;
+        padding-left: 3rem;
+        opacity: .8;
+        font-weight: 700;
+        color: $body-bg;
+        user-select: none;
+        cursor: progress;
+        background: linear-gradient(
+          to left,
+          $module-bg-lighter,
+          $module-bg,
+          transparent
+        );
+
+        .text {
+          letter-spacing: .3px;
+          font-weight: bold;
+          color: $text;
+          background-clip: text;
+          background-image: cdn-url('/images/page-guestbook/banner.jpg');
+          background-position: 100% 80%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+      }
+    }
+
+    &.dark {
+      .banner {
         .solgan {
-          $size: 2em;
-          display: block;
-          position: absolute;
-          right: $lg-gap * 2;
-          bottom: $lg-gap * 2;
-          height: $size;
-          line-height: $size;
-          padding: 0 $sm-gap;
-          padding-left: 3rem;
-          opacity: .5;
-          font-weight: 700;
-          color: $body-bg;
-          user-select: none;
-          cursor: progress;
-          background: linear-gradient(
-            to left,
-            $module-bg,
-            $module-bg-darker-3,
-            transparent
-          );
+          .text {
+            -webkit-text-fill-color: $text !important;
+          }
         }
       }
     }
 
     &.mobile {
-      > .detail {
-        > .banner {
-          height: 12rem;
-        }
+      .banner {
+        height: 12rem;
       }
     }
   }

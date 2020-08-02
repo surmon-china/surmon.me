@@ -15,7 +15,7 @@ export enum ImageExt {
 export enum LayoutColumn {
   Normal = 0,
   Wide = 1,
-  Full = 2,
+  Full = 2, // not used
   Page = 3
 }
 

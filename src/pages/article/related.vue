@@ -27,18 +27,19 @@
             <div class="article-list swiper" v-swiper:releted="swiperOption">
               <div class="swiper-wrapper">
                 <div
-                  v-for="(article, index) in relatedArticles"
+                  v-for="(article, index) in articles"
                   :key="index"
                   class="swiper-slide item"
                 >
                   <router-link
-                    class="item-box filter"
+                    class="item-article filter"
                     :title="article.title"
                     :to="getArticleDetailRoute(article.id)"
                   >
                     <img
                       :src="getRelatedArticleThumb(article.thumb)"
                       :alt="article.title"
+                      draggable="false"
                       class="thumb"
                     >
                     <span class="title">
@@ -52,7 +53,7 @@
           <template #mobile>
             <ul class="article-list">
               <li
-                v-for="(article, index) in relatedArticles"
+                v-for="(article, index) in articles"
                 :key="index"
                 class="item"
               >
@@ -170,30 +171,22 @@
             margin-right: 0;
           }
 
-          > .item-box {
+          > .item-article {
             display: block;
             position: relative;
             overflow: hidden;
+            border-radius: $xs-radius;
             width: auto;
             height: 100%;
-            opacity: .8;
-
-            &:hover {
-              .thumb {
-                opacity: 1;
-                transform: scale(1.1);
-              }
-
-              > .title {
-                opacity: 1;
-              }
-            }
 
             > .thumb {
               width: auto;
               height: 100%;
+              opacity: .8;
               transform: scale(1);
-              transition: transform $transition-time-normal, opacity $transition-time-fast;
+              transition:
+                transform $transition-time-normal,
+                opacity $transition-time-fast;
             }
 
             > .title {
@@ -203,17 +196,30 @@
               width: 100%;
               height: 2em;
               line-height: 2em;
-              background-color: $module-bg-darker-5;
-              opacity: 0.4;
-              color: $text-reversal;
-              font-size: $font-size-h6;
-              transition: opacity $transition-time-fast;
+              background-color: $module-bg-lighter;
+              opacity: .2;
+              transition:
+                transform $transition-time-normal,
+                opacity $transition-time-fast;
 
               .text {
                 display: block;
                 padding: 0 0.5em;
+                color: $link-color;
                 text-align: center;
+                font-size: $font-size-small;
                 @include text-overflow();
+              }
+            }
+
+            &:hover {
+              .thumb {
+                opacity: 1;
+                transform: scale(1.05);
+              }
+
+              .title {
+                opacity: 1;
               }
             }
           }

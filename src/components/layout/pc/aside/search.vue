@@ -7,6 +7,7 @@
         required
         type="search"
         name="search"
+        list="keywords"
         class="search-input"
         :class="i18n.language"
         :placeholder="i18n.t(LANGUAGE_KEYS.SEARCH_PLACEHOLDER)"
@@ -16,7 +17,7 @@
         <i class="iconfont icon-search" />
       </button>
       <client-only>
-        <datalist v-if="tags.length" id="keywords" class="search-keywords">
+        <datalist v-if="tags.length" id="keywords">
           <option
             v-for="tag in tags"
             :key="tag.slug"
@@ -30,16 +31,13 @@
     <router-link to="/sitemap" class="sitemap-btn">
       <i class="iconfont icon-book" />
     </router-link>
-    <!-- TODO:  重新实现，不再使用 list，而是使用 element 实现，并且 focus 时需要高亮起来 -->
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
-  import { useStore } from '/@/store'
+  import { useEnhancer } from '/@/enhancer'
   import { RouteName } from '/@/router'
-  import { useI18n } from '/@/services/i18n'
   import { isSearchArchive } from '/@/transforms/route'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -47,14 +45,9 @@
   export default defineComponent({
     name: 'PcAsideSearch',
     setup() {
-      const i18n = useI18n()
-      const route = useRoute()
-      const router = useRouter()
-      const store = useStore()
-
-      const keyword = ref('')
+      const { i18n, store, route, router, isZhLang } = useEnhancer()
       const tags = computed(() => store.state.tag.data)
-      const isZhLang = computed(() => i18n.language.value === Language.Zh)
+      const keyword = ref('')
 
       onMounted(() => {
         if (isSearchArchive(route.name as string)) {
@@ -63,11 +56,14 @@
       })
 
       const handleSearch = () => {
-        const keywordValue = keyword.value
+        const inputKeyword = keyword.value
         const paramsKeyword = route.params.keyword as string
         const isSearchPage = isSearchArchive(route.name as string)
-        if (keywordValue && (isSearchPage ? (paramsKeyword !== keywordValue) : true)) {
-          router.push({ name: RouteName.SearchArchive, params: { keywordValue }})
+        if (inputKeyword && (!isSearchPage || (paramsKeyword !== inputKeyword))) {
+          router.push({
+            name: RouteName.SearchArchive,
+            params: { keyword: inputKeyword }
+          })
         }
       }
 

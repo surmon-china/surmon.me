@@ -83,7 +83,7 @@
         position: relative;
         box-sizing: border-box;
         font-size: 0;
-        color: #fff;
+        color: $white;
         width: 80px;
         height: 30px;
 

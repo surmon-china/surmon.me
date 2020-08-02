@@ -6,7 +6,7 @@
           cdn
           alt="app-logo"
           draggable="false"
-          src="/images/app-logo.png"
+          src="/images/page-app/logo.png"
         />
       </div>
       <h2 class="title">{{ APP_CONFIG.META.title }}</h2>
@@ -17,7 +17,7 @@
           cdn
           alt="app-hot"
           class="screen-img"
-          src="/images/app-hot.png"
+          src="/images/page-app/hot.png"
         />
         <div class="download">
           <uimage
@@ -25,7 +25,7 @@
             class="qrcode"
             alt="qrcode"
             draggable="false"
-            src="/images/app-qrcode.png"
+            src="/images/page-app/qrcode.png"
           />
           <a
             target="_blank"

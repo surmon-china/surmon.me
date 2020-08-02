@@ -1,19 +1,25 @@
 <template>
   <div class="share">
-    <a
+    <button
       v-for="(social, index) in socials"
       :key="index"
       rel="nofollow noopener"
       class="share-ejector"
       :title="'Share to: ' + social.name"
       :class="social.class || social.name"
-      @click.prevent="openShareWindow(social.name, social.url)"
+      @click="openShareWindow(social.name, social.url)"
     >
-      <i class="iconfont" :class="`icon-${social.icon || social.class || social.name}`"></i>
-    </a>
-    <span class="share-ejector link" @click="copyPageUrl">
+      <i
+        class="iconfont"
+        :class="`icon-${social.icon || social.class || social.name}`"
+      />
+    </button>
+    <button
+      class="share-ejector link"
+      @click="copyPageUrl"
+    >
       <i class="iconfont icon-link"></i>
-    </span>
+    </button>
   </div>
 </template>
 
@@ -146,41 +152,32 @@
       @include background-transition();
 
       &.wechat:hover {
-        background-color: rgb(123, 179, 46);
+        background-color: $wechat-primary;
       }
-
       &.weibo:hover {
-        background-color: rgb(230, 22, 45);
+        background-color: $weibo-primary;
       }
-
       &.qzone:hover {
-        background-color: rgb(43, 130, 217);
+        background-color: $qzone-primary;
       }
-
       &.douban:hover {
-        background-color: rgb(0, 119, 17);
+        background-color: $douban-primary;
       }
-
       &.renren:hover {
-        background-color: rgb(0, 94, 172);
+        background-color: $renren-primary;
       }
-
       &.evernote:hover {
-        background-color: rgb(139, 224, 86);
+        background-color: $evernote-primary;
       }
-
       &.twitter:hover {
-        background-color: rgb(85, 172, 238);
+        background-color: $twitter-primary-hover;
       }
-
       &.facebook:hover {
-        background-color: rgb(59, 89, 152);
+        background-color: $facebook-primary;
       }
-
       &.linkedin:hover {
-        background-color: rgb(0, 123, 181);
+        background-color: $linkedin-primary;
       }
-
       &.link:hover {
         background-color: #e67a1c;
       }

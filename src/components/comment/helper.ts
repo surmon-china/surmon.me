@@ -23,7 +23,7 @@ export const getCommentElementId = (commentId: string | number): string => {
 }
 
 export const humanizeGravatarUrl = (gravatar?: string) => {
-  return gravatar || getFileCDNUrl('/images/anonymous.jpg')
+  return gravatar || getFileCDNUrl('/images/comment/anonymous.jpg')
 }
 
 export const getGravatarUrlByEmail = (email: string) => {
