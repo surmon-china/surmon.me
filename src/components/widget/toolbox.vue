@@ -211,11 +211,10 @@
         }
 
         > .rss {
-          $color: #f8981d;
-          color: $color;
+          color: $rss-primary;
 
           &:hover {
-            background-color: $color;
+            background-color: $rss-primary;
             color: $white;
           }
         }

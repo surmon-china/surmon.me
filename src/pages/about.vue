@@ -125,6 +125,14 @@
                   <i class="iconfont icon-linkedin" />
                 </a>
                 <a
+                  href="https://www.douban.com/people/nocower"
+                  target="_blank"
+                  class="item douban"
+                  rel="external nofollow noopenter"
+                >
+                  <i class="iconfont icon-douban" />
+                </a>
+                <a
                   href="https://www.zhihu.com/people/surmon"
                   target="_blank"
                   class="item zhihu"
@@ -207,7 +215,7 @@
             cdn
             class="image"
             alt="background"
-            src="/images/about-background-be-2.jpg"
+            src="/images/page-about/background-be-2.jpg"
           />
         </div>
         <div class="background be-1">
@@ -215,7 +223,7 @@
             cdn
             class="image"
             alt="background"
-            src="/images/about-background-be-1.jpg"
+            src="/images/page-about/background-be-1.jpg"
           />
         </div>
         <div class="background star-1">
@@ -223,7 +231,7 @@
             cdn
             class="image"
             alt="background-star"
-            src="/images/about-background-star-1.png"
+            src="/images/page-about/background-star-1.png"
           />
         </div>
         <div class="background star-2">
@@ -231,7 +239,7 @@
             cdn
             class="image"
             alt="background-star"
-            src="/images/about-background-star-2.png"
+            src="/images/page-about/background-star-2.png"
           />
         </div>
         <img :src="gravatar" class="avatar" draggable="false">
@@ -249,7 +257,7 @@
             <uimage
               cdn
               class="qrcode"
-              src="/images/wechat-qrcode.jpg"
+              src="/images/page-about/wechat-qrcode.jpg"
             />
             <span class="tooltip">
               <i18n zh="扫码加微，解锁灵魂" en="Scan the QR code in WeChat" />
@@ -488,11 +496,10 @@
             }
 
             .spotify {
-              color: #1DB954;
+              color: $spotify-primary;
             }
-
             .music-163 {
-              color: #C20C0C;
+              color: $music163-primary;
             }
           }
 
@@ -527,25 +534,24 @@
                 }
 
                 &.github {
-                  background-color: #24282d;
+                  background-color: $github-primary;
                   &:hover {
-                    background-color: #000;
+                    background-color: $github-primary-hover;
                   }
                 }
 
                 &.twitter {
-                  background-color: #1b95e0;
+                  background-color: $twitter-primary;
                   &:hover {
-                    background-color: #0c7abf;
+                    background-color: $twitter-primary-hover;
                   }
                 }
 
                 &.instagram {
                   opacity: 0.8;
-                  background: #f09433;
-                  background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+                  background: $instagram-primary;
+                  background: $instagram-gradient;
                   @include visibility-transition();
-
                   &:hover {
                     opacity: 1;
                   }
@@ -575,25 +581,28 @@
                 }
 
                 &.telegram {
-                  background-color: #54a5dd;
+                  background-color: $telegram-primary;
+                }
+                &.douban {
+                  background-color: $douban-primary;
                 }
                 &.zhihu {
-                  background-color: #3582f7;
+                  background-color: $zhihu-primary;
                 }
                 &.bilibili {
-                  background-color: #fb7299;
+                  background-color: $bilibili-pink-primary;
                 }
                 &.stackoverflow {
-                  background-color: #e6863d;
+                  background-color: $stackoverflow-primary;
                 }
                 &.algorithm {
-                  background-color: #fea116;
+                  background-color: $leetcode-primary;
                 }
                 &.quora {
-                  background-color: #b92b27;
+                  background-color: $quora-primary;
                 }
                 &.linkedin {
-                  background-color: #478cc5;
+                  background-color: $linkedin-primary;
                 }
               }
             }
@@ -828,7 +837,7 @@
         opacity: .8;
 
         .wave {
-          background: url('/images/wave.svg') repeat-x;
+          background: url('/images/page-about/wave.svg') repeat-x;
           background-size: contain;
           position: absolute;
           width: 6400px;

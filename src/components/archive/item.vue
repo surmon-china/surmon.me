@@ -311,10 +311,6 @@
           text-overflow: ellipsis;
           word-wrap: normal;
 
-          > .date {
-            text-transform: uppercase;
-          }
-
           > .views {
             min-width: 4rem;
           }

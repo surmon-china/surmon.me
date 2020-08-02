@@ -8,7 +8,7 @@
         <template v-if="!layoutColumn.isFullPageLayout">
           <language />
           <theme />
-          <share />
+          <share class="main-share" />
           <wallpaper />
           <template v-if="!layoutColumn.isFullColumeLayout">
             <toolbox />
@@ -98,7 +98,7 @@
       }
     }
 
-    &::v-deep(.share) {
+    .main-share {
       position: fixed;
       top: 12%;
       left: 0;
@@ -112,11 +112,14 @@
         opacity: 1;
       }
 
-      > .share-ejector {
+      ::v-deep(.share-ejector) {
+        $height: 2.1em;
         width: 3rem;
-        height: 3rem;
-        line-height: 3rem;
-        font-size: 18px;
+        height: $height;
+        line-height: $height;
+        font-size: $font-size-h4;
+        border-top-right-radius: $xs-radius;
+        border-bottom-right-radius: $xs-radius;
         transition: width $transition-time-fast;
 
         &.renren,

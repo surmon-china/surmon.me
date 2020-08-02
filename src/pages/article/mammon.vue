@@ -11,10 +11,10 @@
         />
       </template>
       <template #default>
-        <adsense-responsive
+        <!-- <adsense-responsive
           key="adsense"
           ins-class="mammon-ins"
-        />
+        /> -->
       </template>
     </placeholder>
   </div>

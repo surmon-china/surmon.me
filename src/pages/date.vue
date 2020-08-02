@@ -11,7 +11,9 @@
       />
     </article-list-header>
     <article-list
-      :article="articleData"
+      :fetching="article.fetching"
+      :articles="article.data.data"
+      :pagination="article.data.pagination"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -36,7 +38,7 @@
       const route = useRoute()
       const router = useRouter()
 
-      const articleData = computed(() => store.state.article.list)
+      const article = computed(() => store.state.article.list)
       const currentDate = computed(() => route.params.date)
 
       // TODO: 验证参数
@@ -55,16 +57,16 @@
         return fetchArticles({
           ...route.params,
           date: route.params.date,
-          page: articleData.value.data.pagination.current_page + 1
+          page: article.value.data.pagination.current_page + 1
         })
       }
 
       await fetchArticles(route.params)
 
       return {
-        articleData,
+        article,
         currentDate,
-        loadmoreArticles,
+        loadmoreArticles
       }
     }
   })

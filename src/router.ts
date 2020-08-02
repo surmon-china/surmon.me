@@ -1,4 +1,5 @@
 import { RouteRecordRaw, NavigationGuard, PostNavigationGuard, RouterHistory, createRouter } from 'vue-router'
+import { LayoutColumn } from '/@/state'
 import ErrorPage from './pages/error.vue'
 
 export enum RouteName {
@@ -28,7 +29,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/sitemap',
     name: RouteName.Sitemap,
-    component: () => import('./pages/sitemap.vue')
+    component: () => import('./pages/sitemap.vue'),
+    meta: {
+      layout: LayoutColumn.Wide
+    }
   },
   {
     path: '/article/:article_id',
@@ -58,27 +62,42 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/music',
     name: RouteName.Music,
-    component: () => import('./pages/music.vue')
+    component: () => import('./pages/music.vue'),
+    meta: {
+      layout: LayoutColumn.Page
+    }
   },
   {
     path: '/lens',
     name: RouteName.Lens,
-    component: () => import('./pages/lens.vue')
+    component: () => import('./pages/lens.vue'),
+    meta: {
+      layout: LayoutColumn.Page
+    }
   },
   {
     path: '/job',
     name: RouteName.Job,
-    component: () => import('./pages/job.vue')
+    component: () => import('./pages/job.vue'),
+    meta: {
+      layout: LayoutColumn.Page
+    }
   },
   {
     path: '/about',
     name: RouteName.About,
-    component: () => import('./pages/about.vue')
+    component: () => import('./pages/about.vue'),
+    meta: {
+      layout: LayoutColumn.Wide
+    }
   },
   {
     path: '/service',
     name: RouteName.Service,
-    component: () => import('./pages/service.vue')
+    component: () => import('./pages/service.vue'),
+    meta: {
+      layout: LayoutColumn.Page
+    }
   },
   {
     path: '/guestbook',
@@ -88,7 +107,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/app',
     name: RouteName.App,
-    component: () => import('./pages/app.vue')
+    component: () => import('./pages/app.vue'),
+    meta: {
+      layout: LayoutColumn.Page
+    }
   },
   {
     name: 'error',

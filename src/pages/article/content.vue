@@ -76,10 +76,8 @@
 
 <script lang="ts">
   import { defineComponent, ref, reactive, computed, nextTick, onMounted } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
-  import { mapState } from 'vuex'
-  import { useGlobalState } from '/@/state'
-  import { useStore, Modules, getNamespace } from '/@/store'
+  import { useEnhancer } from '/@/enhancer'
+  import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
@@ -102,11 +100,9 @@
       }
     },
     setup(props, context) {
-      const store = useStore()
-      const globalState = useGlobalState()
+      const { store, globalState, isMobile } = useEnhancer()
       const element = ref<HTMLElement>()
       const tags = computed(() => store.state.tag.data)
-      const isMobile = computed(() => globalState.userAgent.isMobile)
       const _isHybrid = isHybrid(props.article?.origin)
       const _isReprint = isReprint(props.article?.origin)
       const _isOriginal = !props.article?.origin || isOriginal(props.article.origin)
@@ -217,6 +213,7 @@
         _isHybrid,
         _isReprint,
         _isOriginal,
+        isMobile,
         isLongFormContent,
         isRenderMoreEnabled,
         longFormRenderState,
@@ -266,15 +263,14 @@
       color: $text-reversal;
       font-weight: bold;
       font-size: $font-size-small;
+      user-select: none;
 
       &.self {
         background-color: rgba($accent, .8);
       }
-
       &.other {
         background-color: rgba($red, .8);
       }
-
       &.hybrid {
         background-color: rgba($primary, .8);
       }

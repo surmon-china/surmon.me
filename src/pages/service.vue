@@ -45,10 +45,10 @@
             <p class="icon nodejs">
               <i class="iconfont icon-nodejs"></i>
             </p>
-            <h3 class="name">Nodejs</h3>
-            <p class="desc">Nodejs <i18n en="application" zh="整站建设" /></p>
-            <p class="desc">Nodejs <i18n en="Web 服务开发" zh="online bussniess" /></p>
-            <p class="desc">Nodejs <i18n en="命令行工具开发" zh="CLI application" /></p>
+            <h3 class="name">Node.js</h3>
+            <p class="desc">Node.js <i18n en="application" zh="整站建设" /></p>
+            <p class="desc">Node.js <i18n en="Web 服务开发" zh="online bussniess" /></p>
+            <p class="desc">Node.js <i18n en="命令行工具开发" zh="CLI application" /></p>
           </li>
           <li class="item">
             <p class="icon app">
@@ -56,14 +56,14 @@
             </p>
             <h3 class="name">Application</h3>
             <p class="desc">Weex <i18n en="application" zh="应用开发" /></p>
-            <p class="desc">ReactNative <i18n en="application" zh="应用开发" /></p>
+            <p class="desc">React Native <i18n en="application" zh="应用开发" /></p>
             <p class="desc">Electron <i18n en="application" zh="应用开发" /></p>
           </li>
           <li class="item">
             <p class="icon wechat">
               <i class="iconfont icon-wechat"></i>
             </p>
-            <h3 class="name">Wechat</h3>
+            <h3 class="name">WeChat</h3>
             <p class="desc"><i18n en="HTML5 page" zh="H5 开发" /></p>
             <p class="desc"><i18n en="WeChat official account" zh="公众号开发" /></p>
             <p class="desc"><i18n en="WeChat mini program" zh="小程序开发" /></p>
@@ -73,7 +73,7 @@
               <i class="iconfont icon-tool"></i>
             </p>
             <h3 class="name"><i18n en="Consultant" zh="技术咨询" /></h3>
-            <p class="desc"><i18n en="Everything about WEB" zh="语言、框架疑难杂症" /></p>
+            <p class="desc"><i18n en="Everything about web" zh="语言、框架疑难杂症" /></p>
             <p class="desc"><i18n en="Business and technical" zh="业务与技术方案设计" /></p>
             <p class="desc"><i18n en="Technical consultant" zh="长期技术顾问指导" /></p>
           </li>
@@ -184,6 +184,7 @@
 
   .service-page {
     width: 100%;
+    user-select: none;
 
     &.mobile {
       > .banner {
@@ -285,11 +286,10 @@
     }
 
     .banner {
-      height: 31rem;
-      background: $module-bg-hover cdn-url('/images/service.jpg');
+      height: $full-column-page-banner-height;
+      background: $module-bg-hover cdn-url('/images/page-service/banner.jpg');
       background-size: cover;
       background-position: center 60%;
-      background-attachment: fixed;
 
       .content {
         height: 100%;
@@ -300,8 +300,8 @@
           color: $text-reversal;
           margin-top: 7rem;
           margin-bottom: 4rem;
-          font-weight: 500;
-          font-size: $font-size-h1 * 2;
+          font-weight: bold;
+          font-size: $font-size-h2 * 2;
           font-family: 'webfont-normal', DINRegular;
         }
 
@@ -385,16 +385,16 @@
 
               .icon {
                 &.web {
-                  color: #d45835;
+                  color: $html5-primary;
                 }
                 &.nodejs {
-                  color: #43853d;
+                  color: $nodejs-primary;
                 }
                 &.app {
                   color: $primary;
                 }
                 &.wechat {
-                  color: #6fc04b;
+                  color: $wechat-primary;
                 }
                 &.consult {
                   color: #CD7F32;

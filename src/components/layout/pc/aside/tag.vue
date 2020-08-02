@@ -1,17 +1,17 @@
 <template>
   <div class="tag">
     <placeholder
-      :data="tags.length"
+      :data="tagData.data.length"
+      :fetching="tagData.fetching"
       :p-i18n-key="LANGUAGE_KEYS.TAG_PLACEHOLDER"
     >
-      <ul class="tag-list">
+      <div class="tag-list">
         <router-link
-          tag="li"
           class="item"
           :title="tag.description"
           :to="getTagArchiveRoute(tag.slug)"
           :key="index"
-          v-for="(tag, index) in tags"
+          v-for="(tag, index) in tagData.data"
         >
           <i class="iconfont" :class="getTagIcon(tag)" />
           <span class="name">
@@ -19,7 +19,7 @@
             <span class="count">({{ tag.count || 0 }})</span>
           </span>
         </router-link>
-      </ul>
+      </div>
     </placeholder>
   </div>
 </template>
@@ -39,7 +39,7 @@
       const i18n = useI18n()
       const store = useStore()
       const route = useRoute()
-      const tags = computed(() => store.state.tag.data)
+      const tagData = computed(() => store.state.tag)
 
       const getTagIcon = (tag: any) => {
         return getExtendsValue(tag, 'icon') || 'icon-tag'
@@ -48,7 +48,7 @@
       return {
         LANGUAGE_KEYS,
         t: i18n.t,
-        tags,
+        tagData,
         getTagIcon,
         getTagArchiveRoute
       }
@@ -71,9 +71,9 @@
     .tag-list {
       list-style: none;
       padding: 0;
-      margin: 0;
       overflow: hidden;
       margin-left: $gap;
+      margin-bottom: - $gap;
 
       .item {
         display: inline-flex;
@@ -84,9 +84,6 @@
         font-size: $font-size-h6;
         text-transform: capitalize;
         font-family: $font-family-sans-serif;
-        &:last-child {
-          margin: 0;
-        }
 
         .iconfont {
           width: 2em;

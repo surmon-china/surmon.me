@@ -46,9 +46,7 @@
       <div class="module">
         <aside-tag />
       </div>
-      <div class="module">
-        <aside-tool />
-      </div>
+      <aside-tool />
     </div>
   </aside>
 </template>

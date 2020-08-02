@@ -6,106 +6,124 @@
       dark: isDarkTheme
     }"
   >
-    <div class="header">
-      <div class="bilibili">
-        <div class="left">
-          <i class="iconfont icon-bilibili"></i>
-          <a
-            href="https://space.bilibili.com/27940710"
-            target="_blank"
-            class="button"
-            rel="external nofollow noopenter"
-          >(゜-゜)つロ 干杯~</a>
-        </div>
-        <uimage class="image" cdn src="/images/bilibili.jpg" />
-      </div>
-      <div class="global">
-        <a
-          class="instagram"
-          href="https://www.instagram.com/surmon666"
-          target="_blank"
-          rel="external nofollow noopenter"
-        >
-          <i class="iconfont icon-instagram"></i>
-          <span class="button">Instagram</span>
-        </a>
-        <a
-          class="youtube"
-          href="https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w"
-          target="_blank"
-          rel="external nofollow noopenter"
-        >
-          <i class="iconfont icon-youtube"></i>
-          <span class="button">YouTube</span>
-        </a>
-      </div>
-      <div class="wechat-channel" data-placeholder="Scan QR code on Wechat">
-        <uimage cdn src="/images/wechat-channel.jpg" />
-      </div>
-      <div class="douyin" data-placeholder="Scan TikCode on Douyin">
-        <uimage cdn src="/images/douyin.jpg" />
+    <div class="banner">
+      <div class="content container">
+        <p class="title">
+          <i18n
+            zh="凡心所向，素履以往"
+            en="Because it's there"
+          />
+        </p>
+        <p class="description">
+          <i18n>
+            <template #zh>生如逆旅，一苇以航</template>
+            <template #en>"why did you want to climb mount Everest?"</template>
+          </i18n>
+        </p>
       </div>
     </div>
-    <div class="title-split">Vlogs</div>
-    <ul class="videos" ref="videoListElement">
-      <li
-        class="item"
-        @click="handlePlay(video)"
-        :title="video.title"
-        :key="index"
-        v-for="(video, index) in videoList"
-      >
-        <div class="thumb">
-          <div class="mask">
-            <div class="button">
-              <i class="iconfont icon-music-play" />
-            </div>
+    <div class="container">
+      <div class="header">
+        <div class="bilibili">
+          <div class="left">
+            <i class="iconfont icon-bilibili-full"></i>
+            <a
+              href="https://space.bilibili.com/27940710"
+              target="_blank"
+              class="button"
+              rel="external nofollow noopenter"
+            >(゜-゜)つロ 干杯~</a>
           </div>
-          <span class="length">{{ video.length }}</span>
-          <div
-            class="background lozad"
-            :data-background-image="getThumbUrl(video.pic)"
-          />
+          <uimage class="image" cdn src="/images/page-lens/bilibili.jpg" />
         </div>
-        <h5 class="title" v-text="video.title" />
-        <p
-          class="description"
-          style="-webkit-box-orient: vertical;"
-          v-text="video.description || '-'"
-        />
-        <hr class="split">
-        <p class="meta">
-          <span class="item favorites">
-            <i class="iconfont icon-like"></i>
-            <span>{{ video.favorites }}</span>
+        <div class="global">
+          <a
+            class="instagram"
+            href="https://www.instagram.com/surmon666"
+            target="_blank"
+            rel="external nofollow noopenter"
+          >
+            <i class="iconfont icon-instagram"></i>
+            <span class="text">Follow me on Instagram</span>
+          </a>
+          <a
+            class="youtube"
+            href="https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w"
+            target="_blank"
+            rel="external nofollow noopenter"
+          >
+            <i class="iconfont icon-youtube"></i>
+            <span class="text">Subscription my YouTube Channel</span>
+          </a>
+        </div>
+        <div class="wechat-channel">
+          <uimage cdn src="/images/page-lens/wechat-channel.jpg" />
+        </div>
+        <div class="douyin">
+          <uimage cdn src="/images/page-lens/douyin.jpg" />
+        </div>
+      </div>
+      <div class="vlog-title">Vlogs</div>
+      <ul class="videos" ref="videoListElement">
+        <li
+          class="item"
+          @click="handlePlay(video)"
+          :title="video.title"
+          :key="index"
+          v-for="(video, index) in videoList"
+        >
+          <div class="thumb">
+            <div class="mask">
+              <div class="button">
+                <i class="iconfont icon-music-play" />
+              </div>
+            </div>
+            <span class="length">{{ video.length }}</span>
+            <div
+              class="background lozad"
+              :data-background-image="getThumbUrl(video.pic)"
+            />
+          </div>
+          <h5 class="title" v-text="video.title" />
+          <p
+            class="description"
+            style="-webkit-box-orient: vertical;"
+            v-text="video.description || '-'"
+          />
+          <hr class="separator">
+          <p class="meta">
+            <span class="item favorites">
+              <i class="iconfont icon-like"></i>
+              <span>{{ video.favorites }}</span>
+            </span>
+            <span class="item play">
+              <i class="iconfont icon-video-play"></i>
+              <span>{{ video.play }}</span>
+            </span>
+            <span class="item comment">
+              <i class="iconfont icon-comment"></i>
+              <span>{{ video.comment }}</span>
+            </span>
+            <span class="item created">
+              <i class="iconfont icon-clock"></i>
+              <span>{{ humanlizeDate(video.created) }}</span>
+            </span>
+          </p>
+        </li>
+      </ul>
+      <div class="loadmore">
+        <a
+          href="https://space.bilibili.com/27940710/video"
+          target="_blank"
+          class="button"
+          rel="external nofollow noopenter"
+        >
+          <span class="icon">
+            <i class="iconfont icon-bilibili"></i>
           </span>
-          <span class="item play">
-            <i class="iconfont icon-video-play"></i>
-            <span>{{ video.play }}</span>
-          </span>
-          <span class="item comment">
-            <i class="iconfont icon-comment"></i>
-            <span>{{ video.comment }}</span>
-          </span>
-          <span class="item created">
-            <i class="iconfont icon-clock"></i>
-            <span>{{ humanlizeDate(video.created) }}</span>
-          </span>
-        </p>
-      </li>
-    </ul>
-    <div class="loadmore">
-      <a
-        href="https://space.bilibili.com/27940710/video"
-        target="_blank"
-        class="button"
-        rel="external nofollow noopenter"
-      >
-        <span class="icon">
-          <i class="iconfont icon-bilibili"></i>
-        </span>
-        <span v-i18n="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE" />
-      </a>
+          <span v-i18n="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE" />
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -189,14 +207,38 @@
   @import 'src/assets/styles/init.scss';
 
   .lens-page {
-    min-height: 40rem;
-    $bilibili-blue-primary: #00a1d6;
-    $bilibili-red-primary: #fb7299;
+    user-select: none;
+
+    .banner {
+      margin-bottom: $lg-gap;
+      height: $full-column-page-banner-height;
+      background: $module-bg-hover cdn-url('/images/page-lens/banner.jpg');
+      background-size: cover;
+      background-position: center 40%;
+
+      .content {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: $white;
+      }
+
+      .title {
+        font-size: 3em;
+        font-weight: bold;
+        margin-bottom: $lg-gap * 2;
+      }
+      .description {
+        font-size: $font-size-h4;
+      }
+    }
 
     .header {
       display: flex;
       width: 100%;
-      height: 200px;
+      height: 18rem;
       margin-bottom: $lg-gap;
 
       .bilibili,
@@ -213,33 +255,33 @@
         width: 40%;
         height: 100%;
         margin-right: $gap;
-        border: 2px solid $bilibili-blue-primary;
+        border: 2px solid $bilibili-pink-primary;
 
         .left {
           flex-grow: 1;
           height: 100%;
           text-align: center;
-          background-color: $bilibili-blue-primary;
+          background-color: $bilibili-pink-primary;
           color: $white;
 
           .iconfont {
             display: block;
-            margin-top: $sm-gap;
-            font-size: 6em;
+            margin-top: $gap * 2;
+            font-size: 5em;
           }
 
           .button {
             display: inline-block;
-            margin-top: $sm-gap;
+            margin-top: $gap * 2;
             color: inherit;
             height: 2em;
             line-height: 2em;
             padding: 0 $gap;
             border: 1px solid $white;
             border-radius: $xs-radius;
-            opacity: .8;
             &:hover {
-              opacity: 1;
+              color: $bilibili-pink-primary;
+              background-color: $white;
             }
           }
         }
@@ -264,6 +306,7 @@
           flex-direction: column;
           justify-content: center;
           align-items: center;
+          transition: opacity $transition-time-fast;
           color: $white;
           opacity: 0.9;
           &:hover {
@@ -271,37 +314,26 @@
           }
 
           .iconfont {
-            font-size: $font-size-h1;
-            margin-bottom: $gap;
+            font-size: $font-size-h4 * 2;
+            margin-bottom: $xs-gap;
           }
 
-          .button {
+          .text {
             display: inline-block;
-            height: 1.6em;
             line-height: 1.5em;
-            padding: 0 $sm-gap;
-            border: 1px solid $white;
-            border-radius: $xs-radius;
             font-size: $font-size-small;
           }
         }
 
         .instagram {
           margin-bottom: $gap;
-          background: #f09433;
-          background: linear-gradient(
-            45deg,
-            #f09433 0%,
-            #e6683c 25%,
-            #dc2743 50%,
-            #cc2366 75%,
-            #bc1888 100%
-          );
+          background: $instagram-primary;
+          background: $instagram-gradient;
           @include visibility-transition();
         }
 
         .youtube {
-          background-color: #ec3323;
+          background-color: $youtube-primary;
         }
       }
 
@@ -311,55 +343,28 @@
 
       .wechat-channel,
       .douyin {
-        position: relative;
-        flex-shrink: 0;
         height: 100%;
+        flex-shrink: 0;
         background-color: $module-bg;
-        opacity: 0.9;
-        &:hover {
-          opacity: 1;
-        }
 
         img {
           width: auto;
           height: 100%;
         }
-
-        &::before {
-          $height: 4rem;
-          content: attr(data-placeholder);
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          height: $height;
-          line-height: $height;
-          text-align: center;
-          font-size: $font-size-small;
-          font-weight: bold;
-          background-color: $module-bg-opaque;
-          @include hidden();
-          @include visibility-transition();
-        }
-
-        &:hover {
-          &::before {
-            @include visible();
-          }
-        }
       }
     }
 
-    .title-split {
+    .vlog-title {
       margin-bottom: $lg-gap;
       line-height: 3.6em;
       border-width: 4px;
-      border-style: dashed;
+      border-style: double;
+      border-radius: $lg-radius;
       border-color:
+        $bilibili-pink-primary
         $bilibili-blue-primary
-        $bilibili-red-primary
-        $bilibili-red-primary
-        $bilibili-blue-primary;
+        $bilibili-blue-primary
+        $bilibili-pink-primary;
       background-color: $module-bg-opaque;
       text-align: center;
       font-size: $font-size-h3;
@@ -367,7 +372,6 @@
       text-transform: uppercase;
       color: $bilibili-blue-primary;
       letter-spacing: 5px;
-      user-select: none;
     }
 
     .videos {
@@ -413,7 +417,7 @@
 
         .thumb {
           width: 100%;
-          height: 13rem;
+          height: 14rem;
           position: relative;
           overflow: hidden;
 
@@ -486,7 +490,7 @@
           font-size: $font-size-h6;
         }
 
-        > .split {
+        > .separator {
           border-top: 1px dotted $module-bg-darker-1;
           margin: 0;
         }
@@ -512,11 +516,13 @@
     }
 
     .loadmore {
-      > .button {
+      margin-bottom: $lg-gap;
+
+      .button {
         display: block;
         width: 100%;
-        height: $block-button-height;
-        line-height: $block-button-height;
+        height: $button-block-height;
+        line-height: $button-block-height;
         text-align: center;
         @include common-bg-module();
         @include radius-box($xs-radius);
@@ -528,6 +534,9 @@
     }
 
     &.dark {
+      .banner {
+        background-blend-mode: difference;
+      }
       .videos {
         .item {
           .thumb {
@@ -554,12 +563,11 @@
             height: 10rem;
           }
 
-          > .split {
+          > .separator {
             border-color: $module-bg-hover;
           }
         }
       }
     }
-
   }
 </style>

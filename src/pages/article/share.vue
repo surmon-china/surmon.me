@@ -1,5 +1,5 @@
 <template>
-  <div class="share">
+  <div class="share-module">
     <placeholder :loading="fetching">
       <template #loading>
         <div class="skeleton">
@@ -14,7 +14,7 @@
         </div>
       </template>
       <template #default>
-        <share-box :class="{ mobile: isMobile }" />
+        <share class="article-share" :class="{ mobile: isMobile }" />
       </template>
     </placeholder>
   </div>
@@ -23,13 +23,18 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/enhancer'
+  import Share from '/@/components/widget/share.vue'
+
   export default defineComponent({
     name: 'ArticleShare',
     props: {
       fetching: {
         type: Boolean,
-        default: false
+        required: true
       }
+    },
+    components: {
+      Share
     },
     setup() {
       const { isMobile } = useEnhancer()
@@ -45,7 +50,7 @@
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
-  .share {
+  .share-module {
     padding: $gap;
 
     > .skeleton {
@@ -54,7 +59,7 @@
       height: 3rem;
     }
 
-    > .share-box {
+    > .article-share {
       width: 100%;
       opacity: .6;
       display: flex;
@@ -64,13 +69,15 @@
         opacity: 1;
       }
 
-      > .share-ejector {
+      ::v-deep(.share-ejector) {
         flex-grow: 1;
         width: auto;
         height: 3rem;
         line-height: 3rem;
         margin-right: $gap;
-        font-size: 17px;
+        font-size: $font-size-h4;
+        border-radius: $xs-radius;
+        background-color: $module-bg-darker-1;
 
         &:last-child {
           margin-right: 0;
@@ -78,7 +85,7 @@
       }
 
       &.mobile {
-        > .share-ejector {
+        ::v-deep(.share-ejector) {
           width: auto;
           display: none;
           flex-grow: 0;

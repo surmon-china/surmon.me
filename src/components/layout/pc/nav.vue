@@ -49,7 +49,7 @@
       <!-- <a
         :href="AD_CONFIG.nav.holiday"
         target="_blank"
-        class="item ad holiday"
+        class="item holiday"
         rel="external nofollow noopener"
       >
         <i class="iconfont icon-1111"></i>
@@ -58,16 +58,17 @@
       <!-- <a
         :href="AD_CONFIG.nav.taobao"
         target="_blank"
-        class="item ad taobao"
+        class="item taobao"
         rel="external nofollow noopener"
       >
         <i class="iconfont icon-taobao"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.AD_LINK_TAOBAO" />
       </a> -->
+      <span class="separator"></span>
       <a
         :href="AD_CONFIG.nav.aliyun"
         target="_blank"
-        class="item ad aliyun"
+        class="item aliyun"
         rel="external nofollow noopener"
       >
         <i class="iconfont icon-aliyun"></i>
@@ -76,24 +77,27 @@
           <i class="iconfont icon-hot"></i>
         </span>
       </a>
+      <!-- <span class="separator"></span> -->
       <!-- <a
         target="_blank"
-        class="item ad throwerror"
+        class="item throwerror"
         rel="external nofollow noopener"
         :href="APP_CONFIG.LINKS.throwerror"
       >
         <i class="iconfont icon-debug"></i>
         <span class="text">TE.io</span>
       </a> -->
+      <span class="separator"></span>
       <a
         target="_blank"
-        class="item ad foxfinder"
+        class="item foxfinder"
         rel="external nofollow noopener"
         :href="APP_CONFIG.LINKS.foxfinder"
       >
         <i class="iconfont icon-fox-colour"></i>
         <span class="text">FF.io</span>
       </a>
+      <span class="separator"></span>
       <router-link to="/app" class="item app">
         <i class="iconfont icon-app"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_APP" />
@@ -157,7 +161,6 @@
       }
 
       .item {
-        border: none;
         display: block;
         position: relative;
         width: 100%;
@@ -166,88 +169,68 @@
         padding: 0 $lg-gap;
         text-decoration: none;
         text-transform: uppercase;
-        font-weight: 700;
+        font-weight: bold;
         border-radius: 1px;
         color: $text-secondary;
         font-family: 'webfont-normal', DINRegular;
         letter-spacing: 0.5px;
         margin-bottom: $sm-gap;
-        @include color-transition();
+        transition:
+          color $transition-time-fast,
+          background-color $transition-time-fast;
+        @include radius-box($sm-radius);
 
         &:hover {
-          color: $primary;
+          color: $primary-lighter;
+          background-color: $module-bg-translucent;
         }
 
         > .superscript {
-          margin-left: $xs-gap;
+          margin-left: $sm-gap;
 
-          @keyframes superscript-icon-color {
-            0% { color: $accent }
-            30% { color: $primary }
-            60% { color: $black }
-            80% { color: $red }
-          }
-
-          > .iconfont {
+          .iconfont {
             margin-right: 0;
             color: $red;
-            transition: color 0s;
-            animation: superscript-icon-color .66s infinite;
           }
-        }
-
-        &:not(.ad) + .ad {
-          border-top: 1px dashed $module-bg-hover;
-        }
-
-        &.ad {
-          height: 5rem;
-          line-height: 5rem;
-          border-bottom: 1px dashed $module-bg-hover;
-          margin: 0;
         }
 
         &.holiday {
           color: red;
         }
-
         &.taobao {
-          color: #ff5000;
+          color: $taobao-primary;
         }
-
         &.aliyun {
-          color: #ff6a00;
+          color: $aliyun-primary;
         }
-
         &.throwerror {
-          color: black;
+          color: $throwerror-primary;
         }
-
         &.foxfinder {
-          color: #d15d26;
+          color: $foxfinder-primary;
         }
 
-         &.app {
+        &.app {
           color: $primary;
-
           > .iconfont {
             color: $primary;
           }
         }
 
         &:last-child {
-          margin-top: 1rem;
           margin-bottom: 0;
         }
 
         &.link-active {
-          font-weight: bold;
           color: $primary;
-          background-color: $module-bg;
-          @include radius-box($sm-radius);
+          background-color: $module-bg-lighter;
 
           &.guestbook {
-            background: linear-gradient(to bottom, $module-bg, transparent);
+            background: linear-gradient(
+              to bottom,
+              $module-bg-lighter,
+              transparent
+            );
           }
         }
 
@@ -257,6 +240,14 @@
           display: inline-block;
           font-weight: normal;
         }
+      }
+
+      .separator {
+        display: block;
+        height: 0;
+        background-color: transparent;
+        border-top: 1px dotted $module-bg-darker-2;
+        margin-bottom: $sm-gap;
       }
     }
   }

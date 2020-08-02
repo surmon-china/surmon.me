@@ -19,20 +19,28 @@
     <div class="article-list">
       <placeholder
         :data="articles.length"
-        :p-i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"
+        :fetching="!articles.length && fetching"
       >
-        <transition-group
-          key="list"
-          name="fade"
-          tag="div"
-        >
-          <list-item
-            v-for="articleItem in articles"
-            :key="articleItem.id"
-            :article="articleItem"
-            @click="handleArticleClick(articleItem)"
+        <template #placeholder>
+          <empty
+            class="empty"
+            :i18n-ley="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"
           />
-        </transition-group>
+        </template>
+        <template #default>
+          <transition-group
+            key="list"
+            name="fade"
+            tag="div"
+          >
+            <list-item
+              v-for="articleItem in articles"
+              :key="articleItem.id"
+              :article="articleItem"
+              @click="handleArticleClick(articleItem)"
+            />
+          </transition-group>
+        </template>
       </placeholder>
     </div>
 
@@ -162,10 +170,10 @@
       min-height: $lg-gap;
       overflow: hidden;
 
-      > .article-loading {
-        display: flex;
+      .empty {
         height: $gap * 10;
         @include common-bg-module();
+        @include radius-box($sm-radius);
       }
     }
 
@@ -178,8 +186,8 @@
         display: flex;
         justify-content: space-between;
         width: 100%;
-        height: $block-button-height;
-        line-height: $block-button-height;
+        height: $button-block-height;
+        line-height: $button-block-height;
         padding-left: $gap * 2;
         color: $text-reversal;
         @include common-bg-module($transition-time-fast);
@@ -201,7 +209,7 @@
 
         > .text {
           position: relative;
-          height: $block-button-height;
+          height: $button-block-height;
           padding: 0 ($gap * 2) 0 ($gap * 3);
           font-family: 'webfont-bolder', DINRegular;
           text-transform: uppercase;

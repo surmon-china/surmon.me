@@ -11,7 +11,9 @@
       />
     </article-list-header>
     <article-list
-      :article="articleData"
+      :fetching="article.fetching"
+      :articles="article.data.data"
+      :pagination="article.data.pagination"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -41,7 +43,7 @@
       const route = useRoute()
       const router = useRouter()
 
-      const articleData = computed(() => store.state.article.list)
+      const article = computed(() => store.state.article.list)
       const currentKeyword = computed(() => route.params.keyword)
 
       if (!currentKeyword.value) {
@@ -58,16 +60,16 @@
       const loadmoreArticles = () => {
         return fetchArticles({
           keyword: currentKeyword.value,
-          page: articleData.value.data.pagination.current_page + 1
+          page: article.value.data.pagination.current_page + 1
         })
       }
 
       await fetchArticles(route.params)
 
       return {
-        articleData,
+        article,
         currentKeyword,
-        loadmoreArticles,
+        loadmoreArticles
       }
     }
   })

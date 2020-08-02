@@ -11,12 +11,13 @@ $source-url: '' !default;
   @return url($source-url + $uri);
 }
 
-// PC theme color
+// theme colors
 $body-bg: var(--body-bg);
 $theme-black: var(--theme-black);
 $theme-logo-rotate: var(--theme-logo-rotate);
 
 $primary: var(--primary-color);
+$primary-lighter: var(--primary-color-lighter);
 $primary-translucent: var(--primary-color-translucent);
 
 $module-bg-darker-1: var(--module-bg-darker-1);
@@ -30,6 +31,7 @@ $module-bg-darker-7: var(--module-bg-darker-7);
 $module-bg: var(--module-bg);
 $module-bg-opaque: var(--module-bg-opaque);
 $module-bg-lighter: var(--module-bg-lighter);
+$module-bg-translucent: var(--module-bg-translucent);
 $module-bg-hover: $module-bg-darker-2;
 
 // text colors
@@ -53,6 +55,48 @@ $grey: #efefef;
 $white: #ffffff;
 $black: #000000;
 $black-light: #555555;
+
+// others
+$en-primary: rgb(0, 43, 127);
+$zh-primary: #F40002;
+$taobao-primary: #ff5000;
+$aliyun-primary: #ff6a00;
+$throwerror-primary: #000;
+$foxfinder-primary: #d15d26;
+$rss-primary: #f8981d;
+$html5-primary: #d45835;
+$nodejs-primary: #43853d;
+$wechat-primary: #55be69;
+$weibo-primary: rgb(230, 22, 45);
+$qzone-primary: rgb(43, 130, 217);
+$renren-primary: rgb(0, 94, 172);
+$evernote-primary: rgb(85, 182, 25);
+$facebook-primary: rgb(59, 89, 152);
+$telegram-primary: #54a5dd;
+$douban-primary: #00B51D;
+$zhihu-primary: #3582f7;
+$stackoverflow-primary: #e6863d;
+$leetcode-primary: #fea116;
+$quora-primary: #b92b27;
+$linkedin-primary: #478cc5;
+$spotify-primary: #1DB954;
+$music163-primary: #C20C0C;
+$youtube-primary: #ec3323;
+$twitter-primary: #1b95e0;
+$twitter-primary-hover: #0c7abf;
+$github-primary: #24282d;
+$github-primary-hover: #000;
+$bilibili-blue-primary: #00a1d6;
+$bilibili-pink-primary: #fb7299;
+$instagram-primary: #f09433;
+$instagram-gradient: linear-gradient(
+  45deg,
+  #f09433 0%,
+  #e6683c 25%,
+  #dc2743 50%,
+  #cc2366 75%,
+  #bc1888 100%
+);
 
 // gap
 $gap: 1rem; // ~12px
@@ -87,7 +131,8 @@ $container-width: 1050px;
 $navbar-width: 160px;
 $main-width: 595px;
 $aside-width: 266px;
-$block-button-height: 3.4rem;
+$button-block-height: 3.4rem;
+$full-column-page-banner-height: 30rem;
 $active-content-full-height: calc(100vh - #{$header-height + $footer-height});
 
 // Mobile

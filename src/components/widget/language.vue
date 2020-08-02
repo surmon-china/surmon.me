@@ -79,8 +79,8 @@
         }
       }
 
-      $enBG: rgb(0, 43, 127);
-      $zhBG: #F40002;
+      $enBG: $en-primary;
+      $zhBG: $zh-primary;
 
       &.en {
         background: linear-gradient(to bottom left, rgba($enBG, .3), $enBG);
