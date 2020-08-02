@@ -305,7 +305,6 @@
         list-style: square;
         padding: 0;
         margin: 0;
-        user-select: none;
 
         @keyframes barrages-list-out {
           0% { transform: translate3d(100%, 0, 0) }

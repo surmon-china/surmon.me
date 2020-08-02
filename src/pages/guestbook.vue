@@ -101,7 +101,6 @@
         opacity: .8;
         font-weight: 700;
         color: $body-bg;
-        user-select: none;
         cursor: progress;
         background: linear-gradient(
           to left,

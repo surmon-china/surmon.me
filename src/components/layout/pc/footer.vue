@@ -71,7 +71,6 @@
     justify-content: center;
     height: $footer-height;
     margin-top: $lg-gap;
-    user-select: none;
     @include common-bg-module();
 
     .container {

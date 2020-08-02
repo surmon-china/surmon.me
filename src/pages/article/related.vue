@@ -134,7 +134,6 @@
     border-width: 0 $gap;
     border-color: transparent;
     overflow: hidden;
-    user-select: none;
 
     > .skeleton-list {
       padding: 0;

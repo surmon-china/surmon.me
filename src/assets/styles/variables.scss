@@ -108,6 +108,7 @@ $lg-gap: $sm-gap * 2; // ~14px
 $lg-radius: 6px;
 $sm-radius: 4px;
 $xs-radius: 2px;
+$mini-radius: 1px;
 
 // times
 $transition-time-fast: .1s;
@@ -146,9 +147,9 @@ $small-breakpoint: 400px;
 $large-breakpoint: $container-width;
 
 // font
-$font-family-sans-serif: SpecialSymbol, DINRegular, -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", "微软雅黑", sans-serif;
+$font-family-base: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", "微软雅黑", sans-serif;
 $font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace;
-$font-family-base: $font-family-sans-serif;
+$font-family-normal: SpecialSymbol, DINRegular, $font-family-base;
 
 // typography
 $font-size-root: 12px;

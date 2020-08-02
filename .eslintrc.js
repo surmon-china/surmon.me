@@ -35,6 +35,7 @@ module.exports = {
     'vue/require-default-prop': 'off',
     'vue/component-tags-order': 'off',
     'vue/no-use-v-if-with-v-for': 'off',
+    'vue/one-component-per-file': 'off',
     'vue/no-unused-components': 'warn',
     'vue/multiline-html-element-content-newline': 'off',
     'vue/order-in-components': 'off',

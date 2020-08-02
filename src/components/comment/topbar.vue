@@ -35,16 +35,16 @@
           </button>
         </div>
         <div class="sort">
-          <span
-            class="sort-btn"
+          <button
+            class="button"
             :class="{ actived: sort === SortType.Desc }"
             @click="handleSortList(SortType.Desc)"
             v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_NEW"
           />
-          <span
-            class="sort-btn"
+          <button
+            class="button"
             :class="{ actived: sort === SortType.Hot }"
-            @click.stop.prevent="handleSortList(SortType.Hot)"
+            @click="handleSortList(SortType.Hot)"
             v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_HOT"
           />
         </div>
@@ -60,7 +60,7 @@
   import { getNamespace, Modules } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { OptionModuleActions } from '/@/store/option'
-  import { isPageLiked, getPagesLike, likePage } from '/@/transforms/state'
+  import { isPageLiked, likePage } from '/@/transforms/state'
   import { SortType, CommentPostType } from '/@/constants/state'
   import { LANGUAGE_KEYS } from '/@/language/key'
 
@@ -163,7 +163,7 @@
     padding-bottom: $gap;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid $module-bg-hover;
+    border-bottom: 1px solid $module-bg-darker-1;
 
     .count-skeleton,
     .like-skeleton,
@@ -189,55 +189,65 @@
       width: 20%;
     }
 
-    > .statistics {
+    .statistics {
+      $size: 2em;
       display: flex;
 
-      > .like,
-      > .sponsor,
-      > .total {
-        padding: $xs-gap .5em;
+      .like,
+      .sponsor,
+      .total {
+        height: $size;
+        line-height: $size;
+        padding: 0 .6em;
         margin-right: $sm-gap;
-        background-color: $module-bg-hover;
+        background-color: $module-bg-darker-1;
+        @include radius-box($mini-radius);
 
         .count {
           margin-right: $xs-gap;
         }
       }
 
-      > .like {
+      .like {
+        padding-left: 0;
         @include background-transition();
 
-        > .iconfont {
-          margin-right: $xs-gap;
+        .iconfont {
+          display: inline-block;
+          width: $size;
+          text-align: center;
+          margin-right: $sm-gap;
+          background-color: $module-bg-darker-2;
+          @include background-transition();
         }
 
         &:hover {
-          background-color: $module-bg-darker-6;
+          background-color: $module-bg-hover;
+          .iconfont {
+            background-color: $module-bg-darker-3;
+          }
         }
 
         &.liked {
-          > .iconfont {
+          cursor: no-drop;
+          .iconfont {
             color: $red;
           }
         }
       }
 
-      @keyframes sponsorBtnBg {
-        0% { background: $primary; }
-        50% { background: $accent; }
-        100% { background: $primary; }
-      }
-
       > .sponsor {
-        margin-right: 0;
-        color: $white;
-        opacity: .8;
-        animation: sponsorBtnBg 1s infinite;
+        color: $text-reversal;
+        background-color: $primary-lighter;
+        @include background-transition();
+        &:hover {
+          background-color: $primary;
+        }
       }
     }
 
-    > .sort {
-      > .sort-btn {
+    .sort {
+      .button {
         margin-left: $gap;
 
         &.actived {

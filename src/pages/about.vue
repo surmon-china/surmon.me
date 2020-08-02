@@ -153,6 +153,7 @@
                   target="_blank"
                   class="item stackoverflow"
                   rel="external nofollow noopenter"
+                  v-if="false"
                 >
                   <i class="iconfont icon-stackoverflow" />
                 </a>
@@ -162,6 +163,7 @@
                   target="_blank"
                   class="item algorithm"
                   rel="external nofollow noopenter"
+                  v-if="false"
                 >
                   <i class="iconfont icon-leetcode" />
                 </a>
@@ -522,7 +524,6 @@
                 margin-right: $sm-gap;
                 border-radius: $sm-radius;
                 color: $white;
-                user-select: none;
                 @include background-transition();
 
                 .iconfont {
@@ -763,7 +764,6 @@
           .tooltip {
             color: $text;
             font-size: $font-size-small;
-            user-select: none;
           }
         }
       }

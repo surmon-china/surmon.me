@@ -135,8 +135,8 @@
   import { LozadObserver } from '/@/services/lozad'
   import { useEnhancer } from '/@/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { timeAgo } from '/@/transforms/moment'
   import { getFileProxyUrl } from '/@/transforms/url'
+  import { timeAgo } from '/@/transforms/moment'
 
   export default defineComponent({
     name: 'Lens',
@@ -207,12 +207,11 @@
   @import 'src/assets/styles/init.scss';
 
   .lens-page {
-    user-select: none;
 
     .banner {
       margin-bottom: $lg-gap;
       height: $full-column-page-banner-height;
-      background: $module-bg-hover cdn-url('/images/page-lens/banner.jpg');
+      background: $module-bg-darker-1 cdn-url('/images/page-lens/banner.jpg');
       background-size: cover;
       background-position: center 40%;
 

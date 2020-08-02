@@ -11,94 +11,120 @@
         <p class="title">
           <i18n
             zh="内推找我，绝对靠谱"
-            en="We work, we fight"
+            en="We work together"
+          />
+        </p>
+        <p class="description">
+          <i18n
+            zh="一手人脉，假一赔十"
+            en="We fight for future together"
           />
         </p>
       </div>
     </div>
     <div class="container">
-      <ul class="jobs">
-        <li class="item qiniu">
-          <p class="title">七牛云</p>
-        </li>
-        <li class="item byte-dance">
-          <p class="title">字节跳动</p>
-        </li>
-      </ul>
+      <masonry
+        :columns="2"
+        :data="jobs"
+        class="jobs"
+        list-class="job-list"
+      >
+        <template #default="job">
+          <li class="item" :class="job.id">
+            <div
+              class="logo"
+              :style="{
+                backgroundImage: `url('${getFileCDNUrl(job.logo)}')`
+              }"
+            />
+            <div class="content">
+              <a
+                :href="job.url"
+                class="title"
+                target="_blank"
+                rel="external nofollow noopenter"
+              >
+                {{ job.company }}
+                <span class="location" v-if="job.location">（{{ job.location }}）</span>
+              </a>
+              <p class="description" v-html="job.description" />
+              <button
+                class="submit"
+                @click="handleSubmit(job)"
+              >投食简历 {{ job.email.replace('@', '#') }}</button>
+            </div>
+          </li>
+        </template>
+      </masonry>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
-  import { useStore, getNamespace, Modules } from '/@/store'
-  import { VlogModuleActions } from '/@/store/vlog'
-  import { LozadObserver } from '/@/services/lozad'
+  import { defineComponent } from 'vue'
   import { useEnhancer } from '/@/enhancer'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { timeAgo } from '/@/transforms/moment'
-  import { getFileProxyUrl } from '/@/transforms/url'
-
+  import { getFileCDNUrl } from '/@/transforms/url'
+  import { META } from '/@/config/app.config'
   export default defineComponent({
-    name: 'Lens',
+    name: 'Job',
     // head() {
     //   return {
     //     title: `${this.isEnLang ? '' : this.$i18n.nav.vlog + ' | '}Lens`
     //   }
     // },
     async setup() {
-      const { globalState, i18n, store, isMobile, isDarkTheme } = useEnhancer()
-
-      const lozadObserver = ref<LozadObserver | null>(null)
-      const videoListElement = ref<HTMLElement>()
-      const isFetching = computed(() => store.state.vlog.fetching)
-      const videoData = computed(() => store.state.vlog.data)
-      const videoList = computed(() => videoData.value?.vlist)
-      const isCanLoadMore = computed(() => {
-        const { pages, count } = videoData.value
-        return !!count && pages > 1
-      })
-
-      const humanlizeDate = (date: number) => {
-        return timeAgo(date * 1000, i18n.language.value as any)
-      }
-
-      const getThumbUrl = (url: string) => {
-        return getFileProxyUrl(`/bilibili/${url.replace('//', '')}@560w_350h.${globalState.imageExt.ext.value}`)
-      }
-
-      const handlePlay = (video: any) => {
-        window.open(`https://www.bilibili.com/video/av${video.aid}`)
-      }
-
-      onMounted(() => {
-        const lozadElements = videoListElement.value?.querySelectorAll('.lozad')
-        if (!lozadElements || !lozadElements.length) {
-          return false
+      const { isMobile, isDarkTheme } = useEnhancer()
+      const jobs = [
+        {
+          id: 'qiniu',
+          company: '七牛云',
+          logo: '/images/page-job/qiniu.jpg',
+          url: 'https://www.qiniu.com/company',
+          location: '上海',
+          description: '公司赚钱，Leader nice，同事完美，业务靠谱，从不加班',
+          email: META.email
+        },
+        {
+          id: 'byte-dance',
+          company: '字节跳动',
+          logo: '/images/page-job/byte-dance.jpg',
+          url: 'https://job.bytedance.com',
+          location: '国内',
+          description: '饭好吃，不要钱<br> 薪资不低，加班给钱；马上上市，未来可期',
+          email: META.email
+        },
+        {
+          id: 'meituan',
+          company: '美团点评',
+          logo: '/images/page-job/meituan.png',
+          url: 'http://zhaopin.meituan.com',
+          description: '优惠券多 <br> 技术 OK',
+          email: `iamjooger@gmail.com`
+        },
+        {
+          id: 'ant',
+          company: '蚂蚁金服',
+          logo: '/images/page-job/ant.jpg',
+          url: 'https://www.antgroup.com/about/join-us',
+          location: '国内',
+          description: '巨头市值，大牛群居',
+          email: META.email
         }
-        lozadObserver.value = window.lozad(lozadElements, {
-          loaded: element => element.classList.add('loaded')
-        })
-        lozadObserver.value.observe()
-      })
+      ]
 
-      onBeforeUnmount(() => {
-        lozadObserver.value = null
-      })
-
-      await store.dispatch(getNamespace(Modules.Vlog, VlogModuleActions.FetchVideos))
+      const handleSubmit = (job: any) => {
+        const subject = `嗨！求内推！`
+        const body = `我想求内推 ${job.company} - ${job.location || ''} 的职位，我在简历在附件中。%0D%0A %0D%0A from ${META.title}`
+        const mailAddress = `mailto:${job.email}?subject=${subject}&body=${body}`
+        window.open(mailAddress)
+      }
 
       return {
-        LANGUAGE_KEYS,
+        jobs,
         isMobile,
         isDarkTheme,
-        isFetching,
-        videoListElement,
-        videoList,
-        isCanLoadMore,
-        humanlizeDate,
-        getThumbUrl,
-        handlePlay,
+        handleSubmit,
+        getFileCDNUrl
       }
     }
   })
@@ -108,14 +134,13 @@
   @import 'src/assets/styles/init.scss';
 
   .job-page {
-    user-select: none;
 
     .banner {
-      margin-bottom: $lg-gap;
+      margin-bottom: $gap * 2;
       height: $full-column-page-banner-height;
-      background: $module-bg-hover cdn-url('/images/page-lens/banner.jpg');
+      background: $module-bg-darker-1 cdn-url('/images/page-job/banner.jpg');
       background-size: cover;
-      background-position: center 40%;
+      background-position: center 20%;
 
       .content {
         height: 100%;
@@ -136,335 +161,77 @@
       }
     }
 
-    .header {
-      display: flex;
-      width: 100%;
-      height: 18rem;
-      margin-bottom: $lg-gap;
+    .jobs {
+      min-height: 40rem;
 
-      .bilibili,
-      .instagram,
-      .youtube,
-      .wechat-channel,
-      .douyin {
-        @include radius-box($sm-radius);
-      }
-
-      .bilibili {
-        flex-shrink: 0;
-        display: flex;
-        width: 40%;
-        height: 100%;
-        margin-right: $gap;
-        border: 2px solid $bilibili-pink-primary;
-
-        .left {
-          flex-grow: 1;
-          height: 100%;
-          text-align: center;
-          background-color: $bilibili-pink-primary;
-          color: $white;
-
-          .iconfont {
-            display: block;
-            margin-top: $gap * 2;
-            font-size: 5em;
-          }
-
-          .button {
-            display: inline-block;
-            margin-top: $gap * 2;
-            color: inherit;
-            height: 2em;
-            line-height: 2em;
-            padding: 0 $gap;
-            border: 1px solid $white;
-            border-radius: $xs-radius;
-            &:hover {
-              color: $bilibili-pink-primary;
-              background-color: $white;
-            }
-          }
-        }
-
-        .image {
-          flex-shrink: 0;
-          height: 100%;
-          width: auto;
-        }
-      }
-
-      .global {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        margin-right: $gap;
-
-        .instagram,
-        .youtube {
-          flex-grow: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          transition: opacity $transition-time-fast;
-          color: $white;
-          opacity: 0.9;
-          &:hover {
-            opacity: 1;
-          }
-
-          .iconfont {
-            font-size: $font-size-h4 * 2;
-            margin-bottom: $xs-gap;
-          }
-
-          .text {
-            display: inline-block;
-            line-height: 1.5em;
-            font-size: $font-size-small;
-          }
-        }
-
-        .instagram {
-          margin-bottom: $gap;
-          background: $instagram-primary;
-          background: $instagram-gradient;
-          @include visibility-transition();
-        }
-
-        .youtube {
-          background-color: $youtube-primary;
-        }
-      }
-
-      .wechat-channel {
-        margin-right: $gap;
-      }
-
-      .wechat-channel,
-      .douyin {
-        height: 100%;
-        flex-shrink: 0;
-        background-color: $module-bg;
-
-        img {
-          width: auto;
-          height: 100%;
-        }
-      }
-    }
-
-    .vlog-title {
-      margin-bottom: $lg-gap;
-      line-height: 3.6em;
-      border-width: 4px;
-      border-style: double;
-      border-radius: $lg-radius;
-      border-color:
-        $bilibili-pink-primary
-        $bilibili-blue-primary
-        $bilibili-blue-primary
-        $bilibili-pink-primary;
-      background-color: $module-bg-opaque;
-      text-align: center;
-      font-size: $font-size-h3;
-      font-weight: bold;
-      text-transform: uppercase;
-      color: $bilibili-blue-primary;
-      letter-spacing: 5px;
-    }
-
-    .videos {
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      list-style: none;
-      justify-content: flex-start;
-
-      > .item {
+      .item {
         display: block;
-        margin-right: $lg-gap;
-        margin-bottom: $lg-gap;
-        width: calc((100% - #{$lg-gap * 2}) / 3);
-        cursor: pointer;
+        height: auto;
+        margin: 0 $gap;
+        margin-bottom: $gap * 2;
         @include radius-box($sm-radius);
         @include common-bg-module();
 
-        &:hover {
-          .thumb {
-            .background {
-              transform: rotate(2deg) scale(1.1),
-            }
+        .logo {
+          width: 100%;
+          height: 16rem;
+          background-color: $module-bg-darker-2;
+          background-size: cover;
+          background-position: center;
+        }
 
-            .mask {
-              @include visible();
-              .button {
-                transform: scale(1);
-              }
-            }
-          }
+        .content {
+          padding: $lg-gap;
 
           .title {
-            text-decoration: underline;
+            margin: 0;
+            font-weight: bold;
+            font-size: $font-size-h4;
+            text-transform: capitalize;
+            &:hover {
+              text-decoration: underline;
+            }
+
+            .location {
+              font-weight: normal;
+            }
           }
-        }
 
-        &:nth-child(3n + 0) {
-          margin-right: 0;
-        }
+          .description {
+            margin-top: $gap;
+            margin-bottom: 0;
+            line-height: 2;
+          }
 
-        .thumb {
-          width: 100%;
-          height: 14rem;
-          position: relative;
-          overflow: hidden;
-
-          .background {
+          .submit {
+            $height: 2.4em;
+            display: block;
             width: 100%;
-            height: 100%;
-            background-color: $module-bg-darker-2;
-            background-size: cover;
-            background-position: center;
-            transform: rotate(0deg) scale(1);
-            @include transform-transition($transition-time-normal);
-          }
-
-          .length {
-            display: inline-block;
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            z-index: $z-index-normal + 1;
-            background-color: rgba($black, 0.6);
-            height: $font-size-h2;
-            line-height: $font-size-h2;
-            padding: 0 $sm-gap;
-            color: $white;
+            margin-top: $lg-gap;
+            line-height: $height;
+            border: 1px solid;
+            border-color: $primary;
+            color: $primary;
             font-size: $font-size-small;
-          }
+            text-align: center;
+            letter-spacing: 1px;
+            transition:
+              color $transition-time-fast,
+              background-color $transition-time-fast;
+            @include radius-box($xs-radius);
 
-          .mask {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: $z-index-normal + 1;
-            @include hidden();
-            @include visibility-transition();
-
-            .button {
-              width: 5rem;
-              height: 5rem;
-              line-height: 5rem;
-              text-align: center;
-              background: $module-bg;
-              border-radius: 100%;
+            &:hover {
               color: $text-reversal;
-              opacity: 0.88;
-              font-size: 3em;
-              transform: scale(1.2);
-              @include transform-transition($transition-time-normal);
+              background-color: $primary;
             }
           }
-        }
-
-        > .title {
-          padding: 0 $gap;
-          margin-top: $gap;
-          margin-bottom: $sm-gap;
-          font-weight: bold;
-          text-transform: capitalize;
-        }
-
-        > .description {
-          padding: 0 $gap;
-          margin-bottom: $sm-gap;
-          line-height: 2rem;
-          height: 2rem;
-          font-size: $font-size-h6;
-        }
-
-        > .separator {
-          border-top: 1px dotted $module-bg-darker-1;
-          margin: 0;
-        }
-
-        > .meta {
-          margin: 0;
-          height: 3rem;
-          display: flex;
-          justify-content: space-around;
-          align-items: center;
-          font-size: $font-size-small;
-
-          > .item {
-            font-weight: 400;
-            color: $text-secondary;
-
-            .iconfont {
-              margin-right: $xs-gap;
-            }
-          }
-        }
-      }
-    }
-
-    .loadmore {
-      margin-bottom: $lg-gap;
-
-      .button {
-        display: block;
-        width: 100%;
-        height: $button-block-height;
-        line-height: $button-block-height;
-        text-align: center;
-        @include common-bg-module();
-        @include radius-box($xs-radius);
-
-        > .icon {
-          margin-right: $gap;
         }
       }
     }
 
     &.dark {
-      .videos {
-        .item {
-          .thumb {
-            .button {
-              color: $text-disabled !important;
-            }
-          }
-        }
-      }
-    }
-
-    &.mobile {
-      min-height: auto;
-
-      > .videos {
-        > .item {
-          width: 100%;
-          height: auto;
-          flex-grow: 1;
-          margin-right: 0;
-          margin-bottom: $gap;
-
-          > .thumb {
-            height: 10rem;
-          }
-
-          > .separator {
-            border-color: $module-bg-hover;
-          }
-        }
+      .banner {
+        background-blend-mode: difference;
       }
     }
   }

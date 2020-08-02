@@ -123,7 +123,6 @@
     align-items: center;
     min-height: 68rem;
     height: $active-content-full-height;
-    user-select: none;
 
     &.mobile {
       min-height: 53rem;
@@ -176,7 +175,6 @@
         margin-top: 5rem;
         width: 36rem;
         position: relative;
-        user-select: none;
 
         &:hover {
           > .screen-img {

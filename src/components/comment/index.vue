@@ -1,5 +1,9 @@
 <template>
-  <div id="comment-box" class="comment-box" :class="{ mobile: isMobile }">
+  <div
+    id="comment-box"
+    class="comment-box"
+    :class="{ mobile: isMobile }"
+  >
     <comment-topbar
       :total="commentData.pagination.total"
       :likes="likes"
@@ -364,7 +368,8 @@
   @import 'src/assets/styles/init.scss';
   #comment-box {
     padding: $gap;
-    background-color: $module-bg;
+    @include common-bg-module();
+    @include radius-box($lg-radius);
   }
 </style>
 

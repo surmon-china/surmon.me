@@ -39,6 +39,5 @@
     justify-content: center;
     align-items: center;
     color: $text-dividers;
-    user-select: none;
   }
 </style>

@@ -183,7 +183,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.En]: 'off'
   },
   [LANGUAGE_KEYS.APP_SLOGAN]: {
-    [Language.Zh]: '来苏之望，风浪马猖',
+    [Language.Zh]: '来苏之望，鞭狂马猖',
     [Language.En]: 'Because the mountain was there'
   },
   [LANGUAGE_KEYS.MUSIC_PLACEHOLDER]: {

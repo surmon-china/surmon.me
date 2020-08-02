@@ -65,7 +65,6 @@
       border-top-left-radius: $xs-radius;
       color: $primary;
       opacity: 0.4;
-      user-select: none;
       cursor: pointer;
       @include visibility-transition();
 

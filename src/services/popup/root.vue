@@ -56,7 +56,6 @@
       width: 100vw;
       height: 100vh;
       z-index: $z-index-top;
-      user-select: none;
       display: flex;
       justify-content: center;
       align-items: center;

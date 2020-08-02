@@ -87,7 +87,7 @@
 
       const commentsLike = getCommentsLike()
       const isCommentLiked = (commentId: number) => {
-        return commentsLike.includes(commentId)
+        return commentsLike.value.includes(commentId)
       }
 
       const observeLozad = () => {
@@ -128,7 +128,7 @@
             commentId
           )
           .then(_ => {
-            commentsLike.push(commentId)
+            commentsLike.value.push(commentId)
           })
           .catch(error => {
             const message = i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION)

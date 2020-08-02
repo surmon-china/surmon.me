@@ -101,7 +101,6 @@
     height: $header-height;
     z-index: $z-index-header;
     background-color: $module-bg;
-    user-select: none;
     @include backdrop-blur();
 
     .header-container {

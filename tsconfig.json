@@ -8,6 +8,7 @@
     "jsx": "preserve",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
+    "downlevelIteration": true,
     "suppressImplicitAnyIndexErrors": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
