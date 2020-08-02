@@ -9,6 +9,7 @@
         <comment-link
           target="_blank"
           rel="external nofollow noopener"
+          class="link"
           :href="comment.author.site"
         >
           <img
@@ -33,7 +34,10 @@
         <desktop-only>
           <span v-if="comment.ip_location" class="location">
             <span>{{ comment.ip_location.country }}</span>
-            <span v-if="comment.ip_location.country && comment.ip_location.city">&nbsp;-&nbsp;</span>
+            <span
+              v-if="comment.ip_location.country && comment.ip_location.city"
+              class="separator"
+            >-</span>
             <span>{{ comment.ip_location.city }}</span>
           </span>
         </desktop-only>
@@ -41,10 +45,10 @@
       </div>
       <div class="cm-content">
         <p v-if="comment.pid" class="reply">
-          <span v-i18n="LANGUAGE_KEYS.COMMENT_REPLY" />
-          <span class="parent" @click="scrollToCommentItem(comment.pid)">
+          <span class="text" v-i18n="LANGUAGE_KEYS.COMMENT_REPLY" />
+          <button class="parent" @click="scrollToCommentItem(comment.pid)">
             {{ getReplyParentCommentText(comment.pid) }}
-          </span>
+          </button>
           <i18n zh="：" en=":" />
         </p>
         <div v-html="parseMarkdown(comment.content)"></div>
@@ -64,8 +68,8 @@
           @click="likeComment(comment.id)"
         >
           <i class="iconfont icon-zan" />
-          <span v-text="LANGUAGE_KEYS.COMMENT_LIKE" />
-          <span>({{ comment.likes }})</span>
+          <span v-i18n="LANGUAGE_KEYS.COMMENT_LIKE" />
+          <span> ({{ comment.likes }})</span>
         </button>
       </div>
     </div>
@@ -73,7 +77,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted, onBeforeUnmount, onUnmounted, PropType } from 'vue'
+  import { defineComponent, ref, h, computed, onMounted, onBeforeUnmount, onUnmounted, PropType } from 'vue'
   import { isClient } from '/@/vuniversal/env'
   import { useEnhancer } from '/@/enhancer'
   import marked from '/@/services/marked'
@@ -88,8 +92,23 @@
     humanizeGravatarUrl,
     getCommentElementId
   } from '../helper'
-  import CommentLink from './link'
   import CommentUa from './ua.vue'
+
+  const CommentLink = defineComponent({
+    props: {
+      href: String
+    },
+    setup(props, context) {
+      return () => {
+        const { href, ...restProps } = props
+        return h(
+          href ? 'a' : 'span',
+          href ? props : restProps,
+          context.slots.default?.()
+        )
+      }
+    }
+  })
 
   export default defineComponent({
     name: 'CommentListItem',
@@ -126,7 +145,7 @@
           ?.author.name
         const nameText = authorName ? `@${authorName}` : ''
         const idText = `#${parentCommentId}`
-        return idText + nameText
+        return `${idText} ${nameText}`
       }
 
       const humanlizeDate = (date: string) => {
@@ -167,15 +186,8 @@
     position: relative;
     padding-left: 2rem;
     margin-top: $lg-gap;
-
     &:last-child {
       margin-bottom: $lg-gap;
-    }
-
-    &:hover {
-      .cm-body {
-        background-color: $module-bg-darker-6;
-      }
     }
 
     > .cm-avatar {
@@ -183,15 +195,17 @@
       position: absolute;
       left: 0;
       top: $gap * 2;
-      background-color: $module-bg-hover;
+      background-color: $module-bg-darker-2;
 
-      > a {
+      .link {
+        $size: 4.8rem;
         display: block;
-        border: ($xs-radius * 2) solid $module-bg;
-        width: 4em;
-        height: 4em;
+        border: 5px solid $module-bg-lighter;
+        border-radius: $mini-radius;
+        width: $size;
+        height: $size;
 
-        > img {
+        img {
           width: 100%;
           height: 100%;
         }
@@ -203,7 +217,8 @@
       width: 100%;
       height: 100%;
       padding: $sm-gap $sm-gap $sm-gap ($lg-gap * 3);
-      background-color: $module-bg-hover;
+      background-color: $module-bg-darker-1;
+      @include radius-box($xs-radius);
       @include background-transition();
 
       > .cm-header {
@@ -227,28 +242,45 @@
           margin-right: $gap;
 
           .iconfont {
-            margin-right: $xs-gap / 2;
+            margin-right: $xs-gap;
+          }
+
+          .separator {
+            margin: 0 $xs-gap;
           }
         }
 
         > .flool {
           float: right;
-          line-height: 2rem;
+          line-height: 1.8;
           color: $text-dividers;
           font-size: $font-size-small;
-          font-weight: 900;
+          font-weight: bold;
         }
       }
 
       > .cm-content {
         padding-right: $xs-gap;
+        user-select: text;
 
         > .reply {
           color: $text-disabled;
           font-weight: bold;
 
+          > * {
+            float: left;
+          }
+
+          .text {
+            margin-right: $xs-gap;
+          }
+
           .parent {
             font-weight: bold;
+            color: $link-color;
+            &:hover {
+              color: $link-color-hover;
+            }
           }
         }
       }
@@ -293,9 +325,15 @@
 
           > .iconfont {
             opacity: .8;
-            margin-right: $xs-gap / 2;
+            margin-right: $xs-gap;
           }
         }
+      }
+    }
+
+    &:hover {
+      .cm-body {
+        background-color: $module-bg-darker-3;
       }
     }
 

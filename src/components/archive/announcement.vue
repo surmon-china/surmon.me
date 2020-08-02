@@ -152,7 +152,6 @@
     line-height: $announcement-height;
     font-size: $font-size-h6;
     color: $text-secondary;
-    user-select: none;
     @include common-bg-module();
     @include radius-box($xs-radius);
 

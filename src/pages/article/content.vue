@@ -263,7 +263,6 @@
       color: $text-reversal;
       font-weight: bold;
       font-size: $font-size-small;
-      user-select: none;
 
       &.self {
         background-color: rgba($accent, .8);
@@ -276,7 +275,8 @@
       }
     }
 
-    > .knowledge {
+    .knowledge {
+      user-select: text;
 
       > .title {
         margin: 1em 0 1.5em 0;
@@ -439,7 +439,6 @@
               list-style-type: none;
               line-height: $code-row-line-height;
               font-size: $font-size-small;
-              user-select: none;
               transition: none;
 
               &:hover {

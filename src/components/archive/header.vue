@@ -146,7 +146,6 @@
           margin: 0;
           text-align: center;
           text-transform: capitalize;
-          user-select: none;
         }
       }
     }

@@ -158,13 +158,12 @@
         const body = isZhLang
           ? `我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
           : 'Hi Surmon, My name is '
-        const mailAddress = 'mailto:surmon@foxmail.com' + (
+        const mailAddress = `mailto:${APP_CONFIG.META.email}` + (
           isMobile.value
             ? ''
             : `?subject=${subject}&body=${body}`
           )
 
-        // window.location.href = mailAddress
         window.open(mailAddress)
       }
 
@@ -184,7 +183,6 @@
 
   .service-page {
     width: 100%;
-    user-select: none;
 
     &.mobile {
       > .banner {
@@ -309,22 +307,17 @@
           margin-bottom: 2rem;
 
           .email-me {
-            $width: 10rem;
-            $height: 3.8rem;
-            @include radius-box($xs-radius);
-
-            position: relative;
-            width: $width;
-            height: $height;
+            width: 10rem;
             border: 1px solid;
             border-color: $text-reversal;
-            line-height: $height;
+            line-height: 3.8rem;
             text-align: center;
             letter-spacing: 1px;
             font-weight: bold;
             text-transform: uppercase;
             color: $text-reversal;
             transition: color $transition-time-fast, border-color $transition-time-fast;
+            @include radius-box($xs-radius);
 
             &:hover {
               color: $primary;

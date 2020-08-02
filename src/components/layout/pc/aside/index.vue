@@ -155,7 +155,6 @@
     width: $aside-width;
     margin: 0;
     margin-left: $lg-gap;
-    user-select: none;
 
     .module {
       margin-bottom: $lg-gap;

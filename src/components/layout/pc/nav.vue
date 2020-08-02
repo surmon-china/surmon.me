@@ -144,7 +144,6 @@
     width: $navbar-width;
     height: auto;
     margin-right: $lg-gap;
-    user-select: none;
 
     .nav-list {
       width: $navbar-width;
@@ -170,7 +169,7 @@
         text-decoration: none;
         text-transform: uppercase;
         font-weight: bold;
-        border-radius: 1px;
+        border-radius: $mini-radius;
         color: $text-secondary;
         font-family: 'webfont-normal', DINRegular;
         letter-spacing: 0.5px;

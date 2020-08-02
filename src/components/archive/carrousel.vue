@@ -38,7 +38,11 @@
                 </template>
                 <template v-else>
                   <router-link :to="`/article/${article.id}`" class="link">
-                    <img :src="getThumbURL(article.thumb)" :alt="article.title">
+                    <img
+                      :src="getThumbURL(article.thumb)"
+                      :alt="article.title"
+                      draggable="false"
+                    >
                     <div class="title">
                       <div class="background"></div>
                       <div class="prospect">
@@ -143,7 +147,6 @@
     margin-bottom: $lg-gap;
     position: relative;
     overflow: hidden;
-    user-select: none;
     @include common-bg-module();
     @include radius-box($lg-radius);
 

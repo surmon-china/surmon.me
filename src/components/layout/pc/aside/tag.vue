@@ -83,7 +83,7 @@
         line-height: 2em;
         font-size: $font-size-h6;
         text-transform: capitalize;
-        font-family: $font-family-sans-serif;
+        font-family: $font-family-normal;
 
         .iconfont {
           width: 2em;

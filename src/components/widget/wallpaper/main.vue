@@ -95,7 +95,6 @@
       position: relative;
       transform: translateX(-$offset * 2);
       transition: opacity $transition-time-fast, transform $transition-time-fast;
-      user-select: none;
 
       &:hover {
         opacity: .8;
