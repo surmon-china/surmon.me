@@ -18,10 +18,8 @@
   #{--module-bg-darker-1}: darken($module-bg-opaque, 9%);
   #{--module-bg-darker-2}: darken($module-bg-opaque, 13%);
   #{--module-bg-darker-3}: darken($module-bg-opaque, 19%);
-  #{--module-bg-darker-4}: darken($module-bg-opaque, 23%);
-  #{--module-bg-darker-5}: darken($module-bg-opaque, 32%); // #959595
-  #{--module-bg-darker-6}: darken($module-bg-opaque, 40%); // #959595
-  #{--module-bg-darker-7}: darken($module-bg-opaque, 46%); // #959595
+  #{--module-bg-darker-4}: darken($module-bg-opaque, 24%);
+  #{--module-bg-darker-5}: darken($module-bg-opaque, 29%);
 
   #{--text-color}: $theme-text;
   #{--text-lighter}: lighter($theme-text, 20%);

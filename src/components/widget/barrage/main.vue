@@ -264,7 +264,7 @@
     top: 0;
     left: 0;
     z-index: $z-index-toolbox - 1;
-    background-color: $module-bg-darker-6;
+    background-color: $module-bg-darker-3;
     // 由于使用 backdrop-blur，会导致 animation 性能并不好，所以动画都移除了
     transform: translate3d(0, -100%, 0);
     @include backdrop-blur();

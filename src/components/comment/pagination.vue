@@ -2,13 +2,15 @@
   <transition name="module">
     <div v-if="!fetching && pagination.total_page > 1" class="pagination">
       <ul class="pagination-list">
-        <li class="item" v-if="!isHotSort">
-          <span class="pagination-btn prev disabled">
-            <span>—</span>
-            <span v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_OLD" />
-          </span>
+        <li class="item prev" v-if="!isHotSort">
+          <span class="symbol">-</span>
+          <span v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_OLD" />
         </li>
-        <li v-for="(item, index) in pagination.total_page" :key="index" class="item">
+        <li
+          v-for="(item, index) in pagination.total_page"
+          :key="index"
+          class="item"
+        >
           <button
             class="pagination-btn"
             :class="{
@@ -20,11 +22,9 @@
             {{ item }}
           </button>
         </li>
-        <li class="item" v-if="!isHotSort">
-          <span class="pagination-btn next disabled">
-            <span v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_NEW" />
-            <span>—</span>
-          </span>
+        <li class="item next" v-if="!isHotSort">
+          <span v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_NEW" />
+          <span class="symbol">-</span>
         </li>
       </ul>
     </div>
@@ -95,26 +95,36 @@
       list-style-type: none;
 
       > .item {
+        $item-size: 2rem;
         margin: 0 0.5em;
 
-        > .pagination-btn {
+        &.prev,
+        &.next {
           display: inline-block;
-          width: 2rem;
-          height: 2rem;
-          display: inline-block;
-          line-height: 2rem;
+          width: 4em;
+          height: $item-size;
+          line-height: $item-size;
+          font-size: $font-size-small;
           text-align: center;
-          @include background-transition();
+          color: $text-disabled;
 
-          &.prev,
-          &.next {
-            width: 5em;
-            font-size: $font-size-h6;
-
-            &:hover {
-              background: none;
-            }
+          .symbol {
+            margin: 0 $xs-gap;
           }
+
+          &:hover {
+            background: none;
+          }
+        }
+
+        .pagination-btn {
+          display: inline-block;
+          width: $item-size;
+          height: $item-size;
+          line-height: $item-size;
+          text-align: center;
+          @include radius-box($mini-radius);
+          @include background-transition();
 
           &.disabled {
             cursor: no-drop;

@@ -32,18 +32,34 @@
             </ul>
           </div>
         </span>
-        <a href class="image" title="image" @click.stop.prevent="insertImage">
+        <button
+          class="image"
+          title="image"
+          @click="insertImage"
+        >
           <i class="iconfont icon-image" />
-        </a>
-        <a href class="link" title="link" @click.stop.prevent="insertLink">
+        </button>
+        <button
+          class="link"
+          title="link"
+          @click="insertLink"
+        >
           <i class="iconfont icon-link-horizontal" />
-        </a>
-        <a href class="code" title="code" @click.stop.prevent="insertCode">
+        </button>
+        <button
+          class="code"
+          title="code"
+          @click="insertCode"
+        >
           <i class="iconfont icon-code-comment" />
-        </a>
-        <a href class="preview" title="preview" @click.stop.prevent="handleTogglePreview">
+        </button>
+        <button
+          class="preview"
+          title="preview"
+          @click="handleTogglePreview"
+        >
           <i class="iconfont icon-eye" />
-        </a>
+        </button>
       </div>
       <button
         type="submit"
@@ -170,6 +186,7 @@
 
   .pen {
     position: relative;
+    @include radius-box($xs-radius);
 
     .markdown {
       position: relative;
@@ -184,7 +201,7 @@
         cursor: auto;
         font-size: $font-size-h6;
         line-height: 1.8em;
-        background-color: $module-bg-hover;
+        background-color: $module-bg-darker-1;
         @include background-transition();
 
         &:empty:before {
@@ -197,7 +214,7 @@
         }
 
         &:hover {
-          background-color: $module-bg-darker-5;
+          background-color: $module-bg-hover;
         }
       }
 
@@ -220,7 +237,7 @@
       line-height: $size;
       display: flex;
       justify-content: space-between;
-      background-color: $module-bg-darker-4;
+      background-color: $module-bg-darker-3;
 
       .stationery {
         &.disabled {
@@ -236,11 +253,12 @@
           width: $size;
           height: $size;
           text-align: center;
-          display: inline-block;
+          display: block;
+          float: left;
           @include background-transition();
 
           &:hover {
-            background-color: $module-bg-darker-6;
+            background-color: $module-bg-darker-4;
           }
         }
 
@@ -286,11 +304,11 @@
       > .submit {
         width: 8rem;
         height: $size;
-        background-color: $module-bg-darker-6;
+        background-color: $module-bg-darker-4;
         @include background-transition();
 
         &:hover {
-          background-color: $module-bg-darker-7;
+          background-color: $module-bg-darker-5;
         }
       }
     }

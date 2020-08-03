@@ -88,7 +88,7 @@
           id: 'byte-dance',
           company: '字节跳动',
           logo: '/images/page-job/byte-dance.jpg',
-          url: 'https://job.bytedance.com',
+          url: 'https://job.toutiao.com/s/JjxWmG7',
           location: '国内',
           description: '饭好吃，不要钱<br> 薪资不低，加班给钱；马上上市，未来可期',
           email: META.email
