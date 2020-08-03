@@ -76,14 +76,16 @@
       margin-bottom: - $gap;
 
       .item {
+        $height: 2em;
         display: inline-flex;
         margin-right: $sm-gap;
         margin-bottom: $gap;
-        height: 2em;
-        line-height: 2em;
+        height: $height;
+        line-height: $height;
         font-size: $font-size-h6;
         text-transform: capitalize;
         font-family: $font-family-normal;
+        @include radius-box($mini-radius);
 
         .iconfont {
           width: 2em;

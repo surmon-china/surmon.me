@@ -65,7 +65,6 @@
     </transition>
     <div class="postbox">
       <div class="user">
-        <!-- TODO: 为什么不是 only user 容器 -->
         <desktop-only>
           <div class="gravatar">
             <img
@@ -84,13 +83,19 @@
                 <span v-i18n="LANGUAGE_KEYS.COMMENT_REPLY" />
                 <!-- TODO: CSS -->
                 <span>&nbsp;</span>
-                <a href @click.stop.prevent="scrollToComment(replyingComment.id)">
+                <button @click="scrollToComment(replyingComment.id)">
                   <strong>#{{ replyingComment.id }} @{{ replyingComment.author.name }}：</strong>
-                </a>
+                </button>
               </span>
-              <a href class="cancel iconfont icon-cancel" @click.stop.prevent="cancelCommentReply" />
+              <button
+                class="cancel iconfont icon-cancel"
+                @click="cancelCommentReply"
+              />
             </div>
-            <div class="reply-preview" v-html="marked(replyingComment.content)" />
+            <div
+              class="reply-preview"
+              v-html="marked(replyingComment.content)"
+            />
           </div>
         </transition>
         <slot name="pen"></slot>
@@ -210,7 +215,7 @@
   .publisher {
     display: block;
     padding-top: $gap;
-    border-top: 1px dashed $module-bg-darker-6;
+    border-top: 1px solid $module-bg-darker-1;
 
     > .user {
       width: 100%;
@@ -299,12 +304,13 @@
           height: 2em;
           line-height: 2em;
           text-indent: 3px;
-          background-color: $module-bg-hover;
+          background-color: $module-bg-darker-1;
+          @include radius-box($mini-radius);
           @include background-transition();
 
           &:focus,
           &:hover {
-            background-color: $module-bg-darker-5;
+            background-color: $module-bg-hover;
           }
         }
       }
@@ -327,7 +333,7 @@
           margin-bottom: .5em;
           width: 4rem;
           height: 4rem;
-          background-color: $module-bg-darker-6;
+          background-color: $module-bg-darker-1;
 
           > img {
             width: 100%;
