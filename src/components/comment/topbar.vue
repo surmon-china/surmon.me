@@ -1,7 +1,7 @@
 <template>
   <placeholder :loading="fetching">
     <template #loading>
-      <div class="topbar">
+      <div class="topbar" key="skeleton">
         <div class="statistics-skeleton">
           <skeleton-line class="count-skeleton" />
           <skeleton-line class="like-skeleton" />
@@ -12,7 +12,7 @@
       </div>
     </template>
     <template #default>
-      <div class="topbar">
+      <div class="topbar" key="element">
         <div class="statistics">
           <div class="total">
             <strong class="count">{{ total || 0 }}</strong>
@@ -159,17 +159,12 @@
   @import 'src/assets/styles/init.scss';
 
   .topbar {
+    $size: 2em;
     display: flex;
     padding-bottom: $gap;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid $module-bg-darker-1;
-
-    .count-skeleton,
-    .like-skeleton,
-    .sort-skeleton {
-      height: 2rem;
-    }
 
     .statistics-skeleton {
       display: flex;
@@ -177,20 +172,22 @@
 
       .count-skeleton {
         width: 20%;
+        height: $size;
         margin-right: 1rem;
       }
 
       .like-skeleton {
+        height: $size;
         width: 40%;
       }
     }
 
     .sort-skeleton {
       width: 20%;
+      height: $size;
     }
 
     .statistics {
-      $size: 2em;
       display: flex;
 
       .like,

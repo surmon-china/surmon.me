@@ -32,10 +32,13 @@ export default defineComponent({
       type: [Array, Object, Boolean, Number],
       default: undefined
     },
+    transition: {
+      type: Boolean,
+      default: true
+    },
     placeholder: String,
     pI18nKey: String as PropType<LANGUAGE_KEYS>,
     loading: Boolean,
-    transition: Boolean
   },
   emits: [
     Events.AfterEnter
@@ -61,10 +64,7 @@ export default defineComponent({
       }
 
       const getLoadingView = () => {
-        return (
-          context.slots.loading?.() ||
-          h(Spin, { loading: true })
-        )
+        return context.slots.loading?.() || h(Spin, { loading: true })
       }
 
       const getView = () => {

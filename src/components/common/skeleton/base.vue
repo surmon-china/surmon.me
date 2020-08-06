@@ -41,16 +41,12 @@
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
-  $skeleton-background: $body-bg;
+  $skeleton-background: $module-bg;
   $skeleton-spinner: $module-bg-darker-3;
 
   @keyframes placeHolderShimmer {
-    0% {
-      background-position: -468px 0
-    }
-    100% {
-      background-position: 350px 50px
-    }
+    0% { background-position: -468px 0 }
+    100% { background-position: 350px 50px }
   }
 
   .skeleton.base {
@@ -62,7 +58,12 @@
     animation-name: placeHolderShimmer;
     animation-timing-function: linear;
     background-color: $skeleton-spinner;
-    background-image: linear-gradient(to right, $skeleton-background 8%, $skeleton-spinner 18%, $skeleton-background 33%);
+    background-image: linear-gradient(
+      to right,
+      $skeleton-background 8%,
+      $skeleton-spinner 18%,
+      $skeleton-background 33%
+    );
     background-repeat: repeat;
     background-size: 800px 104px;
   }
