@@ -5,7 +5,7 @@
     :class="{ mobile: isMobile }"
   >
     <comment-topbar
-      :total="commentData.pagination.total"
+      :total="commentData.pagination?.total"
       :likes="likes"
       :post-id="postId"
       :fetching="isFetching"

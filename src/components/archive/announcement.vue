@@ -118,7 +118,7 @@
       const nextSlide = () => swiper.value?.slideNext()
       const handleSwiperTransitionStart = () => {
         activeIndex.value = swiper.value?.activeIndex || 0
-      } 
+      }
 
       return {
         LANGUAGE_KEYS,

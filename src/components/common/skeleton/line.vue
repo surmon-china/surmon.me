@@ -7,7 +7,6 @@
 <script lang="ts">
   import { defineComponent, computed, CSSProperties } from 'vue'
   import SkeletonBase from './base.vue'
-
   export default defineComponent({
     name: 'SkeletonLine',
     components: {

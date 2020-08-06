@@ -12,7 +12,6 @@
 <script lang="ts">
   import { defineComponent, computed, CSSProperties } from 'vue'
   import SkeletonLine from './line.vue'
-
   export default defineComponent({
     name: 'SkeletonParagraph',
     components: {
