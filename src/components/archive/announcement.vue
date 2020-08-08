@@ -66,7 +66,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { useSwiperRef, NameId } from '/@/todo/swiper'
+  import { useSwiperRef } from '/@/todo/swiper'
   import { useI18n } from '/@/services/i18n'
   import { useTheme, Theme } from '/@/services/theme'
   import marked from '/@/services/marked'
@@ -157,7 +157,7 @@
 
     &.mobile {
       margin-bottom: $gap;
-      background-color: $module-bg-darker-5;
+      /* background-color: $module-bg-darker-3; */
 
       > .swiper {
         .swiper-slide {

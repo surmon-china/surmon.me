@@ -10,7 +10,7 @@
       />
       <transition name="module">
         <div
-          class="markdown-preview"
+          class="markdown-preview markdown-content comment"
           v-if="preview"
           v-html="previewContent"
         />
@@ -35,28 +35,29 @@
         <button
           class="image"
           title="image"
-          @click="insertImage"
+          @click.prevent="insertImage"
         >
           <i class="iconfont icon-image" />
         </button>
         <button
           class="link"
           title="link"
-          @click="insertLink"
+          @click.prevent="insertLink"
         >
           <i class="iconfont icon-link-horizontal" />
         </button>
         <button
           class="code"
           title="code"
-          @click="insertCode"
+          @click.prevent="insertCode"
         >
           <i class="iconfont icon-code-comment" />
         </button>
         <button
           class="preview"
           title="preview"
-          @click="handleTogglePreview"
+          :class="{ actived: preview }"
+          @click.prevent="handleTogglePreview"
         >
           <i class="iconfont icon-eye" />
         </button>
@@ -82,16 +83,16 @@
   import { CommentEvent } from './helper'
 
   export enum Events {
-    Input = 'input'
+    Update = 'update:modelValue'
   }
 
   export default defineComponent({
     name: 'CommentPen',
     props: {
-      // value: {
-      //   type: String,
-      //   required: true
-      // },
+      modelValue: {
+        type: String,
+        required: true
+      },
       disabled: {
         type: Boolean,
         required: true
@@ -106,13 +107,13 @@
       }
     },
     emits: [
-      Events.Input,
+      Events.Update,
       CommentEvent.TogglePreview,
       CommentEvent.Submit
     ],
     setup(props, context) {
       const { i18n } = useEnhancer()
-      const content = ref('')
+      const content = ref(props.modelValue)
       const inputElement = ref<HTMLElement>()
       const previewContent = computed(() => {
         return props.preview
@@ -138,7 +139,7 @@
         const text = inputElement.value?.innerText as string
         if (text !== content.value) {
           content.value = text
-          context.emit(Events.Input, text)
+          context.emit(Events.Update, text)
         }
       }
 
@@ -167,14 +168,19 @@
         insertContentToInput('\n```javascript\n', '\n```\n')
       }
 
-      watch(() => props.value, handleValueChange)
+      watch(() => props.modelValue, handleValueChange)
 
       return {
         t: i18n.t,
         LANGUAGE_KEYS,
         inputElement,
         previewContent,
+        insertEmoji,
+        insertImage,
+        insertLink,
+        insertCode,
         handleInputChange,
+        handleTogglePreview,
         handleSubmit
       }
     }
@@ -257,6 +263,7 @@
           float: left;
           @include background-transition();
 
+          &.actived,
           &:hover {
             background-color: $module-bg-darker-4;
           }

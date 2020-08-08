@@ -51,7 +51,10 @@
           </button>
           <i18n zh="：" en=":" />
         </p>
-        <div v-html="parseMarkdown(comment.content)"></div>
+        <div
+          class="markdown-content comment"
+          v-html="parseMarkdown(comment.content)"
+        />
       </div>
       <div class="cm-footer">
         <span class="create_at">{{ humanlizeDate(comment.create_at) }}</span>
@@ -179,7 +182,7 @@
   })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
   .comment-item {
@@ -190,7 +193,7 @@
       margin-bottom: $lg-gap;
     }
 
-    > .cm-avatar {
+    .cm-avatar {
       display: block;
       position: absolute;
       left: 0;
@@ -212,7 +215,7 @@
       }
     }
 
-    > .cm-body {
+    .cm-body {
       display: block;
       width: 100%;
       height: 100%;
@@ -231,11 +234,11 @@
 
           &:hover {
             text-decoration: underline;
-          } 
+          }
         }
 
-        .os,
-        .browser,
+        ::v-deep(.os),
+        ::v-deep(.browser),
         .location {
           color: $text-disabled;
           font-size: $font-size-small;

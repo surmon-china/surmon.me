@@ -93,7 +93,7 @@
               />
             </div>
             <div
-              class="reply-preview"
+              class="reply-preview markdown-content comment"
               v-html="marked(replyingComment.content)"
             />
           </div>
@@ -209,7 +209,7 @@
   })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
   .publisher {

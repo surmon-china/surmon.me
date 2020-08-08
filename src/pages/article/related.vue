@@ -24,34 +24,55 @@
       <template #default>
         <responsive>
           <template #desktop>
-            <div class="article-list swiper" v-swiper:releted="swiperOption">
-              <div class="swiper-wrapper">
-                <div
-                  v-for="(article, index) in articles"
-                  :key="index"
-                  class="swiper-slide item"
-                >
-                  <router-link
-                    class="item-article filter"
-                    :title="article.title"
-                    :to="getArticleDetailRoute(article.id)"
+            <div class="articles">
+              <button
+                class="swiper-navigation prev"
+                :disabled="swiperStatus === SwiperStatus.Beginning"
+                @click="handlePrevSlide"
+              >
+                <i class="iconfont icon-long-prev"></i>
+              </button>
+              <div
+                class="swiper"
+                v-swiper="swiperOption"
+                @ready="updateSwiperContext"
+                @transition-start="handleSwiperTransitionStart"
+              >
+                <div class="swiper-wrapper">
+                  <div
+                    v-for="(article, index) in articles"
+                    :key="index"
+                    class="swiper-slide item"
                   >
-                    <img
-                      :src="getRelatedArticleThumb(article.thumb)"
-                      :alt="article.title"
-                      draggable="false"
-                      class="thumb"
+                    <router-link
+                      class="item-article filter"
+                      :title="article.title"
+                      :to="getArticleDetailRoute(article.id)"
                     >
-                    <span class="title">
-                      <span class="text">{{ article.title }}</span>
-                    </span>
-                  </router-link>
+                      <img
+                        :src="getRelatedArticleThumb(article.thumb)"
+                        :alt="article.title"
+                        draggable="false"
+                        class="thumb"
+                      >
+                      <span class="title">
+                        <span class="text">{{ article.title }}</span>
+                      </span>
+                    </router-link>
+                  </div>
                 </div>
               </div>
+              <button
+                class="swiper-navigation next"
+                :disabled="swiperStatus === SwiperStatus.Ended"
+                @click="handleNextSlide"
+              >
+                <i class="iconfont icon-long-next"></i>
+              </button>
             </div>
           </template>
           <template #mobile>
-            <ul class="article-list">
+            <ul class="articles">
               <li
                 v-for="(article, index) in articles"
                 :key="index"
@@ -75,11 +96,16 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, PropType } from 'vue'
+  import { defineComponent, computed, ref, PropType } from 'vue'
   import { useEnhancer } from '/@/enhancer'
+  import { useSwiperRef } from '/@/todo/swiper'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
 
+  enum SwiperStatus {
+    Beginning = 'beginning',
+    Ended = 'ended'
+  }
   export default defineComponent({
     name: 'ArticleRelated',
     props: {
@@ -94,11 +120,13 @@
     },
     setup() {
       const { store, globalState, isMobile } = useEnhancer()
+      const [swiperContext, updateSwiperContext] = useSwiperRef()
+      const swiperStatus = ref<SwiperStatus | null>(SwiperStatus.Beginning)
       const swiperOption = {
         setWrapperSize: true,
         simulateTouch: false,
         mousewheel: {
-          sensitivity: 1,
+          sensitivity: 1
         },
         autoplay: {
           delay: 3500,
@@ -107,6 +135,23 @@
         observeParents: true,
         grabCursor: true,
         slidesPerView: 'auto'
+      }
+
+      const handleSwiperTransitionStart = () => {
+        const swiper = swiperContext.value?.$swiper.value
+        if (swiper?.isBeginning) {
+          swiperStatus.value = SwiperStatus.Beginning
+        } else if (swiper?.isEnd) {
+          swiperStatus.value = SwiperStatus.Ended
+        } else {
+          swiperStatus.value = null
+        }
+      }
+      const handlePrevSlide = () => {
+        swiperContext.value?.$swiper.value?.slidePrev()
+      }
+      const handleNextSlide = () => {
+        swiperContext.value?.$swiper.value?.slideNext()
       }
 
       const getRelatedArticleThumb = (thumb: string) => {
@@ -119,6 +164,12 @@
       return {
         isMobile,
         swiperOption,
+        SwiperStatus,
+        swiperStatus,
+        updateSwiperContext,
+        handleSwiperTransitionStart,
+        handlePrevSlide,
+        handleNextSlide,
         getArticleDetailRoute,
         getRelatedArticleThumb
       }
@@ -130,12 +181,10 @@
   @import 'src/assets/styles/init.scss';
 
   .related {
-    padding: $gap 0;
-    border-width: 0 $gap;
-    border-color: transparent;
+    padding: $gap;
     overflow: hidden;
 
-    > .skeleton-list {
+    .skeleton-list {
       padding: 0;
       margin: 0;
       height: 9rem;
@@ -152,73 +201,109 @@
       }
     }
 
-    > .swiper.article-list {
+    .articles {
+      display: flex;
+      align-items: center;
+      height: 9rem;
 
-      > .swiper-wrapper {
-        height: 9rem;
-        overflow: hidden;
+      .swiper-navigation {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 2rem;
+        height: 100%;
+        opacity: .6;
+        background-color: $module-bg-darker-1;
+        @include radius-box($xs-radius);
+        @include visibility-transition();
 
-        &[style*="300ms"] {
-          @include blur-filter('horizontal-small');
+        .iconfont {
+          color: $text-secondary;
+          font-size: $font-size-h3;
+          font-weight: bold;
         }
 
-        > .swiper-slide.item {
-          width: auto;
-          margin-right: $gap;
+        &[disabled] {
+          .iconfont {
+            color: $text-disabled;
+          }
+        }
 
-          &:last-child {
-            margin-right: 0;
+        &:not(:disabled):hover {
+          opacity: 1;
+        }
+      }
+
+      .swiper {
+        width: 42rem;
+        height: 100%;
+
+        .swiper-wrapper {
+          height: 9rem;
+          overflow: hidden;
+
+          &[style*="300ms"] {
+            @include blur-filter('horizontal-small');
           }
 
-          > .item-article {
-            display: block;
-            position: relative;
-            overflow: hidden;
-            border-radius: $xs-radius;
+          > .swiper-slide.item {
             width: auto;
-            height: 100%;
+            margin-right: $gap;
 
-            > .thumb {
+            &:last-child {
+              margin-right: 0;
+            }
+
+            > .item-article {
+              display: block;
+              position: relative;
+              overflow: hidden;
+              border-radius: $xs-radius;
               width: auto;
               height: 100%;
-              opacity: .8;
-              transform: scale(1);
-              transition:
-                transform $transition-time-normal,
-                opacity $transition-time-fast;
-            }
 
-            > .title {
-              position: absolute;
-              bottom: 0;
-              left: 0;
-              width: 100%;
-              height: 2em;
-              line-height: 2em;
-              background-color: $module-bg-lighter;
-              opacity: .2;
-              transition:
-                transform $transition-time-normal,
-                opacity $transition-time-fast;
-
-              .text {
-                display: block;
-                padding: 0 0.5em;
-                color: $link-color;
-                text-align: center;
-                font-size: $font-size-small;
-                @include text-overflow();
-              }
-            }
-
-            &:hover {
-              .thumb {
-                opacity: 1;
-                transform: scale(1.05);
+              > .thumb {
+                width: auto;
+                height: 100%;
+                opacity: .8;
+                transform: scale(1);
+                transition:
+                  transform $transition-time-normal,
+                  opacity $transition-time-fast;
               }
 
-              .title {
-                opacity: 1;
+              > .title {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 2em;
+                line-height: 2em;
+                background-color: $module-bg-lighter;
+                opacity: .2;
+                transition:
+                  transform $transition-time-normal,
+                  opacity $transition-time-fast;
+
+                .text {
+                  display: block;
+                  padding: 0 0.5em;
+                  color: $link-color;
+                  text-align: center;
+                  font-size: $font-size-small;
+                  @include text-overflow();
+                }
+              }
+
+              &:hover {
+                .thumb {
+                  opacity: 1;
+                  transform: scale(1.05);
+                }
+
+                .title {
+                  opacity: 1;
+                }
               }
             }
           }
@@ -229,28 +314,27 @@
     &.mobile {
       height: auto;
 
-      > .article-list {
+      .articles {
         padding: 0;
         margin: 0;
         list-style: none;
         overflow: hidden;
         opacity: 0.9;
 
-        > .item {
-
-          > .item-link {
+        .item {
+          .item-link {
             display: flex;
             width: 100%;
             height: 2.2em;
             line-height: 2.2em;
 
-            > .title {
+            .title {
               max-width: 70%;
               display: inline-block;
               @include text-overflow();
             }
 
-            > .tip {
+            .tip {
               display: inline-block;
             }
           }

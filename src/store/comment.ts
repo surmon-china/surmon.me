@@ -15,11 +15,11 @@ export const LIKE_COMMENT_API_PATH = '/like/comment'
 
 export enum CommentModuleListMutations {
   // list
-  SetListFetchig = 'setListFetchig',
+  SetListFetching = 'setListFetching',
   SetListData = 'setListData',
   ClearListData = 'clearListData',
   // item
-  SetPostFetchig = 'setPostFetchig',
+  SetPostFetching = 'setPostFetching',
   IncrementCommentLikes = 'incrementCommentLikes',
   AddNewComment = 'addNewComment'
 }
@@ -45,7 +45,7 @@ export const state = () => ({
 
 export const mutations: MutationTree<CommentState> = {
   // 请求列表
-  [CommentModuleListMutations.SetListFetchig](state, fetching: boolean) {
+  [CommentModuleListMutations.SetListFetching](state, fetching: boolean) {
     state.fetching = fetching
   },
   [CommentModuleListMutations.SetListData](state, comments) {
@@ -56,7 +56,7 @@ export const mutations: MutationTree<CommentState> = {
   },
 
   // 发布评论
-  [CommentModuleListMutations.SetPostFetchig](state, posting: boolean) {
+  [CommentModuleListMutations.SetPostFetching](state, posting: boolean) {
     state.posting = posting
   },
   [CommentModuleListMutations.AddNewComment](state, comment) {
@@ -94,7 +94,7 @@ export const actions: ActionTree<CommentState, IRootState> = {
     if (isRestart) {
       commit(CommentModuleListMutations.ClearListData)
     }
-    commit(CommentModuleListMutations.SetListFetchig, true)
+    commit(CommentModuleListMutations.SetListFetching, true)
 
     return http
       .get(COMMENT_API_PATH, { params })
@@ -109,12 +109,12 @@ export const actions: ActionTree<CommentState, IRootState> = {
           })
         })
       })
-      .finally(() => commit(CommentModuleListMutations.SetListFetchig, false))
+      .finally(() => commit(CommentModuleListMutations.SetListFetching, false))
   },
 
   // 发布评论
   [CommentModuleActions.PostComment]({ commit }, comment) {
-    commit(CommentModuleListMutations.SetPostFetchig, true)
+    commit(CommentModuleListMutations.SetPostFetching, true)
     return http
       .post(COMMENT_API_PATH, comment)
       .then(response => {
@@ -122,7 +122,7 @@ export const actions: ActionTree<CommentState, IRootState> = {
         return response
       })
       .finally(() => {
-        commit(CommentModuleListMutations.SetPostFetchig, false)
+        commit(CommentModuleListMutations.SetPostFetching, false)
       })
   },
 

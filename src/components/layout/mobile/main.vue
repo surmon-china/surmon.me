@@ -67,7 +67,7 @@
       height: 100%;
       background-color: $mobile-aside-bg;
       transform: translate3d(-100%, 0 ,0);
-      transition: $mobile-aisde-transition;
+      transition: $mobile-aside-transition;
 
       &.open {
         overflow: hidden;
@@ -77,7 +77,7 @@
     }
 
     #app-main {
-      transition: $mobile-aisde-transition;
+      transition: $mobile-aside-transition;
 
       &.open {
         transform: translate3d($aside-width, 0 ,0);

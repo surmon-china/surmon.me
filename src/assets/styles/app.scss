@@ -1,10 +1,10 @@
 
 @charset "UTF-8";
 
-// variables & mixins
+// variables & mixin
 @import "./init.scss";
 
-// fonts
+// font
 @import "./font.scss";
 
 // reset style
@@ -12,3 +12,7 @@
 
 // universal style
 @import "./universal.scss";
+
+// markdown style
+@import "./markdown.scss";
+

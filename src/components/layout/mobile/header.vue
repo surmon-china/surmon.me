@@ -133,7 +133,7 @@
       width: 100%;
       height: 100%;
       touch-action: none;
-      background-color: $module-bg-darker-5;
+      background-color: $module-bg-darker-3;
     }
 
     .search {

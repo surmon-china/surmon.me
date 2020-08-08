@@ -274,17 +274,21 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '回复',
     [Language.En]: 'reply'
   },
-  [LANGUAGE_KEYS.COMMENT_PAGENATION_OLD]: {
+  [LANGUAGE_KEYS.COMMENT_PAGINATION_OLD]: {
     [Language.Zh]: '更旧',
     [Language.En]: 'old'
   },
-  [LANGUAGE_KEYS.COMMENT_PAGENATION_NEW]: {
+  [LANGUAGE_KEYS.COMMENT_PAGINATION_NEW]: {
     [Language.Zh]: '更新',
     [Language.En]: 'new'
   },
-  [LANGUAGE_KEYS.COMMENT_PAGENATION_HOT]: {
+  [LANGUAGE_KEYS.COMMENT_PAGINATION_HOT]: {
     [Language.Zh]: '最热',
     [Language.En]: 'hot'
+  },
+  [LANGUAGE_KEYS.COMMENT_PAGINATION_COOL]: {
+    [Language.Zh]: '最冷',
+    [Language.En]: 'cool'
   },
   [LANGUAGE_KEYS.COMMENT_POST_NAME]: {
     [Language.Zh]: '名字',

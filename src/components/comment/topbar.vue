@@ -39,13 +39,13 @@
             class="button"
             :class="{ actived: sort === SortType.Desc }"
             @click="handleSortList(SortType.Desc)"
-            v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_NEW"
+            v-i18n="LANGUAGE_KEYS.COMMENT_PAGINATION_NEW"
           />
           <button
             class="button"
             :class="{ actived: sort === SortType.Hot }"
             @click="handleSortList(SortType.Hot)"
-            v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_HOT"
+            v-i18n="LANGUAGE_KEYS.COMMENT_PAGINATION_HOT"
           />
         </div>
       </div>
@@ -67,7 +67,6 @@
   export enum Events {
     Sort = 'sort'
   }
-
   export default defineComponent({
     name: 'CommentTopbar',
     props: {
@@ -76,8 +75,7 @@
         required: true
       },
       total: {
-        type: Number,
-        required: true
+        type: Number
       },
       sort: {
         type: Number as PropType<SortType>,
@@ -136,7 +134,7 @@
         // )
         // TODO: 可以使用 popup 组件？
         // this.isMobile
-          // // ? window.utils.openImgPopup(getFileCDNUrl('/images/sponsor-mobile.png'))
+          // ? window.utils.openImgPopup(getFileCDNUrl('/images/sponsor-mobile.png'))
           // sponsor 业务不使用 CDN
           // : window.utils.openIframePopup('/sponsor', 'sponsor')
       }
@@ -155,7 +153,7 @@
   })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
   .topbar {
