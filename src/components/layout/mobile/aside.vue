@@ -104,7 +104,7 @@
     margin: 0;
     opacity: 0;
     transform: scale(0.8, 0.8);
-    transition: $mobile-aisde-transition;
+    transition: $mobile-aside-transition;
 
     &.open {
       opacity: 1;

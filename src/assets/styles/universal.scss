@@ -12,6 +12,15 @@ body {
   line-height: $line-height-base;
   user-select: none;
   -webkit-font-smoothing: antialiased;
+
+  * {
+    @include scrollbar-style(
+      $size: $sm-gap,
+      $bg: $module-bg,
+      $thumb-bg: $module-bg-darker-1,
+      $thumb-bg-hover: $module-bg-darker-2
+    );
+  }
 }
 
 #app-root {
@@ -57,42 +66,14 @@ input {
 input:-webkit-autofill,
 textarea:-webkit-autofill,
 select:-webkit-autofill {
-  box-shadow: 0 0 0px 1000px rgb(230, 230, 230) inset;
+  box-shadow: 0 0 0px 1000px $white inset;
 }
 
-::selection {
-  background: $primary;
-  color: $text-reversal;
-}
-
-::-moz-selection {
-  background: $primary;
-  color: $text-reversal;
-}
-
+::selection,
+::-moz-selection,
 ::-webkit-selection {
   background: $primary;
   color: $text-reversal;
-}
-
-::-webkit-scrollbar {
-  width: $sm-gap;
-  height: $sm-gap;
-  background: hsla(0, 0%, 100%, 0.6);
-}
-
-::-webkit-scrollbar-track {
-  border-radius: 0;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 0;
-  background-color: rgba(95, 95, 95, .4);
-  @include background-transition();
-
-  &:hover {
-    background-color: rgba(95, 95, 95, .7);
-  }
 }
 
 // filters
@@ -149,28 +130,6 @@ select:-webkit-autofill {
   z-index: $z-index-normal + 3;
 }
 
-// no used
-.slide-up-enter-active, .slide-up-leave-active {
-  transition: all $transition-time-slow cubic-bezier(0, 1.2, 1, 0.5);
-  opacity: .7;
-  transform: translate3d(0, 4em, 0);
-}
-.slide-up-enter, .slide-up-leave-active {
-  opacity: .3;
-  transform: translate3d(0, 4em, 0);
-}
-
-// no used
-.slide-left-enter-active, .slide-left-leave-active {
-  transition: all $transition-time-normal cubic-bezier(0, 1.2, 1, 0.5);
-  opacity: .5;
-  transform: translate3d(2em, 0, 0);
-}
-.slide-left-enter, .slide-left-leave-active {
-  opacity: .3;
-  transform: translate3d(2em, 0, 0);
-}
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity $transition-time-normal;
 }
@@ -179,6 +138,13 @@ select:-webkit-autofill {
 }
 .fade-move {
   transition: transform $transition-time-normal;
+}
+
+.module-enter-active, .module-leave-active {
+  transition: opacity $transition-time-fast;
+}
+.module-enter, .module-leave-active {
+  opacity: 0
 }
 
 .page-enter-active {
@@ -191,9 +157,22 @@ select:-webkit-autofill {
   opacity: 0
 }
 
-.module-enter-active, .module-leave-active {
-  transition: opacity $transition-time-normal;
+.slide-up-enter-active, .slide-up-leave-active {
+  transition: all $transition-time-slow cubic-bezier(0, 1.2, 1, 0.5);
+  opacity: .7;
+  transform: translate3d(0, 4em, 0);
 }
-.module-enter, .module-leave-active {
-  opacity: 0
+.slide-up-enter, .slide-up-leave-active {
+  opacity: .3;
+  transform: translate3d(0, 4em, 0);
+}
+
+.slide-left-enter-active, .slide-left-leave-active {
+  transition: all $transition-time-normal cubic-bezier(0, 1.2, 1, 0.5);
+  opacity: .5;
+  transform: translate3d(2em, 0, 0);
+}
+.slide-left-enter, .slide-left-leave-active {
+  opacity: .3;
+  transform: translate3d(2em, 0, 0);
 }

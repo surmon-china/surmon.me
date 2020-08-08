@@ -50,8 +50,9 @@
 
 <script lang="ts">
   import { defineComponent, ref, reactive, computed, watch, onMounted, onBeforeUnmount, onUnmounted } from 'vue'
+  import { getNamespace, Modules } from '/@/store'
+  import { CommentModuleActions, CommentModuleListMutations } from '/@/store/comment'
   import { useEnhancer } from '/@/enhancer'
-  import { isClient } from '/@/vuniversal/env'
   import { getJSON, setJSON } from '/@/services/storage'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { getGravatarByEmail } from '/@/transforms/thumbnail'
@@ -138,6 +139,11 @@
         // 1. 宿主组件还在加载时，列表和 tool 都呈加载状态
         // 2. 宿主组件加载完成，如果自己还在请求，则列表呈加载状态
         // 3. 自己已请求完，宿主组件还在加载，列表和 tool 都呈加载状态
+
+        // 1. 组件不再负责初始加载评论列表数据的职责
+        // 2. 组件仅负责初评论列表数据翻页、排序的职责
+        // 3. 当容器组件还在请求时，组件全量 Loading
+        // 4. 当只有评论列表在请求时，列表单独 Loading
         return props.fetching || isFetchingComment.value
       })
 
@@ -160,7 +166,7 @@
       const userState = reactive({ ...initUserState })
 
       const penState = reactive({
-        content: '',
+        content: '2389u12389u1293',
         preview: false
       })
 
@@ -232,7 +238,7 @@
         //   easing: Easing['ease-in'],
         //   offset: -80
         // })
-        store.dispatch('comment/fetchList', {
+        store.dispatch(getNamespace(Modules.Comment, CommentModuleActions.FetchList), {
           ...params,
           sort: state.sort,
           post_id: props.postId
@@ -293,7 +299,7 @@
         }
 
         // post
-        return store.dispatch('comment/fetchPostComment', {
+        return store.dispatch(getNamespace(Modules.Comment, CommentModuleActions.PostComment), {
           pid: state.replyPid,
           post_id: props.postId,
           content: penState.content,
@@ -326,11 +332,6 @@
       )
 
       onMounted(() => {
-        // 1. 组件不再负责初始加载评论列表数据的职责
-        // 2. 组件仅负责初评论列表数据翻页、排序的职责
-        // 3. 当容器组件还在请求时，组件全量 Loading
-        // 4. 当只有评论列表在请求时，列表单独 Loading
-        store.dispatch('global/fetchAppOption')
         syncUserStorageToState()
       })
 
@@ -339,7 +340,10 @@
       })
 
       onUnmounted(() => {
-        store.commit('comment/clearListData')
+        store.commit(getNamespace(
+          Modules.Comment,
+          CommentModuleListMutations.ClearListData
+        ))
       })
 
       return {
@@ -364,96 +368,13 @@
   })
 </script>
 
+<style lang="scss" src="./markdown.scss"></style>
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
+
   #comment-box {
     padding: $gap;
     @include common-bg-module();
     @include radius-box($lg-radius);
   }
 </style>
-
-<style lang="scss">
-  @import 'src/assets/styles/init.scss';
-
-  .cm-content,
-  .reply-preview,
-  .markdown-preview {
-    margin: $sm-gap 0;
-    line-height: 2em;
-    word-wrap: break-word;
-    font-size: $font-size-h6;
-
-    a {
-      text-decoration: underline;
-    }
-
-    img {
-      margin: .5rem 0;
-      max-width: 100%;
-      border-radius: 2px;
-      cursor: pointer;
-    }
-
-    p {
-      margin: 0;
-    }
-
-    code {
-      color: #bd4147;
-      padding: .3em .5em;
-      margin: 0 .5em;
-      border-radius: $xs-radius;
-      background-color: $module-bg-hover;
-    }
-
-    pre {
-      $code-header-height: 2.8rem;
-      display: flex;
-      align-items: baseline;
-      flex-wrap: wrap-reverse;
-      position: relative;
-      overflow: hidden;
-      margin-top: .6em;
-      margin-bottom: 1em;
-      padding-top: $code-header-height;
-      border-radius: $xs-radius;
-      background-color: rgba(0, 0, 0, 0.8);
-
-      &:before {
-        color: $white;
-        content: attr(data-lang)" CODE";
-        height: $code-header-height;
-        line-height: $code-header-height;
-        font-size: $font-size-h6;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        font-weight: 700;
-        background-color: rgba(68, 68, 68, 0.9);
-        display: block;
-        text-transform: uppercase;
-        text-align: center;
-      }
-
-      > .code-lines {
-        display: none;
-      }
-
-      > code {
-        margin: 0;
-        padding: 1rem;
-        float: left;
-        width: 100%;
-        height: 100%;
-        display: block;
-        font-size: $font-size-h6;
-        line-height: 1.8rem;
-        color: rgba(255, 255, 255, 0.87);
-        background-color: transparent;
-      }
-    }
-  }
-</style>
-

@@ -12,23 +12,23 @@
     <template #default>
       <div class="metas" :class="{ mobile: isMobile }">
         <p class="item">
-          <i18n>
-            <template #zh>本文于</template>
-            <template #en>Article created at</template>
-          </i18n>
+          <i18n
+            zh="本文于 "
+            en="Article created at "
+          />
           <router-link
             class="date-link"
             :title="getDateTitle(article.create_at)"
             :to="getDateLink(article.create_at)"
           >
-            <span>{{ getDateTitle(article.create_at) }}</span>
+            {{ getDateTitle(article.create_at) }}
           </router-link>
-          <i18n>
-            <template #zh>发布在</template>
-            <template #en>in category</template>
-          </i18n>
+          <i18n
+            zh="发布在 "
+            en="in category "
+          />
           <span
-            class="category-links"
+            class="category-link"
             v-for="(category, index) in article.category"
             :key="index"
           >
@@ -39,11 +39,11 @@
               <i18n :zh="category.name" :en="category.slug" />
             </router-link>
             <span v-if="article.category[index + 1]">
-              <i18n zn="、" en="," />
+              <i18n zh="、" en="," />
             </span>
           </span>
           <span v-if="!article.category.length">
-            <i18n zh="未知分类下，" en="(no catgory)," />
+            <i18n zh="未知分类下" en="(no catgory)" />
           </span>
           <span class="separator">|</span>
           <i18n>
@@ -52,42 +52,35 @@
           </i18n>
         </p>
         <p class="item">
-          <i18n>
-            <template #zh>
-              <span class="title zh">相关标签：</span>
-            </template>
-            <template #en>
-              <span class="title en">Related tags:</span>
-            </template>
-          </i18n>
-          <placeholder :data="article.tag.length">
-            <template #placeholder>
-              <span v-i18n="LANGUAGE_KEYS.TAG_PLACEHOLDER"></span>
-            </template>
-            <template #default>
-              <span v-for="(tag, index) in article.tag" :key="index">
-                <router-link
-                  :to="getTagArchiveRoute(tag.slug)"
-                  :title="tag.description || tag.name"
-                >
-                  <i18n :zh="tag.name" :en="tag.slug" />
-                </router-link>
-                <span v-if="article.tag[index + 1]">
-                  <i18n zn="、" en="," />
-                </span>
-              </span>
-            </template>
-          </placeholder>
+          <span class="title">
+            <i18n
+              zh="相关标签："
+              en="Related tags:"
+            />
+          </span>
+          <span
+            class="tag-link"
+            v-for="(tag, index) in article.tag"
+            :key="index"
+          >
+            <router-link
+              :to="getTagArchiveRoute(tag.slug)"
+              :title="tag.description || tag.name"
+            >
+              <i18n :zh="tag.name" :en="tag.slug" />
+            </router-link>
+            <span v-if="article.tag[index + 1]">
+              <i18n zh="、" en="," />
+            </span>
+          </span>
         </p>
         <p class="item">
-          <i18n>
-            <template #zh>
-              <span class="title zh">永久地址：</span>
-            </template>
-            <template #en>
-              <span class="title en">Article address:</span>
-            </template>
-          </i18n>
+          <span class="title">
+            <i18n
+              zh="永久地址："
+              en="Article address:"
+            />
+          </span>
           <span class="site-url" @click="copyArticleUrl">
             {{ articleUrl }}
           </span>
@@ -95,7 +88,7 @@
         <div class="item">
           <i18n>
             <template #zh>
-              <span class="title zh">版权声明：</span>
+              <span class="title">版权声明：</span>
               <a
                 target="_blank"
                 rel="external nofollow noopenter"
@@ -103,7 +96,7 @@
               >自由转载 - 署名 - 非商业性使用</a>
             </template>
             <template #en>
-              <span class="title en">Copyright clarify:</span>
+              <span class="title">Copyright clarify:</span>
               <a
                 target="_blank"
                 rel="external nofollow noopenter"
@@ -200,18 +193,25 @@
       }
 
       .date-link,
-      .category-links,
+      .tag-link {
+        margin-right: $sm-gap / 2;
+      }
+
       .separator {
         margin: 0 $sm-gap;
       }
 
-      .separator {
-        margin-left: 0;
+      .date-link {
+        text-transform: uppercase;
       }
 
-      > .title.en {
-        width: 11rem;
-        display: inline-block;
+      .category-link,
+      .tag-link {
+        text-transform: capitalize;
+      }
+
+      .title {
+        margin-right: $sm-gap;
       }
 
       .site-url {

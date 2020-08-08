@@ -37,9 +37,9 @@
         <div class="knowledge">
           <h2 class="title">{{ article.title }}</h2>
           <div
-            class="content"
+            class="markdown-content"
             :id="contentElementIds.default"
-            v-html="content.default"
+            v-text="content.default"
           />
           <transition
             name="module"
@@ -236,7 +236,7 @@
     height: auto;
     transition: height $transition-time-normal;
 
-    > .skeleton {
+    .skeleton {
       .title {
         width: 60%;
         height: 26px;
@@ -249,7 +249,7 @@
       }
     }
 
-    > .oirigin {
+    .oirigin {
       position: absolute;
       top: -11px;
       left: -29px;
@@ -278,199 +278,16 @@
     .knowledge {
       user-select: text;
 
-      > .title {
+      .title {
         margin: 1em 0 1.5em 0;
         text-align: center;
         font-weight: 700;
         font-size: $font-size-h2 * .95;
       }
 
-      > .content {
-
-        > .google-auto-placed {
+      .markdown-content {
+        .google-auto-placed {
           margin-bottom: $sm-gap;
-        }
-
-        iframe {
-          width: 100%;
-          margin-bottom: 1em;
-          background-color: $theme-black;
-        }
-
-        a {
-          font-weight: bold;
-          margin: 0 .1em;
-
-          &.image-link {
-            margin: 0;
-          }
-
-          &:hover {
-            text-decoration: underline;
-          }
-        }
-
-        img {
-          max-width: 100%;
-          position: relative;
-          margin: 0 auto;
-          display: block;
-          text-align: center;
-          border-radius: $xs-radius;
-          border: $sm-gap solid $module-bg-hover;
-          opacity: .9;
-          cursor: pointer;
-
-          &:hover {
-            opacity: 1;
-            transition: all $transition-time-normal;
-          }
-        }
-
-        p {
-          line-height: 2.2em;
-          text-indent: 2em;
-          margin-bottom: 1em;
-
-          &.text-center {
-            text-align: center;
-          }
-
-          &.text-right {
-            text-align: right;
-          }
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-          line-height: 1.8em;
-          font-weight: 700;
-          text-indent: 0;
-        }
-
-        blockquote {
-          p {
-            &:last-child {
-              margin-bottom: 0;
-            }
-          }
-        }
-
-        ul {
-          list-style-type: square;
-        }
-
-        ul, ol {
-          > li {
-            line-height: 1.8em;
-            padding: .5em .8em;
-
-            &:hover {
-              background-color: $module-bg-hover;
-            }
-
-            > p {
-              text-indent: 0;
-            }
-
-            > ul {
-              &:last-child {
-                margin-bottom: 0;
-              }
-            }
-          }
-        }
-
-        code {
-          color: #bd4147;
-          padding: .3em .5em;
-          margin: 0 .5em;
-          border-radius: $xs-radius;
-          background-color: $module-bg-hover;
-        }
-
-        pre {
-          $code-header-height: 2.8rem;
-          $code-number-width: 3rem;
-          $code-row-line-height: 1.8rem;
-          $code-font-size: $font-size-h6;
-          display: block;
-          position: relative;
-          overflow: hidden;
-          margin-bottom: 1em;
-          padding-left: $code-number-width;
-          font-size: $code-font-size;
-          background-color: rgba($black, 0.8);
-
-          &:before {
-            color: $white;
-            content: attr(data-lang)" CODE";
-            height: $code-header-height;
-            line-height: $code-header-height;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            font-weight: 700;
-            background-color: rgba(68, 68, 68, 0.9);
-            display: block;
-            text-transform: uppercase;
-            text-align: center;
-          }
-
-          > .code-lines {
-            position: absolute;
-            left: 0;
-            top: $code-header-height;
-            margin: 0;
-            padding: 1rem 0;
-            width: $code-number-width;
-            height: calc(100% - #{$code-header-height});
-            text-align: center;
-            background-color: rgba($black, 0.2);
-
-            > .code-line-number {
-              padding: 0;
-              position: relative;
-              list-style-type: none;
-              line-height: $code-row-line-height;
-              font-size: $font-size-small;
-              transition: none;
-
-              &:hover {
-                &:before {
-                  @include visible();
-                }
-              }
-
-              &:before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: $code-number-width;
-                width: 66em;
-                height: 100%;
-                background-color: rgba(154, 154, 154, 0.2);
-                @include hidden();
-              }
-            }
-          }
-
-          > code {
-            margin: 0;
-            padding: 1rem;
-            float: left;
-            width: 100%;
-            height: 100%;
-            display: block;
-            line-height: $code-row-line-height;
-            color: rgba($white, 0.87);
-            background-color: transparent;
-          }
         }
       }
 

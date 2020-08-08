@@ -64,7 +64,10 @@ export default defineComponent({
       }
 
       const getLoadingView = () => {
-        return context.slots.loading?.() || h(Spin, { loading: true })
+        return (
+          context.slots.loading?.() ||
+          h(Spin, { loading: true })
+        )
       }
 
       const getView = () => {
@@ -83,7 +86,7 @@ export default defineComponent({
               context.emit(Events.AfterEnter, ...args)
             }
           },
-          getView()
+          () => getView()
         )
       }
 

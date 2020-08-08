@@ -53,6 +53,7 @@ $grey: #efefef;
 $white: #ffffff;
 $black: #000000;
 $black-light: #555555;
+$mobile-aside-bg: #34393d;
 
 // others
 $en-primary: rgb(0, 43, 127);
@@ -102,7 +103,7 @@ $sm-gap: $gap * 0.618; // ~8px
 $xs-gap: $sm-gap / 2; // ~4px
 $lg-gap: $sm-gap * 2; // ~14px
 
-// raduis
+// radius
 $lg-radius: 6px;
 $sm-radius: 4px;
 $xs-radius: 2px;
@@ -113,7 +114,7 @@ $transition-time-fast: .1s;
 $transition-time-normal: .25s;
 $transition-time-slow: .38s;
 
-// Z indexs
+// Z index
 $z-index-top: 99999;
 $z-index-header: 999;
 $z-index-toolbox: 9;
@@ -137,8 +138,7 @@ $active-content-full-height: calc(100vh - #{$header-height + $footer-height});
 // Mobile
 $mobile-header-height: 5rem;
 $mobile-footer-height: $lg-gap * 4;
-$mobile-aside-bg: #34393d;
-$mobile-aisde-transition: all $transition-time-slow ease-out;
+$mobile-aside-transition: all $transition-time-slow ease-out;
 
 // breakpoints
 $small-breakpoint: 400px;

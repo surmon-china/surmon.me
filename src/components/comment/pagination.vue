@@ -2,9 +2,12 @@
   <transition name="module">
     <div v-if="!fetching && pagination.total_page > 1" class="pagination">
       <ul class="pagination-list">
-        <li class="item prev" v-if="!isHotSort">
+        <li class="item prev">
           <span class="symbol">-</span>
-          <span v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_OLD" />
+          <span v-i18n="isHotSort
+            ? LANGUAGE_KEYS.COMMENT_PAGINATION_HOT
+            : LANGUAGE_KEYS.COMMENT_PAGINATION_OLD"
+          />
         </li>
         <li
           v-for="(item, index) in pagination.total_page"
@@ -22,8 +25,11 @@
             {{ item }}
           </button>
         </li>
-        <li class="item next" v-if="!isHotSort">
-          <span v-i18n="LANGUAGE_KEYS.COMMENT_PAGENATION_NEW" />
+        <li class="item next">
+          <span v-i18n="isHotSort
+            ? LANGUAGE_KEYS.COMMENT_PAGINATION_COOL
+            : LANGUAGE_KEYS.COMMENT_PAGINATION_NEW"
+          />
           <span class="symbol">-</span>
         </li>
       </ul>
@@ -48,26 +54,25 @@
         type: Number as PropType<SortType>,
         required: true
       },
-      pagination: {
-        type: Object,
-        required: true
-      }
+      pagination: Object
     },
     setup(props, context) {
       const isHotSort = computed(() => props.sort === SortType.Hot)
       const isActivePage = (index: number) => {
         return isHotSort.value
-          ? index === props.pagination.current_page
-          : index === props.pagination.total_page + 1 - props.pagination.current_page
+          ? index === props.pagination?.current_page
+          : index === props.pagination?.total_page + 1 - props.pagination?.current_page
       }
 
       const handlePage = (page: number) => {
         if (!isActivePage(page)) {
-          context.emit(CommentEvent.Page,
-            isHotSort.value
-              ? page
-              : props.pagination.total_page + 1 - page
-          )
+          if (props.pagination) {
+            context.emit(CommentEvent.Page,
+              isHotSort.value
+                ? page
+                : props.pagination.total_page + 1 - page
+            )
+          }
         }
       }
 
@@ -133,7 +138,7 @@
 
           &.actived,
           &:hover {
-            background-color: $module-bg-hover;
+            background-color: $module-bg-darker-1;
           }
         }
       }

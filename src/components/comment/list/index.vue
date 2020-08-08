@@ -112,7 +112,7 @@
       const replyComment = (commentId: number) => {
         context.emit(CommentEvent.Reply, commentId)
       }
- 
+
       const likeComment = (commentId: number) => {
         // this.$ga.event(
         //   '欲赞评论',
@@ -145,6 +145,7 @@
       return {
         LANGUAGE_KEYS,
         firstUpperCase,
+        isMobile,
         listElement,
         loadCommentsAnimateDone,
         addCommentAnimateDone,
