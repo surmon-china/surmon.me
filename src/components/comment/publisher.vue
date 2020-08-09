@@ -299,7 +299,7 @@
       > .site {
         flex-grow: 1;
 
-        > input {
+        input {
           width: 100%;
           height: 2em;
           line-height: 2em;
