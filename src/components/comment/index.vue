@@ -217,13 +217,13 @@
         penState.preview = !penState.preview
       }
 
-      const replyComment = (comment: any) => {
+      const replyComment = (commentId: number) => {
         // this.$ga.event(
         //   '欲回评论',
         //   GAEventActions.Click,
         //   GAEventTags.Comment
         // )
-        state.replyPid = comment.id
+        state.replyPid = commentId
         scrollToElementAnchor('post-box', -300)
         // 激活光标
         // if (this.$refs.markdownInput) {

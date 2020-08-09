@@ -23,12 +23,11 @@
           <div class="emoji-box">
             <ul class="emoji-list">
               <li
-                v-for="(emoji, index) in ['😃', '😂', '😅', '😉', '😌', '😔', '😓', '😢', '😍', '😘', '😜', '😡', '😤', '😭', '😱', '😳', '😵', '🌚', '🙏', '👆', '👇', '👌', '🤘', '👍', '👎', '💪', '👏', '🌻', '🌹', '💊', '🇨🇳', '🇺🇸', '🇯🇵 ', '🚩', '🐶', '❤️', '💔', '💩', '👻']"
+                v-for="(emoji, index) in EMOJIS"
                 :key="index"
                 class="item"
                 @click="insertEmoji(emoji)"
-                v-text="emoji"
-              />
+              >{{ emoji }}</li>
             </ul>
           </div>
         </span>
@@ -80,7 +79,7 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { focusPosition, insertContent } from '/@/utils/editable'
   import marked from '/@/services/marked'
-  import { CommentEvent } from './helper'
+  import { CommentEvent, EMOJIS } from './helper'
 
   export enum Events {
     Update = 'update:modelValue'
@@ -172,6 +171,7 @@
 
       return {
         t: i18n.t,
+        EMOJIS,
         LANGUAGE_KEYS,
         inputElement,
         previewContent,
@@ -198,7 +198,7 @@
       position: relative;
       overflow: hidden;
 
-      > .markdown-input {
+      .markdown-input {
         min-height: 6em;
         max-height: 36em;
         overflow: auto;
@@ -224,7 +224,7 @@
         }
       }
 
-      > .markdown-preview {
+      .markdown-preview {
         position: absolute;
         top: 0;
         left: 0;
@@ -251,11 +251,11 @@
           pointer-events: none;
         }
 
-        > .emoji,
-        > .image,
-        > .link,
-        > .code,
-        > .preview {
+        .emoji,
+        .image,
+        .link,
+        .code,
+        .preview {
           width: $size;
           height: $size;
           text-align: center;
@@ -269,7 +269,7 @@
           }
         }
 
-        > .emoji {
+        .emoji {
           .emoji-box {
             display: none;
             position: absolute;
@@ -280,7 +280,7 @@
             overflow-y: auto;
             background-color: $module-bg;
 
-            > .emoji-list {
+            .emoji-list {
               list-style: none;
               padding: 0;
               margin: 0;
@@ -288,7 +288,7 @@
               display: flex;
               flex-wrap: wrap;
 
-              > .item {
+              .item {
                 padding: 0 .4em;
                 cursor: pointer;
                 @include background-transition();
@@ -301,14 +301,14 @@
           }
 
           &:hover {
-            > .emoji-box {
+            .emoji-box {
               display: block;
             }
           }
         }
       }
 
-      > .submit {
+      .submit {
         width: 8rem;
         height: $size;
         background-color: $module-bg-darker-4;

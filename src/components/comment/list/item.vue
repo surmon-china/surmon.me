@@ -176,7 +176,10 @@
         getCommentElementId,
         getReplyParentCommentText,
         firstUpperCase,
-        parseMarkdown
+        parseMarkdown,
+        replyComment,
+        likeComment,
+        scrollToCommentItem
       }
     }
   })

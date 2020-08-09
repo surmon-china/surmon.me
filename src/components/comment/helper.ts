@@ -3,6 +3,12 @@ import { getFileCDNUrl } from '/@/transforms/url'
 import { getGravatarByEmail } from '/@/transforms/thumbnail'
 import { scrollTo } from '/@/utils/scroller'
 
+export const EMOJIS = [
+  '😃', '😂', '😅', '😉', '😌', '😔', '😓', '😢', '😍', '😘', '😜', '😡', '😤', '😭', '😱',
+  '😳', '😵', '🌚', '🙏', '👆', '👇', '👌', '🤘', '👍', '👎', '💪', '👏', '🌻', '🌹', '💊',
+  '🇨🇳', '🇺🇸', '🇯🇵 ', '🚩', '🐶', '❤️', '💔', '💩', '👻'
+]
+
 export enum CommentEvent {
   Reply = 'reply',
   Like = 'like',
