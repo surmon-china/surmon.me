@@ -20,7 +20,7 @@
         :article="article"
       />
     </div>
-    <div class="module">
+    <div class="releted">
       <article-related
         :fetching="fetching"
         :articles="relatedArticles"
@@ -119,6 +119,10 @@
       margin-bottom: $lg-gap;
       @include radius-box($sm-radius);
       @include common-bg-module();
+    }
+
+    .releted {
+      margin-bottom: $lg-gap;
     }
 
     &.mobile {
