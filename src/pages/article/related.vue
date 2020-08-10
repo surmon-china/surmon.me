@@ -22,74 +22,34 @@
         </responsive>
       </template>
       <template #default>
-        <responsive>
-          <template #desktop>
-            <div class="articles">
-              <button
-                class="swiper-navigation prev"
-                :disabled="swiperStatus === SwiperStatus.Beginning"
-                @click="handlePrevSlide"
-              >
-                <i class="iconfont icon-long-prev"></i>
-              </button>
-              <div
-                class="swiper"
-                v-swiper="swiperOption"
-                @ready="updateSwiperContext"
-                @transition-start="handleSwiperTransitionStart"
-              >
-                <div class="swiper-wrapper">
+        <ul class="articles">
+          <li
+            v-for="(article, index) in articles.slice(0, 6)"
+            :key="index"
+            class="item"
+          >
+            <router-link
+              class="item-article"
+              :title="article.title"
+              :to="getArticleDetailRoute(article.id)"
+            >
+              <responsive>
+                <template #desktop>
                   <div
-                    v-for="(article, index) in articles"
-                    :key="index"
-                    class="swiper-slide item"
-                  >
-                    <router-link
-                      class="item-article filter"
-                      :title="article.title"
-                      :to="getArticleDetailRoute(article.id)"
-                    >
-                      <img
-                        :src="getRelatedArticleThumb(article.thumb)"
-                        :alt="article.title"
-                        draggable="false"
-                        class="thumb"
-                      >
-                      <span class="title">
-                        <span class="text">{{ article.title }}</span>
-                      </span>
-                    </router-link>
-                  </div>
-                </div>
-              </div>
-              <button
-                class="swiper-navigation next"
-                :disabled="swiperStatus === SwiperStatus.Ended"
-                @click="handleNextSlide"
-              >
-                <i class="iconfont icon-long-next"></i>
-              </button>
-            </div>
-          </template>
-          <template #mobile>
-            <ul class="articles">
-              <li
-                v-for="(article, index) in articles"
-                :key="index"
-                class="item"
-              >
-                <router-link
-                  class="item-link"
-                  :title="article.title"
-                  :to="getArticleDetailRoute(article.id)"
-                >
+                    class="thumb"
+                    :style="{
+                      backgroundImage: `url(${getRelatedArticleThumb(article.thumb)})`
+                    }"
+                  />
+                  <div class="title">{{ article.title }}</div>
+                </template>
+                <template #mobile>
                   <span class="title">{{ article.title }} - {{ article.description }}</span>
-                  <small class="tip">- 继续阅读</small>
-                </router-link>
-              </li>
-            </ul>
-          </template>
-        </responsive>
+                </template>
+              </responsive>
+            </router-link>
+          </li>
+        </ul>
       </template>
     </placeholder>
   </div>
@@ -98,14 +58,9 @@
 <script lang="ts">
   import { defineComponent, computed, ref, PropType } from 'vue'
   import { useEnhancer } from '/@/enhancer'
-  import { useSwiperRef } from '/@/todo/swiper'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
 
-  enum SwiperStatus {
-    Beginning = 'beginning',
-    Ended = 'ended'
-  }
   export default defineComponent({
     name: 'ArticleRelated',
     props: {
@@ -120,39 +75,6 @@
     },
     setup() {
       const { store, globalState, isMobile } = useEnhancer()
-      const [swiperContext, updateSwiperContext] = useSwiperRef()
-      const swiperStatus = ref<SwiperStatus | null>(SwiperStatus.Beginning)
-      const swiperOption = {
-        setWrapperSize: true,
-        simulateTouch: false,
-        mousewheel: {
-          sensitivity: 1
-        },
-        autoplay: {
-          delay: 3500,
-          disableOnInteraction: false,
-        },
-        observeParents: true,
-        grabCursor: true,
-        slidesPerView: 'auto'
-      }
-
-      const handleSwiperTransitionStart = () => {
-        const swiper = swiperContext.value?.$swiper.value
-        if (swiper?.isBeginning) {
-          swiperStatus.value = SwiperStatus.Beginning
-        } else if (swiper?.isEnd) {
-          swiperStatus.value = SwiperStatus.Ended
-        } else {
-          swiperStatus.value = null
-        }
-      }
-      const handlePrevSlide = () => {
-        swiperContext.value?.$swiper.value?.slidePrev()
-      }
-      const handleNextSlide = () => {
-        swiperContext.value?.$swiper.value?.slideNext()
-      }
 
       const getRelatedArticleThumb = (thumb: string) => {
         return getArchiveArticleThumbnailUrl(
@@ -163,13 +85,6 @@
 
       return {
         isMobile,
-        swiperOption,
-        SwiperStatus,
-        swiperStatus,
-        updateSwiperContext,
-        handleSwiperTransitionStart,
-        handlePrevSlide,
-        handleNextSlide,
         getArticleDetailRoute,
         getRelatedArticleThumb
       }
@@ -181,7 +96,6 @@
   @import 'src/assets/styles/init.scss';
 
   .related {
-    padding: $gap;
     overflow: hidden;
 
     .skeleton-list {
@@ -202,109 +116,63 @@
     }
 
     .articles {
-      display: flex;
-      align-items: center;
-      height: 9rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      width: 100%;
+      overflow: hidden;
+      margin-bottom: -$gap;
 
-      .swiper-navigation {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 2rem;
-        height: 100%;
-        opacity: .6;
-        background-color: $module-bg-darker-1;
-        @include radius-box($xs-radius);
-        @include visibility-transition();
+      .item {
+        float: left;
+        width: calc((100% - #{$gap * 2}) / 3);
+        margin-right: $gap;
+        margin-bottom: $gap;
+        @include radius-box($sm-radius);
+        @include common-bg-module();
 
-        .iconfont {
-          color: $text-secondary;
-          font-size: $font-size-h3;
-          font-weight: bold;
+        &:nth-child(3n) {
+          margin-right: 0;
+          margin-bottom: 0;
         }
 
-        &[disabled] {
-          .iconfont {
-            color: $text-disabled;
-          }
-        }
-
-        &:not(:disabled):hover {
-          opacity: 1;
-        }
-      }
-
-      .swiper {
-        width: 42rem;
-        height: 100%;
-
-        .swiper-wrapper {
-          height: 9rem;
+        .item-article {
+          display: block;
+          position: relative;
           overflow: hidden;
+          opacity: .8;
+          transition: opacity $transition-time-normal;
 
-          &[style*="300ms"] {
-            @include blur-filter('horizontal-small');
+          .thumb {
+            width: 100%;
+            height: 7.4rem;
+            background-color: $module-bg-darker-2;
+            background-size: cover;
+            background-position: 50% 40%;
+            transition: background-position $transition-time-fast * 2;
           }
 
-          > .swiper-slide.item {
-            width: auto;
-            margin-right: $gap;
+          .title {
+            display: block;
+            width: 100%;
+            padding: 0 1em;
+            line-height: 2.4;
+            text-align: center;
+            font-size: $font-size-small;
+            color: $text-secondary;
+            transition: color $transition-time-fast;
+            @include text-overflow();
+          }
 
-            &:last-child {
-              margin-right: 0;
+          &:hover {
+            opacity: 1;
+
+            .thumb {
+              background-position: 50% 50%;
             }
 
-            > .item-article {
-              display: block;
-              position: relative;
-              overflow: hidden;
-              border-radius: $xs-radius;
-              width: auto;
-              height: 100%;
-
-              > .thumb {
-                width: auto;
-                height: 100%;
-                opacity: .8;
-                transform: scale(1);
-                transition:
-                  transform $transition-time-normal,
-                  opacity $transition-time-fast;
-              }
-
-              > .title {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 2em;
-                line-height: 2em;
-                background-color: $module-bg-lighter;
-                opacity: .2;
-                transition:
-                  transform $transition-time-normal,
-                  opacity $transition-time-fast;
-
-                .text {
-                  display: block;
-                  padding: 0 0.5em;
-                  color: $link-color;
-                  text-align: center;
-                  font-size: $font-size-small;
-                  @include text-overflow();
-                }
-              }
-
-              &:hover {
-                .thumb {
-                  opacity: 1;
-                  transform: scale(1.05);
-                }
-
-                .title {
-                  opacity: 1;
-                }
-              }
+            .title {
+              color: $link-color;
             }
           }
         }
