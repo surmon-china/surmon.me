@@ -1,5 +1,5 @@
 <template>
-  <form id="publisher" class="publisher" name="comment">
+  <form :id="ElementID.Publisher" class="publisher" name="comment">
     <!-- profile editor -->
     <transition name="module" mode="out-in">
       <div v-if="!cached || editing" key="edit" class="user">
@@ -77,24 +77,22 @@
       </div>
       <div class="editor">
         <transition name="module">
-          <div v-if="!!replyPid" key="reply" class="will-reply">
+          <div v-if="Boolean(replyPid)" class="will-reply">
             <div class="reply-user">
-              <span>
+              <span class="reply-text">
                 <span v-i18n="LANGUAGE_KEYS.COMMENT_REPLY" />
-                <!-- TODO: CSS -->
-                <span>&nbsp;</span>
                 <button @click="scrollToComment(replyingComment.id)">
                   <strong>#{{ replyingComment.id }} @{{ replyingComment.author.name }}：</strong>
                 </button>
               </span>
               <button
                 class="cancel iconfont icon-cancel"
-                @click="cancelCommentReply"
+                @click.prevent="cancelCommentReply"
               />
             </div>
             <div
-              class="reply-preview markdown-content comment"
-              v-html="marked(replyingComment.content)"
+              class="reply-preview markdown-html comment"
+              v-html="parseMarkdown(replyingComment.content)"
             />
           </div>
         </transition>
@@ -111,7 +109,7 @@
   import { firstUpperCase } from '/@/transforms/text'
   import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { CommentEvent, getCommentElementId, humanizeGravatarUrl, scrollToElementAnchor } from './helper'
+  import { CommentEvent, ElementID, getCommentElementId, humanizeGravatarUrl, scrollToElementAnchor } from './helper'
 
   export default defineComponent({
     name: 'CommentPublisher',
@@ -138,7 +136,8 @@
       CommentEvent.SaveProfile,
       CommentEvent.EditProfile,
       CommentEvent.ClearProfile,
-      CommentEvent.CancelProfile
+      CommentEvent.CancelProfile,
+      CommentEvent.CancelReply
     ],
     setup(props, context) {
       const { i18n, store, isMobile } = useEnhancer()
@@ -147,9 +146,14 @@
           return props.profile
         },
         set(newProfile) {
+          console.log('------set profile', newProfile)
           context.emit(CommentEvent.SyncProfile, newProfile)
         }
       })
+
+      const parseMarkdown = (markdown: string) => {
+        return markdown
+      }
 
       const replyingComment = computed(() => {
         return store.state.comment.comments.data.find(
@@ -187,21 +191,25 @@
       }
 
       const cancelCommentReply = () => {
-        context.emit(CommentEvent.CancelProfile)
+        context.emit(CommentEvent.CancelReply)
       }
 
       const scrollToComment = (commentId: number) => {
-        scrollToElementAnchor(getCommentElementId(commentId))
+        scrollToElementAnchor(getCommentElementId(commentId), -300)
       }
 
       return {
         t: i18n.t,
+        ElementID,
         LANGUAGE_KEYS,
         firstUpperCase,
         humanizeGravatarUrl,
         isMobile,
         userProfile,
+        parseMarkdown,
         replyingComment,
+        cancelCommentReply,
+        scrollToComment,
         saveUserProfile,
         clearUserProfile
       }
@@ -343,38 +351,38 @@
         }
       }
 
-      > .editor {
+      .editor {
         flex-grow: 1;
         overflow: hidden;
 
-        > .will-reply {
+        .will-reply {
           font-size: $font-size-h6;
-          margin-bottom: 1em;
 
-          > .reply-user {
+          .reply-user,
+          .reply-preview {
+            margin-bottom: $gap;
+            @include radius-box($xs-radius);
+            @include background-transition();
+          }
+
+          .reply-user {
             display: flex;
             justify-content: space-between;
-            margin-bottom: $gap;
             padding: 0 $gap;
-            height: 2.6em;
             line-height: 2.6em;
-            background-color: $module-bg-hover;
-            @include background-transition();
-
-              &:hover {
-              background-color: $module-bg-darker-5;
+            background-color: $module-bg-darker-1;
+            &:hover {
+              background-color: $module-bg-hover;
             }
           }
 
-          > .reply-preview {
-            max-height: 10em;
+          .reply-preview {
             overflow: auto;
-            padding: $gap;
+            padding: $sm-gap $gap;
+            max-height: 10em;
             background-color: $module-bg-hover;
-            @include background-transition();
-
-              &:hover {
-              background-color: $module-bg-darker-5;
+            &:hover {
+              background-color: $module-bg-darker-3;
             }
           }
         }
