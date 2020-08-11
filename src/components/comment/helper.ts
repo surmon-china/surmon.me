@@ -1,6 +1,6 @@
 import { email as emailRegex } from '/@/constants/regex'
-import { getFileCDNUrl } from '/@/transforms/url'
 import { getGravatarByEmail } from '/@/transforms/thumbnail'
+import { getFileCDNUrl } from '/@/transforms/url'
 import { scrollTo } from '/@/utils/scroller'
 
 export const EMOJIS = [
@@ -14,21 +14,26 @@ export enum CommentEvent {
   Like = 'like',
   Sort = 'sort',
   Page = 'page',
+  CancelReply = 'cancel-reply',
   SyncProfile = 'update:profile',
   SaveProfile = 'save-profile',
   EditProfile = 'edit-profile',
   ClearProfile = 'clear-profile',
   CancelProfile = 'cancel-profile',
-  // pen
   TogglePreview = 'toggle-preview',
   Submit = 'submit'
+}
+
+export enum ElementID {
+  Warpper = 'comment-warpper',
+  Publisher = 'comment-publisher',
 }
 
 export const getCommentElementId = (commentId: string | number): string => {
   return `comment-item-${commentId}`
 }
 
-export const humanizeGravatarUrl = (gravatar?: string) => {
+export const humanizeGravatarUrl = (gravatar?: string | null) => {
   return gravatar || getFileCDNUrl('/images/comment/anonymous.jpg')
 }
 

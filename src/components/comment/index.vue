@@ -1,8 +1,8 @@
 <template>
   <div
-    id="comment-box"
-    class="comment-box"
+    :id="ElementID.Warpper"
     :class="{ mobile: isMobile }"
+    class="comment-box"
   >
     <comment-topbar
       :total="commentData.pagination?.total"
@@ -61,7 +61,7 @@
   import { SortType } from '/@/constants/state'
   import { USER } from '/@/constants/storage'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { getGravatarUrlByEmail, scrollToElementAnchor } from './helper'
+  import { ElementID, getGravatarUrlByEmail, scrollToElementAnchor } from './helper'
   import CommentTopbar from './topbar.vue'
   import CommentList from './list/index.vue'
   import CommentPagination from './pagination.vue'
@@ -162,7 +162,7 @@
           gravatar: null
         }
       }
-      // TODO: profile 也许需要独立才可以双向绑定
+      // TODO: profile 也许需要独立才可以双向绑定,cacheed 应该从 storage 读取
       const userState = reactive({ ...initUserState })
 
       const penState = reactive({
@@ -224,7 +224,7 @@
         //   GAEventTags.Comment
         // )
         state.replyPid = commentId
-        scrollToElementAnchor('post-box', -300)
+        scrollToElementAnchor(ElementID.Publisher, 300)
         // 激活光标
         // if (this.$refs.markdownInput) {
         //   this.$refs.markdownInput.focusPosition()
@@ -347,6 +347,7 @@
       })
 
       return {
+        ElementID,
         isMobile,
         isFetching,
         isPostingComment,
@@ -368,11 +369,10 @@
   })
 </script>
 
-<style lang="scss" src="./markdown.scss"></style>
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
-  #comment-box {
+  .comment-box {
     padding: $gap;
     @include common-bg-module();
     @include radius-box($lg-radius);

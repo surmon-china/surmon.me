@@ -23,17 +23,18 @@ const getUserLikeHistory = () => getAccesser(
   }
 )
 
-export const getPagesLike = () => computed(() => getUserLikeHistory().value.pages)
-export const getCommentsLike = () => computed(() => getUserLikeHistory().value.comments)
-export const likePage = (postId: number) => getPagesLike().value.push(postId)
-export const likeComment = (commentId: number) => getCommentsLike().value.push(commentId)
+export const usePageLike = (postId: number) => {
+  const likeHistory = getUserLikeHistory()
+  return {
+    isLiked: computed(() => likeHistory.value.pages.includes(postId)),
+    like: () => likeHistory.value.pages.push(postId)
+  }
+}
 
-export const isPageLiked = (postId: number) => computed(() => {
-  const pagesLike = getPagesLike()
-  return pagesLike.value.includes(postId)
-})
-
-export const isCommentLiked = (commentId: number) => computed(() => {
-  const commentsLike = getPagesLike()
-  return commentsLike.value.includes(commentId)
-})
+export const useCommentsLike = () => {
+  const likeHistory = getUserLikeHistory()
+  return {
+    isLiked: (commentId: number) => likeHistory.value.comments.includes(commentId),
+    like: (commentId: number) => likeHistory.value.comments.push(commentId)
+  }
+}

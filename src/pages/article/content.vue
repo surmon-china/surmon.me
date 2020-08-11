@@ -37,7 +37,7 @@
         <div class="knowledge">
           <h2 class="title">{{ article.title }}</h2>
           <div
-            class="markdown-content"
+            class="markdown-html"
             :id="contentElementIds.default"
             v-text="content.default"
           />
@@ -285,7 +285,7 @@
         font-size: $font-size-h2 * .95;
       }
 
-      .markdown-content {
+      .markdown-html {
         .google-auto-placed {
           margin-bottom: $sm-gap;
         }

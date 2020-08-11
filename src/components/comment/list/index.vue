@@ -61,7 +61,7 @@
   import { LOZAD_CLASS_NAME } from '/@/services/lozad'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/ga'
-  import { getCommentsLike } from '/@/transforms/state'
+  import { useCommentsLike } from '/@/transforms/state'
   import { CommentEvent } from '../helper'
   import CommentItem from './item.vue'
 
@@ -76,19 +76,16 @@
         default: false
       },
       comments: {
-        type: Array as PropType<Array<$TODO>>
+        type: Array as PropType<Array<$TODO>>,
+        required: true
       }
     },
     setup(props, context) {
       const { i18n, store, globalState, isMobile, isZhLang } = useEnhancer()
+      const { like: likeCommentStorage, isLiked: isCommentLiked } = useCommentsLike()
 
       const listElement = ref<HTMLElement>()
       const lozadObserver = ref<LozadObserver | null>(null)
-
-      const commentsLike = getCommentsLike()
-      const isCommentLiked = (commentId: number) => {
-        return commentsLike.value.includes(commentId)
-      }
 
       const observeLozad = () => {
         const lozadElements = listElement.value?.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
@@ -113,7 +110,7 @@
         context.emit(CommentEvent.Reply, commentId)
       }
 
-      const likeComment = (commentId: number) => {
+      const likeComment = async (commentId: number) => {
         // this.$ga.event(
         //   '欲赞评论',
         //   GAEventActions.Click,
@@ -122,19 +119,17 @@
         if (isCommentLiked(commentId)) {
           return false
         }
-        store
-          .dispatch(
+        try {
+          await store.dispatch(
             getNamespace(Modules.Comment, CommentModuleActions.PostCommentLike),
             commentId
           )
-          .then(_ => {
-            commentsLike.value.push(commentId)
-          })
-          .catch(error => {
-            const message = i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION)
-            console.warn(message, error)
-            alert(message)
-          })
+          likeCommentStorage(commentId)
+        } catch (error) {
+          const message = i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION)
+          console.warn(message, error)
+          alert(message)
+        }
       }
 
       onMounted(() => observeLozad)

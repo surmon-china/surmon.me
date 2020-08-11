@@ -52,7 +52,7 @@
           <i18n zh="：" en=":" />
         </p>
         <div
-          class="markdown-content comment"
+          class="markdown-html comment"
           v-html="parseMarkdown(comment.content)"
         />
       </div>
@@ -66,8 +66,9 @@
           class="like"
           :class="{
             liked: liked,
-            actived: !!comment.likes
+            actived: Boolean(comment.likes)
           }"
+          :disabled="liked"
           @click="likeComment(comment.id)"
         >
           <i class="iconfont icon-zan" />
@@ -164,7 +165,7 @@
       }
 
       const scrollToCommentItem = (commentId: number) => {
-        scrollToElementAnchor(getCommentElementId(commentId))
+        scrollToElementAnchor(getCommentElementId(commentId), -300)
       }
 
       return {
@@ -268,14 +269,15 @@
       > .cm-content {
         padding-right: $xs-gap;
         user-select: text;
+        font-size: $font-size-h6;
 
-        > .reply {
+        .reply {
+          display: flex;
+          align-items: center;
+          margin-top: $sm-gap;
+          margin-bottom: - $xs-gap;
           color: $text-disabled;
           font-weight: bold;
-
-          > * {
-            float: left;
-          }
 
           .text {
             margin-right: $xs-gap;
@@ -288,6 +290,10 @@
               color: $link-color-hover;
             }
           }
+        }
+
+        .markdown-html {
+          margin: $sm-gap 0;
         }
       }
 

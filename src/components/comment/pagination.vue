@@ -1,6 +1,6 @@
 <template>
   <transition name="module">
-    <div v-if="!fetching && pagination.total_page > 1" class="pagination">
+    <div v-if="!fetching && pagination?.total_page > 1" class="pagination">
       <ul class="pagination-list">
         <li class="item prev">
           <span class="symbol">-</span>

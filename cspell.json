@@ -29,7 +29,8 @@
     "scrollbar",
     "scroller",
     "swiper",
-    "wwwlogs"
+    "wwwlogs",
+    "warpper"
   ],
   "flagWords": []
 }

@@ -10,7 +10,7 @@
       />
       <transition name="module">
         <div
-          class="markdown-preview markdown-content comment"
+          class="markdown-preview markdown-html comment"
           v-if="preview"
           v-html="previewContent"
         />

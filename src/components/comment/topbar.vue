@@ -20,7 +20,7 @@
           </div>
           <button
             class="like"
-            :class="{ liked: _isPageLiked }"
+            :class="{ liked: isPageLiked }"
             @click="handleLikePage"
           >
             <i class="iconfont icon-like" />
@@ -60,7 +60,7 @@
   import { getNamespace, Modules } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { OptionModuleActions } from '/@/store/option'
-  import { isPageLiked, likePage } from '/@/transforms/state'
+  import { usePageLike } from '/@/transforms/state'
   import { SortType, CommentPostType } from '/@/constants/state'
   import { LANGUAGE_KEYS } from '/@/language/key'
 
@@ -95,7 +95,7 @@
     ],
     setup(props, context) {
       const { i18n, store, isMobile, isZhLang } = useEnhancer()
-      const _isPageLiked = isPageLiked(props.postId)
+      const { isLiked: isPageLiked, like: likePage } = usePageLike(props.postId)
 
       const handleSortList = (sort: SortType) => {
         if (sort !== props.sort) {
@@ -103,8 +103,8 @@
         }
       }
 
-      const handleLikePage = () => {
-        if (_isPageLiked.value) {
+      const handleLikePage = async () => {
+        if (isPageLiked.value) {
           return false
         }
         // this.$ga.event(
@@ -112,18 +112,19 @@
         //   GAEventActions.Click,
         //   GAEventTags.Comment
         // )
-        store.dispatch(
-          props.postId === CommentPostType.Guestbook
-            ? getNamespace(Modules.Option, OptionModuleActions.PostSiteLike)
-            : getNamespace(Modules.Article, ArticleModuleActions.PostArticleLike),
-          props.postId
-        ).then(() => {
-          likePage(props.postId)
-        }).catch(error => {
+        try {
+          await store.dispatch(
+            props.postId === CommentPostType.Guestbook
+              ? getNamespace(Modules.Option, OptionModuleActions.PostSiteLike)
+              : getNamespace(Modules.Article, ArticleModuleActions.PostArticleLike),
+            props.postId
+          )
+          likePage()
+        } catch (error) {
           const message = i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION)
           console.warn(message, error)
           alert(message)
-        })
+        }
       }
 
       const handleSponsor = () => {
@@ -144,7 +145,7 @@
         LANGUAGE_KEYS,
         isMobile,
         isZhLang,
-        _isPageLiked,
+        isPageLiked,
         handleSponsor,
         handleLikePage,
         handleSortList
