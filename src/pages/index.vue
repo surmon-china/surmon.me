@@ -19,6 +19,7 @@
   import Carrousel from '/@/components/archive/carrousel.vue'
   import Announcement from '/@/components/archive/announcement.vue'
   import ArticleList from '/@/components/archive/list.vue'
+  import { nextScreen } from '/@/utils/effects'
 
   export default defineComponent({
     name: 'Index',
@@ -41,8 +42,12 @@
         params
       )
 
-      const loadmoreArticles = () => {
-        fetchArticles({ page: article.value.data.pagination?.current_page + 1 })
+      const loadmoreArticles = async () => {
+        const targetPage = article.value.data.pagination?.current_page + 1
+        await fetchArticles({ page: targetPage })
+        if (targetPage > 1) {
+          nextScreen()
+        }
       }
 
       await Promise.all([

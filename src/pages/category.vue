@@ -25,6 +25,7 @@
   import { getExtendsValue } from '/@/transforms/state'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
+  import { nextScreen } from '/@/utils/effects'
 
   export default defineComponent({
     name: 'CategoryPage',
@@ -37,8 +38,8 @@
     //   const title = slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
     //   const isEnLang = this.$store.getters['global/isEnLang']
     //   const zhTitle = isEnLang ? '' : `${this.$i18n.nav[slug]} | `
-    //   return { 
-    //     title: `${zhTitle}${title} | Category` 
+    //   return {
+    //     title: `${zhTitle}${title} | Category`
     //   }
     // },
     async setup() {
@@ -55,11 +56,17 @@
         params
       )
 
-      const loadmoreArticles = () => fetchArticles({
-        ...route.params,
-        category_slug: route.params.category_slug,
-        page: article.value.data.pagination.current_page + 1
-      })
+      const loadmoreArticles = async () => {
+        const targetPage = article.value.data.pagination?.current_page + 1
+        await fetchArticles({
+          ...route.params,
+          category_slug: route.params.category_slug,
+          page: targetPage
+        })
+        if (targetPage > 1) {
+          nextScreen()
+        }
+      }
 
       await Promise.all([
         fetchCategories(),

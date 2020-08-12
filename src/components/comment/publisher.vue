@@ -81,8 +81,8 @@
             <div class="reply-user">
               <span class="reply-text">
                 <span v-i18n="LANGUAGE_KEYS.COMMENT_REPLY" />
-                <button @click="scrollToComment(replyingComment.id)">
-                  <strong>#{{ replyingComment.id }} @{{ replyingComment.author.name }}：</strong>
+                <button class="reply-user-name" @click="scrollToComment(replyingComment.id)">
+                  #{{ replyingComment.id }} @{{ replyingComment.author.name }}：
                 </button>
               </span>
               <button
@@ -373,6 +373,12 @@
             background-color: $module-bg-darker-1;
             &:hover {
               background-color: $module-bg-hover;
+            }
+
+            .reply-user-name {
+              margin-left: $sm-gap;
+              display: inline;
+              font-weight: bold;
             }
           }
 

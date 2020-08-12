@@ -31,28 +31,34 @@ const createThemeStore = (initTheme: Theme) => {
       : Theme.Dark
   )
   const resetOnClient = () => {
+    // history
     const historyTheme = getStorageTheme()
     if (historyTheme) {
-      set(
-        historyTheme === Theme.Dark
-          ? Theme.Dark
-          : Theme.Default
+      set(historyTheme === Theme.Dark
+        ? Theme.Dark
+        : Theme.Default
       )
-    } else {
-      const darkQuery = "(prefers-color-scheme: dark)"
-      const lightQuery = "(prefers-color-scheme: light)"
-      const isDarkMode = window.matchMedia(darkQuery).matches
-      const isLightMode = window.matchMedia(lightQuery).matches
-      const isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+      return
+    }
 
-      if (isDarkMode) {
-        set(Theme.Dark)
-      } else if (isLightMode) {
-        set(Theme.Default)
-      } else if (isNotSpecified) {
-        window.matchMedia(darkQuery).addListener(({ matches }) => matches && set(Theme.Dark))
-        window.matchMedia(lightQuery).addListener(({ matches }) => matches && set(Theme.Default))
-      }
+    // auto
+    const darkQuery = "(prefers-color-scheme: dark)"
+    const lightQuery = "(prefers-color-scheme: light)"
+    const isDarkMode = window.matchMedia(darkQuery).matches
+    const isLightMode = window.matchMedia(lightQuery).matches
+    const isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+    if (isNotSpecified) {
+      window.matchMedia(darkQuery).addListener(({ matches }) => matches && set(Theme.Dark))
+      window.matchMedia(lightQuery).addListener(({ matches }) => matches && set(Theme.Default))
+      return
+    }
+    if (isDarkMode) {
+      set(Theme.Dark)
+      return
+    }
+    if (isLightMode) {
+      set(Theme.Default)
+      return
     }
   }
 

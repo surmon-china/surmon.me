@@ -60,7 +60,7 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
-      background-color: rgba($black-light, 0.5);
+      background-color: rgba($grey, 0.5);
       @include visibility-transition();
       @include backdrop-blur();
 

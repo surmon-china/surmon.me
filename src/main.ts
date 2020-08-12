@@ -27,6 +27,8 @@ export interface ICreaterContext {
 }
 
 export const createVueApp = (context: ICreaterContext) => {
+  // TODO: HACK
+  process.env.VUE_ENV = context.target
   const isServer = context.target === VueEnv.Server
   const language = isServer
     ? context.request?.headers['accept-language'] || ''
