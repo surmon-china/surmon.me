@@ -34,13 +34,27 @@
             <span class="text">{{ currentWallpaper.bsTitle }}</span>
           </a>
         </transition>
-        <button class="button" title="上一幅" :disabled="!canNext" @click="index++">
+        <button
+          class="button"
+          title="Prev"
+          :disabled="index <= 0"
+          @click="index--"
+        >
           <i class="iconfont icon-prev"></i>
         </button>
-        <button class="button" title="下一幅" :disabled="!canPrev" @click="index--">
+        <button
+          class="button"
+          title="Next"
+          :disabled="index >= wallpapers.length - 1"
+          @click="index++"
+        >
           <i class="iconfont icon-next"></i>
         </button>
-        <button class="button" title="春尽江南" @click="close">
+        <button
+          class="button"
+          title="Close"
+          @click="handleClose"
+        >
           <i class="iconfont icon-cancel"></i>
         </button>
       </div>
@@ -49,50 +63,28 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, watch, toRef } from 'vue'
-  import { useStore, getNamespace, Modules } from '/@/store'
-  import { WallpaperModuleGetters, WallpaperModuleActions } from '/@/store/wallpaper'
-  import { useGlobalState } from '/@/state'
-  import { useI18n } from '/@/services/i18n'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { GAEventActions, GAEventTags } from '/@/constants/ga'
+  import { defineComponent, ref, computed } from 'vue'
+  import { useEnhancer } from '/@/enhancer'
+  import { getNamespace, Modules } from '/@/store'
+  import { WallpaperModuleGetters } from '/@/store/wallpaper'
 
   export default defineComponent({
     name: 'WallpaperWall',
     setup() {
-      const i18n = useI18n()
-      const store = useStore()
-      const globalState = useGlobalState()
+      const { store, globalState, i18n } = useEnhancer()
       const index = ref(0)
-
-      const wallpapers = computed<any[]>(() => {
-        return store.getters[
-          getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Parpers)
-        ](i18n.language)
-      })
+      const wallpapers = computed<any[]>(() => store.getters[
+        getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Papers)
+      ](i18n.language.value))
       const currentWallpaper = computed(() => {
         return wallpapers.value?.length && wallpapers.value?.[index.value]
       })
 
-      const canPrev = computed(() => index.value > 0)
-      const canNext = computed(() => wallpapers.value ? (index.value < wallpapers.value.length - 1) : false)
-
-      watch(
-        () => i18n.language,
-        language => {
-          store.dispatch(
-            getNamespace(Modules.Wallpaper, WallpaperModuleActions.FetchPapers),
-            language
-          )
-        },
-        { immediate: true, flush: 'post' }
-      )
-
       return {
-        close: globalState.switchTogglers.wallpaper,
+        index,
+        wallpapers,
         currentWallpaper,
-        canPrev,
-        canNext
+        handleClose: globalState.switchTogglers.wallpaper
       }
     }
   })
@@ -110,10 +102,11 @@
     align-items: center;
     width: 88vw;
     height: 88vh;
-    border: solid $sm-gap $module-bg-hover;
+    border: solid $sm-gap $module-bg;
     background-color: $module-bg;
+    @include radius-box($xs-radius);
 
-    > .picture-box {
+    .picture-box {
       width: 100%;
       height: 100%;
       overflow: hidden;
@@ -121,22 +114,21 @@
       background-size: cover;
     }
 
-    > .story-box {
+    .story-box {
       position: absolute;
       padding: 2rem 4rem;
-      background-color: $module-bg-hover;
+      background-color: $module-bg-translucent;
       bottom: 0;
       width: 100%;
       height: auto;
-      color: $text;
 
-      > .title,
-      > .sub-title,
-      > .desc {
+      .title,
+      .sub-title,
+      .desc {
         @include title-shadow();
       }
 
-      > .title {
+      .title {
         margin-top: 0;
 
         &.lonely {
@@ -144,32 +136,41 @@
         }
       }
 
-      > .desc {
+      .desc {
         line-height: 2rem;
+        margin-bottom: $gap * 2;
       }
 
-      > .tools {
-        color: $text;
-
-        > .location,
-        > .button {
+      .tools {
+        .location,
+        .button {
           display: block;
           float: left;
-          height: 3rem;
-          line-height: 3rem;
+          line-height: 2.5;
           padding: 0 $gap;
           margin-right: $gap;
           background-color: $module-bg;
           @include background-transition();
+          @include radius-box($xs-radius);
 
-          &:hover {
-            background-color: $module-bg-darker-4;
+          &[disabled] {
+            opacity: .6;
+          }
+
+          &:not([disabled]) {
+            &:hover {
+              background-color: $module-bg-darker-1;
+            }
           }
         }
 
-        > .button {
-          &[disabled] {
-            opacity: .6;
+        .location {
+          .iconfont {
+            margin-right: $xs-gap;
+          }
+
+          .text {
+            border-bottom: 1px solid $text;
           }
         }
       }

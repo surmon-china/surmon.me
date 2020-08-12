@@ -20,13 +20,13 @@ export enum ArticleModuleListMutations {
   // list
   SetListData = 'setListData',
   SetMoreListData = 'setMoreListData',
-  SetListFetchig = 'setListFetchig',
+  SetListFetching = 'setListFetching',
   // hot list
   SetHotListData = 'setHotListData',
   SetHotListFetched = 'setHotListFetched',
   // detail
   SetDetailData = 'setDetailData',
-  SetDetailFetchig = 'setDetailFetchig',
+  SetDetailFetching = 'setDetailFetching',
   IncrementArticleLikes = 'IncrementArticleLikes'
 }
 
@@ -59,7 +59,7 @@ const state = () => ({
 
 const mutations: MutationTree<ArticleState> = {
   // 文章列表
-  [ArticleModuleListMutations.SetListFetchig](state, fetching: boolean) {
+  [ArticleModuleListMutations.SetListFetching](state, fetching: boolean) {
     state.list.fetching = fetching
   },
   [ArticleModuleListMutations.SetListData](state, articleData) {
@@ -79,7 +79,7 @@ const mutations: MutationTree<ArticleState> = {
   },
 
   // 文章详情
-  [ArticleModuleListMutations.SetDetailFetchig](state, fetching: boolean) {
+  [ArticleModuleListMutations.SetDetailFetching](state, fetching: boolean) {
     state.detail.fetching = fetching
   },
   [ArticleModuleListMutations.SetDetailData](state, article) {
@@ -105,7 +105,7 @@ const actions: ActionTree<ArticleState, IRootState> = {
     if (isRestart) {
       commit(ArticleModuleListMutations.SetListData, getDefaultListData())
     }
-    commit(ArticleModuleListMutations.SetListFetchig, true)
+    commit(ArticleModuleListMutations.SetListFetching, true)
 
     return http
       .get<any>(ARTICLE_API_PATH, { params })
@@ -116,19 +116,9 @@ const actions: ActionTree<ArticleState, IRootState> = {
             : ArticleModuleListMutations.SetListData,
           response.result
         )
-        return response
-        /*
-        if (isLoadMore && isClient) {
-          Vue.nextTick(() => {
-            scrollTo(window.scrollY + window.innerHeight * 0.8, 300, {
-              easing: Easing['ease-in']
-            })
-          })
-        }
-        */
       })
       .finally(() => {
-        commit(ArticleModuleListMutations.SetListFetchig, false)
+        commit(ArticleModuleListMutations.SetListFetching, false)
       })
   },
 
@@ -160,7 +150,7 @@ const actions: ActionTree<ArticleState, IRootState> = {
     params.delay = params.delay || 0
     const delay = fetchDelay(params.delay)
 
-    commit(ArticleModuleListMutations.SetDetailFetchig, true)
+    commit(ArticleModuleListMutations.SetDetailFetching, true)
     commit(ArticleModuleListMutations.SetDetailData, null)
     return http
       .get(`${ARTICLE_API_PATH}/${params.article_id}`)
@@ -173,7 +163,7 @@ const actions: ActionTree<ArticleState, IRootState> = {
         })
       })
       .finally(() => {
-        commit(ArticleModuleListMutations.SetDetailFetchig, false)
+        commit(ArticleModuleListMutations.SetDetailFetching, false)
       })
   },
 

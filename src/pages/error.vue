@@ -60,7 +60,7 @@
       > .error-code,
       > .error-link,
       > .error-wrapper-message {
-        color: $black-light;
+        /* color: $black-light; */
         animation: error-item ease-out both .6s $transition-time-slow;
       }
 

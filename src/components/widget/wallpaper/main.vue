@@ -17,11 +17,10 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, toRef } from 'vue'
-  import { useTheme, Theme } from '/@/services/theme'
-  import { useI18n } from '/@/services/i18n'
-  import { useGlobalState } from '/@/state'
-  import { useStore, getNamespace, Modules } from '/@/store'
+  import { defineComponent, ref, computed, watch, toRef, onMounted } from 'vue'
+  import { Theme } from '/@/services/theme'
+  import { useEnhancer } from '/@/enhancer'
+  import { getNamespace, Modules } from '/@/store'
   import { WallpaperModuleGetters, WallpaperModuleActions } from '/@/store/wallpaper'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/ga'
@@ -33,16 +32,13 @@
       Wallpapers
     },
     setup() {
-      const i18n = useI18n()
-      const theme = useTheme()
-      const store = useStore()
-      const globalState = useGlobalState()
-      const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
+      const { store, i18n, globalState, isDarkTheme } = useEnhancer()
       const isOnWallpaper = toRef(globalState.switchBox, 'wallpaper')
-      const wallpapers = computed<any[]>(() => {
-        return store.getters[getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Parpers)](i18n.language)
-      })
-      
+      const wallpapers = computed<any[]>(() => store.getters[
+        getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Papers)
+      ](i18n.language.value))
+      console.log('-----wallpapers', wallpapers)
+
       const toggleWallpaper = () => {
         // this.$ga.event(
         //   '今日壁纸',
@@ -55,6 +51,19 @@
           alert('可能 Bing 又被墙了吧我有什么办法！')
         }
       }
+
+      onMounted(() => {
+        watch(
+          () => i18n.language.value,
+          language => {
+            store.dispatch(
+              getNamespace(Modules.Wallpaper, WallpaperModuleActions.FetchPapers),
+              language
+            )
+          },
+          { immediate: true, flush: 'post' }
+        )
+      })
 
       return {
         LANGUAGE_KEYS,

@@ -12,6 +12,12 @@ body {
   line-height: $line-height-base;
   user-select: none;
   -webkit-font-smoothing: antialiased;
+  @include scrollbar-style(
+    $size: $sm-gap,
+    $bg: rgba($grey, 60%),
+    $thumb-bg: darken($grey, 20%),
+    $thumb-bg-hover: darken($grey, 40%)
+  );
 
   * {
     @include scrollbar-style(
