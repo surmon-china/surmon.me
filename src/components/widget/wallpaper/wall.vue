@@ -31,7 +31,7 @@
             :title="currentWallpaper.bsTitle"
           >
             <i class="iconfont icon-location"></i>
-            <span class="text">{{ currentWallpaper.bsTitle }}</span>
+            <span class="text" v-if="currentWallpaper.bsTitle">{{ currentWallpaper.bsTitle }}</span>
           </a>
         </transition>
         <button
@@ -67,7 +67,6 @@
   import { useEnhancer } from '/@/enhancer'
   import { getNamespace, Modules } from '/@/store'
   import { WallpaperModuleGetters } from '/@/store/wallpaper'
-
   export default defineComponent({
     name: 'WallpaperWall',
     setup() {
@@ -102,9 +101,6 @@
     align-items: center;
     width: 88vw;
     height: 88vh;
-    border: solid $sm-gap $module-bg;
-    background-color: $module-bg;
-    @include radius-box($xs-radius);
 
     .picture-box {
       width: 100%;
@@ -130,7 +126,6 @@
 
       .title {
         margin-top: 0;
-
         &.lonely {
           margin-bottom: 3rem;
         }
@@ -165,11 +160,8 @@
         }
 
         .location {
-          .iconfont {
-            margin-right: $xs-gap;
-          }
-
           .text {
+            margin-left: $xs-gap;
             border-bottom: 1px solid $text;
           }
         }

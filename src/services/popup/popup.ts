@@ -24,17 +24,18 @@ export const PopupUIProps = {
   scrollClose: {
     type: Boolean as PropType<boolean>,
     default: true
-  },
-  closeButton: {
-    type: Boolean as PropType<boolean>,
-    default: true
   }
 }
 
 export const getOtherProps = (
-  { border, maskClose, scrollClose, closeButton, ...others }
+  { border, maskClose, scrollClose, ...others }
   : ExtractPropTypes<typeof PopupUIProps>
 ) => others
+
+enum Event {
+  Close = 'close',
+  UpdateVisible = 'update:visible'
+}
 
 export default defineComponent({
   name: 'Popup',
@@ -51,23 +52,29 @@ export default defineComponent({
     // UI options
     ...PopupUIProps
   },
+  emits: [
+    Event.Close,
+    Event.UpdateVisible
+  ],
   setup(props, context) {
     const popup = usePopup()
-    const { clone, visible, ...others } = props
 
     watch(
       () => props.visible,
-      visible => visible
-        ? popup.visible(others)
-        : popup.hidden()
+      visible => {
+        const { clone, visible: v, ...popupOptions } = props
+        visible
+          ? popup.visible(popupOptions)
+          : popup.hidden()
+      }
     )
 
     watch(
       () => popup.state.visibility,
       visibility => {
         if (!visibility) {
-          context.emit('update:visible', false)
-          context.emit('close')
+          context.emit(Event.UpdateVisible, false)
+          context.emit(Event.Close)
         }
       }
     )

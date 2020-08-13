@@ -30,9 +30,14 @@
               <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIKE_COUNT" />
             </template>
           </button>
-          <button class="sponsor" @click="handleSponsor">
-            <i class="iconfont icon-hao" />
-          </button>
+          <desktop-only>
+            <button class="sponsor" @click="handleSponsor">
+              <i class="iconfont icon-hao" />
+            </button>
+            <popup v-model:visible="isVisibleSponsor" :border="false">
+              <iframe class="sponsor-modal" src="/sponsor" />
+            </popup>
+          </desktop-only>
         </div>
         <div class="sort">
           <button
@@ -60,8 +65,9 @@
   import { getNamespace, Modules } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { OptionModuleActions } from '/@/store/option'
-  import { usePageLike } from '/@/transforms/state'
   import { SortType, CommentPostType } from '/@/constants/state'
+  import { usePageLike } from '/@/transforms/state'
+  import { getFileCDNUrl } from '/@/transforms/url'
   import { LANGUAGE_KEYS } from '/@/language/key'
 
   export enum Events {
@@ -96,6 +102,7 @@
     setup(props, context) {
       const { i18n, store, isMobile, isZhLang } = useEnhancer()
       const { isLiked: isPageLiked, like: likePage } = usePageLike(props.postId)
+      const isVisibleSponsor = ref(false)
 
       const handleSortList = (sort: SortType) => {
         if (sort !== props.sort) {
@@ -133,11 +140,7 @@
         //   GAEventActions.Click,
         //   GAEventTags.Comment
         // )
-        // TODO: 可以使用 popup 组件？
-        // this.isMobile
-          // ? window.utils.openImgPopup(getFileCDNUrl('/images/sponsor-mobile.png'))
-          // sponsor 业务不使用 CDN
-          // : window.utils.openIframePopup('/sponsor', 'sponsor')
+        isVisibleSponsor.value = true
       }
 
       return {
@@ -145,6 +148,7 @@
         LANGUAGE_KEYS,
         isMobile,
         isZhLang,
+        isVisibleSponsor,
         isPageLiked,
         handleSponsor,
         handleLikePage,
@@ -157,13 +161,19 @@
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
+  .sponsor-modal {
+    width: 600px;
+    height: 200px;
+    border-radius: $sm-radius !important;
+  }
+
   .topbar {
     $size: 2em;
     display: flex;
     padding-bottom: $gap;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid $module-bg-darker-1;
+    border-bottom: 1px dashed $module-bg-darker-1;
 
     .statistics-skeleton {
       display: flex;
@@ -232,7 +242,7 @@
         }
       }
 
-      > .sponsor {
+      .sponsor {
         color: $text-reversal;
         background-color: $primary-lighter;
         @include background-transition();
