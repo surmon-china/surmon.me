@@ -174,10 +174,10 @@
   }
 
   .list-empty {
+    color: $text-secondary;
     font-weight: bold;
     text-align: center;
-    height: 6rem;
-    line-height: 6rem;
+    line-height: 8rem;
   }
 
   .comment-list {

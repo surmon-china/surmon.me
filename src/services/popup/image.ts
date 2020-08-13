@@ -5,7 +5,7 @@
  * @example <popup-image src="xxx" class="image" />
 */
 
-import { h, defineComponent, watchEffect, Teleport, Fragment } from 'vue'
+import { h, defineComponent } from 'vue'
 import { PopupUIProps, getOtherProps } from './popup'
 import { usePopup } from '.'
 
@@ -15,29 +15,29 @@ export default defineComponent({
     src: String,
     ...PopupUIProps
   },
-  // eslint-disable-next-line vue/no-setup-props-destructure
-  setup({ src, ...popupProps }, context) {
+  setup(props, context) {
     const popup = usePopup()
-    const imageProps = getOtherProps(popupProps)
-    const imageAttrs = {
-      ...imageProps,
-      ...context.attrs
-    }
 
     // Image -> click -> visible modal, ignore (clone/visible)
     return () => {
-      if (src) {
-        return h('img', {
-          ...imageAttrs,
-          src,
-          onClick(...args) {
-            (imageProps as any)?.onClick?.(...args)
-            popup?.vImage(src, imageAttrs, popupProps)
-          }
-        })
+      const { src, ...popupProps } = props
+      if (!src) {
+        return null
       }
 
-      return null
+      const imageProps = getOtherProps(props)
+      const imageAttrs = {
+        ...imageProps,
+        ...context.attrs
+      }
+      return h('img', {
+        ...imageAttrs,
+        src,
+        onClick(...args) {
+          (imageProps as any)?.onClick?.(...args)
+          popup?.vImage(src, imageAttrs, popupProps)
+        }
+      })
     }
   }
 })

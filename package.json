@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "3.0.0.beta-0.1",
+  "version": "3.0.0",
   "description": "Surmon.me blog",
   "author": {
     "name": "Surmon",
@@ -38,11 +38,9 @@
     "lodash": "^4.17.19",
     "lozad": "^1.15.0",
     "marked": "1.1.1",
-    "naivebayes": "^0.5.0",
     "normalize.css": "^8.0.1",
     "querystring": "^0.2.0",
     "request": "^2.88.2",
-    "segmentit": "^2.0.3",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "sticky-events": "^3.4.8",

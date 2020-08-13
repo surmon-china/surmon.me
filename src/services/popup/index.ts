@@ -18,7 +18,6 @@ declare global {
 
 const PopupSymbol = Symbol('popup')
 const createPopupStore = () => {
-
   const image = reactive({
     src: null as null | string,
     attrs: null as null | object
@@ -31,7 +30,6 @@ const createPopupStore = () => {
     border: true,
     maskClose: true,
     scrollClose: true,
-    closeButton: true,
     // inner
     $container: null as null | HTMLElement
   })

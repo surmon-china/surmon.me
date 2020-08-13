@@ -223,7 +223,7 @@
   .publisher {
     display: block;
     padding-top: $gap;
-    border-top: 1px solid $module-bg-darker-1;
+    border-top: 1px dashed $module-bg-darker-1;
 
     > .user {
       width: 100%;
