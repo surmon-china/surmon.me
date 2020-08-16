@@ -22,8 +22,8 @@
   import { useEnhancer } from '/@/enhancer'
   import { getNamespace, Modules } from '/@/store'
   import { WallpaperModuleGetters, WallpaperModuleActions } from '/@/store/wallpaper'
+  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { GAEventActions, GAEventTags } from '/@/constants/ga'
   import Wallpapers from './wall.vue'
 
   export default defineComponent({
@@ -32,24 +32,22 @@
       Wallpapers
     },
     setup() {
-      const { store, i18n, globalState, isDarkTheme } = useEnhancer()
+      const { store, i18n, gtag, globalState, isDarkTheme } = useEnhancer()
       const isOnWallpaper = toRef(globalState.switchBox, 'wallpaper')
       const wallpapers = computed<any[]>(() => store.getters[
         getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Papers)
       ](i18n.language.value))
-      console.log('-----wallpapers', wallpapers)
 
       const toggleWallpaper = () => {
-        // this.$ga.event(
-        //   '今日壁纸',
-        //   GAEventActions.Toggle,
-        //   GAEventTags.Tool
-        // )
         if (wallpapers.value?.length) {
           globalState.switchTogglers.wallpaper()
         } else {
           alert('可能 Bing 又被墙了吧我有什么办法！')
         }
+        gtag?.event('今日壁纸', {
+          event_category: GAEventActions.Toggle,
+          event_label: GAEventTags.Tool
+        })
       }
 
       onMounted(() => {
@@ -96,7 +94,7 @@
       }
     }
 
-    > .switcher {
+    .switcher {
       width: 4rem;
       height: 8rem;
       opacity: .6;
@@ -125,7 +123,7 @@
         border-bottom-right-radius: $xs-radius;
       }
 
-      > .down {
+      .down {
         top: 0;
         left: $offset;
         z-index: $z-index-normal + 1;
@@ -133,14 +131,14 @@
         animation: wallpaper-y 1.5s .75s infinite;
       }
 
-      > .up {
+      .up {
         top: 0;
         left: 0;
         z-index: $z-index-normal + 2;
         background-color: $yellow;
         animation: wallpaper-y 1.5s 0s infinite;
 
-        > .title {
+        .title {
           display: block;
           width: 100%;
           height: 100%;

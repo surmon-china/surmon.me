@@ -64,11 +64,10 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { useI18n } from '/@/services/i18n'
-  import { useGlobalState } from '/@/state'
+  import { useEnhancer } from '/@/enhancer'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { GAEventActions, GAEventTags } from '/@/constants/ga'
+  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import * as APP_CONFIG from '/@/config/app.config'
 
   export default defineComponent({
@@ -79,16 +78,13 @@
     //   }
     // },
     setup() {
-      const i18n = useI18n()
-      const globalState = useGlobalState()
-      const isMobile = computed(() => globalState.userAgent.isMobile)
+      const { i18n, gtag, isMobile } = useEnhancer()
 
       const handleAppAction = (name: string) => {
-        // this.$ga.event(
-        //   name,
-        //   GAEventActions.Click,
-        //   GAEventTags.AppPage
-        // )
+        gtag?.event(name, {
+          event_category: GAEventActions.Click,
+          event_label: GAEventTags.AppPage
+        })
       }
 
       const handleAndroidApp = (event) => {

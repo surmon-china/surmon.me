@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, inject, ref, computed, reactive } from 'vue'
+import { App, inject, ref, computed, reactive, readonly } from 'vue'
 import { uaParser, isZhUser } from '/@/transforms/ua'
 
 export enum ImageExt {
@@ -42,17 +42,16 @@ export const createGlobalState = (config: GlobalStateConfig) => {
 
   // 页面的栏目展示类型
   const layoutValue = ref(LayoutColumn.Normal)
-  const setLayoutColumn = (layout: LayoutColumn) => {
-    layoutValue.value = layout
-  }
-  const layoutColumn = {
-    layout: layoutValue,
-    setLayoutColumn,
-    isNormalLayout: computed(() => layoutValue.value === LayoutColumn.Normal),
-    isWideLayout: computed(() => layoutValue.value === LayoutColumn.Wide),
-    isFullColumeLayout: computed(() => layoutValue.value === LayoutColumn.Full),
-    isFullPageLayout: computed(() => layoutValue.value === LayoutColumn.Page)
-  }
+  const layoutColumn = readonly({
+    layout: readonly(layoutValue),
+    setValue(layout: LayoutColumn) {
+      layoutValue.value = layout
+    },
+    isNormal: computed(() => layoutValue.value === LayoutColumn.Normal),
+    isWide: computed(() => layoutValue.value === LayoutColumn.Wide),
+    isFullColumn: computed(() => layoutValue.value === LayoutColumn.Full),
+    isFullPage: computed(() => layoutValue.value === LayoutColumn.Page)
+  })
 
   // Aliyun OSS: https://oss.console.aliyun.com/bucket/oss-cn-hangzhou/surmon-static/process/img
   // MARK: 微信/Safari/移动端无法精确判断兼容性，使用 jpg 格式
@@ -89,7 +88,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     resetLanguageOnClient()
   }
 
-  const globalState = {
+  const globalState = readonly({
     userAgent,
     layoutColumn,
     imageExt,
@@ -105,7 +104,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
       },
     },
     resetOnClient
-  }
+  })
 
   return {
     ...globalState,

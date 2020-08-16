@@ -326,10 +326,10 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { useGlobalState } from '/@/state'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { GAEventActions, GAEventTags } from '/@/constants/ga'
+  import { useEnhancer } from '/@/enhancer'
   import { getFileCDNUrl } from '/@/transforms/url'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import AD_CONFIG from '/@/config/ad.config'
   import * as APP_CONFIG from '/@/config/app.config'
 
@@ -346,36 +346,32 @@
     },
     */
     setup(props) {
-      const globalState = useGlobalState()
-      const isMobile = computed(() => globalState.userAgent.isMobile)
+      const { gtag, globalState, isMobile } = useEnhancer()
       const gravatar = computed(() => {
         return getFileCDNUrl('/images/gravatar.jpg')
         // return this.$store.state.global.adminInfo.gravatar || getFileCDNUrl('/images/gravatar.jpg')
       })
 
       const handleHoverFollowMe = () => {
-        // this.$ga.event(
-        //   '加微信码',
-        //   GAEventActions.View,
-        //   GAEventTags.AboutPage
-        // )
+        gtag?.event('加微信码', {
+          event_category: GAEventActions.View,
+          event_label: GAEventTags.AboutPage
+        })
       }
 
       const handleTouchSponsor = () => {
-        // this.$ga.event(
-        //   '赞赏 Sponsor',
-        //   GAEventActions.Click,
-        //   GAEventTags.AboutPage
-        // )
+        gtag?.event('赞赏 Sponsor', {
+          event_category: GAEventActions.Click,
+          event_label: GAEventTags.AboutPage
+        })
       }
 
       const openMyMap = () => {
-        // this.$ga.event(
-        //   '轨迹地图',
-        //   GAEventActions.View,
-        //   GAEventTags.AboutPage
-        // )
         globalState.switchTogglers.liveMap()
+        gtag?.event('轨迹地图', {
+          event_category: GAEventActions.View,
+          event_label: GAEventTags.AboutPage
+        })
       }
 
       const adSwiperOption = {
@@ -829,7 +825,7 @@
         }
       }
 
-      .animation { 
+      .animation {
         width: 100%;
         position: absolute;
         bottom: 0;

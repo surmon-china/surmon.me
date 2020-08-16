@@ -47,19 +47,16 @@
 
 <script lang="ts">
   import { PropType, defineComponent, ref, computed, onMounted } from 'vue'
-  import { mapState } from 'vuex'
-  import { useGlobalState } from '/@/state'
+  import { useEnhancer } from '/@/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { useI18n } from '/@/services/i18n'
-  import { GAEventActions, GAEventTags } from '/@/constants/ga'
+  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { scrollTo, Easing } from '/@/utils/scroller'
   import { META } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'Toolbox',
     setup() {
-      const i18n = useI18n()
-      const globalState = useGlobalState()
+      const { i18n, gtag, globalState } = useEnhancer()
       const isOnBarrage = computed(() => globalState.switchBox.barrage)
 
       const animationFrameId = ref(0)
@@ -122,19 +119,17 @@
           isStartSlow && slowMoveToAnyWhere()
         },
         handleRSS() {
-          // root.$ga.event(
-          //   'RSS 订阅',
-          //   GAEventActions.Click,
-          //   GAEventTags.Tool
-          // )
+          gtag?.event('RSS 订阅', {
+            event_category: GAEventActions.Click,
+            event_label: GAEventTags.Tool
+          })
         },
         toggleBarrage() {
-          // root.$ga.event(
-          //   '弹幕功能',
-          //   GAEventActions.Toggle,
-          //   GAEventTags.Tool
-          // )
           globalState.switchTogglers.barrage()
+          gtag?.event('弹幕功能', {
+            event_category: GAEventActions.Toggle,
+            event_label: GAEventTags.Tool
+          })
         }
       }
     }

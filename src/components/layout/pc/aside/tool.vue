@@ -26,7 +26,7 @@
       const isArticlePage = computed(() => isArticleDetail(route.name))
 
       const setFullColumn = () => {
-        globalState.layoutColumn.setLayoutColumn(LayoutColumn.Full)
+        globalState.layoutColumn.setValue(LayoutColumn.Full)
       }
 
       const setFullScreen = () => {

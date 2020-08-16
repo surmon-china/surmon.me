@@ -8,7 +8,7 @@
         :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_PLACEHOLDER)"
         @keyup="handleInputChange"
       />
-      <transition name="module">
+      <transition name="fade">
         <div
           class="markdown-preview markdown-html comment"
           v-if="preview"
@@ -17,8 +17,13 @@
       </transition>
     </div>
     <div class="pencilbox">
-      <div class="stationery" :class="{ disabled }">
-        <span class="emoji" title="emoji">
+      <div class="stationery">
+        <button
+          class="emoji"
+          title="emoji"
+          type="button"
+          :disabled="disabled || preview"
+        >
           <i class="iconfont icon-emoji" />
           <div class="emoji-box">
             <ul class="emoji-list">
@@ -30,10 +35,11 @@
               >{{ emoji }}</li>
             </ul>
           </div>
-        </span>
+        </button>
         <button
           class="image"
           title="image"
+          :disabled="disabled || preview"
           @click.prevent="insertImage"
         >
           <i class="iconfont icon-image" />
@@ -41,6 +47,7 @@
         <button
           class="link"
           title="link"
+          :disabled="disabled || preview"
           @click.prevent="insertLink"
         >
           <i class="iconfont icon-link-horizontal" />
@@ -48,6 +55,7 @@
         <button
           class="code"
           title="code"
+          :disabled="disabled || preview"
           @click.prevent="insertCode"
         >
           <i class="iconfont icon-code-comment" />
@@ -56,9 +64,13 @@
           class="preview"
           title="preview"
           :class="{ actived: preview }"
+          :disabled="disabled"
           @click.prevent="handleTogglePreview"
         >
-          <i class="iconfont icon-eye" />
+          <i
+            class="iconfont"
+            :class="preview ? 'icon-eye-close' : 'icon-eye'"
+          />
         </button>
       </div>
       <button
@@ -73,16 +85,17 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, watch } from 'vue'
+  import { defineComponent, ref, computed, watch, onMounted } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { isClient } from '/@/vuniversal/env'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { focusPosition, insertContent } from '/@/utils/editable'
+  import { insertContent } from '/@/utils/editable'
   import marked from '/@/services/marked'
   import { CommentEvent, EMOJIS } from './helper'
 
   export enum Events {
-    Update = 'update:modelValue'
+    Update = 'update:modelValue',
+    InputReady = 'input-ready'
   }
 
   export default defineComponent({
@@ -107,6 +120,7 @@
     },
     emits: [
       Events.Update,
+      Events.InputReady,
       CommentEvent.TogglePreview,
       CommentEvent.Submit
     ],
@@ -168,6 +182,9 @@
       }
 
       watch(() => props.modelValue, handleValueChange)
+      onMounted(() => {
+        context.emit(Events.InputReady, inputElement.value)
+      })
 
       return {
         t: i18n.t,
@@ -246,11 +263,6 @@
       background-color: $module-bg-darker-3;
 
       .stationery {
-        &.disabled {
-          opacity: .7;
-          pointer-events: none;
-        }
-
         .emoji,
         .image,
         .link,
@@ -263,13 +275,25 @@
           float: left;
           @include background-transition();
 
-          &.actived,
-          &:hover {
-            background-color: $module-bg-darker-4;
+          &[disabled] {
+            opacity: .7;
+          }
+
+          &:not([disabled]) {
+            &.actived,
+            &:hover {
+              background-color: $module-bg-darker-4;
+            }
           }
         }
 
         .emoji {
+          &:not([disabled]):hover {
+            .emoji-box {
+              display: block;
+            }
+          }
+
           .emoji-box {
             display: none;
             position: absolute;
@@ -297,12 +321,6 @@
                   background-color: $module-bg-hover;
                 }
               }
-            }
-          }
-
-          &:hover {
-            .emoji-box {
-              display: block;
             }
           }
         }

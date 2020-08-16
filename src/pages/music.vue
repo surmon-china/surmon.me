@@ -98,9 +98,8 @@
     // },
     setup() {
       const musicPlayer = useMusic()
-
       const currentSong = computed(() => {
-        return musicPlayer.currentSong.value
+        return musicPlayer?.currentSong
       })
 
       const relativeStrokeWidth = parseFloat((15 / 450 * 100).toFixed(1))

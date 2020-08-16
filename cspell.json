@@ -30,7 +30,9 @@
     "scroller",
     "swiper",
     "wwwlogs",
-    "warpper"
+    "warpper",
+    "preconnect",
+    "inited"
   ],
   "flagWords": []
 }

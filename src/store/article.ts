@@ -116,6 +116,7 @@ const actions: ActionTree<ArticleState, IRootState> = {
             : ArticleModuleListMutations.SetListData,
           response.result
         )
+        return response
       })
       .finally(() => {
         commit(ArticleModuleListMutations.SetListFetching, false)

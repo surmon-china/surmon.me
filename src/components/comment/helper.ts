@@ -33,14 +33,10 @@ export const getCommentElementId = (commentId: string | number): string => {
   return `comment-item-${commentId}`
 }
 
-export const humanizeGravatarUrl = (gravatar?: string | null) => {
-  return gravatar || getFileCDNUrl('/images/comment/anonymous.jpg')
-}
-
-export const getGravatarUrlByEmail = (email: string) => {
+export const humanizeGravatarUrlByEmail = (email: string) => {
   return emailRegex.test(email)
     ? getGravatarByEmail(email)
-    : null
+    : getFileCDNUrl('/images/comment/anonymous.jpg')
 }
 
 export const scrollToElementAnchor = (elementId: string, offset = 0) => {

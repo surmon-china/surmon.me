@@ -3,7 +3,6 @@
     <placeholder :loading="fetching">
       <template #loading>
         <skeleton-paragraph
-          v-if="fetching"
           key="skeleton"
           class="skeleton"
           line-height="1em"
@@ -11,10 +10,11 @@
         />
       </template>
       <template #default>
-        <!-- <adsense-responsive
+        <adsense-responsive
           key="adsense"
+          class="mammon-box"
           ins-class="mammon-ins"
-        /> -->
+        />
       </template>
     </placeholder>
   </div>
@@ -22,8 +22,12 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
+  import AdsenseResponsive from '/@/components/adsense/responsive.vue'
   export default defineComponent({
     name: 'ArticleMammon',
+    components: {
+      AdsenseResponsive
+    },
     props: {
       fetching: {
         type: Boolean,
@@ -44,7 +48,8 @@
     align-items: center;
     overflow: hidden;
 
-    .mammon-ins {
+    .mammon-box,
+    ::v-deep(.mammon-ins) {
       width: 100%;
       height: 16rem;
       min-height: 16rem;

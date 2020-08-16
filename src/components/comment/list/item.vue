@@ -14,7 +14,7 @@
         >
           <img
             :alt="comment.author.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
-            :src="humanizeGravatarUrl(getGravatarUrlByEmail(comment.author.email))"
+            :src="humanizeGravatarUrlByEmail(comment.author.email)"
             draggable="false"
           >
         </comment-link>
@@ -89,13 +89,7 @@
   import { timeAgo } from '/@/transforms/moment'
   import { firstUpperCase } from '/@/transforms/text'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import {
-    CommentEvent,
-    scrollToElementAnchor,
-    getGravatarUrlByEmail,
-    humanizeGravatarUrl,
-    getCommentElementId
-  } from '../helper'
+  import { CommentEvent, scrollToElementAnchor, humanizeGravatarUrlByEmail, getCommentElementId } from '../helper'
   import CommentUa from './ua.vue'
 
   const CommentLink = defineComponent({
@@ -172,8 +166,7 @@
         t: i18n.t,
         LANGUAGE_KEYS,
         humanlizeDate,
-        getGravatarUrlByEmail,
-        humanizeGravatarUrl,
+        humanizeGravatarUrlByEmail,
         getCommentElementId,
         getReplyParentCommentText,
         firstUpperCase,
@@ -193,8 +186,8 @@
     position: relative;
     padding-left: 2rem;
     margin-top: $lg-gap;
-    &:last-child {
-      margin-bottom: $lg-gap;
+    &:first-child {
+      margin-top: 0;
     }
 
     .cm-avatar {
@@ -303,41 +296,31 @@
         > .create_at,
         > .reply,
         > .like {
+          color: $text-disabled;
           font-size: $font-size-small;
           margin-right: $gap;
+
+          .iconfont {
+            margin-right: $xs-gap;
+          }
         }
 
-        > .create_at {
-          color: $text-disabled;
+        .reply {
+          &:hover {
+            color: $link-color;
+          }
         }
 
-        > .like {
+        .like {
           &:hover {
             color: $red;
           }
-
           &.liked {
             color: $red;
             font-weight: bold;
           }
-
           &.actived {
             font-weight: bold;
-          }
-        }
-
-        > .reply,
-        > .like {
-          opacity: .8;
-          transition: visibility $transition-time-fast, opacity $transition-time-fast, color $transition-time-fast;
-
-          &:hover {
-            opacity: 1;
-          }
-
-          > .iconfont {
-            opacity: .8;
-            margin-right: $xs-gap;
           }
         }
       }

@@ -7,13 +7,13 @@
     }"
   >
     <!-- mammon -->
-    <!-- <transition name="module">
+    <transition name="module">
       <component
         v-if="isMammonEnabled"
         class="article-list-mammon"
         :is="isMobile ? 'adsense-archive-mobile' : 'adsense-archive'"
       />
-    </transition> -->
+    </transition>
 
     <!-- list -->
     <div class="article-list">
@@ -78,6 +78,8 @@
   import { useEnhancer } from '/@/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getArticleDetailRoute } from '/@/transforms/route'
+  import AdsenseArchive from '/@/components/adsense/archive.vue'
+  import AdsenseArchiveMobile from '/@/components/adsense/archive-mobile.vue'
   import ListItem from './item.vue'
 
   export enum Events {
@@ -86,7 +88,9 @@
   export default defineComponent({
     name: 'ArticleList',
     components: {
-      ListItem
+      ListItem,
+      AdsenseArchive,
+      AdsenseArchiveMobile
     },
     props: {
       articles: {
@@ -153,14 +157,15 @@
   @import 'src/assets/styles/init.scss';
 
   .articles {
-    > .article-list-mammon {
+    .article-list-mammon {
       width: 100%;
       padding: $sm-gap;
       margin-bottom: $lg-gap;
-      background-color: $module-bg;
+      @include common-bg-module();
+      @include radius-box($sm-radius);
 
       &::v-deep(.mammon-ins) {
-        margin: $sm-gap 0;
+        margin: $xs-gap 0;
         height: 100px;
       }
     }

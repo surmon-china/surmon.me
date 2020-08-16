@@ -24,10 +24,10 @@
       @page="getPageComments"
     />
     <comment-publisher
-      v-model:profile="userState.profile"
       :cached="userState.cached"
       :editing="userState.editing"
       :reply-pid="state.replyPid"
+      v-model:profile="profileState"
       @cancel-reply="resetCommentReply"
       @edit-profile="editUserProfile"
       @save-profile="syncUserProfileToStorage"
@@ -35,11 +35,11 @@
     >
       <template #pen>
         <comment-pen
-          ref="markdownInput"
           v-model="penState.content"
           :preview="penState.preview"
           :disabled="isPostingComment || isFetching"
           :posting="isPostingComment"
+          @input-ready="handleMarkdownInputReady"
           @toggle-preview="togglePenPreview"
           @submit="submitComment"
         />
@@ -53,15 +53,16 @@
   import { getNamespace, Modules } from '/@/store'
   import { CommentModuleActions, CommentModuleListMutations } from '/@/store/comment'
   import { useEnhancer } from '/@/enhancer'
-  import { getJSON, setJSON } from '/@/services/storage'
+  import { getJSON, setJSON, remove } from '/@/services/storage'
   import { getFileCDNUrl } from '/@/transforms/url'
-  import { getGravatarByEmail } from '/@/transforms/thumbnail'
   import { isArticleDetail, isGuestbook } from '/@/transforms/route'
+  import { focusPosition } from '/@/utils/editable'
   import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
+  import { GAEventTags, GAEventActions } from '/@/constants/gtag'
   import { SortType } from '/@/constants/state'
   import { USER } from '/@/constants/storage'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { ElementID, getGravatarUrlByEmail, scrollToElementAnchor } from './helper'
+  import { ElementID, scrollToElementAnchor } from './helper'
   import CommentTopbar from './topbar.vue'
   import CommentList from './list/index.vue'
   import CommentPagination from './pagination.vue'
@@ -127,13 +128,14 @@
       }
     },
     setup(props) {
-      const { store, route, i18n, globalState, isMobile } = useEnhancer()
+      const { store, route, i18n, gtag, globalState, isMobile } = useEnhancer()
       const blockList = computed(() => store.state.option.appOption.data?.blacklist)
       const commentData = computed(() => store.state.comment.comments)
       const isFetchingComment = computed(() => store.state.comment.fetching)
       const isPostingComment = computed(() => store.state.comment.posting)
       const isArticlePage = computed(() => isArticleDetail(route.name))
       const isGuestbookPage = computed(() => isGuestbook(route.name))
+      const markdownInputElement = ref<any>()
 
       const isFetching = computed(() => {
         // 1. 宿主组件还在加载时，列表和 tool 都呈加载状态
@@ -151,58 +153,49 @@
         sort: SortType.Desc,
         replyPid: 0
       })
-
-      const initUserState = {
+      const userState = reactive({
         cached: false,
-        editing: false,
-        profile: {
-          name: '',
-          email: '',
-          site: '',
-          gravatar: null
-        }
+        editing: false
+      })
+      const baseProfile = {
+        name: '',
+        email: '',
+        site: ''
       }
-      // TODO: profile 也许需要独立才可以双向绑定,cacheed 应该从 storage 读取
-      const userState = reactive({ ...initUserState })
-
+      const profileState = ref(baseProfile)
       const penState = reactive({
-        content: '2389u12389u1293',
+        content: '',
         preview: false
       })
 
       const syncUserStorageToState = () => {
         const user = getJSON(USER)
         if (user) {
-          Object.assign(userState, {
-            cached: true,
-            profile: {
-              ...user,
-              gravatar: getGravatarUrlByEmail(user.email)
-            }
-          })
+          userState.cached = true
+          userState.editing = false
+          profileState.value = user
         }
       }
 
       const syncUserProfileToStorage = () => {
-        const _profile = {
-          ...userState.profile,
-          gravatar: getGravatarUrlByEmail(userState.profile.email)
-        }
-        Object.assign(userState, {
-          cached: true,
-          editing: false,
-          profile: _profile
-        })
-        setJSON(USER, userState.profile)
+        userState.cached = true
+        userState.editing = false
+        setJSON(USER, profileState.value)
       }
 
       const clearUserProfile = () => {
-        Object.assign(userState, { ...initUserState })
-        setJSON(USER, userState.profile)
+        userState.cached = false
+        userState.editing = false
+        profileState.value = { ...baseProfile }
+        remove(USER)
       }
 
       const editUserProfile = () => {
         userState.editing = true
+      }
+
+      const handleMarkdownInputReady = (markdownElement: HTMLElement) => {
+        markdownInputElement.value = markdownElement
       }
 
       const resetCommentReply = () => {
@@ -218,26 +211,22 @@
       }
 
       const replyComment = (commentId: number) => {
-        // this.$ga.event(
-        //   '欲回评论',
-        //   GAEventActions.Click,
-        //   GAEventTags.Comment
-        // )
+        gtag?.event('欲回评论', {
+          event_category: GAEventActions.Click,
+          event_label: GAEventTags.Comment
+        })
         state.replyPid = commentId
+        // 滚动到目标位置，并激活光标
         scrollToElementAnchor(ElementID.Publisher, 300)
-        // 激活光标
-        // if (this.$refs.markdownInput) {
-        //   this.$refs.markdownInput.focusPosition()
-        // }
+        if (markdownInputElement.value) {
+          focusPosition(markdownInputElement.value)
+        }
       }
 
       // 获取评论列表
       const fetchCommentList = (params: any = {}) => {
         // 每次重新获取数据时都需要回到评论框顶部，因为都是新数据
-        // scrollTo('#comment-box', 160, {
-        //   easing: Easing['ease-in'],
-        //   offset: -80
-        // })
+        scrollToElementAnchor(ElementID.Warpper, -73)
         store.dispatch(getNamespace(Modules.Comment, CommentModuleActions.FetchList), {
           ...params,
           sort: state.sort,
@@ -257,21 +246,21 @@
       }
 
       const submitComment = async () => {
-        // this.$ga.event(
-        //   '欲发评论',
-        //   GAEventActions.Click,
-        //   GAEventTags.Comment
-        // )
-        if (!userState.profile.name) {
+        gtag?.event('欲发评论', {
+          event_category: GAEventActions.Click,
+          event_label: GAEventTags.Comment
+        })
+        const profile = profileState.value
+        if (!profile.name) {
           return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_NAME) + '?')
         }
-        if (!userState.profile.email) {
+        if (!profile.email) {
           return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_EMAIL) + '?')
         }
-        if (!emailRegex.test(userState.profile.email)) {
+        if (!emailRegex.test(profile.email)) {
           return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_EMAIL))
         }
-        if (userState.profile.site && !urlRegex.test(userState.profile.site)) {
+        if (profile.site && !urlRegex.test(profile.site)) {
           return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_URL))
         }
         if (!penState.content || !penState.content.trim()) {
@@ -287,7 +276,7 @@
 
         // block list
         const { mails, keywords } = blockList.value
-        const hitMail = mails.includes(userState.profile.email)
+        const hitMail = mails.includes(profile.email)
         const hitKeyword = (
           keywords.length &&
           eval(`/${keywords.join('|')}/ig`).test(penState.content)
@@ -304,11 +293,12 @@
           post_id: props.postId,
           content: penState.content,
           agent: globalState.userAgent.original,
-          author: userState.profile
+          author: profile
         }).then(resultData => {
           // clear local data
           penState.preview = false
           userState.cached = true
+          userState.editing = false
           // reset reply state
           resetCommentReply()
           clearPenContent()
@@ -353,6 +343,7 @@
         isPostingComment,
         state,
         userState,
+        profileState,
         penState,
         editUserProfile,
         syncUserProfileToStorage,
@@ -363,7 +354,8 @@
         submitComment,
         resetCommentReply,
         getSortComments,
-        getPageComments
+        getPageComments,
+        handleMarkdownInputReady
       }
     }
   })

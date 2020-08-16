@@ -1,6 +1,10 @@
 <template>
   <div id="emoji-rain" :class="{ active: state.kichikuing }">
-    <canvas v-if="state.chambering" ref="rainBase" class="rain-base"></canvas>
+    <canvas
+      v-if="state.chambering"
+      ref="rainBase"
+      class="rain-base"
+    ></canvas>
   </div>
 </template>
 

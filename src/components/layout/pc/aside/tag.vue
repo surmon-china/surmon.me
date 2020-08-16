@@ -40,7 +40,6 @@
       const store = useStore()
       const route = useRoute()
       const tagData = computed(() => store.state.tag)
-
       const getTagIcon = (tag: any) => {
         return getExtendsValue(tag, 'icon') || 'icon-tag'
       }
