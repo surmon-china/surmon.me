@@ -69,7 +69,7 @@
   import { useSwiperRef } from '/@/todo/swiper'
   import { useI18n } from '/@/services/i18n'
   import { useTheme, Theme } from '/@/services/theme'
-  import marked from '/@/services/marked'
+  import { markdownToHTML } from '/@/transforms/markdown'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { useGlobalState } from '/@/state'
   import { timeAgo } from '/@/transforms/moment'
@@ -108,10 +108,8 @@
         return timeAgo(date, i18n.language.value as any)
       }
 
-      const parseContent = (content) => {
-        return content
-        // TODO: markdown
-        // return marked(content, null, true)
+      const parseContent = (content: string) => {
+        return markdownToHTML(content, { html: true })
       }
 
       const prevSlide = () => swiper.value?.slidePrev()

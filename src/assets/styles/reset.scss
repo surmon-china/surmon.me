@@ -406,8 +406,8 @@ ol {
 blockquote {
   margin: 1em 0;
   text-indent: 0em;
-  background-color: $module-bg-hover;
-  border-left: .5em solid #aaa;
+  background-color: $module-bg-darker-1;
+  border-left: .5em solid $module-bg-darker-2;
   padding: .5em 1em;
   padding-left: 1.5em;
 }
@@ -638,7 +638,7 @@ caption {
 }
 
 thead th {
-  background-color: $module-bg-hover;
+  background-color: $module-bg-darker-1;
   text-align: left;
 }
 

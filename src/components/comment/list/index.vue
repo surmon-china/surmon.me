@@ -50,7 +50,6 @@
   import { CommentModuleActions } from '/@/store/comment'
   import { isClient } from '/@/vuniversal/env'
   import { useEnhancer } from '/@/enhancer'
-  import marked from '/@/services/marked'
   import { LozadObserver } from '/@/services/lozad'
   import { USER, USER_LIKE_HISTORY } from '/@/constants/storage'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'

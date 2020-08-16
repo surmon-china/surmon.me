@@ -12,6 +12,7 @@ import { consoleSlogan } from '/@/services/slogan'
 import { enableCopyright } from '/@/services/copyright'
 import { enableBaiduSeoPush } from '/@/services/baidu-seo-push'
 import { enableAutoTitleSurprise } from './services/title-surprise'
+import { exportAppToGlobal } from '/@/services/exporter'
 import { exportLozadToGlobal } from '/@/services/lozad'
 import { Language } from '/@/language/data'
 import { getFileCDNUrl } from '/@/transforms/url'
@@ -38,9 +39,9 @@ theme.resetOnClient()
 i18n.set(globalState.userAgent.isZhUser ? Language.Zh : Language.En)
 store.clientInit()
 exportLozadToGlobal()
+exportAppToGlobal(app)
 
 app.mount('#app').$nextTick(() => {
-
   // Desktop
   if (!globalState.userAgent.isMobile) {
     defer.addTask(music.start)

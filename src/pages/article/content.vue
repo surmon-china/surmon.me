@@ -39,14 +39,14 @@
           <div
             class="markdown-html"
             :id="contentElementIds.default"
-            v-text="content.default"
+            v-html="content.default"
           />
           <transition
             name="module"
             mode="out-in"
             @after-enter="handleRenderMoreAnimateDone"
           >
-            <div v-if="isRenderMoreEnabled" key="readmore-btn" class="readmore">
+            <div v-if="isRenderMoreEnabled" class="readmore">
               <button
                 class="readmore-btn"
                 :disabled="longFormRenderState.rendering"
@@ -61,10 +61,9 @@
               </button>
             </div>
             <div
-              v-else-if="longFormRenderState.rendered"
-              key="more-content"
-              class="content"
+              class="markdown-html"
               :id="contentElementIds.leftover"
+              v-else-if="longFormRenderState.rendered"
               v-html="content.leftover"
             />
           </transition>
@@ -78,11 +77,12 @@
   import { defineComponent, ref, reactive, computed, nextTick, onMounted } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { Modules, getNamespace } from '/@/store'
+  import { TagModuleGetters } from '/@/store/tag'
   import { ArticleModuleActions } from '/@/store/article'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
   import { isClient } from '/@/vuniversal/env'
-  import marked from '/@/services/marked'
+  import { markdownToHTML } from '/@/transforms/markdown'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { isOriginal, isHybrid, isReprint } from '/@/transforms/state'
   import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
@@ -102,7 +102,7 @@
     setup(props, context) {
       const { store, globalState, isMobile } = useEnhancer()
       const element = ref<HTMLElement>()
-      const tags = computed(() => store.state.tag.data)
+      const tagMap = computed(() => store.getters[getNamespace(Modules.Tag, TagModuleGetters.FullNameTags)])
       const _isHybrid = isHybrid(props.article?.origin)
       const _isReprint = isReprint(props.article?.origin)
       const _isOriginal = !props.article?.origin || isOriginal(props.article.origin)
@@ -142,23 +142,20 @@
           return result
         }
 
-        // TODO: markdown
-        // return marked(
-        //   isLongFormContent.value
-        //     // 渲染截断部分前半段
-        //     ? content.substring(0, getContentSplitIndex(content))
-        //     // 正常长度，正常渲染
-        //     : content,
-        //   tags.value,
-        //   true
-        // )
+        const parseMarkdown = (content: string) => {
+          return markdownToHTML(content, {
+            tagMap: tagMap.value,
+            relink: true,
+            html: true
+          })
+        }
 
         if (isLongFormContent.value) {
           const index = getContentSplitIndex(content)
-          result.default = content.substring(0, index)
-          result.leftover = content.substring(index)
+          result.default = parseMarkdown(content.substring(0, index))
+          result.leftover = parseMarkdown(content.substring(index))
         } else {
-          result.default = content
+          result.default = parseMarkdown(content)
           result.leftover = ''
         }
 
@@ -291,55 +288,31 @@
         }
       }
 
-      @keyframes readmorebtn {
-        0% {
-          transform: translate3d(0, 0, 0);
-          background-color: $module-bg-hover;
-        }
-        25% {
-          transform: translate3d(0, $sm-gap, 0);
-          background-color: $primary;
-          color: $white;
-        }
-        50% {
-          transform: translate3d(0, 0, 0);
-          background-color: $module-bg-hover;
-        }
-        75% {
-          transform: translate3d(0, $sm-gap, 0);
-          background-color: $primary;
-          color: $white;
-        }
-        100% {
-          transform: translate3d(0, 0, 0);
-          background-color: $module-bg-hover;
-        }
-      }
-
-      > .readmore {
+      .readmore {
         width: 100%;
         display: flex;
         justify-content: center;
         margin-bottom: $gap;
 
-        > .readmore-btn {
+        .readmore-btn {
           width: 80%;
           text-align: center;
-          height: 3rem;
           line-height: 3rem;
-          background-color: $module-bg-hover;
-          animation: readmorebtn 4s linear infinite;
+          color: $text-secondary;
+          background-color: $module-bg-darker-1;
+          @include background-transition();
+          @include radius-box($xs-radius);
 
           &[disabled] {
             cursor: no-drop;
           }
 
           &:hover {
-            background-color: $primary !important;
-            color: $white !important;
+            background-color: $primary;
+            color: $text-reversal;
           }
 
-          > .iconfont {
+          .iconfont {
             margin-left: $sm-gap;
           }
         }

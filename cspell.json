@@ -32,7 +32,8 @@
     "wwwlogs",
     "warpper",
     "preconnect",
-    "inited"
+    "inited",
+    "noopenter"
   ],
   "flagWords": []
 }

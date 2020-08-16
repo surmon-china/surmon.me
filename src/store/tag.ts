@@ -4,7 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { Module, MutationTree, ActionTree } from 'vuex'
+import { Module, MutationTree, GetterTree, ActionTree } from 'vuex'
+import { firstUpperCase } from '/@/transforms/text'
 import { IRootState } from '.'
 import http from '/@/services/http'
 
@@ -13,15 +14,52 @@ export enum TagModuleMutations {
   SetFetching = 'setFetching',
   SetListData = 'setListData'
 }
+export enum TagModuleGetters {
+  FullNameTags = 'fullNameTags'
+}
 export enum TagModuleActions {
   FetchAll = 'fetchAll'
+}
+
+export interface ITag {
+  name: string
+  slug: string
+  description: string
+  create_at?: Date
+  update_at?: Date
+  count?: number
+  _id?: string
+  extends: $TODO[]
+}
+
+export interface ITagMap {
+  [key: string]: ITag
 }
 
 const state = () => ({
   fetched: false,
   fetching: false,
-  data: [] as Array<$TODO>
+  data: [] as Array<ITag>
 })
+
+export const getters: GetterTree<TagState, IRootState> = {
+  [TagModuleGetters.FullNameTags](state) {
+    // 全量标签列表（本身、全小写、全大写、首字母大写）
+    const tags = state.data
+    const tagMap: ITagMap = {}
+    tags.forEach(tag => {
+      ;[
+        tag.name,
+        tag.name.toLowerCase(),
+        tag.name.toUpperCase(),
+        firstUpperCase(tag.name)
+      ].forEach(tagName => {
+        tagMap[tagName] = tag
+      })
+    })
+    return tagMap
+  }
+}
 
 const mutations: MutationTree<TagState> = {
   [TagModuleMutations.SetFetched](state, fetched: boolean) {
@@ -57,6 +95,7 @@ const actions: ActionTree<TagState, IRootState> = {
 const tagModule: Module<TagState, IRootState> = {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 }
