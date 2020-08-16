@@ -90,7 +90,7 @@
   import { isClient } from '/@/vuniversal/env'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { insertContent } from '/@/utils/editable'
-  import marked from '/@/services/marked'
+  import { markdownToHTML } from '/@/transforms/markdown'
   import { CommentEvent, EMOJIS } from './helper'
 
   export enum Events {
@@ -130,8 +130,7 @@
       const inputElement = ref<HTMLElement>()
       const previewContent = computed(() => {
         return props.preview
-          ? content.value
-          // ? marked(content.value)
+          ? markdownToHTML(content.value)
           : null
       })
 

@@ -53,7 +53,7 @@
         </p>
         <div
           class="markdown-html comment"
-          v-html="parseMarkdown(comment.content)"
+          v-html="markdownToHTML(comment.content)"
         />
       </div>
       <div class="cm-footer">
@@ -84,7 +84,7 @@
   import { defineComponent, ref, h, computed, onMounted, onBeforeUnmount, onUnmounted, PropType } from 'vue'
   import { isClient } from '/@/vuniversal/env'
   import { useEnhancer } from '/@/enhancer'
-  import marked from '/@/services/marked'
+  import { markdownToHTML } from '/@/transforms/markdown'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { timeAgo } from '/@/transforms/moment'
   import { firstUpperCase } from '/@/transforms/text'
@@ -132,11 +132,6 @@
       const { i18n, store, globalState, isMobile, isZhLang } = useEnhancer()
       const comments = computed(() => store.state.comment.comments.data)
 
-      const parseMarkdown = (markdown: string) => {
-        return markdown
-        // return marked(markdown, null, false)
-      }
-
       const getReplyParentCommentText = (parentCommentId: number) => {
         const authorName = comments.value
           .find(comment => comment.id === parentCommentId)
@@ -170,7 +165,7 @@
         getCommentElementId,
         getReplyParentCommentText,
         firstUpperCase,
-        parseMarkdown,
+        markdownToHTML,
         replyComment,
         likeComment,
         scrollToCommentItem

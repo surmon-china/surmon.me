@@ -1,4 +1,3 @@
-
 .markdown-html {
   p {
     line-height: 2.2em;
@@ -56,7 +55,7 @@
       padding: .5em .8em;
 
       &:hover {
-        background-color: $module-bg-hover;
+        background-color: $module-bg-darker-1;
       }
 
       > p {
@@ -78,10 +77,9 @@
     display: block;
     text-align: center;
     border-radius: $xs-radius;
-    border: $sm-gap solid $module-bg-hover;
+    border: $sm-gap solid $module-bg-darker-1;
     opacity: .9;
     cursor: pointer;
-
     &:hover {
       opacity: 1;
       transition: all $transition-time-normal;
@@ -99,7 +97,7 @@
     padding: .3em .5em;
     margin: 0 .5em;
     border-radius: $xs-radius;
-    background-color: $module-bg-hover;
+    background-color: $module-bg-darker-1;
   }
 
   pre {
@@ -125,7 +123,7 @@
       left: 0;
       width: 100%;
       font-weight: 700;
-      background-color: rgba(68, 68, 68, 0.9);
+      background-color: lighten($black, 30%);
       display: block;
       text-transform: uppercase;
       text-align: center;
@@ -187,6 +185,12 @@
     word-wrap: break-word;
     font-size: $font-size-h6;
 
+    p {
+      margin: 0;
+      text-indent: 0;
+      line-height: 2em;;
+    }
+
     a {
       text-decoration: underline;
     }
@@ -194,66 +198,28 @@
     img {
       margin: .5rem 0;
       max-width: 100%;
-      border-radius: 2px;
-      cursor: pointer;
+      border-color: $module-bg-darker-2;
     }
 
-    p {
-      margin: 0;
-    }
-
-    code {
-      color: #bd4147;
-      padding: .3em .5em;
-      margin: 0 .5em;
-      border-radius: $xs-radius;
-      background-color: $module-bg-hover;
+    ul, ol {
+      padding-left: 2em;
     }
 
     pre {
       $code-header-height: 2.8rem;
+      padding-left: 0;
+      padding-top: $code-header-height;
+      margin-top: 1rem;
       display: flex;
       align-items: baseline;
       flex-wrap: wrap-reverse;
-      position: relative;
-      overflow: hidden;
-      margin-top: .6em;
-      margin-bottom: 1em;
-      padding-top: $code-header-height;
-      border-radius: $xs-radius;
-      background-color: rgba(0, 0, 0, 0.8);
-
-      &:before {
-        color: $white;
-        content: attr(data-lang)" CODE";
-        height: $code-header-height;
-        line-height: $code-header-height;
-        font-size: $font-size-h6;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        font-weight: 700;
-        background-color: rgba(68, 68, 68, 0.9);
-        display: block;
-        text-transform: uppercase;
-        text-align: center;
-      }
 
       .code-lines {
         display: none;
       }
 
       code {
-        margin: 0;
-        padding: 1rem;
-        float: left;
-        width: 100%;
-        height: 100%;
-        display: block;
-        font-size: $font-size-h6;
-        line-height: 1.8rem;
-        color: rgba(255, 255, 255, 0.87);
+        line-height: 1.8;
         background-color: transparent;
       }
     }

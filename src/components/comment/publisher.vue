@@ -94,7 +94,7 @@
             </div>
             <div
               class="reply-preview markdown-html comment"
-              v-html="parseMarkdown(replyingComment.content)"
+              v-html="markdownToHTML(replyingComment.content)"
             />
           </div>
         </transition>
@@ -108,6 +108,7 @@
   import { defineComponent, ref, reactive, computed, watch } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { firstUpperCase } from '/@/transforms/text'
+  import { markdownToHTML } from '/@/transforms/markdown'
   import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { CommentEvent, ElementID, getCommentElementId, humanizeGravatarUrlByEmail, scrollToElementAnchor } from './helper'
@@ -148,10 +149,6 @@
         profile => profileState.value = profile,
         { deep: true }
       )
-
-      const parseMarkdown = (markdown: string) => {
-        return markdown
-      }
 
       const replyingComment = computed(() => {
         return store.state.comment.comments.data.find(
@@ -204,7 +201,7 @@
         humanizeGravatarUrlByEmail,
         isMobile,
         profileState,
-        parseMarkdown,
+        markdownToHTML,
         replyingComment,
         cancelCommentReply,
         scrollToComment,

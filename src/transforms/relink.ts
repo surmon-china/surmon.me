@@ -4,60 +4,30 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { firstUpperCase } from './text'
+import { ITagMap } from '/@/store/tag'
+import { getTagArchiveRoute } from './route'
 
-// TODO: 待迁移
-export interface ITag {
-  name: string
-  slug: string
-  description: string
-  create_at?: Date
-  update_at?: Date
-  count?: number
-  _id?: string
-  extends: $TODO[]
-}
-
-export default (text: string, tags: ITag[]) => {
-  // 初始化标签数据（本身、全小写、全大写、首字母大写）
-  const tagNames = Object.keys(
-    tags.reduce((tagNames, { name: tagName }) => {
-      const lowerCaseText = tagName.toLowerCase()
-      const upperCaseText = tagName.toUpperCase()
-      const firstUpperCaseText = firstUpperCase(tagName)
-      ;[tagName, lowerCaseText, upperCaseText, firstUpperCaseText].forEach(
-        name => {
-          !tagNames[name] && (tagNames[name] = null)
-        }
-      )
-      return tagNames
-    }, {} as { [key: string]: $TODO })
-  ).sort((prev, next) => next.length - prev.length)
-
+export default (text: string, tagMap: ITagMap) => {
   // 构造正则
+  const tagNames = Object.keys(tagMap).sort((prev, next) => next.length - prev.length)
   const tagRegexp = eval(`/${tagNames.join('|')}/ig`)
 
-  // 如果字符被 tagNames 包含，即字符本身是个单词，即字符本身是连接，则直接返回字符，不再处理
-  if (tagNames.includes(text)) {
+  // 如果是 URL 则不处理
+  try {
+    new URL(text)
     return text
+  } catch (error) {
+    return text.replace(tagRegexp, tag => {
+      // 从 map 中匹配自身
+      const foundTag = tagMap[tag]
+
+      // 找不到，或找到匹配的，但 text 字首为 #，则证明是外站连接，则不解析
+      if (!foundTag || text[0] === '#') return tag
+
+      const slug = foundTag.slug
+      const path = getTagArchiveRoute(slug)
+      const command = `window.$app.config.globalProperties.$router.push({ path: \'${path}\' });return false`
+      return `<a href=\"${path}\" title=\"${foundTag.description}\" onclick=\"${command}\">${tag}</a>`
+    })
   }
-
-  // 正则替换方法
-  return text.replace(tagRegexp, tag => {
-    // 找到本身为自身、大写为自身、小写为自身、首字母大写为自身
-    const findedTag = tags.find(
-      ({ name: tagName }) =>
-        tagName === tag ||
-        tagName.toLowerCase() === tag ||
-        tagName.toUpperCase() === tag ||
-        firstUpperCase(tagName) === tag
-    )
-
-    // 找不到，或找到匹配的，但 text 字首为#，则证明是外站连接，则不解析
-    if (!findedTag || text[0] === '#') return tag
-
-    const slug = findedTag.slug
-    const command = `window.$nuxt.$router.push({ path: \'/tag/${slug}\' });return false`
-    return `<a href=\"/tag/${slug}\" title=\"${findedTag.description}\" onclick=\"${command}\">${tag}</a>`
-  })
 }
