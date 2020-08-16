@@ -132,7 +132,7 @@
             to bottom right,
             rgba(255, 255, 255, 0.2),
             rgba(255, 255, 255, 0.9),
-            rgba(255, 255, 255, 0.2) 
+            rgba(255, 255, 255, 0.2)
           );
           animation: logo-blink 8s ease-in 1s infinite;
 

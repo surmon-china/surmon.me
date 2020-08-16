@@ -53,6 +53,7 @@
   import marked from '/@/services/marked'
   import { LozadObserver } from '/@/services/lozad'
   import { USER, USER_LIKE_HISTORY } from '/@/constants/storage'
+  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { firstUpperCase } from '/@/transforms/text'
   import { getGravatarByEmail } from '/@/transforms/thumbnail'
@@ -60,7 +61,6 @@
   import storage from '/@/services/storage'
   import { LOZAD_CLASS_NAME } from '/@/services/lozad'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { GAEventActions, GAEventTags } from '/@/constants/ga'
   import { useCommentsLike } from '/@/transforms/state'
   import { CommentEvent } from '../helper'
   import CommentItem from './item.vue'
@@ -81,14 +81,14 @@
       }
     },
     setup(props, context) {
-      const { i18n, store, globalState, isMobile, isZhLang } = useEnhancer()
+      const { i18n, store, gtag, globalState, isMobile, isZhLang } = useEnhancer()
       const { like: likeCommentStorage, isLiked: isCommentLiked } = useCommentsLike()
 
-      const listElement = ref<HTMLElement>()
+      const listElement = ref<any>()
       const lozadObserver = ref<LozadObserver | null>(null)
 
       const observeLozad = () => {
-        const lozadElements = listElement.value?.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
+        const lozadElements = (listElement.value?.$el as HTMLElement)?.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
         if (!lozadElements || !lozadElements.length) {
           return false
         }
@@ -111,11 +111,10 @@
       }
 
       const likeComment = async (commentId: number) => {
-        // this.$ga.event(
-        //   '欲赞评论',
-        //   GAEventActions.Click,
-        //   GAEventTags.Comment
-        // )
+        gtag?.event('欲赞评论', {
+          event_category: GAEventActions.Click,
+          event_label: GAEventTags.Comment
+        })
         if (isCommentLiked(commentId)) {
           return false
         }

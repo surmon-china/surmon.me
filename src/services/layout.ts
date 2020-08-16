@@ -3,7 +3,7 @@ import { GlobalState, LayoutColumn } from '/@/state'
 
 export const getLayoutMiddleware = (globalState: GlobalState) => {
   const middleware: NavigationGuard = (to, _, next) => {
-    globalState.layoutColumn.setLayoutColumn(
+    globalState.layoutColumn.setValue(
       to.meta.layout === LayoutColumn.Wide
         ? LayoutColumn.Wide
         : to.meta.layout === LayoutColumn.Full

@@ -1,11 +1,9 @@
 <template>
   <client-only>
-    <InFeedAdsense
-      root-class="mammon-box"
+    <Adsense
       ins-class="mammon-ins"
-      :is-non-personalized-ads="false"
-      data-ad-layout-key="-ho-m+39-79+5o"
-      data-ad-client="ca-pub-4710915636313788"
+      data-ad-format="fluid"
+      data-ad-layout-key="-hj-9+3a-97+6s"
       data-ad-slot="1148538406"
     />
   </client-only>

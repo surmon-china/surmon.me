@@ -90,7 +90,7 @@
   @import 'src/assets/styles/init.scss';
 
   .pagination {
-    margin-bottom: $lg-gap;
+    margin-top: $lg-gap;
 
     > .pagination-list {
       margin: 0;

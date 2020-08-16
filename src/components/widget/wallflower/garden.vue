@@ -6,14 +6,14 @@
         :key="flower.id"
         :z-index="index + 1"
         :options="flower"
-        @end="handleAnimationEnd"
+        @ended="handleAnimationEnd"
       />
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, reactive, onMounted, onBeforeUnmount } from 'vue'
+  import { defineComponent, reactive, onMounted, onBeforeUnmount } from 'vue'
   import Flower from './flower.vue'
 
   const FLOWERS = ['富强', '民主', '文明', '和谐', '自由', '平等', '公正', '法治', '爱国', '敬业', '诚信', '友善']

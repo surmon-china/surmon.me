@@ -8,7 +8,7 @@
   >
     <div class="banner">
       <uimage cdn class="image" src="/images/page-guestbook/banner.jpg" />
-      <span class="solgan">
+      <span class="Slogan">
         <span class="text" v-i18n="LANGUAGE_KEYS.GUESTBOOK_SLOGAN" />
       </span>
     </div>
@@ -88,7 +88,7 @@
         }
       }
 
-      .solgan {
+      .Slogan {
         $size: 2em;
         display: block;
         position: absolute;
@@ -124,7 +124,7 @@
 
     &.dark {
       .banner {
-        .solgan {
+        .Slogan {
           .text {
             -webkit-text-fill-color: $text !important;
           }

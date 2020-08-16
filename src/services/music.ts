@@ -48,7 +48,7 @@ const createMusicPlayer = (config: MusicConfig) => {
     // 播放中
     playing: false,
     // 进度
-    spds: 0,
+    speeds: 0,
     progress: 0,
     // 已消费 id
     markedSongIDs: [] as number[]
@@ -179,7 +179,7 @@ const createMusicPlayer = (config: MusicConfig) => {
     const targetSentence = currentSongLrcs.find(
       (timestamp, index, array) => {
         const next = array[index + 1]
-        return timestamp.time <= state.spds && next && next.time > state.spds
+        return timestamp.time <= state.speeds && next && next.time > state.speeds
       }
     )
     return targetSentence ? targetSentence.sentence : '...'
@@ -277,7 +277,7 @@ const createMusicPlayer = (config: MusicConfig) => {
           state.volume = amplitude.getVolume()
         },
         timeupdate: () => {
-          state.spds = amplitude.getSongPlayedSeconds()
+          state.speeds = amplitude.getSongPlayedSeconds()
           state.progress = amplitude.getSongPlayedPercentage()
         },
         song_change: () => {
@@ -335,7 +335,7 @@ const createMusicPlayer = (config: MusicConfig) => {
     })
   }
 
-  return {
+  return readonly({
     state: readonly(state),
     muted,
     currentSong,
@@ -350,7 +350,7 @@ const createMusicPlayer = (config: MusicConfig) => {
     togglePlay,
     prevSong,
     nextSong
-  }
+  })
 }
 
 const MusicPlayerSymbol = Symbol('music-player')

@@ -25,8 +25,8 @@
 
 <script lang="ts">
   import { defineComponent, reactive } from 'vue'
-  import { useRoute } from 'vue-router'
-  import { GAEventActions, GAEventTags } from '/@/constants/ga'
+  import { useEnhancer } from '/@/enhancer'
+  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { getPageUrl } from '/@/transforms/url'
   import { copy } from '/@/utils/clipboard'
   import { META } from '/@/config/app.config'
@@ -34,7 +34,7 @@
   export default defineComponent({
     name: 'Share',
     setup() {
-      const route = useRoute()
+      const { route, gtag } = useEnhancer()
       const getUrl = () => getPageUrl(route.fullPath)
       const getTitle = () => document.title || META.title
       const getDescription = () => (
@@ -43,28 +43,22 @@
       )
 
       const copyPageUrl = () => {
-        // this.$ga.social('复制当页链接', GAEventActions.Click, getUrl())
-        // this.$ga.event('复制当页链接', GAEventActions.Click, GAEventTags.Share)
         copy(getUrl())
+        gtag?.event('复制当页链接', {
+          event_category: GAEventActions.Click,
+          event_label: GAEventTags.Share
+        })
       }
 
       const openShareWindow = (social, url) => {
         const targetUrl = url().includes('mailto')
           ? url().replace(/\s|\||Surmon.me/g, '')
           : encodeURI(url())
-        // this.$ga.social(social, '分享', targetUrl)
-        // this.$ga.event(
-        //   '当页分享',
-        //   GAEventActions.Click,
-        //   GAEventTags.Share
-        // )
-        /*
-        * screen.availWidth 获得屏幕宽度
-        * screen.availHeight 获得屏幕高度
-        * 居中的算法是：
-        * 左右居中： (屏幕宽度 - 窗口宽度)/2
-        * 上下居中： (屏幕高度 - 窗口高度)/2
-        */
+        // screen.availWidth 获得屏幕宽度
+        // screen.availHeight 获得屏幕高度
+        // 居中的算法是：
+        // 左右居中： (屏幕宽度 - 窗口宽度)/2
+        // 上下居中： (屏幕高度 - 窗口高度)/2
         // 给打开的窗口命名
         const windowName = `分享 ${META.title}`
         // 窗口宽度，需要设置
@@ -83,6 +77,11 @@
         const _window = window.open(targetUrl, windowName, params)
         // 新窗口获得焦点
         _window?.focus()
+
+        gtag?.event('当页分享', {
+          event_category: GAEventActions.Click,
+          event_label: GAEventTags.Share
+        })
       }
 
       const socials = [

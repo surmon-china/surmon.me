@@ -11,20 +11,19 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { useI18n } from '/@/services/i18n'
-  import { GAEventActions, GAEventTags } from '/@/constants/ga'
+  import { useEnhancer } from '/@/enhancer'
+  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
 
   export default defineComponent({
     name: 'Language',
     setup() {
-      const i18n = useI18n()
+      const { i18n, gtag } = useEnhancer()
       const tooggleLanguage = () => {
         i18n.toggle()
-        // this.$ga.event(
-        //   '系统语言',
-        //   GAEventActions.Toggle,
-        //   GAEventTags.Tool
-        // )
+        gtag?.event('系统语言', {
+          event_category: GAEventActions.Toggle,
+          event_label: GAEventTags.Tool
+        })
       }
       return {
         language: i18n.language,

@@ -32,15 +32,15 @@ interface ICacheTimeStamp {
   ttl: number
 }
 
-function getCacheKey(key: TCacheKey): string {
+const getCacheKey = (key: TCacheKey): string => {
   return `__cache__${key}`
 }
 
-function getCacheTimeStampKey(key: TCacheKey): string {
+const getCacheTimeStampKey = (key: TCacheKey): string => {
   return `__cache__${key}_timestamp`
 }
 
-function getNowTime(): number {
+const getNowTime = (): number => {
   return Date.parse(new Date().toString())
 }
 
@@ -52,7 +52,8 @@ function getNowTime(): number {
  * @example CacheService.promise({ option })()
  * @example CacheService.interval({ option })()
  */
-export function get(key: TCacheKey) {
+
+export const get = (key: TCacheKey) => {
   const cacheKey = getCacheKey(key)
   const timeStampKey = getCacheTimeStampKey(key)
   const data = storage.getJSON(cacheKey) as $TODO
@@ -70,7 +71,7 @@ export function get(key: TCacheKey) {
   return null
 }
 
-export function set(key: TCacheKey, value: any, ttl?: number): void {
+export const set = (key: TCacheKey, value: any, ttl?: number): void => {
   storage.setJSON(getCacheKey(key), value)
   storage.setJSON(getCacheTimeStampKey(key), {
     last: getNowTime(),
@@ -84,6 +85,7 @@ export function set(key: TCacheKey, value: any, ttl?: number): void {
  * @example CacheService.promise({ key: CacheKey, promise() }) -> promise()
  * @example CacheService.promise({ key: CacheKey, promise(), ioMode: true }) -> { get: promise(), update: promise() }
  */
+
 export function promise<T = $TODO>(options: ICachePromiseOption<T>): TCachePromiseResult<T>
 export function promise<T = $TODO>(options: ICachePromiseIOOption<T>): ICacheIoResult<T>
 export function promise(options: $TODO) {

@@ -2,13 +2,17 @@
   <li
     class="flower-item"
     :style="styles"
-    :class="state.playing ? 'playing' : ''"
-    v-text="text"
-  ></li>
+    :class="{ playing: state.playing }"
+  >{{ options.text }}</li>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, reactive, nextTick, onMounted, onBeforeUnmount } from 'vue'
+  import { defineComponent, computed, reactive, nextTick, onMounted, onBeforeUnmount } from 'vue'
+
+  enum Event {
+    Ended = 'ended'
+  }
+
   export default defineComponent({
     name: 'WallFlowerItem',
     props: {
@@ -47,7 +51,9 @@
           // End animation
           state.timer = window.setTimeout(() => {
             state.playing = false
-            nextTick(() => context.emit('end', props.options.id))
+            nextTick(() => {
+              context.emit(Event.Ended, props.options.id)
+            })
           }, state.delay * 1000)
         })
       }
@@ -61,11 +67,7 @@
         }
       })
 
-      return {
-        state,
-        styles,
-        text: props.options.text
-      }
+      return { state, styles }
     }
   })
 </script>

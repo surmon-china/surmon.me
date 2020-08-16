@@ -135,22 +135,21 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/enhancer'
-  import { GAEventActions, GAEventTags } from '/@/constants/ga'
-  import { Language } from '/@/language/data'
+  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { Language } from '/@/language/data'
+  import AdsenseResponsive from '/@/components/adsense/responsive.vue'
   import * as APP_CONFIG from '/@/config/app.config'
 
   export default defineComponent({
     name: 'Service',
+    components: {
+      AdsenseResponsive
+    },
     setup() {
-      const { i18n, theme, globalState, isMobile, isDarkTheme } = useEnhancer()
+      const { i18n, gtag, isMobile, isDarkTheme } = useEnhancer()
 
       const handleSubmitEmail = () => {
-        // this.$ga.event(
-        //   '咨询邮件',
-        //   GAEventActions.Click,
-        //   GAEventTags.ServicePage
-        // )
         const isZhLang =  i18n.language.value === Language.Zh
         const subject = isZhLang
           ? `嗨！Surmon，久仰大名！`
@@ -165,6 +164,10 @@
           )
 
         window.open(mailAddress)
+        gtag?.event('咨询邮件', {
+          event_category: GAEventActions.Click,
+          event_label: GAEventTags.ServicePage
+        })
       }
 
       return {

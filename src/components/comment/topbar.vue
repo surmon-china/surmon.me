@@ -66,6 +66,7 @@
   import { ArticleModuleActions } from '/@/store/article'
   import { OptionModuleActions } from '/@/store/option'
   import { SortType, CommentPostType } from '/@/constants/state'
+  import { GAEventTags, GAEventActions } from '/@/constants/gtag'
   import { usePageLike } from '/@/transforms/state'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -100,7 +101,7 @@
       Events.Sort
     ],
     setup(props, context) {
-      const { i18n, store, isMobile, isZhLang } = useEnhancer()
+      const { i18n, store, gtag, isMobile, isZhLang } = useEnhancer()
       const { isLiked: isPageLiked, like: likePage } = usePageLike(props.postId)
       const isVisibleSponsor = ref(false)
 
@@ -114,11 +115,10 @@
         if (isPageLiked.value) {
           return false
         }
-        // this.$ga.event(
-        //   '喜欢当页',
-        //   GAEventActions.Click,
-        //   GAEventTags.Comment
-        // )
+        gtag?.event('喜欢当页', {
+          event_category: GAEventActions.Click,
+          event_label: GAEventTags.Comment
+        })
         try {
           await store.dispatch(
             props.postId === CommentPostType.Guestbook
@@ -135,12 +135,11 @@
       }
 
       const handleSponsor = () => {
-        // this.$ga.event(
-        //   '评论赞赏弹窗',
-        //   GAEventActions.Click,
-        //   GAEventTags.Comment
-        // )
         isVisibleSponsor.value = true
+        gtag?.event('评论赞赏弹窗', {
+          event_category: GAEventActions.Click,
+          event_label: GAEventTags.Comment
+        })
       }
 
       return {
@@ -171,6 +170,7 @@
     $size: 2em;
     display: flex;
     padding-bottom: $gap;
+    margin-bottom: $lg-gap;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px dashed $module-bg-darker-1;

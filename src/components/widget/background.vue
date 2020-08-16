@@ -1,17 +1,16 @@
 <template>
   <div id="background">
-    <div class="background-image" :class="{ dark: isDarkTheme }"></div>
+    <div class="image" :class="{ dark: isDarkTheme }"></div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
-  import { useTheme, Theme } from '/@/services/theme'
+  import { defineComponent } from 'vue'
+  import { useEnhancer } from '/@/enhancer'
   export default defineComponent({
     name: 'Background',
     setup() {
-      const theme = useTheme()
-      const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
+      const { isDarkTheme } = useEnhancer()
       return { isDarkTheme }
     }
   })
@@ -29,7 +28,7 @@
     z-index: $z-index-underground;
     background-color: $body-bg;
 
-    > .background-image {
+    .image {
       position: absolute;
       width: 100%;
       height: 100%;

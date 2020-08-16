@@ -6,15 +6,15 @@ module.exports = {
   // base: './public',
   hostname: 'surmon.me',
   port: 443,
-  open: true,
   https: true,
+  // open: true,
   alias: {
     '/@/': path.resolve(__dirname, './src')
   },
   optimizeDeps: {
     link: [],
-    include: ['swiper'],
-    allowNodeBuiltins: ['querystring'],
+    include: ['swiper', 'querystring'],
+    allowNodeBuiltins: [],
     exclude: ['esm', 'fs-extra', 'socket.io', 'request', 'cross-env', '@vue/compiler-sfc', '@vue/server-renderer']
   },
   proxy: {

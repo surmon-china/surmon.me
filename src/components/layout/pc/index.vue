@@ -5,12 +5,12 @@
         <!-- <barrage /> -->
         <background />
         <wallflower />
-        <template v-if="!layoutColumn.isFullPageLayout">
+        <template v-if="!layoutColumn.isFullPage">
           <language />
           <theme />
           <share class="main-share" />
           <wallpaper />
-          <template v-if="!layoutColumn.isFullColumeLayout">
+          <template v-if="!layoutColumn.isFullColumn">
             <toolbox />
           </template>
         </template>
@@ -20,22 +20,22 @@
     <main
       id="main"
       class="main-container"
-      :class="{ 'full-page': layoutColumn.isFullPageLayout }"
+      :class="{ 'full-page': layoutColumn.isFullPage }"
     >
-      <nav-view v-if="layoutColumn.isNormalLayout || layoutColumn.isWideLayout" />
+      <nav-view v-if="layoutColumn.isNormal || layoutColumn.isWide" />
       <div
         id="main-content"
         class="main-content"
         :class="{
-          'layout-normal': layoutColumn.isNormalLayout,
-          'layout-wide': layoutColumn.isWideLayout,
-          'layout-full-column': layoutColumn.isFullColumeLayout,
-          'layout-full-page': layoutColumn.isFullPageLayout
+          'layout-normal': layoutColumn.isNormal,
+          'layout-wide': layoutColumn.isWide,
+          'layout-full-column': layoutColumn.isFullColumn,
+          'layout-full-page': layoutColumn.isFullPage
         }"
       >
         <slot />
       </div>
-      <aside-view v-if="layoutColumn.isNormalLayout" />
+      <aside-view v-if="layoutColumn.isNormal" />
     </main>
     <footer-view />
   </div>

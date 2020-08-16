@@ -30,5 +30,7 @@ export const FRIEND_LINKS = {
 }
 
 export const MUSIC_ALBUM_ID = '638949385'
+export const GA_MEASUREMENT_ID = 'UA-84887611-3'
+export const ADSENSE_CLIENT_ID = 'ca-pub-4710915636313788'
 export const PRIMARY_COLOR = '#0088f5'
 export const DEFAULT_FETCH_DELAY = 888

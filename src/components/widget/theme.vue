@@ -8,12 +8,14 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
+  import { useGtag } from '/@/services/gtag'
   import { useTheme, Theme } from '/@/services/theme'
-  import { GAEventActions, GAEventTags } from '/@/constants/ga'
+  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
 
   export default defineComponent({
     name: 'Theme',
     setup() {
+      const gtag = useGtag()
       const theme = useTheme()
       const themeValue = theme.theme
       const isDark = computed(() => themeValue.value === Theme.Dark)
@@ -27,11 +29,10 @@
 
       const toggleTheme = () => {
         theme.toggle()
-        // this.$ga.event(
-        //   '反色模式',
-        //   GAEventActions.Toggle,
-        //   GAEventTags.Tool
-        // )
+        gtag?.event('切换主题', {
+          event_category: GAEventActions.Toggle,
+          event_label: GAEventTags.Tool
+        })
       }
 
       return {

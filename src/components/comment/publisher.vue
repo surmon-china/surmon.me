@@ -1,11 +1,11 @@
 <template>
   <form :id="ElementID.Publisher" class="publisher" name="comment">
-    <!-- profile editor -->
-    <transition name="module" mode="out-in">
-      <div v-if="!cached || editing" key="edit" class="user">
+    <div class="user">
+      <!-- profile editor -->
+      <template v-if="!cached || editing">
         <div class="name">
           <input
-            v-model="userProfile.name"
+            v-model="profileState.name"
             required
             type="text"
             name="name"
@@ -15,18 +15,17 @@
         </div>
         <div class="email">
           <input
-            v-model="userProfile.email"
+            v-model="profileState.email"
             required
             type="email"
             name="email"
             autocomplete="on"
             :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_EMAIL) + ' *'"
-            @blur="upadteUserGravatar"
           >
         </div>
         <div class="site">
           <input
-            v-model="userProfile.site"
+            v-model="profileState.site"
             type="url"
             name="url"
             autocomplete="on"
@@ -38,11 +37,11 @@
             <i class="iconfont icon-success" />
           </button>
         </div>
-      </div>
+      </template>
       <!-- profile setting -->
-      <div v-else-if="cached && !editing" key="user" class="user">
+      <template v-else>
         <div class="edit">
-          <strong class="name">{{ firstUpperCase(userProfile.name) }}</strong>
+          <strong class="name">{{ firstUpperCase(profileState.name) }}</strong>
           <span class="setting">
             <i class="iconfont icon-setting" />
             <span
@@ -61,15 +60,15 @@
             </ul>
           </span>
         </div>
-      </div>
-    </transition>
+      </template>
+    </div>
     <div class="postbox">
       <div class="user">
         <desktop-only>
           <div class="gravatar">
             <img
-              :alt="userProfile.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
-              :src="humanizeGravatarUrl(userProfile.gravatar)"
+              :alt="profileState.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
+              :src="humanizeGravatarUrlByEmail(profileState.email)"
               draggable="false"
             >
           </div>
@@ -81,7 +80,10 @@
             <div class="reply-user">
               <span class="reply-text">
                 <span v-i18n="LANGUAGE_KEYS.COMMENT_REPLY" />
-                <button class="reply-user-name" @click="scrollToComment(replyingComment.id)">
+                <button
+                  class="reply-user-name"
+                  @click.prevent="scrollToComment(replyingComment.id)"
+                >
                   #{{ replyingComment.id }} @{{ replyingComment.author.name }}：
                 </button>
               </span>
@@ -103,13 +105,12 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
+  import { defineComponent, ref, reactive, computed, watch } from 'vue'
   import { useEnhancer } from '/@/enhancer'
-  import { getGravatarByEmail } from '/@/transforms/thumbnail'
   import { firstUpperCase } from '/@/transforms/text'
   import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { CommentEvent, ElementID, getCommentElementId, humanizeGravatarUrl, scrollToElementAnchor } from './helper'
+  import { CommentEvent, ElementID, getCommentElementId, humanizeGravatarUrlByEmail, scrollToElementAnchor } from './helper'
 
   export default defineComponent({
     name: 'CommentPublisher',
@@ -141,15 +142,12 @@
     ],
     setup(props, context) {
       const { i18n, store, isMobile } = useEnhancer()
-      const userProfile = computed({
-        get() {
-          return props.profile
-        },
-        set(newProfile) {
-          console.log('------set profile', newProfile)
-          context.emit(CommentEvent.SyncProfile, newProfile)
-        }
-      })
+      const profileState = ref(props.profile)
+      watch(
+        () => props.profile,
+        profile => profileState.value = profile,
+        { deep: true }
+      )
 
       const parseMarkdown = (markdown: string) => {
         return markdown
@@ -203,13 +201,14 @@
         ElementID,
         LANGUAGE_KEYS,
         firstUpperCase,
-        humanizeGravatarUrl,
+        humanizeGravatarUrlByEmail,
         isMobile,
-        userProfile,
+        profileState,
         parseMarkdown,
         replyingComment,
         cancelCommentReply,
         scrollToComment,
+        editUserProfile,
         saveUserProfile,
         clearUserProfile
       }
@@ -223,6 +222,7 @@
   .publisher {
     display: block;
     padding-top: $gap;
+    margin-top: $lg-gap;
     border-top: 1px dashed $module-bg-darker-1;
 
     > .user {
@@ -246,7 +246,7 @@
           position: relative;
 
           &:hover {
-            > .user-tool {
+            .user-tool {
               display: block;
             }
           }
@@ -259,7 +259,7 @@
             text-transform: capitalize;
           }
 
-          > .user-tool {
+          .user-tool {
             display: none;
             position: absolute;
             right: 0;
@@ -273,10 +273,10 @@
 
             > li {
               padding: 0 $gap;
-              background-color: rgba($accent, 0.5);
-
+              cursor: pointer;
+              background-color: $primary-translucent;
               &:hover {
-                background-color: rgba($accent, 0.8);
+                background-color: $primary-lighter;
               }
             }
           }
@@ -293,11 +293,10 @@
         > button {
           width: 100%;
           height: 100%;
-          background-color: $module-bg-hover;
           @include background-transition();
-
+          background-color: $module-bg-hover;
           &:hover {
-            background-color: $module-bg-darker-5;
+            background-color: $module-bg-darker-3;
           }
         }
       }
@@ -336,14 +335,14 @@
       > .user {
         margin-right: 1em;
 
-        > .gravatar {
+        .gravatar {
           display: block;
           margin-bottom: .5em;
           width: 4rem;
           height: 4rem;
           background-color: $module-bg-darker-1;
 
-          > img {
+          img {
             width: 100%;
             height: 100%;
             transition: transform .5s ease-out;
@@ -379,6 +378,13 @@
               margin-left: $sm-gap;
               display: inline;
               font-weight: bold;
+            }
+
+            .reply-user-name,
+            .cancel {
+              &:hover {
+                color: $link-color-hover;
+              }
             }
           }
 
