@@ -24,6 +24,7 @@ export enum ArticleModuleListMutations {
   // hot list
   SetHotListData = 'setHotListData',
   SetHotListFetched = 'setHotListFetched',
+  SetHotListFetching = 'setHotListFetching',
   // detail
   SetDetailData = 'setDetailData',
   SetDetailFetching = 'setDetailFetching',
@@ -45,6 +46,7 @@ const getDefaultListData = () => ({
 const state = () => ({
   hotList: {
     fetched: false,
+    fetching: false,
     data: [] as Array<$TODO>
   },
   list: {
@@ -73,6 +75,9 @@ const mutations: MutationTree<ArticleState> = {
   // 热门文章
   [ArticleModuleListMutations.SetHotListFetched](state, fetched: boolean) {
     state.hotList.fetched = fetched
+  },
+  [ArticleModuleListMutations.SetHotListFetching](state, fetching: boolean) {
+    state.hotList.fetching = fetching
   },
   [ArticleModuleListMutations.SetHotListData](state, hotArticles) {
     state.hotList.data = hotArticles
@@ -128,12 +133,16 @@ const actions: ActionTree<ArticleState, IRootState> = {
     if (state.hotList.fetched) {
       return Promise.resolve(state.hotList.data)
     }
+    commit(ArticleModuleListMutations.SetHotListFetching, true)
     return http
       .get(ARTICLE_API_PATH, { params: { cache: 1, sort: SortType.Hot } })
       .then(response => {
         commit(ArticleModuleListMutations.SetHotListData, response.result.data)
         commit(ArticleModuleListMutations.SetHotListFetched, true)
         return response
+      })
+      .finally(() => {
+        commit(ArticleModuleListMutations.SetHotListFetching, false)
       })
   },
 

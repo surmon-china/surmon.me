@@ -5,40 +5,45 @@
       :fetching="tagData.fetching"
       :p-i18n-key="LANGUAGE_KEYS.TAG_PLACEHOLDER"
     >
-      <div class="tag-list">
-        <router-link
-          class="item"
-          :title="tag.description"
-          :to="getTagArchiveRoute(tag.slug)"
-          :key="index"
-          v-for="(tag, index) in tagData.data"
-        >
-          <i class="iconfont" :class="getTagIcon(tag)" />
-          <span class="name">
-            <i18n :zh="tag.name" :en="tag.slug" />
-            <span class="count">({{ tag.count || 0 }})</span>
-          </span>
-        </router-link>
-      </div>
+      <template #loading>
+        <ul class="tag-list-skeleton" key="skeleton">
+          <li v-for="item in 14" :key="item" class="item">
+            <skeleton-line />
+          </li>
+        </ul>
+      </template>
+      <template #default>
+        <div class="tag-list" key="list">
+          <router-link
+            class="item"
+            :title="tag.description"
+            :to="getTagArchiveRoute(tag.slug)"
+            :key="index"
+            v-for="(tag, index) in tagData.data"
+          >
+            <i class="iconfont" :class="getTagIcon(tag)" />
+            <span class="name">
+              <i18n :zh="tag.name" :en="tag.slug" />
+              <span class="count">({{ tag.count || 0 }})</span>
+            </span>
+          </router-link>
+        </div>
+      </template>
     </placeholder>
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useRoute } from 'vue-router'
-  import { useStore } from '/@/store'
-  import { useI18n } from '/@/services/i18n'
+  import { useEnhancer } from '/@/enhancer'
   import { getTagArchiveRoute } from '/@/transforms/route'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { getExtendsValue } from '/@/transforms/state'
+  import { LANGUAGE_KEYS } from '/@/language/key'
 
   export default defineComponent({
     name: 'PcAsideTag',
     setup() {
-      const i18n = useI18n()
-      const store = useStore()
-      const route = useRoute()
+      const { i18n, store, route } = useEnhancer()
       const tagData = computed(() => store.state.tag)
       const getTagIcon = (tag: any) => {
         return getExtendsValue(tag, 'icon') || 'icon-tag'
@@ -66,6 +71,37 @@
     width: 100%;
     border-top: $gap solid transparent;
     border-bottom: $gap solid transparent;
+
+    .tag-list-skeleton {
+      display: flex;
+      flex-wrap: wrap;
+      list-style: none;
+      padding: 0;
+      margin: 0 $gap;
+      overflow: hidden;
+
+      .item {
+        width: calc(50% - #{$gap / 2});
+        height: 1.4em;
+        margin-right: 0;
+        margin-bottom: $gap;
+
+        &:nth-child(2n-1) {
+          margin-right: $gap;
+        }
+        &:nth-child(4n-1) {
+          width: 30%;
+          margin-right: $gap;
+        }
+        &:nth-child(4n) {
+          width: calc(70% - #{$gap});
+        }
+        &:nth-last-child(1),
+        &:nth-last-child(2) {
+          margin-bottom: 0;
+        }
+      }
+    }
 
     .tag-list {
       list-style: none;
