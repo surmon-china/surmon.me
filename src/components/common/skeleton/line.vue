@@ -25,10 +25,7 @@
         ...(props.width && { width: props.width + 'px' }),
         ...(props.height && { height: props.height + 'px' })
       }))
-
-      return {
-        style
-      }
+      return { style }
     }
   })
 </script>

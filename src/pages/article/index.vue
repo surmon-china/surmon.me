@@ -81,7 +81,24 @@
       const article = computed(() => store.state.article.detail.data)
       const fetching = computed(() => store.state.article.detail.fetching)
       const articleId = computed(() => Number(route.params.article_id))
-      const relatedArticles = computed(() => [...article.value?.related].slice(0, 10))
+      const relatedArticles = computed(() => {
+        const ARTICLE_COUNT = 6
+        const articles = [...article.value?.related]
+          .filter(article => article._id !== articleId.value)
+          .slice(0, ARTICLE_COUNT)
+        if (isMobile.value || articles.length >= ARTICLE_COUNT) {
+          return articles
+        }
+        return [
+          ...articles,
+          ...new Array(ARTICLE_COUNT - articles.length).fill({
+            disabled: true,
+            title: 'NULL',
+            _id: '',
+            thumb: ''
+          })
+        ]
+      })
 
       // TODO: validate
       // if (isNaN(articleId.value)) {

@@ -1,12 +1,13 @@
 <template>
   <footer id="footer" class="footer">
     <div class="container">
-      <!-- <a
+      <a
         class="ipc"
         target="_blank"
         rel="external nofollow noopener"
         href="http://www.beian.miit.gov.cn"
-      >陕 ICP 备 13004859 号-2</a> -->
+        v-if="false"
+      >陕 ICP 备 13004859 号-2</a>
       <a
         class="sitemap-btn"
         href="/sitemap.xml"

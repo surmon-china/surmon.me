@@ -24,7 +24,8 @@
       <template #default>
         <ul class="articles">
           <li
-            v-for="(article, index) in articles.slice(0, 6)"
+            v-for="(article, index) in articles"
+            :class="{ disabled: article.disabled }"
             :key="index"
             class="item"
           >
@@ -79,7 +80,7 @@
       const getRelatedArticleThumb = (thumb: string) => {
         return getArchiveArticleThumbnailUrl(
           thumb,
-          globalState.imageExt.isWebP.value
+          globalState.imageExt.isWebP
         )
       }
 
@@ -130,6 +131,11 @@
         margin-bottom: $gap;
         @include radius-box($sm-radius);
         @include common-bg-module();
+
+        &.disabled {
+          pointer-events: none;
+          opacity: .8;
+        }
 
         &:nth-child(3n) {
           margin-right: 0;

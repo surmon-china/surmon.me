@@ -6,20 +6,30 @@
     </p>
     <placeholder
       :data="articles"
+      :loading="isFetching"
       :p-i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"
     >
-      <ul class="article-list">
-        <li v-for="item in articles" :key="item.id" class="item">
-          <span class="index"></span>
-          <router-link
-            class="title"
-            :to="getArticleDetailRoute(item.id)"
-            :title="getArticleTitle(item)"
-          >
-            {{ item.title }}
-          </router-link>
-        </li>
-      </ul>
+      <template #loading>
+        <ul class="article-list-skeleton" key="skeleton">
+          <li v-for="item in 5" :key="item" class="item">
+            <skeleton-line />
+          </li>
+        </ul>
+      </template>
+      <template #default>
+        <ul class="article-list" key="list">
+          <li v-for="item in articles" :key="item.id" class="item">
+            <span class="index"></span>
+            <router-link
+              class="title"
+              :to="getArticleDetailRoute(item.id)"
+              :title="getArticleTitle(item)"
+            >
+              {{ item.title }}
+            </router-link>
+          </li>
+        </ul>
+      </template>
     </placeholder>
   </div>
 </template>
@@ -38,6 +48,7 @@
       const i18n = useI18n()
       const store = useStore()
       const articles = computed(() => store.state.article.hotList.data)
+      const isFetching = computed(() => store.state.article.hotList.fetching)
 
       const getArticleTitle = (article: any) => {
         const commentCount = article.meta.comments + i18n.translate(LANGUAGE_KEYS.COMMENT_LIST_COUNT)
@@ -47,6 +58,7 @@
 
       return {
         articles,
+        isFetching,
         getArticleTitle,
         getArticleDetailRoute,
         LANGUAGE_KEYS
@@ -75,7 +87,21 @@
       }
     }
 
-    > .article-list {
+    .article-list-skeleton {
+      list-style: none;
+      padding: $gap;
+      margin: 0;
+
+      .item {
+        height: 1em;
+        margin-bottom: $gap;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .article-list {
       list-style: none;
       padding: $sm-gap 0;
       margin-bottom: 0;

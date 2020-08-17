@@ -1,7 +1,7 @@
 <template>
   <div
     class="service-page"
-    :class="{ mobile: isMobile, dark: isDarkTheme }"
+    :class="{ mobile: isMobile }"
   >
     <div class="banner">
       <div class="content container">
@@ -147,7 +147,7 @@
       AdsenseResponsive
     },
     setup() {
-      const { i18n, gtag, isMobile, isDarkTheme } = useEnhancer()
+      const { i18n, gtag, isMobile } = useEnhancer()
 
       const handleSubmitEmail = () => {
         const isZhLang =  i18n.language.value === Language.Zh
@@ -171,7 +171,6 @@
       }
 
       return {
-        isDarkTheme,
         isMobile,
         handleSubmitEmail,
         upworkLink: APP_CONFIG.LINKS.upwork,
@@ -265,26 +264,6 @@
       }
     }
 
-    &.dark {
-      .banner {
-        .content {
-          .title {
-            color: $text;
-          }
-
-          .submit {
-            .email-me {
-              color: $text;
-              border-color: $text;
-            }
-          }
-
-          .upwork {
-            color: $text;
-          }
-        }
-      }
-    }
 
     .banner {
       height: $full-column-page-banner-height;
@@ -298,7 +277,7 @@
         text-align: center;
 
         .title {
-          color: $text-reversal;
+          color: $white;
           margin-top: 7rem;
           margin-bottom: 4rem;
           font-weight: bold;
@@ -312,13 +291,13 @@
           .email-me {
             width: 10rem;
             border: 1px solid;
-            border-color: $text-reversal;
+            border-color: $white;
             line-height: 3.8rem;
             text-align: center;
             letter-spacing: 1px;
             font-weight: bold;
             text-transform: uppercase;
-            color: $text-reversal;
+            color: $white;
             transition: color $transition-time-fast, border-color $transition-time-fast;
             @include radius-box($xs-radius);
 
@@ -330,7 +309,7 @@
         }
 
         .upwork {
-          color: $text-reversal;
+          color: $white;
           border-bottom: 1px solid;
           border-color: transparent;
           transition:
@@ -420,13 +399,13 @@
       }
     }
 
-    > .mammon {
-      height: auto;
+    .mammon {
+      height: 192px;
       margin-bottom: $gap * 2;
       background-color: $module-bg;
     }
 
-    > .step {
+    .step {
       @include common-bg-module();
 
       > .step-content {

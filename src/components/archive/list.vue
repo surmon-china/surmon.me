@@ -21,6 +21,23 @@
         :data="articles.length"
         :fetching="!articles.length && fetching"
       >
+        <template #loading>
+          <ul class="article-list-skeleton" key="skeleton">
+            <li v-for="item in 5" :key="item" class="item">
+              <div class="thumb">
+                <skeleton-base />
+              </div>
+              <div class="content">
+                <div class="title">
+                  <skeleton-line />
+                </div>
+                <div class="description">
+                  <skeleton-paragraph :lines="4" />
+                </div>
+              </div>
+            </li>
+          </ul>
+        </template>
         <template #placeholder>
           <empty
             class="empty"
@@ -170,7 +187,44 @@
       }
     }
 
-    > .article-list {
+    .article-list-skeleton {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      overflow: hidden;
+
+      .item {
+        display: flex;
+        height: 10rem;
+        padding: $sm-gap;
+        margin-bottom: $lg-gap;
+        @include common-bg-module();
+        @include radius-box($sm-radius);
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .thumb {
+          height: 100%;
+          width: 15rem;
+        }
+
+        .content {
+          margin-left: $lg-gap;
+          flex-grow: 1;
+
+          .title {
+            height: 1.4em;
+            width: 36%;
+          }
+          .description {
+            margin-top: $sm-gap;
+          }
+        }
+      }
+    }
+
+    .article-list {
       margin-bottom: $lg-gap;
       min-height: $lg-gap;
       overflow: hidden;
@@ -182,12 +236,12 @@
       }
     }
 
-    > .article-load {
+    .article-load {
       overflow: hidden;
       z-index: $z-index-normal;
       @include radius-box($sm-radius);
 
-      > .loadmore-button {
+      .loadmore-button {
         display: flex;
         justify-content: space-between;
         width: 100%;
