@@ -1,5 +1,6 @@
 import { RouteRecordRaw, NavigationGuard, PostNavigationGuard, RouterHistory, createRouter } from 'vue-router'
 import { LayoutColumn } from '/@/state'
+import { scrollToTop } from '/@/utils/effects'
 import ErrorPage from './pages/error.vue'
 
 export enum RouteName {
@@ -130,12 +131,8 @@ export const createUniversalRouter = (config: RouterCreateConfig) => {
     strict: true,
     history: config.history,
     linkActiveClass: 'link-active',
-    scrollBehavior(to, from, savedPosition) {
-      return savedPosition || {
-        top: 0,
-        left: 0,
-        behavior: 'smooth'
-      }
+    scrollBehavior(_, __, savedPosition) {
+      return savedPosition || scrollToTop()
     }
   })
 

@@ -148,15 +148,6 @@ const actions: ActionTree<ArticleState, IRootState> = {
 
   // 获取文章详情
   [ArticleModuleActions.FetchDetail]({ commit }, params: any) {
-    // 到顶部？也许是不必要的
-    // if (isClient) {
-    //   Vue.nextTick(() => {
-    //     scrollTo(0, 300, { easing: Easing['ease-in'] })
-    //   })
-    // }
-    // const delay = fetchDelay(
-    //   isClient && isArticleDetail(window.$nuxt.$route.name) ? null : 0
-    // )
     params.delay = params.delay || 0
     const delay = fetchDelay(params.delay)
 

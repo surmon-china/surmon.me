@@ -37,11 +37,12 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
+  import { defineComponent, ref, computed, watch } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { CommentModuleActions } from '/@/store/comment'
+  import { isClient } from '/@/vuniversal/env'
   import Comment from '/@/components/comment/index.vue'
   import ArticleContent from './content.vue'
   import ArticleMammon from './mammon.vue'
@@ -82,8 +83,11 @@
       const fetching = computed(() => store.state.article.detail.fetching)
       const articleId = computed(() => Number(route.params.article_id))
       const relatedArticles = computed(() => {
+        if (!article.value) {
+          return []
+        }
         const ARTICLE_COUNT = 6
-        const articles = [...article.value?.related]
+        const articles = [...article.value.related]
           .filter(article => article._id !== articleId.value)
           .slice(0, ARTICLE_COUNT)
         if (isMobile.value || articles.length >= ARTICLE_COUNT) {
@@ -105,17 +109,27 @@
       //   throw new Error('xxx')
       // }
 
-      await Promise.all([
-        store.dispatch(
-          getNamespace(Modules.Article, ArticleModuleActions.FetchDetail),
-          { article_id: articleId.value }
-        ),
-          // .catch(err => error({ statusCode: 404 })),
-        store.dispatch(
-          getNamespace(Modules.Comment, CommentModuleActions.FetchList),
-          { post_id: articleId.value }
-        )
-      ])
+      const fetchArticleDetail = (article_id: string | number) => {
+        return Promise.all([
+          store.dispatch(
+            getNamespace(Modules.Article, ArticleModuleActions.FetchDetail),
+            // TODO: isClient
+            { article_id, delay: 666 }
+          ),
+            // .catch(err => error({ statusCode: 404 })),
+          store.dispatch(
+            getNamespace(Modules.Comment, CommentModuleActions.FetchList),
+            { post_id: article_id }
+          )
+        ])
+      }
+
+      watch(
+        () => route.params as Record<string, string>,
+        ({ article_id }) => fetchArticleDetail(article_id)
+      )
+
+      await fetchArticleDetail(articleId.value)
 
       return {
         isMobile,

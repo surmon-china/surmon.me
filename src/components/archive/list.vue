@@ -19,7 +19,7 @@
     <div class="article-list">
       <placeholder
         :data="articles.length"
-        :fetching="!articles.length && fetching"
+        :loading="!articles.length && fetching"
       >
         <template #loading>
           <ul class="article-list-skeleton" key="skeleton">
@@ -114,10 +114,7 @@
         type: Array as PropType<any[]>,
         required: true
       },
-      pagination: {
-        type: Object as PropType<any>,
-        required: true
-      },
+      pagination: Object,
       fetching: {
         type: Boolean,
         default: true

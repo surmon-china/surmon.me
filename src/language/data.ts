@@ -275,11 +275,11 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.En]: 'reply'
   },
   [LANGUAGE_KEYS.COMMENT_PAGINATION_OLD]: {
-    [Language.Zh]: '更旧',
+    [Language.Zh]: '最旧',
     [Language.En]: 'old'
   },
   [LANGUAGE_KEYS.COMMENT_PAGINATION_NEW]: {
-    [Language.Zh]: '更新',
+    [Language.Zh]: '最新',
     [Language.En]: 'new'
   },
   [LANGUAGE_KEYS.COMMENT_PAGINATION_HOT]: {

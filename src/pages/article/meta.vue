@@ -130,7 +130,7 @@
     props: {
       article: {
         type: Object,
-        required: true
+        default: null
       },
       fetching: {
         type: Boolean,
@@ -139,9 +139,9 @@
     },
     setup(props) {
       const { i18n, isMobile, globalState } = useEnhancer()
-      const articleUrl = computed(
-        () => getPageUrl(getArticleDetailRoute(props.article.id))
-      )
+      const articleUrl = computed(() => getPageUrl(
+        getArticleDetailRoute(props.article?.id)
+      ))
 
       const getDateTitle = (date: string) => {
         return humanizeYMD(date, i18n.language.value as Language)
