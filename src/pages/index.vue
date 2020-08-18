@@ -3,6 +3,7 @@
     <carrousel :articles="article.data.data" />
     <announcement :announcements="announcement.data" />
     <article-list
+      :mammon="false"
       :fetching="article.fetching"
       :articles="article.data.data"
       :pagination="article.data.pagination"
