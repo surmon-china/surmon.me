@@ -20,12 +20,13 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
-  import { useStore, Modules, getNamespace } from '/@/store'
+  import { defineComponent, computed, watch } from 'vue'
+  import { useEnhancer } from '/@/enhancer'
+  import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
+  import { nextScreen, scrollToTop } from '/@/utils/effects'
 
   export default defineComponent({
     name: 'SearchPage',
@@ -39,10 +40,7 @@
     //   }
     // },
     async setup() {
-      const store = useStore()
-      const route = useRoute()
-      const router = useRouter()
-
+      const { store, route, router } = useEnhancer()
       const article = computed(() => store.state.article.list)
       const currentKeyword = computed(() => route.params.keyword)
 
@@ -64,7 +62,12 @@
         })
       }
 
-      await fetchArticles(route.params)
+      watch(
+        () => route.params,
+        ({ keyword }) => fetchArticles({ keyword })
+      )
+
+      await fetchArticles({ keyword: currentKeyword.value })
 
       return {
         article,

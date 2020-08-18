@@ -17,15 +17,15 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
-  import { useStore, Modules, getNamespace } from '/@/store'
+  import { defineComponent, computed, watch } from 'vue'
+  import { useEnhancer } from '/@/enhancer'
+  import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { CategoryModuleActions } from '/@/store/category'
   import { getExtendsValue } from '/@/transforms/state'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
-  import { nextScreen } from '/@/utils/effects'
+  import { nextScreen, scrollToTop } from '/@/utils/effects'
 
   export default defineComponent({
     name: 'CategoryPage',
@@ -43,9 +43,8 @@
     //   }
     // },
     async setup() {
-      const store = useStore()
-      const route = useRoute()
-      const router = useRouter()
+      const { store, route, router } = useEnhancer()
+      const categorySlug = computed(() => route.params.category_slug as string)
 
       const fetchCategories = () => store.dispatch(
         getNamespace(Modules.Category, CategoryModuleActions.FetchList)
@@ -56,27 +55,32 @@
         params
       )
 
-      const loadmoreArticles = async () => {
-        const targetPage = article.value.data.pagination?.current_page + 1
-        await fetchArticles({
-          ...route.params,
-          category_slug: route.params.category_slug,
-          page: targetPage
-        })
-        if (targetPage > 1) {
-          nextScreen()
-        }
+      const loadmoreArticles = () => {
+        fetchArticles({
+          category_slug: categorySlug.value,
+          page: article.value.data.pagination.current_page + 1
+        }).then(nextScreen)
       }
 
-      await Promise.all([
-        fetchCategories(),
-        fetchArticles(route.params)
-      ])
+      const fetchAllData = (category_slug: string) => {
+        scrollToTop()
+        return Promise.all([
+          fetchCategories(),
+          fetchArticles({ category_slug })
+        ])
+      }
+
+      watch(
+        () => route.params,
+        params => fetchAllData(params.category_slug as string)
+      )
+
+      await fetchAllData(categorySlug.value)
 
       const article = computed(() => store.state.article.list)
       const currentCategory = computed(() => {
         return store.state.category.data.find(category => {
-          return category.slug === route.params.category_slug
+          return category.slug === categorySlug.value
         })
       })
 
@@ -86,15 +90,18 @@
         return
       }
 
-      const currentCategoryIcon = computed(() => {
-        return getExtendsValue(currentCategory.value, 'icon') || 'icon-category'
-      })
-      const currentCategoryImage = computed(() => {
-        return getExtendsValue(currentCategory.value, 'background')
-      })
-      const currentCategoryColor = computed(() => {
-        return getExtendsValue(currentCategory.value, 'bgcolor')
-      })
+      const currentCategoryIcon = computed(() => (
+        getExtendsValue(currentCategory.value, 'icon') ||
+        'icon-category'
+      ))
+      const currentCategoryImage = computed(() => getExtendsValue(
+        currentCategory.value,
+        'background'
+      ))
+      const currentCategoryColor = computed(() => getExtendsValue(
+        currentCategory.value,
+        'bgcolor'
+      ))
 
       return {
         article,

@@ -1,8 +1,12 @@
 <template>
   <div class="related" :class="{ mobile: isMobile }">
-    <placeholder :loading="fetching">
+    <placeholder
+      :loading="fetching"
+      :data="articles.length"
+    >
       <template #loading>
-        <responsive>
+        <!-- TODO!! -->
+        <!-- <responsive key="skeleton">
           <template #desktop>
             <ul class="skeleton-list">
               <skeleton-base
@@ -19,10 +23,17 @@
               line-height="1em"
             />
           </template>
-        </responsive>
+        </responsive> -->
+        <ul class="skeleton-list">
+          <skeleton-base
+            class="article"
+            v-for="item in 4"
+            :key="item"
+          />
+        </ul>
       </template>
       <template #default>
-        <ul class="articles">
+        <ul class="articles" key="articles">
           <li
             v-for="(article, index) in articles"
             :class="{ disabled: article.disabled }"
@@ -57,7 +68,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, ref, PropType } from 'vue'
+  import { defineComponent, PropType } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
@@ -76,7 +87,6 @@
     },
     setup() {
       const { store, globalState, isMobile } = useEnhancer()
-
       const getRelatedArticleThumb = (thumb: string) => {
         return getArchiveArticleThumbnailUrl(
           thumb,

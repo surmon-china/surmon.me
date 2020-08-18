@@ -6,7 +6,7 @@
       :icon="currentTagIcon"
     >
       <i18n :zh="currentTag.name" :en="currentTag.slug" />
-      <span>&nbsp;-&nbsp;</span>
+      <span class="delimiter">-</span>
       <span>{{ currentTag.description || '...' }}</span>
     </article-list-header>
     <article-list
@@ -19,14 +19,15 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
-  import { useStore, Modules, getNamespace } from '/@/store'
+  import { defineComponent, computed, watch } from 'vue'
+  import { useEnhancer } from '/@/enhancer'
+  import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { TagModuleActions } from '/@/store/tag'
   import { getExtendsValue } from '/@/transforms/state'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
+  import { nextScreen, scrollToTop } from '/@/utils/effects'
 
   export default defineComponent({
     name: 'TagPage',
@@ -40,9 +41,8 @@
     //   return { title: `${title} | Tag` }
     // },
     async setup() {
-      const store = useStore()
-      const route = useRoute()
-      const router = useRouter()
+      const { store, route, router } = useEnhancer()
+      const tagSlug = computed(() => route.params.tag_slug as string)
 
       const fetchTags = () => store.dispatch(
         getNamespace(Modules.Tag, TagModuleActions.FetchAll)
@@ -56,17 +56,27 @@
       }
 
       const loadmoreArticles = () => {
-        return fetchArticles({
+        fetchArticles({
           ...route.params,
-          tag_slug: route.params.tag_slug,
+          tag_slug: tagSlug.value,
           page: article.value.data.pagination.current_page + 1
-        })
+        }).then(nextScreen)
       }
 
-      await Promise.all([
-        fetchTags(),
-        fetchArticles(route.params),
-      ])
+      const fetchAllData = (tag_slug: string) => {
+        scrollToTop()
+        return Promise.all([
+          fetchTags(),
+          fetchArticles({ tag_slug })
+        ])
+      }
+
+      watch(
+        () => route.params,
+        params => fetchAllData(params.tag_slug as string)
+      )
+
+      await fetchAllData(tagSlug.value)
 
       const article = computed(() => store.state.article.list)
       const currentTag = computed(() => {
@@ -81,15 +91,9 @@
         return
       }
 
-      const currentTagIcon = computed(
-        () => getExtendsValue(currentTag.value, 'icon') || 'icon-tag'
-      )
-      const currentTagImage = computed(
-        () => getExtendsValue(currentTag.value, 'background')
-      )
-      const currentTagColor = computed(
-        () => getExtendsValue(currentTag.value, 'bgcolor')
-      )
+      const currentTagIcon = computed(() => getExtendsValue(currentTag.value, 'icon') || 'icon-tag')
+      const currentTagImage = computed(() => getExtendsValue(currentTag.value, 'background'))
+      const currentTagColor = computed(() => getExtendsValue(currentTag.value, 'bgcolor'))
 
       return {
         article,
@@ -102,3 +106,11 @@
     }
   })
 </script>
+
+<style lang="scss" scoped>
+  @import 'src/assets/styles/init.scss';
+
+  .delimiter {
+    margin: 0 $sm-gap;
+  }
+</style>

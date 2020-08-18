@@ -34,7 +34,7 @@
         src="/partials/mammon/aside.html"
       />
     </div>
-    <div class="aside-sticky-box">
+    <div :id="ASIDE_STICKY_ELEMENT_ID" class="aside-sticky-box">
       <client-only>
         <div class="module mammon" v-if="renderStickyAd">
           <aside-mammon
@@ -66,6 +66,8 @@
   import AsideTag from './tag.vue'
   import AsideTool from './tool.vue'
 
+  const ASIDE_STICKY_ELEMENT_ID = 'aside-sticky-module'
+
   export default defineComponent({
     name: 'PcAside',
     components: {
@@ -78,6 +80,7 @@
     },
     setup() {
       const { i18n } = useEnhancer()
+
       // polyfill sticky event
       let stickyEvents: any = null
       const element = ref<HTMLDivElement>(null as any)
@@ -102,17 +105,19 @@
       const handleStickyStateChange = (event) => {
         // workaround: when (main container height >= aside height) & isSticky -> render sticky ad
         const asideElementHeight = element.value.clientHeight
-        // @ts-ignore
-        const mainContentElementHeight = document.getElementById('main-content').children[0].clientHeight
-        const isFeasible = mainContentElementHeight >= asideElementHeight
-        renderStickyAd.value = isFeasible && event.detail.isSticky
+        const targetElement = document.getElementById('main-content')?.children?.[0]
+        if (targetElement) {
+          const mainContentElementHeight = targetElement.clientHeight
+          const isFeasible = mainContentElementHeight >= asideElementHeight
+          renderStickyAd.value = isFeasible && event.detail.isSticky
+        }
       }
 
       onMounted(() => {
         nextTick(() => {
           stickyEvents = new StickyEvents({
             enabled: true,
-            stickySelector: '.aside-sticky-box'
+            stickySelector: `#${ASIDE_STICKY_ELEMENT_ID}`
           })
           stickyEvents.stickyElements[0].addEventListener(
             StickyEvents.CHANGE,
@@ -132,6 +137,7 @@
 
       return {
         LANGUAGE_KEYS,
+        ASIDE_STICKY_ELEMENT_ID,
         t: i18n.t,
         adIndex,
         renderStickyAd,

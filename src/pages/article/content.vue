@@ -24,7 +24,7 @@
       @after-enter="handleContentAnimateDone"
     >
       <template #loading>
-        <div class="skeleton">
+        <div class="skeleton" key="skeleton">
           <skeleton-line class="title" />
           <skeleton-paragraph
             class="content"
@@ -34,8 +34,8 @@
         </div>
       </template>
       <template #default>
-        <div class="knowledge">
-          <h2 class="title">{{ article.title }}</h2>
+        <div class="knowledge" key="knowledge">
+          <h2 class="title">{{ article?.title }}</h2>
           <div
             class="markdown-html"
             :id="contentElementIds.default"
@@ -90,10 +90,7 @@
   export default defineComponent({
     name: 'ArticleContent',
     props: {
-      article: {
-        type: Object,
-        required: true
-      },
+      article: Object,
       fetching: {
         type: Boolean,
         required: true
@@ -158,7 +155,6 @@
           result.default = parseMarkdown(content)
           result.leftover = ''
         }
-
         return result
       })
 
@@ -183,25 +179,16 @@
         if (!lozadElements || !lozadElements.length) {
           return false
         }
-        // console.log('计算出的文档:', this.$refs.detail, contentElement, lozadElements)
         const lozadObserver = window.lozad(lozadElements, {
           loaded: element => element.classList.add('loaded')
         })
         lozadObserver.observe()
-        // console.log('重新监听 observer', lozadObserver)
       }
 
-      const handleContentAnimateDone = () => {
-        // console.log('handleContentAnimateDone')
-        observeLozad(contentElementIds.default)
-      }
-      const handleRenderMoreAnimateDone = () => {
-        // console.log('handleRenderMoreAnimateDone')
-        observeLozad(contentElementIds.leftover)
-      }
-      onMounted(() => {
-        observeLozad(contentElementIds.default)
-      })
+      const handleContentAnimateDone = () => observeLozad(contentElementIds.default)
+      const handleRenderMoreAnimateDone = () => observeLozad(contentElementIds.leftover)
+
+      onMounted(handleContentAnimateDone)
 
       return {
         LANGUAGE_KEYS,

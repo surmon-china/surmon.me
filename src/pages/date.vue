@@ -20,12 +20,13 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
-  import { useStore, Modules, getNamespace } from '/@/store'
+  import { defineComponent, computed, watch } from 'vue'
+  import { useEnhancer } from '/@/enhancer'
+  import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
+  import { nextScreen, scrollToTop } from '/@/utils/effects'
 
   export default defineComponent({
     name: 'DatePage',
@@ -34,19 +35,18 @@
       ArticleList
     },
     async setup() {
-      const store = useStore()
-      const route = useRoute()
-      const router = useRouter()
-
+      const { store, route, router } = useEnhancer()
       const article = computed(() => store.state.article.list)
       const currentDate = computed(() => route.params.date)
 
       // TODO: 验证参数
-      if (!currentDate.value) {
-        router.back()
-      }
+      // if (!currentDate.value || currentDate.value) {
+        // throw Error('你很有问题!')
+        // router.back()
+      // }
 
       const fetchArticles = (params: any) => {
+        scrollToTop()
         return store.dispatch(
           getNamespace(Modules.Article, ArticleModuleActions.FetchList),
           params
@@ -55,13 +55,17 @@
 
       const loadmoreArticles = () => {
         return fetchArticles({
-          ...route.params,
-          date: route.params.date,
+          date: currentDate.value,
           page: article.value.data.pagination.current_page + 1
-        })
+        }).then(nextScreen)
       }
 
-      await fetchArticles(route.params)
+      watch(
+        () => route.params,
+        ({ date }) => fetchArticles({ date })
+      )
+
+      await fetchArticles({ date: currentDate.value })
 
       return {
         article,

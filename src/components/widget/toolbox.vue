@@ -25,7 +25,7 @@
         <button
           class="to-page-top"
           :title="t(LANGUAGE_KEYS.TO_TOP)"
-          @click="totop"
+          @click="scrollToTop"
           @mouseover="setTopButtonState(true, true)"
           @mouseleave="setTopButtonState(false)"
         >
@@ -51,6 +51,7 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { scrollTo, Easing } from '/@/utils/scroller'
+  import { scrollToTop } from '/@/utils/effects'
   import { META } from '/@/config/app.config'
 
   export default defineComponent({
@@ -98,9 +99,7 @@
         t: i18n.translate,
         LANGUAGE_KEYS,
         isOnBarrage,
-        totop() {
-          scrollTo('body', 300, { easing: Easing.easeIn })
-        },
+        scrollToTop,
         toBottom() {
           scrollTo(
             window.scrollY + window.innerHeight,

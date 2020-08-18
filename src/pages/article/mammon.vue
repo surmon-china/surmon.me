@@ -1,21 +1,19 @@
 <template>
   <div class="mammon">
     <placeholder :loading="fetching">
-      <template #loading>
-        <skeleton-paragraph
-          key="skeleton"
-          class="skeleton"
-          line-height="1em"
-          :lines="4"
-        />
-      </template>
-      <template #default>
-        <adsense-responsive
-          key="adsense"
-          class="mammon-box"
-          ins-class="mammon-ins"
-        />
-      </template>
+      <skeleton-paragraph
+        #loading
+        key="skeleton"
+        class="skeleton"
+        line-height="1em"
+        :lines="4"
+      />
+      <adsense-responsive
+        #default
+        key="adsense"
+        class="mammon-box"
+        ins-class="mammon-ins"
+      />
     </placeholder>
   </div>
 </template>
@@ -31,7 +29,7 @@
     props: {
       fetching: {
         type: Boolean,
-        default: false
+        required: true
       }
     }
   })
