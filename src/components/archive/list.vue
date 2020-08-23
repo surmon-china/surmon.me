@@ -7,13 +7,20 @@
     }"
   >
     <!-- mammon -->
-    <transition name="module">
-      <component
-        v-if="isMammonEnabled"
-        class="article-list-mammon"
-        :is="isMobile ? 'adsense-archive-mobile' : 'adsense-archive'"
-      />
-    </transition>
+    <client-only>
+      <transition name="module">
+        <template v-if="isMammonEnabled">
+          <adsense-archive-mobile
+            v-if="isMobile"
+            class="article-list-mammon"
+          />
+          <adsense-archive
+            v-else
+            class="article-list-mammon"
+          />
+        </template>
+      </transition>
+    </client-only>
 
     <!-- list -->
     <div class="article-list">

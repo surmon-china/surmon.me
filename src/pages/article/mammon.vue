@@ -1,19 +1,21 @@
 <template>
   <div class="mammon">
     <placeholder :loading="fetching">
-      <skeleton-paragraph
-        #loading
-        key="skeleton"
-        class="skeleton"
-        line-height="1em"
-        :lines="4"
-      />
-      <adsense-responsive
-        #default
-        key="adsense"
-        class="mammon-box"
-        ins-class="mammon-ins"
-      />
+      <template #loading>
+        <skeleton-paragraph
+          key="skeleton"
+          class="skeleton"
+          line-height="1em"
+          :lines="4"
+        />
+      </template>
+      <template #default>
+        <adsense-responsive
+          key="adsense"
+          class="mammon-box"
+          ins-class="mammon-ins"
+        />
+      </template>
     </placeholder>
   </div>
 </template>

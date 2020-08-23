@@ -83,7 +83,9 @@
     <desktop-only>
       <client-only>
         <div class="mammon container">
-          <adsense-responsive ins-style="display:inline-block;width:1050px;height:192px" />
+          <adsense-responsive
+            ins-style="display:inline-block;width:1050px;height:192px"
+          />
         </div>
       </client-only>
     </desktop-only>

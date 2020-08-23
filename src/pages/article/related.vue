@@ -2,29 +2,16 @@
   <div class="related" :class="{ mobile: isMobile }">
     <placeholder
       :loading="fetching"
-      :data="articles.length"
+      :data="!!articles.length"
     >
       <template #loading>
-        <!-- TODO!! -->
-        <!-- <responsive key="skeleton">
-          <template #desktop>
-            <ul class="skeleton-list">
-              <skeleton-base
-                class="article"
-                v-for="item in 4"
-                :key="item"
-              />
-            </ul>
-          </template>
-          <template #mobile>
-            <skeleton-paragraph
-              class="skeleton"
-              :lines="4"
-              line-height="1em"
-            />
-          </template>
-        </responsive> -->
-        <ul class="skeleton-list">
+        <skeleton-paragraph
+          v-if="isMobile"
+          class="skeleton"
+          :lines="4"
+          line-height="1em"
+        />
+        <ul class="skeleton-list" v-else>
           <skeleton-base
             class="article"
             v-for="item in 4"
