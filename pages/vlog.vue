@@ -52,7 +52,7 @@
         href="https://space.bilibili.com/27940710/video"
         target="_blank"
         class="button"
-        rel="external nofollow noopenter"
+        rel="external nofollow noopener"
       >
         <span class="icon">
           <i class="iconfont icon-vlog"></i>

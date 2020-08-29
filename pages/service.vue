@@ -20,7 +20,7 @@
           v-if="!isMobile"
           class="upwork"
           target="_blank"
-          rel="external nofollow noopenter"
+          rel="external nofollow noopener"
           href="https://www.upwork.com/freelancers/~0142e621258ac1770d"
         >
           <span>({{ $i18n.text.service.hireMe }}</span>

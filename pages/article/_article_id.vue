@@ -177,7 +177,7 @@
           </span>
           <a
             target="_blank"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
             href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
           >Creative Commons BY-NC 3.0 CN</a>
         </div>
@@ -473,7 +473,7 @@
     .share-box {
       .share-ejector {
         background-color: $body-bg;
-      } 
+      }
     }
   }
 </style>

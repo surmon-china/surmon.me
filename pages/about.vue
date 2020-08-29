@@ -13,21 +13,21 @@
           <a
             target="_blank"
             href="https://github.com/sponsors/surmon-china"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
             @mousedown="handleSponsor"
           >GitHub Sponsor</a>
           <span>&nbsp;|&nbsp;</span>
           <a
             target="_blank"
             href="https://www.paypal.me/surmon"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
             @mousedown="handleSponsor"
           >PayPal me</a>
           <span>&nbsp;|&nbsp;</span>
           <a
             target="_blank"
             href="/sponsor"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
             @mousedown="handleSponsor"
           >More</a>
         </div>
@@ -35,7 +35,7 @@
           <i class="iconfont icon-comment-discussion" />
           <a
             target="_blank"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
             href="https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4"
           >
             <span>{{ isEnLang ? 'QQ group' : '寂寞同性交友群' }}</span>
@@ -43,7 +43,7 @@
           <span>&nbsp;|&nbsp;</span>
           <a
             target="_blank"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
             href="https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA"
           >{{ isEnLang ? 'Telegram group' : '电报群' }}</a>
         </div>
@@ -57,7 +57,7 @@
               href="https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o"
               target="_blank"
               class="spotify"
-              rel="external nofollow noopenter"
+              rel="external nofollow noopener"
             >
               <i class="iconfont icon-spotify" />
             </a>
@@ -65,7 +65,7 @@
               href="https://music.163.com/#/playlist?id=638949385"
               target="_blank"
               class="music-163"
-              rel="external nofollow noopenter"
+              rel="external nofollow noopener"
             >
               <i class="iconfont icon-163music-logo" />
             </a>
@@ -79,7 +79,7 @@
                 href="https://github.com/surmon-china"
                 target="_blank"
                 class="item github"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
               >
                 <i class="iconfont icon-github" />
                 <span class="text">GitHub</span>
@@ -88,7 +88,7 @@
                 href="https://twitter.com/surmon_me"
                 target="_blank"
                 class="item twitter"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
               >
                 <i class="iconfont icon-twitter" />
                 <span class="text">Twitter</span>
@@ -97,7 +97,7 @@
                 href="https://www.instagram.com/surmon666"
                 target="_blank"
                 class="item instagram"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
               >
                 <i class="iconfont icon-instagram" />
                 <span class="text">Instagram</span>
@@ -108,7 +108,7 @@
                 href="https://t.me/surmon"
                 target="_blank"
                 class="item telegram"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
               >
                 <i class="iconfont icon-telegram" />
               </a>
@@ -116,7 +116,7 @@
                 href="https://www.linkedin.com/in/surmon"
                 target="_blank"
                 class="item linkedin"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
               >
                 <i class="iconfont icon-linkedin" />
               </a>
@@ -124,7 +124,7 @@
                 href="https://www.zhihu.com/people/surmon"
                 target="_blank"
                 class="item zhihu"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
               >
                 <i class="iconfont icon-zhihu" />
               </a>
@@ -133,7 +133,7 @@
                 href="https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w"
                 target="_blank"
                 class="item youtube"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
               >
                 <i class="iconfont icon-youtube" />
               </a>
@@ -141,7 +141,7 @@
                 href="https://space.bilibili.com/27940710"
                 target="_blank"
                 class="item bilibili"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
               >
                 <i class="iconfont icon-bilibili" />
               </a>
@@ -149,7 +149,7 @@
                 href="https://stackoverflow.com/users/6222535/surmon?tab=profile"
                 target="_blank"
                 class="item stackoverflow"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
               >
                 <i class="iconfont icon-stackoverflow" />
               </a>
@@ -158,7 +158,7 @@
                 bak-href="https://leetcode.com/surmon"
                 target="_blank"
                 class="item algorithm"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
               >
                 <i class="iconfont icon-leetcode" />
               </a>
@@ -166,7 +166,7 @@
                 href="https://www.quora.com/profile/Surmon/activity"
                 target="_blank"
                 class="item quora"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
               >
                 <i class="iconfont icon-quora" />
               </a>
@@ -193,7 +193,7 @@
               :key="link"
               :href="link"
               target="_blank"
-              rel="external nofollow noopenter"
+              rel="external nofollow noopener"
             >「 {{ name }} 」</a>
           </span>
         </div>
@@ -699,7 +699,7 @@
       position: relative;
       background-color: $module-bg;
 
-      .animation { 
+      .animation {
         width: 100%;
         position: absolute;
         bottom: 0;
