@@ -20,7 +20,7 @@ export enum LANGUAGE_KEYS {
   AD_LINK_TAOBAO = 'taobao',
   AD_LINK_ALIYUN = 'aliyun',
   PAGE_APP = 'app',
-  PAGE_SITEMAP = 'sitemap',
+  PAGE_ARCHIVE = 'archive',
   EMPTY_PLACEHOLDER = `common empty's placeholder`,
   FRIEND_ME = 'friendMe',
   NOT_FOUND = 'notFound',

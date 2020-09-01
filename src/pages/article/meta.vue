@@ -1,7 +1,7 @@
 <template>
   <placeholder :loading="fetching">
     <template #loading>
-      <div class="metas" :class="{ mobile: isMobile }">
+      <div class="metas-skeleton" :class="{ mobile: isMobile }">
         <skeleton-paragraph
           :align="true"
           :lines="4"
@@ -91,7 +91,7 @@
               <span class="title">版权声明：</span>
               <a
                 target="_blank"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
                 href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
               >自由转载 - 署名 - 非商业性使用</a>
             </template>
@@ -99,7 +99,7 @@
               <span class="title">Copyright clarify:</span>
               <a
                 target="_blank"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
                 href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.en"
               >Creative Commons BY-NC 3.0 CN</a>
             </template>
@@ -174,9 +174,12 @@
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
-  .metas {
+  .metas,
+  .metas-skeleton {
     padding: $gap;
+  }
 
+  .metas {
     > .item {
       margin-bottom: $lg-gap;
       line-height: 1.4em;

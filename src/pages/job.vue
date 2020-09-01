@@ -42,7 +42,7 @@
                 :href="job.url"
                 class="title"
                 target="_blank"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
               >
                 {{ job.company }}
                 <span class="location" v-if="job.location">（{{ job.location }}）</span>

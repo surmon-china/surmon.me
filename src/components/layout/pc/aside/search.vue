@@ -28,7 +28,7 @@
         </datalist>
       </client-only>
     </div>
-    <router-link to="/sitemap" class="sitemap-btn">
+    <router-link :to="{ name: RouteName.Archive }" class="archive-btn">
       <i class="iconfont icon-book" />
     </router-link>
   </div>
@@ -69,6 +69,7 @@
 
       return {
         LANGUAGE_KEYS,
+        RouteName,
         i18n,
         tags,
         isZhLang,
@@ -93,7 +94,7 @@
 
     .search-input,
     .search-btn,
-    .sitemap-btn {
+    .archive-btn {
       height: 2em;
       line-height: 2em;
       background-color: $module-bg-darker-1;
@@ -111,7 +112,7 @@
       > .search-input {
         margin-right: 0;
         flex-grow: 1;
-        
+
         &::-webkit-calendar-picker-indicator {
           display: none;
         }
@@ -128,7 +129,7 @@
       }
     }
 
-    > .sitemap-btn {
+    > .archive-btn {
       display: inline-block;
       text-align: center;
       margin-left: $sm-gap;

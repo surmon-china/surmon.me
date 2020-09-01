@@ -32,7 +32,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.CATEGORY_THINK]: {
     [Language.Zh]: '无色庵',
-    [Language.En]: 'think'
+    [Language.En]: 'insight'
   },
   [LANGUAGE_KEYS.CATEGORY_CODE]: {
     [Language.Zh]: '宁静寺',
@@ -82,7 +82,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '客户端',
     [Language.En]: 'app'
   },
-  [LANGUAGE_KEYS.PAGE_SITEMAP]: {
+  [LANGUAGE_KEYS.PAGE_ARCHIVE]: {
     [Language.Zh]: '旷日积晷',
     [Language.En]: 'sitemap.xml'
   },

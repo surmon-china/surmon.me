@@ -1,6 +1,6 @@
 <template>
-  <div class="sitemap-page" :class="{ mobile: isMobile }">
-    <div class="sitemap">
+  <div class="archive-page" :class="{ mobile: isMobile }">
+    <div class="archive">
       <div class="module articles">
         <h4 class="title" v-i18n="LANGUAGE_KEYS.ARTICLE_TITLE" />
         <!-- TODO: 按照日期分类 -->
@@ -142,7 +142,7 @@
             <a
               href="/sitemap.xml"
               target="_blank"
-              v-i18n="LANGUAGE_KEYS.PAGE_SITEMAP"
+              v-i18n="LANGUAGE_KEYS.PAGE_ARCHIVE"
             />
           </li>
         </ul>
@@ -160,10 +160,10 @@
   import * as APP_CONFIG from '/@/config/app.config'
 
   export default defineComponent({
-    name: 'Sitemap',
+    name: 'Archive',
     // head() {
     //   return {
-    //     title: `${this.isEnLang ? '' : this.$i18n.nav.map + ' | '}Sitemap`
+    //     title: `${this.isEnLang ? '' : this.$i18n.nav.map + ' | '}Archive`
     //   }
     // },
     // fetch({ store }) {
@@ -197,7 +197,7 @@
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
-  .sitemap-page {
+  .archive-page {
     padding: $gap 3rem;
     background-color: $module-bg;
     overflow: hidden;
@@ -248,7 +248,7 @@
       }
     }
 
-    .sitemap {
+    .archive {
       text-transform: capitalize;
 
       a {

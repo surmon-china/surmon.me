@@ -32,9 +32,9 @@
           <i class="iconfont icon-experiment"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_PROJECT"></span>
         </a>
-        <router-link to="/sitemap" class="item">
+        <router-link to="/archive" class="item">
           <i class="iconfont icon-book"></i>
-          <span v-i18n="LANGUAGE_KEYS.PAGE_SITEMAP"></span>
+          <span v-i18n="LANGUAGE_KEYS.PAGE_ARCHIVE"></span>
         </router-link>
         <router-link to="/vlog" class="item">
           <i class="iconfont icon-vlog"></i>

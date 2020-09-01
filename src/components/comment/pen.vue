@@ -6,7 +6,6 @@
         class="markdown-input"
         :contenteditable="!disabled"
         :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_PLACEHOLDER)"
-        @keyup="handleInputChange"
       />
       <transition name="fade">
         <div
@@ -85,7 +84,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, watch, onMounted } from 'vue'
+  import { defineComponent, ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { isClient } from '/@/vuniversal/env'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -128,6 +127,7 @@
       const { i18n } = useEnhancer()
       const content = ref(props.modelValue)
       const inputElement = ref<HTMLElement>()
+      let inputElementObserver: MutationObserver | null = null
       const previewContent = computed(() => {
         return props.preview
           ? markdownToHTML(content.value)
@@ -148,6 +148,7 @@
       }
 
       const handleInputChange = () => {
+        console.log('do handleInputChange')
         const text = inputElement.value?.innerText as string
         if (text !== content.value) {
           content.value = text
@@ -183,6 +184,18 @@
       watch(() => props.modelValue, handleValueChange)
       onMounted(() => {
         context.emit(Events.InputReady, inputElement.value)
+        inputElementObserver = new MutationObserver(mutations => {
+          handleInputChange()
+        })
+        inputElementObserver.observe(inputElement.value!, {
+          attributes: true,
+          characterData: true,
+          childList: true,
+          subtree: true
+        })
+      })
+      onBeforeUnmount(() => {
+        inputElementObserver?.disconnect()
       })
 
       return {

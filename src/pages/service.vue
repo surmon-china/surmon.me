@@ -18,7 +18,7 @@
           <a
             class="upwork"
             target="_blank"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
             :href="upworkLink"
           >
             <span>(</span>

@@ -89,6 +89,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
   }
 
   const globalState = readonly({
+    resetOnClient,
     userAgent,
     layoutColumn,
     imageExt,
@@ -101,9 +102,8 @@ export const createGlobalState = (config: GlobalStateConfig) => {
         switchBox.mobileSidebar = open !== null
           ? !!open
           : !switchBox.mobileSidebar
-      },
-    },
-    resetOnClient
+      }
+    }
   })
 
   return {

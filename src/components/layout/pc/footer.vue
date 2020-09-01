@@ -12,7 +12,7 @@
         class="sitemap-btn"
         href="/sitemap.xml"
         target="_blank"
-        v-i18n="LANGUAGE_KEYS.PAGE_SITEMAP"
+        v-i18n="LANGUAGE_KEYS.PAGE_ARCHIVE"
       />
       <span class="separator">|</span>
       <i18n zh="由 " en="Powered By " />
