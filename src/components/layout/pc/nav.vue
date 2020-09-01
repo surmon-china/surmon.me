@@ -46,57 +46,74 @@
         <i class="iconfont icon-comment"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_GUESTBOOK" />
       </router-link>
-      <!-- <a
-        :href="AD_CONFIG.nav.holiday"
-        target="_blank"
-        class="item holiday"
-        rel="external nofollow noopener"
-      >
-        <i class="iconfont icon-1111"></i>
-        <span>超级红包</span>
-      </a> -->
-      <!-- <a
-        :href="AD_CONFIG.nav.taobao"
-        target="_blank"
-        class="item taobao"
-        rel="external nofollow noopener"
-      >
-        <i class="iconfont icon-taobao"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.AD_LINK_TAOBAO" />
-      </a> -->
-      <span class="separator"></span>
-      <a
-        :href="AD_CONFIG.nav.aliyun"
-        target="_blank"
-        class="item aliyun"
-        rel="external nofollow noopener"
-      >
-        <i class="iconfont icon-aliyun"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.AD_LINK_ALIYUN" />
-        <span class="superscript">
-          <i class="iconfont icon-hot"></i>
-        </span>
-      </a>
-      <!-- <span class="separator"></span> -->
-      <!-- <a
-        target="_blank"
-        class="item throwerror"
-        rel="external nofollow noopener"
-        :href="APP_CONFIG.LINKS.throwerror"
-      >
-        <i class="iconfont icon-debug"></i>
-        <span class="text">TE.io</span>
-      </a> -->
-      <span class="separator"></span>
-      <a
-        target="_blank"
-        class="item foxfinder"
-        rel="external nofollow noopener"
-        :href="APP_CONFIG.LINKS.foxfinder"
-      >
-        <i class="iconfont icon-fox-colour"></i>
-        <span class="text">FF.io</span>
-      </a>
+      <!-- holiday mail -->
+      <template v-if="false">
+        <span class="separator"></span>
+        <a
+          :href="AD_CONFIG.nav.holiday"
+          target="_blank"
+          class="item holiday"
+          rel="external nofollow noopener"
+        >
+          <i class="iconfont icon-1111"></i>
+          <span>超级红包</span>
+        </a>
+      </template>
+      <!-- taobao -->
+      <template v-if="false">
+        <span class="separator"></span>
+        <a
+          :href="AD_CONFIG.nav.taobao"
+          target="_blank"
+          class="item taobao"
+          rel="external nofollow noopener"
+        >
+          <i class="iconfont icon-taobao"></i>
+          <span class="text" v-i18n="LANGUAGE_KEYS.AD_LINK_TAOBAO" />
+        </a>
+      </template>
+      <!-- aliyun -->
+      <template v-if="true">
+        <span class="separator"></span>
+        <a
+          :href="AD_CONFIG.nav.aliyun"
+          target="_blank"
+          class="item aliyun"
+          rel="external nofollow noopener"
+        >
+          <i class="iconfont icon-aliyun"></i>
+          <span class="text" v-i18n="LANGUAGE_KEYS.AD_LINK_ALIYUN" />
+          <span class="superscript">
+            <i class="iconfont icon-hot"></i>
+          </span>
+        </a>
+      </template>
+      <!-- throwerror -->
+      <template v-if="false">
+        <span class="separator"></span>
+        <a
+          target="_blank"
+          class="item throwerror"
+          rel="external nofollow noopener"
+          :href="APP_CONFIG.LINKS.throwerror"
+        >
+          <i class="iconfont icon-debug"></i>
+          <span class="text">TE.io</span>
+        </a>
+      </template>
+      <!-- foxfinder -->
+      <template v-if="false">
+        <span class="separator"></span>
+        <a
+          target="_blank"
+          class="item foxfinder"
+          rel="external nofollow noopener"
+          :href="APP_CONFIG.LINKS.foxfinder"
+        >
+          <i class="iconfont icon-fox-colour"></i>
+          <span class="text">FF.io</span>
+        </a>
+      </template>
       <span class="separator"></span>
       <router-link to="/app" class="item app">
         <i class="iconfont icon-app"></i>

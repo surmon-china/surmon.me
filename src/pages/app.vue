@@ -39,7 +39,7 @@
           <a
             class="button"
             target="_blank"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
             :href="APP_CONFIG.LINKS.appProject + '#ios'"
             @mousedown="handleAppAction('APP IOS')"
           >
@@ -49,7 +49,7 @@
           <a
             class="button code"
             target="_blank"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
             :href="APP_CONFIG.LINKS.appProject"
             @mousedown="handleAppAction('APP GitHub 地址')"
           >

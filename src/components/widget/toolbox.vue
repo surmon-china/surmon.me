@@ -6,7 +6,7 @@
           href="/rss.xml"
           target="_blank"
           class="rss"
-          rel="external nofollow noopenter"
+          rel="external nofollow noopener"
           @mousedown="handleRSS"
         >
           <i class="iconfont icon-rss" />

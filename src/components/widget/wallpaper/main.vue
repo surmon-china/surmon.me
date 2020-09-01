@@ -11,13 +11,13 @@
       <div class="down"></div>
     </div>
   </div>
-  <popup v-model:visible="isOnWallpaper">
-    <wallpapers />
+  <popup :visible="isOnWallpaper" @close="toggleWallpaper">
+    <wallpapers @close="toggleWallpaper" />
   </popup>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, watch, toRef, onMounted } from 'vue'
+  import { defineComponent, ref, computed, watch, onMounted } from 'vue'
   import { Theme } from '/@/services/theme'
   import { useEnhancer } from '/@/enhancer'
   import { getNamespace, Modules } from '/@/store'
@@ -33,7 +33,7 @@
     },
     setup() {
       const { store, i18n, gtag, globalState, isDarkTheme } = useEnhancer()
-      const isOnWallpaper = toRef(globalState.switchBox, 'wallpaper')
+      const isOnWallpaper = computed(() => globalState.switchBox.wallpaper)
       const wallpapers = computed<any[]>(() => store.getters[
         getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Papers)
       ](i18n.language.value))
@@ -44,10 +44,12 @@
         } else {
           alert('可能 Bing 又被墙了吧我有什么办法！')
         }
-        gtag?.event('今日壁纸', {
-          event_category: GAEventActions.Toggle,
-          event_label: GAEventTags.Tool
-        })
+        if (globalState.switchBox.wallpaper) {
+          gtag?.event('今日壁纸', {
+            event_category: GAEventActions.Toggle,
+            event_label: GAEventTags.Tool
+          })
+        }
       }
 
       onMounted(() => {

@@ -5,8 +5,8 @@
     @after-enter="loadCommentsAnimateDone"
   >
     <template #loading>
-      <ul class="comment-list skeleton">
-        <li v-for="item in (isMobile ? 3 : 5)" :key="item" class="comment-item">
+      <ul class="comment-list-skeleton">
+        <li v-for="item in (isMobile ? 3 : 5)" :key="item" class="item">
           <div class="gravatar">
             <skeleton-base />
           </div>
@@ -153,12 +153,14 @@
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
-  .comment-list.skeleton {
-    .comment-item {
-      padding-left: 0!important;
+  .comment-list-skeleton {
+    padding: 0;
+
+    .item {
       display: flex;
       justify-content: space-around;
       align-items: center;
+      margin-bottom: $lg-gap;
 
       .gravatar {
         width: 5rem;

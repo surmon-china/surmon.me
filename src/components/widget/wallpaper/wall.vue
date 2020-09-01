@@ -26,7 +26,7 @@
             key="location"
             class="location"
             target="_blank"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
             :href="currentWallpaper.humanizedCopyrightUrl"
             :title="currentWallpaper.bsTitle"
           >
@@ -67,10 +67,16 @@
   import { useEnhancer } from '/@/enhancer'
   import { getNamespace, Modules } from '/@/store'
   import { WallpaperModuleGetters } from '/@/store/wallpaper'
+
+  enum Event {
+    Close = 'close'
+  }
+
   export default defineComponent({
     name: 'WallpaperWall',
-    setup() {
-      const { store, globalState, i18n } = useEnhancer()
+    emits: [Event.Close],
+    setup(_, context) {
+      const { store, i18n } = useEnhancer()
       const index = ref(0)
       const wallpapers = computed<any[]>(() => store.getters[
         getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Papers)
@@ -79,11 +85,13 @@
         return wallpapers.value?.length && wallpapers.value?.[index.value]
       })
 
+      const handleClose = () => context.emit(Event.Close)
+
       return {
         index,
         wallpapers,
         currentWallpaper,
-        handleClose: globalState.switchTogglers.wallpaper
+        handleClose
       }
     }
   })

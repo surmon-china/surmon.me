@@ -17,7 +17,7 @@ export enum RouteName {
   Job = 'job',
   About = 'about',
   Lens = 'lens',
-  Sitemap = 'sitemap',
+  Archive = 'archive',
   Error = 'error'
 }
 
@@ -28,9 +28,9 @@ const routes: RouteRecordRaw[] = [
     component: () => import('./pages/index.vue')
   },
   {
-    path: '/sitemap',
-    name: RouteName.Sitemap,
-    component: () => import('./pages/sitemap.vue'),
+    path: '/archive',
+    name: RouteName.Archive,
+    component: () => import('./pages/archive.vue'),
     meta: {
       layout: LayoutColumn.Wide
     }

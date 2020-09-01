@@ -31,7 +31,7 @@
               href="https://space.bilibili.com/27940710"
               target="_blank"
               class="button"
-              rel="external nofollow noopenter"
+              rel="external nofollow noopener"
             >(゜-゜)つロ 干杯~</a>
           </div>
           <uimage class="image" cdn src="/images/page-lens/bilibili.jpg" />
@@ -41,7 +41,7 @@
             class="instagram"
             href="https://www.instagram.com/surmon666"
             target="_blank"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
           >
             <i class="iconfont icon-instagram"></i>
             <span class="text">Follow me on Instagram</span>
@@ -50,7 +50,7 @@
             class="youtube"
             href="https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w"
             target="_blank"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
           >
             <i class="iconfont icon-youtube"></i>
             <span class="text">Subscription my YouTube Channel</span>
@@ -116,7 +116,7 @@
           href="https://space.bilibili.com/27940710/video"
           target="_blank"
           class="button"
-          rel="external nofollow noopenter"
+          rel="external nofollow noopener"
         >
           <span class="icon">
             <i class="iconfont icon-bilibili"></i>
@@ -163,7 +163,7 @@
       }
 
       const getThumbUrl = (url: string) => {
-        return getFileProxyUrl(`/bilibili/${url.replace('//', '')}@560w_350h.${globalState.imageExt.ext.value}`)
+        return getFileProxyUrl(`/bilibili/${url.replace('//', '')}@560w_350h.${globalState.imageExt.ext}`)
       }
 
       const handlePlay = (video: any) => {

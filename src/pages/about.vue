@@ -16,21 +16,21 @@
           <a
             target="_blank"
             href="https://github.com/sponsors/surmon-china"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
             @mousedown="handleTouchSponsor"
           >GitHub Sponsor</a>
           <span class="separator">|</span>
           <a
             target="_blank"
             href="https://www.paypal.me/surmon"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
             @mousedown="handleTouchSponsor"
           >PayPal me</a>
           <span class="separator">|</span>
           <a
             target="_blank"
             href="/sponsor"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
             @mousedown="handleTouchSponsor"
           >More</a>
         </div>
@@ -38,7 +38,7 @@
           <i class="iconfont icon-comment-discussion" />
           <a
             target="_blank"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
             href="https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4"
           >
             <i18n zh="寂寞同性交友群" en="QQ group" />
@@ -46,7 +46,7 @@
           <span class="separator">|</span>
           <a
             target="_blank"
-            rel="external nofollow noopenter"
+            rel="external nofollow noopener"
             href="https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA"
           >
             <i18n zh="电报群" en="Telegram group" />
@@ -60,7 +60,7 @@
               href="https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o"
               target="_blank"
               class="spotify"
-              rel="external nofollow noopenter"
+              rel="external nofollow noopener"
             >
               <i class="iconfont icon-spotify" />
             </a>
@@ -68,7 +68,7 @@
               href="https://music.163.com/#/playlist?id=638949385"
               target="_blank"
               class="music-163"
-              rel="external nofollow noopenter"
+              rel="external nofollow noopener"
             >
               <i class="iconfont icon-163music-logo" />
             </a>
@@ -82,7 +82,7 @@
                 href="https://github.com/surmon-china"
                 target="_blank"
                 class="item github"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
               >
                 <i class="iconfont icon-github" />
                 <span class="text">GitHub</span>
@@ -91,7 +91,7 @@
                 href="https://twitter.com/surmon_me"
                 target="_blank"
                 class="item twitter"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
               >
                 <i class="iconfont icon-twitter" />
                 <span class="text">Twitter</span>
@@ -100,7 +100,7 @@
                 href="https://www.instagram.com/surmon666"
                 target="_blank"
                 class="item instagram"
-                rel="external nofollow noopenter"
+                rel="external nofollow noopener"
               >
                 <i class="iconfont icon-instagram" />
                 <span class="text">Instagram</span>
@@ -112,7 +112,7 @@
                   href="https://t.me/surmon"
                   target="_blank"
                   class="item telegram"
-                  rel="external nofollow noopenter"
+                  rel="external nofollow noopener"
                 >
                   <i class="iconfont icon-telegram" />
                 </a>
@@ -120,7 +120,7 @@
                   href="https://www.linkedin.com/in/surmon"
                   target="_blank"
                   class="item linkedin"
-                  rel="external nofollow noopenter"
+                  rel="external nofollow noopener"
                 >
                   <i class="iconfont icon-linkedin" />
                 </a>
@@ -128,7 +128,7 @@
                   href="https://www.douban.com/people/nocower"
                   target="_blank"
                   class="item douban"
-                  rel="external nofollow noopenter"
+                  rel="external nofollow noopener"
                 >
                   <i class="iconfont icon-douban" />
                 </a>
@@ -136,7 +136,7 @@
                   href="https://www.zhihu.com/people/surmon"
                   target="_blank"
                   class="item zhihu"
-                  rel="external nofollow noopenter"
+                  rel="external nofollow noopener"
                 >
                   <i class="iconfont icon-zhihu" />
                 </a>
@@ -144,7 +144,7 @@
                   href="https://space.bilibili.com/27940710"
                   target="_blank"
                   class="item bilibili"
-                  rel="external nofollow noopenter"
+                  rel="external nofollow noopener"
                 >
                   <i class="iconfont icon-bilibili" />
                 </a>
@@ -152,7 +152,7 @@
                   href="https://stackoverflow.com/users/6222535/surmon?tab=profile"
                   target="_blank"
                   class="item stackoverflow"
-                  rel="external nofollow noopenter"
+                  rel="external nofollow noopener"
                   v-if="false"
                 >
                   <i class="iconfont icon-stackoverflow" />
@@ -162,7 +162,7 @@
                   bak-href="https://leetcode.com/surmon"
                   target="_blank"
                   class="item algorithm"
-                  rel="external nofollow noopenter"
+                  rel="external nofollow noopener"
                   v-if="false"
                 >
                   <i class="iconfont icon-leetcode" />
@@ -171,7 +171,7 @@
                   href="https://www.quora.com/profile/Surmon/activity"
                   target="_blank"
                   class="item quora"
-                  rel="external nofollow noopenter"
+                  rel="external nofollow noopener"
                 >
                   <i class="iconfont icon-quora" />
                 </a>
@@ -190,13 +190,19 @@
         </div>
         <div class="item">
           <i class="iconfont icon-tibet-1" />
-          <span class="my-map" @click="openMyMap">
+          <span class="my-map" @click="toggleLiveMap">
             <i18n
               zh="路为纸，地成册，行作笔，心当墨；思无界，行有疆"
               en="Every path I went astray built my Rome."
             />
           </span>
-          <popup iframe="https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w" class="gmap" />
+          <popup :visible="isOnLiveMap" @close="toggleLiveMap">
+            <iframe
+              src="https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w"
+              frameborder="0"
+              class="live-map"
+            />
+          </popup>
         </div>
         <div class="item">
           <i class="iconfont icon-friend" />
@@ -206,7 +212,7 @@
               :key="link"
               :href="link"
               target="_blank"
-              rel="external nofollow noopenter"
+              rel="external nofollow noopener"
             >「 {{ name }} 」</a>
           </span>
         </div>
@@ -307,25 +313,23 @@
         :href="APP_CONFIG.LINKS.project"
       >
         <p class="title">
-          <i class="iconfont icon-experiment" />
+          <i class="iconfont icon-terminal" />
+          <span class="description">
+            <i18n
+              zh="更多动态"
+              en="Get more"
+            />
+          </span>
         </p>
-        <p class="description">
-          <i18n
-            zh="了解更多关于我的项目的进展"
-            en="What I do,  just keep repeating."
-          />
-        </p>
+        <!-- TODO: 应该集成到 nodejs，否则不稳定 https://github.com/sallar/github-contributions-chart -->
+        <img src="https://ghchart.rshah.org/surmon-china">
       </a>
-      <div class="animation">
-        <div class="wave"></div>
-        <div class="wave"></div>
-      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
+  import { defineComponent, ref, computed, toRef } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -346,11 +350,12 @@
     },
     */
     setup(props) {
-      const { gtag, globalState, isMobile } = useEnhancer()
-      const gravatar = computed(() => {
-        return getFileCDNUrl('/images/gravatar.jpg')
-        // return this.$store.state.global.adminInfo.gravatar || getFileCDNUrl('/images/gravatar.jpg')
-      })
+      const { gtag, globalState, store, isMobile } = useEnhancer()
+      const isOnLiveMap = toRef(globalState.switchBox, 'liveMap')
+      const gravatar = computed(() => (
+        store.state.option.adminInfo?.gravatar ||
+        getFileCDNUrl('/images/gravatar.jpg')
+      ))
 
       const handleHoverFollowMe = () => {
         gtag?.event('加微信码', {
@@ -366,12 +371,14 @@
         })
       }
 
-      const openMyMap = () => {
+      const toggleLiveMap = () => {
         globalState.switchTogglers.liveMap()
-        gtag?.event('轨迹地图', {
-          event_category: GAEventActions.View,
-          event_label: GAEventTags.AboutPage
-        })
+        if (globalState.switchBox.liveMap) {
+          gtag?.event('轨迹地图', {
+            event_category: GAEventActions.View,
+            event_label: GAEventTags.AboutPage
+          })
+        }
       }
 
       const adSwiperOption = {
@@ -398,10 +405,11 @@
         LANGUAGE_KEYS,
         adSwiperOption,
         isMobile,
+        isOnLiveMap,
         gravatar,
         handleHoverFollowMe,
         handleTouchSponsor,
-        openMyMap
+        toggleLiveMap
       }
     }
   })
@@ -409,6 +417,11 @@
 
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
+
+  .live-map {
+    width: 88vw;
+    height: 88vh;
+  }
 
   .about-page {
     width: 100%;
@@ -800,61 +813,43 @@
     .about-project {
       overflow: hidden;
       position: relative;
+      display: flex;
       width: 100%;
-      height: 17rem;
-      @include radius-box($lg-radius);
+      height: 12rem;
 
       .project-link {
+        flex-grow: 1;
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-direction: column;
-        width: 100%;
         height: 100%;
         @include common-bg-module();
+        @include radius-box($lg-radius);
 
         .title {
-          text-transform: uppercase;
-          font-family: 'webfont-normal', DINRegular;
-          margin-bottom: $gap;
-          font-size: 3em;
-        }
+          margin-bottom: 0;
+          display: flex;
+          flex-direction: column;
+          text-align: center;
+          margin-right: $lg-gap * 3;
 
-        .description {
-          margin-bottom: 3rem;
-        }
-      }
-
-      .animation {
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        opacity: .8;
-
-        .wave {
-          background: url('/images/page-about/wave.svg') repeat-x;
-          background-size: contain;
-          position: absolute;
-          width: 6400px;
-          height: 60px;
-          bottom: 0;
-          animation: wave 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) infinite;
-          transform: translate3d(0, 0, 0);
-        }
-
-        .wave:nth-of-type(2) {
-          margin-left: 100px;
-          animation: wave 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) -.125s infinite;
-          opacity: 1;
-        }
-
-        @keyframes wave {
-          0% {
-            transform: translate3d(0, 0, 0);
+          .iconfont {
+            font-size: 4em;
+            color: #98c471;
+            line-height: 1em;
+            padding: 0;
+            margin-top: $xs-gap;
+            margin-bottom: $gap;
           }
-          100% {
-            transform: translate3d(-1600px, 0, 0);
+          .description {
+            $color: rgb(214, 229, 133);
+            display: block;
+            line-height: 1.7em;
+            text-align: center;
+            padding: 0 .2em;
+            color: $color;
+            border: 1px solid $color;
+            font-size: $font-size-small;
           }
         }
       }

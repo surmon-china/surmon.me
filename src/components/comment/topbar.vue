@@ -1,7 +1,7 @@
 <template>
   <placeholder :loading="fetching">
     <template #loading>
-      <div class="topbar" key="skeleton">
+      <div class="topbar-skeleton" key="skeleton">
         <div class="statistics-skeleton">
           <skeleton-line class="count-skeleton" />
           <skeleton-line class="like-skeleton" />
@@ -159,6 +159,7 @@
 
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
+  $topbar-size: 2em;
 
   .sponsor-modal {
     width: 600px;
@@ -166,44 +167,47 @@
     border-radius: $sm-radius !important;
   }
 
-  .topbar {
-    $size: 2em;
+  .topbar,
+  .topbar-skeleton {
     display: flex;
     padding-bottom: $gap;
     margin-bottom: $lg-gap;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px dashed $module-bg-darker-1;
+  }
 
+  .topbar-skeleton {
     .statistics-skeleton {
       display: flex;
       width: 70%;
 
       .count-skeleton {
         width: 20%;
-        height: $size;
+        height: $topbar-size;
         margin-right: 1rem;
       }
-
       .like-skeleton {
-        height: $size;
+        height: $topbar-size;
         width: 40%;
       }
     }
 
     .sort-skeleton {
       width: 20%;
-      height: $size;
+      height: $topbar-size;
     }
+  }
 
+  .topbar {
     .statistics {
       display: flex;
 
       .like,
       .sponsor,
       .total {
-        height: $size;
-        line-height: $size;
+        height: $topbar-size;
+        line-height: $topbar-size;
         padding: 0 .6em;
         margin-right: $sm-gap;
         background-color: $module-bg-darker-1;
@@ -220,7 +224,7 @@
 
         .iconfont {
           display: inline-block;
-          width: $size;
+          width: $topbar-size;
           text-align: center;
           margin-right: $sm-gap;
           background-color: $module-bg-darker-2;
