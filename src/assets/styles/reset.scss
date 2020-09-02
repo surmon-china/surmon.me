@@ -79,7 +79,10 @@ details {
 }
 
 hr {
-  overflow: visible; // Internet Explorer 11-, Edge 12+
+  border-top: 1px solid $module-bg-darker-2;
+  display: block;
+  margin-bottom: 1em;
+  width: 100%;
 }
 
 input {
@@ -282,13 +285,6 @@ summary {
 
 footer {
   clear: both;
-}
-
-hr {
-  border-top: 1px dashed $module-bg-darker-2;
-  display: block;
-  margin-bottom: 1em;
-  width: 100%;
 }
 
 img {

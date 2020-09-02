@@ -12,7 +12,7 @@ import articleModule, { ArticleState, ArticleModuleActions } from './article'
 import categoryModule, { CategoryState, CategoryModuleActions } from './category'
 import tagModule, { TagState, TagModuleActions } from './tag'
 import commentModule, { CommentState } from './comment'
-import sitemapModule, { SitemapState } from './sitemap'
+import archiveModule, { ArchiveState } from './archive'
 import wallpaperModule, { WallpaperState } from './wallpaper'
 import vlogModule, { VlogState } from './vlog'
 
@@ -22,7 +22,7 @@ export enum Modules {
   Tag = 'tag',
   Article = 'article',
   Comment = 'comment',
-  Sitemap = 'sitemap',
+  Archive = 'archive',
   Option = 'option',
   Wallpaper = 'wallpaper',
   Vlog = 'vlog'
@@ -34,7 +34,7 @@ export type IRootState = {
   [Modules.Tag]: TagState
   [Modules.Article]: ArticleState
   [Modules.Comment]: CommentState
-  [Modules.Sitemap]: SitemapState
+  [Modules.Archive]: ArchiveState
   [Modules.Option]: OptionState
   [Modules.Wallpaper]: WallpaperState
   [Modules.Vlog]: VlogState
@@ -48,7 +48,7 @@ const createVuexStore = () => createStore<IRootState>({
     [Modules.Tag]: tagModule,
     [Modules.Article]: articleModule,
     [Modules.Comment]: commentModule,
-    [Modules.Sitemap]: sitemapModule,
+    [Modules.Archive]: archiveModule,
     [Modules.Option]: optionModule,
     [Modules.Wallpaper]: wallpaperModule,
     [Modules.Vlog]: vlogModule
