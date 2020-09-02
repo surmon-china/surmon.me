@@ -54,3 +54,14 @@
     $logo-rotate: hue-rotate(30deg) brightness(180%) grayscale(100%)
   );
 }
+
+@mixin pronHubTheme() {
+  @include css-var(
+    $theme-text: #fff,
+    $theme-white: #444,
+    $theme-black: #fff,
+    $theme-primary: #ffa645,
+    $theme-body-bg: #000,
+    $logo-rotate: hue-rotate(160deg) brightness(160%)
+  );
+}

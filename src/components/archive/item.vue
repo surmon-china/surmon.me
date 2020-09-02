@@ -143,7 +143,7 @@
       const getThumbUrl = (thumbUrl: string) => {
         return getArchiveArticleThumbnailUrl(
           thumbUrl,
-          globalState.imageExt.isWebP.value
+          globalState.imageExt.isWebP
         )
       }
 
@@ -260,7 +260,7 @@
           background-color: $module-bg-hover;
           opacity: 1;
           transform: translateX(0);
-          transition: transform $transition-time-fast, opacity $transition-time-fast;
+          transition: transform $transition-time-normal, opacity $transition-time-normal;
         }
       }
 
@@ -279,11 +279,11 @@
           > a {
             margin-left: 0;
             transition: margin $transition-time-normal;
-
+            border-bottom: 1px solid transparent;
+            text-decoration: none;
             &:hover {
-              display: inline-block;
-              text-decoration: underline;
-              margin-left: $sm-gap;
+              border-color: initial;
+              margin-left: $xs-gap;
             }
           }
         }

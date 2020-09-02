@@ -225,7 +225,7 @@
           margin-right: $gap;
 
           &:hover {
-            text-decoration: underline;
+            border-bottom: 1px solid;
           }
         }
 

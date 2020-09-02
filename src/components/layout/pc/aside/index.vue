@@ -17,9 +17,14 @@
     <div class="module calendar">
       <calendar>
         <template #default="humanDate">
-          <router-link class="date-link" :to="getDateRoute(humanDate)">
+          <router-link
+            class="date-link"
+            v-if="canPushRouteWithDay(humanDate)"
+            :to="getDateRoute(humanDate)"
+          >
             {{ humanDate.day }}
           </router-link>
+          <span v-else>{{ humanDate.day }}</span>
         </template>
       </calendar>
     </div>
@@ -57,7 +62,7 @@
   import { defineComponent, ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { getDateArchiveRoute } from '/@/transforms/route'
-  import { humanDateToYMD, HumanDate } from '/@/transforms/moment'
+  import { humanDateToYMD, dateToHuman, HumanDate } from '/@/transforms/moment'
   import Calendar from '/@/components/widget/calendar.vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import AsideSearch from './search.vue'
@@ -83,10 +88,28 @@
 
       // polyfill sticky event
       let stickyEvents: any = null
+      const today = dateToHuman(new Date())
       const element = ref<HTMLDivElement>(null as any)
       const adIndex = ref(0)
       const renderStickyAd = ref(false)
       const standingSwiperInstance = ref<Swiper>()
+
+      const canPushRouteWithDay = (targetDate: HumanDate) => {
+        if (targetDate.year > today.year) {
+          return false
+        }
+        if (targetDate.month > today.month) {
+          return false
+        }
+        if (
+          targetDate.year == today.year &&
+          targetDate.month == today.month &&
+          targetDate.day > today.day
+        ) {
+          return false
+        }
+        return true
+      }
 
       const getDateRoute = (humanDate: HumanDate) => {
         return getDateArchiveRoute(humanDateToYMD(humanDate))
@@ -142,6 +165,7 @@
         adIndex,
         renderStickyAd,
         element,
+        canPushRouteWithDay,
         getDateRoute,
         handleStandingAdSwiperReady,
         handleStandingAdSlideChange,

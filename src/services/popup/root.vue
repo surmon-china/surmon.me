@@ -80,11 +80,11 @@
           max-width: 90%;
           max-height: 90%;
           background-color: $module-bg;
-          @include radius-box($xs-radius);
         }
 
         &.border > ::v-deep(*) {
           border: $sm-gap solid $module-bg-darker-1;
+          @include radius-box($sm-radius);
         }
       }
     }
