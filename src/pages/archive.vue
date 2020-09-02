@@ -2,76 +2,63 @@
   <div class="archive-page" :class="{ mobile: isMobile }">
     <div class="archive">
       <div class="module articles">
-        <h4 class="title" v-i18n="LANGUAGE_KEYS.ARTICLE_TITLE" />
-        <!-- TODO: 按照日期分类 -->
-        <placeholder :data="articles.length">
+        <h3 class="title" v-i18n="LANGUAGE_KEYS.ARTICLE_TITLE" />
+        <hr>
+        <placeholder :data="hasArticle">
           <template #placeholder>
             <p v-i18n="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"></p>
           </template>
           <template #default>
-            <ul class="article-list">
-              <li v-for="(article, index) in articles" :key="index" class="item">
-                <p class="item-content">
-                  <a
-                    class="link"
-                    target="_blank"
-                    :title="article.title"
-                    :href="getArticleDetailRoute(article.id)"
-                  >
-                    <span class="sign">「</span>
-                    <span class="title">{{ article.title }}</span>
-                    <span class="sign">」</span>
-                  </a>
-                  <!-- TODO: css -->
-                  <span class="sign">-</span>
-                  <button
-                    class="toggle-link"
-                    @click.prevent="handleToggleArticleDescription(article.id)"
-                    v-text="article.open ? 'close' : 'open'"
+            <ul class="year-list">
+              <li
+                v-for="yes in articleTree"
+                :key="yes.year"
+                class="year"
+              >
+                <h3 class="title">
+                  <i18n
+                    :zh="replaceToChineseNumber(yes.year)"
+                    :en="yes.year"
                   />
-                </p>
-                <template v-if="article.description">
-                  <transition name="module">
-                    <p v-show="article.open" class="item-description">
-                      {{ article.description }}
-                    </p>
-                  </transition>
-                </template>
-              </li>
-            </ul>
-          </template>
-        </placeholder>
-      </div>
-      <div class="module categories">
-        <h4 class="title" v-i18n="LANGUAGE_KEYS.CATEGORY_TITLE" />
-        <placeholder :data="categories.length">
-          <template #placeholder>
-            <p v-i18n="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"></p>
-          </template>
-          <template #default>
-            <ul class="categories-list">
-              <li v-for="(category, index) in categories" :key="index" class="item">
-                <p class="item-content">
-                  <a
-                    class="name"
-                    target="_blank"
-                    :title="category.name"
-                    :href="getCategoryArchiveRoute(category.slug)"
+                </h3>
+                <ul class="month-list">
+                  <li
+                    v-for="mos in yes.months"
+                    :key="mos.month"
+                    class="month"
                   >
-                    <i18n :zh="category.name" :en="category.slug" />
-                  </a>
-                  <span>（{{ category.count || 0 }}）</span>
-                  <!-- TODO: css -->
-                  <span class="sign">-</span>
-                  <span>{{ category.description }}</span>
-                </p>
+                    <h4 class="title">
+                      <i18n
+                        :zh="toChineseMonth(mos.month)"
+                        :en="toEngMonth(mos.month)"
+                      />
+                    </h4>
+                    <ul class="article-list">
+                      <li v-for="(article, index) in mos.articles" :key="index" class="item">
+                        <p class="item-content">
+                          <a
+                            class="link"
+                            target="_blank"
+                            :title="article.title"
+                            :href="getArticleDetailRoute(article.id)"
+                          >
+                            {{ article.title }}
+                          </a>
+                        </p>
+                        <!-- <p v-if="article.description" class="item-description">
+                          {{ article.description }}
+                        </p> -->
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
               </li>
             </ul>
           </template>
         </placeholder>
       </div>
       <div class="module tags">
-        <h4 class="title" v-i18n="LANGUAGE_KEYS.TAG_TITLE" />
+        <h3 class="title" v-i18n="LANGUAGE_KEYS.TAG_TITLE" />
         <placeholder :data="tags.length">
           <template #placeholder>
             <p v-i18n="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"></p>
@@ -93,7 +80,7 @@
         </placeholder>
       </div>
       <div class="module pages">
-        <h4 class="title" v-i18n="LANGUAGE_KEYS.PAGE_TITLE" />
+        <h3 class="title" v-i18n="LANGUAGE_KEYS.PAGE_TITLE" />
         <ul class="page-list">
           <li class="item">
             <a
@@ -153,10 +140,16 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
+  import { getNamespace, Modules } from '/@/store'
+  import { ArchiveModuleActions } from '/@/store/archive'
+  import { TagModuleActions } from '/@/store/tag'
+  import { CategoryModuleActions } from '/@/store/category'
   import { useEnhancer } from '/@/enhancer'
   import { RouteName } from '/@/router'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { getTagArchiveRoute, getCategoryArchiveRoute, getArticleDetailRoute, getPageRoute } from '/@/transforms/route'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { dateToHuman } from '/@/transforms/moment'
+  import { replaceToChineseNumber, toChineseMonth, toEngMonth } from '/@/transforms/text'
   import * as APP_CONFIG from '/@/config/app.config'
 
   export default defineComponent({
@@ -166,18 +159,53 @@
     //     title: `${this.isEnLang ? '' : this.$i18n.nav.map + ' | '}Archive`
     //   }
     // },
-    // fetch({ store }) {
-    //   return store.dispatch('sitemap/fetchArticles', { per_page: 666 })
-    // },
-    setup() {
+    async setup() {
       const { store, isMobile } = useEnhancer()
       const tags = computed(() => store.state.tag.data)
-      const categories = computed(() => store.state.category.data)
-      const articles = computed(() => store.state.sitemap.articles.data)
+      const hasArticle = computed(() => store.state.archive.articles.data.length)
+      const articleTree = computed(() => {
+        const rootTree = [] as Array<{
+          year: number
+          months: Array<{
+            month: number
+            articles: Array<any>
+          }>
+        }>
+        store.state.archive.articles.data
+          .map(article => ({ ...article, createAt: dateToHuman(new Date(article.create_at)) }))
+          .sort((a, b) => Number(`${a.year}${a.month}${a.day}`) - Number(`${b.year}${b.month}${b.day}`))
+          .forEach(article => {
+            const { createAt } = article
+            // year
+            const yearTree = rootTree.find(ye => ye.year === createAt.year)
+            let targetYear = yearTree
+            if (!targetYear) {
+              targetYear = { year: createAt.year, months: [] }
+              rootTree.push(targetYear)
+            }
+            // month
+            const monthTree = targetYear.months.find(mo => mo.month === createAt.month)
+            let targetMonth = monthTree
+            if (!targetMonth) {
+              targetMonth = { month: createAt.month, articles: [] }
+              targetYear.months.push(targetMonth)
+            }
+            // article
+            targetMonth.articles.push(article)
+          })
+        return rootTree
+      })
 
-      const handleToggleArticleDescription = (articleId: number) => {
-        // store.commit('sitemap/updateArticleOpenState', index)
-      }
+      await Promise.all([
+        store.dispatch(getNamespace(
+          Modules.Tag,
+          TagModuleActions.FetchAll
+        )),
+        store.dispatch(getNamespace(
+          Modules.Archive,
+          ArchiveModuleActions.FetchArticles
+        ))
+      ])
 
       return {
         LANGUAGE_KEYS,
@@ -187,8 +215,13 @@
         getTagArchiveRoute,
         getCategoryArchiveRoute,
         getArticleDetailRoute,
+        replaceToChineseNumber,
+        toChineseMonth,
+        toEngMonth,
         isMobile,
-        handleToggleArticleDescription,
+        tags,
+        articleTree,
+        hasArticle
       }
     }
   })
@@ -197,66 +230,19 @@
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
+  $border-guide: 1px solid;
+
   .archive-page {
     padding: $gap 3rem;
-    background-color: $module-bg;
     overflow: hidden;
-    $border-guide: 1px solid;
-
-    &.mobile {
-      padding: 1.666rem;
-
-      ul {
-        padding-left: 1.666rem;
-
-        &.article-list {
-          > .item {
-            > .item-content {
-              > .link {
-                display: flex;
-                border: none;
-
-                > .sign,
-                > .title {
-                  display: inline-block;
-                }
-
-                > .title {
-                  margin: 0;
-                  max-width: 88%;
-                  border-bottom: $border-guide;
-                  @include text-overflow();
-                }
-              }
-
-              .toggle-link {
-                padding-left: 1em;
-                display: block;
-                margin: 1em 0;
-              }
-
-              > .sign {
-                display: none;
-              }
-            }
-
-            > .item-description {
-              margin-top: -$gap;
-            }
-          }
-        }
-      }
-    }
+    @include common-bg-module();
+    @include radius-box($lg-radius);
 
     .archive {
       text-transform: capitalize;
 
       a {
         border-bottom: $border-guide;
-
-        &.toggle-link {
-          border: none;
-        }
       }
 
       .module {
@@ -269,6 +255,19 @@
         }
       }
 
+      .year-list,
+      .month-list {
+        .title {
+          color: $text-secondary;
+        }
+      }
+      .year-list {
+        list-style: none;
+      }
+      .month-list {
+        list-style: disc;
+      }
+
       .articles {
         .article-list {
           list-style: square;
@@ -278,16 +277,15 @@
               margin-bottom: 1.2em;
 
               > .link {
-                border: none;
-
-                > .title {
-                  font-weight: normal;
-                  border-bottom: $border-guide;
-                }
+                border-bottom: 1px solid;
+                border-bottom: $border-guide;
+                font-size: $font-size-h5;
+                font-weight: bold;
               }
             }
 
             > .item-description {
+              font-size: $font-size-h6;
               line-height: 2em;
               padding-left: 1em;
             }
@@ -320,6 +318,46 @@
           .item {
             .name {
               text-transform: capitalize;
+            }
+          }
+        }
+      }
+    }
+
+    &.mobile {
+      padding: 1.666rem;
+
+      ul {
+        padding-left: 1.666rem;
+
+        &.article-list {
+          > .item {
+            > .item-content {
+              > .link {
+                display: flex;
+                border: none;
+
+                > .title {
+                  display: inline-block;
+                }
+
+                > .title {
+                  margin: 0;
+                  max-width: 88%;
+                  border-bottom: $border-guide;
+                  @include text-overflow();
+                }
+              }
+
+              .toggle-link {
+                padding-left: 1em;
+                display: block;
+                margin: 1em 0;
+              }
+            }
+
+            > .item-description {
+              margin-top: -$gap;
             }
           }
         }

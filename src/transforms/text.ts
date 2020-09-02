@@ -15,3 +15,47 @@ export const textOverflow = (text: string, customLength?: number) => {
 export const firstUpperCase = (text: string) => {
   return text?.toLowerCase().replace(/( |^)[a-z]/g, L => L.toUpperCase())
 }
+
+export const CHINESE_NUMBER_TEXT = '零一二三四五六七八九十'.split('')
+export const replaceToChineseNumber = (text: string | number) => {
+  return String(text)
+    .split('')
+    .map(number => CHINESE_NUMBER_TEXT[Number(number)])
+    .join('')
+}
+
+export const CHINESE_MONTH_TEXT = [
+  '首阳',
+  '绀香',
+  '莺时',
+  '槐序',
+  '鸣蜩',
+  '季夏',
+  '兰秋',
+  '南宫',
+  '菊月',
+  '子春',
+  '葭月',
+  '季冬'
+]
+export const toChineseMonth = (number: number) => {
+  return CHINESE_MONTH_TEXT[number]
+}
+
+export const ENG_MONTH_TEXT = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+]
+export const toEngMonth = (number: number) => {
+  return ENG_MONTH_TEXT[number]
+}

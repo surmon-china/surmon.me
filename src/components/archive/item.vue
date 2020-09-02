@@ -95,7 +95,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted, PropType } from 'vue'
+  import { defineComponent, ref, computed, onMounted } from 'vue'
   import { useGlobalState } from '/@/state'
   import { useI18n } from '/@/services/i18n'
   import { getJSON } from '/@/services/storage'
@@ -113,7 +113,7 @@
     name: 'ArticleListItem',
     props: {
       article: {
-        type: Object as PropType<any>,
+        type: Object as any,
         required: true
       }
     },
