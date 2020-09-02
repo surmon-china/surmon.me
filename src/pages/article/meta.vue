@@ -191,8 +191,12 @@
         margin: 0;
       }
 
-      a:hover {
-        text-decoration: underline;
+      a {
+        border-bottom: 1px solid transparent;
+        &:hover {
+          text-decoration: none;
+          border-color: initial;
+        }
       }
 
       .date-link,
@@ -218,10 +222,9 @@
       }
 
       .site-url {
-        text-decoration: underline;
+        border-bottom: 1px solid;
         cursor: pointer;
         color: $link-color;
-
         &:hover {
           color: $link-color-hover;
         }

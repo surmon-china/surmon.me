@@ -163,10 +163,12 @@
         .title {
           display: block;
           font-size: $font-size-h6;
+          border-bottom: 1px solid transparent;
           @include text-overflow();
 
           &:hover {
-            text-decoration: underline;
+            text-decoration: none;
+            border-color: initial;
           }
         }
       }

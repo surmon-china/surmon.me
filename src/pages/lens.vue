@@ -84,7 +84,9 @@
               :data-background-image="getThumbUrl(video.pic)"
             />
           </div>
-          <h5 class="title" v-text="video.title" />
+          <h5 class="title">
+            <span class="text">{{ video.title }}</span>
+          </h5>
           <p
             class="description"
             style="-webkit-box-orient: vertical;"
@@ -405,8 +407,9 @@
             }
           }
 
-          .title {
-            text-decoration: underline;
+          .title .text {
+            text-decoration: none;
+            border-color: initial;
           }
         }
 
@@ -479,6 +482,9 @@
           margin-bottom: $sm-gap;
           font-weight: bold;
           text-transform: capitalize;
+          .text {
+            border-bottom: 1px solid transparent;
+          }
         }
 
         > .description {

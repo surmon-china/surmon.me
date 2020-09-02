@@ -188,8 +188,10 @@
             font-weight: bold;
             font-size: $font-size-h4;
             text-transform: capitalize;
+            border-bottom: 1px solid transparent;
             &:hover {
-              text-decoration: underline;
+              text-decoration: none;
+              border-color: initial;
             }
 
             .location {

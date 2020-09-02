@@ -84,17 +84,27 @@ customRenderer.code = function (code, lang, escaped) {
     .map((_, i) => `<li class="code-line-number">${i + 1}</li>`.replace(/\s+/g, ' '))
     .join('')
 
+  const readOnlyAttrs = `
+    contenteditable="true"
+    oncut="return false"
+    onpaste="return false"
+    onkeydown="if(event.metaKey) return true; return false;"
+  `
+
   return lang
     ? `
       <pre data-lang="${lang}">
         <ul class="code-lines">${lineNumbers}</ul>
-        <code class="${this.options.langPrefix}${escape(lang)}">${escaped ? code : escape(code)}\n</code>
+        <code
+          ${readOnlyAttrs}
+          class="${this.options.langPrefix}${escape(lang)}"
+        >${escaped ? code : escape(code)}\n</code>
       </pre>\n
     `
     : `
       <pre>
         <ul class="code-lines">${lineNumbers}</ul>
-        <code>${escaped ? code : escape(code)}\n</code>
+        <code ${readOnlyAttrs}>${escaped ? code : escape(code)}\n</code>
       </pre>
     `
 }

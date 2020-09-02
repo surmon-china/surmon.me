@@ -285,7 +285,7 @@ footer {
 }
 
 hr {
-  border-top: $border;
+  border-top: 1px dashed $module-bg-darker-2;
   display: block;
   margin-bottom: 1em;
   width: 100%;
@@ -573,7 +573,7 @@ fieldset {
 }
 
 legend {
-  border-bottom: $border;
+  border-bottom: 1px solid $module-bg-darker-1;
   color: $text;
   display: block;
   margin-bottom: $sm-gap;
@@ -627,7 +627,6 @@ button:disabled {
 
 table {
   width: 100%;
-  border-top: $border;
   margin-bottom: 1em;
   border-collapse: collapse;
   border-spacing: 0;
@@ -639,6 +638,7 @@ caption {
 
 thead th {
   background-color: $module-bg-darker-1;
+  border: 1px solid $module-bg-darker-2;
   text-align: left;
 }
 
@@ -649,7 +649,7 @@ tr {
 th,
 td {
   vertical-align: inherit;
-  border: $border;
+  border: 1px solid $module-bg-darker-2;
   padding: .5em 1em;
   vertical-align: inherit;
 }
