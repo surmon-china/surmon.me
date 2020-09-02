@@ -1,4 +1,3 @@
-
 // TODO: !!!
 export const APP = {
   title: `Surmon's projects`,

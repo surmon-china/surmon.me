@@ -838,7 +838,7 @@
             color: #98c471;
             line-height: 1em;
             padding: 0;
-            margin-top: $xs-gap;
+            margin-top: $sm-gap;
             margin-bottom: $gap;
           }
           .description {

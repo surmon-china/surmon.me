@@ -71,7 +71,7 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
   const doPrefetchTask = () => {
     const initFetchTasks = [
       store.dispatch(getNamespace(Modules.Tag, TagModuleActions.FetchAll)),
-      store.dispatch(getNamespace(Modules.Category, CategoryModuleActions.FetchList)),
+      store.dispatch(getNamespace(Modules.Category, CategoryModuleActions.FetchAll)),
       store.dispatch(getNamespace(Modules.Option, OptionModuleActions.FetchAdminInfo)),
       store.dispatch(getNamespace(Modules.Option, OptionModuleActions.FetchAppOption))
     ]

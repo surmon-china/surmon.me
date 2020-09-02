@@ -14,7 +14,7 @@ export enum CategoryModuleMutations {
   SetListData = 'setListData'
 }
 export enum CategoryModuleActions {
-  FetchList = 'fetchList'
+  FetchAll = 'fetchAll'
 }
 
 const state = () => ({
@@ -36,13 +36,13 @@ const mutations: MutationTree<CategoryState> = {
 }
 
 const actions: ActionTree<CategoryState, IRootState> = {
-  [CategoryModuleActions.FetchList]({ state, commit }, params: object) {
+  [CategoryModuleActions.FetchAll]({ state, commit }) {
     if (state.fetched) {
       return Promise.resolve(state.data)
     }
     commit(CategoryModuleMutations.SetFetching, true)
     return http
-      .get('/category', { params })
+      .get('/category', { params: { per_page: 666 }})
       .then(response => {
         commit(CategoryModuleMutations.SetListData, response.result.data)
         commit(CategoryModuleMutations.SetFetched, true)

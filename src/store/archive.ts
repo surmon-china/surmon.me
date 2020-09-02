@@ -30,24 +30,20 @@ const mutations: MutationTree<ArchiveState> = {
   },
   [ArchiveModuleMutations.SetArticlesData](state, data) {
     state.articles.data = data
-  },
-  // TODO: 应该在消费方实现
-  // setArticleOpenState(state, index, open) {
-  //   const article = state.articles.data[index]
-  //   if (article) {
-  //     Vue.set(article, 'open', open != null ? open : !article.open)
-  //   }
-  // }
+  }
 }
 
 const actions: ActionTree<ArchiveState, IRootState> = {
-  [ArchiveModuleActions.FetchArticles]({ commit }, params) {
+  [ArchiveModuleActions.FetchArticles]({ state, commit }, params = {}) {
+    if (state.articles.data.length) {
+      return Promise.resolve(state.articles.data)
+    }
     commit(ArchiveModuleMutations.SetArticlesFetching, true)
     return http
-      .get(ARTICLE_API_PATH, { params })
+      .get(ARTICLE_API_PATH, { params: { per_page: 666, ...params }})
       .then(response => {
         commit(ArchiveModuleMutations.SetArticlesData, response.result.data)
-        return response
+        return response.result.data
       })
       .finally(() => {
         commit(ArchiveModuleMutations.SetArticlesFetching, false)
