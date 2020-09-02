@@ -1,19 +1,19 @@
 /**
- * @file Sitemap
- * @module store/sitemap
+ * @file Archive
+ * @module store/archive
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import { Module, MutationTree, ActionTree } from 'vuex'
-import http from '/@/services/http'
 import { ARTICLE_API_PATH } from './article'
 import { IRootState } from '.'
+import http from '/@/services/http'
 
-export enum SitemapModuleMutations {
+export enum ArchiveModuleMutations {
   SetArticlesFetching = 'setArticlesFetching',
   SetArticlesData = 'setArticlesData'
 }
-export enum SitemapModuleActions {
+export enum ArchiveModuleActions {
   FetchArticles = 'fetchArticles'
 }
 
@@ -24,12 +24,12 @@ const state = () => ({
   }
 })
 
-const mutations: MutationTree<SitemapState> = {
-  [SitemapModuleMutations.SetArticlesFetching](state, fetching: boolean) {
+const mutations: MutationTree<ArchiveState> = {
+  [ArchiveModuleMutations.SetArticlesFetching](state, fetching: boolean) {
     state.articles.fetching = fetching
   },
-  [SitemapModuleMutations.SetArticlesData](state, result) {
-    state.articles.data = result.data
+  [ArchiveModuleMutations.SetArticlesData](state, data) {
+    state.articles.data = data
   },
   // TODO: 应该在消费方实现
   // setArticleOpenState(state, index, open) {
@@ -40,27 +40,27 @@ const mutations: MutationTree<SitemapState> = {
   // }
 }
 
-const actions: ActionTree<SitemapState, IRootState> = {
-  [SitemapModuleActions.FetchArticles]({ commit }, params) {
-    commit(SitemapModuleMutations.SetArticlesFetching, true)
+const actions: ActionTree<ArchiveState, IRootState> = {
+  [ArchiveModuleActions.FetchArticles]({ commit }, params) {
+    commit(ArchiveModuleMutations.SetArticlesFetching, true)
     return http
       .get(ARTICLE_API_PATH, { params })
       .then(response => {
-        commit(SitemapModuleMutations.SetArticlesData, response.result)
+        commit(ArchiveModuleMutations.SetArticlesData, response.result.data)
         return response
       })
       .finally(() => {
-        commit(SitemapModuleMutations.SetArticlesFetching, false)
+        commit(ArchiveModuleMutations.SetArticlesFetching, false)
       })
   }
 }
 
-const sitemapModule: Module<SitemapState, IRootState> = {
+const archiveModule: Module<ArchiveState, IRootState> = {
   namespaced: true,
   state,
   mutations,
   actions
 }
 
-export type SitemapState = ReturnType<typeof state>
-export default sitemapModule
+export type ArchiveState = ReturnType<typeof state>
+export default archiveModule

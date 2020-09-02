@@ -97,10 +97,11 @@
 
   code {
     color: #bd4147;
-    padding: .3em .5em;
-    margin: 0 .5em;
+    padding: .3em .4em;
+    margin: 0 .3em;
     border-radius: $xs-radius;
     background-color: $module-bg-darker-1;
+    font-size: $font-size-h6;
   }
 
   pre {
@@ -182,6 +183,7 @@
       line-height: $code-row-line-height;
       color: rgba($white, 0.87);
       background-color: transparent;
+      font-size: $font-size-base;
     }
   }
 
