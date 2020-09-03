@@ -6,21 +6,28 @@
       `barrage-size-${barrage.style.size}`,
       `barrage-color-${barrage.style.color}`,
       barrage.outdated && 'outdated',
-      playing && 'playing',
-      played && 'played'
+      state.playing && 'playing',
+      state.played && 'played'
     ]"
   >
     <span class="gravatar"></span>
-    <span class="content" v-text="barrage.text"></span>
+    <span class="content">{{ barrage.text }}</span>
   </li>
 </template>
 
-<script>
-  export default {
+<script lang="ts">
+  import { defineComponent, reactive, ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
+  import { randomPer } from './util'
+
+  export enum Event {
+    End = 'end'
+  }
+  export default defineComponent({
     name: 'BarrageItem',
     props: {
       id: {
-        type: Number
+        type: Number,
+        required: true
       },
       delay: {
         type: Number,
@@ -31,69 +38,72 @@
         required: true
       }
     },
-    data() {
-      return {
-        // 定时器
-        timers: {
-          transform: null,
-          playing: null
-        },
-        // 播放状态
+    emits: [Event.End],
+    setup(props, context) {
+      // 定时器
+      const timers = {
+        transform: null as null | number,
+        playing: null as null | number
+      }
+
+      // 播放状态
+      const state = reactive({
         played: false,
         playing: false,
-        styles: {
-          'z-index': (this.id + 1) * 10,
-          transition: `transform ${this.delay}s linear`
-        }
-      }
-    },
-    ready() {
-      this.startAnimation()
-    },
-    mounted() {
-      this.startAnimation()
-    },
-    beforeDestroy() {
-      if (this.timers.transform) {
-        clearTimeout(this.timers.transform)
-        this.timers.transform = null
-      }
-      if (this.timers.playing) {
-        clearTimeout(this.timers.playing)
-        this.timers.playing = null
-      }
-    },
-    methods: {
-      readomTop() {
+      })
+
+      const topStyle = ref()
+      const styles = computed(() => ({
+        top: topStyle.value,
+        zIndex: (props.id + 1) * 10,
+        transition: `transform ${props.delay}s linear`
+      }))
+
+      const readomTop = () => {
         const innerHeight = document.documentElement.clientHeight - 63
         const innerCount = innerHeight / 30
-        let randomCount = this.$parent.randomPer(innerCount) - 3
+        let randomCount = randomPer(innerCount) - 3
         randomCount = randomCount < 0 ? 1 : randomCount
         let topPre = randomCount / innerCount * 100
         topPre = (topPre > 88) ? 86 : topPre
-        return `${parseInt(topPre, 0)}%`
-      },
-      startAnimation() {
-        this.$nextTick(() => {
-          // 开始动画
-          this.timers.transform = setTimeout(() => {
-            this.playing = true
-            // 计算出一个随机高度，相对左距
-            this.$set(this.styles, 'top', this.readomTop())
+        return `${parseInt(String(topPre), 0)}%`
+      }
+
+      const startAnimation = () => {
+        nextTick(() => {
+          // 开始动画 -> 计算出一个随机高度，相对左距
+          timers.transform = window.setTimeout(() => {
+            state.playing = true
+            topStyle.value = readomTop()
           })
 
           // 结束动画
-          this.timers.playing = setTimeout(() => {
-            this.playing = false
-            this.played = true
-            this.$nextTick(() => {
-              this.$emit('end', this.id)
-            })
-          }, this.delay * 1000)
+          timers.playing = window.setTimeout(() => {
+            state.playing = false
+            state.played = true
+            nextTick(() => context.emit(Event.End, props.id))
+          }, props.delay * 1000)
         })
       }
+
+      onMounted(startAnimation)
+      onBeforeUnmount(() => {
+        if (timers.transform) {
+          clearTimeout(timers.transform)
+          timers.transform = null
+        }
+        if (timers.playing) {
+          clearTimeout(timers.playing)
+          timers.playing = null
+        }
+      })
+
+      return {
+        styles,
+        state
+      }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
