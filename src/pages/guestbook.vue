@@ -8,7 +8,7 @@
   >
     <div class="banner">
       <uimage cdn class="image" src="/images/page-guestbook/banner.jpg" />
-      <span class="Slogan">
+      <span class="slogan">
         <span class="text" v-i18n="LANGUAGE_KEYS.GUESTBOOK_SLOGAN" />
       </span>
     </div>
@@ -88,7 +88,7 @@
         }
       }
 
-      .Slogan {
+      .slogan {
         $size: 2em;
         display: block;
         position: absolute;
@@ -124,7 +124,7 @@
 
     &.dark {
       .banner {
-        .Slogan {
+        .slogan {
           .text {
             -webkit-text-fill-color: $text !important;
           }
