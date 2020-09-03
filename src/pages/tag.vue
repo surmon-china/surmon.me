@@ -25,9 +25,9 @@
   import { ArticleModuleActions } from '/@/store/article'
   import { TagModuleActions } from '/@/store/tag'
   import { getExtendsValue } from '/@/transforms/state'
+  import { nextScreen, scrollToTop } from '/@/utils/effects'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
-  import { nextScreen, scrollToTop } from '/@/utils/effects'
 
   export default defineComponent({
     name: 'TagPage',

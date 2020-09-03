@@ -23,9 +23,9 @@
   import { ArticleModuleActions } from '/@/store/article'
   import { CategoryModuleActions } from '/@/store/category'
   import { getExtendsValue } from '/@/transforms/state'
+  import { nextScreen, scrollToTop } from '/@/utils/effects'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
-  import { nextScreen, scrollToTop } from '/@/utils/effects'
 
   export default defineComponent({
     name: 'CategoryPage',
@@ -47,7 +47,7 @@
       const categorySlug = computed(() => route.params.category_slug as string)
 
       const fetchCategories = () => store.dispatch(
-        getNamespace(Modules.Category, CategoryModuleActions.FetchList)
+        getNamespace(Modules.Category, CategoryModuleActions.FetchAll)
       )
 
       const fetchArticles = (params: any) => store.dispatch(
