@@ -17,10 +17,10 @@
   import { useStore, Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { AnnouncementModuleActions } from '/@/store/announcement'
+  import { nextScreen } from '/@/utils/effects'
   import Carrousel from '/@/components/archive/carrousel.vue'
   import Announcement from '/@/components/archive/announcement.vue'
   import ArticleList from '/@/components/archive/list.vue'
-  import { nextScreen } from '/@/utils/effects'
 
   export default defineComponent({
     name: 'Index',

@@ -24,9 +24,9 @@
   import { useEnhancer } from '/@/enhancer'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
+  import { nextScreen, scrollToTop } from '/@/utils/effects'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
-  import { nextScreen, scrollToTop } from '/@/utils/effects'
 
   export default defineComponent({
     name: 'DatePage',
