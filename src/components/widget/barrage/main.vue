@@ -43,11 +43,11 @@
             </ul>
           </div>
           <input
-            v-model="barrage"
+            v-model="barrageInput"
             type="text"
             class="input"
             placeholder="Here we go"
-            @keyup.enter="sendbarrage"
+            @keyup.enter="sendBarrage"
           >
           <div class="count">
             <span>{{ counts.users }} {{ isEnLang ? 'U' : '人' }}</span>
@@ -60,154 +60,156 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import { defineComponent, reactive, ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+  import { useEnhancer } from '/@/enhancer'
   import socket from '/@/services/socket.io'
   import BarrageItem from './item.vue'
-  export default {
+  import { randomPer } from './util'
+
+  export default defineComponent({
     name: 'Barrage',
     components: {
       BarrageItem
     },
-    data() {
-      const sizes = this.isEnLang ? ['Strong', 'Large', 'Normal'] : ['粗大', '很大', '大'];
-      const colors = this.isEnLang
-        ? ['Green', 'Green2', 'Red', 'Purple', 'Pink', 'Yellow', 'White', 'Black']
-        : ['老王绿', '原谅绿', '姨妈红', '友情紫', '百合粉', '东莞黄', '李太白', '非常黑'];
+    setup() {
+      const { i18n, globalState, isZhLang } = useEnhancer()
+      const sizes = isZhLang
+        ? ['粗大', '很大', '大']
+        : ['Strong', 'Large', 'Normal'];
+      const colors = isZhLang
+        ? ['老王绿', '原谅绿', '姨妈红', '友情紫', '百合粉', '东莞黄', '李太白', '非常黑']
+        : ['Green', 'Green2', 'Red', 'Purple', 'Pink', 'Yellow', 'White', 'Black'];
+
+      const counts = reactive({ users: 0, count: 0 })
+      const config = reactive({ delay: 10, moveDelay: 4 })
+      const barrages = reactive<Array<any>>([])
+      const barrageInput = ref('')
+      let barrageLimit = 0
+      const state = reactive({
+        sizeIndex: sizes.length - 1,
+        colorIndex: colors.length - 1,
+        transitioning: false,
+        moveTimer: null as null | number
+      })
+
+      const isOnBarrage = computed(() => globalState.switchBox.barrage)
+      const currentColorText = computed(() => colors[state.colorIndex])
+      const currentSizeText = computed(() => sizes[state.sizeIndex])
+
+      // 弹幕输入容器动画周期
+      const handleInputAnimationStart = () => {
+        state.transitioning = true
+      }
+      const handleInputAnimationEnd = () => {
+        state.transitioning = false
+      }
+      const handleBarrageItemAnimationEnd = (id) => {
+        const targetIndex = barrages.findIndex(barrage => barrage.id === id)
+        if (targetIndex > -1) {
+          barrages.splice(targetIndex, 1)
+        }
+      }
+
+      // 发布弹幕
+      const sendBarrage = () => {
+        const text = barrageInput.value.trim()
+        if (text) {
+          const barrage: any = {
+            text: text.slice(0, 40),
+            style: {
+              size: state.sizeIndex,
+              color: state.colorIndex
+            },
+            date: new Date().getTime()
+          }
+          socket.emit('barrage-send', barrage)
+          barrage.id = barrageLimit++
+          barrages.push(barrage)
+          counts.count += 1
+          barrageInput.value = ''
+        }
+      }
+
+      // 时间转换
+      const transferDate = (timestamp: number) => {
+        return new Date(timestamp).toLocaleString()
+      }
+
+      // 清空动画队列
+      const clearBarrages = () => {
+        // TODO: 待验证
+        barrages.length = 0
+      }
+
+      const initSocket = () => {
+        socket.emit('barrage-last-list', barrages => {
+          barrages.forEach((barrage, index) => {
+            barrage.id = index + 1
+          })
+          // 生成随机的时间，push 进不同的内容，而不是一次性赋值
+          const moveBarrages = () => {
+            if (barrages.length) {
+              barrages.push(barrages[0])
+              barrages.splice(0, 1)
+              if (barrages.length) {
+                state.moveTimer = window.setTimeout(
+                  moveBarrages,
+                  parseInt(String(randomPer(config.moveDelay)), 0) * 100
+                )
+              }
+            }
+          }
+          moveBarrages()
+          barrageLimit = barrages.length + 2
+        })
+        socket.emit('barrage-count', _counts => {
+          Object.assign(counts, _counts)
+        })
+        socket.on('barrage-update-count', _counts => {
+          Object.assign(counts, _counts)
+        })
+        socket.on('barrage-create', barrage => {
+          barrages.push({
+            ...barrage,
+            // 得到新消息时，若此刻弹幕窗未开启，则将此消息标记为过时消息，过时消息有不同的 UI 特征
+            outdated: !isOnBarrage.value
+          })
+        })
+      }
+
+      const clean = () => {
+        if (state.moveTimer) {
+          window.clearTimeout(state.moveTimer)
+        }
+        clearBarrages()
+      }
+
+      // 当用户关闭弹幕时，清空所有队列中的（UI 上正在展示的）消息
+      watch(
+        () => isOnBarrage.value,
+        on => on || clearBarrages()
+      )
+
+      onMounted(initSocket)
+      onBeforeUnmount(clean)
+
       return {
         sizes,
         colors,
-        counts: {
-          users: 0,
-          count: 0
-        },
-        config: {
-          delay: 10,
-          moveDelay: 4
-        },
-        barrage: '',
-        barrages: [],
-        moveTimer: null,
-        barrageLimit: 0,
-        sizeIndex: sizes.length - 1,
-        colorIndex: colors.length - 1,
-        transitioning: false
+        counts,
+        config,
+        barrages,
+        barrageInput,
+        sendBarrage
       }
-    },
-    computed: {
-      isEnLang() {
-        return this.$store.getters['global/isEnLang']
-      },
-      onBarrage() {
-        return this.$store.state.global.onBarrage
-      },
-      currentColor() {
-        return this.colors[this.colorIndex]
-      },
-      currentSize() {
-        return this.sizes[this.sizeIndex]
-      }
-    },
-    methods: {
-      // 弹幕输入容器动画周期
-      handleInputAnimationStart() {
-        this.transitioning = true
-      },
-      handleInputAnimationEnd() {
-        this.transitioning = false
-      },
-      handleBarrageItemAnimationEnd(id) {
-        const targetIndex = this.barrages.findIndex(barrage => barrage.id === id)
-        if (targetIndex > -1) {
-          this.barrages.splice(targetIndex, 1)
-        }
-      },
-      // 发布弹幕
-      sendbarrage() {
-        const text = this.barrage.trim()
-        if (!text) return
-        const barrage = {
-          text: text.slice(0, 40),
-          style: {
-            size: this.sizeIndex,
-            color: this.colorIndex
-          },
-          date: new Date().getTime()
-        }
-        socket.emit('barrage-send', barrage)
-        barrage.id = this.barrageLimit++
-        this.barrages.push(barrage)
-        this.counts.count += 1
-        this.barrage = ''
-      },
-      // 时间转换
-      transferDate(timestamp) {
-        return new Date(timestamp).toLocaleString()
-      },
-      // 计算随机数
-      randomPer(pre = 3) {
-        const step1 = new Date().getTime() * 9301 + 49297
-        const step2 = (step1 % 233280) / 233280.0
-        return step2 * pre + Math.random()
-      },
-      // 清空动画队列
-      clearBarrages() {
-        this.barrages = []
-      }
-    },
-    watch: {
-      onBarrage(onBarrage) {
-        // 当用户关闭弹幕时，清空所有队列中的（UI 上正在展示的）消息
-        onBarrage || this.clearBarrages()
-      }
-    },
-    mounted() {
-      socket.emit('barrage-last-list', barrages => {
-        barrages.forEach((barrage, index) => {
-          barrage.id = index + 1
-        })
-        // 生成随机的时间，push 进不同的内容，而不是一次性赋值
-        const moveBarrages = () => {
-          if (barrages.length) {
-            // console.log('moveBarrages， 还有', barrages.length)
-            this.barrages.push(barrages[0])
-            barrages.splice(0, 1)
-            if (barrages.length) {
-              this.moveTimer = setTimeout( 
-                moveBarrages,
-                parseInt(
-                  this.randomPer(this.config.moveDelay), 0
-                ) * 100
-              )
-            }
-          }
-        }
-        moveBarrages()
-        this.barrageLimit = barrages.length + 2
-      })
-      socket.emit('barrage-count', counts => {
-        this.counts = counts
-      })
-      socket.on('barrage-update-count', counts => {
-        this.counts = counts
-      })
-      socket.on('barrage-create', barrage => {
-        this.barrages.push({
-          ...barrage,
-          // 得到新消息时，若此刻弹幕窗未开启，则将此消息标记为过时消息，过时消息有不同的 UI 特征
-          outdated: !this.onBarrage
-        })
-      })
-    },
-    beforeDestroy() {
-      if (this.moveTimer) {
-        clearTimeout(this.moveTimer)
-      }
-      this.clearBarrages()
     }
-  }
+  })
 </script>
 
 <style lang="scss">
+  @import 'src/assets/styles/init.scss';
+
   // 字体尺寸
   .barrage-size-0 {
     font-size: 3em;
@@ -282,8 +284,8 @@
       > .barrage-box {
         > .input-box {
           animation-delay: $transition-time-slow;
-          animation-duration: $transition-time-slow * 1.5; 
-          animation-fill-mode: both; 
+          animation-duration: $transition-time-slow * 1.5;
+          animation-fill-mode: both;
           animation-name: input-box-in;
           animation-timing-function: ease;
         }
@@ -312,8 +314,8 @@
         }
 
         .barrages-list-leave-active {
-          animation-duration: 30s; 
-          animation-fill-mode: both; 
+          animation-duration: 30s;
+          animation-fill-mode: both;
           animation-name: barrages-list-out;
         }
       }
