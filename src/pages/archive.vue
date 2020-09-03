@@ -1,140 +1,86 @@
 <template>
   <div class="archive-page" :class="{ mobile: isMobile }">
-    <div class="archive">
-      <div class="module articles">
-        <h3 class="title" v-i18n="LANGUAGE_KEYS.ARTICLE_TITLE" />
-        <hr>
-        <placeholder :data="hasArticle">
-          <template #placeholder>
-            <p v-i18n="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"></p>
-          </template>
-          <template #default>
-            <ul class="year-list">
-              <li
-                v-for="yes in articleTree"
-                :key="yes.year"
-                class="year"
-              >
-                <h3 class="title">
+    <placeholder :data="hasArticle && tags.length">
+      <template #placeholder>
+        <p v-i18n="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"></p>
+      </template>
+      <template #default>
+        <div class="content">
+          <ul class="year-list">
+            <li
+              v-for="yes in articleTree"
+              :key="yes.year"
+              class="year"
+            >
+              <h4 class="title root">
+                <i class="iconfont icon-china-symble" />
+                <span class="text">
                   <i18n
-                    :zh="replaceToChineseNumber(yes.year)"
+                    :zh="replaceToChineseNumber(yes.year, true)"
                     :en="yes.year"
                   />
-                </h3>
-                <ul class="month-list">
-                  <li
-                    v-for="mos in yes.months"
-                    :key="mos.month"
-                    class="month"
-                  >
-                    <h4 class="title">
+                </span>
+              </h4>
+              <ul class="month-list">
+                <li
+                  v-for="mos in yes.months"
+                  :key="mos.month"
+                  class="month"
+                >
+                  <h5 class="title">
+                    <span class="argyle">
                       <i18n
                         :zh="toChineseMonth(mos.month)"
                         :en="toEngMonth(mos.month)"
                       />
-                    </h4>
-                    <ul class="article-list">
-                      <li v-for="(article, index) in mos.articles" :key="index" class="item">
-                        <p class="item-content">
-                          <a
-                            class="link"
-                            target="_blank"
-                            :title="article.title"
-                            :href="getArticleDetailRoute(article.id)"
-                          >
-                            {{ article.title }}
-                          </a>
-                        </p>
-                        <!-- <p v-if="article.description" class="item-description">
-                          {{ article.description }}
-                        </p> -->
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </template>
-        </placeholder>
-      </div>
-      <div class="module tags">
-        <h3 class="title" v-i18n="LANGUAGE_KEYS.TAG_TITLE" />
-        <placeholder :data="tags.length">
-          <template #placeholder>
-            <p v-i18n="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"></p>
-          </template>
-          <template #default>
-            <ul vclass="tag-list">
-              <li v-for="(tag, index) in tags" :key="index" class="item">
+                      <span>&nbsp;~</span>
+                    </span>
+                  </h5>
+                  <ul class="article-list">
+                    <li v-for="(article, index) in mos.articles" :key="index" class="article">
+                      <p class="title">
+                        <span class="date">
+                          D{{ article.createAt.day }}
+                        </span>
+                        <a
+                          class="link"
+                          target="_blank"
+                          :title="article.title"
+                          :href="getArticleDetailRoute(article.id)"
+                        >
+                          {{ article.title }}
+                        </a>
+                      </p>
+                      <p class="description" v-html="article.description" />
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <h4 class="title root">
+            <i class="iconfont icon-dragon" />
+            <span class="text" v-i18n="LANGUAGE_KEYS.TAG_TITLE" />
+          </h4>
+          <ul class="tag-list">
+            <li v-for="(tag, index) in tags" :key="index" class="tag">
+              <p class="content">
                 <a
                   target="_blank"
+                  class="link"
                   :title="tag.description"
                   :href="getTagArchiveRoute(tag.slug)"
                 >
                   <i18n :zh="tag.name" :en="tag.slug" />
                 </a>
-                <span>（{{ tag.count || 0 }}）</span>
-              </li>
-            </ul>
-          </template>
-        </placeholder>
-      </div>
-      <div class="module pages">
-        <h3 class="title" v-i18n="LANGUAGE_KEYS.PAGE_TITLE" />
-        <ul class="page-list">
-          <li class="item">
-            <a
-              href="/"
-              target="_blank"
-              v-i18n="LANGUAGE_KEYS.PAGE_HOME"
-            />
-          </li>
-          <li class="item">
-            <a
-              href="/about"
-              target="_blank"
-              v-i18n="LANGUAGE_KEYS.PAGE_ABOUT"
-            />
-          </li>
-          <li class="item">
-            <a
-              href="/lens"
-              target="_blank"
-              v-i18n="LANGUAGE_KEYS.PAGE_LENS"
-            />
-          </li>
-          <li class="item">
-            <a
-              target="_blank"
-              rel="external nofollow noopener"
-              :href="APP_CONFIG.LINKS.project"
-              v-i18n="LANGUAGE_KEYS.PAGE_PROJECT"
-            />
-          </li>
-          <li class="item">
-            <a
-              href="/service"
-              target="_blank"
-              v-i18n="LANGUAGE_KEYS.PAGE_SERVICE"
-            />
-          </li>
-          <li class="item">
-            <a
-              href="/guestbook"
-              target="_blank"
-              v-i18n="LANGUAGE_KEYS.PAGE_GUESTBOOK"
-            />
-          </li>
-          <li class="item">
-            <a
-              href="/sitemap.xml"
-              target="_blank"
-              v-i18n="LANGUAGE_KEYS.PAGE_ARCHIVE"
-            />
-          </li>
-        </ul>
-      </div>
-    </div>
+                <span class="count">({{ tag.count || 0 }})</span>
+              </p>
+              <p class="description">{{ tag.description }}</p>
+            </li>
+          </ul>
+        </div>
+      </template>
+    </placeholder>
   </div>
 </template>
 
@@ -230,135 +176,106 @@
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
-  $border-guide: 1px solid;
-
   .archive-page {
-    padding: $gap 3rem;
+    padding: $lg-gap 3rem;
     overflow: hidden;
     @include common-bg-module();
     @include radius-box($lg-radius);
 
-    .archive {
+    .content {
       text-transform: capitalize;
+      font-size: 1em;
 
-      a {
-        border-bottom: $border-guide;
+      .link {
+        border-bottom: 1px solid;
+        font-size: $font-size-h5;
+        font-weight: bold;
       }
 
-      .module {
-        margin-bottom: $lg-gap * 2;
-        font-size: 1em;
-
-        .title {
+      .title {
+        color: $text-secondary;
+        &.root {
           font-weight: bold;
-          text-transform: capitalize;
+          margin-bottom: $lg-gap * 2;
+        }
+
+        > .text {
+          margin-left: $xs-gap;
+          padding-bottom: $xs-gap;
+          border-bottom: 1px solid;
         }
       }
 
-      .year-list,
-      .month-list {
-        .title {
-          color: $text-secondary;
+      .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        overflow: hidden;
+        list-style: square;
+        margin: 0;
+        margin-bottom: $xs-gap;
+
+        .tag {
+          width: 25%;
+          margin-bottom: $lg-gap;
+
+          .content {
+            margin-bottom: $gap;
+            .count {
+              color: $text-disabled;
+              font-size: $font-size-h5;
+              margin-left: $sm-gap;
+            }
+          }
+
+          .description {
+            display: inline-block;
+            width: 80%;
+            margin-bottom: 0;
+            color: $text-secondary;
+            font-size: $font-size-small;
+            @include text-overflow();
+          }
         }
       }
+
       .year-list {
+        padding-left: 0;
         list-style: none;
+        margin-bottom: $lg-gap * 2;
       }
+
       .month-list {
-        list-style: disc;
+        list-style: tibetan;
       }
 
-      .articles {
-        .article-list {
-          list-style: square;
+      .article-list {
+        list-style: none;
+        padding-left: $gap;
 
-          > .item {
-            > .item-content {
-              margin-bottom: 1.2em;
+        .article {
+          padding: $gap;
+          border-radius: $xs-radius;
+          &:hover {
+            background-color: $module-bg-darker-1;
+          }
 
-              > .link {
-                border-bottom: 1px solid;
-                border-bottom: $border-guide;
-                font-size: $font-size-h5;
-                font-weight: bold;
-              }
-            }
+          .title {
+            margin-bottom: $gap;
 
-            > .item-description {
-              font-size: $font-size-h6;
-              line-height: 2em;
-              padding-left: 1em;
+            .date {
+              display: inline-block;
+              color: $text-disabled;
+              font-size: $font-size-h5;
+              width: 2rem;
+              margin-right: $sm-gap;
             }
           }
-        }
-      }
 
-      .tags,
-      .pages {
-        margin-bottom: $gap;
-
-        .tag-list,
-        .page-list {
-          overflow: hidden;
-          margin: 0;
-
-          .item {
-            float: left;
-            display: block;
-            margin-right: $lg-gap;
-            margin-bottom: $lg-gap;
-          }
-        }
-      }
-
-      .categories {
-        .categories-list {
-          list-style: square;
-
-          .item {
-            .name {
-              text-transform: capitalize;
-            }
-          }
-        }
-      }
-    }
-
-    &.mobile {
-      padding: 1.666rem;
-
-      ul {
-        padding-left: 1.666rem;
-
-        &.article-list {
-          > .item {
-            > .item-content {
-              > .link {
-                display: flex;
-                border: none;
-
-                > .title {
-                  display: inline-block;
-                }
-
-                > .title {
-                  margin: 0;
-                  max-width: 88%;
-                  border-bottom: $border-guide;
-                  @include text-overflow();
-                }
-              }
-
-              .toggle-link {
-                padding-left: 1em;
-                display: block;
-                margin: 1em 0;
-              }
-            }
-
-            > .item-description {
-              margin-top: -$gap;
-            }
+          .description {
+            margin-bottom: 0;
+            color: $text-secondary;
+            font-size: $font-size-small;
+            padding-left: 2.6em;
           }
         }
       }

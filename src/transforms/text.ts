@@ -16,11 +16,13 @@ export const firstUpperCase = (text: string) => {
   return text?.toLowerCase().replace(/( |^)[a-z]/g, L => L.toUpperCase())
 }
 
-export const CHINESE_NUMBER_TEXT = '零一二三四五六七八九十'.split('')
-export const replaceToChineseNumber = (text: string | number) => {
+export const CHINESE_NUMBER_TEXT = '〇一二三四五六七八九十'.split('')
+export const CHINESE_NUMBER_CAPITAL_TEXT = '零壹贰叁肆伍陆柒捌玖拾'.split('')
+export const replaceToChineseNumber = (text: string | number, capital = false) => {
+  const targetText = capital ? CHINESE_NUMBER_CAPITAL_TEXT : CHINESE_NUMBER_TEXT
   return String(text)
     .split('')
-    .map(number => CHINESE_NUMBER_TEXT[Number(number)])
+    .map(number => targetText[Number(number)])
     .join('')
 }
 
@@ -39,7 +41,7 @@ export const CHINESE_MONTH_TEXT = [
   '季冬'
 ]
 export const toChineseMonth = (number: number) => {
-  return CHINESE_MONTH_TEXT[number]
+  return CHINESE_MONTH_TEXT[number - 1]
 }
 
 export const ENG_MONTH_TEXT = [
@@ -57,5 +59,5 @@ export const ENG_MONTH_TEXT = [
   'December'
 ]
 export const toEngMonth = (number: number) => {
-  return ENG_MONTH_TEXT[number]
+  return ENG_MONTH_TEXT[number - 1]
 }
