@@ -134,7 +134,7 @@
   import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
   import { useStore, getNamespace, Modules } from '/@/store'
   import { VlogModuleActions } from '/@/store/vlog'
-  import { LozadObserver } from '/@/services/lozad'
+  import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
   import { useEnhancer } from '/@/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getFileProxyUrl } from '/@/transforms/url'
@@ -173,12 +173,12 @@
       }
 
       onMounted(() => {
-        const lozadElements = videoListElement.value?.querySelectorAll('.lozad')
+        const lozadElements = videoListElement.value?.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
         if (!lozadElements || !lozadElements.length) {
           return false
         }
         lozadObserver.value = window.lozad(lozadElements, {
-          loaded: element => element.classList.add('loaded')
+          loaded: element => element.classList.add(LOADED_CLASS_NAME)
         })
         lozadObserver.value.observe()
       })
