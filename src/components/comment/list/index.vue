@@ -58,7 +58,7 @@
   import { getGravatarByEmail } from '/@/transforms/thumbnail'
   import { scrollTo, Easing } from '/@/utils/scroller'
   import storage from '/@/services/storage'
-  import { LOZAD_CLASS_NAME } from '/@/services/lozad'
+  import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { useCommentsLike } from '/@/transforms/state'
   import { CommentEvent } from '../helper'
@@ -92,7 +92,7 @@
           return false
         }
         lozadObserver.value = window.lozad(lozadElements, {
-          loaded: element => element.classList.add('loaded')
+          loaded: element => element.classList.add(LOADED_CLASS_NAME)
         })
         lozadObserver.value.observe()
       }
