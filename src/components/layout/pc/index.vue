@@ -2,7 +2,7 @@
   <div class="pc-main">
     <client-only>
       <figure class="widget">
-        <!-- <barrage /> -->
+        <barrage />
         <background />
         <wallflower />
         <template v-if="!layoutColumn.isFullPage">
@@ -49,7 +49,7 @@
   import AsideView from './aside/index.vue'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
-  // import Barrage from '/@/components/widget/barrage/main.vue'
+  import Barrage from '/@/components/widget/barrage/main.vue'
   import Wallflower from '/@/components/widget/wallflower/garden.vue'
   import Wallpaper from '/@/components/widget/wallpaper/main.vue'
   import Background from '/@/components/widget/background.vue'
@@ -68,8 +68,8 @@
       Theme,
       Toolbox,
       Wallflower,
+      Barrage,
       Background,
-      // Barrage,
       HeaderView,
       FooterView,
       AsideView,
