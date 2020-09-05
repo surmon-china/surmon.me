@@ -1,6 +1,6 @@
 <template>
-  <div id="barrage" :class="{ active: onBarrage }">
-    <div v-if="onBarrage" class="barrage-box">
+  <div id="barrage" :class="{ active: isOnBarrage }">
+    <div v-if="isOnBarrage" class="barrage-box">
       <ul class="barrages-list-box">
         <barrage-item
           v-for="_barrage in barrages"
@@ -13,32 +13,36 @@
       </ul>
       <div
         class="input-box filter"
-        :class="{ 'motion-blur-vertical': transitioning }"
+        :class="{ 'motion-blur-vertical': state.transitioning }"
         @animationstart="handleInputAnimationStart"
         @animationend="handleInputAnimationEnd"
       >
         <div class="input-inner">
           <div class="size">
-            <div class="active size" :class="'s-' + sizeIndex">{{ currentSize }}</div>
+            <div class="active size" :class="'s-' + state.sizeIndex">
+              {{ currentSizeText }}
+            </div>
             <ul class="size list">
               <li
                 v-for="(size, index) in sizes"
                 :key="index"
                 class="item"
                 :class="'s-' + index"
-                @click="sizeIndex = index"
+                @click="handleSetSize(index)"
               >{{ size }}</li>
             </ul>
           </div>
           <div class="color">
-            <div class="active color" :class="'color-' + colorIndex">{{ currentColor }}</div>
+            <div class="active color" :class="'color-' + state.colorIndex">
+              {{ currentColorText }}
+            </div>
             <ul class="color list">
               <li
                 v-for="(color, index) in colors"
                 :key="index"
                 class="item"
                 :class="'barrage-color-' + index"
-                @click="colorIndex = index"
+                @click="handleSetColor(index)"
               >{{ color }}</li>
             </ul>
           </div>
@@ -50,9 +54,9 @@
             @keyup.enter="sendBarrage"
           >
           <div class="count">
-            <span>{{ counts.users }} {{ isEnLang ? 'U' : '人' }}</span>
-            <span>&nbsp;|&nbsp;</span>
-            <span>{{ counts.count }} {{ isEnLang ? 'C' : ' 发' }}</span>
+            <span>{{ counts.users }} <i18n zh="人" en="U" /></span>
+            <span class="separator">|</span>
+            <span>{{ counts.count }} <i18n zh="发" en="C" /></span>
           </div>
         </div>
       </div>
@@ -61,8 +65,9 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, reactive, ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+  import { defineComponent, reactive, ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
   import { useEnhancer } from '/@/enhancer'
+  import { SocketEvent } from '/@/constants/barrage'
   import socket from '/@/services/socket.io'
   import BarrageItem from './item.vue'
   import { randomPer } from './util'
@@ -97,6 +102,13 @@
       const currentColorText = computed(() => colors[state.colorIndex])
       const currentSizeText = computed(() => sizes[state.sizeIndex])
 
+      const handleSetSize = (index: number) => {
+        state.sizeIndex = index
+      }
+      const handleSetColor = (index: number) => {
+        state.colorIndex = index
+      }
+
       // 弹幕输入容器动画周期
       const handleInputAnimationStart = () => {
         state.transitioning = true
@@ -104,7 +116,7 @@
       const handleInputAnimationEnd = () => {
         state.transitioning = false
       }
-      const handleBarrageItemAnimationEnd = (id) => {
+      const handleBarrageItemAnimationEnd = (id: number) => {
         const targetIndex = barrages.findIndex(barrage => barrage.id === id)
         if (targetIndex > -1) {
           barrages.splice(targetIndex, 1)
@@ -131,19 +143,13 @@
         }
       }
 
-      // 时间转换
-      const transferDate = (timestamp: number) => {
-        return new Date(timestamp).toLocaleString()
-      }
-
       // 清空动画队列
       const clearBarrages = () => {
-        // TODO: 待验证
         barrages.length = 0
       }
 
       const initSocket = () => {
-        socket.emit('barrage-last-list', barrages => {
+        socket.emit(SocketEvent.LastLisk, barrages => {
           barrages.forEach((barrage, index) => {
             barrage.id = index + 1
           })
@@ -163,13 +169,13 @@
           moveBarrages()
           barrageLimit = barrages.length + 2
         })
-        socket.emit('barrage-count', _counts => {
+        socket.emit(SocketEvent.Count, _counts => {
           Object.assign(counts, _counts)
         })
-        socket.on('barrage-update-count', _counts => {
+        socket.on(SocketEvent.UpdateCount, _counts => {
           Object.assign(counts, _counts)
         })
-        socket.on('barrage-create', barrage => {
+        socket.on(SocketEvent.Create, barrage => {
           barrages.push({
             ...barrage,
             // 得到新消息时，若此刻弹幕窗未开启，则将此消息标记为过时消息，过时消息有不同的 UI 特征
@@ -197,11 +203,20 @@
       return {
         sizes,
         colors,
+        currentColorText,
+        currentSizeText,
+        state,
         counts,
         config,
         barrages,
         barrageInput,
-        sendBarrage
+        isOnBarrage,
+        sendBarrage,
+        handleSetSize,
+        handleSetColor,
+        handleInputAnimationStart,
+        handleInputAnimationEnd,
+        handleBarrageItemAnimationEnd
       }
     }
   })
@@ -266,8 +281,7 @@
     top: 0;
     left: 0;
     z-index: $z-index-toolbox - 1;
-    background-color: $module-bg-darker-3;
-    // 由于使用 backdrop-blur，会导致 animation 性能并不好，所以动画都移除了
+    background-color: $module-bg-translucent;
     transform: translate3d(0, -100%, 0);
     @include backdrop-blur();
     @include hidden();
@@ -336,12 +350,16 @@
           height: 4rem;
           background-color: $module-bg-darker-1;
 
-          > .count {
+          .count {
             width: auto;
             height: 4rem;
             line-height: 4rem;
             padding: 0 $gap;
             text-align: center;
+
+            .separator {
+              margin: 0 $sm-gap;
+            }
           }
 
           > .size,
@@ -396,11 +414,12 @@
             margin: 0 auto;
             flex-grow: 1;
             padding: 1rem;
-            background-color: $module-bg;
+            background-color: $module-bg-darker-2;
+            @include background-transition();
 
             &:hover,
             &:focus {
-              background-color: $module-bg-darker-1;
+              background-color: $module-bg-darker-3;
             }
           }
         }
