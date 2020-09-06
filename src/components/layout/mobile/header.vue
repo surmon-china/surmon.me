@@ -101,7 +101,7 @@
         t: i18n.t,
         LANGUAGE_KEYS,
         tags,
-        searchState: toRefs(searchState),
+        searchState,
         inputElement,
         openSearch,
         submitSearch,

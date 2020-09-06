@@ -79,7 +79,7 @@
     setup() {
       const store = useStore()
       const gravatar = computed(() => (
-        store.state.option.adminInfo.gravatar ||
+        store.state.option.adminInfo?.gravatar ||
         getFileCDNUrl('/images/gravatar.jpg')
       ))
 
