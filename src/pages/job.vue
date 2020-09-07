@@ -38,15 +38,10 @@
               }"
             />
             <div class="content">
-              <a
-                :href="job.url"
-                class="title"
-                target="_blank"
-                rel="external nofollow noopener"
-              >
+              <ulink class="title" :href="job.url">
                 {{ job.company }}
                 <span class="location" v-if="job.location">（{{ job.location }}）</span>
-              </a>
+              </ulink>
               <p class="description" v-html="job.description" />
               <button
                 class="submit"

@@ -26,18 +26,24 @@
             >
               <div class="content">
                 <template v-if="article.ad">
-                  <a
-                    :href="article.url"
-                    target="_blank"
-                    rel="external nofollow noopener"
-                    class="link"
-                  >
+                  <ulink class="link" :href="article.url">
                     <img :src="article.src" :alt="article.title">
-                    <span class="title">{{ article.title }}</span>
-                  </a>
+                    <div class="title">
+                      <div class="background"></div>
+                      <div class="prospect">
+                        <span
+                          class="text"
+                          :style="{ backgroundImage: `url('${getThumbURL(article.src)}')` }"
+                        >{{ article.title }}</span>
+                      </div>
+                    </div>
+                    <span class="ad-symbol">
+                      <i18n :lkey="LANGUAGE_KEYS.AD" />
+                    </span>
+                  </ulink>
                 </template>
                 <template v-else>
-                  <router-link :to="`/article/${article.id}`" class="link">
+                  <router-link :to="getArticleDetailRoute(article.id)" class="link">
                     <img
                       :src="getThumbURL(article.thumb)"
                       :alt="article.title"
@@ -70,9 +76,10 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { useEnhancer } from '/@/enhancer'
   import { timeAgo } from '/@/transforms/moment'
+  import { getArticleDetailRoute } from '/@/transforms/route'
   import { mapState } from 'vuex'
   import { getBannerArticleThumbnailUrl } from '/@/transforms/thumbnail'
-  import AD_CONFIG from '/@/config/ad.config'
+  import { PC_CARROUSEL as ad } from '/@/config/ad.config'
 
   export default defineComponent({
     name: 'ArchiveCarrousel',
@@ -86,8 +93,8 @@
       const { globalState, isMobile, isDarkTheme } = useEnhancer()
       const articleList = computed(() => {
         const articles = [...props.articles].slice(0, 9)
-        if (AD_CONFIG.carrousel) {
-          const { index, ...otherConfig } = AD_CONFIG.carrousel
+        if (ad) {
+          const { index, ...otherConfig } = ad as any
           articles.length && articles.splice(index, 0, {
             ad: true,
             ...otherConfig
@@ -120,7 +127,7 @@
         return getBannerArticleThumbnailUrl(
           thumb,
           isMobile.value,
-          globalState.imageExt.isWebP.value
+          globalState.imageExt.isWebP
         )
       }
 
@@ -130,6 +137,7 @@
         isDarkTheme,
         swiperOption,
         articleList,
+        getArticleDetailRoute,
         getThumbURL
       }
     }
@@ -140,7 +148,7 @@
   @import 'src/assets/styles/init.scss';
 
   $pc-carrousel-height: 210px;
-  $mobile-carrousel-height: calc((100vw - 2rem) * .35);
+  $mobile-carrousel-height: calc((100vw - 2rem) * .34);
 
   .carrousel {
     height: $pc-carrousel-height;
@@ -207,8 +215,20 @@
             }
           }
 
+          .ad-symbol {
+            display: block;
+            position: absolute;
+            top: 5.6rem;
+            right: 2.6rem;
+            font-size: $font-size-small;
+            color: $module-bg;
+            border-radius: $mini-radius;
+            padding: 0.1em 0.3em;
+            border: 1px solid;
+          }
+
           .title {
-            $offset: 6px / 2;
+            $offset: 3px;
             display: block;
             position: absolute;
             top: 2rem;
@@ -268,6 +288,9 @@
       height: $mobile-carrousel-height;
 
       > .swiper {
+        width: 100%;
+        height: $mobile-carrousel-height;
+
         .swiper-slide {
           > .content {
             height: $mobile-carrousel-height;

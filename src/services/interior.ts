@@ -5,6 +5,7 @@
  */
 
 import { App } from 'vue'
+import Ulink from '../components/common/ulink'
 import Uimage from '/@/components/common/uimage'
 import Placeholder from '/@/components/common/placeholder'
 import Spin from '/@/components/common/spin.vue'
@@ -19,6 +20,7 @@ import { Responsive, DesktopOnly } from '/@/components/common/responsive'
 
 export default function (app: App) {
   // components
+  app.component(Ulink.name, Ulink)
   app.component(Uimage.name, Uimage)
   app.component(Spin.name as string, Spin)
   app.component(Empty.name as string, Empty)

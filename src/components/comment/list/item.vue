@@ -6,12 +6,7 @@
   >
     <desktop-only>
       <div class="cm-avatar">
-        <comment-link
-          target="_blank"
-          rel="external nofollow noopener"
-          class="link"
-          :href="comment.author.site"
-        >
+        <comment-link class="link" :href="comment.author.site">
           <img
             :alt="comment.author.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
             :src="humanizeGravatarUrlByEmail(comment.author.email)"
@@ -22,12 +17,7 @@
     </desktop-only>
     <div class="cm-body">
       <div class="cm-header">
-        <comment-link
-          class="user-name"
-          target="_blank"
-          rel="external nofollow noopener"
-          :href="comment.author.site"
-        >
+        <comment-link class="user-name" :href="comment.author.site">
           {{ firstUpperCase(comment.author.name) }}
         </comment-link>
         <comment-ua v-if="comment.agent" :ua="comment.agent" />
@@ -99,9 +89,14 @@
     setup(props, context) {
       return () => {
         const { href, ...restProps } = props
+        const isLink = !!href
         return h(
-          href ? 'a' : 'span',
-          href ? props : restProps,
+          isLink ? 'a' : 'span',
+          !isLink ? restProps : {
+            ...props,
+            target: '_blank',
+            rel: 'external nofollow noopener'
+          },
           context.slots.default?.()
         )
       }

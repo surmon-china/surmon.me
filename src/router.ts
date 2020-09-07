@@ -3,6 +3,11 @@ import { LayoutColumn } from '/@/state'
 import { scrollToTop } from '/@/utils/effects'
 import ErrorPage from './pages/error.vue'
 
+export enum CategorySlug {
+  Code = 'code',
+  Insight = 'think',
+}
+
 export enum RouteName {
   Home = 'home',
   Article = 'article-detail',

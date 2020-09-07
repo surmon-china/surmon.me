@@ -89,19 +89,15 @@
           <i18n>
             <template #zh>
               <span class="title">版权声明：</span>
-              <a
-                target="_blank"
-                rel="external nofollow noopener"
-                href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
-              >自由转载 - 署名 - 非商业性使用</a>
+              <ulink href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh">
+                自由转载 - 署名 - 非商业性使用
+              </ulink>
             </template>
             <template #en>
               <span class="title">Copyright clarify:</span>
-              <a
-                target="_blank"
-                rel="external nofollow noopener"
-                href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.en"
-              >Creative Commons BY-NC 3.0 CN</a>
+              <ulink href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.en">
+                Creative Commons BY-NC 3.0 CN
+              </ulink>
             </template>
           </i18n>
         </div>

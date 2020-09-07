@@ -8,17 +8,12 @@
     >
       <swiper-slide
         class="swiper-slide"
-        :key="i"
-        v-for="(ad, i) in AD_CONFIG.asideSwiper"
+        :key="_index"
+        v-for="(ad, _index) in ads"
       >
-        <a
-          :href="ad.url"
-          rel="external nofollow noopener"
-          target="_blank"
-          class="content"
-        >
+        <ulink class="content" :href="ad.url">
           <uimage :src="ad.src" alt="aliyun-ad" />
-        </a>
+        </ulink>
       </swiper-slide>
       <template #pagination>
         <div class="swiper-pagination" />
@@ -30,8 +25,13 @@
 <script lang="ts">
   import { defineComponent, computed, onMounted } from 'vue'
   import { useSwiperRef, NameId } from '/@/todo/swiper'
-  import AD_CONFIG from '/@/config/ad.config'
+  import { PC_ASIDE_SWIPER as ads } from '/@/config/ad.config'
 
+  enum Event {
+    Ready = 'ready',
+    UpdateIndex = 'update:index',
+    IndexChange = 'index-change'
+  }
   export default defineComponent({
     name: 'PcAsideMammon',
     props: {
@@ -43,6 +43,11 @@
         type: Object
       }
     },
+    emits: [
+      Event.Ready,
+      Event.UpdateIndex,
+      Event.IndexChange
+    ],
     setup(props, context) {
       const swiperOption = {
         initialSlide: props.index,
@@ -69,14 +74,14 @@
       const swiperInstance = computed(() => swiperContext.value?.$swiper.value)
       const handleSwiperSlideChange = () => {
         const realIndex = swiperInstance.value?.realIndex
-        context.emit('update:index', realIndex)
-        context.emit('index-change', realIndex)
+        context.emit(Event.UpdateIndex, realIndex)
+        context.emit(Event.IndexChange, realIndex)
       }
 
-      onMounted(() => context.emit('ready', swiperInstance.value))
+      onMounted(() => context.emit(Event.Ready, swiperInstance.value))
 
       return {
-        AD_CONFIG,
+        ads,
         swiperOption,
         updateSwiperContext,
         handleSwiperSlideChange

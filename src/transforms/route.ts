@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { RouteName } from '/@/router'
+import { RouteName, CategorySlug } from '/@/router'
 
 type RouteRecordName = string | symbol | null | undefined
 
@@ -12,7 +12,7 @@ export const getTagArchiveRoute = (tagSlug: string) => {
   return `/tag/${tagSlug}`
 }
 
-export const getCategoryArchiveRoute = (categorySlug: string) => {
+export const getCategoryArchiveRoute = (categorySlug: CategorySlug) => {
   return `/category/${categorySlug}`
 }
 

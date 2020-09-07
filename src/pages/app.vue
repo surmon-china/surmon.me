@@ -9,7 +9,7 @@
           src="/images/page-app/logo.png"
         />
       </div>
-      <h2 class="title">{{ APP_CONFIG.META.title }}</h2>
+      <h2 class="title">{{ META.title }}</h2>
       <p class="desc" v-i18n="LANGUAGE_KEYS.APP_SLOGAN"></p>
       <p class="version">v1.1.4 (2020-03-06)</p>
       <div class="screen">
@@ -27,35 +27,30 @@
             draggable="false"
             src="/images/page-app/qrcode.png"
           />
-          <a
-            target="_blank"
+          <ulink
             class="button"
-            :href="APP_CONFIG.LINKS.appApkFile"
+            :href="VALUABLE_LINKS.surmonAppRepositorie"
             @click="handleAndroidApp($event)"
           >
             <i class="iconfont icon-android"></i>
             <span class="text" v-i18n="LANGUAGE_KEYS.DEVICE_ANDROID"></span>
-          </a>
-          <a
+          </ulink>
+          <ulink
             class="button"
-            target="_blank"
-            rel="external nofollow noopener"
-            :href="APP_CONFIG.LINKS.appProject + '#ios'"
+            :href="VALUABLE_LINKS.surmonAppRepositorie + '#ios'"
             @mousedown="handleAppAction('APP IOS')"
           >
             <i class="iconfont icon-mac"></i>
             <span class="text" v-i18n="LANGUAGE_KEYS.DEVICE_IOS"></span>
-          </a>
-          <a
+          </ulink>
+          <ulink
             class="button code"
-            target="_blank"
-            rel="external nofollow noopener"
-            :href="APP_CONFIG.LINKS.appProject"
+            :href="VALUABLE_LINKS.surmonAppRepositorie"
             @mousedown="handleAppAction('APP GitHub 地址')"
           >
             <i class="iconfont icon-git"></i>
             <span class="text">Source Code</span>
-          </a>
+          </ulink>
         </div>
       </div>
     </div>
@@ -68,7 +63,7 @@
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
-  import * as APP_CONFIG from '/@/config/app.config'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'Application',
@@ -99,7 +94,8 @@
       }
 
       return {
-        APP_CONFIG,
+        META,
+        VALUABLE_LINKS,
         LANGUAGE_KEYS,
         isMobile,
         handleAppAction,

@@ -1,13 +1,13 @@
 <template>
   <footer id="footer" class="footer">
     <div class="container">
-      <a
+      <ulink
         class="ipc"
-        target="_blank"
-        rel="external nofollow noopener"
         href="http://www.beian.miit.gov.cn"
         v-if="false"
-      >陕 ICP 备 13004859 号-2</a>
+      >
+        陕 ICP 备 13004859 号-2
+      </ulink>
       <a
         class="sitemap-btn"
         href="/sitemap.xml"
@@ -16,19 +16,19 @@
       />
       <span class="separator">|</span>
       <i18n zh="由 " en="Powered By " />
-      <a
-        target="_blank"
+      <ulink
         class="item"
-        rel="external nofollow noopener"
         href="https://github.com/surmon-china/nodepress"
-      >NodePress</a>
+      >
+        NodePress
+      </ulink>
       <i18n zh="、" en=", " />
-      <a
-        target="_blank"
+      <ulink
         class="item"
-        rel="external nofollow noopener"
         href="https://github.com/surmon-china/vuniversal"
-      >Vuniversal</a>
+      >
+        Vuniversal
+      </ulink>
       <i18n
         zh=" 和 日月星辰 强力驱动"
         en=" and solitarily"
@@ -36,12 +36,12 @@
       <span class="separator">|</span>
       <i18n>
         <template #zh>
-          <router-link to="/about" key="zh">吾之臂躯</router-link>
+          <router-link :to="aboutPageUrl" key="zh">吾之臂躯</router-link>
           <span> 行针步线</span>
         </template>
         <template #en>
           <span>Designed By </span>
-          <router-link to="/about" key="en">Me</router-link>
+          <router-link :to="aboutPageUrl" key="en">Me</router-link>
         </template>
       </i18n>
     </div>
@@ -50,14 +50,16 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
+  import { RouteName } from '/@/router'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
-
+  import { getPageRoute } from '/@/transforms/route'
   export default defineComponent({
     name: 'PcFooter',
     setup() {
       return {
-        LANGUAGE_KEYS
+        LANGUAGE_KEYS,
+        aboutPageUrl: getPageRoute(RouteName.About)
       }
     }
   })

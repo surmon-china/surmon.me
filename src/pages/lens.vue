@@ -27,34 +27,21 @@
         <div class="bilibili">
           <div class="left">
             <i class="iconfont icon-bilibili-full"></i>
-            <a
-              href="https://space.bilibili.com/27940710"
-              target="_blank"
-              class="button"
-              rel="external nofollow noopener"
-            >(゜-゜)つロ 干杯~</a>
+            <ulink class="button" href="https://space.bilibili.com/27940710">
+              (゜-゜)つロ 干杯~
+            </ulink>
           </div>
           <uimage class="image" cdn src="/images/page-lens/bilibili.jpg" />
         </div>
         <div class="global">
-          <a
-            class="instagram"
-            href="https://www.instagram.com/surmon666"
-            target="_blank"
-            rel="external nofollow noopener"
-          >
+          <ulink class="instagram" href="https://www.instagram.com/surmon666">
             <i class="iconfont icon-instagram"></i>
             <span class="text">Follow me on Instagram</span>
-          </a>
-          <a
-            class="youtube"
-            href="https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w"
-            target="_blank"
-            rel="external nofollow noopener"
-          >
+          </ulink>
+          <ulink class="youtube" href="https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w">
             <i class="iconfont icon-youtube"></i>
             <span class="text">Subscription my YouTube Channel</span>
-          </a>
+          </ulink>
         </div>
         <div class="wechat-channel">
           <uimage cdn src="/images/page-lens/wechat-channel.jpg" />
@@ -114,17 +101,12 @@
         </li>
       </ul>
       <div class="loadmore">
-        <a
-          href="https://space.bilibili.com/27940710/video"
-          target="_blank"
-          class="button"
-          rel="external nofollow noopener"
-        >
+        <ulink class="button" href="https://space.bilibili.com/27940710/video">
           <span class="icon">
             <i class="iconfont icon-bilibili"></i>
           </span>
           <span v-i18n="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE" />
-        </a>
+        </ulink>
       </div>
     </div>
   </div>

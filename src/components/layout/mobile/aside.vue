@@ -2,7 +2,7 @@
   <aside class="aside" :class="{ open: open }">
     <div class="aside-user">
       <div class="avatar">
-        <img :src="gravatar" alt="Surmon" draggable="false">
+        <uimage :src="gravatar" alt="Surmon" />
       </div>
       <div class="profile">
         <h3 class="name">Surmon</h3>
@@ -15,44 +15,39 @@
           <i class="iconfont icon-home"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_HOME"></span>
         </router-link>
-        <router-link to="/category/code" class="item">
+        <router-link :to="getCategoryArchiveRoute(CategorySlug.Code)" class="item">
           <i class="iconfont icon-code"></i>
           <span v-i18n="LANGUAGE_KEYS.CATEGORY_CODE"></span>
         </router-link>
-        <router-link to="/category/think" class="item">
+        <router-link :to="getCategoryArchiveRoute(CategorySlug.Insight)" class="item">
           <i class="iconfont icon-thinking"></i>
-          <span v-i18n="LANGUAGE_KEYS.CATEGORY_THINK"></span>
+          <span v-i18n="LANGUAGE_KEYS.CATEGORY_INSIGHT"></span>
         </router-link>
-        <a
-          target="_blank"
-          class="item"
-          rel="external nofollow noopener"
-          :href="APP_CONFIG.LINKS.project"
-        >
+        <ulink class="item" :href="VALUABLE_LINKS.github">
           <i class="iconfont icon-experiment"></i>
-          <span v-i18n="LANGUAGE_KEYS.PAGE_PROJECT"></span>
-        </a>
-        <router-link to="/archive" class="item">
+          <span v-i18n="LANGUAGE_KEYS.PAGE_GITHUB"></span>
+        </ulink>
+        <router-link :to="getPageRoute(RouteName.Archive)" class="item">
           <i class="iconfont icon-book"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_ARCHIVE"></span>
         </router-link>
-        <router-link to="/vlog" class="item">
+        <router-link :to="getPageRoute(RouteName.Lens)" class="item">
           <i class="iconfont icon-vlog"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_LENS"></span>
         </router-link>
-        <router-link to="/about" class="item">
+        <router-link :to="getPageRoute(RouteName.About)" class="item">
           <i class="iconfont icon-user"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_ABOUT"></span>
         </router-link>
-        <router-link to="/service" class="item">
+        <router-link :to="getPageRoute(RouteName.Service)" class="item">
           <i class="iconfont icon-tool"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_SERVICE"></span>
         </router-link>
-        <router-link to="/guestbook" class="item guestbook">
+        <router-link :to="getPageRoute(RouteName.Guestbook)" class="item guestbook">
           <i class="iconfont icon-comment"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_GUESTBOOK"></span>
         </router-link>
-        <router-link to="/app" class="item app">
+        <router-link :to="getPageRoute(RouteName.App)" class="item app">
           <i class="iconfont icon-app"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_APP"></span>
         </router-link>
@@ -62,11 +57,13 @@
 </template>
 
 <script lang="ts">
-  import * as APP_CONFIG from '/@/config/app.config'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
   import { defineComponent, computed } from 'vue'
-  import { getFileCDNUrl } from '/@/transforms/url'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { useStore } from '/@/store'
+  import { getFileCDNUrl } from '/@/transforms/url'
+  import { getPageRoute, getCategoryArchiveRoute } from '/@/transforms/route'
+  import { RouteName, CategorySlug } from '/@/router'
+  import { LANGUAGE_KEYS } from '/@/language/key'
 
   export default defineComponent({
     name: 'MobileAside',
@@ -84,8 +81,12 @@
       ))
 
       return {
-        APP_CONFIG,
+        VALUABLE_LINKS,
         LANGUAGE_KEYS,
+        RouteName,
+        CategorySlug,
+        getPageRoute,
+        getCategoryArchiveRoute,
         gravatar
       }
     }
@@ -95,7 +96,7 @@
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
-  aside {
+  .aside {
     display: block;
     overflow: auto;
     position: relative;
@@ -116,7 +117,8 @@
       display: flex;
       align-items: flex-start;
       flex-direction: column;
-      padding: $gap;
+      padding: $gap * 2;
+      padding-bottom: $gap;
       border-bottom: 1px solid darken($mobile-aside-bg, 5%);
 
       > .avatar {
@@ -124,7 +126,8 @@
 
         > img {
           max-width: 100%;
-          border: 2px solid $module-bg;
+          border: 3px solid $module-bg;
+          @include radius-box($sm-radius);
         }
       }
 
@@ -138,7 +141,6 @@
         }
 
         > .slogan {
-          margin: 0;
           color: $primary;
           @include text-overflow();
         }

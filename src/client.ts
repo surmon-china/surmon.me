@@ -35,12 +35,17 @@ app.use(gtag, {
 
 // init
 globalState.resetOnClient()
-theme.resetOnClient()
 i18n.set(globalState.userAgent.isZhUser ? Language.Zh : Language.En)
 store.clientInit()
 exportLozadToGlobal()
 exportAppToGlobal(app)
 
+// only PC
+if (!globalState.userAgent.isMobile) {
+  theme.resetOnClient()
+}
+
+// mount
 app.mount('#app').$nextTick(() => {
   // Desktop
   if (!globalState.userAgent.isMobile) {

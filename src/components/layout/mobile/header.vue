@@ -3,7 +3,7 @@
     <form
       class="search"
       :class="{ actived: searchState.open }"
-      @submit.stop.prevent="submitSearch()"
+      @submit.stop.prevent="submitSearch"
     >
       <input
         ref="inputElement"
@@ -19,11 +19,15 @@
         <i class="iconfont icon-cancel"></i>
       </span>
       <client-only>
-        <datalist v-if="tags.length" id="keywords" class="search-keywords">
+        <datalist
+          v-if="tags.length"
+          id="keywords"
+          class="search-keywords"
+        >
           <option
+            class="iiem"
             v-for="tag in tags"
             :key="tag.slug"
-            class="iiem"
             :value="tag.name"
             :label="tag.description"
           />
@@ -49,30 +53,24 @@
 
 <script lang="ts">
   import * as APP_CONFIG from '/@/config/app.config'
-  import { defineComponent, computed, reactive, ref, toRefs, watch, nextTick } from 'vue'
-  import { useRouter } from 'vue-router'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { useI18n } from '/@/services/i18n'
-  import { useStore } from '/@/store'
+  import { defineComponent, computed, reactive, ref, watch, nextTick } from 'vue'
+  import { useEnhancer } from '/@/enhancer'
   import { RouteName } from '/@/router'
-  import { useGlobalState } from '/@/state'
+  import { LANGUAGE_KEYS } from '/@/language/key'
 
   export default defineComponent({
     name: 'MobileHeader',
     setup() {
-      const i18n = useI18n()
-      const store = useStore()
-      const router = useRouter()
-      const globalState = useGlobalState()
-      const tags = store.state.tag.data
-      const isOpenedSidebar = globalState.switchBox.mobileSidebar
-      const toggleSidebar = globalState.switchTogglers.mobileSidebar
+      const { store, i18n, router, globalState } = useEnhancer()
+      const isOpenedSidebar = computed(() => globalState.switchBox.mobileSidebar)
+      const tags = computed(() => store.state.tag.data)
       const inputElement = ref<HTMLInputElement>(null as any)
       const searchState = reactive({
         open: false,
         keyword: ''
       })
 
+      const toggleSidebar = globalState.switchTogglers.mobileSidebar
       const openSearch = () => {
         searchState.open = true
         nextTick(inputElement.value.focus)
@@ -81,19 +79,22 @@
         searchState.open = false
       }
       const submitSearch = () => {
-        router.push({
-          name: RouteName.SearchArchive,
-          params: {
-            keyword: searchState.keyword
-          }
-        })
+        const keyword = searchState.keyword.trim()
+        if (keyword) {
+          router.push({
+            name: RouteName.SearchArchive,
+            params: { keyword }
+          })
+        }
       }
 
       watch(
-        () => router.currentRoute,
+        () => router.currentRoute.value,
         () => {
-          cancelSearch()
-          toggleSidebar(false)
+          nextTick(() => {
+            cancelSearch()
+            toggleSidebar(false)
+          })
         }
       )
 
@@ -122,7 +123,7 @@
     left: 0;
     width: 100%;
     height: $mobile-header-height;
-    background-color: $module-bg-darker-1;
+    background-color: $module-bg;
     z-index: $z-index-header;
 
     .search-mask {
@@ -133,7 +134,8 @@
       width: 100%;
       height: 100%;
       touch-action: none;
-      background-color: $module-bg-darker-3;
+      background-color: $module-bg-translucent;
+      @include backdrop-blur(3px);
     }
 
     .search {

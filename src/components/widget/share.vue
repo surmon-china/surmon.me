@@ -1,10 +1,9 @@
 <template>
   <div class="share">
     <button
+      class="share-ejector"
       v-for="(social, index) in socials"
       :key="index"
-      rel="nofollow noopener"
-      class="share-ejector"
       :title="'Share to: ' + social.name"
       :class="social.class || social.name"
       @click="openShareWindow(social.name, social.url)"

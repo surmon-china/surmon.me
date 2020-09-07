@@ -5,116 +5,147 @@
  */
 
 import { getFileCDNUrl } from '/@/transforms/url'
+import { VALUABLE_LINKS } from './app.config'
 
-const imagePath = getFileCDNUrl('/images/mammon/')
-const links = {
-  // 阿里妈妈-淘宝
+const getAdImageUrl = (url: string) => {
+  return getFileCDNUrl('/images/mammon/') + url
+}
+
+const AD_LINKS = {
   // 淘宝（N）
-  taobao: 'https://s.click.taobao.com/Y4HYGzv',
+  TAOBAO: 'https://s.click.taobao.com/Y4HYGzv',
   // 天猫超市（N）
-  tmailMarket: 'https://s.click.taobao.com/yHMYGzv',
+  TMAIL_MARKET: 'https://s.click.taobao.com/yHMYGzv',
   // 飞猪（N）
-  alitrip: 'https://s.click.taobao.com/NVTYGzv',
+  ALI_TRIP: 'https://s.click.taobao.com/NVTYGzv',
 
-  // 阿里妈妈-阿里云
   // ECS 服务器（N）
-  aliyunECS: 'https://s.click.taobao.com/vyZYGzv',
+  ALIYUN_ECS: 'https://s.click.taobao.com/vyZYGzv',
   // 轻量应用服务器（N）
-  aliyunCPS: 'https://s.click.taobao.com/BeUYGzv#guid-1132710',
+  ALIYUN_CPS: 'https://s.click.taobao.com/BeUYGzv#guid-1132710',
   // Web 防火墙
-  aliyunWaf: 'https://s.click.taobao.com/fZdv8yv',
+  ALIYUN_WAF: 'https://s.click.taobao.com/fZdv8yv',
   // HTTP 证书
-  aliyunHTTPS: 'https://s.click.taobao.com/BW2v8yv',
+  ALIYUN_HTTPS: 'https://s.click.taobao.com/BW2v8yv',
   // 全民云计算（ECS）
-  aliyunQWBK: 'https://s.click.taobao.com/fARq8yv',
+  ALIYUN_QWBK: 'https://s.click.taobao.com/fARq8yv',
 
   // 阿里云 云大使（官方活动页）
-  aliyunActivity: 'https://www.aliyun.com/activity?source=5176.11533457&userCode=pu7fghvl#promotionArea',
+  ALIYUN_ACTIVITY: 'https://www.aliyun.com/activity?source=5176.11533457&userCode=pu7fghvl#promotionArea',
   // 阿里云 云小站（领取优惠券固定）
-  aliyunInvite: 'https://www.aliyun.com/minisite/goods?userCode=pu7fghvl',
+  ALIYUN_INVITE: 'https://www.aliyun.com/minisite/goods?userCode=pu7fghvl',
   // 阿里云 云大使（云上爆款）
-  aliyunHotsale: 'https://www.aliyun.com/acts/hotsale?userCode=pu7fghvl',
+  ALIYUN_HOT_SALE: 'https://www.aliyun.com/acts/hotsale?userCode=pu7fghvl',
 
-  // holiday
-  // 2019 1111
-  holiday: 'https://s.click.taobao.com/O7xfvwv',
-  holiday2: 'https://s.click.taobao.com/lTFevwv',
-  holidayAliyun: 'https://www.aliyun.com/1111/2019/group-buying-share?ptCode=48978F811F2376670B0FDDE3FB205EA6647C88CF896EF535&userCode=pu7fghvl&share_source=copy_link',
-  holidayAliyun2: 'https://www.aliyun.com/1111/2019/home?userCode=pu7fghvl'
+  // holiday | 1111
+  HOLIDAY: 'https://s.click.taobao.com/O7xfvwv',
+  HOLIDAY_ALIYUN: 'https://www.aliyun.com/1111/2019/group-buying-share?ptCode=48978F811F2376670B0FDDE3FB205EA6647C88CF896EF535&userCode=pu7fghvl&share_source=copy_link',
+  HOLIDAY_ALIYUN2: 'https://www.aliyun.com/1111/2019/home?userCode=pu7fghvl'
 }
 
-export default {
-  carrousel: false as boolean | any,
-  // Banner 随机
-  /*
-  carrousel: {
-    index: 0,
-    ...(Math.random() > 0.5 ? ({
-      url: links.holidayAliyun,
-      src: imagePath + 'alicloud-1111-banner-group.jpg',
-      title: '云服务器86元/年，错过再等1年'
-    }) : ({
-      url: links.holidayAliyun2,
-      src: imagePath + 'alicloud-1111-banner.jpg',
-      title: '上云！超级钜惠'
-    }))
-  },
-  carrousel: {
-    index: 0,
-    url: links.aliyunWaf,
-    src: imagePath + 'aliyun-banner-1190-420.jpg',
-    title: '网站遇到恶意攻击怎么办？'
-  },
-  */
+export const PC_CARROUSEL = false;
+// export const PC_CARROUSEL = {
+//   index: 0,
+//   url: AD_LINKS.ALIYUN_WAF,
+//   src: getAdImageUrl('aliyun-banner-1190-420.jpg'),
+//   title: '网站遇到恶意攻击怎么办?'
 
   // Banner 固定
-  /*
-  carrousel: {
-    index: 0,
-    url: links.aliyunInvite,
-    src: imagePath + 'alicloud-banner.jpg',
-    title: '地球上第三好的云服务商托我把￥2000红包转交给你！'
+  // index: 0,
+  // url: AD_LINKS.ALIYUN_INVITE,
+  // src: getAdImageUrl('alicloud-banner.jpg'),
+  // title: '地球上第三好的云服务商托我把￥2000红包转交给你！'
+
+  // Banner 随机
+  // index: 0,
+  // ...(Math.random() > 0.5 ? ({
+  //   url: AD_LINKS.HOLIDAY_ALIYUN,
+  //   src: getAdImageUrl('alicloud-1111-banner-group.jpg'),
+  //   title: '云服务器86元/年，错过再等1年'
+  // }) : ({
+  //   url: AD_LINKS.HOLIDAY_ALIYUN2,
+  //   src: getAdImageUrl('alicloud-1111-banner.jpg'),
+  //   title: '上云！超级钜惠'
+  // }))
+// }
+
+export const PC_NAV = [
+  {
+    hot: true,
+    icon: 'icon-aliyun',
+    color: '#ff6a00',
+    url: AD_LINKS.ALIYUN_INVITE,
+    i18n: {
+      en: 'Aliyun',
+      zh: '云上爆款'
+    }
   },
-  */
-
-  // 导航栏
-  nav: {
-    taobao: links.taobao,
-    aliyun: links.aliyunHotsale,
-    // holiday: links.holiday,
+  {
+    disabled: true,
+    icon: 'icon-1111',
+    color: '#ff5000',
+    url: AD_LINKS.HOLIDAY,
+    i18n: {
+      en: 'Holiday',
+      zh: '超级红包'
+    }
   },
+  {
+    disabled: true,
+    icon: 'icon-taobao',
+    color: '#ff5000',
+    url: AD_LINKS.TAOBAO,
+    i18n: {
+      en: 'Taobao',
+      zh: '淘抢购'
+    }
+  },
+  {
+    disabled: true,
+    icon: 'icon-debug',
+    color: '#000',
+    url: VALUABLE_LINKS.throwerror,
+    text: 'TE.io'
+  },
+  {
+    disabled: true,
+    icon: 'icon-fox-colour',
+    color: '#d15d26',
+    url: VALUABLE_LINKS.foxfinder,
+    text: 'FF.io'
+  }
+]
 
-  // About 页面
-  aboutPageSwiper: [{
-    url: links.aliyunInvite,
-    src: imagePath + 'aliyun-ecs-1200-100.png',
-  }],
+export const PC_ABOUT_PAGE_SWIPER = [
+  {
+    url: AD_LINKS.ALIYUN_INVITE,
+    src: getAdImageUrl('aliyun-ecs-1200-100.png'),
+  }
+]
 
-  // 侧边栏轮播
-  asideSwiper: [
-    {
-      url: links.aliyunInvite,
-      src: imagePath + 'aliyun-2020-532-178.jpg'
-    },
-    // {
-    //   url: links.aliyunCPS,
-    //   src: imagePath + 'aliyun-cps-532-178.jpg'
-    // },
-    {
-      url: links.tmailMarket,
-      src: imagePath + 'tmail-532-178.jpg'
-    },
-    {
-      url: links.alitrip,
-      src: imagePath + 'alitrip-532-178.jpg'
-    },
-    // {
-    //   url: links.aliyunHTTPS,
-    //   src: imagePath + 'aliyun-https-532-178.jpg'
-    // },
-    // {
-    //   url: links.taobao,
-    //   src: imagePath + 'taobao-532-178.jpg'
-    // }
-  ]
-}
+export const PC_ASIDE_SWIPER =  [
+  {
+    url: AD_LINKS.ALIYUN_INVITE,
+    src: getAdImageUrl('aliyun-2020-532-178.jpg')
+  },
+  // {
+  //   url: AD_LINKS.ALIYUN_CPS,
+  //   src: getAdImageUrl('aliyun-cps-532-178.jpg)'
+  // },
+  {
+    url: AD_LINKS.TMAIL_MARKET,
+    src: getAdImageUrl('tmail-532-178.jpg')
+  },
+  {
+    url: AD_LINKS.ALI_TRIP,
+    src: getAdImageUrl('alitrip-532-178.jpg')
+  },
+  // {
+  //   url: AD_LINKS.ALIYUN_HTTPS,
+  //   src: getAdImageUrl('aliyun-https-532-178.jpg)'
+  // },
+  // {
+  //   url: AD_LINKS.taobao,
+  //   src: getAdImageUrl('taobao-532-178.jpg)'
+  // }
+]

@@ -13,26 +13,15 @@
         </div>
         <div class="item">
           <i class="iconfont icon-dollar"></i>
-          <a
-            target="_blank"
-            href="https://github.com/sponsors/surmon-china"
-            rel="external nofollow noopener"
-            @mousedown="handleTouchSponsor"
-          >GitHub Sponsor</a>
+          <ulink :href="VALUABLE_LINKS.SPONSOES" @mousedown="handleTouchSponsor">
+            GitHub Sponsor
+          </ulink>
           <span class="separator">|</span>
-          <a
-            target="_blank"
-            href="https://www.paypal.me/surmon"
-            rel="external nofollow noopener"
-            @mousedown="handleTouchSponsor"
-          >PayPal me</a>
+          <ulink :href="VALUABLE_LINKS.PAYPAL" @mousedown="handleTouchSponsor">
+            PayPal me
+          </ulink>
           <span class="separator">|</span>
-          <a
-            target="_blank"
-            href="/sponsor"
-            rel="external nofollow noopener"
-            @mousedown="handleTouchSponsor"
-          >More</a>
+          <ulink href="/sponsor" @mousedown="handleTouchSponsor">More</ulink>
         </div>
         <div class="item">
           <i class="iconfont icon-comment-discussion" />
@@ -208,7 +197,7 @@
           <i class="iconfont icon-friend" />
           <span class="friends">
             <a
-              v-for="(link, name) in APP_CONFIG.FRIEND_LINKS"
+              v-for="(link, name) in FRIEND_LINKS"
               :key="link"
               :href="link"
               target="_blank"
@@ -274,12 +263,12 @@
         </desktop-only>
       </div>
     </div>
-    <template v-if="AD_CONFIG.aboutPageSwiper">
+    <template v-if="ads.length">
       <desktop-only>
         <div class="mammon">
           <swiper class="swiper" :options="adSwiperOption">
             <swiper-slide
-              v-for="(item, index) in AD_CONFIG.aboutPageSwiper"
+              v-for="(item, index) in ads"
               :key="index"
             >
               <a
@@ -306,24 +295,16 @@
       <iframe class="iframe" src="/partials/map.html" />
     </div>
     <div class="about-project">
-      <a
-        target="_blank"
-        class="project-link"
-        rel="external nofollow noopener"
-        :href="APP_CONFIG.LINKS.project"
-      >
+      <ulink class="project-link" :href="VALUABLE_LINKS.github">
         <p class="title">
           <i class="iconfont icon-terminal" />
           <span class="description">
-            <i18n
-              zh="更多动态"
-              en="Get more"
-            />
+            <i18n zh="更多动态" en="Get more" />
           </span>
         </p>
         <!-- TODO: 应该集成到 nodejs，否则不稳定 https://github.com/sallar/github-contributions-chart -->
         <img src="https://ghchart.rshah.org/surmon-china">
-      </a>
+      </ulink>
     </div>
   </div>
 </template>
@@ -334,8 +315,8 @@
   import { getFileCDNUrl } from '/@/transforms/url'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
-  import AD_CONFIG from '/@/config/ad.config'
-  import * as APP_CONFIG from '/@/config/app.config'
+  import { PC_ABOUT_PAGE_SWIPER as ads } from '/@/config/ad.config'
+  import { VALUABLE_LINKS, FRIEND_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'About',
@@ -400,9 +381,10 @@
       }
 
       return {
-        APP_CONFIG,
-        AD_CONFIG,
+        VALUABLE_LINKS,
+        FRIEND_LINKS,
         LANGUAGE_KEYS,
+        ads,
         adSwiperOption,
         isMobile,
         isOnLiveMap,

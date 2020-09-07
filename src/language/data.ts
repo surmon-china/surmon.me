@@ -30,7 +30,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '明殿',
     [Language.En]: 'home'
   },
-  [LANGUAGE_KEYS.CATEGORY_THINK]: {
+  [LANGUAGE_KEYS.CATEGORY_INSIGHT]: {
     [Language.Zh]: '无色庵',
     [Language.En]: 'insight'
   },
@@ -38,9 +38,9 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '宁静寺',
     [Language.En]: 'code'
   },
-  [LANGUAGE_KEYS.PAGE_PROJECT]: {
+  [LANGUAGE_KEYS.PAGE_GITHUB]: {
     [Language.Zh]: '丹青阁',
-    [Language.En]: 'project'
+    [Language.En]: 'github'
   },
   [LANGUAGE_KEYS.PAGE_LENS]: {
     [Language.Zh]: '天涯',
@@ -69,14 +69,6 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   [LANGUAGE_KEYS.PAGE_GUESTBOOK]: {
     [Language.Zh]: '四方馆',
     [Language.En]: 'guestbook'
-  },
-  [LANGUAGE_KEYS.AD_LINK_TAOBAO]: {
-    [Language.Zh]: '淘抢购',
-    [Language.En]: 'taobao'
-  },
-  [LANGUAGE_KEYS.AD_LINK_ALIYUN]: {
-    [Language.Zh]: '云上爆款',
-    [Language.En]: 'aliyun'
   },
   [LANGUAGE_KEYS.PAGE_APP]: {
     [Language.Zh]: '客户端',
