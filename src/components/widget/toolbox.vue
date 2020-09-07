@@ -2,15 +2,13 @@
   <div id="toolbox">
     <div class="container">
       <div class="tools">
-        <a
+        <ulink
           href="/rss.xml"
-          target="_blank"
           class="rss"
-          rel="external nofollow noopener"
           @mousedown="handleRSS"
         >
           <i class="iconfont icon-rss" />
-        </a>
+        </ulink>
         <button
           class="barrage"
           :title="t(LANGUAGE_KEYS.BARRAGE)"

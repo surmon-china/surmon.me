@@ -22,17 +22,15 @@
       <p class="desc">{{ currentWallpaper.desc }}</p>
       <div class="tools">
         <transition name="module">
-          <a
+          <ulink
             key="location"
             class="location"
-            target="_blank"
-            rel="external nofollow noopener"
             :href="currentWallpaper.humanizedCopyrightUrl"
             :title="currentWallpaper.bsTitle"
           >
             <i class="iconfont icon-location"></i>
             <span class="text" v-if="currentWallpaper.bsTitle">{{ currentWallpaper.bsTitle }}</span>
-          </a>
+          </ulink>
         </transition>
         <button
           class="button"

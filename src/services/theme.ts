@@ -17,8 +17,8 @@ export enum Theme {
 
 const themes = Object.values(Theme)
 const ThemeSymbol = Symbol('theme')
-const createThemeStore = (initTheme: Theme) => {
-  const theme = ref(initTheme)
+const createThemeStore = (defaultTheme: Theme) => {
+  const theme = ref(defaultTheme)
   const set = (newTheme: Theme) => {
     if (themes.includes(newTheme) && newTheme !== theme.value) {
       theme.value = newTheme
@@ -71,8 +71,8 @@ const createThemeStore = (initTheme: Theme) => {
 }
 
 export type ThemeService = ReturnType<typeof createThemeStore>
-export const createTheme = (initTheme: Theme) => {
-  const themeStore = createThemeStore(initTheme)
+export const createTheme = (defaultTheme: Theme) => {
+  const themeStore = createThemeStore(defaultTheme)
   return {
     ...themeStore,
     install(app: App) {

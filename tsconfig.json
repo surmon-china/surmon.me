@@ -33,7 +33,7 @@
   "include": [
     "./src/**/*.ts",
     "./src/**/*.js",
-    "./src/**/*.vue", "test.js", "src/components/comment/list/link.ts"
+    "./src/**/*.vue", "test.js"
   ],
   "exclude": ["node_modules", "dist"]
 }

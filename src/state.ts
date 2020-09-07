@@ -99,7 +99,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
       wallpaper() { switchBox.wallpaper = !switchBox.wallpaper },
       barrage() { switchBox.barrage = !switchBox.barrage },
       mobileSidebar: (open?: boolean) => {
-        switchBox.mobileSidebar = open !== null
+        switchBox.mobileSidebar = open != null
           ? !!open
           : !switchBox.mobileSidebar
       }

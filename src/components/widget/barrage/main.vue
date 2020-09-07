@@ -401,9 +401,8 @@
                 text-align: center;
                 cursor: pointer;
                 @include background-transition();
-
                 &:hover {
-                  background-color: $module-bg-darker-1;
+                  background-color: $module-bg-darker-2;
                 }
               }
             }

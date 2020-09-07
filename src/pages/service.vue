@@ -15,17 +15,12 @@
           />
         </div>
         <desktop-only>
-          <a
-            class="upwork"
-            target="_blank"
-            rel="external nofollow noopener"
-            :href="upworkLink"
-          >
+          <ulink class="upwork" :href="VALUABLE_LINKS.upwork">
             <span>(</span>
             <i18n :lkey="LANGUAGE_KEYS.PAGE_SERVICE_HIRE_ME" />
             <i class="iconfont icon-upwork"></i>
             <span>)</span>
-          </a>
+          </ulink>
         </desktop-only>
       </div>
     </div>
@@ -140,8 +135,8 @@
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import AdsenseResponsive from '/@/components/adsense/responsive.vue'
-  import * as APP_CONFIG from '/@/config/app.config'
 
   export default defineComponent({
     name: 'Service',
@@ -155,11 +150,11 @@
         const isZhLang =  i18n.language.value === Language.Zh
         const subject = isZhLang
           ? `嗨！Surmon，久仰大名！`
-          : `Technical consultant / ${APP_CONFIG.META.title}`
+          : `Technical consultant / ${META.title}`
         const body = isZhLang
           ? `我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
           : 'Hi Surmon, My name is '
-        const mailAddress = `mailto:${APP_CONFIG.META.email}` + (
+        const mailAddress = `mailto:${META.email}` + (
           isMobile.value
             ? ''
             : `?subject=${subject}&body=${body}`
@@ -173,10 +168,11 @@
       }
 
       return {
+        META,
+        VALUABLE_LINKS,
+        LANGUAGE_KEYS,
         isMobile,
-        handleSubmitEmail,
-        upworkLink: APP_CONFIG.LINKS.upwork,
-        LANGUAGE_KEYS
+        handleSubmitEmail
       }
     }
   })

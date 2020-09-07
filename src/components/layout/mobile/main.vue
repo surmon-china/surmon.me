@@ -11,9 +11,7 @@
       />
       <header-view />
       <main class="main-container">
-        <div id="main-content" class="main-content">
-          <slot></slot>
-        </div>
+        <slot></slot>
       </main>
       <footer-view />
     </div>
@@ -25,7 +23,7 @@
   import { useStore } from 'vuex'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getFileCDNUrl } from '/@/transforms/url'
-  import { useGlobalState } from '/@/state'
+  import { useEnhancer } from '/@/enhancer'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
   import AsideView from './aside.vue'
@@ -38,14 +36,17 @@
       AsideView
     },
     setup() {
-      const globalState = useGlobalState()
-      const isOpenedSidebar = globalState.switchBox.mobileSidebar
-      const openedAsideClass = computed(() => ({ open: isOpenedSidebar }))
+      const { globalState } = useEnhancer()
+      const isOpenedSidebar = computed(() => globalState.switchBox.mobileSidebar)
+      const openedAsideClass = computed(() => ({ open: isOpenedSidebar.value }))
+      const closeMobileSidebar = () => {
+        globalState.switchTogglers.mobileSidebar(false)
+      }
 
       return {
         isOpenedSidebar,
         openedAsideClass,
-        closeMobileSidebar: globalState.switchTogglers.mobileSidebar
+        closeMobileSidebar
       }
     }
   }
@@ -59,7 +60,7 @@
     background-color: $module-bg-hover;
     $aside-width: 68%;
 
-    #app-aside {
+    #aside {
       width: $aside-width;
       position: fixed;
       top: 0;
@@ -76,7 +77,7 @@
       }
     }
 
-    #app-main {
+    #main {
       transition: $mobile-aside-transition;
 
       &.open {
@@ -90,21 +91,17 @@
         right: 0;
         bottom: 0;
         z-index: $z-index-top;
-        background-color: $module-bg;
+        background-color: $module-bg-translucent;
+        @include backdrop-blur(3px);
       }
 
       .main-container {
         position: relative;
+        overflow: hidden;
         width: 100%;
-
-        .main-content {
-          position: relative;
-          overflow: hidden;
-          width: 100%;
-          margin: 0;
-          padding: ($mobile-header-height + $lg-gap) $gap $gap;
-          transition: width .35s;
-        }
+        margin: 0;
+        padding: ($mobile-header-height + $lg-gap) $gap $gap;
+        transition: width .35s;
       }
     }
   }
