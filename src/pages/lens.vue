@@ -27,18 +27,18 @@
         <div class="bilibili">
           <div class="left">
             <i class="iconfont icon-bilibili-full"></i>
-            <ulink class="button" href="https://space.bilibili.com/27940710">
+            <ulink class="button" :href="VALUABLE_LINKS.BILIBILI">
               (゜-゜)つロ 干杯~
             </ulink>
           </div>
           <uimage class="image" cdn src="/images/page-lens/bilibili.jpg" />
         </div>
         <div class="global">
-          <ulink class="instagram" href="https://www.instagram.com/surmon666">
+          <ulink class="instagram" :href="VALUABLE_LINKS.INSTAGRAM">
             <i class="iconfont icon-instagram"></i>
             <span class="text">Follow me on Instagram</span>
           </ulink>
-          <ulink class="youtube" href="https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w">
+          <ulink class="youtube" :href="VALUABLE_LINKS.YOUTUBE">
             <i class="iconfont icon-youtube"></i>
             <span class="text">Subscription my YouTube Channel</span>
           </ulink>
@@ -101,7 +101,7 @@
         </li>
       </ul>
       <div class="loadmore">
-        <ulink class="button" href="https://space.bilibili.com/27940710/video">
+        <ulink class="button" :href="VALUABLE_LINKS.BILIBILI">
           <span class="icon">
             <i class="iconfont icon-bilibili"></i>
           </span>
@@ -114,13 +114,14 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
-  import { useStore, getNamespace, Modules } from '/@/store'
+  import { useEnhancer } from '/@/enhancer'
+  import { getNamespace, Modules } from '/@/store'
   import { VlogModuleActions } from '/@/store/vlog'
   import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
-  import { useEnhancer } from '/@/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getFileProxyUrl } from '/@/transforms/url'
   import { timeAgo } from '/@/transforms/moment'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'Lens',
@@ -172,6 +173,7 @@
       await store.dispatch(getNamespace(Modules.Vlog, VlogModuleActions.FetchVideos))
 
       return {
+        VALUABLE_LINKS,
         LANGUAGE_KEYS,
         isMobile,
         isDarkTheme,

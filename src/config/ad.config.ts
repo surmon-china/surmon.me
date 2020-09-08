@@ -104,14 +104,14 @@ export const PC_NAV = [
     disabled: true,
     icon: 'icon-debug',
     color: '#000',
-    url: VALUABLE_LINKS.throwerror,
+    url: VALUABLE_LINKS.THROW_ERROR,
     text: 'TE.io'
   },
   {
     disabled: true,
     icon: 'icon-fox-colour',
     color: '#d15d26',
-    url: VALUABLE_LINKS.foxfinder,
+    url: VALUABLE_LINKS.FOX_FINDER,
     text: 'FF.io'
   }
 ]

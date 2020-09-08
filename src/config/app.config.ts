@@ -19,40 +19,41 @@ export const META = Object.freeze({
   email: 'i@surmon.me'
 })
 
-export const VALUABLE_LINKS = Object.freeze({
-  vuniversal: 'https://github.com/surmon-china/vuniversal',
-  surmonAppRepositorie: 'https://github.com/surmon-china/surmon.me.native',
-  nodepresssRepositorie: 'https://github.com/surmon-china/nodepress',
-  appApkFile: 'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
-
-  throwerror: 'https://throwerror.io',
-  foxfinder: 'https://foxfinder.io',
-  project: 'https://github.surmon.me',
-  github: 'https://github.com/surmon-china',
-  SPONSOES: 'https://github.com/sponsors/surmon-china',
-  PAYPAL: 'https://www.paypal.me/surmon',
-  liveMap: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w',
-  upwork: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
-
-  telegram: 'https://t.me/surmon',
-  qqGroup: 'https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4',
-  telegramGroup: 'https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA',
-  spotify: 'https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o',
-  music163: 'https://music.163.com/#/playlist?id=638949385',
-  youtube: 'https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w',
-  douban: 'https://www.douban.com/people/nocower',
-  zhihu: 'https://www.zhihu.com/people/surmon',
-  quora: 'https://www.quora.com/profile/Surmon/activity',
-  bilibili: 'https://space.bilibili.com/27940710',
-  stackoverflow: 'https://stackoverflow.com/users/6222535/surmon?tab=profile',
-  leetcodeCN: 'https://leetcode-cn.com/u/surmon',
-  linkedIn: 'https://www.linkedin.com/in/surmon',
-  instagram: 'https://www.instagram.com/surmon666',
-  twitter: 'https://twitter.com/surmon_me',
-})
-
 export const FRIEND_LINKS = Object.freeze({
   SkyRover: '//skyrover.me',
   JimmyLv: '//blog.jimmylv.info',
   // Jooger: '//jooger.me'
+})
+
+export const VALUABLE_LINKS = Object.freeze({
+  VUNIVERSAL: 'https://github.com/surmon-china/vuniversal',
+  NODEPRESS: 'https://github.com/surmon-china/nodepress',
+  APP_APK_FILE: 'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
+  SURMON_APP_REPOSITORIE: 'https://github.com/surmon-china/surmon.me.native',
+
+  THROW_ERROR: 'https://throwerror.io',
+  FOX_FINDER: 'https://foxfinder.io',
+  PROJECT: 'https://github.surmon.me',
+  GITHUB: 'https://github.com/surmon-china',
+  SPONSORS: 'https://github.com/sponsors/surmon-china',
+  PAYPAL: 'https://www.paypal.me/surmon',
+  UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
+  FUCK_IPC: 'http://www.beian.miit.gov.cn',
+
+  GOOGLE_LIVE_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w',
+  QQ_GROUP: 'https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4',
+  TELEGRAM: 'https://t.me/surmon',
+  TELEGRAM_GROUP: 'https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA',
+  SPOTIFY: 'https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o',
+  MUSIC_163: 'https://music.163.com/#/playlist?id=638949385',
+  YOUTUBE: 'https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w',
+  DOUBAN: 'https://www.douban.com/people/nocower',
+  ZHIHU: 'https://www.zhihu.com/people/surmon',
+  QUORA: 'https://www.quora.com/profile/Surmon/activity',
+  BILIBILI: 'https://space.bilibili.com/27940710',
+  STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon?tab=profile',
+  LEETCODE_CN: 'https://leetcode-cn.com/u/surmon',
+  LINKEDIN: 'https://www.linkedin.com/in/surmon',
+  INSTAGRAM: 'https://www.instagram.com/surmon666',
+  TWITTER: 'https://twitter.com/surmon_me',
 })

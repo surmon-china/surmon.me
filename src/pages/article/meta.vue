@@ -108,6 +108,7 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
   import { useEnhancer } from '/@/enhancer'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -154,6 +155,7 @@
       }
 
       return {
+        VALUABLE_LINKS,
         LANGUAGE_KEYS,
         isMobile,
         articleUrl,

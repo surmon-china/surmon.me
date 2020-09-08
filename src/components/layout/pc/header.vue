@@ -80,11 +80,10 @@
     setup() {
       const i18n = useI18n()
       const music = useMusic()
-
       return {
-        music,
+        LANGUAGE_KEYS,
         t: i18n.t,
-        LANGUAGE_KEYS
+        music
       }
     }
   })

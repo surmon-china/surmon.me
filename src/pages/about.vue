@@ -13,7 +13,7 @@
         </div>
         <div class="item">
           <i class="iconfont icon-dollar"></i>
-          <ulink :href="VALUABLE_LINKS.SPONSOES" @mousedown="handleTouchSponsor">
+          <ulink :href="VALUABLE_LINKS.SPONSORS" @mousedown="handleTouchSponsor">
             GitHub Sponsor
           </ulink>
           <span class="separator">|</span>
@@ -25,145 +25,69 @@
         </div>
         <div class="item">
           <i class="iconfont icon-comment-discussion" />
-          <a
-            target="_blank"
-            rel="external nofollow noopener"
-            href="https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4"
-          >
+          <ulink :href="VALUABLE_LINKS.QQ_GROUP">
             <i18n zh="寂寞同性交友群" en="QQ group" />
-          </a>
+          </ulink>
           <span class="separator">|</span>
-          <a
-            target="_blank"
-            rel="external nofollow noopener"
-            href="https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA"
-          >
+          <ulink :href="VALUABLE_LINKS.TELEGRAM_GROUP">
             <i18n zh="电报群" en="Telegram group" />
-          </a>
+          </ulink>
         </div>
         <div class="item">
           <i class="iconfont icon-music" />
           <span class="music">
             <router-link to="/music">Jazz-HipHop, Electronic, Disco, Rock, Popular</router-link>
-            <a
-              href="https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o"
-              target="_blank"
-              class="spotify"
-              rel="external nofollow noopener"
-            >
+            <ulink class="spotify" :href="VALUABLE_LINKS.SPOTIFY">
               <i class="iconfont icon-spotify" />
-            </a>
-            <a
-              href="https://music.163.com/#/playlist?id=638949385"
-              target="_blank"
-              class="music-163"
-              rel="external nofollow noopener"
-            >
+            </ulink>
+            <ulink class="music-163" :href="VALUABLE_LINKS.MUSIC_163">
               <i class="iconfont icon-163music-logo" />
-            </a>
+            </ulink>
           </span>
         </div>
         <div class="item">
           <i class="iconfont icon-social" />
           <span class="social-media-accounts">
             <span class="normal">
-              <a
-                href="https://github.com/surmon-china"
-                target="_blank"
-                class="item github"
-                rel="external nofollow noopener"
-              >
+              <ulink class="item github" :href="VALUABLE_LINKS.GITHUB">
                 <i class="iconfont icon-github" />
                 <span class="text">GitHub</span>
-              </a>
-              <a
-                href="https://twitter.com/surmon_me"
-                target="_blank"
-                class="item twitter"
-                rel="external nofollow noopener"
-              >
+              </ulink>
+              <ulink class="item twitter" :href="VALUABLE_LINKS.TWITTER">
                 <i class="iconfont icon-twitter" />
                 <span class="text">Twitter</span>
-              </a>
-              <a
-                href="https://www.instagram.com/surmon666"
-                target="_blank"
-                class="item instagram"
-                rel="external nofollow noopener"
-              >
+              </ulink>
+              <ulink class="item instagram" :href="VALUABLE_LINKS.INSTAGRAM">
                 <i class="iconfont icon-instagram" />
                 <span class="text">Instagram</span>
-              </a>
+              </ulink>
             </span>
             <desktop-only>
               <span class="mini">
-                <a
-                  href="https://t.me/surmon"
-                  target="_blank"
-                  class="item telegram"
-                  rel="external nofollow noopener"
-                >
+                <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM">
                   <i class="iconfont icon-telegram" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/surmon"
-                  target="_blank"
-                  class="item linkedin"
-                  rel="external nofollow noopener"
-                >
+                </ulink>
+                <ulink class="item linkedin" :href="VALUABLE_LINKS.LINKEDIN">
                   <i class="iconfont icon-linkedin" />
-                </a>
-                <a
-                  href="https://www.douban.com/people/nocower"
-                  target="_blank"
-                  class="item douban"
-                  rel="external nofollow noopener"
-                >
+                </ulink>
+                <ulink class="item douban" :href="VALUABLE_LINKS.DOUBAN">
                   <i class="iconfont icon-douban" />
-                </a>
-                <a
-                  href="https://www.zhihu.com/people/surmon"
-                  target="_blank"
-                  class="item zhihu"
-                  rel="external nofollow noopener"
-                >
+                </ulink>
+                <ulink class="item zhihu" :href="VALUABLE_LINKS.ZHIHU">
                   <i class="iconfont icon-zhihu" />
-                </a>
-                <a
-                  href="https://space.bilibili.com/27940710"
-                  target="_blank"
-                  class="item bilibili"
-                  rel="external nofollow noopener"
-                >
+                </ulink>
+                <ulink class="item bilibili" :href="VALUABLE_LINKS.BILIBILI">
                   <i class="iconfont icon-bilibili" />
-                </a>
-                <a
-                  href="https://stackoverflow.com/users/6222535/surmon?tab=profile"
-                  target="_blank"
-                  class="item stackoverflow"
-                  rel="external nofollow noopener"
-                  v-if="false"
-                >
+                </ulink>
+                <ulink class="item stackoverflow" :href="VALUABLE_LINKS.STACK_OVERFLOW" v-if="false">
                   <i class="iconfont icon-stackoverflow" />
-                </a>
-                <a
-                  href="https://leetcode-cn.com/u/surmon"
-                  bak-href="https://leetcode.com/surmon"
-                  target="_blank"
-                  class="item algorithm"
-                  rel="external nofollow noopener"
-                  v-if="false"
-                >
+                </ulink>
+                <ulink class="item algorithm" :href="VALUABLE_LINKS.LEETCODE_CN" v-if="false">
                   <i class="iconfont icon-leetcode" />
-                </a>
-                <a
-                  href="https://www.quora.com/profile/Surmon/activity"
-                  target="_blank"
-                  class="item quora"
-                  rel="external nofollow noopener"
-                >
+                </ulink>
+                <ulink class="item quora" :href="VALUABLE_LINKS.QUORA">
                   <i class="iconfont icon-quora" />
-                </a>
+                </ulink>
               </span>
             </desktop-only>
           </span>
@@ -271,18 +195,13 @@
               v-for="(item, index) in ads"
               :key="index"
             >
-              <a
-                class="item"
-                rel="external nofollow noopener"
-                target="_blank"
-                :href="item.url"
-              >
+              <ulink class="item" :href="item.url">
                 <img
                   :src="item.src"
                   :alt="item.alt || item.title"
                   :title="item.title || item.alt"
                 >
-              </a>
+              </ulink>
             </swiper-slide>
             <template #pagination>
               <div class="swiper-pagination" />
@@ -295,7 +214,7 @@
       <iframe class="iframe" src="/partials/map.html" />
     </div>
     <div class="about-project">
-      <ulink class="project-link" :href="VALUABLE_LINKS.github">
+      <ulink class="project-link" :href="VALUABLE_LINKS.GITHUB">
         <p class="title">
           <i class="iconfont icon-terminal" />
           <span class="description">

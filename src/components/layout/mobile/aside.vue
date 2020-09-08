@@ -15,39 +15,39 @@
           <i class="iconfont icon-home"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_HOME"></span>
         </router-link>
-        <router-link :to="getCategoryArchiveRoute(CategorySlug.Code)" class="item">
+        <router-link class="item" :to="getCategoryArchiveRoute(CategorySlug.Code)">
           <i class="iconfont icon-code"></i>
           <span v-i18n="LANGUAGE_KEYS.CATEGORY_CODE"></span>
         </router-link>
-        <router-link :to="getCategoryArchiveRoute(CategorySlug.Insight)" class="item">
+        <router-link class="item" :to="getCategoryArchiveRoute(CategorySlug.Insight)">
           <i class="iconfont icon-thinking"></i>
           <span v-i18n="LANGUAGE_KEYS.CATEGORY_INSIGHT"></span>
         </router-link>
-        <ulink class="item" :href="VALUABLE_LINKS.github">
+        <ulink class="item" :href="VALUABLE_LINKS.GITHUB">
           <i class="iconfont icon-experiment"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_GITHUB"></span>
         </ulink>
-        <router-link :to="getPageRoute(RouteName.Archive)" class="item">
+        <router-link class="item" :to="getPageRoute(RouteName.Archive)">
           <i class="iconfont icon-book"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_ARCHIVE"></span>
         </router-link>
-        <router-link :to="getPageRoute(RouteName.Lens)" class="item">
+        <router-link class="item" :to="getPageRoute(RouteName.Lens)">
           <i class="iconfont icon-vlog"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_LENS"></span>
         </router-link>
-        <router-link :to="getPageRoute(RouteName.About)" class="item">
+        <router-link class="item" :to="getPageRoute(RouteName.About)">
           <i class="iconfont icon-user"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_ABOUT"></span>
         </router-link>
-        <router-link :to="getPageRoute(RouteName.Service)" class="item">
+        <router-link class="item" :to="getPageRoute(RouteName.Service)">
           <i class="iconfont icon-tool"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_SERVICE"></span>
         </router-link>
-        <router-link :to="getPageRoute(RouteName.Guestbook)" class="item guestbook">
+        <router-link class="item guestbook" :to="getPageRoute(RouteName.Guestbook)">
           <i class="iconfont icon-comment"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_GUESTBOOK"></span>
         </router-link>
-        <router-link :to="getPageRoute(RouteName.App)" class="item app">
+        <router-link class="item app" :to="getPageRoute(RouteName.App)">
           <i class="iconfont icon-app"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_APP"></span>
         </router-link>

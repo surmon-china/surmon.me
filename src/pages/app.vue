@@ -24,12 +24,11 @@
             cdn
             class="qrcode"
             alt="qrcode"
-            draggable="false"
             src="/images/page-app/qrcode.png"
           />
           <ulink
             class="button"
-            :href="VALUABLE_LINKS.surmonAppRepositorie"
+            :href="VALUABLE_LINKS.APP_APK_FILE"
             @click="handleAndroidApp($event)"
           >
             <i class="iconfont icon-android"></i>
@@ -37,7 +36,7 @@
           </ulink>
           <ulink
             class="button"
-            :href="VALUABLE_LINKS.surmonAppRepositorie + '#ios'"
+            :href="VALUABLE_LINKS.SURMON_APP_REPOSITORIE + '#ios'"
             @mousedown="handleAppAction('APP IOS')"
           >
             <i class="iconfont icon-mac"></i>
@@ -45,7 +44,7 @@
           </ulink>
           <ulink
             class="button code"
-            :href="VALUABLE_LINKS.surmonAppRepositorie"
+            :href="VALUABLE_LINKS.SURMON_APP_REPOSITORIE"
             @mousedown="handleAppAction('APP GitHub 地址')"
           >
             <i class="iconfont icon-git"></i>
