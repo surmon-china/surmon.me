@@ -15,7 +15,7 @@
           />
         </div>
         <desktop-only>
-          <ulink class="upwork" :href="VALUABLE_LINKS.upwork">
+          <ulink class="upwork" :href="VALUABLE_LINKS.UPWORK">
             <span>(</span>
             <i18n :lkey="LANGUAGE_KEYS.PAGE_SERVICE_HIRE_ME" />
             <i class="iconfont icon-upwork"></i>

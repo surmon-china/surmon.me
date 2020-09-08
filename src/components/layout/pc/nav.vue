@@ -13,7 +13,7 @@
         <i class="iconfont icon-thinking"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.CATEGORY_INSIGHT" />
       </router-link>
-      <ulink class="item" :href="VALUABLE_LINKS.github">
+      <ulink class="item" :href="VALUABLE_LINKS.GITHUB">
         <i class="iconfont icon-github"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_GITHUB" />
       </ulink>

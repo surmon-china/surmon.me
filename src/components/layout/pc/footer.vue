@@ -3,7 +3,7 @@
     <div class="container">
       <ulink
         class="ipc"
-        href="http://www.beian.miit.gov.cn"
+        :href="VALUABLE_LINKS.FUCK_IPC"
         v-if="false"
       >
         陕 ICP 备 13004859 号-2
@@ -16,17 +16,11 @@
       />
       <span class="separator">|</span>
       <i18n zh="由 " en="Powered By " />
-      <ulink
-        class="item"
-        href="https://github.com/surmon-china/nodepress"
-      >
+      <ulink class="item" :href="VALUABLE_LINKS.NODEPRESS">
         NodePress
       </ulink>
       <i18n zh="、" en=", " />
-      <ulink
-        class="item"
-        href="https://github.com/surmon-china/vuniversal"
-      >
+      <ulink class="item" :href="VALUABLE_LINKS.VUNIVERSAL">
         Vuniversal
       </ulink>
       <i18n
@@ -36,12 +30,12 @@
       <span class="separator">|</span>
       <i18n>
         <template #zh>
-          <router-link :to="aboutPageUrl" key="zh">吾之臂躯</router-link>
+          <router-link :to="aboutPageUrl">吾之臂躯</router-link>
           <span> 行针步线</span>
         </template>
         <template #en>
           <span>Designed By </span>
-          <router-link :to="aboutPageUrl" key="en">Me</router-link>
+          <router-link :to="aboutPageUrl">Me</router-link>
         </template>
       </i18n>
     </div>
@@ -54,10 +48,13 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
   import { getPageRoute } from '/@/transforms/route'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+
   export default defineComponent({
     name: 'PcFooter',
     setup() {
       return {
+        VALUABLE_LINKS,
         LANGUAGE_KEYS,
         aboutPageUrl: getPageRoute(RouteName.About)
       }
