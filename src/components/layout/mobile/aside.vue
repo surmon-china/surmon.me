@@ -24,7 +24,7 @@
           <span v-i18n="LANGUAGE_KEYS.CATEGORY_INSIGHT"></span>
         </router-link>
         <ulink class="item" :href="VALUABLE_LINKS.GITHUB">
-          <i class="iconfont icon-experiment"></i>
+          <i class="iconfont icon-github"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_GITHUB"></span>
         </ulink>
         <router-link class="item" :to="getPageRoute(RouteName.Archive)">
@@ -32,16 +32,20 @@
           <span v-i18n="LANGUAGE_KEYS.PAGE_ARCHIVE"></span>
         </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.Lens)">
-          <i class="iconfont icon-vlog"></i>
+          <i class="iconfont icon-lens"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_LENS"></span>
         </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.About)">
           <i class="iconfont icon-user"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_ABOUT"></span>
         </router-link>
-        <router-link class="item" :to="getPageRoute(RouteName.Service)">
+        <router-link class="item" :to="getPageRoute(RouteName.Job)">
+          <i class="iconfont icon-horse"></i>
+          <span v-i18n="LANGUAGE_KEYS.PAGE_JOB"></span>
+        </router-link>
+        <router-link class="item" :to="getPageRoute(RouteName.Freelancer)">
           <i class="iconfont icon-tool"></i>
-          <span v-i18n="LANGUAGE_KEYS.PAGE_SERVICE"></span>
+          <span v-i18n="LANGUAGE_KEYS.PAGE_FREELANCER"></span>
         </router-link>
         <router-link class="item guestbook" :to="getPageRoute(RouteName.Guestbook)">
           <i class="iconfont icon-comment"></i>
@@ -167,6 +171,10 @@
           font-weight: 700;
           color: $module-bg;
 
+          .iconfont {
+            font-weight: normal;
+          }
+
           &.app {
             margin-top: $gap;
             color: $primary;
@@ -174,11 +182,6 @@
 
           &:last-child {
             margin-bottom: 0;
-          }
-
-          &:hover {
-            color: $primary;
-            background-color: $body-bg;
           }
 
           &.link-active {

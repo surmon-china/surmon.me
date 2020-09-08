@@ -31,6 +31,6 @@ export const getPageRoute = (routeName: RouteName) => {
 export const isArticleDetail = (name: RouteRecordName) => name === RouteName.Article
 export const isSearchArchive = (name: RouteRecordName) => name === RouteName.SearchArchive
 export const isGuestbook = (name: RouteRecordName) => name === RouteName.Guestbook
-export const isService = (name: RouteRecordName) => name === RouteName.Service
+export const isFreelancer = (name: RouteRecordName) => name === RouteName.Freelancer
 export const isMusic = (name: RouteRecordName) => name === RouteName.Music
 export const isApp = (name: RouteRecordName) => name === RouteName.App

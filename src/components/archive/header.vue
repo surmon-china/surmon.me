@@ -91,11 +91,11 @@
 
     .background {
       position: absolute;
-      width: 100%;
-      height: 100%;
       top: 0;
       left: 0;
-      z-index: -1;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
       background-color: $module-bg;
       background-size: cover;
       background-position: center center;
@@ -104,6 +104,10 @@
     }
 
     .content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
       width: 100%;
       height: 100%;
       @include backdrop-blur(1px);
@@ -153,11 +157,11 @@
     &.mobile {
       height: 12rem;
 
-      > .logo {
+      .logo {
         height: 8.6rem;
         line-height: 8.6rem;
 
-        > .iconfont {
+        .iconfont {
           font-size: 5em;
         }
       }

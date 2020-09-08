@@ -94,10 +94,11 @@
       const activeIndex = ref(0)
       const swiperOption = {
         height: 42,
-        autoplay: {
-          delay: 3500,
-          disableOnInteraction: false
-        },
+        autoplay: false,
+        // autoplay: {
+        //   delay: 3500,
+        //   disableOnInteraction: false
+        // },
         allowTouchMove: false,
         slidesPerView: 1,
         setWrapperSize: true,
@@ -155,12 +156,12 @@
 
     &.mobile {
       margin-bottom: $gap;
-      /* background-color: $module-bg-darker-3; */
-
-      > .swiper {
-        .swiper-slide {
-          > .content {
-            max-width: $content-width;
+      .swiper-box {
+        .swiper {
+          .swiper-slide {
+            .content {
+              max-width: 100%;
+            }
           }
         }
       }
@@ -213,7 +214,7 @@
       }
     }
 
-    > .title {
+    .title {
       float: left;
       width: $title-width;
       text-align: center;
@@ -226,7 +227,7 @@
       }
     }
 
-    > .swiper-box {
+    .swiper-box {
       float: right;
       display: flex;
       width: $content-width;
@@ -250,14 +251,15 @@
           justify-content: space-between;
           height: $announcement-height;
 
-          > .content {
+          .content {
             max-width: 76%;
             position: relative;
             font-weight: bold;
             @include text-overflow();
 
-            p {
+            ::v-deep(p) {
               margin: 0;
+              max-width: 100%;
               @include text-overflow();
             }
 

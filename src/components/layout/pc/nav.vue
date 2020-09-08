@@ -5,11 +5,11 @@
         <i class="iconfont icon-home"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_HOME" />
       </router-link>
-      <router-link :to="getCategoryArchiveRoute(CategorySlug.Code)" class="item">
+      <router-link class="item" :to="getCategoryArchiveRoute(CategorySlug.Code)">
         <i class="iconfont icon-code"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.CATEGORY_CODE" />
       </router-link>
-      <router-link :to="getCategoryArchiveRoute(CategorySlug.Insight)" class="item">
+      <router-link class="item" :to="getCategoryArchiveRoute(CategorySlug.Insight)">
         <i class="iconfont icon-thinking"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.CATEGORY_INSIGHT" />
       </router-link>
@@ -17,27 +17,27 @@
         <i class="iconfont icon-github"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_GITHUB" />
       </ulink>
-      <router-link :to="getPageRoute(RouteName.Music)" class="item">
+      <router-link class="item" :to="getPageRoute(RouteName.Music)">
         <i class="iconfont icon-netease-music"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_MUSIC" />
       </router-link>
-      <router-link :to="getPageRoute(RouteName.Lens)" class="item">
+      <router-link class="item" :to="getPageRoute(RouteName.Lens)">
         <i class="iconfont icon-lens"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_LENS" />
       </router-link>
-      <router-link :to="getPageRoute(RouteName.Job)" class="item">
-        <i class="iconfont icon-horse"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_JOB" />
-      </router-link>
-      <router-link :to="getPageRoute(RouteName.About)" class="item">
+      <router-link class="item" :to="getPageRoute(RouteName.About)">
         <i class="iconfont icon-user"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_ABOUT" />
       </router-link>
-      <router-link :to="getPageRoute(RouteName.Service)" class="item">
-        <i class="iconfont icon-tool"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_SERVICE" />
+      <router-link class="item" :to="getPageRoute(RouteName.Job)">
+        <i class="iconfont icon-horse"></i>
+        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_JOB" />
       </router-link>
-      <router-link :to="getPageRoute(RouteName.Guestbook)" class="item guestbook">
+      <router-link class="item" :to="getPageRoute(RouteName.Freelancer)">
+        <i class="iconfont icon-tool"></i>
+        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_FREELANCER" />
+      </router-link>
+      <router-link class="item guestbook" :to="getPageRoute(RouteName.Guestbook)">
         <i class="iconfont icon-comment"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_GUESTBOOK" />
       </router-link>
@@ -65,7 +65,7 @@
         </template>
       </template>
       <span class="separator"></span>
-      <router-link :to="getPageRoute(RouteName.App)" class="item app">
+      <router-link class="item app" :to="getPageRoute(RouteName.App)">
         <i class="iconfont icon-app"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_APP" />
       </router-link>

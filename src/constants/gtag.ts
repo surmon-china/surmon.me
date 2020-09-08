@@ -11,5 +11,5 @@ export enum GAEventTags {
   Tool = '部件',
   AppPage = 'page-App',
   AboutPage = 'page-About',
-  ServicePage = 'page-Service'
+  FreelancerPage = 'page-freelancer'
 }

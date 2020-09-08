@@ -354,7 +354,6 @@
 
     &.mobile {
       margin-bottom: $gap;
-
       &:last-child {
         margin: 0;
       }
@@ -370,17 +369,6 @@
           > .item-description {
             height: auto;
             margin-bottom: .5em;
-          }
-
-          > .item-meta {
-            > .date,
-            > .views,
-            > .comments,
-            > .likes,
-            > .tags,
-            > .categories {
-              margin: 0;
-            }
           }
         }
       }

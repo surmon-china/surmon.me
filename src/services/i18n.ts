@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, inject, ref, readonly, defineComponent, FunctionDirective } from 'vue'
+import { App, inject, ref, watch, readonly, defineComponent, WatchStopHandle, ObjectDirective } from 'vue'
 
 export interface I18nLanguage {
   code: string
@@ -76,9 +76,25 @@ const createI18nStore = (config: Ii18nConfig) => {
 export type I18n = ReturnType<typeof createI18nStore>
 export const createI18n = (config: Ii18nConfig) => {
   const i18nStore = createI18nStore(config)
-  const i18nDirective: FunctionDirective<HTMLElement> = (element, binding) => {
-    element.innerText = i18nStore.t(binding.value)
+
+  interface I18nDirectiveElement extends HTMLElement {
+    _i18nDirectiveStopHandler?: WatchStopHandle
   }
+  const i18nDirective: ObjectDirective<I18nDirectiveElement> = {
+    beforeMount(element, binding) {
+      element._i18nDirectiveStopHandler = watch(
+        () => i18nStore.language.value,
+        () => {
+          element.textContent = i18nStore.t(binding.value)
+        },
+        { immediate: true }
+      )
+    },
+    beforeUnmount(element) {
+      element?._i18nDirectiveStopHandler?.()
+    }
+  }
+
   const i18nComponent = defineComponent({
     name: 'I18n',
     props: {
@@ -98,6 +114,7 @@ export const createI18n = (config: Ii18nConfig) => {
   return {
     ...i18nStore,
     install(app: App) {
+      app.config.globalProperties.$i18n = i18nStore
       app.provide(I18nSymbol, i18nStore)
       app.directive('i18n', i18nDirective)
       app.directive('t', i18nDirective)

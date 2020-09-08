@@ -16,7 +16,7 @@ export enum RouteName {
   DateArchive = 'date-archive',
   SearchArchive = 'search-archive',
   Guestbook = 'guestbook',
-  Service = 'service',
+  Freelancer = 'freelancer',
   App = 'app',
   Music = 'music',
   Job = 'job',
@@ -98,9 +98,9 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
-    path: '/service',
-    name: RouteName.Service,
-    component: () => import('./pages/service.vue'),
+    path: '/freelancer',
+    name: RouteName.Freelancer,
+    component: () => import('./pages/freelancer.vue'),
     meta: {
       layout: LayoutColumn.Page
     }

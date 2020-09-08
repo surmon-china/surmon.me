@@ -46,10 +46,15 @@
             <i18n zh="未知分类下" en="(no catgory)" />
           </span>
           <span class="separator">|</span>
-          <i18n>
-            <template #zh>当前已被围观 {{ article.meta.views }} 次</template>
-            <template #en>{{ article.meta.views }} views.</template>
-          </i18n>
+          <responsive>
+            <template #desktop>
+              <i18n>
+                <template #zh>当前已被围观 {{ article.meta.views }} 次</template>
+                <template #en>{{ article.meta.views }} views.</template>
+              </i18n>
+            </template>
+            <template #mobile>{{ article.meta.views }} views.</template>
+          </responsive>
         </p>
         <p class="item">
           <span class="title">
@@ -178,7 +183,7 @@
   }
 
   .metas {
-    > .item {
+    .item {
       margin-bottom: $lg-gap;
       line-height: 1.4em;
       word-break: break-all;
@@ -230,9 +235,8 @@
     }
 
     &.mobile {
-      line-height: 2.3em;
-
-      > .item {
+      .item {
+        line-height: 2.3em;
         margin: 0;
         padding: 0;
         border: none;

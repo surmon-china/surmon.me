@@ -280,5 +280,29 @@
         }
       }
     }
+
+    &.mobile {
+      padding: $lg-gap;
+
+      .tag-list {
+        .tag {
+          width: 50%;
+        }
+      }
+
+      .month-list {
+        padding-left: 2rem;
+
+        .article-list {
+          padding-left: 0;
+
+          .article {
+            .title {
+              @include text-overflow();
+            }
+          }
+        }
+      }
+    }
   }
 </style>
