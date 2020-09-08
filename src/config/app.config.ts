@@ -26,6 +26,10 @@ export const FRIEND_LINKS = Object.freeze({
 })
 
 export const VALUABLE_LINKS = Object.freeze({
+  RSS: '/rss.xml',
+  SITE_MAP: '/sitemap.xml',
+  SPONSOR: '/sponsor',
+
   VUNIVERSAL: 'https://github.com/surmon-china/vuniversal',
   NODEPRESS: 'https://github.com/surmon-china/nodepress',
   APP_APK_FILE: 'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
@@ -35,7 +39,7 @@ export const VALUABLE_LINKS = Object.freeze({
   FOX_FINDER: 'https://foxfinder.io',
   PROJECT: 'https://github.surmon.me',
   GITHUB: 'https://github.com/surmon-china',
-  SPONSORS: 'https://github.com/sponsors/surmon-china',
+  GITHUB_SPONSORS: 'https://github.com/sponsors/surmon-china',
   PAYPAL: 'https://www.paypal.me/surmon',
   UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
   FUCK_IPC: 'http://www.beian.miit.gov.cn',

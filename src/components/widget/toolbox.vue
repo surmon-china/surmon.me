@@ -3,8 +3,8 @@
     <div class="container">
       <div class="tools">
         <ulink
-          href="/rss.xml"
           class="rss"
+          :href="VALUABLE_LINKS.RSS"
           @mousedown="handleRSS"
         >
           <i class="iconfont icon-rss" />
@@ -50,7 +50,7 @@
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { scrollTo, Easing } from '/@/utils/scroller'
   import { scrollToTop } from '/@/utils/effects'
-  import { META } from '/@/config/app.config'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'Toolbox',
@@ -93,9 +93,10 @@
       }
 
       return {
-        mailUrl: `mailto:${META.email}`,
-        t: i18n.translate,
+        VALUABLE_LINKS,
         LANGUAGE_KEYS,
+        t: i18n.translate,
+        mailUrl: `mailto:${META.email}`,
         isOnBarrage,
         scrollToTop,
         toBottom() {

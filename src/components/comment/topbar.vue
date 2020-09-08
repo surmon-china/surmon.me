@@ -35,7 +35,7 @@
               <i class="iconfont icon-hao" />
             </button>
             <popup v-model:visible="isVisibleSponsor" :border="false">
-              <iframe class="sponsor-modal" src="/sponsor" />
+              <iframe class="sponsor-modal" :src="VALUABLE_LINKS.SPONSOR" />
             </popup>
           </desktop-only>
         </div>
@@ -70,6 +70,7 @@
   import { usePageLike } from '/@/transforms/state'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
 
   export enum Events {
     Sort = 'sort'
@@ -143,8 +144,9 @@
       }
 
       return {
-        SortType,
+        VALUABLE_LINKS,
         LANGUAGE_KEYS,
+        SortType,
         isMobile,
         isZhLang,
         isVisibleSponsor,
