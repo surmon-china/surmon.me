@@ -28,7 +28,7 @@
           <span v-i18n="LANGUAGE_KEYS.PAGE_GITHUB"></span>
         </ulink>
         <router-link class="item" :to="getPageRoute(RouteName.Archive)">
-          <i class="iconfont icon-book"></i>
+          <i class="iconfont icon-peachblossom"></i>
           <span v-i18n="LANGUAGE_KEYS.PAGE_ARCHIVE"></span>
         </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.Lens)">

@@ -28,8 +28,8 @@
         </datalist>
       </client-only>
     </div>
-    <router-link :to="{ name: RouteName.Archive }" class="archive-btn">
-      <i class="iconfont icon-book" />
+    <router-link class="archive-btn" :to="{ name: RouteName.Archive }">
+      <i class="iconfont icon-peachblossom" />
     </router-link>
   </div>
 </template>
@@ -135,8 +135,8 @@
       margin-left: $sm-gap;
       width: 3em;
 
-      > .iconfont {
-        font-size: $font-size-h3;
+      .iconfont {
+        font-size: $font-size-h4;
       }
     }
   }
