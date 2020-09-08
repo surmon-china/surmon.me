@@ -10,8 +10,8 @@
       </ulink>
       <a
         class="sitemap-btn"
-        href="/sitemap.xml"
         target="_blank"
+        :href="VALUABLE_LINKS.SITE_MAP"
         v-i18n="LANGUAGE_KEYS.PAGE_ARCHIVE"
       />
       <span class="separator">|</span>

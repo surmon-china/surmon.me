@@ -13,7 +13,7 @@
         </div>
         <div class="item">
           <i class="iconfont icon-dollar"></i>
-          <ulink :href="VALUABLE_LINKS.SPONSORS" @mousedown="handleTouchSponsor">
+          <ulink :href="VALUABLE_LINKS.GITHUB_SPONSORS" @mousedown="handleTouchSponsor">
             GitHub Sponsor
           </ulink>
           <span class="separator">|</span>
@@ -21,7 +21,7 @@
             PayPal me
           </ulink>
           <span class="separator">|</span>
-          <ulink href="/sponsor" @mousedown="handleTouchSponsor">More</ulink>
+          <ulink :href="VALUABLE_LINKS.SPONSOR" @mousedown="handleTouchSponsor">More</ulink>
         </div>
         <div class="item">
           <i class="iconfont icon-comment-discussion" />
@@ -36,7 +36,9 @@
         <div class="item">
           <i class="iconfont icon-music" />
           <span class="music">
-            <router-link to="/music">Jazz-HipHop, Electronic, Disco, Rock, Popular</router-link>
+            <router-link :to="getPageRoute(RouteName.Music)">
+              Jazz-HipHop, Electronic, Disco, Rock, Popular
+            </router-link>
             <ulink class="spotify" :href="VALUABLE_LINKS.SPOTIFY">
               <i class="iconfont icon-spotify" />
             </ulink>
@@ -111,7 +113,7 @@
           </span>
           <popup :visible="isOnLiveMap" @close="toggleLiveMap">
             <iframe
-              src="https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w"
+              :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP"
               frameborder="0"
               class="live-map"
             />
@@ -231,6 +233,8 @@
 <script lang="ts">
   import { defineComponent, ref, computed, toRef } from 'vue'
   import { useEnhancer } from '/@/enhancer'
+  import { RouteName } from '/@/router'
+  import { getPageRoute } from '/@/transforms/route'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
@@ -303,6 +307,8 @@
         VALUABLE_LINKS,
         FRIEND_LINKS,
         LANGUAGE_KEYS,
+        RouteName,
+        getPageRoute,
         ads,
         adSwiperOption,
         isMobile,
