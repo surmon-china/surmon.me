@@ -125,6 +125,7 @@
     height: $mobile-header-height;
     background-color: $module-bg;
     z-index: $z-index-header;
+    @include backdrop-blur();
 
     .search-mask {
       position: fixed;

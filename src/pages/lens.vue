@@ -43,11 +43,13 @@
             <span class="text">Subscription my YouTube Channel</span>
           </ulink>
         </div>
-        <div class="wechat-channel">
-          <uimage cdn src="/images/page-lens/wechat-channel.jpg" />
-        </div>
-        <div class="douyin">
-          <uimage cdn src="/images/page-lens/douyin.jpg" />
+        <div class="mobile">
+          <div class="wechat-channel">
+            <uimage cdn src="/images/page-lens/wechat-channel.jpg" />
+          </div>
+          <div class="douyin">
+            <uimage cdn src="/images/page-lens/douyin.jpg" />
+          </div>
         </div>
       </div>
       <div class="vlog-title">Vlogs</div>
@@ -322,19 +324,20 @@
         }
       }
 
-      .wechat-channel {
-        margin-right: $gap;
-      }
+      .mobile {
+        width: 31.6rem;
+        display: flex;
+        justify-content: space-between;
 
-      .wechat-channel,
-      .douyin {
-        height: 100%;
-        flex-shrink: 0;
-        background-color: $module-bg;
-
-        img {
-          width: auto;
+        .wechat-channel,
+        .douyin {
           height: 100%;
+          background-color: $module-bg;
+
+          img {
+            width: auto;
+            height: 100%;
+          }
         }
       }
     }
@@ -540,20 +543,64 @@
     &.mobile {
       min-height: auto;
 
-      > .videos {
-        > .item {
-          width: 100%;
-          height: auto;
-          flex-grow: 1;
-          margin-right: 0;
+      .loadmore {
+        margin: 0;
+      }
+
+      .banner {
+        height: 12rem;
+        margin-bottom: $gap;
+        @include radius-box($sm-radius);
+
+        .title {
+          font-size: $font-size-h1;
           margin-bottom: $gap;
+        }
+        .description {
+          margin: 0;
+        }
+      }
 
-          > .thumb {
-            height: 10rem;
+      .container {
+        width: 100%;
+
+        .header {
+          height: auto;
+          flex-wrap: wrap;
+
+          .bilibili,
+          .global {
+            height: 16rem;
+            margin: 0;
+            margin-bottom: $gap;
           }
+          .bilibili,
+          .global {
+            width: 100%;
+          }
+          .mobile {
+            height: auto;
 
-          > .separator {
-            border-color: $module-bg-hover;
+            .douyin,
+            .wechat-channel {
+              width: calc((100% - #{$gap}) / 2);
+               img {
+                width: 100%;
+              }
+            }
+          }
+        }
+
+        .videos {
+          > .item {
+            width: 100%;
+            height: auto;
+            margin-right: 0;
+            margin-bottom: $gap;
+
+            > .thumb {
+              height: 10rem;
+            }
           }
         }
       }

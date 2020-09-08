@@ -12,7 +12,7 @@
         class="sitemap-btn"
         target="_blank"
         :href="VALUABLE_LINKS.SITE_MAP"
-        v-i18n="LANGUAGE_KEYS.PAGE_ARCHIVE"
+        v-i18n="LANGUAGE_KEYS.SITE_MAP_XML"
       />
       <span class="separator">|</span>
       <i18n zh="由 " en="Powered By " />
@@ -30,12 +30,12 @@
       <span class="separator">|</span>
       <i18n>
         <template #zh>
-          <router-link :to="aboutPageUrl">吾之臂躯</router-link>
+          <router-link :to="aboutPageUrl" key="zh">吾之臂躯</router-link>
           <span> 行针步线</span>
         </template>
         <template #en>
           <span>Designed By </span>
-          <router-link :to="aboutPageUrl">Me</router-link>
+          <router-link :to="aboutPageUrl" key="en">Me</router-link>
         </template>
       </i18n>
     </div>
@@ -74,9 +74,17 @@
     @include common-bg-module();
 
     .container {
+      color: $text-secondary;
       font-size: $font-size-h6;
       text-align: center;
       text-transform: uppercase;
+
+      a {
+        border-bottom: 1px solid transparent;
+        &:hover {
+          border-color: initial;
+        }
+      }
 
       .separator {
         margin: 0 $sm-gap;

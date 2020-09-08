@@ -1,23 +1,23 @@
 <template>
   <div
-    class="service-page"
+    class="freelancer-page"
     :class="{ mobile: isMobile }"
   >
     <div class="banner">
       <div class="content container">
-        <h2 class="title" v-i18n="LANGUAGE_KEYS.PAGE_SERVICE_SLOGAN"></h2>
+        <h2 class="title" v-i18n="LANGUAGE_KEYS.PAGE_FREELANCER_SLOGAN"></h2>
         <div class="submit">
           <button
             class="email-me"
             title="email me"
             @click="handleSubmitEmail"
-            v-i18n="LANGUAGE_KEYS.PAGE_SERVICE_EMAIL_ME"
+            v-i18n="LANGUAGE_KEYS.PAGE_FREELANCER_EMAIL_ME"
           />
         </div>
         <desktop-only>
           <ulink class="upwork" :href="VALUABLE_LINKS.UPWORK">
             <span>(</span>
-            <i18n :lkey="LANGUAGE_KEYS.PAGE_SERVICE_HIRE_ME" />
+            <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_HIRE_ME" />
             <i class="iconfont icon-upwork"></i>
             <span>)</span>
           </ulink>
@@ -139,7 +139,7 @@
   import AdsenseResponsive from '/@/components/adsense/responsive.vue'
 
   export default defineComponent({
-    name: 'Service',
+    name: 'Freelancer',
     components: {
       AdsenseResponsive
     },
@@ -163,7 +163,7 @@
         window.open(mailAddress)
         gtag?.event('咨询邮件', {
           event_category: GAEventActions.Click,
-          event_label: GAEventTags.ServicePage
+          event_label: GAEventTags.FreelancerPage
         })
       }
 
@@ -181,87 +181,8 @@
 <style lang="scss" scoped>
   @import 'src/assets/styles/init.scss';
 
-  .service-page {
+  .freelancer-page {
     width: 100%;
-
-    &.mobile {
-      > .banner {
-        height: 14rem;
-
-        > .content {
-          width: 100%;
-
-          > .title {
-            margin-top: 3rem;
-            margin-bottom: 2rem;
-            font-size: $font-size-h1;
-          }
-        }
-      }
-
-      > .module {
-        margin: 0 auto;
-        margin-top: 1rem;
-
-        > .module-content {
-          width: 100%;
-
-          > .module-list {
-            flex-direction: column;
-
-            > .item {
-              width: 100%;
-              height: auto;
-              margin-right: 0;
-              margin-bottom: 1rem;
-
-              > .icon {
-                margin-bottom: -0.5em;
-              }
-            }
-          }
-        }
-      }
-
-      > .step {
-        padding: 0;
-        background-color: transparent;
-
-        > .step-content {
-          width: 100%;
-
-          > .step-list {
-            padding: 0;
-            flex-direction: column;
-
-            > .item {
-              width: 100%;
-              height: auto;
-              margin-bottom: 1rem;
-              padding-bottom: 0;
-              background-color: $module-bg;
-            }
-          }
-        }
-      }
-
-      > .rule {
-        height: auto;
-        line-height: 3rem;
-
-        > .rule-content {
-          width: 100%;
-          padding: 1rem;
-          text-align: left;
-          text-indent: 2em;
-
-          > .text {
-            margin: 0;
-          }
-        }
-      }
-    }
-
 
     .banner {
       height: $full-column-page-banner-height;
@@ -429,15 +350,100 @@
       }
     }
 
-    > .rule {
+    .rule {
       height: 5rem;
       line-height: 5rem;
       background-color: $primary;
 
-      > .rule-content {
+      .rule-content {
         color: $text-reversal;
         margin: 0 auto;
         text-align: center;
+      }
+    }
+
+
+
+    &.mobile {
+      .banner {
+        height: 14rem;
+        @include radius-box($sm-radius);
+
+        .content {
+          width: 100%;
+
+          .title {
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+            font-size: $font-size-h1;
+          }
+
+          .email-me {
+
+          }
+        }
+      }
+
+      > .module {
+        margin: 0 auto;
+        margin-top: 1rem;
+
+        > .module-content {
+          width: 100%;
+
+          > .module-list {
+            flex-direction: column;
+
+            > .item {
+              width: 100%;
+              height: auto;
+              margin-right: 0;
+              margin-bottom: 1rem;
+
+              > .icon {
+                margin-bottom: -0.5em;
+              }
+            }
+          }
+        }
+      }
+
+      > .step {
+        padding: 0;
+        background-color: transparent;
+
+        > .step-content {
+          width: 100%;
+
+          > .step-list {
+            padding: 0;
+            flex-direction: column;
+
+            > .item {
+              width: 100%;
+              height: auto;
+              margin-bottom: 1rem;
+              padding-bottom: 0;
+              background-color: $module-bg;
+            }
+          }
+        }
+      }
+
+      > .rule {
+        height: auto;
+        line-height: 3rem;
+
+        > .rule-content {
+          width: 100%;
+          padding: 1rem;
+          text-align: left;
+          text-indent: 2em;
+
+          > .text {
+            margin: 0;
+          }
+        }
       }
     }
   }

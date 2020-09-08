@@ -62,9 +62,9 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '狂浪生',
     [Language.En]: 'about'
   },
-  [LANGUAGE_KEYS.PAGE_SERVICE]: {
+  [LANGUAGE_KEYS.PAGE_FREELANCER]: {
     [Language.Zh]: '得道',
-    [Language.En]: 'service'
+    [Language.En]: 'freelancer'
   },
   [LANGUAGE_KEYS.PAGE_GUESTBOOK]: {
     [Language.Zh]: '四方馆',
@@ -75,6 +75,10 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.En]: 'app'
   },
   [LANGUAGE_KEYS.PAGE_ARCHIVE]: {
+    [Language.Zh]: '黄卷青灯',
+    [Language.En]: 'archive'
+  },
+  [LANGUAGE_KEYS.SITE_MAP_XML]: {
     [Language.Zh]: '旷日积晷',
     [Language.En]: 'sitemap.xml'
   },
@@ -102,15 +106,15 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '山河入梦',
     [Language.En]: 'Gallery'
   },
-  [LANGUAGE_KEYS.PAGE_SERVICE_SLOGAN]: {
+  [LANGUAGE_KEYS.PAGE_FREELANCER_SLOGAN]: {
     [Language.Zh]: '为我一挥手，如临万壑松',
     [Language.En]: 'Talk is cheap. Show me the code'
   },
-  [LANGUAGE_KEYS.PAGE_SERVICE_EMAIL_ME]: {
+  [LANGUAGE_KEYS.PAGE_FREELANCER_EMAIL_ME]: {
     [Language.Zh]: '即破楼兰',
     [Language.En]: 'Email ME'
   },
-  [LANGUAGE_KEYS.PAGE_SERVICE_HIRE_ME]: {
+  [LANGUAGE_KEYS.PAGE_FREELANCER_HIRE_ME]: {
     [Language.Zh]: '或在 Upwork 雇佣我',
     [Language.En]: 'Hire me on upwork.com',
   },

@@ -315,7 +315,7 @@
       }
 
       > .article-list-mammon {
-        padding: $gap;
+        padding: $sm-gap;
 
         &::v-deep(.mammon-ins) {
           margin: 0;

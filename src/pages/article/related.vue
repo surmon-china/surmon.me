@@ -8,8 +8,8 @@
         <skeleton-paragraph
           v-if="isMobile"
           class="skeleton"
-          :lines="4"
           line-height="1em"
+          :lines="4"
         />
         <ul class="skeleton-list" v-else>
           <skeleton-base
@@ -22,7 +22,7 @@
       <template #default>
         <ul class="articles" key="articles">
           <li
-            v-for="(article, index) in articles"
+            v-for="(article, index) in articles.slice(0, isMobile ? 4 : 6)"
             :class="{ disabled: article.disabled }"
             :key="index"
             class="item"
@@ -32,20 +32,13 @@
               :title="article.title"
               :to="getArticleDetailRoute(article.id)"
             >
-              <responsive>
-                <template #desktop>
-                  <div
-                    class="thumb"
-                    :style="{
-                      backgroundImage: `url(${getRelatedArticleThumb(article.thumb)})`
-                    }"
-                  />
-                  <div class="title">{{ article.title }}</div>
-                </template>
-                <template #mobile>
-                  <span class="title">{{ article.title }} - {{ article.description }}</span>
-                </template>
-              </responsive>
+              <div
+                class="thumb"
+                :style="{
+                  backgroundImage: `url(${getRelatedArticleThumb(article.thumb)})`
+                }"
+              />
+              <div class="title">{{ article.title }}</div>
             </router-link>
           </li>
         </ul>
@@ -183,31 +176,18 @@
     }
 
     &.mobile {
-      height: auto;
-
       .articles {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        overflow: hidden;
-        opacity: 0.9;
-
         .item {
-          .item-link {
-            display: flex;
-            width: 100%;
-            height: 2.2em;
-            line-height: 2.2em;
+          width: calc((100% - #{$gap}) / 2);
+          margin-right: $gap;
+          margin-bottom: $gap;
+          &:nth-child(2n) {
+            margin-right: 0;
+            margin-bottom: 0;
+          }
 
-            .title {
-              max-width: 70%;
-              display: inline-block;
-              @include text-overflow();
-            }
-
-            .tip {
-              display: inline-block;
-            }
+          .thumb {
+            height: 6rem;
           }
         }
       }

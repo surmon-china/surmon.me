@@ -231,5 +231,47 @@
         background-blend-mode: difference;
       }
     }
+
+    &.mobile {
+      .banner {
+        height: 12rem;
+        margin-bottom: $gap;
+        @include radius-box($sm-radius);
+
+        .title {
+          font-size: $font-size-h1;
+          margin-bottom: $gap;
+        }
+        .description {
+          margin: 0;
+        }
+      }
+
+      .container {
+        width: 100%;
+
+        .jobs {
+          display: block;
+
+          ::v-deep(.list) {
+            width: 100%;
+            .item {
+              margin: 0;
+              margin-bottom: $gap;
+
+              .logo {
+                height: 10rem;
+              }
+            }
+
+            &:last-child {
+              .item:last-child {
+                margin: 0;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 </style>
