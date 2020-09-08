@@ -45,8 +45,8 @@
         </div>
         <div v-if="music.currentSong" class="song">
           <router-link
-            to="/music"
             class="link"
+            :to="getPageRoute(RouteName.Music)"
             :title="`${music.currentSong.name} / ${music.currentSong.album || 'unknow'}`"
           >
             <span>{{ music.currentSong.name }} By {{ music.currentSong.artist }} / {{ music.currentSong.album || 'unknow' }}</span>
@@ -71,9 +71,11 @@
 
 <script lang="ts">
   import { defineComponent, onMounted, ref, computed } from 'vue'
+  import { RouteName } from '/@/router'
   import { useI18n } from '/@/services/i18n'
   import { useMusic } from '/@/services/music'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { getPageRoute } from '/@/transforms/route'
 
   export default defineComponent({
     name: 'PcHeader',
@@ -82,8 +84,10 @@
       const music = useMusic()
       return {
         LANGUAGE_KEYS,
+        RouteName,
         t: i18n.t,
-        music
+        music,
+        getPageRoute
       }
     }
   })
