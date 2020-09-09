@@ -84,7 +84,7 @@
           <hr class="separator">
           <p class="meta">
             <span class="item favorites">
-              <i class="iconfont icon-like"></i>
+              <i class="iconfont icon-heart"></i>
               <span>{{ video.favorites }}</span>
             </span>
             <span class="item play">

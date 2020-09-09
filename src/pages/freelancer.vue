@@ -319,7 +319,7 @@
     .mammon {
       height: 192px;
       margin-bottom: $gap * 2;
-      background-color: $module-bg;
+      @include common-bg-module();
     }
 
     .step {
