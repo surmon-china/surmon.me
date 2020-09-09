@@ -62,7 +62,7 @@
             <span>{{ article.meta.comments || 0 }}</span>
           </span>
           <span class="likes">
-            <i class="iconfont icon-like" :class="{ liked: isLiked }"></i>
+            <i class="iconfont icon-heart" :class="{ liked: isLiked }"></i>
             <span>{{ article.meta.likes || 0 }}</span>
           </span>
           <span class="tags">

@@ -23,7 +23,7 @@
             :class="{ liked: isPageLiked }"
             @click="handleLikePage"
           >
-            <i class="iconfont icon-like" />
+            <i class="iconfont icon-heart" />
             <strong class="count">{{ likes || 0 }}</strong>
             <template v-if="isZhLang && isMobile">赞</template>
             <template v-else>

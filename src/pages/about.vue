@@ -1,135 +1,157 @@
 <template>
   <div class="about-page" :class="{ mobile: isMobile }">
     <div class="about-me">
-      <div class="description">
-        <div class="item">
+      <div class="profile">
+        <div class="bio">
           <i class="iconfont icon-swordsman" />
-          <p class="bio">
-            <i18n
-              zh="浪蝶游蜂，迈步九云中"
-              en="I'm Surmon, a digital nomad."
-            />
-          </p>
+          <div class="text">
+            <i18n>
+              <template #zh>一个渣男；有一架飞机，和两条狗</template>
+              <template #en>I'm Surmon, a digital nomad.</template>
+            </i18n>
+          </div>
         </div>
-        <div class="item">
-          <i class="iconfont icon-dollar"></i>
-          <ulink :href="VALUABLE_LINKS.GITHUB_SPONSORS" @mousedown="handleTouchSponsor">
-            GitHub Sponsor
-          </ulink>
-          <span class="separator">|</span>
-          <ulink :href="VALUABLE_LINKS.PAYPAL" @mousedown="handleTouchSponsor">
-            PayPal me
-          </ulink>
-          <span class="separator">|</span>
-          <ulink :href="VALUABLE_LINKS.SPONSOR" @mousedown="handleTouchSponsor">More</ulink>
-        </div>
-        <div class="item">
-          <i class="iconfont icon-comment-discussion" />
-          <ulink :href="VALUABLE_LINKS.QQ_GROUP">
-            <i18n zh="寂寞同性交友群" en="QQ group" />
-          </ulink>
-          <span class="separator">|</span>
-          <ulink :href="VALUABLE_LINKS.TELEGRAM_GROUP">
-            <i18n zh="电报群" en="Telegram group" />
-          </ulink>
-        </div>
-        <div class="item">
-          <i class="iconfont icon-music" />
-          <span class="music">
-            <router-link :to="getPageRoute(RouteName.Music)">
-              Jazz-HipHop, Electronic, Disco, Rock, Popular
-            </router-link>
-            <ulink class="spotify" :href="VALUABLE_LINKS.SPOTIFY">
-              <i class="iconfont icon-spotify" />
-            </ulink>
-            <ulink class="music-163" :href="VALUABLE_LINKS.MUSIC_163">
-              <i class="iconfont icon-163music-logo" />
-            </ulink>
-          </span>
-        </div>
-        <div class="item">
-          <i class="iconfont icon-social" />
-          <span class="social-media-accounts">
-            <span class="normal">
-              <ulink class="item github" :href="VALUABLE_LINKS.GITHUB">
-                <i class="iconfont icon-github" />
-                <span class="text">GitHub</span>
-              </ulink>
-              <ulink class="item twitter" :href="VALUABLE_LINKS.TWITTER">
-                <i class="iconfont icon-twitter" />
-                <span class="text">Twitter</span>
-              </ulink>
-              <ulink class="item instagram" :href="VALUABLE_LINKS.INSTAGRAM">
-                <i class="iconfont icon-instagram" />
-                <span class="text">Instagram</span>
-              </ulink>
+        <div class="description">
+          <div class="item">
+            <i class="iconfont icon-heart" />
+            <span class="like-text">
+              <i18n
+                zh="酒池肉林、日夜笙歌、依翠偎红、五音六律、目营心匠、桀骜不羁"
+                en="code. beauty. whisky. music. vagrant."
+              />
             </span>
-            <desktop-only>
-              <span class="mini">
-                <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM">
-                  <i class="iconfont icon-telegram" />
+          </div>
+          <div class="item">
+            <i class="iconfont icon-tibet-1" />
+            <span class="live-map" @click="toggleLiveMap">
+              <i18n
+                zh="路为纸，地成册，行作笔，心当墨；思无界，行有疆"
+                en="Every path I went astray built my Rome."
+              />
+            </span>
+            <popup :visible="isOnLiveMap" @close="toggleLiveMap">
+              <iframe
+                :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP"
+                frameborder="0"
+                class="live-map"
+              />
+            </popup>
+          </div>
+          <div class="item">
+            <i class="iconfont icon-social" />
+            <span class="social-media-accounts">
+              <span class="normal">
+                <ulink class="item normal-button github" :href="VALUABLE_LINKS.GITHUB">
+                  <i class="iconfont icon-github" />
+                  <span class="text">GitHub</span>
                 </ulink>
-                <ulink class="item linkedin" :href="VALUABLE_LINKS.LINKEDIN">
-                  <i class="iconfont icon-linkedin" />
+                <ulink class="item normal-button twitter" :href="VALUABLE_LINKS.TWITTER">
+                  <i class="iconfont icon-twitter" />
+                  <span class="text">Twitter</span>
                 </ulink>
-                <ulink class="item douban" :href="VALUABLE_LINKS.DOUBAN">
-                  <i class="iconfont icon-douban" />
-                </ulink>
-                <ulink class="item zhihu" :href="VALUABLE_LINKS.ZHIHU">
-                  <i class="iconfont icon-zhihu" />
-                </ulink>
-                <ulink class="item bilibili" :href="VALUABLE_LINKS.BILIBILI">
-                  <i class="iconfont icon-bilibili" />
-                </ulink>
-                <ulink class="item stackoverflow" :href="VALUABLE_LINKS.STACK_OVERFLOW" v-if="false">
-                  <i class="iconfont icon-stackoverflow" />
-                </ulink>
-                <ulink class="item algorithm" :href="VALUABLE_LINKS.LEETCODE_CN" v-if="false">
-                  <i class="iconfont icon-leetcode" />
-                </ulink>
-                <ulink class="item quora" :href="VALUABLE_LINKS.QUORA">
-                  <i class="iconfont icon-quora" />
+                <ulink class="item normal-button instagram" :href="VALUABLE_LINKS.INSTAGRAM">
+                  <i class="iconfont icon-instagram" />
+                  <span class="text">Instagram</span>
                 </ulink>
               </span>
-            </desktop-only>
-          </span>
-        </div>
-        <div class="item">
-          <i class="iconfont icon-like" />
-          <span class="like-text">
-            <i18n
-              zh="酒池肉林、日夜笙歌、依翠偎红、五音六律、目营心匠、桀骜不羁"
-              en="code. beauty. whisky. music. vagrant."
-            />
-          </span>
-        </div>
-        <div class="item">
-          <i class="iconfont icon-tibet-1" />
-          <span class="my-map" @click="toggleLiveMap">
-            <i18n
-              zh="路为纸，地成册，行作笔，心当墨；思无界，行有疆"
-              en="Every path I went astray built my Rome."
-            />
-          </span>
-          <popup :visible="isOnLiveMap" @close="toggleLiveMap">
-            <iframe
-              :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP"
-              frameborder="0"
-              class="live-map"
-            />
-          </popup>
-        </div>
-        <div class="item">
-          <i class="iconfont icon-friend" />
-          <span class="friends">
-            <a
-              v-for="(link, name) in FRIEND_LINKS"
-              :key="link"
-              :href="link"
-              target="_blank"
-              rel="external nofollow noopener"
-            >「 {{ name }} 」</a>
-          </span>
+              <desktop-only>
+                <span class="mini">
+                  <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM">
+                    <i class="iconfont icon-telegram" />
+                  </ulink>
+                  <ulink class="item linkedin" :href="VALUABLE_LINKS.LINKEDIN">
+                    <i class="iconfont icon-linkedin" />
+                  </ulink>
+                  <ulink class="item douban" :href="VALUABLE_LINKS.DOUBAN">
+                    <i class="iconfont icon-douban" />
+                  </ulink>
+                  <ulink class="item zhihu" :href="VALUABLE_LINKS.ZHIHU">
+                    <i class="iconfont icon-zhihu" />
+                  </ulink>
+                  <ulink class="item bilibili" :href="VALUABLE_LINKS.BILIBILI">
+                    <i class="iconfont icon-bilibili" />
+                  </ulink>
+                  <ulink class="item stackoverflow" :href="VALUABLE_LINKS.STACK_OVERFLOW" v-if="false">
+                    <i class="iconfont icon-stackoverflow" />
+                  </ulink>
+                  <ulink class="item algorithm" :href="VALUABLE_LINKS.LEETCODE_CN" v-if="false">
+                    <i class="iconfont icon-leetcode" />
+                  </ulink>
+                  <ulink class="item quora" :href="VALUABLE_LINKS.QUORA">
+                    <i class="iconfont icon-quora" />
+                  </ulink>
+                </span>
+              </desktop-only>
+            </span>
+          </div>
+          <div class="item">
+            <i class="iconfont icon-dollar"></i>
+            <div class="sponsor">
+              <ulink
+                class="github normal-button icon-button"
+                :href="VALUABLE_LINKS.GITHUB_SPONSORS"
+                @mousedown="handleTouchSponsor"
+              >
+                <i class="iconfont icon-heart" />
+                <span class="text">GitHub Sponsor</span>
+              </ulink>
+              <ulink
+                class="paypal normal-button icon-button"
+                :href="VALUABLE_LINKS.PAYPAL"
+                @mousedown="handleTouchSponsor"
+              >
+                <i class="iconfont icon-paypal" />
+                <span class="text">PayPal me</span>
+              </ulink>
+              <ulink
+                class="more normal-button icon-button"
+                :href="VALUABLE_LINKS.SPONSOR"
+                @mousedown="handleTouchSponsor"
+              >
+                <i class="iconfont icon-qrcode" />
+                <span class="text">More</span>
+              </ulink>
+            </div>
+          </div>
+          <div class="item">
+            <i class="iconfont icon-music" />
+            <span class="music">
+              <router-link :to="getPageRoute(RouteName.Music)">
+                Jazz-HipHop, Electronic, Disco, Rock, Popular
+              </router-link>
+              <ulink class="spotify" :href="VALUABLE_LINKS.SPOTIFY">
+                <i class="iconfont icon-spotify" />
+              </ulink>
+              <ulink class="music-163" :href="VALUABLE_LINKS.MUSIC_163">
+                <i class="iconfont icon-163music-logo" />
+              </ulink>
+            </span>
+          </div>
+          <div class="item">
+            <i class="iconfont icon-comment-discussion" />
+            <ulink class="group-link" :href="VALUABLE_LINKS.QQ_GROUP">
+              <i18n zh="寂寞同性交友群" en="QQ group" />
+            </ulink>
+            <span class="separator">|</span>
+            <ulink class="group-link" :href="VALUABLE_LINKS.TELEGRAM_GROUP">
+              <i18n zh="电报群" en="Telegram group" />
+            </ulink>
+          </div>
+          <div class="item">
+            <i class="iconfont icon-friend" />
+            <span class="friends">
+              <a
+                v-for="(link, name) in FRIEND_LINKS"
+                :key="link"
+                :href="link"
+                class="link"
+                target="_blank"
+                rel="external nofollow noopener"
+              >
+                {{ name }}
+              </a>
+            </span>
+          </div>
         </div>
       </div>
       <div class="gravatar">
@@ -171,7 +193,15 @@
             <strong>Surmon</strong>
           </h3>
           <p class="skill">
-            <i18n zh="数字游民" en="Digital nomad" />
+            <i18n>
+              <template #en>Digital nomad</template>
+              <template #zh>
+                <p>数字游民</p>
+                <desktop-only>
+                  <p>（一个渣男）</p>
+                </desktop-only>
+              </template>
+            </i18n>
           </p>
         </div>
         <desktop-only>
@@ -215,18 +245,20 @@
     <div class="location-map">
       <iframe class="iframe" src="/partials/map.html" />
     </div>
-    <div class="about-project">
-      <ulink class="project-link" :href="VALUABLE_LINKS.GITHUB">
-        <p class="title">
-          <i class="iconfont icon-terminal" />
-          <span class="description">
-            <i18n zh="更多动态" en="Get more" />
-          </span>
-        </p>
-        <!-- TODO: 应该集成到 nodejs，否则不稳定 https://github.com/sallar/github-contributions-chart -->
-        <img src="https://ghchart.rshah.org/surmon-china">
-      </ulink>
-    </div>
+    <desktop-only>
+      <div class="about-project">
+        <ulink class="project-link" :href="VALUABLE_LINKS.GITHUB">
+          <p class="title">
+            <i class="iconfont icon-terminal" />
+            <span class="description">
+              <i18n zh="更多动态" en="Get more" />
+            </span>
+          </p>
+          <!-- TODO: 应该集成到 nodejs，否则不稳定 https://github.com/sallar/github-contributions-chart -->
+          <img src="https://ghchart.rshah.org/surmon-china">
+        </ulink>
+      </div>
+    </desktop-only>
   </div>
 </template>
 
@@ -342,185 +374,260 @@
       display: flex;
       justify-content: space-between;
 
-      > .description {
+      .profile {
         flex-grow: 1;
-        padding: 2rem 3rem;
-        background-color: $module-bg;
-        @include radius-box($lg-radius);
+        padding: 2.4rem 2.8rem;
+        padding-bottom: 2rem;
+        position: relative;
         @include common-bg-module();
+        @include radius-box($lg-radius);
 
-        > .item {
-          line-height: 2.5em;
-          min-height: 2.5em;
-          margin-bottom: 1.2rem;
-          &:last-child {
-            margin-bottom: 0;
+        .bio {
+          display: flex;
+          align-items: center;
+          padding-left: $sm-gap;
+          margin-bottom: 1.8rem;
+
+          .iconfont {
+            font-size: $font-size-h2;
+            color: $primary;
           }
 
-          .separator {
-            margin: 0 $sm-gap;
+          .text {
+            margin-left: 1.8rem;
+            padding: 0 1em;
+            font-weight: bold;
+            color: $text-reversal;
+            background-color: $primary-lighter;
+            line-height: 2em;
+            @include radius-box($sm-radius);
+            letter-spacing: .1em;
           }
+        }
 
-          > .iconfont {
-            width: 2em;
-            margin-right: 1em;
-            display: inline-block;
-            font-size: $font-size-h4;
-            text-align: center;
-            color: $text-dividers;
-
-            &.icon-social {
-              color: #ffa800;
+        .description {
+          > .item {
+            line-height: 2.5em;
+            min-height: 2.5em;
+            margin-bottom: 1.2rem;
+            &:last-child {
+              margin-bottom: 0;
             }
 
-            &.icon-tibet-1 {
-              color: $primary;
-            }
-
-            &.icon-like {
-              color: $red;
-            }
-
-            &.icon-friend {
-              color: $accent;
-            }
-          }
-
-          > .bio {
-            display: inline-block;
-            font-family: 'webfont-bolder', DINRegular;
-            margin: 0;
-
-            &::first-letter {
-              font-size: $font-size-h2;
-              margin-right: 2px;
-            }
-          }
-
-          > .like-text {
-            font-family: 'webfont-bolder', DINRegular;
-          }
-
-          > .my-map {
-            cursor: pointer;
-            border-bottom: 1px solid;
-            font-family: 'webfont-bolder', DINRegular;
-          }
-
-          > .music {
-            .spotify,
-            .music-163 {
-              margin-left: $xs-gap;
-            }
-
-            .spotify {
-              color: $spotify-primary;
-            }
-            .music-163 {
-              color: $music163-primary;
-            }
-          }
-
-          > .friends {
-            > a {
+            > .iconfont {
+              width: 2em;
               margin-right: 1em;
-              text-transform: capitalize;
+              display: inline-block;
+              font-size: $font-size-h4;
+              text-align: center;
+              color: $text-dividers;
+
+              &.icon-tibet-1 {
+                color: #a94444;
+              }
+              &.icon-heart {
+                color: $red;
+              }
+              &.icon-social {
+                color: $bilibili-blue-primary;
+              }
+              &.icon-dollar {
+                color: #ffa800;
+              }
+              &.icon-music {
+                color: $music163-primary;
+              }
+              &.icon-comment-discussion {
+                color: $telegram-primary;
+              }
+              &.icon-friend {
+                color: $accent;
+              }
             }
-          }
 
-          > .social-media-accounts {
-            $button-size: 2rem;
+            .normal-button {
+              $button-size: 2rem;
+              display: inline-flex;
+              line-height: $button-size;
+              padding: 0 $sm-gap;
+              margin-right: $sm-gap;
+              color: $white;
+              @include radius-box($sm-radius);
+              @include background-transition();
 
-            > .normal {
-              > .item {
-                display: inline-block;
-                height: $button-size;
-                line-height: $button-size;
-                padding: 0 $sm-gap;
-                margin-right: $sm-gap;
-                border-radius: $sm-radius;
-                color: $white;
-                @include background-transition();
+              .iconfont {
+                margin-right: $xs-gap;
+              }
+              .text {
+                font-size: $font-size-small;
+              }
 
+              &.icon-button {
+                padding-left: 0;
                 .iconfont {
-                  margin-right: $xs-gap;
+                  display: inline-block;
+                  width: $button-size;
+                  height: $button-size;
+                  line-height: $button-size;
+                  text-align: center;
                 }
+              }
+            }
 
-                .text {
-                  font-size: $font-size-small;
-                }
+            .separator {
+              margin: 0 $sm-gap;
+            }
 
-                &.github {
-                  background-color: $github-primary;
-                  &:hover {
-                    background-color: $github-primary-hover;
+            .group-link {
+              padding-bottom: 2px;
+              border-bottom: 1px solid;
+            }
+
+            > .like-text {
+              font-family: 'webfont-bolder', DINRegular;
+            }
+
+            > .live-map {
+              cursor: pointer;
+              border-bottom: 1px solid;
+              font-family: 'webfont-bolder', DINRegular;
+            }
+
+            > .music {
+              .spotify,
+              .music-163 {
+                margin-left: $xs-gap;
+              }
+              .spotify {
+                color: $spotify-primary;
+              }
+              .music-163 {
+                color: $music163-primary;
+              }
+            }
+
+            > .friends {
+              .link {
+                margin-right: 1.8rem;
+                text-transform: capitalize;
+                font-weight: bold;
+                padding-bottom: 2px;
+                border-bottom: 1px solid;
+              }
+            }
+
+            > .social-media-accounts {
+              .normal {
+                display: inline-flex;
+                align-items: center;
+                margin-right: $lg-gap;
+
+                .item {
+                  &.github {
+                    background-color: $github-primary;
+                    &:hover {
+                      background-color: $github-primary-hover;
+                    }
+                  }
+                  &.twitter {
+                    background-color: $twitter-primary;
+                    &:hover {
+                      background-color: $twitter-primary-hover;
+                    }
+                  }
+                  &.instagram {
+                    opacity: 0.8;
+                    margin: 0;
+                    background: $instagram-primary;
+                    background: $instagram-gradient;
+                    @include visibility-transition();
+                    &:hover {
+                      opacity: 1;
+                    }
                   }
                 }
+              }
 
-                &.twitter {
-                  background-color: $twitter-primary;
-                  &:hover {
-                    background-color: $twitter-primary-hover;
-                  }
-                }
-
-                &.instagram {
+              > .mini {
+                $button-size: 2rem;
+                > .item {
+                  display: inline-block;
+                  width: $button-size;
+                  height: $button-size;
+                  line-height: $button-size;
+                  margin-right: $sm-gap;
+                  text-align: center;
+                  border-radius: 100%;
+                  color: $white;
                   opacity: 0.8;
-                  background: $instagram-primary;
-                  background: $instagram-gradient;
                   @include visibility-transition();
+
                   &:hover {
                     opacity: 1;
+                  }
+
+                  .iconfont {
+                    font-size: $font-size-small;
+                  }
+
+                  &.telegram {
+                    background-color: $telegram-primary;
+                  }
+                  &.douban {
+                    background-color: $douban-primary;
+                  }
+                  &.zhihu {
+                    background-color: $zhihu-primary;
+                  }
+                  &.bilibili {
+                    background-color: $bilibili-pink-primary;
+                  }
+                  &.stackoverflow {
+                    background-color: $stackoverflow-primary;
+                  }
+                  &.algorithm {
+                    background-color: $leetcode-primary;
+                  }
+                  &.quora {
+                    background-color: $quora-primary;
+                  }
+                  &.linkedin {
+                    background-color: $linkedin-primary;
                   }
                 }
               }
             }
 
-            > .mini {
-              > .item {
-                display: inline-block;
-                width: $button-size;
-                height: $button-size;
-                line-height: $button-size;
-                margin-right: $sm-gap;
-                text-align: center;
-                border-radius: 100%;
-                color: $white;
-                opacity: 0.8;
-                @include visibility-transition();
+            > .sponsor {
+              display: inline-flex;
+              align-items: center;
 
+              .github,
+              .paypal,
+              .more {
+                opacity: .9;
+                @include visibility-transition();
                 &:hover {
                   opacity: 1;
                 }
+              }
 
+              .github {
+                background-color: $github-primary;
                 .iconfont {
-                  font-size: $font-size-small;
+                  background-color: $github-primary-hover;
+                  color: $github-sponsor-primary;
                 }
-
-                &.telegram {
-                  background-color: $telegram-primary;
+              }
+              .paypal {
+                background-color: $paypal-primary;
+                .iconfont {
+                  background-color: $paypal-primary-hover;
+                  color: $paypal-primary;
                 }
-                &.douban {
-                  background-color: $douban-primary;
-                }
-                &.zhihu {
-                  background-color: $zhihu-primary;
-                }
-                &.bilibili {
-                  background-color: $bilibili-pink-primary;
-                }
-                &.stackoverflow {
-                  background-color: $stackoverflow-primary;
-                }
-                &.algorithm {
-                  background-color: $leetcode-primary;
-                }
-                &.quora {
-                  background-color: $quora-primary;
-                }
-                &.linkedin {
-                  background-color: $linkedin-primary;
-                }
+              }
+              .more {
+                background-color: $wechat-primary;
               }
             }
           }
@@ -529,14 +636,14 @@
 
       .gravatar {
         position: relative;
-        width: 19rem;
-        margin-left: $lg-gap;
-        flex-grow: 1;
+        width: 22rem;
+        flex-grow: 0;
+        flex-shrink: 0;
         display: flex;
         align-items: center;
         flex-direction: column;
         justify-content: flex-start;
-        background-color: $module-bg;
+        margin-left: $lg-gap;
         @include radius-box($lg-radius);
         @include common-bg-module();
 
@@ -706,7 +813,6 @@
       width: 100%;
       padding: $sm-gap;
       margin-bottom: $lg-gap;
-      background-color: $module-bg;
       @include radius-box($lg-radius);
       @include common-bg-module();
 
@@ -773,7 +879,7 @@
       > .about-me {
         flex-direction: column-reverse;
 
-        > .gravatar {
+        .gravatar {
           width: 100%;
           margin-left: 0;
           margin-bottom: $gap;
@@ -822,34 +928,29 @@
           }
         }
 
-        > .description {
+        .profile {
           width: 100%;
           padding: 1em;
+          padding-top: 2rem;
           overflow: hidden;
 
-          > .item {
-            @include text-overflow();
+          .description {
+            > .item {
+              @include text-overflow();
 
-            > .iconfont {
-              margin-right: $sm-gap;
+              > .iconfont {
+                margin-right: $sm-gap;
+              }
             }
           }
         }
       }
 
       > .location-map {
-        > .iframe {
+        margin: 0;
+
+        .iframe {
           height: 11rem;
-        }
-      }
-
-      > .about-project {
-        > .project-link {
-          height: 10rem;
-
-          > .title {
-            font-size: 2em;
-          }
         }
       }
     }

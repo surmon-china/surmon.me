@@ -206,9 +206,11 @@
     font-size: $font-size-h6;
 
     p {
-      margin: 0;
       text-indent: 0;
-      line-height: 2em;;
+      line-height: 2em;
+      &:last-child {
+        margin: 0;
+      }
     }
 
     a {
