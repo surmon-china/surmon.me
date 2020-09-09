@@ -4,7 +4,7 @@
     :class="{ mobile: isMobile }"
   >
     <div class="banner">
-      <div class="content container">
+      <div class="banner-content container">
         <h2 class="title" v-i18n="LANGUAGE_KEYS.PAGE_FREELANCER_SLOGAN"></h2>
         <div class="submit">
           <button
@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="module">
-      <div class="module-content container">
+      <div class="container">
         <ul class="module-list">
           <li class="item">
             <p class="icon web">
@@ -190,7 +190,7 @@
       background-size: cover;
       background-position: center 60%;
 
-      .content {
+      .banner-content {
         height: 100%;
         overflow: hidden;
         text-align: center;
@@ -247,72 +247,70 @@
       }
     }
 
-    > .module {
+    .module {
       margin: ($gap * 2) auto;
 
-      > .module-content {
-        > .module-list {
-          margin: 0;
-          padding: 0;
-          list-style-type: none;
-          display: flex;
-          justify-content: space-between;
+      .module-list {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        display: flex;
+        justify-content: space-between;
 
-          > .item {
-            flex: 1;
-            width: auto;
-            height: auto;
-            padding-top: $lg-gap;
-            padding-bottom: $gap;
-            overflow: hidden;
-            text-align: center;
-            margin-right: $gap * 2;
-            @include radius-box($sm-radius);
-            @include common-bg-module($transition-time-fast);
+        > .item {
+          flex: 1;
+          width: auto;
+          height: auto;
+          padding-top: $lg-gap;
+          padding-bottom: $gap;
+          overflow: hidden;
+          text-align: center;
+          margin-right: $gap * 2;
+          @include radius-box($sm-radius);
+          @include common-bg-module($transition-time-fast);
 
-            &:last-child {
-              margin-right: 0;
-            }
+          &:last-child {
+            margin-right: 0;
+          }
 
-            &:hover {
-              background-color: $module-bg-opaque;
+          &:hover {
+            background-color: $module-bg-opaque;
 
-              .icon {
-                &.web {
-                  color: $html5-primary;
-                }
-                &.nodejs {
-                  color: $nodejs-primary;
-                }
-                &.app {
-                  color: $primary;
-                }
-                &.wechat {
-                  color: $wechat-primary;
-                }
-                &.consult {
-                  color: #CD7F32;
-                }
+            .icon {
+              &.web {
+                color: $html5-primary;
               }
-
-              .desc {
-                color: $text;
+              &.nodejs {
+                color: $nodejs-primary;
+              }
+              &.app {
+                color: $primary;
+              }
+              &.wechat {
+                color: $wechat-primary;
+              }
+              &.consult {
+                color: #CD7F32;
               }
             }
 
-            > .icon {
-              @include color-transition($transition-time-fast);
-
-              > .iconfont {
-                font-size: $font-size-h3 * 3;
-              }
+            .desc {
+              color: $text;
             }
+          }
 
-            > .desc {
-              @include color-transition($transition-time-fast);
-              color: $text-disabled;
-              margin-bottom: 1.2em;
+          > .icon {
+            @include color-transition($transition-time-fast);
+
+            > .iconfont {
+              font-size: $font-size-h3 * 3;
             }
+          }
+
+          > .desc {
+            @include color-transition($transition-time-fast);
+            color: $text-disabled;
+            margin-bottom: 1.2em;
           }
         }
       }
@@ -363,15 +361,15 @@
     }
 
 
-
     &.mobile {
+      .container {
+        width: 100%;
+      }
       .banner {
         height: 14rem;
         @include radius-box($sm-radius);
 
-        .content {
-          width: 100%;
-
+        .banner-content {
           .title {
             margin-top: 3rem;
             margin-bottom: 2rem;
@@ -379,47 +377,44 @@
           }
 
           .email-me {
-
+            width: 8rem;
+            line-height: 3rem;
           }
         }
       }
 
-      > .module {
+      .module {
         margin: 0 auto;
         margin-top: 1rem;
 
-        > .module-content {
-          width: 100%;
+        .module-list {
+          flex-direction: column;
 
-          > .module-list {
-            flex-direction: column;
+          > .item {
+            width: 100%;
+            height: auto;
+            margin-right: 0;
+            margin-bottom: 1rem;
 
-            > .item {
-              width: 100%;
-              height: auto;
-              margin-right: 0;
-              margin-bottom: 1rem;
-
-              > .icon {
-                margin-bottom: -0.5em;
-              }
+            > .icon {
+              margin-bottom: -0.5em;
             }
           }
         }
       }
 
-      > .step {
+      .step {
         padding: 0;
         background-color: transparent;
 
-        > .step-content {
+        .step-content {
           width: 100%;
 
-          > .step-list {
+          .step-list {
             padding: 0;
             flex-direction: column;
 
-            > .item {
+            .item {
               width: 100%;
               height: auto;
               margin-bottom: 1rem;
@@ -430,11 +425,12 @@
         }
       }
 
-      > .rule {
+      .rule {
         height: auto;
         line-height: 3rem;
+        @include radius-box($sm-radius);
 
-        > .rule-content {
+        .rule-content {
           width: 100%;
           padding: 1rem;
           text-align: left;

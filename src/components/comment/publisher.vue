@@ -1,5 +1,10 @@
 <template>
-  <form :id="ElementID.Publisher" class="publisher" name="comment">
+  <form
+    :id="ElementID.Publisher"
+    :class="{ mobile: isMobile }"
+    class="publisher"
+    name="comment"
+  >
     <div class="user">
       <!-- profile editor -->
       <template v-if="!cached || editing">
@@ -194,12 +199,12 @@
       }
 
       return {
-        t: i18n.t,
         ElementID,
         LANGUAGE_KEYS,
+        t: i18n.t,
+        isMobile,
         firstUpperCase,
         humanizeGravatarUrlByEmail,
-        isMobile,
         profileState,
         markdownToHTML,
         replyingComment,
@@ -400,6 +405,7 @@
 
     &.mobile {
       > .user {
+        margin: 0;
         padding: 0;
         height: auto;
         flex-direction: column;

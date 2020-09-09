@@ -115,31 +115,6 @@
     min-height: 68rem;
     height: $active-content-full-height;
 
-    &.mobile {
-      min-height: 53rem;
-      height: calc(100vh - #{$mobile-header-height + $lg-gap + $mobile-footer-height + $gap});;
-
-      > .app {
-        padding-top: $lg-gap;
-
-        > .screen {
-          width: 100%;
-          margin-top: 3rem;
-          margin-bottom: 1rem;
-          text-align: center;
-
-          > .screen-img {
-            opacity: .4;
-            width: 90%;
-          }
-
-          > .download {
-            @include visible();
-          }
-        }
-      }
-    }
-
     > .app {
       text-align: center;
 
@@ -239,6 +214,33 @@
                 rgba($accent, .7)
               );
             }
+          }
+        }
+      }
+    }
+
+
+
+    &.mobile {
+      min-height: 53rem;
+      height: calc(100vh - #{$mobile-header-height + $lg-gap + $mobile-footer-height + $gap});;
+
+      > .app {
+        padding-top: $lg-gap;
+
+        > .screen {
+          width: 100%;
+          margin-top: 3rem;
+          margin-bottom: 1rem;
+          text-align: center;
+
+          > .screen-img {
+            opacity: .4;
+            width: 90%;
+          }
+
+          > .download {
+            @include visible();
           }
         }
       }

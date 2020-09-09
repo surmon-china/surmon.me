@@ -2,6 +2,7 @@
   <li
     :key="comment.id"
     :id="getCommentElementId(comment.id)"
+    :class="{ mobile: isMobile }"
     class="comment-item"
   >
     <desktop-only>
@@ -153,8 +154,9 @@
       }
 
       return {
-        t: i18n.t,
         LANGUAGE_KEYS,
+        t: i18n.t,
+        isMobile,
         humanlizeDate,
         humanizeGravatarUrlByEmail,
         getCommentElementId,
@@ -326,7 +328,7 @@
       padding: 0;
       margin-top: $gap;
 
-      > .cm-body {
+      .cm-body {
         padding: $sm-gap $gap;
       }
     }
