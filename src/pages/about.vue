@@ -93,7 +93,7 @@
                 @mousedown="handleTouchSponsor"
               >
                 <i class="iconfont icon-heart" />
-                <span class="text">GitHub Sponsor</span>
+                <span class="text">GitHub Sponsors</span>
               </ulink>
               <ulink
                 class="paypal normal-button icon-button"

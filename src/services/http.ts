@@ -25,8 +25,7 @@ const http = axios.create({
 http.interceptors.response.use(
   response => response.data,
   error => {
-    // TODO: notifition
-    console.debug('Tosta:', error)
+    console.warn('Toast:', error)
     return Promise.reject(error)
   }
 )
