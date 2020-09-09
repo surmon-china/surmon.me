@@ -132,8 +132,8 @@
       z-index: $z-index-normal;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       touch-action: none;
       background-color: $module-bg-translucent;
       @include backdrop-blur(3px);
