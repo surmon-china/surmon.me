@@ -64,7 +64,10 @@
           return yearText + monthText + dayText
         }
 
-        return humanDateToYMD(isSameTodayTable ? today : tableView)
+        return humanDateToYMD(
+          isSameTodayTable ? today : tableView,
+          ' / '
+        )
       })
 
       const setTable = (humanDate: Omit<HumanDate, 'day' | 'week'>) => {
