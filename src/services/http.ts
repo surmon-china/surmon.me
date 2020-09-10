@@ -23,9 +23,15 @@ const http = axios.create({
 })
 
 http.interceptors.response.use(
-  response => response.data,
+  response => {
+    if (response.data.status === HTTPStatus.Success) {
+      return response.data
+    } else {
+      return Promise.reject(response.data)
+    }
+  },
   error => {
-    console.warn('Toast:', error)
+    console.debug('Toast:', error)
     return Promise.reject(error)
   }
 )

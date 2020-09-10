@@ -4,6 +4,7 @@ import { useGlobalState } from '/@/state'
 import { useStore } from '/@/store'
 import { useI18n } from '/@/services/i18n'
 import { useTheme, Theme } from '/@/services/theme'
+import { useLoading } from '/@/services/loading'
 import { useDefer } from '/@/services/defer'
 import { usePopup } from '/@/services/popup'
 import { useGtag } from '/@/services/gtag'
@@ -19,6 +20,7 @@ export const useEnhancer = () => {
   const defer = useDefer()
   const popup = usePopup()
   const gtag = useGtag()
+  const loading = useLoading()
 
   const isMobile = computed(() => globalState.userAgent.isMobile)
   const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
@@ -34,6 +36,7 @@ export const useEnhancer = () => {
     defer,
     popup,
     gtag,
+    loading,
     isMobile,
     isDarkTheme,
     isZhLang
