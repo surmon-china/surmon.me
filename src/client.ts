@@ -8,6 +8,7 @@ import swiper from '/@/services/swiper'
 import { createDefer } from '/@/services/defer'
 import { createMusic } from '/@/services/music'
 import { createPopup } from '/@/services/popup'
+import { createLoading } from '/@/services/loading'
 import { consoleSlogan } from '/@/services/slogan'
 import { enableCopyright } from '/@/services/copyright'
 import { enableBaiduSeoPush } from '/@/services/baidu-seo-push'
@@ -21,9 +22,11 @@ import { createVueApp } from './main'
 const { app, router, globalState, theme, i18n, store } = createVueApp({ target: VueEnv.Client })
 const music = createMusic({ albumId: MUSIC_ALBUM_ID, autoStart: false })
 const defer = createDefer()
+const loading = createLoading()
 
 app.use(swiper)
 app.use(music)
+app.use(loading, { exportToGlobal: true })
 app.use(defer, { exportToGlobal: true })
 app.use(createPopup(), { exportToGlobal: true })
 app.use(adsense, { ID: ADSENSE_CLIENT_ID, enabledAutoAD: true })
@@ -34,11 +37,21 @@ app.use(gtag, {
 })
 
 // init
+router.beforeEach((_, __, next) => {
+  loading.start()
+  next()
+})
+router.afterEach((_, __, failure) => {
+  failure
+    ? loading.fail(failure)
+    : loading.finish()
+})
 globalState.resetOnClient()
 i18n.set(globalState.userAgent.isZhUser ? Language.Zh : Language.En)
 store.clientInit()
 exportLozadToGlobal()
 exportAppToGlobal(app)
+
 
 // only PC
 if (!globalState.userAgent.isMobile) {

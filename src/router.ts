@@ -127,8 +127,8 @@ const routes: RouteRecordRaw[] = [
 
 export interface RouterCreateConfig {
   history: RouterHistory
-  beforeMiddleware?: NavigationGuard
-  afterMiddleware?: PostNavigationGuard
+  beforeMiddleware?: NavigationGuard | NavigationGuard[]
+  afterMiddleware?: PostNavigationGuard | PostNavigationGuard[]
 }
 export const createUniversalRouter = (config: RouterCreateConfig) => {
   const router = createRouter({
@@ -142,10 +142,14 @@ export const createUniversalRouter = (config: RouterCreateConfig) => {
   })
 
   if (config.beforeMiddleware) {
-    router.beforeEach(config.beforeMiddleware)
+    Array.isArray(config.beforeMiddleware)
+      ? config.beforeMiddleware.forEach(router.beforeEach)
+      : router.beforeEach(config.beforeMiddleware)
   }
   if (config.afterMiddleware) {
-    router.afterEach(config.afterMiddleware)
+    Array.isArray(config.afterMiddleware)
+      ? config.afterMiddleware.forEach(router.afterEach)
+      : router.afterEach(config.afterMiddleware)
   }
 
   return router
