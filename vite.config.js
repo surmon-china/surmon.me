@@ -1,13 +1,11 @@
 const path = require('path')
 
-// const a = "/Users/surmon/Projects/Blog/surmon.me/node_modules/vite/dist/resolver.js"
 module.exports = {
   // root: './src',
   // base: './public',
   hostname: 'surmon.me',
   port: 443,
   https: true,
-  // open: true,
   alias: {
     '/@/': path.resolve(__dirname, './src')
   },
@@ -16,27 +14,6 @@ module.exports = {
     include: ['swiper', 'querystring'],
     allowNodeBuiltins: [],
     exclude: ['esm', 'fs-extra', 'socket.io', 'request', 'cross-env', '@vue/compiler-sfc', '@vue/server-renderer']
-  },
-  proxy: {
-    '/api': {
-      target: 'https://api.surmon.me',
-      changeOrigin: true,
-      rewrite: path => path.replace(/^\/api/, '')
-    },
-    '/proxy': {
-      target: 'https://surmon.me/proxy',
-      changeOrigin: true,
-      rewrite: path => path.replace(/^\/proxy/, '')
-      // forward: true,
-      // rewrite(path) {
-      //   const proxyPath = `/proxy/bilibili/`
-      //   const index = path.lastIndexOf(proxyPath)
-      //   if (index > -1) {
-      //     return 'http://' + path.slice(proxyPath.length + index)
-      //   }
-      //   return path
-      // }
-    }
   },
   plugins: [
     {
