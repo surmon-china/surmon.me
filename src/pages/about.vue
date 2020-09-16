@@ -6,7 +6,7 @@
           <i class="iconfont icon-swordsman" />
           <div class="text">
             <i18n>
-              <template #zh>一个渣男；有一架飞机，和两条狗</template>
+              <template #zh>一个渣男，一架飞机，两条狗</template>
               <template #en>I'm Surmon, a digital nomad.</template>
             </i18n>
           </div>
@@ -67,6 +67,9 @@
                   </ulink>
                   <ulink class="item zhihu" :href="VALUABLE_LINKS.ZHIHU">
                     <i class="iconfont icon-zhihu" />
+                  </ulink>
+                  <ulink class="item weibo" :href="VALUABLE_LINKS.WEIBO">
+                    <i class="iconfont icon-weibo" />
                   </ulink>
                   <ulink class="item bilibili" :href="VALUABLE_LINKS.BILIBILI">
                     <i class="iconfont icon-bilibili" />
@@ -394,14 +397,29 @@
           }
 
           .text {
+            position: relative;
             margin-left: 1.8rem;
             padding: 0 1em;
-            font-weight: bold;
-            color: $text-reversal;
+            padding-bottom: .2em;
+            font-family: 'webfont-bolder', DINRegular;
             background-color: $primary-lighter;
+            color: $text-reversal;
             line-height: 2em;
-            @include radius-box($sm-radius);
             letter-spacing: .1em;
+            @include radius-box($sm-radius);
+
+            &::before {
+              content: '';
+              position: absolute;
+              display: block;
+              height: 1rem;
+              bottom: -0.5rem;
+              left: 0;
+              right: 0;
+              background-image: radial-gradient(circle, transparent 70%, $white 70%);
+              background-size: 0.7em 1em;
+              background-position: 0 -0.5em;
+            }
           }
         }
 
@@ -578,6 +596,9 @@
                   }
                   &.zhihu {
                     background-color: $zhihu-primary;
+                  }
+                  &.weibo {
+                    background-color: $weibo-primary;
                   }
                   &.bilibili {
                     background-color: $bilibili-pink-primary;

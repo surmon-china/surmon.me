@@ -15,6 +15,7 @@
             type="text"
             name="name"
             autocomplete="on"
+            :disabled="disabled"
             :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_NAME) + ' *'"
           >
         </div>
@@ -25,6 +26,7 @@
             type="email"
             name="email"
             autocomplete="on"
+            :disabled="disabled"
             :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_EMAIL) + ' *'"
           >
         </div>
@@ -34,11 +36,16 @@
             type="url"
             name="url"
             autocomplete="on"
+            :disabled="disabled"
             :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_SITE)"
           >
         </div>
         <div v-if="editing" class="save">
-          <button type="submit" @click="saveUserProfile">
+          <button
+            type="submit"
+            :disabled="disabled"
+            @click="saveUserProfile"
+          >
             <i class="iconfont icon-success" />
           </button>
         </div>
@@ -121,6 +128,10 @@
   export default defineComponent({
     name: 'CommentPublisher',
     props: {
+      disabled: {
+        type: Boolean,
+        required: true
+      },
       replyPid: {
         type: Number,
         required: true
