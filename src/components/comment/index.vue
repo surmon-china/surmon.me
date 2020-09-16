@@ -24,6 +24,7 @@
       @page="getPageComments"
     />
     <comment-publisher
+      :disabled="isPostingComment || isFetching"
       :cached="userState.cached"
       :editing="userState.editing"
       :reply-pid="state.replyPid"
