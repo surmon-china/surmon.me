@@ -19,14 +19,14 @@
             <span
               class="item-oirigin"
               :class="{
-                self: _isOriginal,
-                other: _isReprint,
-                hybrid: _isHybrid
+                self: isOriginal,
+                other: isReprint,
+                hybrid: isHybrid
               }"
             >
-              <i18n :lkey="LANGUAGE_KEYS.ORIGIN_ORIGINAL" v-if="_isOriginal" />
-              <i18n :lkey="LANGUAGE_KEYS.ORIGIN_REPRINT" v-else-if="_isReprint" />
-              <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="_isHybrid" />
+              <i18n :lkey="LANGUAGE_KEYS.ORIGIN_ORIGINAL" v-if="isOriginal" />
+              <i18n :lkey="LANGUAGE_KEYS.ORIGIN_REPRINT" v-else-if="isReprint" />
+              <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="isHybrid" />
             </span>
             <img
               class="item-thumb-img"
@@ -103,7 +103,7 @@
   import { USER_LIKE_HISTORY } from '/@/constants/storage'
   import { getArticleDetailRoute, getTagArchiveRoute, getCategoryArchiveRoute } from '/@/transforms/route'
   import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
-  import { isOriginal, isHybrid, isReprint } from '/@/transforms/state'
+  import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { timeAgo } from '/@/transforms/moment'
 
   export enum Events {
@@ -128,9 +128,9 @@
       const { origin } = props.article
       const isLiked = ref(false)
       const isMobile = computed(() => globalState.userAgent.isMobile)
-      const _isHybrid = isHybrid(origin)
-      const _isReprint = isReprint(origin)
-      const _isOriginal = !origin || isOriginal(origin)
+      const isHybrid = isHybridType(origin)
+      const isReprint = isReprintType(origin)
+      const isOriginal = !origin || isOriginalType(origin)
 
       const handleClick = (event: MouseEvent) => {
         context.emit(Events.Click, event)
@@ -156,9 +156,9 @@
         LANGUAGE_KEYS,
         isLiked,
         isMobile,
-        _isHybrid,
-        _isReprint,
-        _isOriginal,
+        isHybrid,
+        isReprint,
+        isOriginal,
         handleClick,
         getThumbUrl,
         getArticleDetailRoute,

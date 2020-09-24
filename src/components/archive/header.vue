@@ -48,7 +48,7 @@
     setup(props) {
       const { isMobile } = useEnhancer()
       const backgroundImageUrl = computed(() => {
-        return props.backgroundImage || getFileCDNUrl('/images/page-service/banner.jpg')
+        return props.backgroundImage || getFileCDNUrl('/images/page-feeelancer/banner.jpg')
       })
 
       return {

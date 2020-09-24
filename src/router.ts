@@ -1,6 +1,7 @@
-import { RouteRecordRaw, NavigationGuard, PostNavigationGuard, RouterHistory, createRouter } from 'vue-router'
-import { LayoutColumn } from '/@/state'
+import { RouteRecordRaw, NavigationGuard, NavigationGuardNext, RouterHistory, createRouter } from 'vue-router'
 import { scrollToTop } from '/@/utils/effects'
+import { LayoutColumn } from '/@/state'
+import IndexPage from './pages/index.vue'
 import ErrorPage from './pages/error.vue'
 
 export enum CategorySlug {
@@ -26,11 +27,11 @@ export enum RouteName {
   Error = 'error'
 }
 
-const routes: RouteRecordRaw[] = [
+export const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: RouteName.Home,
-    component: () => import('./pages/index.vue')
+    component: IndexPage
   },
   {
     path: '/archive',
@@ -128,7 +129,7 @@ const routes: RouteRecordRaw[] = [
 export interface RouterCreateConfig {
   history: RouterHistory
   beforeMiddleware?: NavigationGuard | NavigationGuard[]
-  afterMiddleware?: PostNavigationGuard | PostNavigationGuard[]
+  afterMiddleware?: NavigationGuardNext | NavigationGuardNext[]
 }
 export const createUniversalRouter = (config: RouterCreateConfig) => {
   const router = createRouter({

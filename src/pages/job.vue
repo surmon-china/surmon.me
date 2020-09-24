@@ -67,7 +67,7 @@
     //     title: `${this.isEnLang ? '' : this.$i18n.nav.vlog + ' | '}Lens`
     //   }
     // },
-    async setup() {
+    setup() {
       const { isMobile, isDarkTheme } = useEnhancer()
       const jobs = [
         {
