@@ -60,7 +60,7 @@
       <uimage defer cdn src="/images/sponsor.png" alt="sponsor" />
       <uimage defer cdn src="/images/page-app/hot.png" alt="app-download" />
       <uimage defer cdn src="/images/page-app/logo.png" alt="app-logo" />
-      <uimage defer cdn src="/images/service.jpg" alt="service" />
+      <uimage defer cdn src="/images/page-feeelancer/banner.jpg" alt="service" />
       <uimage defer cdn src="/images/page-about/background-be-1.jpg" alt="background" />
       <uimage defer cdn src="/images/page-about/background-be-2.jpg" alt="background" />
       <uimage defer cdn src="/images/page-about/background-star-1.png" alt="background" />

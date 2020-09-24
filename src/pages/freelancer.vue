@@ -186,7 +186,7 @@
 
     .banner {
       height: $full-column-page-banner-height;
-      background: $module-bg-hover cdn-url('/images/page-service/banner.jpg');
+      background: $module-bg-hover cdn-url('/images/page-feeelancer/banner.jpg');
       background-size: cover;
       background-position: center 60%;
 

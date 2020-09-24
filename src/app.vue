@@ -6,14 +6,18 @@
       <popup-root />
     </client-only>
     <component :is="LayoutComponent">
-      <suspense>
-        <template #default>
-          <router-view />
-        </template>
-        <template #fallback>
-          <spin />
-        </template>
-      </suspense>
+      <router-view v-slot="{ Component }">
+        <transition mode="out-in" name="module">
+          <suspense>
+            <template #default>
+              <component :is="Component" />
+            </template>
+            <template #fallback>
+              <spin />
+            </template>
+          </suspense>
+        </transition>
+      </router-view>
     </component>
   </div>
 </template>
@@ -23,7 +27,7 @@
   import { isProd, isClient } from '/@/vuniversal/env'
   import { useEnhancer } from '/@/enhancer'
   import EmojiRain from '/@/components/widget/emoji-rain.vue'
-  import PcMain from '/@/components/layout/pc/index.vue'
+  import PcMain from '/@/components/layout/pc/main.vue'
   import MobileMain from '/@/components/layout/mobile/main.vue'
   import ProgressBar from '/@/components/common/progress.vue'
 

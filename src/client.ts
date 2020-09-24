@@ -52,7 +52,6 @@ store.clientInit()
 exportLozadToGlobal()
 exportAppToGlobal(app)
 
-
 // only PC
 if (!globalState.userAgent.isMobile) {
   theme.resetOnClient()

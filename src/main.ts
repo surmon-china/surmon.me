@@ -5,10 +5,11 @@
  */
 
 import { Request } from 'express'
-import { createSSRApp } from 'vue'
+import { createSSRApp, createApp } from 'vue'
 import { createWebHistory, createMemoryHistory } from 'vue-router'
 import { VueEnv } from '/@/vuniversal/env'
-import { createUniversalRouter, RouteName } from './router'
+import { RouteName } from './router'
+import { createUniversalRouter } from './router'
 import { createUniversalStore } from './store'
 import { createI18n } from '/@/services/i18n'
 import { createClientOnly } from '/@/services/client-only'
@@ -42,7 +43,7 @@ export const createVueApp = (context: ICreaterContext) => {
     language
   })
 
-  const app = createSSRApp(App)
+  const app = createApp(App)
   const store = createUniversalStore({ globalState })
   const router = createUniversalRouter({
     beforeMiddleware: getLayoutMiddleware(globalState),

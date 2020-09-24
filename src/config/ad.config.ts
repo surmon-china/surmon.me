@@ -4,12 +4,10 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { getFileCDNUrl } from '/@/transforms/url'
+import API_CONFIG from './api.config'
 import { VALUABLE_LINKS } from './app.config'
 
-const getAdImageUrl = (url: string) => {
-  return getFileCDNUrl('/images/mammon/') + url
-}
+const getAdImageUrl = (url: string) => `${API_CONFIG.CDN}/images/mammon/${url}`
 
 const AD_LINKS = {
   // 淘宝（N）

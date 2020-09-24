@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { isDev } from '/@/vuniversal/env'
+// import { isDev } from '/@/vuniversal/env'
 
 const DEV_API = {
   FE: 'http://localhost:3000',

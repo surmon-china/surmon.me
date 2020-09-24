@@ -9,14 +9,14 @@
         v-if="!fetching"
         class="oirigin"
         :class="{
-          self: _isOriginal,
-          other: _isReprint,
-          hybrid: _isHybrid
+          self: isOriginal,
+          other: isReprint,
+          hybrid: isHybrid
         }"
       >
-        <i18n :lkey="LANGUAGE_KEYS.ORIGIN_ORIGINAL" v-if="_isOriginal" />
-        <i18n :lkey="LANGUAGE_KEYS.ORIGIN_REPRINT" v-else-if="_isReprint" />
-        <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="_isHybrid" />
+        <i18n :lkey="LANGUAGE_KEYS.ORIGIN_ORIGINAL" v-if="isOriginal" />
+        <i18n :lkey="LANGUAGE_KEYS.ORIGIN_REPRINT" v-else-if="isReprint" />
+        <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="isHybrid" />
       </div>
     </transition>
     <placeholder
@@ -85,7 +85,7 @@
   import { isClient } from '/@/vuniversal/env'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { isOriginal, isHybrid, isReprint } from '/@/transforms/state'
+  import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
 
   export default defineComponent({
@@ -101,9 +101,9 @@
       const { store, globalState, isMobile } = useEnhancer()
       const element = ref<HTMLElement>()
       const tagMap = computed(() => store.getters[getNamespace(Modules.Tag, TagModuleGetters.FullNameTags)])
-      const _isHybrid = isHybrid(props.article?.origin)
-      const _isReprint = isReprint(props.article?.origin)
-      const _isOriginal = !props.article?.origin || isOriginal(props.article.origin)
+      const isHybrid = isHybridType(props.article?.origin)
+      const isReprint = isReprintType(props.article?.origin)
+      const isOriginal = !props.article?.origin || isOriginalType(props.article.origin)
 
       const longFormRenderState = reactive({
         rendering: false,
@@ -195,9 +195,9 @@
         LANGUAGE_KEYS,
         element,
         content,
-        _isHybrid,
-        _isReprint,
-        _isOriginal,
+        isHybrid,
+        isReprint,
+        isOriginal,
         isMobile,
         isLongFormContent,
         isRenderMoreEnabled,
