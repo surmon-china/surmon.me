@@ -9,7 +9,7 @@
       <swiper-slide
         class="swiper-slide"
         :key="_index"
-        v-for="(ad, _index) in ads"
+        v-for="(ad, _index) in adConfig.PC_ASIDE_SWIPER"
       >
         <ulink class="content" :href="ad.url">
           <uimage :src="ad.src" alt="aliyun-ad" />
@@ -25,7 +25,7 @@
 <script lang="ts">
   import { defineComponent, computed, onMounted } from 'vue'
   import { useSwiperRef, NameId } from '/@/todo/swiper'
-  import { PC_ASIDE_SWIPER as ads } from '/@/config/ad.config'
+  import { useEnhancer } from '/@/enhancer'
 
   enum Event {
     Ready = 'ready',
@@ -70,6 +70,7 @@
         lazy: true
       }
 
+      const { adConfig } = useEnhancer()
       const [swiperContext, updateSwiperContext] = useSwiperRef()
       const swiperInstance = computed(() => swiperContext.value?.$swiper.value)
       const handleSwiperSlideChange = () => {
@@ -81,7 +82,7 @@
       onMounted(() => context.emit(Event.Ready, swiperInstance.value))
 
       return {
-        ads,
+        adConfig,
         swiperOption,
         updateSwiperContext,
         handleSwiperSlideChange

@@ -88,7 +88,7 @@
   @import 'src/assets/styles/init.scss';
 
   .pc-main {
-    padding-top: $mobile-header-height + $lg-gap;
+    padding-top: $header-height + $lg-gap;
 
     @media screen and (max-width: 1200px) {
       #theme,

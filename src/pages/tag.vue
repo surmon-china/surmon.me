@@ -40,7 +40,7 @@
     //   const title = slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
     //   return { title: `${title} | Tag` }
     // },
-    async setup() {
+    setup() {
       const { store, route, router } = useEnhancer()
       const tagSlug = computed(() => route.params.tag_slug as string)
 
@@ -73,10 +73,12 @@
 
       watch(
         () => route.params,
-        params => fetchAllData(params.tag_slug as string)
+        params => fetchAllData(params.tag_slug as string),
+        { flush: 'post' }
       )
 
-      await fetchAllData(tagSlug.value)
+      // TODO: SSR
+      fetchAllData(tagSlug.value)
 
       const article = computed(() => store.state.article.list)
       const currentTag = computed(() => {

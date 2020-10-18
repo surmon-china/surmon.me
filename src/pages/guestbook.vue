@@ -37,14 +37,15 @@
     components: {
       Comment
     },
-    async setup() {
+    setup() {
       const { store, isMobile, isDarkTheme } = useEnhancer()
       const siteLikes = computed(() => {
         const appOption = store.state.option.appOption.data
         return appOption ? appOption.meta.likes : 0
       })
 
-      await Promise.all([
+      // TODO: SSR
+      Promise.all([
         store.dispatch(
           getNamespace(Modules.Option, OptionModuleActions.FetchAppOption),
           true

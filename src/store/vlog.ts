@@ -21,7 +21,6 @@ export enum VlogModuleActions {
 const state = () => ({
   fetching: false,
   data: null as any as {
-    pages: number
     count: number
     vlist: Array<any>
   }

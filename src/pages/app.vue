@@ -113,7 +113,7 @@
     flex-direction: column;
     align-items: center;
     min-height: 68rem;
-    height: $active-content-full-height;
+    height: $full-page-active-content-height;
 
     > .app {
       text-align: center;

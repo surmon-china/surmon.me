@@ -7,15 +7,8 @@
     </client-only>
     <component :is="LayoutComponent">
       <router-view v-slot="{ Component }">
-        <transition mode="out-in" name="module">
-          <suspense>
-            <template #default>
-              <component :is="Component" />
-            </template>
-            <template #fallback>
-              <spin />
-            </template>
-          </suspense>
+        <transition mode="out-in" name="page">
+          <component :is="Component" />
         </transition>
       </router-view>
     </component>

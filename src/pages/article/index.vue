@@ -104,10 +104,11 @@
         ]
       })
 
-      // TODO: validate
-      // if (isNaN(articleId.value)) {
-      //   throw new Error('xxx')
-      // }
+      if (!Number.isInteger(articleId.value)) {
+        console.log('123')
+        // return Promise.reject({ error: '垃圾 ID' })
+        throw new Error('asdasd垃圾 ID')
+      }
 
       const fetchArticleDetail = (article_id: string | number) => {
         return Promise.all([
@@ -126,10 +127,12 @@
 
       watch(
         () => route.params as Record<string, string>,
-        ({ article_id }) => fetchArticleDetail(article_id)
+        ({ article_id }) => fetchArticleDetail(article_id),
+        { flush: 'post' }
       )
 
-      await fetchArticleDetail(articleId.value)
+      // TODO: SSR
+      fetchArticleDetail(articleId.value)
 
       return {
         isMobile,

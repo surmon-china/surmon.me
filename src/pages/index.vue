@@ -1,7 +1,13 @@
 <template>
   <div class="index-page">
-    <carrousel :articles="article.data.data" />
-    <announcement :announcements="announcement.data" />
+    <carrousel
+      :articles="article.data.data"
+      :fetching="article.fetching"
+    />
+    <announcement
+      :announcements="announcement.data"
+      :fetching="announcement.fetching || article.fetching"
+    />
     <article-list
       :mammon="false"
       :fetching="article.fetching"
@@ -29,7 +35,7 @@
       Announcement,
       ArticleList
     },
-    async setup() {
+    setup() {
       const store = useStore()
       const article = computed(() => store.state.article.list)
       const announcement = computed(() => store.state.announcement)
@@ -51,7 +57,8 @@
         }
       }
 
-      await Promise.all([
+      // TODO: SSR
+      Promise.all([
         fetchArticles(),
         fetchAnnouncements()
       ])

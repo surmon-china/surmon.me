@@ -6,56 +6,76 @@
       dark: isDarkTheme
     }"
   >
-    <desktop-only>
-      <div
-        class="background"
-        :data-content="parseContent(announcements[activeIndex].content)"
-      />
-    </desktop-only>
-    <div class="title">
-      <span
-        class="icon-box"
-        :style="{ transform: `rotate(-${activeIndex * 90}deg)` }"
-      >
-        <i class="iconfont icon-windmill" />
-      </span>
-    </div>
-    <placeholder :data="announcements.length">
+    <placeholder
+      :data="announcements.length"
+      :loading="fetching"
+    >
+      <template #placeholder>
+        <empty class="announcement-empty" key="empty">
+          <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
+        </empty>
+      </template>
+      <template #loading>
+        <div class="announcement-skeleton" key="skeleton">
+          <div class="left">
+            <skeleton-line />
+          </div>
+          <div class="right">
+            <skeleton-line />
+          </div>
+        </div>
+      </template>
       <template #default>
-        <div class="swiper-box">
-          <div
-            class="swiper"
-            v-swiper="swiperOption"
-            @ready="updateSwiperContext"
-            @transition-start="handleSwiperTransitionStart"
-          >
-            <div class="swiper-wrapper">
-              <div
-                v-for="(ann, index) in announcements"
-                :key="index"
-                class="swiper-slide"
-              >
-                <div class="content" v-html="parseContent(ann.content)" />
-                <desktop-only>
-                  <div class="date">{{ humanlizeDate(ann.create_at) }}</div>
-                </desktop-only>
+        <div class="warpper" key="warpper">
+          <desktop-only>
+            <div
+              class="background"
+              :data-content="parseContent(announcements[activeIndex]?.content)"
+            />
+          </desktop-only>
+          <div class="title">
+            <span
+              class="icon-box"
+              :style="{ transform: `rotate(-${activeIndex * 90}deg)` }"
+            >
+              <i class="iconfont icon-windmill" />
+            </span>
+          </div>
+          <div class="swiper-box">
+            <div
+              class="swiper"
+              v-swiper="swiperOption"
+              @ready="updateSwiperContext"
+              @transition-start="handleSwiperTransitionStart"
+            >
+              <div class="swiper-wrapper">
+                <div
+                  v-for="(ann, index) in announcements"
+                  :key="index"
+                  class="swiper-slide"
+                >
+                  <div class="content" v-html="parseContent(ann.content)" />
+                  <desktop-only>
+                    <div class="date">{{ humanlizeDate(ann.create_at) }}</div>
+                  </desktop-only>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="navigation">
-            <div
-              class="button prev"
-              :class="{ disabled: activeIndex === 0 }"
-              @click="prevSlide"
-            >
-              <i class="iconfont icon-announcement-prev" />
-            </div>
-            <div
-              class="button next"
-              :class="{ disabled: activeIndex === announcements.length - 1 }"
-              @click="nextSlide"
-            >
-              <i class="iconfont icon-announcement-next" />
+            <div class="navigation">
+              <div
+                class="button prev"
+                :class="{ disabled: activeIndex === 0 }"
+                @click="prevSlide"
+              >
+                <i class="iconfont icon-announcement-prev" />
+              </div>
+              <div
+                class="button next"
+                :class="{ disabled: activeIndex === announcements.length - 1 }"
+                @click="nextSlide"
+              >
+                <i class="iconfont icon-announcement-next" />
+              </div>
             </div>
           </div>
         </div>
@@ -79,6 +99,10 @@
     props: {
       announcements: {
         type: Array,
+        required: true
+      },
+      fetching: {
+        type: Boolean,
         required: true
       }
     },
@@ -153,6 +177,25 @@
     color: $text-secondary;
     @include common-bg-module();
     @include radius-box($xs-radius);
+
+    .announcement-empty {
+      height: 100%;
+    }
+
+    .announcement-skeleton {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      padding: $sm-gap;
+
+      .left {
+        width: 68%;
+        margin-right: $gap;
+      }
+      .right {
+        flex: 1;
+      }
+    }
 
     &.mobile {
       margin-bottom: $gap;

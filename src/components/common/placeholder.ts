@@ -36,6 +36,10 @@ export default defineComponent({
       type: Boolean,
       default: true
     },
+    transitionName: {
+      type: String,
+      default: 'module'
+    },
     placeholder: String,
     pI18nKey: String as PropType<LANGUAGE_KEYS>,
     loading: Boolean,
@@ -45,9 +49,9 @@ export default defineComponent({
   ],
   setup(props, context) {
     return () => {
-      const { data, placeholder, pI18nKey, loading, transition } = props
+      const { data, placeholder, pI18nKey, loading, transition, transitionName } = props
       const isEmptyData = data !== undefined && (
-        (Array.isArray(data) && !data.length) ||
+        (Array.isArray(data) && !(data as any).length) ||
         !data
       )
 
@@ -80,7 +84,7 @@ export default defineComponent({
         return h(
           Transition,
           {
-            name: 'module',
+            name: transitionName,
             mode: 'out-in',
             onAfterEnter(...args) {
               context.emit(Events.AfterEnter, ...args)

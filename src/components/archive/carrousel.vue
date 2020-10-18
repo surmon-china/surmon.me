@@ -6,11 +6,27 @@
       dark: isDarkTheme
     }"
   >
-    <placeholder :data="articleList.length">
+    <placeholder
+      :data="articleList.length"
+      :loading="fetching"
+    >
       <template #placeholder>
-        <empty class="article-empty">
+        <empty class="article-empty" key="empty">
           <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
         </empty>
+      </template>
+      <template #loading>
+        <div class="article-skeleton" key="skeleton">
+          <div class="title">
+            <skeleton-line />
+          </div>
+          <div class="content">
+            <div class="first">
+              <skeleton-line />
+            </div>
+            <skeleton-paragraph :lines="5" />
+          </div>
+        </div>
       </template>
       <template #default>
         <div
@@ -73,13 +89,11 @@
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
   import { useSwiperRef, NameId } from '/@/todo/swiper'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { useEnhancer } from '/@/enhancer'
   import { timeAgo } from '/@/transforms/moment'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import { mapState } from 'vuex'
   import { getBannerArticleThumbnailUrl } from '/@/transforms/thumbnail'
-  import { PC_CARROUSEL as ad } from '/@/config/ad.config'
+  import { LANGUAGE_KEYS } from '/@/language/key'
 
   export default defineComponent({
     name: 'ArchiveCarrousel',
@@ -87,14 +101,18 @@
       articles: {
         type: Array,
         required: true
+      },
+      fetching: {
+        type: Boolean,
+        required: true
       }
     },
     setup(props) {
-      const { globalState, isMobile, isDarkTheme } = useEnhancer()
+      const { globalState, adConfig, isMobile, isDarkTheme } = useEnhancer()
       const articleList = computed(() => {
         const articles = [...props.articles].slice(0, 9)
-        if (ad) {
-          const { index, ...otherConfig } = ad as any
+        if (adConfig.value.PC_CARROUSEL) {
+          const { index, ...otherConfig } = adConfig.value.PC_CARROUSEL
           articles.length && articles.splice(index, 0, {
             ad: true,
             ...otherConfig
@@ -157,6 +175,38 @@
     overflow: hidden;
     @include common-bg-module();
     @include radius-box($lg-radius);
+
+    .article-empty {
+      font-size: $font-size-h1;
+      font-weight: bold;
+    }
+
+    .article-skeleton {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 2rem;
+
+      .content {
+        width: 50%;
+        margin-top: 2.6rem;
+        margin-left: 1rem;
+
+        .first {
+          width: 8rem;
+          height: $gap * 2;
+          margin-bottom: $gap;
+        }
+      }
+
+      .title {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        height: 2.6rem;
+        width: 18rem;
+      }
+    }
 
     &.dark {
       .swiper-slide {

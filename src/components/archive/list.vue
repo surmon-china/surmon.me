@@ -124,7 +124,7 @@
       pagination: Object,
       fetching: {
         type: Boolean,
-        default: true
+        required: true
       },
       mammon: {
         type: Boolean,

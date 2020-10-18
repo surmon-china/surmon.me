@@ -1,11 +1,30 @@
 <template>
   <div class="archive-page" :class="{ mobile: isMobile }">
-    <placeholder :data="hasArticle && tags.length">
+    <placeholder
+      :data="hasArticle && tags.length"
+      :loading="isFetching"
+    >
       <template #placeholder>
-        <p v-i18n="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"></p>
+        <empty class="archive-empty" key="empty">
+          <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
+        </empty>
+      </template>
+      <template #loading>
+        <ul class="archive-skeleton" key="skeleton">
+          <li v-for="item in 5" :key="item" class="item">
+            <div class="content">
+              <div class="title">
+                <skeleton-line />
+              </div>
+              <div class="description">
+                <skeleton-paragraph :lines="6" />
+              </div>
+            </div>
+          </li>
+        </ul>
       </template>
       <template #default>
-        <div class="content">
+        <div class="content-warpper" key="content">
           <ul class="year-list">
             <li
               v-for="yes in articleTree"
@@ -105,10 +124,14 @@
     //     title: `${this.isEnLang ? '' : this.$i18n.nav.map + ' | '}Archive`
     //   }
     // },
-    async setup() {
+    setup() {
       const { store, isMobile } = useEnhancer()
       const tags = computed(() => store.state.tag.data)
       const hasArticle = computed(() => store.state.archive.articles.data.length)
+      const isFetching = computed(() => (
+        store.state.archive.articles.fetching || store.state.tag.fetching
+      ))
+
       const articleTree = computed(() => {
         const rootTree = [] as Array<{
           year: number
@@ -142,7 +165,8 @@
         return rootTree
       })
 
-      await Promise.all([
+      // TODO: SSR
+      Promise.all([
         store.dispatch(getNamespace(
           Modules.Tag,
           TagModuleActions.FetchAll
@@ -167,7 +191,8 @@
         isMobile,
         tags,
         articleTree,
-        hasArticle
+        hasArticle,
+        isFetching
       }
     }
   })
@@ -177,12 +202,40 @@
   @import 'src/assets/styles/init.scss';
 
   .archive-page {
-    padding: $lg-gap 3rem;
+    min-height: $normal-page-active-content-height;
     overflow: hidden;
     @include common-bg-module();
     @include radius-box($lg-radius);
 
-    .content {
+    .archive-empty {
+      height: $normal-page-active-content-height;
+      font-weight: bold;
+      font-size: $font-size-h1;
+    }
+
+    .archive-skeleton {
+      list-style: none;
+      padding: 3rem;
+
+      .item {
+        width: 100%;
+        margin-bottom: 2rem;
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .content {
+          .title {
+            width: 8rem;
+            height: 2rem;
+            margin-bottom: $gap;
+          }
+        }
+      }
+    }
+
+    .content-warpper {
+      padding: $lg-gap 3rem;
       text-transform: capitalize;
       font-size: 1em;
 
@@ -216,7 +269,7 @@
 
         .tag {
           width: 25%;
-          margin-bottom: $lg-gap;
+          margin-bottom: 2rem;
 
           .content {
             margin-bottom: $gap;

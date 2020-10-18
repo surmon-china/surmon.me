@@ -39,7 +39,7 @@
     //     title: `${this.defaultParams.keyword} | Search`
     //   }
     // },
-    async setup() {
+    setup() {
       const { store, route, router } = useEnhancer()
       const article = computed(() => store.state.article.list)
       const currentKeyword = computed(() => route.params.keyword)
@@ -64,10 +64,12 @@
 
       watch(
         () => route.params,
-        ({ keyword }) => fetchArticles({ keyword })
+        ({ keyword }) => fetchArticles({ keyword }),
+        { flush: 'post' }
       )
 
-      await fetchArticles({ keyword: currentKeyword.value })
+      // TODO: SSR
+      fetchArticles({ keyword: currentKeyword.value })
 
       return {
         article,

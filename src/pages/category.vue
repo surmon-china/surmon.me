@@ -42,7 +42,7 @@
     //     title: `${zhTitle}${title} | Category`
     //   }
     // },
-    async setup() {
+    setup() {
       const { store, route, router } = useEnhancer()
       const categorySlug = computed(() => route.params.category_slug as string)
 
@@ -72,10 +72,12 @@
 
       watch(
         () => route.params,
-        params => fetchAllData(params.category_slug as string)
+        params => fetchAllData(params.category_slug as string),
+        { flush: 'post' }
       )
 
-      await fetchAllData(categorySlug.value)
+      // TODO: SSR
+      fetchAllData(categorySlug.value)
 
       const article = computed(() => store.state.article.list)
       const currentCategory = computed(() => {

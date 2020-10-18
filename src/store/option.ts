@@ -4,10 +4,13 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { Module, MutationTree, ActionTree } from 'vuex'
+import { Module, MutationTree, GetterTree, ActionTree } from 'vuex'
 import { IRootState } from '.'
 import http from '/@/services/http'
 
+export enum OptionModuleGetters {
+  ADConfig = 'adConfig'
+}
 export enum OptionModuleMutations {
   SetAdminInfo = 'setAdminInfo',
   SetAppOptionFetching = 'setAppOptionFetching',
@@ -20,13 +23,69 @@ export enum OptionModuleActions {
   PostSiteLike = 'postSiteLike'
 }
 
+export interface AD_CONFIG {
+  PC_CARROUSEL: false | {
+    disabled?: boolean
+    index: number
+    url: string
+    src: string
+    title: string
+  }
+  PC_NAV: Array<{
+    disabled?: boolean
+    hot?: boolean
+    icon: string
+    color: string
+    url: string
+    i18n: {
+      en: string
+      zh: string
+    }
+  }>
+  PC_ASIDE_SWIPER: Array<{
+    disabled?: boolean
+    url: string
+    src: string
+  }>
+  PC_ABOUT_PAGE_SWIPER: Array<{
+    disabled?: boolean
+    url: string
+    src: string
+  }>
+}
+
+const defaultAdConfig: AD_CONFIG = {
+  PC_CARROUSEL: false,
+  PC_NAV: [],
+  PC_ASIDE_SWIPER: [],
+  PC_ABOUT_PAGE_SWIPER: [],
+}
+
 const state = () => ({
   adminInfo: null as any,
   appOption: {
     fetching: false,
-    data: null as any
+    data: null as any as {
+      [key: string]: any
+      ad_config: string
+    }
   }
 })
+
+export const getters: GetterTree<OptionState, IRootState> = {
+  [OptionModuleGetters.ADConfig](state): AD_CONFIG {
+    const optionAdConfig = state.appOption.data?.ad_config
+    const adConfig: AD_CONFIG = {
+      ...defaultAdConfig,
+      ...(optionAdConfig ? JSON.parse(optionAdConfig) : {})
+    }
+    // filter disabled ad itmes
+    adConfig.PC_NAV = adConfig.PC_NAV.filter(ad => !ad.disabled)
+    adConfig.PC_ASIDE_SWIPER = adConfig.PC_ASIDE_SWIPER.filter(ad => !ad.disabled)
+    adConfig.PC_ABOUT_PAGE_SWIPER = adConfig.PC_ABOUT_PAGE_SWIPER.filter(ad => !ad.disabled)
+    return adConfig
+  }
+}
 
 const mutations: MutationTree<OptionState> = {
   // 服务端配置的管理员信息
@@ -83,6 +142,7 @@ const actions: ActionTree<OptionState, IRootState> = {
 const optionModule: Module<OptionState, IRootState> = {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 }

@@ -121,7 +121,7 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     name: 'error',
-    path: '/:data(.*)',
+    path: '/:error(.*)',
     component: ErrorPage
   }
 ]

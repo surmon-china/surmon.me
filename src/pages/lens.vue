@@ -53,13 +53,17 @@
         </div>
       </div>
       <div class="vlog-title">Vlogs</div>
+      <empty
+        v-if="!isFetching && !videoListData?.length"
+        class="vlog-empty"
+      />
       <ul class="videos" ref="videoListElement">
         <li
           class="item"
           @click="handlePlay(video)"
           :title="video.title"
           :key="index"
-          v-for="(video, index) in videoList"
+          v-for="(video, index) in videoListData"
         >
           <div class="thumb">
             <div class="mask">
@@ -132,18 +136,12 @@
     //     title: `${this.isEnLang ? '' : this.$i18n.nav.vlog + ' | '}Lens`
     //   }
     // },
-    async setup() {
+    setup() {
       const { globalState, i18n, store, isMobile, isDarkTheme } = useEnhancer()
-
       const lozadObserver = ref<LozadObserver | null>(null)
       const videoListElement = ref<HTMLElement>()
       const isFetching = computed(() => store.state.vlog.fetching)
-      const videoData = computed(() => store.state.vlog.data)
-      const videoList = computed(() => videoData.value?.vlist)
-      const isCanLoadMore = computed(() => {
-        const { pages, count } = videoData.value
-        return !!count && pages > 1
-      })
+      const videoListData = computed(() => store.state.vlog.data?.vlist)
 
       const humanlizeDate = (date: number) => {
         return timeAgo(date * 1000, i18n.language.value as any)
@@ -172,7 +170,8 @@
         lozadObserver.value = null
       })
 
-      await store.dispatch(getNamespace(Modules.Vlog, VlogModuleActions.FetchVideos))
+      // TODO: SSR
+      store.dispatch(getNamespace(Modules.Vlog, VlogModuleActions.FetchVideos))
 
       return {
         VALUABLE_LINKS,
@@ -181,8 +180,7 @@
         isDarkTheme,
         isFetching,
         videoListElement,
-        videoList,
-        isCanLoadMore,
+        videoListData,
         humanlizeDate,
         getThumbUrl,
         handlePlay,
@@ -505,6 +503,13 @@
           }
         }
       }
+    }
+
+    .vlog-empty {
+      @include radius-box($sm-radius);
+      @include common-bg-module();
+      min-height: 10rem;
+      margin-bottom: $gap;
     }
 
     .loadmore {
