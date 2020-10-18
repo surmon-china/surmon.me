@@ -1,5 +1,6 @@
 import './polyfill'
 
+import { createApp } from 'vue'
 import { MUSIC_ALBUM_ID, GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
 import { VueEnv, isProd } from '/@/vuniversal/env'
 import gtag from './services/gtag'
@@ -19,7 +20,10 @@ import { Language } from '/@/language/data'
 import { getFileCDNUrl } from '/@/transforms/url'
 import { createVueApp } from './main'
 
-const { app, router, globalState, theme, i18n, store } = createVueApp({ target: VueEnv.Client })
+const { app, router, globalState, theme, i18n, store } = createVueApp({
+  target: VueEnv.Client,
+  appCreater: createApp
+})
 const music = createMusic({ albumId: MUSIC_ALBUM_ID, autoStart: false })
 const defer = createDefer()
 const loading = createLoading()

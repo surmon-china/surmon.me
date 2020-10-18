@@ -5,7 +5,7 @@
  */
 
 import { Request } from 'express'
-import { createSSRApp, createApp } from 'vue'
+import { CreateAppFunction } from 'vue'
 import { createWebHistory, createMemoryHistory } from 'vue-router'
 import { VueEnv } from '/@/vuniversal/env'
 import { RouteName } from './router'
@@ -25,6 +25,7 @@ import '/@/assets/styles/app.scss'
 export interface ICreaterContext {
   target: VueEnv
   request?: Request
+  appCreater: CreateAppFunction<Element>
 }
 
 export const createVueApp = (context: ICreaterContext) => {
@@ -43,7 +44,7 @@ export const createVueApp = (context: ICreaterContext) => {
     language
   })
 
-  const app = createApp(App)
+  const app = context.appCreater(App)
   const store = createUniversalStore({ globalState })
   const router = createUniversalRouter({
     beforeMiddleware: getLayoutMiddleware(globalState),
@@ -62,10 +63,6 @@ export const createVueApp = (context: ICreaterContext) => {
       : Language.En,
     languages,
     map: langMap
-  })
-
-  router.onError(error => {
-    console.log('router 有错', error)
   })
 
   app.use(router)

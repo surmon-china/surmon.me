@@ -6,7 +6,10 @@ import { VueEnv } from '/@/vuniversal/env'
 import { createVueApp } from './main'
 
 const app = new Koa()
-const vueApp = createVueApp({ target: VueEnv.Server })
+const vueApp = createVueApp({
+  target: VueEnv.Server,
+  appCreater: createSSRApp
+})
 console.log('----vueApp', vueApp)
 
 // app.use('/_assets', express.static(path.join(__dirname, '../client/_assets')));
