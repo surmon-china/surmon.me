@@ -34,7 +34,7 @@
       ArticleListHeader,
       ArticleList
     },
-    async setup() {
+    setup() {
       const { store, route, router } = useEnhancer()
       const article = computed(() => store.state.article.list)
       const currentDate = computed(() => route.params.date)
@@ -62,10 +62,12 @@
 
       watch(
         () => route.params,
-        ({ date }) => fetchArticles({ date })
+        ({ date }) => fetchArticles({ date }),
+        { flush: 'post' }
       )
 
-      await fetchArticles({ date: currentDate.value })
+      // TODO: SSR
+      fetchArticles({ date: currentDate.value })
 
       return {
         article,

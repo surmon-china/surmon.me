@@ -135,7 +135,7 @@
     flex-direction: column;
     align-items: center;
     min-height: 58rem;
-    height: $active-content-full-height;
+    height: $full-page-active-content-height;
 
     > .player {
       display: flex;

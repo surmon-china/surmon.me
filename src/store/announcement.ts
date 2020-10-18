@@ -32,6 +32,7 @@ const mutations: MutationTree<AnnouncementState> = {
 
 const actions: ActionTree<AnnouncementState, IRootState> = {
   [AnnouncementModuleActions.FetchList]({ commit }, params: object) {
+    commit(AnnouncementModuleMutations.SetListData, [])
     commit(AnnouncementModuleMutations.SetFetching, true)
     return http
       .get('/announcement', { params })

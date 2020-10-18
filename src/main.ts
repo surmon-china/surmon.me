@@ -64,6 +64,10 @@ export const createVueApp = (context: ICreaterContext) => {
     map: langMap
   })
 
+  router.onError(error => {
+    console.log('router 有错', error)
+  })
+
   app.use(router)
   app.use(store)
   app.use(globalState)

@@ -130,7 +130,12 @@ $main-width: 595px;
 $aside-width: 266px;
 $button-block-height: 3.4rem;
 $full-column-page-banner-height: 30rem;
-$active-content-full-height: calc(100vh - #{$header-height + $footer-height});
+
+$full-page-occupied-height: $header-height + $footer-height;
+$full-page-active-content-height: calc(100vh - #{$full-page-occupied-height});
+
+$normal-page-occupied-height: $full-page-occupied-height + $lg-gap * 2;
+$normal-page-active-content-height: calc(100vh - #{$normal-page-occupied-height});
 
 // Mobile
 $mobile-header-height: 5rem;

@@ -1,7 +1,7 @@
 <template>
   <div class="error">
     <div class="error-content">
-      <!-- <h1 class="error-code">{{ error.statusCode }}</h1> -->
+      <h1 class="error-code">{{ error }}</h1>
       <div class="error-wrapper-message">
         <!-- <h2 class="error-message">{{ error.message || $i18n.text.notFound }}</h2> -->
       </div>
@@ -20,6 +20,7 @@
       error: Object
     },
     mounted() {
+      console.log('-----', this)
       // this.$store.commit('global/updateThreeColumnsState', true)
     },
     beforeUnmount() {

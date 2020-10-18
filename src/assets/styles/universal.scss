@@ -136,6 +136,28 @@ select:-webkit-autofill {
   z-index: $z-index-normal + 3;
 }
 
+.module-enter-active, .module-leave-active {
+  transition: opacity $transition-time-normal;
+}
+.module-slow-enter-active, .module-slow-leave-active {
+  transition: opacity $transition-time-slow;
+}
+.module-enter-from, .module-leave-to,
+.module-slow-enter-from, .module-slow-leave-to {
+  opacity: 0;
+}
+
+.page-enter-active {
+  transition: opacity $transition-time-fast;
+}
+.page-leave-active {
+  transition: opacity 0s;
+}
+.page-enter-from,
+.page-leave-active {
+  opacity: 0
+}
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity $transition-time-normal;
 }
@@ -144,23 +166,6 @@ select:-webkit-autofill {
 }
 .fade-move {
   transition: transform $transition-time-normal;
-}
-
-.module-enter-active, .module-leave-active {
-  transition: opacity $transition-time-fast;
-}
-.module-enter, .module-leave-active {
-  opacity: 0
-}
-
-.page-enter-active {
-  transition: opacity $transition-time-slow;
-}
-.page-leave-active {
-  transition: opacity 0s;
-}
-.page-enter, .page-leave-active {
-  opacity: 0
 }
 
 .slide-up-enter-active, .slide-up-leave-active {

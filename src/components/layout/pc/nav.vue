@@ -41,28 +41,26 @@
         <i class="iconfont icon-comment"></i>
         <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_GUESTBOOK" />
       </router-link>
-      <template v-for="(ad, index) in ads">
-        <template v-if="!ad.disabled">
-          <span class="separator" :key="index"></span>
-          <ulink class="item" :href="ad.url" :key="index">
-            <i
-              class="iconfont"
-              :class="ad.icon"
-              :style="{ color: ad.color }"
-            ></i>
-            <span class="text" :style="{ color: ad.color }">
-              <template v-if="ad.i18n">
-                <i18n :zh="ad.i18n.zh" :en="ad.i18n.en" />
-              </template>
-              <template v-else>
-                {{ ad.text }}
-              </template>
-            </span>
-            <span class="superscript" v-if="ad.hot">
-              <i class="iconfont icon-hot"></i>
-            </span>
-          </ulink>
-        </template>
+      <template v-for="(ad, index) in adConfig.PC_NAV" :key="index">
+        <span class="separator"></span>
+        <ulink class="item" :href="ad.url">
+          <i
+            class="iconfont"
+            :class="ad.icon"
+            :style="{ color: ad.color }"
+          ></i>
+          <span class="text" :style="{ color: ad.color }">
+            <template v-if="ad.i18n">
+              <i18n :zh="ad.i18n.zh" :en="ad.i18n.en" />
+            </template>
+            <template v-else>
+              {{ ad.text }}
+            </template>
+          </span>
+          <span class="superscript" v-if="ad.hot">
+            <i class="iconfont icon-hot"></i>
+          </span>
+        </ulink>
       </template>
       <span class="separator"></span>
       <router-link class="item app" :to="getPageRoute(RouteName.App)">
@@ -81,15 +79,14 @@
   import { getFileCDNUrl } from '/@/transforms/url'
   import { getPageRoute, getCategoryArchiveRoute } from '/@/transforms/route'
   import { RouteName, CategorySlug } from '/@/router'
-  import { PC_NAV as ads } from '/@/config/ad.config'
   import { VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'PcNav',
     setup() {
-      const { i18n, store, globalState, isZhLang } = useEnhancer()
+      const { i18n, store, globalState, adConfig, isZhLang } = useEnhancer()
       return {
-        ads,
+        adConfig,
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
         RouteName,

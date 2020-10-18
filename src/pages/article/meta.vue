@@ -1,7 +1,7 @@
 <template>
   <placeholder :loading="fetching">
     <template #loading>
-      <div class="metas-skeleton" :class="{ mobile: isMobile }">
+      <div class="metas-skeleton" key="skeleton" :class="{ mobile: isMobile }">
         <skeleton-paragraph
           :align="true"
           :lines="4"
@@ -10,7 +10,7 @@
       </div>
     </template>
     <template #default>
-      <div class="metas" :class="{ mobile: isMobile }">
+      <div class="metas" key="content" :class="{ mobile: isMobile }">
         <p class="item">
           <i18n
             zh="本文于 "

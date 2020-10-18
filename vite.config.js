@@ -13,7 +13,7 @@ module.exports = {
     link: [],
     include: ['swiper', 'querystring'],
     allowNodeBuiltins: [],
-    exclude: ['esm', 'fs-extra', 'socket.io', 'request', 'cross-env', '@vue/compiler-sfc', '@vue/server-renderer']
+    exclude: ['koa', 'esm', 'fs-extra', 'socket.io', 'request', 'cross-env', '@vue/compiler-sfc', '@vue/server-renderer']
   },
   plugins: [
     {

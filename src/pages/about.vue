@@ -222,12 +222,12 @@
         </desktop-only>
       </div>
     </div>
-    <template v-if="ads.length">
+    <template v-if="adConfig.PC_ABOUT_PAGE_SWIPER.length">
       <desktop-only>
         <div class="mammon">
           <swiper class="swiper" :options="adSwiperOption">
             <swiper-slide
-              v-for="(item, index) in ads"
+              v-for="(item, index) in adConfig.PC_ABOUT_PAGE_SWIPER"
               :key="index"
             >
               <ulink class="item" :href="item.url">
@@ -273,7 +273,6 @@
   import { getFileCDNUrl } from '/@/transforms/url'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
-  import { PC_ABOUT_PAGE_SWIPER as ads } from '/@/config/ad.config'
   import { VALUABLE_LINKS, FRIEND_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
@@ -289,7 +288,7 @@
     },
     */
     setup(props) {
-      const { gtag, globalState, store, isMobile } = useEnhancer()
+      const { gtag, globalState, store, adConfig, isMobile } = useEnhancer()
       const isOnLiveMap = toRef(globalState.switchBox, 'liveMap')
       const gravatar = computed(() => (
         store.state.option.adminInfo?.gravatar ||
@@ -344,7 +343,7 @@
         LANGUAGE_KEYS,
         RouteName,
         getPageRoute,
-        ads,
+        adConfig,
         adSwiperOption,
         isMobile,
         isOnLiveMap,
