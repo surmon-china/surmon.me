@@ -77,7 +77,7 @@
     //     ]
     //   }
     // },
-    async setup() {
+    setup() {
       const { store, route, globalState, isMobile } = useEnhancer()
       const article = computed(() => store.state.article.detail.data)
       const fetching = computed(() => store.state.article.detail.fetching)
@@ -106,7 +106,7 @@
 
       if (!Number.isInteger(articleId.value)) {
         console.log('123')
-        // return Promise.reject({ error: '垃圾 ID' })
+        return Promise.reject({ error: '垃圾 ID' })
         throw new Error('asdasd垃圾 ID')
       }
 

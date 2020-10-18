@@ -104,3 +104,8 @@ data/barrages.json
 
 # Redis
 dump.rdb
+
+# XML
+static
+/public/rss.xml
+/public/sitemap.xml
