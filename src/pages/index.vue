@@ -20,6 +20,7 @@
 
 <script lang="ts">
   import { defineComponent, defineAsyncComponent, ref, computed } from 'vue'
+  import { isServer } from '/@/enverionment'
   import { useStore, Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { AnnouncementModuleActions } from '/@/store/announcement'
@@ -35,7 +36,7 @@
       Announcement,
       ArticleList
     },
-    setup() {
+    async setup() {
       const store = useStore()
       const article = computed(() => store.state.article.list)
       const announcement = computed(() => store.state.announcement)
@@ -57,16 +58,31 @@
         }
       }
 
-      // TODO: SSR
-      Promise.all([
-        fetchArticles(),
-        fetchAnnouncements()
-      ])
+      const fetchAllData = () => {
+        console.log('----请求')
+        return Promise.all([
+          fetchArticles(),
+          fetchAnnouncements()
+        ])
+      }
 
-      return {
+      await fetchAllData();
+
+      const resultData = {
         article,
         announcement,
         loadmoreArticles
+      }
+
+      return resultData
+
+      if (isServer) {
+        console.log('----服务端请求')
+        return fetchAllData().then(() => resultData)
+      } else {
+        console.log('----客户端请求')
+        fetchAllData()
+        return resultData
       }
     }
   })

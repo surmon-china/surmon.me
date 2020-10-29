@@ -35,17 +35,17 @@ if (isDev) {
   koa.use(proxy('/@', {
     target: 'http://localhost:3001',
     changeOrigin: true,
-    logs: true
+    logs: false
   }))
   koa.use(proxy('/@modules', {
     target: 'http://localhost:3001',
     changeOrigin: true,
-    logs: true
+    logs: false
   }))
   koa.use(proxy('/vite', {
     target: 'http://localhost:3001',
     changeOrigin: true,
-    logs: true
+    logs: false
   }))
 
   // nginx proxy
