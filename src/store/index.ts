@@ -6,6 +6,7 @@
 
 import { createStore, useStore as useVuexStore } from 'vuex'
 import { GlobalState } from '/@/state'
+import { isSPA } from '/@/enverionment'
 import announcementModule, { AnnouncementState } from './announcement'
 import optionModule, { OptionState, OptionModuleActions } from './option'
 import articleModule, { ArticleState, ArticleModuleActions } from './article'
@@ -91,12 +92,13 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
       return doPrefetchTask()
     },
     clientInit() {
-      doPrefetchTask()
-      // TODO: replace state
-      // store.replaceState(JSON.parse(window.__INIT_STATE__))
+      const initState = (window as any).__INITIAL_STATE__
+      return (!initState || isSPA)
+        ? doPrefetchTask()
+        : store.replaceState(initState)
     },
     getServerScript() {
-      return `<script>window.__INIT_STATE__ = ${JSON.stringify(store.state)}</script>`
+      return `<script>window.__INITIAL_STATE__ = ${JSON.stringify(store.state)}</script>`
     }
   })
 }

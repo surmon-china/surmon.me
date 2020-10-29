@@ -3,7 +3,7 @@ import path from 'path'
 import express, { Handler } from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import { AppCreater } from './creater'
-import { isDev } from './env'
+import { isDev } from '../env'
 import { render } from './render'
 
 export interface VuniversalMiddlewareOptions {

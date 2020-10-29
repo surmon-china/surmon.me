@@ -17,6 +17,7 @@ import SkeletonLine from '/@/components/common/skeleton/line.vue'
 import SkeletonParagraph from '/@/components/common/skeleton/paragraph.vue'
 
 import { Responsive, DesktopOnly } from '/@/components/common/responsive'
+import { ClientOnly } from '/@/components/common/client-only'
 
 export default function (app: App) {
   // components
@@ -27,6 +28,7 @@ export default function (app: App) {
   app.component(Masonry.name as string, Masonry)
   app.component(Placeholder.name, Placeholder)
 
+  app.component(ClientOnly.name, ClientOnly)
   app.component(Responsive.name, Responsive)
   app.component(DesktopOnly.name, DesktopOnly)
 

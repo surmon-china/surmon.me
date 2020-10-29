@@ -4,9 +4,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-const fs = require('fs')
-const path = require('path')
-const axios = require('axios')
+import fs from 'fs'
+import path from 'path'
+import axios from 'axios'
 
 const UPDATE_TIME = {
   HOURS_1: 1000 * 60 * 60 * 1,
@@ -14,12 +14,20 @@ const UPDATE_TIME = {
 }
 
 // 更新脚本
-const updateGAScript = () => {
+export const startGTagScriptUpdater = () => {
   (function doUpdate() {
     axios.get('http://www.google-analytics.com/analytics.js', { timeout: 6000 })
       .then(response => {
         if (response.status === 200) {
-          fs.writeFileSync(path.resolve(__dirname, '..', 'static', 'scripts', 'analytics.js'), response.data)
+          fs.writeFileSync(path.resolve(
+            __dirname,
+            '..',
+            'static',
+            'scripts',
+            'analytics.js'
+            ),
+            response.data
+          )
           console.log('GA 脚本更新成功', new Date())
           setTimeout(doUpdate, UPDATE_TIME.HOURS_24)
         } else {
@@ -33,5 +41,3 @@ const updateGAScript = () => {
       })
   }())
 }
-
-module.exports = updateGAScript

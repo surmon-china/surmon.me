@@ -2,7 +2,6 @@ import { RouteRecordRaw, NavigationGuard, NavigationGuardNext, RouterHistory, cr
 import { scrollToTop } from '/@/utils/effects'
 import { LayoutColumn } from '/@/state'
 import IndexPage from './pages/index.vue'
-import ErrorPage from './pages/error.vue'
 
 export enum CategorySlug {
   Code = 'code',
@@ -44,26 +43,31 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/article/:article_id',
     name: RouteName.Article,
+    props: to => ({ articleId: Number(to.params.article_id) }),
     component: () => import('./pages/article/index.vue')
   },
   {
     path: '/category/:category_slug',
     name: RouteName.CategoryArchive,
+    props: to => ({ categorySlug: to.params.category_slug }),
     component: () => import('./pages/category.vue')
   },
   {
     path: '/tag/:tag_slug',
     name: RouteName.TagArchive,
+    props: to => ({ tagSlug: to.params.tag_slug }),
     component: () => import('./pages/tag.vue')
   },
   {
     path: '/date/:date',
     name: RouteName.DateArchive,
+    props: to => ({ date: to.params.date }),
     component: () => import('./pages/date.vue')
   },
   {
     path: '/search/:keyword',
     name: RouteName.SearchArchive,
+    props: to => ({ keyword: to.params.keyword }),
     component: () => import('./pages/search.vue')
   },
   {
@@ -120,9 +124,11 @@ export const routes: RouteRecordRaw[] = [
     }
   },
   {
-    name: 'error',
+    name: RouteName.Error,
     path: '/:error(.*)',
-    component: ErrorPage
+    component: {
+      setup: () => Promise.reject({ code: 404 })
+    }
   }
 ]
 
@@ -144,8 +150,8 @@ export const createUniversalRouter = (config: RouterCreateConfig) => {
 
   if (config.beforeMiddleware) {
     Array.isArray(config.beforeMiddleware)
-      ? config.beforeMiddleware.forEach(router.beforeEach)
-      : router.beforeEach(config.beforeMiddleware)
+      ? config.beforeMiddleware.forEach(router.beforeResolve)
+      : router.beforeResolve(config.beforeMiddleware)
   }
   if (config.afterMiddleware) {
     Array.isArray(config.afterMiddleware)

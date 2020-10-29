@@ -140,7 +140,7 @@ select:-webkit-autofill {
   transition: opacity $transition-time-normal;
 }
 .module-slow-enter-active, .module-slow-leave-active {
-  transition: opacity $transition-time-slow;
+  transition: opacity $transition-time-fast;
 }
 .module-enter-from, .module-leave-to,
 .module-slow-enter-from, .module-slow-leave-to {

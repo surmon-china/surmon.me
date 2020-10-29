@@ -87,5 +87,6 @@ export enum LANGUAGE_KEYS {
   COMMENT_ACCOUNT_EDIT = 'edit comment account',
   COMMENT_ACCOUNT_CLEAR = 'clear comment account',
   COMMENT_LIST_COUNT = 'comments',
-  COMMENT_LIKE_COUNT = 'likes'
+  COMMENT_LIKE_COUNT = 'likes',
+  QUERY_PARAMS_ERROR = 'query params error'
 }

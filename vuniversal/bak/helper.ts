@@ -1,9 +1,9 @@
 
 import { CreateAppFunction, createApp, createSSRApp } from 'vue'
 import { createWebHistory, createMemoryHistory, RouterHistory } from 'vue-router'
-import { isClient } from './env'
+import { isClient } from '../env'
 
-export * from './env'
+export * from '../env'
 export * from './creater'
 export * from './helmet'
 

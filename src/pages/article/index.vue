@@ -42,7 +42,8 @@
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { CommentModuleActions } from '/@/store/comment'
-  import { isClient } from '/@/vuniversal/env'
+  import { isClient } from '/@/enverionment'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import Comment from '/@/components/comment/index.vue'
   import ArticleContent from './content.vue'
   import ArticleMammon from './mammon.vue'
@@ -77,18 +78,30 @@
     //     ]
     //   }
     // },
-    setup() {
-      const { store, route, globalState, isMobile } = useEnhancer()
+    props: {
+      articleId: {
+        type: Number,
+        required: true
+      }
+    },
+    setup(props) {
+      const { store, globalState, i18n, isMobile } = useEnhancer()
+      if (!Number.isInteger(props.articleId)) {
+        return Promise.reject({
+          code: 500,
+          message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR)
+        })
+      }
+
       const article = computed(() => store.state.article.detail.data)
       const fetching = computed(() => store.state.article.detail.fetching)
-      const articleId = computed(() => Number(route.params.article_id))
       const relatedArticles = computed(() => {
         if (!article.value) {
           return []
         }
         const ARTICLE_COUNT = 6
         const articles = [...article.value.related]
-          .filter(article => article._id !== articleId.value)
+          .filter(article => article._id !== props.articleId)
           .slice(0, ARTICLE_COUNT)
         if (isMobile.value || articles.length >= ARTICLE_COUNT) {
           return articles
@@ -103,12 +116,6 @@
           })
         ]
       })
-
-      if (!Number.isInteger(articleId.value)) {
-        console.log('123')
-        return Promise.reject({ error: '垃圾 ID' })
-        throw new Error('asdasd垃圾 ID')
-      }
 
       const fetchArticleDetail = (article_id: string | number) => {
         return Promise.all([
@@ -126,19 +133,18 @@
       }
 
       watch(
-        () => route.params as Record<string, string>,
-        ({ article_id }) => fetchArticleDetail(article_id),
+        () => props.articleId,
+        (articleId) => fetchArticleDetail(articleId),
         { flush: 'post' }
       )
 
       // TODO: SSR
-      fetchArticleDetail(articleId.value)
+      fetchArticleDetail(props.articleId)
 
       return {
         isMobile,
         article,
         fetching,
-        articleId,
         relatedArticles
       }
     }

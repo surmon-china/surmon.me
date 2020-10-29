@@ -5,20 +5,25 @@
       <emoji-rain />
       <popup-root />
     </client-only>
-    <component :is="LayoutComponent">
-      <router-view v-slot="{ Component }">
-        <transition mode="out-in" name="page">
-          <component :is="Component" />
-        </transition>
-      </router-view>
-    </component>
+    <captured>
+      <component :is="LayoutComponent">
+        <router-view v-slot="{ Component }">
+          <transition mode="out-in" name="page">
+            <suspense>
+              <component :is="Component" />
+            </suspense>
+          </transition>
+        </router-view>
+      </component>
+    </captured>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, onMounted } from 'vue'
-  import { isProd, isClient } from '/@/vuniversal/env'
+  import { defineComponent, ref, computed, onMounted, onErrorCaptured } from 'vue'
+  import { isProd, isClient } from '/@/enverionment'
   import { useEnhancer } from '/@/enhancer'
+  import Captured from '/@/components/common/captured.vue'
   import EmojiRain from '/@/components/widget/emoji-rain.vue'
   import PcMain from '/@/components/layout/pc/main.vue'
   import MobileMain from '/@/components/layout/mobile/main.vue'
@@ -27,6 +32,7 @@
   export default defineComponent({
     name: 'App',
     components: {
+      Captured,
       EmojiRain,
       ProgressBar
     },

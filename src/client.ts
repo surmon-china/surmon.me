@@ -1,8 +1,9 @@
 import './polyfill'
 
 import { createApp } from 'vue'
+import { createWebHistory } from 'vue-router'
 import { MUSIC_ALBUM_ID, GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
-import { VueEnv, isProd } from '/@/vuniversal/env'
+import { isProd, isSSR } from './enverionment'
 import gtag from './services/gtag'
 import adsense from '/@/services/adsense'
 import swiper from '/@/services/swiper'
@@ -21,8 +22,10 @@ import { getFileCDNUrl } from '/@/transforms/url'
 import { createVueApp } from './main'
 
 const { app, router, globalState, theme, i18n, store } = createVueApp({
-  target: VueEnv.Client,
-  appCreater: createApp
+  appCreater: createApp,
+  routerHistoryCreater: createWebHistory,
+  language: navigator.language,
+  userAgent: navigator.userAgent,
 })
 const music = createMusic({ albumId: MUSIC_ALBUM_ID, autoStart: false })
 const defer = createDefer()
@@ -61,8 +64,8 @@ if (!globalState.userAgent.isMobile) {
   theme.resetOnClient()
 }
 
-// mount
-app.mount('#app').$nextTick(() => {
+// mount (isHydrate -> (SSR & true | SPA * false))
+app.mount('#app', isSSR).$nextTick(() => {
   // Desktop
   if (!globalState.userAgent.isMobile) {
     defer.addTask(music.start)

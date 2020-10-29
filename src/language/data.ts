@@ -96,7 +96,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.BACK_TO_HOME_PAGE]: {
     [Language.Zh]: '山河万里 长歌归故',
-    [Language.En]: 'Driveby'
+    [Language.En]: 'Drive by'
   },
   [LANGUAGE_KEYS.GUESTBOOK_SLOGAN]: {
     [Language.Zh]: '此心光明 亦复何言',
@@ -353,5 +353,9 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   [LANGUAGE_KEYS.COMMENT_LIKE_COUNT]: {
     [Language.Zh]: '人觉得有点牛逼',
     [Language.En]: 'likes'
+  },
+  [LANGUAGE_KEYS.QUERY_PARAMS_ERROR]: {
+    [Language.Zh]: '请求参数错误',
+    [Language.En]: 'Invalid query params'
   }
 }
