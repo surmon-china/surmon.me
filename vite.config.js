@@ -17,11 +17,11 @@ module.exports = {
       ]
     },
   },
-  // root: './',
-  // base: '/',
+  root: './',
+  base: '/',
   // hostname: 'surmon.me',
   // https: true,
-  // port: 3001,
+  port: 3000,
   assetsDir: 'assets',
   alias: {
     '/@/': srcPath

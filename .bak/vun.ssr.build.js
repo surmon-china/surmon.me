@@ -6,17 +6,6 @@ const { writeFileSync, rmdirSync } = require('fs')
 const renderer = require('@vue/server-renderer')
 const { ssrBuild, build, createServer } = vite
 
-let nodemoner = null
-
-const watcher = chokidar.watch(path.resolve(__dirname, 'src'), {
-  ignored: [/node_modules/, /\.git/],
-  // #610
-  awaitWriteFinish: {
-    stabilityThreshold: 100,
-    pollInterval: 10
-  }
-})
-
 const doBuild = async () => {
   // nodemoner?.
   const devDir = path.resolve(process.cwd(), '.vun')
@@ -50,10 +39,6 @@ const doBuild = async () => {
       input: 'src/server.ts',
       preserveEntrySignatures: 'allow-extension',
       external: ['vue', /^@vue\//, 'swiper', ...deps],
-      watch: {
-        chokidar: watcher,
-        include: path.resolve(__dirname, 'src')
-      }
     },
     rollupOutputOptions: {
       // inlineDynamicImports: true,
@@ -107,11 +92,6 @@ const doBuild = async () => {
   console.log('🎉 Page generated!')
   // process.exit()
 }
-
-watcher.on('change', info => {
-  console.log('发生改变', info)
-  // doBuild();
-})
 
 doBuild().catch((e) => {
   console.error(e)
