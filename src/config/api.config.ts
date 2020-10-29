@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-// import { isDev } from '/@/vuniversal/env'
+// import { isDev } from '/@/enverionment'
 
 const DEV_API = {
   FE: 'http://localhost:3000',
@@ -33,5 +33,6 @@ const PROD_API = {
   GRAVATAR: 'https://static.surmon.me/avatar'
 }
 
-export default PROXY_DEV_API
+export default DEV_API
+// export default PROXY_DEV_API
 // export default isDev ? DEV_API : PROD_API

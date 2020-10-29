@@ -6,7 +6,7 @@
         <span class="header-slogan" v-i18n="LANGUAGE_KEYS.APP_SLOGAN"></span>
         <router-link to="/" class="header-link" :title="t(LANGUAGE_KEYS.APP_SLOGAN)" />
       </div>
-      <div class="header-player">
+      <div class="header-player" v-if="music">
         <div class="panel">
           <button
             class="prev-song button"
@@ -56,7 +56,12 @@
       </div>
     </div>
     <div class="pre-load">
-      <uimage defer :src="music.currentSongPicUrl" alt="song-thumb" />
+      <uimage
+        defer
+        :src="music.currentSongPicUrl"
+        alt="song-thumb"
+        v-if="music?.currentSongPicUrl"
+      />
       <uimage defer cdn src="/images/sponsor.png" alt="sponsor" />
       <uimage defer cdn src="/images/page-app/hot.png" alt="app-download" />
       <uimage defer cdn src="/images/page-app/logo.png" alt="app-logo" />

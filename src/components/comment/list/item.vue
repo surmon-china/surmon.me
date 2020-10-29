@@ -73,7 +73,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, h, computed, onMounted, onBeforeUnmount, onUnmounted, PropType } from 'vue'
-  import { isClient } from '/@/vuniversal/env'
+  import { isClient } from '/@/enverionment'
   import { useEnhancer } from '/@/enhancer'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { getFileCDNUrl } from '/@/transforms/url'

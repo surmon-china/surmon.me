@@ -4,9 +4,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-const path = require('path')
-const fs = require('fs-extra')
-const { debounce } = require('lodash')
+import fs from 'fs-extra'
+import path from 'path'
+import { debounce } from 'lodash'
 
 // file
 const dataPath = path.join(__dirname, '..', 'data')
@@ -29,8 +29,8 @@ const updateLocalBarragesFile = () => {
     .then(() => {
       // console.log('最新聊天记录保存成功!')
     })
-    .catch(err => {
-      console.warn('最新弹幕记录保存失败', err)
+    .catch(error => {
+      console.warn('最新弹幕记录保存失败', error)
     })
 }
 
@@ -38,8 +38,9 @@ const updateLocalBarragesFile = () => {
 const updateDebounce = debounce(updateLocalBarragesFile, 1000 * 30)
 let socketClients = 0
 
-const barrageServer = io => {
+export const startBarrageSocket = io => {
   io.on('connection', socket => {
+
     // 每次有新人加入，都更新客户端数量
     io.clients((error, clients) => {
       if (error) {
@@ -56,7 +57,6 @@ const barrageServer = io => {
 
     // 弹幕总数量
     socket.on('barrage-count', callback => {
-      // eslint-disable-next-line standard/no-callback-literal
       callback({
         users: socketClients,
         count: barrages.length
@@ -75,5 +75,3 @@ const barrageServer = io => {
     })
   })
 }
-
-module.exports = barrageServer

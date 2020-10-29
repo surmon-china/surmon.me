@@ -8,9 +8,9 @@
       <span>{{ currentCategory?.description || '...' }}</span>
     </article-list-header>
     <article-list
-      :fetching="article.fetching"
-      :articles="article.data.data"
-      :pagination="article.data.pagination"
+      :fetching="articleData.fetching"
+      :articles="articleData.data.data"
+      :pagination="articleData.data.pagination"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -18,6 +18,7 @@
 
 <script lang="ts">
   import { defineComponent, computed, watch } from 'vue'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import { useEnhancer } from '/@/enhancer'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
@@ -33,6 +34,12 @@
       ArticleListHeader,
       ArticleList
     },
+    props: {
+      categorySlug: {
+        type: String,
+        required: true
+      }
+    },
     // head() {
     //   const slug = this.defaultParams.category_slug || ''
     //   const title = slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
@@ -42,9 +49,25 @@
     //     title: `${zhTitle}${title} | Category`
     //   }
     // },
-    setup() {
-      const { store, route, router } = useEnhancer()
-      const categorySlug = computed(() => route.params.category_slug as string)
+    setup(props) {
+      const { store, i18n } = useEnhancer()
+      // slug 是否为空
+      if (!props.categorySlug) {
+        return Promise.reject({
+          code: 500,
+          message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR)
+        })
+      }
+
+      // category 是否存在
+      const currentCategory = computed(() => {
+        return store.state.category.data.find(category => {
+          return category.slug === props.categorySlug
+        })
+      })
+      if (!currentCategory.value) {
+        return Promise.reject({ code: 404 })
+      }
 
       const fetchCategories = () => store.dispatch(
         getNamespace(Modules.Category, CategoryModuleActions.FetchAll)
@@ -57,8 +80,8 @@
 
       const loadmoreArticles = () => {
         fetchArticles({
-          category_slug: categorySlug.value,
-          page: article.value.data.pagination.current_page + 1
+          category_slug: props.categorySlug,
+          page: articleData.value.data.pagination.current_page + 1
         }).then(nextScreen)
       }
 
@@ -71,26 +94,15 @@
       }
 
       watch(
-        () => route.params,
-        params => fetchAllData(params.category_slug as string),
+        () => props.categorySlug,
+        categorySlug => fetchAllData(categorySlug),
         { flush: 'post' }
       )
 
       // TODO: SSR
-      fetchAllData(categorySlug.value)
+      fetchAllData(props.categorySlug)
 
-      const article = computed(() => store.state.article.list)
-      const currentCategory = computed(() => {
-        return store.state.category.data.find(category => {
-          return category.slug === categorySlug.value
-        })
-      })
-
-      if (!currentCategory.value) {
-        router.back()
-        // throw error?
-        return
-      }
+      const articleData = computed(() => store.state.article.list)
 
       const currentCategoryIcon = computed(() => (
         getExtendsValue(currentCategory.value, 'icon') ||
@@ -106,7 +118,7 @@
       ))
 
       return {
-        article,
+        articleData,
         currentCategory,
         currentCategoryIcon,
         currentCategoryImage,

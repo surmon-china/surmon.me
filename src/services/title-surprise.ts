@@ -5,7 +5,7 @@
  */
 
 import FavicoClass from '/@/patchs/favico'
-import { isClient } from '/@/vuniversal/env'
+import { isClient } from '/@/enverionment'
 import { titles } from '/@/config/egg.config'
 
 const Favico = FavicoClass as any

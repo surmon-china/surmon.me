@@ -82,7 +82,7 @@
   import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
-  import { isClient } from '/@/vuniversal/env'
+  import { isClient } from '/@/enverionment'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'

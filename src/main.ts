@@ -4,15 +4,12 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { Request } from 'express'
 import { CreateAppFunction } from 'vue'
-import { createWebHistory, createMemoryHistory } from 'vue-router'
-import { VueEnv } from '/@/vuniversal/env'
+import { RouterHistory } from 'vue-router'
 import { RouteName } from './router'
 import { createUniversalRouter } from './router'
 import { createUniversalStore } from './store'
 import { createI18n } from '/@/services/i18n'
-import { createClientOnly } from '/@/services/client-only'
 import { createTheme, Theme } from '/@/services/theme'
 import { getLayoutMiddleware } from '/@/services/layout'
 import interior from './services/interior'
@@ -23,34 +20,23 @@ import App from './app.vue'
 import '/@/assets/styles/app.scss'
 
 export interface ICreaterContext {
-  target: VueEnv
-  request?: Request
   appCreater: CreateAppFunction<Element>
+  routerHistoryCreater(base?: string): RouterHistory
+  language: string
+  userAgent: string
 }
 
 export const createVueApp = (context: ICreaterContext) => {
-  // TODO: HACK
-  process.env.VUE_ENV = context.target
-  const isServer = context.target === VueEnv.Server
-  const language = isServer
-    ? context.request?.headers['accept-language'] || ''
-    : navigator.language
-  const userAgent = isServer
-    ? context.request?.headers['user-agent'] || ''
-    : navigator.userAgent
-
   const globalState = createGlobalState({
-    userAgent,
-    language
+    userAgent: context.userAgent || '',
+    language: context.language || ''
   })
 
   const app = context.appCreater(App)
   const store = createUniversalStore({ globalState })
   const router = createUniversalRouter({
     beforeMiddleware: getLayoutMiddleware(globalState),
-    history: isServer
-      ? createMemoryHistory()
-      : createWebHistory()
+    history: context.routerHistoryCreater()
   })
   if (globalState.userAgent.isMobile) {
     router.removeRoute(RouteName.Music)
@@ -71,7 +57,6 @@ export const createVueApp = (context: ICreaterContext) => {
   app.use(i18n)
   app.use(theme)
   app.use(interior)
-  app.use(createClientOnly(context.target))
 
   return {
     app,

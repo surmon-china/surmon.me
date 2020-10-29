@@ -9,10 +9,12 @@ import { App, Plugin, inject, readonly, reactive, computed } from 'vue'
 import { getFileCDNUrl, getFileProxyUrl } from '/@/transforms/url'
 import http from './http'
 
-// HACK: Fix #387 https://github.com/521dimensions/amplitudejs/issues/387
-// @ts-ignore
-window.AmplitudeCore = window.AmplitudeCore || {
-  stop: () => console.warn('Forge AmplitudeCore Stop...')
+if (typeof window !== 'undefined') {
+  // HACK: Fix #387 https://github.com/521dimensions/amplitudejs/issues/387
+  // @ts-ignore
+  window.AmplitudeCore = window.AmplitudeCore || {
+    stop: () => console.warn('Forge AmplitudeCore Stop...')
+  }
 }
 
 export interface MusicConfig {
