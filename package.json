@@ -15,8 +15,12 @@
     "url": "https://github.com/surmon-china/surmon.me"
   },
   "scripts": {
-    "dev": "vun",
-    "build": "vun build --ssr",
+    "dev:spa": "vite",
+    "dev:ssr": "node ./vuniversal/dev",
+    "dev": "npm run dev:ssr",
+    "build:spa": "vun build",
+    "build:ssr": "node ./vuniversal/build",
+    "build": "npm run build:ssr",
     "start": "cross-env NODE_ENV=production node ./dist/server/server.js",
     "lint": "eslint --ext .ts,.js,.vue --ignore-path .eslintignore ."
   },
