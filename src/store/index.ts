@@ -98,7 +98,7 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
         : store.replaceState(initState)
     },
     getServerScript() {
-      return `<script>window.__INITIAL_STATE__ = ${JSON.stringify(store.state)}</script>`
+      return `window.__INITIAL_STATE__ = ${JSON.stringify(store.state)}`
     }
   })
 }

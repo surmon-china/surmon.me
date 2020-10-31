@@ -22,7 +22,7 @@ export const startGTagScriptUpdater = () => {
           fs.writeFileSync(path.resolve(
             __dirname,
             '..',
-            'static',
+            'public',
             'scripts',
             'analytics.js'
             ),

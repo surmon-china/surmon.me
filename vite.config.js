@@ -1,10 +1,8 @@
 const path = require('path')
-const srcPath = path.resolve(__dirname, 'src')
 
 module.exports = {
   universal: {
     independence: false,
-    srcDir: srcPath,
     clientEntry: './src/client.ts',
     serverEntry: './src/server.ts',
     prerender: {
@@ -17,14 +15,12 @@ module.exports = {
       ]
     },
   },
-  root: './',
+  root: path.resolve(__dirname),
   base: '/',
-  // hostname: 'surmon.me',
-  // https: true,
   port: 3000,
   assetsDir: 'assets',
   alias: {
-    '/@/': srcPath
+    '/@/': path.resolve(__dirname, 'src')
   },
   optimizeDeps: {
     link: [],

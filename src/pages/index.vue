@@ -21,6 +21,7 @@
 <script lang="ts">
   import { defineComponent, defineAsyncComponent, ref, computed } from 'vue'
   import { isServer } from '/@/enverionment'
+  import { onPreFetch } from '/@/enhancer'
   import { useStore, Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { AnnouncementModuleActions } from '/@/store/announcement'
@@ -36,7 +37,7 @@
       Announcement,
       ArticleList
     },
-    async setup() {
+    setup() {
       const store = useStore()
       const article = computed(() => store.state.article.list)
       const announcement = computed(() => store.state.announcement)
@@ -58,15 +59,10 @@
         }
       }
 
-      const fetchAllData = () => {
-        console.log('----请求')
-        return Promise.all([
-          fetchArticles(),
-          fetchAnnouncements()
-        ])
-      }
-
-      await fetchAllData();
+      const fetchAllData = () => Promise.all([
+        fetchArticles(),
+        fetchAnnouncements()
+      ])
 
       const resultData = {
         article,
@@ -74,16 +70,7 @@
         loadmoreArticles
       }
 
-      return resultData
-
-      if (isServer) {
-        console.log('----服务端请求')
-        return fetchAllData().then(() => resultData)
-      } else {
-        console.log('----客户端请求')
-        fetchAllData()
-        return resultData
-      }
+      return onPreFetch(fetchAllData, resultData)
     }
   })
 </script>

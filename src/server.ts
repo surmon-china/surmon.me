@@ -1,3 +1,4 @@
+import fs from 'fs'
 import path from 'path'
 import http  from 'http'
 import Koa from 'koa'
@@ -7,8 +8,8 @@ import socket from 'socket.io'
 import { createSSRApp } from 'vue'
 import { createMemoryHistory } from 'vue-router'
 import { renderToString } from '@vue/server-renderer'
-import { isProd, isDev } from './enverionment'
-import { createVueApp } from './main'
+import { isProd } from './enverionment'
+import { createVueApp, getSSRContentScript } from './main'
 import { startGTagScriptUpdater } from './server/gtag'
 import { startBarrageSocket } from './server/barrage'
 
@@ -25,48 +26,32 @@ global.console = Object.assign(console, {
   error: (...args) => info(color('\x1B[31m%s\x1B[0m'), '[error]', ...args),
 })
 
+const PORT = 3000
 const koa = new Koa()
 const server = http.createServer(koa.callback())
 const io = socket(server, { transports: ['websocket'] })
 
-if (isDev) {
-  // static & client proxy
-  koa.use(koaStatic(path.join(__dirname, '..', 'public')))
-  koa.use(proxy('/@', {
-    target: 'http://localhost:3001',
-    changeOrigin: true,
-    logs: false
-  }))
-  koa.use(proxy('/@modules', {
-    target: 'http://localhost:3001',
-    changeOrigin: true,
-    logs: false
-  }))
-  koa.use(proxy('/vite', {
-    target: 'http://localhost:3001',
-    changeOrigin: true,
-    logs: false
-  }))
+koa.use(koaStatic(path.join(__dirname, '..', 'client')))
 
-  // nginx proxy
-  // const handleProxy = path => {
-  //   return (request, response) => {
-  //     const targetUrl = 'http://' + request.url.replace('/proxy/' + (path ? path + '/' : ''), '')
-  //     console.log('Dev proxy request:', targetUrl)
-  //     require('request').get(targetUrl).pipe(response)
-  //   }
-  // }
-  // server.get('/proxy/music/*', handleProxy('music'))
-  // server.get('/proxy/bilibili/*', handleProxy('bilibili'))
-  // server.get('/proxy/*', handleProxy())
-}
+// dev -> nodejs proxy
+// prod -> nginx proxy
+// const handleProxy = path => {
+//   return (request, response) => {
+//     const targetUrl = 'http://' + request.url.replace('/proxy/' + (path ? path + '/' : ''), '')
+//     console.log('Dev proxy request:', targetUrl)
+//     require('request').get(targetUrl).pipe(response)
+//   }
+// }
+// server.get('/proxy/music/*', handleProxy('music'))
+// server.get('/proxy/bilibili/*', handleProxy('bilibili'))
+// server.get('/proxy/*', handleProxy())
 
-koa.use(async ctx => {
-  console.log('-----ctx', ctx.request.url)
+koa.use(async (ctx) => {
+  console.log('----renderer')
   const { headers, url } = ctx.request
   const { app, router, store } = createVueApp({
-    routerHistoryCreater: createMemoryHistory,
     appCreater: createSSRApp,
+    routerHistoryCreater: createMemoryHistory,
     language: headers['accept-language'],
     userAgent: headers['user-agent'],
   })
@@ -81,30 +66,36 @@ koa.use(async ctx => {
     const APP_HTML = await renderToString(app)
     console.log('----4')
     const STORE_SCRIPT = store.getServerScript()
-    const JS_SCRIPT = 'TODO'
+    const SSR_CONTEXT_SCRIPT = getSSRContentScript({ url })
+    const manifest = require(path.join(__dirname, '..', 'client', 'assets', 'manifest.json'))
+    const css = fs.readFileSync(path.join(__dirname, manifest['style.css']))
     const HTML = `
       <html>
         <head>
           <script type="module">import "/vite/client"</script>
           <script type="module" src="/@/client.ts"></script>
+          <style>${css}</style>
         </head>
         <body>
           <div id="app" data-server-rendered="true">${APP_HTML}</div>
-          ${STORE_SCRIPT}
-          ${JS_SCRIPT}
+          <script>
+            ${STORE_SCRIPT};
+            ${SSR_CONTEXT_SCRIPT};
+          </script>
         </body>
       </html>
     `
+    console.log('----5 set body')
     ctx.body = HTML;
   } catch (error) {
-    console.log('路由错误', error)
+    console.log('渲染错误', error)
     ctx.body = String(error);
   }
 })
 
-server.listen(3000, () => {
+server.listen(PORT, () => {
   const envText = isProd ? '生产模式' : '开发模式'
-  console.info(`${envText}启动成功！listening on http://localhost:3000, at ${new Date().toLocaleString()}`)
+  console.info(`${envText}启动成功！listening on http://localhost:${PORT}, at ${new Date().toLocaleString()}`)
   // 启动扩展服务
   startGTagScriptUpdater()
   startBarrageSocket(io)

@@ -1,0 +1,6 @@
+
+exports.MESSAGE_TYPE = Object.freeze({
+  BUILD_DONE: 'BUILD_DONE',
+  BUILD_ERROR: 'BUILD_ERROR',
+  RE_BUILD: 'RE_BUILD',
+})

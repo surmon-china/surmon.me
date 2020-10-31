@@ -1,31 +1,43 @@
-const fs = require('fs-extra')
-const path = require('path')
 const { build } = require('vite')
-const rollup = require('rollup')
-const chokidar = require('chokidar')
-const { defaultDefines } = require('vite/dist/node/config')
-const { universal, ...viteConfig } = require('./vite.config')
+const { MESSAGE_TYPE } = require('./message')
+const { universal, ...viteConfig } = require('../../vite.config')
 
-const buildCLient = async () => {
-  build({
-    entry: 'src/client.ts',
-    outDir: '.vun/client',
-    assetsDir: 'assets',
-    mode: 'development',
-    minify: false,
-    emitManifest: true,
-    rollupOutputOptions: {
-      entryFileNames: '[name].js',
-      chunkFileNames: '[name].js',
-    },
-    rollupPluginVueOptions: {
-      target: 'browser',
-    },
-    ...viteConfig
-  })
-}
+const buildClient = async () => build({
+  ...viteConfig,
+  entry: universal.clientEntry,
+  outDir: '.vun/client',
+  mode: 'development',
+  silent: true,
+  sourcemap: true,
+  emitIndex: true,
+  emitAssets: true,
+  emitManifest: true,
+  minify: false,
+  write: true,
+  env: {
+    VITE_SSR: 'true',
+    ...viteConfig.env
+  },
+  rollupOutputOptions: {
+    entryFileNames: '[name].js',
+    chunkFileNames: '[name].js',
+  },
+  rollupPluginVueOptions: {
+    target: 'browser'
+  }
+})
 
-buildCLient().catch((e) => {
-  console.error(e)
-  process.exit(1)
+process.on('message', async message => {
+  console.log('[Client worker] ℹ️  received message from master: ' + message)
+  if (message === MESSAGE_TYPE.RE_BUILD) {
+    try {
+      console.info('[Client worker] 🔵 building...')
+      const clientResult = await buildClient()
+      console.info('[Client worker] ✅ build done.')
+      process.send(MESSAGE_TYPE.BUILD_DONE)
+    } catch (error) {
+      console.warn('[Client worker] ❌ build error!', error)
+      process.send(MESSAGE_TYPE.BUILD_ERROR)
+    }
+  }
 })
