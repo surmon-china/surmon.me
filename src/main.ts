@@ -6,13 +6,15 @@
 
 import { CreateAppFunction } from 'vue'
 import { RouterHistory } from 'vue-router'
+import { META } from '/@/config/app.config'
 import { RouteName } from './router'
 import { createUniversalRouter } from './router'
 import { createUniversalStore } from './store'
 import { createI18n } from '/@/services/i18n'
+import { createHelmet } from '/@/services/helmet'
 import { createTheme, Theme } from '/@/services/theme'
 import { getLayoutMiddleware } from '/@/services/layout'
-import interior from './services/interior'
+import interior from '/@/services/interior'
 import { Language, languages, langMap } from '/@/language/data'
 import { createGlobalState } from './state'
 import App from './app.vue'
@@ -57,10 +59,18 @@ export const createVueApp = (context: ICreaterContext) => {
     map: langMap
   })
 
+  const helmet = createHelmet({
+    title: `${META.title} - ${META.description}`,
+    keywords: META.keywords,
+    description: META.description,
+    titleTemplate: (title: string) => `${title} | ${META.title}`
+  })
+
   app.use(router)
   app.use(store)
   app.use(globalState)
   app.use(i18n)
+  app.use(helmet)
   app.use(theme)
   app.use(interior)
 
@@ -70,6 +80,7 @@ export const createVueApp = (context: ICreaterContext) => {
     store,
     globalState,
     i18n,
+    helmet,
     theme,
     interior
   }

@@ -3,7 +3,7 @@ import './polyfill'
 import { createApp } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { MUSIC_ALBUM_ID, GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
-import { NODE_ENV, isProd, isSSR } from './enverionment'
+import { NODE_ENV, isProd, isSSR, isSPA } from './enverionment'
 import gtag from './services/gtag'
 import adsense from '/@/services/adsense'
 import swiper from '/@/services/swiper'
@@ -21,7 +21,7 @@ import { Language } from '/@/language/data'
 import { getFileCDNUrl } from '/@/transforms/url'
 import { createVueApp } from './main'
 
-const { app, router, globalState, theme, i18n, store } = createVueApp({
+const { app, router, globalState, theme, i18n, helmet, store } = createVueApp({
   appCreater: createApp,
   routerHistoryCreater: createWebHistory,
   language: navigator.language,
@@ -55,6 +55,7 @@ router.afterEach((_, __, failure) => {
 })
 globalState.resetOnClient()
 i18n.set(globalState.userAgent.isZhUser ? Language.Zh : Language.En)
+helmet.bindClient()
 store.clientInit()
 exportLozadToGlobal()
 exportAppToGlobal(app)

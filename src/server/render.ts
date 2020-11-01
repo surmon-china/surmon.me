@@ -15,7 +15,7 @@ console.log('----SPA_INDEX_HTML', SPA_INDEX_HTML)
 export const renderSSR: Middleware = async context => {
   console.log('----renderer')
   const { headers, url } = context.request
-  const { app, router, store } = createVueApp({
+  const { app, router, store, helmet } = createVueApp({
     appCreater: createSSRApp,
     routerHistoryCreater: createMemoryHistory,
     language: headers['accept-language'],
@@ -33,11 +33,14 @@ export const renderSSR: Middleware = async context => {
     console.log('----4')
     const STORE_SCRIPT = store.getServerScript()
     const SSR_CONTEXT_SCRIPT = getSSRContentScript({ url })
-    const title = '123123123'
 
     const HEAD = [
-      `<title>${title}</title>`,
-      `<meta name="keywords" content="asd" />`,
+      helmet.html.title,
+      helmet.html.keywords,
+      helmet.html.description,
+      helmet.html.meta,
+      helmet.html.script,
+      helmet.html.link,
     ].join('\n')
 
     const FOOTER = [
@@ -49,6 +52,10 @@ export const renderSSR: Middleware = async context => {
       .replace(
         /<title>[\s\S]*<\/title>/,
         ''
+      )
+      .replace(
+        '<html',
+        `<html ${helmet.html.htmlAttrs} `
       )
       .replace(
         `<head>`,
