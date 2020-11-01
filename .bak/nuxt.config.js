@@ -14,9 +14,6 @@ const htmlLang = i18nConfig.default || systemConstants.Language.Zh
 const htmlSlogan = i18nConfig.data.text.slogan[htmlLang]
 
 export default {
-  loading: {
-    color: appConfig.color.primary
-  },
   cache: {
     max: 100,
     maxAge: 1000 * 60 * 15
@@ -29,9 +26,5 @@ export default {
     description: htmlSlogan,
     display: 'standalone',
     lang: htmlLang
-  },
-  icon: {
-    iconSrc: '/static/icon.png',
-    sizes: [16, 120, 144, 152, 192, 384, 512]
   }
 }
