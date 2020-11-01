@@ -3,7 +3,7 @@ import './polyfill'
 import { createApp } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { MUSIC_ALBUM_ID, GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
-import { isProd, isSSR } from './enverionment'
+import { NODE_ENV, isProd, isSSR } from './enverionment'
 import gtag from './services/gtag'
 import adsense from '/@/services/adsense'
 import swiper from '/@/services/swiper'
@@ -63,6 +63,8 @@ exportAppToGlobal(app)
 if (!globalState.userAgent.isMobile) {
   theme.resetOnClient()
 }
+
+console.info('INITED:', { NODE_ENV, isProd, isSSR })
 
 // mount (isHydrate -> (SSR & true | SPA * false))
 app.mount('#app', isSSR).$nextTick(() => {

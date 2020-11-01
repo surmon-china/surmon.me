@@ -1,12 +1,14 @@
+const fs = require('fs-extra')
 const path = require('path')
 const childProcess = require('child_process')
 const nodemon= require('nodemon')
 const chokidar = require('chokidar')
 const { universal } = require('../../vite.config')
-const { MESSAGE_TYPE } = require('./message')
+const { MESSAGE_TYPE, CLIENT_OUT_PATH, SERVER_OUT_PATH } = require('./constant')
 
 const clientWorker = childProcess.fork(path.join(__dirname, 'client.js'))
 const serverWorker = childProcess.fork(path.join(__dirname, 'server.js'))
+const distServerFile = path.join(SERVER_OUT_PATH, 'server.js')
 
 let nodemoner = null
 let clientDone = false
@@ -14,10 +16,9 @@ let serverDone = false
 
 const checkStart = () => {
   if (clientDone && serverDone && !nodemoner) {
-    const serverFile = path.join(__dirname, '..', '..', '.vun', 'server', 'server.js')
     nodemoner = nodemon({
-      script: serverFile,
-      watch: serverFile
+      script: distServerFile,
+      watch: distServerFile
     }).on('start', () => {
       console.log('[nodemon start] ♥️ \n')
     }).on('restart', info => {
@@ -26,27 +27,32 @@ const checkStart = () => {
   }
 }
 
-clientWorker.on('message', message => {
-  if (message === MESSAGE_TYPE.BUILD_DONE) {
+clientWorker.on('message', ({ type, data }) => {
+  if (type === MESSAGE_TYPE.BUILD_DONE) {
     clientDone = true
+    fs.move(
+      path.join(CLIENT_OUT_PATH, 'index.html'),
+      path.join(SERVER_OUT_PATH, 'index.html'),
+      { overwrite: true }
+    )
     checkStart()
-  } else if (message === MESSAGE_TYPE.BUILD_ERROR) {
+  } else if (type === MESSAGE_TYPE.BUILD_ERROR) {
     clientDone = false
   }
 })
 
-serverWorker.on('message', message => {
-  if (message === MESSAGE_TYPE.BUILD_DONE) {
+serverWorker.on('message', ({ type }) => {
+  if (type === MESSAGE_TYPE.BUILD_DONE) {
     serverDone = true
     checkStart()
-  } else if (message === MESSAGE_TYPE.BUILD_ERROR) {
+  } else if (type === MESSAGE_TYPE.BUILD_ERROR) {
     serverDone = false
   }
 })
 
 const buildApp = () => {
-  clientWorker.send(MESSAGE_TYPE.RE_BUILD)
-  serverWorker.send(MESSAGE_TYPE.RE_BUILD)
+  clientWorker.send({ type: MESSAGE_TYPE.RE_BUILD })
+  serverWorker.send({ type: MESSAGE_TYPE.RE_BUILD })
 }
 
 const watcher = chokidar.watch(path.join(__dirname, '..', '..', 'src'), {

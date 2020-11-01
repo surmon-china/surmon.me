@@ -1,26 +1,27 @@
 const path = require('path')
 
 module.exports = {
-  universal: {
-    independence: false,
-    clientEntry: './src/client.ts',
-    serverEntry: './src/server.ts',
-    prerender: {
-      fallback: false,
-      routes: [
-        '/service',
-        '/about',
-        '/job',
-        '/app',
-      ]
-    },
-  },
-  root: path.resolve(__dirname),
-  base: '/',
   port: 3000,
+  open: true,
+  root: path.resolve(__dirname),
   assetsDir: 'assets',
   alias: {
     '/@/': path.resolve(__dirname, 'src')
+  },
+  proxy: {
+    '/api': {
+      target: 'https://api.surmon.me',
+      changeOrigin: true,
+      rewrite: path => path.replace(/^\/api/, '')
+    },
+    '/proxy': {
+      target: 'https://surmon.me',
+      changeOrigin: true,
+    },
+    '/avatar': {
+      target: 'https://static.surmon.me',
+      changeOrigin: true,
+    }
   },
   optimizeDeps: {
     link: [],
@@ -39,15 +40,37 @@ module.exports = {
       '@vue/server-renderer'
     ]
   },
-  vueCompilerOptions: {
-    directiveTransforms: {
-      i18n(prop, node, context) {
-        // console.log('directiveTransforms i18n', prop, node, context)
-        return { props: [] }
-      },
-      swiper(prop, node, context) {
-        // console.log('directiveTransforms swiper', prop, node, context)
-        return { props: [] }
+  universal: {
+    independence: false,
+    clientEntry: './src/client.ts',
+    serverEntry: './src/server.ts',
+    prerender: {
+      fallback: false,
+      routes: [
+        '/service',
+        '/about',
+        '/job',
+        '/app',
+      ]
+    },
+    viteConfig(target) {
+      if (target === 'client') {
+        return {}
+      }
+      if (target === 'server') {
+        return {
+          vueCompilerOptions: {
+            directiveTransforms: {
+              i18n(prop, node, context) {
+                // console.log('directiveTransforms i18n', prop, node, context)
+                return { props: [] }
+              },
+              swiper(prop, node, context) {
+                return { props: [] }
+              }
+            }
+          }
+        }
       }
     }
   }

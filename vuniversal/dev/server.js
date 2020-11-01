@@ -2,12 +2,13 @@ const builtinModules = require('builtin-modules')
 const { ssrBuild } = require('vite')
 const packageJSON = require('../../package.json')
 const { universal, ...viteConfig } = require('../../vite.config')
-const { MESSAGE_TYPE } = require('./message')
+const { MESSAGE_TYPE, SERVER_OUT_PATH } = require('./constant')
 
 const buildServer = async () => ssrBuild({
   ...viteConfig,
+  ...universal.viteConfig('server'),
   entry: universal.serverEntry,
-  outDir: '.vun/server',
+  outDir: SERVER_OUT_PATH,
   assetsDir: '.',
   mode: 'development',
   silent: true,
@@ -30,28 +31,27 @@ const buildServer = async () => ssrBuild({
   },
   rollupOutputOptions: {
     inlineDynamicImports: true,
-    entryFileNames: '[name].js',
-    chunkFileNames: '[name].js',
     format: 'cjs',
     exports: 'named',
     entryFileNames: '[name].js',
+    chunkFileNames: '[name].js',
   },
   rollupPluginVueOptions: {
     target: 'node',
   }
 })
 
-process.on('message', async message => {
-  console.log('[Server worker] ℹ️  received message from master: ' + message)
-  if (message === MESSAGE_TYPE.RE_BUILD) {
+process.on('message', async ({ type }) => {
+  console.log('[Server worker] ℹ️  received message from master: ' + type)
+  if (type === MESSAGE_TYPE.RE_BUILD) {
     try {
       console.info('[Server worker] 🔵 building...')
       const serverResult = await buildServer()
       console.info('[Server worker] ✅ build done.')
-      process.send(MESSAGE_TYPE.BUILD_DONE)
+      process.send({ type: MESSAGE_TYPE.BUILD_DONE, data: serverResult })
     } catch (error) {
       console.warn('[Server worker] ❌ build error!', error)
-      process.send(MESSAGE_TYPE.BUILD_ERROR)
+      process.send({ type: MESSAGE_TYPE.BUILD_ERROR, data: error })
     }
   }
 })
