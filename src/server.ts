@@ -1,17 +1,15 @@
-import fs from 'fs'
 import path from 'path'
-import http  from 'http'
+import http from 'http'
 import Koa from 'koa'
 import proxy from 'koa-proxies'
 import koaStatic from 'koa-static'
 import socket from 'socket.io'
-import { createSSRApp } from 'vue'
-import { createMemoryHistory } from 'vue-router'
-import { renderToString } from '@vue/server-renderer'
-import { isProd } from './enverionment'
-import { createVueApp, getSSRContentScript } from './main'
+import { NODE_ENV, isProd, isDev } from './enverionment'
 import { startGTagScriptUpdater } from './server/gtag'
 import { startBarrageSocket } from './server/barrage'
+import { renderSSR } from './server/render'
+import API_CONFIG from './config/api.config'
+import viteConfig from '../vite.config'
 
 // @ts-expect-error
 process.noDeprecation = true
@@ -26,76 +24,36 @@ global.console = Object.assign(console, {
   error: (...args) => info(color('\x1B[31m%s\x1B[0m'), '[error]', ...args),
 })
 
-const PORT = 3000
+const PORT = viteConfig.port || 3000
 const koa = new Koa()
 const server = http.createServer(koa.callback())
 const io = socket(server, { transports: ['websocket'] })
 
-koa.use(koaStatic(path.join(__dirname, '..', 'client')))
+koa.use(koaStatic(path.join(__dirname, 'client')))
 
 // dev -> nodejs proxy
 // prod -> nginx proxy
-// const handleProxy = path => {
-//   return (request, response) => {
-//     const targetUrl = 'http://' + request.url.replace('/proxy/' + (path ? path + '/' : ''), '')
-//     console.log('Dev proxy request:', targetUrl)
-//     require('request').get(targetUrl).pipe(response)
-//   }
-// }
-// server.get('/proxy/music/*', handleProxy('music'))
-// server.get('/proxy/bilibili/*', handleProxy('bilibili'))
-// server.get('/proxy/*', handleProxy())
-
-koa.use(async (ctx) => {
-  console.log('----renderer')
-  const { headers, url } = ctx.request
-  const { app, router, store } = createVueApp({
-    appCreater: createSSRApp,
-    routerHistoryCreater: createMemoryHistory,
-    language: headers['accept-language'],
-    userAgent: headers['user-agent'],
-  })
-
-  try {
-    await router.push(url)
-    console.log('----1')
-    await router.isReady()
-    console.log('----2')
-    await store.serverInit()
-    console.log('----3')
-    const APP_HTML = await renderToString(app)
-    console.log('----4')
-    const STORE_SCRIPT = store.getServerScript()
-    const SSR_CONTEXT_SCRIPT = getSSRContentScript({ url })
-    const manifest = require(path.join(__dirname, '..', 'client', 'assets', 'manifest.json'))
-    const css = fs.readFileSync(path.join(__dirname, manifest['style.css']))
-    const HTML = `
-      <html>
-        <head>
-          <script type="module">import "/vite/client"</script>
-          <script type="module" src="/@/client.ts"></script>
-          <style>${css}</style>
-        </head>
-        <body>
-          <div id="app" data-server-rendered="true">${APP_HTML}</div>
-          <script>
-            ${STORE_SCRIPT};
-            ${SSR_CONTEXT_SCRIPT};
-          </script>
-        </body>
-      </html>
-    `
-    console.log('----5 set body')
-    ctx.body = HTML;
-  } catch (error) {
-    console.log('渲染错误', error)
-    ctx.body = String(error);
+if (isDev) {
+  const proxyOptions = viteConfig.proxy
+  if (proxyOptions) {
+    Object.keys(proxyOptions).forEach((path) => {
+      const options: any = proxyOptions[path]
+      koa.use(proxy(
+        path,
+        typeof options === 'string'
+          ? { target: options }
+          : options
+      ))
+    })
   }
-})
+}
 
+// renderer
+koa.use(renderSSR)
+
+// run
 server.listen(PORT, () => {
-  const envText = isProd ? '生产模式' : '开发模式'
-  console.info(`${envText}启动成功！listening on http://localhost:${PORT}, at ${new Date().toLocaleString()}`)
+  console.info(`Run！in ${NODE_ENV}, listening on ${API_CONFIG.FE}, at ${new Date().toLocaleString()}`)
   // 启动扩展服务
   startGTagScriptUpdater()
   startBarrageSocket(io)

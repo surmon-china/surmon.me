@@ -180,6 +180,7 @@
 
     .announcement-empty {
       height: 100%;
+      min-height: auto;
     }
 
     .announcement-skeleton {
