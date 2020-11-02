@@ -1,5 +1,5 @@
 import { defineComponent, ref, h } from 'vue'
-import { isClient } from '/@/enverionment'
+import { isClient } from '/@/environment'
 import { useDefer } from '/@/services/defer'
 import { getFileCDNUrl, getFileProxyUrl } from '/@/transforms/url'
 

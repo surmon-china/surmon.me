@@ -19,8 +19,9 @@
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { isClient, isServer } from '/@/enverionment'
-  import { useEnhancer, onPreFetch } from '/@/enhancer'
+  import { isClient, isServer } from '/@/environment'
+  import { useEnhancer } from '/@/enhancer'
+  import { onPreFetch } from '/@/ssr'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { CategoryModuleActions } from '/@/store/category'
@@ -53,9 +54,9 @@
 
       // category 是否存在
       const currentCategory = computed(() => {
-        return store.state.category.data.find(category => {
-          return category.slug === props.categorySlug
-        })
+        return store.state.category.data.find(
+          category => category.slug === props.categorySlug
+        )
       })
       if (!currentCategory.value) {
         return Promise.reject({ code: 404 })
@@ -63,7 +64,7 @@
 
       // helmet
       helmet.title(() => {
-        const slug = currentCategory.value.slug || ''
+        const slug = props.categorySlug
         const slugTitle = slug
           .toLowerCase()
           .replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
@@ -97,15 +98,14 @@
         params
       )
 
-      const loadmoreArticles = () => {
-        fetchArticles({
+      const loadmoreArticles = async () => {
+        await fetchArticles({
           category_slug: props.categorySlug,
           page: articleData.value.data.pagination.current_page + 1
-        }).then(() => {
-          if (isClient) {
-            nextScreen()
-          }
         })
+        if (isClient) {
+          nextScreen()
+        }
       }
 
       const fetchAllData = (category_slug: string) => {

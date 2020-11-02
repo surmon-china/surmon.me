@@ -6,7 +6,8 @@
 
 import { createStore, useStore as useVuexStore } from 'vuex'
 import { GlobalState } from '/@/state'
-import { isSPA } from '/@/enverionment'
+import { getSSRStoreData } from '/@/ssr'
+import { isSPA } from '/@/environment'
 import announcementModule, { AnnouncementState } from './announcement'
 import optionModule, { OptionState, OptionModuleActions } from './option'
 import articleModule, { ArticleState, ArticleModuleActions } from './article'
@@ -69,7 +70,7 @@ export interface UniversalStoreConfig {
 }
 export const createUniversalStore = (config: UniversalStoreConfig) => {
   const store = createVuexStore()
-  const doPrefetchTask = () => {
+  const doPreFetchTask = () => {
     const initFetchTasks = [
       store.dispatch(getNamespace(Modules.Tag, TagModuleActions.FetchAll)),
       store.dispatch(getNamespace(Modules.Category, CategoryModuleActions.FetchAll)),
@@ -89,16 +90,13 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
 
   return Object.assign(store, {
     serverInit() {
-      return doPrefetchTask()
+      return doPreFetchTask()
     },
     clientInit() {
-      const initState = (window as any).__INITIAL_STATE__
+      const initState = getSSRStoreData()
       return (!initState || isSPA)
-        ? doPrefetchTask()
+        ? doPreFetchTask()
         : store.replaceState(initState)
-    },
-    getServerScript() {
-      return `window.__INITIAL_STATE__ = ${JSON.stringify(store.state)}`
     }
   })
 }

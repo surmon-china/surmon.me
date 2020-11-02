@@ -6,7 +6,7 @@
 
 import { Module, MutationTree, ActionTree } from 'vuex'
 import { SortType } from '/@/constants/state'
-import { isClient } from '/@/enverionment'
+import { isClient } from '/@/environment'
 import { isArticleDetail } from '/@/transforms/route'
 import { fetchDelay } from '/@/utils/fetch-delay'
 import { scrollTo, Easing } from '/@/utils/scroller'

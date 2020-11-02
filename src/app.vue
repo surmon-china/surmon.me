@@ -21,7 +21,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted, onErrorCaptured } from 'vue'
-  import { isProd, isClient } from '/@/enverionment'
+  import { isProd, isClient } from '/@/environment'
   import { useEnhancer } from '/@/enhancer'
   import Captured from '/@/components/common/captured.vue'
   import EmojiRain from '/@/components/widget/emoji-rain.vue'

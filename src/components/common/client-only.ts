@@ -1,5 +1,5 @@
 import { defineComponent, h } from 'vue'
-import { isClient } from '/@/enverionment'
+import { isClient } from '/@/environment'
 
 export const ClientOnly = defineComponent({
   name: 'ClientOnly',

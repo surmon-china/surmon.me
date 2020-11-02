@@ -5,7 +5,7 @@ import { createSSRApp } from 'vue'
 import { createMemoryHistory } from 'vue-router'
 import { renderToString } from '@vue/server-renderer'
 import { Theme, THEME_STORAGE_KEY } from '/@/services/theme'
-import { getSSRContentScript } from '/@/enhancer'
+import { getSSRContextScript, getSSRStoreScript } from '/@/ssr'
 import { createVueApp } from '/@/main'
 
 const SPA_INDEX_HTML = fs
@@ -28,8 +28,8 @@ export const renderSSR: Middleware = async context => {
     await router.isReady()
     await store.serverInit()
     const APP_HTML = await renderToString(app)
-    const STORE_SCRIPT = store.getServerScript()
-    const SSR_CONTEXT_SCRIPT = getSSRContentScript({ url })
+    const STORE_SCRIPT = getSSRStoreScript(store.state)
+    const SSR_CONTEXT_SCRIPT = getSSRContextScript({ url })
 
     const HEAD = [
       helmet.html.value.title,
@@ -55,7 +55,6 @@ export const renderSSR: Middleware = async context => {
         `</body>`,
         `${FOOTER}\n</body>`
       )
-    console.log('----5 set body')
     context.body = HTML;
   } catch (error) {
     console.log('渲染错误', error)

@@ -11,7 +11,7 @@ import {
   MetaHTMLAttributes,
   readonly,
 } from 'vue'
-import { isClient } from '/@/enverionment'
+import { isClient } from '/@/environment'
 
 interface Base {
   [key: string]: any
