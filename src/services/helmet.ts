@@ -11,25 +11,18 @@ import {
   MetaHTMLAttributes,
   readonly,
 } from 'vue'
+import { isClient } from '/@/enverionment'
 
 interface Base {
   [key: string]: any
 }
-interface _HelmetConfig {
+
+export type Helmet = ReturnType<typeof createHelmetStore>
+export interface HelmetConfig {
   title: string
   keywords: string
   description: string
   titleTemplate(title: string): string
-}
-
-export type Helmet = ReturnType<typeof createHelmetStore>
-export type HelmetConfig = Partial<_HelmetConfig>
-
-const DEFAULT_CONFIG: _HelmetConfig = {
-  title: '',
-  keywords: '',
-  description: '',
-  titleTemplate: title => title,
 }
 
 const appendNewMeta = (metaData: MetaHTMLAttributes) => {
@@ -42,42 +35,43 @@ const appendNewMeta = (metaData: MetaHTMLAttributes) => {
   head?.appendChild(meta)
 }
 
+const getMetaElement = (name: string) => {
+  const head = document.querySelector('head')
+  return Array.from(head?.children || []).find(child => (
+    child.tagName === 'META' &&
+    child.getAttribute('name') === name
+  ))
+}
+const getMetaContent = (name: string) => {
+  return getMetaElement(name)?.getAttribute?.('content')
+}
+
 const setHeadMeta = (name: string, content: string) => {
   const head = document.querySelector('head')
   if (!head) {
     return false
   }
-  const targetMetaElement = Array.from(head.children || []).find(child => (
-    child.tagName === 'META' &&
-    child.getAttribute('name') === name
-  ))
-  if (targetMetaElement) {
-    targetMetaElement.setAttribute('content', content)
-  } else {
-    appendNewMeta({ name, content })
-  }
+  const targetMetaElement = getMetaElement(name)
+  targetMetaElement
+    ? targetMetaElement.setAttribute('content', content)
+    : appendNewMeta({ name, content })
 }
 
 const HELMET_KEY = Symbol('helmet')
-const createHelmetStore = (initConfig: HelmetConfig) => {
-  const config = Object.freeze({
-    ...DEFAULT_CONFIG,
-    ...initConfig
-  })
-
+const createHelmetStore = (defaultConfig: HelmetConfig) => {
   const state = reactive({
-    title: '',
-    keywords: '',
-    description: ''
+    title: isClient && document.title || '',
+    keywords: isClient && getMetaContent('keywords') || '',
+    description: isClient && getMetaContent('description') || '',
   })
 
   const cState = computed(() => {
     return {
       title: state.title
-        ? config.titleTemplate(state.title)
-        : config.title,
-      keywords: state.keywords || config.keywords,
-      description: state.description || config.description
+        ? defaultConfig.titleTemplate(state.title)
+        : defaultConfig.title,
+      keywords: state.keywords || defaultConfig.keywords,
+      description: state.description || defaultConfig.description
     }
   })
 
@@ -139,19 +133,17 @@ export function createHelmet(config: HelmetConfig): Helmet & Plugin {
 
 export function useTitle(title: () => string, once = false) {
   const helmet = inject<Helmet>(HELMET_KEY) as Helmet
-  const prevTitle = helmet.state.title
   if (once) {
     helmet.state.title = title()
   } else {
     const targetTitle = computed(title)
-    const stopWatch = watchEffect(() => {
-      console.log('-----watch title', targetTitle.value)
+    let stopWatch: WatchStopHandle | null  = watchEffect(() => {
       helmet.state.title = targetTitle.value
     })
     onBeforeUnmount(() => {
-      console.log('-----watch onBeforeUnmount')
-      stopWatch()
-      helmet.state.title = prevTitle
+      stopWatch?.()
+      stopWatch = null
+      helmet.state.title = ''
     })
     return stopWatch
   }

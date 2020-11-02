@@ -1,11 +1,11 @@
 <template>
   <div v-if="isArticlePage" class="tools">
     <button class="full-column" @click="setFullColumn">
-      <span v-i18n="LANGUAGE_KEYS.ARTICLE_FULL_COL_READ" />
+      <i18n :lkey="LANGUAGE_KEYS.ARTICLE_FULL_COL_READ" />
       <i class="iconfont icon-read" />
     </button>
     <button class="full-page" @click="setFullScreen">
-      <span v-i18n="LANGUAGE_KEYS.ARTICLE_FULL_SCREEN_READ" />
+      <i18n :lkey="LANGUAGE_KEYS.ARTICLE_FULL_SCREEN_READ" />
       <i class="iconfont icon-fullscreen" />
     </button>
   </div>

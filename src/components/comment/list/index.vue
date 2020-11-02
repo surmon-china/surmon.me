@@ -17,10 +17,9 @@
       </ul>
     </template>
     <template #placeholder>
-      <div
-        class="list-empty"
-        v-i18n="LANGUAGE_KEYS.COMMENT_LIST_PLACEHOLDER"
-      />
+      <div class="list-empty">
+        <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIST_PLACEHOLDER" />
+      </div>
     </template>
     <template #default>
       <transition-group

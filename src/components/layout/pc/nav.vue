@@ -3,43 +3,63 @@
     <nav class="nav-list" :class="{ en: !isZhLang }">
       <router-link to="/" class="item" exact>
         <i class="iconfont icon-home"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_HOME" />
+        <span class="text">
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_HOME" />
+        </span>
       </router-link>
       <router-link class="item" :to="getCategoryArchiveRoute(CategorySlug.Code)">
         <i class="iconfont icon-code"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.CATEGORY_CODE" />
+        <span class="text">
+          <i18n :lkey="LANGUAGE_KEYS.CATEGORY_CODE" />
+        </span>
       </router-link>
       <router-link class="item" :to="getCategoryArchiveRoute(CategorySlug.Insight)">
         <i class="iconfont icon-thinking"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.CATEGORY_INSIGHT" />
+        <span class="text">
+          <i18n :lkey="LANGUAGE_KEYS.CATEGORY_INSIGHT" />
+        </span>
       </router-link>
       <ulink class="item" :href="VALUABLE_LINKS.GITHUB">
         <i class="iconfont icon-github"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_GITHUB" />
+        <span class="text">
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_GITHUB" />
+        </span>
       </ulink>
       <router-link class="item" :to="getPageRoute(RouteName.Music)">
         <i class="iconfont icon-netease-music"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_MUSIC" />
+        <span class="text">
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_MUSIC" />
+        </span>
       </router-link>
       <router-link class="item" :to="getPageRoute(RouteName.Lens)">
         <i class="iconfont icon-lens"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_LENS" />
+        <span class="text">
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_LENS" />
+        </span>
       </router-link>
       <router-link class="item" :to="getPageRoute(RouteName.About)">
         <i class="iconfont icon-user"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_ABOUT" />
+        <span class="text">
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_ABOUT" />
+        </span>
       </router-link>
       <router-link class="item" :to="getPageRoute(RouteName.Job)">
         <i class="iconfont icon-horse"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_JOB" />
+        <span class="text">
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_JOB" />
+        </span>
       </router-link>
       <router-link class="item" :to="getPageRoute(RouteName.Freelancer)">
         <i class="iconfont icon-tool"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_FREELANCER" />
+        <span class="text">
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER" />
+        </span>
       </router-link>
       <router-link class="item guestbook" :to="getPageRoute(RouteName.Guestbook)">
         <i class="iconfont icon-comment"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_GUESTBOOK" />
+        <span class="text">
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_GUESTBOOK" />
+        </span>
       </router-link>
       <template v-for="(ad, index) in adConfig.PC_NAV" :key="index">
         <span class="separator"></span>
@@ -65,7 +85,9 @@
       <span class="separator"></span>
       <router-link class="item app" :to="getPageRoute(RouteName.App)">
         <i class="iconfont icon-app"></i>
-        <span class="text" v-i18n="LANGUAGE_KEYS.PAGE_APP" />
+        <span class="text">
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_APP" />
+        </span>
       </router-link>
     </nav>
   </div>

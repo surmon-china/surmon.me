@@ -44,14 +44,16 @@
             class="button"
             :class="{ actived: sort === SortType.Desc }"
             @click="handleSortList(SortType.Desc)"
-            v-i18n="LANGUAGE_KEYS.COMMENT_PAGINATION_NEW"
-          />
+          >
+            <i18n :lkey="LANGUAGE_KEYS.COMMENT_PAGINATION_NEW" />
+          </button>
           <button
             class="button"
             :class="{ actived: sort === SortType.Hot }"
             @click="handleSortList(SortType.Hot)"
-            v-i18n="LANGUAGE_KEYS.COMMENT_PAGINATION_HOT"
-          />
+          >
+            <i18n :lkey="LANGUAGE_KEYS.COMMENT_PAGINATION_HOT" />
+          </button>
         </div>
       </div>
     </template>

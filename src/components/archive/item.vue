@@ -74,7 +74,7 @@
               <i class="iconfont icon-list"></i>
               <placeholder :transition="false" :data="article.category.length">
                 <template #placeholder>
-                  <span v-i18n="LANGUAGE_KEYS.CATEGORY_PLACEHOLDER" />
+                  <i18n :lkey="LANGUAGE_KEYS.CATEGORY_PLACEHOLDER" />
                 </template>
                 <template #default>
                   <router-link

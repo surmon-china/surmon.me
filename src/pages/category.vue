@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, watch, onMounted } from 'vue'
+  import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { isClient, isServer } from '/@/enverionment'
   import { useEnhancer, onPreFetch } from '/@/enhancer'
@@ -63,7 +63,7 @@
 
       // helmet
       helmet.title(() => {
-        const slug = currentCategory.value.slug
+        const slug = currentCategory.value.slug || ''
         const slugTitle = slug
           .toLowerCase()
           .replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
@@ -87,7 +87,6 @@
         currentCategory.value,
         'bgcolor'
       ))
-
 
       const fetchCategories = () => store.dispatch(
         getNamespace(Modules.Category, CategoryModuleActions.FetchAll)
@@ -119,7 +118,7 @@
         ])
       }
 
-      onMounted(() => {
+      onBeforeMount(() => {
         watch(
           () => props.categorySlug,
           categorySlug => fetchAllData(categorySlug),

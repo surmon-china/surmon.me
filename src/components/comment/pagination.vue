@@ -4,7 +4,7 @@
       <ul class="pagination-list">
         <li class="item prev">
           <span class="symbol">-</span>
-          <span v-i18n="isHotSort
+          <i18n :lkey="isHotSort
             ? LANGUAGE_KEYS.COMMENT_PAGINATION_HOT
             : LANGUAGE_KEYS.COMMENT_PAGINATION_OLD"
           />
@@ -26,7 +26,7 @@
           </button>
         </li>
         <li class="item next">
-          <span v-i18n="isHotSort
+          <i18n :lkey="isHotSort
             ? LANGUAGE_KEYS.COMMENT_PAGINATION_COOL
             : LANGUAGE_KEYS.COMMENT_PAGINATION_NEW"
           />

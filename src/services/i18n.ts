@@ -45,7 +45,10 @@ const createI18nStore = (config: Ii18nConfig) => {
     }
   }
   const translate = <T extends string = string>(key: T, ...args) => {
-    const content = config.map[key][language.value]
+    const content = config.map[key]?.[language.value]
+    if (!content) {
+      return null
+    }
     return typeof content === 'string'
       ? content
       : content(...args)
@@ -116,9 +119,10 @@ export const createI18n = (config: Ii18nConfig) => {
     install(app: App) {
       app.config.globalProperties.$i18n = i18nStore
       app.provide(I18nSymbol, i18nStore)
+      app.component(i18nComponent.name, i18nComponent)
+      // MARK: SSR not support
       app.directive('i18n', i18nDirective)
       app.directive('t', i18nDirective)
-      app.component(i18nComponent.name, i18nComponent)
     }
   }
 }

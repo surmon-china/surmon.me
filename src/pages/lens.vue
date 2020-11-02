@@ -111,7 +111,7 @@
           <span class="icon">
             <i class="iconfont icon-bilibili"></i>
           </span>
-          <span v-i18n="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE" />
+          <i18n :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE" />
         </ulink>
       </div>
     </div>

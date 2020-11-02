@@ -19,29 +19,30 @@ import { Language, languages, langMap } from '/@/language/data'
 import { createGlobalState } from './state'
 import App from './app.vue'
 
-export interface ICreaterContext {
-  appCreater: CreateAppFunction<Element>
-  routerHistoryCreater(base?: string): RouterHistory
+export interface ICreatorContext {
+  appCreator: CreateAppFunction<Element>
+  historyCreator(base?: string): RouterHistory
+  theme: Theme
   language: string
   userAgent: string
 }
-export const createVueApp = (context: ICreaterContext) => {
+export const createVueApp = (context: ICreatorContext) => {
   const globalState = createGlobalState({
     userAgent: context.userAgent || '',
     language: context.language || ''
   })
 
-  const app = context.appCreater(App)
+  const app = context.appCreator(App)
   const store = createUniversalStore({ globalState })
   const router = createUniversalRouter({
     beforeMiddleware: getLayoutMiddleware(globalState),
-    history: context.routerHistoryCreater()
+    history: context.historyCreator()
   })
   if (globalState.userAgent.isMobile) {
     router.removeRoute(RouteName.Music)
   }
 
-  const theme = createTheme(Theme.Default)
+  const theme = createTheme(context.theme)
   const i18n = createI18n({
     default: globalState.userAgent.isZhUser
       ? Language.Zh

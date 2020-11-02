@@ -208,7 +208,9 @@
           </p>
         </div>
         <desktop-only>
-          <span class="followme" v-i18n="LANGUAGE_KEYS.FRIEND_ME" />
+          <span class="followme">
+            <i18n :lkey="LANGUAGE_KEYS.FRIEND_ME" />
+          </span>
           <div class="wechat" @mouseenter="handleHoverFollowMe">
             <uimage
               cdn

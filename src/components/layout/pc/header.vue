@@ -3,7 +3,9 @@
     <div class="header-container container">
       <div class="header-header">
         <uimage cdn src="/images/logo.svg" class="header-logo" />
-        <span class="header-slogan" v-i18n="LANGUAGE_KEYS.APP_SLOGAN"></span>
+        <span class="header-slogan">
+          <i18n :lkey="LANGUAGE_KEYS.APP_SLOGAN" />
+        </span>
         <router-link to="/" class="header-link" :title="t(LANGUAGE_KEYS.APP_SLOGAN)" />
       </div>
       <div class="header-player" v-if="music">
@@ -52,7 +54,9 @@
             <span>{{ music.currentSong.name }} By {{ music.currentSong.artist }} / {{ music.currentSong.album || 'unknow' }}</span>
           </router-link>
         </div>
-        <div v-else class="song" v-i18n="LANGUAGE_KEYS.MUSIC_PLACEHOLDER"></div>
+        <div v-else class="song">
+          <i18n :lkey="LANGUAGE_KEYS.MUSIC_PLACEHOLDER" />
+        </div>
       </div>
     </div>
     <div class="pre-load">

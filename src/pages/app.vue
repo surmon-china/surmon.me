@@ -10,7 +10,9 @@
         />
       </div>
       <h2 class="title">{{ META.title }}</h2>
-      <p class="desc" v-i18n="LANGUAGE_KEYS.APP_SLOGAN"></p>
+      <p class="desc">
+        <i18n :lkey="LANGUAGE_KEYS.APP_SLOGAN" />
+      </p>
       <p class="version">v1.1.4 (2020-03-06)</p>
       <div class="screen">
         <uimage
@@ -32,7 +34,9 @@
             @click="handleAndroidApp($event)"
           >
             <i class="iconfont icon-android"></i>
-            <span class="text" v-i18n="LANGUAGE_KEYS.DEVICE_ANDROID"></span>
+            <span class="text">
+              <i18n :lkey="LANGUAGE_KEYS.DEVICE_ANDROID" />
+            </span>
           </ulink>
           <ulink
             class="button"
@@ -40,7 +44,9 @@
             @mousedown="handleAppAction('APP IOS')"
           >
             <i class="iconfont icon-mac"></i>
-            <span class="text" v-i18n="LANGUAGE_KEYS.DEVICE_IOS"></span>
+            <span class="text">
+              <i18n :lkey="LANGUAGE_KEYS.DEVICE_IOS" />
+            </span>
           </ulink>
           <ulink
             class="button code"

@@ -79,17 +79,17 @@
           <i class="iconfont icon-peachblossom"></i>
         </span>
         <div class="text">
-          <span
+          <i18n
             v-if="fetching"
-            v-i18n="LANGUAGE_KEYS.ARTICLE_LIST_LOADING"
+            :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADING"
           />
-          <span
+          <i18n
             v-else-if="isLoadMoreEnabled"
-            v-i18n="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE"
+            :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE"
           />
-          <span
+          <i18n
             v-else
-            v-i18n="LANGUAGE_KEYS.ARTICLE_LIST_NO_MORE"
+            :lkey="LANGUAGE_KEYS.ARTICLE_LIST_NO_MORE"
           />
         </div>
       </button>

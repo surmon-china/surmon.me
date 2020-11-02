@@ -6,54 +6,56 @@
       </div>
       <div class="profile">
         <h3 class="name">Surmon</h3>
-        <p class="slogan" v-i18n="LANGUAGE_KEYS.APP_SLOGAN"></p>
+        <p class="slogan">
+          <i18n :lkey="LANGUAGE_KEYS.APP_SLOGAN" />
+        </p>
       </div>
     </div>
     <div class="aside-nav">
       <nav class="nav-list">
         <router-link to="/" class="item" exact>
           <i class="iconfont icon-home"></i>
-          <span v-i18n="LANGUAGE_KEYS.PAGE_HOME"></span>
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_HOME" />
         </router-link>
         <router-link class="item" :to="getCategoryArchiveRoute(CategorySlug.Code)">
           <i class="iconfont icon-code"></i>
-          <span v-i18n="LANGUAGE_KEYS.CATEGORY_CODE"></span>
+          <i18n :lkey="LANGUAGE_KEYS.CATEGORY_CODE" />
         </router-link>
         <router-link class="item" :to="getCategoryArchiveRoute(CategorySlug.Insight)">
           <i class="iconfont icon-thinking"></i>
-          <span v-i18n="LANGUAGE_KEYS.CATEGORY_INSIGHT"></span>
+          <i18n :lkey="LANGUAGE_KEYS.CATEGORY_INSIGHT" />
         </router-link>
         <ulink class="item" :href="VALUABLE_LINKS.GITHUB">
           <i class="iconfont icon-github"></i>
-          <span v-i18n="LANGUAGE_KEYS.PAGE_GITHUB"></span>
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_GITHUB" />
         </ulink>
         <router-link class="item" :to="getPageRoute(RouteName.Archive)">
           <i class="iconfont icon-peachblossom"></i>
-          <span v-i18n="LANGUAGE_KEYS.PAGE_ARCHIVE"></span>
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_ARCHIVE" />
         </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.Lens)">
           <i class="iconfont icon-lens"></i>
-          <span v-i18n="LANGUAGE_KEYS.PAGE_LENS"></span>
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_LENS" />
         </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.About)">
           <i class="iconfont icon-user"></i>
-          <span v-i18n="LANGUAGE_KEYS.PAGE_ABOUT"></span>
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_ABOUT" />
         </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.Job)">
           <i class="iconfont icon-horse"></i>
-          <span v-i18n="LANGUAGE_KEYS.PAGE_JOB"></span>
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_JOB" />
         </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.Freelancer)">
           <i class="iconfont icon-tool"></i>
-          <span v-i18n="LANGUAGE_KEYS.PAGE_FREELANCER"></span>
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER" />
         </router-link>
         <router-link class="item guestbook" :to="getPageRoute(RouteName.Guestbook)">
           <i class="iconfont icon-comment"></i>
-          <span v-i18n="LANGUAGE_KEYS.PAGE_GUESTBOOK"></span>
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_GUESTBOOK" />
         </router-link>
         <router-link class="item app" :to="getPageRoute(RouteName.App)">
           <i class="iconfont icon-app"></i>
-          <span v-i18n="LANGUAGE_KEYS.PAGE_APP"></span>
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_APP" />
         </router-link>
       </nav>
     </div>

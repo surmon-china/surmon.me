@@ -36,7 +36,9 @@
       </div>
       <div class="cm-content">
         <p v-if="comment.pid" class="reply">
-          <span class="text" v-i18n="LANGUAGE_KEYS.COMMENT_REPLY" />
+          <span class="text">
+            <i18n :lkey="LANGUAGE_KEYS.COMMENT_REPLY" />
+          </span>
           <button class="parent" @click="scrollToCommentItem(comment.pid)">
             {{ getReplyParentCommentText(comment.pid) }}
           </button>
@@ -51,7 +53,7 @@
         <span class="create_at">{{ humanlizeDate(comment.create_at) }}</span>
         <button class="reply" @click="replyComment(comment.id)">
           <i class="iconfont icon-reply" />
-          <span v-i18n="LANGUAGE_KEYS.COMMENT_REPLY" />
+          <i18n :lkey="LANGUAGE_KEYS.COMMENT_REPLY" />
         </button>
         <button
           class="like"
@@ -63,7 +65,7 @@
           @click="likeComment(comment.id)"
         >
           <i class="iconfont icon-zan" />
-          <span v-i18n="LANGUAGE_KEYS.COMMENT_LIKE" />
+          <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIKE" />
           <span> ({{ comment.likes }})</span>
         </button>
       </div>
