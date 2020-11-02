@@ -37,10 +37,7 @@ export const renderSSR: Middleware = async context => {
     const HEAD = [
       helmet.html.title,
       helmet.html.keywords,
-      helmet.html.description,
-      helmet.html.meta,
-      helmet.html.script,
-      helmet.html.link,
+      helmet.html.description
     ].join('\n')
 
     const FOOTER = [
@@ -49,14 +46,7 @@ export const renderSSR: Middleware = async context => {
     ].join('\n')
 
     const HTML = SPA_INDEX_HTML
-      .replace(
-        /<title>[\s\S]*<\/title>/,
-        ''
-      )
-      .replace(
-        '<html',
-        `<html ${helmet.html.htmlAttrs} `
-      )
+      .replace(/<title>[\s\S]*<\/title>/, '')
       .replace(
         `<head>`,
         `<head>${HEAD}`
