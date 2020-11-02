@@ -61,8 +61,8 @@ module.exports = {
         return {
           vueCompilerOptions: {
             directiveTransforms: {
+              // TODO: remove
               i18n(prop, node, context) {
-                // console.log('directiveTransforms i18n', prop, node, context)
                 return { props: [] }
               },
               swiper(prop, node, context) {

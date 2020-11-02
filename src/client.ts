@@ -3,7 +3,7 @@ import './polyfill'
 import { createApp } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { MUSIC_ALBUM_ID, GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
-import { NODE_ENV, isProd, isSSR, isSPA } from './enverionment'
+import { NODE_ENV, isProd, isSSR } from './enverionment'
 import gtag from './services/gtag'
 import adsense from '/@/services/adsense'
 import swiper from '/@/services/swiper'
@@ -20,6 +20,8 @@ import { exportLozadToGlobal } from '/@/services/lozad'
 import { Language } from '/@/language/data'
 import { getFileCDNUrl } from '/@/transforms/url'
 import { createVueApp } from './main'
+
+import '/@/assets/styles/app.scss'
 
 const { app, router, globalState, theme, i18n, helmet, store } = createVueApp({
   appCreater: createApp,

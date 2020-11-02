@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, defineAsyncComponent, ref, computed } from 'vue'
+  import { defineComponent, ref, computed } from 'vue'
   import { isServer } from '/@/enverionment'
   import { onPreFetch } from '/@/enhancer'
   import { useStore, Modules, getNamespace } from '/@/store'

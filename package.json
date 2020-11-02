@@ -34,7 +34,7 @@
     "emoji-233333": "^0.3.2",
     "fs-extra": "^9.0.1",
     "gravatar": "^1.8.1",
-    "highlight.js": "^10.3.1",
+    "highlight.js": "^10.3.2",
     "https-proxy-agent": "^5.0.0",
     "intersection-observer": "^0.11.0",
     "koa": "^2.13.0",
@@ -48,7 +48,7 @@
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.1",
     "sticky-events": "^3.4.10",
-    "swiper": "^6.3.4",
+    "swiper": "^6.3.5",
     "ua-parser-js": "^0.7.22",
     "vue": "^3.0.2",
     "vue-awesome-swiper": "^4.1.1",
@@ -69,7 +69,7 @@
     "eslint": "^7.12.1",
     "eslint-plugin-vue": "^7.1.0",
     "nodemon": "^2.0.6",
-    "sass": "^1.27.1",
+    "sass": "^1.28.0",
     "typescript": "^4.0.5",
     "vite": "^1.0.0-rc.8"
   }

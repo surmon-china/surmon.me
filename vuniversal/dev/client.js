@@ -16,6 +16,10 @@ const buildClient = async () => build({
   emitIndex: true,
   minify: false,
   write: true,
+  shouldPreload(chunk) {
+    console.log('shouldPreload -> chunk:', chunk.fileName)
+    return true;
+  },
   env: {
     VITE_SSR: 'true',
     ...viteConfig.env
