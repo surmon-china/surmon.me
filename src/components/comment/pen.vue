@@ -90,7 +90,7 @@
 <script lang="ts">
   import { defineComponent, ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
   import { useEnhancer } from '/@/enhancer'
-  import { isClient } from '/@/enverionment'
+  import { isClient } from '/@/environment'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { insertContent } from '/@/utils/editable'
   import { markdownToHTML } from '/@/transforms/markdown'

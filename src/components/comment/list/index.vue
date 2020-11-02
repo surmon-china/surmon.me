@@ -47,7 +47,7 @@
   import { useGlobalState } from '/@/state'
   import { getNamespace, Modules } from '/@/store'
   import { CommentModuleActions } from '/@/store/comment'
-  import { isClient } from '/@/enverionment'
+  import { isClient } from '/@/environment'
   import { useEnhancer } from '/@/enhancer'
   import { LozadObserver } from '/@/services/lozad'
   import { USER, USER_LIKE_HISTORY } from '/@/constants/storage'

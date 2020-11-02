@@ -19,7 +19,10 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, watch } from 'vue'
+  import { defineComponent, computed, watch, onBeforeMount } from 'vue'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { isClient, isServer } from '/@/environment'
+  import { onPreFetch } from '/@/ssr'
   import { useEnhancer } from '/@/enhancer'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
@@ -35,14 +38,44 @@
       ArticleListHeader,
       ArticleList
     },
-    // head() {
-    //   const slug = this.defaultParams.tag_slug || ''
-    //   const title = slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
-    //   return { title: `${title} | Tag` }
-    // },
-    setup() {
-      const { store, route, router } = useEnhancer()
-      const tagSlug = computed(() => route.params.tag_slug as string)
+    props: {
+      tagSlug: {
+        type: String,
+        required: true
+      }
+    },
+    setup(props) {
+      const { store, i18n, helmet, isZhLang } = useEnhancer()
+      // slug 是否为空
+      if (!props.tagSlug) {
+        return Promise.reject({
+          code: 500,
+          message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR)
+        })
+      }
+
+      const currentTag = computed(() => store.state.tag.data.find(
+        tag => tag.slug === props.tagSlug
+      ))
+      // category 是否存在
+      if (!currentTag.value) {
+        return Promise.reject({ code: 404 })
+      }
+
+        // helmet
+      helmet.title(() => {
+        const slug = props.tagSlug
+        const slugTitle = slug
+          .toLowerCase()
+          .replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+        const zhTitle = currentTag.value?.name
+        return `${isZhLang && zhTitle || slugTitle} | Tag`
+      }, isServer)
+
+      const article = computed(() => store.state.article.list)
+      const currentTagIcon = computed(() => getExtendsValue(currentTag.value, 'icon') || 'icon-tag')
+      const currentTagImage = computed(() => getExtendsValue(currentTag.value, 'background'))
+      const currentTagColor = computed(() => getExtendsValue(currentTag.value, 'bgcolor'))
 
       const fetchTags = () => store.dispatch(
         getNamespace(Modules.Tag, TagModuleActions.FetchAll)
@@ -55,49 +88,35 @@
         )
       }
 
-      const loadmoreArticles = () => {
-        fetchArticles({
-          ...route.params,
-          tag_slug: tagSlug.value,
+      const loadmoreArticles = async () => {
+        await fetchArticles({
+          tag_slug: props.tagSlug,
           page: article.value.data.pagination.current_page + 1
-        }).then(nextScreen)
+        })
+        if (isClient) {
+          nextScreen()
+        }
       }
 
       const fetchAllData = (tag_slug: string) => {
-        scrollToTop()
+        if (isClient) {
+          scrollToTop()
+        }
         return Promise.all([
           fetchTags(),
           fetchArticles({ tag_slug })
         ])
       }
 
-      watch(
-        () => route.params,
-        params => fetchAllData(params.tag_slug as string),
-        { flush: 'post' }
-      )
-
-      // TODO: SSR
-      fetchAllData(tagSlug.value)
-
-      const article = computed(() => store.state.article.list)
-      const currentTag = computed(() => {
-        return store.state.tag.data.find(tag => {
-          return tag.slug === route.params.tag_slug
-        })
+      onBeforeMount(() => {
+        watch(
+          () => props.tagSlug,
+          tagSlug => fetchAllData(tagSlug),
+          { flush: 'post' }
+        )
       })
 
-      if (!currentTag.value) {
-        router.back()
-        // throw error?
-        return
-      }
-
-      const currentTagIcon = computed(() => getExtendsValue(currentTag.value, 'icon') || 'icon-tag')
-      const currentTagImage = computed(() => getExtendsValue(currentTag.value, 'background'))
-      const currentTagColor = computed(() => getExtendsValue(currentTag.value, 'bgcolor'))
-
-      return {
+      const resultData = {
         article,
         currentTag,
         currentTagIcon,
@@ -105,6 +124,8 @@
         currentTagColor,
         loadmoreArticles,
       }
+
+      return onPreFetch(() => fetchAllData(props.tagSlug), resultData)
     }
   })
 </script>

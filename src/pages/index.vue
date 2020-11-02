@@ -20,8 +20,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { isServer } from '/@/enverionment'
-  import { onPreFetch } from '/@/enhancer'
+  import { onPreFetch } from '/@/ssr'
   import { useStore, Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { AnnouncementModuleActions } from '/@/store/announcement'

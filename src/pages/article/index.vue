@@ -42,7 +42,7 @@
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { CommentModuleActions } from '/@/store/comment'
-  import { isClient } from '/@/enverionment'
+  import { isClient } from '/@/environment'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import Comment from '/@/components/comment/index.vue'
   import ArticleContent from './content.vue'

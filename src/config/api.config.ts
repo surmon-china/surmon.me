@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { isDev, isSSR, isServer } from '/@/enverionment'
+import { isDev, isSSR, isServer } from '/@/environment'
 
 const isSSRServer = isSSR && isServer
 
@@ -21,7 +21,7 @@ const DEV_API = {
   GRAVATAR: '/avatar'
 }
 
-const LOCA_PROXY_DEV_API = {
+const LOCAL_PROXY_DEV_API = {
   ...DEV_API,
   BASE: isSSRServer
     ? PROD_API_SERVER
@@ -40,6 +40,5 @@ const PROD_API = {
 }
 
 // export default DEV_API
-// export default PROXY_DEV_API
-export default LOCA_PROXY_DEV_API
+export default LOCAL_PROXY_DEV_API
 // export default isDev ? DEV_API : PROD_API

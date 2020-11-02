@@ -62,7 +62,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted, PropType } from 'vue'
-  import { isClient } from '/@/enverionment'
+  import { isClient } from '/@/environment'
   import { useEnhancer } from '/@/enhancer'
   import { getNamespace, Modules } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'

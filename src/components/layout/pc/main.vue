@@ -44,7 +44,7 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue'
   import { mapState } from 'vuex'
-  import { isClient } from '/@/enverionment'
+  import { isClient } from '/@/environment'
   import NavView from './nav.vue'
   import AsideView from './aside/index.vue'
   import HeaderView from './header.vue'
