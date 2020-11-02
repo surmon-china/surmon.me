@@ -2,11 +2,9 @@
   <div id="wallpaper" :class="{ dark: isDarkTheme }">
     <div class="switcher" @click="toggleWallpaper">
       <div class="up">
-        <span
-          class="title"
-          :class="language"
-          v-i18n="LANGUAGE_KEYS.WALLPAPER"
-        />
+        <span class="title" :class="language">
+          <i18n :lkey="LANGUAGE_KEYS.WALLPAPER" />
+        </span>
       </div>
       <div class="down"></div>
     </div>

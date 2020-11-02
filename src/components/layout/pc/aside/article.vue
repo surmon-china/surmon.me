@@ -2,7 +2,9 @@
   <div class="article">
     <p class="title">
       <i class="iconfont icon-hotfill" />
-      <strong v-i18n="LANGUAGE_KEYS.HOT_ARTICLE_LIST_TITLE" />
+      <strong>
+        <i18n :lkey="LANGUAGE_KEYS.HOT_ARTICLE_LIST_TITLE" />
+      </strong>
     </p>
     <placeholder
       :data="articles"

@@ -79,7 +79,9 @@
           </ul>
           <h4 class="title root">
             <i class="iconfont icon-dragon" />
-            <span class="text" v-i18n="LANGUAGE_KEYS.TAG_TITLE" />
+            <span class="text">
+              <i18n :lkey="LANGUAGE_KEYS.TAG_TITLE" />
+            </span>
           </h4>
           <ul class="tag-list">
             <li v-for="(tag, index) in tags" :key="index" class="tag">

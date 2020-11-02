@@ -12,8 +12,9 @@
         class="sitemap-btn"
         target="_blank"
         :href="VALUABLE_LINKS.SITE_MAP"
-        v-i18n="LANGUAGE_KEYS.SITE_MAP_XML"
-      />
+      >
+        <i18n :lkey="LANGUAGE_KEYS.SITE_MAP_XML" />
+      </a>
       <span class="separator">|</span>
       <i18n zh="由 " en="Powered By " />
       <ulink class="item" :href="VALUABLE_LINKS.NODEPRESS">

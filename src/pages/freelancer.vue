@@ -5,14 +5,17 @@
   >
     <div class="banner">
       <div class="banner-content container">
-        <h2 class="title" v-i18n="LANGUAGE_KEYS.PAGE_FREELANCER_SLOGAN"></h2>
+        <h2 class="title">
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_SLOGAN" />
+        </h2>
         <div class="submit">
           <button
             class="email-me"
             title="email me"
             @click="handleSubmitEmail"
-            v-i18n="LANGUAGE_KEYS.PAGE_FREELANCER_EMAIL_ME"
-          />
+          >
+            <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_EMAIL_ME" />
+          </button>
         </div>
         <desktop-only>
           <ulink class="upwork" :href="VALUABLE_LINKS.UPWORK">

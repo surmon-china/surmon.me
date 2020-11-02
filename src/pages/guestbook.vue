@@ -9,7 +9,9 @@
     <div class="banner">
       <uimage cdn class="image" src="/images/page-guestbook/banner.jpg" />
       <span class="slogan">
-        <span class="text" v-i18n="LANGUAGE_KEYS.GUESTBOOK_SLOGAN" />
+        <span class="text">
+          <i18n :lkey="LANGUAGE_KEYS.GUESTBOOK_SLOGAN" />
+        </span>
       </span>
     </div>
     <div class="comment">

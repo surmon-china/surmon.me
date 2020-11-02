@@ -1,9 +1,9 @@
 <template>
   <div class="pc-main">
+    <background />
     <client-only>
-      <figure class="widget">
+      <figure>
         <barrage />
-        <background />
         <wallflower />
         <template v-if="!layoutColumn.isFullPage">
           <language />

@@ -4,11 +4,33 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, inject, ref, readonly, computed } from 'vue'
+import { App, inject, ref, readonly } from 'vue'
+import cookies from 'js-cookie'
 import storage from './storage'
 
+const DARK_THEME_QUERY = '(prefers-color-scheme: dark)'
+const LIGHT_THEME_QUERY = '(prefers-color-scheme: light)'
+const NO_PREFERENCE_QUERY = '(prefers-color-scheme: no-preference)'
+
 export const THEME_STORAGE_KEY = 'theme'
-export const getStorageTheme = () => storage.get(THEME_STORAGE_KEY)
+export const getClientLocalTheme = () => {
+  // local theme
+  const historyTheme = storage.get(THEME_STORAGE_KEY)
+  if (historyTheme) {
+    return historyTheme === Theme.Dark
+      ? Theme.Dark
+      : Theme.Default
+  }
+  // system theme
+  if (window.matchMedia(DARK_THEME_QUERY).matches) {
+    return Theme.Dark
+  }
+  if (window.matchMedia(LIGHT_THEME_QUERY).matches) {
+    return Theme.Default
+  }
+  // not specified || not support
+  return Theme.Default
+}
 
 export enum Theme {
   Default = 'default',
@@ -19,54 +41,35 @@ const themes = Object.values(Theme)
 const ThemeSymbol = Symbol('theme')
 const createThemeStore = (defaultTheme: Theme) => {
   const theme = ref(defaultTheme)
+
   const set = (newTheme: Theme) => {
     if (themes.includes(newTheme) && newTheme !== theme.value) {
       theme.value = newTheme
+      cookies.set(THEME_STORAGE_KEY, newTheme)
       storage.set(THEME_STORAGE_KEY, newTheme)
     }
   }
+
   const toggle = () => set(
     theme.value === Theme.Dark
       ? Theme.Default
       : Theme.Dark
   )
-  const resetOnClient = () => {
-    // history
-    const historyTheme = getStorageTheme()
-    if (historyTheme) {
-      set(historyTheme === Theme.Dark
-        ? Theme.Dark
-        : Theme.Default
-      )
-      return
-    }
 
-    // auto
-    const darkQuery = "(prefers-color-scheme: dark)"
-    const lightQuery = "(prefers-color-scheme: light)"
-    const isDarkMode = window.matchMedia(darkQuery).matches
-    const isLightMode = window.matchMedia(lightQuery).matches
-    const isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
-    if (isNotSpecified) {
-      window.matchMedia(darkQuery).addListener(({ matches }) => matches && set(Theme.Dark))
-      window.matchMedia(lightQuery).addListener(({ matches }) => matches && set(Theme.Default))
-      return
-    }
-    if (isDarkMode) {
-      set(Theme.Dark)
-      return
-    }
-    if (isLightMode) {
-      set(Theme.Default)
-      return
-    }
+  const bindClientSystem = () => {
+    window.matchMedia(DARK_THEME_QUERY).addEventListener('change',
+      ({ matches }) => matches && set(Theme.Dark)
+    )
+    window.matchMedia(LIGHT_THEME_QUERY).addEventListener('change',
+      ({ matches }) => matches && set(Theme.Default)
+    )
   }
 
   return {
     theme: readonly(theme),
     set,
     toggle,
-    resetOnClient
+    bindClientSystem
   }
 }
 

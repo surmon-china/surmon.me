@@ -77,8 +77,12 @@
         class="submit"
         :disabled="disabled"
         @click="handleSubmit"
-        v-i18n="posting ? LANGUAGE_KEYS.COMMENT_POST_SUBMITTING : LANGUAGE_KEYS.COMMENT_POST_SUBMIT"
-      />
+      >
+        <i18n :lkey="posting
+          ? LANGUAGE_KEYS.COMMENT_POST_SUBMITTING
+          : LANGUAGE_KEYS.COMMENT_POST_SUBMIT"
+        />
+      </button>
     </div>
   </div>
 </template>

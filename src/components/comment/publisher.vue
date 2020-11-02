@@ -56,19 +56,16 @@
           <strong class="name">{{ firstUpperCase(profileState.name) }}</strong>
           <span class="setting">
             <i class="iconfont icon-setting" />
-            <span
-              class="account-setting"
-              v-i18n="LANGUAGE_KEYS.COMMENT_ACCOUNT_SETTING"
-            />
+            <span class="account-setting">
+              <i18n :lkey="LANGUAGE_KEYS.COMMENT_ACCOUNT_SETTING" />
+            </span>
             <ul class="user-tool">
-              <li
-                @click.stop.prevent="editUserProfile"
-                v-i18n="LANGUAGE_KEYS.COMMENT_ACCOUNT_EDIT"
-              />
-              <li
-                @click.stop.prevent="clearUserProfile"
-                v-i18n="LANGUAGE_KEYS.COMMENT_ACCOUNT_CLEAR"
-              />
+              <li @click.stop.prevent="editUserProfile">
+                <i18n :lkey="LANGUAGE_KEYS.COMMENT_ACCOUNT_EDIT" />
+              </li>
+              <li @click.stop.prevent="clearUserProfile">
+                <i18n :lkey="LANGUAGE_KEYS.COMMENT_ACCOUNT_CLEAR" />
+              </li>
             </ul>
           </span>
         </div>
@@ -91,7 +88,7 @@
           <div v-if="Boolean(replyPid)" class="will-reply">
             <div class="reply-user">
               <span class="reply-text">
-                <span v-i18n="LANGUAGE_KEYS.COMMENT_REPLY" />
+                <i18n :lkey="LANGUAGE_KEYS.COMMENT_REPLY" />
                 <button
                   class="reply-user-name"
                   @click.prevent="scrollToComment(replyingComment.id)"

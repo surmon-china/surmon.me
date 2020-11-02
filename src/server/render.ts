@@ -4,6 +4,7 @@ import { Middleware } from 'koa'
 import { createSSRApp } from 'vue'
 import { createMemoryHistory } from 'vue-router'
 import { renderToString } from '@vue/server-renderer'
+import { Theme, THEME_STORAGE_KEY } from '/@/services/theme'
 import { getSSRContentScript } from '/@/enhancer'
 import { createVueApp } from '/@/main'
 
@@ -15,10 +16,11 @@ export const renderSSR: Middleware = async context => {
   console.log('----renderer')
   const { headers, url } = context.request
   const { app, router, store, helmet } = createVueApp({
-    appCreater: createSSRApp,
-    routerHistoryCreater: createMemoryHistory,
+    appCreator: createSSRApp,
+    historyCreator: createMemoryHistory,
     language: headers['accept-language'],
     userAgent: headers['user-agent'],
+    theme: context.cookies.get(THEME_STORAGE_KEY) as Theme || Theme.Default
   })
 
   try {

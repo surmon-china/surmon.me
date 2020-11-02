@@ -7,6 +7,7 @@ import { NODE_ENV, isProd, isSSR } from './enverionment'
 import gtag from './services/gtag'
 import adsense from '/@/services/adsense'
 import swiper from '/@/services/swiper'
+import { getClientLocalTheme } from '/@/services/theme'
 import { createDefer } from '/@/services/defer'
 import { createMusic } from '/@/services/music'
 import { createPopup } from '/@/services/popup'
@@ -22,13 +23,16 @@ import { getFileCDNUrl } from '/@/transforms/url'
 import { createVueApp } from './main'
 
 import '/@/assets/styles/app.scss'
+import { Theme } from './services/theme'
 
 const { app, router, globalState, theme, i18n, helmet, store } = createVueApp({
-  appCreater: createApp,
-  routerHistoryCreater: createWebHistory,
+  appCreator: createApp,
+  historyCreator: createWebHistory,
   language: navigator.language,
   userAgent: navigator.userAgent,
+  theme: getClientLocalTheme()
 })
+
 const music = createMusic({ albumId: MUSIC_ALBUM_ID, autoStart: false })
 const defer = createDefer()
 const loading = createLoading()
@@ -62,14 +66,15 @@ store.clientInit()
 exportLozadToGlobal()
 exportAppToGlobal(app)
 
-// only PC
-if (!globalState.userAgent.isMobile) {
-  theme.resetOnClient()
-}
+// PC -> bind system switch
+// Mobile -> reset to default
+globalState.userAgent.isMobile
+  ? theme.set(Theme.Default)
+  : theme.bindClientSystem()
 
 console.info('INITED:', { NODE_ENV, isProd, isSSR })
 
-// mount (isHydrate -> (SSR & true | SPA * false))
+// mount (isHydrate -> (SSR -> true | SPA -> false))
 app.mount('#app', isSSR).$nextTick(() => {
   // Desktop
   if (!globalState.userAgent.isMobile) {
