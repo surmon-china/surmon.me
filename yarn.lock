@@ -1902,7 +1902,7 @@ hash-sum@^2.0.0:
   resolved "https://registry.yarnpkg.com/hash-sum/-/hash-sum-2.0.0.tgz#81d01bb5de8ea4a214ad5d6ead1b523460b0b45a"
   integrity sha512-WdZTbAByD+pHfl/g9QSsBIIwy8IT+EsPiKDs0KNX+zSHhdDLFKdZu0BQHljvO+0QI/BasbMSUa8wYNCZTvhslg==
 
-highlight.js@^10.3.1:
+highlight.js@^10.3.2:
   version "10.3.2"
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-10.3.2.tgz#135fd3619a00c3cbb8b4cd6dbc78d56bfcbc46f1"
   integrity sha512-3jRT7OUYsVsKvukNKZCtnvRcFyCJqSEIuIMsEybAXRiFSwpt65qjPd/Pr+UOdYt7WJlt+lj3+ypUsHiySBp/Jw==
@@ -3312,10 +3312,10 @@ safer-buffer@^2.0.2, safer-buffer@^2.1.0, safer-buffer@~2.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sass@^1.27.1:
-  version "1.27.1"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.27.1.tgz#fe4c730f2abfe1502ecff047798b35a7b792dc03"
-  integrity sha512-Co5i3s4kN0AgXe8ZFfIl4pfjHjPgotT81O68m3buwdj7v3oHjYiWNqp0oXTKXnEqyKU30KAYC5u8uUF4x+BKfw==
+sass@^1.28.0:
+  version "1.28.0"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.28.0.tgz#546f1308ff74cc4ec2ad735fd35dc18bc3f51f72"
+  integrity sha512-9FWX/0wuE1KxwfiP02chZhHaPzu6adpx9+wGch7WMOuHy5npOo0UapRI3FNSHva2CczaYJu2yNUBN8cCSqHz/A==
   dependencies:
     chokidar ">=2.0.0 <4.0.0"
 
@@ -3609,10 +3609,10 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-swiper@^6.3.4:
-  version "6.3.4"
-  resolved "https://registry.yarnpkg.com/swiper/-/swiper-6.3.4.tgz#94bebb39437825d303afd19d9f28927fa943e5f2"
-  integrity sha512-6XWBJCAjOTQd3yVVZO9y47B007QPeiCcn/pm9OkueVLpYNWZBAXpoX0P8JaGch/bzcaH3oXteWCj5KC8R3AloA==
+swiper@^6.3.5:
+  version "6.3.5"
+  resolved "https://registry.yarnpkg.com/swiper/-/swiper-6.3.5.tgz#7444b680d0fdafe84859825ac3559b5b01bd1916"
+  integrity sha512-MZkkVJ+sXukp6G3Z3BlKayhBjRIQuO1TZaTlH7ooI/0qbH0kkmItFMjFo19nOOsJaDXglA32xqyc9KCtmbJv0w==
   dependencies:
     dom7 "^3.0.0-alpha.7"
     ssr-window "^3.0.0-alpha.4"

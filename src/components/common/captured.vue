@@ -55,11 +55,13 @@
         const defaultError = {
           code: 500
         }
+        // error
         if (_error instanceof Error) {
           error.value = {
             ...defaultError,
             message: _error.message
           }
+        // error message
         } else if (typeof _error === 'string') {
           error.value = {
             ...defaultError,
@@ -71,7 +73,6 @@
             ..._error
           }
         }
-        console.log('Captured--err', _error, error.value)
       })
 
       return {

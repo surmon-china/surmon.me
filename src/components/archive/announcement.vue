@@ -280,11 +280,14 @@
         flex: 1;
         height: $announcement-height;
 
-        // Filter for slide when transitioning
-        .swiper-wrapper[style*="300ms"] {
-          .swiper-slide-active {
-            .content {
-              @include blur-filter('vertical-small');
+        .swiper-wrapper {
+          flex-direction: column;
+          // Filter for slide when transitioning
+          &[style*="300ms"] {
+            .swiper-slide-active {
+              .content {
+                @include blur-filter('vertical-small');
+              }
             }
           }
         }

@@ -8,17 +8,12 @@ import {
   App,
   Plugin,
   WatchStopHandle,
-  HtmlHTMLAttributes,
   MetaHTMLAttributes,
   readonly,
 } from 'vue'
 
 interface Base {
   [key: string]: any
-}
-interface HelmetHTMLAttributes extends HtmlHTMLAttributes, Base {
-  xmlns?: string
-  lang?: string
 }
 interface _HelmetConfig {
   title: string
@@ -93,8 +88,7 @@ const createHelmetStore = (initConfig: HelmetConfig) => {
   const transformMetaCode = (meta: MetaHTMLAttributes) => {
     return `<meta ${transformAttrCode(meta).join(' ')} />`
   }
-
-  const getHTML = () => ({
+  const html = computed(() => ({
     title: `<title>${cState.value.title}</title>`,
     keywords: transformMetaCode({
       name: 'keywords',
@@ -102,9 +96,9 @@ const createHelmetStore = (initConfig: HelmetConfig) => {
     }),
     description: transformMetaCode({
       name: 'description',
-      content: cState.value.keywords
+      content: cState.value.description
     })
-  })
+  }))
 
   // Client
   let watchStopHandle: WatchStopHandle | null
@@ -123,11 +117,9 @@ const createHelmetStore = (initConfig: HelmetConfig) => {
   return {
     state,
     cState: readonly(cState),
+    html,
     bindClient,
-    unbindClient,
-    get html() {
-      return getHTML()
-    }
+    unbindClient
   }
 }
 
@@ -145,22 +137,27 @@ export function createHelmet(config: HelmetConfig): Helmet & Plugin {
   }
 }
 
-export function useTitle(title: () => string) {
+export function useTitle(title: () => string, once = false) {
   const helmet = inject<Helmet>(HELMET_KEY) as Helmet
   const prevTitle = helmet.state.title
-  const targetTitle = computed(title)
-  const stopWatch = watchEffect(() => {
-    helmet.state.title = targetTitle.value
-  })
-
-  onBeforeUnmount(() => {
-    stopWatch()
-    helmet.state.title = prevTitle
-  })
-  return helmet as Helmet
+  if (once) {
+    helmet.state.title = title()
+  } else {
+    const targetTitle = computed(title)
+    const stopWatch = watchEffect(() => {
+      console.log('-----watch title', targetTitle.value)
+      helmet.state.title = targetTitle.value
+    })
+    onBeforeUnmount(() => {
+      console.log('-----watch onBeforeUnmount')
+      stopWatch()
+      helmet.state.title = prevTitle
+    })
+    return stopWatch
+  }
 }
 
-export function useHelmet(state?: HelmetConfig) {
+export function useHelmet() {
   const helmet = inject<Helmet>(HELMET_KEY)
   // if (helmet && state) {
   //   const id = new Date().getTime().toString()
@@ -174,5 +171,8 @@ export function useHelmet(state?: HelmetConfig) {
   // // TODO:
   // // onmounted -> push
   // // ondestory -> unshift
-  return helmet as Helmet
+  return {
+    helmet: helmet as Helmet,
+    title: useTitle
+  }
 }

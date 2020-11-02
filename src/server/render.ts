@@ -4,13 +4,12 @@ import { Middleware } from 'koa'
 import { createSSRApp } from 'vue'
 import { createMemoryHistory } from 'vue-router'
 import { renderToString } from '@vue/server-renderer'
-import { createVueApp, getSSRContentScript } from '/@/main'
+import { getSSRContentScript } from '/@/enhancer'
+import { createVueApp } from '/@/main'
 
 const SPA_INDEX_HTML = fs
   .readFileSync(path.join(__dirname, 'index.html'))
   .toString()
-
-console.log('----SPA_INDEX_HTML', SPA_INDEX_HTML)
 
 export const renderSSR: Middleware = async context => {
   console.log('----renderer')
@@ -24,20 +23,16 @@ export const renderSSR: Middleware = async context => {
 
   try {
     await router.push(url)
-    console.log('----1')
     await router.isReady()
-    console.log('----2')
     await store.serverInit()
-    console.log('----3')
     const APP_HTML = await renderToString(app)
-    console.log('----4')
     const STORE_SCRIPT = store.getServerScript()
     const SSR_CONTEXT_SCRIPT = getSSRContentScript({ url })
 
     const HEAD = [
-      helmet.html.title,
-      helmet.html.keywords,
-      helmet.html.description
+      helmet.html.value.title,
+      helmet.html.value.keywords,
+      helmet.html.value.description
     ].join('\n')
 
     const FOOTER = [
@@ -49,14 +44,14 @@ export const renderSSR: Middleware = async context => {
       .replace(/<title>[\s\S]*<\/title>/, '')
       .replace(
         `<head>`,
-        `<head>${HEAD}`
+        `<head>\n${HEAD}`
       )
       .replace(
         `<div id="app">`,
         `<div id="app" data-server-rendered="true">${APP_HTML}</div>`
       ).replace(
         `</body>`,
-        `${FOOTER}</body>`
+        `${FOOTER}\n</body>`
       )
     console.log('----5 set body')
     context.body = HTML;

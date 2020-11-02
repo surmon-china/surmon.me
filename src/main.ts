@@ -19,15 +19,6 @@ import { Language, languages, langMap } from '/@/language/data'
 import { createGlobalState } from './state'
 import App from './app.vue'
 
-import '/@/assets/styles/app.scss'
-
-export const getSSRContentScript = (data) => {
-  return `window.__INITIAL_SSR_CONTEXT__ = ${JSON.stringify(data)}`
-}
-export const getSSRContentData = () => {
-  return (window as any).__INITIAL_SSR_CONTEXT__
-}
-
 export interface ICreaterContext {
   appCreater: CreateAppFunction<Element>
   routerHistoryCreater(base?: string): RouterHistory
