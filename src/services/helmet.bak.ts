@@ -4,12 +4,16 @@ import {
   computed,
   watchEffect,
   // onMounted,
-  onBeforeUnmount,
+  onActivated,
+  onDeactivated,
   App,
   Plugin,
   WatchStopHandle,
   HtmlHTMLAttributes,
+  BaseHTMLAttributes,
   MetaHTMLAttributes,
+  LinkHTMLAttributes,
+  ScriptHTMLAttributes,
   readonly,
 } from 'vue'
 
@@ -25,6 +29,10 @@ interface _HelmetConfig {
   keywords: string
   description: string
   titleTemplate(title: string): string
+  htmlAttrs: HelmetHTMLAttributes
+  meta: Array<MetaHTMLAttributes & Base>
+  link: Array<LinkHTMLAttributes & Base>
+  script: Array<ScriptHTMLAttributes & Base>
 }
 
 export type Helmet = ReturnType<typeof createHelmetStore>
@@ -35,32 +43,10 @@ const DEFAULT_CONFIG: _HelmetConfig = {
   keywords: '',
   description: '',
   titleTemplate: title => title,
-}
-
-const appendNewMeta = (metaData: MetaHTMLAttributes) => {
-  const head = document.querySelector('head')
-  const meta = document.createElement('meta')
-  Object.keys(metaData).forEach(key => {
-    meta[key] = metaData[key]
-    meta.setAttribute(key, metaData[key])
-  })
-  head?.appendChild(meta)
-}
-
-const setHeadMeta = (name: string, content: string) => {
-  const head = document.querySelector('head')
-  if (!head) {
-    return false
-  }
-  const targetMetaElement = Array.from(head.children || []).find(child => (
-    child.tagName === 'META' &&
-    child.getAttribute('name') === name
-  ))
-  if (targetMetaElement) {
-    targetMetaElement.setAttribute('content', content)
-  } else {
-    appendNewMeta({ name, content })
-  }
+  htmlAttrs: {},
+  meta: [],
+  link: [],
+  script: []
 }
 
 const HELMET_KEY = Symbol('helmet')
@@ -93,6 +79,12 @@ const createHelmetStore = (initConfig: HelmetConfig) => {
   const transformMetaCode = (meta: MetaHTMLAttributes) => {
     return `<meta ${transformAttrCode(meta).join(' ')} />`
   }
+  const transformLinkCode = (link: LinkHTMLAttributes) => {
+    return `<link ${transformAttrCode(link).join(' ')} >`
+  }
+  const transformScriptCode = (script: LinkHTMLAttributes) => {
+    return `<script ${transformAttrCode(script).join(' ')} ></script>`
+  }
 
   const getHTML = () => ({
     title: `<title>${cState.value.title}</title>`,
@@ -103,12 +95,43 @@ const createHelmetStore = (initConfig: HelmetConfig) => {
     description: transformMetaCode({
       name: 'description',
       content: cState.value.keywords
-    })
+    }),
+    htmlAttrs: transformAttrCode(config.htmlAttrs).join(' '),
+    meta: config.meta.map(transformMetaCode),
+    link: config.link.map(transformLinkCode),
+    script: config.script.map(transformScriptCode),
   })
 
   // Client
+  // MARK: 暂不支持纯 SPA，SPA 环境下会忽略不可变数据
   let watchStopHandle: WatchStopHandle | null
   const bindClient = () => {
+    const appendNewMeta = (metaData: MetaHTMLAttributes) => {
+      const head = document.querySelector('head')
+      const meta = document.createElement('meta')
+      Object.keys(metaData).forEach(key => {
+        meta[key] = metaData[key]
+        meta.setAttribute(key, metaData[key])
+      })
+      head?.appendChild(meta)
+    }
+
+    const setHeadMeta = (name: string, content: string) => {
+      const head = document.querySelector('head')
+      if (!head) {
+        return false
+      }
+      const targetMetaElement = Array.from(head.children || []).find(child => (
+        child.tagName === 'META' &&
+        child.getAttribute('name') === name
+      ))
+      if (targetMetaElement) {
+        targetMetaElement.setAttribute('content', content)
+      } else {
+        appendNewMeta({ name, content })
+      }
+    }
+
     watchStopHandle = watchEffect(() => {
       document.title = cState.value.title
       setHeadMeta('keywords', cState.value.keywords)
@@ -121,7 +144,7 @@ const createHelmetStore = (initConfig: HelmetConfig) => {
   }
 
   return {
-    state,
+    state: readonly(state),
     cState: readonly(cState),
     bindClient,
     unbindClient,
@@ -143,21 +166,6 @@ export function createHelmet(config: HelmetConfig): Helmet & Plugin {
       }
     }
   }
-}
-
-export function useTitle(title: () => string) {
-  const helmet = inject<Helmet>(HELMET_KEY) as Helmet
-  const prevTitle = helmet.state.title
-  const targetTitle = computed(title)
-  const stopWatch = watchEffect(() => {
-    helmet.state.title = targetTitle.value
-  })
-
-  onBeforeUnmount(() => {
-    stopWatch()
-    helmet.state.title = prevTitle
-  })
-  return helmet as Helmet
 }
 
 export function useHelmet(state?: HelmetConfig) {
