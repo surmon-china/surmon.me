@@ -137,7 +137,6 @@
   import { useEnhancer } from '/@/enhancer'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { Language } from '/@/language/data'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import AdsenseResponsive from '/@/components/adsense/responsive.vue'
 
@@ -147,14 +146,13 @@
       AdsenseResponsive
     },
     setup() {
-      const { i18n, gtag, isMobile } = useEnhancer()
+      const { i18n, gtag, isMobile, isZhLang } = useEnhancer()
 
       const handleSubmitEmail = () => {
-        const isZhLang =  i18n.language.value === Language.Zh
-        const subject = isZhLang
+        const subject = isZhLang.value
           ? `嗨！Surmon，久仰大名！`
           : `Technical consultant / ${META.title}`
-        const body = isZhLang
+        const body = isZhLang.value
           ? `我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
           : 'Hi Surmon, My name is '
         const mailAddress = `mailto:${META.email}` + (

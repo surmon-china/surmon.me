@@ -22,10 +22,11 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
+  import { isClient } from '/@/environment'
+  import { useEnhancer } from '/@/enhancer'
   import { Modules, getNamespace } from '/@/store'
   import { OptionModuleActions, OptionModuleMutations } from '/@/store/option'
   import { CommentModuleActions } from '/@/store/comment'
-  import { useEnhancer } from '/@/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import Comment from '/@/components/comment/index.vue'
 
@@ -54,7 +55,7 @@
         ),
         store.dispatch(
           getNamespace(Modules.Comment, CommentModuleActions.FetchList),
-          { post_id: 0 }
+          { post_id: 0, delay: isClient ? 368 : 0 }
         )
       ])
 

@@ -20,7 +20,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { onPreFetch } from '/@/ssr'
+  import { onPrefetch, onClient } from '/@/universal'
   import { useStore, Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { AnnouncementModuleActions } from '/@/store/announcement'
@@ -54,7 +54,7 @@
         const targetPage = article.value.data.pagination?.current_page + 1
         await fetchArticles({ page: targetPage })
         if (targetPage > 1) {
-          nextScreen()
+          onClient(nextScreen)
         }
       }
 
@@ -69,7 +69,7 @@
         loadmoreArticles
       }
 
-      return onPreFetch(fetchAllData, resultData)
+      return onPrefetch(fetchAllData, resultData)
     }
   })
 </script>

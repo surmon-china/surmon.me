@@ -79,10 +79,10 @@
     },
     setup() {
       const { i18n, globalState, isZhLang } = useEnhancer()
-      const sizes = isZhLang
+      const sizes = isZhLang.value
         ? ['粗大', '很大', '大']
         : ['Strong', 'Large', 'Normal'];
-      const colors = isZhLang
+      const colors = isZhLang.value
         ? ['老王绿', '原谅绿', '姨妈红', '友情紫', '百合粉', '东莞黄', '李太白', '非常黑']
         : ['Green', 'Green2', 'Red', 'Purple', 'Pink', 'Yellow', 'White', 'Black'];
 

@@ -19,9 +19,8 @@
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { isClient, isServer } from '/@/environment'
   import { useEnhancer } from '/@/enhancer'
-  import { onPreFetch } from '/@/ssr'
+  import { onPrefetch, onClient } from '/@/universal'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { CategoryModuleActions } from '/@/store/category'
@@ -63,17 +62,21 @@
       }
 
       // helmet
-      helmet.title(() => {
+      helmet(() => {
         const slug = props.categorySlug
         const slugTitle = slug
           .toLowerCase()
           .replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
         const enTitle = `${slugTitle} | Category`
         const zhTitle = i18n.t(slug)
-        return isZhLang && zhTitle
+        const title = isZhLang.value && zhTitle
           ? `${zhTitle} | ${enTitle}`
           : enTitle
-      }, isServer)
+        return {
+          title,
+          description: currentCategory.value?.description || title
+        }
+      })
 
       const articleData = computed(() => store.state.article.list)
       const currentCategoryIcon = computed(() => (
@@ -103,15 +106,11 @@
           category_slug: props.categorySlug,
           page: articleData.value.data.pagination.current_page + 1
         })
-        if (isClient) {
-          nextScreen()
-        }
+        onClient(nextScreen)
       }
 
       const fetchAllData = (category_slug: string) => {
-        if (isClient) {
-          scrollToTop()
-        }
+        onClient(scrollToTop)
         return Promise.all([
           fetchCategories(),
           fetchArticles({ category_slug })
@@ -135,7 +134,7 @@
         loadmoreArticles
       }
 
-      return onPreFetch(() => fetchAllData(props.categorySlug), resultData)
+      return onPrefetch(() => fetchAllData(props.categorySlug), resultData)
     }
   })
 </script>

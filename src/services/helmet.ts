@@ -1,9 +1,9 @@
 import {
+  ref,
   inject,
-  reactive,
   computed,
   watchEffect,
-  // onMounted,
+  onMounted,
   onBeforeUnmount,
   App,
   Plugin,
@@ -12,18 +12,7 @@ import {
   readonly,
 } from 'vue'
 import { isClient } from '/@/environment'
-
-interface Base {
-  [key: string]: any
-}
-
-export type Helmet = ReturnType<typeof createHelmetStore>
-export interface HelmetConfig {
-  title: string
-  keywords: string
-  description: string
-  titleTemplate(title: string): string
-}
+import { onClient, onServer } from '/@/universal'
 
 const appendNewMeta = (metaData: MetaHTMLAttributes) => {
   const head = document.querySelector('head')
@@ -42,6 +31,7 @@ const getMetaElement = (name: string) => {
     child.getAttribute('name') === name
   ))
 }
+
 const getMetaContent = (name: string) => {
   return getMetaElement(name)?.getAttribute?.('content')
 }
@@ -57,21 +47,52 @@ const setHeadMeta = (name: string, content: string) => {
     : appendNewMeta({ name, content })
 }
 
+interface Base {
+  [key: string]: any
+}
+
+export type Helmet = ReturnType<typeof createHelmetStore>
+export interface HelmetConfig {
+  title: string
+  keywords: string
+  description: string
+  titleTemplate(title: string): string
+}
+
+export interface HelmetHookState {
+  title?: string
+  keywords?: string
+  description?: string
+}
+
+type HelmetComputer = () => HelmetHookState
 const HELMET_KEY = Symbol('helmet')
 const createHelmetStore = (defaultConfig: HelmetConfig) => {
-  const state = reactive({
+
+  const computer = ref<HelmetComputer>(() => ({
     title: isClient && document.title || '',
     keywords: isClient && getMetaContent('keywords') || '',
     description: isClient && getMetaContent('description') || '',
-  })
+  }))
+  const setComputer = (_computer: HelmetComputer) => {
+    computer.value = _computer
+  }
+  const resetComputer = () => {
+    computer.value = () => ({
+      title: '',
+      keywords: '',
+      description: '',
+    })
+  }
 
+  const state = computed(() => computer.value())
   const cState = computed(() => {
     return {
-      title: state.title
-        ? defaultConfig.titleTemplate(state.title)
+      title: state.value.title
+        ? defaultConfig.titleTemplate(state.value.title)
         : defaultConfig.title,
-      keywords: state.keywords || defaultConfig.keywords,
-      description: state.description || defaultConfig.description
+      keywords: state.value.keywords || defaultConfig.keywords,
+      description: state.value.description || defaultConfig.description
     }
   })
 
@@ -80,7 +101,7 @@ const createHelmetStore = (defaultConfig: HelmetConfig) => {
     return Object.keys(attrs).map(key => `${key}="${attrs[key]}"`)
   }
   const transformMetaCode = (meta: MetaHTMLAttributes) => {
-    return `<meta ${transformAttrCode(meta).join(' ')} />`
+    return `<meta ${transformAttrCode(meta).join(' ')}>`
   }
   const html = computed(() => ({
     title: `<title>${cState.value.title}</title>`,
@@ -109,6 +130,8 @@ const createHelmetStore = (defaultConfig: HelmetConfig) => {
   }
 
   return {
+    setComputer,
+    resetComputer,
     state,
     cState: readonly(cState),
     html,
@@ -131,40 +154,22 @@ export function createHelmet(config: HelmetConfig): Helmet & Plugin {
   }
 }
 
-export function useTitle(title: () => string, once = false) {
-  const helmet = inject<Helmet>(HELMET_KEY) as Helmet
-  if (once) {
-    helmet.state.title = title()
-  } else {
-    const targetTitle = computed(title)
-    let stopWatch: WatchStopHandle | null  = watchEffect(() => {
-      helmet.state.title = targetTitle.value
-    })
-    onBeforeUnmount(() => {
-      stopWatch?.()
-      stopWatch = null
-      helmet.state.title = ''
-    })
-    return stopWatch
-  }
-}
-
+export type HelmetHook = ReturnType<typeof useHelmet>
 export function useHelmet() {
-  const helmet = inject<Helmet>(HELMET_KEY)
-  // if (helmet && state) {
-  //   const id = new Date().getTime().toString()
-  //   const push = () => helmet.push(id, state)
-  //   const remove = () => helmet.remove(id)
-
-  //   push()
-  //   onActivated(push)
-  //   onDeactivated(remove)
-  // }
-  // // TODO:
-  // // onmounted -> push
-  // // ondestory -> unshift
-  return {
-    helmet: helmet as Helmet,
-    title: useTitle
+  const helmet = inject<Helmet>(HELMET_KEY) as Helmet
+  const use = (computer: HelmetComputer) => {
+    onServer(() => {
+      helmet.setComputer(computer)
+    })
+    onClient(() => {
+      onMounted(() => {
+        helmet.setComputer(computer)
+      })
+      onBeforeUnmount(() => {
+        helmet.resetComputer()
+      })
+    })
   }
+
+  return use
 }

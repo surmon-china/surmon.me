@@ -6,7 +6,7 @@
 
 import { createStore, useStore as useVuexStore } from 'vuex'
 import { GlobalState } from '/@/state'
-import { getSSRStoreData } from '/@/ssr'
+import { getSSRStoreData } from '/@/universal'
 import { isSPA } from '/@/environment'
 import announcementModule, { AnnouncementState } from './announcement'
 import optionModule, { OptionState, OptionModuleActions } from './option'

@@ -21,8 +21,7 @@
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { isClient, isServer } from '/@/environment'
-  import { onPreFetch } from '/@/ssr'
+  import { onPrefetch, onClient } from '/@/universal'
   import { useEnhancer } from '/@/enhancer'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
@@ -62,15 +61,18 @@
         return Promise.reject({ code: 404 })
       }
 
-        // helmet
-      helmet.title(() => {
+      // helmet
+      helmet(() => {
         const slug = props.tagSlug
         const slugTitle = slug
           .toLowerCase()
           .replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+        const enTitle = `${slugTitle} | Tag`
         const zhTitle = currentTag.value?.name
-        return `${isZhLang && zhTitle || slugTitle} | Tag`
-      }, isServer)
+        const title = `${isZhLang.value && zhTitle ? zhTitle : enTitle} | Tag`
+        const description = currentTag.value?.description || title
+        return { title, description}
+      })
 
       const article = computed(() => store.state.article.list)
       const currentTagIcon = computed(() => getExtendsValue(currentTag.value, 'icon') || 'icon-tag')
@@ -93,15 +95,11 @@
           tag_slug: props.tagSlug,
           page: article.value.data.pagination.current_page + 1
         })
-        if (isClient) {
-          nextScreen()
-        }
+        onClient(nextScreen)
       }
 
       const fetchAllData = (tag_slug: string) => {
-        if (isClient) {
-          scrollToTop()
-        }
+        onClient(scrollToTop)
         return Promise.all([
           fetchTags(),
           fetchArticles({ tag_slug })
@@ -125,7 +123,7 @@
         loadmoreArticles,
       }
 
-      return onPreFetch(() => fetchAllData(props.tagSlug), resultData)
+      return onPrefetch(() => fetchAllData(props.tagSlug), resultData)
     }
   })
 </script>

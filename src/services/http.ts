@@ -31,8 +31,17 @@ http.interceptors.response.use(
     }
   },
   error => {
-    console.debug('Toast:', error)
-    return Promise.reject(error)
+    const errorJSON = error.toJSON()
+    const errorInfo = {
+      ...errorJSON,
+      config: error.config,
+      request: error.request,
+      response: error.response,
+      code: error.code || error.response?.status,
+      message: errorJSON.message + ': ' + (error.response?.statusText || 'NULL'),
+    }
+    console.debug('axios error:', errorInfo)
+    return Promise.reject(errorInfo)
   }
 )
 

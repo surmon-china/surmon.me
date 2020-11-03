@@ -1,5 +1,6 @@
 
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import { isServer } from '/@/environment'
 import { getAccesser } from '/@/services/storage'
 import { OriginState } from '/@/constants/state'
 import { USER_LIKE_HISTORY } from '/@/constants/storage'
@@ -16,12 +17,15 @@ export const getExtendsValue = (target: any, key: string) => {
   return targetExtend ? targetExtend.value : null
 }
 
-const getUserLikeHistory = () => getAccesser(
-  USER_LIKE_HISTORY, {
+const getUserLikeHistory = () => {
+  const defaultState = {
     pages: [] as number [],
     comments: [] as number []
   }
-)
+  return isServer
+    ? ref(defaultState)
+    : getAccesser(USER_LIKE_HISTORY, defaultState)
+}
 
 export const usePageLike = (postId: number) => {
   const likeHistory = getUserLikeHistory()

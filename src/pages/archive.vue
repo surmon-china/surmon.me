@@ -112,6 +112,7 @@
   import { TagModuleActions } from '/@/store/tag'
   import { CategoryModuleActions } from '/@/store/category'
   import { useEnhancer } from '/@/enhancer'
+  import { onPrefetch } from '/@/universal'
   import { RouteName } from '/@/router'
   import { getTagArchiveRoute, getCategoryArchiveRoute, getArticleDetailRoute, getPageRoute } from '/@/transforms/route'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -121,18 +122,20 @@
 
   export default defineComponent({
     name: 'Archive',
-    // head() {
-    //   return {
-    //     title: `${this.isEnLang ? '' : this.$i18n.nav.map + ' | '}Archive`
-    //   }
-    // },
     setup() {
-      const { store, isMobile } = useEnhancer()
+      const { i18n, store, helmet, isMobile, isZhLang } = useEnhancer()
       const tags = computed(() => store.state.tag.data)
       const hasArticle = computed(() => store.state.archive.articles.data.length)
       const isFetching = computed(() => (
         store.state.archive.articles.fetching || store.state.tag.fetching
       ))
+
+      helmet(() => {
+        const prefix = isZhLang.value
+          ? `${i18n.t(LANGUAGE_KEYS.PAGE_ARCHIVE)} | `
+          : ''
+        return { title: prefix + 'Archive' }
+      })
 
       const articleTree = computed(() => {
         const rootTree = [] as Array<{
@@ -167,8 +170,7 @@
         return rootTree
       })
 
-      // TODO: SSR
-      Promise.all([
+      const fetchAllData = Promise.all([
         store.dispatch(getNamespace(
           Modules.Tag,
           TagModuleActions.FetchAll
@@ -179,7 +181,7 @@
         ))
       ])
 
-      return {
+      const resultData = {
         LANGUAGE_KEYS,
         APP_CONFIG,
         RouteName,
@@ -196,6 +198,8 @@
         hasArticle,
         isFetching
       }
+
+      return onPrefetch(fetchAllData, resultData)
     }
   })
 </script>

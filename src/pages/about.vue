@@ -29,13 +29,15 @@
                 en="Every path I went astray built my Rome."
               />
             </span>
-            <popup :visible="isOnLiveMap" @close="toggleLiveMap">
-              <iframe
-                :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP"
-                frameborder="0"
-                class="live-map"
-              />
-            </popup>
+            <client-only>
+              <popup :visible="isOnLiveMap" @close="toggleLiveMap">
+                <iframe
+                  :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP"
+                  frameborder="0"
+                  class="live-map"
+                />
+              </popup>
+            </client-only>
           </div>
           <div class="item">
             <i class="iconfont icon-social" />
@@ -279,23 +281,20 @@
 
   export default defineComponent({
     name: 'About',
-    /*
-    head() {
-      return {
-        title: `${this.isEnLang ? '' : this.$i18n.nav.about + ' | '}About`
-      }
-    },
-    fetch({ store }) {
-      return store.dispatch('global/fetchAdminInfo')
-    },
-    */
     setup(props) {
-      const { gtag, globalState, store, adConfig, isMobile } = useEnhancer()
+      const { i18n, helmet, gtag, globalState, store, adConfig, isZhLang, isMobile } = useEnhancer()
       const isOnLiveMap = toRef(globalState.switchBox, 'liveMap')
       const gravatar = computed(() => (
         store.state.option.adminInfo?.gravatar ||
         getFileCDNUrl('/images/gravatar.jpg')
       ))
+
+      helmet(() => {
+        const prefix = isZhLang.value
+          ? `${i18n.t(LANGUAGE_KEYS.PAGE_ABOUT)} | `
+          : ''
+        return { title: prefix + 'About' }
+      })
 
       const handleHoverFollowMe = () => {
         gtag?.event('加微信码', {
