@@ -28,7 +28,7 @@ export const onServer = (callback: any) => {
 
 // server pre fetch
 let isFirstScreenHydrated = false
-export const onPrefetch = <D = any>(fetcher: () => Promise<any | any[]>, data: D) => {
+export const onPrefetch = <D = any>(fetcher: () => Promise<any>, data: D) => {
   if (isSPA) {
     onBeforeMount(fetcher)
     return data

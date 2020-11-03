@@ -59,16 +59,13 @@
   import { defineComponent } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { getFileCDNUrl } from '/@/transforms/url'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import { META } from '/@/config/app.config'
+
   export default defineComponent({
     name: 'Job',
-    // head() {
-    //   return {
-    //     title: `${this.isEnLang ? '' : this.$i18n.nav.vlog + ' | '}Lens`
-    //   }
-    // },
     setup() {
-      const { isMobile, isDarkTheme } = useEnhancer()
+      const { i18n, helmet, isMobile, isDarkTheme, isZhLang } = useEnhancer()
       const jobs = [
         {
           id: 'qiniu',
@@ -106,6 +103,13 @@
           email: META.email
         }
       ]
+
+      helmet(() => {
+        const prefix = isZhLang.value
+          ? `${i18n.t(LANGUAGE_KEYS.PAGE_JOB)} | `
+          : ''
+        return { title: prefix + 'Job' }
+      })
 
       const handleSubmit = (job: any) => {
         const subject = `嗨！求内推！`

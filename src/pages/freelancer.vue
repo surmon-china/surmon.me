@@ -146,7 +146,14 @@
       AdsenseResponsive
     },
     setup() {
-      const { i18n, gtag, isMobile, isZhLang } = useEnhancer()
+      const { i18n, helmet, gtag, isMobile, isZhLang } = useEnhancer()
+
+      helmet(() => {
+        const prefix = isZhLang.value
+          ? `${i18n.t(LANGUAGE_KEYS.PAGE_FREELANCER)} | `
+          : ''
+        return { title: prefix + 'Freelancer' }
+      })
 
       const handleSubmitEmail = () => {
         const subject = isZhLang.value

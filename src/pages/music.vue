@@ -88,18 +88,24 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
+  import { useEnhancer } from '/@/enhancer'
   import { useMusic } from '/@/services/music'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+
   export default defineComponent({
     name: 'Music',
-    // head() {
-    //   return {
-    //     title: `${this.isEnLang ? '' : this.$i18n.nav.music + ' | '}Music`
-    //   }
-    // },
     setup() {
+      const { i18n, helmet, isZhLang } = useEnhancer()
       const musicPlayer = useMusic()
       const currentSong = computed(() => {
         return musicPlayer?.currentSong
+      })
+
+      helmet(() => {
+        const prefix = isZhLang.value
+          ? `${i18n.t(LANGUAGE_KEYS.PAGE_MUSIC)} | `
+          : ''
+        return { title: prefix + 'Music' }
       })
 
       const relativeStrokeWidth = parseFloat((15 / 450 * 100).toFixed(1))

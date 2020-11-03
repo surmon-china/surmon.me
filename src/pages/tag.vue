@@ -20,7 +20,6 @@
 
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { onPrefetch, onClient } from '/@/universal'
   import { useEnhancer } from '/@/enhancer'
   import { Modules, getNamespace } from '/@/store'
@@ -28,6 +27,7 @@
   import { TagModuleActions } from '/@/store/tag'
   import { getExtendsValue } from '/@/transforms/state'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
 

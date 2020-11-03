@@ -24,6 +24,7 @@
   import { defineComponent, ref, computed } from 'vue'
   import { isClient } from '/@/environment'
   import { useEnhancer } from '/@/enhancer'
+  import { onPrefetch } from '/@/universal'
   import { Modules, getNamespace } from '/@/store'
   import { OptionModuleActions, OptionModuleMutations } from '/@/store/option'
   import { CommentModuleActions } from '/@/store/comment'
@@ -32,23 +33,24 @@
 
   export default defineComponent({
     name: 'Guestbook',
-    // head() {
-    //   return {
-    //     title: `${this.isEnLang ? '' : this.$i18n.nav.guestbook + ' | '}Guestbook`
-    //   }
-    // },
     components: {
       Comment
     },
     setup() {
-      const { store, isMobile, isDarkTheme } = useEnhancer()
+      const { i18n, store, helmet, isMobile, isDarkTheme, isZhLang } = useEnhancer()
       const siteLikes = computed(() => {
         const appOption = store.state.option.appOption.data
         return appOption ? appOption.meta.likes : 0
       })
 
-      // TODO: SSR
-      Promise.all([
+      helmet(() => {
+        const prefix = isZhLang.value
+          ? `${i18n.t(LANGUAGE_KEYS.PAGE_GUESTBOOK)} | `
+          : ''
+        return { title: prefix + 'Guestbook' }
+      })
+
+      const fetchAllData = () => Promise.all([
         store.dispatch(
           getNamespace(Modules.Option, OptionModuleActions.FetchAppOption),
           true
@@ -59,12 +61,14 @@
         )
       ])
 
-      return {
+      const resultData = {
         LANGUAGE_KEYS,
         isMobile,
         isDarkTheme,
         siteLikes
       }
+
+      return onPrefetch(fetchAllData, resultData)
     }
   })
 </script>
