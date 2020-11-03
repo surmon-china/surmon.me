@@ -170,7 +170,7 @@
         return rootTree
       })
 
-      const fetchAllData = Promise.all([
+      const fetchAllData = () => Promise.all([
         store.dispatch(getNamespace(
           Modules.Tag,
           TagModuleActions.FetchAll

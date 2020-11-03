@@ -121,6 +121,7 @@
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
   import { useEnhancer } from '/@/enhancer'
+  import { onPrefetch } from '/@/universal'
   import { getNamespace, Modules } from '/@/store'
   import { VlogModuleActions } from '/@/store/vlog'
   import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
@@ -131,17 +132,19 @@
 
   export default defineComponent({
     name: 'Lens',
-    // head() {
-    //   return {
-    //     title: `${this.isEnLang ? '' : this.$i18n.nav.vlog + ' | '}Lens`
-    //   }
-    // },
     setup() {
-      const { globalState, i18n, store, isMobile, isDarkTheme } = useEnhancer()
+      const { globalState, i18n, helmet, store, isMobile, isDarkTheme, isZhLang } = useEnhancer()
       const lozadObserver = ref<LozadObserver | null>(null)
       const videoListElement = ref<HTMLElement>()
       const isFetching = computed(() => store.state.vlog.fetching)
       const videoListData = computed(() => store.state.vlog.data?.vlist)
+
+      helmet(() => {
+        const prefix = isZhLang.value
+          ? `${i18n.t(LANGUAGE_KEYS.PAGE_LENS)} | `
+          : ''
+        return { title: prefix + 'Lens' }
+      })
 
       const humanlizeDate = (date: number) => {
         return timeAgo(date * 1000, i18n.language.value as any)
@@ -153,6 +156,13 @@
 
       const handlePlay = (video: any) => {
         window.open(`https://www.bilibili.com/video/av${video.aid}`)
+      }
+
+      const fetchData = () => {
+        return store.dispatch(getNamespace(
+          Modules.Vlog,
+          VlogModuleActions.FetchVideos
+        ))
       }
 
       onMounted(() => {
@@ -170,10 +180,7 @@
         lozadObserver.value = null
       })
 
-      // TODO: SSR
-      store.dispatch(getNamespace(Modules.Vlog, VlogModuleActions.FetchVideos))
-
-      return {
+      const resultData = {
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
         isMobile,
@@ -185,6 +192,8 @@
         getThumbUrl,
         handlePlay,
       }
+
+      return onPrefetch(fetchData, resultData)
     }
   })
 </script>

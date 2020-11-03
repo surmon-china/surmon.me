@@ -72,10 +72,8 @@
         const title = isZhLang.value && zhTitle
           ? `${zhTitle} | ${enTitle}`
           : enTitle
-        return {
-          title,
-          description: currentCategory.value?.description || title
-        }
+        const description = currentCategory.value?.description || title
+        return { title, description }
       })
 
       const articleData = computed(() => store.state.article.list)
@@ -134,7 +132,10 @@
         loadmoreArticles
       }
 
-      return onPrefetch(() => fetchAllData(props.categorySlug), resultData)
+      return onPrefetch(
+        () => fetchAllData(props.categorySlug),
+        resultData
+      )
     }
   })
 </script>

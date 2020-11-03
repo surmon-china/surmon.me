@@ -6,8 +6,8 @@
       icon="icon-clock"
     >
       <i18n
-        :zh="`发布于 ${currentDate} 的所有文章`"
-        :en="`${currentDate} articles`"
+        :zh="`发布于 ${date} 的所有文章`"
+        :en="`${date} articles`"
       />
     </article-list-header>
     <article-list
@@ -20,11 +20,13 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, watch } from 'vue'
+  import { defineComponent, computed, watch, onBeforeMount } from 'vue'
+  import { onPrefetch, onClient } from '/@/universal'
   import { useEnhancer } from '/@/enhancer'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
 
@@ -34,19 +36,35 @@
       ArticleListHeader,
       ArticleList
     },
-    setup() {
-      const { store, route, router } = useEnhancer()
+    props: {
+      date: {
+        type: String,
+        required: true,
+        // TODO
+        // validator() {
+        //   return null
+        // }
+      }
+    },
+    setup(props) {
+      const { i18n, store, helmet } = useEnhancer()
+      const isVaildDate = (date: string) => {
+        const ds = date.split('-')
+        // TODO
+        if (ds.length !== 3) {
+          return false
+        }
+      }
+      if (!props.date || !isVaildDate(props.date)) {
+        return Promise.reject({
+          code: 500,
+          message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR)
+        })
+      }
+
       const article = computed(() => store.state.article.list)
-      const currentDate = computed(() => route.params.date)
-
-      // TODO: 验证参数
-      // if (!currentDate.value || currentDate.value) {
-        // throw Error('你很有问题!')
-        // router.back()
-      // }
-
       const fetchArticles = (params: any) => {
-        scrollToTop()
+        onClient(scrollToTop)
         return store.dispatch(
           getNamespace(Modules.Article, ArticleModuleActions.FetchList),
           params
@@ -55,25 +73,26 @@
 
       const loadmoreArticles = () => {
         return fetchArticles({
-          date: currentDate.value,
+          date: props.date,
           page: article.value.data.pagination.current_page + 1
         }).then(nextScreen)
       }
 
-      watch(
-        () => route.params,
-        ({ date }) => fetchArticles({ date }),
-        { flush: 'post' }
+      onBeforeMount(() => {
+        watch(
+          () => props.date,
+          (date) => fetchArticles({ date }),
+          { flush: 'post' }
+        )
+      })
+
+      return onPrefetch(
+        () => fetchArticles({ date: props.date }),
+        {
+          article,
+          loadmoreArticles
+        }
       )
-
-      // TODO: SSR
-      fetchArticles({ date: currentDate.value })
-
-      return {
-        article,
-        currentDate,
-        loadmoreArticles
-      }
     }
   })
 </script>
