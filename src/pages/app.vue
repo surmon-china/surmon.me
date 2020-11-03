@@ -72,13 +72,15 @@
 
   export default defineComponent({
     name: 'Application',
-    // head() {
-    //   return {
-    //     title: `${this.isEnLang ? '' : this.$i18n.nav.app + ' | '}App`
-    //   }
-    // },
     setup() {
-      const { i18n, gtag, isMobile } = useEnhancer()
+      const { i18n, helmet, gtag, isMobile, isZhLang } = useEnhancer()
+
+      helmet(() => {
+        const prefix = isZhLang.value
+          ? `${i18n.t(LANGUAGE_KEYS.PAGE_APP)} | `
+          : ''
+        return { title: prefix + 'App' }
+      })
 
       const handleAppAction = (name: string) => {
         gtag?.event(name, {
@@ -90,7 +92,7 @@
       const handleAndroidApp = (event) => {
         handleAppAction('APP Android 下载')
         if (!window.confirm(
-          i18n.language.value === Language.Zh
+          isZhLang.value
             ? 'Android apk 文件托管在 GitHub，希望你可以顺利访问~'
             : 'Will open raw.githubusercontent.com to download android app...'
         )) {

@@ -30,14 +30,13 @@
 
 <script lang="ts">
   import { defineComponent, ref, reactive, computed } from 'vue'
-  import { useI18n } from '/@/services/i18n'
-  import { Language } from '/@/language/data'
+  import { useEnhancer } from '/@/enhancer'
   import { dateToHuman, humanToDate, cloneDate, isSameHumanDay, textHumanizer, humanDateToYMD, HumanDate, TEXT_MAP } from '/@/transforms/moment'
 
   export default defineComponent({
     name: 'PcAsideCalendar',
     setup(_, context) {
-      const i18n = useI18n()
+      const { i18n, isZhLang } = useEnhancer()
       const today = dateToHuman(new Date())
       const tableView = reactive({
         month: 0,
@@ -55,7 +54,7 @@
           tableView.year === today.year
         )
 
-        if (i18n.language.value === Language.Zh) {
+        if (isZhLang.value) {
           const yearText = `${tableView.year} 年`
           const monthText = ` ${tableView.month} 月`
           const dayText = isSameTodayTable

@@ -92,6 +92,7 @@
   import { markdownToHTML } from '/@/transforms/markdown'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { useGlobalState } from '/@/state'
+  import { useEnhancer } from '/@/enhancer'
   import { timeAgo } from '/@/transforms/moment'
 
   export default defineComponent({
@@ -107,11 +108,7 @@
       }
     },
     setup(props) {
-      const i18n = useI18n()
-      const theme = useTheme()
-      const globalState = useGlobalState()
-      const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
-      const isMobile = computed(() => globalState.userAgent.isMobile)
+      const { i18n, theme, globalState, isMobile, isDarkTheme } = useEnhancer()
       const [swiperContext, updateSwiperContext] = useSwiperRef()
       const swiper = computed(() => swiperContext.value?.$swiper.value)
 

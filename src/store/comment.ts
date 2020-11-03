@@ -84,6 +84,7 @@ export const actions: ActionTree<CommentState, IRootState> = {
       page: 1,
       per_page: 88,
       sort: SortType.Desc,
+      delay: 0,
       ...params
     }
 
@@ -100,7 +101,7 @@ export const actions: ActionTree<CommentState, IRootState> = {
       .get(COMMENT_API_PATH, { params })
       .then(response => {
         return new Promise(resolve => {
-          fetchDelay()(() => {
+          fetchDelay(params.delay)(() => {
             if (isDescSort) {
               response.result.data.reverse()
             }

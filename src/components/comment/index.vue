@@ -231,7 +231,8 @@
         store.dispatch(getNamespace(Modules.Comment, CommentModuleActions.FetchList), {
           ...params,
           sort: state.sort,
-          post_id: props.postId
+          post_id: props.postId,
+          delay: 368
         })
       }
 

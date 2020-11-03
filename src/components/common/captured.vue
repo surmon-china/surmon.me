@@ -55,7 +55,7 @@
         const defaultError = {
           code: 500
         }
-        // error
+        // new Error
         if (_error instanceof Error) {
           error.value = {
             ...defaultError,
@@ -67,6 +67,7 @@
             ...defaultError,
             message: _error
           }
+        // error object -> axios | component
         } else {
           error.value = {
             ...defaultError,

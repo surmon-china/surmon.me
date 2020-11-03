@@ -8,11 +8,11 @@ export const MUSIC_ALBUM_ID = '638949385'
 export const GA_MEASUREMENT_ID = 'UA-84887611-3'
 export const ADSENSE_CLIENT_ID = 'ca-pub-4710915636313788'
 export const PRIMARY_COLOR = '#0088f5'
-export const DEFAULT_FETCH_DELAY = 888
+export const DEFAULT_FETCH_DELAY = 468
 
 export const META = Object.freeze({
   title: 'Surmon.me',
-  keywords: 'Surmon,司马萌,Vue开发者,前端技术开发,javascript技术',
+  keywords: 'Surmon 博客,surmon-china，苏尔蒙,Vue 博客,前端技术开发博客,JavaScript 技术',
   description: '凡心所向，素履所往，生如逆旅，一苇以航',
   url: 'surmon.me',
   author: 'Surmon',

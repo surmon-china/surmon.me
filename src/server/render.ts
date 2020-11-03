@@ -5,7 +5,7 @@ import { createSSRApp } from 'vue'
 import { createMemoryHistory } from 'vue-router'
 import { renderToString } from '@vue/server-renderer'
 import { Theme, THEME_STORAGE_KEY } from '/@/services/theme'
-import { getSSRContextScript, getSSRStoreScript } from '/@/ssr'
+import { getSSRContextScript, getSSRStoreScript } from '/@/universal'
 import { createVueApp } from '/@/main'
 
 const SPA_INDEX_HTML = fs
@@ -13,7 +13,6 @@ const SPA_INDEX_HTML = fs
   .toString()
 
 export const renderSSR: Middleware = async context => {
-  console.log('----renderer')
   const { headers, url } = context.request
   const { app, router, store, helmet } = createVueApp({
     appCreator: createSSRApp,
@@ -22,6 +21,10 @@ export const renderSSR: Middleware = async context => {
     userAgent: headers['user-agent'],
     theme: context.cookies.get(THEME_STORAGE_KEY) as Theme || Theme.Default
   })
+
+  app.config.warnHandler = (msg, vm, trace) => {
+    // `trace` is the component hierarchy trace
+  }
 
   try {
     await router.push(url)
