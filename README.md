@@ -2,7 +2,7 @@
   <a href="https://github.com/nuxt/nuxt.js" target="blank">
     <img src="https://nuxtjs.org/meta_400.png" height="90" alt="nuxt logo" />
   </a>
-  <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+  <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 
   <a href="https://github.com/surmon-china/surmon.me" target="blank">
     <img src="https://raw.githubusercontent.com/surmon-china/surmon.me/master/static/icon.png" height="90" alt="surmon.me logo" />
   </a>
