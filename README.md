@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://vuejs.org/" target="blank">
+  <a href="https://vuejs.org" target="blank">
     <img src="https://vuejs.org/images/logo.png" height="80" alt="vue logo" />
   </a>
   <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -10,7 +10,7 @@
 
 # Surmon.me
 
-![vue](https://img.shields.io/badge/MADE%20WITH-VUE-42a97a?style=for-the-badge&labelColor=35495d)
+[![vue](https://img.shields.io/badge/MADE%20WITH-VUE-42a97a?style=for-the-badge&labelColor=35495d)]((https://vuejs.org))
 [![nodepress](https://img.shields.io/badge/NODE-PRESS-83BA2F?style=for-the-badge&labelColor=90C53F)](https://github.com/surmon-china/nodepress)
 [![GitHub stars](https://img.shields.io/github/stars/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues-raw/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/issues)
@@ -40,18 +40,25 @@
 ## Development Setup
 
 ```bash
-# install nodemon
-$ npm i nodemon -g
-
 # install dependencies
 $ yarn # or npm install
 
 # serve with hot reload at localhost:3000
-$ yarn dev # or npm run dev
+$ yarn dev
+
+# or
+$ yarn dev:spa
+$ yarn dev:ssr
 
 # build for production and launch server
-$ yarn build # or npm run build
-$ yarn start # or npm start
+$ yarn build
+
+# or
+$ yarn build:spa
+$ yarn build:ssr
+
+# run SSR
+$ yarn start
 
 # lint test
 $ yarn lint

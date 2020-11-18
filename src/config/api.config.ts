@@ -4,12 +4,12 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { isDev, isSPA, isSSR, isServer } from '/@/environment'
+import { isDev, isSPA, isServer } from '/@/environment'
 
 // common
-const API_PROXY_URL = import.meta.env.VITE_API_PROXY_URL
-const API_LOCAL_URL = import.meta.env.VITE_API_LOCAL_URL
-const API_ONLINE_URL = import.meta.env.VITE_API_ONLINE_URL
+const API_PROXY_URL = import.meta.env.VITE_API_PROXY_URL as string
+const API_LOCAL_URL = import.meta.env.VITE_API_LOCAL_URL as string
+const API_ONLINE_URL = import.meta.env.VITE_API_ONLINE_URL as string
 
 // dev:
 //  spa -> /api

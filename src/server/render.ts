@@ -63,8 +63,8 @@ const renderHTML = async (context: Context) => {
 
   return {
     app,
-    router,
     store,
+    router,
     helmet,
     HTML
   }

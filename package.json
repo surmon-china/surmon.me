@@ -21,7 +21,9 @@
     "build:spa": "vite build",
     "build:ssr": "node ./vuniversal/prod",
     "build": "npm run build:ssr",
+    "start:spa": "http-server ./dist",
     "start:ssr": "cross-env NODE_ENV=production node ./dist/server.js",
+    "start": "npm run start:ssr",
     "lint": "eslint --ext .ts,.js,.vue --ignore-path .eslintignore ."
   },
   "dependencies": {
