@@ -7,6 +7,9 @@
 import fs from 'fs'
 import path from 'path'
 import axios from 'axios'
+import { GA_MEASUREMENT_ID } from '/@/config/app.config'
+import { getGAScriptUrl } from '/@/transforms/url'
+import { PUBLIC_PATH } from './helper'
 
 const UPDATE_TIME = {
   HOURS_1: 1000 * 60 * 60 * 1,
@@ -16,15 +19,13 @@ const UPDATE_TIME = {
 // 更新脚本
 export const startGTagScriptUpdater = () => {
   (function doUpdate() {
-    axios.get('http://www.google-analytics.com/analytics.js', { timeout: 6000 })
+    axios.get(getGAScriptUrl(GA_MEASUREMENT_ID), { timeout: 6000 })
       .then(response => {
         if (response.status === 200) {
           fs.writeFileSync(path.resolve(
-            __dirname,
-            '..',
-            'public',
+            PUBLIC_PATH,
             'scripts',
-            'analytics.js'
+            'gtag.js'
             ),
             response.data
           )

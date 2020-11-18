@@ -34,9 +34,11 @@
             <button class="sponsor" @click="handleSponsor">
               <i class="iconfont icon-hao" />
             </button>
-            <popup v-model:visible="isVisibleSponsor" :border="false">
-              <iframe class="sponsor-modal" :src="VALUABLE_LINKS.SPONSOR" />
-            </popup>
+            <client-only>
+              <popup v-model:visible="isVisibleSponsor" :border="false">
+                <iframe class="sponsor-modal" :src="VALUABLE_LINKS.SPONSOR" />
+              </popup>
+            </client-only>
           </desktop-only>
         </div>
         <div class="sort">

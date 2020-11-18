@@ -215,8 +215,8 @@
 
     .archive-empty {
       height: $normal-page-active-content-height;
-      font-weight: bold;
       font-size: $font-size-h1;
+      font-weight: bold;
     }
 
     .archive-skeleton {

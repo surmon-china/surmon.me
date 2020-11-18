@@ -6,10 +6,7 @@
 
 import { Module, MutationTree, ActionTree } from 'vuex'
 import { SortType } from '/@/constants/state'
-import { isClient } from '/@/environment'
-import { isArticleDetail } from '/@/transforms/route'
 import { fetchDelay } from '/@/utils/fetch-delay'
-import { scrollTo, Easing } from '/@/utils/scroller'
 import { IRootState } from '.'
 import http from '/@/services/http'
 
@@ -148,16 +145,13 @@ const actions: ActionTree<ArticleState, IRootState> = {
 
   // 获取文章详情
   [ArticleModuleActions.FetchDetail]({ commit }, params: any) {
-    params.delay = params.delay || 0
-    const delay = fetchDelay(params.delay)
-
     commit(ArticleModuleListMutations.SetDetailFetching, true)
     commit(ArticleModuleListMutations.SetDetailData, null)
     return http
       .get(`${ARTICLE_API_PATH}/${params.article_id}`)
       .then(response => {
         return new Promise(resolve => {
-          delay(() => {
+          fetchDelay(params.delay || 0)(() => {
             commit(ArticleModuleListMutations.SetDetailData, response.result)
             resolve(response)
           })

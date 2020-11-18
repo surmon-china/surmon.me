@@ -3,7 +3,9 @@ import './polyfill'
 import { createApp } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { MUSIC_ALBUM_ID, GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
-import { NODE_ENV, isProd, isSSR } from './environment'
+import { isProd, isSSR } from './environment'
+import { Language } from '/@/language/data'
+import { getFileCDNUrl } from '/@/transforms/url'
 import gtag from './services/gtag'
 import adsense from '/@/services/adsense'
 import swiper from '/@/services/swiper'
@@ -18,8 +20,6 @@ import { enableBaiduSeoPush } from '/@/services/baidu-seo-push'
 import { enableAutoTitleSurprise } from './services/title-surprise'
 import { exportAppToGlobal } from '/@/services/exporter'
 import { exportLozadToGlobal } from '/@/services/lozad'
-import { Language } from '/@/language/data'
-import { getFileCDNUrl } from '/@/transforms/url'
 import { createVueApp } from './main'
 
 import '/@/assets/styles/app.scss'
@@ -46,7 +46,7 @@ app.use(adsense, { ID: ADSENSE_CLIENT_ID, enabledAutoAD: true })
 app.use(gtag, {
   router,
   id: GA_MEASUREMENT_ID,
-  // customResourceURL: getFileCDNUrl('/scripts/gtag.js'),
+  customResourceURL: getFileCDNUrl('/scripts/gtag.js'),
 })
 
 // init
@@ -71,8 +71,6 @@ exportAppToGlobal(app)
 globalState.userAgent.isMobile
   ? theme.set(Theme.Default)
   : theme.bindClientSystem()
-
-console.info('INITED:', { NODE_ENV, isProd, isSSR })
 
 // mount (isHydrate -> (SSR -> true | SPA -> false))
 app.mount('#app', isSSR).$nextTick(() => {

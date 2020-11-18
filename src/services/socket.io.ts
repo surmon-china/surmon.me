@@ -4,10 +4,10 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import io from 'socket.io-client'
+import socketIO from 'socket.io-client'
 import API_CONFIG from '/@/config/api.config'
 
-const socket = io(API_CONFIG.SOCKET, {
+const socket = socketIO.io(API_CONFIG.SOCKET, {
   transports: ['websocket']
 })
 

@@ -4,41 +4,32 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { isDev, isSSR, isServer } from '/@/environment'
+import { isDev, isSPA, isSSR, isServer } from '/@/environment'
 
-const isSSRServer = isSSR && isServer
+// common
+const API_PROXY_URL = import.meta.env.VITE_API_PROXY_URL
+const API_LOCAL_URL = import.meta.env.VITE_API_LOCAL_URL
+const API_ONLINE_URL = import.meta.env.VITE_API_ONLINE_URL
 
-const PROXY_API_SERVER = '/api'
-const LOCAL_API_SERVER = 'http://localhost:8000'
-const PROD_API_SERVER = 'https://api.surmon.me'
+// dev:
+//  spa -> /api
+//  ssr -> server ? online api : /api
+const DEV_API_BASE = isSPA
+  ? API_PROXY_URL
+  : isServer ? API_ONLINE_URL : API_PROXY_URL
 
-const DEV_API = {
-  BASE: LOCAL_API_SERVER,
-  FE: 'http://localhost:3000',
-  SOCKET: '/',
-  CDN: '',
-  PROXY: '/proxy',
-  GRAVATAR: '/avatar'
+// prod:
+//  spa -> online api
+//  ssr -> server ? localhost : online api
+const PROD_API_BASE = isSPA
+  ? API_ONLINE_URL
+  : isServer ? API_LOCAL_URL : API_ONLINE_URL
+
+export default {
+  FE: import.meta.env.VITE_FE_URL,
+  SOCKET: import.meta.env.VITE_SOCKET_URL,
+  CDN: import.meta.env.VITE_CDN_URL,
+  PROXY: import.meta.env.VITE_PROXY_URL,
+  GRAVATAR: import.meta.env.VITE_GRAVATAR_URL,
+  BASE: isDev ? DEV_API_BASE : PROD_API_BASE
 }
-
-const LOCAL_PROXY_DEV_API = {
-  ...DEV_API,
-  BASE: isSSRServer
-    ? PROD_API_SERVER
-    : PROXY_API_SERVER
-}
-
-const PROD_API = {
-  BASE: isSSRServer
-    ? LOCAL_API_SERVER
-    : PROXY_API_SERVER,
-  FE: 'https://surmon.me',
-  SOCKET: 'https://surmon.me',
-  CDN: 'https://cdn.surmon.me',
-  PROXY: 'https://cdn.surmon.me/proxy',
-  GRAVATAR: 'https://static.surmon.me/avatar'
-}
-
-// export default DEV_API
-export default LOCAL_PROXY_DEV_API
-// export default isDev ? DEV_API : PROD_API

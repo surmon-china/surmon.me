@@ -22,3 +22,7 @@ export const getPageUrl = (uri: string) => {
 export const getArticleDetailUrl = (articleID: string | number) => {
   return getPageUrl(getArticleDetailRoute(articleID))
 }
+
+export const getGAScriptUrl = (gaMeasurementId: string) => {
+  return `https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`
+}

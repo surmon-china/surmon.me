@@ -135,7 +135,7 @@
             },
             date: new Date().getTime()
           }
-          socket.emit('barrage-send', barrage)
+          socket.emit(SocketEvent.Send, barrage)
           barrage.id = barrageLimit++
           barrages.push(barrage)
           counts.count += 1
@@ -149,16 +149,17 @@
       }
 
       const initSocket = () => {
-        socket.emit(SocketEvent.LastLisk, barrages => {
-          barrages.forEach((barrage, index) => {
-            barrage.id = index + 1
-          })
+        socket.emit(SocketEvent.LastList, _barrages => {
+          const lastBarrages = _barrages.map((barrage, index) => ({
+            id: index + 1,
+            ...barrage
+          }))
           // 生成随机的时间，push 进不同的内容，而不是一次性赋值
           const moveBarrages = () => {
-            if (barrages.length) {
-              barrages.push(barrages[0])
-              barrages.splice(0, 1)
-              if (barrages.length) {
+            if (lastBarrages.length) {
+              barrages.push(lastBarrages[0])
+              lastBarrages.splice(0, 1)
+              if (lastBarrages.length) {
                 state.moveTimer = window.setTimeout(
                   moveBarrages,
                   parseInt(String(randomPer(config.moveDelay)), 0) * 100
@@ -167,7 +168,7 @@
             }
           }
           moveBarrages()
-          barrageLimit = barrages.length + 2
+          barrageLimit = lastBarrages.length + 2
         })
         socket.emit(SocketEvent.Count, _counts => {
           Object.assign(counts, _counts)
@@ -178,6 +179,7 @@
         socket.on(SocketEvent.Create, barrage => {
           barrages.push({
             ...barrage,
+            id: barrageLimit++,
             // 得到新消息时，若此刻弹幕窗未开启，则将此消息标记为过时消息，过时消息有不同的 UI 特征
             outdated: !isOnBarrage.value
           })
