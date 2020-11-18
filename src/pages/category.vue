@@ -19,6 +19,7 @@
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { isSSR } from '/@/environment'
   import { useEnhancer } from '/@/enhancer'
   import { onPrefetch, onClient } from '/@/universal'
   import { Modules, getNamespace } from '/@/store'
@@ -57,7 +58,7 @@
           category => category.slug === props.categorySlug
         )
       })
-      if (!currentCategory.value) {
+      if (isSSR && !currentCategory.value) {
         return Promise.reject({ code: 404 })
       }
 
@@ -66,7 +67,7 @@
         const slug = props.categorySlug
         const slugTitle = slug
           .toLowerCase()
-          .replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+          .replace(/( |^)[a-z]/g, L => L.toUpperCase())
         const enTitle = `${slugTitle} | Category`
         const zhTitle = i18n.t(slug)
         const title = isZhLang.value && zhTitle

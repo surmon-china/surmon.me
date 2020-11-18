@@ -2,6 +2,19 @@ import { RouteRecordRaw, NavigationGuard, NavigationGuardNext, RouterHistory, cr
 import { scrollToTop } from '/@/utils/effects'
 import { LayoutColumn } from '/@/state'
 import IndexPage from './pages/index.vue'
+import ArchivePage from './pages/archive.vue'
+import ArticlePage from './pages/article/index.vue'
+import CategoryPage from './pages/category.vue'
+import TagPage from './pages/tag.vue'
+import DatePage from './pages/date.vue'
+import SearchPage from './pages/search.vue'
+import MusicPage from './pages/music.vue'
+import LensPage from './pages/lens.vue'
+import JobPage from './pages/job.vue'
+import AboutPage from './pages/about.vue'
+import FreelancerPage from './pages/freelancer.vue'
+import GuestbookPage from './pages/guestbook.vue'
+import AppPage from './pages/app.vue'
 
 export enum CategorySlug {
   Code = 'code',
@@ -35,7 +48,7 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/archive',
     name: RouteName.Archive,
-    component: () => import('./pages/archive.vue'),
+    component: ArchivePage,
     meta: {
       layout: LayoutColumn.Wide
     }
@@ -43,45 +56,46 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/article/:article_id',
     name: RouteName.Article,
-    props: to => ({ articleId: Number(to.params.article_id) }),
-    component: () => import('./pages/article/index.vue')
+    component: ArticlePage,
+    props: to => ({ articleId: Number(to.params.article_id) })
   },
   {
     path: '/category/:category_slug',
     name: RouteName.CategoryArchive,
-    props: to => ({ categorySlug: to.params.category_slug }),
-    component: () => import('./pages/category.vue')
+    component: CategoryPage,
+    props: to => ({ categorySlug: to.params.category_slug })
   },
   {
     path: '/tag/:tag_slug',
     name: RouteName.TagArchive,
-    props: to => ({ tagSlug: to.params.tag_slug }),
-    component: () => import('./pages/tag.vue')
+    component: TagPage,
+    props: to => ({ tagSlug: to.params.tag_slug })
   },
   {
     path: '/date/:date',
     name: RouteName.DateArchive,
-    props: to => ({ date: to.params.date }),
-    component: () => import('./pages/date.vue')
+    component: DatePage,
+    props: to => ({ date: to.params.date })
   },
   {
     path: '/search/:keyword',
     name: RouteName.SearchArchive,
-    props: to => ({ keyword: to.params.keyword }),
-    component: () => import('./pages/search.vue')
+    component: SearchPage,
+    props: to => ({ keyword: to.params.keyword })
   },
   {
     path: '/music',
     name: RouteName.Music,
-    component: () => import('./pages/music.vue'),
+    component: MusicPage,
     meta: {
+      static: true,
       layout: LayoutColumn.Page
     }
   },
   {
     path: '/lens',
     name: RouteName.Lens,
-    component: () => import('./pages/lens.vue'),
+    component: LensPage,
     meta: {
       layout: LayoutColumn.Page
     }
@@ -89,37 +103,41 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/job',
     name: RouteName.Job,
-    component: () => import('./pages/job.vue'),
+    component: JobPage,
     meta: {
+      static: true,
       layout: LayoutColumn.Page
     }
   },
   {
     path: '/about',
     name: RouteName.About,
-    component: () => import('./pages/about.vue'),
+    component: AboutPage,
     meta: {
+      static: true,
       layout: LayoutColumn.Wide
     }
   },
   {
     path: '/freelancer',
     name: RouteName.Freelancer,
-    component: () => import('./pages/freelancer.vue'),
+    component: FreelancerPage,
     meta: {
+      static: true,
       layout: LayoutColumn.Page
     }
   },
   {
     path: '/guestbook',
     name: RouteName.Guestbook,
-    component: () => import('./pages/guestbook.vue')
+    component: GuestbookPage,
   },
   {
     path: '/app',
     name: RouteName.App,
-    component: () => import('./pages/app.vue'),
+    component: AppPage,
     meta: {
+      static: true,
       layout: LayoutColumn.Page
     }
   },

@@ -6,6 +6,8 @@
 
 import { CreateAppFunction } from 'vue'
 import { RouterHistory } from 'vue-router'
+import * as ENV from './environment'
+import API_CONFIG from '/@/config/api.config'
 import { META } from '/@/config/app.config'
 import { RouteName } from './router'
 import { createUniversalRouter } from './router'
@@ -18,6 +20,8 @@ import interior from '/@/services/interior'
 import { Language, languages, langMap } from '/@/language/data'
 import { createGlobalState } from './state'
 import App from './app.vue'
+
+console.info('[APP INITED]', API_CONFIG, JSON.parse(JSON.stringify(ENV)))
 
 export interface ICreatorContext {
   appCreator: CreateAppFunction<Element>

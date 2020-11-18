@@ -111,11 +111,11 @@
         return Promise.all([
           store.dispatch(
             getNamespace(Modules.Article, ArticleModuleActions.FetchDetail),
-            { article_id, delay: isClient ? 666 : 0 }
+            { article_id, delay: isClient ? 368 : 0 }
           ),
           store.dispatch(
             getNamespace(Modules.Comment, CommentModuleActions.FetchList),
-            { post_id: article_id, delay: isClient ? 666 : 0 }
+            { post_id: article_id, delay: isClient ? 368 : 0 }
           )
         ])
       }

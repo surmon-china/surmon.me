@@ -21,6 +21,7 @@
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { onPrefetch, onClient } from '/@/universal'
+  import { isSSR } from '/@/environment'
   import { useEnhancer } from '/@/enhancer'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
@@ -56,8 +57,7 @@
       const currentTag = computed(() => store.state.tag.data.find(
         tag => tag.slug === props.tagSlug
       ))
-      // category 是否存在
-      if (!currentTag.value) {
+      if (isSSR && !currentTag.value) {
         return Promise.reject({ code: 404 })
       }
 
@@ -66,7 +66,7 @@
         const slug = props.tagSlug
         const slugTitle = slug
           .toLowerCase()
-          .replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+          .replace(/( |^)[a-z]/g, L => L.toUpperCase())
         const enTitle = `${slugTitle} | Tag`
         const zhTitle = currentTag.value?.name
         const title = `${isZhLang.value && zhTitle ? zhTitle : enTitle} | Tag`

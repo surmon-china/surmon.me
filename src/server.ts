@@ -1,15 +1,16 @@
 import path from 'path'
 import http from 'http'
 import Koa from 'koa'
+import mount from 'koa-mount'
 import proxy from 'koa-proxies'
 import koaStatic from 'koa-static'
-import socket from 'socket.io'
+import { Server } from 'socket.io'
 import { NODE_ENV, isProd, isDev } from './environment'
 import { startGTagScriptUpdater } from './server/gtag'
 import { startBarrageSocket } from './server/barrage'
 import { renderSSR } from './server/render'
+import { viteConfig } from './server/helper'
 import API_CONFIG from './config/api.config'
-import viteConfig from '../vite.config'
 
 // @ts-expect-error
 process.noDeprecation = true
@@ -25,11 +26,16 @@ global.console = Object.assign(console, {
 })
 
 const PORT = viteConfig.port || 3000
-const koa = new Koa()
-const server = http.createServer(koa.callback())
-const io = socket(server, { transports: ['websocket'] })
+const app = new Koa()
+const server = http.createServer(app.callback())
+const io: Server = require('socket.io')(server, {
+  transports: ['websocket'],
+  serveClient: false,
+  cookie: false
+})
 
-koa.use(koaStatic(path.join(__dirname, 'client')))
+app.use(mount('/assets', koaStatic(path.join(__dirname, 'assets'))));
+app.use(koaStatic(path.join(__dirname, '..', 'public')))
 
 // dev -> nodejs proxy
 // prod -> nginx proxy
@@ -38,7 +44,7 @@ if (isDev) {
   if (proxyOptions) {
     Object.keys(proxyOptions).forEach((path) => {
       const options: any = proxyOptions[path]
-      koa.use(proxy(
+      app.use(proxy(
         path,
         typeof options === 'string'
           ? { target: options }
@@ -49,7 +55,7 @@ if (isDev) {
 }
 
 // renderer
-koa.use(renderSSR)
+app.use(renderSSR)
 
 // run
 server.listen(PORT, () => {

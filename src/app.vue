@@ -8,9 +8,14 @@
     <captured>
       <component :is="LayoutComponent">
         <router-view v-slot="{ Component }">
+          <!-- TODO: transition -->
           <transition mode="out-in" name="page">
+            <!-- unuse suspense -> async route component -> can't extract style to css file -->
+            <!-- suspense<component :is="Component"> -> some warning -> can't match DOM -> can't hydrate -->
             <suspense>
-              <component :is="Component" />
+              <div class="router-view">
+                <component :is="Component"></component>
+              </div>
             </suspense>
           </transition>
         </router-view>

@@ -1,17 +1,19 @@
 /**
- * @file 弹幕服务 / Commonjs module
+ * @file 弹幕服务
  * @module server/barrage
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import fs from 'fs-extra'
 import path from 'path'
+import fs from 'fs-extra'
+import { Socket, Server } from 'socket.io'
 import { debounce } from 'lodash'
+import { SocketEvent } from '/@/constants/barrage'
+import { DATA_PATH } from './helper'
 
 // file
-const dataPath = path.join(__dirname, '..', 'data')
-const dataFile = path.resolve(dataPath, 'barrages.json')
-const defaultFile = path.resolve(dataPath, 'barrages.default.json')
+const dataFile = path.resolve(DATA_PATH, 'barrages.json')
+const defaultFile = path.resolve(DATA_PATH, 'barrages.default.json')
 
 // init
 fs.ensureFileSync(dataFile)
@@ -23,55 +25,57 @@ if (!barrages.length) {
 }
 
 // 更新本地文件数据
-const updateLocalBarragesFile = () => {
-  fs
-    .outputJson(dataFile, barrages)
-    .then(() => {
-      // console.log('最新聊天记录保存成功!')
-    })
-    .catch(error => {
-      console.warn('最新弹幕记录保存失败', error)
-    })
+const updateLocalBarragesFile = async () => {
+  try {
+    await fs.outputJson(dataFile, barrages)
+    // console.log('最新聊天记录保存成功!')
+  } catch (error) {
+    console.warn('最新弹幕记录保存失败', error)
+  }
 }
 
 // 30秒为一个周期，保存一次最新弹幕记录
 const updateDebounce = debounce(updateLocalBarragesFile, 1000 * 30)
-let socketClients = 0
 
-export const startBarrageSocket = io => {
-  io.on('connection', socket => {
+export const startBarrageSocket = (ioServer: Server) => {
 
-    // 每次有新人加入，都更新客户端数量
-    io.clients((error, clients) => {
-      if (error) {
-        console.warn('弹幕 socket 客户端数获取失败', error)
-      } else {
-        socketClients = clients.length
-      }
+  // get counts
+  const getCounts = () => ({
+    // @ts-ignore
+    users: ioServer.engine.clientsCount,
+    count: barrages.length
+  })
+
+  ioServer.on('connection', (socketWithClient: Socket) => {
+
+    // 通知所有数量的更新
+    const sendCountToClients = () => socketWithClient.broadcast.emit(
+      SocketEvent.UpdateCount,
+      getCounts()
+    )
+
+    // 每次有连接发生变化，都需要更新总数量 & 且通知客户端
+    sendCountToClients()
+    socketWithClient.on('disconnect', () => {
+      sendCountToClients()
     })
 
     // 最后一批弹幕记录
-    socket.on('barrage-last-list', callback => {
+    socketWithClient.on(SocketEvent.LastList, callback => {
       callback(barrages.slice(-66))
     })
 
     // 弹幕总数量
-    socket.on('barrage-count', callback => {
-      callback({
-        users: socketClients,
-        count: barrages.length
-      })
+    socketWithClient.on(SocketEvent.Count, callback => {
+      callback(getCounts())
     })
 
-    // 广播弹幕
-    socket.on('barrage-send', barrage => {
+    // 广播新弹幕 & 且通知客户端数量变化
+    socketWithClient.on(SocketEvent.Send, barrage => {
       barrages.push(barrage)
-      socket.broadcast.emit('barrage-create', barrage)
-      socket.broadcast.emit('barrage-update-count', {
-        users: socketClients,
-        count: barrages.length
-      })
+      socketWithClient.broadcast.emit(SocketEvent.Create, barrage)
       updateDebounce()
+      sendCountToClients()
     })
   })
 }

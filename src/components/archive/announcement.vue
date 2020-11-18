@@ -115,11 +115,10 @@
       const activeIndex = ref(0)
       const swiperOption = {
         height: 42,
-        autoplay: false,
-        // autoplay: {
-        //   delay: 3500,
-        //   disableOnInteraction: false
-        // },
+        autoplay: {
+          delay: 3500,
+          disableOnInteraction: false
+        },
         allowTouchMove: false,
         slidesPerView: 1,
         setWrapperSize: true,

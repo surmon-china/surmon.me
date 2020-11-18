@@ -4,11 +4,11 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+export const DEFAULT_FETCH_DELAY = 468
+export const PRIMARY_COLOR = '#0088f5'
 export const MUSIC_ALBUM_ID = '638949385'
 export const GA_MEASUREMENT_ID = 'UA-84887611-3'
 export const ADSENSE_CLIENT_ID = 'ca-pub-4710915636313788'
-export const PRIMARY_COLOR = '#0088f5'
-export const DEFAULT_FETCH_DELAY = 468
 
 export const META = Object.freeze({
   title: 'Surmon.me',

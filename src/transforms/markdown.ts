@@ -7,7 +7,7 @@
 import marked from 'marked'
 import { ITagMap } from '/@/store/tag'
 import { LOZAD_CLASS_NAME } from '/@/services/lozad'
-import highlight from '/@/utils/highlight'
+import highlight from '/@/services/highlight'
 import { META } from '/@/config/app.config'
 import API_CONFIG from '/@/config/api.config'
 import relink from '/@/transforms/relink'

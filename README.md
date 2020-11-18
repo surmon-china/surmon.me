@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://github.com/nuxt/nuxt.js" target="blank">
-    <img src="https://nuxtjs.org/meta_400.png" height="90" alt="nuxt logo" />
+  <a href="https://vuejs.org/" target="blank">
+    <img src="https://vuejs.org/images/logo.png" height="80" alt="vue logo" />
   </a>
   <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
   <a href="https://github.com/surmon-china/surmon.me" target="blank">
@@ -18,9 +18,9 @@
 [![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/blob/master/LICENSE)
 
 
-**My personal website and blog, powered by [Nuxt.js](https://github.com/nuxt/nuxt.js).** 
+**My personal website and blog, powered by [Vue](https://vuejs.org).** 
 
-**使用 [Nuxt.js](https://github.com/nuxt/nuxt.js) 构建的个人网站。**
+**使用 [Vue](https://vuejs.org) 构建的个人网站。**
 
 **Online site:** https://surmon.me
 
@@ -60,9 +60,9 @@ $ yarn lint
 ## Actions setup
 
 **Rule:**
-- `any PR open` -> `CI:Build test`
-- `master PR closed & merged` -> `CI:Deploy to server`
+- `any PR open` → `CI:Build test`
+- `master PR closed & merged` → `CI:Deploy to server`
 
 **Example:**
-- `local:develop -> remote:develop` -> `CI:Build test`
-- `remote:develop/other -> remote:master -> merged` -> `CI:Deploy to server`
+- `local:develop` → `remote:develop` → `CI:Build test`
+- `remote:develop/other` → `remote:master → merged` → `CI:Deploy to server`
