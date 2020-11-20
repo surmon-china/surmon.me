@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="masonry"
-    :style="{ '--columns': columns }"
-  >
+  <div class="masonry">
     <ul
       class="list"
       :class="listClass"
@@ -62,7 +59,7 @@
     .list {
       padding: 0;
       margin: 0;
-      width: calc(100% / var(--columns));
+      flex: 1;
     }
   }
 </style>

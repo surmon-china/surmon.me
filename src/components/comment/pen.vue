@@ -152,7 +152,6 @@
       }
 
       const handleInputChange = () => {
-        console.log('do handleInputChange')
         const text = inputElement.value?.innerText as string
         if (text !== content.value) {
           content.value = text

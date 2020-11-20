@@ -1,19 +1,19 @@
 <template>
   <div class="pc-main">
     <background />
+    <template v-if="!layoutColumn.isFullPage">
+      <language />
+      <theme />
+      <share class="main-share" />
+      <wallpaper />
+      <template v-if="!layoutColumn.isFullColumn">
+        <toolbox />
+      </template>
+    </template>
     <client-only>
       <figure>
         <barrage />
         <wallflower />
-        <template v-if="!layoutColumn.isFullPage">
-          <language />
-          <theme />
-          <share class="main-share" />
-          <wallpaper />
-          <template v-if="!layoutColumn.isFullColumn">
-            <toolbox />
-          </template>
-        </template>
       </figure>
     </client-only>
     <header-view />

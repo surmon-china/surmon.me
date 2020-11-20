@@ -136,25 +136,41 @@ select:-webkit-autofill {
   z-index: $z-index-normal + 3;
 }
 
-.module-enter-active, .module-leave-active {
-  transition: opacity $transition-time-normal;
+.module-enter-active,
+.module-leave-active {
+  transition: opacity $transition-time-normal ease;
 }
-.module-slow-enter-active, .module-slow-leave-active {
-  transition: opacity $transition-time-fast;
+.module-slow-enter-active,
+.module-slow-leave-active {
+  transition: opacity $transition-time-slow ease;
 }
 .module-enter-from, .module-leave-to,
 .module-slow-enter-from, .module-slow-leave-to {
   opacity: 0;
 }
 
-.page-enter-active {
-  transition: opacity $transition-time-fast;
+// TODO: DELETE
+.slide-fade-enter-active {
+  transition: all .3s ease-out;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition: opacity $transition-time-fast ease;
 }
 .page-leave-active {
   transition: opacity 0s;
 }
 .page-enter-from,
-.page-leave-active {
+.page-leave-to {
   opacity: 0
 }
 

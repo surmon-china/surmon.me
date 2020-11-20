@@ -3,8 +3,8 @@
     <div class="player">
       <button
         class="prev-song"
-        :disabled="!player.state.ready || player.state.index === 0"
-        @click="player.prevSong"
+        :disabled="!player?.state.ready || player?.state?.index === 0"
+        @click="player?.prevSong"
       >
         <i class="iconfont icon-music-prev"></i>
       </button>
@@ -27,20 +27,20 @@
             />
           </svg>
         </div>
-        <div class="song-bg-box" :class="{ 'playing': player.state.playing }">
-          <img :src="player.currentSongPicUrl" draggable="false">
+        <div class="song-bg-box" :class="{ 'playing': player?.state.playing }">
+          <img :src="player?.currentSongPicUrl" draggable="false">
         </div>
         <div class="toggle-box">
           <transition name="module" mode="out-in">
             <button
-              :key="player.state.playing ? 'pause' : 'play'"
-              :disabled="!player.state.ready"
+              :key="player?.state.playing ? 'pause' : 'play'"
+              :disabled="!player?.state.ready"
               class="toggle-btn"
-              @click="player.togglePlay"
+              @click="player?.togglePlay"
             >
               <i
                 class="iconfont"
-                :class="player.state.playing
+                :class="player?.state.playing
                   ? 'icon-music-pause'
                   : 'icon-music-play'"
               ></i>
@@ -50,20 +50,20 @@
         <div class="toggle-muted">
           <button
             class="muted-btn"
-            :disabled="!player.state.ready"
-            @click="player.toggleMuted"
+            :disabled="!player?.state.ready"
+            @click="player?.toggleMuted"
           >
             <i
               class="iconfont"
-              :class="player.muted ? 'icon-music-muted' : 'icon-music-volume'"
+              :class="player?.muted ? 'icon-music-muted' : 'icon-music-volume'"
             />
           </button>
         </div>
       </div>
       <button
         class="next-song"
-        :disabled="!player.state.ready"
-        @click="player.nextSong"
+        :disabled="!player?.state.ready"
+        @click="player?.nextSong"
       >
         <i class="iconfont icon-music-next"></i>
       </button>
@@ -74,10 +74,10 @@
         <template v-else>Kind words are the music of the world.</template>
       </h4>
       <transition name="fade">
-        <p v-if="player.currentSongRealTimeLrc !== null" class="lrc">
+        <p v-if="player?.currentSongRealTimeLrc !== null" class="lrc">
           <transition name="module" mode="out-in">
-            <span :key="player.currentSongRealTimeLrc" class="lrc-text">
-              {{ player.currentSongRealTimeLrc }}
+            <span :key="player?.currentSongRealTimeLrc" class="lrc-text">
+              {{ player?.currentSongRealTimeLrc }}
             </span>
           </transition>
         </p>
@@ -97,9 +97,7 @@
     setup() {
       const { i18n, helmet, isZhLang } = useEnhancer()
       const musicPlayer = useMusic()
-      const currentSong = computed(() => {
-        return musicPlayer?.currentSong
-      })
+      const currentSong = computed(() => musicPlayer?.currentSong)
 
       helmet(() => {
         const prefix = isZhLang.value
@@ -116,10 +114,12 @@
         return `M 50 50 m 0 -${_radius} a ${_radius} ${_radius} 0 1 1 0 ${_radius * 2} a ${_radius} ${_radius} 0 1 1 0 -${_radius * 2}`
       })()
 
-      const circlePathStyle = computed(() => ({
-        strokeDasharray: `${perimeter}px, ${perimeter}px`,
-        strokeDashoffset: (1 - (musicPlayer.state.progress) / 100) * perimeter + 'px'
-      }))
+      const circlePathStyle = computed(() => {
+        return musicPlayer && {
+          strokeDasharray: `${perimeter}px, ${perimeter}px`,
+          strokeDashoffset: (1 - (musicPlayer.state.progress) / 100) * perimeter + 'px'
+        }
+      })
 
       return {
         player: musicPlayer,
