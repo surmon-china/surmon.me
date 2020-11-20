@@ -7,20 +7,18 @@
     }"
   >
     <!-- mammon -->
-    <client-only>
-      <transition name="module">
-        <template v-if="isMammonEnabled">
-          <adsense-archive-mobile
-            v-if="isMobile"
-            class="article-list-mammon"
-          />
-          <adsense-archive
-            v-else
-            class="article-list-mammon"
-          />
-        </template>
-      </transition>
-    </client-only>
+    <template v-if="isMammonEnabled">
+      <client-only>
+        <adsense-archive-mobile
+          v-if="isMobile"
+          class="article-list-mammon"
+        />
+        <adsense-archive
+          v-else
+          class="article-list-mammon"
+        />
+      </client-only>
+    </template>
 
     <!-- list -->
     <div class="article-list">

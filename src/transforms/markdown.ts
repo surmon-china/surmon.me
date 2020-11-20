@@ -5,11 +5,11 @@
  */
 
 import marked from 'marked'
+import API_CONFIG from '/@/config/api.config'
+import { META } from '/@/config/app.config'
 import { ITagMap } from '/@/store/tag'
 import { LOZAD_CLASS_NAME } from '/@/services/lozad'
 import highlight from '/@/services/highlight'
-import { META } from '/@/config/app.config'
-import API_CONFIG from '/@/config/api.config'
 import relink from '/@/transforms/relink'
 
 // global options
@@ -21,12 +21,9 @@ marked.setOptions({
   smartLists: true,
   smartypants: false,
   highlight(code, language) {
-    return highlight.highlight(
-      highlight.getLanguage(language)
-        ? language
-        : 'plaintext',
-      code
-    ).value
+    return highlight.getLanguage(language)
+      ? highlight.highlight(language, code).value
+      : highlight.highlightAuto(code).value
   }
 })
 

@@ -7,17 +7,17 @@
     </client-only>
     <captured>
       <component :is="LayoutComponent">
-        <router-view v-slot="{ Component }">
-          <!-- TODO: transition -->
-          <transition mode="out-in" name="page">
-            <!-- unuse suspense -> async route component -> can't extract style to css file -->
-            <!-- suspense<component :is="Component"> -> some warning -> can't match DOM -> can't hydrate -->
-            <suspense>
-              <div class="router-view">
-                <component :is="Component"></component>
-              </div>
-            </suspense>
-          </transition>
+        <!-- unuse suspense -> async route component -> can't extract style to css file -->
+        <!-- suspense<component :is="Component"> -> some warning -> can't match DOM -> can't hydrate -->
+        <router-view v-slot="{ Component, route }">
+          <suspense>
+            <div class="router-view">
+              <!-- transition -> ssr -> client hydration -> rerender -->
+              <!-- <transition mode="out-in" name="page"> -->
+              <component :is="Component" :key="route.name"></component>
+              <!-- </transition> -->
+            </div>
+          </suspense>
         </router-view>
       </component>
     </captured>

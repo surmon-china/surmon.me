@@ -1,4 +1,4 @@
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, ref, onMounted, Transition } from 'vue'
 import { isClient } from '/@/environment'
 
 export const ClientOnly = defineComponent({
@@ -11,27 +11,31 @@ export const ClientOnly = defineComponent({
       default: 'div'
     }
   },
-  render() {
-    const { placeholder, placeholderTag } = this.$props
-    const defaultSlot = this.$slots.default
-    const placeholderSlot = this.$slots.placeholder
+  setup(props, context) {
+    // eslint-disable-next-line vue/no-setup-props-destructure
+    const { placeholder, placeholderTag } = props
 
-    if (isClient) {
-      return defaultSlot?.()
+    return () => {
+      const defaultSlot = context.slots.default
+      const placeholderSlot = context.slots.placeholder
+
+      if (isClient) {
+        return defaultSlot?.()
+      }
+
+      if (placeholderSlot) {
+        return placeholderSlot()
+      }
+
+      if (placeholderTag && placeholder) {
+        return h(
+          placeholderTag,
+          { class: ['client-only-placeholder'] },
+          placeholder
+        )
+      }
+
+      return null
     }
-
-    if (placeholderSlot) {
-      return placeholderSlot()
-    }
-
-    if (placeholderTag && placeholder) {
-      return h(
-        placeholderTag,
-        { class: ['client-only-placeholder'] },
-        placeholder
-      )
-    }
-
-    return null
   }
 })

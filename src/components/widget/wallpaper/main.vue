@@ -9,9 +9,11 @@
       <div class="down"></div>
     </div>
   </div>
-  <popup :visible="isOnWallpaper" @close="toggleWallpaper">
-    <wallpapers @close="toggleWallpaper" />
-  </popup>
+  <client-only>
+    <popup :visible="isOnWallpaper" @close="toggleWallpaper">
+      <wallpapers @close="toggleWallpaper" />
+    </popup>
+  </client-only>
 </template>
 
 <script lang="ts">

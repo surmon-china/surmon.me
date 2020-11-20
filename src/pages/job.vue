@@ -16,7 +16,7 @@
         </p>
         <p class="description">
           <i18n
-            zh="一手人脉，假一赔十"
+            zh="一手人脉，假一赔万"
             en="We fight for future together"
           />
         </p>
@@ -36,7 +36,14 @@
               :style="{
                 backgroundImage: `url('${getFileCDNUrl(job.logo)}')`
               }"
-            />
+            >
+              <uimage
+                cdn
+                class="qrcode"
+                :src="job.qrcode"
+                v-if="job.qrcode"
+              />
+            </div>
             <div class="content">
               <ulink class="title" :href="job.url">
                 {{ job.company }}
@@ -79,8 +86,9 @@
         {
           id: 'byte-dance',
           company: '字节跳动',
-          logo: '/images/page-job/byte-dance.jpg',
-          url: 'https://job.toutiao.com/s/JjxWmG7',
+          logo: '/images/page-job/bytedance.jpg',
+          qrcode: '/images/page-job/bytedance-qrcode.png',
+          url: 'https://job.toutiao.com/s/J9oWrQQ',
           location: '国内',
           description: '饭好吃，不要钱<br> 薪资不低，加班给钱；马上上市，未来可期',
           email: META.email
@@ -174,9 +182,19 @@
         .logo {
           width: 100%;
           height: 16rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          overflow: hidden;
           background-color: $module-bg-darker-2;
           background-size: cover;
           background-position: center;
+
+          .qrcode {
+            height: 50%;
+            background-color: $white;
+            @include radius-box($sm-radius);
+          }
         }
 
         .content {

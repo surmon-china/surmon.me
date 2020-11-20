@@ -156,6 +156,7 @@
                 {{ name }}
               </a>
             </span>
+            <span>...</span>
           </div>
         </div>
       </div>

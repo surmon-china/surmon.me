@@ -108,14 +108,15 @@
       }))
 
       const fetchArticleDetail = (article_id: string | number) => {
+        const fetchDelay = isClient ? 368 : 0
         return Promise.all([
           store.dispatch(
             getNamespace(Modules.Article, ArticleModuleActions.FetchDetail),
-            { article_id, delay: isClient ? 368 : 0 }
+            { article_id, delay: fetchDelay }
           ),
           store.dispatch(
             getNamespace(Modules.Comment, CommentModuleActions.FetchList),
-            { post_id: article_id, delay: isClient ? 368 : 0 }
+            { post_id: article_id, delay: fetchDelay }
           )
         ])
       }
