@@ -98,7 +98,7 @@ public/sitemap.xml
 public/rss.xml
 
 # analytics
-public/scripts/analytics.js
+public/scripts/gtag.js
 
 # barrages
 data/barrages.json
@@ -106,7 +106,3 @@ data/barrages.json
 # Redis
 dump.rdb
 
-# XML
-static
-/public/rss.xml
-/public/sitemap.xml
