@@ -1,14 +1,16 @@
 /**
  * @file popup image component
- * @module popup/image-component
+ * @module service/popup/image-component
  * @author Surmon <https://github.com/surmon-china>
- * @example <popup-image src="xxx" class="image" />
 */
 
 import { h, defineComponent } from 'vue'
 import { PopupUIProps, getOtherProps } from './popup'
 import { usePopup } from '.'
 
+/**
+ * @example <popup-image src="xxx" class="image" />
+*/
 export default defineComponent({
   name: 'PopupImage',
   props: {

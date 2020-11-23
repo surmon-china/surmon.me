@@ -1,3 +1,9 @@
+/**
+ * @file App universal helper
+ * @module app/universal-helper
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import { onBeforeMount, getCurrentInstance } from 'vue'
 import { promise } from '/@/services/cache'
 import { isServer, isClient, isSPA } from '/@/environment'

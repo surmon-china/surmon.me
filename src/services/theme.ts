@@ -1,6 +1,6 @@
 /**
- * @file theme service
- * @module service.theme
+ * @file Theme service
+ * @module service/theme
  * @author Surmon <https://github.com/surmon-china>
  */
 

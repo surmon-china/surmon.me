@@ -1,6 +1,6 @@
 /**
  * @file Surpres config
- * @module egg.config
+ * @module config/egg
  * @author Surmon <https://github.com/surmon-china>
  */
 

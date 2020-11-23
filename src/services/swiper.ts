@@ -1,6 +1,6 @@
 /**
  * @file vue-awesome-swiper
- * @module plugins/swiper
+ * @module service/swiper
  * @author Surmon <https://github.com/surmon-china>
  */
 

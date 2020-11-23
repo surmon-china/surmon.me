@@ -1,10 +1,10 @@
 /**
- * @file App main
- * @module app.main
+ * @file App main logic
+ * @module app/main
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { CreateAppFunction } from 'vue'
+import { createSSRApp } from 'vue'
 import { RouterHistory } from 'vue-router'
 import * as ENV from './environment'
 import API_CONFIG from '/@/config/api.config'
@@ -24,7 +24,6 @@ import App from './app.vue'
 console.info('[APP INITED]', API_CONFIG, JSON.parse(JSON.stringify(ENV)))
 
 export interface ICreatorContext {
-  appCreator: CreateAppFunction<Element>
   historyCreator(base?: string): RouterHistory
   theme: Theme
   language: string
@@ -36,7 +35,7 @@ export const createVueApp = (context: ICreatorContext) => {
     language: context.language || ''
   })
 
-  const app = context.appCreator(App)
+  const app = createSSRApp(App)
   const store = createUniversalStore({ globalState })
   const router = createUniversalRouter({
     beforeMiddleware: getLayoutMiddleware(globalState),

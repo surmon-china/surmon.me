@@ -1,3 +1,9 @@
+/**
+ * @file Helmet service
+ * @module service/helmet
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import {
   ref,
   inject,

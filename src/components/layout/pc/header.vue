@@ -8,56 +8,58 @@
         </span>
         <router-link to="/" class="header-link" :title="t(LANGUAGE_KEYS.APP_SLOGAN)" />
       </div>
-      <div class="header-player" v-if="music">
-        <div class="panel">
-          <button
-            class="prev-song button"
-            :disabled="!music.state.ready || music.state.index === 0"
-            @click="music.prevSong"
-          >
-            <i class="iconfont icon-music-prev"></i>
-          </button>
-          <button
-            class="toggle-play button"
-            :disabled="!music.state.ready"
-            @click="music.togglePlay"
-          >
-            <i
-              class="iconfont"
-              :class="music.state.playing ? 'icon-music-pause' : 'icon-music-play'"
-            ></i>
-          </button>
-          <button
-            class="next-song button"
-            :disabled="!music.state.ready"
-            @click="music.nextSong"
-          >
-            <i class="iconfont icon-music-next"></i>
-          </button>
-          <button
-            class="muted-toggle button"
-            :disabled="!music.state.ready"
-            @click="music.toggleMuted"
-          >
-            <i
-              class="iconfont"
-              :class="music.muted ? 'icon-music-muted' : 'icon-music-volume'"
-            ></i>
-          </button>
+      <client-only>
+        <div class="header-player" v-if="music">
+          <div class="panel">
+            <button
+              class="prev-song button"
+              :disabled="!music.state.ready || music.state.index === 0"
+              @click="music.prevSong"
+            >
+              <i class="iconfont icon-music-prev"></i>
+            </button>
+            <button
+              class="toggle-play button"
+              :disabled="!music.state.ready"
+              @click="music.togglePlay"
+            >
+              <i
+                class="iconfont"
+                :class="music.state.playing ? 'icon-music-pause' : 'icon-music-play'"
+              ></i>
+            </button>
+            <button
+              class="next-song button"
+              :disabled="!music.state.ready"
+              @click="music.nextSong"
+            >
+              <i class="iconfont icon-music-next"></i>
+            </button>
+            <button
+              class="muted-toggle button"
+              :disabled="!music.state.ready"
+              @click="music.toggleMuted"
+            >
+              <i
+                class="iconfont"
+                :class="music.muted ? 'icon-music-muted' : 'icon-music-volume'"
+              ></i>
+            </button>
+          </div>
+          <div v-if="music.currentSong" class="song">
+            <router-link
+              class="link"
+              :to="getPageRoute(RouteName.Music)"
+              :title="`${music.currentSong.name} / ${music.currentSong.album || 'unknow'}`"
+            >
+              <span>{{ music.currentSong.name }} By {{ music.currentSong.artist }} / {{ music.currentSong.album || 'unknow' }}</span>
+            </router-link>
+          </div>
+          <div v-else class="song">
+            <i18n :lkey="LANGUAGE_KEYS.MUSIC_PLACEHOLDER" />
+          </div>
         </div>
-        <div v-if="music.currentSong" class="song">
-          <router-link
-            class="link"
-            :to="getPageRoute(RouteName.Music)"
-            :title="`${music.currentSong.name} / ${music.currentSong.album || 'unknow'}`"
-          >
-            <span>{{ music.currentSong.name }} By {{ music.currentSong.artist }} / {{ music.currentSong.album || 'unknow' }}</span>
-          </router-link>
-        </div>
-        <div v-else class="song">
-          <i18n :lkey="LANGUAGE_KEYS.MUSIC_PLACEHOLDER" />
-        </div>
-      </div>
+      </client-only>
     </div>
     <div class="pre-load">
       <uimage

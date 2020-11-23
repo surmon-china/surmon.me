@@ -1,3 +1,10 @@
+/**
+ * @file Helmet service
+ * @description backup
+ * @module service/helmet
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import {
   inject,
   reactive,

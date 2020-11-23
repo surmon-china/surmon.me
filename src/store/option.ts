@@ -1,5 +1,5 @@
 /**
- * @file Global options
+ * @file App options state
  * @module store/option
  * @author Surmon <https://github.com/surmon-china>
  */

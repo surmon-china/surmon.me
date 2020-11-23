@@ -1,6 +1,6 @@
 /**
  * @file GA 统计服务
- * @module plugins/analytics
+ * @module service/gtag
  * @author Surmon <https://github.com/surmon-china>
  */
 

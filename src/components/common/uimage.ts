@@ -1,3 +1,9 @@
+/**
+ * @file Universal image
+ * @description Render image with CDN/Proxy/Defer
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import { defineComponent, ref, h } from 'vue'
 import { isClient } from '/@/environment'
 import { useDefer } from '/@/services/defer'

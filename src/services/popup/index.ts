@@ -1,6 +1,6 @@
 /**
  * @file 弹窗服务
- * @module services/popup
+ * @module service/popup
  * @author Surmon <https://github.com/surmon-china>
  * @example window.popup.vImage('http://xxx.jpg')
  */

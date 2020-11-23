@@ -1,9 +1,14 @@
+/**
+ * @file BFF Server render
+ * @module server/render
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import fs from 'fs'
 import path from 'path'
 import LRU from 'lru-cache'
 import serialize from 'serialize-javascript'
 import { Middleware, Context } from 'koa'
-import { createSSRApp } from 'vue'
 import { createMemoryHistory } from 'vue-router'
 import { renderToString } from '@vue/server-renderer'
 import { Theme, THEME_STORAGE_KEY } from '/@/services/theme'
@@ -18,7 +23,6 @@ const SPA_INDEX_HTML = fs
 const renderHTML = async (context: Context) => {
   const { headers, url } = context.request
   const { app, router, store, helmet } = createVueApp({
-    appCreator: createSSRApp,
     historyCreator: createMemoryHistory,
     language: headers['accept-language'],
     userAgent: headers['user-agent'],
@@ -55,7 +59,7 @@ const renderHTML = async (context: Context) => {
     )
     .replace(
       `<div id="app">`,
-      `<div id="app" data-server-rendered="true">${APP_HTML}</div>`
+      `<div id="app" data-server-rendered="true">${APP_HTML}`
     ).replace(
       `</body>`,
       `${FOOTER}\n</body>`

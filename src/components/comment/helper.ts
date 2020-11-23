@@ -1,3 +1,8 @@
+/**
+ * @file comment helper
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import { email as emailRegex } from '/@/constants/regex'
 import { getGravatarByEmail } from '/@/transforms/thumbnail'
 import { getFileCDNUrl } from '/@/transforms/url'

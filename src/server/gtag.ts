@@ -1,6 +1,6 @@
 /**
- * @file GA 更新器 / Commonjs module
- * @module server/analytics
+ * @file BFF GA updater
+ * @module server/gtag
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -16,7 +16,6 @@ const UPDATE_TIME = {
   HOURS_24: 1000 * 60 * 60 * 24
 }
 
-// 更新脚本
 export const startGTagScriptUpdater = () => {
   (function doUpdate() {
     axios.get(getGAScriptUrl(GA_MEASUREMENT_ID), { timeout: 6000 })

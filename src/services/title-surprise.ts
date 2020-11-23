@@ -1,6 +1,6 @@
 /**
  * @file Title surprise
- * @module services/title-egg
+ * @module service/title-egg
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -1,3 +1,8 @@
+/**
+ * @file Editable element util
+ * @module util/editable
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 export const focusPosition = (element: HTMLElement, position: number = 0) => {
   if (!element) {

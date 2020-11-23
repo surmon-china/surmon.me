@@ -1,3 +1,8 @@
+/**
+ * @file Serialize JavaScript code
+ * @module transformer/code
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 // fork from: https://github.com/nuxt/nuxt.js/blob/dev/packages/utils/src/serialize.js
 // document: https://github.com/yahoo/serialize-javascript

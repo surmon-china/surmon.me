@@ -1,3 +1,9 @@
+/**
+ * @file App server entry
+ * @module app/server
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import path from 'path'
 import http from 'http'
 import Koa from 'koa'

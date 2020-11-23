@@ -1,6 +1,6 @@
 /**
  * @file i18n service
- * @module service.i18n
+ * @module service/i18n
  * @author Surmon <https://github.com/surmon-china>
  */
 

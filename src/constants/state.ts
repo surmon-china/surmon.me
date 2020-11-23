@@ -1,7 +1,7 @@
 /**
  * @file State constant
- * @module state.constant
- * @author Surmon <https =//github.com/surmon-china>
+ * @module constant/state
+ * @author Surmon <https://github.com/surmon-china>
  */
 
 // 转载状态

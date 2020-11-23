@@ -1,5 +1,5 @@
 /**
- * @file 评论数据状态
+ * @file Comment state
  * @module store/comment
  * @author Surmon <https://github.com/surmon-china>
  */

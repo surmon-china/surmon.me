@@ -1,6 +1,6 @@
 /**
  * @file 本机数据状态
- * @module services/storage
+ * @module service/storage
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -16,7 +16,7 @@ export const getJSON = <T = any>(key: string): T | null => {
   return typeof data === 'string' ? JSON.parse(data) : null
 }
 
-export const getAccesser = <S = any>(key: string, initState: S) => {
+export const getAccessor = <S = any>(key: string, initState: S) => {
   const localState = ref(getJSON<S>(key) || initState)
   watchEffect(() => setJSON(key, localState.value))
   return localState
@@ -28,5 +28,5 @@ export default {
   remove,
   setJSON,
   getJSON,
-  getAccesser
+  getAccessor
 }
