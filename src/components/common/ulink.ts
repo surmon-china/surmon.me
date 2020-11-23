@@ -1,3 +1,9 @@
+/**
+ * @file Universal Link
+ * @description Render Link with external/nofollow/noopener
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import { AnchorHTMLAttributes, defineComponent, h } from 'vue'
 
 export default defineComponent({

@@ -1,3 +1,9 @@
+/**
+ * @file App enhancers
+ * @module app/enhancer
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useGlobalState } from '/@/state'

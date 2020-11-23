@@ -1,6 +1,6 @@
 /**
- * @file 全局设置数据状态
- * @module store/option
+ * @file App local global state
+ * @module app/global-state
  * @author Surmon <https://github.com/surmon-china>
  */
 

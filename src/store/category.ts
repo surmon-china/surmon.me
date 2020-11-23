@@ -1,5 +1,5 @@
 /**
- * @file Categories data
+ * @file Categories state
  * @module store/category
  * @author Surmon <https://github.com/surmon-china>
  */

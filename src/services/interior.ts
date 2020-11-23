@@ -1,6 +1,6 @@
 /**
- * @file Vue enhancer
- * @module plugins/vue-extends
+ * @file app interior extends
+ * @module service/interior
  * @author Surmon <https://github.com/surmon-china>
  */
 

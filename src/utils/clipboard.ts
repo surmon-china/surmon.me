@@ -1,3 +1,9 @@
+/**
+ * @file Clipboard util
+ * @module util/clipboard
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 declare global {
   interface Window {
     isCopyFromApp: boolean

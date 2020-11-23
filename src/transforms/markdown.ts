@@ -1,6 +1,6 @@
 /**
- * @file 文档解析服务
- * @module transforms/marked
+ * @file Markdown parser
+ * @module transformer/markdown
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -1,6 +1,6 @@
 /**
  * @file 复制拦截器
- * @module plugins/copy-right
+ * @module service/copyright
  * @author Surmon <https://github.com/surmon-china>
  */
 

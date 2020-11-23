@@ -1,3 +1,8 @@
+/**
+ * @file Script loader
+ * @module util/script-loader
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 export interface ILoaderOption extends Partial<HTMLScriptElement> {
   domain?: string

@@ -1,6 +1,6 @@
 /**
  * @file Music player
- * @module services/music
+ * @module service/music
  * @author Surmon <https://github.com/surmon-china>
  */
 

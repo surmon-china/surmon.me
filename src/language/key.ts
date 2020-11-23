@@ -1,7 +1,6 @@
 /**
- * Language key constant
- * @file 语言字段
- * @module app/constants/language
+ * @file I18n keys
+ * @module i18n/key
  * @author Surmon <https://github.com/surmon-china>
  */
 

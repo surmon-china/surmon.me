@@ -1,5 +1,5 @@
 /**
- * @file 弹幕服务
+ * @file BFF Barrage server
  * @module server/barrage
  * @author Surmon <https://github.com/surmon-china>
  */

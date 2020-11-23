@@ -45,14 +45,12 @@ const getNowTime = (): number => {
 }
 
 /**
- * @class CacheService
- * @classdesc 承载缓存服务
+ * @description 承载缓存服务
  * @example CacheService.get(CacheKey)
  * @example CacheService.set(CacheKey)
  * @example CacheService.promise({ option })()
  * @example CacheService.interval({ option })()
  */
-
 export const get = (key: TCacheKey) => {
   const cacheKey = getCacheKey(key)
   const timeStampKey = getCacheTimeStampKey(key)
@@ -85,7 +83,6 @@ export const set = (key: TCacheKey, value: any, ttl?: number): void => {
  * @example CacheService.promise({ key: CacheKey, promise() }) -> promise()
  * @example CacheService.promise({ key: CacheKey, promise(), ioMode: true }) -> { get: promise(), update: promise() }
  */
-
 export function promise<T = $TODO>(options: ICachePromiseOption<T>): TCachePromiseResult<T>
 export function promise<T = $TODO>(options: ICachePromiseIOOption<T>): ICacheIoResult<T>
 export function promise(options: $TODO) {

@@ -1,7 +1,12 @@
+/**
+ * @file App state transformer
+ * @module transformer/state
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import { computed, ref } from 'vue'
 import { isServer } from '/@/environment'
-import { getAccesser } from '/@/services/storage'
+import { getAccessor } from '/@/services/storage'
 import { OriginState } from '/@/constants/state'
 import { USER_LIKE_HISTORY } from '/@/constants/storage'
 
@@ -24,7 +29,7 @@ const getUserLikeHistory = () => {
   }
   return isServer
     ? ref(defaultState)
-    : getAccesser(USER_LIKE_HISTORY, defaultState)
+    : getAccessor(USER_LIKE_HISTORY, defaultState)
 }
 
 export const usePageLike = (postId: number) => {

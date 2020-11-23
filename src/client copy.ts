@@ -1,9 +1,3 @@
-/**
- * @file App client entry
- * @module app/client
- * @author Surmon <https://github.com/surmon-china>
- */
-
 import './polyfill'
 
 import { createWebHistory } from 'vue-router'
@@ -53,33 +47,30 @@ app.use(gtag, {
 })
 
 // init
+router.beforeEach((_, __, next) => {
+  loading.start()
+  next()
+})
+router.afterEach((_, __, failure) => {
+  failure
+    ? loading.fail(failure)
+    : loading.finish()
+})
+globalState.resetOnClient()
+i18n.set(globalState.userAgent.isZhUser ? Language.Zh : Language.En)
+helmet.bindClient()
 store.clientInit()
+exportLozadToGlobal()
+exportAppToGlobal(app)
+
+// PC -> bind system switch
+// Mobile -> reset to default
+globalState.userAgent.isMobile
+  ? theme.set(Theme.Default)
+  : theme.bindClientSystem()
 
 // mount (isHydrate -> (SSR -> true | SPA -> false))
 app.mount('#app', isSSR).$nextTick(() => {
-
-
-  // PC -> bind system switch
-  // Mobile -> reset to default
-  globalState.userAgent.isMobile
-    ? theme.set(Theme.Default)
-    : theme.bindClientSystem()
-
-  router.beforeEach((_, __, next) => {
-    loading.start()
-    next()
-  })
-  router.afterEach((_, __, failure) => {
-    failure
-      ? loading.fail(failure)
-      : loading.finish()
-  })
-  globalState.resetOnClient()
-  i18n.set(globalState.userAgent.isZhUser ? Language.Zh : Language.En)
-  helmet.bindClient()
-  exportLozadToGlobal()
-  exportAppToGlobal(app)
-
   // Desktop
   if (!globalState.userAgent.isMobile) {
     defer.addTask(music.start)

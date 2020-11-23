@@ -1,3 +1,8 @@
+/**
+ * @file BFF Server helper
+ * @module server/helper
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import path from 'path'
 import { NODE_ENV } from '../environment'

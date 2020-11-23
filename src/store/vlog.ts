@@ -1,5 +1,5 @@
 /**
- * @file Vlog videos
+ * @file Vlog videos state
  * @module store/vlog
  * @author Surmon <https://github.com/surmon-china>
  */

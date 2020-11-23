@@ -1,3 +1,8 @@
+/**
+ * @file GTag constant
+ * @module constant/gtag
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 export enum GAEventActions {
   Click = '点击',

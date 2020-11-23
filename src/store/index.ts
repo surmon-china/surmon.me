@@ -1,6 +1,6 @@
 /**
  * @file Root store
- * @module store/entry
+ * @module store
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -1,3 +1,8 @@
+/**
+ * @file Barrage constant
+ * @module constant/barrage
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 export enum SocketEvent {
   LastList = 'barrage-last-list',

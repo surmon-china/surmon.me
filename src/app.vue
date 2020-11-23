@@ -5,17 +5,16 @@
       <emoji-rain />
       <popup-root />
     </client-only>
+    <!-- unuse suspense -> async route component -> can't extract style to css file -->
+    <!-- suspense<component :is="Component"> -> some warning -> can't match DOM -> can't hydrate -->
     <captured>
       <component :is="LayoutComponent">
-        <!-- unuse suspense -> async route component -> can't extract style to css file -->
-        <!-- suspense<component :is="Component"> -> some warning -> can't match DOM -> can't hydrate -->
         <router-view v-slot="{ Component, route }">
           <suspense>
             <div class="router-view">
-              <!-- transition -> ssr -> client hydration -> rerender -->
-              <!-- <transition mode="out-in" name="page"> -->
-              <component :is="Component" :key="route.name"></component>
-              <!-- </transition> -->
+              <transition mode="out-in" name="page">
+                <component :is="Component" :key="route.name"></component>
+              </transition>
             </div>
           </suspense>
         </router-view>
@@ -26,7 +25,6 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted, onErrorCaptured } from 'vue'
-  import { isProd, isClient } from '/@/environment'
   import { useEnhancer } from '/@/enhancer'
   import Captured from '/@/components/common/captured.vue'
   import EmojiRain from '/@/components/widget/emoji-rain.vue'

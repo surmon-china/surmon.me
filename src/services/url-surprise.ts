@@ -1,6 +1,6 @@
 /**
  * @file Url surprise
- * @module services/url-surprise
+ * @module service/url-surprise
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -13,7 +13,7 @@ export const getUrlSurprise = (router: Router) => {
     // location.hash = emoji
     // window.$nuxt.$router.replace(`${path}${emojis ? ('#' + emojis) : ''}`)
   }
-  
+
   const eggs = [
     () => {
       const emojis = ['🌑', '🌒', '🌓', '🌔', '🌝', '🌖', '🌗', '🌘']

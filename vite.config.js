@@ -102,7 +102,6 @@ module.exports = mode => {
         'https-proxy-agent',
         'serialize-javascript',
         'socket.io',
-        'request',
         'cross-env',
         '@vue/compiler-sfc',
         '@vue/server-renderer'

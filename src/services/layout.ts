@@ -1,3 +1,9 @@
+/**
+ * @file app layout updater
+ * @module service/layout
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import { NavigationGuard } from 'vue-router'
 import { GlobalState, LayoutColumn } from '/@/state'
 

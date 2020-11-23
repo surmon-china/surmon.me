@@ -1,30 +1,34 @@
+/**
+ * @file placeholder
+ * @description render placeholder or data
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import { defineComponent, h, Transition, PropType } from 'vue'
 import { LANGUAGE_KEYS } from '/@/language/key'
 import Empty from './empty.vue'
 import Spin from './spin.vue'
 
+export enum Events {
+  AfterEnter = 'after-enter'
+}
+
 /**
- * @example (
+ * @example
  *  <placeholder :loading="false" :data="data.length" p-i18n-key="LANGUAGE_KEYS.XXX">
  *    <component />
  *  </placeholder>
- * )
- * @example (
+ * @example
  *  <placeholder :loading="false" :data="data.length" placeholder="empty">
  *    <component />
  *  </placeholder>
- * )
- * @example (
+ * @example
  *  <placeholder :loading="true" :data="data.length">
  *    <template #loading> skeleton </template>
  *    <template #placeholder> placeholder </template>
  *    <template #default> <component /> </template>
  *  </placeholder>
- * )
 */
-export enum Events {
-  AfterEnter = 'after-enter'
-}
 export default defineComponent({
   name: 'Placeholder',
   props: {

@@ -1,6 +1,6 @@
 /**
  * @file Network
- * @module utils/network
+ * @module service/network
  * @author Surmon <https://github.com/surmon-china>
  */
 

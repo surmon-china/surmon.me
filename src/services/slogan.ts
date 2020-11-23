@@ -1,3 +1,9 @@
+/**
+ * @file Slogan consoler
+ * @module service/slogan
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import { I18n } from '/@/services/i18n'
 import { LANGUAGE_KEYS } from '/@/language/key'
 import { META } from '/@/config/app.config'

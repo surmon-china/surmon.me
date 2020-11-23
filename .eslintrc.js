@@ -1,6 +1,6 @@
 /**
  * @file Eslint config
- * @module eslint.config
+ * @module eslint/config
  * @author Surmon <https://github.com/surmon-china>
 */
 

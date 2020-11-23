@@ -1,6 +1,6 @@
 /**
  * @file Api config
- * @module api.config
+ * @module config/api
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -26,10 +26,10 @@ const PROD_API_BASE = isSPA
   : isServer ? API_LOCAL_URL : API_ONLINE_URL
 
 export default {
-  FE: import.meta.env.VITE_FE_URL,
-  SOCKET: import.meta.env.VITE_SOCKET_URL,
-  CDN: import.meta.env.VITE_CDN_URL,
-  PROXY: import.meta.env.VITE_PROXY_URL,
-  GRAVATAR: import.meta.env.VITE_GRAVATAR_URL,
+  FE: import.meta.env.VITE_FE_URL as string,
+  SOCKET: import.meta.env.VITE_SOCKET_URL as string,
+  CDN: import.meta.env.VITE_CDN_URL as string,
+  PROXY: import.meta.env.VITE_PROXY_URL as string,
+  GRAVATAR: import.meta.env.VITE_GRAVATAR_URL as string,
   BASE: isDev ? DEV_API_BASE : PROD_API_BASE
 }

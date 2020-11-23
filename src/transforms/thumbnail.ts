@@ -1,6 +1,6 @@
 /**
  * @file Thumbnail transformer
- * @module transforms/thumbnail
+ * @module transformer/thumbnail
  * @author Surmon <https://github.com/surmon-china>
  */
 

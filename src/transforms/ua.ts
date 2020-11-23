@@ -1,6 +1,6 @@
 /**
  * @file UA parser
- * @module transforms/ua
+ * @module transformer/ua
  * @author Surmon <https://github.com/surmon-china>
  */
 

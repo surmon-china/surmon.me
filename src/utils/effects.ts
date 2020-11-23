@@ -1,3 +1,9 @@
+/**
+ * @file Client util
+ * @module util/effects
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import { nextTick } from 'vue'
 import { scrollTo, Easing } from './scroller'
 

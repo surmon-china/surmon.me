@@ -1,12 +1,7 @@
 /**
  * @file popup component
- * @module popup component
+ * @module service/popup/popup-component
  * @author Surmon <https://github.com/surmon-china>
- * @example (
- *  <popup :visible="false" :clone="true">
- *    <div class="xxx">I will visible on original & modal</div>
- *  </popup>
- * )
 */
 
 import { h, defineComponent, watch, Teleport, Fragment, PropType, ExtractPropTypes } from 'vue'
@@ -37,6 +32,12 @@ enum Event {
   UpdateVisible = 'update:visible'
 }
 
+/**
+ * @example
+ *  <popup :visible="false" :clone="true">
+ *    <div class="xxx">I will visible on original & modal</div>
+ *  </popup>
+*/
 export default defineComponent({
   name: 'Popup',
   props: {

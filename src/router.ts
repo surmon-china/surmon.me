@@ -1,3 +1,9 @@
+/**
+ * @file App router
+ * @module app/router
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import { RouteRecordRaw, NavigationGuard, NavigationGuardNext, RouterHistory, createRouter } from 'vue-router'
 import { scrollToTop } from '/@/utils/effects'
 import { LayoutColumn } from '/@/state'
