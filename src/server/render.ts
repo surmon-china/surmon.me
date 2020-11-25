@@ -15,22 +15,34 @@ import { renderToString } from '@vue/server-renderer'
 import { getLayoutByRouteMeta } from '/@/services/layout'
 import { Theme, THEME_STORAGE_KEY } from '/@/services/theme'
 import { getSSRContextScript, getSSRStoreScript, SSRContext } from '/@/universal'
-import { createVueApp } from '/@/main'
+import { createVueApp, VueApp } from '/@/main'
 import { APP_PATH } from './helper'
 
 const SPA_INDEX_HTML = fs
   .readFileSync(path.join(APP_PATH, 'index.html'))
   .toString()
 
-const renderHTML = async (context: Context) => {
-  const { headers, url } = context.request
-  const { app, router, store, helmet, theme, globalState } = createVueApp({
+const createApp = (context: Context): VueApp => {
+  const { headers } = context.request
+  return createVueApp({
     appCreator: createSSRApp,
     historyCreator: createMemoryHistory,
     language: headers['accept-language'],
     userAgent: headers['user-agent'],
     theme: context.cookies.get(THEME_STORAGE_KEY) as Theme || Theme.Default
   })
+}
+
+const getCacheKey = (vueApp: VueApp, url: string): string => {
+  const { i18n, theme, globalState } = vueApp
+  const language = i18n.language.value
+  const themeV = theme.theme.value
+  const device = globalState.userAgent.isMobile ? 'mobile' : 'pc'
+  return `${url}-${language}-${themeV}-${device}`
+}
+
+const renderHTML = async (vueApp: VueApp, url: string) => {
+  const { app, router, store, helmet, theme, globalState } = vueApp
 
   await router.push(url)
   await router.isReady()
@@ -77,11 +89,8 @@ const renderHTML = async (context: Context) => {
     )
 
   return {
-    app,
-    store,
-    router,
-    helmet,
-    HTML
+    html: HTML,
+    isStatic: !!router.currentRoute.value.meta?.static
   }
 }
 
@@ -91,15 +100,16 @@ const microCache = new LRU({
 })
 
 export const renderSSR: Middleware = async context => {
-  const requestURL = context.request.url
-  if (microCache.has(requestURL)) {
-    context.body = microCache.get(requestURL)
+  const { url } = context.request
+  const app = createApp(context)
+  const cacheKey = getCacheKey(app, url)
+  if (microCache.has(cacheKey)) {
+    context.body = microCache.get(cacheKey)
   } else {
     try {
-      const { router, HTML } = await renderHTML(context)
-      const { static: isStatic } = router.currentRoute.value.meta
-      context.body = HTML
-      microCache.set(requestURL, HTML, isStatic && Infinity)
+      const { html, isStatic } = await renderHTML(app, url)
+      context.body = html
+      microCache.set(cacheKey, html, isStatic ? Infinity : undefined)
     } catch (error) {
       console.log('渲染错误', error)
       context.body = String(error)

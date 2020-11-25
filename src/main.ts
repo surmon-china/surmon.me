@@ -31,6 +31,7 @@ export interface ICreatorContext {
   language: string
   userAgent: string
 }
+export type VueApp = ReturnType<typeof createVueApp>
 export const createVueApp = (context: ICreatorContext) => {
   const globalState = createGlobalState({
     userAgent: context.userAgent || '',
