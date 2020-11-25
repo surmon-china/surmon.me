@@ -47,7 +47,6 @@ const { app, router, globalState, theme, i18n, helmet, store } = createVueApp({
   userAgent: isSSR
     ? ssrContextState.globalState.userAgent
     : navigator.userAgent,
-  // 强制使用本地？
   theme: isSSR
     ? ssrContextState.theme
     : getClientLocalTheme()
