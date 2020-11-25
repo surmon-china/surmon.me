@@ -36,7 +36,7 @@ export const startGTagScriptUpdater = () => {
         }
       })
       .catch(error => {
-        console.warn('GA 脚本更新网络连接失败', new Date(), error)
+        console.warn('GA 脚本更新网络连接失败', new Date(), error.message, error?.toJSON())
         setTimeout(doUpdate, UPDATE_TIME.HOURS_1)
       })
   }())

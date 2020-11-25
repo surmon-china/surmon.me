@@ -4,18 +4,17 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { createSSRApp } from 'vue'
+import { CreateAppFunction } from 'vue'
 import { RouterHistory } from 'vue-router'
 import * as ENV from './environment'
 import API_CONFIG from '/@/config/api.config'
 import { META } from '/@/config/app.config'
 import { RouteName } from './router'
-import { createUniversalRouter } from './router'
+import { createUniversalRouter, RouterCreatorConfig } from './router'
 import { createUniversalStore } from './store'
 import { createI18n } from '/@/services/i18n'
 import { createHelmet } from '/@/services/helmet'
 import { createTheme, Theme } from '/@/services/theme'
-import { getLayoutMiddleware } from '/@/services/layout'
 import interior from '/@/services/interior'
 import { Language, languages, langMap } from '/@/language/data'
 import { createGlobalState } from './state'
@@ -24,7 +23,10 @@ import App from './app.vue'
 console.info('[APP INITED]', API_CONFIG, JSON.parse(JSON.stringify(ENV)))
 
 export interface ICreatorContext {
+  appCreator: CreateAppFunction<Element>
   historyCreator(base?: string): RouterHistory
+  historyBeforeMiddleware?(globalState: any): RouterCreatorConfig['beforeMiddleware']
+  historyAfterMiddleware?(globalState: any): RouterCreatorConfig['afterMiddleware']
   theme: Theme
   language: string
   userAgent: string
@@ -35,10 +37,11 @@ export const createVueApp = (context: ICreatorContext) => {
     language: context.language || ''
   })
 
-  const app = createSSRApp(App)
+  const app = context.appCreator(App)
   const store = createUniversalStore({ globalState })
   const router = createUniversalRouter({
-    beforeMiddleware: getLayoutMiddleware(globalState),
+    beforeMiddleware: context.historyBeforeMiddleware?.(globalState),
+    afterMiddleware: context.historyAfterMiddleware?.(globalState),
     history: context.historyCreator()
   })
   if (globalState.userAgent.isMobile) {

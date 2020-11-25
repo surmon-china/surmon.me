@@ -34,7 +34,7 @@
         </datalist>
       </client-only>
     </form>
-    <transition name="fade">
+    <transition name="module">
       <div v-if="searchState.open" class="search-mask"></div>
     </transition>
     <nav class="navbar">

@@ -7,7 +7,7 @@
         :contenteditable="!disabled"
         :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_PLACEHOLDER)"
       />
-      <transition name="fade">
+      <transition name="list-fade">
         <div
           class="markdown-preview markdown-html comment"
           v-if="preview"

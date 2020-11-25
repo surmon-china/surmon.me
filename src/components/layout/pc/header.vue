@@ -8,7 +8,7 @@
         </span>
         <router-link to="/" class="header-link" :title="t(LANGUAGE_KEYS.APP_SLOGAN)" />
       </div>
-      <client-only>
+      <client-only transition>
         <div class="header-player" v-if="music">
           <div class="panel">
             <button

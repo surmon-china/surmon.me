@@ -79,7 +79,7 @@
       </div>
     </div>
     <desktop-only>
-      <client-only>
+      <client-only transition :delay="668">
         <div class="mammon container">
           <adsense-responsive
             ins-style="display:inline-block;width:1050px;height:192px"
