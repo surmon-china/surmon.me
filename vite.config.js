@@ -1,18 +1,11 @@
 const path = require('path')
-
-// TODO!!!
-// https://github.com/vitejs/vite/issues/1096#issuecomment-729077386
-// const { loadEnv } = require('vite')
-const loadEnv = env => {
-  return require('dotenv').config(env && {
-    path: path.resolve(`.env.${env}`)
-  })?.parsed
-}
+const { loadEnv } = require('vite')
+const CWD = process.cwd()
 
 // env
-const BASE_ENV_CONFIG = loadEnv()
-const DEV_ENV_CONFIG = loadEnv('development')
-const PROD_ENV_CONFIG = loadEnv('production')
+const BASE_ENV_CONFIG = loadEnv('', CWD)
+const DEV_ENV_CONFIG = loadEnv('development', CWD)
+const PROD_ENV_CONFIG = loadEnv('production', CWD)
 
 // console.log('vun:envs:config', {
 //   BASE_ENV_CONFIG,
@@ -21,11 +14,7 @@ const PROD_ENV_CONFIG = loadEnv('production')
 // })
 
 module.exports = mode => {
-
-  const TARGET_ENV_CONFIG = {
-    ...BASE_ENV_CONFIG,
-    ...loadEnv(mode),
-  }
+  const TARGET_ENV_CONFIG = loadEnv(mode, CWD)
   // console.log('vun:mode:config', mode, TARGET_ENV_CONFIG)
 
   return {
