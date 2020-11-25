@@ -8,7 +8,7 @@
   >
     <!-- mammon -->
     <template v-if="isMammonEnabled">
-      <client-only transition :delay="668">
+      <client-only transition>
         <adsense-archive-mobile
           v-if="isMobile"
           class="article-list-mammon"

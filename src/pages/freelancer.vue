@@ -34,34 +34,58 @@
             <p class="icon web">
               <i class="iconfont icon-html5"></i>
             </p>
-            <h3 class="name">Web <i18n en="Client" zh="客户端" /></h3>
-            <p class="desc">Vue <i18n en="application" zh="应用开发" /></p>
-            <p class="desc">React <i18n en="application" zh="应用开发" /></p>
-            <p class="desc">Angular <i18n en="application" zh="应用开发" /></p>
+            <h3 class="name">
+              <i18n en="Web Client" zh="Web 客户端" />
+            </h3>
+            <p class="desc">
+              <i18n en="Vue application" zh="Vue 应用开发" />
+            </p>
+            <p class="desc">
+              <i18n en="React application" zh="React 应用开发" />
+            </p>
+            <p class="desc">
+              <i18n en="Angular application" zh="Angular 应用开发" />
+            </p>
           </li>
           <li class="item">
             <p class="icon nodejs">
               <i class="iconfont icon-nodejs"></i>
             </p>
             <h3 class="name">Node.js</h3>
-            <p class="desc">Node.js <i18n en="application" zh="整站建设" /></p>
-            <p class="desc">Node.js <i18n en="Web 服务开发" zh="online bussniess" /></p>
-            <p class="desc">Node.js <i18n en="命令行工具开发" zh="CLI application" /></p>
+            <p class="desc">
+              <i18n en="Node.js application" zh="Node.js 整站建设" />
+            </p>
+            <p class="desc">
+              <i18n en="Node.js Web 服务开发" zh="Node.js online bussniess" />
+            </p>
+            <p class="desc">
+              <i18n en="Node.js 命令行工具开发" zh="Node.js CLI application" />
+            </p>
           </li>
           <li class="item">
             <p class="icon app">
               <i class="iconfont icon-app"></i>
             </p>
-            <h3 class="name">Application</h3>
-            <p class="desc">Weex <i18n en="application" zh="应用开发" /></p>
-            <p class="desc">React Native <i18n en="application" zh="应用开发" /></p>
-            <p class="desc">Electron <i18n en="application" zh="应用开发" /></p>
+            <h3 class="name">
+              <i18n en="Hybrid App" zh="混合应用" />
+            </h3>
+            <p class="desc">
+              <i18n en="Flutter application" zh="Flutter 应用开发" />
+            </p>
+            <p class="desc">
+              <i18n en="React Native application" zh="React Native 应用开发" />
+            </p>
+            <p class="desc">
+              <i18n en="Electron application" zh="Electron 应用开发" />
+            </p>
           </li>
           <li class="item">
             <p class="icon wechat">
               <i class="iconfont icon-wechat"></i>
             </p>
-            <h3 class="name">WeChat</h3>
+            <h3 class="name">
+              <i18n en="WeChat" zh="微信周边" />
+            </h3>
             <p class="desc"><i18n en="HTML5 page" zh="H5 开发" /></p>
             <p class="desc"><i18n en="WeChat official account" zh="公众号开发" /></p>
             <p class="desc"><i18n en="WeChat mini program" zh="小程序开发" /></p>
@@ -79,7 +103,7 @@
       </div>
     </div>
     <desktop-only>
-      <client-only transition :delay="668">
+      <client-only transition>
         <div class="mammon container">
           <adsense-responsive
             ins-style="display:inline-block;width:1050px;height:192px"
@@ -92,31 +116,58 @@
         <ul class="step-list">
           <li class="item">
             <h3 class="name">
-              <span>1. </span>
-              <i18n zh="提交需求" en="Consult" />
+              <i18n zh="1. 提交需求" en="1. Consult" />
             </h3>
-            <p class="desc"><i18n en="Product requirements document" zh="提供构思成熟的需求文档" /></p>
-            <p class="desc"><i18n en="Prototype design document" zh="及清晰可用的设计图或原型" /></p>
+            <p class="desc">
+              <i18n en="Product requirements document" zh="提供构思成熟的需求文档" />
+            </p>
+            <p class="desc">
+              <i18n en="Prototype design document" zh="清晰可用的设计图或原型" />
+            </p>
           </li>
           <li class="item">
-            <h3 class="name">2. <i18n en="Confirm" zh="确认需求" /></h3>
-            <p class="desc"><i18n en="Price and schedule" zh="确认报价及开发周期" /></p>
-            <p class="desc"><i18n en="Development cycle" zh="协商开发周期和要点" /></p>
+            <h3 class="name">
+              <i18n en="2. Confirm" zh="2. 确认需求" />
+            </h3>
+            <p class="desc">
+              <i18n en="Price and schedule" zh="确认报价及开发周期" />
+            </p>
+            <p class="desc">
+              <i18n en="Development cycle" zh="协商开发周期和要点" />
+            </p>
           </li>
           <li class="item">
-            <h3 class="name">3. <i18n en="Develop" zh="预付开发" /></h3>
-            <p class="desc"><i18n en="Payment the trust and deposit" zh="预付部分或全部" /></p>
-            <p class="desc"><i18n en="Develop project" zh="进入开发流程" /></p>
+            <h3 class="name">
+              <i18n en="3. Develop" zh="3. 预付开发" />
+            </h3>
+            <p class="desc">
+              <i18n en="Payment the trust and deposit" zh="预付部分或全部" />
+            </p>
+            <p class="desc">
+              <i18n en="Develop project" zh="进入开发流程" />
+            </p>
           </li>
           <li class="item">
-            <h3 class="name">4. <i18n en="Review" zh="预收修正" /></h3>
-            <p class="desc"><i18n en="Review and experience" zh="提供预览演示" /></p>
-            <p class="desc"><i18n en="Fixbug and optimize" zh="细节修正及调优" /></p>
+            <h3 class="name">
+              <i18n en="4. Review" zh="4. 预收修正" />
+            </h3>
+            <p class="desc">
+              <i18n en="Review and experience" zh="提供预览演示" />
+            </p>
+            <p class="desc">
+              <i18n en="Fixbug and optimize" zh="细节修正调优" />
+            </p>
           </li>
           <li class="item">
-            <h3 class="name">5. <i18n en="Delivery" zh="交付维护" /></h3>
-            <p class="desc"><i18n en="Pay balance" zh="付清尾款，交付项目" /></p>
-            <p class="desc"><i18n en="Maintenance cycle" zh="一定周期内持续维护" /></p>
+            <h3 class="name">
+              <i18n en="5. Delivery" zh="5. 交付维护" />
+            </h3>
+            <p class="desc">
+              <i18n en="Pay balance" zh="付清尾款，交付项目" />
+            </p>
+            <p class="desc">
+              <i18n en="Maintenance cycle" zh="一定周期内持续维护" />
+            </p>
           </li>
         </ul>
       </div>

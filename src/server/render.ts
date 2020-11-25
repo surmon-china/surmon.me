@@ -12,9 +12,9 @@ import { createSSRApp } from 'vue'
 import { Middleware, Context } from 'koa'
 import { createMemoryHistory } from 'vue-router'
 import { renderToString } from '@vue/server-renderer'
-import { setLayout } from '/@/services/layout'
+import { getLayoutByRouteMeta } from '/@/services/layout'
 import { Theme, THEME_STORAGE_KEY } from '/@/services/theme'
-import { getSSRContextScript, getSSRStoreScript } from '/@/universal'
+import { getSSRContextScript, getSSRStoreScript, SSRContext } from '/@/universal'
 import { createVueApp } from '/@/main'
 import { APP_PATH } from './helper'
 
@@ -24,7 +24,7 @@ const SPA_INDEX_HTML = fs
 
 const renderHTML = async (context: Context) => {
   const { headers, url } = context.request
-  const { app, router, store, helmet, globalState } = createVueApp({
+  const { app, router, store, helmet, theme, globalState } = createVueApp({
     appCreator: createSSRApp,
     historyCreator: createMemoryHistory,
     language: headers['accept-language'],
@@ -37,11 +37,19 @@ const renderHTML = async (context: Context) => {
   await store.serverInit()
 
   // init server layout
-  setLayout(router.currentRoute.value.meta, globalState)
+  globalState.layoutColumn.setValue(
+    getLayoutByRouteMeta(router.currentRoute.value.meta)
+  )
+
+  const ssrContextState: SSRContext = {
+    url,
+    theme: theme.theme.value,
+    globalState: globalState.toRawState()
+  }
 
   const APP_HTML = await renderToString(app)
   const STORE_SCRIPT = getSSRStoreScript(serialize(store.state))
-  const SSR_CONTEXT_SCRIPT = getSSRContextScript(serialize({ url }))
+  const SSR_CONTEXT_SCRIPT = getSSRContextScript(serialize(ssrContextState))
 
   const HEAD = [
     helmet.html.value.title,

@@ -15,8 +15,8 @@ import { getFileCDNUrl } from '/@/transforms/url'
 import gtag from './services/gtag'
 import adsense from '/@/services/adsense'
 import swiper from '/@/services/swiper'
-import { getClientLocalTheme, Theme } from '/@/services/theme'
-import { setLayout } from '/@/services/layout'
+import { getClientLocalTheme } from '/@/services/theme'
+import { getLayoutByRouteMeta } from '/@/services/layout'
 import { createDefer } from '/@/services/defer'
 import { createMusic } from '/@/services/music'
 import { createPopup } from '/@/services/popup'
@@ -27,21 +27,31 @@ import { enableBaiduSeoPush } from '/@/services/baidu-seo-push'
 import { enableAutoTitleSurprise } from './services/title-surprise'
 import { exportAppToGlobal } from '/@/services/exporter'
 import { exportLozadToGlobal } from '/@/services/lozad'
+import { getSSRContextData } from './universal'
 import { createVueApp } from './main'
 
 import '/@/assets/styles/app.scss'
 
-const { app, router, globalState, theme, i18n, helmet, store } = createVueApp({
-  appCreator: isSSR ? createSSRApp : createApp,
-  historyCreator: createWebHistory,
-  language: navigator.language,
-  userAgent: navigator.userAgent,
-  theme: getClientLocalTheme()
-})
-
 const defer = createDefer()
 const loading = createLoading()
 const music = createMusic({ albumId: MUSIC_ALBUM_ID, autoStart: false })
+const ssrContextState = getSSRContextData()
+const { app, router, globalState, theme, i18n, helmet, store } = createVueApp({
+  historyCreator: createWebHistory,
+  appCreator: isSSR
+    ? createSSRApp
+    : createApp,
+  language: isSSR
+    ? ssrContextState.globalState.language
+    : navigator.language,
+  userAgent: isSSR
+    ? ssrContextState.globalState.userAgent
+    : navigator.userAgent,
+  // 强制使用本地？
+  theme: isSSR
+    ? ssrContextState.theme
+    : getClientLocalTheme()
+})
 
 app.use(swiper)
 app.use(music)
@@ -55,13 +65,18 @@ app.use(gtag, {
   customResourceURL: getFileCDNUrl('/scripts/gtag.js'),
 })
 
-// init
-store.clientInit()
+// init: store
+isSSR
+  ? store.clientSSRInit()
+  : store.clientInit()
+
+// init: services
 helmet.bindClient()
+theme.bindClientSystem()
 exportLozadToGlobal()
 exportAppToGlobal(app)
 
-// router
+// init: router loading middleware
 router.beforeEach((_, __, next) => {
   loading.start()
   next()
@@ -71,22 +86,22 @@ router.afterEach((_, __, failure) => {
     ? loading.fail(failure)
     : loading.finish()
 })
+
+// router ready -> mount
 router.isReady().then(() => {
-  // Init client layout
-  setLayout(router.currentRoute.value.meta, globalState)
+  // UI layout
+  globalState.layoutColumn.setValue(
+    isSSR
+      ? ssrContextState.globalState.layout
+      : getLayoutByRouteMeta(router.currentRoute.value.meta)
+  )
 
   // mount (isHydrate -> (SSR -> true | SPA -> false))
   app.mount('#app', isSSR).$nextTick(() => {
-    // User agent & language
+    // 程序修正！任何异常发生，都要保证客户端状态的正确性！
+    // reset: global state
     globalState.resetOnClient()
-
-    // PC -> bind system switch
-    // Mobile -> reset to default
-    globalState.userAgent.isMobile
-      ? theme.set(Theme.Default)
-      : theme.bindClientSystem()
-
-    // i18n language
+    // reset: i18n language
     i18n.set(
       globalState.userAgent.isZhUser
         ? Language.Zh

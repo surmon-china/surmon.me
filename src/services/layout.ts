@@ -5,7 +5,13 @@
  */
 
 import { RouteMeta } from 'vue-router'
-import { GlobalState, LayoutColumn } from '/@/state'
+
+export enum LayoutColumn {
+  Normal = 0,
+  Wide = 1,
+  Full = 2, // not used
+  Page = 3
+}
 
 export const getLayoutByRouteMeta = (routeMeta: RouteMeta) => {
   return routeMeta.layout === LayoutColumn.Wide
@@ -15,10 +21,4 @@ export const getLayoutByRouteMeta = (routeMeta: RouteMeta) => {
       : routeMeta.layout === LayoutColumn.Page
         ? LayoutColumn.Page
         : LayoutColumn.Normal
-}
-
-export const setLayout = (routeMeta: RouteMeta, globalState: GlobalState) => {
-  globalState.layoutColumn.setValue(
-    getLayoutByRouteMeta(routeMeta)
-  )
 }

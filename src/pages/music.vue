@@ -3,8 +3,8 @@
     <div class="player">
       <button
         class="prev-song"
-        :disabled="!player?.state.ready || player?.state?.index === 0"
-        @click="player?.prevSong"
+        :disabled="!player?.state?.ready || player?.state?.index === 0"
+        @click="player.prevSong"
       >
         <i class="iconfont icon-music-prev"></i>
       </button>
@@ -73,15 +73,17 @@
         <template v-if="currentSong">{{ currentSong.name }} By {{ currentSong.artist }} / {{ currentSong.album || 'unknow' }}</template>
         <template v-else>Kind words are the music of the world.</template>
       </h4>
-      <transition name="list-fade">
-        <p v-if="player?.currentSongRealTimeLrc !== null" class="lrc">
-          <transition name="module" mode="out-in">
-            <span :key="player?.currentSongRealTimeLrc" class="lrc-text">
-              {{ player?.currentSongRealTimeLrc }}
-            </span>
-          </transition>
-        </p>
-      </transition>
+      <client-only>
+        <transition name="list-fade">
+          <p v-if="player?.currentSongRealTimeLrc !== null" class="lrc">
+            <transition name="module" mode="out-in">
+              <span :key="player?.currentSongRealTimeLrc" class="lrc-text">
+                {{ player?.currentSongRealTimeLrc }}
+              </span>
+            </transition>
+          </p>
+        </transition>
+      </client-only>
     </div>
   </div>
 </template>
@@ -201,6 +203,7 @@
           > img {
             width: 100%;
             height: 100%;
+            overflow: hidden;
             border-radius: 100%;
             background-color: $module-bg-darker-1;
             background-image: cdn-url('/images/page-music/background.jpg');

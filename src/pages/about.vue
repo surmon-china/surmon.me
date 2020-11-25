@@ -198,16 +198,8 @@
           <h3 class="name">
             <strong>Surmon</strong>
           </h3>
-          <p class="skill">
-            <i18n>
-              <template #en>Digital nomad</template>
-              <template #zh>
-                <p>数字游民</p>
-                <desktop-only>
-                  <p>（一个渣男）</p>
-                </desktop-only>
-              </template>
-            </i18n>
+          <p class="role">
+            <i18n en="Digital nomad" zh="数字游民" />
           </p>
         </div>
         <desktop-only>
@@ -229,25 +221,27 @@
     </div>
     <template v-if="adConfig.PC_ABOUT_PAGE_SWIPER.length">
       <desktop-only>
-        <div class="mammon">
-          <swiper class="swiper" :options="adSwiperOption">
-            <swiper-slide
-              v-for="(item, index) in adConfig.PC_ABOUT_PAGE_SWIPER"
-              :key="index"
-            >
-              <ulink class="item" :href="item.url">
-                <img
-                  :src="item.src"
-                  :alt="item.alt || item.title"
-                  :title="item.title || item.alt"
-                >
-              </ulink>
-            </swiper-slide>
-            <template #pagination>
-              <div class="swiper-pagination" />
-            </template>
-          </swiper>
-        </div>
+        <client-only transition>
+          <div class="mammon">
+            <swiper class="swiper" :options="adSwiperOption">
+              <swiper-slide
+                v-for="(item, index) in adConfig.PC_ABOUT_PAGE_SWIPER"
+                :key="index"
+              >
+                <ulink class="item" :href="item.url">
+                  <img
+                    :src="item.src"
+                    :alt="item.alt || item.title"
+                    :title="item.title || item.alt"
+                  >
+                </ulink>
+              </swiper-slide>
+              <template #pagination>
+                <div class="swiper-pagination" />
+              </template>
+            </swiper>
+          </div>
+        </client-only>
       </desktop-only>
     </template>
     <div class="location-map">
@@ -764,7 +758,7 @@
           text-align: center;
           color: $text;
 
-          > .skill {
+          > .role {
             margin-top: .466rem;
           }
         }
@@ -939,7 +933,7 @@
             color: $text-reversal;
 
             > .name,
-            > .skill {
+            > .role {
               margin: 1rem 0;
             }
           }

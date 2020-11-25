@@ -6,7 +6,7 @@
         :article="article"
       />
     </div>
-    <client-only transition :delay="668">
+    <client-only>
       <div class="module">
         <article-mammon :fetching="fetching" />
       </div>

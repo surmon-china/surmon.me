@@ -158,9 +158,8 @@
         font-family: 'webfont-normal', DINRegular;
         letter-spacing: 0.5px;
         margin-bottom: $sm-gap;
-        transition:
-          color $transition-time-fast,
-          background-color $transition-time-fast;
+        will-change: background-color;
+        transition: background-color $transition-time-fast * 0.6;
         @include radius-box($sm-radius);
 
         &:hover {

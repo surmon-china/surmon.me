@@ -6,10 +6,12 @@
 
 import { onBeforeMount, getCurrentInstance } from 'vue'
 import { promise } from '/@/services/cache'
+import { GlobalRawState } from '/@/state'
+import { Theme } from '/@/services/theme'
 import { isServer, isClient, isSPA } from '/@/environment'
 
 // store script
-export const getSSRStoreScript = (data) => {
+export const getSSRStoreScript = (data: string) => {
   return `window.__INITIAL_STATE__ = ${data}`
 }
 export const getSSRStoreData = () => {
@@ -17,10 +19,15 @@ export const getSSRStoreData = () => {
 }
 
 // context script
-export const getSSRContextScript = (data) => {
+export interface SSRContext {
+  url: string
+  theme: Theme
+  globalState: GlobalRawState
+}
+export const getSSRContextScript = (data: string) => {
   return `window.__INITIAL_SSR_CONTEXT__ = ${data}`
 }
-export const getSSRContextData = () => {
+export const getSSRContextData = (): SSRContext => {
   return (window as any).__INITIAL_SSR_CONTEXT__
 }
 
