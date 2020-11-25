@@ -36,7 +36,7 @@
     "favico.js": "^0.3.10",
     "fs-extra": "^8.1.0",
     "gravatar": "^1.8.0",
-    "highlight.js": "^9.18.1",
+    "highlight.js": "^10.1.2",
     "intersection-observer": "^0.7.0",
     "lodash": "^4.17.15",
     "lozad": "^1.14.0",
