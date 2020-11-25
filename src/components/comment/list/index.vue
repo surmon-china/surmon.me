@@ -23,7 +23,7 @@
     </template>
     <template #default>
       <transition-group
-        name="fade"
+        name="list-fade"
         tag="ul"
         ref="listElement"
         class="comment-list"

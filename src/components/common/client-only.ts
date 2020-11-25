@@ -6,12 +6,16 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { defineComponent, ref, h, onMounted, Transition } from 'vue'
+import { defineComponent, ref, h, onMounted, Transition, cloneVNode } from 'vue'
 
 /**
  * @description only render on client (browser)
  * @example
  * <client-only placeholder="loading...">
+ *    <component />
+ * </client-only>
+ * @example
+ * <client-only :transition="true" :delay="668">
  *    <component />
  * </client-only>
  */
@@ -25,58 +29,59 @@ export const ClientOnly = defineComponent({
     },
     transition: {
       type: Boolean,
-      default: true
+      default: false
+    },
+    delay: {
+      type: Number,
+      default: 0
     }
   },
   setup(props, context) {
-    // eslint-disable-next-line vue/no-setup-props-destructure
-    const { placeholder, placeholderTag, transition } = props
-    const defaultSlot = context.slots.default
-    const placeholderSlot = context.slots.placeholder
     const canRender = ref(false)
+    const setRender = () => {
+      canRender.value = true
+    }
 
     onMounted(() => {
-      canRender.value = true
+      props.delay
+        ? setTimeout(setRender, props.delay)
+        : setRender()
     })
 
-    return () => {
-
-      const renderResult = result => {
-        console.log('-----result', result)
-        if (!transition) {
-          return result
-        }
-        // if (Array.isArray(result) && result.length > 1) {
-        //   return result
-        // }
-        return h(
-          Transition,
-          { name: 'slide-fade', mode: 'out-in' },
-          h(
-            'div',
-            { class: 'client-only' },
-            () => result
-          )
-        )
-      }
-
-      if (canRender.value) {
-        const result = renderResult(defaultSlot?.())
-        console.log(111, result)
+    const renderResult = (result, resultKey?: string) => {
+      if (!props.transition) {
         return result
       }
+      if (Array.isArray(result) && result.length > 1) {
+        return result
+      }
+      const singleResult = Array.isArray(result)
+        ? result[0]
+        : result
+      return h(
+        Transition,
+        { name: 'client-only', mode: 'out-in' },
+        () => singleResult
+          ? cloneVNode(singleResult, { key: resultKey })
+          : h('div', { key: 'empty', class: 'client-only-empty' })
+      )
+    }
 
-        console.log(222)
-        if (placeholderSlot) {
-        return renderResult(placeholderSlot())
+    return () => {
+      if (canRender.value) {
+        return renderResult(context.slots.default?.(), 'result')
       }
 
-      if (placeholderTag && placeholder) {
+      if (context.slots.placeholder) {
+        return renderResult(context.slots.placeholder(), 'placeholderSlot')
+      }
+
+      if (props.placeholderTag && props.placeholder) {
         return renderResult(h(
-          placeholderTag,
-          { class: ['client-only-placeholder'] },
-          placeholder
-        ))
+          props.placeholderTag,
+          { class: 'client-only-placeholder' },
+          props.placeholder
+        ), 'placeholder')
       }
 
       return renderResult(null)

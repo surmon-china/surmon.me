@@ -8,7 +8,7 @@
   >
     <!-- mammon -->
     <template v-if="isMammonEnabled">
-      <client-only>
+      <client-only transition :delay="668">
         <adsense-archive-mobile
           v-if="isMobile"
           class="article-list-mammon"
@@ -52,7 +52,7 @@
         <template #default>
           <transition-group
             key="list"
-            name="fade"
+            name="list-fade"
             tag="div"
           >
             <list-item

@@ -12,7 +12,11 @@
         <router-view v-slot="{ Component, route }">
           <suspense>
             <div class="router-view">
-              <transition mode="out-in" name="page">
+              <transition
+                name="page"
+                mode="out-in"
+                @before-enter="handlePageTransitionDone"
+              >
                 <component :is="Component" :key="route.name"></component>
               </transition>
             </div>
@@ -24,13 +28,14 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted, onErrorCaptured } from 'vue'
+  import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/enhancer'
+  import { getLayoutByRouteMeta } from '/@/services/layout'
+  import ProgressBar from '/@/components/common/progress.vue'
   import Captured from '/@/components/common/captured.vue'
   import EmojiRain from '/@/components/widget/emoji-rain.vue'
   import PcMain from '/@/components/layout/pc/main.vue'
   import MobileMain from '/@/components/layout/mobile/main.vue'
-  import ProgressBar from '/@/components/common/progress.vue'
 
   export default defineComponent({
     name: 'App',
@@ -40,15 +45,23 @@
       ProgressBar
     },
     setup() {
-      const { theme, store, isMobile } = useEnhancer()
+      const { theme, store, route, globalState, isMobile } = useEnhancer()
       const LayoutComponent = computed(() => {
         return isMobile.value
           ? MobileMain
           : PcMain
       })
+
+      const handlePageTransitionDone = () => {
+        globalState.layoutColumn.setValue(
+          getLayoutByRouteMeta(route.meta)
+        )
+      }
+
       return {
         LayoutComponent,
         theme: theme.theme,
+        handlePageTransitionDone
       }
     }
   })

@@ -8,9 +8,11 @@ import fs from 'fs'
 import path from 'path'
 import LRU from 'lru-cache'
 import serialize from 'serialize-javascript'
+import { createSSRApp } from 'vue'
 import { Middleware, Context } from 'koa'
 import { createMemoryHistory } from 'vue-router'
 import { renderToString } from '@vue/server-renderer'
+import { setLayout } from '/@/services/layout'
 import { Theme, THEME_STORAGE_KEY } from '/@/services/theme'
 import { getSSRContextScript, getSSRStoreScript } from '/@/universal'
 import { createVueApp } from '/@/main'
@@ -22,20 +24,21 @@ const SPA_INDEX_HTML = fs
 
 const renderHTML = async (context: Context) => {
   const { headers, url } = context.request
-  const { app, router, store, helmet } = createVueApp({
+  const { app, router, store, helmet, globalState } = createVueApp({
+    appCreator: createSSRApp,
     historyCreator: createMemoryHistory,
     language: headers['accept-language'],
     userAgent: headers['user-agent'],
     theme: context.cookies.get(THEME_STORAGE_KEY) as Theme || Theme.Default
   })
 
-  app.config.warnHandler = (msg, vm, trace) => {
-    // `trace` is the component hierarchy trace
-  }
-
   await router.push(url)
   await router.isReady()
   await store.serverInit()
+
+  // init server layout
+  setLayout(router.currentRoute.value.meta, globalState)
+
   const APP_HTML = await renderToString(app)
   const STORE_SCRIPT = getSSRStoreScript(serialize(store.state))
   const SSR_CONTEXT_SCRIPT = getSSRContextScript(serialize({ url }))

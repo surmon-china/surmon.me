@@ -156,12 +156,12 @@ export const routes: RouteRecordRaw[] = [
   }
 ]
 
-export interface RouterCreateConfig {
+export interface RouterCreatorConfig {
   history: RouterHistory
   beforeMiddleware?: NavigationGuard | NavigationGuard[]
   afterMiddleware?: NavigationGuardNext | NavigationGuardNext[]
 }
-export const createUniversalRouter = (config: RouterCreateConfig) => {
+export const createUniversalRouter = (config: RouterCreatorConfig) => {
   const router = createRouter({
     routes,
     strict: true,

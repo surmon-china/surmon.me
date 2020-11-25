@@ -73,7 +73,7 @@
         <template v-if="currentSong">{{ currentSong.name }} By {{ currentSong.artist }} / {{ currentSong.album || 'unknow' }}</template>
         <template v-else>Kind words are the music of the world.</template>
       </h4>
-      <transition name="fade">
+      <transition name="list-fade">
         <p v-if="player?.currentSongRealTimeLrc !== null" class="lrc">
           <transition name="module" mode="out-in">
             <span :key="player?.currentSongRealTimeLrc" class="lrc-text">
