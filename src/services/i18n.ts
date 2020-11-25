@@ -104,9 +104,8 @@ export const createI18n = (config: Ii18nConfig) => {
       lkey: [String, Number, Symbol]
     },
     render() {
-      const { lkey } = this.$props
-      if (lkey) {
-        return i18nStore.t(lkey as string)
+      if (this.$props.lkey) {
+        return i18nStore.t(this.$props.lkey as string)
       } else {
         const lang = i18nStore.language.value
         return this.$attrs[lang] || this.$slots[lang]?.()

@@ -7,6 +7,7 @@
 
 body {
   overflow-x: hidden;
+  overflow-y: scroll;
   font-family: $font-family-normal;
   font-size: $font-size-base;
   line-height: $line-height-base;
@@ -151,21 +152,12 @@ select:-webkit-autofill {
 }
 
 // for page transition
-.page-enter-active {
-  transition:
-    width 0s,
-    transform $transition-time-fast ease-out,
-    opacity $transition-time-fast ease-out;
-}
+.page-enter-active,
 .page-leave-active {
-  transition:
-    width 0s,
-    transform $transition-time-fast ease-in,
-    opacity $transition-time-fast ease-in;
+  transition: width 0s, opacity $transition-time-fast * 0.3 linear;
 }
 .page-enter-from,
 .page-leave-to {
-  transform: translate3d(0, -$xs-gap, 0);
   opacity: 0;
 }
 
@@ -185,18 +177,18 @@ select:-webkit-autofill {
 // for client only component transition
 .client-only-enter-active {
   transition:
-    transform $transition-time-normal ease-out,
-    opacity $transition-time-normal ease-out
+    transform $transition-time-fast ease-out,
+    opacity $transition-time-fast linear
     !important;
 }
 .client-only-leave-active {
   transition:
-    transform $transition-time-fast ease-in,
-    opacity $transition-time-fast ease-in
+    transform $transition-time-fast * 0.6 ease-in,
+    opacity $transition-time-fast * 0.6 linear
     !important;
 }
 .client-only-enter-from,
 .client-only-leave-to {
-  transform: translate3d(0, -8%, 0) !important;
+  transform: translate3d(0, -$sm-gap, 0) !important;
   opacity: 0 !important;
 }

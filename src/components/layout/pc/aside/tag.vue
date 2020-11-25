@@ -108,13 +108,13 @@
       padding: 0;
       overflow: hidden;
       margin-left: $gap;
-      margin-bottom: - $gap;
+      margin-top: -$gap;
 
       .item {
         $height: 2em;
         display: inline-flex;
         margin-right: $sm-gap;
-        margin-bottom: $gap;
+        margin-top: $gap;
         height: $height;
         line-height: $height;
         font-size: $font-size-h6;

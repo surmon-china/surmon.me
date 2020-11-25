@@ -6,7 +6,7 @@
 
 import { RouteRecordRaw, NavigationGuard, NavigationGuardNext, RouterHistory, createRouter } from 'vue-router'
 import { scrollToTop } from '/@/utils/effects'
-import { LayoutColumn } from '/@/state'
+import { LayoutColumn } from '/@/services/layout'
 import IndexPage from './pages/index.vue'
 import ArchivePage from './pages/archive.vue'
 import ArticlePage from './pages/article/index.vue'

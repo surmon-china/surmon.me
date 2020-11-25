@@ -140,7 +140,7 @@
           width: 11rem;
           margin-right: $gap * 4;
           filter: $theme-logo-rotate;
-          mask-size: 88%;
+          /* mask-size: 88%;
           mask-position: -30%;
           mask-image: linear-gradient(
             to bottom right,
@@ -148,7 +148,7 @@
             rgba(255, 255, 255, 0.9),
             rgba(255, 255, 255, 0.2)
           );
-          animation: logo-blink 8s ease-in 1s infinite;
+          animation: logo-blink 8s ease-in 1s infinite; */
 
           .logo-st {
             fill: $primary;

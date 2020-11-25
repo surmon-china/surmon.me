@@ -6,17 +6,17 @@
 
 import { App, inject, ref, computed, reactive, readonly } from 'vue'
 import { uaParser, isZhUser } from '/@/transforms/ua'
+import { LayoutColumn } from '/@/services/layout'
 
 export enum ImageExt {
   WebP = 'webp',
   Jpg = 'jpeg'
 }
 
-export enum LayoutColumn {
-  Normal = 0,
-  Wide = 1,
-  Full = 2, // not used
-  Page = 3
+export interface GlobalRawState {
+  userAgent: string
+  language: string
+  layout: LayoutColumn
 }
 
 export interface GlobalStateConfig {
@@ -35,9 +35,13 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     isZhUser: isZhUser(config.language),
     ...uaParser(config.userAgent)
   })
-  const resetUserAgentOnClient = () => {
-    userAgent.original = navigator.userAgent
+  const setUserAgent = (_userAgent: string) => {
+    userAgent.original = _userAgent
     Object.assign(userAgent, uaParser(config.userAgent))
+  }
+  const setLanguage = (_language: string) => {
+    userAgent.language = _language
+    userAgent.isZhUser = isZhUser(_language)
   }
 
   // 页面的栏目展示类型
@@ -77,18 +81,20 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     // 山河入梦
     wallpaper: false,
   })
-  const resetLanguageOnClient = () => {
-    const language = navigator.language
-    userAgent.language = navigator.language
-    userAgent.isZhUser = isZhUser(language)
-  }
+
+  const toRawState = (): GlobalRawState => ({
+    userAgent: userAgent.original,
+    language: userAgent.language,
+    layout: layoutValue.value
+  })
 
   const resetOnClient = () => {
-    resetUserAgentOnClient()
-    resetLanguageOnClient()
+    setUserAgent(navigator.userAgent)
+    setLanguage(navigator.language)
   }
 
   const globalState = readonly({
+    toRawState,
     resetOnClient,
     userAgent,
     layoutColumn,

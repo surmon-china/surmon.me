@@ -6,7 +6,7 @@
     <div class="module">
       <aside-article />
     </div>
-    <client-only transition :delay="668">
+    <client-only transition>
       <div class="module mammon">
         <aside-mammon
           @index-change="handleStandingAdSlideChange"
@@ -40,12 +40,14 @@
       />
     </div>
     <div :id="ASIDE_STICKY_ELEMENT_ID" class="aside-sticky-box">
-      <div class="module mammon" v-if="renderStickyAd">
-        <aside-mammon
-          :index="adIndex"
-          @index-change="handleStickyAdIndexChange"
-        />
-      </div>
+      <client-only>
+        <div class="module mammon" v-if="renderStickyAd">
+          <aside-mammon
+            :index="adIndex"
+            @index-change="handleStickyAdIndexChange"
+          />
+        </div>
+      </client-only>
       <div class="module">
         <aside-tag />
       </div>
@@ -59,7 +61,6 @@
   import StickyEvents from 'sticky-events'
   import { defineComponent, ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
   import { useEnhancer } from '/@/enhancer'
-  import { isClient } from '/@/environment'
   import { getDateArchiveRoute } from '/@/transforms/route'
   import { humanDateToYMD, dateToHuman, HumanDate } from '/@/transforms/moment'
   import Calendar from '/@/components/widget/calendar.vue'
@@ -158,7 +159,6 @@
       })
 
       return {
-        isClient,
         LANGUAGE_KEYS,
         ASIDE_STICKY_ELEMENT_ID,
         t: i18n.t,
