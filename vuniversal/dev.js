@@ -2,24 +2,28 @@ const path = require('path')
 const nodemon= require('nodemon')
 const chokidar = require('chokidar')
 const vunConfig = require('../../vun.config')
-const { buildApp, getOutDir } = require('../build')
-const DEV_OUT_DIR = path.join(__dirname, '..', '..', '.vun')
+const { buildApp, getOutDir } = require('./bundle')
 
 let nodemoner = null
+
+const {
+  client: clientOutDir,
+  server: serverOutDir
+} = getOutDir(path.join(__dirname, '..', '.vun'))
 
 const startDevBuild = async () => {
   const [serverResult, clientResult] = await buildApp({
     clientConfig: {
-      ...(await require('./client')()),
-      outDir: getOutDir(DEV_OUT_DIR).client
+      ...(await require('./config/client')('development')),
+      outDir: clientOutDir
     },
     serverConfig: {
-      ...(await require('./server')()),
-      outDir: getOutDir(DEV_OUT_DIR).server
-    },
+      ...(await require('./config/server')('development')),
+      outDir: serverOutDir
+    }
   })
   const distServerFile = path.join(
-    getOutDir(DEV_OUT_DIR).server,
+    serverOutDir,
     serverResult[0].assets[0].fileName
   )
   console.info('[Server] 🔵 running...')
