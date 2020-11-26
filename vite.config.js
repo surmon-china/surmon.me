@@ -57,7 +57,6 @@ module.exports = mode => {
       link: [],
       include: [
         'swiper',
-        'querystring',
         // Tree shaking
         'highlight.js/lib/core',
         'highlight.js/lib/languages/go',
@@ -79,7 +78,7 @@ module.exports = mode => {
         'highlight.js/lib/languages/javascript',
         'highlight.js/lib/languages/typescript'
       ],
-      allowNodeBuiltins: [],
+      allowNodeBuiltins: ['querystring'],
       exclude: [
         'highlight.js',
         'koa',
