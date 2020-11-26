@@ -1,10 +1,10 @@
 <p align="center">
   <a href="https://vuejs.org" target="blank">
-    <img src="https://vuejs.org/images/logo.png" height="80" alt="vue logo" />
+    <img src="https://raw.githubusercontent.com/surmon-china/surmon.me/master/presses/vue-logo.png" height="90" alt="vue logo" />
   </a>
   <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
   <a href="https://github.com/surmon-china/surmon.me" target="blank">
-    <img src="https://raw.githubusercontent.com/surmon-china/surmon.me/master/static/icon.png" height="90" alt="surmon.me logo" />
+    <img src="https://raw.githubusercontent.com/surmon-china/surmon.me/master/presses/logo.png" height="90" alt="surmon.me logo" />
   </a>
 </p>
 

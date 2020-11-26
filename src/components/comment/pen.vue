@@ -28,6 +28,7 @@
             <ul class="emoji-list">
               <li
                 v-for="(emoji, index) in EMOJIS"
+                v-once
                 :key="index"
                 class="item"
                 @click="insertEmoji(emoji)"

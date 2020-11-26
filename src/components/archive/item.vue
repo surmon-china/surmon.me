@@ -29,6 +29,7 @@
               <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="isHybrid" />
             </span>
             <img
+              v-once
               class="item-thumb-img"
               :src="getThumbUrl(article.thumb)"
               :alt="article.title"
@@ -39,7 +40,10 @@
       </desktop-only>
       <div class="item-body">
         <h5 class="item-title">
-          <router-link :to="getArticleDetailRoute(article.id)" :title="article.title">
+          <router-link
+            :to="getArticleDetailRoute(article.id)"
+            :title="article.title"
+          >
             {{ article.title }}
           </router-link>
         </h5>
@@ -47,6 +51,7 @@
           class="item-description"
           style="-webkit-box-orient: vertical;"
           v-html="article.description"
+          v-once
         ></p>
         <div class="item-meta">
           <span class="date">

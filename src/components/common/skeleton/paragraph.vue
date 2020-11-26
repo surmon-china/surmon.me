@@ -2,6 +2,7 @@
   <div class="skeleton paragraph" :style="style">
     <skeleton-line
       v-for="(line, index) in lines"
+      v-once
       :key="index"
       :style="getLineStyle(index)"
       class="paragraph-line"
