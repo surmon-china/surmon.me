@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import FavicoClass from '/@/patchs/favico'
+import FavicoClass from '/@/patches/favico'
 import { isClient } from '/@/environment'
 import { titles } from '/@/config/egg.config'
 

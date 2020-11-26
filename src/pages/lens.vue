@@ -170,7 +170,7 @@
         if (!lozadElements || !lozadElements.length) {
           return false
         }
-        lozadObserver.value = window.lozad(lozadElements, {
+        lozadObserver.value = window.$lozad(lozadElements, {
           loaded: element => element.classList.add(LOADED_CLASS_NAME)
         })
         lozadObserver.value.observe()

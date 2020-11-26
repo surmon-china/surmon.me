@@ -11,7 +11,7 @@ export type IDefer = ReturnType<typeof createDefer>
 
 declare global {
   interface Window {
-    defer: IDefer
+    $defer: IDefer
   }
 }
 
@@ -46,7 +46,7 @@ const DeferSymbol = Symbol('defer')
 export interface DeferPluginConfig { exportToGlobal?: boolean }
 export type Defer = ReturnType<typeof createDeferStore>
 export const createDefer = (): Defer & Plugin => {
-  const defer = window.defer || createDeferStore()
+  const defer = window.$defer || createDeferStore()
 
   return {
     ...defer,
@@ -54,7 +54,7 @@ export const createDefer = (): Defer & Plugin => {
       app.provide(DeferSymbol, defer)
 
       if (config?.exportToGlobal) {
-        window.defer = defer
+        window.$defer = defer
       }
     }
   }

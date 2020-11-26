@@ -10,8 +10,13 @@
 
 <script lang="ts">
   import { defineComponent, ref, reactive, nextTick, onMounted } from 'vue'
-  import Emoji233333 from 'emoji-233333'
   import { getFileCDNUrl } from '/@/transforms/url'
+
+  declare global {
+    interface Window {
+      $luanchEmojiRain(options: any): void
+    }
+  }
 
   export default defineComponent({
     name: 'EmojiRain',
@@ -22,37 +27,35 @@
         kichikuing: false
       })
 
-      const luanchEmojiRain = options => {
-        if (!state.chambering && !state.kichikuing) {
-          state.chambering = true
-          nextTick(() => {
-            // @ts-ignore
-            rainBase.value.width = document.documentElement.clientWidth || document.body.clientWidth
-            // @ts-ignore
-            rainBase.value.height = document.documentElement.clientHeight || document.body.clientHeight
-            new Emoji233333({
-              base: rainBase.value,
-              scale: 0.7,
-              speed: 12,
-              increaseSpeed: 0.4,
-              density: 5,
-              staggered: true,
-              emoji: getFileCDNUrl('/images/emojis/funny.png'),
-              ...options,
-              onStart() {
-                state.kichikuing = true
-              },
-              onEnded() {
-                state.kichikuing = false
-                state.chambering = false
-              }
-            }).launch()
-          })
-        }
-      }
-
       onMounted(() => {
-        window.luanchEmojiRain = luanchEmojiRain
+        window.$luanchEmojiRain = options => {
+          if (!state.chambering && !state.kichikuing) {
+            state.chambering = true
+            nextTick(() => {
+              // @ts-ignore
+              rainBase.value.width = document.documentElement.clientWidth || document.body.clientWidth
+              // @ts-ignore
+              rainBase.value.height = document.documentElement.clientHeight || document.body.clientHeight
+              new window.$Emoji233333({
+                base: rainBase.value,
+                scale: 0.7,
+                speed: 12,
+                increaseSpeed: 0.4,
+                density: 5,
+                staggered: true,
+                emoji: getFileCDNUrl('/images/emojis/funny.png'),
+                ...options,
+                onStart() {
+                  state.kichikuing = true
+                },
+                onEnded() {
+                  state.kichikuing = false
+                  state.chambering = false
+                }
+              }).launch()
+            })
+          }
+        }
       })
 
       return {

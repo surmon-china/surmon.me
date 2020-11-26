@@ -24,7 +24,7 @@ export const enableCopyright = () => {
 
   document.addEventListener('copy', event => {
     if (!window.getSelection) return
-    if (!window.isCopyFromApp) {
+    if (!window.$isCopyFromApp) {
       const content = window.getSelection()?.toString()
       event.clipboardData?.setData('text/plain', buildText(content))
       event.clipboardData?.setData('text/html', buildHtml(content))

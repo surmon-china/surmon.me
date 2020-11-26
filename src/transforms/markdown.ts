@@ -62,7 +62,7 @@ customRenderer.image = (src, title, alt) => {
       data-src="${source}"
       title="${title || alt || META.url}"
       alt="${alt || title || source}"
-      onclick="window.popup && window.popup.vImage('${source}')"
+      onclick="window.$popup && window.$popup.vImage('${source}')"
     />
   `).replace(/\s+/g, ' ').replace(/\n/g, ' ')
 }

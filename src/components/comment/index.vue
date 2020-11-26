@@ -71,7 +71,7 @@
   import CommentPen from './pen.vue'
 
   const luanchEmojiRain = (content: string) => {
-    const luanchRain = window.luanchEmojiRain
+    const luanchRain = window.$luanchEmojiRain
     if (content.includes('2333') || content.includes('哈哈')) {
       luanchRain({
         speed: 12,

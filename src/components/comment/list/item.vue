@@ -17,7 +17,7 @@
       </div>
     </desktop-only>
     <div class="cm-body">
-      <div class="cm-header" v-once>
+      <div class="cm-header">
         <comment-link class="user-name" :href="comment.author.site">
           {{ firstUpperCase(comment.author.name) }}
         </comment-link>

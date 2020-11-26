@@ -1,7 +1,7 @@
 const path = require('path')
 const nodemon= require('nodemon')
 const chokidar = require('chokidar')
-const vunConfig = require('../../vun.config')
+const vunConfig = require('../vun.config')
 const { buildApp, getOutDir } = require('./bundle')
 
 let nodemoner = null
@@ -41,7 +41,7 @@ const startDevBuild = async () => {
   }
 }
 
-const watcher = chokidar.watch(path.join(__dirname, '..', '..', 'src'), {
+const watcher = chokidar.watch(path.join(__dirname, '..', 'src'), {
   ignored: [/node_modules/, /\.git/],
   awaitWriteFinish: {
     stabilityThreshold: 888,

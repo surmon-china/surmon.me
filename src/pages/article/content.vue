@@ -180,7 +180,7 @@
         if (!lozadElements || !lozadElements.length) {
           return false
         }
-        const lozadObserver = window.lozad(lozadElements, {
+        const lozadObserver = window.$lozad(lozadElements, {
           loaded: element => element.classList.add(LOADED_CLASS_NAME)
         })
         lozadObserver.observe()

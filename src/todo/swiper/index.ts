@@ -16,5 +16,4 @@ export const directive = VueAwesomeSwiper.directive
 export const Swiper = VueAwesomeSwiper.Swiper
 export const SwiperSlide = VueAwesomeSwiper.SwiperSlide
 export const useSwiper = VueAwesomeSwiper.useSwiper
-export const useSwiperRef = VueAwesomeSwiper.useSwiperRef
 export default VueAwesomeSwiper

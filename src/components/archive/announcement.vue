@@ -86,7 +86,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { useSwiperRef } from '/@/todo/swiper'
+  import type { SwiperContext } from '/@/todo/swiper'
   import { useI18n } from '/@/services/i18n'
   import { useTheme, Theme } from '/@/services/theme'
   import { markdownToHTML } from '/@/transforms/markdown'
@@ -109,8 +109,11 @@
     },
     setup(props) {
       const { i18n, theme, globalState, isMobile, isDarkTheme } = useEnhancer()
-      const [swiperContext, updateSwiperContext] = useSwiperRef()
+      const swiperContext = ref<SwiperContext>()
       const swiper = computed(() => swiperContext.value?.$swiper.value)
+      const updateSwiperContext = (context: SwiperContext) => {
+        swiperContext.value = context
+      }
 
       const activeIndex = ref(0)
       const swiperOption = {

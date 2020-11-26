@@ -6,15 +6,15 @@
 
 declare global {
   interface Window {
-    isCopyFromApp: boolean
+    $isCopyFromApp: boolean
   }
 }
 
 export const read = () => navigator.clipboard.readText()
 export const copy = (text: string) => {
-  window.isCopyFromApp = true
+  window.$isCopyFromApp = true
   navigator.clipboard.writeText(text).finally(() => {
-    window.isCopyFromApp = false
+    window.$isCopyFromApp = false
   })
 }
 

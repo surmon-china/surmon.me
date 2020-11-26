@@ -10,7 +10,7 @@ import { NameId } from './constants'
 import getDirective from './directive'
 import getSwiperComponent from './swiper'
 import SwiperSlideComponent from './slide'
-import { useSwiper, useSwiperRef } from './hooks'
+import { useSwiper } from './hooks'
 
 type InstallFunction = Plugin & {
   installed?: boolean
@@ -24,7 +24,7 @@ const getInstaller = (SwiperClass: typeof Swiper) => {
     if (globalOptions) {
       SwiperComponent.props.defaultOptions.default = () => globalOptions
     }
-  
+
     app.component(SwiperComponent.name, SwiperComponent)
     app.component(SwiperSlideComponent.name, SwiperSlideComponent)
     app.directive(NameId.SwiperDirective, getDirective(SwiperClass, globalOptions))
@@ -36,7 +36,6 @@ const getInstaller = (SwiperClass: typeof Swiper) => {
 export default function exporter(SwiperClass: typeof Swiper) {
   return {
     useSwiper,
-    useSwiperRef,
     version: 'PACKAGE_VERSION',
     install: getInstaller(SwiperClass),
     directive: getDirective(SwiperClass),

@@ -12,7 +12,8 @@ import { MUSIC_ALBUM_ID, GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/
 import { isProd, isSSR } from './environment'
 import { Language } from '/@/language/data'
 import { getFileCDNUrl } from '/@/transforms/url'
-import gtag from './services/gtag'
+import amplitude from './patches/amplitude'
+import gtag from '/@/services/gtag'
 import adsense from '/@/services/adsense'
 import swiper from '/@/services/swiper'
 import { getClientLocalTheme } from '/@/services/theme'
@@ -25,8 +26,10 @@ import { consoleSlogan } from '/@/services/slogan'
 import { enableCopyright } from '/@/services/copyright'
 import { enableBaiduSeoPush } from '/@/services/baidu-seo-push'
 import { enableAutoTitleSurprise } from './services/title-surprise'
+import { exportEmojiRainToGlobal } from './services/emoji-23333'
 import { exportAppToGlobal } from '/@/services/exporter'
 import { exportLozadToGlobal } from '/@/services/lozad'
+import { initSocketAndExport } from '/@/services/socket.io'
 import { getSSRContextData } from './universal'
 import { createVueApp } from './main'
 
@@ -34,7 +37,11 @@ import '/@/assets/styles/app.scss'
 
 const defer = createDefer()
 const loading = createLoading()
-const music = createMusic({ albumId: MUSIC_ALBUM_ID, autoStart: false })
+const music = createMusic({
+  amplitude,
+  albumId: MUSIC_ALBUM_ID,
+  autoStart: false
+})
 const ssrContextState = getSSRContextData()
 const { app, router, globalState, theme, i18n, helmet, store } = createVueApp({
   historyCreator: createWebHistory,
@@ -72,7 +79,9 @@ isSSR
 // init: services
 helmet.bindClient()
 theme.bindClientSystem()
+initSocketAndExport()
 exportLozadToGlobal()
+exportEmojiRainToGlobal()
 exportAppToGlobal(app)
 
 // init: router loading middleware

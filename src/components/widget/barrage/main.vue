@@ -68,7 +68,6 @@
   import { defineComponent, reactive, ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { SocketEvent } from '/@/constants/barrage'
-  import socket from '/@/services/socket.io'
   import BarrageItem from './item.vue'
   import { randomPer } from './util'
 
@@ -135,7 +134,7 @@
             },
             date: new Date().getTime()
           }
-          socket.emit(SocketEvent.Send, barrage)
+          window.$socket.emit(SocketEvent.Send, barrage)
           barrage.id = barrageLimit++
           barrages.push(barrage)
           counts.count += 1
@@ -149,7 +148,7 @@
       }
 
       const initSocket = () => {
-        socket.emit(SocketEvent.LastList, _barrages => {
+        window.$socket.emit(SocketEvent.LastList, _barrages => {
           const lastBarrages = _barrages.map((barrage, index) => ({
             id: index + 1,
             ...barrage
@@ -170,13 +169,13 @@
           moveBarrages()
           barrageLimit = lastBarrages.length + 2
         })
-        socket.emit(SocketEvent.Count, _counts => {
+        window.$socket.emit(SocketEvent.Count, _counts => {
           Object.assign(counts, _counts)
         })
-        socket.on(SocketEvent.UpdateCount, _counts => {
+        window.$socket.on(SocketEvent.UpdateCount, _counts => {
           Object.assign(counts, _counts)
         })
-        socket.on(SocketEvent.Create, barrage => {
+        window.$socket.on(SocketEvent.Create, barrage => {
           barrages.push({
             ...barrage,
             id: barrageLimit++,
