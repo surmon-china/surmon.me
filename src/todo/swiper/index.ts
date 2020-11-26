@@ -8,6 +8,7 @@ import SwiperClass from 'swiper'
 import exporter from './exporter'
 export * from './constants'
 
+// TODO: https://github.com/vuejs/vue-next/commit/0e59770b9282992f6a5af4d8fef33dafb948fc8b
 const VueAwesomeSwiper = exporter(SwiperClass)
 
 export const version = VueAwesomeSwiper.version
