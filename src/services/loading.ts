@@ -8,7 +8,7 @@ import { App, reactive, readonly, inject, nextTick } from 'vue'
 
 declare global {
   interface Window {
-    loading: Loading
+    $loading: Loading
   }
 }
 
@@ -141,7 +141,7 @@ export const createLoading = (options?: ILoadingOptions) => {
       app.provide(ILoadingSymbol, loading)
       app.config.globalProperties.$loading = loading
       if (config?.exportToGlobal) {
-        window.loading = loading
+        window.$loading = loading
       }
     }
   }

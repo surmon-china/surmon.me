@@ -88,7 +88,6 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { useSwiperRef, NameId } from '/@/todo/swiper'
   import { useEnhancer } from '/@/enhancer'
   import { timeAgo } from '/@/transforms/moment'
   import { getArticleDetailRoute } from '/@/transforms/route'

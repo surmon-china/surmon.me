@@ -23,8 +23,8 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, onMounted } from 'vue'
-  import { useSwiperRef, NameId } from '/@/todo/swiper'
+  import { defineComponent, ref, computed, onMounted } from 'vue'
+  import type { SwiperContext } from '/@/todo/swiper'
   import { useEnhancer } from '/@/enhancer'
 
   enum Event {
@@ -71,8 +71,12 @@
       }
 
       const { adConfig } = useEnhancer()
-      const [swiperContext, updateSwiperContext] = useSwiperRef()
+      const swiperContext = ref<SwiperContext>()
       const swiperInstance = computed(() => swiperContext.value?.$swiper.value)
+      const updateSwiperContext = (context: SwiperContext) => {
+        swiperContext.value = context
+      }
+
       const handleSwiperSlideChange = () => {
         const realIndex = swiperInstance.value?.realIndex
         context.emit(Event.UpdateIndex, realIndex)

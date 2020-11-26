@@ -4,7 +4,6 @@
       <ulink
         class="ipc"
         :href="VALUABLE_LINKS.FUCK_IPC"
-        v-once
         v-if="false"
       >
         陕 ICP 备 13004859 号-2

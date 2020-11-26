@@ -2,7 +2,7 @@
  * @file 弹窗服务
  * @module service/popup
  * @author Surmon <https://github.com/surmon-china>
- * @example window.popup.vImage('http://xxx.jpg')
+ * @example window.$popup.vImage('http://xxx.jpg')
  */
 
 import { App, Plugin, inject, readonly, reactive, onMounted, nextTick } from 'vue'
@@ -12,7 +12,7 @@ import PopupImageComponent from './image'
 
 declare global {
   interface Window {
-    popup: Popup
+    $popup: Popup
   }
 }
 
@@ -98,7 +98,7 @@ export const createPopup = (): Popup & Plugin => {
       app.component(PopupImageComponent.name as string, PopupImageComponent)
       app.component(PopupRootComponent.name as string, PopupRootComponent)
       if (config?.exportToGlobal) {
-        window.popup = popupStore
+        window.$popup = popupStore
       }
     }
   }

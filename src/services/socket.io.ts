@@ -7,8 +7,14 @@
 import socketIO from 'socket.io-client'
 import API_CONFIG from '/@/config/api.config'
 
-const socket = socketIO.io(API_CONFIG.SOCKET, {
-  transports: ['websocket']
-})
+declare global {
+  interface Window {
+    $socket: socketIO.Socket
+  }
+}
 
-export default socket
+export const initSocketAndExport = () => {
+  window.$socket = socketIO.io(API_CONFIG.SOCKET, {
+    transports: ['websocket']
+  })
+}

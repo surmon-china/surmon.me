@@ -11,7 +11,7 @@ export const getUrlSurprise = (router: Router) => {
   const replaceLocation = (emoji: string) => {
     const path = router.currentRoute.value.path
     // location.hash = emoji
-    // window.$nuxt.$router.replace(`${path}${emojis ? ('#' + emojis) : ''}`)
+    // window.$app.$router.replace(`${path}${emojis ? ('#' + emojis) : ''}`)
   }
 
   const eggs = [

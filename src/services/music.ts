@@ -4,20 +4,12 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import amplitude from 'amplitudejs'
 import { App, Plugin, inject, readonly, reactive, computed } from 'vue'
 import { getFileCDNUrl, getFileProxyUrl } from '/@/transforms/url'
 import http from './http'
 
-if (typeof window !== 'undefined') {
-  // HACK: Fix #387 https://github.com/521dimensions/amplitudejs/issues/387
-  // @ts-ignore
-  window.AmplitudeCore = window.AmplitudeCore || {
-    stop: () => console.warn('Forge AmplitudeCore Stop...')
-  }
-}
-
 export interface MusicConfig {
+  amplitude: any
   albumId: MusicId
   volume?: number
   autoStart?: boolean
@@ -34,6 +26,8 @@ interface ISong {
 }
 
 const createMusicPlayer = (config: MusicConfig) => {
+  const { amplitude } = config
+
   // Player state
   const initVolume = config.volume ?? 40
   const state = reactive({
@@ -321,7 +315,7 @@ const createMusicPlayer = (config: MusicConfig) => {
         takeOutFirstCompleteSongFromList()
           .then(song => {
             initPlayerWithSong(song)
-            window.defer.addTask(() => {
+            window.$defer.addTask(() => {
               window.onmousemove = () => {
                 state.playing || play()
                 window.onmousemove = null

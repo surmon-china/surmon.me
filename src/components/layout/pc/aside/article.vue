@@ -22,7 +22,6 @@
         <ul class="article-list" key="list">
           <li
             v-for="item in articles"
-            v-once
             :key="item.id"
             class="item"
           >
