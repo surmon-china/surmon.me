@@ -47,7 +47,6 @@
     "lozad": "^1.16.0",
     "lru-cache": "^6.0.0",
     "marked": "^1.2.5",
-    "querystring": "^0.2.0",
     "serialize-javascript": "^5.0.1",
     "socket.io": "^3.0.3",
     "socket.io-client": "^3.0.3",
