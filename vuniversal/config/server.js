@@ -2,21 +2,22 @@ const builtinModules = require('builtin-modules')
 const packageJSON = require('../../package.json')
 const vunConfig = require('../../vun.config')
 
-module.exports = async () => {
-  const viteConfig = await vunConfig.vite('server', 'development')
+module.exports = async mode => {
+  const isProd = mode === 'production'
+  const viteConfig = await vunConfig.vite('server', mode)
 
   return {
     ...viteConfig,
     entry: vunConfig.serverEntry,
     assetsDir: '.',
-    mode: 'development',
-    silent: true,
-    sourcemap: true,
+    mode,
     emitAssets: false,
     emitManifest: false,
     emitIndex: false,
-    minify: false,
     ssr: true,
+    silent: !isProd,
+    sourcemap: isProd ? true : 'inline',
+    minify: isProd ? 'terser' : false,
     env: {
       VITE_SSR: 'true',
       ...viteConfig.env

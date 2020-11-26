@@ -95,6 +95,11 @@ module.exports = mode => {
         '@vue/server-renderer'
       ]
     },
+    terserOptions: {
+      compress: {
+        keep_infinity: true
+      }
+    },
     rollupOutputOptions: {
       entryFileNames: '[name].js',
       chunkFileNames: '[name].js',

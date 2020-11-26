@@ -19,7 +19,7 @@
     "dev:ssr": "node ./vuniversal/dev",
     "dev": "npm run dev:ssr",
     "build:spa": "vite build",
-    "build:ssr": "node ./vuniversal/prod",
+    "build:ssr": "node ./vuniversal/build",
     "build": "npm run build:ssr",
     "start:spa": "http-server ./dist",
     "start:ssr": "cross-env NODE_ENV=production node ./dist/server.js",
