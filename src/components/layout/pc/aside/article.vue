@@ -20,7 +20,12 @@
       </template>
       <template #default>
         <ul class="article-list" key="list">
-          <li v-for="item in articles" :key="item.id" class="item">
+          <li
+            v-for="item in articles"
+            v-once
+            :key="item.id"
+            class="item"
+          >
             <span class="index"></span>
             <router-link
               class="title"
