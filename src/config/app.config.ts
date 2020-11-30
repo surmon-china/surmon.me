@@ -30,6 +30,7 @@ export const VALUABLE_LINKS = Object.freeze({
   SITE_MAP: '/sitemap.xml',
   SPONSOR: '/sponsor',
 
+  VUE: 'https://v3.vuejs.org/',
   VUNIVERSAL: 'https://github.com/surmon-china/vuniversal',
   NODEPRESS: 'https://github.com/surmon-china/nodepress',
   APP_APK_FILE: 'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
