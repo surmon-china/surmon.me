@@ -21,8 +21,8 @@
         NodePress
       </ulink>
       <i18n zh="、" en=", " />
-      <ulink class="item" :href="VALUABLE_LINKS.VUNIVERSAL">
-        Vuniversal
+      <ulink class="item" :href="VALUABLE_LINKS.VUE">
+        Vue
       </ulink>
       <i18n
         zh=" 和 日月星辰 强力驱动"

@@ -28,6 +28,12 @@ const GlobalStateSymbol = Symbol('globalState')
 export type GlobalState = ReturnType<typeof createGlobalState>
 export const createGlobalState = (config: GlobalStateConfig) => {
 
+  // Hydrated
+  const isHydrated = ref(false)
+  const setHydrate = () => {
+    isHydrated.value = true
+  }
+
   // UserAgent & device info
   const userAgent = reactive({
     original: config.userAgent,
@@ -96,6 +102,9 @@ export const createGlobalState = (config: GlobalStateConfig) => {
   const globalState = readonly({
     toRawState,
     resetOnClient,
+    // data
+    isHydrated,
+    setHydrate,
     userAgent,
     layoutColumn,
     imageExt,

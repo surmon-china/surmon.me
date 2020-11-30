@@ -106,7 +106,8 @@ router.isReady().then(() => {
 
   // mount (isHydrate -> (SSR -> true | SPA -> false))
   app.mount('#app', isSSR).$nextTick(() => {
-    // 程序修正！任何异常发生，都要保证客户端状态的正确性！
+    // set hydrate state
+    globalState.setHydrate()
     // reset: global state
     globalState.resetOnClient()
     // reset: i18n language

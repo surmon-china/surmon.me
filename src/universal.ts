@@ -6,7 +6,7 @@
 
 import { onBeforeMount, getCurrentInstance } from 'vue'
 import { promise } from '/@/services/cache'
-import { GlobalRawState } from '/@/state'
+import { GlobalRawState, useGlobalState } from '/@/state'
 import { Theme } from '/@/services/theme'
 import { isServer, isClient, isSPA } from '/@/environment'
 
@@ -39,12 +39,7 @@ export const onServer = (callback: any) => {
   isServer && callback()
 }
 
-// TODO:
-// A Component -> onPrefetch
-// B Component -> null
-// SSR -> B -> Client -> A -> not fetch
 // server pre fetch
-let isFirstScreenHydrated = false
 export const onPrefetch = <D = any>(fetcher: () => Promise<any>, data: D) => {
   if (isSPA) {
     onBeforeMount(fetcher)
@@ -55,17 +50,16 @@ export const onPrefetch = <D = any>(fetcher: () => Promise<any>, data: D) => {
     return fetcher().then(() => data)
   }
   // SSR -> Client
-  // MARK:
+  // TODO: _hydrating
   // onServerPreFetch: https://github.com/vuejs/composition-api/pull/198/files
   // isHydrating: https://github.com/vuejs/vue-next/issues/1723
   // isHydrating: https://github.com/vuejs/vue-next/pull/2016
-  // TODO: _hydrating
   // console.log('-----context', getCurrentInstance())
   // if (getCurrentInstance()?._hydrating)
-  if (!isFirstScreenHydrated) {
-    isFirstScreenHydrated = true
-  } else {
+
+  if (useGlobalState().isHydrated) {
     onBeforeMount(fetcher)
   }
+
   return data
 }
