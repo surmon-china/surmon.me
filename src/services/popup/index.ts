@@ -5,10 +5,11 @@
  * @example window.$popup.vImage('http://xxx.jpg')
  */
 
-import { App, Plugin, inject, readonly, reactive, onMounted, nextTick } from 'vue'
+import { App, Plugin, readonly, reactive, nextTick } from 'vue'
 import PopupRootComponent from './root.vue'
-import PopupComponent from './popup'
 import PopupImageComponent from './image'
+import PopupComponent from './popup'
+import { PopupSymbol } from './constant'
 
 declare global {
   interface Window {
@@ -16,7 +17,6 @@ declare global {
   }
 }
 
-const PopupSymbol = Symbol('popup')
 const createPopupStore = () => {
   const image = reactive({
     src: null as null | string,
@@ -102,14 +102,4 @@ export const createPopup = (): Popup & Plugin => {
       }
     }
   }
-}
-
-export const usePopup = (): Popup => {
-  return inject(PopupSymbol) as Popup
-}
-
-export const usePopupWithRoot = (fn: () => HTMLElement): Popup => {
-  const popup = usePopup()
-  onMounted(() => popup.$setRoot(fn()))
-  return popup
 }

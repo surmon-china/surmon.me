@@ -53,59 +53,71 @@
         </div>
       </div>
       <div class="vlog-title">Vlogs</div>
-      <empty
-        v-if="!isFetching && !videoListData?.length"
-        class="vlog-empty"
-      />
-      <ul class="videos" ref="videoListElement">
-        <li
-          class="item"
-          @click="handlePlay(video)"
-          :title="video.title"
-          :key="index"
-          v-for="(video, index) in videoListData"
-        >
-          <div class="thumb">
-            <div class="mask">
-              <div class="button">
-                <i class="iconfont icon-music-play" />
+      <placeholder
+        :data="videoListData?.length"
+        :loading="isFetching"
+        @after-enter="observeLozad"
+      >
+        <template #placeholder>
+          <empty class="vlog-empty" key="empty">
+            <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
+          </empty>
+        </template>
+        <template #loading>
+          <div class="vlog-loading" key="loading">Loading...</div>
+        </template>
+        <template #default>
+          <ul class="videos" ref="videoListElement">
+            <li
+              class="item"
+              @click="handlePlay(video)"
+              :title="video.title"
+              :key="index"
+              v-for="(video, index) in videoListData"
+            >
+              <div class="thumb">
+                <div class="mask">
+                  <div class="button">
+                    <i class="iconfont icon-music-play" />
+                  </div>
+                </div>
+                <span class="length">{{ video.length }}</span>
+                <div
+                  class="background lozad"
+                  :data-background-image="getThumbUrl(video.pic)"
+                />
               </div>
-            </div>
-            <span class="length">{{ video.length }}</span>
-            <div
-              class="background lozad"
-              :data-background-image="getThumbUrl(video.pic)"
-            />
-          </div>
-          <h5 class="title">
-            <span class="text">{{ video.title }}</span>
-          </h5>
-          <p
-            class="description"
-            style="-webkit-box-orient: vertical;"
-            v-text="video.description || '-'"
-          />
-          <hr class="separator">
-          <p class="meta">
-            <span class="item favorites">
-              <i class="iconfont icon-heart"></i>
-              <span>{{ video.favorites }}</span>
-            </span>
-            <span class="item play">
-              <i class="iconfont icon-video-play"></i>
-              <span>{{ video.play }}</span>
-            </span>
-            <span class="item comment">
-              <i class="iconfont icon-comment"></i>
-              <span>{{ video.comment }}</span>
-            </span>
-            <span class="item created">
-              <i class="iconfont icon-clock"></i>
-              <span>{{ humanlizeDate(video.created) }}</span>
-            </span>
-          </p>
-        </li>
-      </ul>
+              <h5 class="title">
+                <span class="text">{{ video.title }}</span>
+              </h5>
+              <p
+                class="description"
+                style="-webkit-box-orient: vertical;"
+                v-text="video.description || '-'"
+              />
+              <hr class="separator">
+              <p class="meta">
+                <span class="item favorites">
+                  <i class="iconfont icon-heart"></i>
+                  <span>{{ video.favorites }}</span>
+                </span>
+                <span class="item play">
+                  <i class="iconfont icon-video-play"></i>
+                  <span>{{ video.play }}</span>
+                </span>
+                <span class="item comment">
+                  <i class="iconfont icon-comment"></i>
+                  <span>{{ video.comment }}</span>
+                </span>
+                <span class="item created">
+                  <i class="iconfont icon-clock"></i>
+                  <span>{{ humanlizeDate(video.created) }}</span>
+                </span>
+              </p>
+            </li>
+          </ul>
+        </template>
+      </placeholder>
       <div class="loadmore">
         <ulink class="button" :href="VALUABLE_LINKS.BILIBILI">
           <span class="icon">
@@ -121,6 +133,7 @@
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
   import { useEnhancer } from '/@/enhancer'
+  import { isClient } from '/@/environment'
   import { onPrefetch } from '/@/universal'
   import { getNamespace, Modules } from '/@/store'
   import { VlogModuleActions } from '/@/store/vlog'
@@ -165,15 +178,18 @@
         ))
       }
 
-      onMounted(() => {
+      const observeLozad = () => {
         const lozadElements = videoListElement.value?.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
-        if (!lozadElements || !lozadElements.length) {
-          return false
+        if (lozadElements?.length) {
+          lozadObserver.value = window.$lozad(lozadElements, {
+            loaded: element => element.classList.add(LOADED_CLASS_NAME)
+          })
+          lozadObserver.value.observe()
         }
-        lozadObserver.value = window.$lozad(lozadElements, {
-          loaded: element => element.classList.add(LOADED_CLASS_NAME)
-        })
-        lozadObserver.value.observe()
+      }
+
+      onMounted(() => {
+        observeLozad()
       })
 
       onBeforeUnmount(() => {
@@ -191,6 +207,7 @@
         humanlizeDate,
         getThumbUrl,
         handlePlay,
+        observeLozad,
       }
 
       return onPrefetch(fetchData, resultData)
@@ -416,11 +433,11 @@
           height: 14rem;
           position: relative;
           overflow: hidden;
+          background-color: $module-bg-darker-3;
 
           .background {
             width: 100%;
             height: 100%;
-            background-color: $module-bg-darker-2;
             background-size: cover;
             background-position: center;
             transform: rotate(0deg) scale(1);
@@ -514,11 +531,19 @@
       }
     }
 
-    .vlog-empty {
+    .vlog-empty,
+    .vlog-loading {
       @include radius-box($sm-radius);
       @include common-bg-module();
       min-height: 10rem;
       margin-bottom: $gap;
+    }
+
+    .vlog-loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: $font-size-h3;
     }
 
     .loadmore {

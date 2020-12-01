@@ -24,7 +24,7 @@
 
 <script lang="ts">
   import { defineComponent, watchEffect, ref } from 'vue'
-  import { usePopupWithRoot } from './'
+  import { usePopupWithRoot } from './hook'
   export default defineComponent({
     name: 'PopupRoot',
     setup() {
