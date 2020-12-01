@@ -177,19 +177,20 @@
       const observeLozad = (elementId: string) => {
         const contentElement = element.value?.querySelector(`#${elementId}`)
         const lozadElements = contentElement && contentElement.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
-        if (!lozadElements || !lozadElements.length) {
-          return false
+        if (lozadElements?.length) {
+          const lozadObserver = window.$lozad(lozadElements, {
+            loaded: element => element.classList.add(LOADED_CLASS_NAME)
+          })
+          lozadObserver.observe()
         }
-        const lozadObserver = window.$lozad(lozadElements, {
-          loaded: element => element.classList.add(LOADED_CLASS_NAME)
-        })
-        lozadObserver.observe()
       }
 
       const handleContentAnimateDone = () => observeLozad(contentElementIds.default)
       const handleRenderMoreAnimateDone = () => observeLozad(contentElementIds.leftover)
 
-      onMounted(handleContentAnimateDone)
+      onMounted(() => {
+        handleContentAnimateDone()
+      })
 
       return {
         LANGUAGE_KEYS,

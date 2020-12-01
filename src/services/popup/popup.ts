@@ -5,7 +5,7 @@
 */
 
 import { h, defineComponent, watch, Teleport, Fragment, PropType, ExtractPropTypes } from 'vue'
-import { usePopup } from './'
+import { usePopup } from './hook'
 
 export const PopupUIProps = {
   border: {

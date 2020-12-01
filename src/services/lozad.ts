@@ -11,7 +11,7 @@ export type LozadObserver = lozad.Observer
 
 declare global {
   interface Window {
-    $lozad: LozadSelector
+    $lozad: typeof lozad
   }
 }
 

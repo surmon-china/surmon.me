@@ -6,7 +6,7 @@
 
 import { h, defineComponent } from 'vue'
 import { PopupUIProps, getOtherProps } from './popup'
-import { usePopup } from '.'
+import { usePopup } from './hook'
 
 /**
  * @example <popup-image src="xxx" class="image" />

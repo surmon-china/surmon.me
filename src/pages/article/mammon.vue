@@ -23,6 +23,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import AdsenseResponsive from '/@/components/adsense/responsive.vue'
+
   export default defineComponent({
     name: 'ArticleMammon',
     components: {

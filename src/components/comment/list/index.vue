@@ -87,13 +87,12 @@
 
       const observeLozad = () => {
         const lozadElements = (listElement.value?.$el as HTMLElement)?.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
-        if (!lozadElements || !lozadElements.length) {
-          return false
+        if (lozadElements?.length) {
+          lozadObserver.value = window.$lozad(lozadElements, {
+            loaded: element => element.classList.add(LOADED_CLASS_NAME)
+          })
+          lozadObserver.value.observe()
         }
-        lozadObserver.value = window.$lozad(lozadElements, {
-          loaded: element => element.classList.add(LOADED_CLASS_NAME)
-        })
-        lozadObserver.value.observe()
       }
 
       const loadCommentsAnimateDone = () => {
@@ -129,7 +128,9 @@
         }
       }
 
-      onMounted(() => observeLozad)
+      onMounted(() => {
+        observeLozad()
+      })
       onBeforeUnmount(() => {
         lozadObserver.value = null
       })
