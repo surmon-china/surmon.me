@@ -1,5 +1,3 @@
-# TODO
-- [lozad.js](https://apoorv.pro/lozad.js/) `lozadObserver.observer.unobserve(targetElement?)`
 
 # Changelog
 All notable changes to this project will be documented in this file.

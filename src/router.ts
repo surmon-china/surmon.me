@@ -24,7 +24,7 @@ import AppPage from './pages/app.vue'
 
 export enum CategorySlug {
   Code = 'code',
-  Insight = 'think',
+  Insight = 'insight',
 }
 
 export enum RouteName {
