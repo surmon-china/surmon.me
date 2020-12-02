@@ -193,6 +193,7 @@
       })
 
       onBeforeUnmount(() => {
+        lozadObserver.value?.observer.disconnect()
         lozadObserver.value = null
       })
 

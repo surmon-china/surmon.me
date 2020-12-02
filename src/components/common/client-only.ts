@@ -7,6 +7,7 @@
  */
 
 import { defineComponent, ref, h, onMounted, Transition, cloneVNode } from 'vue'
+import { useEnhancer } from '/@/enhancer'
 
 /**
  * @description only render on client (browser)
@@ -37,15 +38,20 @@ export const ClientOnly = defineComponent({
     }
   },
   setup(props, context) {
-    const canRender = ref(false)
-    const setRender = () => {
-      canRender.value = true
-    }
+    const { globalState } = useEnhancer()
+    // SSR -> hydrated -> render -> no transition
+    const canRender = ref(globalState.isHydrated ? true : false)
 
     onMounted(() => {
-      props.delay
-        ? setTimeout(setRender, props.delay)
-        : setRender()
+      // SSR inited -> mounted -> render -> transition
+      if (!globalState.isHydrated) {
+        const setRender = () => {
+          canRender.value = true
+        }
+        props.delay
+          ? setTimeout(setRender, props.delay)
+          : setRender()
+      }
     })
 
     const renderResult = (result, resultKey?: string) => {
