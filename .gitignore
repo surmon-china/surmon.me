@@ -91,7 +91,7 @@ dist
 sw.*
 
 # ecosystem
-ecosystem.config.js
+# ecosystem.config.js
 
 # syndication
 # analytics
