@@ -1,0 +1,21 @@
+name: Deploy
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true
+    name: Deploy to server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Exec deploy script with SSH
+        uses: appleboy/ssh-action@master
+        with:
+          command_timeout: 10m
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          script: sh ${{ secrets.WWW_PATH }}/surmon.me/.deploy/main.sh

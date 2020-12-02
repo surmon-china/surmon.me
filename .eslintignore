@@ -1,0 +1,14 @@
+# .eslintignore
+
+*.discard
+node_modules
+
+.vun
+.deploy
+dist
+public
+src/patchs
+
+.eslintrc.js
+*.config.js
+*.json

@@ -1,0 +1,67 @@
+/// @name theme
+
+@mixin css-var($theme-text, $theme-white, $theme-black, $theme-primary, $theme-body-bg, $logo-rotate) {
+  #{--body-bg}: $theme-body-bg;
+  #{--theme-black}: $theme-black;
+  #{--theme-logo-rotate}: $logo-rotate;
+
+  #{--primary-color}: $theme-primary;
+  #{--primary-color-lighter}: rgba($theme-primary, 0.8);
+  #{--primary-color-translucent}: rgba($theme-primary, 0.5);
+
+  $module-bg: rgba($theme-white, 0.6);
+  $module-bg-opaque: rgba($theme-white, 1);
+  #{--module-bg}: $module-bg;
+  #{--module-bg-opaque}: $module-bg-opaque;
+  #{--module-bg-lighter}: rgba($module-bg, 0.8);
+  #{--module-bg-translucent}: rgba($module-bg, 0.5);
+  #{--module-bg-darker-1}: darken($module-bg-opaque, 9%);
+  #{--module-bg-darker-2}: darken($module-bg-opaque, 13%);
+  #{--module-bg-darker-3}: darken($module-bg-opaque, 19%);
+  #{--module-bg-darker-4}: darken($module-bg-opaque, 24%);
+  #{--module-bg-darker-5}: darken($module-bg-opaque, 29%);
+
+  #{--text-color}: $theme-text;
+  #{--text-lighter}: lighter($theme-text, 20%);
+  #{--text-darker}: darken($theme-text, 20%);
+  #{--text-secondary}: rgba($theme-black, .54);
+  #{--text-disabled}: rgba($theme-black, .38);
+  #{--text-dividers}: rgba($theme-black, .26);
+  #{--text-reversal}: $theme-white;
+
+  #{--link-color}: $theme-text;
+  #{--link-color-hover}: darken($theme-text, 20%);
+}
+
+@mixin defaultTheme() {
+  @include css-var(
+    $theme-text: #555,
+    $theme-white: #fff,
+    $theme-black: #000,
+    $theme-primary: #0088f5,
+    $theme-body-bg: #eee,
+    $logo-rotate: none
+  );
+}
+
+@mixin darkTheme() {
+  @include css-var(
+    $theme-text: #fff,
+    $theme-white: #444,
+    $theme-black: #fff,
+    $theme-primary: #fff,
+    $theme-body-bg: #000,
+    $logo-rotate: hue-rotate(30deg) brightness(180%) grayscale(100%)
+  );
+}
+
+@mixin pronHubTheme() {
+  @include css-var(
+    $theme-text: #fff,
+    $theme-white: #444,
+    $theme-black: #fff,
+    $theme-primary: #ffa645,
+    $theme-body-bg: #000,
+    $logo-rotate: hue-rotate(160deg) brightness(160%)
+  );
+}
