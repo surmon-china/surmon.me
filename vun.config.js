@@ -1,3 +1,9 @@
+/**
+ * @file vuniversal config
+ * @module config/vuniversal
+ * @author Surmon <surmon@foxmail.com>
+ */
+
 const deepmerge = require('deepmerge')
 const { resolveConfig } = require('vite')
 

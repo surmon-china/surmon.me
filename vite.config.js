@@ -1,3 +1,9 @@
+/**
+ * @file vite config
+ * @module config/vite
+ * @author Surmon <surmon@foxmail.com>
+ */
+
 const path = require('path')
 const { loadEnv } = require('vite')
 const CWD = process.cwd()

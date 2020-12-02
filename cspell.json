@@ -39,7 +39,8 @@
     "vite",
     "gtag",
     "adsense",
-    "lozad"
+    "lozad",
+    "deepmerge"
   ],
   "flagWords": []
 }
