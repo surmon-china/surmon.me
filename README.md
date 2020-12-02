@@ -1,16 +1,16 @@
 <p align="center">
-  <a href="https://github.com/nuxt/nuxt.js" target="blank">
-    <img src="https://nuxtjs.org/meta_400.png" height="90" alt="nuxt logo" />
+  <a href="https://vuejs.org" target="blank">
+    <img src="https://raw.githubusercontent.com/surmon-china/surmon.me/master/presses/vue-logo.png" height="90" alt="vue logo" />
   </a>
-  <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+  <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
   <a href="https://github.com/surmon-china/surmon.me" target="blank">
-    <img src="https://raw.githubusercontent.com/surmon-china/surmon.me/master/static/icon.png" height="90" alt="surmon.me logo" />
+    <img src="https://raw.githubusercontent.com/surmon-china/surmon.me/master/presses/logo.png" height="90" alt="surmon.me logo" />
   </a>
 </p>
 
 # Surmon.me
 
-![vue](https://img.shields.io/badge/MADE%20WITH-VUE-42a97a?style=for-the-badge&labelColor=35495d)
+[![vue](https://img.shields.io/badge/MADE%20WITH-VUE-42a97a?style=for-the-badge&labelColor=35495d)](https://vuejs.org)
 [![nodepress](https://img.shields.io/badge/NODE-PRESS-83BA2F?style=for-the-badge&labelColor=90C53F)](https://github.com/surmon-china/nodepress)
 [![GitHub stars](https://img.shields.io/github/stars/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues-raw/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/issues)
@@ -18,9 +18,9 @@
 [![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/blob/master/LICENSE)
 
 
-**My personal website and blog, powered by [Nuxt.js](https://github.com/nuxt/nuxt.js).** 
+**My personal website and blog, powered by [Vue (3)](https://vuejs.org).** 
 
-**使用 [Nuxt.js](https://github.com/nuxt/nuxt.js) 构建的个人网站。**
+**使用 [Vue (3)](https://vuejs.org) 构建的个人网站。**
 
 **Online site:** https://surmon.me
 
@@ -40,18 +40,25 @@
 ## Development Setup
 
 ```bash
-# install nodemon
-$ npm i nodemon -g
-
 # install dependencies
 $ yarn # or npm install
 
 # serve with hot reload at localhost:3000
-$ yarn dev # or npm run dev
+$ yarn dev
+
+# or
+$ yarn dev:spa
+$ yarn dev:ssr
 
 # build for production and launch server
-$ yarn build # or npm run build
-$ yarn start # or npm start
+$ yarn build
+
+# or
+$ yarn build:spa
+$ yarn build:ssr
+
+# run SSR
+$ yarn start
 
 # lint test
 $ yarn lint
@@ -60,9 +67,9 @@ $ yarn lint
 ## Actions setup
 
 **Rule:**
-- `any PR open` -> `CI:Build test`
-- `master PR closed & merged` -> `CI:Deploy to server`
+- `any PR open` → `CI:Build test`
+- `master PR closed & merged` → `CI:Deploy to server`
 
 **Example:**
-- `local:develop -> remote:develop` -> `CI:Build test`
-- `remote:develop/other -> remote:master -> merged` -> `CI:Deploy to server`
+- `local:develop` → `remote:develop` → `CI:Build test`
+- `remote:develop/other` → `remote:master → merged` → `CI:Deploy to server`

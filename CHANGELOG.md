@@ -2,6 +2,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+### v3.0.0 (2020-12-01)
+### v3.0.0.beta-0.1 (2020-05-20)
+
+**Upgrade**
+- Nuxt.js to Vuniversal
+- Upgrade styles
+- ...
+
 ### v2.5.8 (2020-03-29)
 
 **Update**

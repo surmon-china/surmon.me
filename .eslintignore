@@ -1,23 +1,14 @@
 # .eslintignore
 
+*.discard
 node_modules
 
-build/*.js
-# config/*.js
+.vun
+.deploy
+dist
+public
+src/patchs
 
-*.discard
-
-static/*
-static/*.js
-
-.deploy/*
-
-.nuxt
-.nuxt/*
-.nuxt/*.js
-
-services/scroller.ts
-
-plugins/ga.js
-plugins/copy-right.js
-plugins/baidu-seo-push.js
+.eslintrc.js
+*.config.js
+*.json
