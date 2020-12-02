@@ -105,3 +105,5 @@ data/barrages.json
 # Redis
 dump.rdb
 
+# Mac OS
+.DS_Store
