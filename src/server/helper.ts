@@ -8,10 +8,12 @@ import path from 'path'
 import { NODE_ENV } from '../environment'
 import type { UserConfig } from 'vite'
 
-// dist
-//  |- server.js
-// data...
-// public...
+/**
+ * dist
+ * |- server.js
+ * data
+ * public
+*/
 export const APP_PATH = path.join(__dirname)
 export const ROOT_PATH = path.join(APP_PATH, '..')
 export const DATA_PATH = path.join(ROOT_PATH, 'data')
