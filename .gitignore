@@ -7,6 +7,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# vscode
+.vscode
+
 # test
 test.*
 
@@ -61,18 +64,15 @@ package-lock.json
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+.env.local
+.env.*.local
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
-# next.js build output
-.next
-
-# nuxt.js build output
-.nuxt
-
-# Nuxt generate
+# Vuniversal dev cache
+.vun
+# Vuniversal build output
 dist
 
 # vuepress build output
@@ -94,16 +94,14 @@ sw.*
 ecosystem.config.js
 
 # syndication
-/static/sitemap.xml
-/static/rss.xml
+# analytics
+public/sitemap.xml
+public/rss.xml
+public/scripts/gtag.js
 
 # barrages
 data/barrages.json
-/data/barrages.json
-
-# analytics
-static/scripts/analytics.js
-/static/scripts/analytics.js
 
 # Redis
 dump.rdb
+

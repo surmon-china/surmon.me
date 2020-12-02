@@ -1,0 +1,254 @@
+.markdown-html {
+  p {
+    line-height: 2.2em;
+    text-indent: 2em;
+    margin-bottom: 1em;
+
+    &.text-center {
+      text-align: center;
+    }
+
+    &.text-right {
+      text-align: right;
+    }
+  }
+
+  a {
+    margin: 0 .1em;
+    border-bottom: 1px solid transparent;
+    font-weight: bold;
+
+    &.image-link {
+      margin: 0;
+      border: 0;
+    }
+
+    &:hover {
+      text-decoration: none;
+      border-color: initial;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.8em;
+    font-weight: 700;
+    text-indent: 0;
+  }
+
+  blockquote {
+    p {
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  ul {
+    list-style-type: square;
+  }
+
+  ul, ol {
+    > li {
+      line-height: 1.8em;
+      padding: .5em .8em;
+
+      &:hover {
+        background-color: $module-bg-darker-1;
+      }
+
+      > p {
+        text-indent: 0;
+      }
+
+      > ol {
+        list-style: lower-alpha;
+      }
+
+      > ul,
+      > ol {
+        margin-top: $sm-gap;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      &:last-child {
+        > ul,
+        > ol {
+          margin-bottom: - $sm-gap;
+        }
+      }
+    }
+  }
+
+  img {
+    max-width: 100%;
+    position: relative;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+    border-radius: $xs-radius;
+    border: $sm-gap solid $module-bg-darker-1;
+    opacity: .9;
+    cursor: pointer;
+    &:hover {
+      opacity: 1;
+      transition: all $transition-time-normal;
+    }
+  }
+
+  iframe {
+    width: 100%;
+    margin-bottom: 1em;
+    background-color: $theme-black;
+  }
+
+  code {
+    color: #bd4147;
+    padding: .3em .4em;
+    margin: 0 .3em;
+    border-radius: $xs-radius;
+    background-color: $module-bg-darker-1;
+    font-size: $font-size-h6;
+  }
+
+  pre {
+    $code-header-height: 2.8rem;
+    $code-number-width: 3rem;
+    $code-row-line-height: 1.8rem;
+    $code-font-size: $font-size-h6;
+    display: block;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1em;
+    padding-left: $code-number-width;
+    font-size: $code-font-size;
+    background-color: rgba($black, 0.8);
+    border-radius: $xs-radius;
+
+    &:before {
+      color: $white;
+      content: attr(data-lang)" CODE";
+      height: $code-header-height;
+      line-height: $code-header-height;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      font-weight: 700;
+      background-color: lighten($black, 30%);
+      display: block;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .code-lines {
+      user-select: none;
+      position: absolute;
+      left: 0;
+      top: $code-header-height;
+      margin: 0;
+      padding: 1rem 0;
+      width: $code-number-width;
+      height: calc(100% - #{$code-header-height});
+      text-align: center;
+      background-color: rgba($black, 0.2);
+
+      .code-line-number {
+        padding: 0;
+        position: relative;
+        list-style-type: none;
+        line-height: $code-row-line-height;
+        font-size: $font-size-small;
+        transition: none;
+
+        &:hover {
+          &:before {
+            @include visible();
+          }
+        }
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: $code-number-width;
+          width: 66em;
+          height: 100%;
+          background-color: rgba(154, 154, 154, 0.2);
+          @include hidden();
+        }
+      }
+    }
+
+    code {
+      margin: 0;
+      padding: 1rem;
+      float: left;
+      width: 100%;
+      height: 100%;
+      display: block;
+      line-height: $code-row-line-height;
+      color: rgba($white, 0.87);
+      background-color: transparent;
+      font-size: $font-size-base;
+    }
+  }
+
+  &.comment {
+    line-height: 2em;
+    word-wrap: break-word;
+    font-size: $font-size-h6;
+
+    p {
+      text-indent: 0;
+      line-height: 2em;
+      &:last-child {
+        margin: 0;
+      }
+    }
+
+    a {
+      text-decoration: none;
+      border-bottom: 1px solid;
+    }
+
+    img {
+      margin: .5rem 0;
+      max-width: 100%;
+      border-color: $module-bg-darker-2;
+    }
+
+    ul, ol {
+      padding-left: 2em;
+
+      > li {
+        padding: 0.2em 0.5em;
+      }
+    }
+
+    pre {
+      $code-header-height: 2.8rem;
+      padding-left: 0;
+      padding-top: $code-header-height;
+      margin-top: 1rem;
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap-reverse;
+
+      .code-lines {
+        display: none;
+      }
+
+      code {
+        line-height: 1.8;
+        background-color: transparent;
+      }
+    }
+  }
+}
