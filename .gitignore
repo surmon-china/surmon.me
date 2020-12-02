@@ -94,10 +94,9 @@ sw.*
 ecosystem.config.js
 
 # syndication
+# analytics
 public/sitemap.xml
 public/rss.xml
-
-# analytics
 public/scripts/gtag.js
 
 # barrages

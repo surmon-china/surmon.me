@@ -18,9 +18,9 @@
 [![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/blob/master/LICENSE)
 
 
-**My personal website and blog, powered by [Vue](https://vuejs.org).** 
+**My personal website and blog, powered by [Vue (3)](https://vuejs.org).** 
 
-**使用 [Vue](https://vuejs.org) 构建的个人网站。**
+**使用 [Vue (3)](https://vuejs.org) 构建的个人网站。**
 
 **Online site:** https://surmon.me
 
