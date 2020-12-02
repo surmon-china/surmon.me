@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 
 **Upgrade**
 - Nuxt.js to Vuniversal
-- Upgrade styles
+- Vue -> Vue3
 - ...
 
 ### v2.5.8 (2020-03-29)
