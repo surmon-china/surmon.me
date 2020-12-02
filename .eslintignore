@@ -3,9 +3,11 @@
 *.discard
 node_modules
 
+.vun
 .deploy
+dist
 public
-patchs
+src/patchs
 
 .eslintrc.js
 *.config.js
