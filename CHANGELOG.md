@@ -2,6 +2,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+### v3.0.1 (2020-12-03)
+
+**Fix**
+- Console style
+- Assets CDN url
+- SSR prefetch * validate
+
 ### v3.0.0 (2020-12-01)
 ### v3.0.0.beta-0.1 (2020-05-20)
 

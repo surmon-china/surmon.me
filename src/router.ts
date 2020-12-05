@@ -5,8 +5,12 @@
  */
 
 import { RouteRecordRaw, NavigationGuard, NavigationGuardNext, RouterHistory, createRouter } from 'vue-router'
-import { scrollToTop } from '/@/utils/effects'
+import { NOT_FOUND, INVALID_ERROR } from '/@/constants/error'
+import { LANGUAGE_KEYS } from '/@/language/key'
 import { LayoutColumn } from '/@/services/layout'
+import { isSSR } from '/@/environment'
+import { isValidDateParam } from '/@/transforms/validate'
+import { scrollToTop } from '/@/utils/effects'
 import IndexPage from './pages/index.vue'
 import ArchivePage from './pages/archive.vue'
 import ArticlePage from './pages/article/index.vue'
@@ -63,31 +67,101 @@ export const routes: RouteRecordRaw[] = [
     path: '/article/:article_id',
     name: RouteName.Article,
     component: ArticlePage,
-    props: to => ({ articleId: Number(to.params.article_id) })
+    props: to => ({ articleId: Number(to.params.article_id) }),
+    meta: {
+      async validate({ route, i18n }) {
+        if (!Number.isInteger(Number(route.params.article_id))) {
+          return Promise.reject({
+            code: INVALID_ERROR,
+            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Article ID → <number>'
+          })
+        }
+      }
+    }
   },
   {
     path: '/category/:category_slug',
     name: RouteName.CategoryArchive,
     component: CategoryPage,
-    props: to => ({ categorySlug: to.params.category_slug })
+    props: to => ({ categorySlug: to.params.category_slug }),
+    meta: {
+      async validate({ route, i18n, store }) {
+        const { category_slug } = route.params
+        if (!category_slug) {
+          return Promise.reject({
+            code: INVALID_ERROR,
+            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Category slug → <string>'
+          })
+        }
+        if (isSSR) {
+          const target = store.state.category.data.find(
+            category => category.slug === category_slug
+          )
+          if (!target) {
+            return Promise.reject({
+              code: NOT_FOUND,
+              message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Category slug not found'
+            })
+          }
+        }
+      }
+    }
   },
   {
     path: '/tag/:tag_slug',
     name: RouteName.TagArchive,
     component: TagPage,
-    props: to => ({ tagSlug: to.params.tag_slug })
+    props: to => ({ tagSlug: to.params.tag_slug }),
+    meta: {
+      async validate({ route, i18n, store }) {
+        const { tag_slug } = route.params
+        if (!tag_slug) {
+          return Promise.reject({
+            code: INVALID_ERROR,
+            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Tag slug → <string>'
+          })
+        }
+        if (isSSR && !store.state.tag.data.find(tag => tag.slug === tag_slug)) {
+          return Promise.reject({
+            code: NOT_FOUND,
+            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Tag slug not found'
+          })
+        }
+      }
+    }
   },
   {
     path: '/date/:date',
     name: RouteName.DateArchive,
     component: DatePage,
-    props: to => ({ date: to.params.date })
+    props: to => ({ date: to.params.date }),
+    meta: {
+      async validate({ route, i18n }) {
+        const date = route.params.date
+        if (!date || !isValidDateParam(date)) {
+          return Promise.reject({
+            code: INVALID_ERROR,
+            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Invalid date'
+          })
+        }
+      }
+    }
   },
   {
     path: '/search/:keyword',
     name: RouteName.SearchArchive,
     component: SearchPage,
-    props: to => ({ keyword: to.params.keyword })
+    props: to => ({ keyword: to.params.keyword }),
+    meta: {
+      async validate({ route, i18n }) {
+        if (!route.params.keyword) {
+          return Promise.reject({
+            code: INVALID_ERROR,
+            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Keywords ?'
+          })
+        }
+      }
+    }
   },
   {
     path: '/music',
@@ -151,7 +225,7 @@ export const routes: RouteRecordRaw[] = [
     name: RouteName.Error,
     path: '/:error(.*)',
     component: {
-      setup: () => Promise.reject({ code: 404 })
+      setup: () => Promise.reject({ code: NOT_FOUND })
     }
   }
 ]

@@ -43,20 +43,13 @@
       }
     },
     setup(props) {
-      const { i18n, helmet, store } = useEnhancer()
-      if (!props.keyword) {
-        return Promise.reject({
-          code: 500,
-          message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR)
-        })
-      }
+      const { helmet, store } = useEnhancer()
 
       helmet(() => ({
         title: `${props.keyword} | Search`
       }))
 
       const article = computed(() => store.state.article.list)
-
       const fetchArticles = (params: any) => {
         onClient(scrollToTop)
         return store.dispatch(

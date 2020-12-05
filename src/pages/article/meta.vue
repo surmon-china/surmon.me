@@ -10,7 +10,12 @@
       </div>
     </template>
     <template #default>
-      <div class="metas" key="content" :class="{ mobile: isMobile }">
+      <div
+        class="metas"
+        key="content"
+        :class="{ mobile: isMobile }"
+        v-if="article"
+      >
         <p class="item">
           <i18n
             zh="本文于 "
@@ -130,10 +135,7 @@
   export default defineComponent({
     name: 'ArticleMeta',
     props: {
-      article: {
-        type: Object,
-        default: null
-      },
+      article: Object,
       fetching: {
         type: Boolean,
         required: true

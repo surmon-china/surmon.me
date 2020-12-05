@@ -5,8 +5,14 @@
  */
 
 import { App, inject, ref, computed, reactive, readonly } from 'vue'
+import { INVALID_ERROR } from '/@/constants/error'
 import { uaParser, isZhUser } from '/@/transforms/ua'
 import { LayoutColumn } from '/@/services/layout'
+
+export interface RenderError {
+  code: number
+  message: string
+}
 
 export enum ImageExt {
   WebP = 'webp',
@@ -27,6 +33,36 @@ export interface GlobalStateConfig {
 const GlobalStateSymbol = Symbol('globalState')
 export type GlobalState = ReturnType<typeof createGlobalState>
 export const createGlobalState = (config: GlobalStateConfig) => {
+
+  // render error
+  const renderError = ref<RenderError | string | null>(null)
+  const defaultError = { code: INVALID_ERROR }
+  const setRenderError = (error: any) => {
+    // null
+    if (!error) {
+      renderError.value = null
+    // new Error
+    } else if (error instanceof Error) {
+      renderError.value = {
+        ...defaultError,
+        message: error.message
+      }
+    // error message
+    } else if (typeof error === 'string') {
+      renderError.value = {
+        ...defaultError,
+        message: error
+      }
+    // error object -> axios | component
+    } else {
+      renderError.value = {
+        ...defaultError,
+        ...error
+      }
+    }
+    console.log('--------setRenderError', renderError.value)
+  }
+
 
   // Hydrated
   const isHydrated = ref(false)
@@ -103,6 +139,8 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     toRawState,
     resetOnClient,
     // data
+    renderError,
+    setRenderError,
     isHydrated,
     setHydrate,
     userAgent,

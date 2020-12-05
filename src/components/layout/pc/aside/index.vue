@@ -58,7 +58,6 @@
 
 <script lang="ts">
   import Swiper from 'swiper'
-  import StickyEvents from 'sticky-events'
   import { defineComponent, ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { getDateArchiveRoute } from '/@/transforms/route'
@@ -138,20 +137,20 @@
 
       onMounted(() => {
         nextTick(() => {
-          stickyEvents = new StickyEvents({
+          stickyEvents = new window.$StickyEvents({
             enabled: true,
             stickySelector: `#${ASIDE_STICKY_ELEMENT_ID}`
           })
-          stickyEvents.stickyElements[0].addEventListener(
-            StickyEvents.CHANGE,
+          stickyEvents.stickyElements?.[0]?.addEventListener(
+            window.$StickyEvents.CHANGE,
             handleStickyStateChange
           )
         })
       })
 
       onBeforeUnmount(() => {
-        stickyEvents.stickyElements[0].removeEventListener(
-          StickyEvents.CHANGE,
+        stickyEvents.stickyElements?.[0]?.removeEventListener(
+          window.$StickyEvents.CHANGE,
           handleStickyStateChange
         )
         stickyEvents.disableEvents(false)

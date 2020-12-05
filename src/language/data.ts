@@ -355,7 +355,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.En]: 'likes'
   },
   [LANGUAGE_KEYS.QUERY_PARAMS_ERROR]: {
-    [Language.Zh]: '请求参数错误',
-    [Language.En]: 'Invalid query params'
+    [Language.Zh]: '请求参数错误：',
+    [Language.En]: 'Invalid query params: '
   }
 }

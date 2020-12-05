@@ -65,6 +65,23 @@ export const createVueApp = (context: ICreatorContext) => {
     titleTemplate: (title: string) => `${title} | ${META.title}`
   })
 
+  const handleError = (error: any) => {
+    console.log('------全局捕获到错误了', error)
+    globalState.setRenderError(error)
+  }
+
+  app.config.errorHandler = handleError
+  router.beforeEach((to, _, next) => {
+    if (to.meta.validate) {
+      to.meta
+        .validate({ route: to, i18n, store })
+        .catch(handleError)
+        .finally(next)
+    } else {
+      next()
+    }
+  })
+
   app.use(router)
   app.use(store)
   app.use(globalState)

@@ -69,14 +69,7 @@
       }
     },
     setup(props) {
-      const { store, globalState, i18n, helmet, isMobile } = useEnhancer()
-      if (!Number.isInteger(props.articleId)) {
-        return Promise.reject({
-          code: 500,
-          message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR)
-        })
-      }
-
+      const { store, helmet, isMobile } = useEnhancer()
       const article = computed(() => store.state.article.detail.data)
       const fetching = computed(() => store.state.article.detail.fetching)
       const relatedArticles = computed(() => {

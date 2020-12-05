@@ -32,13 +32,15 @@ http.interceptors.response.use(
   },
   error => {
     const errorJSON = error.toJSON()
+    const messageText = error.response?.data?.message || 'Error'
+    const errorText = error.response?.data?.error || error.response?.statusText || errorJSON.message
     const errorInfo = {
       ...errorJSON,
       config: error.config,
       request: error.request,
       response: error.response,
       code: error.code || error.response?.status,
-      message: errorJSON.message + ': ' + (error.response?.statusText || 'NULL'),
+      message: messageText + ': ' + errorText
     }
     console.debug('axios error:', errorInfo)
     return Promise.reject(errorInfo)

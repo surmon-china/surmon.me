@@ -13,19 +13,13 @@ const BASE_ENV_CONFIG = loadEnv('', CWD)
 const DEV_ENV_CONFIG = loadEnv('development', CWD)
 const PROD_ENV_CONFIG = loadEnv('production', CWD)
 
-// console.log('vun:envs:config', {
-//   BASE_ENV_CONFIG,
-//   DEV_ENV_CONFIG,
-//   PROD_ENV_CONFIG
-// })
-
 module.exports = mode => {
   const TARGET_ENV_CONFIG = loadEnv(mode, CWD)
-  // console.log('vun:mode:config', mode, TARGET_ENV_CONFIG)
 
   return {
     port: 3000,
     open: true,
+    base: TARGET_ENV_CONFIG.VITE_CDN_URL + '/',
     root: path.resolve(__dirname),
     assetsDir: 'assets',
     alias: {
