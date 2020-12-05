@@ -6,21 +6,20 @@
       <popup-root />
     </client-only>
     <!-- unuse suspense -> async route component -> can't extract style to css file -->
-    <!-- suspense<component :is="Component"> -> some warning -> can't match DOM -> can't hydrate -->
     <captured>
       <component :is="LayoutComponent">
         <router-view v-slot="{ Component, route }">
-          <suspense>
-            <div class="router-view">
-              <transition
-                name="page"
-                mode="out-in"
-                @before-enter="handlePageTransitionDone"
-              >
-                <component :is="Component" :key="route.name"></component>
-              </transition>
-            </div>
-          </suspense>
+          <div class="router-view">
+            <transition
+              name="page"
+              mode="out-in"
+              @before-enter="handlePageTransitionDone"
+            >
+              <suspense>
+                <component :is="Component" :key="route.name" />
+              </suspense>
+            </transition>
+          </div>
         </router-view>
       </component>
     </captured>
@@ -42,10 +41,10 @@
     components: {
       Captured,
       EmojiRain,
-      ProgressBar
+      ProgressBar,
     },
     setup() {
-      const { theme, store, route, globalState, isMobile } = useEnhancer()
+      const { theme, route, globalState, isMobile } = useEnhancer()
       const LayoutComponent = computed(() => {
         return isMobile.value
           ? MobileMain

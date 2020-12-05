@@ -41,14 +41,27 @@ export const onServer = (callback: any) => {
 
 // server pre fetch
 export const onPrefetch = <D = any>(fetcher: () => Promise<any>, data: D) => {
+  const globalState = useGlobalState()
+  const doFetchOnBeforeMount = () => {
+    onBeforeMount(() => {
+      fetcher().catch(error => {
+        globalState.setRenderError(error)
+        return Promise.reject(error)
+      })
+    })
+  }
+
+  // SPA
   if (isSPA) {
-    onBeforeMount(fetcher)
+    doFetchOnBeforeMount()
     return data
   }
+
   // SSR -> Server
   if (isServer) {
     return fetcher().then(() => data)
   }
+
   // SSR -> Client
   // TODO: _hydrating
   // onServerPreFetch: https://github.com/vuejs/composition-api/pull/198/files
@@ -56,10 +69,8 @@ export const onPrefetch = <D = any>(fetcher: () => Promise<any>, data: D) => {
   // isHydrating: https://github.com/vuejs/vue-next/pull/2016
   // console.log('-----context', getCurrentInstance())
   // if (getCurrentInstance()?._hydrating)
-
-  if (useGlobalState().isHydrated) {
-    onBeforeMount(fetcher)
+  if (globalState.isHydrated) {
+    doFetchOnBeforeMount()
   }
-
   return data
 }

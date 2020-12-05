@@ -27,6 +27,7 @@ import { enableCopyright } from '/@/services/copyright'
 import { enableBaiduSeoPush } from '/@/services/baidu-seo-push'
 import { enableAutoTitleSurprise } from './services/title-surprise'
 import { exportEmojiRainToGlobal } from './services/emoji-23333'
+import { exportStickyEventsToGlobal } from './services/sticky'
 import { exportAppToGlobal } from '/@/services/exporter'
 import { exportLozadToGlobal } from '/@/services/lozad'
 import { initSocketAndExport } from '/@/services/socket.io'
@@ -82,6 +83,7 @@ theme.bindClientSystem()
 initSocketAndExport()
 exportLozadToGlobal()
 exportEmojiRainToGlobal()
+exportStickyEventsToGlobal()
 exportAppToGlobal(app)
 
 // init: router loading middleware
@@ -96,7 +98,7 @@ router.afterEach((_, __, failure) => {
 })
 
 // router ready -> mount
-router.isReady().then(() => {
+router.isReady().finally(() => {
   // UI layout
   globalState.layoutColumn.setValue(
     isSSR

@@ -19,7 +19,6 @@
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { isSSR } from '/@/environment'
   import { useEnhancer } from '/@/enhancer'
   import { onPrefetch, onClient } from '/@/universal'
   import { Modules, getNamespace } from '/@/store'
@@ -43,24 +42,12 @@
       }
     },
     setup(props) {
-      const { store, i18n, helmet, isZhLang } = useEnhancer()
-      // slug 是否为空
-      if (!props.categorySlug) {
-        return Promise.reject({
-          code: 500,
-          message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR)
-        })
-      }
-
-      // category 是否存在
+      const { store, i18n, helmet, isZhLang, globalState } = useEnhancer()
       const currentCategory = computed(() => {
         return store.state.category.data.find(
           category => category.slug === props.categorySlug
         )
       })
-      if (isSSR && !currentCategory.value) {
-        return Promise.reject({ code: 404 })
-      }
 
       // helmet
       helmet(() => {

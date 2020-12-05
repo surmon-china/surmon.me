@@ -9,11 +9,7 @@
       <p class="link" @click="handleResolveRoute">
         <i18n :lkey="LANGUAGE_KEYS.BACK_TO_HOME_PAGE" />
       </p>
-      <uimage
-        cdn
-        src="/images/logo.svg"
-        class="logo"
-      />
+      <uimage cdn class="logo" src="/images/logo.svg" />
     </div>
     <template v-else>
       <slot />
@@ -22,15 +18,11 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, onErrorCaptured, nextTick, PropType } from 'vue'
+  import { defineComponent, ref, computed, onErrorCaptured, nextTick, PropType } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { RouteName } from '/@/router'
   import { LANGUAGE_KEYS } from '/@/language/key'
 
-  export interface ComponentError {
-    code: number
-    message: string
-  }
   export enum Events {
     Resolve = 'resolve'
   }
@@ -39,12 +31,11 @@
     layout: 'empty',
     emits: [Events.Resolve],
     setup(props, context) {
-      const { router, isDarkTheme } = useEnhancer()
-      const error = ref<ComponentError | string | null>()
-
+      const { router, globalState, isDarkTheme } = useEnhancer()
+      const error = computed(() => globalState.renderError)
       const handleResolveRoute = () => {
         router.push({ name: RouteName.Home }).then(() => {
-          error.value = null
+          globalState.setRenderError(null)
           nextTick(() => {
             context.emit(Events.Resolve)
           })
@@ -52,28 +43,9 @@
       }
 
       onErrorCaptured((_error: any) => {
-        const defaultError = {
-          code: 500
-        }
-        // new Error
-        if (_error instanceof Error) {
-          error.value = {
-            ...defaultError,
-            message: _error.message
-          }
-        // error message
-        } else if (typeof _error === 'string') {
-          error.value = {
-            ...defaultError,
-            message: _error
-          }
-        // error object -> axios | component
-        } else {
-          error.value = {
-            ...defaultError,
-            ..._error
-          }
-        }
+        console.log('------capture onErrorCaptured', _error)
+        globalState.setRenderError(_error)
+        return true;
       })
 
       return {

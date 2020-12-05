@@ -5,9 +5,11 @@
       :background-image="currentTagImage"
       :icon="currentTagIcon"
     >
-      <i18n :zh="currentTag.name" :en="currentTag.slug" />
-      <span class="delimiter">-</span>
-      <span>{{ currentTag.description || '...' }}</span>
+      <template v-if="currentTag">
+        <i18n :zh="currentTag.name" :en="currentTag.slug" />
+        <span class="delimiter">-</span>
+        <span>{{ currentTag.description || '...' }}</span>
+      </template>
     </article-list-header>
     <article-list
       :fetching="article.fetching"
@@ -21,7 +23,6 @@
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { onPrefetch, onClient } from '/@/universal'
-  import { isSSR } from '/@/environment'
   import { useEnhancer } from '/@/enhancer'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
@@ -45,21 +46,10 @@
       }
     },
     setup(props) {
-      const { store, i18n, helmet, isZhLang } = useEnhancer()
-      // slug 是否为空
-      if (!props.tagSlug) {
-        return Promise.reject({
-          code: 500,
-          message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR)
-        })
-      }
-
+      const { store, helmet, isZhLang } = useEnhancer()
       const currentTag = computed(() => store.state.tag.data.find(
         tag => tag.slug === props.tagSlug
       ))
-      if (isSSR && !currentTag.value) {
-        return Promise.reject({ code: 404 })
-      }
 
       // helmet
       helmet(() => {
