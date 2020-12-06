@@ -36,7 +36,7 @@
       Announcement,
       ArticleList
     },
-    setup() {
+    async setup() {
       const store = useStore()
       const article = computed(() => store.state.article.list)
       const announcement = computed(() => store.state.announcement)
@@ -69,7 +69,7 @@
         loadmoreArticles
       }
 
-      return onPrefetch(fetchAllData, resultData)
+      return onPrefetch(() => Promise.reject('垃圾'), resultData)
     }
   })
 </script>

@@ -100,7 +100,7 @@ router.afterEach((_, __, failure) => {
 // router ready -> mount
 router.isReady().finally(() => {
   // UI layout
-  globalState.layoutColumn.setValue(
+  globalState.setLayoutColumn(
     isSSR
       ? ssrContextState.globalState.layout
       : getLayoutByRouteMeta(router.currentRoute.value.meta)

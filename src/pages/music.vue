@@ -90,6 +90,7 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
+  import { isClient } from '/@/environment'
   import { useEnhancer } from '/@/enhancer'
   import { useMusic } from '/@/services/music'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -98,7 +99,7 @@
     name: 'Music',
     setup() {
       const { i18n, helmet, isZhLang } = useEnhancer()
-      const musicPlayer = useMusic()
+      const musicPlayer = isClient ? useMusic() : null
       const currentSong = computed(() => musicPlayer?.currentSong)
 
       helmet(() => {

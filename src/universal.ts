@@ -59,7 +59,12 @@ export const onPrefetch = <D = any>(fetcher: () => Promise<any>, data: D) => {
 
   // SSR -> Server
   if (isServer) {
-    return fetcher().then(() => data)
+    return fetcher()
+      .then(() => data)
+      .catch(error => {
+        globalState.setRenderError(error)
+        return data
+      })
   }
 
   // SSR -> Client
@@ -69,7 +74,7 @@ export const onPrefetch = <D = any>(fetcher: () => Promise<any>, data: D) => {
   // isHydrating: https://github.com/vuejs/vue-next/pull/2016
   // console.log('-----context', getCurrentInstance())
   // if (getCurrentInstance()?._hydrating)
-  if (globalState.isHydrated) {
+  if (globalState.isHydrated.value) {
     doFetchOnBeforeMount()
   }
   return data

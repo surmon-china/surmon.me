@@ -5,6 +5,7 @@
  */
 
 import { App, reactive, readonly, inject, nextTick } from 'vue'
+import ProgressComponent from './progress.vue'
 
 declare global {
   interface Window {
@@ -16,7 +17,7 @@ export interface ILoadingOptions {
   throttle?: number
   duration?: number
 }
-const ILoadingSymbol = Symbol('loading')
+const LoadingSymbol = Symbol('loading')
 const createLoadingStore = (options: ILoadingOptions = {}) => {
   let _cut: number
   let _timer: number
@@ -138,7 +139,8 @@ export const createLoading = (options?: ILoadingOptions) => {
   return {
     ...loading,
     install(app: App, config?: { exportToGlobal?: boolean }) {
-      app.provide(ILoadingSymbol, loading)
+      app.provide(LoadingSymbol, loading)
+      app.component(ProgressComponent.name as string, ProgressComponent)
       app.config.globalProperties.$loading = loading
       if (config?.exportToGlobal) {
         window.$loading = loading
@@ -148,5 +150,5 @@ export const createLoading = (options?: ILoadingOptions) => {
 }
 
 export const useLoading = (): Loading => {
-  return inject(ILoadingSymbol) as Loading
+  return inject(LoadingSymbol) as Loading
 }

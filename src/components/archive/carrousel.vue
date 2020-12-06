@@ -144,7 +144,7 @@
         return getBannerArticleThumbnailUrl(
           thumb,
           isMobile.value,
-          globalState.imageExt.isWebP
+          globalState.imageExt.value.isWebP
         )
       }
 

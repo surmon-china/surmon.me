@@ -6,7 +6,7 @@
 
 import { defineComponent, ref, h } from 'vue'
 import { isClient } from '/@/environment'
-import { useDefer } from '/@/services/defer'
+import { useEnhancer } from '/@/enhancer'
 import { getFileCDNUrl, getFileProxyUrl } from '/@/transforms/url'
 
 export default defineComponent({
@@ -21,7 +21,7 @@ export default defineComponent({
     defer: Boolean
   },
   setup(props) {
-    const defer = useDefer()
+    const { defer } = useEnhancer()
     const loadImage = ref(false)
     if (props.defer && isClient) {
       defer.addTask(() => {

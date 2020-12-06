@@ -70,7 +70,7 @@
       const getRelatedArticleThumb = (thumb: string) => {
         return getArchiveArticleThumbnailUrl(
           thumb,
-          globalState.imageExt.isWebP
+          globalState.imageExt.value.isWebP
         )
       }
 

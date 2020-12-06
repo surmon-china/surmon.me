@@ -164,7 +164,7 @@
       }
 
       const getThumbUrl = (url: string) => {
-        return getFileProxyUrl(`/bilibili/${url.replace('//', '')}@560w_350h.${globalState.imageExt.ext}`)
+        return getFileProxyUrl(`/bilibili/${url.replace('//', '')}@560w_350h.${globalState.imageExt.value.ext}`)
       }
 
       const handlePlay = (video: any) => {

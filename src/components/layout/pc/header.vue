@@ -82,6 +82,7 @@
 
 <script lang="ts">
   import { defineComponent, onMounted, ref, computed } from 'vue'
+  import { isClient } from '/@/environment'
   import { RouteName } from '/@/router'
   import { useI18n } from '/@/services/i18n'
   import { useMusic } from '/@/services/music'
@@ -92,7 +93,7 @@
     name: 'PcHeader',
     setup() {
       const i18n = useI18n()
-      const music = useMusic()
+      const music = isClient && useMusic()
       return {
         LANGUAGE_KEYS,
         RouteName,

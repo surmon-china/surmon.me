@@ -25,7 +25,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { useLoading } from '/@/services/loading'
+  import { useLoading } from '.'
   export default defineComponent({
     name: 'ProgressBar',
     setup() {

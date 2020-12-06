@@ -8,13 +8,15 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useGlobalState } from '/@/state'
 import { useStore, getNamespace, Modules } from '/@/store'
+import { isClient } from '/@/environment'
 import { useI18n } from '/@/services/i18n'
 import { useHelmet } from '/@/services/helmet'
 import { useTheme, Theme } from '/@/services/theme'
-import { useLoading } from '/@/services/loading'
-import { useDefer } from '/@/services/defer'
+import { useDefer, Defer } from '/@/services/defer'
+import { useLoading, Loading } from '/@/services/loading'
+import { useGtag, Gtag } from '/@/services/gtag'
+import type { Popup } from '/@/services/popup'
 import { usePopup } from '/@/services/popup/hook'
-import { useGtag } from '/@/services/gtag'
 import { Language } from '/@/language/data'
 import { OptionModuleGetters, AD_CONFIG } from '/@/store/option'
 
@@ -22,14 +24,10 @@ export const useEnhancer = () => {
   const store = useStore()
   const route = useRoute()
   const router = useRouter()
-  const globalState = useGlobalState()
   const i18n = useI18n()
-  const helmet = useHelmet()
   const theme = useTheme()
-  const defer = useDefer()
-  const popup = usePopup()
-  const gtag = useGtag()
-  const loading = useLoading()
+  const helmet = useHelmet()
+  const globalState = useGlobalState()
 
   const isMobile = computed(() => globalState.userAgent.isMobile)
   const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
@@ -46,13 +44,15 @@ export const useEnhancer = () => {
     i18n,
     helmet,
     theme,
-    defer,
-    popup,
-    gtag,
+
     adConfig,
-    loading,
     isMobile,
     isDarkTheme,
-    isZhLang
+    isZhLang,
+
+    defer: (isClient && useDefer()) as Defer,
+    popup: (isClient && usePopup()) as Popup,
+    gtag: (isClient && useGtag()) as Gtag,
+    loading: (isClient && useLoading()) as Loading,
   }
 }

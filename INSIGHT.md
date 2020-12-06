@@ -59,4 +59,7 @@ renderToString(app).then(res => {
 validate 与路由参数耦合，故可以在路由层面进行验证，配置在路由（meta） & 消费在路由（中间件）。
 preFetch 由 自定义 hook（客户端）& （手动 get route component）服务端 分别调用。
 
+`serverPrefetch` 是 options API, 尽量不要与 setup API 混搭，所以在 composition-api 中的正确实现应该是：
+维持之前的 async setup，当 fetch 发生异常时，直接 setError，而不是期待 async setup 的 error 被捕获。
+
 ### Vite

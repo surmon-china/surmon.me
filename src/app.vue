@@ -30,7 +30,6 @@
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { getLayoutByRouteMeta } from '/@/services/layout'
-  import ProgressBar from '/@/components/common/progress.vue'
   import Captured from '/@/components/common/captured.vue'
   import EmojiRain from '/@/components/widget/emoji-rain.vue'
   import PcMain from '/@/components/layout/pc/main.vue'
@@ -41,7 +40,6 @@
     components: {
       Captured,
       EmojiRain,
-      ProgressBar,
     },
     setup() {
       const { theme, route, globalState, isMobile } = useEnhancer()
@@ -52,7 +50,7 @@
       })
 
       const handlePageTransitionDone = () => {
-        globalState.layoutColumn.setValue(
+        globalState.setLayoutColumn(
           getLayoutByRouteMeta(route.meta)
         )
       }
