@@ -32,7 +32,6 @@
     emits: [Events.Resolve],
     setup(props, context) {
       const { router, globalState, isDarkTheme } = useEnhancer()
-      const error = computed(() => globalState.renderError)
       const handleResolveRoute = () => {
         router.push({ name: RouteName.Home }).then(() => {
           globalState.setRenderError(null)
@@ -51,7 +50,7 @@
       return {
         LANGUAGE_KEYS,
         isDarkTheme,
-        error,
+        error: globalState.renderError,
         handleResolveRoute
       }
     }

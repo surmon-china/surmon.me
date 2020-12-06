@@ -35,7 +35,7 @@ export type GlobalState = ReturnType<typeof createGlobalState>
 export const createGlobalState = (config: GlobalStateConfig) => {
 
   // render error
-  const renderError = ref<RenderError | string | null>(null)
+  const renderError = ref<RenderError | null>(null)
   const defaultError = { code: INVALID_ERROR }
   const setRenderError = (error: any) => {
     // null
@@ -88,29 +88,29 @@ export const createGlobalState = (config: GlobalStateConfig) => {
 
   // 页面的栏目展示类型
   const layoutValue = ref(LayoutColumn.Normal)
-  const layoutColumn = readonly({
-    layout: readonly(layoutValue),
-    setValue(layout: LayoutColumn) {
-      layoutValue.value = layout
-    },
-    isNormal: computed(() => layoutValue.value === LayoutColumn.Normal),
-    isWide: computed(() => layoutValue.value === LayoutColumn.Wide),
-    isFullColumn: computed(() => layoutValue.value === LayoutColumn.Full),
-    isFullPage: computed(() => layoutValue.value === LayoutColumn.Page)
-  })
+  const layoutColumn = computed(() => ({
+    layout: layoutValue.value,
+    isNormal: layoutValue.value === LayoutColumn.Normal,
+    isWide: layoutValue.value === LayoutColumn.Wide,
+    isFullColumn: layoutValue.value === LayoutColumn.Full,
+    isFullPage: layoutValue.value === LayoutColumn.Page
+  }))
+  const setLayoutColumn = (layout: LayoutColumn) => {
+    layoutValue.value = layout
+  }
 
   // Aliyun OSS: https://oss.console.aliyun.com/bucket/oss-cn-hangzhou/surmon-static/process/img
   // MARK: 微信/Safari/移动端无法精确判断兼容性，使用 jpg 格式
-  const imageExtValue = computed(() => {
-    return userAgent.isMobile || userAgent.isWechat || userAgent.isSafari
+  const imageExt = computed(() => {
+    const imageExtValue = userAgent.isMobile || userAgent.isWechat || userAgent.isSafari
       ? ImageExt.Jpg as ImageExt
       : ImageExt.WebP as ImageExt
+    return {
+      ext: imageExtValue,
+      isJpg: imageExtValue === ImageExt.Jpg,
+      isWebP: imageExtValue === ImageExt.WebP
+    }
   })
-  const imageExt = {
-    ext: imageExtValue,
-    isJpg: computed(() => imageExtValue.value === ImageExt.Jpg),
-    isWebP: computed(() => imageExtValue.value === ImageExt.WebP)
-  }
 
   // 所有业务的开关
   const switchBox = reactive({
@@ -135,18 +135,23 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     setLanguage(navigator.language)
   }
 
-  const globalState = readonly({
+  const globalState = {
     toRawState,
     resetOnClient,
-    // data
-    renderError,
+    // Render error state
+    renderError: readonly(renderError),
     setRenderError,
-    isHydrated,
+    // Hydrate state
+    isHydrated: readonly(isHydrated),
     setHydrate,
-    userAgent,
+    // Layout state
     layoutColumn,
+    setLayoutColumn,
+    // Device state
+    userAgent: readonly(userAgent),
     imageExt,
-    switchBox,
+    // switch
+    switchBox: readonly(switchBox),
     switchTogglers: {
       liveMap() { switchBox.liveMap = !switchBox.liveMap },
       wallpaper() { switchBox.wallpaper = !switchBox.wallpaper },
@@ -157,7 +162,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
           : !switchBox.mobileSidebar
       }
     }
-  })
+  }
 
   return {
     ...globalState,

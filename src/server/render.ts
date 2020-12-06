@@ -14,6 +14,7 @@ import { createMemoryHistory } from 'vue-router'
 import { renderToString } from '@vue/server-renderer'
 import { getLayoutByRouteMeta } from '/@/services/layout'
 import { Theme, THEME_STORAGE_KEY } from '/@/services/theme'
+import { INVALID_ERROR } from '/@/constants/error'
 import { getSSRContextScript, getSSRStoreScript, SSRContext } from '/@/universal'
 import { createVueApp, VueApp } from '/@/main'
 import { APP_PATH } from './helper'
@@ -44,12 +45,36 @@ const getCacheKey = (vueApp: VueApp, url: string): string => {
 const renderHTML = async (vueApp: VueApp, url: string) => {
   const { app, router, store, helmet, theme, globalState } = vueApp
 
+  // 1. init store prefetch
+  // 2. push route
+  // 3. route validate
+  // 4. error: next() -> renderError
+  // 4. !error: next() -> renderPage
+  await store.serverInit()
   await router.push(url)
   await router.isReady()
-  await store.serverInit()
 
-  // init server layout
-  globalState.layoutColumn.setValue(
+  // https://ssr.vuejs.org/guide/data.html#data-store
+  // 5. do prefetch
+  // 5. fetch succeed -> renderPage
+  // 5. fetch failed -> setError -> renderError
+  /*
+  const matchedComponents = router.currentRoute.value.matched
+    .map(com => com.components?.default)
+    .filter(com => (com as any).prefetch)
+  if (!matchedComponents.length) {
+    throw new Error()
+  }
+  await Promise.all(matchedComponents.map(
+    (component : any) => component.prefetch({
+      store,
+      route: router.currentRoute
+    })
+  ))
+  */
+
+  // 6. init server layout
+  globalState.setLayoutColumn(
     getLayoutByRouteMeta(router.currentRoute.value.meta)
   )
 
@@ -59,10 +84,12 @@ const renderHTML = async (vueApp: VueApp, url: string) => {
     globalState: globalState.toRawState()
   }
 
+  // 7. render
   const APP_HTML = await renderToString(app)
   const STORE_SCRIPT = getSSRStoreScript(serialize(store.state))
   const SSR_CONTEXT_SCRIPT = getSSRContextScript(serialize(ssrContextState))
 
+  // 8. assemble HTML
   const HEAD = [
     helmet.html.value.title,
     helmet.html.value.keywords,
@@ -90,6 +117,7 @@ const renderHTML = async (vueApp: VueApp, url: string) => {
 
   return {
     html: HTML,
+    error: globalState.renderError.value,
     isStatic: !!router.currentRoute.value.meta?.static
   }
 }
@@ -107,11 +135,26 @@ export const renderSSR: Middleware = async context => {
     context.body = microCache.get(cacheKey)
   } else {
     try {
-      const { html, isStatic } = await renderHTML(app, url)
-      context.body = html
-      microCache.set(cacheKey, html, isStatic ? Infinity : undefined)
+      // 1. 正常渲染
+      // 2. 路由校验不通过
+      // 2. 404 页面
+      const { html, isStatic, error } = await renderHTML(app, url)
+      console.log('渲染完成', isStatic, error)
+      if (error) {
+        context.status = error.code
+        context.body = html
+      } else {
+        context.body = html
+        microCache.set(
+          cacheKey,
+          html,
+          isStatic ? Infinity : undefined
+        )
+      }
     } catch (error) {
+      // TODO：应该渲染错误页面
       console.log('渲染错误', error)
+      context.status = INVALID_ERROR
       context.body = String(error)
     }
   }

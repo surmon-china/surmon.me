@@ -8,17 +8,15 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useGtag } from '/@/services/gtag'
-  import { useTheme, Theme } from '/@/services/theme'
+  import { useEnhancer } from '/@/enhancer'
+  import { Theme } from '/@/services/theme'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
 
   export default defineComponent({
     name: 'Theme',
     setup() {
-      const gtag = useGtag()
-      const theme = useTheme()
+      const { theme, gtag } = useEnhancer()
       const themeValue = theme.theme
-      const isDark = computed(() => themeValue.value === Theme.Dark)
       const themeIcon = computed(() => {
         const themeIconMap = {
           [Theme.Default]: 'icon-sunny',
@@ -38,7 +36,6 @@
       return {
         theme: themeValue,
         themeIcon,
-        isDark,
         toggleTheme
       }
     }

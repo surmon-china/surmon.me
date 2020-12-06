@@ -146,7 +146,7 @@
       const getThumbUrl = (thumbUrl: string) => {
         return getArchiveArticleThumbnailUrl(
           thumbUrl,
-          globalState.imageExt.isWebP
+          globalState.imageExt.value.isWebP
         )
       }
 

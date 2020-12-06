@@ -40,11 +40,11 @@ export const ClientOnly = defineComponent({
   setup(props, context) {
     const { globalState } = useEnhancer()
     // SSR -> hydrated -> render -> no transition
-    const canRender = ref(globalState.isHydrated ? true : false)
+    const canRender = ref(globalState.isHydrated.value ? true : false)
 
     onMounted(() => {
       // SSR inited -> mounted -> render -> transition
-      if (!globalState.isHydrated) {
+      if (!globalState.isHydrated.value) {
         const setRender = () => {
           canRender.value = true
         }

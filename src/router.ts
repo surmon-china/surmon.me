@@ -94,13 +94,13 @@ export const routes: RouteRecordRaw[] = [
           })
         }
         if (isSSR) {
-          const target = store.state.category.data.find(
+          const targetCategory = store.state.category.data.find(
             category => category.slug === category_slug
           )
-          if (!target) {
+          if (!targetCategory) {
             return Promise.reject({
               code: NOT_FOUND,
-              message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Category slug not found'
+              message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + `Category ${category_slug} not found`
             })
           }
         }
@@ -124,7 +124,7 @@ export const routes: RouteRecordRaw[] = [
         if (isSSR && !store.state.tag.data.find(tag => tag.slug === tag_slug)) {
           return Promise.reject({
             code: NOT_FOUND,
-            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Tag slug not found'
+            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + `Tag ${tag_slug} not found`
           })
         }
       }
@@ -137,11 +137,11 @@ export const routes: RouteRecordRaw[] = [
     props: to => ({ date: to.params.date }),
     meta: {
       async validate({ route, i18n }) {
-        const date = route.params.date
+        const { date } = route.params
         if (!date || !isValidDateParam(date)) {
           return Promise.reject({
             code: INVALID_ERROR,
-            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Invalid date'
+            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + `Invalid date ${date || ''}`
           })
         }
       }
@@ -224,8 +224,14 @@ export const routes: RouteRecordRaw[] = [
   {
     name: RouteName.Error,
     path: '/:error(.*)',
-    component: {
-      setup: () => Promise.reject({ code: NOT_FOUND })
+    component: {},
+    meta: {
+      async validate({ i18n }) {
+        return Promise.reject({
+          code: NOT_FOUND,
+          message: i18n.t(LANGUAGE_KEYS.NOT_FOUND)
+        })
+      }
     }
   }
 ]
