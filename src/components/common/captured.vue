@@ -44,7 +44,7 @@
       onErrorCaptured((_error: any) => {
         console.log('------capture onErrorCaptured', _error)
         globalState.setRenderError(_error)
-        return true;
+        return true
       })
 
       return {
