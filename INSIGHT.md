@@ -61,5 +61,13 @@ preFetch 由 自定义 hook（客户端）& （手动 get route component）服�
 
 `serverPrefetch` 是 options API, 尽量不要与 setup API 混搭，所以在 composition-api 中的正确实现应该是：
 维持之前的 async setup，当 fetch 发生异常时，直接 setError，而不是期待 async setup 的 error 被捕获。
+但是：异步请求 catch 产生的错误信息被捕获了，但是 renderToString 的内容并非预期的错误页面；
+主要是因为：错误是在 renderToString 的过程中发生的，而 ssrRender 可不是响应式的有点傻逼。
+也许可以做个兜底检测？
+但这个检测的目的是：为了将服务端的网络错误传递给客户端，但是由于服务端和移动端的网络状态本来就是不对应的，比如客户端没有请求成功，客户端应该是需要重新请求的，是这样吗？
+
+所以问题就变成了：
+- 期望服务端和客户端对应，对植株友好，状态也明显，这种情况下，error 也需要在 ssrContext 中
+- 期望不对应，各自搞各自的，用 http-code 来标示页面的成功与否状态
 
 ### Vite

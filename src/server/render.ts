@@ -85,7 +85,11 @@ const renderHTML = async (vueApp: VueApp, url: string) => {
   }
 
   // 7. render
-  const APP_HTML = await renderToString(app)
+  let preError = !!globalState.renderError.value
+  let APP_HTML = await renderToString(app)
+  if (!preError && !!globalState.renderError.value) {
+    APP_HTML = await renderToString(app)
+  }
   const STORE_SCRIPT = getSSRStoreScript(serialize(store.state))
   const SSR_CONTEXT_SCRIPT = getSSRContextScript(serialize(ssrContextState))
 
