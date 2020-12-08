@@ -21,7 +21,7 @@
 
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
-  import { onPrefetch, onClient } from '/@/universal'
+  import { prefetch, onClient } from '/@/universal'
   import { useEnhancer } from '/@/enhancer'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
@@ -74,7 +74,7 @@
         )
       })
 
-      return onPrefetch(
+      return prefetch(
         () => fetchArticles({ keyword: props.keyword }),
         {
           article,

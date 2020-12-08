@@ -42,58 +42,55 @@ const getCacheKey = (vueApp: VueApp, url: string): string => {
   return `${url}-${language}-${themeV}-${device}`
 }
 
-const renderHTML = async (vueApp: VueApp, url: string) => {
+const renderHTML = async (vueApp: VueApp, url: string, error?: any) => {
   const { app, router, store, helmet, theme, globalState } = vueApp
 
   // 1. init store prefetch
-  // 2. push route
-  // 3. route validate
-  // 4. error: next() -> renderError
-  // 4. !error: next() -> renderPage
   await store.serverInit()
-  await router.push(url)
-  await router.isReady()
 
-  // https://ssr.vuejs.org/guide/data.html#data-store
-  // 5. do prefetch
-  // 5. fetch succeed -> renderPage
-  // 5. fetch failed -> setError -> renderError
-  /*
-  const matchedComponents = router.currentRoute.value.matched
-    .map(com => com.components?.default)
-    .filter(com => (com as any).prefetch)
-  if (!matchedComponents.length) {
-    throw new Error()
+  // render error: don't push url
+  if (!error) {
+    // 2. push route
+    // 3. route validate
+    // 4. router error: next() -> renderError
+    // 4. !router error: next() -> renderPage
+    await router.push(url)
+    await router.isReady()
   }
-  await Promise.all(matchedComponents.map(
-    (component : any) => component.prefetch({
-      store,
-      route: router.currentRoute
-    })
-  ))
-  */
 
-  // 6. init server layout
+  // render error: set error
+  if (error) {
+    globalState.setRenderError(error)
+  }
+
+  // 5. init server layout
   globalState.setLayoutColumn(
     getLayoutByRouteMeta(router.currentRoute.value.meta)
   )
 
-  const ssrContextState: SSRContext = {
+  // 7. render
+  let preRenderError = !!globalState.renderError.value
+  let APP_HTML = await renderToString(app)
+  // render -> error -> reRender -> error page
+  if (!preRenderError && !!globalState.renderError.value) {
+    APP_HTML = await renderToString(app)
+  }
+
+  // render error: clear helmet
+  if (error) {
+    helmet.resetComputer()
+  }
+
+  // 8. SSR context
+  const STORE_SCRIPT = getSSRStoreScript(serialize(store.state))
+  // TODO: SSR context?
+  const SSR_CONTEXT_SCRIPT = getSSRContextScript(serialize({
     url,
     theme: theme.theme.value,
     globalState: globalState.toRawState()
-  }
+  }))
 
-  // 7. render
-  let preError = !!globalState.renderError.value
-  let APP_HTML = await renderToString(app)
-  if (!preError && !!globalState.renderError.value) {
-    APP_HTML = await renderToString(app)
-  }
-  const STORE_SCRIPT = getSSRStoreScript(serialize(store.state))
-  const SSR_CONTEXT_SCRIPT = getSSRContextScript(serialize(ssrContextState))
-
-  // 8. assemble HTML
+  // 9. assemble HTML
   const HEAD = [
     helmet.html.value.title,
     helmet.html.value.keywords,
@@ -119,11 +116,7 @@ const renderHTML = async (vueApp: VueApp, url: string) => {
       `${FOOTER}\n</body>`
     )
 
-  return {
-    html: HTML,
-    error: globalState.renderError.value,
-    isStatic: !!router.currentRoute.value.meta?.static
-  }
+  return HTML
 }
 
 const microCache = new LRU({
@@ -136,18 +129,22 @@ export const renderSSR: Middleware = async context => {
   const app = createApp(context)
   const cacheKey = getCacheKey(app, url)
   if (microCache.has(cacheKey)) {
+    // cache render
     context.body = microCache.get(cacheKey)
   } else {
+    // 1. render page
+    // 2. render route validate error page
+    // 2. render 404 error page
     try {
-      // 1. 正常渲染
-      // 2. 路由校验不通过
-      // 2. 404 页面
-      const { html, isStatic, error } = await renderHTML(app, url)
-      console.log('渲染完成', isStatic, error)
+      const html = await renderHTML(app, url)
+      const error = app.globalState.renderError.value
+      const isStatic = !!app.router.currentRoute.value.meta?.static
       if (error) {
+        // render error page
         context.status = error.code
         context.body = html
       } else {
+        // render page
         context.body = html
         microCache.set(
           cacheKey,
@@ -155,11 +152,15 @@ export const renderSSR: Middleware = async context => {
           isStatic ? Infinity : undefined
         )
       }
-    } catch (error) {
-      // TODO：应该渲染错误页面
-      console.log('渲染错误', error)
-      context.status = INVALID_ERROR
-      context.body = String(error)
+    } catch (unknownError) {
+      // unknown error
+      const error = {
+        code: INVALID_ERROR,
+        message: unknownError.message
+      }
+      const html = await renderHTML(app, url, error)
+      context.status = error.code
+      context.body = html
     }
   }
 }

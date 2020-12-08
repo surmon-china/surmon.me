@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 - Console style
 - Assets CDN url
 - SSR prefetch * validate
+- Error page & 404 Page
+- Upgrade deps
 
 ### v3.0.0 (2020-12-01)
 ### v3.0.0.beta-0.1 (2020-05-20)

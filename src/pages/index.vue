@@ -20,7 +20,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { onPrefetch, onClient } from '/@/universal'
+  import { prefetch, onClient } from '/@/universal'
   import { useStore, Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { AnnouncementModuleActions } from '/@/store/announcement'
@@ -36,7 +36,7 @@
       Announcement,
       ArticleList
     },
-    async setup() {
+    setup() {
       const store = useStore()
       const article = computed(() => store.state.article.list)
       const announcement = computed(() => store.state.announcement)
@@ -69,7 +69,7 @@
         loadmoreArticles
       }
 
-      return onPrefetch(() => Promise.reject('垃圾'), resultData)
+      return prefetch(fetchAllData, resultData)
     }
   })
 </script>

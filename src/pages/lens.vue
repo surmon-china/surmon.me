@@ -134,7 +134,7 @@
   import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { isClient } from '/@/environment'
-  import { onPrefetch } from '/@/universal'
+  import { prefetch } from '/@/universal'
   import { getNamespace, Modules } from '/@/store'
   import { VlogModuleActions } from '/@/store/vlog'
   import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
@@ -211,7 +211,7 @@
         observeLozad,
       }
 
-      return onPrefetch(fetchData, resultData)
+      return prefetch(fetchData, resultData)
     }
   })
 </script>

@@ -24,7 +24,7 @@
   import { defineComponent, ref, computed } from 'vue'
   import { isClient } from '/@/environment'
   import { useEnhancer } from '/@/enhancer'
-  import { onPrefetch } from '/@/universal'
+  import { prefetch } from '/@/universal'
   import { Modules, getNamespace } from '/@/store'
   import { OptionModuleActions, OptionModuleMutations } from '/@/store/option'
   import { CommentModuleActions } from '/@/store/comment'
@@ -68,7 +68,7 @@
         siteLikes
       }
 
-      return onPrefetch(fetchAllData, resultData)
+      return prefetch(fetchAllData, resultData)
     }
   })
 </script>

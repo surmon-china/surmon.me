@@ -30,7 +30,7 @@
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { getLayoutByRouteMeta } from '/@/services/layout'
-  import Captured from '/@/components/common/captured.vue'
+  import Captured from '/@/components/root/captured.vue'
   import EmojiRain from '/@/components/widget/emoji-rain.vue'
   import PcMain from '/@/components/layout/pc/main.vue'
   import MobileMain from '/@/components/layout/mobile/main.vue'

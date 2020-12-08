@@ -39,7 +39,7 @@
 <script lang="ts">
   import { defineComponent, ref, computed, watch, onBeforeMount } from 'vue'
   import { useEnhancer } from '/@/enhancer'
-  import { onPrefetch, onClient } from '/@/universal'
+  import { prefetch, onClient } from '/@/universal'
   import { isClient } from '/@/environment'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
@@ -122,7 +122,7 @@
         )
       })
 
-      return onPrefetch(
+      return prefetch(
         () => fetchArticleDetail(props.articleId),
         {
           isMobile,

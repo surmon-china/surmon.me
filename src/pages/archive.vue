@@ -112,7 +112,7 @@
   import { TagModuleActions } from '/@/store/tag'
   import { CategoryModuleActions } from '/@/store/category'
   import { useEnhancer } from '/@/enhancer'
-  import { onPrefetch } from '/@/universal'
+  import { prefetch } from '/@/universal'
   import { RouteName } from '/@/router'
   import { getTagArchiveRoute, getCategoryArchiveRoute, getArticleDetailRoute, getPageRoute } from '/@/transforms/route'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -199,7 +199,7 @@
         isFetching
       }
 
-      return onPrefetch(fetchAllData, resultData)
+      return prefetch(fetchAllData, resultData)
     }
   })
 </script>

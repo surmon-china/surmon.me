@@ -1,5 +1,3 @@
-// TODO: https://github.com/skovy/typed-scss-modules
-
 interface ICSSModuleExport {
   [className: string]: string
 }

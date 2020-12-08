@@ -9,6 +9,7 @@ import { INVALID_ERROR } from '/@/constants/error'
 import { uaParser, isZhUser } from '/@/transforms/ua'
 import { LayoutColumn } from '/@/services/layout'
 
+type RenderErrorValue = RenderError | null
 export interface RenderError {
   code: number
   message: string
@@ -20,6 +21,7 @@ export enum ImageExt {
 }
 
 export interface GlobalRawState {
+  renderError: RenderErrorValue
   userAgent: string
   language: string
   layout: LayoutColumn
@@ -34,35 +36,33 @@ const GlobalStateSymbol = Symbol('globalState')
 export type GlobalState = ReturnType<typeof createGlobalState>
 export const createGlobalState = (config: GlobalStateConfig) => {
 
-  // render error
-  const renderError = ref<RenderError | null>(null)
+  // Render error
+  const renderError = ref<RenderErrorValue>(null)
   const defaultError = { code: INVALID_ERROR }
   const setRenderError = (error: any) => {
-    // null
     if (!error) {
+      // clear error
       renderError.value = null
-    // new Error
     } else if (error instanceof Error) {
+      // new Error
       renderError.value = {
         ...defaultError,
         message: error.message
       }
-    // error message
     } else if (typeof error === 'string') {
+      // error message
       renderError.value = {
         ...defaultError,
         message: error
       }
-    // error object -> axios | component
     } else {
+      // error object -> axios | component
       renderError.value = {
         ...defaultError,
         ...error
       }
     }
-    console.log('--------setRenderError', renderError.value)
   }
-
 
   // Hydrated
   const isHydrated = ref(false)
@@ -86,7 +86,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     userAgent.isZhUser = isZhUser(_language)
   }
 
-  // 页面的栏目展示类型
+  // UI layout
   const layoutValue = ref(LayoutColumn.Normal)
   const layoutColumn = computed(() => ({
     layout: layoutValue.value,
@@ -112,7 +112,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     }
   })
 
-  // 所有业务的开关
+  // Switchers
   const switchBox = reactive({
     // 移动端侧边栏
     mobileSidebar: false,
@@ -124,12 +124,15 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     wallpaper: false,
   })
 
+  // export state
   const toRawState = (): GlobalRawState => ({
+    renderError: renderError.value,
     userAgent: userAgent.original,
     language: userAgent.language,
     layout: layoutValue.value
   })
 
+  // reset UA & i18n
   const resetOnClient = () => {
     setUserAgent(navigator.userAgent)
     setLanguage(navigator.language)
