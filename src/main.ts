@@ -45,6 +45,8 @@ export const createVueApp = (context: ICreatorContext) => {
     afterMiddleware: context.historyAfterMiddleware?.(globalState),
     history: context.historyCreator()
   })
+
+  // keep music page PC only
   if (globalState.userAgent.isMobile) {
     router.removeRoute(RouteName.Music)
   }
@@ -65,17 +67,15 @@ export const createVueApp = (context: ICreatorContext) => {
     titleTemplate: (title: string) => `${title} | ${META.title}`
   })
 
-  const handleError = (error: any) => {
-    console.log('------全局捕获到错误了', error)
-    globalState.setRenderError(error)
-  }
+  // handle global error
+  app.config.errorHandler = error => globalState.setRenderError(error)
 
-  app.config.errorHandler = handleError
+  // handle router validate error & 404 error
   router.beforeEach((to, _, next) => {
     if (to.meta.validate) {
       to.meta
         .validate({ route: to, i18n, store })
-        .catch(handleError)
+        .catch(globalState.setRenderError)
         .finally(next)
     } else {
       next()

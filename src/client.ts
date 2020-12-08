@@ -36,6 +36,7 @@ import { createVueApp } from './main'
 
 import '/@/assets/styles/app.scss'
 
+// services
 const defer = createDefer()
 const loading = createLoading()
 const music = createMusic({
@@ -43,6 +44,8 @@ const music = createMusic({
   albumId: MUSIC_ALBUM_ID,
   autoStart: false
 })
+
+// app
 const ssrContextState = getSSRContextData()
 const { app, router, globalState, theme, i18n, helmet, store } = createVueApp({
   historyCreator: createWebHistory,
@@ -60,6 +63,7 @@ const { app, router, globalState, theme, i18n, helmet, store } = createVueApp({
     : getClientLocalTheme()
 })
 
+// plugins & services
 app.use(swiper)
 app.use(music)
 app.use(loading, { exportToGlobal: true })
@@ -72,12 +76,19 @@ app.use(gtag, {
   customResourceURL: getFileCDNUrl('/scripts/gtag.js'),
 })
 
-// init: store
+// init: store (from SSR context or fetch)
 isSSR
   ? store.clientSSRInit()
   : store.clientInit()
 
-// init: services
+// init: error (from SSR context only)
+if (isSSR) {
+  if (ssrContextState.globalState.renderError) {
+    globalState.setRenderError(ssrContextState.globalState.renderError)
+  }
+}
+
+// init: services with client
 helmet.bindClient()
 theme.bindClientSystem()
 initSocketAndExport()
@@ -86,7 +97,7 @@ exportEmojiRainToGlobal()
 exportStickyEventsToGlobal()
 exportAppToGlobal(app)
 
-// init: router loading middleware
+// init: router loading middleware client only
 router.beforeEach((_, __, next) => {
   loading.start()
   next()
@@ -99,15 +110,19 @@ router.afterEach((_, __, failure) => {
 
 // router ready -> mount
 router.isReady().finally(() => {
+
   // UI layout
   globalState.setLayoutColumn(
     isSSR
+      // reset UI layout by SSR context (for SSR)
       ? ssrContextState.globalState.layout
+      // set UI layout by route (for SPA)
       : getLayoutByRouteMeta(router.currentRoute.value.meta)
   )
 
   // mount (isHydrate -> (SSR -> true | SPA -> false))
   app.mount('#app', isSSR).$nextTick(() => {
+
     // set hydrate state
     globalState.setHydrate()
     // reset: global state

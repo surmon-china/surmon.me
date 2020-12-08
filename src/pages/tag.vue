@@ -22,7 +22,7 @@
 
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
-  import { onPrefetch, onClient } from '/@/universal'
+  import { prefetch, onClient } from '/@/universal'
   import { useEnhancer } from '/@/enhancer'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
@@ -113,7 +113,7 @@
         loadmoreArticles,
       }
 
-      return onPrefetch(() => fetchAllData(props.tagSlug), resultData)
+      return prefetch(() => fetchAllData(props.tagSlug), resultData)
     }
   })
 </script>

@@ -20,7 +20,7 @@
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { useEnhancer } from '/@/enhancer'
-  import { onPrefetch, onClient } from '/@/universal'
+  import { prefetch, onClient } from '/@/universal'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { CategoryModuleActions } from '/@/store/category'
@@ -120,10 +120,7 @@
         loadmoreArticles
       }
 
-      return onPrefetch(
-        () => fetchAllData(props.categorySlug),
-        resultData
-      )
+      return prefetch(() => fetchAllData(props.categorySlug), resultData)
     }
   })
 </script>

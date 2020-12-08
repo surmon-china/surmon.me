@@ -5,6 +5,7 @@
  */
 
 import axios, { AxiosInstance } from 'axios'
+import { BAD_REQUEST } from '/@/constants/error'
 import API_CONFIG from '/@/config/api.config'
 
 export enum HTTPStatus {
@@ -23,13 +24,10 @@ const http = axios.create({
 })
 
 http.interceptors.response.use(
-  response => {
-    if (response.data.status === HTTPStatus.Success) {
-      return response.data
-    } else {
-      return Promise.reject(response.data)
-    }
-  },
+  response => response.data.status === HTTPStatus.Success
+    ? response.data
+    : Promise.reject(response.data)
+  ,
   error => {
     const errorJSON = error.toJSON()
     const messageText = error.response?.data?.message || 'Error'
@@ -39,7 +37,7 @@ http.interceptors.response.use(
       config: error.config,
       request: error.request,
       response: error.response,
-      code: error.code || error.response?.status,
+      code: error.code || error.response?.status || BAD_REQUEST,
       message: messageText + ': ' + errorText
     }
     console.debug('axios error:', errorInfo)
