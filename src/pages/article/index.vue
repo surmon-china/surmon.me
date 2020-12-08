@@ -39,7 +39,7 @@
 <script lang="ts">
   import { defineComponent, ref, computed, watch, onBeforeMount } from 'vue'
   import { useEnhancer } from '/@/enhancer'
-  import { prefetch, onClient } from '/@/universal'
+  import { prefetch } from '/@/universal'
   import { isClient } from '/@/environment'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
