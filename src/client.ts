@@ -109,7 +109,7 @@ router.afterEach((_, __, failure) => {
 })
 
 // router ready -> mount
-router.isReady().finally(() => {
+router.isReady().then(() => {
 
   // UI layout
   globalState.setLayoutColumn(

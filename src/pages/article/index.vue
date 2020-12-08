@@ -11,9 +11,9 @@
         <article-mammon :fetching="fetching" />
       </div>
     </client-only>
-    <!-- <div class="module">
+    <div class="module">
       <article-share :fetching="fetching" />
-    </div> -->
+    </div>
     <div class="module">
       <article-meta
         :fetching="fetching"
