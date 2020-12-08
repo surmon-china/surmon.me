@@ -42,6 +42,7 @@ export type IRootState = {
 }
 
 export type IRootStore = ReturnType<typeof createVuexStore>
+export const useStore = () => useVuexStore<IRootState>()
 const createVuexStore = () => createStore<IRootState>({
   modules: {
     [Modules.Announcement]: announcementModule,
@@ -55,10 +56,6 @@ const createVuexStore = () => createStore<IRootState>({
     [Modules.Vlog]: vlogModule
   }
 })
-
-export const useStore = (): IRootStore => {
-  return useVuexStore() as IRootStore
-}
 
 export const getNamespace = (moduleName: Modules, target: string) => {
   return `${moduleName}/${target}`
@@ -77,10 +74,13 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
       store.dispatch(getNamespace(Modules.Option, OptionModuleActions.FetchAppOption))
     ]
 
-    // fetch hot articles when desktop env
+    // fetch hot articles when desktop only
     if (!config.globalState.userAgent.isMobile) {
       initFetchTasks.push(
-        store.dispatch(getNamespace(Modules.Article, ArticleModuleActions.FetchHotList))
+        store.dispatch(getNamespace(
+          Modules.Article,
+          ArticleModuleActions.FetchHotList
+        ))
       )
     }
 
