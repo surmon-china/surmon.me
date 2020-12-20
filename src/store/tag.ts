@@ -7,7 +7,7 @@
 import { Module, MutationTree, GetterTree, ActionTree } from 'vuex'
 import { firstUpperCase } from '/@/transforms/text'
 import { IRootState } from '.'
-import http from '/@/services/http'
+import nodepress from '../services/nodepress'
 
 export enum TagModuleMutations {
   SetFetched = 'setFetched',
@@ -79,7 +79,7 @@ const actions: ActionTree<TagState, IRootState> = {
       return Promise.resolve(state.data)
     }
     commit(TagModuleMutations.SetFetching, true)
-    return http
+    return nodepress
       .get('/tag', { params: { cache: 1 }})
       .then(response => {
         commit(TagModuleMutations.SetListData, response.result)

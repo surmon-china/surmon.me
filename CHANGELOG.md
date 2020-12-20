@@ -2,6 +2,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+### v3.0.2 (2020-12-16)
+
+**Fix**
+- Upgrade music service
+- Hidden marked warn message (HACK)
+- Add marked comment
+
+**Feature**
+- Add fortune page
+- Add tunnel server for Music/BiliBili/Wallpaper
+
 ### v3.0.1 (2020-12-03)
 
 **Fix**

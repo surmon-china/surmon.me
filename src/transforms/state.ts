@@ -10,7 +10,7 @@ import { getAccessor } from '/@/services/storage'
 import { OriginState } from '/@/constants/state'
 import { USER_LIKE_HISTORY } from '/@/constants/storage'
 
-export const isOriginalType = (originState: OriginState) => originState === OriginState.Original
+export const isOriginalType = (originState?: OriginState) => originState == null || originState === OriginState.Original
 export const isHybridType = (originState: OriginState) => originState === OriginState.Hybrid
 export const isReprintType = (originState: OriginState) => originState === OriginState.Reprint
 

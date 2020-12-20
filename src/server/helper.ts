@@ -5,8 +5,8 @@
  */
 
 import path from 'path'
-import { NODE_ENV } from '../environment'
 import type { UserConfig } from 'vite'
+import { NODE_ENV } from '../environment'
 
 /**
  * dist

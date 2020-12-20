@@ -7,6 +7,8 @@
 export const DEFAULT_FETCH_DELAY = 468
 export const PRIMARY_COLOR = '#0088f5'
 export const MUSIC_ALBUM_ID = '638949385'
+export const BILIBILI_UID = '27940710'
+export const GITHUB_UID = 'surmon-china'
 export const GA_MEASUREMENT_ID = 'UA-84887611-3'
 export const ADSENSE_CLIENT_ID = 'ca-pub-4710915636313788'
 

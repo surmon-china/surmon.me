@@ -54,7 +54,7 @@
       </div>
       <div class="vlog-title">Vlogs</div>
       <placeholder
-        :data="videoListData?.length"
+        :data="videoList?.length"
         :loading="isFetching"
         @after-enter="observeLozad"
       >
@@ -73,7 +73,7 @@
               @click="handlePlay(video)"
               :title="video.title"
               :key="index"
-              v-for="(video, index) in videoListData"
+              v-for="(video, index) in videoList"
             >
               <div class="thumb">
                 <div class="mask">
@@ -150,7 +150,7 @@
       const lozadObserver = ref<LozadObserver | null>(null)
       const videoListElement = ref<HTMLElement>()
       const isFetching = computed(() => store.state.vlog.fetching)
-      const videoListData = computed(() => store.state.vlog.data?.vlist)
+      const videoList = computed(() => store.state.vlog.data)
 
       helmet(() => {
         const prefix = isZhLang.value
@@ -204,7 +204,7 @@
         isDarkTheme,
         isFetching,
         videoListElement,
-        videoListData,
+        videoList,
         humanlizeDate,
         getThumbUrl,
         handlePlay,

@@ -33,12 +33,12 @@ module.exports = async mode => {
       ]))
     },
     rollupOutputOptions: {
+      ...viteConfig.rollupOutputOptions,
       inlineDynamicImports: true,
       format: 'cjs',
       exports: 'named',
       entryFileNames: '[name].js',
       chunkFileNames: '[name].js',
-      ...viteConfig.rollupOutputOptions,
       manualChunks: undefined
     },
     rollupPluginVueOptions: {

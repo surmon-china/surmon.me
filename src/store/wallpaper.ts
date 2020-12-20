@@ -5,8 +5,10 @@
  */
 
 import { Module, MutationTree, ActionTree, GetterTree } from 'vuex'
-import http from '/@/services/http'
+import { TunnelModule } from '/@/constants/tunnel'
+import { getTunnelApiPath } from '/@/transforms/url'
 import { Language } from '/@/language/data'
+import tunnel from '/@/services/tunnel'
 import { IRootState } from '.'
 
 export const WALLPAPER_API_PATH = '/wallpaper/list'
@@ -24,17 +26,14 @@ export enum WallpaperModuleActions {
 
 const state = () => ({
   fetching: false,
-  data: {
-    [Language.En]: null as any,
-    [Language.Zh]: null as any
-  } as {
-    [lang in Language]: any
+  data: null as any as {
+    [lang in Language]: Array<any>
   }
 })
 
 export const getters: GetterTree<WallpaperState, IRootState> = {
   [WallpaperModuleGetters.Papers](state) {
-    return (language: Language) => state.data[language]
+    return (language: Language) => state.data?.[language]
   }
 }
 
@@ -42,29 +41,23 @@ const mutations: MutationTree<WallpaperState> = {
   [WallpaperModuleMutations.SetFetching](state, fetching: boolean) {
     state.fetching = fetching
   },
-  [WallpaperModuleMutations.SetPapers](state, action: { language: Language, papers: any }) {
-    state.data[action.language] = action.papers
+  [WallpaperModuleMutations.SetPapers](state, action) {
+    state.data = action
   }
 }
 
 const actions: ActionTree<WallpaperState, IRootState> = {
-  [WallpaperModuleActions.FetchPapers]({ commit, state }, language: Language) {
+  [WallpaperModuleActions.FetchPapers]({ commit, state }) {
     // return data when exists
-    if (state.data[language]) {
-      return Promise.resolve(state.data[language])
+    if (state.data) {
+      return Promise.resolve(state.data)
     }
 
-    const isChinese = language === Language.Zh
-    const emParam = Number(!isChinese)
-
     commit(WallpaperModuleMutations.SetFetching, true)
-    return http
-      .get(WALLPAPER_API_PATH, { params: { en: emParam }})
+    return tunnel
+      .get(getTunnelApiPath(TunnelModule.Wallpaper))
       .then(response => {
-        commit(
-          WallpaperModuleMutations.SetPapers,
-          { language, papers: response.result }
-        )
+        commit(WallpaperModuleMutations.SetPapers, response)
         return response
       })
       .finally(() => {

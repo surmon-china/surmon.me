@@ -4,26 +4,19 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, Plugin, inject, readonly, reactive, computed } from 'vue'
-import { getFileCDNUrl, getFileProxyUrl } from '/@/transforms/url'
-import http from './http'
+import { App, Plugin, inject, readonly, reactive, computed, toRaw } from 'vue'
+import { getFileCDNUrl, getFileProxyUrl, getTunnelApiPath } from '/@/transforms/url'
+import { TunnelModule } from '/@/constants/tunnel'
+import type { ISong } from '/@/server/tunnel/music'
+import tunnel from '/@/services/tunnel'
 
 export interface MusicConfig {
   amplitude: any
-  albumId: MusicId
   volume?: number
   autoStart?: boolean
 }
 
 type MusicId = string | number
-interface ISong {
-  id: number
-  name: string
-  album: string
-  artist: string
-  cover_art_url: string
-  url: string
-}
 
 const createMusicPlayer = (config: MusicConfig) => {
   const { amplitude } = config
@@ -47,80 +40,52 @@ const createMusicPlayer = (config: MusicConfig) => {
     speeds: 0,
     progress: 0,
     // 已消费 id
-    markedSongIDs: [] as number[]
+    markedSongIds: [] as number[]
   })
+
+  // mute state
   const muted = computed<boolean>(() => state.volume === 0)
 
-  // Player data
-  const musicList = reactive({
+  // 原始播放列表
+  const songList = reactive({
     fetching: false,
-    data: null as any
+    data: [] as Array<ISong>
   })
 
-  const musicLrc = reactive({
-    fetching: false,
-    data: null as any
-  })
-
-  const fetchSongUrl = (songId: MusicId) => {
-    return http.get<any>(`/music/url/${songId}`)
-  }
-
-  const fetchSongList = (listId: MusicId) => {
-    musicList.fetching = true
-    return http.get<any>(`/music/list/${listId}`)
-      .then(response => {
-        musicList.data = response.result
-        return response
-      })
-      .catch(error => {
-        musicList.data = null
-        return Promise.reject(error)
-      })
-      .finally(() => {
-        musicList.fetching = false
-      })
-  }
-
-  const fetchSongLrc = (songId: MusicId) => {
-    musicList.fetching = true
-    return http.get(`/music/lrc/${songId}`)
-      .then(response => {
-        musicList.data = response.result
-        return response
-      })
-      .catch(error => {
-        musicLrc.data = null
-        return Promise.reject(error)
-      })
-      .finally(() => {
-        musicLrc.fetching = false
-      })
-  }
-
+  // 可消费播放列表
   const baseSongList = computed<ISong[]>(() => {
-    const tracks = musicList.data?.tracks || []
-    return tracks.map((song: $TODO) => ({
-      id: song.id,
-      name: song.name,
-      album: (song.al && song.al.name) || '-',
-      artist: (song.ar || [])
-        .map((artist: $TODO) => artist.name)
-        .join(' & '),
-      cover_art_url:
-        song.al &&
-        getFileProxyUrl(
-          song.al.picUrl.replace('http://', '/music/') + '?param=600y600'
-        ),
-      url: null
+    return songList.data.map(song => ({
+      ...song,
+      url: song.url
+        ? song.url.replace(/(http:\/\/|https:\/\/)/gi, getFileProxyUrl('/music/'))
+        : null as any as string,
+      coverUrl: song.coverUrl
+        ? getFileProxyUrl(song.coverUrl.replace('http://', '/music/') + '?param=600y600')
+        : null as any as string,
     }))
   })
 
+  // 待播放列表
   const todoPlayList = computed<ISong[]>(() => {
-    return baseSongList.value.filter((song: ISong) => {
-      return !state.markedSongIDs.includes(song.id)
+    return baseSongList.value.filter(song => {
+      return !state.markedSongIds.includes(song.id)
     })
   })
+
+  const fetchSongList = async () => {
+    try {
+      songList.fetching = true
+      songList.data = await tunnel.get<ISong[]>(getTunnelApiPath(TunnelModule.Music))
+    } catch (error) {
+      songList.data = []
+      throw error
+    } finally {
+      songList.fetching = false
+    }
+  }
+
+  // MARK: 暂时停用
+  const fetchSongLrc = async (songId: MusicId) => {}
 
   // eslint-disable-next-line vue/return-in-computed-property
   const currentSong = computed<ISong | void>(() => {
@@ -131,16 +96,17 @@ const createMusicPlayer = (config: MusicConfig) => {
 
   const currentSongPicUrl = computed<string>(() => {
     return currentSong.value
-      ? currentSong.value.cover_art_url
+      ? currentSong.value.coverUrl
       : getFileCDNUrl('/images/page-music/background.jpg')
   })
 
-
   const currentSongRealTimeLrc = computed<string | null>(() => {
+    return null
+
+    /*
     if (!state.inited) {
       return null
     }
-
     const lrc = musicLrc.data
     const lyric = lrc && !lrc.nolyric && lrc.lrc
 
@@ -179,47 +145,43 @@ const createMusicPlayer = (config: MusicConfig) => {
       }
     )
     return targetSentence ? targetSentence.sentence : '...'
+    */
   })
 
   const play = () => amplitude.play()
   const pause = () => amplitude.pause()
   const changeVolume = (volume: number) => amplitude.setVolume(volume)
   const toggleMuted = () => changeVolume(muted.value ? initVolume : 0)
-  const togglePlay = () => {
-    amplitude.getPlayerState() === 'playing'
-      ? pause()
-      : play()
-  }
+  const togglePlay = () => amplitude.getPlayerState() === 'playing'
+    ? pause()
+    : play()
 
-  const markSongWithBaseList = (songID: number) => state.markedSongIDs.push(songID)
-  const takeOutFirstCompleteSongFromList = (): Promise<ISong> => {
+  const markSongWithBaseList = (songID: number) => state.markedSongIds.push(songID)
+  const takeOutFirstCompleteSongFromList = async (): Promise<ISong> => {
     state.ready = false
     if (!todoPlayList.value.length) {
-      return Promise.reject('BasePlayerList 为空!')
+      return Promise.reject('TodoPlayerList 为空!')
     }
 
     const [firstSong] = todoPlayList.value
-    return fetchSongUrl(firstSong.id).then(response => {
-      const resultData = response.result.data
-      const targetData = resultData && resultData[0]
-      const songUrl = targetData && targetData.url
-      if (!songUrl) {
-        return Promise.reject(
-          `未得到有效的 Song ${firstSong.id} 的 URL！`
-        )
-      }
+    state.ready = true
+    console.log('-----firstSong', firstSong)
+    markSongWithBaseList(firstSong.id)
+    if (!firstSong.url) {
+      return Promise.reject(
+        `未得到有效的 Song ${firstSong.id} 的 URL！`
+      )
+    } else {
       return {
         ...firstSong,
-        url: songUrl.replace(/(http:\/\/|https:\/\/)/gi, getFileProxyUrl('/music/')),
+        /*
         time_callbacks: {
           // 当任何一首音乐播放到第三秒时开始获取歌词
           3: () => fetchSongLrc((currentSong.value as ISong).id)
         }
+        */
       }
-    }).finally(() => {
-      state.ready = true
-      markSongWithBaseList(firstSong.id)
-    })
+    }
   }
 
   const prevSong = () => amplitude.prev()
@@ -236,6 +198,7 @@ const createMusicPlayer = (config: MusicConfig) => {
       takeOutFirstCompleteSongFromList()
         .then(song => {
           amplitude.playSongAtIndex(amplitude.addSong(song))
+          console.log('放啊', song, amplitude)
         })
         .catch(error => {
           console.warn('nextSong 执行失败，递归执行！', error)
@@ -283,7 +246,7 @@ const createMusicPlayer = (config: MusicConfig) => {
           state.playing = false
           nextSong()
         },
-        error: (error: $TODO) => {
+        error: (error: any) => {
           console.warn('播放器出现异常，自动下一首！', error)
           const song = currentSong.value as ISong
           state.playing = false
@@ -303,7 +266,7 @@ const createMusicPlayer = (config: MusicConfig) => {
      * 2. Take Out first song -> init player -> play
      * 4. on ended | on next -> tracks.length ? repeat add song : nextSong
      */
-    fetchSongList(config.albumId).then(() => {
+    fetchSongList().then(() => {
       const initPlay = () => {
         if (!todoPlayList.value.length) {
           state.ready = false

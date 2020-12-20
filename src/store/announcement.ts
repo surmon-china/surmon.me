@@ -5,7 +5,7 @@
  */
 
 import { Module, MutationTree, ActionTree } from 'vuex'
-import http from '/@/services/http'
+import nodepress from '../services/nodepress'
 import { IRootState } from '.'
 
 export enum AnnouncementModuleMutations {
@@ -34,7 +34,7 @@ const actions: ActionTree<AnnouncementState, IRootState> = {
   [AnnouncementModuleActions.FetchList]({ commit }, params: object) {
     commit(AnnouncementModuleMutations.SetListData, [])
     commit(AnnouncementModuleMutations.SetFetching, true)
-    return http
+    return nodepress
       .get('/announcement', { params })
       .then(response => {
         commit(AnnouncementModuleMutations.SetListData, response.result.data)

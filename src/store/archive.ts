@@ -5,9 +5,9 @@
  */
 
 import { Module, MutationTree, ActionTree } from 'vuex'
+import nodepress from '../services/nodepress'
 import { ARTICLE_API_PATH } from './article'
 import { IRootState } from '.'
-import http from '/@/services/http'
 
 export enum ArchiveModuleMutations {
   SetArticlesFetching = 'setArticlesFetching',
@@ -39,7 +39,7 @@ const actions: ActionTree<ArchiveState, IRootState> = {
       return Promise.resolve(state.articles.data)
     }
     commit(ArchiveModuleMutations.SetArticlesFetching, true)
-    return http
+    return nodepress
       .get(ARTICLE_API_PATH, { params: { per_page: 666, ...params }})
       .then(response => {
         commit(ArchiveModuleMutations.SetArticlesData, response.result.data)

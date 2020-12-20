@@ -52,7 +52,7 @@
               :to="getPageRoute(RouteName.Music)"
               :title="`${music.currentSong.name} / ${music.currentSong.album || 'unknow'}`"
             >
-              <span>{{ music.currentSong.name }} By {{ music.currentSong.artist }} / {{ music.currentSong.album || 'unknow' }}</span>
+              <span>{{ music.currentSong.name }} By {{ music.currentSong.artists.join(' / ') }} | {{ music.currentSong.album || 'unknow' }}</span>
             </router-link>
           </div>
           <div v-else class="song">

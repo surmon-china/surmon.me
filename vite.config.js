@@ -17,7 +17,7 @@ module.exports = mode => {
   const TARGET_ENV_CONFIG = loadEnv(mode, CWD)
 
   return {
-    port: 3000,
+    port: Number(BASE_ENV_CONFIG.VITE_SERVER_PORT),
     open: true,
     base: TARGET_ENV_CONFIG.VITE_CDN_URL + '/',
     root: path.resolve(__dirname),
@@ -36,7 +36,19 @@ module.exports = mode => {
       '/proxy': {
         target: PROD_ENV_CONFIG.VITE_PROXY_URL,
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/proxy/, '')
+        rewrite: path => path.replace(/^\/proxy/, ''),
+        events: {
+          proxyReq(request) {
+            request.setHeader('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3223.8 Safari/')
+            if (request.path.includes('bilibili')) {
+              request.setHeader('Origin', 'https://www.bilibili.com/')
+              request.setHeader('Referer', 'https://www.bilibili.com/')
+            } else if (request.path.includes('music')) {
+              request.setHeader('Origin', 'https://music.163.com/')
+              request.setHeader('Referer', 'https://music.163.com/')
+            }
+          }
+        }
       },
       '/avatar': {
         target: PROD_ENV_CONFIG.VITE_GRAVATAR_URL,
@@ -84,13 +96,17 @@ module.exports = mode => {
         'koa',
         'fs-extra',
         'lru-cache',
+        'node-schedule',
         'koa-mount',
         'koa-static',
+        'koa-router',
         'koa-proxies',
         'https-proxy-agent',
         'serialize-javascript',
         'socket.io',
         'cross-env',
+        'simple-netease-cloud-music',
+        'wonderful-bing-wallpaper',
         '@vue/compiler-sfc',
         '@vue/server-renderer'
       ]
@@ -101,9 +117,9 @@ module.exports = mode => {
       }
     },
     rollupOutputOptions: {
-      entryFileNames: '[name].js',
-      chunkFileNames: '[name].js',
-      assetFileNames: '[name].[ext]',
+      entryFileNames: '[name]-[hash].js',
+      chunkFileNames: '[name]-[hash].js',
+      assetFileNames: '[name]-[hash].[ext]',
       manualChunks(id) {
         if (id.includes('/node_modules/')) {
           const expansions = ['swiper', 'dom7', '233333', 'lozad', 'marked', 'amplitude', 'highlight.js', 'ua-parser']

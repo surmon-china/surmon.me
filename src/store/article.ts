@@ -8,7 +8,7 @@ import { Module, MutationTree, ActionTree } from 'vuex'
 import { SortType } from '/@/constants/state'
 import { fetchDelay } from '/@/utils/fetch-delay'
 import { IRootState } from '.'
-import http from '/@/services/http'
+import nodepress from '../services/nodepress'
 
 export const ARTICLE_API_PATH = '/article'
 export const LIKE_ARTICLE_API_PATH = '/like/article'
@@ -109,7 +109,7 @@ const actions: ActionTree<ArticleState, IRootState> = {
     }
     commit(ArticleModuleListMutations.SetListFetching, true)
 
-    return http
+    return nodepress
       .get<any>(ARTICLE_API_PATH, { params })
       .then(response => {
         commit(
@@ -131,7 +131,7 @@ const actions: ActionTree<ArticleState, IRootState> = {
       return Promise.resolve(state.hotList.data)
     }
     commit(ArticleModuleListMutations.SetHotListFetching, true)
-    return http
+    return nodepress
       .get(ARTICLE_API_PATH, { params: { cache: 1, sort: SortType.Hot } })
       .then(response => {
         commit(ArticleModuleListMutations.SetHotListData, response.result.data)
@@ -147,7 +147,7 @@ const actions: ActionTree<ArticleState, IRootState> = {
   [ArticleModuleActions.FetchDetail]({ commit }, params: any) {
     commit(ArticleModuleListMutations.SetDetailFetching, true)
     commit(ArticleModuleListMutations.SetDetailData, null)
-    return http
+    return nodepress
       .get(`${ARTICLE_API_PATH}/${params.article_id}`)
       .then(response => {
         return new Promise(resolve => {
@@ -164,7 +164,7 @@ const actions: ActionTree<ArticleState, IRootState> = {
 
   // 喜欢文章
   [ArticleModuleActions.PostArticleLike]({ commit }, article_id: string) {
-    return http
+    return nodepress
       .patch(LIKE_ARTICLE_API_PATH, { article_id })
       .then(response => {
         commit(ArticleModuleListMutations.IncrementArticleLikes)

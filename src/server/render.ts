@@ -119,7 +119,7 @@ const renderHTML = async (vueApp: VueApp, url: string, error?: any) => {
   return HTML
 }
 
-const microCache = new LRU({
+const renderCache = new LRU({
   max: Infinity,
   maxAge: 1000 * 60 * 5
 })
@@ -128,9 +128,9 @@ export const renderSSR: Middleware = async context => {
   const { url } = context.request
   const app = createApp(context)
   const cacheKey = getCacheKey(app, url)
-  if (microCache.has(cacheKey)) {
+  if (renderCache.has(cacheKey)) {
     // cache render
-    context.body = microCache.get(cacheKey)
+    context.body = renderCache.get(cacheKey)
   } else {
     // 1. render page
     // 2. render route validate error page
@@ -146,7 +146,7 @@ export const renderSSR: Middleware = async context => {
       } else {
         // render page
         context.body = html
-        microCache.set(
+        renderCache.set(
           cacheKey,
           html,
           isStatic ? Infinity : undefined

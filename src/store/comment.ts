@@ -8,7 +8,7 @@ import { Module, MutationTree, ActionTree } from 'vuex'
 import { SortType } from '/@/constants/state'
 import { fetchDelay } from '/@/utils/fetch-delay'
 import { IRootState } from '.'
-import http from '/@/services/http'
+import nodepress from '../services/nodepress'
 
 export const COMMENT_API_PATH = '/comment'
 export const LIKE_COMMENT_API_PATH = '/like/comment'
@@ -97,7 +97,7 @@ export const actions: ActionTree<CommentState, IRootState> = {
     }
     commit(CommentModuleListMutations.SetListFetching, true)
 
-    return http
+    return nodepress
       .get(COMMENT_API_PATH, { params })
       .then(response => {
         return new Promise(resolve => {
@@ -116,7 +116,7 @@ export const actions: ActionTree<CommentState, IRootState> = {
   // 发布评论
   [CommentModuleActions.PostComment]({ commit }, comment) {
     commit(CommentModuleListMutations.SetPostFetching, true)
-    return http
+    return nodepress
       .post(COMMENT_API_PATH, comment)
       .then(response => {
         commit(CommentModuleListMutations.AddNewComment, response.result)
@@ -129,7 +129,7 @@ export const actions: ActionTree<CommentState, IRootState> = {
 
   // 喜欢评论
   [CommentModuleActions.PostCommentLike]({ commit }, commentId) {
-    return http
+    return nodepress
       .patch(LIKE_COMMENT_API_PATH, { comment_id: commentId })
       .then(response => {
         commit(CommentModuleListMutations.IncrementCommentLikes, commentId)

@@ -103,7 +103,7 @@
       const tagMap = computed(() => store.getters[getNamespace(Modules.Tag, TagModuleGetters.FullNameTags)])
       const isHybrid = isHybridType(props.article?.origin)
       const isReprint = isReprintType(props.article?.origin)
-      const isOriginal = !props.article?.origin || isOriginalType(props.article.origin)
+      const isOriginal = isOriginalType(props.article?.origin)
 
       const longFormRenderState = reactive({
         rendering: false,
