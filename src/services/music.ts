@@ -4,8 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, Plugin, inject, readonly, reactive, computed, toRaw } from 'vue'
-import { getFileCDNUrl, getFileProxyUrl, getTunnelApiPath } from '/@/transforms/url'
+import { App, Plugin, inject, readonly, reactive, computed } from 'vue'
+import { getFileProxyUrl, getTunnelApiPath } from '/@/transforms/url'
 import { TunnelModule } from '/@/constants/tunnel'
 import type { ISong } from '/@/server/tunnel/music'
 import tunnel from '/@/services/tunnel'
@@ -30,6 +30,8 @@ const createMusicPlayer = (config: MusicConfig) => {
     ready: false,
     // 活动项
     index: 0,
+    // 总数
+    count: 0,
     // 音量
     volume: initVolume,
     // 图形化
@@ -39,8 +41,6 @@ const createMusicPlayer = (config: MusicConfig) => {
     // 进度
     speeds: 0,
     progress: 0,
-    // 已消费 id
-    markedSongIds: [] as number[]
   })
 
   // mute state
@@ -53,31 +53,26 @@ const createMusicPlayer = (config: MusicConfig) => {
   })
 
   // 可消费播放列表
-  const baseSongList = computed<ISong[]>(() => {
+  const playableSongList = computed<ISong[]>(() => {
     return songList.data.map(song => ({
       ...song,
       url: song.url
         ? song.url.replace(/(http:\/\/|https:\/\/)/gi, getFileProxyUrl('/music/'))
         : null as any as string,
-      coverUrl: song.coverUrl
-        ? getFileProxyUrl(song.coverUrl.replace('http://', '/music/') + '?param=600y600')
+      cover_art_url: song.cover_art_url
+        ? getFileProxyUrl(song.cover_art_url.replace('http://', '/music/') + '?param=600y600')
         : null as any as string,
     }))
-  })
-
-  // 待播放列表
-  const todoPlayList = computed<ISong[]>(() => {
-    return baseSongList.value.filter(song => {
-      return !state.markedSongIds.includes(song.id)
-    })
   })
 
   const fetchSongList = async () => {
     try {
       songList.fetching = true
       songList.data = await tunnel.get<ISong[]>(getTunnelApiPath(TunnelModule.Music))
+      state.count = songList.data.length
     } catch (error) {
       songList.data = []
+      state.count = 0
       throw error
     } finally {
       songList.fetching = false
@@ -92,12 +87,6 @@ const createMusicPlayer = (config: MusicConfig) => {
     if (state.inited && state.index !== undefined) {
       return amplitude.getActiveSongMetadata()
     }
-  })
-
-  const currentSongPicUrl = computed<string>(() => {
-    return currentSong.value
-      ? currentSong.value.coverUrl
-      : getFileCDNUrl('/images/page-music/background.jpg')
   })
 
   const currentSongRealTimeLrc = computed<string | null>(() => {
@@ -150,85 +139,51 @@ const createMusicPlayer = (config: MusicConfig) => {
 
   const play = () => amplitude.play()
   const pause = () => amplitude.pause()
+  const prevSong = () => amplitude.prev()
+  const nextSong = () => amplitude.next()
   const changeVolume = (volume: number) => amplitude.setVolume(volume)
   const toggleMuted = () => changeVolume(muted.value ? initVolume : 0)
   const togglePlay = () => amplitude.getPlayerState() === 'playing'
     ? pause()
     : play()
 
-  const markSongWithBaseList = (songID: number) => state.markedSongIds.push(songID)
-  const takeOutFirstCompleteSongFromList = async (): Promise<ISong> => {
-    state.ready = false
-    if (!todoPlayList.value.length) {
-      return Promise.reject('TodoPlayerList 为空!')
-    }
-
-    const [firstSong] = todoPlayList.value
-    state.ready = true
-    console.log('-----firstSong', firstSong)
-    markSongWithBaseList(firstSong.id)
-    if (!firstSong.url) {
-      return Promise.reject(
-        `未得到有效的 Song ${firstSong.id} 的 URL！`
-      )
-    } else {
-      return {
-        ...firstSong,
-        /*
+  const initPlayer = (songs: ISong[]) => {
+    amplitude.init({
+      debug: false,
+      // https://521dimensions.com/open-source/amplitudejs/docs/configuration/delay.html#public-function
+      delay: 168,
+      volume: state.volume,
+      songs,
+      /*
+      songs: songs.map(song => ({
+        ...song,
         time_callbacks: {
           // 当任何一首音乐播放到第三秒时开始获取歌词
           3: () => fetchSongLrc((currentSong.value as ISong).id)
         }
-        */
-      }
-    }
-  }
-
-  const prevSong = () => amplitude.prev()
-  const nextSong = () => {
-    /**
-     * 1. 若 base 列表中已没有音乐 | 当前音乐并不是最后一首音乐，则执行播放器的 next
-     * 2. 否则，从 base 中取出数据并添加至列表进行播放
-     */
-    const notLastSong = state.index < amplitude.getSongs().length - 1
-    const hasBaseSong = !!todoPlayList.value.length
-    if (notLastSong || !hasBaseSong) {
-      amplitude.next()
-    } else {
-      takeOutFirstCompleteSongFromList()
-        .then(song => {
-          amplitude.playSongAtIndex(amplitude.addSong(song))
-          console.log('放啊', song, amplitude)
-        })
-        .catch(error => {
-          console.warn('nextSong 执行失败，递归执行！', error)
-          nextSong()
-        })
-    }
-  }
-
-  const initPlayerWithSong = (song: ISong) => {
-    amplitude.init({
-      debug: false,
-      volume: state.volume,
-      songs: [song],
+      })),
+      */
       start_song: 0,
-      continue_next: false,
+      continue_next: true,
       callbacks: {
         initialized: () => {
+          // console.log('----initialized')
           state.ready = true
           state.inited = true
         },
         play: () => {
+          // console.log('----play')
           state.ready = true
           state.wave = true
           state.playing = true
         },
         pause: () => {
+          // console.log('----pause')
           state.wave = false
           state.playing = false
         },
         stop: () => {
+          // console.log('----stop')
           state.wave = false
           state.playing = false
         },
@@ -240,65 +195,50 @@ const createMusicPlayer = (config: MusicConfig) => {
           state.progress = amplitude.getSongPlayedPercentage()
         },
         song_change: () => {
+          // console.log('----song_change')
           state.index = amplitude.getActiveIndex()
         },
         ended: () => {
+          // console.log('----ended')
           state.playing = false
-          nextSong()
         },
         error: (error: any) => {
-          console.warn('播放器出现异常，自动下一首！', error)
-          const song = currentSong.value as ISong
+          console.warn('播放器出现异常，自动下一首！', state.index, error)
           state.playing = false
+          // 播放异常时不再清除音乐，不作 url 可能不可用的假设
+          // amplitude.removeSong(state.index)
           nextSong()
-          markSongWithBaseList(song.id)
-          amplitude.removeSong(state.index)
         }
       }
     })
     amplitude.setRepeat(true)
   }
 
-
   const start = () => {
-    /**
-     * 1. Get list
-     * 2. Take Out first song -> init player -> play
-     * 4. on ended | on next -> tracks.length ? repeat add song : nextSong
-     */
     fetchSongList().then(() => {
-      const initPlay = () => {
-        if (!todoPlayList.value.length) {
-          state.ready = false
-          console.warn('播放列表为空，未找到有效音乐，无法初始化！')
-          return
-        }
-
-        // 首次初始化，务必拿到一个完整的 song 用于消费
-        takeOutFirstCompleteSongFromList()
-          .then(song => {
-            initPlayerWithSong(song)
-            window.$defer.addTask(() => {
-              window.onmousemove = () => {
-                state.playing || play()
-                window.onmousemove = null
-              }
-            })
-          })
-          .catch(error => {
-            console.warn('initPlay 执行失败，递归执行！', error)
-            initPlay()
-          })
+      if (!playableSongList.value.length) {
+        state.ready = false
+        console.warn('播放列表为空，未找到有效音乐，无法初始化！')
+        return
       }
-      initPlay()
+
+      initPlayer(playableSongList.value)
+      window.$defer.addTask(() => {
+        window.onmousemove = () => {
+          state.playing || play()
+          window.onmousemove = null
+        }
+      })
+    }).catch(error => {
+      state.ready = false
+      console.warn('播放列表请求失败，无法初始化！', error)
     })
   }
 
-  return readonly({
+  return {
     state: readonly(state),
     muted,
     currentSong,
-    currentSongPicUrl,
     currentSongRealTimeLrc,
 
     start,
@@ -309,7 +249,7 @@ const createMusicPlayer = (config: MusicConfig) => {
     togglePlay,
     prevSong,
     nextSong
-  })
+  }
 }
 
 const MusicPlayerSymbol = Symbol('music-player')

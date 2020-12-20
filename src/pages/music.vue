@@ -3,8 +3,8 @@
     <div class="player">
       <button
         class="prev-song"
-        :disabled="!player?.state?.ready || player?.state?.index === 0"
-        @click="player.prevSong"
+        :disabled="!player?.state?.ready"
+        @click="player?.prevSong()"
       >
         <i class="iconfont icon-music-prev"></i>
       </button>
@@ -28,7 +28,7 @@
           </svg>
         </div>
         <div class="song-bg-box" :class="{ 'playing': player?.state.playing }">
-          <img :src="player?.currentSongPicUrl" draggable="false">
+          <img :src="currentSong?.cover_art_url" draggable="false">
         </div>
         <div class="toggle-box">
           <transition name="module" mode="out-in">
@@ -36,7 +36,7 @@
               :key="player?.state.playing ? 'pause' : 'play'"
               :disabled="!player?.state.ready"
               class="toggle-btn"
-              @click="player?.togglePlay"
+              @click="player?.togglePlay()"
             >
               <i
                 class="iconfont"
@@ -51,11 +51,11 @@
           <button
             class="muted-btn"
             :disabled="!player?.state.ready"
-            @click="player?.toggleMuted"
+            @click="player?.toggleMuted()"
           >
             <i
               class="iconfont"
-              :class="player?.muted ? 'icon-music-muted' : 'icon-music-volume'"
+              :class="muted ? 'icon-music-muted' : 'icon-music-volume'"
             />
           </button>
         </div>
@@ -63,17 +63,22 @@
       <button
         class="next-song"
         :disabled="!player?.state.ready"
-        @click="player?.nextSong"
+        @click="player?.nextSong()"
       >
         <i class="iconfont icon-music-next"></i>
       </button>
     </div>
     <div class="song-info">
       <h4 class="name">
-        <template v-if="currentSong">{{ currentSong.name }} By {{ currentSong.artists.join(' / ') }} | {{ currentSong.album || 'unknow' }}</template>
+        <template v-if="currentSong">
+          {{ currentSong.name }} By {{ currentSong.artist }} | {{ currentSong.album || 'unknow' }}
+        </template>
         <template v-else>Kind words are the music of the world.</template>
       </h4>
-      <client-only>
+      <h5>
+        {{ (player?.state.index || 0) + 1 }} / {{ player?.state.count || 'Infinity' }}
+      </h5>
+      <client-only v-if="false">
         <transition name="list-fade">
           <p v-if="player?.currentSongRealTimeLrc !== null" class="lrc">
             <transition name="module" mode="out-in">
@@ -100,7 +105,6 @@
     setup() {
       const { i18n, helmet, isZhLang } = useEnhancer()
       const musicPlayer = isClient ? useMusic() : null
-      const currentSong = computed(() => musicPlayer?.currentSong)
 
       helmet(() => {
         const prefix = isZhLang.value
@@ -126,7 +130,8 @@
 
       return {
         player: musicPlayer,
-        currentSong,
+        muted: musicPlayer?.muted,
+        currentSong: musicPlayer?.currentSong,
         trackPath,
         relativeStrokeWidth,
         circlePathStyle
