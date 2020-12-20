@@ -40,13 +40,8 @@ module.exports = mode => {
         events: {
           proxyReq(request) {
             request.setHeader('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3223.8 Safari/')
-            if (request.path.includes('bilibili')) {
-              request.setHeader('Origin', 'https://www.bilibili.com/')
-              request.setHeader('Referer', 'https://www.bilibili.com/')
-            } else if (request.path.includes('music')) {
-              request.setHeader('Origin', 'https://music.163.com/')
-              request.setHeader('Referer', 'https://music.163.com/')
-            }
+            request.setHeader('Origin', 'https://surmon.me/')
+            request.setHeader('Referer', 'https://surmon.me/')
           }
         }
       },

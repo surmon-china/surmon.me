@@ -11,12 +11,14 @@ import { TunnelModule } from '/@/constants/tunnel'
 import { MUSIC_ALBUM_ID, META } from '/@/config/app.config'
 import { tunnelCache } from '.'
 
+// https://521dimensions.com/open-source/amplitudejs/docs/configuration/playlists.html
+// https://521dimensions.com/open-source/amplitudejs/docs/configuration/song-objects.html#special-keys
 export interface ISong {
   id: number
   name: string
   album: string
-  artists: string
-  coverUrl: string
+  artist: string
+  cover_art_url: string
   url: string
 }
 
@@ -34,8 +36,8 @@ const getSongList = async (): Promise<Array<ISong>> => {
       id: track.id,
       name: track.name,
       album: track?.al?.name || '-',
-      artists: track.ar?.map((artist: any) => artist.name) || [],
-      coverUrl: track.al?.picUrl,
+      artist: (track.ar || []).map((artist: any) => artist.name).join(' / '),
+      cover_art_url: track.al?.picUrl,
       url: null as any as string
     } as ISong))
 }
@@ -51,11 +53,13 @@ const getSongs = async (): Promise<ISong[]> => {
   const urlMap = new Map<number, string>(
     songUrls.map(songUrl => [songUrl.id, songUrl.url])
   )
-  // 4. 合成可用数据
-  return songs.map(song => ({
-    ...song,
-    url: urlMap.get(song.id) as string
-  }))
+  // 4. 合成可用数据，并过滤掉无有效地址的数据
+  return songs
+    .map(song => ({
+      ...song,
+      url: urlMap.get(song.id) as string
+    }))
+    .filter(song => !!song.url)
 }
 
 const autoUpdateData = () => {

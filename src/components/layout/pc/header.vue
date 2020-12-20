@@ -13,7 +13,7 @@
           <div class="panel">
             <button
               class="prev-song button"
-              :disabled="!music.state.ready || music.state.index === 0"
+              :disabled="!music.state.ready"
               @click="music.prevSong"
             >
               <i class="iconfont icon-music-prev"></i>
@@ -42,17 +42,17 @@
             >
               <i
                 class="iconfont"
-                :class="music.muted ? 'icon-music-muted' : 'icon-music-volume'"
+                :class="muted ? 'icon-music-muted' : 'icon-music-volume'"
               ></i>
             </button>
           </div>
-          <div v-if="music.currentSong" class="song">
+          <div v-if="currentSong" class="song">
             <router-link
               class="link"
               :to="getPageRoute(RouteName.Music)"
-              :title="`${music.currentSong.name} / ${music.currentSong.album || 'unknow'}`"
+              :title="`${currentSong.name} / ${currentSong.album || 'unknow'}`"
             >
-              <span>{{ music.currentSong.name }} By {{ music.currentSong.artists.join(' / ') }} | {{ music.currentSong.album || 'unknow' }}</span>
+              <span>{{ currentSong.name }} By {{ currentSong.artist }} | {{ currentSong.album || 'unknow' }}</span>
             </router-link>
           </div>
           <div v-else class="song">
@@ -64,9 +64,9 @@
     <div class="pre-load">
       <uimage
         defer
-        :src="music.currentSongPicUrl"
         alt="song-thumb"
-        v-if="music?.currentSongPicUrl"
+        :src="currentSong.cover_art_url"
+        v-if="currentSong?.cover_art_url"
       />
       <uimage defer cdn src="/images/sponsor.png" alt="sponsor" />
       <uimage defer cdn src="/images/page-app/hot.png" alt="app-download" />
@@ -93,12 +93,15 @@
     name: 'PcHeader',
     setup() {
       const i18n = useI18n()
-      const music = isClient && useMusic()
+      const music = isClient ? useMusic() : null
+
       return {
         LANGUAGE_KEYS,
         RouteName,
         t: i18n.t,
         music,
+        muted: music?.muted,
+        currentSong: music?.currentSong,
         getPageRoute
       }
     }
