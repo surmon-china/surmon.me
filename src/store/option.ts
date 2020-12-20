@@ -6,7 +6,7 @@
 
 import { Module, MutationTree, GetterTree, ActionTree } from 'vuex'
 import { IRootState } from '.'
-import http from '/@/services/http'
+import nodepress from '../services/nodepress'
 
 export enum OptionModuleGetters {
   ADConfig = 'adConfig'
@@ -108,7 +108,7 @@ const mutations: MutationTree<OptionState> = {
 
 const actions: ActionTree<OptionState, IRootState> = {
   [OptionModuleActions.FetchAdminInfo]({ commit }) {
-    return http
+    return nodepress
       .get('/auth/admin')
       .then(response => {
         commit(OptionModuleMutations.SetAdminInfo, response.result)
@@ -121,7 +121,7 @@ const actions: ActionTree<OptionState, IRootState> = {
     }
 
     commit(OptionModuleMutations.SetAppOptionFetching, true)
-    return http
+    return nodepress
       .get('/option')
       .then(response => {
         commit(OptionModuleMutations.SetAppOptionData, response.result)
@@ -132,7 +132,7 @@ const actions: ActionTree<OptionState, IRootState> = {
       })
   },
   [OptionModuleActions.PostSiteLike]({ commit }) {
-    return http.patch('/like/site').then(response => {
+    return nodepress.patch('/like/site').then(response => {
       commit(OptionModuleMutations.IncrementAppLikes)
       return response
     })

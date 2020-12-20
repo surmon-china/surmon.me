@@ -8,7 +8,7 @@ import './polyfill'
 
 import { createApp, createSSRApp } from 'vue'
 import { createWebHistory } from 'vue-router'
-import { MUSIC_ALBUM_ID, GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
+import { GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
 import { isProd, isSSR } from './environment'
 import { Language } from '/@/language/data'
 import { getFileCDNUrl } from '/@/transforms/url'
@@ -39,11 +39,7 @@ import '/@/assets/styles/app.scss'
 // services
 const defer = createDefer()
 const loading = createLoading()
-const music = createMusic({
-  amplitude,
-  albumId: MUSIC_ALBUM_ID,
-  autoStart: false
-})
+const music = createMusic({ amplitude, autoStart: false })
 
 // app
 const ssrContextState = getSSRContextData()
@@ -109,7 +105,7 @@ router.afterEach((_, __, failure) => {
 })
 
 // router ready -> mount
-router.isReady().then(() => {
+router.isReady().finally(() => {
 
   // UI layout
   globalState.setLayoutColumn(

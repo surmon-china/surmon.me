@@ -70,7 +70,7 @@
     </div>
     <div class="song-info">
       <h4 class="name">
-        <template v-if="currentSong">{{ currentSong.name }} By {{ currentSong.artist }} / {{ currentSong.album || 'unknow' }}</template>
+        <template v-if="currentSong">{{ currentSong.name }} By {{ currentSong.artists.join(' / ') }} | {{ currentSong.album || 'unknow' }}</template>
         <template v-else>Kind words are the music of the world.</template>
       </h4>
       <client-only>

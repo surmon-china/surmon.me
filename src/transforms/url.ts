@@ -5,7 +5,12 @@
  */
 
 import API_CONFIG from '/@/config/api.config'
+import { TunnelModule } from '/@/constants/tunnel'
 import { getArticleDetailRoute } from '/@/transforms/route'
+
+export const getTunnelApiPath = (moduleName: TunnelModule) => {
+  return `/${moduleName}`
+}
 
 export const getFileCDNUrl = (uri: string) => {
   return `${API_CONFIG.CDN}${uri}`

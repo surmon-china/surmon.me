@@ -93,6 +93,6 @@ await Promise.all(matchedComponents.map(
 
 所以最终的做法是：
 - 进入路由之前校验路由的 `meta.validate` 若不通过，则会在此处就 setError, 目标页面渲染为空数据，app 渲染为 errorPage
-- setup 返回 Promise，当 Promise 成功时，一切正常，失败时 setError，目标页面渲染为空数据，再次 render，app 渲染为 errorPage
+- setup 返回 Promise，当 Promise 成功时，一切正常，失败时 setError，目标页面渲染为空数据，再次 render，app 渲染为 errorPage，若后续 Issues 修复，则可调整逻辑至：以组件 Promise 返回结果为准决定是否渲染错误页面
 
 ### Vite

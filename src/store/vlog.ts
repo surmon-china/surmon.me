@@ -5,10 +5,10 @@
  */
 
 import { Module, MutationTree, ActionTree } from 'vuex'
-import http from '/@/services/http'
+import { TunnelModule } from '/@/constants/tunnel'
+import { getTunnelApiPath } from '/@/transforms/url'
+import tunnel from '/@/services/tunnel'
 import { IRootState } from '.'
-
-export const VLOG_API_PATH = '/bilibili/list'
 
 export enum VlogModuleMutations {
   SetFetching = 'setFetching',
@@ -20,10 +20,7 @@ export enum VlogModuleActions {
 
 const state = () => ({
   fetching: false,
-  data: null as any as {
-    count: number
-    vlist: Array<any>
-  }
+  data: null as any as Array<any>
 })
 
 const mutations: MutationTree<VlogState> = {
@@ -36,17 +33,17 @@ const mutations: MutationTree<VlogState> = {
 }
 
 const actions: ActionTree<VlogState, IRootState> = {
-  [VlogModuleActions.FetchVideos]({ commit, state }, params: any = {}) {
+  [VlogModuleActions.FetchVideos]({ commit, state }) {
     // return data when exists
     if (state.data) {
       return Promise.resolve(state.data)
     }
 
     commit(VlogModuleMutations.SetFetching, true)
-    return http
-      .get(VLOG_API_PATH, { ...params, per_page: 66 })
+    return tunnel
+      .get(getTunnelApiPath(TunnelModule.Bilibili))
       .then(response => {
-        commit(VlogModuleMutations.SetVideoData, response.result)
+        commit(VlogModuleMutations.SetVideoData, response)
         return response
       })
       .finally(() => {

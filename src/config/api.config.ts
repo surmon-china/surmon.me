@@ -14,14 +14,14 @@ const API_ONLINE_URL = import.meta.env.VITE_API_ONLINE_URL as string
 // dev:
 //  spa -> /api
 //  ssr -> server ? online api : /api
-const DEV_API_BASE = isSPA
+const DEV_API = isSPA
   ? API_PROXY_URL
   : isServer ? API_ONLINE_URL : API_PROXY_URL
 
 // prod:
 //  spa -> online api
 //  ssr -> server ? localhost : online api
-const PROD_API_BASE = isSPA
+const PROD_API = isSPA
   ? API_ONLINE_URL
   : isServer ? API_LOCAL_URL : API_ONLINE_URL
 
@@ -31,5 +31,7 @@ export default {
   CDN: import.meta.env.VITE_CDN_URL as string,
   PROXY: import.meta.env.VITE_PROXY_URL as string,
   GRAVATAR: import.meta.env.VITE_GRAVATAR_URL as string,
-  BASE: isDev ? DEV_API_BASE : PROD_API_BASE
+  TUNNEL: import.meta.env.VITE_TUNNEL_URL as string,
+  NODEPRESS: isDev ? DEV_API : PROD_API,
+  SERVER_PORT: Number(import.meta.env.VITE_SERVER_PORT)
 }

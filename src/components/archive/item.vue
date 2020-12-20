@@ -133,7 +133,7 @@
       const isMobile = computed(() => globalState.userAgent.isMobile)
       const isHybrid = isHybridType(origin)
       const isReprint = isReprintType(origin)
-      const isOriginal = !origin || isOriginalType(origin)
+      const isOriginal = isOriginalType(origin)
 
       const handleClick = (event: MouseEvent) => {
         context.emit(Events.Click, event)

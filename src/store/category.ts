@@ -5,7 +5,7 @@
  */
 
 import { Module, MutationTree, ActionTree } from 'vuex'
-import http from '/@/services/http'
+import nodepress from '../services/nodepress'
 import { IRootState } from '.'
 
 export enum CategoryModuleMutations {
@@ -41,7 +41,7 @@ const actions: ActionTree<CategoryState, IRootState> = {
       return Promise.resolve(state.data)
     }
     commit(CategoryModuleMutations.SetFetching, true)
-    return http
+    return nodepress
       .get('/category', { params: { per_page: 666 }})
       .then(response => {
         commit(CategoryModuleMutations.SetListData, response.result.data)

@@ -5,6 +5,7 @@
     "surmon",
     "Surmon",
     "vuex",
+    "nodepress",
     "aliyun",
     "taobao",
     "loadmore",
@@ -41,7 +42,9 @@
     "gtag",
     "adsense",
     "lozad",
-    "deepmerge"
+    "deepmerge",
+    "uimage",
+    "ulink"
   ],
   "flagWords": []
 }

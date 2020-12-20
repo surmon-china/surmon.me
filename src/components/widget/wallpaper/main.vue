@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, watch, onMounted } from 'vue'
+  import { defineComponent, computed, onMounted } from 'vue'
   import { Theme } from '/@/services/theme'
   import { useEnhancer } from '/@/enhancer'
   import { getNamespace, Modules } from '/@/store'
@@ -53,16 +53,10 @@
       }
 
       onMounted(() => {
-        watch(
-          () => i18n.language.value,
-          language => {
-            store.dispatch(
-              getNamespace(Modules.Wallpaper, WallpaperModuleActions.FetchPapers),
-              language
-            )
-          },
-          { immediate: true, flush: 'post' }
-        )
+        store.dispatch(getNamespace(
+          Modules.Wallpaper,
+          WallpaperModuleActions.FetchPapers
+        ))
       })
 
       return {

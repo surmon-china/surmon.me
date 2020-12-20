@@ -9,5 +9,5 @@ export enum SocketEvent {
   Count = 'barrage-count',
   Send = 'barrage-send',
   Create = 'barrage-create',
-  UpdateCount = 'barrage-update-count',
+  UpdateCount = 'barrage-update-count'
 }
