@@ -252,12 +252,9 @@
         <ulink class="project-link" :href="VALUABLE_LINKS.GITHUB">
           <p class="title">
             <i class="iconfont icon-terminal" />
-            <span class="description">
-              <i18n zh="更多动态" en="Get more" />
-            </span>
+            <span class="description">contributions</span>
           </p>
-          <!-- TODO: 应该集成到 nodejs，否则不稳定 https://github.com/sallar/github-contributions-chart -->
-          <img src="https://ghchart.rshah.org/surmon-china">
+          <uimage cdn src="/images/ghchart.svg" />
         </ulink>
       </div>
     </desktop-only>

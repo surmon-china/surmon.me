@@ -6,6 +6,8 @@
 
 import axios, { AxiosInstance } from 'axios'
 import API_CONFIG from '/@/config/api.config'
+import { TunnelModule } from '/@/constants/tunnel'
+import { getTunnelApiPath } from '/@/transforms/url'
 import { isServer } from '/@/environment'
 
 const tunnel = axios.create({
@@ -23,7 +25,7 @@ tunnel.interceptors.response.use(
 const service = {
   $: tunnel,
   request: <T = any>(...args: Parameters<AxiosInstance['request']>): Promise<T> => tunnel.request(...args),
-  get: <T = any>(...args: Parameters<AxiosInstance['get']>): Promise<T> => tunnel.get(...args),
+  dispatch: <T = any>(module: TunnelModule): Promise<T> => tunnel.get(getTunnelApiPath(module)),
 }
 
 export default service

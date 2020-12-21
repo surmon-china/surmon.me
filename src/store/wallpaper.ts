@@ -6,7 +6,6 @@
 
 import { Module, MutationTree, ActionTree, GetterTree } from 'vuex'
 import { TunnelModule } from '/@/constants/tunnel'
-import { getTunnelApiPath } from '/@/transforms/url'
 import { Language } from '/@/language/data'
 import tunnel from '/@/services/tunnel'
 import { IRootState } from '.'
@@ -55,7 +54,7 @@ const actions: ActionTree<WallpaperState, IRootState> = {
 
     commit(WallpaperModuleMutations.SetFetching, true)
     return tunnel
-      .get(getTunnelApiPath(TunnelModule.Wallpaper))
+      .dispatch(TunnelModule.Wallpaper)
       .then(response => {
         commit(WallpaperModuleMutations.SetPapers, response)
         return response

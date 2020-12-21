@@ -96,6 +96,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     isFullPage: layoutValue.value === LayoutColumn.Page
   }))
   const setLayoutColumn = (layout: LayoutColumn) => {
+    if (layout !== layoutValue.value)
     layoutValue.value = layout
   }
 

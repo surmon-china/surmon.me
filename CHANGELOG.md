@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Add marked comment
 
 **Feature**
+- Add github chart server
 - Add fortune page
 - Add tunnel server for Music/BiliBili/Wallpaper
 

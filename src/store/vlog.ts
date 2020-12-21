@@ -6,7 +6,6 @@
 
 import { Module, MutationTree, ActionTree } from 'vuex'
 import { TunnelModule } from '/@/constants/tunnel'
-import { getTunnelApiPath } from '/@/transforms/url'
 import tunnel from '/@/services/tunnel'
 import { IRootState } from '.'
 
@@ -41,7 +40,7 @@ const actions: ActionTree<VlogState, IRootState> = {
 
     commit(VlogModuleMutations.SetFetching, true)
     return tunnel
-      .get(getTunnelApiPath(TunnelModule.Bilibili))
+      .dispatch(TunnelModule.Bilibili)
       .then(response => {
         commit(VlogModuleMutations.SetVideoData, response)
         return response

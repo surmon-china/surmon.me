@@ -107,3 +107,6 @@ dump.rdb
 
 # Mac OS
 .DS_Store
+
+# resources
+public/images/ghchart.svg
