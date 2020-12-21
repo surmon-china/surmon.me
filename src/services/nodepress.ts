@@ -5,6 +5,7 @@
  */
 
 import axios, { AxiosInstance } from 'axios'
+import { isClient } from '/@/environment'
 import { BAD_REQUEST } from '/@/constants/error'
 import API_CONFIG from '/@/config/api.config'
 
@@ -40,7 +41,9 @@ nodepress.interceptors.response.use(
       code: error.code || error.response?.status || BAD_REQUEST,
       message: messageText + ': ' + errorText
     }
-    console.debug('axios error:', errorInfo)
+    isClient
+      ? console.debug('axios error:', errorInfo)
+      : console.debug('axios error:', errorInfo.message)
     return Promise.reject(errorInfo)
   }
 )
