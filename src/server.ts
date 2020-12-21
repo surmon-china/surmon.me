@@ -14,6 +14,7 @@ import koaStatic from 'koa-static'
 import { Server } from 'socket.io'
 import { NODE_ENV, isProd, isDev } from './environment'
 import { startGTagScriptUpdater } from './server/gtag'
+import { startGitHubChartUpdater } from './server/ghchart'
 import { startBarrageSocket } from './server/barrage'
 import { tunnelRouter } from './server/tunnel'
 import { renderSSR } from './server/render'
@@ -84,5 +85,6 @@ server.listen(API_CONFIG.SERVER_PORT, () => {
   console.info(`Run！in ${NODE_ENV}, listening on ${API_CONFIG.FE}, at ${new Date().toLocaleString()}`)
   // 启动扩展服务
   startGTagScriptUpdater()
+  startGitHubChartUpdater()
   startBarrageSocket(io)
 })

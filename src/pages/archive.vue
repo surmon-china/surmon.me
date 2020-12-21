@@ -343,6 +343,10 @@
     &.mobile {
       padding: $lg-gap;
 
+      .content-warpper {
+        padding: 0;
+      }
+
       .tag-list {
         .tag {
           width: 50%;

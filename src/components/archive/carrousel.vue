@@ -24,7 +24,9 @@
             <div class="first">
               <skeleton-line />
             </div>
-            <skeleton-paragraph :lines="5" />
+            <responsive desktop>
+              <skeleton-paragraph :lines="5" />
+            </responsive>
           </div>
         </div>
       </template>
@@ -171,7 +173,6 @@
     height: $pc-carrousel-height;
     margin-bottom: $lg-gap;
     position: relative;
-    overflow: hidden;
     @include common-bg-module();
     @include radius-box($lg-radius);
 

@@ -5,7 +5,7 @@
  */
 
 import { App, Plugin, inject, readonly, reactive, computed } from 'vue'
-import { getFileProxyUrl, getTunnelApiPath } from '/@/transforms/url'
+import { getFileProxyUrl } from '/@/transforms/url'
 import { TunnelModule } from '/@/constants/tunnel'
 import type { ISong } from '/@/server/tunnel/music'
 import tunnel from '/@/services/tunnel'
@@ -68,7 +68,7 @@ const createMusicPlayer = (config: MusicConfig) => {
   const fetchSongList = async () => {
     try {
       songList.fetching = true
-      songList.data = await tunnel.get<ISong[]>(getTunnelApiPath(TunnelModule.Music))
+      songList.data = await tunnel.dispatch<ISong[]>(TunnelModule.Music)
       state.count = songList.data.length
     } catch (error) {
       songList.data = []
