@@ -2,6 +2,7 @@
  * @file Music player
  * @module service/music
  * @author Surmon <https://github.com/surmon-china>
+ * @document https://521dimensions.com/open-source/amplitudejs/docs
  */
 
 import { App, Plugin, inject, readonly, reactive, computed } from 'vue'
@@ -149,9 +150,10 @@ const createMusicPlayer = (config: MusicConfig) => {
 
   const initPlayer = (songs: ISong[]) => {
     amplitude.init({
-      debug: false,
+      // 歌曲切换之间的延时
       // https://521dimensions.com/open-source/amplitudejs/docs/configuration/delay.html#public-function
-      delay: 168,
+      delay: 668,
+      debug: false,
       volume: state.volume,
       songs,
       /*
@@ -172,18 +174,15 @@ const createMusicPlayer = (config: MusicConfig) => {
           state.inited = true
         },
         play: () => {
-          // console.log('----play')
           state.ready = true
           state.wave = true
           state.playing = true
         },
         pause: () => {
-          // console.log('----pause')
           state.wave = false
           state.playing = false
         },
         stop: () => {
-          // console.log('----stop')
           state.wave = false
           state.playing = false
         },
@@ -195,11 +194,9 @@ const createMusicPlayer = (config: MusicConfig) => {
           state.progress = amplitude.getSongPlayedPercentage()
         },
         song_change: () => {
-          // console.log('----song_change')
           state.index = amplitude.getActiveIndex()
         },
         ended: () => {
-          // console.log('----ended')
           state.playing = false
         },
         error: (error: any) => {
@@ -207,7 +204,8 @@ const createMusicPlayer = (config: MusicConfig) => {
           state.playing = false
           // 播放异常时不再清除音乐，不作 url 可能不可用的假设
           // amplitude.removeSong(state.index)
-          nextSong()
+          // HACK: 网络阻塞会导致紧邻的后续请求中断，所以下一首操作需要延时，避免瀑布式请求
+          window.setTimeout(nextSong, 1668)
         }
       }
     })

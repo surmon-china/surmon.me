@@ -97,7 +97,6 @@ export const createGlobalState = (config: GlobalStateConfig) => {
   }))
   const setLayoutColumn = (layout: LayoutColumn) => {
     if (layout !== layoutValue.value) {
-      console.log('----setLayoutColumn', layout, 'old:', layoutValue.value)
       layoutValue.value = layout
     }
   }
