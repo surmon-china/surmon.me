@@ -18,7 +18,7 @@ const UPDATE_TIME = {
 
 export const startGitHubChartUpdater = () => {
   (function doUpdate() {
-    axios.get(`https://ghchart.rshah.org/${GITHUB_UID}`, { timeout: 6000 })
+    axios.get(`https://ghchart.rshah.org/${GITHUB_UID}`, { timeout: 8000 })
       .then(response => {
         if (response.status === 200) {
           fs.writeFileSync(path.resolve(
@@ -36,7 +36,7 @@ export const startGitHubChartUpdater = () => {
         }
       })
       .catch(error => {
-        console.warn('GitHub Chart 更新网络连接失败', new Date(), error.message, error?.toJSON())
+        console.warn('GitHub Chart 更新网络连接失败', new Date(), error?.toJSON())
         setTimeout(doUpdate, UPDATE_TIME.HOURS_05)
       })
   }())

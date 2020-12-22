@@ -108,13 +108,14 @@ router.afterEach((_, __, failure) => {
 router.isReady().finally(() => {
 
   // UI layout
-  globalState.setLayoutColumn(
-    isSSR
+  console.log('------globalState', globalState.layoutColumn.value, ssrContextState.globalState.layout, router.currentRoute.value.meta)
+  // globalState.setLayoutColumn(
+    // isSSR
       // reset UI layout by SSR context (for SSR)
-      ? ssrContextState.globalState.layout
+      // ? ssrContextState.globalState.layout
       // set UI layout by route (for SPA)
-      : getLayoutByRouteMeta(router.currentRoute.value.meta)
-  )
+      // : getLayoutByRouteMeta(router.currentRoute.value.meta)
+  // )
 
   // mount (isHydrate -> (SSR -> true | SPA -> false))
   app.mount('#app', isSSR).$nextTick(() => {
