@@ -96,8 +96,10 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     isFullPage: layoutValue.value === LayoutColumn.Page
   }))
   const setLayoutColumn = (layout: LayoutColumn) => {
-    if (layout !== layoutValue.value)
-    layoutValue.value = layout
+    if (layout !== layoutValue.value) {
+      console.log('----setLayoutColumn', layout, 'old:', layoutValue.value)
+      layoutValue.value = layout
+    }
   }
 
   // Aliyun OSS: https://oss.console.aliyun.com/bucket/oss-cn-hangzhou/surmon-static/process/img
