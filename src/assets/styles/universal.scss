@@ -13,6 +13,9 @@ body {
   line-height: $line-height-base;
   user-select: none;
   -webkit-font-smoothing: antialiased;
+  // HACK: 为保证 GA 页面跳转广告不错位
+  position: relative !important;
+
   @include scrollbar-style(
     $size: $sm-gap,
     $bg: rgba($grey, 60%),
