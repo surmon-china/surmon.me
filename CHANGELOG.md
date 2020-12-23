@@ -2,6 +2,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+### v3.0.3 (2020-12-24)
+
+**Fix**
+- Fix mobile search logic
+
+**Improve**
+- Improve body style for Google AdSense
+- Improve music service (delay)
+
+**Feature**
+- Upgrade deps
+
 ### v3.0.2 (2020-12-16)
 
 **Fix**

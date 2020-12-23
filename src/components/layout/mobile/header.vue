@@ -1,9 +1,8 @@
 <template>
   <header class="header">
-    <form
+    <div
       class="search"
       :class="{ actived: searchState.open }"
-      @submit.stop.prevent="submitSearch"
     >
       <input
         ref="inputElement"
@@ -33,7 +32,7 @@
           />
         </datalist>
       </client-only>
-    </form>
+    </div>
     <transition name="module">
       <div v-if="searchState.open" class="search-mask"></div>
     </transition>
@@ -52,22 +51,29 @@
 </template>
 
 <script lang="ts">
-  import * as APP_CONFIG from '/@/config/app.config'
-  import { defineComponent, computed, reactive, ref, watch, nextTick } from 'vue'
+  import { defineComponent, computed, reactive, ref, watch, onMounted, nextTick } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { RouteName } from '/@/router'
+  import { isSearchArchive } from '/@/transforms/route'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import * as APP_CONFIG from '/@/config/app.config'
 
   export default defineComponent({
     name: 'MobileHeader',
     setup() {
-      const { store, i18n, router, globalState } = useEnhancer()
+      const { store, i18n, route, router, globalState } = useEnhancer()
       const isOpenedSidebar = computed(() => globalState.switchBox.mobileSidebar)
       const tags = computed(() => store.state.tag.data)
       const inputElement = ref<HTMLInputElement>(null as any)
       const searchState = reactive({
         open: false,
         keyword: ''
+      })
+
+      onMounted(() => {
+        if (isSearchArchive(route.name as string)) {
+          searchState.keyword = route.params.keyword as string
+        }
       })
 
       const toggleSidebar = globalState.switchTogglers.mobileSidebar

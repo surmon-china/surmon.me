@@ -31,14 +31,12 @@
     <div
       class="module ali-ma-ma"
       :placeholder="t(LANGUAGE_KEYS.AD)"
-      v-if="false"
     >
-      <!-- TODO: 切换为京东联盟 -->
       <iframe
         scrolling="no"
         frameborder="0"
         class="iframe"
-        src="/partials/mammon/aside.html"
+        src="/partials/mammon/aside-jd.html"
       />
     </div>
     <div :id="ASIDE_STICKY_ELEMENT_ID" class="aside-sticky-box">
