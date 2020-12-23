@@ -37,7 +37,8 @@
 
       watchEffect(() => {
         state.scrollClose
-          ? window.addEventListener('scroll', handleWindowScroll)
+          // https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md#solution-the-passive-option
+          ? window.addEventListener('scroll', handleWindowScroll, { passive: true })
           : window.removeEventListener('scroll', handleWindowScroll)
       })
 
