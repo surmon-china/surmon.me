@@ -121,7 +121,7 @@ const renderHTML = async (vueApp: VueApp, url: string, error?: any) => {
 
 const renderCache = new LRU({
   max: Infinity,
-  maxAge: 1000 * 60 * 5
+  maxAge: 1000 * 60 * 1
 })
 
 export const renderSSR: Middleware = async context => {
