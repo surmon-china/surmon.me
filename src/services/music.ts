@@ -57,9 +57,12 @@ const createMusicPlayer = (config: MusicConfig) => {
   const playableSongList = computed<ISong[]>(() => {
     return songList.data.map(song => ({
       ...song,
-      url: song.url
-        ? song.url.replace(/(http:\/\/|https:\/\/)/gi, getFileProxyUrl('/music/'))
-        : null as any as string,
+      // https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=%e8%8e%b7%e5%8f%96%e9%9f%b3%e4%b9%90-url
+      url: `https://music.163.com/song/media/outer/url?id=${song.id}.mp3`,
+      // MARK: 403!
+      // url: song.url
+      //   ? song.url.replace(/(http:\/\/|https:\/\/)/gi, getFileProxyUrl('/music/'))
+      //   : null as any as string,
       cover_art_url: song.cover_art_url
         ? getFileProxyUrl(song.cover_art_url.replace('http://', '/music/') + '?param=600y600')
         : null as any as string,
