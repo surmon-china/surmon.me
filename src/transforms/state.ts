@@ -4,8 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { computed, ref } from 'vue'
-import { isServer } from '/@/environment'
+import { ref, onMounted, watchEffect } from 'vue'
 import { getAccessor } from '/@/services/storage'
 import { OriginState } from '/@/constants/state'
 import { USER_LIKE_HISTORY } from '/@/constants/storage'
@@ -22,28 +21,44 @@ export const getExtendsValue = (target: any, key: string) => {
   return targetExtend ? targetExtend.value : null
 }
 
+const defaultUserLikeHistory = {
+  pages: [] as number [],
+  comments: [] as number []
+}
+
 const getUserLikeHistory = () => {
-  const defaultState = {
-    pages: [] as number [],
-    comments: [] as number []
-  }
-  return isServer
-    ? ref(defaultState)
-    : getAccessor(USER_LIKE_HISTORY, defaultState)
+  return getAccessor(USER_LIKE_HISTORY, defaultUserLikeHistory)
 }
 
 export const usePageLike = (postId: number) => {
-  const likeHistory = getUserLikeHistory()
+  const isLiked = ref(false)
+  let likeHistory = null as any
+
+  onMounted(() => {
+    likeHistory = getUserLikeHistory()
+    watchEffect(() => {
+      isLiked.value = likeHistory.value.pages.includes(postId)
+    })
+  })
+
   return {
-    isLiked: computed(() => likeHistory.value.pages.includes(postId)),
+    isLiked,
     like: () => likeHistory.value.pages.push(postId)
   }
 }
 
 export const useCommentsLike = () => {
-  const likeHistory = getUserLikeHistory()
+  const userLikeHistory = ref({ ...defaultUserLikeHistory })
+
+  onMounted(() => {
+    const liveHistory = getUserLikeHistory()
+    watchEffect(() => {
+      userLikeHistory.value = liveHistory.value
+    })
+  })
+
   return {
-    isLiked: (commentId: number) => likeHistory.value.comments.includes(commentId),
-    like: (commentId: number) => likeHistory.value.comments.push(commentId)
+    isLiked: (commentId: number) => userLikeHistory.value.comments.includes(commentId),
+    like: (commentId: number) => userLikeHistory.value.comments.push(commentId)
   }
 }
