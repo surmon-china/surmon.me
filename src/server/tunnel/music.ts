@@ -42,7 +42,7 @@ const getSongList = async (): Promise<Array<ISong>> => {
     } as ISong))
 }
 
-// 获取播放地址
+// 获取播放地址，403 暂不启用！
 const getSongs = async (): Promise<ISong[]> => {
   // 1. 获取列表
   const songs = await getSongList()
@@ -63,7 +63,7 @@ const getSongs = async (): Promise<ISong[]> => {
 }
 
 const autoUpdateData = () => {
-  getSongs().then(data => {
+  getSongList().then(data => {
     tunnelCache.set(TunnelModule.Music, data)
     // 成功后 1 小时获取新数据
     setTimeout(autoUpdateData, 1000 * 60 * 60 * 1)
@@ -81,7 +81,7 @@ export const musicTunnel: Middleware = context => {
   if (tunnelCache.has(TunnelModule.Music)) {
     context.body = tunnelCache.get(TunnelModule.Music)
   } else {
-    getSongs().then(data => {
+    getSongList().then(data => {
       tunnelCache.set(TunnelModule.Music, data)
       context.body = data
     }).catch(error => {
