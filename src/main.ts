@@ -6,7 +6,6 @@
 
 import { CreateAppFunction } from 'vue'
 import { RouterHistory } from 'vue-router'
-import * as ENV from './environment'
 import API_CONFIG from '/@/config/api.config'
 import { META } from '/@/config/app.config'
 import { RouteName } from './router'
@@ -19,6 +18,7 @@ import interior from '/@/services/interior'
 import { Language, languages, langMap } from '/@/language/data'
 import { createGlobalState } from './state'
 import App from './app.vue'
+import * as ENV from './environment'
 
 console.info('[APP INITED]', API_CONFIG, JSON.parse(JSON.stringify(ENV)))
 

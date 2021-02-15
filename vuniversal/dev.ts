@@ -1,8 +1,12 @@
-const path = require('path')
-const nodemon= require('nodemon')
-const chokidar = require('chokidar')
-const vunConfig = require('../vun.config')
-const { buildApp, getOutDir } = require('./bundle')
+import path from 'path'
+import nodemon from 'nodemon'
+import deepmerge from 'deepmerge'
+import chokidar from 'chokidar'
+import vunConfig from '../vun.config'
+import { BuildMode } from './interface'
+import { buildApp, getOutDir } from './bundle'
+import getClientConfig from './config/client'
+import getServerConfig from './config/server'
 
 let nodemoner = null
 
@@ -13,14 +17,16 @@ const {
 
 const startDevBuild = async () => {
   const [serverResult, clientResult] = await buildApp({
-    clientConfig: {
-      ...(await require('./config/client')('development')),
-      outDir: clientOutDir
-    },
-    serverConfig: {
-      ...(await require('./config/server')('development')),
-      outDir: serverOutDir
-    }
+    clientConfig: deepmerge(await getClientConfig(BuildMode.Development), {
+      build: {
+        outDir: clientOutDir
+      }
+    }),
+    serverConfig: deepmerge(await getServerConfig(BuildMode.Development), {
+      build: {
+        outDir: serverOutDir
+      }
+    })
   })
   const distServerFile = path.join(
     serverOutDir,
@@ -46,9 +52,9 @@ const watcher = chokidar.watch(path.join(__dirname, '..', 'src'), {
   awaitWriteFinish: {
     stabilityThreshold: 888,
     pollInterval: 10,
-    ...vunConfig.watchOptions?.awaitWriteFinish
+    // ...vunConfig.watchOptions?.awaitWriteFinish
   },
-  ...vunConfig.watchOptions
+  // ...vunConfig.watchOptions
 })
 
 watcher.on('change', info => {

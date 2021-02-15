@@ -123,3 +123,7 @@ const app = createSSRApp(defineComponent({
 ```
 
 ### Vite
+
+#### Watch mode
+
+[Issue](https://github.com/vitejs/vite/issues/972#event-4185421948)

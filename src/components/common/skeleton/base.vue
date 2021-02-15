@@ -39,7 +39,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   $skeleton-background: $module-bg;
   $skeleton-spinner: $module-bg-darker-3;

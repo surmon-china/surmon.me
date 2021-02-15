@@ -119,7 +119,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .delimiter {
     margin: 0 $sm-gap;

@@ -81,7 +81,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
   @import './variables.scss';
 
   .search {

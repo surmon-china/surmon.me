@@ -160,7 +160,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   $announcement-height: 42px;
   $title-width: 10%;

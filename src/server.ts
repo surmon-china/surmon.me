@@ -11,7 +11,7 @@ import mount from 'koa-mount'
 import Router from 'koa-router'
 import proxy from 'koa-proxies'
 import koaStatic from 'koa-static'
-import { Server } from 'socket.io'
+import { Server as SocketServer } from 'socket.io'
 import { NODE_ENV, isProd, isDev } from './environment'
 import { startGTagScriptUpdater } from './server/gtag'
 import { startGitHubChartUpdater } from './server/ghchart'
@@ -31,7 +31,8 @@ global.console = Object.assign(console, {
   log: (...args) => log('[log]', ...args),
   info: (...args) => info(color('\x1B[34m%s\x1B[0m'), '[info]', ...args),
   error: (...args) => info(color('\x1B[31m%s\x1B[0m'), '[error]', ...args),
-  // warn: (...args) => warn(color('\x1B[33m%s\x1B[0m'), '[warn]', ...args),
+  warn: (...args) => warn(color('\x1B[33m%s\x1B[0m'), '[warn]', ...args),
+  /*
   warn: (...args) => {
     const text = args[0]
     // HACK: hidden marked sanitize warning
@@ -40,12 +41,13 @@ global.console = Object.assign(console, {
       warn(color('\x1B[33m%s\x1B[0m'), '[warn]', ...args)
     }
   },
+  */
 })
 
 const app = new Koa()
 const router = new Router()
 const server = http.createServer(app.callback())
-const io: Server = require('socket.io')(server, {
+const io: SocketServer = require('socket.io')(server, {
   transports: ['websocket'],
   serveClient: false,
   cookie: false
@@ -57,7 +59,7 @@ app.use(koaStatic(path.join(__dirname, '..', 'public')))
 // dev -> nodejs proxy
 // prod -> nginx proxy
 if (isDev) {
-  const proxyOptions = viteConfig.proxy
+  const proxyOptions = viteConfig.server?.proxy
   if (proxyOptions) {
     Object.keys(proxyOptions).forEach((path) => {
       const options: any = proxyOptions[path]

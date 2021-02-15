@@ -43,20 +43,13 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, reactive, computed, onMounted, onBeforeUnmount, PropType } from 'vue'
-  import { useGlobalState } from '/@/state'
+  import { defineComponent, ref, onMounted, onBeforeUnmount, PropType } from 'vue'
   import { getNamespace, Modules } from '/@/store'
   import { CommentModuleActions } from '/@/store/comment'
-  import { isClient } from '/@/environment'
   import { useEnhancer } from '/@/enhancer'
   import { LozadObserver } from '/@/services/lozad'
-  import { USER, USER_LIKE_HISTORY } from '/@/constants/storage'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
-  import { getFileCDNUrl } from '/@/transforms/url'
   import { firstUpperCase } from '/@/transforms/text'
-  import { getGravatarByEmail } from '/@/transforms/thumbnail'
-  import { scrollTo, Easing } from '/@/utils/scroller'
-  import storage from '/@/services/storage'
   import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { useCommentsLike } from '/@/transforms/state'
@@ -152,7 +145,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .comment-list-skeleton {
     padding: 0;

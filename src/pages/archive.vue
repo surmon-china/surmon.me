@@ -205,7 +205,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .archive-page {
     min-height: $normal-page-active-content-height;

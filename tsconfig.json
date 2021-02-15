@@ -5,7 +5,7 @@
     }
   },
   "compilerOptions": {
-    "target": "es5",
+    "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -32,13 +32,18 @@
     },
     "types": [
       "node",
+      "vite/client",
       "./src/types"
-    ]
+    ],
+    "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }]
   },
   "include": [
-    "./src/**/*.ts",
     "./src/**/*.js",
-    "./src/**/*.vue", "test.js"
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "./src/**/*.d.ts",
+    "./src/**/*.vue",
+    "test.js"
   ],
   "exclude": ["node_modules", "dist"]
 }

@@ -74,11 +74,9 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, h, computed, onMounted, onBeforeUnmount, onUnmounted, PropType } from 'vue'
-  import { isClient } from '/@/environment'
+  import { defineComponent, h, computed } from 'vue'
   import { useEnhancer } from '/@/enhancer'
   import { markdownToHTML } from '/@/transforms/markdown'
-  import { getFileCDNUrl } from '/@/transforms/url'
   import { timeAgo } from '/@/transforms/moment'
   import { firstUpperCase } from '/@/transforms/text'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -174,7 +172,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .comment-item {
     position: relative;

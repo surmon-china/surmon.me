@@ -164,7 +164,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   $pc-carrousel-height: 210px;
   $mobile-carrousel-height: calc((100vw - 2rem) * .34);
