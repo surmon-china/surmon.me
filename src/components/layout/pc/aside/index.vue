@@ -33,6 +33,7 @@
       :placeholder="t(LANGUAGE_KEYS.AD)"
     >
       <iframe
+        sandbox="allow-scripts"
         scrolling="no"
         frameborder="0"
         class="iframe"
@@ -176,7 +177,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
   @import './variables.scss';
 
   #aside {

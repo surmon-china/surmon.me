@@ -34,7 +34,7 @@ import { initSocketAndExport } from '/@/services/socket.io'
 import { getSSRContextData } from './universal'
 import { createVueApp } from './main'
 
-import '/@/assets/styles/app.scss'
+import '/@/styles/app.scss'
 
 // services
 const defer = createDefer()

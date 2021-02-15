@@ -51,7 +51,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
   .masonry {
     display: flex;
     justify-content: space-between;

@@ -1,15 +1,15 @@
-const path = require('path')
-const fs = require('fs-extra')
-const { build, ssrBuild } = require('vite')
+import path from 'path'
+import fs from 'fs-extra'
+import { build, InlineConfig } from 'vite'
 
-exports.getOutDir = (outDir) => {
+export const getOutDir = (outDir: string) => {
   return {
     client: path.join(outDir, 'client'),
     server: outDir
   }
 }
 
-exports.buildClient = async (clientConfig) => {
+export const buildClient = async (clientConfig: InlineConfig) => {
   console.info('[Client] 🔵 building...')
   try {
     const clientResult = await build(clientConfig)
@@ -21,10 +21,10 @@ exports.buildClient = async (clientConfig) => {
   }
 }
 
-exports.buildServer = async (serverConfig) => {
+export const buildServer = async (serverConfig: InlineConfig) => {
   console.info('[Server] 🔵 building...')
   try {
-    const serverResult = await ssrBuild(serverConfig)
+    const serverResult = await build(serverConfig)
     console.info('[Server] ✅ build done.')
     return serverResult
   } catch (error) {
@@ -33,13 +33,18 @@ exports.buildServer = async (serverConfig) => {
   }
 }
 
-exports.buildApp = async (options = {}) => {
+export interface AppBuilderProps {
+  clientConfig: InlineConfig
+  serverConfig: InlineConfig
+}
+
+export const buildApp = async (options: AppBuilderProps) => {
   try {
-    const clientOutDir = options.clientConfig.outDir
-    const serverOutDir = options.serverConfig.outDir
-    const clientAssetsDir = options.clientConfig.assetsDir || 'assets'
-    const serverResult = await exports.buildServer(options.serverConfig)
-    const clientResult = await exports.buildClient(options.clientConfig)
+    const clientOutDir = options.clientConfig.build.outDir
+    const serverOutDir = options.serverConfig.build.outDir
+    const clientAssetsDir = options.clientConfig.build.assetsDir || 'assets'
+    const serverResult = await buildServer(options.serverConfig)
+    const clientResult = await buildClient(options.clientConfig)
     fs.moveSync(
       path.join(clientOutDir, 'index.html'),
       path.join(serverOutDir, 'index.html'),

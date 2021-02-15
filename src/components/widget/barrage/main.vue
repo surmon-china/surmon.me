@@ -224,7 +224,7 @@
 </script>
 
 <style lang="scss">
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   // 字体尺寸
   .barrage-size-0 {
@@ -266,7 +266,7 @@
 </style>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   @keyframes input-box-in {
     0% { transform: translate3d(0, -2000%, 0) }
