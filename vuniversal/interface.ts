@@ -1,4 +1,4 @@
-import { ResolvedConfig } from 'vite'
+import { UserConfig } from 'vite'
 
 export enum BuildTarget {
   Client = 'client',
@@ -13,5 +13,5 @@ export enum BuildMode {
 export interface VuniversalConfig {
   clientEntry: string
   serverEntry: string
-  vite(target: BuildTarget, mode: BuildMode): Promise<ResolvedConfig>
+  vite(target: BuildTarget, mode: BuildMode): Promise<UserConfig>
 }

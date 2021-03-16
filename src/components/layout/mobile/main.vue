@@ -20,15 +20,12 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useStore } from 'vuex'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { getFileCDNUrl } from '/@/transforms/url'
   import { useEnhancer } from '/@/enhancer'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
   import AsideView from './aside.vue'
 
-  export default {
+  export default defineComponent({
     name: 'MobileMain',
     components: {
       HeaderView,
@@ -49,7 +46,7 @@
         closeMobileSidebar
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>

@@ -1,34 +1,24 @@
-import deepmerge from 'deepmerge'
-import { ResolvedConfig } from 'vite'
+import { UserConfig, mergeConfig } from 'vite'
 import { BuildMode, BuildTarget } from '../interface'
 import vunConfig from '../../vun.config'
 
-export default async (mode: BuildMode): Promise<ResolvedConfig> => {
-  const isProd = mode === 'production'
+export default async (mode: BuildMode): Promise<UserConfig> => {
+  const IS_PROD = mode === 'production'
   const viteConfig = await vunConfig.vite(BuildTarget.Client, mode)
 
   // https://vitejs.dev/guide/migration.html#migration-from-v1
-  return deepmerge<ResolvedConfig>(viteConfig, {
-    define: {
-      VITE_SSR: 'true',
-    },
-    logLevel: isProd ? 'info' : 'silent',
-    // rollupPluginVueOptions: {
-    //   target: 'browser',
-    //   ...viteConfig.rollupPluginVueOptions
-    // }
-    // @ts-ignore
+  return mergeConfig(viteConfig, {
+    mode,
+    logLevel: IS_PROD ? 'info' : 'silent',
     build: {
       manifest: true,
       write: true,
-      // emitAssets: true,
-      // emitIndex: true,
-      sourcemap: isProd ? true : 'inline',
-      minify: isProd ? 'terser' : false,
+      sourcemap: IS_PROD ? true : 'inline',
+      minify: IS_PROD ? 'terser' : false,
       rollupOptions: {
         // MARK: 'client.ts' not bound index.html
         // input: universal.clientEntry,
       }
     }
-  })
+  } as UserConfig)
 }
