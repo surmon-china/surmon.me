@@ -19,7 +19,12 @@ const PROD_ENV_CONFIG = loadEnv('production', CWD)
 export default defineConfig(({ command, mode }) => {
   const TARGET_ENV_CONFIG = loadEnv(mode, CWD)
   const IS_VITE_SERVER = command === 'serve'
-  console.info('vite config', { command, mode, IS_VITE_SERVER, TARGET_ENV_CONFIG })
+  console.info('vite config', {
+    command,
+    mode,
+    IS_VITE_SERVER,
+    TARGET_ENV_CONFIG
+  })
 
   return {
     plugins: [vuePlugin()],
@@ -46,9 +51,14 @@ export default defineConfig(({ command, mode }) => {
           rewrite: path => path.replace(/^\/api/, '')
         },
         // Tunnel 服务由 BFF 提供，此处仅为兼容 SPA 开发模式，故仅在 SPA/VITE 模式生效
-        [BASE_ENV_CONFIG.VITE_TUNNEL_URL]: IS_VITE_SERVER && {
+        [BASE_ENV_CONFIG.VITE_TUNNEL_URL]: !IS_VITE_SERVER ? {} : {
           target: PROD_ENV_CONFIG.VITE_FE_URL,
           changeOrigin: true
+        },
+        '/avatar': {
+          target: PROD_ENV_CONFIG.VITE_GRAVATAR_URL,
+          changeOrigin: true,
+          rewrite: path => path.replace(/^\/avatar/, '')
         },
         '/proxy': {
           target: PROD_ENV_CONFIG.VITE_PROXY_URL,
@@ -61,11 +71,6 @@ export default defineConfig(({ command, mode }) => {
               request.setHeader('Referer', 'https://surmon.me/')
             }
           }
-        },
-        '/avatar': {
-          target: PROD_ENV_CONFIG.VITE_GRAVATAR_URL,
-          changeOrigin: true,
-          rewrite: path => path.replace(/^\/avatar/, '')
         }
       },
     },
@@ -83,6 +88,7 @@ export default defineConfig(({ command, mode }) => {
     },
     build: {
       assetsDir: 'assets',
+      // https://vitejs.dev/config/#build-csscodesplit
       // https://vitejs.dev/guide/features.html#css-code-splitting
       cssCodeSplit: false,
       terserOptions: {
@@ -109,7 +115,6 @@ export default defineConfig(({ command, mode }) => {
       }
     },
     optimizeDeps: {
-      link: [],
       include: [
         'swiper',
         'querystring',
@@ -157,10 +162,6 @@ export default defineConfig(({ command, mode }) => {
         '@vue/compiler-sfc',
         '@vue/server-renderer'
       ]
-    },
-    // TODO
-    shouldPreload(chunk) {
-      return true
     }
   }
 })

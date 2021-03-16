@@ -4,43 +4,52 @@
  * @author Surmon <surmon@foxmail.com>
  */
 
-import deepmerge from 'deepmerge'
-import { resolveConfig, ResolvedConfig } from 'vite'
+import { mergeConfig, UserConfigFn } from 'vite'
 import vuePlugin from '@vitejs/plugin-vue'
 import { VuniversalConfig } from './vuniversal/interface'
+import resolveViteConfig from './vite.config'
 
 export default {
   clientEntry: './src/client.ts',
   serverEntry: './src/server.ts',
   async vite(target, mode) {
-    const viteConfig = await resolveConfig({}, 'build', mode)
+    const viteConfig = await (resolveViteConfig as UserConfigFn)({
+      command: 'build',
+      mode
+    })
+
+    // TODO: shouldPreload!
 
     if (target === 'client') {
-      return deepmerge<ResolvedConfig>(viteConfig, {
-        // ...
+      return mergeConfig(viteConfig, {
+        define: {
+          VITE_SSR: 'true',
+        },
       })
     }
 
     if (target === 'server') {
-      return deepmerge<ResolvedConfig>(viteConfig, {
-        // @ts-ignore
+      return mergeConfig(viteConfig, {
+        define: {
+          VITE_SSR: 'true',
+        },
         build: {
           rollupOptions: {
             // MARK: IMPORTANT! FOR Node.js bound
-            external: [...viteConfig.optimizeDeps.include]
+            external: viteConfig?.optimizeDeps?.include || []
           }
         },
-        // plugins: [vuePlugin({
-        //   template: {
-        //     compilerOptions: {
-        //       directiveTransforms: {
-        //         swiper(prop, node, context) {
-        //           return { props: [] }
-        //         }
-        //       }
-        //     }
-        //   }
-        // })]
+        plugins: [vuePlugin({
+          template: {
+            compilerOptions: {
+              directiveTransforms: {
+                swiper(prop, node, context) {
+                  return { props: [] }
+                }
+              }
+            }
+          }
+        })]
       })
     }
   }

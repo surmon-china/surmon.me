@@ -1,6 +1,6 @@
 import path from 'path'
 import nodemon from 'nodemon'
-import deepmerge from 'deepmerge'
+import { mergeConfig } from 'vite'
 import chokidar from 'chokidar'
 import vunConfig from '../vun.config'
 import { BuildMode } from './interface'
@@ -17,12 +17,12 @@ const {
 
 const startDevBuild = async () => {
   const [serverResult, clientResult] = await buildApp({
-    clientConfig: deepmerge(await getClientConfig(BuildMode.Development), {
+    clientConfig: mergeConfig(await getClientConfig(BuildMode.Development), {
       build: {
         outDir: clientOutDir
       }
     }),
-    serverConfig: deepmerge(await getServerConfig(BuildMode.Development), {
+    serverConfig: mergeConfig(await getServerConfig(BuildMode.Development), {
       build: {
         outDir: serverOutDir
       }

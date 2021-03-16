@@ -2,6 +2,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+### v3.1.0 (2021-02-16)
+
+**Feature**
+- Upgrade deps
+- Upgrade vite to 2.x
+- Upgrade marked (sanitize)
+
 ### v3.0.3 (2020-12-24)
 
 **Fix**

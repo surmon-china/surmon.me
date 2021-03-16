@@ -1,5 +1,5 @@
 import path from 'path'
-import deepmerge from 'deepmerge'
+import { mergeConfig } from 'vite'
 import { BuildMode } from './interface'
 import { buildApp, getOutDir } from './bundle'
 import getClientConfig from './config/client'
@@ -12,12 +12,12 @@ const {
 
 ;(async () => {
   buildApp({
-    clientConfig: deepmerge(await getClientConfig(BuildMode.Production), {
+    clientConfig: mergeConfig(await getClientConfig(BuildMode.Production), {
       build: {
         outDir: clientOutDir
       }
     }),
-    serverConfig: deepmerge(await getServerConfig(BuildMode.Production), {
+    serverConfig: mergeConfig(await getServerConfig(BuildMode.Production), {
       build: {
         outDir: serverOutDir
       }

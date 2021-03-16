@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs-extra'
-import { build, InlineConfig } from 'vite'
+import { build, UserConfig } from 'vite'
 
 export const getOutDir = (outDir: string) => {
   return {
@@ -9,7 +9,7 @@ export const getOutDir = (outDir: string) => {
   }
 }
 
-export const buildClient = async (clientConfig: InlineConfig) => {
+export const buildClient = async (clientConfig: UserConfig) => {
   console.info('[Client] 🔵 building...')
   try {
     const clientResult = await build(clientConfig)
@@ -21,7 +21,7 @@ export const buildClient = async (clientConfig: InlineConfig) => {
   }
 }
 
-export const buildServer = async (serverConfig: InlineConfig) => {
+export const buildServer = async (serverConfig: UserConfig) => {
   console.info('[Server] 🔵 building...')
   try {
     const serverResult = await build(serverConfig)
@@ -34,29 +34,29 @@ export const buildServer = async (serverConfig: InlineConfig) => {
 }
 
 export interface AppBuilderProps {
-  clientConfig: InlineConfig
-  serverConfig: InlineConfig
+  clientConfig: UserConfig
+  serverConfig: UserConfig
 }
 
 export const buildApp = async (options: AppBuilderProps) => {
   try {
-    const clientOutDir = options.clientConfig.build.outDir
-    const serverOutDir = options.serverConfig.build.outDir
-    const clientAssetsDir = options.clientConfig.build.assetsDir || 'assets'
-    const serverResult = await buildServer(options.serverConfig)
+    const clientOutDir = options.clientConfig.build!.outDir
+    const serverOutDir = options.serverConfig.build!.outDir
+    const clientAssetsDir = options.clientConfig.build?.assetsDir || 'assets'
+    // const serverResult = await buildServer(options.serverConfig)
     const clientResult = await buildClient(options.clientConfig)
-    fs.moveSync(
-      path.join(clientOutDir, 'index.html'),
-      path.join(serverOutDir, 'index.html'),
-      { overwrite: true }
-    )
-    fs.moveSync(
-      path.join(clientOutDir, clientAssetsDir),
-      path.join(serverOutDir, clientAssetsDir),
-      { overwrite: true }
-    )
-    fs.removeSync(path.join(clientOutDir))
-    return [serverResult, clientResult]
+    // fs.moveSync(
+    //   path.join(clientOutDir, 'index.html'),
+    //   path.join(serverOutDir, 'index.html'),
+    //   { overwrite: true }
+    // )
+    // fs.moveSync(
+    //   path.join(clientOutDir, clientAssetsDir),
+    //   path.join(serverOutDir, clientAssetsDir),
+    //   { overwrite: true }
+    // )
+    // fs.removeSync(path.join(clientOutDir))
+    // return [serverResult, clientResult]
   } catch (error) {
     console.warn('[Error] ❌❌❌ build error!', error.message)
     process.exit(0)
