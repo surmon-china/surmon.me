@@ -70,4 +70,4 @@ $ yarn lint
 
 - `Any PR open` → `CI:Build test`
 - `New tag v*` → `CI:Create Release`
-- `New tag | release create` → `CI:Deploy` → `CI:Execute server script`
+- `New tag | Release created` → `CI:Deploy` → `CI:Execute server script`
