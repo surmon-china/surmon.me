@@ -17,17 +17,17 @@
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/surmon-china/surmon.me/Deploy?style=for-the-badge&label=Deploy)](https://github.com/surmon-china/surmon.me/actions?query=workflow:%22Deploy%22)
 [![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/blob/master/LICENSE)
 
+> **My personal website and blog, powered by [Vue (3)](https://vuejs.org).**
 
-**My personal website and blog, powered by [Vue (3)](https://vuejs.org).** 
-
-**使用 [Vue (3)](https://vuejs.org) 构建的个人网站。**
+> **使用 [Vue (3)](https://vuejs.org) 构建的个人博客网站。**
 
 **Online site:** https://surmon.me
 
-**其他相关项目：**
-- **RESTful API service:** [nodepress](https://github.com/surmon-china/nodepress) powered by [nestjs](https://github.com/nestjs/nest)
-- **web client for admin:** [angular-admin](https://github.com/surmon-china/angular-admin) powered by [Angular](https://github.com/angular/angular) & [Bootstrap](https://github.com/twbs/bootstrap)
-- **native app client:** [surmon.me.native](https://github.com/surmon-china/surmon.me.native) powered by [react-native](https://github.com/facebook/react-native)
+**🔥 其他相关项目：**
+
+- **RESTful API service for blog:** [nodepress](https://github.com/surmon-china/nodepress) powered by nestjs
+- **Blog admin site:** [veact-admin](https://github.com/surmon-china/veact-admin) powered by React & [Veact](https://github.com/veactjs/veact)
+- **Blog native app:** [surmon.me.native](https://github.com/surmon-china/surmon.me.native) powered by react-native
 
 **更新记录：[CHANGELOG.md](https://github.com/surmon-china/surmon.me/blob/master/CHANGELOG.md)**
 
@@ -67,6 +67,7 @@ $ yarn lint
 ## Actions setup
 
 **Rule:**
-- `any PR open` → `CI:Build test`
-- `new tag v*` → `CI:Create Release`
-- `release create` → `CI:Deploy` → `CI:Execute server script`
+
+- `Any PR open` → `CI:Build test`
+- `New tag v*` → `CI:Create Release`
+- `New tag | release create` → `CI:Deploy` → `CI:Execute server script`
