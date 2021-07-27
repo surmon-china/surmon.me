@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, reactive, readonly, inject, nextTick } from 'vue'
+import { App, reactive, readonly, inject, nextTick, DeepReadonly } from 'vue'
 import ProgressComponent from './progress.vue'
 
 declare global {
@@ -13,12 +13,34 @@ declare global {
   }
 }
 
-export interface ILoadingOptions {
+export interface LoadingState {
+  percent: number;
+  show: boolean;
+  error: null;
+  canSucceed: boolean;
+  skipTimerCount: number;
+  throttle: number;
+  duration: number;
+}
+
+export interface Loading {
+  state: DeepReadonly<LoadingState>
+  start(): void
+  pause(): void
+  resume(): void
+  finish(): void
+  fail(error: any): void
+  increase(percent: number): void
+  decrease(percent: number): void
+  set(percent: number): void
+}
+
+export interface LoadingOptions {
   throttle?: number
   duration?: number
 }
 const LoadingSymbol = Symbol('loading')
-const createLoadingStore = (options: ILoadingOptions = {}) => {
+const createLoadingStore = (options: LoadingOptions = {}) => {
   let _cut: number
   let _timer: number
   let _throttle: number
@@ -38,12 +60,12 @@ const createLoadingStore = (options: ILoadingOptions = {}) => {
     _timer = 0
   }
 
-  const increase = (num: number) => {
-    state.percent = Math.min(100, Math.floor(state.percent + num))
+  const increase = (percent: number) => {
+    state.percent = Math.min(100, Math.floor(state.percent + percent))
   }
 
-  const decrease = (num: number) => {
-    state.percent = Math.max(0, Math.floor(state.percent - num))
+  const decrease = (percent: number) => {
+    state.percent = Math.max(0, Math.floor(state.percent - percent))
   }
 
   const startTimer = () => {
@@ -95,10 +117,10 @@ const createLoadingStore = (options: ILoadingOptions = {}) => {
     }, 500)
   }
 
-  const set = (num: number) => {
+  const set = (percent: number) => {
     state.show = true
     state.canSucceed = true
-    state.percent = Math.min(100, Math.max(0, Math.floor(num)))
+    state.percent = Math.min(100, Math.max(0, Math.floor(percent)))
   }
 
   const pause = () => {
@@ -133,8 +155,7 @@ const createLoadingStore = (options: ILoadingOptions = {}) => {
   }
 }
 
-export type Loading = ReturnType<typeof createLoadingStore>
-export const createLoading = (options?: ILoadingOptions) => {
+export const createLoading = (options?: LoadingOptions) => {
   const loading = createLoadingStore(options)
   return {
     ...loading,

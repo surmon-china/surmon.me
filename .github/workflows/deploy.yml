@@ -1,13 +1,14 @@
 name: Deploy
+
 on:
-  pull_request:
-    types: [closed]
-    branches:
-      - master
+  release:
+    types: [created]
+  push:
+    tags:
+      - "v*"
 
 jobs:
-  deploy:
-    if: github.event.pull_request.merged == true
+   deploy:
     name: Deploy to server
     runs-on: ubuntu-latest
     steps:
@@ -18,4 +19,4 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
-          script: sh ${{ secrets.WWW_PATH }}/surmon.me/.deploy/main.sh
+          script: sh ${{ secrets.WWW_PATH }}/surmon.me/scripts/deploy.sh

@@ -1,12 +1,7 @@
-/**
- * @file Eslint config
- * @module eslint/config
- * @author Surmon <https://github.com/surmon-china>
-*/
-
 module.exports = {
   extends: [
-    'plugin:vue/vue3-recommended'
+    'plugin:vue/vue3-recommended',
+    'prettier'
   ],
   parser: 'vue-eslint-parser',
   parserOptions: {
@@ -56,7 +51,6 @@ module.exports = {
       }
     }],
 
-    // 禁止在代码中出现没有被使用到的表达式或值
     'no-unused-expressions': 'off',
     'import/no-named-as-default-member': 'off',
     'unicorn/prefer-text-content': 'off',
