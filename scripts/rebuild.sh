@@ -9,8 +9,8 @@ cd $WEB_PATH
 cd ..
 echo "[deploy] path:" $(pwd)
 echo "[deploy] pulling source code..."
-git fetch --all && git reset --hard origin/master && git pull
-git checkout master
+git fetch --all && git reset --hard origin/main && git pull
+git checkout main
 # echo "changing permissions..."
 # chown -R $WEB_USER:$WEB_USERGROUP $WEB_PATH
 # chmod -R 777 $WEB_PATH

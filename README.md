@@ -68,8 +68,5 @@ $ yarn lint
 
 **Rule:**
 - `any PR open` → `CI:Build test`
-- `master PR closed & merged` → `CI:Deploy to server`
-
-**Example:**
-- `local:develop` → `remote:develop` → `CI:Build test`
-- `remote:develop/other` → `remote:master → merged` → `CI:Deploy to server`
+- `new tag v*` → `CI:Create Release`
+- `release create` → `CI:Deploy` → `CI:Execute server script`

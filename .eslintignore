@@ -2,9 +2,9 @@
 
 *.discard
 node_modules
+scripts
 
 .vun
-.deploy
 dist
 public
 src/patchs
