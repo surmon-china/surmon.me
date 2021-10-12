@@ -68,7 +68,7 @@
   import { useStore } from '/@/store'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { getPageRoute, getCategoryArchiveRoute } from '/@/transforms/route'
-  import { RouteName, CategorySlug } from '/@/router'
+  import { RouteName, CategorySlug } from '../../../app/router'
   import { LANGUAGE_KEYS } from '/@/language/key'
 
   export default defineComponent({
@@ -81,10 +81,9 @@
     },
     setup() {
       const store = useStore()
-      const gravatar = computed(() => (
-        store.state.option.adminInfo?.gravatar ||
-        getFileCDNUrl('/images/gravatar.jpg')
-      ))
+      const gravatar = computed(
+        () => store.state.option.adminInfo?.gravatar || getFileCDNUrl('/images/gravatar.jpg')
+      )
 
       return {
         VALUABLE_LINKS,
@@ -166,7 +165,7 @@
           height: 3em;
           line-height: 3em;
           padding: 0 1em;
-          margin-bottom: .5em;
+          margin-bottom: 0.5em;
           border: none;
           text-decoration: none;
           text-transform: uppercase;

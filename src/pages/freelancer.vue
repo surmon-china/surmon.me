@@ -1,19 +1,12 @@
 <template>
-  <div
-    class="freelancer-page"
-    :class="{ mobile: isMobile }"
-  >
+  <div class="freelancer-page" :class="{ mobile: isMobile }">
     <div class="banner">
       <div class="banner-content container">
         <h2 class="title">
           <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_SLOGAN" />
         </h2>
         <div class="submit">
-          <button
-            class="email-me"
-            title="email me"
-            @click="handleSubmitEmail"
-          >
+          <button class="email-me" title="email me" @click="handleSubmitEmail">
             <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_EMAIL_ME" />
           </button>
         </div>
@@ -95,8 +88,12 @@
               <i class="iconfont icon-tool"></i>
             </p>
             <h3 class="name"><i18n en="Consultant" zh="技术咨询" /></h3>
-            <p class="desc"><i18n en="Everything about web" zh="语言、框架疑难杂症" /></p>
-            <p class="desc"><i18n en="Business and technical" zh="业务与技术方案设计" /></p>
+            <p class="desc">
+              <i18n en="Everything about web" zh="语言、框架疑难杂症" />
+            </p>
+            <p class="desc">
+              <i18n en="Business and technical" zh="业务与技术方案设计" />
+            </p>
             <p class="desc"><i18n en="Technical consultant" zh="长期技术顾问指导" /></p>
           </li>
         </ul>
@@ -185,7 +182,7 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../app/enhancer'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
@@ -213,11 +210,9 @@
         const body = isZhLang.value
           ? `我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
           : 'Hi Surmon, My name is '
-        const mailAddress = `mailto:${META.email}` + (
-          isMobile.value
-            ? ''
-            : `?subject=${subject}&body=${body}`
-          )
+        const mailAddress =
+          `mailto:${META.email}` +
+          (isMobile.value ? '' : `?subject=${subject}&body=${body}`)
 
         window.open(mailAddress)
         gtag?.event('咨询邮件', {
@@ -290,9 +285,7 @@
           color: $white;
           border-bottom: 1px solid;
           border-color: transparent;
-          transition:
-            color $transition-time-fast,
-            border-color $transition-time-fast;
+          transition: color $transition-time-fast, border-color $transition-time-fast;
 
           .iconfont {
             margin-left: $xs-gap;
@@ -349,7 +342,7 @@
                 color: $wechat-primary;
               }
               &.consult {
-                color: #CD7F32;
+                color: #cd7f32;
               }
             }
 
@@ -418,7 +411,6 @@
         text-align: center;
       }
     }
-
 
     &.mobile {
       .container {

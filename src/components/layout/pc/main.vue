@@ -44,7 +44,7 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue'
   import { mapState } from 'vuex'
-  import { isClient } from '/@/environment'
+  import { isClient } from '../../../environment'
   import NavView from './nav.vue'
   import AsideView from './aside/index.vue'
   import HeaderView from './header.vue'
@@ -57,7 +57,7 @@
   import Theme from '/@/components/widget/theme.vue'
   import Share from '/@/components/widget/share.vue'
   import Toolbox from '/@/components/widget/toolbox.vue'
-  import { useGlobalState } from '/@/state'
+  import { useGlobalState } from '../../../app/state'
 
   export default defineComponent({
     name: 'PcMain',

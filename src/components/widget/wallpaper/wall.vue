@@ -29,15 +29,12 @@
             :title="currentWallpaper.bsTitle"
           >
             <i class="iconfont icon-location"></i>
-            <span class="text" v-if="currentWallpaper.bsTitle">{{ currentWallpaper.bsTitle }}</span>
+            <span class="text" v-if="currentWallpaper.bsTitle">{{
+              currentWallpaper.bsTitle
+            }}</span>
           </ulink>
         </transition>
-        <button
-          class="button"
-          title="Prev"
-          :disabled="index <= 0"
-          @click="index--"
-        >
+        <button class="button" title="Prev" :disabled="index <= 0" @click="index--">
           <i class="iconfont icon-prev"></i>
         </button>
         <button
@@ -48,11 +45,7 @@
         >
           <i class="iconfont icon-next"></i>
         </button>
-        <button
-          class="button"
-          title="Close"
-          @click="handleClose"
-        >
+        <button class="button" title="Close" @click="handleClose">
           <i class="iconfont icon-cancel"></i>
         </button>
       </div>
@@ -62,7 +55,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../../app/enhancer'
   import { getNamespace, Modules } from '/@/store'
   import { WallpaperModuleGetters } from '/@/store/wallpaper'
 
@@ -76,9 +69,11 @@
     setup(_, context) {
       const { store, i18n } = useEnhancer()
       const index = ref(0)
-      const wallpapers = computed<any[]>(() => store.getters[
-        getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Papers)
-      ](i18n.language.value))
+      const wallpapers = computed<any[]>(() =>
+        store.getters[getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Papers)](
+          i18n.language.value
+        )
+      )
       const currentWallpaper = computed(() => {
         return wallpapers.value?.length && wallpapers.value?.[index.value]
       })
@@ -155,7 +150,7 @@
           @include radius-box($xs-radius);
 
           &[disabled] {
-            opacity: .6;
+            opacity: 0.6;
           }
 
           &:not([disabled]) {

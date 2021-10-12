@@ -25,7 +25,7 @@
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted } from 'vue'
   import type { SwiperContext } from '/@/todo/swiper'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../../../app/enhancer'
 
   enum Event {
     Ready = 'ready',
@@ -43,11 +43,7 @@
         type: Object
       }
     },
-    emits: [
-      Event.Ready,
-      Event.UpdateIndex,
-      Event.IndexChange
-    ],
+    emits: [Event.Ready, Event.UpdateIndex, Event.IndexChange],
     setup(props, context) {
       const swiperOption = {
         initialSlide: props.index,
@@ -107,7 +103,7 @@
       height: 88px;
 
       .swiper-wrapper {
-        &[style*="300ms"] {
+        &[style*='300ms'] {
           .swiper-slide-active {
             @include blur-filter('vertical-small');
           }

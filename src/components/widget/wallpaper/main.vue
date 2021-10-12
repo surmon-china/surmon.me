@@ -19,7 +19,7 @@
 <script lang="ts">
   import { defineComponent, computed, onMounted } from 'vue'
   import { Theme } from '/@/services/theme'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../../app/enhancer'
   import { getNamespace, Modules } from '/@/store'
   import { WallpaperModuleGetters, WallpaperModuleActions } from '/@/store/wallpaper'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
@@ -34,9 +34,11 @@
     setup() {
       const { store, i18n, gtag, globalState, isDarkTheme } = useEnhancer()
       const isOnWallpaper = computed(() => globalState.switchBox.wallpaper)
-      const wallpapers = computed<any[]>(() => store.getters[
-        getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Papers)
-      ](i18n.language.value))
+      const wallpapers = computed<any[]>(() =>
+        store.getters[getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Papers)](
+          i18n.language.value
+        )
+      )
 
       const toggleWallpaper = () => {
         if (wallpapers.value?.length) {
@@ -53,10 +55,9 @@
       }
 
       onMounted(() => {
-        store.dispatch(getNamespace(
-          Modules.Wallpaper,
-          WallpaperModuleActions.FetchPapers
-        ))
+        store.dispatch(
+          getNamespace(Modules.Wallpaper, WallpaperModuleActions.FetchPapers)
+        )
       })
 
       return {
@@ -93,21 +94,27 @@
     .switcher {
       width: 4rem;
       height: 8rem;
-      opacity: .6;
+      opacity: 0.6;
       display: block;
       position: relative;
       transform: translateX(-$offset * 2);
       transition: opacity $transition-time-fast, transform $transition-time-fast;
 
       &:hover {
-        opacity: .8;
+        opacity: 0.8;
         transform: translateX(-$offset);
       }
 
       @keyframes wallpaper-y {
-        0% { transform: translateY(-$offset) }
-        50% { transform: translateY($offset) }
-        100% { transform: translateY(-$offset) }
+        0% {
+          transform: translateY(-$offset);
+        }
+        50% {
+          transform: translateY($offset);
+        }
+        100% {
+          transform: translateY(-$offset);
+        }
       }
 
       > .up,
@@ -124,7 +131,7 @@
         left: $offset;
         z-index: $z-index-normal + 1;
         background-color: $primary;
-        animation: wallpaper-y 1.5s .75s infinite;
+        animation: wallpaper-y 1.5s 0.75s infinite;
       }
 
       .up {

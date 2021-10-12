@@ -11,7 +11,7 @@ export const Easing = {
   linear: [0, 0.0, 1, 1.0],
   easeIn: [0.42, 0.0, 1, 1.0],
   easeOut: [0, 0.0, 0.58, 1.0],
-  easeInOut: [0.42, 0.0, 0.58, 1.0]
+  easeInOut: [0.42, 0.0, 0.58, 1.0],
 }
 
 enum ElementEvent {
@@ -21,7 +21,7 @@ enum ElementEvent {
   DOMMouseScroll = 'DOMMouseScroll',
   mousewheel = 'mousewheel',
   keyup = 'keyup',
-  touchmove = 'touchmove'
+  touchmove = 'touchmove',
 }
 
 const _ = {
@@ -32,7 +32,7 @@ const _ = {
     if (!Array.isArray(events)) {
       events = [events]
     }
-    events.forEach(event => {
+    events.forEach((event) => {
       element.addEventListener(event, handler, { passive: true })
     })
   },
@@ -40,13 +40,17 @@ const _ = {
     if (!Array.isArray(events)) {
       events = [events]
     }
-    events.forEach(event => {
+    events.forEach((event) => {
       element.removeEventListener(event, handler)
     })
-  }
+  },
 }
 
-export const scrollTo = (target: string | number | Element, duration = 500, options: $TODO) => {
+export const scrollTo = (
+  target: string | number | Element,
+  duration = 500,
+  options: $TODO
+) => {
   options = options || {}
   options.easing = Easing.ease
 
@@ -58,12 +62,12 @@ export const scrollTo = (target: string | number | Element, duration = 500, opti
     ElementEvent.DOMMouseScroll,
     ElementEvent.mousewheel,
     ElementEvent.keyup,
-    ElementEvent.touchmove
+    ElementEvent.touchmove,
   ]
 
   let abort = false
 
-  const abortFn = function() {
+  const abortFn = function () {
     abort = true
   }
 
@@ -75,9 +79,7 @@ export const scrollTo = (target: string | number | Element, duration = 500, opti
   if (typeof target === 'number') {
     elementY = target
   } else {
-    const element = (typeof target === 'string'
-      ? _.$(target)
-      : target) as Element
+    const element = (typeof target === 'string' ? _.$(target) : target) as Element
     elementY = initialY + element.getBoundingClientRect().top
   }
 
@@ -94,7 +96,7 @@ export const scrollTo = (target: string | number | Element, duration = 500, opti
   const easing = Reflect.apply(BezierEasing, BezierEasing, options.easing)
   let start: number
 
-  const done = function() {
+  const done = function () {
     _.off(page, events, abortFn)
     if (abort && options.onCancel) {
       options.onCancel()

@@ -27,7 +27,7 @@
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../app/enhancer'
   import { timeAgo } from '/@/transforms/moment'
   import { getFileCDNUrl } from '/@/transforms/url'
 
@@ -48,7 +48,9 @@
     setup(props) {
       const { isMobile } = useEnhancer()
       const backgroundImageUrl = computed(() => {
-        return props.backgroundImage || getFileCDNUrl('/images/page-feeelancer/banner.jpg')
+        return (
+          props.backgroundImage || getFileCDNUrl('/images/page-feeelancer/banner.jpg')
+        )
       })
 
       return {

@@ -64,11 +64,7 @@
       <template v-for="(ad, index) in adConfig.PC_NAV" :key="index">
         <span class="separator"></span>
         <ulink class="item" :href="ad.url">
-          <i
-            class="iconfont"
-            :class="ad.icon"
-            :style="{ color: ad.color }"
-          ></i>
+          <i class="iconfont" :class="ad.icon" :style="{ color: ad.color }"></i>
           <span class="text" :style="{ color: ad.color }">
             <template v-if="ad.i18n">
               <i18n :zh="ad.i18n.zh" :en="ad.i18n.en" />
@@ -95,12 +91,12 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../../app/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { getPageRoute, getCategoryArchiveRoute } from '/@/transforms/route'
-  import { RouteName, CategorySlug } from '/@/router'
+  import { RouteName, CategorySlug } from '../../../app/router'
   import { VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
@@ -192,11 +188,7 @@
           background-color: $module-bg-lighter;
 
           &.guestbook {
-            background: linear-gradient(
-              to bottom,
-              $module-bg-lighter,
-              transparent
-            );
+            background: linear-gradient(to bottom, $module-bg-lighter, transparent);
           }
         }
 

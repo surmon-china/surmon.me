@@ -47,11 +47,17 @@
                   <i class="iconfont icon-github" />
                   <span class="text">GitHub</span>
                 </ulink>
-                <ulink class="item normal-button twitter" :href="VALUABLE_LINKS.TWITTER">
+                <ulink
+                  class="item normal-button twitter"
+                  :href="VALUABLE_LINKS.TWITTER"
+                >
                   <i class="iconfont icon-twitter" />
                   <span class="text">Twitter</span>
                 </ulink>
-                <ulink class="item normal-button instagram" :href="VALUABLE_LINKS.INSTAGRAM">
+                <ulink
+                  class="item normal-button instagram"
+                  :href="VALUABLE_LINKS.INSTAGRAM"
+                >
                   <i class="iconfont icon-instagram" />
                   <span class="text">Instagram</span>
                 </ulink>
@@ -76,10 +82,18 @@
                   <ulink class="item bilibili" :href="VALUABLE_LINKS.BILIBILI">
                     <i class="iconfont icon-bilibili" />
                   </ulink>
-                  <ulink class="item stackoverflow" :href="VALUABLE_LINKS.STACK_OVERFLOW" v-if="false">
+                  <ulink
+                    class="item stackoverflow"
+                    :href="VALUABLE_LINKS.STACK_OVERFLOW"
+                    v-if="false"
+                  >
                     <i class="iconfont icon-stackoverflow" />
                   </ulink>
-                  <ulink class="item algorithm" :href="VALUABLE_LINKS.LEETCODE_CN" v-if="false">
+                  <ulink
+                    class="item algorithm"
+                    :href="VALUABLE_LINKS.LEETCODE_CN"
+                    v-if="false"
+                  >
                     <i class="iconfont icon-leetcode" />
                   </ulink>
                   <ulink class="item quora" :href="VALUABLE_LINKS.QUORA">
@@ -193,7 +207,7 @@
             src="/images/page-about/background-star-2.png"
           />
         </div>
-        <img :src="gravatar" class="avatar" draggable="false">
+        <img :src="gravatar" class="avatar" draggable="false" />
         <div class="description">
           <h3 class="name">
             <strong>Surmon</strong>
@@ -207,11 +221,7 @@
             <i18n :lkey="LANGUAGE_KEYS.FRIEND_ME" />
           </span>
           <div class="wechat" @mouseenter="handleHoverFollowMe">
-            <uimage
-              cdn
-              class="qrcode"
-              src="/images/page-about/wechat-qrcode.jpg"
-            />
+            <uimage cdn class="qrcode" src="/images/page-about/wechat-qrcode.jpg" />
             <span class="tooltip">
               <i18n zh="扫码加微，解锁灵魂" en="Scan the QR code in WeChat" />
             </span>
@@ -233,7 +243,7 @@
                     :src="item.src"
                     :alt="item.alt || item.title"
                     :title="item.title || item.alt"
-                  >
+                  />
                 </ulink>
               </swiper-slide>
               <template #pagination>
@@ -263,8 +273,8 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, toRef } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
-  import { RouteName } from '/@/router'
+  import { useEnhancer } from '../app/enhancer'
+  import { RouteName } from '../app/router'
   import { getPageRoute } from '/@/transforms/route'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -274,17 +284,17 @@
   export default defineComponent({
     name: 'About',
     setup(props) {
-      const { i18n, helmet, gtag, globalState, store, adConfig, isZhLang, isMobile } = useEnhancer()
+      const { i18n, helmet, gtag, globalState, store, adConfig, isZhLang, isMobile } =
+        useEnhancer()
       const isOnLiveMap = toRef(globalState.switchBox, 'liveMap')
-      const gravatar = computed(() => (
-        store.state.option.adminInfo?.gravatar ||
-        getFileCDNUrl('/images/gravatar.jpg')
-      ))
+      const gravatar = computed(
+        () =>
+          store.state.option.adminInfo?.gravatar ||
+          getFileCDNUrl('/images/gravatar.jpg')
+      )
 
       helmet(() => {
-        const prefix = isZhLang.value
-          ? `${i18n.t(LANGUAGE_KEYS.PAGE_ABOUT)} | `
-          : ''
+        const prefix = isZhLang.value ? `${i18n.t(LANGUAGE_KEYS.PAGE_ABOUT)} | ` : ''
         return { title: prefix + 'About' }
       })
 
@@ -359,7 +369,7 @@
 
   .about-page {
     width: 100%;
-    overflow:  hidden;
+    overflow: hidden;
 
     .about-me {
       width: 100%;
@@ -392,12 +402,12 @@
             position: relative;
             margin-left: 1.8rem;
             padding: 0 1em;
-            padding-bottom: .2em;
+            padding-bottom: 0.2em;
             font-family: 'webfont-bolder', DINRegular;
             background-color: $primary-lighter;
             color: $text-reversal;
             line-height: 2em;
-            letter-spacing: .1em;
+            letter-spacing: 0.1em;
             @include radius-box($sm-radius);
 
             &::before {
@@ -618,7 +628,7 @@
               .github,
               .paypal,
               .more {
-                opacity: .9;
+                opacity: 0.9;
                 @include visibility-transition();
                 &:hover {
                   opacity: 1;
@@ -661,31 +671,61 @@
         @include common-bg-module();
 
         @keyframes aboutbg-be-1 {
-          0% { transform: translate3d(0%, 0%, 0) }
-          25% { transform: translate3d(-50%, -50%, 0) }
-          50% { transform: translate3d(-50%, 0%, 0) }
-          75% { transform: translate3d(0%, -50%, 0) }
-          100% { transform: translate3d(0%, 0%, 0) }
+          0% {
+            transform: translate3d(0%, 0%, 0);
+          }
+          25% {
+            transform: translate3d(-50%, -50%, 0);
+          }
+          50% {
+            transform: translate3d(-50%, 0%, 0);
+          }
+          75% {
+            transform: translate3d(0%, -50%, 0);
+          }
+          100% {
+            transform: translate3d(0%, 0%, 0);
+          }
         }
 
         @keyframes aboutbg-be-2 {
-          0% { transform: translate3d(0%, 0%, 0) }
-          25% { transform: translate3d(0%, -50%, 0) }
-          50% { transform: translate3d(-20%, 0%, 0) }
-          75% { transform: translate3d(-30%, -50%, 0) }
-          100% { transform: translate3d(0%, 0%, 0) }
+          0% {
+            transform: translate3d(0%, 0%, 0);
+          }
+          25% {
+            transform: translate3d(0%, -50%, 0);
+          }
+          50% {
+            transform: translate3d(-20%, 0%, 0);
+          }
+          75% {
+            transform: translate3d(-30%, -50%, 0);
+          }
+          100% {
+            transform: translate3d(0%, 0%, 0);
+          }
         }
 
         @keyframes aboutbg-star {
-          0% { opacity: 1; }
-          25% { opacity: .5; }
-          50% { opacity: .8; }
-          75% { opacity: .2; }
-          100% { opacity: 1; }
+          0% {
+            opacity: 1;
+          }
+          25% {
+            opacity: 0.5;
+          }
+          50% {
+            opacity: 0.8;
+          }
+          75% {
+            opacity: 0.2;
+          }
+          100% {
+            opacity: 1;
+          }
         }
 
         > .background {
-          content: "";
+          content: '';
           display: block;
           position: absolute;
           width: 100%;
@@ -696,7 +736,7 @@
           overflow: hidden;
 
           &.be-1 {
-            opacity: .66;
+            opacity: 0.66;
 
             > .image {
               width: auto;
@@ -756,7 +796,7 @@
           color: $text;
 
           > .role {
-            margin-top: .466rem;
+            margin-top: 0.466rem;
           }
         }
 
@@ -872,7 +912,7 @@
             display: block;
             line-height: 1.7em;
             text-align: center;
-            padding: 0 .2em;
+            padding: 0 0.2em;
             color: $color;
             border: 1px solid $color;
             font-size: $font-size-small;

@@ -12,7 +12,7 @@
         :class="i18n.language"
         :placeholder="i18n.t(LANGUAGE_KEYS.SEARCH_PLACEHOLDER)"
         @keyup.enter="handleSearch"
-      >
+      />
       <button class="search-btn" @click="handleSearch">
         <i class="iconfont icon-search" />
       </button>
@@ -36,8 +36,8 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
-  import { RouteName } from '/@/router'
+  import { useEnhancer } from '../../../../app/enhancer'
+  import { RouteName } from '../../../../app/router'
   import { isSearchArchive } from '/@/transforms/route'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -59,7 +59,7 @@
         const inputKeyword = keyword.value
         const paramsKeyword = route.params.keyword as string
         const isSearchPage = isSearchArchive(route.name as string)
-        if (inputKeyword && (!isSearchPage || (paramsKeyword !== inputKeyword))) {
+        if (inputKeyword && (!isSearchPage || paramsKeyword !== inputKeyword)) {
           router.push({
             name: RouteName.SearchArchive,
             params: { keyword: inputKeyword }

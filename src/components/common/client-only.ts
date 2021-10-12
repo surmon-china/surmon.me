@@ -7,7 +7,7 @@
  */
 
 import { defineComponent, ref, h, onMounted, Transition, cloneVNode } from 'vue'
-import { useEnhancer } from '/@/enhancer'
+import { useEnhancer } from '../../app/enhancer'
 
 /**
  * @description only render on client (browser)
@@ -48,9 +48,7 @@ export const ClientOnly = defineComponent({
         const setRender = () => {
           canRender.value = true
         }
-        props.delay
-          ? setTimeout(setRender, props.delay)
-          : setRender()
+        props.delay ? setTimeout(setRender, props.delay) : setRender()
       }
     })
 
@@ -61,13 +59,9 @@ export const ClientOnly = defineComponent({
       if (Array.isArray(result) && result.length > 1) {
         return result
       }
-      const singleResult = Array.isArray(result)
-        ? result[0]
-        : result
-      return h(
-        Transition,
-        { name: 'client-only', mode: 'out-in' },
-        () => singleResult
+      const singleResult = Array.isArray(result) ? result[0] : result
+      return h(Transition, { name: 'client-only', mode: 'out-in' }, () =>
+        singleResult
           ? cloneVNode(singleResult, { key: resultKey })
           : h('div', { key: 'empty', class: 'client-only-empty' })
       )
@@ -83,11 +77,10 @@ export const ClientOnly = defineComponent({
       }
 
       if (props.placeholderTag && props.placeholder) {
-        return renderResult(h(
-          props.placeholderTag,
-          { class: 'client-only-placeholder' },
-          props.placeholder
-        ), 'placeholder')
+        return renderResult(
+          h(props.placeholderTag, { class: 'client-only-placeholder' }, props.placeholder),
+          'placeholder'
+        )
       }
 
       return renderResult(null)

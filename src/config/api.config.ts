@@ -14,9 +14,7 @@ const API_ONLINE_URL = import.meta.env.VITE_API_ONLINE_URL as string
 // dev:
 //  spa -> /api
 //  ssr -> server ? online api : /api
-const DEV_API = isSPA
-  ? API_PROXY_URL
-  : isServer ? API_ONLINE_URL : API_PROXY_URL
+const DEV_API = isSPA ? API_PROXY_URL : isServer ? API_ONLINE_URL : API_PROXY_URL
 
 // prod:
 //  spa -> online api

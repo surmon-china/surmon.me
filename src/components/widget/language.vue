@@ -5,13 +5,15 @@
       title="Switch language"
       :class="language"
       @click="tooggleLanguage"
-    >{{ language }}</div>
+    >
+      {{ language }}
+    </div>
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../app/enhancer'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
 
   export default defineComponent({
@@ -81,7 +83,7 @@
       $zhBG: $zh-primary;
 
       &.en {
-        background: linear-gradient(to bottom left, rgba($enBG, .3), $enBG);
+        background: linear-gradient(to bottom left, rgba($enBG, 0.3), $enBG);
         border-left: $xs-gap solid $enBG;
 
         &:hover {
@@ -93,7 +95,7 @@
       }
 
       &.zh {
-        background: linear-gradient(to bottom right, rgba($zhBG, .3), $zhBG);
+        background: linear-gradient(to bottom right, rgba($zhBG, 0.3), $zhBG);
         border-left: $xs-gap solid $zhBG;
 
         &:hover {

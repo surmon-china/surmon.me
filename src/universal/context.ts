@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { GlobalRawState } from '/@/state'
+import { GlobalRawState } from '/@/app/state'
 import { Theme } from '/@/services/theme'
 
 // store script

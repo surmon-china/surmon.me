@@ -1,9 +1,5 @@
 <template>
-  <div
-    :id="ElementID.Warpper"
-    :class="{ mobile: isMobile }"
-    class="comment-box"
-  >
+  <div :id="ElementID.Warpper" :class="{ mobile: isMobile }" class="comment-box">
     <comment-topbar
       :total="commentData.pagination?.total"
       :likes="likes"
@@ -50,10 +46,19 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, reactive, computed, watch, onMounted, onBeforeUnmount, onUnmounted } from 'vue'
+  import {
+    defineComponent,
+    ref,
+    reactive,
+    computed,
+    watch,
+    onMounted,
+    onBeforeUnmount,
+    onUnmounted
+  } from 'vue'
   import { getNamespace, Modules } from '/@/store'
   import { CommentModuleActions, CommentModuleListMutations } from '/@/store/comment'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../app/enhancer'
   import { getJSON, setJSON, remove } from '/@/services/storage'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { isArticleDetail, isGuestbook } from '/@/transforms/route'
@@ -279,44 +284,47 @@
         // block list
         const { mails, keywords } = blockList.value
         const hitMail = mails.includes(profile.email)
-        const hitKeyword = (
-          keywords.length &&
-          eval(`/${keywords.join('|')}/ig`).test(penState.content)
-        )
+        const hitKeyword =
+          keywords.length && eval(`/${keywords.join('|')}/ig`).test(penState.content)
         if (hitMail || hitKeyword) {
           alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_SUBMIT))
-          console.warn('评论发布失败\n1：被 Akismet 过滤\n2：邮箱/IP 被列入黑名单\n3：内容包含黑名单关键词')
+          console.warn(
+            '评论发布失败\n1：被 Akismet 过滤\n2：邮箱/IP 被列入黑名单\n3：内容包含黑名单关键词'
+          )
           return false
         }
 
         // post
-        return store.dispatch(getNamespace(Modules.Comment, CommentModuleActions.PostComment), {
-          pid: state.replyPid,
-          post_id: props.postId,
-          content: penState.content,
-          agent: globalState.userAgent.original,
-          author: profile
-        }).then(resultData => {
-          // clear local data
-          penState.preview = false
-          userState.cached = true
-          userState.editing = false
-          // reset reply state
-          resetCommentReply()
-          clearPenContent()
-          // set user profile
-          syncUserProfileToStorage()
-          // random emoji rain
-          luanchEmojiRain(resultData.result.content)
-        }).catch(error => {
-          console.warn('评论发布失败，可能原因：被 Akismet 过滤，或者：\n', error)
-          alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_SUBMIT))
-        })
+        return store
+          .dispatch(getNamespace(Modules.Comment, CommentModuleActions.PostComment), {
+            pid: state.replyPid,
+            post_id: props.postId,
+            content: penState.content,
+            agent: globalState.userAgent.original,
+            author: profile
+          })
+          .then((resultData) => {
+            // clear local data
+            penState.preview = false
+            userState.cached = true
+            userState.editing = false
+            // reset reply state
+            resetCommentReply()
+            clearPenContent()
+            // set user profile
+            syncUserProfileToStorage()
+            // random emoji rain
+            luanchEmojiRain(resultData.result.content)
+          })
+          .catch((error) => {
+            console.warn('评论发布失败，可能原因：被 Akismet 过滤，或者：\n', error)
+            alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_SUBMIT))
+          })
       }
 
       watch(
         () => isFetching.value,
-        isFetching => {
+        (isFetching) => {
           if (isFetching) {
             resetCommentReply()
           }
@@ -332,10 +340,9 @@
       })
 
       onUnmounted(() => {
-        store.commit(getNamespace(
-          Modules.Comment,
-          CommentModuleListMutations.ClearListData
-        ))
+        store.commit(
+          getNamespace(Modules.Comment, CommentModuleListMutations.ClearListData)
+        )
       })
 
       return {

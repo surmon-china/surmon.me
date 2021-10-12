@@ -9,21 +9,24 @@ import { getAccessor } from '/@/services/storage'
 import { OriginState } from '/@/constants/state'
 import { USER_LIKE_HISTORY } from '/@/constants/storage'
 
-export const isOriginalType = (originState?: OriginState) => originState == null || originState === OriginState.Original
-export const isHybridType = (originState: OriginState) => originState === OriginState.Hybrid
-export const isReprintType = (originState: OriginState) => originState === OriginState.Reprint
+export const isOriginalType = (originState?: OriginState) =>
+  originState == null || originState === OriginState.Original
+export const isHybridType = (originState: OriginState) =>
+  originState === OriginState.Hybrid
+export const isReprintType = (originState: OriginState) =>
+  originState === OriginState.Reprint
 
 export const getExtendsValue = (target: any, key: string) => {
   if (!target?.extends?.length) {
     return null
   }
-  const targetExtend = target.extends.find(t => t.name === key)
+  const targetExtend = target.extends.find((t) => t.name === key)
   return targetExtend ? targetExtend.value : null
 }
 
 const defaultUserLikeHistory = {
-  pages: [] as number [],
-  comments: [] as number []
+  pages: [] as number[],
+  comments: [] as number[],
 }
 
 const getUserLikeHistory = () => {
@@ -43,7 +46,7 @@ export const usePageLike = (postId: number) => {
 
   return {
     isLiked,
-    like: () => likeHistory.value.pages.push(postId)
+    like: () => likeHistory.value.pages.push(postId),
   }
 }
 
@@ -59,6 +62,6 @@ export const useCommentsLike = () => {
 
   return {
     isLiked: (commentId: number) => userLikeHistory.value.comments.includes(commentId),
-    like: (commentId: number) => userLikeHistory.value.comments.push(commentId)
+    like: (commentId: number) => userLikeHistory.value.comments.push(commentId),
   }
 }

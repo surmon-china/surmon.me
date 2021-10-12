@@ -30,8 +30,17 @@
 
 <script lang="ts">
   import { defineComponent, ref, reactive, computed } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
-  import { dateToHuman, humanToDate, cloneDate, isSameHumanDay, textHumanizer, humanDateToYMD, HumanDate, TEXT_MAP } from '/@/transforms/moment'
+  import { useEnhancer } from '../../app/enhancer'
+  import {
+    dateToHuman,
+    humanToDate,
+    cloneDate,
+    isSameHumanDay,
+    textHumanizer,
+    humanDateToYMD,
+    HumanDate,
+    TEXT_MAP
+  } from '/@/transforms/moment'
 
   export default defineComponent({
     name: 'PcAsideCalendar',
@@ -49,24 +58,17 @@
       })
 
       const headerText = computed(() => {
-        const isSameTodayTable = (
-          tableView.month === today.month &&
-          tableView.year === today.year
-        )
+        const isSameTodayTable =
+          tableView.month === today.month && tableView.year === today.year
 
         if (isZhLang.value) {
           const yearText = `${tableView.year} 年`
           const monthText = ` ${tableView.month} 月`
-          const dayText = isSameTodayTable
-            ? ` ${today.day} 日`
-            : ''
+          const dayText = isSameTodayTable ? ` ${today.day} 日` : ''
           return yearText + monthText + dayText
         }
 
-        return humanDateToYMD(
-          isSameTodayTable ? today : tableView,
-          ' / '
-        )
+        return humanDateToYMD(isSameTodayTable ? today : tableView, ' / ')
       })
 
       const setTable = (humanDate: Omit<HumanDate, 'day' | 'week'>) => {
@@ -97,7 +99,7 @@
       }
 
       const toPrevMonth = () => {
-        const isPrevYear = (tableView.month - 1) <= 0
+        const isPrevYear = tableView.month - 1 <= 0
         setTable({
           year: tableView.year - (isPrevYear ? 1 : 0),
           month: isPrevYear ? 12 : tableView.month - 1
@@ -105,7 +107,7 @@
       }
 
       const toNextMonth = () => {
-        const isNextYear = (tableView.month + 1) >= 13
+        const isNextYear = tableView.month + 1 >= 13
         setTable({
           year: tableView.year + (isNextYear ? 1 : 0),
           month: isNextYear ? 1 : tableView.month + 1
@@ -133,7 +135,7 @@
         toPrevMonth,
         toNextMonth,
         handleDayClick,
-        isToday: target => isSameHumanDay(target, today)
+        isToday: (target) => isSameHumanDay(target, today)
       }
     }
   })
@@ -232,7 +234,7 @@
           }
 
           &.other {
-            opacity: .3;
+            opacity: 0.3;
             cursor: initial;
           }
         }

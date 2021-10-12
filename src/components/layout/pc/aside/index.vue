@@ -28,10 +28,7 @@
         </template>
       </calendar>
     </div>
-    <div
-      class="module ali-ma-ma"
-      :placeholder="t(LANGUAGE_KEYS.AD)"
-    >
+    <div class="module ali-ma-ma" :placeholder="t(LANGUAGE_KEYS.AD)">
       <iframe
         sandbox="allow-scripts"
         scrolling="no"
@@ -43,10 +40,7 @@
     <div :id="ASIDE_STICKY_ELEMENT_ID" class="aside-sticky-box">
       <client-only>
         <div class="module mammon" v-if="renderStickyAd">
-          <aside-mammon
-            :index="adIndex"
-            @index-change="handleStickyAdIndexChange"
-          />
+          <aside-mammon :index="adIndex" @index-change="handleStickyAdIndexChange" />
         </div>
       </client-only>
       <div class="module">
@@ -59,8 +53,16 @@
 
 <script lang="ts">
   import Swiper from 'swiper'
-  import { defineComponent, ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import {
+    defineComponent,
+    ref,
+    reactive,
+    computed,
+    onMounted,
+    onBeforeUnmount,
+    nextTick
+  } from 'vue'
+  import { useEnhancer } from '../../../../app/enhancer'
   import { getDateArchiveRoute } from '/@/transforms/route'
   import { humanDateToYMD, dateToHuman, HumanDate } from '/@/transforms/moment'
   import Calendar from '/@/components/widget/calendar.vue'

@@ -14,8 +14,8 @@
 
 <script lang="ts">
   import { defineComponent, PropType } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
-  import { RenderError } from '/@/state'
+  import { useEnhancer } from '../../app/enhancer'
+  import { RenderError } from '../../app/state'
   import { LANGUAGE_KEYS } from '/@/language/key'
 
   export enum Events {
@@ -82,15 +82,17 @@
 
     .logo {
       width: 8rem;
-      opacity: .1;
+      opacity: 0.1;
       position: fixed;
       bottom: 2rem;
       filter: $theme-logo-rotate;
     }
 
-    .code, .link, .message {
+    .code,
+    .link,
+    .message {
       color: $text-secondary;
-      animation: error-item ease-out both .6s $transition-time-normal;
+      animation: error-item ease-out both 0.6s $transition-time-normal;
     }
 
     @keyframes code-wave {
@@ -124,9 +126,8 @@
       background-position: center;
       -webkit-background-clip: text;
       color: rgba(darken($white, 20%), 20%);
-      animation:
-        error-item ease-out both .6s $transition-time-normal,
-        code-wave ease-out both .6s $transition-time-normal,
+      animation: error-item ease-out both 0.6s $transition-time-normal,
+        code-wave ease-out both 0.6s $transition-time-normal,
         code-wave-play linear 2s infinite;
     }
 

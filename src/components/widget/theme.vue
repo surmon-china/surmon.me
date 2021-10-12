@@ -8,7 +8,7 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../app/enhancer'
   import { Theme } from '/@/services/theme'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
 

@@ -26,7 +26,7 @@ import python from 'highlight.js/lib/languages/python'
 import javascript from 'highlight.js/lib/languages/javascript'
 import typescript from 'highlight.js/lib/languages/typescript'
 
-import 'highlight.js/styles/ocean.css'
+// import 'highlight.js/styles/ocean.css'
 
 const languages = {
   go,

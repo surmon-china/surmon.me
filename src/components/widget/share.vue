@@ -13,10 +13,7 @@
         :class="`icon-${social.icon || social.class || social.name}`"
       />
     </button>
-    <button
-      class="share-ejector link"
-      @click="copyPageUrl"
-    >
+    <button class="share-ejector link" @click="copyPageUrl">
       <i class="iconfont icon-link"></i>
     </button>
   </div>
@@ -24,7 +21,7 @@
 
 <script lang="ts">
   import { defineComponent, reactive } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../app/enhancer'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { getPageUrl } from '/@/transforms/url'
   import { copy } from '/@/utils/clipboard'
@@ -36,10 +33,9 @@
       const { route, gtag } = useEnhancer()
       const getUrl = () => getPageUrl(route.fullPath)
       const getTitle = () => document.title || META.title
-      const getDescription = () => (
+      const getDescription = () =>
         document.getElementsByName('description')[0].getAttribute('content') ||
         META.description
-      )
 
       const copyPageUrl = () => {
         copy(getUrl())
@@ -61,9 +57,9 @@
         // 给打开的窗口命名
         const windowName = `分享 ${META.title}`
         // 窗口宽度，需要设置
-        const awidth = screen.availWidth / 6 * 2
+        const awidth = (screen.availWidth / 6) * 2
         // 窗口高度，需要设置
-        const aheight = screen.availHeight / 5 * 2
+        const aheight = (screen.availHeight / 5) * 2
         // 窗口顶部位置，一般不需要改
         const atop = (screen.availHeight - aheight) / 2
         // 窗口放中央，一般不需要改
@@ -92,7 +88,8 @@
         {
           name: '微博',
           class: 'weibo',
-          url: () => `https://service.weibo.com/share/share.php?url=${getUrl()}&title=${getTitle()}&source=${getUrl()}&sourceUrl=${getUrl()}&content=${getDescription()}`
+          url: () =>
+            `https://service.weibo.com/share/share.php?url=${getUrl()}&title=${getTitle()}&source=${getUrl()}&sourceUrl=${getUrl()}&content=${getDescription()}`
         },
         {
           name: 'twitter',
@@ -101,22 +98,26 @@
         {
           name: 'QQ空间',
           class: 'qzone',
-          url: () => `https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${getUrl()}&title=${getTitle()}&summary=${getDescription()}&site=${getUrl()}`
+          url: () =>
+            `https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${getUrl()}&title=${getTitle()}&summary=${getDescription()}&site=${getUrl()}`
         },
         {
           name: '豆瓣',
           class: 'douban',
-          url: () => `https://www.douban.com/recommend/?url=${getUrl()}&title=${getTitle()}`
+          url: () =>
+            `https://www.douban.com/recommend/?url=${getUrl()}&title=${getTitle()}`
         },
         {
           name: '人人',
           class: 'renren',
-          url: () => `https://widget.renren.com/dialog/share?resourceUrl=${getUrl()}&srcUrl=${getUrl()}&title=${getTitle()}&description=${getDescription()}`
+          url: () =>
+            `https://widget.renren.com/dialog/share?resourceUrl=${getUrl()}&srcUrl=${getUrl()}&title=${getTitle()}&description=${getDescription()}`
         },
         {
           name: '印象笔记',
           class: 'evernote',
-          url: () => `https://www.evernote.com/clip.action?url=${getUrl()}&title=${getTitle()}`
+          url: () =>
+            `https://www.evernote.com/clip.action?url=${getUrl()}&title=${getTitle()}`
         },
         {
           name: 'facebook',
@@ -124,7 +125,8 @@
         },
         {
           name: 'linkedin',
-          url: () => `https://www.linkedin.com/shareArticle?title=${getTitle()}&summary=${getDescription()}&mini=true&url=${getUrl()}`
+          url: () =>
+            `https://www.linkedin.com/shareArticle?title=${getTitle()}&summary=${getDescription()}&mini=true&url=${getUrl()}`
         }
       ]
 

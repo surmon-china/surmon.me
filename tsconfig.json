@@ -22,29 +22,11 @@
     "sourceMap": true,
     "strict": true,
     "noEmit": true,
-    "lib": [
-      "esnext",
-      "esnext.asynciterable",
-      "dom"
-    ],
+    "lib": ["esnext", "esnext.asynciterable", "dom"],
     "baseUrl": ".",
     "paths": {
       "/@/*": ["./src/*"]
     },
-    "types": [
-      "node",
-      "vite/client",
-      "./src/types"
-    ],
-    "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }]
-  },
-  "include": [
-    "./src/**/*.js",
-    "./src/**/*.ts",
-    "./src/**/*.tsx",
-    "./src/**/*.d.ts",
-    "./src/**/*.vue",
-    "test.js"
-  ],
-  "exclude": ["node_modules", "dist"]
+    "types": ["node", "vite/client", "./src/types"]
+  }
 }

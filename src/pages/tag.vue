@@ -23,7 +23,7 @@
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { prefetch, onClient } from '/@/universal'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../app/enhancer'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { TagModuleActions } from '/@/store/tag'
@@ -47,31 +47,36 @@
     },
     setup(props) {
       const { store, helmet, isZhLang } = useEnhancer()
-      const currentTag = computed(() => store.state.tag.data.find(
-        tag => tag.slug === props.tagSlug
-      ))
+      const currentTag = computed(() =>
+        store.state.tag.data.find((tag) => tag.slug === props.tagSlug)
+      )
 
       // helmet
       helmet(() => {
         const slug = props.tagSlug
         const slugTitle = slug
           .toLowerCase()
-          .replace(/( |^)[a-z]/g, L => L.toUpperCase())
+          .replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
         const enTitle = `${slugTitle} | Tag`
         const zhTitle = currentTag.value?.name
         const title = `${isZhLang.value && zhTitle ? zhTitle : enTitle} | Tag`
         const description = currentTag.value?.description || title
-        return { title, description}
+        return { title, description }
       })
 
       const article = computed(() => store.state.article.list)
-      const currentTagIcon = computed(() => getExtendsValue(currentTag.value, 'icon') || 'icon-tag')
-      const currentTagImage = computed(() => getExtendsValue(currentTag.value, 'background'))
-      const currentTagColor = computed(() => getExtendsValue(currentTag.value, 'bgcolor'))
-
-      const fetchTags = () => store.dispatch(
-        getNamespace(Modules.Tag, TagModuleActions.FetchAll)
+      const currentTagIcon = computed(
+        () => getExtendsValue(currentTag.value, 'icon') || 'icon-tag'
       )
+      const currentTagImage = computed(() =>
+        getExtendsValue(currentTag.value, 'background')
+      )
+      const currentTagColor = computed(() =>
+        getExtendsValue(currentTag.value, 'bgcolor')
+      )
+
+      const fetchTags = () =>
+        store.dispatch(getNamespace(Modules.Tag, TagModuleActions.FetchAll))
 
       const fetchArticles = (params: any) => {
         return store.dispatch(
@@ -90,16 +95,13 @@
 
       const fetchAllData = (tag_slug: string) => {
         onClient(scrollToTop)
-        return Promise.all([
-          fetchTags(),
-          fetchArticles({ tag_slug })
-        ])
+        return Promise.all([fetchTags(), fetchArticles({ tag_slug })])
       }
 
       onBeforeMount(() => {
         watch(
           () => props.tagSlug,
-          tagSlug => fetchAllData(tagSlug),
+          (tagSlug) => fetchAllData(tagSlug),
           { flush: 'post' }
         )
       })
@@ -110,7 +112,7 @@
         currentTagIcon,
         currentTagImage,
         currentTagColor,
-        loadmoreArticles,
+        loadmoreArticles
       }
 
       return prefetch(() => fetchAllData(props.tagSlug), resultData)

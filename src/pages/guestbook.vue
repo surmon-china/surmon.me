@@ -22,8 +22,8 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { isClient } from '/@/environment'
-  import { useEnhancer } from '/@/enhancer'
+  import { isClient } from '../environment'
+  import { useEnhancer } from '../app/enhancer'
   import { prefetch } from '/@/universal'
   import { Modules, getNamespace } from '/@/store'
   import { OptionModuleActions, OptionModuleMutations } from '/@/store/option'
@@ -50,16 +50,17 @@
         return { title: prefix + 'Guestbook' }
       })
 
-      const fetchAllData = () => Promise.all([
-        store.dispatch(
-          getNamespace(Modules.Option, OptionModuleActions.FetchAppOption),
-          true
-        ),
-        store.dispatch(
-          getNamespace(Modules.Comment, CommentModuleActions.FetchList),
-          { post_id: 0, delay: isClient ? 368 : 0 }
-        )
-      ])
+      const fetchAllData = () =>
+        Promise.all([
+          store.dispatch(
+            getNamespace(Modules.Option, OptionModuleActions.FetchAppOption),
+            true
+          ),
+          store.dispatch(
+            getNamespace(Modules.Comment, CommentModuleActions.FetchList),
+            { post_id: 0, delay: isClient ? 368 : 0 }
+          )
+        ])
 
       const resultData = {
         LANGUAGE_KEYS,
@@ -88,7 +89,7 @@
       @include radius-box($lg-radius);
 
       .image {
-        margin-top: - ($gap * 6);
+        margin-top: -($gap * 6);
         transition: all $transition-time-slow;
 
         &:hover {
@@ -106,7 +107,7 @@
         line-height: $size;
         padding: 0 $sm-gap;
         padding-left: 3rem;
-        opacity: .8;
+        opacity: 0.8;
         font-weight: 700;
         color: $body-bg;
         cursor: progress;
@@ -118,7 +119,7 @@
         );
 
         .text {
-          letter-spacing: .3px;
+          letter-spacing: 0.3px;
           font-weight: bold;
           color: $text;
           background-clip: text;

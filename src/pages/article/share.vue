@@ -14,10 +14,7 @@
         </div>
       </template>
       <template #default>
-        <base-share
-          class="article-share"
-          :class="{ mobile: isMobile }"
-        />
+        <base-share class="article-share" :class="{ mobile: isMobile }" />
       </template>
     </placeholder>
   </div>
@@ -25,19 +22,19 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../app/enhancer'
   import BaseShare from '/@/components/widget/share.vue'
 
   export default defineComponent({
     name: 'ArticleShare',
+    components: {
+      BaseShare
+    },
     props: {
       fetching: {
         type: Boolean,
         required: true
       }
-    },
-    components: {
-      BaseShare
     },
     setup() {
       const { isMobile } = useEnhancer()
@@ -64,7 +61,7 @@
 
     > .article-share {
       width: 100%;
-      opacity: .6;
+      opacity: 0.6;
       display: flex;
       justify-content: space-between;
 

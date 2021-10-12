@@ -22,7 +22,7 @@
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { prefetch, onClient } from '/@/universal'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../app/enhancer'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
@@ -74,13 +74,10 @@
         )
       })
 
-      return prefetch(
-        () => fetchArticles({ keyword: props.keyword }),
-        {
-          article,
-          loadmoreArticles
-        }
-      )
+      return prefetch(() => fetchArticles({ keyword: props.keyword }), {
+        article,
+        loadmoreArticles
+      })
     }
   })
 </script>

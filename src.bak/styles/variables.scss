@@ -1,0 +1,167 @@
+// url
+$cdn-url: '' !default;
+$source-url: '' !default;
+
+@function cdn-url($uri) {
+  @return url($cdn-url + $uri);
+}
+
+@function force-source-url($uri) {
+  @return url($source-url + $uri);
+}
+
+// theme colors
+$body-bg: var(--body-bg);
+$theme-black: var(--theme-black);
+$theme-logo-rotate: var(--theme-logo-rotate);
+
+$primary: var(--primary-color);
+$primary-lighter: var(--primary-color-lighter);
+$primary-translucent: var(--primary-color-translucent);
+
+$module-bg-darker-1: var(--module-bg-darker-1);
+$module-bg-darker-2: var(--module-bg-darker-2);
+$module-bg-darker-3: var(--module-bg-darker-3);
+$module-bg-darker-4: var(--module-bg-darker-4);
+$module-bg-darker-5: var(--module-bg-darker-5);
+
+$module-bg: var(--module-bg);
+$module-bg-opaque: var(--module-bg-opaque);
+$module-bg-lighter: var(--module-bg-lighter);
+$module-bg-translucent: var(--module-bg-translucent);
+$module-bg-hover: $module-bg-darker-2;
+
+// text colors
+$text: var(--text-color);
+$text-lighter: var(--text-lighter);
+$text-darker: var(--text-darker);
+$text-secondary: var(--text-secondary);
+$text-disabled: var(--text-disabled);
+$text-dividers: var(--text-dividers);
+$text-reversal: var(--text-reversal);
+
+// links
+$link-color: var(--link-color);
+$link-color-hover: var(--link-color-hover);
+
+// colors
+$accent: #4caf50;
+$red: #ff5722;
+$yellow: #ffeb3b;
+$grey: #C0C0C0;
+$white: #ffffff;
+$black: #000000;
+$mobile-aside-bg: #34393d;
+
+// others
+$en-primary: rgb(0, 43, 127);
+$zh-primary: #F40002;
+$taobao-primary: #ff5000;
+$aliyun-primary: #ff6a00;
+$rss-primary: #f8981d;
+$html5-primary: #d45835;
+$nodejs-primary: #43853d;
+$wechat-primary: #55be69;
+$weibo-primary: rgb(230, 22, 45);
+$qzone-primary: rgb(43, 130, 217);
+$renren-primary: rgb(0, 94, 172);
+$evernote-primary: rgb(85, 182, 25);
+$facebook-primary: rgb(59, 89, 152);
+$telegram-primary: #54a5dd;
+$douban-primary: #00B51D;
+$zhihu-primary: #3582f7;
+$stackoverflow-primary: #e6863d;
+$leetcode-primary: #fea116;
+$quora-primary: #b92b27;
+$linkedin-primary: #478cc5;
+$spotify-primary: #1DB954;
+$music163-primary: #C20C0C;
+$youtube-primary: #ec3323;
+$paypal-primary: #4599d2;
+$paypal-primary-hover: #293a7c;
+$twitter-primary: #1b95e0;
+$twitter-primary-hover: #0c7abf;
+$github-primary: #24282d;
+$github-primary-hover: #000;
+$github-sponsor-primary: #ea4aaa;
+$bilibili-blue-primary: #00a1d6;
+$bilibili-pink-primary: #fb7299;
+$instagram-primary: #f09433;
+$instagram-gradient: linear-gradient(
+  45deg,
+  #f09433 0%,
+  #e6683c 25%,
+  #dc2743 50%,
+  #cc2366 75%,
+  #bc1888 100%
+);
+
+// gap
+$gap: 1rem; // ~12px
+$sm-gap: $gap * 0.618; // ~8px
+$xs-gap: $sm-gap / 2; // ~4px
+$lg-gap: $sm-gap * 2; // ~14px
+
+// radius
+$lg-radius: 6px;
+$sm-radius: 4px;
+$xs-radius: 2px;
+$mini-radius: 1px;
+
+// times
+$transition-time-fast: .1s;
+$transition-time-normal: .25s;
+$transition-time-slow: .38s;
+
+// Z index
+$z-index-progress-bar: 999999;
+$z-index-top: 99999;
+$z-index-header: 999;
+$z-index-toolbox: 9;
+$z-index-normal: 0;
+$z-index-underground: -1;
+
+// PC
+$header-height: 5.1rem;
+$footer-height: 6rem;
+$container-width: 1050px;
+$navbar-width: 160px;
+$main-width: 595px;
+$aside-width: 266px;
+$button-block-height: 3.4rem;
+$full-column-page-banner-height: 30rem;
+
+$full-page-occupied-height: $header-height + $footer-height;
+$full-page-active-content-height: calc(100vh - #{$full-page-occupied-height});
+
+$normal-page-occupied-height: $full-page-occupied-height + $lg-gap * 2;
+$normal-page-active-content-height: calc(100vh - #{$normal-page-occupied-height});
+
+// Mobile
+$mobile-header-height: 5rem;
+$mobile-footer-height: $lg-gap * 4;
+$mobile-aside-transition: all $transition-time-slow ease-out;
+
+// breakpoints
+$small-breakpoint: 400px;
+$large-breakpoint: $container-width;
+
+// font
+$font-family-base: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", "微软雅黑", sans-serif;
+$font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace;
+$font-family-normal: SpecialSymbol, DINRegular, $font-family-base;
+
+// typography
+$font-size-root: 12px;
+$font-size-base: 14px;
+$font-size-large: $font-size-base * 1.25; // ~17.5px
+$font-size-small: $font-size-base * .888; // ~12.4px
+
+$font-size-h1: $font-size-base * 1.7; // ~23.8px
+$font-size-h2: $font-size-base * 1.45; // ~20.3px
+$font-size-h3: $font-size-base * 1.3; // ~18.2px
+$font-size-h4: $font-size-base * 1.15; // ~16.1px
+$font-size-h5: $font-size-base;  // ~14px
+$font-size-h6: $font-size-base * 0.95; // ~13.3px
+
+$line-height-base: 1.4;
