@@ -14,7 +14,7 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { useRoute } from 'vue-router'
-  import { useGlobalState } from '/@/state'
+  import { useGlobalState } from '../../../../app/state'
   import { LayoutColumn } from '/@/services/layout'
   import { getTagArchiveRoute, isArticleDetail } from '/@/transforms/route'
   import { LANGUAGE_KEYS } from '/@/language/key'

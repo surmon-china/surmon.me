@@ -1,33 +1,16 @@
 <template>
   <footer id="footer" class="footer">
     <div class="container">
-      <ulink
-        class="ipc"
-        :href="VALUABLE_LINKS.FUCK_IPC"
-        v-if="false"
-      >
-        陕 ICP 备 13004859 号-2
-      </ulink>
-      <a
-        class="sitemap-btn"
-        target="_blank"
-        :href="VALUABLE_LINKS.SITE_MAP"
-      >
+      <ulink class="ipc" :href="VALUABLE_LINKS.FUCK_IPC" v-if="false"> 陕 ICP 备 13004859 号-2 </ulink>
+      <a class="sitemap-btn" target="_blank" :href="VALUABLE_LINKS.SITE_MAP">
         <i18n :lkey="LANGUAGE_KEYS.SITE_MAP_XML" />
       </a>
       <span class="separator">|</span>
       <i18n zh="由 " en="Powered By " />
-      <ulink class="item" :href="VALUABLE_LINKS.NODEPRESS">
-        NodePress
-      </ulink>
+      <ulink class="item" :href="VALUABLE_LINKS.NODEPRESS"> NodePress </ulink>
       <i18n zh="、" en=", " />
-      <ulink class="item" :href="VALUABLE_LINKS.VUE">
-        Vue
-      </ulink>
-      <i18n
-        zh=" 和 日月星辰 强力驱动"
-        en=" and solitarily"
-      />
+      <ulink class="item" :href="VALUABLE_LINKS.VUE"> Vue </ulink>
+      <i18n zh=" 和 日月星辰 强力驱动" en=" and solitarily" />
       <span class="separator">|</span>
       <i18n>
         <template #zh>
@@ -45,7 +28,7 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { RouteName } from '/@/router'
+  import { RouteName } from '../../../app/router'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
   import { getPageRoute } from '/@/transforms/route'

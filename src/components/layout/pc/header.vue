@@ -52,7 +52,10 @@
               :to="getPageRoute(RouteName.Music)"
               :title="`${currentSong.name} / ${currentSong.album || 'unknow'}`"
             >
-              <span>{{ currentSong.name }} By {{ currentSong.artist }} | {{ currentSong.album || 'unknow' }}</span>
+              <span
+                >{{ currentSong.name }} By {{ currentSong.artist }} |
+                {{ currentSong.album || 'unknow' }}</span
+              >
             </router-link>
           </div>
           <div v-else class="song">
@@ -74,16 +77,26 @@
       <uimage defer cdn src="/images/page-feeelancer/banner.jpg" alt="service" />
       <uimage defer cdn src="/images/page-about/background-be-1.jpg" alt="background" />
       <uimage defer cdn src="/images/page-about/background-be-2.jpg" alt="background" />
-      <uimage defer cdn src="/images/page-about/background-star-1.png" alt="background" />
-      <uimage defer cdn src="/images/page-about/background-star-2.png" alt="background" />
+      <uimage
+        defer
+        cdn
+        src="/images/page-about/background-star-1.png"
+        alt="background"
+      />
+      <uimage
+        defer
+        cdn
+        src="/images/page-about/background-star-2.png"
+        alt="background"
+      />
     </div>
   </header>
 </template>
 
 <script lang="ts">
   import { defineComponent, onMounted, ref, computed } from 'vue'
-  import { isClient } from '/@/environment'
-  import { RouteName } from '/@/router'
+  import { isClient } from '../../../environment'
+  import { RouteName } from '../../../app/router'
   import { useI18n } from '/@/services/i18n'
   import { useMusic } from '/@/services/music'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -136,8 +149,12 @@
         overflow: hidden;
 
         @keyframes logo-blink {
-          0% { mask-position: -30% }
-          100% { mask-position: 666% }
+          0% {
+            mask-position: -30%;
+          }
+          100% {
+            mask-position: 666%;
+          }
         }
 
         .header-logo {
@@ -177,7 +194,7 @@
         flex-direction: column;
         align-items: inherit;
         justify-content: center;
-        opacity: .3;
+        opacity: 0.3;
         @include text-overflow();
         @include visibility-transition();
 

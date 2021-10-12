@@ -6,10 +6,7 @@
       dark: isDarkTheme
     }"
   >
-    <placeholder
-      :data="articleList.length"
-      :loading="fetching"
-    >
+    <placeholder :data="articleList.length" :loading="fetching">
       <template #placeholder>
         <empty class="article-empty" key="empty">
           <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
@@ -31,11 +28,7 @@
         </div>
       </template>
       <template #default>
-        <div
-          key="swiper"
-          class="swiper"
-          v-swiper="swiperOption"
-        >
+        <div key="swiper" class="swiper">
           <div class="swiper-wrapper">
             <div
               class="swiper-slide"
@@ -45,14 +38,17 @@
               <div class="content">
                 <template v-if="article.ad">
                   <ulink class="link" :href="article.url">
-                    <img :src="article.src" :alt="article.title">
+                    <img :src="article.src" :alt="article.title" />
                     <div class="title">
                       <div class="background"></div>
                       <div class="prospect">
                         <span
                           class="text"
-                          :style="{ backgroundImage: `url('${getThumbURL(article.src)}')` }"
-                        >{{ article.title }}</span>
+                          :style="{
+                            backgroundImage: `url('${getThumbURL(article.src)}')`
+                          }"
+                          >{{ article.title }}</span
+                        >
                       </div>
                     </div>
                     <span class="ad-symbol">
@@ -66,14 +62,17 @@
                       :src="getThumbURL(article.thumb)"
                       :alt="article.title"
                       draggable="false"
-                    >
+                    />
                     <div class="title">
                       <div class="background"></div>
                       <div class="prospect">
                         <span
                           class="text"
-                          :style="{ backgroundImage: `url('${getThumbURL(article.thumb)}')` }"
-                        >{{ article.title }}</span>
+                          :style="{
+                            backgroundImage: `url('${getThumbURL(article.thumb)}')`
+                          }"
+                          >{{ article.title }}</span
+                        >
                       </div>
                     </div>
                   </router-link>
@@ -81,7 +80,11 @@
               </div>
             </div>
           </div>
-          <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets" />
+          <div
+            class="
+              swiper-pagination swiper-pagination-clickable swiper-pagination-bullets
+            "
+          />
         </div>
       </template>
     </placeholder>
@@ -90,7 +93,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../app/enhancer'
   import { timeAgo } from '/@/transforms/moment'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getBannerArticleThumbnailUrl } from '/@/transforms/thumbnail'
@@ -114,10 +117,11 @@
         const articles = [...props.articles].slice(0, 9)
         if (adConfig.value.PC_CARROUSEL) {
           const { index, ...otherConfig } = adConfig.value.PC_CARROUSEL
-          articles.length && articles.splice(index, 0, {
-            ad: true,
-            ...otherConfig
-          })
+          articles.length &&
+            articles.splice(index, 0, {
+              ad: true,
+              ...otherConfig
+            })
         }
         return articles
       })
@@ -167,7 +171,7 @@
   @import 'src/styles/init.scss';
 
   $pc-carrousel-height: 210px;
-  $mobile-carrousel-height: calc((100vw - 2rem) * .34);
+  $mobile-carrousel-height: calc((100vw - 2rem) * 0.34);
 
   .carrousel {
     height: $pc-carrousel-height;
@@ -225,7 +229,7 @@
       height: $pc-carrousel-height;
 
       // Filter for slide when transitioning
-      .swiper-wrapper[style*="300ms"] {
+      .swiper-wrapper[style*='300ms'] {
         .swiper-slide-active {
           .content {
             @include blur-filter('horizontal');
@@ -283,7 +287,7 @@
             position: absolute;
             top: 2rem;
             right: 2.6rem;
-            opacity: .8;
+            opacity: 0.8;
             transition: opacity $transition-time-normal;
 
             .background {
@@ -306,11 +310,11 @@
               @include text-overflow;
               background-color: $module-bg-opaque;
               background-position: top right;
-              transform: translate3d(- $offset, $offset, 0);
+              transform: translate3d(-$offset, $offset, 0);
               transition: transform $transition-time-fast;
 
               .text {
-                letter-spacing: .3px;
+                letter-spacing: 0.3px;
                 font-weight: bold;
                 color: $text;
                 background-clip: text;

@@ -35,7 +35,7 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../../../app/enhancer'
   import { getTagArchiveRoute } from '/@/transforms/route'
   import { getExtendsValue } from '/@/transforms/state'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -61,6 +61,7 @@
 </script>
 
 <style lang="scss" scoped>
+  @use "sass:math";
   @import 'src/styles/init.scss';
   @import './variables.scss';
 
@@ -81,7 +82,7 @@
       overflow: hidden;
 
       .item {
-        width: calc(50% - #{$gap / 2});
+        width: calc(50% - #{math.div($gap, 2)});
         height: 1.4em;
         margin-right: 0;
         margin-bottom: $gap;

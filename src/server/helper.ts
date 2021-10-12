@@ -5,19 +5,9 @@
  */
 
 import path from 'path'
-import type { UserConfig } from 'vite'
-import { NODE_ENV } from '../environment'
 
-/**
- * dist
- * |- server.js
- * data
- * public
-*/
-export const APP_PATH = path.join(__dirname)
-export const ROOT_PATH = path.join(APP_PATH, '..')
+export const ROOT_PATH = process.cwd()
 export const DATA_PATH = path.join(ROOT_PATH, 'data')
 export const PUBLIC_PATH = path.join(ROOT_PATH, 'public')
-
-// config
-export const viteConfig: UserConfig = require(path.join(ROOT_PATH, 'vite.config'))(NODE_ENV)
+export const PRDO_CLIENT_PATH = path.join(ROOT_PATH, 'dist', 'client')
+export const PRDO_SERVER_PATH = path.join(ROOT_PATH, 'dist', 'server')

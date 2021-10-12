@@ -38,7 +38,6 @@ const updateLocalBarragesFile = async () => {
 const updateDebounce = debounce(updateLocalBarragesFile, 1000 * 30)
 
 export const startBarrageSocket = (ioServer: Server) => {
-
   // get counts
   const getCounts = () => ({
     // @ts-ignore
@@ -47,12 +46,10 @@ export const startBarrageSocket = (ioServer: Server) => {
   })
 
   ioServer.on('connection', (socketWithClient: Socket) => {
-
     // 通知所有数量的更新
-    const sendCountToClients = () => socketWithClient.broadcast.emit(
-      SocketEvent.UpdateCount,
-      getCounts()
-    )
+    const sendCountToClients = () => {
+      socketWithClient.broadcast.emit(SocketEvent.UpdateCount, getCounts())
+    }
 
     // 每次有连接发生变化，都需要更新总数量 & 且通知客户端
     sendCountToClients()
@@ -61,17 +58,17 @@ export const startBarrageSocket = (ioServer: Server) => {
     })
 
     // 最后一批弹幕记录
-    socketWithClient.on(SocketEvent.LastList, callback => {
+    socketWithClient.on(SocketEvent.LastList, (callback) => {
       callback(barrages.slice(-66))
     })
 
     // 弹幕总数量
-    socketWithClient.on(SocketEvent.Count, callback => {
+    socketWithClient.on(SocketEvent.Count, (callback) => {
       callback(getCounts())
     })
 
     // 广播新弹幕 & 且通知客户端数量变化
-    socketWithClient.on(SocketEvent.Send, barrage => {
+    socketWithClient.on(SocketEvent.Send, (barrage) => {
       barrages.push(barrage)
       socketWithClient.broadcast.emit(SocketEvent.Create, barrage)
       updateDebounce()

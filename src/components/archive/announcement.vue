@@ -6,10 +6,7 @@
       dark: isDarkTheme
     }"
   >
-    <placeholder
-      :data="announcements.length"
-      :loading="fetching"
-    >
+    <placeholder :data="announcements.length" :loading="fetching">
       <template #placeholder>
         <empty class="announcement-empty" key="empty">
           <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
@@ -44,7 +41,6 @@
           <div class="swiper-box">
             <div
               class="swiper"
-              v-swiper="swiperOption"
               @ready="updateSwiperContext"
               @transition-start="handleSwiperTransitionStart"
             >
@@ -91,8 +87,8 @@
   import { useTheme, Theme } from '/@/services/theme'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { useGlobalState } from '/@/state'
-  import { useEnhancer } from '/@/enhancer'
+  import { useGlobalState } from '../../app/state'
+  import { useEnhancer } from '../../app/enhancer'
   import { timeAgo } from '/@/transforms/moment'
 
   export default defineComponent({
@@ -160,6 +156,7 @@
 </script>
 
 <style lang="scss" scoped>
+  @use "sass:math";
   @import 'src/styles/init.scss';
 
   $announcement-height: 42px;
@@ -222,12 +219,7 @@
       position: absolute;
       width: $demarcation-width;
       height: 100%;
-      background: linear-gradient(
-        66deg,
-        $module-bg-opaque,
-        $module-bg-lighter
-        66%
-      );
+      background: linear-gradient(66deg, $module-bg-opaque, $module-bg-lighter 66%);
 
       &::before {
         content: attr(data-content);
@@ -238,7 +230,7 @@
         font-size: 6em;
         font-weight: bold;
         direction: rtl;
-        opacity: .2;
+        opacity: 0.2;
         z-index: -1;
         @include text-overflow(clip);
       }
@@ -251,7 +243,7 @@
         width: $size;
         height: 200%;
         top: -50%;
-        right: -($size / 2);
+        right: -math.div($size, 2);
         background: $body-bg;
         transform: rotate(18deg);
       }
@@ -266,7 +258,7 @@
       .icon-box {
         display: inline-block;
         transform: rotate(0deg);
-        transition: transform .3s;
+        transition: transform 0.3s;
       }
     }
 
@@ -282,7 +274,7 @@
         .swiper-wrapper {
           flex-direction: column;
           // Filter for slide when transitioning
-          &[style*="300ms"] {
+          &[style*='300ms'] {
             .swiper-slide-active {
               .content {
                 @include blur-filter('vertical-small');
@@ -339,7 +331,7 @@
           }
 
           &.disabled {
-            opacity: .8;
+            opacity: 0.8;
             color: $text-dividers;
             cursor: no-drop;
           }

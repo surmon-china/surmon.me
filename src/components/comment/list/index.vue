@@ -6,7 +6,7 @@
   >
     <template #loading>
       <ul class="comment-list-skeleton">
-        <li v-for="item in (isMobile ? 3 : 5)" :key="item" class="item">
+        <li v-for="item in isMobile ? 3 : 5" :key="item" class="item">
           <div class="gravatar">
             <skeleton-base />
           </div>
@@ -46,7 +46,7 @@
   import { defineComponent, ref, onMounted, onBeforeUnmount, PropType } from 'vue'
   import { getNamespace, Modules } from '/@/store'
   import { CommentModuleActions } from '/@/store/comment'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../../app/enhancer'
   import { LozadObserver } from '/@/services/lozad'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { firstUpperCase } from '/@/transforms/text'
@@ -59,7 +59,7 @@
   export default defineComponent({
     name: 'CommentList',
     components: {
-      CommentItem,
+      CommentItem
     },
     props: {
       fetching: {
@@ -79,10 +79,12 @@
       const lozadObserver = ref<LozadObserver | null>(null)
 
       const observeLozad = () => {
-        const lozadElements = (listElement.value?.$el as HTMLElement)?.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
+        const lozadElements = (listElement.value?.$el as HTMLElement)?.querySelectorAll(
+          `.${LOZAD_CLASS_NAME}`
+        )
         if (lozadElements?.length) {
           lozadObserver.value = window.$lozad(lozadElements, {
-            loaded: element => element.classList.add(LOADED_CLASS_NAME)
+            loaded: (element) => element.classList.add(LOADED_CLASS_NAME)
           })
           lozadObserver.value.observe()
         }

@@ -14,13 +14,13 @@ declare global {
 }
 
 export interface LoadingState {
-  percent: number;
-  show: boolean;
-  error: null;
-  canSucceed: boolean;
-  skipTimerCount: number;
-  throttle: number;
-  duration: number;
+  percent: number
+  show: boolean
+  error: null
+  canSucceed: boolean
+  skipTimerCount: number
+  throttle: number
+  duration: number
 }
 
 export interface Loading {
@@ -151,7 +151,7 @@ const createLoadingStore = (options: LoadingOptions = {}) => {
     fail,
     increase,
     decrease,
-    set
+    set,
   }
 }
 
@@ -166,7 +166,7 @@ export const createLoading = (options?: LoadingOptions) => {
       if (config?.exportToGlobal) {
         window.$loading = loading
       }
-    }
+    },
   }
 }
 

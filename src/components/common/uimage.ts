@@ -5,8 +5,8 @@
  */
 
 import { defineComponent, ref, h } from 'vue'
-import { isClient } from '/@/environment'
-import { useEnhancer } from '/@/enhancer'
+import { isClient } from '../../environment'
+import { useEnhancer } from '../../app/enhancer'
 import { getFileCDNUrl, getFileProxyUrl } from '/@/transforms/url'
 
 export default defineComponent({

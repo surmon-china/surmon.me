@@ -9,10 +9,7 @@
     <div class="banner">
       <div class="content container">
         <p class="title">
-          <i18n
-            zh="凡心所向，素履以往"
-            en="Because it's there"
-          />
+          <i18n zh="凡心所向，素履以往" en="Because it's there" />
         </p>
         <p class="description">
           <i18n>
@@ -92,10 +89,10 @@
               </h5>
               <p
                 class="description"
-                style="-webkit-box-orient: vertical;"
+                style="-webkit-box-orient: vertical"
                 v-text="video.description || '-'"
               />
-              <hr class="separator">
+              <hr class="separator" />
               <p class="meta">
                 <span class="item favorites">
                   <i class="iconfont icon-heart"></i>
@@ -132,8 +129,8 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
-  import { isClient } from '/@/environment'
+  import { useEnhancer } from '../app/enhancer'
+  import { isClient } from '../environment'
   import { prefetch } from '/@/universal'
   import { getNamespace, Modules } from '/@/store'
   import { VlogModuleActions } from '/@/store/vlog'
@@ -146,16 +143,15 @@
   export default defineComponent({
     name: 'Lens',
     setup() {
-      const { globalState, i18n, helmet, store, isMobile, isDarkTheme, isZhLang } = useEnhancer()
+      const { globalState, i18n, helmet, store, isMobile, isDarkTheme, isZhLang } =
+        useEnhancer()
       const lozadObserver = ref<LozadObserver | null>(null)
       const videoListElement = ref<HTMLElement>()
       const isFetching = computed(() => store.state.vlog.fetching)
       const videoList = computed(() => store.state.vlog.data)
 
       helmet(() => {
-        const prefix = isZhLang.value
-          ? `${i18n.t(LANGUAGE_KEYS.PAGE_LENS)} | `
-          : ''
+        const prefix = isZhLang.value ? `${i18n.t(LANGUAGE_KEYS.PAGE_LENS)} | ` : ''
         return { title: prefix + 'Lens' }
       })
 
@@ -164,7 +160,11 @@
       }
 
       const getThumbUrl = (url: string) => {
-        return getFileProxyUrl(`/bilibili/${url.replace('//', '')}@560w_350h.${globalState.imageExt.value.ext}`)
+        return getFileProxyUrl(
+          `/bilibili/${url.replace('//', '')}@560w_350h.${
+            globalState.imageExt.value.ext
+          }`
+        )
       }
 
       const handlePlay = (video: any) => {
@@ -172,17 +172,16 @@
       }
 
       const fetchData = () => {
-        return store.dispatch(getNamespace(
-          Modules.Vlog,
-          VlogModuleActions.FetchVideos
-        ))
+        return store.dispatch(getNamespace(Modules.Vlog, VlogModuleActions.FetchVideos))
       }
 
       const observeLozad = () => {
-        const lozadElements = videoListElement.value?.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
+        const lozadElements = videoListElement.value?.querySelectorAll(
+          `.${LOZAD_CLASS_NAME}`
+        )
         if (lozadElements?.length) {
           lozadObserver.value = window.$lozad(lozadElements, {
-            loaded: element => element.classList.add(LOADED_CLASS_NAME)
+            loaded: (element) => element.classList.add(LOADED_CLASS_NAME)
           })
           lozadObserver.value.observe()
         }
@@ -208,7 +207,7 @@
         humanlizeDate,
         getThumbUrl,
         handlePlay,
-        observeLozad,
+        observeLozad
       }
 
       return prefetch(fetchData, resultData)
@@ -220,7 +219,6 @@
   @import 'src/styles/init.scss';
 
   .lens-page {
-
     .banner {
       margin-bottom: $lg-gap;
       height: $full-column-page-banner-height;
@@ -373,10 +371,7 @@
       border-width: 4px;
       border-style: double;
       border-radius: $lg-radius;
-      border-color:
-        $bilibili-pink-primary
-        $bilibili-blue-primary
-        $bilibili-blue-primary
+      border-color: $bilibili-pink-primary $bilibili-blue-primary $bilibili-blue-primary
         $bilibili-pink-primary;
       background-color: $module-bg-opaque;
       text-align: center;
@@ -408,7 +403,7 @@
         &:hover {
           .thumb {
             .background {
-              transform: rotate(2deg) scale(1.1),
+              transform: rotate(2deg) scale(1.1);
             }
 
             .mask {
@@ -624,7 +619,7 @@
             .douyin,
             .wechat-channel {
               width: calc((100% - #{$gap}) / 2);
-               img {
+              img {
                 width: 100%;
               }
             }

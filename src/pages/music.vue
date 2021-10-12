@@ -27,8 +27,8 @@
             />
           </svg>
         </div>
-        <div class="song-bg-box" :class="{ 'playing': player?.state.playing }">
-          <img :src="currentSong?.cover_art_url" draggable="false">
+        <div class="song-bg-box" :class="{ playing: player?.state.playing }">
+          <img :src="currentSong?.cover_art_url" draggable="false" />
         </div>
         <div class="toggle-box">
           <transition name="module" mode="out-in">
@@ -40,9 +40,7 @@
             >
               <i
                 class="iconfont"
-                :class="player?.state.playing
-                  ? 'icon-music-pause'
-                  : 'icon-music-play'"
+                :class="player?.state.playing ? 'icon-music-pause' : 'icon-music-play'"
               ></i>
             </button>
           </transition>
@@ -71,7 +69,8 @@
     <div class="song-info">
       <h4 class="name">
         <template v-if="currentSong">
-          {{ currentSong.name }} By {{ currentSong.artist }} | {{ currentSong.album || 'unknow' }}
+          {{ currentSong.name }} By {{ currentSong.artist }} |
+          {{ currentSong.album || 'unknow' }}
         </template>
         <template v-else>Kind words are the music of the world.</template>
       </h4>
@@ -95,8 +94,8 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { isClient } from '/@/environment'
-  import { useEnhancer } from '/@/enhancer'
+  import { isClient } from '../environment'
+  import { useEnhancer } from '../app/enhancer'
   import { useMusic } from '/@/services/music'
   import { LANGUAGE_KEYS } from '/@/language/key'
 
@@ -107,25 +106,27 @@
       const musicPlayer = isClient ? useMusic() : null
 
       helmet(() => {
-        const prefix = isZhLang.value
-          ? `${i18n.t(LANGUAGE_KEYS.PAGE_MUSIC)} | `
-          : ''
+        const prefix = isZhLang.value ? `${i18n.t(LANGUAGE_KEYS.PAGE_MUSIC)} | ` : ''
         return { title: prefix + 'Music' }
       })
 
-      const relativeStrokeWidth = parseFloat((15 / 450 * 100).toFixed(1))
+      const relativeStrokeWidth = parseFloat(((15 / 450) * 100).toFixed(1))
       const radius = 50 - relativeStrokeWidth / 2
       const perimeter = 2 * Math.PI * radius
       const trackPath = (() => {
         const _radius = parseInt(String(radius), 10)
-        return `M 50 50 m 0 -${_radius} a ${_radius} ${_radius} 0 1 1 0 ${_radius * 2} a ${_radius} ${_radius} 0 1 1 0 -${_radius * 2}`
+        return `M 50 50 m 0 -${_radius} a ${_radius} ${_radius} 0 1 1 0 ${
+          _radius * 2
+        } a ${_radius} ${_radius} 0 1 1 0 -${_radius * 2}`
       })()
 
       const circlePathStyle = computed(() => {
-        return musicPlayer && {
-          strokeDasharray: `${perimeter}px, ${perimeter}px`,
-          strokeDashoffset: (1 - (musicPlayer.state.progress) / 100) * perimeter + 'px'
-        }
+        return (
+          musicPlayer && {
+            strokeDasharray: `${perimeter}px, ${perimeter}px`,
+            strokeDashoffset: (1 - musicPlayer.state.progress / 100) * perimeter + 'px'
+          }
+        )
       })
 
       return {
@@ -180,7 +181,7 @@
         align-items: center;
         width: 38rem;
         height: 38rem;
-        opacity: .9;
+        opacity: 0.9;
         @include visibility-transition();
 
         &:hover {
@@ -188,8 +189,12 @@
         }
 
         @keyframes rotation {
-          from { transform: rotate(0deg) }
-          to { transform: rotate(360deg) }
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
         }
 
         > .song-bg-box {
@@ -224,7 +229,7 @@
             line-height: 6rem;
             background-color: $module-bg;
             border-radius: 100%;
-            opacity: .8;
+            opacity: 0.8;
             font-size: 3em;
             text-align: center;
             transition: all $transition-time-fast;

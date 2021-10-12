@@ -5,10 +5,7 @@
       :background-image="null"
       icon="icon-clock"
     >
-      <i18n
-        :zh="`发布于 ${date} 的所有文章`"
-        :en="`${date} articles`"
-      />
+      <i18n :zh="`发布于 ${date} 的所有文章`" :en="`${date} articles`" />
     </article-list-header>
     <article-list
       :fetching="article.fetching"
@@ -22,7 +19,7 @@
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { prefetch, onClient } from '/@/universal'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../app/enhancer'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
@@ -70,13 +67,10 @@
         )
       })
 
-      return prefetch(
-        () => fetchArticles({ date: props.date }),
-        {
-          article,
-          loadmoreArticles
-        }
-      )
+      return prefetch(() => fetchArticles({ date: props.date }), {
+        article,
+        loadmoreArticles
+      })
     }
   })
 </script>

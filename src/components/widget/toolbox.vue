@@ -2,11 +2,7 @@
   <div id="toolbox">
     <div class="container">
       <div class="tools">
-        <ulink
-          class="rss"
-          :href="VALUABLE_LINKS.RSS"
-          @mousedown="handleRSS"
-        >
+        <ulink class="rss" :href="VALUABLE_LINKS.RSS" @mousedown="handleRSS">
           <i class="iconfont icon-rss" />
         </ulink>
         <button
@@ -45,7 +41,7 @@
 
 <script lang="ts">
   import { PropType, defineComponent, ref, computed, onMounted } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../app/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { scrollTo, Easing } from '/@/utils/scroller'
@@ -100,11 +96,7 @@
         isOnBarrage,
         scrollToTop,
         toBottom() {
-          scrollTo(
-            window.scrollY + window.innerHeight,
-            300,
-            { easing: Easing.easeIn }
-          )
+          scrollTo(window.scrollY + window.innerHeight, 300, { easing: Easing.easeIn })
         },
         setTopButtonState(state: boolean, isStartSlow = false) {
           isTopButtonMouseOver.value = state

@@ -1,9 +1,6 @@
 <template>
   <div class="related" :class="{ mobile: isMobile }">
-    <placeholder
-      :loading="fetching"
-      :data="!!articles.length"
-    >
+    <placeholder :loading="fetching" :data="!!articles.length">
       <template #loading>
         <skeleton-paragraph
           v-if="isMobile"
@@ -12,11 +9,7 @@
           :lines="4"
         />
         <ul class="skeleton-list" v-else>
-          <skeleton-base
-            class="article"
-            v-for="item in 4"
-            :key="item"
-          />
+          <skeleton-base class="article" v-for="item in 4" :key="item" />
         </ul>
       </template>
       <template #default>
@@ -49,7 +42,7 @@
 
 <script lang="ts">
   import { defineComponent, PropType } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../app/enhancer'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
 
@@ -68,10 +61,7 @@
     setup() {
       const { store, globalState, isMobile } = useEnhancer()
       const getRelatedArticleThumb = (thumb: string) => {
-        return getArchiveArticleThumbnailUrl(
-          thumb,
-          globalState.imageExt.value.isWebP
-        )
+        return getArchiveArticleThumbnailUrl(thumb, globalState.imageExt.value.isWebP)
       }
 
       return {
@@ -124,7 +114,7 @@
 
         &.disabled {
           pointer-events: none;
-          opacity: .8;
+          opacity: 0.8;
         }
 
         &:nth-child(3n) {
@@ -136,7 +126,7 @@
           display: block;
           position: relative;
           overflow: hidden;
-          opacity: .8;
+          opacity: 0.8;
           transition: opacity $transition-time-normal;
 
           .thumb {

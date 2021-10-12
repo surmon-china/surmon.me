@@ -17,7 +17,7 @@
             autocomplete="on"
             :disabled="disabled"
             :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_NAME) + ' *'"
-          >
+          />
         </div>
         <div class="email">
           <input
@@ -28,7 +28,7 @@
             autocomplete="on"
             :disabled="disabled"
             :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_EMAIL) + ' *'"
-          >
+          />
         </div>
         <div class="site">
           <input
@@ -38,14 +38,10 @@
             autocomplete="on"
             :disabled="disabled"
             :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_SITE)"
-          >
+          />
         </div>
         <div v-if="editing" class="save">
-          <button
-            type="submit"
-            :disabled="disabled"
-            @click="saveUserProfile"
-          >
+          <button type="submit" :disabled="disabled" @click="saveUserProfile">
             <i class="iconfont icon-success" />
           </button>
         </div>
@@ -79,7 +75,7 @@
               :alt="profileState.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
               :src="humanizeGravatarUrlByEmail(profileState.email)"
               draggable="false"
-            >
+            />
           </div>
         </desktop-only>
       </div>
@@ -115,12 +111,18 @@
 
 <script lang="ts">
   import { defineComponent, ref, reactive, computed, watch } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../app/enhancer'
   import { firstUpperCase } from '/@/transforms/text'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { CommentEvent, ElementID, getCommentElementId, humanizeGravatarUrlByEmail, scrollToElementAnchor } from './helper'
+  import {
+    CommentEvent,
+    ElementID,
+    getCommentElementId,
+    humanizeGravatarUrlByEmail,
+    scrollToElementAnchor
+  } from './helper'
 
   export default defineComponent({
     name: 'CommentPublisher',
@@ -159,13 +161,13 @@
       const profileState = ref(props.profile)
       watch(
         () => props.profile,
-        profile => profileState.value = profile,
+        (profile) => (profileState.value = profile),
         { deep: true }
       )
 
       const replyingComment = computed(() => {
         return store.state.comment.comments.data.find(
-          comment => comment.id === props.replyPid
+          (comment) => comment.id === props.replyPid
         )
       })
 
@@ -276,7 +278,7 @@
             top: 2em;
             margin: 0;
             padding: 0;
-            padding-top: .5rem;
+            padding-top: 0.5rem;
             list-style-type: square;
             z-index: $z-index-normal + 1;
             color: $text-reversal;
@@ -347,7 +349,7 @@
 
         .gravatar {
           display: block;
-          margin-bottom: .5em;
+          margin-bottom: 0.5em;
           width: 4rem;
           height: 4rem;
           background-color: $module-bg-darker-1;
@@ -355,7 +357,7 @@
           img {
             width: 100%;
             height: 100%;
-            transition: transform .5s ease-out;
+            transition: transform 0.5s ease-out;
           }
         }
       }

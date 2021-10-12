@@ -29,7 +29,9 @@
                 class="item"
                 :class="'s-' + index"
                 @click="handleSetSize(index)"
-              >{{ size }}</li>
+              >
+                {{ size }}
+              </li>
             </ul>
           </div>
           <div class="color">
@@ -43,7 +45,9 @@
                 class="item"
                 :class="'barrage-color-' + index"
                 @click="handleSetColor(index)"
-              >{{ color }}</li>
+              >
+                {{ color }}
+              </li>
             </ul>
           </div>
           <input
@@ -52,7 +56,7 @@
             class="input"
             placeholder="Here we go"
             @keyup.enter="sendBarrage"
-          >
+          />
           <div class="count">
             <span>{{ counts.users }} <i18n zh="人" en="U" /></span>
             <span class="separator">|</span>
@@ -65,8 +69,16 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, reactive, ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import {
+    defineComponent,
+    reactive,
+    ref,
+    computed,
+    watch,
+    onMounted,
+    onBeforeUnmount
+  } from 'vue'
+  import { useEnhancer } from '../../../app/enhancer'
   import { SocketEvent } from '/@/constants/barrage'
   import BarrageItem from './item.vue'
   import { randomPer } from './util'
@@ -80,10 +92,19 @@
       const { i18n, globalState, isZhLang } = useEnhancer()
       const sizes = isZhLang.value
         ? ['粗大', '很大', '大']
-        : ['Strong', 'Large', 'Normal'];
+        : ['Strong', 'Large', 'Normal']
       const colors = isZhLang.value
-        ? ['老王绿', '原谅绿', '姨妈红', '友情紫', '百合粉', '东莞黄', '李太白', '非常黑']
-        : ['Green', 'Green2', 'Red', 'Purple', 'Pink', 'Yellow', 'White', 'Black'];
+        ? [
+            '老王绿',
+            '原谅绿',
+            '姨妈红',
+            '友情紫',
+            '百合粉',
+            '东莞黄',
+            '李太白',
+            '非常黑'
+          ]
+        : ['Green', 'Green2', 'Red', 'Purple', 'Pink', 'Yellow', 'White', 'Black']
 
       const counts = reactive({ users: 0, count: 0 })
       const config = reactive({ delay: 10, moveDelay: 4 })
@@ -116,7 +137,7 @@
         state.transitioning = false
       }
       const handleBarrageItemAnimationEnd = (id: number) => {
-        const targetIndex = barrages.findIndex(barrage => barrage.id === id)
+        const targetIndex = barrages.findIndex((barrage) => barrage.id === id)
         if (targetIndex > -1) {
           barrages.splice(targetIndex, 1)
         }
@@ -148,7 +169,7 @@
       }
 
       const initSocket = () => {
-        window.$socket.emit(SocketEvent.LastList, _barrages => {
+        window.$socket.emit(SocketEvent.LastList, (_barrages) => {
           const lastBarrages = _barrages.map((barrage, index) => ({
             id: index + 1,
             ...barrage
@@ -169,13 +190,13 @@
           moveBarrages()
           barrageLimit = lastBarrages.length + 2
         })
-        window.$socket.emit(SocketEvent.Count, _counts => {
+        window.$socket.emit(SocketEvent.Count, (_counts) => {
           Object.assign(counts, _counts)
         })
-        window.$socket.on(SocketEvent.UpdateCount, _counts => {
+        window.$socket.on(SocketEvent.UpdateCount, (_counts) => {
           Object.assign(counts, _counts)
         })
-        window.$socket.on(SocketEvent.Create, barrage => {
+        window.$socket.on(SocketEvent.Create, (barrage) => {
           barrages.push({
             ...barrage,
             id: barrageLimit++,
@@ -195,7 +216,7 @@
       // 当用户关闭弹幕时，清空所有队列中的（UI 上正在展示的）消息
       watch(
         () => isOnBarrage.value,
-        on => on || clearBarrages()
+        (on) => on || clearBarrages()
       )
 
       onMounted(initSocket)
@@ -269,10 +290,18 @@
   @import 'src/styles/init.scss';
 
   @keyframes input-box-in {
-    0% { transform: translate3d(0, -2000%, 0) }
-    65% { transform: translate3d(0, 100%, 0) }
-    80% { transform: translate3d(0, -80%, 0) }
-    100% { transform: translate3d(0, 0, 0) }
+    0% {
+      transform: translate3d(0, -2000%, 0);
+    }
+    65% {
+      transform: translate3d(0, 100%, 0);
+    }
+    80% {
+      transform: translate3d(0, -80%, 0);
+    }
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
   }
 
   #barrage {
@@ -286,11 +315,8 @@
     transform: translate3d(0, -100%, 0);
     @include backdrop-blur();
     @include hidden();
-    transition:
-      opacity $transition-time-normal,
-      visibility $transition-time-normal,
-      transform $transition-time-normal
-    ;
+    transition: opacity $transition-time-normal, visibility $transition-time-normal,
+      transform $transition-time-normal;
 
     &.active {
       @include visible();
@@ -324,8 +350,12 @@
         margin: 0;
 
         @keyframes barrages-list-out {
-          0% { transform: translate3d(100%, 0, 0) }
-          90% { transform: translate3d(-100%, 0, 0) }
+          0% {
+            transform: translate3d(100%, 0, 0);
+          }
+          90% {
+            transform: translate3d(-100%, 0, 0);
+          }
         }
 
         .barrages-list-leave-active {

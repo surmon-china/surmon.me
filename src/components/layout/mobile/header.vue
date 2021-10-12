@@ -1,9 +1,6 @@
 <template>
   <header class="header">
-    <div
-      class="search"
-      :class="{ actived: searchState.open }"
-    >
+    <div class="search" :class="{ actived: searchState.open }">
       <input
         ref="inputElement"
         v-model.trim="searchState.keyword"
@@ -13,16 +10,12 @@
         required
         :placeholder="t(LANGUAGE_KEYS.SEARCH_PLACEHOLDER)"
         @keyup.enter.stop.prevent="submitSearch"
-      >
+      />
       <span class="close" @click.stop.prevent="cancelSearch">
         <i class="iconfont icon-cancel"></i>
       </span>
       <client-only>
-        <datalist
-          v-if="tags.length"
-          id="keywords"
-          class="search-keywords"
-        >
+        <datalist v-if="tags.length" id="keywords" class="search-keywords">
           <option
             class="iiem"
             v-for="tag in tags"
@@ -51,9 +44,17 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, reactive, ref, watch, onMounted, nextTick } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
-  import { RouteName } from '/@/router'
+  import {
+    defineComponent,
+    computed,
+    reactive,
+    ref,
+    watch,
+    onMounted,
+    nextTick
+  } from 'vue'
+  import { useEnhancer } from '../../../app/enhancer'
+  import { RouteName } from '../../../app/router'
   import { isSearchArchive } from '/@/transforms/route'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import * as APP_CONFIG from '/@/config/app.config'

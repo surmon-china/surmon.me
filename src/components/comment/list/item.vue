@@ -12,7 +12,7 @@
             :alt="comment.author.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
             :src="humanizeGravatarUrlByEmail(comment.author.email)"
             draggable="false"
-          >
+          />
         </comment-link>
       </div>
     </desktop-only>
@@ -28,7 +28,8 @@
             <span
               v-if="comment.ip_location.country && comment.ip_location.city"
               class="separator"
-            >-</span>
+              >-</span
+            >
             <span>{{ comment.ip_location.city }}</span>
           </span>
         </desktop-only>
@@ -44,10 +45,7 @@
           </button>
           <i18n zh="：" en=":" />
         </p>
-        <div
-          class="markdown-html comment"
-          v-html="markdownToHTML(comment.content)"
-        />
+        <div class="markdown-html comment" v-html="markdownToHTML(comment.content)" />
       </div>
       <div class="cm-footer">
         <span class="create_at">{{ humanlizeDate(comment.create_at) }}</span>
@@ -75,12 +73,17 @@
 
 <script lang="ts">
   import { defineComponent, h, computed } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../../app/enhancer'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { timeAgo } from '/@/transforms/moment'
   import { firstUpperCase } from '/@/transforms/text'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { CommentEvent, scrollToElementAnchor, humanizeGravatarUrlByEmail, getCommentElementId } from '../helper'
+  import {
+    CommentEvent,
+    scrollToElementAnchor,
+    humanizeGravatarUrlByEmail,
+    getCommentElementId
+  } from '../helper'
   import CommentUa from './ua.vue'
 
   const CommentLink = defineComponent({
@@ -93,11 +96,13 @@
         const isLink = !!href
         return h(
           isLink ? 'a' : 'span',
-          !isLink ? restProps : {
-            ...props,
-            target: '_blank',
-            rel: 'external nofollow noopener'
-          },
+          !isLink
+            ? restProps
+            : {
+                ...props,
+                target: '_blank',
+                rel: 'external nofollow noopener'
+              },
           context.slots.default?.()
         )
       }
@@ -108,7 +113,7 @@
     name: 'CommentListItem',
     components: {
       CommentLink,
-      CommentUa,
+      CommentUa
     },
     props: {
       comment: {
@@ -120,18 +125,15 @@
         default: false
       }
     },
-    emits: [
-      CommentEvent.Reply,
-      CommentEvent.Like
-    ],
+    emits: [CommentEvent.Reply, CommentEvent.Like],
     setup(props, context) {
       const { i18n, store, globalState, isMobile, isZhLang } = useEnhancer()
       const comments = computed(() => store.state.comment.comments.data)
 
       const getReplyParentCommentText = (parentCommentId: number) => {
-        const authorName = comments.value
-          .find(comment => comment.id === parentCommentId)
-          ?.author.name
+        const authorName = comments.value.find(
+          (comment) => comment.id === parentCommentId
+        )?.author.name
         const nameText = authorName ? `@${authorName}` : ''
         const idText = `#${parentCommentId}`
         return `${idText} ${nameText}`
@@ -260,7 +262,7 @@
           display: flex;
           align-items: center;
           margin-top: $sm-gap;
-          margin-bottom: - $xs-gap;
+          margin-bottom: -$xs-gap;
           color: $text-disabled;
           font-weight: bold;
 

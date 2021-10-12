@@ -23,15 +23,15 @@ export default {
     if (target === 'client') {
       return mergeConfig(viteConfig, {
         define: {
-          VITE_SSR: 'true',
-        },
+          VITE_SSR: 'true'
+        }
       })
     }
 
     if (target === 'server') {
       return mergeConfig(viteConfig, {
         define: {
-          VITE_SSR: 'true',
+          VITE_SSR: 'true'
         },
         build: {
           rollupOptions: {
@@ -39,17 +39,19 @@ export default {
             external: viteConfig?.optimizeDeps?.include || []
           }
         },
-        plugins: [vuePlugin({
-          template: {
-            compilerOptions: {
-              directiveTransforms: {
-                swiper(prop, node, context) {
-                  return { props: [] }
+        plugins: [
+          vuePlugin({
+            template: {
+              compilerOptions: {
+                directiveTransforms: {
+                  swiper(prop, node, context) {
+                    return { props: [] }
+                  }
                 }
               }
             }
-          }
-        })]
+          })
+        ]
       })
     }
   }

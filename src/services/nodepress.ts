@@ -21,7 +21,7 @@ type HTTPResult<T = any> = {
 }
 
 const nodepress = axios.create({
-  baseURL: API_CONFIG.NODEPRESS,
+  baseURL: 'https://api.surmon.me',
 })
 
 nodepress.interceptors.response.use(

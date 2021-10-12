@@ -1,10 +1,7 @@
 <template>
   <div class="article-page" :class="{ mobile: isMobile }">
     <div class="module">
-      <article-content
-        :fetching="fetching"
-        :article="article"
-      />
+      <article-content :fetching="fetching" :article="article" />
     </div>
     <client-only>
       <div class="module">
@@ -15,16 +12,10 @@
       <article-share :fetching="fetching" />
     </div>
     <div class="module">
-      <article-meta
-        :fetching="fetching"
-        :article="article"
-      />
+      <article-meta :fetching="fetching" :article="article" />
     </div>
     <div class="releted">
-      <article-related
-        :fetching="fetching"
-        :articles="relatedArticles"
-      />
+      <article-related :fetching="fetching" :articles="relatedArticles" />
     </div>
     <div class="comment">
       <comment
@@ -38,9 +29,9 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, watch, onBeforeMount } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../app/enhancer'
   import { prefetch } from '/@/universal'
-  import { isClient } from '/@/environment'
+  import { isClient } from '../../environment'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { CommentModuleActions } from '/@/store/comment'
@@ -78,7 +69,7 @@
         }
         const ARTICLE_COUNT = 6
         const articles = [...article.value.related]
-          .filter(article => article._id !== props.articleId)
+          .filter((article) => article._id !== props.articleId)
           .slice(0, ARTICLE_COUNT)
         if (isMobile.value || articles.length >= ARTICLE_COUNT) {
           return articles
@@ -122,15 +113,12 @@
         )
       })
 
-      return prefetch(
-        () => fetchArticleDetail(props.articleId),
-        {
-          isMobile,
-          article,
-          fetching,
-          relatedArticles
-        }
-      )
+      return prefetch(() => fetchArticleDetail(props.articleId), {
+        isMobile,
+        article,
+        fetching,
+        relatedArticles
+      })
     }
   })
 </script>

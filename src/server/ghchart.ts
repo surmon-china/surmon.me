@@ -17,15 +17,13 @@ const UPDATE_TIME = {
 }
 
 export const startGitHubChartUpdater = () => {
-  (function doUpdate() {
-    axios.get(`https://ghchart.rshah.org/${GITHUB_UID}`, { timeout: 8000 })
-      .then(response => {
+  ;(function doUpdate() {
+    axios
+      .get(`https://ghchart.rshah.org/${GITHUB_UID}`, { timeout: 8000 })
+      .then((response) => {
         if (response.status === 200) {
-          fs.writeFileSync(path.resolve(
-            PUBLIC_PATH,
-            'images',
-            'ghchart.svg'
-            ),
+          fs.writeFileSync(
+            path.resolve(PUBLIC_PATH, 'images', 'ghchart.svg'),
             response.data
           )
           console.log('GitHub Chart 更新成功', new Date())
@@ -35,9 +33,9 @@ export const startGitHubChartUpdater = () => {
           setTimeout(doUpdate, UPDATE_TIME.HOURS_05)
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.warn('GitHub Chart 更新网络连接失败', new Date(), error?.toJSON())
         setTimeout(doUpdate, UPDATE_TIME.HOURS_05)
       })
-  }())
+  })()
 }

@@ -1,9 +1,6 @@
 <template>
   <div class="archive-page" :class="{ mobile: isMobile }">
-    <placeholder
-      :data="hasArticle && tags.length"
-      :loading="isFetching"
-    >
+    <placeholder :data="hasArticle && tags.length" :loading="isFetching">
       <template #placeholder>
         <empty class="archive-empty" key="empty">
           <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
@@ -26,26 +23,15 @@
       <template #default>
         <div class="content-warpper" key="content">
           <ul class="year-list">
-            <li
-              v-for="yes in articleTree"
-              :key="yes.year"
-              class="year"
-            >
+            <li v-for="yes in articleTree" :key="yes.year" class="year">
               <h4 class="title root">
                 <i class="iconfont icon-china-symble" />
                 <span class="text">
-                  <i18n
-                    :zh="replaceToChineseNumber(yes.year, true)"
-                    :en="yes.year"
-                  />
+                  <i18n :zh="replaceToChineseNumber(yes.year, true)" :en="yes.year" />
                 </span>
               </h4>
               <ul class="month-list">
-                <li
-                  v-for="mos in yes.months"
-                  :key="mos.month"
-                  class="month"
-                >
+                <li v-for="mos in yes.months" :key="mos.month" class="month">
                   <h5 class="title">
                     <span class="argyle">
                       <i18n
@@ -56,11 +42,13 @@
                     </span>
                   </h5>
                   <ul class="article-list">
-                    <li v-for="(article, index) in mos.articles" :key="index" class="article">
+                    <li
+                      v-for="(article, index) in mos.articles"
+                      :key="index"
+                      class="article"
+                    >
                       <p class="title">
-                        <span class="date">
-                          D{{ article.createAt.day }}
-                        </span>
+                        <span class="date"> D{{ article.createAt.day }} </span>
                         <a
                           class="link"
                           target="_blank"
@@ -111,13 +99,22 @@
   import { ArchiveModuleActions } from '/@/store/archive'
   import { TagModuleActions } from '/@/store/tag'
   import { CategoryModuleActions } from '/@/store/category'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../app/enhancer'
   import { prefetch } from '/@/universal'
-  import { RouteName } from '/@/router'
-  import { getTagArchiveRoute, getCategoryArchiveRoute, getArticleDetailRoute, getPageRoute } from '/@/transforms/route'
+  import { RouteName } from '../app/router'
+  import {
+    getTagArchiveRoute,
+    getCategoryArchiveRoute,
+    getArticleDetailRoute,
+    getPageRoute
+  } from '/@/transforms/route'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { dateToHuman } from '/@/transforms/moment'
-  import { replaceToChineseNumber, toChineseMonth, toEngMonth } from '/@/transforms/text'
+  import {
+    replaceToChineseNumber,
+    toChineseMonth,
+    toEngMonth
+  } from '/@/transforms/text'
   import * as APP_CONFIG from '/@/config/app.config'
 
   export default defineComponent({
@@ -126,14 +123,12 @@
       const { i18n, store, helmet, isMobile, isZhLang } = useEnhancer()
       const tags = computed(() => store.state.tag.data)
       const hasArticle = computed(() => store.state.archive.articles.data.length)
-      const isFetching = computed(() => (
-        store.state.archive.articles.fetching || store.state.tag.fetching
-      ))
+      const isFetching = computed(
+        () => store.state.archive.articles.fetching || store.state.tag.fetching
+      )
 
       helmet(() => {
-        const prefix = isZhLang.value
-          ? `${i18n.t(LANGUAGE_KEYS.PAGE_ARCHIVE)} | `
-          : ''
+        const prefix = isZhLang.value ? `${i18n.t(LANGUAGE_KEYS.PAGE_ARCHIVE)} | ` : ''
         return { title: prefix + 'Archive' }
       })
 
@@ -146,19 +141,28 @@
           }>
         }>
         store.state.archive.articles.data
-          .map(article => ({ ...article, createAt: dateToHuman(new Date(article.create_at)) }))
-          .sort((a, b) => Number(`${a.year}${a.month}${a.day}`) - Number(`${b.year}${b.month}${b.day}`))
-          .forEach(article => {
+          .map((article) => ({
+            ...article,
+            createAt: dateToHuman(new Date(article.create_at))
+          }))
+          .sort(
+            (a, b) =>
+              Number(`${a.year}${a.month}${a.day}`) -
+              Number(`${b.year}${b.month}${b.day}`)
+          )
+          .forEach((article) => {
             const { createAt } = article
             // year
-            const yearTree = rootTree.find(ye => ye.year === createAt.year)
+            const yearTree = rootTree.find((ye) => ye.year === createAt.year)
             let targetYear = yearTree
             if (!targetYear) {
               targetYear = { year: createAt.year, months: [] }
               rootTree.push(targetYear)
             }
             // month
-            const monthTree = targetYear.months.find(mo => mo.month === createAt.month)
+            const monthTree = targetYear.months.find(
+              (mo) => mo.month === createAt.month
+            )
             let targetMonth = monthTree
             if (!targetMonth) {
               targetMonth = { month: createAt.month, articles: [] }
@@ -170,16 +174,13 @@
         return rootTree
       })
 
-      const fetchAllData = () => Promise.all([
-        store.dispatch(getNamespace(
-          Modules.Tag,
-          TagModuleActions.FetchAll
-        )),
-        store.dispatch(getNamespace(
-          Modules.Archive,
-          ArchiveModuleActions.FetchArticles
-        ))
-      ])
+      const fetchAllData = () =>
+        Promise.all([
+          store.dispatch(getNamespace(Modules.Tag, TagModuleActions.FetchAll)),
+          store.dispatch(
+            getNamespace(Modules.Archive, ArchiveModuleActions.FetchArticles)
+          )
+        ])
 
       const resultData = {
         LANGUAGE_KEYS,

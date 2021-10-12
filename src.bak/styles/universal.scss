@@ -1,0 +1,190 @@
+@import "./theme.scss";
+
+[hidden],
+[v-cloak] {
+  display: none !important;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  font-family: $font-family-normal;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  // HACK: 为保证 GA 页面跳转广告不错位
+  position: relative !important;
+
+  @include scrollbar-style(
+    $size: $sm-gap,
+    $bg: rgba($grey, 60%),
+    $thumb-bg: darken($grey, 20%),
+    $thumb-bg-hover: darken($grey, 40%)
+  );
+
+  * {
+    @include scrollbar-style(
+      $size: $sm-gap,
+      $bg: $module-bg,
+      $thumb-bg: $module-bg-darker-1,
+      $thumb-bg-hover: $module-bg-darker-2
+    );
+  }
+}
+
+#app-root {
+  color: $text;
+
+  &.default {
+    @include defaultTheme();
+  }
+
+  &.dark {
+    @include darkTheme();
+  }
+}
+
+.container {
+  width: $container-width;
+  margin: 0 auto;
+}
+
+.iconfont {
+  font-size: 1em;
+}
+
+.radio, .checkbox {
+  display: inline-block;
+  margin-top: 0px;
+  padding-top: 0px;
+  margin-bottom: 0px;
+}
+
+.placeholder {
+  color: $text-secondary;
+}
+
+input {
+  &::placeholder {
+    text-indent: .5em;
+    font-size: $font-size-small;
+    text-transform: capitalize;
+  }
+}
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px $white inset;
+}
+
+::selection,
+::-moz-selection,
+::-webkit-selection {
+  background: $primary;
+  color: $text-reversal;
+}
+
+// filters
+.filter {
+  &.motion-blur-horizontal {
+    @include blur-filter('horizontal');
+  }
+
+  &.motion-blur-horizontal-small {
+    @include blur-filter('horizontal-small');
+  }
+
+  &.motion-blur-vertical {
+    @include blur-filter('vertical');
+  }
+
+  &.motion-blur-vertical-small {
+    @include blur-filter('vertical-small');
+  }
+}
+
+.mammon-box {
+  @extend .center-placeholder;
+}
+
+// swiper
+.swiper-wrapper {
+  z-index: $z-index-normal + 1;
+}
+
+.swiper-pagination {
+  z-index: $z-index-normal + 2;
+}
+
+.swiper-pagination-bullet {
+  // swiper default size
+  border-radius: 8px;
+  transition:
+    width $transition-time-slow,
+    height $transition-time-slow,
+    border-radius $transition-time-slow;
+
+  &:hover {
+    background: $module-bg-darker-1;
+  }
+
+  &.swiper-pagination-bullet-active {
+    background: $module-bg;
+  }
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  z-index: $z-index-normal + 3;
+}
+
+// for module transition
+.module-enter-active,
+.module-leave-active {
+  transition: opacity $transition-time-normal ease;
+}
+.module-slow-enter-active,
+.module-slow-leave-active {
+  transition: opacity $transition-time-slow ease;
+}
+.module-enter-from, .module-leave-to,
+.module-slow-enter-from, .module-slow-leave-to {
+  opacity: 0;
+}
+
+// for page transition
+.page-enter-active,
+.page-leave-active {
+  transition: width 0s, opacity $transition-time-fast * 0.3 linear;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
+
+// for list transition
+.list-fade-enter-active,
+.list-fade-leave-active {
+  transition: opacity $transition-time-normal;
+}
+.list-fade-enter,
+.list-fade-leave-active {
+  opacity: 0
+}
+.list-fade-move {
+  transition: transform $transition-time-normal;
+}
+
+// for client only component transition
+.client-only-enter-active {
+  transition: opacity $transition-time-fast linear !important;
+}
+.client-only-leave-active {
+  transition: opacity $transition-time-fast * 0.6 linear !important;
+}
+.client-only-enter-from,
+.client-only-leave-to {
+  opacity: 0 !important;
+}

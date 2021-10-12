@@ -18,11 +18,7 @@
             <strong class="count">{{ total || 0 }}</strong>
             <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIST_COUNT" />
           </div>
-          <button
-            class="like"
-            :class="{ liked: isPageLiked }"
-            @click="handleLikePage"
-          >
+          <button class="like" :class="{ liked: isPageLiked }" @click="handleLikePage">
             <i class="iconfont icon-heart" />
             <strong class="count">{{ likes || 0 }}</strong>
             <template v-if="isZhLang && isMobile">赞</template>
@@ -35,7 +31,7 @@
               <i class="iconfont icon-hao" />
             </button>
             <client-only>
-              <popup v-model:visible="isVisibleSponsor" :border="false">
+              <popup :border="false">
                 <iframe class="sponsor-modal" :src="VALUABLE_LINKS.SPONSOR" />
               </popup>
             </client-only>
@@ -64,8 +60,8 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted, PropType } from 'vue'
-  import { isClient } from '/@/environment'
-  import { useEnhancer } from '/@/enhancer'
+  import { isClient } from '../../environment'
+  import { useEnhancer } from '../../app/enhancer'
   import { getNamespace, Modules } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
   import { OptionModuleActions } from '/@/store/option'
@@ -102,9 +98,7 @@
         required: true
       }
     },
-    emits: [
-      Events.Sort
-    ],
+    emits: [Events.Sort],
     setup(props, context) {
       const { i18n, store, gtag, isMobile, isZhLang } = useEnhancer()
       const { isLiked: isPageLiked, like: likePage } = usePageLike(props.postId)
@@ -214,7 +208,7 @@
       .total {
         height: $topbar-size;
         line-height: $topbar-size;
-        padding: 0 .6em;
+        padding: 0 0.6em;
         margin-right: $sm-gap;
         background-color: $module-bg-darker-1;
         @include radius-box($mini-radius);

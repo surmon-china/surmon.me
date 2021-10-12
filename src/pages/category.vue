@@ -19,7 +19,7 @@
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../app/enhancer'
   import { prefetch, onClient } from '/@/universal'
   import { Modules, getNamespace } from '/@/store'
   import { ArticleModuleActions } from '/@/store/article'
@@ -45,7 +45,7 @@
       const { store, i18n, helmet, isZhLang, globalState } = useEnhancer()
       const currentCategory = computed(() => {
         return store.state.category.data.find(
-          category => category.slug === props.categorySlug
+          (category) => category.slug === props.categorySlug
         )
       })
 
@@ -54,38 +54,33 @@
         const slug = props.categorySlug
         const slugTitle = slug
           .toLowerCase()
-          .replace(/( |^)[a-z]/g, L => L.toUpperCase())
+          .replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
         const enTitle = `${slugTitle} | Category`
         const zhTitle = i18n.t(slug)
-        const title = isZhLang.value && zhTitle
-          ? `${zhTitle} | ${enTitle}`
-          : enTitle
+        const title = isZhLang.value && zhTitle ? `${zhTitle} | ${enTitle}` : enTitle
         const description = currentCategory.value?.description || title
         return { title, description }
       })
 
       const articleData = computed(() => store.state.article.list)
-      const currentCategoryIcon = computed(() => (
-        getExtendsValue(currentCategory.value, 'icon') ||
-        'icon-category'
-      ))
-      const currentCategoryImage = computed(() => getExtendsValue(
-        currentCategory.value,
-        'background'
-      ))
-      const currentCategoryColor = computed(() => getExtendsValue(
-        currentCategory.value,
-        'bgcolor'
-      ))
-
-      const fetchCategories = () => store.dispatch(
-        getNamespace(Modules.Category, CategoryModuleActions.FetchAll)
+      const currentCategoryIcon = computed(
+        () => getExtendsValue(currentCategory.value, 'icon') || 'icon-category'
+      )
+      const currentCategoryImage = computed(() =>
+        getExtendsValue(currentCategory.value, 'background')
+      )
+      const currentCategoryColor = computed(() =>
+        getExtendsValue(currentCategory.value, 'bgcolor')
       )
 
-      const fetchArticles = (params: any) => store.dispatch(
-        getNamespace(Modules.Article, ArticleModuleActions.FetchList),
-        params
-      )
+      const fetchCategories = () =>
+        store.dispatch(getNamespace(Modules.Category, CategoryModuleActions.FetchAll))
+
+      const fetchArticles = (params: any) =>
+        store.dispatch(
+          getNamespace(Modules.Article, ArticleModuleActions.FetchList),
+          params
+        )
 
       const loadmoreArticles = async () => {
         await fetchArticles({
@@ -97,16 +92,13 @@
 
       const fetchAllData = (category_slug: string) => {
         onClient(scrollToTop)
-        return Promise.all([
-          fetchCategories(),
-          fetchArticles({ category_slug })
-        ])
+        return Promise.all([fetchCategories(), fetchArticles({ category_slug })])
       }
 
       onBeforeMount(() => {
         watch(
           () => props.categorySlug,
-          categorySlug => fetchAllData(categorySlug),
+          (categorySlug) => fetchAllData(categorySlug),
           { flush: 'post' }
         )
       })

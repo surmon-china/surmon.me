@@ -5,22 +5,46 @@
  */
 
 import LRU from 'lru-cache'
-import Router from 'koa-router'
+import express, { RequestHandler } from 'express'
+import { INVALID_ERROR } from '/@/constants/error'
 import { TunnelModule } from '/@/constants/tunnel'
 import { getTunnelApiPath } from '/@/transforms/url'
-import { bilibiliTunnel } from './bilibili'
-import { wallpaperTunnel } from './wallpaper'
-import { githubTunnel } from './github'
-import { musicTunnel } from './music'
+import { bilibiliService } from './bilibili'
+import { wallpaperService } from './wallpaper'
+import { githubService } from './github'
+import { musicService } from './music'
 
 // cache
 export const tunnelCache = new LRU<TunnelModule, any>({
-  max: Infinity,
+  max: Infinity
 })
 
 // router
-export const tunnelRouter = new Router()
-tunnelRouter.get(getTunnelApiPath(TunnelModule.Bilibili), bilibiliTunnel)
-tunnelRouter.get(getTunnelApiPath(TunnelModule.Wallpaper), wallpaperTunnel)
-tunnelRouter.get(getTunnelApiPath(TunnelModule.GitHub), githubTunnel)
-tunnelRouter.get(getTunnelApiPath(TunnelModule.Music), musicTunnel)
+const handleTunnelService = (tunnelService: () => Promise<any>): RequestHandler => {
+  return (_, response) => {
+    tunnelService()
+      .then((data) => response.send(data))
+      .catch((error) => {
+        response.status(INVALID_ERROR)
+        response.send(error.message)
+      })
+  }
+}
+
+export const tunnelRouter = express.Router()
+tunnelRouter.get(
+  getTunnelApiPath(TunnelModule.Bilibili),
+  handleTunnelService(bilibiliService)
+)
+tunnelRouter.get(
+  getTunnelApiPath(TunnelModule.Wallpaper),
+  handleTunnelService(wallpaperService)
+)
+tunnelRouter.get(
+  getTunnelApiPath(TunnelModule.GitHub),
+  handleTunnelService(githubService)
+)
+tunnelRouter.get(
+  getTunnelApiPath(TunnelModule.Music),
+  handleTunnelService(musicService)
+)

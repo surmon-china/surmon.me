@@ -32,7 +32,9 @@
                 :key="index"
                 class="item"
                 @click="insertEmoji(emoji)"
-              >{{ emoji }}</li>
+              >
+                {{ emoji }}
+              </li>
             </ul>
           </div>
         </button>
@@ -67,21 +69,16 @@
           :disabled="disabled"
           @click.prevent="handleTogglePreview"
         >
-          <i
-            class="iconfont"
-            :class="preview ? 'icon-eye-close' : 'icon-eye'"
-          />
+          <i class="iconfont" :class="preview ? 'icon-eye-close' : 'icon-eye'" />
         </button>
       </div>
-      <button
-        type="submit"
-        class="submit"
-        :disabled="disabled"
-        @click="handleSubmit"
-      >
-        <i18n :lkey="posting
-          ? LANGUAGE_KEYS.COMMENT_POST_SUBMITTING
-          : LANGUAGE_KEYS.COMMENT_POST_SUBMIT"
+      <button type="submit" class="submit" :disabled="disabled" @click="handleSubmit">
+        <i18n
+          :lkey="
+            posting
+              ? LANGUAGE_KEYS.COMMENT_POST_SUBMITTING
+              : LANGUAGE_KEYS.COMMENT_POST_SUBMIT
+          "
         />
       </button>
     </div>
@@ -89,9 +86,16 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
-  import { isClient } from '/@/environment'
+  import {
+    defineComponent,
+    ref,
+    computed,
+    watch,
+    onMounted,
+    onBeforeUnmount
+  } from 'vue'
+  import { useEnhancer } from '../../app/enhancer'
+  import { isClient } from '../../environment'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { insertContent } from '/@/utils/editable'
   import { markdownToHTML } from '/@/transforms/markdown'
@@ -134,9 +138,7 @@
       const inputElement = ref<HTMLElement>()
       let inputElementObserver: MutationObserver | null = null
       const previewContent = computed(() => {
-        return props.preview
-          ? markdownToHTML(content.value)
-          : null
+        return props.preview ? markdownToHTML(content.value) : null
       })
 
       const handleTogglePreview = () => {
@@ -188,7 +190,7 @@
       watch(() => props.modelValue, handleValueChange)
       onMounted(() => {
         context.emit(Events.InputReady, inputElement.value)
-        inputElementObserver = new MutationObserver(mutations => {
+        inputElementObserver = new MutationObserver((mutations) => {
           handleInputChange()
         })
         inputElementObserver.observe(inputElement.value!, {
@@ -236,7 +238,7 @@
         max-height: 36em;
         overflow: auto;
         outline: none;
-        padding: .5em;
+        padding: 0.5em;
         cursor: auto;
         font-size: $font-size-h6;
         line-height: 1.8em;
@@ -249,7 +251,7 @@
         }
 
         &:focus {
-          content:none;
+          content: none;
         }
 
         &:hover {
@@ -265,7 +267,7 @@
         height: 100%;
         overflow: auto;
         margin: 0;
-        padding: .5em;
+        padding: 0.5em;
         background-color: $body-bg;
       }
     }
@@ -292,7 +294,7 @@
           @include background-transition();
 
           &[disabled] {
-            opacity: .7;
+            opacity: 0.7;
           }
 
           &:not([disabled]) {
@@ -329,7 +331,7 @@
               flex-wrap: wrap;
 
               .item {
-                padding: 0 .4em;
+                padding: 0 0.4em;
                 cursor: pointer;
                 @include background-transition();
 

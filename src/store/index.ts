@@ -5,7 +5,7 @@
  */
 
 import { createStore, useStore as useVuexStore } from 'vuex'
-import { GlobalState } from '/@/state'
+import { GlobalState } from '/@/app/state'
 import { getSSRStoreData } from '/@/universal'
 import announcementModule, { AnnouncementState } from './announcement'
 import optionModule, { OptionState, OptionModuleActions } from './option'
@@ -43,19 +43,20 @@ export type IRootState = {
 
 export type IRootStore = ReturnType<typeof createVuexStore>
 export const useStore = () => useVuexStore<IRootState>()
-const createVuexStore = () => createStore<IRootState>({
-  modules: {
-    [Modules.Announcement]: announcementModule,
-    [Modules.Category]: categoryModule,
-    [Modules.Tag]: tagModule,
-    [Modules.Article]: articleModule,
-    [Modules.Comment]: commentModule,
-    [Modules.Archive]: archiveModule,
-    [Modules.Option]: optionModule,
-    [Modules.Wallpaper]: wallpaperModule,
-    [Modules.Vlog]: vlogModule
-  }
-})
+const createVuexStore = () =>
+  createStore<IRootState>({
+    modules: {
+      [Modules.Announcement]: announcementModule,
+      [Modules.Category]: categoryModule,
+      [Modules.Tag]: tagModule,
+      [Modules.Article]: articleModule,
+      [Modules.Comment]: commentModule,
+      [Modules.Archive]: archiveModule,
+      [Modules.Option]: optionModule,
+      [Modules.Wallpaper]: wallpaperModule,
+      [Modules.Vlog]: vlogModule
+    }
+  })
 
 export const getNamespace = (moduleName: Modules, target: string) => {
   return `${moduleName}/${target}`
@@ -76,12 +77,7 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
 
     // fetch hot articles when desktop only
     if (!config.globalState.userAgent.isMobile) {
-      initFetchTasks.push(
-        store.dispatch(getNamespace(
-          Modules.Article,
-          ArticleModuleActions.FetchHotList
-        ))
-      )
+      initFetchTasks.push(store.dispatch(getNamespace(Modules.Article, ArticleModuleActions.FetchHotList)))
     }
 
     return Promise.all(initFetchTasks)

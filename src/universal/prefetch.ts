@@ -5,8 +5,8 @@
  */
 
 import { onBeforeMount, getCurrentInstance, ComponentOptions } from 'vue'
-import { useGlobalState } from '/@/state'
-import { isServer, isSPA } from '/@/environment'
+import { useGlobalState } from '/@/app/state'
+import { isServer, isSPA } from '/@/app/environment'
 
 // serverPrefetch === async setup
 // serverPrefetch && async setup = not handle error
@@ -24,7 +24,7 @@ export const prefetch = <D = any>(fetcher: () => Promise<any>, data: D) => {
   const globalState = useGlobalState()
   const doFetchOnBeforeMount = () => {
     onBeforeMount(() => {
-      fetcher().catch(error => {
+      fetcher().catch((error) => {
         globalState.setRenderError(error)
         return Promise.reject(error)
       })
@@ -41,7 +41,7 @@ export const prefetch = <D = any>(fetcher: () => Promise<any>, data: D) => {
   if (isServer) {
     return fetcher()
       .then(() => data)
-      .catch(error => {
+      .catch((error) => {
         globalState.setRenderError(error)
         return data
       })

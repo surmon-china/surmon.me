@@ -1,9 +1,5 @@
 <template>
-  <div
-    ref="element"
-    class="detail"
-    :class="{ mobile: isMobile }"
-  >
+  <div ref="element" class="detail" :class="{ mobile: isMobile }">
     <transition name="module">
       <div
         v-if="!fetching"
@@ -19,18 +15,11 @@
         <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="isHybrid" />
       </div>
     </transition>
-    <placeholder
-      :loading="fetching"
-      @after-enter="handleContentAnimateDone"
-    >
+    <placeholder :loading="fetching" @after-enter="handleContentAnimateDone">
       <template #loading>
         <div class="skeleton" key="skeleton">
           <skeleton-line class="title" />
-          <skeleton-paragraph
-            class="content"
-            :lines="9"
-            line-height="1.2em"
-          />
+          <skeleton-paragraph class="content" :lines="9" line-height="1.2em" />
         </div>
       </template>
       <template #default>
@@ -53,9 +42,11 @@
                 @click="handleRenderMore"
               >
                 <i18n
-                  :lkey="longFormRenderState.rendering
-                    ? LANGUAGE_KEYS.ARTICLE_RENDERING
-                    : LANGUAGE_KEYS.ARTICLE_READ_ALL"
+                  :lkey="
+                    longFormRenderState.rendering
+                      ? LANGUAGE_KEYS.ARTICLE_RENDERING
+                      : LANGUAGE_KEYS.ARTICLE_READ_ALL
+                  "
                 />
                 <i class="iconfont icon-next-bottom"></i>
               </button>
@@ -75,14 +66,14 @@
 
 <script lang="ts">
   import { defineComponent, ref, reactive, computed, nextTick, onMounted } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../app/enhancer'
   import { Modules, getNamespace } from '/@/store'
   import { TagModuleGetters } from '/@/store/tag'
   import { ArticleModuleActions } from '/@/store/article'
   import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
-  import { isClient } from '/@/environment'
+  import { isClient } from '../../environment'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
@@ -100,7 +91,9 @@
     setup(props, context) {
       const { store, globalState, isMobile } = useEnhancer()
       const element = ref<HTMLElement>()
-      const tagMap = computed(() => store.getters[getNamespace(Modules.Tag, TagModuleGetters.FullNameTags)])
+      const tagMap = computed(
+        () => store.getters[getNamespace(Modules.Tag, TagModuleGetters.FullNameTags)]
+      )
       const isHybrid = isHybridType(props.article?.origin)
       const isReprint = isReprintType(props.article?.origin)
       const isOriginal = isOriginalType(props.article?.origin)
@@ -124,7 +117,12 @@
         const lastH3Index = shortContent.lastIndexOf('\n###')
         const lastCodeIndex = shortContent.lastIndexOf('\n\n```')
         const lastLineIndex = shortContent.lastIndexOf('\n\n**')
-        const lastReadindex = Math.max(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex)
+        const lastReadindex = Math.max(
+          lastH4Index,
+          lastH3Index,
+          lastCodeIndex,
+          lastLineIndex
+        )
         return lastReadindex
       }
 
@@ -176,10 +174,11 @@
 
       const observeLozad = (elementId: string) => {
         const contentElement = element.value?.querySelector(`#${elementId}`)
-        const lozadElements = contentElement && contentElement.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
+        const lozadElements =
+          contentElement && contentElement.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
         if (lozadElements?.length) {
           const lozadObserver = window.$lozad(lozadElements, {
-            loaded: element => element.classList.add(LOADED_CLASS_NAME)
+            loaded: (element) => element.classList.add(LOADED_CLASS_NAME)
           })
           lozadObserver.observe()
         }
@@ -251,13 +250,13 @@
       font-size: $font-size-small;
 
       &.self {
-        background-color: rgba($accent, .8);
+        background-color: rgba($accent, 0.8);
       }
       &.other {
-        background-color: rgba($red, .8);
+        background-color: rgba($red, 0.8);
       }
       &.hybrid {
-        background-color: rgba($primary, .8);
+        background-color: rgba($primary, 0.8);
       }
     }
 
@@ -268,7 +267,7 @@
         margin: 1em 0 1.5em 0;
         text-align: center;
         font-weight: 700;
-        font-size: $font-size-h2 * .95;
+        font-size: $font-size-h2 * 0.95;
       }
 
       .markdown-html {

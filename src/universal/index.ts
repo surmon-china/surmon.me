@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { isServer, isClient } from '/@/environment'
+import { isServer, isClient } from '../environment'
 export * from './context'
 export * from './prefetch'
 
@@ -16,4 +16,3 @@ export const onClient = (callback: any) => {
 export const onServer = (callback: any) => {
   isServer && callback()
 }
-
