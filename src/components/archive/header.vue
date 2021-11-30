@@ -35,10 +35,12 @@
     name: 'ArticleListHeader',
     props: {
       backgroundColor: {
-        type: String
+        type: String,
+        default: ''
       },
       backgroundImage: {
-        type: String
+        type: String,
+        default: ''
       },
       icon: {
         type: String,
@@ -48,9 +50,7 @@
     setup(props) {
       const { isMobile } = useEnhancer()
       const backgroundImageUrl = computed(() => {
-        return (
-          props.backgroundImage || getFileCDNUrl('/images/page-feeelancer/banner.jpg')
-        )
+        return props.backgroundImage || getFileCDNUrl('/images/page-feeelancer/banner.jpg')
       })
 
       return {

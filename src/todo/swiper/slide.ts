@@ -12,7 +12,9 @@ export default defineComponent({
   name: NameId.SwiperSlideComponent,
   setup(_, context) {
     const swiperContext = useSwiper() as SwiperContext
-    const slideClass = computed(() => swiperContext?.options.value.slideClass || DEFAULT_CLASSES.slideClass)
+    const slideClass = computed(
+      () => swiperContext?.options.value.slideClass || DEFAULT_CLASSES.slideClass
+    )
     // https://github.com/surmon-china/vue-awesome-swiper/issues/632
     const updateOfSwiperInstance = () => {
       if (swiperContext?.__props?.[ComponentPropNames.AutoUpdate]) {

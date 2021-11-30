@@ -1,11 +1,7 @@
 <template>
   <span class="ua">
     <span class="os">
-      <i
-        v-if="osIconName"
-        class="iconfont"
-        :class="`icon-${osIconName}`"
-      />
+      <i v-if="osIconName" class="iconfont" :class="`icon-${osIconName}`" />
       <span>{{ uaResult.result.os.name }}</span>
       <span>{{ uaResult.result.os.version }}</span>
     </span>
@@ -24,30 +20,30 @@
   // https://github.com/faisalman/ua-parser-js#methods
   const osIconsNameMap = {
     'Mac OS': 'mac',
-    'Windows': 'windows',
-    'Android': 'android',
-    'Ubuntu': 'ubuntu',
-    'Linux': 'linux',
-    'iOS': 'mac',
-    'Unix': 'unix'
+    Windows: 'windows',
+    Android: 'android',
+    Ubuntu: 'ubuntu',
+    Linux: 'linux',
+    iOS: 'mac',
+    Unix: 'unix'
   }
 
   const browersIconsNameMap = {
-    'Chrome': 'chrome',
-    'Chromium': 'chrome',
-    'WeChat': 'wechat',
-    'Safari': 'safari',
+    Chrome: 'chrome',
+    Chromium: 'chrome',
+    WeChat: 'wechat',
+    Safari: 'safari',
     'Mobile Safari': 'safari',
-    'UCBrowser': 'uc',
-    'Maxthon': 'maxthon',
-    'Firefox': 'firefox',
-    'IE': 'ie',
-    'Opera': 'opera',
-    'Edge': 'edge'
+    UCBrowser: 'uc',
+    Maxthon: 'maxthon',
+    Firefox: 'firefox',
+    IE: 'ie',
+    Opera: 'opera',
+    Edge: 'edge'
   }
 
   export default defineComponent({
-    name: 'CommentUa',
+    name: 'CommentUA',
     props: {
       ua: {
         type: String,

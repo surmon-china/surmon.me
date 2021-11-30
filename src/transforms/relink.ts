@@ -17,7 +17,7 @@ export default (text: string, tagMap: ITagMap) => {
     new URL(text)
     return text
   } catch (error) {
-    return text.replace(tagRegexp, tag => {
+    return text.replace(tagRegexp, (tag) => {
       // 从 map 中匹配自身
       const foundTag = tagMap[tag]
 

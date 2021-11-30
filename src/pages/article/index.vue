@@ -18,30 +18,24 @@
       <article-related :fetching="fetching" :articles="relatedArticles" />
     </div>
     <div class="comment">
-      <comment
-        :fetching="fetching"
-        :post-id="articleId"
-        :likes="article?.meta?.likes"
-      />
+      <comment :fetching="fetching" :post-id="articleId" :likes="article?.meta?.likes" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent, ref, computed, watch, onBeforeMount } from 'vue'
-  import { useEnhancer } from '../../app/enhancer'
+  import { useEnhancer } from '/@/app/enhancer'
   import { prefetch } from '/@/universal'
-  import { isClient } from '../../environment'
-  import { Modules, getNamespace } from '/@/store'
-  import { ArticleModuleActions } from '/@/store/article'
-  import { CommentModuleActions } from '/@/store/comment'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import Comment from '/@/components/comment/index.vue'
+  import { isClient } from '/@/app/environment'
+  import { useArticleStore } from '/@/store/article'
+  import { useCommentStore } from '/@/store/comment'
   import ArticleContent from './content.vue'
   import ArticleMammon from './mammon.vue'
   import ArticleShare from './share.vue'
   import ArticleMeta from './meta.vue'
   import ArticleRelated from './related.vue'
+  import Comment from '/@/components/comment/index.vue'
 
   export default defineComponent({
     name: 'ArticleDetail',
@@ -60,16 +54,18 @@
       }
     },
     setup(props) {
-      const { store, helmet, isMobile } = useEnhancer()
-      const article = computed(() => store.state.article.detail.data)
-      const fetching = computed(() => store.state.article.detail.fetching)
+      const { helmet, isMobile } = useEnhancer()
+      const articleStore = useArticleStore()
+      const commentStore = useCommentStore()
+      const article = computed(() => articleStore.detail.data || void 0)
+      const fetching = computed(() => articleStore.detail.fetching)
       const relatedArticles = computed(() => {
         if (!article.value) {
           return []
         }
         const ARTICLE_COUNT = 6
         const articles = [...article.value.related]
-          .filter((article) => article._id !== props.articleId)
+          .filter((article) => article.id !== props.articleId)
           .slice(0, ARTICLE_COUNT)
         if (isMobile.value || articles.length >= ARTICLE_COUNT) {
           return articles
@@ -91,17 +87,17 @@
         description: article.value?.description || ''
       }))
 
-      const fetchArticleDetail = (article_id: string | number) => {
+      const fetchArticleDetail = (articleID: number) => {
         const fetchDelay = isClient ? 368 : 0
         return Promise.all([
-          store.dispatch(
-            getNamespace(Modules.Article, ArticleModuleActions.FetchDetail),
-            { article_id, delay: fetchDelay }
-          ),
-          store.dispatch(
-            getNamespace(Modules.Comment, CommentModuleActions.FetchList),
-            { post_id: article_id, delay: fetchDelay }
-          )
+          articleStore.fetchDetail({
+            articleID,
+            delay: fetchDelay
+          }),
+          commentStore.fetchList({
+            post_id: articleID,
+            delay: fetchDelay
+          })
         ])
       }
 

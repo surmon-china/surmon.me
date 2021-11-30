@@ -1,11 +1,7 @@
 <template>
   <div class="music-page">
     <div class="player">
-      <button
-        class="prev-song"
-        :disabled="!player?.state?.ready"
-        @click="player?.prevSong()"
-      >
+      <button class="prev-song" :disabled="!player?.state?.ready" @click="player?.prevSong()">
         <i class="iconfont icon-music-prev"></i>
       </button>
       <div class="album-box">
@@ -46,23 +42,12 @@
           </transition>
         </div>
         <div class="toggle-muted">
-          <button
-            class="muted-btn"
-            :disabled="!player?.state.ready"
-            @click="player?.toggleMuted()"
-          >
-            <i
-              class="iconfont"
-              :class="muted ? 'icon-music-muted' : 'icon-music-volume'"
-            />
+          <button class="muted-btn" :disabled="!player?.state.ready" @click="player?.toggleMuted()">
+            <i class="iconfont" :class="muted ? 'icon-music-muted' : 'icon-music-unmuted'" />
           </button>
         </div>
       </div>
-      <button
-        class="next-song"
-        :disabled="!player?.state.ready"
-        @click="player?.nextSong()"
-      >
+      <button class="next-song" :disabled="!player?.state.ready" @click="player?.nextSong()">
         <i class="iconfont icon-music-next"></i>
       </button>
     </div>
@@ -74,10 +59,8 @@
         </template>
         <template v-else>Kind words are the music of the world.</template>
       </h4>
-      <h5>
-        {{ (player?.state.index || 0) + 1 }} / {{ player?.state.count || 'Infinity' }}
-      </h5>
-      <client-only v-if="false">
+      <h5>{{ (player?.state.index || 0) + 1 }} / {{ player?.state.count || 'Infinity' }}</h5>
+      <!-- <client-only>
         <transition name="list-fade">
           <p v-if="player?.currentSongRealTimeLrc !== null" class="lrc">
             <transition name="module" mode="out-in">
@@ -87,20 +70,20 @@
             </transition>
           </p>
         </transition>
-      </client-only>
+      </client-only> -->
     </div>
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { isClient } from '../environment'
-  import { useEnhancer } from '../app/enhancer'
+  import { isClient } from '/@/app/environment'
+  import { useEnhancer } from '/@/app/enhancer'
   import { useMusic } from '/@/services/music'
   import { LANGUAGE_KEYS } from '/@/language/key'
 
   export default defineComponent({
-    name: 'Music',
+    name: 'MusicPage',
     setup() {
       const { i18n, helmet, isZhLang } = useEnhancer()
       const musicPlayer = isClient ? useMusic() : null
@@ -121,12 +104,12 @@
       })()
 
       const circlePathStyle = computed(() => {
-        return (
-          musicPlayer && {
+        if (musicPlayer) {
+          return {
             strokeDasharray: `${perimeter}px, ${perimeter}px`,
             strokeDashoffset: (1 - musicPlayer.state.progress / 100) * perimeter + 'px'
           }
-        )
+        }
       })
 
       return {
@@ -179,8 +162,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 38rem;
-        height: 38rem;
+        width: 39rem;
+        height: 39rem;
         opacity: 0.9;
         @include visibility-transition();
 

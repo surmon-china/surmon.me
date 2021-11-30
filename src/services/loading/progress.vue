@@ -30,7 +30,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { useLoading } from '.'
+  import { useLoading } from './'
   export default defineComponent({
     name: 'ProgressBar',
     setup() {
@@ -65,8 +65,7 @@
       background-color: $primary;
       &.show {
         @include visible();
-        transition: width 0s, opacity $transition-time-fast,
-          visibility $transition-time-fast;
+        transition: width 0s, opacity $transition-time-fast, visibility $transition-time-fast;
       }
 
       &.notransition {

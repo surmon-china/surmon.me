@@ -1,10 +1,5 @@
 <template>
-  <form
-    :id="ElementID.Publisher"
-    :class="{ mobile: isMobile }"
-    class="publisher"
-    name="comment"
-  >
+  <form :id="ElementID.Publisher" :class="{ mobile: isMobile }" class="publisher" name="comment">
     <div class="user">
       <!-- profile editor -->
       <template v-if="!cached || editing">
@@ -92,10 +87,7 @@
                   #{{ replyingComment.id }} @{{ replyingComment.author.name }}：
                 </button>
               </span>
-              <button
-                class="cancel iconfont icon-cancel"
-                @click.prevent="cancelCommentReply"
-              />
+              <button class="cancel iconfont icon-cancel" @click.prevent="cancelCommentReply" />
             </div>
             <div
               class="reply-preview markdown-html comment"
@@ -110,8 +102,9 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, reactive, computed, watch } from 'vue'
-  import { useEnhancer } from '../../app/enhancer'
+  import { defineComponent, ref, computed, watch } from 'vue'
+  import { useCommentStore, Comment } from '/@/store/comment'
+  import { useEnhancer } from '/@/app/enhancer'
   import { firstUpperCase } from '/@/transforms/text'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
@@ -157,7 +150,9 @@
       CommentEvent.CancelReply
     ],
     setup(props, context) {
-      const { i18n, store, isMobile } = useEnhancer()
+      const { i18n, isMobile } = useEnhancer()
+      const commentStore = useCommentStore()
+
       const profileState = ref(props.profile)
       watch(
         () => props.profile,
@@ -165,11 +160,9 @@
         { deep: true }
       )
 
-      const replyingComment = computed(() => {
-        return store.state.comment.comments.data.find(
-          (comment) => comment.id === props.replyPid
-        )
-      })
+      const replyingComment = computed(
+        () => commentStore.comments.find((comment) => comment.id === props.replyPid) as Comment
+      )
 
       const saveUserProfile = (event) => {
         event.preventDefault()
@@ -233,9 +226,9 @@
 
   .publisher {
     display: block;
-    padding-top: $gap;
-    margin-top: $lg-gap;
-    border-top: 1px dashed $module-bg-darker-1;
+    padding-bottom: $gap;
+    margin-bottom: $lg-gap;
+    border-bottom: 1px dashed $module-bg-darker-1;
 
     > .user {
       width: 100%;

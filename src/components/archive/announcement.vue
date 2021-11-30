@@ -31,10 +31,7 @@
             />
           </desktop-only>
           <div class="title">
-            <span
-              class="icon-box"
-              :style="{ transform: `rotate(-${activeIndex * 90}deg)` }"
-            >
+            <span class="icon-box" :style="{ transform: `rotate(-${activeIndex * 90}deg)` }">
               <i class="iconfont icon-windmill" />
             </span>
           </div>
@@ -45,11 +42,7 @@
               @transition-start="handleSwiperTransitionStart"
             >
               <div class="swiper-wrapper">
-                <div
-                  v-for="(ann, index) in announcements"
-                  :key="index"
-                  class="swiper-slide"
-                >
+                <div v-for="(ann, index) in announcements" :key="index" class="swiper-slide">
                   <div class="content" v-html="parseContent(ann.content)" />
                   <desktop-only>
                     <div class="date">{{ humanlizeDate(ann.create_at) }}</div>
@@ -58,11 +51,7 @@
               </div>
             </div>
             <div class="navigation">
-              <div
-                class="button prev"
-                :class="{ disabled: activeIndex === 0 }"
-                @click="prevSlide"
-              >
+              <div class="button prev" :class="{ disabled: activeIndex === 0 }" @click="prevSlide">
                 <i class="iconfont icon-announcement-prev" />
               </div>
               <div
@@ -81,21 +70,18 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
+  import { defineComponent, ref, computed, PropType } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import type { SwiperContext } from '/@/todo/swiper'
-  import { useI18n } from '/@/services/i18n'
-  import { useTheme, Theme } from '/@/services/theme'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { useGlobalState } from '../../app/state'
-  import { useEnhancer } from '../../app/enhancer'
   import { timeAgo } from '/@/transforms/moment'
 
   export default defineComponent({
     name: 'ArchiveAnnouncement',
     props: {
       announcements: {
-        type: Array,
+        type: Array as PropType<Array<$TODO>>,
         required: true
       },
       fetching: {
@@ -104,7 +90,7 @@
       }
     },
     setup(props) {
-      const { i18n, theme, globalState, isMobile, isDarkTheme } = useEnhancer()
+      const { i18n, isMobile, isDarkTheme } = useEnhancer()
       const swiperContext = ref<SwiperContext>()
       const swiper = computed(() => swiperContext.value?.$swiper.value)
       const updateSwiperContext = (context: SwiperContext) => {
@@ -156,7 +142,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @use "sass:math";
+  @use 'sass:math';
   @import 'src/styles/init.scss';
 
   $announcement-height: 42px;
@@ -243,7 +229,7 @@
         width: $size;
         height: 200%;
         top: -50%;
-        right: -math.div($size, 2);
+        right: -#{math.div($size, 2)};
         background: $body-bg;
         transform: rotate(18deg);
       }

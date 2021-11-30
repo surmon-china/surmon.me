@@ -58,11 +58,7 @@
                 </template>
                 <template v-else>
                   <router-link :to="getArticleDetailRoute(article.id)" class="link">
-                    <img
-                      :src="getThumbURL(article.thumb)"
-                      :alt="article.title"
-                      draggable="false"
-                    />
+                    <img :src="getThumbURL(article.thumb)" :alt="article.title" draggable="false" />
                     <div class="title">
                       <div class="background"></div>
                       <div class="prospect">
@@ -80,11 +76,7 @@
               </div>
             </div>
           </div>
-          <div
-            class="
-              swiper-pagination swiper-pagination-clickable swiper-pagination-bullets
-            "
-          />
+          <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets" />
         </div>
       </template>
     </placeholder>
@@ -92,18 +84,18 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
-  import { useEnhancer } from '../../app/enhancer'
-  import { timeAgo } from '/@/transforms/moment'
+  import { defineComponent, computed, PropType } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getBannerArticleThumbnailUrl } from '/@/transforms/thumbnail'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { Article } from '/@/store/article'
 
   export default defineComponent({
     name: 'ArchiveCarrousel',
     props: {
       articles: {
-        type: Array,
+        type: Array as PropType<Article[]>,
         required: true
       },
       fetching: {
@@ -121,7 +113,7 @@
             articles.splice(index, 0, {
               ad: true,
               ...otherConfig
-            })
+            } as any)
         }
         return articles
       })

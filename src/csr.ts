@@ -1,14 +1,16 @@
 /**
  * @file Client app entry
+ * @module CSR-entry
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import './polyfill'
+// polyfills
+import 'intersection-observer'
 
 import { createApp, createSSRApp } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
-import { isProd, isSSR } from './environment'
+import { isSSR } from '/@/app/environment'
 import { Language } from '/@/language/data'
 import { getFileCDNUrl } from '/@/transforms/url'
 import amplitude from './patches/amplitude'
@@ -29,9 +31,9 @@ import { exportEmojiRainToGlobal } from './services/emoji-23333'
 import { exportStickyEventsToGlobal } from './services/sticky'
 import { exportAppToGlobal } from '/@/services/exporter'
 import { exportLozadToGlobal } from '/@/services/lozad'
-import { initSocketAndExport } from '/@/services/socket.io'
-import { getSSRContextData } from './universal'
 import { createVueApp } from '/@/app/main'
+import { getSSRContextData } from './universal'
+import { isProd } from './environment'
 
 import '/@/styles/app.scss'
 
@@ -76,7 +78,6 @@ if (isSSR) {
 // init: services with client
 helmet.bindClient()
 theme.bindClientSystem()
-initSocketAndExport()
 exportLozadToGlobal()
 exportEmojiRainToGlobal()
 exportStickyEventsToGlobal()

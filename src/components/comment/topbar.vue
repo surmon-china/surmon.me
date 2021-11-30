@@ -59,16 +59,13 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted, PropType } from 'vue'
-  import { isClient } from '../../environment'
-  import { useEnhancer } from '../../app/enhancer'
-  import { getNamespace, Modules } from '/@/store'
-  import { ArticleModuleActions } from '/@/store/article'
-  import { OptionModuleActions } from '/@/store/option'
+  import { defineComponent, ref, PropType } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useArticleStore } from '/@/store/article'
+  import { useMetaStore } from '/@/store/meta'
   import { SortType, CommentPostType } from '/@/constants/state'
   import { GAEventTags, GAEventActions } from '/@/constants/gtag'
   import { usePageLike } from '/@/transforms/state'
-  import { getFileCDNUrl } from '/@/transforms/url'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { VALUABLE_LINKS } from '/@/config/app.config'
 
@@ -100,7 +97,10 @@
     },
     emits: [Events.Sort],
     setup(props, context) {
-      const { i18n, store, gtag, isMobile, isZhLang } = useEnhancer()
+      const { i18n, gtag, isMobile, isZhLang } = useEnhancer()
+      const articleStore = useArticleStore()
+      const metaStore = useMetaStore()
+
       const { isLiked: isPageLiked, like: likePage } = usePageLike(props.postId)
       const isVisibleSponsor = ref(false)
 
@@ -119,12 +119,11 @@
           event_label: GAEventTags.Comment
         })
         try {
-          await store.dispatch(
-            props.postId === CommentPostType.Guestbook
-              ? getNamespace(Modules.Option, OptionModuleActions.PostSiteLike)
-              : getNamespace(Modules.Article, ArticleModuleActions.PostArticleLike),
-            props.postId
-          )
+          if (props.postId === CommentPostType.Guestbook) {
+            await metaStore.postSiteLike()
+          } else {
+            await articleStore.postArticleLike(props.postId)
+          }
           likePage()
         } catch (error) {
           const message = i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION)

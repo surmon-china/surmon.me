@@ -8,7 +8,7 @@
 import fs from 'fs'
 import path from 'path'
 import axios from 'axios'
-import { GITHUB_UID } from '/@/config/app.config'
+import { GITHUB_UID } from '@/config/app.config'
 import { PUBLIC_PATH } from './helper'
 
 const UPDATE_TIME = {
@@ -19,13 +19,10 @@ const UPDATE_TIME = {
 export const startGitHubChartUpdater = () => {
   ;(function doUpdate() {
     axios
-      .get(`https://ghchart.rshah.org/${GITHUB_UID}`, { timeout: 8000 })
+      .get<any>(`https://ghchart.rshah.org/${GITHUB_UID}`, { timeout: 8000 })
       .then((response) => {
         if (response.status === 200) {
-          fs.writeFileSync(
-            path.resolve(PUBLIC_PATH, 'images', 'ghchart.svg'),
-            response.data
-          )
+          fs.writeFileSync(path.resolve(PUBLIC_PATH, 'images', 'ghchart.svg'), response.data)
           console.log('GitHub Chart 更新成功', new Date())
           setTimeout(doUpdate, UPDATE_TIME.HOURS_6)
         } else {

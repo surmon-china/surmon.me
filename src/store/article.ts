@@ -1,184 +1,151 @@
 /**
  * @file Article state
- * @module store/article
+ * @module store.article
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { Module, MutationTree, ActionTree } from 'vuex'
-import { SortType } from '/@/constants/state'
+import { defineStore } from 'pinia'
+import { SortType, OriginState } from '/@/constants/state'
 import { fetchDelay } from '/@/utils/fetch-delay'
-import { IRootState } from '.'
-import nodepress from '../services/nodepress'
+import nodepress from '/@/services/nodepress'
+import { Category } from './category'
+import { Tag } from './tag'
 
 export const ARTICLE_API_PATH = '/article'
 export const LIKE_ARTICLE_API_PATH = '/like/article'
 
-export enum ArticleModuleListMutations {
-  // list
-  SetListData = 'setListData',
-  SetMoreListData = 'setMoreListData',
-  SetListFetching = 'setListFetching',
-  // hot list
-  SetHotListData = 'setHotListData',
-  SetHotListFetched = 'setHotListFetched',
-  SetHotListFetching = 'setHotListFetching',
-  // detail
-  SetDetailData = 'setDetailData',
-  SetDetailFetching = 'setDetailFetching',
-  IncrementArticleLikes = 'IncrementArticleLikes'
-}
-
-export enum ArticleModuleActions {
-  FetchList = 'fetchList',
-  FetchHotList = 'fetchHotList',
-  FetchDetail = 'fetchDetail',
-  PostArticleLike = 'postArticleLike'
-}
-
-const getDefaultListData = () => ({
-  data: [] as Array<$TODO>,
-  pagination: null as $TODO
-})
-
-const state = () => ({
-  hotList: {
-    fetched: false,
-    fetching: false,
-    data: [] as Array<$TODO>
-  },
-  list: {
-    fetching: false,
-    data: getDefaultListData()
-  },
-  detail: {
-    fetching: false,
-    data: null as $TODO
+export interface Article {
+  id: number
+  _id: string
+  title: string
+  description: string
+  content: string
+  keywords: string[]
+  thumb: string
+  meta: {
+    likes: number
+    views: number
+    comments: number
   }
-})
-
-const mutations: MutationTree<ArticleState> = {
-  // 文章列表
-  [ArticleModuleListMutations.SetListFetching](state, fetching: boolean) {
-    state.list.fetching = fetching
-  },
-  [ArticleModuleListMutations.SetListData](state, articleData) {
-    state.list.data = articleData
-  },
-  [ArticleModuleListMutations.SetMoreListData](state, articleData) {
-    state.list.data.data.push(...articleData.data)
-    state.list.data.pagination = articleData.pagination
-  },
-
-  // 热门文章
-  [ArticleModuleListMutations.SetHotListFetched](state, fetched: boolean) {
-    state.hotList.fetched = fetched
-  },
-  [ArticleModuleListMutations.SetHotListFetching](state, fetching: boolean) {
-    state.hotList.fetching = fetching
-  },
-  [ArticleModuleListMutations.SetHotListData](state, hotArticles) {
-    state.hotList.data = hotArticles
-  },
-
-  // 文章详情
-  [ArticleModuleListMutations.SetDetailFetching](state, fetching: boolean) {
-    state.detail.fetching = fetching
-  },
-  [ArticleModuleListMutations.SetDetailData](state, article) {
-    state.detail.data = article
-  },
-
-  // 喜欢某篇文章
-  [ArticleModuleListMutations.IncrementArticleLikes](state) {
-    const article = state.detail.data
-    if (article) {
-      article.meta.likes++
-    }
-  }
+  origin: OriginState
+  update_at: string
+  create_at: string
+  tag: Tag[]
+  category: Category[]
+  related: Article[]
 }
 
-const actions: ActionTree<ArticleState, IRootState> = {
-  // 获取文章列表
-  [ArticleModuleActions.FetchList]({ commit }, params: any = {}) {
-    const isRestart = !params.page || params.page === 1
-    const isLoadMore = !isRestart && params.page > 1
-
-    // 清空已有数据
-    if (isRestart) {
-      commit(ArticleModuleListMutations.SetListData, getDefaultListData())
+export const useArticleStore = defineStore('article', {
+  state: () => ({
+    hotList: {
+      fetched: false,
+      fetching: false,
+      data: [] as Array<Article>
+    },
+    list: {
+      fetching: false,
+      data: [] as Array<Article>,
+      pagination: null as null | $TODO
+    },
+    archive: {
+      fetching: false,
+      data: [] as Array<Article>
+    },
+    detail: {
+      fetching: false,
+      data: null as null | Article
     }
-    commit(ArticleModuleListMutations.SetListFetching, true)
+  }),
+  actions: {
+    // 获取文章列表
+    fetchList(params: any = {}) {
+      const isRestart = !params.page || params.page === 1
+      const isLoadMore = !isRestart && params.page > 1
 
-    return nodepress
-      .get<any>(ARTICLE_API_PATH, { params })
-      .then(response => {
-        commit(
-          isLoadMore
-            ? ArticleModuleListMutations.SetMoreListData
-            : ArticleModuleListMutations.SetListData,
-          response.result
-        )
-        return response
-      })
-      .finally(() => {
-        commit(ArticleModuleListMutations.SetListFetching, false)
-      })
-  },
+      // 清空已有数据
+      if (isRestart) {
+        this.list.data = []
+        this.list.pagination = null
+      }
 
-  // 获取最热文章列表
-  [ArticleModuleActions.FetchHotList]({ state, commit }) {
-    if (state.hotList.fetched) {
-      return Promise.resolve(state.hotList.data)
-    }
-    commit(ArticleModuleListMutations.SetHotListFetching, true)
-    return nodepress
-      .get(ARTICLE_API_PATH, { params: { cache: 1, sort: SortType.Hot } })
-      .then(response => {
-        commit(ArticleModuleListMutations.SetHotListData, response.result.data)
-        commit(ArticleModuleListMutations.SetHotListFetched, true)
-        return response
-      })
-      .finally(() => {
-        commit(ArticleModuleListMutations.SetHotListFetching, false)
-      })
-  },
+      this.list.fetching = true
+      return nodepress
+        .get<any>(ARTICLE_API_PATH, { params })
+        .then((response) => {
+          if (isLoadMore) {
+            this.list.data.push(...response.result.data)
+            this.list.pagination = response.result.pagination
+          } else {
+            this.list.data = response.result.data
+            this.list.pagination = response.result.pagination
+          }
+        })
+        .finally(() => {
+          this.list.fetching = false
+        })
+    },
 
-  // 获取文章详情
-  [ArticleModuleActions.FetchDetail]({ commit }, params: any) {
-    commit(ArticleModuleListMutations.SetDetailFetching, true)
-    commit(ArticleModuleListMutations.SetDetailData, null)
-    return nodepress
-      .get(`${ARTICLE_API_PATH}/${params.article_id}`)
-      .then(response => {
-        return new Promise(resolve => {
-          fetchDelay(params.delay || 0)(() => {
-            commit(ArticleModuleListMutations.SetDetailData, response.result)
-            resolve(response)
+    // 获取最热文章列表
+    fetchHotList() {
+      if (this.hotList.fetched) {
+        return Promise.resolve()
+      }
+
+      this.hotList.fetching = true
+      return nodepress
+        .get(ARTICLE_API_PATH, { params: { cache: 1, sort: SortType.Hot } })
+        .then((response) => {
+          this.hotList.data = response.result.data
+          this.hotList.fetched = true
+        })
+        .finally(() => {
+          this.hotList.fetching = false
+        })
+    },
+
+    // 获取全部文章列表
+    fetchArchive(params: any = {}) {
+      if (this.archive.data.length) {
+        return Promise.resolve()
+      }
+      this.archive.fetching = true
+      return nodepress
+        .get<{ data: Array<Article> }>(ARTICLE_API_PATH, { params: { per_page: 666, ...params } })
+        .then((response) => {
+          this.archive.data = response.result.data
+        })
+        .finally(() => {
+          this.archive.fetching = false
+        })
+    },
+
+    // 获取文章详情
+    fetchDetail(params: { delay?: number; articleID: number }) {
+      this.detail.fetching = true
+      this.detail.data = null
+      return nodepress
+        .get(`${ARTICLE_API_PATH}/${params.articleID}`)
+        .then((response) => {
+          return new Promise((resolve) => {
+            fetchDelay(params.delay || 0)(() => {
+              this.detail.data = response.result
+              resolve(void 0)
+            })
           })
         })
-      })
-      .finally(() => {
-        commit(ArticleModuleListMutations.SetDetailFetching, false)
-      })
-  },
+        .finally(() => {
+          this.detail.fetching = false
+        })
+    },
 
-  // 喜欢文章
-  [ArticleModuleActions.PostArticleLike]({ commit }, article_id: string) {
-    return nodepress
-      .patch(LIKE_ARTICLE_API_PATH, { article_id })
-      .then(response => {
-        commit(ArticleModuleListMutations.IncrementArticleLikes)
-        return response
+    // 喜欢文章
+    postArticleLike(articleID: number) {
+      return nodepress.patch(LIKE_ARTICLE_API_PATH, { article_id: articleID }).then(() => {
+        const article = this.detail.data
+        if (article) {
+          article.meta.likes++
+        }
       })
+    }
   }
-}
-
-const articleModule: Module<ArticleState, IRootState> = {
-  namespaced: true,
-  state,
-  mutations,
-  actions
-}
-
-export type ArticleState = ReturnType<typeof state>
-export default articleModule
+})

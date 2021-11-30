@@ -28,13 +28,12 @@
         </template>
       </calendar>
     </div>
-    <div class="module ali-ma-ma" :placeholder="t(LANGUAGE_KEYS.AD)">
-      <iframe
-        sandbox="allow-scripts"
-        scrolling="no"
-        frameborder="0"
-        class="iframe"
-        src="/partials/mammon/aside-jd.html"
+    <div class="module mammon-square" :placeholder="t(LANGUAGE_KEYS.AD)">
+      <Adsense
+        ins-class="adsbygoogle"
+        data-ad-client="ca-pub-4710915636313788"
+        data-ad-slot="6138120718"
+        class="content"
       />
     </div>
     <div :id="ASIDE_STICKY_ELEMENT_ID" class="aside-sticky-box">
@@ -53,30 +52,22 @@
 
 <script lang="ts">
   import Swiper from 'swiper'
-  import {
-    defineComponent,
-    ref,
-    reactive,
-    computed,
-    onMounted,
-    onBeforeUnmount,
-    nextTick
-  } from 'vue'
-  import { useEnhancer } from '../../../../app/enhancer'
+  import { defineComponent, ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { getDateArchiveRoute } from '/@/transforms/route'
   import { humanDateToYMD, dateToHuman, HumanDate } from '/@/transforms/moment'
-  import Calendar from '/@/components/widget/calendar.vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import AsideSearch from './search.vue'
   import AsideArticle from './article.vue'
   import AsideMammon from './mammon.vue'
   import AsideTag from './tag.vue'
   import AsideTool from './tool.vue'
+  import Calendar from '/@/components/widget/calendar.vue'
 
   const ASIDE_STICKY_ELEMENT_ID = 'aside-sticky-module'
 
   export default defineComponent({
-    name: 'PcAside',
+    name: 'PCAside',
     components: {
       AsideSearch,
       AsideArticle,
@@ -171,8 +162,7 @@
         getDateRoute,
         handleStandingAdSwiperReady,
         handleStandingAdSlideChange,
-        handleStickyAdIndexChange,
-        handleStickyStateChange
+        handleStickyAdIndexChange
       }
     }
   })
@@ -211,14 +201,14 @@
         width: 100%;
       }
 
-      &.ali-ma-ma {
+      &.mammon-square {
         @extend .center-placeholder;
         height: $aside-width;
         display: flex;
         justify-content: center;
         align-items: center;
 
-        .iframe {
+        .content {
           height: 250px;
           width: 250px;
           overflow: hidden;

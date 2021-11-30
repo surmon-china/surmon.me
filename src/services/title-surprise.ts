@@ -5,7 +5,7 @@
  */
 
 import FavicoClass from '/@/patches/favico'
-import { isClient } from '/@/environment'
+import { isClient } from '/@/app/environment'
 import { titles } from '/@/config/egg.config'
 
 const Favico = FavicoClass as any
@@ -26,19 +26,15 @@ const defaultFaviconText = '来苏之望'
 const titleInterval = 366
 const favInterval = 466
 
-const matchedEgg = titles.find(egg => {
+const matchedEgg = titles.find((egg) => {
   const isToday = egg.day === today
   const isTomonth = egg.month == null || egg.month === tomonth
   const isToyear = egg.year == null || egg.year === toyear
   return isToday && isTomonth && isToyear
 })
 
-eggTitle = matchedEgg && matchedEgg.title
-  ? matchedEgg.title
-  : defaultEgg
-faviconText = matchedEgg && matchedEgg.favicon
-  ? matchedEgg.favicon
-  : defaultFaviconText
+eggTitle = matchedEgg && matchedEgg.title ? matchedEgg.title : defaultEgg
+faviconText = matchedEgg && matchedEgg.favicon ? matchedEgg.favicon : defaultFaviconText
 
 // 滚动器
 const setTitle = (title: string) => {
@@ -94,11 +90,11 @@ export const resetEasyTitle = () => {
 }
 
 export const enableAutoTitleSurprise = () => {
-  document.addEventListener('visibilitychange', event => {
+  document.addEventListener(
+    'visibilitychange',
+    (event) => {
       // @ts-ignore
-      event.target?.hidden || event.target?.webkitHidden
-        ? setEasyTitleEffect()
-        : resetEasyTitle()
+      event.target?.hidden || event.target?.webkitHidden ? setEasyTitleEffect() : resetEasyTitle()
     },
     false
   )

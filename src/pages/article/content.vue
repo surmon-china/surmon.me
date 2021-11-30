@@ -25,16 +25,8 @@
       <template #default>
         <div class="knowledge" key="knowledge">
           <h2 class="title">{{ article?.title }}</h2>
-          <div
-            class="markdown-html"
-            :id="contentElementIds.default"
-            v-html="content.default"
-          />
-          <transition
-            name="module"
-            mode="out-in"
-            @after-enter="handleRenderMoreAnimateDone"
-          >
+          <div class="markdown-html" :id="contentElementIds.default" v-html="content.default" />
+          <transition name="module" mode="out-in" @after-enter="handleRenderMoreAnimateDone">
             <div v-if="isRenderMoreEnabled" class="readmore">
               <button
                 class="readmore-btn"
@@ -65,46 +57,43 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, reactive, computed, nextTick, onMounted } from 'vue'
-  import { useEnhancer } from '../../app/enhancer'
-  import { Modules, getNamespace } from '/@/store'
-  import { TagModuleGetters } from '/@/store/tag'
-  import { ArticleModuleActions } from '/@/store/article'
+  import { defineComponent, ref, reactive, computed, nextTick, onMounted, PropType } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useTagStore } from '/@/store/tag'
+  import { Article } from '/@/store/article'
   import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
-  import ArticleListHeader from '/@/components/archive/header.vue'
-  import ArticleList from '/@/components/archive/list.vue'
-  import { isClient } from '../../environment'
+  import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
-  import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
 
   export default defineComponent({
     name: 'ArticleContent',
     props: {
-      article: Object,
+      article: {
+        type: Object as PropType<Article>,
+        required: false
+      },
       fetching: {
         type: Boolean,
         required: true
       }
     },
-    setup(props, context) {
-      const { store, globalState, isMobile } = useEnhancer()
-      const element = ref<HTMLElement>()
-      const tagMap = computed(
-        () => store.getters[getNamespace(Modules.Tag, TagModuleGetters.FullNameTags)]
-      )
-      const isHybrid = isHybridType(props.article?.origin)
-      const isReprint = isReprintType(props.article?.origin)
-      const isOriginal = isOriginalType(props.article?.origin)
+    setup(props) {
+      const { isMobile } = useEnhancer()
+      const tag = useTagStore()
+      const tagMap = computed(() => tag.fullNameTags)
+      const isHybrid = isHybridType(props.article?.origin!)
+      const isReprint = isReprintType(props.article?.origin!)
+      const isOriginal = isOriginalType(props.article?.origin!)
 
+      const element = ref<HTMLElement>()
       const longFormRenderState = reactive({
         rendering: false,
         rendered: false
       })
 
       const isLongFormContent = computed(() => {
-        return props.article?.content.length > 13688
+        return props.article?.content?.length! > 13688
       })
       const isRenderMoreEnabled = computed(() => {
         return isLongFormContent.value && !longFormRenderState.rendered
@@ -117,12 +106,7 @@
         const lastH3Index = shortContent.lastIndexOf('\n###')
         const lastCodeIndex = shortContent.lastIndexOf('\n\n```')
         const lastLineIndex = shortContent.lastIndexOf('\n\n**')
-        const lastReadindex = Math.max(
-          lastH4Index,
-          lastH3Index,
-          lastCodeIndex,
-          lastLineIndex
-        )
+        const lastReadindex = Math.max(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex)
         return lastReadindex
       }
 

@@ -28,7 +28,7 @@ export enum Events {
  *    <template #placeholder> placeholder </template>
  *    <template #default> <component /> </template>
  *  </placeholder>
-*/
+ */
 export default defineComponent({
   name: 'Placeholder',
   props: {
@@ -46,42 +46,31 @@ export default defineComponent({
     },
     placeholder: String,
     pI18nKey: String as PropType<LANGUAGE_KEYS>,
-    loading: Boolean,
+    loading: Boolean
   },
-  emits: [
-    Events.AfterEnter
-  ],
+  emits: [Events.AfterEnter],
   setup(props, context) {
     return () => {
       const { data, placeholder, pI18nKey, loading, transition, transitionName } = props
-      const isEmptyData = data !== undefined && (
-        (Array.isArray(data) && !(data as any).length) ||
-        !data
-      )
+      const isEmptyData =
+        data !== undefined && ((Array.isArray(data) && !(data as any).length) || !data)
 
       const getPlaceholderView = () => {
-        return (placeholder || pI18nKey)
+        return placeholder || pI18nKey
           ? h(Empty, { placeholder, i18nKey: pI18nKey })
           : context.slots.placeholder?.()
       }
 
       const getDataView = () => {
-        return isEmptyData
-          ? getPlaceholderView()
-          : context.slots.default?.()
+        return isEmptyData ? getPlaceholderView() : context.slots.default?.()
       }
 
       const getLoadingView = () => {
-        return (
-          context.slots.loading?.() ||
-          h(Spin, { loading: true })
-        )
+        return context.slots.loading?.() || h(Spin, { loading: true })
       }
 
       const getView = () => {
-        return loading
-          ? getLoadingView()
-          : getDataView()
+        return loading ? getLoadingView() : getDataView()
       }
 
       if (transition) {

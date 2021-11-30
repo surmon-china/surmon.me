@@ -18,11 +18,10 @@
 
 <script lang="ts">
   import { defineComponent, computed, onMounted } from 'vue'
-  import { Theme } from '/@/services/theme'
-  import { useEnhancer } from '../../../app/enhancer'
-  import { getNamespace, Modules } from '/@/store'
-  import { WallpaperModuleGetters, WallpaperModuleActions } from '/@/store/wallpaper'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useWallpaperStore } from '/@/store/wallpaper'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
+  import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import Wallpapers from './wall.vue'
 
@@ -32,19 +31,16 @@
       Wallpapers
     },
     setup() {
-      const { store, i18n, gtag, globalState, isDarkTheme } = useEnhancer()
+      const { i18n, gtag, globalState, isDarkTheme } = useEnhancer()
+      const wallpaperStore = useWallpaperStore()
       const isOnWallpaper = computed(() => globalState.switchBox.wallpaper)
-      const wallpapers = computed<any[]>(() =>
-        store.getters[getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Papers)](
-          i18n.language.value
-        )
-      )
+      const wallpapers = computed(() => wallpaperStore.papers(i18n.language.value as Language))
 
       const toggleWallpaper = () => {
         if (wallpapers.value?.length) {
           globalState.switchTogglers.wallpaper()
         } else {
-          alert('可能 Bing 又被墙了吧我有什么办法！')
+          alert('Something was wrong！')
         }
         if (globalState.switchBox.wallpaper) {
           gtag?.event('今日壁纸', {
@@ -55,9 +51,7 @@
       }
 
       onMounted(() => {
-        store.dispatch(
-          getNamespace(Modules.Wallpaper, WallpaperModuleActions.FetchPapers)
-        )
+        wallpaperStore.fetchPapers()
       })
 
       return {

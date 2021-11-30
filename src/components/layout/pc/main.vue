@@ -1,36 +1,27 @@
 <template>
   <div class="pc-main">
     <background />
-    <template v-if="!layoutColumn.isFullPage">
-      <language />
-      <theme />
+    <client-only>
+      <wallflower />
+    </client-only>
+    <template v-if="!layoutColumn.isFull">
       <share class="main-share" />
       <wallpaper />
-      <template v-if="!layoutColumn.isFullColumn">
-        <toolbox />
-      </template>
+      <toolbox />
+      <client-only>
+        <player />
+      </client-only>
     </template>
-    <client-only>
-      <figure>
-        <barrage />
-        <wallflower />
-      </figure>
-    </client-only>
     <header-view />
-    <main
-      id="main"
-      class="main-container"
-      :class="{ 'full-page': layoutColumn.isFullPage }"
-    >
-      <nav-view v-if="layoutColumn.isNormal || layoutColumn.isWide" />
+    <main id="main" class="main-container" :class="{ 'full-page': layoutColumn.isFull }">
+      <nav-view v-if="layoutColumn.isNormal" />
       <div
         id="main-content"
         class="main-content"
         :class="{
           'layout-normal': layoutColumn.isNormal,
           'layout-wide': layoutColumn.isWide,
-          'layout-full-column': layoutColumn.isFullColumn,
-          'layout-full-page': layoutColumn.isFullPage
+          'layout-full': layoutColumn.isFull
         }"
       >
         <slot />
@@ -42,33 +33,27 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue'
-  import { mapState } from 'vuex'
-  import { isClient } from '../../../environment'
+  import { defineComponent } from 'vue'
+  import { useGlobalState } from '/@/app/state'
   import NavView from './nav.vue'
   import AsideView from './aside/index.vue'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
-  import Barrage from '/@/components/widget/barrage/main.vue'
   import Wallflower from '/@/components/widget/wallflower/garden.vue'
   import Wallpaper from '/@/components/widget/wallpaper/main.vue'
   import Background from '/@/components/widget/background.vue'
-  import Language from '/@/components/widget/language.vue'
-  import Theme from '/@/components/widget/theme.vue'
+  import Player from '/@/components/widget/player.vue'
   import Share from '/@/components/widget/share.vue'
   import Toolbox from '/@/components/widget/toolbox.vue'
-  import { useGlobalState } from '../../../app/state'
 
   export default defineComponent({
     name: 'PcMain',
     components: {
       Share,
-      Language,
       Wallpaper,
-      Theme,
+      Player,
       Toolbox,
       Wallflower,
-      Barrage,
       Background,
       HeaderView,
       FooterView,
@@ -169,15 +154,11 @@
         }
 
         &.layout-wide {
-          flex-grow: 1;
-        }
-
-        &.layout-full-column {
           width: 100%;
           margin: 0;
         }
 
-        &.layout-full-page {
+        &.layout-full {
           width: 100%;
           margin: -$lg-gap 0;
         }

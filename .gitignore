@@ -72,9 +72,6 @@ package-lock.json
 # Vuniversal build output
 dist
 
-# vuepress build output
-.vuepress/dist
-
 # Serverless directories
 .serverless
 

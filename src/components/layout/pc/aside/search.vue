@@ -17,9 +17,9 @@
         <i class="iconfont icon-search" />
       </button>
       <client-only>
-        <datalist v-if="tags.length" id="keywords">
+        <datalist v-if="tagStore.tags.length" id="keywords">
           <option
-            v-for="tag in tags"
+            v-for="tag in tagStore.tags"
             :key="tag.slug"
             :value="isZhLang ? tag.name : tag.slug"
             :label="tag.description"
@@ -35,18 +35,18 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted } from 'vue'
-  import { useEnhancer } from '../../../../app/enhancer'
-  import { RouteName } from '../../../../app/router'
-  import { isSearchArchive } from '/@/transforms/route'
-  import { Language } from '/@/language/data'
+  import { defineComponent, ref, onMounted } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { RouteName } from '/@/app/router'
+  import { useTagStore } from '/@/store/tag'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { isSearchArchive } from '/@/transforms/route'
 
   export default defineComponent({
-    name: 'PcAsideSearch',
+    name: 'PCAsideSearch',
     setup() {
-      const { i18n, store, route, router, isZhLang } = useEnhancer()
-      const tags = computed(() => store.state.tag.data)
+      const { i18n, route, router, isZhLang } = useEnhancer()
+      const tagStore = useTagStore()
       const keyword = ref('')
 
       onMounted(() => {
@@ -71,7 +71,7 @@
         LANGUAGE_KEYS,
         RouteName,
         i18n,
-        tags,
+        tagStore,
         isZhLang,
         keyword,
         handleSearch

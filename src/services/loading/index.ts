@@ -51,7 +51,7 @@ const createLoadingStore = (options: LoadingOptions = {}) => {
     canSucceed: true,
     skipTimerCount: 0,
     throttle: options.throttle || 200,
-    duration: options.duration || 3000,
+    duration: options.duration || 3000
   })
 
   const clear = () => {
@@ -151,7 +151,7 @@ const createLoadingStore = (options: LoadingOptions = {}) => {
     fail,
     increase,
     decrease,
-    set,
+    set
   }
 }
 
@@ -166,7 +166,7 @@ export const createLoading = (options?: LoadingOptions) => {
       if (config?.exportToGlobal) {
         window.$loading = loading
       }
-    },
+    }
   }
 }
 

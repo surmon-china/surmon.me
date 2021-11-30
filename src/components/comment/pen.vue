@@ -17,12 +17,7 @@
     </div>
     <div class="pencilbox">
       <div class="stationery">
-        <button
-          class="emoji"
-          title="emoji"
-          type="button"
-          :disabled="disabled || preview"
-        >
+        <button class="emoji" title="emoji" type="button" :disabled="disabled || preview">
           <i class="iconfont icon-emoji" />
           <div class="emoji-box">
             <ul class="emoji-list">
@@ -75,9 +70,7 @@
       <button type="submit" class="submit" :disabled="disabled" @click="handleSubmit">
         <i18n
           :lkey="
-            posting
-              ? LANGUAGE_KEYS.COMMENT_POST_SUBMITTING
-              : LANGUAGE_KEYS.COMMENT_POST_SUBMIT
+            posting ? LANGUAGE_KEYS.COMMENT_POST_SUBMITTING : LANGUAGE_KEYS.COMMENT_POST_SUBMIT
           "
         />
       </button>
@@ -86,22 +79,15 @@
 </template>
 
 <script lang="ts">
-  import {
-    defineComponent,
-    ref,
-    computed,
-    watch,
-    onMounted,
-    onBeforeUnmount
-  } from 'vue'
-  import { useEnhancer } from '../../app/enhancer'
-  import { isClient } from '../../environment'
+  import { defineComponent, ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { isClient } from '/@/app/environment'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { insertContent } from '/@/utils/editable'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { CommentEvent, EMOJIS } from './helper'
 
-  export enum Events {
+  export enum PenEvents {
     Update = 'update:modelValue',
     InputReady = 'input-ready'
   }
@@ -127,8 +113,8 @@
       }
     },
     emits: [
-      Events.Update,
-      Events.InputReady,
+      PenEvents.Update,
+      PenEvents.InputReady,
       CommentEvent.TogglePreview,
       CommentEvent.Submit
     ],
@@ -158,7 +144,7 @@
         const text = inputElement.value?.innerText as string
         if (text !== content.value) {
           content.value = text
-          context.emit(Events.Update, text)
+          context.emit(PenEvents.Update, text)
         }
       }
 
@@ -189,7 +175,7 @@
 
       watch(() => props.modelValue, handleValueChange)
       onMounted(() => {
-        context.emit(Events.InputReady, inputElement.value)
+        context.emit(PenEvents.InputReady, inputElement.value)
         inputElementObserver = new MutationObserver((mutations) => {
           handleInputChange()
         })

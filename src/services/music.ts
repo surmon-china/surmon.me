@@ -1,6 +1,6 @@
 /**
  * @file Music player
- * @module service/music
+ * @module service.music
  * @author Surmon <https://github.com/surmon-china>
  * @document https://521dimensions.com/open-source/amplitudejs/docs
  */
@@ -41,7 +41,7 @@ const createMusicPlayer = (config: MusicConfig) => {
     playing: false,
     // 进度
     speeds: 0,
-    progress: 0,
+    progress: 0
   })
 
   // mute state
@@ -55,7 +55,7 @@ const createMusicPlayer = (config: MusicConfig) => {
 
   // 可消费播放列表
   const playableSongList = computed<ISong[]>(() => {
-    return songList.data.map(song => ({
+    return songList.data.map((song) => ({
       ...song,
       // https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=%e8%8e%b7%e5%8f%96%e9%9f%b3%e4%b9%90-url
       url: `https://music.163.com/song/media/outer/url?id=${song.id}.mp3`,
@@ -65,7 +65,7 @@ const createMusicPlayer = (config: MusicConfig) => {
       //   : null as any as string,
       cover_art_url: song.cover_art_url
         ? getFileProxyUrl(song.cover_art_url.replace('http://', '/music/') + '?param=600y600')
-        : null as any as string,
+        : (null as any as string)
     }))
   })
 
@@ -147,9 +147,7 @@ const createMusicPlayer = (config: MusicConfig) => {
   const nextSong = () => amplitude.next()
   const changeVolume = (volume: number) => amplitude.setVolume(volume)
   const toggleMuted = () => changeVolume(muted.value ? initVolume : 0)
-  const togglePlay = () => amplitude.getPlayerState() === 'playing'
-    ? pause()
-    : play()
+  const togglePlay = () => (amplitude.getPlayerState() === 'playing' ? pause() : play())
 
   const initPlayer = (songs: ISong[]) => {
     amplitude.init({
@@ -215,14 +213,14 @@ const createMusicPlayer = (config: MusicConfig) => {
     amplitude.setRepeat(true)
   }
 
-  const start = () => {
-    fetchSongList().then(() => {
+  const start = async () => {
+    try {
+      await fetchSongList()
       if (!playableSongList.value.length) {
         state.ready = false
         console.warn('播放列表为空，未找到有效音乐，无法初始化！')
         return
       }
-
       initPlayer(playableSongList.value)
       window.$defer.addTask(() => {
         window.onmousemove = () => {
@@ -230,10 +228,10 @@ const createMusicPlayer = (config: MusicConfig) => {
           window.onmousemove = null
         }
       })
-    }).catch(error => {
+    } catch (error) {
       state.ready = false
       console.warn('播放列表请求失败，无法初始化！', error)
-    })
+    }
   }
 
   return {

@@ -1,9 +1,5 @@
 <template>
-  <placeholder
-    :loading="fetching"
-    :data="comments.length"
-    @after-enter="loadCommentsAnimateDone"
-  >
+  <placeholder :loading="fetching" :data="comments.length" @after-enter="loadCommentsAnimateDone">
     <template #loading>
       <ul class="comment-list-skeleton">
         <li v-for="item in isMobile ? 3 : 5" :key="item" class="item">
@@ -44,9 +40,8 @@
 
 <script lang="ts">
   import { defineComponent, ref, onMounted, onBeforeUnmount, PropType } from 'vue'
-  import { getNamespace, Modules } from '/@/store'
-  import { CommentModuleActions } from '/@/store/comment'
-  import { useEnhancer } from '../../../app/enhancer'
+  import { useCommentStore, Comment } from '/@/store/comment'
+  import { useEnhancer } from '/@/app/enhancer'
   import { LozadObserver } from '/@/services/lozad'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { firstUpperCase } from '/@/transforms/text'
@@ -67,13 +62,14 @@
         default: false
       },
       comments: {
-        type: Array as PropType<Array<$TODO>>,
+        type: Array as PropType<Array<Comment>>,
         required: true
       }
     },
     setup(props, context) {
-      const { i18n, store, gtag, globalState, isMobile, isZhLang } = useEnhancer()
+      const { i18n, gtag, isMobile } = useEnhancer()
       const { like: likeCommentStorage, isLiked: isCommentLiked } = useCommentsLike()
+      const commentStore = useCommentStore()
 
       const listElement = ref<any>()
       const lozadObserver = ref<LozadObserver | null>(null)
@@ -111,10 +107,7 @@
           return false
         }
         try {
-          await store.dispatch(
-            getNamespace(Modules.Comment, CommentModuleActions.PostCommentLike),
-            commentId
-          )
+          await commentStore.postCommentLike(commentId)
           likeCommentStorage(commentId)
         } catch (error) {
           const message = i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION)

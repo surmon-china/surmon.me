@@ -8,10 +8,7 @@
       :class="social.class || social.name"
       @click="openShareWindow(social.name, social.url)"
     >
-      <i
-        class="iconfont"
-        :class="`icon-${social.icon || social.class || social.name}`"
-      />
+      <i class="iconfont" :class="`icon-${social.class || social.name}`" />
     </button>
     <button class="share-ejector link" @click="copyPageUrl">
       <i class="iconfont icon-link"></i>
@@ -21,7 +18,7 @@
 
 <script lang="ts">
   import { defineComponent, reactive } from 'vue'
-  import { useEnhancer } from '../../app/enhancer'
+  import { useEnhancer } from '/@/app/enhancer'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { getPageUrl } from '/@/transforms/url'
   import { copy } from '/@/utils/clipboard'
@@ -34,8 +31,7 @@
       const getUrl = () => getPageUrl(route.fullPath)
       const getTitle = () => document.title || META.title
       const getDescription = () =>
-        document.getElementsByName('description')[0].getAttribute('content') ||
-        META.description
+        document.getElementsByName('description')[0].getAttribute('content') || META.description
 
       const copyPageUrl = () => {
         copy(getUrl())
@@ -104,8 +100,7 @@
         {
           name: '豆瓣',
           class: 'douban',
-          url: () =>
-            `https://www.douban.com/recommend/?url=${getUrl()}&title=${getTitle()}`
+          url: () => `https://www.douban.com/recommend/?url=${getUrl()}&title=${getTitle()}`
         },
         {
           name: '人人',
@@ -116,8 +111,7 @@
         {
           name: '印象笔记',
           class: 'evernote',
-          url: () =>
-            `https://www.evernote.com/clip.action?url=${getUrl()}&title=${getTitle()}`
+          url: () => `https://www.evernote.com/clip.action?url=${getUrl()}&title=${getTitle()}`
         },
         {
           name: 'facebook',

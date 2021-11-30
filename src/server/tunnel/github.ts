@@ -5,8 +5,8 @@
  */
 
 import axios from 'axios'
-import { TunnelModule } from '/@/constants/tunnel'
-import { GITHUB_UID, META } from '/@/config/app.config'
+import { TunnelModule } from '@/constants/tunnel'
+import { GITHUB_UID, META } from '@/config/app.config'
 import { tunnelCache } from '.'
 
 export interface IGithubRepository {

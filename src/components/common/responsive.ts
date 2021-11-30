@@ -1,12 +1,12 @@
 /**
  * @file responsive
- * @description Render on desktop platform or mobile platform
+ * @description Render children on desktop platform or mobile platform
  * @author Surmon <https://github.com/surmon-china>
  */
 
 /* eslint-disable vue/one-component-per-file */
 import { defineComponent } from 'vue'
-import { useGlobalState } from '/@/state'
+import { useGlobalState } from '/@/app/state'
 
 /**
  * @example <responsive desktop><component /></responsive>
@@ -17,7 +17,7 @@ import { useGlobalState } from '/@/state'
  *    <template #desktop>Desktop</template>
  *    <template #mobile>Mobile</template>
  *  </responsive>
-*/
+ */
 export const Responsive = defineComponent({
   name: 'Responsive',
   props: {
@@ -43,9 +43,7 @@ export const Responsive = defineComponent({
       }
 
       // slot mode
-      return globalState.userAgent.isMobile
-        ? context.slots.mobile?.()
-        : context.slots.desktop?.()
+      return globalState.userAgent.isMobile ? context.slots.mobile?.() : context.slots.desktop?.()
     }
   }
 })
@@ -54,9 +52,6 @@ export const DesktopOnly = defineComponent({
   name: 'DesktopOnly',
   setup(_, context) {
     const globalState = useGlobalState()
-    return () => (
-      !globalState.userAgent.isMobile &&
-      context.slots.default?.()
-    )
+    return () => !globalState.userAgent.isMobile && context.slots.default?.()
   }
 })

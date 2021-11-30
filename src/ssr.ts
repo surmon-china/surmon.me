@@ -1,5 +1,6 @@
 /**
  * @file Server render entry
+ * @module SSR-entry
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -35,6 +36,7 @@ const renderHTML = async (vueApp: VueApp, url: string, error?: any) => {
   const { app, router, store, helmet, theme, globalState } = vueApp
 
   // 1. init store prefetch
+  console.log('-----1 store.serverInit')
   await store.serverInit()
 
   // render error: don't push url
@@ -45,6 +47,7 @@ const renderHTML = async (vueApp: VueApp, url: string, error?: any) => {
     // 4. !router error: next() -> renderPage
     await router.push(url)
     await router.isReady()
+    console.log('-----2 router.push')
   }
 
   // render error: set error
@@ -56,12 +59,14 @@ const renderHTML = async (vueApp: VueApp, url: string, error?: any) => {
   globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta))
 
   // 7. render
+  const ctx = {}
   const preRenderError = !!globalState.renderError.value
-  let APP_HTML = await renderToString(app)
+  let APP_HTML = await renderToString(app, ctx)
   // render -> error -> reRender -> error page
   if (!preRenderError && !!globalState.renderError.value) {
-    APP_HTML = await renderToString(app)
+    APP_HTML = await renderToString(app, ctx)
   }
+  console.log('-----3 renderToString ctx', ctx)
 
   // render error: clear helmet
   if (error) {

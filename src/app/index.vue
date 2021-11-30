@@ -10,11 +10,7 @@
       <component :is="LayoutComponent">
         <router-view v-slot="{ Component, route }">
           <div class="router-view">
-            <transition
-              name="page"
-              mode="out-in"
-              @before-enter="handlePageTransitionDone"
-            >
+            <transition name="page" mode="out-in" @before-enter="handlePageTransitionDone">
               <suspense>
                 <component :is="Component" :key="route.name" />
               </suspense>

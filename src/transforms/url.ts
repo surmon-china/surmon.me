@@ -4,9 +4,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import API_CONFIG from '/@/config/api.config'
-import { TunnelModule } from '/@/constants/tunnel'
-import { getArticleDetailRoute } from '/@/transforms/route'
+import API_CONFIG from '../config/api.config'
+import { TunnelModule } from '../constants/tunnel'
+import { getArticleDetailRoute } from '../transforms/route'
 
 export const getTunnelApiPath = (moduleName: TunnelModule) => {
   return `/${moduleName}`
