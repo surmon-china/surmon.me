@@ -25,9 +25,7 @@
         <desktop-only>
           <span v-if="comment.ip_location" class="location">
             <span>{{ comment.ip_location.country }}</span>
-            <span
-              v-if="comment.ip_location.country && comment.ip_location.city"
-              class="separator"
+            <span v-if="comment.ip_location.country && comment.ip_location.city" class="separator"
               >-</span
             >
             <span>{{ comment.ip_location.city }}</span>
@@ -72,12 +70,13 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, h, computed } from 'vue'
-  import { useEnhancer } from '../../../app/enhancer'
+  import { defineComponent, h, PropType } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useCommentStore, Comment } from '/@/store/comment'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { timeAgo } from '/@/transforms/moment'
   import { firstUpperCase } from '/@/transforms/text'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import {
     CommentEvent,
     scrollToElementAnchor,
@@ -117,7 +116,7 @@
     },
     props: {
       comment: {
-        type: Object,
+        type: Object as PropType<Comment>,
         required: true
       },
       liked: {
@@ -127,13 +126,12 @@
     },
     emits: [CommentEvent.Reply, CommentEvent.Like],
     setup(props, context) {
-      const { i18n, store, globalState, isMobile, isZhLang } = useEnhancer()
-      const comments = computed(() => store.state.comment.comments.data)
+      const { i18n, isMobile } = useEnhancer()
+      const commentStore = useCommentStore()
 
       const getReplyParentCommentText = (parentCommentId: number) => {
-        const authorName = comments.value.find(
-          (comment) => comment.id === parentCommentId
-        )?.author.name
+        const authorName = commentStore.comments.find((comment) => comment.id === parentCommentId)
+          ?.author.name
         const nameText = authorName ? `@${authorName}` : ''
         const idText = `#${parentCommentId}`
         return `${idText} ${nameText}`

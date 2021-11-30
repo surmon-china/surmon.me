@@ -1,19 +1,18 @@
 <template>
   <transition name="module">
-    <div v-if="!fetching && pagination?.total_page > 1" class="pagination">
+    <div v-if="!fetching && pagination && pagination.total_page > 1" class="pagination">
       <ul class="pagination-list">
         <li class="item prev">
           <span class="symbol">-</span>
-          <i18n :lkey="isHotSort
-            ? LANGUAGE_KEYS.COMMENT_PAGINATION_HOT
-            : LANGUAGE_KEYS.COMMENT_PAGINATION_OLD"
+          <i18n
+            :lkey="
+              isHotSort
+                ? LANGUAGE_KEYS.COMMENT_PAGINATION_HOT
+                : LANGUAGE_KEYS.COMMENT_PAGINATION_OLD
+            "
           />
         </li>
-        <li
-          v-for="(item, index) in pagination.total_page"
-          :key="index"
-          class="item"
-        >
+        <li v-for="(item, index) in pagination.total_page" :key="index" class="item">
           <button
             class="pagination-btn"
             :class="{
@@ -26,9 +25,12 @@
           </button>
         </li>
         <li class="item next">
-          <i18n :lkey="isHotSort
-            ? LANGUAGE_KEYS.COMMENT_PAGINATION_COOL
-            : LANGUAGE_KEYS.COMMENT_PAGINATION_NEW"
+          <i18n
+            :lkey="
+              isHotSort
+                ? LANGUAGE_KEYS.COMMENT_PAGINATION_COOL
+                : LANGUAGE_KEYS.COMMENT_PAGINATION_NEW
+            "
           />
           <span class="symbol">-</span>
         </li>
@@ -38,8 +40,8 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, PropType } from 'vue'
-  import { SortType, CommentPostType } from '/@/constants/state'
+  import { defineComponent, computed, PropType } from 'vue'
+  import { SortType } from '/@/constants/state'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { CommentEvent } from './helper'
 
@@ -54,7 +56,10 @@
         type: Number as PropType<SortType>,
         required: true
       },
-      pagination: Object
+      pagination: {
+        type: Object,
+        required: false
+      }
     },
     setup(props, context) {
       const isHotSort = computed(() => props.sort === SortType.Hot)
@@ -67,10 +72,9 @@
       const handlePage = (page: number) => {
         if (!isActivePage(page)) {
           if (props.pagination) {
-            context.emit(CommentEvent.Page,
-              isHotSort.value
-                ? page
-                : props.pagination.total_page + 1 - page
+            context.emit(
+              CommentEvent.Page,
+              isHotSort.value ? page : props.pagination.total_page + 1 - page
             )
           }
         }
@@ -133,7 +137,7 @@
 
           &.disabled {
             cursor: no-drop;
-            opacity: .5;
+            opacity: 0.5;
           }
 
           &.actived,

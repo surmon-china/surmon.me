@@ -5,7 +5,6 @@
  */
 
 // MARK: vite.config.js
-import type HLJSApi from 'highlight.js'
 import hljs from 'highlight.js/lib/core'
 import go from 'highlight.js/lib/languages/go'
 import css from 'highlight.js/lib/languages/css'
@@ -46,9 +45,9 @@ const languages = {
   stylus,
   python,
   javascript,
-  typescript,
+  typescript
 }
 
-Object.keys(languages).forEach(name => hljs.registerLanguage(name, languages[name]))
+Object.keys(languages).forEach((name) => hljs.registerLanguage(name, languages[name]))
 
-export default hljs as HLJSApi
+export default hljs

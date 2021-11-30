@@ -9,8 +9,22 @@
     <!-- mammon -->
     <template v-if="isMammonEnabled">
       <client-only transition>
-        <adsense-archive-mobile v-if="isMobile" class="article-list-mammon" />
-        <adsense-archive v-else class="article-list-mammon" />
+        <Adsense
+          ins-class="mammon-ins"
+          data-ad-format="fluid"
+          data-ad-layout-key="-hw-7+2w-11-86"
+          data-ad-slot="6538975194"
+          class="article-list-mammon"
+          v-if="isMobile"
+        />
+        <Adsense
+          ins-class="mammon-ins"
+          data-ad-format="fluid"
+          data-ad-layout-key="-hj-9+3a-97+6s"
+          data-ad-slot="1148538406"
+          class="article-list-mammon"
+          v-else
+        />
       </client-only>
     </template>
 
@@ -62,10 +76,7 @@
         </span>
         <div class="text">
           <i18n v-if="fetching" :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADING" />
-          <i18n
-            v-else-if="isLoadMoreEnabled"
-            :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE"
-          />
+          <i18n v-else-if="isLoadMoreEnabled" :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE" />
           <i18n v-else :lkey="LANGUAGE_KEYS.ARTICLE_LIST_NO_MORE" />
         </div>
       </button>
@@ -75,26 +86,24 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted, PropType } from 'vue'
-  import { useEnhancer } from '../../app/enhancer'
+  import { useEnhancer } from '/@/app/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import AdsenseArchive from '/@/components/adsense/archive.vue'
-  import AdsenseArchiveMobile from '/@/components/adsense/archive-mobile.vue'
+  import { Article } from '/@/store/article'
   import ListItem from './item.vue'
 
   export enum Events {
     Loadmore = 'loadmore'
   }
+
   export default defineComponent({
     name: 'ArticleList',
     components: {
-      ListItem,
-      AdsenseArchive,
-      AdsenseArchiveMobile
+      ListItem
     },
     props: {
       articles: {
-        type: Array as PropType<any[]>,
+        type: Array as PropType<Article[]>,
         required: true
       },
       pagination: Object,
@@ -149,7 +158,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @use "sass:math";
+  @use 'sass:math';
   @import 'src/styles/init.scss';
 
   .articles {
@@ -263,7 +272,7 @@
             width: $size;
             height: 200%;
             top: -50%;
-            left: -math.div($size, 2);
+            left: -#{math.div($size, 2)};
             background: $body-bg;
             transform: rotate(18deg);
           }

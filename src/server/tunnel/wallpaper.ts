@@ -6,7 +6,7 @@
 
 import schedule from 'node-schedule'
 import WonderfulBingWallpaper, { WonderfulBingWallpaperOption } from 'wonderful-bing-wallpaper'
-import { TunnelModule } from '/@/constants/tunnel'
+import { TunnelModule } from '@/constants/tunnel'
 import { tunnelCache } from '.'
 
 export interface IWallpaper {

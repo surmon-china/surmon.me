@@ -1,8 +1,8 @@
 <template>
   <div class="tag">
     <placeholder
-      :data="tagData.data.length"
-      :fetching="tagData.fetching"
+      :data="tagStore.tags.length"
+      :fetching="tagStore.fetching"
       :p-i18n-key="LANGUAGE_KEYS.TAG_PLACEHOLDER"
     >
       <template #loading>
@@ -19,7 +19,7 @@
             :title="tag.description"
             :to="getTagArchiveRoute(tag.slug)"
             :key="index"
-            v-for="(tag, index) in tagData.data"
+            v-for="(tag, index) in tagStore.tags"
           >
             <i class="iconfont" :class="getTagIcon(tag)" />
             <span class="name">
@@ -34,25 +34,23 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '../../../../app/enhancer'
+  import { defineComponent } from 'vue'
+  import { useTagStore } from '/@/store/tag'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import { getTagArchiveRoute } from '/@/transforms/route'
   import { getExtendsValue } from '/@/transforms/state'
-  import { LANGUAGE_KEYS } from '/@/language/key'
 
   export default defineComponent({
-    name: 'PcAsideTag',
+    name: 'PCAsideTag',
     setup() {
-      const { i18n, store, route } = useEnhancer()
-      const tagData = computed(() => store.state.tag)
+      const tagStore = useTagStore()
       const getTagIcon = (tag: any) => {
         return getExtendsValue(tag, 'icon') || 'icon-tag'
       }
 
       return {
         LANGUAGE_KEYS,
-        t: i18n.t,
-        tagData,
+        tagStore,
         getTagIcon,
         getTagArchiveRoute
       }
@@ -61,7 +59,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @use "sass:math";
+  @use 'sass:math';
   @import 'src/styles/init.scss';
   @import './variables.scss';
 

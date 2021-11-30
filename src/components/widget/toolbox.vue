@@ -5,16 +5,8 @@
         <ulink class="rss" :href="VALUABLE_LINKS.RSS" @mousedown="handleRSS">
           <i class="iconfont icon-rss" />
         </ulink>
-        <button
-          class="barrage"
-          :title="t(LANGUAGE_KEYS.BARRAGE)"
-          :class="{ active: isOnBarrage }"
-          @click="toggleBarrage"
-        >
-          <i class="iconfont icon-barrage" />
-        </button>
-        <a class="feedback" :href="mailUrl" :title="t(LANGUAGE_KEYS.FEEDBACK)">
-          <i class="iconfont icon-mail" />
+        <a class="feedback" target="_blank" :href="mailUrl" :title="t(LANGUAGE_KEYS.FEEDBACK)">
+          <i class="iconfont icon-mail-plane" />
         </a>
         <button
           class="to-page-top"
@@ -52,7 +44,6 @@
     name: 'Toolbox',
     setup() {
       const { i18n, gtag, globalState } = useEnhancer()
-      const isOnBarrage = computed(() => globalState.switchBox.barrage)
 
       const animationFrameId = ref(0)
       const isTopButtonMouseOver = ref(false)
@@ -93,7 +84,6 @@
         LANGUAGE_KEYS,
         t: i18n.translate,
         mailUrl: `mailto:${META.email}`,
-        isOnBarrage,
         scrollToTop,
         toBottom() {
           scrollTo(window.scrollY + window.innerHeight, 300, { easing: Easing.easeIn })
@@ -113,13 +103,6 @@
             event_category: GAEventActions.Click,
             event_label: GAEventTags.Tool
           })
-        },
-        toggleBarrage() {
-          globalState.switchTogglers.barrage()
-          gtag?.event('弹幕功能', {
-            event_category: GAEventActions.Toggle,
-            event_label: GAEventTags.Tool
-          })
         }
       }
     }
@@ -135,11 +118,11 @@
     width: 100%;
     bottom: 30rem;
 
-    > .container {
+    .container {
       $size: $lg-gap * 2.8;
       position: relative;
 
-      > .tools {
+      .tools {
         position: absolute;
         right: -12rem;
         width: $size;
@@ -154,12 +137,10 @@
           border-bottom-right-radius: $xs-radius;
         }
 
-        > .rss,
-        > .webcam,
-        > .barrage,
-        > .to-page-top,
-        > .to-page-bottom,
-        > .feedback {
+        .rss,
+        .to-page-top,
+        .to-page-bottom,
+        .feedback {
           display: block;
           width: $size;
           height: $size;
@@ -195,33 +176,25 @@
           }
         }
 
-        > .rss {
+        .rss {
           color: $rss-primary;
-
           &:hover {
             background-color: $rss-primary;
             color: $white;
           }
         }
 
-        > .barrage {
-          color: $text-reversal;
-          animation: default-btn-bg 8s infinite;
-
-          &.active {
-            background-color: $module-bg-hover;
-            animation: default-btn-bg steps(1) 1.666s infinite;
-          }
-
-          &.close {
-            color: $link-color;
-            animation: none;
+        .feedback {
+          background-color: $primary-lighter;
+          color: $white;
+          &:hover {
+            background-color: $primary;
           }
         }
 
-        > .to-page-bottom {
-          height: $size * 0.6;
-          line-height: $size * 0.6;
+        .to-page-bottom {
+          height: $size * 0.618;
+          line-height: $size * 0.618;
         }
       }
     }

@@ -8,9 +8,9 @@
       <span>{{ currentCategory?.description || '...' }}</span>
     </article-list-header>
     <article-list
-      :fetching="articleData.fetching"
-      :articles="articleData.data.data"
-      :pagination="articleData.data.pagination"
+      :fetching="article.list.fetching"
+      :articles="article.list.data"
+      :pagination="article.list.pagination"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -18,12 +18,10 @@
 
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { useEnhancer } from '../app/enhancer'
+  import { useEnhancer } from '/@/app/enhancer'
   import { prefetch, onClient } from '/@/universal'
-  import { Modules, getNamespace } from '/@/store'
-  import { ArticleModuleActions } from '/@/store/article'
-  import { CategoryModuleActions } from '/@/store/category'
+  import { useArticleStore } from '/@/store/article'
+  import { useCategoryStore } from '/@/store/category'
   import { getExtendsValue } from '/@/transforms/state'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
   import ArticleListHeader from '/@/components/archive/header.vue'
@@ -42,19 +40,17 @@
       }
     },
     setup(props) {
-      const { store, i18n, helmet, isZhLang, globalState } = useEnhancer()
+      const { i18n, helmet, isZhLang, globalState } = useEnhancer()
+      const article = useArticleStore()
+      const catrgory = useCategoryStore()
       const currentCategory = computed(() => {
-        return store.state.category.data.find(
-          (category) => category.slug === props.categorySlug
-        )
+        return catrgory.categories.find((category) => category.slug === props.categorySlug)
       })
 
       // helmet
       helmet(() => {
         const slug = props.categorySlug
-        const slugTitle = slug
-          .toLowerCase()
-          .replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+        const slugTitle = slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
         const enTitle = `${slugTitle} | Category`
         const zhTitle = i18n.t(slug)
         const title = isZhLang.value && zhTitle ? `${zhTitle} | ${enTitle}` : enTitle
@@ -62,37 +58,25 @@
         return { title, description }
       })
 
-      const articleData = computed(() => store.state.article.list)
       const currentCategoryIcon = computed(
         () => getExtendsValue(currentCategory.value, 'icon') || 'icon-category'
       )
       const currentCategoryImage = computed(() =>
         getExtendsValue(currentCategory.value, 'background')
       )
-      const currentCategoryColor = computed(() =>
-        getExtendsValue(currentCategory.value, 'bgcolor')
-      )
-
-      const fetchCategories = () =>
-        store.dispatch(getNamespace(Modules.Category, CategoryModuleActions.FetchAll))
-
-      const fetchArticles = (params: any) =>
-        store.dispatch(
-          getNamespace(Modules.Article, ArticleModuleActions.FetchList),
-          params
-        )
+      const currentCategoryColor = computed(() => getExtendsValue(currentCategory.value, 'bgcolor'))
 
       const loadmoreArticles = async () => {
-        await fetchArticles({
+        await article.fetchList({
           category_slug: props.categorySlug,
-          page: articleData.value.data.pagination.current_page + 1
+          page: article.list.pagination.current_page + 1
         })
         onClient(nextScreen)
       }
 
       const fetchAllData = (category_slug: string) => {
         onClient(scrollToTop)
-        return Promise.all([fetchCategories(), fetchArticles({ category_slug })])
+        return Promise.all([catrgory.fetchAll(), article.fetchList({ category_slug })])
       }
 
       onBeforeMount(() => {
@@ -104,7 +88,7 @@
       })
 
       const resultData = {
-        articleData,
+        article,
         currentCategory,
         currentCategoryIcon,
         currentCategoryImage,

@@ -1,5 +1,5 @@
 <template>
-  <header id="header" class="header">
+  <header id="header" class="header" :class="{ 'enable-nav': isEnabledNav }">
     <div class="header-container container">
       <div class="header-header">
         <uimage cdn src="/images/logo.svg" class="header-logo" />
@@ -8,114 +8,112 @@
         </span>
         <router-link to="/" class="header-link" :title="t(LANGUAGE_KEYS.APP_SLOGAN)" />
       </div>
-      <client-only transition>
-        <div class="header-player" v-if="music">
-          <div class="panel">
-            <button
-              class="prev-song button"
-              :disabled="!music.state.ready"
-              @click="music.prevSong"
-            >
-              <i class="iconfont icon-music-prev"></i>
-            </button>
-            <button
-              class="toggle-play button"
-              :disabled="!music.state.ready"
-              @click="music.togglePlay"
-            >
-              <i
-                class="iconfont"
-                :class="music.state.playing ? 'icon-music-pause' : 'icon-music-play'"
-              ></i>
-            </button>
-            <button
-              class="next-song button"
-              :disabled="!music.state.ready"
-              @click="music.nextSong"
-            >
-              <i class="iconfont icon-music-next"></i>
-            </button>
-            <button
-              class="muted-toggle button"
-              :disabled="!music.state.ready"
-              @click="music.toggleMuted"
-            >
-              <i
-                class="iconfont"
-                :class="muted ? 'icon-music-muted' : 'icon-music-volume'"
-              ></i>
-            </button>
-          </div>
-          <div v-if="currentSong" class="song">
-            <router-link
-              class="link"
-              :to="getPageRoute(RouteName.Music)"
-              :title="`${currentSong.name} / ${currentSong.album || 'unknow'}`"
-            >
-              <span
-                >{{ currentSong.name }} By {{ currentSong.artist }} |
-                {{ currentSong.album || 'unknow' }}</span
-              >
-            </router-link>
-          </div>
-          <div v-else class="song">
-            <i18n :lkey="LANGUAGE_KEYS.MUSIC_PLACEHOLDER" />
-          </div>
-        </div>
-      </client-only>
+      <div class="toolbox">
+        <button class="button menu" v-if="isEnabledNav">
+          <i class="iconfont icon-top-menu"></i>
+        </button>
+        <button
+          class="button language"
+          title="Switch language"
+          :class="language"
+          @click="tooggleLanguage"
+        >
+          {{ language || '-' }}
+        </button>
+        <button class="button theme" :class="theme" @click="toggleTheme">
+          <i class="iconfont" :class="themeIcon"></i>
+        </button>
+      </div>
     </div>
-    <div class="pre-load">
-      <uimage
-        defer
-        alt="song-thumb"
-        :src="currentSong.cover_art_url"
-        v-if="currentSong?.cover_art_url"
-      />
-      <uimage defer cdn src="/images/sponsor.png" alt="sponsor" />
-      <uimage defer cdn src="/images/page-app/hot.png" alt="app-download" />
-      <uimage defer cdn src="/images/page-app/logo.png" alt="app-logo" />
-      <uimage defer cdn src="/images/page-feeelancer/banner.jpg" alt="service" />
-      <uimage defer cdn src="/images/page-about/background-be-1.jpg" alt="background" />
-      <uimage defer cdn src="/images/page-about/background-be-2.jpg" alt="background" />
-      <uimage
-        defer
-        cdn
-        src="/images/page-about/background-star-1.png"
-        alt="background"
-      />
-      <uimage
-        defer
-        cdn
-        src="/images/page-about/background-star-2.png"
-        alt="background"
-      />
+    <div class="header-nav">
+      <nav class="nav-list container">
+        <template v-for="(menu, index) in menus" :key="menu.id">
+          <span class="separator" v-if="index > 0"></span>
+          <router-link
+            v-if="menu.route"
+            class="item"
+            :class="[menu.id, { hot: menu.hot }]"
+            :to="menu.route"
+            exact
+          >
+            <i class="iconfont" :class="menu.icon"></i>
+            <span class="text">
+              <i18n :lkey="menu.i18nKey" />
+            </span>
+            <span v-if="menu.hot" class="superscript">
+              <i class="iconfont icon-hot-fill"></i>
+            </span>
+          </router-link>
+          <ulink
+            v-else-if="menu.url"
+            class="item"
+            :class="[menu.id, { hot: menu.hot }]"
+            :href="menu.url"
+          >
+            <i class="iconfont" :class="menu.icon"></i>
+            <span class="text">
+              <i18n :lkey="menu.i18nKey" />
+            </span>
+            <span v-if="menu.hot" class="superscript">
+              <i class="iconfont icon-hot-fill"></i>
+            </span>
+          </ulink>
+        </template>
+      </nav>
     </div>
   </header>
 </template>
 
 <script lang="ts">
-  import { defineComponent, onMounted, ref, computed } from 'vue'
-  import { isClient } from '../../../environment'
-  import { RouteName } from '../../../app/router'
-  import { useI18n } from '/@/services/i18n'
-  import { useMusic } from '/@/services/music'
+  import { defineComponent, computed } from 'vue'
+  import { Theme } from '/@/services/theme'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { getPageRoute } from '/@/transforms/route'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
+  import { menus } from './menu'
 
   export default defineComponent({
-    name: 'PcHeader',
+    name: 'PCHeader',
     setup() {
-      const i18n = useI18n()
-      const music = isClient ? useMusic() : null
+      const { i18n, gtag, theme, globalState } = useEnhancer()
+      // 非常规布局则启用菜单
+      const isEnabledNav = computed(() => !globalState.layoutColumn.value.isNormal)
+
+      const themeValue = theme.theme
+      const themeIcon = computed(() => {
+        const themeIconMap = {
+          [Theme.Default]: 'icon-sun',
+          [Theme.Dark]: 'icon-moon'
+        }
+        return themeIconMap[themeValue.value]
+      })
+
+      const toggleTheme = () => {
+        theme.toggle()
+        gtag?.event('切换主题', {
+          event_category: GAEventActions.Toggle,
+          event_label: GAEventTags.Tool
+        })
+      }
+
+      const tooggleLanguage = () => {
+        i18n.toggle()
+        gtag?.event('系统语言', {
+          event_category: GAEventActions.Toggle,
+          event_label: GAEventTags.Tool
+        })
+      }
 
       return {
+        menus,
         LANGUAGE_KEYS,
-        RouteName,
+        isEnabledNav,
         t: i18n.t,
-        music,
-        muted: music?.muted,
-        currentSong: music?.currentSong,
-        getPageRoute
+        language: i18n.language,
+        tooggleLanguage,
+        theme: themeValue,
+        themeIcon,
+        toggleTheme
       }
     }
   })
@@ -133,6 +131,12 @@
     z-index: $z-index-header;
     background-color: $module-bg;
     @include backdrop-blur();
+
+    &.enable-nav:hover {
+      .header-nav {
+        @include visible();
+      }
+    }
 
     .header-container {
       height: 100%;
@@ -161,16 +165,6 @@
           width: 11rem;
           margin-right: $gap * 4;
           filter: $theme-logo-rotate;
-          /* mask-size: 88%;
-          mask-position: -30%;
-          mask-image: linear-gradient(
-            to bottom right,
-            rgba(255, 255, 255, 0.2),
-            rgba(255, 255, 255, 0.9),
-            rgba(255, 255, 255, 0.2)
-          );
-          animation: logo-blink 8s ease-in 1s infinite; */
-
           .logo-st {
             fill: $primary;
           }
@@ -188,61 +182,110 @@
         }
       }
 
-      .header-player {
-        width: 14rem;
+      .toolbox {
         display: flex;
-        flex-direction: column;
-        align-items: inherit;
+        flex-direction: row;
+        align-items: center;
         justify-content: center;
-        opacity: 0.3;
-        @include text-overflow();
+        opacity: 0.6;
         @include visibility-transition();
-
         &:hover {
           opacity: 1;
         }
 
-        > .panel {
-          display: flex;
-          justify-content: flex-start;
-          margin-bottom: $xs-gap;
+        .button {
+          position: relative;
+          display: block;
+          text-transform: uppercase;
+          margin: 0 $gap;
+          width: 2rem;
+          height: 2rem;
 
-          > .button {
-            margin-right: $lg-gap;
+          &::before {
+            content: '';
+            display: block;
+            width: 50%;
+            height: 2px;
+            position: absolute;
+            left: 25%;
+            bottom: -2px;
+          }
 
-            &:hover {
-              .iconfont {
-                color: $link-color-hover;
+          &.menu {
+            cursor: none;
+            &::before {
+              background-color: $black;
+            }
+          }
+
+          &.theme {
+            &::before {
+              background-color: $primary;
+            }
+          }
+
+          &.language {
+            font-weight: bold;
+
+            &.en {
+              &::before {
+                background-color: $en-primary;
+              }
+            }
+            &.zh {
+              &::before {
+                background-color: $zh-primary;
               }
             }
           }
         }
-
-        > .song {
-          font-size: $font-size-small;
-          @include text-overflow();
-
-          > .link {
-            color: $text-dividers;
-            @include color-transition();
-
-            &:hover {
-              color: $link-color-hover;
-            }
-          }
-        }
-
-        .iconfont {
-          color: $text-dividers;
-          @include color-transition();
-        }
       }
     }
 
-    > .pre-load {
-      width: 0;
-      height: 0;
+    .header-nav {
+      width: 100%;
+      height: 4rem;
+      background-color: $primary-lighter;
       @include hidden();
+      @include visibility-transition();
+
+      .nav-list {
+        height: 100%;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+
+        .separator {
+          height: 10%;
+          width: 1px;
+          background-color: $module-bg-translucent;
+        }
+
+        .item {
+          text-transform: uppercase;
+          color: $text-reversal;
+          @include visibility-transition();
+          opacity: 0.7;
+          &:hover {
+            opacity: 1;
+          }
+
+          &.link-active {
+            .text {
+              padding-bottom: 4px;
+              border-bottom: 2px solid;
+            }
+          }
+
+          > .iconfont {
+            margin-right: $sm-gap;
+          }
+
+          .superscript {
+            margin-left: $xs-gap;
+          }
+        }
+      }
     }
   }
 </style>

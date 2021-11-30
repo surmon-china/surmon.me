@@ -1,22 +1,19 @@
 /**
  * @file BFF server entry
+ * @module BFF-server
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import http from 'http'
 import express from 'express'
-import { Server as SocketServer } from 'socket.io'
 import { NODE_ENV, isDev } from './environment'
 import { startGTagScriptUpdater } from './server/gtag'
 import { startGitHubChartUpdater } from './server/ghchart'
-import { startBarrageSocket } from './server/barrage'
 import { tunnelRouter } from './server/tunnel'
 import { PUBLIC_PATH } from './server/helper'
 import { enableDevRuntime } from './server/runtime/dev'
 import { enableProdRuntime } from './server/runtime/prod'
-import API_CONFIG from './config/api.config'
-
-console.log('----isDev', isDev)
+import { API_TUNNEL_PREFIX, BFF_SERVER_PORT } from './config/bff.config'
 
 // @ts-expect-error
 process.noDeprecation = true
@@ -34,32 +31,26 @@ global.console = Object.assign(console, {
 // init app
 const app = express()
 const server = http.createServer(app)
-const io: SocketServer = require('socket.io')(server, {
-  transports: ['websocket'],
-  serveClient: false,
-  cookie: false
-})
 
 // static
-// 由于 BFF 存在副作用资源，build 时不再 copy to assets
+// 由于 BFF 存在副作用资源（如 gatg.js），build 时不再 copy to assets
 app.use(express.static(PUBLIC_PATH, { index: false }))
 
 // tunnel
-app.use(API_CONFIG.TUNNEL, tunnelRouter)
+app.use(API_TUNNEL_PREFIX, tunnelRouter)
 
 // app effect
 isDev ? enableDevRuntime(app) : enableProdRuntime(app)
 
 // run
-server.listen(API_CONFIG.SERVER_PORT, () => {
+server.listen(BFF_SERVER_PORT, () => {
   const infos = [
     `in ${NODE_ENV}`,
-    `listening on ${API_CONFIG.FE}`,
-    `at ${new Date().toLocaleString()}`
+    `at ${new Date().toLocaleString()}`,
+    `listening on ${JSON.stringify(server.address())}`
   ]
-  console.info(`Run! ${infos.join(', ')}`)
+  console.info(`Run! ${infos.join(', ')}.`)
   // 启动扩展服务
-  startGTagScriptUpdater()
-  startGitHubChartUpdater()
-  startBarrageSocket(io)
+  // startGTagScriptUpdater()
+  // startGitHubChartUpdater()
 })

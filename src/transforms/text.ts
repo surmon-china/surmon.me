@@ -13,7 +13,7 @@ export const textOverflow = (text: string, customLength?: number) => {
 
 // 首字母大写
 export const firstUpperCase = (text: string) => {
-  return text?.toLowerCase().replace(/( |^)[a-z]/g, L => L.toUpperCase())
+  return text?.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
 }
 
 export const CHINESE_NUMBER_TEXT = '〇一二三四五六七八九十'.split('')
@@ -22,7 +22,7 @@ export const replaceToChineseNumber = (text: string | number, capital = false) =
   const targetText = capital ? CHINESE_NUMBER_CAPITAL_TEXT : CHINESE_NUMBER_TEXT
   return String(text)
     .split('')
-    .map(number => targetText[Number(number)])
+    .map((number) => targetText[Number(number)])
     .join('')
 }
 

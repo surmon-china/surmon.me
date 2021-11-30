@@ -63,13 +63,13 @@
 </template>
 
 <script lang="ts">
-  import { VALUABLE_LINKS } from '/@/config/app.config'
   import { defineComponent, computed } from 'vue'
-  import { useStore } from '/@/store'
+  import { RouteName, CategorySlug } from '/@/app/router'
+  import { useMetaStore } from '/@/store/meta'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { getPageRoute, getCategoryArchiveRoute } from '/@/transforms/route'
-  import { RouteName, CategorySlug } from '../../../app/router'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'MobileAside',
@@ -80,9 +80,9 @@
       }
     },
     setup() {
-      const store = useStore()
+      const metaStore = useMetaStore()
       const gravatar = computed(
-        () => store.state.option.adminInfo?.gravatar || getFileCDNUrl('/images/gravatar.jpg')
+        () => metaStore.adminInfo.data?.gravatar || getFileCDNUrl('/images/gravatar.jpg')
       )
 
       return {

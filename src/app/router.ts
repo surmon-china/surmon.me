@@ -1,6 +1,6 @@
 /**
  * @file App router
- * @module app/router
+ * @module app.router
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -14,23 +14,24 @@ import {
 import { NOT_FOUND, INVALID_ERROR } from '/@/constants/error'
 import { LANGUAGE_KEYS } from '/@/language/key'
 import { LayoutColumn } from '/@/services/layout'
-import { isSSR } from '/@/environment'
+import { isSSR } from '/@/app/environment'
 import { isValidDateParam } from '/@/transforms/validate'
 import { scrollToTop } from '/@/utils/effects'
-import IndexPage from './pages/index.vue'
-import ArchivePage from './pages/archive.vue'
-import ArticlePage from './pages/article/index.vue'
-import CategoryPage from './pages/category.vue'
-import TagPage from './pages/tag.vue'
-import DatePage from './pages/date.vue'
-import SearchPage from './pages/search.vue'
-import MusicPage from './pages/music.vue'
-import LensPage from './pages/lens.vue'
-import JobPage from './pages/job.vue'
-import AboutPage from './pages/about.vue'
-import FreelancerPage from './pages/freelancer.vue'
-import GuestbookPage from './pages/guestbook.vue'
-import AppPage from './pages/app.vue'
+import IndexPage from '/@/pages/index.vue'
+import ArchivePage from '/@/pages/archive.vue'
+import ArticlePage from '/@/pages/article/index.vue'
+import CategoryPage from '/@/pages/category.vue'
+import TagPage from '/@/pages/tag.vue'
+import DatePage from '/@/pages/date.vue'
+import SearchPage from '/@/pages/search.vue'
+import MusicPage from '/@/pages/music.vue'
+import LensPage from '/@/pages/lens.vue'
+import JobPage from '/@/pages/job.vue'
+import AboutPage from '/@/pages/about.vue'
+import MerchPage from '/@/pages/merch/index.vue'
+import FreelancerPage from '/@/pages/freelancer.vue'
+import GuestbookPage from '/@/pages/guestbook.vue'
+import AppPage from '/@/pages/app.vue'
 
 export enum CategorySlug {
   Code = 'code',
@@ -50,6 +51,7 @@ export enum RouteName {
   Music = 'music',
   Job = 'job',
   About = 'about',
+  Merch = 'merch',
   Lens = 'lens',
   Archive = 'archive',
   Error = 'error'
@@ -66,7 +68,7 @@ export const routes: RouteRecordRaw[] = [
     name: RouteName.Archive,
     component: ArchivePage,
     meta: {
-      layout: LayoutColumn.Wide
+      layout: LayoutColumn.Full
     }
   },
   {
@@ -106,7 +108,8 @@ export const routes: RouteRecordRaw[] = [
           if (!targetCategory) {
             return Promise.reject({
               code: NOT_FOUND,
-              message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + `Category ${category_slug} not found`
+              message:
+                i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + `Category ${category_slug} not found`
             })
           }
         }
@@ -175,7 +178,7 @@ export const routes: RouteRecordRaw[] = [
     component: MusicPage,
     meta: {
       static: true,
-      layout: LayoutColumn.Page
+      layout: LayoutColumn.Full
     }
   },
   {
@@ -183,7 +186,7 @@ export const routes: RouteRecordRaw[] = [
     name: RouteName.Lens,
     component: LensPage,
     meta: {
-      layout: LayoutColumn.Page
+      layout: LayoutColumn.Full
     }
   },
   {
@@ -192,7 +195,7 @@ export const routes: RouteRecordRaw[] = [
     component: JobPage,
     meta: {
       static: true,
-      layout: LayoutColumn.Page
+      layout: LayoutColumn.Full
     }
   },
   {
@@ -201,7 +204,16 @@ export const routes: RouteRecordRaw[] = [
     component: AboutPage,
     meta: {
       static: true,
-      layout: LayoutColumn.Wide
+      layout: LayoutColumn.Full
+    }
+  },
+  {
+    path: '/merch',
+    name: RouteName.Merch,
+    component: MerchPage,
+    meta: {
+      static: true,
+      layout: LayoutColumn.Full
     }
   },
   {
@@ -210,7 +222,7 @@ export const routes: RouteRecordRaw[] = [
     component: FreelancerPage,
     meta: {
       static: true,
-      layout: LayoutColumn.Page
+      layout: LayoutColumn.Full
     }
   },
   {
@@ -224,7 +236,7 @@ export const routes: RouteRecordRaw[] = [
     component: AppPage,
     meta: {
       static: true,
-      layout: LayoutColumn.Page
+      layout: LayoutColumn.Full
     }
   },
   {

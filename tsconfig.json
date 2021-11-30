@@ -1,7 +1,8 @@
 {
   "ts-node": {
     "compilerOptions": {
-      "module": "commonjs"
+      "module": "commonjs",
+      "esModuleInterop": true
     }
   },
   "compilerOptions": {
@@ -25,7 +26,10 @@
     "lib": ["esnext", "esnext.asynciterable", "dom"],
     "baseUrl": ".",
     "paths": {
-      "/@/*": ["./src/*"]
+      // Client
+      "/@/*": ["./src/*"],
+      // BFF server
+      "@/*": ["./src/*"]
     },
     "types": ["node", "vite/client", "./src/types"]
   }

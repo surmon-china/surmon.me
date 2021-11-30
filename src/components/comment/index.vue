@@ -1,29 +1,18 @@
 <template>
   <div :id="ElementID.Warpper" :class="{ mobile: isMobile }" class="comment-box">
     <comment-topbar
-      :total="commentData.pagination?.total"
+      :total="commentStore.pagination?.total"
       :likes="likes"
       :post-id="postId"
       :fetching="isFetching"
       :sort="state.sort"
       @sort="getSortComments"
     />
-    <comment-list
-      :fetching="isFetching"
-      :comments="commentData.data"
-      @reply="replyComment"
-    />
-    <comment-pagination
-      :fetching="isFetching"
-      :pagination="commentData.pagination"
-      :sort="state.sort"
-      @page="getPageComments"
-    />
     <comment-publisher
       :disabled="isPostingComment || isFetching"
       :cached="userState.cached"
       :editing="userState.editing"
-      :reply-pid="state.replyPid"
+      :reply-pid="state.replyPID"
       v-model:profile="profileState"
       @cancel-reply="resetCommentReply"
       @edit-profile="editUserProfile"
@@ -42,6 +31,13 @@
         />
       </template>
     </comment-publisher>
+    <comment-list :fetching="isFetching" :comments="commentStore.comments" @reply="replyComment" />
+    <comment-pagination
+      :fetching="isFetching"
+      :pagination="commentStore.pagination"
+      :sort="state.sort"
+      @page="getPageComments"
+    />
   </div>
 </template>
 
@@ -56,18 +52,17 @@
     onBeforeUnmount,
     onUnmounted
   } from 'vue'
-  import { getNamespace, Modules } from '/@/store'
-  import { CommentModuleActions, CommentModuleListMutations } from '/@/store/comment'
-  import { useEnhancer } from '../../app/enhancer'
+  import { useMetaStore } from '/@/store/meta'
+  import { useCommentStore } from '/@/store/comment'
+  import { useEnhancer } from '/@/app/enhancer'
   import { getJSON, setJSON, remove } from '/@/services/storage'
-  import { getFileCDNUrl } from '/@/transforms/url'
-  import { isArticleDetail, isGuestbook } from '/@/transforms/route'
-  import { focusPosition } from '/@/utils/editable'
   import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
   import { GAEventTags, GAEventActions } from '/@/constants/gtag'
   import { SortType } from '/@/constants/state'
   import { USER } from '/@/constants/storage'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { getFileCDNUrl } from '/@/transforms/url'
+  import { focusPosition } from '/@/utils/editable'
   import { ElementID, scrollToElementAnchor } from './helper'
   import CommentTopbar from './topbar.vue'
   import CommentList from './list/index.vue'
@@ -134,13 +129,12 @@
       }
     },
     setup(props) {
-      const { store, route, i18n, gtag, globalState, isMobile } = useEnhancer()
-      const blockList = computed(() => store.state.option.appOption.data?.blacklist)
-      const commentData = computed(() => store.state.comment.comments)
-      const isFetchingComment = computed(() => store.state.comment.fetching)
-      const isPostingComment = computed(() => store.state.comment.posting)
-      const isArticlePage = computed(() => isArticleDetail(route.name))
-      const isGuestbookPage = computed(() => isGuestbook(route.name))
+      const { i18n, gtag, globalState, isMobile } = useEnhancer()
+      const metaStore = useMetaStore()
+      const commentStore = useCommentStore()
+
+      const blockList = computed(() => metaStore.appOptions.data?.blacklist)
+      const isPostingComment = computed(() => commentStore.posting)
       const markdownInputElement = ref<any>()
 
       const isFetching = computed(() => {
@@ -152,12 +146,12 @@
         // 2. 组件仅负责初评论列表数据翻页、排序的职责
         // 3. 当容器组件还在请求时，组件全量 Loading
         // 4. 当只有评论列表在请求时，列表单独 Loading
-        return props.fetching || isFetchingComment.value
+        return props.fetching || commentStore.fetching
       })
 
       const state = reactive({
         sort: SortType.Desc,
-        replyPid: 0
+        replyPID: 0
       })
       const userState = reactive({
         cached: false,
@@ -205,7 +199,7 @@
       }
 
       const resetCommentReply = () => {
-        state.replyPid = 0
+        state.replyPID = 0
       }
 
       const clearPenContent = () => {
@@ -221,7 +215,7 @@
           event_category: GAEventActions.Click,
           event_label: GAEventTags.Comment
         })
-        state.replyPid = commentId
+        state.replyPID = commentId
         // 滚动到目标位置，并激活光标
         scrollToElementAnchor(ElementID.Publisher, 300)
         if (markdownInputElement.value) {
@@ -233,7 +227,7 @@
       const fetchCommentList = (params: any = {}) => {
         // 每次重新获取数据时都需要回到评论框顶部，因为都是新数据
         scrollToElementAnchor(ElementID.Warpper, -73)
-        store.dispatch(getNamespace(Modules.Comment, CommentModuleActions.FetchList), {
+        commentStore.fetchList({
           ...params,
           sort: state.sort,
           post_id: props.postId,
@@ -295,15 +289,15 @@
         }
 
         // post
-        return store
-          .dispatch(getNamespace(Modules.Comment, CommentModuleActions.PostComment), {
-            pid: state.replyPid,
+        return commentStore
+          .postComment({
+            pid: state.replyPID,
             post_id: props.postId,
             content: penState.content,
             agent: globalState.userAgent.original,
             author: profile
           })
-          .then((resultData) => {
+          .then(() => {
             // clear local data
             penState.preview = false
             userState.cached = true
@@ -314,7 +308,7 @@
             // set user profile
             syncUserProfileToStorage()
             // random emoji rain
-            luanchEmojiRain(resultData.result.content)
+            luanchEmojiRain(penState.content)
           })
           .catch((error) => {
             console.warn('评论发布失败，可能原因：被 Akismet 过滤，或者：\n', error)
@@ -340,9 +334,7 @@
       })
 
       onUnmounted(() => {
-        store.commit(
-          getNamespace(Modules.Comment, CommentModuleListMutations.ClearListData)
-        )
+        commentStore.clearList()
       })
 
       return {
@@ -350,6 +342,7 @@
         isMobile,
         isFetching,
         isPostingComment,
+        commentStore,
         state,
         userState,
         profileState,
@@ -358,7 +351,6 @@
         syncUserProfileToStorage,
         clearUserProfile,
         togglePenPreview,
-        commentData,
         replyComment,
         submitComment,
         resetCommentReply,

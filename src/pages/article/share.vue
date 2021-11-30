@@ -21,8 +21,8 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '../../app/enhancer'
+  import { defineComponent } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import BaseShare from '/@/components/widget/share.vue'
 
   export default defineComponent({

@@ -5,12 +5,11 @@
  */
 
 import { App } from 'vue'
-import Ulink from '../components/common/ulink'
+import Ulink from '/@/components/common/ulink'
 import Uimage from '/@/components/common/uimage'
 import Placeholder from '/@/components/common/placeholder'
 import Spin from '/@/components/common/spin.vue'
 import Empty from '/@/components/common/empty.vue'
-import Masonry from '/@/components/common/masonry.vue'
 
 import SkeletonBase from '/@/components/common/skeleton/base.vue'
 import SkeletonLine from '/@/components/common/skeleton/line.vue'
@@ -25,7 +24,6 @@ export default function (app: App) {
   app.component(Uimage.name, Uimage)
   app.component(Spin.name as string, Spin)
   app.component(Empty.name as string, Empty)
-  app.component(Masonry.name as string, Masonry)
   app.component(Placeholder.name, Placeholder)
 
   app.component(ClientOnly.name, ClientOnly)

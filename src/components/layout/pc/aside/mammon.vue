@@ -24,16 +24,16 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import type { SwiperContext } from '/@/todo/swiper'
-  import { useEnhancer } from '../../../../app/enhancer'
 
-  enum Event {
+  export enum AsideMammonEvent {
     Ready = 'ready',
     UpdateIndex = 'update:index',
     IndexChange = 'index-change'
   }
   export default defineComponent({
-    name: 'PcAsideMammon',
+    name: 'PCAsideMammon',
     props: {
       index: {
         type: Number,
@@ -43,7 +43,7 @@
         type: Object
       }
     },
-    emits: [Event.Ready, Event.UpdateIndex, Event.IndexChange],
+    emits: [AsideMammonEvent.Ready, AsideMammonEvent.UpdateIndex, AsideMammonEvent.IndexChange],
     setup(props, context) {
       const swiperOption = {
         initialSlide: props.index,
@@ -75,11 +75,11 @@
 
       const handleSwiperSlideChange = () => {
         const realIndex = swiperInstance.value?.realIndex
-        context.emit(Event.UpdateIndex, realIndex)
-        context.emit(Event.IndexChange, realIndex)
+        context.emit(AsideMammonEvent.UpdateIndex, realIndex)
+        context.emit(AsideMammonEvent.IndexChange, realIndex)
       }
 
-      onMounted(() => context.emit(Event.Ready, swiperInstance.value))
+      onMounted(() => context.emit(AsideMammonEvent.Ready, swiperInstance.value))
 
       return {
         adConfig,

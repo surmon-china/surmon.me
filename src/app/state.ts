@@ -1,6 +1,6 @@
 /**
  * @file App local global state
- * @module app/global-state
+ * @module app.global-state
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -91,8 +91,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     layout: layoutValue.value,
     isNormal: layoutValue.value === LayoutColumn.Normal,
     isWide: layoutValue.value === LayoutColumn.Wide,
-    isFullColumn: layoutValue.value === LayoutColumn.Full,
-    isFullPage: layoutValue.value === LayoutColumn.Page
+    isFull: layoutValue.value === LayoutColumn.Full
   }))
   const setLayoutColumn = (layout: LayoutColumn) => {
     if (layout !== layoutValue.value) {
@@ -118,8 +117,6 @@ export const createGlobalState = (config: GlobalStateConfig) => {
   const switchBox = reactive({
     // 移动端侧边栏
     mobileSidebar: false,
-    // 是否开启弹幕
-    barrage: false,
     // 开启轨迹地图
     liveMap: false,
     // 山河入梦
@@ -163,9 +160,6 @@ export const createGlobalState = (config: GlobalStateConfig) => {
       },
       wallpaper() {
         switchBox.wallpaper = !switchBox.wallpaper
-      },
-      barrage() {
-        switchBox.barrage = !switchBox.barrage
       },
       mobileSidebar: (open?: boolean) => {
         switchBox.mobileSidebar = open != null ? !!open : !switchBox.mobileSidebar

@@ -5,8 +5,8 @@
  */
 
 import NeteaseMusic from 'simple-netease-cloud-music'
-import { TunnelModule } from '/@/constants/tunnel'
-import { MUSIC_ALBUM_ID } from '/@/config/app.config'
+import { TunnelModule } from '@/constants/tunnel'
+import { MUSIC_ALBUM_ID } from '@/config/app.config'
 import { tunnelCache } from '.'
 
 // https://521dimensions.com/open-source/amplitudejs/docs/configuration/playlists.html

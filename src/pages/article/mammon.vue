@@ -2,19 +2,10 @@
   <div class="mammon">
     <placeholder :loading="fetching">
       <template #loading>
-        <skeleton-paragraph
-          key="skeleton"
-          class="skeleton"
-          line-height="1em"
-          :lines="4"
-        />
+        <skeleton-paragraph key="skeleton" class="skeleton" line-height="1em" :lines="4" />
       </template>
       <template #default>
-        <adsense-responsive
-          key="adsense"
-          class="mammon-box"
-          ins-class="mammon-ins"
-        />
+        <u-adsense key="adsense" class="mammon-box" ins-class="mammon-ins" />
       </template>
     </placeholder>
   </div>
@@ -22,12 +13,11 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import AdsenseResponsive from '/@/components/adsense/responsive.vue'
-
+  import UAdsense from '/@/components/common/uadsense.vue'
   export default defineComponent({
     name: 'ArticleMammon',
     components: {
-      AdsenseResponsive
+      UAdsense
     },
     props: {
       fetching: {
@@ -61,5 +51,3 @@
     }
   }
 </style>
-
-

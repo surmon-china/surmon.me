@@ -14,13 +14,13 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { useRoute } from 'vue-router'
-  import { useGlobalState } from '../../../../app/state'
+  import { useGlobalState } from '/@/app/state'
   import { LayoutColumn } from '/@/services/layout'
   import { getTagArchiveRoute, isArticleDetail } from '/@/transforms/route'
   import { LANGUAGE_KEYS } from '/@/language/key'
 
   export default defineComponent({
-    name: 'PcAsideTool',
+    name: 'PCAsideTool',
     setup() {
       const route = useRoute()
       const globalState = useGlobalState()

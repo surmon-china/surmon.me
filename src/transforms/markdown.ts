@@ -41,7 +41,7 @@ import relink from '/@/transforms/relink'
       方案 2 无法实行，无论放在节点 2 还是 4，都会有无法承担的维护成本，放在节点 2 会吧用户输入的 code 进行消毒，放在节点 4 会导致用户可以输入任何前端需渲染的类型。
       最终选定方案 1，使用 escapeHtml 对 text、html、tag 进行 escape，对 link、image 进行 cleanLink
 */
-
+/*
 // global options
 marked.setOptions({
   gfm: true,
@@ -59,7 +59,7 @@ marked.setOptions({
 
 const customRenderer = new marked.Renderer()
 // 段落解析
-customRenderer.paragraph = text => `<p>${text}</p>`
+customRenderer.paragraph = (text) => `<p>${text}</p>`
 // 标题解析
 customRenderer.heading = (text, level, raw) => {
   const id = raw.toLowerCase().replace(/[^a-zA-Z0-9\u4E00-\u9FA5]+/g, '-')
@@ -86,7 +86,7 @@ customRenderer.link = (href, title, text) => {
 customRenderer.image = (src, title, alt) => {
   // HTTP -> proxy
   const source = src?.replace(/^http:\/\//gi, `${API_CONFIG.PROXY}/`)
-  return (`
+  return `
     <img
       class="${LOZAD_CLASS_NAME}"
       data-src="${source}"
@@ -94,7 +94,9 @@ customRenderer.image = (src, title, alt) => {
       alt="${alt || title || source}"
       onclick="window.$popup && window.$popup.vImage('${source}')"
     />
-  `).replace(/\s+/g, ' ').replace(/\n/g, ' ')
+  `
+    .replace(/\s+/g, ' ')
+    .replace(/\n/g, ' ')
 }
 // 代码解析器（行号处理）
 customRenderer.code = function (code, lang, escaped) {
@@ -135,6 +137,7 @@ customRenderer.code = function (code, lang, escaped) {
       </pre>
     `
 }
+*/
 
 export interface IRenderOption {
   tagMap?: ITagMap
@@ -143,17 +146,21 @@ export interface IRenderOption {
 }
 
 export const markdownToHTML = (markdown: string, options?: IRenderOption) => {
-  if (!markdown || typeof markdown !== 'string') {
-    return ''
-  }
+  // TODO!
+  return markdown
 
-  // relink
-  customRenderer.text = options?.relink && options?.tagMap
-    ? text => relink(text, options.tagMap as ITagMap)
-    : text => text
+  // if (!markdown || typeof markdown !== 'string') {
+  //   return ''
+  // }
 
-  return marked(markdown, {
-    sanitize: !options?.html,
-    renderer: customRenderer
-  })
+  // // relink
+  // customRenderer.text =
+  //   options?.relink && options?.tagMap
+  //     ? (text) => relink(text, options.tagMap as ITagMap)
+  //     : (text) => text
+
+  // return marked(markdown, {
+  //   sanitize: !options?.html,
+  //   renderer: customRenderer
+  // })
 }

@@ -1,28 +1,64 @@
 <template>
   <div class="about-page" :class="{ mobile: isMobile }">
-    <div class="about-me">
-      <div class="profile">
-        <div class="bio">
-          <i class="iconfont icon-swordsman" />
-          <div class="text">
-            <i18n>
-              <template #zh>一个渣男</template>
-              <template #en>I'm Surmon, a digital nomad.</template>
-            </i18n>
-          </div>
+    <div class="banner">
+      <div class="background">
+        <video class="video" loop muted autoplay :controls="false">
+          <source src="/images/page-about/background.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="gravatar">
+        <img :src="gravatar" class="avatar" draggable="false" />
+        <h2 class="name">{{ adminInfo?.name || '-' }}</h2>
+        <p class="role">{{ adminInfo?.slogan || '-' }}</p>
+        <div class="socials">
+          <span class="normal">
+            <ulink class="item github" :href="VALUABLE_LINKS.GITHUB">
+              <i class="iconfont icon-github" />
+              <span class="text">GitHub</span>
+            </ulink>
+            <ulink class="item twitter" :href="VALUABLE_LINKS.TWITTER">
+              <i class="iconfont icon-twitter" />
+              <span class="text">Twitter</span>
+            </ulink>
+            <ulink class="item instagram" :href="VALUABLE_LINKS.INSTAGRAM">
+              <i class="iconfont icon-instagram" />
+              <span class="text">Instagram</span>
+            </ulink>
+          </span>
+          <span class="mini">
+            <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM">
+              <i class="iconfont icon-telegram" />
+            </ulink>
+            <ulink class="item linkedin" :href="VALUABLE_LINKS.LINKEDIN">
+              <i class="iconfont icon-linkedin" />
+            </ulink>
+            <ulink class="item douban" :href="VALUABLE_LINKS.DOUBAN">
+              <i class="iconfont icon-douban" />
+            </ulink>
+            <ulink class="item bilibili" :href="VALUABLE_LINKS.BILIBILI">
+              <i class="iconfont icon-bilibili" />
+            </ulink>
+            <ulink class="item zhihu" :href="VALUABLE_LINKS.ZHIHU">
+              <i class="iconfont icon-zhihu" />
+            </ulink>
+          </span>
         </div>
-        <div class="description">
+      </div>
+    </div>
+    <div class="container">
+      <div class="profile">
+        <div class="content">
           <div class="item">
             <i class="iconfont icon-heart" />
             <span class="like-text">
               <i18n
-                zh="酒池肉林、日夜笙歌、依翠偎红、五音六律、目营心匠、桀骜不羁"
+                zh="酒池肉林、桀骜不羁、日夜笙歌、五音六律、依翠偎红、目营心匠"
                 en="misfits. rebels. troublemakers. rocker."
               />
             </span>
           </div>
           <div class="item">
-            <i class="iconfont icon-tibet-1" />
+            <i class="iconfont icon-swordsman" />
             <span class="live-map" @click="toggleLiveMap">
               <i18n
                 zh="路为纸，地成册，行作笔，心当墨；思无界，行有疆"
@@ -31,112 +67,15 @@
             </span>
             <client-only>
               <popup :visible="isOnLiveMap" @close="toggleLiveMap">
-                <iframe
-                  :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP"
-                  frameborder="0"
-                  class="live-map"
-                />
+                <iframe :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP" frameborder="0" class="live-map" />
               </popup>
             </client-only>
-          </div>
-          <div class="item">
-            <i class="iconfont icon-social" />
-            <span class="social-media-accounts">
-              <span class="normal">
-                <ulink class="item normal-button github" :href="VALUABLE_LINKS.GITHUB">
-                  <i class="iconfont icon-github" />
-                  <span class="text">GitHub</span>
-                </ulink>
-                <ulink
-                  class="item normal-button twitter"
-                  :href="VALUABLE_LINKS.TWITTER"
-                >
-                  <i class="iconfont icon-twitter" />
-                  <span class="text">Twitter</span>
-                </ulink>
-                <ulink
-                  class="item normal-button instagram"
-                  :href="VALUABLE_LINKS.INSTAGRAM"
-                >
-                  <i class="iconfont icon-instagram" />
-                  <span class="text">Instagram</span>
-                </ulink>
-              </span>
-              <desktop-only>
-                <span class="mini">
-                  <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM">
-                    <i class="iconfont icon-telegram" />
-                  </ulink>
-                  <ulink class="item linkedin" :href="VALUABLE_LINKS.LINKEDIN">
-                    <i class="iconfont icon-linkedin" />
-                  </ulink>
-                  <ulink class="item douban" :href="VALUABLE_LINKS.DOUBAN">
-                    <i class="iconfont icon-douban" />
-                  </ulink>
-                  <ulink class="item zhihu" :href="VALUABLE_LINKS.ZHIHU">
-                    <i class="iconfont icon-zhihu" />
-                  </ulink>
-                  <ulink class="item weibo" :href="VALUABLE_LINKS.WEIBO">
-                    <i class="iconfont icon-weibo" />
-                  </ulink>
-                  <ulink class="item bilibili" :href="VALUABLE_LINKS.BILIBILI">
-                    <i class="iconfont icon-bilibili" />
-                  </ulink>
-                  <ulink
-                    class="item stackoverflow"
-                    :href="VALUABLE_LINKS.STACK_OVERFLOW"
-                    v-if="false"
-                  >
-                    <i class="iconfont icon-stackoverflow" />
-                  </ulink>
-                  <ulink
-                    class="item algorithm"
-                    :href="VALUABLE_LINKS.LEETCODE_CN"
-                    v-if="false"
-                  >
-                    <i class="iconfont icon-leetcode" />
-                  </ulink>
-                  <ulink class="item quora" :href="VALUABLE_LINKS.QUORA">
-                    <i class="iconfont icon-quora" />
-                  </ulink>
-                </span>
-              </desktop-only>
-            </span>
-          </div>
-          <div class="item">
-            <i class="iconfont icon-dollar"></i>
-            <div class="sponsor">
-              <ulink
-                class="github normal-button icon-button"
-                :href="VALUABLE_LINKS.GITHUB_SPONSORS"
-                @mousedown="handleTouchSponsor"
-              >
-                <i class="iconfont icon-heart" />
-                <span class="text">GitHub Sponsors</span>
-              </ulink>
-              <ulink
-                class="paypal normal-button icon-button"
-                :href="VALUABLE_LINKS.PAYPAL"
-                @mousedown="handleTouchSponsor"
-              >
-                <i class="iconfont icon-paypal" />
-                <span class="text">PayPal me</span>
-              </ulink>
-              <ulink
-                class="more normal-button icon-button"
-                :href="VALUABLE_LINKS.SPONSOR"
-                @mousedown="handleTouchSponsor"
-              >
-                <i class="iconfont icon-qrcode" />
-                <span class="text">More</span>
-              </ulink>
-            </div>
           </div>
           <div class="item">
             <i class="iconfont icon-music" />
             <span class="music">
               <router-link :to="getPageRoute(RouteName.Music)">
-                Jazz-HipHop, Electronic, Disco, Rock, Popular
+                Techno, Electronic, Disco, Rock, Popular
               </router-link>
               <ulink class="spotify" :href="VALUABLE_LINKS.SPOTIFY">
                 <i class="iconfont icon-spotify" />
@@ -147,15 +86,34 @@
             </span>
           </div>
           <div class="item">
+            <i class="iconfont icon-social" />
+            <router-link class="text-link" :to="getPageRoute(RouteName.Job)">
+              <i18n zh="找我内推" en="Find job" />
+            </router-link>
+            <span class="separator">|</span>
+            <router-link class="text-link" :to="getPageRoute(RouteName.Freelancer)">
+              <i18n zh="找我干活" en="Hire me" />
+            </router-link>
+            <span class="separator">|</span>
+            <router-link class="text-link" :to="getPageRoute(RouteName.Lens)">
+              <i18n zh="关注我的 Vlog" en="Follow me" />
+            </router-link>
+            <span class="separator">|</span>
+            <router-link class="text-link" :to="getPageRoute(RouteName.Merch)">
+              <i18n zh="体验我的周边" en="Merch bar" />
+            </router-link>
+          </div>
+          <div class="item">
             <i class="iconfont icon-comment-discussion" />
-            <ulink class="group-link" :href="VALUABLE_LINKS.QQ_GROUP">
+            <ulink class="text-link" :href="VALUABLE_LINKS.QQ_GROUP">
               <i18n zh="寂寞同性交友群" en="QQ group" />
             </ulink>
             <span class="separator">|</span>
-            <ulink class="group-link" :href="VALUABLE_LINKS.TELEGRAM_GROUP">
+            <ulink class="text-link" :href="VALUABLE_LINKS.TELEGRAM_GROUP">
               <i18n zh="电报群" en="Telegram group" />
             </ulink>
           </div>
+          <div class="separator"></div>
           <div class="item">
             <i class="iconfont icon-friend" />
             <span class="friends">
@@ -173,108 +131,73 @@
             <span>...</span>
           </div>
         </div>
-      </div>
-      <div class="gravatar">
-        <div class="background be-2">
-          <uimage
-            cdn
-            class="image"
-            alt="background"
-            src="/images/page-about/background-be-2.jpg"
-          />
-        </div>
-        <div class="background be-1">
-          <uimage
-            cdn
-            class="image"
-            alt="background"
-            src="/images/page-about/background-be-1.jpg"
-          />
-        </div>
-        <div class="background star-1">
-          <uimage
-            cdn
-            class="image"
-            alt="background-star"
-            src="/images/page-about/background-star-1.png"
-          />
-        </div>
-        <div class="background star-2">
-          <uimage
-            cdn
-            class="image"
-            alt="background-star"
-            src="/images/page-about/background-star-2.png"
-          />
-        </div>
-        <img :src="gravatar" class="avatar" draggable="false" />
-        <div class="description">
-          <h3 class="name">
-            <strong>Surmon</strong>
-          </h3>
-          <p class="role">
-            <i18n en="Digital nomad" zh="数字游民" />
-          </p>
-        </div>
         <desktop-only>
-          <span class="followme">
-            <i18n :lkey="LANGUAGE_KEYS.FRIEND_ME" />
-          </span>
-          <div class="wechat" @mouseenter="handleHoverFollowMe">
-            <uimage cdn class="qrcode" src="/images/page-about/wechat-qrcode.jpg" />
-            <span class="tooltip">
-              <i18n zh="扫码加微，解锁灵魂" en="Scan the QR code in WeChat" />
-            </span>
+          <div class="wechat">
+            <div class="qrcode">
+              <uimage cdn class="image" src="/images/page-about/wechat-qrcode.jpg" />
+              <div class="slogan">
+                <span class="text">
+                  <i18n zh="扫码加微，点燃灵魂" en="Scan the QR code on WeChat" />
+                </span>
+              </div>
+            </div>
+            <div class="cover" @mouseenter="handleHoverFollowMe">
+              <div class="friend-me">
+                <i class="iconfont icon-wechat"></i>
+                <i18n zh="众里寻他" en="WeChat" />
+              </div>
+            </div>
           </div>
         </desktop-only>
       </div>
-    </div>
-    <template v-if="adConfig.PC_ABOUT_PAGE_SWIPER.length">
-      <desktop-only>
-        <client-only transition>
-          <div class="mammon">
-            <swiper class="swiper" :options="adSwiperOption">
-              <swiper-slide
-                v-for="(item, index) in adConfig.PC_ABOUT_PAGE_SWIPER"
-                :key="index"
-              >
-                <ulink class="item" :href="item.url">
-                  <img
-                    :src="item.src"
-                    :alt="item.alt || item.title"
-                    :title="item.title || item.alt"
-                  />
-                </ulink>
-              </swiper-slide>
-              <template #pagination>
-                <div class="swiper-pagination" />
-              </template>
-            </swiper>
-          </div>
-        </client-only>
-      </desktop-only>
-    </template>
-    <div class="location-map">
-      <iframe class="iframe" src="/partials/map.html" />
-    </div>
-    <desktop-only>
-      <div class="about-project">
-        <ulink class="project-link" :href="VALUABLE_LINKS.GITHUB">
-          <p class="title">
-            <i class="iconfont icon-terminal" />
-            <span class="description">contributions</span>
-          </p>
-          <uimage cdn src="/images/ghchart.svg" />
-        </ulink>
+      <div class="location-box">
+        <iframe class="iframe" src="/partials/map.html" />
       </div>
-    </desktop-only>
+      <desktop-only>
+        <div class="github-box">
+          <div class="sponsors">
+            <ulink
+              class="button github"
+              :href="VALUABLE_LINKS.GITHUB_SPONSORS"
+              @mousedown="handleTouchSponsor"
+            >
+              <i class="iconfont icon-heart" />
+              <span class="text">Sponsor me</span>
+            </ulink>
+            <ulink
+              class="button paypal"
+              :href="VALUABLE_LINKS.PAYPAL"
+              @mousedown="handleTouchSponsor"
+            >
+              <i class="iconfont icon-paypal" />
+              <span class="text">PayPal me</span>
+            </ulink>
+            <ulink
+              class="button more"
+              :href="VALUABLE_LINKS.SPONSOR"
+              @mousedown="handleTouchSponsor"
+            >
+              <i class="iconfont icon-qrcode" />
+              <span class="text">More payment</span>
+            </ulink>
+          </div>
+          <span class="divider"></span>
+          <uimage cdn class="pal" src="/images/page-about/peace-and-love.jpg" />
+          <span class="divider"></span>
+          <ulink class="homepage-link" :href="VALUABLE_LINKS.GITHUB">
+            <uimage cdn src="/images/ghchart.svg" />
+          </ulink>
+        </div>
+      </desktop-only>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, toRef } from 'vue'
-  import { useEnhancer } from '../app/enhancer'
-  import { RouteName } from '../app/router'
+  import { defineComponent, computed, toRef } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { RouteName } from '/@/app/router'
+  import { useMetaStore } from '/@/store/meta'
   import { getPageRoute } from '/@/transforms/route'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -282,15 +205,14 @@
   import { VALUABLE_LINKS, FRIEND_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
-    name: 'About',
-    setup(props) {
-      const { i18n, helmet, gtag, globalState, store, adConfig, isZhLang, isMobile } =
-        useEnhancer()
+    name: 'AboutPage',
+    setup() {
+      const { i18n, helmet, gtag, globalState, isZhLang, isMobile } = useEnhancer()
+      const metaStore = useMetaStore()
       const isOnLiveMap = toRef(globalState.switchBox, 'liveMap')
+      const adminInfo = computed(() => metaStore.adminInfo.data)
       const gravatar = computed(
-        () =>
-          store.state.option.adminInfo?.gravatar ||
-          getFileCDNUrl('/images/gravatar.jpg')
+        () => adminInfo.value?.gravatar || getFileCDNUrl('/images/gravatar.jpg')
       )
 
       helmet(() => {
@@ -322,35 +244,15 @@
         }
       }
 
-      const adSwiperOption = {
-        loop: true,
-        direction: 'vertical',
-        autoplay: {
-          delay: 2666,
-          disableOnInteraction: false
-        },
-        pagination: {
-          clickable: true,
-          el: '.swiper-pagination'
-        },
-        autoHeight: true,
-        mousewheel: true,
-        observeParents: true,
-        preloadImages: false,
-        lazy: true
-      }
-
       return {
         VALUABLE_LINKS,
         FRIEND_LINKS,
-        LANGUAGE_KEYS,
         RouteName,
         getPageRoute,
-        adConfig,
-        adSwiperOption,
         isMobile,
         isOnLiveMap,
         gravatar,
+        adminInfo,
         handleHoverFollowMe,
         handleTouchSponsor,
         toggleLiveMap
@@ -371,419 +273,69 @@
     width: 100%;
     overflow: hidden;
 
-    .about-me {
-      width: 100%;
-      height: auto;
+    .banner {
+      $banner-height: 22rem;
       margin-bottom: $lg-gap;
-      overflow: hidden;
-      display: flex;
-      justify-content: space-between;
 
-      .profile {
-        flex-grow: 1;
-        padding: 2.4rem 2.8rem;
-        padding-bottom: 2rem;
-        position: relative;
-        @include common-bg-module();
-        @include radius-box($lg-radius);
+      .background {
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: $banner-height;
+        top: 0;
+        left: 0;
+        z-index: $z-index-normal + 1;
+        overflow: hidden;
 
-        .bio {
-          display: flex;
-          align-items: center;
-          padding-left: $sm-gap;
-          margin-bottom: 1.8rem;
-
-          .iconfont {
-            font-size: $font-size-h2;
-            color: $primary;
-          }
-
-          .text {
-            position: relative;
-            margin-left: 1.8rem;
-            padding: 0 1em;
-            padding-bottom: 0.2em;
-            font-family: 'webfont-bolder', DINRegular;
-            background-color: $primary-lighter;
-            color: $text-reversal;
-            line-height: 2em;
-            letter-spacing: 0.1em;
-            @include radius-box($sm-radius);
-
-            &::before {
-              content: '';
-              position: absolute;
-              display: block;
-              height: 1rem;
-              bottom: -0.5rem;
-              left: 0;
-              right: 0;
-              background-image: radial-gradient(circle, transparent 70%, $white 70%);
-              background-size: 0.7em 1em;
-              background-position: 0 -0.5em;
-            }
-          }
+        &::before {
+          content: '';
+          position: absolute;
+          display: block;
+          height: 1rem;
+          bottom: -0.5rem;
+          left: 0;
+          right: 0;
+          background-image: radial-gradient(circle, transparent 70%, $text-reversal 70%);
+          background-size: 0.7em 1em;
+          background-position: 0 -0.5em;
         }
 
-        .description {
-          > .item {
-            line-height: 2.5em;
-            min-height: 2.5em;
-            margin-bottom: 1.2rem;
-            &:last-child {
-              margin-bottom: 0;
-            }
-
-            > .iconfont {
-              width: 2em;
-              margin-right: 1em;
-              display: inline-block;
-              font-size: $font-size-h4;
-              text-align: center;
-              color: $text-dividers;
-
-              &.icon-tibet-1 {
-                color: #a94444;
-              }
-              &.icon-heart {
-                color: $red;
-              }
-              &.icon-social {
-                color: $bilibili-blue-primary;
-              }
-              &.icon-dollar {
-                color: #ffa800;
-              }
-              &.icon-music {
-                color: $music163-primary;
-              }
-              &.icon-comment-discussion {
-                color: $telegram-primary;
-              }
-              &.icon-friend {
-                color: $accent;
-              }
-            }
-
-            .normal-button {
-              $button-size: 2rem;
-              display: inline-flex;
-              line-height: $button-size;
-              padding: 0 $sm-gap;
-              margin-right: $sm-gap;
-              color: $white;
-              @include radius-box($sm-radius);
-              @include background-transition();
-
-              .iconfont {
-                margin-right: $xs-gap;
-              }
-              .text {
-                font-size: $font-size-small;
-              }
-
-              &.icon-button {
-                padding-left: 0;
-                .iconfont {
-                  display: inline-block;
-                  width: $button-size;
-                  height: $button-size;
-                  line-height: $button-size;
-                  text-align: center;
-                }
-              }
-            }
-
-            .separator {
-              margin: 0 $sm-gap;
-            }
-
-            .group-link {
-              padding-bottom: 2px;
-              border-bottom: 1px solid;
-            }
-
-            > .like-text {
-              font-family: 'webfont-bolder', DINRegular;
-            }
-
-            > .live-map {
-              cursor: pointer;
-              border-bottom: 1px solid;
-              font-family: 'webfont-bolder', DINRegular;
-            }
-
-            > .music {
-              .spotify,
-              .music-163 {
-                margin-left: $xs-gap;
-              }
-              .spotify {
-                color: $spotify-primary;
-              }
-              .music-163 {
-                color: $music163-primary;
-              }
-            }
-
-            > .friends {
-              .link {
-                margin-right: 1.8rem;
-                text-transform: capitalize;
-                font-weight: bold;
-                padding-bottom: 2px;
-                border-bottom: 1px solid;
-              }
-            }
-
-            > .social-media-accounts {
-              .normal {
-                display: inline-flex;
-                align-items: center;
-                margin-right: $lg-gap;
-
-                .item {
-                  &.github {
-                    background-color: $github-primary;
-                    &:hover {
-                      background-color: $github-primary-hover;
-                    }
-                  }
-                  &.twitter {
-                    background-color: $twitter-primary;
-                    &:hover {
-                      background-color: $twitter-primary-hover;
-                    }
-                  }
-                  &.instagram {
-                    opacity: 0.8;
-                    margin: 0;
-                    background: $instagram-primary;
-                    background: $instagram-gradient;
-                    @include visibility-transition();
-                    &:hover {
-                      opacity: 1;
-                    }
-                  }
-                }
-              }
-
-              > .mini {
-                $button-size: 2rem;
-                > .item {
-                  display: inline-block;
-                  width: $button-size;
-                  height: $button-size;
-                  line-height: $button-size;
-                  margin-right: $sm-gap;
-                  text-align: center;
-                  border-radius: 100%;
-                  color: $white;
-                  opacity: 0.8;
-                  @include visibility-transition();
-
-                  &:hover {
-                    opacity: 1;
-                  }
-
-                  .iconfont {
-                    font-size: $font-size-small;
-                  }
-
-                  &.telegram {
-                    background-color: $telegram-primary;
-                  }
-                  &.douban {
-                    background-color: $douban-primary;
-                  }
-                  &.zhihu {
-                    background-color: $zhihu-primary;
-                  }
-                  &.weibo {
-                    background-color: $weibo-primary;
-                  }
-                  &.bilibili {
-                    background-color: $bilibili-pink-primary;
-                  }
-                  &.stackoverflow {
-                    background-color: $stackoverflow-primary;
-                  }
-                  &.algorithm {
-                    background-color: $leetcode-primary;
-                  }
-                  &.quora {
-                    background-color: $quora-primary;
-                  }
-                  &.linkedin {
-                    background-color: $linkedin-primary;
-                  }
-                }
-              }
-            }
-
-            > .sponsor {
-              display: inline-flex;
-              align-items: center;
-
-              .github,
-              .paypal,
-              .more {
-                opacity: 0.9;
-                @include visibility-transition();
-                &:hover {
-                  opacity: 1;
-                }
-              }
-
-              .github {
-                background-color: $github-primary;
-                .iconfont {
-                  background-color: $github-primary-hover;
-                  color: $github-sponsor-primary;
-                }
-              }
-              .paypal {
-                background-color: $paypal-primary;
-                .iconfont {
-                  background-color: $paypal-primary-hover;
-                  color: $paypal-primary;
-                }
-              }
-              .more {
-                background-color: $wechat-primary;
-              }
-            }
-          }
+        .video {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: 0% 30%;
+          pointer-events: none;
         }
       }
 
       .gravatar {
         position: relative;
-        width: 22rem;
-        flex-grow: 0;
-        flex-shrink: 0;
         display: flex;
         align-items: center;
         flex-direction: column;
         justify-content: flex-start;
-        margin-left: $lg-gap;
+        width: 100%;
+        background-color: $module-bg;
         @include radius-box($lg-radius);
-        @include common-bg-module();
-
-        @keyframes aboutbg-be-1 {
-          0% {
-            transform: translate3d(0%, 0%, 0);
-          }
-          25% {
-            transform: translate3d(-50%, -50%, 0);
-          }
-          50% {
-            transform: translate3d(-50%, 0%, 0);
-          }
-          75% {
-            transform: translate3d(0%, -50%, 0);
-          }
-          100% {
-            transform: translate3d(0%, 0%, 0);
-          }
-        }
-
-        @keyframes aboutbg-be-2 {
-          0% {
-            transform: translate3d(0%, 0%, 0);
-          }
-          25% {
-            transform: translate3d(0%, -50%, 0);
-          }
-          50% {
-            transform: translate3d(-20%, 0%, 0);
-          }
-          75% {
-            transform: translate3d(-30%, -50%, 0);
-          }
-          100% {
-            transform: translate3d(0%, 0%, 0);
-          }
-        }
-
-        @keyframes aboutbg-star {
-          0% {
-            opacity: 1;
-          }
-          25% {
-            opacity: 0.5;
-          }
-          50% {
-            opacity: 0.8;
-          }
-          75% {
-            opacity: 0.2;
-          }
-          100% {
-            opacity: 1;
-          }
-        }
-
-        > .background {
-          content: '';
-          display: block;
-          position: absolute;
-          width: 100%;
-          height: 26%;
-          top: 0;
-          right: 0;
-          z-index: $z-index-normal;
-          overflow: hidden;
-
-          &.be-1 {
-            opacity: 0.66;
-
-            > .image {
-              width: auto;
-              height: 200%;
-              animation: aboutbg-be-1 88s linear infinite;
-            }
-          }
-
-          &.be-2 {
-            opacity: 1;
-
-            > .image {
-              width: auto;
-              height: 200%;
-              animation: aboutbg-be-2 66s linear infinite;
-            }
-          }
-
-          &.star-1,
-          &.star-2 {
-            width: auto;
-            height: auto;
-            right: 1rem;
-
-            > .image {
-              width: 5rem;
-              height: auto;
-              animation: aboutbg-star 6s linear infinite;
-            }
-          }
-        }
+        background-image: cdn-url('/images/page-about/background.png'),
+          linear-gradient($module-bg-opaque 40%, #00000000 100%);
+        background-size: contain;
+        background-repeat: repeat-x;
+        background-blend-mode: lighten;
 
         &:hover {
-          > .avatar {
+          .avatar {
             transform: rotate(360deg);
-          }
-
-          > .wechat {
-            @include visible();
           }
         }
 
         > .avatar {
-          width: 8rem;
-          height: 8rem;
+          $size: 8rem;
+          width: $size;
+          height: $size;
           z-index: $z-index-normal + 2;
-          margin-top: 5rem;
+          margin-top: $banner-height - 4rem;
           max-width: 100%;
           border-radius: 100%;
           border: 5px solid $module-bg;
@@ -791,77 +343,294 @@
           transition: transform $transition-time-slow;
         }
 
-        > .description {
+        .name,
+        .role {
           text-align: center;
           color: $text;
-
-          > .role {
-            margin-top: 0.466rem;
-          }
         }
 
-        > .followme {
-          margin-top: 1.666rem;
-          display: inline-block;
-          color: $primary;
-          border: 1px solid $primary;
-          border-radius: $xs-radius;
-          width: 56%;
-          height: 2.68rem;
-          text-align: center;
-          line-height: 2.46rem;
+        .socials {
+          $button-size: 3rem;
+          display: flex;
+          justify-content: center;
+          height: $button-size;
+          margin-top: $lg-gap;
+          margin-bottom: $gap * 2;
 
-          &:hover {
-            color: $text-reversal;
-            background-color: $primary;
+          .normal {
+            display: inline-flex;
+            align-items: center;
+            margin-right: $gap;
+
+            .item {
+              padding: 0 $gap;
+              margin-right: $gap;
+              height: 100%;
+              display: inline-flex;
+              align-items: center;
+              border-radius: $sm-radius;
+              color: $white;
+
+              .iconfont {
+                font-size: $font-size-h4;
+                margin-right: $sm-gap;
+              }
+
+              &.github {
+                background-color: $github-primary;
+                &:hover {
+                  background-color: $github-primary-hover;
+                }
+              }
+              &.twitter {
+                background-color: $twitter-primary;
+                &:hover {
+                  background-color: $twitter-primary-hover;
+                }
+              }
+              &.instagram {
+                opacity: 0.8;
+                margin: 0;
+                background: $instagram-primary;
+                background: $instagram-gradient;
+                @include visibility-transition();
+                &:hover {
+                  opacity: 1;
+                }
+              }
+            }
+          }
+
+          > .mini {
+            > .item {
+              display: inline-block;
+              width: $button-size;
+              height: $button-size;
+              line-height: $button-size;
+              margin-right: $gap;
+              text-align: center;
+              border-radius: $sm-radius;
+              color: $white;
+              opacity: 0.8;
+              @include visibility-transition();
+
+              &:hover {
+                opacity: 1;
+              }
+
+              .iconfont {
+                font-size: $font-size-h4;
+              }
+
+              &.telegram {
+                background-color: $telegram-primary;
+              }
+              &.douban {
+                background-color: $douban-primary;
+              }
+              &.zhihu {
+                background-color: $zhihu-primary;
+              }
+              &.weibo {
+                background-color: $weibo-primary;
+              }
+              &.bilibili {
+                background-color: $bilibili-pink-primary;
+              }
+              &.stackoverflow {
+                background-color: $stackoverflow-primary;
+              }
+              &.algorithm {
+                background-color: $leetcode-primary;
+              }
+              &.quora {
+                background-color: $quora-primary;
+              }
+              &.linkedin {
+                background-color: $linkedin-primary;
+              }
+            }
           }
         }
+      }
+    }
 
-        > .wechat {
-          position: absolute;
-          left: 0;
-          bottom: 0rem;
+    .profile {
+      width: 100%;
+      height: auto;
+      display: flex;
+      overflow: hidden;
+      margin-bottom: $lg-gap;
+
+      .content {
+        flex-grow: 1;
+        padding: $gap * 2 $lg-gap * 2;
+        position: relative;
+        @include common-bg-module();
+        @include radius-box($lg-radius);
+        font-size: $font-size-h5 + 1;
+
+        > .item {
+          line-height: 2.5em;
+          min-height: 2.5em;
+          margin-bottom: $gap;
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          > .iconfont {
+            width: 2em;
+            margin-right: 1em;
+            display: inline-block;
+            font-size: $font-size-h4;
+            text-align: center;
+            color: $text-dividers;
+
+            &.icon-swordsman {
+              color: #a94444;
+            }
+            &.icon-heart {
+              color: $red;
+            }
+            &.icon-social {
+              color: $instagram-primary;
+            }
+            &.icon-dollar {
+              color: #ffa800;
+            }
+            &.icon-music {
+              color: $music163-primary;
+            }
+            &.icon-comment-discussion {
+              color: $telegram-primary;
+            }
+            &.icon-friend {
+              color: $accent;
+            }
+          }
+
+          .separator {
+            margin: 0 $sm-gap;
+          }
+
+          .text-link {
+            font-weight: bold;
+            padding-bottom: 2px;
+            border-bottom: 1px solid;
+          }
+
+          .like-text {
+            font-family: 'webfont-bolder', DINRegular;
+            text-transform: capitalize;
+          }
+
+          .live-map {
+            cursor: pointer;
+            border-bottom: 1px solid;
+            font-family: 'webfont-bolder', DINRegular;
+          }
+
+          > .music {
+            .spotify,
+            .music-163 {
+              margin-left: $xs-gap;
+            }
+            .spotify {
+              color: $spotify-primary;
+            }
+            .music-163 {
+              color: $music163-primary;
+            }
+          }
+
+          > .friends {
+            .link {
+              margin-right: 1.8rem;
+              text-transform: capitalize;
+              font-weight: bold;
+              padding-bottom: 2px;
+              border-bottom: 1px solid;
+            }
+          }
+        }
+      }
+
+      .wechat {
+        position: relative;
+        display: block;
+        width: 22rem;
+        overflow: hidden;
+        margin-left: $lg-gap;
+        padding: 1rem;
+        @include common-bg-module();
+        @include radius-box($lg-radius);
+
+        .qrcode {
+          display: flex;
+          flex-direction: column;
           width: 100%;
-          height: 74%;
+          height: 100%;
+          @include radius-box($sm-radius);
+
+          .image {
+            width: 100%;
+          }
+          .slogan {
+            flex-grow: 1;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            text-align: center;
+            color: #555;
+
+            .text {
+              font-weight: bold;
+              border-bottom: 1px solid;
+              padding-bottom: 0.5em;
+            }
+          }
+        }
+        .cover {
+          /* opacity: 0; */
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: $module-bg;
+          backdrop-filter: blur(6px);
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          z-index: $z-index-normal + 1;
-          @include hidden();
-          @include visibility-transition();
-
-          .qrcode {
-            margin-top: 3rem;
-            margin-bottom: $gap;
-            width: 80%;
+          &:hover {
+            background-color: transparent;
+            backdrop-filter: none;
+            .friend-me {
+              visibility: hidden;
+            }
           }
 
-          .tooltip {
-            color: $text;
-            font-size: $font-size-small;
+          .friend-me {
+            display: block;
+            border: 1px solid;
+            border-radius: $xs-radius;
+            padding: 1em;
+            font-weight: bold;
+            writing-mode: vertical-lr;
+            letter-spacing: 1em;
+            text-transform: uppercase;
+
+            .iconfont {
+              font-weight: normal;
+            }
           }
         }
       }
     }
 
-    .mammon {
-      width: 100%;
-      margin-bottom: $lg-gap;
-      background-color: $module-bg;
-      @include radius-box($lg-radius);
-
-      .swiper {
-        height: 6rem;
-
-        img {
-          width: 100%;
-          @include hover-effect();
-        }
-      }
-    }
-
-    .location-map {
+    .location-box {
       overflow: hidden;
       width: 100%;
       padding: $sm-gap;
@@ -876,134 +645,132 @@
       }
     }
 
-    .about-project {
+    .github-box {
       overflow: hidden;
       position: relative;
       display: flex;
+      justify-content: space-evenly;
+      align-items: center;
       width: 100%;
       height: 12rem;
+      margin-bottom: $lg-gap;
+      @include common-bg-module();
+      @include radius-box($lg-radius);
 
-      .project-link {
-        flex-grow: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        @include common-bg-module();
-        @include radius-box($lg-radius);
+      .sponsors {
+        display: inline-flex;
+        flex-direction: column;
 
-        .title {
-          margin-bottom: 0;
-          display: flex;
-          flex-direction: column;
-          text-align: center;
-          margin-right: $lg-gap * 3;
+        .button {
+          $button-size: 2.4rem;
+          display: inline-flex;
+          width: 100%;
+          margin-bottom: $gap;
+          line-height: $button-size;
+          color: $white;
+          @include radius-box($xs-radius);
+          @include background-transition();
+          &:last-child {
+            margin: 0;
+          }
 
           .iconfont {
-            font-size: 4em;
-            color: #98c471;
-            line-height: 1em;
-            padding: 0;
-            margin-top: $sm-gap;
-            margin-bottom: $gap;
-          }
-          .description {
-            $color: rgb(214, 229, 133);
-            display: block;
-            line-height: 1.7em;
+            width: $button-size;
+            height: $button-size;
+            line-height: $button-size;
             text-align: center;
-            padding: 0 0.2em;
-            color: $color;
-            border: 1px solid $color;
+          }
+          .text {
+            padding: 0 $sm-gap;
+            font-weight: bold;
             font-size: $font-size-small;
           }
+
+          &.github,
+          &.paypal,
+          &.more {
+            opacity: 0.9;
+            @include visibility-transition();
+            &:hover {
+              opacity: 1;
+            }
+          }
+          &.github {
+            background-color: $github-primary;
+            .iconfont {
+              background-color: $github-primary-hover;
+              color: $github-sponsor-primary;
+            }
+          }
+          &.paypal {
+            background-color: $paypal-primary;
+            .iconfont {
+              background-color: $paypal-primary-hover;
+              color: $paypal-primary;
+            }
+          }
+          &.more {
+            background-color: rgba($accent, 0.8);
+            .iconfont {
+              background-color: $accent;
+            }
+          }
         }
+      }
+
+      .pal {
+        display: block;
+        height: 110px;
+        @include radius-box($lg-radius);
+      }
+
+      .divider {
+        height: 60%;
+        width: 1px;
+        background-color: $module-bg-darker-1;
+        opacity: 0.5;
+      }
+
+      .homepage-link {
+        height: 100%;
+        display: flex;
+        align-items: center;
       }
     }
 
     &.mobile {
       margin: 0;
 
-      > .about-me,
-      > .location-map {
-        margin-bottom: $gap;
-      }
-
-      > .about-me {
-        flex-direction: column-reverse;
-
-        .gravatar {
-          width: 100%;
-          margin-left: 0;
-          margin-bottom: $gap;
-          flex-direction: row;
-          padding: $lg-gap 0;
-
-          > .background {
-            height: 100%;
-
-            &.star-1,
-            &.star-2 {
-              > .image {
-                width: 4rem;
-              }
-            }
-
-            > .image {
-              width: 200%;
-              height: auto;
-            }
-          }
-
-          > .avatar {
-            width: 6rem;
-            height: 6rem;
-            margin-top: 0;
-            margin-left: 6%;
-          }
-
-          > .description {
-            width: 50%;
-            margin-left: 5%;
-            text-align: left;
-            z-index: $z-index-normal + 1;
-            color: $text-reversal;
-
-            > .name,
-            > .role {
-              margin: 1rem 0;
-            }
-          }
-
-          > .favorite {
-            margin: 1rem 0;
-            margin-bottom: 2rem;
-          }
-        }
-
-        .profile {
-          width: 100%;
-          padding: 1em;
-          padding-top: 2rem;
-          overflow: hidden;
-
-          .description {
-            > .item {
-              @include text-overflow();
-
-              > .iconfont {
-                margin-right: $sm-gap;
-              }
-            }
-          }
-        }
-      }
-
-      > .location-map {
+      .location-box {
         margin: 0;
 
         .iframe {
           height: 11rem;
+        }
+      }
+
+      .banner {
+        .gravatar {
+          .socials {
+            .normal {
+              margin: 0;
+            }
+            .mini {
+              display: none;
+            }
+          }
+        }
+      }
+      .profile {
+        .content {
+          padding: $lg-gap;
+          > .item {
+            @include text-overflow();
+
+            > .iconfont {
+              margin-right: $sm-gap;
+            }
+          }
         }
       }
     }

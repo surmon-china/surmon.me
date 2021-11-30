@@ -15,15 +15,15 @@ import {
   Plugin,
   WatchStopHandle,
   MetaHTMLAttributes,
-  readonly,
+  readonly
 } from 'vue'
-import { isClient } from '/@/environment'
+import { isClient } from '/@/app/environment'
 import { onClient, onServer } from '/@/universal'
 
 const appendNewMeta = (metaData: MetaHTMLAttributes) => {
   const head = document.querySelector('head')
   const meta = document.createElement('meta')
-  Object.keys(metaData).forEach(key => {
+  Object.keys(metaData).forEach((key) => {
     meta[key] = metaData[key]
     meta.setAttribute(key, metaData[key])
   })
@@ -32,10 +32,9 @@ const appendNewMeta = (metaData: MetaHTMLAttributes) => {
 
 const getMetaElement = (name: string) => {
   const head = document.querySelector('head')
-  return Array.from(head?.children || []).find(child => (
-    child.tagName === 'META' &&
-    child.getAttribute('name') === name
-  ))
+  return Array.from(head?.children || []).find(
+    (child) => child.tagName === 'META' && child.getAttribute('name') === name
+  )
 }
 
 const getMetaContent = (name: string) => {
@@ -74,11 +73,10 @@ export interface HelmetHookState {
 type HelmetComputer = () => HelmetHookState
 const HELMET_KEY = Symbol('helmet')
 const createHelmetStore = (defaultConfig: HelmetConfig) => {
-
   const computer = ref<HelmetComputer>(() => ({
-    title: isClient && document.title || '',
-    keywords: isClient && getMetaContent('keywords') || '',
-    description: isClient && getMetaContent('description') || '',
+    title: (isClient && document.title) || '',
+    keywords: (isClient && getMetaContent('keywords')) || '',
+    description: (isClient && getMetaContent('description')) || ''
   }))
   const setComputer = (_computer: HelmetComputer) => {
     computer.value = _computer
@@ -87,7 +85,7 @@ const createHelmetStore = (defaultConfig: HelmetConfig) => {
     computer.value = () => ({
       title: '',
       keywords: '',
-      description: '',
+      description: ''
     })
   }
 
@@ -104,7 +102,7 @@ const createHelmetStore = (defaultConfig: HelmetConfig) => {
 
   // SSR html
   const transformAttrCode = (attrs: Base | any) => {
-    return Object.keys(attrs).map(key => `${key}="${attrs[key]}"`)
+    return Object.keys(attrs).map((key) => `${key}="${attrs[key]}"`)
   }
   const transformMetaCode = (meta: MetaHTMLAttributes) => {
     return `<meta ${transformAttrCode(meta).join(' ')}>`

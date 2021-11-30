@@ -5,8 +5,27 @@
  */
 
 import Swiper, { SwiperOptions } from 'swiper'
-import { defineComponent, ref, computed, h, onMounted, onUpdated, onActivated, onBeforeUnmount, nextTick, provide, PropType, ExtractPropTypes } from 'vue'
-import { DEFAULT_CLASSES, SwiperSymbol, SwiperContext, NameId, ComponentPropNames } from './constants'
+import {
+  defineComponent,
+  ref,
+  computed,
+  h,
+  onMounted,
+  onUpdated,
+  onActivated,
+  onBeforeUnmount,
+  nextTick,
+  provide,
+  PropType,
+  ExtractPropTypes
+} from 'vue'
+import {
+  DEFAULT_CLASSES,
+  SwiperSymbol,
+  SwiperContext,
+  NameId,
+  ComponentPropNames
+} from './constants'
 import { handleClickSlideEvent } from './event'
 import { createSwiperContext } from './context'
 
@@ -22,7 +41,7 @@ export const swiperOptionProps = {
   defaultOptions: {
     type: Object as PropType<SwiperOptions>,
     required: false,
-    default: () => ({}) as SwiperOptions
+    default: () => ({} as SwiperOptions)
   },
   // eslint-disable-next-line vue/require-default-prop
   options: {
@@ -70,7 +89,9 @@ export default function getSwiperComponent(SwiperClass: typeof Swiper) {
       const eventEmiter = context.emit
       const swiperElement = ref<HTMLElement>(null as any as HTMLElement)
       const swiperOptions = computed(() => props.options || props.defaultOptions)
-      const wrapperClass = computed(() => swiperOptions.value?.wrapperClass || DEFAULT_CLASSES.wrapperClass)
+      const wrapperClass = computed(
+        () => swiperOptions.value?.wrapperClass || DEFAULT_CLASSES.wrapperClass
+      )
       const swiperContext: SwiperContext = createSwiperContext({
         SwiperClass,
         props,
@@ -84,11 +105,7 @@ export default function getSwiperComponent(SwiperClass: typeof Swiper) {
       // Feature: click event
       const handleSwiperClick = (event: MouseEvent) => {
         if (swiperInstance.value) {
-          handleClickSlideEvent(
-            swiperInstance.value,
-            event,
-            eventEmiter
-          )
+          handleClickSlideEvent(swiperInstance.value, event, eventEmiter)
         }
       }
 
@@ -110,7 +127,8 @@ export default function getSwiperComponent(SwiperClass: typeof Swiper) {
       provide(SwiperSymbol, swiperContext)
 
       return () => {
-        return h('div',
+        return h(
+          'div',
           {
             class: DEFAULT_CLASSES.containerClass,
             ref: swiperElement,

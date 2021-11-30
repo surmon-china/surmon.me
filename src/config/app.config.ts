@@ -14,9 +14,8 @@ export const ADSENSE_CLIENT_ID = 'ca-pub-4710915636313788'
 
 export const META = Object.freeze({
   title: 'Surmon.me',
-  keywords:
-    'Surmon 博客,surmon-china，苏尔蒙,Vue 博客,前端技术开发博客,JavaScript 技术',
-  description: '凡心所向，素履所往，生如逆旅，一苇以航',
+  keywords: 'Surmon 博客,surmon-china,苏尔蒙,Vue 博客,前端技术开发博客,JavaScript 技术',
+  description: '来苏之望',
   url: 'surmon.me',
   author: 'Surmon',
   email: 'i@surmon.me'
@@ -48,8 +47,7 @@ export const VALUABLE_LINKS = Object.freeze({
   UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
   FUCK_IPC: 'http://www.beian.miit.gov.cn',
 
-  GOOGLE_LIVE_MAP:
-    'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w',
+  GOOGLE_LIVE_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w',
   QQ_GROUP:
     'https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4',
   TELEGRAM: 'https://t.me/surmon',
