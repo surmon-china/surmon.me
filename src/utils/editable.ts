@@ -1,6 +1,6 @@
 /**
  * @file Editable element util
- * @module util/editable
+ * @module util.editable
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -82,10 +82,7 @@ export const insertContent = (option: IncertOption) => {
     const newText = currentText.replace(selectedText, newSelectedText)
     // console.log('选中插入', newText)
     element.innerText = newText
-    focusPosition(
-      element,
-      newText.indexOf(newSelectedText) + newSelectedText.length - 1
-    )
+    focusPosition(element, newText.indexOf(newSelectedText) + newSelectedText.length - 1)
   } else {
     // 否则追加新内容
     const newInsertText = before + after
@@ -103,7 +100,7 @@ export const insertContent = (option: IncertOption) => {
       const newTexts = [
         currentText.slice(0, startPoint),
         newInsertText,
-        currentText.slice(startPoint),
+        currentText.slice(startPoint)
       ]
       // console.log('光标插入', startPoint, newTexts)
       element.innerText = newTexts.join('')

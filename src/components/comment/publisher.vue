@@ -1,5 +1,10 @@
 <template>
-  <form :id="ElementID.Publisher" :class="{ mobile: isMobile }" class="publisher" name="comment">
+  <form
+    :id="COMMENT_PUBLISHER_ELEMENT_ID"
+    :class="{ mobile: isMobile }"
+    class="publisher"
+    name="comment"
+  >
     <div class="user">
       <!-- profile editor -->
       <template v-if="!cached || editing">
@@ -91,7 +96,7 @@
             </div>
             <div
               class="reply-preview markdown-html comment"
-              v-html="markdownToHTML(replyingComment.content)"
+              v-html="markdownToHTML(replyingComment.content, { sanitize: true })"
             />
           </div>
         </transition>
@@ -105,17 +110,13 @@
   import { defineComponent, ref, computed, watch } from 'vue'
   import { useCommentStore, Comment } from '/@/store/comment'
   import { useEnhancer } from '/@/app/enhancer'
+  import { getCommentItemElementID, COMMENT_PUBLISHER_ELEMENT_ID } from '/@/constants/anchor'
+  import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
   import { firstUpperCase } from '/@/transforms/text'
   import { markdownToHTML } from '/@/transforms/markdown'
-  import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import {
-    CommentEvent,
-    ElementID,
-    getCommentElementId,
-    humanizeGravatarUrlByEmail,
-    scrollToElementAnchor
-  } from './helper'
+  import { scrollToElementAnchor } from '/@/utils/scroller'
+  import { CommentEvent, humanizeGravatarUrlByEmail } from './helper'
 
   export default defineComponent({
     name: 'CommentPublisher',
@@ -198,11 +199,11 @@
       }
 
       const scrollToComment = (commentId: number) => {
-        scrollToElementAnchor(getCommentElementId(commentId), -300)
+        scrollToElementAnchor(getCommentItemElementID(commentId), -300)
       }
 
       return {
-        ElementID,
+        COMMENT_PUBLISHER_ELEMENT_ID,
         LANGUAGE_KEYS,
         t: i18n.t,
         isMobile,
@@ -226,9 +227,9 @@
 
   .publisher {
     display: block;
-    padding-bottom: $gap;
-    margin-bottom: $lg-gap;
-    border-bottom: 1px dashed $module-bg-darker-1;
+    padding-top: $gap;
+    margin-top: $lg-gap;
+    border-top: 1px solid $module-bg-darker-1;
 
     > .user {
       width: 100%;

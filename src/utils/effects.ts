@@ -1,6 +1,6 @@
 /**
  * @file Client util
- * @module util/effects
+ * @module util.effects
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -18,5 +18,3 @@ export const nextScreen = () => {
     })
   })
 }
-
-

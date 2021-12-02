@@ -86,7 +86,7 @@
             </span>
           </div>
           <div class="item">
-            <i class="iconfont icon-social" />
+            <i class="iconfont icon-coffee" />
             <router-link class="text-link" :to="getPageRoute(RouteName.Job)">
               <i18n zh="找我内推" en="Find job" />
             </router-link>
@@ -104,7 +104,7 @@
             </router-link>
           </div>
           <div class="item">
-            <i class="iconfont icon-comment-discussion" />
+            <i class="iconfont icon-discussion" />
             <ulink class="text-link" :href="VALUABLE_LINKS.QQ_GROUP">
               <i18n zh="寂寞同性交友群" en="QQ group" />
             </ulink>
@@ -492,7 +492,7 @@
             &.icon-heart {
               color: $red;
             }
-            &.icon-social {
+            &.icon-coffee {
               color: $instagram-primary;
             }
             &.icon-dollar {
@@ -501,7 +501,7 @@
             &.icon-music {
               color: $music163-primary;
             }
-            &.icon-comment-discussion {
+            &.icon-discussion {
               color: $telegram-primary;
             }
             &.icon-friend {

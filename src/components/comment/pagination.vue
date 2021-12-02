@@ -14,12 +14,12 @@
         </li>
         <li v-for="(item, index) in pagination.total_page" :key="index" class="item">
           <button
+            @click="handlePage(item)"
             class="pagination-btn"
             :class="{
               actived: isActivePage(item),
               disabled: isActivePage(item)
             }"
-            @click="handlePage(item)"
           >
             {{ item }}
           </button>

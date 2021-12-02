@@ -1,8 +1,8 @@
 <template>
   <li
     :key="comment.id"
-    :id="getCommentElementId(comment.id)"
-    :class="{ mobile: isMobile }"
+    :id="getCommentItemElementID(comment.id)"
+    :class="{ mobile: isMobile, child: isChild }"
     class="comment-item"
   >
     <desktop-only>
@@ -43,7 +43,10 @@
           </button>
           <i18n zh="：" en=":" />
         </p>
-        <div class="markdown-html comment" v-html="markdownToHTML(comment.content)" />
+        <div
+          class="markdown-html comment"
+          v-html="markdownToHTML(comment.content, { sanitize: true })"
+        />
       </div>
       <div class="cm-footer">
         <span class="create_at">{{ humanlizeDate(comment.create_at) }}</span>
@@ -65,51 +68,29 @@
           <span> ({{ comment.likes }})</span>
         </button>
       </div>
+      <div class="cm-children">
+        <slot name="children"></slot>
+      </div>
     </div>
   </li>
 </template>
 
 <script lang="ts">
-  import { defineComponent, h, PropType } from 'vue'
+  import { defineComponent, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useCommentStore, Comment } from '/@/store/comment'
+  import { getCommentItemElementID } from '/@/constants/anchor'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { timeAgo } from '/@/transforms/moment'
   import { firstUpperCase } from '/@/transforms/text'
-  import {
-    CommentEvent,
-    scrollToElementAnchor,
-    humanizeGravatarUrlByEmail,
-    getCommentElementId
-  } from '../helper'
+  import { scrollToElementAnchor } from '/@/utils/scroller'
+  import { CommentEvent, humanizeGravatarUrlByEmail } from '../helper'
+  import CommentLink from './link.vue'
   import CommentUa from './ua.vue'
 
-  const CommentLink = defineComponent({
-    props: {
-      href: String
-    },
-    setup(props, context) {
-      return () => {
-        const { href, ...restProps } = props
-        const isLink = !!href
-        return h(
-          isLink ? 'a' : 'span',
-          !isLink
-            ? restProps
-            : {
-                ...props,
-                target: '_blank',
-                rel: 'external nofollow noopener'
-              },
-          context.slots.default?.()
-        )
-      }
-    }
-  })
-
   export default defineComponent({
-    name: 'CommentListItem',
+    name: 'CommentItem',
     components: {
       CommentLink,
       CommentUa
@@ -122,10 +103,14 @@
       liked: {
         type: Boolean,
         default: false
+      },
+      isChild: {
+        type: Boolean,
+        default: false
       }
     },
     emits: [CommentEvent.Reply, CommentEvent.Like],
-    setup(props, context) {
+    setup(_, context) {
       const { i18n, isMobile } = useEnhancer()
       const commentStore = useCommentStore()
 
@@ -150,7 +135,7 @@
       }
 
       const scrollToCommentItem = (commentId: number) => {
-        scrollToElementAnchor(getCommentElementId(commentId), -300)
+        scrollToElementAnchor(getCommentItemElementID(commentId), -300)
       }
 
       return {
@@ -159,7 +144,7 @@
         isMobile,
         humanlizeDate,
         humanizeGravatarUrlByEmail,
-        getCommentElementId,
+        getCommentItemElementID,
         getReplyParentCommentText,
         firstUpperCase,
         markdownToHTML,
@@ -181,25 +166,43 @@
     &:first-child {
       margin-top: 0;
     }
+    &.child {
+      margin-top: $xs-gap;
+      padding-top: $xs-gap;
+      border-top: 1px dashed $module-bg-darker-3;
+      &:first-child {
+        margin-top: $gap;
+      }
+      &:last-child {
+        .cm-body {
+          padding-bottom: 0;
+        }
+      }
+
+      .cm-avatar {
+        top: $lg-gap * 2;
+      }
+    }
 
     .cm-avatar {
       display: block;
       position: absolute;
       left: 0;
       top: $gap * 2;
-      background-color: $module-bg-darker-2;
 
       .link {
         $size: 4.8rem;
         display: block;
+        background-color: $module-bg-darker-2;
         border: 5px solid $module-bg-lighter;
-        border-radius: $mini-radius;
+        border-radius: $sm-radius;
         width: $size;
         height: $size;
 
         img {
           width: 100%;
           height: 100%;
+          border-radius: $xs-radius;
         }
       }
     }
@@ -254,15 +257,15 @@
       > .cm-content {
         padding-right: $xs-gap;
         user-select: text;
-        font-size: $font-size-h6;
 
         .reply {
           display: flex;
           align-items: center;
           margin-top: $sm-gap;
           margin-bottom: -$xs-gap;
-          color: $text-disabled;
+          font-size: $font-size-h6;
           font-weight: bold;
+          color: $text-disabled;
 
           .text {
             margin-right: $xs-gap;
@@ -320,7 +323,7 @@
 
     &:hover {
       .cm-body {
-        background-color: $module-bg-darker-3;
+        background-color: $module-bg-hover;
       }
     }
 

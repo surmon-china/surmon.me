@@ -1,6 +1,6 @@
 /**
  * @file Script loader
- * @module util/script-loader
+ * @module util.script-loader
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -24,10 +24,9 @@ export default (source: string, options: ILoaderOption = {} as ILoaderOption) =>
     script.type = type
     script.defer = defer
     script.async = async
-    ;script.src = src || source
-    script.charset = charset
+    script.src = src || source
 
-    Object.keys(restAttrs).forEach(key => {
+    Object.keys(restAttrs).forEach((key) => {
       script[key] = restAttrs[key]
     })
 

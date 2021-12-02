@@ -55,7 +55,7 @@
           :disabled="disabled || preview"
           @click.prevent="insertCode"
         >
-          <i class="iconfont icon-code-comment" />
+          <i class="iconfont icon-code" />
         </button>
         <button
           class="preview"
@@ -81,7 +81,6 @@
 <script lang="ts">
   import { defineComponent, ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { isClient } from '/@/app/environment'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { insertContent } from '/@/utils/editable'
   import { markdownToHTML } from '/@/transforms/markdown'
@@ -124,7 +123,7 @@
       const inputElement = ref<HTMLElement>()
       let inputElementObserver: MutationObserver | null = null
       const previewContent = computed(() => {
-        return props.preview ? markdownToHTML(content.value) : null
+        return props.preview ? markdownToHTML(content.value, { sanitize: true }) : null
       })
 
       const handleTogglePreview = () => {

@@ -17,7 +17,7 @@ export const menus: Array<MenuItem> = [
   {
     id: RouteName.Home,
     route: '/',
-    icon: 'icon-home',
+    icon: 'icon-home-fill',
     i18nKey: LANGUAGE_KEYS.PAGE_HOME
   },
   {
@@ -38,12 +38,13 @@ export const menus: Array<MenuItem> = [
     icon: 'icon-github',
     i18nKey: LANGUAGE_KEYS.PAGE_GITHUB
   },
-  {
-    id: RouteName.Music,
-    route: getPageRoute(RouteName.Music),
-    icon: 'icon-netease-music',
-    i18nKey: LANGUAGE_KEYS.PAGE_MUSIC
-  },
+  // hidden music page menu
+  // {
+  //   id: RouteName.Music,
+  //   route: getPageRoute(RouteName.Music),
+  //   icon: 'icon-netease-music',
+  //   i18nKey: LANGUAGE_KEYS.PAGE_MUSIC
+  // },
   {
     id: RouteName.Lens,
     route: getPageRoute(RouteName.Lens),

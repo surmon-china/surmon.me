@@ -14,7 +14,7 @@
     <div class="aside-nav">
       <nav class="nav-list">
         <router-link to="/" class="item" exact>
-          <i class="iconfont icon-home"></i>
+          <i class="iconfont icon-home-fill"></i>
           <i18n :lkey="LANGUAGE_KEYS.PAGE_HOME" />
         </router-link>
         <router-link class="item" :to="getCategoryArchiveRoute(CategorySlug.Code)">

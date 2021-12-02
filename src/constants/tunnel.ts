@@ -1,6 +1,6 @@
 /**
  * @file Tunnel constant
- * @module constant/tunnel
+ * @module constant.tunnel
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -1,5 +1,5 @@
 <template>
-  <div id="nav" class="aside-nav">
+  <div :id="NAV_ELEMENT_ID" class="aside-nav">
     <nav class="nav-list" :class="{ en: !isZhLang }">
       <template v-for="menu in menus" :key="menu.id">
         <span class="separator" v-if="menu.separator"></span>
@@ -33,7 +33,7 @@
           </span>
         </ulink>
       </template>
-
+      <!-- AD -->
       <template v-for="(ad, index) in adConfig.PC_NAV" :key="index">
         <span class="separator"></span>
         <ulink class="item" :href="ad.url">
@@ -57,6 +57,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
+  import { NAV_ELEMENT_ID } from '/@/constants/anchor'
   import { useEnhancer } from '/@/app/enhancer'
   import { menus } from './menu'
   export default defineComponent({
@@ -64,6 +65,7 @@
     setup() {
       const { adConfig, isZhLang } = useEnhancer()
       return {
+        NAV_ELEMENT_ID,
         menus,
         adConfig,
         isZhLang

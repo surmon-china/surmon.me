@@ -4,6 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import * as _ from 'lodash'
 import { defineStore } from 'pinia'
 import nodepress from '/@/services/nodepress'
 import { SortType } from '/@/constants/state'
@@ -11,7 +12,7 @@ import { fetchDelay } from '/@/utils/fetch-delay'
 
 export const COMMENT_API_PATH = '/comment'
 export const LIKE_COMMENT_API_PATH = '/like/comment'
-
+export const COMMENT_EMPTY_PID = 0
 export interface Author {
   name: string
   email: string
@@ -21,7 +22,7 @@ export interface Author {
 export interface Comment {
   post_id: number
   id: number
-  pid: number
+  pid: number | typeof COMMENT_EMPTY_PID
   content: string
   agent?: string
   author: Author
@@ -39,7 +40,13 @@ export interface CommentFetchParams {
   per_page?: number
   sort?: SortType
   delay?: number
+  loadmore?: boolean
   [key: string]: any
+}
+
+export interface CommentTreeItem {
+  comment: Comment
+  children: Array<Comment>
 }
 
 export const useCommentStore = defineStore('comment', {
@@ -50,8 +57,44 @@ export const useCommentStore = defineStore('comment', {
     pagination: null as null | $TODO
   }),
   getters: {
-    // TODO: Tree
-    // tree: state => {}
+    commentTreeList: (state): Array<CommentTreeItem> => {
+      // only keep 2 level tree
+      const ids = state.comments.map((comment) => comment.id)
+      const roots = state.comments.filter(
+        (comment) => comment.pid === COMMENT_EMPTY_PID || !ids.includes(comment.pid)
+      )
+      const children = state.comments.filter(
+        (comment) => comment.pid !== COMMENT_EMPTY_PID && ids.includes(comment.pid)
+      )
+      const fullMap = new Map<number, Comment>(
+        state.comments.map((comment) => [comment.id, comment])
+      )
+      const treeMap = new Map<number, { comment: Comment; children: Array<Comment> }>(
+        roots.map((comment) => [comment.id, { comment, children: [] }])
+      )
+
+      const findRootParentID = (pid: number): number | void => {
+        const target = fullMap.get(pid)
+        if (!target) {
+          return void 0
+        }
+        return target.pid === COMMENT_EMPTY_PID ? target.id : findRootParentID(target.pid)
+      }
+
+      children.forEach((comment) => {
+        const rootPID = findRootParentID(comment.pid)
+        if (rootPID) {
+          if (treeMap.has(rootPID)) {
+            const target = treeMap.get(rootPID)!
+            treeMap.set(rootPID, {
+              ...target,
+              children: [...target.children, comment]
+            })
+          }
+        }
+      })
+      return Array.from(treeMap.values())
+    }
   },
   actions: {
     clearList() {
@@ -66,6 +109,7 @@ export const useCommentStore = defineStore('comment', {
         per_page: 88,
         sort: SortType.Desc,
         delay: 0,
+        loadmore: false,
         ...params
       }
 
@@ -85,7 +129,13 @@ export const useCommentStore = defineStore('comment', {
               if (isDescSort) {
                 response.result.data.reverse()
               }
-              this.comments = response.result.data
+              if (params.loadmore) {
+                isDescSort
+                  ? this.comments.unshift(...response.result.data)
+                  : this.comments.push(...response.result.data)
+              } else {
+                this.comments = response.result.data
+              }
               this.pagination = response.result.pagination
               resolve(void 0)
             })

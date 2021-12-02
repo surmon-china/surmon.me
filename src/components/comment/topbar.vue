@@ -28,10 +28,10 @@
           </button>
           <desktop-only>
             <button class="sponsor" @click="handleSponsor">
-              <i class="iconfont icon-hao" />
+              <i class="iconfont icon-dollar" />
             </button>
             <client-only>
-              <popup :border="false">
+              <popup v-model:visible="isVisibleSponsor" :border="false">
                 <iframe class="sponsor-modal" :src="VALUABLE_LINKS.SPONSOR" />
               </popup>
             </client-only>
@@ -61,7 +61,7 @@
 <script lang="ts">
   import { defineComponent, ref, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useArticleStore } from '/@/store/article'
+  import { useArticleDetailStore } from '/@/store/article'
   import { useMetaStore } from '/@/store/meta'
   import { SortType, CommentPostType } from '/@/constants/state'
   import { GAEventTags, GAEventActions } from '/@/constants/gtag'
@@ -98,7 +98,7 @@
     emits: [Events.Sort],
     setup(props, context) {
       const { i18n, gtag, isMobile, isZhLang } = useEnhancer()
-      const articleStore = useArticleStore()
+      const articleDetailStore = useArticleDetailStore()
       const metaStore = useMetaStore()
 
       const { isLiked: isPageLiked, like: likePage } = usePageLike(props.postId)
@@ -122,7 +122,7 @@
           if (props.postId === CommentPostType.Guestbook) {
             await metaStore.postSiteLike()
           } else {
-            await articleStore.postArticleLike(props.postId)
+            await articleDetailStore.postArticleLike(props.postId)
           }
           likePage()
         } catch (error) {
@@ -173,7 +173,7 @@
     margin-bottom: $lg-gap;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px dashed $module-bg-darker-1;
+    border-bottom: 1px solid $module-bg-darker-1;
   }
 
   .topbar-skeleton {

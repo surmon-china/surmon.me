@@ -39,7 +39,11 @@
             {{ article.title }}
           </router-link>
         </h5>
-        <p class="item-description" style="-webkit-box-orient: vertical" v-html="article.description"></p>
+        <p
+          class="item-description"
+          style="-webkit-box-orient: vertical"
+          v-html="article.description"
+        ></p>
         <div class="item-meta">
           <span class="date">
             <i class="iconfont icon-clock"></i>
@@ -63,7 +67,7 @@
           </span>
           <desktop-only>
             <span class="categories">
-              <i class="iconfont icon-list"></i>
+              <i class="iconfont icon-category"></i>
               <placeholder :transition="false" :data="article.category.length">
                 <template #placeholder>
                   <i18n :lkey="LANGUAGE_KEYS.CATEGORY_PLACEHOLDER" />
@@ -88,12 +92,16 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted } from 'vue'
-  import { useGlobalState } from '../../app/state'
+  import { useGlobalState } from '/@/app/state'
   import { useI18n } from '/@/services/i18n'
   import { getJSON } from '/@/services/storage'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { USER_LIKE_HISTORY } from '/@/constants/storage'
-  import { getArticleDetailRoute, getTagArchiveRoute, getCategoryArchiveRoute } from '/@/transforms/route'
+  import {
+    getArticleDetailRoute,
+    getTagArchiveRoute,
+    getCategoryArchiveRoute
+  } from '/@/transforms/route'
   import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { timeAgo } from '/@/transforms/moment'

@@ -61,11 +61,9 @@
 <style lang="scss" scoped>
   @use 'sass:math';
   @import 'src/styles/init.scss';
-  @import './variables.scss';
 
   .tag {
     margin-bottom: 0;
-    max-height: calc(100vh - 88px - #{$top-height + $lg-gap + $lg-gap + $tool-height});
     overflow-y: auto;
     width: 100%;
     border-top: $gap solid transparent;
@@ -119,7 +117,7 @@
         font-size: $font-size-h6;
         text-transform: capitalize;
         font-family: $font-family-normal;
-        @include radius-box($mini-radius);
+        @include radius-box($xs-radius);
 
         .iconfont {
           width: 2em;

@@ -93,7 +93,6 @@
 
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
-  @import './variables.scss';
 
   .mammon {
     width: 100%;

@@ -2,9 +2,13 @@
   <div class="calendar">
     <!-- header -->
     <div class="header">
-      <button class="item arrow" @click="toPrevMonth">❮</button>
+      <button class="item arrow" @click="toPrevMonth">
+        <i class="iconfont icon-prev"></i>
+      </button>
       <span class="item year-month">{{ headerText }}</span>
-      <button class="item arrow" @click="toNextMonth">❯</button>
+      <button class="item arrow" @click="toNextMonth">
+        <i class="iconfont icon-next"></i>
+      </button>
     </div>
     <!-- weekdays -->
     <ul class="weekdays">
@@ -58,8 +62,7 @@
       })
 
       const headerText = computed(() => {
-        const isSameTodayTable =
-          tableView.month === today.month && tableView.year === today.year
+        const isSameTodayTable = tableView.month === today.month && tableView.year === today.year
 
         if (isZhLang.value) {
           const yearText = `${tableView.year} 年`

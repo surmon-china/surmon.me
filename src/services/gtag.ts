@@ -30,7 +30,7 @@ export interface IGtagPluginConfig {
   config?: IGtagConfig
 }
 
-const IGtagSymbol = Symbol('gtag')
+const GtagSymbol = Symbol('gtag')
 export type Gtag = ReturnType<typeof createGtag>
 export const createGtag = (options: IGtagPluginConfig) => {
   if (window.gtag == null) {
@@ -97,7 +97,7 @@ export const createGtag = (options: IGtagPluginConfig) => {
 }
 
 export const useGtag = (): Gtag => {
-  return inject(IGtagSymbol) as Gtag
+  return inject(GtagSymbol) as Gtag
 }
 
 type PluginInstallFunction = Plugin & {
@@ -109,7 +109,7 @@ const install: PluginInstallFunction = (app: App, config: IGtagPluginConfig) => 
     return
   }
   const gtag = createGtag(config)
-  app.provide(IGtagSymbol, gtag)
+  app.provide(GtagSymbol, gtag)
   app.config.globalProperties.$gtag = gtag
   install.installed = true
 }

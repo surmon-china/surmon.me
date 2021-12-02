@@ -1,7 +1,9 @@
 <template>
-  <footer id="footer" class="footer">
+  <footer :id="FOOTER_ELEMENT_ID" class="footer">
     <div class="container">
-      <ulink class="ipc" :href="VALUABLE_LINKS.FUCK_IPC" v-if="false"> 陕 ICP 备 13004859 号-2 </ulink>
+      <ulink class="ipc" :href="VALUABLE_LINKS.FUCK_IPC" v-if="false">
+        陕 ICP 备 13004859 号-2
+      </ulink>
       <a class="sitemap-btn" target="_blank" :href="VALUABLE_LINKS.SITE_MAP">
         <i18n :lkey="LANGUAGE_KEYS.SITE_MAP_XML" />
       </a>
@@ -27,10 +29,10 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { RouteName } from '../../../app/router'
+  import { defineComponent } from 'vue'
+  import { RouteName } from '/@/app/router'
+  import { FOOTER_ELEMENT_ID } from '/@/constants/anchor'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { Language } from '/@/language/data'
   import { getPageRoute } from '/@/transforms/route'
   import { VALUABLE_LINKS } from '/@/config/app.config'
 
@@ -38,6 +40,7 @@
     name: 'PcFooter',
     setup() {
       return {
+        FOOTER_ELEMENT_ID,
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
         aboutPageUrl: getPageRoute(RouteName.About)
