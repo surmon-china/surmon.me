@@ -1,4 +1,5 @@
 .markdown-html {
+  font-size: $font-size-base * 1.05;
   p {
     line-height: 2.2em;
     text-indent: 2em;
@@ -14,8 +15,8 @@
   }
 
   a {
-    margin: 0 .1em;
-    border-bottom: 1px solid transparent;
+    margin: 0 0.1em;
+    border-bottom: 1px solid;
     font-weight: bold;
 
     &.image-link {
@@ -25,7 +26,6 @@
 
     &:hover {
       text-decoration: none;
-      border-color: initial;
     }
   }
 
@@ -41,6 +41,7 @@
   }
 
   blockquote {
+    border-radius: $xs-radius;
     p {
       &:last-child {
         margin-bottom: 0;
@@ -52,10 +53,11 @@
     list-style-type: square;
   }
 
-  ul, ol {
+  ul,
+  ol {
     > li {
-      line-height: 1.8em;
-      padding: .5em .8em;
+      line-height: 2em;
+      padding: 0.5em 0.8em;
 
       &:hover {
         background-color: $module-bg-darker-1;
@@ -71,6 +73,7 @@
 
       > ul,
       > ol {
+        list-style: circle;
         margin-top: $sm-gap;
         &:last-child {
           margin-bottom: 0;
@@ -80,10 +83,15 @@
       &:last-child {
         > ul,
         > ol {
-          margin-bottom: - $sm-gap;
+          margin-bottom: -$sm-gap;
         }
       }
     }
+  }
+
+  table {
+    border-radius: $xs-radius;
+    overflow: hidden;
   }
 
   img {
@@ -94,7 +102,7 @@
     text-align: center;
     border-radius: $xs-radius;
     border: $sm-gap solid $module-bg-darker-1;
-    opacity: .9;
+    opacity: 0.9;
     cursor: pointer;
     &:hover {
       opacity: 1;
@@ -105,16 +113,24 @@
   iframe {
     width: 100%;
     margin-bottom: 1em;
+    border-radius: $xs-radius;
     background-color: $theme-black;
+  }
+
+  .checkbox {
+    margin: 0 $xs-gap;
+    &.checked {
+      color: $theme-black;
+    }
   }
 
   code {
     color: #bd4147;
-    padding: .3em .4em;
-    margin: 0 .3em;
+    padding: 0.3em 0.4em;
+    margin: 0 0.3em;
     border-radius: $xs-radius;
     background-color: $module-bg-darker-1;
-    font-size: $font-size-h6;
+    font-size: $font-size-base;
   }
 
   pre {
@@ -133,7 +149,7 @@
 
     &:before {
       color: $white;
-      content: attr(data-lang)" CODE";
+      content: attr(data-lang) ' CODE';
       height: $code-header-height;
       line-height: $code-header-height;
       position: absolute;
@@ -203,7 +219,7 @@
   &.comment {
     line-height: 2em;
     word-wrap: break-word;
-    font-size: $font-size-h6;
+    font-size: $font-size-base;
 
     p {
       text-indent: 0;
@@ -219,12 +235,13 @@
     }
 
     img {
-      margin: .5rem 0;
+      margin: 0.5rem 0;
       max-width: 100%;
       border-color: $module-bg-darker-2;
     }
 
-    ul, ol {
+    ul,
+    ol {
       padding-left: 2em;
 
       > li {

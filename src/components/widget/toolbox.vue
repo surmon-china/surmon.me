@@ -32,8 +32,8 @@
 </template>
 
 <script lang="ts">
-  import { PropType, defineComponent, ref, computed, onMounted } from 'vue'
-  import { useEnhancer } from '../../app/enhancer'
+  import { defineComponent, ref } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { scrollTo, Easing } from '/@/utils/scroller'

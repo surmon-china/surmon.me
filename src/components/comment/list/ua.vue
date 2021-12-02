@@ -19,12 +19,12 @@
 
   // https://github.com/faisalman/ua-parser-js#methods
   const osIconsNameMap = {
-    'Mac OS': 'mac',
+    'Mac OS': 'apple',
     Windows: 'windows',
     Android: 'android',
     Ubuntu: 'ubuntu',
     Linux: 'linux',
-    iOS: 'mac',
+    iOS: 'apple',
     Unix: 'unix'
   }
 

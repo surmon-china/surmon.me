@@ -115,7 +115,7 @@
       }
 
       const parseContent = (content: string) => {
-        return markdownToHTML(content, { html: true })
+        return markdownToHTML(content)
       }
 
       const prevSlide = () => swiper.value?.slidePrev()

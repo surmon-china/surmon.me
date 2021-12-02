@@ -1,50 +1,37 @@
 <template>
-  <placeholder :loading="fetching" :data="comments.length" @after-enter="loadCommentsAnimateDone">
-    <template #loading>
-      <ul class="comment-list-skeleton">
-        <li v-for="item in isMobile ? 3 : 5" :key="item" class="item">
-          <div class="gravatar">
-            <skeleton-base />
-          </div>
-          <div class="content">
-            <skeleton-paragraph :lines="4" />
-          </div>
-        </li>
-      </ul>
-    </template>
-    <template #placeholder>
-      <div class="list-empty">
-        <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIST_PLACEHOLDER" />
-      </div>
-    </template>
-    <template #default>
-      <transition-group
-        name="list-fade"
-        tag="ul"
-        ref="listElement"
-        class="comment-list"
-        @after-enter="addCommentAnimateDone"
-      >
-        <comment-item
-          v-for="comment in comments"
-          :key="comment.id"
-          :comment="comment"
-          :liked="isCommentLiked(comment.id)"
-          @like="likeComment"
+  <transition-group
+    name="list-fade"
+    tag="ul"
+    ref="listElement"
+    class="comment-list"
+    @after-enter="addCommentAnimateDone"
+  >
+    <comment-item
+      v-for="item in comments"
+      :key="item.comment.id"
+      :comment="item.comment"
+      :liked="isCommentLiked(item.comment.id)"
+      :is-child="isChildList"
+      @like="likeComment"
+      @reply="replyComment"
+    >
+      <template #children v-if="item.children.length">
+        <comment-list
+          :comments="buildeCommentTree(item.children)"
+          :isChildList="true"
           @reply="replyComment"
         />
-      </transition-group>
-    </template>
-  </placeholder>
+      </template>
+    </comment-item>
+  </transition-group>
 </template>
 
 <script lang="ts">
   import { defineComponent, ref, onMounted, onBeforeUnmount, PropType } from 'vue'
-  import { useCommentStore, Comment } from '/@/store/comment'
+  import { useCommentStore, Comment, CommentTreeItem } from '/@/store/comment'
   import { useEnhancer } from '/@/app/enhancer'
   import { LozadObserver } from '/@/services/lozad'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
-  import { firstUpperCase } from '/@/transforms/text'
   import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { useCommentsLike } from '/@/transforms/state'
@@ -57,17 +44,18 @@
       CommentItem
     },
     props: {
-      fetching: {
+      comments: {
+        type: Array as PropType<Array<CommentTreeItem>>,
+        required: true
+      },
+      isChildList: {
         type: Boolean,
         default: false
-      },
-      comments: {
-        type: Array as PropType<Array<Comment>>,
-        required: true
       }
     },
-    setup(props, context) {
-      const { i18n, gtag, isMobile } = useEnhancer()
+    emits: [CommentEvent.Reply],
+    setup(_, context) {
+      const { i18n, gtag } = useEnhancer()
       const { like: likeCommentStorage, isLiked: isCommentLiked } = useCommentsLike()
       const commentStore = useCommentStore()
 
@@ -86,34 +74,37 @@
         }
       }
 
-      const loadCommentsAnimateDone = () => {
-        observeLozad()
-      }
-
       const addCommentAnimateDone = () => {
         observeLozad()
       }
 
-      const replyComment = (commentId: number) => {
-        context.emit(CommentEvent.Reply, commentId)
+      const replyComment = (commentID: number) => {
+        context.emit(CommentEvent.Reply, commentID)
       }
 
-      const likeComment = async (commentId: number) => {
+      const likeComment = async (commentID: number) => {
         gtag?.event('欲赞评论', {
           event_category: GAEventActions.Click,
           event_label: GAEventTags.Comment
         })
-        if (isCommentLiked(commentId)) {
+        if (isCommentLiked(commentID)) {
           return false
         }
         try {
-          await commentStore.postCommentLike(commentId)
-          likeCommentStorage(commentId)
+          await commentStore.postCommentLike(commentID)
+          likeCommentStorage(commentID)
         } catch (error) {
           const message = i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION)
           console.warn(message, error)
           alert(message)
         }
+      }
+
+      const buildeCommentTree = (comments: Comment[]): Array<CommentTreeItem> => {
+        return comments.map((comment) => ({
+          comment,
+          children: []
+        }))
       }
 
       onMounted(() => {
@@ -125,15 +116,12 @@
       })
 
       return {
-        LANGUAGE_KEYS,
-        firstUpperCase,
-        isMobile,
         listElement,
-        loadCommentsAnimateDone,
         addCommentAnimateDone,
         isCommentLiked,
         likeComment,
-        replyComment
+        replyComment,
+        buildeCommentTree
       }
     }
   })
@@ -141,33 +129,6 @@
 
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
-
-  .comment-list-skeleton {
-    padding: 0;
-
-    .item {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      margin-bottom: $lg-gap;
-
-      .gravatar {
-        width: 5rem;
-        height: 5rem;
-      }
-
-      .content {
-        width: calc((100% - 5rem) * 0.9);
-      }
-    }
-  }
-
-  .list-empty {
-    color: $text-secondary;
-    font-weight: bold;
-    text-align: center;
-    line-height: 8rem;
-  }
 
   .comment-list {
     padding: 0;

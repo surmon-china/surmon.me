@@ -77,7 +77,7 @@
     .skeleton-list {
       padding: 0;
       margin: 0;
-      height: 9rem;
+      height: 7rem;
       overflow: hidden;
       display: flex;
 
@@ -139,7 +139,7 @@
             padding: 0 1em;
             line-height: 2.4;
             text-align: center;
-            font-size: $font-size-small;
+            font-size: $font-size-h6;
             color: $text-secondary;
             transition: color $transition-time-fast;
             @include text-overflow();

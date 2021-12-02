@@ -223,7 +223,7 @@
             }
 
             > .iconfont {
-              color: $text-reversal;
+              color: $white;
             }
           }
         }

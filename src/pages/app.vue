@@ -28,7 +28,7 @@
             :href="VALUABLE_LINKS.SURMON_APP_REPOSITORIE + '#ios'"
             @mousedown="handleAppAction('APP IOS')"
           >
-            <i class="iconfont icon-mac"></i>
+            <i class="iconfont icon-apple"></i>
             <span class="text">
               <i18n :lkey="LANGUAGE_KEYS.DEVICE_IOS" />
             </span>
@@ -214,9 +214,7 @@
 
     &.mobile {
       min-height: 53rem;
-      height: calc(
-        100vh - #{$mobile-header-height + $lg-gap + $mobile-footer-height + $gap}
-      );
+      height: calc(100vh - #{$mobile-header-height + $lg-gap + $mobile-footer-height + $gap});
 
       > .app {
         padding-top: $lg-gap;

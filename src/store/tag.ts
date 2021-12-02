@@ -8,6 +8,7 @@ import { defineStore } from 'pinia'
 import nodepress from '/@/services/nodepress'
 import { firstUpperCase } from '/@/transforms/text'
 
+export type TagMap = Map<string, Tag>
 export interface Tag {
   id: number
   _id: string
@@ -28,18 +29,14 @@ export const useTagStore = defineStore('tag', {
   }),
   getters: {
     // 全量标签列表（本身、全小写、全大写、首字母大写）
-    fullNameTags: (state) => {
+    fullNameTags: (state): TagMap => {
       const tags = state.tags
-      const tagMap: { [key: string]: Tag } = {}
+      const tagMap: TagMap = new Map()
       tags.forEach((tag) => {
-        ;[
-          tag.name,
-          tag.name.toLowerCase(),
-          tag.name.toUpperCase(),
-          firstUpperCase(tag.name)
-        ].forEach((tagName) => {
-          tagMap[tagName] = tag
-        })
+        tagMap.set(tag.name, tag)
+        tagMap.set(tag.name.toLowerCase(), tag)
+        tagMap.set(tag.name.toUpperCase(), tag)
+        tagMap.set(firstUpperCase(tag.name), tag)
       })
       return tagMap
     }

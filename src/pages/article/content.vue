@@ -25,29 +25,33 @@
       <template #default>
         <div class="knowledge" key="knowledge">
           <h2 class="title">{{ article?.title }}</h2>
-          <div class="markdown-html" :id="contentElementIds.default" v-html="content.default" />
+          <div
+            class="markdown-html"
+            :id="ARTICLE_CONTENT_ELEMENT_IDS.default"
+            v-html="articleDetailStore.defaultContent?.html"
+          />
           <transition name="module" mode="out-in" @after-enter="handleRenderMoreAnimateDone">
             <div v-if="isRenderMoreEnabled" class="readmore">
               <button
                 class="readmore-btn"
-                :disabled="longFormRenderState.rendering"
+                :disabled="isRenderMoreContent"
                 @click="handleRenderMore"
               >
                 <i18n
                   :lkey="
-                    longFormRenderState.rendering
+                    isRenderMoreContent
                       ? LANGUAGE_KEYS.ARTICLE_RENDERING
                       : LANGUAGE_KEYS.ARTICLE_READ_ALL
                   "
                 />
-                <i class="iconfont icon-next-bottom"></i>
+                <i class="iconfont icon-loadmore"></i>
               </button>
             </div>
             <div
               class="markdown-html"
-              :id="contentElementIds.leftover"
-              v-else-if="longFormRenderState.rendered"
-              v-html="content.leftover"
+              :id="ARTICLE_CONTENT_ELEMENT_IDS.more"
+              v-else-if="articleDetailStore.renderedFullContent"
+              v-html="articleDetailStore.moreContent?.html"
             />
           </transition>
         </div>
@@ -57,14 +61,17 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, reactive, computed, nextTick, onMounted, PropType } from 'vue'
+  import { defineComponent, ref, computed, nextTick, onMounted, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useTagStore } from '/@/store/tag'
-  import { Article } from '/@/store/article'
+  import { Article, useArticleDetailStore } from '/@/store/article'
   import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
-  import { markdownToHTML } from '/@/transforms/markdown'
   import { LANGUAGE_KEYS } from '/@/language/key'
+
+  const ARTICLE_CONTENT_ELEMENT_IDS = {
+    default: 'article_content_default',
+    more: 'article_content_more'
+  }
 
   export default defineComponent({
     name: 'ArticleContent',
@@ -80,84 +87,29 @@
     },
     setup(props) {
       const { isMobile } = useEnhancer()
-      const tag = useTagStore()
-      const tagMap = computed(() => tag.fullNameTags)
-      const isHybrid = isHybridType(props.article?.origin!)
-      const isReprint = isReprintType(props.article?.origin!)
-      const isOriginal = isOriginalType(props.article?.origin!)
+      const articleDetailStore = useArticleDetailStore()
+      const isHybrid = computed(() => isHybridType(props.article?.origin!))
+      const isReprint = computed(() => isReprintType(props.article?.origin!))
+      const isOriginal = computed(() => isOriginalType(props.article?.origin!))
 
       const element = ref<HTMLElement>()
-      const longFormRenderState = reactive({
-        rendering: false,
-        rendered: false
-      })
-
-      const isLongFormContent = computed(() => {
-        return props.article?.content?.length! > 13688
-      })
+      const isRenderMoreContent = ref(false)
       const isRenderMoreEnabled = computed(() => {
-        return isLongFormContent.value && !longFormRenderState.rendered
-      })
-
-      const getContentSplitIndex = (content: string) => {
-        // 坐标优先级：H4 -> H3 -> Code -> \n\n
-        const shortContent = content.substring(0, 11688)
-        const lastH4Index = shortContent.lastIndexOf('\n####')
-        const lastH3Index = shortContent.lastIndexOf('\n###')
-        const lastCodeIndex = shortContent.lastIndexOf('\n\n```')
-        const lastLineIndex = shortContent.lastIndexOf('\n\n**')
-        const lastReadindex = Math.max(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex)
-        return lastReadindex
-      }
-
-      // article content
-      const content = computed(() => {
-        const content = props.article?.content
-        const result = {
-          default: '',
-          leftover: ''
-        }
-
-        if (!content) {
-          return result
-        }
-
-        const parseMarkdown = (content: string) => {
-          return markdownToHTML(content, {
-            tagMap: tagMap.value,
-            relink: true,
-            html: true
-          })
-        }
-
-        if (isLongFormContent.value) {
-          const index = getContentSplitIndex(content)
-          result.default = parseMarkdown(content.substring(0, index))
-          result.leftover = parseMarkdown(content.substring(index))
-        } else {
-          result.default = parseMarkdown(content)
-          result.leftover = ''
-        }
-        return result
+        return articleDetailStore.isLongContent && !articleDetailStore.renderedFullContent
       })
 
       const handleRenderMore = () => {
-        longFormRenderState.rendering = true
+        isRenderMoreContent.value = true
         nextTick(() => {
           setTimeout(() => {
-            longFormRenderState.rendered = true
-            longFormRenderState.rendering = false
+            articleDetailStore.renderFullContent()
+            isRenderMoreContent.value = false
           }, 0)
         })
       }
 
-      const contentElementIds = {
-        default: 'article-content',
-        leftover: 'more-article-content'
-      }
-
-      const observeLozad = (elementId: string) => {
-        const contentElement = element.value?.querySelector(`#${elementId}`)
+      const observeLozad = (elementID: string) => {
+        const contentElement = element.value?.querySelector(`#${elementID}`)
         const lozadElements =
           contentElement && contentElement.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
         if (lozadElements?.length) {
@@ -168,8 +120,8 @@
         }
       }
 
-      const handleContentAnimateDone = () => observeLozad(contentElementIds.default)
-      const handleRenderMoreAnimateDone = () => observeLozad(contentElementIds.leftover)
+      const handleContentAnimateDone = () => observeLozad(ARTICLE_CONTENT_ELEMENT_IDS.default)
+      const handleRenderMoreAnimateDone = () => observeLozad(ARTICLE_CONTENT_ELEMENT_IDS.more)
 
       onMounted(() => {
         handleContentAnimateDone()
@@ -178,15 +130,14 @@
       return {
         LANGUAGE_KEYS,
         element,
-        content,
         isHybrid,
         isReprint,
         isOriginal,
         isMobile,
-        isLongFormContent,
+        articleDetailStore,
         isRenderMoreEnabled,
-        longFormRenderState,
-        contentElementIds,
+        isRenderMoreContent,
+        ARTICLE_CONTENT_ELEMENT_IDS,
         handleRenderMore,
         handleContentAnimateDone,
         handleRenderMoreAnimateDone
@@ -246,6 +197,7 @@
 
     .knowledge {
       user-select: text;
+      position: relative;
 
       .title {
         margin: 1em 0 1.5em 0;
@@ -261,15 +213,21 @@
       }
 
       .readmore {
+        position: absolute;
+        bottom: 0;
         width: 100%;
+        height: 16rem;
         display: flex;
         justify-content: center;
-        margin-bottom: $gap;
+        align-items: center;
+        background: linear-gradient(to top, $module-bg-hover, transparent);
 
         .readmore-btn {
           width: 80%;
-          text-align: center;
+          height: 3rem;
+          margin-top: 2rem;
           line-height: 3rem;
+          text-align: center;
           color: $text-secondary;
           background-color: $module-bg-darker-1;
           @include background-transition();

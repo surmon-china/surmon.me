@@ -1,4 +1,4 @@
-@use "sass:math";
+@use 'sass:math';
 
 // url
 $cdn-url: '' !default;
@@ -89,7 +89,14 @@ $github-sponsor-primary: #ea4aaa;
 $bilibili-blue-primary: #00a1d6;
 $bilibili-pink-primary: #fb7299;
 $instagram-primary: #f09433;
-$instagram-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+$instagram-gradient: linear-gradient(
+  45deg,
+  #f09433 0%,
+  #e6683c 25%,
+  #dc2743 50%,
+  #cc2366 75%,
+  #bc1888 100%
+);
 
 // gap
 $gap: 1rem; // ~12px
@@ -142,8 +149,8 @@ $small-breakpoint: 400px;
 $large-breakpoint: $container-width;
 
 // font
-$font-family-base: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Hiragino Sans GB', 'Segoe UI',
-  'Microsoft YaHei', '微软雅黑', sans-serif;
+$font-family-base: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue',
+  'Hiragino Sans GB', 'Segoe UI', 'Microsoft YaHei', '微软雅黑', sans-serif;
 $font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace;
 $font-family-normal: SpecialSymbol, DINRegular, $font-family-base;
 
@@ -158,6 +165,6 @@ $font-size-h2: $font-size-base * 1.45; // ~20.3px
 $font-size-h3: $font-size-base * 1.3; // ~18.2px
 $font-size-h4: $font-size-base * 1.15; // ~16.1px
 $font-size-h5: $font-size-base; // ~14px
-$font-size-h6: $font-size-base * 0.95; // ~13.3px
+$font-size-h6: $font-size-base * 0.97; // ~13.3px
 
 $line-height-base: 1.4;

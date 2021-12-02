@@ -1,5 +1,5 @@
 <template>
-  <aside id="aside" class="aside" ref="element">
+  <aside :id="ASIDE_ELEMENT_ID" class="aside" ref="element">
     <div class="module">
       <aside-search />
     </div>
@@ -43,25 +43,27 @@
         </div>
       </client-only>
       <div class="module">
-        <aside-tag />
+        <aside-nav class="sticky-module" v-if="isArticlePage" />
+        <aside-tag class="sticky-module" v-else />
       </div>
-      <aside-tool />
     </div>
   </aside>
 </template>
 
 <script lang="ts">
   import Swiper from 'swiper'
-  import { defineComponent, ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
+  import { useRoute } from 'vue-router'
+  import { defineComponent, ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+  import { ASIDE_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
   import { useEnhancer } from '/@/app/enhancer'
-  import { getDateArchiveRoute } from '/@/transforms/route'
+  import { getDateArchiveRoute, isArticleDetail } from '/@/transforms/route'
   import { humanDateToYMD, dateToHuman, HumanDate } from '/@/transforms/moment'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import AsideSearch from './search.vue'
   import AsideArticle from './article.vue'
   import AsideMammon from './mammon.vue'
   import AsideTag from './tag.vue'
-  import AsideTool from './tool.vue'
+  import AsideNav from './nav.vue'
   import Calendar from '/@/components/widget/calendar.vue'
 
   const ASIDE_STICKY_ELEMENT_ID = 'aside-sticky-module'
@@ -74,10 +76,12 @@
       AsideMammon,
       Calendar,
       AsideTag,
-      AsideTool
+      AsideNav
     },
     setup() {
+      const route = useRoute()
       const { i18n } = useEnhancer()
+      const isArticlePage = computed(() => isArticleDetail(route.name))
 
       // polyfill sticky event
       let stickyEvents: any = null
@@ -121,7 +125,7 @@
       const handleStickyStateChange = (event) => {
         // workaround: when (main container height >= aside height) & isSticky -> render sticky ad
         const asideElementHeight = element.value.clientHeight
-        const targetElement = document.getElementById('main-content')?.children?.[0]
+        const targetElement = document.getElementById(MAIN_CONTENT_ELEMENT_ID)?.children?.[0]
         if (targetElement) {
           const mainContentElementHeight = targetElement.clientHeight
           const isFeasible = mainContentElementHeight >= asideElementHeight
@@ -152,7 +156,9 @@
       })
 
       return {
+        isArticlePage,
         LANGUAGE_KEYS,
+        ASIDE_ELEMENT_ID,
         ASIDE_STICKY_ELEMENT_ID,
         t: i18n.t,
         adIndex,
@@ -170,9 +176,8 @@
 
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
-  @import './variables.scss';
 
-  #aside {
+  .aside {
     display: block;
     width: $aside-width;
     margin: 0;
@@ -215,14 +220,14 @@
         }
       }
 
-      &.tools {
-        margin-top: $lg-gap;
+      .sticky-module {
+        max-height: calc(100vh - 88px - #{$header-height + $lg-gap + $lg-gap + $lg-gap});
       }
     }
 
     .aside-sticky-box {
       position: sticky;
-      top: $top-height;
+      top: $header-height + $lg-gap;
       width: $aside-width;
     }
   }

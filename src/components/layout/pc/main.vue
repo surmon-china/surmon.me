@@ -13,10 +13,14 @@
       </client-only>
     </template>
     <header-view />
-    <main id="main" class="main-container" :class="{ 'full-page': layoutColumn.isFull }">
+    <main
+      :id="MAIN_ELEMENT_ID"
+      class="main-container"
+      :class="{ 'full-page': layoutColumn.isFull }"
+    >
       <nav-view v-if="layoutColumn.isNormal" />
       <div
-        id="main-content"
+        :id="MAIN_CONTENT_ELEMENT_ID"
         class="main-content"
         :class="{
           'layout-normal': layoutColumn.isNormal,
@@ -35,6 +39,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import { useGlobalState } from '/@/app/state'
+  import { MAIN_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
   import NavView from './nav.vue'
   import AsideView from './aside/index.vue'
   import HeaderView from './header.vue'
@@ -47,7 +52,7 @@
   import Toolbox from '/@/components/widget/toolbox.vue'
 
   export default defineComponent({
-    name: 'PcMain',
+    name: 'PCMain',
     components: {
       Share,
       Wallpaper,
@@ -63,6 +68,8 @@
     setup() {
       const globalState = useGlobalState()
       return {
+        MAIN_ELEMENT_ID,
+        MAIN_CONTENT_ELEMENT_ID,
         layoutColumn: globalState.layoutColumn
       }
     }

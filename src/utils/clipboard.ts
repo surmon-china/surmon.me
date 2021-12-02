@@ -1,6 +1,6 @@
 /**
  * @file Clipboard util
- * @module util/clipboard
+ * @module util.clipboard
  * @author Surmon <https://github.com/surmon-china>
  */
 

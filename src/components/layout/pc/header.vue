@@ -1,5 +1,5 @@
 <template>
-  <header id="header" class="header" :class="{ 'enable-nav': isEnabledNav }">
+  <header :id="HEADER_ELEMENT_ID" class="header" :class="{ 'enable-nav': isEnabledNav }">
     <div class="header-container container">
       <div class="header-header">
         <uimage cdn src="/images/logo.svg" class="header-logo" />
@@ -66,6 +66,7 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
+  import { HEADER_ELEMENT_ID } from '/@/constants/anchor'
   import { Theme } from '/@/services/theme'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { useEnhancer } from '/@/app/enhancer'
@@ -106,6 +107,7 @@
 
       return {
         menus,
+        HEADER_ELEMENT_ID,
         LANGUAGE_KEYS,
         isEnabledNav,
         t: i18n.t,

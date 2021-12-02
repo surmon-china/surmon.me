@@ -278,6 +278,10 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '最冷',
     [Language.En]: 'cool'
   },
+  [LANGUAGE_KEYS.COMMENT_LOADMORE]: {
+    [Language.Zh]: '加载更多评论',
+    [Language.En]: 'loadmore comments'
+  },
   [LANGUAGE_KEYS.COMMENT_POST_NAME]: {
     [Language.Zh]: '名字',
     [Language.En]: 'name'

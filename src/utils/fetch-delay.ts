@@ -1,6 +1,6 @@
 /**
  * @file 模拟延时器
- * @module util/fetch-delay
+ * @module util.fetch-delay
  * @author Surmon <https://github.com/surmon-china>
  */
 

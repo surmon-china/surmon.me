@@ -1,7 +1,7 @@
 <template>
   <div class="article-page" :class="{ mobile: isMobile }">
     <div class="module">
-      <article-content :fetching="fetching" :article="article" />
+      <article-content :id="ARTICLE_CONTENT_ELEMENT_ID" :fetching="fetching" :article="article" />
     </div>
     <client-only>
       <div class="module">
@@ -9,13 +9,17 @@
       </div>
     </client-only>
     <div class="module">
-      <article-share :fetching="fetching" />
+      <article-share :id="ARTICLE_SHARE_ELEMENT_ID" :fetching="fetching" />
     </div>
     <div class="module">
-      <article-meta :fetching="fetching" :article="article" />
+      <article-meta :id="ARTICLE_META_ELEMENT_ID" :fetching="fetching" :article="article" />
     </div>
     <div class="releted">
-      <article-related :fetching="fetching" :articles="relatedArticles" />
+      <article-related
+        :id="ARTICLE_RELETED_ELEMENT_ID"
+        :fetching="fetching"
+        :articles="relatedArticles"
+      />
     </div>
     <div class="comment">
       <comment :fetching="fetching" :post-id="articleId" :likes="article?.meta?.likes" />
@@ -24,11 +28,17 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, watch, onBeforeMount } from 'vue'
+  import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { prefetch } from '/@/universal'
   import { isClient } from '/@/app/environment'
-  import { useArticleStore } from '/@/store/article'
+  import {
+    ARTICLE_CONTENT_ELEMENT_ID,
+    ARTICLE_META_ELEMENT_ID,
+    ARTICLE_RELETED_ELEMENT_ID,
+    ARTICLE_SHARE_ELEMENT_ID
+  } from '/@/constants/anchor'
+  import { useArticleDetailStore } from '/@/store/article'
   import { useCommentStore } from '/@/store/comment'
   import ArticleContent from './content.vue'
   import ArticleMammon from './mammon.vue'
@@ -55,10 +65,10 @@
     },
     setup(props) {
       const { helmet, isMobile } = useEnhancer()
-      const articleStore = useArticleStore()
+      const articleDetailStore = useArticleDetailStore()
       const commentStore = useCommentStore()
-      const article = computed(() => articleStore.detail.data || void 0)
-      const fetching = computed(() => articleStore.detail.fetching)
+      const article = computed(() => articleDetailStore.article || void 0)
+      const fetching = computed(() => articleDetailStore.fetching)
       const relatedArticles = computed(() => {
         if (!article.value) {
           return []
@@ -90,7 +100,7 @@
       const fetchArticleDetail = (articleID: number) => {
         const fetchDelay = isClient ? 368 : 0
         return Promise.all([
-          articleStore.fetchDetail({
+          articleDetailStore.fetchDetail({
             articleID,
             delay: fetchDelay
           }),
@@ -113,7 +123,11 @@
         isMobile,
         article,
         fetching,
-        relatedArticles
+        relatedArticles,
+        ARTICLE_CONTENT_ELEMENT_ID,
+        ARTICLE_META_ELEMENT_ID,
+        ARTICLE_RELETED_ELEMENT_ID,
+        ARTICLE_SHARE_ELEMENT_ID
       })
     }
   })

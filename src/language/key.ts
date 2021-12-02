@@ -68,6 +68,7 @@ export enum LANGUAGE_KEYS {
   COMMENT_PAGINATION_NEW = 'get new comments',
   COMMENT_PAGINATION_HOT = 'get hot comments',
   COMMENT_PAGINATION_COOL = 'get cool comments',
+  COMMENT_LOADMORE = 'loadmore comments',
   COMMENT_POST_NAME = `comment's author name`,
   COMMENT_POST_EMAIL = `comment's author email`,
   COMMENT_POST_SITE = `comment's author site url`,

@@ -68,7 +68,6 @@
 
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
-  @import './variables.scss';
 
   .article {
     overflow: hidden;
@@ -109,7 +108,7 @@
       .item {
         display: flex;
         align-items: center;
-        height: 1.9em;
+        height: 2.2rem;
         padding: 0 $gap;
         margin-bottom: $sm-gap;
         color: $text-darker;
@@ -142,7 +141,7 @@
         .index {
           $size: 1.5em;
           flex-shrink: 0;
-          color: $text-secondary;
+          color: $text-disabled;
           counter-increment: hot-article-list;
           background-color: $module-bg-darker-1;
           width: $size;
@@ -151,7 +150,8 @@
           display: block;
           text-align: center;
           margin-right: $sm-gap;
-          font-size: $gap;
+          font-size: 1rem;
+          font-weight: bold;
           border-radius: $xs-radius;
 
           &::before {
@@ -162,12 +162,13 @@
         .title {
           display: block;
           font-size: $font-size-h6;
+          border-top: 1px solid transparent;
           border-bottom: 1px solid transparent;
           @include text-overflow();
 
           &:hover {
             text-decoration: none;
-            border-color: initial;
+            border-bottom-color: initial;
           }
         }
       }

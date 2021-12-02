@@ -6,6 +6,8 @@
 
 import { defineStore } from 'pinia'
 import { SortType, OriginState } from '/@/constants/state'
+import { getArticleContentHeadingElementID } from '/@/constants/anchor'
+import { markdownToHTML } from '/@/transforms/markdown'
 import { fetchDelay } from '/@/utils/fetch-delay'
 import nodepress from '/@/services/nodepress'
 import { Category } from './category'
@@ -50,10 +52,6 @@ export const useArticleStore = defineStore('article', {
     archive: {
       fetching: false,
       data: [] as Array<Article>
-    },
-    detail: {
-      fetching: false,
-      data: null as null | Article
     }
   }),
   actions: {
@@ -117,33 +115,116 @@ export const useArticleStore = defineStore('article', {
         .finally(() => {
           this.archive.fetching = false
         })
+    }
+  }
+})
+
+export interface ArticleHeading {
+  text: string
+  level: number
+  id: string
+}
+const renderArticleMarkdown = (markdown: string): { html: string; headings: ArticleHeading[] } => {
+  const headings: Array<ArticleHeading> = []
+  const html = markdownToHTML(markdown, {
+    sanitize: false,
+    relink: false,
+    headingIDRenderer: (text, level, raw) => {
+      const id = getArticleContentHeadingElementID(
+        level,
+        raw.toLowerCase().replace(/[^a-zA-Z0-9\u4E00-\u9FA5]+/g, '-')
+      )
+      headings.push({ text, level, id })
+      return id
+    }
+  })
+
+  return { html, headings }
+}
+
+export const useArticleDetailStore = defineStore('articleDetail', {
+  state: () => ({
+    fetching: false,
+    article: null as null | Article,
+    renderedFullContent: true
+  }),
+  getters: {
+    isLongContent(): boolean {
+      return Boolean(this.article && this.article.content.length > 16688)
+    },
+    splitIndex(): number | null {
+      if (this.article && this.isLongContent) {
+        const content = this.article.content
+        // 坐标优先级：H4 -> H3 -> Code -> \n\n
+        const shortContent = content.substring(0, 13688)
+        const lastH4Index = shortContent.lastIndexOf('\n####')
+        const lastH3Index = shortContent.lastIndexOf('\n###')
+        const lastCodeIndex = shortContent.lastIndexOf('\n```')
+        const lastLineIndex = shortContent.lastIndexOf('\n\n**')
+        return Math.max(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex)
+      }
+      return null
+    },
+    defaultContent(): null | { markdown: string; html: string; headings: ArticleHeading[] } {
+      if (!this.article) {
+        return null
+      }
+      const markdown = this.isLongContent
+        ? this.article.content.substring(0, this.splitIndex!)
+        : this.article.content
+      const { html, headings } = renderArticleMarkdown(markdown)
+      console.log('-----defaultContent', headings)
+      return {
+        markdown,
+        html,
+        headings
+      }
+    },
+    moreContent(): null | { markdown: string; html: string; headings: ArticleHeading[] } {
+      if (this.article && this.isLongContent) {
+        const markdown = this.article.content.substring(this.splitIndex!)
+        const { html, headings } = renderArticleMarkdown(markdown)
+        console.log('-----moreContent', headings)
+        return {
+          markdown,
+          html,
+          headings
+        }
+      }
+      return null
+    }
+  },
+  actions: {
+    // 阅读全文
+    renderFullContent() {
+      this.renderedFullContent = true
     },
 
     // 获取文章详情
     fetchDetail(params: { delay?: number; articleID: number }) {
-      this.detail.fetching = true
-      this.detail.data = null
+      this.fetching = true
+      this.article = null
       return nodepress
         .get(`${ARTICLE_API_PATH}/${params.articleID}`)
         .then((response) => {
           return new Promise((resolve) => {
             fetchDelay(params.delay || 0)(() => {
-              this.detail.data = response.result
+              this.article = response.result
+              this.renderedFullContent = !this.isLongContent
               resolve(void 0)
             })
           })
         })
         .finally(() => {
-          this.detail.fetching = false
+          this.fetching = false
         })
     },
 
     // 喜欢文章
     postArticleLike(articleID: number) {
       return nodepress.patch(LIKE_ARTICLE_API_PATH, { article_id: articleID }).then(() => {
-        const article = this.detail.data
-        if (article) {
-          article.meta.likes++
+        if (this.article) {
+          this.article.meta.likes++
         }
       })
     }
