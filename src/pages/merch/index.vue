@@ -19,9 +19,12 @@
 </template>
 
 <script lang="ts">
+  import { META } from '/@/config/app.config'
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { firstUpperCase } from '/@/transforms/text'
   import PageBanner from '/@/components/common/banner.vue'
   import ProductList from './list.vue'
 
@@ -32,13 +35,14 @@
       ProductList
     },
     setup() {
-      const { i18n, helmet, isMobile, isZhLang, adConfig } = useEnhancer()
+      const { i18n, meta, isMobile, isZhLang, adConfig } = useEnhancer()
       const products = computed(() => adConfig.value.PC_MERCH_PRODUCTS)
       const brokers = computed(() => adConfig.value.PC_MERCH_BROKERS)
 
-      helmet(() => {
-        const prefix = isZhLang.value ? `${i18n.t(LANGUAGE_KEYS.PAGE_JOB)} | ` : ''
-        return { title: prefix + 'Merch' }
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_MERCH, Language.En)!)
+        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_MERCH), enTitle] : [enTitle]
+        return { pageTitle: titles.join(' | '), description: `${META.author} 的周边好物` }
       })
 
       return {

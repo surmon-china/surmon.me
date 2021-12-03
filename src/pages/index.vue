@@ -17,6 +17,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { prefetch, onClient } from '/@/universal'
   import { useArticleStore } from '/@/store/article'
   import { useAnnouncementStore } from '/@/store/announcement'
@@ -24,6 +25,7 @@
   import Carrousel from '/@/components/archive/carrousel.vue'
   import Announcement from '/@/components/archive/announcement.vue'
   import ArticleList from '/@/components/archive/list.vue'
+  import { META } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'IndexPage',
@@ -33,6 +35,13 @@
       ArticleList
     },
     setup() {
+      const { meta } = useEnhancer()
+      meta({
+        title: `${META.title} - ${META.description}`,
+        keywords: META.keywords,
+        description: META.description
+      })
+
       const articleStore = useArticleStore()
       const announcementStore = useAnnouncementStore()
 

@@ -173,7 +173,6 @@ export const useArticleDetailStore = defineStore('articleDetail', {
         ? this.article.content.substring(0, this.splitIndex!)
         : this.article.content
       const { html, headings } = renderArticleMarkdown(markdown)
-      console.log('-----defaultContent', headings)
       return {
         markdown,
         html,
@@ -184,7 +183,6 @@ export const useArticleDetailStore = defineStore('articleDetail', {
       if (this.article && this.isLongContent) {
         const markdown = this.article.content.substring(this.splitIndex!)
         const { html, headings } = renderArticleMarkdown(markdown)
-        console.log('-----moreContent', headings)
         return {
           markdown,
           html,

@@ -34,10 +34,10 @@
       }
     },
     setup(props) {
-      const { helmet } = useEnhancer()
+      const { meta } = useEnhancer()
       const articleStore = useArticleStore()
 
-      helmet(() => ({ title: `${props.date} | Date` }))
+      meta(() => ({ pageTitle: `${props.date} | Date` }))
 
       const fetchArticles = (params: any) => {
         onClient(scrollToTop)

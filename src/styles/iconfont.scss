@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
-  src: url('//at.alicdn.com/t/font_64825_tas722uh0b.woff2?t=1638473223295') format('woff2'),
-    url('//at.alicdn.com/t/font_64825_tas722uh0b.woff?t=1638473223295') format('woff'),
-    url('//at.alicdn.com/t/font_64825_tas722uh0b.ttf?t=1638473223295') format('truetype');
+  src: url('//at.alicdn.com/t/font_64825_w6m5dopajn.woff2?t=1638480294203') format('woff2'),
+    url('//at.alicdn.com/t/font_64825_w6m5dopajn.woff?t=1638480294203') format('woff'),
+    url('//at.alicdn.com/t/font_64825_w6m5dopajn.ttf?t=1638480294203') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-image:before {
+  content: '\e6fc';
+}
+
+.icon-math:before {
+  content: '\e63a';
 }
 
 .icon-h-1:before {
@@ -317,10 +325,6 @@
   content: '\e686';
 }
 
-.icon-renlianshibie:before {
-  content: '\e652';
-}
-
 .icon-face-ai:before {
   content: '\e673';
 }
@@ -333,16 +337,8 @@
   content: '\e619';
 }
 
-.icon-image:before {
-  content: '\e63b';
-}
-
 .icon-beiyesihei:before {
   content: '\e680';
-}
-
-.icon-math:before {
-  content: '\e615';
 }
 
 .icon-emoji:before {

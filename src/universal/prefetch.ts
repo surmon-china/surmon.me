@@ -8,6 +8,8 @@ import { onBeforeMount, getCurrentInstance, ComponentOptions } from 'vue'
 import { useGlobalState } from '/@/app/state'
 import { isServer, isSPA } from '/@/app/environment'
 
+// https://github.com/nuxt/framework/blob/main/packages/nuxt3/src/app/composables/asyncData.ts
+
 // serverPrefetch === async setup
 // serverPrefetch && async setup = not handle error
 // https://github.com/vuejs/vue-next/blob/master/packages/server-renderer/src/render.ts#L96

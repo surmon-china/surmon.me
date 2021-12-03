@@ -8,6 +8,7 @@
 import {
   App,
   inject,
+  computed,
   ref,
   watch,
   readonly,
@@ -39,6 +40,7 @@ const I18nSymbol = Symbol('i18n')
 const createI18nStore = (config: Ii18nConfig) => {
   const language = ref(config.default)
   const languageCodes = config.languages.map((lang) => lang.code)
+  const l = computed(() => config.languages.find((l) => l.code === language.value))
 
   const set = <L extends string = string>(lang: L) => {
     if (languageCodes.includes(lang) && language.value !== lang) {
@@ -52,8 +54,8 @@ const createI18nStore = (config: Ii18nConfig) => {
       set(languageCodes[nextIndex])
     }
   }
-  const translate = <T extends string = string>(key: T, ...args) => {
-    const content = config.map[key]?.[language.value]
+  const translate = <T extends string = string>(key: T, targetLanguage?: string, ...args) => {
+    const content = config.map[key]?.[targetLanguage || language.value]
     if (!content) {
       return
     }
@@ -62,6 +64,7 @@ const createI18nStore = (config: Ii18nConfig) => {
 
   return {
     language: readonly(language),
+    l,
     set,
     toggle,
     translate,

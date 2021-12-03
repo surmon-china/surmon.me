@@ -27,8 +27,11 @@
   import { prefetch } from '/@/universal'
   import { useMetaStore } from '/@/store/meta'
   import { useCommentStore } from '/@/store/comment'
+  import { firstUpperCase } from '/@/transforms/text'
+  import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import Comment from '/@/components/comment/index.vue'
+  import { META } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'GuestbookPage',
@@ -36,14 +39,15 @@
       Comment
     },
     setup() {
-      const { i18n, helmet, isMobile, isDarkTheme, isZhLang } = useEnhancer()
+      const { i18n, meta, isMobile, isDarkTheme, isZhLang } = useEnhancer()
       const metaStore = useMetaStore()
       const commentStore = useCommentStore()
       const siteLikes = computed(() => metaStore.appOptions.data?.meta.likes || 0)
 
-      helmet(() => {
-        const prefix = isZhLang.value ? `${i18n.t(LANGUAGE_KEYS.PAGE_GUESTBOOK)} | ` : ''
-        return { title: prefix + 'Guestbook' }
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_GUESTBOOK, Language.En)!)
+        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_GUESTBOOK), enTitle] : [enTitle]
+        return { pageTitle: titles.join(' | '), description: `给 ${META.author} 留言` }
       })
 
       const fetchAllData = () => {

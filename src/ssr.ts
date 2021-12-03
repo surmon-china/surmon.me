@@ -33,7 +33,7 @@ const getCacheKey = (vueApp: VueApp, url: string): string => {
 }
 
 const renderHTML = async (vueApp: VueApp, url: string, error?: any) => {
-  const { app, router, store, helmet, theme, globalState } = vueApp
+  const { app, router, store, meta, theme, globalState } = vueApp
 
   // 1. init store prefetch
   console.log('-----1 store.serverInit')
@@ -70,7 +70,7 @@ const renderHTML = async (vueApp: VueApp, url: string, error?: any) => {
 
   // render error: clear helmet
   if (error) {
-    helmet.resetComputer()
+    // helmet.resetComputer()
   }
 
   // 8. SSR context
@@ -84,11 +84,13 @@ const renderHTML = async (vueApp: VueApp, url: string, error?: any) => {
     })
   )
 
+  // https://github.com/nuxt/vue-meta/tree/next#ssr
+  // https://github.com/nuxt/framework/blob/main/packages/nuxt3/src/meta/runtime/lib/vue-meta.plugin.ts
   // 9. assemble HTML
   const HEAD = [
-    helmet.html.value.title,
-    helmet.html.value.keywords,
-    helmet.html.value.description
+    // meta.html.value.title,
+    // meta.html.value.keywords,
+    // meta.html.value.description
   ].join('\n')
 
   const FOOTER = [

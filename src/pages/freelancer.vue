@@ -76,6 +76,8 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { Language } from '/@/language/data'
+  import { firstUpperCase } from '/@/transforms/text'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import UAdsense from '/@/components/common/uadsense.vue'
 
@@ -86,11 +88,12 @@
       PageBanner
     },
     setup() {
-      const { i18n, helmet, gtag, isMobile, isZhLang } = useEnhancer()
+      const { i18n, meta, gtag, isMobile, isZhLang } = useEnhancer()
 
-      helmet(() => {
-        const prefix = isZhLang.value ? `${i18n.t(LANGUAGE_KEYS.PAGE_FREELANCER)} | ` : ''
-        return { title: prefix + 'Freelancer' }
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_FREELANCER, Language.En)!)
+        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_FREELANCER), enTitle] : [enTitle]
+        return { pageTitle: titles.join(' | ') }
       })
 
       const handleSubmitEmail = () => {
