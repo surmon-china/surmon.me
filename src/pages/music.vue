@@ -80,17 +80,20 @@
   import { isClient } from '/@/app/environment'
   import { useEnhancer } from '/@/app/enhancer'
   import { useMusic } from '/@/services/music'
+  import { firstUpperCase } from '/@/transforms/text'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { Language } from '/@/language/data'
 
   export default defineComponent({
     name: 'MusicPage',
     setup() {
-      const { i18n, helmet, isZhLang } = useEnhancer()
+      const { i18n, meta, isZhLang } = useEnhancer()
       const musicPlayer = isClient ? useMusic() : null
 
-      helmet(() => {
-        const prefix = isZhLang.value ? `${i18n.t(LANGUAGE_KEYS.PAGE_MUSIC)} | ` : ''
-        return { title: prefix + 'Music' }
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_MUSIC, Language.En)!)
+        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_MUSIC), enTitle] : [enTitle]
+        return { pageTitle: titles.join(' | ') }
       })
 
       const relativeStrokeWidth = parseFloat(((15 / 450) * 100).toFixed(1))

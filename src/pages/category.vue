@@ -23,6 +23,7 @@
   import { useArticleStore } from '/@/store/article'
   import { useCategoryStore } from '/@/store/category'
   import { getExtendsValue } from '/@/transforms/state'
+  import { firstUpperCase } from '/@/transforms/text'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
@@ -40,22 +41,19 @@
       }
     },
     setup(props) {
-      const { i18n, helmet, isZhLang, globalState } = useEnhancer()
+      const { i18n, meta, isZhLang } = useEnhancer()
       const article = useArticleStore()
       const catrgory = useCategoryStore()
       const currentCategory = computed(() => {
         return catrgory.categories.find((category) => category.slug === props.categorySlug)
       })
 
-      // helmet
-      helmet(() => {
-        const slug = props.categorySlug
-        const slugTitle = slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
-        const enTitle = `${slugTitle} | Category`
-        const zhTitle = i18n.t(slug)
-        const title = isZhLang.value && zhTitle ? `${zhTitle} | ${enTitle}` : enTitle
-        const description = currentCategory.value?.description || title
-        return { title, description }
+      meta(() => {
+        const enTitle = firstUpperCase(props.categorySlug)
+        const zhTitle = i18n.t(props.categorySlug)!
+        const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle, 'Category']
+        const description = currentCategory.value?.description || titles.join(',')
+        return { pageTitle: titles.join(' | '), description }
       })
 
       const currentCategoryIcon = computed(

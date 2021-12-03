@@ -122,13 +122,14 @@
   import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
   import PageBanner from '/@/components/common/banner.vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { isClient } from '/@/app/environment'
   import { useLensStore } from '/@/store/lens'
   import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
   import { getFileProxyUrl, getFileCDNUrl } from '/@/transforms/url'
   import { timeAgo } from '/@/transforms/moment'
+  import { firstUpperCase } from '/@/transforms/text'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { Language } from '/@/language/data'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'LensPage',
@@ -136,7 +137,7 @@
       PageBanner
     },
     setup() {
-      const { globalState, i18n, helmet, isMobile, isDarkTheme, isZhLang } = useEnhancer()
+      const { globalState, i18n, meta, isMobile, isDarkTheme, isZhLang } = useEnhancer()
       const lensStore = useLensStore()
       const lozadObserver = ref<LozadObserver | null>(null)
       const videoListElement = ref<HTMLElement>()
@@ -144,9 +145,10 @@
         `/images/page-lens/banner-${Math.floor(Math.random() * 3) + 1}.jpg`
       )
 
-      helmet(() => {
-        const prefix = isZhLang.value ? `${i18n.t(LANGUAGE_KEYS.PAGE_LENS)} | ` : ''
-        return { title: prefix + 'Lens' }
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_LENS, Language.En)!)
+        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_LENS), enTitle] : [enTitle]
+        return { pageTitle: titles.join(' | '), description: `${META.author} 的 Vlog 视频` }
       })
 
       const humanlizeDate = (date: number) => {

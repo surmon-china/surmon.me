@@ -44,7 +44,7 @@ const music = createMusic({ amplitude, autoStart: false })
 
 // app
 const ssrContextState = getSSRContextData()
-const { app, router, globalState, theme, i18n, helmet, store } = createVueApp({
+const { app, router, globalState, theme, i18n, meta, store } = createVueApp({
   historyCreator: createWebHistory,
   appCreator: isSSR ? createSSRApp : createApp,
   language: isSSR ? ssrContextState.globalState.language : navigator.language,
@@ -76,7 +76,7 @@ if (isSSR) {
 }
 
 // init: services with client
-helmet.bindClient()
+meta.bindClient()
 theme.bindClientSystem()
 exportLozadToGlobal()
 exportEmojiRainToGlobal()

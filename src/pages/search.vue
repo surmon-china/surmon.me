@@ -34,12 +34,10 @@
       }
     },
     setup(props) {
-      const { helmet } = useEnhancer()
+      const { meta } = useEnhancer()
       const article = useArticleStore()
 
-      helmet(() => ({
-        title: `${props.keyword} | Search`
-      }))
+      meta(() => ({ pageTitle: `${props.keyword} | Search` }))
 
       const fetchArticles = (params: any) => {
         onClient(scrollToTop)

@@ -12,7 +12,7 @@ import { RouteName } from './router'
 import { createUniversalRouter, RouterCreatorOptions } from './router'
 import { createUniversalStore } from '/@/store'
 import { createI18n } from '/@/services/i18n'
-import { createHelmet } from '/@/services/helmet'
+import { createMeta } from '/@/services/meta'
 import { createTheme, Theme } from '/@/services/theme'
 import interior from '/@/services/interior'
 import { Language, languages, langMap } from '/@/language/data'
@@ -57,12 +57,8 @@ export const createVueApp = (context: ICreatorContext) => {
     languages,
     map: langMap
   })
-
-  const helmet = createHelmet({
-    title: `${META.title} - ${META.description}`,
-    keywords: META.keywords,
-    description: META.description,
-    titleTemplate: (title: string) => `${title} | ${META.title}`
+  const meta = createMeta({
+    titler: (title: string) => `${title} | ${META.title}`
   })
 
   // handle global error
@@ -84,7 +80,7 @@ export const createVueApp = (context: ICreatorContext) => {
   app.use(store)
   app.use(globalState)
   app.use(i18n)
-  app.use(helmet)
+  app.use(meta)
   app.use(theme)
   app.use(interior)
 
@@ -94,7 +90,7 @@ export const createVueApp = (context: ICreatorContext) => {
     store,
     globalState,
     i18n,
-    helmet,
+    meta,
     theme,
     interior
   }

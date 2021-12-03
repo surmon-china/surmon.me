@@ -41,7 +41,9 @@
   import PageBanner from '/@/components/common/banner.vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { getFileCDNUrl } from '/@/transforms/url'
+  import { firstUpperCase } from '/@/transforms/text'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { Language } from '/@/language/data'
   import { META } from '/@/config/app.config'
 
   export default defineComponent({
@@ -50,7 +52,7 @@
       PageBanner
     },
     setup() {
-      const { i18n, helmet, isMobile, isZhLang } = useEnhancer()
+      const { i18n, meta, isMobile, isZhLang } = useEnhancer()
       const jobs = [
         {
           id: 'qiniu',
@@ -106,9 +108,10 @@
         }
       ]
 
-      helmet(() => {
-        const prefix = isZhLang.value ? `${i18n.t(LANGUAGE_KEYS.PAGE_JOB)} | ` : ''
-        return { title: prefix + 'Job' }
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_JOB, Language.En)!)
+        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_JOB), enTitle] : [enTitle]
+        return { pageTitle: titles.join(' | '), description: `找 ${META.author} 内推` }
       })
 
       const handleSubmit = (job: any) => {

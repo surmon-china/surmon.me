@@ -27,6 +27,7 @@
   import { useArticleStore } from '/@/store/article'
   import { useTagStore } from '/@/store/tag'
   import { getExtendsValue } from '/@/transforms/state'
+  import { firstUpperCase } from '/@/transforms/text'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
@@ -44,20 +45,17 @@
       }
     },
     setup(props) {
-      const { helmet, isZhLang } = useEnhancer()
+      const { meta, isZhLang } = useEnhancer()
       const tagStore = useTagStore()
       const articleStore = useArticleStore()
       const currentTag = computed(() => tagStore.tags.find((tag) => tag.slug === props.tagSlug))
 
-      // helmet
-      helmet(() => {
-        const slug = props.tagSlug
-        const slugTitle = slug.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
-        const enTitle = `${slugTitle} | Tag`
-        const zhTitle = currentTag.value?.name
-        const title = `${isZhLang.value && zhTitle ? zhTitle : enTitle} | Tag`
-        const description = currentTag.value?.description || title
-        return { title, description }
+      meta(() => {
+        const enTitle = firstUpperCase(props.tagSlug)
+        const zhTitle = currentTag.value?.name!
+        const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle, 'Tag']
+        const description = currentTag.value?.description || titles.join(',')
+        return { pageTitle: titles.join(' | '), description }
       })
 
       const currentTagIcon = computed(() => getExtendsValue(currentTag.value, 'icon') || 'icon-tag')

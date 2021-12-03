@@ -113,11 +113,17 @@
     getArticleDetailRoute,
     getPageRoute
   } from '/@/transforms/route'
+  import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { dateToHuman } from '/@/transforms/moment'
-  import { replaceToChineseNumber, toChineseMonth, toEngMonth } from '/@/transforms/text'
+  import {
+    replaceToChineseNumber,
+    toChineseMonth,
+    toEngMonth,
+    firstUpperCase
+  } from '/@/transforms/text'
   import PageBanner from '/@/components/common/banner.vue'
-  import * as APP_CONFIG from '/@/config/app.config'
+  import { META } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'ArchivePage',
@@ -125,15 +131,16 @@
       PageBanner
     },
     setup() {
-      const { i18n, helmet, isMobile, isZhLang } = useEnhancer()
+      const { i18n, meta, isMobile, isZhLang } = useEnhancer()
       const tagStore = useTagStore()
       const articleStore = useArticleStore()
       const isHasArticle = computed(() => articleStore.archive.data.length)
       const isFetching = computed(() => articleStore.archive.fetching || tagStore.fetching)
 
-      helmet(() => {
-        const prefix = isZhLang.value ? `${i18n.t(LANGUAGE_KEYS.PAGE_ARCHIVE)} | ` : ''
-        return { title: prefix + 'Archive' }
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_ARCHIVE, Language.En)!)
+        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_ARCHIVE), enTitle] : [enTitle]
+        return { pageTitle: titles.join(' | '), description: `${META.title} 数据归档` }
       })
 
       const articleTree = computed(() => {
@@ -179,7 +186,6 @@
 
       const resultData = {
         LANGUAGE_KEYS,
-        APP_CONFIG,
         RouteName,
         getPageRoute,
         getTagArchiveRoute,

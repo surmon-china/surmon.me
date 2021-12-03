@@ -199,15 +199,17 @@
   import { RouteName } from '/@/app/router'
   import { useMetaStore } from '/@/store/meta'
   import { getPageRoute } from '/@/transforms/route'
+  import { firstUpperCase } from '/@/transforms/text'
   import { getFileCDNUrl } from '/@/transforms/url'
+  import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
-  import { VALUABLE_LINKS, FRIEND_LINKS } from '/@/config/app.config'
+  import { META, VALUABLE_LINKS, FRIEND_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'AboutPage',
     setup() {
-      const { i18n, helmet, gtag, globalState, isZhLang, isMobile } = useEnhancer()
+      const { i18n, meta, gtag, globalState, isZhLang, isMobile } = useEnhancer()
       const metaStore = useMetaStore()
       const isOnLiveMap = toRef(globalState.switchBox, 'liveMap')
       const adminInfo = computed(() => metaStore.adminInfo.data)
@@ -215,9 +217,10 @@
         () => adminInfo.value?.gravatar || getFileCDNUrl('/images/gravatar.jpg')
       )
 
-      helmet(() => {
-        const prefix = isZhLang.value ? `${i18n.t(LANGUAGE_KEYS.PAGE_ABOUT)} | ` : ''
-        return { title: prefix + 'About' }
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_ABOUT, Language.En)!)
+        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_ABOUT), enTitle] : [enTitle]
+        return { pageTitle: titles.join(' | '), description: `关于 ${META.author}` }
       })
 
       const handleHoverFollowMe = () => {

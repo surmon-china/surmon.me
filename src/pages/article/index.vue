@@ -64,7 +64,7 @@
       }
     },
     setup(props) {
-      const { helmet, isMobile } = useEnhancer()
+      const { meta, isMobile } = useEnhancer()
       const articleDetailStore = useArticleDetailStore()
       const commentStore = useCommentStore()
       const article = computed(() => articleDetailStore.article || void 0)
@@ -91,8 +91,8 @@
         ]
       })
 
-      helmet(() => ({
-        title: article.value?.title,
+      meta(() => ({
+        pageTitle: article.value?.title,
         keywords: article.value?.keywords?.join(',') || article.value?.title,
         description: article.value?.description || ''
       }))

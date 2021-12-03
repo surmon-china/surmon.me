@@ -43,9 +43,9 @@
   export default defineComponent({
     name: 'Toolbox',
     setup() {
-      const { i18n, gtag, globalState } = useEnhancer()
+      const { i18n, gtag } = useEnhancer()
 
-      const animationFrameId = ref(0)
+      const animationFrameID = ref(0)
       const isTopButtonMouseOver = ref(false)
       const isBottomButtonMouseOver = ref(false)
 
@@ -70,13 +70,13 @@
           }
           window.scrollTo(0, targetScrollY)
           if (isBottomButtonMouseOver.value || isTopButtonMouseOver.value) {
-            animationFrameId.value = window.requestAnimationFrame(step)
+            animationFrameID.value = window.requestAnimationFrame(step)
           } else {
-            window.cancelAnimationFrame(animationFrameId.value)
+            window.cancelAnimationFrame(animationFrameID.value)
             return false
           }
         }
-        animationFrameId.value = window.requestAnimationFrame(step)
+        animationFrameID.value = window.requestAnimationFrame(step)
       }
 
       return {
@@ -90,12 +90,12 @@
         },
         setTopButtonState(state: boolean, isStartSlow = false) {
           isTopButtonMouseOver.value = state
-          window.cancelAnimationFrame(animationFrameId.value)
+          window.cancelAnimationFrame(animationFrameID.value)
           isStartSlow && slowMoveToAnyWhere()
         },
         setBottomButtonState(state: boolean, isStartSlow = false) {
           isBottomButtonMouseOver.value = state
-          window.cancelAnimationFrame(animationFrameId.value)
+          window.cancelAnimationFrame(animationFrameID.value)
           isStartSlow && slowMoveToAnyWhere()
         },
         handleRSS() {

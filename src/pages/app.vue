@@ -48,9 +48,10 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
-  import { useEnhancer } from '../app/enhancer'
+  import { defineComponent } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { Language } from '/@/language/data'
+  import { firstUpperCase } from '/@/transforms/text'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
@@ -58,11 +59,11 @@
   export default defineComponent({
     name: 'Application',
     setup() {
-      const { i18n, helmet, gtag, isMobile, isZhLang } = useEnhancer()
-
-      helmet(() => {
-        const prefix = isZhLang.value ? `${i18n.t(LANGUAGE_KEYS.PAGE_APP)} | ` : ''
-        return { title: prefix + 'App' }
+      const { i18n, meta, gtag, isMobile, isZhLang } = useEnhancer()
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_APP, Language.En)!)
+        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_APP), enTitle] : [enTitle]
+        return { pageTitle: titles.join(' | '), description: `${META.title} App 下载` }
       })
 
       const handleAppAction = (name: string) => {
