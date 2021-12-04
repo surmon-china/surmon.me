@@ -29,12 +29,14 @@
       </calendar>
     </div>
     <div class="module mammon-square" :placeholder="t(LANGUAGE_KEYS.AD)">
-      <Adsense
-        ins-class="adsbygoogle"
-        data-ad-client="ca-pub-4710915636313788"
-        data-ad-slot="6138120718"
-        class="content"
-      />
+      <client-only>
+        <Adsense
+          ins-class="adsbygoogle"
+          data-ad-client="ca-pub-4710915636313788"
+          data-ad-slot="6138120718"
+          class="content"
+        />
+      </client-only>
     </div>
     <div :id="ASIDE_STICKY_ELEMENT_ID" class="aside-sticky-box">
       <client-only>
@@ -43,7 +45,9 @@
         </div>
       </client-only>
       <div class="module">
-        <aside-nav class="sticky-module" v-if="isArticlePage" />
+        <client-only v-if="isArticlePage">
+          <aside-nav class="sticky-module" />
+        </client-only>
         <aside-tag class="sticky-module" v-else />
       </div>
     </div>

@@ -1,20 +1,17 @@
 /**
  * @file BFF Server tunnel
- * @module server/tunnel
+ * @module server.tunnel
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import LRU from 'lru-cache'
 import express, { RequestHandler } from 'express'
 import { INVALID_ERROR } from '@/constants/error'
-import { TunnelModule } from '@/constants/tunnel'
-// import { getTunnelApiPath } from '@/transforms/url'
+import { TunnelModule, getTunnelApiPath } from '@/constants/tunnel'
 import { bilibiliService } from './bilibili'
 import { wallpaperService } from './wallpaper'
 import { githubService } from './github'
 import { musicService } from './music'
-
-const getTunnelApiPath = (txt) => txt
 
 // cache
 export const tunnelCache = new LRU<TunnelModule, any>({

@@ -14,8 +14,8 @@
 <script lang="ts">
   import { defineComponent, onErrorCaptured } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { useEnhancer } from '../../app/enhancer'
-  import { RouteName } from '../../app/router'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { RouteName } from '/@/app/router'
   import { getLayoutByRouteMeta } from '/@/services/layout'
   import ErrorComponent from './error.vue'
 
@@ -29,9 +29,7 @@
       const handleResolveRoute = () => {
         router.push({ name: RouteName.Home }).then(() => {
           // MARK: 顺序很重要！要先设置布局，再渲染，避免闪屏
-          globalState.setLayoutColumn(
-            getLayoutByRouteMeta(router.currentRoute.value.meta)
-          )
+          globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta))
           globalState.setRenderError(null)
         })
       }

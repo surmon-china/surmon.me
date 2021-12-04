@@ -15,7 +15,7 @@ export enum Events {
 
 /**
  * @example
- *  <placeholder :loading="false" :data="data.length" p-i18n-key="LANGUAGE_KEYS.XXX">
+ *  <placeholder :loading="false" :data="data.length" :i18n-key="LANGUAGE_KEYS.XXX">
  *    <component />
  *  </placeholder>
  * @example
@@ -45,19 +45,19 @@ export default defineComponent({
       default: 'module'
     },
     placeholder: String,
-    pI18nKey: String as PropType<LANGUAGE_KEYS>,
+    i18nKey: String as PropType<LANGUAGE_KEYS>,
     loading: Boolean
   },
   emits: [Events.AfterEnter],
   setup(props, context) {
     return () => {
-      const { data, placeholder, pI18nKey, loading, transition, transitionName } = props
+      const { data, placeholder, i18nKey, loading, transition, transitionName } = props
       const isEmptyData =
         data !== undefined && ((Array.isArray(data) && !(data as any).length) || !data)
 
       const getPlaceholderView = () => {
-        return placeholder || pI18nKey
-          ? h(Empty, { placeholder, i18nKey: pI18nKey })
+        return placeholder || i18nKey
+          ? h(Empty, { placeholder, i18nKey })
           : context.slots.placeholder?.()
       }
 

@@ -15,30 +15,38 @@ import { createI18n } from '/@/services/i18n'
 import { createMeta } from '/@/services/meta'
 import { createTheme, Theme } from '/@/services/theme'
 import interior from '/@/services/interior'
+import { LayoutColumn } from '/@/services/layout'
+import { rebirthSSRContext } from '/@/universal'
 import { Language, languages, langMap } from '/@/language/data'
 import { createGlobalState } from './state'
+import { NODE_ENV } from '/@/environment'
+import { isSSR } from '/@/app/environment'
 import App from './index.vue'
-import * as ENV from '../environment'
 
-console.info('[APP INITED]', API_CONFIG, JSON.parse(JSON.stringify(ENV)))
+console.info(`[APP INITED]:`, { NODE_ENV, mode: isSSR ? 'SSR' : 'SPA' }, API_CONFIG)
 
 export interface ICreatorContext {
   appCreator: CreateAppFunction<Element>
   historyCreator(base?: string): RouterHistory
   historyBeforeMiddleware?(globalState: any): RouterCreatorOptions['beforeMiddleware']
   historyAfterMiddleware?(globalState: any): RouterCreatorOptions['afterMiddleware']
+  layout?: LayoutColumn
   theme: Theme
   language: string
   userAgent: string
 }
 export type VueApp = ReturnType<typeof createVueApp>
 export const createVueApp = (context: ICreatorContext) => {
+  const app = context.appCreator(App)
+  // ssr context
+  const ssrContext = rebirthSSRContext(app)
+
   const globalState = createGlobalState({
     userAgent: context.userAgent || '',
-    language: context.language || ''
+    language: context.language || '',
+    layout: context.layout ?? LayoutColumn.Normal
   })
 
-  const app = context.appCreator(App)
   const store = createUniversalStore({ globalState })
   const router = createUniversalRouter({
     beforeMiddleware: context.historyBeforeMiddleware?.(globalState),
@@ -51,14 +59,16 @@ export const createVueApp = (context: ICreatorContext) => {
     router.removeRoute(RouteName.Music)
   }
 
+  // meta
+  const meta = createMeta({
+    titler: (title: string) => `${title} | ${META.title}`
+  })
+
   const theme = createTheme(context.theme)
   const i18n = createI18n({
     default: globalState.userAgent.isZhUser ? Language.Zh : Language.En,
     languages,
     map: langMap
-  })
-  const meta = createMeta({
-    titler: (title: string) => `${title} | ${META.title}`
   })
 
   // handle global error
@@ -69,8 +79,8 @@ export const createVueApp = (context: ICreatorContext) => {
     if (to.meta.validate) {
       ;(to.meta as any)
         .validate({ route: to, i18n, store })
+        .then(next)
         .catch(globalState.setRenderError)
-        .finally(next)
     } else {
       next()
     }

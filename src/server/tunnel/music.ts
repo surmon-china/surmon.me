@@ -1,6 +1,6 @@
 /**
  * @file BFF Server music
- * @module server/music
+ * @module server.tunnel.music
  * @author Surmon <https://github.com/surmon-china>
  */
 

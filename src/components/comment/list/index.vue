@@ -1,29 +1,25 @@
 <template>
-  <transition-group
-    name="list-fade"
-    tag="ul"
-    ref="listElement"
-    class="comment-list"
-    @after-enter="addCommentAnimateDone"
-  >
-    <comment-item
-      v-for="item in comments"
-      :key="item.comment.id"
-      :comment="item.comment"
-      :liked="isCommentLiked(item.comment.id)"
-      :is-child="isChildList"
-      @like="likeComment"
-      @reply="replyComment"
-    >
-      <template #children v-if="item.children.length">
-        <comment-list
-          :comments="buildeCommentTree(item.children)"
-          :isChildList="true"
-          @reply="replyComment"
-        />
-      </template>
-    </comment-item>
-  </transition-group>
+  <ul class="comment-list" ref="listElement">
+    <transition-group name="list-fade" @after-enter="addCommentAnimateDone">
+      <comment-item
+        v-for="item in comments"
+        :key="item.comment.id"
+        :comment="item.comment"
+        :liked="isCommentLiked(item.comment.id)"
+        :is-child="isChildList"
+        @like="likeComment"
+        @reply="replyComment"
+      >
+        <template #children v-if="item.children.length">
+          <comment-list
+            :comments="buildeCommentTree(item.children)"
+            :isChildList="true"
+            @reply="replyComment"
+          />
+        </template>
+      </comment-item>
+    </transition-group>
+  </ul>
 </template>
 
 <script lang="ts">

@@ -6,7 +6,7 @@
 
 import { createPinia } from 'pinia'
 import { GlobalState } from '/@/app/state'
-import { getSSRStoreData } from '/@/universal'
+import { getSSRContext } from '/@/universal'
 import { useArticleStore } from './article'
 import { useCategoryStore } from './category'
 import { useTagStore } from './tag'
@@ -34,16 +34,14 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
   }
 
   return {
+    state: pinia.state,
     install: pinia.install,
-    serverInit() {
-      return doPreFetchTask()
+    prefetch: doPreFetchTask,
+    initInSSR() {
+      pinia.state.value = getSSRContext('store')
     },
-    clientInit() {
+    initInSPA() {
       return doPreFetchTask()
-    },
-    clientSSRInit() {
-      pinia.state.value = getSSRStoreData()
-      return pinia
     }
   }
 }

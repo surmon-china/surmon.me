@@ -119,9 +119,9 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
-  import PageBanner from '/@/components/common/banner.vue'
+  import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useUniversalFetch } from '/@/universal'
   import { useLensStore } from '/@/store/lens'
   import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
   import { getFileProxyUrl, getFileCDNUrl } from '/@/transforms/url'
@@ -129,7 +129,9 @@
   import { firstUpperCase } from '/@/transforms/text'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
+  import { randomNumber } from '/@/utils/random'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import PageBanner from '/@/components/common/banner.vue'
 
   export default defineComponent({
     name: 'LensPage',
@@ -141,9 +143,7 @@
       const lensStore = useLensStore()
       const lozadObserver = ref<LozadObserver | null>(null)
       const videoListElement = ref<HTMLElement>()
-      const bannerImageUrl = getFileCDNUrl(
-        `/images/page-lens/banner-${Math.floor(Math.random() * 3) + 1}.jpg`
-      )
+      const bannerImageUrl = getFileCDNUrl(`/images/page-lens/banner-${randomNumber(3)}.jpg`)
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_LENS, Language.En)!)
@@ -165,7 +165,7 @@
         window.open(`https://www.bilibili.com/video/av${video.aid}`)
       }
 
-      const fetchData = () => {
+      const fetchAllData = () => {
         return lensStore.fetchVlogs()
       }
 
@@ -188,7 +188,9 @@
         lozadObserver.value = null
       })
 
-      const resultData = {
+      useUniversalFetch(() => fetchAllData())
+
+      return {
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
         lensStore,
@@ -202,10 +204,6 @@
         observeLozad,
         bannerImageUrl
       }
-
-      // return prefetch(fetchData, resultData)
-
-      return resultData
     }
   })
 </script>

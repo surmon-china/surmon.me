@@ -18,7 +18,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { prefetch, onClient } from '/@/universal'
+  import { useUniversalFetch, onClient } from '/@/universal'
   import { useArticleStore } from '/@/store/article'
   import { useAnnouncementStore } from '/@/store/announcement'
   import { nextScreen } from '/@/utils/effects'
@@ -36,14 +36,14 @@
     },
     setup() {
       const { meta } = useEnhancer()
+      const articleStore = useArticleStore()
+      const announcementStore = useAnnouncementStore()
+
       meta({
         title: `${META.title} - ${META.description}`,
         keywords: META.keywords,
         description: META.description
       })
-
-      const articleStore = useArticleStore()
-      const announcementStore = useAnnouncementStore()
 
       const loadmoreArticles = async () => {
         const targetPage = articleStore.list.pagination?.current_page + 1
@@ -53,17 +53,15 @@
         }
       }
 
-      const fetchAllData = () => {
-        return Promise.all([articleStore.fetchList(), announcementStore.fetchList()])
-      }
+      useUniversalFetch(() =>
+        Promise.all([articleStore.fetchList(), announcementStore.fetchList()])
+      )
 
-      const resultData = {
+      return {
         articleStore,
         announcementStore,
         loadmoreArticles
       }
-
-      return prefetch(fetchAllData, resultData)
     }
   })
 </script>

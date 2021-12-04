@@ -1,6 +1,6 @@
 /**
  * @file BFF Server bilibili
- * @module server/bilibili
+ * @module server.tunnel.bilibili
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -9,14 +9,13 @@ import { TunnelModule } from '@/constants/tunnel'
 import { BILIBILI_UID, META } from '@/config/app.config'
 import { tunnelCache } from '.'
 
-const KEYWORD = 'vlog'
-const PAGE_SIZE = 66
+const PAGE_SIZE = 45
 const PAGE = 1
 
 const getVideoList = async (): Promise<Array<any>> => {
   const videosResult = await axios.request<any>({
     headers: { 'User-Agent': META.title },
-    url: `https://api.bilibili.com/x/space/arc/search?mid=${BILIBILI_UID}&ps=${PAGE_SIZE}&tid=0&pn=${PAGE}&keyword=${KEYWORD}&order=pubdate&jsonp=jsonp`
+    url: `https://api.bilibili.com/x/space/arc/search?mid=${BILIBILI_UID}&ps=${PAGE_SIZE}&tid=0&pn=${PAGE}&order=pubdate&jsonp=jsonp`
   })
   if (videosResult.data.code === 0) {
     return videosResult.data.data.list.vlist

@@ -53,6 +53,13 @@
     },
     setup() {
       const { i18n, meta, isMobile, isZhLang } = useEnhancer()
+
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_JOB, Language.En)!)
+        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_JOB), enTitle] : [enTitle]
+        return { pageTitle: titles.join(' | '), description: `找 ${META.author} 内推` }
+      })
+
       const jobs = [
         {
           id: 'qiniu',
@@ -107,12 +114,6 @@
           email: META.email
         }
       ]
-
-      meta(() => {
-        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_JOB, Language.En)!)
-        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_JOB), enTitle] : [enTitle]
-        return { pageTitle: titles.join(' | '), description: `找 ${META.author} 内推` }
-      })
 
       const handleSubmit = (job: any) => {
         const subject = `嗨！求内推！`

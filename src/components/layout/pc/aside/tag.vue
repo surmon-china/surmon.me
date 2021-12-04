@@ -3,7 +3,7 @@
     <placeholder
       :data="tagStore.tags.length"
       :fetching="tagStore.fetching"
-      :p-i18n-key="LANGUAGE_KEYS.TAG_PLACEHOLDER"
+      :i18n-key="LANGUAGE_KEYS.TAG_PLACEHOLDER"
     >
       <template #loading>
         <ul class="tag-list-skeleton" key="skeleton">

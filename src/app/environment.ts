@@ -4,10 +4,12 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-// app env
-export const isSSR = Boolean(import.meta.env.SSR)
+import { getSSRSymbleStatus } from '/@/universal/context'
+
+// app mode
+export const isSSR = typeof window === 'undefined' || getSSRSymbleStatus()
 export const isSPA = !isSSR
 
 // runtime env
-export const isServer = typeof window === 'undefined'
+export const isServer = import.meta.env.SSR
 export const isClient = !isServer

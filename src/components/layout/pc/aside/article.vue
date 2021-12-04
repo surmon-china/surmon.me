@@ -9,7 +9,7 @@
     <placeholder
       :data="articleStore.hotList.data"
       :loading="articleStore.hotList.fetching"
-      :p-i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"
+      :i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"
     >
       <template #loading>
         <ul class="article-list-skeleton" key="skeleton">
@@ -22,11 +22,7 @@
         <ul class="article-list" key="list">
           <li v-for="item in articleStore.hotList.data" :key="item.id" class="item">
             <span class="index"></span>
-            <router-link
-              class="title"
-              :to="getArticleDetailRoute(item.id)"
-              :title="getArticleTitle(item)"
-            >
+            <router-link class="title" :to="getArticleDetailRoute(item.id)" :title="item.title">
               {{ item.title }}
             </router-link>
           </li>
@@ -39,26 +35,16 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import { useArticleStore } from '/@/store/article'
-  import { useI18n } from '/@/services/i18n'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getArticleDetailRoute } from '/@/transforms/route'
 
   export default defineComponent({
     name: 'PCAsideArticle',
     setup() {
-      const i18n = useI18n()
       const articleStore = useArticleStore()
-
-      const getArticleTitle = (article: any) => {
-        const commentCount =
-          article.meta.comments + i18n.translate(LANGUAGE_KEYS.COMMENT_LIST_COUNT)
-        const likeCount = i18n.translate(LANGUAGE_KEYS.COMMENT_LIKE_COUNT, article.meta.likes)
-        return `${article.title} - 「 ${commentCount} | ${likeCount} 」`
-      }
 
       return {
         articleStore,
-        getArticleTitle,
         getArticleDetailRoute,
         LANGUAGE_KEYS
       }

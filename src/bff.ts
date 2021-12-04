@@ -6,6 +6,7 @@
 
 import http from 'http'
 import express from 'express'
+import cookieParser from 'cookie-parser'
 import { NODE_ENV, isDev } from './environment'
 import { startGTagScriptUpdater } from './server/gtag'
 import { startGitHubChartUpdater } from './server/ghchart'
@@ -32,8 +33,10 @@ global.console = Object.assign(console, {
 const app = express()
 const server = http.createServer(app)
 
-// static
-// 由于 BFF 存在副作用资源（如 gatg.js），build 时不再 copy to assets
+// cookie
+app.use(cookieParser())
+
+// static > MARK: 由于 BFF 存在副作用资源（如 gatg.js），build 时不再 copy to assets
 app.use(express.static(PUBLIC_PATH, { index: false }))
 
 // tunnel
@@ -51,6 +54,6 @@ server.listen(BFF_SERVER_PORT, () => {
   ]
   console.info(`Run! ${infos.join(', ')}.`)
   // 启动扩展服务
-  // startGTagScriptUpdater()
-  // startGitHubChartUpdater()
+  startGTagScriptUpdater()
+  startGitHubChartUpdater()
 })

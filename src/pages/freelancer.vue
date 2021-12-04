@@ -72,7 +72,6 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import PageBanner from '/@/components/common/banner.vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -80,6 +79,7 @@
   import { firstUpperCase } from '/@/transforms/text'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import UAdsense from '/@/components/common/uadsense.vue'
+  import PageBanner from '/@/components/common/banner.vue'
 
   export default defineComponent({
     name: 'FreelancerPage',

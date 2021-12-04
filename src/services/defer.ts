@@ -1,6 +1,6 @@
 /**
  * @file 客户端初始化任务管理器
- * @module service/defer
+ * @module service.defer
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -27,7 +27,7 @@ const createDeferStore = () => {
 
   const handleLoaded = () => {
     state.loaded = true
-    state.tasks.forEach(task => doTask(task))
+    state.tasks.forEach((task) => doTask(task))
   }
 
   const addTask = (task: ITask) => {
@@ -43,7 +43,9 @@ const createDeferStore = () => {
 
 const DeferSymbol = Symbol('defer')
 
-export interface DeferPluginConfig { exportToGlobal?: boolean }
+export interface DeferPluginConfig {
+  exportToGlobal?: boolean
+}
 export type Defer = ReturnType<typeof createDeferStore>
 export const createDefer = (): Defer & Plugin => {
   const defer = window.$defer || createDeferStore()

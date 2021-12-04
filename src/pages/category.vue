@@ -19,7 +19,7 @@
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { prefetch, onClient } from '/@/universal'
+  import { useUniversalFetch, onClient } from '/@/universal'
   import { useArticleStore } from '/@/store/article'
   import { useCategoryStore } from '/@/store/category'
   import { getExtendsValue } from '/@/transforms/state'
@@ -56,13 +56,15 @@
         return { pageTitle: titles.join(' | '), description }
       })
 
-      const currentCategoryIcon = computed(
-        () => getExtendsValue(currentCategory.value, 'icon') || 'icon-category'
-      )
-      const currentCategoryImage = computed(() =>
-        getExtendsValue(currentCategory.value, 'background')
-      )
-      const currentCategoryColor = computed(() => getExtendsValue(currentCategory.value, 'bgcolor'))
+      const currentCategoryIcon = computed(() => {
+        return getExtendsValue(currentCategory.value, 'icon') || 'icon-category'
+      })
+      const currentCategoryImage = computed(() => {
+        return getExtendsValue(currentCategory.value, 'background')
+      })
+      const currentCategoryColor = computed(() => {
+        return getExtendsValue(currentCategory.value, 'bgcolor')
+      })
 
       const loadmoreArticles = async () => {
         await article.fetchList({
@@ -85,7 +87,9 @@
         )
       })
 
-      const resultData = {
+      useUniversalFetch(() => fetchAllData(props.categorySlug))
+
+      return {
         article,
         currentCategory,
         currentCategoryIcon,
@@ -93,8 +97,6 @@
         currentCategoryColor,
         loadmoreArticles
       }
-
-      return prefetch(() => fetchAllData(props.categorySlug), resultData)
     }
   })
 </script>

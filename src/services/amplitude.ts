@@ -5,6 +5,7 @@
  */
 
 import amplitude from 'amplitudejs'
+import { isClient } from '/@/app/environment'
 
 declare global {
   interface Window {
@@ -13,12 +14,7 @@ declare global {
   }
 }
 
-if (typeof window !== 'undefined') {
-  // HACK: Fix #387 https://github.com/521dimensions/amplitudejs/issues/387
-  // @ts-ignore
-  window.AmplitudeCore = window.AmplitudeCore || {
-    stop: () => console.warn('Forge AmplitudeCore Stop...')
-  }
+if (isClient) {
   window.Amplitude = window.Amplitude || amplitude
 }
 

@@ -24,7 +24,7 @@
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { isClient } from '/@/app/environment'
-  import { prefetch } from '/@/universal'
+  import { useUniversalFetch } from '/@/universal'
   import { useMetaStore } from '/@/store/meta'
   import { useCommentStore } from '/@/store/comment'
   import { firstUpperCase } from '/@/transforms/text'
@@ -60,14 +60,14 @@
         ])
       }
 
-      const resultData = {
+      useUniversalFetch(() => fetchAllData())
+
+      return {
         LANGUAGE_KEYS,
         isMobile,
         isDarkTheme,
         siteLikes
       }
-
-      return prefetch(fetchAllData, resultData)
     }
   })
 </script>

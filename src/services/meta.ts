@@ -2,82 +2,93 @@
  * @file Meta service
  * @module service.meta
  * @author Surmon <https://github.com/surmon-china>
+ * @link https://github.com/vueuse/head
  */
 
-import { computed, createApp } from 'vue'
+import { computed, inject } from 'vue'
 import type { ComputedGetter } from '@vue/reactivity'
-import {
-  createMetaManager,
-  MetaConfig as VueMetaConfig,
-  useMeta as useVueMeta,
-  MetaSource
-} from 'vue-meta'
+import { createHead, useHead, HeadObject, HeadAttrs, renderHeadToString } from '@vueuse/head'
 import { useI18n } from './i18n'
 
-let titleComputer = (title: string) => title
-export const meatTitle = (title: string) => {
-  return titleComputer(title)
+export interface MetaResult {
+  readonly headTags: string
+  readonly htmlAttrs: string
+  readonly bodyAttrs: string
 }
+
+const MetaTitlerSymbol = Symbol('meta-titler')
+type MeatTitler = (title: string) => string
 
 export interface MetaConfig {
-  titler?(title: string): string
-  vueMetaSSR?: boolean
-  vueMetaConfig?: VueMetaConfig
+  titler?: MeatTitler
 }
 export const createMeta = (metaConfig?: MetaConfig) => {
-  titleComputer = metaConfig?.titler || titleComputer
-  const manager = createMetaManager(metaConfig?.vueMetaSSR, metaConfig?.vueMetaConfig)
-  // https://github.com/nuxt/framework/blob/main/packages/nuxt3/src/meta/runtime/lib/vue-meta.plugin.ts
-  const bindClient = () => {
-    const teleportTarget = document.createElement('div')
-    teleportTarget.id = 'head-target'
-    document.body.appendChild(teleportTarget)
-    createApp({ render: () => manager.render({}) }).mount('#head-target')
+  const head = createHead()
+  return {
+    ...head,
+    renderToString(): MetaResult {
+      return renderHeadToString(head)
+    },
+    install(app, ...rest: any[]) {
+      app.provide(MetaTitlerSymbol, metaConfig?.titler || ((title) => title))
+      app.use(head, ...rest)
+      return head
+    }
   }
-
-  ;(manager as any).bindClient = bindClient
-  return manager as typeof manager & { bindClient: typeof bindClient }
 }
 
-export interface MetaObject extends MetaSource {
+export interface MetaObject extends HeadObject {
   title?: string
   pageTitle?: string
   keywords?: string
   description?: string
-  // ref to vue-meta
-  [key: string]: any
 }
 
 export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
   const i18n = useI18n()
+  const titler = inject(MetaTitlerSymbol) as MeatTitler
 
-  const meta = computed(() => {
-    const { title, pageTitle, keywords, ...restSource } =
-      typeof source === 'function' ? source() : source
+  const meta = computed<HeadObject>(() => {
+    const sourceObject = typeof source === 'function' ? source() : source
+    const { title, pageTitle, keywords, description, ...restSource } = sourceObject
+
     // title | page title
-    const metaTitle = title ? title : pageTitle ? meatTitle(pageTitle) : ''
+    const mTitle = title ? title : pageTitle ? titler(pageTitle) : ''
+
+    // metas
+    const mMeta = (restSource.meta as HeadAttrs[]) || []
+
     // keywords
-    const keywordMeta = {
-      vmid: 'keywords',
-      name: 'keywords',
-      property: 'keywords',
-      content: keywords
+    if (keywords) {
+      mMeta.push({
+        key: 'keywords',
+        name: 'keywords',
+        content: keywords
+      })
     }
+
+    // description
+    if (description) {
+      mMeta.push({
+        key: 'description',
+        name: 'description',
+        content: description
+      })
+    }
+
     // html i18n
-    const htmlAttrs = {
-      lang: i18n.l.value?.iso
+    const mHTMLAttrs = {
+      lang: i18n.l.value?.iso,
+      ...restSource.htmlAttrs
     }
 
     return {
       ...restSource,
-      title: metaTitle,
-      meta: [...(restSource.meta || []), keywordMeta],
-      htmlAttrs: {
-        ...htmlAttrs,
-        ...restSource.htmlAttrs
-      }
+      title: mTitle,
+      meta: mMeta,
+      htmlAttrs: mHTMLAttrs
     }
   })
 
-  return useVueMeta(meta)
+  return useHead(meta)
 }

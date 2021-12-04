@@ -1,10 +1,10 @@
 /**
  * @file Markdown parser
- * @module transformer/markdown
+ * @module transformer.markdown
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import DOMPurify from 'dompurify'
+import sanitizeHTML from 'sanitize-html'
 import escapeHTML from 'escape-html'
 import { marked, Renderer } from 'marked'
 import { TagMap } from '/@/store/tag'
@@ -30,7 +30,8 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
 
   // html: escape > sanitize
   renderer.html = (html) => {
-    return options?.sanitize ? DOMPurify.sanitize(escapeHTML(html)) : html
+    // https://github.com/apostrophecms/sanitize-html#default-options
+    return options?.sanitize ? sanitizeHTML(escapeHTML(html)) : html
   }
 
   // heading
@@ -67,8 +68,11 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
 
     return !options?.sanitize
       ? linkHTML
-      : DOMPurify.sanitize(linkHTML, {
-          ALLOWED_ATTR: ['target', 'href', 'target', 'class', 'title']
+      : sanitizeHTML(linkHTML, {
+          allowedTags: ['a'],
+          allowedAttributes: {
+            a: ['href', 'target', 'class', 'title', 'rel', 'data-*']
+          }
         })
   }
 
@@ -88,9 +92,11 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
 
     return !options?.sanitize
       ? imageHTML
-      : DOMPurify.sanitize(imageHTML, {
-          ALLOW_DATA_ATTR: true,
-          ALLOWED_ATTR: ['alt', 'onclick', 'class', 'title']
+      : sanitizeHTML(imageHTML, {
+          allowedTags: ['img'],
+          allowedAttributes: {
+            img: ['alt', 'onclick', 'class', 'title', 'data-*']
+          }
         })
   }
 
@@ -146,7 +152,7 @@ marked.setOptions({
   langPrefix: 'hljs language-',
   highlight(code, language) {
     return highlight.getLanguage(language)
-      ? highlight.highlight(language, code).value
+      ? highlight.highlight(code, { language }).value
       : highlight.highlightAuto(code).value
   }
 })
