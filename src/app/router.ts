@@ -102,7 +102,7 @@ export const routes: RouteRecordRaw[] = [
           })
         }
         if (isSSR) {
-          const targetCategory = store.state.category.data.find(
+          const targetCategory = store.state.value.category.categories.find(
             (category) => category.slug === category_slug
           )
           if (!targetCategory) {
@@ -130,7 +130,7 @@ export const routes: RouteRecordRaw[] = [
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Tag slug → <string>'
           })
         }
-        if (isSSR && !store.state.tag.data.find((tag) => tag.slug === tag_slug)) {
+        if (isSSR && !store.state.value.tag.tags.find((tag) => tag.slug === tag_slug)) {
           return Promise.reject({
             code: NOT_FOUND,
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + `Tag ${tag_slug} not found`

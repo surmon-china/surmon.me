@@ -6,7 +6,7 @@
 
 import { App, reactive, readonly, inject, Plugin } from 'vue'
 import { Router } from 'vue-router'
-import { getGAScriptUrl } from '/@/transforms/url'
+import { getGAScriptUrl } from '/@/transforms/outside'
 import loadScript from '/@/utils/script-loader'
 // MARK: https://zh.nuxtjs.org/faq/ga
 // MARK: https://github.com/nuxt-community/google-gtag/blob/master/lib/plugin.js

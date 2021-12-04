@@ -13,12 +13,12 @@ import { GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
 import { isSSR } from '/@/app/environment'
 import { Language } from '/@/language/data'
 import { getFileCDNUrl } from '/@/transforms/url'
-import amplitude from './patches/amplitude'
+import amplitude from './services/amplitude'
 import gtag from '/@/services/gtag'
 import adsense from '/@/services/adsense'
 import swiper from '/@/services/swiper'
 import { getClientLocalTheme } from '/@/services/theme'
-import { getLayoutByRouteMeta } from '/@/services/layout'
+import { LayoutColumn, getLayoutByRouteMeta } from '/@/services/layout'
 import { createDefer } from '/@/services/defer'
 import { createMusic } from '/@/services/music'
 import { createPopup } from '/@/services/popup'
@@ -26,13 +26,14 @@ import { createLoading } from '/@/services/loading'
 import { consoleSlogan } from '/@/services/slogan'
 import { enableCopyright } from '/@/services/copyright'
 import { enableBaiduSeoPush } from '/@/services/baidu-seo-push'
-import { enableAutoTitleSurprise } from './services/title-surprise'
+import { runTitler, resetTitler } from './services/titler'
 import { exportEmojiRainToGlobal } from './services/emoji-23333'
 import { exportStickyEventsToGlobal } from './services/sticky'
 import { exportAppToGlobal } from '/@/services/exporter'
 import { exportLozadToGlobal } from '/@/services/lozad'
+import { randomNumber } from '/@/utils/random'
 import { createVueApp } from '/@/app/main'
-import { getSSRContextData } from './universal'
+import { getSSRContext } from './universal'
 import { isProd } from './environment'
 
 import '/@/styles/app.scss'
@@ -43,13 +44,13 @@ const loading = createLoading()
 const music = createMusic({ amplitude, autoStart: false })
 
 // app
-const ssrContextState = getSSRContextData()
-const { app, router, globalState, theme, i18n, meta, store } = createVueApp({
+const { app, router, globalState, theme, i18n, store } = createVueApp({
   historyCreator: createWebHistory,
   appCreator: isSSR ? createSSRApp : createApp,
-  language: isSSR ? ssrContextState.globalState.language : navigator.language,
-  userAgent: isSSR ? ssrContextState.globalState.userAgent : navigator.userAgent,
-  theme: isSSR ? ssrContextState.theme : getClientLocalTheme()
+  language: navigator.language,
+  userAgent: navigator.userAgent,
+  layout: isSSR ? getSSRContext('layout') : LayoutColumn.Normal,
+  theme: isSSR ? getSSRContext('theme') : getClientLocalTheme()
 })
 
 // plugins & services
@@ -66,17 +67,17 @@ app.use(gtag, {
 })
 
 // init: store (from SSR context or fetch)
-isSSR ? store.clientSSRInit() : store.clientInit()
+isSSR ? store.initInSSR() : store.initInSPA()
 
 // init: error (from SSR context only)
-if (isSSR) {
-  if (ssrContextState.globalState.renderError) {
-    globalState.setRenderError(ssrContextState.globalState.renderError)
-  }
-}
+// TODO: ssr state
+// if (isSSR) {
+//   if (ssrContextState.globalState.renderError) {
+//     globalState.setRenderError(ssrContextState.globalState.renderError)
+//   }
+// }
 
 // init: services with client
-meta.bindClient()
 theme.bindClientSystem()
 exportLozadToGlobal()
 exportEmojiRainToGlobal()
@@ -94,28 +95,32 @@ router.afterEach((_, __, failure) => {
 
 // router ready -> mount
 router.isReady().finally(() => {
-  // UI layout
-  globalState.setLayoutColumn(
-    isSSR
-      ? // reset UI layout by SSR context (for SSR)
-        ssrContextState.globalState.layout
-      : // set UI layout by route (for SPA)
-        getLayoutByRouteMeta(router.currentRoute.value.meta)
-  )
+  // UI layout: set UI layout by route (for SPA)
+  globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta))
 
   // mount (isHydrate -> (SSR -> true | SPA -> false))
   app.mount('#app', isSSR).$nextTick(() => {
     // set hydrate state
     globalState.setHydrate()
-    // reset: global state
-    globalState.resetOnClient()
     // reset: i18n language
     i18n.set(globalState.userAgent.isZhUser ? Language.Zh : Language.En)
 
     // Desktop
     if (!globalState.userAgent.isMobile) {
-      defer.addTask(music.start)
-      enableAutoTitleSurprise()
+      document.addEventListener(
+        'visibilitychange',
+        (event) => {
+          // @ts-ignore
+          const isHidden = event.target?.hidden || event.target?.webkitHidden
+          const surprises = [
+            { favicon: '🔞', title: 'FBI WARNING!' },
+            { favicon: '⭕️', title: 'FBI WARNING!' },
+            { favicon: '🌝', title: 'new message (3)' }
+          ]
+          !isHidden ? resetTitler() : runTitler(surprises[randomNumber(surprises.length - 1)])
+        },
+        false
+      )
     }
 
     // Production

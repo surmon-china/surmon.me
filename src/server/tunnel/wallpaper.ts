@@ -1,6 +1,6 @@
 /**
  * @file BFF Server wallpaper
- * @module server/wallpaper
+ * @module server.tunnel.wallpaper
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -14,16 +14,16 @@
 
 <script lang="ts">
   import { defineComponent, PropType } from 'vue'
-  import { useEnhancer } from '../../app/enhancer'
-  import { RenderError } from '../../app/state'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { RenderError } from '/@/app/state'
   import { LANGUAGE_KEYS } from '/@/language/key'
 
-  export enum Events {
+  export enum ErrorEvent {
     Resolve = 'resolve'
   }
   export default defineComponent({
     name: 'Error',
-    emits: [Events.Resolve],
+    emits: [ErrorEvent.Resolve],
     props: {
       error: {
         type: Object as PropType<RenderError>,
@@ -33,7 +33,7 @@
     setup(props, context) {
       const { isDarkTheme } = useEnhancer()
       const handleResolveRoute = () => {
-        context.emit(Events.Resolve)
+        context.emit(ErrorEvent.Resolve)
       }
 
       return {
@@ -127,8 +127,7 @@
       -webkit-background-clip: text;
       color: rgba(darken($white, 20%), 20%);
       animation: error-item ease-out both 0.6s $transition-time-normal,
-        code-wave ease-out both 0.6s $transition-time-normal,
-        code-wave-play linear 2s infinite;
+        code-wave ease-out both 0.6s $transition-time-normal, code-wave-play linear 2s infinite;
     }
 
     .message {

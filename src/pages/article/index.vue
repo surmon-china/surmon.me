@@ -30,7 +30,7 @@
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { prefetch } from '/@/universal'
+  import { useUniversalFetch } from '/@/universal'
   import { isClient } from '/@/app/environment'
   import {
     ARTICLE_CONTENT_ELEMENT_ID,
@@ -119,7 +119,9 @@
         )
       })
 
-      return prefetch(() => fetchArticleDetail(props.articleId), {
+      useUniversalFetch(() => fetchArticleDetail(props.articleId))
+
+      return {
         isMobile,
         article,
         fetching,
@@ -128,7 +130,7 @@
         ARTICLE_META_ELEMENT_ID,
         ARTICLE_RELETED_ELEMENT_ID,
         ARTICLE_SHARE_ELEMENT_ID
-      })
+      }
     }
   })
 </script>

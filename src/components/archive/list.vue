@@ -49,17 +49,19 @@
           </ul>
         </template>
         <template #placeholder>
-          <empty class="empty" :i18n-ley="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
+          <empty class="empty" :i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
         </template>
         <template #default>
-          <transition-group key="list" name="list-fade" tag="div">
-            <list-item
-              v-for="articleItem in articles"
-              :key="articleItem.id"
-              :article="articleItem"
-              @click="handleArticleClick(articleItem)"
-            />
-          </transition-group>
+          <div key="list">
+            <transition-group name="list-fade">
+              <list-item
+                v-for="articleItem in articles"
+                :key="articleItem.id"
+                :article="articleItem"
+                @click="handleArticleClick(articleItem)"
+              />
+            </transition-group>
+          </div>
         </template>
       </placeholder>
     </div>
@@ -120,7 +122,6 @@
     setup(props, context) {
       const { router, defer, isMobile, isDarkTheme } = useEnhancer()
       const mammonEnabled = ref(false)
-
       const isMammonEnabled = computed(() => props.mammon && mammonEnabled)
       const isLoadMoreEnabled = computed(() => {
         return props.pagination

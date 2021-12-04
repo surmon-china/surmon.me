@@ -102,20 +102,15 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
+  import { META } from '/@/config/app.config'
   import { useArticleStore } from '/@/store/article'
   import { useTagStore } from '/@/store/tag'
   import { useEnhancer } from '/@/app/enhancer'
-  import { prefetch } from '/@/universal'
-  import { RouteName } from '/@/app/router'
-  import {
-    getTagArchiveRoute,
-    getCategoryArchiveRoute,
-    getArticleDetailRoute,
-    getPageRoute
-  } from '/@/transforms/route'
+  import { useUniversalFetch } from '/@/universal'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { dateToHuman } from '/@/transforms/moment'
+  import { getTagArchiveRoute, getArticleDetailRoute } from '/@/transforms/route'
   import {
     replaceToChineseNumber,
     toChineseMonth,
@@ -123,7 +118,6 @@
     firstUpperCase
   } from '/@/transforms/text'
   import PageBanner from '/@/components/common/banner.vue'
-  import { META } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'ArchivePage',
@@ -182,14 +176,11 @@
         return rootTree
       })
 
-      const fetchAllData = () => Promise.all([tagStore.fetchAll(), articleStore.fetchArchive()])
+      useUniversalFetch(() => Promise.all([tagStore.fetchAll(), articleStore.fetchArchive()]))
 
-      const resultData = {
+      return {
         LANGUAGE_KEYS,
-        RouteName,
-        getPageRoute,
         getTagArchiveRoute,
-        getCategoryArchiveRoute,
         getArticleDetailRoute,
         replaceToChineseNumber,
         toChineseMonth,
@@ -200,8 +191,6 @@
         isHasArticle,
         isFetching
       }
-
-      return prefetch(fetchAllData, resultData)
     }
   })
 </script>

@@ -69,11 +69,11 @@
   @import 'src/styles/init.scss';
 
   #wallpaper {
+    $offset: 6px;
     position: fixed;
     left: 0;
     top: 70%;
     cursor: pointer;
-    $offset: 6px;
 
     &.dark {
       .switcher {

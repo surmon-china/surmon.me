@@ -8,9 +8,9 @@
       <h2 class="title">
         <slot name="title"></slot>
       </h2>
-      <p class="description">
+      <div class="description">
         <slot name="description"></slot>
-      </p>
+      </div>
     </div>
   </div>
 </template>
@@ -72,6 +72,7 @@
 
       .description {
         font-size: $font-size-h4;
+        margin-bottom: 1em;
       }
     }
   }

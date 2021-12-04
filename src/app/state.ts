@@ -30,6 +30,7 @@ export interface GlobalRawState {
 export interface GlobalStateConfig {
   userAgent: string
   language: string
+  layout: LayoutColumn
 }
 
 const GlobalStateSymbol = Symbol('globalState')
@@ -39,6 +40,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
   const renderError = ref<RenderErrorValue>(null)
   const defaultError = { code: INVALID_ERROR }
   const setRenderError = (error: any) => {
+    console.warn('App error:', error)
     if (!error) {
       // clear error
       renderError.value = null
@@ -86,7 +88,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
   }
 
   // UI layout
-  const layoutValue = ref(LayoutColumn.Normal)
+  const layoutValue = ref(config.layout)
   const layoutColumn = computed(() => ({
     layout: layoutValue.value,
     isNormal: layoutValue.value === LayoutColumn.Normal,
@@ -131,15 +133,8 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     layout: layoutValue.value
   })
 
-  // reset UA & i18n
-  const resetOnClient = () => {
-    setUserAgent(navigator.userAgent)
-    setLanguage(navigator.language)
-  }
-
   const globalState = {
     toRawState,
-    resetOnClient,
     // Render error state
     renderError: readonly(renderError),
     setRenderError,

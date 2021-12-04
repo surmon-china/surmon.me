@@ -1,6 +1,6 @@
 /**
  * @file BFF Server github
- * @module server/github
+ * @module server.tunnel.github
  * @author Surmon <https://github.com/surmon-china>
  */
 

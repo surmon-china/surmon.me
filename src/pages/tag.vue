@@ -22,7 +22,7 @@
 
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
-  import { prefetch, onClient } from '/@/universal'
+  import { useUniversalFetch, onClient } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { useArticleStore } from '/@/store/article'
   import { useTagStore } from '/@/store/tag'
@@ -83,7 +83,9 @@
         )
       })
 
-      const resultData = {
+      useUniversalFetch(() => fetchAllData(props.tagSlug))
+
+      return {
         articleStore,
         currentTag,
         currentTagIcon,
@@ -91,8 +93,6 @@
         currentTagColor,
         loadmoreArticles
       }
-
-      return prefetch(() => fetchAllData(props.tagSlug), resultData)
     }
   })
 </script>

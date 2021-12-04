@@ -19,7 +19,7 @@ export const enableProdRuntime = async (app: Express) => {
     try {
       const url = request.originalUrl
       const render = require('./dist/server/ssr.js').render
-      const [appHtml, preloadLinks] = await render(request, clientManifest)
+      const [appHtml, preloadLinks] = await render(request)
       const html = indexHTML
         // .replace(`<!--preload-links-->`, preloadLinks)
         .replace(`<!--app-html-->`, appHtml)

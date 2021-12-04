@@ -53,9 +53,7 @@ export default defineConfig(({ command, mode }) => {
     },
     server: {
       open: true,
-      // TODO localhost debug
-      // port: 3000,
-      port: 80,
+      port: 3000,
       proxy: {
         [BASE_ENV_CONFIG.VITE_API_PROXY_URL]: {
           target: BASE_ENV_CONFIG.VITE_API_ONLINE_URL,
@@ -153,14 +151,11 @@ export default defineConfig(({ command, mode }) => {
         // Tree shaking
         'highlight.js',
         // Node
-        'koa',
+        'express',
         'fs-extra',
         'lru-cache',
         'node-schedule',
-        'koa-mount',
-        'koa-static',
-        'koa-router',
-        'koa-proxies',
+        'cookie-parser',
         'https-proxy-agent',
         'serialize-javascript',
         'cross-env',

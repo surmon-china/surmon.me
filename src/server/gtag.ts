@@ -1,6 +1,6 @@
 /**
  * @file BFF GA updater
- * @module server/gtag
+ * @module server.gtag
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -8,10 +8,8 @@ import fs from 'fs'
 import path from 'path'
 import axios from 'axios'
 import { GA_MEASUREMENT_ID } from '@/config/app.config'
-// import { getGAScriptUrl } from '@/transforms/url'
+import { getGAScriptUrl } from '@/transforms/outside'
 import { PUBLIC_PATH } from './helper'
-
-const getGAScriptUrl = (text) => text
 
 const UPDATE_TIME = {
   HOURS_1: 1000 * 60 * 60 * 1,

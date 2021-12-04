@@ -19,12 +19,12 @@
 </template>
 
 <script lang="ts">
-  import { META } from '/@/config/app.config'
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { firstUpperCase } from '/@/transforms/text'
+  import { META } from '/@/config/app.config'
   import PageBanner from '/@/components/common/banner.vue'
   import ProductList from './list.vue'
 

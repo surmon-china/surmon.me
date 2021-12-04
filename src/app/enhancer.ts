@@ -9,7 +9,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useGlobalState } from '/@/app/state'
 import { isClient } from '/@/app/environment'
 import { useI18n } from '/@/services/i18n'
-import { useMeta, meatTitle } from '/@/services/meta'
+import { useMeta } from '/@/services/meta'
 import { useTheme, Theme } from '/@/services/theme'
 import { useDefer, Defer } from '/@/services/defer'
 import { useLoading, Loading } from '/@/services/loading'
@@ -38,7 +38,6 @@ export const useEnhancer = () => {
     globalState,
     i18n,
     meta: useMeta,
-    title: meatTitle,
     theme,
 
     adConfig,

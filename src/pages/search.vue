@@ -14,7 +14,7 @@
 
 <script lang="ts">
   import { defineComponent, watch, onBeforeMount } from 'vue'
-  import { prefetch, onClient } from '/@/universal'
+  import { useUniversalFetch, onClient } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { useArticleStore } from '/@/store/article'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
@@ -60,10 +60,12 @@
         )
       })
 
-      return prefetch(() => fetchArticles({ keyword: props.keyword }), {
+      useUniversalFetch(() => fetchArticles({ keyword: props.keyword }))
+
+      return {
         article,
         loadmoreArticles
-      })
+      }
     }
   })
 </script>

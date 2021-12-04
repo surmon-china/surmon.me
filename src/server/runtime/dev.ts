@@ -2,6 +2,8 @@ import fs from 'fs'
 import path from 'path'
 import { Express } from 'express'
 import { createServer } from 'vite'
+import { RenderResult } from '@/ssr'
+import { resolveTemplate } from './template'
 import { ROOT_PATH } from '../helper'
 
 export const enableDevRuntime = async (app: Express) => {
@@ -9,7 +11,7 @@ export const enableDevRuntime = async (app: Express) => {
     root: process.cwd(),
     logLevel: 'info',
     server: {
-      middlewareMode: true,
+      middlewareMode: 'ssr',
       watch: {
         usePolling: true,
         interval: 100
@@ -25,12 +27,17 @@ export const enableDevRuntime = async (app: Express) => {
       const _template = fs.readFileSync(path.resolve(ROOT_PATH, 'index.html'), 'utf-8')
       const template = await viteServer.transformIndexHtml(url, _template)
       const render = (await viteServer.ssrLoadModule('/src/ssr.ts')).render
-      const { html } = await render(request)
-      const appHtml = template.replace(`<!--app-html-->`, html)
-      response.status(200).set({ 'Content-Type': 'text/html' }).end(appHtml)
+      const redered: RenderResult = await render(request)
+      const html = resolveTemplate({
+        template,
+        appHTML: redered.html,
+        metas: redered.metas,
+        scripts: redered.scripts
+      })
+      response.status(redered.code).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (error: any) {
+      console.log('------BFF 捕获到错误，这里应该渲染个页面出来')
       viteServer.ssrFixStacktrace(error)
-      console.log(error.stack)
       response.status(500).end(error.stack)
     }
   })
