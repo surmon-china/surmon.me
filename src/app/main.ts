@@ -14,8 +14,8 @@ import { createUniversalStore } from '/@/store'
 import { createI18n } from '/@/services/i18n'
 import { createMeta } from '/@/services/meta'
 import { createTheme, Theme } from '/@/services/theme'
-import interior from '/@/services/interior'
 import { LayoutColumn } from '/@/services/layout'
+import interior from '/@/services/interior'
 import { rebirthSSRContext } from '/@/universal'
 import { Language, languages, langMap } from '/@/language/data'
 import { createGlobalState } from './state'
@@ -75,12 +75,19 @@ export const createVueApp = (context: ICreatorContext) => {
   app.config.errorHandler = (error) => globalState.setRenderError(error)
 
   // handle router validate error & 404 error
+  // https://next.router.vuejs.org/guide/advanced/navigation-guards.html#optional-third-argument-next
   router.beforeEach((to, _, next) => {
     if (to.meta.validate) {
       ;(to.meta as any)
         .validate({ route: to, i18n, store })
         .then(next)
-        .catch(globalState.setRenderError)
+        .catch((error) => {
+          const newError: any = new Error()
+          newError.code = error.code
+          newError.message = error.message
+          // next(error) > router error > global state error
+          next(newError)
+        })
     } else {
       next()
     }

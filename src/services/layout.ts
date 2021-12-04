@@ -1,6 +1,6 @@
 /**
- * @file app layout updater
- * @module service/layout
+ * @file App layout updater
+ * @module service.layout
  * @author Surmon <https://github.com/surmon-china>
  */
 

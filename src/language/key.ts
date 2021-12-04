@@ -1,6 +1,6 @@
 /**
  * @file I18n keys
- * @module i18n/key
+ * @module i18n.key
  * @author Surmon <https://github.com/surmon-china>
  */
 

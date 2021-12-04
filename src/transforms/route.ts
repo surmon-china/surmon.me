@@ -1,6 +1,6 @@
 /**
  * @file Route transformer
- * @module transformer/route
+ * @module transformer.route
  * @author Surmon <https://github.com/surmon-china>
  */
 

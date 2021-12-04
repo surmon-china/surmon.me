@@ -1,13 +1,15 @@
 /**
  * @file App local global state
- * @module app.global-state
+ * @module app.state
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import { App, inject, ref, computed, reactive, readonly } from 'vue'
+import { isClient } from '/@/app/environment'
 import { INVALID_ERROR } from '/@/constants/error'
 import { uaParser, isZhUser } from '/@/transforms/ua'
 import { LayoutColumn } from '/@/services/layout'
+import { universalRef } from '/@/universal'
 
 type RenderErrorValue = RenderError | null
 export interface RenderError {
@@ -37,17 +39,19 @@ const GlobalStateSymbol = Symbol('globalState')
 export type GlobalState = ReturnType<typeof createGlobalState>
 export const createGlobalState = (config: GlobalStateConfig) => {
   // Render error
-  const renderError = ref<RenderErrorValue>(null)
+  const renderError = universalRef<RenderErrorValue>('error', () => null)
   const defaultError = { code: INVALID_ERROR }
   const setRenderError = (error: any) => {
-    console.warn('App error:', error)
+    if (isClient) {
+      console.warn('App error:', error)
+    }
     if (!error) {
       // clear error
       renderError.value = null
     } else if (error instanceof Error) {
       // new Error
       renderError.value = {
-        ...defaultError,
+        code: (error as any).code ?? defaultError.code,
         message: error.message
       }
     } else if (typeof error === 'string') {

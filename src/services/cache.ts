@@ -1,6 +1,6 @@
 /**
  * @file Cache 缓存模块服务
- * @module service/cache
+ * @module service.cache
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -60,7 +60,7 @@ export const get = (key: TCacheKey) => {
   if (ttl == null || last == null) {
     return data
   }
-  const dead = (last + ttl) < getNowTime()
+  const dead = last + ttl < getNowTime()
   if (!dead) {
     return data
   }
@@ -86,12 +86,7 @@ export const set = (key: TCacheKey, value: any, ttl?: number): void => {
 export function promise<T = $TODO>(options: ICachePromiseOption<T>): TCachePromiseResult<T>
 export function promise<T = $TODO>(options: ICachePromiseIOOption<T>): ICacheIoResult<T>
 export function promise(options: $TODO) {
-  const {
-    key,
-    promise,
-    ttl,
-    ioMode = false
-  } = options
+  const { key, promise, ttl, ioMode = false } = options
 
   // 包装任务
   const doPromiseTask = () => {
@@ -104,9 +99,7 @@ export function promise(options: $TODO) {
   // Promise 拦截模式（返回死数据）
   const handlePromiseMode = () => {
     const data = get(key)
-    return data !== null && data !== undefined
-      ? Promise.resolve(data)
-      : doPromiseTask()
+    return data !== null && data !== undefined ? Promise.resolve(data) : doPromiseTask()
   }
 
   // 双向同步模式（返回获取器和更新器）

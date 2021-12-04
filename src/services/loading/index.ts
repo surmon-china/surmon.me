@@ -1,6 +1,6 @@
 /**
- * @file 全局进度管理器
- * @module service/loading
+ * @file Global loading state
+ * @module service.loading
  * @author Surmon <https://github.com/surmon-china>
  */
 

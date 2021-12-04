@@ -1,6 +1,6 @@
 /**
  * @file SSR BFF API Tunnel
- * @module service/tunnel
+ * @module service.tunnel
  * @author Surmon <https://github.com/surmon-china>
  */
 

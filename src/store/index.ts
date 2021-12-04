@@ -38,7 +38,12 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
     install: pinia.install,
     prefetch: doPreFetchTask,
     initInSSR() {
-      pinia.state.value = getSSRContext('store')
+      const contextStore = getSSRContext('store')
+      if (contextStore) {
+        pinia.state.value = contextStore
+      } else {
+        doPreFetchTask()
+      }
     },
     initInSPA() {
       return doPreFetchTask()

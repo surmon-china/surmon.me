@@ -15,7 +15,8 @@ import { musicService } from './music'
 
 // cache
 export const tunnelCache = new LRU<TunnelModule, any>({
-  max: Infinity
+  max: Infinity,
+  maxAge: 1000 * 60 * 60
 })
 
 // router
