@@ -1,6 +1,6 @@
 /**
- * @file emoji 表情雨服务
- * @module service/emoji-233333
+ * @file amplitude player
+ * @module service.amplitude
  * @author Surmon <https://github.com/surmon-china>
  */
 

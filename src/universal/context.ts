@@ -17,11 +17,9 @@ export const getSSRSymbleStatus = () => Boolean((window as any)[SSR_SYMBLE_KEY])
 
 // Context
 const SSR_CONTEXT_KEY = '__INITIAL_SSR_CONTEXT__'
-// for renderer
 export const renderSSRContextScript = (data: string) => {
   return `<script>window.${SSR_CONTEXT_KEY} = ${data}</script>`
 }
-// for client
 export const getSSRContextData = (): Partial<SSRContext> | null => {
   return (window as any)[SSR_CONTEXT_KEY] || null
 }
@@ -35,11 +33,9 @@ export interface SSRContext {
 
 // ssr context
 let ssrContext: Partial<SSRContext> = {}
-// for server temp
 export const setSSRContext = (key: keyof SSRContext, value: any) => {
   ssrContext[key] = value ? JSON.parse(JSON.stringify(value)) : value
 }
-// for server and client
 export const getSSRContext = (key: keyof SSRContext) => {
   return isClient ? getSSRContextData()?.[key] : ssrContext[key]
 }
@@ -60,6 +56,7 @@ export function getSSRContextByApp(app: any) {
  * @param key a unique key to identify the data in the Nuxt payload
  * @param get a function that returns the value to set the initial data
  * @param set a function that will receive the data on the client-side
+ * @link https://github.com/nuxt/framework/blob/main/packages/nuxt3/src/app/composables/hydrate.ts
  * @example
     useHydration(
       'store',
@@ -67,7 +64,6 @@ export function getSSRContextByApp(app: any) {
       (storeState) => (pinia.state.value = storeState)
     )
  */
-// https://github.com/nuxt/framework/blob/main/packages/nuxt3/src/app/composables/hydrate.ts
 // MARK: memory leak
 export const useHydration = <T>(key: keyof SSRContext, get: () => T, set: (value: T) => void) => {
   if (isServer) {

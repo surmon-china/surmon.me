@@ -1,6 +1,6 @@
 /**
  * @file Slogan consoler
- * @module service/slogan
+ * @module service.slogan
  * @author Surmon <https://github.com/surmon-china>
  */
 

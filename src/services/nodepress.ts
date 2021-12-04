@@ -1,6 +1,6 @@
 /**
  * @file HTTP requester service
- * @module service/http
+ * @module service.http
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -14,7 +14,7 @@ import {
 import { NOT_FOUND, INVALID_ERROR } from '/@/constants/error'
 import { LANGUAGE_KEYS } from '/@/language/key'
 import { LayoutColumn } from '/@/services/layout'
-import { isSSR } from '/@/app/environment'
+import { isServer } from '/@/app/environment'
 import { isValidDateParam } from '/@/transforms/validate'
 import { scrollToTop } from '/@/utils/effects'
 import IndexPage from '/@/pages/index.vue'
@@ -32,6 +32,17 @@ import MerchPage from '/@/pages/merch/index.vue'
 import FreelancerPage from '/@/pages/freelancer.vue'
 import GuestbookPage from '/@/pages/guestbook.vue'
 import AppPage from '/@/pages/app.vue'
+
+import 'vue-router'
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    /** second */
+    ssrCacheAge?: number
+    layout?: LayoutColumn
+    validate?: (params: any) => Promise<any>
+  }
+}
 
 export enum CategorySlug {
   Code = 'code',
@@ -68,6 +79,7 @@ export const routes: RouteRecordRaw[] = [
     name: RouteName.Archive,
     component: ArchivePage,
     meta: {
+      ssrCacheAge: 60 * 60 * 6,
       layout: LayoutColumn.Full
     }
   },
@@ -101,7 +113,7 @@ export const routes: RouteRecordRaw[] = [
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Category slug → <string>'
           })
         }
-        if (isSSR) {
+        if (isServer) {
           const targetCategory = store.state.value.category.categories.find(
             (category) => category.slug === category_slug
           )
@@ -130,7 +142,7 @@ export const routes: RouteRecordRaw[] = [
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Tag slug → <string>'
           })
         }
-        if (isSSR && !store.state.value.tag.tags.find((tag) => tag.slug === tag_slug)) {
+        if (isServer && !store.state.value.tag.tags.find((tag) => tag.slug === tag_slug)) {
           return Promise.reject({
             code: NOT_FOUND,
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + `Tag ${tag_slug} not found`
@@ -145,6 +157,7 @@ export const routes: RouteRecordRaw[] = [
     component: DatePage,
     props: (to) => ({ date: to.params.date }),
     meta: {
+      ssrCacheAge: 60 * 60 * 24,
       async validate({ route, i18n }) {
         const { date } = route.params
         if (!date || !isValidDateParam(date)) {
@@ -177,7 +190,7 @@ export const routes: RouteRecordRaw[] = [
     name: RouteName.Music,
     component: MusicPage,
     meta: {
-      static: true,
+      ssrCacheAge: Infinity,
       layout: LayoutColumn.Full
     }
   },
@@ -186,6 +199,7 @@ export const routes: RouteRecordRaw[] = [
     name: RouteName.Lens,
     component: LensPage,
     meta: {
+      ssrCacheAge: 60 * 60 * 24,
       layout: LayoutColumn.Full
     }
   },
@@ -194,7 +208,7 @@ export const routes: RouteRecordRaw[] = [
     name: RouteName.Job,
     component: JobPage,
     meta: {
-      static: true,
+      ssrCacheAge: Infinity,
       layout: LayoutColumn.Full
     }
   },
@@ -203,7 +217,7 @@ export const routes: RouteRecordRaw[] = [
     name: RouteName.About,
     component: AboutPage,
     meta: {
-      static: true,
+      ssrCacheAge: Infinity,
       layout: LayoutColumn.Full
     }
   },
@@ -212,7 +226,7 @@ export const routes: RouteRecordRaw[] = [
     name: RouteName.Merch,
     component: MerchPage,
     meta: {
-      static: true,
+      ssrCacheAge: 60 * 30,
       layout: LayoutColumn.Full
     }
   },
@@ -221,21 +235,24 @@ export const routes: RouteRecordRaw[] = [
     name: RouteName.Freelancer,
     component: FreelancerPage,
     meta: {
-      static: true,
+      ssrCacheAge: Infinity,
       layout: LayoutColumn.Full
     }
   },
   {
     path: '/guestbook',
     name: RouteName.Guestbook,
-    component: GuestbookPage
+    component: GuestbookPage,
+    meta: {
+      ssrCacheAge: 60 * 2
+    }
   },
   {
     path: '/app',
     name: RouteName.App,
     component: AppPage,
     meta: {
-      static: true,
+      ssrCacheAge: Infinity,
       layout: LayoutColumn.Full
     }
   },

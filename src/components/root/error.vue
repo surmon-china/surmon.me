@@ -131,7 +131,6 @@
     }
 
     .message {
-      font-family: DINRegular;
       font-weight: normal;
       margin-top: 0;
       margin-bottom: 2rem;

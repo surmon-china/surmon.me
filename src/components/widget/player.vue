@@ -1,8 +1,7 @@
 <template>
   <div id="player" v-if="music">
     <div class="cd">
-      <!-- <img class="image" :src="currentSong?.cover_art_url" /> -->
-      <img class="image" src="/images/page-music/background.jpg" />
+      <img class="image" :src="currentSong?.cover_art_url" />
       <button class="toggle-button" :disabled="!music.state.ready" @click="music.togglePlay">
         <i
           class="iconfont"
@@ -77,7 +76,7 @@
     right: 0;
     top: 20%;
     z-index: $z-index-toolbox;
-    opacity: 0.7;
+    opacity: 0.4;
     transform: translateX(16rem);
     transition: opacity $transition-time-fast, transform $transition-time-normal ease-in-out;
     height: $size;

@@ -1,6 +1,6 @@
 /**
  * @file highlight.js
- * @module service/highlight
+ * @module service.highlight
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -1,6 +1,6 @@
 /**
  * @file 本机数据状态
- * @module service/storage
+ * @module service.storage
  * @author Surmon <https://github.com/surmon-china>
  */
 

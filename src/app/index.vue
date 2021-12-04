@@ -27,15 +27,15 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { getLayoutByRouteMeta } from '/@/services/layout'
   import Captured from '/@/components/root/captured.vue'
-  import EmojiRain from '/@/components/widget/emoji-rain.vue'
   import PcMain from '/@/components/layout/pc/main.vue'
   import MobileMain from '/@/components/layout/mobile/main.vue'
+  import EmojiRain from '/@/components/widget/emoji-rain.vue'
 
   export default defineComponent({
     name: 'App',
     components: {
-      Captured,
-      EmojiRain
+      EmojiRain,
+      Captured
     },
     setup() {
       const { theme, route, globalState, isMobile } = useEnhancer()

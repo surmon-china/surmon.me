@@ -1,5 +1,5 @@
 /**
- * @file 随机数字
+ * @file Random number
  * @module util.random
  * @author Surmon <https://github.com/surmon-china>
  */

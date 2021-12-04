@@ -1,5 +1,5 @@
 /**
- * @file 外部一些服务
+ * @file Outside
  * @module service.outside
  * @author Surmon <https://github.com/surmon-china>
  */

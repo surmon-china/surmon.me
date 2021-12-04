@@ -1,6 +1,6 @@
 /**
  * @file I18n config
- * @module i18n/config
+ * @module i18n.config
  * @author Surmon <https://github.com/surmon-china>
  */
 

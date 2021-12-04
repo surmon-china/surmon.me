@@ -38,11 +38,6 @@ import { isProd } from './environment'
 
 import '/@/styles/app.scss'
 
-// services
-const defer = createDefer()
-const loading = createLoading()
-const music = createMusic({ amplitude, autoStart: false })
-
 // app
 const { app, router, globalState, theme, i18n, store } = createVueApp({
   historyCreator: createWebHistory,
@@ -53,12 +48,18 @@ const { app, router, globalState, theme, i18n, store } = createVueApp({
   theme: isSSR ? getSSRContext('theme') : getClientLocalTheme()
 })
 
+// services
+const defer = createDefer()
+const popup = createPopup()
+const loading = createLoading()
+const music = createMusic({ amplitude, autoStart: false })
+
 // plugins & services
 app.use(swiper)
 app.use(music)
-app.use(loading, { exportToGlobal: true })
 app.use(defer, { exportToGlobal: true })
-app.use(createPopup(), { exportToGlobal: true })
+app.use(popup, { exportToGlobal: true })
+app.use(loading, { exportToGlobal: true })
 app.use(adsense, { ID: ADSENSE_CLIENT_ID, enabledAutoAD: true })
 app.use(gtag, {
   router,
@@ -68,14 +69,6 @@ app.use(gtag, {
 
 // init: store (from SSR context or fetch)
 isSSR ? store.initInSSR() : store.initInSPA()
-
-// init: error (from SSR context only)
-// TODO: ssr state
-// if (isSSR) {
-//   if (ssrContextState.globalState.renderError) {
-//     globalState.setRenderError(ssrContextState.globalState.renderError)
-//   }
-// }
 
 // init: services with client
 theme.bindClientSystem()
@@ -107,6 +100,9 @@ router.isReady().finally(() => {
 
     // Desktop
     if (!globalState.userAgent.isMobile) {
+      // music player
+      defer.addTask(music.start)
+      // title surprise
       document.addEventListener(
         'visibilitychange',
         (event) => {

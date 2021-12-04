@@ -1,6 +1,6 @@
 /**
  * @file app interior extends
- * @module service/interior
+ * @module service.interior
  * @author Surmon <https://github.com/surmon-china>
  */
 

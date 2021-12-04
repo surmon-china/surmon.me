@@ -60,17 +60,6 @@
         <template v-else>Kind words are the music of the world.</template>
       </h4>
       <h5>{{ (player?.state.index || 0) + 1 }} / {{ player?.state.count || 'Infinity' }}</h5>
-      <!-- <client-only>
-        <transition name="list-fade">
-          <p v-if="player?.currentSongRealTimeLrc !== null" class="lrc">
-            <transition name="module" mode="out-in">
-              <span :key="player?.currentSongRealTimeLrc" class="lrc-text">
-                {{ player?.currentSongRealTimeLrc }}
-              </span>
-            </transition>
-          </p>
-        </transition>
-      </client-only> -->
     </div>
   </div>
 </template>
@@ -270,12 +259,6 @@
     > .song-info {
       margin-top: $lg-gap * 3;
       text-align: center;
-
-      > .lrc {
-        .lrc-text {
-          color: $primary;
-        }
-      }
     }
   }
 </style>

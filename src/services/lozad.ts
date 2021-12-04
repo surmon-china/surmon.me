@@ -1,6 +1,6 @@
 /**
- * @file 懒加载
- * @module service/lozad
+ * @file lazy load
+ * @module service.lozad
  * @author Surmon <https://github.com/surmon-china>
  */
 

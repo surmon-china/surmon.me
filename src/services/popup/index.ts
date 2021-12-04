@@ -1,6 +1,6 @@
 /**
  * @file 弹窗服务
- * @module service/popup
+ * @module service.popup
  * @author Surmon <https://github.com/surmon-china>
  * @example window.$popup.vImage('http://xxx.jpg')
  */
@@ -84,7 +84,9 @@ const createPopupStore = () => {
   }
 }
 
-export interface PopupPluginConfig { exportToGlobal?: boolean }
+export interface PopupPluginConfig {
+  exportToGlobal?: boolean
+}
 export type Popup = ReturnType<typeof createPopupStore>
 export const createPopup = (): Popup & Plugin => {
   const popupStore = createPopupStore()
