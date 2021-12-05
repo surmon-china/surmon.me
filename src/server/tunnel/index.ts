@@ -14,9 +14,9 @@ import { githubService } from './github'
 import { musicService } from './music'
 
 // cache
-export const tunnelCache = new LRU<TunnelModule, any>({
+export const tunnelCache = new LRU({
   max: Infinity,
-  maxAge: 1000 * 60 * 60
+  maxAge: 1000 * 60 * 60 // 1 hour cache
 })
 
 // router

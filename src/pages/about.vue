@@ -3,7 +3,7 @@
     <div class="banner">
       <div class="background">
         <video class="video" loop muted autoplay :controls="false">
-          <source src="/images/page-about/background.mp4" type="video/mp4" />
+          <source :src="backgroundVideo" type="video/mp4" />
         </video>
       </div>
       <div class="gravatar">
@@ -185,7 +185,7 @@
           <uimage cdn class="pal" src="/images/page-about/peace-and-love.jpg" />
           <span class="divider"></span>
           <ulink class="homepage-link" :href="VALUABLE_LINKS.GITHUB">
-            <uimage cdn src="/images/ghchart.svg" />
+            <uimage cdn src="/effects/ghchart.svg" />
           </ulink>
         </div>
       </desktop-only>
@@ -216,6 +216,8 @@
       const gravatar = computed(
         () => adminInfo.value?.gravatar || getFileCDNUrl('/images/gravatar.jpg')
       )
+      // MARK: 非常有必要，vite 对 video.source.src 的解析有问题，会将其认为是 asset，而非 static resource，从而编译失败
+      const backgroundVideo = getFileCDNUrl('/images/page-about/background.mp4')
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_ABOUT, Language.En)!)
@@ -254,6 +256,7 @@
         getPageRoute,
         isMobile,
         isOnLiveMap,
+        backgroundVideo,
         gravatar,
         adminInfo,
         handleHoverFollowMe,
@@ -289,6 +292,10 @@
         left: 0;
         z-index: $z-index-normal + 1;
         overflow: hidden;
+        background-color: $module-bg-darker-1;
+        background-image: cdn-url('/images/page-lens/banner-1.jpg');
+        background-size: cover;
+        background-position-y: center;
 
         &::before {
           content: '';

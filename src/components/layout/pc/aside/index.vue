@@ -55,11 +55,11 @@
 </template>
 
 <script lang="ts">
-  import Swiper from 'swiper'
   import { useRoute } from 'vue-router'
   import { defineComponent, ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-  import { ASIDE_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
   import { useEnhancer } from '/@/app/enhancer'
+  import SwiperClass from '/@/services/swiper'
+  import { ASIDE_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
   import { getDateArchiveRoute, isArticleDetail } from '/@/transforms/route'
   import { humanDateToYMD, dateToHuman, HumanDate } from '/@/transforms/moment'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -93,7 +93,7 @@
       const element = ref<HTMLDivElement>(null as any)
       const adIndex = ref(0)
       const renderStickyAd = ref(false)
-      const standingSwiperInstance = ref<Swiper>()
+      const swiper = ref<SwiperClass>()
 
       const canPushRouteWithDay = (targetDate: HumanDate) => {
         if (targetDate.year > today.year) {
@@ -116,14 +116,14 @@
         return getDateArchiveRoute(humanDateToYMD(humanDate))
       }
 
+      const handleStandingAdSwiperReady = (_swiper: SwiperClass) => {
+        swiper.value = _swiper
+      }
       const handleStandingAdSlideChange = (index: number) => {
         adIndex.value = index
       }
-      const handleStandingAdSwiperReady = (swiper: Swiper) => {
-        standingSwiperInstance.value = swiper
-      }
       const handleStickyAdIndexChange = (index: number) => {
-        standingSwiperInstance.value?.slideToLoop(index)
+        swiper.value?.slideToLoop(index)
       }
 
       const handleStickyStateChange = (event) => {

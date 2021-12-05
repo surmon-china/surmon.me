@@ -13,10 +13,9 @@ import { GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
 import { isSSR } from '/@/app/environment'
 import { Language } from '/@/language/data'
 import { getFileCDNUrl } from '/@/transforms/url'
-import amplitude from './services/amplitude'
+import amplitude from '/@/services/amplitude'
 import gtag from '/@/services/gtag'
 import adsense from '/@/services/adsense'
-import swiper from '/@/services/swiper'
 import { getClientLocalTheme } from '/@/services/theme'
 import { LayoutColumn, getLayoutByRouteMeta } from '/@/services/layout'
 import { createDefer } from '/@/services/defer'
@@ -55,7 +54,6 @@ const loading = createLoading()
 const music = createMusic({ amplitude, autoStart: false })
 
 // plugins & services
-app.use(swiper)
 app.use(music)
 app.use(defer, { exportToGlobal: true })
 app.use(popup, { exportToGlobal: true })
@@ -64,7 +62,7 @@ app.use(adsense, { ID: ADSENSE_CLIENT_ID, enabledAutoAD: true })
 app.use(gtag, {
   router,
   id: GA_MEASUREMENT_ID,
-  customResourceURL: getFileCDNUrl('/scripts/gtag.js')
+  customResourceURL: getFileCDNUrl('/effects/gtag.js')
 })
 
 // init: store (from SSR context or fetch)

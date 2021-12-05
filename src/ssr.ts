@@ -15,6 +15,7 @@ import { Theme, THEME_STORAGE_KEY } from '/@/services/theme'
 import { MetaResult } from '/@/services/meta'
 import { INVALID_ERROR } from '/@/constants/error'
 import { createVueApp, VueApp } from '/@/app/main'
+import { isDev } from '/@/environment'
 import { renderSSRContextScript, getSSRContextByApp, renderSSRSymbleScript } from '/@/universal'
 
 // cache https://github.com/isaacs/node-lru-cache
@@ -53,29 +54,30 @@ const renderScripts = (data: any) => {
 }
 
 // https://github.com/nuxt/framework/blob/main/packages/nitro/src/runtime/app/render.ts
+const renderDebug = (...args) => isDev && console.debug(`-----`, ...args)
 const renderHTML = async (vueApp: VueApp, url: string) => {
-  console.debug(`--------- renderHTML: ${url}`)
+  renderDebug(`renderHTML: ${url}`)
   const { app, router, store, meta, theme, globalState } = vueApp
 
-  console.debug('--------- 1. store.serverInit')
+  renderDebug('1. store.serverInit')
   await store.prefetch()
 
-  console.debug('--------- 2. route.push.validate')
+  renderDebug('2. route.push.validate')
   await router.push(url)
   await router.isReady()
 
   // because the layout func set has by animation done
-  console.debug('--------- 3. set layout')
+  renderDebug('3. set layout')
   globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta))
 
-  console.debug('--------- 4. renderToString')
+  renderDebug('4. renderToString')
   const ssrContext = {}
   const html = await renderToString(app, ssrContext)
 
-  console.debug('--------- 5. renderMetaString')
+  renderDebug('5. renderMetaString')
   const metas = await meta.renderToString()
 
-  console.debug('--------- 6. HTML & SSR context script')
+  renderDebug('6. HTML & SSR context script')
   const scripts = renderScripts({
     metas,
     url,

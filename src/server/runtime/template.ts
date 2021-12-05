@@ -11,8 +11,9 @@ export const resolveTemplate = (config: {
 
   const bodyScripts = [
     scripts
-    // TODO: manifest
-    // manifest.xxx
+    // MARK: https://cn.vitejs.dev/config/#build-ssrmanifest
+    // client output less assets (3 js + 1 css) & built-in HTML
+    // manifest
   ].join('\n')
 
   const html = template

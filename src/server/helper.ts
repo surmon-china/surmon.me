@@ -5,8 +5,11 @@
  */
 
 import path from 'path'
+import { isDev } from '@/environment'
 
 export const ROOT_PATH = process.cwd()
-export const PUBLIC_PATH = path.join(ROOT_PATH, 'public')
 export const PRDO_CLIENT_PATH = path.join(ROOT_PATH, 'dist', 'client')
 export const PRDO_SERVER_PATH = path.join(ROOT_PATH, 'dist', 'server')
+
+export const PUBLIC_PATH = isDev ? path.join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH
+export const EFFECTS_PATH = path.join(PUBLIC_PATH, 'effects')

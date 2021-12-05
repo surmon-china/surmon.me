@@ -36,8 +36,8 @@ const server = http.createServer(app)
 // cookie
 app.use(cookieParser())
 
-// static > MARK: 由于 BFF 存在副作用资源（如 gatg.js），build 时不再 copy to assets
-app.use(express.static(PUBLIC_PATH, { index: false }))
+// static
+app.use(express.static(PUBLIC_PATH))
 
 // tunnel
 app.use(API_TUNNEL_PREFIX, tunnelRouter)

@@ -2,9 +2,20 @@
   <div class="mammon">
     <swiper
       class="swiper"
-      :options="swiperOption"
-      @ready="updateSwiperContext"
-      @slide-change-transition-end="handleSwiperSlideChange"
+      direction="vertical"
+      :initial-slide="index"
+      :loop="true"
+      :simulate-touch="false"
+      :autoplay="{ delay: 2800, disableOnInteraction: false }"
+      :pagination="{ clickable: true }"
+      :set-wrapper-size="true"
+      :auto-height="true"
+      :mousewheel="true"
+      :observe-parents="true"
+      :preload-images="false"
+      :lazy="true"
+      @swiper="updateSwiper"
+      @slide-change-transition-end="handleSlideChange"
     >
       <swiper-slide
         class="swiper-slide"
@@ -15,17 +26,14 @@
           <uimage :src="ad.src" alt="aliyun-ad" />
         </ulink>
       </swiper-slide>
-      <template #pagination>
-        <div class="swiper-pagination" />
-      </template>
     </swiper>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted } from 'vue'
+  import { defineComponent, ref } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import type { SwiperContext } from '/@/todo/swiper'
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
 
   export enum AsideMammonEvent {
     Ready = 'ready',
@@ -34,6 +42,10 @@
   }
   export default defineComponent({
     name: 'PCAsideMammon',
+    components: {
+      Swiper,
+      SwiperSlide
+    },
     props: {
       index: {
         type: Number,
@@ -45,47 +57,23 @@
     },
     emits: [AsideMammonEvent.Ready, AsideMammonEvent.UpdateIndex, AsideMammonEvent.IndexChange],
     setup(props, context) {
-      const swiperOption = {
-        initialSlide: props.index,
-        loop: true,
-        simulateTouch: false,
-        direction: 'vertical',
-        autoplay: {
-          delay: 2960,
-          disableOnInteraction: false
-        },
-        pagination: {
-          clickable: true,
-          el: '.swiper-pagination'
-        },
-        setWrapperSize: true,
-        autoHeight: true,
-        mousewheel: true,
-        observeParents: true,
-        preloadImages: false,
-        lazy: true
-      }
-
       const { adConfig } = useEnhancer()
-      const swiperContext = ref<SwiperContext>()
-      const swiperInstance = computed(() => swiperContext.value?.$swiper.value)
-      const updateSwiperContext = (context: SwiperContext) => {
-        swiperContext.value = context
+      const swiper = ref<SwiperClass>()
+      const updateSwiper = (_swiper: SwiperClass) => {
+        swiper.value = _swiper
+        context.emit(AsideMammonEvent.Ready, swiper.value)
       }
 
-      const handleSwiperSlideChange = () => {
-        const realIndex = swiperInstance.value?.realIndex
+      const handleSlideChange = () => {
+        const realIndex = swiper.value?.realIndex
         context.emit(AsideMammonEvent.UpdateIndex, realIndex)
         context.emit(AsideMammonEvent.IndexChange, realIndex)
       }
 
-      onMounted(() => context.emit(AsideMammonEvent.Ready, swiperInstance.value))
-
       return {
         adConfig,
-        swiperOption,
-        updateSwiperContext,
-        handleSwiperSlideChange
+        updateSwiper,
+        handleSlideChange
       }
     }
   })
@@ -117,15 +105,6 @@
               width: 100%;
               height: auto;
             }
-          }
-        }
-      }
-
-      .swiper-pagination {
-        ::v-deep(.swiper-pagination-bullet) {
-          &.swiper-pagination-bullet-active {
-            height: $font-size-base;
-            border-radius: $lg-radius;
           }
         }
       }

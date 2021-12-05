@@ -2,9 +2,9 @@ import fs from 'fs'
 import path from 'path'
 import { Express } from 'express'
 import { createServer } from 'vite'
-import { RenderResult } from '@/ssr'
 import { resolveTemplate } from './template'
 import { ROOT_PATH } from '../helper'
+import type { RenderResult } from '@/ssr'
 
 export const enableDevRuntime = async (app: Express) => {
   const viteServer = await createServer({
