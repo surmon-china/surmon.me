@@ -87,15 +87,6 @@ sw.*
 # ecosystem
 # ecosystem.config.js
 
-# syndication
-# analytics
-public/sitemap.xml
-public/rss.xml
-public/scripts/gtag.js
-
-# barrages
-data/barrages.json
-
 # Redis
 dump.rdb
 
@@ -103,4 +94,6 @@ dump.rdb
 .DS_Store
 
 # resources
-public/images/ghchart.svg
+public/sitemap.xml
+public/effects/*
+!public/effects/.gitkeep

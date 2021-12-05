@@ -31,11 +31,6 @@ export default defineConfig(({ command, mode }) => {
     publicDir: 'public',
     resolve: {
       alias: {
-        // https://github.com/vitejs/vite/issues/1363
-        // https://github.com/vitejs/vite/issues/1232#issuecomment-751168784
-        // https://github.com/vitejs/vite/issues/1008#issuecomment-723209837
-        // https://github.com/vitejs/vite/issues/1363#issuecomment-754739657
-        // https://vitejs.dev/guide/migration.html#alias-behavior-change
         '/@': path.resolve(__dirname, 'src')
       }
     },
@@ -45,9 +40,9 @@ export default defineConfig(({ command, mode }) => {
         scss: {
           // https://github.com/vitejs/vite/issues/520
           additionalData: `
-              $cdn-url: '${TARGET_ENV_CONFIG.VITE_CDN_URL}';
-              $source-url: '${TARGET_ENV_CONFIG.VITE_FE_URL}';
-            `
+            $cdn-url: '${TARGET_ENV_CONFIG.VITE_CDN_URL}';
+            $source-url: '${TARGET_ENV_CONFIG.VITE_FE_URL}';
+          `
         }
       }
     },
@@ -77,44 +72,6 @@ export default defineConfig(({ command, mode }) => {
               )
               request.setHeader('Origin', 'https://surmon.me/')
               request.setHeader('Referer', 'https://surmon.me/')
-            }
-          }
-        }
-      }
-    },
-    build: {
-      assetsDir: 'assets',
-      minify: false,
-      // https://vitejs.dev/config/#build-csscodesplit
-      // https://vitejs.dev/guide/features.html#css-code-splitting
-      cssCodeSplit: false,
-      terserOptions: {
-        compress: {
-          keep_infinity: true
-        }
-      },
-      rollupOptions: {
-        output: {
-          entryFileNames: '[name]-[hash].js',
-          chunkFileNames: '[name]-[hash].js',
-          assetFileNames: '[name]-[hash].[ext]',
-          manualChunks(id) {
-            if (id.includes('/node_modules/')) {
-              const expansions = [
-                'swiper',
-                'dom7',
-                '233333',
-                'lozad',
-                'marked',
-                'amplitude',
-                'highlight.js',
-                'ua-parser'
-              ]
-              if (expansions.some((exp) => id.includes(`/node_modules/${exp}`))) {
-                return 'expansion'
-              } else {
-                return 'vendor'
-              }
             }
           }
         }
@@ -152,11 +109,9 @@ export default defineConfig(({ command, mode }) => {
         'highlight.js',
         // Node
         'express',
-        'fs-extra',
         'lru-cache',
         'node-schedule',
         'cookie-parser',
-        'https-proxy-agent',
         'serialize-javascript',
         'cross-env',
         'simple-netease-cloud-music',
@@ -164,6 +119,41 @@ export default defineConfig(({ command, mode }) => {
         '@vue/compiler-sfc',
         '@vue/server-renderer'
       ]
+    },
+    build: {
+      // https://vitejs.dev/config/#build-csscodesplit
+      // https://vitejs.dev/guide/features.html#css-code-splitting
+      cssCodeSplit: false,
+      sourcemap: true,
+      manifest: true,
+      rollupOptions: {
+        output: {
+          entryFileNames: '[name]-[hash].js',
+          chunkFileNames: '[name]-[hash].js',
+          assetFileNames: '[name]-[hash].[ext]',
+          manualChunks(id) {
+            if (id.includes('/node_modules/')) {
+              const expansions = [
+                'swiper',
+                // MARK: important > swiper need dom7
+                'dom7',
+                'amplitudejs',
+                'emoji-233333',
+                'lozad',
+                'marked',
+                'amplitude',
+                'highlight.js',
+                'ua-parse-js'
+              ]
+              if (expansions.some((exp) => id.includes(`/node_modules/${exp}`))) {
+                return 'expansion'
+              } else {
+                return 'vendor'
+              }
+            }
+          }
+        }
+      }
     }
   }
 })

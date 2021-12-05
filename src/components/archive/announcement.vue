@@ -31,25 +31,29 @@
             />
           </desktop-only>
           <div class="title">
-            <span class="icon-box" :style="{ transform: `rotate(-${activeIndex * 90}deg)` }">
+            <span class="icon-box" :style="{ transform: `rotate(-${activeIndex * 135}deg)` }">
               <i class="iconfont icon-windmill" />
             </span>
           </div>
           <div class="swiper-box">
-            <div
+            <swiper
               class="swiper"
-              @ready="updateSwiperContext"
+              direction="vertical"
+              :height="42"
+              :allow-touch-move="false"
+              :slides-per-view="1"
+              :set-wrapper-size="true"
+              :autoplay="{ delay: 3500, disableOnInteraction: false }"
               @transition-start="handleSwiperTransitionStart"
+              @swiper="onSwiper"
             >
-              <div class="swiper-wrapper">
-                <div v-for="(ann, index) in announcements" :key="index" class="swiper-slide">
-                  <div class="content" v-html="parseContent(ann.content)" />
-                  <desktop-only>
-                    <div class="date">{{ humanlizeDate(ann.create_at) }}</div>
-                  </desktop-only>
-                </div>
-              </div>
-            </div>
+              <swiper-slide v-for="(ann, index) in announcements" :key="index">
+                <div class="content" v-html="parseContent(ann.content)" />
+                <desktop-only>
+                  <div class="date">{{ humanlizeDate(ann.create_at) }}</div>
+                </desktop-only>
+              </swiper-slide>
+            </swiper>
             <div class="navigation">
               <div class="button prev" :class="{ disabled: activeIndex === 0 }" @click="prevSlide">
                 <i class="iconfont icon-announcement-prev" />
@@ -70,15 +74,19 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, PropType } from 'vue'
+  import { defineComponent, ref, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import type { SwiperContext } from '/@/todo/swiper'
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { timeAgo } from '/@/transforms/moment'
 
   export default defineComponent({
     name: 'ArchiveAnnouncement',
+    components: {
+      Swiper,
+      SwiperSlide
+    },
     props: {
       announcements: {
         type: Array as PropType<Array<$TODO>>,
@@ -89,25 +97,12 @@
         required: true
       }
     },
-    setup(props) {
+    setup() {
       const { i18n, isMobile, isDarkTheme } = useEnhancer()
-      const swiperContext = ref<SwiperContext>()
-      const swiper = computed(() => swiperContext.value?.$swiper.value)
-      const updateSwiperContext = (context: SwiperContext) => {
-        swiperContext.value = context
-      }
-
       const activeIndex = ref(0)
-      const swiperOption = {
-        height: 42,
-        autoplay: {
-          delay: 3500,
-          disableOnInteraction: false
-        },
-        allowTouchMove: false,
-        slidesPerView: 1,
-        setWrapperSize: true,
-        direction: 'vertical'
+      const swiper = ref<SwiperClass>()
+      const onSwiper = (_swiper: SwiperClass) => {
+        swiper.value = _swiper
       }
 
       const humanlizeDate = (date: string) => {
@@ -126,7 +121,6 @@
 
       return {
         LANGUAGE_KEYS,
-        swiperOption,
         isMobile,
         isDarkTheme,
         activeIndex,
@@ -134,7 +128,7 @@
         parseContent,
         prevSlide,
         nextSlide,
-        updateSwiperContext,
+        onSwiper,
         handleSwiperTransitionStart
       }
     }
@@ -257,7 +251,7 @@
         flex: 1;
         height: $announcement-height;
 
-        .swiper-wrapper {
+        ::v-deep(.swiper-wrapper) {
           flex-direction: column;
           // Filter for slide when transitioning
           &[style*='300ms'] {

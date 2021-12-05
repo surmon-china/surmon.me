@@ -1,4 +1,4 @@
-@import "./theme.scss";
+@import './theme.scss';
 
 [hidden],
 [v-cloak] {
@@ -54,7 +54,8 @@ body {
   font-size: 1em;
 }
 
-.radio, .checkbox {
+.radio,
+.checkbox {
   display: inline-block;
   margin-top: 0px;
   padding-top: 0px;
@@ -67,7 +68,7 @@ body {
 
 input {
   &::placeholder {
-    text-indent: .5em;
+    text-indent: 0.5em;
     font-size: $font-size-small;
     text-transform: capitalize;
   }
@@ -109,37 +110,6 @@ select:-webkit-autofill {
   @extend .center-placeholder;
 }
 
-// swiper
-.swiper-wrapper {
-  z-index: $z-index-normal + 1;
-}
-
-.swiper-pagination {
-  z-index: $z-index-normal + 2;
-}
-
-.swiper-pagination-bullet {
-  // swiper default size
-  border-radius: 8px;
-  transition:
-    width $transition-time-slow,
-    height $transition-time-slow,
-    border-radius $transition-time-slow;
-
-  &:hover {
-    background: $module-bg-darker-1;
-  }
-
-  &.swiper-pagination-bullet-active {
-    background: $module-bg;
-  }
-}
-
-.swiper-button-prev,
-.swiper-button-next {
-  z-index: $z-index-normal + 3;
-}
-
 // for module transition
 .module-enter-active,
 .module-leave-active {
@@ -149,8 +119,10 @@ select:-webkit-autofill {
 .module-slow-leave-active {
   transition: opacity $transition-time-slow ease;
 }
-.module-enter-from, .module-leave-to,
-.module-slow-enter-from, .module-slow-leave-to {
+.module-enter-from,
+.module-leave-to,
+.module-slow-enter-from,
+.module-slow-leave-to {
   opacity: 0;
 }
 
@@ -171,7 +143,7 @@ select:-webkit-autofill {
 }
 .list-fade-enter,
 .list-fade-leave-active {
-  opacity: 0
+  opacity: 0;
 }
 .list-fade-move {
   transition: transform $transition-time-normal;

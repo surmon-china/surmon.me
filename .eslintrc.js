@@ -12,6 +12,7 @@ module.exports = {
     'vue/no-v-html': 0,
     'vue/valid-v-slot': 0,
     'vue/valid-template-root': 0,
+    'vue/multi-word-component-names': 0,
     'vue/attributes-order': 0,
     'vue/script-indent': 0
   }

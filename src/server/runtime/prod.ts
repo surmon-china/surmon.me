@@ -1,32 +1,42 @@
 import fs from 'fs'
 import path from 'path'
-import express, { Express } from 'express'
+import { Express } from 'express'
 import compression from 'compression'
-import { ROOT_PATH } from '../helper'
-import { isProd } from '@/environment'
+import { PRDO_CLIENT_PATH, PRDO_SERVER_PATH } from '../helper'
+import { resolveTemplate } from './template'
+import type { RenderResult } from '@/ssr'
 
 export const enableProdRuntime = async (app: Express) => {
   app.use(compression())
 
-  const indexHTML = fs.readFileSync(
-    path.resolve(ROOT_PATH, 'dist', 'client', 'index.html'),
-    'utf-8'
-  )
-
-  const clientManifest = require(path.resolve(ROOT_PATH, 'dist', 'client', 'ssr-manifest.json'))
+  const template = fs.readFileSync(path.resolve(PRDO_CLIENT_PATH, 'template.html'), 'utf-8')
 
   app.use('*', async (request, response) => {
+    const { renderApp, renderError } = require(path.resolve(PRDO_SERVER_PATH, 'ssr.js'))
+
     try {
-      const url = request.originalUrl
-      const render = require('./dist/server/ssr.js').render
-      const [appHtml, preloadLinks] = await render(request)
-      const html = indexHTML
-        // .replace(`<!--preload-links-->`, preloadLinks)
-        .replace(`<!--app-html-->`, appHtml)
-      response.status(200).set({ 'Content-Type': 'text/html' }).end(html)
+      const redered: RenderResult = await renderApp(request)
+      response
+        .status(redered.code)
+        .set({ 'Content-Type': 'text/html' })
+        .end(
+          resolveTemplate({
+            template,
+            appHTML: redered.html,
+            metas: redered.metas,
+            scripts: redered.scripts
+          })
+        )
     } catch (error: any) {
-      console.log(error.stack)
-      response.status(500).end(error.stack)
+      const redered: RenderResult = await renderError(request, error)
+      response.status(redered.code).end(
+        resolveTemplate({
+          template,
+          appHTML: redered.html,
+          metas: redered.metas,
+          scripts: redered.scripts
+        })
+      )
     }
   })
 }

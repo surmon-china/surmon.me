@@ -9,7 +9,7 @@ import path from 'path'
 import axios from 'axios'
 import { GA_MEASUREMENT_ID } from '@/config/app.config'
 import { getGAScriptUrl } from '@/transforms/outside'
-import { PUBLIC_PATH } from './helper'
+import { EFFECTS_PATH } from './helper'
 
 const UPDATE_TIME = {
   HOURS_1: 1000 * 60 * 60 * 1,
@@ -22,7 +22,7 @@ export const startGTagScriptUpdater = () => {
       .get<any>(getGAScriptUrl(GA_MEASUREMENT_ID), { timeout: 6000 })
       .then((response) => {
         if (response.status === 200) {
-          fs.writeFileSync(path.resolve(PUBLIC_PATH, 'scripts', 'gtag.js'), response.data)
+          fs.writeFileSync(path.resolve(EFFECTS_PATH, 'gtag.js'), response.data)
           console.log('GA 脚本更新成功', new Date())
           setTimeout(doUpdate, UPDATE_TIME.HOURS_24)
         } else {

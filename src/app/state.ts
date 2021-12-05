@@ -5,11 +5,10 @@
  */
 
 import { App, inject, ref, computed, reactive, readonly } from 'vue'
-import { isClient } from '/@/app/environment'
 import { INVALID_ERROR } from '/@/constants/error'
-import { uaParser, isZhUser } from '/@/transforms/ua'
 import { LayoutColumn } from '/@/services/layout'
-import { universalRef } from '/@/universal'
+import { uaParser, isZhUser } from '/@/transforms/ua'
+import { universalRef, onClient } from '/@/universal'
 
 type RenderErrorValue = RenderError | null
 export interface RenderError {
@@ -42,9 +41,9 @@ export const createGlobalState = (config: GlobalStateConfig) => {
   const renderError = universalRef<RenderErrorValue>('error', () => null)
   const defaultError = { code: INVALID_ERROR }
   const setRenderError = (error: any) => {
-    if (isClient) {
+    onClient(() => {
       console.warn('App error:', error)
-    }
+    })
     if (!error) {
       // clear error
       renderError.value = null
