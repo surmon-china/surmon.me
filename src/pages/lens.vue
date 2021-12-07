@@ -85,10 +85,6 @@
               />
               <hr class="separator" />
               <p class="meta">
-                <span class="item favorites">
-                  <i class="iconfont icon-heart"></i>
-                  <span>{{ video.favorites }}</span>
-                </span>
                 <span class="item play">
                   <i class="iconfont icon-video-play"></i>
                   <span>{{ video.play }}</span>
@@ -116,7 +112,7 @@
   import { useUniversalFetch } from '/@/universal'
   import { useLensStore } from '/@/store/lens'
   import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
-  import { getFileProxyUrl, getFileCDNUrl } from '/@/transforms/url'
+  import { getFileProxyUrl } from '/@/transforms/url'
   import { timeAgo } from '/@/transforms/moment'
   import { firstUpperCase } from '/@/transforms/text'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -135,7 +131,7 @@
       const lensStore = useLensStore()
       const lozadObserver = ref<LozadObserver | null>(null)
       const videoListElement = ref<HTMLElement>()
-      const bannerImageUrl = getFileCDNUrl(`/images/page-lens/banner-${randomNumber(3)}.jpg`)
+      const bannerImageUrl = `/images/page-lens/banner-${randomNumber(3)}.jpg`
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_LENS, Language.En)!)
@@ -149,7 +145,7 @@
 
       const getThumbUrl = (url: string) => {
         return getFileProxyUrl(
-          `/bilibili/${url.replace('//', '')}@560w_350h.${globalState.imageExt.value.ext}`
+          `/bilibili/${url.replace('http://', '')}@560w_350h.${globalState.imageExt.value.ext}`
         )
       }
 
@@ -489,7 +485,7 @@
             color: $text-secondary;
 
             .iconfont {
-              margin-right: $xs-gap;
+              margin-right: $sm-gap;
             }
           }
         }

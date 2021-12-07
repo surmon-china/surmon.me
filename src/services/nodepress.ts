@@ -40,7 +40,7 @@ nodepress.interceptors.response.use(
       message: messageText + ': ' + errorText
     }
     console.debug('axios error:', isClient ? errorInfo : errorJSON)
-    return Promise.reject(error)
+    return Promise.reject(errorJSON)
   }
 )
 
