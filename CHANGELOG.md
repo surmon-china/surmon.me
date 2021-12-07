@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 **Feature**
 
 - SSR > `usePrefetch`
+- `Vuex` > `Pinia`
 - Add Merch page
 - Add Article nav in sidebar
 - Refactoring SSR (by vite) done
