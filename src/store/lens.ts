@@ -27,7 +27,7 @@ export const useLensStore = defineStore('lens', {
 
       this.vlogs.fetching = true
       return tunnel
-        .dispatch(TunnelModule.Bilibili)
+        .dispatch(TunnelModule.BiliBili)
         .then((response) => {
           this.vlogs.data = response
         })

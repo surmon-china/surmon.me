@@ -1,5 +1,5 @@
 /**
- * @file Cache 缓存模块服务
+ * @file Storage cache
  * @module service.cache
  * @author Surmon <https://github.com/surmon-china>
  */

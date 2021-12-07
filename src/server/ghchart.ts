@@ -23,15 +23,15 @@ export const startGitHubChartUpdater = () => {
       .then((response) => {
         if (response.status === 200) {
           fs.writeFileSync(path.resolve(EFFECTS_PATH, 'ghchart.svg'), response.data)
-          console.log('GitHub Chart 更新成功', new Date())
+          console.info('[GitHub Chart]', '更新成功', new Date())
           setTimeout(doUpdate, UPDATE_TIME.HOURS_6)
         } else {
-          console.warn('GitHub Chart 更新失败', new Date(), response.data)
+          console.warn('[GitHub Chart]', '更新失败', new Date(), response.data)
           setTimeout(doUpdate, UPDATE_TIME.HOURS_05)
         }
       })
       .catch((error) => {
-        console.warn('GitHub Chart 更新网络连接失败', new Date(), error?.toJSON())
+        console.warn('[GitHub Chart]', '更新网络连接失败', new Date(), error?.toJSON?.())
         setTimeout(doUpdate, UPDATE_TIME.HOURS_05)
       })
   })()

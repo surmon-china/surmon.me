@@ -32,7 +32,7 @@ const handleTunnelService = (tunnelService: () => Promise<any>): RequestHandler 
 }
 
 export const tunnelRouter = express.Router()
-tunnelRouter.get(getTunnelApiPath(TunnelModule.Bilibili), handleTunnelService(bilibiliService))
+tunnelRouter.get(getTunnelApiPath(TunnelModule.BiliBili), handleTunnelService(bilibiliService))
 tunnelRouter.get(getTunnelApiPath(TunnelModule.Wallpaper), handleTunnelService(wallpaperService))
 tunnelRouter.get(getTunnelApiPath(TunnelModule.GitHub), handleTunnelService(githubService))
 tunnelRouter.get(getTunnelApiPath(TunnelModule.Music), handleTunnelService(musicService))

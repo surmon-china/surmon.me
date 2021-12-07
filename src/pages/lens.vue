@@ -42,7 +42,7 @@
           <uimage cdn src="/images/page-lens/wechat-channel.jpg" />
         </div>
       </div>
-      <div class="module-title plog">Plogs</div>
+      <!-- <div class="module-title plog">Plogs</div> -->
       <div class="module-title vlog">Vlogs</div>
       <placeholder
         :data="lensStore.vlogs.data.length"
@@ -106,14 +106,6 @@
           </ul>
         </template>
       </placeholder>
-      <div class="loadmore">
-        <ulink class="button" :href="VALUABLE_LINKS.BILIBILI">
-          <span class="icon">
-            <i class="iconfont icon-bilibili"></i>
-          </span>
-          <i18n :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE" />
-        </ulink>
-      </div>
     </div>
   </div>
 </template>
@@ -199,7 +191,6 @@
         videoListElement,
         humanlizeDate,
         getThumbUrl,
-        getFileCDNUrl,
         handlePlay,
         observeLozad,
         bannerImageUrl
@@ -247,14 +238,16 @@
           }
 
           .button {
-            display: inline-block;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 50%;
+            height: 3rem;
             margin-top: $gap * 2;
-            color: inherit;
-            height: 2em;
-            line-height: 2em;
-            padding: 0 $gap;
-            border: 1px solid $white;
+            border: 2px solid $white;
             border-radius: $xs-radius;
+            font-size: $font-size-h4;
+            color: inherit;
             &:hover {
               color: $bilibili-pink-primary;
               background-color: $white;
@@ -518,24 +511,6 @@
       font-size: $font-size-h3;
     }
 
-    .loadmore {
-      margin-bottom: $lg-gap;
-
-      .button {
-        display: block;
-        width: 100%;
-        height: $button-block-height;
-        line-height: $button-block-height;
-        text-align: center;
-        @include common-bg-module();
-        @include radius-box($xs-radius);
-
-        > .icon {
-          margin-right: $gap;
-        }
-      }
-    }
-
     &.dark {
       .videos {
         .item {
@@ -550,10 +525,6 @@
 
     &.mobile {
       min-height: auto;
-
-      .loadmore {
-        margin: 0;
-      }
 
       .banner {
         height: 12rem;

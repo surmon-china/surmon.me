@@ -106,7 +106,7 @@ export const useCommentStore = defineStore('comment', {
       // 修正参数
       params = {
         page: 1,
-        per_page: 88,
+        per_page: 50,
         sort: SortType.Desc,
         delay: 0,
         loadmore: false,

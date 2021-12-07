@@ -94,6 +94,5 @@ dump.rdb
 .DS_Store
 
 # resources
-public/sitemap.xml
 public/effects/*
 !public/effects/.gitkeep

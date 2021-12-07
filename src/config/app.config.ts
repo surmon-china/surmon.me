@@ -16,7 +16,8 @@ export const META = Object.freeze({
   title: 'Surmon.me',
   keywords: 'Surmon 博客,surmon-china,苏尔蒙,Vue 博客,前端技术开发博客,JavaScript 技术',
   description: '来苏之望',
-  url: 'surmon.me',
+  domain: 'surmon.me',
+  url: 'https://surmon.me',
   author: 'Surmon',
   email: 'i@surmon.me'
 })

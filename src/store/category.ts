@@ -33,7 +33,7 @@ export const useCategoryStore = defineStore('category', {
 
       this.fetching = true
       return nodepress
-        .get('/category', { params: { per_page: 666 } })
+        .get('/category', { params: { per_page: 50 } })
         .then((response) => {
           this.categories = response.result.data
           this.fetched = true

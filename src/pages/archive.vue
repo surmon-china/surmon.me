@@ -10,7 +10,10 @@
     </page-banner>
     <div class="container">
       <div class="archive-content">
-        <placeholder :data="isHasArticle && tagStore.tags.length" :loading="isFetching">
+        <placeholder
+          :data="archiveStore.data?.articles.length && archiveStore.data?.tags.length"
+          :loading="isFetching"
+        >
           <template #placeholder>
             <empty class="archive-empty" key="empty">
               <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
@@ -76,7 +79,7 @@
                   </span>
                 </h4>
                 <ul class="tag-list">
-                  <li v-for="(tag, index) in tagStore.tags" :key="index" class="tag">
+                  <li v-for="(tag, index) in archiveStore.data?.tags" :key="index" class="tag">
                     <p class="content">
                       <a
                         target="_blank"
@@ -103,8 +106,7 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { META } from '/@/config/app.config'
-  import { useArticleStore } from '/@/store/article'
-  import { useTagStore } from '/@/store/tag'
+  import { useArchiveStore } from '/@/store/archive'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/universal'
   import { Language } from '/@/language/data'
@@ -126,10 +128,8 @@
     },
     setup() {
       const { i18n, meta, isMobile, isZhLang } = useEnhancer()
-      const tagStore = useTagStore()
-      const articleStore = useArticleStore()
-      const isHasArticle = computed(() => articleStore.archive.data.length)
-      const isFetching = computed(() => articleStore.archive.fetching || tagStore.fetching)
+      const archiveStore = useArchiveStore()
+      const isFetching = computed(() => archiveStore.fetching)
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_ARCHIVE, Language.En)!)
@@ -146,13 +146,13 @@
           }>
         }>
 
-        articleStore.archive.data
+        archiveStore.data?.articles
           .map((article) => ({
             ...article,
             createAt: dateToHuman(new Date(article.create_at))
           }))
-          .sort(({ createAt: a }, { createAt: b }) => {
-            return Number(`${a.year}${a.month}${a.day}`) - Number(`${b.year}${b.month}${b.day}`)
+          .sort(({ create_at: a }, { create_at: b }) => {
+            return Date.parse(b) - Date.parse(a)
           })
           .forEach((article) => {
             const { createAt } = article
@@ -176,7 +176,7 @@
         return rootTree
       })
 
-      useUniversalFetch(() => Promise.all([tagStore.fetchAll(), articleStore.fetchArchive()]))
+      useUniversalFetch(() => archiveStore.fetchArchive())
 
       return {
         LANGUAGE_KEYS,
@@ -186,9 +186,8 @@
         toChineseMonth,
         toEngMonth,
         isMobile,
-        tagStore,
+        archiveStore,
         articleTree,
-        isHasArticle,
         isFetching
       }
     }

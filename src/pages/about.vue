@@ -290,12 +290,9 @@
         height: $banner-height;
         top: 0;
         left: 0;
-        z-index: $z-index-normal + 1;
         overflow: hidden;
+        z-index: $z-index-normal + 1;
         background-color: $module-bg-darker-1;
-        background-image: cdn-url('/images/page-lens/banner-1.jpg');
-        background-size: cover;
-        background-position-y: center;
 
         &::before {
           content: '';

@@ -7,6 +7,10 @@ exports.bundleSSRServer = async (paths) => {
   console.info('Server bundling...\n')
   return await build({
     publicDir: false,
+    ssr: {
+      // https://cn.vitejs.dev/config/#ssr-noexternal
+      noExternal: ['swiper']
+    },
     build: {
       ssr: true,
       minify: true,

@@ -1,5 +1,5 @@
 /**
- * @file 客户端百度 SEO 服务
+ * @file Client Baidu SEO
  * @module service.seo
  * @author Surmon <https://github.com/surmon-china>
  */

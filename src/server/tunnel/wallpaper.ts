@@ -55,7 +55,7 @@ const autoUpdateData = () => {
     })
     .catch((error) => {
       // 失败后 10 分钟更新一次数据
-      console.warn('Tunnel Wallpaper 请求失败：', error)
+      console.warn('[Tunnel Wallpaper]', '请求失败', error)
       setTimeout(autoUpdateData, 1000 * 60 * 10)
     })
 }

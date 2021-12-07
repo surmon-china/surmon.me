@@ -75,7 +75,7 @@ const autoUpdateData = () => {
     })
     .catch((error) => {
       // 失败后 5 分钟更新一次数据
-      console.warn('Tunnel Music 请求失败：', error)
+      console.warn('[Tunnel Music]', '请求失败', error)
       setTimeout(autoUpdateData, 1000 * 60 * 5)
     })
 }
