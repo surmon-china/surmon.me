@@ -16,7 +16,7 @@
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/surmon-china/surmon.me/Deploy?style=for-the-badge&label=Deploy)](https://github.com/surmon-china/surmon.me/actions?query=workflow:%22Deploy%22)
 [![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/blob/master/LICENSE)
 
-<strong><samp>My personal website and blog, powered by [Vue(3)](https://vuejs.org).<samp></strong>
+**My personal website and blog, powered by [Vue(3)](https://vuejs.org).**
 
 **使用 [Vue (3)](https://vuejs.org) 构建的个人博客网站。**
 
