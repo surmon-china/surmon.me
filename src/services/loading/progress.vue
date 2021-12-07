@@ -17,7 +17,12 @@
           failed: !loading.state.canSucceed
         }"
       >
-        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+        <div class="lds-ring">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
     </desktop-only>
   </div>
@@ -25,7 +30,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { useLoading } from '.'
+  import { useLoading } from './'
   export default defineComponent({
     name: 'ProgressBar',
     setup() {
@@ -36,7 +41,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   #progress-bar {
     $size: 3px;
@@ -55,17 +60,12 @@
       height: $size;
       width: 0%;
       @include hidden();
-      transition:
-        width $transition-time-normal,
-        opacity $transition-time-normal,
+      transition: width $transition-time-normal, opacity $transition-time-normal,
         visibility $transition-time-normal;
       background-color: $primary;
       &.show {
         @include visible();
-        transition:
-          width 0s,
-          opacity $transition-time-fast,
-          visibility $transition-time-fast;
+        transition: width 0s, opacity $transition-time-fast, visibility $transition-time-fast;
       }
 
       &.notransition {
@@ -102,8 +102,12 @@
         height: $size;
 
         @keyframes lds-ring {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
 
         div {

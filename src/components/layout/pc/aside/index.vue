@@ -1,5 +1,5 @@
 <template>
-  <aside id="aside" class="aside" ref="element">
+  <aside :id="ASIDE_ELEMENT_ID" class="aside" ref="element">
     <div class="module">
       <aside-search />
     </div>
@@ -28,62 +28,64 @@
         </template>
       </calendar>
     </div>
-    <div
-      class="module ali-ma-ma"
-      :placeholder="t(LANGUAGE_KEYS.AD)"
-    >
-      <iframe
-        scrolling="no"
-        frameborder="0"
-        class="iframe"
-        src="/partials/mammon/aside-jd.html"
-      />
+    <div class="module mammon-square" :placeholder="t(LANGUAGE_KEYS.AD)">
+      <client-only>
+        <Adsense
+          ins-class="adsbygoogle"
+          data-ad-client="ca-pub-4710915636313788"
+          data-ad-slot="6138120718"
+          class="content"
+        />
+      </client-only>
     </div>
     <div :id="ASIDE_STICKY_ELEMENT_ID" class="aside-sticky-box">
       <client-only>
         <div class="module mammon" v-if="renderStickyAd">
-          <aside-mammon
-            :index="adIndex"
-            @index-change="handleStickyAdIndexChange"
-          />
+          <aside-mammon :index="adIndex" @index-change="handleStickyAdIndexChange" />
         </div>
       </client-only>
       <div class="module">
-        <aside-tag />
+        <client-only v-if="isArticlePage">
+          <aside-nav class="sticky-module" />
+        </client-only>
+        <aside-tag class="sticky-module" v-else />
       </div>
-      <aside-tool />
     </div>
   </aside>
 </template>
 
 <script lang="ts">
-  import Swiper from 'swiper'
-  import { defineComponent, ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
-  import { getDateArchiveRoute } from '/@/transforms/route'
+  import { useRoute } from 'vue-router'
+  import { defineComponent, ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import SwiperClass from '/@/services/swiper'
+  import { ASIDE_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
+  import { getDateArchiveRoute, isArticleDetail } from '/@/transforms/route'
   import { humanDateToYMD, dateToHuman, HumanDate } from '/@/transforms/moment'
-  import Calendar from '/@/components/widget/calendar.vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import AsideSearch from './search.vue'
   import AsideArticle from './article.vue'
   import AsideMammon from './mammon.vue'
   import AsideTag from './tag.vue'
-  import AsideTool from './tool.vue'
+  import AsideNav from './nav.vue'
+  import Calendar from '/@/components/widget/calendar.vue'
 
   const ASIDE_STICKY_ELEMENT_ID = 'aside-sticky-module'
 
   export default defineComponent({
-    name: 'PcAside',
+    name: 'PCAside',
     components: {
       AsideSearch,
       AsideArticle,
       AsideMammon,
       Calendar,
       AsideTag,
-      AsideTool
+      AsideNav
     },
     setup() {
+      const route = useRoute()
       const { i18n } = useEnhancer()
+      const isArticlePage = computed(() => isArticleDetail(route.name))
 
       // polyfill sticky event
       let stickyEvents: any = null
@@ -91,7 +93,7 @@
       const element = ref<HTMLDivElement>(null as any)
       const adIndex = ref(0)
       const renderStickyAd = ref(false)
-      const standingSwiperInstance = ref<Swiper>()
+      const swiper = ref<SwiperClass>()
 
       const canPushRouteWithDay = (targetDate: HumanDate) => {
         if (targetDate.year > today.year) {
@@ -114,20 +116,20 @@
         return getDateArchiveRoute(humanDateToYMD(humanDate))
       }
 
+      const handleStandingAdSwiperReady = (_swiper: SwiperClass) => {
+        swiper.value = _swiper
+      }
       const handleStandingAdSlideChange = (index: number) => {
         adIndex.value = index
       }
-      const handleStandingAdSwiperReady = (swiper: Swiper) => {
-        standingSwiperInstance.value = swiper
-      }
       const handleStickyAdIndexChange = (index: number) => {
-        standingSwiperInstance.value?.slideToLoop(index)
+        swiper.value?.slideToLoop(index)
       }
 
       const handleStickyStateChange = (event) => {
         // workaround: when (main container height >= aside height) & isSticky -> render sticky ad
         const asideElementHeight = element.value.clientHeight
-        const targetElement = document.getElementById('main-content')?.children?.[0]
+        const targetElement = document.getElementById(MAIN_CONTENT_ELEMENT_ID)?.children?.[0]
         if (targetElement) {
           const mainContentElementHeight = targetElement.clientHeight
           const isFeasible = mainContentElementHeight >= asideElementHeight
@@ -158,7 +160,9 @@
       })
 
       return {
+        isArticlePage,
         LANGUAGE_KEYS,
+        ASIDE_ELEMENT_ID,
         ASIDE_STICKY_ELEMENT_ID,
         t: i18n.t,
         adIndex,
@@ -168,18 +172,16 @@
         getDateRoute,
         handleStandingAdSwiperReady,
         handleStandingAdSlideChange,
-        handleStickyAdIndexChange,
-        handleStickyStateChange
+        handleStickyAdIndexChange
       }
     }
   })
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
-  @import './variables.scss';
+  @import 'src/styles/init.scss';
 
-  #aside {
+  .aside {
     display: block;
     width: $aside-width;
     margin: 0;
@@ -208,28 +210,28 @@
         width: 100%;
       }
 
-      &.ali-ma-ma {
+      &.mammon-square {
         @extend .center-placeholder;
         height: $aside-width;
         display: flex;
         justify-content: center;
         align-items: center;
 
-        .iframe {
+        .content {
           height: 250px;
           width: 250px;
           overflow: hidden;
         }
       }
 
-      &.tools {
-        margin-top: $lg-gap;
+      .sticky-module {
+        max-height: calc(100vh - 88px - #{$header-height + $lg-gap + $lg-gap + $lg-gap});
       }
     }
 
     .aside-sticky-box {
       position: sticky;
-      top: $top-height;
+      top: $header-height + $lg-gap;
       width: $aside-width;
     }
   }

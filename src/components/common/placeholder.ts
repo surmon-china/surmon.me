@@ -15,7 +15,7 @@ export enum Events {
 
 /**
  * @example
- *  <placeholder :loading="false" :data="data.length" p-i18n-key="LANGUAGE_KEYS.XXX">
+ *  <placeholder :loading="false" :data="data.length" :i18n-key="LANGUAGE_KEYS.XXX">
  *    <component />
  *  </placeholder>
  * @example
@@ -28,7 +28,7 @@ export enum Events {
  *    <template #placeholder> placeholder </template>
  *    <template #default> <component /> </template>
  *  </placeholder>
-*/
+ */
 export default defineComponent({
   name: 'Placeholder',
   props: {
@@ -45,43 +45,32 @@ export default defineComponent({
       default: 'module'
     },
     placeholder: String,
-    pI18nKey: String as PropType<LANGUAGE_KEYS>,
-    loading: Boolean,
+    i18nKey: String as PropType<LANGUAGE_KEYS>,
+    loading: Boolean
   },
-  emits: [
-    Events.AfterEnter
-  ],
+  emits: [Events.AfterEnter],
   setup(props, context) {
     return () => {
-      const { data, placeholder, pI18nKey, loading, transition, transitionName } = props
-      const isEmptyData = data !== undefined && (
-        (Array.isArray(data) && !(data as any).length) ||
-        !data
-      )
+      const { data, placeholder, i18nKey, loading, transition, transitionName } = props
+      const isEmptyData =
+        data !== undefined && ((Array.isArray(data) && !(data as any).length) || !data)
 
       const getPlaceholderView = () => {
-        return (placeholder || pI18nKey)
-          ? h(Empty, { placeholder, i18nKey: pI18nKey })
+        return placeholder || i18nKey
+          ? h(Empty, { placeholder, i18nKey })
           : context.slots.placeholder?.()
       }
 
       const getDataView = () => {
-        return isEmptyData
-          ? getPlaceholderView()
-          : context.slots.default?.()
+        return isEmptyData ? getPlaceholderView() : context.slots.default?.()
       }
 
       const getLoadingView = () => {
-        return (
-          context.slots.loading?.() ||
-          h(Spin, { loading: true })
-        )
+        return context.slots.loading?.() || h(Spin, { loading: true })
       }
 
       const getView = () => {
-        return loading
-          ? getLoadingView()
-          : getDataView()
+        return loading ? getLoadingView() : getDataView()
       }
 
       if (transition) {

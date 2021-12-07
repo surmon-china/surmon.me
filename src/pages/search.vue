@@ -1,32 +1,23 @@
 <template>
   <div class="search-archive-page">
-    <article-list-header
-      :background-color="null"
-      :background-image="null"
-      icon="icon-search"
-    >
-      <i18n
-        :zh="`和 “${keyword}” 有关的所有文章`"
-        :en="`'${keyword}' related articles`"
-      />
+    <article-list-header icon="icon-search">
+      <i18n :zh="`和 “${keyword}” 有关的所有文章`" :en="`'${keyword}' related articles`" />
     </article-list-header>
     <article-list
-      :fetching="article.fetching"
-      :articles="article.data.data"
-      :pagination="article.data.pagination"
+      :fetching="article.list.fetching"
+      :articles="article.list.data"
+      :pagination="article.list.pagination"
       @loadmore="loadmoreArticles"
     />
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, watch, onBeforeMount } from 'vue'
-  import { prefetch, onClient } from '/@/universal'
-  import { useEnhancer } from '/@/enhancer'
-  import { Modules, getNamespace } from '/@/store'
-  import { ArticleModuleActions } from '/@/store/article'
+  import { defineComponent, watch, onBeforeMount } from 'vue'
+  import { useUniversalFetch, onClient } from '/@/universal'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useArticleStore } from '/@/store/article'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
 
@@ -43,25 +34,20 @@
       }
     },
     setup(props) {
-      const { helmet, store } = useEnhancer()
+      const { meta } = useEnhancer()
+      const article = useArticleStore()
 
-      helmet(() => ({
-        title: `${props.keyword} | Search`
-      }))
+      meta(() => ({ pageTitle: `${props.keyword} | Search` }))
 
-      const article = computed(() => store.state.article.list)
       const fetchArticles = (params: any) => {
         onClient(scrollToTop)
-        return store.dispatch(
-          getNamespace(Modules.Article, ArticleModuleActions.FetchList),
-          params
-        )
+        return article.fetchList(params)
       }
 
       const loadmoreArticles = async () => {
         await fetchArticles({
           keyword: props.keyword,
-          page: article.value.data.pagination.current_page + 1
+          page: article.list.pagination.current_page + 1
         })
         onClient(nextScreen)
       }
@@ -74,13 +60,12 @@
         )
       })
 
-      return prefetch(
-        () => fetchArticles({ keyword: props.keyword }),
-        {
-          article,
-          loadmoreArticles
-        }
-      )
+      useUniversalFetch(() => fetchArticles({ keyword: props.keyword }))
+
+      return {
+        article,
+        loadmoreArticles
+      }
     }
   })
 </script>

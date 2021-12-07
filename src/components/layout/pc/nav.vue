@@ -1,74 +1,43 @@
 <template>
-  <div id="nav" class="aside-nav">
+  <div :id="NAV_ELEMENT_ID" class="aside-nav">
     <nav class="nav-list" :class="{ en: !isZhLang }">
-      <router-link to="/" class="item" exact>
-        <i class="iconfont icon-home"></i>
-        <span class="text">
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_HOME" />
-        </span>
-      </router-link>
-      <router-link class="item" :to="getCategoryArchiveRoute(CategorySlug.Code)">
-        <i class="iconfont icon-code"></i>
-        <span class="text">
-          <i18n :lkey="LANGUAGE_KEYS.CATEGORY_CODE" />
-        </span>
-      </router-link>
-      <router-link class="item" :to="getCategoryArchiveRoute(CategorySlug.Insight)">
-        <i class="iconfont icon-thinking"></i>
-        <span class="text">
-          <i18n :lkey="LANGUAGE_KEYS.CATEGORY_INSIGHT" />
-        </span>
-      </router-link>
-      <ulink class="item" :href="VALUABLE_LINKS.GITHUB">
-        <i class="iconfont icon-github"></i>
-        <span class="text">
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_GITHUB" />
-        </span>
-      </ulink>
-      <router-link class="item" :to="getPageRoute(RouteName.Music)">
-        <i class="iconfont icon-netease-music"></i>
-        <span class="text">
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_MUSIC" />
-        </span>
-      </router-link>
-      <router-link class="item" :to="getPageRoute(RouteName.Lens)">
-        <i class="iconfont icon-lens"></i>
-        <span class="text">
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_LENS" />
-        </span>
-      </router-link>
-      <router-link class="item" :to="getPageRoute(RouteName.About)">
-        <i class="iconfont icon-user"></i>
-        <span class="text">
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_ABOUT" />
-        </span>
-      </router-link>
-      <router-link class="item" :to="getPageRoute(RouteName.Job)">
-        <i class="iconfont icon-horse"></i>
-        <span class="text">
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_JOB" />
-        </span>
-      </router-link>
-      <router-link class="item" :to="getPageRoute(RouteName.Freelancer)">
-        <i class="iconfont icon-tool"></i>
-        <span class="text">
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER" />
-        </span>
-      </router-link>
-      <router-link class="item guestbook" :to="getPageRoute(RouteName.Guestbook)">
-        <i class="iconfont icon-comment"></i>
-        <span class="text">
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_GUESTBOOK" />
-        </span>
-      </router-link>
+      <template v-for="menu in menus" :key="menu.id">
+        <span class="separator" v-if="menu.separator"></span>
+        <router-link
+          v-if="menu.route"
+          class="item"
+          :class="[menu.id, { hot: menu.hot }]"
+          :to="menu.route"
+          exact
+        >
+          <i class="iconfont" :class="menu.icon"></i>
+          <span class="text">
+            <i18n :lkey="menu.i18nKey" />
+          </span>
+          <span v-if="menu.hot" class="superscript">
+            <i class="iconfont icon-hot-fill"></i>
+          </span>
+        </router-link>
+        <ulink
+          v-else-if="menu.url"
+          class="item"
+          :class="[menu.id, { hot: menu.hot }]"
+          :href="menu.url"
+        >
+          <i class="iconfont" :class="menu.icon"></i>
+          <span class="text">
+            <i18n :lkey="menu.i18nKey" />
+          </span>
+          <span v-if="menu.hot" class="superscript">
+            <i class="iconfont icon-hot-fill"></i>
+          </span>
+        </ulink>
+      </template>
+      <!-- AD -->
       <template v-for="(ad, index) in adConfig.PC_NAV" :key="index">
         <span class="separator"></span>
         <ulink class="item" :href="ad.url">
-          <i
-            class="iconfont"
-            :class="ad.icon"
-            :style="{ color: ad.color }"
-          ></i>
+          <i class="iconfont" :class="ad.icon" :style="{ color: ad.color }"></i>
           <span class="text" :style="{ color: ad.color }">
             <template v-if="ad.i18n">
               <i18n :zh="ad.i18n.zh" :en="ad.i18n.en" />
@@ -77,52 +46,36 @@
               {{ ad.text }}
             </template>
           </span>
-          <span class="superscript" v-if="ad.hot">
-            <i class="iconfont icon-hot"></i>
+          <span class="superscript">
+            <i class="iconfont icon-ad"></i>
           </span>
         </ulink>
       </template>
-      <span class="separator"></span>
-      <router-link class="item app" :to="getPageRoute(RouteName.App)">
-        <i class="iconfont icon-app"></i>
-        <span class="text">
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_APP" />
-        </span>
-      </router-link>
     </nav>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { Language } from '/@/language/data'
-  import { getFileCDNUrl } from '/@/transforms/url'
-  import { getPageRoute, getCategoryArchiveRoute } from '/@/transforms/route'
-  import { RouteName, CategorySlug } from '/@/router'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-
+  import { defineComponent } from 'vue'
+  import { NAV_ELEMENT_ID } from '/@/constants/anchor'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { menus } from './menu'
   export default defineComponent({
-    name: 'PcNav',
+    name: 'PCNav',
     setup() {
-      const { i18n, store, globalState, adConfig, isZhLang } = useEnhancer()
+      const { adConfig, isZhLang } = useEnhancer()
       return {
+        NAV_ELEMENT_ID,
+        menus,
         adConfig,
-        VALUABLE_LINKS,
-        LANGUAGE_KEYS,
-        RouteName,
-        CategorySlug,
-        isZhLang,
-        getPageRoute,
-        getCategoryArchiveRoute
+        isZhLang
       }
     }
   })
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .aside-nav {
     width: $navbar-width;
@@ -171,9 +124,14 @@
           margin-left: $sm-gap;
 
           .iconfont {
+            width: auto;
             margin-right: 0;
             color: $red;
           }
+        }
+
+        &.hot {
+          color: $red;
         }
 
         &.app {
@@ -192,11 +150,7 @@
           background-color: $module-bg-lighter;
 
           &.guestbook {
-            background: linear-gradient(
-              to bottom,
-              $module-bg-lighter,
-              transparent
-            );
+            background: linear-gradient(to bottom, $module-bg-lighter, transparent);
           }
         }
 

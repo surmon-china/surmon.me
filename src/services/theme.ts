@@ -1,6 +1,6 @@
 /**
  * @file Theme service
- * @module service/theme
+ * @module service.theme
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -17,9 +17,7 @@ export const getClientLocalTheme = () => {
   // local theme
   const historyTheme = storage.get(THEME_STORAGE_KEY)
   if (historyTheme) {
-    return historyTheme === Theme.Dark
-      ? Theme.Dark
-      : Theme.Default
+    return historyTheme === Theme.Dark ? Theme.Dark : Theme.Default
   }
   // system theme
   if (window.matchMedia(DARK_THEME_QUERY).matches) {
@@ -50,19 +48,15 @@ const createThemeStore = (defaultTheme: Theme) => {
     }
   }
 
-  const toggle = () => set(
-    theme.value === Theme.Dark
-      ? Theme.Default
-      : Theme.Dark
-  )
+  const toggle = () => set(theme.value === Theme.Dark ? Theme.Default : Theme.Dark)
 
   const bindClientSystem = () => {
-    window.matchMedia(DARK_THEME_QUERY).addEventListener('change',
-      ({ matches }) => matches && set(Theme.Dark)
-    )
-    window.matchMedia(LIGHT_THEME_QUERY).addEventListener('change',
-      ({ matches }) => matches && set(Theme.Default)
-    )
+    window
+      .matchMedia(DARK_THEME_QUERY)
+      .addEventListener('change', ({ matches }) => matches && set(Theme.Dark))
+    window
+      .matchMedia(LIGHT_THEME_QUERY)
+      .addEventListener('change', ({ matches }) => matches && set(Theme.Default))
   }
 
   return {

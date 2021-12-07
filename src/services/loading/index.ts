@@ -1,6 +1,6 @@
 /**
- * @file 全局进度管理器
- * @module service/loading
+ * @file Global loading state
+ * @module service.loading
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -14,13 +14,13 @@ declare global {
 }
 
 export interface LoadingState {
-  percent: number;
-  show: boolean;
-  error: null;
-  canSucceed: boolean;
-  skipTimerCount: number;
-  throttle: number;
-  duration: number;
+  percent: number
+  show: boolean
+  error: null
+  canSucceed: boolean
+  skipTimerCount: number
+  throttle: number
+  duration: number
 }
 
 export interface Loading {
@@ -51,7 +51,7 @@ const createLoadingStore = (options: LoadingOptions = {}) => {
     canSucceed: true,
     skipTimerCount: 0,
     throttle: options.throttle || 200,
-    duration: options.duration || 3000,
+    duration: options.duration || 3000
   })
 
   const clear = () => {

@@ -27,7 +27,7 @@
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../app/enhancer'
   import { timeAgo } from '/@/transforms/moment'
   import { getFileCDNUrl } from '/@/transforms/url'
 
@@ -35,10 +35,12 @@
     name: 'ArticleListHeader',
     props: {
       backgroundColor: {
-        type: String
+        type: String,
+        default: ''
       },
       backgroundImage: {
-        type: String
+        type: String,
+        default: ''
       },
       icon: {
         type: String,
@@ -61,7 +63,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .header {
     position: relative;

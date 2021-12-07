@@ -1,33 +1,30 @@
 <template>
-  <div
-    :id="ElementID.Warpper"
-    :class="{ mobile: isMobile }"
-    class="comment-box"
-  >
+  <div :id="COMMENT_ELEMENT_ID" :class="{ mobile: isMobile }" class="comment-box">
     <comment-topbar
-      :total="commentData.pagination?.total"
+      :total="commentStore.pagination?.total"
       :likes="likes"
       :post-id="postId"
       :fetching="isFetching"
       :sort="state.sort"
       @sort="getSortComments"
     />
-    <comment-list
-      :fetching="isFetching"
-      :comments="commentData.data"
-      @reply="replyComment"
-    />
-    <comment-pagination
-      :fetching="isFetching"
-      :pagination="commentData.pagination"
-      :sort="state.sort"
-      @page="getPageComments"
-    />
+    <comment-main :fetching="isFetching" :has-data="Boolean(commentStore.commentTreeList.length)">
+      <template #list>
+        <comment-list :comments="commentStore.commentTreeList" @reply="replyComment" />
+      </template>
+      <template #pagination>
+        <comment-loadmore
+          :fetching="isFetching"
+          :pagination="commentStore.pagination"
+          @page="getPageComments"
+        />
+      </template>
+    </comment-main>
     <comment-publisher
       :disabled="isPostingComment || isFetching"
       :cached="userState.cached"
       :editing="userState.editing"
-      :reply-pid="state.replyPid"
+      :reply-pid="state.replyPID"
       v-model:profile="profileState"
       @cancel-reply="resetCommentReply"
       @edit-profile="editUserProfile"
@@ -50,67 +47,43 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, reactive, computed, watch, onMounted, onBeforeUnmount, onUnmounted } from 'vue'
-  import { getNamespace, Modules } from '/@/store'
-  import { CommentModuleActions, CommentModuleListMutations } from '/@/store/comment'
-  import { useEnhancer } from '/@/enhancer'
-  import { getJSON, setJSON, remove } from '/@/services/storage'
-  import { getFileCDNUrl } from '/@/transforms/url'
-  import { isArticleDetail, isGuestbook } from '/@/transforms/route'
-  import { focusPosition } from '/@/utils/editable'
+  import {
+    defineComponent,
+    ref,
+    reactive,
+    computed,
+    watch,
+    onMounted,
+    onBeforeUnmount,
+    onUnmounted
+  } from 'vue'
+  import { useMetaStore } from '/@/store/meta'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useCommentStore, CommentFetchParams } from '/@/store/comment'
   import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
+  import { COMMENT_ELEMENT_ID, COMMENT_PUBLISHER_ELEMENT_ID } from '/@/constants/anchor'
   import { GAEventTags, GAEventActions } from '/@/constants/gtag'
   import { SortType } from '/@/constants/state'
   import { USER } from '/@/constants/storage'
+  import { getJSON, setJSON, remove } from '/@/services/storage'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { ElementID, scrollToElementAnchor } from './helper'
+  import { focusPosition } from '/@/utils/editable'
+  import { scrollToElementAnchor } from '/@/utils/scroller'
+  import { luanchEmojiRain } from './helper'
   import CommentTopbar from './topbar.vue'
+  import CommentMain from './main.vue'
   import CommentList from './list/index.vue'
-  import CommentPagination from './pagination.vue'
+  import CommentLoadmore from './loadmore.vue'
   import CommentPublisher from './publisher.vue'
   import CommentPen from './pen.vue'
-
-  const luanchEmojiRain = (content: string) => {
-    const luanchRain = window.$luanchEmojiRain
-    if (content.includes('2333') || content.includes('哈哈')) {
-      luanchRain({
-        speed: 12,
-        staggered: true,
-        increaseSpeed: 0.4,
-        emoji: getFileCDNUrl('/images/emojis/haha.png')
-      })
-    } else if (content.includes('666') || content.includes('赞')) {
-      luanchRain({
-        speed: 12,
-        staggered: true,
-        increaseSpeed: 0.4,
-        emoji: getFileCDNUrl('/images/emojis/666.png')
-      })
-    } else if (content.includes('呵呵')) {
-      luanchRain({
-        staggered: false,
-        speed: 8,
-        increaseSpeed: 0.04,
-        emoji: getFileCDNUrl('/images/emojis/hehe.png')
-      })
-    } else if (Math.random() <= 0.6) {
-      // 否则以 60% 的概率随机出现
-      luanchRain({
-        scale: 0.6,
-        staggered: true,
-        speed: 8,
-        increaseSpeed: 0.04,
-        emoji: getFileCDNUrl('/images/emojis/funny.png')
-      })
-    }
-  }
 
   export default defineComponent({
     name: 'Comment',
     components: {
       CommentTopbar,
+      CommentMain,
       CommentList,
-      CommentPagination,
+      CommentLoadmore,
       CommentPublisher,
       CommentPen
     },
@@ -129,13 +102,11 @@
       }
     },
     setup(props) {
-      const { store, route, i18n, gtag, globalState, isMobile } = useEnhancer()
-      const blockList = computed(() => store.state.option.appOption.data?.blacklist)
-      const commentData = computed(() => store.state.comment.comments)
-      const isFetchingComment = computed(() => store.state.comment.fetching)
-      const isPostingComment = computed(() => store.state.comment.posting)
-      const isArticlePage = computed(() => isArticleDetail(route.name))
-      const isGuestbookPage = computed(() => isGuestbook(route.name))
+      const { i18n, gtag, globalState, isMobile } = useEnhancer()
+      const metaStore = useMetaStore()
+      const commentStore = useCommentStore()
+      const blockList = computed(() => metaStore.appOptions.data?.blacklist)
+      const isPostingComment = computed(() => commentStore.posting)
       const markdownInputElement = ref<any>()
 
       const isFetching = computed(() => {
@@ -147,12 +118,12 @@
         // 2. 组件仅负责初评论列表数据翻页、排序的职责
         // 3. 当容器组件还在请求时，组件全量 Loading
         // 4. 当只有评论列表在请求时，列表单独 Loading
-        return props.fetching || isFetchingComment.value
+        return props.fetching || commentStore.fetching
       })
 
       const state = reactive({
         sort: SortType.Desc,
-        replyPid: 0
+        replyPID: 0
       })
       const userState = reactive({
         cached: false,
@@ -200,7 +171,7 @@
       }
 
       const resetCommentReply = () => {
-        state.replyPid = 0
+        state.replyPID = 0
       }
 
       const clearPenContent = () => {
@@ -216,19 +187,19 @@
           event_category: GAEventActions.Click,
           event_label: GAEventTags.Comment
         })
-        state.replyPid = commentId
+        state.replyPID = commentId
         // 滚动到目标位置，并激活光标
-        scrollToElementAnchor(ElementID.Publisher, 300)
+        scrollToElementAnchor(COMMENT_PUBLISHER_ELEMENT_ID, 300)
         if (markdownInputElement.value) {
           focusPosition(markdownInputElement.value)
         }
       }
 
       // 获取评论列表
-      const fetchCommentList = (params: any = {}) => {
+      const fetchCommentList = (params: CommentFetchParams = {}) => {
         // 每次重新获取数据时都需要回到评论框顶部，因为都是新数据
-        scrollToElementAnchor(ElementID.Warpper, -73)
-        store.dispatch(getNamespace(Modules.Comment, CommentModuleActions.FetchList), {
+        scrollToElementAnchor(COMMENT_ELEMENT_ID, -73)
+        commentStore.fetchList({
           ...params,
           sort: state.sort,
           post_id: props.postId,
@@ -244,7 +215,7 @@
       }
 
       const getPageComments = (page: number) => {
-        fetchCommentList({ page })
+        fetchCommentList({ page, loadmore: true })
       }
 
       const submitComment = async () => {
@@ -279,44 +250,47 @@
         // block list
         const { mails, keywords } = blockList.value
         const hitMail = mails.includes(profile.email)
-        const hitKeyword = (
-          keywords.length &&
-          eval(`/${keywords.join('|')}/ig`).test(penState.content)
-        )
+        const hitKeyword =
+          keywords.length && eval(`/${keywords.join('|')}/ig`).test(penState.content)
         if (hitMail || hitKeyword) {
           alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_SUBMIT))
-          console.warn('评论发布失败\n1：被 Akismet 过滤\n2：邮箱/IP 被列入黑名单\n3：内容包含黑名单关键词')
+          console.warn(
+            '评论发布失败\n1：被 Akismet 过滤\n2：邮箱/IP 被列入黑名单\n3：内容包含黑名单关键词'
+          )
           return false
         }
 
         // post
-        return store.dispatch(getNamespace(Modules.Comment, CommentModuleActions.PostComment), {
-          pid: state.replyPid,
-          post_id: props.postId,
-          content: penState.content,
-          agent: globalState.userAgent.original,
-          author: profile
-        }).then(resultData => {
-          // clear local data
-          penState.preview = false
-          userState.cached = true
-          userState.editing = false
-          // reset reply state
-          resetCommentReply()
-          clearPenContent()
-          // set user profile
-          syncUserProfileToStorage()
-          // random emoji rain
-          luanchEmojiRain(resultData.result.content)
-        }).catch(error => {
-          console.warn('评论发布失败，可能原因：被 Akismet 过滤，或者：\n', error)
-          alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_SUBMIT))
-        })
+        return commentStore
+          .postComment({
+            pid: state.replyPID,
+            post_id: props.postId,
+            content: penState.content,
+            agent: globalState.userAgent.original,
+            author: profile
+          })
+          .then(() => {
+            // clear local data
+            penState.preview = false
+            userState.cached = true
+            userState.editing = false
+            // reset reply state
+            resetCommentReply()
+            clearPenContent()
+            // set user profile
+            syncUserProfileToStorage()
+            // random emoji rain
+            luanchEmojiRain(penState.content)
+          })
+          .catch((error) => {
+            console.warn('评论发布失败，可能原因：被 Akismet 过滤，或者：\n', error)
+            alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_SUBMIT))
+          })
       }
 
       watch(
         () => isFetching.value,
-        isFetching => {
+        (isFetching) => {
           if (isFetching) {
             resetCommentReply()
           }
@@ -332,17 +306,15 @@
       })
 
       onUnmounted(() => {
-        store.commit(getNamespace(
-          Modules.Comment,
-          CommentModuleListMutations.ClearListData
-        ))
+        commentStore.clearList()
       })
 
       return {
-        ElementID,
+        COMMENT_ELEMENT_ID,
         isMobile,
         isFetching,
         isPostingComment,
+        commentStore,
         state,
         userState,
         profileState,
@@ -351,7 +323,6 @@
         syncUserProfileToStorage,
         clearUserProfile,
         togglePenPreview,
-        commentData,
         replyComment,
         submitComment,
         resetCommentReply,
@@ -364,7 +335,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .comment-box {
     padding: $gap;

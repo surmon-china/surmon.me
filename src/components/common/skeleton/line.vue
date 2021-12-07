@@ -14,10 +14,10 @@
     },
     props: {
       width: {
-        type: Number,
+        type: Number
       },
       height: {
-        type: Number,
+        type: Number
       }
     },
     setup(props) {

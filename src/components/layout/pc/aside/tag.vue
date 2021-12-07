@@ -1,9 +1,9 @@
 <template>
   <div class="tag">
     <placeholder
-      :data="tagData.data.length"
-      :fetching="tagData.fetching"
-      :p-i18n-key="LANGUAGE_KEYS.TAG_PLACEHOLDER"
+      :data="tagStore.tags.length"
+      :fetching="tagStore.fetching"
+      :i18n-key="LANGUAGE_KEYS.TAG_PLACEHOLDER"
     >
       <template #loading>
         <ul class="tag-list-skeleton" key="skeleton">
@@ -19,7 +19,7 @@
             :title="tag.description"
             :to="getTagArchiveRoute(tag.slug)"
             :key="index"
-            v-for="(tag, index) in tagData.data"
+            v-for="(tag, index) in tagStore.tags"
           >
             <i class="iconfont" :class="getTagIcon(tag)" />
             <span class="name">
@@ -34,25 +34,23 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { defineComponent } from 'vue'
+  import { useTagStore } from '/@/store/tag'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import { getTagArchiveRoute } from '/@/transforms/route'
   import { getExtendsValue } from '/@/transforms/state'
-  import { LANGUAGE_KEYS } from '/@/language/key'
 
   export default defineComponent({
-    name: 'PcAsideTag',
+    name: 'PCAsideTag',
     setup() {
-      const { i18n, store, route } = useEnhancer()
-      const tagData = computed(() => store.state.tag)
+      const tagStore = useTagStore()
       const getTagIcon = (tag: any) => {
         return getExtendsValue(tag, 'icon') || 'icon-tag'
       }
 
       return {
         LANGUAGE_KEYS,
-        t: i18n.t,
-        tagData,
+        tagStore,
         getTagIcon,
         getTagArchiveRoute
       }
@@ -61,12 +59,11 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
-  @import './variables.scss';
+  @use 'sass:math';
+  @import 'src/styles/init.scss';
 
   .tag {
     margin-bottom: 0;
-    max-height: calc(100vh - 88px - #{$top-height + $lg-gap + $lg-gap + $tool-height});
     overflow-y: auto;
     width: 100%;
     border-top: $gap solid transparent;
@@ -81,7 +78,7 @@
       overflow: hidden;
 
       .item {
-        width: calc(50% - #{$gap / 2});
+        width: calc(50% - #{math.div($gap, 2)});
         height: 1.4em;
         margin-right: 0;
         margin-bottom: $gap;
@@ -120,7 +117,7 @@
         font-size: $font-size-h6;
         text-transform: capitalize;
         font-family: $font-family-normal;
-        @include radius-box($mini-radius);
+        @include radius-box($xs-radius);
 
         .iconfont {
           width: 2em;

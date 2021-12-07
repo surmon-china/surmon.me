@@ -1,6 +1,6 @@
 /**
  * @file Time transformer
- * @module transformer/moment
+ * @module transformer.moment
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -83,21 +83,18 @@ export const humanToDate = (humanDate: Omit<HumanDate, 'week'>) => {
 }
 
 // HumanData -> like: 2016-01-02
-export const humanDateToYMD = ({ year, month, day }: Partial<Omit<HumanDate, 'week'>>, separator = '-') => {
-  const _month = month
-    ? separator + String(month).padStart(2, '0')
-    : ''
-  const _day = day
-    ? separator + String(day).padStart(2, '0')
-    : ''
+export const humanDateToYMD = (
+  { year, month, day }: Partial<Omit<HumanDate, 'week'>>,
+  separator = '-'
+) => {
+  const _month = month ? separator + String(month).padStart(2, '0') : ''
+  const _day = day ? separator + String(day).padStart(2, '0') : ''
   return `${year}${_month}${_day}`
 }
 
 export const isSameHumanDay = (target: HumanDate, target2: HumanDate) => {
   return (
-    target.day === target2.day &&
-    target.month === target2.month &&
-    target.year === target2.year
+    target.day === target2.day && target.month === target2.month && target.year === target2.year
   )
 }
 
@@ -120,7 +117,7 @@ export const toLocalString = (date: string) => {
 // 相对时间过滤器，传入时间，返回距离今天有多久
 export const timeAgo = (_time: string | number | Date, language: Language) => {
   const time = _time instanceof Date ? _time : new Date(_time)
-  const between = Date.now() / 1000 - (Number(time) / 1000)
+  const between = Date.now() / 1000 - Number(time) / 1000
   const hourS = 3600
   const dayS = hourS * 24
   const weekS = dayS * 7
@@ -161,8 +158,9 @@ export const humanizeYMD = (date: string, language: Language) => {
   const year = newDate.getFullYear()
   const month = newDate.getMonth() + 1
   const day = newDate.getDate()
-  const hour = newDate.getHours() > 11
-    ? textHumanizer(language)(TEXT_MAP.PM)
-    : textHumanizer(language)(TEXT_MAP.AM)
+  const hour =
+    newDate.getHours() > 11
+      ? textHumanizer(language)(TEXT_MAP.PM)
+      : textHumanizer(language)(TEXT_MAP.AM)
   return `${year}/${month}/${day} ${hour}`
 }

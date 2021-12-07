@@ -18,11 +18,10 @@
 
 <script lang="ts">
   import { defineComponent, computed, onMounted } from 'vue'
-  import { Theme } from '/@/services/theme'
-  import { useEnhancer } from '/@/enhancer'
-  import { getNamespace, Modules } from '/@/store'
-  import { WallpaperModuleGetters, WallpaperModuleActions } from '/@/store/wallpaper'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useWallpaperStore } from '/@/store/wallpaper'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
+  import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import Wallpapers from './wall.vue'
 
@@ -32,17 +31,16 @@
       Wallpapers
     },
     setup() {
-      const { store, i18n, gtag, globalState, isDarkTheme } = useEnhancer()
+      const { i18n, gtag, globalState, isDarkTheme } = useEnhancer()
+      const wallpaperStore = useWallpaperStore()
       const isOnWallpaper = computed(() => globalState.switchBox.wallpaper)
-      const wallpapers = computed<any[]>(() => store.getters[
-        getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Papers)
-      ](i18n.language.value))
+      const wallpapers = computed(() => wallpaperStore.papers(i18n.language.value as Language))
 
       const toggleWallpaper = () => {
         if (wallpapers.value?.length) {
           globalState.switchTogglers.wallpaper()
         } else {
-          alert('可能 Bing 又被墙了吧我有什么办法！')
+          alert('Something was wrong！')
         }
         if (globalState.switchBox.wallpaper) {
           gtag?.event('今日壁纸', {
@@ -53,10 +51,7 @@
       }
 
       onMounted(() => {
-        store.dispatch(getNamespace(
-          Modules.Wallpaper,
-          WallpaperModuleActions.FetchPapers
-        ))
+        wallpaperStore.fetchPapers()
       })
 
       return {
@@ -71,14 +66,14 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   #wallpaper {
+    $offset: 6px;
     position: fixed;
     left: 0;
     top: 70%;
     cursor: pointer;
-    $offset: 6px;
 
     &.dark {
       .switcher {
@@ -93,21 +88,27 @@
     .switcher {
       width: 4rem;
       height: 8rem;
-      opacity: .6;
+      opacity: 0.6;
       display: block;
       position: relative;
       transform: translateX(-$offset * 2);
       transition: opacity $transition-time-fast, transform $transition-time-fast;
 
       &:hover {
-        opacity: .8;
+        opacity: 0.8;
         transform: translateX(-$offset);
       }
 
       @keyframes wallpaper-y {
-        0% { transform: translateY(-$offset) }
-        50% { transform: translateY($offset) }
-        100% { transform: translateY(-$offset) }
+        0% {
+          transform: translateY(-$offset);
+        }
+        50% {
+          transform: translateY($offset);
+        }
+        100% {
+          transform: translateY(-$offset);
+        }
       }
 
       > .up,
@@ -124,7 +125,7 @@
         left: $offset;
         z-index: $z-index-normal + 1;
         background-color: $primary;
-        animation: wallpaper-y 1.5s .75s infinite;
+        animation: wallpaper-y 1.5s 0.75s infinite;
       }
 
       .up {

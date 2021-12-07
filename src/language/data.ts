@@ -1,6 +1,6 @@
 /**
  * @file I18n config
- * @module i18n/config
+ * @module i18n.config
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -16,12 +16,12 @@ export const languages: I18nLanguage[] = [
   {
     code: Language.Zh,
     iso: 'zh-CN',
-    name: '简体中文',
+    name: '简体中文'
   },
   {
     code: Language.En,
     iso: 'en-US',
-    name: 'English',
+    name: 'English'
   }
 ]
 
@@ -62,6 +62,10 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '狂浪生',
     [Language.En]: 'about'
   },
+  [LANGUAGE_KEYS.PAGE_MERCH]: {
+    [Language.Zh]: '周边',
+    [Language.En]: 'merch'
+  },
   [LANGUAGE_KEYS.PAGE_FREELANCER]: {
     [Language.Zh]: '得道',
     [Language.En]: 'freelancer'
@@ -86,10 +90,6 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '空空如也',
     [Language.En]: 'No data'
   },
-  [LANGUAGE_KEYS.FRIEND_ME]: {
-    [Language.Zh]: '众里寻他',
-    [Language.En]: 'Friend me'
-  },
   [LANGUAGE_KEYS.NOT_FOUND]: {
     [Language.Zh]: '众里寻他 我已不再',
     [Language.En]: 'Arrives here at last'
@@ -111,12 +111,12 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.En]: 'Talk is cheap. Show me the code'
   },
   [LANGUAGE_KEYS.PAGE_FREELANCER_EMAIL_ME]: {
-    [Language.Zh]: '即破楼兰',
+    [Language.Zh]: '放码过来',
     [Language.En]: 'Email ME'
   },
   [LANGUAGE_KEYS.PAGE_FREELANCER_HIRE_ME]: {
     [Language.Zh]: '或在 Upwork 雇佣我',
-    [Language.En]: 'Hire me on upwork.com',
+    [Language.En]: 'Hire me on upwork.com'
   },
   [LANGUAGE_KEYS.DEVICE_ANDROID]: {
     [Language.Zh]: 'Android',
@@ -179,7 +179,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.En]: 'off'
   },
   [LANGUAGE_KEYS.APP_SLOGAN]: {
-    [Language.Zh]: '来苏之望，鞭狂马猖',
+    [Language.Zh]: '来苏之望',
     [Language.En]: 'Because the mountain was there'
   },
   [LANGUAGE_KEYS.MUSIC_PLACEHOLDER]: {
@@ -198,17 +198,9 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '空空如也',
     [Language.En]: 'No announcements'
   },
-  [LANGUAGE_KEYS.CATEGORY_TITLE]: {
-    [Language.Zh]: '分门别类',
-    [Language.En]: 'Categories'
-  },
   [LANGUAGE_KEYS.CATEGORY_PLACEHOLDER]: {
     [Language.Zh]: '未分类',
     [Language.En]: 'no cate'
-  },
-  [LANGUAGE_KEYS.TAG_TITLE]: {
-    [Language.Zh]: '画龙点睛',
-    [Language.En]: 'Tags'
   },
   [LANGUAGE_KEYS.TAG_PLACEHOLDER]: {
     [Language.Zh]: '无标签',
@@ -285,6 +277,10 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   [LANGUAGE_KEYS.COMMENT_PAGINATION_COOL]: {
     [Language.Zh]: '最冷',
     [Language.En]: 'cool'
+  },
+  [LANGUAGE_KEYS.COMMENT_LOADMORE]: {
+    [Language.Zh]: '加载更多评论',
+    [Language.En]: 'loadmore comments'
   },
   [LANGUAGE_KEYS.COMMENT_POST_NAME]: {
     [Language.Zh]: '名字',

@@ -1,12 +1,16 @@
 /**
  * @file Tunnel constant
- * @module constant/tunnel
+ * @module constant.tunnel
  * @author Surmon <https://github.com/surmon-china>
  */
 
 export enum TunnelModule {
-  Bilibili = 'bilibili',
+  BiliBili = 'bilibili',
   Wallpaper = 'wallpaper',
   GitHub = 'gitHub',
   Music = 'music'
+}
+
+export const getTunnelApiPath = (moduleName: TunnelModule) => {
+  return `/${moduleName}`
 }

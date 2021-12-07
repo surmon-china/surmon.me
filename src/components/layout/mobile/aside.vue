@@ -14,7 +14,7 @@
     <div class="aside-nav">
       <nav class="nav-list">
         <router-link to="/" class="item" exact>
-          <i class="iconfont icon-home"></i>
+          <i class="iconfont icon-home-fill"></i>
           <i18n :lkey="LANGUAGE_KEYS.PAGE_HOME" />
         </router-link>
         <router-link class="item" :to="getCategoryArchiveRoute(CategorySlug.Code)">
@@ -63,13 +63,13 @@
 </template>
 
 <script lang="ts">
-  import { VALUABLE_LINKS } from '/@/config/app.config'
   import { defineComponent, computed } from 'vue'
-  import { useStore } from '/@/store'
+  import { RouteName, CategorySlug } from '/@/app/router'
+  import { useMetaStore } from '/@/store/meta'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { getPageRoute, getCategoryArchiveRoute } from '/@/transforms/route'
-  import { RouteName, CategorySlug } from '/@/router'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'MobileAside',
@@ -80,11 +80,10 @@
       }
     },
     setup() {
-      const store = useStore()
-      const gravatar = computed(() => (
-        store.state.option.adminInfo?.gravatar ||
-        getFileCDNUrl('/images/gravatar.jpg')
-      ))
+      const metaStore = useMetaStore()
+      const gravatar = computed(
+        () => metaStore.adminInfo.data?.gravatar || getFileCDNUrl('/images/gravatar.jpg')
+      )
 
       return {
         VALUABLE_LINKS,
@@ -100,7 +99,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .aside {
     display: block;
@@ -166,7 +165,7 @@
           height: 3em;
           line-height: 3em;
           padding: 0 1em;
-          margin-bottom: .5em;
+          margin-bottom: 0.5em;
           border: none;
           text-decoration: none;
           text-transform: uppercase;

@@ -1,6 +1,6 @@
 /**
  * @file I18n keys
- * @module i18n/key
+ * @module i18n.key
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -13,6 +13,7 @@ export enum LANGUAGE_KEYS {
   PAGE_INSTAGRAM = 'instagram',
   PAGE_MUSIC = 'music',
   PAGE_JOB = 'job',
+  PAGE_MERCH = 'merch',
   PAGE_ABOUT = 'about',
   PAGE_FREELANCER = 'freelancer',
   PAGE_GUESTBOOK = 'guestbook',
@@ -20,7 +21,6 @@ export enum LANGUAGE_KEYS {
   PAGE_ARCHIVE = 'archive',
   SITE_MAP_XML = 'sitemap xml',
   EMPTY_PLACEHOLDER = `common empty's placeholder`,
-  FRIEND_ME = 'friendMe',
   NOT_FOUND = 'notFound',
   BACK_TO_HOME_PAGE = 'back to home page',
   GUESTBOOK_SLOGAN = 'guestbook banner slogan',
@@ -49,9 +49,7 @@ export enum LANGUAGE_KEYS {
   HOT_ARTICLE_LIST_TITLE = 'hot article list title',
   PAGE_TITLE = 'page title',
   ANNOUNCEMENT_PLACEHOLDER = 'announcement empty placeholder',
-  CATEGORY_TITLE = 'category title',
   CATEGORY_PLACEHOLDER = 'category empty placeholder',
-  TAG_TITLE = 'tag title',
   TAG_PLACEHOLDER = 'tag placeholder',
   ARTICLE_TITLE = 'article title',
   ARTICLE_PLACEHOLDER = 'article empty placeholder',
@@ -70,6 +68,7 @@ export enum LANGUAGE_KEYS {
   COMMENT_PAGINATION_NEW = 'get new comments',
   COMMENT_PAGINATION_HOT = 'get hot comments',
   COMMENT_PAGINATION_COOL = 'get cool comments',
+  COMMENT_LOADMORE = 'loadmore comments',
   COMMENT_POST_NAME = `comment's author name`,
   COMMENT_POST_EMAIL = `comment's author email`,
   COMMENT_POST_SITE = `comment's author site url`,

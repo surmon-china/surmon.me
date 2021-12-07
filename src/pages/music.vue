@@ -1,11 +1,7 @@
 <template>
   <div class="music-page">
     <div class="player">
-      <button
-        class="prev-song"
-        :disabled="!player?.state?.ready"
-        @click="player?.prevSong()"
-      >
+      <button class="prev-song" :disabled="!player?.state?.ready" @click="player?.prevSong()">
         <i class="iconfont icon-music-prev"></i>
       </button>
       <div class="album-box">
@@ -27,8 +23,8 @@
             />
           </svg>
         </div>
-        <div class="song-bg-box" :class="{ 'playing': player?.state.playing }">
-          <img :src="currentSong?.cover_art_url" draggable="false">
+        <div class="song-bg-box" :class="{ playing: player?.state.playing }">
+          <img :src="currentSong?.cover_art_url" draggable="false" />
         </div>
         <div class="toggle-box">
           <transition name="module" mode="out-in">
@@ -40,91 +36,71 @@
             >
               <i
                 class="iconfont"
-                :class="player?.state.playing
-                  ? 'icon-music-pause'
-                  : 'icon-music-play'"
+                :class="player?.state.playing ? 'icon-music-pause' : 'icon-music-play'"
               ></i>
             </button>
           </transition>
         </div>
         <div class="toggle-muted">
-          <button
-            class="muted-btn"
-            :disabled="!player?.state.ready"
-            @click="player?.toggleMuted()"
-          >
-            <i
-              class="iconfont"
-              :class="muted ? 'icon-music-muted' : 'icon-music-volume'"
-            />
+          <button class="muted-btn" :disabled="!player?.state.ready" @click="player?.toggleMuted()">
+            <i class="iconfont" :class="muted ? 'icon-music-muted' : 'icon-music-unmuted'" />
           </button>
         </div>
       </div>
-      <button
-        class="next-song"
-        :disabled="!player?.state.ready"
-        @click="player?.nextSong()"
-      >
+      <button class="next-song" :disabled="!player?.state.ready" @click="player?.nextSong()">
         <i class="iconfont icon-music-next"></i>
       </button>
     </div>
     <div class="song-info">
       <h4 class="name">
         <template v-if="currentSong">
-          {{ currentSong.name }} By {{ currentSong.artist }} | {{ currentSong.album || 'unknow' }}
+          {{ currentSong.name }} By {{ currentSong.artist }} |
+          {{ currentSong.album || 'unknow' }}
         </template>
         <template v-else>Kind words are the music of the world.</template>
       </h4>
-      <h5>
-        {{ (player?.state.index || 0) + 1 }} / {{ player?.state.count || 'Infinity' }}
-      </h5>
-      <client-only v-if="false">
-        <transition name="list-fade">
-          <p v-if="player?.currentSongRealTimeLrc !== null" class="lrc">
-            <transition name="module" mode="out-in">
-              <span :key="player?.currentSongRealTimeLrc" class="lrc-text">
-                {{ player?.currentSongRealTimeLrc }}
-              </span>
-            </transition>
-          </p>
-        </transition>
-      </client-only>
+      <h5>{{ (player?.state.index || 0) + 1 }} / {{ player?.state.count || 'Infinity' }}</h5>
     </div>
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { isClient } from '/@/environment'
-  import { useEnhancer } from '/@/enhancer'
+  import { isClient } from '/@/app/environment'
+  import { useEnhancer } from '/@/app/enhancer'
   import { useMusic } from '/@/services/music'
+  import { firstUpperCase } from '/@/transforms/text'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { Language } from '/@/language/data'
 
   export default defineComponent({
-    name: 'Music',
+    name: 'MusicPage',
     setup() {
-      const { i18n, helmet, isZhLang } = useEnhancer()
+      const { i18n, meta, isZhLang } = useEnhancer()
       const musicPlayer = isClient ? useMusic() : null
 
-      helmet(() => {
-        const prefix = isZhLang.value
-          ? `${i18n.t(LANGUAGE_KEYS.PAGE_MUSIC)} | `
-          : ''
-        return { title: prefix + 'Music' }
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_MUSIC, Language.En)!)
+        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_MUSIC), enTitle] : [enTitle]
+        return { pageTitle: titles.join(' | ') }
       })
 
-      const relativeStrokeWidth = parseFloat((15 / 450 * 100).toFixed(1))
+      const relativeStrokeWidth = parseFloat(((15 / 450) * 100).toFixed(1))
       const radius = 50 - relativeStrokeWidth / 2
       const perimeter = 2 * Math.PI * radius
       const trackPath = (() => {
         const _radius = parseInt(String(radius), 10)
-        return `M 50 50 m 0 -${_radius} a ${_radius} ${_radius} 0 1 1 0 ${_radius * 2} a ${_radius} ${_radius} 0 1 1 0 -${_radius * 2}`
+        return `M 50 50 m 0 -${_radius} a ${_radius} ${_radius} 0 1 1 0 ${
+          _radius * 2
+        } a ${_radius} ${_radius} 0 1 1 0 -${_radius * 2}`
       })()
 
       const circlePathStyle = computed(() => {
-        return musicPlayer && {
-          strokeDasharray: `${perimeter}px, ${perimeter}px`,
-          strokeDashoffset: (1 - (musicPlayer.state.progress) / 100) * perimeter + 'px'
+        if (musicPlayer) {
+          return {
+            strokeDasharray: `${perimeter}px, ${perimeter}px`,
+            strokeDashoffset: (1 - musicPlayer.state.progress / 100) * perimeter + 'px'
+          }
         }
       })
 
@@ -141,7 +117,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .music-page {
     display: flex;
@@ -178,9 +154,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 38rem;
-        height: 38rem;
-        opacity: .9;
+        width: 39rem;
+        height: 39rem;
+        opacity: 0.9;
         @include visibility-transition();
 
         &:hover {
@@ -188,8 +164,12 @@
         }
 
         @keyframes rotation {
-          from { transform: rotate(0deg) }
-          to { transform: rotate(360deg) }
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
         }
 
         > .song-bg-box {
@@ -224,7 +204,7 @@
             line-height: 6rem;
             background-color: $module-bg;
             border-radius: 100%;
-            opacity: .8;
+            opacity: 0.8;
             font-size: 3em;
             text-align: center;
             transition: all $transition-time-fast;
@@ -235,7 +215,7 @@
             }
 
             > .iconfont {
-              color: $text-reversal;
+              color: $white;
             }
           }
         }
@@ -279,12 +259,6 @@
     > .song-info {
       margin-top: $lg-gap * 3;
       text-align: center;
-
-      > .lrc {
-        .lrc-text {
-          color: $primary;
-        }
-      }
     }
   }
 </style>

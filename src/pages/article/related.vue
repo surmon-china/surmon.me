@@ -1,22 +1,10 @@
 <template>
   <div class="related" :class="{ mobile: isMobile }">
-    <placeholder
-      :loading="fetching"
-      :data="!!articles.length"
-    >
+    <placeholder :loading="fetching" :data="!!articles.length">
       <template #loading>
-        <skeleton-paragraph
-          v-if="isMobile"
-          class="skeleton"
-          line-height="1em"
-          :lines="4"
-        />
+        <skeleton-paragraph v-if="isMobile" class="skeleton" line-height="1em" :lines="4" />
         <ul class="skeleton-list" v-else>
-          <skeleton-base
-            class="article"
-            v-for="item in 4"
-            :key="item"
-          />
+          <skeleton-base class="article" v-for="item in 4" :key="item" />
         </ul>
       </template>
       <template #default>
@@ -49,7 +37,7 @@
 
 <script lang="ts">
   import { defineComponent, PropType } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '/@/app/enhancer'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
 
@@ -66,12 +54,9 @@
       }
     },
     setup() {
-      const { store, globalState, isMobile } = useEnhancer()
+      const { globalState, isMobile } = useEnhancer()
       const getRelatedArticleThumb = (thumb: string) => {
-        return getArchiveArticleThumbnailUrl(
-          thumb,
-          globalState.imageExt.value.isWebP
-        )
+        return getArchiveArticleThumbnailUrl(thumb, globalState.imageExt.value.isWebP)
       }
 
       return {
@@ -84,7 +69,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .related {
     overflow: hidden;
@@ -92,7 +77,7 @@
     .skeleton-list {
       padding: 0;
       margin: 0;
-      height: 9rem;
+      height: 7rem;
       overflow: hidden;
       display: flex;
 
@@ -124,7 +109,7 @@
 
         &.disabled {
           pointer-events: none;
-          opacity: .8;
+          opacity: 0.8;
         }
 
         &:nth-child(3n) {
@@ -136,7 +121,7 @@
           display: block;
           position: relative;
           overflow: hidden;
-          opacity: .8;
+          opacity: 0.8;
           transition: opacity $transition-time-normal;
 
           .thumb {
@@ -154,7 +139,7 @@
             padding: 0 1em;
             line-height: 2.4;
             text-align: center;
-            font-size: $font-size-small;
+            font-size: $font-size-h6;
             color: $text-secondary;
             transition: color $transition-time-fast;
             @include text-overflow();

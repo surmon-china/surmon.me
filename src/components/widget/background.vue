@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../app/enhancer'
   export default defineComponent({
     name: 'Background',
     setup() {
@@ -17,7 +17,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   #background {
     position: fixed;

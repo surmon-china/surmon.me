@@ -1,6 +1,6 @@
 /**
  * @file Storage constant
- * @module constant/storage
+ * @module constant.storage
  * @author Surmon <https://github.com/surmon-china>
  */
 

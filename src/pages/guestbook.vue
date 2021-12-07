@@ -21,60 +21,59 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
-  import { isClient } from '/@/environment'
-  import { useEnhancer } from '/@/enhancer'
-  import { prefetch } from '/@/universal'
-  import { Modules, getNamespace } from '/@/store'
-  import { OptionModuleActions, OptionModuleMutations } from '/@/store/option'
-  import { CommentModuleActions } from '/@/store/comment'
+  import { defineComponent, computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { isClient } from '/@/app/environment'
+  import { useUniversalFetch } from '/@/universal'
+  import { useMetaStore } from '/@/store/meta'
+  import { useCommentStore } from '/@/store/comment'
+  import { firstUpperCase } from '/@/transforms/text'
+  import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import Comment from '/@/components/comment/index.vue'
+  import { META } from '/@/config/app.config'
 
   export default defineComponent({
-    name: 'Guestbook',
+    name: 'GuestbookPage',
     components: {
       Comment
     },
     setup() {
-      const { i18n, store, helmet, isMobile, isDarkTheme, isZhLang } = useEnhancer()
-      const siteLikes = computed(() => {
-        const appOption = store.state.option.appOption.data
-        return appOption ? appOption.meta.likes : 0
+      const { i18n, meta, isMobile, isDarkTheme, isZhLang } = useEnhancer()
+      const metaStore = useMetaStore()
+      const commentStore = useCommentStore()
+      const siteLikes = computed(() => metaStore.appOptions.data?.meta.likes || 0)
+
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_GUESTBOOK, Language.En)!)
+        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_GUESTBOOK), enTitle] : [enTitle]
+        return { pageTitle: titles.join(' | '), description: `给 ${META.author} 留言` }
       })
 
-      helmet(() => {
-        const prefix = isZhLang.value
-          ? `${i18n.t(LANGUAGE_KEYS.PAGE_GUESTBOOK)} | `
-          : ''
-        return { title: prefix + 'Guestbook' }
-      })
+      const fetchAllData = () => {
+        return Promise.all([
+          metaStore.fetchAppOptions(true),
+          commentStore.fetchList({
+            post_id: 0,
+            delay: isClient ? 368 : 0
+          })
+        ])
+      }
 
-      const fetchAllData = () => Promise.all([
-        store.dispatch(
-          getNamespace(Modules.Option, OptionModuleActions.FetchAppOption),
-          true
-        ),
-        store.dispatch(
-          getNamespace(Modules.Comment, CommentModuleActions.FetchList),
-          { post_id: 0, delay: isClient ? 368 : 0 }
-        )
-      ])
+      useUniversalFetch(() => fetchAllData())
 
-      const resultData = {
+      return {
         LANGUAGE_KEYS,
         isMobile,
         isDarkTheme,
         siteLikes
       }
-
-      return prefetch(fetchAllData, resultData)
     }
   })
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .guestbook-page {
     .banner {
@@ -88,7 +87,7 @@
       @include radius-box($lg-radius);
 
       .image {
-        margin-top: - ($gap * 6);
+        margin-top: -($gap * 6);
         transition: all $transition-time-slow;
 
         &:hover {
@@ -106,19 +105,14 @@
         line-height: $size;
         padding: 0 $sm-gap;
         padding-left: 3rem;
-        opacity: .8;
+        opacity: 0.8;
         font-weight: 700;
         color: $body-bg;
         cursor: progress;
-        background: linear-gradient(
-          to left,
-          $module-bg-lighter,
-          $module-bg,
-          transparent
-        );
+        background: linear-gradient(to left, $module-bg-lighter, $module-bg, transparent);
 
         .text {
-          letter-spacing: .3px;
+          letter-spacing: 0.3px;
           font-weight: bold;
           color: $text;
           background-clip: text;

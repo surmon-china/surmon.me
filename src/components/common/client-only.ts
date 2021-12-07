@@ -3,11 +3,12 @@
  * @description only render on client (browser)
  * @description Fork from: https://github.com/egoist/vue-client-only/blob/master/src/index.js
  * @description Fork from: https://github.com/kadirahq/react-no-ssr/blob/master/src/index.js
+ * @description Fork from: https://github.com/nuxt/framework/blob/main/packages/nuxt3/src/app/components/client-only.mjs
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import { defineComponent, ref, h, onMounted, Transition, cloneVNode } from 'vue'
-import { useEnhancer } from '/@/enhancer'
+import { useEnhancer } from '../../app/enhancer'
 
 /**
  * @description only render on client (browser)
@@ -40,17 +41,15 @@ export const ClientOnly = defineComponent({
   setup(props, context) {
     const { globalState } = useEnhancer()
     // SSR -> hydrated -> render -> no transition
-    const canRender = ref(globalState.isHydrated.value ? true : false)
+    const mounted = ref(globalState.isHydrated.value ? true : false)
 
     onMounted(() => {
       // SSR inited -> mounted -> render -> transition
       if (!globalState.isHydrated.value) {
         const setRender = () => {
-          canRender.value = true
+          mounted.value = true
         }
-        props.delay
-          ? setTimeout(setRender, props.delay)
-          : setRender()
+        props.delay ? setTimeout(setRender, props.delay) : setRender()
       }
     })
 
@@ -61,20 +60,16 @@ export const ClientOnly = defineComponent({
       if (Array.isArray(result) && result.length > 1) {
         return result
       }
-      const singleResult = Array.isArray(result)
-        ? result[0]
-        : result
-      return h(
-        Transition,
-        { name: 'client-only', mode: 'out-in' },
-        () => singleResult
+      const singleResult = Array.isArray(result) ? result[0] : result
+      return h(Transition, { name: 'client-only', mode: 'out-in' }, () =>
+        singleResult
           ? cloneVNode(singleResult, { key: resultKey })
           : h('div', { key: 'empty', class: 'client-only-empty' })
       )
     }
 
     return () => {
-      if (canRender.value) {
+      if (mounted.value) {
         return renderResult(context.slots.default?.(), 'result')
       }
 
@@ -83,11 +78,10 @@ export const ClientOnly = defineComponent({
       }
 
       if (props.placeholderTag && props.placeholder) {
-        return renderResult(h(
-          props.placeholderTag,
-          { class: 'client-only-placeholder' },
-          props.placeholder
-        ), 'placeholder')
+        return renderResult(
+          h(props.placeholderTag, { class: 'client-only-placeholder' }, props.placeholder),
+          'placeholder'
+        )
       }
 
       return renderResult(null)

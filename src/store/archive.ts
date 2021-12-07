@@ -1,62 +1,41 @@
 /**
  * @file Archive state
- * @module store/archive
+ * @module store.archive
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { Module, MutationTree, ActionTree } from 'vuex'
-import nodepress from '../services/nodepress'
-import { ARTICLE_API_PATH } from './article'
-import { IRootState } from '.'
+import { defineStore } from 'pinia'
+import nodepress from '/@/services/nodepress'
+import { Article } from './article'
+import { Category } from './category'
+import { Tag } from './tag'
 
-export enum ArchiveModuleMutations {
-  SetArticlesFetching = 'setArticlesFetching',
-  SetArticlesData = 'setArticlesData'
-}
-export enum ArchiveModuleActions {
-  FetchArticles = 'fetchArticles'
+export interface ArchiveState {
+  meta: any
+  articles: Article[]
+  categories: Category[]
+  tags: Tag[]
 }
 
-const state = () => ({
-  articles: {
+export const useArchiveStore = defineStore('archive', {
+  state: () => ({
     fetching: false,
-    data: [] as Array<$TODO>
+    data: null as null | ArchiveState
+  }),
+  actions: {
+    fetchArchive() {
+      if (this.data) {
+        return Promise.resolve()
+      }
+      this.fetching = true
+      return nodepress
+        .get<ArchiveState>('/archive')
+        .then((response) => {
+          this.data = response.result
+        })
+        .finally(() => {
+          this.fetching = false
+        })
+    }
   }
 })
-
-const mutations: MutationTree<ArchiveState> = {
-  [ArchiveModuleMutations.SetArticlesFetching](state, fetching: boolean) {
-    state.articles.fetching = fetching
-  },
-  [ArchiveModuleMutations.SetArticlesData](state, data) {
-    state.articles.data = data
-  }
-}
-
-const actions: ActionTree<ArchiveState, IRootState> = {
-  [ArchiveModuleActions.FetchArticles]({ state, commit }, params = {}) {
-    if (state.articles.data.length) {
-      return Promise.resolve(state.articles.data)
-    }
-    commit(ArchiveModuleMutations.SetArticlesFetching, true)
-    return nodepress
-      .get(ARTICLE_API_PATH, { params: { per_page: 666, ...params }})
-      .then(response => {
-        commit(ArchiveModuleMutations.SetArticlesData, response.result.data)
-        return response.result.data
-      })
-      .finally(() => {
-        commit(ArchiveModuleMutations.SetArticlesFetching, false)
-      })
-  }
-}
-
-const archiveModule: Module<ArchiveState, IRootState> = {
-  namespaced: true,
-  state,
-  mutations,
-  actions
-}
-
-export type ArchiveState = ReturnType<typeof state>
-export default archiveModule

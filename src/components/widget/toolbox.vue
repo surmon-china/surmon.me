@@ -2,23 +2,11 @@
   <div id="toolbox">
     <div class="container">
       <div class="tools">
-        <ulink
-          class="rss"
-          :href="VALUABLE_LINKS.RSS"
-          @mousedown="handleRSS"
-        >
+        <ulink class="rss" :href="VALUABLE_LINKS.RSS" @mousedown="handleRSS">
           <i class="iconfont icon-rss" />
         </ulink>
-        <button
-          class="barrage"
-          :title="t(LANGUAGE_KEYS.BARRAGE)"
-          :class="{ active: isOnBarrage }"
-          @click="toggleBarrage"
-        >
-          <i class="iconfont icon-barrage" />
-        </button>
-        <a class="feedback" :href="mailUrl" :title="t(LANGUAGE_KEYS.FEEDBACK)">
-          <i class="iconfont icon-mail" />
+        <a class="feedback" target="_blank" :href="mailUrl" :title="t(LANGUAGE_KEYS.FEEDBACK)">
+          <i class="iconfont icon-mail-plane" />
         </a>
         <button
           class="to-page-top"
@@ -44,8 +32,8 @@
 </template>
 
 <script lang="ts">
-  import { PropType, defineComponent, ref, computed, onMounted } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { defineComponent, ref } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { scrollTo, Easing } from '/@/utils/scroller'
@@ -55,10 +43,9 @@
   export default defineComponent({
     name: 'Toolbox',
     setup() {
-      const { i18n, gtag, globalState } = useEnhancer()
-      const isOnBarrage = computed(() => globalState.switchBox.barrage)
+      const { i18n, gtag } = useEnhancer()
 
-      const animationFrameId = ref(0)
+      const animationFrameID = ref(0)
       const isTopButtonMouseOver = ref(false)
       const isBottomButtonMouseOver = ref(false)
 
@@ -83,13 +70,13 @@
           }
           window.scrollTo(0, targetScrollY)
           if (isBottomButtonMouseOver.value || isTopButtonMouseOver.value) {
-            animationFrameId.value = window.requestAnimationFrame(step)
+            animationFrameID.value = window.requestAnimationFrame(step)
           } else {
-            window.cancelAnimationFrame(animationFrameId.value)
+            window.cancelAnimationFrame(animationFrameID.value)
             return false
           }
         }
-        animationFrameId.value = window.requestAnimationFrame(step)
+        animationFrameID.value = window.requestAnimationFrame(step)
       }
 
       return {
@@ -97,35 +84,23 @@
         LANGUAGE_KEYS,
         t: i18n.translate,
         mailUrl: `mailto:${META.email}`,
-        isOnBarrage,
         scrollToTop,
         toBottom() {
-          scrollTo(
-            window.scrollY + window.innerHeight,
-            300,
-            { easing: Easing.easeIn }
-          )
+          scrollTo(window.scrollY + window.innerHeight, 300, { easing: Easing.easeIn })
         },
         setTopButtonState(state: boolean, isStartSlow = false) {
           isTopButtonMouseOver.value = state
-          window.cancelAnimationFrame(animationFrameId.value)
+          window.cancelAnimationFrame(animationFrameID.value)
           isStartSlow && slowMoveToAnyWhere()
         },
         setBottomButtonState(state: boolean, isStartSlow = false) {
           isBottomButtonMouseOver.value = state
-          window.cancelAnimationFrame(animationFrameId.value)
+          window.cancelAnimationFrame(animationFrameID.value)
           isStartSlow && slowMoveToAnyWhere()
         },
         handleRSS() {
           gtag?.event('RSS 订阅', {
             event_category: GAEventActions.Click,
-            event_label: GAEventTags.Tool
-          })
-        },
-        toggleBarrage() {
-          globalState.switchTogglers.barrage()
-          gtag?.event('弹幕功能', {
-            event_category: GAEventActions.Toggle,
             event_label: GAEventTags.Tool
           })
         }
@@ -135,7 +110,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   #toolbox {
     position: fixed;
@@ -143,11 +118,11 @@
     width: 100%;
     bottom: 30rem;
 
-    > .container {
+    .container {
       $size: $lg-gap * 2.8;
       position: relative;
 
-      > .tools {
+      .tools {
         position: absolute;
         right: -12rem;
         width: $size;
@@ -162,12 +137,10 @@
           border-bottom-right-radius: $xs-radius;
         }
 
-        > .rss,
-        > .webcam,
-        > .barrage,
-        > .to-page-top,
-        > .to-page-bottom,
-        > .feedback {
+        .rss,
+        .to-page-top,
+        .to-page-bottom,
+        .feedback {
           display: block;
           width: $size;
           height: $size;
@@ -203,33 +176,25 @@
           }
         }
 
-        > .rss {
+        .rss {
           color: $rss-primary;
-
           &:hover {
             background-color: $rss-primary;
             color: $white;
           }
         }
 
-        > .barrage {
-          color: $text-reversal;
-          animation: default-btn-bg 8s infinite;
-
-          &.active {
-            background-color: $module-bg-hover;
-            animation: default-btn-bg steps(1) 1.666s infinite;
-          }
-
-          &.close {
-            color: $link-color;
-            animation: none;
+        .feedback {
+          background-color: $primary-lighter;
+          color: $white;
+          &:hover {
+            background-color: $primary;
           }
         }
 
-        > .to-page-bottom {
-          height: $size * 0.6;
-          line-height: $size * 0.6;
+        .to-page-bottom {
+          height: $size * 0.618;
+          line-height: $size * 0.618;
         }
       }
     }

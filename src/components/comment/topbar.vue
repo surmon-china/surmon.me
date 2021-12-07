@@ -18,11 +18,7 @@
             <strong class="count">{{ total || 0 }}</strong>
             <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIST_COUNT" />
           </div>
-          <button
-            class="like"
-            :class="{ liked: isPageLiked }"
-            @click="handleLikePage"
-          >
+          <button class="like" :class="{ liked: isPageLiked }" @click="handleLikePage">
             <i class="iconfont icon-heart" />
             <strong class="count">{{ likes || 0 }}</strong>
             <template v-if="isZhLang && isMobile">赞</template>
@@ -32,7 +28,7 @@
           </button>
           <desktop-only>
             <button class="sponsor" @click="handleSponsor">
-              <i class="iconfont icon-hao" />
+              <i class="iconfont icon-dollar" />
             </button>
             <client-only>
               <popup v-model:visible="isVisibleSponsor" :border="false">
@@ -63,16 +59,13 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted, PropType } from 'vue'
-  import { isClient } from '/@/environment'
-  import { useEnhancer } from '/@/enhancer'
-  import { getNamespace, Modules } from '/@/store'
-  import { ArticleModuleActions } from '/@/store/article'
-  import { OptionModuleActions } from '/@/store/option'
+  import { defineComponent, ref, PropType } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useArticleDetailStore } from '/@/store/article'
+  import { useMetaStore } from '/@/store/meta'
   import { SortType, CommentPostType } from '/@/constants/state'
   import { GAEventTags, GAEventActions } from '/@/constants/gtag'
   import { usePageLike } from '/@/transforms/state'
-  import { getFileCDNUrl } from '/@/transforms/url'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { VALUABLE_LINKS } from '/@/config/app.config'
 
@@ -102,11 +95,12 @@
         required: true
       }
     },
-    emits: [
-      Events.Sort
-    ],
+    emits: [Events.Sort],
     setup(props, context) {
-      const { i18n, store, gtag, isMobile, isZhLang } = useEnhancer()
+      const { i18n, gtag, isMobile, isZhLang } = useEnhancer()
+      const articleDetailStore = useArticleDetailStore()
+      const metaStore = useMetaStore()
+
       const { isLiked: isPageLiked, like: likePage } = usePageLike(props.postId)
       const isVisibleSponsor = ref(false)
 
@@ -125,12 +119,11 @@
           event_label: GAEventTags.Comment
         })
         try {
-          await store.dispatch(
-            props.postId === CommentPostType.Guestbook
-              ? getNamespace(Modules.Option, OptionModuleActions.PostSiteLike)
-              : getNamespace(Modules.Article, ArticleModuleActions.PostArticleLike),
-            props.postId
-          )
+          if (props.postId === CommentPostType.Guestbook) {
+            await metaStore.postSiteLike()
+          } else {
+            await articleDetailStore.postArticleLike(props.postId)
+          }
           likePage()
         } catch (error) {
           const message = i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION)
@@ -164,7 +157,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
   $topbar-size: 2em;
 
   .sponsor-modal {
@@ -180,7 +173,7 @@
     margin-bottom: $lg-gap;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px dashed $module-bg-darker-1;
+    border-bottom: 1px solid $module-bg-darker-1;
   }
 
   .topbar-skeleton {
@@ -214,7 +207,7 @@
       .total {
         height: $topbar-size;
         line-height: $topbar-size;
-        padding: 0 .6em;
+        padding: 0 0.6em;
         margin-right: $sm-gap;
         background-color: $module-bg-darker-1;
         @include radius-box($mini-radius);

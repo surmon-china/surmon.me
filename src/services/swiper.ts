@@ -1,19 +1,12 @@
 /**
- * @file vue-awesome-swiper
- * @module service/swiper
+ * @file swiper for vue
+ * @module service.swiper
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App } from 'vue'
-import { Swiper, Pagination, Mousewheel, Autoplay } from 'swiper'
-// import exporter from 'vue-awesome-swiper/dist/exporter'
-import exporter from '/@/todo/swiper/exporter'
-import 'swiper/swiper-bundle.min.css'
+import { Swiper as SwiperClass, Pagination, Navigation, Mousewheel, Autoplay, A11y } from 'swiper'
+export { Swiper, SwiperSlide } from 'swiper/vue'
 
-Swiper.use([Pagination, Mousewheel, Autoplay])
+SwiperClass.use([Pagination, Navigation, Mousewheel, Autoplay, A11y])
 
-export default {
-  install(app: App) {
-    app.use(exporter(Swiper))
-  }
-}
+export default SwiperClass

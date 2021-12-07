@@ -7,9 +7,9 @@
       </strong>
     </p>
     <placeholder
-      :data="articles"
-      :loading="isFetching"
-      :p-i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"
+      :data="articleStore.hotList.data"
+      :loading="articleStore.hotList.fetching"
+      :i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"
     >
       <template #loading>
         <ul class="article-list-skeleton" key="skeleton">
@@ -20,17 +20,9 @@
       </template>
       <template #default>
         <ul class="article-list" key="list">
-          <li
-            v-for="item in articles"
-            :key="item.id"
-            class="item"
-          >
+          <li v-for="item in articleStore.hotList.data" :key="item.id" class="item">
             <span class="index"></span>
-            <router-link
-              class="title"
-              :to="getArticleDetailRoute(item.id)"
-              :title="getArticleTitle(item)"
-            >
+            <router-link class="title" :to="getArticleDetailRoute(item.id)" :title="item.title">
               {{ item.title }}
             </router-link>
           </li>
@@ -41,31 +33,18 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useStore } from '/@/store'
-  import { useI18n } from '/@/services/i18n'
-  import { Language } from '/@/language/data'
+  import { defineComponent } from 'vue'
+  import { useArticleStore } from '/@/store/article'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { isSearchArchive, getArticleDetailRoute } from '/@/transforms/route'
+  import { getArticleDetailRoute } from '/@/transforms/route'
 
   export default defineComponent({
-    name: 'PcAsideArticle',
+    name: 'PCAsideArticle',
     setup() {
-      const i18n = useI18n()
-      const store = useStore()
-      const articles = computed(() => store.state.article.hotList.data)
-      const isFetching = computed(() => store.state.article.hotList.fetching)
-
-      const getArticleTitle = (article: any) => {
-        const commentCount = article.meta.comments + i18n.translate(LANGUAGE_KEYS.COMMENT_LIST_COUNT)
-        const likeCount = i18n.translate(LANGUAGE_KEYS.COMMENT_LIKE_COUNT, article.meta.likes)
-        return `${article.title} - 「 ${commentCount} | ${likeCount} 」`
-      }
+      const articleStore = useArticleStore()
 
       return {
-        articles,
-        isFetching,
-        getArticleTitle,
+        articleStore,
         getArticleDetailRoute,
         LANGUAGE_KEYS
       }
@@ -74,8 +53,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
-  @import './variables.scss';
+  @import 'src/styles/init.scss';
 
   .article {
     overflow: hidden;
@@ -116,7 +94,7 @@
       .item {
         display: flex;
         align-items: center;
-        height: 1.9em;
+        height: 2.2rem;
         padding: 0 $gap;
         margin-bottom: $sm-gap;
         color: $text-darker;
@@ -131,14 +109,14 @@
         &:nth-child(2) {
           .index {
             color: $text-reversal;
-            background-color: rgba($accent, .6);
+            background-color: rgba($accent, 0.6);
           }
         }
 
         &:nth-child(3) {
           .index {
             color: $text-reversal;
-            background-color: rgba($red, .6);
+            background-color: rgba($red, 0.6);
           }
         }
 
@@ -149,7 +127,7 @@
         .index {
           $size: 1.5em;
           flex-shrink: 0;
-          color: $text-secondary;
+          color: $text-disabled;
           counter-increment: hot-article-list;
           background-color: $module-bg-darker-1;
           width: $size;
@@ -158,7 +136,8 @@
           display: block;
           text-align: center;
           margin-right: $sm-gap;
-          font-size: $gap;
+          font-size: 1rem;
+          font-weight: bold;
           border-radius: $xs-radius;
 
           &::before {
@@ -169,12 +148,13 @@
         .title {
           display: block;
           font-size: $font-size-h6;
+          border-top: 1px solid transparent;
           border-bottom: 1px solid transparent;
           @include text-overflow();
 
           &:hover {
             text-decoration: none;
-            border-color: initial;
+            border-bottom-color: initial;
           }
         }
       }

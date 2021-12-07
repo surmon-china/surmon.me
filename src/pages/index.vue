@@ -1,75 +1,67 @@
 <template>
   <div class="index-page">
-    <carrousel
-      :articles="article.data.data"
-      :fetching="article.fetching"
-    />
+    <carrousel :articles="articleStore.list.data" :fetching="articleStore.list.fetching" />
     <announcement
-      :announcements="announcement.data"
-      :fetching="announcement.fetching || article.fetching"
+      :announcements="announcementStore.announcements"
+      :fetching="announcementStore.fetching || articleStore.list.fetching"
     />
     <article-list
       :mammon="false"
-      :fetching="article.fetching"
-      :articles="article.data.data"
-      :pagination="article.data.pagination"
+      :fetching="articleStore.list.fetching"
+      :articles="articleStore.list.data"
+      :pagination="articleStore.list.pagination"
       @loadmore="loadmoreArticles"
     />
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
-  import { prefetch, onClient } from '/@/universal'
-  import { useStore, Modules, getNamespace } from '/@/store'
-  import { ArticleModuleActions } from '/@/store/article'
-  import { AnnouncementModuleActions } from '/@/store/announcement'
+  import { defineComponent } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useUniversalFetch, onClient } from '/@/universal'
+  import { useArticleStore } from '/@/store/article'
+  import { useAnnouncementStore } from '/@/store/announcement'
   import { nextScreen } from '/@/utils/effects'
   import Carrousel from '/@/components/archive/carrousel.vue'
   import Announcement from '/@/components/archive/announcement.vue'
   import ArticleList from '/@/components/archive/list.vue'
+  import { META } from '/@/config/app.config'
 
   export default defineComponent({
-    name: 'Index',
+    name: 'IndexPage',
     components: {
       Carrousel,
       Announcement,
       ArticleList
     },
     setup() {
-      const store = useStore()
-      const article = computed(() => store.state.article.list)
-      const announcement = computed(() => store.state.announcement)
+      const { meta } = useEnhancer()
+      const articleStore = useArticleStore()
+      const announcementStore = useAnnouncementStore()
 
-      const fetchAnnouncements = () => store.dispatch(
-        getNamespace(Modules.Announcement, AnnouncementModuleActions.FetchList),
-      )
-
-      const fetchArticles = (params?: any) => store.dispatch(
-        getNamespace(Modules.Article, ArticleModuleActions.FetchList),
-        params
-      )
+      meta({
+        title: `${META.title} - ${META.description}`,
+        keywords: META.keywords,
+        description: META.description
+      })
 
       const loadmoreArticles = async () => {
-        const targetPage = article.value.data.pagination?.current_page + 1
-        await fetchArticles({ page: targetPage })
+        const targetPage = articleStore.list.pagination?.current_page + 1
+        await articleStore.fetchList({ page: targetPage })
         if (targetPage > 1) {
           onClient(nextScreen)
         }
       }
 
-      const fetchAllData = () => Promise.all([
-        fetchArticles(),
-        fetchAnnouncements()
-      ])
+      useUniversalFetch(() =>
+        Promise.all([articleStore.fetchList(), announcementStore.fetchList()])
+      )
 
-      const resultData = {
-        article,
-        announcement,
+      return {
+        articleStore,
+        announcementStore,
         loadmoreArticles
       }
-
-      return prefetch(fetchAllData, resultData)
     }
   })
 </script>

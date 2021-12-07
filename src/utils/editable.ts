@@ -1,6 +1,6 @@
 /**
  * @file Editable element util
- * @module util/editable
+ * @module util.editable
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -78,22 +78,19 @@ export const insertContent = (option: IncertOption) => {
     // 替换所有选中文本 -> 然后定位到所替换文本的最后一个字符
     // 对于选中逻辑来说，既定的任何单个字符都理解为替换
     const isInsertReplace = !!before && !after
-    const newSelectedText = isInsertReplace
-      ? before
-      : before + selectedText + after
+    const newSelectedText = isInsertReplace ? before : before + selectedText + after
     const newText = currentText.replace(selectedText, newSelectedText)
     // console.log('选中插入', newText)
     element.innerText = newText
-    focusPosition(
-      element,
-      newText.indexOf(newSelectedText) + newSelectedText.length - 1
-    )
+    focusPosition(element, newText.indexOf(newSelectedText) + newSelectedText.length - 1)
   } else {
     // 否则追加新内容
     const newInsertText = before + after
     const selectedRange = (() => {
       // eslint-disable-next-line no-empty
-      try { return selection.getRangeAt(0) } catch(error) {}
+      try {
+        return selection.getRangeAt(0)
+      } catch (error) {}
     })() as Range
     const startPoint = selectedRange?.startOffset
     const endPoint = selectedRange?.endOffset
@@ -107,10 +104,7 @@ export const insertContent = (option: IncertOption) => {
       ]
       // console.log('光标插入', startPoint, newTexts)
       element.innerText = newTexts.join('')
-      focusPosition(
-        element,
-        newTexts[0].length + newTexts[1].length - 1
-      )
+      focusPosition(element, newTexts[0].length + newTexts[1].length - 1)
     } else {
       // 否则末端追加内容，并定位到最后一个字符
       const newText = currentText + newInsertText

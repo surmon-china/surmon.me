@@ -1,21 +1,9 @@
 <template>
   <div id="popup" class="popup">
     <transition name="module">
-      <div
-        class="mask"
-        v-show="state.visibility"
-        @click.self="handleMaskClick"
-      >
-        <div
-          ref="element"
-          class="warpper"
-          :class="{ border: state.border }"
-        >
-          <img
-            v-if="state.isImage"
-            v-bind="image.attrs"
-            :src="image.src"
-          >
+      <div class="mask" v-show="state.visibility" @click.self="handleMaskClick">
+        <div ref="element" class="warpper" :class="{ border: state.border }">
+          <img v-if="state.isImage" v-bind="image.attrs" :src="image.src || ''" />
         </div>
       </div>
     </transition>
@@ -37,8 +25,8 @@
 
       watchEffect(() => {
         state.scrollClose
-          // https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md#solution-the-passive-option
-          ? window.addEventListener('scroll', handleWindowScroll, { passive: true })
+          ? // https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md#solution-the-passive-option
+            window.addEventListener('scroll', handleWindowScroll, { passive: true })
           : window.removeEventListener('scroll', handleWindowScroll)
       })
 
@@ -53,7 +41,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   #popup {
     .mask {
