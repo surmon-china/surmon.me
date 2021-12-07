@@ -13,7 +13,6 @@
 [![vue](https://img.shields.io/badge/MADE%20WITH-VUE-42a97a?style=for-the-badge&labelColor=35495d)](https://vuejs.org)
 [![nodepress](https://img.shields.io/badge/NODE-PRESS-83BA2F?style=for-the-badge&labelColor=90C53F)](https://github.com/surmon-china/nodepress)
 [![GitHub stars](https://img.shields.io/github/stars/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues-raw/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/issues)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/surmon-china/surmon.me/Deploy?style=for-the-badge&label=Deploy)](https://github.com/surmon-china/surmon.me/actions?query=workflow:%22Deploy%22)
 [![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/blob/master/LICENSE)
 
@@ -25,9 +24,9 @@
 
 **🔥 其他相关项目：**
 
-- **RESTful API service for blog:** [nodepress](https://github.com/surmon-china/nodepress) powered by nestjs
-- **Blog admin site:** [veact-admin](https://github.com/surmon-china/veact-admin) powered by React & [Veact](https://github.com/veactjs/veact)
-- **Blog native app:** [surmon.me.native](https://github.com/surmon-china/surmon.me.native) powered by react-native
+- **RESTful API service for blog:** [`nodepress`](https://github.com/surmon-china/nodepress) powered by nestjs
+- **Blog admin site:** [`veact-admin`](https://github.com/surmon-china/veact-admin) powered by React & [`Veact`](https://github.com/veactjs/veact)
+- **Blog native app:** [`surmon.me.native`](https://github.com/surmon-china/surmon.me.native) powered by react-native
 
 **更新记录：[CHANGELOG.md](https://github.com/surmon-china/surmon.me/blob/master/CHANGELOG.md)**
 
