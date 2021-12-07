@@ -1,8 +1,8 @@
 /**
- * @file 弹窗服务
+ * @file Client popup
  * @module service.popup
  * @author Surmon <https://github.com/surmon-china>
- * @example window.$popup.vImage('http://xxx.jpg')
+ * @example window.$popup.vImage('https://xxx.jpg')
  */
 
 import { App, Plugin, readonly, reactive, nextTick } from 'vue'
@@ -13,6 +13,7 @@ import { PopupSymbol } from './constant'
 
 declare global {
   interface Window {
+    // @ts-ignore
     $popup: Popup
   }
 }
@@ -87,6 +88,7 @@ const createPopupStore = () => {
 export interface PopupPluginConfig {
   exportToGlobal?: boolean
 }
+// @ts-ignore
 export type Popup = ReturnType<typeof createPopupStore>
 export const createPopup = (): Popup & Plugin => {
   const popupStore = createPopupStore()
@@ -100,7 +102,7 @@ export const createPopup = (): Popup & Plugin => {
       app.component(PopupImageComponent.name as string, PopupImageComponent)
       app.component(PopupRootComponent.name as string, PopupRootComponent)
       if (config?.exportToGlobal) {
-        window.$popup = popupStore
+        ;(window as any).$popup = popupStore
       }
     }
   }

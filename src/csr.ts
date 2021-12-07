@@ -35,6 +35,14 @@ import { createVueApp } from '/@/app/main'
 import { getSSRContext } from './universal'
 import { isProd } from './environment'
 
+import 'swiper/scss'
+import 'swiper/scss/a11y'
+import 'swiper/scss/autoplay'
+import 'swiper/scss/mousewheel'
+import 'swiper/scss/manipulation'
+import 'swiper/scss/navigation'
+import 'swiper/scss/pagination'
+
 import '/@/styles/app.scss'
 
 // app

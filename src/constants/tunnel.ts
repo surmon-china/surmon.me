@@ -5,7 +5,7 @@
  */
 
 export enum TunnelModule {
-  Bilibili = 'bilibili',
+  BiliBili = 'bilibili',
   Wallpaper = 'wallpaper',
   GitHub = 'gitHub',
   Music = 'music'

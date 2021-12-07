@@ -23,15 +23,21 @@ export const startGTagScriptUpdater = () => {
       .then((response) => {
         if (response.status === 200) {
           fs.writeFileSync(path.resolve(EFFECTS_PATH, 'gtag.js'), response.data)
-          console.log('GA 脚本更新成功', new Date())
+          console.info('[GA Script]', '更新成功', new Date())
           setTimeout(doUpdate, UPDATE_TIME.HOURS_24)
         } else {
-          console.warn('GA 脚本更新失败', new Date(), response.data)
+          console.warn('[GA Script]', '更新失败', new Date(), response.data)
           setTimeout(doUpdate, UPDATE_TIME.HOURS_1)
         }
       })
       .catch((error) => {
-        console.warn('GA 脚本更新网络连接失败', new Date(), error.message, error?.toJSON())
+        console.warn(
+          '[GA Script]',
+          '更新网络连接失败',
+          new Date(),
+          error.message,
+          error?.toJSON?.()
+        )
         setTimeout(doUpdate, UPDATE_TIME.HOURS_1)
       })
   })()

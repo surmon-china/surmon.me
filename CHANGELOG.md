@@ -2,10 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
-### v3.2.0 (2021-12-03)
+### v3.2.0 (2021-12-08)
+
+**Feature**
 
 - SSR > `usePrefetch`
--
+- Add Merch page
+- Add Article nav in sidebar
+- Refactoring SSR (by vite) done
+- Refactoring Markdown parser
+- Redesign Music player
+- Redesign Comment component
+- Improve About/Archive/Lens/Job pages
+- Remove Desktop WebSocket
+- Add SSR archive (RSS/Sitemap) function
+- Upgrade Swiper (remove `vue-awesome-swiper`)
 
 ### v3.1.0 (2021-02-16)
 

@@ -28,8 +28,8 @@ console.info(`[APP INITED]:`, { NODE_ENV, mode: isSSR ? 'SSR' : 'SPA' }, API_CON
 export interface ICreatorContext {
   appCreator: CreateAppFunction<Element>
   historyCreator(base?: string): RouterHistory
-  historyBeforeMiddleware?(globalState: any): RouterCreatorOptions['beforeMiddleware']
-  historyAfterMiddleware?(globalState: any): RouterCreatorOptions['afterMiddleware']
+  routerBeforeMiddleware?(globalState: any): RouterCreatorOptions['beforeMiddleware']
+  routerAfterMiddleware?(globalState: any): RouterCreatorOptions['afterMiddleware']
   layout?: LayoutColumn
   theme: Theme
   language: string
@@ -49,8 +49,8 @@ export const createVueApp = (context: ICreatorContext) => {
 
   const store = createUniversalStore({ globalState })
   const router = createUniversalRouter({
-    beforeMiddleware: context.historyBeforeMiddleware?.(globalState),
-    afterMiddleware: context.historyAfterMiddleware?.(globalState),
+    beforeMiddleware: context.routerBeforeMiddleware?.(globalState),
+    afterMiddleware: context.routerAfterMiddleware?.(globalState),
     history: context.historyCreator()
   })
 

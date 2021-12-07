@@ -52,7 +52,7 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
 
   // link: sanitize
   renderer.link = (href, title, text) => {
-    const isSelf = href?.includes(META.url)
+    const isSelf = href?.includes(META.domain)
     const textIsImage = text.includes('<img')
     const linkHTML = trimHTML(`
       <a
@@ -84,7 +84,7 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
       <img
         class="${LOZAD_CLASS_NAME}"
         data-src="${source}"
-        title="${title || alt || META.url}"
+        title="${title || alt || META.domain}"
         alt="${alt || title || source}"
         onclick="window.$popup?.vImage('${source}')"
       />

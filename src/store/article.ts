@@ -48,10 +48,6 @@ export const useArticleStore = defineStore('article', {
       fetching: false,
       data: [] as Array<Article>,
       pagination: null as null | $TODO
-    },
-    archive: {
-      fetching: false,
-      data: [] as Array<Article>
     }
   }),
   actions: {
@@ -98,22 +94,6 @@ export const useArticleStore = defineStore('article', {
         })
         .finally(() => {
           this.hotList.fetching = false
-        })
-    },
-
-    // 获取全部文章列表
-    fetchArchive(params: any = {}) {
-      if (this.archive.data.length) {
-        return Promise.resolve()
-      }
-      this.archive.fetching = true
-      return nodepress
-        .get<{ data: Array<Article> }>(ARTICLE_API_PATH, { params: { per_page: 666, ...params } })
-        .then((response) => {
-          this.archive.data = response.result.data
-        })
-        .finally(() => {
-          this.archive.fetching = false
         })
     }
   }

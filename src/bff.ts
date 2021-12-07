@@ -10,6 +10,7 @@ import cookieParser from 'cookie-parser'
 import { NODE_ENV, isDev } from './environment'
 import { startGTagScriptUpdater } from './server/gtag'
 import { startGitHubChartUpdater } from './server/ghchart'
+import { handleSitemapRequest, handleRSSRequest, startArchiveUpdater } from './server/archive'
 import { tunnelRouter } from './server/tunnel'
 import { PUBLIC_PATH } from './server/helper'
 import { enableDevRuntime } from './server/runtime/dev'
@@ -39,6 +40,10 @@ app.use(cookieParser())
 // static
 app.use(express.static(PUBLIC_PATH))
 
+// sitemap & rss
+app.use('/sitemap.xml', handleSitemapRequest)
+app.use('/rss.xml', handleRSSRequest)
+
 // tunnel
 app.use(API_TUNNEL_PREFIX, tunnelRouter)
 
@@ -52,8 +57,9 @@ server.listen(BFF_SERVER_PORT, () => {
     `at ${new Date().toLocaleString()}`,
     `listening on ${JSON.stringify(server.address())}`
   ]
-  console.info(`Run! ${infos.join(', ')}.`)
+  console.info('[surmon.me]', `Run! ${infos.join(', ')}.`)
   // 启动扩展服务
   startGTagScriptUpdater()
   startGitHubChartUpdater()
+  startArchiveUpdater()
 })

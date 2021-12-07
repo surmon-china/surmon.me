@@ -41,7 +41,7 @@ const createApp = (request: Request): VueApp => {
     userAgent: headers['user-agent']!,
     theme: (request as any).cookies[THEME_STORAGE_KEY] || Theme.Default
   })
-  // hack components for SSR fix warn
+  // HACK: hack components for SSR fix warn
   const hackComponents = ['progress-bar', 'popup-root', 'popup', 'Adsense']
   hackComponents.forEach((c) => app.app.component(c, {}))
   return app
@@ -54,30 +54,30 @@ const renderScripts = (data: any) => {
 }
 
 // https://github.com/nuxt/framework/blob/main/packages/nitro/src/runtime/app/render.ts
-const renderDebug = (...args) => isDev && console.debug(`-----`, ...args)
+const devDebug = (...args) => isDev && console.debug(`-----`, ...args)
 const renderHTML = async (vueApp: VueApp, url: string) => {
-  renderDebug(`renderHTML: ${url}`)
+  devDebug(`renderHTML: ${url}`)
   const { app, router, store, meta, theme, globalState } = vueApp
 
-  renderDebug('1. store.serverInit')
+  devDebug('1. store.serverInit')
   await store.prefetch()
 
-  renderDebug('2. route.push.validate')
+  devDebug('2. route.push.validate')
   await router.push(url)
   await router.isReady()
 
   // because the layout func set has by animation done
-  renderDebug('3. set layout')
+  devDebug('3. set layout')
   globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta))
 
-  renderDebug('4. renderToString')
+  devDebug('4. renderToString')
   const ssrContext = {}
   const html = await renderToString(app, ssrContext)
 
-  renderDebug('5. renderMetaString')
+  devDebug('5. renderMetaString')
   const metas = await meta.renderToString()
 
-  renderDebug('6. HTML & SSR context script')
+  devDebug('6. HTML & SSR context script')
   const scripts = renderScripts({
     metas,
     url,

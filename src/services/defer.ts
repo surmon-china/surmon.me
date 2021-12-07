@@ -1,5 +1,5 @@
 /**
- * @file 客户端初始化任务管理器
+ * @file Client defer task manager
  * @module service.defer
  * @author Surmon <https://github.com/surmon-china>
  */

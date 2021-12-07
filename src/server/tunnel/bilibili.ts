@@ -27,13 +27,13 @@ const getVideoList = async (): Promise<Array<any>> => {
 const autoUpdateData = () => {
   getVideoList()
     .then((data) => {
-      tunnelCache.set(TunnelModule.Bilibili, data)
+      tunnelCache.set(TunnelModule.BiliBili, data)
       // 成功后 1 小时更新一次数据
       setTimeout(autoUpdateData, 1000 * 60 * 60 * 1)
     })
     .catch((error) => {
       // 失败后 5 分钟更新一次数据
-      console.warn('Tunnel bilibili 请求失败：', error)
+      console.warn('[Tunnel BiliBili]', '请求失败', error)
       setTimeout(autoUpdateData, 1000 * 60 * 5)
     })
 }
@@ -41,11 +41,11 @@ const autoUpdateData = () => {
 autoUpdateData()
 
 export const bilibiliService = async (): Promise<any> => {
-  if (tunnelCache.has(TunnelModule.Bilibili)) {
-    return tunnelCache.get(TunnelModule.Bilibili)
+  if (tunnelCache.has(TunnelModule.BiliBili)) {
+    return tunnelCache.get(TunnelModule.BiliBili)
   } else {
     const data = await getVideoList()
-    tunnelCache.set(TunnelModule.Bilibili, data)
+    tunnelCache.set(TunnelModule.BiliBili, data)
     return data
   }
 }
