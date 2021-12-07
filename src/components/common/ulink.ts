@@ -31,10 +31,14 @@ export default defineComponent({
         customAttrs.target = '_blank'
       }
 
-      return h('a', {
-        ...linkAttrs,
-        ...customAttrs
-      }, context.slots.default?.() || text)
+      return h(
+        'a',
+        {
+          ...linkAttrs,
+          ...customAttrs
+        },
+        context.slots.default?.() || text
+      )
     }
   }
 })

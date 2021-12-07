@@ -1,12 +1,12 @@
 /**
  * @file GA 统计服务
- * @module service/gtag
+ * @module service.gtag
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import { App, reactive, readonly, inject, Plugin } from 'vue'
 import { Router } from 'vue-router'
-import { getGAScriptUrl } from '/@/transforms/url'
+import { getGAScriptUrl } from '/@/transforms/outside'
 import loadScript from '/@/utils/script-loader'
 // MARK: https://zh.nuxtjs.org/faq/ga
 // MARK: https://github.com/nuxt-community/google-gtag/blob/master/lib/plugin.js
@@ -30,7 +30,7 @@ export interface IGtagPluginConfig {
   config?: IGtagConfig
 }
 
-const IGtagSymbol = Symbol('gtag')
+const GtagSymbol = Symbol('gtag')
 export type Gtag = ReturnType<typeof createGtag>
 export const createGtag = (options: IGtagPluginConfig) => {
   if (window.gtag == null) {
@@ -59,7 +59,7 @@ export const createGtag = (options: IGtagPluginConfig) => {
 
   loadScript(resourceURL, { async: true }).then(() => {
     state.readied = true
-    options.router.afterEach(to => {
+    options.router.afterEach((to) => {
       const location = window.location.origin + to.fullPath
       push('config', options.id, {
         page_title: document.title,
@@ -71,8 +71,8 @@ export const createGtag = (options: IGtagPluginConfig) => {
 
   const gtag = {
     state: readonly(state),
-    enable: () => state.disabled = false,
-    disable: () => state.disabled = true,
+    enable: () => (state.disabled = false),
+    disable: () => (state.disabled = true),
     set(config: IGtagConfig) {
       push('set', config)
     },
@@ -80,12 +80,15 @@ export const createGtag = (options: IGtagPluginConfig) => {
       push('config', options.id, config)
     },
     // https://developers.google.com/analytics/devguides/collection/gtagjs/events?hl=zh-cn
-    event(eventName: string, config?: IGtagConfig & {
-      event_action?: string
-      event_category?: string
-      event_label?: string
-      value?: number
-    }) {
+    event(
+      eventName: string,
+      config?: IGtagConfig & {
+        event_action?: string
+        event_category?: string
+        event_label?: string
+        value?: number
+      }
+    ) {
       push('event', eventName, config)
     }
   }
@@ -94,7 +97,7 @@ export const createGtag = (options: IGtagPluginConfig) => {
 }
 
 export const useGtag = (): Gtag => {
-  return inject(IGtagSymbol) as Gtag
+  return inject(GtagSymbol) as Gtag
 }
 
 type PluginInstallFunction = Plugin & {
@@ -106,7 +109,7 @@ const install: PluginInstallFunction = (app: App, config: IGtagPluginConfig) => 
     return
   }
   const gtag = createGtag(config)
-  app.provide(IGtagSymbol, gtag)
+  app.provide(GtagSymbol, gtag)
   app.config.globalProperties.$gtag = gtag
   install.installed = true
 }

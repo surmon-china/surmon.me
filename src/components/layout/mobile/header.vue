@@ -1,9 +1,6 @@
 <template>
   <header class="header">
-    <div
-      class="search"
-      :class="{ actived: searchState.open }"
-    >
+    <div class="search" :class="{ actived: searchState.open }">
       <input
         ref="inputElement"
         v-model.trim="searchState.keyword"
@@ -13,19 +10,15 @@
         required
         :placeholder="t(LANGUAGE_KEYS.SEARCH_PLACEHOLDER)"
         @keyup.enter.stop.prevent="submitSearch"
-      >
+      />
       <span class="close" @click.stop.prevent="cancelSearch">
         <i class="iconfont icon-cancel"></i>
       </span>
       <client-only>
-        <datalist
-          v-if="tags.length"
-          id="keywords"
-          class="search-keywords"
-        >
+        <datalist v-if="tagStore.tags.length" id="keywords" class="search-keywords">
           <option
             class="iiem"
-            v-for="tag in tags"
+            v-for="tag in tagStore.tags"
             :key="tag.slug"
             :value="tag.name"
             :label="tag.description"
@@ -52,18 +45,18 @@
 
 <script lang="ts">
   import { defineComponent, computed, reactive, ref, watch, onMounted, nextTick } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
-  import { RouteName } from '/@/router'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { RouteName } from '/@/app/router'
+  import { useTagStore } from '/@/store/tag'
   import { isSearchArchive } from '/@/transforms/route'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import * as APP_CONFIG from '/@/config/app.config'
 
   export default defineComponent({
     name: 'MobileHeader',
     setup() {
-      const { store, i18n, route, router, globalState } = useEnhancer()
+      const { i18n, route, router, globalState } = useEnhancer()
+      const tagStore = useTagStore()
       const isOpenedSidebar = computed(() => globalState.switchBox.mobileSidebar)
-      const tags = computed(() => store.state.tag.data)
       const inputElement = ref<HTMLInputElement>(null as any)
       const searchState = reactive({
         open: false,
@@ -107,7 +100,7 @@
       return {
         t: i18n.t,
         LANGUAGE_KEYS,
-        tags,
+        tagStore,
         searchState,
         inputElement,
         openSearch,
@@ -121,7 +114,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   header {
     position: fixed;

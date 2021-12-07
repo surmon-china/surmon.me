@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="article-list-item"
-    :class="{ mobile: isMobile }"
-    @click="handleClick"
-  >
+  <div class="article-list-item" :class="{ mobile: isMobile }" @click="handleClick">
     <desktop-only>
       <div
         class="item-background"
@@ -33,22 +29,19 @@
               :src="getThumbUrl(article.thumb)"
               :alt="article.title"
               :title="article.title"
-            >
+            />
           </router-link>
         </div>
       </desktop-only>
       <div class="item-body">
         <h5 class="item-title">
-          <router-link
-            :to="getArticleDetailRoute(article.id)"
-            :title="article.title"
-          >
+          <router-link :to="getArticleDetailRoute(article.id)" :title="article.title">
             {{ article.title }}
           </router-link>
         </h5>
         <p
           class="item-description"
-          style="-webkit-box-orient: vertical;"
+          style="-webkit-box-orient: vertical"
           v-html="article.description"
         ></p>
         <div class="item-meta">
@@ -74,7 +67,7 @@
           </span>
           <desktop-only>
             <span class="categories">
-              <i class="iconfont icon-list"></i>
+              <i class="iconfont icon-category"></i>
               <placeholder :transition="false" :data="article.category.length">
                 <template #placeholder>
                   <i18n :lkey="LANGUAGE_KEYS.CATEGORY_PLACEHOLDER" />
@@ -99,12 +92,16 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted } from 'vue'
-  import { useGlobalState } from '/@/state'
+  import { useGlobalState } from '/@/app/state'
   import { useI18n } from '/@/services/i18n'
   import { getJSON } from '/@/services/storage'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { USER_LIKE_HISTORY } from '/@/constants/storage'
-  import { getArticleDetailRoute, getTagArchiveRoute, getCategoryArchiveRoute } from '/@/transforms/route'
+  import {
+    getArticleDetailRoute,
+    getTagArchiveRoute,
+    getCategoryArchiveRoute
+  } from '/@/transforms/route'
   import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { timeAgo } from '/@/transforms/moment'
@@ -120,9 +117,7 @@
         required: true
       }
     },
-    emits: [
-      Events.Click
-    ],
+    emits: [Events.Click],
     setup(props, context) {
       const i18n = useI18n()
       const globalState = useGlobalState()
@@ -144,10 +139,7 @@
       }
 
       const getThumbUrl = (thumbUrl: string) => {
-        return getArchiveArticleThumbnailUrl(
-          thumbUrl,
-          globalState.imageExt.value.isWebP
-        )
+        return getArchiveArticleThumbnailUrl(thumbUrl, globalState.imageExt.value.isWebP)
       }
 
       onMounted(() => {
@@ -174,7 +166,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .article-list-item {
     position: relative;
@@ -192,7 +184,7 @@
       z-index: -1;
       background-size: 120%;
       background-position: 0% 50%;
-      opacity: .06;
+      opacity: 0.06;
     }
 
     > .item-content {
@@ -212,7 +204,7 @@
           }
 
           .item-thumb-img {
-            opacity: .95;
+            opacity: 0.95;
             transform: translateX(-3px);
           }
         }
@@ -227,15 +219,15 @@
 
         .item-oirigin {
           $height: 2.1rem;
-          $opacity: .8;
+          $opacity: 0.8;
           position: absolute;
           left: 0;
           top: 0;
           height: $height;
           line-height: $height;
-          z-index:  $z-index-normal + 1;
+          z-index: $z-index-normal + 1;
           padding: 0 $sm-gap;
-          opacity: .4;
+          opacity: 0.4;
           font-size: $font-size-small;
           color: $white;
           text-align: center;
@@ -354,7 +346,6 @@
       }
     }
 
-
     &.mobile {
       margin-bottom: $gap;
       &:last-child {
@@ -371,7 +362,7 @@
 
           > .item-description {
             height: auto;
-            margin-bottom: .5em;
+            margin-bottom: 0.5em;
           }
         }
       }

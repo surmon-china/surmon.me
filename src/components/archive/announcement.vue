@@ -6,10 +6,7 @@
       dark: isDarkTheme
     }"
   >
-    <placeholder
-      :data="announcements.length"
-      :loading="fetching"
-    >
+    <placeholder :data="announcements.length" :loading="fetching">
       <template #placeholder>
         <empty class="announcement-empty" key="empty">
           <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
@@ -34,39 +31,31 @@
             />
           </desktop-only>
           <div class="title">
-            <span
-              class="icon-box"
-              :style="{ transform: `rotate(-${activeIndex * 90}deg)` }"
-            >
+            <span class="icon-box" :style="{ transform: `rotate(-${activeIndex * 135}deg)` }">
               <i class="iconfont icon-windmill" />
             </span>
           </div>
           <div class="swiper-box">
-            <div
+            <swiper
               class="swiper"
-              v-swiper="swiperOption"
-              @ready="updateSwiperContext"
+              direction="vertical"
+              :height="42"
+              :allow-touch-move="false"
+              :slides-per-view="1"
+              :set-wrapper-size="true"
+              :autoplay="{ delay: 3500, disableOnInteraction: false }"
               @transition-start="handleSwiperTransitionStart"
+              @swiper="onSwiper"
             >
-              <div class="swiper-wrapper">
-                <div
-                  v-for="(ann, index) in announcements"
-                  :key="index"
-                  class="swiper-slide"
-                >
-                  <div class="content" v-html="parseContent(ann.content)" />
-                  <desktop-only>
-                    <div class="date">{{ humanlizeDate(ann.create_at) }}</div>
-                  </desktop-only>
-                </div>
-              </div>
-            </div>
+              <swiper-slide v-for="(ann, index) in announcements" :key="index">
+                <div class="content" v-html="parseContent(ann.content)" />
+                <desktop-only>
+                  <div class="date">{{ humanlizeDate(ann.create_at) }}</div>
+                </desktop-only>
+              </swiper-slide>
+            </swiper>
             <div class="navigation">
-              <div
-                class="button prev"
-                :class="{ disabled: activeIndex === 0 }"
-                @click="prevSlide"
-              >
+              <div class="button prev" :class="{ disabled: activeIndex === 0 }" @click="prevSlide">
                 <i class="iconfont icon-announcement-prev" />
               </div>
               <div
@@ -85,21 +74,22 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
-  import type { SwiperContext } from '/@/todo/swiper'
-  import { useI18n } from '/@/services/i18n'
-  import { useTheme, Theme } from '/@/services/theme'
+  import { defineComponent, ref, PropType } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { useGlobalState } from '/@/state'
-  import { useEnhancer } from '/@/enhancer'
   import { timeAgo } from '/@/transforms/moment'
 
   export default defineComponent({
     name: 'ArchiveAnnouncement',
+    components: {
+      Swiper,
+      SwiperSlide
+    },
     props: {
       announcements: {
-        type: Array,
+        type: Array as PropType<Array<$TODO>>,
         required: true
       },
       fetching: {
@@ -107,25 +97,12 @@
         required: true
       }
     },
-    setup(props) {
-      const { i18n, theme, globalState, isMobile, isDarkTheme } = useEnhancer()
-      const swiperContext = ref<SwiperContext>()
-      const swiper = computed(() => swiperContext.value?.$swiper.value)
-      const updateSwiperContext = (context: SwiperContext) => {
-        swiperContext.value = context
-      }
-
+    setup() {
+      const { i18n, isMobile, isDarkTheme } = useEnhancer()
       const activeIndex = ref(0)
-      const swiperOption = {
-        height: 42,
-        autoplay: {
-          delay: 3500,
-          disableOnInteraction: false
-        },
-        allowTouchMove: false,
-        slidesPerView: 1,
-        setWrapperSize: true,
-        direction: 'vertical'
+      const swiper = ref<SwiperClass>()
+      const onSwiper = (_swiper: SwiperClass) => {
+        swiper.value = _swiper
       }
 
       const humanlizeDate = (date: string) => {
@@ -133,7 +110,7 @@
       }
 
       const parseContent = (content: string) => {
-        return markdownToHTML(content, { html: true })
+        return markdownToHTML(content)
       }
 
       const prevSlide = () => swiper.value?.slidePrev()
@@ -144,7 +121,6 @@
 
       return {
         LANGUAGE_KEYS,
-        swiperOption,
         isMobile,
         isDarkTheme,
         activeIndex,
@@ -152,7 +128,7 @@
         parseContent,
         prevSlide,
         nextSlide,
-        updateSwiperContext,
+        onSwiper,
         handleSwiperTransitionStart
       }
     }
@@ -160,7 +136,8 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @use 'sass:math';
+  @import 'src/styles/init.scss';
 
   $announcement-height: 42px;
   $title-width: 10%;
@@ -222,12 +199,7 @@
       position: absolute;
       width: $demarcation-width;
       height: 100%;
-      background: linear-gradient(
-        66deg,
-        $module-bg-opaque,
-        $module-bg-lighter
-        66%
-      );
+      background: linear-gradient(66deg, $module-bg-opaque, $module-bg-lighter 66%);
 
       &::before {
         content: attr(data-content);
@@ -238,7 +210,7 @@
         font-size: 6em;
         font-weight: bold;
         direction: rtl;
-        opacity: .2;
+        opacity: 0.2;
         z-index: -1;
         @include text-overflow(clip);
       }
@@ -251,7 +223,7 @@
         width: $size;
         height: 200%;
         top: -50%;
-        right: -($size / 2);
+        right: -#{math.div($size, 2)};
         background: $body-bg;
         transform: rotate(18deg);
       }
@@ -266,7 +238,7 @@
       .icon-box {
         display: inline-block;
         transform: rotate(0deg);
-        transition: transform .3s;
+        transition: transform 0.3s;
       }
     }
 
@@ -279,10 +251,10 @@
         flex: 1;
         height: $announcement-height;
 
-        .swiper-wrapper {
+        ::v-deep(.swiper-wrapper) {
           flex-direction: column;
           // Filter for slide when transitioning
-          &[style*="300ms"] {
+          &[style*='300ms'] {
             .swiper-slide-active {
               .content {
                 @include blur-filter('vertical-small');
@@ -339,7 +311,7 @@
           }
 
           &.disabled {
-            opacity: .8;
+            opacity: 0.8;
             color: $text-dividers;
             cursor: no-drop;
           }

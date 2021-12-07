@@ -1,6 +1,6 @@
 /**
- * @file 复制拦截器
- * @module service/copyright
+ * @file copyright
+ * @module service.copyright
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -19,10 +19,10 @@ export const enableCopyright = () => {
     ].join('\n')
   }
 
-  const buildText = content => content + copyText()
-  const buildHtml = content => content + copyText()
+  const buildText = (content) => content + copyText()
+  const buildHtml = (content) => content + copyText()
 
-  document.addEventListener('copy', event => {
+  document.addEventListener('copy', (event) => {
     if (!window.getSelection) return
     if (!window.$isCopyFromApp) {
       const content = window.getSelection()?.toString()

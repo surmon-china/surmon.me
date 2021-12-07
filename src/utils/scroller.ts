@@ -1,6 +1,6 @@
 /**
  * @file Scroll to anywhere
- * @module util/scroll-to
+ * @module util.scroller
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -32,7 +32,7 @@ const _ = {
     if (!Array.isArray(events)) {
       events = [events]
     }
-    events.forEach(event => {
+    events.forEach((event) => {
       element.addEventListener(event, handler, { passive: true })
     })
   },
@@ -40,7 +40,7 @@ const _ = {
     if (!Array.isArray(events)) {
       events = [events]
     }
-    events.forEach(event => {
+    events.forEach((event) => {
       element.removeEventListener(event, handler)
     })
   }
@@ -63,7 +63,7 @@ export const scrollTo = (target: string | number | Element, duration = 500, opti
 
   let abort = false
 
-  const abortFn = function() {
+  const abortFn = function () {
     abort = true
   }
 
@@ -75,9 +75,7 @@ export const scrollTo = (target: string | number | Element, duration = 500, opti
   if (typeof target === 'number') {
     elementY = target
   } else {
-    const element = (typeof target === 'string'
-      ? _.$(target)
-      : target) as Element
+    const element = (typeof target === 'string' ? _.$(target) : target) as Element
     elementY = initialY + element.getBoundingClientRect().top
   }
 
@@ -94,7 +92,7 @@ export const scrollTo = (target: string | number | Element, duration = 500, opti
   const easing = Reflect.apply(BezierEasing, BezierEasing, options.easing)
   let start: number
 
-  const done = function() {
+  const done = function () {
     _.off(page, events, abortFn)
     if (abort && options.onCancel) {
       options.onCancel()
@@ -128,4 +126,12 @@ export const scrollTo = (target: string | number | Element, duration = 500, opti
       done()
     }
   })
+}
+
+// default offset: header height
+export const scrollToElementAnchor = (elementID: string, offset = -76) => {
+  const targetElement = document.getElementById(elementID)
+  if (targetElement) {
+    scrollTo(targetElement, 200, { offset })
+  }
 }

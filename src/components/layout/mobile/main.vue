@@ -4,11 +4,7 @@
       <aside-view :open="isOpenedSidebar" />
     </div>
     <div id="main" :class="openedAsideClass">
-      <div
-        v-if="isOpenedSidebar"
-        class="close-mask"
-        @click="closeMobileSidebar"
-      />
+      <div v-if="isOpenedSidebar" class="close-mask" @click="closeMobileSidebar" />
       <header-view />
       <main class="main-container">
         <slot></slot>
@@ -20,15 +16,12 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useStore } from 'vuex'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { getFileCDNUrl } from '/@/transforms/url'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '../../../app/enhancer'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
   import AsideView from './aside.vue'
 
-  export default {
+  export default defineComponent({
     name: 'MobileMain',
     components: {
       HeaderView,
@@ -49,11 +42,11 @@
         closeMobileSidebar
       }
     }
-  }
+  })
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   #mobile-main {
     color: $text;
@@ -67,12 +60,12 @@
       left: 0;
       height: 100%;
       background-color: $mobile-aside-bg;
-      transform: translate3d(-100%, 0 ,0);
+      transform: translate3d(-100%, 0, 0);
       transition: $mobile-aside-transition;
 
       &.open {
         overflow: hidden;
-        transform: translate3d(0, 0 ,0);
+        transform: translate3d(0, 0, 0);
         -webkit-overflow-scrolling: touch;
       }
     }
@@ -81,7 +74,7 @@
       transition: $mobile-aside-transition;
 
       &.open {
-        transform: translate3d($aside-width, 0 ,0);
+        transform: translate3d($aside-width, 0, 0);
       }
 
       .close-mask {
@@ -101,7 +94,7 @@
         width: 100%;
         margin: 0;
         padding: ($mobile-header-height + $lg-gap) $gap $gap;
-        transition: width .35s;
+        transition: width 0.35s;
       }
     }
   }

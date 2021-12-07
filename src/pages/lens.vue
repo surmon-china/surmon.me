@@ -6,32 +6,27 @@
       dark: isDarkTheme
     }"
   >
-    <div class="banner">
-      <div class="content container">
-        <p class="title">
-          <i18n
-            zh="凡心所向，素履以往"
-            en="Because it's there"
-          />
-        </p>
-        <p class="description">
-          <i18n>
-            <template #zh>生如逆旅，一苇以航</template>
-            <template #en>"why did you want to climb mount Everest?"</template>
-          </i18n>
-        </p>
-      </div>
-    </div>
+    <page-banner :position="38" :image="bannerImageUrl">
+      <template #title>
+        <i18n zh="凡心所向，素履以往" en="Because it's there" />
+      </template>
+      <template #description>
+        <i18n>
+          <template #zh>生如逆旅，一苇以航</template>
+          <template #en>"why did you want to climb mount Everest?"</template>
+        </i18n>
+      </template>
+    </page-banner>
     <div class="container">
       <div class="header">
         <div class="bilibili">
           <div class="left">
             <i class="iconfont icon-bilibili-full"></i>
-            <ulink class="button" :href="VALUABLE_LINKS.BILIBILI">
-              (゜-゜)つロ 干杯~
-            </ulink>
+            <ulink class="button" :href="VALUABLE_LINKS.BILIBILI"> (゜-゜)つロ 干杯~ </ulink>
           </div>
-          <uimage class="image" cdn src="/images/page-lens/bilibili.jpg" />
+          <div class="qrcode">
+            <uimage class="image" cdn src="/images/page-lens/bilibili.jpg" />
+          </div>
         </div>
         <div class="global">
           <ulink class="instagram" :href="VALUABLE_LINKS.INSTAGRAM">
@@ -40,22 +35,18 @@
           </ulink>
           <ulink class="youtube" :href="VALUABLE_LINKS.YOUTUBE">
             <i class="iconfont icon-youtube"></i>
-            <span class="text">Subscription my YouTube Channel</span>
+            <span class="text">Subscribe my YouTube Channel</span>
           </ulink>
         </div>
-        <div class="mobile">
-          <div class="wechat-channel">
-            <uimage cdn src="/images/page-lens/wechat-channel.jpg" />
-          </div>
-          <div class="douyin">
-            <uimage cdn src="/images/page-lens/douyin.jpg" />
-          </div>
+        <div class="wechat-channel">
+          <uimage cdn src="/images/page-lens/wechat-channel.jpg" />
         </div>
       </div>
-      <div class="vlog-title">Vlogs</div>
+      <!-- <div class="module-title plog">Plogs</div> -->
+      <div class="module-title vlog">Vlogs</div>
       <placeholder
-        :data="videoList?.length"
-        :loading="isFetching"
+        :data="lensStore.vlogs.data.length"
+        :loading="lensStore.vlogs.fetching"
         @after-enter="observeLozad"
       >
         <template #placeholder>
@@ -73,7 +64,7 @@
               @click="handlePlay(video)"
               :title="video.title"
               :key="index"
-              v-for="(video, index) in videoList"
+              v-for="(video, index) in lensStore.vlogs.data"
             >
               <div class="thumb">
                 <div class="mask">
@@ -82,20 +73,17 @@
                   </div>
                 </div>
                 <span class="length">{{ video.length }}</span>
-                <div
-                  class="background lozad"
-                  :data-background-image="getThumbUrl(video.pic)"
-                />
+                <div class="background lozad" :data-background-image="getThumbUrl(video.pic)" />
               </div>
               <h5 class="title">
                 <span class="text">{{ video.title }}</span>
               </h5>
               <p
                 class="description"
-                style="-webkit-box-orient: vertical;"
+                style="-webkit-box-orient: vertical"
                 v-text="video.description || '-'"
               />
-              <hr class="separator">
+              <hr class="separator" />
               <p class="meta">
                 <span class="item favorites">
                   <i class="iconfont icon-heart"></i>
@@ -118,45 +106,41 @@
           </ul>
         </template>
       </placeholder>
-      <div class="loadmore">
-        <ulink class="button" :href="VALUABLE_LINKS.BILIBILI">
-          <span class="icon">
-            <i class="iconfont icon-bilibili"></i>
-          </span>
-          <i18n :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE" />
-        </ulink>
-      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
-  import { isClient } from '/@/environment'
-  import { prefetch } from '/@/universal'
-  import { getNamespace, Modules } from '/@/store'
-  import { VlogModuleActions } from '/@/store/vlog'
+  import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useUniversalFetch } from '/@/universal'
+  import { useLensStore } from '/@/store/lens'
   import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { getFileProxyUrl } from '/@/transforms/url'
+  import { getFileProxyUrl, getFileCDNUrl } from '/@/transforms/url'
   import { timeAgo } from '/@/transforms/moment'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { firstUpperCase } from '/@/transforms/text'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { Language } from '/@/language/data'
+  import { randomNumber } from '/@/utils/random'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import PageBanner from '/@/components/common/banner.vue'
 
   export default defineComponent({
-    name: 'Lens',
+    name: 'LensPage',
+    components: {
+      PageBanner
+    },
     setup() {
-      const { globalState, i18n, helmet, store, isMobile, isDarkTheme, isZhLang } = useEnhancer()
+      const { globalState, i18n, meta, isMobile, isDarkTheme, isZhLang } = useEnhancer()
+      const lensStore = useLensStore()
       const lozadObserver = ref<LozadObserver | null>(null)
       const videoListElement = ref<HTMLElement>()
-      const isFetching = computed(() => store.state.vlog.fetching)
-      const videoList = computed(() => store.state.vlog.data)
+      const bannerImageUrl = getFileCDNUrl(`/images/page-lens/banner-${randomNumber(3)}.jpg`)
 
-      helmet(() => {
-        const prefix = isZhLang.value
-          ? `${i18n.t(LANGUAGE_KEYS.PAGE_LENS)} | `
-          : ''
-        return { title: prefix + 'Lens' }
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_LENS, Language.En)!)
+        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_LENS), enTitle] : [enTitle]
+        return { pageTitle: titles.join(' | '), description: `${META.author} 的 Vlog 视频` }
       })
 
       const humanlizeDate = (date: number) => {
@@ -164,25 +148,24 @@
       }
 
       const getThumbUrl = (url: string) => {
-        return getFileProxyUrl(`/bilibili/${url.replace('//', '')}@560w_350h.${globalState.imageExt.value.ext}`)
+        return getFileProxyUrl(
+          `/bilibili/${url.replace('//', '')}@560w_350h.${globalState.imageExt.value.ext}`
+        )
       }
 
       const handlePlay = (video: any) => {
         window.open(`https://www.bilibili.com/video/av${video.aid}`)
       }
 
-      const fetchData = () => {
-        return store.dispatch(getNamespace(
-          Modules.Vlog,
-          VlogModuleActions.FetchVideos
-        ))
+      const fetchAllData = () => {
+        return lensStore.fetchVlogs()
       }
 
       const observeLozad = () => {
         const lozadElements = videoListElement.value?.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
         if (lozadElements?.length) {
           lozadObserver.value = window.$lozad(lozadElements, {
-            loaded: element => element.classList.add(LOADED_CLASS_NAME)
+            loaded: (element) => element.classList.add(LOADED_CLASS_NAME)
           })
           lozadObserver.value.observe()
         }
@@ -197,74 +180,46 @@
         lozadObserver.value = null
       })
 
-      const resultData = {
+      useUniversalFetch(() => fetchAllData())
+
+      return {
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
+        lensStore,
         isMobile,
         isDarkTheme,
-        isFetching,
         videoListElement,
-        videoList,
         humanlizeDate,
         getThumbUrl,
         handlePlay,
         observeLozad,
+        bannerImageUrl
       }
-
-      return prefetch(fetchData, resultData)
     }
   })
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .lens-page {
-
-    .banner {
-      margin-bottom: $lg-gap;
-      height: $full-column-page-banner-height;
-      background: $module-bg-darker-1 cdn-url('/images/page-lens/banner.jpg');
-      background-size: cover;
-      background-position: center 40%;
-
-      .content {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        color: $white;
-      }
-
-      .title {
-        font-size: 3em;
-        font-weight: bold;
-        margin-bottom: $lg-gap * 2;
-      }
-      .description {
-        font-size: $font-size-h4;
-      }
-    }
-
     .header {
       display: flex;
       width: 100%;
       height: 18rem;
-      margin-bottom: $lg-gap;
+      margin: $lg-gap 0;
 
       .bilibili,
       .instagram,
       .youtube,
-      .wechat-channel,
-      .douyin {
+      .wechat-channel {
         @include radius-box($sm-radius);
       }
 
       .bilibili {
         flex-shrink: 0;
         display: flex;
-        width: 40%;
+        width: 52%;
         height: 100%;
         margin-right: $gap;
         border: 2px solid $bilibili-pink-primary;
@@ -283,14 +238,16 @@
           }
 
           .button {
-            display: inline-block;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 50%;
+            height: 3rem;
             margin-top: $gap * 2;
-            color: inherit;
-            height: 2em;
-            line-height: 2em;
-            padding: 0 $gap;
-            border: 1px solid $white;
+            border: 2px solid $white;
             border-radius: $xs-radius;
+            font-size: $font-size-h4;
+            color: inherit;
             &:hover {
               color: $bilibili-pink-primary;
               background-color: $white;
@@ -298,8 +255,15 @@
           }
         }
 
-        .image {
+        .qrcode {
           flex-shrink: 0;
+          height: 100%;
+          width: 18rem;
+          text-align: center;
+          background-color: #fbfbfd;
+        }
+
+        .image {
           height: 100%;
           width: auto;
         }
@@ -315,8 +279,8 @@
         .youtube {
           flex-grow: 1;
           display: flex;
-          flex-direction: column;
-          justify-content: center;
+          flex-direction: row;
+          justify-content: start;
           align-items: center;
           transition: opacity $transition-time-fast;
           color: $white;
@@ -326,14 +290,14 @@
           }
 
           .iconfont {
-            font-size: $font-size-h4 * 2;
-            margin-bottom: $xs-gap;
+            font-size: $font-size-h2 * 2;
+            margin-left: $gap * 2;
+            margin-right: $gap;
           }
 
           .text {
-            display: inline-block;
-            line-height: 1.5em;
-            font-size: $font-size-small;
+            font-size: $font-size-h5;
+            font-weight: bold;
           }
         }
 
@@ -349,42 +313,42 @@
         }
       }
 
-      .mobile {
-        width: 31.6rem;
-        display: flex;
-        justify-content: space-between;
+      .wechat-channel {
+        width: 184px;
+        height: 100%;
+        background-color: $module-bg;
+        border: 2px solid #fa9d3b;
 
-        .wechat-channel,
-        .douyin {
+        img {
+          width: auto;
           height: 100%;
-          background-color: $module-bg;
-
-          img {
-            width: auto;
-            height: 100%;
-          }
         }
       }
     }
 
-    .vlog-title {
+    .module-title {
       margin-bottom: $lg-gap;
       line-height: 3.6em;
       border-width: 4px;
       border-style: double;
       border-radius: $lg-radius;
-      border-color:
-        $bilibili-pink-primary
-        $bilibili-blue-primary
-        $bilibili-blue-primary
-        $bilibili-pink-primary;
       background-color: $module-bg-opaque;
       text-align: center;
       font-size: $font-size-h3;
       font-weight: bold;
       text-transform: uppercase;
-      color: $bilibili-blue-primary;
       letter-spacing: 5px;
+
+      &.plog {
+        color: $instagram-primary;
+        border-image: $instagram-gradient 30;
+      }
+
+      &.vlog {
+        color: $bilibili-blue-primary;
+        border-color: $bilibili-pink-primary $bilibili-blue-primary $bilibili-blue-primary
+          $bilibili-pink-primary;
+      }
     }
 
     .videos {
@@ -408,7 +372,7 @@
         &:hover {
           .thumb {
             .background {
-              transform: rotate(2deg) scale(1.1),
+              transform: rotate(2deg) scale(1.1);
             }
 
             .mask {
@@ -547,28 +511,7 @@
       font-size: $font-size-h3;
     }
 
-    .loadmore {
-      margin-bottom: $lg-gap;
-
-      .button {
-        display: block;
-        width: 100%;
-        height: $button-block-height;
-        line-height: $button-block-height;
-        text-align: center;
-        @include common-bg-module();
-        @include radius-box($xs-radius);
-
-        > .icon {
-          margin-right: $gap;
-        }
-      }
-    }
-
     &.dark {
-      .banner {
-        background-blend-mode: difference;
-      }
       .videos {
         .item {
           .thumb {
@@ -582,10 +525,6 @@
 
     &.mobile {
       min-height: auto;
-
-      .loadmore {
-        margin: 0;
-      }
 
       .banner {
         height: 12rem;
@@ -615,19 +554,9 @@
             margin-bottom: $gap;
           }
           .bilibili,
-          .global {
+          .global,
+          .wechat-channel {
             width: 100%;
-          }
-          .mobile {
-            height: auto;
-
-            .douyin,
-            .wechat-channel {
-              width: calc((100% - #{$gap}) / 2);
-               img {
-                width: 100%;
-              }
-            }
           }
         }
 

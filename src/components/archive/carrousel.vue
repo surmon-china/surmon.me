@@ -6,10 +6,7 @@
       dark: isDarkTheme
     }"
   >
-    <placeholder
-      :data="articleList.length"
-      :loading="fetching"
-    >
+    <placeholder :data="articleList.length" :loading="fetching">
       <template #placeholder>
         <empty class="article-empty" key="empty">
           <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
@@ -31,76 +28,83 @@
         </div>
       </template>
       <template #default>
-        <div
-          key="swiper"
+        <swiper
           class="swiper"
-          v-swiper="swiperOption"
+          :autoplay="{ delay: 3500, disableOnInteraction: false }"
+          :set-wrapper-size="true"
+          :mousewheel="true"
+          :observe-parents="true"
+          :grab-cursor="false"
+          :simulate-touch="false"
+          :preload-images="false"
+          :lazy="false"
+          :pagination="{ clickable: true }"
         >
-          <div class="swiper-wrapper">
-            <div
-              class="swiper-slide"
-              v-for="(article, index) in articleList.slice(0, 9)"
-              :key="index"
-            >
-              <div class="content">
-                <template v-if="article.ad">
-                  <ulink class="link" :href="article.url">
-                    <img :src="article.src" :alt="article.title">
-                    <div class="title">
-                      <div class="background"></div>
-                      <div class="prospect">
-                        <span
-                          class="text"
-                          :style="{ backgroundImage: `url('${getThumbURL(article.src)}')` }"
-                        >{{ article.title }}</span>
-                      </div>
+          <swiper-slide v-for="(article, index) in articleList.slice(0, 9)" :key="index">
+            <div class="content">
+              <template v-if="article.ad">
+                <ulink class="link" :href="article.url">
+                  <img :src="article.src" :alt="article.title" />
+                  <div class="title">
+                    <div class="background"></div>
+                    <div class="prospect">
+                      <span
+                        class="text"
+                        :style="{
+                          backgroundImage: `url('${getThumbURL(article.src)}')`
+                        }"
+                        >{{ article.title }}</span
+                      >
                     </div>
-                    <span class="ad-symbol">
-                      <i18n :lkey="LANGUAGE_KEYS.AD" />
-                    </span>
-                  </ulink>
-                </template>
-                <template v-else>
-                  <router-link :to="getArticleDetailRoute(article.id)" class="link">
-                    <img
-                      :src="getThumbURL(article.thumb)"
-                      :alt="article.title"
-                      draggable="false"
-                    >
-                    <div class="title">
-                      <div class="background"></div>
-                      <div class="prospect">
-                        <span
-                          class="text"
-                          :style="{ backgroundImage: `url('${getThumbURL(article.thumb)}')` }"
-                        >{{ article.title }}</span>
-                      </div>
+                  </div>
+                  <span class="ad-symbol">
+                    <i18n :lkey="LANGUAGE_KEYS.AD" />
+                  </span>
+                </ulink>
+              </template>
+              <template v-else>
+                <router-link :to="getArticleDetailRoute(article.id)" class="link">
+                  <img :src="getThumbURL(article.thumb)" :alt="article.title" draggable="false" />
+                  <div class="title">
+                    <div class="background"></div>
+                    <div class="prospect">
+                      <span
+                        class="text"
+                        :style="{
+                          backgroundImage: `url('${getThumbURL(article.thumb)}')`
+                        }"
+                        >{{ article.title }}</span
+                      >
                     </div>
-                  </router-link>
-                </template>
-              </div>
+                  </div>
+                </router-link>
+              </template>
             </div>
-          </div>
-          <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets" />
-        </div>
+          </swiper-slide>
+        </swiper>
       </template>
     </placeholder>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
-  import { timeAgo } from '/@/transforms/moment'
+  import { defineComponent, computed, PropType } from 'vue'
+  import { Swiper, SwiperSlide } from '/@/services/swiper'
+  import { useEnhancer } from '/@/app/enhancer'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getBannerArticleThumbnailUrl } from '/@/transforms/thumbnail'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { Article } from '/@/store/article'
 
   export default defineComponent({
     name: 'ArchiveCarrousel',
+    components: {
+      Swiper,
+      SwiperSlide
+    },
     props: {
       articles: {
-        type: Array,
+        type: Array as PropType<Article[]>,
         required: true
       },
       fetching: {
@@ -111,36 +115,17 @@
     setup(props) {
       const { globalState, adConfig, isMobile, isDarkTheme } = useEnhancer()
       const articleList = computed(() => {
-        const articles = [...props.articles].slice(0, 9)
+        const articles: Array<Article | any> = [...props.articles].slice(0, 9)
         if (adConfig.value.PC_CARROUSEL) {
           const { index, ...otherConfig } = adConfig.value.PC_CARROUSEL
-          articles.length && articles.splice(index, 0, {
-            ad: true,
-            ...otherConfig
-          })
+          articles.length &&
+            articles.splice(index, 0, {
+              ad: true,
+              ...otherConfig
+            } as any)
         }
         return articles
       })
-
-      const swiperOption = {
-        autoplay: {
-          delay: 3500,
-          disableOnInteraction: false
-        },
-        pagination: {
-          clickable: true,
-          el: '.swiper-pagination'
-        },
-        setWrapperSize: true,
-        mousewheel: true,
-        observeParents: true,
-        // 禁用 PC 拖动手指样式
-        grabCursor: false,
-        // 禁用 PC 拖动
-        simulateTouch: false,
-        preloadImages: false,
-        lazy: true
-      }
 
       const getThumbURL = (thumb: string): string => {
         return getBannerArticleThumbnailUrl(
@@ -154,7 +139,6 @@
         LANGUAGE_KEYS,
         isMobile,
         isDarkTheme,
-        swiperOption,
         articleList,
         getArticleDetailRoute,
         getThumbURL
@@ -164,10 +148,10 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   $pc-carrousel-height: 210px;
-  $mobile-carrousel-height: calc((100vw - 2rem) * .34);
+  $mobile-carrousel-height: calc((100vw - 2rem) * 0.34);
 
   .carrousel {
     height: $pc-carrousel-height;
@@ -224,8 +208,8 @@
       width: 595px;
       height: $pc-carrousel-height;
 
-      // Filter for slide when transitioning
-      .swiper-wrapper[style*="300ms"] {
+      // filter for slide when transitioning
+      ::v-deep(.swiper-wrapper[style*='300ms']) {
         .swiper-slide-active {
           .content {
             @include blur-filter('horizontal');
@@ -233,100 +217,95 @@
         }
       }
 
-      .swiper-pagination {
-        ::v-deep(.swiper-pagination-bullet) {
-          &.swiper-pagination-bullet-active {
-            width: 2rem;
-            border-radius: $lg-radius;
-          }
+      ::v-deep(.swiper-pagination) {
+        .swiper-pagination-bullet-active {
+          width: 2rem;
         }
       }
 
-      .swiper-slide {
-        .content {
-          width: 100%;
-          height: $pc-carrousel-height;
-          position: relative;
-          overflow: hidden;
+      .content {
+        width: 100%;
+        height: $pc-carrousel-height;
+        position: relative;
+        overflow: hidden;
 
-          > .link {
-            display: block;
+        > .link {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
+
+        img {
+          width: 100%;
+          transform: scale(1);
+          transition: transform $transition-time-normal;
+
+          &:hover {
+            transform: scale(1.06);
+          }
+        }
+
+        .ad-symbol {
+          display: block;
+          position: absolute;
+          top: 5.6rem;
+          right: 2.6rem;
+          font-size: $font-size-small;
+          color: $module-bg;
+          border-radius: $mini-radius;
+          padding: 0.1em 0.3em;
+          border: 1px solid;
+        }
+
+        .title {
+          $offset: 3px;
+          display: block;
+          position: absolute;
+          top: 2rem;
+          right: 2.6rem;
+          opacity: 0.8;
+          transition: opacity $transition-time-normal;
+
+          .background {
+            content: '';
+            position: absolute;
             width: 100%;
             height: 100%;
+            z-index: -1;
+            top: 0;
+            left: 0;
+            background-color: $module-bg;
+            transform: translate3d($offset, -$offset, 0);
+            transition: transform $transition-time-fast;
           }
 
-          img {
-            width: 100%;
-            transform: scale(1);
-            transition: transform $transition-time-normal;
+          .prospect {
+            padding: 0 1em;
+            height: 2em;
+            line-height: 2em;
+            @include text-overflow;
+            background-color: $module-bg-opaque;
+            background-position: top right;
+            transform: translate3d(-$offset, $offset, 0);
+            transition: transform $transition-time-fast;
 
-            &:hover {
-              transform: scale(1.06);
+            .text {
+              letter-spacing: 0.3px;
+              font-weight: bold;
+              color: $text;
+              background-clip: text;
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
             }
           }
 
-          .ad-symbol {
-            display: block;
-            position: absolute;
-            top: 5.6rem;
-            right: 2.6rem;
-            font-size: $font-size-small;
-            color: $module-bg;
-            border-radius: $mini-radius;
-            padding: 0.1em 0.3em;
-            border: 1px solid;
-          }
-
-          .title {
-            $offset: 3px;
-            display: block;
-            position: absolute;
-            top: 2rem;
-            right: 2.6rem;
-            opacity: .8;
-            transition: opacity $transition-time-normal;
-
+          &:hover {
+            opacity: 1;
             .background {
-              content: '';
-              position: absolute;
-              width: 100%;
-              height: 100%;
-              z-index: -1;
-              top: 0;
-              left: 0;
-              background-color: $module-bg;
-              transform: translate3d($offset, -$offset, 0);
-              transition: transform $transition-time-fast;
+              transform: translate3d(0, 0, 0);
             }
-
             .prospect {
-              padding: 0 1em;
-              height: 2em;
-              line-height: 2em;
-              @include text-overflow;
-              background-color: $module-bg-opaque;
-              background-position: top right;
-              transform: translate3d(- $offset, $offset, 0);
-              transition: transform $transition-time-fast;
-
-              .text {
-                letter-spacing: .3px;
-                font-weight: bold;
-                color: $text;
-                background-clip: text;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-              }
-            }
-
-            &:hover {
-              opacity: 1;
-              .background {
-                transform: translate3d(0, 0, 0);
-              }
-              .prospect {
-                transform: translate3d(0, 0, 0);
-              }
+              transform: translate3d(0, 0, 0);
             }
           }
         }

@@ -1,6 +1,6 @@
 /**
  * @file sticky event hack lib
- * @module service/sticky
+ * @module service.sticky
  * @author Surmon <https://github.com/surmon-china>
  */
 

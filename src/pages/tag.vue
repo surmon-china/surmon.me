@@ -12,9 +12,9 @@
       </template>
     </article-list-header>
     <article-list
-      :fetching="article.fetching"
-      :articles="article.data.data"
-      :pagination="article.data.pagination"
+      :fetching="articleStore.list.fetching"
+      :articles="articleStore.list.data"
+      :pagination="articleStore.list.pagination"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -22,14 +22,13 @@
 
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
-  import { prefetch, onClient } from '/@/universal'
-  import { useEnhancer } from '/@/enhancer'
-  import { Modules, getNamespace } from '/@/store'
-  import { ArticleModuleActions } from '/@/store/article'
-  import { TagModuleActions } from '/@/store/tag'
+  import { useUniversalFetch, onClient } from '/@/universal'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useArticleStore } from '/@/store/article'
+  import { useTagStore } from '/@/store/tag'
   import { getExtendsValue } from '/@/transforms/state'
+  import { firstUpperCase } from '/@/transforms/text'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import ArticleListHeader from '/@/components/archive/header.vue'
   import ArticleList from '/@/components/archive/list.vue'
 
@@ -46,80 +45,60 @@
       }
     },
     setup(props) {
-      const { store, helmet, isZhLang } = useEnhancer()
-      const currentTag = computed(() => store.state.tag.data.find(
-        tag => tag.slug === props.tagSlug
-      ))
+      const { meta, isZhLang } = useEnhancer()
+      const tagStore = useTagStore()
+      const articleStore = useArticleStore()
+      const currentTag = computed(() => tagStore.tags.find((tag) => tag.slug === props.tagSlug))
 
-      // helmet
-      helmet(() => {
-        const slug = props.tagSlug
-        const slugTitle = slug
-          .toLowerCase()
-          .replace(/( |^)[a-z]/g, L => L.toUpperCase())
-        const enTitle = `${slugTitle} | Tag`
-        const zhTitle = currentTag.value?.name
-        const title = `${isZhLang.value && zhTitle ? zhTitle : enTitle} | Tag`
-        const description = currentTag.value?.description || title
-        return { title, description}
+      meta(() => {
+        const enTitle = firstUpperCase(props.tagSlug)
+        const zhTitle = currentTag.value?.name!
+        const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle, 'Tag']
+        const description = currentTag.value?.description || titles.join(',')
+        return { pageTitle: titles.join(' | '), description }
       })
 
-      const article = computed(() => store.state.article.list)
       const currentTagIcon = computed(() => getExtendsValue(currentTag.value, 'icon') || 'icon-tag')
       const currentTagImage = computed(() => getExtendsValue(currentTag.value, 'background'))
       const currentTagColor = computed(() => getExtendsValue(currentTag.value, 'bgcolor'))
 
-      const fetchTags = () => store.dispatch(
-        getNamespace(Modules.Tag, TagModuleActions.FetchAll)
-      )
-
-      const fetchArticles = (params: any) => {
-        return store.dispatch(
-          getNamespace(Modules.Article, ArticleModuleActions.FetchList),
-          params
-        )
-      }
-
       const loadmoreArticles = async () => {
-        await fetchArticles({
+        await articleStore.fetchList({
           tag_slug: props.tagSlug,
-          page: article.value.data.pagination.current_page + 1
+          page: articleStore.list.pagination.current_page + 1
         })
         onClient(nextScreen)
       }
 
       const fetchAllData = (tag_slug: string) => {
         onClient(scrollToTop)
-        return Promise.all([
-          fetchTags(),
-          fetchArticles({ tag_slug })
-        ])
+        return Promise.all([tagStore.fetchAll(), articleStore.fetchList({ tag_slug })])
       }
 
       onBeforeMount(() => {
         watch(
           () => props.tagSlug,
-          tagSlug => fetchAllData(tagSlug),
+          (tagSlug) => fetchAllData(tagSlug),
           { flush: 'post' }
         )
       })
 
-      const resultData = {
-        article,
+      useUniversalFetch(() => fetchAllData(props.tagSlug))
+
+      return {
+        articleStore,
         currentTag,
         currentTagIcon,
         currentTagImage,
         currentTagColor,
-        loadmoreArticles,
+        loadmoreArticles
       }
-
-      return prefetch(() => fetchAllData(props.tagSlug), resultData)
     }
   })
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .delimiter {
     margin: 0 $sm-gap;

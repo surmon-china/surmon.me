@@ -1,31 +1,29 @@
 /**
  * @file SSR BFF API Tunnel
- * @module service/tunnel
+ * @module service.tunnel
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import axios, { AxiosInstance } from 'axios'
-import API_CONFIG from '/@/config/api.config'
-import { TunnelModule } from '/@/constants/tunnel'
-import { getTunnelApiPath } from '/@/transforms/url'
-import { isServer } from '/@/environment'
+import { API_TUNNEL_PREFIX, BFF_SERVER_PORT } from '/@/config/bff.config'
+import { TunnelModule, getTunnelApiPath } from '/@/constants/tunnel'
+import { isServer } from '/@/app/environment'
 
 const tunnel = axios.create({
-  baseURL: API_CONFIG.TUNNEL,
+  baseURL: API_TUNNEL_PREFIX,
   proxy: isServer && {
     host: 'localhost',
-    port: API_CONFIG.SERVER_PORT
+    port: BFF_SERVER_PORT
   }
 })
 
-tunnel.interceptors.response.use(
-  response => response.data
-)
+tunnel.interceptors.response.use((response) => response.data)
 
 const service = {
   $: tunnel,
-  request: <T = any>(...args: Parameters<AxiosInstance['request']>): Promise<T> => tunnel.request(...args),
-  dispatch: <T = any>(module: TunnelModule): Promise<T> => tunnel.get(getTunnelApiPath(module)),
+  request: <T = any>(...args: Parameters<AxiosInstance['request']>): Promise<T> =>
+    tunnel.request(...args),
+  dispatch: <T = any>(module: TunnelModule): Promise<T> => tunnel.get(getTunnelApiPath(module))
 }
 
 export default service

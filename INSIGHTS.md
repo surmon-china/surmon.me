@@ -1,98 +1,63 @@
+### SSR state context
 
-### SSR state context serialize
+**Data flow:**
 
-fork from: https://github.com/nuxt/nuxt.js/blob/dev/packages/utils/src/serialize.js
-document: https://github.com/yahoo/serialize-javascript
+state data > serialize > script > client window > state
 
-### PreFetch
+**Libs**
 
-```js
-const { createSSRApp, defineComponent } = require('vue')
-const { renderToString } = require('@vue/server-renderer')
+- serialize: https://github.com/yahoo/serialize-javascript
+- meta: https://github.com/yahoo/serialize-javascript
 
-const asyncChildren = defineComponent({
-  name: 'asyncChildren',
-  async setup() {
-    // some async error...
-    // e.g. axios.fetch...
-    // throw new Error('async child error!')
-    return Promise.reject('async child error!')
-  },
-  template: `<div class="async-children">{{ test.abc }}</div>`
-})
+### universalRef
 
-const app = createSSRApp({
-  name: 'App',
-  components: {
-    asyncChildren
-  },
-  template:
-  `
-    <div class="app">
-      <suspense>
-        <async-children />
-      </suspense>
-    </div>
-  `,
-  errorCaptured(error) {
-    console.log('-----errorCaptured', error)
-  }
-})
+**Data flow:**
 
-app.config.errorHandler = (error) => {
-  console.log('-----errorHandler', error)
-}
+global context object > app instance > state data > client...
 
-renderToString(app).then(res => {
-  console.log('----renderToString', res)
-}).catch(error => {
-  console.log('----renderToString error', error)
-})
+### universalFetch
 
-```
+1. async setup func > App
+2. onServerPrefetch > App
+
+**Links:**
 
 - [Issue](https://github.com/vuejs/vue-next/issues/2736)
+- [PR](https://github.com/vuejs/vue-next/pull/2881)
+- [server-renderer](https://github.com/vuejs/vue-next/blob/master/packages/server-renderer/src/render.ts#L96)
 
-`serverPrefetch` 和 `async setup` 都不能被用作 “抛错即处理” 的预期目的，因为 `renderToString` 的实现中忽略了 `Promise.reject` 返回的结果状态，可参见[此处源码](https://github.com/vuejs/vue-next/blob/master/packages/server-renderer/src/render.ts#L96)，所以只能在 SSR 层面自行实现 `validate` & `preFetch`。
+### Error
 
-validate 与路由参数耦合，故可以在路由层面进行验证，配置在路由（meta） & 消费在路由（中间件）。
-preFetch 由 自定义 hook（客户端）& （手动 get route component）服务端 分别调用。
+1. Node.js runtime error
 
-此方案实现为：
+node runtime error > renderErrorByApp
 
-```js
-// https://ssr.vuejs.org/guide/data.html#data-store
-// 6. do prefetch
-// 6. fetch succeed -> renderPage
-// 6. fetch failed -> setError -> renderError
-const matchedComponents = router.currentRoute.value.matched
-  .map(com => com.components?.default)
-  .filter(com => (com as any).prefetch)
-if (!matchedComponents.length) {
-  throw new Error()
-}
-await Promise.all(matchedComponents.map(
-  (component : any) => component.prefetch({
-    store,
-    route: router.currentRoute
-  })
-))
+2. SSR/App render error
+
+app render error > renderErrorByApp
+
+3. router validate/404 error
+
+router.push > router.beforeEach > route.validate > validate error | 404 error > router.guard > vue.errorHandler > catch error
+
+### Bundle
+
+**SPA mode**
+
+```
+vite
+
+vite build
 ```
 
-`serverPrefetch` 是 options API, 尽量不要与 setup API 混搭，所以在 composition-api 中的正确实现应该是：
-维持之前的 async setup，当 fetch 发生异常时，直接 setError，而不是期待 async setup 的 error 被捕获。
-但是：异步请求 catch 产生的错误信息被捕获了，但是 `renderToString` 的内容并非预期的错误页面；
-主要是因为：错误是在 `renderToString` 的过程中发生的，而 ssrRender 可不是响应式的。
-所以需要做一个兜底渲染，即：发现 `renderToString` 引起新的 error 时，重新 render 一次。
+**SSR mode**
 
-但这个兜底操作的最终目的是：为了将服务端的网络错误传递给客户端，但是由于服务端和移动端的网络状态本来就是不对应的，比如客户端没有请求成功，客户端应该是需要重新请求的，是这样吗？
+1. bundle BFF entry (by `libundler`)
 
-所以问题就变成了：
-- 期望服务端和客户端对应，对蜘蛛友好，状态也明显，这种情况下，error 也需要在 `ssrContext` 中
-- 期望不对应，各自搞各自的，用 http-code 来标示页面的成功与否状态，但是如果服务端输出的是空，客户端是需要重新拉取的，但现有逻辑下服务端不会重新拉取数据
+2. bundle client (by vite)
 
-所以最终的做法是：
-- 进入路由之前校验路由的 `meta.validate` 若不通过，则会在此处就 setError, 目标页面渲染为空数据，app 渲染为 errorPage
-- setup 返回 Promise，当 Promise 成功时，一切正常，失败时 setError，目标页面渲染为空数据，再次 render，app 渲染为 errorPage，若后续 Issues 修复，则可调整逻辑至：以组件 Promise 返回结果为准决定是否渲染错误页面
+rename `index.html` to `template.html`
 
-### Vite
+3. bundle server (by vite SSR mode)
+
+output one file

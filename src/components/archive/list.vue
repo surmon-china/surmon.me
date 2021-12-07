@@ -9,23 +9,28 @@
     <!-- mammon -->
     <template v-if="isMammonEnabled">
       <client-only transition>
-        <adsense-archive-mobile
+        <Adsense
+          ins-class="mammon-ins"
+          data-ad-format="fluid"
+          data-ad-layout-key="-hw-7+2w-11-86"
+          data-ad-slot="6538975194"
+          class="article-list-mammon"
           v-if="isMobile"
-          class="article-list-mammon"
         />
-        <adsense-archive
-          v-else
+        <Adsense
+          ins-class="mammon-ins"
+          data-ad-format="fluid"
+          data-ad-layout-key="-hj-9+3a-97+6s"
+          data-ad-slot="1148538406"
           class="article-list-mammon"
+          v-else
         />
       </client-only>
     </template>
 
     <!-- list -->
     <div class="article-list">
-      <placeholder
-        :data="articles.length"
-        :loading="!articles.length && fetching"
-      >
+      <placeholder :data="articles.length" :loading="!articles.length && fetching">
         <template #loading>
           <ul class="article-list-skeleton" key="skeleton">
             <li v-for="item in 5" :key="item" class="item">
@@ -44,24 +49,19 @@
           </ul>
         </template>
         <template #placeholder>
-          <empty
-            class="empty"
-            :i18n-ley="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"
-          />
+          <empty class="empty" :i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
         </template>
         <template #default>
-          <transition-group
-            key="list"
-            name="list-fade"
-            tag="div"
-          >
-            <list-item
-              v-for="articleItem in articles"
-              :key="articleItem.id"
-              :article="articleItem"
-              @click="handleArticleClick(articleItem)"
-            />
-          </transition-group>
+          <div key="list">
+            <transition-group name="list-fade">
+              <list-item
+                v-for="articleItem in articles"
+                :key="articleItem.id"
+                :article="articleItem"
+                @click="handleArticleClick(articleItem)"
+              />
+            </transition-group>
+          </div>
         </template>
       </placeholder>
     </div>
@@ -77,18 +77,9 @@
           <i class="iconfont icon-peachblossom"></i>
         </span>
         <div class="text">
-          <i18n
-            v-if="fetching"
-            :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADING"
-          />
-          <i18n
-            v-else-if="isLoadMoreEnabled"
-            :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE"
-          />
-          <i18n
-            v-else
-            :lkey="LANGUAGE_KEYS.ARTICLE_LIST_NO_MORE"
-          />
+          <i18n v-if="fetching" :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADING" />
+          <i18n v-else-if="isLoadMoreEnabled" :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE" />
+          <i18n v-else :lkey="LANGUAGE_KEYS.ARTICLE_LIST_NO_MORE" />
         </div>
       </button>
     </div>
@@ -97,26 +88,24 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted, PropType } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { useEnhancer } from '/@/app/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import AdsenseArchive from '/@/components/adsense/archive.vue'
-  import AdsenseArchiveMobile from '/@/components/adsense/archive-mobile.vue'
+  import { Article } from '/@/store/article'
   import ListItem from './item.vue'
 
   export enum Events {
     Loadmore = 'loadmore'
   }
+
   export default defineComponent({
     name: 'ArticleList',
     components: {
-      ListItem,
-      AdsenseArchive,
-      AdsenseArchiveMobile
+      ListItem
     },
     props: {
       articles: {
-        type: Array as PropType<any[]>,
+        type: Array as PropType<Article[]>,
         required: true
       },
       pagination: Object,
@@ -129,17 +118,14 @@
         default: true
       }
     },
-    emits: [
-      Events.Loadmore
-    ],
+    emits: [Events.Loadmore],
     setup(props, context) {
       const { router, defer, isMobile, isDarkTheme } = useEnhancer()
       const mammonEnabled = ref(false)
-
       const isMammonEnabled = computed(() => props.mammon && mammonEnabled)
       const isLoadMoreEnabled = computed(() => {
         return props.pagination
-          ? (props.pagination.current_page < props.pagination.total_page)
+          ? props.pagination.current_page < props.pagination.total_page
           : false
       })
 
@@ -173,7 +159,8 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @use 'sass:math';
+  @import 'src/styles/init.scss';
 
   .articles {
     .article-list-mammon {
@@ -255,7 +242,7 @@
         @include common-bg-module($transition-time-fast);
 
         &[disabled] {
-          opacity: .6;
+          opacity: 0.6;
         }
 
         .iconfont {
@@ -265,7 +252,7 @@
 
         &:hover {
           .iconfont {
-            color: rgba($red, .6);
+            color: rgba($red, 0.6);
           }
         }
 
@@ -276,7 +263,7 @@
           font-family: 'webfont-bolder', DINRegular;
           text-transform: uppercase;
           color: $white;
-          background: rgba($red, .6);
+          background: rgba($red, 0.6);
 
           &::before {
             $size: 1rem;
@@ -286,7 +273,7 @@
             width: $size;
             height: 200%;
             top: -50%;
-            left: -($size / 2);
+            left: -#{math.div($size, 2)};
             background: $body-bg;
             transform: rotate(18deg);
           }

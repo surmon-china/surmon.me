@@ -1,10 +1,6 @@
 <template>
   <div id="emoji-rain" :class="{ active: state.kichikuing }">
-    <canvas
-      v-if="state.chambering"
-      ref="rainBase"
-      class="rain-base"
-    ></canvas>
+    <canvas v-if="state.chambering" ref="rainBase" class="rain-base"></canvas>
   </div>
 </template>
 
@@ -28,14 +24,16 @@
       })
 
       onMounted(() => {
-        window.$luanchEmojiRain = options => {
+        window.$luanchEmojiRain = (options) => {
           if (!state.chambering && !state.kichikuing) {
             state.chambering = true
             nextTick(() => {
               // @ts-ignore
-              rainBase.value.width = document.documentElement.clientWidth || document.body.clientWidth
+              rainBase.value.width =
+                document.documentElement.clientWidth || document.body.clientWidth
               // @ts-ignore
-              rainBase.value.height = document.documentElement.clientHeight || document.body.clientHeight
+              rainBase.value.height =
+                document.documentElement.clientHeight || document.body.clientHeight
               new window.$Emoji233333({
                 base: rainBase.value,
                 scale: 0.7,
@@ -67,7 +65,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   #emoji-rain {
     position: fixed;

@@ -1,103 +1,39 @@
 <template>
-  <div
-    class="freelancer-page"
-    :class="{ mobile: isMobile }"
-  >
-    <div class="banner">
-      <div class="banner-content container">
-        <h2 class="title">
+  <div class="freelancer-page" :class="{ mobile: isMobile }">
+    <page-banner class="banner-content" :position="66" image="/images/page-feeelancer/banner.jpg">
+      <template #title>
+        <div class="title">
           <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_SLOGAN" />
-        </h2>
-        <div class="submit">
-          <button
-            class="email-me"
-            title="email me"
-            @click="handleSubmitEmail"
-          >
+        </div>
+      </template>
+      <template #description>
+        <div class="desc">
+          <button class="submit-email" title="email me" @click="handleSubmitEmail">
             <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_EMAIL_ME" />
           </button>
+          <desktop-only>
+            <ulink class="upwork" :href="VALUABLE_LINKS.UPWORK">
+              <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_HIRE_ME" />
+              <i class="iconfont icon-upwork"></i>
+            </ulink>
+          </desktop-only>
         </div>
-        <desktop-only>
-          <ulink class="upwork" :href="VALUABLE_LINKS.UPWORK">
-            <span>(</span>
-            <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_HIRE_ME" />
-            <i class="iconfont icon-upwork"></i>
-            <span>)</span>
-          </ulink>
-        </desktop-only>
-      </div>
-    </div>
+      </template>
+    </page-banner>
     <div class="module">
       <div class="container">
         <ul class="module-list">
-          <li class="item">
-            <p class="icon web">
-              <i class="iconfont icon-html5"></i>
+          <li class="item" :key="index" v-for="(service, index) in services">
+            <p class="icon" :class="service.id">
+              <i class="iconfont" :class="service.iconfont"></i>
             </p>
             <h3 class="name">
-              <i18n en="Web Client" zh="Web 客户端" />
+              <span v-if="typeof service.name === 'string'">{{ service.name }}</span>
+              <i18n v-else :en="service.name.en" :zh="service.name.zh" />
             </h3>
-            <p class="desc">
-              <i18n en="Vue application" zh="Vue 应用开发" />
+            <p class="desc" :key="i" v-for="(desc, i) in service.descriptions">
+              <i18n :en="desc.en" :zh="desc.zh" />
             </p>
-            <p class="desc">
-              <i18n en="React application" zh="React 应用开发" />
-            </p>
-            <p class="desc">
-              <i18n en="Angular application" zh="Angular 应用开发" />
-            </p>
-          </li>
-          <li class="item">
-            <p class="icon nodejs">
-              <i class="iconfont icon-nodejs"></i>
-            </p>
-            <h3 class="name">Node.js</h3>
-            <p class="desc">
-              <i18n en="Node.js application" zh="Node.js 整站建设" />
-            </p>
-            <p class="desc">
-              <i18n en="Node.js Web 服务开发" zh="Node.js online bussniess" />
-            </p>
-            <p class="desc">
-              <i18n en="Node.js 命令行工具开发" zh="Node.js CLI application" />
-            </p>
-          </li>
-          <li class="item">
-            <p class="icon app">
-              <i class="iconfont icon-app"></i>
-            </p>
-            <h3 class="name">
-              <i18n en="Hybrid App" zh="混合应用" />
-            </h3>
-            <p class="desc">
-              <i18n en="Flutter application" zh="Flutter 应用开发" />
-            </p>
-            <p class="desc">
-              <i18n en="React Native application" zh="React Native 应用开发" />
-            </p>
-            <p class="desc">
-              <i18n en="Electron application" zh="Electron 应用开发" />
-            </p>
-          </li>
-          <li class="item">
-            <p class="icon wechat">
-              <i class="iconfont icon-wechat"></i>
-            </p>
-            <h3 class="name">
-              <i18n en="WeChat" zh="微信周边" />
-            </h3>
-            <p class="desc"><i18n en="HTML5 page" zh="H5 开发" /></p>
-            <p class="desc"><i18n en="WeChat official account" zh="公众号开发" /></p>
-            <p class="desc"><i18n en="WeChat mini program" zh="小程序开发" /></p>
-          </li>
-          <li class="item">
-            <p class="icon consult">
-              <i class="iconfont icon-tool"></i>
-            </p>
-            <h3 class="name"><i18n en="Consultant" zh="技术咨询" /></h3>
-            <p class="desc"><i18n en="Everything about web" zh="语言、框架疑难杂症" /></p>
-            <p class="desc"><i18n en="Business and technical" zh="业务与技术方案设计" /></p>
-            <p class="desc"><i18n en="Technical consultant" zh="长期技术顾问指导" /></p>
           </li>
         </ul>
       </div>
@@ -105,68 +41,19 @@
     <desktop-only>
       <client-only transition>
         <div class="mammon container">
-          <adsense-responsive
-            ins-style="display:inline-block;width:1050px;height:192px"
-          />
+          <u-adsense ins-style="display:inline-block;width:1050px;height:192px" />
         </div>
       </client-only>
     </desktop-only>
     <div class="step">
       <div class="step-content container">
         <ul class="step-list">
-          <li class="item">
+          <li class="item" :key="index" v-for="(step, index) in steps">
             <h3 class="name">
-              <i18n zh="1. 提交需求" en="1. Consult" />
+              <i18n :zh="step.name.zh" :en="step.name.en" />
             </h3>
-            <p class="desc">
-              <i18n en="Product requirements document" zh="提供构思成熟的需求文档" />
-            </p>
-            <p class="desc">
-              <i18n en="Prototype design document" zh="清晰可用的设计图或原型" />
-            </p>
-          </li>
-          <li class="item">
-            <h3 class="name">
-              <i18n en="2. Confirm" zh="2. 确认需求" />
-            </h3>
-            <p class="desc">
-              <i18n en="Price and schedule" zh="确认报价及开发周期" />
-            </p>
-            <p class="desc">
-              <i18n en="Development cycle" zh="协商开发周期和要点" />
-            </p>
-          </li>
-          <li class="item">
-            <h3 class="name">
-              <i18n en="3. Develop" zh="3. 预付开发" />
-            </h3>
-            <p class="desc">
-              <i18n en="Payment the trust and deposit" zh="预付部分或全部" />
-            </p>
-            <p class="desc">
-              <i18n en="Develop project" zh="进入开发流程" />
-            </p>
-          </li>
-          <li class="item">
-            <h3 class="name">
-              <i18n en="4. Review" zh="4. 预收修正" />
-            </h3>
-            <p class="desc">
-              <i18n en="Review and experience" zh="提供预览演示" />
-            </p>
-            <p class="desc">
-              <i18n en="Fixbug and optimize" zh="细节修正调优" />
-            </p>
-          </li>
-          <li class="item">
-            <h3 class="name">
-              <i18n en="5. Delivery" zh="5. 交付维护" />
-            </h3>
-            <p class="desc">
-              <i18n en="Pay balance" zh="付清尾款，交付项目" />
-            </p>
-            <p class="desc">
-              <i18n en="Maintenance cycle" zh="一定周期内持续维护" />
+            <p class="desc" :key="i" v-for="(desc, i) in step.descriptions">
+              <i18n :en="desc.en" :zh="desc.zh" />
             </p>
           </li>
         </ul>
@@ -184,26 +71,29 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { defineComponent } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { Language } from '/@/language/data'
+  import { firstUpperCase } from '/@/transforms/text'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
-  import AdsenseResponsive from '/@/components/adsense/responsive.vue'
+  import UAdsense from '/@/components/common/uadsense.vue'
+  import PageBanner from '/@/components/common/banner.vue'
 
   export default defineComponent({
-    name: 'Freelancer',
+    name: 'FreelancerPage',
     components: {
-      AdsenseResponsive
+      UAdsense,
+      PageBanner
     },
     setup() {
-      const { i18n, helmet, gtag, isMobile, isZhLang } = useEnhancer()
+      const { i18n, meta, gtag, isMobile, isZhLang } = useEnhancer()
 
-      helmet(() => {
-        const prefix = isZhLang.value
-          ? `${i18n.t(LANGUAGE_KEYS.PAGE_FREELANCER)} | `
-          : ''
-        return { title: prefix + 'Freelancer' }
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_FREELANCER, Language.En)!)
+        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_FREELANCER), enTitle] : [enTitle]
+        return { pageTitle: titles.join(' | ') }
       })
 
       const handleSubmitEmail = () => {
@@ -213,11 +103,8 @@
         const body = isZhLang.value
           ? `我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
           : 'Hi Surmon, My name is '
-        const mailAddress = `mailto:${META.email}` + (
-          isMobile.value
-            ? ''
-            : `?subject=${subject}&body=${body}`
-          )
+        const mailAddress =
+          `mailto:${META.email}` + (isMobile.value ? '' : `?subject=${subject}&body=${body}`)
 
         window.open(mailAddress)
         gtag?.event('咨询邮件', {
@@ -226,10 +113,129 @@
         })
       }
 
+      const services = [
+        {
+          id: 'web',
+          iconfont: 'icon-html5',
+          name: {
+            zh: 'Web 客户端',
+            en: 'Web Client'
+          },
+          descriptions: [
+            { zh: 'Vue 应用开发', en: 'Vue application' },
+            { en: 'React application', zh: 'React 应用开发' },
+            { en: 'Angular application', zh: 'Angular 应用开发' }
+          ]
+        },
+        {
+          id: 'nodejs',
+          iconfont: 'icon-nodejs',
+          name: 'Node.js',
+          descriptions: [
+            { en: 'Node.js application', zh: 'Node.js 整站建设' },
+            { en: 'Node.js online bussniess', zh: 'Node.js Web 服务开发' },
+            { en: 'Node.js CLI application', zh: 'Node.js 命令行工具开发' }
+          ]
+        },
+        {
+          id: 'app',
+          iconfont: 'icon-app',
+          name: {
+            zh: '混合应用',
+            en: 'Hybrid App'
+          },
+          descriptions: [
+            { en: 'Flutter application', zh: 'Flutter 应用开发' },
+            { en: 'React Native application', zh: 'React Native 应用开发' },
+            { en: 'Electron application', zh: 'Electron 应用开发' }
+          ]
+        },
+        {
+          id: 'wechat',
+          iconfont: 'icon-wechat',
+          name: {
+            zh: '微信周边',
+            en: 'WeChat'
+          },
+          descriptions: [
+            { en: 'HTML5 web page', zh: 'H5 开发' },
+            { en: 'WeChat official account', zh: '公众号开发' },
+            { en: 'WeChat mini program', zh: '小程序开发' }
+          ]
+        },
+        {
+          id: 'consult',
+          iconfont: 'icon-tool',
+          name: {
+            zh: '技术咨询',
+            en: 'Consultant'
+          },
+          descriptions: [
+            { en: 'Everything about web', zh: '语言、框架疑难杂症' },
+            { en: 'Business and technical', zh: '业务与技术方案设计' },
+            { en: 'Technical consultant', zh: '长期技术顾问指导' }
+          ]
+        }
+      ]
+
+      const steps = [
+        {
+          name: {
+            zh: '1. 提交需求',
+            en: '1. Consult'
+          },
+          descriptions: [
+            { en: 'Product requirements document', zh: '提供构思成熟的需求文档' },
+            { en: 'Prototype design document', zh: '清晰可用的设计图或原型' }
+          ]
+        },
+        {
+          name: {
+            zh: '2. 确认需求',
+            en: '2. Confirm'
+          },
+          descriptions: [
+            { en: 'Price and schedule', zh: '确认报价及开发周期' },
+            { en: 'Development cycle', zh: '协商开发周期和要点' }
+          ]
+        },
+        {
+          name: {
+            zh: '3. 预付开发',
+            en: '3. Develop'
+          },
+          descriptions: [
+            { en: 'Payment the trust and deposit', zh: '预付部分或全部' },
+            { en: 'Develop project', zh: '进入开发流程' }
+          ]
+        },
+        {
+          name: {
+            zh: '4. 预收修正',
+            en: '4. Review'
+          },
+          descriptions: [
+            { en: 'Review and experience', zh: '提供预览演示' },
+            { en: 'Fixbug and optimize', zh: '细节修正调优' }
+          ]
+        },
+        {
+          name: {
+            zh: '5. 交付维护',
+            en: '5. Delivery'
+          },
+          descriptions: [
+            { en: 'Pay balance', zh: '付清尾款，交付项目' },
+            { en: 'Maintenance cycle', zh: '一定周期内持续维护' }
+          ]
+        }
+      ]
+
       return {
-        META,
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
+        services,
+        steps,
         isMobile,
         handleSubmitEmail
       }
@@ -238,51 +244,42 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .freelancer-page {
     width: 100%;
 
-    .banner {
-      height: $full-column-page-banner-height;
-      background: $module-bg-hover cdn-url('/images/page-feeelancer/banner.jpg');
-      background-size: cover;
-      background-position: center 60%;
+    .banner-content {
+      text-align: center;
 
-      .banner-content {
-        height: 100%;
-        overflow: hidden;
-        text-align: center;
+      .title {
+        font-family: 'webfont-normal', DINRegular;
+      }
 
-        .title {
-          color: $white;
-          margin-top: 7rem;
-          margin-bottom: 4rem;
-          font-weight: bold;
-          font-size: $font-size-h2 * 2;
-          font-family: 'webfont-normal', DINRegular;
-        }
+      .desc {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
 
-        .submit {
+        .submit-email {
+          display: block;
           margin-bottom: 2rem;
+          width: 10rem;
+          border: 1px solid;
+          border-color: $white;
+          line-height: 3.8rem;
+          text-align: center;
+          letter-spacing: 1px;
+          font-weight: bold;
+          text-transform: uppercase;
+          color: $white;
+          transition: color $transition-time-fast, border-color $transition-time-fast;
+          @include radius-box($xs-radius);
 
-          .email-me {
-            width: 10rem;
-            border: 1px solid;
-            border-color: $white;
-            line-height: 3.8rem;
-            text-align: center;
-            letter-spacing: 1px;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: $white;
-            transition: color $transition-time-fast, border-color $transition-time-fast;
-            @include radius-box($xs-radius);
-
-            &:hover {
-              color: $primary;
-              border-color: $primary;
-            }
+          &:hover {
+            color: $primary;
+            border-color: $primary;
           }
         }
 
@@ -290,9 +287,8 @@
           color: $white;
           border-bottom: 1px solid;
           border-color: transparent;
-          transition:
-            color $transition-time-fast,
-            border-color $transition-time-fast;
+          font-size: $font-size-h5;
+          transition: color $transition-time-fast, border-color $transition-time-fast;
 
           .iconfont {
             margin-left: $xs-gap;
@@ -327,31 +323,12 @@
           margin-right: $gap * 2;
           @include radius-box($sm-radius);
           @include common-bg-module($transition-time-fast);
-
           &:last-child {
             margin-right: 0;
           }
 
           &:hover {
             background-color: $module-bg-opaque;
-
-            .icon {
-              &.web {
-                color: $html5-primary;
-              }
-              &.nodejs {
-                color: $nodejs-primary;
-              }
-              &.app {
-                color: $primary;
-              }
-              &.wechat {
-                color: $wechat-primary;
-              }
-              &.consult {
-                color: #CD7F32;
-              }
-            }
 
             .desc {
               color: $text;
@@ -360,8 +337,23 @@
 
           > .icon {
             @include color-transition($transition-time-fast);
+            &.web {
+              color: $html5-primary;
+            }
+            &.nodejs {
+              color: $nodejs-primary;
+            }
+            &.app {
+              color: $primary;
+            }
+            &.wechat {
+              color: $wechat-primary;
+            }
+            &.consult {
+              color: $stackoverflow-primary;
+            }
 
-            > .iconfont {
+            .iconfont {
               font-size: $font-size-h3 * 3;
             }
           }
@@ -386,6 +378,7 @@
 
       > .step-content {
         > .step-list {
+          height: 16rem;
           margin: 0;
           padding: 0;
           list-style-type: none;
@@ -395,8 +388,7 @@
           > .item {
             width: 20%;
             height: auto;
-            padding-top: $xs-gap;
-            padding-bottom: $lg-gap;
+            padding-top: $gap;
             text-align: center;
 
             > .desc {
@@ -418,7 +410,6 @@
         text-align: center;
       }
     }
-
 
     &.mobile {
       .container {

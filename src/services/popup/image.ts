@@ -1,8 +1,8 @@
 /**
  * @file popup image component
- * @module service/popup/image-component
+ * @module service.popup.image
  * @author Surmon <https://github.com/surmon-china>
-*/
+ */
 
 import { h, defineComponent } from 'vue'
 import { PopupUIProps, getOtherProps } from './popup'
@@ -10,7 +10,7 @@ import { usePopup } from './hook'
 
 /**
  * @example <popup-image src="xxx" class="image" />
-*/
+ */
 export default defineComponent({
   name: 'PopupImage',
   props: {
@@ -36,7 +36,7 @@ export default defineComponent({
         ...imageAttrs,
         src,
         onClick(...args) {
-          (imageProps as any)?.onClick?.(...args)
+          ;(imageProps as any)?.onClick?.(...args)
           popup?.vImage(src, imageAttrs, popupProps)
         }
       })

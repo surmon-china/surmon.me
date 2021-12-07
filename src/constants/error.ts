@@ -1,6 +1,6 @@
 /**
  * @file Error constant
- * @module constant/error
+ * @module constant.error
  * @author Surmon <https://github.com/surmon-china>
  */
 

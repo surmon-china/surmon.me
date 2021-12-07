@@ -16,7 +16,20 @@
   import { defineComponent, reactive, onMounted, onBeforeUnmount } from 'vue'
   import Flower from './flower.vue'
 
-  const FLOWERS = ['富强', '民主', '文明', '和谐', '自由', '平等', '公正', '法治', '爱国', '敬业', '诚信', '友善']
+  const FLOWERS = [
+    '富强',
+    '民主',
+    '文明',
+    '和谐',
+    '自由',
+    '平等',
+    '公正',
+    '法治',
+    '爱国',
+    '敬业',
+    '诚信',
+    '友善'
+  ]
 
   export interface IFlower {
     id: number
@@ -54,7 +67,7 @@
       onBeforeUnmount(() => window.removeEventListener('click', handleClick))
 
       const handleAnimationEnd = (id: number) => {
-        const targetIndex = state.flowers.findIndex(flower => flower.id === id)
+        const targetIndex = state.flowers.findIndex((flower) => flower.id === id)
         if (targetIndex > -1) {
           state.flowers.splice(targetIndex, 1)
         }
@@ -69,7 +82,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   #wallflower {
     position: fixed;

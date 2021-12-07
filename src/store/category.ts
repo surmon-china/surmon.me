@@ -1,65 +1,46 @@
 /**
  * @file Categories state
- * @module store/category
+ * @module store.category
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { Module, MutationTree, ActionTree } from 'vuex'
-import nodepress from '../services/nodepress'
-import { IRootState } from '.'
+import { defineStore } from 'pinia'
+import nodepress from '/@/services/nodepress'
 
-export enum CategoryModuleMutations {
-  SetFetched = 'setFetched',
-  SetFetching = 'setFetching',
-  SetListData = 'setListData'
-}
-export enum CategoryModuleActions {
-  FetchAll = 'fetchAll'
-}
-
-const state = () => ({
-  fetched: false,
-  fetching: false,
-  data: [] as Array<$TODO>
-})
-
-const mutations: MutationTree<CategoryState> = {
-  [CategoryModuleMutations.SetFetched](state, fetched: boolean) {
-    state.fetched = fetched
-  },
-  [CategoryModuleMutations.SetFetching](state, fetching: boolean) {
-    state.fetching = fetching
-  },
-  [CategoryModuleMutations.SetListData](state, data) {
-    state.data = data
-  }
+export interface Category {
+  id: number
+  _id: string
+  pid: string
+  name: string
+  slug: string
+  count: number
+  description: string
+  update_at: string
+  create_at: string
 }
 
-const actions: ActionTree<CategoryState, IRootState> = {
-  [CategoryModuleActions.FetchAll]({ state, commit }) {
-    if (state.fetched) {
-      return Promise.resolve(state.data)
+export const useCategoryStore = defineStore('category', {
+  state: () => ({
+    fetched: false,
+    fetching: false,
+    categories: [] as Array<Category>
+  }),
+  actions: {
+    fetchAll() {
+      if (this.fetched) {
+        return Promise.resolve()
+      }
+
+      this.fetching = true
+      return nodepress
+        .get('/category', { params: { per_page: 50 } })
+        .then((response) => {
+          this.categories = response.result.data
+          this.fetched = true
+        })
+        .finally(() => {
+          this.fetching = false
+        })
     }
-    commit(CategoryModuleMutations.SetFetching, true)
-    return nodepress
-      .get('/category', { params: { per_page: 666 }})
-      .then(response => {
-        commit(CategoryModuleMutations.SetListData, response.result.data)
-        commit(CategoryModuleMutations.SetFetched, true)
-        return response
-      })
-      .finally(() => {
-        commit(CategoryModuleMutations.SetFetching, false)
-      })
   }
-}
-
-const categoryModule: Module<CategoryState, IRootState> = {
-  namespaced: true,
-  state,
-  mutations,
-  actions
-}
-
-export type CategoryState = ReturnType<typeof state>
-export default categoryModule
+})

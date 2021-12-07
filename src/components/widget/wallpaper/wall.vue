@@ -32,12 +32,7 @@
             <span class="text" v-if="currentWallpaper.bsTitle">{{ currentWallpaper.bsTitle }}</span>
           </ulink>
         </transition>
-        <button
-          class="button"
-          title="Prev"
-          :disabled="index <= 0"
-          @click="index--"
-        >
+        <button class="button" title="Prev" :disabled="index <= 0" @click="index--">
           <i class="iconfont icon-prev"></i>
         </button>
         <button
@@ -48,11 +43,7 @@
         >
           <i class="iconfont icon-next"></i>
         </button>
-        <button
-          class="button"
-          title="Close"
-          @click="handleClose"
-        >
+        <button class="button" title="Close" @click="handleClose">
           <i class="iconfont icon-cancel"></i>
         </button>
       </div>
@@ -62,28 +53,27 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
-  import { getNamespace, Modules } from '/@/store'
-  import { WallpaperModuleGetters } from '/@/store/wallpaper'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useWallpaperStore } from '/@/store/wallpaper'
+  import { Language } from '/@/language/data'
 
-  enum Event {
+  export enum WallpaperWallEvent {
     Close = 'close'
   }
 
   export default defineComponent({
     name: 'WallpaperWall',
-    emits: [Event.Close],
+    emits: [WallpaperWallEvent.Close],
     setup(_, context) {
-      const { store, i18n } = useEnhancer()
+      const { i18n } = useEnhancer()
+      const wallpaperStore = useWallpaperStore()
       const index = ref(0)
-      const wallpapers = computed<any[]>(() => store.getters[
-        getNamespace(Modules.Wallpaper, WallpaperModuleGetters.Papers)
-      ](i18n.language.value))
-      const currentWallpaper = computed(() => {
-        return wallpapers.value?.length && wallpapers.value?.[index.value]
-      })
+      const wallpapers = computed(() => wallpaperStore.papers(i18n.language.value as Language))
+      const currentWallpaper = computed(
+        () => wallpapers.value?.length && wallpapers.value?.[index.value]
+      )
 
-      const handleClose = () => context.emit(Event.Close)
+      const handleClose = () => context.emit(WallpaperWallEvent.Close)
 
       return {
         index,
@@ -96,7 +86,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .wall {
     position: relative;
@@ -155,7 +145,7 @@
           @include radius-box($xs-radius);
 
           &[disabled] {
-            opacity: .6;
+            opacity: 0.6;
           }
 
           &:not([disabled]) {

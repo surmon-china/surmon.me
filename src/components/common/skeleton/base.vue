@@ -8,10 +8,10 @@
     name: 'SkeletonBase',
     props: {
       width: {
-        type: Number,
+        type: Number
       },
       height: {
-        type: Number,
+        type: Number
       },
       circle: {
         type: Boolean,
@@ -24,9 +24,7 @@
     },
     setup(props) {
       const style = computed<CSSProperties>(() => ({
-        borderRadius: props.circle
-          ? '100%'
-          : `${props.radius}px`,
+        borderRadius: props.circle ? '100%' : `${props.radius}px`,
         ...(props.width && { width: props.width + 'px' }),
         ...(props.height && { height: props.height + 'px' })
       }))
@@ -39,14 +37,18 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   $skeleton-background: $module-bg;
   $skeleton-spinner: $module-bg-darker-3;
 
   @keyframes placeHolderShimmer {
-    0% { background-position: -468px 0 }
-    100% { background-position: 350px 50px }
+    0% {
+      background-position: -468px 0;
+    }
+    100% {
+      background-position: 350px 50px;
+    }
   }
 
   .skeleton.base {

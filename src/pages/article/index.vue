@@ -1,10 +1,7 @@
 <template>
   <div class="article-page" :class="{ mobile: isMobile }">
     <div class="module">
-      <article-content
-        :fetching="fetching"
-        :article="article"
-      />
+      <article-content :id="ARTICLE_CONTENT_ELEMENT_ID" :fetching="fetching" :article="article" />
     </div>
     <client-only>
       <div class="module">
@@ -12,45 +9,43 @@
       </div>
     </client-only>
     <div class="module">
-      <article-share :fetching="fetching" />
+      <article-share :id="ARTICLE_SHARE_ELEMENT_ID" :fetching="fetching" />
     </div>
     <div class="module">
-      <article-meta
-        :fetching="fetching"
-        :article="article"
-      />
+      <article-meta :id="ARTICLE_META_ELEMENT_ID" :fetching="fetching" :article="article" />
     </div>
     <div class="releted">
       <article-related
+        :id="ARTICLE_RELETED_ELEMENT_ID"
         :fetching="fetching"
         :articles="relatedArticles"
       />
     </div>
     <div class="comment">
-      <comment
-        :fetching="fetching"
-        :post-id="articleId"
-        :likes="article?.meta?.likes"
-      />
+      <comment :fetching="fetching" :post-id="articleId" :likes="article?.meta?.likes" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, watch, onBeforeMount } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
-  import { prefetch } from '/@/universal'
-  import { isClient } from '/@/environment'
-  import { Modules, getNamespace } from '/@/store'
-  import { ArticleModuleActions } from '/@/store/article'
-  import { CommentModuleActions } from '/@/store/comment'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import Comment from '/@/components/comment/index.vue'
+  import { defineComponent, computed, watch, onBeforeMount } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useUniversalFetch } from '/@/universal'
+  import { isClient } from '/@/app/environment'
+  import {
+    ARTICLE_CONTENT_ELEMENT_ID,
+    ARTICLE_META_ELEMENT_ID,
+    ARTICLE_RELETED_ELEMENT_ID,
+    ARTICLE_SHARE_ELEMENT_ID
+  } from '/@/constants/anchor'
+  import { useArticleDetailStore } from '/@/store/article'
+  import { useCommentStore } from '/@/store/comment'
   import ArticleContent from './content.vue'
   import ArticleMammon from './mammon.vue'
   import ArticleShare from './share.vue'
   import ArticleMeta from './meta.vue'
   import ArticleRelated from './related.vue'
+  import Comment from '/@/components/comment/index.vue'
 
   export default defineComponent({
     name: 'ArticleDetail',
@@ -69,16 +64,18 @@
       }
     },
     setup(props) {
-      const { store, helmet, isMobile } = useEnhancer()
-      const article = computed(() => store.state.article.detail.data)
-      const fetching = computed(() => store.state.article.detail.fetching)
+      const { meta, isMobile } = useEnhancer()
+      const articleDetailStore = useArticleDetailStore()
+      const commentStore = useCommentStore()
+      const article = computed(() => articleDetailStore.article || void 0)
+      const fetching = computed(() => articleDetailStore.fetching)
       const relatedArticles = computed(() => {
         if (!article.value) {
           return []
         }
         const ARTICLE_COUNT = 6
         const articles = [...article.value.related]
-          .filter(article => article._id !== props.articleId)
+          .filter((article) => article.id !== props.articleId)
           .slice(0, ARTICLE_COUNT)
         if (isMobile.value || articles.length >= ARTICLE_COUNT) {
           return articles
@@ -94,23 +91,23 @@
         ]
       })
 
-      helmet(() => ({
-        title: article.value?.title,
+      meta(() => ({
+        pageTitle: article.value?.title,
         keywords: article.value?.keywords?.join(',') || article.value?.title,
         description: article.value?.description || ''
       }))
 
-      const fetchArticleDetail = (article_id: string | number) => {
+      const fetchArticleDetail = (articleID: number) => {
         const fetchDelay = isClient ? 368 : 0
         return Promise.all([
-          store.dispatch(
-            getNamespace(Modules.Article, ArticleModuleActions.FetchDetail),
-            { article_id, delay: fetchDelay }
-          ),
-          store.dispatch(
-            getNamespace(Modules.Comment, CommentModuleActions.FetchList),
-            { post_id: article_id, delay: fetchDelay }
-          )
+          articleDetailStore.fetchDetail({
+            articleID,
+            delay: fetchDelay
+          }),
+          commentStore.fetchList({
+            post_id: articleID,
+            delay: fetchDelay
+          })
         ])
       }
 
@@ -122,21 +119,24 @@
         )
       })
 
-      return prefetch(
-        () => fetchArticleDetail(props.articleId),
-        {
-          isMobile,
-          article,
-          fetching,
-          relatedArticles
-        }
-      )
+      useUniversalFetch(() => fetchArticleDetail(props.articleId))
+
+      return {
+        isMobile,
+        article,
+        fetching,
+        relatedArticles,
+        ARTICLE_CONTENT_ELEMENT_ID,
+        ARTICLE_META_ELEMENT_ID,
+        ARTICLE_RELETED_ELEMENT_ID,
+        ARTICLE_SHARE_ELEMENT_ID
+      }
     }
   })
 </script>
 
 <style lang="scss">
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .article-page {
     .module {

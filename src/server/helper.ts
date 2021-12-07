@@ -1,23 +1,20 @@
 /**
  * @file BFF Server helper
- * @module server/helper
+ * @module server.helper
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import fs from 'fs'
 import path from 'path'
-import type { UserConfig } from 'vite'
-import { NODE_ENV } from '../environment'
+import { isDev } from '@/environment'
 
-/**
- * dist
- * |- server.js
- * data
- * public
-*/
-export const APP_PATH = path.join(__dirname)
-export const ROOT_PATH = path.join(APP_PATH, '..')
-export const DATA_PATH = path.join(ROOT_PATH, 'data')
-export const PUBLIC_PATH = path.join(ROOT_PATH, 'public')
+export const ROOT_PATH = process.cwd()
+export const PRDO_CLIENT_PATH = path.join(ROOT_PATH, 'dist', 'client')
+export const PRDO_SERVER_PATH = path.join(ROOT_PATH, 'dist', 'server')
 
-// config
-export const viteConfig: UserConfig = require(path.join(ROOT_PATH, 'vite.config'))(NODE_ENV)
+export const PUBLIC_PATH = isDev ? path.join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH
+export const EFFECTS_PATH = path.join(PUBLIC_PATH, 'effects')
+
+export const packageJSON = JSON.parse(
+  fs.readFileSync(path.resolve(ROOT_PATH, 'package.json'), 'utf-8')
+)

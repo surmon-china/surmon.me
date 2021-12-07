@@ -1,6 +1,6 @@
 <template>
   <form
-    :id="ElementID.Publisher"
+    :id="COMMENT_PUBLISHER_ELEMENT_ID"
     :class="{ mobile: isMobile }"
     class="publisher"
     name="comment"
@@ -17,7 +17,7 @@
             autocomplete="on"
             :disabled="disabled"
             :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_NAME) + ' *'"
-          >
+          />
         </div>
         <div class="email">
           <input
@@ -28,7 +28,7 @@
             autocomplete="on"
             :disabled="disabled"
             :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_EMAIL) + ' *'"
-          >
+          />
         </div>
         <div class="site">
           <input
@@ -38,14 +38,10 @@
             autocomplete="on"
             :disabled="disabled"
             :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_SITE)"
-          >
+          />
         </div>
         <div v-if="editing" class="save">
-          <button
-            type="submit"
-            :disabled="disabled"
-            @click="saveUserProfile"
-          >
+          <button type="submit" :disabled="disabled" @click="saveUserProfile">
             <i class="iconfont icon-success" />
           </button>
         </div>
@@ -79,7 +75,7 @@
               :alt="profileState.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
               :src="humanizeGravatarUrlByEmail(profileState.email)"
               draggable="false"
-            >
+            />
           </div>
         </desktop-only>
       </div>
@@ -96,14 +92,11 @@
                   #{{ replyingComment.id }} @{{ replyingComment.author.name }}：
                 </button>
               </span>
-              <button
-                class="cancel iconfont icon-cancel"
-                @click.prevent="cancelCommentReply"
-              />
+              <button class="cancel iconfont icon-cancel" @click.prevent="cancelCommentReply" />
             </div>
             <div
               class="reply-preview markdown-html comment"
-              v-html="markdownToHTML(replyingComment.content)"
+              v-html="markdownToHTML(replyingComment.content, { sanitize: true })"
             />
           </div>
         </transition>
@@ -114,13 +107,16 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, reactive, computed, watch } from 'vue'
-  import { useEnhancer } from '/@/enhancer'
+  import { defineComponent, ref, computed, watch } from 'vue'
+  import { useCommentStore, Comment } from '/@/store/comment'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { getCommentItemElementID, COMMENT_PUBLISHER_ELEMENT_ID } from '/@/constants/anchor'
+  import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
   import { firstUpperCase } from '/@/transforms/text'
   import { markdownToHTML } from '/@/transforms/markdown'
-  import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { CommentEvent, ElementID, getCommentElementId, humanizeGravatarUrlByEmail, scrollToElementAnchor } from './helper'
+  import { scrollToElementAnchor } from '/@/utils/scroller'
+  import { CommentEvent, humanizeGravatarUrlByEmail } from './helper'
 
   export default defineComponent({
     name: 'CommentPublisher',
@@ -155,19 +151,19 @@
       CommentEvent.CancelReply
     ],
     setup(props, context) {
-      const { i18n, store, isMobile } = useEnhancer()
+      const { i18n, isMobile } = useEnhancer()
+      const commentStore = useCommentStore()
+
       const profileState = ref(props.profile)
       watch(
         () => props.profile,
-        profile => profileState.value = profile,
+        (profile) => (profileState.value = profile),
         { deep: true }
       )
 
-      const replyingComment = computed(() => {
-        return store.state.comment.comments.data.find(
-          comment => comment.id === props.replyPid
-        )
-      })
+      const replyingComment = computed(
+        () => commentStore.comments.find((comment) => comment.id === props.replyPid) as Comment
+      )
 
       const saveUserProfile = (event) => {
         event.preventDefault()
@@ -203,11 +199,11 @@
       }
 
       const scrollToComment = (commentId: number) => {
-        scrollToElementAnchor(getCommentElementId(commentId), -300)
+        scrollToElementAnchor(getCommentItemElementID(commentId), -300)
       }
 
       return {
-        ElementID,
+        COMMENT_PUBLISHER_ELEMENT_ID,
         LANGUAGE_KEYS,
         t: i18n.t,
         isMobile,
@@ -227,13 +223,13 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/assets/styles/init.scss';
+  @import 'src/styles/init.scss';
 
   .publisher {
     display: block;
     padding-top: $gap;
     margin-top: $lg-gap;
-    border-top: 1px dashed $module-bg-darker-1;
+    border-top: 1px solid $module-bg-darker-1;
 
     > .user {
       width: 100%;
@@ -276,7 +272,7 @@
             top: 2em;
             margin: 0;
             padding: 0;
-            padding-top: .5rem;
+            padding-top: 0.5rem;
             list-style-type: square;
             z-index: $z-index-normal + 1;
             color: $text-reversal;
@@ -347,7 +343,7 @@
 
         .gravatar {
           display: block;
-          margin-bottom: .5em;
+          margin-bottom: 0.5em;
           width: 4rem;
           height: 4rem;
           background-color: $module-bg-darker-1;
@@ -355,7 +351,7 @@
           img {
             width: 100%;
             height: 100%;
-            transition: transform .5s ease-out;
+            transition: transform 0.5s ease-out;
           }
         }
       }

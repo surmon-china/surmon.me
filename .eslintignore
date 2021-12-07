@@ -4,11 +4,9 @@
 node_modules
 scripts
 
-.vun
 dist
 public
 src/patchs
 
-.eslintrc.js
 *.config.js
 *.json
