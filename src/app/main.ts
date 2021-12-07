@@ -73,6 +73,8 @@ export const createVueApp = (context: ICreatorContext) => {
 
   // handle global error
   app.config.errorHandler = (error) => globalState.setRenderError(error)
+  // handle router error https://next.router.vuejs.org/api/#onerror
+  router.onError(globalState.setRenderError)
 
   // handle router validate error & 404 error
   // https://next.router.vuejs.org/guide/advanced/navigation-guards.html#optional-third-argument-next

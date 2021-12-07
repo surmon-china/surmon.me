@@ -59,12 +59,12 @@ const renderHTML = async (vueApp: VueApp, url: string) => {
   devDebug(`renderHTML: ${url}`)
   const { app, router, store, meta, theme, globalState } = vueApp
 
-  devDebug('1. store.serverInit')
-  await store.prefetch()
-
-  devDebug('2. route.push.validate')
+  devDebug('1. route.push.validate')
   await router.push(url)
   await router.isReady()
+
+  devDebug('2. store.serverInit')
+  await store.prefetch()
 
   // because the layout func set has by animation done
   devDebug('3. set layout')

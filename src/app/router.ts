@@ -14,7 +14,7 @@ import {
 import { NOT_FOUND, INVALID_ERROR } from '/@/constants/error'
 import { LANGUAGE_KEYS } from '/@/language/key'
 import { LayoutColumn } from '/@/services/layout'
-import { isServer } from '/@/app/environment'
+import { isClient } from '/@/app/environment'
 import { isValidDateParam } from '/@/transforms/validate'
 import { scrollToTop } from '/@/utils/effects'
 import IndexPage from '/@/pages/index.vue'
@@ -113,8 +113,8 @@ export const routes: RouteRecordRaw[] = [
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Category slug → <string>'
           })
         }
-        if (isServer) {
-          const targetCategory = store.state.value.category.categories.find(
+        if (isClient) {
+          const targetCategory = store.state.value?.category.categories.find(
             (category) => category.slug === category_slug
           )
           if (!targetCategory) {
@@ -142,11 +142,14 @@ export const routes: RouteRecordRaw[] = [
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Tag slug → <string>'
           })
         }
-        if (isServer && !store.state.value.tag.tags.find((tag) => tag.slug === tag_slug)) {
-          return Promise.reject({
-            code: NOT_FOUND,
-            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + `Tag ${tag_slug} not found`
-          })
+        if (isClient) {
+          const tagretTag = store.state.value?.tag.tags.find((tag) => tag.slug === tag_slug)
+          if (!tagretTag) {
+            return Promise.reject({
+              code: NOT_FOUND,
+              message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + `Tag ${tag_slug} not found`
+            })
+          }
         }
       }
     }
