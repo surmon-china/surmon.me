@@ -42,7 +42,7 @@
     </button>
     <button class="link" @click="handleLink(ANCHORS.ARTICLE_META_ELEMENT_ID)">
       <i class="iconfont icon-clock"></i>
-      <i18n zh="元信息" en="Meta" />
+      <i18n zh="元始" en="Meta" />
       <span class="separator">|</span>
       <span class="meta">
         <i class="iconfont icon-eye"></i>

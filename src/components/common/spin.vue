@@ -36,7 +36,7 @@
         default: '5px'
       }
     },
-    data () {
+    data() {
       return {
         spinnerStyle: {
           backgroundColor: this.color,
@@ -60,7 +60,7 @@
 
     @keyframes ball-beat {
       50% {
-        opacity: .2;
+        opacity: 0.2;
         transform: scale(0.75);
       }
       100% {
@@ -100,7 +100,7 @@
           animation: ball-beat 0.7s -0.15s infinite linear;
 
           &:nth-child(2n-1) {
-            animation-delay: -.5s;
+            animation-delay: -0.5s;
           }
         }
 
@@ -133,7 +133,7 @@
           > div {
             width: 30px;
             height: 30px;
-            margin: 12px
+            margin: 12px;
           }
         }
       }
