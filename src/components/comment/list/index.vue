@@ -59,7 +59,7 @@
       const lozadObserver = ref<LozadObserver | null>(null)
 
       const observeLozad = () => {
-        const lozadElements = (listElement.value?.$el as HTMLElement)?.querySelectorAll(
+        const lozadElements = (listElement.value as HTMLElement)?.querySelectorAll(
           `.${LOZAD_CLASS_NAME}`
         )
         if (lozadElements?.length) {
