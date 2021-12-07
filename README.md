@@ -22,13 +22,15 @@
 
 > **Online site:** https://surmon.me
 
+> **更新记录：[CHANGELOG.md](https://github.com/surmon-china/surmon.me/blob/master/CHANGELOG.md)**
+
+---
+
 **🔥 其他相关项目：**
 
 - **RESTful API service for blog:** [`nodepress`](https://github.com/surmon-china/nodepress) powered by nestjs
 - **Blog admin site:** [`veact-admin`](https://github.com/surmon-china/veact-admin) powered by React & [`Veact`](https://github.com/veactjs/veact)
 - **Blog native app:** [`surmon.me.native`](https://github.com/surmon-china/surmon.me.native) powered by react-native
-
-**更新记录：[CHANGELOG.md](https://github.com/surmon-china/surmon.me/blob/master/CHANGELOG.md)**
 
 ## Screenshot
 
