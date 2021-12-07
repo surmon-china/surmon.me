@@ -28,7 +28,13 @@ export const useUniversalFetch = (fetcher: () => Promise<any>) => {
 
   // Server side: SSR
   if (isServer) {
-    onServerPrefetch(() => fetcher())
+    onServerPrefetch(() =>
+      fetcher().catch((error) => {
+        // HACK: 因为 onServerPrefetch 或 async setup 都无法中断 renderToString，所以需要在状态被抛出之前就做一个标记
+        globalState.setRenderError(error)
+        return Promise.reject(error)
+      })
+    )
     return
   }
 

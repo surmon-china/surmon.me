@@ -33,7 +33,7 @@
       <placeholder :data="articles.length" :loading="!articles.length && fetching">
         <template #loading>
           <ul class="article-list-skeleton" key="skeleton">
-            <li v-for="item in 5" :key="item" class="item">
+            <li v-for="item in 6" :key="item" class="item">
               <div class="thumb">
                 <skeleton-base />
               </div>

@@ -62,8 +62,8 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     } else {
       // error object -> axios | component
       renderError.value = {
-        ...defaultError,
-        ...error
+        ...error,
+        code: error.status || error.status || defaultError.code
       }
     }
   }
