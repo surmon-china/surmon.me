@@ -20,11 +20,9 @@ const DEV_API = isSPA ? API_PROXY_URL : isServer ? API_ONLINE_URL : API_PROXY_UR
 // prod:
 //  SPA -> online api
 //  SSR -> server ? localhost : online api
-// MARK: 会引发 nginx 带来诸多意外问题
-// const PROD_API = isSPA
-//   ? API_ONLINE_URL
-//   : isServer ? API_LOCAL_URL : API_ONLINE_URL
-const PROD_API = API_ONLINE_URL
+// MARK: 可能会引发 nginx 带来诸多意外问题
+// const PROD_API = API_ONLINE_URL
+const PROD_API = isSPA ? API_ONLINE_URL : isServer ? API_LOCAL_URL : API_ONLINE_URL
 
 export default {
   FE: import.meta.env.VITE_FE_URL as string,
