@@ -1,9 +1,7 @@
 <template>
-  <li
-    class="flower-item"
-    :style="styles"
-    :class="{ playing: state.playing }"
-  >{{ options.text }}</li>
+  <li class="flower-item" :style="styles" :class="{ playing: state.playing }">
+    {{ options.text }}
+  </li>
 </template>
 
 <script lang="ts">
@@ -25,6 +23,7 @@
         required: true
       }
     },
+    emits: [Event.Ended],
     setup(props, context) {
       const state = reactive({
         // 播放时长
@@ -32,7 +31,7 @@
         // 定时器
         timer: null as number | null,
         // 播放状态
-        playing: false,
+        playing: false
       })
 
       const styles = computed(() => ({
@@ -80,7 +79,7 @@
     position: fixed;
     display: block;
     transform: translate3d(-50%, -50%, 0);
-    transition: opacity .5s;
+    transition: opacity 0.5s;
     color: $primary;
     font-family: 'webfont-bolder', $font-family-normal;
     font-size: $font-size-h3;
@@ -91,7 +90,7 @@
       }
       80% {
         transform: translate3d(-50%, -400%, 0);
-        opacity: .8;
+        opacity: 0.8;
       }
       100% {
         transform: translate3d(-50%, -500%, 0);

@@ -46,9 +46,7 @@
       const getLineStyle = (index: number) => {
         const style: CSSProperties = {
           height: props.lineHeight,
-          marginBottom: index === props.lines - 1
-            ? '0'
-            : `calc(${props.lineHeight} * 0.75)`
+          marginBottom: index === props.lines - 1 ? '0' : `calc(${props.lineHeight} * 0.75)`
         }
         const position = index % 3
         if (position) {
