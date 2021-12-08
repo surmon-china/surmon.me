@@ -44,25 +44,21 @@
 # install dependencies
 $ yarn
 
-# serve with hot reload at localhost:3000
+# SSR mode
 $ yarn dev
-
-# or
-$ yarn dev:spa
-$ yarn dev:ssr
-
-# build for production and launch server
 $ yarn build
-
-# or
-$ yarn build:spa
-$ yarn build:ssr
-
-# run SSR
 $ yarn start
+
+# or SPA mode
+$ yarn spa:dev
+$ yarn spa:build
+$ yarn spa:start
 
 # lint test
 $ yarn lint
+
+# releast
+$ yarn releast
 ```
 
 ## Actions setup
