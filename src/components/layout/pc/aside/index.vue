@@ -28,11 +28,11 @@
         </template>
       </calendar>
     </div>
-    <div class="module mammon-square" :placeholder="t(LANGUAGE_KEYS.AD)">
+    <div class="module mammon-square">
       <client-only>
         <Adsense
           ins-class="adsbygoogle"
-          data-ad-client="ca-pub-4710915636313788"
+          ins-style="display:inline-block;width:250px;height:250px"
           data-ad-slot="6138120718"
           class="content"
         />
@@ -215,7 +215,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        @extend .center-placeholder;
 
         .content {
           height: 250px;

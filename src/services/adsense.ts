@@ -46,7 +46,19 @@ const getComponent = (clientID: string) =>
       const { i18n } = useEnhancer()
 
       return () => {
-        const { class: rootClass, insClass, insStyle, ...restAttrs } = props
+        const {
+          class: rootClass,
+          insClass,
+          insStyle,
+          dataAdClient,
+          dataAdSlot,
+          dataAdLayoutKey,
+          dataAdTest,
+          dataAdFormat,
+          dataFullWidthResponsive,
+          ...restAttrs
+        } = props
+
         return h(
           'div',
           {
@@ -62,7 +74,12 @@ const getComponent = (clientID: string) =>
             h('ins', {
               class: ['adsbygoogle', insClass],
               style: insStyle,
-              'data-ad-client': clientID,
+              'data-ad-client': dataAdClient || clientID,
+              'data-ad-slot': dataAdSlot,
+              'data-ad-layout-key': dataAdLayoutKey,
+              'data-ad-test': dataAdTest,
+              'data-ad-format': dataAdFormat,
+              'data-full-width-responsive': dataFullWidthResponsive,
               ...restAttrs
             }),
             h('script', `(adsbygoogle = window.adsbygoogle || []).push({})`)
