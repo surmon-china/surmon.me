@@ -1,5 +1,5 @@
 #!/bin/bash
 
-echo "[deploy] Restarting..."
+echo "[deploy] restarting..."
 pm2 restart surmon.me
-echo "[deploy] Restart done."
+echo "[deploy] restart done."
