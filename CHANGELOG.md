@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.2.1 (2021-12-08)
+
+**Fix**
+
+- Fix pages banner height
+- Fix PC aside AdSense
+
 ### v3.2.0 (2021-12-08)
 
 **Feature**

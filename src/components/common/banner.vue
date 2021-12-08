@@ -67,12 +67,12 @@
 
       .title {
         font-size: 3em;
+        margin-top: 0;
         margin-bottom: $lg-gap * 2;
       }
 
       .description {
         font-size: $font-size-h4;
-        margin-bottom: 1em;
       }
     }
   }
