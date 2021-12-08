@@ -7,7 +7,6 @@
         required
         type="search"
         name="search"
-        list="keywords"
         class="search-input"
         :class="i18n.language"
         :placeholder="i18n.t(LANGUAGE_KEYS.SEARCH_PLACEHOLDER)"
@@ -16,17 +15,6 @@
       <button class="search-btn" @click="handleSearch">
         <i class="iconfont icon-search" />
       </button>
-      <client-only>
-        <datalist v-if="tagStore.tags.length" id="keywords">
-          <option
-            v-for="tag in tagStore.tags"
-            :key="tag.slug"
-            :value="isZhLang ? tag.name : tag.slug"
-            :label="tag.description"
-            class="iiem"
-          />
-        </datalist>
-      </client-only>
     </div>
     <router-link class="archive-btn" :to="{ name: RouteName.Archive }">
       <i class="iconfont icon-peachblossom" />
@@ -38,15 +26,13 @@
   import { defineComponent, ref, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
-  import { useTagStore } from '/@/store/tag'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { isSearchArchive } from '/@/transforms/route'
 
   export default defineComponent({
     name: 'PCAsideSearch',
     setup() {
-      const { i18n, route, router, isZhLang } = useEnhancer()
-      const tagStore = useTagStore()
+      const { i18n, route, router } = useEnhancer()
       const keyword = ref('')
 
       onMounted(() => {
@@ -71,8 +57,6 @@
         LANGUAGE_KEYS,
         RouteName,
         i18n,
-        tagStore,
-        isZhLang,
         keyword,
         handleSearch
       }

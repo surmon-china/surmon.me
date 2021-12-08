@@ -1,5 +1,5 @@
 /**
- * @file Client util
+ * @file Client effects
  * @module util.effects
  * @author Surmon <https://github.com/surmon-china>
  */

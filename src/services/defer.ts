@@ -6,22 +6,23 @@
 
 import { App, inject, reactive, Plugin } from 'vue'
 
-export type ITask = () => any
-export type IDefer = ReturnType<typeof createDefer>
-
 declare global {
   interface Window {
-    $defer: IDefer
+    // @ts-ignore
+    $defer: Defer
   }
 }
 
+// @ts-ignore
+export type Defer = ReturnType<typeof createDeferStore>
+export type DeferTask = () => any
 const createDeferStore = () => {
   const state = reactive({
     loaded: false,
-    tasks: [] as Array<ITask>
+    tasks: [] as Array<DeferTask>
   })
 
-  const doTask = (task: ITask) => {
+  const doTask = (task: DeferTask) => {
     window.setTimeout(task, 666)
   }
 
@@ -30,7 +31,7 @@ const createDeferStore = () => {
     state.tasks.forEach((task) => doTask(task))
   }
 
-  const addTask = (task: ITask) => {
+  const addTask = (task: DeferTask) => {
     state.tasks.push(task)
     if (state.loaded) {
       doTask(task)
@@ -38,7 +39,7 @@ const createDeferStore = () => {
   }
 
   window.addEventListener('load', handleLoaded)
-  return { ...state, addTask }
+  return { state, addTask }
 }
 
 const DeferSymbol = Symbol('defer')
@@ -46,10 +47,8 @@ const DeferSymbol = Symbol('defer')
 export interface DeferPluginConfig {
   exportToGlobal?: boolean
 }
-export type Defer = ReturnType<typeof createDeferStore>
 export const createDefer = (): Defer & Plugin => {
-  const defer = window.$defer || createDeferStore()
-
+  const defer = createDeferStore()
   return {
     ...defer,
     install(app: App, config?: DeferPluginConfig) {
@@ -62,6 +61,6 @@ export const createDefer = (): Defer & Plugin => {
   }
 }
 
-export const useDefer = (): IDefer => {
-  return inject(DeferSymbol) as IDefer
+export const useDefer = (): Defer => {
+  return inject(DeferSymbol) as Defer
 }

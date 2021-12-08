@@ -4,8 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import sanitizeHTML from 'sanitize-html'
 import escapeHTML from 'escape-html'
+import sanitizeHTML from 'sanitize-html'
 import { marked, Renderer } from 'marked'
 import { TagMap } from '/@/store/tag'
 import { LOZAD_CLASS_NAME } from '/@/services/lozad'

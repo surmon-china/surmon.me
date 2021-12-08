@@ -6,7 +6,7 @@
 
 import { Router } from 'vue-router'
 
-export const enableBaiduSeoPush = (router: Router) => {
+export const enableBaiduSEOer = (router: Router) => {
   // Fork from https://zz.bdstatic.com/linksubmit/push.js
   const pushUrl = (url: string) => {
     const e = /([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi

@@ -1,5 +1,5 @@
 /**
- * @file swiper for vue
+ * @file Swiper for vue
  * @module service.swiper
  * @author Surmon <https://github.com/surmon-china>
  */

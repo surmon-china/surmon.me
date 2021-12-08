@@ -6,9 +6,9 @@
 
 import * as _ from 'lodash'
 import { defineStore } from 'pinia'
-import nodepress from '/@/services/nodepress'
 import { SortType } from '/@/constants/state'
 import { fetchDelay } from '/@/utils/fetch-delay'
+import nodepress from '/@/services/nodepress'
 
 export const COMMENT_API_PATH = '/comment'
 export const LIKE_COMMENT_API_PATH = '/like/comment'

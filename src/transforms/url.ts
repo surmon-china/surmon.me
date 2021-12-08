@@ -15,6 +15,10 @@ export const getFileProxyUrl = (uri: string) => {
   return `${API_CONFIG.PROXY}${uri}`
 }
 
+export const getFileStaticUrl = (uri: string) => {
+  return `${API_CONFIG.STATIC}${uri}`
+}
+
 export const getPageUrl = (uri: string) => {
   return `${API_CONFIG.FE}${uri}`
 }

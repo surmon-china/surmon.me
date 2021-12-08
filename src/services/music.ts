@@ -11,13 +11,13 @@ import { TunnelModule } from '/@/constants/tunnel'
 import type { Song } from '/@/server/tunnel/music'
 import tunnel from '/@/services/tunnel'
 
-export interface MusicConfig {
+export interface PlayerConfig {
   amplitude: any
   volume?: number
   autoStart?: boolean
 }
 
-const createMusicPlayer = (config: MusicConfig) => {
+const createMusicPlayer = (config: PlayerConfig) => {
   const { amplitude } = config
 
   // Player state
@@ -188,7 +188,7 @@ const createMusicPlayer = (config: MusicConfig) => {
 
 const MusicPlayerSymbol = Symbol('music-player')
 export type Music = ReturnType<typeof createMusicPlayer>
-export const createMusic = (config: MusicConfig): Music & Plugin => {
+export const createMusic = (config: PlayerConfig): Music & Plugin => {
   const musicPlayer = createMusicPlayer(config)
   if (config.autoStart) {
     musicPlayer.start()

@@ -36,24 +36,24 @@
           <template #default>
             <div class="content-warpper" key="content">
               <ul class="year-list">
-                <li v-for="yes in articleTree" :key="yes.year" class="year">
-                  <h4 class="title root">
+                <li v-for="yes in articleTree" :key="yes.year" class="year-item">
+                  <h3 class="title root">
                     <i class="iconfont icon-peachblossom" />
                     <span class="text">
                       <i18n :zh="replaceToChineseNumber(yes.year)" :en="yes.year" />
                     </span>
-                  </h4>
+                  </h3>
                   <ul class="month-list">
                     <li v-for="mos in yes.months" :key="mos.month" class="month">
-                      <h5 class="title">
+                      <h4 class="title">
                         <span class="argyle">
                           <i18n :zh="toChineseMonth(mos.month)" :en="toEngMonth(mos.month)" />
                           <span>&nbsp;~</span>
                         </span>
-                      </h5>
+                      </h4>
                       <ul class="article-list">
                         <li v-for="(article, index) in mos.articles" :key="index" class="article">
-                          <p class="title">
+                          <h5 class="title">
                             <span class="date"> D{{ article.createAt.day }} </span>
                             <a
                               class="link"
@@ -63,7 +63,7 @@
                             >
                               {{ article.title }}
                             </a>
-                          </p>
+                          </h5>
                           <p class="description" v-html="article.description" />
                         </li>
                       </ul>
@@ -72,15 +72,15 @@
                 </li>
               </ul>
               <div class="tag-content">
-                <h4 class="title root">
+                <h3 class="title root">
                   <i class="iconfont icon-dragon" />
                   <span class="text">
                     <i18n zh="分门别类" en="Tags" />
                   </span>
-                </h4>
+                </h3>
                 <ul class="tag-list">
                   <li v-for="(tag, index) in archiveStore.data?.tags" :key="index" class="tag">
-                    <p class="content">
+                    <h5 class="content">
                       <a
                         target="_blank"
                         class="link"
@@ -90,7 +90,7 @@
                         <i18n :zh="tag.name" :en="tag.slug" />
                       </a>
                       <span class="count">({{ tag.count || 0 }})</span>
-                    </p>
+                    </h5>
                     <p class="description">{{ tag.description }}</p>
                   </li>
                 </ul>
@@ -237,7 +237,7 @@
         text-transform: capitalize;
         font-size: 1em;
 
-        .year-list,
+        .year-item,
         .tag-content {
           margin-top: 0;
           margin-bottom: $gap * 2;
@@ -249,7 +249,6 @@
 
         .link {
           border-bottom: 1px solid;
-          font-size: $font-size-h5;
           font-weight: bold;
         }
 
@@ -269,6 +268,8 @@
 
         .year-list {
           list-style: none;
+          padding: 0;
+          margin: 0;
         }
 
         .month-list {

@@ -6,7 +6,6 @@
         v-model.trim="searchState.keyword"
         type="text"
         class="input"
-        list="keywords"
         required
         :placeholder="t(LANGUAGE_KEYS.SEARCH_PLACEHOLDER)"
         @keyup.enter.stop.prevent="submitSearch"
@@ -14,17 +13,6 @@
       <span class="close" @click.stop.prevent="cancelSearch">
         <i class="iconfont icon-cancel"></i>
       </span>
-      <client-only>
-        <datalist v-if="tagStore.tags.length" id="keywords" class="search-keywords">
-          <option
-            class="iiem"
-            v-for="tag in tagStore.tags"
-            :key="tag.slug"
-            :value="tag.name"
-            :label="tag.description"
-          />
-        </datalist>
-      </client-only>
     </div>
     <transition name="module">
       <div v-if="searchState.open" class="search-mask"></div>
@@ -47,7 +35,6 @@
   import { defineComponent, computed, reactive, ref, watch, onMounted, nextTick } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
-  import { useTagStore } from '/@/store/tag'
   import { isSearchArchive } from '/@/transforms/route'
   import { LANGUAGE_KEYS } from '/@/language/key'
 
@@ -55,7 +42,6 @@
     name: 'MobileHeader',
     setup() {
       const { i18n, route, router, globalState } = useEnhancer()
-      const tagStore = useTagStore()
       const isOpenedSidebar = computed(() => globalState.switchBox.mobileSidebar)
       const inputElement = ref<HTMLInputElement>(null as any)
       const searchState = reactive({
@@ -100,7 +86,6 @@
       return {
         t: i18n.t,
         LANGUAGE_KEYS,
-        tagStore,
         searchState,
         inputElement,
         openSearch,

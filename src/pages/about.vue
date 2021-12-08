@@ -200,7 +200,7 @@
   import { useMetaStore } from '/@/store/meta'
   import { getPageRoute } from '/@/transforms/route'
   import { firstUpperCase } from '/@/transforms/text'
-  import { getFileCDNUrl } from '/@/transforms/url'
+  import { getFileCDNUrl, getFileStaticUrl } from '/@/transforms/url'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
@@ -217,7 +217,7 @@
         () => adminInfo.value?.gravatar || getFileCDNUrl('/images/gravatar.jpg')
       )
       // MARK: 非常有必要，vite 对 video.source.src 的解析有问题，会将其认为是 asset，而非 static resource，从而编译失败
-      const backgroundVideo = getFileCDNUrl('/images/page-about/background.mp4')
+      const backgroundVideo = getFileStaticUrl('/assets/page-about-background.mp4')
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_ABOUT, Language.En)!)
@@ -281,7 +281,7 @@
 
     .banner {
       $banner-height: 22rem;
-      margin-bottom: $lg-gap;
+      margin-bottom: $gap * 2;
 
       .background {
         display: block;
@@ -467,7 +467,7 @@
       height: auto;
       display: flex;
       overflow: hidden;
-      margin-bottom: $lg-gap;
+      margin-bottom: $gap * 2;
 
       .content {
         flex-grow: 1;
@@ -567,7 +567,7 @@
         display: block;
         width: 22rem;
         overflow: hidden;
-        margin-left: $lg-gap;
+        margin-left: $gap * 2;
         padding: 1rem;
         @include common-bg-module();
         @include radius-box($lg-radius);
@@ -641,7 +641,7 @@
       overflow: hidden;
       width: 100%;
       padding: $sm-gap;
-      margin-bottom: $lg-gap;
+      margin-bottom: $gap * 2;
       @include radius-box($lg-radius);
       @include common-bg-module();
 
@@ -660,7 +660,7 @@
       align-items: center;
       width: 100%;
       height: 12rem;
-      margin-bottom: $lg-gap;
+      margin-bottom: $gap * 2;
       @include common-bg-module();
       @include radius-box($lg-radius);
 

@@ -1,96 +1,59 @@
-@mixin center-placeholder() {
-  width: 100%;
-  height: auto;
-  position: relative;
-
-  &::before {
-    content: attr(placeholder);
-    position: absolute;
-    text-align: center;
-    font-size: $font-size-h1;
-    font-weight: bold;
-    color: $text-dividers;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    z-index: $z-index-underground;
-    letter-spacing: .2em;
-    transform: translate(-50%, -50%);
-  }
-}
-
-.center-placeholder {
-  @include center-placeholder;
-}
-
+/// Element border radius
 @mixin radius-box($radius-size) {
   border-radius: $radius-size;
   overflow: hidden;
 }
 
+/// Text overflow
 @mixin text-overflow($placeholder: ellipsis) {
   overflow: hidden;
   text-overflow: $placeholder;
   white-space: nowrap;
 }
 
+/// Multi line text overflow
+@mixin clamp($lines: 2) {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+}
+
+/// Visible element
 @mixin visible() {
   opacity: 1;
   visibility: visible;
 }
 
+/// Hidden element
 @mixin hidden() {
   opacity: 0;
   visibility: hidden;
 }
 
+/// Backdrop drop effect
 @mixin backdrop-blur($blur-radius: 5px) {
   backdrop-filter: blur($blur-radius);
 }
 
+/// Box shadow
 @mixin box-shadow($alpha: 0.6, $blur-radius: 8px) {
   box-shadow: rgba($black, $alpha) 0px 0px $blur-radius;
 }
 
+/// Box shadow
 @mixin drop-shadow($alpha: 0.6, $blur-radius: 1px) {
   filter: drop-shadow(0px 0px $blur-radius rgba($black, $alpha));
 }
 
+/// Title shadow
 @mixin title-shadow() {
   $text-color: #efefef;
   color: $text-color;
   text-shadow: 0px 0px 0px $text-color, 0px 0px 2px rgba($black, 0.6), 0px 0px 4px rgba($black, 0.6);
 }
 
-@mixin transform-transition($time: $transition-time-fast) {
-  transition: transform $time;
-}
-
-@mixin visibility-transition($time: $transition-time-fast) {
-  transition: opacity $time, visibility $time;
-}
-
-@mixin color-transition($time: $transition-time-fast) {
-  transition: color $time;
-}
-
-@mixin background-transition($time: $transition-time-fast) {
-  transition: background-color $time;
-}
-
-@mixin filter-transition($time: $transition-time-fast) {
-  transition: filter $time;
-}
-
-@mixin hover-effect() {
-  filter: brightness(0.96);
-  @include filter-transition($transition-time-fast);
-
-  &:hover {
-    filter: brightness(1.06);
-  }
-}
-
+/// General module background
 @mixin common-bg-module($time: $transition-time-normal) {
   background-color: $module-bg;
   @include background-transition($time);
@@ -99,19 +62,34 @@
   }
 }
 
-@mixin blur-filter($param: 'horizontal') {
-  filter: force-source-url('/images/motion-blur-filter.svg##{$param}');
+/// Transform transition
+@mixin transform-transition($time: $transition-time-fast) {
+  transition: transform $time;
+}
+
+/// Visibility transition
+@mixin visibility-transition($time: $transition-time-fast) {
+  transition: opacity $time, visibility $time;
+}
+
+/// Color transition
+@mixin color-transition($time: $transition-time-fast) {
+  transition: color $time;
+}
+
+/// BackgroundColor transition
+@mixin background-transition($time: $transition-time-fast) {
+  transition: background-color $time;
+}
+
+/// Filter transition
+@mixin filter-transition($time: $transition-time-fast) {
+  transition: filter $time;
 }
 
 /// Adds a browser prefix to the property
-/// @param {*} $property Property
-/// @param {*} $value Value
-
-@mixin clamp($lines: 2) {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-line-clamp: $lines;
-  -webkit-box-orient: vertical;
+@mixin blur-filter($param: 'horizontal') {
+  filter: force-source-url('/images/motion-blur-filter.svg##{$param}');
 }
 
 /// Text Shadow
@@ -119,16 +97,20 @@
 /// @param {Size} $y [2px] - Y
 /// @param {Size} $blur [2px] - Blur
 /// @param {Color} $color [rgba(0,0,0,.4)] - Color
-
-@mixin text-shadow($x: 2px, $y: 2px, $blur: 5px, $color: rgba(0,0,0,.4)) {
+@mixin text-shadow($x: 2px, $y: 2px, $blur: 5px, $color: rgba(0, 0, 0, 0.4)) {
   text-shadow: $x $y $blur $color;
 }
 
+// Scrollbar
+/// @param {Size} $size
+/// @param {BackgroundColor} $bg
+/// @param {ThumbBackgroundColor} $thumb-bg
+/// @param {ThumbBackgroundColorHover} $thumb-bg-hover
 @mixin scrollbar-style(
   $size: $sm-gap,
   $bg: $white,
   $thumb-bg: darken($white, 18%),
-  $thumb-bg-hover: darken($white, 26%),
+  $thumb-bg-hover: darken($white, 26%)
 ) {
   &::-webkit-scrollbar {
     width: $size;
@@ -146,4 +128,30 @@
       background-color: $thumb-bg-hover;
     }
   }
+}
+
+/// Center placeholder attr in element
+@mixin center-placeholder() {
+  width: 100%;
+  height: auto;
+  position: relative;
+
+  &::before {
+    content: attr(placeholder);
+    position: absolute;
+    text-align: center;
+    font-size: $font-size-h1;
+    font-weight: bold;
+    color: $text-dividers;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    z-index: $z-index-underground;
+    letter-spacing: 0.2em;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.center-placeholder {
+  @include center-placeholder;
 }
