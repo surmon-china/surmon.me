@@ -6,7 +6,7 @@
 
 import { META } from '/@/config/app.config'
 
-export const enableCopyright = () => {
+export const enableCopyrighter = () => {
   const copyText = () => {
     return [
       '',

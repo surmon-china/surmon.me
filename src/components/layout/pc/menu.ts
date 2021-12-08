@@ -38,13 +38,6 @@ export const menus: Array<MenuItem> = [
     icon: 'icon-github',
     i18nKey: LANGUAGE_KEYS.PAGE_GITHUB
   },
-  // hidden music page menu
-  // {
-  //   id: RouteName.Music,
-  //   route: getPageRoute(RouteName.Music),
-  //   icon: 'icon-netease-music',
-  //   i18nKey: LANGUAGE_KEYS.PAGE_MUSIC
-  // },
   {
     id: RouteName.Lens,
     route: getPageRoute(RouteName.Lens),

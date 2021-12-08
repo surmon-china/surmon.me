@@ -5,8 +5,8 @@
  */
 
 import { defineStore } from 'pinia'
-import nodepress from '/@/services/nodepress'
 import { firstUpperCase } from '/@/transforms/text'
+import nodepress from '/@/services/nodepress'
 
 export type TagMap = Map<string, Tag>
 export interface Tag {

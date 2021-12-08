@@ -5,7 +5,7 @@
  */
 
 import amplitude from 'amplitudejs'
-import { isClient } from '/@/app/environment'
+import { onClient } from '/@/universal'
 
 declare global {
   interface Window {
@@ -14,8 +14,8 @@ declare global {
   }
 }
 
-if (isClient) {
+onClient(() => {
   window.Amplitude = window.Amplitude || amplitude
-}
+})
 
 export default amplitude

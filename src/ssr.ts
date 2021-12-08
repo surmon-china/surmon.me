@@ -73,7 +73,7 @@ const renderHTML = async (vueApp: VueApp, url: string) => {
   devDebug('4. renderToString')
   const ssrContext = {}
   const html = await renderToString(app, ssrContext)
-  // HACK renderToString 无法被 async setup | onServerPrefetch 中断，导致输出的 HTML 为空壳，所以需要再次根据手工标记判断是否重新渲染
+  // HACK: renderToString 无法被 async setup | onServerPrefetch 中断，导致输出的 HTML 为空壳，所以需要再次根据手工标记判断是否重新渲染
   if (globalState.renderError.value) {
     const newError = new Error(globalState.renderError.value.message)
     ;(newError as any).code = globalState.renderError.value.code

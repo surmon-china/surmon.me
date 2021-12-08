@@ -5,9 +5,9 @@
  */
 
 import { App, defineComponent, h } from 'vue'
-import { useEnhancer } from '../app/enhancer'
-import loadScript from '/@/utils/script-loader'
+import { useEnhancer } from '/@/app/enhancer'
 import { LANGUAGE_KEYS } from '/@/language/key'
+import loadScript from '/@/utils/script-loader'
 
 declare global {
   interface Window {
@@ -15,7 +15,7 @@ declare global {
   }
 }
 
-export interface IAdsenseConfig {
+export interface AdSenseConfig {
   ID: string
   enabledAutoAD?: boolean
 }
@@ -73,9 +73,10 @@ const getComponent = (clientID: string) =>
   })
 
 export default {
-  install(app: App, adsenseConfig: IAdsenseConfig) {
+  install(app: App, adsenseConfig: AdSenseConfig) {
     const component = getComponent(adsenseConfig.ID)
     app.component(component.name, component)
+
     if (adsenseConfig.enabledAutoAD) {
       loadScript(ADS_SCRIPT, { async: true }).then(() => {
         const adsbygoogle = window.adsbygoogle || []

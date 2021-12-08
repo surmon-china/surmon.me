@@ -7,36 +7,35 @@
 import * as storage from './storage'
 
 // 获取器
-export type TCacheKey = string
-export type TCachePromiseResult<T> = Promise<T>
+export type CacheKey = string
+export type CachePromiseResult<T> = Promise<T>
 
 // IO 模式通用返回结构
-export interface ICacheIoResult<T> {
-  get(): TCachePromiseResult<T>
-  update(): TCachePromiseResult<T>
+export interface CacheIOResult<T> {
+  get(): CachePromiseResult<T>
+  update(): CachePromiseResult<T>
 }
 
 // Promise 模式参数
-export interface ICachePromiseOption<T> {
-  key: TCacheKey
+export interface CachePromiseOption<T> {
+  key: CacheKey
   ttl?: number
-  promise(): TCachePromiseResult<T>
+  promise(): CachePromiseResult<T>
 }
 // Promise & IO 模式参数
-export interface ICachePromiseIOOption<T> extends ICachePromiseOption<T> {
+export interface CachePromiseIOOption<T> extends CachePromiseOption<T> {
   ioMode?: boolean
 }
 
-interface ICacheTimeStamp {
+interface CacheTimeStamp {
   last: number
   ttl: number
 }
 
-const getCacheKey = (key: TCacheKey): string => {
+const getCacheKey = (key: CacheKey): string => {
   return `__cache__${key}`
 }
-
-const getCacheTimeStampKey = (key: TCacheKey): string => {
+const getCacheTimeStampKey = (key: CacheKey): string => {
   return `__cache__${key}_timestamp`
 }
 
@@ -51,11 +50,11 @@ const getNowTime = (): number => {
  * @example CacheService.promise({ option })()
  * @example CacheService.interval({ option })()
  */
-export const get = (key: TCacheKey) => {
+export const get = (key: CacheKey) => {
   const cacheKey = getCacheKey(key)
   const timeStampKey = getCacheTimeStampKey(key)
   const data = storage.getJSON(cacheKey) as $TODO
-  const timeStamp = storage.getJSON(timeStampKey) as never as ICacheTimeStamp
+  const timeStamp = storage.getJSON(timeStampKey) as never as CacheTimeStamp
   const { last, ttl } = timeStamp || {}
   if (ttl == null || last == null) {
     return data
@@ -69,7 +68,7 @@ export const get = (key: TCacheKey) => {
   return null
 }
 
-export const set = (key: TCacheKey, value: any, ttl?: number): void => {
+export const set = (key: CacheKey, value: any, ttl?: number): void => {
   storage.setJSON(getCacheKey(key), value)
   storage.setJSON(getCacheTimeStampKey(key), {
     last: getNowTime(),
@@ -83,8 +82,8 @@ export const set = (key: TCacheKey, value: any, ttl?: number): void => {
  * @example CacheService.promise({ key: CacheKey, promise() }) -> promise()
  * @example CacheService.promise({ key: CacheKey, promise(), ioMode: true }) -> { get: promise(), update: promise() }
  */
-export function promise<T = $TODO>(options: ICachePromiseOption<T>): TCachePromiseResult<T>
-export function promise<T = $TODO>(options: ICachePromiseIOOption<T>): ICacheIoResult<T>
+export function promise<T = $TODO>(options: CachePromiseOption<T>): CachePromiseResult<T>
+export function promise<T = $TODO>(options: CachePromiseIOOption<T>): CacheIOResult<T>
 export function promise(options: $TODO) {
   const { key, promise, ttl, ioMode = false } = options
 

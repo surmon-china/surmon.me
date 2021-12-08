@@ -211,11 +211,11 @@
       }
 
       &.mammon-square {
-        @extend .center-placeholder;
         height: $aside-width;
         display: flex;
         justify-content: center;
         align-items: center;
+        @extend .center-placeholder;
 
         .content {
           height: 250px;

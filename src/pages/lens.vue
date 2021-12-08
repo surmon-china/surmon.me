@@ -25,7 +25,7 @@
             <ulink class="button" :href="VALUABLE_LINKS.BILIBILI"> (゜-゜)つロ 干杯~ </ulink>
           </div>
           <div class="qrcode">
-            <uimage class="image" cdn src="/images/page-lens/bilibili.jpg" />
+            <uimage cdn class="image" src="/images/page-lens/bilibili.jpg" />
           </div>
         </div>
         <div class="global">
@@ -35,7 +35,7 @@
           </ulink>
           <ulink class="youtube" :href="VALUABLE_LINKS.YOUTUBE">
             <i class="iconfont icon-youtube"></i>
-            <span class="text">Subscribe my YouTube Channel</span>
+            <span class="text">Subscribe my YouTube</span>
           </ulink>
         </div>
         <div class="wechat-channel">
@@ -203,7 +203,7 @@
       display: flex;
       width: 100%;
       height: 18rem;
-      margin: $lg-gap 0;
+      margin: $gap * 2 0;
 
       .bilibili,
       .instagram,
@@ -217,7 +217,7 @@
         display: flex;
         width: 52%;
         height: 100%;
-        margin-right: $gap;
+        margin-right: $gap * 2;
         border: 2px solid $bilibili-pink-primary;
 
         .left {
@@ -242,7 +242,7 @@
             margin-top: $gap * 2;
             border: 2px solid $white;
             border-radius: $xs-radius;
-            font-size: $font-size-h4;
+            font-weight: bold;
             color: inherit;
             &:hover {
               color: $bilibili-pink-primary;
@@ -269,7 +269,7 @@
         flex-grow: 1;
         display: flex;
         flex-direction: column;
-        margin-right: $gap;
+        margin-right: $gap * 2;
 
         .instagram,
         .youtube {
@@ -292,13 +292,13 @@
           }
 
           .text {
-            font-size: $font-size-h5;
             font-weight: bold;
+            font-size: $font-size-h4;
           }
         }
 
         .instagram {
-          margin-bottom: $gap;
+          margin-bottom: $lg-gap;
           background: $instagram-primary;
           background: $instagram-gradient;
           @include visibility-transition();
@@ -323,7 +323,7 @@
     }
 
     .module-title {
-      margin-bottom: $lg-gap;
+      margin-bottom: $gap * 2;
       line-height: 3.6em;
       border-width: 4px;
       border-style: double;
@@ -350,17 +350,14 @@
     .videos {
       padding: 0;
       margin: 0;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
+      margin-bottom: $gap * 2;
       list-style: none;
-      justify-content: flex-start;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: $gap * 2;
 
       > .item {
         display: block;
-        margin-right: $lg-gap;
-        margin-bottom: $lg-gap;
-        width: calc((100% - #{$lg-gap * 2}) / 3);
         cursor: pointer;
         @include radius-box($sm-radius);
         @include common-bg-module();
@@ -406,17 +403,18 @@
           }
 
           .length {
-            display: inline-block;
             position: absolute;
             bottom: 0;
             right: 0;
             z-index: $z-index-normal + 1;
-            background-color: rgba($black, 0.6);
-            height: $font-size-h2;
-            line-height: $font-size-h2;
-            padding: 0 $sm-gap;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 4rem;
+            height: 2rem;
+            border-top-left-radius: $xs-radius;
+            background-color: $text-dividers;
             color: $white;
-            font-size: $font-size-small;
           }
 
           .mask {

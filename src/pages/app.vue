@@ -2,7 +2,7 @@
   <div class="app-page" :class="{ mobile: isMobile }">
     <div class="app">
       <div class="logo">
-        <uimage cdn alt="app-logo" draggable="false" src="/images/page-app/logo.png" />
+        <uimage cdn alt="app-logo" src="/images/page-app/logo.png" />
       </div>
       <h2 class="title">{{ META.title }}</h2>
       <p class="desc">

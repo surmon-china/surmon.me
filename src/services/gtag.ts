@@ -19,20 +19,20 @@ declare global {
   }
 }
 
-export interface IGtagConfig {
+export interface GtagConfig {
   [key: string]: any
 }
 
-export interface IGtagPluginConfig {
+export interface GtagPluginConfig {
   id: string
   router: Router
   customResourceURL?: string
-  config?: IGtagConfig
+  config?: GtagConfig
 }
 
 const GtagSymbol = Symbol('gtag')
 export type Gtag = ReturnType<typeof createGtag>
-export const createGtag = (options: IGtagPluginConfig) => {
+export const createGtag = (options: GtagPluginConfig) => {
   if (window.gtag == null) {
     window.dataLayer = window.dataLayer || []
     window.gtag = (...args) => window.dataLayer.push(...args)
@@ -71,18 +71,22 @@ export const createGtag = (options: IGtagPluginConfig) => {
 
   const gtag = {
     state: readonly(state),
-    enable: () => (state.disabled = false),
-    disable: () => (state.disabled = true),
-    set(config: IGtagConfig) {
+    enable: () => {
+      state.disabled = false
+    },
+    disable: () => {
+      state.disabled = true
+    },
+    set(config: GtagConfig) {
       push('set', config)
     },
-    config(config: IGtagConfig) {
+    config(config: GtagConfig) {
       push('config', options.id, config)
     },
     // https://developers.google.com/analytics/devguides/collection/gtagjs/events?hl=zh-cn
     event(
       eventName: string,
-      config?: IGtagConfig & {
+      config?: GtagConfig & {
         event_action?: string
         event_category?: string
         event_label?: string
@@ -104,7 +108,7 @@ type PluginInstallFunction = Plugin & {
   installed?: boolean
 }
 
-const install: PluginInstallFunction = (app: App, config: IGtagPluginConfig) => {
+const install: PluginInstallFunction = (app: App, config: GtagPluginConfig) => {
   if (install.installed) {
     return
   }

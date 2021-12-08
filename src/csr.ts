@@ -23,8 +23,8 @@ import { createMusic } from '/@/services/music'
 import { createPopup } from '/@/services/popup'
 import { createLoading } from '/@/services/loading'
 import { consoleSlogan } from '/@/services/slogan'
-import { enableCopyright } from '/@/services/copyright'
-import { enableBaiduSeoPush } from '/@/services/baidu-seo-push'
+import { enableCopyrighter } from '/@/services/copyright'
+import { enableBaiduSEOer } from '/@/services/baidu-seo-push'
 import { runTitler, resetTitler } from './services/titler'
 import { exportEmojiRainToGlobal } from './services/emoji-23333'
 import { exportStickyEventsToGlobal } from './services/sticky'
@@ -119,7 +119,7 @@ router.isReady().finally(() => {
             { favicon: '⭕️', title: 'FBI WARNING!' },
             { favicon: '🌝', title: 'new message (3)' }
           ]
-          !isHidden ? resetTitler() : runTitler(surprises[randomNumber(surprises.length - 1)])
+          isHidden ? runTitler(surprises[randomNumber(surprises.length - 1)]) : resetTitler()
         },
         false
       )
@@ -127,8 +127,8 @@ router.isReady().finally(() => {
 
     // Production
     if (isProd) {
-      enableCopyright()
-      enableBaiduSeoPush(router)
+      enableCopyrighter()
+      enableBaiduSEOer(router)
       consoleSlogan(i18n)
     }
   })
