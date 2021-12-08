@@ -1,0 +1,23 @@
+{
+  "index.html": {
+    "file": "index-f14507bf.js",
+    "src": "index.html",
+    "isEntry": true,
+    "imports": [
+      "_vendor-96bfab15.js",
+      "_expansion-d52ddf8f.js"
+    ]
+  },
+  "_vendor-96bfab15.js": {
+    "file": "vendor-96bfab15.js",
+    "imports": [
+      "_expansion-d52ddf8f.js"
+    ]
+  },
+  "_expansion-d52ddf8f.js": {
+    "file": "expansion-d52ddf8f.js",
+    "imports": [
+      "_vendor-96bfab15.js"
+    ]
+  }
+}
