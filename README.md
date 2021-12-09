@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://vuejs.org" target="blank">
-    <img src="https://raw.githubusercontent.com/surmon-china/surmon.me/master/presses/vue-logo.png" height="90" alt="vue logo" />
+    <img src="https://raw.githubusercontent.com/surmon-china/surmon.me/master/presses/vue.png" height="90" alt="vue logo" />
   </a>
   <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
   <a href="https://github.com/surmon-china/surmon.me" target="blank">
@@ -38,7 +38,7 @@
 
 ## Screenshot
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/presses/pc.png)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/presses/pc.jpg)
 
 ![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/presses/mobile.png)
 
