@@ -7,13 +7,11 @@ import { resolveTemplate } from './template'
 import type { RenderResult } from '@/ssr'
 
 export const enableProdRuntime = async (app: Express) => {
-  app.use(compression())
-
   const template = fs.readFileSync(path.resolve(PRDO_CLIENT_PATH, 'template.html'), 'utf-8')
+  const { renderApp, renderError } = require(path.resolve(PRDO_SERVER_PATH, 'ssr.js'))
 
+  app.use(compression())
   app.use('*', async (request, response) => {
-    const { renderApp, renderError } = require(path.resolve(PRDO_SERVER_PATH, 'ssr.js'))
-
     try {
       const redered: RenderResult = await renderApp(request)
       response
