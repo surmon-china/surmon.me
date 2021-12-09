@@ -1,10 +1,10 @@
 <p align="center">
   <a href="https://vuejs.org" target="blank">
-    <img src="https://raw.githubusercontent.com/surmon-china/surmon.me/master/presses/vue.png" height="90" alt="vue logo" />
+    <img src="https://raw.githubusercontent.com/surmon-china/surmon.me/main/presses/vue.png" height="90" alt="vue logo" />
   </a>
   <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
   <a href="https://github.com/surmon-china/surmon.me" target="blank">
-    <img src="https://raw.githubusercontent.com/surmon-china/surmon.me/master/presses/logo.png" height="90" alt="surmon.me logo" />
+    <img src="https://raw.githubusercontent.com/surmon-china/surmon.me/main/presses/logo.png" height="90" alt="surmon.me logo" />
   </a>
 </p>
 
@@ -18,7 +18,7 @@
 &nbsp;
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/surmon-china/surmon.me/Deploy?style=for-the-badge&label=Deploy)](https://github.com/surmon-china/surmon.me/actions?query=workflow:%22Deploy%22)
 &nbsp;
-[![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/blob/main/LICENSE)
 
 **My personal website and blog, powered by [Vue(3)](https://vuejs.org).**
 
@@ -26,7 +26,7 @@
 
 > **Online site:** https://surmon.me
 
-> **更新记录：[CHANGELOG.md](https://github.com/surmon-china/surmon.me/blob/master/CHANGELOG.md)**
+> **更新记录：[CHANGELOG.md](https://github.com/surmon-china/surmon.me/blob/main/CHANGELOG.md)**
 
 ---
 
@@ -38,9 +38,9 @@
 
 ## Screenshot
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/presses/pc.jpg)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me/main/presses/pc.jpg)
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me/master/presses/mobile.png)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me/main/presses/mobile.png)
 
 ## Development Setup
 
