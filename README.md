@@ -61,8 +61,8 @@ $ yarn spa:start
 # lint test
 $ yarn lint
 
-# releast
-$ yarn releast
+# release
+$ yarn release
 ```
 
 ## Actions setup
