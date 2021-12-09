@@ -45,13 +45,19 @@ export const handleRSSRequest: RequestHandler = (_, response) => {
   response.send(archiveCache.get(ArchiveCacheKey.RSS))
 }
 
-export const fecthArchiveData = async () => {
-  const response = await axios.get<any>(archiveURL, { timeout: 6000 })
-  if (response.status === 200) {
-    return response.data.result
-  } else {
-    throw new Error(response.statusText)
-  }
+export const fecthArchiveData = () => {
+  return axios
+    .get<any>(archiveURL, { timeout: 6000 })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data.result
+      } else {
+        return Promise.reject(response.statusText)
+      }
+    })
+    .catch((error) => {
+      return Promise.reject(error.toJSON?.() || error)
+    })
 }
 
 export const startArchiveUpdater = () => {

@@ -17,7 +17,7 @@ export interface IWallpaper {
 const wbw = new WonderfulBingWallpaper()
 
 // 获取今日壁纸
-const getWallpapers = async (params?: WonderfulBingWallpaperOption): Promise<any> => {
+const fetchWallpapers = async (params?: WonderfulBingWallpaperOption): Promise<any> => {
   const wallpaperJSON = await wbw.getWallpapers({ ...params, size: 8 })
   try {
     return wbw.humanizeWallpapers(wallpaperJSON)
@@ -27,28 +27,28 @@ const getWallpapers = async (params?: WonderfulBingWallpaperOption): Promise<any
 }
 
 // 今日壁纸缓存（ZH）
-const getZhWallpapers = () =>
-  getWallpapers({
+const fetchZHWallpapers = () =>
+  fetchWallpapers({
     local: 'zh-CN',
     host: 'cn.bing.com',
     ensearch: 0
   })
 
 // 今日壁纸缓存（EN）
-const getEnWallpapers = () =>
-  getWallpapers({
+const getENWallpapers = () =>
+  fetchWallpapers({
     local: 'en-US',
     host: 'bing.com',
     ensearch: 1
   })
 
-const getAllWallpapers = async (): Promise<IWallpaper> => {
-  const [zh, en] = await Promise.all([getZhWallpapers(), getEnWallpapers()])
+const fetchAllWallpapers = async (): Promise<IWallpaper> => {
+  const [zh, en] = await Promise.all([fetchZHWallpapers(), getENWallpapers()])
   return { zh, en }
 }
 
 const autoUpdateData = () => {
-  getAllWallpapers()
+  fetchAllWallpapers()
     .then((data) => {
       // 成功后，仅 set cache
       tunnelCache.set(TunnelModule.Wallpaper, data)
@@ -69,7 +69,7 @@ export const wallpaperService = async (): Promise<any> => {
   if (tunnelCache.has(TunnelModule.Wallpaper)) {
     return tunnelCache.get(TunnelModule.Wallpaper)
   } else {
-    const data = await getAllWallpapers()
+    const data = await fetchAllWallpapers()
     tunnelCache.set(TunnelModule.Wallpaper, data)
     return data
   }

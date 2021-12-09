@@ -22,7 +22,7 @@ export interface IGithubRepository {
   language: string
 }
 
-const getRepositories = async (): Promise<Array<IGithubRepository>> => {
+const fetchGitHubRepositories = async (): Promise<Array<IGithubRepository>> => {
   const response = await axios.request<any>({
     headers: { 'User-Agent': META.title },
     url: `http://api.github.com/users/${GITHUB_UID}/repos?per_page=1000`
@@ -45,7 +45,7 @@ const getRepositories = async (): Promise<Array<IGithubRepository>> => {
 }
 
 const autoUpdateData = () => {
-  getRepositories()
+  fetchGitHubRepositories()
     .then((data) => {
       tunnelCache.set(TunnelModule.GitHub, data)
       // 成功后 2 小时更新一次数据
@@ -64,7 +64,7 @@ export const githubService = async (): Promise<any> => {
   if (tunnelCache.has(TunnelModule.GitHub)) {
     return tunnelCache.get(TunnelModule.GitHub)
   } else {
-    const data = await getRepositories()
+    const data = await fetchGitHubRepositories()
     tunnelCache.set(TunnelModule.GitHub, data)
     return data
   }

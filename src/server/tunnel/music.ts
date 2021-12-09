@@ -24,7 +24,7 @@ const PLAY_LIST_LIMIT = 68
 const neteseMusic = new NeteaseMusic()
 
 // 获取歌单列表
-const getSongList = async (): Promise<Array<Song>> => {
+const fetchSongList = async (): Promise<Array<Song>> => {
   const result = await neteseMusic._playlist(MUSIC_ALBUM_ID, PLAY_LIST_LIMIT)
   if (result.code < 0) {
     throw new Error(result.message)
@@ -49,9 +49,9 @@ const getSongList = async (): Promise<Array<Song>> => {
 }
 
 // 获取播放地址，403 暂不启用！
-const getSongs = async (): Promise<Song[]> => {
+const fetchSongs = async (): Promise<Song[]> => {
   // 1. 获取列表
-  const songs = await getSongList()
+  const songs = await fetchSongList()
   // 2. 使用列表的 IDs 获取 urls
   const songIds = songs.map((song) => String(song.id))
   const { data: songUrls } = await neteseMusic.url(songIds, 128)
@@ -67,7 +67,7 @@ const getSongs = async (): Promise<Song[]> => {
 }
 
 const autoUpdateData = () => {
-  getSongList()
+  fetchSongList()
     .then((data) => {
       tunnelCache.set(TunnelModule.Music, data)
       // 成功后 1 小时获取新数据
@@ -87,7 +87,7 @@ export const musicService = async (): Promise<any> => {
   if (tunnelCache.has(TunnelModule.Music)) {
     return tunnelCache.get(TunnelModule.Music)
   } else {
-    const data = await getSongList()
+    const data = await fetchSongList()
     tunnelCache.set(TunnelModule.Music, data)
     return data
   }

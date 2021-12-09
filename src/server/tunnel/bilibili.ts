@@ -12,7 +12,7 @@ import { tunnelCache } from '.'
 const PAGE_SIZE = 45
 const PAGE = 1
 
-const getVideoList = async (): Promise<Array<any>> => {
+const fetchVideoData = async (): Promise<Array<any>> => {
   const videosResult = await axios.request<any>({
     headers: { 'User-Agent': META.title },
     url: `https://api.bilibili.com/x/space/arc/search?mid=${BILIBILI_UID}&ps=${PAGE_SIZE}&tid=0&pn=${PAGE}&order=pubdate&jsonp=jsonp`
@@ -25,7 +25,7 @@ const getVideoList = async (): Promise<Array<any>> => {
 }
 
 const autoUpdateData = () => {
-  getVideoList()
+  fetchVideoData()
     .then((data) => {
       tunnelCache.set(TunnelModule.BiliBili, data)
       // 成功后 1 小时更新一次数据
@@ -44,7 +44,7 @@ export const bilibiliService = async (): Promise<any> => {
   if (tunnelCache.has(TunnelModule.BiliBili)) {
     return tunnelCache.get(TunnelModule.BiliBili)
   } else {
-    const data = await getVideoList()
+    const data = await fetchVideoData()
     tunnelCache.set(TunnelModule.BiliBili, data)
     return data
   }
