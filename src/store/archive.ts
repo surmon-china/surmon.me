@@ -22,6 +22,34 @@ export const useArchiveStore = defineStore('archive', {
     fetching: false,
     data: null as null | ArchiveState
   }),
+  getters: {
+    hydrated: (state) => {
+      if (!state.data) {
+        return null
+      }
+
+      const { articles, tags, categories } = state.data
+      const tagMap = new Map(tags.map((tag) => [tag._id, { ...tag, count: 0 }]))
+      const categoryMap = new Map(categories.map((cate) => [cate._id, { ...cate, count: 0 }]))
+      articles.forEach((article) => {
+        ;(article.tag as any as string[]).forEach((t) => {
+          if (tagMap.has(t)) {
+            tagMap.get(t)!.count++
+          }
+        })
+        ;(article.category as any as string[]).forEach((c) => {
+          if (categoryMap.has(c)) {
+            categoryMap.get(c)!.count++
+          }
+        })
+      })
+
+      return {
+        tags: Array.from(tagMap.values()),
+        categories: Array.from(categoryMap.values())
+      }
+    }
+  },
   actions: {
     fetchArchive() {
       if (this.data) {

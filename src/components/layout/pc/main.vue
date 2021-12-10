@@ -113,14 +113,6 @@
         border-top-right-radius: $xs-radius;
         border-bottom-right-radius: $xs-radius;
         transition: width $transition-time-fast;
-
-        &.renren,
-        &.evernote,
-        &.linkedin,
-        &.mail {
-          display: none;
-        }
-
         &:hover {
           width: 120%;
         }

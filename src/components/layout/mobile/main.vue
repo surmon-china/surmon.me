@@ -16,7 +16,7 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '../../../app/enhancer'
+  import { useEnhancer } from '/@/app/enhancer'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
   import AsideView from './aside.vue'

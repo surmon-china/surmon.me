@@ -7,7 +7,7 @@
         </video>
       </div>
       <div class="gravatar">
-        <img :src="gravatar" class="avatar" draggable="false" />
+        <uimage class="avatar" :src="adminInfo?.gravatar || '/images/gravatar.png'" />
         <h2 class="name">{{ adminInfo?.name || '-' }}</h2>
         <p class="role">{{ adminInfo?.slogan || '-' }}</p>
         <div class="socials">
@@ -134,7 +134,7 @@
         <desktop-only>
           <div class="wechat">
             <div class="qrcode">
-              <uimage cdn class="image" src="/images/page-about/wechat-qrcode.jpg" />
+              <uimage cdn class="image" src="/images/page-about/wechat.jpg" />
               <div class="slogan">
                 <span class="text">
                   <i18n zh="扫码加微，点燃灵魂" en="Scan the QR code on WeChat" />
@@ -200,7 +200,7 @@
   import { useMetaStore } from '/@/store/meta'
   import { getPageRoute } from '/@/transforms/route'
   import { firstUpperCase } from '/@/transforms/text'
-  import { getFileCDNUrl, getFileStaticUrl } from '/@/transforms/url'
+  import { getFileStaticUrl } from '/@/transforms/url'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
@@ -213,9 +213,7 @@
       const metaStore = useMetaStore()
       const isOnLiveMap = toRef(globalState.switchBox, 'liveMap')
       const adminInfo = computed(() => metaStore.adminInfo.data)
-      const gravatar = computed(
-        () => adminInfo.value?.gravatar || getFileCDNUrl('/images/gravatar.jpg')
-      )
+
       // MARK: 非常有必要，vite 对 video.source.src 的解析有问题，会将其认为是 asset，而非 static resource，从而编译失败
       const backgroundVideo = getFileStaticUrl('/assets/page-about-background.mp4')
 
@@ -257,7 +255,6 @@
         isMobile,
         isOnLiveMap,
         backgroundVideo,
-        gravatar,
         adminInfo,
         handleHoverFollowMe,
         handleTouchSponsor,

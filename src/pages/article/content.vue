@@ -228,8 +228,8 @@
           margin-top: 2rem;
           line-height: 3rem;
           text-align: center;
-          color: $text-secondary;
-          background-color: $module-bg-darker-1;
+          color: $text-reversal;
+          background-color: $primary-lighter;
           @include background-transition();
           @include radius-box($xs-radius);
 

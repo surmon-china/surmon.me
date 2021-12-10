@@ -15,7 +15,7 @@ export const getBannerArticleThumbnailUrl = (
 ) => {
   if (!thumb) {
     return getFileCDNUrl(
-      isMobile ? `/images/thumb/mobile-carrousel.jpg` : `/images/thumb/pc-carrousel.jpg`
+      isMobile ? `/images/thumbnail/mobile-carrousel.jpg` : `/images/thumbnail/pc-carrousel.jpg`
     )
   }
   if (isMobile) {
@@ -31,7 +31,7 @@ export const getBannerArticleThumbnailUrl = (
 
 export const getArchiveArticleThumbnailUrl = (thumb: string, isWebPImage: boolean) => {
   if (!thumb) {
-    return getFileCDNUrl('/images/thumb/pc-article-list.jpg')
+    return getFileCDNUrl('/images/thumbnail/pc-article-list.jpg')
   }
 
   return `${thumb}?x-oss-process=${
@@ -42,8 +42,9 @@ export const getArchiveArticleThumbnailUrl = (thumb: string, isWebPImage: boolea
 }
 
 export const getGravatarByEmail = (email: string) => {
-  let avatar = gravatar.url(email, { protocol: 'https' })
-  avatar = avatar.replace('https://s.gravatar.com/avatar', API_CONFIG.GRAVATAR)
-  avatar += `?x-oss-process=style/gravatar`
+  const avatar = gravatar
+    .url(email, { protocol: 'https', s: '240' })
+    .replace('https://s.gravatar.com/avatar', API_CONFIG.GRAVATAR)
+  // avatar += `?x-oss-process=style/gravatar`
   return avatar
 }

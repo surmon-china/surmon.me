@@ -31,9 +31,7 @@ export enum CommentEvent {
 }
 
 export const humanizeGravatarUrlByEmail = (email: string) => {
-  return emailRegex.test(email)
-    ? getGravatarByEmail(email)
-    : getFileCDNUrl('/images/comment/anonymous.jpg')
+  return emailRegex.test(email) ? getGravatarByEmail(email) : getFileCDNUrl('/images/gravatar.png')
 }
 
 export const luanchEmojiRain = (content: string) => {
