@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.2.1
+* Surmon.me v3.2.2
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -45,11 +45,12 @@ Object.freeze({
     RSS: '/rss.xml',
     SITE_MAP: '/sitemap.xml',
     SPONSOR: '/sponsor',
-    VUE: 'https://v3.vuejs.org/',
+    SURMON_ME: 'https://github.com/surmon-china/surmon.me',
+    GITHUB_BLOG_LIST: 'https://github.com/stars/surmon-china/lists/surmon-me',
     VUNIVERSAL: 'https://github.com/surmon-china/vuniversal',
     NODEPRESS: 'https://github.com/surmon-china/nodepress',
+    SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
     APP_APK_FILE: 'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
-    SURMON_APP_REPOSITORIE: 'https://github.com/surmon-china/surmon.me.native',
     THROW_ERROR: 'https://throwerror.io',
     FOX_FINDER: 'https://foxfinder.io',
     GITHUB: 'https://github.com/surmon-china',
@@ -271,14 +272,20 @@ const handleRSSRequest = (_, response) => {
     response.header('Content-Type', 'application/xml');
     response.send(archiveCache.get(ArchiveCacheKey.RSS));
 };
-const fecthArchiveData = async () => {
-    const response = await axios__default["default"].get(archiveURL, { timeout: 6000 });
-    if (response.status === 200) {
-        return response.data.result;
-    }
-    else {
-        throw new Error(response.statusText);
-    }
+const fecthArchiveData = () => {
+    return axios__default["default"]
+        .get(archiveURL, { timeout: 6000 })
+        .then((response) => {
+        if (response.status === 200) {
+            return response.data.result;
+        }
+        else {
+            return Promise.reject(response.statusText);
+        }
+    })
+        .catch((error) => {
+        return Promise.reject(error.toJSON?.() || error);
+    });
 };
 const startArchiveUpdater = () => {
     (function doUpdate() {
@@ -321,7 +328,7 @@ const getTunnelApiPath = (moduleName) => {
  */
 const PAGE_SIZE = 45;
 const PAGE = 1;
-const getVideoList = async () => {
+const fetchVideoData = async () => {
     const videosResult = await axios__default["default"].request({
         headers: { 'User-Agent': META.title },
         url: `https://api.bilibili.com/x/space/arc/search?mid=${BILIBILI_UID}&ps=${PAGE_SIZE}&tid=0&pn=${PAGE}&order=pubdate&jsonp=jsonp`
@@ -334,7 +341,7 @@ const getVideoList = async () => {
     }
 };
 const autoUpdateData$3 = () => {
-    getVideoList()
+    fetchVideoData()
         .then((data) => {
         tunnelCache.set(TunnelModule.BiliBili, data);
         // 成功后 1 小时更新一次数据
@@ -352,7 +359,7 @@ const bilibiliService = async () => {
         return tunnelCache.get(TunnelModule.BiliBili);
     }
     else {
-        const data = await getVideoList();
+        const data = await fetchVideoData();
         tunnelCache.set(TunnelModule.BiliBili, data);
         return data;
     }
@@ -363,7 +370,7 @@ const bilibiliService = async () => {
  */
 const wbw = new WonderfulBingWallpaper__default["default"]();
 // 获取今日壁纸
-const getWallpapers = async (params) => {
+const fetchWallpapers = async (params) => {
     const wallpaperJSON = await wbw.getWallpapers({ ...params, size: 8 });
     try {
         return wbw.humanizeWallpapers(wallpaperJSON);
@@ -373,23 +380,23 @@ const getWallpapers = async (params) => {
     }
 };
 // 今日壁纸缓存（ZH）
-const getZhWallpapers = () => getWallpapers({
+const fetchZHWallpapers = () => fetchWallpapers({
     local: 'zh-CN',
     host: 'cn.bing.com',
     ensearch: 0
 });
 // 今日壁纸缓存（EN）
-const getEnWallpapers = () => getWallpapers({
+const getENWallpapers = () => fetchWallpapers({
     local: 'en-US',
     host: 'bing.com',
     ensearch: 1
 });
-const getAllWallpapers = async () => {
-    const [zh, en] = await Promise.all([getZhWallpapers(), getEnWallpapers()]);
+const fetchAllWallpapers = async () => {
+    const [zh, en] = await Promise.all([fetchZHWallpapers(), getENWallpapers()]);
     return { zh, en };
 };
 const autoUpdateData$2 = () => {
-    getAllWallpapers()
+    fetchAllWallpapers()
         .then((data) => {
         // 成功后，仅 set cache
         tunnelCache.set(TunnelModule.Wallpaper, data);
@@ -409,7 +416,7 @@ const wallpaperService = async () => {
         return tunnelCache.get(TunnelModule.Wallpaper);
     }
     else {
-        const data = await getAllWallpapers();
+        const data = await fetchAllWallpapers();
         tunnelCache.set(TunnelModule.Wallpaper, data);
         return data;
     }
@@ -418,7 +425,7 @@ const wallpaperService = async () => {
  * @module server.tunnel.github
  * @author Surmon <https://github.com/surmon-china>
  */
-const getRepositories = async () => {
+const fetchGitHubRepositories = async () => {
     const response = await axios__default["default"].request({
         headers: { 'User-Agent': META.title },
         url: `http://api.github.com/users/${GITHUB_UID}/repos?per_page=1000`
@@ -437,7 +444,7 @@ const getRepositories = async () => {
     }));
 };
 const autoUpdateData$1 = () => {
-    getRepositories()
+    fetchGitHubRepositories()
         .then((data) => {
         tunnelCache.set(TunnelModule.GitHub, data);
         // 成功后 2 小时更新一次数据
@@ -455,7 +462,7 @@ const githubService = async () => {
         return tunnelCache.get(TunnelModule.GitHub);
     }
     else {
-        const data = await getRepositories();
+        const data = await fetchGitHubRepositories();
         tunnelCache.set(TunnelModule.GitHub, data);
         return data;
     }
@@ -467,7 +474,7 @@ const githubService = async () => {
 const PLAY_LIST_LIMIT = 68;
 const neteseMusic = new NeteaseMusic__default["default"]();
 // 获取歌单列表
-const getSongList = async () => {
+const fetchSongList = async () => {
     const result = await neteseMusic._playlist(MUSIC_ALBUM_ID, PLAY_LIST_LIMIT);
     if (result.code < 0) {
         throw new Error(result.message);
@@ -486,7 +493,7 @@ const getSongList = async () => {
     })));
 };
 const autoUpdateData = () => {
-    getSongList()
+    fetchSongList()
         .then((data) => {
         tunnelCache.set(TunnelModule.Music, data);
         // 成功后 1 小时获取新数据
@@ -505,7 +512,7 @@ const musicService = async () => {
         return tunnelCache.get(TunnelModule.Music);
     }
     else {
-        const data = await getSongList();
+        const data = await fetchSongList();
         tunnelCache.set(TunnelModule.Music, data);
         return data;
     }
@@ -593,10 +600,10 @@ tunnelRouter.get(getTunnelApiPath(TunnelModule.Music), handleTunnelService(music
         }
     });
 };const enableProdRuntime = async (app) => {
-    app.use(compression__default["default"]());
     const template = fs__default["default"].readFileSync(path__default["default"].resolve(PRDO_CLIENT_PATH, 'template.html'), 'utf-8');
+    const { renderApp, renderError } = require(path__default["default"].resolve(PRDO_SERVER_PATH, 'ssr.js'));
+    app.use(compression__default["default"]());
     app.use('*', async (request, response) => {
-        const { renderApp, renderError } = require(path__default["default"].resolve(PRDO_SERVER_PATH, 'ssr.js'));
         try {
             const redered = await renderApp(request);
             response
