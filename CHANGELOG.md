@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.2.2 (2021-12-11)
+
+**Feature**
+
+- `public` resources
+- Improve `archive` page
+- Improve `search` input
+- Improve `share` component
+
 ### v3.2.1 (2021-12-08)
 
 **Fix**

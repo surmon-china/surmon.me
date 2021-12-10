@@ -1,3 +1,5 @@
+<br />
+
 <p align="center">
   <a href="https://vuejs.org" target="blank">
     <img src="https://raw.githubusercontent.com/surmon-china/surmon.me/main/presses/vue.png" height="90" alt="vue logo" />
@@ -30,7 +32,7 @@
 
 ---
 
-**🔥 其他相关项目：**
+**🔥 其他 [相关项目](https://github.com/stars/surmon-china/lists/surmon-me)：**
 
 - **RESTful API service for blog:** [`nodepress`](https://github.com/surmon-china/nodepress) powered by nestjs
 - **Blog admin site:** [`veact-admin`](https://github.com/surmon-china/veact-admin) powered by React & [`Veact`](https://github.com/veactjs/veact)

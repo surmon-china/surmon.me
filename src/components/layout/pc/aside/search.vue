@@ -3,11 +3,12 @@
     <div class="search-box">
       <input
         id="keyword"
-        v-model.trim="keyword"
+        class="search-input"
         required
         type="search"
         name="search"
-        class="search-input"
+        maxlength="16"
+        v-model.trim="keyword"
         :class="i18n.language"
         :placeholder="i18n.t(LANGUAGE_KEYS.SEARCH_PLACEHOLDER)"
         @keyup.enter="handleSearch"

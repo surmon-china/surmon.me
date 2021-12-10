@@ -120,7 +120,7 @@
       font-size: 10em;
       font-weight: normal;
       margin: 0;
-      background-image: cdn-url('/images/wave.png');
+      background-image: cdn-url('/images/page-error/wave.png');
       background-size: cover;
       background-repeat: repeat-x;
       background-position: center;

@@ -2,12 +2,13 @@
   <header class="header">
     <div class="search" :class="{ actived: searchState.open }">
       <input
-        ref="inputElement"
-        v-model.trim="searchState.keyword"
-        type="text"
         class="input"
+        ref="inputElement"
+        type="text"
+        maxlength="16"
         required
         :placeholder="t(LANGUAGE_KEYS.SEARCH_PLACEHOLDER)"
+        v-model.trim="searchState.keyword"
         @keyup.enter.stop.prevent="submitSearch"
       />
       <span class="close" @click.stop.prevent="cancelSearch">

@@ -33,12 +33,13 @@ export const VALUABLE_LINKS = Object.freeze({
   SITE_MAP: '/sitemap.xml',
   SPONSOR: '/sponsor',
 
-  VUE: 'https://v3.vuejs.org/',
+  SURMON_ME: 'https://github.com/surmon-china/surmon.me',
+  GITHUB_BLOG_LIST: 'https://github.com/stars/surmon-china/lists/surmon-me',
   VUNIVERSAL: 'https://github.com/surmon-china/vuniversal',
   NODEPRESS: 'https://github.com/surmon-china/nodepress',
+  SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
   APP_APK_FILE:
     'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
-  SURMON_APP_REPOSITORIE: 'https://github.com/surmon-china/surmon.me.native',
 
   THROW_ERROR: 'https://throwerror.io',
   FOX_FINDER: 'https://foxfinder.io',

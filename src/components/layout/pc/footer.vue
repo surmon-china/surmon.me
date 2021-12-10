@@ -9,9 +9,9 @@
       </a>
       <span class="separator">|</span>
       <i18n zh="由 " en="Powered By " />
-      <ulink class="item" :href="VALUABLE_LINKS.NODEPRESS"> NodePress </ulink>
+      <ulink class="item" :href="VALUABLE_LINKS.GITHUB_BLOG_LIST"> NodePress </ulink>
       <i18n zh="、" en=", " />
-      <ulink class="item" :href="VALUABLE_LINKS.VUE"> Vue </ulink>
+      <ulink class="item" :href="VALUABLE_LINKS.SURMON_ME"> Vue </ulink>
       <i18n zh=" 和 日月星辰 强力驱动" en=" and solitarily" />
       <span class="separator">|</span>
       <i18n>

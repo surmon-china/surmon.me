@@ -25,7 +25,7 @@
           </ulink>
           <ulink
             class="button"
-            :href="VALUABLE_LINKS.SURMON_APP_REPOSITORIE + '#ios'"
+            :href="VALUABLE_LINKS.SURMON_ME_NATIVE + '#ios'"
             @mousedown="handleAppAction('APP IOS')"
           >
             <i class="iconfont icon-apple"></i>
@@ -35,7 +35,7 @@
           </ulink>
           <ulink
             class="button code"
-            :href="VALUABLE_LINKS.SURMON_APP_REPOSITORIE"
+            :href="VALUABLE_LINKS.SURMON_ME_NATIVE"
             @mousedown="handleAppAction('APP GitHub 地址')"
           >
             <i class="iconfont icon-git"></i>

@@ -82,7 +82,7 @@
     setup() {
       const metaStore = useMetaStore()
       const gravatar = computed(
-        () => metaStore.adminInfo.data?.gravatar || getFileCDNUrl('/images/gravatar.jpg')
+        () => metaStore.adminInfo.data?.gravatar || getFileCDNUrl('/images/gravatar.png')
       )
 
       return {
