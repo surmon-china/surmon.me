@@ -1,6 +1,6 @@
 <template>
   <div class="archive-page">
-    <page-banner :position="75" image="/images/page-archive/banner.jpg">
+    <page-banner :blur="false" :position="75" image="/images/page-archive/banner.jpg">
       <template #title>
         <i18n zh="万物之中，希望至美" en="Hope is a good thing" />
       </template>
