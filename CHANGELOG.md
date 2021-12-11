@@ -2,7 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-### v3.2.2 (2021-12-11)
+### v3.2.3 (2021-12-11)
+
+**Feature**
+
+- Improve email link
+- Improve `job` page banner
+
+### v3.2.2 (2021-12-11)3.2.3
 
 **Feature**
 

@@ -5,7 +5,7 @@
         <ulink class="rss" :href="VALUABLE_LINKS.RSS" @mousedown="handleRSS">
           <i class="iconfont icon-rss" />
         </ulink>
-        <a class="feedback" target="_blank" :href="mailUrl" :title="t(LANGUAGE_KEYS.FEEDBACK)">
+        <a class="feedback" target="_blank" :href="email" :title="t(LANGUAGE_KEYS.FEEDBACK)">
           <i class="iconfont icon-mail-plane" />
         </a>
         <button
@@ -38,6 +38,7 @@
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
   import { scrollTo, Easing } from '/@/utils/scroller'
   import { scrollToTop } from '/@/utils/effects'
+  import { emailLink } from '/@/transforms/email'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
@@ -83,7 +84,7 @@
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
         t: i18n.translate,
-        mailUrl: `mailto:${META.email}`,
+        email: emailLink(META.email),
         scrollToTop,
         toBottom() {
           scrollTo(window.scrollY + window.innerHeight, 300, { easing: Easing.easeIn })

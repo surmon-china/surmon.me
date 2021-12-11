@@ -1,5 +1,5 @@
 <template>
-  <div class="freelancer-page" :class="{ mobile: isMobile }">
+  <div class="freelancer-page">
     <page-banner class="banner-content" :position="66" image="/images/page-feeelancer/banner.jpg">
       <template #title>
         <div class="title">
@@ -8,7 +8,7 @@
       </template>
       <template #description>
         <div class="desc">
-          <button class="submit-email" title="email me" @click="handleSubmitEmail">
+          <button class="submit-email" title="Email me" @click="handleSubmitEmail">
             <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_EMAIL_ME" />
           </button>
           <desktop-only>
@@ -77,6 +77,7 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
   import { firstUpperCase } from '/@/transforms/text'
+  import { emailLink } from '/@/transforms/email'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import UAdsense from '/@/components/common/uadsense.vue'
   import PageBanner from '/@/components/common/banner.vue'
@@ -88,7 +89,7 @@
       PageBanner
     },
     setup() {
-      const { i18n, meta, gtag, isMobile, isZhLang } = useEnhancer()
+      const { i18n, meta, gtag, isZhLang } = useEnhancer()
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_FREELANCER, Language.En)!)
@@ -97,16 +98,18 @@
       })
 
       const handleSubmitEmail = () => {
-        const subject = isZhLang.value
-          ? `嗨！Surmon，久仰大名！`
-          : `Technical consultant / ${META.title}`
-        const body = isZhLang.value
-          ? `我有一个需求：%0D%0A %0D%0A - 需求简述： %0D%0A %0D%0A - 需求文档：%0D%0A %0D%0A - 预算金额：%0D%0A %0D%0A - 预算周期：`
-          : 'Hi Surmon, My name is '
-        const mailAddress =
-          `mailto:${META.email}` + (isMobile.value ? '' : `?subject=${subject}&body=${body}`)
+        window.open(
+          emailLink({
+            email: META.email,
+            subject: isZhLang.value
+              ? `嗨！Surmon，久仰大名！`
+              : `Technical consultant / ${META.title}`,
+            body: isZhLang.value
+              ? `我有一个需求：\n\n - 需求简述： \n - 需求文档：\n - 预算金额：\n - 预算周期：`
+              : `Hi! Surmon, I\'m ?`
+          })
+        )
 
-        window.open(mailAddress)
         gtag?.event('咨询邮件', {
           event_category: GAEventActions.Click,
           event_label: GAEventTags.FreelancerPage
@@ -236,7 +239,6 @@
         LANGUAGE_KEYS,
         services,
         steps,
-        isMobile,
         handleSubmitEmail
       }
     }
@@ -408,88 +410,6 @@
         color: $text-reversal;
         margin: 0 auto;
         text-align: center;
-      }
-    }
-
-    &.mobile {
-      .container {
-        width: 100%;
-      }
-      .banner {
-        height: 14rem;
-        @include radius-box($sm-radius);
-
-        .banner-content {
-          .title {
-            margin-top: 3rem;
-            margin-bottom: 2rem;
-            font-size: $font-size-h1;
-          }
-
-          .email-me {
-            width: 8rem;
-            line-height: 3rem;
-          }
-        }
-      }
-
-      .module {
-        margin: 0 auto;
-        margin-top: 1rem;
-
-        .module-list {
-          flex-direction: column;
-
-          > .item {
-            width: 100%;
-            height: auto;
-            margin-right: 0;
-            margin-bottom: 1rem;
-
-            > .icon {
-              margin-bottom: -0.5em;
-            }
-          }
-        }
-      }
-
-      .step {
-        padding: 0;
-        background-color: transparent;
-
-        .step-content {
-          width: 100%;
-
-          .step-list {
-            padding: 0;
-            flex-direction: column;
-
-            .item {
-              width: 100%;
-              height: auto;
-              margin-bottom: 1rem;
-              padding-bottom: 0;
-              background-color: $module-bg;
-            }
-          }
-        }
-      }
-
-      .rule {
-        height: auto;
-        line-height: 3rem;
-        @include radius-box($sm-radius);
-
-        .rule-content {
-          width: 100%;
-          padding: 1rem;
-          text-align: left;
-          text-indent: 2em;
-
-          > .text {
-            margin: 0;
-          }
-        }
       }
     }
   }

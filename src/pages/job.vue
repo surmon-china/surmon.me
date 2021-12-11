@@ -1,6 +1,6 @@
 <template>
   <div class="job-page" :class="{ mobile: isMobile }">
-    <page-banner image="/images/page-job/banner.jpg">
+    <page-banner image="/images/page-job/banner-2.jpg">
       <template #title>
         <i18n zh="内推找我，绝对靠谱" en="We work together" />
       </template>
@@ -38,13 +38,14 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import PageBanner from '/@/components/common/banner.vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { firstUpperCase } from '/@/transforms/text'
+  import { emailLink } from '/@/transforms/email'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
   import { META } from '/@/config/app.config'
+  import PageBanner from '/@/components/common/banner.vue'
 
   export default defineComponent({
     name: 'JobPage',
@@ -116,12 +117,14 @@
       ]
 
       const handleSubmit = (job: any) => {
-        const subject = `嗨！求内推！`
-        const body = `我想求内推 ${job.company} - ${
-          job.location || ''
-        } 的职位，我在简历在附件中。%0D%0A %0D%0A from ${META.title}`
-        const mailAddress = `mailto:${job.email}?subject=${subject}&body=${body}`
-        window.open(mailAddress)
+        const location = job.location ? `- ${job.location} ` : ''
+        window.open(
+          emailLink({
+            email: job.email,
+            subject: `嗨！求内推！/ from ${META.title}`,
+            body: `我想求内推「${job.company} ${location}」的机会/职位，我在简历在附件中。\n\nfrom ${META.title}`
+          })
+        )
       }
 
       return {
