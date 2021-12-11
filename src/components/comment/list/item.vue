@@ -194,7 +194,7 @@
         $size: 4.8rem;
         display: block;
         background-color: $module-bg-darker-2;
-        border: 5px solid $module-bg-lighter;
+        border: 4px solid $module-bg-lighter;
         border-radius: $sm-radius;
         width: $size;
         height: $size;

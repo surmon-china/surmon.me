@@ -6,7 +6,7 @@
       dark: isDarkTheme
     }"
   >
-    <page-banner :position="38" :image="bannerImageUrl">
+    <page-banner :position="38" :image="bannerImageURL">
       <template #title>
         <i18n zh="凡心所向，素履以往" en="Because it's there" />
       </template>
@@ -131,7 +131,7 @@
       const lensStore = useLensStore()
       const lozadObserver = ref<LozadObserver | null>(null)
       const videoListElement = ref<HTMLElement>()
-      const bannerImageUrl = `/images/page-lens/banner-${randomNumber(3)}.jpg`
+      const bannerImageURL = `/images/page-lens/banner-${randomNumber(3)}.jpg`
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_LENS, Language.En)!)
@@ -189,7 +189,7 @@
         getThumbUrl,
         handlePlay,
         observeLozad,
-        bannerImageUrl
+        bannerImageURL
       }
     }
   })

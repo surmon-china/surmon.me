@@ -4,7 +4,7 @@
     :class="{ dark: isDarkTheme }"
     :style="{ backgroundImage: `url(${imageUrl})`, backgroundPositionY: `${position}%` }"
   >
-    <div class="content" :class="className">
+    <div class="content" :class="[className, { blur }]">
       <h2 class="title">
         <slot name="title"></slot>
       </h2>
@@ -30,6 +30,10 @@
       image: {
         type: String,
         required: true
+      },
+      blur: {
+        type: Boolean,
+        default: true
       }
     },
     setup(props) {
@@ -51,9 +55,8 @@
     background-color: $module-bg-darker-1;
     background-size: cover;
     background-position-x: center;
-
     &.dark {
-      /* background-blend-mode: lighten; */
+      /* background-blend-mode: difference; */
     }
 
     .content {
@@ -64,6 +67,9 @@
       align-items: center;
       text-align: center;
       color: $white;
+      &.blur {
+        backdrop-filter: blur(4px);
+      }
 
       .title {
         font-size: 3em;
