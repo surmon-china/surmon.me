@@ -8,6 +8,7 @@ export interface MenuItem {
   icon: string
   i18nKey: LANGUAGE_KEYS
   separator?: boolean
+  newWindow?: boolean
   hot?: boolean
   route?: string
   url?: string
@@ -36,6 +37,7 @@ export const menus: Array<MenuItem> = [
     id: 'github',
     url: VALUABLE_LINKS.GITHUB,
     icon: 'icon-github',
+    newWindow: true,
     i18nKey: LANGUAGE_KEYS.PAGE_GITHUB
   },
   {

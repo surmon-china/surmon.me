@@ -68,7 +68,7 @@
       text-align: center;
       color: $white;
       &.blur {
-        backdrop-filter: blur(4px);
+        backdrop-filter: blur(3px);
       }
 
       .title {

@@ -14,7 +14,7 @@
           <span class="text">
             <i18n :lkey="menu.i18nKey" />
           </span>
-          <span v-if="menu.hot" class="superscript">
+          <span class="superscript" v-if="menu.hot">
             <i class="iconfont icon-hot-fill"></i>
           </span>
         </router-link>
@@ -28,7 +28,10 @@
           <span class="text">
             <i18n :lkey="menu.i18nKey" />
           </span>
-          <span v-if="menu.hot" class="superscript">
+          <span class="newscript" v-if="menu.newWindow">
+            <i class="iconfont icon-new-window-s"></i>
+          </span>
+          <span class="superscript" v-if="menu.hot">
             <i class="iconfont icon-hot-fill"></i>
           </span>
         </ulink>
@@ -120,7 +123,15 @@
           background-color: $module-bg-translucent;
         }
 
-        > .superscript {
+        .newscript {
+          margin-left: $sm-gap;
+
+          .iconfont {
+            font-size: $font-size-small;
+          }
+        }
+
+        .superscript {
           margin-left: $sm-gap;
 
           .iconfont {

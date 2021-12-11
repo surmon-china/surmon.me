@@ -109,8 +109,8 @@
 <script lang="ts">
   import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useUniversalFetch } from '/@/universal'
   import { useLensStore } from '/@/store/lens'
+  import { useUniversalFetch, universalRef } from '/@/universal'
   import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
   import { getFileProxyUrl } from '/@/transforms/url'
   import { timeAgo } from '/@/transforms/moment'
@@ -131,7 +131,10 @@
       const lensStore = useLensStore()
       const lozadObserver = ref<LozadObserver | null>(null)
       const videoListElement = ref<HTMLElement>()
-      const bannerImageURL = `/images/page-lens/banner-${randomNumber(3)}.jpg`
+      const bannerImageURL = universalRef(
+        'page-lens-banner',
+        () => `/images/page-lens/banner-${randomNumber(2)}.jpg`
+      )
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_LENS, Language.En)!)

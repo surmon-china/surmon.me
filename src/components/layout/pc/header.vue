@@ -54,7 +54,10 @@
             <span class="text">
               <i18n :lkey="menu.i18nKey" />
             </span>
-            <span v-if="menu.hot" class="superscript">
+            <span class="newscript" v-if="menu.newWindow">
+              <i class="iconfont icon-new-window-s"></i>
+            </span>
+            <span class="superscript" v-if="menu.hot">
               <i class="iconfont icon-hot-fill"></i>
             </span>
           </ulink>
@@ -258,7 +261,7 @@
         align-items: center;
 
         .separator {
-          height: 10%;
+          height: 6px;
           width: 1px;
           background-color: $module-bg-translucent;
         }
@@ -283,6 +286,7 @@
             margin-right: $sm-gap;
           }
 
+          .newscript,
           .superscript {
             margin-left: $xs-gap;
           }

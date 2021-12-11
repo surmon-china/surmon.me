@@ -115,9 +115,10 @@ router.isReady().finally(() => {
           // @ts-ignore
           const isHidden = event.target?.hidden || event.target?.webkitHidden
           const surprises = [
-            { favicon: '🔞', title: 'FBI WARNING!' },
-            { favicon: '⭕️', title: 'FBI WARNING!' },
-            { favicon: '🌝', title: 'new message (3)' }
+            { favicon: '🔞', title: 'FBI WARNING' },
+            { favicon: '⭕️', title: 'FBI WARNING' },
+            // tltle: zero width character
+            { favicon: '🌝', title: '​' }
           ]
           isHidden ? runTitler(surprises[randomNumber(surprises.length - 1)]) : resetTitler()
         },
