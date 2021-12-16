@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.2.3
+* Surmon.me v3.2.4
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -80,7 +80,7 @@ Object.freeze({
  * @module service.outside
  * @author Surmon <https://github.com/surmon-china>
  */
-const getGAScriptUrl = (gaMeasurementID) => {
+const getGAScriptURL = (gaMeasurementID) => {
     return `https://www.googletagmanager.com/gtag/js?id=${gaMeasurementID}`;
 };/**
  * @file BFF Server helper
@@ -104,7 +104,7 @@ const UPDATE_TIME$2 = {
 const startGTagScriptUpdater = () => {
     (function doUpdate() {
         axios__default["default"]
-            .get(getGAScriptUrl(GA_MEASUREMENT_ID), { timeout: 6000 })
+            .get(getGAScriptURL(GA_MEASUREMENT_ID), { timeout: 6000 })
             .then((response) => {
             if (response.status === 200) {
                 fs__default["default"].writeFileSync(path__default["default"].resolve(EFFECTS_PATH, 'gtag.js'), response.data);
@@ -655,11 +655,11 @@ const server = http__default["default"].createServer(app);
 app.use(cookieParser__default["default"]());
 // static
 app.use(express__default["default"].static(PUBLIC_PATH));
+// tunnel
+app.use(API_TUNNEL_PREFIX, tunnelRouter);
 // sitemap & rss
 app.use('/sitemap.xml', handleSitemapRequest);
 app.use('/rss.xml', handleRSSRequest);
-// tunnel
-app.use(API_TUNNEL_PREFIX, tunnelRouter);
 // app effect
 isDev ? enableDevRuntime(app) : enableProdRuntime(app);
 // run
@@ -670,7 +670,7 @@ server.listen(BFF_SERVER_PORT, () => {
         `listening on ${JSON.stringify(server.address())}`
     ];
     console.info('[surmon.me]', `Run! ${infos.join(', ')}.`);
-    // 启动扩展服务
+    // run BFF services
     startGTagScriptUpdater();
     startGitHubChartUpdater();
     startArchiveUpdater();
