@@ -1,5 +1,5 @@
 <template>
-  <div class="job-page" :class="{ mobile: isMobile }">
+  <div class="job-page">
     <page-banner image="/images/page-job/banner-2.jpg">
       <template #title>
         <i18n zh="内推找我，绝对靠谱" en="We work together" />
@@ -53,7 +53,7 @@
       PageBanner
     },
     setup() {
-      const { i18n, meta, isMobile, isZhLang } = useEnhancer()
+      const { i18n, meta, isZhLang } = useEnhancer()
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_JOB, Language.En)!)
@@ -129,7 +129,6 @@
 
       return {
         jobs,
-        isMobile,
         handleSubmit,
         getFileCDNUrl
       }
@@ -215,48 +214,6 @@
             &:hover {
               color: $text-reversal;
               background-color: $primary;
-            }
-          }
-        }
-      }
-    }
-
-    &.mobile {
-      .banner {
-        height: 12rem;
-        margin-bottom: $gap;
-        @include radius-box($sm-radius);
-
-        .title {
-          font-size: $font-size-h1;
-          margin-bottom: $gap;
-        }
-        .description {
-          margin: 0;
-        }
-      }
-
-      .container {
-        width: 100%;
-
-        .jobs {
-          display: block;
-
-          ::v-deep(.list) {
-            width: 100%;
-            .item {
-              margin: 0;
-              margin-bottom: $gap;
-
-              .logo {
-                height: 10rem;
-              }
-            }
-
-            &:last-child {
-              .item:last-child {
-                margin: 0;
-              }
             }
           }
         }

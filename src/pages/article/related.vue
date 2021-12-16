@@ -1,17 +1,16 @@
 <template>
-  <div class="related" :class="{ mobile: isMobile }">
-    <placeholder :loading="fetching" :data="!!articles.length">
+  <div class="related">
+    <placeholder :loading="fetching" :data="articles">
       <template #loading>
-        <skeleton-paragraph v-if="isMobile" class="skeleton" line-height="1em" :lines="4" />
-        <ul class="skeleton-list" v-else>
-          <skeleton-base class="article" v-for="item in 4" :key="item" />
+        <ul class="skeleton-list" :class="`count-${count}`">
+          <skeleton-base v-for="item in count / 2" :key="item" class="article" />
         </ul>
       </template>
       <template #default>
-        <ul class="articles" key="articles">
+        <ul class="articles" :class="`count-${count}`" key="articles">
           <li
-            v-for="(article, index) in articles.slice(0, isMobile ? 4 : 6)"
-            :class="{ disabled: article.disabled }"
+            v-for="(article, index) in articles.slice(0, count)"
+            :class="{ disabled: !article.id }"
             :key="index"
             class="item"
           >
@@ -23,7 +22,7 @@
               <div
                 class="thumb"
                 :style="{
-                  backgroundImage: `url(${getRelatedArticleThumb(article.thumb)})`
+                  backgroundImage: `url(${getRelatedArticleThumbnail(article.thumb)})`
                 }"
               />
               <div class="title">{{ article.title }}</div>
@@ -38,15 +37,20 @@
 <script lang="ts">
   import { defineComponent, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { Article } from '/@/store/article'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
+  import { getArticleListThumbnailURL } from '/@/transforms/thumbnail'
 
   export default defineComponent({
     name: 'ArticleRelated',
     props: {
       articles: {
-        type: Array as PropType<$TODO[]>,
+        type: Array as PropType<Article[]>,
         required: true
+      },
+      count: {
+        type: Number,
+        default: 6
       },
       fetching: {
         type: Boolean,
@@ -54,15 +58,14 @@
       }
     },
     setup() {
-      const { globalState, isMobile } = useEnhancer()
-      const getRelatedArticleThumb = (thumb: string) => {
-        return getArchiveArticleThumbnailUrl(thumb, globalState.imageExt.value.isWebP)
+      const { globalState } = useEnhancer()
+      const getRelatedArticleThumbnail = (thumb: string) => {
+        return getArticleListThumbnailURL(thumb, globalState.imageExt.value.isWebP)
       }
 
       return {
-        isMobile,
         getArticleDetailRoute,
-        getRelatedArticleThumb
+        getRelatedArticleThumbnail
       }
     }
   })
@@ -75,35 +78,41 @@
     overflow: hidden;
 
     .skeleton-list {
+      display: grid;
+      grid-gap: $gap;
       padding: 0;
       margin: 0;
-      height: 7rem;
       overflow: hidden;
-      display: flex;
+      &.count-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      &.count-6 {
+        grid-template-columns: repeat(3, 1fr);
+      }
 
       .article {
-        width: 12rem;
-        margin-right: 1rem;
-
-        &:last-child {
-          margin-right: 0;
-        }
+        width: auto;
+        height: 9rem;
       }
     }
 
     .articles {
-      list-style: none;
+      display: grid;
+      grid-gap: $gap;
+      width: 100%;
       padding: 0;
       margin: 0;
-      width: 100%;
+      list-style: none;
       overflow: hidden;
-      margin-bottom: -$gap;
+      &.count-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      &.count-6 {
+        grid-template-columns: repeat(3, 1fr);
+      }
 
       .item {
-        float: left;
-        width: calc((100% - #{$gap * 2}) / 3);
-        margin-right: $gap;
-        margin-bottom: $gap;
+        width: auto;
         @include radius-box($sm-radius);
         @include common-bg-module();
 
@@ -155,24 +164,6 @@
             .title {
               color: $link-color;
             }
-          }
-        }
-      }
-    }
-
-    &.mobile {
-      .articles {
-        .item {
-          width: calc((100% - #{$gap}) / 2);
-          margin-right: $gap;
-          margin-bottom: $gap;
-          &:nth-child(2n) {
-            margin-right: 0;
-            margin-bottom: 0;
-          }
-
-          .thumb {
-            height: 6rem;
           }
         }
       }

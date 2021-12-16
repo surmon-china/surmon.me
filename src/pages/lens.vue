@@ -1,11 +1,5 @@
 <template>
-  <div
-    class="lens-page"
-    :class="{
-      mobile: isMobile,
-      dark: isDarkTheme
-    }"
-  >
+  <div class="lens-page" :class="{ dark: isDarkTheme }">
     <page-banner :position="38" :image="bannerImageURL">
       <template #title>
         <i18n zh="凡心所向，素履以往" en="Because it's there" />
@@ -73,7 +67,7 @@
                   </div>
                 </div>
                 <span class="length">{{ video.length }}</span>
-                <div class="background lozad" :data-background-image="getThumbUrl(video.pic)" />
+                <div class="background lozad" :data-background-image="getThumbURL(video.pic)" />
               </div>
               <h5 class="title">
                 <span class="text">{{ video.title }}</span>
@@ -83,7 +77,7 @@
                 style="-webkit-box-orient: vertical"
                 v-text="video.description || '-'"
               />
-              <hr class="separator" />
+              <hr class="divider" />
               <p class="meta">
                 <span class="item play">
                   <i class="iconfont icon-video-play"></i>
@@ -121,13 +115,14 @@
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import PageBanner from '/@/components/common/banner.vue'
 
+  // plogs https://github.com/bertrandom/icloud-shared-album-to-flickr/blob/master/app.js
   export default defineComponent({
     name: 'LensPage',
     components: {
       PageBanner
     },
     setup() {
-      const { globalState, i18n, meta, isMobile, isDarkTheme, isZhLang } = useEnhancer()
+      const { globalState, i18n, meta, isDarkTheme, isZhLang } = useEnhancer()
       const lensStore = useLensStore()
       const lozadObserver = ref<LozadObserver | null>(null)
       const videoListElement = ref<HTMLElement>()
@@ -146,7 +141,7 @@
         return timeAgo(date * 1000, i18n.language.value as any)
       }
 
-      const getThumbUrl = (url: string) => {
+      const getThumbURL = (url: string) => {
         return getFileProxyUrl(
           `/bilibili/${url.replace('http://', '')}@560w_350h.${globalState.imageExt.value.ext}`
         )
@@ -185,11 +180,10 @@
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
         lensStore,
-        isMobile,
         isDarkTheme,
         videoListElement,
         humanlizeDate,
-        getThumbUrl,
+        getThumbURL,
         handlePlay,
         observeLozad,
         bannerImageURL
@@ -468,7 +462,7 @@
           font-size: $font-size-h6;
         }
 
-        > .separator {
+        > .divider {
           border-top: 1px dotted $module-bg-darker-1;
           margin: 0;
         }
@@ -497,8 +491,8 @@
     .vlog-loading {
       @include radius-box($sm-radius);
       @include common-bg-module();
-      min-height: 10rem;
-      margin-bottom: $gap;
+      min-height: 18rem;
+      margin-bottom: $gap * 2;
     }
 
     .vlog-loading {
@@ -514,58 +508,6 @@
           .thumb {
             .button {
               color: $text-disabled !important;
-            }
-          }
-        }
-      }
-    }
-
-    &.mobile {
-      min-height: auto;
-
-      .banner {
-        height: 12rem;
-        margin-bottom: $gap;
-        @include radius-box($sm-radius);
-
-        .title {
-          font-size: $font-size-h1;
-          margin-bottom: $gap;
-        }
-        .description {
-          margin: 0;
-        }
-      }
-
-      .container {
-        width: 100%;
-
-        .header {
-          height: auto;
-          flex-wrap: wrap;
-
-          .bilibili,
-          .global {
-            height: 16rem;
-            margin: 0;
-            margin-bottom: $gap;
-          }
-          .bilibili,
-          .global,
-          .wechat-channel {
-            width: 100%;
-          }
-        }
-
-        .videos {
-          > .item {
-            width: 100%;
-            height: auto;
-            margin-right: 0;
-            margin-bottom: $gap;
-
-            > .thumb {
-              height: 10rem;
             }
           }
         }

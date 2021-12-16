@@ -28,16 +28,16 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { isSearchArchive } from '/@/transforms/route'
+  import { isSearchFlow } from '/@/transforms/route'
 
   export default defineComponent({
-    name: 'PCAsideSearch',
+    name: 'DesktopAsideSearch',
     setup() {
       const { i18n, route, router } = useEnhancer()
       const keyword = ref('')
 
       onMounted(() => {
-        if (isSearchArchive(route.name as string)) {
+        if (isSearchFlow(route.name as string)) {
           keyword.value = route.params.keyword as string
         }
       })
@@ -45,10 +45,10 @@
       const handleSearch = () => {
         const inputKeyword = keyword.value
         const paramsKeyword = route.params.keyword as string
-        const isSearchPage = isSearchArchive(route.name as string)
+        const isSearchPage = isSearchFlow(route.name as string)
         if (inputKeyword && (!isSearchPage || paramsKeyword !== inputKeyword)) {
           router.push({
-            name: RouteName.SearchArchive,
+            name: RouteName.SearchFlow,
             params: { keyword: inputKeyword }
           })
         }
@@ -113,10 +113,11 @@
       }
     }
 
-    > .archive-btn {
+    .archive-btn {
       display: inline-block;
       text-align: center;
       margin-left: $sm-gap;
+      border-radius: $mini-radius;
       width: 3em;
 
       .iconfont {

@@ -8,6 +8,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useGlobalState } from '/@/app/state'
 import { isClient } from '/@/app/environment'
+import { UNDEFINED } from '/@/constants/value'
 import { useI18n } from '/@/services/i18n'
 import { useMeta } from '/@/services/meta'
 import { useTheme, Theme } from '/@/services/theme'
@@ -45,9 +46,9 @@ export const useEnhancer = () => {
     isDarkTheme,
     isZhLang,
 
-    defer: (isClient && useDefer()) as Defer,
-    popup: (isClient && usePopup()) as Popup,
-    gtag: (isClient && useGtag()) as Gtag,
-    loading: (isClient && useLoading()) as Loading
+    defer: (isClient ? useDefer() : UNDEFINED) as Defer,
+    popup: (isClient ? usePopup() : UNDEFINED) as Popup,
+    gtag: (isClient ? useGtag() : UNDEFINED) as Gtag,
+    loading: (isClient ? useLoading() : UNDEFINED) as Loading
   }
 }

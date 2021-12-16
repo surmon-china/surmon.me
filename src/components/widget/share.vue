@@ -6,11 +6,11 @@
       :key="index"
       :title="'Share to: ' + social.name"
       :class="social.class"
-      @click="openShareWindow(social)"
+      @click="handleShare(social)"
     >
       <i class="iconfont" :class="`icon-${social.class}`" />
     </button>
-    <button class="share-ejector link" @click="copyPageUrl">
+    <button class="share-ejector link" @click="copyPageURL">
       <i class="iconfont icon-link"></i>
     </button>
   </div>
@@ -21,6 +21,7 @@
   import { defineComponent, PropType, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
+  import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
   import { getPageUrl } from '/@/transforms/url'
   import { copy } from '/@/utils/clipboard'
   import { META } from '/@/config/app.config'
@@ -35,18 +36,28 @@
     LinkedIn = 'linkedin'
   }
 
+  interface ShareParams {
+    url: string
+    title: string
+    description: string
+  }
+
   interface SocialItem {
     id: SocialMedia
     name: string
     class: string
-    url(share: { url: string; title: string; description: string }): string
+    handler?(share: ShareParams): void
+    url?(share: ShareParams): string
   }
   const socials: SocialItem[] = [
     {
       id: SocialMedia.Wechat,
       name: '微信',
       class: 'wechat',
-      url: (share) => `/partials/qrcode.html?url=${share.url}`
+      handler: async (share) => {
+        const dataURL = await renderTextToQRCodeDataURL(share.url)
+        window.$popup.vImage(dataURL)
+      }
     },
     {
       id: SocialMedia.Weibo,
@@ -162,7 +173,7 @@
         )
       }
 
-      const copyPageUrl = () => {
+      const copyPageURL = () => {
         copy(`${getTitle()} - ${getURL()}`)
         gtag?.event('复制当页链接', {
           event_category: GAEventActions.Click,
@@ -170,12 +181,21 @@
         })
       }
 
-      const openShareWindow = (social: SocialItem) => {
-        const targetURL = social.url({
+      const handleShare = (social: SocialItem) => {
+        const shareParams: ShareParams = {
           url: getURL(),
           title: getTitle(),
           description: getDescription()
-        })
+        }
+
+        // handler
+        if (social.handler) {
+          social.handler(shareParams)
+          return
+        }
+
+        // open new window
+        const targetURL = social.url!(shareParams)
         // screen.availWidth 获得屏幕宽度
         // screen.availHeight 获得屏幕高度
         // 居中的算法是：
@@ -208,8 +228,8 @@
 
       return {
         enabledSocials,
-        copyPageUrl,
-        openShareWindow
+        copyPageURL,
+        handleShare
       }
     }
   })
@@ -249,7 +269,7 @@
         background-color: $linkedin-primary;
       }
       &.link:hover {
-        background-color: $primary;
+        background-color: $surmon;
       }
 
       &:hover {

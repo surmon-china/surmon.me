@@ -2,7 +2,7 @@
   <div :id="NAV_ELEMENT_ID" class="aside-nav">
     <nav class="nav-list" :class="{ en: !isZhLang }">
       <template v-for="menu in menus" :key="menu.id">
-        <span class="separator" v-if="menu.separator"></span>
+        <span class="divider" v-if="menu.divider"></span>
         <router-link
           v-if="menu.route"
           class="item"
@@ -38,7 +38,7 @@
       </template>
       <!-- AD -->
       <template v-for="(ad, index) in adConfig.PC_NAV" :key="index">
-        <span class="separator"></span>
+        <span class="divider"></span>
         <ulink class="item" :href="ad.url">
           <i class="iconfont" :class="ad.icon" :style="{ color: ad.color }"></i>
           <span class="text" :style="{ color: ad.color }">
@@ -64,7 +64,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { menus } from './menu'
   export default defineComponent({
-    name: 'PCNav',
+    name: 'DesktopNav',
     setup() {
       const { adConfig, isZhLang } = useEnhancer()
       return {
@@ -147,7 +147,7 @@
 
         &.app {
           color: $primary;
-          > .iconfont {
+          .iconfont {
             color: $primary;
           }
         }
@@ -173,7 +173,7 @@
         }
       }
 
-      .separator {
+      .divider {
         display: block;
         height: 0;
         background-color: transparent;

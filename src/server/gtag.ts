@@ -8,7 +8,7 @@ import fs from 'fs'
 import path from 'path'
 import axios from 'axios'
 import { GA_MEASUREMENT_ID } from '@/config/app.config'
-import { getGAScriptUrl } from '@/transforms/outside'
+import { getGAScriptURL } from '@/transforms/outside'
 import { EFFECTS_PATH } from './helper'
 
 const UPDATE_TIME = {
@@ -19,7 +19,7 @@ const UPDATE_TIME = {
 export const startGTagScriptUpdater = () => {
   ;(function doUpdate() {
     axios
-      .get<any>(getGAScriptUrl(GA_MEASUREMENT_ID), { timeout: 6000 })
+      .get<any>(getGAScriptURL(GA_MEASUREMENT_ID), { timeout: 6000 })
       .then((response) => {
         if (response.status === 200) {
           fs.writeFileSync(path.resolve(EFFECTS_PATH, 'gtag.js'), response.data)

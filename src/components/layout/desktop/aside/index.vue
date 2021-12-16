@@ -31,7 +31,6 @@
     <div class="module mammon-square">
       <client-only>
         <Adsense
-          ins-class="adsbygoogle"
           ins-style="display:inline-block;width:250px;height:250px"
           data-ad-slot="6138120718"
           class="content"
@@ -60,7 +59,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import SwiperClass from '/@/services/swiper'
   import { ASIDE_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
-  import { getDateArchiveRoute, isArticleDetail } from '/@/transforms/route'
+  import { getDateFlowRoute, isArticleDetail } from '/@/transforms/route'
   import { humanDateToYMD, dateToHuman, HumanDate } from '/@/transforms/moment'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import AsideSearch from './search.vue'
@@ -73,7 +72,7 @@
   const ASIDE_STICKY_ELEMENT_ID = 'aside-sticky-module'
 
   export default defineComponent({
-    name: 'PCAside',
+    name: 'DesktopAside',
     components: {
       AsideSearch,
       AsideArticle,
@@ -113,7 +112,7 @@
       }
 
       const getDateRoute = (humanDate: HumanDate) => {
-        return getDateArchiveRoute(humanDateToYMD(humanDate))
+        return getDateFlowRoute(humanDateToYMD(humanDate))
       }
 
       const handleStandingAdSwiperReady = (_swiper: SwiperClass) => {
@@ -200,6 +199,7 @@
           border-radius: 100%;
 
           &.link-active {
+            font-weight: bold;
             background-color: $primary;
             color: $text-reversal;
           }

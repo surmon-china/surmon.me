@@ -10,6 +10,13 @@ import { Category } from './category'
 import { Tag } from './tag'
 import nodepress from '/@/services/nodepress'
 
+export interface StatisticState {
+  tags: number
+  views: number
+  articles: number
+  comments: number
+}
+
 export interface ArchiveState {
   meta: any
   articles: Article[]
@@ -20,6 +27,7 @@ export interface ArchiveState {
 export const useArchiveStore = defineStore('archive', {
   state: () => ({
     fetching: false,
+    statistic: null as null | StatisticState,
     data: null as null | ArchiveState
   }),
   getters: {
@@ -60,6 +68,21 @@ export const useArchiveStore = defineStore('archive', {
         .get<ArchiveState>('/archive')
         .then((response) => {
           this.data = response.result
+        })
+        .finally(() => {
+          this.fetching = false
+        })
+    },
+
+    fetchStatistic() {
+      if (this.statistic) {
+        return Promise.resolve()
+      }
+      this.fetching = true
+      return nodepress
+        .get<StatisticState>('/expansion/statistic')
+        .then((response) => {
+          this.statistic = response.result
         })
         .finally(() => {
           this.fetching = false

@@ -4,16 +4,14 @@
       <ulink class="ipc" :href="VALUABLE_LINKS.FUCK_IPC" v-if="false">
         陕 ICP 备 13004859 号-2
       </ulink>
-      <a class="sitemap-btn" target="_blank" :href="VALUABLE_LINKS.SITE_MAP">
-        <i18n :lkey="LANGUAGE_KEYS.SITE_MAP_XML" />
-      </a>
-      <span class="separator">|</span>
+      <a class="sitemap-btn" target="_blank" :href="VALUABLE_LINKS.SITE_MAP">sitemap.xml</a>
+      <divider type="vertical" />
       <i18n zh="由 " en="Powered By " />
-      <ulink class="item" :href="VALUABLE_LINKS.GITHUB_BLOG_LIST"> NodePress </ulink>
+      <ulink class="item" :href="VALUABLE_LINKS.GITHUB_BLOG_LIST">NodePress</ulink>
       <i18n zh="、" en=", " />
-      <ulink class="item" :href="VALUABLE_LINKS.SURMON_ME"> Vue </ulink>
+      <ulink class="item" :href="VALUABLE_LINKS.SURMON_ME">Vue</ulink>
       <i18n zh=" 和 日月星辰 强力驱动" en=" and solitarily" />
-      <span class="separator">|</span>
+      <divider type="vertical" />
       <i18n>
         <template #zh>
           <router-link :to="aboutPageUrl" key="zh">吾之臂躯</router-link>
@@ -37,7 +35,7 @@
   import { VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
-    name: 'PcFooter',
+    name: 'DesktopFooter',
     setup() {
       return {
         FOOTER_ELEMENT_ID,
@@ -71,10 +69,6 @@
         &:hover {
           border-color: initial;
         }
-      }
-
-      .separator {
-        margin: 0 $sm-gap;
       }
 
       .ipc {

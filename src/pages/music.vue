@@ -96,11 +96,13 @@
       })()
 
       const circlePathStyle = computed(() => {
-        if (musicPlayer) {
-          return {
-            strokeDasharray: `${perimeter}px, ${perimeter}px`,
-            strokeDashoffset: (1 - musicPlayer.state.progress / 100) * perimeter + 'px'
-          }
+        if (!musicPlayer) {
+          return {}
+        }
+
+        return {
+          strokeDasharray: `${perimeter}px, ${perimeter}px`,
+          strokeDashoffset: (1 - musicPlayer.state.progress / 100) * perimeter + 'px'
         }
       })
 

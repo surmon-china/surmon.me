@@ -18,6 +18,8 @@ import { createVueApp, VueApp } from '/@/app/main'
 import { isDev } from '/@/environment'
 import { renderSSRContextScript, getSSRContextByApp, renderSSRSymbleScript } from '/@/universal'
 
+const devDebug = (...args) => isDev && console.debug(`-----`, ...args)
+
 // cache https://github.com/isaacs/node-lru-cache
 const renderCache = new LRU({
   max: Infinity,
@@ -26,9 +28,9 @@ const renderCache = new LRU({
 const getCacheKey = (vueApp: VueApp, url: string): string => {
   const { i18n, theme, globalState } = vueApp
   const language = i18n.language.value
-  const themeV = theme.theme.value
-  const device = globalState.userAgent.isMobile ? 'mobile' : 'pc'
-  return `${url}-${language}-${themeV}-${device}`
+  const themeValue = theme.theme.value
+  const device = globalState.userAgent.isMobile ? 'mobile' : 'desktop'
+  return `${url}-${language}-${themeValue}-${device}`
 }
 
 // app creater
@@ -54,7 +56,6 @@ const renderScripts = (data: any) => {
 }
 
 // https://github.com/nuxt/framework/blob/main/packages/nitro/src/runtime/app/render.ts
-const devDebug = (...args) => isDev && console.debug(`-----`, ...args)
 const renderHTML = async (vueApp: VueApp, url: string) => {
   devDebug(`renderHTML: ${url}`)
   const { app, router, store, meta, theme, globalState } = vueApp
@@ -136,7 +137,9 @@ export const renderApp = async (request: Request): Promise<RenderResult> => {
 
   // render from cache
   const cacheKey = getCacheKey(app, url)
-  if (renderCache.has(cacheKey)) {
+  const hasCache = renderCache.has(cacheKey)
+  devDebug('cache key:', cacheKey, hasCache)
+  if (hasCache) {
     const cache = renderCache.get(cacheKey)
     return {
       ...cache,
@@ -147,7 +150,9 @@ export const renderApp = async (request: Request): Promise<RenderResult> => {
   try {
     const rendered = await renderHTML(app, url)
     const cacheAge = app.router.currentRoute.value.meta?.ssrCacheAge
-    renderCache.set(cacheKey, rendered, typeof cacheAge === 'number' ? cacheAge * 1000 : undefined)
+    if (typeof cacheAge === 'number' && cacheAge > 0) {
+      renderCache.set(cacheKey, rendered, cacheAge * 1000)
+    }
     return {
       code: SUCCESS_STATUS,
       ...rendered

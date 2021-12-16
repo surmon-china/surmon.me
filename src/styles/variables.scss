@@ -47,6 +47,7 @@ $link-color: var(--link-color);
 $link-color-hover: var(--link-color-hover);
 
 // colors
+$surmon: #0088f5;
 $accent: #4caf50;
 $red: #ff5722;
 $yellow: #ffeb3b;
@@ -58,6 +59,7 @@ $mobile-aside-bg: #34393d;
 // others
 $en-primary: rgb(0, 43, 127);
 $zh-primary: #f40002;
+$qq-primary: #12b7f5;
 $taobao-primary: #ff5000;
 $aliyun-primary: #ff6a00;
 $rss-primary: #f8981d;
@@ -122,7 +124,7 @@ $z-index-toolbox: 9;
 $z-index-normal: 0;
 $z-index-underground: -1;
 
-// PC
+// desktop
 $header-height: 5.1rem;
 $footer-height: 6rem;
 $container-width: 1050px;
@@ -138,8 +140,9 @@ $full-page-active-content-height: calc(100vh - #{$full-page-occupied-height});
 $normal-page-occupied-height: $full-page-occupied-height + $lg-gap * 2;
 $normal-page-active-content-height: calc(100vh - #{$normal-page-occupied-height});
 
-// Mobile
+// mobile
 $mobile-header-height: 5rem;
+$mobile-banner-height: 16rem;
 $mobile-footer-height: $lg-gap * 4;
 $mobile-aside-transition: all $transition-time-slow ease-out;
 

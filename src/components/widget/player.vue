@@ -98,7 +98,7 @@
       border-bottom-left-radius: $sm-radius;
       border-left: 4px solid $primary;
       background-color: $module-bg-darker-1;
-      background: linear-gradient(60deg, $primary, $red, $yellow, $accent, $primary) border-box;
+      background: linear-gradient(60deg, $surmon, $red, $yellow, $accent, $surmon) border-box;
 
       .image {
         width: 100%;

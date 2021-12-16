@@ -25,7 +25,7 @@ const createPopupStore = () => {
   })
 
   const state = reactive({
-    visibility: false,
+    visible: false,
     isImage: false,
     // UI options
     border: true,
@@ -36,11 +36,11 @@ const createPopupStore = () => {
   })
 
   const hidden = (cb?: () => void) => {
-    if (!state.visibility) {
+    if (!state.visible) {
       cb?.()
       return
     }
-    state.visibility = false
+    state.visible = false
     state.isImage = false
     image.src = null
     image.attrs = null
@@ -54,7 +54,7 @@ const createPopupStore = () => {
       Object.assign(state, {
         ...options,
         isImage: false,
-        visibility: true
+        visible: true
       })
     })
   }
@@ -66,7 +66,7 @@ const createPopupStore = () => {
       Object.assign(state, {
         ...options,
         isImage: true,
-        visibility: true
+        visible: true
       })
     })
   }

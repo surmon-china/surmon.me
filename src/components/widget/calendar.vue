@@ -47,7 +47,7 @@
   } from '/@/transforms/moment'
 
   export default defineComponent({
-    name: 'PcAsideCalendar',
+    name: 'DesktopAsideCalendar',
     setup(_, context) {
       const { i18n, isZhLang } = useEnhancer()
       const today = dateToHuman(new Date())
@@ -183,15 +183,15 @@
     > .days,
     > .weekdays {
       list-style: none;
-      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
       margin: 0;
-      overflow: hidden;
       margin-bottom: $sm-gap;
+      padding: 0;
+      overflow: hidden;
 
       > li {
         display: block;
-        float: left;
-        width: 14.28%;
         text-align: center;
       }
     }

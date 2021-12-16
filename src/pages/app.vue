@@ -18,28 +18,26 @@
             :href="VALUABLE_LINKS.APP_APK_FILE"
             @click="handleAndroidApp($event)"
           >
-            <i class="iconfont icon-android"></i>
-            <span class="text">
-              <i18n :lkey="LANGUAGE_KEYS.DEVICE_ANDROID" />
-            </span>
+            <i class="icon iconfont icon-android"></i>
+            <span class="text">Android</span>
+            <i class="new-window iconfont icon-new-window-s"></i>
           </ulink>
           <ulink
             class="button"
             :href="VALUABLE_LINKS.SURMON_ME_NATIVE + '#ios'"
             @mousedown="handleAppAction('APP IOS')"
           >
-            <i class="iconfont icon-apple"></i>
-            <span class="text">
-              <i18n :lkey="LANGUAGE_KEYS.DEVICE_IOS" />
-            </span>
+            <i class="icon iconfont icon-apple"></i>
+            <span class="text">iOS</span>
+            <i class="new-window iconfont icon-new-window-s"></i>
           </ulink>
           <ulink
-            class="button code"
+            class="source-code"
             :href="VALUABLE_LINKS.SURMON_ME_NATIVE"
             @mousedown="handleAppAction('APP GitHub 地址')"
           >
             <i class="iconfont icon-git"></i>
-            <span class="text">Source Code</span>
+            Source Code
           </ulink>
         </div>
       </div>
@@ -57,9 +55,15 @@
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
-    name: 'Application',
+    name: 'AppPage',
+    props: {
+      isMobile: {
+        type: Boolean,
+        default: false
+      }
+    },
     setup() {
-      const { i18n, meta, gtag, isMobile, isZhLang } = useEnhancer()
+      const { i18n, meta, gtag, isZhLang } = useEnhancer()
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_APP, Language.En)!)
         const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_APP), enTitle] : [enTitle]
@@ -90,7 +94,6 @@
         META,
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
-        isMobile,
         handleAppAction,
         handleAndroidApp
       }
@@ -152,6 +155,7 @@
         }
 
         > .download {
+          $size: 12rem;
           position: absolute;
           width: 100%;
           height: 100%;
@@ -162,51 +166,54 @@
           justify-content: center;
           align-items: center;
           @include hidden();
+          @include backdrop-blur(3px);
           @include visibility-transition($transition-time-normal);
 
-          > .qrcode {
-            width: 12rem;
+          .qrcode {
+            width: $size;
             height: auto;
+            @include radius-box($sm-radius);
           }
 
-          > .button {
-            width: 12rem;
-            line-height: $line-height-base * 1.6;
-            color: $primary;
+          .button {
+            width: $size;
+            height: 3rem;
+            display: flex;
+            align-items: center;
             margin-top: 2rem;
+            padding: 0 1em;
             border: 1px solid $primary;
             border-radius: $xs-radius;
-            text-align: center;
-            text-transform: uppercase;
             background: $module-bg;
-            transition: color $transition-time-fast, background $transition-time-fast;
-
-            &.code {
-              border-color: $text;
-              color: $text;
-
-              &:hover {
-                background: $primary;
-                border-color: $primary;
-                color: $text-reversal;
-              }
-            }
-
-            .text {
-              margin-left: $xs-gap;
-            }
-
+            color: $primary;
+            transition: all $transition-time-fast;
             &:hover {
               color: $text-reversal;
               border-color: $primary-translucent;
-              background: linear-gradient(
-                to bottom right,
-                rgba($red, 0.7),
-                $text-reversal,
-                $primary,
-                $text-reversal,
-                rgba($accent, 0.7)
-              );
+              background: $primary-lighter;
+            }
+
+            .icon {
+              font-size: $font-size-h4;
+              margin-right: $sm-gap;
+            }
+
+            .new-window {
+              margin-left: $xs-gap;
+              font-size: $font-size-small;
+            }
+          }
+
+          .source-code {
+            margin-top: 2rem;
+            border-bottom: 1px solid;
+            color: $text;
+            &:hover {
+              color: $primary;
+            }
+
+            .iconfont {
+              margin-right: $xs-gap;
             }
           }
         }
@@ -215,11 +222,9 @@
 
     &.mobile {
       min-height: 53rem;
-      height: calc(100vh - #{$mobile-header-height + $lg-gap + $mobile-footer-height + $gap});
+      height: calc(100vh - #{$mobile-header-height + $lg-gap + $lg-gap + $mobile-footer-height});
 
       > .app {
-        padding-top: $lg-gap;
-
         > .screen {
           width: 100%;
           margin-top: 3rem;

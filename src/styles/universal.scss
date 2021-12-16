@@ -33,23 +33,6 @@ body {
   }
 }
 
-#app-root {
-  color: $text;
-
-  &.default {
-    @include defaultTheme();
-  }
-
-  &.dark {
-    @include darkTheme();
-  }
-}
-
-.container {
-  width: $container-width;
-  margin: 0 auto;
-}
-
 .iconfont {
   font-size: 1em;
 }
@@ -151,10 +134,10 @@ select:-webkit-autofill {
 
 // for client only component transition
 .client-only-enter-active {
-  transition: opacity $transition-time-fast linear !important;
+  transition: opacity $transition-time-normal linear !important;
 }
 .client-only-leave-active {
-  transition: opacity $transition-time-fast * 0.6 linear !important;
+  transition: opacity $transition-time-normal * 0.6 linear !important;
 }
 .client-only-enter-from,
 .client-only-leave-to {

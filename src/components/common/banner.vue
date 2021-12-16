@@ -1,10 +1,10 @@
 <template>
   <div
     class="banner"
-    :class="{ dark: isDarkTheme }"
-    :style="{ backgroundImage: `url(${imageUrl})`, backgroundPositionY: `${position}%` }"
+    :class="{ dark: isDarkTheme, mobile: isMobile }"
+    :style="{ backgroundImage: `url(${imageURL})`, backgroundPositionY: `${position}%` }"
   >
-    <div class="content" :class="[className, { blur }]">
+    <div class="content" :class="{ blur }">
       <h2 class="title">
         <slot name="title"></slot>
       </h2>
@@ -19,10 +19,10 @@
   import { defineComponent } from 'vue'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { useEnhancer } from '/@/app/enhancer'
+
   export default defineComponent({
     name: 'FullPageBanner',
     props: {
-      class: String,
       position: {
         type: Number,
         default: 20
@@ -34,14 +34,17 @@
       blur: {
         type: Boolean,
         default: true
+      },
+      isMobile: {
+        type: Boolean,
+        default: false
       }
     },
     setup(props) {
       const { isDarkTheme } = useEnhancer()
       return {
         isDarkTheme,
-        className: props.class,
-        imageUrl: getFileCDNUrl(props.image)
+        imageURL: getFileCDNUrl(props.image)
       }
     }
   })
@@ -58,7 +61,6 @@
     &.dark {
       /* background-blend-mode: difference; */
     }
-
     .content {
       height: 100%;
       display: flex;
@@ -79,6 +81,17 @@
 
       .description {
         font-size: $font-size-h4;
+      }
+    }
+
+    &.mobile {
+      height: $mobile-banner-height;
+      margin-top: -$lg-gap;
+      margin-left: -$gap;
+      margin-right: -$gap;
+
+      .title {
+        font-size: 2em;
       }
     }
   }

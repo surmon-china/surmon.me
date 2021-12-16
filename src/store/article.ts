@@ -5,13 +5,15 @@
  */
 
 import { defineStore } from 'pinia'
+import { isClient } from '/@/app/environment'
+import { UNDEFINED } from '/@/constants/value'
 import { SortType, OriginState } from '/@/constants/state'
 import { getArticleContentHeadingElementID } from '/@/constants/anchor'
+import nodepress from '/@/services/nodepress'
 import { markdownToHTML } from '/@/transforms/markdown'
 import { fetchDelay } from '/@/utils/fetch-delay'
 import { Category } from './category'
 import { Tag } from './tag'
-import nodepress from '/@/services/nodepress'
 
 export const ARTICLE_API_PATH = '/article'
 export const LIKE_ARTICLE_API_PATH = '/like/article'
@@ -66,13 +68,19 @@ export const useArticleStore = defineStore('article', {
       return nodepress
         .get<any>(ARTICLE_API_PATH, { params })
         .then((response) => {
-          if (isLoadMore) {
-            this.list.data.push(...response.result.data)
-            this.list.pagination = response.result.pagination
-          } else {
-            this.list.data = response.result.data
-            this.list.pagination = response.result.pagination
-          }
+          const state = this
+          return new Promise((resolve) => {
+            fetchDelay(isClient ? 368 : 0)(() => {
+              if (isLoadMore) {
+                state.list.data.push(...response.result.data)
+                state.list.pagination = response.result.pagination
+              } else {
+                state.list.data = response.result.data
+                state.list.pagination = response.result.pagination
+              }
+              resolve(UNDEFINED)
+            })
+          })
         })
         .finally(() => {
           this.list.fetching = false
@@ -179,17 +187,17 @@ export const useArticleDetailStore = defineStore('articleDetail', {
     },
 
     // 获取文章详情
-    fetchDetail(params: { delay?: number; articleID: number }) {
+    fetchDetail(params: { articleID: number }) {
       this.fetching = true
       this.article = null
       return nodepress
         .get(`${ARTICLE_API_PATH}/${params.articleID}`)
         .then((response) => {
           return new Promise((resolve) => {
-            fetchDelay(params.delay || 0)(() => {
+            fetchDelay(isClient ? 368 : 0)(() => {
               this.article = response.result
               this.renderedFullContent = !this.isLongContent
-              resolve(void 0)
+              resolve(UNDEFINED)
             })
           })
         })

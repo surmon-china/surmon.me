@@ -1,3 +1,7 @@
+@function is-important($important) {
+  @return #{if($important, '!important', '')};
+}
+
 /// Element border radius
 @mixin radius-box($radius-size) {
   border-radius: $radius-size;
@@ -20,15 +24,15 @@
 }
 
 /// Visible element
-@mixin visible() {
-  opacity: 1;
-  visibility: visible;
+@mixin visible($important: false) {
+  opacity: 1 is-important($important);
+  visibility: visible is-important($important);
 }
 
 /// Hidden element
-@mixin hidden() {
-  opacity: 0;
-  visibility: hidden;
+@mixin hidden($important: false) {
+  opacity: 0 is-important($important);
+  visibility: hidden is-important($important);
 }
 
 /// Backdrop drop effect

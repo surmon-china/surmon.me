@@ -6,6 +6,8 @@
 
 import * as _ from 'lodash'
 import { defineStore } from 'pinia'
+import { isClient } from '/@/app/environment'
+import { UNDEFINED } from '/@/constants/value'
 import { SortType } from '/@/constants/state'
 import { fetchDelay } from '/@/utils/fetch-delay'
 import nodepress from '/@/services/nodepress'
@@ -39,7 +41,6 @@ export interface CommentFetchParams {
   page?: number
   per_page?: number
   sort?: SortType
-  delay?: number
   loadmore?: boolean
   [key: string]: any
 }
@@ -76,7 +77,7 @@ export const useCommentStore = defineStore('comment', {
       const findRootParentID = (pid: number): number | void => {
         const target = fullMap.get(pid)
         if (!target) {
-          return void 0
+          return UNDEFINED
         }
         return target.pid === COMMENT_EMPTY_PID ? target.id : findRootParentID(target.pid)
       }
@@ -108,7 +109,6 @@ export const useCommentStore = defineStore('comment', {
         page: 1,
         per_page: 50,
         sort: SortType.Desc,
-        delay: 0,
         loadmore: false,
         ...params
       }
@@ -125,7 +125,7 @@ export const useCommentStore = defineStore('comment', {
         .get(COMMENT_API_PATH, { params })
         .then((response) => {
           return new Promise((resolve) => {
-            fetchDelay(params.delay)(() => {
+            fetchDelay(isClient ? 368 : 0)(() => {
               if (isDescSort) {
                 response.result.data.reverse()
               }
@@ -137,7 +137,7 @@ export const useCommentStore = defineStore('comment', {
                 this.comments = response.result.data
               }
               this.pagination = response.result.pagination
-              resolve(void 0)
+              resolve(UNDEFINED)
             })
           })
         })

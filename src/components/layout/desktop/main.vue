@@ -1,9 +1,7 @@
 <template>
-  <div class="pc-main">
+  <div class="desktop-main">
     <background />
-    <client-only>
-      <wallflower />
-    </client-only>
+    <wallflower />
     <template v-if="!layoutColumn.isFull">
       <share class="main-share" />
       <wallpaper />
@@ -28,7 +26,16 @@
           'layout-full': layoutColumn.isFull
         }"
       >
-        <slot />
+        <!-- unuse suspense -> async route component -> can't extract style to css file -->
+        <router-view v-slot="{ Component, route }">
+          <div class="router-view">
+            <transition name="page" mode="out-in" @before-enter="handlePageTransitionDone">
+              <suspense>
+                <component :is="Component" :key="route.name" />
+              </suspense>
+            </transition>
+          </div>
+        </router-view>
       </div>
       <aside-view v-if="layoutColumn.isNormal" />
     </main>
@@ -38,7 +45,8 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { useGlobalState } from '/@/app/state'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { getLayoutByRouteMeta } from '/@/services/layout'
   import { MAIN_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
   import NavView from './nav.vue'
   import AsideView from './aside/index.vue'
@@ -52,7 +60,7 @@
   import Toolbox from '/@/components/widget/toolbox.vue'
 
   export default defineComponent({
-    name: 'PCMain',
+    name: 'DesktopMain',
     components: {
       Share,
       Wallpaper,
@@ -66,11 +74,16 @@
       NavView
     },
     setup() {
-      const globalState = useGlobalState()
+      const { route, globalState } = useEnhancer()
+      const handlePageTransitionDone = () => {
+        globalState.setLayoutColumn(getLayoutByRouteMeta(route.meta))
+      }
+
       return {
         MAIN_ELEMENT_ID,
         MAIN_CONTENT_ELEMENT_ID,
-        layoutColumn: globalState.layoutColumn
+        layoutColumn: globalState.layoutColumn,
+        handlePageTransitionDone
       }
     }
   })
@@ -79,7 +92,7 @@
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
 
-  .pc-main {
+  .desktop-main {
     padding-top: $header-height + $lg-gap;
 
     @media screen and (max-width: 1200px) {

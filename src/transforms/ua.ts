@@ -8,7 +8,7 @@ import parser from 'ua-parser-js'
 import { Language } from '/@/language/data'
 
 export const uaParser = (userAgent: string) => {
-  const parseResult = (parser as $TODO)(userAgent || '')
+  const parseResult = parser(userAgent || '')
   const browserName = String(parseResult.browser.name).toLowerCase()
   const isTargetDevice = (browsers: string[]) => {
     return browsers.some((browser) => browser.toLowerCase() === browserName)

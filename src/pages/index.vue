@@ -22,10 +22,10 @@
   import { useArticleStore } from '/@/store/article'
   import { useAnnouncementStore } from '/@/store/announcement'
   import { nextScreen } from '/@/utils/effects'
-  import Carrousel from '/@/components/archive/carrousel.vue'
-  import Announcement from '/@/components/archive/announcement.vue'
-  import ArticleList from '/@/components/archive/list.vue'
   import { META } from '/@/config/app.config'
+  import Carrousel from '/@/components/flow-desktop/carrousel.vue'
+  import Announcement from '/@/components/flow-desktop/announcement.vue'
+  import ArticleList from '/@/components/flow-desktop/list.vue'
 
   export default defineComponent({
     name: 'IndexPage',

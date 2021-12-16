@@ -23,13 +23,13 @@
   }
   export default defineComponent({
     name: 'Error',
-    emits: [ErrorEvent.Resolve],
     props: {
       error: {
         type: Object as PropType<RenderError>,
         required: true
       }
     },
+    emits: [ErrorEvent.Resolve],
     setup(props, context) {
       const { isDarkTheme } = useEnhancer()
       const handleResolveRoute = () => {

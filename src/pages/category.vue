@@ -1,5 +1,5 @@
 <template>
-  <div class="category-archive-page">
+  <div class="category-flow-page">
     <article-list-header
       :background-color="currentCategoryColor"
       :background-image="currentCategoryImage"
@@ -25,8 +25,8 @@
   import { getExtendsValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
-  import ArticleListHeader from '/@/components/archive/header.vue'
-  import ArticleList from '/@/components/archive/list.vue'
+  import ArticleListHeader from '/@/components/flow-desktop/header.vue'
+  import ArticleList from '/@/components/flow-desktop/list.vue'
 
   export default defineComponent({
     name: 'CategoryPage',

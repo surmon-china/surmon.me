@@ -1,16 +1,27 @@
 <template>
-  <div :id="COMMENT_ELEMENT_ID" :class="{ mobile: isMobile }" class="comment-box">
+  <div :id="COMMENT_ELEMENT_ID" class="comment-box">
     <comment-topbar
       :total="commentStore.pagination?.total"
       :likes="likes"
       :post-id="postId"
       :fetching="isFetching"
       :sort="state.sort"
+      :mini-likes="plain"
+      :hidden-sponsor="plain"
       @sort="getSortComments"
     />
-    <comment-main :fetching="isFetching" :has-data="Boolean(commentStore.commentTreeList.length)">
+    <comment-main
+      :fetching="isFetching"
+      :skeleton-count="plain ? 3 : 5"
+      :has-data="Boolean(commentStore.commentTreeList.length)"
+    >
       <template #list>
-        <comment-list :comments="commentStore.commentTreeList" @reply="replyComment" />
+        <comment-list
+          :comments="commentStore.commentTreeList"
+          :hidden-gravatar="plain"
+          :hidden-ua="plain"
+          @reply="replyComment"
+        />
       </template>
       <template #pagination>
         <comment-loadmore
@@ -25,6 +36,7 @@
       :cached="userState.cached"
       :editing="userState.editing"
       :reply-pid="state.replyPID"
+      :hidden-gravatar="plain"
       v-model:profile="profileState"
       @cancel-reply="resetCommentReply"
       @edit-profile="editUserProfile"
@@ -88,6 +100,10 @@
       CommentPen
     },
     props: {
+      postId: {
+        type: Number,
+        required: true
+      },
       fetching: {
         type: Boolean,
         default: false
@@ -96,13 +112,13 @@
         type: Number,
         default: 0
       },
-      postId: {
-        type: Number,
-        required: true
+      plain: {
+        type: Boolean,
+        default: false
       }
     },
     setup(props) {
-      const { i18n, gtag, globalState, isMobile } = useEnhancer()
+      const { i18n, gtag, globalState } = useEnhancer()
       const metaStore = useMetaStore()
       const commentStore = useCommentStore()
       const blockList = computed(() => metaStore.appOptions.data?.blacklist)
@@ -202,8 +218,7 @@
         commentStore.fetchList({
           ...params,
           sort: state.sort,
-          post_id: props.postId,
-          delay: 368
+          post_id: props.postId
         })
       }
 
@@ -311,7 +326,6 @@
 
       return {
         COMMENT_ELEMENT_ID,
-        isMobile,
         isFetching,
         isPostingComment,
         commentStore,

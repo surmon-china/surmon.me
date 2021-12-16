@@ -1,33 +1,5 @@
 <template>
-  <div
-    class="articles"
-    :class="{
-      mobile: isMobile,
-      dark: isDarkTheme
-    }"
-  >
-    <!-- mammon -->
-    <template v-if="isMammonEnabled">
-      <client-only transition>
-        <Adsense
-          ins-class="mammon-ins"
-          data-ad-format="fluid"
-          data-ad-layout-key="-hw-7+2w-11-86"
-          data-ad-slot="6538975194"
-          class="article-list-mammon"
-          v-if="isMobile"
-        />
-        <Adsense
-          ins-class="mammon-ins"
-          data-ad-format="fluid"
-          data-ad-layout-key="-hj-9+3a-97+6s"
-          data-ad-slot="1148538406"
-          class="article-list-mammon"
-          v-else
-        />
-      </client-only>
-    </template>
-
+  <div class="articles" :class="{ dark: isDarkTheme }">
     <!-- list -->
     <div class="article-list">
       <placeholder :data="articles.length" :loading="!articles.length && fetching">
@@ -53,12 +25,33 @@
         </template>
         <template #default>
           <div key="list">
+            <!-- list-mammon -->
+            <client-only>
+              <template v-if="mammon">
+                <Adsense
+                  v-if="isDarkTheme"
+                  ins-class="mammon-ins"
+                  data-ad-format="fluid"
+                  data-ad-layout-key="-hj-9+3a-97+6s"
+                  data-ad-slot="1765379407"
+                  class="article-list-mammon"
+                />
+                <Adsense
+                  v-else
+                  ins-class="mammon-ins"
+                  data-ad-format="fluid"
+                  data-ad-layout-key="-hj-9+3a-97+6s"
+                  data-ad-slot="1148538406"
+                  class="article-list-mammon"
+                />
+              </template>
+            </client-only>
             <transition-group name="list-fade">
               <list-item
                 v-for="articleItem in articles"
+                class="list-item"
                 :key="articleItem.id"
                 :article="articleItem"
-                @click="handleArticleClick(articleItem)"
               />
             </transition-group>
           </div>
@@ -87,10 +80,9 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted, PropType } from 'vue'
+  import { defineComponent, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { getArticleDetailRoute } from '/@/transforms/route'
   import { Article } from '/@/store/article'
   import ListItem from './item.vue'
 
@@ -99,7 +91,7 @@
   }
 
   export default defineComponent({
-    name: 'ArticleList',
+    name: 'FlowArticleList',
     components: {
       ListItem
     },
@@ -120,9 +112,7 @@
     },
     emits: [Events.Loadmore],
     setup(props, context) {
-      const { router, defer, isMobile, isDarkTheme } = useEnhancer()
-      const mammonEnabled = ref(false)
-      const isMammonEnabled = computed(() => props.mammon && mammonEnabled)
+      const { isDarkTheme } = useEnhancer()
       const isLoadMoreEnabled = computed(() => {
         return props.pagination
           ? props.pagination.current_page < props.pagination.total_page
@@ -133,26 +123,11 @@
         context.emit(Events.Loadmore)
       }
 
-      const handleArticleClick = (article: $TODO) => {
-        if (isMobile.value) {
-          router.push(getArticleDetailRoute(article.id))
-        }
-      }
-
-      onMounted(() => {
-        defer.addTask(() => {
-          mammonEnabled.value = true
-        })
-      })
-
       return {
         LANGUAGE_KEYS,
-        isMobile,
         isDarkTheme,
-        isMammonEnabled,
         isLoadMoreEnabled,
-        handleLoadmore,
-        handleArticleClick
+        handleLoadmore
       }
     }
   })
@@ -163,19 +138,6 @@
   @import 'src/styles/init.scss';
 
   .articles {
-    .article-list-mammon {
-      width: 100%;
-      padding: $sm-gap;
-      margin-bottom: $lg-gap;
-      @include common-bg-module();
-      @include radius-box($sm-radius);
-
-      &::v-deep(.mammon-ins) {
-        margin: $xs-gap 0;
-        height: 100px;
-      }
-    }
-
     .article-list-skeleton {
       padding: 0;
       margin: 0;
@@ -213,6 +175,20 @@
       }
     }
 
+    .article-list-mammon {
+      width: 100%;
+      min-height: 10rem;
+      padding: $sm-gap;
+      margin-bottom: $lg-gap;
+      @include common-bg-module();
+      @include radius-box($sm-radius);
+
+      &::v-deep(.mammon-ins) {
+        margin: $xs-gap 0;
+        height: 100px;
+      }
+    }
+
     .article-list {
       margin-bottom: $lg-gap;
       min-height: $lg-gap;
@@ -223,6 +199,13 @@
         font-size: $font-size-h4;
         @include common-bg-module();
         @include radius-box($sm-radius);
+      }
+
+      .list-item {
+        margin-bottom: $lg-gap;
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
     }
 
@@ -289,22 +272,6 @@
               background: $module-bg-darker-1 !important;
             }
           }
-        }
-      }
-    }
-
-    &.mobile {
-      > .article-list,
-      > .article-list-mammon {
-        margin-bottom: $gap;
-      }
-
-      > .article-list-mammon {
-        padding: $sm-gap;
-
-        &::v-deep(.mammon-ins) {
-          margin: 0;
-          height: 81px;
         }
       }
     }

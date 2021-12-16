@@ -14,6 +14,7 @@ module.exports = {
     'vue/valid-template-root': 0,
     'vue/multi-word-component-names': 0,
     'vue/attributes-order': 0,
-    'vue/script-indent': 0
+    'vue/script-indent': 0,
+    'vue/require-default-prop': 0
   }
 }

@@ -3,26 +3,41 @@
     <div class="module">
       <article-content :id="ARTICLE_CONTENT_ELEMENT_ID" :fetching="fetching" :article="article" />
     </div>
-    <client-only>
+    <client-only v-if="!isMobile">
       <div class="module">
         <article-mammon :fetching="fetching" />
       </div>
     </client-only>
     <div class="module">
-      <article-share :id="ARTICLE_SHARE_ELEMENT_ID" :fetching="fetching" />
+      <article-share
+        :id="ARTICLE_SHARE_ELEMENT_ID"
+        :fetching="fetching"
+        :socials="isMobile ? [SocialMedia.Wechat, SocialMedia.Weibo, SocialMedia.Twitter] : []"
+      />
     </div>
     <div class="module">
-      <article-meta :id="ARTICLE_META_ELEMENT_ID" :fetching="fetching" :article="article" />
+      <article-meta
+        :id="ARTICLE_META_ELEMENT_ID"
+        :plain="isMobile"
+        :fetching="fetching"
+        :article="article"
+      />
     </div>
-    <div class="releted">
+    <div class="releted-module">
       <article-related
         :id="ARTICLE_RELETED_ELEMENT_ID"
+        :count="isMobile ? 4 : 6"
         :fetching="fetching"
         :articles="relatedArticles"
       />
     </div>
     <div class="comment">
-      <comment :fetching="fetching" :post-id="articleId" :likes="article?.meta?.likes" />
+      <comment
+        :plain="isMobile"
+        :fetching="fetching"
+        :post-id="articleId"
+        :likes="article?.meta?.likes"
+      />
     </div>
   </div>
 </template>
@@ -31,15 +46,16 @@
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/universal'
-  import { isClient } from '/@/app/environment'
   import {
     ARTICLE_CONTENT_ELEMENT_ID,
     ARTICLE_META_ELEMENT_ID,
     ARTICLE_RELETED_ELEMENT_ID,
     ARTICLE_SHARE_ELEMENT_ID
   } from '/@/constants/anchor'
+  import { UNDEFINED } from '/@/constants/value'
   import { useArticleDetailStore } from '/@/store/article'
   import { useCommentStore } from '/@/store/comment'
+  import { SocialMedia } from '/@/components/widget/share.vue'
   import ArticleContent from './content.vue'
   import ArticleMammon from './mammon.vue'
   import ArticleShare from './share.vue'
@@ -61,13 +77,17 @@
       articleId: {
         type: Number,
         required: true
+      },
+      isMobile: {
+        type: Boolean,
+        default: false
       }
     },
     setup(props) {
-      const { meta, isMobile } = useEnhancer()
+      const { meta } = useEnhancer()
       const articleDetailStore = useArticleDetailStore()
       const commentStore = useCommentStore()
-      const article = computed(() => articleDetailStore.article || void 0)
+      const article = computed(() => articleDetailStore.article || UNDEFINED)
       const fetching = computed(() => articleDetailStore.fetching)
       const relatedArticles = computed(() => {
         if (!article.value) {
@@ -77,14 +97,14 @@
         const articles = [...article.value.related]
           .filter((article) => article.id !== props.articleId)
           .slice(0, ARTICLE_COUNT)
-        if (isMobile.value || articles.length >= ARTICLE_COUNT) {
+        if (props.isMobile || articles.length >= ARTICLE_COUNT) {
           return articles
         }
         return [
           ...articles,
           ...new Array(ARTICLE_COUNT - articles.length).fill({
-            disabled: true,
-            title: 'NULL',
+            title: 'null',
+            id: null,
             _id: '',
             thumb: ''
           })
@@ -98,16 +118,9 @@
       }))
 
       const fetchArticleDetail = (articleID: number) => {
-        const fetchDelay = isClient ? 368 : 0
         return Promise.all([
-          articleDetailStore.fetchDetail({
-            articleID,
-            delay: fetchDelay
-          }),
-          commentStore.fetchList({
-            post_id: articleID,
-            delay: fetchDelay
-          })
+          articleDetailStore.fetchDetail({ articleID }),
+          commentStore.fetchList({ post_id: articleID })
         ])
       }
 
@@ -122,7 +135,7 @@
       useUniversalFetch(() => fetchArticleDetail(props.articleId))
 
       return {
-        isMobile,
+        SocialMedia,
         article,
         fetching,
         relatedArticles,
@@ -145,14 +158,8 @@
       @include common-bg-module();
     }
 
-    .releted {
+    .releted-module {
       margin-bottom: $lg-gap;
-    }
-
-    &.mobile {
-      .module {
-        margin-bottom: $gap;
-      }
     }
   }
 </style>

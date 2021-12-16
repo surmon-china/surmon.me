@@ -39,7 +39,23 @@ nodepress.interceptors.response.use(
       code: error.code || error.response?.status || BAD_REQUEST,
       message: messageText + ': ' + errorText
     }
-    console.debug('axios error:', isClient ? errorInfo : errorJSON)
+    console.debug(
+      'axios error:',
+      isClient
+        ? errorInfo
+        : {
+            name: errorJSON.name,
+            message: errorJSON.message,
+            code: errorJSON.code,
+            status: errorJSON.status,
+            stack: errorJSON.stack,
+            method: errorJSON.config.method,
+            baseURL: errorJSON.config.baseURL,
+            url: errorJSON.config.url,
+            data: errorJSON.config.data,
+            headers: errorJSON.config.headers
+          }
+    )
     return Promise.reject(errorJSON)
   }
 )

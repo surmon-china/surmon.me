@@ -74,7 +74,7 @@ export const ClientOnly = defineComponent({
       }
 
       if (context.slots.placeholder) {
-        return renderResult(context.slots.placeholder(), 'placeholderSlot')
+        return renderResult(context.slots.placeholder(), 'placeholder-slot')
       }
 
       if (props.placeholderTag && props.placeholder) {

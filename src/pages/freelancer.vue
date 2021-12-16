@@ -1,6 +1,6 @@
 <template>
   <div class="freelancer-page">
-    <page-banner class="banner-content" :position="66" image="/images/page-feeelancer/banner.jpg">
+    <page-banner :position="66" class="page-banner" image="/images/page-feeelancer/banner.jpg">
       <template #title>
         <div class="title">
           <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_SLOGAN" />
@@ -11,12 +11,10 @@
           <button class="submit-email" title="Email me" @click="handleSubmitEmail">
             <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_EMAIL_ME" />
           </button>
-          <desktop-only>
-            <ulink class="upwork" :href="VALUABLE_LINKS.UPWORK">
-              <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_HIRE_ME" />
-              <i class="iconfont icon-upwork"></i>
-            </ulink>
-          </desktop-only>
+          <ulink class="upwork" :href="VALUABLE_LINKS.UPWORK">
+            <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_HIRE_ME" />
+            <i class="iconfont icon-upwork"></i>
+          </ulink>
         </div>
       </template>
     </page-banner>
@@ -38,13 +36,11 @@
         </ul>
       </div>
     </div>
-    <desktop-only>
-      <client-only transition>
-        <div class="mammon container">
-          <u-adsense ins-style="display:inline-block;width:1050px;height:192px" />
-        </div>
-      </client-only>
-    </desktop-only>
+    <client-only transition>
+      <div class="mammon container">
+        <u-adsense ins-style="display:inline-block;width:1050px;height:192px" />
+      </div>
+    </client-only>
     <div class="step">
       <div class="step-content container">
         <ul class="step-list">
@@ -251,9 +247,7 @@
   .freelancer-page {
     width: 100%;
 
-    .banner-content {
-      text-align: center;
-
+    .page-banner {
       .title {
         font-family: 'webfont-normal', DINRegular;
       }
@@ -371,7 +365,7 @@
 
     .mammon {
       height: 192px;
-      margin-bottom: $gap * 2;
+      margin-bottom: $gap * 2 !important;
       @include common-bg-module();
     }
 

@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.2.4 (2021-12-17)
+
+**Feature**
+
+- Mobile pages
+- `Archive` rename to `Flow`
+- `Divider` component
+- Improve universal styles
+- Improve SSR cache logic
+
 ### v3.2.3 (2021-12-11)
 
 **Feature**

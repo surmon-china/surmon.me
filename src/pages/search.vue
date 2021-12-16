@@ -1,5 +1,5 @@
 <template>
-  <div class="search-archive-page">
+  <div class="search-flow-page">
     <article-list-header icon="icon-search">
       <i18n :zh="`和 “${keyword}” 有关的所有文章`" :en="`'${keyword}' related articles`" />
     </article-list-header>
@@ -18,8 +18,8 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useArticleStore } from '/@/store/article'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
-  import ArticleListHeader from '/@/components/archive/header.vue'
-  import ArticleList from '/@/components/archive/list.vue'
+  import ArticleListHeader from '/@/components/flow-desktop/header.vue'
+  import ArticleList from '/@/components/flow-desktop/list.vue'
 
   export default defineComponent({
     name: 'SearchPage',
