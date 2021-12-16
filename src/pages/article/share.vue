@@ -2,28 +2,20 @@
   <div class="share-module">
     <placeholder :loading="fetching">
       <template #loading>
-        <div class="skeleton">
-          <skeleton-base
-            v-for="item in skeletonCount"
-            :key="item"
-            :radius="0"
-            :style="{
-              width: `calc((100% - (1em * ${skeletonCount - 1})) / ${skeletonCount})`
-            }"
-          />
+        <div class="skeletons">
+          <skeleton-base class="item" v-for="item in skeletonCount" :key="item" />
         </div>
       </template>
       <template #default>
-        <base-share class="article-share" :class="{ mobile: isMobile }" />
+        <base-share class="article-share" :socials="socials" />
       </template>
     </placeholder>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import BaseShare from '/@/components/widget/share.vue'
+  import { defineComponent, PropType } from 'vue'
+  import BaseShare, { SocialMedia } from '/@/components/widget/share.vue'
 
   export default defineComponent({
     name: 'ArticleShare',
@@ -31,16 +23,20 @@
       BaseShare
     },
     props: {
+      socials: {
+        type: Array as PropType<SocialMedia[]>,
+        default: () => []
+      },
       fetching: {
         type: Boolean,
         required: true
       }
     },
-    setup() {
-      const { isMobile } = useEnhancer()
-      const skeletonCount = isMobile.value ? 3 : 10
+    setup(props) {
+      const skeletonCount = props.socials.length
+        ? props.socials.length
+        : Object.keys(SocialMedia).length
       return {
-        isMobile,
         skeletonCount
       }
     }
@@ -51,15 +47,23 @@
   @import 'src/styles/init.scss';
 
   .share-module {
+    $share-size: 3rem;
     padding: $gap;
 
-    > .skeleton {
+    .skeletons {
       display: flex;
       justify-content: space-between;
-      height: 3rem;
+      height: $share-size;
+
+      .item {
+        margin-right: $gap;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
     }
 
-    > .article-share {
+    .article-share {
       width: 100%;
       opacity: 0.6;
       display: flex;
@@ -72,8 +76,8 @@
       ::v-deep(.share-ejector) {
         flex-grow: 1;
         width: auto;
-        height: 3rem;
-        line-height: 3rem;
+        height: $share-size;
+        line-height: $share-size;
         margin-right: $gap;
         font-size: $font-size-h4;
         border-radius: $xs-radius;
@@ -81,24 +85,6 @@
 
         &:last-child {
           margin-right: 0;
-        }
-      }
-
-      &.mobile {
-        ::v-deep(.share-ejector) {
-          width: auto;
-          display: none;
-          flex-grow: 0;
-
-          &[class*='wechat'],
-          &[class*='weibo'],
-          &[class*='twitter'] {
-            display: inline-block;
-            flex-grow: 1;
-          }
-          &[class*='twitter'] {
-            margin-right: 0;
-          }
         }
       }
     }

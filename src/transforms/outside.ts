@@ -4,6 +4,6 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-export const getGAScriptUrl = (gaMeasurementID: string) => {
+export const getGAScriptURL = (gaMeasurementID: string) => {
   return `https://www.googletagmanager.com/gtag/js?id=${gaMeasurementID}`
 }

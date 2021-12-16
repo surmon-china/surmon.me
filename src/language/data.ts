@@ -26,65 +26,61 @@ export const languages: I18nLanguage[] = [
 ]
 
 export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
+  [LANGUAGE_KEYS.APP_SLOGAN]: {
+    [Language.Zh]: '来苏之望',
+    [Language.En]: 'Because the mountain is there'
+  },
   [LANGUAGE_KEYS.PAGE_HOME]: {
     [Language.Zh]: '明殿',
-    [Language.En]: 'home'
+    [Language.En]: 'Home'
   },
   [LANGUAGE_KEYS.CATEGORY_INSIGHT]: {
     [Language.Zh]: '无色庵',
-    [Language.En]: 'insight'
+    [Language.En]: 'Insight'
   },
   [LANGUAGE_KEYS.CATEGORY_CODE]: {
     [Language.Zh]: '宁静寺',
-    [Language.En]: 'code'
+    [Language.En]: 'Code'
   },
   [LANGUAGE_KEYS.PAGE_GITHUB]: {
     [Language.Zh]: '丹青阁',
-    [Language.En]: 'github'
+    [Language.En]: 'HitHub'
   },
-  [LANGUAGE_KEYS.PAGE_LENS]: {
-    [Language.Zh]: '天涯',
-    [Language.En]: 'lens'
-  },
-  [LANGUAGE_KEYS.PAGE_INSTAGRAM]: {
-    [Language.Zh]: '海角',
-    [Language.En]: 'instagram'
-  },
-  [LANGUAGE_KEYS.PAGE_MUSIC]: {
-    [Language.Zh]: '梨园',
-    [Language.En]: 'music'
-  },
-  [LANGUAGE_KEYS.PAGE_JOB]: {
-    [Language.Zh]: '伯乐',
-    [Language.En]: 'job'
+  [LANGUAGE_KEYS.PAGE_ARCHIVE]: {
+    [Language.Zh]: '万象殿',
+    [Language.En]: 'Archive'
   },
   [LANGUAGE_KEYS.PAGE_ABOUT]: {
     [Language.Zh]: '狂浪生',
-    [Language.En]: 'about'
-  },
-  [LANGUAGE_KEYS.PAGE_MERCH]: {
-    [Language.Zh]: '周边',
-    [Language.En]: 'merch'
-  },
-  [LANGUAGE_KEYS.PAGE_FREELANCER]: {
-    [Language.Zh]: '得道',
-    [Language.En]: 'freelancer'
+    [Language.En]: 'About'
   },
   [LANGUAGE_KEYS.PAGE_GUESTBOOK]: {
     [Language.Zh]: '四方馆',
-    [Language.En]: 'guestbook'
+    [Language.En]: 'Guestbook'
   },
   [LANGUAGE_KEYS.PAGE_APP]: {
     [Language.Zh]: '客户端',
-    [Language.En]: 'app'
+    [Language.En]: 'App'
   },
-  [LANGUAGE_KEYS.PAGE_ARCHIVE]: {
-    [Language.Zh]: '黄卷青灯',
-    [Language.En]: 'archive'
+  [LANGUAGE_KEYS.PAGE_LENS]: {
+    [Language.Zh]: '茫涯',
+    [Language.En]: 'Lens'
   },
-  [LANGUAGE_KEYS.SITE_MAP_XML]: {
-    [Language.Zh]: '旷日积晷',
-    [Language.En]: 'sitemap.xml'
+  [LANGUAGE_KEYS.PAGE_MUSIC]: {
+    [Language.Zh]: '梨园',
+    [Language.En]: 'Music'
+  },
+  [LANGUAGE_KEYS.PAGE_JOB]: {
+    [Language.Zh]: '伯乐',
+    [Language.En]: 'Job'
+  },
+  [LANGUAGE_KEYS.PAGE_MERCH]: {
+    [Language.Zh]: '周边',
+    [Language.En]: 'Merch'
+  },
+  [LANGUAGE_KEYS.PAGE_FREELANCER]: {
+    [Language.Zh]: '善巧堂',
+    [Language.En]: 'Freelancer'
   },
   [LANGUAGE_KEYS.EMPTY_PLACEHOLDER]: {
     [Language.Zh]: '空空如也',
@@ -112,27 +108,15 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.PAGE_FREELANCER_EMAIL_ME]: {
     [Language.Zh]: '放码过来',
-    [Language.En]: 'Email ME'
+    [Language.En]: 'Email me'
   },
   [LANGUAGE_KEYS.PAGE_FREELANCER_HIRE_ME]: {
     [Language.Zh]: '或在 Upwork 雇佣我',
     [Language.En]: 'Hire me on upwork.com'
   },
-  [LANGUAGE_KEYS.DEVICE_ANDROID]: {
-    [Language.Zh]: 'Android',
-    [Language.En]: 'Android'
-  },
-  [LANGUAGE_KEYS.DEVICE_IOS]: {
-    [Language.Zh]: 'IOS',
-    [Language.En]: 'IOS'
-  },
   [LANGUAGE_KEYS.AD]: {
     [Language.Zh]: '广而告之',
     [Language.En]: 'AD'
-  },
-  [LANGUAGE_KEYS.WEBCAM]: {
-    [Language.Zh]: '见相',
-    [Language.En]: 'Webcam'
   },
   [LANGUAGE_KEYS.BARRAGE]: {
     [Language.Zh]: '畅言',
@@ -177,10 +161,6 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   [LANGUAGE_KEYS.ACTION_OFF]: {
     [Language.Zh]: '关',
     [Language.En]: 'off'
-  },
-  [LANGUAGE_KEYS.APP_SLOGAN]: {
-    [Language.Zh]: '来苏之望',
-    [Language.En]: 'Because the mountain was there'
   },
   [LANGUAGE_KEYS.MUSIC_PLACEHOLDER]: {
     [Language.Zh]: '五音六律，七弦八度',
@@ -348,6 +328,10 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.COMMENT_LIKE_COUNT]: {
     [Language.Zh]: '人觉得有点牛逼',
+    [Language.En]: 'likes'
+  },
+  [LANGUAGE_KEYS.COMMENT_LIKE_COUNT_BRIEF]: {
+    [Language.Zh]: '次喜欢',
     [Language.En]: 'likes'
   },
   [LANGUAGE_KEYS.QUERY_PARAMS_ERROR]: {

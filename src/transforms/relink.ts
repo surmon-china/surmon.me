@@ -5,7 +5,7 @@
  */
 
 import { TagMap } from '/@/store/tag'
-import { getTagArchiveRoute } from './route'
+import { getTagFlowRoute } from './route'
 
 export default (text: string, tagMap: TagMap) => {
   // 构造正则
@@ -25,7 +25,7 @@ export default (text: string, tagMap: TagMap) => {
       if (!foundTag || text[0] === '#') return tagText
 
       const slug = foundTag.slug
-      const path = getTagArchiveRoute(slug)
+      const path = getTagFlowRoute(slug)
       const command = `window.$app.config.globalProperties.$router.push({ path: \'${path}\' });return false`
       return `<a href=\"${path}\" title=\"${foundTag.description}\" onclick=\"${command}\">${tagText}</a>`
     })

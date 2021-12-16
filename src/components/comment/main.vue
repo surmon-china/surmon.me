@@ -2,7 +2,7 @@
   <placeholder :loading="fetching" :data="hasData">
     <template #loading>
       <ul class="main-skeleton">
-        <li v-for="item in isMobile ? 3 : 5" :key="item" class="item">
+        <li v-for="item in skeletonCount" :key="item" class="item">
           <div class="gravatar">
             <skeleton-base />
           </div>
@@ -28,7 +28,6 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
 
   export default defineComponent({
@@ -41,13 +40,15 @@
       hasData: {
         type: Boolean,
         required: true
+      },
+      skeletonCount: {
+        type: Number,
+        default: 6
       }
     },
     setup() {
-      const { isMobile } = useEnhancer()
       return {
-        LANGUAGE_KEYS,
-        isMobile
+        LANGUAGE_KEYS
       }
     }
   })

@@ -1,5 +1,5 @@
 <template>
-  <div ref="element" class="detail" :class="{ mobile: isMobile }">
+  <div ref="element" class="detail">
     <transition name="module">
       <div
         v-if="!fetching"
@@ -62,7 +62,6 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, nextTick, onMounted, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
   import { Article, useArticleDetailStore } from '/@/store/article'
   import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
@@ -86,7 +85,6 @@
       }
     },
     setup(props) {
-      const { isMobile } = useEnhancer()
       const articleDetailStore = useArticleDetailStore()
       const isHybrid = computed(() => isHybridType(props.article?.origin!))
       const isReprint = computed(() => isReprintType(props.article?.origin!))
@@ -133,7 +131,6 @@
         isHybrid,
         isReprint,
         isOriginal,
-        isMobile,
         articleDetailStore,
         isRenderMoreEnabled,
         isRenderMoreContent,
@@ -239,31 +236,10 @@
 
           &:hover {
             background-color: $primary;
-            color: $text-reversal;
           }
 
           .iconfont {
             margin-left: $sm-gap;
-          }
-        }
-      }
-    }
-
-    &.mobile {
-      padding: $gap $lg-gap;
-
-      > .oirigin {
-        font-size: $font-size-base;
-      }
-
-      > .knowledge {
-        > .content {
-          pre {
-            padding-left: 0;
-
-            > .code-lines {
-              display: none;
-            }
           }
         }
       }

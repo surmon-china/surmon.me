@@ -1,5 +1,5 @@
 import { RouteName, CategorySlug } from '/@/app/router'
-import { getPageRoute, getCategoryArchiveRoute } from '/@/transforms/route'
+import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
 import { LANGUAGE_KEYS } from '/@/language/key'
 import { VALUABLE_LINKS } from '/@/config/app.config'
 
@@ -7,7 +7,7 @@ export interface MenuItem {
   id: string
   icon: string
   i18nKey: LANGUAGE_KEYS
-  separator?: boolean
+  divider?: boolean
   newWindow?: boolean
   hot?: boolean
   route?: string
@@ -23,13 +23,13 @@ export const menus: Array<MenuItem> = [
   },
   {
     id: CategorySlug.Code,
-    route: getCategoryArchiveRoute(CategorySlug.Code),
+    route: getCategoryFlowRoute(CategorySlug.Code),
     icon: 'icon-code',
     i18nKey: LANGUAGE_KEYS.CATEGORY_CODE
   },
   {
     id: CategorySlug.Insight,
-    route: getCategoryArchiveRoute(CategorySlug.Insight),
+    route: getCategoryFlowRoute(CategorySlug.Insight),
     icon: 'icon-thinking',
     i18nKey: LANGUAGE_KEYS.CATEGORY_INSIGHT
   },
@@ -61,7 +61,7 @@ export const menus: Array<MenuItem> = [
   {
     id: RouteName.Freelancer,
     route: getPageRoute(RouteName.Freelancer),
-    icon: 'icon-tool',
+    icon: 'icon-coin-s',
     i18nKey: LANGUAGE_KEYS.PAGE_FREELANCER
   },
   {
@@ -73,14 +73,14 @@ export const menus: Array<MenuItem> = [
   {
     id: RouteName.App,
     route: getPageRoute(RouteName.App),
-    separator: true,
+    divider: true,
     icon: 'icon-app',
     i18nKey: LANGUAGE_KEYS.PAGE_APP
   },
   {
     id: RouteName.Merch,
     route: getPageRoute(RouteName.Merch),
-    separator: true,
+    divider: true,
     hot: true,
     icon: 'icon-rubik',
     i18nKey: LANGUAGE_KEYS.PAGE_MERCH

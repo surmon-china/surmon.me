@@ -43,12 +43,12 @@
     <button class="link" @click="handleLink(ANCHORS.ARTICLE_META_ELEMENT_ID)">
       <i class="iconfont icon-clock"></i>
       <i18n zh="元始" en="Meta" />
-      <span class="separator">|</span>
+      <divider type="vertical" />
       <span class="meta">
         <i class="iconfont icon-eye"></i>
         <span>{{ article.meta.views }}</span>
       </span>
-      <span class="separator">|</span>
+      <divider type="vertical" />
       <span class="meta">
         <i class="like-icon iconfont icon-heart"></i>
         <span>{{ article.meta.likes }}</span>
@@ -78,7 +78,7 @@
   import { scrollToElementAnchor } from '/@/utils/scroller'
 
   export default defineComponent({
-    name: 'PCAsideNav',
+    name: 'DesktopAsideNav',
     setup() {
       const articleDetailStore = useArticleDetailStore()
       const article = computed(() => articleDetailStore.article)
@@ -155,11 +155,6 @@
 
       .title {
         font-weight: bold;
-      }
-
-      .separator {
-        margin: 0 $gap;
-        color: $text-dividers;
       }
 
       .meta {

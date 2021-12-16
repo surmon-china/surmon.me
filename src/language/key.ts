@@ -10,7 +10,6 @@ export enum LANGUAGE_KEYS {
   CATEGORY_CODE = 'code',
   PAGE_GITHUB = 'github',
   PAGE_LENS = 'lens',
-  PAGE_INSTAGRAM = 'instagram',
   PAGE_MUSIC = 'music',
   PAGE_JOB = 'job',
   PAGE_MERCH = 'merch',
@@ -19,7 +18,6 @@ export enum LANGUAGE_KEYS {
   PAGE_GUESTBOOK = 'guestbook',
   PAGE_APP = 'app',
   PAGE_ARCHIVE = 'archive',
-  SITE_MAP_XML = 'sitemap xml',
   EMPTY_PLACEHOLDER = `common empty's placeholder`,
   NOT_FOUND = 'notFound',
   BACK_TO_HOME_PAGE = 'back to home page',
@@ -28,10 +26,7 @@ export enum LANGUAGE_KEYS {
   PAGE_FREELANCER_SLOGAN = 'service page banner slogan',
   PAGE_FREELANCER_EMAIL_ME = 'email me',
   PAGE_FREELANCER_HIRE_ME = 'hire me',
-  DEVICE_ANDROID = 'android',
-  DEVICE_IOS = 'ios',
   AD = 'ad',
-  WEBCAM = 'webcam',
   BARRAGE = 'barrage',
   FEEDBACK = 'feedback',
   TO_TOP = 'to page top',
@@ -86,5 +81,6 @@ export enum LANGUAGE_KEYS {
   COMMENT_ACCOUNT_CLEAR = 'clear comment account',
   COMMENT_LIST_COUNT = 'comments',
   COMMENT_LIKE_COUNT = 'likes',
+  COMMENT_LIKE_COUNT_BRIEF = 'brief likes',
   QUERY_PARAMS_ERROR = 'query params error'
 }

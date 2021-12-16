@@ -2,35 +2,32 @@
   <li
     :key="comment.id"
     :id="getCommentItemElementID(comment.id)"
-    :class="{ mobile: isMobile, child: isChild }"
+    :class="{ 'h-g': hiddenGravatar, child: isChild }"
     class="comment-item"
   >
-    <desktop-only>
-      <div class="cm-avatar">
-        <comment-link class="link" :href="comment.author.site">
-          <img
-            :alt="comment.author.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
-            :src="humanizeGravatarUrlByEmail(comment.author.email)"
-            draggable="false"
-          />
-        </comment-link>
-      </div>
-    </desktop-only>
+    <div class="cm-avatar" v-if="!hiddenGravatar">
+      <comment-link class="link" :href="comment.author.site">
+        <img
+          :alt="comment.author.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
+          :src="humanizeGravatarUrlByEmail(comment.author.email)"
+          draggable="false"
+        />
+      </comment-link>
+    </div>
     <div class="cm-body">
       <div class="cm-header">
         <comment-link class="user-name" :href="comment.author.site">
           {{ firstUpperCase(comment.author.name) }}
         </comment-link>
-        <comment-ua v-if="comment.agent" :ua="comment.agent" />
-        <desktop-only>
-          <span v-if="comment.ip_location" class="location">
-            <span>{{ comment.ip_location.country }}</span>
-            <span v-if="comment.ip_location.country && comment.ip_location.city" class="separator"
-              >-</span
-            >
-            <span>{{ comment.ip_location.city }}</span>
-          </span>
-        </desktop-only>
+        <span v-if="comment.ip_location" class="location">
+          <i class="iconfont icon-earth"></i>
+          <span>{{ comment.ip_location.country }}</span>
+          <divider v-if="comment.ip_location.city" type="vertical" size="xs">•</divider>
+          <span>{{ comment.ip_location.city }}</span>
+        </span>
+        <template v-if="!hiddenUa">
+          <comment-ua v-if="comment.agent" :ua="comment.agent" />
+        </template>
         <span class="flool">#{{ comment.id }}</span>
       </div>
       <div class="cm-content">
@@ -107,11 +104,19 @@
       isChild: {
         type: Boolean,
         default: false
+      },
+      hiddenGravatar: {
+        type: Boolean,
+        default: false
+      },
+      hiddenUa: {
+        type: Boolean,
+        default: false
       }
     },
     emits: [CommentEvent.Reply, CommentEvent.Like],
     setup(_, context) {
-      const { i18n, isMobile } = useEnhancer()
+      const { i18n } = useEnhancer()
       const commentStore = useCommentStore()
 
       const getReplyParentCommentText = (parentCommentId: number) => {
@@ -141,7 +146,6 @@
       return {
         LANGUAGE_KEYS,
         t: i18n.t,
-        isMobile,
         humanlizeDate,
         humanizeGravatarUrlByEmail,
         getCommentItemElementID,
@@ -232,16 +236,12 @@
         ::v-deep(.os),
         ::v-deep(.browser),
         .location {
-          color: $text-disabled;
+          color: $text-dividers;
           font-size: $font-size-small;
           margin-right: $gap;
 
           .iconfont {
             margin-right: $xs-gap;
-          }
-
-          .separator {
-            margin: 0 $xs-gap;
           }
         }
 
@@ -327,9 +327,15 @@
       }
     }
 
-    &.mobile {
+    &.h-g {
       padding: 0;
       margin-top: $gap;
+      &.child {
+        .cm-content {
+          border-left: 6px solid $module-bg-darker-2;
+          padding-left: 1rem;
+        }
+      }
 
       .cm-body {
         padding: $sm-gap $gap;

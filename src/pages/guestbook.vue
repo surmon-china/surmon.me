@@ -1,13 +1,24 @@
 <template>
-  <div
-    class="guestbook-page"
-    :class="{
-      mobile: isMobile,
-      dark: isDarkTheme
-    }"
-  >
-    <div class="banner">
-      <uimage cdn class="image" src="/images/page-guestbook/banner.jpg" />
+  <div class="guestbook-page" :class="{ dark: isDarkTheme }">
+    <!-- mobile-banner -->
+    <page-banner
+      v-if="isMobile"
+      class="mobile-banner"
+      :is-mobile="true"
+      :position="70"
+      :blur="false"
+      :image="bannerImage"
+    >
+      <template #title>
+        <i18n :lkey="LANGUAGE_KEYS.PAGE_GUESTBOOK" />
+      </template>
+      <template #description>
+        <i18n :lkey="LANGUAGE_KEYS.GUESTBOOK_SLOGAN" />
+      </template>
+    </page-banner>
+    <!-- desktop-banner -->
+    <div class="desktop-banner" v-else>
+      <uimage cdn class="image" :src="bannerImage" />
       <span class="slogan">
         <span class="text">
           <i18n :lkey="LANGUAGE_KEYS.GUESTBOOK_SLOGAN" />
@@ -15,7 +26,7 @@
       </span>
     </div>
     <div class="comment">
-      <comment :post-id="0" :likes="siteLikes" />
+      <comment :post-id="0" :likes="siteLikes" :plain="isMobile" />
     </div>
   </div>
 </template>
@@ -23,26 +34,34 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { isClient } from '/@/app/environment'
   import { useUniversalFetch } from '/@/universal'
   import { useMetaStore } from '/@/store/meta'
   import { useCommentStore } from '/@/store/comment'
   import { firstUpperCase } from '/@/transforms/text'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import Comment from '/@/components/comment/index.vue'
   import { META } from '/@/config/app.config'
+  import Comment from '/@/components/comment/index.vue'
+  import PageBanner from '/@/components/common/banner.vue'
 
   export default defineComponent({
     name: 'GuestbookPage',
     components: {
+      PageBanner,
       Comment
     },
+    props: {
+      isMobile: {
+        type: Boolean,
+        default: false
+      }
+    },
     setup() {
-      const { i18n, meta, isMobile, isDarkTheme, isZhLang } = useEnhancer()
+      const { i18n, meta, isDarkTheme, isZhLang } = useEnhancer()
       const metaStore = useMetaStore()
       const commentStore = useCommentStore()
       const siteLikes = computed(() => metaStore.appOptions.data?.meta.likes || 0)
+      const bannerImage = `/images/page-guestbook/banner.jpg`
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_GUESTBOOK, Language.En)!)
@@ -53,10 +72,7 @@
       const fetchAllData = () => {
         return Promise.all([
           metaStore.fetchAppOptions(true),
-          commentStore.fetchList({
-            post_id: 0,
-            delay: isClient ? 368 : 0
-          })
+          commentStore.fetchList({ post_id: 0 })
         ])
       }
 
@@ -64,7 +80,7 @@
 
       return {
         LANGUAGE_KEYS,
-        isMobile,
+        bannerImage,
         isDarkTheme,
         siteLikes
       }
@@ -76,7 +92,11 @@
   @import 'src/styles/init.scss';
 
   .guestbook-page {
-    .banner {
+    .mobile-banner {
+      margin-bottom: $lg-gap;
+    }
+
+    .desktop-banner {
       position: relative;
       overflow: hidden;
       margin-bottom: $lg-gap;
@@ -105,6 +125,8 @@
         line-height: $size;
         padding: 0 $sm-gap;
         padding-left: 3rem;
+        border-top-right-radius: $mini-radius;
+        border-bottom-right-radius: $mini-radius;
         opacity: 0.8;
         font-weight: 700;
         color: $body-bg;
@@ -125,18 +147,12 @@
     }
 
     &.dark {
-      .banner {
+      .desktop-banner {
         .slogan {
           .text {
             -webkit-text-fill-color: $text !important;
           }
         }
-      }
-    }
-
-    &.mobile {
-      .banner {
-        height: 12rem;
       }
     }
   }

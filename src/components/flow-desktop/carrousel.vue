@@ -1,11 +1,5 @@
 <template>
-  <div
-    class="carrousel"
-    :class="{
-      mobile: isMobile,
-      dark: isDarkTheme
-    }"
-  >
+  <div class="carrousel" :class="{ dark: isDarkTheme }">
     <placeholder :data="articleList.length" :loading="fetching">
       <template #placeholder>
         <empty class="article-empty" key="empty">
@@ -21,9 +15,7 @@
             <div class="first">
               <skeleton-line />
             </div>
-            <responsive desktop>
-              <skeleton-paragraph :lines="5" />
-            </responsive>
+            <skeleton-paragraph :lines="5" />
           </div>
         </div>
       </template>
@@ -92,12 +84,12 @@
   import { Swiper, SwiperSlide } from '/@/services/swiper'
   import { useEnhancer } from '/@/app/enhancer'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getBannerArticleThumbnailUrl } from '/@/transforms/thumbnail'
+  import { getArticleBannerThumbnailURL } from '/@/transforms/thumbnail'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Article } from '/@/store/article'
 
   export default defineComponent({
-    name: 'ArchiveCarrousel',
+    name: 'FlowCarrousel',
     components: {
       Swiper,
       SwiperSlide
@@ -113,7 +105,7 @@
       }
     },
     setup(props) {
-      const { globalState, adConfig, isMobile, isDarkTheme } = useEnhancer()
+      const { globalState, adConfig, isDarkTheme } = useEnhancer()
       const articleList = computed(() => {
         const articles: Array<Article | any> = [...props.articles].slice(0, 9)
         if (adConfig.value.PC_CARROUSEL) {
@@ -128,16 +120,11 @@
       })
 
       const getThumbURL = (thumb: string): string => {
-        return getBannerArticleThumbnailUrl(
-          thumb,
-          isMobile.value,
-          globalState.imageExt.value.isWebP
-        )
+        return getArticleBannerThumbnailURL(thumb, globalState.imageExt.value.isWebP)
       }
 
       return {
         LANGUAGE_KEYS,
-        isMobile,
         isDarkTheme,
         articleList,
         getArticleDetailRoute,
@@ -150,11 +137,9 @@
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
 
-  $pc-carrousel-height: 210px;
-  $mobile-carrousel-height: calc((100vw - 2rem) * 0.34);
-
   .carrousel {
-    height: $pc-carrousel-height;
+    $carrousel-height: 210px;
+    height: $carrousel-height;
     margin-bottom: $lg-gap;
     position: relative;
     @include common-bg-module();
@@ -206,7 +191,7 @@
 
     .swiper {
       width: 595px;
-      height: $pc-carrousel-height;
+      height: $carrousel-height;
 
       // filter for slide when transitioning
       ::v-deep(.swiper-wrapper[style*='300ms']) {
@@ -225,7 +210,7 @@
 
       .content {
         width: 100%;
-        height: $pc-carrousel-height;
+        height: $carrousel-height;
         position: relative;
         overflow: hidden;
 
@@ -306,27 +291,6 @@
             }
             .prospect {
               transform: translate3d(0, 0, 0);
-            }
-          }
-        }
-      }
-    }
-
-    &.mobile {
-      margin-bottom: $gap;
-      height: $mobile-carrousel-height;
-
-      > .swiper {
-        width: 100%;
-        height: $mobile-carrousel-height;
-
-        .swiper-slide {
-          > .content {
-            height: $mobile-carrousel-height;
-
-            > .title {
-              right: 1.7rem;
-              max-width: 70%;
             }
           }
         }

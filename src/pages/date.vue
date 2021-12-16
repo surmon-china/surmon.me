@@ -18,8 +18,8 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useArticleStore } from '/@/store/article'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
-  import ArticleListHeader from '/@/components/archive/header.vue'
-  import ArticleList from '/@/components/archive/list.vue'
+  import ArticleListHeader from '/@/components/flow-desktop/header.vue'
+  import ArticleList from '/@/components/flow-desktop/list.vue'
 
   export default defineComponent({
     name: 'DatePage',

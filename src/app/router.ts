@@ -14,33 +14,43 @@ import {
 import { NOT_FOUND, INVALID_ERROR } from '/@/constants/error'
 import { LANGUAGE_KEYS } from '/@/language/key'
 import { LayoutColumn } from '/@/services/layout'
-import { isClient } from '/@/app/environment'
+import { isSSR, isClient } from '/@/app/environment'
 import { isValidDateParam } from '/@/transforms/validate'
 import { scrollToTop } from '/@/utils/effects'
-import IndexPage from '/@/pages/index.vue'
+
+// mobile flow
+import MobileFlow from '/@/components/flow-mobile/index.vue'
+// desktop flow
+import IndexFlowPage from '/@/pages/index.vue'
+import CategoryFlowPage from '/@/pages/category.vue'
+import TagFlowPage from '/@/pages/tag.vue'
+import DateFlowPage from '/@/pages/date.vue'
+import SearchFlowPage from '/@/pages/search.vue'
+
+// core pages
+import ArticleDetailPage from '/@/pages/article/index.vue'
 import ArchivePage from '/@/pages/archive.vue'
-import ArticlePage from '/@/pages/article/index.vue'
-import CategoryPage from '/@/pages/category.vue'
-import TagPage from '/@/pages/tag.vue'
-import DatePage from '/@/pages/date.vue'
-import SearchPage from '/@/pages/search.vue'
+import AboutDesktopPage from '/@/pages/about/desktop.vue'
+import AboutMobilePage from '/@/pages/about/mobile.vue'
+import GuestbookPage from '/@/pages/guestbook.vue'
+import AppPage from '/@/pages/app.vue'
+
+// service pages
 import MusicPage from '/@/pages/music.vue'
 import LensPage from '/@/pages/lens.vue'
 import JobPage from '/@/pages/job.vue'
-import AboutPage from '/@/pages/about.vue'
 import MerchPage from '/@/pages/merch/index.vue'
 import FreelancerPage from '/@/pages/freelancer.vue'
-import GuestbookPage from '/@/pages/guestbook.vue'
-import AppPage from '/@/pages/app.vue'
 
 import 'vue-router'
 
 declare module 'vue-router' {
   interface RouteMeta {
-    /** second */
-    ssrCacheAge?: number
+    responsive?: boolean
     layout?: LayoutColumn
     validate?: (params: any) => Promise<any>
+    /** seconds */
+    ssrCacheAge?: number | false
   }
 }
 
@@ -52,19 +62,19 @@ export enum CategorySlug {
 export enum RouteName {
   Home = 'home',
   Article = 'article-detail',
-  TagArchive = 'tag-archive',
-  CategoryArchive = 'category-archive',
-  DateArchive = 'date-archive',
-  SearchArchive = 'search-archive',
+  CategoryFlow = 'category-flow',
+  TagFlow = 'tag-flow',
+  DateFlow = 'date-flow',
+  SearchFlow = 'search-flow',
+  Archive = 'archive',
   Guestbook = 'guestbook',
-  Freelancer = 'freelancer',
+  About = 'about',
   App = 'app',
+  Freelancer = 'freelancer',
   Music = 'music',
   Job = 'job',
-  About = 'about',
   Merch = 'merch',
   Lens = 'lens',
-  Archive = 'archive',
   Error = 'error'
 }
 
@@ -72,23 +82,32 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: RouteName.Home,
-    component: IndexPage
-  },
-  {
-    path: '/archive',
-    name: RouteName.Archive,
-    component: ArchivePage,
+    components: {
+      default: IndexFlowPage,
+      mobile: MobileFlow
+    },
     meta: {
-      ssrCacheAge: 60 * 60 * 6,
-      layout: LayoutColumn.Full
+      responsive: true,
+      ssrCacheAge: 60 * 2 // 2 mins
     }
   },
   {
     path: '/article/:article_id',
     name: RouteName.Article,
-    component: ArticlePage,
-    props: (to) => ({ articleId: Number(to.params.article_id) }),
+    components: {
+      default: ArticleDetailPage,
+      mobile: ArticleDetailPage
+    },
+    props: {
+      default: (to) => ({ articleId: Number(to.params.article_id) }),
+      mobile: (to) => ({
+        isMobile: true,
+        articleId: Number(to.params.article_id)
+      })
+    },
     meta: {
+      responsive: true,
+      ssrCacheAge: 30, // 30 seconds
       async validate({ route, i18n }) {
         if (!Number.isInteger(Number(route.params.article_id))) {
           return Promise.reject({
@@ -101,10 +120,18 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/category/:category_slug',
-    name: RouteName.CategoryArchive,
-    component: CategoryPage,
-    props: (to) => ({ categorySlug: to.params.category_slug }),
+    name: RouteName.CategoryFlow,
+    components: {
+      default: CategoryFlowPage,
+      mobile: MobileFlow
+    },
+    props: {
+      default: (to) => ({ categorySlug: to.params.category_slug }),
+      mobile: (to) => ({ categorySlug: to.params.category_slug })
+    },
     meta: {
+      responsive: true,
+      ssrCacheAge: 60 * 2, // 2 mins
       async validate({ route, i18n, store }) {
         const { category_slug } = route.params
         if (!category_slug) {
@@ -113,7 +140,7 @@ export const routes: RouteRecordRaw[] = [
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Category slug → <string>'
           })
         }
-        if (isClient) {
+        if (isSSR && isClient) {
           const targetCategory = store.state.value?.category.categories.find(
             (category) => category.slug === category_slug
           )
@@ -130,10 +157,18 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/tag/:tag_slug',
-    name: RouteName.TagArchive,
-    component: TagPage,
-    props: (to) => ({ tagSlug: to.params.tag_slug }),
+    name: RouteName.TagFlow,
+    components: {
+      default: TagFlowPage,
+      mobile: MobileFlow
+    },
+    props: {
+      default: (to) => ({ tagSlug: to.params.tag_slug }),
+      mobile: (to) => ({ tagSlug: to.params.tag_slug })
+    },
     meta: {
+      responsive: true,
+      ssrCacheAge: 60 * 2, // 2 mins
       async validate({ route, i18n, store }) {
         const { tag_slug } = route.params
         if (!tag_slug) {
@@ -142,7 +177,7 @@ export const routes: RouteRecordRaw[] = [
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Tag slug → <string>'
           })
         }
-        if (isClient) {
+        if (isSSR && isClient) {
           const tagretTag = store.state.value?.tag.tags.find((tag) => tag.slug === tag_slug)
           if (!tagretTag) {
             return Promise.reject({
@@ -156,11 +191,18 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/date/:date',
-    name: RouteName.DateArchive,
-    component: DatePage,
-    props: (to) => ({ date: to.params.date }),
+    name: RouteName.DateFlow,
+    components: {
+      default: DateFlowPage,
+      mobile: MobileFlow
+    },
+    props: {
+      default: (to) => ({ date: to.params.date }),
+      mobile: (to) => ({ date: to.params.date })
+    },
     meta: {
-      ssrCacheAge: 60 * 60 * 24,
+      responsive: true,
+      ssrCacheAge: 60 * 60 * 24, // 24 hours
       async validate({ route, i18n }) {
         const { date } = route.params
         if (!date || !isValidDateParam(date)) {
@@ -174,10 +216,18 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/search/:keyword',
-    name: RouteName.SearchArchive,
-    component: SearchPage,
-    props: (to) => ({ keyword: to.params.keyword }),
+    name: RouteName.SearchFlow,
+    components: {
+      default: SearchFlowPage,
+      mobile: MobileFlow
+    },
+    props: {
+      default: (to) => ({ keyword: to.params.keyword }),
+      mobile: (to) => ({ searchKeyword: to.params.keyword })
+    },
     meta: {
+      responsive: true,
+      ssrCacheAge: false,
       async validate({ route, i18n }) {
         if (!route.params.keyword) {
           return Promise.reject({
@@ -189,12 +239,87 @@ export const routes: RouteRecordRaw[] = [
     }
   },
   {
-    path: '/music',
-    name: RouteName.Music,
-    component: MusicPage,
+    path: '/archive',
+    name: RouteName.Archive,
+    components: {
+      default: ArchivePage,
+      mobile: ArchivePage
+    },
+    props: {
+      mobile: {
+        isMobile: true
+      }
+    },
     meta: {
-      ssrCacheAge: Infinity,
-      layout: LayoutColumn.Full
+      responsive: true,
+      layout: LayoutColumn.Full,
+      ssrCacheAge: 60 * 60 // 1 hours
+    }
+  },
+  {
+    path: '/about',
+    name: RouteName.About,
+    components: {
+      default: AboutDesktopPage,
+      mobile: AboutMobilePage
+    },
+    meta: {
+      responsive: true,
+      layout: LayoutColumn.Full,
+      ssrCacheAge: Infinity
+    }
+  },
+  {
+    path: '/guestbook',
+    name: RouteName.Guestbook,
+    components: {
+      default: GuestbookPage,
+      mobile: GuestbookPage
+    },
+    props: {
+      mobile: {
+        isMobile: true
+      }
+    },
+    meta: {
+      responsive: true,
+      ssrCacheAge: 60 * 1 // 1 mins
+    }
+  },
+  {
+    path: '/app',
+    name: RouteName.App,
+    components: {
+      default: AppPage,
+      mobile: AppPage
+    },
+    props: {
+      mobile: {
+        isMobile: true
+      }
+    },
+    meta: {
+      responsive: true,
+      layout: LayoutColumn.Full,
+      ssrCacheAge: Infinity
+    }
+  },
+  {
+    path: '/merch',
+    name: RouteName.Merch,
+    components: {
+      default: MerchPage,
+      mobile: MerchPage
+    },
+    props: {
+      mobile: {
+        isMobile: true
+      }
+    },
+    meta: {
+      responsive: true,
+      layout: LayoutColumn.Full,
+      ssrCacheAge: 60 * 60 // 1 hours
     }
   },
   {
@@ -202,8 +327,19 @@ export const routes: RouteRecordRaw[] = [
     name: RouteName.Lens,
     component: LensPage,
     meta: {
-      ssrCacheAge: 60 * 60 * 24,
-      layout: LayoutColumn.Full
+      responsive: false,
+      layout: LayoutColumn.Full,
+      ssrCacheAge: 60 * 60 * 24 // 24 hours
+    }
+  },
+  {
+    path: '/music',
+    name: RouteName.Music,
+    component: MusicPage,
+    meta: {
+      responsive: false,
+      layout: LayoutColumn.Full,
+      ssrCacheAge: Infinity
     }
   },
   {
@@ -211,26 +347,9 @@ export const routes: RouteRecordRaw[] = [
     name: RouteName.Job,
     component: JobPage,
     meta: {
-      ssrCacheAge: Infinity,
-      layout: LayoutColumn.Full
-    }
-  },
-  {
-    path: '/about',
-    name: RouteName.About,
-    component: AboutPage,
-    meta: {
-      ssrCacheAge: Infinity,
-      layout: LayoutColumn.Full
-    }
-  },
-  {
-    path: '/merch',
-    name: RouteName.Merch,
-    component: MerchPage,
-    meta: {
-      ssrCacheAge: 60 * 30,
-      layout: LayoutColumn.Full
+      responsive: false,
+      layout: LayoutColumn.Full,
+      ssrCacheAge: Infinity
     }
   },
   {
@@ -238,25 +357,9 @@ export const routes: RouteRecordRaw[] = [
     name: RouteName.Freelancer,
     component: FreelancerPage,
     meta: {
-      ssrCacheAge: Infinity,
-      layout: LayoutColumn.Full
-    }
-  },
-  {
-    path: '/guestbook',
-    name: RouteName.Guestbook,
-    component: GuestbookPage,
-    meta: {
-      ssrCacheAge: 60 * 2
-    }
-  },
-  {
-    path: '/app',
-    name: RouteName.App,
-    component: AppPage,
-    meta: {
-      ssrCacheAge: Infinity,
-      layout: LayoutColumn.Full
+      responsive: false,
+      layout: LayoutColumn.Full,
+      ssrCacheAge: Infinity
     }
   },
   {

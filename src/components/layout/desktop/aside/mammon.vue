@@ -41,7 +41,7 @@
     IndexChange = 'index-change'
   }
   export default defineComponent({
-    name: 'PCAsideMammon',
+    name: 'DesktopAsideMammon',
     components: {
       Swiper,
       SwiperSlide

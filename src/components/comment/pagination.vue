@@ -96,7 +96,7 @@
   .pagination {
     margin-top: $lg-gap;
 
-    > .pagination-list {
+    .pagination-list {
       margin: 0;
       padding: 0;
       display: flex;

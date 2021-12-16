@@ -15,18 +15,16 @@
       <div class="topbar" key="element">
         <div class="statistics">
           <div class="total">
-            <strong class="count">{{ total || 0 }}</strong>
+            <strong class="count">{{ total }}</strong>
             <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIST_COUNT" />
           </div>
           <button class="like" :class="{ liked: isPageLiked }" @click="handleLikePage">
             <i class="iconfont icon-heart" />
-            <strong class="count">{{ likes || 0 }}</strong>
-            <template v-if="isZhLang && isMobile">赞</template>
-            <template v-else>
-              <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIKE_COUNT" />
-            </template>
+            <strong class="count">{{ likes }}</strong>
+            <i18n v-if="miniLikes" :lkey="LANGUAGE_KEYS.COMMENT_LIKE_COUNT_BRIEF" />
+            <i18n v-else :lkey="LANGUAGE_KEYS.COMMENT_LIKE_COUNT" />
           </button>
-          <desktop-only>
+          <template v-if="!hiddenSponsor">
             <button class="sponsor" @click="handleSponsor">
               <i class="iconfont icon-dollar" />
             </button>
@@ -35,7 +33,7 @@
                 <iframe class="sponsor-modal" :src="VALUABLE_LINKS.SPONSOR" />
               </popup>
             </client-only>
-          </desktop-only>
+          </template>
         </div>
         <div class="sort">
           <button
@@ -75,12 +73,13 @@
   export default defineComponent({
     name: 'CommentTopbar',
     props: {
+      postId: {
+        type: Number,
+        required: true
+      },
       fetching: {
         type: Boolean,
         required: true
-      },
-      total: {
-        type: Number
       },
       sort: {
         type: Number as PropType<SortType>,
@@ -90,14 +89,23 @@
         type: Number,
         required: true
       },
-      postId: {
+      total: {
         type: Number,
-        required: true
+        default: 0,
+        required: false
+      },
+      miniLikes: {
+        type: Boolean,
+        required: false
+      },
+      hiddenSponsor: {
+        type: Boolean,
+        required: false
       }
     },
     emits: [Events.Sort],
     setup(props, context) {
-      const { i18n, gtag, isMobile, isZhLang } = useEnhancer()
+      const { i18n, gtag } = useEnhancer()
       const articleDetailStore = useArticleDetailStore()
       const metaStore = useMetaStore()
 
@@ -144,8 +152,6 @@
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
         SortType,
-        isMobile,
-        isZhLang,
         isVisibleSponsor,
         isPageLiked,
         handleSponsor,
@@ -246,11 +252,11 @@
       }
 
       .sponsor {
-        color: $text-reversal;
-        background-color: $primary-lighter;
-        @include background-transition();
+        color: $white;
+        background-color: $surmon;
+        opacity: 0.8;
         &:hover {
-          background-color: $primary;
+          opacity: 1;
         }
       }
     }

@@ -1,7 +1,7 @@
 <template>
   <div id="popup" class="popup">
     <transition name="module">
-      <div class="mask" v-show="state.visibility" @click.self="handleMaskClick">
+      <div class="mask" v-show="state.visible" @click.self="handleMaskClick">
         <div ref="element" class="warpper" :class="{ border: state.border }">
           <img v-if="state.isImage" v-bind="image.attrs" :src="image.src || ''" />
         </div>

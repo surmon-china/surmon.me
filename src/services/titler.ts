@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { renderTextToDataURL } from '/@/utils/text-2-image'
+import { renderTextToDataURL } from '/@/transforms/text-2-image'
 
 // matcher
 export interface Titler {

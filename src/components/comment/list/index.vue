@@ -7,13 +7,17 @@
         :comment="item.comment"
         :liked="isCommentLiked(item.comment.id)"
         :is-child="isChildList"
+        :hidden-gravatar="hiddenGravatar"
+        :hidden-ua="hiddenUa"
         @like="likeComment"
         @reply="replyComment"
       >
         <template #children v-if="item.children.length">
           <comment-list
             :comments="buildeCommentTree(item.children)"
-            :isChildList="true"
+            :is-child-list="true"
+            :hidden-gravatar="hiddenGravatar"
+            :hidden-ua="hiddenUa"
             @reply="replyComment"
           />
         </template>
@@ -45,6 +49,14 @@
         required: true
       },
       isChildList: {
+        type: Boolean,
+        default: false
+      },
+      hiddenGravatar: {
+        type: Boolean,
+        default: false
+      },
+      hiddenUa: {
         type: Boolean,
         default: false
       }

@@ -28,7 +28,7 @@
     <div class="header-nav">
       <nav class="nav-list container">
         <template v-for="(menu, index) in menus" :key="menu.id">
-          <span class="separator" v-if="index > 0"></span>
+          <span class="divider" v-if="index > 0"></span>
           <router-link
             v-if="menu.route"
             class="item"
@@ -77,7 +77,7 @@
   import { menus } from './menu'
 
   export default defineComponent({
-    name: 'PCHeader',
+    name: 'DesktopHeader',
     setup() {
       const { i18n, gtag, theme, globalState } = useEnhancer()
       // 非常规布局则启用菜单
@@ -177,7 +177,8 @@
 
         .header-slogan {
           color: $primary;
-          font-family: 'webfont-normal', DINRegular;
+          font-size: $font-size-h5;
+          font-family: 'webfont-medium', DINRegular;
         }
 
         .header-link {
@@ -260,7 +261,7 @@
         justify-content: space-evenly;
         align-items: center;
 
-        .separator {
+        .divider {
           height: 6px;
           width: 1px;
           background-color: $module-bg-translucent;

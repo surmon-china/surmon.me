@@ -8,18 +8,9 @@ import gravatar from 'gravatar'
 import API_CONFIG from '/@/config/api.config'
 import { getFileCDNUrl } from '/@/transforms/url'
 
-export const getBannerArticleThumbnailUrl = (
-  thumb: string,
-  isMobile: boolean,
-  isWebPImage: boolean
-) => {
+export const getArticleBannerThumbnailURL = (thumb: string, isWebPImage: boolean) => {
   if (!thumb) {
-    return getFileCDNUrl(
-      isMobile ? `/images/thumbnail/mobile-carrousel.jpg` : `/images/thumbnail/pc-carrousel.jpg`
-    )
-  }
-  if (isMobile) {
-    return `${thumb}?x-oss-process=style/blog.list.banner.mobile`
+    return getFileCDNUrl(`/images/thumbnail/pc-carrousel.jpg`)
   }
 
   return `${thumb}?x-oss-process=${
@@ -29,7 +20,19 @@ export const getBannerArticleThumbnailUrl = (
   }`
 }
 
-export const getArchiveArticleThumbnailUrl = (thumb: string, isWebPImage: boolean) => {
+export const getMobileArticleListThumbnailURL = (thumb: string, isWebPImage: boolean) => {
+  if (!thumb) {
+    return getFileCDNUrl(`/images/thumbnail/pc-carrousel.jpg`)
+  }
+
+  return `${thumb}?x-oss-process=${
+    isWebPImage
+      ? 'style/blog.list.item.mobile'
+      : 'image/auto-orient,1/resize,m_fill,w_700,h_247/quality,q_86/format,jpg/watermark,text_U3VybW9uLm1l,type_ZHJvaWRzYW5zZmFsbGJhY2s,color_ffffff,size_30,g_sw,t_26,x_30,y_25'
+  }`
+}
+
+export const getArticleListThumbnailURL = (thumb: string, isWebPImage: boolean) => {
   if (!thumb) {
     return getFileCDNUrl('/images/thumbnail/pc-article-list.jpg')
   }

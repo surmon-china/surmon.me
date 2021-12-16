@@ -9,22 +9,21 @@
       }"
       :style="{ width: loading.state.percent + '%' }"
     />
-    <desktop-only>
-      <div
-        class="spin"
-        :class="{
-          show: loading.state.show,
-          failed: !loading.state.canSucceed
-        }"
-      >
-        <div class="lds-ring">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+    <div
+      v-if="spin"
+      class="spin"
+      :class="{
+        show: loading.state.show,
+        failed: !loading.state.canSucceed
+      }"
+    >
+      <div class="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
-    </desktop-only>
+    </div>
   </div>
 </template>
 
@@ -33,6 +32,12 @@
   import { useLoading } from './'
   export default defineComponent({
     name: 'ProgressBar',
+    props: {
+      spin: {
+        type: Boolean,
+        default: false
+      }
+    },
     setup() {
       const loading = useLoading()
       return { loading }

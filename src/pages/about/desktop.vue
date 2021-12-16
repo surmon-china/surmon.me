@@ -1,5 +1,5 @@
 <template>
-  <div class="about-page" :class="{ mobile: isMobile }">
+  <div class="about-page">
     <div class="banner">
       <div class="background">
         <video class="video" loop muted autoplay :controls="false">
@@ -10,6 +10,9 @@
         <uimage class="avatar" :src="adminInfo?.gravatar || '/images/gravatar.png'" />
         <h2 class="name">{{ adminInfo?.name || '-' }}</h2>
         <p class="role">{{ adminInfo?.slogan || '-' }}</p>
+        <div class="bio-text" :class="language">
+          <i18n v-bind="i18ns.biography" />
+        </div>
         <div class="socials">
           <span class="normal">
             <ulink class="item github" :href="VALUABLE_LINKS.GITHUB">
@@ -49,25 +52,13 @@
       <div class="profile">
         <div class="content">
           <div class="item">
-            <i class="iconfont icon-heart" />
-            <span class="like-text">
-              <i18n
-                zh="酒池肉林、桀骜不羁、日夜笙歌、五音六律、依翠偎红、目营心匠"
-                en="misfits. rebels. troublemakers. rocker."
-              />
-            </span>
-          </div>
-          <div class="item">
             <i class="iconfont icon-swordsman" />
-            <span class="live-map" @click="toggleLiveMap">
-              <i18n
-                zh="路为纸，地成册，行作笔，心当墨；思无界，行有疆"
-                en="Every path I went astray built my Rome."
-              />
+            <span class="roadmap" :class="language" @click="toggleLiveMap">
+              <i18n v-bind="i18ns.roadmap" />
             </span>
             <client-only>
               <popup :visible="isOnLiveMap" @close="toggleLiveMap">
-                <iframe :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP" frameborder="0" class="live-map" />
+                <iframe :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP" frameborder="0" class="roadmap" />
               </popup>
             </client-only>
           </div>
@@ -88,32 +79,31 @@
           <div class="item">
             <i class="iconfont icon-coffee" />
             <router-link class="text-link" :to="getPageRoute(RouteName.Job)">
-              <i18n zh="找我内推" en="Find job" />
+              <i18n v-bind="i18ns.findJob" />
             </router-link>
-            <span class="separator">|</span>
+            <divider type="vertical" />
             <router-link class="text-link" :to="getPageRoute(RouteName.Freelancer)">
-              <i18n zh="找我干活" en="Hire me" />
+              <i18n v-bind="i18ns.hireMe" />
             </router-link>
-            <span class="separator">|</span>
+            <divider type="vertical" />
             <router-link class="text-link" :to="getPageRoute(RouteName.Lens)">
-              <i18n zh="关注我的 Vlog" en="Follow me" />
+              <i18n v-bind="i18ns.followMe" />
             </router-link>
-            <span class="separator">|</span>
+            <divider type="vertical" />
             <router-link class="text-link" :to="getPageRoute(RouteName.Merch)">
-              <i18n zh="体验我的周边" en="Merch bar" />
+              <i18n v-bind="i18ns.merchBar" />
             </router-link>
           </div>
           <div class="item">
             <i class="iconfont icon-discussion" />
             <ulink class="text-link" :href="VALUABLE_LINKS.QQ_GROUP">
-              <i18n zh="寂寞同性交友群" en="QQ group" />
+              <i18n v-bind="i18ns.QQGroup" />
             </ulink>
-            <span class="separator">|</span>
+            <divider type="vertical" />
             <ulink class="text-link" :href="VALUABLE_LINKS.TELEGRAM_GROUP">
-              <i18n zh="电报群" en="Telegram group" />
+              <i18n v-bind="i18ns.TelegramGroup" />
             </ulink>
           </div>
-          <div class="separator"></div>
           <div class="item">
             <i class="iconfont icon-friend" />
             <span class="friends">
@@ -131,64 +121,56 @@
             <span>...</span>
           </div>
         </div>
-        <desktop-only>
-          <div class="wechat">
-            <div class="qrcode">
-              <uimage cdn class="image" src="/images/page-about/wechat.jpg" />
-              <div class="slogan">
-                <span class="text">
-                  <i18n zh="扫码加微，点燃灵魂" en="Scan the QR code on WeChat" />
-                </span>
-              </div>
-            </div>
-            <div class="cover" @mouseenter="handleHoverFollowMe">
-              <div class="friend-me">
-                <i class="iconfont icon-wechat"></i>
-                <i18n zh="众里寻他" en="WeChat" />
-              </div>
+        <div class="wechat">
+          <div class="qrcode">
+            <uimage cdn class="image" src="/images/page-about/wechat.jpg" />
+            <div class="slogan">
+              <span class="text">
+                <i18n zh="扫码加微，点燃灵魂" en="Scan the QR code on WeChat" />
+              </span>
             </div>
           </div>
-        </desktop-only>
+          <div class="cover" @mouseenter="handleWeChatHover">
+            <div class="friend-me">
+              <i class="iconfont icon-wechat"></i>
+              <i18n zh="众里寻他" en="WeChat" />
+            </div>
+          </div>
+        </div>
       </div>
       <div class="location-box">
         <iframe class="iframe" src="/partials/map.html" />
       </div>
-      <desktop-only>
-        <div class="github-box">
-          <div class="sponsors">
-            <ulink
-              class="button github"
-              :href="VALUABLE_LINKS.GITHUB_SPONSORS"
-              @mousedown="handleTouchSponsor"
-            >
-              <i class="iconfont icon-heart" />
-              <span class="text">Sponsor me</span>
-            </ulink>
-            <ulink
-              class="button paypal"
-              :href="VALUABLE_LINKS.PAYPAL"
-              @mousedown="handleTouchSponsor"
-            >
-              <i class="iconfont icon-paypal" />
-              <span class="text">PayPal me</span>
-            </ulink>
-            <ulink
-              class="button more"
-              :href="VALUABLE_LINKS.SPONSOR"
-              @mousedown="handleTouchSponsor"
-            >
-              <i class="iconfont icon-qrcode" />
-              <span class="text">More payment</span>
-            </ulink>
-          </div>
-          <span class="divider"></span>
-          <uimage cdn class="pal" src="/images/page-about/peace-and-love.jpg" />
-          <span class="divider"></span>
-          <ulink class="homepage-link" :href="VALUABLE_LINKS.GITHUB">
-            <uimage cdn src="/effects/ghchart.svg" />
+      <div class="github-box">
+        <div class="sponsors">
+          <ulink
+            class="button github"
+            :href="VALUABLE_LINKS.GITHUB_SPONSORS"
+            @mousedown="handleSponsorTouch"
+          >
+            <i class="iconfont icon-heart" />
+            <span class="text">Sponsor me</span>
+          </ulink>
+          <ulink
+            class="button paypal"
+            :href="VALUABLE_LINKS.PAYPAL"
+            @mousedown="handleSponsorTouch"
+          >
+            <i class="iconfont icon-paypal" />
+            <span class="text">PayPal me</span>
+          </ulink>
+          <ulink class="button more" :href="VALUABLE_LINKS.SPONSOR" @mousedown="handleSponsorTouch">
+            <i class="iconfont icon-qrcode" />
+            <span class="text">More payment</span>
           </ulink>
         </div>
-      </desktop-only>
+        <span class="divider"></span>
+        <uimage cdn class="pal" src="/images/page-about/peace-and-love.jpg" />
+        <span class="divider"></span>
+        <ulink class="homepage-link" :href="VALUABLE_LINKS.GITHUB">
+          <uimage cdn src="/effects/ghchart.svg" />
+        </ulink>
+      </div>
     </div>
   </div>
 </template>
@@ -199,17 +181,15 @@
   import { RouteName } from '/@/app/router'
   import { useMetaStore } from '/@/store/meta'
   import { getPageRoute } from '/@/transforms/route'
-  import { firstUpperCase } from '/@/transforms/text'
   import { getFileStaticUrl } from '/@/transforms/url'
-  import { Language } from '/@/language/data'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
-  import { META, VALUABLE_LINKS, FRIEND_LINKS } from '/@/config/app.config'
+  import { VALUABLE_LINKS, FRIEND_LINKS } from '/@/config/app.config'
+  import { useAboutPageMeta, i18ns } from './helper'
 
   export default defineComponent({
-    name: 'AboutPage',
+    name: 'PCAboutPage',
     setup() {
-      const { i18n, meta, gtag, globalState, isZhLang, isMobile } = useEnhancer()
+      const { i18n, gtag, globalState } = useEnhancer()
       const metaStore = useMetaStore()
       const isOnLiveMap = toRef(globalState.switchBox, 'liveMap')
       const adminInfo = computed(() => metaStore.adminInfo.data)
@@ -217,20 +197,17 @@
       // MARK: 非常有必要，vite 对 video.source.src 的解析有问题，会将其认为是 asset，而非 static resource，从而编译失败
       const backgroundVideo = getFileStaticUrl('/assets/page-about-background.mp4')
 
-      meta(() => {
-        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_ABOUT, Language.En)!)
-        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_ABOUT), enTitle] : [enTitle]
-        return { pageTitle: titles.join(' | '), description: `关于 ${META.author}` }
-      })
+      // meta
+      useAboutPageMeta()
 
-      const handleHoverFollowMe = () => {
+      const handleWeChatHover = () => {
         gtag?.event('加微信码', {
           event_category: GAEventActions.View,
           event_label: GAEventTags.AboutPage
         })
       }
 
-      const handleTouchSponsor = () => {
+      const handleSponsorTouch = () => {
         gtag?.event('赞赏 Sponsor', {
           event_category: GAEventActions.Click,
           event_label: GAEventTags.AboutPage
@@ -248,16 +225,17 @@
       }
 
       return {
+        i18ns,
+        language: i18n.language,
         VALUABLE_LINKS,
         FRIEND_LINKS,
         RouteName,
         getPageRoute,
-        isMobile,
         isOnLiveMap,
         backgroundVideo,
         adminInfo,
-        handleHoverFollowMe,
-        handleTouchSponsor,
+        handleWeChatHover,
+        handleSponsorTouch,
         toggleLiveMap
       }
     }
@@ -267,7 +245,7 @@
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
 
-  .live-map {
+  .roadmap {
     width: 88vw;
     height: 88vh;
   }
@@ -351,6 +329,15 @@
         .role {
           text-align: center;
           color: $text;
+        }
+
+        .bio-text {
+          line-height: 5rem;
+          font-size: $font-size-h3;
+          font-family: 'webfont-bolder', DINRegular;
+          &.en {
+            font-weight: bold;
+          }
         }
 
         .socials {
@@ -477,44 +464,51 @@
         > .item {
           line-height: 2.5em;
           min-height: 2.5em;
-          margin-bottom: $gap;
+          margin-bottom: $lg-gap;
+          font-weight: bold;
           &:last-child {
             margin-bottom: 0;
           }
 
-          > .iconfont {
-            width: 2em;
-            margin-right: 1em;
-            display: inline-block;
-            font-size: $font-size-h4;
-            text-align: center;
-            color: $text-dividers;
-
-            &.icon-swordsman {
-              color: #a94444;
-            }
-            &.icon-heart {
-              color: $red;
-            }
-            &.icon-coffee {
-              color: $instagram-primary;
-            }
-            &.icon-dollar {
-              color: #ffa800;
-            }
-            &.icon-music {
-              color: $music163-primary;
-            }
-            &.icon-discussion {
-              color: $telegram-primary;
-            }
-            &.icon-friend {
-              color: $accent;
+          &:hover {
+            > .iconfont {
+              opacity: 0.7;
             }
           }
 
-          .separator {
-            margin: 0 $sm-gap;
+          .iconfont {
+            font-weight: normal;
+          }
+
+          > .iconfont {
+            $size: 2rem;
+            width: $size;
+            height: $size;
+            margin-right: 1em;
+            opacity: 0.4;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: $sm-radius;
+            text-align: center;
+            color: $white;
+            transition: opacity $transition-time-fast;
+
+            &.icon-swordsman {
+              background-color: #9d1c33;
+            }
+            &.icon-coffee {
+              background-color: $instagram-primary;
+            }
+            &.icon-music {
+              background-color: $music163-primary;
+            }
+            &.icon-discussion {
+              background-color: $telegram-primary;
+            }
+            &.icon-friend {
+              background-color: $accent;
+            }
           }
 
           .text-link {
@@ -523,21 +517,20 @@
             border-bottom: 1px solid;
           }
 
-          .like-text {
-            font-family: 'webfont-bolder', DINRegular;
-            text-transform: capitalize;
-          }
-
-          .live-map {
+          .roadmap {
             cursor: pointer;
             border-bottom: 1px solid;
+            font-weight: normal;
             font-family: 'webfont-bolder', DINRegular;
+            &.en {
+              font-weight: bold;
+            }
           }
 
           > .music {
             .spotify,
             .music-163 {
-              margin-left: $xs-gap;
+              margin-left: $sm-gap;
             }
             .spotify {
               color: $spotify-primary;
@@ -590,7 +583,7 @@
 
             .text {
               font-weight: bold;
-              border-bottom: 1px solid;
+              border-bottom: 1px solid $text;
               padding-bottom: 0.5em;
             }
           }
@@ -739,43 +732,6 @@
         height: 100%;
         display: flex;
         align-items: center;
-      }
-    }
-
-    &.mobile {
-      margin: 0;
-
-      .location-box {
-        margin: 0;
-
-        .iframe {
-          height: 11rem;
-        }
-      }
-
-      .banner {
-        .gravatar {
-          .socials {
-            .normal {
-              margin: 0;
-            }
-            .mini {
-              display: none;
-            }
-          }
-        }
-      }
-      .profile {
-        .content {
-          padding: $lg-gap;
-          > .item {
-            @include text-overflow();
-
-            > .iconfont {
-              margin-right: $sm-gap;
-            }
-          }
-        }
       }
     }
   }

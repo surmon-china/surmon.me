@@ -35,14 +35,7 @@ import { createVueApp } from '/@/app/main'
 import { getSSRContext } from './universal'
 import { isProd } from './environment'
 
-import 'swiper/scss'
-import 'swiper/scss/a11y'
-import 'swiper/scss/autoplay'
-import 'swiper/scss/mousewheel'
-import 'swiper/scss/manipulation'
-import 'swiper/scss/navigation'
-import 'swiper/scss/pagination'
-
+import '/@/services/swiper/style'
 import '/@/styles/app.scss'
 
 // app
@@ -104,7 +97,7 @@ router.isReady().finally(() => {
     // reset: i18n language
     i18n.set(globalState.userAgent.isZhUser ? Language.Zh : Language.En)
 
-    // Desktop
+    // desktop only
     if (!globalState.userAgent.isMobile) {
       // music player
       defer.addTask(music.start)
@@ -126,7 +119,7 @@ router.isReady().finally(() => {
       )
     }
 
-    // Production
+    // production only
     if (isProd) {
       enableCopyrighter()
       enableBaiduSEOer(router)

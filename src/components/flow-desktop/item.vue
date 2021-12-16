@@ -1,46 +1,40 @@
 <template>
-  <div class="article-list-item" :class="{ mobile: isMobile }" @click="handleClick">
-    <desktop-only>
-      <div
-        class="item-background"
-        :style="{
-          backgroundImage: `url(${getThumbUrl(article.thumb)})`
-        }"
-      />
-    </desktop-only>
+  <div class="article-item">
+    <div
+      class="item-background"
+      :style="{
+        backgroundImage: `url(${getThumbnailURL(article.thumb)})`
+      }"
+    />
     <div class="item-content">
-      <desktop-only>
-        <div class="item-thumb">
-          <router-link :to="getArticleDetailRoute(article.id)">
-            <span
-              class="item-oirigin"
-              :class="{
-                self: isOriginal,
-                other: isReprint,
-                hybrid: isHybrid
-              }"
-            >
-              <i18n :lkey="LANGUAGE_KEYS.ORIGIN_ORIGINAL" v-if="isOriginal" />
-              <i18n :lkey="LANGUAGE_KEYS.ORIGIN_REPRINT" v-else-if="isReprint" />
-              <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="isHybrid" />
-            </span>
-            <img
-              class="item-thumb-img"
-              :src="getThumbUrl(article.thumb)"
-              :alt="article.title"
-              :title="article.title"
-            />
-          </router-link>
-        </div>
-      </desktop-only>
+      <router-link class="item-thumb" :to="getArticleDetailRoute(article.id)">
+        <span
+          class="item-oirigin"
+          :class="{
+            self: isOriginal,
+            other: isReprint,
+            hybrid: isHybrid
+          }"
+        >
+          <i18n :lkey="LANGUAGE_KEYS.ORIGIN_ORIGINAL" v-if="isOriginal" />
+          <i18n :lkey="LANGUAGE_KEYS.ORIGIN_REPRINT" v-else-if="isReprint" />
+          <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="isHybrid" />
+        </span>
+        <div
+          class="image"
+          :style="{ backgroundImage: `url(${getThumbnailURL(article.thumb)})` }"
+          :alt="article.title"
+          :title="article.title"
+        />
+      </router-link>
       <div class="item-body">
-        <h5 class="item-title">
-          <router-link :to="getArticleDetailRoute(article.id)" :title="article.title">
+        <h5 class="title">
+          <router-link class="link" :to="getArticleDetailRoute(article.id)" :title="article.title">
             {{ article.title }}
           </router-link>
         </h5>
         <p
-          class="item-description"
+          class="description"
           style="-webkit-box-orient: vertical"
           v-html="article.description"
         ></p>
@@ -61,29 +55,27 @@
             <i class="iconfont icon-heart" :class="{ liked: isLiked }"></i>
             <span>{{ article.meta.likes || 0 }}</span>
           </span>
-          <span class="tags">
+          <!-- <span class="tags">
             <i class="iconfont icon-tag"></i>
             <span>{{ article.tag.length || 0 }}</span>
+          </span> -->
+          <span class="categories">
+            <i class="iconfont icon-category"></i>
+            <placeholder :transition="false" :data="article.category.length">
+              <template #placeholder>
+                <i18n :lkey="LANGUAGE_KEYS.CATEGORY_PLACEHOLDER" />
+              </template>
+              <template #default>
+                <router-link
+                  v-for="(category, index) in article.category.slice(0, 1)"
+                  :key="index"
+                  :to="getCategoryFlowRoute(category.slug)"
+                >
+                  <i18n :zh="category.name" :en="category.slug" />
+                </router-link>
+              </template>
+            </placeholder>
           </span>
-          <desktop-only>
-            <span class="categories">
-              <i class="iconfont icon-category"></i>
-              <placeholder :transition="false" :data="article.category.length">
-                <template #placeholder>
-                  <i18n :lkey="LANGUAGE_KEYS.CATEGORY_PLACEHOLDER" />
-                </template>
-                <template #default>
-                  <router-link
-                    v-for="(category, index) in article.category.slice(0, 1)"
-                    :key="index"
-                    :to="getCategoryArchiveRoute(category.slug)"
-                  >
-                    <i18n :zh="category.name" :en="category.slug" />
-                  </router-link>
-                </template>
-              </placeholder>
-            </span>
-          </desktop-only>
         </div>
       </div>
     </div>
@@ -91,55 +83,41 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted } from 'vue'
-  import { useGlobalState } from '/@/app/state'
-  import { useI18n } from '/@/services/i18n'
+  import { defineComponent, ref, onMounted, PropType } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { Article } from '/@/store/article'
   import { getJSON } from '/@/services/storage'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { USER_LIKE_HISTORY } from '/@/constants/storage'
-  import {
-    getArticleDetailRoute,
-    getTagArchiveRoute,
-    getCategoryArchiveRoute
-  } from '/@/transforms/route'
-  import { getArchiveArticleThumbnailUrl } from '/@/transforms/thumbnail'
+  import { getArticleDetailRoute, getTagFlowRoute, getCategoryFlowRoute } from '/@/transforms/route'
+  import { getArticleListThumbnailURL } from '/@/transforms/thumbnail'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { timeAgo } from '/@/transforms/moment'
 
-  export enum Events {
-    Click = 'click'
-  }
   export default defineComponent({
-    name: 'ArticleListItem',
+    name: 'FlowArticleListItem',
     props: {
       article: {
-        type: Object as any,
+        type: Object as PropType<Article>,
         required: true
       }
     },
-    emits: [Events.Click],
-    setup(props, context) {
-      const i18n = useI18n()
-      const globalState = useGlobalState()
+    setup(props) {
+      const { globalState, i18n } = useEnhancer()
 
       // eslint-disable-next-line vue/no-setup-props-destructure
       const { origin } = props.article
       const isLiked = ref(false)
-      const isMobile = computed(() => globalState.userAgent.isMobile)
       const isHybrid = isHybridType(origin)
       const isReprint = isReprintType(origin)
       const isOriginal = isOriginalType(origin)
-
-      const handleClick = (event: MouseEvent) => {
-        context.emit(Events.Click, event)
-      }
 
       const humanlizeDate = (date: string) => {
         return timeAgo(date, i18n.language.value as any)
       }
 
-      const getThumbUrl = (thumbUrl: string) => {
-        return getArchiveArticleThumbnailUrl(thumbUrl, globalState.imageExt.value.isWebP)
+      const getThumbnailURL = (thumbURL: string) => {
+        return getArticleListThumbnailURL(thumbURL, globalState.imageExt.value.isWebP)
       }
 
       onMounted(() => {
@@ -150,15 +128,13 @@
       return {
         LANGUAGE_KEYS,
         isLiked,
-        isMobile,
         isHybrid,
         isReprint,
         isOriginal,
-        handleClick,
-        getThumbUrl,
+        getThumbnailURL,
         getArticleDetailRoute,
-        getCategoryArchiveRoute,
-        getTagArchiveRoute,
+        getCategoryFlowRoute,
+        getTagFlowRoute,
         humanlizeDate
       }
     }
@@ -168,9 +144,8 @@
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
 
-  .article-list-item {
+  .article-item {
     position: relative;
-    margin-bottom: $lg-gap;
     @include radius-box($sm-radius);
 
     &:last-child {
@@ -191,7 +166,7 @@
       $height: $gap * 11;
       $padding: $sm-gap;
       $content-height: $height - ($padding * 2);
-      display: block;
+      display: flex;
       height: $height;
       padding: $padding;
       overflow: hidden;
@@ -203,19 +178,21 @@
             opacity: 1;
           }
 
-          .item-thumb-img {
-            opacity: 0.95;
+          .image {
+            opacity: 0.88;
             transform: translateX(-3px);
           }
         }
       }
 
       > .item-thumb {
-        float: left;
-        width: 15rem;
+        /* Google AdSense */
+        $width: 186px;
+        width: $width;
         height: $content-height;
-        overflow: hidden;
+        margin-right: $lg-gap;
         position: relative;
+        @include radius-box($xs-radius);
 
         .item-oirigin {
           $height: 2.1rem;
@@ -227,7 +204,8 @@
           line-height: $height;
           z-index: $z-index-normal + 1;
           padding: 0 $sm-gap;
-          opacity: 0.4;
+          border-bottom-right-radius: $xs-radius;
+          opacity: 0.5;
           font-size: $font-size-small;
           color: $white;
           text-align: center;
@@ -245,14 +223,15 @@
           }
         }
 
-        .item-thumb-img {
+        .image {
+          height: 100%;
           min-width: 100%;
-          width: calc(100% + 3px);
-          max-width: calc(100% + 3px);
-          height: auto;
-          min-height: $content-height;
+          width: $width + 3px;
+          max-width: $width + 3px;
           border-color: transparent;
           background-color: $module-bg-hover;
+          background-size: cover;
+          background-position: center;
           opacity: 1;
           transform: translateX(0);
           transition: transform $transition-time-normal, opacity $transition-time-normal;
@@ -260,18 +239,17 @@
       }
 
       > .item-body {
-        float: right;
-        width: 32rem;
+        flex-grow: 1;
         height: $content-height;
 
-        > .item-title {
+        .title {
           margin-top: 3px;
           margin-bottom: $sm-gap;
           font-weight: bold;
           color: $link-color-hover;
           @include text-overflow();
 
-          > a {
+          .link {
             margin-left: 0;
             transition: margin $transition-time-normal;
             border-bottom: 1px solid transparent;
@@ -283,7 +261,7 @@
           }
         }
 
-        > .item-description {
+        .description {
           height: 5rem;
           margin: 0;
           margin-bottom: $xs-gap;
@@ -341,28 +319,6 @@
 
           > .tags {
             margin-right: 0;
-          }
-        }
-      }
-    }
-
-    &.mobile {
-      margin-bottom: $gap;
-      &:last-child {
-        margin: 0;
-      }
-
-      > .item-content {
-        height: auto;
-        padding: $sm-gap $gap;
-
-        > .item-body {
-          width: 100%;
-          height: auto;
-
-          > .item-description {
-            height: auto;
-            margin-bottom: 0.5em;
           }
         }
       }

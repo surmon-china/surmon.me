@@ -1,5 +1,5 @@
 <template>
-  <div class="header" :class="{ mobile: isMobile }">
+  <div class="header">
     <div
       class="background"
       :style="{
@@ -25,14 +25,12 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
+  import { defineComponent, computed } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { useEnhancer } from '../../app/enhancer'
-  import { timeAgo } from '/@/transforms/moment'
   import { getFileCDNUrl } from '/@/transforms/url'
 
   export default defineComponent({
-    name: 'ArticleListHeader',
+    name: 'FlowArticleListHeader',
     props: {
       backgroundColor: {
         type: String,
@@ -48,14 +46,12 @@
       }
     },
     setup(props) {
-      const { isMobile } = useEnhancer()
       const backgroundImageUrl = computed(() => {
         return props.backgroundImage || getFileCDNUrl('/images/page-feeelancer/banner.jpg')
       })
 
       return {
         LANGUAGE_KEYS,
-        isMobile,
         backgroundImageUrl
       }
     }
@@ -151,19 +147,6 @@
           margin: 0;
           text-align: center;
           text-transform: capitalize;
-        }
-      }
-    }
-
-    &.mobile {
-      height: 12rem;
-
-      .logo {
-        height: 8.6rem;
-        line-height: 8.6rem;
-
-        .iconfont {
-          font-size: 5em;
         }
       }
     }

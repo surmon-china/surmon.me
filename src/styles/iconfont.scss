@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
-  src: url('//at.alicdn.com/t/font_64825_5fvrizm333o.woff2?t=1639235801384') format('woff2'),
-    url('//at.alicdn.com/t/font_64825_5fvrizm333o.woff?t=1639235801384') format('woff'),
-    url('//at.alicdn.com/t/font_64825_5fvrizm333o.ttf?t=1639235801384') format('truetype');
+  src: url('//at.alicdn.com/t/font_64825_s5nf5e6n17i.woff2?t=1639665158967') format('woff2'),
+    url('//at.alicdn.com/t/font_64825_s5nf5e6n17i.woff?t=1639665158967') format('woff'),
+    url('//at.alicdn.com/t/font_64825_s5nf5e6n17i.ttf?t=1639665158967') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-coin-s:before {
+  content: '\e685';
+}
+
+.icon-buddhism:before {
+  content: '\e67f';
+}
+
+.icon-desktop:before {
+  content: '\e7aa';
 }
 
 .icon-new-window-s:before {

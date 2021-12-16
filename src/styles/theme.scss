@@ -1,6 +1,13 @@
 /// @name theme
 
-@mixin css-var($theme-text, $theme-white, $theme-black, $theme-primary, $theme-body-bg, $logo-rotate) {
+@mixin css-var(
+  $theme-text,
+  $theme-white,
+  $theme-black,
+  $theme-primary,
+  $theme-body-bg,
+  $logo-rotate
+) {
   #{--body-bg}: $theme-body-bg;
   #{--theme-black}: $theme-black;
   #{--theme-logo-rotate}: $logo-rotate;
@@ -24,9 +31,9 @@
   #{--text-color}: $theme-text;
   #{--text-lighter}: lighter($theme-text, 20%);
   #{--text-darker}: darken($theme-text, 20%);
-  #{--text-secondary}: rgba($theme-black, .54);
-  #{--text-disabled}: rgba($theme-black, .38);
-  #{--text-dividers}: rgba($theme-black, .26);
+  #{--text-secondary}: rgba($theme-black, 0.54);
+  #{--text-disabled}: rgba($theme-black, 0.38);
+  #{--text-dividers}: rgba($theme-black, 0.26);
   #{--text-reversal}: $theme-white;
 
   #{--link-color}: $theme-text;
@@ -38,7 +45,7 @@
     $theme-text: #555,
     $theme-white: #fff,
     $theme-black: #000,
-    $theme-primary: #0088f5,
+    $theme-primary: $surmon,
     $theme-body-bg: #eee,
     $logo-rotate: none
   );
@@ -51,7 +58,7 @@
     $theme-black: #fff,
     $theme-primary: #fff,
     $theme-body-bg: #000,
-    $logo-rotate: hue-rotate(30deg) brightness(180%) grayscale(100%)
+    $logo-rotate: hue-rotate(180deg) brightness(300%) grayscale(100%)
   );
 }
 

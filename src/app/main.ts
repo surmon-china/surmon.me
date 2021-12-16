@@ -8,7 +8,6 @@ import { CreateAppFunction } from 'vue'
 import { RouterHistory } from 'vue-router'
 import API_CONFIG from '/@/config/api.config'
 import { META } from '/@/config/app.config'
-import { RouteName } from './router'
 import { createUniversalRouter, RouterCreatorOptions } from './router'
 import { createUniversalStore } from '/@/store'
 import { createI18n } from '/@/services/i18n'
@@ -35,35 +34,31 @@ export interface ICreatorContext {
   language: string
   userAgent: string
 }
+
 export type VueApp = ReturnType<typeof createVueApp>
 export const createVueApp = (context: ICreatorContext) => {
+  // 1. create app
   const app = context.appCreator(App)
-  // ssr context
+  // 2. ssr context
   const ssrContext = rebirthSSRContext(app)
-
+  // 3. global state
   const globalState = createGlobalState({
     userAgent: context.userAgent || '',
     language: context.language || '',
     layout: context.layout ?? LayoutColumn.Normal
   })
-
+  // 4. store
   const store = createUniversalStore({ globalState })
+  // 5. router
   const router = createUniversalRouter({
     beforeMiddleware: context.routerBeforeMiddleware?.(globalState),
     afterMiddleware: context.routerAfterMiddleware?.(globalState),
     history: context.historyCreator()
   })
-
-  // keep music page PC only
-  if (globalState.userAgent.isMobile) {
-    router.removeRoute(RouteName.Music)
-  }
-
-  // meta
+  // 6. services
   const meta = createMeta({
     titler: (title: string) => `${title} | ${META.title}`
   })
-
   const theme = createTheme(context.theme)
   const i18n = createI18n({
     default: globalState.userAgent.isZhUser ? Language.Zh : Language.En,

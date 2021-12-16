@@ -43,7 +43,7 @@
   }
 
   export default defineComponent({
-    name: 'CommentUA',
+    name: 'CommentItemUA',
     props: {
       ua: {
         type: String,

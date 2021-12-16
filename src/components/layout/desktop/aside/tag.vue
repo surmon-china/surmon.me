@@ -17,7 +17,7 @@
           <router-link
             class="item"
             :title="tag.description"
-            :to="getTagArchiveRoute(tag.slug)"
+            :to="getTagFlowRoute(tag.slug)"
             :key="index"
             v-for="(tag, index) in tagStore.tags"
           >
@@ -37,11 +37,11 @@
   import { defineComponent } from 'vue'
   import { useTagStore } from '/@/store/tag'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { getTagArchiveRoute } from '/@/transforms/route'
+  import { getTagFlowRoute } from '/@/transforms/route'
   import { getExtendsValue } from '/@/transforms/state'
 
   export default defineComponent({
-    name: 'PCAsideTag',
+    name: 'DesktopAsideTag',
     setup() {
       const tagStore = useTagStore()
       const getTagIcon = (tag: any) => {
@@ -52,7 +52,7 @@
         LANGUAGE_KEYS,
         tagStore,
         getTagIcon,
-        getTagArchiveRoute
+        getTagFlowRoute
       }
     }
   })
@@ -142,8 +142,9 @@
             background-color: $primary-translucent;
           }
           .name {
-            background-color: $primary;
+            font-weight: bold;
             color: $text-reversal;
+            background-color: $primary;
           }
         }
 

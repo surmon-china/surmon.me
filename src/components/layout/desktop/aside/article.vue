@@ -39,7 +39,7 @@
   import { getArticleDetailRoute } from '/@/transforms/route'
 
   export default defineComponent({
-    name: 'PCAsideArticle',
+    name: 'DesktopAsideArticle',
     setup() {
       const articleStore = useArticleStore()
 

@@ -1,7 +1,7 @@
 <template>
   <form
     :id="COMMENT_PUBLISHER_ELEMENT_ID"
-    :class="{ mobile: isMobile }"
+    :class="{ 'h-g': hiddenGravatar }"
     class="publisher"
     name="comment"
   >
@@ -68,16 +68,14 @@
       </template>
     </div>
     <div class="postbox">
-      <div class="user">
-        <desktop-only>
-          <div class="gravatar">
-            <img
-              :alt="profileState.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
-              :src="humanizeGravatarUrlByEmail(profileState.email)"
-              draggable="false"
-            />
-          </div>
-        </desktop-only>
+      <div class="user" v-if="!hiddenGravatar">
+        <div class="gravatar">
+          <img
+            :alt="profileState.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
+            :src="humanizeGravatarUrlByEmail(profileState.email)"
+            draggable="false"
+          />
+        </div>
       </div>
       <div class="editor">
         <transition name="module">
@@ -140,6 +138,10 @@
       editing: {
         type: Boolean,
         required: true
+      },
+      hiddenGravatar: {
+        type: Boolean,
+        required: false
       }
     },
     emits: [
@@ -151,7 +153,7 @@
       CommentEvent.CancelReply
     ],
     setup(props, context) {
-      const { i18n, isMobile } = useEnhancer()
+      const { i18n } = useEnhancer()
       const commentStore = useCommentStore()
 
       const profileState = ref(props.profile)
@@ -206,7 +208,6 @@
         COMMENT_PUBLISHER_ELEMENT_ID,
         LANGUAGE_KEYS,
         t: i18n.t,
-        isMobile,
         firstUpperCase,
         humanizeGravatarUrlByEmail,
         profileState,
@@ -407,7 +408,7 @@
       }
     }
 
-    &.mobile {
+    &.h-g {
       > .user {
         margin: 0;
         padding: 0;
@@ -427,12 +428,6 @@
         > .save {
           width: 30%;
           margin-bottom: 0;
-        }
-      }
-
-      > .postbox {
-        > .user {
-          margin: 0;
         }
       }
     }

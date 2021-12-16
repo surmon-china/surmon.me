@@ -68,9 +68,9 @@ export default defineComponent({
     )
 
     watch(
-      () => popup.state.visibility,
-      (visibility) => {
-        if (!visibility && props.visible) {
+      () => popup.state.visible,
+      (visible) => {
+        if (!visible && props.visible) {
           context.emit(Event.UpdateVisible, false)
           context.emit(Event.Close)
         }

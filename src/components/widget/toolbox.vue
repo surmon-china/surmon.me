@@ -150,33 +150,6 @@
           @include common-bg-module($transition-time-fast);
         }
 
-        @keyframes default-btn-bg {
-          0% {
-            color: $white;
-            background: $accent;
-          }
-          20% {
-            color: $white;
-            background: $red;
-          }
-          40% {
-            color: $white;
-            background: $primary;
-          }
-          60% {
-            color: $text;
-            background: $yellow;
-          }
-          80% {
-            color: $text;
-            background: $white;
-          }
-          100% {
-            color: $white;
-            background: $black;
-          }
-        }
-
         .rss {
           color: $rss-primary;
           &:hover {
@@ -187,7 +160,7 @@
 
         .feedback {
           background-color: $primary-lighter;
-          color: $white;
+          color: $text-reversal;
           &:hover {
             background-color: $primary;
           }

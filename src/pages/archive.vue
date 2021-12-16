@@ -1,6 +1,11 @@
 <template>
-  <div class="archive-page">
-    <page-banner :blur="false" :position="75" image="/images/page-archive/banner.jpg">
+  <div class="archive-page" :class="{ mobile: isMobile }">
+    <page-banner
+      :blur="true"
+      :position="75"
+      :is-mobile="isMobile"
+      image="/images/page-archive/banner.jpg"
+    >
       <template #title>
         <i18n zh="万物之中，希望至美" en="Hope is a good thing" />
       </template>
@@ -35,25 +40,63 @@
           </template>
           <template #default>
             <div class="content-warpper" key="content">
+              <h2 class="root-title">
+                <span class="text">
+                  <i18n zh="万象星盘" en="Statistic" />
+                </span>
+              </h2>
+              <div class="statistic">
+                <span class="item">
+                  <span class="count">{{ archiveStore.statistic?.articles }}</span>
+                  <divider class="divider" type="vertical" />
+                  <span class="kind">
+                    <i class="iconfont icon-coffee"></i>
+                    <span class="text">Articles</span>
+                  </span>
+                </span>
+                <span class="item">
+                  <span class="count">{{ archiveStore.statistic?.tags }}</span>
+                  <divider class="divider" type="vertical" />
+                  <span class="kind">
+                    <i class="iconfont icon-tag"></i>
+                    <span class="text">Tags</span>
+                  </span>
+                </span>
+                <span class="item">
+                  <span class="count">{{ archiveStore.statistic?.comments }}</span>
+                  <divider class="divider" type="vertical" />
+                  <span class="kind">
+                    <i class="iconfont icon-comment"></i>
+                    <span class="text">Comments</span>
+                  </span>
+                </span>
+                <span class="item">
+                  <span class="count">{{ archiveStore.statistic?.views }}</span>
+                  <divider class="divider" type="vertical" />
+                  <span class="kind">
+                    <i class="iconfont icon-eye"></i>
+                    <span class="text">Today views</span>
+                  </span>
+                </span>
+              </div>
               <ul class="year-list">
                 <li v-for="yes in articleTree" :key="yes.year" class="year-item">
-                  <h3 class="title root">
-                    <i class="iconfont icon-peachblossom" />
+                  <h2 class="root-title">
                     <span class="text">
                       <i18n :zh="replaceToChineseNumber(yes.year)" :en="yes.year" />
                     </span>
-                  </h3>
+                  </h2>
                   <ul class="month-list">
                     <li v-for="mos in yes.months" :key="mos.month" class="month">
-                      <h4 class="title">
-                        <span class="argyle">
+                      <h4 class="month-title">
+                        <span class="text">
                           <i18n :zh="toChineseMonth(mos.month)" :en="toEngMonth(mos.month)" />
                         </span>
                       </h4>
                       <ul class="article-list">
                         <li v-for="(article, index) in mos.articles" :key="index" class="article">
                           <div class="left">
-                            <h4 class="title">
+                            <h4 class="article-title">
                               <span class="date"> D{{ article.createAt.day }} </span>
                               <a
                                 class="link"
@@ -66,17 +109,17 @@
                             </h4>
                             <p class="description" v-html="article.description" />
                           </div>
-                          <div class="metas">
+                          <div class="metas" v-if="!isMobile">
                             <span class="item views">
                               <i class="iconfont icon-eye"></i>
                               <span>{{ article.meta.views }}</span>
                             </span>
-                            <span class="separator">|</span>
+                            <divider type="vertical" />
                             <span class="item likes">
                               <i class="like-icon iconfont icon-heart"></i>
                               <span>{{ article.meta.likes }}</span>
                             </span>
-                            <span class="separator">|</span>
+                            <divider type="vertical" />
                             <span class="item comments">
                               <i class="iconfont icon-comment"></i>
                               <span>{{ article.meta.comments }}</span>
@@ -119,6 +162,12 @@
     name: 'ArchivePage',
     components: {
       PageBanner
+    },
+    props: {
+      isMobile: {
+        type: Boolean,
+        default: false
+      }
     },
     setup() {
       const { i18n, meta, isZhLang } = useEnhancer()
@@ -170,7 +219,9 @@
         return rootTree
       })
 
-      useUniversalFetch(() => archiveStore.fetchArchive())
+      useUniversalFetch(() =>
+        Promise.all([archiveStore.fetchArchive(), archiveStore.fetchStatistic()])
+      )
 
       return {
         LANGUAGE_KEYS,
@@ -190,6 +241,23 @@
   @import 'src/styles/init.scss';
 
   .archive-page {
+    &.mobile {
+      .statistic {
+        flex-wrap: wrap;
+        margin-bottom: 2rem !important;
+
+        .item {
+          width: 100%;
+          margin-bottom: $gap;
+
+          .count {
+            font-size: $font-size-h3 * 2 !important;
+            width: 46%;
+          }
+        }
+      }
+    }
+
     .archive-content {
       margin-top: $gap * 2;
       min-height: $normal-page-active-content-height / 2;
@@ -227,27 +295,58 @@
         text-transform: capitalize;
         font-size: 1em;
 
+        .statistic {
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          margin-top: 3rem;
+          margin-bottom: 4rem;
+
+          .item {
+            display: inline-flex;
+            align-items: center;
+            $count-size: $font-size-h2 * 2;
+
+            .count {
+              min-width: 6rem;
+              text-align: right;
+              font-weight: bold;
+              font-size: $count-size;
+            }
+
+            .divider {
+              font-size: $count-size;
+            }
+
+            .kind {
+              display: inline-flex;
+              flex-direction: column;
+              color: $text-dividers;
+
+              .iconfont {
+                font-size: $font-size-h3;
+              }
+
+              .text {
+                text-transform: uppercase;
+              }
+            }
+          }
+        }
+
         .year-item {
           margin-top: 0;
           margin-bottom: $gap * 2;
           overflow: hidden;
         }
 
-        .link {
-          border-bottom: 1px solid;
-          font-weight: bold;
-        }
-
-        .title {
+        .root-title {
+          margin-bottom: $lg-gap * 3;
+          text-align: center;
           color: $text-secondary;
+          font-weight: bold;
 
-          &.root {
-            font-weight: bold;
-            margin-bottom: $lg-gap * 3;
-          }
-
-          > .text {
-            margin-left: $xs-gap;
+          .text {
             padding-bottom: $xs-gap;
             border-bottom: 1px solid;
           }
@@ -260,7 +359,14 @@
         }
 
         .month-list {
+          padding-left: 2em;
           list-style: tibetan;
+
+          .month-title {
+            .text {
+              color: $text-disabled;
+            }
+          }
         }
 
         .article-list {
@@ -273,20 +379,24 @@
             align-items: center;
             padding: $gap;
             padding-left: $gap * 2;
-            @include radius-box($sm-radius);
-            &:hover {
-              background-color: $module-bg;
-            }
+            margin-bottom: $xs-gap;
+            border-left: 4px dotted $text-dividers;
 
             .left {
-              .title {
+              .article-title {
                 margin: $gap 0;
 
                 .date {
                   display: inline-block;
-                  font-size: $font-size-h5;
                   width: 2rem;
                   margin-right: $sm-gap;
+                  font-size: $font-size-h5;
+                  color: $text-disabled;
+                }
+
+                .link {
+                  padding-bottom: $xs-gap;
+                  border-bottom: 1px solid $text-secondary;
                 }
               }
 
@@ -303,11 +413,7 @@
               flex-shrink: 0;
               align-items: center;
               font-size: $font-size-h4;
-              color: $text-secondary;
-
-              .separator {
-                margin: 0 $gap;
-              }
+              color: $text-disabled;
 
               .item {
                 width: 6rem;

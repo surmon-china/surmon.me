@@ -4,11 +4,14 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-export interface ILoaderOption extends Partial<HTMLScriptElement> {
+export interface ScriptLoaderOption extends Partial<HTMLScriptElement> {
   domain?: string
 }
 
-export default (source: string, options: ILoaderOption = {} as ILoaderOption) => {
+export const loadScript = (
+  source: string,
+  options: ScriptLoaderOption = {} as ScriptLoaderOption
+) => {
   return new Promise((resolve, reject) => {
     const head = document.head || document.getElementsByTagName('head')[0]
     const script = document.createElement('script')

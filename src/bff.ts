@@ -40,12 +40,12 @@ app.use(cookieParser())
 // static
 app.use(express.static(PUBLIC_PATH))
 
+// tunnel
+app.use(API_TUNNEL_PREFIX, tunnelRouter)
+
 // sitemap & rss
 app.use('/sitemap.xml', handleSitemapRequest)
 app.use('/rss.xml', handleRSSRequest)
-
-// tunnel
-app.use(API_TUNNEL_PREFIX, tunnelRouter)
 
 // app effect
 isDev ? enableDevRuntime(app) : enableProdRuntime(app)
@@ -58,7 +58,7 @@ server.listen(BFF_SERVER_PORT, () => {
     `listening on ${JSON.stringify(server.address())}`
   ]
   console.info('[surmon.me]', `Run! ${infos.join(', ')}.`)
-  // 启动扩展服务
+  // run BFF services
   startGTagScriptUpdater()
   startGitHubChartUpdater()
   startArchiveUpdater()

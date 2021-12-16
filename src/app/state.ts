@@ -120,8 +120,6 @@ export const createGlobalState = (config: GlobalStateConfig) => {
 
   // Switchers
   const switchBox = reactive({
-    // 移动端侧边栏
-    mobileSidebar: false,
     // 开启轨迹地图
     liveMap: false,
     // 山河入梦
@@ -158,9 +156,6 @@ export const createGlobalState = (config: GlobalStateConfig) => {
       },
       wallpaper() {
         switchBox.wallpaper = !switchBox.wallpaper
-      },
-      mobileSidebar: (open?: boolean) => {
-        switchBox.mobileSidebar = open != null ? !!open : !switchBox.mobileSidebar
       }
     }
   }

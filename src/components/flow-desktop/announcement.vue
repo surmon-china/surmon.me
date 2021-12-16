@@ -1,11 +1,5 @@
 <template>
-  <div
-    class="announcement"
-    :class="{
-      mobile: isMobile,
-      dark: isDarkTheme
-    }"
-  >
+  <div class="announcement" :class="{ dark: isDarkTheme }">
     <placeholder :data="announcements.length" :loading="fetching">
       <template #placeholder>
         <empty class="announcement-empty" key="empty">
@@ -24,12 +18,10 @@
       </template>
       <template #default>
         <div class="warpper" key="warpper">
-          <desktop-only>
-            <div
-              class="background"
-              :data-content="parseContent(announcements[activeIndex]?.content)"
-            />
-          </desktop-only>
+          <div
+            class="background"
+            :data-content="parseContent(announcements[activeIndex]?.content)"
+          />
           <div class="title">
             <span class="icon-box" :style="{ transform: `rotate(-${activeIndex * 135}deg)` }">
               <i class="iconfont icon-windmill" />
@@ -49,9 +41,7 @@
             >
               <swiper-slide v-for="(ann, index) in announcements" :key="index">
                 <div class="content" v-html="parseContent(ann.content)" />
-                <desktop-only>
-                  <div class="date">{{ humanlizeDate(ann.create_at) }}</div>
-                </desktop-only>
+                <div class="date">{{ humanlizeDate(ann.create_at) }}</div>
               </swiper-slide>
             </swiper>
             <div class="navigation">
@@ -82,7 +72,7 @@
   import { timeAgo } from '/@/transforms/moment'
 
   export default defineComponent({
-    name: 'ArchiveAnnouncement',
+    name: 'FlowAnnouncement',
     components: {
       Swiper,
       SwiperSlide
@@ -98,7 +88,7 @@
       }
     },
     setup() {
-      const { i18n, isMobile, isDarkTheme } = useEnhancer()
+      const { i18n, isDarkTheme } = useEnhancer()
       const activeIndex = ref(0)
       const swiper = ref<SwiperClass>()
       const onSwiper = (_swiper: SwiperClass) => {
@@ -121,7 +111,6 @@
 
       return {
         LANGUAGE_KEYS,
-        isMobile,
         isDarkTheme,
         activeIndex,
         humanlizeDate,
@@ -171,19 +160,6 @@
       }
       .right {
         flex: 1;
-      }
-    }
-
-    &.mobile {
-      margin-bottom: $gap;
-      .swiper-box {
-        .swiper {
-          .swiper-slide {
-            .content {
-              max-width: 100%;
-            }
-          }
-        }
       }
     }
 

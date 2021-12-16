@@ -13,7 +13,9 @@ declare global {
 export const read = () => navigator.clipboard.readText()
 export const copy = (text: string) => {
   window.$isCopyFromApp = true
-  navigator.clipboard.writeText(text).finally(() => {
+  // https://www.w3.org/TR/clipboard-apis/#async-clipboard-api
+  // only https site
+  window.navigator.clipboard?.writeText(text).finally(() => {
     window.$isCopyFromApp = false
   })
 }
