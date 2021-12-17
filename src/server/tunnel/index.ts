@@ -26,7 +26,7 @@ const handleTunnelService = (tunnelService: () => Promise<any>): RequestHandler 
       .then((data) => response.send(data))
       .catch((error) => {
         response.status(INVALID_ERROR)
-        response.send(error.message)
+        response.send(error?.message || String(error))
       })
   }
 }

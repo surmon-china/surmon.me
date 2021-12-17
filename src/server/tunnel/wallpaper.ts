@@ -27,20 +27,22 @@ const fetchWallpapers = async (params?: WonderfulBingWallpaperOption): Promise<a
 }
 
 // 今日壁纸缓存（ZH）
-const fetchZHWallpapers = () =>
-  fetchWallpapers({
+const fetchZHWallpapers = () => {
+  return fetchWallpapers({
     local: 'zh-CN',
     host: 'cn.bing.com',
     ensearch: 0
   })
+}
 
 // 今日壁纸缓存（EN）
-const getENWallpapers = () =>
-  fetchWallpapers({
+const getENWallpapers = () => {
+  return fetchWallpapers({
     local: 'en-US',
     host: 'bing.com',
     ensearch: 1
   })
+}
 
 const fetchAllWallpapers = async (): Promise<IWallpaper> => {
   const [zh, en] = await Promise.all([fetchZHWallpapers(), getENWallpapers()])
@@ -54,9 +56,9 @@ const autoUpdateData = () => {
       tunnelCache.set(TunnelModule.Wallpaper, data)
     })
     .catch((error) => {
-      // 失败后 10 分钟更新一次数据
+      // 失败后 30 分钟更新一次数据
       console.warn('[Tunnel Wallpaper]', '请求失败', error)
-      setTimeout(autoUpdateData, 1000 * 60 * 10)
+      setTimeout(autoUpdateData, 1000 * 60 * 30)
     })
 }
 
@@ -66,11 +68,13 @@ autoUpdateData()
 schedule.scheduleJob('10 0 0 * * *', autoUpdateData)
 
 export const wallpaperService = async (): Promise<any> => {
-  if (tunnelCache.has(TunnelModule.Wallpaper)) {
-    return tunnelCache.get(TunnelModule.Wallpaper)
-  } else {
-    const data = await fetchAllWallpapers()
-    tunnelCache.set(TunnelModule.Wallpaper, data)
-    return data
-  }
+  // GFW! https://www.ithome.com/0/592/920.htm
+  return Promise.reject(`GFW! https://www.ithome.com/0/592/920.htm`)
+  // if (tunnelCache.has(TunnelModule.Wallpaper)) {
+  //   return tunnelCache.get(TunnelModule.Wallpaper)
+  // } else {
+  //   const data = await fetchAllWallpapers()
+  //   tunnelCache.set(TunnelModule.Wallpaper, data)
+  //   return data
+  // }
 }

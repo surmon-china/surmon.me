@@ -40,7 +40,7 @@ export const i18ns = {
   },
   TelegramGroup: {
     [Language.Zh]: `加入电报群`,
-    [Language.En]: `Join Telegram group`
+    [Language.En]: `Telegram group`
   }
 }
 

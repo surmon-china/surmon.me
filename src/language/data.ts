@@ -44,7 +44,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.PAGE_GITHUB]: {
     [Language.Zh]: '丹青阁',
-    [Language.En]: 'HitHub'
+    [Language.En]: 'GitHub'
   },
   [LANGUAGE_KEYS.PAGE_ARCHIVE]: {
     [Language.Zh]: '万象殿',

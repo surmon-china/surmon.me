@@ -6,8 +6,9 @@
  */
 
 import { App, Plugin, inject, readonly, reactive, computed } from 'vue'
-import { getFileProxyUrl } from '/@/transforms/url'
+import { UNDEFINED } from '/@/constants/value'
 import { TunnelModule } from '/@/constants/tunnel'
+import { getFileProxyUrl } from '/@/transforms/url'
 import type { Song } from '/@/server/tunnel/music'
 import tunnel from '/@/services/tunnel'
 
@@ -84,6 +85,8 @@ const createMusicPlayer = (config: PlayerConfig) => {
   const currentSong = computed<Song | void>(() => {
     if (state.inited && state.index !== undefined) {
       return amplitude.getActiveSongMetadata()
+    } else {
+      return UNDEFINED
     }
   })
 

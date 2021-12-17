@@ -204,7 +204,6 @@
           margin-bottom: 0.5em;
           border: none;
           text-decoration: none;
-          text-transform: uppercase;
           font-weight: 700;
           color: $white;
 
