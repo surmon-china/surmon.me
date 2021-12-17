@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.2.4
+* Surmon.me v3.2.5
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -380,17 +380,21 @@ const fetchWallpapers = async (params) => {
     }
 };
 // 今日壁纸缓存（ZH）
-const fetchZHWallpapers = () => fetchWallpapers({
-    local: 'zh-CN',
-    host: 'cn.bing.com',
-    ensearch: 0
-});
+const fetchZHWallpapers = () => {
+    return fetchWallpapers({
+        local: 'zh-CN',
+        host: 'cn.bing.com',
+        ensearch: 0
+    });
+};
 // 今日壁纸缓存（EN）
-const getENWallpapers = () => fetchWallpapers({
-    local: 'en-US',
-    host: 'bing.com',
-    ensearch: 1
-});
+const getENWallpapers = () => {
+    return fetchWallpapers({
+        local: 'en-US',
+        host: 'bing.com',
+        ensearch: 1
+    });
+};
 const fetchAllWallpapers = async () => {
     const [zh, en] = await Promise.all([fetchZHWallpapers(), getENWallpapers()]);
     return { zh, en };
@@ -402,9 +406,9 @@ const autoUpdateData$2 = () => {
         tunnelCache.set(TunnelModule.Wallpaper, data);
     })
         .catch((error) => {
-        // 失败后 10 分钟更新一次数据
+        // 失败后 30 分钟更新一次数据
         console.warn('[Tunnel Wallpaper]', '请求失败', error);
-        setTimeout(autoUpdateData$2, 1000 * 60 * 10);
+        setTimeout(autoUpdateData$2, 1000 * 60 * 30);
     });
 };
 // 初始化默认拉取数据
@@ -412,14 +416,15 @@ autoUpdateData$2();
 // 周期时间定为每天的 0:00:10 重新获取数据
 schedule__default["default"].scheduleJob('10 0 0 * * *', autoUpdateData$2);
 const wallpaperService = async () => {
-    if (tunnelCache.has(TunnelModule.Wallpaper)) {
-        return tunnelCache.get(TunnelModule.Wallpaper);
-    }
-    else {
-        const data = await fetchAllWallpapers();
-        tunnelCache.set(TunnelModule.Wallpaper, data);
-        return data;
-    }
+    // GFW! https://www.ithome.com/0/592/920.htm
+    return Promise.reject(`GFW! https://www.ithome.com/0/592/920.htm`);
+    // if (tunnelCache.has(TunnelModule.Wallpaper)) {
+    //   return tunnelCache.get(TunnelModule.Wallpaper)
+    // } else {
+    //   const data = await fetchAllWallpapers()
+    //   tunnelCache.set(TunnelModule.Wallpaper, data)
+    //   return data
+    // }
 };/**
  * @file BFF Server github
  * @module server.tunnel.github
@@ -533,7 +538,7 @@ const handleTunnelService = (tunnelService) => {
             .then((data) => response.send(data))
             .catch((error) => {
             response.status(INVALID_ERROR);
-            response.send(error.message);
+            response.send(error?.message || String(error));
         });
     };
 };
