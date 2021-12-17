@@ -25,15 +25,15 @@ import { createLoading } from '/@/services/loading'
 import { consoleSlogan } from '/@/services/slogan'
 import { enableCopyrighter } from '/@/services/copyright'
 import { enableBaiduSEOer } from '/@/services/baidu-seo-push'
-import { runTitler, resetTitler } from './services/titler'
-import { exportEmojiRainToGlobal } from './services/emoji-23333'
-import { exportStickyEventsToGlobal } from './services/sticky'
+import { runTitler, resetTitler } from '/@/services/titler'
+import { exportEmojiRainToGlobal } from '/@/services/emoji-23333'
+import { exportStickyEventsToGlobal } from '/@/services/sticky'
 import { exportAppToGlobal } from '/@/services/exporter'
 import { exportLozadToGlobal } from '/@/services/lozad'
 import { randomNumber } from '/@/utils/random'
 import { createVueApp } from '/@/app/main'
-import { getSSRContext } from './universal'
-import { isProd } from './environment'
+import { getSSRContext } from '/@/universal'
+import { isProd } from '/@/environment'
 
 import '/@/services/swiper/style'
 import '/@/styles/app.scss'
@@ -99,6 +99,8 @@ router.isReady().finally(() => {
 
     // desktop only
     if (!globalState.userAgent.isMobile) {
+      // bing wallpaper
+      defer.addTask(store.stores.wallpaper.fetchPapers)
       // music player
       defer.addTask(music.start)
       // title surprise

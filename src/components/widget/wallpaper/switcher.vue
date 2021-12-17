@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, onMounted } from 'vue'
+  import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useWallpaperStore } from '/@/store/wallpaper'
   import { GAEventActions, GAEventTags } from '/@/constants/gtag'
@@ -49,12 +49,6 @@
           })
         }
       }
-
-      onMounted(() => {
-        wallpaperStore.fetchPapers().catch((error) => {
-          console.warn(`[wallpaper] error:`, error)
-        })
-      })
 
       return {
         LANGUAGE_KEYS,

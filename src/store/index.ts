@@ -7,10 +7,29 @@
 import { createPinia } from 'pinia'
 import { GlobalState } from '/@/app/state'
 import { getSSRContext } from '/@/universal'
-import { useArticleStore } from './article'
+
+import { useAnnouncementStore } from './announcement'
+import { useArchiveStore } from './archive'
+import { useArticleStore, useArticleDetailStore } from './article'
 import { useCategoryStore } from './category'
 import { useTagStore } from './tag'
+import { useCommentStore } from './comment'
 import { useMetaStore } from './meta'
+import { useLensStore } from './lens'
+import { useWallpaperStore } from './wallpaper'
+
+export const useStores = () => ({
+  announcement: useAnnouncementStore(),
+  archive: useArchiveStore(),
+  article: useArticleStore(),
+  articleDetail: useArticleDetailStore(),
+  category: useCategoryStore(),
+  tag: useTagStore(),
+  comment: useCommentStore(),
+  meta: useMetaStore(),
+  lens: useLensStore(),
+  wallpaper: useWallpaperStore()
+})
 
 export interface UniversalStoreConfig {
   globalState: GlobalState
@@ -18,16 +37,17 @@ export interface UniversalStoreConfig {
 export const createUniversalStore = (config: UniversalStoreConfig) => {
   const pinia = createPinia()
   const doPreFetchTask = () => {
+    const stores = useStores()
     const initFetchTasks = [
-      useTagStore().fetchAll(),
-      useCategoryStore().fetchAll(),
-      useMetaStore().fetchAdminInfo(),
-      useMetaStore().fetchAppOptions()
+      stores.tag.fetchAll(),
+      stores.category.fetchAll(),
+      stores.meta.fetchAdminInfo(),
+      stores.meta.fetchAppOptions()
     ]
 
     // fetch hot articles when desktop only
     if (!config.globalState.userAgent.isMobile) {
-      initFetchTasks.push(useArticleStore().fetchHotList())
+      initFetchTasks.push(stores.article.fetchHotList())
     }
 
     return Promise.all(initFetchTasks)
@@ -37,6 +57,9 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
     state: pinia.state,
     install: pinia.install,
     prefetch: doPreFetchTask,
+    get stores() {
+      return useStores()
+    },
     initInSSR() {
       const contextStore = getSSRContext('store')
       if (contextStore) {

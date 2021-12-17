@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.2.7 (2021-12-18)
+
+**Fix**
+
+- Wallpeper fetch on CSR mounted
+
 ### v3.2.6 (2021-12-17)
 
 **Fix**

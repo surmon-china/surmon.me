@@ -53,7 +53,7 @@
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
   import Wallflower from '/@/components/widget/wallflower/garden.vue'
-  import Wallpaper from '/@/components/widget/wallpaper/main.vue'
+  import Wallpaper from '/@/components/widget/wallpaper/switcher.vue'
   import Background from '/@/components/widget/background.vue'
   import Player from '/@/components/widget/player.vue'
   import Share from '/@/components/widget/share.vue'
