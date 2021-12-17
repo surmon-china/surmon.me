@@ -83,10 +83,13 @@
 
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch, onClient } from '/@/universal'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { useArticleStore, Article } from '/@/store/article'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { firstUpperCase } from '/@/transforms/text'
   import { nextScreen } from '/@/utils/effects'
+  import { META } from '/@/config/app.config'
   import ListItem from './item.vue'
   import Mammon from './mammon.vue'
 
@@ -115,6 +118,7 @@
       }
     },
     setup(props) {
+      const { meta } = useEnhancer()
       const articleStore = useArticleStore()
       type ArticleItem = Article & { ad?: true }
       const articles = computed<Array<ArticleItem>>(() => {
@@ -130,6 +134,26 @@
       const hasMoreArticles = computed(() => {
         const pagination = articleStore.list.pagination
         return pagination ? pagination.current_page < pagination.total_page : false
+      })
+
+      meta(() => {
+        const titles: string[] = Object.values(props)
+          .filter(Boolean)
+          .map((prop) => firstUpperCase(prop as string))
+
+        // filter page
+        if (titles.length) {
+          return {
+            pageTitle: titles.join(' | ')
+          }
+        }
+
+        // index page
+        return {
+          title: `${META.title} - ${META.description}`,
+          keywords: META.keywords,
+          description: META.description
+        }
       })
 
       const fetchArticles = async (params: any = {}) => {

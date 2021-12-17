@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.2.6 (2021-12-17)
+
+**Fix**
+
+- Mobile flow page title
+
 ### v3.2.5 (2021-12-17)
 
 **Feature**
