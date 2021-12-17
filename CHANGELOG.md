@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.2.5 (2021-12-17)
+
+**Feature**
+
+- `HitHub` > `GitHub`
+- Improve axios error infos
+- Suspend `Wallpaper` service
+
 ### v3.2.4 (2021-12-17)
 
 **Feature**

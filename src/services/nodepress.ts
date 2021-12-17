@@ -46,9 +46,8 @@ nodepress.interceptors.response.use(
         : {
             name: errorJSON.name,
             message: errorJSON.message,
-            code: errorJSON.code,
             status: errorJSON.status,
-            stack: errorJSON.stack,
+            code: errorJSON.code,
             method: errorJSON.config.method,
             baseURL: errorJSON.config.baseURL,
             url: errorJSON.config.url,

@@ -51,7 +51,9 @@
       }
 
       onMounted(() => {
-        wallpaperStore.fetchPapers()
+        wallpaperStore.fetchPapers().catch((error) => {
+          console.warn(`[wallpaper] error:`, error)
+        })
       })
 
       return {
