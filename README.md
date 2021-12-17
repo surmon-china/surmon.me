@@ -40,7 +40,7 @@
 
 ## Screenshot
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me/main/presses/pc.jpg)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me/main/presses/desktop.png)
 
 ![](https://raw.githubusercontent.com/surmon-china/surmon.me/main/presses/mobile.png)
 
