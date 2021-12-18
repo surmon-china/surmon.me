@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { createPinia } from 'pinia'
+import { createPinia, Pinia } from 'pinia'
 import { GlobalState } from '/@/app/state'
 import { getSSRContext } from '/@/universal'
 
@@ -18,17 +18,17 @@ import { useMetaStore } from './meta'
 import { useLensStore } from './lens'
 import { useWallpaperStore } from './wallpaper'
 
-export const useStores = () => ({
-  announcement: useAnnouncementStore(),
-  archive: useArchiveStore(),
-  article: useArticleStore(),
-  articleDetail: useArticleDetailStore(),
-  category: useCategoryStore(),
-  tag: useTagStore(),
-  comment: useCommentStore(),
-  meta: useMetaStore(),
-  lens: useLensStore(),
-  wallpaper: useWallpaperStore()
+export const useStores = (_pinia?: Pinia) => ({
+  announcement: useAnnouncementStore(_pinia),
+  archive: useArchiveStore(_pinia),
+  article: useArticleStore(_pinia),
+  articleDetail: useArticleDetailStore(_pinia),
+  category: useCategoryStore(_pinia),
+  tag: useTagStore(_pinia),
+  comment: useCommentStore(_pinia),
+  meta: useMetaStore(_pinia),
+  lens: useLensStore(_pinia),
+  wallpaper: useWallpaperStore(_pinia)
 })
 
 export interface UniversalStoreConfig {
@@ -36,8 +36,9 @@ export interface UniversalStoreConfig {
 }
 export const createUniversalStore = (config: UniversalStoreConfig) => {
   const pinia = createPinia()
+
   const doPreFetchTask = () => {
-    const stores = useStores()
+    const stores = useStores(pinia)
     const initFetchTasks = [
       stores.tag.fetchAll(),
       stores.category.fetchAll(),
@@ -58,7 +59,7 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
     install: pinia.install,
     prefetch: doPreFetchTask,
     get stores() {
-      return useStores()
+      return useStores(pinia)
     },
     initInSSR() {
       const contextStore = getSSRContext('store')

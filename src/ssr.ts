@@ -85,6 +85,7 @@ const renderHTML = async (vueApp: VueApp, url: string) => {
   const metas = await meta.renderToString()
 
   devDebug('6. HTML & SSR context script')
+  console.log('prod test 2, store state', store.state.value)
   const scripts = renderScripts({
     metas,
     url,
@@ -117,7 +118,7 @@ export interface RenderResult {
 export const renderError = async (request: Request, error: Error): Promise<RenderResult> => {
   const { app, meta, globalState, theme } = createApp(request)
   globalState.setRenderError(error)
-  meta.addHeadObjs(ref({ title: `Server Error: ${error.message || 'unknow'}` }))
+  meta.addHeadObjs(ref({ title: `Server Error: ${error.message || String(error) || 'unknow'}` }))
   return {
     code: (error as any).code ?? INVALID_ERROR,
     html: await renderToString(app),
@@ -139,6 +140,7 @@ export const renderApp = async (request: Request): Promise<RenderResult> => {
   const cacheKey = getCacheKey(app, url)
   const hasCache = renderCache.has(cacheKey)
   devDebug('cache key:', cacheKey, hasCache)
+  console.log('prod test 1, cache', renderCache.get(cacheKey))
   if (hasCache) {
     const cache = renderCache.get(cacheKey)
     return {
