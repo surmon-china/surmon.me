@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 import { Express } from 'express'
-import compression from 'compression'
 import { PRDO_CLIENT_PATH, PRDO_SERVER_PATH } from '../helper'
 import { resolveTemplate } from './template'
 import type { RenderResult } from '@/ssr'
@@ -10,7 +9,6 @@ export const enableProdRuntime = async (app: Express) => {
   const template = fs.readFileSync(path.resolve(PRDO_CLIENT_PATH, 'template.html'), 'utf-8')
   const { renderApp, renderError } = require(path.resolve(PRDO_SERVER_PATH, 'ssr.js'))
 
-  app.use(compression())
   app.use('*', async (request, response) => {
     try {
       const redered: RenderResult = await renderApp(request)

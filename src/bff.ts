@@ -6,6 +6,7 @@
 
 import http from 'http'
 import express from 'express'
+import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import { NODE_ENV, isDev } from './environment'
 import { startGTagScriptUpdater } from './server/gtag'
@@ -20,22 +21,13 @@ import { API_TUNNEL_PREFIX, BFF_SERVER_PORT } from './config/bff.config'
 // @ts-expect-error
 process.noDeprecation = true
 
-// replace global console
-const { log, warn, info } = console
-const color = (c) => (isDev ? c : '')
-global.console = Object.assign(console, {
-  log: (...args) => log('[log]', ...args),
-  info: (...args) => info(color('\x1B[34m%s\x1B[0m'), '[info]', ...args),
-  error: (...args) => info(color('\x1B[31m%s\x1B[0m'), '[error]', ...args),
-  warn: (...args) => warn(color('\x1B[33m%s\x1B[0m'), '[warn]', ...args)
-})
-
 // init app
 const app = express()
 const server = http.createServer(app)
 
-// cookie
+// middlewares
 app.use(cookieParser())
+app.use(compression())
 
 // static
 app.use(express.static(PUBLIC_PATH))
