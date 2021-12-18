@@ -37,7 +37,8 @@ export interface UniversalStoreConfig {
 export const createUniversalStore = (config: UniversalStoreConfig) => {
   const pinia = createPinia()
 
-  const doPreFetchTask = () => {
+  const doPrefetch = () => {
+    // https://pinia.esm.dev/ssr/#using-the-store-outside-of-setup
     const stores = useStores(pinia)
     const initFetchTasks = [
       stores.tag.fetchAll(),
@@ -57,7 +58,7 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
   return {
     state: pinia.state,
     install: pinia.install,
-    prefetch: doPreFetchTask,
+    prefetch: doPrefetch,
     get stores() {
       return useStores(pinia)
     },
@@ -66,11 +67,12 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
       if (contextStore) {
         pinia.state.value = contextStore
       } else {
-        doPreFetchTask()
+        // fallback when SSR page error
+        doPrefetch()
       }
     },
     initInSPA() {
-      return doPreFetchTask()
+      return doPrefetch()
     }
   }
 }

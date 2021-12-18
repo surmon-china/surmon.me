@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.2.9 (2021-12-18)
+
+**Fix**
+
+- SSR `store.prefetch` [pass `pinia` instance](https://pinia.esm.dev/ssr/#using-the-store-outside-of-setup)
+
 ### v3.2.7 (2021-12-18)
 
 **Fix**

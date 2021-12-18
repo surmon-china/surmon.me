@@ -85,7 +85,6 @@ const renderHTML = async (vueApp: VueApp, url: string) => {
   const metas = await meta.renderToString()
 
   devDebug('6. HTML & SSR context script')
-  console.log('prod test 2, store state', store.state.value)
   const scripts = renderScripts({
     metas,
     url,
@@ -140,7 +139,6 @@ export const renderApp = async (request: Request): Promise<RenderResult> => {
   const cacheKey = getCacheKey(app, url)
   const hasCache = renderCache.has(cacheKey)
   devDebug('cache key:', cacheKey, hasCache)
-  console.log('prod test 1, cache', renderCache.get(cacheKey))
   if (hasCache) {
     const cache = renderCache.get(cacheKey)
     return {
