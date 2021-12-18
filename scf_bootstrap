@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/var/lang/node12/bin/node ./dist/bff.cjs.js

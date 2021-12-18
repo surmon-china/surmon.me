@@ -96,3 +96,6 @@ dump.rdb
 # resources
 public/effects/*
 !public/effects/.gitkeep
+
+# Serverless directories
+.serverless
