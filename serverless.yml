@@ -14,9 +14,9 @@ inputs:
 
   src:
     dist: ./
-    hook: npm run build
+    hook: yarn && npm run build
     exclude:
-      - .env
+      - 'node_modules/**'
 
   faas:
     runtime: Nodejs12.16
