@@ -1,22 +1,54 @@
-component: scf
-name: surmon-me
+app: surmon-me
+stage: prod
+component: http
+name: surmon-me-express
+
+# https://github.com/serverless-components/tencent-http/blob/master/docs/configure.md
 inputs:
+  region: ap-hongkong
+  type: web
+  gitUrl: 'https://github.com/surmon-china/surmon.me.git'
+  branch: main
+  codePlatform: GITHUB
+  isAutoCiDeploy: false
+
   src:
-    src: ./
+    dist: ./
+    hook: npm run build
     exclude:
       - .env
-  type: web
-  name: surmon-me
-  region: ap-hongkong
-  runtime: Nodejs12.16
-  memorySize: 512
-  events:
-    - apigw:
-        parameters:
-          protocols:
-            - http
-            - https
-          environment: release
-          endpoints:
-            - path: /
-              method: ANY
+
+  faas:
+    runtime: Nodejs12.16
+    framework: express
+    name: '${name}'
+    eip: true
+    timeout: 3
+    memorySize: 512
+    tags: []
+    environments: []
+
+  apigw:
+    timeout: 60
+    protocols:
+      - http
+      - https
+    environment: release
+    customDomains:
+      - domain: serverless.surmon.me
+        certId: sGtdxO8A
+        protocols:
+          - http
+          - https
+        pathMap:
+          - path: /
+            environment: release
+        customMap: true
+        isDefaultMapping: false
+
+  assets:
+    cos:
+      bucket: surmon-me-1253995560
+      sources:
+        - src: dist/client
+          targetDir: /
