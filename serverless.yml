@@ -25,9 +25,6 @@ inputs:
     timeout: 3
     memorySize: 512
     tags: []
-    layers:
-      - name: '${output:${stage}:${app}:express-layer.name}'
-        version: '${output:${stage}:${app}:express-layer.version}'
 
   # https://github.com/serverless-components/tencent-apigateway/blob/master/docs/configure.md
   apigw:
