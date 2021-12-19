@@ -1,15 +1,16 @@
 /**
  * @file Archive sitemap generator
- * @module server.archive.sitemap
+ * @module server.getter.sitemap
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import { Readable } from 'stream'
 import { SitemapStream, streamToPromise, SitemapItemLoose, EnumChangefreq } from 'sitemap'
+import { getArchiveData, getArticleURL, getPageURL, getTagURL, getCategoryURL } from './archive'
 import { META } from '@/config/app.config'
-import { getArticleUrl, getPageUrl, getTagUrl, getCategoryUrl } from '.'
 
-export const getSitemapXML = (archive) => {
+export const getSitemapXML = async (archiveData?: any) => {
+  const archive = archiveData || (await getArchiveData())
   const sitemapStream = new SitemapStream({
     hostname: META.url
   })
@@ -17,22 +18,22 @@ export const getSitemapXML = (archive) => {
   const sitemapItemList: SitemapItemLoose[] = [
     { url: META.url, changefreq: EnumChangefreq.ALWAYS, priority: 1 },
     {
-      url: getPageUrl('about'),
+      url: getPageURL('about'),
       changefreq: EnumChangefreq.YEARLY,
       priority: 1
     },
     {
-      url: getPageUrl('merch'),
+      url: getPageURL('merch'),
       changefreq: EnumChangefreq.YEARLY,
       priority: 1
     },
     {
-      url: getPageUrl('archive'),
+      url: getPageURL('archive'),
       changefreq: EnumChangefreq.ALWAYS,
       priority: 1
     },
     {
-      url: getPageUrl('guestbook'),
+      url: getPageURL('guestbook'),
       changefreq: EnumChangefreq.ALWAYS,
       priority: 1
     }
@@ -42,7 +43,7 @@ export const getSitemapXML = (archive) => {
     sitemapItemList.push({
       priority: 0.6,
       changefreq: EnumChangefreq.DAILY,
-      url: getCategoryUrl(category.slug)
+      url: getCategoryURL(category.slug)
     })
   })
 
@@ -50,7 +51,7 @@ export const getSitemapXML = (archive) => {
     sitemapItemList.push({
       priority: 0.6,
       changefreq: EnumChangefreq.DAILY,
-      url: getTagUrl(tag.slug)
+      url: getTagURL(tag.slug)
     })
   })
 
@@ -58,7 +59,7 @@ export const getSitemapXML = (archive) => {
     sitemapItemList.push({
       priority: 0.8,
       changefreq: EnumChangefreq.DAILY,
-      url: getArticleUrl(article.id),
+      url: getArticleURL(article.id),
       lastmodISO: new Date(article.update_at).toISOString()
     })
   })

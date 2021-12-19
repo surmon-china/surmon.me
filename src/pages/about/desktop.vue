@@ -168,7 +168,7 @@
         <uimage cdn class="pal" src="/images/page-about/peace-and-love.jpg" />
         <span class="divider"></span>
         <ulink class="homepage-link" :href="VALUABLE_LINKS.GITHUB">
-          <uimage cdn src="/effects/ghchart.svg" />
+          <uimage cdn src="/ghchart.svg" />
         </ulink>
       </div>
     </div>

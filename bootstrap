@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+export PORT=9000
+node ./dist/sls.cjs.js

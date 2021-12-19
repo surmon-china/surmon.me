@@ -93,9 +93,6 @@ dump.rdb
 # Mac OS
 .DS_Store
 
-# resources
-public/effects/*
-!public/effects/.gitkeep
-
 # Serverless directories
 .serverless
+.fun

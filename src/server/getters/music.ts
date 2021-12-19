@@ -1,13 +1,11 @@
 /**
- * @file BFF Server music
- * @module server.tunnel.music
+ * @file BFF music getter
+ * @module server.getter.music
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import NeteaseMusic from 'simple-netease-cloud-music'
-import { TunnelModule } from '@/constants/tunnel'
 import { MUSIC_ALBUM_ID } from '@/config/app.config'
-import { tunnelCache } from '.'
 
 // https://521dimensions.com/open-source/amplitudejs/docs/configuration/playlists.html
 // https://521dimensions.com/open-source/amplitudejs/docs/configuration/song-objects.html#special-keys
@@ -24,7 +22,7 @@ const PLAY_LIST_LIMIT = 68
 const neteseMusic = new NeteaseMusic()
 
 // 获取歌单列表
-const fetchSongList = async (): Promise<Array<Song>> => {
+export const getSongList = async (): Promise<Array<Song>> => {
   const result = await neteseMusic._playlist(MUSIC_ALBUM_ID, PLAY_LIST_LIMIT)
   if (result.code < 0) {
     throw new Error(result.message)
@@ -49,9 +47,9 @@ const fetchSongList = async (): Promise<Array<Song>> => {
 }
 
 // 获取播放地址，403 暂不启用！
-const fetchSongs = async (): Promise<Song[]> => {
+export const getSongs = async (): Promise<Song[]> => {
   // 1. 获取列表
-  const songs = await fetchSongList()
+  const songs = await getSongList()
   // 2. 使用列表的 IDs 获取 urls
   const songIds = songs.map((song) => String(song.id))
   const { data: songUrls } = await neteseMusic.url(songIds, 128)
@@ -64,31 +62,4 @@ const fetchSongs = async (): Promise<Song[]> => {
       url: urlMap.get(song.id) as string
     }))
     .filter((song) => !!song.url)
-}
-
-const autoUpdateData = () => {
-  fetchSongList()
-    .then((data) => {
-      tunnelCache.set(TunnelModule.Music, data)
-      // 成功后 1 小时获取新数据
-      setTimeout(autoUpdateData, 1000 * 60 * 60 * 1)
-    })
-    .catch((error) => {
-      // 失败后 5 分钟更新一次数据
-      console.warn('[Tunnel Music]', '请求失败', error)
-      setTimeout(autoUpdateData, 1000 * 60 * 5)
-    })
-}
-
-// 初始化默认拉取数据
-autoUpdateData()
-
-export const musicService = async (): Promise<any> => {
-  if (tunnelCache.has(TunnelModule.Music)) {
-    return tunnelCache.get(TunnelModule.Music)
-  } else {
-    const data = await fetchSongList()
-    tunnelCache.set(TunnelModule.Music, data)
-    return data
-  }
 }

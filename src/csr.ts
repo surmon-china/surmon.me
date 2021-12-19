@@ -63,7 +63,7 @@ app.use(adsense, { ID: ADSENSE_CLIENT_ID, enabledAutoAD: true })
 app.use(gtag, {
   router,
   id: GA_MEASUREMENT_ID,
-  customResourceURL: getFileCDNUrl('/effects/gtag.js')
+  customResourceURL: getFileCDNUrl('/gtag.js')
 })
 
 // init: store (from SSR context or fetch)

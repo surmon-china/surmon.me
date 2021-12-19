@@ -1,10 +1,10 @@
 const path = require('path')
-const { build } = require('vite')
 const builtinModules = require('builtin-modules')
 const packageJSON = require('../package.json')
+const { build } = require('vite')
 
-exports.bundleSSRServer = async (paths) => {
-  console.info('Server bundling...\n')
+exports.bundleServerRender = async (paths) => {
+  console.info('Server render bundling...\n')
   return await build({
     publicDir: false,
     ssr: {
