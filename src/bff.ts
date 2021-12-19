@@ -32,7 +32,7 @@ const { app, server } = createExpressApp()
 // static
 app.use(express.static(PUBLIC_PATH))
 
-// resources
+// sitemap
 app.get('/sitemap.xml', async (_, response) => {
   try {
     const data = await cacher({
@@ -47,6 +47,7 @@ app.get('/sitemap.xml', async (_, response) => {
   }
 })
 
+// rss
 app.get('/rss.xml', async (_, response) => {
   try {
     const data = await cacher({
@@ -61,6 +62,7 @@ app.get('/rss.xml', async (_, response) => {
   }
 })
 
+// gtag
 app.get('/gtag.js', async (_, response) => {
   try {
     const data = await cacher({
@@ -76,6 +78,7 @@ app.get('/gtag.js', async (_, response) => {
   }
 })
 
+// ghchart
 app.get('/ghchart.svg', async (_, response) => {
   try {
     const data = await cacher({
@@ -91,7 +94,7 @@ app.get('/ghchart.svg', async (_, response) => {
   }
 })
 
-// tunnel
+// tunnel services
 app.get(
   `${API_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`,
   responser(
