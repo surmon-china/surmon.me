@@ -1,10 +1,10 @@
 /*!
-* Surmon.me v3.2.9
+* Surmon.me v3.2.10
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
 */
-'use strict';var http=require('http'),express=require('express'),cookieParser=require('cookie-parser'),fs=require('fs'),path=require('path'),axios=require('axios'),LRU=require('lru-cache'),vite=require('vite'),stream=require('stream'),sitemap=require('sitemap'),RSS=require('rss'),schedule=require('node-schedule'),WonderfulBingWallpaper=require('wonderful-bing-wallpaper'),NeteaseMusic=require('simple-netease-cloud-music'),compression=require('compression');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var http__default=/*#__PURE__*/_interopDefaultLegacy(http);var express__default=/*#__PURE__*/_interopDefaultLegacy(express);var cookieParser__default=/*#__PURE__*/_interopDefaultLegacy(cookieParser);var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var axios__default=/*#__PURE__*/_interopDefaultLegacy(axios);var LRU__default=/*#__PURE__*/_interopDefaultLegacy(LRU);var RSS__default=/*#__PURE__*/_interopDefaultLegacy(RSS);var schedule__default=/*#__PURE__*/_interopDefaultLegacy(schedule);var WonderfulBingWallpaper__default=/*#__PURE__*/_interopDefaultLegacy(WonderfulBingWallpaper);var NeteaseMusic__default=/*#__PURE__*/_interopDefaultLegacy(NeteaseMusic);var compression__default=/*#__PURE__*/_interopDefaultLegacy(compression);/**
+'use strict';var express=require('express'),RSS=require('rss'),axios=require('axios'),path=require('path'),stream=require('stream'),sitemap=require('sitemap'),WonderfulBingWallpaper=require('wonderful-bing-wallpaper'),NeteaseMusic=require('simple-netease-cloud-music'),fs=require('fs'),vite=require('vite'),LRU=require('lru-cache'),http=require('http'),compression=require('compression'),cookieParser=require('cookie-parser');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var express__default=/*#__PURE__*/_interopDefaultLegacy(express);var RSS__default=/*#__PURE__*/_interopDefaultLegacy(RSS);var axios__default=/*#__PURE__*/_interopDefaultLegacy(axios);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var WonderfulBingWallpaper__default=/*#__PURE__*/_interopDefaultLegacy(WonderfulBingWallpaper);var NeteaseMusic__default=/*#__PURE__*/_interopDefaultLegacy(NeteaseMusic);var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var LRU__default=/*#__PURE__*/_interopDefaultLegacy(LRU);var http__default=/*#__PURE__*/_interopDefaultLegacy(http);var compression__default=/*#__PURE__*/_interopDefaultLegacy(compression);var cookieParser__default=/*#__PURE__*/_interopDefaultLegacy(cookieParser);/**
  * @file Dev environment
  * @module environment
  * @author Surmon <https://github.com/surmon-china>
@@ -19,6 +19,24 @@ const NODE_ENV = "production";
 const isDev = "production" === NodeEnv.Development;
 "production" === NodeEnv.Production;
 "production" === NodeEnv.Test;/**
+ * @file Tunnel constant
+ * @module constant.tunnel
+ * @author Surmon <https://github.com/surmon-china>
+ */
+var TunnelModule;
+(function (TunnelModule) {
+    TunnelModule["BiliBili"] = "bilibili";
+    TunnelModule["Wallpaper"] = "wallpaper";
+    TunnelModule["GitHub"] = "gitHub";
+    TunnelModule["Music"] = "music";
+})(TunnelModule || (TunnelModule = {}));/**
+ * @file BFF server config
+ * @module config.bff
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const API_TUNNEL_PREFIX = '/_tunnel';
+const DEFAULT_SERVER_PORT = 3000;
+const getPort = () => Number(process.env.PORT || DEFAULT_SERVER_PORT);/**
  * @file App config
  * @module config.app
  * @author Surmon <https://github.com/surmon-china>
@@ -76,205 +94,28 @@ Object.freeze({
     INSTAGRAM: 'https://www.instagram.com/surmon666',
     TWITTER: 'https://twitter.com/surmon_me'
 });/**
- * @file Outside
- * @module service.outside
- * @author Surmon <https://github.com/surmon-china>
- */
-const getGAScriptURL = (gaMeasurementID) => {
-    return `https://www.googletagmanager.com/gtag/js?id=${gaMeasurementID}`;
-};/**
  * @file BFF Server helper
  * @module server.helper
  * @author Surmon <https://github.com/surmon-china>
  */
+// MARK: 与非生产资料解耦
+const NODEPRESS_API = `https://api.surmon.me`;
 const ROOT_PATH = process.cwd();
-const PRDO_CLIENT_PATH = path__default["default"].join(ROOT_PATH, 'dist', 'client');
-const PRDO_SERVER_PATH = path__default["default"].join(ROOT_PATH, 'dist', 'server');
-const PUBLIC_PATH = isDev ? path__default["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;
-const EFFECTS_PATH = path__default["default"].join(PUBLIC_PATH, 'effects');
-const packageJSON = JSON.parse(fs__default["default"].readFileSync(path__default["default"].resolve(ROOT_PATH, 'package.json'), 'utf-8'));/**
- * @file BFF GA updater
- * @module server.gtag
+const DIST_PATH = path__default["default"].join(ROOT_PATH, 'dist');
+const PRDO_CLIENT_PATH = path__default["default"].join(DIST_PATH, 'client');
+const PRDO_SERVER_PATH = path__default["default"].join(DIST_PATH, 'server');
+const PUBLIC_PATH = isDev ? path__default["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;/**
+ * @file BFF archive getter
+ * @module server.getter.archive
  * @author Surmon <https://github.com/surmon-china>
  */
-const UPDATE_TIME$2 = {
-    HOURS_1: 1000 * 60 * 60 * 1,
-    HOURS_24: 1000 * 60 * 60 * 24
-};
-const startGTagScriptUpdater = () => {
-    (function doUpdate() {
-        axios__default["default"]
-            .get(getGAScriptURL(GA_MEASUREMENT_ID), { timeout: 6000 })
-            .then((response) => {
-            if (response.status === 200) {
-                fs__default["default"].writeFileSync(path__default["default"].resolve(EFFECTS_PATH, 'gtag.js'), response.data);
-                console.info('[GA Script]', '更新成功', new Date());
-                setTimeout(doUpdate, UPDATE_TIME$2.HOURS_24);
-            }
-            else {
-                console.warn('[GA Script]', '更新失败', new Date(), response.data);
-                setTimeout(doUpdate, UPDATE_TIME$2.HOURS_1);
-            }
-        })
-            .catch((error) => {
-            console.warn('[GA Script]', '更新网络连接失败', new Date(), error.message, error?.toJSON?.());
-            setTimeout(doUpdate, UPDATE_TIME$2.HOURS_1);
-        });
-    })();
-};/**
- * @file BFF ghchart updater
- * @module server.ghchart
- * @author Surmon <https://github.com/surmon-china>
- * @repo https://github.com/sallar/github-contributions-chart
- */
-const UPDATE_TIME$1 = {
-    HOURS_05: 1000 * 60 * 30,
-    HOURS_6: 1000 * 60 * 60 * 6
-};
-const startGitHubChartUpdater = () => {
-    (function doUpdate() {
-        axios__default["default"]
-            .get(`https://ghchart.rshah.org/${GITHUB_UID}`, { timeout: 8000 })
-            .then((response) => {
-            if (response.status === 200) {
-                fs__default["default"].writeFileSync(path__default["default"].resolve(EFFECTS_PATH, 'ghchart.svg'), response.data);
-                console.info('[GitHub Chart]', '更新成功', new Date());
-                setTimeout(doUpdate, UPDATE_TIME$1.HOURS_6);
-            }
-            else {
-                console.warn('[GitHub Chart]', '更新失败', new Date(), response.data);
-                setTimeout(doUpdate, UPDATE_TIME$1.HOURS_05);
-            }
-        })
-            .catch((error) => {
-            console.warn('[GitHub Chart]', '更新网络连接失败', new Date(), error?.toJSON?.());
-            setTimeout(doUpdate, UPDATE_TIME$1.HOURS_05);
-        });
-    })();
-};/**
- * @file Archive sitemap generator
- * @module server.archive.sitemap
- * @author Surmon <https://github.com/surmon-china>
- */
-const getSitemapXML = (archive) => {
-    const sitemapStream = new sitemap.SitemapStream({
-        hostname: META.url
-    });
-    const sitemapItemList = [
-        { url: META.url, changefreq: sitemap.EnumChangefreq.ALWAYS, priority: 1 },
-        {
-            url: getPageUrl('about'),
-            changefreq: sitemap.EnumChangefreq.YEARLY,
-            priority: 1
-        },
-        {
-            url: getPageUrl('merch'),
-            changefreq: sitemap.EnumChangefreq.YEARLY,
-            priority: 1
-        },
-        {
-            url: getPageUrl('archive'),
-            changefreq: sitemap.EnumChangefreq.ALWAYS,
-            priority: 1
-        },
-        {
-            url: getPageUrl('guestbook'),
-            changefreq: sitemap.EnumChangefreq.ALWAYS,
-            priority: 1
-        }
-    ];
-    archive.categories.forEach((category) => {
-        sitemapItemList.push({
-            priority: 0.6,
-            changefreq: sitemap.EnumChangefreq.DAILY,
-            url: getCategoryUrl(category.slug)
-        });
-    });
-    archive.tags.forEach((tag) => {
-        sitemapItemList.push({
-            priority: 0.6,
-            changefreq: sitemap.EnumChangefreq.DAILY,
-            url: getTagUrl(tag.slug)
-        });
-    });
-    archive.articles.forEach((article) => {
-        sitemapItemList.push({
-            priority: 0.8,
-            changefreq: sitemap.EnumChangefreq.DAILY,
-            url: getArticleUrl(article.id),
-            lastmodISO: new Date(article.update_at).toISOString()
-        });
-    });
-    return sitemap.streamToPromise(stream.Readable.from(sitemapItemList).pipe(sitemapStream));
-};/**
- * @file Archive RSS generator
- * @module server.archive.rss
- * @author Surmon <https://github.com/surmon-china>
- */
-const getRSSXML = (archive) => {
-    const feed = new RSS__default["default"]({
-        title: META.title,
-        description: META.description,
-        site_url: META.url,
-        feed_url: `${META.url}/rss.xml`,
-        image_url: `${META.url}/icon.png`,
-        managingEditor: META.author,
-        webMaster: META.author,
-        generator: `${packageJSON.name} ${packageJSON.version}`,
-        categories: archive.categories.map((category) => category.slug),
-        copyright: `${new Date().getFullYear()} ${META.title}`,
-        language: 'zh',
-        ttl: 60
-    });
-    archive.articles.forEach((article) => feed.item({
-        title: article.title,
-        description: article.description,
-        url: getArticleUrl(article.id),
-        guid: getArticleUrl(article.id),
-        categories: article.category.map((category) => category.slug),
-        author: META.author,
-        date: article.create_at,
-        enclosure: {
-            url: article.thumb
-        }
-    }));
-    return feed.xml({ indent: true });
-};/**
- * @file BFF archive cacher
- * @module server.archive
- * @author Surmon <https://github.com/surmon-china>
- */
-const getPageUrl = (page) => `${META.url}/${page}`;
-const getTagUrl = (tag) => `${META.url}/tag/${tag}`;
-const getCategoryUrl = (category) => `${META.url}/category/${category}`;
-const getArticleUrl = (id) => `${META.url}/article/${id}`;
-const appProdENV = vite.loadEnv('production', ROOT_PATH);
-const archiveURL = `${appProdENV.VITE_API_ONLINE_URL}/archive`;
-const UPDATE_TIME = {
-    HOURS_05: 1000 * 60 * 30,
-    HOURS_1: 1000 * 60 * 60
-};
-var ArchiveCacheKey;
-(function (ArchiveCacheKey) {
-    ArchiveCacheKey["Data"] = "data";
-    ArchiveCacheKey["Sitemap"] = "sitemap";
-    ArchiveCacheKey["RSS"] = "rss";
-})(ArchiveCacheKey || (ArchiveCacheKey = {}));
-const archiveCache = new LRU__default["default"]({
-    max: Infinity,
-    maxAge: 1000 * 60 * 60 * 2 // 2 hour cache
-});
-const handleSitemapRequest = (_, response) => {
-    response.header('Content-Type', 'application/xml');
-    response.send(archiveCache.get(ArchiveCacheKey.Sitemap));
-};
-const handleRSSRequest = (_, response) => {
-    response.header('Content-Type', 'application/xml');
-    response.send(archiveCache.get(ArchiveCacheKey.RSS));
-};
-const fecthArchiveData = () => {
+const getPageURL = (page) => `${META.url}/${page}`;
+const getTagURL = (tag) => `${META.url}/tag/${tag}`;
+const getCategoryURL = (category) => `${META.url}/category/${category}`;
+const getArticleURL = (id) => `${META.url}/article/${id}`;
+const getArchiveData = () => {
     return axios__default["default"]
-        .get(archiveURL, { timeout: 6000 })
+        .get(`${NODEPRESS_API}/archive`, { timeout: 6000 })
         .then((response) => {
         if (response.status === 200) {
             return response.data.result;
@@ -286,49 +127,140 @@ const fecthArchiveData = () => {
         .catch((error) => {
         return Promise.reject(error.toJSON?.() || error);
     });
-};
-const startArchiveUpdater = () => {
-    (function doUpdate() {
-        fecthArchiveData()
-            .then(async (archive) => {
-            const sitemap = await getSitemapXML(archive);
-            archiveCache.set(ArchiveCacheKey.Data, archive);
-            archiveCache.set(ArchiveCacheKey.RSS, getRSSXML(archive));
-            archiveCache.set(ArchiveCacheKey.Sitemap, sitemap.toString());
-            setTimeout(doUpdate, UPDATE_TIME.HOURS_1);
-        })
-            .catch((error) => {
-            console.warn('[archive]', '更新失败', new Date(), error);
-            setTimeout(doUpdate, UPDATE_TIME.HOURS_05);
+};/**
+ * @file Archive RSS generator
+ * @module server.getter.rss
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const getRSSXML = async (archiveData) => {
+    const archive = archiveData || (await getArchiveData());
+    const feed = new RSS__default["default"]({
+        title: META.title,
+        description: META.description,
+        site_url: META.url,
+        feed_url: `${META.url}/rss.xml`,
+        image_url: `${META.url}/icon.png`,
+        managingEditor: META.author,
+        webMaster: META.author,
+        generator: `${META.domain}`,
+        categories: archive.categories.map((category) => category.slug),
+        copyright: `${new Date().getFullYear()} ${META.title}`,
+        language: 'zh',
+        ttl: 60
+    });
+    archive.articles.forEach((article) => feed.item({
+        title: article.title,
+        description: article.description,
+        url: getArticleURL(article.id),
+        guid: getArticleURL(article.id),
+        categories: article.category.map((category) => category.slug),
+        author: META.author,
+        date: article.create_at,
+        enclosure: {
+            url: article.thumb
+        }
+    }));
+    return feed.xml({ indent: true });
+};/**
+ * @file Archive sitemap generator
+ * @module server.getter.sitemap
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const getSitemapXML = async (archiveData) => {
+    const archive = archiveData || (await getArchiveData());
+    const sitemapStream = new sitemap.SitemapStream({
+        hostname: META.url
+    });
+    const sitemapItemList = [
+        { url: META.url, changefreq: sitemap.EnumChangefreq.ALWAYS, priority: 1 },
+        {
+            url: getPageURL('about'),
+            changefreq: sitemap.EnumChangefreq.YEARLY,
+            priority: 1
+        },
+        {
+            url: getPageURL('merch'),
+            changefreq: sitemap.EnumChangefreq.YEARLY,
+            priority: 1
+        },
+        {
+            url: getPageURL('archive'),
+            changefreq: sitemap.EnumChangefreq.ALWAYS,
+            priority: 1
+        },
+        {
+            url: getPageURL('guestbook'),
+            changefreq: sitemap.EnumChangefreq.ALWAYS,
+            priority: 1
+        }
+    ];
+    archive.categories.forEach((category) => {
+        sitemapItemList.push({
+            priority: 0.6,
+            changefreq: sitemap.EnumChangefreq.DAILY,
+            url: getCategoryURL(category.slug)
         });
-    })();
+    });
+    archive.tags.forEach((tag) => {
+        sitemapItemList.push({
+            priority: 0.6,
+            changefreq: sitemap.EnumChangefreq.DAILY,
+            url: getTagURL(tag.slug)
+        });
+    });
+    archive.articles.forEach((article) => {
+        sitemapItemList.push({
+            priority: 0.8,
+            changefreq: sitemap.EnumChangefreq.DAILY,
+            url: getArticleURL(article.id),
+            lastmodISO: new Date(article.update_at).toISOString()
+        });
+    });
+    return sitemap.streamToPromise(stream.Readable.from(sitemapItemList).pipe(sitemapStream));
 };/**
- * @file Error constant
- * @module constant.error
+ * @file Outside
+ * @module service.outside
  * @author Surmon <https://github.com/surmon-china>
  */
-const INVALID_ERROR = 500;/**
- * @file Tunnel constant
- * @module constant.tunnel
+const getGAScriptURL = (gaMeasurementID) => {
+    return `https://www.googletagmanager.com/gtag/js?id=${gaMeasurementID}`;
+};/**
+ * @file BFF GA getter
+ * @module server.getter.gtag
  * @author Surmon <https://github.com/surmon-china>
  */
-var TunnelModule;
-(function (TunnelModule) {
-    TunnelModule["BiliBili"] = "bilibili";
-    TunnelModule["Wallpaper"] = "wallpaper";
-    TunnelModule["GitHub"] = "gitHub";
-    TunnelModule["Music"] = "music";
-})(TunnelModule || (TunnelModule = {}));
-const getTunnelApiPath = (moduleName) => {
-    return `/${moduleName}`;
+const getGTagScript = async () => {
+    const response = await axios__default["default"].get(getGAScriptURL(GA_MEASUREMENT_ID), { timeout: 6000 });
+    if (response.status === 200) {
+        return response.data;
+    }
+    else {
+        throw response.data;
+    }
 };/**
- * @file BFF Server bilibili
- * @module server.tunnel.bilibili
+ * @file BFF ghchart getter
+ * @module server.getter.ghchart
+ * @author Surmon <https://github.com/surmon-china>
+ * @repo https://github.com/sallar/github-contributions-chart
+ */
+const getGitHubChartSVG = async () => {
+    const response = await axios__default["default"].get(`https://ghchart.rshah.org/${GITHUB_UID}`, {
+        timeout: 8000
+    });
+    if (response.status === 200) {
+        return response.data;
+    }
+    else {
+        throw response.data;
+    }
+};/**
+ * @file BFF bilibili getter
+ * @module server.getter.bilibili
  * @author Surmon <https://github.com/surmon-china>
  */
 const PAGE_SIZE = 45;
 const PAGE = 1;
-const fetchVideoData = async () => {
+const getBiliBiliVideos = async () => {
     const videosResult = await axios__default["default"].request({
         headers: { 'User-Agent': META.title },
         url: `https://api.bilibili.com/x/space/arc/search?mid=${BILIBILI_UID}&ps=${PAGE_SIZE}&tid=0&pn=${PAGE}&order=pubdate&jsonp=jsonp`
@@ -339,38 +271,14 @@ const fetchVideoData = async () => {
     else {
         throw new Error(String(videosResult.status + videosResult.statusText));
     }
-};
-const autoUpdateData$3 = () => {
-    fetchVideoData()
-        .then((data) => {
-        tunnelCache.set(TunnelModule.BiliBili, data);
-        // 成功后 1 小时更新一次数据
-        setTimeout(autoUpdateData$3, 1000 * 60 * 60 * 1);
-    })
-        .catch((error) => {
-        // 失败后 5 分钟更新一次数据
-        console.warn('[Tunnel BiliBili]', '请求失败', error);
-        setTimeout(autoUpdateData$3, 1000 * 60 * 5);
-    });
-};
-autoUpdateData$3();
-const bilibiliService = async () => {
-    if (tunnelCache.has(TunnelModule.BiliBili)) {
-        return tunnelCache.get(TunnelModule.BiliBili);
-    }
-    else {
-        const data = await fetchVideoData();
-        tunnelCache.set(TunnelModule.BiliBili, data);
-        return data;
-    }
 };/**
- * @file BFF Server wallpaper
- * @module server.tunnel.wallpaper
+ * @file BFF wallpaper getter
+ * @module server.getter.wallpaper
  * @author Surmon <https://github.com/surmon-china>
  */
 const wbw = new WonderfulBingWallpaper__default["default"]();
 // 获取今日壁纸
-const fetchWallpapers = async (params) => {
+const getWallpapers = async (params) => {
     const wallpaperJSON = await wbw.getWallpapers({ ...params, size: 8 });
     try {
         return wbw.humanizeWallpapers(wallpaperJSON);
@@ -380,8 +288,8 @@ const fetchWallpapers = async (params) => {
     }
 };
 // 今日壁纸缓存（ZH）
-const fetchZHWallpapers = () => {
-    return fetchWallpapers({
+const getZHWallpapers = () => {
+    return getWallpapers({
         local: 'zh-CN',
         host: 'cn.bing.com',
         ensearch: 0
@@ -389,51 +297,24 @@ const fetchZHWallpapers = () => {
 };
 // 今日壁纸缓存（EN）
 const getENWallpapers = () => {
-    return fetchWallpapers({
+    return getWallpapers({
         local: 'en-US',
         host: 'bing.com',
         ensearch: 1
     });
 };
-const fetchAllWallpapers = async () => {
-    const [zh, en] = await Promise.all([fetchZHWallpapers(), getENWallpapers()]);
+const getAllWallpapers = async () => {
+    const [zh, en] = await Promise.all([getZHWallpapers(), getENWallpapers()]);
     return { zh, en };
-};
-const autoUpdateData$2 = () => {
-    fetchAllWallpapers()
-        .then((data) => {
-        // 成功后，仅 set cache
-        tunnelCache.set(TunnelModule.Wallpaper, data);
-    })
-        .catch((error) => {
-        // 失败后 30 分钟更新一次数据
-        console.warn('[Tunnel Wallpaper]', '请求失败', error);
-        setTimeout(autoUpdateData$2, 1000 * 60 * 30);
-    });
-};
-// 初始化默认拉取数据
-autoUpdateData$2();
-// 周期时间定为每天的 0:00:10 重新获取数据
-schedule__default["default"].scheduleJob('10 0 0 * * *', autoUpdateData$2);
-const wallpaperService = async () => {
-    // GFW! https://www.ithome.com/0/592/920.htm
-    return Promise.reject(`GFW! https://www.ithome.com/0/592/920.htm`);
-    // if (tunnelCache.has(TunnelModule.Wallpaper)) {
-    //   return tunnelCache.get(TunnelModule.Wallpaper)
-    // } else {
-    //   const data = await fetchAllWallpapers()
-    //   tunnelCache.set(TunnelModule.Wallpaper, data)
-    //   return data
-    // }
 };/**
- * @file BFF Server github
- * @module server.tunnel.github
+ * @file BFF GitHub getter
+ * @module server.getter.github
  * @author Surmon <https://github.com/surmon-china>
  */
-const fetchGitHubRepositories = async () => {
+const getGitHubRepositories = async () => {
     const response = await axios__default["default"].request({
         headers: { 'User-Agent': META.title },
-        url: `http://api.github.com/users/${GITHUB_UID}/repos?per_page=1000`
+        url: `http://api.github.com/users/${GITHUB_UID}/repos?per_page=168`
     });
     return response.data.map((rep) => ({
         html_url: rep.html_url,
@@ -447,39 +328,15 @@ const fetchGitHubRepositories = async () => {
         created_at: rep.created_at,
         language: rep.language
     }));
-};
-const autoUpdateData$1 = () => {
-    fetchGitHubRepositories()
-        .then((data) => {
-        tunnelCache.set(TunnelModule.GitHub, data);
-        // 成功后 2 小时更新一次数据
-        setTimeout(autoUpdateData$1, 1000 * 60 * 60 * 2);
-    })
-        .catch((error) => {
-        // 失败后 10 分钟更新一次数据
-        console.warn('[Tunnel GitHub]', '请求失败', error);
-        setTimeout(autoUpdateData$1, 1000 * 60 * 10);
-    });
-};
-autoUpdateData$1();
-const githubService = async () => {
-    if (tunnelCache.has(TunnelModule.GitHub)) {
-        return tunnelCache.get(TunnelModule.GitHub);
-    }
-    else {
-        const data = await fetchGitHubRepositories();
-        tunnelCache.set(TunnelModule.GitHub, data);
-        return data;
-    }
 };/**
- * @file BFF Server music
- * @module server.tunnel.music
+ * @file BFF music getter
+ * @module server.getter.music
  * @author Surmon <https://github.com/surmon-china>
  */
 const PLAY_LIST_LIMIT = 68;
 const neteseMusic = new NeteaseMusic__default["default"]();
 // 获取歌单列表
-const fetchSongList = async () => {
+const getSongList = async () => {
     const result = await neteseMusic._playlist(MUSIC_ALBUM_ID, PLAY_LIST_LIMIT);
     if (result.code < 0) {
         throw new Error(result.message);
@@ -496,57 +353,7 @@ const fetchSongList = async () => {
         cover_art_url: track.al?.picUrl,
         url: null
     })));
-};
-const autoUpdateData = () => {
-    fetchSongList()
-        .then((data) => {
-        tunnelCache.set(TunnelModule.Music, data);
-        // 成功后 1 小时获取新数据
-        setTimeout(autoUpdateData, 1000 * 60 * 60 * 1);
-    })
-        .catch((error) => {
-        // 失败后 5 分钟更新一次数据
-        console.warn('[Tunnel Music]', '请求失败', error);
-        setTimeout(autoUpdateData, 1000 * 60 * 5);
-    });
-};
-// 初始化默认拉取数据
-autoUpdateData();
-const musicService = async () => {
-    if (tunnelCache.has(TunnelModule.Music)) {
-        return tunnelCache.get(TunnelModule.Music);
-    }
-    else {
-        const data = await fetchSongList();
-        tunnelCache.set(TunnelModule.Music, data);
-        return data;
-    }
-};/**
- * @file BFF Server tunnel
- * @module server.tunnel
- * @author Surmon <https://github.com/surmon-china>
- */
-// cache
-const tunnelCache = new LRU__default["default"]({
-    max: Infinity,
-    maxAge: 1000 * 60 * 60 // 1 hour cache
-});
-// router
-const handleTunnelService = (tunnelService) => {
-    return (_, response) => {
-        tunnelService()
-            .then((data) => response.send(data))
-            .catch((error) => {
-            response.status(INVALID_ERROR);
-            response.send(error?.message || String(error));
-        });
-    };
-};
-const tunnelRouter = express__default["default"].Router();
-tunnelRouter.get(getTunnelApiPath(TunnelModule.BiliBili), handleTunnelService(bilibiliService));
-tunnelRouter.get(getTunnelApiPath(TunnelModule.Wallpaper), handleTunnelService(wallpaperService));
-tunnelRouter.get(getTunnelApiPath(TunnelModule.GitHub), handleTunnelService(githubService));
-tunnelRouter.get(getTunnelApiPath(TunnelModule.Music), handleTunnelService(musicService));const resolveTemplate = (config) => {
+};const resolveTemplate = (config) => {
     const { template, appHTML, metas, scripts, manifest } = config;
     const bodyScripts = [
         scripts
@@ -605,9 +412,8 @@ tunnelRouter.get(getTunnelApiPath(TunnelModule.Music), handleTunnelService(music
         }
     });
 };const enableProdRuntime = async (app) => {
-    const template = fs__default["default"].readFileSync(path__default["default"].resolve(PRDO_CLIENT_PATH, 'template.html'), 'utf-8');
+    const template = fs__default["default"].readFileSync(path__default["default"].resolve(DIST_PATH, 'template.html'), 'utf-8');
     const { renderApp, renderError } = require(path__default["default"].resolve(PRDO_SERVER_PATH, 'ssr.js'));
-    app.use(compression__default["default"]());
     app.use('*', async (request, response) => {
         try {
             const redered = await renderApp(request);
@@ -632,51 +438,193 @@ tunnelRouter.get(getTunnelApiPath(TunnelModule.Music), handleTunnelService(music
         }
     });
 };/**
- * @file BFF server config
- * @module config.bff
+ * @file Error constant
+ * @module constant.error
  * @author Surmon <https://github.com/surmon-china>
  */
-const API_TUNNEL_PREFIX = '/_tunnel';
-const BFF_SERVER_PORT = 3000;/**
+const INVALID_ERROR = 500;/**
+ * @file BFF Server responser
+ * @module server.responser
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const erroror = (response, error) => {
+    console.warn(`[BFF] error:`, error);
+    response.status(INVALID_ERROR);
+    response.send(error?.message || String(error));
+};
+const responser = (promise) => {
+    return (_, response) => {
+        promise.then((data) => response.send(data)).catch((error) => erroror(response, error));
+    };
+};/**
+ * @file BFF Server cacher
+ * @module server.cacher
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const bffCache = new LRU__default["default"]({
+    max: Infinity,
+    maxAge: 1000 * 60 * 60 * 2 // 2 hour cache
+});
+const retryingMap = new Map();
+const retry = (config) => {
+    if (bffCache.has(config.key)) {
+        retryingMap.set(config.key, false);
+        return;
+    }
+    config
+        .getter()
+        .then((data) => {
+        bffCache.set(config.key, data, config.age * 1000);
+    })
+        .catch((error) => {
+        console.warn('[cacher] retry error:', error);
+    })
+        .finally(() => {
+        retryingMap.set(config.key, false);
+    });
+};
+const cacher = async (config) => {
+    // cached
+    if (bffCache.has(config.key)) {
+        return bffCache.get(config.key);
+    }
+    try {
+        const data = await config.getter();
+        bffCache.set(config.key, data, config.age * 1000);
+        return data;
+    }
+    catch (error) {
+        // retry only once
+        if (config.retryWhen && !retryingMap.get(config.key)) {
+            retryingMap.set(config.key, true);
+            setTimeout(() => retry({ ...config }), config.retryWhen * 1000);
+        }
+        const err = typeof error === 'string' ? new Error(error) : error;
+        err.name = `[cacher] ${err.name || ''}`;
+        return Promise.reject(err);
+    }
+};/**
+ * @file BFF Server main
+ * @module server.index
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const createExpressApp = () => {
+    // init app
+    const app = express__default["default"]();
+    const server = http__default["default"].createServer(app);
+    // middlewares
+    app.use(cookieParser__default["default"]());
+    app.use(compression__default["default"]());
+    return {
+        app,
+        server
+    };
+};/**
  * @file BFF server entry
  * @module BFF-server
  * @author Surmon <https://github.com/surmon-china>
  */
 // @ts-expect-error
 process.noDeprecation = true;
-// replace global console
-const { log, warn, info } = console;
-const color = (c) => (isDev ? c : '');
-global.console = Object.assign(console, {
-    log: (...args) => log('[log]', ...args),
-    info: (...args) => info(color('\x1B[34m%s\x1B[0m'), '[info]', ...args),
-    error: (...args) => info(color('\x1B[31m%s\x1B[0m'), '[error]', ...args),
-    warn: (...args) => warn(color('\x1B[33m%s\x1B[0m'), '[warn]', ...args)
-});
-// init app
-const app = express__default["default"]();
-const server = http__default["default"].createServer(app);
-// cookie
-app.use(cookieParser__default["default"]());
+// app
+const { app, server } = createExpressApp();
 // static
 app.use(express__default["default"].static(PUBLIC_PATH));
-// tunnel
-app.use(API_TUNNEL_PREFIX, tunnelRouter);
-// sitemap & rss
-app.use('/sitemap.xml', handleSitemapRequest);
-app.use('/rss.xml', handleRSSRequest);
+// sitemap
+app.get('/sitemap.xml', async (_, response) => {
+    try {
+        const data = await cacher({
+            key: 'sitemap',
+            age: 60 * 60,
+            getter: getSitemapXML
+        });
+        response.header('Content-Type', 'application/xml');
+        response.send(data);
+    }
+    catch (error) {
+        erroror(response, error);
+    }
+});
+// rss
+app.get('/rss.xml', async (_, response) => {
+    try {
+        const data = await cacher({
+            key: 'rss',
+            age: 60 * 60,
+            getter: getRSSXML
+        });
+        response.header('Content-Type', 'application/xml');
+        response.send(data);
+    }
+    catch (error) {
+        erroror(response, error);
+    }
+});
+// gtag
+app.get('/gtag.js', async (_, response) => {
+    try {
+        const data = await cacher({
+            key: 'gtag',
+            age: 60 * 60 * 24,
+            retryWhen: 60 * 60 * 1,
+            getter: getGTagScript
+        });
+        response.header('Content-Type', 'application/javascript');
+        response.send(data);
+    }
+    catch (error) {
+        erroror(response, error);
+    }
+});
+// ghchart
+app.get('/ghchart.svg', async (_, response) => {
+    try {
+        const data = await cacher({
+            key: 'ghchart',
+            age: 60 * 60 * 6,
+            retryWhen: 60 * 60 * 30,
+            getter: getGitHubChartSVG
+        });
+        response.header('Content-Type', 'image/svg+xml');
+        response.send(data);
+    }
+    catch (error) {
+        erroror(response, error);
+    }
+});
+// tunnel services
+app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`, responser(cacher({
+    key: 'bilibili',
+    age: 60 * 60 * 1,
+    retryWhen: 60 * 5,
+    getter: getBiliBiliVideos
+})));
+app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`, responser(cacher({
+    key: 'wallpaper',
+    age: 60 * 60 * 8,
+    retryWhen: 60 * 30,
+    getter: getAllWallpapers
+})));
+app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.GitHub}`, responser(cacher({
+    key: 'github',
+    age: 60 * 60 * 2,
+    retryWhen: 60 * 30,
+    getter: getGitHubRepositories
+})));
+app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.Music}`, responser(cacher({
+    key: 'music',
+    age: 60 * 60 * 1,
+    retryWhen: 60 * 10,
+    getter: getSongList
+})));
 // app effect
 isDev ? enableDevRuntime(app) : enableProdRuntime(app);
 // run
-server.listen(BFF_SERVER_PORT, () => {
+server.listen(getPort(), () => {
     const infos = [
         `in ${NODE_ENV}`,
         `at ${new Date().toLocaleString()}`,
         `listening on ${JSON.stringify(server.address())}`
     ];
     console.info('[surmon.me]', `Run! ${infos.join(', ')}.`);
-    // run BFF services
-    startGTagScriptUpdater();
-    startGitHubChartUpdater();
-    startArchiveUpdater();
 });//# sourceMappingURL=bff.cjs.js.map
