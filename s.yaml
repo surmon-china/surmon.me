@@ -1,0 +1,49 @@
+# https://github.com/devsapp/fc/blob/jiangyu-docs/docs/zh/yaml.md
+edition: 1.0.0
+name: surmon-me
+access: 'default'
+
+vars:
+  region: cn-hongkong
+  service:
+    name: surmon-me
+    description: 'Surmon.me serverless service'
+
+services:
+  framework: # 业务名称/模块名称
+    component: fc
+    actions:
+      pre-deploy:
+        - run: yarn install --frozen-lockfile
+          path: ./
+        - run: yarn build
+          path: ./
+        - run: yarn install --production
+          path: ./
+    #  post-deploy: # 在deploy之前运行
+    #    - run: s nas upload ./db.sqlite3 /mnt/auto  # 要运行的命令行
+    #      path: ./ # 命令行运行的路径
+    props:
+      region: ${vars.region}
+      service: ${vars.service}
+      function:
+        name: surmon-me
+        description: 'Surmon.me serverless Function'
+        codeUri: './'
+        runtime: nodejs14
+        timeout: 60
+        caPort: 9000
+        memorySize: 512
+        ossBucket: surmon-me-function
+      triggers:
+        - name: httpTrigger
+          type: http
+          config:
+            authType: anonymous
+            methods:
+              - GET
+      customDomains:
+        - domainName: auto
+          protocol: HTTP
+          routeConfigs:
+            - path: '/*'

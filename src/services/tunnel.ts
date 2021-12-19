@@ -5,15 +5,15 @@
  */
 
 import axios, { AxiosInstance } from 'axios'
-import { API_TUNNEL_PREFIX, BFF_SERVER_PORT } from '/@/config/bff.config'
-import { TunnelModule, getTunnelApiPath } from '/@/constants/tunnel'
+import { API_TUNNEL_PREFIX, getPort } from '/@/config/bff.config'
+import { TunnelModule } from '/@/constants/tunnel'
 import { isServer } from '/@/app/environment'
 
 const tunnel = axios.create({
   baseURL: API_TUNNEL_PREFIX,
   proxy: isServer && {
     host: 'localhost',
-    port: BFF_SERVER_PORT
+    port: getPort()
   }
 })
 
@@ -23,7 +23,7 @@ const service = {
   $: tunnel,
   request: <T = any>(...args: Parameters<AxiosInstance['request']>): Promise<T> =>
     tunnel.request(...args),
-  dispatch: <T = any>(module: TunnelModule): Promise<T> => tunnel.get(getTunnelApiPath(module))
+  dispatch: <T = any>(module: TunnelModule): Promise<T> => tunnel.get(module)
 }
 
 export default service

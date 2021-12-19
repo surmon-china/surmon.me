@@ -1,15 +1,15 @@
 const path = require('path')
-const { bundle } = require('@surmon-china/libundler')
 const builtinModules = require('builtin-modules')
 const packageJSON = require('../package.json')
+const { bundle } = require('@surmon-china/libundler')
 
-exports.bundleBFFServer = (paths) => {
-  console.log('\nBFF bundling...\n')
+exports.bundleSLSServer = (paths) => {
+  console.log('\nServerless server bundling...\n')
   return bundle({
-    libName: 'bff',
-    entry: 'src/bff.ts',
+    libName: 'sls',
+    entry: 'src/sls.ts',
     outDir: paths.dist,
-    outFileName: 'bff',
+    outFileName: 'sls',
     targets: ['cjs'],
     parser: false,
     sourcemap: true,

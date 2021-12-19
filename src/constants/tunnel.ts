@@ -10,7 +10,3 @@ export enum TunnelModule {
   GitHub = 'gitHub',
   Music = 'music'
 }
-
-export const getTunnelApiPath = (moduleName: TunnelModule) => {
-  return `/${moduleName}`
-}

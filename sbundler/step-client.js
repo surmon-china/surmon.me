@@ -1,5 +1,3 @@
-const fs = require('fs-extra')
-const path = require('path')
 const { build } = require('vite')
 
 exports.bundleSSRClent = async (paths) => {
@@ -11,9 +9,4 @@ exports.bundleSSRClent = async (paths) => {
       emptyOutDir: false
     }
   })
-
-  await fs.rename(
-    path.resolve(paths.client, 'index.html'),
-    path.resolve(paths.client, 'template.html')
-  )
 }
