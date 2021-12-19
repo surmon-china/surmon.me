@@ -1,0 +1,14 @@
+org: '1253995560'
+component: layer
+name: surmon-me-layer
+app: surmon-me
+stage: prod
+
+inputs:
+  name: surmon-me-layer
+  region: ap-hongkong
+  src:
+    src: ./node_modules
+    targetDir: /node_modules
+  runtimes:
+    - Nodejs12.16
