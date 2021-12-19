@@ -1,0 +1,5 @@
+#!/bin/sh
+
+export PORT=9000
+
+/var/lang/node12/bin/node ./dist/sls.cjs.js

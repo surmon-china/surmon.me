@@ -72,9 +72,6 @@ package-lock.json
 # Vuniversal build output
 dist
 
-# Serverless directories
-.serverless
-
 # IDE
 .idea
 
@@ -96,3 +93,5 @@ dump.rdb
 # Serverless directories
 .serverless
 .fun
+.s
+code
