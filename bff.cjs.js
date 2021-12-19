@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.2.10
+* Surmon.me v3.2.11
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -569,7 +569,7 @@ app.get('/gtag.js', async (_, response) => {
             retryWhen: 60 * 60 * 1,
             getter: getGTagScript
         });
-        response.header('Content-Type', 'application/javascript');
+        response.header('Content-Type', 'text/javascript');
         response.send(data);
     }
     catch (error) {
