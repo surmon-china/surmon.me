@@ -1,32 +1,37 @@
 app: surmon-me
 stage: prod
 component: http
-name: http-express
+name: surmon-me
 org: '1253995560'
 
 # https://github.com/serverless-components/tencent-http/blob/master/docs/configure.md
 inputs:
   region: ap-hongkong
   type: web
-
-  # https://github.com/serverless-components/tencent-scf/blob/master/docs/configure.md
   src:
     src: ./
+    # dist: ./
     # hook: npm run build
-    # dist: ./dist
+    # hook: npm run build
+    # dist: ./
     exclude:
       - 'node_modules/**'
   faas:
     runtime: Nodejs12.16
     framework: express
     name: '${name}'
-    environments: []
+    environments:
+      - key: PORT
+        value: 9000
     eip: true
     timeout: 3
     memorySize: 512
     tags: []
+    layers:
+      - name: '${output:${stage}:${app}:surmon-me-layer.name}'
+        version: '${output:${stage}:${app}:surmon-me-layer.version}'
 
-  # https://github.com/serverless-components/tencent-apigateway/blob/master/docs/configure.md
+  # https://github.com/serverless-components/tencent-http/blob/master/docs/configure.md#apigw
   apigw:
     protocols:
       - http
@@ -46,7 +51,7 @@ inputs:
         customMap: true
         isDefaultMapping: false
 
-  # https://github.com/serverless-components/tencent-cos/blob/master/docs/configure.md
+  # https://github.com/serverless-components/tencent-http/blob/master/docs/configure.md#source
   assets:
     cos:
       bucket: surmon-me-1253995560
