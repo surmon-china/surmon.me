@@ -93,7 +93,7 @@
 
 /// Adds a browser prefix to the property
 @mixin blur-filter($param: 'horizontal') {
-  filter: cdn-url('/images/filters/motion-blur.svg##{$param}');
+  filter: force-source-url('/images/filters/motion-blur.svg##{$param}');
 }
 
 /// Text Shadow
