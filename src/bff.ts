@@ -71,7 +71,7 @@ app.get('/gtag.js', async (_, response) => {
       retryWhen: 60 * 60 * 1, // 1 hours
       getter: getGTagScript
     })
-    response.header('Content-Type', 'application/javascript')
+    response.header('Content-Type', 'text/javascript')
     response.send(data)
   } catch (error) {
     erroror(response, error)
