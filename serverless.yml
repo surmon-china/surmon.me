@@ -1,0 +1,22 @@
+component: scf
+name: surmon-me
+inputs:
+  src:
+    src: ./
+    exclude:
+      - .env
+  type: web
+  name: surmon-me
+  region: ap-hongkong
+  runtime: Nodejs12.16
+  memorySize: 512
+  events:
+    - apigw:
+        parameters:
+          protocols:
+            - http
+            - https
+          environment: release
+          endpoints:
+            - path: /
+              method: ANY
