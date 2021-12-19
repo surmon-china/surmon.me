@@ -21,23 +21,23 @@ export interface CacherConfig {
   retryWhen?: number
 }
 
-const retryStateMap = new Map<string, boolean>()
+const retryingMap = new Map<string, boolean>()
 const retry = (config: CacherConfig) => {
   if (bffCache.has(config.key)) {
-    retryStateMap.set(config.key, false)
+    retryingMap.set(config.key, false)
     return
   }
 
   config
     .getter()
-    .then((d) => {
-      bffCache.set(config.key, d, config.age * 1000)
+    .then((data) => {
+      bffCache.set(config.key, data, config.age * 1000)
     })
-    .catch((e) => {
-      console.warn('[cacher] retry error:', e)
+    .catch((error) => {
+      console.warn('[cacher] retry error:', error)
     })
     .finally(() => {
-      retryStateMap.set(config.key, false)
+      retryingMap.set(config.key, false)
     })
 }
 
@@ -53,8 +53,8 @@ export const cacher = async (config: CacherConfig) => {
     return data
   } catch (error: any) {
     // retry only once
-    if (config.retryWhen && !retryStateMap.get(config.key)) {
-      retryStateMap.set(config.key, true)
+    if (config.retryWhen && !retryingMap.get(config.key)) {
+      retryingMap.set(config.key, true)
       setTimeout(() => retry({ ...config }), config.retryWhen * 1000)
     }
     const err = typeof error === 'string' ? new Error(error) : error

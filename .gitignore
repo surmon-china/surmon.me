@@ -75,7 +75,7 @@ dist
 # IDE
 .idea
 
-# DS_Store
+# Mac OS
 .DS_Store
 
 # PWA
@@ -86,9 +86,6 @@ sw.*
 
 # Redis
 dump.rdb
-
-# Mac OS
-.DS_Store
 
 # Serverless directories
 .serverless

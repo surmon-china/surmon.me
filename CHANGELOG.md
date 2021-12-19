@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.2.10 (2021-12-20)
+
+**Feature**
+
+- Improve BFF server cache logic
+- Serverless support 🚧
+
 ### v3.2.9 (2021-12-18)
 
 **Fix**
