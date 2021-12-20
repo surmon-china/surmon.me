@@ -11,4 +11,4 @@ mkdir dist
 cd dist
 git clone -b release git@github.com:surmon-china/surmon.me.git .
 rm -rf .git
-echo "[deploy] clone release done."
+echo "[deploy] clone release done"

@@ -40,7 +40,7 @@
         if (wallpapers.value?.length) {
           globalState.switchTogglers.wallpaper()
         } else {
-          alert('Something was wrong！')
+          alert('Something went wrong！')
         }
         if (globalState.switchBox.wallpaper) {
           gtag?.event('今日壁纸', {
