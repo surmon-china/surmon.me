@@ -36,5 +36,5 @@ jobs:
           command_timeout: 4m
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
-          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.KEY }}
           script: sh ${{ secrets.WWW_PATH }}/surmon.me/scripts/deploy.sh

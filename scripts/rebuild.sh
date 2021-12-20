@@ -7,4 +7,4 @@ cd ..
 
 echo "[deploy] building..."
 yarn build
-echo "[deploy] build done."
+echo "[deploy] build done"
