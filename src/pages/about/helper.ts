@@ -12,7 +12,7 @@ export interface AboutI18nConfig {
 export const i18ns = {
   biography: {
     [Language.Zh]: `本是浪蝶游蜂，自留半亩石池，但求直抒胸臆，挥墨九云之中`,
-    [Language.En]: `Either write something worth reading. Do something worth writing.`
+    [Language.En]: `Either write something worth reading, Do something worth writing.`
   },
   roadmap: {
     [Language.Zh]: `路为纸，地成册，行作笔，心当墨；思无界，行有疆`,
