@@ -60,7 +60,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.PAGE_APP]: {
     [Language.Zh]: '客户端',
-    [Language.En]: 'App'
+    [Language.En]: 'APP'
   },
   [LANGUAGE_KEYS.PAGE_LENS]: {
     [Language.Zh]: '茫涯',
