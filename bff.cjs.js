@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.2.13
+* Surmon.me v3.2.14
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -454,7 +454,9 @@ const erroror = (response, error) => {
 };
 const responser = (promise) => {
     return (_, response) => {
-        promise.then((data) => response.send(data)).catch((error) => erroror(response, error));
+        promise()
+            .then((data) => response.send(data))
+            .catch((error) => erroror(response, error));
     };
 };/**
  * @file BFF Server cacher
@@ -499,8 +501,11 @@ const cacher = async (config) => {
             retryingMap.set(config.key, true);
             setTimeout(() => retry({ ...config }), config.retryWhen * 1000);
         }
-        const err = typeof error === 'string' ? new Error(error) : error;
-        err.name = `[cacher] ${err.name || ''}`;
+        if (typeof error === 'string') {
+            return Promise.reject(`cacher error > ${error}`);
+        }
+        const err = error.toJSON?.() || error;
+        err.name = `cacher error > ${err.name || ''}`;
         return Promise.reject(err);
     }
 };/**
@@ -593,25 +598,25 @@ app.get('/ghchart.svg', async (_, response) => {
     }
 });
 // tunnel services
-app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`, responser(cacher({
+app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`, responser(() => cacher({
     key: 'bilibili',
     age: 60 * 60 * 1,
     retryWhen: 60 * 5,
     getter: getBiliBiliVideos
 })));
-app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`, responser(cacher({
+app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`, responser(() => cacher({
     key: 'wallpaper',
     age: 60 * 60 * 8,
     retryWhen: 60 * 30,
     getter: getAllWallpapers
 })));
-app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.GitHub}`, responser(cacher({
+app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.GitHub}`, responser(() => cacher({
     key: 'github',
     age: 60 * 60 * 2,
     retryWhen: 60 * 30,
     getter: getGitHubRepositories
 })));
-app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.Music}`, responser(cacher({
+app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.Music}`, responser(() => cacher({
     key: 'music',
     age: 60 * 60 * 1,
     retryWhen: 60 * 10,
