@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.2.14 (2021-12-21)
+
+**Fix**
+
+- BFF tunnel service responser
+- GTag events
+
+**Feature**
+
+- Improve background style
+- Improve gtag events
+- Improve state types `Extend`
+- Add article language text on desktop flow
+
 ### v3.2.11 (2021-12-20)
 
 **Fix**

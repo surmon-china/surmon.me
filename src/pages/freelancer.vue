@@ -69,7 +69,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
   import { firstUpperCase } from '/@/transforms/text'
@@ -94,6 +94,10 @@
       })
 
       const handleSubmitEmail = () => {
+        gtag?.event('freelance_send_email', {
+          event_category: GAEventCategories.Universal
+        })
+
         window.open(
           emailLink({
             email: META.email,
@@ -105,11 +109,6 @@
               : `Hi! Surmon, I\'m ?`
           })
         )
-
-        gtag?.event('咨询邮件', {
-          event_category: GAEventActions.Click,
-          event_label: GAEventTags.FreelancerPage
-        })
       }
 
       const services = [

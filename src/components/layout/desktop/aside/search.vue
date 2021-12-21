@@ -27,13 +27,14 @@
   import { defineComponent, ref, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { isSearchFlow } from '/@/transforms/route'
 
   export default defineComponent({
     name: 'DesktopAsideSearch',
     setup() {
-      const { i18n, route, router } = useEnhancer()
+      const { i18n, gtag, route, router } = useEnhancer()
       const keyword = ref('')
 
       onMounted(() => {
@@ -50,6 +51,10 @@
           router.push({
             name: RouteName.SearchFlow,
             params: { keyword: inputKeyword }
+          })
+          gtag?.event('aside_search', {
+            event_category: GAEventCategories.Universal,
+            event_label: inputKeyword
           })
         }
       }

@@ -97,7 +97,7 @@ app.get('/ghchart.svg', async (_, response) => {
 // tunnel services
 app.get(
   `${API_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`,
-  responser(
+  responser(() =>
     cacher({
       key: 'bilibili',
       age: 60 * 60 * 1, // 1 hours
@@ -109,7 +109,7 @@ app.get(
 
 app.get(
   `${API_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`,
-  responser(
+  responser(() =>
     cacher({
       key: 'wallpaper',
       age: 60 * 60 * 8, // 8 hours
@@ -121,7 +121,7 @@ app.get(
 
 app.get(
   `${API_TUNNEL_PREFIX}/${TunnelModule.GitHub}`,
-  responser(
+  responser(() =>
     cacher({
       key: 'github',
       age: 60 * 60 * 2, // 2 hours
@@ -133,7 +133,7 @@ app.get(
 
 app.get(
   `${API_TUNNEL_PREFIX}/${TunnelModule.Music}`,
-  responser(
+  responser(() =>
     cacher({
       key: 'music',
       age: 60 * 60 * 1, // 1 hours

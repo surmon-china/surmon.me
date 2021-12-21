@@ -2,7 +2,12 @@
   <div id="player" v-if="music">
     <div class="cd">
       <img class="image" :src="currentSong?.cover_art_url" />
-      <button class="toggle-button" :disabled="!music.state.ready" @click="music.togglePlay">
+      <button
+        class="toggle-button"
+        :disabled="!music.state.ready"
+        @click="music.togglePlay"
+        @mousedown="handleTouchEvent('toggle play')"
+      >
         <i
           class="iconfont"
           :class="music.state.playing ? 'icon-music-pause' : 'icon-music-play'"
@@ -11,22 +16,37 @@
     </div>
     <div class="panel">
       <div class="control">
-        <button class="prev-song button" :disabled="!music.state.ready" @click="music.prevSong">
+        <button
+          class="prev-song button"
+          :disabled="!music.state.ready"
+          @click="music.prevSong"
+          @mousedown="handleTouchEvent('prev song')"
+        >
           <i class="iconfont icon-music-prev"></i>
         </button>
-        <button class="next-song button" :disabled="!music.state.ready" @click="music.nextSong">
+        <button
+          class="next-song button"
+          :disabled="!music.state.ready"
+          @click="music.nextSong"
+          @mousedown="handleTouchEvent('next song')"
+        >
           <i class="iconfont icon-music-next"></i>
         </button>
         <button
           class="muted-toggle button"
           :disabled="!music.state.ready"
           @click="music.toggleMuted"
+          @mousedown="handleTouchEvent('toggle muted')"
         >
           <i class="iconfont" :class="muted ? 'icon-music-muted' : 'icon-music-unmuted'"></i>
         </button>
       </div>
       <div class="song">
-        <router-link class="link" :to="getPageRoute(RouteName.Music)">
+        <router-link
+          class="link"
+          :to="getPageRoute(RouteName.Music)"
+          @mousedown="handleTouchEvent('music player page')"
+        >
           <span v-if="currentSong"
             >{{ currentSong.name }} By {{ currentSong.artist }} |
             {{ currentSong.album || 'unknow' }}</span
@@ -39,10 +59,11 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { defineComponent, computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { isClient } from '/@/app/environment'
   import { RouteName } from '/@/app/router'
-  import { useI18n } from '/@/services/i18n'
   import { useMusic } from '/@/services/music'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getPageRoute } from '/@/transforms/route'
@@ -50,17 +71,26 @@
   export default defineComponent({
     name: 'PlayerControl',
     setup() {
-      const i18n = useI18n()
+      const { gtag } = useEnhancer()
       const music = isClient ? useMusic() : null
+      const muted = computed(() => Boolean(music?.muted.value))
+      const currentSong = computed(() => music?.currentSong.value)
+
+      const handleTouchEvent = (label) => {
+        gtag?.event('music_player_widget', {
+          event_category: GAEventCategories.Widget,
+          event_label: label
+        })
+      }
 
       return {
         LANGUAGE_KEYS,
         RouteName,
-        t: i18n.t,
         music,
-        muted: music?.muted,
-        currentSong: music?.currentSong,
-        getPageRoute
+        muted,
+        currentSong,
+        getPageRoute,
+        handleTouchEvent
       }
     }
   })

@@ -74,7 +74,7 @@
   import { useCommentStore, CommentFetchParams } from '/@/store/comment'
   import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
   import { COMMENT_ELEMENT_ID, COMMENT_PUBLISHER_ELEMENT_ID } from '/@/constants/anchor'
-  import { GAEventTags, GAEventActions } from '/@/constants/gtag'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { SortType } from '/@/constants/state'
   import { USER } from '/@/constants/storage'
   import { getJSON, setJSON, remove } from '/@/services/storage'
@@ -199,9 +199,8 @@
       }
 
       const replyComment = (commentId: number) => {
-        gtag?.event('欲回评论', {
-          event_category: GAEventActions.Click,
-          event_label: GAEventTags.Comment
+        gtag?.event('reply_comment', {
+          event_category: GAEventCategories.Comment
         })
         state.replyPID = commentId
         // 滚动到目标位置，并激活光标
@@ -234,9 +233,8 @@
       }
 
       const submitComment = async () => {
-        gtag?.event('欲发评论', {
-          event_category: GAEventActions.Click,
-          event_label: GAEventTags.Comment
+        gtag?.event('submit_comment', {
+          event_category: GAEventCategories.Comment
         })
         const profile = profileState.value
         if (!profile.name) {

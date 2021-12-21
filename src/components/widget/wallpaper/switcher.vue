@@ -20,7 +20,7 @@
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useWallpaperStore } from '/@/store/wallpaper'
-  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import Wallpapers from './wall.vue'
@@ -37,16 +37,14 @@
       const wallpapers = computed(() => wallpaperStore.papers(i18n.language.value as Language))
 
       const toggleWallpaper = () => {
+        gtag?.event('wallpaper', {
+          event_category: GAEventCategories.Widget
+        })
+
         if (wallpapers.value?.length) {
           globalState.switchTogglers.wallpaper()
         } else {
           alert('Something went wrong！')
-        }
-        if (globalState.switchBox.wallpaper) {
-          gtag?.event('今日壁纸', {
-            event_category: GAEventActions.Toggle,
-            event_label: GAEventTags.Tool
-          })
         }
       }
 

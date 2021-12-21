@@ -6,7 +6,12 @@
         <span class="header-slogan">
           <i18n :lkey="LANGUAGE_KEYS.APP_SLOGAN" />
         </span>
-        <router-link to="/" class="header-link" :title="t(LANGUAGE_KEYS.APP_SLOGAN)" />
+        <router-link
+          to="/"
+          class="header-link"
+          :title="t(LANGUAGE_KEYS.APP_SLOGAN)"
+          @mousedown="handleRootNavEvent"
+        />
       </div>
       <div class="toolbox">
         <button class="button menu" v-if="isEnabledNav">
@@ -73,7 +78,7 @@
   import { Theme } from '/@/services/theme'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { useEnhancer } from '/@/app/enhancer'
-  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { menus } from './menu'
 
   export default defineComponent({
@@ -94,17 +99,23 @@
 
       const toggleTheme = () => {
         theme.toggle()
-        gtag?.event('切换主题', {
-          event_category: GAEventActions.Toggle,
-          event_label: GAEventTags.Tool
+        gtag?.event('switch_theme', {
+          event_category: GAEventCategories.Widget,
+          event_label: theme.theme.value
         })
       }
 
       const tooggleLanguage = () => {
         i18n.toggle()
-        gtag?.event('系统语言', {
-          event_category: GAEventActions.Toggle,
-          event_label: GAEventTags.Tool
+        gtag?.event('switch_language', {
+          event_category: GAEventCategories.Widget,
+          event_label: i18n.l.value?.name
+        })
+      }
+
+      const handleRootNavEvent = () => {
+        gtag?.event('root_header_home_nav', {
+          event_category: GAEventCategories.Universal
         })
       }
 
@@ -113,6 +124,7 @@
         HEADER_ELEMENT_ID,
         LANGUAGE_KEYS,
         isEnabledNav,
+        handleRootNavEvent,
         t: i18n.t,
         language: i18n.language,
         tooggleLanguage,

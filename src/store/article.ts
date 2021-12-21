@@ -7,7 +7,7 @@
 import { defineStore } from 'pinia'
 import { isClient } from '/@/app/environment'
 import { UNDEFINED } from '/@/constants/value'
-import { SortType, OriginState } from '/@/constants/state'
+import { SortType, OriginState, UniversalExtend } from '/@/constants/state'
 import { getArticleContentHeadingElementID } from '/@/constants/anchor'
 import nodepress from '/@/services/nodepress'
 import { markdownToHTML } from '/@/transforms/markdown'
@@ -37,6 +37,7 @@ export interface Article {
   tag: Tag[]
   category: Category[]
   related: Article[]
+  extends?: UniversalExtend[]
 }
 
 export const useArticleStore = defineStore('article', {

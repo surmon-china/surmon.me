@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, reactive, readonly, inject, Plugin } from 'vue'
+import { App, reactive, readonly, inject, Plugin, nextTick } from 'vue'
 import { Router } from 'vue-router'
 import { getGAScriptURL } from '/@/transforms/outside'
 import { loadScript } from '/@/utils/script-loader'
@@ -25,7 +25,7 @@ export interface GtagConfig {
 
 export interface GtagPluginConfig {
   id: string
-  router: Router
+  router?: Router
   customResourceURL?: string
   config?: GtagConfig
 }
@@ -33,41 +33,51 @@ export interface GtagPluginConfig {
 const GtagSymbol = Symbol('gtag')
 export type Gtag = ReturnType<typeof createGtag>
 export const createGtag = (options: GtagPluginConfig) => {
-  if (window.gtag == null) {
-    window.dataLayer = window.dataLayer || []
-    window.gtag = (...args) => window.dataLayer.push(...args)
-    window.gtag('js', new Date())
-    window.gtag('config', options.id, options.config)
-  }
-
-  if (!options.id || !options.router) {
+  if (!options.id) {
     return
   }
 
-  const push = (...args) => {
-    if (state.readied && !state.disabled) {
-      window.gtag(...args)
-    }
-  }
-
   const resourceURL = options.customResourceURL || getGAScriptURL(options.id)
-
   const state = reactive({
-    readied: false,
+    loaded: false,
     disabled: false
   })
 
   loadScript(resourceURL, { async: true }).then(() => {
-    state.readied = true
-    options.router.afterEach((to) => {
-      const location = window.location.origin + to.fullPath
-      push('config', options.id, {
-        page_title: document.title,
-        page_path: to.fullPath,
-        page_location: location
-      })
-    })
+    state.loaded = true
   })
+
+  if (window.gtag == null) {
+    window.dataLayer = window.dataLayer || []
+    // MARK: important! only function
+    window.gtag = function () {
+      window.dataLayer.push(arguments)
+    }
+    window.gtag('js', new Date())
+    window.gtag('config', options.id, options.config)
+  }
+
+  const push = (...args) => {
+    if (!state.disabled) {
+      window.gtag?.(...args)
+    }
+  }
+
+  if (options.router) {
+    options.router.afterEach((to, from) => {
+      if (to.path !== from.path) {
+        nextTick().then(() => {
+          const location = window.location.origin + to.fullPath
+          push('event', 'page_view', {
+            page_title: document.title,
+            page_location: location,
+            page_path: to.fullPath,
+            send_to: options.id
+          })
+        })
+      }
+    })
+  }
 
   const gtag = {
     state: readonly(state),
@@ -87,7 +97,6 @@ export const createGtag = (options: GtagPluginConfig) => {
     event(
       eventName: string,
       config?: GtagConfig & {
-        event_action?: string
         event_category?: string
         event_label?: string
         value?: number

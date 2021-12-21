@@ -5,6 +5,7 @@
  */
 
 import { defineStore } from 'pinia'
+import { UniversalExtend } from '/@/constants/state'
 import nodepress from '/@/services/nodepress'
 
 export interface Category {
@@ -17,6 +18,7 @@ export interface Category {
   description: string
   update_at: string
   create_at: string
+  extends?: UniversalExtend[]
 }
 
 export const useCategoryStore = defineStore('category', {

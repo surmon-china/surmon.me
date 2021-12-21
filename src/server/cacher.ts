@@ -57,8 +57,13 @@ export const cacher = async (config: CacherConfig) => {
       retryingMap.set(config.key, true)
       setTimeout(() => retry({ ...config }), config.retryWhen * 1000)
     }
-    const err = typeof error === 'string' ? new Error(error) : error
-    err.name = `[cacher] ${err.name || ''}`
+
+    if (typeof error === 'string') {
+      return Promise.reject(`cacher error > ${error}`)
+    }
+
+    const err = (error as any).toJSON?.() || error
+    err.name = `cacher error > ${err.name || ''}`
     return Promise.reject(err)
   }
 }

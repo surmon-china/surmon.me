@@ -4,8 +4,8 @@
       <span
         class="oirigin"
         :class="{
-          self: isOriginal,
-          other: isReprint,
+          original: isOriginal,
+          reprint: isReprint,
           hybrid: isHybrid
         }"
       >
@@ -133,7 +133,7 @@
 
       .oirigin {
         $height: 2.3rem;
-        $opacity: 0.8;
+        $opacity: 0.7;
         position: absolute;
         right: 0;
         top: 0;
@@ -149,14 +149,14 @@
         text-transform: uppercase;
         @include visibility-transition();
 
-        &.self {
-          background-color: rgba($accent, $opacity);
-        }
-        &.other {
-          background-color: rgba($red, $opacity);
+        &.original {
+          background-color: rgba($surmon, $opacity);
         }
         &.hybrid {
-          background-color: rgba($primary, $opacity);
+          background-color: rgba($accent, $opacity);
+        }
+        &.reprint {
+          background-color: rgba($red, $opacity);
         }
       }
 

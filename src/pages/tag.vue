@@ -26,7 +26,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useArticleStore } from '/@/store/article'
   import { useTagStore } from '/@/store/tag'
-  import { getExtendsValue } from '/@/transforms/state'
+  import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
   import ArticleListHeader from '/@/components/flow-desktop/header.vue'
@@ -49,6 +49,15 @@
       const tagStore = useTagStore()
       const articleStore = useArticleStore()
       const currentTag = computed(() => tagStore.tags.find((tag) => tag.slug === props.tagSlug))
+      const currentTagIcon = computed(
+        () => getExtendValue(currentTag.value?.extends || [], 'icon') || 'icon-tag'
+      )
+      const currentTagImage = computed(() =>
+        getExtendValue(currentTag.value?.extends || [], 'background')
+      )
+      const currentTagColor = computed(() =>
+        getExtendValue(currentTag.value?.extends || [], 'bgcolor')
+      )
 
       meta(() => {
         const enTitle = firstUpperCase(props.tagSlug)
@@ -57,10 +66,6 @@
         const description = currentTag.value?.description || titles.join(',')
         return { pageTitle: titles.join(' | '), description }
       })
-
-      const currentTagIcon = computed(() => getExtendsValue(currentTag.value, 'icon') || 'icon-tag')
-      const currentTagImage = computed(() => getExtendsValue(currentTag.value, 'background'))
-      const currentTagColor = computed(() => getExtendsValue(currentTag.value, 'bgcolor'))
 
       const loadmoreArticles = async () => {
         await articleStore.fetchList({

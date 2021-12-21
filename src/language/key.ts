@@ -34,8 +34,6 @@ export enum LANGUAGE_KEYS {
   ORIGIN_ORIGINAL = 'original',
   ORIGIN_REPRINT = 'reprint',
   ORIGIN_HYBRID = 'hybrid',
-  ACTION_OPEN_DESC = 'open article description',
-  ACTION_CLOSE_DESC = 'close article description',
   ACTION_ON = 'on',
   ACTION_OFF = 'off',
   APP_SLOGAN = 'app slogan',

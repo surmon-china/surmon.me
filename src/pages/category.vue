@@ -22,7 +22,7 @@
   import { useUniversalFetch, onClient } from '/@/universal'
   import { useArticleStore } from '/@/store/article'
   import { useCategoryStore } from '/@/store/category'
-  import { getExtendsValue } from '/@/transforms/state'
+  import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
   import ArticleListHeader from '/@/components/flow-desktop/header.vue'
@@ -47,6 +47,15 @@
       const currentCategory = computed(() => {
         return catrgory.categories.find((category) => category.slug === props.categorySlug)
       })
+      const currentCategoryIcon = computed(() => {
+        return getExtendValue(currentCategory.value?.extends || [], 'icon') || 'icon-category'
+      })
+      const currentCategoryImage = computed(() => {
+        return getExtendValue(currentCategory.value?.extends || [], 'background')
+      })
+      const currentCategoryColor = computed(() => {
+        return getExtendValue(currentCategory.value?.extends || [], 'bgcolor')
+      })
 
       meta(() => {
         const enTitle = firstUpperCase(props.categorySlug)
@@ -54,16 +63,6 @@
         const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle, 'Category']
         const description = currentCategory.value?.description || titles.join(',')
         return { pageTitle: titles.join(' | '), description }
-      })
-
-      const currentCategoryIcon = computed(() => {
-        return getExtendsValue(currentCategory.value, 'icon') || 'icon-category'
-      })
-      const currentCategoryImage = computed(() => {
-        return getExtendsValue(currentCategory.value, 'background')
-      })
-      const currentCategoryColor = computed(() => {
-        return getExtendsValue(currentCategory.value, 'bgcolor')
       })
 
       const loadmoreArticles = async () => {

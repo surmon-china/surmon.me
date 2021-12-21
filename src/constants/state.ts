@@ -27,3 +27,8 @@ export enum SortType {
   Desc = -1, // 降序
   Hot = 2 // 热序
 }
+
+export interface UniversalExtend {
+  name: string
+  value: string
+}

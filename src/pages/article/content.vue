@@ -5,8 +5,8 @@
         v-if="!fetching"
         class="oirigin"
         :class="{
-          self: isOriginal,
-          other: isReprint,
+          original: isOriginal,
+          reprint: isReprint,
           hybrid: isHybrid
         }"
       >
@@ -175,20 +175,19 @@
       height: 4rem;
       line-height: 5.8rem;
       text-align: center;
-      text-transform: uppercase;
       transform-origin: center;
-      color: $text-reversal;
+      color: $white;
       font-weight: bold;
       font-size: $font-size-small;
 
-      &.self {
-        background-color: rgba($accent, 0.8);
-      }
-      &.other {
-        background-color: rgba($red, 0.8);
+      &.original {
+        background-color: rgba($surmon, 0.7);
       }
       &.hybrid {
-        background-color: rgba($primary, 0.8);
+        background-color: rgba($accent, 0.7);
+      }
+      &.reprint {
+        background-color: rgba($red, 0.7);
       }
     }
 
