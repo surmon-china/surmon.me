@@ -136,23 +136,15 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.ORIGIN_ORIGINAL]: {
     [Language.Zh]: '原创',
-    [Language.En]: 'og'
+    [Language.En]: 'OG'
   },
   [LANGUAGE_KEYS.ORIGIN_REPRINT]: {
     [Language.Zh]: '转载',
-    [Language.En]: 'rp'
+    [Language.En]: 'RPT'
   },
   [LANGUAGE_KEYS.ORIGIN_HYBRID]: {
-    [Language.Zh]: '混撰',
-    [Language.En]: 'hb'
-  },
-  [LANGUAGE_KEYS.ACTION_OPEN_DESC]: {
-    [Language.Zh]: '展开描述',
-    [Language.En]: 'open description'
-  },
-  [LANGUAGE_KEYS.ACTION_CLOSE_DESC]: {
-    [Language.Zh]: '收起描述',
-    [Language.En]: 'close description'
+    [Language.Zh]: '衍生',
+    [Language.En]: 'HY'
   },
   [LANGUAGE_KEYS.ACTION_ON]: {
     [Language.Zh]: '开',

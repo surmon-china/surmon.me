@@ -253,7 +253,7 @@
         overflow: auto;
         margin: 0;
         padding: 0.5em;
-        background-color: $body-bg;
+        background-color: $module-bg-darker-1;
       }
     }
 

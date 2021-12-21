@@ -35,17 +35,17 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { useTagStore } from '/@/store/tag'
+  import { useTagStore, Tag } from '/@/store/tag'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getTagFlowRoute } from '/@/transforms/route'
-  import { getExtendsValue } from '/@/transforms/state'
+  import { getExtendValue } from '/@/transforms/state'
 
   export default defineComponent({
     name: 'DesktopAsideTag',
     setup() {
       const tagStore = useTagStore()
-      const getTagIcon = (tag: any) => {
-        return getExtendsValue(tag, 'icon') || 'icon-tag'
+      const getTagIcon = (tag: Tag) => {
+        return getExtendValue(tag.extends || [], 'icon') || 'icon-tag'
       }
 
       return {

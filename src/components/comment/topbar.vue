@@ -62,7 +62,7 @@
   import { useArticleDetailStore } from '/@/store/article'
   import { useMetaStore } from '/@/store/meta'
   import { SortType, CommentPostType } from '/@/constants/state'
-  import { GAEventTags, GAEventActions } from '/@/constants/gtag'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { usePageLike } from '/@/transforms/state'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { VALUABLE_LINKS } from '/@/config/app.config'
@@ -122,9 +122,8 @@
         if (isPageLiked.value) {
           return false
         }
-        gtag?.event('喜欢当页', {
-          event_category: GAEventActions.Click,
-          event_label: GAEventTags.Comment
+        gtag?.event('like_page', {
+          event_category: GAEventCategories.Article
         })
         try {
           if (props.postId === CommentPostType.Guestbook) {
@@ -142,9 +141,8 @@
 
       const handleSponsor = () => {
         isVisibleSponsor.value = true
-        gtag?.event('评论赞赏弹窗', {
-          event_category: GAEventActions.Click,
-          event_label: GAEventTags.Comment
+        gtag?.event('page_sponsor', {
+          event_category: GAEventCategories.Article
         })
       }
 

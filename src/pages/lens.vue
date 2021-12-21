@@ -16,18 +16,32 @@
         <div class="bilibili">
           <div class="left">
             <i class="iconfont icon-bilibili-full"></i>
-            <ulink class="button" :href="VALUABLE_LINKS.BILIBILI"> (゜-゜)つロ 干杯~ </ulink>
+            <ulink
+              class="button"
+              :href="VALUABLE_LINKS.BILIBILI"
+              @mousedown="handleGTagEvent('bilibili_homepage')"
+            >
+              (゜-゜)つロ 干杯~
+            </ulink>
           </div>
           <div class="qrcode">
             <uimage cdn class="image" src="/images/page-lens/bilibili.jpg" />
           </div>
         </div>
         <div class="global">
-          <ulink class="instagram" :href="VALUABLE_LINKS.INSTAGRAM">
+          <ulink
+            class="instagram"
+            :href="VALUABLE_LINKS.INSTAGRAM"
+            @mousedown="handleGTagEvent('instagram_link')"
+          >
             <i class="iconfont icon-instagram"></i>
             <span class="text">Follow me on Instagram</span>
           </ulink>
-          <ulink class="youtube" :href="VALUABLE_LINKS.YOUTUBE">
+          <ulink
+            class="youtube"
+            :href="VALUABLE_LINKS.YOUTUBE"
+            @mousedown="handleGTagEvent('youtube_link')"
+          >
             <i class="iconfont icon-youtube"></i>
             <span class="text">Subscribe my YouTube</span>
           </ulink>
@@ -106,6 +120,7 @@
   import { useLensStore } from '/@/store/lens'
   import { useUniversalFetch, universalRef } from '/@/universal'
   import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { getFileProxyUrl } from '/@/transforms/url'
   import { timeAgo } from '/@/transforms/moment'
   import { firstUpperCase } from '/@/transforms/text'
@@ -122,7 +137,7 @@
       PageBanner
     },
     setup() {
-      const { globalState, i18n, meta, isDarkTheme, isZhLang } = useEnhancer()
+      const { globalState, i18n, meta, gtag, isDarkTheme, isZhLang } = useEnhancer()
       const lensStore = useLensStore()
       const lozadObserver = ref<LozadObserver | null>(null)
       const videoListElement = ref<HTMLElement>()
@@ -147,7 +162,14 @@
         )
       }
 
+      const handleGTagEvent = (event: string) => {
+        gtag?.event(event, {
+          event_category: GAEventCategories.Lens
+        })
+      }
+
       const handlePlay = (video: any) => {
+        handleGTagEvent('bilibili_video_play')
         window.open(`https://www.bilibili.com/video/av${video.aid}`)
       }
 
@@ -185,6 +207,7 @@
         humanlizeDate,
         getThumbURL,
         handlePlay,
+        handleGTagEvent,
         observeLozad,
         bannerImageURL
       }

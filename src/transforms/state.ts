@@ -6,21 +6,26 @@
 
 import { ref, onMounted, watchEffect } from 'vue'
 import { getAccessor } from '/@/services/storage'
-import { OriginState } from '/@/constants/state'
+import { UNDEFINED, isNull, isUndefined } from '/@/constants/value'
+import { OriginState, UniversalExtend } from '/@/constants/state'
 import { USER_LIKE_HISTORY } from '/@/constants/storage'
 
 export const isOriginalType = (originState?: OriginState) => {
-  return originState == null || originState === OriginState.Original
+  return isNull(originState) || isUndefined(null) || originState === OriginState.Original
 }
 export const isHybridType = (originState: OriginState) => originState === OriginState.Hybrid
 export const isReprintType = (originState: OriginState) => originState === OriginState.Reprint
 
-export const getExtendsValue = (target: any, key: string) => {
-  if (!target?.extends?.length) {
-    return null
-  }
-  const targetExtend = target.extends.find((t) => t.name === key)
-  return targetExtend ? targetExtend.value : null
+export const getExtendsObject = (
+  _extends: UniversalExtend[] | void
+): {
+  [key: string]: string
+} => {
+  return _extends?.length ? _extends.reduce((v, c) => ({ ...v, [c.name]: c.value }), {}) : {}
+}
+
+export const getExtendValue = (_extends: UniversalExtend[], key: string) => {
+  return _extends.length ? getExtendsObject(_extends)[key] : UNDEFINED
 }
 
 const defaultUserLikeHistory = {

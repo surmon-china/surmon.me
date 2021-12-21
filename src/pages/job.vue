@@ -39,6 +39,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { firstUpperCase } from '/@/transforms/text'
   import { emailLink } from '/@/transforms/email'
@@ -53,7 +54,7 @@
       PageBanner
     },
     setup() {
-      const { i18n, meta, isZhLang } = useEnhancer()
+      const { i18n, meta, gtag, isZhLang } = useEnhancer()
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_JOB, Language.En)!)
@@ -117,6 +118,10 @@
       ]
 
       const handleSubmit = (job: any) => {
+        gtag?.event('job_send_mail', {
+          event_category: GAEventCategories.Universal
+        })
+
         const location = job.location ? `- ${job.location} ` : ''
         window.open(
           emailLink({

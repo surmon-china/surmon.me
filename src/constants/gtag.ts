@@ -4,17 +4,13 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-export enum GAEventActions {
-  Click = '点击',
-  View = '触及',
-  Toggle = '切换'
-}
-
-export enum GAEventTags {
-  Comment = '评论',
-  Share = '分享',
-  Tool = '部件',
-  AppPage = 'page-App',
-  AboutPage = 'page-About',
-  FreelancerPage = 'page-freelancer'
+export enum GAEventCategories {
+  Comment = 'comment',
+  Share = 'share',
+  Widget = 'widget',
+  Universal = 'global',
+  Article = 'page_article',
+  App = 'page_app',
+  About = 'page_about',
+  Lens = 'page_lens'
 }

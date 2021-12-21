@@ -13,8 +13,10 @@ export const erroror = (response: Response, error: any) => {
   response.send(error?.message || String(error))
 }
 
-export const responser = (promise: Promise<any>): RequestHandler => {
+export const responser = (promise: () => Promise<any>): RequestHandler => {
   return (_, response) => {
-    promise.then((data) => response.send(data)).catch((error) => erroror(response, error))
+    promise()
+      .then((data) => response.send(data))
+      .catch((error) => erroror(response, error))
   }
 }

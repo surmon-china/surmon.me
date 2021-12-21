@@ -53,11 +53,11 @@
         <div class="content">
           <div class="item">
             <i class="iconfont icon-swordsman" />
-            <span class="roadmap" :class="language" @click="toggleLiveMap">
+            <span class="roadmap" :class="language" @click="toggleRoadMap">
               <i18n v-bind="i18ns.roadmap" />
             </span>
             <client-only>
-              <popup :visible="isOnLiveMap" @close="toggleLiveMap">
+              <popup :visible="isOnLiveMap" @close="toggleRoadMap">
                 <iframe :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP" frameborder="0" class="roadmap" />
               </popup>
             </client-only>
@@ -130,7 +130,7 @@
               </span>
             </div>
           </div>
-          <div class="cover" @mouseenter="handleWeChatHover">
+          <div class="cover" @mouseenter="handleGTagEvent('wechat_qrcode')">
             <div class="friend-me">
               <i class="iconfont icon-wechat"></i>
               <i18n zh="众里寻他" en="WeChat" />
@@ -146,7 +146,7 @@
           <ulink
             class="button github"
             :href="VALUABLE_LINKS.GITHUB_SPONSORS"
-            @mousedown="handleSponsorTouch"
+            @mousedown="handleGTagEvent('sponsor_github_link')"
           >
             <i class="iconfont icon-heart" />
             <span class="text">Sponsor me</span>
@@ -154,12 +154,16 @@
           <ulink
             class="button paypal"
             :href="VALUABLE_LINKS.PAYPAL"
-            @mousedown="handleSponsorTouch"
+            @mousedown="handleGTagEvent('sponsor_paypal_link')"
           >
             <i class="iconfont icon-paypal" />
             <span class="text">PayPal me</span>
           </ulink>
-          <ulink class="button more" :href="VALUABLE_LINKS.SPONSOR" @mousedown="handleSponsorTouch">
+          <ulink
+            class="button more"
+            :href="VALUABLE_LINKS.SPONSOR"
+            @mousedown="handleGTagEvent('sponsor_more_payment_link')"
+          >
             <i class="iconfont icon-qrcode" />
             <span class="text">More payment</span>
           </ulink>
@@ -167,7 +171,11 @@
         <span class="divider"></span>
         <uimage cdn class="pal" src="/images/page-about/peace-and-love.jpg" />
         <span class="divider"></span>
-        <ulink class="homepage-link" :href="VALUABLE_LINKS.GITHUB">
+        <ulink
+          class="homepage-link"
+          :href="VALUABLE_LINKS.GITHUB"
+          @mousedown="handleGTagEvent('github_chart_link')"
+        >
           <uimage cdn src="/ghchart.svg" />
         </ulink>
       </div>
@@ -182,7 +190,7 @@
   import { useMetaStore } from '/@/store/meta'
   import { getPageRoute } from '/@/transforms/route'
   import { getFileStaticUrl } from '/@/transforms/url'
-  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { VALUABLE_LINKS, FRIEND_LINKS } from '/@/config/app.config'
   import { useAboutPageMeta, i18ns } from './helper'
 
@@ -193,35 +201,21 @@
       const metaStore = useMetaStore()
       const isOnLiveMap = toRef(globalState.switchBox, 'liveMap')
       const adminInfo = computed(() => metaStore.adminInfo.data)
-
       // MARK: 非常有必要，vite 对 video.source.src 的解析有问题，会将其认为是 asset，而非 static resource，从而编译失败
       const backgroundVideo = getFileStaticUrl('/assets/page-about-background.mp4')
 
       // meta
       useAboutPageMeta()
 
-      const handleWeChatHover = () => {
-        gtag?.event('加微信码', {
-          event_category: GAEventActions.View,
-          event_label: GAEventTags.AboutPage
+      const handleGTagEvent = (event: string) => {
+        gtag?.event(event, {
+          event_category: GAEventCategories.About
         })
       }
 
-      const handleSponsorTouch = () => {
-        gtag?.event('赞赏 Sponsor', {
-          event_category: GAEventActions.Click,
-          event_label: GAEventTags.AboutPage
-        })
-      }
-
-      const toggleLiveMap = () => {
+      const toggleRoadMap = () => {
         globalState.switchTogglers.liveMap()
-        if (globalState.switchBox.liveMap) {
-          gtag?.event('轨迹地图', {
-            event_category: GAEventActions.View,
-            event_label: GAEventTags.AboutPage
-          })
-        }
+        handleGTagEvent('roadmap')
       }
 
       return {
@@ -234,9 +228,8 @@
         isOnLiveMap,
         backgroundVideo,
         adminInfo,
-        handleWeChatHover,
-        handleSponsorTouch,
-        toggleLiveMap
+        handleGTagEvent,
+        toggleRoadMap
       }
     }
   })

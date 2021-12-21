@@ -11,9 +11,9 @@
         <span
           class="item-oirigin"
           :class="{
-            self: isOriginal,
-            other: isReprint,
-            hybrid: isHybrid
+            original: isOriginal,
+            hybrid: isHybrid,
+            reprint: isReprint
           }"
         >
           <i18n :lkey="LANGUAGE_KEYS.ORIGIN_ORIGINAL" v-if="isOriginal" />
@@ -28,16 +28,23 @@
         />
       </router-link>
       <div class="item-body">
-        <h5 class="title">
-          <router-link class="link" :to="getArticleDetailRoute(article.id)" :title="article.title">
-            {{ article.title }}
-          </router-link>
-        </h5>
-        <p
-          class="description"
-          style="-webkit-box-orient: vertical"
-          v-html="article.description"
-        ></p>
+        <div class="item-content">
+          <h5 class="title">
+            <router-link
+              class="link"
+              :to="getArticleDetailRoute(article.id)"
+              :title="article.title"
+            >
+              {{ article.title }}
+            </router-link>
+            <span class="language" v-if="extendsMap.language">{{ extendsMap.language }}</span>
+          </h5>
+          <p
+            class="description"
+            style="-webkit-box-orient: vertical"
+            v-html="article.description"
+          ></p>
+        </div>
         <div class="item-meta">
           <span class="date">
             <i class="iconfont icon-clock"></i>
@@ -91,8 +98,13 @@
   import { USER_LIKE_HISTORY } from '/@/constants/storage'
   import { getArticleDetailRoute, getTagFlowRoute, getCategoryFlowRoute } from '/@/transforms/route'
   import { getArticleListThumbnailURL } from '/@/transforms/thumbnail'
-  import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { timeAgo } from '/@/transforms/moment'
+  import {
+    isOriginalType,
+    isHybridType,
+    isReprintType,
+    getExtendsObject
+  } from '/@/transforms/state'
 
   export default defineComponent({
     name: 'FlowArticleListItem',
@@ -105,12 +117,11 @@
     setup(props) {
       const { globalState, i18n } = useEnhancer()
 
-      // eslint-disable-next-line vue/no-setup-props-destructure
-      const { origin } = props.article
       const isLiked = ref(false)
-      const isHybrid = isHybridType(origin)
-      const isReprint = isReprintType(origin)
-      const isOriginal = isOriginalType(origin)
+      const isHybrid = isHybridType(props.article.origin)
+      const isReprint = isReprintType(props.article.origin)
+      const isOriginal = isOriginalType(props.article.origin)
+      const extendsMap = getExtendsObject(props.article.extends)
 
       const humanlizeDate = (date: string) => {
         return timeAgo(date, i18n.language.value as any)
@@ -131,6 +142,7 @@
         isHybrid,
         isReprint,
         isOriginal,
+        extendsMap,
         getThumbnailURL,
         getArticleDetailRoute,
         getCategoryFlowRoute,
@@ -186,6 +198,7 @@
       }
 
       > .item-thumb {
+        flex-shrink: 0;
         /* Google AdSense */
         $width: 186px;
         width: $width;
@@ -196,7 +209,7 @@
 
         .item-oirigin {
           $height: 2.1rem;
-          $opacity: 0.8;
+          $opacity: 0.7;
           position: absolute;
           left: 0;
           top: 0;
@@ -209,17 +222,16 @@
           font-size: $font-size-small;
           color: $white;
           text-align: center;
-          text-transform: uppercase;
           @include visibility-transition();
 
-          &.self {
-            background-color: rgba($accent, $opacity);
-          }
-          &.other {
-            background-color: rgba($red, $opacity);
+          &.original {
+            background-color: rgba($surmon, $opacity);
           }
           &.hybrid {
-            background-color: rgba($primary, $opacity);
+            background-color: rgba($accent, $opacity);
+          }
+          &.reprint {
+            background-color: rgba($red, $opacity);
           }
         }
 
@@ -240,36 +252,48 @@
 
       > .item-body {
         flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         height: $content-height;
+        padding-right: $xs-gap;
 
         .title {
+          display: flex;
+          justify-content: space-between;
           margin-top: 3px;
           margin-bottom: $sm-gap;
           font-weight: bold;
           color: $link-color-hover;
-          @include text-overflow();
 
           .link {
+            display: block;
+            max-width: 26rem;
             margin-left: 0;
             transition: margin $transition-time-normal;
             border-bottom: 1px solid transparent;
             text-decoration: none;
+            @include text-overflow();
+
             &:hover {
               border-color: initial;
               margin-left: $xs-gap;
             }
           }
+
+          .language {
+            opacity: 0.4;
+            color: $text-dividers;
+          }
         }
 
         .description {
-          height: 5rem;
           margin: 0;
-          margin-bottom: $xs-gap;
           line-height: 1.8em;
           overflow: hidden;
           text-overflow: ellipsis;
           font-size: $font-size-h6;
-          @include clamp(3);
+          @include clamp(2);
         }
 
         > .item-meta {
@@ -283,6 +307,7 @@
           white-space: nowrap;
           text-overflow: ellipsis;
           word-wrap: normal;
+          color: $text-secondary;
 
           > .views {
             min-width: 4rem;
@@ -312,8 +337,13 @@
 
           > .categories {
             a {
+              color: $text-secondary;
               text-transform: capitalize;
               margin-right: $sm-gap;
+
+              &:last-child {
+                margin-right: 0;
+              }
             }
           }
 

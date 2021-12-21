@@ -35,7 +35,7 @@
   import { defineComponent, ref } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { scrollTo, Easing } from '/@/utils/scroller'
   import { scrollToTop } from '/@/utils/effects'
   import { emailLink } from '/@/transforms/email'
@@ -100,9 +100,8 @@
           isStartSlow && slowMoveToAnyWhere()
         },
         handleRSS() {
-          gtag?.event('RSS 订阅', {
-            event_category: GAEventActions.Click,
-            event_label: GAEventTags.Tool
+          gtag?.event('rss', {
+            event_category: GAEventCategories.Widget
           })
         }
       }

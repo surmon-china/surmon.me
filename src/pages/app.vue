@@ -17,6 +17,7 @@
             class="button"
             :href="VALUABLE_LINKS.APP_APK_FILE"
             @click="handleAndroidApp($event)"
+            @mousedown="handleAppEvent('download_android_app')"
           >
             <i class="icon iconfont icon-android"></i>
             <span class="text">Android</span>
@@ -25,7 +26,7 @@
           <ulink
             class="button"
             :href="VALUABLE_LINKS.SURMON_ME_NATIVE + '#ios'"
-            @mousedown="handleAppAction('APP IOS')"
+            @mousedown="handleAppEvent('download_ios_app')"
           >
             <i class="icon iconfont icon-apple"></i>
             <span class="text">iOS</span>
@@ -34,7 +35,7 @@
           <ulink
             class="source-code"
             :href="VALUABLE_LINKS.SURMON_ME_NATIVE"
-            @mousedown="handleAppAction('APP GitHub 地址')"
+            @mousedown="handleAppEvent('app_source_code')"
           >
             <i class="iconfont icon-git"></i>
             Source Code
@@ -51,7 +52,7 @@
   import { Language } from '/@/language/data'
   import { firstUpperCase } from '/@/transforms/text'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
@@ -70,15 +71,13 @@
         return { pageTitle: titles.join(' | '), description: `${META.title} App 下载` }
       })
 
-      const handleAppAction = (name: string) => {
+      const handleAppEvent = (name: string) => {
         gtag?.event(name, {
-          event_category: GAEventActions.Click,
-          event_label: GAEventTags.AppPage
+          event_category: GAEventCategories.App
         })
       }
 
       const handleAndroidApp = (event) => {
-        handleAppAction('APP Android 下载')
         if (
           !window.confirm(
             isZhLang.value
@@ -94,7 +93,7 @@
         META,
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
-        handleAppAction,
+        handleAppEvent,
         handleAndroidApp
       }
     }

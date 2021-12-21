@@ -129,7 +129,6 @@
         border-bottom-right-radius: $mini-radius;
         opacity: 0.8;
         font-weight: 700;
-        color: $body-bg;
         cursor: progress;
         background: linear-gradient(to left, $module-bg-lighter, $module-bg, transparent);
 

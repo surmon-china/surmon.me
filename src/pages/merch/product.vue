@@ -17,7 +17,11 @@
       <p class="text">
         {{ product.detail || '暂无描述' }}
       </p>
-      <ulink class="link" :href="product.url">
+      <ulink
+        class="link"
+        :href="product.url"
+        @mousedown="handleGTagEvent('merch_product_link', product.name)"
+      >
         去看看
         <i class="iconfont icon-new-window"></i>
       </ulink>
@@ -27,6 +31,8 @@
 
 <script lang="ts">
   import { defineComponent, PropType, CSSProperties } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { GAEventCategories } from '/@/constants/gtag'
   export interface ProductItem {
     name: string
     description: string
@@ -50,6 +56,17 @@
         type: Boolean,
         default: false
       }
+    },
+    setup() {
+      const { gtag } = useEnhancer()
+      const handleGTagEvent = (event: string, label: string) => {
+        gtag?.event(event, {
+          event_category: GAEventCategories.Universal,
+          event_label: label
+        })
+      }
+
+      return { handleGTagEvent }
     }
   })
 </script>

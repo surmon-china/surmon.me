@@ -78,6 +78,8 @@
     setup() {
       const { i18n, meta, isZhLang } = useEnhancer()
       const musicPlayer = isClient ? useMusic() : null
+      const muted = computed(() => Boolean(musicPlayer?.muted.value))
+      const currentSong = computed(() => musicPlayer?.currentSong.value)
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_MUSIC, Language.En)!)
@@ -108,8 +110,8 @@
 
       return {
         player: musicPlayer,
-        muted: musicPlayer?.muted,
-        currentSong: musicPlayer?.currentSong,
+        muted,
+        currentSong,
         trackPath,
         relativeStrokeWidth,
         circlePathStyle

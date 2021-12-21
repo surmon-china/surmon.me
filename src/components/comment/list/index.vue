@@ -31,7 +31,7 @@
   import { useCommentStore, Comment, CommentTreeItem } from '/@/store/comment'
   import { useEnhancer } from '/@/app/enhancer'
   import { LozadObserver } from '/@/services/lozad'
-  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { useCommentsLike } from '/@/transforms/state'
@@ -91,9 +91,8 @@
       }
 
       const likeComment = async (commentID: number) => {
-        gtag?.event('欲赞评论', {
-          event_category: GAEventActions.Click,
-          event_label: GAEventTags.Comment
+        gtag?.event('like_comment', {
+          event_category: GAEventCategories.Comment
         })
         if (isCommentLiked(commentID)) {
           return false

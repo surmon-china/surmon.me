@@ -20,7 +20,7 @@
   import qs from 'qs'
   import { defineComponent, PropType, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { GAEventActions, GAEventTags } from '/@/constants/gtag'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
   import { getPageUrl } from '/@/transforms/url'
   import { copy } from '/@/utils/clipboard'
@@ -174,14 +174,20 @@
       }
 
       const copyPageURL = () => {
-        copy(`${getTitle()} - ${getURL()}`)
-        gtag?.event('复制当页链接', {
-          event_category: GAEventActions.Click,
-          event_label: GAEventTags.Share
+        const content = `${getTitle()} - ${getURL()}`
+        copy(content)
+        gtag?.event('share_copy_url', {
+          event_category: GAEventCategories.Share,
+          event_label: content
         })
       }
 
       const handleShare = (social: SocialItem) => {
+        gtag?.event('share_social', {
+          event_category: GAEventCategories.Share,
+          event_label: social.id
+        })
+
         const shareParams: ShareParams = {
           url: getURL(),
           title: getTitle(),
@@ -219,11 +225,6 @@
         const _window = window.open(targetURL, windowName, params)
         // 新窗口获得焦点
         _window?.focus()
-
-        gtag?.event('当页分享', {
-          event_category: GAEventActions.Click,
-          event_label: GAEventTags.Share
-        })
       }
 
       return {
