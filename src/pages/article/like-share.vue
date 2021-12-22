@@ -2,6 +2,7 @@
   <div class="like-share">
     <div class="like-box">
       <div class="item likes">
+        <div class="bridge"></div>
         <button class="button" :disabled="isLiked" @click="handleLike">
           <i class="icon iconfont icon-zan"></i>
           <span class="count">{{ isLiked ? `${likes - 1} + 1` : likes }}</span>
@@ -14,6 +15,7 @@
         </span>
       </div>
       <div class="item sponsor">
+        <div class="bridge"></div>
         <button class="button" @click="handleSponsor">
           <i class="icon iconfont icon-dollar"></i>
         </button>
@@ -131,13 +133,22 @@
       grid-gap: $lg-gap;
 
       .item {
+        position: relative;
         padding: $lg-gap $gap;
-        @include radius-box($sm-radius);
-        @include common-bg-module();
+        border-radius: $sm-radius;
         display: inline-flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        @include common-bg-module();
+
+        .bridge {
+          position: absolute;
+          top: -$lg-gap;
+          width: $lg-gap;
+          height: $lg-gap;
+          background: linear-gradient(to bottom, $module-bg 60%, transparent);
+        }
 
         .button {
           display: inline-flex;
@@ -178,9 +189,10 @@
         }
 
         .text {
+          position: relative;
           margin-top: $lg-gap;
           padding-top: $sm-gap;
-          border-top: 1px dashed $module-bg-darker-1;
+          border-top: 1px solid $module-bg-darker-1;
           color: $text-secondary;
         }
       }
