@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.2.15 (2021-12-22)
+
+**Feature**
+
+- Improve global styles
+- Improve article detail page layout
+- Improve article page like-share
+- Improve article page skeleton
+- Improve `comment` component
+- Improve `loading` component
+
 ### v3.2.14 (2021-12-21)
 
 **Fix**

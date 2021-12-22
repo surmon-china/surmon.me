@@ -249,28 +249,28 @@
       @include background-transition();
 
       &.wechat:hover {
-        background-color: $wechat-primary;
+        background-color: $wechat-primary !important;
       }
       &.weibo:hover {
-        background-color: $weibo-primary;
+        background-color: $weibo-primary !important;
       }
       &.douban:hover {
-        background-color: $douban-primary;
+        background-color: $douban-primary !important;
       }
       &.evernote:hover {
-        background-color: $evernote-primary;
+        background-color: $evernote-primary !important;
       }
       &.twitter:hover {
-        background-color: $twitter-primary-hover;
+        background-color: $twitter-primary-hover !important;
       }
       &.facebook:hover {
-        background-color: $facebook-primary;
+        background-color: $facebook-primary !important;
       }
       &.linkedin:hover {
-        background-color: $linkedin-primary;
+        background-color: $linkedin-primary !important;
       }
       &.link:hover {
-        background-color: $surmon;
+        background-color: $surmon !important;
       }
 
       &:hover {

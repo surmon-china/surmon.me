@@ -73,11 +73,15 @@
 
       const openSearch = () => {
         searchState.open = true
-        nextTick(inputElement.value.focus)
+        nextTick(() => {
+          inputElement.value.focus()
+        })
       }
+
       const cancelSearch = () => {
         searchState.open = false
       }
+
       const submitSearch = () => {
         const keyword = searchState.keyword.trim()
         if (keyword) {

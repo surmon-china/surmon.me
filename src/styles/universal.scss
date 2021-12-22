@@ -52,7 +52,6 @@ body {
 input {
   &::placeholder {
     text-indent: 0.5em;
-    font-size: $font-size-small;
     text-transform: capitalize;
   }
 }

@@ -98,16 +98,15 @@
       display: flex;
       flex-grow: 1;
 
-      > .search-input {
+      .search-input {
         margin-right: 0;
         flex-grow: 1;
-
         &::-webkit-calendar-picker-indicator {
           display: none;
         }
       }
 
-      > .search-btn {
+      .search-btn {
         width: 2em;
         background-color: $module-bg-darker-3;
         @include background-transition();

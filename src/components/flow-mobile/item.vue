@@ -132,17 +132,15 @@
       background-color: $module-bg-darker-3;
 
       .oirigin {
-        $height: 2.3rem;
         $opacity: 0.7;
         position: absolute;
         right: 0;
         top: 0;
-        height: $height;
         z-index: $z-index-normal + 1;
         padding: 0 $gap;
         border-bottom-left-radius: $xs-radius;
         opacity: 0.7;
-        line-height: $height;
+        line-height: 2.3rem;
         font-size: $font-size-small;
         color: $white;
         text-align: center;

@@ -2,12 +2,10 @@
   <div :id="COMMENT_ELEMENT_ID" class="comment-box">
     <comment-topbar
       :total="commentStore.pagination?.total"
-      :likes="likes"
+      :count="commentStore.comments.length"
       :post-id="postId"
       :fetching="isFetching"
       :sort="state.sort"
-      :mini-likes="plain"
-      :hidden-sponsor="plain"
       @sort="getSortComments"
     />
     <comment-main
@@ -107,10 +105,6 @@
       fetching: {
         type: Boolean,
         default: false
-      },
-      likes: {
-        type: Number,
-        default: 0
       },
       plain: {
         type: Boolean,

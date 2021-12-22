@@ -19,6 +19,10 @@
     <!-- desktop-banner -->
     <div class="desktop-banner" v-else>
       <uimage cdn class="image" :src="bannerImage" />
+      <button class="like" :class="{ liked: isLiked }" :disabled="isLiked" @click="handleLike">
+        <i class="icon iconfont icon-heart"></i>
+        <span class="count">{{ isLiked ? `${siteLikes - 1} + 1` : siteLikes }}</span>
+      </button>
       <span class="slogan">
         <span class="text">
           <i18n :lkey="LANGUAGE_KEYS.GUESTBOOK_SLOGAN" />
@@ -26,7 +30,7 @@
       </span>
     </div>
     <div class="comment">
-      <comment :post-id="0" :likes="siteLikes" :plain="isMobile" />
+      <comment :post-id="0" :plain="isMobile" />
     </div>
   </div>
 </template>
@@ -37,9 +41,11 @@
   import { useUniversalFetch } from '/@/universal'
   import { useMetaStore } from '/@/store/meta'
   import { useCommentStore } from '/@/store/comment'
-  import { firstUpperCase } from '/@/transforms/text'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { firstUpperCase } from '/@/transforms/text'
+  import { usePageLike } from '/@/transforms/state'
   import { META } from '/@/config/app.config'
   import Comment from '/@/components/comment/index.vue'
   import PageBanner from '/@/components/common/banner.vue'
@@ -57,9 +63,10 @@
       }
     },
     setup() {
-      const { i18n, meta, isDarkTheme, isZhLang } = useEnhancer()
+      const { i18n, meta, gtag, isDarkTheme, isZhLang } = useEnhancer()
       const metaStore = useMetaStore()
       const commentStore = useCommentStore()
+      const { isLiked, like } = usePageLike(0)
       const siteLikes = computed(() => metaStore.appOptions.data?.meta.likes || 0)
       const bannerImage = `/images/page-guestbook/banner.jpg`
 
@@ -76,13 +83,34 @@
         ])
       }
 
+      const handleLike = async () => {
+        if (isLiked.value) {
+          return false
+        }
+        gtag?.event('like_site', {
+          event_category: GAEventCategories.Universal
+        })
+
+        try {
+          await metaStore.postSiteLike()
+          await metaStore.fetchAppOptions(true)
+          like()
+        } catch (error) {
+          const message = i18n.t(LANGUAGE_KEYS.POST_ACTION_ERROR)
+          console.warn(message, error)
+          alert(message)
+        }
+      }
+
       useUniversalFetch(() => fetchAllData())
 
       return {
         LANGUAGE_KEYS,
         bannerImage,
         isDarkTheme,
-        siteLikes
+        isLiked,
+        siteLikes,
+        handleLike
       }
     }
   })
@@ -98,7 +126,6 @@
 
     .desktop-banner {
       position: relative;
-      overflow: hidden;
       margin-bottom: $lg-gap;
       width: 100%;
       height: 19rem;
@@ -115,12 +142,39 @@
         }
       }
 
+      .like {
+        position: absolute;
+        left: $lg-gap * 2;
+        bottom: $gap * 2;
+        display: inline-flex;
+        align-items: center;
+
+        &.liked,
+        &:hover {
+          .icon {
+            color: $red;
+          }
+        }
+
+        .icon {
+          margin-right: $sm-gap;
+          color: rgba($red, 0.6);
+          font-size: $font-size-h2;
+          @include color-transition();
+        }
+
+        .count {
+          color: rgba($white, 0.8);
+          font-weight: bold;
+        }
+      }
+
       .slogan {
         $size: 2em;
         display: block;
         position: absolute;
         right: $lg-gap * 2;
-        bottom: $lg-gap * 2;
+        bottom: $gap * 2;
         height: $size;
         line-height: $size;
         padding: 0 $sm-gap;

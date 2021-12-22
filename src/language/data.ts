@@ -160,11 +160,7 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   },
   [LANGUAGE_KEYS.SEARCH_PLACEHOLDER]: {
     [Language.Zh]: '探索与觉知',
-    [Language.En]: 'Search..'
-  },
-  [LANGUAGE_KEYS.PAGE_TITLE]: {
-    [Language.Zh]: '黄卷青灯',
-    [Language.En]: 'pages'
+    [Language.En]: 'Search...'
   },
   [LANGUAGE_KEYS.ANNOUNCEMENT_PLACEHOLDER]: {
     [Language.Zh]: '空空如也',
@@ -298,13 +294,9 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '发布失败，原因 -> 控制台',
     [Language.En]: 'Submit failed, get err in dev console!'
   },
-  [LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION]: {
-    [Language.Zh]: '操作失败，原因 -> 控制台',
-    [Language.En]: 'Action failed, get error in dev console!'
-  },
   [LANGUAGE_KEYS.COMMENT_ACCOUNT_SETTING]: {
-    [Language.Zh]: '设置账户信息',
-    [Language.En]: 'account setting'
+    [Language.Zh]: '编辑用户信息',
+    [Language.En]: 'profile'
   },
   [LANGUAGE_KEYS.COMMENT_ACCOUNT_EDIT]: {
     [Language.Zh]: '编辑信息',
@@ -314,20 +306,12 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '清空信息',
     [Language.En]: 'clear profile'
   },
-  [LANGUAGE_KEYS.COMMENT_LIST_COUNT]: {
-    [Language.Zh]: '条看法',
-    [Language.En]: 'comments'
-  },
-  [LANGUAGE_KEYS.COMMENT_LIKE_COUNT]: {
-    [Language.Zh]: '人觉得有点牛逼',
-    [Language.En]: 'likes'
-  },
-  [LANGUAGE_KEYS.COMMENT_LIKE_COUNT_BRIEF]: {
-    [Language.Zh]: '次喜欢',
-    [Language.En]: 'likes'
-  },
   [LANGUAGE_KEYS.QUERY_PARAMS_ERROR]: {
     [Language.Zh]: '请求参数错误：',
     [Language.En]: 'Invalid query params: '
+  },
+  [LANGUAGE_KEYS.POST_ACTION_ERROR]: {
+    [Language.Zh]: '操作失败，原因 > 控制台',
+    [Language.En]: 'Failed! get error in dev console'
   }
 }

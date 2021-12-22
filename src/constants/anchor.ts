@@ -11,10 +11,10 @@ export const MAIN_CONTENT_ELEMENT_ID = 'A_main'
 export const ASIDE_ELEMENT_ID = 'A_aside'
 export const FOOTER_ELEMENT_ID = 'A_footer'
 
-export const ARTICLE_SHARE_ELEMENT_ID = 'A_article_share'
+export const ARTICLE_CONTENT_ELEMENT_ID = 'A_article_content'
+export const ARTICLE_LIKE_SHARE_ELEMENT_ID = 'A_article_like_share'
 export const ARTICLE_META_ELEMENT_ID = 'A_article_meta'
 export const ARTICLE_RELETED_ELEMENT_ID = 'A_article_releted'
-export const ARTICLE_CONTENT_ELEMENT_ID = 'A_article_content'
 
 export const ARTICLE_CONTENT_HEADING_ELEMENT_ID_PREFIX = 'A_article_content_heading'
 export const getArticleContentHeadingElementID = (level: number, heading: string) => {

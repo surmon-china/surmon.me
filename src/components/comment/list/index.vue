@@ -101,7 +101,7 @@
           await commentStore.postCommentLike(commentID)
           likeCommentStorage(commentID)
         } catch (error) {
-          const message = i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_ACTION)
+          const message = i18n.t(LANGUAGE_KEYS.POST_ACTION_ERROR)
           console.warn(message, error)
           alert(message)
         }

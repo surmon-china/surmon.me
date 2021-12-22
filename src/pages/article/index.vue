@@ -1,43 +1,48 @@
 <template>
-  <div class="article-page" :class="{ mobile: isMobile }">
-    <div class="module">
-      <article-content :id="ARTICLE_CONTENT_ELEMENT_ID" :fetching="fetching" :article="article" />
-    </div>
-    <client-only v-if="!isMobile">
-      <div class="module">
-        <article-mammon :fetching="fetching" />
-      </div>
-    </client-only>
-    <div class="module">
-      <article-share
-        :id="ARTICLE_SHARE_ELEMENT_ID"
-        :fetching="fetching"
-        :socials="isMobile ? [SocialMedia.Wechat, SocialMedia.Weibo, SocialMedia.Twitter] : []"
-      />
-    </div>
-    <div class="module">
-      <article-meta
-        :id="ARTICLE_META_ELEMENT_ID"
-        :plain="isMobile"
-        :fetching="fetching"
-        :article="article"
-      />
-    </div>
-    <div class="releted-module">
-      <article-related
-        :id="ARTICLE_RELETED_ELEMENT_ID"
-        :count="isMobile ? 4 : 6"
-        :fetching="fetching"
-        :articles="relatedArticles"
-      />
-    </div>
+  <div class="article-page">
+    <placeholder :loading="fetching">
+      <template #loading>
+        <article-skeleton :social-count="isMobile ? 3 : 8" :releted-count="isMobile ? 2 : 3" />
+      </template>
+      <template #default>
+        <div v-if="article">
+          <div class="module">
+            <article-content :id="ANCHORS.ARTICLE_CONTENT_ELEMENT_ID" :article="article" />
+          </div>
+          <div class="like-share-module">
+            <article-like-share
+              :id="ANCHORS.ARTICLE_LIKE_SHARE_ELEMENT_ID"
+              :article-id="articleId"
+              :likes="article?.meta?.likes || 0"
+              :socials="
+                isMobile ? [SocialMedia.Wechat, SocialMedia.Weibo, SocialMedia.Twitter] : []
+              "
+            />
+          </div>
+          <div class="module">
+            <article-meta
+              :id="ANCHORS.ARTICLE_META_ELEMENT_ID"
+              :plain="isMobile"
+              :article="article"
+            />
+          </div>
+          <client-only>
+            <div class="module" v-if="!isMobile">
+              <article-mammon />
+            </div>
+          </client-only>
+          <div class="releted-module">
+            <article-related
+              :id="ANCHORS.ARTICLE_RELETED_ELEMENT_ID"
+              :count="isMobile ? 4 : 6"
+              :articles="relatedArticles"
+            />
+          </div>
+        </div>
+      </template>
+    </placeholder>
     <div class="comment">
-      <comment
-        :plain="isMobile"
-        :fetching="fetching"
-        :post-id="articleId"
-        :likes="article?.meta?.likes"
-      />
+      <comment :plain="isMobile" :fetching="fetching" :post-id="articleId" />
     </div>
   </div>
 </template>
@@ -46,30 +51,27 @@
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/universal'
-  import {
-    ARTICLE_CONTENT_ELEMENT_ID,
-    ARTICLE_META_ELEMENT_ID,
-    ARTICLE_RELETED_ELEMENT_ID,
-    ARTICLE_SHARE_ELEMENT_ID
-  } from '/@/constants/anchor'
+  import * as ANCHORS from '/@/constants/anchor'
   import { UNDEFINED } from '/@/constants/value'
   import { useArticleDetailStore } from '/@/store/article'
   import { useCommentStore } from '/@/store/comment'
   import { SocialMedia } from '/@/components/widget/share.vue'
-  import ArticleContent from './content.vue'
-  import ArticleMammon from './mammon.vue'
-  import ArticleShare from './share.vue'
-  import ArticleMeta from './meta.vue'
-  import ArticleRelated from './related.vue'
   import Comment from '/@/components/comment/index.vue'
+  import ArticleSkeleton from './skeleton.vue'
+  import ArticleContent from './content.vue'
+  import ArticleLikeShare from './like-share.vue'
+  import ArticleRelated from './related.vue'
+  import ArticleMammon from './mammon.vue'
+  import ArticleMeta from './meta.vue'
 
   export default defineComponent({
     name: 'ArticleDetail',
     components: {
       Comment,
+      ArticleSkeleton,
       ArticleContent,
       ArticleMammon,
-      ArticleShare,
+      ArticleLikeShare,
       ArticleMeta,
       ArticleRelated
     },
@@ -139,10 +141,7 @@
         article,
         fetching,
         relatedArticles,
-        ARTICLE_CONTENT_ELEMENT_ID,
-        ARTICLE_META_ELEMENT_ID,
-        ARTICLE_RELETED_ELEMENT_ID,
-        ARTICLE_SHARE_ELEMENT_ID
+        ANCHORS
       }
     }
   })
@@ -158,7 +157,8 @@
       @include common-bg-module();
     }
 
-    .releted-module {
+    .releted-module,
+    .like-share-module {
       margin-bottom: $lg-gap;
     }
   }

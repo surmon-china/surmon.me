@@ -64,10 +64,10 @@
       left: 0;
       height: $size;
       width: 0%;
+      background-color: $primary;
       @include hidden();
       transition: width $transition-time-normal, opacity $transition-time-normal,
         visibility $transition-time-normal;
-      background-color: $primary;
       &.show {
         @include visible();
         transition: width 0s, opacity $transition-time-fast, visibility $transition-time-fast;
