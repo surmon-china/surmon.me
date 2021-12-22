@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.2.14
+* Surmon.me v3.2.15
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -41,12 +41,14 @@ isDev ? path__default["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;co
         // manifest
     ].join('\n');
     const html = template
+        // MARK: replace! $ sign & use function replacer
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_string_as_a_parameter
         .replace(/<title>[\s\S]*<\/title>/, '')
-        .replace(`<html`, `<html ${metas.htmlAttrs} `)
-        .replace(`<head>`, `<head>\n${metas.headTags}`)
-        .replace(`<!--app-html-->`, appHTML)
-        .replace(`<body>`, `<body ${metas.bodyAttrs}>`)
-        .replace(`</body>`, `\n${bodyScripts}\n</body>`);
+        .replace(`<html`, () => `<html ${metas.htmlAttrs} `)
+        .replace(`<head>`, () => `<head>\n${metas.headTags}`)
+        .replace(`<!--app-html-->`, () => appHTML)
+        .replace(`<body>`, () => `<body ${metas.bodyAttrs}>`)
+        .replace(`</body>`, () => `\n${bodyScripts}\n</body>`);
     return html;
 };const enableProdRuntime = async (app) => {
     const template = fs__default["default"].readFileSync(path__default["default"].resolve(DIST_PATH, 'template.html'), 'utf-8');

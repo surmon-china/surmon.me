@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.2.14
+* Surmon.me v3.2.15
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -75,7 +75,6 @@ Object.freeze({
     GITHUB_SPONSORS: 'https://github.com/sponsors/surmon-china',
     PAYPAL: 'https://www.paypal.me/surmon',
     UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
-    FUCK_IPC: 'http://www.beian.miit.gov.cn',
     GOOGLE_LIVE_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w',
     QQ_GROUP: 'https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4',
     TELEGRAM: 'https://t.me/surmon',
@@ -362,12 +361,14 @@ const getSongList = async () => {
         // manifest
     ].join('\n');
     const html = template
+        // MARK: replace! $ sign & use function replacer
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_string_as_a_parameter
         .replace(/<title>[\s\S]*<\/title>/, '')
-        .replace(`<html`, `<html ${metas.htmlAttrs} `)
-        .replace(`<head>`, `<head>\n${metas.headTags}`)
-        .replace(`<!--app-html-->`, appHTML)
-        .replace(`<body>`, `<body ${metas.bodyAttrs}>`)
-        .replace(`</body>`, `\n${bodyScripts}\n</body>`);
+        .replace(`<html`, () => `<html ${metas.htmlAttrs} `)
+        .replace(`<head>`, () => `<head>\n${metas.headTags}`)
+        .replace(`<!--app-html-->`, () => appHTML)
+        .replace(`<body>`, () => `<body ${metas.bodyAttrs}>`)
+        .replace(`</body>`, () => `\n${bodyScripts}\n</body>`);
     return html;
 };const enableDevRuntime = async (app) => {
     const viteServer = await vite.createServer({
