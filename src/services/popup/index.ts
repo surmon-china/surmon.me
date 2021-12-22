@@ -65,6 +65,7 @@ const createPopupStore = () => {
       image.attrs = attrs
       Object.assign(state, {
         ...options,
+        border: true,
         isImage: true,
         visible: true
       })

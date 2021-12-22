@@ -1,7 +1,12 @@
 <template>
   <div id="popup" class="popup">
     <transition name="module">
-      <div class="mask" v-show="state.visible" @click.self="handleMaskClick">
+      <div
+        class="mask"
+        :class="{ dark: isDarkTheme }"
+        v-show="state.visible"
+        @click.self="handleMaskClick"
+      >
         <div ref="element" class="warpper" :class="{ border: state.border }">
           <img v-if="state.isImage" v-bind="image.attrs" :src="image.src || ''" />
         </div>
@@ -12,11 +17,13 @@
 
 <script lang="ts">
   import { defineComponent, watchEffect, ref } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { usePopupWithRoot } from './hook'
   export default defineComponent({
     name: 'PopupRoot',
     setup() {
       const element = ref<HTMLElement>(null as any)
+      const { isDarkTheme } = useEnhancer()
       const { state, image, hidden, visible } = usePopupWithRoot(() => element.value)
       const handleWindowScroll = () => hidden()
       const handleMaskClick = () => {
@@ -34,6 +41,7 @@
         element,
         state,
         image,
+        isDarkTheme,
         handleMaskClick
       }
     }
@@ -58,6 +66,9 @@
       background-color: rgba($grey, 0.5);
       @include visibility-transition();
       @include backdrop-blur();
+      &.dark {
+        background-color: rgba($black, 0.5);
+      }
 
       .warpper {
         display: contents;
