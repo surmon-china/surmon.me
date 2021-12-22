@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ### v3.2.15 (2021-12-22)
 
+**Fix**
+
+- Fix SSR render BUG
+
 **Feature**
 
 - Improve global styles

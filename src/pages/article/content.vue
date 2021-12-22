@@ -38,7 +38,7 @@
           class="markdown-html"
           :id="ARTICLE_CONTENT_ELEMENT_IDS.more"
           v-else-if="articleDetailStore.renderedFullContent"
-          v-html="articleDetailStore.moreContent?.html"
+          v-html="articleDetailStore.moreContent?.html || ''"
         />
       </transition>
     </div>
