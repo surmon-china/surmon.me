@@ -40,7 +40,6 @@ export enum LANGUAGE_KEYS {
   MUSIC_PLACEHOLDER = 'music page placeholder',
   SEARCH_PLACEHOLDER = 'search input placeholder',
   HOT_ARTICLE_LIST_TITLE = 'hot article list title',
-  PAGE_TITLE = 'page title',
   ANNOUNCEMENT_PLACEHOLDER = 'announcement empty placeholder',
   CATEGORY_PLACEHOLDER = 'category empty placeholder',
   TAG_PLACEHOLDER = 'tag placeholder',
@@ -73,12 +72,9 @@ export enum LANGUAGE_KEYS {
   COMMENT_POST_ERROR_URL = `comment submit failed of site url error`,
   COMMENT_POST_ERROR_CONTENT = `comment submit failed of content error`,
   COMMENT_POST_ERROR_SUBMIT = `comment submit failed of submit error`,
-  COMMENT_POST_ERROR_ACTION = `comment submit failed of other error`,
   COMMENT_ACCOUNT_SETTING = `comment account setting`,
   COMMENT_ACCOUNT_EDIT = 'edit comment account',
   COMMENT_ACCOUNT_CLEAR = 'clear comment account',
-  COMMENT_LIST_COUNT = 'comments',
-  COMMENT_LIKE_COUNT = 'likes',
-  COMMENT_LIKE_COUNT_BRIEF = 'brief likes',
-  QUERY_PARAMS_ERROR = 'query params error'
+  QUERY_PARAMS_ERROR = 'query params error',
+  POST_ACTION_ERROR = `comment submit failed of other error`
 }

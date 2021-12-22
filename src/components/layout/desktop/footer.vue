@@ -1,9 +1,6 @@
 <template>
   <footer :id="FOOTER_ELEMENT_ID" class="footer">
     <div class="container">
-      <ulink class="ipc" :href="VALUABLE_LINKS.FUCK_IPC" v-if="false">
-        陕 ICP 备 13004859 号-2
-      </ulink>
       <a class="sitemap-btn" target="_blank" :href="VALUABLE_LINKS.SITE_MAP">sitemap.xml</a>
       <divider type="vertical" />
       <i18n zh="由 " en="Powered By " />

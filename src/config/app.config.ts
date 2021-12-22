@@ -47,7 +47,6 @@ export const VALUABLE_LINKS = Object.freeze({
   GITHUB_SPONSORS: 'https://github.com/sponsors/surmon-china',
   PAYPAL: 'https://www.paypal.me/surmon',
   UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
-  FUCK_IPC: 'http://www.beian.miit.gov.cn',
 
   GOOGLE_LIVE_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w',
   QQ_GROUP:

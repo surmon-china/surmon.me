@@ -36,33 +36,35 @@
         </li>
       </ul>
     </div>
-    <button class="link" @click="handleLink(ANCHORS.ARTICLE_SHARE_ELEMENT_ID)">
+    <button class="link" @click="handleLink(ANCHORS.ARTICLE_LIKE_SHARE_ELEMENT_ID)">
       <i class="iconfont icon-share"></i>
       <i18n zh="分享" en="Share" />
+      <divider type="vertical" />
+      <span class="meta">
+        <i class="like-icon iconfont icon-zan"></i>
+        <span class="count">{{ article.meta.likes }}</span>
+      </span>
     </button>
     <button class="link" @click="handleLink(ANCHORS.ARTICLE_META_ELEMENT_ID)">
       <i class="iconfont icon-clock"></i>
-      <i18n zh="元始" en="Meta" />
+      <i18n zh="关于" en="Meta" />
       <divider type="vertical" />
       <span class="meta">
         <i class="iconfont icon-eye"></i>
-        <span>{{ article.meta.views }}</span>
-      </span>
-      <divider type="vertical" />
-      <span class="meta">
-        <i class="like-icon iconfont icon-heart"></i>
-        <span>{{ article.meta.likes }}</span>
+        <span class="count">{{ article.meta.views }}</span>
       </span>
     </button>
     <button class="link" @click="handleLink(ANCHORS.ARTICLE_RELETED_ELEMENT_ID)">
       <i class="iconfont icon-category"></i>
-      <i18n zh="相关文章" en="Related articles" />
-      <span>&nbsp;({{ article.related.length }})</span>
+      <i18n zh="相关" en="Related articles" />
+      <divider type="vertical" />
+      <span class="count">{{ article.related.length }}</span>
     </button>
     <button class="link" @click="handleLink(ANCHORS.COMMENT_ELEMENT_ID)">
       <i class="iconfont icon-comment"></i>
       <i18n zh="评论" en="Comments" />
-      <span>&nbsp;({{ article.meta.comments }})</span>
+      <divider type="vertical" />
+      <span class="count">{{ article.meta.comments }}</span>
     </button>
     <button class="link" @click="handleLink(ANCHORS.COMMENT_PUBLISHER_ELEMENT_ID)">
       <i class="iconfont icon-edit"></i>
@@ -147,6 +149,10 @@
       &:hover {
         color: $primary;
         border-color: $primary;
+      }
+
+      .count {
+        font-weight: bold;
       }
 
       .iconfont {

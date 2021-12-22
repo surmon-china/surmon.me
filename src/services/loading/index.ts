@@ -111,8 +111,10 @@ const createLoadingStore = (options: LoadingOptions = {}) => {
     clear()
     window.setTimeout(() => {
       state.show = false
-      nextTick(() => {
-        state.percent = 0
+      nextTick().then(() => {
+        setTimeout(() => {
+          state.percent = 0
+        }, 160)
       })
     }, 500)
   }

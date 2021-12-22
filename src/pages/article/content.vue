@@ -2,7 +2,6 @@
   <div ref="element" class="detail">
     <transition name="module">
       <div
-        v-if="!fetching"
         class="oirigin"
         :class="{
           original: isOriginal,
@@ -15,48 +14,34 @@
         <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="isHybrid" />
       </div>
     </transition>
-    <placeholder :loading="fetching" @after-enter="handleContentAnimateDone">
-      <template #loading>
-        <div class="skeleton" key="skeleton">
-          <skeleton-line class="title" />
-          <skeleton-paragraph class="content" :lines="9" line-height="1.2em" />
-        </div>
-      </template>
-      <template #default>
-        <div class="knowledge" key="knowledge">
-          <h2 class="title">{{ article?.title }}</h2>
-          <div
-            class="markdown-html"
-            :id="ARTICLE_CONTENT_ELEMENT_IDS.default"
-            v-html="articleDetailStore.defaultContent?.html"
-          />
-          <transition name="module" mode="out-in" @after-enter="handleRenderMoreAnimateDone">
-            <div v-if="isRenderMoreEnabled" class="readmore">
-              <button
-                class="readmore-btn"
-                :disabled="isRenderMoreContent"
-                @click="handleRenderMore"
-              >
-                <i18n
-                  :lkey="
-                    isRenderMoreContent
-                      ? LANGUAGE_KEYS.ARTICLE_RENDERING
-                      : LANGUAGE_KEYS.ARTICLE_READ_ALL
-                  "
-                />
-                <i class="iconfont icon-loadmore"></i>
-              </button>
-            </div>
-            <div
-              class="markdown-html"
-              :id="ARTICLE_CONTENT_ELEMENT_IDS.more"
-              v-else-if="articleDetailStore.renderedFullContent"
-              v-html="articleDetailStore.moreContent?.html"
+    <div class="knowledge" key="knowledge">
+      <h2 class="title">{{ article.title }}</h2>
+      <div
+        class="markdown-html"
+        :id="ARTICLE_CONTENT_ELEMENT_IDS.default"
+        v-html="articleDetailStore.defaultContent?.html"
+      />
+      <transition name="module" mode="out-in" @after-enter="handleRenderMoreAnimateDone">
+        <div v-if="isRenderMoreEnabled" class="readmore">
+          <button class="readmore-btn" :disabled="isRenderMoreContent" @click="handleRenderMore">
+            <i18n
+              :lkey="
+                isRenderMoreContent
+                  ? LANGUAGE_KEYS.ARTICLE_RENDERING
+                  : LANGUAGE_KEYS.ARTICLE_READ_ALL
+              "
             />
-          </transition>
+            <i class="iconfont icon-loadmore"></i>
+          </button>
         </div>
-      </template>
-    </placeholder>
+        <div
+          class="markdown-html"
+          :id="ARTICLE_CONTENT_ELEMENT_IDS.more"
+          v-else-if="articleDetailStore.renderedFullContent"
+          v-html="articleDetailStore.moreContent?.html"
+        />
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -77,18 +62,14 @@
     props: {
       article: {
         type: Object as PropType<Article>,
-        required: false
-      },
-      fetching: {
-        type: Boolean,
         required: true
       }
     },
     setup(props) {
       const articleDetailStore = useArticleDetailStore()
-      const isHybrid = computed(() => isHybridType(props.article?.origin!))
-      const isReprint = computed(() => isReprintType(props.article?.origin!))
-      const isOriginal = computed(() => isOriginalType(props.article?.origin!))
+      const isHybrid = computed(() => isHybridType(props.article.origin!))
+      const isReprint = computed(() => isReprintType(props.article.origin!))
+      const isOriginal = computed(() => isOriginalType(props.article.origin!))
 
       const element = ref<HTMLElement>()
       const isRenderMoreContent = ref(false)
@@ -118,11 +99,10 @@
         }
       }
 
-      const handleContentAnimateDone = () => observeLozad(ARTICLE_CONTENT_ELEMENT_IDS.default)
       const handleRenderMoreAnimateDone = () => observeLozad(ARTICLE_CONTENT_ELEMENT_IDS.more)
 
       onMounted(() => {
-        handleContentAnimateDone()
+        observeLozad(ARTICLE_CONTENT_ELEMENT_IDS.default)
       })
 
       return {
@@ -136,7 +116,6 @@
         isRenderMoreContent,
         ARTICLE_CONTENT_ELEMENT_IDS,
         handleRenderMore,
-        handleContentAnimateDone,
         handleRenderMoreAnimateDone
       }
     }
@@ -153,19 +132,6 @@
     height: auto;
     transition: height $transition-time-normal;
 
-    .skeleton {
-      .title {
-        width: 60%;
-        height: 26px;
-        margin: 2rem auto;
-      }
-
-      .content {
-        margin-top: 3rem;
-        margin-bottom: 1rem;
-      }
-    }
-
     .oirigin {
       position: absolute;
       top: -11px;
@@ -173,7 +139,7 @@
       transform: rotate(-45deg);
       width: 7rem;
       height: 4rem;
-      line-height: 5.8rem;
+      line-height: 5.6rem;
       text-align: center;
       transform-origin: center;
       color: $white;

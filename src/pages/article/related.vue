@@ -1,36 +1,27 @@
 <template>
   <div class="related">
-    <placeholder :loading="fetching" :data="articles">
-      <template #loading>
-        <ul class="skeleton-list" :class="`count-${count}`">
-          <skeleton-base v-for="item in count / 2" :key="item" class="article" />
-        </ul>
-      </template>
-      <template #default>
-        <ul class="articles" :class="`count-${count}`" key="articles">
-          <li
-            v-for="(article, index) in articles.slice(0, count)"
-            :class="{ disabled: !article.id }"
-            :key="index"
-            class="item"
-          >
-            <router-link
-              class="item-article"
-              :title="article.title"
-              :to="getArticleDetailRoute(article.id)"
-            >
-              <div
-                class="thumb"
-                :style="{
-                  backgroundImage: `url(${getRelatedArticleThumbnail(article.thumb)})`
-                }"
-              />
-              <div class="title">{{ article.title }}</div>
-            </router-link>
-          </li>
-        </ul>
-      </template>
-    </placeholder>
+    <ul class="articles" :class="`count-${count}`">
+      <li
+        v-for="(article, index) in articles.slice(0, count)"
+        :class="{ disabled: !article.id }"
+        :key="index"
+        class="item"
+      >
+        <router-link
+          class="item-article"
+          :title="article.title"
+          :to="getArticleDetailRoute(article.id)"
+        >
+          <div
+            class="thumb"
+            :style="{
+              backgroundImage: `url(${getRelatedArticleThumbnail(article.thumb)})`
+            }"
+          />
+          <div class="title">{{ article.title }}</div>
+        </router-link>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -51,10 +42,6 @@
       count: {
         type: Number,
         default: 6
-      },
-      fetching: {
-        type: Boolean,
-        required: true
       }
     },
     setup() {
@@ -76,25 +63,6 @@
 
   .related {
     overflow: hidden;
-
-    .skeleton-list {
-      display: grid;
-      grid-gap: $gap;
-      padding: 0;
-      margin: 0;
-      overflow: hidden;
-      &.count-4 {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      &.count-6 {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .article {
-        width: auto;
-        height: 9rem;
-      }
-    }
 
     .articles {
       display: grid;
