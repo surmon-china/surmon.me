@@ -24,7 +24,7 @@
         <comment-pen
           v-model="rootPenState.content"
           v-model:preview="rootPenState.preview"
-          :auto-focus="true"
+          :auto-focus="!plain"
           :hidden-stationery="plain"
           :disabled="isRootPosting || isLoading"
           :posting="isRootPosting"
