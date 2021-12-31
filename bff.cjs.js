@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.2.16
+* Surmon.me v3.3.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -25,6 +25,7 @@ const isDev = "production" === NodeEnv.Development;
  */
 var TunnelModule;
 (function (TunnelModule) {
+    TunnelModule["Instagram"] = "instagram";
     TunnelModule["BiliBili"] = "bilibili";
     TunnelModule["Wallpaper"] = "wallpaper";
     TunnelModule["GitHub"] = "gitHub";
@@ -35,8 +36,7 @@ var TunnelModule;
  * @author Surmon <https://github.com/surmon-china>
  */
 const API_TUNNEL_PREFIX = '/_tunnel';
-const DEFAULT_SERVER_PORT = 3000;
-const getPort = () => Number(process.env.PORT || DEFAULT_SERVER_PORT);/**
+const getBFFServerPort = () => Number(process.env.PORT || 3000);/**
  * @file App config
  * @module config.app
  * @author Surmon <https://github.com/surmon-china>
@@ -47,12 +47,10 @@ const GITHUB_UID = 'surmon-china';
 const GA_MEASUREMENT_ID = 'UA-84887611-3';
 const META = Object.freeze({
     title: 'Surmon.me',
-    keywords: 'Surmon 博客,surmon-china,苏尔蒙,Vue 博客,前端技术开发博客,JavaScript 技术',
-    description: '来苏之望',
+    sub_title: '来苏之望',
     domain: 'surmon.me',
     url: 'https://surmon.me',
-    author: 'Surmon',
-    email: 'i@surmon.me'
+    author: 'Surmon'
 });
 Object.freeze({
     JimmyLv: '//blog.jimmylv.info'
@@ -75,6 +73,7 @@ Object.freeze({
     GITHUB_SPONSORS: 'https://github.com/sponsors/surmon-china',
     PAYPAL: 'https://www.paypal.me/surmon',
     UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
+    MARKDOWN: 'https://daringfireball.net/projects/markdown/',
     GOOGLE_LIVE_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w',
     QQ_GROUP: 'https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4',
     TELEGRAM: 'https://t.me/surmon',
@@ -135,7 +134,7 @@ const getRSSXML = async (archiveData) => {
     const archive = archiveData || (await getArchiveData());
     const feed = new RSS__default["default"]({
         title: META.title,
-        description: META.description,
+        description: META.sub_title,
         site_url: META.url,
         feed_url: `${META.url}/rss.xml`,
         image_url: `${META.url}/icon.png`,
@@ -221,8 +220,8 @@ const getSitemapXML = async (archiveData) => {
  * @module service.outside
  * @author Surmon <https://github.com/surmon-china>
  */
-const getGAScriptURL = (gaMeasurementID) => {
-    return `https://www.googletagmanager.com/gtag/js?id=${gaMeasurementID}`;
+const getGAScriptURL = (measurementID) => {
+    return `https://www.googletagmanager.com/gtag/js?id=${measurementID}`;
 };/**
  * @file BFF GA getter
  * @module server.getter.gtag
@@ -327,6 +326,20 @@ const getGitHubRepositories = async () => {
         created_at: rep.created_at,
         language: rep.language
     }));
+};/**
+ * @file BFF instagram getter
+ * @module server.getter.instagram
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const getInstagramMedias = async () => {
+    return [];
+};/**
+ * @file BFF instagram setter
+ * @module server.setter.instagram
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const setInstagramMedias = async (payload) => {
+    console.log('setInstagramMedias', typeof payload, payload);
 };/**
  * @file BFF music getter
  * @module server.getter.music
@@ -519,6 +532,7 @@ const createExpressApp = () => {
     const app = express__default["default"]();
     const server = http__default["default"].createServer(app);
     // middlewares
+    app.use(express__default["default"].json());
     app.use(cookieParser__default["default"]());
     app.use(compression__default["default"]());
     return {
@@ -623,10 +637,20 @@ app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.Music}`, responser(() => cacher({
     retryWhen: 60 * 10,
     getter: getSongList
 })));
+app.post(`${API_TUNNEL_PREFIX}/${TunnelModule.Instagram}`, (request, response) => {
+    setInstagramMedias(request.body);
+    response.send('ok');
+});
+app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.Instagram}`, responser(() => cacher({
+    key: 'instagram',
+    age: 60 * 60 * 1,
+    retryWhen: 60 * 10,
+    getter: getInstagramMedias
+})));
 // app effect
 isDev ? enableDevRuntime(app) : enableProdRuntime(app);
 // run
-server.listen(getPort(), () => {
+server.listen(getBFFServerPort(), () => {
     const infos = [
         `in ${NODE_ENV}`,
         `at ${new Date().toLocaleString()}`,

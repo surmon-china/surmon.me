@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.2.16
+* Surmon.me v3.3.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -9,8 +9,7 @@
  * @module config.bff
  * @author Surmon <https://github.com/surmon-china>
  */
-const DEFAULT_SERVER_PORT = 3000;
-const getPort = () => Number(process.env.PORT || DEFAULT_SERVER_PORT);/**
+const getBFFServerPort = () => Number(process.env.PORT || 3000);/**
  * @file Dev environment
  * @module environment
  * @author Surmon <https://github.com/surmon-china>
@@ -86,6 +85,7 @@ const createExpressApp = () => {
     const app = express__default["default"]();
     const server = http__default["default"].createServer(app);
     // middlewares
+    app.use(express__default["default"].json());
     app.use(cookieParser__default["default"]());
     app.use(compression__default["default"]());
     return {
@@ -100,7 +100,7 @@ const createExpressApp = () => {
 const { app, server } = createExpressApp();
 // TODO
 enableProdRuntime(app);
-server.listen(getPort());
+server.listen(getBFFServerPort());
 // MARK
 const initializer = (context, callback) => {
     console.log('serverless initializing');
