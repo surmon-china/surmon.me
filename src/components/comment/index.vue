@@ -11,27 +11,28 @@
       @sort="fetchSortComments"
     />
     <divider class="divider" size="lg" />
-    <comment-publisher
-      :id="ANCHOR.COMMENT_PUBLISHER_ELEMENT_ID"
-      :disabled="isLoading || isRootPosting"
-      :total="commentStore.pagination?.total"
-      :responsive="!plain"
-      :fetching="fetching"
-      :profile="guestProfile"
-      :hidden-avatar="plain"
-    >
-      <template #pen>
-        <comment-pen
-          v-model="rootPenState.content"
-          v-model:preview="rootPenState.preview"
-          :auto-focus="!plain"
-          :hidden-stationery="plain"
-          :disabled="isRootPosting || isLoading"
-          :posting="isRootPosting"
-          @submit="handleRootSubmit"
-        />
-      </template>
-    </comment-publisher>
+    <comment-publisher-main :fetching="fetching">
+      <comment-publisher
+        :id="ANCHOR.COMMENT_PUBLISHER_ELEMENT_ID"
+        :disabled="isLoading || isRootPosting"
+        :total="commentStore.pagination?.total"
+        :default-blossomed="plain ? true : false"
+        :profile="guestProfile"
+        :hidden-avatar="plain"
+      >
+        <template #pen>
+          <comment-pen
+            v-model="rootPenState.content"
+            v-model:preview="rootPenState.preview"
+            :auto-focus="plain ? false : true"
+            :hidden-stationery="plain"
+            :disabled="isRootPosting || isLoading"
+            :posting="isRootPosting"
+            @submit="handleRootSubmit"
+          />
+        </template>
+      </comment-publisher>
+    </comment-publisher-main>
     <divider class="divider" size="lg" />
     <comment-main
       :fetching="isLoading"
@@ -53,6 +54,7 @@
               :disabled="false"
               :profile="guestProfile"
               :bordered="true"
+              :default-blossomed="true"
               :hidden-avatar="plain"
               :fixed-avatar="payload.isChild"
             >
@@ -108,8 +110,9 @@
   import CommentMain from './main.vue'
   import CommentList from './list/index.vue'
   import CommentLoadmore from './loadmore.vue'
-  import CommentPublisher from './publisher.vue'
-  import CommentPen from './pen.vue'
+  import CommentPublisherMain from './publisher/main.vue'
+  import CommentPublisher from './publisher/publisher.vue'
+  import CommentPen from './publisher/pen.vue'
 
   export default defineComponent({
     name: 'Dsiqus',
@@ -118,6 +121,7 @@
       CommentMain,
       CommentList,
       CommentLoadmore,
+      CommentPublisherMain,
       CommentPublisher,
       CommentPen
     },
@@ -181,11 +185,10 @@
         commentState.replyPID = 0
       }
       const replyComment = (commentID: number) => {
+        commentState.replyPID = commentID
         gtag?.event('reply_comment', {
           event_category: GAEventCategories.Comment
         })
-
-        commentState.replyPID = commentID
       }
 
       const fetchCommentList = (params: CommentFetchParams = {}) => {

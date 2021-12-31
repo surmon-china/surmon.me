@@ -1,87 +1,70 @@
 <template>
-  <placeholder :loading="fetching" @after-enter="handlePublisherRendered">
-    <template #loading>
-      <div class="publisher-skeleton" key="skeleton">
-        <div class="avatar">
-          <skeleton-base />
+  <form
+    key="publisher"
+    class="publisher"
+    name="comment"
+    :id="id"
+    :class="{
+      'hidden-avatar': hiddenAvatar,
+      'fixed-avatar': fixedAvatar,
+      blossomed,
+      bordered
+    }"
+  >
+    <transition name="module-slow">
+      <div class="profile" v-if="user.type === UserType.Null" v-show="blossomed">
+        <div class="name">
+          <input
+            v-model="profile.name"
+            required
+            type="text"
+            name="name"
+            autocomplete="on"
+            :disabled="disabled"
+            :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_NAME) + ' *'"
+          />
         </div>
-        <div class="content">
-          <skeleton-base />
+        <div class="email">
+          <input
+            v-model="profile.email"
+            required
+            type="email"
+            name="email"
+            autocomplete="on"
+            :disabled="disabled"
+            :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_EMAIL) + ' *'"
+          />
+        </div>
+        <div class="site">
+          <input
+            v-model="profile.site"
+            type="url"
+            name="url"
+            autocomplete="on"
+            :disabled="disabled"
+            :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_SITE)"
+          />
         </div>
       </div>
-    </template>
-    <template #default>
-      <form
-        key="publisher"
-        class="publisher"
-        name="comment"
-        :id="id"
-        :class="{
-          'hidden-avatar': hiddenAvatar,
-          'fixed-avatar': fixedAvatar,
-          blossomed,
-          bordered
-        }"
-      >
-        <transition name="module-slow">
-          <div class="profile" v-if="user.type === UserType.Null" v-show="blossomed">
-            <div class="name">
-              <input
-                v-model="profile.name"
-                required
-                type="text"
-                name="name"
-                autocomplete="on"
-                :disabled="disabled"
-                :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_NAME) + ' *'"
-              />
-            </div>
-            <div class="email">
-              <input
-                v-model="profile.email"
-                required
-                type="email"
-                name="email"
-                autocomplete="on"
-                :disabled="disabled"
-                :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_EMAIL) + ' *'"
-              />
-            </div>
-            <div class="site">
-              <input
-                v-model="profile.site"
-                type="url"
-                name="url"
-                autocomplete="on"
-                :disabled="disabled"
-                :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_SITE)"
-              />
-            </div>
-          </div>
-        </transition>
-        <div class="postbox">
-          <div class="avatar" v-if="!hiddenAvatar">
-            <uimage :alt="profile.name" :src="avatar" />
-          </div>
-          <transition name="module-slow">
-            <div class="editor" v-if="blossomed" key="editor">
-              <slot name="pen"></slot>
-            </div>
-            <div class="placeholder" v-else key="placeholder" @click="handleBlossom">
-              <i18n
-                zh="在下有一拙见，不知..."
-                :en="`${total ? 'Join' : 'Start'} the discussion...`"
-              />
-            </div>
-          </transition>
+    </transition>
+    <div class="postbox">
+      <div class="avatar" v-if="!hiddenAvatar">
+        <uimage :alt="profile.name" :src="avatar" />
+      </div>
+      <transition name="module-slow">
+        <div class="editor" v-if="blossomed" key="editor">
+          <slot name="pen"></slot>
         </div>
-      </form>
-    </template>
-  </placeholder>
+        <div class="placeholder" v-else key="placeholder" @click="handleBlossom">
+          <i18n zh="在下有一拙见，不知..." :en="`${total ? 'Join' : 'Start'} the discussion...`" />
+        </div>
+      </transition>
+    </div>
+  </form>
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, ref, PropType } from 'vue'
+  import { defineComponent, ref, computed, PropType } from 'vue'
   import { Author } from '/@/store/comment'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalStore, UserType } from '/@/store/universal'
@@ -95,6 +78,7 @@
   import { markdownToHTML } from '/@/transforms/markdown'
   import { firstUpperCase } from '/@/transforms/text'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { CommentEvents } from '../helper'
 
   export default defineComponent({
     name: 'CommentPublisher',
@@ -102,10 +86,6 @@
       id: {
         type: String,
         default: ''
-      },
-      fetching: {
-        type: Boolean,
-        default: false
       },
       disabled: {
         type: Boolean,
@@ -124,9 +104,9 @@
         type: Boolean,
         default: false
       },
-      responsive: {
+      defaultBlossomed: {
         type: Boolean,
-        default: false
+        default: true
       },
       hiddenAvatar: {
         type: Boolean,
@@ -137,7 +117,8 @@
         required: false
       }
     },
-    setup(props) {
+    emits: [CommentEvents.Blossom],
+    setup(props, context) {
       const { i18n, gtag } = useEnhancer()
       const universalStore = useUniversalStore()
       const user = computed(() => universalStore.user)
@@ -156,17 +137,13 @@
         }
       })
 
-      const blossomed = ref(props.responsive ? false : true)
+      const blossomed = ref(props.defaultBlossomed)
       const handleBlossom = () => {
         blossomed.value = true
+        context.emit(CommentEvents.Blossom)
         gtag?.event('focus_publisher', {
           event_category: GAEventCategories.Comment
         })
-      }
-
-      // reset blossomed state when rerender publisher
-      const handlePublisherRendered = () => {
-        blossomed.value = false
       }
 
       return {
@@ -179,8 +156,7 @@
         t: i18n.t,
         firstUpperCase,
         markdownToHTML,
-        handleBlossom,
-        handlePublisherRendered
+        handleBlossom
       }
     }
   })

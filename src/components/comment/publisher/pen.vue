@@ -98,7 +98,7 @@
   import { markdownToHTML } from '/@/transforms/markdown'
   import { focusPosition } from '/@/utils/editable'
   import { VALUABLE_LINKS } from '/@/config/app.config'
-  import { CommentEvents, EMOJIS } from './helper'
+  import { CommentEvents, EMOJIS } from '../helper'
 
   export enum PenEvents {
     Update = 'update:modelValue',
