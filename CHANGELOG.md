@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-### v3.2.16 (2021-12-31)
+### v3.3.0 (2021-12-31)
 
 **Feature**
 
