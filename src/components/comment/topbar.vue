@@ -118,11 +118,9 @@
   import { openWindow } from '/@/utils/opener'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { META } from '/@/config/app.config'
+  import { CommentEvents } from './helper'
   import nodepress from '/@/services/nodepress'
 
-  export enum Events {
-    Sort = 'sort'
-  }
   export default defineComponent({
     name: 'CommentTopbar',
     props: {
@@ -157,7 +155,7 @@
         default: false
       }
     },
-    emits: [Events.Sort],
+    emits: [CommentEvents.Sort],
     setup(props, context) {
       const { gtag } = useEnhancer()
       const universalStore = useUniversalStore()
@@ -188,9 +186,10 @@
         gtag?.event('sort_switch', {
           event_category: GAEventCategories.Comment
         })
+
         const value = Number(target?.value)
         if (value !== props.sort) {
-          context.emit(Events.Sort, value)
+          context.emit(CommentEvents.Sort, value)
         }
       }
 
@@ -199,6 +198,7 @@
           event_category: GAEventCategories.Comment,
           event_label: `id: ${props.postId}`
         })
+
         openWindow(universalStore.disqusConfig.authorize_url, {
           name: `Disqus Auth ${META.title}`,
           onClose: () => {

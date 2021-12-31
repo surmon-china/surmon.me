@@ -16,6 +16,7 @@ export enum CommentEvents {
   Sort = 'sort',
   Page = 'page',
   Vote = 'vote',
+  Blossom = 'blossom',
   Delete = 'delete',
   Reply = 'reply',
   CancelReply = 'cancelReply',
