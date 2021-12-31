@@ -7,7 +7,7 @@
 import { App, reactive, readonly, inject, Plugin, nextTick } from 'vue'
 import { Router } from 'vue-router'
 import { getGAScriptURL } from '/@/transforms/outside'
-import { loadScript } from '/@/utils/script-loader'
+import { loadScript } from '/@/utils/scripter'
 // MARK: https://zh.nuxtjs.org/faq/ga
 // MARK: https://github.com/nuxt-community/google-gtag/blob/master/lib/plugin.js
 // DOC: https://developers.google.com/analytics/devguides/collection/gtagjs/pages?hl=zh-cn

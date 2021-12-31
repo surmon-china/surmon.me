@@ -5,6 +5,7 @@
  */
 
 export enum TunnelModule {
+  Instagram = 'instagram',
   BiliBili = 'bilibili',
   Wallpaper = 'wallpaper',
   GitHub = 'gitHub',

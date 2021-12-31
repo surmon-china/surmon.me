@@ -11,12 +11,11 @@ import { SortType, OriginState, UniversalExtend } from '/@/constants/state'
 import { getArticleContentHeadingElementID } from '/@/constants/anchor'
 import nodepress from '/@/services/nodepress'
 import { markdownToHTML } from '/@/transforms/markdown'
-import { fetchDelay } from '/@/utils/fetch-delay'
+import { delayer } from '/@/utils/delayer'
 import { Category } from './category'
 import { Tag } from './tag'
 
 export const ARTICLE_API_PATH = '/article'
-export const LIKE_ARTICLE_API_PATH = '/like/article'
 
 export interface Article {
   id: number
@@ -26,6 +25,7 @@ export interface Article {
   content: string
   keywords: string[]
   thumb: string
+  disabled_comment: boolean
   meta: {
     likes: number
     views: number
@@ -37,7 +37,7 @@ export interface Article {
   tag: Tag[]
   category: Category[]
   related: Article[]
-  extends?: UniversalExtend[]
+  extends: UniversalExtend[]
 }
 
 export const useArticleStore = defineStore('article', {
@@ -71,7 +71,7 @@ export const useArticleStore = defineStore('article', {
         .then((response) => {
           const state = this
           return new Promise((resolve) => {
-            fetchDelay(isClient ? 368 : 0)(() => {
+            delayer(isClient ? 368 : 0)(() => {
               if (isLoadMore) {
                 state.list.data.push(...response.result.data)
                 state.list.pagination = response.result.pagination
@@ -195,7 +195,7 @@ export const useArticleDetailStore = defineStore('articleDetail', {
         .get(`${ARTICLE_API_PATH}/${params.articleID}`)
         .then((response) => {
           return new Promise((resolve) => {
-            fetchDelay(isClient ? 368 : 0)(() => {
+            delayer(isClient ? 368 : 0)(() => {
               this.article = response.result
               this.renderedFullContent = !this.isLongContent
               resolve(UNDEFINED)
@@ -209,11 +209,13 @@ export const useArticleDetailStore = defineStore('articleDetail', {
 
     // 喜欢文章
     postArticleLike(articleID: number) {
-      return nodepress.patch(LIKE_ARTICLE_API_PATH, { article_id: articleID }).then(() => {
-        if (this.article) {
-          this.article.meta.likes++
-        }
-      })
+      return nodepress
+        .post(`/vote/article`, { article_id: articleID, vote: 1 })
+        .then((response) => {
+          if (this.article) {
+            this.article.meta.likes = response.result
+          }
+        })
     }
   }
 })

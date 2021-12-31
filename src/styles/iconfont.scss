@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
-  src: url('//at.alicdn.com/t/font_64825_b6bykz5pfd.woff2?t=1640129522333') format('woff2'),
-    url('//at.alicdn.com/t/font_64825_b6bykz5pfd.woff?t=1640129522333') format('woff'),
-    url('//at.alicdn.com/t/font_64825_b6bykz5pfd.ttf?t=1640129522333') format('truetype');
+  src: url('//at.alicdn.com/t/font_64825_oej52c0rf4c.woff2?t=1640956950115') format('woff2'),
+    url('//at.alicdn.com/t/font_64825_oej52c0rf4c.woff?t=1640956950115') format('woff'),
+    url('//at.alicdn.com/t/font_64825_oej52c0rf4c.ttf?t=1640956950115') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-delete:before {
+  content: '\e94d';
+}
+
+.icon-down-arrow:before {
+  content: '\eb6d';
+}
+
+.icon-disqus:before {
+  content: '\e9f1';
+}
+
+.icon-disqus-logo:before {
+  content: '\e9f2';
+}
+
+.icon-anonymous:before {
+  content: '\e727';
 }
 
 .icon-discussion:before {
@@ -341,10 +361,6 @@
   content: '\e686';
 }
 
-.icon-face-ai:before {
-  content: '\e673';
-}
-
 .icon-nlp:before {
   content: '\e79c';
 }
@@ -605,7 +621,11 @@
   content: '\e8e7';
 }
 
-.icon-zan:before {
+.icon-dislike:before {
+  content: '\f87d';
+}
+
+.icon-like:before {
   content: '\e614';
 }
 

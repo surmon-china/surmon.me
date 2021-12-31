@@ -68,7 +68,7 @@ app.use(gtag, {
 })
 
 // init: store (from SSR context or fetch)
-isSSR ? store.initInSSR() : store.initInSPA()
+isSSR ? store.initOnSSRClient() : store.initOnSPAClient()
 
 // init: services with client
 theme.bindClientSystem()
@@ -97,6 +97,8 @@ router.isReady().finally(() => {
     globalState.setHydrate()
     // reset: i18n language
     i18n.set(globalState.userAgent.isZhUser ? Language.Zh : Language.En)
+    // init universal user state
+    store.stores.universal.initOnClient()
 
     // desktop only
     if (!globalState.userAgent.isMobile) {
@@ -126,7 +128,7 @@ router.isReady().finally(() => {
     if (isProd) {
       enableCopyrighter()
       enableBaiduSEOer(router)
-      consoleSlogan(i18n)
+      consoleSlogan(i18n, store.stores.meta.appOptions.data?.site_email)
     }
   })
 })

@@ -2,10 +2,10 @@
   <aside class="aside">
     <div class="aside-user">
       <div class="avatar">
-        <uimage :src="gravatar" alt="Surmon" />
+        <uimage :src="avatar" :alt="author" />
       </div>
       <div class="profile">
-        <h3 class="name">Surmon</h3>
+        <h3 class="name">{{ author }}</h3>
         <p class="slogan">
           <i18n :lkey="LANGUAGE_KEYS.APP_SLOGAN" />
         </p>
@@ -70,21 +70,20 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName, CategorySlug } from '/@/app/router'
   import { useMetaStore } from '/@/store/meta'
+  import { useUniversalFetch } from '/@/universal'
   import { Theme } from '/@/services/theme'
   import { Language } from '/@/language/data'
-  import { getFileCDNUrl } from '/@/transforms/url'
   import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
+  import { getDefaultAvatar } from '/@/transforms/avatar'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { VALUABLE_LINKS, META } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'MobileAside',
     setup() {
       const { theme, i18n } = useEnhancer()
       const metaStore = useMetaStore()
-      const gravatar = computed(
-        () => metaStore.adminInfo.data?.gravatar || getFileCDNUrl('/images/gravatar.png')
-      )
+      const avatar = computed(() => metaStore.adminInfo.data?.avatar || getDefaultAvatar())
 
       const themeIcon = computed(() => {
         const themeIconMap = {
@@ -102,6 +101,8 @@
         return languageIconMap[i18n.language.value]
       })
 
+      useUniversalFetch(() => metaStore.fetchAdminInfo())
+
       return {
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
@@ -109,7 +110,8 @@
         CategorySlug,
         getPageRoute,
         getCategoryFlowRoute,
-        gravatar,
+        avatar,
+        author: META.author,
         themeIcon,
         languageIcon,
         toggleTheme: theme.toggle,

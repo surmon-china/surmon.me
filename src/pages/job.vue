@@ -26,7 +26,7 @@
             </ulink>
             <p class="description" v-if="job.description" v-html="job.description" />
             <button class="submit" @click="handleSubmit(job)" v-if="job.email">
-              {{ job.email.replace('@', '#') }}
+              {{ job.email().replace('@', '#') }}
               <i class="iconfont icon-mail-plane"></i>
             </button>
           </div>
@@ -37,8 +37,9 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useMetaStore } from '/@/store/meta'
   import { GAEventCategories } from '/@/constants/gtag'
   import { getFileCDNUrl } from '/@/transforms/url'
   import { firstUpperCase } from '/@/transforms/text'
@@ -55,6 +56,7 @@
     },
     setup() {
       const { i18n, meta, gtag, isZhLang } = useEnhancer()
+      const adminEmail = computed(() => useMetaStore().appOptions.data?.site_email || '')
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_JOB, Language.En)!)
@@ -70,7 +72,7 @@
           url: 'https://www.qiniu.com/company',
           location: '上海',
           description: '公司赚钱，Leader nice，同事完美，业务靠谱，从不加班',
-          email: META.email
+          email: () => adminEmail.value
         },
         {
           id: 'bytedance',
@@ -80,7 +82,7 @@
           url: 'https://job.toutiao.com/s/J9oWrQQ',
           location: '国内',
           description: '饭好吃，不要钱<br> 薪资不低，加班给钱；马上上市，未来可期',
-          email: META.email
+          email: () => adminEmail.value
         },
         {
           id: 'meituan',
@@ -88,7 +90,7 @@
           logo: '/images/page-job/meituan.png',
           url: 'http://zhaopin.meituan.com',
           description: '优惠券多 <br> 技术 OK',
-          email: `iamjooger@gmail.com`
+          email: () => `iamjooger@gmail.com`
         },
         {
           id: 'ant',
@@ -97,7 +99,7 @@
           logo: '/images/page-job/ant.jpg',
           url: 'https://www.antgroup.com/about/join-us',
           description: '巨头市值，大牛群居',
-          email: META.email
+          email: () => adminEmail.value
         },
         {
           id: 'github-veact',
@@ -106,14 +108,14 @@
           logo: '/images/page-job/github.jpg',
           url: 'https://github.com/veactjs',
           description: 'Become the maintainer of the <code>veact</code> project',
-          email: META.email
+          email: () => adminEmail.value
         },
         {
           id: 'todo',
           company: '假装是广告位',
           logo: '/images/page-job/github-package.png',
           description: '如果你有自认为不错的机会，请联系我~',
-          email: META.email
+          email: () => adminEmail.value
         }
       ]
 
@@ -125,7 +127,7 @@
         const location = job.location ? `- ${job.location} ` : ''
         window.open(
           emailLink({
-            email: job.email,
+            email: job.email(),
             subject: `嗨！求内推！/ from ${META.title}`,
             body: `我想求内推「${job.company} ${location}」的机会/职位，我在简历在附件中。\n\nfrom ${META.title}`
           })

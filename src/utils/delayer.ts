@@ -1,13 +1,12 @@
 /**
  * @file 模拟延时器
- * @module util.fetch-delay
+ * @module util.delayer
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { DEFAULT_FETCH_DELAY } from '/@/config/app.config'
+import { DEFAULT_DELAY } from '/@/config/app.config'
 
-export const fetchDelay = (delay: number = DEFAULT_FETCH_DELAY) => {
-  // 一个卑鄙的手段
+export const delayer = (delay: number = DEFAULT_DELAY) => {
   const start = new Date().getTime()
   return (action: () => void) => {
     if (!delay) {

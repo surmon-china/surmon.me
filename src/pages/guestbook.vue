@@ -30,25 +30,27 @@
       </span>
     </div>
     <div class="comment">
-      <comment :post-id="0" :plain="isMobile" />
+      <comment :post-id="0" :plain="isMobile" :fetching="mockCommentLoading" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
+  import { defineComponent, ref, computed } from 'vue'
+  import { isClient } from '/@/app/environment'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/universal'
   import { useMetaStore } from '/@/store/meta'
   import { useCommentStore } from '/@/store/comment'
+  import { useUniversalStore } from '/@/store/universal'
   import { GAEventCategories } from '/@/constants/gtag'
+  import { CommentPostType } from '/@/constants/state'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { firstUpperCase } from '/@/transforms/text'
-  import { usePageLike } from '/@/transforms/state'
   import { META } from '/@/config/app.config'
-  import Comment from '/@/components/comment/index.vue'
   import PageBanner from '/@/components/common/banner.vue'
+  import Comment from '/@/components/comment/index.vue'
 
   export default defineComponent({
     name: 'GuestbookPage',
@@ -63,12 +65,16 @@
       }
     },
     setup() {
-      const { i18n, meta, gtag, isDarkTheme, isZhLang } = useEnhancer()
+      const GUESTBOOK_POST_ID = CommentPostType.Guestbook
+      const { i18n, meta, gtag, globalState, isDarkTheme, isZhLang } = useEnhancer()
       const metaStore = useMetaStore()
       const commentStore = useCommentStore()
-      const { isLiked, like } = usePageLike(0)
+      const universalStore = useUniversalStore()
+      const isLiked = computed(() => universalStore.isLikedPage(GUESTBOOK_POST_ID))
       const siteLikes = computed(() => metaStore.appOptions.data?.meta.likes || 0)
       const bannerImage = `/images/page-guestbook/banner.jpg`
+      // MARK: [SSR & not first page] only
+      const mockCommentLoading = ref(isClient && globalState.isHydrated.value)
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_GUESTBOOK, Language.En)!)
@@ -79,8 +85,10 @@
       const fetchAllData = () => {
         return Promise.all([
           metaStore.fetchAppOptions(true),
-          commentStore.fetchList({ post_id: 0 })
-        ])
+          commentStore.fetchList({ post_id: GUESTBOOK_POST_ID })
+        ]).then(() => {
+          mockCommentLoading.value = false
+        })
       }
 
       const handleLike = async () => {
@@ -93,8 +101,7 @@
 
         try {
           await metaStore.postSiteLike()
-          await metaStore.fetchAppOptions(true)
-          like()
+          universalStore.likePage(GUESTBOOK_POST_ID)
         } catch (error) {
           const message = i18n.t(LANGUAGE_KEYS.POST_ACTION_ERROR)
           console.warn(message, error)
@@ -107,6 +114,7 @@
       return {
         LANGUAGE_KEYS,
         bannerImage,
+        mockCommentLoading,
         isDarkTheme,
         isLiked,
         siteLikes,

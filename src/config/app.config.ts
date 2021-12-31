@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-export const DEFAULT_FETCH_DELAY = 468
+export const DEFAULT_DELAY = 468
 export const PRIMARY_COLOR = '#0088f5'
 export const MUSIC_ALBUM_ID = '638949385'
 export const BILIBILI_UID = '27940710'
@@ -14,12 +14,10 @@ export const ADSENSE_CLIENT_ID = 'ca-pub-4710915636313788'
 
 export const META = Object.freeze({
   title: 'Surmon.me',
-  keywords: 'Surmon 博客,surmon-china,苏尔蒙,Vue 博客,前端技术开发博客,JavaScript 技术',
-  description: '来苏之望',
+  sub_title: '来苏之望',
   domain: 'surmon.me',
   url: 'https://surmon.me',
-  author: 'Surmon',
-  email: 'i@surmon.me'
+  author: 'Surmon'
 })
 
 export const FRIEND_LINKS = Object.freeze({
@@ -47,6 +45,7 @@ export const VALUABLE_LINKS = Object.freeze({
   GITHUB_SPONSORS: 'https://github.com/sponsors/surmon-china',
   PAYPAL: 'https://www.paypal.me/surmon',
   UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
+  MARKDOWN: 'https://daringfireball.net/projects/markdown/',
 
   GOOGLE_LIVE_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w',
   QQ_GROUP:

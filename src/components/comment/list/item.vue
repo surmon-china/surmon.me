@@ -1,88 +1,133 @@
 <template>
   <li
+    class="comment-item"
     :key="comment.id"
     :id="getCommentItemElementID(comment.id)"
-    :class="{ 'h-g': hiddenGravatar, child: isChild }"
-    class="comment-item"
+    :class="{
+      'hide-avatar': hiddenAvatar,
+      'is-child': isChild,
+      'has-child': hasChild
+    }"
   >
-    <div class="cm-avatar" v-if="!hiddenGravatar">
-      <comment-link class="link" :href="comment.author.site">
-        <img
-          :alt="comment.author.name || t(LANGUAGE_KEYS.COMMENT_ANONYMOUS)"
-          :src="humanizeGravatarUrlByEmail(comment.author.email)"
-          draggable="false"
-        />
-      </comment-link>
-    </div>
-    <div class="cm-body">
-      <div class="cm-header">
-        <comment-link class="user-name" :href="comment.author.site">
-          {{ firstUpperCase(comment.author.name) }}
-        </comment-link>
-        <span v-if="comment.ip_location" class="location">
-          <i class="iconfont icon-earth"></i>
-          <span>{{ comment.ip_location.country }}</span>
-          <divider v-if="comment.ip_location.city" type="vertical" size="xs">•</divider>
-          <span>{{ comment.ip_location.city }}</span>
-        </span>
-        <template v-if="!hiddenUa">
-          <comment-ua v-if="comment.agent" :ua="comment.agent" />
-        </template>
-        <span class="flool">#{{ comment.id }}</span>
-      </div>
-      <div class="cm-content">
-        <p v-if="comment.pid" class="reply">
-          <span class="text">
-            <i18n :lkey="LANGUAGE_KEYS.COMMENT_REPLY" />
+    <div>
+      <div class="cm-avatar" v-if="!hiddenAvatar">
+        <comment-link class="link" :href="authorURL">
+          <img :alt="comment.author.name" :src="authorAvatar" draggable="false" />
+          <span class="role" :class="isDisqusAuthor ? 'disqus' : 'anonymous'">
+            <i class="iconfont icon-disqus-logo" v-if="isDisqusAuthor"></i>
+            <i class="iconfont icon-anonymous" v-else></i>
           </span>
-          <button class="parent" @click="scrollToCommentItem(comment.pid)">
-            {{ getReplyParentCommentText(comment.pid) }}
-          </button>
-          <i18n zh="：" en=":" />
-        </p>
-        <div
-          class="markdown-html comment"
-          v-html="markdownToHTML(comment.content, { sanitize: true })"
-        />
+        </comment-link>
       </div>
-      <div class="cm-footer">
-        <span class="create_at">{{ humanlizeDate(comment.create_at) }}</span>
-        <button class="reply" @click="replyComment(comment.id)">
-          <i class="iconfont icon-reply" />
-          <i18n :lkey="LANGUAGE_KEYS.COMMENT_REPLY" />
-        </button>
-        <button
-          class="like"
-          :class="{
-            liked: liked,
-            actived: Boolean(comment.likes)
-          }"
-          :disabled="liked"
-          @click="likeComment(comment.id)"
-        >
-          <i class="iconfont icon-zan" />
-          <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIKE" />
-          <span> ({{ comment.likes }})</span>
-        </button>
-      </div>
-      <div class="cm-children">
-        <slot name="children"></slot>
+      <div class="cm-body">
+        <div class="cm-header">
+          <div class="left">
+            <comment-link class="username" :class="{ url: Boolean(authorURL) }" :href="authorURL">
+              {{ firstUpperCase(comment.author.name) }}
+            </comment-link>
+            <span class="moderator" v-if="isAdminAuthor">
+              <i18n :lkey="LANGUAGE_KEYS.COMMENT_MODERATOR" />
+            </span>
+            <span v-if="comment.ip_location" class="location">
+              <i class="iconfont icon-earth"></i>
+              <span>{{ comment.ip_location.country }}</span>
+              <divider v-if="comment.ip_location.city" type="vertical" size="xs">•</divider>
+              <span>{{ comment.ip_location.city }}</span>
+            </span>
+            <template v-if="!hiddenUa">
+              <comment-ua v-if="comment.agent" :ua="comment.agent" />
+            </template>
+          </div>
+          <div class="right">
+            <span class="flool">#{{ comment.id }}</span>
+          </div>
+        </div>
+        <div class="cm-content">
+          <p v-if="comment.pid" class="reply">
+            <span class="text">
+              <i18n :lkey="LANGUAGE_KEYS.COMMENT_REPLY" />
+            </span>
+            <button class="parent" @click="scrollToCommentItem(comment.pid)">
+              {{ getReplyParentCommentText(comment.pid) }}
+            </button>
+            <i18n zh="：" en=":" />
+          </p>
+          <div
+            class="markdown-html comment"
+            v-html="markdownToHTML(comment.content, { sanitize: true })"
+          />
+        </div>
+        <div class="cm-footer">
+          <div class="left">
+            <span class="create_at">{{ humanlizeDate(comment.create_at) }}</span>
+            <button
+              class="vote"
+              :class="{
+                actived: liked,
+                alived: Boolean(comment.likes)
+              }"
+              :disabled="liked"
+              @click="handleVote(true)"
+            >
+              <i class="iconfont icon-like" />
+              <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIKE" />
+              <span class="count">({{ comment.likes }})</span>
+            </button>
+            <button
+              class="vote"
+              :class="{
+                actived: disliked,
+                alived: Boolean(comment.dislikes)
+              }"
+              :disabled="disliked"
+              @click="handleVote(false)"
+            >
+              <i class="iconfont icon-dislike" />
+              <i18n :lkey="LANGUAGE_KEYS.COMMENT_DISLIKE" />
+              <span class="count">({{ comment.dislikes }})</span>
+            </button>
+            <button class="reply" @click="handleCancelReply" v-if="isReply">
+              <i class="iconfont icon-cancel" />
+              <i18n :lkey="LANGUAGE_KEYS.COMMENT_REPLY_CANCEL" />
+            </button>
+            <button class="reply" @click="handleReply" v-else>
+              <i class="iconfont icon-reply" />
+              <i18n :lkey="LANGUAGE_KEYS.COMMENT_REPLY" />
+            </button>
+          </div>
+          <div class="right">
+            <button class="delete" :disabled="isDeleting" @click="handleDelete" v-if="isDeleteable">
+              <i class="iconfont icon-delete" />
+              <i18n :lkey="LANGUAGE_KEYS.COMMENT_DELETE" />
+            </button>
+          </div>
+        </div>
+        <div class="cm-reply" v-if="isReply">
+          <slot name="reply"></slot>
+        </div>
+        <div class="cm-children">
+          <slot name="children"></slot>
+        </div>
       </div>
     </div>
   </li>
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType } from 'vue'
+  import { defineComponent, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useCommentStore, Comment } from '/@/store/comment'
+  import { useUniversalStore, UserType } from '/@/store/universal'
   import { getCommentItemElementID } from '/@/constants/anchor'
+  import { UNDEFINED } from '/@/constants/value'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
   import { markdownToHTML } from '/@/transforms/markdown'
-  import { timeAgo } from '/@/transforms/moment'
+  import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
+  import { timeAgo } from '/@/transforms/moment'
   import { scrollToElementAnchor } from '/@/utils/scroller'
-  import { CommentEvent, humanizeGravatarUrlByEmail } from '../helper'
+  import { CommentEvents, getDisqusUserURL } from '../helper'
   import CommentLink from './link.vue'
   import CommentUa from './ua.vue'
 
@@ -101,11 +146,23 @@
         type: Boolean,
         default: false
       },
+      disliked: {
+        type: Boolean,
+        default: false
+      },
+      isReply: {
+        type: Boolean,
+        default: false
+      },
       isChild: {
         type: Boolean,
         default: false
       },
-      hiddenGravatar: {
+      hasChild: {
+        type: Boolean,
+        default: false
+      },
+      hiddenAvatar: {
         type: Boolean,
         default: false
       },
@@ -114,16 +171,67 @@
         default: false
       }
     },
-    emits: [CommentEvent.Reply, CommentEvent.Like],
-    setup(_, context) {
+    emits: [
+      CommentEvents.Vote,
+      CommentEvents.Delete,
+      CommentEvents.Reply,
+      CommentEvents.CancelReply
+    ],
+    setup(props, context) {
       const { i18n } = useEnhancer()
       const commentStore = useCommentStore()
+      const universalStore = useUniversalStore()
+      const isDeleting = computed(() => commentStore.deleting)
 
-      const getReplyParentCommentText = (parentCommentId: number) => {
-        const authorName = commentStore.comments.find((comment) => comment.id === parentCommentId)
-          ?.author.name
+      const disqusAuthorID = computed(() => {
+        return getExtendValue(props.comment.extends, 'disqus-author-id')
+      })
+      const disqusUsername = computed<string | void>(() => {
+        return getExtendValue(props.comment.extends, 'disqus-author-username')
+      })
+
+      const isDisqusAuthor = computed(() => Boolean(disqusAuthorID.value))
+      const isAdminAuthor = computed(() => {
+        return (
+          Boolean(disqusUsername.value) &&
+          Boolean(universalStore.disqusConfig) &&
+          disqusUsername.value === universalStore.disqusConfig.admin_username
+        )
+      })
+
+      const authorAvatar = computed(() => {
+        return disqusUsername.value
+          ? getDisqusAvatarByUsername(disqusUsername.value)
+          : getGravatarByHash(props.comment.author.email_hash)
+      })
+
+      const authorURL = computed(() => {
+        if (props.comment.author.site) {
+          return props.comment.author.site
+        }
+        if (disqusUsername.value) {
+          return getDisqusUserURL(disqusUsername.value)
+        }
+        return UNDEFINED
+      })
+
+      const isDeleteable = computed(() => {
+        // 1. Disqus logined
+        if (universalStore.user.type === UserType.Disqus) {
+          // 2. Logined user ID === comment.author.disqus-author-id
+          if (disqusAuthorID.value) {
+            return universalStore.user.disqusProfile?.id === disqusAuthorID.value
+          }
+        }
+
+        return false
+      })
+
+      const getReplyParentCommentText = (parentID: number) => {
+        const authorName = commentStore.comments.find((comment) => comment.id === parentID)?.author
+          .name
         const nameText = authorName ? `@${authorName}` : ''
-        const idText = `#${parentCommentId}`
+        const idText = `#${parentID}`
         return `${idText} ${nameText}`
       }
 
@@ -131,12 +239,22 @@
         return timeAgo(date, i18n.language.value as any)
       }
 
-      const replyComment = (commentId: number) => {
-        context.emit(CommentEvent.Reply, commentId)
+      const handleReply = () => {
+        context.emit(CommentEvents.Reply, props.comment.id)
       }
 
-      const likeComment = (commentId: number) => {
-        context.emit(CommentEvent.Like, commentId)
+      const handleCancelReply = () => {
+        context.emit(CommentEvents.CancelReply, props.comment.id)
+      }
+
+      const handleVote = (isLike: boolean) => {
+        context.emit(CommentEvents.Vote, props.comment.id, isLike)
+      }
+
+      const handleDelete = () => {
+        if (window.confirm(i18n.t(LANGUAGE_KEYS.COMMENT_DELETE_CONFIRM))) {
+          context.emit(CommentEvents.Delete, props.comment.id)
+        }
       }
 
       const scrollToCommentItem = (commentId: number) => {
@@ -145,15 +263,21 @@
 
       return {
         LANGUAGE_KEYS,
-        t: i18n.t,
         humanlizeDate,
-        humanizeGravatarUrlByEmail,
+        isDeleting,
+        isDisqusAuthor,
+        isAdminAuthor,
+        isDeleteable,
+        authorAvatar,
+        authorURL,
         getCommentItemElementID,
         getReplyParentCommentText,
         firstUpperCase,
         markdownToHTML,
-        replyComment,
-        likeComment,
+        handleVote,
+        handleDelete,
+        handleReply,
+        handleCancelReply,
         scrollToCommentItem
       }
     }
@@ -170,16 +294,35 @@
     &:first-child {
       margin-top: 0;
     }
-    &.child {
+
+    /* reply */
+    .cm-reply {
+      padding-top: $lg-gap;
+      padding-bottom: $sm-gap;
+      padding-right: $sm-gap;
+    }
+
+    &.has-child {
+      .cm-reply {
+        padding-bottom: 0;
+      }
+    }
+
+    &.is-child {
       margin-top: $xs-gap;
       padding-top: $xs-gap;
       border-top: 1px dashed $module-bg-darker-3;
-      &:first-child {
-        margin-top: $gap;
+      .cm-reply {
+        padding-right: 0;
+        padding-bottom: 0;
       }
+
       &:last-child {
         .cm-body {
           padding-bottom: 0;
+        }
+        .cm-reply {
+          padding-bottom: $sm-gap;
         }
       }
 
@@ -196,17 +339,38 @@
 
       .link {
         $size: 4.8rem;
+        position: relative;
         display: block;
-        background-color: $module-bg-darker-2;
-        border: 4px solid $module-bg-lighter;
-        border-radius: $sm-radius;
         width: $size;
         height: $size;
+        border: 4px solid $module-bg-lighter;
+        border-radius: $sm-radius;
+        background-color: $module-bg-darker-2;
 
         img {
           width: 100%;
           height: 100%;
           border-radius: $xs-radius;
+        }
+
+        .role {
+          position: absolute;
+          right: 0;
+          bottom: 0;
+          width: 40%;
+          height: 40%;
+          padding-top: 1px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-top-left-radius: $sm-radius;
+          color: $white;
+          &.disqus {
+            background-color: rgba($disqus-primary, 0.5);
+          }
+          &.anonymous {
+            background-color: $module-bg-translucent;
+          }
         }
       }
     }
@@ -217,20 +381,41 @@
       height: 100%;
       padding: $sm-gap $sm-gap $sm-gap ($lg-gap * 3);
       background-color: $module-bg-darker-1;
-      @include radius-box($xs-radius);
+      border-radius: $xs-radius;
       @include background-transition();
 
       > .cm-header {
-        display: block;
         position: relative;
+        display: flex;
+        justify-content: space-between;
 
-        > .user-name {
+        .left {
+          display: flex;
+          align-items: center;
+        }
+
+        .username {
           font-weight: bold;
           margin-right: $gap;
-
-          &:hover {
-            border-bottom: 1px solid;
+          border-bottom: 1px solid transparent;
+          &.url {
+            color: $link-color;
+            &:hover {
+              color: $link-color-hover;
+              border-color: inherit;
+            }
           }
+        }
+
+        .moderator {
+          display: inline-block;
+          margin-left: -$sm-gap;
+          margin-right: $sm-gap;
+          padding: 0 $xs-gap;
+          font-size: 11px;
+          color: $text-reversal;
+          background-color: $primary-lighter;
+          @include radius-box($xs-radius);
         }
 
         ::v-deep(.os),
@@ -245,9 +430,7 @@
           }
         }
 
-        > .flool {
-          float: right;
-          line-height: 1.8;
+        .flool {
           color: $text-dividers;
           font-size: $font-size-small;
           font-weight: bold;
@@ -285,12 +468,14 @@
         }
       }
 
-      > .cm-footer {
+      .cm-footer {
         display: flex;
+        justify-content: space-between;
 
-        > .create_at,
-        > .reply,
-        > .like {
+        .create_at,
+        .reply,
+        .vote,
+        .delete {
           color: $text-disabled;
           font-size: $font-size-small;
           margin-right: $gap;
@@ -306,16 +491,28 @@
           }
         }
 
-        .like {
+        .vote {
+          &:hover,
+          &.actived {
+            color: $red;
+          }
+          &.actived,
+          &.alived {
+            .count {
+              font-weight: bold;
+            }
+          }
+
+          .count {
+            margin-left: 3px;
+          }
+        }
+
+        .delete {
+          color: $text-dividers;
+          margin: 0;
           &:hover {
             color: $red;
-          }
-          &.liked {
-            color: $red;
-            font-weight: bold;
-          }
-          &.actived {
-            font-weight: bold;
           }
         }
       }
@@ -327,10 +524,10 @@
       }
     }
 
-    &.h-g {
+    &.hide-avatar {
       padding: 0;
       margin-top: $gap;
-      &.child {
+      &.is-child {
         .cm-content {
           border-left: 6px solid $module-bg-darker-2;
           padding-left: 1rem;

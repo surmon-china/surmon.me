@@ -101,21 +101,21 @@
 
         &:nth-child(1) {
           .index {
-            color: $text-reversal;
+            color: $white;
             background-color: $primary-translucent;
           }
         }
 
         &:nth-child(2) {
           .index {
-            color: $text-reversal;
+            color: $white;
             background-color: rgba($accent, 0.6);
           }
         }
 
         &:nth-child(3) {
           .index {
-            color: $text-reversal;
+            color: $white;
             background-color: rgba($red, 0.6);
           }
         }

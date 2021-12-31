@@ -5,7 +5,7 @@
  */
 
 import axios, { AxiosInstance } from 'axios'
-import { API_TUNNEL_PREFIX, getPort } from '/@/config/bff.config'
+import { API_TUNNEL_PREFIX, getBFFServerPort } from '/@/config/bff.config'
 import { TunnelModule } from '/@/constants/tunnel'
 import { isServer } from '/@/app/environment'
 
@@ -13,7 +13,7 @@ const tunnel = axios.create({
   baseURL: API_TUNNEL_PREFIX,
   proxy: isServer && {
     host: 'localhost',
-    port: getPort()
+    port: getBFFServerPort()
   }
 })
 

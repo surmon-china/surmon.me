@@ -5,5 +5,4 @@
  */
 
 export const API_TUNNEL_PREFIX = '/_tunnel'
-export const DEFAULT_SERVER_PORT = 3000
-export const getPort = () => Number(process.env.PORT || DEFAULT_SERVER_PORT)
+export const getBFFServerPort = () => Number(process.env.PORT || 3000)

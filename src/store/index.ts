@@ -14,6 +14,7 @@ import { useArticleStore, useArticleDetailStore } from './article'
 import { useCategoryStore } from './category'
 import { useTagStore } from './tag'
 import { useCommentStore } from './comment'
+import { useUniversalStore } from './universal'
 import { useMetaStore } from './meta'
 import { useLensStore } from './lens'
 import { useWallpaperStore } from './wallpaper'
@@ -26,6 +27,7 @@ export const useStores = (_pinia?: Pinia) => ({
   category: useCategoryStore(_pinia),
   tag: useTagStore(_pinia),
   comment: useCommentStore(_pinia),
+  universal: useUniversalStore(_pinia),
   meta: useMetaStore(_pinia),
   lens: useLensStore(_pinia),
   wallpaper: useWallpaperStore(_pinia)
@@ -37,14 +39,13 @@ export interface UniversalStoreConfig {
 export const createUniversalStore = (config: UniversalStoreConfig) => {
   const pinia = createPinia()
 
-  const doPrefetch = () => {
+  const fetchBasicStore = () => {
     // https://pinia.esm.dev/ssr/#using-the-store-outside-of-setup
     const stores = useStores(pinia)
     const initFetchTasks = [
-      stores.tag.fetchAll(),
+      stores.meta.fetchAppOptions(),
       stores.category.fetchAll(),
-      stores.meta.fetchAdminInfo(),
-      stores.meta.fetchAppOptions()
+      stores.tag.fetchAll()
     ]
 
     // fetch hot articles when desktop only
@@ -56,23 +57,24 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
   }
 
   return {
-    state: pinia.state,
-    install: pinia.install,
-    prefetch: doPrefetch,
     get stores() {
       return useStores(pinia)
     },
-    initInSSR() {
+    state: pinia.state,
+    install: pinia.install,
+    serverPrefetch: fetchBasicStore,
+    initOnSSRClient() {
       const contextStore = getSSRContext('store')
       if (contextStore) {
         pinia.state.value = contextStore
       } else {
         // fallback when SSR page error
-        doPrefetch()
+        fetchBasicStore()
       }
     },
-    initInSPA() {
-      return doPrefetch()
+    initOnSPAClient() {
+      useStores(pinia).universal.initOnClient()
+      return fetchBasicStore()
     }
   }
 }

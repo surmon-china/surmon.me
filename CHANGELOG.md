@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.2.16 (2021-12-31)
+
+**Feature**
+
+- Disqus comment
+- Remove comment blocklist
+- Improve global config
+
 ### v3.2.15 (2021-12-22)
 
 **Fix**

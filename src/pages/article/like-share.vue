@@ -4,7 +4,7 @@
       <div class="item likes">
         <div class="bridge"></div>
         <button class="button" :disabled="isLiked" @click="handleLike">
-          <i class="icon iconfont icon-zan"></i>
+          <i class="icon iconfont icon-like"></i>
           <span class="count">{{ isLiked ? `${likes - 1} + 1` : likes }}</span>
         </button>
         <span class="text">
@@ -39,13 +39,13 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType, ref } from 'vue'
+  import { defineComponent, PropType, ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useUniversalStore } from '/@/store/universal'
   import { useArticleDetailStore } from '/@/store/article'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
-  import { usePageLike } from '/@/transforms/state'
   import BaseShare, { SocialMedia } from '/@/components/widget/share.vue'
 
   export default defineComponent({
@@ -69,8 +69,9 @@
     },
     setup(props) {
       const { i18n, gtag } = useEnhancer()
-      const { isLiked, like } = usePageLike(props.articleId)
+      const universalStore = useUniversalStore()
       const articleDetailStore = useArticleDetailStore()
+      const isLiked = computed(() => universalStore.isLikedPage(props.articleId))
       const isVisibleSponsor = ref(false)
       const skeletonCount = props.socials.length
         ? props.socials.length
@@ -87,12 +88,14 @@
         if (isLiked.value) {
           return false
         }
+
         gtag?.event('article_like', {
           event_category: GAEventCategories.Article
         })
+
         try {
           await articleDetailStore.postArticleLike(props.articleId)
-          like()
+          universalStore.likePage(props.articleId)
         } catch (error) {
           const message = i18n.t(LANGUAGE_KEYS.POST_ACTION_ERROR)
           console.warn(message, error)

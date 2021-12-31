@@ -19,8 +19,9 @@
   import { defineComponent } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch, onClient } from '/@/universal'
-  import { useArticleStore } from '/@/store/article'
   import { useAnnouncementStore } from '/@/store/announcement'
+  import { useArticleStore } from '/@/store/article'
+  import { useMetaStore } from '/@/store/meta'
   import { nextScreen } from '/@/utils/effects'
   import { META } from '/@/config/app.config'
   import Carrousel from '/@/components/flow-desktop/carrousel.vue'
@@ -36,14 +37,15 @@
     },
     setup() {
       const { meta } = useEnhancer()
+      const metaStore = useMetaStore()
       const articleStore = useArticleStore()
       const announcementStore = useAnnouncementStore()
 
-      meta({
-        title: `${META.title} - ${META.description}`,
-        keywords: META.keywords,
-        description: META.description
-      })
+      meta(() => ({
+        title: `${META.title} - ${META.sub_title}`,
+        description: metaStore.appOptions.data?.description,
+        keywords: metaStore.appOptions.data?.keywords.join(',')
+      }))
 
       const loadmoreArticles = async () => {
         const targetPage = articleStore.list.pagination?.current_page + 1

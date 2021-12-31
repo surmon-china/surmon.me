@@ -4,8 +4,6 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import gravatar from 'gravatar'
-import API_CONFIG from '/@/config/api.config'
 import { getFileCDNUrl } from '/@/transforms/url'
 
 export const getArticleBannerThumbnailURL = (thumb: string, isWebPImage: boolean) => {
@@ -42,12 +40,4 @@ export const getArticleListThumbnailURL = (thumb: string, isWebPImage: boolean) 
       ? 'style/blog.list.item.pc'
       : 'image/auto-orient,1/resize,m_fill,w_350,h_238/quality,q_80/format,jpg/watermark,text_U3VybW9uLm1l,type_ZHJvaWRzYW5zZmFsbGJhY2s,color_ffffff,size_20,g_sw,t_24,x_16,y_14'
   }`
-}
-
-export const getGravatarByEmail = (email: string) => {
-  const avatar = gravatar
-    .url(email, { protocol: 'https', s: '240' })
-    .replace('https://s.gravatar.com/avatar', API_CONFIG.GRAVATAR)
-  // avatar += `?x-oss-process=style/gravatar`
-  return avatar
 }

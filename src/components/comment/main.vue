@@ -3,7 +3,7 @@
     <template #loading>
       <ul class="main-skeleton">
         <li v-for="item in skeletonCount" :key="item" class="item">
-          <div class="gravatar">
+          <div class="avatar">
             <skeleton-base />
           </div>
           <div class="content">
@@ -14,7 +14,7 @@
     </template>
     <template #placeholder>
       <div class="list-empty">
-        <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIST_PLACEHOLDER" />
+        <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIST_EMPTY" />
       </div>
     </template>
     <template #default>
@@ -66,7 +66,7 @@
       align-items: center;
       margin-bottom: $lg-gap;
 
-      .gravatar {
+      .avatar {
         width: 5rem;
         height: 5rem;
       }
@@ -81,6 +81,6 @@
     color: $text-secondary;
     font-weight: bold;
     text-align: center;
-    line-height: 8rem;
+    line-height: 4rem;
   }
 </style>

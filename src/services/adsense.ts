@@ -7,7 +7,7 @@
 import { App, defineComponent, h } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { LANGUAGE_KEYS } from '/@/language/key'
-import { loadScript } from '/@/utils/script-loader'
+import { loadScript } from '/@/utils/scripter'
 
 declare global {
   interface Window {

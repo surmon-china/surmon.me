@@ -21,12 +21,20 @@ type HTTPResult<T = any> = {
 }
 
 const nodepress = axios.create({
-  baseURL: API_CONFIG.NODEPRESS
+  baseURL: API_CONFIG.NODEPRESS,
+  withCredentials: true
 })
 
 nodepress.interceptors.response.use(
-  (response) =>
-    response.data.status === HTTPStatus.Success ? response.data : Promise.reject(response.data),
+  (response) => {
+    if (response.headers['content-type'].includes('json')) {
+      if (response.data.status !== HTTPStatus.Success) {
+        return Promise.reject(response.data)
+      }
+    }
+
+    return response.data
+  },
   (error) => {
     const errorJSON = error.toJSON()
     const messageText = error.response?.data?.message || 'Error'
@@ -39,6 +47,7 @@ nodepress.interceptors.response.use(
       code: error.code || error.response?.status || BAD_REQUEST,
       message: messageText + ': ' + errorText
     }
+
     console.debug(
       'axios error:',
       isClient
@@ -55,7 +64,7 @@ nodepress.interceptors.response.use(
             headers: errorJSON.config.headers
           }
     )
-    return Promise.reject(errorJSON)
+    return Promise.reject(errorInfo)
   }
 )
 

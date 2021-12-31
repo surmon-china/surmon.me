@@ -18,7 +18,7 @@ export interface Category {
   description: string
   update_at: string
   create_at: string
-  extends?: UniversalExtend[]
+  extends: UniversalExtend[]
 }
 
 export const useCategoryStore = defineStore('category', {

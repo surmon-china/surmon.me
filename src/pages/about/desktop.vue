@@ -6,8 +6,8 @@
           <source :src="backgroundVideo" type="video/mp4" />
         </video>
       </div>
-      <div class="gravatar">
-        <uimage class="avatar" :src="adminInfo?.gravatar || '/images/gravatar.png'" />
+      <div class="avatar">
+        <uimage class="image" :src="getAdminAvatar(adminInfo?.avatar)" />
         <h2 class="name">{{ adminInfo?.name || '-' }}</h2>
         <p class="role">{{ adminInfo?.slogan || '-' }}</p>
         <div class="bio-text" :class="language">
@@ -188,11 +188,12 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
   import { useMetaStore } from '/@/store/meta'
+  import { useUniversalFetch } from '/@/universal'
   import { getPageRoute } from '/@/transforms/route'
   import { getFileStaticUrl } from '/@/transforms/url'
   import { GAEventCategories } from '/@/constants/gtag'
   import { VALUABLE_LINKS, FRIEND_LINKS } from '/@/config/app.config'
-  import { useAboutPageMeta, i18ns } from './helper'
+  import { useAboutPageMeta, getAdminAvatar, i18ns } from './helper'
 
   export default defineComponent({
     name: 'PCAboutPage',
@@ -206,6 +207,8 @@
 
       // meta
       useAboutPageMeta()
+      // prefetch
+      useUniversalFetch(() => metaStore.fetchAdminInfo())
 
       const handleGTagEvent = (event: string) => {
         gtag?.event(event, {
@@ -224,6 +227,7 @@
         VALUABLE_LINKS,
         FRIEND_LINKS,
         RouteName,
+        getAdminAvatar,
         getPageRoute,
         isOnLiveMap,
         backgroundVideo,
@@ -284,7 +288,7 @@
         }
       }
 
-      .gravatar {
+      .avatar {
         position: relative;
         display: flex;
         align-items: center;
@@ -300,12 +304,12 @@
         background-blend-mode: lighten;
 
         &:hover {
-          .avatar {
+          .image {
             transform: rotate(360deg);
           }
         }
 
-        > .avatar {
+        > .image {
           $size: 8rem;
           width: $size;
           height: $size;

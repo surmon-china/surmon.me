@@ -11,7 +11,7 @@ import {
   RouterHistory,
   createRouter
 } from 'vue-router'
-import { NOT_FOUND, INVALID_ERROR } from '/@/constants/error'
+import { NOT_FOUND, BAD_REQUEST } from '/@/constants/error'
 import { LANGUAGE_KEYS } from '/@/language/key'
 import { LayoutColumn } from '/@/services/layout'
 import { isSSR, isClient } from '/@/app/environment'
@@ -111,7 +111,7 @@ export const routes: RouteRecordRaw[] = [
       async validate({ route, i18n }) {
         if (!Number.isInteger(Number(route.params.article_id))) {
           return Promise.reject({
-            code: INVALID_ERROR,
+            code: BAD_REQUEST,
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Article ID → <number>'
           })
         }
@@ -136,7 +136,7 @@ export const routes: RouteRecordRaw[] = [
         const { category_slug } = route.params
         if (!category_slug) {
           return Promise.reject({
-            code: INVALID_ERROR,
+            code: BAD_REQUEST,
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Category slug → <string>'
           })
         }
@@ -173,7 +173,7 @@ export const routes: RouteRecordRaw[] = [
         const { tag_slug } = route.params
         if (!tag_slug) {
           return Promise.reject({
-            code: INVALID_ERROR,
+            code: BAD_REQUEST,
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Tag slug → <string>'
           })
         }
@@ -207,7 +207,7 @@ export const routes: RouteRecordRaw[] = [
         const { date } = route.params
         if (!date || !isValidDateParam(date)) {
           return Promise.reject({
-            code: INVALID_ERROR,
+            code: BAD_REQUEST,
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + `Invalid date ${date || ''}`
           })
         }
@@ -231,7 +231,7 @@ export const routes: RouteRecordRaw[] = [
       async validate({ route, i18n }) {
         if (!route.params.keyword) {
           return Promise.reject({
-            code: INVALID_ERROR,
+            code: BAD_REQUEST,
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Keywords ?'
           })
         }
