@@ -1,5 +1,5 @@
 <template>
-  <placeholder :loading="fetching">
+  <placeholder :loading="fetching" @after-enter="handlePublisherRendered">
     <template #loading>
       <div class="publisher-skeleton" key="skeleton">
         <div class="avatar">
@@ -164,6 +164,11 @@
         })
       }
 
+      // reset blossomed state when rerender publisher
+      const handlePublisherRendered = () => {
+        blossomed.value = false
+      }
+
       return {
         user,
         avatar,
@@ -174,7 +179,8 @@
         t: i18n.t,
         firstUpperCase,
         markdownToHTML,
-        handleBlossom
+        handleBlossom,
+        handlePublisherRendered
       }
     }
   })
