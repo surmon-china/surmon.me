@@ -33,8 +33,12 @@ export interface Comment {
   dislikes: number
   ip?: string
   ip_location?: {
-    city: string
     country: string
+    country_code: string
+    region: string
+    region_code: string
+    city: string
+    zip: string
   }
   create_at: string
   update_at: string

@@ -30,9 +30,11 @@
             </span>
             <span v-if="comment.ip_location" class="location">
               <i class="iconfont icon-earth"></i>
-              <span>{{ comment.ip_location.country }}</span>
-              <divider v-if="comment.ip_location.city" type="vertical" size="xs">•</divider>
-              <span>{{ comment.ip_location.city }}</span>
+              <span>{{ comment.ip_location.country_code || comment.ip_location.country }}</span>
+              <template v-if="comment.ip_location.city">
+                <span class="separator">•</span>
+                <span>{{ comment.ip_location.city }}</span>
+              </template>
             </span>
             <template v-if="!hiddenUa">
               <comment-ua v-if="comment.agent" :ua="comment.agent" />
@@ -410,7 +412,7 @@
         .moderator {
           display: inline-block;
           margin-left: -$sm-gap;
-          margin-right: $sm-gap;
+          margin-right: $gap;
           padding: 0 $xs-gap;
           font-size: 11px;
           color: $text-reversal;
@@ -423,11 +425,24 @@
         .location {
           color: $text-dividers;
           font-size: $font-size-small;
-          margin-right: $gap;
-
           .iconfont {
             margin-right: $xs-gap;
           }
+        }
+
+        .location {
+          margin-right: $gap;
+          .separator {
+            margin: 0 3px;
+          }
+        }
+
+        ::v-deep(.os) {
+          margin-right: $sm-gap;
+        }
+
+        ::v-deep(.browser) {
+          margin-right: 0;
         }
 
         .flool {

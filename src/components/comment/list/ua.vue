@@ -3,12 +3,12 @@
     <span class="os">
       <i v-if="osIconName" class="iconfont" :class="`icon-${osIconName}`" />
       <span>{{ uaResult.result.os.name }}</span>
-      <span>{{ uaResult.result.os.version }}</span>
+      <!-- <span>{{ uaResult.result.os.version }}</span> -->
     </span>
     <span class="browser">
       <i class="iconfont" :class="`icon-${browserIconName}`" />
       <span>{{ uaResult.result.browser.name }}</span>
-      <span>{{ uaResult.result.browser.major }}</span>
+      <!-- <span>{{ uaResult.result.browser.version }}</span> -->
     </span>
   </span>
 </template>
