@@ -11,8 +11,8 @@
       </template>
     </page-banner>
     <div class="profile">
-      <div class="gravatar">
-        <uimage class="avatar" :src="adminInfo?.gravatar || '/images/gravatar.png'" />
+      <div class="avatar">
+        <uimage class="image" :src="getAdminAvatar(adminInfo?.avatar)" />
       </div>
       <h2 class="name">{{ adminInfo?.name || '-' }}</h2>
       <h5 class="slogan">{{ adminInfo?.slogan || '-' }}</h5>
@@ -100,32 +100,32 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useMetaStore } from '/@/store/meta'
   import { RouteName } from '/@/app/router'
+  import { useUniversalFetch } from '/@/universal'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getPageRoute } from '/@/transforms/route'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import PageBanner from '/@/components/common/banner.vue'
-  import Divider from '/@/components/common/divider.vue'
-  import { useAboutPageMeta, i18ns } from './helper'
+  import { useAboutPageMeta, getAdminAvatar, i18ns } from './helper'
 
   export default defineComponent({
     name: 'MobileAboutPage',
     components: {
-      PageBanner,
-      Divider
+      PageBanner
     },
     setup() {
       const { i18n } = useEnhancer()
       const metaStore = useMetaStore()
       const adminInfo = computed(() => metaStore.adminInfo.data)
 
-      // meta
       useAboutPageMeta()
+      useUniversalFetch(() => metaStore.fetchAdminInfo())
 
       return {
         i18ns,
         language: i18n.language,
         adminInfo,
         RouteName,
+        getAdminAvatar,
         getPageRoute,
         LANGUAGE_KEYS,
         VALUABLE_LINKS
@@ -138,9 +138,6 @@
   @import 'src/styles/init.scss';
 
   .about-page {
-    .banner {
-    }
-
     .profile {
       position: relative;
       padding: $lg-gap;
@@ -161,14 +158,14 @@
         background-position: 0 -0.5em;
       }
 
-      .gravatar {
+      .avatar {
         width: 100%;
         position: absolute;
         top: -$gap * 3;
         left: 0;
         text-align: center;
 
-        .avatar {
+        .image {
           $size: 7rem;
           width: $size;
           height: $size;

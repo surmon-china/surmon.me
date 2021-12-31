@@ -7,7 +7,7 @@
 import express from 'express'
 import { NODE_ENV, isDev } from '@/environment'
 import { TunnelModule } from '@/constants/tunnel'
-import { API_TUNNEL_PREFIX, getPort } from '@/config/bff.config'
+import { API_TUNNEL_PREFIX, getBFFServerPort } from '@/config/bff.config'
 import { getRSSXML } from './server/getters/rss'
 import { getSitemapXML } from './server/getters/sitemap'
 import { getGTagScript } from './server/getters/gtag'
@@ -15,6 +15,8 @@ import { getGitHubChartSVG } from './server/getters/ghchart'
 import { getBiliBiliVideos } from './server/getters/bilibili'
 import { getAllWallpapers } from './server/getters/wallpaper'
 import { getGitHubRepositories } from './server/getters/github'
+import { getInstagramMedias } from './server/getters/instagram'
+import { setInstagramMedias } from './server/setters/instagram'
 import { getSongList } from './server/getters/music'
 import { enableDevRuntime } from './server/runtime/dev'
 import { enableProdRuntime } from './server/runtime/prod'
@@ -143,11 +145,27 @@ app.get(
   )
 )
 
+app.post(`${API_TUNNEL_PREFIX}/${TunnelModule.Instagram}`, (request, response) => {
+  setInstagramMedias(request.body)
+  response.send('ok')
+})
+app.get(
+  `${API_TUNNEL_PREFIX}/${TunnelModule.Instagram}`,
+  responser(() =>
+    cacher({
+      key: 'instagram',
+      age: 60 * 60 * 1, // 1 hours
+      retryWhen: 60 * 10, // 10 minutes
+      getter: getInstagramMedias
+    })
+  )
+)
+
 // app effect
 isDev ? enableDevRuntime(app) : enableProdRuntime(app)
 
 // run
-server.listen(getPort(), () => {
+server.listen(getBFFServerPort(), () => {
   const infos = [
     `in ${NODE_ENV}`,
     `at ${new Date().toLocaleString()}`,

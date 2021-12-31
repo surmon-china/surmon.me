@@ -4,6 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import { META } from '/@/config/app.config'
 import { I18nLanguage, I18nMap } from '/@/services/i18n'
 import { LANGUAGE_KEYS } from './key'
 
@@ -27,7 +28,7 @@ export const languages: I18nLanguage[] = [
 
 export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
   [LANGUAGE_KEYS.APP_SLOGAN]: {
-    [Language.Zh]: '来苏之望',
+    [Language.Zh]: META.sub_title,
     [Language.En]: 'Because the mountain is there'
   },
   [LANGUAGE_KEYS.PAGE_HOME]: {
@@ -110,10 +111,6 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '放码过来',
     [Language.En]: 'Email me'
   },
-  [LANGUAGE_KEYS.PAGE_FREELANCER_HIRE_ME]: {
-    [Language.Zh]: '或在 Upwork 雇佣我',
-    [Language.En]: 'Hire me on upwork.com'
-  },
   [LANGUAGE_KEYS.AD]: {
     [Language.Zh]: '广而告之',
     [Language.En]: 'AD'
@@ -182,73 +179,73 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '空空如也',
     [Language.En]: 'No articles'
   },
-  [LANGUAGE_KEYS.ARTICLE_FULL_COL_READ]: {
-    [Language.Zh]: '通栏阅读',
-    [Language.En]: 'Full Column'
-  },
-  [LANGUAGE_KEYS.ARTICLE_FULL_SCREEN_READ]: {
-    [Language.Zh]: '全屏阅读',
-    [Language.En]: 'Full Screen'
-  },
   [LANGUAGE_KEYS.ARTICLE_READ_ALL]: {
     [Language.Zh]: '阅读余下全文',
-    [Language.En]: 'Read all'
+    [Language.En]: 'Render all'
   },
   [LANGUAGE_KEYS.ARTICLE_RENDERING]: {
     [Language.Zh]: '渲染中..',
-    [Language.En]: 'rendering...'
+    [Language.En]: 'Rendering...'
   },
   [LANGUAGE_KEYS.HOT_ARTICLE_LIST_TITLE]: {
     [Language.Zh]: '群贤毕至',
-    [Language.En]: 'hot'
+    [Language.En]: 'Hottest'
   },
   [LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE]: {
     [Language.Zh]: '山河入梦',
-    [Language.En]: 'loadmore'
+    [Language.En]: 'Loadmore'
   },
   [LANGUAGE_KEYS.ARTICLE_LIST_LOADING]: {
     [Language.Zh]: '人面桃花',
-    [Language.En]: 'loading'
+    [Language.En]: 'Loading'
   },
   [LANGUAGE_KEYS.ARTICLE_LIST_NO_MORE]: {
     [Language.Zh]: '春尽江南',
-    [Language.En]: 'no more'
+    [Language.En]: 'No more'
   },
-  [LANGUAGE_KEYS.COMMENT_LIST_PLACEHOLDER]: {
+  [LANGUAGE_KEYS.COMMENT_LIST_EMPTY]: {
     [Language.Zh]: '期待你的捷足先登',
-    [Language.En]: 'Hit the nail on the head'
-  },
-  [LANGUAGE_KEYS.COMMENT_ANONYMOUS]: {
-    [Language.Zh]: '匿名用户',
-    [Language.En]: 'anonymous'
+    [Language.En]: 'Be the first to comment'
   },
   [LANGUAGE_KEYS.COMMENT_LIKE]: {
     [Language.Zh]: '赞',
     [Language.En]: 'like'
   },
+  [LANGUAGE_KEYS.COMMENT_DISLIKE]: {
+    [Language.Zh]: '踩',
+    [Language.En]: 'dislike'
+  },
+  [LANGUAGE_KEYS.COMMENT_DELETE]: {
+    [Language.Zh]: '删除',
+    [Language.En]: 'delete'
+  },
+  [LANGUAGE_KEYS.COMMENT_DELETE_CONFIRM]: {
+    [Language.Zh]: '确定要删除此评论吗？此操作不可恢复',
+    [Language.En]: 'Are you sure you want to delete this comment? You cannot undo this action.'
+  },
   [LANGUAGE_KEYS.COMMENT_REPLY]: {
     [Language.Zh]: '回复',
     [Language.En]: 'reply'
   },
-  [LANGUAGE_KEYS.COMMENT_PAGINATION_OLD]: {
-    [Language.Zh]: '最旧',
-    [Language.En]: 'old'
+  [LANGUAGE_KEYS.COMMENT_REPLY_CANCEL]: {
+    [Language.Zh]: '取消回复',
+    [Language.En]: 'cancel reply'
   },
-  [LANGUAGE_KEYS.COMMENT_PAGINATION_NEW]: {
+  [LANGUAGE_KEYS.COMMENT_MODERATOR]: {
+    [Language.Zh]: '博主',
+    [Language.En]: 'Moderator'
+  },
+  [LANGUAGE_KEYS.COMMENT_SORT_OLD]: {
+    [Language.Zh]: '最早',
+    [Language.En]: 'Oldest'
+  },
+  [LANGUAGE_KEYS.COMMENT_SORT_NEW]: {
     [Language.Zh]: '最新',
-    [Language.En]: 'new'
+    [Language.En]: 'Newest'
   },
-  [LANGUAGE_KEYS.COMMENT_PAGINATION_HOT]: {
+  [LANGUAGE_KEYS.COMMENT_SORT_HOT]: {
     [Language.Zh]: '最热',
-    [Language.En]: 'hot'
-  },
-  [LANGUAGE_KEYS.COMMENT_PAGINATION_COOL]: {
-    [Language.Zh]: '最冷',
-    [Language.En]: 'cool'
-  },
-  [LANGUAGE_KEYS.COMMENT_LOADMORE]: {
-    [Language.Zh]: '加载更多评论',
-    [Language.En]: 'loadmore comments'
+    [Language.En]: 'Hottest'
   },
   [LANGUAGE_KEYS.COMMENT_POST_NAME]: {
     [Language.Zh]: '名字',
@@ -270,14 +267,6 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '愿你的见解一针见血',
     [Language.En]: 'Hit the nail on the head'
   },
-  [LANGUAGE_KEYS.COMMENT_POST_SUBMIT]: {
-    [Language.Zh]: '发射',
-    [Language.En]: 'publish'
-  },
-  [LANGUAGE_KEYS.COMMENT_POST_SUBMITTING]: {
-    [Language.Zh]: '发射中..',
-    [Language.En]: 'publishing'
-  },
   [LANGUAGE_KEYS.COMMENT_POST_ERROR_EMAIL]: {
     [Language.Zh]: '邮箱不合法',
     [Language.En]: 'Email address is not legitimate!'
@@ -287,31 +276,15 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.En]: 'Site is not legitimate!'
   },
   [LANGUAGE_KEYS.COMMENT_POST_ERROR_CONTENT]: {
-    [Language.Zh]: '内容需要在 2000字/36行 以内',
-    [Language.En]: 'Content requirements are within 2000 words / 36 lines!'
-  },
-  [LANGUAGE_KEYS.COMMENT_POST_ERROR_SUBMIT]: {
-    [Language.Zh]: '发布失败，原因 -> 控制台',
-    [Language.En]: 'Submit failed, get err in dev console!'
-  },
-  [LANGUAGE_KEYS.COMMENT_ACCOUNT_SETTING]: {
-    [Language.Zh]: '编辑用户信息',
-    [Language.En]: 'profile'
-  },
-  [LANGUAGE_KEYS.COMMENT_ACCOUNT_EDIT]: {
-    [Language.Zh]: '编辑信息',
-    [Language.En]: 'edit profile'
-  },
-  [LANGUAGE_KEYS.COMMENT_ACCOUNT_CLEAR]: {
-    [Language.Zh]: '清空信息',
-    [Language.En]: 'clear profile'
+    [Language.Zh]: '内容需要在 3000 字以内',
+    [Language.En]: 'Content requirements are within 3000 words!'
   },
   [LANGUAGE_KEYS.QUERY_PARAMS_ERROR]: {
     [Language.Zh]: '请求参数错误：',
     [Language.En]: 'Invalid query params: '
   },
   [LANGUAGE_KEYS.POST_ACTION_ERROR]: {
-    [Language.Zh]: '操作失败，原因 > 控制台',
-    [Language.En]: 'Failed! get error in dev console'
+    [Language.Zh]: '操作失败，详细原因 > 控制台',
+    [Language.En]: 'Failed! Get error detail in console'
   }
 }

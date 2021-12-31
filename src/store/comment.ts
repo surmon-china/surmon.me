@@ -8,17 +8,18 @@ import * as _ from 'lodash'
 import { defineStore } from 'pinia'
 import { isClient } from '/@/app/environment'
 import { UNDEFINED } from '/@/constants/value'
-import { SortType } from '/@/constants/state'
-import { fetchDelay } from '/@/utils/fetch-delay'
+import { SortType, UniversalExtend, CommentParentType } from '/@/constants/state'
+import { delayer } from '/@/utils/delayer'
 import nodepress from '/@/services/nodepress'
 
 export const COMMENT_API_PATH = '/comment'
-export const LIKE_COMMENT_API_PATH = '/like/comment'
-export const COMMENT_EMPTY_PID = 0
+export const COMMENT_EMPTY_PID = CommentParentType.Self
+
 export interface Author {
   name: string
-  email: string
-  site: string
+  site?: string
+  email?: string
+  email_hash?: string
 }
 
 export interface Comment {
@@ -29,6 +30,7 @@ export interface Comment {
   agent?: string
   author: Author
   likes: number
+  dislikes: number
   ip?: string
   ip_location?: {
     city: string
@@ -36,6 +38,7 @@ export interface Comment {
   }
   create_at: string
   update_at: string
+  extends: UniversalExtend[]
 }
 export interface CommentFetchParams {
   page?: number
@@ -54,6 +57,7 @@ export const useCommentStore = defineStore('comment', {
   state: () => ({
     fetching: false,
     posting: false,
+    deleting: false,
     comments: [] as Array<Comment>,
     pagination: null as null | $TODO
   }),
@@ -89,7 +93,7 @@ export const useCommentStore = defineStore('comment', {
             const target = treeMap.get(rootPID)!
             treeMap.set(rootPID, {
               ...target,
-              children: [...target.children, comment]
+              children: [comment, ...target.children]
             })
           }
         }
@@ -104,7 +108,6 @@ export const useCommentStore = defineStore('comment', {
     },
 
     fetchList(params: CommentFetchParams = {}) {
-      // 修正参数
       params = {
         page: 1,
         per_page: 50,
@@ -113,11 +116,8 @@ export const useCommentStore = defineStore('comment', {
         ...params
       }
 
-      const isRestart = params.page === 1
-      const isDescSort = params.sort === SortType.Desc
-
-      // 清空数据
-      if (isRestart) {
+      // clear list when refetch
+      if (params.page === 1) {
         this.clearList()
       }
       this.fetching = true
@@ -125,18 +125,13 @@ export const useCommentStore = defineStore('comment', {
         .get(COMMENT_API_PATH, { params })
         .then((response) => {
           return new Promise((resolve) => {
-            fetchDelay(isClient ? 368 : 0)(() => {
-              if (isDescSort) {
-                response.result.data.reverse()
-              }
+            delayer(isClient ? 368 : 0)(() => {
+              this.pagination = response.result.pagination
               if (params.loadmore) {
-                isDescSort
-                  ? this.comments.unshift(...response.result.data)
-                  : this.comments.push(...response.result.data)
+                this.comments.push(...response.result.data)
               } else {
                 this.comments = response.result.data
               }
-              this.pagination = response.result.pagination
               resolve(UNDEFINED)
             })
           })
@@ -146,30 +141,47 @@ export const useCommentStore = defineStore('comment', {
         })
     },
 
-    // 发布评论
     postComment(comment: Partial<Comment>) {
       this.posting = true
       return nodepress
-        .post(COMMENT_API_PATH, comment)
+        .post<Comment>('/disqus/comment', comment)
         .then((response) => {
-          this.comments.push(response.result)
+          this.comments.unshift(response.result)
           if (this.pagination) {
             this.pagination.total++
           }
+          return response.result
         })
         .finally(() => {
           this.posting = false
         })
     },
 
-    // 喜欢评论
-    postCommentLike(commentID: number) {
-      return nodepress.patch(LIKE_COMMENT_API_PATH, { comment_id: commentID }).then(() => {
-        const comment = this.comments.find((comment) => comment.id === commentID)
-        if (comment) {
-          comment.likes++
-        }
-      })
+    deleteComment(commentID: number) {
+      this.deleting = true
+      return nodepress
+        .delete('/disqus/comment', { data: { comment_id: commentID } })
+        .then(() => {
+          const index = this.comments.findIndex((comment) => comment.id === commentID)
+          if (index > -1) {
+            this.comments.splice(index, 1)
+            this.pagination.total--
+          }
+        })
+        .finally(() => {
+          this.deleting = false
+        })
+    },
+
+    postCommentVote(commentID: number, isLike: boolean) {
+      return nodepress
+        .post(`/vote/comment`, { comment_id: commentID, vote: isLike ? 1 : -1 })
+        .then(() => {
+          const comment = this.comments.find((comment) => comment.id === commentID)
+          if (comment) {
+            isLike ? comment.likes++ : comment.dislikes++
+          }
+        })
     }
   }
 })

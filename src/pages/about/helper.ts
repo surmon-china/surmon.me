@@ -1,8 +1,14 @@
 import { useEnhancer } from '/@/app/enhancer'
+import { AdminInfo } from '/@/store/meta'
 import { Language } from '/@/language/data'
 import { LANGUAGE_KEYS } from '/@/language/key'
 import { firstUpperCase } from '/@/transforms/text'
+import { getDefaultAvatar } from '/@/transforms/avatar'
 import { META } from '/@/config/app.config'
+
+export const getAdminAvatar = (avatar?: string) => {
+  return avatar || getDefaultAvatar()
+}
 
 export interface AboutI18nConfig {
   [Language.Zh]: string

@@ -62,10 +62,6 @@
             <i class="iconfont icon-heart" :class="{ liked: isLiked }"></i>
             <span>{{ article.meta.likes || 0 }}</span>
           </span>
-          <!-- <span class="tags">
-            <i class="iconfont icon-tag"></i>
-            <span>{{ article.tag.length || 0 }}</span>
-          </span> -->
           <span class="categories">
             <i class="iconfont icon-category"></i>
             <placeholder :transition="false" :data="article.category.length">
@@ -90,12 +86,11 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, onMounted, PropType } from 'vue'
+  import { defineComponent, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { Article } from '/@/store/article'
-  import { getJSON } from '/@/services/storage'
+  import { useUniversalStore } from '/@/store/universal'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { USER_LIKE_HISTORY } from '/@/constants/storage'
   import { getArticleDetailRoute, getTagFlowRoute, getCategoryFlowRoute } from '/@/transforms/route'
   import { getArticleListThumbnailURL } from '/@/transforms/thumbnail'
   import { timeAgo } from '/@/transforms/moment'
@@ -116,8 +111,9 @@
     },
     setup(props) {
       const { globalState, i18n } = useEnhancer()
+      const universalStore = useUniversalStore()
 
-      const isLiked = ref(false)
+      const isLiked = computed(() => universalStore.isLikedPage(props.article.id))
       const isHybrid = isHybridType(props.article.origin)
       const isReprint = isReprintType(props.article.origin)
       const isOriginal = isOriginalType(props.article.origin)
@@ -130,11 +126,6 @@
       const getThumbnailURL = (thumbURL: string) => {
         return getArticleListThumbnailURL(thumbURL, globalState.imageExt.value.isWebP)
       }
-
-      onMounted(() => {
-        const localHistoryLikes = getJSON(USER_LIKE_HISTORY)
-        isLiked.value = !!localHistoryLikes?.pages?.includes(props.article.id)
-      })
 
       return {
         LANGUAGE_KEYS,

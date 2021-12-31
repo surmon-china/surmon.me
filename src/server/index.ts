@@ -15,6 +15,7 @@ export const createExpressApp = () => {
   const server = http.createServer(app)
 
   // middlewares
+  app.use(express.json())
   app.use(cookieParser())
   app.use(compression())
 

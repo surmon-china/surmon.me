@@ -12,8 +12,10 @@
             <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_EMAIL_ME" />
           </button>
           <ulink class="upwork" :href="VALUABLE_LINKS.UPWORK">
-            <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_HIRE_ME" />
-            <i class="iconfont icon-upwork"></i>
+            <i18n>
+              <template #zh>或在<i class="iconfont icon-upwork"></i>雇佣我</template>
+              <template #en>Hire me on<i class="iconfont icon-upwork"></i></template>
+            </i18n>
           </ulink>
         </div>
       </template>
@@ -69,6 +71,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useMetaStore } from '/@/store/meta'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
@@ -86,6 +89,7 @@
     },
     setup() {
       const { i18n, meta, gtag, isZhLang } = useEnhancer()
+      const metaStore = useMetaStore()
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_FREELANCER, Language.En)!)
@@ -100,7 +104,7 @@
 
         window.open(
           emailLink({
-            email: META.email,
+            email: metaStore.appOptions.data?.site_email!,
             subject: isZhLang.value
               ? `嗨！Surmon，久仰大名！`
               : `Technical consultant / ${META.title}`,
@@ -271,7 +275,6 @@
           color: $white;
           transition: color $transition-time-fast, border-color $transition-time-fast;
           @include radius-box($xs-radius);
-
           &:hover {
             color: $primary;
             border-color: $primary;
@@ -284,14 +287,13 @@
           border-color: transparent;
           font-size: $font-size-h5;
           transition: color $transition-time-fast, border-color $transition-time-fast;
-
-          .iconfont {
-            margin-left: $xs-gap;
-          }
-
           &:hover {
             color: $primary;
             border-color: $primary;
+          }
+
+          .iconfont {
+            margin: 0 $sm-gap;
           }
         }
       }

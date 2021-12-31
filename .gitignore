@@ -82,7 +82,7 @@ dist
 sw.*
 
 # ecosystem
-# ecosystem.config.js
+ecosystem.config.js
 
 # Redis
 dump.rdb

@@ -5,9 +5,9 @@
         <ulink class="rss" :href="VALUABLE_LINKS.RSS" @mousedown="handleRSS">
           <i class="iconfont icon-rss" />
         </ulink>
-        <a class="feedback" target="_blank" :href="email" :title="t(LANGUAGE_KEYS.FEEDBACK)">
+        <button class="feedback" :title="t(LANGUAGE_KEYS.FEEDBACK)" @click="handleFeedback">
           <i class="iconfont icon-mail-plane" />
-        </a>
+        </button>
         <button
           class="to-page-top"
           :title="t(LANGUAGE_KEYS.TO_TOP)"
@@ -34,21 +34,37 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useMetaStore } from '/@/store/meta'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventCategories } from '/@/constants/gtag'
   import { scrollTo, Easing } from '/@/utils/scroller'
   import { scrollToTop } from '/@/utils/effects'
   import { emailLink } from '/@/transforms/email'
-  import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'Toolbox',
     setup() {
       const { i18n, gtag } = useEnhancer()
+      const metaStore = useMetaStore()
 
       const animationFrameID = ref(0)
       const isTopButtonMouseOver = ref(false)
       const isBottomButtonMouseOver = ref(false)
+
+      const handleRSS = () => {
+        gtag?.event('rss', {
+          event_category: GAEventCategories.Widget
+        })
+      }
+
+      const handleFeedback = () => {
+        gtag?.event('feedback', {
+          event_category: GAEventCategories.Widget
+        })
+
+        window.open(emailLink({ email: metaStore.appOptions.data?.site_email! }))
+      }
 
       const slowMoveToAnyWhere = () => {
         const step = () => {
@@ -84,8 +100,9 @@
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
         t: i18n.translate,
-        email: emailLink(META.email),
         scrollToTop,
+        handleFeedback,
+        handleRSS,
         toBottom() {
           scrollTo(window.scrollY + window.innerHeight, 300, { easing: Easing.easeIn })
         },
@@ -98,11 +115,6 @@
           isBottomButtonMouseOver.value = state
           window.cancelAnimationFrame(animationFrameID.value)
           isStartSlow && slowMoveToAnyWhere()
-        },
-        handleRSS() {
-          gtag?.event('rss', {
-            event_category: GAEventCategories.Widget
-          })
         }
       }
     }

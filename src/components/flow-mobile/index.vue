@@ -86,6 +86,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch, onClient } from '/@/universal'
   import { useArticleStore, Article } from '/@/store/article'
+  import { useMetaStore } from '/@/store/meta'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { firstUpperCase } from '/@/transforms/text'
   import { nextScreen } from '/@/utils/effects'
@@ -119,7 +120,9 @@
     },
     setup(props) {
       const { meta } = useEnhancer()
+      const metaStore = useMetaStore()
       const articleStore = useArticleStore()
+
       type ArticleItem = Article & { ad?: true }
       const articles = computed<Array<ArticleItem>>(() => {
         const list: ArticleItem[] = [...articleStore.list.data]
@@ -150,9 +153,9 @@
 
         // index page
         return {
-          title: `${META.title} - ${META.description}`,
-          keywords: META.keywords,
-          description: META.description
+          title: `${META.title} - ${META.sub_title}`,
+          description: metaStore.appOptions.data?.description,
+          keywords: metaStore.appOptions.data?.keywords.join(',')
         }
       })
 

@@ -53,18 +53,34 @@ const defaultAdConfig: AD_CONFIG = {
   PC_MERCH_BROKERS: []
 }
 
+export interface AdminInfo {
+  name: string
+  slogan: string
+  avatar: string
+}
+
+export interface AppOption {
+  title: string
+  sub_title: string
+  description: string
+  keywords: Array<string>
+  site_url: string
+  site_email: string
+  meta: {
+    likes: number
+  }
+  ad_config: string
+}
+
 export const useMetaStore = defineStore('meta', {
   state: () => ({
     adminInfo: {
       fetching: false,
-      data: null as null | any
+      data: null as null | AdminInfo
     },
     appOptions: {
       fetching: false,
-      data: null as null | {
-        [key: string]: any
-        ad_config: string
-      }
+      data: null as null | AppOption
     }
   }),
   getters: {
@@ -110,9 +126,9 @@ export const useMetaStore = defineStore('meta', {
     },
 
     postSiteLike() {
-      return nodepress.patch('/like/site').then((response) => {
+      return nodepress.post('/vote/site').then((response) => {
         if (this.appOptions.data) {
-          this.appOptions.data.meta.likes++
+          this.appOptions.data.meta.likes = response.result
         }
       })
     }

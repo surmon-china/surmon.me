@@ -74,15 +74,12 @@ select:-webkit-autofill {
   &.motion-blur-horizontal {
     @include blur-filter('horizontal');
   }
-
   &.motion-blur-horizontal-small {
     @include blur-filter('horizontal-small');
   }
-
   &.motion-blur-vertical {
     @include blur-filter('vertical');
   }
-
   &.motion-blur-vertical-small {
     @include blur-filter('vertical-small');
   }

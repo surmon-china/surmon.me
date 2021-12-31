@@ -41,7 +41,7 @@
       <i18n zh="分享" en="Share" />
       <divider type="vertical" />
       <span class="meta">
-        <i class="like-icon iconfont icon-zan"></i>
+        <i class="like-icon iconfont icon-like"></i>
         <span class="count">{{ article.meta.likes }}</span>
       </span>
     </button>
@@ -65,10 +65,6 @@
       <i18n zh="评论" en="Comments" />
       <divider type="vertical" />
       <span class="count">{{ article.meta.comments }}</span>
-    </button>
-    <button class="link" @click="handleLink(ANCHORS.COMMENT_PUBLISHER_ELEMENT_ID)">
-      <i class="iconfont icon-edit"></i>
-      <i18n zh="发布评论" en="Pulish comment" />
     </button>
   </div>
 </template>

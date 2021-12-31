@@ -65,7 +65,7 @@ const renderHTML = async (vueApp: VueApp, url: string) => {
   await router.isReady()
 
   devDebug('2. store.serverInit')
-  await store.prefetch()
+  await store.serverPrefetch()
 
   // because the layout func set has by animation done
   devDebug('3. set layout')

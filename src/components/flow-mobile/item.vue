@@ -56,12 +56,11 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, onMounted, PropType } from 'vue'
+  import { defineComponent, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { Article } from '/@/store/article'
-  import { getJSON } from '/@/services/storage'
+  import { useUniversalStore } from '/@/store/universal'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { USER_LIKE_HISTORY } from '/@/constants/storage'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getMobileArticleListThumbnailURL } from '/@/transforms/thumbnail'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
@@ -77,7 +76,8 @@
     },
     setup(props) {
       const { i18n, router, globalState } = useEnhancer()
-      const isLiked = ref(false)
+      const universalStore = useUniversalStore()
+      const isLiked = computed(() => universalStore.isLikedPage(props.article.id))
       const isHybrid = isHybridType(props.article.origin)
       const isReprint = isReprintType(props.article.origin)
       const isOriginal = isOriginalType(props.article.origin)
@@ -93,11 +93,6 @@
       const handleClick = () => {
         router.push(getArticleDetailRoute(props.article.id))
       }
-
-      onMounted(() => {
-        const localHistoryLikes = getJSON(USER_LIKE_HISTORY)
-        isLiked.value = Boolean(localHistoryLikes?.pages?.includes(props.article.id))
-      })
 
       return {
         LANGUAGE_KEYS,

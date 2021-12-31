@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { getPort } from '@/config/bff.config'
+import { getBFFServerPort } from '@/config/bff.config'
 import { enableProdRuntime } from './server/runtime/prod'
 import { createExpressApp } from './server'
 
@@ -12,7 +12,7 @@ const { app, server } = createExpressApp()
 
 // TODO
 enableProdRuntime(app)
-server.listen(getPort())
+server.listen(getBFFServerPort())
 
 // MARK
 export const initializer = (context, callback) => {

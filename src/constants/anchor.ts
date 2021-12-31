@@ -23,6 +23,7 @@ export const getArticleContentHeadingElementID = (level: number, heading: string
 
 export const COMMENT_ELEMENT_ID = 'A_comment_warpper'
 export const COMMENT_PUBLISHER_ELEMENT_ID = 'A_comment_publisher'
+export const COMMENT_FOOTER_ELEMENT_ID = 'A_comment_footer'
 export const COMMENT_ITEM_ELEMENT_ID_PREFIX = 'A_comment_content_item'
 export const getCommentItemElementID = (commentID: string | number) => {
   return `${COMMENT_ITEM_ELEMENT_ID_PREFIX}_${commentID}`

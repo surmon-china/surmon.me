@@ -1,58 +1,83 @@
 <template>
-  <div :id="COMMENT_ELEMENT_ID" class="comment-box">
+  <div :id="ANCHOR.COMMENT_ELEMENT_ID" class="comment-box">
     <comment-topbar
       :total="commentStore.pagination?.total"
-      :count="commentStore.comments.length"
+      :loaded="commentStore.comments.length"
       :post-id="postId"
-      :fetching="isFetching"
-      :sort="state.sort"
-      @sort="getSortComments"
+      :fetching="fetching"
+      :loading="isLoading"
+      :plain="plain"
+      :sort="commentState.sort"
+      @sort="fetchSortComments"
     />
+    <divider class="divider" size="lg" />
+    <comment-publisher
+      :id="ANCHOR.COMMENT_PUBLISHER_ELEMENT_ID"
+      :disabled="isLoading || isRootPosting"
+      :total="commentStore.pagination?.total"
+      :responsive="!plain"
+      :fetching="fetching"
+      :profile="guestProfile"
+      :hidden-avatar="plain"
+    >
+      <template #pen>
+        <comment-pen
+          v-model="rootPenState.content"
+          v-model:preview="rootPenState.preview"
+          :auto-focus="true"
+          :hidden-stationery="plain"
+          :disabled="isRootPosting || isLoading"
+          :posting="isRootPosting"
+          @submit="handleRootSubmit"
+        />
+      </template>
+    </comment-publisher>
+    <divider class="divider" size="lg" />
     <comment-main
-      :fetching="isFetching"
+      :fetching="isLoading"
       :skeleton-count="plain ? 3 : 5"
       :has-data="Boolean(commentStore.commentTreeList.length)"
     >
       <template #list>
         <comment-list
           :comments="commentStore.commentTreeList"
-          :hidden-gravatar="plain"
+          :reply-pid="commentState.replyPID"
+          :hidden-avatar="plain"
           :hidden-ua="plain"
+          @delete="handleDeleteComment"
           @reply="replyComment"
-        />
+          @cancel-reply="cancelCommentReply"
+        >
+          <template #reply="payload">
+            <comment-publisher
+              :disabled="false"
+              :profile="guestProfile"
+              :bordered="true"
+              :hidden-avatar="plain"
+              :fixed-avatar="payload.isChild"
+            >
+              <template #pen>
+                <comment-pen
+                  :posting="isReplyPosting"
+                  :bordered="true"
+                  :auto-focus="true"
+                  :hidden-stationery="plain"
+                  @submit="handleReplySubmit"
+                />
+              </template>
+            </comment-publisher>
+          </template>
+        </comment-list>
       </template>
       <template #pagination>
         <comment-loadmore
           :fetching="isFetching"
           :pagination="commentStore.pagination"
-          @page="getPageComments"
+          :remain="commentStore.pagination?.total - commentStore.comments.length"
+          @page="fetchPageComments"
         />
       </template>
     </comment-main>
-    <comment-publisher
-      :disabled="isPostingComment || isFetching"
-      :cached="userState.cached"
-      :editing="userState.editing"
-      :reply-pid="state.replyPID"
-      :hidden-gravatar="plain"
-      v-model:profile="profileState"
-      @cancel-reply="resetCommentReply"
-      @edit-profile="editUserProfile"
-      @save-profile="syncUserProfileToStorage"
-      @clear-profile="clearUserProfile"
-    >
-      <template #pen>
-        <comment-pen
-          v-model="penState.content"
-          :preview="penState.preview"
-          :disabled="isPostingComment || isFetching"
-          :posting="isPostingComment"
-          @input-ready="handleMarkdownInputReady"
-          @toggle-preview="togglePenPreview"
-          @submit="submitComment"
-        />
-      </template>
-    </comment-publisher>
   </div>
 </template>
 
@@ -63,21 +88,20 @@
     reactive,
     computed,
     watch,
-    onMounted,
+    toRaw,
     onBeforeUnmount,
-    onUnmounted
+    onUnmounted,
+    nextTick
   } from 'vue'
-  import { useMetaStore } from '/@/store/meta'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useCommentStore, CommentFetchParams } from '/@/store/comment'
+  import { useUniversalStore, UserType } from '/@/store/universal'
+  import { useCommentStore, CommentFetchParams, Author } from '/@/store/comment'
   import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
-  import { COMMENT_ELEMENT_ID, COMMENT_PUBLISHER_ELEMENT_ID } from '/@/constants/anchor'
+  import * as ANCHOR from '/@/constants/anchor'
+  import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
   import { SortType } from '/@/constants/state'
-  import { USER } from '/@/constants/storage'
-  import { getJSON, setJSON, remove } from '/@/services/storage'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { focusPosition } from '/@/utils/editable'
   import { scrollToElementAnchor } from '/@/utils/scroller'
   import { luanchEmojiRain } from './helper'
   import CommentTopbar from './topbar.vue'
@@ -88,7 +112,7 @@
   import CommentPen from './pen.vue'
 
   export default defineComponent({
-    name: 'Comment',
+    name: 'Dsiqus',
     components: {
       CommentTopbar,
       CommentMain,
@@ -113,228 +137,214 @@
     },
     setup(props) {
       const { i18n, gtag, globalState } = useEnhancer()
-      const metaStore = useMetaStore()
+      const universalStore = useUniversalStore()
       const commentStore = useCommentStore()
-      const blockList = computed(() => metaStore.appOptions.data?.blacklist)
-      const isPostingComment = computed(() => commentStore.posting)
-      const markdownInputElement = ref<any>()
 
-      const isFetching = computed(() => {
-        // 1. 宿主组件还在加载时，列表和 tool 都呈加载状态
-        // 2. 宿主组件加载完成，如果自己还在请求，则列表呈加载状态
-        // 3. 自己已请求完，宿主组件还在加载，列表和 tool 都呈加载状态
-
-        // 1. 组件不再负责初始加载评论列表数据的职责
-        // 2. 组件仅负责初评论列表数据翻页、排序的职责
-        // 3. 当容器组件还在请求时，组件全量 Loading
-        // 4. 当只有评论列表在请求时，列表单独 Loading
-        return props.fetching || commentStore.fetching
+      const isPosting = computed(() => commentStore.posting)
+      const isFetching = computed(() => commentStore.fetching)
+      const isLoading = computed(() => {
+        return props.fetching || (!commentStore.comments.length && commentStore.fetching)
       })
 
-      const state = reactive({
+      enum PostKey {
+        Root = 'root',
+        Reply = 'reply'
+      }
+      const postingKey = ref<PostKey>()
+      const isRootPosting = computed(() => isPosting.value && postingKey.value === PostKey.Root)
+      const isReplyPosting = computed(() => isPosting.value && postingKey.value === PostKey.Reply)
+
+      const commentState = reactive({
         sort: SortType.Desc,
         replyPID: 0
       })
-      const userState = reactive({
-        cached: false,
-        editing: false
-      })
-      const baseProfile = {
+
+      const guestProfile = reactive<Author>({
         name: '',
         email: '',
         site: ''
-      }
-      const profileState = ref(baseProfile)
-      const penState = reactive({
+      })
+
+      const rootPenState = reactive({
         content: '',
         preview: false
       })
 
-      const syncUserStorageToState = () => {
-        const user = getJSON(USER)
-        if (user) {
-          userState.cached = true
-          userState.editing = false
-          profileState.value = user
-        }
+      const clearRootPenContent = () => {
+        rootPenState.content = ''
+      }
+      const closeRootPenPreview = () => {
+        rootPenState.preview = false
       }
 
-      const syncUserProfileToStorage = () => {
-        userState.cached = true
-        userState.editing = false
-        setJSON(USER, profileState.value)
+      const cancelCommentReply = () => {
+        commentState.replyPID = 0
       }
-
-      const clearUserProfile = () => {
-        userState.cached = false
-        userState.editing = false
-        profileState.value = { ...baseProfile }
-        remove(USER)
-      }
-
-      const editUserProfile = () => {
-        userState.editing = true
-      }
-
-      const handleMarkdownInputReady = (markdownElement: HTMLElement) => {
-        markdownInputElement.value = markdownElement
-      }
-
-      const resetCommentReply = () => {
-        state.replyPID = 0
-      }
-
-      const clearPenContent = () => {
-        penState.content = ''
-      }
-
-      const togglePenPreview = () => {
-        penState.preview = !penState.preview
-      }
-
-      const replyComment = (commentId: number) => {
+      const replyComment = (commentID: number) => {
         gtag?.event('reply_comment', {
           event_category: GAEventCategories.Comment
         })
-        state.replyPID = commentId
-        // 滚动到目标位置，并激活光标
-        scrollToElementAnchor(COMMENT_PUBLISHER_ELEMENT_ID, 300)
-        if (markdownInputElement.value) {
-          focusPosition(markdownInputElement.value)
-        }
+
+        commentState.replyPID = commentID
       }
 
-      // 获取评论列表
       const fetchCommentList = (params: CommentFetchParams = {}) => {
-        // 每次重新获取数据时都需要回到评论框顶部，因为都是新数据
-        scrollToElementAnchor(COMMENT_ELEMENT_ID, -73)
-        commentStore.fetchList({
+        return commentStore.fetchList({
           ...params,
-          sort: state.sort,
+          sort: commentState.sort,
           post_id: props.postId
         })
       }
 
-      const getSortComments = (sort: SortType) => {
-        if (state.sort !== sort) {
-          state.sort = sort
+      const fetchSortComments = (sort: SortType) => {
+        if (commentState.sort !== sort) {
+          commentState.sort = sort
           fetchCommentList()
+          scrollToElementAnchor(ANCHOR.COMMENT_ELEMENT_ID)
         }
       }
 
-      const getPageComments = (page: number) => {
-        fetchCommentList({ page, loadmore: true })
+      const fetchPageComments = (page: number) => {
+        const comments = commentStore.comments
+        const lastCommentID = ANCHOR.getCommentItemElementID(comments[comments.length - 2].id)
+        fetchCommentList({ page, loadmore: true }).then(() => {
+          nextTick().then(() => {
+            scrollToElementAnchor(lastCommentID, null, 500)
+          })
+        })
       }
 
-      const submitComment = async () => {
+      const handleDeleteComment = (commentID: number) => {
+        commentStore.deleteComment(commentID).catch((error) => {
+          console.warn('delete comment failed', error)
+          alert(error.message)
+        })
+      }
+
+      const createComment = async (payload: { content: string; pid: number }) => {
         gtag?.event('submit_comment', {
           event_category: GAEventCategories.Comment
         })
-        const profile = profileState.value
-        if (!profile.name) {
-          return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_NAME) + '?')
-        }
-        if (!profile.email) {
-          return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_EMAIL) + '?')
-        }
-        if (!emailRegex.test(profile.email)) {
-          return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_EMAIL))
-        }
-        if (profile.site && !urlRegex.test(profile.site)) {
-          return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_URL))
-        }
-        if (!penState.content || !penState.content.trim()) {
-          return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_CONTENT) + '?')
-        }
 
         // content length
-        const lineOverflow = penState.content.split('\n').length > 36
-        const lengthOverflow = penState.content.length > 2000
-        if (lineOverflow || lengthOverflow) {
-          return alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_CONTENT))
+        if (!payload.content || !payload.content.trim()) {
+          throw `${i18n.t(LANGUAGE_KEYS.COMMENT_POST_CONTENT)} ?`
+        }
+        if (payload.content.length > 3000) {
+          throw `${i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_CONTENT)} ?`
         }
 
-        // block list
-        const { mails, keywords } = blockList.value
-        const hitMail = mails.includes(profile.email)
-        const hitKeyword =
-          keywords.length && eval(`/${keywords.join('|')}/ig`).test(penState.content)
-        if (hitMail || hitKeyword) {
-          alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_SUBMIT))
-          console.warn(
-            '评论发布失败\n1：被 Akismet 过滤\n2：邮箱/IP 被列入黑名单\n3：内容包含黑名单关键词'
-          )
-          return false
-        }
-
-        // post
-        return commentStore
-          .postComment({
-            pid: state.replyPID,
-            post_id: props.postId,
-            content: penState.content,
-            agent: globalState.userAgent.original,
-            author: profile
-          })
-          .then(() => {
-            // clear local data
-            penState.preview = false
-            userState.cached = true
-            userState.editing = false
-            // reset reply state
-            resetCommentReply()
-            clearPenContent()
-            // set user profile
-            syncUserProfileToStorage()
-            // random emoji rain
-            luanchEmojiRain(penState.content)
-          })
-          .catch((error) => {
-            console.warn('评论发布失败，可能原因：被 Akismet 过滤，或者：\n', error)
-            alert(i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_SUBMIT))
-          })
-      }
-
-      watch(
-        () => isFetching.value,
-        (isFetching) => {
-          if (isFetching) {
-            resetCommentReply()
+        // temp user profile
+        const isGuest = universalStore.user.type === UserType.Null
+        if (isGuest) {
+          if (!guestProfile.name) {
+            throw i18n.t(LANGUAGE_KEYS.COMMENT_POST_NAME) + '?'
+          }
+          if (!guestProfile.email) {
+            throw i18n.t(LANGUAGE_KEYS.COMMENT_POST_EMAIL) + '?'
+          }
+          if (!emailRegex.test(guestProfile.email)) {
+            throw i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_EMAIL)
+          }
+          if (guestProfile.site && !urlRegex.test(guestProfile.site)) {
+            throw i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_URL)
           }
         }
-      )
 
-      onMounted(() => {
-        syncUserStorageToState()
+        const author: Author = isGuest
+          ? toRaw(guestProfile)
+          : universalStore.user.type === UserType.Local
+          ? universalStore.user.localProfile!
+          : {
+              name: universalStore.user.disqusProfile.name,
+              site: universalStore.user.disqusProfile.url
+            }
+        if (!author.email) {
+          Reflect.deleteProperty(author, 'email')
+        }
+        if (!author.site) {
+          Reflect.deleteProperty(author, 'site')
+        }
+
+        try {
+          const newComment = await commentStore.postComment({
+            pid: payload.pid,
+            post_id: props.postId,
+            content: payload.content,
+            agent: globalState.userAgent.original,
+            author
+          })
+          // set user profile
+          if (isGuest) {
+            universalStore.saveLocalUser({
+              ...author,
+              email_hash: newComment.author.email_hash
+            })
+          }
+          // random emoji rain
+          luanchEmojiRain(payload.content)
+        } catch (error: any) {
+          console.warn('submit comment failed:', error)
+          throw error.message
+        }
+      }
+
+      const handleRootSubmit = async (content: string) => {
+        postingKey.value = PostKey.Root
+        try {
+          await createComment({ content, pid: 0 })
+          closeRootPenPreview()
+          clearRootPenContent()
+        } catch (error: any) {
+          alert(error)
+        } finally {
+          postingKey.value = UNDEFINED
+        }
+      }
+
+      const handleReplySubmit = async (content: string) => {
+        postingKey.value = PostKey.Reply
+        try {
+          await createComment({ content, pid: commentState.replyPID })
+          cancelCommentReply()
+        } catch (error: any) {
+          alert(error)
+        } finally {
+          postingKey.value = UNDEFINED
+        }
+      }
+
+      watch(isLoading, (isFetching) => {
+        if (isFetching) {
+          cancelCommentReply()
+        }
       })
 
       onBeforeUnmount(() => {
-        resetCommentReply()
+        cancelCommentReply()
       })
-
       onUnmounted(() => {
         commentStore.clearList()
       })
 
       return {
-        COMMENT_ELEMENT_ID,
+        ANCHOR,
         isFetching,
-        isPostingComment,
+        isLoading,
+        isPosting,
+        isRootPosting,
+        isReplyPosting,
         commentStore,
-        state,
-        userState,
-        profileState,
-        penState,
-        editUserProfile,
-        syncUserProfileToStorage,
-        clearUserProfile,
-        togglePenPreview,
+        commentState,
+        rootPenState,
+        guestProfile,
         replyComment,
-        submitComment,
-        resetCommentReply,
-        getSortComments,
-        getPageComments,
-        handleMarkdownInputReady
+        handleDeleteComment,
+        handleRootSubmit,
+        handleReplySubmit,
+        cancelCommentReply,
+        fetchSortComments,
+        fetchPageComments
       }
     }
   })
@@ -347,5 +357,9 @@
     padding: $gap;
     @include common-bg-module();
     @include radius-box($lg-radius);
+
+    .divider {
+      border-color: $module-bg-darker-1 !important;
+    }
   }
 </style>

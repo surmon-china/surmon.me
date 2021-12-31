@@ -20,7 +20,6 @@ import { Responsive, DesktopOnly } from '/@/components/common/responsive'
 import { ClientOnly } from '/@/components/common/client-only'
 
 export default function (app: App) {
-  // components
   app.component(Spin.name as string, Spin)
   app.component(Empty.name as string, Empty)
   app.component(Divider.name as string, Divider)

@@ -129,9 +129,13 @@ export const scrollTo = (target: string | number | Element, duration = 500, opti
 }
 
 // default offset: header height
-export const scrollToElementAnchor = (elementID: string, offset = -76) => {
+export const scrollToElementAnchor = (
+  elementID: string,
+  offset?: number | null,
+  duration?: number
+) => {
   const targetElement = document.getElementById(elementID)
   if (targetElement) {
-    scrollTo(targetElement, 200, { offset })
+    scrollTo(targetElement, duration ?? 200, { offset: offset ?? -76 })
   }
 }

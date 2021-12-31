@@ -1,5 +1,5 @@
 <template>
-  <div class="pen">
+  <div class="pen" :class="{ bordered }">
     <div class="markdown">
       <div
         ref="inputElement"
@@ -17,78 +17,92 @@
     </div>
     <div class="pencilbox">
       <div class="stationery">
-        <button class="emoji" title="emoji" type="button" :disabled="disabled || preview">
-          <i class="iconfont icon-emoji" />
-          <div class="emoji-box">
-            <ul class="emoji-list">
-              <li
-                v-for="(emoji, index) in EMOJIS"
-                v-once
-                :key="index"
-                class="item"
-                @click="insertEmoji(emoji)"
-              >
-                {{ emoji }}
-              </li>
-            </ul>
-          </div>
-        </button>
-        <button
-          class="image"
-          title="image"
-          :disabled="disabled || preview"
-          @click.prevent="insertImage"
-        >
-          <i class="iconfont icon-image" />
-        </button>
-        <button
-          class="link"
-          title="link"
-          :disabled="disabled || preview"
-          @click.prevent="insertLink"
-        >
-          <i class="iconfont icon-link-horizontal" />
-        </button>
-        <button
-          class="code"
-          title="code"
-          :disabled="disabled || preview"
-          @click.prevent="insertCode"
-        >
-          <i class="iconfont icon-code" />
-        </button>
-        <button
-          class="preview"
-          title="preview"
-          :class="{ actived: preview }"
-          :disabled="disabled"
-          @click.prevent="handleTogglePreview"
-        >
-          <i class="iconfont" :class="preview ? 'icon-eye-close' : 'icon-eye'" />
-        </button>
+        <ulink class="markdown" title="markdown" :href="VALUABLE_LINKS.MARKDOWN">
+          <i class="iconfont icon-markdown" />
+        </ulink>
+        <template v-if="!hiddenStationery">
+          <button class="emoji" title="emoji" type="button" :disabled="disabled || preview">
+            <i class="iconfont icon-emoji" />
+            <div class="emoji-box">
+              <ul class="emoji-list">
+                <li
+                  v-for="(emoji, index) in EMOJIS"
+                  v-once
+                  :key="index"
+                  class="item"
+                  @click="insertEmoji(emoji)"
+                >
+                  {{ emoji }}
+                </li>
+              </ul>
+            </div>
+          </button>
+          <button
+            class="image"
+            title="image"
+            :disabled="disabled || preview"
+            @click.prevent="insertImage"
+          >
+            <i class="iconfont icon-image" />
+          </button>
+          <button
+            class="link"
+            title="link"
+            :disabled="disabled || preview"
+            @click.prevent="insertLink"
+          >
+            <i class="iconfont icon-link" />
+          </button>
+          <button
+            class="code"
+            title="code"
+            :disabled="disabled || preview"
+            @click.prevent="insertCode"
+          >
+            <i class="iconfont icon-code" />
+          </button>
+          <button
+            class="preview"
+            title="preview"
+            :class="{ actived: preview }"
+            :disabled="disabled"
+            @click.prevent="handleTogglePreview"
+          >
+            <i class="iconfont" :class="preview ? 'icon-eye-close' : 'icon-eye'" />
+          </button>
+        </template>
       </div>
       <button type="submit" class="submit" :disabled="disabled" @click="handleSubmit">
-        <i18n
-          :lkey="
-            posting ? LANGUAGE_KEYS.COMMENT_POST_SUBMITTING : LANGUAGE_KEYS.COMMENT_POST_SUBMIT
-          "
-        />
+        <i18n zh="发布中..." en="Posting..." v-if="posting" />
+        <i18n v-else-if="user.type === UserType.Local">
+          <template #zh>以 {{ user.localProfile?.name }} 的身份发布</template>
+          <template #en>Post as {{ user.localProfile?.name }}</template>
+        </i18n>
+        <i18n v-else-if="user.type === UserType.Disqus">
+          <template #zh>以 {{ user.disqusProfile?.name }} 的身份发布</template>
+          <template #en>Post as {{ user.disqusProfile?.name }}</template>
+        </i18n>
+        <i18n zh="发布" en="Publish" v-else />
+        <i class="iconfont icon-mail-plane"></i>
       </button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+  import { defineComponent, ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useUniversalStore, UserType } from '/@/store/universal'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { insertContent } from '/@/utils/editable'
   import { markdownToHTML } from '/@/transforms/markdown'
-  import { CommentEvent, EMOJIS } from './helper'
+  import { focusPosition } from '/@/utils/editable'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { CommentEvents, EMOJIS } from './helper'
 
   export enum PenEvents {
     Update = 'update:modelValue',
-    InputReady = 'input-ready'
+    UpdatePreview = 'update:preview'
   }
 
   export default defineComponent({
@@ -96,49 +110,48 @@
     props: {
       modelValue: {
         type: String,
-        required: true
+        required: false
       },
       disabled: {
         type: Boolean,
-        required: true
+        default: false
+      },
+      preview: {
+        type: Boolean,
+        default: false
       },
       posting: {
         type: Boolean,
         required: true
       },
-      preview: {
+      bordered: {
         type: Boolean,
-        required: true
+        required: false
+      },
+      autoFocus: {
+        type: Boolean,
+        default: false
+      },
+      hiddenStationery: {
+        type: Boolean,
+        default: false
       }
     },
-    emits: [
-      PenEvents.Update,
-      PenEvents.InputReady,
-      CommentEvent.TogglePreview,
-      CommentEvent.Submit
-    ],
+    emits: [PenEvents.Update, PenEvents.UpdatePreview, CommentEvents.Submit],
     setup(props, context) {
       const { i18n } = useEnhancer()
-      const content = ref(props.modelValue)
+      const universalStore = useUniversalStore()
+      const content = ref(props.modelValue || '')
+      const preview = ref(props.preview || false)
       const inputElement = ref<HTMLElement>()
       let inputElementObserver: MutationObserver | null = null
       const previewContent = computed(() => {
         return props.preview ? markdownToHTML(content.value, { sanitize: true }) : null
       })
-
       const handleTogglePreview = () => {
-        context.emit(CommentEvent.TogglePreview)
+        preview.value = !preview.value
+        context.emit(PenEvents.UpdatePreview, preview.value)
       }
-
-      const handleValueChange = (value: string) => {
-        if (value !== content.value) {
-          content.value = value
-          if (inputElement.value) {
-            inputElement.value.innerText = value
-          }
-        }
-      }
-
       const handleInputChange = () => {
         const text = inputElement.value?.innerText as string
         if (text !== content.value) {
@@ -146,12 +159,10 @@
           context.emit(PenEvents.Update, text)
         }
       }
-
       const handleSubmit = (event) => {
         event.preventDefault()
-        context.emit(CommentEvent.Submit, content.value)
+        context.emit(CommentEvents.Submit, content.value)
       }
-
       const insertContentToInput = (before: string, after = '') => {
         insertContent({
           element: inputElement.value,
@@ -171,10 +182,35 @@
       const insertCode = () => {
         insertContentToInput('\n```javascript\n', '\n```\n')
       }
-
-      watch(() => props.modelValue, handleValueChange)
+      watch(
+        () => props.modelValue,
+        (value = '') => {
+          if (value !== content.value) {
+            content.value = value
+            if (inputElement.value) {
+              inputElement.value.innerText = value
+            }
+          }
+        }
+      )
+      watch(
+        () => props.preview,
+        (_preview) => {
+          if (_preview !== preview.value) {
+            preview.value = _preview
+          }
+        }
+      )
       onMounted(() => {
-        context.emit(PenEvents.InputReady, inputElement.value)
+        // auto focus
+        if (props.autoFocus) {
+          nextTick().then(() => {
+            if (inputElement.value) {
+              focusPosition(inputElement.value)
+            }
+          })
+        }
+        // watch element
         inputElementObserver = new MutationObserver((mutations) => {
           handleInputChange()
         })
@@ -188,13 +224,16 @@
       onBeforeUnmount(() => {
         inputElementObserver?.disconnect()
       })
-
       return {
         t: i18n.t,
+        user: universalStore.user,
+        UserType,
         EMOJIS,
+        VALUABLE_LINKS,
         LANGUAGE_KEYS,
         inputElement,
         previewContent,
+        preview,
         insertEmoji,
         insertImage,
         insertLink,
@@ -213,6 +252,12 @@
   .pen {
     position: relative;
     @include radius-box($xs-radius);
+    &.bordered {
+      border: 1px solid $module-bg-darker-3;
+      .pencilbox {
+        border-top: 1px solid $module-bg-darker-3;
+      }
+    }
 
     .markdown {
       position: relative;
@@ -234,11 +279,9 @@
           content: attr(placeholder);
           color: $text-disabled;
         }
-
         &:focus {
           content: none;
         }
-
         &:hover {
           background-color: $module-bg-hover;
         }
@@ -258,14 +301,16 @@
     }
 
     .pencilbox {
-      $size: $font-size-base * 2;
+      $size: 30px;
       height: $size;
       line-height: $size;
       display: flex;
       justify-content: space-between;
-      background-color: $module-bg-darker-3;
+      background-color: $module-bg-darker-2;
 
       .stationery {
+        display: flex;
+
         .emoji,
         .image,
         .link,
@@ -275,7 +320,6 @@
           height: $size;
           text-align: center;
           display: block;
-          float: left;
           @include background-transition();
 
           &[disabled] {
@@ -288,6 +332,12 @@
               background-color: $module-bg-darker-4;
             }
           }
+        }
+
+        .markdown {
+          width: 4rem;
+          text-align: center;
+          background-color: $module-bg-darker-3;
         }
 
         .emoji {
@@ -312,14 +362,15 @@
               padding: 0;
               margin: 0;
               font-size: $font-size-h3;
-              display: flex;
-              flex-wrap: wrap;
+              display: grid;
+              grid-template-columns: repeat(auto-fill, 45px);
 
               .item {
-                padding: 0 0.4em;
                 cursor: pointer;
+                padding: $xs-gap 0;
+                font-size: $font-size-h2;
+                border-radius: $sm-radius;
                 @include background-transition();
-
                 &:hover {
                   background-color: $module-bg-hover;
                 }
@@ -330,13 +381,21 @@
       }
 
       .submit {
-        width: 8rem;
+        min-width: 8rem;
         height: $size;
-        background-color: $module-bg-darker-4;
+        padding: 0 $gap;
+        font-weight: bold;
+        font-size: $font-size-small;
+        color: $text-disabled;
+        background-color: $module-bg-darker-3;
         @include background-transition();
-
         &:hover {
-          background-color: $module-bg-darker-5;
+          color: $text-secondary;
+          background-color: $module-bg-darker-4;
+        }
+
+        .iconfont {
+          margin-left: $sm-gap;
         }
       }
     }

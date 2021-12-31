@@ -23,6 +23,6 @@ export const getPageUrl = (uri: string) => {
   return `${API_CONFIG.FE}${uri}`
 }
 
-export const getArticleDetailUrl = (articleID: string | number) => {
-  return getPageUrl(getArticleDetailRoute(articleID))
+export const getArticleDetailUrl = (IDOrSlug: string | number) => {
+  return getPageUrl(getArticleDetailRoute(IDOrSlug))
 }

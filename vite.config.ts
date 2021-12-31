@@ -80,8 +80,6 @@ export default defineConfig(({ command, mode }) => {
     optimizeDeps: {
       include: [
         'swiper',
-        // gravatar dependencie
-        'querystring',
         // Tree shaking
         'highlight.js/lib/core',
         'highlight.js/lib/languages/go',

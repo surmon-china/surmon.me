@@ -19,7 +19,7 @@ export interface Tag {
   description: string
   update_at: string
   create_at: string
-  extends?: UniversalExtend[]
+  extends: UniversalExtend[]
 }
 
 export const useTagStore = defineStore('tag', {

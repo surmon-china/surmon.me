@@ -12,7 +12,7 @@ export const getRSSXML = async (archiveData?: any) => {
   const archive = archiveData || (await getArchiveData())
   const feed = new RSS({
     title: META.title,
-    description: META.description,
+    description: META.sub_title,
     site_url: META.url,
     feed_url: `${META.url}/rss.xml`,
     image_url: `${META.url}/icon.png`,

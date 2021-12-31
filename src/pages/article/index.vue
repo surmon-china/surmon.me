@@ -115,8 +115,8 @@
 
       meta(() => ({
         pageTitle: article.value?.title,
-        keywords: article.value?.keywords?.join(',') || article.value?.title,
-        description: article.value?.description || ''
+        description: article.value?.description || '',
+        keywords: article.value?.keywords?.join(',') || article.value?.title
       }))
 
       const fetchArticleDetail = (articleID: number) => {
