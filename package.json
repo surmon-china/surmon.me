@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "3.3.4",
+  "version": "3.3.5",
   "description": "Surmon.me blog",
   "author": {
     "name": "Surmon",
@@ -36,6 +36,7 @@
     "bezier-easing": "^2.1.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
+    "country-flag-emoji": "^1.0.3",
     "emoji-233333": "^0.3.2",
     "escape-html": "^1.0.3",
     "express": "^4.17.2",

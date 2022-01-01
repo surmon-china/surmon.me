@@ -22,6 +22,15 @@ export interface Author {
   email_hash?: string
 }
 
+export interface IPLocation {
+  country: string
+  country_code: string
+  region: string
+  region_code: string
+  city: string
+  zip: string
+}
+
 export interface Comment {
   post_id: number
   id: number
@@ -32,14 +41,7 @@ export interface Comment {
   likes: number
   dislikes: number
   ip?: string
-  ip_location?: {
-    country: string
-    country_code: string
-    region: string
-    region_code: string
-    city: string
-    zip: string
-  }
+  ip_location?: IPLocation
   create_at: string
   update_at: string
   extends: UniversalExtend[]
