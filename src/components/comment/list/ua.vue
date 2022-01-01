@@ -6,7 +6,7 @@
       <!-- <span>{{ uaResult.result.os.version }}</span> -->
     </span>
     <span class="browser">
-      <i class="iconfont" :class="`icon-${browserIconName}`" />
+      <i class="iconfont" v-if="browserIconName" :class="`icon-${browserIconName}`" />
       <span>{{ uaResult.result.browser.name }}</span>
       <!-- <span>{{ uaResult.result.browser.version }}</span> -->
     </span>
@@ -32,6 +32,7 @@
     Chrome: 'chrome',
     Chromium: 'chrome',
     WeChat: 'wechat',
+    QQ: 'qq',
     Safari: 'safari',
     'Mobile Safari': 'safari',
     UCBrowser: 'uc',
@@ -69,3 +70,17 @@
     }
   })
 </script>
+
+<style lang="scss" scoped>
+  @import 'src/styles/init.scss';
+
+  .ua {
+    .iconfont {
+      margin-right: $xs-gap;
+    }
+
+    .os {
+      margin-right: $sm-gap;
+    }
+  }
+</style>

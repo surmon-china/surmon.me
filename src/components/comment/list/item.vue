@@ -28,16 +28,11 @@
             <span class="moderator" v-if="isAdminAuthor">
               <i18n :lkey="LANGUAGE_KEYS.COMMENT_MODERATOR" />
             </span>
-            <span v-if="comment.ip_location" class="location">
-              <i class="iconfont icon-earth"></i>
-              <span>{{ comment.ip_location.country_code || comment.ip_location.country }}</span>
-              <template v-if="comment.ip_location.city">
-                <span class="separator">•</span>
-                <span>{{ comment.ip_location.city }}</span>
-              </template>
-            </span>
+            <template v-if="comment.ip_location">
+              <comment-location class="location" :location="comment.ip_location" />
+            </template>
             <template v-if="!hiddenUa">
-              <comment-ua v-if="comment.agent" :ua="comment.agent" />
+              <comment-ua class="ua" v-if="comment.agent" :ua="comment.agent" />
             </template>
           </div>
           <div class="right">
@@ -130,12 +125,14 @@
   import { timeAgo } from '/@/transforms/moment'
   import { scrollToElementAnchor } from '/@/utils/scroller'
   import { CommentEvents, getDisqusUserURL } from '../helper'
+  import CommentLocation from './location.vue'
   import CommentLink from './link.vue'
   import CommentUa from './ua.vue'
 
   export default defineComponent({
     name: 'CommentItem',
     components: {
+      CommentLocation,
       CommentLink,
       CommentUa
     },
@@ -420,29 +417,14 @@
           @include radius-box($xs-radius);
         }
 
-        ::v-deep(.os),
-        ::v-deep(.browser),
+        .ua,
         .location {
           color: $text-dividers;
           font-size: $font-size-small;
-          .iconfont {
-            margin-right: $xs-gap;
-          }
         }
 
         .location {
           margin-right: $gap;
-          .separator {
-            margin: 0 3px;
-          }
-        }
-
-        ::v-deep(.os) {
-          margin-right: $sm-gap;
-        }
-
-        ::v-deep(.browser) {
-          margin-right: 0;
         }
 
         .flool {
