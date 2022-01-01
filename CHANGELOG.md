@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.3.4 (2022-01-01)
+
+**Feature**
+
+- Improve comment components
+
 ### v3.3.0 (2021-12-31)
 
 **Feature**

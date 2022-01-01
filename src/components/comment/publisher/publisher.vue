@@ -15,7 +15,8 @@
       <div class="profile" v-if="user.type === UserType.Null" v-show="blossomed">
         <div class="name">
           <input
-            v-model="profile.name"
+            :value="profile.name"
+            @input="handleUpdateProfile('name', $event)"
             required
             type="text"
             name="name"
@@ -26,7 +27,8 @@
         </div>
         <div class="email">
           <input
-            v-model="profile.email"
+            :value="profile.email"
+            @input="handleUpdateProfile('email', $event)"
             required
             type="email"
             name="email"
@@ -37,7 +39,8 @@
         </div>
         <div class="site">
           <input
-            v-model="profile.site"
+            :value="profile.site"
+            @input="handleUpdateProfile('site', $event)"
             type="url"
             name="url"
             autocomplete="on"
@@ -80,6 +83,10 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { CommentEvents } from '../helper'
 
+  export enum PublisherEvents {
+    UpdateProfile = 'update:profile'
+  }
+
   export default defineComponent({
     name: 'CommentPublisher',
     props: {
@@ -117,16 +124,12 @@
         required: false
       }
     },
-    emits: [CommentEvents.Blossom],
+    emits: [CommentEvents.Blossom, PublisherEvents.UpdateProfile],
     setup(props, context) {
       const { i18n, gtag } = useEnhancer()
       const universalStore = useUniversalStore()
       const user = computed(() => universalStore.user)
       const avatar = computed(() => {
-        // temp user
-        if (user.value.type === UserType.Null) {
-          return getDefaultAvatar()
-        }
         // local user
         if (user.value.type === UserType.Local) {
           return getGravatarByHash(user.value.localProfile?.email_hash)
@@ -135,7 +138,16 @@
         if (user.value.type === UserType.Disqus) {
           return getDisqusAvatarByUsername(user.value.disqusProfile?.username)
         }
+        // temp user
+        return getDefaultAvatar()
       })
+
+      const handleUpdateProfile = (key: keyof Author, event: any) => {
+        context.emit(PublisherEvents.UpdateProfile, {
+          ...props.profile,
+          [key]: event.target.value
+        })
+      }
 
       const blossomed = ref(props.defaultBlossomed)
       const handleBlossom = () => {
@@ -156,6 +168,7 @@
         t: i18n.t,
         firstUpperCase,
         markdownToHTML,
+        handleUpdateProfile,
         handleBlossom
       }
     }
