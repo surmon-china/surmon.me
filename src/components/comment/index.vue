@@ -13,17 +13,17 @@
     <divider class="divider" size="lg" />
     <comment-publisher-main :fetching="fetching">
       <comment-publisher
+        v-model:profile="guestProfile"
         :id="ANCHOR.COMMENT_PUBLISHER_ELEMENT_ID"
         :disabled="isLoading || isRootPosting"
         :total="commentStore.pagination?.total"
         :default-blossomed="plain ? true : false"
-        :profile="guestProfile"
         :hidden-avatar="plain"
       >
         <template #pen>
           <comment-pen
             v-model="rootPenState.content"
-            v-model:preview="rootPenState.preview"
+            v-model:previewed="rootPenState.previewed"
             :auto-focus="plain ? false : true"
             :hidden-stationery="plain"
             :disabled="isRootPosting || isLoading"
@@ -51,8 +51,8 @@
         >
           <template #reply="payload">
             <comment-publisher
+              v-model:profile="guestProfile"
               :disabled="false"
-              :profile="guestProfile"
               :bordered="true"
               :default-blossomed="true"
               :hidden-avatar="plain"
@@ -107,8 +107,8 @@
   import { scrollToElementAnchor } from '/@/utils/scroller'
   import { luanchEmojiRain } from './helper'
   import CommentTopbar from './topbar.vue'
-  import CommentMain from './main.vue'
-  import CommentList from './list/index.vue'
+  import CommentMain from './list/main.vue'
+  import CommentList from './list/list.vue'
   import CommentLoadmore from './loadmore.vue'
   import CommentPublisherMain from './publisher/main.vue'
   import CommentPublisher from './publisher/publisher.vue'
@@ -163,7 +163,7 @@
         replyPID: 0
       })
 
-      const guestProfile = reactive<Author>({
+      const guestProfile = ref<Author>({
         name: '',
         email: '',
         site: ''
@@ -171,14 +171,14 @@
 
       const rootPenState = reactive({
         content: '',
-        preview: false
+        previewed: false
       })
 
       const clearRootPenContent = () => {
         rootPenState.content = ''
       }
       const closeRootPenPreview = () => {
-        rootPenState.preview = false
+        rootPenState.previewed = false
       }
 
       const cancelCommentReply = () => {
@@ -239,23 +239,24 @@
 
         // temp user profile
         const isGuest = universalStore.user.type === UserType.Null
+        const guestProfileValue = guestProfile.value
         if (isGuest) {
-          if (!guestProfile.name) {
+          if (!guestProfileValue.name) {
             throw i18n.t(LANGUAGE_KEYS.COMMENT_POST_NAME) + '?'
           }
-          if (!guestProfile.email) {
+          if (!guestProfileValue.email) {
             throw i18n.t(LANGUAGE_KEYS.COMMENT_POST_EMAIL) + '?'
           }
-          if (!emailRegex.test(guestProfile.email)) {
+          if (!emailRegex.test(guestProfileValue.email)) {
             throw i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_EMAIL)
           }
-          if (guestProfile.site && !urlRegex.test(guestProfile.site)) {
+          if (guestProfileValue.site && !urlRegex.test(guestProfileValue.site)) {
             throw i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_URL)
           }
         }
 
         const author: Author = isGuest
-          ? toRaw(guestProfile)
+          ? toRaw(guestProfileValue)
           : universalStore.user.type === UserType.Local
           ? universalStore.user.localProfile!
           : {

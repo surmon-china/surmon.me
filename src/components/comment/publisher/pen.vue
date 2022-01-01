@@ -10,7 +10,7 @@
       <transition name="list-fade">
         <div
           class="markdown-preview markdown-html comment"
-          v-if="preview"
+          v-if="isPreviewed"
           v-html="previewContent"
         />
       </transition>
@@ -21,7 +21,7 @@
           <i class="iconfont icon-markdown" />
         </ulink>
         <template v-if="!hiddenStationery">
-          <button class="emoji" title="emoji" type="button" :disabled="disabled || preview">
+          <button class="emoji" title="emoji" type="button" :disabled="disabled || isPreviewed">
             <i class="iconfont icon-emoji" />
             <div class="emoji-box">
               <ul class="emoji-list">
@@ -40,7 +40,7 @@
           <button
             class="image"
             title="image"
-            :disabled="disabled || preview"
+            :disabled="disabled || isPreviewed"
             @click.prevent="insertImage"
           >
             <i class="iconfont icon-image" />
@@ -48,7 +48,7 @@
           <button
             class="link"
             title="link"
-            :disabled="disabled || preview"
+            :disabled="disabled || isPreviewed"
             @click.prevent="insertLink"
           >
             <i class="iconfont icon-link" />
@@ -56,7 +56,7 @@
           <button
             class="code"
             title="code"
-            :disabled="disabled || preview"
+            :disabled="disabled || isPreviewed"
             @click.prevent="insertCode"
           >
             <i class="iconfont icon-code" />
@@ -64,11 +64,11 @@
           <button
             class="preview"
             title="preview"
-            :class="{ actived: preview }"
+            :class="{ actived: isPreviewed }"
             :disabled="disabled"
             @click.prevent="handleTogglePreview"
           >
-            <i class="iconfont" :class="preview ? 'icon-eye-close' : 'icon-eye'" />
+            <i class="iconfont" :class="isPreviewed ? 'icon-eye-close' : 'icon-eye'" />
           </button>
         </template>
       </div>
@@ -102,7 +102,7 @@
 
   export enum PenEvents {
     Update = 'update:modelValue',
-    UpdatePreview = 'update:preview'
+    UpdatePreviewed = 'update:previewed'
   }
 
   export default defineComponent({
@@ -116,7 +116,7 @@
         type: Boolean,
         default: false
       },
-      preview: {
+      previewed: {
         type: Boolean,
         default: false
       },
@@ -137,21 +137,23 @@
         default: false
       }
     },
-    emits: [PenEvents.Update, PenEvents.UpdatePreview, CommentEvents.Submit],
+    emits: [PenEvents.Update, PenEvents.UpdatePreviewed, CommentEvents.Submit],
     setup(props, context) {
       const { i18n } = useEnhancer()
       const universalStore = useUniversalStore()
       const content = ref(props.modelValue || '')
-      const preview = ref(props.preview || false)
+      const isPreviewed = ref(props.previewed || false)
       const inputElement = ref<HTMLElement>()
       let inputElementObserver: MutationObserver | null = null
       const previewContent = computed(() => {
-        return props.preview ? markdownToHTML(content.value, { sanitize: true }) : null
+        return props.previewed ? markdownToHTML(content.value, { sanitize: true }) : null
       })
+
       const handleTogglePreview = () => {
-        preview.value = !preview.value
-        context.emit(PenEvents.UpdatePreview, preview.value)
+        isPreviewed.value = !isPreviewed.value
+        context.emit(PenEvents.UpdatePreviewed, isPreviewed.value)
       }
+
       const handleInputChange = () => {
         const text = inputElement.value?.innerText as string
         if (text !== content.value) {
@@ -159,10 +161,12 @@
           context.emit(PenEvents.Update, text)
         }
       }
+
       const handleSubmit = (event) => {
         event.preventDefault()
         context.emit(CommentEvents.Submit, content.value)
       }
+
       const insertContentToInput = (before: string, after = '') => {
         insertContent({
           element: inputElement.value,
@@ -170,6 +174,7 @@
         })
         handleInputChange()
       }
+
       const insertEmoji = (emoji: any) => {
         insertContentToInput(` ${emoji} `)
       }
@@ -182,6 +187,7 @@
       const insertCode = () => {
         insertContentToInput('\n```javascript\n', '\n```\n')
       }
+
       watch(
         () => props.modelValue,
         (value = '') => {
@@ -193,14 +199,16 @@
           }
         }
       )
+
       watch(
-        () => props.preview,
+        () => props.previewed,
         (_preview) => {
-          if (_preview !== preview.value) {
-            preview.value = _preview
+          if (_preview !== isPreviewed.value) {
+            isPreviewed.value = _preview
           }
         }
       )
+
       onMounted(() => {
         // auto focus
         if (props.autoFocus) {
@@ -210,6 +218,7 @@
             }
           })
         }
+
         // watch element
         inputElementObserver = new MutationObserver((mutations) => {
           handleInputChange()
@@ -221,6 +230,7 @@
           subtree: true
         })
       })
+
       onBeforeUnmount(() => {
         inputElementObserver?.disconnect()
       })
@@ -233,7 +243,7 @@
         LANGUAGE_KEYS,
         inputElement,
         previewContent,
-        preview,
+        isPreviewed,
         insertEmoji,
         insertImage,
         insertLink,
