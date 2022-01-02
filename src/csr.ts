@@ -23,7 +23,7 @@ import { createMusic } from '/@/services/music'
 import { createPopup } from '/@/services/popup'
 import { createLoading } from '/@/services/loading'
 import { consoleSlogan } from '/@/services/slogan'
-import { enableCopyrighter } from '/@/services/copyright'
+import { initCopyrighter } from '/@/services/copyright'
 import { enableBaiduSEOer } from '/@/services/baidu-seo-push'
 import { runTitler, resetTitler } from '/@/services/titler'
 import { exportEmojiRainToGlobal } from '/@/services/emoji-23333'
@@ -76,6 +76,7 @@ exportLozadToGlobal()
 exportEmojiRainToGlobal()
 exportStickyEventsToGlobal()
 exportAppToGlobal(app)
+initCopyrighter()
 
 // init: router loading middleware client only
 router.beforeEach((_, __, next) => {
@@ -126,7 +127,6 @@ router.isReady().finally(() => {
 
     // production only
     if (isProd) {
-      enableCopyrighter()
       enableBaiduSEOer(router)
       consoleSlogan(i18n, store.stores.meta.appOptions.data?.site_email)
     }

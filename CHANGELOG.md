@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.3.6 (2022-01-02)
+
+**Feature**
+
+- Improve copyrighter when focus comment publisher
+
+**Fix**
+
+- Fix comment reply preview
+
 ### v3.3.4 (2022-01-01)
 
 **Feature**
