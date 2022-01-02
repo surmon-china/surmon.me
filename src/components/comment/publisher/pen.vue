@@ -6,6 +6,8 @@
         class="markdown-input"
         :contenteditable="!disabled"
         :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_PLACEHOLDER)"
+        @focus="disableCopyrighter"
+        @blur="enableCopyrighter"
       />
       <transition name="list-fade">
         <div
@@ -91,12 +93,13 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalStore, UserType } from '/@/store/universal'
+  import { useEnhancer } from '/@/app/enhancer'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import { enableCopyrighter, disableCopyrighter } from '/@/services/copyright'
+  import { focusPosition } from '/@/utils/editable'
   import { insertContent } from '/@/utils/editable'
   import { markdownToHTML } from '/@/transforms/markdown'
-  import { focusPosition } from '/@/utils/editable'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { CommentEvents, EMOJIS } from '../helper'
 
@@ -146,7 +149,7 @@
       const inputElement = ref<HTMLElement>()
       let inputElementObserver: MutationObserver | null = null
       const previewContent = computed(() => {
-        return props.previewed ? markdownToHTML(content.value, { sanitize: true }) : null
+        return isPreviewed.value ? markdownToHTML(content.value, { sanitize: true }) : null
       })
 
       const handleTogglePreview = () => {
@@ -218,11 +221,8 @@
             }
           })
         }
-
         // watch element
-        inputElementObserver = new MutationObserver((mutations) => {
-          handleInputChange()
-        })
+        inputElementObserver = new MutationObserver(() => handleInputChange())
         inputElementObserver.observe(inputElement.value!, {
           attributes: true,
           characterData: true,
@@ -230,10 +230,10 @@
           subtree: true
         })
       })
-
       onBeforeUnmount(() => {
         inputElementObserver?.disconnect()
       })
+
       return {
         t: i18n.t,
         user: universalStore.user,
@@ -250,7 +250,9 @@
         insertCode,
         handleInputChange,
         handleTogglePreview,
-        handleSubmit
+        handleSubmit,
+        enableCopyrighter,
+        disableCopyrighter
       }
     }
   })

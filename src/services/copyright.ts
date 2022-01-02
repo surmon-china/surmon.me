@@ -6,7 +6,23 @@
 
 import { META } from '/@/config/app.config'
 
+declare global {
+  interface Window {
+    __isEnabledCopyrighter: boolean
+  }
+}
+
 export const enableCopyrighter = () => {
+  window.__isEnabledCopyrighter = true
+}
+
+export const disableCopyrighter = () => {
+  window.__isEnabledCopyrighter = false
+}
+
+export const initCopyrighter = () => {
+  enableCopyrighter()
+
   const copyText = () => {
     return [
       '',
@@ -24,7 +40,7 @@ export const enableCopyrighter = () => {
 
   document.addEventListener('copy', (event) => {
     if (!window.getSelection) return
-    if (!window.$isCopyFromApp) {
+    if (window.__isEnabledCopyrighter) {
       const content = window.getSelection()?.toString()
       event.clipboardData?.setData('text/plain', buildText(content))
       event.clipboardData?.setData('text/html', buildHtml(content))

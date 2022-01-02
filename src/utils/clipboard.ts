@@ -4,19 +4,15 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-declare global {
-  interface Window {
-    $isCopyFromApp: boolean
-  }
-}
+import { enableCopyrighter, disableCopyrighter } from '/@/services/copyright'
 
 export const read = () => navigator.clipboard.readText()
 export const copy = (text: string) => {
-  window.$isCopyFromApp = true
+  disableCopyrighter()
   // https://www.w3.org/TR/clipboard-apis/#async-clipboard-api
   // MARK: only https site
-  window.navigator.clipboard?.writeText(text).finally(() => {
-    window.$isCopyFromApp = false
+  return window.navigator.clipboard?.writeText(text).finally(() => {
+    enableCopyrighter()
   })
 }
 
