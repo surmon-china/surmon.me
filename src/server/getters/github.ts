@@ -7,7 +7,7 @@
 import axios from 'axios'
 import { GITHUB_UID, META } from '@/config/app.config'
 
-export interface IGithubRepository {
+export interface GitHubRepository {
   html_url: string
   name: string
   fork: boolean
@@ -20,7 +20,7 @@ export interface IGithubRepository {
   language: string
 }
 
-export const getGitHubRepositories = async (): Promise<Array<IGithubRepository>> => {
+export const getGitHubRepositories = async (): Promise<Array<GitHubRepository>> => {
   const response = await axios.request<any>({
     headers: { 'User-Agent': META.title },
     url: `http://api.github.com/users/${GITHUB_UID}/repos?per_page=168`
@@ -38,6 +38,6 @@ export const getGitHubRepositories = async (): Promise<Array<IGithubRepository>>
         stargazers_count: rep.stargazers_count,
         created_at: rep.created_at,
         language: rep.language
-      } as IGithubRepository)
+      } as GitHubRepository)
   )
 }
