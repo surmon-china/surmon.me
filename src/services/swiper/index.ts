@@ -8,6 +8,7 @@ import {
   Swiper as SwiperClass,
   Pagination,
   Navigation,
+  Lazy,
   Mousewheel,
   Autoplay,
   A11y,
@@ -15,6 +16,6 @@ import {
 } from 'swiper'
 export { Swiper, SwiperSlide } from 'swiper/vue'
 
-SwiperClass.use([Pagination, Navigation, Mousewheel, Autoplay, A11y, EffectFade])
+SwiperClass.use([Pagination, Navigation, Mousewheel, Autoplay, A11y, Lazy, EffectFade])
 
 export default SwiperClass

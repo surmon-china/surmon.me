@@ -33,7 +33,7 @@
           <i class="iconfont icon-clock"></i>
           <span>{{ humanlizeDate(video.created) }}</span>
         </span>
-        <span class="item">
+        <span class="item" v-if="false">
           <i class="iconfont icon-list"></i>
           <span>{{ video.aid }}</span>
         </span>
@@ -120,7 +120,7 @@
     margin-bottom: $gap * 2;
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     grid-gap: $gap * 2;
 
     > .item {
@@ -150,7 +150,7 @@
 
       .thumb {
         width: 100%;
-        height: 16rem;
+        height: 11rem;
         position: relative;
         overflow: hidden;
         background-color: $module-bg-darker-3;
@@ -211,12 +211,13 @@
 
       .title {
         padding: 0 $gap;
-        margin: $gap 0;
+        margin: $sm-gap 0;
         font-weight: bold;
         text-transform: capitalize;
         @include text-overflow();
 
         .text {
+          max-width: 80%;
           border-bottom: 1px solid transparent;
         }
       }
@@ -236,7 +237,7 @@
 
         .item {
           font-weight: 400;
-          color: $text-secondary;
+          color: $text-disabled;
 
           .iconfont {
             margin-right: $sm-gap;

@@ -14,7 +14,7 @@
           </span>
           <span class="caption" v-if="media.caption">{{ media.caption }}</span>
         </div>
-        <div class="background lozad" :data-background-image="getInstagramImage(media, 'l')" />
+        <div class="background lozad" :data-background-image="getInstagramImage(media, 'm')" />
       </li>
     </ul>
     <client-only>
@@ -27,6 +27,8 @@
             :mousewheel="true"
             :observe-parents="true"
             :grab-cursor="false"
+            :preload-images="false"
+            :lazy="true"
             :simulate-touch="false"
             :pagination="{ type: 'fraction' }"
             @swiper="handleSwiperReady"
@@ -55,11 +57,12 @@
                   </div>
                 </div>
                 <div
-                  class="image"
+                  class="image swiper-lazy"
+                  :data-background="getInstagramImage(media)"
                   :alt="media.caption"
-                  :style="{ backgroundImage: `url(${getInstagramImage(media)})` }"
                 />
               </div>
+              <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
             </swiper-slide>
           </swiper>
           <button class="navigation prev" :disabled="galleryActiveIndex === 0" @click="prevSlide">
@@ -106,7 +109,7 @@
       const lozadObserver = ref<LozadObserver | null>(null)
       const listElement = ref<HTMLElement>()
       const plogList = computed(() => {
-        return props.plogs.filter((plog) => plog.media_type !== 'VIDEO').slice(0, 15)
+        return props.plogs.filter((plog) => plog.media_type !== 'VIDEO').slice(0, 16)
       })
       const humanlizeDate = (date: string) => {
         return humanizeYMD(date, i18n.language.value as any)
@@ -181,13 +184,13 @@
     margin-bottom: $gap * 2;
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     grid-gap: $gap * 2;
 
     > .item {
       display: block;
       cursor: pointer;
-      height: 334px;
+      height: 243px;
       position: relative;
       overflow: hidden;
       background-color: $module-bg-darker-3;
@@ -287,7 +290,7 @@
         justify-content: space-between;
         align-items: center;
         font-size: $font-size-h4;
-        background-color: $module-bg;
+        background-color: rgba($black, 0.4);
         color: $white;
 
         .timestamp,
