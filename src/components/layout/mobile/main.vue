@@ -29,7 +29,7 @@
   import { defineComponent, ref, computed, watch } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { onClient } from '/@/universal'
-  import { getPageUrl } from '/@/transforms/url'
+  import { getPageURL } from '/@/transforms/url'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
   import AsideView from './aside.vue'
@@ -43,7 +43,7 @@
     },
     setup() {
       const { route } = useEnhancer()
-      const pageURL = computed(() => getPageUrl(route.fullPath))
+      const pageURL = computed(() => getPageURL(route.fullPath))
 
       const isOpenedAside = ref(false)
       const openAside = () => (isOpenedAside.value = true)

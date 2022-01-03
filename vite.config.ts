@@ -54,26 +54,6 @@ export default defineConfig(({ command, mode }) => {
           target: BASE_ENV_CONFIG.VITE_API_ONLINE_URL,
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, '')
-        },
-        [DEV_ENV_CONFIG.VITE_GRAVATAR_URL]: {
-          target: PROD_ENV_CONFIG.VITE_GRAVATAR_URL,
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/avatar/, '')
-        },
-        [DEV_ENV_CONFIG.VITE_PROXY_URL]: {
-          target: PROD_ENV_CONFIG.VITE_PROXY_URL,
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/proxy/, ''),
-          events: {
-            proxyReq(request) {
-              request.setHeader(
-                'User-Agent',
-                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3223.8 Safari/'
-              )
-              request.setHeader('Origin', 'https://surmon.me/')
-              request.setHeader('Referer', 'https://surmon.me/')
-            }
-          }
         }
       }
     },

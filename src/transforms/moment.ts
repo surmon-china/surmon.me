@@ -8,11 +8,11 @@ import { Language } from '/@/language/data'
 
 export const TEXT_MAP = {
   AM: {
-    [Language.En]: 'am',
+    [Language.En]: 'AM',
     [Language.Zh]: '上午'
   },
   PM: {
-    [Language.En]: 'pm',
+    [Language.En]: 'PM',
     [Language.Zh]: '下午'
   },
   AGO: {
@@ -156,8 +156,8 @@ export const humanizeYMD = (date: string, language: Language) => {
   }
   const newDate = new Date(date)
   const year = newDate.getFullYear()
-  const month = newDate.getMonth() + 1
-  const day = newDate.getDate()
+  const month = String(newDate.getMonth() + 1).padStart(2, '0')
+  const day = String(newDate.getDate()).padStart(2, '0')
   const hour =
     newDate.getHours() > 11
       ? textHumanizer(language)(TEXT_MAP.PM)

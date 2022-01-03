@@ -4,9 +4,17 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { Swiper as SwiperClass, Pagination, Navigation, Mousewheel, Autoplay, A11y } from 'swiper'
+import {
+  Swiper as SwiperClass,
+  Pagination,
+  Navigation,
+  Mousewheel,
+  Autoplay,
+  A11y,
+  EffectFade
+} from 'swiper'
 export { Swiper, SwiperSlide } from 'swiper/vue'
 
-SwiperClass.use([Pagination, Navigation, Mousewheel, Autoplay, A11y])
+SwiperClass.use([Pagination, Navigation, Mousewheel, Autoplay, A11y, EffectFade])
 
 export default SwiperClass

@@ -17,7 +17,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { getFileCDNUrl } from '/@/transforms/url'
+  import { getTargetCDNURL } from '/@/transforms/url'
   import { useEnhancer } from '/@/app/enhancer'
 
   export default defineComponent({
@@ -44,7 +44,7 @@
       const { isDarkTheme } = useEnhancer()
       return {
         isDarkTheme,
-        imageURL: getFileCDNUrl(props.image)
+        imageURL: getTargetCDNURL(props.image)
       }
     }
   })

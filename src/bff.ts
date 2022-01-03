@@ -7,7 +7,7 @@
 import express from 'express'
 import { NODE_ENV, isDev } from '@/environment'
 import { TunnelModule } from '@/constants/tunnel'
-import { API_TUNNEL_PREFIX, getBFFServerPort } from '@/config/bff.config'
+import { BFF_TUNNEL_PREFIX, getBFFServerPort } from '@/config/bff.config'
 import { getRSSXML } from './server/getters/rss'
 import { getSitemapXML } from './server/getters/sitemap'
 import { getGTagScript } from './server/getters/gtag'
@@ -16,7 +16,6 @@ import { getBiliBiliVideos } from './server/getters/bilibili'
 import { getAllWallpapers } from './server/getters/wallpaper'
 import { getGitHubRepositories } from './server/getters/github'
 import { getInstagramMedias } from './server/getters/instagram'
-import { setInstagramMedias } from './server/setters/instagram'
 import { getSongList } from './server/getters/music'
 import { enableDevRuntime } from './server/runtime/dev'
 import { enableProdRuntime } from './server/runtime/prod'
@@ -98,7 +97,7 @@ app.get('/ghchart.svg', async (_, response) => {
 
 // tunnel services
 app.get(
-  `${API_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`,
+  `${BFF_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`,
   responser(() =>
     cacher({
       key: 'bilibili',
@@ -110,7 +109,7 @@ app.get(
 )
 
 app.get(
-  `${API_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`,
+  `${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`,
   responser(() =>
     cacher({
       key: 'wallpaper',
@@ -122,7 +121,7 @@ app.get(
 )
 
 app.get(
-  `${API_TUNNEL_PREFIX}/${TunnelModule.GitHub}`,
+  `${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHub}`,
   responser(() =>
     cacher({
       key: 'github',
@@ -134,7 +133,7 @@ app.get(
 )
 
 app.get(
-  `${API_TUNNEL_PREFIX}/${TunnelModule.Music}`,
+  `${BFF_TUNNEL_PREFIX}/${TunnelModule.Music}`,
   responser(() =>
     cacher({
       key: 'music',
@@ -145,16 +144,12 @@ app.get(
   )
 )
 
-app.post(`${API_TUNNEL_PREFIX}/${TunnelModule.Instagram}`, (request, response) => {
-  setInstagramMedias(request.body)
-  response.send('ok')
-})
 app.get(
-  `${API_TUNNEL_PREFIX}/${TunnelModule.Instagram}`,
+  `${BFF_TUNNEL_PREFIX}/${TunnelModule.Instagram}`,
   responser(() =>
     cacher({
       key: 'instagram',
-      age: 60 * 60 * 1, // 1 hours
+      age: 60 * 60 * 1, // 6 hours
       retryWhen: 60 * 10, // 10 minutes
       getter: getInstagramMedias
     })

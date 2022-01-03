@@ -5,24 +5,25 @@
  */
 
 import API_CONFIG from '/@/config/api.config'
+import { ProxyModule } from '/@/constants/proxy'
 import { getArticleDetailRoute } from '/@/transforms/route'
 
-export const getFileCDNUrl = (uri: string) => {
+export const getTargetCDNURL = (uri: string) => {
   return `${API_CONFIG.CDN}${uri}`
 }
 
-export const getFileProxyUrl = (uri: string) => {
-  return `${API_CONFIG.PROXY}${uri}`
+export const getTargetProxyURL = (uri: string, module: ProxyModule = ProxyModule.Default) => {
+  return `${API_CONFIG.PROXY}/${module}/${encodeURIComponent(uri)}`
 }
 
-export const getFileStaticUrl = (uri: string) => {
+export const getTargetStaticURL = (uri: string) => {
   return `${API_CONFIG.STATIC}${uri}`
 }
 
-export const getPageUrl = (uri: string) => {
+export const getPageURL = (uri: string) => {
   return `${API_CONFIG.FE}${uri}`
 }
 
-export const getArticleDetailUrl = (IDOrSlug: string | number) => {
-  return getPageUrl(getArticleDetailRoute(IDOrSlug))
+export const getArticleDetailURL = (IDOrSlug: string | number) => {
+  return getPageURL(getArticleDetailRoute(IDOrSlug))
 }

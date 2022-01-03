@@ -6,7 +6,7 @@
 
 import { defineComponent, ref, h } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
-import { getFileCDNUrl, getFileProxyUrl } from '/@/transforms/url'
+import { getTargetCDNURL, getTargetProxyURL } from '/@/transforms/url'
 import { onClient } from '/@/universal'
 
 export default defineComponent({
@@ -36,10 +36,10 @@ export default defineComponent({
 
       let imageSrc = src
       if (cdn) {
-        imageSrc = getFileCDNUrl(src)
+        imageSrc = getTargetCDNURL(src)
       }
       if (proxy) {
-        imageSrc = getFileProxyUrl(src)
+        imageSrc = getTargetProxyURL(src)
       }
       if (defer && !deferRenderable.value) {
         return null

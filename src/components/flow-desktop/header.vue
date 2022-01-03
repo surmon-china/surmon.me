@@ -27,7 +27,7 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { getFileCDNUrl } from '/@/transforms/url'
+  import { getTargetCDNURL } from '/@/transforms/url'
 
   export default defineComponent({
     name: 'FlowArticleListHeader',
@@ -47,7 +47,7 @@
     },
     setup(props) {
       const backgroundImageUrl = computed(() => {
-        return props.backgroundImage || getFileCDNUrl('/images/page-feeelancer/banner.jpg')
+        return props.backgroundImage || getTargetCDNURL('/images/page-feeelancer/banner.jpg')
       })
 
       return {

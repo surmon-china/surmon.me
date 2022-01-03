@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "3.3.6",
+  "version": "3.4.0",
   "description": "Surmon.me blog",
   "author": {
     "name": "Surmon",
@@ -41,6 +41,7 @@
     "escape-html": "^1.0.3",
     "express": "^4.17.2",
     "highlight.js": "^11.3.1",
+    "http-proxy": "^1.18.1",
     "intersection-observer": "^0.12.0",
     "js-cookie": "^3.0.1",
     "lodash": "^4.17.21",
@@ -61,13 +62,15 @@
     "ua-parser-js": "^1.0.2",
     "vue": "^3.2.26",
     "vue-router": "^4.0.10",
-    "wonderful-bing-wallpaper": "^0.3.4"
+    "wonderful-bing-wallpaper": "^0.3.4",
+    "yargs": "^17.3.1"
   },
   "devDependencies": {
     "@surmon-china/libundler": "^1.1.1",
     "@types/compression": "^1.7.2",
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.13",
+    "@types/http-proxy": "^1.17.8",
     "@types/lozad": "^1.16.1",
     "@types/marked": "^4.0.1",
     "@types/node-schedule": "^1.3.2",

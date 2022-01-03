@@ -97,7 +97,7 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { copy } from '/@/utils/clipboard'
   import { humanizeYMD, dateToYMD } from '/@/transforms/moment'
-  import { getPageUrl } from '/@/transforms/url'
+  import { getPageURL } from '/@/transforms/url'
   import {
     getArticleDetailRoute,
     getTagFlowRoute,
@@ -119,7 +119,7 @@
     },
     setup(props) {
       const { i18n } = useEnhancer()
-      const articleURL = computed(() => getPageUrl(getArticleDetailRoute(props.article.id)))
+      const articleURL = computed(() => getPageURL(getArticleDetailRoute(props.article.id)))
 
       const getDateTitle = (date: string) => {
         return humanizeYMD(date, i18n.language.value as Language)

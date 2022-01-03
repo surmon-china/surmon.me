@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.4.0 (2022-01-03)
+
+**Feature**
+
+- Add BFF proxy server
+- Add Plogs on Lens page
+
 ### v3.3.6 (2022-01-02)
 
 **Feature**

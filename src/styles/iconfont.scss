@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
-  src: url('//at.alicdn.com/t/font_64825_oej52c0rf4c.woff2?t=1640956950115') format('woff2'),
-    url('//at.alicdn.com/t/font_64825_oej52c0rf4c.woff?t=1640956950115') format('woff'),
-    url('//at.alicdn.com/t/font_64825_oej52c0rf4c.ttf?t=1640956950115') format('truetype');
+  src: url('//at.alicdn.com/t/font_64825_j4bqtb7etvs.woff2?t=1641144113411') format('woff2'),
+    url('//at.alicdn.com/t/font_64825_j4bqtb7etvs.woff?t=1641144113411') format('woff'),
+    url('//at.alicdn.com/t/font_64825_j4bqtb7etvs.ttf?t=1641144113411') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-video-play:before {
+  content: '\e61b';
+}
+
+.icon-camera:before {
+  content: '\e615';
+}
+
+.icon-magnifier:before {
+  content: '\e665';
 }
 
 .icon-delete:before {
@@ -467,10 +479,6 @@
 
 .icon-vlog:before {
   content: '\e660';
-}
-
-.icon-video-play:before {
-  content: '\e657';
 }
 
 .icon-peachblossom:before {
