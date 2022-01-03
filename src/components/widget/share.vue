@@ -22,7 +22,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { GAEventCategories } from '/@/constants/gtag'
   import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
-  import { getPageUrl } from '/@/transforms/url'
+  import { getPageURL } from '/@/transforms/url'
   import { openWindow } from '/@/utils/opener'
   import { copy } from '/@/utils/clipboard'
   import { META } from '/@/config/app.config'
@@ -166,7 +166,7 @@
           : socials
       })
 
-      const getURL = () => getPageUrl(route.fullPath)
+      const getURL = () => getPageURL(route.fullPath)
       const getTitle = () => document.title || META.title
       const getDescription = () =>
         document.getElementsByName('description')?.[0]?.getAttribute('content') || META.sub_title

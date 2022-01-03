@@ -12,7 +12,7 @@ import { createWebHistory } from 'vue-router'
 import { GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
 import { isSSR } from '/@/app/environment'
 import { Language } from '/@/language/data'
-import { getFileCDNUrl } from '/@/transforms/url'
+import { getTargetCDNURL } from '/@/transforms/url'
 import amplitude from '/@/services/amplitude'
 import gtag from '/@/services/gtag'
 import adsense from '/@/services/adsense'
@@ -64,7 +64,7 @@ app.use(gtag, {
   router,
   id: GA_MEASUREMENT_ID,
   config: { send_page_view: false },
-  customResourceURL: getFileCDNUrl('/gtag.js')
+  customResourceURL: getTargetCDNURL('/gtag.js')
 })
 
 // init: store (from SSR context or fetch)

@@ -27,7 +27,6 @@ export default {
   FE: import.meta.env.VITE_FE_URL as string,
   CDN: import.meta.env.VITE_CDN_URL as string,
   PROXY: import.meta.env.VITE_PROXY_URL as string,
-  GRAVATAR: import.meta.env.VITE_GRAVATAR_URL as string,
   STATIC: import.meta.env.VITE_STATIC_URL as string,
   NODEPRESS: isDev ? DEV_API : PROD_API
 }

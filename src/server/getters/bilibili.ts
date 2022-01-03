@@ -7,7 +7,7 @@
 import axios from 'axios'
 import { BILIBILI_UID, META } from '@/config/app.config'
 
-const PAGE_SIZE = 45
+const PAGE_SIZE = 36
 const PAGE = 1
 
 export const getBiliBiliVideos = async (): Promise<Array<any>> => {

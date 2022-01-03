@@ -4,11 +4,11 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { getFileCDNUrl } from '/@/transforms/url'
+import { getTargetCDNURL } from '/@/transforms/url'
 
 export const getArticleBannerThumbnailURL = (thumb: string, isWebPImage: boolean) => {
   if (!thumb) {
-    return getFileCDNUrl(`/images/thumbnail/pc-carrousel.jpg`)
+    return getTargetCDNURL(`/images/thumbnail/pc-carrousel.jpg`)
   }
 
   return `${thumb}?x-oss-process=${
@@ -20,7 +20,7 @@ export const getArticleBannerThumbnailURL = (thumb: string, isWebPImage: boolean
 
 export const getMobileArticleListThumbnailURL = (thumb: string, isWebPImage: boolean) => {
   if (!thumb) {
-    return getFileCDNUrl(`/images/thumbnail/pc-carrousel.jpg`)
+    return getTargetCDNURL(`/images/thumbnail/pc-carrousel.jpg`)
   }
 
   return `${thumb}?x-oss-process=${
@@ -32,7 +32,7 @@ export const getMobileArticleListThumbnailURL = (thumb: string, isWebPImage: boo
 
 export const getArticleListThumbnailURL = (thumb: string, isWebPImage: boolean) => {
   if (!thumb) {
-    return getFileCDNUrl('/images/thumbnail/pc-article-list.jpg')
+    return getTargetCDNURL('/images/thumbnail/pc-article-list.jpg')
   }
 
   return `${thumb}?x-oss-process=${

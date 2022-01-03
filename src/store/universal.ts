@@ -58,9 +58,7 @@ export const useUniversalStore = defineStore('universal', {
       }
     },
     initOnClient() {
-      // init disqus config
-      this.fetchDisqusConfig()
-      // bind client storage
+      // 1. bind client storage
       this.fromStorage()
       this.$subscribe(() => setJSON(UNIVERSAL_STORGAE_KEY, this.$state))
       window.addEventListener('storage', (event) => {
@@ -68,7 +66,7 @@ export const useUniversalStore = defineStore('universal', {
           this.fromStorage()
         }
       })
-      // init and reset user info
+      // 2. init and reset user info
       if (this.$state.user.type === UserType.Disqus) {
         this.fetchDisqusUserInfo().catch(() => {
           this.user.disqusProfile = null
@@ -77,6 +75,8 @@ export const useUniversalStore = defineStore('universal', {
       } else {
         this.user.disqusProfile = null
       }
+      // 3. refetch disqus config
+      this.fetchDisqusConfig()
     },
     saveLocalUser(user: UserLocalProfile) {
       this.user.localProfile = { ...user }

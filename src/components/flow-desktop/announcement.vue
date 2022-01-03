@@ -34,7 +34,7 @@
               :set-wrapper-size="true"
               :autoplay="{ delay: 3500, disableOnInteraction: false }"
               @transition-start="handleSwiperTransitionStart"
-              @swiper="onSwiper"
+              @swiper="handleSwiperReady"
             >
               <swiper-slide v-for="(ann, index) in announcements" :key="index">
                 <div class="content" v-html="parseContent(ann.content)" />
@@ -88,7 +88,7 @@
       const { i18n, isDarkTheme } = useEnhancer()
       const activeIndex = ref(0)
       const swiper = ref<SwiperClass>()
-      const onSwiper = (_swiper: SwiperClass) => {
+      const handleSwiperReady = (_swiper: SwiperClass) => {
         swiper.value = _swiper
       }
 
@@ -114,7 +114,7 @@
         parseContent,
         prevSlide,
         nextSlide,
-        onSwiper,
+        handleSwiperReady,
         handleSwiperTransitionStart
       }
     }

@@ -190,7 +190,7 @@
   import { useMetaStore } from '/@/store/meta'
   import { useUniversalFetch } from '/@/universal'
   import { getPageRoute } from '/@/transforms/route'
-  import { getFileStaticUrl } from '/@/transforms/url'
+  import { getTargetStaticURL } from '/@/transforms/url'
   import { GAEventCategories } from '/@/constants/gtag'
   import { VALUABLE_LINKS, FRIEND_LINKS } from '/@/config/app.config'
   import { useAboutPageMeta, getAdminAvatar, i18ns } from './helper'
@@ -203,7 +203,7 @@
       const isOnLiveMap = toRef(globalState.switchBox, 'liveMap')
       const adminInfo = computed(() => metaStore.adminInfo.data)
       // MARK: 非常有必要，vite 对 video.source.src 的解析有问题，会将其认为是 asset，而非 static resource，从而编译失败
-      const backgroundVideo = getFileStaticUrl('/assets/page-about-background.mp4')
+      const backgroundVideo = getTargetStaticURL('/assets/page-about-background.mp4')
 
       // meta
       useAboutPageMeta()

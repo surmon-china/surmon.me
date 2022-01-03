@@ -4,25 +4,29 @@
  */
 
 import { isDev } from '/@/environment'
-import { getFileCDNUrl } from '/@/transforms/url'
+import { isSPA } from '/@/app/environment'
+import { ProxyModule } from '/@/constants/proxy'
+import { getTargetCDNURL, getTargetProxyURL } from '/@/transforms/url'
 import API_CONFIG from '/@/config/api.config'
 
 export const getDefaultAvatar = () => {
-  return getFileCDNUrl('/images/gravatar.png')
+  return getTargetCDNURL('/images/gravatar.png')
 }
 
 export const getGravatarByHash = (hash?: string | null) => {
   if (!hash) {
     return getDefaultAvatar()
   }
-  // https://en.gravatar.com/site/implement/images/
+
   if (isDev) {
     return `https://www.gravatar.com/avatar/${hash}`
   }
-  return `${API_CONFIG.GRAVATAR}/${hash}`
+
+  return `${API_CONFIG.STATIC}/avatar/${hash}`
 }
 
 export const getDisqusAvatarByUsername = (username: string) => {
   // https://disqus.com/api/docs/images/
-  return `https://disqus.com/api/users/avatars/${username}.jpg`
+  const target = `https://disqus.com/api/users/avatars/${username}.jpg`
+  return isSPA ? target : getTargetProxyURL(target, ProxyModule.Disqus)
 }

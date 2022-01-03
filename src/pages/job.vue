@@ -14,7 +14,7 @@
           <div
             class="logo"
             :style="{
-              backgroundImage: `url('${getFileCDNUrl(job.logo)}')`
+              backgroundImage: `url('${getTargetCDNURL(job.logo)}')`
             }"
           >
             <uimage cdn class="qrcode" :src="job.qrcode" v-if="job.qrcode" />
@@ -41,7 +41,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useMetaStore } from '/@/store/meta'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { getFileCDNUrl } from '/@/transforms/url'
+  import { getTargetCDNURL } from '/@/transforms/url'
   import { firstUpperCase } from '/@/transforms/text'
   import { emailLink } from '/@/transforms/email'
   import { LANGUAGE_KEYS } from '/@/language/key'
@@ -137,7 +137,7 @@
       return {
         jobs,
         handleSubmit,
-        getFileCDNUrl
+        getTargetCDNURL
       }
     }
   })

@@ -37,7 +37,7 @@ import AppPage from '/@/pages/app.vue'
 
 // service pages
 import MusicPage from '/@/pages/music.vue'
-import LensPage from '/@/pages/lens.vue'
+import LensPage from '/@/pages/lens/index.vue'
 import JobPage from '/@/pages/job.vue'
 import MerchPage from '/@/pages/merch/index.vue'
 import FreelancerPage from '/@/pages/freelancer.vue'
@@ -329,7 +329,7 @@ export const routes: RouteRecordRaw[] = [
     meta: {
       responsive: false,
       layout: LayoutColumn.Full,
-      ssrCacheAge: 60 * 60 * 24 // 24 hours
+      ssrCacheAge: 60 * 60 * 4 // 4 hours
     }
   },
   {
