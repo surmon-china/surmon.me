@@ -147,7 +147,7 @@
   })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import 'src/styles/init.scss';
 
   .article-page {
