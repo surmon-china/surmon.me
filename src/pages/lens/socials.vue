@@ -41,7 +41,7 @@
           name: 'WeChat Channel',
           qrcode: `/images/page-lens/wechat-channel.png`,
           icon: 'icon-wechat-channel',
-          text: `Follow my WeChat Channel`
+          text: `Follow me on WeChat Channel`
         },
         {
           class: 'bilibili',
@@ -95,7 +95,7 @@
       padding: $xs-gap 0;
       color: $white;
       background-image: linear-gradient($module-bg-opaque 40%, #00000000 100%);
-      @include radius-box($sm-radius);
+      @include radius-box($lg-radius);
 
       .title {
         width: 100%;

@@ -1,6 +1,6 @@
 <template>
   <div class="job-page">
-    <page-banner image="/images/page-job/banner-2.jpg">
+    <page-banner :blur="false" image="/images/page-job/banner-2.jpg">
       <template #title>
         <i18n zh="内推找我，绝对靠谱" en="We work together" />
       </template>
