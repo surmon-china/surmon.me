@@ -1,6 +1,11 @@
 <template>
   <div class="merch-page" :class="{ mobile: isMobile }">
-    <page-banner :position="70" :is-mobile="isMobile" image="/images/page-merch/banner.jpg">
+    <page-banner
+      :blur="false"
+      :position="70"
+      :is-mobile="isMobile"
+      image="/images/page-merch/banner.jpg"
+    >
       <template #title>
         <i18n zh="亲身体验，真实不虚" en="Merch Bar" />
       </template>

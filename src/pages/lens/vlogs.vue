@@ -2,7 +2,7 @@
   <ul class="videos" ref="videoListElement">
     <li
       class="item"
-      @click="handlePlay(video)"
+      @click="handleLink(video)"
       :title="video.title"
       :key="index"
       v-for="(video, index) in vlogs"
@@ -75,8 +75,8 @@
         )
       }
 
-      const handlePlay = (video: any) => {
-        gtag?.event('bilibili_video_play', {
+      const handleLink = (video: any) => {
+        gtag?.event('bilibili_view', {
           event_category: GAEventCategories.Lens
         })
         window.open(`https://www.bilibili.com/video/av${video.aid}`)
@@ -105,7 +105,7 @@
         videoListElement,
         humanlizeDate,
         getThumbURL,
-        handlePlay
+        handleLink
       }
     }
   })
@@ -143,8 +143,7 @@
         }
 
         .title .text {
-          text-decoration: none;
-          border-color: initial;
+          color: $link-color;
         }
       }
 
@@ -194,14 +193,9 @@
           @include visibility-transition();
 
           .button {
-            width: 5rem;
-            height: 5rem;
-            border-radius: 100%;
             opacity: 0.88;
             font-size: 3em;
-            line-height: 5rem;
             text-align: center;
-            background: rgba($white, 0.4);
             color: rgba($white, 0.8);
             transform: scale(1.2);
             @include transform-transition($transition-time-normal);
@@ -217,8 +211,8 @@
         @include text-overflow();
 
         .text {
+          color: $text-secondary;
           max-width: 80%;
-          border-bottom: 1px solid transparent;
         }
       }
 

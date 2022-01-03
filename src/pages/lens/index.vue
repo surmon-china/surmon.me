@@ -1,6 +1,6 @@
 <template>
   <div class="lens-page" :class="{ dark: isDarkTheme }">
-    <page-banner :position="38" :image="bannerImageURL">
+    <page-banner :blur="false" :position="36" :image="bannerImageURL">
       <template #title>
         <i18n zh="凡心所向，素履以往" en="Because it's there" />
       </template>
@@ -13,7 +13,7 @@
     </page-banner>
     <div class="container">
       <socials class="header" />
-      <div class="module-title plog">Plogs</div>
+      <div class="module-title plog">Instagram · Plogs</div>
       <placeholder :data="lensStore.plogs.data" :loading="lensStore.plogs.fetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">
@@ -27,7 +27,7 @@
           <plogs :plogs="lensStore.plogs.data" />
         </template>
       </placeholder>
-      <div class="module-title vlog">Vlogs</div>
+      <div class="module-title vlog">BiliBili · Vlogs</div>
       <placeholder :data="lensStore.vlogs.data" :loading="lensStore.vlogs.fetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">

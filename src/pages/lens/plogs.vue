@@ -109,7 +109,7 @@
       const lozadObserver = ref<LozadObserver | null>(null)
       const listElement = ref<HTMLElement>()
       const plogList = computed(() => {
-        return props.plogs.filter((plog) => plog.media_type !== 'VIDEO').slice(0, 16)
+        return props.plogs.filter((plog) => plog.media_type !== 'VIDEO').slice(0, 20)
       })
       const humanlizeDate = (date: string) => {
         return humanizeYMD(date, i18n.language.value as any)
@@ -263,7 +263,7 @@
 
   .gallery {
     width: 88vw;
-    height: 70vh;
+    height: 76vh;
     position: relative;
 
     .swiper {

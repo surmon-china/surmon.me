@@ -1,7 +1,7 @@
 <template>
   <div class="archive-page" :class="{ mobile: isMobile }">
     <page-banner
-      :blur="true"
+      :blur="false"
       :position="75"
       :is-mobile="isMobile"
       image="/images/page-archive/banner.jpg"
@@ -116,7 +116,7 @@
                             </span>
                             <divider type="vertical" />
                             <span class="item likes">
-                              <i class="like-icon iconfont icon-heart"></i>
+                              <i class="like-icon iconfont icon-like"></i>
                               <span>{{ article.meta.likes }}</span>
                             </span>
                             <divider type="vertical" />
