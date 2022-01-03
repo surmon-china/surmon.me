@@ -176,7 +176,7 @@
           :href="VALUABLE_LINKS.GITHUB"
           @mousedown="handleGTagEvent('github_chart_link')"
         >
-          <uimage cdn src="/ghchart.svg" />
+          <uimage cdn src="/effects/ghchart" />
         </ulink>
       </div>
     </div>

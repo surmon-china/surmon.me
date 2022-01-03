@@ -64,7 +64,7 @@ app.get('/rss.xml', async (_, response) => {
 })
 
 // gtag
-app.get('/gtag.js', async (_, response) => {
+app.get('/effects/gtag', async (_, response) => {
   try {
     const data = await cacher({
       key: 'gtag',
@@ -80,7 +80,7 @@ app.get('/gtag.js', async (_, response) => {
 })
 
 // ghchart
-app.get('/ghchart.svg', async (_, response) => {
+app.get('/effects/ghchart', async (_, response) => {
   try {
     const data = await cacher({
       key: 'ghchart',
