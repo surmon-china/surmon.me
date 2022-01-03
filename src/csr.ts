@@ -64,7 +64,7 @@ app.use(gtag, {
   router,
   id: GA_MEASUREMENT_ID,
   config: { send_page_view: false },
-  customResourceURL: getTargetCDNURL('/gtag.js')
+  customResourceURL: getTargetCDNURL('/effects/gtag')
 })
 
 // init: store (from SSR context or fetch)

@@ -15,7 +15,7 @@ import tunnel from '/@/services/tunnel'
 // https://www.surinderbhomra.com/Blog/2016/05/16/Resize-An-Instagram-Image-Using-A-Media-Query-Parameter
 export const getInstagramImage = (media: InstagramMediaItem, size?: 't' | 'm' | 'l') => {
   if (size) {
-    return getTargetProxyURL(`${media.permalink}/media/?size=${size}`, ProxyModule.Instagram)
+    return getTargetProxyURL(`${media.permalink}media/?size=${size}`, ProxyModule.Instagram)
   } else {
     return getTargetProxyURL(media.media_url, ProxyModule.Instagram)
   }
