@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.4.0
+* Surmon.me v3.4.1
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -708,7 +708,7 @@ app.get('/rss.xml', async (_, response) => {
     }
 });
 // gtag
-app.get('/gtag.js', async (_, response) => {
+app.get('/effects/gtag', async (_, response) => {
     try {
         const data = await cacher({
             key: 'gtag',
@@ -724,7 +724,7 @@ app.get('/gtag.js', async (_, response) => {
     }
 });
 // ghchart
-app.get('/ghchart.svg', async (_, response) => {
+app.get('/effects/ghchart', async (_, response) => {
     try {
         const data = await cacher({
             key: 'ghchart',
