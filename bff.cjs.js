@@ -1,10 +1,10 @@
 /*!
-* Surmon.me v3.3.6
+* Surmon.me v3.4.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
 */
-'use strict';var express=require('express'),RSS=require('rss'),axios=require('axios'),path=require('path'),stream=require('stream'),sitemap=require('sitemap'),WonderfulBingWallpaper=require('wonderful-bing-wallpaper'),NeteaseMusic=require('simple-netease-cloud-music'),fs=require('fs'),vite=require('vite'),LRU=require('lru-cache'),http=require('http'),compression=require('compression'),cookieParser=require('cookie-parser');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var express__default=/*#__PURE__*/_interopDefaultLegacy(express);var RSS__default=/*#__PURE__*/_interopDefaultLegacy(RSS);var axios__default=/*#__PURE__*/_interopDefaultLegacy(axios);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var WonderfulBingWallpaper__default=/*#__PURE__*/_interopDefaultLegacy(WonderfulBingWallpaper);var NeteaseMusic__default=/*#__PURE__*/_interopDefaultLegacy(NeteaseMusic);var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var LRU__default=/*#__PURE__*/_interopDefaultLegacy(LRU);var http__default=/*#__PURE__*/_interopDefaultLegacy(http);var compression__default=/*#__PURE__*/_interopDefaultLegacy(compression);var cookieParser__default=/*#__PURE__*/_interopDefaultLegacy(cookieParser);/**
+'use strict';var express=require('express'),RSS=require('rss'),axios=require('axios'),path=require('path'),stream=require('stream'),sitemap=require('sitemap'),WonderfulBingWallpaper=require('wonderful-bing-wallpaper'),yargs=require('yargs'),NeteaseMusic=require('simple-netease-cloud-music'),fs=require('fs'),vite=require('vite'),LRU=require('lru-cache'),http=require('http'),compression=require('compression'),cookieParser=require('cookie-parser'),httpProxy=require('http-proxy');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var express__default=/*#__PURE__*/_interopDefaultLegacy(express);var RSS__default=/*#__PURE__*/_interopDefaultLegacy(RSS);var axios__default=/*#__PURE__*/_interopDefaultLegacy(axios);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var WonderfulBingWallpaper__default=/*#__PURE__*/_interopDefaultLegacy(WonderfulBingWallpaper);var NeteaseMusic__default=/*#__PURE__*/_interopDefaultLegacy(NeteaseMusic);var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var LRU__default=/*#__PURE__*/_interopDefaultLegacy(LRU);var http__default=/*#__PURE__*/_interopDefaultLegacy(http);var compression__default=/*#__PURE__*/_interopDefaultLegacy(compression);var cookieParser__default=/*#__PURE__*/_interopDefaultLegacy(cookieParser);/**
  * @file Dev environment
  * @module environment
  * @author Surmon <https://github.com/surmon-china>
@@ -17,7 +17,7 @@ var NodeEnv;
 })(NodeEnv || (NodeEnv = {}));
 const NODE_ENV = "production";
 const isDev = "production" === NodeEnv.Development;
-"production" === NodeEnv.Production;
+const isProd = "production" === NodeEnv.Production;
 "production" === NodeEnv.Test;/**
  * @file Tunnel constant
  * @module constant.tunnel
@@ -35,7 +35,9 @@ var TunnelModule;
  * @module config.bff
  * @author Surmon <https://github.com/surmon-china>
  */
-const API_TUNNEL_PREFIX = '/_tunnel';
+const BFF_TUNNEL_PREFIX = '/_tunnel';
+const BFF_PROXY_PREFIX = '/_proxy';
+const BFF_PROXY_ALLOWLIST = ['https://surmon.me', 'https://cdn.surmon.me'];
 const getBFFServerPort = () => Number(process.env.PORT || 3000);/**
  * @file App config
  * @module config.app
@@ -256,7 +258,7 @@ const getGitHubChartSVG = async () => {
  * @module server.getter.bilibili
  * @author Surmon <https://github.com/surmon-china>
  */
-const PAGE_SIZE = 45;
+const PAGE_SIZE = 36;
 const PAGE = 1;
 const getBiliBiliVideos = async () => {
     const videosResult = await axios__default["default"].request({
@@ -331,15 +333,22 @@ const getGitHubRepositories = async () => {
  * @module server.getter.instagram
  * @author Surmon <https://github.com/surmon-china>
  */
+// 1. Generate long-lived access tokens for Instagram Testers
+// https://developers.facebook.com/apps/625907498725071/instagram-basic-display/basic-display/?business_id=277570526188879
+// 2. Get medias useing API
+// https://developers.facebook.com/docs/instagram-basic-display-api/reference/media#fields
+// 3. TODO: Refresh token
+// https://developers.facebook.com/docs/instagram-basic-display-api/reference/refresh_access_token
+const fields = `id,username,permalink,caption,media_type,media_url,thumbnail_url,timestamp`;
+const token = yargs.argv.instagram_token;
 const getInstagramMedias = async () => {
-    return [];
-};/**
- * @file BFF instagram setter
- * @module server.setter.instagram
- * @author Surmon <https://github.com/surmon-china>
- */
-const setInstagramMedias = async (payload) => {
-    console.log('setInstagramMedias', typeof payload, payload);
+    const response = await axios__default["default"].get(`https://graph.instagram.com/me/media?fields=${fields}&access_token=${token}`, { timeout: 8000 });
+    if (response.status === 200 && response.data.data) {
+        return response.data.data;
+    }
+    else {
+        throw response.data;
+    }
 };/**
  * @file BFF music getter
  * @module server.getter.music
@@ -456,6 +465,8 @@ const getSongList = async () => {
  * @module constant.error
  * @author Surmon <https://github.com/surmon-china>
  */
+const BAD_REQUEST = 400;
+const FORBIDDEN = 403;
 const INVALID_ERROR = 500;/**
  * @file BFF Server responser
  * @module server.responser
@@ -523,6 +534,120 @@ const cacher = async (config) => {
         return Promise.reject(err);
     }
 };/**
+ * @file Proxy constant
+ * @module constant.proxy
+ * @author Surmon <https://github.com/surmon-china>
+ */
+var ProxyModule;
+(function (ProxyModule) {
+    ProxyModule["Default"] = "default";
+    ProxyModule["BiliBili"] = "bilibili";
+    ProxyModule["Instagram"] = "instagram";
+    ProxyModule["NetEasyMusic"] = "163";
+    ProxyModule["Disqus"] = "disqus";
+})(ProxyModule || (ProxyModule = {}));/**
+ * @file BFF Server proxy
+ * @module server.proxy
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const proxys = [
+    {
+        module: ProxyModule.Default,
+        origin: 'https://surmon.me',
+        referer: 'https://surmon.me/'
+    },
+    {
+        module: ProxyModule.BiliBili,
+        origin: 'https://www.bilibili.com',
+        referer: 'https://www.bilibili.com/'
+    },
+    {
+        module: ProxyModule.Instagram,
+        origin: 'https://www.instagram.com',
+        referer: 'https://www.instagram.com/'
+    },
+    {
+        module: ProxyModule.NetEasyMusic,
+        origin: 'https://music.163.com',
+        referer: 'https://music.163.com/'
+    },
+    {
+        module: ProxyModule.Disqus,
+        referer: 'https://surmon.disqus.com/'
+    }
+];
+const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/:module/*`;
+const proxyer = () => {
+    // https://github.com/http-party/node-http-proxy
+    const proxyMap = new Map(proxys.map(({ module, ...rest }) => [module, rest]));
+    const proxy = httpProxy.createProxyServer({
+        prependPath: true,
+        ignorePath: true,
+        toProxy: false,
+        xfwd: true
+    });
+    // https://github.com/http-party/node-http-proxy/issues/813
+    proxy.on('error', (error, _, response, target) => {
+        console.warn(`[BFF] proxy error: ${error.message} > ${target?.href}`);
+        if (!response.headersSent) {
+            response.writeHead(500, { 'content-type': 'application/json' });
+        }
+        response.end(JSON.stringify({ error: 'proxy_error', reason: error.message }));
+    });
+    proxy.on('proxyReq', (proxyRequest) => {
+        proxyRequest.setHeader('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3223.8 Safari/');
+    });
+    proxy.on('proxyRes', (proxyResponse, request) => {
+        const statusCode = proxyResponse.statusCode;
+        const location = proxyResponse.headers.location;
+        if ([301, 302, 307, 308].includes(statusCode) && location) {
+            proxyResponse.headers.location = `${BFF_PROXY_PREFIX}/${request.params.module}/${encodeURIComponent(location)}`;
+        }
+        // proxy cache
+        if (statusCode === 200) {
+            proxyResponse.headers['cache-control'] = `max-age=315360000`;
+        }
+    });
+    return (request, response) => {
+        if (isProd) {
+            const referer = request.headers.referrer || request.headers.referer;
+            const origin = request.headers.origin;
+            const isAllowedReferer = !referer || BFF_PROXY_ALLOWLIST.some((i) => referer.startsWith(i));
+            const isAllowedOrigin = !origin || BFF_PROXY_ALLOWLIST.some((i) => origin.startsWith(i));
+            if (!isAllowedReferer || !isAllowedOrigin) {
+                response.status(FORBIDDEN).send();
+                return;
+            }
+        }
+        const config = proxyMap.get(request.params.module);
+        const targetURL = decodeURIComponent(request.params['0']);
+        let parsedURL = null;
+        try {
+            parsedURL = new URL(targetURL);
+        }
+        catch (error) {
+            response.status(BAD_REQUEST).send();
+            return;
+        }
+        const headers = {};
+        if (config?.origin) {
+            headers['Origin'] = config.origin;
+        }
+        if (config?.referer) {
+            headers['Referer'] = config.referer;
+        }
+        proxy.web(request, response, {
+            target: targetURL,
+            changeOrigin: true,
+            followRedirects: false,
+            autoRewrite: false,
+            headers: {
+                host: parsedURL.hostname,
+                ...headers
+            }
+        });
+    };
+};/**
  * @file BFF Server main
  * @module server.index
  * @author Surmon <https://github.com/surmon-china>
@@ -531,6 +656,8 @@ const createExpressApp = () => {
     // init app
     const app = express__default["default"]();
     const server = http__default["default"].createServer(app);
+    // proxy
+    app.use(PROXY_ROUTE_PATH, proxyer());
     // middlewares
     app.use(express__default["default"].json());
     app.use(cookieParser__default["default"]());
@@ -613,35 +740,31 @@ app.get('/ghchart.svg', async (_, response) => {
     }
 });
 // tunnel services
-app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`, responser(() => cacher({
+app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`, responser(() => cacher({
     key: 'bilibili',
     age: 60 * 60 * 1,
     retryWhen: 60 * 5,
     getter: getBiliBiliVideos
 })));
-app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`, responser(() => cacher({
+app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`, responser(() => cacher({
     key: 'wallpaper',
     age: 60 * 60 * 8,
     retryWhen: 60 * 30,
     getter: getAllWallpapers
 })));
-app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.GitHub}`, responser(() => cacher({
+app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHub}`, responser(() => cacher({
     key: 'github',
     age: 60 * 60 * 2,
     retryWhen: 60 * 30,
     getter: getGitHubRepositories
 })));
-app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.Music}`, responser(() => cacher({
+app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Music}`, responser(() => cacher({
     key: 'music',
     age: 60 * 60 * 1,
     retryWhen: 60 * 10,
     getter: getSongList
 })));
-app.post(`${API_TUNNEL_PREFIX}/${TunnelModule.Instagram}`, (request, response) => {
-    setInstagramMedias(request.body);
-    response.send('ok');
-});
-app.get(`${API_TUNNEL_PREFIX}/${TunnelModule.Instagram}`, responser(() => cacher({
+app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Instagram}`, responser(() => cacher({
     key: 'instagram',
     age: 60 * 60 * 1,
     retryWhen: 60 * 10,
