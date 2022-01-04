@@ -18,7 +18,7 @@
               backgroundImage: `url(${getMobileArticleListThumbnailURL(article.thumb)})`
             }"
           >
-            <div class="meta">
+            <div class="meta" v-if="false">
               {{ getTimeAgo(article.create_at) }}
               <span class="dot">·</span>
               <i18n>
@@ -127,7 +127,7 @@
             position: relative;
             opacity: 0.8;
             width: 100%;
-            height: 8rem;
+            height: 7rem;
             background-color: $module-bg-darker-4;
             background-size: cover;
             background-position: 50% 45%;
