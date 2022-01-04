@@ -15,9 +15,18 @@
           <div
             class="thumb"
             :style="{
-              backgroundImage: `url(${getArticleReletedListThumbnailURL(article.thumb)})`
+              backgroundImage: `url(${getMobileArticleListThumbnailURL(article.thumb)})`
             }"
-          />
+          >
+            <div class="meta">
+              {{ getTimeAgo(article.create_at) }}
+              <span class="dot">·</span>
+              <i18n>
+                <template #zh>{{ article.meta.comments }} 条看法</template>
+                <template #en>{{ article.meta.comments }} comments</template>
+              </i18n>
+            </div>
+          </div>
           <div class="title">{{ article.title }}</div>
           <div class="description">{{ article.description }}</div>
         </router-link>
@@ -28,9 +37,11 @@
 
 <script lang="ts">
   import { defineComponent, computed, PropType } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { Article } from '/@/store/article'
+  import { timeAgo } from '/@/transforms/moment'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getArticleReletedListThumbnailURL } from '/@/transforms/thumbnail'
+  import { getMobileArticleListThumbnailURL } from '/@/transforms/thumbnail'
 
   export default defineComponent({
     name: 'ArticleRelated',
@@ -49,7 +60,13 @@
       }
     },
     setup(props) {
-      const articleList = computed(() => {
+      const { i18n } = useEnhancer()
+
+      const getTimeAgo = (date: string) => {
+        return timeAgo(date, i18n.language.value as any)
+      }
+
+      const articleList = computed<Article[]>(() => {
         const articles = [...props.articles].slice(0, props.count)
         if (articles.length >= props.count) {
           return articles
@@ -67,8 +84,9 @@
 
       return {
         articleList,
+        getTimeAgo,
         getArticleDetailRoute,
-        getArticleReletedListThumbnailURL
+        getMobileArticleListThumbnailURL
       }
     }
   })
@@ -92,40 +110,65 @@
 
       .item {
         width: auto;
-        @include radius-box($sm-radius);
         @include common-bg-module();
+        @include radius-box($sm-radius);
 
         &.disabled {
           pointer-events: none;
           opacity: 0.6;
         }
 
-        &:nth-child(3n) {
-          margin-right: 0;
-          margin-bottom: 0;
-        }
-
         .item-article {
           display: block;
           position: relative;
           overflow: hidden;
-          opacity: 0.7;
-          transition: opacity $transition-time-normal;
 
           .thumb {
+            position: relative;
+            opacity: 0.8;
             width: 100%;
-            height: 12rem;
+            height: 8rem;
             background-color: $module-bg-darker-4;
             background-size: cover;
-            background-position: 50% 30%;
-            transition: background-position $transition-time-fast * 2;
+            background-position: 50% 45%;
+            transition: all $transition-time-fast;
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+
+            &::before {
+              content: '';
+              position: absolute;
+              background: linear-gradient(
+                to top,
+                rgba(0, 0, 0, 0.3) 10%,
+                rgba(0, 0, 0, 0.1) 60%,
+                transparent 90%
+              );
+              width: 100%;
+              height: 100%;
+              top: 0;
+              left: 0;
+            }
+          }
+
+          .meta {
+            line-height: 2;
+            padding: 0 $sm-gap;
+            font-size: $font-size-small;
+            color: $white;
+            text-shadow: 0 0.5px 2px rgb(0 0 0 / 35%);
+
+            .dot {
+              margin: 0 $xs-gap;
+            }
           }
 
           .title,
           .description {
             display: block;
             width: 100%;
-            padding: 0 $gap;
+            padding: 0 $sm-gap;
             transition: color $transition-time-fast;
             @include text-overflow();
           }
@@ -133,25 +176,28 @@
           .title {
             font-size: $font-size-h6;
             margin-top: $sm-gap;
+            margin-bottom: $xs-gap;
             font-weight: bold;
+            color: $text-secondary;
           }
 
           .description {
-            margin-bottom: $xs-gap;
-            line-height: 2;
             font-size: $font-size-small;
             color: $text-disabled;
+            margin-bottom: $sm-gap;
           }
 
           &:hover {
-            opacity: 1;
-
             .thumb {
+              opacity: 1;
               background-position: 50% 50%;
             }
 
             .title {
               color: $link-color;
+            }
+            .description {
+              color: $text;
             }
           }
         }

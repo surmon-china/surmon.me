@@ -15,7 +15,30 @@
       </div>
     </transition>
     <div class="knowledge" key="knowledge">
-      <h2 class="title">{{ article.title }}</h2>
+      <div class="title">
+        <h2 class="text">{{ article.title }}</h2>
+        <div class="meta">
+          <i class="iconfont icon-read"></i>
+          <span>
+            <i18n>
+              <template #zh
+                >共 {{ articleDetailStore.contentLength }} 字，需阅读
+                {{ articleDetailStore.readMinutes }} 分钟</template
+              >
+              <template #en
+                >{{ articleDetailStore.contentLength }} words,
+                {{ articleDetailStore.readMinutes }} min read</template
+              >
+            </i18n>
+          </span>
+          <divider type="vertical" class="vertical" />
+          <i class="iconfont icon-clock-outline"></i>
+          <span>{{ publishedAt(article.create_at) }}</span>
+          <divider type="vertical" class="vertical" />
+          <i class="iconfont icon-eye"></i>
+          <span>{{ article.meta.views }}</span>
+        </div>
+      </div>
       <div
         class="markdown-html"
         :id="ARTICLE_CONTENT_ELEMENT_IDS.default"
@@ -47,9 +70,11 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, nextTick, onMounted, PropType } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { Article, useArticleDetailStore } from '/@/store/article'
   import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
+  import { humanizeYMD } from '/@/transforms/moment'
   import { LANGUAGE_KEYS } from '/@/language/key'
 
   const ARTICLE_CONTENT_ELEMENT_IDS = {
@@ -66,6 +91,7 @@
       }
     },
     setup(props) {
+      const { i18n } = useEnhancer()
       const articleDetailStore = useArticleDetailStore()
       const isHybrid = computed(() => isHybridType(props.article.origin!))
       const isReprint = computed(() => isReprintType(props.article.origin!))
@@ -101,13 +127,19 @@
 
       const handleRenderMoreAnimateDone = () => observeLozad(ARTICLE_CONTENT_ELEMENT_IDS.more)
 
+      const publishedAt = (date: string) => {
+        return humanizeYMD(date, i18n.language.value as any)
+      }
+
       onMounted(() => {
         observeLozad(ARTICLE_CONTENT_ELEMENT_IDS.default)
       })
 
       return {
         LANGUAGE_KEYS,
+        i18n,
         element,
+        publishedAt,
         isHybrid,
         isReprint,
         isOriginal,
@@ -164,8 +196,27 @@
       .title {
         margin: 1em 0 1.5em 0;
         text-align: center;
-        font-weight: 700;
-        font-size: $font-size-h2 * 0.95;
+
+        .text {
+          font-weight: 700;
+          font-size: $font-size-h2 * 0.95;
+          margin-bottom: $gap;
+        }
+
+        .meta {
+          display: inline-block;
+          padding-top: $sm-gap;
+          border-top: 1px dashed $text-dividers;
+          color: $text-dividers;
+          font-size: $font-size-small;
+          user-select: none;
+          .iconfont {
+            margin-right: $xs-gap;
+          }
+          .vertical {
+            top: -1px;
+          }
+        }
       }
 
       .markdown-html {

@@ -138,8 +138,15 @@ export const useArticleDetailStore = defineStore('articleDetail', {
     renderedFullContent: true
   }),
   getters: {
+    contentLength(): number {
+      return this.article?.content.length || 0
+    },
+    readMinutes(): number {
+      const minutes = Math.round(this.contentLength / 400)
+      return minutes < 1 ? 1 : minutes
+    },
     isLongContent(): boolean {
-      return Boolean(this.article && this.article.content.length > 16688)
+      return Boolean(this.article && this.contentLength > 16688)
     },
     splitIndex(): number | null {
       if (this.article && this.isLongContent) {
