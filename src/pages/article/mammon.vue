@@ -1,17 +1,18 @@
 <template>
   <div class="mammon">
-    <u-adsense key="adsense" class="mammon-box" ins-class="mammon-ins" />
+    <Adsense
+      ins-class="mammon-ins"
+      ins-style="display:inline-block;width:594px;height:180px"
+      data-ad-slot="4117530525"
+      class="mammon-box"
+    />
   </div>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import UAdsense from '/@/components/common/uadsense.vue'
   export default defineComponent({
-    name: 'ArticleMammon',
-    components: {
-      UAdsense
-    }
+    name: 'ArticleMammon'
   })
 </script>
 
@@ -28,8 +29,8 @@
     .mammon-box,
     ::v-deep(.mammon-ins) {
       width: 100%;
-      height: 16rem;
-      min-height: 16rem;
+      height: 180px;
+      overflow: hidden;
     }
   }
 </style>

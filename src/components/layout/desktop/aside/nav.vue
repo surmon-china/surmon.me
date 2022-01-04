@@ -5,20 +5,25 @@
       :title="article.title"
       @click="handleLink(ANCHORS.ARTICLE_CONTENT_ELEMENT_ID)"
     >
-      <i class="iconfont icon-read"></i>
-      <span v-if="headings.length" class="title">{{ article.title }}</span>
+      <span v-if="headings.length" class="title">
+        <i class="iconfont icon-edit"></i>
+        {{ article.title }}
+      </span>
       <span v-else class="title">
+        <i class="iconfont icon-read"></i>
         <i18n>
-          <template #zh>正文（共 {{ article.content.length }} 字）</template>
-          <template #en>Article content ({{ article.content.length }} words)</template>
+          <template #zh>正文（共 {{ store.contentLength }} 字）</template>
+          <template #en>Article content ({{ store.contentLength }} words)</template>
         </i18n>
       </span>
     </button>
     <div class="link" v-if="headings.length">
-      <i class="iconfont icon-mood"></i>
+      <i class="iconfont icon-read"></i>
       <i18n>
-        <template #zh>共 {{ article.content.length }} 字，需阅读 {{ readTime }} 分钟</template>
-        <template #en>{{ article.content.length }} words, take {{ readTime }} minutes</template>
+        <template #zh
+          >共 {{ store.contentLength }} 字，需阅读 {{ store.readMinutes }} 分钟</template
+        >
+        <template #en>{{ store.contentLength }} words, {{ store.readMinutes }} min read</template>
       </i18n>
     </div>
     <div class="catalogue" v-if="headings.length">
@@ -88,12 +93,6 @@
         return Math.min(...headings.value.map((heading) => heading.level))
       })
 
-      const readTime = computed(() => {
-        const words = article.value?.content.length || 0
-        const minutes = Math.round(words / 400)
-        return minutes < 1 ? 1 : minutes
-      })
-
       const handleLink = (elementID: string) => {
         scrollToElementAnchor(elementID)
       }
@@ -101,9 +100,9 @@
       return {
         ANCHORS,
         article,
+        store: articleDetailStore,
         headings,
         minHeadingLevel,
-        readTime,
         handleLink
       }
     }

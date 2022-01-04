@@ -18,7 +18,7 @@ export const getArticleBannerThumbnailURL = (thumb: string, isWebPImage: boolean
   }`
 }
 
-export const getMobileArticleListThumbnailURL = (thumb: string, isWebPImage: boolean) => {
+export const getMobileArticleListThumbnailURL = (thumb: string, isWebPImage: boolean = false) => {
   if (!thumb) {
     return getTargetCDNURL(`/images/thumbnail/pc-carrousel.jpg`)
   }
@@ -42,8 +42,8 @@ export const getArticleListThumbnailURL = (thumb: string, isWebPImage: boolean) 
   }`
 }
 
-export const getArticleReletedListThumbnailURL = (thumb: string) => {
+export const getArticleSquareThumbnailURL = (thumb: string) => {
   return thumb
-    ? `${thumb}?x-oss-process=image/auto-orient,1/resize,m_fill,w_280,h_300/quality,q_84`
+    ? `${thumb}?x-oss-process=image/auto-orient,1/resize,m_fill,w_320,h_320/quality,q_84`
     : getTargetCDNURL('/images/thumbnail/pc-article-list.jpg')
 }

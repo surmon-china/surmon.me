@@ -8,8 +8,7 @@
         <div v-if="article">
           <div class="module margin background overflow">
             <article-content :id="ANCHORS.ARTICLE_CONTENT_ELEMENT_ID" :article="article" />
-          </div>
-          <div class="module margin background">
+            <div class="divider"></div>
             <article-meta
               :id="ANCHORS.ARTICLE_META_ELEMENT_ID"
               :plain="isMobile"
@@ -17,6 +16,8 @@
             />
           </div>
           <div class="module margin background">
+            <div class="bridge left"></div>
+            <div class="bridge right"></div>
             <article-share
               :id="ANCHORS.ARTICLE_SHARE_ELEMENT_ID"
               :article-id="articleId"
@@ -26,16 +27,16 @@
               "
             />
           </div>
-          <client-only>
+          <client-only v-if="false">
             <div class="module margin background overflow" v-if="!isMobile">
               <article-mammon />
             </div>
           </client-only>
-          <div class="module margin">
+          <div class="module margin overflow">
             <article-related
               :id="ANCHORS.ARTICLE_RELETED_ELEMENT_ID"
-              :columns="isMobile ? 2 : 4"
-              :count="isMobile ? 4 : 8"
+              :columns="isMobile ? 2 : 3"
+              :count="isMobile ? 4 : 6"
               :articles="article?.related"
             />
           </div>
@@ -131,6 +132,8 @@
 
   .article-page {
     .module {
+      position: relative;
+
       &.margin {
         margin-bottom: $lg-gap;
       }
@@ -142,6 +145,37 @@
 
       &.overflow {
         overflow: hidden;
+      }
+
+      .divider {
+        border-top: 2px solid $module-bg-darker-1;
+      }
+
+      .bridge {
+        $distance: 3rem;
+        position: absolute;
+        top: -$lg-gap;
+        width: $lg-gap;
+        height: $lg-gap;
+        background: linear-gradient(to bottom, $module-bg, $module-bg-darker-1);
+        /* &::before {
+        content: '';
+        position: absolute;
+        top: 2rem;
+        display: block;
+        width: 1em;
+        height: 1em;
+        background-color: $module-bg-darker-1;
+        border-radius: $sm-radius;
+        opacity: 0.4;
+      } */
+
+        &.left {
+          left: $distance;
+        }
+        &.right {
+          right: $distance;
+        }
       }
     }
   }
