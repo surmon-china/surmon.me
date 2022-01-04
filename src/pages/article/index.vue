@@ -27,7 +27,7 @@
             />
           </div>
           <client-only>
-            <div class="module margin background" v-if="!isMobile">
+            <div class="module margin background overflow" v-if="!isMobile">
               <article-mammon />
             </div>
           </client-only>

@@ -206,7 +206,7 @@
       &::before {
         content: '';
         position: absolute;
-        top: 3rem;
+        top: 2rem;
         display: block;
         width: 1em;
         height: 1em;
