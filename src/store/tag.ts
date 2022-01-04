@@ -29,6 +29,12 @@ export const useTagStore = defineStore('tag', {
     tags: [] as Array<Tag>
   }),
   getters: {
+    // sort by count
+    sorted: (state) => {
+      const tags = [...state.tags]
+      tags.sort((a, b) => b.count - a.count)
+      return tags
+    },
     // 全量标签列表（本身、全小写、全大写、首字母大写）
     fullNameTags: (state): TagMap => {
       const tags = state.tags

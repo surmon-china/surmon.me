@@ -36,22 +36,18 @@
         </li>
       </ul>
     </div>
-    <button class="link" @click="handleLink(ANCHORS.ARTICLE_LIKE_SHARE_ELEMENT_ID)">
-      <i class="iconfont icon-share"></i>
-      <i18n zh="分享" en="Share" />
-      <divider type="vertical" />
-      <span class="meta">
-        <i class="like-icon iconfont icon-like"></i>
-        <span class="count">{{ article.meta.likes }}</span>
-      </span>
-    </button>
     <button class="link" @click="handleLink(ANCHORS.ARTICLE_META_ELEMENT_ID)">
-      <i class="iconfont icon-clock"></i>
-      <i18n zh="关于" en="Meta" />
+      <i class="iconfont icon-heart"></i>
+      <i18n zh="摁赞" en="Well" />
       <divider type="vertical" />
       <span class="meta">
         <i class="iconfont icon-eye"></i>
         <span class="count">{{ article.meta.views }}</span>
+      </span>
+      <divider type="vertical" />
+      <span class="meta">
+        <i class="iconfont icon-like"></i>
+        <span class="count">{{ article.meta.likes }}</span>
       </span>
     </button>
     <button class="link" @click="handleLink(ANCHORS.ARTICLE_RELETED_ELEMENT_ID)">
@@ -157,12 +153,6 @@
 
       .title {
         font-weight: bold;
-      }
-
-      .meta {
-        .like-icon {
-          color: $red;
-        }
       }
     }
 

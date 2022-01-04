@@ -41,3 +41,9 @@ export const getArticleListThumbnailURL = (thumb: string, isWebPImage: boolean) 
       : 'image/auto-orient,1/resize,m_fill,w_350,h_238/quality,q_80/format,jpg/watermark,text_U3VybW9uLm1l,type_ZHJvaWRzYW5zZmFsbGJhY2s,color_ffffff,size_20,g_sw,t_24,x_16,y_14'
   }`
 }
+
+export const getArticleReletedListThumbnailURL = (thumb: string) => {
+  return thumb
+    ? `${thumb}?x-oss-process=image/auto-orient,1/resize,m_fill,w_280,h_300/quality,q_84`
+    : getTargetCDNURL('/images/thumbnail/pc-article-list.jpg')
+}

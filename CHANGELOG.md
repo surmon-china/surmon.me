@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.4.5 (2022-01-05)
+
+**Feature**
+
+- Improve Article detail page
+
 ### v3.4.0 (2022-01-03)
 
 **Feature**

@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
-  src: url('//at.alicdn.com/t/font_64825_49m4mjbufs1.woff2?t=1641216754254') format('woff2'),
-    url('//at.alicdn.com/t/font_64825_49m4mjbufs1.woff?t=1641216754254') format('woff'),
-    url('//at.alicdn.com/t/font_64825_49m4mjbufs1.ttf?t=1641216754254') format('truetype');
+  src: url('//at.alicdn.com/t/font_64825_56v0yny53l6.woff2?t=1641310952963') format('woff2'),
+    url('//at.alicdn.com/t/font_64825_56v0yny53l6.woff?t=1641310952963') format('woff'),
+    url('//at.alicdn.com/t/font_64825_56v0yny53l6.ttf?t=1641310952963') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,22 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-copy:before {
+  content: '\e6e9';
+}
+
+.icon-copy-l:before {
+  content: '\e61e';
+}
+
+.icon-copy1:before {
+  content: '\e74a';
+}
+
+.icon-clock-outline:before {
+  content: '\e815';
 }
 
 .icon-wechat-channel:before {
