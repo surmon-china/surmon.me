@@ -1,8 +1,8 @@
 <template>
   <div class="related">
-    <ul class="articles" :class="`count-${count}`">
+    <ul class="articles" :style="{ gridTemplateColumns: `repeat(${columns}, 1fr)` }">
       <li
-        v-for="(article, index) in articles.slice(0, count)"
+        v-for="(article, index) in articleList"
         :class="{ disabled: !article.id }"
         :key="index"
         class="item"
@@ -15,10 +15,11 @@
           <div
             class="thumb"
             :style="{
-              backgroundImage: `url(${getRelatedArticleThumbnail(article.thumb)})`
+              backgroundImage: `url(${getArticleReletedListThumbnailURL(article.thumb)})`
             }"
           />
           <div class="title">{{ article.title }}</div>
+          <div class="description">{{ article.description }}</div>
         </router-link>
       </li>
     </ul>
@@ -26,33 +27,48 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
+  import { defineComponent, computed, PropType } from 'vue'
   import { Article } from '/@/store/article'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getArticleListThumbnailURL } from '/@/transforms/thumbnail'
+  import { getArticleReletedListThumbnailURL } from '/@/transforms/thumbnail'
 
   export default defineComponent({
     name: 'ArticleRelated',
     props: {
       articles: {
         type: Array as PropType<Article[]>,
-        required: true
+        default: () => []
+      },
+      columns: {
+        type: Number,
+        default: 4
       },
       count: {
         type: Number,
-        default: 6
+        default: 8
       }
     },
-    setup() {
-      const { globalState } = useEnhancer()
-      const getRelatedArticleThumbnail = (thumb: string) => {
-        return getArticleListThumbnailURL(thumb, globalState.imageExt.value.isWebP)
-      }
+    setup(props) {
+      const articleList = computed(() => {
+        const articles = [...props.articles].slice(0, props.count)
+        if (articles.length >= props.count) {
+          return articles
+        }
+        return [
+          ...articles,
+          ...new Array(props.count - articles.length).fill({
+            title: 'null',
+            id: null,
+            _id: '',
+            thumb: ''
+          })
+        ]
+      })
 
       return {
+        articleList,
         getArticleDetailRoute,
-        getRelatedArticleThumbnail
+        getArticleReletedListThumbnailURL
       }
     }
   })
@@ -66,18 +82,13 @@
 
     .articles {
       display: grid;
+      grid-template-columns: repeat(4, 1fr);
       grid-gap: $gap;
       width: 100%;
       padding: 0;
       margin: 0;
       list-style: none;
       overflow: hidden;
-      &.count-4 {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      &.count-6 {
-        grid-template-columns: repeat(3, 1fr);
-      }
 
       .item {
         width: auto;
@@ -103,23 +114,33 @@
 
           .thumb {
             width: 100%;
-            height: 7.4rem;
+            height: 12rem;
             background-color: $module-bg-darker-2;
             background-size: cover;
-            background-position: 50% 40%;
+            background-position: 50% 30%;
             transition: background-position $transition-time-fast * 2;
           }
 
-          .title {
+          .title,
+          .description {
             display: block;
             width: 100%;
-            padding: 0 1em;
-            line-height: 2.4;
-            text-align: center;
-            font-size: $font-size-h6;
-            color: $text-secondary;
+            padding: 0 $gap;
             transition: color $transition-time-fast;
             @include text-overflow();
+          }
+
+          .title {
+            font-size: $font-size-h6;
+            margin-top: $sm-gap;
+            font-weight: bold;
+          }
+
+          .description {
+            margin-bottom: $xs-gap;
+            line-height: 2;
+            font-size: $font-size-small;
+            color: $text-disabled;
           }
 
           &:hover {

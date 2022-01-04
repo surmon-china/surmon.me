@@ -6,12 +6,19 @@
       </template>
       <template #default>
         <div v-if="article">
-          <div class="module">
+          <div class="module margin background overflow">
             <article-content :id="ANCHORS.ARTICLE_CONTENT_ELEMENT_ID" :article="article" />
           </div>
-          <div class="like-share-module">
-            <article-like-share
-              :id="ANCHORS.ARTICLE_LIKE_SHARE_ELEMENT_ID"
+          <div class="module margin background">
+            <article-meta
+              :id="ANCHORS.ARTICLE_META_ELEMENT_ID"
+              :plain="isMobile"
+              :article="article"
+            />
+          </div>
+          <div class="module margin background">
+            <article-share
+              :id="ANCHORS.ARTICLE_SHARE_ELEMENT_ID"
               :article-id="articleId"
               :likes="article?.meta?.likes || 0"
               :socials="
@@ -19,23 +26,17 @@
               "
             />
           </div>
-          <div class="module">
-            <article-meta
-              :id="ANCHORS.ARTICLE_META_ELEMENT_ID"
-              :plain="isMobile"
-              :article="article"
-            />
-          </div>
           <client-only>
-            <div class="module" v-if="!isMobile">
+            <div class="module margin background" v-if="!isMobile">
               <article-mammon />
             </div>
           </client-only>
-          <div class="releted-module">
+          <div class="module margin">
             <article-related
               :id="ANCHORS.ARTICLE_RELETED_ELEMENT_ID"
-              :count="isMobile ? 4 : 6"
-              :articles="relatedArticles"
+              :columns="isMobile ? 2 : 4"
+              :count="isMobile ? 4 : 8"
+              :articles="article?.related"
             />
           </div>
         </div>
@@ -59,7 +60,7 @@
   import Comment from '/@/components/comment/index.vue'
   import ArticleSkeleton from './skeleton.vue'
   import ArticleContent from './content.vue'
-  import ArticleLikeShare from './like-share.vue'
+  import ArticleShare from './share.vue'
   import ArticleRelated from './related.vue'
   import ArticleMammon from './mammon.vue'
   import ArticleMeta from './meta.vue'
@@ -71,7 +72,7 @@
       ArticleSkeleton,
       ArticleContent,
       ArticleMammon,
-      ArticleLikeShare,
+      ArticleShare,
       ArticleMeta,
       ArticleRelated
     },
@@ -91,27 +92,6 @@
       const commentStore = useCommentStore()
       const article = computed(() => articleDetailStore.article || UNDEFINED)
       const fetching = computed(() => articleDetailStore.fetching)
-      const relatedArticles = computed(() => {
-        if (!article.value) {
-          return []
-        }
-        const ARTICLE_COUNT = 6
-        const articles = [...article.value.related]
-          .filter((article) => article.id !== props.articleId)
-          .slice(0, ARTICLE_COUNT)
-        if (props.isMobile || articles.length >= ARTICLE_COUNT) {
-          return articles
-        }
-        return [
-          ...articles,
-          ...new Array(ARTICLE_COUNT - articles.length).fill({
-            title: 'null',
-            id: null,
-            _id: '',
-            thumb: ''
-          })
-        ]
-      })
 
       meta(() => ({
         pageTitle: article.value?.title,
@@ -140,7 +120,6 @@
         SocialMedia,
         article,
         fetching,
-        relatedArticles,
         ANCHORS
       }
     }
@@ -152,14 +131,18 @@
 
   .article-page {
     .module {
-      margin-bottom: $lg-gap;
-      @include radius-box($sm-radius);
-      @include common-bg-module();
-    }
+      &.margin {
+        margin-bottom: $lg-gap;
+      }
 
-    .releted-module,
-    .like-share-module {
-      margin-bottom: $lg-gap;
+      &.background {
+        border-radius: $sm-radius;
+        @include common-bg-module();
+      }
+
+      &.overflow {
+        overflow: hidden;
+      }
     }
   }
 </style>

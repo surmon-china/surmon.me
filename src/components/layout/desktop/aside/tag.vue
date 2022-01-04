@@ -1,7 +1,7 @@
 <template>
   <div class="tag">
     <placeholder
-      :data="tagStore.tags.length"
+      :data="tagStore.sorted.length"
       :fetching="tagStore.fetching"
       :i18n-key="LANGUAGE_KEYS.TAG_PLACEHOLDER"
     >
@@ -19,7 +19,7 @@
             :title="tag.description"
             :to="getTagFlowRoute(tag.slug)"
             :key="index"
-            v-for="(tag, index) in tagStore.tags"
+            v-for="(tag, index) in tagStore.sorted"
           >
             <i class="iconfont" :class="getTagIcon(tag)" />
             <span class="name">
@@ -133,6 +133,7 @@
 
           .count {
             margin-left: $xs-gap;
+            color: $text-secondary;
           }
         }
 
@@ -145,6 +146,9 @@
             font-weight: bold;
             color: $text-reversal;
             background-color: $primary;
+            .count {
+              color: $text-reversal;
+            }
           }
         }
 

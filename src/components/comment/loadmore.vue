@@ -1,17 +1,19 @@
 <template>
   <transition name="module">
     <div class="loadmore" :id="COMMENT_FOOTER_ELEMENT_ID">
-      <button class="button" :disabled="!hasMore || fetching" @click="handleLoadmore">
+      <button class="button" v-if="hasMore" :disabled="fetching" @click="handleLoadmore">
         <i18n v-if="fetching" zh="加载中..." en="Loading..." />
-        <template v-else-if="hasMore">
+        <template v-else>
           <i18n>
             <template #zh>加载更多评论（剩 {{ remain }} 条）</template>
             <template #en>Loadmore (remain {{ remain }})</template>
           </i18n>
           <i class="iconfont icon-loadmore"></i>
         </template>
-        <i18n v-else zh="穷山尽水处" en="NO MORE" />
       </button>
+      <span class="no-more" v-else>
+        <i18n zh="水尽山穷" en="NO MORE" />
+      </span>
     </div>
   </transition>
 </template>
@@ -92,6 +94,11 @@
       .iconfont {
         margin-left: $sm-gap;
       }
+    }
+
+    .no-more {
+      padding: $xs-gap 0;
+      color: $text-disabled;
     }
   }
 </style>
