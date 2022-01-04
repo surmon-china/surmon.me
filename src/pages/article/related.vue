@@ -97,7 +97,7 @@
 
         &.disabled {
           pointer-events: none;
-          opacity: 0.8;
+          opacity: 0.6;
         }
 
         &:nth-child(3n) {
@@ -109,7 +109,7 @@
           display: block;
           position: relative;
           overflow: hidden;
-          opacity: 0.8;
+          opacity: 0.7;
           transition: opacity $transition-time-normal;
 
           .thumb {

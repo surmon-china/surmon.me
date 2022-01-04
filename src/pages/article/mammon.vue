@@ -19,7 +19,6 @@
   @import 'src/styles/init.scss';
 
   .mammon {
-    padding: $gap;
     height: auto;
     display: flex;
     justify-content: center;
