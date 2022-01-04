@@ -73,7 +73,6 @@
         </template>
       </i18n>
       <divider type="vertical" />
-      <i class="icon iconfont icon-copy"></i>
       <span class="site-url" @click="copy(articleURL)">
         {{ articleURL }}
       </span>

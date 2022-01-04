@@ -115,7 +115,7 @@
           .thumb {
             width: 100%;
             height: 12rem;
-            background-color: $module-bg-darker-2;
+            background-color: $module-bg-darker-4;
             background-size: cover;
             background-position: 50% 30%;
             transition: background-position $transition-time-fast * 2;

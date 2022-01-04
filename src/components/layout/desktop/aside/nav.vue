@@ -38,7 +38,7 @@
     </div>
     <button class="link" @click="handleLink(ANCHORS.ARTICLE_META_ELEMENT_ID)">
       <i class="iconfont icon-heart"></i>
-      <i18n zh="摁赞" en="Well" />
+      <i18n zh="摁赞" en="Meta" />
       <divider type="vertical" />
       <span class="meta">
         <i class="iconfont icon-eye"></i>
