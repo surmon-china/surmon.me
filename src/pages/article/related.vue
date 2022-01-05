@@ -17,16 +17,7 @@
             :style="{
               backgroundImage: `url(${getMobileArticleListThumbnailURL(article.thumb)})`
             }"
-          >
-            <div class="meta" v-if="false">
-              {{ getTimeAgo(article.create_at) }}
-              <span class="dot">·</span>
-              <i18n>
-                <template #zh>{{ article.meta.comments }} 条看法</template>
-                <template #en>{{ article.meta.comments }} comments</template>
-              </i18n>
-            </div>
-          </div>
+          ></div>
           <div class="title">{{ article.title }}</div>
           <div class="description">{{ article.description }}</div>
         </router-link>
@@ -128,7 +119,7 @@
             opacity: 0.8;
             width: 100%;
             height: 7rem;
-            background-color: $module-bg-darker-4;
+            background-color: $module-bg-darker-2;
             background-size: cover;
             background-position: 50% 45%;
             transition: all $transition-time-fast;
@@ -141,26 +132,14 @@
               position: absolute;
               background: linear-gradient(
                 to top,
-                rgba(0, 0, 0, 0.3) 10%,
-                rgba(0, 0, 0, 0.1) 60%,
+                rgba($black, 0.2) 20%,
+                rgba($black, 0.1) 50%,
                 transparent 90%
               );
               width: 100%;
               height: 100%;
               top: 0;
               left: 0;
-            }
-          }
-
-          .meta {
-            line-height: 2;
-            padding: 0 $sm-gap;
-            font-size: $font-size-small;
-            color: $white;
-            text-shadow: 0 0.5px 2px rgb(0 0 0 / 35%);
-
-            .dot {
-              margin: 0 $xs-gap;
             }
           }
 
@@ -183,7 +162,7 @@
 
           .description {
             font-size: $font-size-small;
-            color: $text-disabled;
+            color: $text-dividers;
             margin-bottom: $sm-gap;
           }
 
@@ -197,7 +176,7 @@
               color: $link-color;
             }
             .description {
-              color: $text;
+              color: $text-secondary;
             }
           }
         }

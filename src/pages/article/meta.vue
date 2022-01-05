@@ -9,8 +9,10 @@
       >
         <i class="icon iconfont icon-like"></i>
         <span class="text">
-          <i18n zh="真棒！" :en="`Well&nbsp;`" />
-          {{ likes }}
+          <i18n>
+            <template #zh>真棒！{{ likes }}</template>
+            <template #en>Well~ {{ likes }}</template>
+          </i18n>
         </span>
       </button>
       <button class="button sponsor" @click="handleSponsor">
@@ -215,6 +217,9 @@
         &:hover,
         &.liked {
           background-color: rgba($red, 1);
+        }
+        &[disabled] {
+          opacity: 0.7;
         }
 
         &.like {

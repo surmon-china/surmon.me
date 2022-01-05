@@ -43,6 +43,7 @@ export enum LANGUAGE_KEYS {
   CATEGORY_PLACEHOLDER = 'category-empty-placeholder',
   TAG_PLACEHOLDER = 'tag-placeholder',
   ARTICLE_TITLE = 'article-title',
+  ARTICLE_VIEWS = 'article-views',
   ARTICLE_PLACEHOLDER = 'article-empty-placeholder',
   ARTICLE_READ_ALL = 'read-all-article-content',
   ARTICLE_RENDERING = 'rendering',

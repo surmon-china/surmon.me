@@ -19,24 +19,31 @@
         <h2 class="text">{{ article.title }}</h2>
         <div class="meta">
           <i class="iconfont icon-read"></i>
-          <span>
-            <i18n>
-              <template #zh
+          <i18n>
+            <template #zh>
+              <span
                 >共 {{ articleDetailStore.contentLength }} 字，需阅读
-                {{ articleDetailStore.readMinutes }} 分钟</template
+                {{ articleDetailStore.readMinutes }} 分钟</span
               >
-              <template #en
+            </template>
+            <template #en>
+              <span
                 >{{ articleDetailStore.contentLength }} words,
-                {{ articleDetailStore.readMinutes }} min read</template
+                {{ articleDetailStore.readMinutes }} min read</span
               >
-            </i18n>
+            </template>
+          </i18n>
+          <divider type="vertical" class="vertical" />
+          <span>
+            <i class="iconfont icon-clock-outline"></i>
+            <span>{{ publishedAt(article.create_at) }}</span>
           </span>
           <divider type="vertical" class="vertical" />
-          <i class="iconfont icon-clock-outline"></i>
-          <span>{{ publishedAt(article.create_at) }}</span>
-          <divider type="vertical" class="vertical" />
-          <i class="iconfont icon-eye"></i>
-          <span>{{ article.meta.views }}</span>
+          <span>
+            <i class="iconfont icon-eye"></i>
+            <span>{{ article.meta.views }}&nbsp;</span>
+            <i18n :lkey="LANGUAGE_KEYS.ARTICLE_VIEWS" />
+          </span>
         </div>
       </div>
       <div
@@ -205,9 +212,7 @@
 
         .meta {
           display: inline-block;
-          padding-top: $sm-gap;
-          border-top: 1px dashed $text-dividers;
-          color: $text-dividers;
+          color: $text-disabled;
           font-size: $font-size-small;
           user-select: none;
           .iconfont {

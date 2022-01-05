@@ -45,5 +45,5 @@ export const getArticleListThumbnailURL = (thumb: string, isWebPImage: boolean) 
 export const getArticleSquareThumbnailURL = (thumb: string) => {
   return thumb
     ? `${thumb}?x-oss-process=image/auto-orient,1/resize,m_fill,w_320,h_320/quality,q_84`
-    : getTargetCDNURL('/images/thumbnail/pc-article-list.jpg')
+    : ''
 }
