@@ -175,6 +175,10 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '文不加点',
     [Language.En]: 'Articles'
   },
+  [LANGUAGE_KEYS.ARTICLE_VIEWS]: {
+    [Language.Zh]: '次阅读',
+    [Language.En]: 'views'
+  },
   [LANGUAGE_KEYS.ARTICLE_PLACEHOLDER]: {
     [Language.Zh]: '空空如也',
     [Language.En]: 'No articles'
