@@ -38,7 +38,19 @@ export const useUniversalStore = defineStore('universal', {
   getters: {
     isLikedPage: (state) => (id: number) => state.vote.likedPages.includes(id),
     isLikedComment: (state) => (id: number) => state.vote.likedComments.includes(id),
-    isDislikedComment: (state) => (id: number) => state.vote.dislikedComments.includes(id)
+    isDislikedComment: (state) => (id: number) => state.vote.dislikedComments.includes(id),
+    author: (state): Author | null => {
+      if (state.user.type === UserType.Local) {
+        return state.user.localProfile
+      }
+      if (state.user.type === UserType.Disqus) {
+        return {
+          name: state.user.disqusProfile?.name,
+          site: state.user.disqusProfile?.url || state.user.disqusProfile?.profileUrl
+        }
+      }
+      return null
+    }
   },
   actions: {
     likeComment(commentID: number) {

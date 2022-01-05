@@ -11,6 +11,7 @@ import { UNDEFINED } from '/@/constants/value'
 import { SortType, UniversalExtend, CommentParentType } from '/@/constants/state'
 import { delayer } from '/@/utils/delayer'
 import nodepress from '/@/services/nodepress'
+import { useUniversalStore } from './universal'
 
 export const COMMENT_API_PATH = '/comment'
 export const COMMENT_EMPTY_PID = CommentParentType.Self
@@ -179,13 +180,14 @@ export const useCommentStore = defineStore('comment', {
         })
     },
 
-    postCommentVote(commentID: number, isLike: boolean) {
+    postCommentVote(commentID: number, vote: 1 | -1) {
+      const universalStore = useUniversalStore()
       return nodepress
-        .post(`/vote/comment`, { comment_id: commentID, vote: isLike ? 1 : -1 })
+        .post(`/vote/comment`, { comment_id: commentID, vote, author: universalStore.author })
         .then(() => {
           const comment = this.comments.find((comment) => comment.id === commentID)
           if (comment) {
-            isLike ? comment.likes++ : comment.dislikes++
+            vote > 0 ? comment.likes++ : comment.dislikes++
           }
         })
     }
