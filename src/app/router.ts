@@ -14,7 +14,6 @@ import {
 import { NOT_FOUND, BAD_REQUEST } from '/@/constants/error'
 import { LANGUAGE_KEYS } from '/@/language/key'
 import { LayoutColumn } from '/@/services/layout'
-import { isSSR, isClient } from '/@/app/environment'
 import { isValidDateParam } from '/@/transforms/validate'
 import { scrollToTop } from '/@/utils/effects'
 
@@ -132,25 +131,13 @@ export const routes: RouteRecordRaw[] = [
     meta: {
       responsive: true,
       ssrCacheAge: 60 * 2, // 2 mins
-      async validate({ route, i18n, store }) {
+      async validate({ route, i18n }) {
         const { category_slug } = route.params
         if (!category_slug) {
           return Promise.reject({
             code: BAD_REQUEST,
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Category slug → <string>'
           })
-        }
-        if (isSSR && isClient) {
-          const targetCategory = store.state.value?.category.categories.find(
-            (category) => category.slug === category_slug
-          )
-          if (!targetCategory) {
-            return Promise.reject({
-              code: NOT_FOUND,
-              message:
-                i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + `Category ${category_slug} not found`
-            })
-          }
         }
       }
     }
@@ -169,22 +156,13 @@ export const routes: RouteRecordRaw[] = [
     meta: {
       responsive: true,
       ssrCacheAge: 60 * 2, // 2 mins
-      async validate({ route, i18n, store }) {
+      async validate({ route, i18n }) {
         const { tag_slug } = route.params
         if (!tag_slug) {
           return Promise.reject({
             code: BAD_REQUEST,
             message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Tag slug → <string>'
           })
-        }
-        if (isSSR && isClient) {
-          const tagretTag = store.state.value?.tag.tags.find((tag) => tag.slug === tag_slug)
-          if (!tagretTag) {
-            return Promise.reject({
-              code: NOT_FOUND,
-              message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + `Tag ${tag_slug} not found`
-            })
-          }
         }
       }
     }
