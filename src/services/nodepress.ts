@@ -37,33 +37,32 @@ nodepress.interceptors.response.use(
   },
   (error) => {
     const errorJSON = error.toJSON()
-    const messageText = error.response?.data?.message || 'Error'
-    const errorText = error.response?.data?.error || error.response?.statusText || errorJSON.message
     const errorInfo = {
       ...errorJSON,
       config: error.config,
-      request: error.request,
-      response: error.response,
-      code: error.code || error.response?.status || BAD_REQUEST,
-      message: messageText + ': ' + errorText
+      code: errorJSON.status || error.response?.status || BAD_REQUEST,
+      message: error.response?.data?.error || error.response?.statusText || errorJSON.message
     }
 
     console.debug(
       'axios error:',
       isClient
-        ? errorInfo
+        ? error
         : {
-            name: errorJSON.name,
-            message: errorJSON.message,
-            status: errorJSON.status,
-            code: errorJSON.code,
+            axiosName: errorJSON.name,
+            axiosMessage: errorJSON.message,
+            npError: errorInfo.message,
+            npMessage: error.response?.data?.message || '',
+            status: errorInfo.code,
             method: errorJSON.config.method,
             baseURL: errorJSON.config.baseURL,
+            params: errorJSON.config.params,
             url: errorJSON.config.url,
             data: errorJSON.config.data,
             headers: errorJSON.config.headers
           }
     )
+
     return Promise.reject(errorInfo)
   }
 )
