@@ -58,7 +58,12 @@
             </span>
             <client-only>
               <popup :visible="isOnLiveMap" @close="toggleRoadMap">
-                <iframe :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP" frameborder="0" class="roadmap" />
+                <iframe
+                  :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP"
+                  allowfullscreen
+                  frameborder="0"
+                  class="roadmap"
+                />
               </popup>
             </client-only>
           </div>
@@ -138,8 +143,10 @@
           </div>
         </div>
       </div>
-      <div class="location-box">
-        <iframe class="iframe" src="/partials/map.html" />
+      <div class="roadmap-box" :placeholder="isZhLang ? i18ns.roadmap.zh : i18ns.roadmap.en">
+        <div class="wrapper">
+          <iframe class="iframe" :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP" frameborder="0" />
+        </div>
       </div>
       <div class="github-box">
         <div class="sponsors">
@@ -169,7 +176,7 @@
           </ulink>
         </div>
         <span class="divider"></span>
-        <uimage cdn class="pal" src="/images/page-about/peace-and-love.jpg" />
+        <iframe class="location" src="/partials/location.html" />
         <span class="divider"></span>
         <ulink
           class="homepage-link"
@@ -198,7 +205,7 @@
   export default defineComponent({
     name: 'PCAboutPage',
     setup() {
-      const { i18n, gtag, globalState } = useEnhancer()
+      const { i18n, gtag, globalState, isZhLang } = useEnhancer()
       const metaStore = useMetaStore()
       const isOnLiveMap = toRef(globalState.switchBox, 'liveMap')
       const adminInfo = computed(() => metaStore.adminInfo.data)
@@ -229,6 +236,7 @@
         RouteName,
         getAdminAvatar,
         getPageRoute,
+        isZhLang,
         isOnLiveMap,
         backgroundVideo,
         adminInfo,
@@ -624,18 +632,26 @@
       }
     }
 
-    .location-box {
+    .roadmap-box {
       overflow: hidden;
       width: 100%;
       padding: $sm-gap;
       margin-bottom: $gap * 2;
       @include radius-box($lg-radius);
       @include common-bg-module();
+      @extend .center-placeholder;
 
-      iframe {
-        width: 100%;
-        height: 19rem;
-        border-radius: $xs-radius;
+      .wrapper {
+        $size: 230px;
+        $google-bar: 54px;
+        height: $size;
+        @include radius-box($lg-radius);
+
+        .iframe {
+          width: 100%;
+          height: $size + $google-bar;
+          margin-top: -$google-bar;
+        }
       }
     }
 
@@ -712,8 +728,9 @@
         }
       }
 
-      .pal {
+      .location {
         display: block;
+        width: 14rem;
         height: 110px;
         @include radius-box($lg-radius);
       }
