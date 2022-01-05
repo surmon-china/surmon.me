@@ -12,6 +12,7 @@ import { getArticleContentHeadingElementID } from '/@/constants/anchor'
 import nodepress from '/@/services/nodepress'
 import { markdownToHTML } from '/@/transforms/markdown'
 import { delayer } from '/@/utils/delayer'
+import { useUniversalStore } from './universal'
 import { Category } from './category'
 import { Tag } from './tag'
 
@@ -216,8 +217,9 @@ export const useArticleDetailStore = defineStore('articleDetail', {
 
     // 喜欢文章
     postArticleLike(articleID: number) {
+      const universalStore = useUniversalStore()
       return nodepress
-        .post(`/vote/article`, { article_id: articleID, vote: 1 })
+        .post(`/vote/article`, { article_id: articleID, vote: 1, author: universalStore.author })
         .then((response) => {
           if (this.article) {
             this.article.meta.likes = response.result

@@ -129,7 +129,7 @@
           return false
         }
         try {
-          await commentStore.postCommentVote(commentID, isLike)
+          await commentStore.postCommentVote(commentID, isLike ? 1 : -1)
           isLike ? universalStore.likeComment(commentID) : universalStore.dislikeComment(commentID)
         } catch (error) {
           const message = i18n.t(LANGUAGE_KEYS.POST_ACTION_ERROR)

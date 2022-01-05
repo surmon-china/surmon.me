@@ -6,6 +6,7 @@
 
 import { defineStore } from 'pinia'
 import nodepress from '/@/services/nodepress'
+import { useUniversalStore } from './universal'
 
 export interface MerchItemConfig {
   name: string
@@ -126,7 +127,8 @@ export const useMetaStore = defineStore('meta', {
     },
 
     postSiteLike() {
-      return nodepress.post('/vote/site').then((response) => {
+      const universalStore = useUniversalStore()
+      return nodepress.post('/vote/site', { author: universalStore.author }).then((response) => {
         if (this.appOptions.data) {
           this.appOptions.data.meta.likes = response.result
         }
