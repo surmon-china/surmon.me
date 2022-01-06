@@ -1,5 +1,5 @@
 <template>
-  <div class="about-page">
+  <div class="about-page" :class="{ dark: isDarkTheme }">
     <div class="banner">
       <div class="background">
         <video class="video" loop muted autoplay :controls="false">
@@ -56,16 +56,6 @@
             <span class="roadmap" :class="language" @click="toggleRoadMap">
               <i18n v-bind="i18ns.roadmap" />
             </span>
-            <client-only>
-              <popup :visible="isOnLiveMap" @close="toggleRoadMap">
-                <iframe
-                  :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP"
-                  allowfullscreen
-                  frameborder="0"
-                  class="roadmap"
-                />
-              </popup>
-            </client-only>
           </div>
           <div class="item">
             <i class="iconfont icon-music" />
@@ -145,7 +135,20 @@
       </div>
       <div class="roadmap-box" :placeholder="isZhLang ? i18ns.roadmap.zh : i18ns.roadmap.en">
         <div class="wrapper">
+          <button class="fullscreen" @click="toggleRoadMap">
+            <i class="iconfont icon-fullscreen"></i>
+          </button>
           <iframe class="iframe" :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP" frameborder="0" />
+          <client-only>
+            <popup :visible="isOnLiveMap" @close="toggleRoadMap">
+              <iframe
+                :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP"
+                allowfullscreen
+                frameborder="0"
+                class="roadmap"
+              />
+            </popup>
+          </client-only>
         </div>
       </div>
       <div class="github-box">
@@ -179,11 +182,11 @@
         <iframe class="location" src="/partials/location.html" />
         <span class="divider"></span>
         <ulink
-          class="homepage-link"
+          class="github-chart"
           :href="VALUABLE_LINKS.GITHUB"
           @mousedown="handleGTagEvent('github_chart_link')"
         >
-          <uimage cdn src="/effects/ghchart" />
+          <uimage class="image" cdn src="/effects/ghchart" />
         </ulink>
       </div>
     </div>
@@ -205,7 +208,7 @@
   export default defineComponent({
     name: 'PCAboutPage',
     setup() {
-      const { i18n, gtag, globalState, isZhLang } = useEnhancer()
+      const { i18n, gtag, globalState, isZhLang, isDarkTheme } = useEnhancer()
       const metaStore = useMetaStore()
       const isOnLiveMap = toRef(globalState.switchBox, 'liveMap')
       const adminInfo = computed(() => metaStore.adminInfo.data)
@@ -237,6 +240,7 @@
         getAdminAvatar,
         getPageRoute,
         isZhLang,
+        isDarkTheme,
         isOnLiveMap,
         backgroundVideo,
         adminInfo,
@@ -258,6 +262,24 @@
   .about-page {
     width: 100%;
     overflow: hidden;
+
+    &.dark {
+      .roadmap-box {
+        .iframe {
+          filter: invert(1) hue-rotate(200deg) grayscale(60%) contrast(0.9);
+        }
+      }
+      .github-chart {
+        .image {
+          filter: invert(1) hue-rotate(200deg) brightness(1.5) contrast(0.9);
+        }
+      }
+      .github-box {
+        .location {
+          filter: invert(1) hue-rotate(200deg) brightness(0.5) contrast(0.9);
+        }
+      }
+    }
 
     .banner {
       $banner-height: 22rem;
@@ -644,8 +666,25 @@
       .wrapper {
         $size: 230px;
         $google-bar: 54px;
+        position: relative;
         height: $size;
         @include radius-box($lg-radius);
+
+        .fullscreen {
+          position: absolute;
+          top: 0;
+          right: 0;
+          z-index: $z-index-normal + 1;
+          display: block;
+          width: 3rem;
+          height: 3rem;
+          border-bottom-left-radius: $xs-radius;
+          background-color: $module-bg-translucent;
+          font-size: $font-size-h4;
+          &:hover {
+            background-color: $module-bg;
+          }
+        }
 
         .iframe {
           width: 100%;
@@ -732,17 +771,19 @@
         display: block;
         width: 14rem;
         height: 110px;
+        background-color: $module-bg-darker-1;
+        /* border: 1px solid $module-bg-darker-1; */
         @include radius-box($lg-radius);
       }
 
       .divider {
         height: 60%;
         width: 1px;
-        background-color: $module-bg-darker-1;
         opacity: 0.5;
+        background-color: $module-bg-darker-1;
       }
 
-      .homepage-link {
+      .github-chart {
         height: 100%;
         display: flex;
         align-items: center;
