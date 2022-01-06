@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
-  src: url('//at.alicdn.com/t/font_64825_56v0yny53l6.woff2?t=1641310952963') format('woff2'),
-    url('//at.alicdn.com/t/font_64825_56v0yny53l6.woff?t=1641310952963') format('woff'),
-    url('//at.alicdn.com/t/font_64825_56v0yny53l6.ttf?t=1641310952963') format('truetype');
+  src: url('//at.alicdn.com/t/font_64825_vokvppyf4e.woff2?t=1641474297451') format('woff2'),
+    url('//at.alicdn.com/t/font_64825_vokvppyf4e.woff?t=1641474297451') format('woff'),
+    url('//at.alicdn.com/t/font_64825_vokvppyf4e.ttf?t=1641474297451') format('truetype');
 }
 
 .iconfont {
@@ -13,16 +13,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-fullscreen:before {
+  content: '\e63b';
+}
+
 .icon-copy:before {
   content: '\e6e9';
-}
-
-.icon-copy-l:before {
-  content: '\e61e';
-}
-
-.icon-copy1:before {
-  content: '\e74a';
 }
 
 .icon-clock-outline:before {
@@ -283,10 +279,6 @@
 
 .icon-brush:before {
   content: '\e696';
-}
-
-.icon-fullscreen:before {
-  content: '\e643';
 }
 
 .icon-dragon:before {
