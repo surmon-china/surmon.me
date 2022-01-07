@@ -15,14 +15,9 @@
           </i18n>
         </span>
       </button>
-      <button class="button sponsor" @click="handleSponsor">
+      <button v-if="!plain" class="button sponsor" @click="handleOpenSponsor">
         <i class="icon iconfont icon-heart"></i>
       </button>
-      <client-only>
-        <popup v-model:visible="isVisibleSponsor" :border="false">
-          <iframe class="sponsor-modal" :src="VALUABLE_LINKS.SPONSOR" />
-        </popup>
-      </client-only>
     </div>
     <div class="line">
       <i18n zh="本文于" en="Published at" />
@@ -118,16 +113,15 @@
       }
     },
     setup(props) {
-      const { i18n, gtag } = useEnhancer()
+      const { i18n, gtag, globalState } = useEnhancer()
       const universalStore = useUniversalStore()
       const articleDetailStore = useArticleDetailStore()
       const isLiked = computed(() => universalStore.isLikedPage(props.article.id))
       const articleURL = computed(() => getPageURL(getArticleDetailRoute(props.article.id)))
       const likes = computed(() => props.article.meta.likes)
 
-      const isVisibleSponsor = ref(false)
-      const handleSponsor = () => {
-        isVisibleSponsor.value = true
+      const handleOpenSponsor = () => {
+        globalState.switchTogglers.sponsorModal()
         gtag?.event('article_sponsor', {
           event_category: GAEventCategories.Article
         })
@@ -167,9 +161,8 @@
         likes,
         copy,
         isLiked,
-        isVisibleSponsor,
         handleLike,
-        handleSponsor,
+        handleOpenSponsor,
         getDateTitle,
         getDateLink,
         getTagFlowRoute,
@@ -182,12 +175,6 @@
 <style lang="scss" scoped>
   @use 'sass:math';
   @import 'src/styles/init.scss';
-
-  .sponsor-modal {
-    width: 600px;
-    height: 200px;
-    border-radius: $sm-radius !important;
-  }
 
   .meta {
     position: relative;
@@ -221,11 +208,19 @@
         &[disabled] {
           opacity: 0.7;
         }
+        &:first-child {
+          border-top-left-radius: $sm-radius;
+          border-bottom-left-radius: $sm-radius;
+        }
+        &:last-child {
+          /* https://github.com/ant-design/ant-design/blob/master/components/style/themes/variable.less#L121 */
+          border-left: 1px solid mix($white, $red, 30%);
+          border-top-right-radius: $sm-radius;
+          border-bottom-right-radius: $sm-radius;
+        }
 
         &.like {
           min-width: 8rem;
-          border-top-left-radius: $sm-radius;
-          border-bottom-left-radius: $sm-radius;
           .icon {
             font-size: $font-size-h2;
           }
@@ -237,10 +232,6 @@
 
         &.sponsor {
           font-size: $font-size-h4;
-          border-top-right-radius: $sm-radius;
-          border-bottom-right-radius: $sm-radius;
-          /* https://github.com/ant-design/ant-design/blob/master/components/style/themes/variable.less#L121 */
-          border-left: 1px solid mix($white, $red, 30%);
         }
       }
     }

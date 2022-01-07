@@ -29,16 +29,20 @@ export const i18ns = {
     [Language.En]: `Find job`
   },
   hireMe: {
-    [Language.Zh]: `找我干活`,
+    [Language.Zh]: `与我合作`,
     [Language.En]: `Hire me`
   },
-  followMe: {
-    [Language.Zh]: `关注我的 Vlog`,
-    [Language.En]: `Follow me`
+  myVlogs: {
+    [Language.Zh]: `我的 Vlog`,
+    [Language.En]: `My Vlogs | Plogs`
   },
   merchBar: {
-    [Language.Zh]: `体验我的周边`,
+    [Language.Zh]: `我的周边`,
     [Language.En]: `Merch bar`
+  },
+  guestbook: {
+    [Language.Zh]: `给我留言`,
+    [Language.En]: `Guestbook`
   },
   QQGroup: {
     [Language.Zh]: `寂寞同性交友群`,

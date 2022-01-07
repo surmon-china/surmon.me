@@ -12,7 +12,6 @@
       </template>
     </page-banner>
     <div class="container">
-      <socials class="header" />
       <div class="module-title plog">Instagram · Plogs</div>
       <placeholder :data="lensStore.plogs.data" :loading="lensStore.plogs.fetching">
         <template #placeholder>
@@ -57,7 +56,6 @@
   import { META } from '/@/config/app.config'
   import PageBanner from '/@/components/common/banner.vue'
   import LensSkeleton from './skeleton.vue'
-  import Socials from './socials.vue'
   import Plogs from './plogs.vue'
   import Vlogs from './vlogs.vue'
 
@@ -67,7 +65,6 @@
     components: {
       PageBanner,
       LensSkeleton,
-      Socials,
       Plogs,
       Vlogs
     },
@@ -105,12 +102,8 @@
   @import 'src/styles/init.scss';
 
   .lens-page {
-    .header {
-      margin: $gap * 2 0;
-    }
-
     .module-title {
-      margin-bottom: $gap * 2;
+      margin: $gap * 2 0;
       line-height: 3.6em;
       border-width: 4px;
       border-style: double;

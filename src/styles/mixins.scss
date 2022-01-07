@@ -2,6 +2,14 @@
   @return #{if($important, '!important', '')};
 }
 
+@function toRGBValue($color) {
+  @return red($color) + ', ' + green($color) + ', ' + blue($color);
+}
+
+@function toRGB($color) {
+  @return 'rgb(' + toRGBValue($color) + ')';
+}
+
 /// Element border radius
 @mixin radius-box($radius-size) {
   border-radius: $radius-size;
