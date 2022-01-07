@@ -22,11 +22,11 @@
 &nbsp;
 [![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/blob/main/LICENSE)
 
-**My personal website and blog, powered by [Vue(3)](https://vuejs.org).**
+**My personal website and blog, powered by [Vue(3)](https://vuejs.org), API services provided by [NodePress](https://github.com/surmon-china/nodepress).**
 
-**使用 [Vue (3)](https://vuejs.org) 构建的个人博客网站。**
+**使用 [Vue (3)](https://vuejs.org) 构建的个人博客网站，服务端使用 [NodePress](https://github.com/surmon-china/nodepress) 程序。**
 
-> **Online site:** https://surmon.me
+> **Online site: [https://surmon.me](https://surmon.me)**
 
 > **更新记录：[CHANGELOG.md](https://github.com/surmon-china/surmon.me/blob/main/CHANGELOG.md)**
 
