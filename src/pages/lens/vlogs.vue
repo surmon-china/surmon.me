@@ -149,7 +149,7 @@
 
       .thumb {
         width: 100%;
-        height: 11rem;
+        height: 12rem;
         position: relative;
         overflow: hidden;
         background-color: $module-bg-darker-3;

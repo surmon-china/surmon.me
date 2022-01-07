@@ -2,6 +2,14 @@
   <div class="desktop-main">
     <background />
     <wallflower />
+    <client-only>
+      <popup :visible="isOnSponsorModal" :border="false" @close="handleSponsorModalClose">
+        <iframe
+          :style="{ width: '600px', height: '200px', borderRadius: '4px' }"
+          :src="VALUABLE_LINKS.SPONSOR"
+        />
+      </popup>
+    </client-only>
     <template v-if="!layoutColumn.isFull">
       <share class="main-share" />
       <wallpaper />
@@ -44,10 +52,11 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { getLayoutByRouteMeta } from '/@/services/layout'
   import { MAIN_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
   import NavView from './nav.vue'
   import AsideView from './aside/index.vue'
   import HeaderView from './header.vue'
@@ -75,6 +84,10 @@
     },
     setup() {
       const { route, globalState } = useEnhancer()
+      const isOnSponsorModal = computed(() => globalState.switchBox.sponsorModal)
+      const handleSponsorModalClose = () => {
+        globalState.switchTogglers.sponsorModal()
+      }
       const handlePageTransitionDone = () => {
         globalState.setLayoutColumn(getLayoutByRouteMeta(route.meta))
       }
@@ -82,8 +95,11 @@
       return {
         MAIN_ELEMENT_ID,
         MAIN_CONTENT_ELEMENT_ID,
+        VALUABLE_LINKS,
+        isOnSponsorModal,
         layoutColumn: globalState.layoutColumn,
-        handlePageTransitionDone
+        handlePageTransitionDone,
+        handleSponsorModalClose
       }
     }
   })

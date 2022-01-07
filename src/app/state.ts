@@ -120,10 +120,8 @@ export const createGlobalState = (config: GlobalStateConfig) => {
 
   // Switchers
   const switchBox = reactive({
-    // 开启轨迹地图
-    liveMap: false,
-    // 山河入梦
-    wallpaper: false
+    wallpaper: false,
+    sponsorModal: false
   })
 
   // export state
@@ -151,8 +149,8 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     // switch
     switchBox: readonly(switchBox),
     switchTogglers: {
-      liveMap() {
-        switchBox.liveMap = !switchBox.liveMap
+      sponsorModal() {
+        switchBox.sponsorModal = !switchBox.sponsorModal
       },
       wallpaper() {
         switchBox.wallpaper = !switchBox.wallpaper

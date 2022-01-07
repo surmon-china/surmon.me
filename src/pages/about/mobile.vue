@@ -33,7 +33,7 @@
         </router-link>
         <router-link class="item text-only" :to="getPageRoute(RouteName.Lens)">
           <i class="iconfont icon-lens" />
-          <i18n v-bind="i18ns.followMe" />
+          <i18n v-bind="i18ns.myVlogs" />
         </router-link>
         <router-link class="item text-only" :to="getPageRoute(RouteName.Merch)">
           <i class="iconfont icon-rubik" />

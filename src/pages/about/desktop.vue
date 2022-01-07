@@ -49,138 +49,88 @@
       </div>
     </div>
     <div class="container">
-      <div class="profile">
-        <div class="content">
-          <div class="item">
-            <i class="iconfont icon-swordsman" />
-            <span class="roadmap" :class="language" @click="toggleRoadMap">
-              <i18n v-bind="i18ns.roadmap" />
-            </span>
-          </div>
-          <div class="item">
-            <i class="iconfont icon-music" />
-            <span class="music">
-              <router-link :to="getPageRoute(RouteName.Music)">
-                Techno, Electronic, Disco, Rock, Popular
-              </router-link>
-              <ulink class="spotify" :href="VALUABLE_LINKS.SPOTIFY">
-                <i class="iconfont icon-spotify" />
-              </ulink>
-              <ulink class="music-163" :href="VALUABLE_LINKS.MUSIC_163">
-                <i class="iconfont icon-163music-logo" />
-              </ulink>
-            </span>
-          </div>
-          <div class="item">
-            <i class="iconfont icon-coffee" />
-            <router-link class="text-link" :to="getPageRoute(RouteName.Job)">
-              <i18n v-bind="i18ns.findJob" />
-            </router-link>
-            <divider type="vertical" />
-            <router-link class="text-link" :to="getPageRoute(RouteName.Freelancer)">
-              <i18n v-bind="i18ns.hireMe" />
-            </router-link>
-            <divider type="vertical" />
-            <router-link class="text-link" :to="getPageRoute(RouteName.Lens)">
-              <i18n v-bind="i18ns.followMe" />
-            </router-link>
-            <divider type="vertical" />
-            <router-link class="text-link" :to="getPageRoute(RouteName.Merch)">
-              <i18n v-bind="i18ns.merchBar" />
-            </router-link>
-          </div>
-          <div class="item">
-            <i class="iconfont icon-discussion" />
-            <ulink class="text-link" :href="VALUABLE_LINKS.QQ_GROUP">
-              <i18n v-bind="i18ns.QQGroup" />
-            </ulink>
-            <divider type="vertical" />
-            <ulink class="text-link" :href="VALUABLE_LINKS.TELEGRAM_GROUP">
-              <i18n v-bind="i18ns.TelegramGroup" />
-            </ulink>
-          </div>
-          <div class="item">
-            <i class="iconfont icon-friend" />
-            <span class="friends">
-              <a
-                v-for="(link, name) in FRIEND_LINKS"
-                :key="link"
-                :href="link"
-                class="link"
-                target="_blank"
-                rel="external nofollow noopener"
-              >
-                {{ name }}
-              </a>
-            </span>
-            <span>...</span>
-          </div>
-        </div>
-        <div class="wechat">
-          <div class="qrcode">
-            <uimage cdn class="image" src="/images/page-about/wechat.jpg" />
-            <div class="slogan">
-              <span class="text">
-                <i18n zh="扫码加微，点燃灵魂" en="Scan the QR code on WeChat" />
-              </span>
-            </div>
-          </div>
-          <div class="cover" @mouseenter="handleGTagEvent('wechat_qrcode')">
-            <div class="friend-me">
-              <i class="iconfont icon-wechat"></i>
-              <i18n zh="众里寻他" en="WeChat" />
-            </div>
-          </div>
+      <div class="links">
+        <router-link class="item" :to="getPageRoute(RouteName.Lens)">
+          <i class="iconfont icon-lens"></i>
+          <span class="text"><i18n v-bind="i18ns.myVlogs" /></span>
+        </router-link>
+        <router-link class="item" :to="getPageRoute(RouteName.Merch)">
+          <i class="iconfont icon-rubik"></i>
+          <span class="text"><i18n v-bind="i18ns.merchBar" /></span>
+        </router-link>
+        <router-link class="item" :to="getPageRoute(RouteName.Job)">
+          <i class="iconfont icon-horse"></i>
+          <span class="text"><i18n v-bind="i18ns.findJob" /></span>
+        </router-link>
+        <router-link class="item" :to="getPageRoute(RouteName.Freelancer)">
+          <i class="iconfont icon-coin-s"></i>
+          <span class="text"><i18n v-bind="i18ns.hireMe" /></span>
+        </router-link>
+        <router-link class="item" :to="getPageRoute(RouteName.Guestbook)">
+          <i class="iconfont icon-comment"></i>
+          <span class="text"><i18n v-bind="i18ns.guestbook" /></span>
+        </router-link>
+      </div>
+      <div class="discussion">
+        <ulink class="item qq-group" :href="VALUABLE_LINKS.QQ_GROUP">
+          <i class="iconfont icon-qq"></i>
+          <span class="text"><i18n v-bind="i18ns.QQGroup" /></span>
+        </ulink>
+        <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM_GROUP">
+          <i class="iconfont icon-telegram"></i>
+          <span class="text"><i18n v-bind="i18ns.TelegramGroup" /></span>
+        </ulink>
+        <button class="item sponsor" @click="handleOpenSponsor">
+          <i class="iconfont icon-heart" />
+          <span class="text"><i18n zh="赞助我" en="Sponsor" /></span>
+        </button>
+        <ulink class="item spotify" :href="VALUABLE_LINKS.SPOTIFY">
+          <i class="iconfont icon-spotify" />
+          <span class="text">Spotify</span>
+        </ulink>
+        <ulink class="item music-163" :href="VALUABLE_LINKS.MUSIC_163">
+          <i class="iconfont icon-163music-logo" />
+          <span class="text">BGM list</span>
+        </ulink>
+      </div>
+      <div class="qrcodes">
+        <div
+          class="item"
+          :class="item.class"
+          :key="index"
+          v-for="(item, index) in qrcodes"
+          @mouseenter="handleGTagEvent(item.class.replace('-', '_') + '_qrcode')"
+        >
+          <div class="background"></div>
+          <span class="qrcode">
+            <uimage class="image" cdn :src="item.qrcode" />
+          </span>
+          <ulink class="link" :href="item.link">
+            <i class="icon iconfont" :class="item.icon"></i>
+            <span class="text">{{ item.text }}</span>
+          </ulink>
         </div>
       </div>
       <div class="roadmap-box" :placeholder="isZhLang ? i18ns.roadmap.zh : i18ns.roadmap.en">
         <div class="wrapper">
-          <button class="fullscreen" @click="toggleRoadMap">
+          <button class="fullscreen" @click="handleOpenMap">
             <i class="iconfont icon-fullscreen"></i>
           </button>
           <iframe class="iframe" :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP" frameborder="0" />
           <client-only>
-            <popup :visible="isOnLiveMap" @close="toggleRoadMap">
+            <popup v-model:visible="isOnRoadMap">
               <iframe
                 :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP"
                 allowfullscreen
                 frameborder="0"
-                class="roadmap"
+                class="roadmap-modal"
               />
             </popup>
           </client-only>
         </div>
       </div>
       <div class="github-box">
-        <div class="sponsors">
-          <ulink
-            class="button github"
-            :href="VALUABLE_LINKS.GITHUB_SPONSORS"
-            @mousedown="handleGTagEvent('sponsor_github_link')"
-          >
-            <i class="iconfont icon-heart" />
-            <span class="text">Sponsor me</span>
-          </ulink>
-          <ulink
-            class="button paypal"
-            :href="VALUABLE_LINKS.PAYPAL"
-            @mousedown="handleGTagEvent('sponsor_paypal_link')"
-          >
-            <i class="iconfont icon-paypal" />
-            <span class="text">PayPal me</span>
-          </ulink>
-          <ulink
-            class="button more"
-            :href="VALUABLE_LINKS.SPONSOR"
-            @mousedown="handleGTagEvent('sponsor_more_payment_link')"
-          >
-            <i class="iconfont icon-qrcode" />
-            <span class="text">More payment</span>
-          </ulink>
-        </div>
-        <span class="divider"></span>
         <iframe class="location" src="/partials/location.html" />
-        <span class="divider"></span>
         <ulink
           class="github-chart"
           :href="VALUABLE_LINKS.GITHUB"
@@ -194,7 +144,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, toRef } from 'vue'
+  import { defineComponent, computed, ref } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
   import { useMetaStore } from '/@/store/meta'
@@ -210,8 +160,61 @@
     setup() {
       const { i18n, gtag, globalState, isZhLang, isDarkTheme } = useEnhancer()
       const metaStore = useMetaStore()
-      const isOnLiveMap = toRef(globalState.switchBox, 'liveMap')
       const adminInfo = computed(() => metaStore.adminInfo.data)
+
+      const qrcodes = [
+        {
+          class: 'wechat',
+          qrcode: `/images/page-about/wechat.jpg`,
+          icon: 'icon-wechat',
+          text: `Scan on WeChat`
+        },
+        {
+          class: 'instagram',
+          qrcode: `/images/page-lens/instagram.png`,
+          icon: 'icon-instagram',
+          link: VALUABLE_LINKS.INSTAGRAM,
+          text: `Instagram Plogs`
+        },
+        {
+          class: 'wechat-channel',
+          qrcode: `/images/page-lens/wechat-channel.png`,
+          icon: 'icon-wechat-channel',
+          text: `WeChat Channel`
+        },
+        {
+          class: 'bilibili',
+          qrcode: `/images/page-lens/bilibili.png`,
+          icon: 'icon-bilibili-full',
+          link: VALUABLE_LINKS.BILIBILI,
+          text: `BiliBili 干杯~`
+        },
+        {
+          class: 'youtube',
+          qrcode: `/images/page-lens/youtube.png`,
+          icon: 'icon-youtube',
+          link: VALUABLE_LINKS.YOUTUBE,
+          text: 'YouTube Channel'
+        }
+      ]
+
+      const handleGTagEvent = (event: string) => {
+        gtag?.event(event, {
+          event_category: GAEventCategories.About
+        })
+      }
+
+      const isOnRoadMap = ref(false)
+      const handleOpenMap = () => {
+        isOnRoadMap.value = true
+        handleGTagEvent('roadmap_modal')
+      }
+
+      const handleOpenSponsor = () => {
+        globalState.switchTogglers.sponsorModal()
+        handleGTagEvent('sponsor_modal')
+      }
+
       // MARK: 非常有必要，vite 对 video.source.src 的解析有问题，会将其认为是 asset，而非 static resource，从而编译失败
       const backgroundVideo = getTargetStaticURL('/assets/page-about-background.mp4')
 
@@ -220,19 +223,9 @@
       // prefetch
       useUniversalFetch(() => metaStore.fetchAdminInfo())
 
-      const handleGTagEvent = (event: string) => {
-        gtag?.event(event, {
-          event_category: GAEventCategories.About
-        })
-      }
-
-      const toggleRoadMap = () => {
-        globalState.switchTogglers.liveMap()
-        handleGTagEvent('roadmap')
-      }
-
       return {
         i18ns,
+        qrcodes,
         language: i18n.language,
         VALUABLE_LINKS,
         FRIEND_LINKS,
@@ -241,11 +234,12 @@
         getPageRoute,
         isZhLang,
         isDarkTheme,
-        isOnLiveMap,
+        isOnRoadMap,
         backgroundVideo,
         adminInfo,
         handleGTagEvent,
-        toggleRoadMap
+        handleOpenSponsor,
+        handleOpenMap
       }
     }
   })
@@ -254,7 +248,7 @@
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
 
-  .roadmap {
+  .roadmap-modal {
     width: 88vw;
     height: 88vh;
   }
@@ -394,6 +388,10 @@
                 margin-right: $sm-gap;
               }
 
+              .text {
+                font-weight: bold;
+              }
+
               &.github {
                 background-color: $github-primary;
                 &:hover {
@@ -473,182 +471,168 @@
       }
     }
 
-    .profile {
+    .links,
+    .discussion {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-gap: $gap * 2;
       width: 100%;
-      height: auto;
-      display: flex;
-      overflow: hidden;
-      margin-bottom: $gap * 2;
+      margin-bottom: 2rem;
 
-      .content {
-        flex-grow: 1;
-        padding: $gap * 2 $lg-gap * 2;
-        position: relative;
-        @include common-bg-module();
+      .item {
+        height: 6rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        @include common-bg-module($transition-time-fast);
         @include radius-box($lg-radius);
-        font-size: $font-size-h5 + 1;
+        color: $text-secondary;
 
-        > .item {
-          line-height: 2.5em;
-          min-height: 2.5em;
-          margin-bottom: $lg-gap;
+        .iconfont {
+          font-size: $font-size-h3;
+        }
+
+        .text {
+          margin-left: $sm-gap;
+          font-size: $font-size-h4;
           font-weight: bold;
-          &:last-child {
-            margin-bottom: 0;
+        }
+      }
+    }
+
+    .links {
+      .item {
+        border: 4px double;
+        /* color: $text-secondary; */
+        color: $primary-lighter;
+        &:hover {
+          color: $text-reversal;
+          background-color: $primary;
+          border-color: $module-bg-darker-1;
+        }
+      }
+    }
+
+    .discussion {
+      .item {
+        color: var(--item-primary);
+        border: 4px double;
+        &:hover {
+          color: $white;
+          background-color: var(--item-primary);
+          border-color: $module-bg-darker-1;
+        }
+
+        &.qq-group {
+          --item-primary: #{$qq-primary};
+        }
+        &.telegram {
+          --item-primary: #{$telegram-primary};
+        }
+        &.spotify {
+          --item-primary: #{$spotify-primary};
+        }
+        &.music-163 {
+          --item-primary: #{$music163-primary};
+        }
+        &.sponsor {
+          /* --item-primary: #{$red}; */
+          /* border: 2px solid; */
+          border: none;
+          background-color: mix($grey, $red, 16%);
+          color: $white;
+          .iconfont {
+            font-size: $font-size-h1;
           }
 
           &:hover {
-            > .iconfont {
-              opacity: 0.7;
-            }
-          }
-
-          .iconfont {
-            font-weight: normal;
-          }
-
-          > .iconfont {
-            $size: 2rem;
-            width: $size;
-            height: $size;
-            margin-right: 1em;
-            opacity: 0.4;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: $sm-radius;
-            text-align: center;
-            color: $white;
-            transition: opacity $transition-time-fast;
-
-            &.icon-swordsman {
-              background-color: #9d1c33;
-            }
-            &.icon-coffee {
-              background-color: $instagram-primary;
-            }
-            &.icon-music {
-              background-color: $music163-primary;
-            }
-            &.icon-discussion {
-              background-color: $telegram-primary;
-            }
-            &.icon-friend {
-              background-color: $accent;
-            }
-          }
-
-          .text-link {
-            font-weight: bold;
-            padding-bottom: 2px;
-            border-bottom: 1px solid;
-          }
-
-          .roadmap {
-            cursor: pointer;
-            border-bottom: 1px solid;
-            font-weight: normal;
-            font-family: 'webfont-bolder', DINRegular;
-            &.en {
-              font-weight: bold;
-            }
-          }
-
-          > .music {
-            .spotify,
-            .music-163 {
-              margin-left: $sm-gap;
-            }
-            .spotify {
-              color: $spotify-primary;
-            }
-            .music-163 {
-              color: $music163-primary;
-            }
-          }
-
-          > .friends {
-            .link {
-              margin-right: 1.8rem;
-              text-transform: capitalize;
-              font-weight: bold;
-              padding-bottom: 2px;
-              border-bottom: 1px solid;
-            }
+            background-color: $red;
           }
         }
       }
+    }
 
-      .wechat {
+    .qrcodes {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-gap: $gap * 2;
+      width: 100%;
+      height: 18rem;
+      margin-bottom: 2rem;
+
+      .item {
         position: relative;
-        display: block;
-        width: 22rem;
-        overflow: hidden;
-        margin-left: $gap * 2;
-        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
         @include common-bg-module();
         @include radius-box($lg-radius);
-
-        .qrcode {
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-          height: 100%;
-          @include radius-box($sm-radius);
-
-          .image {
-            width: 100%;
-          }
-          .slogan {
-            flex-grow: 1;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #fff;
-            text-align: center;
-            color: #555;
-
-            .text {
-              font-weight: bold;
-              border-bottom: 1px solid $text;
-              padding-bottom: 0.5em;
-            }
+        &.wechat {
+          --item-primary: #{$wechat-primary};
+        }
+        &.bilibili {
+          --item-primary: #{$bilibili-pink-primary};
+        }
+        &.instagram {
+          --item-primary: #{$instagram-primary};
+          .background {
+            background: $instagram-primary;
+            background: $instagram-gradient;
           }
         }
-        .cover {
-          /* opacity: 0; */
+        &.youtube {
+          --item-primary: #{$youtube-primary};
+        }
+        &.wechat-channel {
+          --item-primary: #{$wechat-channel-primary};
+        }
+
+        .background {
           position: absolute;
           top: 0;
           left: 0;
           width: 100%;
-          height: 100%;
-          background-color: $module-bg;
-          backdrop-filter: blur(6px);
-          display: flex;
-          flex-direction: column;
+          height: 6px;
+          background: var(--item-primary);
+          filter: opacity(0.8);
+        }
+
+        .qrcode {
+          margin-top: $lg-gap;
+          z-index: $z-index-normal + 1;
+          .image {
+            width: 12rem;
+            @include radius-box($sm-radius);
+          }
+        }
+
+        .link {
+          display: inline-flex;
           justify-content: center;
           align-items: center;
+          margin-bottom: $sm-gap;
+          padding-bottom: 2px;
+          color: var(--item-primary);
+          opacity: 0.8;
+          transition: opacity $transition-time-fast;
           &:hover {
-            background-color: transparent;
-            backdrop-filter: none;
-            .friend-me {
-              visibility: hidden;
-            }
+            opacity: 1;
           }
 
-          .friend-me {
-            display: block;
-            border: 1px solid;
-            border-radius: $xs-radius;
-            padding: 1em;
-            font-weight: bold;
-            writing-mode: vertical-lr;
-            letter-spacing: 1em;
-            text-transform: uppercase;
+          &[href] {
+            border-bottom: 1px solid;
+          }
 
-            .iconfont {
-              font-weight: normal;
-            }
+          .iconfont {
+            margin-right: $sm-gap;
+            font-size: $font-size-h3;
+          }
+
+          .text {
+            font-weight: bold;
+            color: inherit;
           }
         }
       }
@@ -698,95 +682,36 @@
       overflow: hidden;
       position: relative;
       display: flex;
-      justify-content: space-evenly;
-      align-items: center;
       width: 100%;
-      height: 12rem;
+      height: 126px;
       margin-bottom: $gap * 2;
-      @include common-bg-module();
-      @include radius-box($lg-radius);
 
-      .sponsors {
-        display: inline-flex;
-        flex-direction: column;
-
-        .button {
-          $button-size: 2.4rem;
-          display: inline-flex;
-          width: 100%;
-          margin-bottom: $gap;
-          line-height: $button-size;
-          color: $white;
-          @include radius-box($xs-radius);
-          @include background-transition();
-          &:last-child {
-            margin: 0;
-          }
-
-          .iconfont {
-            width: $button-size;
-            height: $button-size;
-            line-height: $button-size;
-            text-align: center;
-          }
-          .text {
-            padding: 0 $sm-gap;
-            font-weight: bold;
-            font-size: $font-size-small;
-          }
-
-          &.github,
-          &.paypal,
-          &.more {
-            opacity: 0.9;
-            @include visibility-transition();
-            &:hover {
-              opacity: 1;
-            }
-          }
-          &.github {
-            background-color: $github-primary;
-            .iconfont {
-              background-color: $github-primary-hover;
-              color: $github-sponsor-primary;
-            }
-          }
-          &.paypal {
-            background-color: $paypal-primary;
-            .iconfont {
-              background-color: $paypal-primary-hover;
-              color: $paypal-primary;
-            }
-          }
-          &.more {
-            background-color: rgba($accent, 0.8);
-            .iconfont {
-              background-color: $accent;
-            }
-          }
-        }
+      .location,
+      .github-chart {
+        margin-right: $gap * 2;
+        height: 100%;
+        @include common-bg-module();
+        @include radius-box($lg-radius);
       }
 
       .location {
         display: block;
-        width: 14rem;
-        height: 110px;
-        background-color: $module-bg-darker-1;
-        /* border: 1px solid $module-bg-darker-1; */
-        @include radius-box($lg-radius);
-      }
-
-      .divider {
-        height: 60%;
-        width: 1px;
-        opacity: 0.5;
-        background-color: $module-bg-darker-1;
+        width: 27rem;
+        padding: $sm-gap;
       }
 
       .github-chart {
-        height: 100%;
-        display: flex;
+        margin: 0;
+        padding: $gap;
+        flex-grow: 1;
+        display: inline-flex;
+        justify-content: center;
         align-items: center;
+
+        .image {
+          width: 663px;
+          height: 104px;
+        }
       }
     }
   }

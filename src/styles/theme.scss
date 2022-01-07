@@ -31,7 +31,7 @@
   #{--text-color}: $theme-text;
   #{--text-lighter}: lighter($theme-text, 20%);
   #{--text-darker}: darken($theme-text, 20%);
-  #{--text-secondary}: rgba($theme-black, 0.54);
+  #{--text-secondary}: rgba($theme-black, 0.5);
   #{--text-disabled}: rgba($theme-black, 0.38);
   #{--text-dividers}: rgba($theme-black, 0.26);
   #{--text-reversal}: $theme-white;
