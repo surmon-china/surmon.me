@@ -25,7 +25,7 @@
           </empty>
         </template>
         <template #loading>
-          <lens-skeleton class="module-loading" :count="3" key="loading" />
+          <lens-skeleton class="module-loading" key="loading" />
         </template>
         <template #default>
           <div class="module-content">
@@ -158,7 +158,7 @@
     }
 
     .module-loading {
-      margin-bottom: $lg-gap;
+      margin-bottom: $gap * 2;
     }
 
     .module-content {

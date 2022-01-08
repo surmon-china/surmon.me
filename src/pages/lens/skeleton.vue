@@ -30,6 +30,7 @@
 
     .item {
       height: 16rem;
+      padding: $gap;
       @include radius-box($sm-radius);
       @include common-bg-module();
     }
