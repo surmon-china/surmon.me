@@ -1,13 +1,13 @@
 <template>
   <div class="masonry">
     <ul class="list" :class="listClass" :key="index" v-for="(columnData, index) in columnDatas">
-      <slot v-bind="item" v-for="item in columnData"></slot>
+      <slot v-bind="{ item, index: i }" v-for="(item, i) in columnData"></slot>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, h, PropType } from 'vue'
+  import { defineComponent, PropType } from 'vue'
 
   const createNumberArray = (count: number) => {
     return Array.from(Array(count).keys())
