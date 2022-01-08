@@ -157,7 +157,7 @@
             margin-top: $sm-gap;
             margin-bottom: $xs-gap;
             font-weight: bold;
-            color: $text-secondary;
+            color: $text;
           }
 
           .description {

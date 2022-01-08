@@ -229,7 +229,7 @@
         }
 
         .iconfont {
-          color: $text;
+          color: $text-secondary;
           @include color-transition();
         }
 
