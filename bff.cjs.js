@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.4.15
+* Surmon.me v3.4.16
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -54,11 +54,12 @@ const META = Object.freeze({
     url: 'https://surmon.me',
     author: 'Surmon'
 });
-Object.freeze({
-    JimmyLv: '//blog.jimmylv.info'
-    // SkyRover: '//skyrover.me',
-    // Jooger: '//jooger.me'
-});
+Object.freeze([
+    {
+        name: '吕立青的博客',
+        url: 'https://blog.jimmylv.info'
+    }
+]);
 Object.freeze({
     RSS: '/rss.xml',
     SITE_MAP: '/sitemap.xml',
