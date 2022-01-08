@@ -645,7 +645,7 @@
           right: 0;
           z-index: $z-index-normal + 1;
           display: block;
-          width: 3rem;
+          width: 4rem;
           height: 3rem;
           border-bottom-left-radius: $xs-radius;
           background-color: $module-bg-translucent;
