@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.4.21
+* Surmon.me v3.4.22
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -62,6 +62,28 @@ Object.freeze([
     {
         name: `nighca's log`,
         url: 'https://nighca.me'
+    }
+]);
+Object.freeze([
+    {
+        name: 'iconfont',
+        url: 'https://www.iconfont.cn/'
+    },
+    {
+        name: `GitHub`,
+        url: 'https://github.com'
+    },
+    {
+        name: `PM2`,
+        url: 'https://pm2.keymetrics.io/'
+    },
+    {
+        name: `Vite`,
+        url: 'https://vitejs.dev/'
+    },
+    {
+        name: `Disqus`,
+        url: 'https://disqus.com/'
     }
 ]);
 Object.freeze({
