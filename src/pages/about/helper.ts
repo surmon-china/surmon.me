@@ -34,7 +34,7 @@ export const i18ns = {
   },
   myVlogs: {
     [Language.Zh]: `我的 Vlog`,
-    [Language.En]: `My Vlogs | Plogs`
+    [Language.En]: `My Vlogs`
   },
   merchBar: {
     [Language.Zh]: `我的周边`,
@@ -45,12 +45,12 @@ export const i18ns = {
     [Language.En]: `Guestbook`
   },
   QQGroup: {
-    [Language.Zh]: `寂寞同性群`,
-    [Language.En]: `Join QQ group`
+    [Language.Zh]: `同性联谊`,
+    [Language.En]: `QQ group`
   },
   TelegramGroup: {
-    [Language.Zh]: `自由电报群`,
-    [Language.En]: `Telegram group`
+    [Language.Zh]: `自由电报`,
+    [Language.En]: `TG group`
   }
 }
 

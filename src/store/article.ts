@@ -6,12 +6,11 @@
 
 import { defineStore } from 'pinia'
 import { isClient } from '/@/app/environment'
-import { UNDEFINED } from '/@/constants/value'
 import { SortType, OriginState, UniversalExtend } from '/@/constants/state'
 import { getArticleContentHeadingElementID } from '/@/constants/anchor'
 import nodepress from '/@/services/nodepress'
 import { markdownToHTML } from '/@/transforms/markdown'
-import { delayer } from '/@/utils/delayer'
+import { delayPromise } from '/@/utils/delayer'
 import { useUniversalStore } from './universal'
 import { Category } from './category'
 import { Tag } from './tag'
@@ -67,22 +66,17 @@ export const useArticleStore = defineStore('article', {
       }
 
       this.list.fetching = true
-      return nodepress
-        .get<any>(ARTICLE_API_PATH, { params })
+      const fetch = nodepress.get<any>(ARTICLE_API_PATH, { params })
+      const promise = isClient ? delayPromise(520, fetch) : fetch
+      return promise
         .then((response) => {
-          const state = this
-          return new Promise((resolve) => {
-            delayer(isClient ? 368 : 0)(() => {
-              if (isLoadMore) {
-                state.list.data.push(...response.result.data)
-                state.list.pagination = response.result.pagination
-              } else {
-                state.list.data = response.result.data
-                state.list.pagination = response.result.pagination
-              }
-              resolve(UNDEFINED)
-            })
-          })
+          if (isLoadMore) {
+            this.list.data.push(...response.result.data)
+            this.list.pagination = response.result.pagination
+          } else {
+            this.list.data = response.result.data
+            this.list.pagination = response.result.pagination
+          }
         })
         .finally(() => {
           this.list.fetching = false
@@ -199,16 +193,12 @@ export const useArticleDetailStore = defineStore('articleDetail', {
     fetchDetail(params: { articleID: number }) {
       this.fetching = true
       this.article = null
-      return nodepress
-        .get(`${ARTICLE_API_PATH}/${params.articleID}`)
+      const fetch = nodepress.get(`${ARTICLE_API_PATH}/${params.articleID}`)
+      const promise = isClient ? delayPromise(580, fetch) : fetch
+      return promise
         .then((response) => {
-          return new Promise((resolve) => {
-            delayer(isClient ? 368 : 0)(() => {
-              this.article = response.result
-              this.renderedFullContent = !this.isLongContent
-              resolve(UNDEFINED)
-            })
-          })
+          this.article = response.result
+          this.renderedFullContent = !this.isLongContent
         })
         .finally(() => {
           this.fetching = false

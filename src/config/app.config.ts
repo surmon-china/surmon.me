@@ -31,6 +31,29 @@ export const FRIEND_LINKS = Object.freeze([
   }
 ])
 
+export const SPECIAL_LINKS = Object.freeze([
+  {
+    name: 'iconfont',
+    url: 'https://www.iconfont.cn/'
+  },
+  {
+    name: `GitHub`,
+    url: 'https://github.com'
+  },
+  {
+    name: `PM2`,
+    url: 'https://pm2.keymetrics.io/'
+  },
+  {
+    name: `Vite`,
+    url: 'https://vitejs.dev/'
+  },
+  {
+    name: `Disqus`,
+    url: 'https://disqus.com/'
+  }
+])
+
 export const VALUABLE_LINKS = Object.freeze({
   RSS: '/rss.xml',
   SITE_MAP: '/sitemap.xml',

@@ -9,7 +9,7 @@ import { defineStore } from 'pinia'
 import { isClient } from '/@/app/environment'
 import { UNDEFINED } from '/@/constants/value'
 import { SortType, UniversalExtend, CommentParentType } from '/@/constants/state'
-import { delayer } from '/@/utils/delayer'
+import { delayPromise } from '/@/utils/delayer'
 import nodepress from '/@/services/nodepress'
 import { useUniversalStore } from './universal'
 
@@ -128,20 +128,16 @@ export const useCommentStore = defineStore('comment', {
         this.clearList()
       }
       this.fetching = true
-      return nodepress
-        .get(COMMENT_API_PATH, { params })
+      const fetch = nodepress.get(COMMENT_API_PATH, { params })
+      const promise = isClient ? delayPromise(480, fetch) : fetch
+      return promise
         .then((response) => {
-          return new Promise((resolve) => {
-            delayer(isClient ? 368 : 0)(() => {
-              this.pagination = response.result.pagination
-              if (params.loadmore) {
-                this.comments.push(...response.result.data)
-              } else {
-                this.comments = response.result.data
-              }
-              resolve(UNDEFINED)
-            })
-          })
+          this.pagination = response.result.pagination
+          if (params.loadmore) {
+            this.comments.push(...response.result.data)
+          } else {
+            this.comments = response.result.data
+          }
         })
         .finally(() => {
           this.fetching = false
