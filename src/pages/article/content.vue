@@ -215,6 +215,7 @@
           color: $text-disabled;
           font-size: $font-size-small;
           user-select: none;
+          line-height: 2;
           .iconfont {
             margin-right: $xs-gap;
           }

@@ -11,7 +11,7 @@
         <span class="text">
           <i18n>
             <template #zh>真棒！{{ likes }}</template>
-            <template #en>Well~ {{ likes }}</template>
+            <template #en>{{ isLiked ? 'Upvoted' : 'Upvote' }} ({{ likes }})</template>
           </i18n>
         </span>
       </button>
@@ -44,7 +44,10 @@
       <span v-if="!article.category.length">
         <i18n zh="未知分类下" en="(no catgory)" />
       </span>
-      <divider type="vertical" size="sm" />
+      <template v-if="plain"><br /></template>
+      <template v-else>
+        <divider type="vertical" size="sm" />
+      </template>
       <span v-for="(tag, index) in article.tag" :key="index">
         <router-link
           class="link tag"
@@ -62,17 +65,22 @@
       <i class="icon iconfont icon-copyright"></i>
       <i18n>
         <template #zh>
-          <ulink class="link" href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
+          <ulink
+            class="link copyright"
+            href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
             >自由转载 - 署名 - 非商业性使用</ulink
           >
         </template>
         <template #en>
-          <ulink class="link" href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.en"
+          <ulink
+            class="link copyright"
+            href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.en"
             >Creative Commons BY-NC 3.0 CN</ulink
           >
         </template>
       </i18n>
-      <divider type="vertical" />
+      <template v-if="plain"><br /></template>
+      <template v-else><divider type="vertical" /></template>
       <span class="link permalink" @click="copy(articleURL)">
         {{ articleURL }}
       </span>
@@ -81,7 +89,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, PropType } from 'vue'
+  import { defineComponent, computed, PropType } from 'vue'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalStore } from '/@/store/universal'
@@ -183,6 +191,7 @@
     &.plain {
       .line {
         height: auto;
+        line-height: 2;
       }
     }
 
@@ -200,13 +209,13 @@
         line-height: 3rem;
         padding: 0 $gap;
         color: $white;
-        background-color: rgba($red, 0.8);
-        &:hover,
-        &.liked {
-          background-color: rgba($red, 1);
+        background-color: mix($white, $red, 10%);
+        &:hover {
+          background-color: $red;
         }
         &[disabled] {
-          opacity: 0.7;
+          opacity: 0.8;
+          background-color: mix($black, $red, 18%);
         }
         &:first-child {
           border-top-left-radius: $sm-radius;
@@ -218,7 +227,7 @@
         }
         & + button {
           /* https://github.com/ant-design/ant-design/blob/master/components/style/themes/variable.less#L121 */
-          border-left: 1px solid mix($white, $red, 30%);
+          border-left: 1px solid mix($white, $red, 26%);
         }
 
         &.like {
@@ -257,17 +266,19 @@
 
       .link {
         border-bottom: 1px solid transparent;
-        color: $text;
         &:hover {
           text-decoration: none;
           border-color: initial;
-          color: $link-hover;
         }
 
         &.date,
-        &.tag,
-        &.category {
+        &.category,
+        &.tag {
           margin: 0 $xs-gap;
+          color: $text;
+          &:hover {
+            color: $link-hover;
+          }
         }
         &.date {
           text-transform: uppercase;
@@ -275,6 +286,14 @@
         &.category,
         &.tag {
           text-transform: capitalize;
+        }
+
+        &.copyright,
+        &.permalink {
+          color: $text-secondary;
+          &:hover {
+            color: $text;
+          }
         }
 
         &.permalink {

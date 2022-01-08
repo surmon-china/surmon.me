@@ -1,11 +1,6 @@
 <template>
-  <div class="merch-page" :class="{ mobile: isMobile }">
-    <page-banner
-      :blur="false"
-      :position="70"
-      :is-mobile="isMobile"
-      image="/images/page-merch/banner.jpg"
-    >
+  <div class="merch-page">
+    <page-banner :blur="false" :position="70" image="/images/page-merch/banner.jpg">
       <template #title>
         <i18n zh="亲身体验，真实不虚" en="Merch Bar" />
       </template>
@@ -16,24 +11,18 @@
     <div class="container">
       <div class="module-title" id="products">我在用的推荐好物</div>
       <ul class="product-list">
-        <product-item
-          :key="index"
-          :product="product"
-          :plain="isMobile"
-          v-for="(product, index) in products"
-        />
+        <product-item :key="index" :product="product" v-for="(product, index) in products" />
       </ul>
       <div class="module-title" id="brokers">我筛选后在用的港美股券商</div>
       <ul class="product-list">
         <product-item
           :key="index"
           :product="broker"
-          :plain="isMobile"
           :image-style="{ backgroundSize: '50%' }"
           v-for="(broker, index) in brokers"
         />
       </ul>
-      <div class="end" v-if="!isMobile"></div>
+      <div class="end"></div>
     </div>
   </div>
 </template>
@@ -53,12 +42,6 @@
     components: {
       PageBanner,
       ProductItem
-    },
-    props: {
-      isMobile: {
-        type: Boolean,
-        default: false
-      }
     },
     setup() {
       const { i18n, meta, isZhLang, adConfig } = useEnhancer()
@@ -107,18 +90,6 @@
 
     .end {
       height: $gap * 2;
-    }
-
-    &.mobile {
-      .module-title {
-        margin: $lg-gap 0;
-        line-height: 2.8em;
-      }
-
-      .product-list {
-        grid-template-columns: repeat(1, 1fr);
-        grid-gap: $lg-gap;
-      }
     }
   }
 </style>

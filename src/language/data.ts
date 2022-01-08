@@ -211,13 +211,13 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '期待你的捷足先登',
     [Language.En]: 'Be the first to comment'
   },
-  [LANGUAGE_KEYS.COMMENT_LIKE]: {
+  [LANGUAGE_KEYS.COMMENT_UPVOTE]: {
     [Language.Zh]: '赞',
-    [Language.En]: 'like'
+    [Language.En]: 'upvote'
   },
-  [LANGUAGE_KEYS.COMMENT_DISLIKE]: {
+  [LANGUAGE_KEYS.COMMENT_DOWNVOTE]: {
     [Language.Zh]: '踩',
-    [Language.En]: 'dislike'
+    [Language.En]: 'downvote'
   },
   [LANGUAGE_KEYS.COMMENT_DELETE]: {
     [Language.Zh]: '删除',

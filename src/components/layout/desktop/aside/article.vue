@@ -64,7 +64,6 @@
       margin: 0;
       padding: 0 $gap;
       border-bottom: 1px dotted $module-bg-darker-1;
-      text-transform: uppercase;
 
       .iconfont {
         margin-right: $sm-gap;

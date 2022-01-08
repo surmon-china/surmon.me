@@ -67,7 +67,7 @@
               @click="handleVote(true)"
             >
               <i class="iconfont icon-like" />
-              <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIKE" />
+              <i18n :lkey="LANGUAGE_KEYS.COMMENT_UPVOTE" />
               <span class="count">({{ comment.likes }})</span>
             </button>
             <button
@@ -80,7 +80,7 @@
               @click="handleVote(false)"
             >
               <i class="iconfont icon-dislike" />
-              <i18n :lkey="LANGUAGE_KEYS.COMMENT_DISLIKE" />
+              <i18n :lkey="LANGUAGE_KEYS.COMMENT_DOWNVOTE" />
               <span class="count">({{ comment.dislikes }})</span>
             </button>
             <button class="reply" @click="handleCancelReply" v-if="isReply">

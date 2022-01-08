@@ -6,7 +6,7 @@
       @click="handleLink(ANCHORS.ARTICLE_CONTENT_ELEMENT_ID)"
     >
       <span v-if="headings.length" class="title">
-        <i class="iconfont icon-edit"></i>
+        <i class="iconfont icon-title"></i>
         {{ article.title }}
       </span>
       <span v-else class="title">

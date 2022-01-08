@@ -24,6 +24,10 @@ export const FRIEND_LINKS = Object.freeze([
   {
     name: '吕立青的博客',
     url: 'https://blog.jimmylv.info'
+  },
+  {
+    name: `nighca's log`,
+    url: 'https://nighca.me'
   }
 ])
 

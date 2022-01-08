@@ -52,10 +52,6 @@
           <i class="iconfont icon-user"></i>
           <i18n :lkey="LANGUAGE_KEYS.PAGE_ABOUT" />
         </router-link>
-        <router-link class="item" :to="getPageRoute(RouteName.Merch)">
-          <i class="iconfont icon-rubik"></i>
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_MERCH" />
-        </router-link>
         <router-link class="item app" :to="getPageRoute(RouteName.App)">
           <i class="iconfont icon-app"></i>
           <i18n :lkey="LANGUAGE_KEYS.PAGE_APP" />

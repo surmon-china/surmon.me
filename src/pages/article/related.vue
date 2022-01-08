@@ -116,12 +116,12 @@
 
           .thumb {
             position: relative;
-            opacity: 0.8;
+            opacity: 0.88;
             width: 100%;
             height: 7rem;
             background-color: $module-bg-darker-2;
             background-size: cover;
-            background-position: 50% 45%;
+            background-position: 50% 46%;
             transition: all $transition-time-fast;
             display: flex;
             flex-direction: column;
