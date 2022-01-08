@@ -285,19 +285,11 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/merch',
     name: RouteName.Merch,
-    components: {
-      default: MerchPage,
-      mobile: MerchPage
-    },
-    props: {
-      mobile: {
-        isMobile: true
-      }
-    },
+    component: MerchPage,
     meta: {
-      responsive: true,
+      responsive: false,
       layout: LayoutColumn.Full,
-      ssrCacheAge: 60 * 60 // 1 hours
+      ssrCacheAge: 60 * 60 * 12 // 12 hours
     }
   },
   {

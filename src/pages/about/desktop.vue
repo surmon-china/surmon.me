@@ -107,10 +107,7 @@
           </span>
           <ulink class="link" :href="item.link">
             <i class="icon iconfont" :class="item.icon"></i>
-            <span class="text">
-              <i18n v-if="item.i18n" v-bind="item.i18n" />
-              <template v-else>{{ item.text }}</template>
-            </span>
+            <span class="text">{{ item.text }}</span>
           </ulink>
         </div>
       </div>
@@ -178,19 +175,13 @@
           class: 'wechat',
           qrcode: `/images/qrcodes/wechat.jpg`,
           icon: 'icon-wechat',
-          i18n: {
-            zh: '扫码加微燃魂魄',
-            en: 'Scan on WeChat'
-          }
+          text: 'Scan on WeChat'
         },
         {
           class: 'wechat-channel',
           qrcode: `/images/qrcodes/wechat-channel.png`,
           icon: 'icon-wechat-channel',
-          i18n: {
-            zh: '天高地阔任飞扬',
-            en: 'WeChat Channel'
-          }
+          text: 'WeChat Channel'
         },
         {
           class: 'bilibili',
@@ -545,10 +536,6 @@
         }
         &.sponsor {
           --item-primary: #{$red};
-          border: 4px double;
-          .iconfont {
-            font-size: $font-size-h1;
-          }
         }
       }
     }

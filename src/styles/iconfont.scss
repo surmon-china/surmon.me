@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
-  src: url('//at.alicdn.com/t/font_64825_vokvppyf4e.woff2?t=1641474297451') format('woff2'),
-    url('//at.alicdn.com/t/font_64825_vokvppyf4e.woff?t=1641474297451') format('woff'),
-    url('//at.alicdn.com/t/font_64825_vokvppyf4e.ttf?t=1641474297451') format('truetype');
+  src: url('//at.alicdn.com/t/font_64825_k68j2xqxza.woff2?t=1641640576607') format('woff2'),
+    url('//at.alicdn.com/t/font_64825_k68j2xqxza.woff?t=1641640576607') format('woff'),
+    url('//at.alicdn.com/t/font_64825_k68j2xqxza.ttf?t=1641640576607') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-read:before {
+  content: '\e616';
+}
+
+.icon-title:before {
+  content: '\e6bf';
 }
 
 .icon-fullscreen:before {
@@ -575,10 +583,6 @@
 
 .icon-webcam:before {
   content: '\e7dc';
-}
-
-.icon-read:before {
-  content: '\e667';
 }
 
 .icon-barrage:before {

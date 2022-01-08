@@ -1,5 +1,5 @@
 <template>
-  <li class="product" :class="{ plain }">
+  <li class="product">
     <div
       class="image"
       :style="{
@@ -51,10 +51,6 @@
       imageStyle: {
         type: Object as PropType<CSSProperties>,
         required: false
-      },
-      plain: {
-        type: Boolean,
-        default: false
       }
     },
     setup() {
@@ -83,13 +79,6 @@
     &:hover {
       .detail {
         @include visible();
-      }
-    }
-
-    &.plain {
-      .detail {
-        position: relative !important;
-        @include visible(true);
       }
     }
 
