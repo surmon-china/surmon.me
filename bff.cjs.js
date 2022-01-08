@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.4.17
+* Surmon.me v3.4.18
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -58,6 +58,10 @@ Object.freeze([
     {
         name: '吕立青的博客',
         url: 'https://blog.jimmylv.info'
+    },
+    {
+        name: `nighca's log`,
+        url: 'https://nighca.me'
     }
 ]);
 Object.freeze({
