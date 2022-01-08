@@ -13,7 +13,7 @@
     props: {
       count: {
         type: Number,
-        default: 6
+        default: 8
       }
     }
   })
@@ -25,11 +25,11 @@
   .skeletons {
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     grid-gap: $gap * 2;
 
     .item {
-      height: 16rem;
+      height: 243px;
       padding: $gap;
       @include radius-box($sm-radius);
       @include common-bg-module();
