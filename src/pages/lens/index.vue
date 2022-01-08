@@ -25,7 +25,7 @@
           </empty>
         </template>
         <template #loading>
-          <lens-skeleton class="module-loading" key="loading" />
+          <lens-skeleton :count="4" class="module-loading" key="loading" />
         </template>
         <template #default>
           <div class="module-content">
