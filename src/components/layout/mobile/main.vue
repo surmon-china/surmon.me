@@ -140,7 +140,7 @@
           justify-content: center;
 
           .iconfont {
-            color: $text-dividers;
+            color: $text-divider;
             font-size: 12rem;
           }
 

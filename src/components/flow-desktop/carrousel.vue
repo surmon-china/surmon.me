@@ -182,7 +182,8 @@
         .title {
           .prospect {
             .text {
-              -webkit-text-fill-color: $text !important;
+              color: $link-color !important;
+              -webkit-text-fill-color: $link-color !important;
             }
           }
         }

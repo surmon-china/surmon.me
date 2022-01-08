@@ -260,7 +260,7 @@
           }
 
           .date {
-            color: $text-dividers;
+            color: $text-divider;
             margin-right: $xs-gap;
           }
         }
@@ -275,7 +275,7 @@
         .button {
           height: 50%;
           text-align: center;
-          color: $text-dividers;
+          color: $text-divider;
           cursor: pointer;
           @include color-transition();
 
@@ -285,7 +285,7 @@
 
           &.disabled {
             opacity: 0.8;
-            color: $text-dividers;
+            color: $text-divider;
             cursor: no-drop;
           }
 

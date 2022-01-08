@@ -20,11 +20,12 @@ export const META = Object.freeze({
   author: 'Surmon'
 })
 
-export const FRIEND_LINKS = Object.freeze({
-  JimmyLv: '//blog.jimmylv.info'
-  // SkyRover: '//skyrover.me',
-  // Jooger: '//jooger.me'
-})
+export const FRIEND_LINKS = Object.freeze([
+  {
+    name: '吕立青的博客',
+    url: 'https://blog.jimmylv.info'
+  }
+])
 
 export const VALUABLE_LINKS = Object.freeze({
   RSS: '/rss.xml',

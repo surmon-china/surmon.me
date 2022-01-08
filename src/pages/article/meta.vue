@@ -213,10 +213,12 @@
           border-bottom-left-radius: $sm-radius;
         }
         &:last-child {
-          /* https://github.com/ant-design/ant-design/blob/master/components/style/themes/variable.less#L121 */
-          border-left: 1px solid mix($white, $red, 30%);
           border-top-right-radius: $sm-radius;
           border-bottom-right-radius: $sm-radius;
+        }
+        & + button {
+          /* https://github.com/ant-design/ant-design/blob/master/components/style/themes/variable.less#L121 */
+          border-left: 1px solid mix($white, $red, 30%);
         }
 
         &.like {
@@ -259,7 +261,7 @@
         &:hover {
           text-decoration: none;
           border-color: initial;
-          color: $link-color-hover;
+          color: $link-hover;
         }
 
         &.date,

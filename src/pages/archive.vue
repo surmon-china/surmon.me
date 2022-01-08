@@ -321,7 +321,7 @@
             .kind {
               display: inline-flex;
               flex-direction: column;
-              color: $text-dividers;
+              color: $text-divider;
 
               .iconfont {
                 font-size: $font-size-h3;
@@ -380,7 +380,7 @@
             padding: $gap;
             padding-left: $gap * 2;
             margin-bottom: $xs-gap;
-            border-left: 4px dotted $text-dividers;
+            border-left: 4px dotted $text-divider;
 
             .left {
               .article-title {

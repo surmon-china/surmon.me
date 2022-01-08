@@ -45,11 +45,11 @@ export const i18ns = {
     [Language.En]: `Guestbook`
   },
   QQGroup: {
-    [Language.Zh]: `寂寞同性交友群`,
+    [Language.Zh]: `寂寞同性群`,
     [Language.En]: `Join QQ group`
   },
   TelegramGroup: {
-    [Language.Zh]: `加入电报群`,
+    [Language.Zh]: `自由电报群`,
     [Language.En]: `Telegram group`
   }
 }

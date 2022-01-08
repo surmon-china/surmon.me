@@ -205,7 +205,7 @@
 
           .text {
             padding-bottom: 3px;
-            border-bottom: 1px dotted $text-dividers;
+            border-bottom: 1px dotted $text-divider;
           }
 
           &.level-2 {

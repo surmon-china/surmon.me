@@ -161,9 +161,9 @@
           }
 
           .description {
-            font-size: $font-size-small;
-            color: $text-dividers;
             margin-bottom: $sm-gap;
+            font-size: $font-size-small;
+            color: $text-disabled;
           }
 
           &:hover {

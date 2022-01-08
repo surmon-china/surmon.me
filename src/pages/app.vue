@@ -130,7 +130,7 @@
       }
 
       > .version {
-        color: $text-dividers;
+        color: $text-divider;
       }
 
       > .screen {

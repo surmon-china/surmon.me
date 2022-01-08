@@ -107,7 +107,10 @@
           </span>
           <ulink class="link" :href="item.link">
             <i class="icon iconfont" :class="item.icon"></i>
-            <span class="text">{{ item.text }}</span>
+            <span class="text">
+              <i18n v-if="item.i18n" v-bind="item.i18n" />
+              <template v-else>{{ item.text }}</template>
+            </span>
           </ulink>
         </div>
       </div>
@@ -139,6 +142,14 @@
           <uimage class="image" cdn src="/effects/ghchart" />
         </ulink>
       </div>
+      <div class="friendlinks">
+        <template v-for="(item, index) in FRIEND_LINKS" :key="index">
+          <divider type="vertical" size="lg" v-if="index !== 0" />
+          <a :href="item.url" class="item" target="_blank" rel="external nofollow noopener">
+            {{ item.name }}
+          </a>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -165,33 +176,39 @@
       const qrcodes = [
         {
           class: 'wechat',
-          qrcode: `/images/page-about/wechat.jpg`,
+          qrcode: `/images/qrcodes/wechat.jpg`,
           icon: 'icon-wechat',
-          text: `Scan on WeChat`
-        },
-        {
-          class: 'instagram',
-          qrcode: `/images/page-lens/instagram.png`,
-          icon: 'icon-instagram',
-          link: VALUABLE_LINKS.INSTAGRAM,
-          text: `Instagram Plogs`
+          i18n: {
+            zh: '扫码加微燃魂魄',
+            en: 'Scan on WeChat'
+          }
         },
         {
           class: 'wechat-channel',
-          qrcode: `/images/page-lens/wechat-channel.png`,
+          qrcode: `/images/qrcodes/wechat-channel.png`,
           icon: 'icon-wechat-channel',
-          text: `WeChat Channel`
+          i18n: {
+            zh: '天高地阔任飞扬',
+            en: 'WeChat Channel'
+          }
         },
         {
           class: 'bilibili',
-          qrcode: `/images/page-lens/bilibili.png`,
+          qrcode: `/images/qrcodes/bilibili.png`,
           icon: 'icon-bilibili-full',
           link: VALUABLE_LINKS.BILIBILI,
           text: `BiliBili 干杯~`
         },
         {
+          class: 'instagram',
+          qrcode: `/images/qrcodes/instagram.png`,
+          icon: 'icon-instagram',
+          link: VALUABLE_LINKS.INSTAGRAM,
+          text: `Instagram Plogs`
+        },
+        {
           class: 'youtube',
-          qrcode: `/images/page-lens/youtube.png`,
+          qrcode: `/images/qrcodes/youtube.png`,
           icon: 'icon-youtube',
           link: VALUABLE_LINKS.YOUTUBE,
           text: 'YouTube Channel'
@@ -486,7 +503,6 @@
         align-items: center;
         @include common-bg-module($transition-time-fast);
         @include radius-box($lg-radius);
-        color: $text-secondary;
 
         .iconfont {
           font-size: $font-size-h3;
@@ -502,13 +518,10 @@
 
     .links {
       .item {
-        border: 4px double;
-        /* color: $text-secondary; */
-        color: $primary-lighter;
+        color: $text-secondary;
         &:hover {
           color: $text-reversal;
           background-color: $primary;
-          border-color: $module-bg-darker-1;
         }
       }
     }
@@ -516,11 +529,9 @@
     .discussion {
       .item {
         color: var(--item-primary);
-        border: 4px double;
         &:hover {
           color: $white;
           background-color: var(--item-primary);
-          border-color: $module-bg-darker-1;
         }
 
         &.qq-group {
@@ -536,17 +547,10 @@
           --item-primary: #{$music163-primary};
         }
         &.sponsor {
-          /* --item-primary: #{$red}; */
-          /* border: 2px solid; */
-          border: none;
-          background-color: mix($grey, $red, 16%);
-          color: $white;
+          --item-primary: #{$red};
+          border: 2px solid;
           .iconfont {
             font-size: $font-size-h1;
-          }
-
-          &:hover {
-            background-color: $red;
           }
         }
       }
@@ -614,15 +618,12 @@
           align-items: center;
           margin-bottom: $sm-gap;
           padding-bottom: 2px;
+          border-bottom: 1px solid;
           color: var(--item-primary);
           opacity: 0.8;
           transition: opacity $transition-time-fast;
           &:hover {
             opacity: 1;
-          }
-
-          &[href] {
-            border-bottom: 1px solid;
           }
 
           .iconfont {
@@ -712,6 +713,18 @@
           width: 663px;
           height: 104px;
         }
+      }
+    }
+
+    .friendlinks {
+      margin-bottom: $gap * 2;
+      padding: 2rem;
+      @include common-bg-module();
+      @include radius-box($lg-radius);
+
+      .item {
+        font-weight: bold;
+        border-bottom: 1px solid;
       }
     }
   }

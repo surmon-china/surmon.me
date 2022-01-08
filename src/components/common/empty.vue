@@ -38,7 +38,7 @@
     text-align: center;
     justify-content: center;
     align-items: center;
-    color: $text-dividers;
+    color: $text-divider;
     letter-spacing: 0.1em;
   }
 </style>

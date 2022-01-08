@@ -164,7 +164,7 @@
 
           &:hover {
             .iconfont {
-              color: $link-color-hover;
+              color: $link-hover;
             }
           }
         }
@@ -179,7 +179,7 @@
           @include color-transition();
 
           &:hover {
-            color: $link-color-hover;
+            color: $link-hover;
           }
         }
       }

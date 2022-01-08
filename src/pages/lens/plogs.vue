@@ -227,7 +227,7 @@
         width: 4rem;
         height: 2rem;
         border-top-left-radius: $xs-radius;
-        background-color: $text-dividers;
+        background-color: $text-divider;
         color: $white;
       }
 
