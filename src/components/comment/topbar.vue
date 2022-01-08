@@ -281,16 +281,16 @@
 
     .statistics {
       display: flex;
+      height: $topbar-size;
+      line-height: $topbar-size;
 
       .total {
-        height: $topbar-size;
-        line-height: $topbar-size;
         padding: 0;
         padding-right: 0.6em;
         background-color: $module-bg-darker-1;
         @include radius-box($xs-radius);
         will-change: width;
-        transition: all $transition-time-slow;
+        transition: all $transition-time-fast;
         max-width: 180px;
         &.loading {
           max-width: 130px;
@@ -314,20 +314,22 @@
       .sort,
       .disqus {
         margin-left: $gap;
-        cursor: pointer;
         background-color: $module-bg-darker-1;
         @include radius-box($xs-radius);
+        cursor: pointer;
         &:hover {
           background-color: $module-bg-darker-2;
         }
       }
 
       .sort {
+        padding: 0 $xs-gap;
         font-weight: bold;
       }
 
       .disqus {
-        padding: 0 0.6em;
+        width: $topbar-size;
+        text-align: center;
         &:hover {
           color: $white;
           background-color: $disqus-primary;
@@ -399,7 +401,7 @@
           }
 
           .arrow {
-            color: $text-dividers;
+            color: $text-divider;
             font-size: $font-size-small;
           }
         }

@@ -149,7 +149,7 @@
 
         > .iconfont {
           font-size: 3em;
-          color: $text-dividers;
+          color: $text-divider;
         }
       }
 

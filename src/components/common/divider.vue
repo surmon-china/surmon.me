@@ -51,7 +51,7 @@
       clear: both;
       width: 100%;
       margin: var(--divider-gap) 0;
-      border-top: 1px solid $text-dividers;
+      border-top: 1px solid $text-divider;
       &.slot {
         border-top: none;
       }
@@ -64,7 +64,7 @@
       height: 0.9em;
       margin: 0 var(--divider-gap);
       vertical-align: middle;
-      border-left: 1px solid $text-dividers;
+      border-left: 1px solid $text-divider;
 
       &.slot {
         display: inline-flex;

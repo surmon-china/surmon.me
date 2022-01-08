@@ -398,9 +398,7 @@
           margin-right: $gap;
           border-bottom: 1px solid transparent;
           &.url {
-            color: $link-color;
             &:hover {
-              color: $link-color-hover;
               border-color: inherit;
             }
           }
@@ -419,7 +417,7 @@
 
         .ua,
         .location {
-          color: $text-dividers;
+          color: $text-divider;
           font-size: $font-size-small;
         }
 
@@ -428,7 +426,7 @@
         }
 
         .flool {
-          color: $text-dividers;
+          color: $text-divider;
           font-size: $font-size-small;
           font-weight: bold;
         }
@@ -455,7 +453,7 @@
             font-weight: bold;
             color: $link-color;
             &:hover {
-              color: $link-color-hover;
+              color: $link-hover;
             }
           }
         }
@@ -506,7 +504,7 @@
         }
 
         .delete {
-          color: $text-dividers;
+          color: $text-divider;
           margin: 0;
           &:hover {
             color: $red;

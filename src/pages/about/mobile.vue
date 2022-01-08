@@ -88,8 +88,8 @@
     </div>
     <div class="links">
       <div class="list col-2">
-        <uimage cdn class="image-item" src="/images/page-about/wechat.jpg" />
-        <uimage cdn class="image-item" src="/images/page-lens/wechat-channel.png" />
+        <uimage cdn class="image-item" src="/images/qrcodes/wechat.jpg" />
+        <uimage cdn class="image-item" src="/images/qrcodes/wechat-channel.png" />
       </div>
     </div>
   </div>

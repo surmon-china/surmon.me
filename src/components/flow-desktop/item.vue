@@ -255,7 +255,7 @@
           margin-top: 3px;
           margin-bottom: $sm-gap;
           font-weight: bold;
-          color: $link-color-hover;
+          color: $link-hover;
 
           .link {
             display: block;
@@ -274,7 +274,7 @@
 
           .language {
             opacity: 0.4;
-            color: $text-dividers;
+            color: $text-divider;
           }
         }
 
