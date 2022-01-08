@@ -12,7 +12,12 @@
       </template>
     </page-banner>
     <div class="container">
-      <div class="module-title plog">Instagram · Plogs</div>
+      <div class="module-title plog">
+        <ulink class="link" :href="VALUABLE_LINKS.INSTAGRAM">
+          <span class="text">Newest · Instagram · Plogs</span>
+          <i class="iconfont icon-new-window-s"></i>
+        </ulink>
+      </div>
       <placeholder :data="lensStore.plogs.data" :loading="lensStore.plogs.fetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">
@@ -23,10 +28,17 @@
           <lens-skeleton class="module-loading" :count="3" key="loading" />
         </template>
         <template #default>
-          <plogs :plogs="lensStore.plogs.data" />
+          <div class="module-content">
+            <plogs :plogs="lensStore.plogs.data" />
+          </div>
         </template>
       </placeholder>
-      <div class="module-title vlog">BiliBili · Vlogs</div>
+      <div class="module-title vlog">
+        <ulink class="link" :href="VALUABLE_LINKS.BILIBILI">
+          <span class="text">Newest · BiliBili · Vlogs</span>
+          <i class="iconfont icon-new-window-s"></i>
+        </ulink>
+      </div>
       <placeholder :data="lensStore.vlogs.data" :loading="lensStore.vlogs.fetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">
@@ -37,7 +49,9 @@
           <lens-skeleton class="module-loading" key="loading" />
         </template>
         <template #default>
-          <vlogs :vlogs="lensStore.vlogs.data" />
+          <div class="module-content">
+            <vlogs :vlogs="lensStore.vlogs.data" />
+          </div>
         </template>
       </placeholder>
     </div>
@@ -53,7 +67,7 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
   import { randomNumber } from '/@/utils/random'
-  import { META } from '/@/config/app.config'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import PageBanner from '/@/components/common/banner.vue'
   import LensSkeleton from './skeleton.vue'
   import Plogs from './plogs.vue'
@@ -89,6 +103,7 @@
       useUniversalFetch(() => fetchAllData())
 
       return {
+        VALUABLE_LINKS,
         LANGUAGE_KEYS,
         lensStore,
         isDarkTheme,
@@ -111,19 +126,26 @@
       background-color: $module-bg-opaque;
       text-align: center;
       font-size: $font-size-h3;
-      font-weight: bold;
       text-transform: uppercase;
       letter-spacing: 5px;
-
       &.plog {
-        color: $instagram-primary;
         border-image: $instagram-gradient 30;
+        .link {
+          color: $instagram-primary;
+        }
       }
 
       &.vlog {
-        color: $bilibili-blue-primary;
         border-color: $bilibili-pink-primary $bilibili-blue-primary $bilibili-blue-primary
           $bilibili-pink-primary;
+        .link {
+          color: $bilibili-blue-primary;
+        }
+      }
+
+      .text {
+        margin-right: $sm-gap;
+        font-weight: bold;
       }
     }
 
@@ -137,6 +159,10 @@
 
     .module-loading {
       margin-bottom: $lg-gap;
+    }
+
+    .module-content {
+      margin-bottom: $gap * 2;
     }
   }
 </style>

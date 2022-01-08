@@ -117,7 +117,6 @@
   .videos {
     padding: 0;
     margin: 0;
-    margin-bottom: $gap * 2;
     list-style: none;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
