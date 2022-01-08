@@ -344,12 +344,6 @@
         background-repeat: repeat-x;
         background-blend-mode: lighten;
 
-        &:hover {
-          .image {
-            transform: rotate(360deg);
-          }
-        }
-
         > .image {
           $size: 8rem;
           width: $size;
@@ -361,6 +355,9 @@
           border: 5px solid $module-bg;
           box-sizing: content-box;
           transition: transform $transition-time-slow;
+          &:hover {
+            transform: rotate(360deg);
+          }
         }
 
         .name,
@@ -497,7 +494,7 @@
       margin-bottom: 2rem;
 
       .item {
-        height: 6rem;
+        height: 5rem;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -548,7 +545,7 @@
         }
         &.sponsor {
           --item-primary: #{$red};
-          border: 2px solid;
+          border: 4px double;
           .iconfont {
             font-size: $font-size-h1;
           }
@@ -649,7 +646,7 @@
       @extend .center-placeholder;
 
       .wrapper {
-        $size: 230px;
+        $size: 250px;
         $google-bar: 54px;
         position: relative;
         height: $size;
