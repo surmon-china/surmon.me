@@ -18,7 +18,7 @@
           <i class="iconfont icon-new-window-s"></i>
         </ulink>
       </div>
-      <placeholder :data="lensStore.plogs.data" :loading="lensStore.plogs.fetching">
+      <placeholder :data="lensStore.plogs.data" :loading="isFetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">
             <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
@@ -39,7 +39,7 @@
           <i class="iconfont icon-new-window-s"></i>
         </ulink>
       </div>
-      <placeholder :data="lensStore.vlogs.data" :loading="lensStore.vlogs.fetching">
+      <placeholder :data="lensStore.vlogs.data" :loading="isFetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">
             <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useLensStore } from '/@/store/lens'
   import { useUniversalFetch, universalRef } from '/@/universal'
@@ -85,6 +85,7 @@
     setup() {
       const { i18n, meta, isDarkTheme, isZhLang } = useEnhancer()
       const lensStore = useLensStore()
+      const isFetching = computed(() => lensStore.plogs.fetching || lensStore.vlogs.fetching)
       const bannerImageURL = universalRef(
         'page-lens-banner',
         () => `/images/page-lens/banner-${randomNumber(2)}.jpg`
@@ -107,6 +108,7 @@
         LANGUAGE_KEYS,
         lensStore,
         isDarkTheme,
+        isFetching,
         bannerImageURL
       }
     }

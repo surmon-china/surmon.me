@@ -50,46 +50,41 @@
     </div>
     <div class="container">
       <div class="links">
-        <router-link class="item" :to="getPageRoute(RouteName.Lens)">
-          <i class="iconfont icon-lens"></i>
-          <span class="text"><i18n v-bind="i18ns.myVlogs" /></span>
-        </router-link>
-        <router-link class="item" :to="getPageRoute(RouteName.Merch)">
-          <i class="iconfont icon-rubik"></i>
-          <span class="text"><i18n v-bind="i18ns.merchBar" /></span>
-        </router-link>
-        <router-link class="item" :to="getPageRoute(RouteName.Job)">
-          <i class="iconfont icon-horse"></i>
-          <span class="text"><i18n v-bind="i18ns.findJob" /></span>
-        </router-link>
-        <router-link class="item" :to="getPageRoute(RouteName.Freelancer)">
-          <i class="iconfont icon-coin-s"></i>
-          <span class="text"><i18n v-bind="i18ns.hireMe" /></span>
-        </router-link>
-        <router-link class="item" :to="getPageRoute(RouteName.Guestbook)">
-          <i class="iconfont icon-comment"></i>
-          <span class="text"><i18n v-bind="i18ns.guestbook" /></span>
+        <router-link
+          class="item"
+          v-for="(item, index) in links"
+          :key="index"
+          :to="getPageRoute(item.to)"
+        >
+          <i class="iconfont" :class="item.icon"></i>
+          <divider class="divider" type="vertical" />
+          <span class="text"><i18n v-bind="item.i18n" /></span>
         </router-link>
       </div>
       <div class="discussion">
         <ulink class="item qq-group" :href="VALUABLE_LINKS.QQ_GROUP">
           <i class="iconfont icon-qq"></i>
+          <divider class="divider" type="vertical" />
           <span class="text"><i18n v-bind="i18ns.QQGroup" /></span>
         </ulink>
         <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM_GROUP">
           <i class="iconfont icon-telegram"></i>
+          <divider class="divider" type="vertical" />
           <span class="text"><i18n v-bind="i18ns.TelegramGroup" /></span>
         </ulink>
         <button class="item sponsor" @click="handleOpenSponsor">
           <i class="iconfont icon-heart" />
+          <divider class="divider" type="vertical" />
           <span class="text"><i18n zh="赞助我" en="Sponsor" /></span>
         </button>
         <ulink class="item spotify" :href="VALUABLE_LINKS.SPOTIFY">
           <i class="iconfont icon-spotify" />
+          <divider class="divider" type="vertical" />
           <span class="text">Spotify</span>
         </ulink>
         <ulink class="item music-163" :href="VALUABLE_LINKS.MUSIC_163">
           <i class="iconfont icon-163music-logo" />
+          <divider class="divider" type="vertical" />
           <span class="text">BGM list</span>
         </ulink>
       </div>
@@ -139,13 +134,23 @@
           <uimage class="image" cdn src="/effects/ghchart" />
         </ulink>
       </div>
-      <div class="friendlinks">
-        <template v-for="(item, index) in FRIEND_LINKS" :key="index">
-          <divider type="vertical" size="lg" v-if="index !== 0" />
-          <a :href="item.url" class="item" target="_blank" rel="external nofollow noopener">
-            {{ item.name }}
-          </a>
-        </template>
+      <div class="footer-links">
+        <div class="friendlinks">
+          <template v-for="(item, index) in FRIEND_LINKS" :key="index">
+            <divider type="vertical" size="lg" v-if="index !== 0" />
+            <a :href="item.url" class="item" target="_blank" rel="external nofollow noopener">
+              {{ item.name }}
+            </a>
+          </template>
+        </div>
+        <div class="speciallinks">
+          <template v-for="(item, index) in SPECIAL_LINKS" :key="index">
+            <divider type="vertical" size="lg" v-if="index !== 0" />
+            <a :href="item.url" class="item" target="_blank" rel="external nofollow noopener">
+              {{ item.name }}
+            </a>
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -160,7 +165,7 @@
   import { getPageRoute } from '/@/transforms/route'
   import { getTargetStaticURL } from '/@/transforms/url'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { VALUABLE_LINKS, FRIEND_LINKS } from '/@/config/app.config'
+  import { VALUABLE_LINKS, FRIEND_LINKS, SPECIAL_LINKS } from '/@/config/app.config'
   import { useAboutPageMeta, getAdminAvatar, i18ns } from './helper'
 
   export default defineComponent({
@@ -169,6 +174,34 @@
       const { i18n, gtag, globalState, isZhLang, isDarkTheme } = useEnhancer()
       const metaStore = useMetaStore()
       const adminInfo = computed(() => metaStore.adminInfo.data)
+
+      const links = [
+        {
+          to: RouteName.Lens,
+          icon: `icon-lens`,
+          i18n: i18ns.myVlogs
+        },
+        {
+          to: RouteName.Merch,
+          icon: `icon-rubik`,
+          i18n: i18ns.merchBar
+        },
+        {
+          to: RouteName.Job,
+          icon: `icon-horse`,
+          i18n: i18ns.findJob
+        },
+        {
+          to: RouteName.Freelancer,
+          icon: `icon-coin-s`,
+          i18n: i18ns.hireMe
+        },
+        {
+          to: RouteName.Guestbook,
+          icon: `icon-comment`,
+          i18n: i18ns.guestbook
+        }
+      ]
 
       const qrcodes = [
         {
@@ -234,10 +267,11 @@
       return {
         i18ns,
         qrcodes,
+        links,
         language: i18n.language,
         VALUABLE_LINKS,
         FRIEND_LINKS,
-        RouteName,
+        SPECIAL_LINKS,
         getAdminAvatar,
         getPageRoute,
         isZhLang,
@@ -487,17 +521,22 @@
       .item {
         height: 5rem;
         display: flex;
-        justify-content: center;
+        justify-content: start;
         align-items: center;
         @include common-bg-module($transition-time-fast);
         @include radius-box($lg-radius);
 
         .iconfont {
+          margin-left: 3rem;
           font-size: $font-size-h3;
         }
 
+        .divider {
+          opacity: 0.6;
+          border-color: initial;
+        }
+
         .text {
-          margin-left: $sm-gap;
           font-size: $font-size-h4;
           font-weight: bold;
         }
@@ -648,10 +687,12 @@
           width: 4rem;
           height: 3rem;
           border-bottom-left-radius: $xs-radius;
-          background-color: $module-bg-translucent;
+          background-color: $module-bg;
           font-size: $font-size-h4;
+          color: $text-secondary;
           &:hover {
-            background-color: $module-bg;
+            color: $text;
+            background-color: $module-bg-opaque;
           }
         }
 
@@ -700,7 +741,9 @@
       }
     }
 
-    .friendlinks {
+    .footer-links {
+      display: flex;
+      justify-content: space-between;
       margin-bottom: $gap * 2;
       padding: 2rem;
       @include common-bg-module();
@@ -709,6 +752,15 @@
       .item {
         font-weight: bold;
         border-bottom: 1px solid;
+      }
+
+      .speciallinks {
+        .item {
+          color: $text-secondary;
+          &:hover {
+            color: $text;
+          }
+        }
       }
     }
   }

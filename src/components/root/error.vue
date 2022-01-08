@@ -125,7 +125,7 @@
       background-repeat: repeat-x;
       background-position: center;
       -webkit-background-clip: text;
-      color: rgba(darken($white, 20%), 20%);
+      color: rgba(darken($white, 30%), 20%);
       animation: error-item ease-out both 0.6s $transition-time-normal,
         code-wave ease-out both 0.6s $transition-time-normal, code-wave-play linear 2s infinite;
     }
