@@ -59,7 +59,7 @@
             <span>{{ article.meta.comments || 0 }}</span>
           </span>
           <span class="likes">
-            <i class="iconfont icon-heart" :class="{ liked: isLiked }"></i>
+            <i class="iconfont icon-like" :class="{ liked: isLiked }"></i>
             <span>{{ article.meta.likes || 0 }}</span>
           </span>
           <span class="categories">
@@ -255,7 +255,6 @@
           margin-top: 3px;
           margin-bottom: $sm-gap;
           font-weight: bold;
-          color: $link-hover;
 
           .link {
             display: block;
@@ -265,8 +264,9 @@
             border-bottom: 1px solid transparent;
             text-decoration: none;
             @include text-overflow();
-
+            color: $text;
             &:hover {
+              color: $link-color;
               border-color: initial;
               margin-left: $xs-gap;
             }

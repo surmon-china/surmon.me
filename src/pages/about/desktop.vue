@@ -756,7 +756,7 @@
 
       .speciallinks {
         .item {
-          color: $text-secondary;
+          color: $text-disabled;
           &:hover {
             color: $text;
           }
