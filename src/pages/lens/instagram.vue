@@ -157,9 +157,9 @@
 
   .list-swiper {
     $size: 243px;
-    width: 100%;
-    /* 2rem gap */
+    /* height * 2 + 2rem gap */
     height: $size * 2 + 12 * 2;
+    width: 100%;
 
     .media {
       position: relative;
