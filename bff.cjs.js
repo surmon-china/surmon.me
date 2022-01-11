@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.5.1
+* Surmon.me v3.5.2
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -183,7 +183,7 @@ const getRSSXML = async (archiveData) => {
         title: article.title,
         description: article.description,
         url: getArticleURL(article.id),
-        guid: getArticleURL(article.id),
+        guid: String(article.id),
         categories: article.category.map((category) => category.slug),
         author: META.author,
         date: article.create_at,
