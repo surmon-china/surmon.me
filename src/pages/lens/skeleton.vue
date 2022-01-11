@@ -1,6 +1,6 @@
 <template>
-  <ul class="skeletons">
-    <div class="item" :style="{ height: `${height}px` }" v-for="item in count" :key="item">
+  <ul class="skeletons" :style="{ gridTemplateColumns: `repeat(${columns}, 1fr)` }">
+    <div class="item" :style="{ height: `${height}px` }" v-for="item in columns * rows" :key="item">
       <skeleton-base />
     </div>
   </ul>
@@ -11,9 +11,13 @@
   export default defineComponent({
     name: 'LensSkeleton',
     props: {
-      count: {
+      columns: {
         type: Number,
-        default: 8
+        required: true
+      },
+      rows: {
+        type: Number,
+        default: 2
       },
       height: {
         type: Number,
@@ -29,7 +33,6 @@
   .skeletons {
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
     grid-gap: $gap * 2;
 
     .item {

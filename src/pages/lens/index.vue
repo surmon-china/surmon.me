@@ -12,34 +12,33 @@
       </template>
     </page-banner>
     <div class="container">
-      <page-title class="module-title instagram" :level="5">
-        <ulink class="link" :href="VALUABLE_LINKS.INSTAGRAM">Newest · Instagram · Plogs</ulink>
+      <page-title class="module-title instagram" :level="4">
+        <ulink class="link" :href="VALUABLE_LINKS.INSTAGRAM">Newest · instagram</ulink>
       </page-title>
-      <placeholder :data="lensStore.instagram.data" :loading="lensStore.instagram.fetching">
+      <placeholder :data="instagramMedias" :loading="lensStore.instagram.fetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">
             <i18n :lkey="LANGUAGE_KEYS.EMPTY_PLACEHOLDER" />
           </empty>
         </template>
         <template #loading>
-          <lens-skeleton :height="243" class="module-loading" key="loading" />
+          <lens-skeleton
+            :columns="6"
+            :rows="2"
+            :height="155"
+            key="loading"
+            class="module-loading"
+          />
         </template>
         <template #default>
           <div class="module-content">
-            <instagram :medias="lensStore.instagram.data" />
+            <instagram-grid :medias="instagramMedias" />
           </div>
         </template>
       </placeholder>
       <div class="module-content">
-        <ul class="playlist">
-          <li
-            class="item"
-            :title="list.title"
-            :key="index"
-            v-for="(list, index) in lensStore.youtube.data.filter(
-              (list) => list.contentDetails.itemCount > 1
-            )"
-          >
+        <youtube-playlist :playlists="youtubeLists">
+          <template #title="{ list }">
             <page-title class="module-title youtube" :level="5">
               <template #left>
                 <ulink class="link" :href="getYouTubePlaylistURL(list.id)">
@@ -51,47 +50,43 @@
                 <span class="brand">YouTube · Channel</span>
               </template>
             </page-title>
-            <youtube-video-list :playlist-id="list.id" @view="openYouTubeModal">
-              <template #empty>
-                <empty class="module-empty" key="empty">
-                  <i18n :lkey="LANGUAGE_KEYS.EMPTY_PLACEHOLDER" />
-                </empty>
-              </template>
-              <template #loading>
-                <lens-skeleton :count="4" :height="198" class="module-loading" key="loading" />
-              </template>
-            </youtube-video-list>
-          </li>
-        </ul>
-        <client-only>
-          <popup :visible="isOnYouTubeModal" @close="closeYouTubeModal">
-            <iframe
-              class="youtube-modal"
-              :src="getYouTubeVideoEmbedURL(youtubeModalVideo.snippet.resourceId.videoId)"
+          </template>
+          <template #loading>
+            <lens-skeleton
+              :columns="5"
+              :rows="1"
+              :height="170"
+              key="loading"
+              class="module-loading"
             />
-          </popup>
-        </client-only>
+          </template>
+          <template #empty>
+            <empty class="module-empty" key="empty">
+              <i18n :lkey="LANGUAGE_KEYS.EMPTY_PLACEHOLDER" />
+            </empty>
+          </template>
+        </youtube-playlist>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
+  import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useLensStore } from '/@/store/lens'
   import { useUniversalFetch, universalRef } from '/@/universal'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
   import { firstUpperCase } from '/@/transforms/text'
-  import { getYouTubePlaylistURL, getYouTubeVideoEmbedURL } from '/@/transforms/media'
+  import { getYouTubePlaylistURL } from '/@/transforms/media'
   import { randomNumber } from '/@/utils/random'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
   import PageTitle from '/@/components/common/fullpage/title.vue'
   import LensSkeleton from './skeleton.vue'
-  import Instagram from './instagram.vue'
-  import YoutubeVideoList from './youtube.vue'
+  import InstagramGrid from './instagram/grid.vue'
+  import YoutubePlaylist from './youtube/playlist.vue'
 
   export default defineComponent({
     name: 'LensPage',
@@ -99,25 +94,22 @@
       PageBanner,
       PageTitle,
       LensSkeleton,
-      Instagram,
-      YoutubeVideoList
+      InstagramGrid,
+      YoutubePlaylist
     },
     setup() {
       const { i18n, meta, isDarkTheme, isZhLang } = useEnhancer()
       const lensStore = useLensStore()
+      const instagramMedias = computed(() => {
+        return lensStore.instagram.data.filter((plog) => plog.media_type !== 'VIDEO').slice(0, 24)
+      })
+      const youtubeLists = computed(() => {
+        return lensStore.youtube.data.filter((list) => list.contentDetails.itemCount > 1)
+      })
       const bannerImageURL = universalRef(
         'page-lens-banner',
         () => `/images/page-lens/banner-${randomNumber(2)}.jpg`
       )
-
-      const youtubeModalVideo = ref<any>(null)
-      const isOnYouTubeModal = computed(() => Boolean(youtubeModalVideo.value))
-      const openYouTubeModal = (video: any) => {
-        youtubeModalVideo.value = video
-      }
-      const closeYouTubeModal = () => {
-        youtubeModalVideo.value = null
-      }
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_LENS, Language.En)!)
@@ -135,13 +127,10 @@
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
         getYouTubePlaylistURL,
-        getYouTubeVideoEmbedURL,
         lensStore,
+        instagramMedias,
+        youtubeLists,
         isDarkTheme,
-        isOnYouTubeModal,
-        openYouTubeModal,
-        closeYouTubeModal,
-        youtubeModalVideo,
         bannerImageURL
       }
     }
@@ -151,16 +140,10 @@
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
 
-  .youtube-modal {
-    width: 88vw;
-    height: 76vh;
-    position: relative;
-  }
-
   .lens-page {
     .module-title {
       .link {
-        color: $text;
+        color: $text-secondary;
         font-weight: bold;
         &:hover {
           color: $link-color;
@@ -169,12 +152,12 @@
 
       &.instagram {
         --item-primary: #{$instagram-primary};
-        background: linear-gradient(to right, transparent, $module-bg-lighter, transparent);
+        background: linear-gradient(to right, transparent, $module-bg-opaque, transparent);
       }
 
       &.youtube {
         --item-primary: #{$youtube-primary};
-        background: $module-bg-lighter;
+        background: linear-gradient(to right, $module-bg-opaque, transparent);
 
         .icon {
           color: var(--item-primary);
@@ -185,6 +168,7 @@
 
         .brand {
           color: $text-disabled;
+          font-size: $font-size-small;
         }
       }
     }
@@ -204,12 +188,6 @@
 
     .module-content {
       margin-bottom: $gap * 2;
-
-      .playlist {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-      }
     }
   }
 </style>

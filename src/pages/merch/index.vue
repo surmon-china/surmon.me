@@ -69,7 +69,7 @@
 
   .merch-page {
     .title {
-      background: linear-gradient(to right, transparent, $module-bg-lighter, transparent);
+      background: linear-gradient(to right, transparent, $module-bg-opaque, transparent);
     }
 
     .product-list {

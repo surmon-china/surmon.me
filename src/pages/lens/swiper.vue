@@ -16,9 +16,9 @@
       :mousewheel="false"
       :grab-cursor="false"
       :allow-touch-move="false"
-      :slides-per-view="4"
-      :slides-per-group="4"
-      :grid="{ rows: 2, fill: 'row' }"
+      :slides-per-view="columns"
+      :slides-per-group="columns"
+      :grid="{ rows: rows, fill: 'row' }"
       :space-between="24"
       @swiper="handleListSwiperReady"
       @slide-change="handleListSlideChange"
@@ -45,6 +45,14 @@
       data: {
         type: Array as PropType<Array<any>>,
         required: true
+      },
+      rows: {
+        type: Number,
+        default: 2
+      },
+      columns: {
+        type: Number,
+        default: 5
       }
     },
     setup() {

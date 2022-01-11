@@ -40,6 +40,9 @@
     letter-spacing: 5px;
     color: $text;
     @include radius-box($xs-radius);
+    &.heading-1 {
+      font-size: $font-size-h1;
+    }
     &.heading-2 {
       font-size: $font-size-h2;
     }

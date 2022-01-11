@@ -29,7 +29,7 @@ export const getRSSXML = async (archiveData?: any) => {
       title: article.title,
       description: article.description,
       url: getArticleURL(article.id),
-      guid: getArticleURL(article.id),
+      guid: String(article.id),
       categories: article.category.map((category) => category.slug),
       author: META.author,
       date: article.create_at,

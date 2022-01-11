@@ -40,7 +40,7 @@
           </template>
           <template #default>
             <div class="content-warpper" key="content">
-              <page-title class="root-title" :level="2">
+              <page-title class="root-title" :level="1">
                 <span class="text">
                   <i18n zh="万象星盘" en="Statistic" />
                 </span>

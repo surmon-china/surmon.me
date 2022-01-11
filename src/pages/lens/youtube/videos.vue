@@ -43,7 +43,7 @@
   import { ProxyModule } from '/@/constants/proxy'
   import { getTargetProxyURL } from '/@/transforms/url'
   import { timeAgo } from '/@/transforms/moment'
-  import ListSwiper from './swiper.vue'
+  import ListSwiper from '../swiper.vue'
 
   export enum YoutubeVideoListEvents {
     View = 'view'
@@ -83,6 +83,7 @@
       const humanlizeDate = (date: number) => {
         return timeAgo(date, i18n.language.value as any)
       }
+
       const handleView = (video: any) => {
         context.emit(YoutubeVideoListEvents.View, video)
         gtag?.event('youtube_view', {
@@ -111,7 +112,7 @@
 
   .video {
     display: block;
-    height: 198px;
+    height: 170px;
     cursor: pointer;
     @include radius-box($sm-radius);
     @include common-bg-module();
@@ -136,7 +137,7 @@
 
     .thumb {
       width: 100%;
-      height: 11rem;
+      height: 106px;
       position: relative;
       overflow: hidden;
       background-color: $module-bg-darker-3;

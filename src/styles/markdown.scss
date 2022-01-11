@@ -113,6 +113,7 @@
   iframe {
     width: 100%;
     margin-bottom: 1em;
+    border: $sm-gap solid $module-bg-darker-1;
     border-radius: $xs-radius;
     background-color: $theme-black;
   }

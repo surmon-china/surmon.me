@@ -12,6 +12,7 @@
         :is-reply="replyPid === item.comment.id"
         :hidden-avatar="hiddenAvatar"
         :hidden-ua="hiddenUa"
+        :plain-vote="plainVote"
         @vote="handleVoteComment"
         @delete="handleDeleteComment"
         @reply="handleReplyComment"
@@ -26,6 +27,7 @@
             :is-child-list="true"
             :hidden-avatar="hiddenAvatar"
             :hidden-ua="hiddenUa"
+            :plain-vote="plainVote"
             :reply-pid="replyPid"
             @delete="handleDeleteComment"
             @reply="handleReplyComment"
@@ -78,6 +80,10 @@
       hiddenUa: {
         type: Boolean,
         default: false
+      },
+      plainVote: {
+        type: Boolean,
+        required: false
       }
     },
     emits: [CommentEvents.Reply, CommentEvents.Delete, CommentEvents.CancelReply],

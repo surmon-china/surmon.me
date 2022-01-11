@@ -11,6 +11,8 @@ import type { InstagramMediaItem } from '/@/server/getters/instagram'
 import { delayPromise } from '/@/utils/delayer'
 import tunnel from '/@/services/tunnel'
 
+const LENS_NORMAL_DELAY = 480
+
 export const useLensStore = defineStore('lens', {
   state: () => ({
     instagram: {
@@ -28,13 +30,10 @@ export const useLensStore = defineStore('lens', {
   }),
   actions: {
     fetchInstagramMedias() {
-      if (this.instagram.data.length) {
-        return Promise.resolve()
-      }
-
       this.instagram.fetching = true
-      return tunnel
-        .dispatch(TunnelModule.Instagram)
+      const fetch = tunnel.dispatch(TunnelModule.Instagram)
+      const delayed = isClient ? delayPromise(LENS_NORMAL_DELAY, fetch) : fetch
+      return delayed
         .then((response) => {
           this.instagram.data = response
         })
@@ -60,7 +59,7 @@ export const useLensStore = defineStore('lens', {
     },
     fetchYouTubeVideoList(playlistID: string) {
       const fetch = tunnel.dispatch(TunnelModule.YouTubeVideoList, { id: playlistID })
-      return isClient ? delayPromise(480, fetch) : fetch
+      return isClient ? delayPromise(LENS_NORMAL_DELAY, fetch) : fetch
     },
     fetchBilibiliVideos() {
       if (this.bilibili.data.length) {

@@ -5,10 +5,18 @@
         <uimage cdn alt="app-logo" src="/images/page-app/logo.png" />
       </div>
       <h2 class="title">{{ META.title }}</h2>
-      <p class="desc">
+      <p class="description">
         <i18n :lkey="LANGUAGE_KEYS.APP_SLOGAN" />
       </p>
-      <p class="version">v1.1.4 (2020-03-06)</p>
+      <p class="rss">
+        <span class="prefix"><i18n zh="（" en="[" /></span>
+        <span class="deprecated"><i18n zh="此项目已废弃！" en="DEPRECATED!" /></span>
+        <i18n zh="建议使用" en="Recommend" />
+        <a class="link" :href="VALUABLE_LINKS.RSS" target="_blank">
+          <i18n zh="RSS 订阅" en="RSS subscription" />
+        </a>
+        <span class="suffix"><i18n zh="）" en="]" /></span>
+      </p>
       <div class="screen">
         <uimage cdn alt="app-hot" class="screen-img" src="/images/page-app/hot.png" />
         <div class="download">
@@ -16,7 +24,6 @@
           <ulink
             class="button"
             :href="VALUABLE_LINKS.APP_APK_FILE"
-            @click="handleAndroidApp($event)"
             @mousedown="handleAppEvent('download_android_app')"
           >
             <i class="icon iconfont icon-android"></i>
@@ -77,24 +84,11 @@
         })
       }
 
-      const handleAndroidApp = (event) => {
-        if (
-          !window.confirm(
-            isZhLang.value
-              ? 'Android apk 文件托管在 GitHub，希望你可以顺利访问~'
-              : 'Will open raw.githubusercontent.com to download android app...'
-          )
-        ) {
-          event.preventDefault()
-        }
-      }
-
       return {
         META,
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
-        handleAppEvent,
-        handleAndroidApp
+        handleAppEvent
       }
     }
   })
@@ -111,49 +105,70 @@
     min-height: 68rem;
     height: $full-page-active-content-height;
 
-    > .app {
+    .app {
       text-align: center;
 
-      > .logo {
+      .logo {
         margin-bottom: $lg-gap * 2;
 
-        > img {
+        img {
           width: 6rem;
           border-radius: 1em;
         }
       }
 
-      > .title {
+      .title {
+        margin-bottom: 1rem;
         color: $primary;
         font-weight: bold;
         text-transform: uppercase;
       }
 
-      > .version {
+      .version {
         color: $text-divider;
+        text-decoration: line-through;
       }
 
-      > .screen {
-        margin-top: 3rem;
+      .rss {
+        .deprecated {
+          font-weight: bold;
+          margin-right: $xs-gap;
+        }
+
+        .link {
+          margin-left: $xs-gap;
+          border-bottom: 1px solid;
+        }
+
+        .prefix {
+          margin-right: $xs-gap;
+        }
+        .suffix {
+          margin-left: $xs-gap;
+        }
+      }
+
+      .screen {
+        margin-top: 5rem;
         width: 36rem;
         position: relative;
 
         &:hover {
-          > .screen-img {
+          .screen-img {
             opacity: 0.4;
           }
 
-          > .download {
+          .download {
             @include visible();
           }
         }
 
-        > .screen-img {
+        .screen-img {
           width: 100%;
           @include visibility-transition($transition-time-normal);
         }
 
-        > .download {
+        .download {
           $size: 12rem;
           position: absolute;
           width: 100%;
@@ -223,19 +238,19 @@
       min-height: 53rem;
       height: calc(100vh - #{$mobile-header-height + $lg-gap + $lg-gap + $mobile-footer-height});
 
-      > .app {
-        > .screen {
+      .app {
+        .screen {
           width: 100%;
           margin-top: 3rem;
           margin-bottom: 1rem;
           text-align: center;
 
-          > .screen-img {
+          .screen-img {
             opacity: 0.4;
             width: 90%;
           }
 
-          > .download {
+          .download {
             @include visible();
           }
         }

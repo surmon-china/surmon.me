@@ -45,6 +45,7 @@
           :reply-pid="commentState.replyPID"
           :hidden-avatar="plain"
           :hidden-ua="plain"
+          :plain-vote="plain"
           @delete="handleDeleteComment"
           @reply="replyComment"
           @cancel-reply="cancelCommentReply"
