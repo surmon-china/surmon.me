@@ -5,8 +5,10 @@
  */
 
 import { defineStore } from 'pinia'
+import { isClient } from '/@/app/environment'
 import { TunnelModule } from '/@/constants/tunnel'
 import type { InstagramMediaItem } from '/@/server/getters/instagram'
+import { delayPromise } from '/@/utils/delayer'
 import tunnel from '/@/services/tunnel'
 
 export const useLensStore = defineStore('lens', {
@@ -57,7 +59,8 @@ export const useLensStore = defineStore('lens', {
         })
     },
     fetchYouTubeVideoList(playlistID: string) {
-      return tunnel.dispatch(TunnelModule.YouTubeVideoList, { id: playlistID })
+      const fetch = tunnel.dispatch(TunnelModule.YouTubeVideoList, { id: playlistID })
+      return isClient ? delayPromise(480, fetch) : fetch
     },
     fetchBilibiliVideos() {
       if (this.bilibili.data.length) {

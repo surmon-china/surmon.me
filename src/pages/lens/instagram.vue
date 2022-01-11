@@ -1,6 +1,6 @@
 <template>
   <div class="plog">
-    <list-swiper :data="plogList">
+    <list-swiper class="list-swiper" :data="plogList">
       <template #item="{ item, index }">
         <div class="media" :title="item.caption" @click="handleGalleryOpen(index)">
           <div class="mask">
@@ -155,72 +155,79 @@
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
 
-  .media {
-    position: relative;
-    display: block;
-    height: 243px;
-    overflow: hidden;
-    cursor: pointer;
-    @include radius-box($sm-radius);
-    @include common-bg-module();
-    &:hover {
+  .list-swiper {
+    $size: 243px;
+    width: 100%;
+    /* 2rem gap */
+    height: $size * 2 + 12 * 2;
+
+    .media {
+      position: relative;
+      display: block;
+      height: $size;
+      overflow: hidden;
+      cursor: pointer;
+      @include radius-box($sm-radius);
+      @include common-bg-module();
+      &:hover {
+        .background {
+          transform: scale(1.15);
+        }
+
+        .mask {
+          @include visible();
+        }
+      }
+
       .background {
-        transform: scale(1.15);
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        transform: scale(1.05);
+        @include transform-transition($transition-time-normal);
+      }
+
+      .length {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        z-index: $z-index-normal + 1;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 4rem;
+        height: 2rem;
+        border-top-left-radius: $xs-radius;
+        background-color: $text-divider;
+        color: $white;
       }
 
       .mask {
-        @include visible();
-      }
-    }
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: $z-index-normal + 1;
+        backdrop-filter: blur(2px);
+        color: $white;
+        background-color: rgba(#000, 0.3);
+        @include hidden();
+        @include visibility-transition();
 
-    .background {
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      transform: scale(1.05);
-      @include transform-transition($transition-time-normal);
-    }
+        .icon {
+          font-size: $font-size-h1 * 2;
+        }
 
-    .length {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      z-index: $z-index-normal + 1;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      width: 4rem;
-      height: 2rem;
-      border-top-left-radius: $xs-radius;
-      background-color: $text-divider;
-      color: $white;
-    }
-
-    .mask {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: $z-index-normal + 1;
-      backdrop-filter: blur(2px);
-      color: $white;
-      background-color: rgba(#000, 0.3);
-      @include hidden();
-      @include visibility-transition();
-
-      .icon {
-        font-size: $font-size-h1 * 2;
-      }
-
-      .caption {
-        margin-top: $gap;
-        font-weight: bold;
+        .caption {
+          margin-top: $gap;
+          font-weight: bold;
+        }
       }
     }
   }

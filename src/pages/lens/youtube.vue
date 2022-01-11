@@ -62,7 +62,7 @@
     setup(props, context) {
       const { i18n, gtag } = useEnhancer()
       const lensStore = useLensStore()
-      const isFetching = ref(false)
+      const isFetching = ref(true)
       const videos = ref<Array<any>>([])
       const fetchVideos = async () => {
         try {
