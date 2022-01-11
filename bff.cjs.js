@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.5.2
+* Surmon.me v3.5.3
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -763,7 +763,7 @@ app.get('/sitemap.xml', async (_, response) => {
     try {
         const data = await cacher({
             key: 'sitemap',
-            age: 60 * 60,
+            age: 60 * 60 * 2,
             getter: getSitemapXML
         });
         response.header('Content-Type', 'application/xml');
@@ -778,7 +778,7 @@ app.get('/rss.xml', async (_, response) => {
     try {
         const data = await cacher({
             key: 'rss',
-            age: 60 * 60,
+            age: 60 * 60 * 2,
             getter: getRSSXML
         });
         response.header('Content-Type', 'application/xml');
@@ -848,7 +848,7 @@ app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHub}`, responser(() => {
 app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Music}`, responser(() => {
     return cacher({
         key: 'music',
-        age: 60 * 60 * 1,
+        age: 60 * 60 * 12,
         retryWhen: 60 * 10,
         getter: getSongList
     });
