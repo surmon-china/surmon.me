@@ -81,7 +81,7 @@
               </div>
               <ul class="year-list">
                 <li v-for="yes in articleTree" :key="yes.year" class="year-item">
-                  <page-title class="root-title" :level="2">
+                  <page-title class="root-title" :level="1">
                     <span class="text">
                       <i18n :zh="replaceToChineseNumber(yes.year)" :en="yes.year" />
                     </span>

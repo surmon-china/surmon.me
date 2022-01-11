@@ -44,13 +44,13 @@
           <i class="iconfont icon-peachblossom"></i>
           <i18n :lkey="LANGUAGE_KEYS.PAGE_ARCHIVE" />
         </router-link>
-        <router-link class="item guestbook" :to="getPageRoute(RouteName.Guestbook)">
-          <i class="iconfont icon-comment"></i>
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_GUESTBOOK" />
-        </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.About)">
           <i class="iconfont icon-user"></i>
           <i18n :lkey="LANGUAGE_KEYS.PAGE_ABOUT" />
+        </router-link>
+        <router-link class="item guestbook" :to="getPageRoute(RouteName.Guestbook)">
+          <i class="iconfont icon-comment"></i>
+          <i18n :lkey="LANGUAGE_KEYS.PAGE_GUESTBOOK" />
         </router-link>
         <router-link class="item app" :to="getPageRoute(RouteName.App)">
           <i class="iconfont icon-app"></i>

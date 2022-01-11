@@ -42,7 +42,7 @@ app.get('/sitemap.xml', async (_, response) => {
   try {
     const data = await cacher({
       key: 'sitemap',
-      age: 60 * 60, // 1 hours
+      age: 60 * 60 * 2, // 2 hours
       getter: getSitemapXML
     })
     response.header('Content-Type', 'application/xml')
@@ -57,7 +57,7 @@ app.get('/rss.xml', async (_, response) => {
   try {
     const data = await cacher({
       key: 'rss',
-      age: 60 * 60, // 1 hours
+      age: 60 * 60 * 2, // 2 hours
       getter: getRSSXML
     })
     response.header('Content-Type', 'application/xml')
@@ -141,7 +141,7 @@ app.get(
   responser(() => {
     return cacher({
       key: 'music',
-      age: 60 * 60 * 1, // 1 hours
+      age: 60 * 60 * 12, // 12 hours
       retryWhen: 60 * 10, // 10 minutes
       getter: getSongList
     })
