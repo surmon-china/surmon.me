@@ -75,11 +75,11 @@
         <ulink class="item linkedin icon-only" :href="VALUABLE_LINKS.LINKEDIN">
           <i class="iconfont icon-linkedin" />
         </ulink>
+        <ulink class="item youtube icon-only" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
+          <i class="iconfont icon-youtube" />
+        </ulink>
         <ulink class="item douban icon-only" :href="VALUABLE_LINKS.DOUBAN">
           <i class="iconfont icon-douban" />
-        </ulink>
-        <ulink class="item bilibili icon-only" :href="VALUABLE_LINKS.BILIBILI">
-          <i class="iconfont icon-bilibili" />
         </ulink>
         <ulink class="item zhihu icon-only" :href="VALUABLE_LINKS.ZHIHU">
           <i class="iconfont icon-zhihu" />
@@ -104,7 +104,7 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getPageRoute } from '/@/transforms/route'
   import { VALUABLE_LINKS } from '/@/config/app.config'
-  import PageBanner from '/@/components/common/banner.vue'
+  import PageBanner from '/@/components/common/fullpage/banner.vue'
   import { useAboutPageMeta, getAdminAvatar, i18ns } from './helper'
 
   export default defineComponent({
@@ -264,20 +264,8 @@
           &.zhihu {
             background-color: $zhihu-primary;
           }
-          &.weibo {
-            background-color: $weibo-primary;
-          }
-          &.bilibili {
-            background-color: $bilibili-pink-primary;
-          }
-          &.stackoverflow {
-            background-color: $stackoverflow-primary;
-          }
-          &.algorithm {
-            background-color: $leetcode-primary;
-          }
-          &.quora {
-            background-color: $quora-primary;
+          &.youtube {
+            background-color: $youtube-primary;
           }
           &.linkedin {
             background-color: $linkedin-primary;

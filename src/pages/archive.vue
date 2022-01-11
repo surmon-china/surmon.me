@@ -40,11 +40,11 @@
           </template>
           <template #default>
             <div class="content-warpper" key="content">
-              <h2 class="root-title">
+              <page-title class="root-title" :level="2">
                 <span class="text">
                   <i18n zh="万象星盘" en="Statistic" />
                 </span>
-              </h2>
+              </page-title>
               <div class="statistic">
                 <span class="item">
                   <span class="count">{{ archiveStore.statistic?.articles }}</span>
@@ -81,11 +81,11 @@
               </div>
               <ul class="year-list">
                 <li v-for="yes in articleTree" :key="yes.year" class="year-item">
-                  <h2 class="root-title">
+                  <page-title class="root-title" :level="2">
                     <span class="text">
                       <i18n :zh="replaceToChineseNumber(yes.year)" :en="yes.year" />
                     </span>
-                  </h2>
+                  </page-title>
                   <ul class="month-list">
                     <li v-for="mos in yes.months" :key="mos.month" class="month">
                       <h4 class="month-title">
@@ -156,12 +156,14 @@
     toEngMonth,
     firstUpperCase
   } from '/@/transforms/text'
-  import PageBanner from '/@/components/common/banner.vue'
+  import PageBanner from '/@/components/common/fullpage/banner.vue'
+  import PageTitle from '/@/components/common/fullpage/title.vue'
 
   export default defineComponent({
     name: 'ArchivePage',
     components: {
-      PageBanner
+      PageBanner,
+      PageTitle
     },
     props: {
       isMobile: {
@@ -335,17 +337,11 @@
         }
 
         .year-item {
-          margin-top: 0;
-          margin-bottom: $gap * 2;
+          margin: 0;
           overflow: hidden;
         }
 
         .root-title {
-          margin-bottom: $lg-gap * 3;
-          text-align: center;
-          color: $text-secondary;
-          font-weight: bold;
-
           .text {
             padding-bottom: $xs-gap;
             border-bottom: 1px solid;

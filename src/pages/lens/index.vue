@@ -12,93 +12,121 @@
       </template>
     </page-banner>
     <div class="container">
-      <div class="module-title plog">
-        <ulink class="link" :href="VALUABLE_LINKS.INSTAGRAM">
-          <span class="text">Newest · Instagram · Plogs</span>
-          <i class="iconfont icon-new-window-s"></i>
-        </ulink>
-      </div>
-      <placeholder :data="lensStore.plogs.data" :loading="isFetching">
+      <page-title class="module-title instagram" :level="5">
+        <ulink class="link" :href="VALUABLE_LINKS.INSTAGRAM">Newest · Instagram · Plogs</ulink>
+      </page-title>
+      <placeholder :data="lensStore.instagram.data" :loading="lensStore.instagram.fetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">
-            <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
+            <i18n :lkey="LANGUAGE_KEYS.EMPTY_PLACEHOLDER" />
           </empty>
         </template>
         <template #loading>
-          <lens-skeleton :count="4" class="module-loading" key="loading" />
+          <lens-skeleton :height="243" class="module-loading" key="loading" />
         </template>
         <template #default>
           <div class="module-content">
-            <plogs :plogs="lensStore.plogs.data" />
+            <instagram :medias="lensStore.instagram.data" />
           </div>
         </template>
       </placeholder>
-      <div class="module-title vlog">
-        <ulink class="link" :href="VALUABLE_LINKS.BILIBILI">
-          <span class="text">Newest · BiliBili · Vlogs</span>
-          <i class="iconfont icon-new-window-s"></i>
-        </ulink>
+      <div class="module-content">
+        <ul class="playlist">
+          <li
+            class="item"
+            :title="list.title"
+            :key="index"
+            v-for="(list, index) in lensStore.youtube.data.filter(
+              (list) => list.contentDetails.itemCount > 1
+            )"
+          >
+            <page-title class="module-title youtube" :level="5">
+              <template #left>
+                <ulink class="link" :href="getYouTubePlaylistURL(list.id)">
+                  {{ list.snippet.title }}
+                  ({{ list.contentDetails.itemCount }})
+                </ulink>
+              </template>
+              <template #right>
+                <span class="brand">YouTube · Channel</span>
+              </template>
+            </page-title>
+            <youtube-video-list :playlist-id="list.id" @view="openYouTubeModal">
+              <template #empty>
+                <empty class="module-empty" key="empty">
+                  <i18n :lkey="LANGUAGE_KEYS.EMPTY_PLACEHOLDER" />
+                </empty>
+              </template>
+              <template #loading>
+                <lens-skeleton :count="4" :height="198" class="module-loading" key="loading" />
+              </template>
+            </youtube-video-list>
+          </li>
+        </ul>
+        <client-only>
+          <popup :visible="isOnYouTubeModal" @close="closeYouTubeModal">
+            <iframe
+              class="youtube-modal"
+              :src="getYouTubeVideoEmbedURL(youtubeModalVideo.snippet.resourceId.videoId)"
+            />
+          </popup>
+        </client-only>
       </div>
-      <placeholder :data="lensStore.vlogs.data" :loading="isFetching">
-        <template #placeholder>
-          <empty class="module-empty" key="empty">
-            <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
-          </empty>
-        </template>
-        <template #loading>
-          <lens-skeleton class="module-loading" key="loading" />
-        </template>
-        <template #default>
-          <div class="module-content">
-            <vlogs :vlogs="lensStore.vlogs.data" />
-          </div>
-        </template>
-      </placeholder>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
+  import { defineComponent, ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useLensStore } from '/@/store/lens'
   import { useUniversalFetch, universalRef } from '/@/universal'
-  import { firstUpperCase } from '/@/transforms/text'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
+  import { firstUpperCase } from '/@/transforms/text'
+  import { getYouTubePlaylistURL, getYouTubeVideoEmbedURL } from '/@/transforms/media'
   import { randomNumber } from '/@/utils/random'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
-  import PageBanner from '/@/components/common/banner.vue'
+  import PageBanner from '/@/components/common/fullpage/banner.vue'
+  import PageTitle from '/@/components/common/fullpage/title.vue'
   import LensSkeleton from './skeleton.vue'
-  import Plogs from './plogs.vue'
-  import Vlogs from './vlogs.vue'
+  import Instagram from './instagram.vue'
+  import YoutubeVideoList from './youtube.vue'
 
-  // plogs https://github.com/bertrandom/icloud-shared-album-to-flickr/blob/master/app.js
   export default defineComponent({
     name: 'LensPage',
     components: {
       PageBanner,
+      PageTitle,
       LensSkeleton,
-      Plogs,
-      Vlogs
+      Instagram,
+      YoutubeVideoList
     },
     setup() {
       const { i18n, meta, isDarkTheme, isZhLang } = useEnhancer()
       const lensStore = useLensStore()
-      const isFetching = computed(() => lensStore.plogs.fetching || lensStore.vlogs.fetching)
       const bannerImageURL = universalRef(
         'page-lens-banner',
         () => `/images/page-lens/banner-${randomNumber(2)}.jpg`
       )
 
+      const youtubeModalVideo = ref<any>(null)
+      const isOnYouTubeModal = computed(() => Boolean(youtubeModalVideo.value))
+      const openYouTubeModal = (video: any) => {
+        youtubeModalVideo.value = video
+      }
+      const closeYouTubeModal = () => {
+        youtubeModalVideo.value = null
+      }
+
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_LENS, Language.En)!)
         const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_LENS), enTitle] : [enTitle]
-        return { pageTitle: titles.join(' | '), description: `${META.author} 的 Vlog 视频` }
+        return { pageTitle: titles.join(' | '), description: `${META.author} 的视频创作` }
       })
 
       const fetchAllData = () => {
-        return Promise.all([lensStore.fetchPlogs(), lensStore.fetchVlogs()])
+        return Promise.all([lensStore.fetchInstagramMedias(), lensStore.fetchYouTubePlaylist()])
       }
 
       useUniversalFetch(() => fetchAllData())
@@ -106,9 +134,14 @@
       return {
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
+        getYouTubePlaylistURL,
+        getYouTubeVideoEmbedURL,
         lensStore,
         isDarkTheme,
-        isFetching,
+        isOnYouTubeModal,
+        openYouTubeModal,
+        closeYouTubeModal,
+        youtubeModalVideo,
         bannerImageURL
       }
     }
@@ -118,45 +151,51 @@
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
 
+  .youtube-modal {
+    width: 88vw;
+    height: 76vh;
+    position: relative;
+  }
+
   .lens-page {
     .module-title {
-      margin: $gap * 2 0;
-      line-height: 3.6em;
-      border-width: 4px;
-      border-style: double;
-      border-radius: $lg-radius;
-      background-color: $module-bg-opaque;
-      text-align: center;
-      font-size: $font-size-h3;
-      text-transform: uppercase;
-      letter-spacing: 5px;
-      &.plog {
-        border-image: $instagram-gradient 30;
-        .link {
-          color: $instagram-primary;
-        }
-      }
-
-      &.vlog {
-        border-color: $bilibili-pink-primary $bilibili-blue-primary $bilibili-blue-primary
-          $bilibili-pink-primary;
-        .link {
-          color: $bilibili-blue-primary;
-        }
-      }
-
-      .text {
-        margin-right: $sm-gap;
+      .link {
+        color: $text;
         font-weight: bold;
+        &:hover {
+          color: $link-color;
+        }
+      }
+
+      &.instagram {
+        --item-primary: #{$instagram-primary};
+        background: linear-gradient(to right, transparent, $module-bg-lighter, transparent);
+      }
+
+      &.youtube {
+        --item-primary: #{$youtube-primary};
+        background: $module-bg-lighter;
+
+        .icon {
+          color: var(--item-primary);
+          margin-right: $sm-gap;
+          font-size: $font-size-h3;
+          font-weight: normal;
+        }
+
+        .brand {
+          color: $text-disabled;
+        }
       }
     }
 
     .module-empty {
+      min-height: 12rem;
+      margin-bottom: $gap * 2;
+      font-weight: bold;
+      font-size: $font-size-h3;
       @include radius-box($sm-radius);
       @include common-bg-module();
-      min-height: 18rem;
-      margin-bottom: $gap * 2;
-      font-size: $font-size-h3;
     }
 
     .module-loading {
@@ -165,6 +204,12 @@
 
     .module-content {
       margin-bottom: $gap * 2;
+
+      .playlist {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
     }
   }
 </style>

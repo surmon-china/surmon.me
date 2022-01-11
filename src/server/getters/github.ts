@@ -5,7 +5,7 @@
  */
 
 import axios from 'axios'
-import { GITHUB_UID, META } from '@/config/app.config'
+import { THIRD_IDS, META } from '@/config/app.config'
 
 export interface GitHubRepository {
   html_url: string
@@ -23,7 +23,7 @@ export interface GitHubRepository {
 export const getGitHubRepositories = async (): Promise<Array<GitHubRepository>> => {
   const response = await axios.request<any>({
     headers: { 'User-Agent': META.title },
-    url: `http://api.github.com/users/${GITHUB_UID}/repos?per_page=168`
+    url: `http://api.github.com/users/${THIRD_IDS.GITHUB_USER_ID}/repos?per_page=168`
   })
   return response.data.map(
     (rep) =>

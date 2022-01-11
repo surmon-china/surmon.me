@@ -6,7 +6,7 @@
 
 import axios from 'axios'
 import { GA_MEASUREMENT_ID } from '@/config/app.config'
-import { getGAScriptURL } from '@/transforms/outside'
+import { getGAScriptURL } from '@/transforms/gtag'
 
 export const getGTagScript = async () => {
   const response = await axios.get<string>(getGAScriptURL(GA_MEASUREMENT_ID), { timeout: 6000 })

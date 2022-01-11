@@ -9,6 +9,14 @@
       </template>
     </page-banner>
     <div class="container">
+      <client-only transition>
+        <Adsense
+          class="mammon"
+          ins-class="mammon-ins"
+          ins-style="display:inline-block;width:1050px;height:130px"
+          data-ad-slot="3013952710"
+        />
+      </client-only>
       <ul class="jobs">
         <li class="item" :class="job.id" :key="index" v-for="(job, index) in jobs">
           <div
@@ -47,7 +55,7 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { Language } from '/@/language/data'
   import { META } from '/@/config/app.config'
-  import PageBanner from '/@/components/common/banner.vue'
+  import PageBanner from '/@/components/common/fullpage/banner.vue'
 
   export default defineComponent({
     name: 'JobPage',
@@ -113,7 +121,7 @@
         {
           id: 'todo',
           company: '假装是广告位',
-          logo: '/images/page-job/github-package.png',
+          logo: '/images/page-job/github.jpg',
           description: '如果你有自认为不错的机会，请联系我~',
           email: () => adminEmail.value
         }
@@ -147,6 +155,14 @@
   @import 'src/styles/init.scss';
 
   .job-page {
+    .mammon {
+      margin: $gap * 2 0;
+      height: 130px;
+      overflow: hidden;
+      @include radius-box($sm-radius);
+      @include common-bg-module();
+    }
+
     .jobs {
       padding: 0;
       margin: $gap * 2 0;

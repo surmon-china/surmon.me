@@ -9,11 +9,11 @@
       </template>
     </page-banner>
     <div class="container">
-      <div class="module-title" id="products">我在用的推荐好物</div>
+      <page-title class="title" id="products">我在用的推荐好物</page-title>
       <ul class="product-list">
         <product-item :key="index" :product="product" v-for="(product, index) in products" />
       </ul>
-      <div class="module-title" id="brokers">我筛选后在用的港美股券商</div>
+      <page-title class="title" id="brokers">我筛选后在用的港美股券商</page-title>
       <ul class="product-list">
         <product-item
           :key="index"
@@ -34,13 +34,15 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { firstUpperCase } from '/@/transforms/text'
   import { META } from '/@/config/app.config'
-  import PageBanner from '/@/components/common/banner.vue'
+  import PageBanner from '/@/components/common/fullpage/banner.vue'
+  import PageTitle from '/@/components/common/fullpage/title.vue'
   import ProductItem from './product.vue'
 
   export default defineComponent({
     name: 'MerchPage',
     components: {
       PageBanner,
+      PageTitle,
       ProductItem
     },
     setup() {
@@ -66,18 +68,8 @@
   @import 'src/styles/init.scss';
 
   .merch-page {
-    .module-title {
-      margin: ($gap * 2) 0;
-      line-height: 3.6em;
-      background-color: $module-bg;
-      border: 4px double $primary;
-      border-radius: $lg-radius;
-      text-transform: uppercase;
-      text-align: center;
-      color: $primary;
-      letter-spacing: 5px;
-      font-size: $font-size-h3;
-      font-weight: bold;
+    .title {
+      background: linear-gradient(to right, transparent, $module-bg-lighter, transparent);
     }
 
     .product-list {

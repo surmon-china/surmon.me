@@ -21,9 +21,12 @@ tunnel.interceptors.response.use((response) => response.data)
 
 const service = {
   $: tunnel,
-  request: <T = any>(...args: Parameters<AxiosInstance['request']>): Promise<T> =>
-    tunnel.request(...args),
-  dispatch: <T = any>(module: TunnelModule): Promise<T> => tunnel.get(module)
+  request: <T = any>(...args: Parameters<AxiosInstance['request']>): Promise<T> => {
+    return tunnel.request(...args)
+  },
+  dispatch: <T = any>(module: TunnelModule, params?: any): Promise<T> => {
+    return tunnel.get(module, { params })
+  }
 }
 
 export default service

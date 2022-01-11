@@ -1,6 +1,6 @@
 <template>
   <ul class="skeletons">
-    <div class="item" v-for="item in count" :key="item">
+    <div class="item" :style="{ height: `${height}px` }" v-for="item in count" :key="item">
       <skeleton-base />
     </div>
   </ul>
@@ -14,6 +14,10 @@
       count: {
         type: Number,
         default: 8
+      },
+      height: {
+        type: Number,
+        required: true
       }
     }
   })
@@ -29,7 +33,6 @@
     grid-gap: $gap * 2;
 
     .item {
-      height: 243px;
       padding: $gap;
       @include radius-box($sm-radius);
       @include common-bg-module();

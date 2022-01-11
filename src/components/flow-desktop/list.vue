@@ -197,6 +197,7 @@
       .empty {
         height: $gap * 10;
         font-size: $font-size-h4;
+        font-weight: bold;
         @include common-bg-module();
         @include radius-box($sm-radius);
       }

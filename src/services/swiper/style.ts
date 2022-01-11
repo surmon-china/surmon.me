@@ -6,6 +6,7 @@
 
 // https://swiperjs.com/swiper-api#css-styles
 import 'swiper/scss'
+import 'swiper/scss/grid'
 import 'swiper/scss/lazy'
 import 'swiper/scss/a11y'
 import 'swiper/scss/effect-fade'

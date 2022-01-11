@@ -3,7 +3,7 @@
     <placeholder :data="announcements.length" :loading="fetching">
       <template #placeholder>
         <empty class="announcement-empty" key="empty">
-          <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
+          <i18n :lkey="LANGUAGE_KEYS.EMPTY_PLACEHOLDER" />
         </empty>
       </template>
       <template #loading>

@@ -8,7 +8,7 @@ import axios from 'axios'
 import { argv } from 'yargs'
 
 // 1. Generate long-lived access tokens for Instagram Testers
-// https://developers.facebook.com/apps/625907498725071/instagram-basic-display/basic-display/?business_id=277570526188879
+// https://developers.facebook.com/apps/625907498725071/instagram-basic-display/basic-display/
 
 // 2. Get medias useing API
 // https://developers.facebook.com/docs/instagram-basic-display-api/reference/media#fields

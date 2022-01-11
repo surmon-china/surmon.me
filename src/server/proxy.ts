@@ -34,6 +34,11 @@ const proxys: ProxyConfigItem[] = [
     referer: 'https://www.instagram.com/'
   },
   {
+    module: ProxyModule.YouTube,
+    origin: 'https://www.youtube.com',
+    referer: 'https://www.youtube.com/'
+  },
+  {
     module: ProxyModule.NetEasyMusic,
     origin: 'https://music.163.com',
     referer: 'https://music.163.com/'

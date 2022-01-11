@@ -49,7 +49,7 @@
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { firstUpperCase } from '/@/transforms/text'
   import { META } from '/@/config/app.config'
-  import PageBanner from '/@/components/common/banner.vue'
+  import PageBanner from '/@/components/common/fullpage/banner.vue'
   import Comment from '/@/components/comment/index.vue'
 
   export default defineComponent({

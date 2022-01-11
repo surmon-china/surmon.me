@@ -6,6 +6,8 @@
 
 export enum TunnelModule {
   Instagram = 'instagram',
+  YouTubePlaylist = 'youtube_playlist',
+  YouTubeVideoList = 'youtube_video_list',
   BiliBili = 'bilibili',
   Wallpaper = 'wallpaper',
   GitHub = 'gitHub',

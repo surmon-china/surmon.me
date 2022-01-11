@@ -1,24 +1,20 @@
 <template>
   <div class="plog">
-    <ul class="medias" ref="listElement">
-      <li
-        class="item"
-        @click="handleOpenGallery(index)"
-        :title="media.caption"
-        :key="index"
-        v-for="(media, index) in plogList"
-      >
-        <div class="mask">
-          <span class="icon">
-            <i class="iconfont icon-magnifier"></i>
-          </span>
-          <span class="caption" v-if="media.caption">{{ media.caption }}</span>
+    <list-swiper :data="plogList">
+      <template #item="{ item, index }">
+        <div class="media" :title="item.caption" @click="handleGalleryOpen(index)">
+          <div class="mask">
+            <span class="icon">
+              <i class="iconfont icon-magnifier"></i>
+            </span>
+            <span class="caption" v-if="item.caption">{{ item.caption }}</span>
+          </div>
+          <div class="background lozad" :data-background-image="getInstagramImage(item, 'm')" />
         </div>
-        <div class="background lozad" :data-background-image="getInstagramImage(media, 'm')" />
-      </li>
-    </ul>
+      </template>
+    </list-swiper>
     <client-only>
-      <popup :visible="isOnGallery" @close="handleCloseGallery">
+      <popup :visible="isOnGallery" @close="handleGalleryClose">
         <div class="gallery">
           <swiper
             effect="fade"
@@ -31,8 +27,8 @@
             :lazy="true"
             :simulate-touch="false"
             :pagination="{ type: 'fraction' }"
-            @swiper="handleSwiperReady"
-            @transition-start="handleSwiperTransitionStart"
+            @swiper="handleGallerySwiperReady"
+            @transition-start="handleGallerySwiperTransitionStart"
           >
             <swiper-slide v-for="(media, index) in plogList" :key="index">
               <div class="content">
@@ -65,13 +61,17 @@
               <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
             </swiper-slide>
           </swiper>
-          <button class="navigation prev" :disabled="galleryActiveIndex === 0" @click="prevSlide">
+          <button
+            class="navigation prev"
+            :disabled="galleryActiveIndex === 0"
+            @click="galleryPrevSlide"
+          >
             <i class="iconfont icon-prev" />
           </button>
           <button
             class="navigation next"
             :disabled="galleryActiveIndex === plogList.length - 1"
-            @click="nextSlide"
+            @click="galleryNextSlide"
           >
             <i class="iconfont icon-next" />
           </button>
@@ -82,34 +82,33 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, onMounted, onBeforeUnmount, PropType } from 'vue'
+  import { defineComponent, ref, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { getInstagramImage } from '/@/store/lens'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
   import { GAEventCategories } from '/@/constants/gtag'
   import { UNDEFINED } from '/@/constants/value'
   import { humanizeYMD } from '/@/transforms/moment'
+  import { getInstagramImage } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
-  import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
+  import ListSwiper from './swiper.vue'
 
   export default defineComponent({
-    name: 'LensPlogs',
+    name: 'LensInstagram',
     components: {
       Swiper,
-      SwiperSlide
+      SwiperSlide,
+      ListSwiper
     },
     props: {
-      plogs: {
+      medias: {
         type: Array as PropType<Array<InstagramMediaItem>>,
         required: true
       }
     },
     setup(props) {
       const { i18n, gtag } = useEnhancer()
-      const lozadObserver = ref<LozadObserver | null>(null)
-      const listElement = ref<HTMLElement>()
       const plogList = computed(() => {
-        return props.plogs.filter((plog) => plog.media_type !== 'VIDEO').slice(0, 20)
+        return props.medias.filter((plog) => plog.media_type !== 'VIDEO').slice(0, 24)
       })
       const humanlizeDate = (date: string) => {
         return humanizeYMD(date, i18n.language.value as any)
@@ -117,59 +116,37 @@
 
       const galleryActiveIndex = ref<number>()
       const isOnGallery = computed(() => galleryActiveIndex.value !== UNDEFINED)
-      const swiper = ref<SwiperClass>()
-      const handleSwiperReady = (_swiper: SwiperClass) => {
-        swiper.value = _swiper
+      const gallerySwiper = ref<SwiperClass>()
+      const galleryPrevSlide = () => gallerySwiper.value?.slidePrev()
+      const galleryNextSlide = () => gallerySwiper.value?.slideNext()
+      const handleGallerySwiperReady = (_swiper: SwiperClass) => {
+        gallerySwiper.value = _swiper
       }
-
-      const prevSlide = () => swiper.value?.slidePrev()
-      const nextSlide = () => swiper.value?.slideNext()
-      const handleSwiperTransitionStart = () => {
-        galleryActiveIndex.value = swiper.value?.activeIndex || 0
+      const handleGallerySwiperTransitionStart = () => {
+        galleryActiveIndex.value = gallerySwiper.value?.activeIndex || 0
       }
-
-      const handleCloseGallery = () => {
+      const handleGalleryClose = () => {
         galleryActiveIndex.value = UNDEFINED
       }
-      const handleOpenGallery = (index: number) => {
+      const handleGalleryOpen = (index: number) => {
         galleryActiveIndex.value = index
         gtag?.event('instagram_view', {
           event_category: GAEventCategories.Lens
         })
       }
 
-      const observeLozad = () => {
-        const lozadElements = listElement.value?.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
-        if (lozadElements?.length) {
-          lozadObserver.value = window.$lozad(lozadElements, {
-            loaded: (element) => element.classList.add(LOADED_CLASS_NAME)
-          })
-          lozadObserver.value.observe()
-        }
-      }
-
-      onMounted(() => {
-        observeLozad()
-      })
-
-      onBeforeUnmount(() => {
-        lozadObserver.value?.observer.disconnect()
-        lozadObserver.value = null
-      })
-
       return {
         plogList,
         galleryActiveIndex,
         isOnGallery,
-        listElement,
         humanlizeDate,
         getInstagramImage,
-        handleOpenGallery,
-        handleCloseGallery,
-        handleSwiperReady,
-        handleSwiperTransitionStart,
-        prevSlide,
-        nextSlide
+        handleGalleryOpen,
+        handleGalleryClose,
+        handleGallerySwiperReady,
+        handleGallerySwiperTransitionStart,
+        galleryPrevSlide,
+        galleryNextSlide
       }
     }
   })
@@ -178,84 +155,72 @@
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
 
-  .medias {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: $gap * 2;
-
-    > .item {
-      display: block;
-      cursor: pointer;
-      height: 243px;
-      position: relative;
-      overflow: hidden;
-      background-color: $module-bg-darker-3;
-      @include radius-box($sm-radius);
-      @include common-bg-module();
-
-      &:hover {
-        .background {
-          transform: scale(1.15);
-        }
-
-        .mask {
-          @include visible();
-        }
-      }
-
+  .media {
+    position: relative;
+    display: block;
+    height: 243px;
+    overflow: hidden;
+    cursor: pointer;
+    @include radius-box($sm-radius);
+    @include common-bg-module();
+    &:hover {
       .background {
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        background-position: center;
-        transform: scale(1.05);
-        @include transform-transition($transition-time-normal);
-      }
-
-      .length {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        z-index: $z-index-normal + 1;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        width: 4rem;
-        height: 2rem;
-        border-top-left-radius: $xs-radius;
-        background-color: $text-divider;
-        color: $white;
+        transform: scale(1.15);
       }
 
       .mask {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: $z-index-normal + 1;
-        backdrop-filter: blur(2px);
-        color: $white;
-        background-color: rgba(#000, 0.3);
-        @include hidden();
-        @include visibility-transition();
+        @include visible();
+      }
+    }
 
-        .icon {
-          font-size: $font-size-h1 * 2;
-        }
+    .background {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.05);
+      @include transform-transition($transition-time-normal);
+    }
 
-        .caption {
-          margin-top: $gap;
-          font-weight: bold;
-          font-size: $font-size-h4;
-        }
+    .length {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      z-index: $z-index-normal + 1;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 4rem;
+      height: 2rem;
+      border-top-left-radius: $xs-radius;
+      background-color: $text-divider;
+      color: $white;
+    }
+
+    .mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: $z-index-normal + 1;
+      backdrop-filter: blur(2px);
+      color: $white;
+      background-color: rgba(#000, 0.3);
+      @include hidden();
+      @include visibility-transition();
+
+      .icon {
+        font-size: $font-size-h1 * 2;
+      }
+
+      .caption {
+        margin-top: $gap;
+        font-weight: bold;
       }
     }
   }

@@ -1,5 +1,4 @@
 import { useEnhancer } from '/@/app/enhancer'
-import { AdminInfo } from '/@/store/meta'
 import { Language } from '/@/language/data'
 import { LANGUAGE_KEYS } from '/@/language/key'
 import { firstUpperCase } from '/@/transforms/text'
@@ -33,8 +32,8 @@ export const i18ns = {
     [Language.En]: `Hire me`
   },
   myVlogs: {
-    [Language.Zh]: `我的 Vlog`,
-    [Language.En]: `My Vlogs`
+    [Language.Zh]: `我拍摄的`,
+    [Language.En]: `My albums`
   },
   merchBar: {
     [Language.Zh]: `我的周边`,

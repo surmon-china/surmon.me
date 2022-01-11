@@ -5,7 +5,7 @@
  */
 
 import NeteaseMusic from 'simple-netease-cloud-music'
-import { MUSIC_ALBUM_ID } from '@/config/app.config'
+import { THIRD_IDS } from '@/config/app.config'
 
 // https://521dimensions.com/open-source/amplitudejs/docs/configuration/playlists.html
 // https://521dimensions.com/open-source/amplitudejs/docs/configuration/song-objects.html#special-keys
@@ -23,7 +23,7 @@ const neteseMusic = new NeteaseMusic()
 
 // 获取歌单列表
 export const getSongList = async (): Promise<Array<Song>> => {
-  const result = await neteseMusic._playlist(MUSIC_ALBUM_ID, PLAY_LIST_LIMIT)
+  const result = await neteseMusic._playlist(THIRD_IDS.MUSIC_163_BGM_ALBUM_ID, PLAY_LIST_LIMIT)
   if (result.code < 0) {
     throw new Error(result.message)
   }

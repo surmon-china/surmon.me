@@ -16,6 +16,10 @@ import { getBiliBiliVideos } from './server/getters/bilibili'
 import { getAllWallpapers } from './server/getters/wallpaper'
 import { getGitHubRepositories } from './server/getters/github'
 import { getInstagramMedias } from './server/getters/instagram'
+import {
+  getYouTubeChannelPlayLists,
+  getYouTubeVideoListByPlayerlistID
+} from './server/getters/youtube'
 import { getSongList } from './server/getters/music'
 import { enableDevRuntime } from './server/runtime/dev'
 import { enableProdRuntime } from './server/runtime/prod'
@@ -98,63 +102,90 @@ app.get('/effects/ghchart', async (_, response) => {
 // tunnel services
 app.get(
   `${BFF_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`,
-  responser(() =>
-    cacher({
+  responser(() => {
+    return cacher({
       key: 'bilibili',
       age: 60 * 60 * 1, // 1 hours
       retryWhen: 60 * 5, // 5 minutes
       getter: getBiliBiliVideos
     })
-  )
+  })
 )
 
 app.get(
   `${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`,
-  responser(() =>
-    cacher({
+  responser(() => {
+    return cacher({
       key: 'wallpaper',
       age: 60 * 60 * 8, // 8 hours
       retryWhen: 60 * 30, // 30 minutes
       getter: getAllWallpapers
     })
-  )
+  })
 )
 
 app.get(
   `${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHub}`,
-  responser(() =>
-    cacher({
+  responser(() => {
+    return cacher({
       key: 'github',
       age: 60 * 60 * 2, // 2 hours
       retryWhen: 60 * 30, // 30 minutes
       getter: getGitHubRepositories
     })
-  )
+  })
 )
 
 app.get(
   `${BFF_TUNNEL_PREFIX}/${TunnelModule.Music}`,
-  responser(() =>
-    cacher({
+  responser(() => {
+    return cacher({
       key: 'music',
       age: 60 * 60 * 1, // 1 hours
       retryWhen: 60 * 10, // 10 minutes
       getter: getSongList
     })
-  )
+  })
 )
 
 app.get(
   `${BFF_TUNNEL_PREFIX}/${TunnelModule.Instagram}`,
-  responser(() =>
-    cacher({
+  responser(() => {
+    return cacher({
       key: 'instagram',
-      age: 60 * 60 * 1, // 6 hours
+      age: 60 * 60 * 6, // 6 hours
       retryWhen: 60 * 10, // 10 minutes
       getter: getInstagramMedias
     })
-  )
+  })
 )
+
+app.get(
+  `${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`,
+  responser(() => {
+    return cacher({
+      key: 'youtube_playlist',
+      age: 60 * 60 * 24, // 24 hours
+      retryWhen: 60 * 10, // 10 minutes
+      getter: getYouTubeChannelPlayLists
+    })
+  })
+)
+
+app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
+  const playlistID = request.query.id
+  if (!playlistID || typeof playlistID !== 'string') {
+    return erroror(response, 'Invalid params')
+  }
+  responser(() => {
+    return cacher({
+      key: `youtube_playlist_${playlistID}`,
+      age: 60 * 60 * 1, // 1 hours
+      retryWhen: 60 * 10, // 10 minutes
+      getter: () => getYouTubeVideoListByPlayerlistID(playlistID)
+    })
+  })(request, response, next)
+})
 
 // app effect
 isDev ? enableDevRuntime(app) : enableProdRuntime(app)

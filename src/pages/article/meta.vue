@@ -54,7 +54,7 @@
           :to="getTagFlowRoute(tag.slug)"
           :title="tag.description || tag.name"
         >
-          <i18n :zh="tag.name" :en="tag.slug" />
+          #<i18n :zh="tag.name" :en="tag.slug" />
         </router-link>
         <span v-if="article.tag[index + 1]">
           <i18n zh="、" en="," />

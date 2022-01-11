@@ -27,6 +27,10 @@
               <i class="iconfont icon-instagram" />
               <span class="text">Instagram</span>
             </ulink>
+            <ulink class="item youtube" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
+              <i class="iconfont icon-youtube" />
+              <span class="text">YouTube</span>
+            </ulink>
           </span>
           <span class="mini">
             <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM">
@@ -37,9 +41,6 @@
             </ulink>
             <ulink class="item douban" :href="VALUABLE_LINKS.DOUBAN">
               <i class="iconfont icon-douban" />
-            </ulink>
-            <ulink class="item bilibili" :href="VALUABLE_LINKS.BILIBILI">
-              <i class="iconfont icon-bilibili" />
             </ulink>
             <ulink class="item zhihu" :href="VALUABLE_LINKS.ZHIHU">
               <i class="iconfont icon-zhihu" />
@@ -205,6 +206,13 @@
 
       const qrcodes = [
         {
+          class: 'douban',
+          qrcode: `/images/qrcodes/douban.png`,
+          icon: 'icon-douban',
+          link: VALUABLE_LINKS.DOUBAN,
+          text: `Douban Archive`
+        },
+        {
           class: 'wechat',
           qrcode: `/images/qrcodes/wechat.jpg`,
           icon: 'icon-wechat',
@@ -217,13 +225,6 @@
           text: 'WeChat Channel'
         },
         {
-          class: 'bilibili',
-          qrcode: `/images/qrcodes/bilibili.png`,
-          icon: 'icon-bilibili-full',
-          link: VALUABLE_LINKS.BILIBILI,
-          text: `BiliBili 干杯~`
-        },
-        {
           class: 'instagram',
           qrcode: `/images/qrcodes/instagram.png`,
           icon: 'icon-instagram',
@@ -234,7 +235,7 @@
           class: 'youtube',
           qrcode: `/images/qrcodes/youtube.png`,
           icon: 'icon-youtube',
-          link: VALUABLE_LINKS.YOUTUBE,
+          link: VALUABLE_LINKS.YOUTUBE_CHANNEL,
           text: 'YouTube Channel'
         }
       ]
@@ -421,6 +422,7 @@
               align-items: center;
               border-radius: $sm-radius;
               color: $white;
+              transition: all $transition-time-fast;
 
               .iconfont {
                 font-size: $font-size-h4;
@@ -443,12 +445,17 @@
                   background-color: $twitter-primary-hover;
                 }
               }
+              &.youtube {
+                margin: 0;
+                background-color: $youtube-primary;
+                &:hover {
+                  background-color: mix($black, $youtube-primary, 8%);
+                }
+              }
               &.instagram {
                 opacity: 0.8;
-                margin: 0;
                 background: $instagram-primary;
                 background: $instagram-gradient;
-                @include visibility-transition();
                 &:hover {
                   opacity: 1;
                 }
@@ -467,7 +474,7 @@
               border-radius: $sm-radius;
               color: $white;
               opacity: 0.8;
-              @include visibility-transition();
+              transition: all $transition-time-fast;
 
               &:hover {
                 opacity: 1;
@@ -485,9 +492,6 @@
               }
               &.zhihu {
                 background-color: $zhihu-primary;
-              }
-              &.weibo {
-                background-color: $weibo-primary;
               }
               &.bilibili {
                 background-color: $bilibili-pink-primary;
@@ -599,8 +603,8 @@
         &.wechat {
           --item-primary: #{$wechat-primary};
         }
-        &.bilibili {
-          --item-primary: #{$bilibili-pink-primary};
+        &.douban {
+          --item-primary: #{$douban-primary};
         }
         &.instagram {
           --item-primary: #{$instagram-primary};

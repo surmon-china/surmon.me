@@ -8,6 +8,7 @@ export enum ProxyModule {
   Default = 'default',
   BiliBili = 'bilibili',
   Instagram = 'instagram',
+  YouTube = 'youtube',
   NetEasyMusic = '163',
   Disqus = 'disqus'
 }

@@ -6,61 +6,72 @@
 
 import { defineStore } from 'pinia'
 import { TunnelModule } from '/@/constants/tunnel'
-import { ProxyModule } from '/@/constants/proxy'
 import type { InstagramMediaItem } from '/@/server/getters/instagram'
-import { getTargetProxyURL } from '/@/transforms/url'
 import tunnel from '/@/services/tunnel'
-
-// https://www.instagram.com/p/['IMAGE-CODE']/?__a=1
-// https://www.surinderbhomra.com/Blog/2016/05/16/Resize-An-Instagram-Image-Using-A-Media-Query-Parameter
-export const getInstagramImage = (media: InstagramMediaItem, size?: 't' | 'm' | 'l') => {
-  if (size) {
-    return getTargetProxyURL(`${media.permalink}media/?size=${size}`, ProxyModule.Instagram)
-  } else {
-    return getTargetProxyURL(media.media_url, ProxyModule.Instagram)
-  }
-}
 
 export const useLensStore = defineStore('lens', {
   state: () => ({
-    plogs: {
+    instagram: {
       fetching: false,
       data: [] as Array<InstagramMediaItem>
     },
-    vlogs: {
+    youtube: {
+      fetching: false,
+      data: [] as Array<any>
+    },
+    bilibili: {
       fetching: false,
       data: [] as Array<any>
     }
   }),
   actions: {
-    fetchPlogs() {
-      if (this.plogs.data.length) {
+    fetchInstagramMedias() {
+      if (this.instagram.data.length) {
         return Promise.resolve()
       }
 
-      this.plogs.fetching = true
+      this.instagram.fetching = true
       return tunnel
         .dispatch(TunnelModule.Instagram)
         .then((response) => {
-          this.plogs.data = response
+          this.instagram.data = response
         })
         .finally(() => {
-          this.plogs.fetching = false
+          this.instagram.fetching = false
         })
     },
-    fetchVlogs() {
-      if (this.vlogs.data.length) {
+    fetchYouTubePlaylist() {
+      if (this.youtube.data.length) {
         return Promise.resolve()
       }
 
-      this.vlogs.fetching = true
+      this.youtube.fetching = true
+      return tunnel
+        .dispatch(TunnelModule.YouTubePlaylist)
+        .then((response) => {
+          response.sort((a, b) => a.snippet.position - b.snippet.position)
+          this.youtube.data = response
+        })
+        .finally(() => {
+          this.youtube.fetching = false
+        })
+    },
+    fetchYouTubeVideoList(playlistID: string) {
+      return tunnel.dispatch(TunnelModule.YouTubeVideoList, { id: playlistID })
+    },
+    fetchBilibiliVideos() {
+      if (this.bilibili.data.length) {
+        return Promise.resolve()
+      }
+
+      this.bilibili.fetching = true
       return tunnel
         .dispatch(TunnelModule.BiliBili)
         .then((response) => {
-          this.vlogs.data = response
+          this.bilibili.data = response
         })
         .finally(() => {
-          this.vlogs.fetching = false
+          this.bilibili.fetching = false
         })
     }
   }
