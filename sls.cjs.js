@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.4.23
+* Surmon.me v3.5.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -93,6 +93,7 @@ var ProxyModule;
     ProxyModule["Default"] = "default";
     ProxyModule["BiliBili"] = "bilibili";
     ProxyModule["Instagram"] = "instagram";
+    ProxyModule["YouTube"] = "youtube";
     ProxyModule["NetEasyMusic"] = "163";
     ProxyModule["Disqus"] = "disqus";
 })(ProxyModule || (ProxyModule = {}));/**
@@ -115,6 +116,11 @@ const proxys = [
         module: ProxyModule.Instagram,
         origin: 'https://www.instagram.com',
         referer: 'https://www.instagram.com/'
+    },
+    {
+        module: ProxyModule.YouTube,
+        origin: 'https://www.youtube.com',
+        referer: 'https://www.youtube.com/'
     },
     {
         module: ProxyModule.NetEasyMusic,

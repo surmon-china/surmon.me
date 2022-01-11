@@ -1,23 +1,23 @@
 {
   "index.html": {
-    "file": "index-2ec1379f.js",
+    "file": "index-08623a91.js",
     "src": "index.html",
     "isEntry": true,
     "imports": [
-      "_vendor-0d0a4726.js",
-      "_expansion-d22e8cd8.js"
+      "_vendor-6facb6ac.js",
+      "_expansion-67949a7f.js"
     ]
   },
-  "_vendor-0d0a4726.js": {
-    "file": "vendor-0d0a4726.js",
+  "_vendor-6facb6ac.js": {
+    "file": "vendor-6facb6ac.js",
     "imports": [
-      "_expansion-d22e8cd8.js"
+      "_expansion-67949a7f.js"
     ]
   },
-  "_expansion-d22e8cd8.js": {
-    "file": "expansion-d22e8cd8.js",
+  "_expansion-67949a7f.js": {
+    "file": "expansion-67949a7f.js",
     "imports": [
-      "_vendor-0d0a4726.js"
+      "_vendor-6facb6ac.js"
     ]
   }
 }

@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.4.23
+* Surmon.me v3.5.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -26,6 +26,8 @@ const isProd = "production" === NodeEnv.Production;
 var TunnelModule;
 (function (TunnelModule) {
     TunnelModule["Instagram"] = "instagram";
+    TunnelModule["YouTubePlaylist"] = "youtube_playlist";
+    TunnelModule["YouTubeVideoList"] = "youtube_video_list";
     TunnelModule["BiliBili"] = "bilibili";
     TunnelModule["Wallpaper"] = "wallpaper";
     TunnelModule["GitHub"] = "gitHub";
@@ -43,9 +45,6 @@ const getBFFServerPort = () => Number(process.env.PORT || 3000);/**
  * @module config.app
  * @author Surmon <https://github.com/surmon-china>
  */
-const MUSIC_ALBUM_ID = '638949385';
-const BILIBILI_UID = '27940710';
-const GITHUB_UID = 'surmon-china';
 const GA_MEASUREMENT_ID = 'UA-84887611-3';
 const META = Object.freeze({
     title: 'Surmon.me',
@@ -53,6 +52,12 @@ const META = Object.freeze({
     domain: 'surmon.me',
     url: 'https://surmon.me',
     author: 'Surmon'
+});
+const THIRD_IDS = Object.freeze({
+    YOUTUBE_CHANNEL_ID: `UCoL-j6T28PLSJ2U6ZdONS0w`,
+    MUSIC_163_BGM_ALBUM_ID: '638949385',
+    BILIBILI_USER_ID: '27940710',
+    GITHUB_USER_ID: 'surmon-china'
 });
 Object.freeze([
     {
@@ -91,10 +96,9 @@ Object.freeze({
     SITE_MAP: '/sitemap.xml',
     SPONSOR: '/sponsor',
     SURMON_ME: 'https://github.com/surmon-china/surmon.me',
-    GITHUB_BLOG_LIST: 'https://github.com/stars/surmon-china/lists/surmon-me',
-    VUNIVERSAL: 'https://github.com/surmon-china/vuniversal',
     NODEPRESS: 'https://github.com/surmon-china/nodepress',
     SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
+    GITHUB_BLOG_LIST: 'https://github.com/stars/surmon-china/lists/surmon-me',
     APP_APK_FILE: 'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
     THROW_ERROR: 'https://throwerror.io',
     FOX_FINDER: 'https://foxfinder.io',
@@ -108,13 +112,13 @@ Object.freeze({
     TELEGRAM: 'https://t.me/surmon',
     TELEGRAM_GROUP: 'https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA',
     SPOTIFY: 'https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o',
-    MUSIC_163: 'https://music.163.com/#/playlist?id=638949385',
-    YOUTUBE: 'https://www.youtube.com/channel/UCoL-j6T28PLSJ2U6ZdONS0w',
+    MUSIC_163: `https://music.163.com/#/playlist?id=${THIRD_IDS.MUSIC_163_BGM_ALBUM_ID}`,
+    YOUTUBE_CHANNEL: `https://www.youtube.com/channel/${THIRD_IDS.YOUTUBE_CHANNEL_ID}`,
     DOUBAN: 'https://www.douban.com/people/nocower',
     ZHIHU: 'https://www.zhihu.com/people/surmon',
     WEIBO: 'https://weibo.com/surmon',
     QUORA: 'https://www.quora.com/profile/Surmon',
-    BILIBILI: 'https://space.bilibili.com/27940710',
+    BILIBILI: `https://space.bilibili.com/${THIRD_IDS.BILIBILI_USER_ID}`,
     STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon?tab=profile',
     LEETCODE_CN: 'https://leetcode-cn.com/u/surmon',
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
@@ -271,9 +275,7 @@ const getGTagScript = async () => {
  * @repo https://github.com/sallar/github-contributions-chart
  */
 const getGitHubChartSVG = async () => {
-    const response = await axios__default["default"].get(`https://ghchart.rshah.org/${GITHUB_UID}`, {
-        timeout: 8000
-    });
+    const response = await axios__default["default"].get(`https://ghchart.rshah.org/${THIRD_IDS.GITHUB_USER_ID}`, { timeout: 8000 });
     if (response.status === 200) {
         return response.data;
     }
@@ -290,7 +292,7 @@ const PAGE = 1;
 const getBiliBiliVideos = async () => {
     const videosResult = await axios__default["default"].request({
         headers: { 'User-Agent': META.title },
-        url: `https://api.bilibili.com/x/space/arc/search?mid=${BILIBILI_UID}&ps=${PAGE_SIZE}&tid=0&pn=${PAGE}&order=pubdate&jsonp=jsonp`
+        url: `https://api.bilibili.com/x/space/arc/search?mid=${THIRD_IDS.BILIBILI_USER_ID}&ps=${PAGE_SIZE}&tid=0&pn=${PAGE}&order=pubdate&jsonp=jsonp`
     });
     if (videosResult.data.code === 0) {
         return videosResult.data.data.list.vlist;
@@ -341,7 +343,7 @@ const getAllWallpapers = async () => {
 const getGitHubRepositories = async () => {
     const response = await axios__default["default"].request({
         headers: { 'User-Agent': META.title },
-        url: `http://api.github.com/users/${GITHUB_UID}/repos?per_page=168`
+        url: `http://api.github.com/users/${THIRD_IDS.GITHUB_USER_ID}/repos?per_page=168`
     });
     return response.data.map((rep) => ({
         html_url: rep.html_url,
@@ -361,17 +363,63 @@ const getGitHubRepositories = async () => {
  * @author Surmon <https://github.com/surmon-china>
  */
 // 1. Generate long-lived access tokens for Instagram Testers
-// https://developers.facebook.com/apps/625907498725071/instagram-basic-display/basic-display/?business_id=277570526188879
+// https://developers.facebook.com/apps/625907498725071/instagram-basic-display/basic-display/
 // 2. Get medias useing API
 // https://developers.facebook.com/docs/instagram-basic-display-api/reference/media#fields
 // 3. TODO: Refresh token
 // https://developers.facebook.com/docs/instagram-basic-display-api/reference/refresh_access_token
 const fields = `id,username,permalink,caption,media_type,media_url,thumbnail_url,timestamp`;
-const token = yargs.argv.instagram_token;
+const token$1 = yargs.argv.instagram_token;
 const getInstagramMedias = async () => {
-    const response = await axios__default["default"].get(`https://graph.instagram.com/me/media?fields=${fields}&access_token=${token}`, { timeout: 8000 });
+    const response = await axios__default["default"].get(`https://graph.instagram.com/me/media?fields=${fields}&access_token=${token$1}`, { timeout: 8000 });
     if (response.status === 200 && response.data.data) {
         return response.data.data;
+    }
+    else {
+        throw response.data;
+    }
+};/**
+ * @file BFF YouTube getter
+ * @module server.getter.instagram
+ * @author Surmon <https://github.com/surmon-china>
+ */
+// 1. Generate API key
+// https://console.cloud.google.com/apis/credentials
+const token = yargs.argv.youtube_token;
+// 2. Get playlist by Channel ID
+// https://developers.google.com/youtube/v3/docs/playlists/list
+const getYouTubeChannelPlayLists = async () => {
+    const response = await axios__default["default"].get(`https://www.googleapis.com/youtube/v3/playlists`, {
+        timeout: 8000,
+        params: {
+            part: 'snippet,contentDetails',
+            maxResults: 50,
+            channelId: THIRD_IDS.YOUTUBE_CHANNEL_ID,
+            key: token
+        }
+    });
+    if (response.status === 200 && response.data.items) {
+        return response.data.items;
+    }
+    else {
+        throw response.data;
+    }
+};
+// 3. Get video list by playlist ID
+// https://developers.google.com/youtube/v3/docs/playlistItems/list
+// MARK: can't order by date, max results 50
+const getYouTubeVideoListByPlayerlistID = async (playlistID) => {
+    const response = await axios__default["default"].get(`https://www.googleapis.com/youtube/v3/playlistItems`, {
+        timeout: 8000,
+        params: {
+            part: 'snippet,contentDetails',
+            maxResults: 50,
+            playlistId: playlistID,
+            key: token
+        }
+    });
+    if (response.status === 200 && response.data.items) {
+        return response.data.items;
     }
     else {
         throw response.data;
@@ -385,7 +433,7 @@ const PLAY_LIST_LIMIT = 68;
 const neteseMusic = new NeteaseMusic__default["default"]();
 // 获取歌单列表
 const getSongList = async () => {
-    const result = await neteseMusic._playlist(MUSIC_ALBUM_ID, PLAY_LIST_LIMIT);
+    const result = await neteseMusic._playlist(THIRD_IDS.MUSIC_163_BGM_ALBUM_ID, PLAY_LIST_LIMIT);
     if (result.code < 0) {
         throw new Error(result.message);
     }
@@ -570,6 +618,7 @@ var ProxyModule;
     ProxyModule["Default"] = "default";
     ProxyModule["BiliBili"] = "bilibili";
     ProxyModule["Instagram"] = "instagram";
+    ProxyModule["YouTube"] = "youtube";
     ProxyModule["NetEasyMusic"] = "163";
     ProxyModule["Disqus"] = "disqus";
 })(ProxyModule || (ProxyModule = {}));/**
@@ -592,6 +641,11 @@ const proxys = [
         module: ProxyModule.Instagram,
         origin: 'https://www.instagram.com',
         referer: 'https://www.instagram.com/'
+    },
+    {
+        module: ProxyModule.YouTube,
+        origin: 'https://www.youtube.com',
+        referer: 'https://www.youtube.com/'
     },
     {
         module: ProxyModule.NetEasyMusic,
@@ -767,36 +821,68 @@ app.get('/effects/ghchart', async (_, response) => {
     }
 });
 // tunnel services
-app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`, responser(() => cacher({
-    key: 'bilibili',
-    age: 60 * 60 * 1,
-    retryWhen: 60 * 5,
-    getter: getBiliBiliVideos
-})));
-app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`, responser(() => cacher({
-    key: 'wallpaper',
-    age: 60 * 60 * 8,
-    retryWhen: 60 * 30,
-    getter: getAllWallpapers
-})));
-app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHub}`, responser(() => cacher({
-    key: 'github',
-    age: 60 * 60 * 2,
-    retryWhen: 60 * 30,
-    getter: getGitHubRepositories
-})));
-app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Music}`, responser(() => cacher({
-    key: 'music',
-    age: 60 * 60 * 1,
-    retryWhen: 60 * 10,
-    getter: getSongList
-})));
-app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Instagram}`, responser(() => cacher({
-    key: 'instagram',
-    age: 60 * 60 * 1,
-    retryWhen: 60 * 10,
-    getter: getInstagramMedias
-})));
+app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`, responser(() => {
+    return cacher({
+        key: 'bilibili',
+        age: 60 * 60 * 1,
+        retryWhen: 60 * 5,
+        getter: getBiliBiliVideos
+    });
+}));
+app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`, responser(() => {
+    return cacher({
+        key: 'wallpaper',
+        age: 60 * 60 * 8,
+        retryWhen: 60 * 30,
+        getter: getAllWallpapers
+    });
+}));
+app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHub}`, responser(() => {
+    return cacher({
+        key: 'github',
+        age: 60 * 60 * 2,
+        retryWhen: 60 * 30,
+        getter: getGitHubRepositories
+    });
+}));
+app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Music}`, responser(() => {
+    return cacher({
+        key: 'music',
+        age: 60 * 60 * 1,
+        retryWhen: 60 * 10,
+        getter: getSongList
+    });
+}));
+app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Instagram}`, responser(() => {
+    return cacher({
+        key: 'instagram',
+        age: 60 * 60 * 6,
+        retryWhen: 60 * 10,
+        getter: getInstagramMedias
+    });
+}));
+app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`, responser(() => {
+    return cacher({
+        key: 'youtube_playlist',
+        age: 60 * 60 * 24,
+        retryWhen: 60 * 10,
+        getter: getYouTubeChannelPlayLists
+    });
+}));
+app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
+    const playlistID = request.query.id;
+    if (!playlistID || typeof playlistID !== 'string') {
+        return erroror(response, 'Invalid params');
+    }
+    responser(() => {
+        return cacher({
+            key: `youtube_playlist_${playlistID}`,
+            age: 60 * 60 * 1,
+            retryWhen: 60 * 10,
+            getter: () => getYouTubeVideoListByPlayerlistID(playlistID)
+        });
+    })(request, response, next);
+});
 // app effect
 isDev ? enableDevRuntime(app) : enableProdRuntime(app);
 // run
