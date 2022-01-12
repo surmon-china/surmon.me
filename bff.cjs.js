@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.5.6
+* Surmon.me v3.5.7
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -57,7 +57,8 @@ const THIRD_IDS = Object.freeze({
     YOUTUBE_CHANNEL_ID: `UCoL-j6T28PLSJ2U6ZdONS0w`,
     MUSIC_163_BGM_ALBUM_ID: '638949385',
     BILIBILI_USER_ID: '27940710',
-    GITHUB_USER_ID: 'surmon-china'
+    GITHUB_USER_ID: 'surmon-china',
+    TWITTER_USER_ID: 'surmon7788'
 });
 Object.freeze([
     {
@@ -95,10 +96,10 @@ Object.freeze({
     RSS: '/rss.xml',
     SITE_MAP: '/sitemap.xml',
     SPONSOR: '/sponsor',
-    SURMON_ME: 'https://github.com/surmon-china/surmon.me',
-    NODEPRESS: 'https://github.com/surmon-china/nodepress',
-    SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
-    GITHUB_BLOG_LIST: 'https://github.com/stars/surmon-china/lists/surmon-me',
+    GITHUB_SURMON_ME: 'https://github.com/surmon-china/surmon.me',
+    GITHUB_NODEPRESS: 'https://github.com/surmon-china/nodepress',
+    GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
+    GITHUB_BLOG_STAR_LIST: 'https://github.com/stars/surmon-china/lists/surmon-me',
     APP_APK_FILE: 'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
     THROW_ERROR: 'https://throwerror.io',
     FOX_FINDER: 'https://foxfinder.io',
@@ -123,7 +124,7 @@ Object.freeze({
     LEETCODE_CN: 'https://leetcode-cn.com/u/surmon',
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
     INSTAGRAM: 'https://www.instagram.com/surmon666',
-    TWITTER: 'https://twitter.com/surmon_me'
+    TWITTER: `https://twitter.com/${THIRD_IDS.TWITTER_USER_ID}`
 });/**
  * @file BFF Server helper
  * @module server.helper
