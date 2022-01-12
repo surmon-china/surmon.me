@@ -1,14 +1,25 @@
 <template>
-  <div class="tag-archive-page">
+  <div class="tag-flow-page">
     <article-list-header
       :background-color="currentTagColor"
       :background-image="currentTagImage"
       :icon="currentTagIcon"
     >
       <template v-if="currentTag">
-        <i18n :zh="currentTag.name" :en="currentTag.slug" />
-        <span class="delimiter">-</span>
-        <span>{{ currentTag.description || '...' }}</span>
+        <span class="header">
+          <i18n>
+            <template #zh>
+              <span>#{{ currentTag.name }}</span>
+              <divider class="divider" type="vertical" />
+              <span>{{ currentTag.description || '...' }}</span>
+            </template>
+            <template #en>
+              <span>Tag</span>
+              <divider class="divider" type="vertical" />
+              <span>#{{ tagEnName(currentTag) }}</span>
+            </template>
+          </i18n>
+        </span>
       </template>
     </article-list-header>
     <article-list
@@ -25,7 +36,7 @@
   import { useUniversalFetch, onClient } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { useArticleStore } from '/@/store/article'
-  import { useTagStore } from '/@/store/tag'
+  import { useTagStore, tagEnName } from '/@/store/tag'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
@@ -92,6 +103,7 @@
 
       return {
         articleStore,
+        tagEnName,
         currentTag,
         currentTagIcon,
         currentTagImage,
@@ -105,7 +117,9 @@
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
 
-  .delimiter {
-    margin: 0 $sm-gap;
+  .tag-flow-page {
+    .divider {
+      border-color: $white !important;
+    }
   }
 </style>

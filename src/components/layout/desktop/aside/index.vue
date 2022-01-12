@@ -45,7 +45,7 @@
       </client-only>
       <div class="module">
         <client-only v-if="isArticlePage">
-          <aside-nav class="sticky-module" />
+          <aside-anchor class="sticky-module" />
         </client-only>
         <aside-tag class="sticky-module" v-else />
       </div>
@@ -66,7 +66,7 @@
   import AsideArticle from './article.vue'
   import AsideMammon from './mammon.vue'
   import AsideTag from './tag.vue'
-  import AsideNav from './nav.vue'
+  import AsideAnchor from './anchor.vue'
   import Calendar from '/@/components/widget/calendar.vue'
 
   const ASIDE_STICKY_ELEMENT_ID = 'aside-sticky-module'
@@ -79,7 +79,7 @@
       AsideMammon,
       Calendar,
       AsideTag,
-      AsideNav
+      AsideAnchor
     },
     setup() {
       const route = useRoute()

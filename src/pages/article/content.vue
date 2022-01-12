@@ -18,7 +18,7 @@
       <div class="title">
         <h2 class="text">{{ article.title }}</h2>
         <div class="meta">
-          <i class="iconfont icon-read"></i>
+          <i class="iconfont icon-t"></i>
           <i18n>
             <template #zh>
               <span

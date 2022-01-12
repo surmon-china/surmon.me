@@ -32,7 +32,7 @@
           </ulink>
           <ulink
             class="button"
-            :href="VALUABLE_LINKS.SURMON_ME_NATIVE + '#ios'"
+            :href="VALUABLE_LINKS.GITHUB_SURMON_ME_NATIVE + '#ios'"
             @mousedown="handleAppEvent('download_ios_app')"
           >
             <i class="icon iconfont icon-apple"></i>
@@ -41,7 +41,7 @@
           </ulink>
           <ulink
             class="source-code"
-            :href="VALUABLE_LINKS.SURMON_ME_NATIVE"
+            :href="VALUABLE_LINKS.GITHUB_SURMON_ME_NATIVE"
             @mousedown="handleAppEvent('app_source_code')"
           >
             <i class="iconfont icon-git"></i>

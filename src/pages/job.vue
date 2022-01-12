@@ -79,7 +79,7 @@
           logo: '/images/page-job/qiniu.jpg',
           url: 'https://www.qiniu.com/company',
           location: '上海',
-          description: '公司赚钱，Leader nice，同事完美，业务靠谱，从不加班',
+          description: '公司赚钱，Leader nice，同事完美，业务靠谱，极少加班',
           email: () => adminEmail.value
         },
         {
@@ -201,7 +201,6 @@
             margin: 0;
             font-weight: bold;
             font-size: $font-size-h4;
-            text-transform: capitalize;
             border-bottom: 1px solid transparent;
             &:hover {
               text-decoration: none;

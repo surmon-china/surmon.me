@@ -1,7 +1,10 @@
 <template>
   <div class="search-flow-page">
     <article-list-header icon="icon-search">
-      <i18n :zh="`和 “${keyword}” 有关的所有文章`" :en="`'${keyword}' related articles`" />
+      <i18n
+        :zh="`和 “${keyword}” 有关的所有文章`"
+        :en="`Keyword &quot;${keyword}&quot;\'s result`"
+      />
     </article-list-header>
     <article-list
       :fetching="article.list.fetching"

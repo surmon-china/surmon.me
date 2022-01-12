@@ -16,14 +16,14 @@
         <div class="tag-list" key="list">
           <router-link
             class="item"
-            :title="tag.description"
+            :title="`${tagEnName(tag)} | ${tag.description}`"
             :to="getTagFlowRoute(tag.slug)"
             :key="index"
             v-for="(tag, index) in tagStore.sorted"
           >
             <i class="iconfont" :class="getTagIcon(tag)" />
             <span class="name">
-              <i18n :zh="tag.name" :en="tag.slug" />
+              <i18n :zh="tag.name" :en="tagEnName(tag)" />
               <span class="count">({{ tag.count || 0 }})</span>
             </span>
           </router-link>
@@ -35,7 +35,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { useTagStore, Tag } from '/@/store/tag'
+  import { useTagStore, tagEnName, Tag } from '/@/store/tag'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getTagFlowRoute } from '/@/transforms/route'
   import { getExtendValue } from '/@/transforms/state'
@@ -51,6 +51,7 @@
       return {
         LANGUAGE_KEYS,
         tagStore,
+        tagEnName,
         getTagIcon,
         getTagFlowRoute
       }
@@ -115,7 +116,6 @@
         height: $height;
         line-height: $height;
         font-size: $font-size-h6;
-        text-transform: capitalize;
         font-family: $font-family-normal;
         @include radius-box($xs-radius);
 

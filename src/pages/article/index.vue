@@ -27,11 +27,6 @@
               "
             />
           </div>
-          <client-only v-if="false">
-            <div class="module margin background overflow" v-if="!isMobile">
-              <article-mammon />
-            </div>
-          </client-only>
           <div class="module margin overflow">
             <article-related
               :id="ANCHORS.ARTICLE_RELETED_ELEMENT_ID"
@@ -63,7 +58,6 @@
   import ArticleContent from './content.vue'
   import ArticleShare from './share.vue'
   import ArticleRelated from './related.vue'
-  import ArticleMammon from './mammon.vue'
   import ArticleMeta from './meta.vue'
 
   export default defineComponent({
@@ -72,7 +66,6 @@
       Comment,
       ArticleSkeleton,
       ArticleContent,
-      ArticleMammon,
       ArticleShare,
       ArticleMeta,
       ArticleRelated
@@ -158,18 +151,6 @@
         width: $lg-gap;
         height: $lg-gap;
         background: linear-gradient(to bottom, $module-bg, $module-bg-darker-1);
-        /* &::before {
-        content: '';
-        position: absolute;
-        top: 2rem;
-        display: block;
-        width: 1em;
-        height: 1em;
-        background-color: $module-bg-darker-1;
-        border-radius: $sm-radius;
-        opacity: 0.4;
-      } */
-
         &.left {
           left: $distance;
         }

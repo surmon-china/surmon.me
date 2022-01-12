@@ -22,6 +22,20 @@ export interface Tag {
   extends: UniversalExtend[]
 }
 
+export const tagEnName = (tag: Tag) => {
+  const isChineseName = /.*[\u4e00-\u9fa5]+.*$/.test(tag.name)
+  // english name
+  if (!isChineseName) {
+    return tag.name
+  }
+  // english words
+  if (tag.slug.includes('-')) {
+    return tag.slug
+  }
+  // english word
+  return firstUpperCase(tag.slug)
+}
+
 export const useTagStore = defineStore('tag', {
   state: () => ({
     fetched: false,

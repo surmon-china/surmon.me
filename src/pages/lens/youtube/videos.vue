@@ -208,7 +208,6 @@
     .title {
       margin: $sm-gap 0;
       font-weight: bold;
-      text-transform: capitalize;
       color: $text;
       max-width: 90%;
       @include text-overflow();

@@ -32,10 +32,10 @@
       <span v-for="(category, index) in article.category" :key="index">
         <router-link
           class="link category"
+          :title="`${firstUpperCase(category.slug)} | ${category.description}`"
           :to="getCategoryFlowRoute(category.slug)"
-          :title="category.description || category.name"
         >
-          <i18n :zh="category.name" :en="category.slug" />
+          <i18n :zh="category.name" :en="firstUpperCase(category.slug)" />
         </router-link>
         <span v-if="article.category[index + 1]">
           <i18n zh="、" en="," />
@@ -51,10 +51,10 @@
       <span v-for="(tag, index) in article.tag" :key="index">
         <router-link
           class="link tag"
+          :title="`${tagEnName(tag)} | ${tag.description}`"
           :to="getTagFlowRoute(tag.slug)"
-          :title="tag.description || tag.name"
         >
-          <i18n :zh="`#${tag.name}`" :en="`#${tag.slug}`" />
+          <i18n :zh="`#${tag.name}`" :en="`#${tagEnName(tag)}`" />
         </router-link>
         <span v-if="article.tag[index + 1]">
           <i18n zh="、" en="," />
@@ -93,13 +93,14 @@
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalStore } from '/@/store/universal'
-  import { useArticleDetailStore } from '/@/store/article'
-  import { Article } from '/@/store/article'
+  import { useArticleDetailStore, Article } from '/@/store/article'
+  import { tagEnName } from '/@/store/tag'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { GAEventCategories } from '/@/constants/gtag'
   import { copy } from '/@/utils/clipboard'
   import { humanizeYMD, dateToYMD } from '/@/transforms/moment'
+  import { firstUpperCase } from '/@/transforms/text'
   import { getPageURL } from '/@/transforms/url'
   import {
     getArticleDetailRoute,
@@ -169,6 +170,8 @@
         likes,
         copy,
         isLiked,
+        tagEnName,
+        firstUpperCase,
         handleLike,
         handleOpenSponsor,
         getDateTitle,
@@ -280,12 +283,9 @@
             color: $link-hover;
           }
         }
+
         &.date {
           text-transform: uppercase;
-        }
-        &.category,
-        &.tag {
-          text-transform: capitalize;
         }
 
         &.copyright,

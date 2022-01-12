@@ -5,7 +5,18 @@
       :background-image="currentCategoryImage"
       :icon="currentCategoryIcon"
     >
-      <span>{{ currentCategory?.description || '...' }}</span>
+      <i18n v-if="currentCategory">
+        <template #zh>
+          <span>{{ currentCategory.name }}</span>
+          <divider class="divider" type="vertical" />
+          <span>{{ currentCategory.description || '...' }}</span>
+        </template>
+        <template #en>
+          <span>Category</span>
+          <divider class="divider" type="vertical" />
+          <span>{{ firstUpperCase(currentCategory.slug) }}</span>
+        </template>
+      </i18n>
     </article-list-header>
     <article-list
       :fetching="article.list.fetching"
@@ -90,6 +101,7 @@
 
       return {
         article,
+        firstUpperCase,
         currentCategory,
         currentCategoryIcon,
         currentCategoryImage,
@@ -99,3 +111,13 @@
     }
   })
 </script>
+
+<style lang="scss" scoped>
+  @import 'src/styles/init.scss';
+
+  .category-flow-page {
+    .divider {
+      border-color: $white !important;
+    }
+  }
+</style>

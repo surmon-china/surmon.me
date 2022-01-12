@@ -4,9 +4,9 @@
       <a class="sitemap-btn" target="_blank" :href="VALUABLE_LINKS.SITE_MAP">sitemap.xml</a>
       <divider type="vertical" />
       <i18n zh="由 " en="Powered By " />
-      <ulink class="item" :href="VALUABLE_LINKS.GITHUB_BLOG_LIST">NodePress</ulink>
+      <ulink class="item" :href="VALUABLE_LINKS.GITHUB_BLOG_STAR_LIST">NodePress</ulink>
       <i18n zh="、" en=", " />
-      <ulink class="item" :href="VALUABLE_LINKS.SURMON_ME">Vue</ulink>
+      <ulink class="item" :href="VALUABLE_LINKS.GITHUB_SURMON_ME">Vue</ulink>
       <i18n zh=" 和 日月星辰 强力驱动" en=" and solitarily" />
       <divider type="vertical" />
       <i18n>
@@ -27,7 +27,6 @@
   import { defineComponent } from 'vue'
   import { RouteName } from '/@/app/router'
   import { FOOTER_ELEMENT_ID } from '/@/constants/anchor'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { getPageRoute } from '/@/transforms/route'
   import { VALUABLE_LINKS } from '/@/config/app.config'
 
@@ -37,7 +36,6 @@
       return {
         FOOTER_ELEMENT_ID,
         VALUABLE_LINKS,
-        LANGUAGE_KEYS,
         aboutPageUrl: getPageRoute(RouteName.About)
       }
     }

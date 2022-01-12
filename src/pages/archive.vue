@@ -261,7 +261,7 @@
     }
 
     .archive-content {
-      margin-top: $gap * 2;
+      margin: 2rem 0;
       min-height: $normal-page-active-content-height / 2;
 
       .archive-empty {
@@ -272,9 +272,10 @@
       }
 
       .archive-skeleton {
-        @include radius-box($lg-radius);
         list-style: none;
         padding: 3rem;
+        background-color: $module-bg;
+        @include radius-box($lg-radius);
 
         .item {
           width: 100%;

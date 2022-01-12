@@ -15,9 +15,7 @@
       </div>
       <div class="title">
         <transition name="module" mode="out-in">
-          <h5 class="text">
-            <slot></slot>
-          </h5>
+          <div class="text"><slot></slot></div>
         </transition>
       </div>
     </div>
@@ -47,7 +45,7 @@
     },
     setup(props) {
       const backgroundImageUrl = computed(() => {
-        return props.backgroundImage || getTargetCDNURL('/images/page-feeelancer/banner.jpg')
+        return props.backgroundImage || getTargetCDNURL('/images/thumbnail/carrousel.jpg')
       })
 
       return {
@@ -63,8 +61,6 @@
 
   .header {
     position: relative;
-    display: flex;
-    flex-direction: column;
     width: 100%;
     height: 16.4rem;
     margin-bottom: $lg-gap;
@@ -73,10 +69,10 @@
 
     &:hover {
       .background {
-        transform: scale(1);
+        filter: grayscale(0);
+        transform: scale(1.02);
       }
       .content {
-        backdrop-filter: none;
         .logo {
           .iconfont {
             animation: none;
@@ -96,8 +92,9 @@
       background-color: $module-bg;
       background-size: cover;
       background-position: center center;
-      transform: scale(1.1);
-      @include transform-transition();
+      transform: scale(1.05);
+      filter: grayscale(0.3);
+      transition: transform $transition-time-normal, filter $transition-time-normal;
     }
 
     .content {
@@ -107,46 +104,29 @@
       z-index: 1;
       width: 100%;
       height: 100%;
-      @include backdrop-blur(1px);
 
       .logo {
-        height: 12rem;
-        line-height: 12rem;
+        $size: 12rem;
         margin: 0;
-        text-align: center;
         overflow: hidden;
-
-        @keyframes logo-animate {
-          0% {
-            opacity: 1;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 0.8;
-            transform: scale(0.9);
-          }
-          100% {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
+        height: $size;
+        line-height: $size;
+        text-align: center;
 
         .iconfont {
-          font-size: 6em;
+          font-size: 5em;
           display: inline-block;
-          animation: logo-animate 5s infinite;
-          @include transform-transition();
+          transform: scale(1.01);
+          @include transform-transition($transition-time-normal);
         }
       }
 
       .title {
-        height: 4rem;
-        line-height: 2.5rem;
-
         .text {
           margin: 0;
           text-align: center;
-          text-transform: capitalize;
+          font-weight: bold;
+          font-size: $font-size-h4 - 1;
         }
       }
     }

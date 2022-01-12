@@ -8,7 +8,7 @@ import { getTargetCDNURL } from '/@/transforms/url'
 
 export const getArticleBannerThumbnailURL = (thumb: string, isWebPImage: boolean) => {
   if (!thumb) {
-    return getTargetCDNURL(`/images/thumbnail/pc-carrousel.jpg`)
+    return getTargetCDNURL(`/images/thumbnail/carrousel.jpg`)
   }
 
   return `${thumb}?x-oss-process=${
@@ -20,7 +20,7 @@ export const getArticleBannerThumbnailURL = (thumb: string, isWebPImage: boolean
 
 export const getMobileArticleListThumbnailURL = (thumb: string, isWebPImage: boolean = false) => {
   if (!thumb) {
-    return getTargetCDNURL(`/images/thumbnail/pc-carrousel.jpg`)
+    return ''
   }
 
   return `${thumb}?x-oss-process=${
@@ -32,7 +32,7 @@ export const getMobileArticleListThumbnailURL = (thumb: string, isWebPImage: boo
 
 export const getArticleListThumbnailURL = (thumb: string, isWebPImage: boolean) => {
   if (!thumb) {
-    return getTargetCDNURL('/images/thumbnail/pc-article-list.jpg')
+    return ''
   }
 
   return `${thumb}?x-oss-process=${

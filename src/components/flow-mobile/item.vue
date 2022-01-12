@@ -132,11 +132,12 @@
         right: 0;
         top: 0;
         z-index: $z-index-normal + 1;
-        padding: 0 $gap;
+        padding: 0 $lg-gap;
         border-bottom-left-radius: $xs-radius;
         opacity: 0.7;
         line-height: 2.3rem;
         font-size: $font-size-small;
+        font-weight: bold;
         color: $white;
         text-align: center;
         text-transform: uppercase;

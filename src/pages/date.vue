@@ -1,7 +1,7 @@
 <template>
-  <div class="date-archive-page">
+  <div class="date-flow-page">
     <article-list-header icon="icon-clock">
-      <i18n :zh="`发布于 ${date} 的所有文章`" :en="`${date} articles`" />
+      <i18n :zh="`发布于 ${date} 的所有文章`" :en="`Articles published at ${date}`" />
     </article-list-header>
     <article-list
       :fetching="articleStore.list.fetching"
