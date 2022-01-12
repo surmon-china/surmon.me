@@ -113,12 +113,12 @@ const renderArticleMarkdown = (markdown: string): { html: string; headings: Arti
   const html = markdownToHTML(markdown, {
     sanitize: false,
     relink: false,
-    headingIDRenderer: (text, level, raw) => {
+    headingIDRenderer: (html, level, raw) => {
       const id = getArticleContentHeadingElementID(
         level,
         raw.toLowerCase().replace(/[^a-zA-Z0-9\u4E00-\u9FA5]+/g, '-')
       )
-      headings.push({ text, level, id })
+      headings.push({ level, id, text: raw })
       return id
     }
   })

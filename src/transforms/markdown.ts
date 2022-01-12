@@ -18,7 +18,7 @@ const trimHTML = (html: string) => html.replace(/\s+/g, ' ').replace(/\n/g, ' ')
 interface RendererGetterOption {
   sanitize: boolean
   text: (text: string) => string
-  headingID: (text: string, level: number, raw: string) => string
+  headingID: (html: string, level: number, raw: string) => string
 }
 const getRenderer = (options?: Partial<RendererGetterOption>) => {
   const renderer = new Renderer()
@@ -35,9 +35,9 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
   }
 
   // heading
-  renderer.heading = (text, level, raw) => {
-    const idText = options?.headingID ? `id=${options.headingID(text, level, raw)}` : ''
-    return `<h${level} ${idText} alt=${text} title=${text}>${text}</h${level}>`
+  renderer.heading = (html, level, raw) => {
+    const idText = options?.headingID ? `id=${options.headingID(html, level, raw)}` : ''
+    return `<h${level} ${idText} alt=${raw} title=${raw}>${html}</h${level}>`
   }
 
   // paragraph
