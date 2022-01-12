@@ -36,8 +36,9 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
 
   // heading
   renderer.heading = (html, level, raw) => {
-    const idText = options?.headingID ? `id=${options.headingID(html, level, raw)}` : ''
-    return `<h${level} ${idText} alt=${raw} title=${raw}>${html}</h${level}>`
+    const idText = options?.headingID ? `id="${options.headingID(html, level, raw)}"` : ''
+    const safeRaw = escapeHTML(raw)
+    return `<h${level} ${idText} alt="${safeRaw}" title="${safeRaw}">${html}</h${level}>`
   }
 
   // paragraph
@@ -52,7 +53,7 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
 
   // link: sanitize
   renderer.link = (href, title, text) => {
-    const isSelf = href?.includes(META.domain)
+    const isSelf = href?.startsWith(META.url)
     const textIsImage = text.includes('<img')
     const linkHTML = trimHTML(`
       <a
@@ -101,11 +102,11 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
   }
 
   // code: line number
-  renderer.code = function (code, lang, escaped) {
+  renderer.code = function (code, lang, isEscaped) {
     if (renderer.options.highlight) {
       const output = renderer.options.highlight(code, lang || '')
       if (output != null && output !== code) {
-        escaped = true
+        isEscaped = true
         code = output
       }
     }
@@ -128,14 +129,14 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
           <ul class="code-lines">${lineNumbers}</ul>
           <code
             ${readOnlyAttrs}
-            class="${renderer.options.langPrefix}${escape(lang)}"
-          >${escaped ? code : escape(code)}\n</code>
+            class="${renderer.options.langPrefix}${encodeURI(lang)}"
+          >${isEscaped ? code : encodeURI(code)}\n</code>
         </pre>\n
       `
       : `
         <pre>
           <ul class="code-lines">${lineNumbers}</ul>
-          <code ${readOnlyAttrs}>${escaped ? code : escape(code)}\n</code>
+          <code ${readOnlyAttrs}>${isEscaped ? code : encodeURI(code)}\n</code>
         </pre>
       `
   }
