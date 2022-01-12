@@ -15,10 +15,7 @@
     </ul>
     <client-only>
       <popup :visible="isOnYouTubeModal" @close="closeYouTubeModal">
-        <iframe
-          class="youtube-modal"
-          :src="getYouTubeVideoEmbedURL(youtubeModalVideo.snippet.resourceId.videoId)"
-        />
+        <iframe class="youtube-modal" :src="youTubeModalURL" />
       </popup>
     </client-only>
   </div>
@@ -26,6 +23,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, PropType } from 'vue'
+  import { UNDEFINED } from '/@/constants/value'
   import { getYouTubeVideoEmbedURL } from '/@/transforms/media'
   import YoutubeVideoList from './videos.vue'
 
@@ -43,6 +41,12 @@
     setup() {
       const youtubeModalVideo = ref<any>(null)
       const isOnYouTubeModal = computed(() => Boolean(youtubeModalVideo.value))
+      const youTubeModalURL = computed(() => {
+        const video = youtubeModalVideo.value
+        return video
+          ? getYouTubeVideoEmbedURL(video.snippet.resourceId.videoId, video.snippet.playlistId)
+          : UNDEFINED
+      })
       const openYouTubeModal = (video: any) => {
         youtubeModalVideo.value = video
       }
@@ -51,9 +55,8 @@
       }
 
       return {
-        getYouTubeVideoEmbedURL,
         isOnYouTubeModal,
-        youtubeModalVideo,
+        youTubeModalURL,
         openYouTubeModal,
         closeYouTubeModal
       }

@@ -17,7 +17,7 @@
       <gallery
         :medias="medias"
         :index="galleryActiveIndex"
-        :visible="Boolean(galleryActiveIndex)"
+        :visible="isOnGallery"
         @close="handleGalleryClose"
       />
     </client-only>
@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, PropType } from 'vue'
+  import { defineComponent, ref, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
@@ -49,6 +49,7 @@
     setup() {
       const { gtag } = useEnhancer()
       const galleryActiveIndex = ref<number>()
+      const isOnGallery = computed(() => galleryActiveIndex.value !== UNDEFINED)
       const handleGalleryClose = () => {
         galleryActiveIndex.value = UNDEFINED
       }
@@ -60,6 +61,7 @@
       }
 
       return {
+        isOnGallery,
         galleryActiveIndex,
         getInstagramImage,
         handleGalleryOpen,

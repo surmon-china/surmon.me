@@ -1,51 +1,29 @@
 <template>
   <popup :visible="visible" @close="handleGalleryClose">
     <div class="instagram-gallery">
-      <swiper
-        effect="fade"
-        :initial-slide="index"
-        :set-wrapper-size="true"
-        :mousewheel="true"
-        :observe-parents="true"
-        :grab-cursor="false"
-        :preload-images="false"
-        :lazy="true"
-        :simulate-touch="false"
-        :pagination="{ type: 'fraction' }"
-        @swiper="handleGallerySwiperReady"
-        @transition-start="handleGallerySwiperTransitionStart"
-      >
-        <swiper-slide v-for="(media, index) in medias" :key="index">
-          <div class="content">
-            <div class="info">
-              <div class="left">
-                <span class="timestamp">
-                  <i class="iconfont icon-clock"></i>
-                  <span class="text">{{ humanlizeDate(media.timestamp) }}</span>
-                </span>
-              </div>
-              <div class="right">
-                <span class="caption" v-if="media.caption">
-                  <i class="iconfont icon-camera"></i>
-                  <span class="text">{{ media.caption }}</span>
-                  <divider type="vertical" />
-                </span>
-                <ulink class="link" :href="media.permalink">
-                  <i class="iconfont instagram icon-instagram"></i>
-                  <span class="text">On Instagram</span>
-                  <i class="iconfont window icon-new-window-s"></i>
-                </ulink>
-              </div>
-            </div>
-            <div
-              class="image swiper-lazy"
-              :data-background="getInstagramImage(media)"
-              :alt="media.caption"
-            />
-          </div>
-          <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-        </swiper-slide>
-      </swiper>
+      <div class="topbar">
+        <div class="left">
+          <span class="timestamp">
+            <i class="iconfont icon-clock"></i>
+            <span class="text">{{ humanlizeDate(galleryActiveMedia.timestamp) }}</span>
+          </span>
+        </div>
+        <div class="center">
+          <span class="pagination">{{ galleryActiveIndex + 1 }} / {{ medias.length }}</span>
+        </div>
+        <div class="right">
+          <span class="caption" v-if="galleryActiveMedia.caption">
+            <i class="iconfont icon-camera"></i>
+            <span class="text">{{ galleryActiveMedia.caption }}</span>
+            <divider type="vertical" />
+          </span>
+          <ulink class="link" :href="galleryActiveMedia.permalink">
+            <i class="iconfont instagram icon-instagram"></i>
+            <span class="text">On Instagram</span>
+            <i class="iconfont window icon-new-window-s"></i>
+          </ulink>
+        </div>
+      </div>
       <button
         class="navigation prev"
         :disabled="galleryActiveIndex === 0"
@@ -60,12 +38,34 @@
       >
         <i class="iconfont icon-next" />
       </button>
+      <swiper
+        effect="fade"
+        :fade-effect="{ crossFade: true }"
+        :initial-slide="index"
+        :mousewheel="true"
+        :observe-parents="true"
+        :grab-cursor="false"
+        :preload-images="false"
+        :lazy="true"
+        :simulate-touch="false"
+        @swiper="handleGallerySwiperReady"
+        @transition-start="handleGallerySwiperTransitionStart"
+      >
+        <swiper-slide v-for="(media, i) in medias" :key="i">
+          <div
+            class="image swiper-lazy"
+            :data-background="getInstagramImage(media)"
+            :alt="media.caption"
+          />
+          <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+        </swiper-slide>
+      </swiper>
     </div>
   </popup>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, watch, PropType } from 'vue'
+  import { defineComponent, ref, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
   import { humanizeYMD } from '/@/transforms/moment'
@@ -103,8 +103,9 @@
         return humanizeYMD(date, i18n.language.value as any)
       }
 
-      const galleryActiveIndex = ref<number>()
+      const galleryActiveIndex = ref<number>(props.index)
       const gallerySwiper = ref<SwiperClass>()
+      const galleryActiveMedia = computed(() => props.medias[galleryActiveIndex.value])
       const galleryPrevSlide = () => gallerySwiper.value?.slidePrev()
       const galleryNextSlide = () => gallerySwiper.value?.slideNext()
       const handleGallerySwiperReady = (_swiper: SwiperClass) => {
@@ -119,6 +120,7 @@
 
       return {
         galleryActiveIndex,
+        galleryActiveMedia,
         humanlizeDate,
         getInstagramImage,
         handleGalleryClose,
@@ -142,66 +144,6 @@
 
     .swiper {
       height: 100%;
-      ::v-deep(.swiper-pagination-fraction) {
-        color: $white;
-        bottom: $lg-gap;
-      }
-    }
-
-    .content {
-      height: 100%;
-
-      .info {
-        position: absolute;
-        top: 0;
-        left: 0;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 4rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: $font-size-h4;
-        background-color: rgba($black, 0.4);
-        color: $white;
-
-        .timestamp,
-        .caption {
-          .iconfont {
-            margin-right: $sm-gap;
-          }
-        }
-
-        .timestamp {
-          margin-left: $lg-gap;
-          color: rgba($white, 0.6);
-        }
-
-        .caption {
-          .text {
-            font-weight: bold;
-          }
-        }
-
-        .link {
-          display: inline-block;
-          padding: 2px $sm-gap;
-          margin-right: $gap;
-          border-radius: $sm-radius;
-          color: $white;
-          background: $instagram-gradient;
-          .instagram {
-            margin-right: $sm-gap;
-          }
-          .text {
-            font-weight: bold;
-          }
-          .window {
-            margin-left: $sm-gap;
-          }
-        }
-      }
 
       .image {
         overflow: hidden;
@@ -212,13 +154,93 @@
       }
     }
 
+    .topbar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: $font-size-h4;
+      background-color: rgba($black, 0.4);
+      color: $white;
+      z-index: $z-index-normal + 2;
+
+      .left,
+      .right,
+      .center {
+        display: inline-flex;
+        align-items: center;
+      }
+      .left {
+        width: 40%;
+        justify-content: start;
+      }
+      .center {
+        width: 20%;
+        justify-content: center;
+      }
+      .right {
+        width: 40%;
+        justify-content: end;
+      }
+
+      .pagination {
+        font-weight: bold;
+      }
+
+      .timestamp,
+      .caption {
+        .iconfont {
+          margin-right: $sm-gap;
+        }
+      }
+
+      .timestamp {
+        margin-left: $lg-gap;
+        color: rgba($white, 0.6);
+      }
+
+      .caption {
+        .text {
+          font-weight: bold;
+        }
+      }
+
+      .link {
+        display: inline-flex;
+        align-items: center;
+        height: 28px;
+        padding: 0 $sm-gap;
+        margin-right: $gap;
+        border-radius: $xs-radius;
+        color: $white;
+        background: $instagram-gradient;
+
+        .instagram {
+          margin-right: $sm-gap;
+        }
+        .text {
+          font-size: $font-size-base;
+          font-weight: bold;
+        }
+        .window {
+          margin-left: $sm-gap;
+        }
+      }
+    }
+
     .navigation {
       display: inline-block;
       position: absolute;
       top: 33%;
       height: 33%;
       width: 4rem;
-      z-index: $z-index-normal + 1;
+      z-index: $z-index-normal + 2;
       font-size: $font-size-h1 * 2;
       color: $module-bg;
       &[disabled] {

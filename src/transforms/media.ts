@@ -25,6 +25,7 @@ export const getYouTubeVideoURL = (id: string) => {
   return `https://www.youtube.com/playlist?list=${id}`
 }
 
-export const getYouTubeVideoEmbedURL = (id: string) => {
-  return `https://www.youtube.com/embed/${id}`
+export const getYouTubeVideoEmbedURL = (id: string, list?: string) => {
+  const listParam = list ? `?list=${list}` : ''
+  return `https://www.youtube.com/embed/${id}${listParam}`
 }
