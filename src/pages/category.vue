@@ -19,9 +19,9 @@
       </i18n>
     </article-list-header>
     <article-list
-      :fetching="article.list.fetching"
-      :articles="article.list.data"
-      :pagination="article.list.pagination"
+      :fetching="articleListStore.list.fetching"
+      :articles="articleListStore.list.data"
+      :pagination="articleListStore.list.pagination"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -31,7 +31,7 @@
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch, onClient } from '/@/universal'
-  import { useArticleStore } from '/@/store/article'
+  import { useArticleListStore } from '/@/store/article'
   import { useCategoryStore } from '/@/store/category'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
@@ -53,10 +53,10 @@
     },
     setup(props) {
       const { i18n, meta, isZhLang } = useEnhancer()
-      const article = useArticleStore()
-      const catrgory = useCategoryStore()
+      const articleListStore = useArticleListStore()
+      const catrgoryStore = useCategoryStore()
       const currentCategory = computed(() => {
-        return catrgory.categories.find((category) => category.slug === props.categorySlug)
+        return catrgoryStore.categories.find((category) => category.slug === props.categorySlug)
       })
       const currentCategoryIcon = computed(() => {
         return getExtendValue(currentCategory.value?.extends || [], 'icon') || 'icon-category'
@@ -77,16 +77,19 @@
       })
 
       const loadmoreArticles = async () => {
-        await article.fetchList({
+        await articleListStore.fetchList({
           category_slug: props.categorySlug,
-          page: article.list.pagination.current_page + 1
+          page: articleListStore.list.pagination.current_page + 1
         })
         onClient(nextScreen)
       }
 
       const fetchAllData = (category_slug: string) => {
         onClient(scrollToTop)
-        return Promise.all([catrgory.fetchAll(), article.fetchList({ category_slug })])
+        return Promise.all([
+          catrgoryStore.fetchAll(),
+          articleListStore.fetchList({ category_slug })
+        ])
       }
 
       onBeforeMount(() => {
@@ -100,7 +103,7 @@
       useUniversalFetch(() => fetchAllData(props.categorySlug))
 
       return {
-        article,
+        articleListStore,
         firstUpperCase,
         currentCategory,
         currentCategoryIcon,

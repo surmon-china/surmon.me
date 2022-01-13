@@ -94,7 +94,7 @@
       background-position: center center;
       transform: scale(1.05);
       filter: grayscale(0.3);
-      transition: transform $transition-time-normal, filter $transition-time-normal;
+      transition: transform $transition-time-fast, filter $transition-time-fast;
     }
 
     .content {

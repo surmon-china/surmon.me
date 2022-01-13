@@ -7,9 +7,9 @@
       />
     </article-list-header>
     <article-list
-      :fetching="article.list.fetching"
-      :articles="article.list.data"
-      :pagination="article.list.pagination"
+      :fetching="articleListStore.list.fetching"
+      :articles="articleListStore.list.data"
+      :pagination="articleListStore.list.pagination"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -19,7 +19,7 @@
   import { defineComponent, watch, onBeforeMount } from 'vue'
   import { useUniversalFetch, onClient } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useArticleStore } from '/@/store/article'
+  import { useArticleListStore } from '/@/store/article'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
   import ArticleListHeader from '/@/components/flow-desktop/header.vue'
   import ArticleList from '/@/components/flow-desktop/list.vue'
@@ -38,19 +38,19 @@
     },
     setup(props) {
       const { meta } = useEnhancer()
-      const article = useArticleStore()
+      const articleListStore = useArticleListStore()
 
       meta(() => ({ pageTitle: `${props.keyword} | Search` }))
 
       const fetchArticles = (params: any) => {
         onClient(scrollToTop)
-        return article.fetchList(params)
+        return articleListStore.fetchList(params)
       }
 
       const loadmoreArticles = async () => {
         await fetchArticles({
           keyword: props.keyword,
-          page: article.list.pagination.current_page + 1
+          page: articleListStore.list.pagination.current_page + 1
         })
         onClient(nextScreen)
       }
@@ -66,7 +66,7 @@
       useUniversalFetch(() => fetchArticles({ keyword: props.keyword }))
 
       return {
-        article,
+        articleListStore,
         loadmoreArticles
       }
     }

@@ -8,7 +8,6 @@ import { TagMap } from '/@/store/tag'
 import { getTagFlowRoute } from './route'
 
 export default (text: string, tagMap: TagMap) => {
-  // 构造正则
   const tagNames = Object.keys(tagMap).sort((prev, next) => next.length - prev.length)
   const tagRegexp = eval(`/${tagNames.join('|')}/ig`)
 
@@ -18,11 +17,11 @@ export default (text: string, tagMap: TagMap) => {
     return text
   } catch (error) {
     return text.replace(tagRegexp, (tagText) => {
-      // 从 map 中匹配自身
       const foundTag = tagMap.get(tagText)
 
-      // 找不到，或找到匹配的，但 text 字首为 #，则证明是外站连接，则不解析
-      if (!foundTag || text[0] === '#') return tagText
+      if (!foundTag || text[0] === '#') {
+        return tagText
+      }
 
       const slug = foundTag.slug
       const path = getTagFlowRoute(slug)

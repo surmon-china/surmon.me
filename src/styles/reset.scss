@@ -264,16 +264,14 @@ textarea {
 }
 
 // specify the font family of code elements
-
 code,
 kbd,
 pre,
 samp {
-  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-family: Consolas, Menlo, monospace;
 }
 
 // specify the list style of nav lists
-
 nav ol,
 nav ul {
   list-style: if(variable-exists(nav-list-style), $nav-list-style, none);
@@ -627,7 +625,6 @@ button:disabled {
 }
 
 // specify the border styling of tables
-
 table {
   width: 100%;
   margin-bottom: 1em;
@@ -641,7 +638,7 @@ caption {
 
 thead th {
   background-color: $module-bg-darker-1;
-  border: 1px solid $module-bg-darker-2;
+  border: 1px solid $module-bg-darker-3;
   text-align: left;
 }
 
@@ -653,7 +650,7 @@ th,
 td {
   vertical-align: inherit;
   border: 1px solid $module-bg-darker-2;
-  padding: 0.5em 1em;
+  padding: 0.4em 0.8em;
   vertical-align: inherit;
 }
 

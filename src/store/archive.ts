@@ -8,6 +8,7 @@ import { defineStore } from 'pinia'
 import { Article } from './article'
 import { Category } from './category'
 import { Tag } from './tag'
+import { dateToHuman, HumanDate } from '/@/transforms/moment'
 import nodepress from '/@/services/nodepress'
 
 export interface StatisticState {
@@ -56,6 +57,44 @@ export const useArchiveStore = defineStore('archive', {
         tags: Array.from(tagMap.values()),
         categories: Array.from(categoryMap.values())
       }
+    },
+    tree: (state) => {
+      const rootTree = [] as Array<{
+        year: number
+        months: Array<{
+          month: number
+          articles: Array<Article & { createAt: HumanDate }>
+        }>
+      }>
+
+      state.data?.articles
+        .map((article) => ({
+          ...article,
+          createAt: dateToHuman(new Date(article.create_at))
+        }))
+        .sort(({ create_at: a }, { create_at: b }) => {
+          return Date.parse(b) - Date.parse(a)
+        })
+        .forEach((article) => {
+          const { createAt } = article
+          // year
+          const yearTree = rootTree.find((ye) => ye.year === createAt.year)
+          let targetYear = yearTree
+          if (!targetYear) {
+            targetYear = { year: createAt.year, months: [] }
+            rootTree.push(targetYear)
+          }
+          // month
+          const monthTree = targetYear.months.find((mo) => mo.month === createAt.month)
+          let targetMonth = monthTree
+          if (!targetMonth) {
+            targetMonth = { month: createAt.month, articles: [] }
+            targetYear.months.push(targetMonth)
+          }
+          // article
+          targetMonth.articles.push(article)
+        })
+      return rootTree
     }
   },
   actions: {

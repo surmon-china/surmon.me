@@ -25,7 +25,10 @@
       </router-link>
     </div>
     <!-- list -->
-    <placeholder :data="articles.length" :loading="!articles.length && articleStore.list.fetching">
+    <placeholder
+      :data="articles.length"
+      :loading="!articles.length && articleListStore.list.fetching"
+    >
       <template #loading>
         <ul class="skeletons" key="skeleton">
           <li v-for="item in 3" :key="item" class="item">
@@ -59,12 +62,12 @@
           <div class="loadmore">
             <button
               class="button"
-              :disabled="articleStore.list.fetching || !hasMoreArticles"
+              :disabled="articleListStore.list.fetching || !hasMoreArticles"
               @click="loadmoreArticles"
             >
               <div class="text">
                 <i18n
-                  v-if="articleStore.list.fetching"
+                  v-if="articleListStore.list.fetching"
                   :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADING"
                 />
                 <i18n v-else-if="hasMoreArticles" :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE" />
@@ -85,7 +88,7 @@
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch, onClient } from '/@/universal'
-  import { useArticleStore, Article } from '/@/store/article'
+  import { useArticleListStore, Article } from '/@/store/article'
   import { useMetaStore } from '/@/store/meta'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { firstUpperCase } from '/@/transforms/text'
@@ -121,11 +124,11 @@
     setup(props) {
       const { meta } = useEnhancer()
       const metaStore = useMetaStore()
-      const articleStore = useArticleStore()
+      const articleListStore = useArticleListStore()
 
       type ArticleItem = Article & { ad?: true }
       const articles = computed<Array<ArticleItem>>(() => {
-        const list: ArticleItem[] = [...articleStore.list.data]
+        const list: ArticleItem[] = [...articleListStore.list.data]
         if (list.length < 5) {
           return list
         } else {
@@ -135,7 +138,7 @@
       })
 
       const hasMoreArticles = computed(() => {
-        const pagination = articleStore.list.pagination
+        const pagination = articleListStore.list.pagination
         return pagination ? pagination.current_page < pagination.total_page : false
       })
 
@@ -160,7 +163,7 @@
       })
 
       const fetchArticles = async (params: any = {}) => {
-        await articleStore.fetchList({
+        await articleListStore.fetchList({
           category_slug: props.categorySlug,
           tag_slug: props.tagSlug,
           date: props.date,
@@ -171,7 +174,7 @@
 
       const loadmoreArticles = async () => {
         await fetchArticles({
-          page: articleStore.list.pagination.current_page + 1
+          page: articleListStore.list.pagination.current_page + 1
         })
         onClient(nextScreen)
       }
@@ -189,7 +192,7 @@
       return {
         LANGUAGE_KEYS,
         articles,
-        articleStore,
+        articleListStore,
         hasMoreArticles,
         loadmoreArticles
       }

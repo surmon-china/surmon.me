@@ -7,7 +7,7 @@
 // polyfills
 import 'intersection-observer'
 
-import { createApp, createSSRApp } from 'vue'
+import { createApp, createSSRApp, computed } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
 import { isSSR } from '/@/app/environment'
@@ -16,7 +16,8 @@ import { getTargetCDNURL } from '/@/transforms/url'
 import amplitude from '/@/services/amplitude'
 import gtag from '/@/services/gtag'
 import adsense from '/@/services/adsense'
-import { getClientLocalTheme } from '/@/services/theme'
+import { getHighlightThemeStyle } from '/@/services/highlight'
+import { getClientLocalTheme, Theme } from '/@/services/theme'
 import { LayoutColumn, getLayoutByRouteMeta } from '/@/services/layout'
 import { createDefer } from '/@/services/defer'
 import { createMusic } from '/@/services/music'
@@ -39,7 +40,7 @@ import '/@/services/swiper/style'
 import '/@/styles/app.scss'
 
 // app
-const { app, router, globalState, theme, i18n, store } = createVueApp({
+const { app, router, globalState, theme, i18n, meta, store } = createVueApp({
   historyCreator: createWebHistory,
   appCreator: isSSR ? createSSRApp : createApp,
   language: navigator.language,
@@ -77,6 +78,18 @@ exportEmojiRainToGlobal()
 exportStickyEventsToGlobal()
 exportAppToGlobal(app)
 initCopyrighter()
+
+// init higtlight style
+meta.addHeadObjs(
+  computed(() => ({
+    style: [
+      {
+        key: 'markdown',
+        children: getHighlightThemeStyle(theme.theme.value === Theme.Dark)
+      }
+    ]
+  }))
+)
 
 // init: router loading middleware client only
 router.beforeEach((_, __, next) => {

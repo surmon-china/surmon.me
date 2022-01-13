@@ -40,7 +40,7 @@ export interface Article {
   extends: UniversalExtend[]
 }
 
-export const useArticleStore = defineStore('article', {
+export const useArticleListStore = defineStore('article', {
   state: () => ({
     hotList: {
       fetched: false,

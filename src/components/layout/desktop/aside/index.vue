@@ -14,19 +14,8 @@
         />
       </div>
     </client-only>
-    <div class="module calendar">
-      <calendar>
-        <template #default="humanDate">
-          <router-link
-            class="date-link"
-            v-if="canPushRouteWithDay(humanDate)"
-            :to="getDateRoute(humanDate)"
-          >
-            {{ humanDate.day }}
-          </router-link>
-          <span v-else>{{ humanDate.day }}</span>
-        </template>
-      </calendar>
+    <div class="module">
+      <aside-calendar />
     </div>
     <div class="module mammon-square">
       <client-only>
@@ -56,18 +45,15 @@
 <script lang="ts">
   import { useRoute } from 'vue-router'
   import { defineComponent, ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
   import SwiperClass from '/@/services/swiper'
   import { ASIDE_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
-  import { getDateFlowRoute, isArticleDetail } from '/@/transforms/route'
-  import { humanDateToYMD, dateToHuman, HumanDate } from '/@/transforms/moment'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { isArticleDetail } from '/@/transforms/route'
   import AsideSearch from './search.vue'
   import AsideArticle from './article.vue'
   import AsideMammon from './mammon.vue'
   import AsideTag from './tag.vue'
   import AsideAnchor from './anchor.vue'
-  import Calendar from '/@/components/widget/calendar.vue'
+  import AsideCalendar from './calendar.vue'
 
   const ASIDE_STICKY_ELEMENT_ID = 'aside-sticky-module'
 
@@ -77,43 +63,20 @@
       AsideSearch,
       AsideArticle,
       AsideMammon,
-      Calendar,
+      AsideCalendar,
       AsideTag,
       AsideAnchor
     },
     setup() {
       const route = useRoute()
-      const { i18n } = useEnhancer()
       const isArticlePage = computed(() => isArticleDetail(route.name))
 
       // polyfill sticky event
       let stickyEvents: any = null
-      const today = dateToHuman(new Date())
       const element = ref<HTMLDivElement>(null as any)
       const adIndex = ref(0)
       const renderStickyAd = ref(false)
       const swiper = ref<SwiperClass>()
-
-      const canPushRouteWithDay = (targetDate: HumanDate) => {
-        if (targetDate.year > today.year) {
-          return false
-        }
-        if (targetDate.month > today.month) {
-          return false
-        }
-        if (
-          targetDate.year == today.year &&
-          targetDate.month == today.month &&
-          targetDate.day > today.day
-        ) {
-          return false
-        }
-        return true
-      }
-
-      const getDateRoute = (humanDate: HumanDate) => {
-        return getDateFlowRoute(humanDateToYMD(humanDate))
-      }
 
       const handleStandingAdSwiperReady = (_swiper: SwiperClass) => {
         swiper.value = _swiper
@@ -160,15 +123,11 @@
 
       return {
         isArticlePage,
-        LANGUAGE_KEYS,
         ASIDE_ELEMENT_ID,
         ASIDE_STICKY_ELEMENT_ID,
-        t: i18n.t,
-        adIndex,
         renderStickyAd,
+        adIndex,
         element,
-        canPushRouteWithDay,
-        getDateRoute,
         handleStandingAdSwiperReady,
         handleStandingAdSlideChange,
         handleStickyAdIndexChange
@@ -190,21 +149,6 @@
       margin-bottom: $lg-gap;
       @include radius-box($sm-radius);
       @include common-bg-module();
-
-      &.calendar {
-        padding: $gap;
-
-        .date-link {
-          display: block;
-          border-radius: 100%;
-
-          &.link-active {
-            font-weight: bold;
-            background-color: $primary;
-            color: $text-reversal;
-          }
-        }
-      }
 
       &.mammon {
         width: 100%;

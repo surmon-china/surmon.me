@@ -46,10 +46,9 @@
           </span>
         </div>
       </div>
-      <div
-        class="markdown-html"
+      <markdown
         :id="ARTICLE_CONTENT_ELEMENT_IDS.default"
-        v-html="articleDetailStore.defaultContent?.html"
+        :html="articleDetailStore.defaultContent?.html"
       />
       <transition name="module" mode="out-in" @after-enter="handleRenderMoreAnimateDone">
         <div v-if="isRenderMoreEnabled" class="readmore">
@@ -64,11 +63,10 @@
             <i class="iconfont icon-loadmore"></i>
           </button>
         </div>
-        <div
-          class="markdown-html"
-          :id="ARTICLE_CONTENT_ELEMENT_IDS.more"
+        <markdown
           v-else-if="articleDetailStore.renderedFullContent"
-          v-html="articleDetailStore.moreContent?.html || ''"
+          :id="ARTICLE_CONTENT_ELEMENT_IDS.more"
+          :html="articleDetailStore.moreContent?.html"
         />
       </transition>
     </div>
@@ -83,6 +81,7 @@
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { humanizeYMD } from '/@/transforms/moment'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import Markdown from '/@/components/common/markdown.vue'
 
   const ARTICLE_CONTENT_ELEMENT_IDS = {
     default: 'article_content_default',
@@ -91,6 +90,7 @@
 
   export default defineComponent({
     name: 'ArticleContent',
+    components: { Markdown },
     props: {
       article: {
         type: Object as PropType<Article>,
@@ -225,17 +225,11 @@
         }
       }
 
-      .markdown-html {
-        .google-auto-placed {
-          margin-bottom: $sm-gap;
-        }
-      }
-
       .readmore {
         position: absolute;
         bottom: 0;
         width: 100%;
-        height: 16rem;
+        height: 18rem;
         display: flex;
         justify-content: center;
         align-items: center;

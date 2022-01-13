@@ -49,10 +49,9 @@
             </button>
             <i18n zh="：" en=":" />
           </p>
-          <div
-            class="markdown-html comment"
-            v-html="markdownToHTML(comment.content, { sanitize: true })"
-          />
+          <div class="markdown">
+            <markdown :markdown="comment.content" :sanitize="true" :compact="true" />
+          </div>
         </div>
         <div class="cm-footer">
           <div class="left">
@@ -119,12 +118,12 @@
   import { UNDEFINED } from '/@/constants/value'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
-  import { markdownToHTML } from '/@/transforms/markdown'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
   import { timeAgo } from '/@/transforms/moment'
   import { scrollToElementAnchor } from '/@/utils/scroller'
   import { CommentEvents, getDisqusUserURL } from '../helper'
+  import Markdown from '/@/components/common/markdown.vue'
   import CommentLocation from './location.vue'
   import CommentLink from './link.vue'
   import CommentUa from './ua.vue'
@@ -132,6 +131,7 @@
   export default defineComponent({
     name: 'CommentItem',
     components: {
+      Markdown,
       CommentLocation,
       CommentLink,
       CommentUa
@@ -276,7 +276,6 @@
         getCommentItemElementID,
         getReplyParentCommentText,
         firstUpperCase,
-        markdownToHTML,
         handleVote,
         handleDelete,
         handleReply,
@@ -462,7 +461,7 @@
           }
         }
 
-        .markdown-html {
+        .markdown {
           margin: $sm-gap 0;
         }
       }

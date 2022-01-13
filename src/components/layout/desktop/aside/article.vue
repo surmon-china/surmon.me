@@ -7,8 +7,8 @@
       </strong>
     </p>
     <placeholder
-      :data="articleStore.hotList.data"
-      :loading="articleStore.hotList.fetching"
+      :data="articleListStore.hotList.data"
+      :loading="articleListStore.hotList.fetching"
       :i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"
     >
       <template #loading>
@@ -20,7 +20,7 @@
       </template>
       <template #default>
         <ul class="article-list" key="list">
-          <li v-for="item in articleStore.hotList.data" :key="item.id" class="item">
+          <li v-for="item in articleListStore.hotList.data" :key="item.id" class="item">
             <span class="index"></span>
             <router-link class="title" :to="getArticleDetailRoute(item.id)" :title="item.title">
               {{ item.title }}
@@ -34,17 +34,17 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { useArticleStore } from '/@/store/article'
+  import { useArticleListStore } from '/@/store/article'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getArticleDetailRoute } from '/@/transforms/route'
 
   export default defineComponent({
     name: 'DesktopAsideArticle',
     setup() {
-      const articleStore = useArticleStore()
+      const articleListStore = useArticleListStore()
 
       return {
-        articleStore,
+        articleListStore,
         getArticleDetailRoute,
         LANGUAGE_KEYS
       }

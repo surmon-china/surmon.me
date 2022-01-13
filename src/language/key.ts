@@ -22,7 +22,6 @@ export enum LANGUAGE_KEYS {
   NOT_FOUND = 'not-found',
   BACK_TO_HOME_PAGE = 'back-to-home-page',
   GUESTBOOK_SLOGAN = 'guestbook-banner-slogan',
-  WALLPAPER = 'wallpaper',
   PAGE_FREELANCER_SLOGAN = 'freelancer-page-banner-slogan',
   PAGE_FREELANCER_EMAIL_ME = 'freelancer-email-me',
   AD = 'ad',

@@ -23,9 +23,9 @@
       </template>
     </article-list-header>
     <article-list
-      :fetching="articleStore.list.fetching"
-      :articles="articleStore.list.data"
-      :pagination="articleStore.list.pagination"
+      :fetching="articleListStore.list.fetching"
+      :articles="articleListStore.list.data"
+      :pagination="articleListStore.list.pagination"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -35,7 +35,7 @@
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { useUniversalFetch, onClient } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useArticleStore } from '/@/store/article'
+  import { useArticleListStore } from '/@/store/article'
   import { useTagStore, tagEnName } from '/@/store/tag'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
@@ -58,7 +58,7 @@
     setup(props) {
       const { meta, isZhLang } = useEnhancer()
       const tagStore = useTagStore()
-      const articleStore = useArticleStore()
+      const articleListStore = useArticleListStore()
       const currentTag = computed(() => tagStore.tags.find((tag) => tag.slug === props.tagSlug))
       const currentTagIcon = computed(
         () => getExtendValue(currentTag.value?.extends || [], 'icon') || 'icon-tag'
@@ -79,16 +79,16 @@
       })
 
       const loadmoreArticles = async () => {
-        await articleStore.fetchList({
+        await articleListStore.fetchList({
           tag_slug: props.tagSlug,
-          page: articleStore.list.pagination.current_page + 1
+          page: articleListStore.list.pagination.current_page + 1
         })
         onClient(nextScreen)
       }
 
       const fetchAllData = (tag_slug: string) => {
         onClient(scrollToTop)
-        return Promise.all([tagStore.fetchAll(), articleStore.fetchList({ tag_slug })])
+        return Promise.all([tagStore.fetchAll(), articleListStore.fetchList({ tag_slug })])
       }
 
       onBeforeMount(() => {
@@ -102,7 +102,7 @@
       useUniversalFetch(() => fetchAllData(props.tagSlug))
 
       return {
-        articleStore,
+        articleListStore,
         tagEnName,
         currentTag,
         currentTagIcon,

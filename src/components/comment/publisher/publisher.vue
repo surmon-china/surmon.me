@@ -78,7 +78,6 @@
     getDefaultAvatar,
     getDisqusAvatarByUsername
   } from '/@/transforms/avatar'
-  import { markdownToHTML } from '/@/transforms/markdown'
   import { firstUpperCase } from '/@/transforms/text'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { CommentEvents } from '../helper'
@@ -167,7 +166,6 @@
         LANGUAGE_KEYS,
         t: i18n.t,
         firstUpperCase,
-        markdownToHTML,
         handleUpdateProfile,
         handleBlossom
       }

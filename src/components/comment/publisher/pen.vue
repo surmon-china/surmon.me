@@ -10,11 +10,9 @@
         @blur="enableCopyrighter"
       />
       <transition name="list-fade">
-        <div
-          class="markdown-preview markdown-html comment"
-          v-if="isPreviewed"
-          v-html="previewContent"
-        />
+        <div class="preview-content" v-if="isPreviewed">
+          <markdown :markdown="content" :sanitize="true" :compact="true" />
+        </div>
       </transition>
     </div>
     <div class="pencilbox">
@@ -99,9 +97,9 @@
   import { enableCopyrighter, disableCopyrighter } from '/@/services/copyright'
   import { focusPosition } from '/@/utils/editable'
   import { insertContent } from '/@/utils/editable'
-  import { markdownToHTML } from '/@/transforms/markdown'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { CommentEvents, EMOJIS } from '../helper'
+  import Markdown from '/@/components/common/markdown.vue'
 
   export enum PenEvents {
     Update = 'update:modelValue',
@@ -110,6 +108,9 @@
 
   export default defineComponent({
     name: 'CommentPen',
+    components: {
+      Markdown
+    },
     props: {
       modelValue: {
         type: String,
@@ -148,9 +149,6 @@
       const isPreviewed = ref(props.previewed || false)
       const inputElement = ref<HTMLElement>()
       let inputElementObserver: MutationObserver | null = null
-      const previewContent = computed(() => {
-        return isPreviewed.value ? markdownToHTML(content.value, { sanitize: true }) : null
-      })
 
       const handleTogglePreview = () => {
         isPreviewed.value = !isPreviewed.value
@@ -242,7 +240,7 @@
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
         inputElement,
-        previewContent,
+        content,
         isPreviewed,
         insertEmoji,
         insertImage,
@@ -299,7 +297,7 @@
         }
       }
 
-      .markdown-preview {
+      .preview-content {
         position: absolute;
         top: 0;
         left: 0;

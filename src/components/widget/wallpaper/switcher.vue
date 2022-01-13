@@ -2,9 +2,10 @@
   <div id="wallpaper" :class="{ dark: isDarkTheme }">
     <div class="switcher" @click="toggleWallpaper">
       <div class="up">
-        <span class="title" :class="language">
-          <i18n :lkey="LANGUAGE_KEYS.WALLPAPER" />
-        </span>
+        <div class="title">
+          <i class="iconfont icon-bing" />
+          <span class="text" :class="language"><i18n zh="山河入梦" en="BING" /></span>
+        </div>
       </div>
       <div class="down"></div>
     </div>
@@ -130,7 +131,8 @@
         animation: wallpaper-y 1.5s 0s infinite;
 
         .title {
-          display: block;
+          display: flex;
+          justify-content: center;
           width: 100%;
           height: 100%;
           line-height: 2rem;
@@ -138,16 +140,18 @@
           writing-mode: tb-rl;
           color: $primary;
 
-          &.zh {
-            letter-spacing: -2.5px;
-          }
+          .text {
+            font-size: 10px;
+            &.zh {
+              letter-spacing: -2px;
+            }
 
-          &.en {
-            text-align: center;
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-size: $font-size-small;
+            &.en {
+              margin-top: $xs-gap;
+              text-align: center;
+              font-weight: bold;
+              letter-spacing: 2px;
+            }
           }
         }
       }

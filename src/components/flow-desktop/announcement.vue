@@ -37,7 +37,7 @@
               @swiper="handleSwiperReady"
             >
               <swiper-slide v-for="(ann, index) in announcements" :key="index">
-                <div class="content" v-html="parseContent(ann.content)" />
+                <markdown class="content" :plain="true" :markdown="ann.content" />
                 <div class="date">{{ humanlizeDate(ann.create_at) }}</div>
               </swiper-slide>
             </swiper>
@@ -64,15 +64,16 @@
   import { defineComponent, ref, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
-  import { markdownToHTML } from '/@/transforms/markdown'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { timeAgo } from '/@/transforms/moment'
+  import Markdown from '/@/components/common/markdown.vue'
 
   export default defineComponent({
     name: 'FlowAnnouncement',
     components: {
       Swiper,
-      SwiperSlide
+      SwiperSlide,
+      Markdown
     },
     props: {
       announcements: {
@@ -96,10 +97,6 @@
         return timeAgo(date, i18n.language.value as any)
       }
 
-      const parseContent = (content: string) => {
-        return markdownToHTML(content)
-      }
-
       const prevSlide = () => swiper.value?.slidePrev()
       const nextSlide = () => swiper.value?.slideNext()
       const handleSwiperTransitionStart = () => {
@@ -111,7 +108,6 @@
         isDarkTheme,
         activeIndex,
         humanlizeDate,
-        parseContent,
         prevSlide,
         nextSlide,
         handleSwiperReady,
@@ -247,16 +243,6 @@
             position: relative;
             font-weight: bold;
             @include text-overflow();
-
-            ::v-deep(p) {
-              margin: 0;
-              max-width: 100%;
-              @include text-overflow();
-            }
-
-            a {
-              border-bottom: 1px solid;
-            }
           }
 
           .date {

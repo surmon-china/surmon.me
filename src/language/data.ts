@@ -99,10 +99,6 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '此心光明 亦复何言',
     [Language.En]: 'You have come a long way'
   },
-  [LANGUAGE_KEYS.WALLPAPER]: {
-    [Language.Zh]: '山河入梦',
-    [Language.En]: 'Gallery'
-  },
   [LANGUAGE_KEYS.PAGE_FREELANCER_SLOGAN]: {
     [Language.Zh]: '为我一挥手，如临万壑松',
     [Language.En]: 'Talk is cheap. Show me the code'

@@ -10,7 +10,7 @@ import { getSSRContext } from '/@/universal'
 
 import { useAnnouncementStore } from './announcement'
 import { useArchiveStore } from './archive'
-import { useArticleStore, useArticleDetailStore } from './article'
+import { useArticleListStore, useArticleDetailStore } from './article'
 import { useCategoryStore } from './category'
 import { useTagStore } from './tag'
 import { useCommentStore } from './comment'
@@ -22,7 +22,7 @@ import { useWallpaperStore } from './wallpaper'
 export const useStores = (_pinia?: Pinia) => ({
   announcement: useAnnouncementStore(_pinia),
   archive: useArchiveStore(_pinia),
-  article: useArticleStore(_pinia),
+  articleList: useArticleListStore(_pinia),
   articleDetail: useArticleDetailStore(_pinia),
   category: useCategoryStore(_pinia),
   tag: useTagStore(_pinia),
@@ -50,7 +50,7 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
 
     // fetch hot articles when desktop only
     if (!config.globalState.userAgent.isMobile) {
-      initFetchTasks.push(stores.article.fetchHotList())
+      initFetchTasks.push(stores.articleList.fetchHotList())
     }
 
     return Promise.all(initFetchTasks)

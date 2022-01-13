@@ -17,7 +17,7 @@
     <!-- days -->
     <ul class="days">
       <li v-for="(item, index) in tableView.table" :key="index">
-        <span
+        <div
           class="item"
           :class="{
             today: isToday(item),
@@ -25,8 +25,8 @@
           }"
           @click="handleDayClick(item)"
         >
-          <slot v-bind="item">{{ item.day }}</slot>
-        </span>
+          <slot name="day" v-bind="item">{{ item.day }}</slot>
+        </div>
       </li>
     </ul>
   </div>
@@ -218,10 +218,6 @@
           display: block;
           border-radius: 100%;
           @include background-transition();
-
-          > a {
-            display: block;
-          }
 
           &:hover {
             background-color: $module-bg-darker-1;

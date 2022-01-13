@@ -1,15 +1,15 @@
 <template>
   <div class="index-page">
-    <carrousel :articles="articleStore.list.data" :fetching="articleStore.list.fetching" />
+    <carrousel :articles="articleListStore.list.data" :fetching="articleListStore.list.fetching" />
     <announcement
       :announcements="announcementStore.announcements"
-      :fetching="announcementStore.fetching || articleStore.list.fetching"
+      :fetching="announcementStore.fetching || articleListStore.list.fetching"
     />
     <article-list
       :mammon="false"
-      :fetching="articleStore.list.fetching"
-      :articles="articleStore.list.data"
-      :pagination="articleStore.list.pagination"
+      :fetching="articleListStore.list.fetching"
+      :articles="articleListStore.list.data"
+      :pagination="articleListStore.list.pagination"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -20,7 +20,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch, onClient } from '/@/universal'
   import { useAnnouncementStore } from '/@/store/announcement'
-  import { useArticleStore } from '/@/store/article'
+  import { useArticleListStore } from '/@/store/article'
   import { useMetaStore } from '/@/store/meta'
   import { nextScreen } from '/@/utils/effects'
   import { META } from '/@/config/app.config'
@@ -38,7 +38,7 @@
     setup() {
       const { meta } = useEnhancer()
       const metaStore = useMetaStore()
-      const articleStore = useArticleStore()
+      const articleListStore = useArticleListStore()
       const announcementStore = useAnnouncementStore()
 
       meta(() => ({
@@ -48,19 +48,19 @@
       }))
 
       const loadmoreArticles = async () => {
-        const targetPage = articleStore.list.pagination?.current_page + 1
-        await articleStore.fetchList({ page: targetPage })
+        const targetPage = articleListStore.list.pagination?.current_page + 1
+        await articleListStore.fetchList({ page: targetPage })
         if (targetPage > 1) {
           onClient(nextScreen)
         }
       }
 
       useUniversalFetch(() =>
-        Promise.all([articleStore.fetchList(), announcementStore.fetchList()])
+        Promise.all([articleListStore.fetchList(), announcementStore.fetchList()])
       )
 
       return {
-        articleStore,
+        articleListStore,
         announcementStore,
         loadmoreArticles
       }
