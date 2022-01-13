@@ -410,8 +410,8 @@
         .moderator {
           display: inline-block;
           margin-left: -$sm-gap;
-          margin-right: $gap;
-          padding: 0 $xs-gap;
+          margin-right: $sm-gap;
+          padding: 0 $xs-gap 0.1em;
           font-size: 11px;
           color: $text-reversal;
           background-color: $primary-lighter;

@@ -55,17 +55,13 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
   renderer.link = (href, title, text) => {
     const isSelf = href?.startsWith(META.url)
     const textIsImage = text.includes('<img')
-    const linkHTML = trimHTML(`
-      <a
-        href="${href}"
-        target="_blank"
-        class="${textIsImage ? 'image-link' : 'link'}"
-        title="${title || (textIsImage ? href : text)}"
-        ${isSelf ? '' : 'rel="external nofollow noopener"'}
-      >
-        ${text}
-      </a>
-    `)
+    const linkHTML = trimHTML(`<a
+      href="${href}"
+      target="_blank"
+      class="${textIsImage ? 'image-link' : 'link'}"
+      title="${title || (textIsImage ? href : text)}"
+      ${isSelf ? '' : 'rel="external nofollow noopener"'}
+    >${text}</a>`)
 
     return !options?.sanitize
       ? linkHTML

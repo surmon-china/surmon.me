@@ -23,7 +23,6 @@
   import { useWallpaperStore } from '/@/store/wallpaper'
   import { GAEventCategories } from '/@/constants/gtag'
   import { Language } from '/@/language/data'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import Wallpapers from './wall.vue'
 
   export default defineComponent({
@@ -50,7 +49,6 @@
       }
 
       return {
-        LANGUAGE_KEYS,
         language: i18n.language,
         isDarkTheme,
         isOnWallpaper,
@@ -141,7 +139,7 @@
           color: $primary;
 
           .text {
-            font-size: 10px;
+            font-size: 11px;
             &.zh {
               letter-spacing: -2px;
             }

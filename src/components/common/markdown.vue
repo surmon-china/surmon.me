@@ -208,10 +208,9 @@
 
     code {
       vertical-align: middle;
-      padding: 0.3em 0.4em 0.2em;
+      padding: 0.2em 0.4em 0.14em;
       margin: 0;
       border-radius: $sm-radius;
-      color: $link-color;
       font-size: 95%;
     }
 
@@ -359,7 +358,9 @@
 
   .global-markdown-html {
     code {
+      border: 1px solid $module-bg-darker-2;
       background-color: $module-bg-darker-1;
+      color: $link-color;
     }
 
     pre {
@@ -397,7 +398,13 @@
     }
 
     &.compact {
+      blockquote {
+        border-color: $module-bg-darker-3;
+        background-color: $module-bg-darker-2;
+      }
+
       code {
+        border-color: $module-bg-darker-3;
         background-color: $module-bg-darker-2;
       }
 

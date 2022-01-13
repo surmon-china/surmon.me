@@ -97,7 +97,7 @@
     }
 
     .no-more {
-      padding: $xs-gap 0;
+      padding-top: $xs-gap;
       color: $text-disabled;
     }
   }
