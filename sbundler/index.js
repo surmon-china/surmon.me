@@ -17,32 +17,39 @@ const DIR_PATHS = {
 }
 
 ;(async () => {
-  // 1. empty ./dist
-  await fs.emptyDir(DIST_PATH)
+  try {
+    // 1. empty ./dist
+    await fs.emptyDir(DIST_PATH)
 
-  // 2. BFF server
-  await bundleBFFServer(DIR_PATHS)
-  console.info('\nBFF bundle done!\n')
+    // 2. BFF server
+    await bundleBFFServer(DIR_PATHS)
+    console.info('\nBFF bundle done!\n')
 
-  // 3. Serverless server
-  await bundleSLSServer(DIR_PATHS)
-  console.info('\nServerless bundle done!\n')
+    // 3. Serverless server
+    await bundleSLSServer(DIR_PATHS)
+    console.info('\nServerless bundle done!\n')
 
-  // 4. Client
-  await bundleSSRClent(DIR_PATHS)
-  // rename
-  await fs.rename(
-    path.resolve(DIR_PATHS.client, 'index.html'),
-    path.resolve(DIR_PATHS.client, 'template.html')
-  )
-  // and move to the dist root dir
-  await fs.move(
-    path.resolve(DIR_PATHS.client, 'template.html'),
-    path.resolve(DIR_PATHS.dist, 'template.html')
-  )
-  console.info('\nClient bundle done!\n')
+    // 4. Client
+    await bundleSSRClent(DIR_PATHS)
+    // rename
+    await fs.rename(
+      path.resolve(DIR_PATHS.client, 'index.html'),
+      path.resolve(DIR_PATHS.client, 'template.html')
+    )
+    // and move to the dist root dir
+    await fs.move(
+      path.resolve(DIR_PATHS.client, 'template.html'),
+      path.resolve(DIR_PATHS.dist, 'template.html')
+    )
+    console.info('\nClient bundle done!\n')
 
-  // 5. SSR render
-  await bundleServerRender(DIR_PATHS)
-  console.info('\nServer render bundle done!\n')
+    // 5. SSR render
+    await bundleServerRender(DIR_PATHS)
+    console.info('\nServer render bundle done!\n')
+
+    process.exit(0)
+  } catch (error) {
+    console.error('bundle ERROR!', error)
+    process.exit(1)
+  }
 })()

@@ -26,8 +26,7 @@ exports.bundleServerRender = async (paths) => {
           chunkFileNames: '[name].js',
           assetFileNames: '[name].[ext]',
           manualChunks: () => 'ssr'
-        },
-        external: [...builtinModules, ...Object.keys(packageJSON.devDependencies)]
+        }
       }
     }
   })
