@@ -50,6 +50,7 @@
 </script>
 
 <style lang="scss" scoped>
+  @use 'sass:math';
   @import 'src/styles/init.scss';
 
   .calendar {
@@ -67,7 +68,7 @@
         right: 50%;
         width: $size;
         height: $size;
-        margin-right: -$size / 2;
+        margin-right: -#{math.div($size, 2)};
         border-radius: 100%;
         background-color: $primary;
       }

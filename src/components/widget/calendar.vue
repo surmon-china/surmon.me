@@ -217,7 +217,6 @@
         > .item {
           display: block;
           border-radius: 100%;
-          @include background-transition();
 
           &:hover {
             background-color: $module-bg-darker-1;
