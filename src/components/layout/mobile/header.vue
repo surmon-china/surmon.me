@@ -23,7 +23,7 @@
         <i class="iconfont icon-menu"></i>
       </button>
       <router-link to="/" class="navbar-logo">
-        <uimage cdn src="/images/logo.svg" />
+        <uimage class="image" cdn src="/images/logo.svg" />
       </router-link>
       <button class="navbar-search" @click.stop.prevent="openSearch">
         <i class="iconfont icon-search"></i>
@@ -190,6 +190,10 @@
 
       .navbar-logo {
         width: 30%;
+
+        .image {
+          filter: $theme-logo-rotate;
+        }
       }
     }
   }

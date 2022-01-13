@@ -56,7 +56,7 @@
           <div class="logined" v-else>
             <template v-if="user.type === UserType.Local">
               <div class="name">
-                <i class="icon guest iconfont icon-anonymous"></i>
+                <i class="icon guest iconfont icon-user"></i>
                 <span class="text">{{ user.localProfile?.name || '' }}</span>
                 <i class="arrow iconfont icon-down-arrow"></i>
               </div>

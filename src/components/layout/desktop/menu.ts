@@ -49,7 +49,7 @@ export const menus: Array<MenuItem> = [
   {
     id: RouteName.About,
     route: getPageRoute(RouteName.About),
-    icon: 'icon-user',
+    icon: 'icon-swordsman',
     i18nKey: LANGUAGE_KEYS.PAGE_ABOUT
   },
   {

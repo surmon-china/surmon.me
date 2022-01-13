@@ -15,7 +15,7 @@
           <img :alt="comment.author.name" :src="authorAvatar" draggable="false" />
           <span class="role" :class="isDisqusAuthor ? 'disqus' : 'anonymous'">
             <i class="iconfont icon-disqus-logo" v-if="isDisqusAuthor"></i>
-            <i class="iconfont icon-anonymous" v-else></i>
+            <i class="iconfont icon-user" v-else></i>
           </span>
         </comment-link>
       </div>

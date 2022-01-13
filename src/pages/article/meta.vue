@@ -11,7 +11,7 @@
         <span class="text">
           <i18n>
             <template #zh>真棒！{{ likes }}</template>
-            <template #en>{{ isLiked ? 'Upvoted' : 'Upvote' }} ({{ likes }})</template>
+            <template #en>{{ isLiked ? 'Upvoted' : 'Upvote' }} {{ likes }}</template>
           </i18n>
         </span>
       </button>
@@ -28,7 +28,7 @@
       >
         {{ getDateTitle(article.create_at) }}
       </router-link>
-      <i18n zh="发布在" en="in category" />
+      <i18n zh="发布在" en="in" />
       <span v-for="(category, index) in article.category" :key="index">
         <router-link
           class="link category"

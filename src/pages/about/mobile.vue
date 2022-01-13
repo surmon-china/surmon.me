@@ -28,7 +28,7 @@
           <i18n v-bind="i18ns.findJob" />
         </router-link>
         <router-link class="item text-only" :to="getPageRoute(RouteName.Freelancer)">
-          <i class="iconfont icon-tool" />
+          <i class="iconfont icon-coin-s" />
           <i18n v-bind="i18ns.hireMe" />
         </router-link>
         <router-link class="item text-only" :to="getPageRoute(RouteName.Lens)">
@@ -204,7 +204,6 @@
       .list {
         display: grid;
         grid-gap: $lg-gap;
-
         &.col-2 {
           grid-template-columns: repeat(2, 1fr);
         }
@@ -239,6 +238,10 @@
 
           .iconfont {
             margin-right: $sm-gap;
+          }
+
+          .text {
+            font-weight: bold;
           }
 
           &.github {

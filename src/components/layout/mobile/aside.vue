@@ -45,7 +45,7 @@
           <i18n :lkey="LANGUAGE_KEYS.PAGE_ARCHIVE" />
         </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.About)">
-          <i class="iconfont icon-user"></i>
+          <i class="iconfont icon-swordsman"></i>
           <i18n :lkey="LANGUAGE_KEYS.PAGE_ABOUT" />
         </router-link>
         <router-link class="item guestbook" :to="getPageRoute(RouteName.Guestbook)">
