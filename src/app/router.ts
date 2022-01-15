@@ -20,7 +20,7 @@ import { scrollToTop } from '/@/utils/effects'
 // mobile flow
 import MobileFlow from '/@/components/flow-mobile/index.vue'
 // desktop flow
-import IndexFlowPage from '/@/pages/index.vue'
+import IndexFlowPage from '/@/pages/index/main.vue'
 import CategoryFlowPage from '/@/pages/category.vue'
 import TagFlowPage from '/@/pages/tag.vue'
 import DateFlowPage from '/@/pages/date.vue'

@@ -22,7 +22,6 @@
       <template #default>
         <swiper
           class="swiper"
-          :autoplay="{ delay: 3500, disableOnInteraction: false }"
           :set-wrapper-size="true"
           :mousewheel="true"
           :observe-parents="true"
@@ -31,6 +30,7 @@
           :preload-images="false"
           :lazy="false"
           :pagination="{ clickable: true }"
+          :autoplay="{ delay: 3500, disableOnInteraction: false }"
         >
           <swiper-slide v-for="(article, index) in articleList.slice(0, 9)" :key="index">
             <div class="content">
@@ -81,15 +81,15 @@
 
 <script lang="ts">
   import { defineComponent, computed, PropType } from 'vue'
-  import { Swiper, SwiperSlide } from '/@/services/swiper'
   import { useEnhancer } from '/@/app/enhancer'
+  import { Article } from '/@/store/article'
+  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { Swiper, SwiperSlide } from '/@/services/swiper'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getArticleBannerThumbnailURL } from '/@/transforms/thumbnail'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { Article } from '/@/store/article'
 
   export default defineComponent({
-    name: 'FlowCarrousel',
+    name: 'IndexCarrousel',
     components: {
       Swiper,
       SwiperSlide
@@ -139,9 +139,8 @@
 
   .carrousel {
     $carrousel-height: 210px;
-    height: $carrousel-height;
-    margin-bottom: $lg-gap;
     position: relative;
+    height: $carrousel-height;
     @include common-bg-module();
     @include radius-box($lg-radius);
 

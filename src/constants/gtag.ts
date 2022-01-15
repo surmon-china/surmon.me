@@ -10,6 +10,7 @@ export enum GAEventCategories {
   Widget = 'widget',
   Universal = 'global',
   Article = 'page_article',
+  Index = 'page_index',
   App = 'page_app',
   About = 'page_about',
   Lens = 'page_lens'

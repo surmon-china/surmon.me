@@ -15,6 +15,7 @@ import { getGitHubChartSVG } from './server/getters/ghchart'
 import { getBiliBiliVideos } from './server/getters/bilibili'
 import { getAllWallpapers } from './server/getters/wallpaper'
 import { getGitHubRepositories } from './server/getters/github'
+import { getTwitterTweets, getTwitterUserinfo } from './server/getters/twitter'
 import { getInstagramMedias } from './server/getters/instagram'
 import {
   getYouTubeChannelPlayLists,
@@ -83,7 +84,7 @@ app.get('/effects/gtag', async (_, response) => {
   }
 })
 
-// ghchart
+// GitHub chart svg
 app.get('/effects/ghchart', async (_, response) => {
   try {
     const data = await cacher({
@@ -99,7 +100,7 @@ app.get('/effects/ghchart', async (_, response) => {
   }
 })
 
-// tunnel services
+// BiliBili videos
 app.get(
   `${BFF_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`,
   responser(() => {
@@ -112,6 +113,7 @@ app.get(
   })
 )
 
+// Bing wallpapers
 app.get(
   `${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`,
   responser(() => {
@@ -124,6 +126,7 @@ app.get(
   })
 )
 
+// GitHub Repositories
 app.get(
   `${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHub}`,
   responser(() => {
@@ -136,6 +139,7 @@ app.get(
   })
 )
 
+// 163 music BGM list
 app.get(
   `${BFF_TUNNEL_PREFIX}/${TunnelModule.Music}`,
   responser(() => {
@@ -148,6 +152,33 @@ app.get(
   })
 )
 
+// Twitter userinfo
+app.get(
+  `${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterUserInfo}`,
+  responser(() => {
+    return cacher({
+      key: 'twitter_userinfo',
+      age: 60 * 60 * 12, // 12 hours
+      retryWhen: 60 * 10, // 10 minutes
+      getter: getTwitterUserinfo
+    })
+  })
+)
+
+// Twitter newest tweets
+app.get(
+  `${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterTweets}`,
+  responser(() => {
+    return cacher({
+      key: 'twitter_tweets',
+      age: 60 * 60 * 2, // 2 hours
+      retryWhen: 60 * 10, // 10 minutes
+      getter: getTwitterTweets
+    })
+  })
+)
+
+// Instagram newest medias
 app.get(
   `${BFF_TUNNEL_PREFIX}/${TunnelModule.Instagram}`,
   responser(() => {
@@ -160,6 +191,7 @@ app.get(
   })
 )
 
+// YouTube platlists
 app.get(
   `${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`,
   responser(() => {
@@ -172,6 +204,7 @@ app.get(
   })
 )
 
+// YouTube videos
 app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
   const playlistID = request.query.id
   if (!playlistID || typeof playlistID !== 'string') {

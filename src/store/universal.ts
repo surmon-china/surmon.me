@@ -4,7 +4,6 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import * as _ from 'lodash'
 import { defineStore } from 'pinia'
 import { Author } from './comment'
 import { getJSON, setJSON, remove } from '/@/services/storage'

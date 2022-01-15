@@ -17,6 +17,7 @@ import { useCommentStore } from './comment'
 import { useUniversalStore } from './universal'
 import { useMetaStore } from './meta'
 import { useLensStore } from './lens'
+import { useTwitterStore } from './twitter'
 import { useWallpaperStore } from './wallpaper'
 
 export const useStores = (_pinia?: Pinia) => ({
@@ -30,6 +31,7 @@ export const useStores = (_pinia?: Pinia) => ({
   universal: useUniversalStore(_pinia),
   meta: useMetaStore(_pinia),
   lens: useLensStore(_pinia),
+  twitter: useTwitterStore(_pinia),
   wallpaper: useWallpaperStore(_pinia)
 })
 

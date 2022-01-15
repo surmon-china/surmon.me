@@ -110,9 +110,9 @@
       }
 
       .description {
-        margin-top: $gap;
+        margin-top: $sm-gap;
         margin-bottom: 0;
-        line-height: 2;
+        line-height: 1.6;
       }
     }
 

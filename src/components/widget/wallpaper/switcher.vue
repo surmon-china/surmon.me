@@ -3,8 +3,15 @@
     <div class="switcher" @click="toggleWallpaper">
       <div class="up">
         <div class="title">
-          <i class="iconfont icon-bing" />
-          <span class="text" :class="language"><i18n zh="山河入梦" en="BING" /></span>
+          <i18n>
+            <template #zh>
+              <span class="zh-text">山河入梦</span>
+            </template>
+            <template #en>
+              <i class="iconfont icon-bing" />
+              <span class="en-text">BING</span>
+            </template>
+          </i18n>
         </div>
       </div>
       <div class="down"></div>
@@ -107,7 +114,7 @@
       > .up,
       > .down {
         width: 3rem;
-        height: 6.8rem;
+        height: 7rem;
         position: absolute;
         border-top-right-radius: $xs-radius;
         border-bottom-right-radius: $xs-radius;
@@ -138,18 +145,17 @@
           writing-mode: tb-rl;
           color: $primary;
 
-          .text {
-            font-size: 11px;
-            &.zh {
-              letter-spacing: -2px;
-            }
+          .zh-text {
+            margin-bottom: $xs-gap;
+            letter-spacing: -3px;
+          }
 
-            &.en {
-              margin-top: $xs-gap;
-              text-align: center;
-              font-weight: bold;
-              letter-spacing: 2px;
-            }
+          .en-text {
+            font-size: $font-size-small - 1;
+            margin-top: $xs-gap;
+            letter-spacing: 2px;
+            text-align: center;
+            font-weight: bold;
           }
         }
       }

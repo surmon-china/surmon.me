@@ -47,9 +47,43 @@ export const cacher = async (config: CacherConfig) => {
     return bffCache.get(config.key)
   }
 
+  // fetch & cache
+  const fetchAndCache = async (_config: CacherConfig) => {
+    const data = await _config.getter()
+    bffCache.set(_config.key, data, _config.age * 1000)
+    return data
+  }
+
+  // timeout prefetch
+  const setTimeoutPreRefresh = (_config: CacherConfig, preSeconds: number, refreshCount = 1) => {
+    const whenSeconds = _config.age - preSeconds
+    console.info(
+      '[cacher] setTimeoutPreRefresh',
+      `> ${_config.key} + ${refreshCount}`,
+      `> cache expire when after ${_config.age}s`,
+      `> pre refresh when after ${whenSeconds}s`
+    )
+    setTimeout(() => {
+      fetchAndCache(_config)
+        .then(() => {
+          setTimeoutPreRefresh(_config, preSeconds, refreshCount + 1)
+        })
+        .catch((error) => {
+          console.warn(
+            `[cacher] setTimeoutPreRefresh ERROR!`,
+            `> ${_config.key} + ${refreshCount}`,
+            error
+          )
+        })
+    }, whenSeconds * 1000)
+  }
+
   try {
-    const data = await config.getter()
-    bffCache.set(config.key, data, config.age * 1000)
+    // 1. fetch & cache
+    const data = await fetchAndCache(config)
+    // 2. set timeout pre 1 min refresh
+    setTimeoutPreRefresh(config, 60)
+    // 3. return data
     return data
   } catch (error: any) {
     // retry only once

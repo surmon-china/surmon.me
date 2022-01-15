@@ -4,7 +4,6 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import * as _ from 'lodash'
 import { defineStore } from 'pinia'
 import { isClient } from '/@/app/environment'
 import { UNDEFINED } from '/@/constants/value'

@@ -63,13 +63,13 @@
 <script lang="ts">
   import { defineComponent, ref, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
   import { LANGUAGE_KEYS } from '/@/language/key'
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
   import { timeAgo } from '/@/transforms/moment'
   import Markdown from '/@/components/common/markdown.vue'
 
   export default defineComponent({
-    name: 'FlowAnnouncement',
+    name: 'IndexAnnouncement',
     components: {
       Swiper,
       SwiperSlide,

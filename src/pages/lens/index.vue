@@ -55,7 +55,7 @@
             <lens-skeleton
               :columns="5"
               :rows="1"
-              :height="170"
+              :height="166"
               key="loading"
               class="module-loading"
             />

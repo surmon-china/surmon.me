@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.6.0 (2022-01-15)
+
+**Feature**
+
+- Announcement to Twitter
+- improve BFF cacher logic
+
 ### v3.5.0 (2022-01-11)
 
 **Feature**

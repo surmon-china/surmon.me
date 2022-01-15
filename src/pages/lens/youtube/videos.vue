@@ -112,7 +112,7 @@
 
   .video {
     display: block;
-    height: 170px;
+    height: 166px;
     cursor: pointer;
     @include radius-box($sm-radius);
     @include common-bg-module();
@@ -202,11 +202,12 @@
 
     .title,
     .description {
-      padding: 0 $gap;
+      padding: 0 0.7em;
     }
 
     .title {
-      margin: $sm-gap 0;
+      margin-top: $sm-gap;
+      margin-bottom: 0.4em;
       font-weight: bold;
       color: $text;
       max-width: 90%;
@@ -214,9 +215,9 @@
     }
 
     .description {
-      margin-bottom: $gap;
-      color: $text-secondary;
       max-width: 95%;
+      font-size: $font-size-h5 - 1;
+      color: $text-secondary;
       @include text-overflow();
     }
   }

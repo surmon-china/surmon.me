@@ -29,3 +29,7 @@ export const getYouTubeVideoEmbedURL = (id: string, list?: string) => {
   const listParam = list ? `?list=${list}` : ''
   return `https://www.youtube.com/embed/${id}${listParam}`
 }
+
+export const getTwitterTweetDetailURL = (uid: string, id: string) => {
+  return `https://twitter.com/${uid}/status/${id}`
+}

@@ -5,10 +5,12 @@
  */
 
 export enum TunnelModule {
-  Instagram = 'instagram',
+  TwitterUserInfo = 'twitter_userinfo',
+  TwitterTweets = 'twitter_tweets',
   YouTubePlaylist = 'youtube_playlist',
   YouTubeVideoList = 'youtube_video_list',
   BiliBili = 'bilibili',
+  Instagram = 'instagram',
   Wallpaper = 'wallpaper',
   GitHub = 'gitHub',
   Music = 'music'

@@ -4,13 +4,13 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import escapeHTML from 'escape-html'
 import sanitizeHTML from 'sanitize-html'
 import { marked, Renderer } from 'marked'
 import { TagMap } from '/@/store/tag'
 import { LOZAD_CLASS_NAME } from '/@/services/lozad'
 import highlight from '/@/services/highlight'
 import relink from '/@/transforms/relink'
+import { escape } from '/@/transforms/text'
 import { META } from '/@/config/app.config'
 import API_CONFIG from '/@/config/api.config'
 
@@ -31,13 +31,13 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
   // html: escape > sanitize
   renderer.html = (html) => {
     // https://github.com/apostrophecms/sanitize-html#default-options
-    return options?.sanitize ? sanitizeHTML(escapeHTML(html)) : html
+    return options?.sanitize ? sanitizeHTML(escape(html)) : html
   }
 
   // heading
   renderer.heading = (html, level, raw) => {
     const idText = options?.headingID ? `id="${options.headingID(html, level, raw)}"` : ''
-    const safeRaw = escapeHTML(raw)
+    const safeRaw = escape(raw)
     return `<h${level} ${idText} alt="${safeRaw}" title="${safeRaw}">${html}</h${level}>`
   }
 

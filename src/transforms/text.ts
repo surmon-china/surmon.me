@@ -4,17 +4,15 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-// 文字溢出过滤器
-export const textOverflow = (text: string, customLength?: number) => {
-  const length = customLength || text.length
-  const cansub = length && text?.length > length
-  return cansub ? text.substr(0, length) + '...' : text
-}
+import _escape from 'lodash/escape'
+import _unescape from 'lodash/unescape'
+import _truncate from 'lodash/truncate'
+import _capitalize from 'lodash/capitalize'
 
-// 首字母大写
-export const firstUpperCase = (text: string) => {
-  return text?.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
-}
+export const escape = _escape
+export const unescape = _unescape
+export const textOverflow = _truncate
+export const firstUpperCase = _capitalize
 
 export const CHINESE_NUMBER_TEXT = '〇一二三四五六七八九十'.split('')
 export const CHINESE_NUMBER_CAPITAL_TEXT = '零壹贰叁肆伍陆柒捌玖拾'.split('')
