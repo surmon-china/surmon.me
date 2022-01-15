@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.5.11
+* Surmon.me v3.6.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -25,10 +25,12 @@ const isProd = "production" === NodeEnv.Production;
  */
 var TunnelModule;
 (function (TunnelModule) {
-    TunnelModule["Instagram"] = "instagram";
+    TunnelModule["TwitterUserInfo"] = "twitter_userinfo";
+    TunnelModule["TwitterTweets"] = "twitter_tweets";
     TunnelModule["YouTubePlaylist"] = "youtube_playlist";
     TunnelModule["YouTubeVideoList"] = "youtube_video_list";
     TunnelModule["BiliBili"] = "bilibili";
+    TunnelModule["Instagram"] = "instagram";
     TunnelModule["Wallpaper"] = "wallpaper";
     TunnelModule["GitHub"] = "gitHub";
     TunnelModule["Music"] = "music";
@@ -359,6 +361,65 @@ const getGitHubRepositories = async () => {
         language: rep.language
     }));
 };/**
+ * @file BFF Twitter getter
+ * @module server.getter.twitter
+ * @author Surmon <https://github.com/surmon-china>
+ */
+// 1. Generate tokens
+// https://developer.twitter.com/en/portal/projects-and-apps
+const bearerToken = yargs.argv.twitter_bearer_token;
+// 2. Get userinfo
+// https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by-username-username
+const getTwitterUserinfoByUsername = async (username) => {
+    const response = await axios__default["default"].get(`https://api.twitter.com/2/users/by/username/${username}`, {
+        timeout: 8000,
+        params: {
+            'user.fields': `location,url,description,profile_image_url,public_metrics`
+        },
+        headers: {
+            Authorization: `Bearer ${bearerToken}`
+        }
+    });
+    if (response.status === 200 && response.data.data) {
+        return response.data.data;
+    }
+    else {
+        throw response.data;
+    }
+};
+// 3. Get tweets
+// https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-tweets
+const getTwitterUserTweetsByUID = async (UID) => {
+    const response = await axios__default["default"].get(`https://api.twitter.com/2/users/${UID}/tweets`, {
+        timeout: 8000,
+        params: {
+            exclude: 'replies',
+            expansions: `attachments.media_keys,author_id,entities.mentions.username,geo.place_id,in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id`,
+            'tweet.fields': `attachments,author_id,context_annotations,conversation_id,created_at,entities,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,reply_settings,source,text,withheld`,
+            'user.fields': `created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld`,
+            'place.fields': `contained_within,country,country_code,full_name,id,name,place_type`,
+            'media.fields': `duration_ms,height,media_key,preview_image_url,type,url,width,public_metrics,non_public_metrics,organic_metrics,promoted_metrics`,
+            max_results: 46
+        },
+        headers: {
+            Authorization: `Bearer ${bearerToken}`
+        }
+    });
+    if (response.status === 200) {
+        return response.data;
+    }
+    else {
+        throw response.data;
+    }
+};
+const getTwitterUserinfo = () => {
+    return getTwitterUserinfoByUsername(THIRD_IDS.TWITTER_USER_ID);
+};
+let uidCache = null;
+const getTwitterTweets = async () => {
+    uidCache = uidCache || (await getTwitterUserinfo()).id;
+    return await getTwitterUserTweetsByUID(uidCache);
+};/**
  * @file BFF instagram getter
  * @module server.getter.instagram
  * @author Surmon <https://github.com/surmon-china>
@@ -591,9 +652,32 @@ const cacher = async (config) => {
     if (bffCache.has(config.key)) {
         return bffCache.get(config.key);
     }
+    // fetch & cache
+    const fetchAndCache = async (_config) => {
+        const data = await _config.getter();
+        bffCache.set(_config.key, data, _config.age * 1000);
+        return data;
+    };
+    // timeout prefetch
+    const setTimeoutPreRefresh = (_config, preSeconds, refreshCount = 1) => {
+        const whenSeconds = _config.age - preSeconds;
+        console.info('[cacher] setTimeoutPreRefresh', `> ${_config.key} + ${refreshCount}`, `> cache expire when after ${_config.age}s`, `> pre refresh when after ${whenSeconds}s`);
+        setTimeout(() => {
+            fetchAndCache(_config)
+                .then(() => {
+                setTimeoutPreRefresh(_config, preSeconds, refreshCount + 1);
+            })
+                .catch((error) => {
+                console.warn(`[cacher] setTimeoutPreRefresh ERROR!`, `> ${_config.key} + ${refreshCount}`, error);
+            });
+        }, whenSeconds * 1000);
+    };
     try {
-        const data = await config.getter();
-        bffCache.set(config.key, data, config.age * 1000);
+        // 1. fetch & cache
+        const data = await fetchAndCache(config);
+        // 2. set timeout pre 1 min refresh
+        setTimeoutPreRefresh(config, 60);
+        // 3. return data
         return data;
     }
     catch (error) {
@@ -805,7 +889,7 @@ app.get('/effects/gtag', async (_, response) => {
         erroror(response, error);
     }
 });
-// ghchart
+// GitHub chart svg
 app.get('/effects/ghchart', async (_, response) => {
     try {
         const data = await cacher({
@@ -821,7 +905,7 @@ app.get('/effects/ghchart', async (_, response) => {
         erroror(response, error);
     }
 });
-// tunnel services
+// BiliBili videos
 app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`, responser(() => {
     return cacher({
         key: 'bilibili',
@@ -830,6 +914,7 @@ app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`, responser(() => {
         getter: getBiliBiliVideos
     });
 }));
+// Bing wallpapers
 app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`, responser(() => {
     return cacher({
         key: 'wallpaper',
@@ -838,6 +923,7 @@ app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`, responser(() => {
         getter: getAllWallpapers
     });
 }));
+// GitHub Repositories
 app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHub}`, responser(() => {
     return cacher({
         key: 'github',
@@ -846,6 +932,7 @@ app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHub}`, responser(() => {
         getter: getGitHubRepositories
     });
 }));
+// 163 music BGM list
 app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Music}`, responser(() => {
     return cacher({
         key: 'music',
@@ -854,6 +941,25 @@ app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Music}`, responser(() => {
         getter: getSongList
     });
 }));
+// Twitter userinfo
+app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterUserInfo}`, responser(() => {
+    return cacher({
+        key: 'twitter_userinfo',
+        age: 60 * 60 * 12,
+        retryWhen: 60 * 10,
+        getter: getTwitterUserinfo
+    });
+}));
+// Twitter newest tweets
+app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterTweets}`, responser(() => {
+    return cacher({
+        key: 'twitter_tweets',
+        age: 60 * 60 * 2,
+        retryWhen: 60 * 10,
+        getter: getTwitterTweets
+    });
+}));
+// Instagram newest medias
 app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Instagram}`, responser(() => {
     return cacher({
         key: 'instagram',
@@ -862,6 +968,7 @@ app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Instagram}`, responser(() => {
         getter: getInstagramMedias
     });
 }));
+// YouTube platlists
 app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`, responser(() => {
     return cacher({
         key: 'youtube_playlist',
@@ -870,6 +977,7 @@ app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`, responser(() => 
         getter: getYouTubeChannelPlayLists
     });
 }));
+// YouTube videos
 app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
     const playlistID = request.query.id;
     if (!playlistID || typeof playlistID !== 'string') {
