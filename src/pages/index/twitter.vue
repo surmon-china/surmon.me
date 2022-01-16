@@ -54,6 +54,7 @@
             :allow-touch-move="false"
             :slides-per-view="1"
             :prevent-clicks="false"
+            :autoplay="{ delay: 3500, disableOnInteraction: false }"
             @transition-start="handleSwiperTransitionStart"
             @swiper="handleSwiperReady"
           >
