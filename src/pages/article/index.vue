@@ -113,7 +113,7 @@
         })
       }
 
-      const handleLike = async () => {
+      const handleLike = async (callback) => {
         if (isLiked.value) {
           return false
         }
@@ -124,6 +124,7 @@
         try {
           await articleDetailStore.postArticleLike(article.value!.id)
           universalStore.likePage(article.value!.id)
+          callback?.()
         } catch (error) {
           const message = i18n.t(LANGUAGE_KEYS.POST_ACTION_ERROR)
           console.warn(message, error)

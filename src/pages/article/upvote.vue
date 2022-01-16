@@ -3,7 +3,7 @@
     <div class="wrapper">
       <button
         class="button like"
-        :class="{ liked: isLiked, animating }"
+        :class="{ liked: isLiked, newliked: newliked }"
         :disabled="isLiked"
         @click="handleLike"
       >
@@ -15,7 +15,7 @@
           </i18n>
         </span>
         <span class="parkinson-mask">
-          <i class="iconfont" :class="animating ? 'icon-like' : 'icon-like-pre'"></i>
+          <i class="iconfont" :class="newliked ? 'icon-like' : 'icon-like-pre'"></i>
         </span>
         <div class="parkinson-likes">+ 1</div>
       </button>
@@ -58,28 +58,23 @@
         context.emit(ArticleUpvoteEvents.Sponsor)
       }
 
-      const animating = ref(false)
-      const handleLike = () => {
-        if (!props.isLiked) {
-          context.emit(ArticleUpvoteEvents.Like)
-        }
+      const newliked = ref(false)
+      const handleLiked = () => {
+        newliked.value = true
       }
 
-      watch(
-        () => props.isLiked,
-        (isLiked) => {
-          if (isLiked) {
-            animating.value = true
-          }
+      const handleLike = () => {
+        if (!props.isLiked) {
+          context.emit(ArticleUpvoteEvents.Like, handleLiked)
         }
-      )
+      }
 
       return {
         VALUABLE_LINKS,
         LANGUAGE_KEYS,
         handleLike,
         handleSponsor,
-        animating
+        newliked
       }
     }
   })
@@ -115,7 +110,7 @@
         &[disabled] {
           color: $white;
           background-color: mix($black, $red, 10%);
-          &:not(.animating) {
+          &:not(.newliked) {
             opacity: 0.8;
           }
         }
@@ -183,7 +178,7 @@
         }
 
         &:not([disabled]):hover,
-        &.animating {
+        &.newliked {
           /* parkinson animate */
           .parkinson-mask {
             transition: opacity $transition-time-normal, visibility $transition-time-normal;
@@ -220,7 +215,7 @@
           }
 
           /* liked animate */
-          &.animating {
+          &.newliked {
             .parkinson-mask {
               transition-delay: 1s;
               @include hidden();
