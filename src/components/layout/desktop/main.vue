@@ -25,6 +25,7 @@
       :class="{ 'full-page': layoutColumn.isFull }"
     >
       <nav-view class="nav-view" v-if="layoutColumn.isNormal" />
+      <aside-view class="aside-view" v-if="layoutColumn.isNormal" />
       <div
         :id="MAIN_CONTENT_ELEMENT_ID"
         class="main-view"
@@ -45,9 +46,8 @@
           </div>
         </router-view>
       </div>
-      <aside-view class="aside-view" v-if="layoutColumn.isNormal" />
     </main>
-    <footer-view />
+    <footer-view class="footer-view" />
   </div>
 </template>
 
@@ -159,15 +159,20 @@
       }
 
       .nav-view {
+        order: 1;
+        flex-shrink: 0;
         margin-right: $lg-gap;
       }
 
       .aside-view {
+        order: 3;
+        flex-shrink: 0;
         margin-left: $lg-gap;
       }
 
       .main-view {
-        width: $main-width;
+        order: 2;
+        flex-grow: 1;
         position: relative;
         overflow: hidden;
         transition: none;
@@ -189,15 +194,21 @@
         }
 
         &.layout-wide {
+          flex-grow: unset;
           width: 100%;
           margin: 0;
         }
 
         &.layout-full {
+          flex-grow: unset;
           width: 100%;
           margin: -$lg-gap 0;
         }
       }
+    }
+
+    .footer-view {
+      margin-top: $lg-gap;
     }
   }
 </style>

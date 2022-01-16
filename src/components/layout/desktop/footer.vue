@@ -49,7 +49,6 @@
     display: flex;
     align-items: center;
     height: $footer-height;
-    margin-top: $lg-gap;
     @include common-bg-module();
 
     .container {
