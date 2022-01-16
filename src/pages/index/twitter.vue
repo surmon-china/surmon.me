@@ -31,13 +31,17 @@
                 </span>
               </ulink>
               <div class="counts">
-                <div class="item">
-                  <span class="count">{{ userinfo.public_metrics.tweet_count }}</span>
-                  <span class="text">tweets</span>
+                <div class="item top">
+                  <span class="count">{{
+                    padStart(userinfo.public_metrics.tweet_count, 3, '0')
+                  }}</span>
+                  <span class="text">TWES</span>
                 </div>
-                <div class="item">
-                  <span class="count">{{ userinfo.public_metrics.followers_count }}</span>
-                  <span class="text">followers</span>
+                <div class="item bottom">
+                  <span class="count">{{
+                    padStart(userinfo.public_metrics.followers_count, 3, '0')
+                  }}</span>
+                  <span class="text">FOLS</span>
                 </div>
               </div>
             </div>
@@ -50,35 +54,41 @@
             :allow-touch-move="false"
             :slides-per-view="1"
             :prevent-clicks="false"
-            :autoplay="{ delay: 3500, disableOnInteraction: false }"
             @transition-start="handleSwiperTransitionStart"
             @swiper="handleSwiperReady"
           >
             <swiper-slide class="tweet-item" v-for="(t, index) in completedTweets" :key="index">
               <div class="content" :title="t.tweet.text">
                 <div class="reference" v-if="t.tweet.referenced_tweets?.length">[R]</div>
-                <div class="main" v-if="t.html" v-html="t.html"></div>
+                <div
+                  class="main"
+                  :class="{ 'has-image': t.tweet.attachments?.media_keys.length }"
+                  v-if="t.html"
+                  v-html="t.html"
+                ></div>
                 <ulink
+                  v-if="t.tweet.attachments?.media_keys.length"
                   class="end-link"
+                  :class="{ empty: !t.html }"
                   :href="t.url"
-                  :class="{
-                    empty: !t.html,
-                    image: Boolean(t.tweet.attachments?.media_keys.length)
-                  }"
-                  @mousedown="handleGtagEvent('twitter_detail_link')"
+                  @mousedown="handleGtagEvent('twitter_image_link')"
                 >
-                  <template v-if="t.tweet.attachments?.media_keys.length">
-                    <i class="iconfont icon icon-image"></i>
-                    <span class="text">[{{ t.tweet.attachments?.media_keys.length }}]</span>
-                    <i class="iconfont window icon-new-window-s"></i>
-                  </template>
-                  <template v-else>
-                    <i class="iconfont icon icon-twitter"></i>
-                    <i class="iconfont window icon-new-window-s"></i>
-                  </template>
+                  <i class="iconfont image icon-image"></i>
+                  <span class="text">[{{ t.tweet.attachments?.media_keys.length }}]</span>
+                  <i class="iconfont window icon-new-window-s"></i>
                 </ulink>
               </div>
               <div class="meta">
+                <ulink
+                  class="item link"
+                  title="To Tweet"
+                  :href="t.url"
+                  @mousedown="handleGtagEvent('twitter_detail_link')"
+                >
+                  <i class="iconfont twitter icon-twitter"></i>
+                  <span>Tweet</span>
+                  <i class="iconfont window icon-new-window-s"></i>
+                </ulink>
                 <span class="item reply">
                   <i class="iconfont icon-comment"></i>
                   <span>{{ t.tweet.public_metrics.reply_count }}</span>
@@ -125,7 +135,7 @@
   import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
   import { getTwitterTweetDetailURL } from '/@/transforms/media'
   import { timeAgo } from '/@/transforms/moment'
-  import { unescape } from '/@/transforms/text'
+  import { unescape, padStart } from '/@/transforms/text'
 
   export default defineComponent({
     name: 'IndexTwitter',
@@ -226,6 +236,7 @@
         LANGUAGE_KEYS,
         completedTweets,
         activeIndex,
+        padStart,
         humanlizeDate,
         prevSlide,
         nextSlide,
@@ -242,7 +253,7 @@
   @import 'src/styles/init.scss';
 
   $twitter-height: 66px;
-  $content-height: 40px;
+  $content-height: 42px;
   $userinfo-width: 12rem;
 
   .twitter {
@@ -286,10 +297,11 @@
 
         .userinfo {
           display: flex;
+          margin-right: 2px;
 
           .logo-link {
             position: relative;
-            margin-right: $sm-gap;
+            margin-right: 10px;
             background-color: $twitter-primary;
             color: $white;
             opacity: 0.9;
@@ -326,15 +338,23 @@
             height: $content-height;
 
             .item {
-              font-size: $font-size-small;
+              &.top {
+                margin-top: -2px;
+              }
+              &.bottom {
+                margin-bottom: -1px;
+              }
 
               .count {
+                font-size: $font-size-small + 1;
                 margin-right: $xs-gap;
                 font-weight: bold;
               }
 
               .text {
                 color: $text-disabled;
+                font-size: $font-size-small;
+                letter-spacing: 1px;
               }
             }
           }
@@ -367,7 +387,7 @@
             display: flex;
             height: 20px;
             line-height: 20px;
-            margin-bottom: 0.4em;
+            margin-bottom: 6px;
             $content-gap: 0.3em;
 
             .reference {
@@ -375,10 +395,16 @@
             }
 
             .main {
-              margin-right: $content-gap;
-              max-width: 88%;
+              max-width: 96%;
               font-weight: bold;
               @include text-overflow();
+              &.has-image {
+                max-width: #{calc(100% - 40px)};
+              }
+
+              & + .end-link {
+                margin-left: $content-gap;
+              }
 
               ::v-deep(.link) {
                 font-weight: normal;
@@ -403,32 +429,34 @@
 
             .end-link {
               position: relative;
-              color: $text-divider;
-              @include color-transition();
-              &.image,
+              color: $text-secondary;
               &.empty {
                 color: $text;
               }
               &:hover {
-                color: $link-color;
-              }
-
-              .text,
-              .iconfont {
-                vertical-align: top;
+                &,
+                .iconfont {
+                  color: $link-color !important;
+                }
               }
 
               .text {
                 margin-left: $xs-gap;
-                font-size: $font-size-small - 1;
+                vertical-align: top;
+                font-size: $font-size-small;
+                @include color-transition();
               }
 
               .iconfont {
-                &.icon {
-                  font-size: $font-size-base;
+                vertical-align: top;
+                @include color-transition();
+
+                &.image {
+                  font-size: $font-size-base + 1;
                 }
 
                 &.window {
+                  color: $text-disabled;
                   position: absolute;
                   top: -0.6em;
                   right: -1.2em;
@@ -446,13 +474,25 @@
 
             .item {
               display: inline-block;
-              margin-right: $gap;
+              margin-right: $lg-gap;
               font-size: $font-size-small;
               color: $text-divider;
               @include color-transition();
               .iconfont {
                 margin-right: $xs-gap;
                 font-size: $font-size-small - 1;
+              }
+
+              &.link {
+                .window {
+                  margin-right: 0;
+                  margin-left: 2px;
+                  font-size: 10px;
+                }
+
+                &:hover {
+                  color: $text;
+                }
               }
 
               &.location {

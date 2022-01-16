@@ -8,9 +8,11 @@ import _escape from 'lodash/escape'
 import _unescape from 'lodash/unescape'
 import _truncate from 'lodash/truncate'
 import _capitalize from 'lodash/capitalize'
+import _padStart from 'lodash/padStart'
 
 export const escape = _escape
 export const unescape = _unescape
+export const padStart = _padStart
 export const textOverflow = _truncate
 export const firstUpperCase = _capitalize
 

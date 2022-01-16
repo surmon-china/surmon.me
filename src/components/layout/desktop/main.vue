@@ -24,6 +24,7 @@
       class="main-container"
       :class="{ 'full-page': layoutColumn.isFull }"
     >
+      <!-- MARK: keep order > long content > flicker -->
       <nav-view class="nav-view" v-if="layoutColumn.isNormal" />
       <aside-view class="aside-view" v-if="layoutColumn.isNormal" />
       <div
