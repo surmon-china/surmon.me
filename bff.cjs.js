@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.7
+* Surmon.me v3.6.8
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
