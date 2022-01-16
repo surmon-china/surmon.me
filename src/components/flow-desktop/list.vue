@@ -67,13 +67,13 @@
         @click="handleLoadmore"
       >
         <span class="icon">
-          <i class="iconfont icon-peachblossom"></i>
+          <i class="iconfont icon-loadmore"></i>
         </span>
-        <div class="text" :class="{ en: !isZhLang }">
+        <span class="text" :class="{ en: !isZhLang }">
           <i18n v-if="fetching" :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADING" />
           <i18n v-else-if="isLoadMoreEnabled" :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE" />
           <i18n v-else :lkey="LANGUAGE_KEYS.ARTICLE_LIST_NO_MORE" />
-        </div>
+        </span>
       </button>
     </div>
   </div>
@@ -239,7 +239,8 @@
           }
         }
 
-        .iconfont {
+        .icon {
+          font-weight: bold;
           color: $text-secondary;
           @include color-transition();
         }

@@ -118,7 +118,10 @@
       })
 
       const fetchAllData = () => {
-        return Promise.all([lensStore.fetchInstagramMedias(), lensStore.fetchYouTubePlaylist()])
+        return Promise.all([
+          lensStore.fetchInstagramMedias().catch((e) => {}),
+          lensStore.fetchYouTubePlaylist().catch((e) => {})
+        ])
       }
 
       useUniversalFetch(() => fetchAllData())

@@ -46,9 +46,8 @@
   @import 'src/styles/init.scss';
 
   .footer {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    justify-content: center;
     height: $footer-height;
     margin-top: $lg-gap;
     @include common-bg-module();

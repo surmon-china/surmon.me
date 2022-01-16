@@ -28,7 +28,6 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { isSSR } from '/@/app/environment'
   import { useUniversalFetch, onClient } from '/@/universal'
   import { useTwitterStore } from '/@/store/twitter'
   import { useArticleListStore } from '/@/store/article'
@@ -67,13 +66,11 @@
       }
 
       useUniversalFetch(() => {
-        const twitterUserinfoPromise = twitterStore.fetchUserinfo()
-        const twitterTweetsPromise = twitterStore.fetchTweets()
-        const promises = [articleListStore.fetchList()]
-        if (isSSR) {
-          promises.push(twitterUserinfoPromise, twitterTweetsPromise)
-        }
-        return Promise.all(promises)
+        return Promise.all([
+          articleListStore.fetchList(),
+          twitterStore.fetchUserinfo().catch((e) => {}),
+          twitterStore.fetchTweets().catch((e) => {})
+        ])
       })
 
       return {
