@@ -2,11 +2,12 @@ import fs from 'fs'
 import path from 'path'
 import { Express } from 'express'
 import { createServer } from 'vite'
-import { resolveTemplate } from './template'
-import { ROOT_PATH } from '../helper'
 import type { RenderResult } from '@/ssr'
+import { ROOT_PATH } from '../helpers/configurer'
+import { CacheClient } from '../cache'
+import { resolveTemplate } from './template'
 
-export const enableDevRuntime = async (app: Express) => {
+export const enableDevRenderer = async (app: Express, cache: CacheClient) => {
   const viteServer = await createServer({
     root: process.cwd(),
     logLevel: 'info',
@@ -28,7 +29,7 @@ export const enableDevRuntime = async (app: Express) => {
     try {
       const url = request.originalUrl
       template = await viteServer.transformIndexHtml(url, template)
-      const redered: RenderResult = await renderApp(request)
+      const redered: RenderResult = await renderApp(request, cache)
       response
         .status(redered.code)
         .set({ 'Content-Type': 'text/html' })

@@ -6,7 +6,7 @@
 
 import axios from 'axios'
 import { META } from '@/config/app.config'
-import { NODEPRESS_API } from '../helper'
+import { NODEPRESS_API } from '../helpers/configurer'
 
 export const getPageURL = (page) => `${META.url}/${page}`
 export const getTagURL = (tag) => `${META.url}/tag/${tag}`

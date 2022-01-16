@@ -4,7 +4,6 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import fs from 'fs'
 import path from 'path'
 import { isDev } from '@/environment'
 

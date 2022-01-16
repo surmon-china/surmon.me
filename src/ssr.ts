@@ -4,7 +4,6 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import LRU from 'lru-cache'
 import serialize from 'serialize-javascript'
 import { Request } from 'express'
 import { createSSRApp, ref } from 'vue'
@@ -15,22 +14,18 @@ import { Theme, THEME_STORAGE_KEY } from '/@/services/theme'
 import { MetaResult } from '/@/services/meta'
 import { INVALID_ERROR } from '/@/constants/error'
 import { createVueApp, VueApp } from '/@/app/main'
-import { isDev } from '/@/environment'
 import { renderSSRContextScript, getSSRContextByApp, renderSSRSymbleScript } from '/@/universal'
+import { isDev } from '/@/environment'
+import type { CacheClient } from '/@/server/cache'
 
 const devDebug = (...args) => isDev && console.debug(`-----`, ...args)
 
-// cache https://github.com/isaacs/node-lru-cache
-const renderCache = new LRU({
-  max: Infinity,
-  maxAge: 1000 * 60 * 1 // ms > 1 minutes
-})
 const getCacheKey = (vueApp: VueApp, url: string): string => {
   const { i18n, theme, globalState } = vueApp
   const language = i18n.language.value
   const themeValue = theme.theme.value
   const device = globalState.userAgent.isMobile ? 'mobile' : 'desktop'
-  return `${url}-${language}-${themeValue}-${device}`
+  return `ssr_${url}_${language}_${themeValue}_${device}`
 }
 
 // app creater
@@ -130,19 +125,19 @@ export const renderError = async (request: Request, error: Error): Promise<Rende
 }
 
 // app renderer
-export const renderApp = async (request: Request): Promise<RenderResult> => {
+export const renderApp = async (request: Request, cache: CacheClient): Promise<RenderResult> => {
   const app = createApp(request)
   const { originalUrl: url } = request
   const SUCCESS_STATUS = 200
 
   // render from cache
   const cacheKey = getCacheKey(app, url)
-  const hasCache = renderCache.has(cacheKey)
-  devDebug('cache key:', cacheKey, hasCache)
-  if (hasCache) {
-    const cache = renderCache.get(cacheKey)
+  const isCached = await cache.has(cacheKey)
+  devDebug('cache key:', cacheKey, isCached)
+  if (isCached) {
+    const cached = await cache.get(cacheKey)
     return {
-      ...cache,
+      ...cached,
       code: SUCCESS_STATUS
     }
   }
@@ -150,8 +145,12 @@ export const renderApp = async (request: Request): Promise<RenderResult> => {
   try {
     const rendered = await renderHTML(app, url)
     const cacheAge = app.router.currentRoute.value.meta?.ssrCacheAge
-    if (typeof cacheAge === 'number' && cacheAge > 0) {
-      renderCache.set(cacheKey, rendered, cacheAge * 1000)
+    if (cacheAge !== false && typeof cacheAge === 'number' && cacheAge > 0) {
+      if (cacheAge === Infinity) {
+        cache.set(cacheKey, rendered)
+      } else {
+        cache.set(cacheKey, rendered, cacheAge)
+      }
     }
     return {
       code: SUCCESS_STATUS,

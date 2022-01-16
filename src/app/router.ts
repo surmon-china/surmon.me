@@ -48,8 +48,8 @@ declare module 'vue-router' {
     responsive?: boolean
     layout?: LayoutColumn
     validate?: (params: any) => Promise<any>
-    /** seconds */
-    ssrCacheAge?: number | false
+    /** seconds | infinity | false: disabled  */
+    ssrCacheAge: number | false
   }
 }
 
@@ -299,7 +299,7 @@ export const routes: RouteRecordRaw[] = [
     meta: {
       responsive: false,
       layout: LayoutColumn.Full,
-      ssrCacheAge: 60 * 60 * 4 // 4 hours
+      ssrCacheAge: 60 * 60 * 1 // 1 hours
     }
   },
   {
@@ -337,6 +337,7 @@ export const routes: RouteRecordRaw[] = [
     path: '/:error(.*)',
     component: {},
     meta: {
+      ssrCacheAge: false,
       async validate({ i18n }) {
         return Promise.reject({
           code: NOT_FOUND,

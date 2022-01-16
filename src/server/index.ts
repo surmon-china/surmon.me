@@ -9,22 +9,27 @@ import express from 'express'
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import { PROXY_ROUTE_PATH, proxyer } from './proxy'
+import { initCacheClient } from './cache'
 
-export const createExpressApp = () => {
+export const createExpressApp = async () => {
+  // init cache client
+  const cache = await initCacheClient()
+
   // init app
   const app = express()
   const server = http.createServer(app)
 
-  // proxy
+  // app proxy
   app.use(PROXY_ROUTE_PATH, proxyer())
 
-  // middlewares
+  // app middlewares
   app.use(express.json())
   app.use(cookieParser())
   app.use(compression())
 
   return {
     app,
-    server
+    server,
+    cache
   }
 }

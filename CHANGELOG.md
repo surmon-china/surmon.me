@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.6.1 (2022-01-16)
+
+**Feature**
+
+- Improve cache & cacher (Redis first & LRU second)
+
 ### v3.6.0 (2022-01-15)
 
 **Feature**

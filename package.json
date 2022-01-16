@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "description": "Surmon.me blog",
   "author": {
     "name": "Surmon",
@@ -51,6 +51,7 @@
     "pinia": "^2.0.9",
     "qrcode": "^1.5.0",
     "qs": "^6.10.3",
+    "redis": "^4.0.2",
     "rss": "^1.2.2",
     "sanitize-html": "^2.6.1",
     "serialize-javascript": "^6.0.0",

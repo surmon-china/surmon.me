@@ -5,23 +5,24 @@
  */
 
 import { getBFFServerPort } from '@/config/bff.config'
-import { enableProdRuntime } from './server/runtime/prod'
+import { enableProdRenderer } from './server/renderer/prod'
 import { createExpressApp } from './server'
 
-const { app, server } = createExpressApp()
+let slsServer: Awaited<ReturnType<typeof createExpressApp>> | null = null
 
 // TODO
-enableProdRuntime(app)
-server.listen(getBFFServerPort())
-
-// MARK
-export const initializer = (context, callback) => {
+export const initializer = async (context, callback) => {
   console.log('serverless initializing')
+  slsServer = await createExpressApp()
+  enableProdRenderer(slsServer.app, slsServer.cache)
+  slsServer.server.listen(getBFFServerPort())
   callback(null, '')
 }
 
 // MARK
 export const handler = (request, response, context) => {
+  // slsServer?.app
+  // ...
   console.log('hello world')
   response.send('hello world')
 }
