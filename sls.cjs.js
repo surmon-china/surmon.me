@@ -1,10 +1,10 @@
 /*!
-* Surmon.me v3.6.0
+* Surmon.me v3.6.1
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
 */
-'use strict';Object.defineProperty(exports,'__esModule',{value:true});var fs=require('fs'),path=require('path'),http=require('http'),express=require('express'),compression=require('compression'),cookieParser=require('cookie-parser'),httpProxy=require('http-proxy');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var http__default=/*#__PURE__*/_interopDefaultLegacy(http);var express__default=/*#__PURE__*/_interopDefaultLegacy(express);var compression__default=/*#__PURE__*/_interopDefaultLegacy(compression);var cookieParser__default=/*#__PURE__*/_interopDefaultLegacy(cookieParser);/**
+'use strict';Object.defineProperty(exports,'__esModule',{value:true});var fs=require('fs'),path=require('path'),http=require('http'),express=require('express'),compression=require('compression'),cookieParser=require('cookie-parser'),httpProxy=require('http-proxy'),LRU=require('lru-cache'),redis=require('redis');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var http__default=/*#__PURE__*/_interopDefaultLegacy(http);var express__default=/*#__PURE__*/_interopDefaultLegacy(express);var compression__default=/*#__PURE__*/_interopDefaultLegacy(compression);var cookieParser__default=/*#__PURE__*/_interopDefaultLegacy(cookieParser);var LRU__default=/*#__PURE__*/_interopDefaultLegacy(LRU);/**
  * @file BFF server config
  * @module config.bff
  * @author Surmon <https://github.com/surmon-china>
@@ -51,12 +51,12 @@ isDev ? path__default["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;co
         .replace(`<body>`, () => `<body ${metas.bodyAttrs}>`)
         .replace(`</body>`, () => `\n${bodyScripts}\n</body>`);
     return html;
-};const enableProdRuntime = async (app) => {
+};const enableProdRenderer = async (app, cache) => {
     const template = fs__default["default"].readFileSync(path__default["default"].resolve(DIST_PATH, 'template.html'), 'utf-8');
     const { renderApp, renderError } = require(path__default["default"].resolve(PRDO_SERVER_PATH, 'ssr.js'));
     app.use('*', async (request, response) => {
         try {
-            const redered = await renderApp(request);
+            const redered = await renderApp(request, cache);
             response
                 .status(redered.code)
                 .set({ 'Content-Type': 'text/html' })
@@ -204,40 +204,212 @@ const proxyer = () => {
         });
     };
 };/**
+ * @file App config
+ * @module config.app
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const META = Object.freeze({
+    title: 'Surmon.me',
+    sub_title: '来苏之望',
+    domain: 'surmon.me',
+    url: 'https://surmon.me',
+    author: 'Surmon'
+});
+const THIRD_IDS = Object.freeze({
+    YOUTUBE_CHANNEL_ID: `UCoL-j6T28PLSJ2U6ZdONS0w`,
+    MUSIC_163_BGM_ALBUM_ID: '638949385',
+    BILIBILI_USER_ID: '27940710',
+    GITHUB_USER_ID: 'surmon-china',
+    TWITTER_USER_ID: 'surmon7788'
+});
+Object.freeze([
+    {
+        name: '吕立青的博客',
+        url: 'https://blog.jimmylv.info'
+    },
+    {
+        name: `nighca's log`,
+        url: 'https://nighca.me'
+    }
+]);
+Object.freeze([
+    {
+        name: 'iconfont',
+        url: 'https://www.iconfont.cn/'
+    },
+    {
+        name: `GitHub`,
+        url: 'https://github.com'
+    },
+    {
+        name: `PM2`,
+        url: 'https://pm2.keymetrics.io/'
+    },
+    {
+        name: `Vite`,
+        url: 'https://vitejs.dev/'
+    },
+    {
+        name: `Disqus`,
+        url: 'https://disqus.com/'
+    }
+]);
+Object.freeze({
+    RSS: '/rss.xml',
+    SITE_MAP: '/sitemap.xml',
+    SPONSOR: '/sponsor',
+    GITHUB_SURMON_ME: 'https://github.com/surmon-china/surmon.me',
+    GITHUB_NODEPRESS: 'https://github.com/surmon-china/nodepress',
+    GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
+    GITHUB_BLOG_STAR_LIST: 'https://github.com/stars/surmon-china/lists/surmon-me',
+    APP_APK_FILE: 'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
+    THROW_ERROR: 'https://throwerror.io',
+    FOX_FINDER: 'https://foxfinder.io',
+    GITHUB: 'https://github.com/surmon-china',
+    GITHUB_SPONSORS: 'https://github.com/sponsors/surmon-china',
+    PAYPAL: 'https://www.paypal.me/surmon',
+    UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
+    MARKDOWN: 'https://daringfireball.net/projects/markdown/',
+    GOOGLE_LIVE_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3',
+    QQ_GROUP: 'https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4',
+    TELEGRAM: 'https://t.me/surmon',
+    TELEGRAM_GROUP: 'https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA',
+    SPOTIFY: 'https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o',
+    MUSIC_163: `https://music.163.com/#/playlist?id=${THIRD_IDS.MUSIC_163_BGM_ALBUM_ID}`,
+    YOUTUBE_CHANNEL: `https://www.youtube.com/channel/${THIRD_IDS.YOUTUBE_CHANNEL_ID}`,
+    DOUBAN: 'https://www.douban.com/people/nocower',
+    ZHIHU: 'https://www.zhihu.com/people/surmon',
+    WEIBO: 'https://weibo.com/surmon',
+    QUORA: 'https://www.quora.com/profile/Surmon',
+    BILIBILI: `https://space.bilibili.com/${THIRD_IDS.BILIBILI_USER_ID}`,
+    STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon?tab=profile',
+    LEETCODE_CN: 'https://leetcode-cn.com/u/surmon',
+    LINKEDIN: 'https://www.linkedin.com/in/surmon',
+    INSTAGRAM: 'https://www.instagram.com/surmon666',
+    TWITTER: `https://twitter.com/${THIRD_IDS.TWITTER_USER_ID}`
+});/**
+ * @file Universal Server cache
+ * @module server.cache
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const getLRUClient = () => {
+    // https://github.com/isaacs/node-lru-cache
+    const lruCache = new LRU__default["default"]({
+        max: Infinity,
+        maxAge: -1 // MARK: default never expire
+    });
+    return {
+        set: (key, value, maxAge) => {
+            return maxAge ? lruCache.set(key, value, maxAge * 1000) : lruCache.set(key, value);
+        },
+        get: (key) => lruCache.get(key),
+        has: (key) => lruCache.has(key),
+        delete: (key) => lruCache.del(key),
+        clear: () => lruCache.reset()
+    };
+};
+const getRedisClient = async () => {
+    // https://github.com/redis/node-redis
+    const client = redis.createClient({
+        socket: {
+            // Only once connect! Redis error > reject
+            reconnectStrategy: () => new Error(`can't connect to Redis!`)
+        }
+    });
+    client.on('connect', () => console.info('[redis]', 'connecting...'));
+    client.on('reconnecting', () => console.info('[redis]', 'reconnecting...'));
+    client.on('ready', () => console.info('[redis]', 'readied!'));
+    client.on('error', (error) => console.warn('[redis]', 'Client Error!', error.message || error));
+    await client.connect();
+    const getCacheKey = (key) => {
+        const cacheKeyPrefix = META.domain.replace(/\./gi, '_');
+        return `__${cacheKeyPrefix}_${key}`;
+    };
+    const set = async (key, value, maxAge) => {
+        const _value = value ? JSON.stringify(value) : '';
+        if (maxAge) {
+            // https://redis.io/commands/setex
+            await client.setEx(getCacheKey(key), maxAge, _value);
+        }
+        else {
+            await client.set(getCacheKey(key), _value);
+        }
+    };
+    const get = async (key) => {
+        const value = await client.get(getCacheKey(key));
+        return value ? JSON.parse(value) : value;
+    };
+    const has = async (key) => {
+        const value = await client.exists(getCacheKey(key));
+        return Boolean(value);
+    };
+    const del = (key) => client.del(getCacheKey(key));
+    const clear = async () => {
+        const keys = await client.keys(getCacheKey('*'));
+        if (keys.length) {
+            await client.del(keys);
+        }
+    };
+    return {
+        set,
+        get,
+        has,
+        delete: del,
+        clear
+    };
+};
+const initCacheClient = async () => {
+    let cacheClient = null;
+    try {
+        cacheClient = await getRedisClient();
+        console.info('[cache]', 'Redis store readied!');
+    }
+    catch (error) {
+        cacheClient = getLRUClient();
+        console.info('[cache]', 'LRU store readied!');
+    }
+    await cacheClient.clear();
+    return cacheClient;
+};/**
  * @file BFF Server main
  * @module server.index
  * @author Surmon <https://github.com/surmon-china>
  */
-const createExpressApp = () => {
+const createExpressApp = async () => {
+    // init cache client
+    const cache = await initCacheClient();
     // init app
     const app = express__default["default"]();
     const server = http__default["default"].createServer(app);
-    // proxy
+    // app proxy
     app.use(PROXY_ROUTE_PATH, proxyer());
-    // middlewares
+    // app middlewares
     app.use(express__default["default"].json());
     app.use(cookieParser__default["default"]());
     app.use(compression__default["default"]());
     return {
         app,
-        server
+        server,
+        cache
     };
 };/**
  * @file Serverless server entry
  * @module Serverless
  * @author Surmon <https://github.com/surmon-china>
  */
-const { app, server } = createExpressApp();
+let slsServer = null;
 // TODO
-enableProdRuntime(app);
-server.listen(getBFFServerPort());
-// MARK
-const initializer = (context, callback) => {
+const initializer = async (context, callback) => {
     console.log('serverless initializing');
+    slsServer = await createExpressApp();
+    enableProdRenderer(slsServer.app, slsServer.cache);
+    slsServer.server.listen(getBFFServerPort());
     callback(null, '');
 };
 // MARK
 const handler = (request, response, context) => {
+    // slsServer?.app
+    // ...
     console.log('hello world');
     response.send('hello world');
 };exports.handler=handler;exports.initializer=initializer;//# sourceMappingURL=sls.cjs.js.map

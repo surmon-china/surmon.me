@@ -1,10 +1,10 @@
 /*!
-* Surmon.me v3.6.0
+* Surmon.me v3.6.1
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
 */
-'use strict';var express=require('express'),RSS=require('rss'),axios=require('axios'),path=require('path'),stream=require('stream'),sitemap=require('sitemap'),WonderfulBingWallpaper=require('wonderful-bing-wallpaper'),yargs=require('yargs'),NeteaseMusic=require('simple-netease-cloud-music'),fs=require('fs'),vite=require('vite'),LRU=require('lru-cache'),http=require('http'),compression=require('compression'),cookieParser=require('cookie-parser'),httpProxy=require('http-proxy');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var express__default=/*#__PURE__*/_interopDefaultLegacy(express);var RSS__default=/*#__PURE__*/_interopDefaultLegacy(RSS);var axios__default=/*#__PURE__*/_interopDefaultLegacy(axios);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var WonderfulBingWallpaper__default=/*#__PURE__*/_interopDefaultLegacy(WonderfulBingWallpaper);var NeteaseMusic__default=/*#__PURE__*/_interopDefaultLegacy(NeteaseMusic);var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var LRU__default=/*#__PURE__*/_interopDefaultLegacy(LRU);var http__default=/*#__PURE__*/_interopDefaultLegacy(http);var compression__default=/*#__PURE__*/_interopDefaultLegacy(compression);var cookieParser__default=/*#__PURE__*/_interopDefaultLegacy(cookieParser);/**
+'use strict';var express=require('express'),RSS=require('rss'),axios=require('axios'),path=require('path'),stream=require('stream'),sitemap=require('sitemap'),WonderfulBingWallpaper=require('wonderful-bing-wallpaper'),yargs=require('yargs'),NeteaseMusic=require('simple-netease-cloud-music'),fs=require('fs'),vite=require('vite'),http=require('http'),compression=require('compression'),cookieParser=require('cookie-parser'),httpProxy=require('http-proxy'),LRU=require('lru-cache'),redis=require('redis');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var express__default=/*#__PURE__*/_interopDefaultLegacy(express);var RSS__default=/*#__PURE__*/_interopDefaultLegacy(RSS);var axios__default=/*#__PURE__*/_interopDefaultLegacy(axios);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var WonderfulBingWallpaper__default=/*#__PURE__*/_interopDefaultLegacy(WonderfulBingWallpaper);var NeteaseMusic__default=/*#__PURE__*/_interopDefaultLegacy(NeteaseMusic);var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var http__default=/*#__PURE__*/_interopDefaultLegacy(http);var compression__default=/*#__PURE__*/_interopDefaultLegacy(compression);var cookieParser__default=/*#__PURE__*/_interopDefaultLegacy(cookieParser);var LRU__default=/*#__PURE__*/_interopDefaultLegacy(LRU);/**
  * @file Dev environment
  * @module environment
  * @author Surmon <https://github.com/surmon-china>
@@ -529,7 +529,7 @@ const getSongList = async () => {
         .replace(`<body>`, () => `<body ${metas.bodyAttrs}>`)
         .replace(`</body>`, () => `\n${bodyScripts}\n</body>`);
     return html;
-};const enableDevRuntime = async (app) => {
+};const enableDevRenderer = async (app, cache) => {
     const viteServer = await vite.createServer({
         root: process.cwd(),
         logLevel: 'info',
@@ -549,7 +549,7 @@ const getSongList = async () => {
         try {
             const url = request.originalUrl;
             template = await viteServer.transformIndexHtml(url, template);
-            const redered = await renderApp(request);
+            const redered = await renderApp(request, cache);
             response
                 .status(redered.code)
                 .set({ 'Content-Type': 'text/html' })
@@ -571,12 +571,12 @@ const getSongList = async () => {
             }));
         }
     });
-};const enableProdRuntime = async (app) => {
+};const enableProdRenderer = async (app, cache) => {
     const template = fs__default["default"].readFileSync(path__default["default"].resolve(DIST_PATH, 'template.html'), 'utf-8');
     const { renderApp, renderError } = require(path__default["default"].resolve(PRDO_SERVER_PATH, 'ssr.js'));
     app.use('*', async (request, response) => {
         try {
-            const redered = await renderApp(request);
+            const redered = await renderApp(request, cache);
             response
                 .status(redered.code)
                 .set({ 'Content-Type': 'text/html' })
@@ -625,53 +625,47 @@ const responser = (promise) => {
  * @module server.cacher
  * @author Surmon <https://github.com/surmon-china>
  */
-const bffCache = new LRU__default["default"]({
-    max: Infinity,
-    maxAge: 1000 * 60 * 60 * 2 // 2 hour cache
-});
+// fetch & cache
+const fetchAndCache = async (config) => {
+    const data = await config.getter();
+    await config.cache.set(config.key, data, config.age);
+    return data;
+};
+// timeout prefetch
+const setTimeoutPreRefresh = (config, preSeconds, refreshCount = 1) => {
+    const timeoutSeconds = config.age - preSeconds;
+    console.info('[cacher] setTimeoutPreRefresh', `> ${config.key} + ${refreshCount}`, `> cache expire when after ${config.age}s`, `> pre refresh when after ${timeoutSeconds}s`);
+    setTimeout(async () => {
+        try {
+            await fetchAndCache(config);
+            setTimeoutPreRefresh(config, preSeconds, refreshCount + 1);
+        }
+        catch (error) {
+            console.warn(`[cacher] setTimeoutPreRefresh ERROR!`, `> ${config.key} + ${refreshCount}`, error);
+        }
+    }, timeoutSeconds * 1000);
+};
 const retryingMap = new Map();
-const retry = (config) => {
-    if (bffCache.has(config.key)) {
+const retryFetch = async (config) => {
+    if (await config.cache.has(config.key)) {
         retryingMap.set(config.key, false);
         return;
     }
-    config
-        .getter()
-        .then((data) => {
-        bffCache.set(config.key, data, config.age * 1000);
-    })
-        .catch((error) => {
+    try {
+        await fetchAndCache(config);
+    }
+    catch (error) {
         console.warn('[cacher] retry error:', error);
-    })
-        .finally(() => {
+    }
+    finally {
         retryingMap.set(config.key, false);
-    });
+    }
 };
 const cacher = async (config) => {
     // cached
-    if (bffCache.has(config.key)) {
-        return bffCache.get(config.key);
+    if (await config.cache.has(config.key)) {
+        return await config.cache.get(config.key);
     }
-    // fetch & cache
-    const fetchAndCache = async (_config) => {
-        const data = await _config.getter();
-        bffCache.set(_config.key, data, _config.age * 1000);
-        return data;
-    };
-    // timeout prefetch
-    const setTimeoutPreRefresh = (_config, preSeconds, refreshCount = 1) => {
-        const whenSeconds = _config.age - preSeconds;
-        console.info('[cacher] setTimeoutPreRefresh', `> ${_config.key} + ${refreshCount}`, `> cache expire when after ${_config.age}s`, `> pre refresh when after ${whenSeconds}s`);
-        setTimeout(() => {
-            fetchAndCache(_config)
-                .then(() => {
-                setTimeoutPreRefresh(_config, preSeconds, refreshCount + 1);
-            })
-                .catch((error) => {
-                console.warn(`[cacher] setTimeoutPreRefresh ERROR!`, `> ${_config.key} + ${refreshCount}`, error);
-            });
-        }, whenSeconds * 1000);
-    };
     try {
         // 1. fetch & cache
         const data = await fetchAndCache(config);
@@ -684,7 +678,7 @@ const cacher = async (config) => {
         // retry only once
         if (config.retryWhen && !retryingMap.get(config.key)) {
             retryingMap.set(config.key, true);
-            setTimeout(() => retry({ ...config }), config.retryWhen * 1000);
+            setTimeout(() => retryFetch({ ...config }), config.retryWhen * 1000);
         }
         if (typeof error === 'string') {
             return Promise.reject(`cacher error > ${error}`);
@@ -814,23 +808,109 @@ const proxyer = () => {
         });
     };
 };/**
+ * @file Universal Server cache
+ * @module server.cache
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const getLRUClient = () => {
+    // https://github.com/isaacs/node-lru-cache
+    const lruCache = new LRU__default["default"]({
+        max: Infinity,
+        maxAge: -1 // MARK: default never expire
+    });
+    return {
+        set: (key, value, maxAge) => {
+            return maxAge ? lruCache.set(key, value, maxAge * 1000) : lruCache.set(key, value);
+        },
+        get: (key) => lruCache.get(key),
+        has: (key) => lruCache.has(key),
+        delete: (key) => lruCache.del(key),
+        clear: () => lruCache.reset()
+    };
+};
+const getRedisClient = async () => {
+    // https://github.com/redis/node-redis
+    const client = redis.createClient({
+        socket: {
+            // Only once connect! Redis error > reject
+            reconnectStrategy: () => new Error(`can't connect to Redis!`)
+        }
+    });
+    client.on('connect', () => console.info('[redis]', 'connecting...'));
+    client.on('reconnecting', () => console.info('[redis]', 'reconnecting...'));
+    client.on('ready', () => console.info('[redis]', 'readied!'));
+    client.on('error', (error) => console.warn('[redis]', 'Client Error!', error.message || error));
+    await client.connect();
+    const getCacheKey = (key) => {
+        const cacheKeyPrefix = META.domain.replace(/\./gi, '_');
+        return `__${cacheKeyPrefix}_${key}`;
+    };
+    const set = async (key, value, maxAge) => {
+        const _value = value ? JSON.stringify(value) : '';
+        if (maxAge) {
+            // https://redis.io/commands/setex
+            await client.setEx(getCacheKey(key), maxAge, _value);
+        }
+        else {
+            await client.set(getCacheKey(key), _value);
+        }
+    };
+    const get = async (key) => {
+        const value = await client.get(getCacheKey(key));
+        return value ? JSON.parse(value) : value;
+    };
+    const has = async (key) => {
+        const value = await client.exists(getCacheKey(key));
+        return Boolean(value);
+    };
+    const del = (key) => client.del(getCacheKey(key));
+    const clear = async () => {
+        const keys = await client.keys(getCacheKey('*'));
+        if (keys.length) {
+            await client.del(keys);
+        }
+    };
+    return {
+        set,
+        get,
+        has,
+        delete: del,
+        clear
+    };
+};
+const initCacheClient = async () => {
+    let cacheClient = null;
+    try {
+        cacheClient = await getRedisClient();
+        console.info('[cache]', 'Redis store readied!');
+    }
+    catch (error) {
+        cacheClient = getLRUClient();
+        console.info('[cache]', 'LRU store readied!');
+    }
+    await cacheClient.clear();
+    return cacheClient;
+};/**
  * @file BFF Server main
  * @module server.index
  * @author Surmon <https://github.com/surmon-china>
  */
-const createExpressApp = () => {
+const createExpressApp = async () => {
+    // init cache client
+    const cache = await initCacheClient();
     // init app
     const app = express__default["default"]();
     const server = http__default["default"].createServer(app);
-    // proxy
+    // app proxy
     app.use(PROXY_ROUTE_PATH, proxyer());
-    // middlewares
+    // app middlewares
     app.use(express__default["default"].json());
     app.use(cookieParser__default["default"]());
     app.use(compression__default["default"]());
     return {
         app,
-        server
+        server,
+        cache
     };
 };/**
  * @file BFF server entry
@@ -840,166 +920,180 @@ const createExpressApp = () => {
 // @ts-expect-error
 process.noDeprecation = true;
 // app
-const { app, server } = createExpressApp();
-// static
-app.use(express__default["default"].static(PUBLIC_PATH));
-// sitemap
-app.get('/sitemap.xml', async (_, response) => {
-    try {
-        const data = await cacher({
-            key: 'sitemap',
-            age: 60 * 60 * 2,
-            getter: getSitemapXML
-        });
-        response.header('Content-Type', 'application/xml');
-        response.send(data);
-    }
-    catch (error) {
-        erroror(response, error);
-    }
-});
-// rss
-app.get('/rss.xml', async (_, response) => {
-    try {
-        const data = await cacher({
-            key: 'rss',
-            age: 60 * 60 * 2,
-            getter: getRSSXML
-        });
-        response.header('Content-Type', 'application/xml');
-        response.send(data);
-    }
-    catch (error) {
-        erroror(response, error);
-    }
-});
-// gtag
-app.get('/effects/gtag', async (_, response) => {
-    try {
-        const data = await cacher({
-            key: 'gtag',
-            age: 60 * 60 * 24,
-            retryWhen: 60 * 60 * 1,
-            getter: getGTagScript
-        });
-        response.header('Content-Type', 'text/javascript');
-        response.send(data);
-    }
-    catch (error) {
-        erroror(response, error);
-    }
-});
-// GitHub chart svg
-app.get('/effects/ghchart', async (_, response) => {
-    try {
-        const data = await cacher({
-            key: 'ghchart',
-            age: 60 * 60 * 6,
-            retryWhen: 60 * 60 * 30,
-            getter: getGitHubChartSVG
-        });
-        response.header('Content-Type', 'image/svg+xml');
-        response.send(data);
-    }
-    catch (error) {
-        erroror(response, error);
-    }
-});
-// BiliBili videos
-app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`, responser(() => {
-    return cacher({
-        key: 'bilibili',
-        age: 60 * 60 * 1,
-        retryWhen: 60 * 5,
-        getter: getBiliBiliVideos
+createExpressApp().then(({ app, server, cache }) => {
+    // static
+    app.use(express__default["default"].static(PUBLIC_PATH));
+    // sitemap
+    app.get('/sitemap.xml', async (_, response) => {
+        try {
+            const data = await cacher({
+                cache,
+                key: 'sitemap',
+                age: 60 * 60 * 2,
+                getter: getSitemapXML
+            });
+            response.header('Content-Type', 'application/xml');
+            response.send(data);
+        }
+        catch (error) {
+            erroror(response, error);
+        }
     });
-}));
-// Bing wallpapers
-app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`, responser(() => {
-    return cacher({
-        key: 'wallpaper',
-        age: 60 * 60 * 8,
-        retryWhen: 60 * 30,
-        getter: getAllWallpapers
+    // rss
+    app.get('/rss.xml', async (_, response) => {
+        try {
+            const data = await cacher({
+                cache,
+                key: 'rss',
+                age: 60 * 60 * 2,
+                getter: getRSSXML
+            });
+            response.header('Content-Type', 'application/xml');
+            response.send(data);
+        }
+        catch (error) {
+            erroror(response, error);
+        }
     });
-}));
-// GitHub Repositories
-app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHub}`, responser(() => {
-    return cacher({
-        key: 'github',
-        age: 60 * 60 * 2,
-        retryWhen: 60 * 30,
-        getter: getGitHubRepositories
+    // gtag
+    app.get('/effects/gtag', async (_, response) => {
+        try {
+            const data = await cacher({
+                cache,
+                key: 'gtag',
+                age: 60 * 60 * 24,
+                retryWhen: 60 * 60 * 1,
+                getter: getGTagScript
+            });
+            response.header('Content-Type', 'text/javascript');
+            response.send(data);
+        }
+        catch (error) {
+            erroror(response, error);
+        }
     });
-}));
-// 163 music BGM list
-app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Music}`, responser(() => {
-    return cacher({
-        key: 'music',
-        age: 60 * 60 * 12,
-        retryWhen: 60 * 10,
-        getter: getSongList
+    // GitHub chart svg
+    app.get('/effects/ghchart', async (_, response) => {
+        try {
+            const data = await cacher({
+                cache,
+                key: 'ghchart',
+                age: 60 * 60 * 6,
+                retryWhen: 60 * 60 * 30,
+                getter: getGitHubChartSVG
+            });
+            response.header('Content-Type', 'image/svg+xml');
+            response.send(data);
+        }
+        catch (error) {
+            erroror(response, error);
+        }
     });
-}));
-// Twitter userinfo
-app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterUserInfo}`, responser(() => {
-    return cacher({
-        key: 'twitter_userinfo',
-        age: 60 * 60 * 12,
-        retryWhen: 60 * 10,
-        getter: getTwitterUserinfo
-    });
-}));
-// Twitter newest tweets
-app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterTweets}`, responser(() => {
-    return cacher({
-        key: 'twitter_tweets',
-        age: 60 * 60 * 2,
-        retryWhen: 60 * 10,
-        getter: getTwitterTweets
-    });
-}));
-// Instagram newest medias
-app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Instagram}`, responser(() => {
-    return cacher({
-        key: 'instagram',
-        age: 60 * 60 * 6,
-        retryWhen: 60 * 10,
-        getter: getInstagramMedias
-    });
-}));
-// YouTube platlists
-app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`, responser(() => {
-    return cacher({
-        key: 'youtube_playlist',
-        age: 60 * 60 * 24,
-        retryWhen: 60 * 10,
-        getter: getYouTubeChannelPlayLists
-    });
-}));
-// YouTube videos
-app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
-    const playlistID = request.query.id;
-    if (!playlistID || typeof playlistID !== 'string') {
-        return erroror(response, 'Invalid params');
-    }
-    responser(() => {
+    // BiliBili videos
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`, responser(() => {
         return cacher({
-            key: `youtube_playlist_${playlistID}`,
+            cache,
+            key: 'bilibili',
             age: 60 * 60 * 1,
-            retryWhen: 60 * 10,
-            getter: () => getYouTubeVideoListByPlayerlistID(playlistID)
+            retryWhen: 60 * 5,
+            getter: getBiliBiliVideos
         });
-    })(request, response, next);
-});
-// app effect
-isDev ? enableDevRuntime(app) : enableProdRuntime(app);
-// run
-server.listen(getBFFServerPort(), () => {
-    const infos = [
-        `in ${NODE_ENV}`,
-        `at ${new Date().toLocaleString()}`,
-        `listening on ${JSON.stringify(server.address())}`
-    ];
-    console.info('[surmon.me]', `Run! ${infos.join(', ')}.`);
+    }));
+    // Bing wallpapers
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`, responser(() => {
+        return cacher({
+            cache,
+            key: 'wallpaper',
+            age: 60 * 60 * 8,
+            retryWhen: 60 * 30,
+            getter: getAllWallpapers
+        });
+    }));
+    // GitHub Repositories
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHub}`, responser(() => {
+        return cacher({
+            cache,
+            key: 'github',
+            age: 60 * 60 * 2,
+            retryWhen: 60 * 30,
+            getter: getGitHubRepositories
+        });
+    }));
+    // 163 music BGM list
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Music}`, responser(() => {
+        return cacher({
+            cache,
+            key: 'music',
+            age: 60 * 60 * 12,
+            retryWhen: 60 * 10,
+            getter: getSongList
+        });
+    }));
+    // Twitter userinfo
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterUserInfo}`, responser(() => {
+        return cacher({
+            cache,
+            key: 'twitter_userinfo',
+            age: 60 * 60 * 12,
+            retryWhen: 60 * 10,
+            getter: getTwitterUserinfo
+        });
+    }));
+    // Twitter newest tweets
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterTweets}`, responser(() => {
+        return cacher({
+            cache,
+            key: 'twitter_tweets',
+            age: 60 * 60 * 2,
+            retryWhen: 60 * 10,
+            getter: getTwitterTweets
+        });
+    }));
+    // Instagram newest medias
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Instagram}`, responser(() => {
+        return cacher({
+            cache,
+            key: 'instagram',
+            age: 60 * 60 * 6,
+            retryWhen: 60 * 10,
+            getter: getInstagramMedias
+        });
+    }));
+    // YouTube platlists
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`, responser(() => {
+        return cacher({
+            cache,
+            key: 'youtube_playlist',
+            age: 60 * 60 * 24,
+            retryWhen: 60 * 10,
+            getter: getYouTubeChannelPlayLists
+        });
+    }));
+    // YouTube videos
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
+        const playlistID = request.query.id;
+        if (!playlistID || typeof playlistID !== 'string') {
+            return erroror(response, 'Invalid params');
+        }
+        responser(() => {
+            return cacher({
+                cache,
+                key: `youtube_playlist_${playlistID}`,
+                age: 60 * 60 * 1,
+                retryWhen: 60 * 10,
+                getter: () => getYouTubeVideoListByPlayerlistID(playlistID)
+            });
+        })(request, response, next);
+    });
+    // vue renderer
+    isDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache);
+    // run
+    server.listen(getBFFServerPort(), () => {
+        const infos = [
+            `in ${NODE_ENV}`,
+            `at ${new Date().toLocaleString()}`,
+            `listening on ${JSON.stringify(server.address())}`
+        ];
+        console.info('[surmon.me]', `Run! ${infos.join(', ')}.`);
+    });
 });//# sourceMappingURL=bff.cjs.js.map
