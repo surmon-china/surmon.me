@@ -1,5 +1,5 @@
 <template>
-  <aside :id="ASIDE_ELEMENT_ID" class="aside" ref="element">
+  <aside :id="ASIDE_ELEMENT_ID" class="desktop-aside" ref="element">
     <div class="module">
       <aside-search />
     </div>
@@ -139,11 +139,10 @@
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
 
-  .aside {
+  .desktop-aside {
     display: block;
+    padding: 0;
     width: $aside-width;
-    margin: 0;
-    margin-left: $lg-gap;
 
     .module {
       margin-bottom: $lg-gap;

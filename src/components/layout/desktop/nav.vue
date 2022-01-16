@@ -1,5 +1,5 @@
 <template>
-  <div :id="NAV_ELEMENT_ID" class="aside-nav">
+  <div :id="NAV_ELEMENT_ID" class="desktop-nav">
     <nav class="nav-list" :class="{ en: !isZhLang }">
       <template v-for="menu in menus" :key="menu.id">
         <span class="divider" v-if="menu.divider"></span>
@@ -80,10 +80,9 @@
 <style lang="scss" scoped>
   @import 'src/styles/init.scss';
 
-  .aside-nav {
+  .desktop-nav {
     width: $navbar-width;
     height: auto;
-    margin-right: $lg-gap;
 
     .nav-list {
       width: $navbar-width;
