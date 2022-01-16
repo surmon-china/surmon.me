@@ -52,7 +52,6 @@
     },
     setup(props) {
       const { i18n } = useEnhancer()
-
       const getTimeAgo = (date: string) => {
         return timeAgo(date, i18n.language.value as any)
       }

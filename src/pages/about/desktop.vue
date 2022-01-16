@@ -73,7 +73,7 @@
           <divider class="divider" type="vertical" />
           <span class="text"><i18n v-bind="i18ns.TelegramGroup" /></span>
         </ulink>
-        <button class="item sponsor" @click="handleOpenSponsor">
+        <button class="item sponsor" @click="handleSponsor">
           <i class="iconfont icon-heart" />
           <divider class="divider" type="vertical" />
           <span class="text"><i18n zh="赞助我" en="Sponsor" /></span>
@@ -252,7 +252,7 @@
         handleGTagEvent('roadmap_modal')
       }
 
-      const handleOpenSponsor = () => {
+      const handleSponsor = () => {
         globalState.switchTogglers.sponsorModal()
         handleGTagEvent('sponsor_modal')
       }
@@ -281,7 +281,7 @@
         backgroundVideo,
         adminInfo,
         handleGTagEvent,
-        handleOpenSponsor,
+        handleSponsor,
         handleOpenMap
       }
     }

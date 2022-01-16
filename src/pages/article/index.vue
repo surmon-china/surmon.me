@@ -11,9 +11,19 @@
             <div class="divider"></div>
             <article-meta
               :id="ANCHORS.ARTICLE_META_ELEMENT_ID"
-              :plain="isMobile"
               :article="article"
-            />
+              :plain="isMobile"
+            >
+              <template #action>
+                <article-upvote
+                  :likes="article.meta.likes"
+                  :is-liked="isLiked"
+                  :hidden-sponsor="isMobile"
+                  @like="handleLike"
+                  @sponsor="handleSponsor"
+                />
+              </template>
+            </article-meta>
           </div>
           <div class="module margin background">
             <div class="bridge left"></div>
@@ -48,17 +58,21 @@
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/universal'
+  import { useUniversalStore } from '/@/store/universal'
+  import { useArticleDetailStore } from '/@/store/article'
   import * as ANCHORS from '/@/constants/anchor'
   import { UNDEFINED } from '/@/constants/value'
-  import { useArticleDetailStore } from '/@/store/article'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import { useCommentStore } from '/@/store/comment'
   import { SocialMedia } from '/@/components/widget/share.vue'
   import Comment from '/@/components/comment/index.vue'
   import ArticleSkeleton from './skeleton.vue'
   import ArticleContent from './content.vue'
   import ArticleShare from './share.vue'
-  import ArticleRelated from './related.vue'
   import ArticleMeta from './meta.vue'
+  import ArticleUpvote from './upvote.vue'
+  import ArticleRelated from './related.vue'
 
   export default defineComponent({
     name: 'ArticleDetail',
@@ -68,6 +82,7 @@
       ArticleContent,
       ArticleShare,
       ArticleMeta,
+      ArticleUpvote,
       ArticleRelated
     },
     props: {
@@ -81,11 +96,40 @@
       }
     },
     setup(props) {
-      const { meta } = useEnhancer()
+      const { i18n, meta, gtag, globalState } = useEnhancer()
+      const universalStore = useUniversalStore()
       const articleDetailStore = useArticleDetailStore()
       const commentStore = useCommentStore()
       const article = computed(() => articleDetailStore.article || UNDEFINED)
       const fetching = computed(() => articleDetailStore.fetching)
+      const isLiked = computed(() =>
+        Boolean(article.value && universalStore.isLikedPage(article.value.id))
+      )
+
+      const handleSponsor = () => {
+        globalState.switchTogglers.sponsorModal()
+        gtag?.event('article_sponsor', {
+          event_category: GAEventCategories.Article
+        })
+      }
+
+      const handleLike = async () => {
+        if (isLiked.value) {
+          return false
+        }
+
+        gtag?.event('article_like', {
+          event_category: GAEventCategories.Article
+        })
+        try {
+          await articleDetailStore.postArticleLike(article.value!.id)
+          universalStore.likePage(article.value!.id)
+        } catch (error) {
+          const message = i18n.t(LANGUAGE_KEYS.POST_ACTION_ERROR)
+          console.warn(message, error)
+          alert(message)
+        }
+      }
 
       meta(() => ({
         pageTitle: article.value?.title,
@@ -111,10 +155,13 @@
       useUniversalFetch(() => fetchArticleDetail(props.articleId))
 
       return {
+        ANCHORS,
         SocialMedia,
         article,
         fetching,
-        ANCHORS
+        isLiked,
+        handleLike,
+        handleSponsor
       }
     }
   })

@@ -1,23 +1,7 @@
 <template>
   <div class="meta" :class="{ plain }">
     <div class="actions">
-      <button
-        class="button like"
-        :class="{ liked: isLiked }"
-        :disabled="isLiked"
-        @click="handleLike"
-      >
-        <i class="icon iconfont icon-like"></i>
-        <span class="text">
-          <i18n>
-            <template #zh>真棒！{{ likes }}</template>
-            <template #en>{{ isLiked ? 'Upvoted' : 'Upvote' }} {{ likes }}</template>
-          </i18n>
-        </span>
-      </button>
-      <button v-if="!plain" class="button sponsor" @click="handleOpenSponsor">
-        <i class="icon iconfont icon-heart"></i>
-      </button>
+      <slot name="action"></slot>
     </div>
     <div class="line">
       <i18n zh="本文于" en="Published at" />
@@ -45,9 +29,7 @@
         <i18n zh="未知分类下" en="(no catgory)" />
       </span>
       <template v-if="plain"><br /></template>
-      <template v-else>
-        <divider type="vertical" size="sm" />
-      </template>
+      <template v-else><divider type="vertical" size="sm" /></template>
       <span v-for="(tag, index) in article.tag" :key="index">
         <router-link
           class="link tag"
@@ -201,53 +183,6 @@
     .actions {
       margin-top: $sm-gap;
       margin-bottom: 2rem;
-      display: flex;
-      justify-content: center;
-
-      .button {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        height: 3rem;
-        line-height: 3rem;
-        padding: 0 $gap;
-        color: $white;
-        background-color: mix($white, $red, 10%);
-        &:hover {
-          background-color: $red;
-        }
-        &[disabled] {
-          opacity: 0.8;
-          background-color: mix($black, $red, 18%);
-        }
-        &:first-child {
-          border-top-left-radius: $sm-radius;
-          border-bottom-left-radius: $sm-radius;
-        }
-        &:last-child {
-          border-top-right-radius: $sm-radius;
-          border-bottom-right-radius: $sm-radius;
-        }
-        & + button {
-          /* https://github.com/ant-design/ant-design/blob/master/components/style/themes/variable.less#L121 */
-          border-left: 1px solid mix($white, $red, 26%);
-        }
-
-        &.like {
-          min-width: 8rem;
-          .icon {
-            font-size: $font-size-h2;
-          }
-          .text {
-            margin-left: $sm-gap;
-            font-weight: bold;
-          }
-        }
-
-        &.sponsor {
-          font-size: $font-size-h4;
-        }
-      }
     }
 
     .line {

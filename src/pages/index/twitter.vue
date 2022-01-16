@@ -298,7 +298,6 @@
 
         .userinfo {
           display: flex;
-          margin-right: 2px;
 
           .logo-link {
             position: relative;
@@ -348,7 +347,7 @@
 
               .count {
                 font-size: $font-size-small + 1;
-                margin-right: $xs-gap;
+                margin-right: 6px;
                 font-weight: bold;
               }
 
