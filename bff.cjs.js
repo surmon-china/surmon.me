@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.8
+* Surmon.me v3.6.9
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -398,7 +398,7 @@ const getTwitterUserTweetsByUID = async (UID) => {
             'tweet.fields': `attachments,author_id,context_annotations,conversation_id,created_at,entities,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,reply_settings,source,text,withheld`,
             'user.fields': `created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld`,
             'place.fields': `contained_within,country,country_code,full_name,id,name,place_type`,
-            'media.fields': `duration_ms,height,media_key,preview_image_url,type,url,width,public_metrics,non_public_metrics,organic_metrics,promoted_metrics`,
+            'media.fields': `duration_ms,height,media_key,preview_image_url,type,url,width,public_metrics`,
             max_results: 46
         },
         headers: {
