@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.9
+* Surmon.me v3.6.10
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -250,7 +250,7 @@ const getSitemapXML = async (archiveData) => {
             lastmodISO: new Date(article.update_at).toISOString()
         });
     });
-    return sitemap.streamToPromise(stream.Readable.from(sitemapItemList).pipe(sitemapStream));
+    return sitemap.streamToPromise(stream.Readable.from(sitemapItemList).pipe(sitemapStream)).then((data) => data.toString());
 };/**
  * @file Outside
  * @module service.outside
