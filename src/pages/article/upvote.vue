@@ -3,7 +3,7 @@
     <div class="wrapper">
       <button
         class="button like"
-        :class="{ liked: isLiked, newliked: newliked }"
+        :class="{ liked: isLiked, parkinson: enabledParkinson, newliked: newliked }"
         :disabled="isLiked"
         @click="handleLike"
       >
@@ -14,10 +14,12 @@
             <template #en>{{ isLiked ? 'Upvoted' : 'Upvote' }} {{ likes }}</template>
           </i18n>
         </span>
-        <span class="parkinson-mask">
-          <i class="iconfont" :class="newliked ? 'icon-like' : 'icon-like-pre'"></i>
-        </span>
-        <div class="parkinson-likes">+ 1</div>
+        <template v-if="enabledParkinson">
+          <span class="parkinson-mask">
+            <i class="iconfont" :class="newliked ? 'icon-like' : 'icon-like-pre'"></i>
+          </span>
+          <div class="parkinson-likes">+ 1</div>
+        </template>
       </button>
       <button v-if="!hiddenSponsor" class="button sponsor" @click="handleSponsor">
         <i class="icon iconfont icon-heart"></i>
@@ -48,6 +50,10 @@
         required: true
       },
       hiddenSponsor: {
+        type: Boolean,
+        default: false
+      },
+      enabledParkinson: {
         type: Boolean,
         default: false
       }
@@ -91,7 +97,7 @@
     $button-radius: $sm-radius;
     $like-icon-size: $font-size-h2;
     /* https://github.com/ant-design/ant-design/blob/master/components/style/themes/variable.less#L121 */
-    $lighter-color: mix($white, $red, 10%);
+    $lighter-red: mix($white, $red, 10%);
 
     .wrapper {
       position: relative;
@@ -104,15 +110,19 @@
         line-height: $button-size;
         padding: 0 $gap;
         border-width: 1px 0;
-        border-color: $lighter-color;
-        color: $lighter-color;
+        border-color: $lighter-red;
+        color: $lighter-red;
         transition: background-color $transition-time-fast, color $transition-time-fast;
         &[disabled] {
           color: $white;
-          background-color: mix($black, $red, 10%);
+          background-color: $lighter-red;
           &:not(.newliked) {
             opacity: 0.8;
           }
+        }
+        &:not([disabled]):not(.parkinson):hover {
+          color: $white;
+          background-color: $lighter-red;
         }
         &:first-of-type {
           border-left-width: 1px;
@@ -130,12 +140,7 @@
 
         &.sponsor {
           font-size: $font-size-h4;
-          &:hover {
-            color: $white;
-            background-color: $lighter-color;
-          }
         }
-
         &.like {
           min-width: 8rem;
           .icon {
@@ -148,7 +153,7 @@
         }
       }
 
-      .button.like {
+      .button.like.parkinson {
         .parkinson-mask {
           position: absolute;
           top: 0;

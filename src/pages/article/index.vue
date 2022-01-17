@@ -19,6 +19,7 @@
                   :likes="article.meta.likes"
                   :is-liked="isLiked"
                   :hidden-sponsor="isMobile"
+                  :enabled-parkinson="!isMobile && (userAgent.isChrome || userAgent.isFirefox)"
                   @like="handleLike"
                   @sponsor="handleSponsor"
                 />
@@ -158,6 +159,7 @@
       return {
         ANCHORS,
         SocialMedia,
+        userAgent: globalState.userAgent,
         article,
         fetching,
         isLiked,

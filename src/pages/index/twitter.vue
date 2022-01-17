@@ -63,19 +63,24 @@
                 <div class="reference" v-if="t.tweet.referenced_tweets?.length">[R]</div>
                 <div
                   class="main"
-                  :class="{ 'has-image': t.tweet.attachments?.media_keys.length }"
+                  :class="{ 'has-media': t.medias.length }"
                   v-if="t.html"
                   v-html="t.html"
                 ></div>
                 <ulink
-                  v-if="t.tweet.attachments?.media_keys.length"
+                  v-if="t.medias.length"
                   class="end-link"
                   :class="{ empty: !t.html }"
                   :href="t.url"
                   @mousedown="handleGtagEvent('twitter_image_link')"
                 >
-                  <i class="iconfont image icon-image"></i>
-                  <span class="text">[{{ t.tweet.attachments?.media_keys.length }}]</span>
+                  <template v-if="t.medias.find((m) => m.type === 'video')">
+                    <i class="iconfont media icon-video"></i>
+                  </template>
+                  <template v-else>
+                    <i class="iconfont media icon-image"></i>
+                  </template>
+                  <span class="text">[{{ t.medias.length }}]</span>
                   <i class="iconfont window icon-new-window-s"></i>
                 </ulink>
               </div>
@@ -192,6 +197,17 @@
         return null
       }
 
+      const getMedias = (tweet: any): any[] => {
+        const mediaKeys = tweet.attachments?.media_keys || []
+        if (mediaKeys.length) {
+          const medias = props.tweets.includes.media || []
+          return mediaKeys
+            .map((key) => medias.find((media) => media.media_key === key))
+            .filter(Boolean)
+        }
+        return []
+      }
+
       const completedTweets = computed(() => {
         const tweets = props.tweets
         if (!tweets?.data) {
@@ -203,6 +219,7 @@
             tweet,
             url: getTwitterTweetDetailURL(THIRD_IDS.TWITTER_USER_ID, tweet.id),
             location: getLocation(tweet),
+            medias: getMedias(tweet),
             html: unescape(tweet.text)
           }
 
@@ -398,7 +415,7 @@
               max-width: 96%;
               font-weight: bold;
               @include text-overflow();
-              &.has-image {
+              &.has-media {
                 max-width: #{calc(100% - 40px)};
               }
 
@@ -451,7 +468,7 @@
                 vertical-align: top;
                 @include color-transition();
 
-                &.image {
+                &.media {
                   font-size: $font-size-base + 1;
                 }
 
