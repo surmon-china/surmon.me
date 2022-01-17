@@ -64,7 +64,13 @@ const retryFetch = async (config: CacherConfig) => {
   }
 }
 
-export const cacher = async (config: CacherConfig) => {
+export const cacher = async (_config: CacherConfig) => {
+  // key prefix
+  const config = {
+    ..._config,
+    key: `bff_${_config.key}`
+  }
+
   // cached
   if (await config.cache.has(config.key)) {
     return await config.cache.get(config.key)

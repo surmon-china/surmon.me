@@ -46,6 +46,8 @@
 /// Backdrop drop effect
 @mixin backdrop-blur($blur-radius: 5px) {
   backdrop-filter: blur($blur-radius);
+  // for Safari
+  -webkit-backdrop-filter: blur($blur-radius);
 }
 
 /// Box shadow

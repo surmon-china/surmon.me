@@ -163,9 +163,9 @@
         justify-content: center;
         align-items: center;
         z-index: $z-index-normal + 1;
-        backdrop-filter: blur(2px);
         background-color: rgba(#000, 0.3);
         color: rgba($white, 0.8);
+        @include backdrop-blur(2px);
         @include hidden();
         @include visibility-transition();
 

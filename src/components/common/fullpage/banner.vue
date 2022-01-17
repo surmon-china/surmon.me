@@ -70,7 +70,7 @@
       text-align: center;
       color: $white;
       &.blur {
-        backdrop-filter: blur(3px);
+        @include backdrop-blur(3px);
       }
 
       .title {

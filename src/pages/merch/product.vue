@@ -124,7 +124,7 @@
       bottom: 0;
       left: 0;
       background-color: $module-bg;
-      backdrop-filter: blur(5px);
+      @include backdrop-blur(5px);
       @include hidden();
       @include visibility-transition();
 

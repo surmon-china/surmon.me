@@ -65,7 +65,7 @@
       overflow: hidden;
       background-color: rgba($grey, 0.5);
       @include visibility-transition();
-      @include backdrop-blur();
+      @include backdrop-blur(5px);
       &.dark {
         background-color: rgba($black, 0.5);
       }

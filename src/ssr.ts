@@ -25,7 +25,7 @@ const getCacheKey = (vueApp: VueApp, url: string): string => {
   const language = i18n.language.value
   const themeValue = theme.theme.value
   const device = globalState.userAgent.isMobile ? 'mobile' : 'desktop'
-  return `ssr_${url}_${language}_${themeValue}_${device}`
+  return `ssr_${language}_${device}_${themeValue}_${url}`
 }
 
 // app creater
