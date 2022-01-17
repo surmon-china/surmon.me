@@ -33,7 +33,7 @@ const getTwitterUserinfoByUsername = async (username: string) => {
 
 // 3. Get tweets
 // https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-tweets
-const getTwitterUserTweetsByUID = async (UID: string) => {
+const getTwitterTweetsByUID = async (UID: string) => {
   const response = await axios.get<any>(`https://api.twitter.com/2/users/${UID}/tweets`, {
     timeout: 8000,
     params: {
@@ -63,5 +63,5 @@ export const getTwitterUserinfo = () => {
 let uidCache: string | null = null
 export const getTwitterTweets = async () => {
   uidCache = uidCache || ((await getTwitterUserinfo()).id as string)
-  return await getTwitterUserTweetsByUID(uidCache)
+  return await getTwitterTweetsByUID(uidCache)
 }
