@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.10
+* Surmon.me v3.6.11
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -661,7 +661,12 @@ const retryFetch = async (config) => {
         retryingMap.set(config.key, false);
     }
 };
-const cacher = async (config) => {
+const cacher = async (_config) => {
+    // key prefix
+    const config = {
+        ..._config,
+        key: `bff_${_config.key}`
+    };
     // cached
     if (await config.cache.has(config.key)) {
         return await config.cache.get(config.key);
