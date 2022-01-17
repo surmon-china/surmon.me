@@ -64,5 +64,7 @@ export const getSitemapXML = async (archiveData?: any) => {
     })
   })
 
-  return streamToPromise(Readable.from(sitemapItemList).pipe(sitemapStream))
+  return streamToPromise(Readable.from(sitemapItemList).pipe(sitemapStream)).then((data) =>
+    data.toString()
+  )
 }

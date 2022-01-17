@@ -356,10 +356,10 @@
 
             .item {
               &.top {
-                margin-top: -2px;
+                margin-top: -1px;
               }
               &.bottom {
-                margin-bottom: -1px;
+                /* margin-bottom: -1px; */
               }
 
               .count {
