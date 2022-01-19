@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.11
+* Surmon.me v3.6.12
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -389,7 +389,7 @@ const getTwitterUserinfoByUsername = async (username) => {
 };
 // 3. Get tweets
 // https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-tweets
-const getTwitterUserTweetsByUID = async (UID) => {
+const getTwitterTweetsByUID = async (UID) => {
     const response = await axios__default["default"].get(`https://api.twitter.com/2/users/${UID}/tweets`, {
         timeout: 8000,
         params: {
@@ -418,7 +418,7 @@ const getTwitterUserinfo = () => {
 let uidCache = null;
 const getTwitterTweets = async () => {
     uidCache = uidCache || (await getTwitterUserinfo()).id;
-    return await getTwitterUserTweetsByUID(uidCache);
+    return await getTwitterTweetsByUID(uidCache);
 };/**
  * @file BFF instagram getter
  * @module server.getter.instagram
