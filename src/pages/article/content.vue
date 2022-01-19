@@ -51,7 +51,7 @@
         :html="articleDetailStore.defaultContent?.html"
       />
       <transition name="module" mode="out-in" @after-enter="handleRenderMoreAnimateDone">
-        <div v-if="isRenderMoreEnabled" class="readmore">
+        <div :id="readmoreId" v-if="isRenderMoreEnabled" class="readmore">
           <button class="readmore-btn" :disabled="isRenderMoreContent" @click="handleRenderMore">
             <i18n
               :lkey="
@@ -94,6 +94,10 @@
     props: {
       article: {
         type: Object as PropType<Article>,
+        required: true
+      },
+      readmoreId: {
+        type: String,
         required: true
       }
     },

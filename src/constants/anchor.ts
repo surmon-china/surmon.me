@@ -12,6 +12,7 @@ export const ASIDE_ELEMENT_ID = 'A_aside'
 export const FOOTER_ELEMENT_ID = 'A_footer'
 
 export const ARTICLE_CONTENT_ELEMENT_ID = 'A_article_content'
+export const ARTICLE_READMORE_ELEMENT_ID = 'A_article_readmore'
 export const ARTICLE_META_ELEMENT_ID = 'A_article_meta'
 export const ARTICLE_SHARE_ELEMENT_ID = 'A_article_share'
 export const ARTICLE_RELETED_ELEMENT_ID = 'A_article_releted'

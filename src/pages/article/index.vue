@@ -7,7 +7,11 @@
       <template #default>
         <div v-if="article">
           <div class="module margin background overflow">
-            <article-content :id="ANCHORS.ARTICLE_CONTENT_ELEMENT_ID" :article="article" />
+            <article-content
+              :id="ANCHORS.ARTICLE_CONTENT_ELEMENT_ID"
+              :readmore-id="ANCHORS.ARTICLE_READMORE_ELEMENT_ID"
+              :article="article"
+            />
             <div class="divider"></div>
             <article-meta
               :id="ANCHORS.ARTICLE_META_ELEMENT_ID"

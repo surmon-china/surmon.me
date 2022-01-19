@@ -5,6 +5,7 @@
  */
 
 export const DEFAULT_DELAY = 468
+export const LONG_ARTICLE_THRESHOLD = 16688
 export const PRIMARY_COLOR = '#0088f5'
 export const GA_MEASUREMENT_ID = 'UA-84887611-3'
 export const ADSENSE_CLIENT_ID = 'ca-pub-4710915636313788'

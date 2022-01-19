@@ -6,6 +6,7 @@
 
 import { defineStore } from 'pinia'
 import { isClient } from '/@/app/environment'
+import { LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
 import { SortType, OriginState, UniversalExtend } from '/@/constants/state'
 import { getArticleContentHeadingElementID } from '/@/constants/anchor'
 import nodepress from '/@/services/nodepress'
@@ -141,20 +142,25 @@ export const useArticleDetailStore = defineStore('articleDetail', {
       return minutes < 1 ? 1 : minutes
     },
     isLongContent(): boolean {
-      return Boolean(this.article && this.contentLength > 16688)
+      return Boolean(this.article && this.contentLength >= LONG_ARTICLE_THRESHOLD)
     },
     splitIndex(): number | null {
-      if (this.article && this.isLongContent) {
-        const content = this.article.content
-        // 坐标优先级：H4 -> H3 -> Code -> \n\n
-        const shortContent = content.substring(0, 13688)
-        const lastH4Index = shortContent.lastIndexOf('\n####')
-        const lastH3Index = shortContent.lastIndexOf('\n###')
-        const lastCodeIndex = shortContent.lastIndexOf('\n```')
-        const lastLineIndex = shortContent.lastIndexOf('\n\n**')
-        return Math.max(lastH4Index, lastH3Index, lastCodeIndex, lastLineIndex)
+      if (!this.article || !this.isLongContent) {
+        return null
       }
-      return null
+
+      const halfIndex = Math.floor(this.contentLength / 2)
+      const index =
+        halfIndex >= LONG_ARTICLE_THRESHOLD ? Math.floor(LONG_ARTICLE_THRESHOLD * 0.68) : halfIndex
+      // 坐标优先级：H5 > H4 > H3 > \n\n
+      const shortContent = this.article.content.substring(0, index)
+      const lastH5Index = shortContent.lastIndexOf('\n####')
+      const lastH4Index = shortContent.lastIndexOf('\n####')
+      const lastH3Index = shortContent.lastIndexOf('\n###')
+      const lastLineIndex = shortContent.lastIndexOf('\n\n')
+      const splitIndex = Math.max(lastH5Index, lastH4Index, lastH3Index, lastLineIndex)
+      // console.log('-----content length', this.contentLength, index, splitIndex)
+      return splitIndex
     },
     defaultContent(): null | { markdown: string; html: string; headings: ArticleHeading[] } {
       if (!this.article) {

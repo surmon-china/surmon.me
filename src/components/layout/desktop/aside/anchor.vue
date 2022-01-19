@@ -28,6 +28,16 @@
           <i class="level iconfont" :class="`icon-h-${heading.level}`"></i>
           <span class="text">{{ heading.text }}</span>
         </li>
+        <li
+          class="item readmore"
+          key="readmore"
+          v-if="store.isLongContent && !store.renderedFullContent"
+          :class="`level-${minHeadingLevel}`"
+          @click="handleAnchor(ANCHORS.ARTICLE_READMORE_ELEMENT_ID)"
+        >
+          <i class="level iconfont icon-loadmore"></i>
+          <span class="text"><i18n :lkey="LANGUAGE_KEYS.ARTICLE_READ_ALL" /></span>
+        </li>
       </ul>
     </div>
     <button class="link" @click="handleAnchor(ANCHORS.ARTICLE_META_ELEMENT_ID)">
@@ -62,6 +72,7 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import * as ANCHORS from '/@/constants/anchor'
+  import { LANGUAGE_KEYS } from '/@/language/key'
   import { useArticleDetailStore } from '/@/store/article'
   import { scrollToElementAnchor } from '/@/utils/scroller'
 
@@ -88,6 +99,7 @@
 
       return {
         ANCHORS,
+        LANGUAGE_KEYS,
         article,
         store: articleDetailStore,
         headings,
@@ -180,7 +192,6 @@
         margin: 0;
         list-style: none;
         padding-left: $xs-gap;
-
         &.indent-2 {
           margin-left: -$font-size-h4;
         }
@@ -237,6 +248,13 @@
           }
           &.level-6 {
             padding-left: $font-size-h4 * 5;
+          }
+
+          &.readmore {
+            margin-top: $xs-gap;
+            .text {
+              font-weight: bold;
+            }
           }
         }
       }
