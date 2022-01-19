@@ -15,7 +15,9 @@
             <div class="first">
               <skeleton-line />
             </div>
-            <skeleton-paragraph :lines="5" />
+            <div class="line" v-for="(line, index) in 3" :key="index">
+              <skeleton-line class="line-item" />
+            </div>
           </div>
         </div>
       </template>
@@ -157,13 +159,21 @@
 
       .content {
         width: 50%;
-        margin-top: 2.6rem;
+        margin-top: 4rem;
         margin-left: 1rem;
 
         .first {
           width: 8rem;
           height: $gap * 2;
           margin-bottom: $gap;
+        }
+
+        .line {
+          .line-item {
+            width: 14rem;
+            height: $lg-gap;
+            margin-bottom: $gap;
+          }
         }
       }
 

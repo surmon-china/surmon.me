@@ -3,17 +3,12 @@
     <div class="module">
       <div class="content-skeleton">
         <skeleton-line class="title" />
-        <skeleton-paragraph class="content" :lines="9" line-height="1.2em" />
+        <skeleton-paragraph class="content" :lines="9" line-height="1.3em" />
       </div>
     </div>
     <div class="module">
       <div class="share-skeleton">
         <skeleton-base class="item" v-for="item in socialCount" :key="item" />
-      </div>
-    </div>
-    <div class="module">
-      <div class="meta-skeleton">
-        <skeleton-paragraph :align="true" :lines="4" line-height="1.2em" />
       </div>
     </div>
     <div class="module">
@@ -81,10 +76,6 @@
           margin-right: 0;
         }
       }
-    }
-
-    .meta-skeleton {
-      padding: $gap;
     }
 
     .releted-skeleton {

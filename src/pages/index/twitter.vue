@@ -294,7 +294,7 @@
 
       .left {
         width: $userinfo-width;
-        margin-right: $gap;
+        margin-right: $lg-gap;
       }
       .right {
         flex: 1;

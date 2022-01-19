@@ -14,8 +14,11 @@
                   <skeleton-line />
                 </div>
                 <div class="description">
-                  <skeleton-paragraph :lines="4" />
+                  <div class="line-item" :class="index" :key="index" v-for="(line, index) in 2">
+                    <skeleton-line />
+                  </div>
                 </div>
+                <skeleton-line class="meta" />
               </div>
             </li>
           </ul>
@@ -170,7 +173,16 @@
             width: 36%;
           }
           .description {
-            margin-top: $sm-gap;
+            .line-item {
+              width: 100%;
+              height: $lg-gap;
+              margin-top: $sm-gap;
+            }
+          }
+          .meta {
+            width: 80%;
+            height: $lg-gap;
+            margin-top: 2rem;
           }
         }
       }
