@@ -31,8 +31,12 @@ export const i18ns = {
     [Language.Zh]: `与我合作`,
     [Language.En]: `Hire me`
   },
+  myArchive: {
+    [Language.Zh]: `我的创作`,
+    [Language.En]: `My articles`
+  },
   myVlogs: {
-    [Language.Zh]: `我拍摄的`,
+    [Language.Zh]: `我的行摄`,
     [Language.En]: `My albums`
   },
   merchBar: {
@@ -48,7 +52,7 @@ export const i18ns = {
     [Language.En]: `QQ group`
   },
   TelegramGroup: {
-    [Language.Zh]: `自由电报`,
+    [Language.Zh]: `自由报社`,
     [Language.En]: `TG group`
   }
 }

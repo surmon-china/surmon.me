@@ -93,7 +93,7 @@ createExpressApp().then(({ app, server, cache }) => {
         cache,
         key: 'ghchart',
         age: 60 * 60 * 6, // 6 hours
-        retryWhen: 60 * 60 * 30, // 30 minutes
+        retryWhen: 60 * 1, // 1 minute
         getter: getGitHubChartSVG
       })
       response.header('Content-Type', 'image/svg+xml')

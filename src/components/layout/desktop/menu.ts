@@ -52,12 +52,14 @@ export const menus: Array<MenuItem> = [
     icon: 'icon-swordsman',
     i18nKey: LANGUAGE_KEYS.PAGE_ABOUT
   },
+  /*
   {
     id: RouteName.Job,
     route: getPageRoute(RouteName.Job),
     icon: 'icon-horse',
     i18nKey: LANGUAGE_KEYS.PAGE_JOB
   },
+  */
   {
     id: RouteName.Freelancer,
     route: getPageRoute(RouteName.Freelancer),

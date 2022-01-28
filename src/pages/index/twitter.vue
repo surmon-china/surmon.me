@@ -17,8 +17,8 @@
         </div>
       </template>
       <template #default>
-        <div class="warpper" key="warpper" v-if="userinfo && tweets">
-          <div class="user">
+        <div class="warpper" key="warpper">
+          <div class="user" v-if="userinfo">
             <div class="userinfo" :title="userinfo.username">
               <ulink
                 class="logo-link"
@@ -35,18 +35,19 @@
                   <span class="count">{{
                     padStart(userinfo.public_metrics.tweet_count, 3, '0')
                   }}</span>
-                  <span class="text">TWES</span>
+                  <span class="text">TS</span>
                 </div>
                 <div class="item bottom">
                   <span class="count">{{
                     padStart(userinfo.public_metrics.followers_count, 3, '0')
                   }}</span>
-                  <span class="text">FOLS</span>
+                  <span class="text">FS</span>
                 </div>
               </div>
             </div>
           </div>
           <swiper
+            v-if="completedTweets.length"
             class="swiper"
             direction="vertical"
             :height="66"
@@ -290,7 +291,7 @@
       display: flex;
       width: 100%;
       height: 100%;
-      padding: $sm-gap;
+      padding: $gap;
 
       .left {
         width: $userinfo-width;
@@ -318,7 +319,7 @@
 
           .logo-link {
             position: relative;
-            margin-right: 10px;
+            margin-right: $lg-gap;
             background-color: $twitter-primary;
             color: $white;
             opacity: 0.9;
@@ -349,23 +350,33 @@
           }
 
           .counts {
+            position: relative;
             display: inline-flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: space-around;
             height: $content-height;
+            padding: 0.2em 0.3em 0.26em 0.5em;
+            border-radius: $xs-radius;
+            background-color: $module-bg-darker-1;
+            &::before {
+              $size: 5px;
+              content: '';
+              position: absolute;
+              left: -$size * 2;
+              top: 20%;
+              width: 0;
+              height: 0;
+              border-top: $size solid transparent;
+              border-right: $size * 2 solid $module-bg-darker-1;
+              border-bottom: $size solid transparent;
+            }
 
             .item {
-              &.top {
-                margin-top: -1px;
-              }
-              &.bottom {
-                /* margin-bottom: -1px; */
-              }
-
               .count {
                 font-size: $font-size-small + 1;
                 margin-right: 6px;
                 font-weight: bold;
+                color: $text-secondary;
               }
 
               .text {

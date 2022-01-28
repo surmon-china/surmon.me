@@ -23,13 +23,9 @@
     </div>
     <div class="links">
       <div class="list col-2">
-        <router-link class="item text-only" :to="getPageRoute(RouteName.Job)">
-          <i class="iconfont icon-horse" />
-          <i18n v-bind="i18ns.findJob" />
-        </router-link>
-        <router-link class="item text-only" :to="getPageRoute(RouteName.Freelancer)">
-          <i class="iconfont icon-coin-s" />
-          <i18n v-bind="i18ns.hireMe" />
+        <router-link class="item text-only" :to="getPageRoute(RouteName.Archive)">
+          <i class="iconfont icon-peachblossom" />
+          <i18n v-bind="i18ns.myArchive" />
         </router-link>
         <router-link class="item text-only" :to="getPageRoute(RouteName.Lens)">
           <i class="iconfont icon-lens" />
@@ -38,6 +34,10 @@
         <router-link class="item text-only" :to="getPageRoute(RouteName.Merch)">
           <i class="iconfont icon-rubik" />
           <i18n v-bind="i18ns.merchBar" />
+        </router-link>
+        <router-link class="item text-only" :to="getPageRoute(RouteName.Freelancer)">
+          <i class="iconfont icon-coin-s" />
+          <i18n v-bind="i18ns.hireMe" />
         </router-link>
       </div>
       <divider dashed />
@@ -54,15 +54,15 @@
     </div>
     <div class="links">
       <div class="list col-3">
-        <ulink class="item github" :href="VALUABLE_LINKS.GITHUB">
+        <ulink class="item center github" :href="VALUABLE_LINKS.GITHUB">
           <i class="iconfont icon-github" />
           <span class="text">GitHub</span>
         </ulink>
-        <ulink class="item twitter" :href="VALUABLE_LINKS.TWITTER">
+        <ulink class="item center twitter" :href="VALUABLE_LINKS.TWITTER">
           <i class="iconfont icon-twitter" />
           <span class="text">Twitter</span>
         </ulink>
-        <ulink class="item instagram" :href="VALUABLE_LINKS.INSTAGRAM">
+        <ulink class="item center instagram" :href="VALUABLE_LINKS.INSTAGRAM">
           <i class="iconfont icon-instagram" />
           <span class="text">Instagram</span>
         </ulink>
@@ -225,6 +225,10 @@
           padding: 0 $gap;
           border-radius: $sm-radius;
           color: $white;
+          &.center {
+            justify-content: center;
+          }
+
           &.text-only {
             background-color: $surmon;
           }

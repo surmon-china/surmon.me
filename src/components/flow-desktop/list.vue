@@ -151,7 +151,7 @@
       .item {
         display: flex;
         height: 10rem;
-        padding: $sm-gap;
+        padding: $gap;
         margin-bottom: $lg-gap;
         @include common-bg-module();
         @include radius-box($sm-radius);
@@ -169,7 +169,7 @@
           flex-grow: 1;
 
           .title {
-            height: 1.4em;
+            height: 1.5em;
             width: 36%;
           }
           .description {
@@ -180,9 +180,9 @@
             }
           }
           .meta {
-            width: 80%;
+            width: 68%;
             height: $lg-gap;
-            margin-top: 2rem;
+            margin-top: $lg-gap;
           }
         }
       }

@@ -76,12 +76,12 @@
         <button class="item sponsor" @click="handleSponsor">
           <i class="iconfont icon-heart" />
           <divider class="divider" type="vertical" />
-          <span class="text"><i18n zh="赞助我" en="Sponsor" /></span>
+          <span class="text"><i18n zh="赠予玫瑰" en="Sponsor Me" /></span>
         </button>
         <ulink class="item spotify" :href="VALUABLE_LINKS.SPOTIFY">
           <i class="iconfont icon-spotify" />
           <divider class="divider" type="vertical" />
-          <span class="text">Spotify</span>
+          <span class="text">My Spotify</span>
         </ulink>
         <ulink class="item music-163" :href="VALUABLE_LINKS.MUSIC_163">
           <i class="iconfont icon-163music-logo" />
@@ -126,13 +126,17 @@
         </div>
       </div>
       <div class="github-box">
-        <iframe class="location" src="/partials/location.html" />
+        <div class="location">
+          <iframe class="iframe" src="/partials/location.html" />
+        </div>
         <ulink
           class="github-chart"
           :href="VALUABLE_LINKS.GITHUB"
           @mousedown="handleGTagEvent('github_chart_link')"
         >
-          <uimage class="image" cdn src="/effects/ghchart" />
+          <div class="wrapper">
+            <uimage class="image" cdn src="/effects/ghchart" />
+          </div>
         </ulink>
       </div>
       <div class="footer-links">
@@ -188,9 +192,9 @@
           i18n: i18ns.merchBar
         },
         {
-          to: RouteName.Job,
-          icon: `icon-horse`,
-          i18n: i18ns.findJob
+          to: RouteName.Archive,
+          icon: `icon-peachblossom`,
+          i18n: i18ns.myArchive
         },
         {
           to: RouteName.Freelancer,
@@ -313,7 +317,9 @@
       }
       .github-box {
         .location {
-          filter: invert(1) hue-rotate(200deg) brightness(0.5) contrast(0.9);
+          .iframe {
+            filter: invert(1) hue-rotate(200deg) brightness(0.5) contrast(0.9);
+          }
         }
       }
     }
@@ -531,7 +537,7 @@
         @include radius-box($lg-radius);
 
         .iconfont {
-          margin-left: 3rem;
+          margin-left: 2.8rem;
           font-size: $font-size-h3;
         }
 
@@ -713,34 +719,46 @@
       position: relative;
       display: flex;
       width: 100%;
-      height: 126px;
+      height: 10rem;
       margin-bottom: $gap * 2;
 
       .location,
       .github-chart {
-        margin-right: $gap * 2;
         height: 100%;
+        padding: $sm-gap;
         @include common-bg-module();
         @include radius-box($lg-radius);
       }
 
       .location {
         display: block;
-        width: 27rem;
-        padding: $sm-gap;
+        width: 26rem;
+        margin-right: $gap * 2;
+
+        .iframe {
+          width: 100%;
+          height: 100%;
+        }
       }
 
       .github-chart {
-        margin: 0;
-        padding: $gap;
         flex-grow: 1;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
 
-        .image {
-          width: 663px;
-          height: 104px;
+        .wrapper {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          overflow: hidden;
+          border: 1px solid $module-bg-darker-1;
+          border-radius: $xs-radius;
+          /* background-color: $module-bg-opaque; */
+
+          .image {
+            max-width: 100%;
+            height: 87px;
+          }
         }
       }
     }

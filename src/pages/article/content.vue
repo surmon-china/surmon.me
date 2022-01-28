@@ -182,22 +182,34 @@
       transform: rotate(-45deg);
       width: 7rem;
       height: 4rem;
-      line-height: 5.6rem;
+      line-height: 5.7em;
       text-align: center;
       transform-origin: center;
       color: $white;
       font-weight: bold;
       font-size: $font-size-small;
-
+      background-color: var(--color);
       &.original {
-        background-color: rgba($surmon, 0.7);
+        --color: #{rgba($surmon, 0.7)};
       }
       &.hybrid {
-        background-color: rgba($accent, 0.7);
+        --color: #{rgba($accent, 0.7)};
       }
       &.reprint {
-        background-color: rgba($red, 0.7);
+        --color: #{rgba($red, 0.7)};
       }
+
+      /* &::before {
+        $size: 6px;
+        content: '';
+        position: absolute;
+        top: 30%;
+        left: 47%;
+        width: $size;
+        height: $size;
+        border-radius: 100%;
+        background: $module-bg-opaque;
+      } */
     }
 
     .knowledge {
