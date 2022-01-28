@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.13
+* Surmon.me v3.6.14
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -275,10 +275,10 @@ const getGTagScript = async () => {
  * @file BFF ghchart getter
  * @module server.getter.ghchart
  * @author Surmon <https://github.com/surmon-china>
- * @repo https://github.com/sallar/github-contributions-chart
  */
+// https://github.com/surmon-china/README.md/blob/main/templates/github-contributions-calendar/README.md
 const getGitHubChartSVG = async () => {
-    const response = await axios__default["default"].get(`https://ghchart.rshah.org/${THIRD_IDS.GITHUB_USER_ID}`, { timeout: 8000 });
+    const response = await axios__default["default"].get(`https://readme.app.surmon.me/api/render?template_id=github-contributions-calendar&props.username=${THIRD_IDS.GITHUB_USER_ID}&props.size=10&props.gap=3&svg.width=686&svg.height=88`, { timeout: 8000 });
     if (response.status === 200) {
         return response.data;
     }
@@ -984,7 +984,7 @@ createExpressApp().then(({ app, server, cache }) => {
                 cache,
                 key: 'ghchart',
                 age: 60 * 60 * 6,
-                retryWhen: 60 * 60 * 30,
+                retryWhen: 60 * 1,
                 getter: getGitHubChartSVG
             });
             response.header('Content-Type', 'image/svg+xml');
