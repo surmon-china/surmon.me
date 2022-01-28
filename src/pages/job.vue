@@ -13,7 +13,7 @@
         <Adsense
           class="mammon"
           ins-class="mammon-ins"
-          ins-style="display:inline-block;width:1050px;height:130px"
+          ins-style="display:inline-block;width:1050px;height:230px"
           data-ad-slot="3013952710"
         />
       </client-only>

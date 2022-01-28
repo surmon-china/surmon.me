@@ -76,7 +76,7 @@
         <button class="item sponsor" @click="handleSponsor">
           <i class="iconfont icon-heart" />
           <divider class="divider" type="vertical" />
-          <span class="text"><i18n zh="赠予玫瑰" en="Sponsor Me" /></span>
+          <span class="text"><i18n zh="赠瑰留香" en="Sponsor Me" /></span>
         </button>
         <ulink class="item spotify" :href="VALUABLE_LINKS.SPOTIFY">
           <i class="iconfont icon-spotify" />
@@ -751,7 +751,7 @@
           justify-content: center;
           align-items: center;
           overflow: hidden;
-          border: 1px solid $module-bg-darker-1;
+          border: 1px dashed $module-bg-darker-1;
           border-radius: $xs-radius;
           /* background-color: $module-bg-opaque; */
 

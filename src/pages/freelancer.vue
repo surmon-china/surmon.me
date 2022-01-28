@@ -40,7 +40,11 @@
     </div>
     <client-only transition>
       <div class="mammon container">
-        <u-adsense ins-style="display:inline-block;width:1050px;height:180px" />
+        <Adsense
+          ins-class="mammon-ins"
+          ins-style="display:inline-block;width:1050px;height:230px"
+          data-ad-slot="3013952710"
+        />
       </div>
     </client-only>
     <div class="step">
@@ -79,13 +83,11 @@
   import { emailLink } from '/@/transforms/email'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
-  import UAdsense from '/@/components/common/uadsense.vue'
 
   export default defineComponent({
     name: 'FreelancerPage',
     components: {
-      PageBanner,
-      UAdsense
+      PageBanner
     },
     setup() {
       const { i18n, meta, gtag, isZhLang } = useEnhancer()
@@ -365,7 +367,7 @@
     }
 
     .mammon {
-      height: 180px;
+      height: 230px;
       margin-bottom: $gap * 2 !important;
       @include common-bg-module();
     }

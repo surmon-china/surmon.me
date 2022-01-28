@@ -319,7 +319,7 @@
 
           .logo-link {
             position: relative;
-            margin-right: $lg-gap;
+            margin-right: 1.5rem;
             background-color: $twitter-primary;
             color: $white;
             opacity: 0.9;
