@@ -9,14 +9,6 @@
       </template>
     </page-banner>
     <div class="container">
-      <client-only transition>
-        <Adsense
-          class="mammon"
-          ins-class="mammon-ins"
-          ins-style="display:inline-block;width:1050px;height:230px"
-          data-ad-slot="3013952710"
-        />
-      </client-only>
       <ul class="jobs">
         <li class="item" :class="job.id" :key="index" v-for="(job, index) in jobs">
           <div
@@ -155,14 +147,6 @@
   @import 'src/styles/init.scss';
 
   .job-page {
-    .mammon {
-      margin: $gap * 2 0;
-      height: 130px;
-      overflow: hidden;
-      @include radius-box($sm-radius);
-      @include common-bg-module();
-    }
-
     .jobs {
       padding: 0;
       margin: $gap * 2 0;

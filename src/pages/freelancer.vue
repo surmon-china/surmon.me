@@ -39,12 +39,15 @@
       </div>
     </div>
     <client-only transition>
-      <div class="mammon container">
-        <Adsense
-          ins-class="mammon-ins"
-          ins-style="display:inline-block;width:1050px;height:230px"
-          data-ad-slot="3013952710"
-        />
+      <div class="module">
+        <div class="container">
+          <Adsense
+            class="mammon"
+            ins-class="mammon-ins"
+            ins-style="display:inline-block;width:1026px;height:200px"
+            data-ad-slot="3013952710"
+          />
+        </div>
       </div>
     </client-only>
     <div class="step">
@@ -367,9 +370,10 @@
     }
 
     .mammon {
-      height: 230px;
-      margin-bottom: $gap * 2 !important;
+      height: calc(200px + $gap * 2);
+      padding: $gap;
       @include common-bg-module();
+      @include radius-box($sm-radius);
     }
 
     .step {
