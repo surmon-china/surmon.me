@@ -1,12 +1,7 @@
 <template>
-  <div id="popup" class="popup">
+  <div id="popup" class="popup" :class="{ mobile: isMobile, dark: isDarkTheme }">
     <transition name="module">
-      <div
-        class="mask"
-        :class="{ dark: isDarkTheme }"
-        v-show="state.visible"
-        @click.self="handleMaskClick"
-      >
+      <div class="mask" v-show="state.visible" @click.self="handleMaskClick">
         <div ref="element" class="warpper" :class="{ border: state.border }">
           <img v-if="state.isImage" v-bind="image.attrs" :src="image.src || ''" />
         </div>
@@ -23,7 +18,7 @@
     name: 'PopupRoot',
     setup() {
       const element = ref<HTMLElement>(null as any)
-      const { isDarkTheme } = useEnhancer()
+      const { isDarkTheme, isMobile } = useEnhancer()
       const { state, image, hidden, visible } = usePopupWithRoot(() => element.value)
       const handleWindowScroll = () => hidden()
       const handleMaskClick = () => {
@@ -42,6 +37,7 @@
         state,
         image,
         isDarkTheme,
+        isMobile,
         handleMaskClick
       }
     }
@@ -52,6 +48,22 @@
   @import 'src/styles/init.scss';
 
   #popup {
+    &.dark {
+      .mask {
+        background-color: rgba($black, 0.5);
+      }
+    }
+    &.mobile {
+      .mask {
+        .warpper {
+          & > ::v-deep(*) {
+            min-width: 50vw;
+            min-height: 4rem;
+          }
+        }
+      }
+    }
+
     .mask {
       position: fixed;
       top: 0;
@@ -66,9 +78,6 @@
       background-color: rgba($grey, 0.5);
       @include visibility-transition();
       @include backdrop-blur(5px);
-      &.dark {
-        background-color: rgba($black, 0.5);
-      }
 
       .warpper {
         display: contents;

@@ -256,7 +256,7 @@
     }
     .skeleton-item {
       &.count {
-        width: 14rem;
+        width: 12rem;
         margin-right: $gap;
       }
       &.sort {
