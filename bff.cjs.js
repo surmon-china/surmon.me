@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.16
+* Surmon.me v3.6.17
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -276,9 +276,21 @@ const getGTagScript = async () => {
  * @module server.getter.ghchart
  * @author Surmon <https://github.com/surmon-china>
  */
-// https://github.com/surmon-china/README.md/blob/main/templates/github-contributions-calendar/README.md
+// https://github.com/surmon-china/README.md/blob/main/templates/github-contributions-calendar
 const getGitHubChartSVG = async () => {
-    const response = await axios__default["default"].get(`https://readme.app.surmon.me/api/render?template_id=github-contributions-calendar&props.username=${THIRD_IDS.GITHUB_USER_ID}&props.size=10&props.gap=3&svg.width=686&svg.height=88`, { timeout: 8000 });
+    const response = await axios__default["default"].get(`https://readme.app.surmon.me/api/render`, {
+        timeout: 1000 * 10,
+        params: {
+            // disable cache
+            cache_seconds: 0,
+            template_id: 'github-contributions-calendar',
+            'props.username': THIRD_IDS.GITHUB_USER_ID,
+            'props.size': 10,
+            'props.gap': 3,
+            'svg.width': 686,
+            'svg.height': 88
+        }
+    });
     if (response.status === 200) {
         return response.data;
     }
