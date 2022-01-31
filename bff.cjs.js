@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.19
+* Surmon.me v3.6.20
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -33,7 +33,7 @@ var TunnelModule;
     TunnelModule["Instagram"] = "instagram";
     TunnelModule["Wallpaper"] = "wallpaper";
     TunnelModule["GitHub"] = "gitHub";
-    TunnelModule["Music"] = "music";
+    TunnelModule["NetEaseMusic"] = "netease_music";
 })(TunnelModule || (TunnelModule = {}));/**
  * @file BFF server config
  * @module config.bff
@@ -1037,10 +1037,10 @@ createExpressApp().then(({ app, server, cache }) => {
         });
     }));
     // 163 music BGM list
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Music}`, responser(() => {
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`, responser(() => {
         return cacher({
             cache,
-            key: 'music',
+            key: 'netease_music',
             age: 60 * 60 * 12,
             retryWhen: 60 * 10,
             getter: getSongList
