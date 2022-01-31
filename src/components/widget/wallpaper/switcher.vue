@@ -1,20 +1,10 @@
 <template>
-  <div id="wallpaper" :class="{ dark: isDarkTheme }">
+  <div id="wallpaper">
     <div class="switcher" @click="toggleWallpaper">
-      <div class="up">
-        <div class="title">
-          <i18n>
-            <template #zh>
-              <span class="zh-text">山河入梦</span>
-            </template>
-            <template #en>
-              <i class="iconfont icon-bing" />
-              <span class="en-text">BING</span>
-            </template>
-          </i18n>
-        </div>
+      <div class="title">
+        <i class="iconfont icon-bing" />
+        <span class="text">BING</span>
       </div>
-      <div class="down"></div>
     </div>
   </div>
   <client-only>
@@ -38,7 +28,7 @@
       Wallpapers
     },
     setup() {
-      const { i18n, gtag, globalState, isDarkTheme } = useEnhancer()
+      const { i18n, gtag, globalState } = useEnhancer()
       const wallpaperStore = useWallpaperStore()
       const isOnWallpaper = computed(() => globalState.switchBox.wallpaper)
       const wallpapers = computed(() => wallpaperStore.papers(i18n.language.value as Language))
@@ -56,8 +46,6 @@
       }
 
       return {
-        language: i18n.language,
-        isDarkTheme,
         isOnWallpaper,
         toggleWallpaper
       }
@@ -69,94 +57,57 @@
   @import 'src/styles/init.scss';
 
   #wallpaper {
-    $offset: 6px;
+    $width: 2.8rem;
+    $height: 6.5rem;
+    $offset: 0.6rem;
     position: fixed;
-    left: 0;
-    top: 70%;
+    top: 18%;
+    right: 0;
     cursor: pointer;
 
-    &.dark {
-      .switcher {
-        .up {
-          .title {
-            color: $text-reversal;
-          }
-        }
-      }
-    }
-
     .switcher {
-      width: 4rem;
-      height: 8rem;
-      opacity: 0.6;
-      display: block;
       position: relative;
-      transform: translateX(-$offset * 2);
+      width: $width;
+      height: $height;
+      display: block;
+      border-style: solid;
+      border-color: $bing-primary;
+      border-top-width: 4px;
+      border-top-left-radius: $xs-radius;
+      border-bottom-left-radius: $xs-radius;
+      background-color: $yellow;
+      opacity: 0.4;
+      transform: translateX($offset);
       transition: opacity $transition-time-fast, transform $transition-time-fast;
-
       &:hover {
         opacity: 0.8;
-        transform: translateX(-$offset);
-      }
-
-      @keyframes wallpaper-y {
-        0% {
-          transform: translateY(-$offset);
-        }
-        50% {
-          transform: translateY($offset);
-        }
-        100% {
-          transform: translateY(-$offset);
-        }
-      }
-
-      > .up,
-      > .down {
-        width: 3rem;
-        height: 7rem;
-        position: absolute;
-        border-top-right-radius: $xs-radius;
-        border-bottom-right-radius: $xs-radius;
-      }
-
-      .down {
-        top: 0;
-        left: $offset;
-        z-index: $z-index-normal + 1;
-        background-color: $primary;
-        animation: wallpaper-y 1.5s 0.75s infinite;
-      }
-
-      .up {
-        top: 0;
-        left: 0;
-        z-index: $z-index-normal + 2;
-        background-color: $yellow;
-        animation: wallpaper-y 1.5s 0s infinite;
-
+        transform: translateX(0);
         .title {
-          display: flex;
-          justify-content: center;
           width: 100%;
-          height: 100%;
-          line-height: 2rem;
-          font-family: 'webfont-bolder', DINRegular;
-          writing-mode: tb-rl;
-          color: $primary;
+        }
+      }
 
-          .zh-text {
-            margin-bottom: $xs-gap;
-            letter-spacing: -3px;
-          }
+      .title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 80%;
+        height: 100%;
+        font-family: 'webfont-bolder', DINRegular;
+        writing-mode: tb-rl;
+        color: $bing-primary;
+        font-size: $font-size-small - 1;
+        letter-spacing: 2px;
+        text-align: center;
+        transition: width $transition-time-fast;
 
-          .en-text {
-            font-size: $font-size-small - 1;
-            margin-top: $xs-gap;
-            letter-spacing: 2px;
-            text-align: center;
-            font-weight: bold;
-          }
+        .iconfont {
+          font-size: 16px;
+          margin-bottom: $xs-gap;
+        }
+
+        .text {
+          font-weight: bold;
         }
       }
     }

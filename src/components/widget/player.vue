@@ -1,19 +1,5 @@
 <template>
-  <div id="player" v-if="music">
-    <div class="cd">
-      <img class="image" :src="currentSong?.cover_art_url" />
-      <button
-        class="toggle-button"
-        :disabled="!music.state.ready"
-        @click="music.togglePlay"
-        @mousedown="handleTouchEvent('toggle play')"
-      >
-        <i
-          class="iconfont"
-          :class="music.state.playing ? 'icon-music-pause' : 'icon-music-play'"
-        ></i>
-      </button>
-    </div>
+  <div id="player" v-if="music?.currentSong.value">
     <div class="panel">
       <div class="control">
         <button
@@ -54,6 +40,20 @@
           <i18n v-else :lkey="LANGUAGE_KEYS.MUSIC_PLACEHOLDER" />
         </router-link>
       </div>
+    </div>
+    <div class="cd">
+      <img class="image" :src="currentSong?.cover_art_url" />
+      <button
+        class="toggle-button"
+        :disabled="!music.state.ready"
+        @click="music.togglePlay"
+        @mousedown="handleTouchEvent('toggle play')"
+      >
+        <i
+          class="iconfont"
+          :class="music.state.playing ? 'icon-music-pause' : 'icon-music-play'"
+        ></i>
+      </button>
     </div>
   </div>
 </template>
@@ -103,12 +103,13 @@
   #player {
     $size: 5rem;
     position: fixed;
-    right: 0;
-    top: 20%;
+    left: 0;
+    bottom: 18%;
     z-index: $z-index-toolbox;
-    opacity: 0.4;
-    transform: translateX(16rem);
-    transition: opacity $transition-time-fast, transform $transition-time-normal ease-in-out;
+    opacity: 0.3;
+    transform: translateX(-13rem);
+    transition: opacity $transition-time-fast,
+      transform $transition-time-normal cubic-bezier(0.65, 0.05, 0.36, 1);
     height: $size;
     display: flex;
     align-items: center;
@@ -124,11 +125,11 @@
       width: $size;
       height: $size;
       overflow: hidden;
-      border-top-left-radius: $sm-radius;
-      border-bottom-left-radius: $sm-radius;
-      border-left: 4px solid $primary;
+      border-right: 4px solid $primary;
+      border-top-right-radius: $sm-radius;
+      border-bottom-right-radius: $sm-radius;
       background-color: $module-bg-darker-1;
-      background: linear-gradient(60deg, $surmon, $red, $yellow, $accent, $surmon) border-box;
+      box-sizing: content-box;
 
       .image {
         width: 100%;
