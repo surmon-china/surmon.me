@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.17
+* Surmon.me v3.6.18
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -946,7 +946,7 @@ createExpressApp().then(({ app, server, cache }) => {
             const data = await cacher({
                 cache,
                 key: 'sitemap',
-                age: 60 * 60 * 2,
+                age: 60 * 60 * 1,
                 getter: getSitemapXML
             });
             response.header('Content-Type', 'application/xml');
@@ -962,7 +962,7 @@ createExpressApp().then(({ app, server, cache }) => {
             const data = await cacher({
                 cache,
                 key: 'rss',
-                age: 60 * 60 * 2,
+                age: 60 * 60 * 1,
                 getter: getRSSXML
             });
             response.header('Content-Type', 'application/xml');
@@ -1021,7 +1021,7 @@ createExpressApp().then(({ app, server, cache }) => {
         return cacher({
             cache,
             key: 'wallpaper',
-            age: 60 * 60 * 8,
+            age: 60 * 60 * 6,
             retryWhen: 60 * 30,
             getter: getAllWallpapers
         });
@@ -1061,7 +1061,7 @@ createExpressApp().then(({ app, server, cache }) => {
         return cacher({
             cache,
             key: 'twitter_tweets',
-            age: 60 * 60 * 2,
+            age: 60 * 60 * 1,
             retryWhen: 60 * 10,
             getter: getTwitterTweets
         });
@@ -1071,7 +1071,7 @@ createExpressApp().then(({ app, server, cache }) => {
         return cacher({
             cache,
             key: 'instagram',
-            age: 60 * 60 * 6,
+            age: 60 * 60 * 2,
             retryWhen: 60 * 10,
             getter: getInstagramMedias
         });
