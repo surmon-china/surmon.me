@@ -43,7 +43,7 @@ createExpressApp().then(({ app, server, cache }) => {
       const data = await cacher({
         cache,
         key: 'sitemap',
-        age: 60 * 60 * 2, // 2 hours
+        age: 60 * 60 * 1, // 1 hours
         getter: getSitemapXML
       })
       response.header('Content-Type', 'application/xml')
@@ -59,7 +59,7 @@ createExpressApp().then(({ app, server, cache }) => {
       const data = await cacher({
         cache,
         key: 'rss',
-        age: 60 * 60 * 2, // 2 hours
+        age: 60 * 60 * 1, // 1 hours
         getter: getRSSXML
       })
       response.header('Content-Type', 'application/xml')
@@ -124,7 +124,7 @@ createExpressApp().then(({ app, server, cache }) => {
       return cacher({
         cache,
         key: 'wallpaper',
-        age: 60 * 60 * 8, // 8 hours
+        age: 60 * 60 * 6, // 6 hours
         retryWhen: 60 * 30, // 30 minutes
         getter: getAllWallpapers
       })
@@ -180,7 +180,7 @@ createExpressApp().then(({ app, server, cache }) => {
       return cacher({
         cache,
         key: 'twitter_tweets',
-        age: 60 * 60 * 2, // 2 hours
+        age: 60 * 60 * 1, // 1 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getTwitterTweets
       })
@@ -194,7 +194,7 @@ createExpressApp().then(({ app, server, cache }) => {
       return cacher({
         cache,
         key: 'instagram',
-        age: 60 * 60 * 6, // 6 hours
+        age: 60 * 60 * 2, // 2 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getInstagramMedias
       })
