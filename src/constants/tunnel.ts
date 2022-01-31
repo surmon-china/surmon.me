@@ -13,5 +13,5 @@ export enum TunnelModule {
   Instagram = 'instagram',
   Wallpaper = 'wallpaper',
   GitHub = 'gitHub',
-  Music = 'music'
+  NetEaseMusic = 'netease_music'
 }

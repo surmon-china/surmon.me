@@ -21,7 +21,7 @@ import {
   getYouTubeChannelPlayLists,
   getYouTubeVideoListByPlayerlistID
 } from './server/getters/youtube'
-import { getSongList } from './server/getters/music'
+import { getSongList } from './server/getters/netease-music'
 import { enableDevRenderer } from './server/renderer/dev'
 import { enableProdRenderer } from './server/renderer/prod'
 import { PUBLIC_PATH } from './server/helpers/configurer'
@@ -147,11 +147,11 @@ createExpressApp().then(({ app, server, cache }) => {
 
   // 163 music BGM list
   app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.Music}`,
+    `${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`,
     responser(() => {
       return cacher({
         cache,
-        key: 'music',
+        key: 'netease_music',
         age: 60 * 60 * 12, // 12 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getSongList

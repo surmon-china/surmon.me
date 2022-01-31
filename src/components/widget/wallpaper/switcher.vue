@@ -1,6 +1,6 @@
 <template>
   <div id="wallpaper">
-    <div class="switcher" @click="toggleWallpaper">
+    <div class="switcher" :class="{ dark: isDarkTheme }" @click="toggleWallpaper">
       <div class="title">
         <i class="iconfont icon-bing" />
         <span class="text">BING</span>
@@ -28,7 +28,7 @@
       Wallpapers
     },
     setup() {
-      const { i18n, gtag, globalState } = useEnhancer()
+      const { i18n, gtag, globalState, isDarkTheme } = useEnhancer()
       const wallpaperStore = useWallpaperStore()
       const isOnWallpaper = computed(() => globalState.switchBox.wallpaper)
       const wallpapers = computed(() => wallpaperStore.papers(i18n.language.value as Language))
@@ -46,6 +46,7 @@
       }
 
       return {
+        isDarkTheme,
         isOnWallpaper,
         toggleWallpaper
       }
@@ -57,9 +58,8 @@
   @import 'src/styles/init.scss';
 
   #wallpaper {
-    $width: 2.8rem;
-    $height: 6.5rem;
-    $offset: 0.6rem;
+    $width: 2rem;
+    $height: 6.6rem;
     position: fixed;
     top: 18%;
     right: 0;
@@ -75,23 +75,21 @@
       border-top-width: 4px;
       border-top-left-radius: $xs-radius;
       border-bottom-left-radius: $xs-radius;
-      background-color: $yellow;
-      opacity: 0.4;
-      transform: translateX($offset);
-      transition: opacity $transition-time-fast, transform $transition-time-fast;
+      opacity: 0.5;
+      transition: opacity $transition-time-fast;
+      background-color: #ffffff;
+      &.dark {
+        background-color: #ececec;
+      }
       &:hover {
         opacity: 0.8;
-        transform: translateX(0);
-        .title {
-          width: 100%;
-        }
       }
 
       .title {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 80%;
+        width: 100%;
         height: 100%;
         font-family: 'webfont-bolder', DINRegular;
         writing-mode: tb-rl;

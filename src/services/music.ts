@@ -10,7 +10,7 @@ import { UNDEFINED } from '/@/constants/value'
 import { TunnelModule } from '/@/constants/tunnel'
 import { ProxyModule } from '/@/constants/proxy'
 import { getTargetProxyURL } from '/@/transforms/url'
-import type { Song } from '/@/server/getters/music'
+import type { Song } from '/@/server/getters/netease-music'
 import tunnel from '/@/services/tunnel'
 
 export interface PlayerConfig {
@@ -68,7 +68,7 @@ const createMusicPlayer = (config: PlayerConfig) => {
   const fetchSongList = async () => {
     try {
       songList.fetching = true
-      songList.data = await tunnel.dispatch<Song[]>(TunnelModule.Music)
+      songList.data = await tunnel.dispatch<Song[]>(TunnelModule.NetEaseMusic)
       state.count = songList.data.length
     } catch (error) {
       songList.data = []

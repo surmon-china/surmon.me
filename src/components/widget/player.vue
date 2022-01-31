@@ -1,5 +1,5 @@
 <template>
-  <div id="player" v-if="music?.currentSong.value">
+  <div id="player" :class="{ playing: music.state.playing }" v-if="music?.currentSong.value">
     <div class="panel">
       <div class="control">
         <button
@@ -55,6 +55,9 @@
         ></i>
       </button>
     </div>
+    <div class="trigger">
+      <i class="iconfont icon-music"></i>
+    </div>
   </div>
 </template>
 
@@ -106,50 +109,23 @@
     left: 0;
     bottom: 18%;
     z-index: $z-index-toolbox;
-    opacity: 0.3;
-    transform: translateX(-13rem);
     transition: opacity $transition-time-fast,
       transform $transition-time-normal cubic-bezier(0.65, 0.05, 0.36, 1);
     height: $size;
+    transform: translateX(-18rem);
     display: flex;
     align-items: center;
+    border-top-right-radius: $sm-radius;
+    border-bottom-right-radius: $sm-radius;
     background-color: $module-bg-opaque;
-    &:hover {
-      opacity: 1;
-      transform: translateX(0);
+    overflow: hidden;
+    opacity: 0.5;
+    &.playing {
+      transform: translateX(-13rem);
     }
-
-    .cd {
-      position: relative;
-      display: block;
-      width: $size;
-      height: $size;
-      overflow: hidden;
-      border-right: 4px solid $primary;
-      border-top-right-radius: $sm-radius;
-      border-bottom-right-radius: $sm-radius;
-      background-color: $module-bg-darker-1;
-      box-sizing: content-box;
-
-      .image {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background-color: $module-bg-darker-1;
-        background-image: cdn-url('/images/page-music/background.jpg');
-        background-size: cover;
-      }
-
-      .toggle-button {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 100%;
-        font-size: $font-size-h1;
-        color: $white;
-      }
+    &:hover {
+      opacity: 0.9;
+      transform: translateX(0);
     }
 
     .panel {
@@ -183,6 +159,50 @@
             color: $link-hover;
           }
         }
+      }
+    }
+
+    .cd {
+      position: relative;
+      display: block;
+      width: $size;
+      height: $size;
+      overflow: hidden;
+      background-color: $module-bg-darker-1;
+
+      .image {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: $module-bg-darker-1;
+        background-image: cdn-url('/images/page-music/background.jpg');
+        background-size: cover;
+      }
+
+      .toggle-button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 100%;
+        font-size: $font-size-h1;
+        color: $white;
+      }
+    }
+
+    .trigger {
+      width: math.div($size, 2);
+      height: $size;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      writing-mode: tb-rl;
+      color: $white;
+      background-image: linear-gradient(0deg, #ff5a4c 0%, #ff1d12 100%);
+
+      .iconfont {
+        font-size: $font-size-h4;
       }
     }
   }
