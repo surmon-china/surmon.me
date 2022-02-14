@@ -2,7 +2,7 @@
   <div class="article-page">
     <placeholder :loading="fetching">
       <template #loading>
-        <article-skeleton :social-count="isMobile ? 3 : 8" :releted-count="isMobile ? 2 : 3" />
+        <article-skeleton :social-count="isMobile ? 3 : 8" :related-count="isMobile ? 2 : 3" />
       </template>
       <template #default>
         <div v-if="article">
@@ -44,10 +44,10 @@
           </div>
           <div class="module margin overflow">
             <article-related
-              :id="ANCHORS.ARTICLE_RELETED_ELEMENT_ID"
+              :id="ANCHORS.ARTICLE_RELATED_ELEMENT_ID"
               :columns="isMobile ? 2 : 3"
               :count="isMobile ? 4 : 6"
-              :articles="article?.related"
+              :articles="relatedArticles"
             />
           </div>
         </div>
@@ -105,6 +105,7 @@
       const universalStore = useUniversalStore()
       const articleDetailStore = useArticleDetailStore()
       const commentStore = useCommentStore()
+      const relatedArticles = computed(() => articleDetailStore.relatedArticles)
       const article = computed(() => articleDetailStore.article || UNDEFINED)
       const fetching = computed(() => articleDetailStore.fetching)
       const isLiked = computed(() =>
@@ -145,7 +146,7 @@
 
       const fetchArticleDetail = (articleID: number) => {
         return Promise.all([
-          articleDetailStore.fetchDetail({ articleID }),
+          articleDetailStore.fetchCompleteArticle({ articleID }),
           commentStore.fetchList({ post_id: articleID })
         ])
       }
@@ -164,6 +165,7 @@
         ANCHORS,
         SocialMedia,
         userAgent: globalState.userAgent,
+        relatedArticles,
         article,
         fetching,
         isLiked,

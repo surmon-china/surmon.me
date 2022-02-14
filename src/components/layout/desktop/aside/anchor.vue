@@ -54,11 +54,11 @@
         <span class="count">{{ article.meta.likes }}</span>
       </span>
     </button>
-    <button class="link" @click="handleAnchor(ANCHORS.ARTICLE_RELETED_ELEMENT_ID)">
+    <button class="link" @click="handleAnchor(ANCHORS.ARTICLE_RELATED_ELEMENT_ID)">
       <i class="iconfont icon-category"></i>
       <i18n zh="相关" en="Related articles" />
       <divider type="vertical" />
-      <span class="count">{{ article.related.length }}</span>
+      <span class="count">{{ store.relatedArticles.length }}</span>
     </button>
     <button class="link" @click="handleAnchor(ANCHORS.COMMENT_ELEMENT_ID)">
       <i class="iconfont icon-comment"></i>

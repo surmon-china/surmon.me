@@ -36,8 +36,8 @@
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
-  import ArticleListHeader from '/@/components/flow-desktop/header.vue'
-  import ArticleList from '/@/components/flow-desktop/list.vue'
+  import ArticleListHeader from '/@/components/flow/desktop/header.vue'
+  import ArticleList from '/@/components/flow/desktop/list.vue'
 
   export default defineComponent({
     name: 'CategoryPage',

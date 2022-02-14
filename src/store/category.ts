@@ -14,11 +14,11 @@ export interface Category {
   pid: string
   name: string
   slug: string
-  count: number
   description: string
   update_at: string
   create_at: string
   extends: UniversalExtend[]
+  articles_count: number
 }
 
 export const useCategoryStore = defineStore('category', {

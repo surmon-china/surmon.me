@@ -6,7 +6,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { useEnhancer } from '../../app/enhancer'
+  import { useEnhancer } from '/@/app/enhancer'
   export default defineComponent({
     name: 'Background',
     setup() {

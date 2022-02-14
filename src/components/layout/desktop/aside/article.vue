@@ -1,14 +1,19 @@
 <template>
   <div class="article">
-    <p class="title">
-      <i class="iconfont icon-hotfill" />
-      <strong>
-        <i18n :lkey="LANGUAGE_KEYS.HOT_ARTICLE_LIST_TITLE" />
-      </strong>
-    </p>
+    <div class="header">
+      <span class="title">
+        <i class="iconfont icon-hotfill" />
+        <span class="text">
+          <i18n :lkey="LANGUAGE_KEYS.HOT_ARTICLE_LIST_TITLE" />
+        </span>
+      </span>
+      <button class="switch" @click="switchHotPage">
+        <i class="iconfont icon-switch" />
+      </button>
+    </div>
     <placeholder
-      :data="articleListStore.hotList.data"
-      :loading="articleListStore.hotList.fetching"
+      :data="articles"
+      :loading="isFetching"
       :i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"
     >
       <template #loading>
@@ -20,7 +25,7 @@
       </template>
       <template #default>
         <ul class="article-list" key="list">
-          <li v-for="item in articleListStore.hotList.data" :key="item.id" class="item">
+          <li v-for="item in articles" :key="item.id" class="item">
             <span class="index"></span>
             <router-link class="title" :to="getArticleDetailRoute(item.id)" :title="item.title">
               {{ item.title }}
@@ -33,18 +38,38 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { defineComponent, ref, computed } from 'vue'
   import { useArticleListStore } from '/@/store/article'
   import { LANGUAGE_KEYS } from '/@/language/key'
   import { getArticleDetailRoute } from '/@/transforms/route'
+
+  const PER_PAGE = 10
 
   export default defineComponent({
     name: 'DesktopAsideArticle',
     setup() {
       const articleListStore = useArticleListStore()
+      const isFetching = computed(() => articleListStore.hotList.fetching)
+      const hotPage = ref(0)
+      const articles = computed(() => {
+        const perPage = hotPage.value * PER_PAGE
+        return articleListStore.hotList.data.slice(perPage, perPage + PER_PAGE)
+      })
+
+      const switchHotPage = () => {
+        const count = articleListStore.hotList.data.length
+        const pages = Math.ceil(count / PER_PAGE)
+        if (hotPage.value < pages - 1) {
+          hotPage.value++
+        } else {
+          hotPage.value = 0
+        }
+      }
 
       return {
-        articleListStore,
+        isFetching,
+        articles,
+        switchHotPage,
         getArticleDetailRoute,
         LANGUAGE_KEYS
       }
@@ -58,15 +83,29 @@
   .article {
     overflow: hidden;
 
-    > .title {
+    .header {
+      display: flex;
+      justify-content: space-between;
       height: 3em;
       line-height: 3em;
       margin: 0;
       padding: 0 $gap;
       border-bottom: 1px dotted $module-bg-darker-1;
 
-      .iconfont {
-        margin-right: $sm-gap;
+      .title {
+        .iconfont {
+          margin-right: $sm-gap;
+        }
+        .text {
+          font-weight: bold;
+        }
+      }
+
+      .switch {
+        color: $text-secondary;
+        &:hover {
+          color: $text;
+        }
       }
     }
 

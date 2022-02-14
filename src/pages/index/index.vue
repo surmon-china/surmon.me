@@ -34,7 +34,7 @@
   import { useMetaStore } from '/@/store/meta'
   import { nextScreen } from '/@/utils/effects'
   import { META } from '/@/config/app.config'
-  import ArticleList from '/@/components/flow-desktop/list.vue'
+  import ArticleList from '/@/components/flow/desktop/list.vue'
   import Carrousel from './carrousel.vue'
   import Twitter from './twitter.vue'
 

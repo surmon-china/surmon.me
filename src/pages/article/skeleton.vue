@@ -13,10 +13,10 @@
     </div>
     <div class="module">
       <ul
-        class="releted-skeleton"
-        :style="{ 'grid-template-columns': `repeat(${reletedCount}, 1fr)` }"
+        class="related-skeleton"
+        :style="{ 'grid-template-columns': `repeat(${relatedCount}, 1fr)` }"
       >
-        <skeleton-base v-for="item in reletedCount" :key="item" class="item" />
+        <skeleton-base v-for="item in relatedCount" :key="item" class="item" />
       </ul>
     </div>
   </div>
@@ -31,7 +31,7 @@
         type: Number,
         required: true
       },
-      reletedCount: {
+      relatedCount: {
         type: Number,
         required: true
       }
@@ -78,7 +78,7 @@
       }
     }
 
-    .releted-skeleton {
+    .related-skeleton {
       padding: $gap;
       margin: 0;
       display: grid;

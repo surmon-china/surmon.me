@@ -15,11 +15,11 @@ export interface Tag {
   _id: string
   name: string
   slug: string
-  count: number
   description: string
   update_at: string
   create_at: string
   extends: UniversalExtend[]
+  articles_count: number
 }
 
 export const tagEnName = (tag: Tag) => {
@@ -46,7 +46,7 @@ export const useTagStore = defineStore('tag', {
     // sort by count
     sorted: (state) => {
       const tags = [...state.tags]
-      tags.sort((a, b) => b.count - a.count)
+      tags.sort((a, b) => b.articles_count - a.articles_count)
       return tags
     },
     // 全量标签列表（本身、全小写、全大写、首字母大写）
@@ -70,9 +70,9 @@ export const useTagStore = defineStore('tag', {
 
       this.fetching = true
       return nodepress
-        .get('/tag', { params: { cache: 1 } })
+        .get('/tag/all')
         .then((response) => {
-          this.tags = response.result.data
+          this.tags = response.result
           this.fetched = true
         })
         .finally(() => {

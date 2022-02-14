@@ -14,9 +14,11 @@
 
 <script lang="ts">
   import { defineComponent, reactive, onMounted, onBeforeUnmount } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import Flower from './flower.vue'
 
-  const FLOWERS = [
+  const EN_FLOWERS = ['💙', '🤍', '❤️']
+  const ZH_FLOWERS = [
     '富强',
     '民主',
     '文明',
@@ -44,6 +46,7 @@
       Flower
     },
     setup() {
+      const { isZhLang } = useEnhancer()
       const state = reactive({
         id: 0,
         flowers: [] as IFlower[],
@@ -51,20 +54,18 @@
       })
 
       const handleClick = (event: MouseEvent) => {
+        const flowers = isZhLang.value ? ZH_FLOWERS : EN_FLOWERS
         state.contentIndex++
-        if (state.contentIndex >= FLOWERS.length) {
+        if (state.contentIndex >= flowers.length) {
           state.contentIndex = 0
         }
         state.flowers.push({
           id: ++state.id,
           x: event.x || event.clientX,
           y: event.y || event.clientY,
-          text: FLOWERS[state.contentIndex]
+          text: flowers[state.contentIndex]
         } as IFlower)
       }
-
-      onMounted(() => window.addEventListener('click', handleClick))
-      onBeforeUnmount(() => window.removeEventListener('click', handleClick))
 
       const handleAnimationEnd = (id: number) => {
         const targetIndex = state.flowers.findIndex((flower) => flower.id === id)
@@ -72,6 +73,9 @@
           state.flowers.splice(targetIndex, 1)
         }
       }
+
+      onMounted(() => window.addEventListener('click', handleClick))
+      onBeforeUnmount(() => window.removeEventListener('click', handleClick))
 
       return {
         state,
@@ -97,6 +101,7 @@
     .garden-box {
       width: 100%;
       height: 100%;
+      padding: 0;
     }
   }
 </style>

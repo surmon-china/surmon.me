@@ -11,15 +11,16 @@ import { Tag } from './tag'
 import { dateToHuman, HumanDate } from '/@/transforms/moment'
 import nodepress from '/@/services/nodepress'
 
-export interface StatisticState {
+export interface Statistic {
   tags: number
-  views: number
   articles: number
   comments: number
+  todayViews: number
+  totalViews: number
+  totalLikes: number
 }
 
-export interface ArchiveState {
-  meta: any
+export interface Archive {
   articles: Article[]
   categories: Category[]
   tags: Tag[]
@@ -28,8 +29,8 @@ export interface ArchiveState {
 export const useArchiveStore = defineStore('archive', {
   state: () => ({
     fetching: false,
-    statistic: null as null | StatisticState,
-    data: null as null | ArchiveState
+    statistic: null as null | Statistic,
+    data: null as null | Archive
   }),
   getters: {
     hydrated: (state) => {
@@ -38,17 +39,21 @@ export const useArchiveStore = defineStore('archive', {
       }
 
       const { articles, tags, categories } = state.data
-      const tagMap = new Map(tags.map((tag) => [tag._id, { ...tag, count: 0 }]))
-      const categoryMap = new Map(categories.map((cate) => [cate._id, { ...cate, count: 0 }]))
+      const tagMap = new Map<string, Tag>(
+        tags.map((tag) => [tag._id, { ...tag, articles_count: 0 }])
+      )
+      const categoryMap = new Map<string, Category>(
+        categories.map((category) => [category._id, { ...category, articles_count: 0 }])
+      )
       articles.forEach((article) => {
         ;(article.tag as any as string[]).forEach((t) => {
           if (tagMap.has(t)) {
-            tagMap.get(t)!.count++
+            tagMap.get(t)!.articles_count++
           }
         })
         ;(article.category as any as string[]).forEach((c) => {
           if (categoryMap.has(c)) {
-            categoryMap.get(c)!.count++
+            categoryMap.get(c)!.articles_count++
           }
         })
       })
@@ -104,7 +109,7 @@ export const useArchiveStore = defineStore('archive', {
       }
       this.fetching = true
       return nodepress
-        .get<ArchiveState>('/archive')
+        .get<Archive>('/archive')
         .then((response) => {
           this.data = response.result
         })
@@ -119,7 +124,7 @@ export const useArchiveStore = defineStore('archive', {
       }
       this.fetching = true
       return nodepress
-        .get<StatisticState>('/expansion/statistic')
+        .get<Statistic>('/expansion/statistic')
         .then((response) => {
           this.statistic = response.result
         })

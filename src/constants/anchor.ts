@@ -15,7 +15,7 @@ export const ARTICLE_CONTENT_ELEMENT_ID = 'A_article_content'
 export const ARTICLE_READMORE_ELEMENT_ID = 'A_article_readmore'
 export const ARTICLE_META_ELEMENT_ID = 'A_article_meta'
 export const ARTICLE_SHARE_ELEMENT_ID = 'A_article_share'
-export const ARTICLE_RELETED_ELEMENT_ID = 'A_article_releted'
+export const ARTICLE_RELATED_ELEMENT_ID = 'A_article_related'
 
 export const ARTICLE_CONTENT_HEADING_ELEMENT_ID_PREFIX = 'A_article_content_heading'
 export const getArticleContentHeadingElementID = (level: number, heading: string) => {

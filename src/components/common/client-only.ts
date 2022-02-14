@@ -8,7 +8,7 @@
  */
 
 import { defineComponent, ref, h, onMounted, Transition, cloneVNode } from 'vue'
-import { useEnhancer } from '../../app/enhancer'
+import { useEnhancer } from '/@/app/enhancer'
 
 /**
  * @description only render on client (browser)

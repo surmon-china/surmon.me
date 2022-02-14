@@ -7,7 +7,7 @@
 import { defineStore } from 'pinia'
 import { isClient } from '/@/app/environment'
 import { LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
-import { SortType, OriginState, UniversalExtend } from '/@/constants/state'
+import { OriginState, UniversalExtend } from '/@/constants/state'
 import { getArticleContentHeadingElementID } from '/@/constants/anchor'
 import nodepress from '/@/services/nodepress'
 import { markdownToHTML } from '/@/transforms/markdown'
@@ -37,7 +37,6 @@ export interface Article {
   create_at: string
   tag: Tag[]
   category: Category[]
-  related: Article[]
   extends: UniversalExtend[]
 }
 
@@ -92,9 +91,9 @@ export const useArticleListStore = defineStore('article', {
 
       this.hotList.fetching = true
       return nodepress
-        .get(ARTICLE_API_PATH, { params: { cache: 1, sort: SortType.Hot } })
+        .get(`${ARTICLE_API_PATH}/hot`)
         .then((response) => {
-          this.hotList.data = response.result.data
+          this.hotList.data = response.result
           this.hotList.fetched = true
         })
         .finally(() => {
@@ -131,6 +130,7 @@ export const useArticleDetailStore = defineStore('articleDetail', {
   state: () => ({
     fetching: false,
     article: null as null | Article,
+    relatedArticles: [] as Article[],
     renderedFullContent: true
   }),
   getters: {
@@ -190,28 +190,37 @@ export const useArticleDetailStore = defineStore('articleDetail', {
     }
   },
   actions: {
-    // 阅读全文
     renderFullContent() {
       this.renderedFullContent = true
     },
 
-    // 获取文章详情
-    fetchDetail(params: { articleID: number }) {
-      this.fetching = true
+    fetchArticleDetail(articleID: number) {
       this.article = null
-      const fetch = nodepress.get(`${ARTICLE_API_PATH}/${params.articleID}`)
+      const fetch = nodepress.get(`${ARTICLE_API_PATH}/${articleID}`)
       const promise = isClient ? delayPromise(580, fetch) : fetch
-      return promise
-        .then((response) => {
-          this.article = response.result
-          this.renderedFullContent = !this.isLongContent
-        })
-        .finally(() => {
-          this.fetching = false
-        })
+      return promise.then((response) => {
+        this.article = response.result
+        this.renderedFullContent = !this.isLongContent
+      })
     },
 
-    // 喜欢文章
+    fetchRelatedArticles(articleID: number) {
+      this.relatedArticles = []
+      return nodepress.get(`${ARTICLE_API_PATH}/related/${articleID}`).then((response) => {
+        this.relatedArticles = response.result
+      })
+    },
+
+    fetchCompleteArticle(params: { articleID: number }) {
+      this.fetching = true
+      return Promise.all([
+        this.fetchArticleDetail(params.articleID),
+        this.fetchRelatedArticles(params.articleID)
+      ]).finally(() => {
+        this.fetching = false
+      })
+    },
+
     postArticleLike(articleID: number) {
       const universalStore = useUniversalStore()
       return nodepress

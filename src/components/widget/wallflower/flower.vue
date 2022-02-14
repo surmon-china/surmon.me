@@ -26,11 +26,8 @@
     emits: [Event.Ended],
     setup(props, context) {
       const state = reactive({
-        // 播放时长
         delay: 1,
-        // 定时器
         timer: null as number | null,
-        // 播放状态
         playing: false
       })
 
@@ -83,6 +80,7 @@
     color: $primary;
     font-family: 'webfont-bolder', $font-family-normal;
     font-size: $font-size-h3;
+    white-space: nowrap;
 
     @keyframes flower-playing {
       0% {
@@ -90,7 +88,7 @@
       }
       80% {
         transform: translate3d(-50%, -400%, 0);
-        opacity: 0.8;
+        opacity: 0.6;
       }
       100% {
         transform: translate3d(-50%, -500%, 0);
@@ -99,6 +97,7 @@
     }
 
     &.playing {
+      opacity: 0.8;
       animation: flower-playing 1s ease 0s forwards;
     }
   }

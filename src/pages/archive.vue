@@ -40,44 +40,19 @@
           </template>
           <template #default>
             <div class="content-warpper" key="content">
-              <page-title class="root-title" :level="1">
+              <page-title class="root-title" :level="1" v-if="archiveStore.statistic">
                 <span class="text">
                   <i18n zh="万象星盘" en="Statistic" />
                 </span>
               </page-title>
-              <div class="statistic">
-                <span class="item">
-                  <span class="count">{{ archiveStore.statistic?.articles }}</span>
-                  <divider class="divider" type="vertical" />
-                  <span class="kind">
-                    <i class="iconfont icon-coffee"></i>
-                    <span class="text">Articles</span>
-                  </span>
-                </span>
-                <span class="item">
-                  <span class="count">{{ archiveStore.statistic?.tags }}</span>
-                  <divider class="divider" type="vertical" />
-                  <span class="kind">
-                    <i class="iconfont icon-tag"></i>
-                    <span class="text">Tags</span>
-                  </span>
-                </span>
-                <span class="item">
-                  <span class="count">{{ archiveStore.statistic?.comments }}</span>
-                  <divider class="divider" type="vertical" />
-                  <span class="kind">
-                    <i class="iconfont icon-comment"></i>
-                    <span class="text">Comments</span>
-                  </span>
-                </span>
-                <span class="item">
-                  <span class="count">{{ archiveStore.statistic?.views }}</span>
-                  <divider class="divider" type="vertical" />
-                  <span class="kind">
-                    <i class="iconfont icon-eye"></i>
-                    <span class="text">Today views</span>
-                  </span>
-                </span>
+              <div class="statistic" v-if="archiveStore.statistic">
+                <div class="item" :key="index" v-for="(s, index) in statistics">
+                  <p class="title">
+                    <span class="text">{{ s.title }}</span>
+                    <i class="iconfont" :class="s.icon"></i>
+                  </p>
+                  <span class="content">{{ s.content }}</span>
+                </div>
               </div>
               <ul class="year-list">
                 <li v-for="yes in articleTree" :key="yes.year" class="year-item">
@@ -142,19 +117,19 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { META } from '/@/config/app.config'
-  import { Article } from '/@/store/article'
   import { useArchiveStore } from '/@/store/archive'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/universal'
   import { Language } from '/@/language/data'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { dateToHuman, HumanDate } from '/@/transforms/moment'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import {
     replaceToChineseNumber,
     toChineseMonth,
     toEngMonth,
-    firstUpperCase
+    firstUpperCase,
+    numberToKilo,
+    numberSplit
   } from '/@/transforms/text'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
   import PageTitle from '/@/components/common/fullpage/title.vue'
@@ -176,6 +151,35 @@
       const archiveStore = useArchiveStore()
       const articleTree = computed(() => archiveStore.tree)
       const isFetching = computed(() => archiveStore.fetching)
+      const statistics = computed(() => [
+        {
+          title: 'Articles',
+          content: numberSplit(archiveStore.statistic?.articles || 0),
+          icon: 'icon-quill'
+        },
+        {
+          title: 'Total upvotes',
+          content: numberSplit(archiveStore.statistic?.totalLikes || 0),
+          icon: 'icon-heart'
+        },
+        {
+          title: 'Views Today / Total',
+          content: `${archiveStore.statistic?.todayViews} / ${numberToKilo(
+            archiveStore.statistic?.totalViews || 0
+          )}`,
+          icon: 'icon-eye'
+        },
+        {
+          title: 'Comments',
+          content: numberSplit(archiveStore.statistic?.comments || 0),
+          icon: 'icon-comment'
+        },
+        {
+          title: 'Tags',
+          content: archiveStore.statistic?.tags,
+          icon: 'icon-tag'
+        }
+      ])
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_ARCHIVE, Language.En)!)
@@ -193,6 +197,7 @@
         replaceToChineseNumber,
         toChineseMonth,
         toEngMonth,
+        statistics,
         archiveStore,
         articleTree,
         isFetching
@@ -213,22 +218,19 @@
         .item {
           width: 100%;
           margin-bottom: $gap;
-
-          .count {
-            font-size: $font-size-h3 * 2 !important;
-            width: 46%;
-          }
+          padding-left: 33%;
         }
       }
     }
 
     .archive-content {
-      margin: 2rem 0;
-      min-height: $normal-page-active-content-height / 2;
+      margin-top: 2rem;
+      margin-bottom: 3rem;
+      min-height: $normal-page-active-content-height;
 
       .archive-empty {
         @include radius-box($lg-radius);
-        height: $normal-page-active-content-height / 2;
+        height: $normal-page-active-content-height;
         font-size: $font-size-h1;
         font-weight: bold;
       }
@@ -269,32 +271,22 @@
 
           .item {
             display: inline-flex;
-            align-items: center;
-            $count-size: $font-size-h2 * 2;
+            flex-direction: column;
 
-            .count {
-              min-width: 6rem;
-              text-align: right;
-              font-weight: bold;
-              font-size: $count-size;
-            }
-
-            .divider {
-              font-size: $count-size;
-            }
-
-            .kind {
-              display: inline-flex;
-              flex-direction: column;
-              color: $text-divider;
+            .title {
+              text-transform: uppercase;
+              margin-bottom: 0;
+              color: $text-disabled;
 
               .iconfont {
-                font-size: $font-size-h3;
+                margin-left: $xs-gap;
+                color: $text-divider;
               }
+            }
 
-              .text {
-                text-transform: uppercase;
-              }
+            .content {
+              font-size: $font-size-h1 * 1.2;
+              font-weight: bold;
             }
           }
         }

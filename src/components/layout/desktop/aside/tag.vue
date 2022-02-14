@@ -24,7 +24,7 @@
             <i class="iconfont" :class="getTagIcon(tag)" />
             <span class="name">
               <i18n :zh="tag.name" :en="tagEnName(tag)" />
-              <span class="count">({{ tag.count || 0 }})</span>
+              <span class="count">({{ tag.articles_count || 0 }})</span>
             </span>
           </router-link>
         </div>

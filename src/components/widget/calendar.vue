@@ -33,8 +33,8 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, reactive, computed } from 'vue'
-  import { useEnhancer } from '../../app/enhancer'
+  import { defineComponent, reactive, computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import {
     dateToHuman,
     humanToDate,
@@ -48,7 +48,7 @@
 
   export default defineComponent({
     name: 'DesktopAsideCalendar',
-    setup(_, context) {
+    setup() {
       const { i18n, isZhLang } = useEnhancer()
       const today = dateToHuman(new Date())
       const tableView = reactive({

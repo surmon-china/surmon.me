@@ -18,7 +18,7 @@ import { isValidDateParam } from '/@/transforms/validate'
 import { scrollToTop } from '/@/utils/effects'
 
 // mobile flow
-import MobileFlow from '/@/components/flow-mobile/index.vue'
+import MobileFlow from '/@/components/flow/mobile/index.vue'
 // desktop flow
 import IndexFlowPage from '/@/pages/index/index.vue'
 import CategoryFlowPage from '/@/pages/category.vue'
