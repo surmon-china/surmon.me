@@ -84,14 +84,14 @@ export const useArticleListStore = defineStore('article', {
     },
 
     // 获取最热文章列表
-    fetchHotList() {
+    fetchHottestList() {
       if (this.hotList.fetched) {
         return Promise.resolve()
       }
 
       this.hotList.fetching = true
       return nodepress
-        .get(`${ARTICLE_API_PATH}/hot`)
+        .get(`${ARTICLE_API_PATH}/hottest`)
         .then((response) => {
           this.hotList.data = response.result
           this.hotList.fetched = true
@@ -130,6 +130,8 @@ export const useArticleDetailStore = defineStore('articleDetail', {
   state: () => ({
     fetching: false,
     article: null as null | Article,
+    prevArticle: null as null | Article,
+    nextArticle: null as null | Article,
     relatedArticles: [] as Article[],
     renderedFullContent: true
   }),
@@ -204,10 +206,14 @@ export const useArticleDetailStore = defineStore('articleDetail', {
       })
     },
 
-    fetchRelatedArticles(articleID: number) {
+    fetchArticleContext(articleID: number) {
+      this.prevArticle = null
+      this.nextArticle = null
       this.relatedArticles = []
-      return nodepress.get(`${ARTICLE_API_PATH}/related/${articleID}`).then((response) => {
-        this.relatedArticles = response.result
+      return nodepress.get(`${ARTICLE_API_PATH}/${articleID}/context`).then((response) => {
+        this.prevArticle = response.result.prev_article
+        this.nextArticle = response.result.next_article
+        this.relatedArticles = response.result.related_articles
       })
     },
 
@@ -215,7 +221,7 @@ export const useArticleDetailStore = defineStore('articleDetail', {
       this.fetching = true
       return Promise.all([
         this.fetchArticleDetail(params.articleID),
-        this.fetchRelatedArticles(params.articleID)
+        this.fetchArticleContext(params.articleID)
       ]).finally(() => {
         this.fetching = false
       })

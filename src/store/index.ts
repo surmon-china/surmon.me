@@ -19,6 +19,7 @@ import { useMetaStore } from './meta'
 import { useLensStore } from './lens'
 import { useTwitterStore } from './twitter'
 import { useWallpaperStore } from './wallpaper'
+import { useArticleCalendarStore } from './aggregate'
 
 export const useStores = (_pinia?: Pinia) => ({
   announcement: useAnnouncementStore(_pinia),
@@ -32,7 +33,8 @@ export const useStores = (_pinia?: Pinia) => ({
   meta: useMetaStore(_pinia),
   lens: useLensStore(_pinia),
   twitter: useTwitterStore(_pinia),
-  wallpaper: useWallpaperStore(_pinia)
+  wallpaper: useWallpaperStore(_pinia),
+  articleCalendar: useArticleCalendarStore(_pinia)
 })
 
 export interface UniversalStoreConfig {
@@ -52,7 +54,7 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
 
     // fetch hot articles when desktop only
     if (!config.globalState.userAgent.isMobile) {
-      initFetchTasks.push(stores.articleList.fetchHotList())
+      initFetchTasks.push(stores.articleList.fetchHottestList())
     }
 
     return Promise.all(initFetchTasks)

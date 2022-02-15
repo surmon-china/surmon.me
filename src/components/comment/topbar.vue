@@ -29,7 +29,7 @@
             <option :value="SortType.Desc">
               <i18n :lkey="LANGUAGE_KEYS.COMMENT_SORT_NEW" />
             </option>
-            <option :value="SortType.Hot">
+            <option :value="SortType.Hottest">
               <i18n :lkey="LANGUAGE_KEYS.COMMENT_SORT_HOT" />
             </option>
             <option :value="SortType.Asc">

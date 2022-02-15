@@ -43,11 +43,14 @@
             />
           </div>
           <div class="module margin overflow">
+            <article-neighbour :prev="store.prevArticle" :next="store.nextArticle" />
+          </div>
+          <div class="module margin overflow">
             <article-related
               :id="ANCHORS.ARTICLE_RELATED_ELEMENT_ID"
               :columns="isMobile ? 2 : 3"
               :count="isMobile ? 4 : 6"
-              :articles="relatedArticles"
+              :articles="store.relatedArticles"
             />
           </div>
         </div>
@@ -78,6 +81,7 @@
   import ArticleMeta from './meta.vue'
   import ArticleUpvote from './upvote.vue'
   import ArticleRelated from './related.vue'
+  import ArticleNeighbour from './neighbour.vue'
 
   export default defineComponent({
     name: 'ArticleDetail',
@@ -88,7 +92,8 @@
       ArticleShare,
       ArticleMeta,
       ArticleUpvote,
-      ArticleRelated
+      ArticleRelated,
+      ArticleNeighbour
     },
     props: {
       articleId: {
@@ -103,9 +108,8 @@
     setup(props) {
       const { i18n, meta, gtag, globalState } = useEnhancer()
       const universalStore = useUniversalStore()
-      const articleDetailStore = useArticleDetailStore()
       const commentStore = useCommentStore()
-      const relatedArticles = computed(() => articleDetailStore.relatedArticles)
+      const articleDetailStore = useArticleDetailStore()
       const article = computed(() => articleDetailStore.article || UNDEFINED)
       const fetching = computed(() => articleDetailStore.fetching)
       const isLiked = computed(() =>
@@ -165,7 +169,7 @@
         ANCHORS,
         SocialMedia,
         userAgent: globalState.userAgent,
-        relatedArticles,
+        store: articleDetailStore,
         article,
         fetching,
         isLiked,

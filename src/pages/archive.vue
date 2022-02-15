@@ -16,7 +16,7 @@
     <div class="container">
       <div class="archive-content">
         <placeholder
-          :data="archiveStore.data?.articles.length && archiveStore.data?.tags.length"
+          :data="archiveStore.archive?.articles.length && archiveStore.archive?.tags.length"
           :loading="isFetching"
         >
           <template #placeholder>
@@ -48,8 +48,8 @@
               <div class="statistic" v-if="archiveStore.statistic">
                 <div class="item" :key="index" v-for="(s, index) in statistics">
                   <p class="title">
-                    <span class="text">{{ s.title }}</span>
                     <i class="iconfont" :class="s.icon"></i>
+                    <span class="text">{{ s.title }}</span>
                   </p>
                   <span class="content">{{ s.content }}</span>
                 </div>
@@ -163,8 +163,8 @@
           icon: 'icon-heart'
         },
         {
-          title: 'Views Today / Total',
-          content: `${archiveStore.statistic?.todayViews} / ${numberToKilo(
+          title: 'Today Views · Total',
+          content: `${archiveStore.statistic?.todayViews} · ${numberToKilo(
             archiveStore.statistic?.totalViews || 0
           )}`,
           icon: 'icon-eye'
@@ -218,7 +218,7 @@
         .item {
           width: 100%;
           margin-bottom: $gap;
-          padding-left: 33%;
+          align-items: center;
         }
       }
     }
@@ -279,13 +279,13 @@
               color: $text-disabled;
 
               .iconfont {
-                margin-left: $xs-gap;
+                margin-right: $xs-gap;
                 color: $text-divider;
               }
             }
 
             .content {
-              font-size: $font-size-h1 * 1.2;
+              font-size: $font-size-h1 * 1.4;
               font-weight: bold;
             }
           }

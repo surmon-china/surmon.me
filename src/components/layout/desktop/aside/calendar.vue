@@ -11,7 +11,7 @@
 
 <script lang="ts">
   import { defineComponent, onMounted } from 'vue'
-  import { useArchiveStore } from '/@/store/archive'
+  import { useArticleCalendarStore } from '/@/store/aggregate'
   import { getDateFlowRoute } from '/@/transforms/route'
   import { humanDateToYMD, HumanDate } from '/@/transforms/moment'
   import Calendar from '/@/components/widget/calendar.vue'
@@ -20,26 +20,17 @@
     name: 'DesktopAsideCalendar',
     components: { Calendar },
     setup() {
-      const archiveStore = useArchiveStore()
+      const articleCalendarStore = useArticleCalendarStore()
       const articlesIn = (targetDate: HumanDate) => {
-        const months = archiveStore.tree.find((y) => y.year === targetDate.year)?.months
-        if (months?.length) {
-          const days = months.find((m) => m.month === targetDate.month)?.articles
-          if (days?.length) {
-            const articles = days.filter((d) => d.createAt.day === targetDate.day)
-            return articles.length
-          }
-        }
-        return 0
+        const ymd = humanDateToYMD(targetDate)
+        return articleCalendarStore.data.find((item) => item.day === ymd)?.count || 0
       }
 
       const getDateRoute = (humanDate: HumanDate) => {
         return getDateFlowRoute(humanDateToYMD(humanDate))
       }
 
-      onMounted(() => {
-        archiveStore.fetchArchive()
-      })
+      onMounted(() => articleCalendarStore.fetch())
 
       return {
         articlesIn,
@@ -60,6 +51,8 @@
       position: relative;
       display: block;
       border-radius: 100%;
+      font-weight: bold;
+      color: $primary;
       &::before {
         content: '';
         $size: 4px;
@@ -75,7 +68,6 @@
 
       &:hover,
       &.link-active {
-        font-weight: bold;
         background-color: $primary;
         color: $text-reversal;
         &::before {

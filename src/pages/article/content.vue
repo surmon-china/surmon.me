@@ -177,12 +177,13 @@
 
     .oirigin {
       position: absolute;
-      top: -11px;
-      left: -29px;
+      position: absolute;
+      top: 1rem;
+      left: -2rem;
       transform: rotate(-45deg);
-      width: 7rem;
-      height: 4rem;
-      line-height: 5.7em;
+      width: 8rem;
+      height: 2rem;
+      line-height: 2rem;
       text-align: center;
       transform-origin: center;
       color: $white;
@@ -198,18 +199,6 @@
       &.reprint {
         --color: #{rgba($red, 0.7)};
       }
-
-      /* &::before {
-        $size: 6px;
-        content: '';
-        position: absolute;
-        top: 30%;
-        left: 47%;
-        width: $size;
-        height: $size;
-        border-radius: 100%;
-        background: $module-bg-opaque;
-      } */
     }
 
     .knowledge {

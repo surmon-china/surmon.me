@@ -30,15 +30,15 @@ export const useArchiveStore = defineStore('archive', {
   state: () => ({
     fetching: false,
     statistic: null as null | Statistic,
-    data: null as null | Archive
+    archive: null as null | Archive
   }),
   getters: {
     hydrated: (state) => {
-      if (!state.data) {
+      if (!state.archive) {
         return null
       }
 
-      const { articles, tags, categories } = state.data
+      const { articles, tags, categories } = state.archive
       const tagMap = new Map<string, Tag>(
         tags.map((tag) => [tag._id, { ...tag, articles_count: 0 }])
       )
@@ -72,7 +72,7 @@ export const useArchiveStore = defineStore('archive', {
         }>
       }>
 
-      state.data?.articles
+      state.archive?.articles
         .map((article) => ({
           ...article,
           createAt: dateToHuman(new Date(article.create_at))
@@ -104,14 +104,14 @@ export const useArchiveStore = defineStore('archive', {
   },
   actions: {
     fetchArchive() {
-      if (this.data) {
+      if (this.archive) {
         return Promise.resolve()
       }
       this.fetching = true
       return nodepress
         .get<Archive>('/archive')
         .then((response) => {
-          this.data = response.result
+          this.archive = response.result
         })
         .finally(() => {
           this.fetching = false
