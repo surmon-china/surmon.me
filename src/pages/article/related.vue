@@ -64,7 +64,7 @@
         return [
           ...articles,
           ...new Array(props.count - articles.length).fill({
-            title: '-',
+            title: '',
             id: null,
             _id: '',
             thumb: ''

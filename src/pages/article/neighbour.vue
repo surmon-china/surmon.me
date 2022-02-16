@@ -1,6 +1,6 @@
 <template>
   <div class="neighbour">
-    <div class="item-article prev">
+    <div class="item-article prev" :class="{ disabled: !prev }">
       <router-link
         v-if="prev"
         class="link"
@@ -19,7 +19,7 @@
         <i18n zh="没有更早的了" en="null" />
       </div>
     </div>
-    <div class="item-article next">
+    <div class="item-article next" :class="{ disabled: !next }">
       <router-link
         v-if="next"
         class="link"
@@ -85,73 +85,80 @@
 
     .item-article {
       display: block;
-      padding: $sm-gap $gap;
       position: relative;
       overflow: hidden;
       @include common-bg-module();
       @include radius-box($sm-radius);
+      &.disabled {
+        opacity: 0.7;
+        pointer-events: none;
+      }
       &.prev {
         .link {
           justify-content: flex-start;
-          .icon {
-            margin-right: $gap;
-          }
         }
       }
       &.next {
         .link {
           justify-content: space-between;
-          .icon {
-            margin-left: $gap;
-          }
         }
       }
 
       .link {
+        display: flex;
         width: 100%;
         height: 100%;
-        display: flex;
-        align-items: center;
+
         &:hover {
           .icon {
             color: $text;
           }
-          .title {
-            color: $link-color;
-          }
-          .description {
-            color: $text-secondary;
+          .content {
+            .title {
+              color: $link-color;
+            }
+            .description {
+              color: $text-secondary;
+            }
           }
         }
 
         .icon {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 3rem;
+          height: 100%;
           color: $text-secondary;
+          background-color: $module-bg-lighter;
+          transition: all $transition-time-fast;
         }
 
         .content {
-          max-width: calc(100% - 2em);
-        }
+          width: calc(100% - 3rem);
+          padding: $sm-gap $gap;
 
-        .title,
-        .description {
-          display: block;
-          width: 100%;
-          transition: color $transition-time-fast;
-          @include text-overflow();
-        }
+          .title,
+          .description {
+            display: block;
+            width: 100%;
+            transition: color $transition-time-fast;
+            @include text-overflow();
+          }
 
-        .title {
-          font-size: $font-size-h6;
-          margin-top: 0;
-          margin-bottom: $xs-gap;
-          font-weight: bold;
-          color: $text;
-        }
+          .title {
+            font-size: $font-size-h6;
+            margin-top: 0;
+            margin-bottom: $xs-gap;
+            font-weight: bold;
+            color: $text;
+          }
 
-        .description {
-          margin-bottom: 0;
-          font-size: $font-size-small;
-          color: $text-disabled;
+          .description {
+            margin-bottom: 0;
+            font-size: $font-size-small;
+            color: $text-disabled;
+          }
         }
       }
 
@@ -162,7 +169,6 @@
         justify-content: center;
         align-items: center;
         color: $text-disabled;
-        cursor: no-drop;
       }
     }
   }

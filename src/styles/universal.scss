@@ -1,3 +1,4 @@
+@import './variables.scss';
 @import './theme.scss';
 
 [hidden],
@@ -13,8 +14,9 @@ body {
   line-height: $line-height-base;
   user-select: none;
   -webkit-font-smoothing: antialiased;
-  // HACK: 为保证 GA 页面跳转广告不错位
+  // MARK: 为保证 GA 页面跳转广告不错位
   position: relative !important;
+  scroll-behavior: smooth;
 
   @include scrollbar-style(
     $size: $sm-gap,

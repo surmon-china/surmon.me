@@ -178,8 +178,8 @@
     .oirigin {
       position: absolute;
       position: absolute;
-      top: 1rem;
-      left: -2rem;
+      top: 0.8rem;
+      left: -2.2rem;
       transform: rotate(-45deg);
       width: 8rem;
       height: 2rem;

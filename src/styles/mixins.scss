@@ -169,3 +169,12 @@
 .center-placeholder {
   @include center-placeholder;
 }
+
+// https://developer.mozilla.org/zh-CN/docs/Web/CSS/scroll-snap-type
+@mixin scroll-snap-y() {
+  scroll-snap-type: y mandatory;
+}
+
+@mixin scroll-snap-item() {
+  scroll-snap-align: start;
+}

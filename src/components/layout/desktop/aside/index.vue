@@ -8,30 +8,22 @@
     </div>
     <client-only transition>
       <div class="module mammon">
-        <aside-mammon
-          @index-change="handleStandingAdSlideChange"
-          @ready="handleStandingAdSwiperReady"
-        />
+        <aside-mammon />
       </div>
     </client-only>
     <div class="module">
       <aside-calendar />
     </div>
-    <div class="module mammon-square">
-      <client-only>
-        <Adsense
-          ins-style="display:inline-block;width:250px;height:250px"
-          data-ad-slot="6138120718"
-          class="content"
-        />
-      </client-only>
-    </div>
     <div :id="ASIDE_STICKY_ELEMENT_ID" class="aside-sticky-box">
-      <client-only>
-        <div class="module mammon" v-if="renderStickyAd">
-          <aside-mammon :index="adIndex" @index-change="handleStickyAdIndexChange" />
-        </div>
-      </client-only>
+      <div class="module mammon-square">
+        <client-only>
+          <Adsense
+            ins-style="display:inline-block;width:250px;height:250px"
+            data-ad-slot="6138120718"
+            class="content"
+          />
+        </client-only>
+      </div>
       <div class="module">
         <client-only v-if="isArticlePage">
           <aside-anchor class="sticky-module" />
@@ -74,19 +66,6 @@
       // polyfill sticky event
       let stickyEvents: any = null
       const element = ref<HTMLDivElement>(null as any)
-      const adIndex = ref(0)
-      const renderStickyAd = ref(false)
-      const swiper = ref<SwiperClass>()
-
-      const handleStandingAdSwiperReady = (_swiper: SwiperClass) => {
-        swiper.value = _swiper
-      }
-      const handleStandingAdSlideChange = (index: number) => {
-        adIndex.value = index
-      }
-      const handleStickyAdIndexChange = (index: number) => {
-        swiper.value?.slideToLoop(index)
-      }
 
       const handleStickyStateChange = (event) => {
         // workaround: when (main container height >= aside height) & isSticky -> render sticky ad
@@ -95,7 +74,7 @@
         if (targetElement) {
           const mainContentElementHeight = targetElement.clientHeight
           const isFeasible = mainContentElementHeight >= asideElementHeight
-          renderStickyAd.value = isFeasible && event.detail.isSticky
+          // console.log(isFeasible && event.detail.isSticky)
         }
       }
 
@@ -125,12 +104,7 @@
         isArticlePage,
         ASIDE_ELEMENT_ID,
         ASIDE_STICKY_ELEMENT_ID,
-        renderStickyAd,
-        adIndex,
-        element,
-        handleStandingAdSwiperReady,
-        handleStandingAdSlideChange,
-        handleStickyAdIndexChange
+        element
       }
     }
   })
@@ -167,7 +141,7 @@
       }
 
       .sticky-module {
-        max-height: calc(100vh - 88px - #{$header-height + $lg-gap + $lg-gap + $lg-gap});
+        max-height: calc(100vh - 250px - #{$header-height + $lg-gap * 4});
       }
     }
 

@@ -180,9 +180,10 @@
     }
 
     .catalogue {
+      max-height: 60%;
       padding: $sm-gap $gap;
       overflow-y: auto;
-      max-height: 60%;
+      @include scroll-snap-y();
       &:hover {
         border-color: $primary;
       }
@@ -211,6 +212,7 @@
         .item {
           cursor: pointer;
           line-height: 2.4em;
+          @include scroll-snap-item();
           @include text-overflow();
           &:hover {
             color: $primary;
