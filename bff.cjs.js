@@ -1,10 +1,10 @@
 /*!
-* Surmon.me v3.6.23
+* Surmon.me v3.6.24
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
 */
-'use strict';var express=require('express'),RSS=require('rss'),axios=require('axios'),path=require('path'),stream=require('stream'),sitemap=require('sitemap'),WonderfulBingWallpaper=require('wonderful-bing-wallpaper'),yargs=require('yargs'),NeteaseMusic=require('simple-netease-cloud-music'),fs=require('fs'),vite=require('vite'),http=require('http'),compression=require('compression'),cookieParser=require('cookie-parser'),httpProxy=require('http-proxy'),LRU=require('lru-cache'),redis=require('redis');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var express__default=/*#__PURE__*/_interopDefaultLegacy(express);var RSS__default=/*#__PURE__*/_interopDefaultLegacy(RSS);var axios__default=/*#__PURE__*/_interopDefaultLegacy(axios);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var WonderfulBingWallpaper__default=/*#__PURE__*/_interopDefaultLegacy(WonderfulBingWallpaper);var NeteaseMusic__default=/*#__PURE__*/_interopDefaultLegacy(NeteaseMusic);var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var http__default=/*#__PURE__*/_interopDefaultLegacy(http);var compression__default=/*#__PURE__*/_interopDefaultLegacy(compression);var cookieParser__default=/*#__PURE__*/_interopDefaultLegacy(cookieParser);var LRU__default=/*#__PURE__*/_interopDefaultLegacy(LRU);/**
+'use strict';var express=require('express'),RSS=require('rss'),axios=require('axios'),path=require('path'),stream=require('stream'),sitemap=require('sitemap'),WonderfulBingWallpaper=require('wonderful-bing-wallpaper'),yargs=require('yargs'),fs=require('fs'),vite=require('vite'),http=require('http'),compression=require('compression'),cookieParser=require('cookie-parser'),httpProxy=require('http-proxy'),LRU=require('lru-cache'),redis=require('redis');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var express__default=/*#__PURE__*/_interopDefaultLegacy(express);var RSS__default=/*#__PURE__*/_interopDefaultLegacy(RSS);var axios__default=/*#__PURE__*/_interopDefaultLegacy(axios);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var WonderfulBingWallpaper__default=/*#__PURE__*/_interopDefaultLegacy(WonderfulBingWallpaper);var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var http__default=/*#__PURE__*/_interopDefaultLegacy(http);var compression__default=/*#__PURE__*/_interopDefaultLegacy(compression);var cookieParser__default=/*#__PURE__*/_interopDefaultLegacy(cookieParser);var LRU__default=/*#__PURE__*/_interopDefaultLegacy(LRU);/**
  * @file Dev environment
  * @module environment
  * @author Surmon <https://github.com/surmon-china>
@@ -272,32 +272,6 @@ const getGTagScript = async () => {
         throw response.data;
     }
 };/**
- * @file BFF ghchart getter
- * @module server.getter.ghchart
- * @author Surmon <https://github.com/surmon-china>
- */
-// https://github.com/surmon-china/README.md/blob/main/templates/github-contributions-calendar
-const getGitHubChartSVG = async () => {
-    const response = await axios__default["default"].get(`https://readme.app.surmon.me/api/render`, {
-        timeout: 1000 * 10,
-        params: {
-            // disable cache
-            cache_seconds: 0,
-            template_id: 'github-contributions-calendar',
-            'props.username': THIRD_IDS.GITHUB_USER_ID,
-            'props.size': 10,
-            'props.gap': 3,
-            'svg.width': 686,
-            'svg.height': 88
-        }
-    });
-    if (response.status === 200) {
-        return response.data;
-    }
-    else {
-        throw response.data;
-    }
-};/**
  * @file BFF bilibili getter
  * @module server.getter.bilibili
  * @author Surmon <https://github.com/surmon-china>
@@ -503,25 +477,37 @@ const getYouTubeVideoListByPlayerlistID = async (playlistID) => {
  * @module server.getter.music
  * @author Surmon <https://github.com/surmon-china>
  */
-const PLAY_LIST_LIMIT = 68;
-const neteseMusic = new NeteaseMusic__default["default"]();
-// 获取歌单列表
+const PLAY_LIST_LIMIT = 168;
 const getSongList = async () => {
-    const result = await neteseMusic._playlist(THIRD_IDS.MUSIC_163_BGM_ALBUM_ID, PLAY_LIST_LIMIT);
-    if (result.code < 0) {
-        throw new Error(result.message);
+    // https://github.com/Binaryify/NeteaseCloudMusicApi/blob/a0500ec648f22a1dd20fc7b529126f813aa26935/module/playlist_track_all.js
+    const playlistDetail = await axios__default["default"].get(`https://music.163.com/api/v6/playlist/detail?id=${THIRD_IDS.MUSIC_163_BGM_ALBUM_ID}`, { timeout: 6000 });
+    if (playlistDetail.data.code < 0) {
+        throw new Error(playlistDetail.data.message);
     }
-    return (result?.playlist?.tracks
+    const trackIDs = playlistDetail.data.playlist?.trackIds || [];
+    const idsParams = trackIDs
+        .slice(0, PLAY_LIST_LIMIT)
+        .map((id) => `{id:${id.id}}`)
+        .join(',');
+    const songListDetail = await axios__default["default"].get(`https://music.163.com/api/v3/song/detail?c=[${idsParams}]`, { timeout: 6000 });
+    if (!songListDetail.data.songs) {
+        throw new Error(songListDetail.data);
+    }
+    const songs = songListDetail.data.songs || [];
+    return (songs
         // 过滤掉无版权音乐
-        ?.filter((track) => track?.privilege?.cp !== 0)
-        // 格式化数据
-        ?.map((track) => ({
-        id: track.id,
-        name: track.name,
-        album: track?.al?.name || '-',
-        artist: (track.ar || []).map((artist) => artist.name).join(' / '),
-        cover_art_url: track.al?.picUrl,
-        url: null
+        // https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=%e8%8e%b7%e5%8f%96%e7%94%a8%e6%88%b7%e6%ad%8c%e5%8d%95
+        .filter((song) => !song.noCopyrightRcmd)
+        .slice(0, PLAY_LIST_LIMIT)
+        .map((song) => ({
+        id: song.id,
+        duration: song.dt,
+        name: song.name,
+        album: song.al?.name || '-',
+        artist: (song.ar || []).map((artist) => artist.name).join(' / '),
+        cover_art_url: song.al?.picUrl,
+        // https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=%e8%8e%b7%e5%8f%96%e9%9f%b3%e4%b9%90-url
+        url: `https://music.163.com/song/media/outer/url?id=${song.id}.mp3`
     })));
 };const resolveTemplate = (config) => {
     const { template, appHTML, metas, scripts, manifest } = config;
@@ -983,23 +969,6 @@ createExpressApp().then(({ app, server, cache }) => {
                 getter: getGTagScript
             });
             response.header('Content-Type', 'text/javascript');
-            response.send(data);
-        }
-        catch (error) {
-            erroror(response, error);
-        }
-    });
-    // GitHub chart svg
-    app.get('/effects/ghchart', async (_, response) => {
-        try {
-            const data = await cacher({
-                cache,
-                key: 'ghchart',
-                age: 60 * 60 * 6,
-                retryWhen: 60 * 1,
-                getter: getGitHubChartSVG
-            });
-            response.header('Content-Type', 'image/svg+xml');
             response.send(data);
         }
         catch (error) {
