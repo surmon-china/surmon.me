@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.24
+* Surmon.me v3.6.25
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -27,12 +27,13 @@ var TunnelModule;
 (function (TunnelModule) {
     TunnelModule["TwitterUserInfo"] = "twitter_userinfo";
     TunnelModule["TwitterTweets"] = "twitter_tweets";
+    TunnelModule["TwitterCalendar"] = "twitter_calendar";
     TunnelModule["YouTubePlaylist"] = "youtube_playlist";
     TunnelModule["YouTubeVideoList"] = "youtube_video_list";
-    TunnelModule["BiliBili"] = "bilibili";
     TunnelModule["Instagram"] = "instagram";
     TunnelModule["Wallpaper"] = "wallpaper";
-    TunnelModule["GitHub"] = "gitHub";
+    TunnelModule["GitHubRepositories"] = "github_repositories";
+    TunnelModule["GitHubContributions"] = "github_contributions";
     TunnelModule["NetEaseMusic"] = "netease_music";
 })(TunnelModule || (TunnelModule = {}));/**
  * @file BFF server config
@@ -58,7 +59,6 @@ const META = Object.freeze({
 const THIRD_IDS = Object.freeze({
     YOUTUBE_CHANNEL_ID: `UCoL-j6T28PLSJ2U6ZdONS0w`,
     MUSIC_163_BGM_ALBUM_ID: '638949385',
-    BILIBILI_USER_ID: '27940710',
     GITHUB_USER_ID: 'surmon-china',
     TWITTER_USER_ID: 'surmon7788'
 });
@@ -121,7 +121,6 @@ Object.freeze({
     ZHIHU: 'https://www.zhihu.com/people/surmon',
     WEIBO: 'https://weibo.com/surmon',
     QUORA: 'https://www.quora.com/profile/Surmon',
-    BILIBILI: `https://space.bilibili.com/${THIRD_IDS.BILIBILI_USER_ID}`,
     STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon?tab=profile',
     LEETCODE_CN: 'https://leetcode-cn.com/u/surmon',
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
@@ -272,24 +271,6 @@ const getGTagScript = async () => {
         throw response.data;
     }
 };/**
- * @file BFF bilibili getter
- * @module server.getter.bilibili
- * @author Surmon <https://github.com/surmon-china>
- */
-const PAGE_SIZE = 36;
-const PAGE = 1;
-const getBiliBiliVideos = async () => {
-    const videosResult = await axios__default["default"].request({
-        headers: { 'User-Agent': META.title },
-        url: `https://api.bilibili.com/x/space/arc/search?mid=${THIRD_IDS.BILIBILI_USER_ID}&ps=${PAGE_SIZE}&tid=0&pn=${PAGE}&order=pubdate&jsonp=jsonp`
-    });
-    if (videosResult.data.code === 0) {
-        return videosResult.data.data.list.vlist;
-    }
-    else {
-        throw new Error(String(videosResult.status + videosResult.statusText));
-    }
-};/**
  * @file BFF wallpaper getter
  * @module server.getter.wallpaper
  * @author Surmon <https://github.com/surmon-china>
@@ -329,6 +310,8 @@ const getAllWallpapers = async () => {
  * @module server.getter.github
  * @author Surmon <https://github.com/surmon-china>
  */
+// https://github.com/settings/tokens
+const bearerToken$1 = yargs.argv.github_token;
 const getGitHubRepositories = async () => {
     const response = await axios__default["default"].request({
         headers: { 'User-Agent': META.title },
@@ -346,6 +329,45 @@ const getGitHubRepositories = async () => {
         created_at: rep.created_at,
         language: rep.language
     }));
+};
+const isISODateString = (dateString) => {
+    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(dateString))
+        return false;
+    return new Date(dateString).toISOString() === dateString;
+};
+const getGitHubContributions = async (from, to) => {
+    if (!isISODateString(from) || !isISODateString(to)) {
+        return Promise.reject('Invalid date string!');
+    }
+    const response = await axios__default["default"].request({
+        headers: { Authorization: `bearer ${bearerToken$1}` },
+        url: `https://api.github.com/graphql`,
+        method: 'POST',
+        data: JSON.stringify({
+            query: `query {
+        user(login: "${THIRD_IDS.GITHUB_USER_ID}") {
+          contributionsCollection(from: "${from}", to: "${to}") {
+            contributionCalendar {
+              totalContributions
+              weeks {
+                contributionDays {
+                  weekday
+                  date
+                  contributionCount
+                  color
+                }
+              }
+            }
+          }
+        }
+      }`
+        })
+    });
+    if (response.data.errors) {
+        const message = response.data.errors.map((error) => error.message).join('; ');
+        throw Error(message);
+    }
+    return response.data.data.user.contributionsCollection.contributionCalendar;
 };/**
  * @file BFF Twitter getter
  * @module server.getter.twitter
@@ -402,10 +424,105 @@ const getTwitterUserinfo = () => {
     return getTwitterUserinfoByUsername(THIRD_IDS.TWITTER_USER_ID);
 };
 let uidCache = null;
+const ensureUID = async () => {
+    if (uidCache) {
+        return uidCache;
+    }
+    else {
+        uidCache = (await getTwitterUserinfo()).id;
+        return uidCache;
+    }
+};
 const getTwitterTweets = async () => {
-    uidCache = uidCache || (await getTwitterUserinfo()).id;
-    return await getTwitterTweetsByUID(uidCache);
-};/**
+    const uid = await ensureUID();
+    return await getTwitterTweetsByUID(uid);
+};
+// ---------------------------------------------------------
+// Tweets calendar
+const getPageTweets = async (startTime, pagination_token) => {
+    const uid = await ensureUID();
+    return axios__default["default"]
+        .get(`https://api.twitter.com/2/users/${uid}/tweets`, {
+        timeout: 8000,
+        params: {
+            'tweet.fields': `id,created_at`,
+            start_time: startTime,
+            pagination_token,
+            max_results: 100
+        },
+        headers: {
+            Authorization: `Bearer ${bearerToken}`
+        }
+    })
+        .then((response) => {
+        if (response.status === 200) {
+            return response.data;
+        }
+        else {
+            throw response.data;
+        }
+    });
+};
+function doFetchAllTweets({ startTime, nextToken, tweets = [], onSucceed, onFailed }) {
+    getPageTweets(startTime, nextToken)
+        .then((result) => {
+        tweets.push(...result.data);
+        if (result.meta.next_token) {
+            doFetchAllTweets({
+                startTime,
+                nextToken: result.meta.next_token,
+                tweets,
+                onSucceed,
+                onFailed
+            });
+        }
+        else {
+            onSucceed?.(tweets);
+        }
+    })
+        .catch(onFailed);
+}
+const calendarTemp = {
+    tweets: [],
+    calendar: []
+};
+function fetchAllTweets() {
+    console.info(`[BFF] fetchAllTweets`);
+    calendarTemp.tweets = [];
+    calendarTemp.calendar = [];
+    // startTime
+    const today = new Date();
+    today.setDate(1);
+    today.setFullYear(today.getFullYear() - 1);
+    const prevYearToday = today.toISOString();
+    doFetchAllTweets({
+        startTime: prevYearToday,
+        onSucceed: (tweets) => {
+            console.info(`[BFF] fetchAllTweets done, ${tweets.length} tweets. refetch when after 18h`);
+            setTimeout(() => fetchAllTweets(), 18 * 60 * 60 * 1000);
+            const map = new Map();
+            tweets.forEach((tweet) => {
+                const key = tweet.created_at.slice(0, 10);
+                if (map.has(key)) {
+                    map.set(key, map.get(key) + 1);
+                }
+                else {
+                    map.set(key, 1);
+                }
+            });
+            calendarTemp.calendar = Array.from(map.keys()).map((key) => ({
+                date: key,
+                count: map.get(key)
+            }));
+        },
+        onFailed: (error) => {
+            console.warn(`[BFF] fetchAllTweets error, retry when after 30s`, error);
+            setTimeout(() => fetchAllTweets(), 30 * 1000);
+        }
+    });
+}
+fetchAllTweets();
+const getTwitterCalendar = async () => calendarTemp.calendar;/**
  * @file BFF instagram getter
  * @module server.getter.instagram
  * @author Surmon <https://github.com/surmon-china>
@@ -698,7 +815,6 @@ const cacher = async (_config) => {
 var ProxyModule;
 (function (ProxyModule) {
     ProxyModule["Default"] = "default";
-    ProxyModule["BiliBili"] = "bilibili";
     ProxyModule["Instagram"] = "instagram";
     ProxyModule["YouTube"] = "youtube";
     ProxyModule["NetEasyMusic"] = "163";
@@ -713,11 +829,6 @@ const proxys = [
         module: ProxyModule.Default,
         origin: 'https://surmon.me',
         referer: 'https://surmon.me/'
-    },
-    {
-        module: ProxyModule.BiliBili,
-        origin: 'https://www.bilibili.com',
-        referer: 'https://www.bilibili.com/'
     },
     {
         module: ProxyModule.Instagram,
@@ -975,16 +1086,6 @@ createExpressApp().then(({ app, server, cache }) => {
             erroror(response, error);
         }
     });
-    // BiliBili videos
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`, responser(() => {
-        return cacher({
-            cache,
-            key: 'bilibili',
-            age: 60 * 60 * 1,
-            retryWhen: 60 * 5,
-            getter: getBiliBiliVideos
-        });
-    }));
     // Bing wallpapers
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`, responser(() => {
         return cacher({
@@ -996,13 +1097,29 @@ createExpressApp().then(({ app, server, cache }) => {
         });
     }));
     // GitHub Repositories
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHub}`, responser(() => {
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubRepositories}`, responser(() => {
         return cacher({
             cache,
-            key: 'github',
+            key: 'github_repositories',
             age: 60 * 60 * 2,
             retryWhen: 60 * 30,
             getter: getGitHubRepositories
+        });
+    }));
+    // GitHub Contributions
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubContributions}`, responser(() => {
+        return cacher({
+            cache,
+            key: 'github_contributions',
+            age: 60 * 60 * 12,
+            retryWhen: 60 * 10,
+            getter: () => {
+                const now = new Date();
+                const end = now.toISOString();
+                now.setFullYear(now.getFullYear() - 1);
+                const start = now.toISOString();
+                return getGitHubContributions(start, end);
+            }
         });
     }));
     // 163 music BGM list
@@ -1035,6 +1152,8 @@ createExpressApp().then(({ app, server, cache }) => {
             getter: getTwitterTweets
         });
     }));
+    // Twitter tweets calendar
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterCalendar}`, responser(() => getTwitterCalendar()));
     // Instagram newest medias
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Instagram}`, responser(() => {
         return cacher({

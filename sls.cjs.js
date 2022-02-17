@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.24
+* Surmon.me v3.6.25
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -91,7 +91,6 @@ const FORBIDDEN = 403;/**
 var ProxyModule;
 (function (ProxyModule) {
     ProxyModule["Default"] = "default";
-    ProxyModule["BiliBili"] = "bilibili";
     ProxyModule["Instagram"] = "instagram";
     ProxyModule["YouTube"] = "youtube";
     ProxyModule["NetEasyMusic"] = "163";
@@ -106,11 +105,6 @@ const proxys = [
         module: ProxyModule.Default,
         origin: 'https://surmon.me',
         referer: 'https://surmon.me/'
-    },
-    {
-        module: ProxyModule.BiliBili,
-        origin: 'https://www.bilibili.com',
-        referer: 'https://www.bilibili.com/'
     },
     {
         module: ProxyModule.Instagram,
@@ -218,7 +212,6 @@ const META = Object.freeze({
 const THIRD_IDS = Object.freeze({
     YOUTUBE_CHANNEL_ID: `UCoL-j6T28PLSJ2U6ZdONS0w`,
     MUSIC_163_BGM_ALBUM_ID: '638949385',
-    BILIBILI_USER_ID: '27940710',
     GITHUB_USER_ID: 'surmon-china',
     TWITTER_USER_ID: 'surmon7788'
 });
@@ -281,7 +274,6 @@ Object.freeze({
     ZHIHU: 'https://www.zhihu.com/people/surmon',
     WEIBO: 'https://weibo.com/surmon',
     QUORA: 'https://www.quora.com/profile/Surmon',
-    BILIBILI: `https://space.bilibili.com/${THIRD_IDS.BILIBILI_USER_ID}`,
     STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon?tab=profile',
     LEETCODE_CN: 'https://leetcode-cn.com/u/surmon',
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
