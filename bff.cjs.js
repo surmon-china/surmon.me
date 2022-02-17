@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.25
+* Surmon.me v3.6.26
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -364,8 +364,7 @@ const getGitHubContributions = async (from, to) => {
         })
     });
     if (response.data.errors) {
-        const message = response.data.errors.map((error) => error.message).join('; ');
-        throw Error(message);
+        throw Error(response.data.errors.map((error) => error.message).join('; '));
     }
     return response.data.data.user.contributionsCollection.contributionCalendar;
 };/**
@@ -441,8 +440,7 @@ const getTwitterTweets = async () => {
 // Tweets calendar
 const getPageTweets = async (startTime, pagination_token) => {
     const uid = await ensureUID();
-    return axios__default["default"]
-        .get(`https://api.twitter.com/2/users/${uid}/tweets`, {
+    const response = await axios__default["default"].get(`https://api.twitter.com/2/users/${uid}/tweets`, {
         timeout: 8000,
         params: {
             'tweet.fields': `id,created_at`,
@@ -453,15 +451,13 @@ const getPageTweets = async (startTime, pagination_token) => {
         headers: {
             Authorization: `Bearer ${bearerToken}`
         }
-    })
-        .then((response) => {
-        if (response.status === 200) {
-            return response.data;
-        }
-        else {
-            throw response.data;
-        }
     });
+    if (response.status === 200) {
+        return response.data;
+    }
+    else {
+        throw response.data;
+    }
 };
 function doFetchAllTweets({ startTime, nextToken, tweets = [], onSucceed, onFailed }) {
     getPageTweets(startTime, nextToken)
