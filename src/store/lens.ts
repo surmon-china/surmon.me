@@ -22,10 +22,6 @@ export const useLensStore = defineStore('lens', {
     youtube: {
       fetching: false,
       data: [] as Array<any>
-    },
-    bilibili: {
-      fetching: false,
-      data: [] as Array<any>
     }
   }),
   actions: {
@@ -60,21 +56,6 @@ export const useLensStore = defineStore('lens', {
     fetchYouTubeVideoList(playlistID: string) {
       const fetch = tunnel.dispatch(TunnelModule.YouTubeVideoList, { id: playlistID })
       return isClient ? delayPromise(LENS_NORMAL_DELAY, fetch) : fetch
-    },
-    fetchBilibiliVideos() {
-      if (this.bilibili.data.length) {
-        return Promise.resolve()
-      }
-
-      this.bilibili.fetching = true
-      return tunnel
-        .dispatch(TunnelModule.BiliBili)
-        .then((response) => {
-          this.bilibili.data = response
-        })
-        .finally(() => {
-          this.bilibili.fetching = false
-        })
     }
   }
 })

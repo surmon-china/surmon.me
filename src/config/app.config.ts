@@ -21,7 +21,6 @@ export const META = Object.freeze({
 export const THIRD_IDS = Object.freeze({
   YOUTUBE_CHANNEL_ID: `UCoL-j6T28PLSJ2U6ZdONS0w`,
   MUSIC_163_BGM_ALBUM_ID: '638949385',
-  BILIBILI_USER_ID: '27940710',
   GITHUB_USER_ID: 'surmon-china',
   TWITTER_USER_ID: 'surmon7788'
 })
@@ -92,7 +91,6 @@ export const VALUABLE_LINKS = Object.freeze({
   ZHIHU: 'https://www.zhihu.com/people/surmon',
   WEIBO: 'https://weibo.com/surmon',
   QUORA: 'https://www.quora.com/profile/Surmon',
-  BILIBILI: `https://space.bilibili.com/${THIRD_IDS.BILIBILI_USER_ID}`,
   STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon?tab=profile',
   LEETCODE_CN: 'https://leetcode-cn.com/u/surmon',
   LINKEDIN: 'https://www.linkedin.com/in/surmon',

@@ -170,9 +170,13 @@
   @include center-placeholder;
 }
 
-// https://developer.mozilla.org/zh-CN/docs/Web/CSS/scroll-snap-type
+/// https://developer.mozilla.org/zh-CN/docs/Web/CSS/scroll-snap-type
 @mixin scroll-snap-y() {
   scroll-snap-type: y mandatory;
+}
+
+@mixin scroll-snap-x() {
+  scroll-snap-type: x mandatory;
 }
 
 @mixin scroll-snap-item() {

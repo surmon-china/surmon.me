@@ -107,35 +107,31 @@
           </ulink>
         </div>
       </div>
-      <div class="roadmap-box" :placeholder="isZhLang ? i18ns.roadmap.zh : i18ns.roadmap.en">
-        <div class="wrapper">
-          <button class="fullscreen" @click="handleOpenMap">
-            <i class="iconfont icon-fullscreen"></i>
-          </button>
-          <iframe class="iframe" :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP" frameborder="0" />
-          <client-only>
-            <popup v-model:visible="isOnRoadMap">
-              <iframe
-                :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP"
-                allowfullscreen
-                frameborder="0"
-                class="roadmap-modal"
-              />
-            </popup>
-          </client-only>
-        </div>
+      <div class="calendar">
+        <activity-calendar />
       </div>
-      <div class="calendar-box">
+      <div class="maps">
         <div class="location">
           <iframe class="iframe" src="/partials/location.html" />
         </div>
-        <router-link
-          class="article-calendar"
-          :to="getPageRoute(RouteName.Archive)"
-          @mousedown="handleGTagEvent('article_calendar_link')"
-        >
-          <article-calendar />
-        </router-link>
+        <div class="roadmap" :placeholder="isZhLang ? i18ns.roadmap.zh : i18ns.roadmap.en">
+          <div class="wrapper">
+            <button class="fullscreen" @click="handleOpenMap">
+              <i class="iconfont icon-fullscreen"></i>
+            </button>
+            <iframe class="iframe" :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP" frameborder="0" />
+            <client-only>
+              <popup v-model:visible="isOnRoadMap">
+                <iframe
+                  :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP"
+                  allowfullscreen
+                  frameborder="0"
+                  class="roadmap-modal"
+                />
+              </popup>
+            </client-only>
+          </div>
+        </div>
       </div>
       <div class="footer-links">
         <div class="friendlinks">
@@ -170,12 +166,12 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { VALUABLE_LINKS, FRIEND_LINKS, SPECIAL_LINKS } from '/@/config/app.config'
   import { useAboutPageMeta, getAdminAvatar, i18ns } from './helper'
-  import ArticleCalendar from './calendar.vue'
+  import ActivityCalendar from './calendar.vue'
 
   export default defineComponent({
     name: 'PCAboutPage',
     components: {
-      ArticleCalendar
+      ActivityCalendar
     },
     setup() {
       const { i18n, gtag, globalState, isZhLang, isDarkTheme } = useEnhancer()
@@ -272,7 +268,6 @@
       useUniversalFetch(() => metaStore.fetchAdminInfo())
 
       return {
-        RouteName,
         i18ns,
         qrcodes,
         links,
@@ -308,15 +303,15 @@
     overflow: hidden;
 
     &.dark {
-      .roadmap-box {
-        .iframe {
-          filter: invert(1) hue-rotate(200deg) grayscale(60%) contrast(0.9);
-        }
-      }
-      .calendar-box {
+      .maps {
         .location {
           .iframe {
             filter: invert(1) hue-rotate(200deg) brightness(0.5) contrast(0.9);
+          }
+        }
+        .roadmap {
+          .iframe {
+            filter: invert(1) hue-rotate(200deg) grayscale(60%) contrast(0.9);
           }
         }
       }
@@ -497,9 +492,6 @@
               &.zhihu {
                 background-color: $zhihu-primary;
               }
-              &.bilibili {
-                background-color: $bilibili-pink-primary;
-              }
               &.stackoverflow {
                 background-color: $stackoverflow-primary;
               }
@@ -649,7 +641,7 @@
           align-items: center;
           margin-bottom: $sm-gap;
           padding-bottom: 2px;
-          border-bottom: 1px solid;
+          border-bottom: 2px solid;
           color: var(--item-primary);
           opacity: 0.8;
           transition: opacity $transition-time-fast;
@@ -659,7 +651,7 @@
 
           .iconfont {
             margin-right: $sm-gap;
-            font-size: $font-size-h3;
+            font-size: $font-size-h4;
           }
 
           .text {
@@ -670,73 +662,73 @@
       }
     }
 
-    .roadmap-box {
-      overflow: hidden;
-      width: 100%;
-      padding: $sm-gap;
+    .calendar {
       margin-bottom: $gap * 2;
-      @include radius-box($lg-radius);
+      padding: $gap;
+      border-radius: $lg-radius;
       @include common-bg-module();
-      @extend .center-placeholder;
-
-      .wrapper {
-        $size: 250px;
-        $google-bar: 54px;
-        position: relative;
-        height: $size;
-        @include radius-box($lg-radius);
-
-        .fullscreen {
-          position: absolute;
-          top: $gap;
-          right: $gap;
-          z-index: $z-index-normal + 1;
-          display: block;
-          width: 4rem;
-          height: 3rem;
-          border-radius: $xs-radius;
-          background-color: $module-bg;
-          font-size: $font-size-h4;
-          color: $text-secondary;
-          @include background-transition();
-          &:hover {
-            color: $text;
-            background-color: $module-bg-opaque;
-          }
-        }
-
-        .iframe {
-          width: 100%;
-          height: $size + $google-bar;
-          margin-top: -$google-bar;
-        }
-      }
     }
 
-    .calendar-box {
+    .maps {
+      $size: 160px;
       position: relative;
       display: flex;
       width: 100%;
-      height: 9rem;
       margin-bottom: $gap * 2;
 
       .location,
-      .article-calendar {
-        height: 100%;
+      .roadmap {
         padding: $sm-gap;
-        border-radius: $lg-radius;
         @include common-bg-module();
+        @include radius-box($lg-radius);
       }
 
       .location {
+        flex: 1;
         display: block;
-        /* width: 26rem; */
-        flex-grow: 1;
         margin-right: $gap * 2;
 
         .iframe {
           width: 100%;
           height: 100%;
+        }
+      }
+
+      .roadmap {
+        width: 70%;
+        overflow: hidden;
+        @extend .center-placeholder;
+
+        .wrapper {
+          $google-bar: 54px;
+          position: relative;
+          height: $size;
+          @include radius-box($lg-radius);
+
+          .fullscreen {
+            position: absolute;
+            top: $sm-gap;
+            right: $sm-gap;
+            z-index: $z-index-normal + 1;
+            display: block;
+            width: 4rem;
+            height: 3rem;
+            border-radius: $xs-radius;
+            background-color: $module-bg;
+            font-size: $font-size-h4;
+            color: $text-secondary;
+            @include background-transition();
+            &:hover {
+              color: $text;
+              background-color: $module-bg-opaque;
+            }
+          }
+
+          .iframe {
+            width: 100%;
+            height: $size + $google-bar;
+            margin-top: -$google-bar;
+          }
         }
       }
     }

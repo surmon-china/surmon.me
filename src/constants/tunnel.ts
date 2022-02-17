@@ -7,11 +7,12 @@
 export enum TunnelModule {
   TwitterUserInfo = 'twitter_userinfo',
   TwitterTweets = 'twitter_tweets',
+  TwitterCalendar = 'twitter_calendar',
   YouTubePlaylist = 'youtube_playlist',
   YouTubeVideoList = 'youtube_video_list',
-  BiliBili = 'bilibili',
   Instagram = 'instagram',
   Wallpaper = 'wallpaper',
-  GitHub = 'gitHub',
+  GitHubRepositories = 'github_repositories',
+  GitHubContributions = 'github_contributions',
   NetEaseMusic = 'netease_music'
 }

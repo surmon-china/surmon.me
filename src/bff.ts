@@ -11,10 +11,9 @@ import { BFF_TUNNEL_PREFIX, getBFFServerPort } from '@/config/bff.config'
 import { getRSSXML } from './server/getters/rss'
 import { getSitemapXML } from './server/getters/sitemap'
 import { getGTagScript } from './server/getters/gtag'
-import { getBiliBiliVideos } from './server/getters/bilibili'
 import { getAllWallpapers } from './server/getters/wallpaper'
-import { getGitHubRepositories } from './server/getters/github'
-import { getTwitterTweets, getTwitterUserinfo } from './server/getters/twitter'
+import { getGitHubRepositories, getGitHubContributions } from './server/getters/github'
+import { getTwitterTweets, getTwitterUserinfo, getTwitterCalendar } from './server/getters/twitter'
 import { getInstagramMedias } from './server/getters/instagram'
 import {
   getYouTubeChannelPlayLists,
@@ -85,20 +84,6 @@ createExpressApp().then(({ app, server, cache }) => {
     }
   })
 
-  // BiliBili videos
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.BiliBili}`,
-    responser(() => {
-      return cacher({
-        cache,
-        key: 'bilibili',
-        age: 60 * 60 * 1, // 1 hours
-        retryWhen: 60 * 5, // 5 minutes
-        getter: getBiliBiliVideos
-      })
-    })
-  )
-
   // Bing wallpapers
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`,
@@ -115,14 +100,34 @@ createExpressApp().then(({ app, server, cache }) => {
 
   // GitHub Repositories
   app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHub}`,
+    `${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubRepositories}`,
     responser(() => {
       return cacher({
         cache,
-        key: 'github',
+        key: 'github_repositories',
         age: 60 * 60 * 2, // 2 hours
         retryWhen: 60 * 30, // 30 minutes
         getter: getGitHubRepositories
+      })
+    })
+  )
+
+  // GitHub Contributions
+  app.get(
+    `${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubContributions}`,
+    responser(() => {
+      return cacher({
+        cache,
+        key: 'github_contributions',
+        age: 60 * 60 * 12, // 12 hours
+        retryWhen: 60 * 10, // 10 minutes
+        getter: () => {
+          const now = new Date()
+          const end = now.toISOString()
+          now.setFullYear(now.getFullYear() - 1)
+          const start = now.toISOString()
+          return getGitHubContributions(start, end)
+        }
       })
     })
   )
@@ -167,6 +172,12 @@ createExpressApp().then(({ app, server, cache }) => {
         getter: getTwitterTweets
       })
     })
+  )
+
+  // Twitter tweets calendar
+  app.get(
+    `${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterCalendar}`,
+    responser(() => getTwitterCalendar())
   )
 
   // Instagram newest medias

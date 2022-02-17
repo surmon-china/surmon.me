@@ -86,6 +86,11 @@
         </ulink>
       </div>
     </div>
+    <div class="calendar">
+      <div class="wrapper">
+        <activity-calendar class="content" />
+      </div>
+    </div>
     <div class="links">
       <div class="list col-2">
         <uimage cdn class="image-item" src="/images/qrcodes/wechat.jpg" />
@@ -106,11 +111,13 @@
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
   import { useAboutPageMeta, getAdminAvatar, i18ns } from './helper'
+  import ActivityCalendar from './calendar.vue'
 
   export default defineComponent({
     name: 'MobileAboutPage',
     components: {
-      PageBanner
+      PageBanner,
+      ActivityCalendar
     },
     setup() {
       const { i18n } = useEnhancer()
@@ -190,6 +197,23 @@
         text-align: center;
         &.en {
           font-weight: bold;
+        }
+      }
+    }
+
+    .calendar {
+      margin-top: $lg-gap;
+      padding: $gap;
+      border-radius: $lg-radius;
+      background-color: $module-bg-opaque;
+
+      .wrapper {
+        overflow-y: hidden;
+        overflow-x: scroll;
+        @include scroll-snap-x();
+
+        .content {
+          width: 1000px;
         }
       }
     }

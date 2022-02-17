@@ -23,7 +23,7 @@
       const articleCalendarStore = useArticleCalendarStore()
       const articlesIn = (targetDate: HumanDate) => {
         const ymd = humanDateToYMD(targetDate)
-        return articleCalendarStore.data.find((item) => item.day === ymd)?.count || 0
+        return articleCalendarStore.data.find((item) => item.date === ymd)?.count || 0
       }
 
       const getDateRoute = (humanDate: HumanDate) => {

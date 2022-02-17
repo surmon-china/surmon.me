@@ -61,7 +61,123 @@ export const getTwitterUserinfo = () => {
 }
 
 let uidCache: string | null = null
-export const getTwitterTweets = async () => {
-  uidCache = uidCache || ((await getTwitterUserinfo()).id as string)
-  return await getTwitterTweetsByUID(uidCache)
+const ensureUID = async () => {
+  if (uidCache) {
+    return uidCache
+  } else {
+    uidCache = (await getTwitterUserinfo()).id as string
+    return uidCache
+  }
 }
+
+export const getTwitterTweets = async () => {
+  const uid = await ensureUID()
+  return await getTwitterTweetsByUID(uid)
+}
+
+// ---------------------------------------------------------
+// Tweets calendar
+
+const getPageTweets = async (startTime: string, pagination_token?: string) => {
+  const uid = await ensureUID()
+  return axios
+    .get<any>(`https://api.twitter.com/2/users/${uid}/tweets`, {
+      timeout: 8000,
+      params: {
+        'tweet.fields': `id,created_at`,
+        start_time: startTime,
+        pagination_token,
+        max_results: 100
+      },
+      headers: {
+        Authorization: `Bearer ${bearerToken}`
+      }
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.data
+      } else {
+        throw response.data
+      }
+    })
+}
+
+interface AllTweetsFetchParams {
+  startTime: string
+  nextToken?: string
+  tweets?: Tweets
+  onSucceed?(tweets: Tweets)
+  onFailed?(error: any)
+}
+
+function doFetchAllTweets({
+  startTime,
+  nextToken,
+  tweets = [],
+  onSucceed,
+  onFailed
+}: AllTweetsFetchParams) {
+  getPageTweets(startTime, nextToken)
+    .then((result: any) => {
+      tweets.push(...result.data)
+      if (result.meta.next_token) {
+        doFetchAllTweets({
+          startTime,
+          nextToken: result.meta.next_token,
+          tweets,
+          onSucceed,
+          onFailed
+        })
+      } else {
+        onSucceed?.(tweets)
+      }
+    })
+    .catch(onFailed)
+}
+
+type Tweets = Array<{ text: string; id: string; created_at: string }>
+const calendarTemp = {
+  tweets: [] as Tweets,
+  calendar: [] as Array<{ count: number; date: string }>
+}
+
+function fetchAllTweets() {
+  console.info(`[BFF] fetchAllTweets`)
+  calendarTemp.tweets = []
+  calendarTemp.calendar = []
+
+  // startTime
+  const today = new Date()
+  today.setDate(1)
+  today.setFullYear(today.getFullYear() - 1)
+  const prevYearToday = today.toISOString()
+
+  doFetchAllTweets({
+    startTime: prevYearToday,
+    onSucceed: (tweets) => {
+      console.info(`[BFF] fetchAllTweets done, ${tweets.length} tweets. refetch when after 18h`)
+      setTimeout(() => fetchAllTweets(), 18 * 60 * 60 * 1000)
+      const map = new Map<string, number>()
+      tweets.forEach((tweet) => {
+        const key = tweet.created_at.slice(0, 10)
+        if (map.has(key)) {
+          map.set(key, map.get(key)! + 1)
+        } else {
+          map.set(key, 1)
+        }
+      })
+      calendarTemp.calendar = Array.from(map.keys()).map((key) => ({
+        date: key,
+        count: map.get(key)!
+      }))
+    },
+    onFailed: (error) => {
+      console.warn(`[BFF] fetchAllTweets error, retry when after 30s`, error)
+      setTimeout(() => fetchAllTweets(), 30 * 1000)
+    }
+  })
+}
+
+fetchAllTweets()
+
+export const getTwitterCalendar = async () => calendarTemp.calendar

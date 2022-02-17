@@ -24,11 +24,6 @@ const proxys: ProxyConfigItem[] = [
     referer: 'https://surmon.me/'
   },
   {
-    module: ProxyModule.BiliBili,
-    origin: 'https://www.bilibili.com',
-    referer: 'https://www.bilibili.com/'
-  },
-  {
     module: ProxyModule.Instagram,
     origin: 'https://www.instagram.com',
     referer: 'https://www.instagram.com/'
