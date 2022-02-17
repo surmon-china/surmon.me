@@ -119,6 +119,7 @@
 
   #player {
     $size: 5rem;
+    $panel-size: 13rem;
     position: fixed;
     left: 0;
     bottom: 18%;
@@ -135,7 +136,7 @@
     overflow: hidden;
     opacity: 0.5;
     &.playing {
-      transform: translateX(-13rem);
+      transform: translateX(-$panel-size);
     }
     &:hover {
       opacity: 0.9;
@@ -143,6 +144,7 @@
     }
 
     .panel {
+      width: $panel-size;
       padding: $gap;
 
       .control {
