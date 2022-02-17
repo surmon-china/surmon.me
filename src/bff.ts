@@ -11,7 +11,6 @@ import { BFF_TUNNEL_PREFIX, getBFFServerPort } from '@/config/bff.config'
 import { getRSSXML } from './server/getters/rss'
 import { getSitemapXML } from './server/getters/sitemap'
 import { getGTagScript } from './server/getters/gtag'
-import { getGitHubChartSVG } from './server/getters/ghchart'
 import { getBiliBiliVideos } from './server/getters/bilibili'
 import { getAllWallpapers } from './server/getters/wallpaper'
 import { getGitHubRepositories } from './server/getters/github'
@@ -80,23 +79,6 @@ createExpressApp().then(({ app, server, cache }) => {
         getter: getGTagScript
       })
       response.header('Content-Type', 'text/javascript')
-      response.send(data)
-    } catch (error) {
-      erroror(response, error)
-    }
-  })
-
-  // GitHub chart svg
-  app.get('/effects/ghchart', async (_, response) => {
-    try {
-      const data = await cacher({
-        cache,
-        key: 'ghchart',
-        age: 60 * 60 * 6, // 6 hours
-        retryWhen: 60 * 1, // 1 minute
-        getter: getGitHubChartSVG
-      })
-      response.header('Content-Type', 'image/svg+xml')
       response.send(data)
     } catch (error) {
       erroror(response, error)

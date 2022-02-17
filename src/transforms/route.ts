@@ -32,5 +32,4 @@ export const isArticleDetail = (name: RouteRecordName) => name === RouteName.Art
 export const isSearchFlow = (name: RouteRecordName) => name === RouteName.SearchFlow
 export const isGuestbook = (name: RouteRecordName) => name === RouteName.Guestbook
 export const isFreelancer = (name: RouteRecordName) => name === RouteName.Freelancer
-export const isMusic = (name: RouteRecordName) => name === RouteName.Music
 export const isApp = (name: RouteRecordName) => name === RouteName.App

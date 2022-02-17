@@ -26,20 +26,22 @@
         >
           <i class="iconfont" :class="muted ? 'icon-music-muted' : 'icon-music-unmuted'"></i>
         </button>
-      </div>
-      <div class="song">
-        <router-link
-          class="link"
-          :to="getPageRoute(RouteName.Music)"
-          @mousedown="handleTouchEvent('music player page')"
+        <button
+          class="player button"
+          @click="togglePlayerModel"
+          @mousedown="handleTouchEvent('open player model')"
         >
-          <span v-if="currentSong"
-            >{{ currentSong.name }} By {{ currentSong.artist }} |
-            {{ currentSong.album || 'unknow' }}</span
-          >
-          <i18n v-else :lkey="LANGUAGE_KEYS.MUSIC_PLACEHOLDER" />
-        </router-link>
+          <i class="iconfont icon-netease-music"></i>
+        </button>
       </div>
+      <button
+        class="song-link"
+        @click="togglePlayerModel"
+        @mousedown="handleTouchEvent('open player model')"
+      >
+        <span v-if="currentSong">{{ currentSong.name }}</span>
+        <i18n v-else :lkey="LANGUAGE_KEYS.MUSIC_PLACEHOLDER" />
+      </button>
     </div>
     <div class="cd">
       <img class="image" :src="currentSong?.cover_art_url" />
@@ -59,25 +61,37 @@
       <i class="iconfont icon-music"></i>
     </div>
   </div>
+  <client-only>
+    <popup :scroll-close="false" :visible="isOnPlayerModel" @close="togglePlayerModel">
+      <music-player @close="togglePlayerModel" />
+    </popup>
+  </client-only>
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
+  import { defineComponent, ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { GAEventCategories } from '/@/constants/gtag'
   import { isClient } from '/@/app/environment'
-  import { RouteName } from '/@/app/router'
   import { useMusic } from '/@/services/music'
   import { LANGUAGE_KEYS } from '/@/language/key'
-  import { getPageRoute } from '/@/transforms/route'
+  import MusicPlayer from './player.vue'
 
   export default defineComponent({
-    name: 'PlayerControl',
+    name: 'MusicPlayerHandle',
+    components: {
+      MusicPlayer
+    },
     setup() {
       const { gtag } = useEnhancer()
       const music = isClient ? useMusic() : null
       const muted = computed(() => Boolean(music?.muted.value))
       const currentSong = computed(() => music?.currentSong.value)
+
+      const isOnPlayerModel = ref(false)
+      const togglePlayerModel = () => {
+        isOnPlayerModel.value = !isOnPlayerModel.value
+      }
 
       const handleTouchEvent = (label) => {
         gtag?.event('music_player_widget', {
@@ -88,11 +102,11 @@
 
       return {
         LANGUAGE_KEYS,
-        RouteName,
+        isOnPlayerModel,
         music,
         muted,
         currentSong,
-        getPageRoute,
+        togglePlayerModel,
         handleTouchEvent
       }
     }
@@ -138,26 +152,23 @@
 
         > .button {
           margin-right: $lg-gap;
-
           &:hover {
-            .iconfont {
-              color: $link-hover;
-            }
+            color: $link-hover;
+          }
+          &.player {
+            color: $music163-primary;
           }
         }
       }
 
-      .song {
+      .song-link {
         max-width: 11rem;
+        color: $text-secondary;
+        @include color-transition();
         @include text-overflow();
 
-        .link {
-          color: $text-secondary;
-          @include color-transition();
-
-          &:hover {
-            color: $link-hover;
-          }
+        &:hover {
+          color: $link-hover;
         }
       }
     }

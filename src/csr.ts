@@ -53,7 +53,7 @@ const { app, router, globalState, theme, i18n, meta, store } = createVueApp({
 const defer = createDefer()
 const popup = createPopup()
 const loading = createLoading()
-const music = createMusic({ amplitude, autoStart: false })
+const music = createMusic({ amplitude, autoInit: false })
 
 // plugins & services
 app.use(music)
@@ -119,7 +119,7 @@ router.isReady().finally(() => {
       // bing wallpaper
       defer.addTask(store.stores.wallpaper.fetchPapers)
       // music player
-      defer.addTask(music.start)
+      defer.addTask(music.init)
       // title surprise
       document.addEventListener(
         'visibilitychange',

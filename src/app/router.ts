@@ -35,7 +35,6 @@ import GuestbookPage from '/@/pages/guestbook.vue'
 import AppPage from '/@/pages/app.vue'
 
 // service pages
-import MusicPage from '/@/pages/music.vue'
 import LensPage from '/@/pages/lens/index.vue'
 import JobPage from '/@/pages/job.vue'
 import MerchPage from '/@/pages/merch/index.vue'
@@ -70,7 +69,6 @@ export enum RouteName {
   About = 'about',
   App = 'app',
   Freelancer = 'freelancer',
-  Music = 'music',
   Job = 'job',
   Merch = 'merch',
   Lens = 'lens',
@@ -300,16 +298,6 @@ export const routes: RouteRecordRaw[] = [
       responsive: false,
       layout: LayoutColumn.Full,
       ssrCacheAge: 60 * 60 * 1 // 1 hours
-    }
-  },
-  {
-    path: '/music',
-    name: RouteName.Music,
-    component: MusicPage,
-    meta: {
-      responsive: false,
-      layout: LayoutColumn.Full,
-      ssrCacheAge: Infinity
     }
   },
   {

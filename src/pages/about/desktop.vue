@@ -125,19 +125,17 @@
           </client-only>
         </div>
       </div>
-      <div class="github-box">
+      <div class="calendar-box">
         <div class="location">
           <iframe class="iframe" src="/partials/location.html" />
         </div>
-        <ulink
-          class="github-chart"
-          :href="VALUABLE_LINKS.GITHUB"
-          @mousedown="handleGTagEvent('github_chart_link')"
+        <router-link
+          class="article-calendar"
+          :to="getPageRoute(RouteName.Archive)"
+          @mousedown="handleGTagEvent('article_calendar_link')"
         >
-          <div class="wrapper">
-            <uimage class="image" cdn src="/effects/ghchart" />
-          </div>
-        </ulink>
+          <article-calendar />
+        </router-link>
       </div>
       <div class="footer-links">
         <div class="friendlinks">
@@ -172,9 +170,13 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { VALUABLE_LINKS, FRIEND_LINKS, SPECIAL_LINKS } from '/@/config/app.config'
   import { useAboutPageMeta, getAdminAvatar, i18ns } from './helper'
+  import ArticleCalendar from './calendar.vue'
 
   export default defineComponent({
     name: 'PCAboutPage',
+    components: {
+      ArticleCalendar
+    },
     setup() {
       const { i18n, gtag, globalState, isZhLang, isDarkTheme } = useEnhancer()
       const metaStore = useMetaStore()
@@ -270,6 +272,7 @@
       useUniversalFetch(() => metaStore.fetchAdminInfo())
 
       return {
+        RouteName,
         i18ns,
         qrcodes,
         links,
@@ -310,12 +313,7 @@
           filter: invert(1) hue-rotate(200deg) grayscale(60%) contrast(0.9);
         }
       }
-      .github-chart {
-        .image {
-          filter: invert(1) hue-rotate(200deg) brightness(1.5) contrast(0.9);
-        }
-      }
-      .github-box {
+      .calendar-box {
         .location {
           .iframe {
             filter: invert(1) hue-rotate(200deg) brightness(0.5) contrast(0.9);
@@ -690,16 +688,17 @@
 
         .fullscreen {
           position: absolute;
-          top: 0;
-          right: 0;
+          top: $gap;
+          right: $gap;
           z-index: $z-index-normal + 1;
           display: block;
           width: 4rem;
           height: 3rem;
-          border-bottom-left-radius: $xs-radius;
+          border-radius: $xs-radius;
           background-color: $module-bg;
           font-size: $font-size-h4;
           color: $text-secondary;
+          @include background-transition();
           &:hover {
             color: $text;
             background-color: $module-bg-opaque;
@@ -714,51 +713,30 @@
       }
     }
 
-    .github-box {
-      overflow: hidden;
+    .calendar-box {
       position: relative;
       display: flex;
       width: 100%;
-      height: 10rem;
+      height: 9rem;
       margin-bottom: $gap * 2;
 
       .location,
-      .github-chart {
+      .article-calendar {
         height: 100%;
         padding: $sm-gap;
+        border-radius: $lg-radius;
         @include common-bg-module();
-        @include radius-box($lg-radius);
       }
 
       .location {
         display: block;
-        width: 26rem;
+        /* width: 26rem; */
+        flex-grow: 1;
         margin-right: $gap * 2;
 
         .iframe {
           width: 100%;
           height: 100%;
-        }
-      }
-
-      .github-chart {
-        flex-grow: 1;
-
-        .wrapper {
-          width: 100%;
-          height: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          overflow: hidden;
-          border: 1px dashed $module-bg-darker-1;
-          border-radius: $xs-radius;
-          /* background-color: $module-bg-opaque; */
-
-          .image {
-            max-width: 100%;
-            height: 87px;
-          }
         }
       }
     }

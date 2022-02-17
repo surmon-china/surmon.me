@@ -180,7 +180,7 @@
     }
 
     .catalogue {
-      max-height: 60%;
+      max-height: 36rem;
       padding: $sm-gap $gap;
       overflow-y: auto;
       @include scroll-snap-y();

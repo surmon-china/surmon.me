@@ -67,10 +67,6 @@ export const langMap: I18nMap<LANGUAGE_KEYS, Language> = {
     [Language.Zh]: '茫涯',
     [Language.En]: 'Lens'
   },
-  [LANGUAGE_KEYS.PAGE_MUSIC]: {
-    [Language.Zh]: '梨园',
-    [Language.En]: 'Music'
-  },
   [LANGUAGE_KEYS.PAGE_JOB]: {
     [Language.Zh]: '伯乐',
     [Language.En]: 'Job'

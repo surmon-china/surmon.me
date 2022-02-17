@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "3.6.23",
+  "version": "3.6.24",
   "description": "Surmon.me blog",
   "author": {
     "name": "Surmon",
@@ -55,7 +55,6 @@
     "rss": "^1.2.2",
     "sanitize-html": "^2.6.1",
     "serialize-javascript": "^6.0.0",
-    "simple-netease-cloud-music": "^0.5.2",
     "sitemap": "^7.1.0",
     "sticky-events": "^3.4.11",
     "swiper": "^7.4.1",

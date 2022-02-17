@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.6.24 (2022-02-17)
+
+**Feature**
+
+- About page GitHub cahrt to article calendar
+- Music page to popup
+
 ### v3.6.1 (2022-01-16)
 
 **Feature**

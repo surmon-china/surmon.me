@@ -3594,11 +3594,6 @@ side-channel@^1.0.4:
     get-intrinsic "^1.0.2"
     object-inspect "^1.9.0"
 
-simple-netease-cloud-music@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/simple-netease-cloud-music/-/simple-netease-cloud-music-0.5.2.tgz#3007a05ebc11496820e6b9898077bdeb7a5e6313"
-  integrity sha512-U7tFsXLfA/Ocrmbn/KxBpcFL0Xj+iwCb4Onltp4VnQQVLTzkYxD7hh+13Vx5n6GWg/qHHm6p/v0EFyEXuwqSIg==
-
 sitemap@^7.1.0:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/sitemap/-/sitemap-7.1.0.tgz#300cd8b3fa9d45fb63f9b56d962785c3cd799362"

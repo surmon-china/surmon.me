@@ -15,7 +15,7 @@
       <wallpaper />
       <toolbox />
       <client-only>
-        <player />
+        <music-player-handle />
       </client-only>
     </template>
     <header-view />
@@ -62,10 +62,10 @@
   import AsideView from './aside/index.vue'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
+  import MusicPlayerHandle from '/@/components/widget/music-player/handle.vue'
   import Wallflower from '/@/components/widget/wallflower/garden.vue'
   import Wallpaper from '/@/components/widget/wallpaper/switcher.vue'
   import Background from '/@/components/widget/background.vue'
-  import Player from '/@/components/widget/player.vue'
   import Share from '/@/components/widget/share.vue'
   import Toolbox from '/@/components/widget/toolbox.vue'
 
@@ -74,7 +74,7 @@
     components: {
       Share,
       Wallpaper,
-      Player,
+      MusicPlayerHandle,
       Toolbox,
       Wallflower,
       Background,

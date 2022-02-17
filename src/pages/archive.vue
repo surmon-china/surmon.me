@@ -311,7 +311,7 @@
 
         .month-list {
           padding-left: 2em;
-          list-style: tibetan;
+          list-style: circle;
 
           .month-title {
             .text {

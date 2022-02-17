@@ -16,7 +16,7 @@ import tunnel from '/@/services/tunnel'
 export interface PlayerConfig {
   amplitude: any
   volume?: number
-  autoStart?: boolean
+  autoInit?: boolean
 }
 
 const createMusicPlayer = (config: PlayerConfig) => {
@@ -25,6 +25,9 @@ const createMusicPlayer = (config: PlayerConfig) => {
   // Player state
   const initVolume = config.volume ?? 40
   const state = reactive({
+    // data
+    fetching: false,
+    songs: [] as Array<Song>,
     // 是否初始化
     inited: false,
     // 是否可用
@@ -47,35 +50,27 @@ const createMusicPlayer = (config: PlayerConfig) => {
   // mute state
   const muted = computed<boolean>(() => state.volume === 0)
 
-  // 原始播放列表
-  const songList = reactive({
-    fetching: false,
-    data: [] as Array<Song>
-  })
-
   // playable song list
   const playableSongList = computed<Song[]>(() => {
-    return songList.data.map((song) => ({
+    return state.songs.map((song) => ({
       ...song,
-      // https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=%e8%8e%b7%e5%8f%96%e9%9f%b3%e4%b9%90-url
-      url: `https://music.163.com/song/media/outer/url?id=${song.id}.mp3`,
       cover_art_url: song.cover_art_url
-        ? getTargetProxyURL(song.cover_art_url + '?param=600y600', ProxyModule.NetEasyMusic)
+        ? getTargetProxyURL(song.cover_art_url + '?param=300y300', ProxyModule.NetEasyMusic)
         : (null as any as string)
     }))
   })
 
   const fetchSongList = async () => {
     try {
-      songList.fetching = true
-      songList.data = await tunnel.dispatch<Song[]>(TunnelModule.NetEaseMusic)
-      state.count = songList.data.length
+      state.fetching = true
+      state.songs = await tunnel.dispatch<Song[]>(TunnelModule.NetEaseMusic)
+      state.count = state.songs.length
     } catch (error) {
-      songList.data = []
+      state.songs = []
       state.count = 0
       throw error
     } finally {
-      songList.fetching = false
+      state.fetching = false
     }
   }
 
@@ -87,7 +82,13 @@ const createMusicPlayer = (config: PlayerConfig) => {
     }
   })
 
-  const play = () => amplitude.play()
+  const play = (index?: number) => {
+    if (index != null) {
+      amplitude.playSongAtIndex(index)
+    } else {
+      amplitude.play()
+    }
+  }
   const pause = () => amplitude.pause()
   const prevSong = () => amplitude.prev()
   const nextSong = () => amplitude.next()
@@ -139,9 +140,9 @@ const createMusicPlayer = (config: PlayerConfig) => {
         error: (error: any) => {
           console.warn('播放器出现异常，自动下一首！', state.index, error)
           state.playing = false
-          // 播放异常时不再清除音乐，不作 url 可能不可用的假设
+          // 播放异常时不再清除音乐，不作 URL 可能不可用的假设
           // amplitude.removeSong(state.index)
-          // HACK: 网络阻塞会导致紧邻的后续请求中断，所以下一首操作需要延时，避免瀑布式请求
+          // MARK: 网络阻塞会导致紧邻的后续请求中断，所以下一首操作需要延时，避免瀑布式请求
           window.setTimeout(nextSong, 1668)
         }
       }
@@ -149,7 +150,7 @@ const createMusicPlayer = (config: PlayerConfig) => {
     amplitude.setRepeat(true)
   }
 
-  const start = async () => {
+  const init = async () => {
     try {
       await fetchSongList()
       if (!playableSongList.value.length) {
@@ -158,12 +159,6 @@ const createMusicPlayer = (config: PlayerConfig) => {
         return
       }
       initPlayer(playableSongList.value)
-      // window.$defer.addTask(() => {
-      //   window.onmousemove = () => {
-      //     state.playing || play()
-      //     window.onmousemove = null
-      //   }
-      // })
     } catch (error) {
       state.ready = false
       console.warn('播放列表请求失败，无法初始化！', error)
@@ -175,7 +170,7 @@ const createMusicPlayer = (config: PlayerConfig) => {
     muted,
     currentSong,
 
-    start,
+    init,
     play,
     pause,
     changeVolume,
@@ -190,8 +185,8 @@ const MusicPlayerSymbol = Symbol('music-player')
 export type Music = ReturnType<typeof createMusicPlayer>
 export const createMusic = (config: PlayerConfig): Music & Plugin => {
   const musicPlayer = createMusicPlayer(config)
-  if (config.autoStart) {
-    musicPlayer.start()
+  if (config.autoInit) {
+    musicPlayer.init()
   }
 
   return {

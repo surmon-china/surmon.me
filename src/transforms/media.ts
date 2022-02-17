@@ -33,3 +33,7 @@ export const getYouTubeVideoEmbedURL = (id: string, list?: string) => {
 export const getTwitterTweetDetailURL = (uid: string, id: string) => {
   return `https://twitter.com/${uid}/status/${id}`
 }
+
+export const get163MusicSongDetailURL = (songID: string | number) => {
+  return `https://music.163.com/#/song?id=${songID}`
+}

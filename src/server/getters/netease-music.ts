@@ -4,13 +4,14 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import NeteaseMusic from 'simple-netease-cloud-music'
+import axios from 'axios'
 import { THIRD_IDS } from '@/config/app.config'
 
 // https://521dimensions.com/open-source/amplitudejs/docs/configuration/playlists.html
 // https://521dimensions.com/open-source/amplitudejs/docs/configuration/song-objects.html#special-keys
 export interface Song {
   id: number
+  duration: number
   name: string
   album: string
   artist: string
@@ -18,48 +19,50 @@ export interface Song {
   url: string
 }
 
-const PLAY_LIST_LIMIT = 68
-const neteseMusic = new NeteaseMusic()
+const PLAY_LIST_LIMIT = 168
 
-// 获取歌单列表
 export const getSongList = async (): Promise<Array<Song>> => {
-  const result = await neteseMusic._playlist(THIRD_IDS.MUSIC_163_BGM_ALBUM_ID, PLAY_LIST_LIMIT)
-  if (result.code < 0) {
-    throw new Error(result.message)
+  // https://github.com/Binaryify/NeteaseCloudMusicApi/blob/a0500ec648f22a1dd20fc7b529126f813aa26935/module/playlist_track_all.js
+  const playlistDetail = await axios.get<any>(
+    `https://music.163.com/api/v6/playlist/detail?id=${THIRD_IDS.MUSIC_163_BGM_ALBUM_ID}`,
+    { timeout: 6000 }
+  )
+  if (playlistDetail.data.code < 0) {
+    throw new Error(playlistDetail.data.message)
   }
+
+  const trackIDs = (playlistDetail.data.playlist?.trackIds as any[]) || []
+  const idsParams = trackIDs
+    .slice(0, PLAY_LIST_LIMIT)
+    .map((id) => `{id:${id.id}}`)
+    .join(',')
+  const songListDetail = await axios.get<any>(
+    `https://music.163.com/api/v3/song/detail?c=[${idsParams}]`,
+    { timeout: 6000 }
+  )
+  if (!songListDetail.data.songs) {
+    throw new Error(songListDetail.data)
+  }
+
+  const songs = songListDetail.data.songs || []
   return (
-    result?.playlist?.tracks
+    songs
       // 过滤掉无版权音乐
-      ?.filter((track) => track?.privilege?.cp !== 0)
-      // 格式化数据
-      ?.map(
-        (track) =>
+      // https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=%e8%8e%b7%e5%8f%96%e7%94%a8%e6%88%b7%e6%ad%8c%e5%8d%95
+      .filter((song) => !song.noCopyrightRcmd)
+      .slice(0, PLAY_LIST_LIMIT)
+      .map(
+        (song) =>
           ({
-            id: track.id,
-            name: track.name,
-            album: track?.al?.name || '-',
-            artist: (track.ar || []).map((artist: any) => artist.name).join(' / '),
-            cover_art_url: track.al?.picUrl,
-            url: null as any as string
+            id: song.id,
+            duration: song.dt,
+            name: song.name,
+            album: song.al?.name || '-',
+            artist: (song.ar || []).map((artist) => artist.name).join(' / '),
+            cover_art_url: song.al?.picUrl,
+            // https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=%e8%8e%b7%e5%8f%96%e9%9f%b3%e4%b9%90-url
+            url: `https://music.163.com/song/media/outer/url?id=${song.id}.mp3`
           } as Song)
       )
   )
-}
-
-// 获取播放地址，403 暂不启用！
-export const getSongs = async (): Promise<Song[]> => {
-  // 1. 获取列表
-  const songs = await getSongList()
-  // 2. 使用列表的 IDs 获取 urls
-  const songIds = songs.map((song) => String(song.id))
-  const { data: songUrls } = await neteseMusic.url(songIds, 128)
-  // 3. 用 map 合成
-  const urlMap = new Map<number, string>(songUrls.map((songUrl) => [songUrl.id, songUrl.url]))
-  // 4. 合成可用数据，并过滤掉无有效地址的数据
-  return songs
-    .map((song) => ({
-      ...song,
-      url: urlMap.get(song.id) as string
-    }))
-    .filter((song) => !!song.url)
 }
