@@ -41,7 +41,7 @@
 
   .mammon {
     min-height: 16rem;
-    max-height: 26rem;
+    max-height: 28rem;
     background-color: $module-bg;
     @include radius-box($sm-radius);
   }

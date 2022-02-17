@@ -82,8 +82,7 @@ export const getGitHubContributions = async (from: string, to: string): Promise<
   })
 
   if (response.data.errors) {
-    const message = response.data.errors.map((error) => error.message).join('; ')
-    throw Error(message)
+    throw Error(response.data.errors.map((error) => error.message).join('; '))
   }
 
   return response.data.data.user.contributionsCollection.contributionCalendar

@@ -80,26 +80,24 @@ export const getTwitterTweets = async () => {
 
 const getPageTweets = async (startTime: string, pagination_token?: string) => {
   const uid = await ensureUID()
-  return axios
-    .get<any>(`https://api.twitter.com/2/users/${uid}/tweets`, {
-      timeout: 8000,
-      params: {
-        'tweet.fields': `id,created_at`,
-        start_time: startTime,
-        pagination_token,
-        max_results: 100
-      },
-      headers: {
-        Authorization: `Bearer ${bearerToken}`
-      }
-    })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data
-      } else {
-        throw response.data
-      }
-    })
+  const response = await axios.get<any>(`https://api.twitter.com/2/users/${uid}/tweets`, {
+    timeout: 8000,
+    params: {
+      'tweet.fields': `id,created_at`,
+      start_time: startTime,
+      pagination_token,
+      max_results: 100
+    },
+    headers: {
+      Authorization: `Bearer ${bearerToken}`
+    }
+  })
+
+  if (response.status === 200) {
+    return response.data
+  } else {
+    throw response.data
+  }
 }
 
 interface AllTweetsFetchParams {
