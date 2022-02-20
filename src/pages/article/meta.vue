@@ -7,10 +7,10 @@
       <i18n zh="本文于" en="Published at" />
       <router-link
         class="link date"
-        :title="getDateTitle(article.create_at)"
+        :title="article.create_at"
         :to="getDateLink(article.create_at)"
       >
-        {{ getDateTitle(article.create_at) }}
+        <udate to="YMDm" :date="article.create_at" separator="/" />
       </router-link>
       <i18n zh="发布在" en="in" />
       <span v-for="(category, index) in article.category" :key="index">
@@ -73,15 +73,13 @@
 <script lang="ts">
   import { defineComponent, computed, PropType } from 'vue'
   import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalStore } from '/@/store/universal'
   import { useArticleDetailStore, Article } from '/@/store/article'
   import { tagEnName } from '/@/store/tag'
-  import { Language } from '/@/language/data'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { copy } from '/@/utils/clipboard'
-  import { humanizeYMD, dateToYMD } from '/@/transforms/moment'
+  import { dateToYMD } from '/@/transforms/moment'
   import { firstUpperCase } from '/@/transforms/text'
   import { getPageURL } from '/@/transforms/url'
   import {
@@ -90,6 +88,7 @@
     getCategoryFlowRoute,
     getDateFlowRoute
   } from '/@/transforms/route'
+  import { copy } from '/@/utils/clipboard'
 
   export default defineComponent({
     name: 'ArticleMeta',
@@ -131,14 +130,10 @@
           await articleDetailStore.postArticleLike(props.article.id)
           universalStore.likePage(props.article.id)
         } catch (error) {
-          const message = i18n.t(LANGUAGE_KEYS.POST_ACTION_ERROR)
+          const message = i18n.t(LanguageKey.POST_ACTION_ERROR)
           console.warn(message, error)
           alert(message)
         }
-      }
-
-      const getDateTitle = (date: string) => {
-        return humanizeYMD(date, i18n.language.value as Language)
       }
 
       const getDateLink = (date: string) => {
@@ -147,7 +142,7 @@
 
       return {
         VALUABLE_LINKS,
-        LANGUAGE_KEYS,
+        LanguageKey,
         articleURL,
         likes,
         copy,
@@ -156,7 +151,6 @@
         firstUpperCase,
         handleLike,
         handleOpenSponsor,
-        getDateTitle,
         getDateLink,
         getTagFlowRoute,
         getCategoryFlowRoute

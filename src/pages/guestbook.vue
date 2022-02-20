@@ -10,10 +10,10 @@
       :image="bannerImage"
     >
       <template #title>
-        <i18n :lkey="LANGUAGE_KEYS.PAGE_GUESTBOOK" />
+        <i18n :k="LanguageKey.PAGE_GUESTBOOK" />
       </template>
       <template #description>
-        <i18n :lkey="LANGUAGE_KEYS.GUESTBOOK_SLOGAN" />
+        <i18n :k="LanguageKey.GUESTBOOK_SLOGAN" />
       </template>
     </page-banner>
     <!-- desktop-banner -->
@@ -25,7 +25,7 @@
       </button>
       <span class="slogan">
         <span class="text">
-          <i18n :lkey="LANGUAGE_KEYS.GUESTBOOK_SLOGAN" />
+          <i18n :k="LanguageKey.GUESTBOOK_SLOGAN" />
         </span>
       </span>
     </div>
@@ -45,8 +45,7 @@
   import { useUniversalStore } from '/@/store/universal'
   import { GAEventCategories } from '/@/constants/gtag'
   import { CommentPostType } from '/@/constants/state'
-  import { Language } from '/@/language/data'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
   import { META } from '/@/config/app.config'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
@@ -77,8 +76,8 @@
       const mockCommentLoading = ref(isClient && globalState.isHydrated.value)
 
       meta(() => {
-        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_GUESTBOOK, Language.En)!)
-        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_GUESTBOOK), enTitle] : [enTitle]
+        const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_GUESTBOOK, Language.English)!)
+        const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_GUESTBOOK), enTitle] : [enTitle]
         return { pageTitle: titles.join(' | '), description: `给 ${META.author} 留言` }
       })
 
@@ -103,7 +102,7 @@
           await metaStore.postSiteLike()
           universalStore.likePage(GUESTBOOK_POST_ID)
         } catch (error) {
-          const message = i18n.t(LANGUAGE_KEYS.POST_ACTION_ERROR)
+          const message = i18n.t(LanguageKey.POST_ACTION_ERROR)
           console.warn(message, error)
           alert(message)
         }
@@ -112,7 +111,7 @@
       useUniversalFetch(() => fetchAllData())
 
       return {
-        LANGUAGE_KEYS,
+        LanguageKey,
         bannerImage,
         mockCommentLoading,
         isDarkTheme,

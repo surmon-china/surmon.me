@@ -8,6 +8,7 @@ import type { RenderResult } from '@/ssr'
 
 export const enableProdRenderer = async (app: Express, cache: CacheClient) => {
   const template = fs.readFileSync(path.resolve(DIST_PATH, 'template.html'), 'utf-8')
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { renderApp, renderError } = require(path.resolve(PRDO_SERVER_PATH, 'ssr.js'))
 
   app.use('*', async (request, response) => {

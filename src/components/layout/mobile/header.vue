@@ -7,7 +7,7 @@
         type="text"
         maxlength="16"
         required
-        :placeholder="t(LANGUAGE_KEYS.SEARCH_PLACEHOLDER)"
+        :placeholder="t(LanguageKey.SEARCH_PLACEHOLDER)"
         v-model.trim="searchState.keyword"
         @keyup.enter.stop.prevent="submitSearch"
       />
@@ -33,11 +33,11 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, reactive, ref, watch, onMounted, nextTick } from 'vue'
+  import { defineComponent, reactive, ref, watch, onMounted, nextTick } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
+  import { LanguageKey } from '/@/language'
   import { isSearchFlow } from '/@/transforms/route'
-  import { LANGUAGE_KEYS } from '/@/language/key'
 
   export enum MobileHeaderEvents {
     Open = 'open',
@@ -104,7 +104,7 @@
 
       return {
         t: i18n.t,
-        LANGUAGE_KEYS,
+        LanguageKey,
         searchState,
         inputElement,
         openSearch,

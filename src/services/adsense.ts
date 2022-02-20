@@ -6,7 +6,7 @@
 
 import { App, defineComponent, h } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
-import { LANGUAGE_KEYS } from '/@/language/key'
+import { LanguageKey } from '/@/language'
 import { loadScript } from '/@/utils/scripter'
 
 declare global {
@@ -63,7 +63,7 @@ const getComponent = (clientID: string) =>
           'div',
           {
             class: ['mammon-box', rootClass],
-            placeholder: i18n.t(LANGUAGE_KEYS.AD)
+            placeholder: i18n.t(LanguageKey.AD)
           },
           [
             h('script', {

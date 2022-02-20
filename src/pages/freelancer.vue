@@ -3,13 +3,13 @@
     <page-banner :position="66" class="page-banner" image="/images/page-feeelancer/banner.jpg">
       <template #title>
         <div class="title">
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_SLOGAN" />
+          <i18n :k="LanguageKey.PAGE_FREELANCER_SLOGAN" />
         </div>
       </template>
       <template #description>
         <div class="desc">
           <button class="submit-email" title="Email me" @click="handleSubmitEmail">
-            <i18n :lkey="LANGUAGE_KEYS.PAGE_FREELANCER_EMAIL_ME" />
+            <i18n :k="LanguageKey.PAGE_FREELANCER_EMAIL_ME" />
           </button>
           <ulink class="upwork" :href="VALUABLE_LINKS.UPWORK">
             <i18n>
@@ -77,14 +77,13 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { Language, LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { useMetaStore } from '/@/store/meta'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { Language } from '/@/language/data'
   import { firstUpperCase } from '/@/transforms/text'
   import { emailLink } from '/@/transforms/email'
-  import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
 
   export default defineComponent({
@@ -97,8 +96,8 @@
       const metaStore = useMetaStore()
 
       meta(() => {
-        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_FREELANCER, Language.En)!)
-        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_FREELANCER), enTitle] : [enTitle]
+        const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_FREELANCER, Language.English)!)
+        const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_FREELANCER), enTitle] : [enTitle]
         return { pageTitle: titles.join(' | ') }
       })
 
@@ -240,7 +239,7 @@
 
       return {
         VALUABLE_LINKS,
-        LANGUAGE_KEYS,
+        LanguageKey,
         services,
         steps,
         handleSubmitEmail

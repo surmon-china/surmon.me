@@ -12,8 +12,7 @@ export interface EmailLinkOptions {
   body?: string
 }
 export const emailLink = (email: string | EmailLinkOptions) => {
-  const isString = typeof email === 'string'
-  if (isString) {
+  if (typeof email === 'string') {
     return `mailto:${email}`
   }
 

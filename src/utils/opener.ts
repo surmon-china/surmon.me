@@ -42,7 +42,7 @@ export const openWindow = (targetURL: string, options: WindowOpenerOptions = {})
   const _window = window.open(targetURL, name, _params)
   if (_window) {
     if (onClose) {
-      let timer = setInterval(() => {
+      const timer = setInterval(() => {
         if (_window.closed) {
           clearInterval(timer)
           onClose()

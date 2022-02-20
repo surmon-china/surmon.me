@@ -1,13 +1,14 @@
 /**
- * @file I18n keys
- * @module i18n.key
+ * @file Language keys
+ * @module language.key
  * @author Surmon <https://github.com/surmon-china>
  */
 
-export enum LANGUAGE_KEYS {
-  PAGE_HOME = 'home',
+export enum LanguageKey {
+  APP_SLOGAN = 'app-slogan',
   CATEGORY_INSIGHT = 'insight',
   CATEGORY_CODE = 'code',
+  PAGE_HOME = 'home',
   PAGE_GITHUB = 'github',
   PAGE_LENS = 'lens',
   PAGE_JOB = 'job',
@@ -33,7 +34,6 @@ export enum LANGUAGE_KEYS {
   ORIGIN_HYBRID = 'hybrid',
   ACTION_ON = 'on',
   ACTION_OFF = 'off',
-  APP_SLOGAN = 'app-slogan',
   MUSIC_PLACEHOLDER = 'music-placeholder',
   SEARCH_PLACEHOLDER = 'search-input-placeholder',
   HOT_ARTICLE_LIST_TITLE = 'hot-article-list-title',
@@ -68,5 +68,15 @@ export enum LANGUAGE_KEYS {
   COMMENT_POST_ERROR_URL = 'comment-submit-failed-of-site-url-error',
   COMMENT_POST_ERROR_CONTENT = 'comment-submit-failed-of-content-error',
   QUERY_PARAMS_ERROR = 'query-params-error',
-  POST_ACTION_ERROR = 'post-requiest-failed-of-other-error'
+  POST_ACTION_ERROR = 'post-requiest-failed-of-other-error',
+  MOMENT_AM = 'moment-am',
+  MOMENT_PM = 'moment-pm',
+  MOMENT_JUST_NOW = 'moment-just-now',
+  MOMENT_MINUTES = 'moment-minutes',
+  MOMENT_HOURS = 'moment-hours',
+  MOMENT_WEEKS = 'moment-weeks',
+  MOMENT_DAYS = 'moment-days',
+  MOMENT_MONTHS = 'moment-months',
+  MOMENT_YEAR = 'moment-year',
+  MOMENT_AGO = 'moment-ago'
 }

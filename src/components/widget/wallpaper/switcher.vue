@@ -19,7 +19,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useWallpaperStore } from '/@/store/wallpaper'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { Language } from '/@/language/data'
+  import { Language } from '/@/language'
   import Wallpapers from './wall.vue'
 
   export default defineComponent({

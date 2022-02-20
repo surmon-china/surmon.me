@@ -37,7 +37,6 @@
 <script lang="ts">
   import { useRoute } from 'vue-router'
   import { defineComponent, ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-  import SwiperClass from '/@/services/swiper'
   import { ASIDE_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
   import { isArticleDetail } from '/@/transforms/route'
   import AsideSearch from './search.vue'

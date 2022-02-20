@@ -22,7 +22,7 @@
             name="name"
             autocomplete="on"
             :disabled="disabled"
-            :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_NAME) + ' *'"
+            :placeholder="t(LanguageKey.COMMENT_POST_NAME) + ' *'"
           />
         </div>
         <div class="email">
@@ -34,7 +34,7 @@
             name="email"
             autocomplete="on"
             :disabled="disabled"
-            :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_EMAIL) + ' *'"
+            :placeholder="t(LanguageKey.COMMENT_POST_EMAIL) + ' *'"
           />
         </div>
         <div class="site">
@@ -45,7 +45,7 @@
             name="url"
             autocomplete="on"
             :disabled="disabled"
-            :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_SITE)"
+            :placeholder="t(LanguageKey.COMMENT_POST_SITE)"
           />
         </div>
       </div>
@@ -68,18 +68,18 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, PropType } from 'vue'
-  import { Author } from '/@/store/comment'
   import { useEnhancer } from '/@/app/enhancer'
+  import { Author } from '/@/store/comment'
   import { useUniversalStore, UserType } from '/@/store/universal'
   import { COMMENT_PUBLISHER_ELEMENT_ID } from '/@/constants/anchor'
   import { GAEventCategories } from '/@/constants/gtag'
+  import { LanguageKey } from '/@/language'
   import {
     getGravatarByHash,
     getDefaultAvatar,
     getDisqusAvatarByUsername
   } from '/@/transforms/avatar'
   import { firstUpperCase } from '/@/transforms/text'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { CommentEvents } from '../helper'
 
   export enum PublisherEvents {
@@ -163,7 +163,7 @@
         blossomed,
         UserType,
         COMMENT_PUBLISHER_ELEMENT_ID,
-        LANGUAGE_KEYS,
+        LanguageKey,
         t: i18n.t,
         firstUpperCase,
         handleUpdateProfile,

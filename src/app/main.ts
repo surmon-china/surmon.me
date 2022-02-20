@@ -8,15 +8,15 @@ import { CreateAppFunction } from 'vue'
 import { RouterHistory } from 'vue-router'
 import API_CONFIG from '/@/config/api.config'
 import { META } from '/@/config/app.config'
+import { Language, LanguageKey, languages } from '/@/language'
 import { createUniversalRouter, RouterCreatorOptions } from './router'
+import { rebirthSSRContext } from '/@/universal'
 import { createUniversalStore } from '/@/store'
 import { createI18n } from '/@/services/i18n'
 import { createMeta } from '/@/services/meta'
 import { createTheme, Theme } from '/@/services/theme'
 import { LayoutColumn } from '/@/services/layout'
 import interior from '/@/services/interior'
-import { rebirthSSRContext } from '/@/universal'
-import { Language, languages, langMap } from '/@/language/data'
 import { createGlobalState } from './state'
 import { NODE_ENV } from '/@/environment'
 import { isSSR } from '/@/app/environment'
@@ -61,9 +61,9 @@ export const createVueApp = (context: ICreatorContext) => {
   })
   const theme = createTheme(context.theme)
   const i18n = createI18n({
-    default: globalState.userAgent.isZhUser ? Language.Zh : Language.En,
-    languages,
-    map: langMap
+    default: globalState.userAgent.isZhUser ? Language.Chinese : Language.English,
+    keys: Object.values(LanguageKey),
+    languages
   })
 
   // handle global error

@@ -1,12 +1,12 @@
 import { RouteName, CategorySlug } from '/@/app/router'
 import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
-import { LANGUAGE_KEYS } from '/@/language/key'
+import { LanguageKey } from '../../../language'
 import { VALUABLE_LINKS } from '/@/config/app.config'
 
 export interface MenuItem {
   id: string
   icon: string
-  i18nKey: LANGUAGE_KEYS
+  i18nKey: LanguageKey
   divider?: boolean
   newWindow?: boolean
   hot?: boolean
@@ -19,65 +19,65 @@ export const menus: Array<MenuItem> = [
     id: RouteName.Home,
     route: '/',
     icon: 'icon-home-fill',
-    i18nKey: LANGUAGE_KEYS.PAGE_HOME
+    i18nKey: LanguageKey.PAGE_HOME
   },
   {
     id: CategorySlug.Code,
     route: getCategoryFlowRoute(CategorySlug.Code),
     icon: 'icon-code',
-    i18nKey: LANGUAGE_KEYS.CATEGORY_CODE
+    i18nKey: LanguageKey.CATEGORY_CODE
   },
   {
     id: CategorySlug.Insight,
     route: getCategoryFlowRoute(CategorySlug.Insight),
     icon: 'icon-thinking',
-    i18nKey: LANGUAGE_KEYS.CATEGORY_INSIGHT
+    i18nKey: LanguageKey.CATEGORY_INSIGHT
   },
   {
     id: 'github',
     url: VALUABLE_LINKS.GITHUB,
     icon: 'icon-github',
     newWindow: true,
-    i18nKey: LANGUAGE_KEYS.PAGE_GITHUB
+    i18nKey: LanguageKey.PAGE_GITHUB
   },
   {
     id: RouteName.Lens,
     route: getPageRoute(RouteName.Lens),
     icon: 'icon-lens',
-    i18nKey: LANGUAGE_KEYS.PAGE_LENS
+    i18nKey: LanguageKey.PAGE_LENS
   },
   {
     id: RouteName.About,
     route: getPageRoute(RouteName.About),
     icon: 'icon-swordsman',
-    i18nKey: LANGUAGE_KEYS.PAGE_ABOUT
+    i18nKey: LanguageKey.PAGE_ABOUT
   },
   /*
   {
     id: RouteName.Job,
     route: getPageRoute(RouteName.Job),
     icon: 'icon-horse',
-    i18nKey: LANGUAGE_KEYS.PAGE_JOB
+    i18nKey: LanguageKey.PAGE_JOB
   },
   */
   {
     id: RouteName.Freelancer,
     route: getPageRoute(RouteName.Freelancer),
     icon: 'icon-coin-s',
-    i18nKey: LANGUAGE_KEYS.PAGE_FREELANCER
+    i18nKey: LanguageKey.PAGE_FREELANCER
   },
   {
     id: RouteName.Guestbook,
     route: getPageRoute(RouteName.Guestbook),
     icon: 'icon-comment',
-    i18nKey: LANGUAGE_KEYS.PAGE_GUESTBOOK
+    i18nKey: LanguageKey.PAGE_GUESTBOOK
   },
   {
     id: RouteName.App,
     route: getPageRoute(RouteName.App),
     divider: true,
     icon: 'icon-app',
-    i18nKey: LANGUAGE_KEYS.PAGE_APP
+    i18nKey: LanguageKey.PAGE_APP
   },
   {
     id: RouteName.Merch,
@@ -85,6 +85,6 @@ export const menus: Array<MenuItem> = [
     divider: true,
     hot: true,
     icon: 'icon-rubik',
-    i18nKey: LANGUAGE_KEYS.PAGE_MERCH
+    i18nKey: LanguageKey.PAGE_MERCH
   }
 ]

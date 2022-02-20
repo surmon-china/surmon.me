@@ -55,7 +55,7 @@
   import { defineComponent, ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useWallpaperStore } from '/@/store/wallpaper'
-  import { Language } from '/@/language/data'
+  import { Language } from '/@/language'
 
   export enum WallpaperWallEvent {
     Close = 'close'

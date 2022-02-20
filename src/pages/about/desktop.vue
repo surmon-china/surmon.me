@@ -102,13 +102,13 @@
             <uimage class="image" cdn :src="item.qrcode" />
           </span>
           <ulink class="link" :href="item.link">
-            <i class="icon iconfont" :class="item.icon"></i>
+            <i v-if="item.icon" class="icon iconfont" :class="item.icon"></i>
             <span class="text">{{ item.text }}</span>
           </ulink>
         </div>
       </div>
       <div class="calendar">
-        <activity-calendar />
+        <aggregate-calendar />
       </div>
       <div class="maps">
         <div class="location">
@@ -156,7 +156,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, ref } from 'vue'
+  import { defineComponent, ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
   import { useMetaStore } from '/@/store/meta'
@@ -166,12 +166,12 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { VALUABLE_LINKS, FRIEND_LINKS, SPECIAL_LINKS } from '/@/config/app.config'
   import { useAboutPageMeta, getAdminAvatar, i18ns } from './helper'
-  import ActivityCalendar from './calendar.vue'
+  import AggregateCalendar from './calendar/index.vue'
 
   export default defineComponent({
     name: 'PCAboutPage',
     components: {
-      ActivityCalendar
+      AggregateCalendar
     },
     setup() {
       const { i18n, gtag, globalState, isZhLang, isDarkTheme } = useEnhancer()
@@ -215,16 +215,15 @@
           text: `Douban Archive`
         },
         {
-          class: 'wechat',
-          qrcode: `/images/qrcodes/wechat.jpg`,
-          icon: 'icon-wechat',
-          text: 'Scan on WeChat'
-        },
-        {
           class: 'wechat-channel',
           qrcode: `/images/qrcodes/wechat-channel.png`,
           icon: 'icon-wechat-channel',
           text: 'WeChat Channel'
+        },
+        {
+          class: 'wechat',
+          qrcode: `/images/qrcodes/wechat.jpg`,
+          text: 'Friend me on WeChat'
         },
         {
           class: 'instagram',
@@ -598,6 +597,9 @@
         @include radius-box($lg-radius);
         &.wechat {
           --item-primary: #{$wechat-primary};
+          .background {
+            height: 45%;
+          }
         }
         &.douban {
           --item-primary: #{$douban-primary};
@@ -670,7 +672,7 @@
     }
 
     .maps {
-      $size: 160px;
+      $size: 150px;
       position: relative;
       display: flex;
       width: 100%;
@@ -690,7 +692,8 @@
 
         .iframe {
           width: 100%;
-          height: 100%;
+          height: $size;
+          @include radius-box($xs-radius);
         }
       }
 
@@ -703,7 +706,8 @@
           $google-bar: 54px;
           position: relative;
           height: $size;
-          @include radius-box($lg-radius);
+          border-radius: $xs-radius;
+          overflow: hidden;
 
           .fullscreen {
             position: absolute;
@@ -711,8 +715,8 @@
             right: $sm-gap;
             z-index: $z-index-normal + 1;
             display: block;
-            width: 4rem;
-            height: 3rem;
+            width: 2em;
+            height: 2em;
             border-radius: $xs-radius;
             background-color: $module-bg;
             font-size: $font-size-h4;

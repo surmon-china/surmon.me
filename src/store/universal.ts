@@ -9,7 +9,7 @@ import { Author } from './comment'
 import { getJSON, setJSON, remove } from '/@/services/storage'
 import nodepress from '/@/services/nodepress'
 
-export interface UserLocalProfile extends Author {}
+export type UserLocalProfile = Author
 export enum UserType {
   Null = 0,
   Local = 1,

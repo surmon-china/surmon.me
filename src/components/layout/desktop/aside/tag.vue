@@ -3,7 +3,7 @@
     <placeholder
       :data="tagStore.sorted.length"
       :fetching="tagStore.fetching"
-      :i18n-key="LANGUAGE_KEYS.TAG_PLACEHOLDER"
+      :i18n-key="LanguageKey.TAG_PLACEHOLDER"
     >
       <template #loading>
         <ul class="tag-list-skeleton" key="skeleton">
@@ -36,7 +36,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import { useTagStore, tagEnName, Tag } from '/@/store/tag'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { LanguageKey } from '/@/language'
   import { getTagFlowRoute } from '/@/transforms/route'
   import { getExtendValue } from '/@/transforms/state'
 
@@ -49,7 +49,7 @@
       }
 
       return {
-        LANGUAGE_KEYS,
+        LanguageKey,
         tagStore,
         tagEnName,
         getTagIcon,

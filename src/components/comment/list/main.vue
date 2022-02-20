@@ -14,7 +14,7 @@
     </template>
     <template #placeholder>
       <div class="list-empty">
-        <i18n :lkey="LANGUAGE_KEYS.COMMENT_LIST_EMPTY" />
+        <i18n :k="LanguageKey.COMMENT_LIST_EMPTY" />
       </div>
     </template>
     <template #default>
@@ -28,7 +28,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { LanguageKey } from '/@/language'
 
   export default defineComponent({
     name: 'CommentMain',
@@ -48,7 +48,7 @@
     },
     setup() {
       return {
-        LANGUAGE_KEYS
+        LanguageKey
       }
     }
   })

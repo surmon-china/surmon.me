@@ -63,10 +63,6 @@
           border-color: initial;
         }
       }
-
-      .ipc {
-        margin-right: $xs-gap;
-      }
     }
   }
 </style>

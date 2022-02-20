@@ -20,6 +20,7 @@
   import qs from 'qs'
   import { defineComponent, PropType, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
   import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
   import { getPageURL } from '/@/transforms/url'
@@ -159,7 +160,7 @@
       }
     },
     setup(props) {
-      const { route, gtag } = useEnhancer()
+      const { route, gtag, i18n } = useEnhancer()
       const enabledSocials = computed(() => {
         return props.socials?.length
           ? socials.filter((s) => props.socials?.includes(s.id))
@@ -168,8 +169,12 @@
 
       const getURL = () => getPageURL(route.fullPath)
       const getTitle = () => document.title || META.title
-      const getDescription = () =>
-        document.getElementsByName('description')?.[0]?.getAttribute('content') || META.sub_title
+      const getDescription = () => {
+        return (
+          document.getElementsByName('description')?.[0]?.getAttribute('content') ||
+          i18n.t(LanguageKey.APP_SLOGAN)!
+        )
+      }
 
       const copyPageURL = () => {
         const content = `${getTitle()} - ${getURL()}`

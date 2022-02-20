@@ -28,9 +28,7 @@
 
 <script lang="ts">
   import { defineComponent, computed, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
   import { Article } from '/@/store/article'
-  import { timeAgo } from '/@/transforms/moment'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getMobileArticleListThumbnailURL } from '/@/transforms/thumbnail'
 
@@ -51,11 +49,6 @@
       }
     },
     setup(props) {
-      const { i18n } = useEnhancer()
-      const getTimeAgo = (date: string) => {
-        return timeAgo(date, i18n.language.value as any)
-      }
-
       const articleList = computed<Article[]>(() => {
         const articles = [...props.articles].slice(0, props.count)
         if (articles.length >= props.count) {
@@ -74,7 +67,6 @@
 
       return {
         articleList,
-        getTimeAgo,
         getArticleDetailRoute,
         getMobileArticleListThumbnailURL
       }

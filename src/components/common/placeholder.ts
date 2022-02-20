@@ -5,7 +5,7 @@
  */
 
 import { defineComponent, h, Transition, PropType } from 'vue'
-import { LANGUAGE_KEYS } from '/@/language/key'
+import { LanguageKey } from '/@/language'
 import Empty from './empty.vue'
 import Spin from './spin.vue'
 
@@ -15,7 +15,7 @@ export enum Events {
 
 /**
  * @example
- *  <placeholder :loading="false" :data="data.length" :i18n-key="LANGUAGE_KEYS.XXX">
+ *  <placeholder :loading="false" :data="data.length" :i18n-key="LanguageKey.XXX">
  *    <component />
  *  </placeholder>
  * @example
@@ -45,7 +45,7 @@ export default defineComponent({
       default: 'module'
     },
     placeholder: String,
-    i18nKey: String as PropType<LANGUAGE_KEYS>,
+    i18nKey: String as PropType<LanguageKey>,
     loading: Boolean
   },
   emits: [Events.AfterEnter],

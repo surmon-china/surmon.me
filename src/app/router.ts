@@ -12,7 +12,7 @@ import {
   createRouter
 } from 'vue-router'
 import { NOT_FOUND, BAD_REQUEST } from '/@/constants/error'
-import { LANGUAGE_KEYS } from '/@/language/key'
+import { LanguageKey } from '/@/language'
 import { LayoutColumn } from '/@/services/layout'
 import { isValidDateParam } from '/@/transforms/validate'
 import { scrollToTop } from '/@/utils/effects'
@@ -109,7 +109,7 @@ export const routes: RouteRecordRaw[] = [
         if (!Number.isInteger(Number(route.params.article_id))) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Article ID → <number>'
+            message: i18n.t(LanguageKey.QUERY_PARAMS_ERROR) + 'Article ID → <number>'
           })
         }
       }
@@ -134,7 +134,7 @@ export const routes: RouteRecordRaw[] = [
         if (!category_slug) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Category slug → <string>'
+            message: i18n.t(LanguageKey.QUERY_PARAMS_ERROR) + 'Category slug → <string>'
           })
         }
       }
@@ -159,7 +159,7 @@ export const routes: RouteRecordRaw[] = [
         if (!tag_slug) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Tag slug → <string>'
+            message: i18n.t(LanguageKey.QUERY_PARAMS_ERROR) + 'Tag slug → <string>'
           })
         }
       }
@@ -184,7 +184,7 @@ export const routes: RouteRecordRaw[] = [
         if (!date || !isValidDateParam(date)) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + `Invalid date ${date || ''}`
+            message: i18n.t(LanguageKey.QUERY_PARAMS_ERROR) + `Invalid date ${date || ''}`
           })
         }
       }
@@ -208,7 +208,7 @@ export const routes: RouteRecordRaw[] = [
         if (!route.params.keyword) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LANGUAGE_KEYS.QUERY_PARAMS_ERROR) + 'Keywords ?'
+            message: i18n.t(LanguageKey.QUERY_PARAMS_ERROR) + 'Keywords ?'
           })
         }
       }
@@ -329,7 +329,7 @@ export const routes: RouteRecordRaw[] = [
       async validate({ i18n }) {
         return Promise.reject({
           code: NOT_FOUND,
-          message: i18n.t(LANGUAGE_KEYS.NOT_FOUND)
+          message: i18n.t(LanguageKey.NOT_FOUND)
         })
       }
     }

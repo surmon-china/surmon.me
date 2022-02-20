@@ -2,7 +2,7 @@
   <div class="captured">
     <error-component v-if="error" :error="error" @resolve="handleResolveRoute">
       <template #resolve-text>
-        <i18n :lkey="LANGUAGE_KEYS.BACK_TO_HOME_PAGE" />
+        <i18n :k="LanguageKey.BACK_TO_HOME_PAGE" />
       </template>
     </error-component>
     <template v-else>
@@ -13,9 +13,9 @@
 
 <script lang="ts">
   import { defineComponent, onErrorCaptured } from 'vue'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
+  import { LanguageKey } from '/@/language'
   import { getLayoutByRouteMeta } from '/@/services/layout'
   import ErrorComponent from './error.vue'
 
@@ -24,7 +24,7 @@
     components: {
       ErrorComponent
     },
-    setup(props, context) {
+    setup() {
       const { router, globalState } = useEnhancer()
       const handleResolveRoute = () => {
         router.push({ name: RouteName.Home }).then(() => {
@@ -42,7 +42,7 @@
       return {
         error: globalState.renderError,
         handleResolveRoute,
-        LANGUAGE_KEYS
+        LanguageKey
       }
     }
   })

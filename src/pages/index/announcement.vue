@@ -3,7 +3,7 @@
     <placeholder :data="announcements.length" :loading="fetching">
       <template #placeholder>
         <empty class="announcement-empty" key="empty">
-          <i18n :lkey="LANGUAGE_KEYS.EMPTY_PLACEHOLDER" />
+          <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
         </empty>
       </template>
       <template #loading>
@@ -38,7 +38,7 @@
             >
               <swiper-slide v-for="(ann, index) in announcements" :key="index">
                 <markdown class="content" :plain="true" :markdown="ann.content" />
-                <div class="date">{{ humanlizeDate(ann.create_at) }}</div>
+                <div class="date"><udate to="ago" :date="ann.create_at" /></div>
               </swiper-slide>
             </swiper>
             <div class="navigation">
@@ -63,9 +63,8 @@
 <script lang="ts">
   import { defineComponent, ref, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { LanguageKey } from '/@/language'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
-  import { timeAgo } from '/@/transforms/moment'
   import Markdown from '/@/components/common/markdown.vue'
 
   export default defineComponent({
@@ -86,15 +85,11 @@
       }
     },
     setup() {
-      const { i18n, isDarkTheme } = useEnhancer()
+      const { isDarkTheme } = useEnhancer()
       const activeIndex = ref(0)
       const swiper = ref<SwiperClass>()
       const handleSwiperReady = (_swiper: SwiperClass) => {
         swiper.value = _swiper
-      }
-
-      const humanlizeDate = (date: string) => {
-        return timeAgo(date, i18n.language.value as any)
       }
 
       const prevSlide = () => swiper.value?.slidePrev()
@@ -104,10 +99,9 @@
       }
 
       return {
-        LANGUAGE_KEYS,
+        LanguageKey,
         isDarkTheme,
         activeIndex,
-        humanlizeDate,
         prevSlide,
         nextSlide,
         handleSwiperReady,

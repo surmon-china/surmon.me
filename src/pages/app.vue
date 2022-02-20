@@ -6,7 +6,7 @@
       </div>
       <h2 class="title">{{ META.title }}</h2>
       <p class="description">
-        <i18n :lkey="LANGUAGE_KEYS.APP_SLOGAN" />
+        <i18n :k="LanguageKey.APP_SLOGAN" />
       </p>
       <p class="rss">
         <span class="prefix"><i18n zh="（" en="[" /></span>
@@ -56,10 +56,9 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { Language } from '/@/language/data'
-  import { firstUpperCase } from '/@/transforms/text'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { Language, LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
+  import { firstUpperCase } from '/@/transforms/text'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
@@ -73,8 +72,8 @@
     setup() {
       const { i18n, meta, gtag, isZhLang } = useEnhancer()
       meta(() => {
-        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_APP, Language.En)!)
-        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_APP), enTitle] : [enTitle]
+        const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_APP, Language.English)!)
+        const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_APP), enTitle] : [enTitle]
         return { pageTitle: titles.join(' | '), description: `${META.title} App 下载` }
       })
 
@@ -87,7 +86,7 @@
       return {
         META,
         VALUABLE_LINKS,
-        LANGUAGE_KEYS,
+        LanguageKey,
         handleAppEvent
       }
     }

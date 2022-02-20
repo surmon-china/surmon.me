@@ -5,7 +5,9 @@
         <div class="left">
           <span class="timestamp">
             <i class="iconfont icon-clock"></i>
-            <span class="text">{{ humanlizeDate(galleryActiveMedia.timestamp) }}</span>
+            <span class="text">
+              <udate to="YMDm" :date="galleryActiveMedia.timestamp" separator="/" />
+            </span>
           </span>
         </div>
         <div class="center">
@@ -66,11 +68,9 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
-  import { humanizeYMD } from '/@/transforms/moment'
-  import { getInstagramImage } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
+  import { getInstagramImage } from '/@/transforms/media'
 
   enum GalleryEvents {
     Close = 'close'
@@ -98,11 +98,6 @@
     },
     emits: [GalleryEvents.Close],
     setup(props, context) {
-      const { i18n } = useEnhancer()
-      const humanlizeDate = (date: string) => {
-        return humanizeYMD(date, i18n.language.value as any)
-      }
-
       const galleryActiveIndex = ref<number>(props.index)
       const gallerySwiper = ref<SwiperClass>()
       const galleryActiveMedia = computed(() => props.medias[galleryActiveIndex.value])
@@ -121,7 +116,6 @@
       return {
         galleryActiveIndex,
         galleryActiveMedia,
-        humanlizeDate,
         getInstagramImage,
         handleGalleryClose,
         handleGallerySwiperReady,

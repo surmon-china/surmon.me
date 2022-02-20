@@ -27,13 +27,13 @@
           </div>
           <select class="sort" name="sort" :value="sort" @change="handleSort($event.target)">
             <option :value="SortType.Desc">
-              <i18n :lkey="LANGUAGE_KEYS.COMMENT_SORT_NEW" />
+              <i18n :k="LanguageKey.COMMENT_SORT_NEW" />
             </option>
             <option :value="SortType.Hottest">
-              <i18n :lkey="LANGUAGE_KEYS.COMMENT_SORT_HOT" />
+              <i18n :k="LanguageKey.COMMENT_SORT_HOT" />
             </option>
             <option :value="SortType.Asc">
-              <i18n :lkey="LANGUAGE_KEYS.COMMENT_SORT_OLD" />
+              <i18n :k="LanguageKey.COMMENT_SORT_OLD" />
             </option>
           </select>
           <button class="disqus" @click="handleDisqusThread">
@@ -114,12 +114,12 @@
   import { UserType, useUniversalStore } from '/@/store/universal'
   import { GAEventCategories } from '/@/constants/gtag'
   import { SortType } from '/@/constants/state'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { LanguageKey } from '/@/language'
+  import nodepress from '/@/services/nodepress'
   import { openWindow } from '/@/utils/opener'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { META } from '/@/config/app.config'
   import { CommentEvents } from './helper'
-  import nodepress from '/@/services/nodepress'
 
   export default defineComponent({
     name: 'CommentTopbar',
@@ -225,7 +225,7 @@
         user,
         statisticsText,
         VALUABLE_LINKS,
-        LANGUAGE_KEYS,
+        LanguageKey,
         UserType,
         SortType,
         handleSort,

@@ -41,11 +41,10 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useMetaStore } from '/@/store/meta'
   import { GAEventCategories } from '/@/constants/gtag'
+  import { Language, LanguageKey } from '/@/language'
   import { getTargetCDNURL } from '/@/transforms/url'
   import { firstUpperCase } from '/@/transforms/text'
   import { emailLink } from '/@/transforms/email'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { Language } from '/@/language/data'
   import { META } from '/@/config/app.config'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
 
@@ -59,8 +58,8 @@
       const adminEmail = computed(() => useMetaStore().appOptions.data?.site_email || '')
 
       meta(() => {
-        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_JOB, Language.En)!)
-        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_JOB), enTitle] : [enTitle]
+        const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_JOB, Language.English)!)
+        const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_JOB), enTitle] : [enTitle]
         return { pageTitle: titles.join(' | '), description: `找 ${META.author} 内推` }
       })
 

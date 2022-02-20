@@ -47,7 +47,7 @@
         </ul>
       </template>
       <template #placeholder>
-        <empty class="empty" :i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
+        <empty class="empty" :i18n-key="LanguageKey.ARTICLE_PLACEHOLDER" />
       </template>
       <template #default>
         <div>
@@ -66,12 +66,9 @@
               @click="loadmoreArticles"
             >
               <div class="text">
-                <i18n
-                  v-if="articleListStore.list.fetching"
-                  :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADING"
-                />
-                <i18n v-else-if="hasMoreArticles" :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE" />
-                <i18n v-else :lkey="LANGUAGE_KEYS.ARTICLE_LIST_NO_MORE" />
+                <i18n v-if="articleListStore.list.fetching" :k="LanguageKey.ARTICLE_LIST_LOADING" />
+                <i18n v-else-if="hasMoreArticles" :k="LanguageKey.ARTICLE_LIST_LOADMORE" />
+                <i18n v-else :k="LanguageKey.ARTICLE_LIST_NO_MORE" />
               </div>
               <span class="icon" v-if="hasMoreArticles">
                 <i class="iconfont icon-loadmore"></i>
@@ -86,14 +83,14 @@
 
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
+  import { LanguageKey } from '/@/language'
+  import { META } from '/@/config/app.config'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch, onClient } from '/@/universal'
   import { useArticleListStore, Article } from '/@/store/article'
   import { useMetaStore } from '/@/store/meta'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { firstUpperCase } from '/@/transforms/text'
   import { nextScreen } from '/@/utils/effects'
-  import { META } from '/@/config/app.config'
   import ListItem from './item.vue'
   import Mammon from './mammon.vue'
 
@@ -122,7 +119,7 @@
       }
     },
     setup(props) {
-      const { meta } = useEnhancer()
+      const { meta, i18n } = useEnhancer()
       const metaStore = useMetaStore()
       const articleListStore = useArticleListStore()
 
@@ -156,7 +153,7 @@
 
         // index page
         return {
-          title: `${META.title} - ${META.sub_title}`,
+          title: `${META.title} - ${i18n.t(LanguageKey.APP_SLOGAN)}`,
           description: metaStore.appOptions.data?.description,
           keywords: metaStore.appOptions.data?.keywords.join(',')
         }
@@ -190,7 +187,7 @@
       useUniversalFetch(() => fetchArticles())
 
       return {
-        LANGUAGE_KEYS,
+        LanguageKey,
         articles,
         articleListStore,
         hasMoreArticles,

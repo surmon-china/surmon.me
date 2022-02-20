@@ -29,9 +29,9 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, watch } from 'vue'
+  import { defineComponent, ref } from 'vue'
   import { VALUABLE_LINKS } from '/@/config/app.config'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { LanguageKey } from '/@/language'
 
   enum ArticleUpvoteEvents {
     Like = 'like',
@@ -77,7 +77,7 @@
 
       return {
         VALUABLE_LINKS,
-        LANGUAGE_KEYS,
+        LanguageKey,
         handleLike,
         handleSponsor,
         newliked

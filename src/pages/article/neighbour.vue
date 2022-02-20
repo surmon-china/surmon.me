@@ -16,7 +16,7 @@
         </div>
       </router-link>
       <div v-else class="nomore">
-        <i18n zh="没有更早的了" en="null" />
+        <i18n zh="已是最早" en="NULL" />
       </div>
     </div>
     <div class="item-article next" :class="{ disabled: !next }">
@@ -35,7 +35,7 @@
         </div>
       </router-link>
       <div v-else class="nomore">
-        <i18n zh="没有更多的了" en="null" />
+        <i18n zh="无有更多" en="NULL" />
       </div>
     </div>
   </div>
@@ -43,11 +43,8 @@
 
 <script lang="ts">
   import { defineComponent, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
   import { Article } from '/@/store/article'
-  import { timeAgo } from '/@/transforms/moment'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getMobileArticleListThumbnailURL } from '/@/transforms/thumbnail'
 
   export default defineComponent({
     name: 'ArticleNeighbour',
@@ -55,15 +52,8 @@
       prev: Object as PropType<Article | null>,
       next: Object as PropType<Article | null>
     },
-    setup(props) {
-      const { i18n } = useEnhancer()
-      const getTimeAgo = (date: string) => {
-        return timeAgo(date, i18n.language.value as any)
-      }
-
+    setup() {
       return {
-        getTimeAgo,
-        getMobileArticleListThumbnailURL,
         getArticleDetailRoute
       }
     }

@@ -7,7 +7,7 @@
       <div class="profile">
         <h3 class="name">{{ author }}</h3>
         <p class="slogan">
-          <i18n :lkey="LANGUAGE_KEYS.APP_SLOGAN" />
+          <i18n :k="LanguageKey.APP_SLOGAN" />
         </p>
       </div>
     </div>
@@ -23,38 +23,38 @@
       <nav class="nav-list">
         <router-link to="/" class="item" exact>
           <i class="iconfont icon-home-fill"></i>
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_HOME" />
+          <i18n :k="LanguageKey.PAGE_HOME" />
         </router-link>
         <router-link class="item" :to="getCategoryFlowRoute(CategorySlug.Code)">
           <i class="iconfont icon-code"></i>
-          <i18n :lkey="LANGUAGE_KEYS.CATEGORY_CODE" />
+          <i18n :k="LanguageKey.CATEGORY_CODE" />
         </router-link>
         <router-link class="item" :to="getCategoryFlowRoute(CategorySlug.Insight)">
           <i class="iconfont icon-thinking"></i>
-          <i18n :lkey="LANGUAGE_KEYS.CATEGORY_INSIGHT" />
+          <i18n :k="LanguageKey.CATEGORY_INSIGHT" />
         </router-link>
         <ulink class="item" :href="VALUABLE_LINKS.GITHUB">
           <i class="iconfont icon-github"></i>
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_GITHUB" />
+          <i18n :k="LanguageKey.PAGE_GITHUB" />
           <span class="newscript">
             <i class="iconfont icon-new-window-s"></i>
           </span>
         </ulink>
         <router-link class="item" :to="getPageRoute(RouteName.Archive)">
           <i class="iconfont icon-peachblossom"></i>
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_ARCHIVE" />
+          <i18n :k="LanguageKey.PAGE_ARCHIVE" />
         </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.About)">
           <i class="iconfont icon-swordsman"></i>
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_ABOUT" />
+          <i18n :k="LanguageKey.PAGE_ABOUT" />
         </router-link>
         <router-link class="item guestbook" :to="getPageRoute(RouteName.Guestbook)">
           <i class="iconfont icon-comment"></i>
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_GUESTBOOK" />
+          <i18n :k="LanguageKey.PAGE_GUESTBOOK" />
         </router-link>
         <router-link class="item app" :to="getPageRoute(RouteName.App)">
           <i class="iconfont icon-app"></i>
-          <i18n :lkey="LANGUAGE_KEYS.PAGE_APP" />
+          <i18n :k="LanguageKey.PAGE_APP" />
         </router-link>
       </nav>
     </div>
@@ -65,13 +65,12 @@
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName, CategorySlug } from '/@/app/router'
-  import { useMetaStore } from '/@/store/meta'
   import { useUniversalFetch } from '/@/universal'
+  import { useMetaStore } from '/@/store/meta'
   import { Theme } from '/@/services/theme'
-  import { Language } from '/@/language/data'
+  import { Language, LanguageKey } from '/@/language'
   import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
   import { getDefaultAvatar } from '/@/transforms/avatar'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { VALUABLE_LINKS, META } from '/@/config/app.config'
 
   export default defineComponent({
@@ -91,8 +90,8 @@
 
       const languageIcon = computed(() => {
         const languageIconMap = {
-          [Language.Zh]: 'icon-chinese',
-          [Language.En]: 'icon-english'
+          [Language.Chinese]: 'icon-chinese',
+          [Language.English]: 'icon-english'
         }
         return languageIconMap[i18n.language.value]
       })
@@ -101,7 +100,7 @@
 
       return {
         VALUABLE_LINKS,
-        LANGUAGE_KEYS,
+        LanguageKey,
         RouteName,
         CategorySlug,
         getPageRoute,

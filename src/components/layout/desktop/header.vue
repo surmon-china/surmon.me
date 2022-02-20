@@ -4,12 +4,12 @@
       <div class="header-header">
         <uimage cdn src="/images/logo.svg" class="header-logo" />
         <span class="header-slogan">
-          <i18n :lkey="LANGUAGE_KEYS.APP_SLOGAN" />
+          <i18n :k="LanguageKey.APP_SLOGAN" />
         </span>
         <router-link
           to="/"
           class="header-link"
-          :title="t(LANGUAGE_KEYS.APP_SLOGAN)"
+          :title="t(LanguageKey.APP_SLOGAN)"
           @mousedown="handleRootNavEvent"
         />
       </div>
@@ -43,7 +43,7 @@
           >
             <i class="iconfont" :class="menu.icon"></i>
             <span class="text">
-              <i18n :lkey="menu.i18nKey" />
+              <i18n :k="menu.i18nKey" />
             </span>
             <span v-if="menu.hot" class="superscript">
               <i class="iconfont icon-hot-fill"></i>
@@ -57,7 +57,7 @@
           >
             <i class="iconfont" :class="menu.icon"></i>
             <span class="text">
-              <i18n :lkey="menu.i18nKey" />
+              <i18n :k="menu.i18nKey" />
             </span>
             <span class="newscript" v-if="menu.newWindow">
               <i class="iconfont icon-new-window-s"></i>
@@ -74,11 +74,11 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { HEADER_ELEMENT_ID } from '/@/constants/anchor'
-  import { Theme } from '/@/services/theme'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { useEnhancer } from '/@/app/enhancer'
+  import { HEADER_ELEMENT_ID } from '/@/constants/anchor'
   import { GAEventCategories } from '/@/constants/gtag'
+  import { LanguageKey } from '/@/language'
+  import { Theme } from '/@/services/theme'
   import { menus } from './menu'
 
   export default defineComponent({
@@ -122,7 +122,7 @@
       return {
         menus,
         HEADER_ELEMENT_ID,
-        LANGUAGE_KEYS,
+        LanguageKey,
         isEnabledNav,
         handleRootNavEvent,
         t: i18n.t,

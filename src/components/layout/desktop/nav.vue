@@ -12,7 +12,7 @@
         >
           <i class="iconfont" :class="menu.icon"></i>
           <span class="text">
-            <i18n :lkey="menu.i18nKey" />
+            <i18n :k="menu.i18nKey" />
           </span>
           <span class="superscript" v-if="menu.hot">
             <i class="iconfont icon-hot-fill"></i>
@@ -26,7 +26,7 @@
         >
           <i class="iconfont" :class="menu.icon"></i>
           <span class="text">
-            <i18n :lkey="menu.i18nKey" />
+            <i18n :k="menu.i18nKey" />
           </span>
           <span class="newscript" v-if="menu.newWindow">
             <i class="iconfont icon-new-window-s"></i>

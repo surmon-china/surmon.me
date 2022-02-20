@@ -9,13 +9,11 @@ import 'intersection-observer'
 
 import { createApp, createSSRApp, computed } from 'vue'
 import { createWebHistory } from 'vue-router'
-import { GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
-import { isSSR } from '/@/app/environment'
-import { Language } from '/@/language/data'
-import { getTargetCDNURL } from '/@/transforms/url'
-import amplitude from '/@/services/amplitude'
+import { createVueApp } from '/@/app/main'
+import { getSSRContext } from '/@/universal'
 import gtag from '/@/services/gtag'
 import adsense from '/@/services/adsense'
+import amplitude from '/@/services/amplitude'
 import { getHighlightThemeStyle } from '/@/services/highlight'
 import { getClientLocalTheme, Theme } from '/@/services/theme'
 import { LayoutColumn, getLayoutByRouteMeta } from '/@/services/layout'
@@ -31,10 +29,12 @@ import { exportEmojiRainToGlobal } from '/@/services/emoji-23333'
 import { exportStickyEventsToGlobal } from '/@/services/sticky'
 import { exportAppToGlobal } from '/@/services/exporter'
 import { exportLozadToGlobal } from '/@/services/lozad'
+import { getTargetCDNURL } from '/@/transforms/url'
 import { randomNumber } from '/@/utils/random'
-import { createVueApp } from '/@/app/main'
-import { getSSRContext } from '/@/universal'
 import { isProd } from '/@/environment'
+import { isSSR } from '/@/app/environment'
+import { Language, LanguageKey } from '/@/language'
+import { GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
 
 import '/@/services/swiper/style'
 import '/@/styles/app.scss'
@@ -110,7 +110,7 @@ router.isReady().finally(() => {
     // set hydrate state
     globalState.setHydrate()
     // reset: i18n language
-    i18n.set(globalState.userAgent.isZhUser ? Language.Zh : Language.En)
+    i18n.set(globalState.userAgent.isZhUser ? Language.Chinese : Language.English)
     // init universal user state
     store.stores.universal.initOnClient()
 
@@ -141,7 +141,7 @@ router.isReady().finally(() => {
     // production only
     if (isProd) {
       enableBaiduSEOer(router)
-      consoleSlogan(i18n, store.stores.meta.appOptions.data?.site_email)
+      consoleSlogan(i18n.t(LanguageKey.APP_SLOGAN)!, store.stores.meta.appOptions.data?.site_email)
     }
   })
 })

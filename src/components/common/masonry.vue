@@ -26,11 +26,11 @@
       },
       listClass: String
     },
-    setup(props, context) {
-      // 构造基本数据
+    setup(props) {
+      // columns layout
       let index = 0
       const columnDatas = createNumberArray(props.columns).map(() => [] as any[])
-      // 分配数据
+      // data
       props.data.forEach((item) => {
         columnDatas[index].push(item)
         index = index === props.columns - 1 ? 0 : index + 1

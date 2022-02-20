@@ -33,6 +33,7 @@
   import { useArticleListStore } from '/@/store/article'
   import { useMetaStore } from '/@/store/meta'
   import { nextScreen } from '/@/utils/effects'
+  import { LanguageKey } from '/@/language'
   import { META } from '/@/config/app.config'
   import ArticleList from '/@/components/flow/desktop/list.vue'
   import Carrousel from './carrousel.vue'
@@ -46,13 +47,13 @@
       ArticleList
     },
     setup() {
-      const { meta } = useEnhancer()
+      const { meta, i18n } = useEnhancer()
       const metaStore = useMetaStore()
       const twitterStore = useTwitterStore()
       const articleListStore = useArticleListStore()
 
       meta(() => ({
-        title: `${META.title} - ${META.sub_title}`,
+        title: `${META.title} - ${i18n.t(LanguageKey.APP_SLOGAN)}`,
         description: metaStore.appOptions.data?.description,
         keywords: metaStore.appOptions.data?.keywords.join(',')
       }))
@@ -68,8 +69,10 @@
       useUniversalFetch(() => {
         return Promise.all([
           articleListStore.fetchList(),
-          twitterStore.fetchUserinfo().catch((e) => {}),
-          twitterStore.fetchTweets().catch((e) => {})
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          twitterStore.fetchUserinfo().catch(() => {}),
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          twitterStore.fetchTweets().catch(() => {})
         ])
       })
 

@@ -1,7 +1,7 @@
-import Vue from 'vue'
+import { App } from 'vue'
 
 declare global {
   interface Window {
-    // xxx(options: any): void
+    $app: App
   }
 }

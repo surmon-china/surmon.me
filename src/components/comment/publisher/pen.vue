@@ -5,7 +5,7 @@
         ref="inputElement"
         class="markdown-input"
         :contenteditable="!disabled"
-        :placeholder="t(LANGUAGE_KEYS.COMMENT_POST_PLACEHOLDER)"
+        :placeholder="t(LanguageKey.COMMENT_POST_PLACEHOLDER)"
         @focus="disableCopyrighter"
         @blur="enableCopyrighter"
       />
@@ -90,14 +90,14 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
-  import { useUniversalStore, UserType } from '/@/store/universal'
+  import { defineComponent, ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { useUniversalStore, UserType } from '/@/store/universal'
   import { enableCopyrighter, disableCopyrighter } from '/@/services/copyright'
   import { focusPosition } from '/@/utils/editable'
   import { insertContent } from '/@/utils/editable'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
   import { CommentEvents, EMOJIS } from '../helper'
   import Markdown from '/@/components/common/markdown.vue'
 
@@ -238,7 +238,7 @@
         UserType,
         EMOJIS,
         VALUABLE_LINKS,
-        LANGUAGE_KEYS,
+        LanguageKey,
         inputElement,
         content,
         isPreviewed,

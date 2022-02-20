@@ -34,16 +34,15 @@
 
 <script lang="ts">
   import { defineComponent, reactive, computed } from 'vue'
+  import { Language } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import {
+    cloneDate,
     dateToHuman,
     humanToDate,
-    cloneDate,
     isSameHumanDay,
-    textHumanizer,
     humanDateToYMD,
-    HumanDate,
-    TEXT_MAP
+    HumanDate
   } from '/@/transforms/moment'
 
   export default defineComponent({
@@ -57,20 +56,22 @@
         table: [] as Array<HumanDate>
       })
 
-      const weekDayTexts = computed(() => {
-        return textHumanizer(i18n.language.value as any)(TEXT_MAP.WEEKDAYS)
-      })
+      const WEEKDAYS = {
+        [Language.English]: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        [Language.Chinese]: ['一', '二', '三', '四', '五', '六', '日']
+      }
 
+      const weekDayTexts = computed(() => WEEKDAYS[i18n.language.value])
       const headerText = computed(() => {
-        const isSameTodayTable = tableView.month === today.month && tableView.year === today.year
-
+        const isSameYear = tableView.year === today.year
+        const isSameMonth = tableView.month === today.month
+        const isSameTodayTable = isSameYear && isSameMonth
         if (isZhLang.value) {
           const yearText = `${tableView.year} 年`
           const monthText = ` ${tableView.month} 月`
           const dayText = isSameTodayTable ? ` ${today.day} 日` : ''
           return yearText + monthText + dayText
         }
-
         return humanDateToYMD(isSameTodayTable ? today : tableView, ' / ')
       })
 

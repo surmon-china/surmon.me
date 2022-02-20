@@ -45,13 +45,13 @@
 
 <script lang="ts">
   import { defineComponent, ref, onMounted, onBeforeUnmount, PropType } from 'vue'
-  import { useCommentStore, Comment, CommentTreeItem } from '/@/store/comment'
-  import { useUniversalStore } from '/@/store/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { LozadObserver } from '/@/services/lozad'
-  import { GAEventCategories } from '/@/constants/gtag'
+  import { useUniversalStore } from '/@/store/universal'
+  import { useCommentStore, Comment, CommentTreeItem } from '/@/store/comment'
   import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { LanguageKey } from '/@/language'
   import { CommentEvents } from '../helper'
   import CommentItem from './item.vue'
 
@@ -138,7 +138,7 @@
           await commentStore.postCommentVote(commentID, isLike ? 1 : -1)
           isLike ? universalStore.likeComment(commentID) : universalStore.dislikeComment(commentID)
         } catch (error) {
-          const message = i18n.t(LANGUAGE_KEYS.POST_ACTION_ERROR)
+          const message = i18n.t(LanguageKey.POST_ACTION_ERROR)
           console.warn(message, error)
           alert(message)
         }

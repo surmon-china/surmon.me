@@ -18,7 +18,7 @@ export const getArticleBannerThumbnailURL = (thumb: string, isWebPImage: boolean
   }`
 }
 
-export const getMobileArticleListThumbnailURL = (thumb: string, isWebPImage: boolean = false) => {
+export const getMobileArticleListThumbnailURL = (thumb: string, isWebPImage = false) => {
   if (!thumb) {
     return ''
   }

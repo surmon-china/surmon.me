@@ -9,9 +9,9 @@
           hybrid: isHybrid
         }"
       >
-        <i18n :lkey="LANGUAGE_KEYS.ORIGIN_ORIGINAL" v-if="isOriginal" />
-        <i18n :lkey="LANGUAGE_KEYS.ORIGIN_REPRINT" v-else-if="isReprint" />
-        <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="isHybrid" />
+        <i18n :k="LanguageKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
+        <i18n :k="LanguageKey.ORIGIN_REPRINT" v-else-if="isReprint" />
+        <i18n :k="LanguageKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
       </div>
     </transition>
     <div class="knowledge" key="knowledge">
@@ -36,13 +36,13 @@
           <divider type="vertical" class="vertical" />
           <span>
             <i class="iconfont icon-clock-outline"></i>
-            <span>{{ publishedAt(article.create_at) }}</span>
+            <udate to="YMDm" :date="article.create_at" separator="/" />
           </span>
           <divider type="vertical" class="vertical" />
           <span>
             <i class="iconfont icon-eye"></i>
             <span>{{ article.meta.views }}&nbsp;</span>
-            <i18n :lkey="LANGUAGE_KEYS.ARTICLE_VIEWS" />
+            <i18n :k="LanguageKey.ARTICLE_VIEWS" />
           </span>
         </div>
       </div>
@@ -54,10 +54,8 @@
         <div :id="readmoreId" v-if="isRenderMoreEnabled" class="readmore">
           <button class="readmore-btn" :disabled="isRenderMoreContent" @click="handleRenderMore">
             <i18n
-              :lkey="
-                isRenderMoreContent
-                  ? LANGUAGE_KEYS.ARTICLE_RENDERING
-                  : LANGUAGE_KEYS.ARTICLE_READ_ALL
+              :k="
+                isRenderMoreContent ? LanguageKey.ARTICLE_RENDERING : LanguageKey.ARTICLE_READ_ALL
               "
             />
             <i class="iconfont icon-loadmore"></i>
@@ -75,12 +73,11 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, nextTick, onMounted, PropType } from 'vue'
+  import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { Article, useArticleDetailStore } from '/@/store/article'
   import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
-  import { humanizeYMD } from '/@/transforms/moment'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import Markdown from '/@/components/common/markdown.vue'
 
   const ARTICLE_CONTENT_ELEMENT_IDS = {
@@ -138,19 +135,14 @@
 
       const handleRenderMoreAnimateDone = () => observeLozad(ARTICLE_CONTENT_ELEMENT_IDS.more)
 
-      const publishedAt = (date: string) => {
-        return humanizeYMD(date, i18n.language.value as any)
-      }
-
       onMounted(() => {
         observeLozad(ARTICLE_CONTENT_ELEMENT_IDS.default)
       })
 
       return {
-        LANGUAGE_KEYS,
+        LanguageKey,
         i18n,
         element,
-        publishedAt,
         isHybrid,
         isReprint,
         isOriginal,
@@ -178,8 +170,8 @@
     .oirigin {
       position: absolute;
       position: absolute;
-      top: 0.8rem;
-      left: -2.2rem;
+      top: 0.6rem;
+      left: -2.4rem;
       transform: rotate(-45deg);
       width: 8rem;
       height: 2rem;

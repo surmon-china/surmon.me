@@ -5,12 +5,12 @@
         <ulink class="rss" :href="VALUABLE_LINKS.RSS" @mousedown="handleRSS">
           <i class="iconfont icon-rss" />
         </ulink>
-        <button class="feedback" :title="t(LANGUAGE_KEYS.FEEDBACK)" @click="handleFeedback">
+        <button class="feedback" :title="t(LanguageKey.FEEDBACK)" @click="handleFeedback">
           <i class="iconfont icon-mail-plane" />
         </button>
         <button
           class="to-page-top"
-          :title="t(LANGUAGE_KEYS.TO_TOP)"
+          :title="t(LanguageKey.TO_TOP)"
           @click="scrollToTop"
           @mouseover="setTopButtonState(true, true)"
           @mouseleave="setTopButtonState(false)"
@@ -19,7 +19,7 @@
         </button>
         <button
           class="to-page-bottom"
-          :title="t(LANGUAGE_KEYS.TO_BOTTOM)"
+          :title="t(LanguageKey.TO_BOTTOM)"
           @click="toBottom"
           @mouseover="setBottomButtonState(true, true)"
           @mouseleave="setBottomButtonState(false)"
@@ -35,7 +35,7 @@
   import { defineComponent, ref } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useMetaStore } from '/@/store/meta'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
   import { scrollTo, Easing } from '/@/utils/scroller'
   import { scrollToTop } from '/@/utils/effects'
@@ -98,7 +98,7 @@
 
       return {
         VALUABLE_LINKS,
-        LANGUAGE_KEYS,
+        LanguageKey,
         t: i18n.translate,
         scrollToTop,
         handleFeedback,

@@ -36,7 +36,7 @@
           @click="handleAnchor(ANCHORS.ARTICLE_READMORE_ELEMENT_ID)"
         >
           <i class="level iconfont icon-loadmore"></i>
-          <span class="text"><i18n :lkey="LANGUAGE_KEYS.ARTICLE_READ_ALL" /></span>
+          <span class="text"><i18n :k="LanguageKey.ARTICLE_READ_ALL" /></span>
         </li>
       </ul>
     </div>
@@ -56,7 +56,7 @@
     </button>
     <button class="link" @click="handleAnchor(ANCHORS.ARTICLE_RELATED_ELEMENT_ID)">
       <i class="iconfont icon-category"></i>
-      <i18n zh="相关" en="Related articles" />
+      <i18n zh="相关" en="Related" />
       <divider type="vertical" />
       <span class="count">{{ store.relatedArticles.length }}</span>
     </button>
@@ -72,7 +72,7 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import * as ANCHORS from '/@/constants/anchor'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { LanguageKey } from '/@/language'
   import { useArticleDetailStore } from '/@/store/article'
   import { scrollToElementAnchor } from '/@/utils/scroller'
 
@@ -99,7 +99,7 @@
 
       return {
         ANCHORS,
-        LANGUAGE_KEYS,
+        LanguageKey,
         article,
         store: articleDetailStore,
         headings,

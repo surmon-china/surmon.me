@@ -3,7 +3,7 @@
     <h1 class="code">{{ error.code }}</h1>
     <h3 class="message">
       <template v-if="error.message">{{ error.message }}</template>
-      <i18n v-else :lkey="LANGUAGE_KEYS.NOT_FOUND" />
+      <i18n v-else :k="LanguageKey.NOT_FOUND" />
     </h3>
     <p class="link" @click="handleResolveRoute">
       <slot name="resolve-text" />
@@ -16,7 +16,7 @@
   import { defineComponent, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { RenderError } from '/@/app/state'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { LanguageKey } from '/@/language'
 
   export enum ErrorEvent {
     Resolve = 'resolve'
@@ -37,7 +37,7 @@
       }
 
       return {
-        LANGUAGE_KEYS,
+        LanguageKey,
         isDarkTheme,
         handleResolveRoute
       }

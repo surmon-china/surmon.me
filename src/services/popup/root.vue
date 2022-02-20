@@ -19,7 +19,7 @@
     setup() {
       const element = ref<HTMLElement>(null as any)
       const { isDarkTheme, isMobile } = useEnhancer()
-      const { state, image, hidden, visible } = usePopupWithRoot(() => element.value)
+      const { state, image, hidden } = usePopupWithRoot(() => element.value)
       const handleWindowScroll = () => hidden()
       const handleMaskClick = () => {
         state.maskClose && hidden()

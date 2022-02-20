@@ -3,7 +3,7 @@
     <slot>
       <template v-if="placeholder">{{ placeholder }}</template>
       <template v-else>
-        <i18n :lkey="i18nKey || LANGUAGE_KEYS.EMPTY_PLACEHOLDER" />
+        <i18n :k="i18nKey || LanguageKey.EMPTY_PLACEHOLDER" />
       </template>
     </slot>
   </div>
@@ -11,16 +11,16 @@
 
 <script lang="ts">
   import { defineComponent, PropType } from 'vue'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { LanguageKey } from '/@/language'
   export default defineComponent({
     name: 'Empty',
     props: {
       placeholder: String,
-      i18nKey: String as PropType<LANGUAGE_KEYS>
+      i18nKey: String as PropType<LanguageKey>
     },
     setup() {
       return {
-        LANGUAGE_KEYS
+        LanguageKey
       }
     }
   })

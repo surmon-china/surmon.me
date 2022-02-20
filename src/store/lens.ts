@@ -27,7 +27,7 @@ export const useLensStore = defineStore('lens', {
   actions: {
     fetchInstagramMedias() {
       this.instagram.fetching = true
-      const fetch = tunnel.dispatch(TunnelModule.Instagram)
+      const fetch = tunnel.dispatch(TunnelModule.InstagramMedias)
       const delayed = isClient ? delayPromise(LENS_NORMAL_DELAY, fetch) : fetch
       return delayed
         .then((response) => {

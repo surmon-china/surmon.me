@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
+  import { defineComponent } from 'vue'
   import { META } from '/@/config/app.config'
   export default defineComponent({
     name: 'MobileFooter',

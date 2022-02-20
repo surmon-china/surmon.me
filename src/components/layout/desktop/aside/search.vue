@@ -10,7 +10,7 @@
         maxlength="16"
         v-model.trim="keyword"
         :class="i18n.language"
-        :placeholder="i18n.t(LANGUAGE_KEYS.SEARCH_PLACEHOLDER)"
+        :placeholder="i18n.t(LanguageKey.SEARCH_PLACEHOLDER)"
         @keyup.enter="handleSearch"
       />
       <button class="search-btn" @click="handleSearch">
@@ -27,8 +27,8 @@
   import { defineComponent, ref, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
+  import { LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { isSearchFlow } from '/@/transforms/route'
 
   export default defineComponent({
@@ -60,7 +60,7 @@
       }
 
       return {
-        LANGUAGE_KEYS,
+        LanguageKey,
         RouteName,
         i18n,
         keyword,

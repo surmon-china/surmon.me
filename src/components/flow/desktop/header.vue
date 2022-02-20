@@ -24,7 +24,7 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { LanguageKey } from '/@/language'
   import { getTargetCDNURL } from '/@/transforms/url'
 
   export default defineComponent({
@@ -49,7 +49,7 @@
       })
 
       return {
-        LANGUAGE_KEYS,
+        LanguageKey,
         backgroundImageUrl
       }
     }

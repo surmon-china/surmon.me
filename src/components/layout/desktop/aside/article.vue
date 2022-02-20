@@ -4,18 +4,14 @@
       <span class="title">
         <i class="iconfont icon-hotfill" />
         <span class="text">
-          <i18n :lkey="LANGUAGE_KEYS.HOT_ARTICLE_LIST_TITLE" />
+          <i18n :k="LanguageKey.HOT_ARTICLE_LIST_TITLE" />
         </span>
       </span>
       <button class="switch" @click="switchHotPage">
         <i class="iconfont icon-switch" />
       </button>
     </div>
-    <placeholder
-      :data="articles"
-      :loading="isFetching"
-      :i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER"
-    >
+    <placeholder :data="articles" :loading="isFetching" :i18n-key="LanguageKey.ARTICLE_PLACEHOLDER">
       <template #loading>
         <ul class="article-list-skeleton" key="skeleton">
           <li v-for="item in 5" :key="item" class="item">
@@ -40,8 +36,8 @@
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
   import { useArticleListStore } from '/@/store/article'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { getArticleDetailRoute } from '/@/transforms/route'
+  import { LanguageKey } from '/@/language'
 
   const PER_PAGE = 10
 
@@ -71,7 +67,7 @@
         articles,
         switchHotPage,
         getArticleDetailRoute,
-        LANGUAGE_KEYS
+        LanguageKey
       }
     }
   })

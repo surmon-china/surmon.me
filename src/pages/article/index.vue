@@ -68,11 +68,11 @@
   import { useUniversalFetch } from '/@/universal'
   import { useUniversalStore } from '/@/store/universal'
   import { useArticleDetailStore } from '/@/store/article'
+  import { useCommentStore } from '/@/store/comment'
   import * as ANCHORS from '/@/constants/anchor'
   import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { useCommentStore } from '/@/store/comment'
+  import { LanguageKey } from '/@/language'
   import { SocialMedia } from '/@/components/widget/share.vue'
   import Comment from '/@/components/comment/index.vue'
   import ArticleSkeleton from './skeleton.vue'
@@ -136,7 +136,7 @@
           universalStore.likePage(article.value!.id)
           callback?.()
         } catch (error) {
-          const message = i18n.t(LANGUAGE_KEYS.POST_ACTION_ERROR)
+          const message = i18n.t(LanguageKey.POST_ACTION_ERROR)
           console.warn(message, error)
           alert(message)
         }

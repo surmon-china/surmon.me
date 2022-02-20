@@ -18,7 +18,7 @@
       <placeholder :data="instagramMedias" :loading="lensStore.instagram.fetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">
-            <i18n :lkey="LANGUAGE_KEYS.EMPTY_PLACEHOLDER" />
+            <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
           </empty>
         </template>
         <template #loading>
@@ -62,7 +62,7 @@
           </template>
           <template #empty>
             <empty class="module-empty" key="empty">
-              <i18n :lkey="LANGUAGE_KEYS.EMPTY_PLACEHOLDER" />
+              <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
             </empty>
           </template>
         </youtube-playlist>
@@ -76,12 +76,11 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useLensStore } from '/@/store/lens'
   import { useUniversalFetch, universalRef } from '/@/universal'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { Language } from '/@/language/data'
-  import { firstUpperCase } from '/@/transforms/text'
-  import { getYouTubePlaylistURL } from '/@/transforms/media'
-  import { randomNumber } from '/@/utils/random'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import { Language, LanguageKey } from '/@/language'
+  import { getYouTubePlaylistURL } from '/@/transforms/media'
+  import { firstUpperCase } from '/@/transforms/text'
+  import { randomNumber } from '/@/utils/random'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
   import PageTitle from '/@/components/common/fullpage/title.vue'
   import LensSkeleton from './skeleton.vue'
@@ -112,15 +111,17 @@
       )
 
       meta(() => {
-        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_LENS, Language.En)!)
-        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_LENS), enTitle] : [enTitle]
+        const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_LENS, Language.English)!)
+        const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_LENS), enTitle] : [enTitle]
         return { pageTitle: titles.join(' | '), description: `${META.author} 的视频创作` }
       })
 
       const fetchAllData = () => {
         return Promise.all([
-          lensStore.fetchInstagramMedias().catch((e) => {}),
-          lensStore.fetchYouTubePlaylist().catch((e) => {})
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          lensStore.fetchInstagramMedias().catch(() => {}),
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          lensStore.fetchYouTubePlaylist().catch(() => {})
         ])
       }
 
@@ -128,7 +129,7 @@
 
       return {
         VALUABLE_LINKS,
-        LANGUAGE_KEYS,
+        LanguageKey,
         getYouTubePlaylistURL,
         lensStore,
         instagramMedias,

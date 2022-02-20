@@ -40,7 +40,7 @@
         @mousedown="handleTouchEvent('open player model')"
       >
         <span v-if="currentSong">{{ currentSong.name }}</span>
-        <i18n v-else :lkey="LANGUAGE_KEYS.MUSIC_PLACEHOLDER" />
+        <i18n v-else :k="LanguageKey.MUSIC_PLACEHOLDER" />
       </button>
     </div>
     <div class="cd">
@@ -72,9 +72,9 @@
   import { defineComponent, ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { GAEventCategories } from '/@/constants/gtag'
+  import { LanguageKey } from '/@/language'
   import { isClient } from '/@/app/environment'
   import { useMusic } from '/@/services/music'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import MusicPlayer from './player.vue'
 
   export default defineComponent({
@@ -101,7 +101,7 @@
       }
 
       return {
-        LANGUAGE_KEYS,
+        LanguageKey,
         isOnPlayerModel,
         music,
         muted,

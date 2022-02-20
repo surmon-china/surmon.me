@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, h } from 'vue'
+  import { defineComponent } from 'vue'
   export default defineComponent({
     name: 'Spin',
     props: {

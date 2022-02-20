@@ -3,7 +3,7 @@
     <placeholder :data="articleList.length" :loading="fetching">
       <template #placeholder>
         <empty class="article-empty" key="empty">
-          <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
+          <i18n :k="LanguageKey.ARTICLE_PLACEHOLDER" />
         </empty>
       </template>
       <template #loading>
@@ -52,7 +52,7 @@
                     </div>
                   </div>
                   <span class="ad-symbol">
-                    <i18n :lkey="LANGUAGE_KEYS.AD" />
+                    <i18n :k="LanguageKey.AD" />
                   </span>
                 </ulink>
               </template>
@@ -85,7 +85,7 @@
   import { defineComponent, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { Article } from '/@/store/article'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { LanguageKey } from '/@/language'
   import { Swiper, SwiperSlide } from '/@/services/swiper'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getArticleBannerThumbnailURL } from '/@/transforms/thumbnail'
@@ -126,7 +126,7 @@
       }
 
       return {
-        LANGUAGE_KEYS,
+        LanguageKey,
         isDarkTheme,
         articleList,
         getArticleDetailRoute,

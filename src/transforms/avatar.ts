@@ -3,11 +3,11 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { isDev } from '/@/environment'
-import { isSPA } from '/@/app/environment'
+import API_CONFIG from '/@/config/api.config'
 import { ProxyModule } from '/@/constants/proxy'
 import { getTargetCDNURL, getTargetProxyURL } from '/@/transforms/url'
-import API_CONFIG from '/@/config/api.config'
+import { isSPA } from '/@/app/environment'
+import { isDev } from '/@/environment'
 
 export const getDefaultAvatar = () => {
   return getTargetCDNURL('/images/gravatar.png')

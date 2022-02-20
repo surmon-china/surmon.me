@@ -13,8 +13,17 @@ import { getSitemapXML } from './server/getters/sitemap'
 import { getGTagScript } from './server/getters/gtag'
 import { getAllWallpapers } from './server/getters/wallpaper'
 import { getGitHubRepositories, getGitHubContributions } from './server/getters/github'
-import { getTwitterTweets, getTwitterUserinfo, getTwitterCalendar } from './server/getters/twitter'
-import { getInstagramMedias } from './server/getters/instagram'
+import {
+  getTwitterTweets,
+  getTwitterUserinfo,
+  getTwitterCalendar,
+  initTwitterCalendar
+} from './server/getters/twitter'
+import {
+  getInstagramMedias,
+  getInstagramCalendar,
+  initInstagramCalendar
+} from './server/getters/instagram'
 import {
   getYouTubeChannelPlayLists,
   getYouTubeVideoListByPlayerlistID
@@ -34,6 +43,9 @@ process.noDeprecation = true
 createExpressApp().then(({ app, server, cache }) => {
   // static
   app.use(express.static(PUBLIC_PATH))
+  // init thirds task
+  initTwitterCalendar()
+  initInstagramCalendar()
 
   // sitemap
   app.get('/sitemap.xml', async (_, response) => {
@@ -182,7 +194,7 @@ createExpressApp().then(({ app, server, cache }) => {
 
   // Instagram newest medias
   app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.Instagram}`,
+    `${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMedias}`,
     responser(() => {
       return cacher({
         cache,
@@ -192,6 +204,12 @@ createExpressApp().then(({ app, server, cache }) => {
         getter: getInstagramMedias
       })
     })
+  )
+
+  // Instagram calendar
+  app.get(
+    `${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramCalendar}`,
+    responser(() => getInstagramCalendar())
   )
 
   // YouTube platlists

@@ -6,7 +6,6 @@ scripts
 
 dist
 public
-src/patchs
 
 *.config.js
 *.json

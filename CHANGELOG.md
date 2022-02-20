@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.6.27 (2022-02-20)
+
+**Feature**
+
+- Add instagram & twitter calendar to About page calendar
+- Improve i18n & language
+- Improve transforms
+- `Udate` component
+
+**Fix**
+
+- Eslint with `@typescript-eslint`
+
 ### v3.6.24 (2022-02-17)
 
 **Feature**

@@ -21,7 +21,7 @@
         >
           <template #placeholder>
             <empty class="archive-empty" key="empty">
-              <i18n :lkey="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
+              <i18n :k="LanguageKey.ARTICLE_PLACEHOLDER" />
             </empty>
           </template>
           <template #loading>
@@ -55,21 +55,21 @@
                 </div>
               </div>
               <ul class="year-list">
-                <li v-for="yes in articleTree" :key="yes.year" class="year-item">
+                <li v-for="node in articleTree" :key="node.year" class="year-item">
                   <page-title class="root-title" :level="1">
                     <span class="text">
-                      <i18n :zh="replaceToChineseNumber(yes.year)" :en="yes.year" />
+                      <i18n :zh="numberToChinese(node.year)" :en="node.year" />
                     </span>
                   </page-title>
                   <ul class="month-list">
-                    <li v-for="mos in yes.months" :key="mos.month" class="month">
+                    <li v-for="mn in node.months" :key="mn.month" class="month">
                       <h4 class="month-title">
                         <span class="text">
-                          <i18n :zh="toChineseMonth(mos.month)" :en="toEngMonth(mos.month)" />
+                          <i18n v-bind="getMonthNameI18n(mn.month)" />
                         </span>
                       </h4>
                       <ul class="article-list">
-                        <li v-for="(article, index) in mos.articles" :key="index" class="article">
+                        <li v-for="(article, index) in mn.articles" :key="index" class="article">
                           <div class="left">
                             <h4 class="article-title">
                               <span class="date"> D{{ article.createAt.day }} </span>
@@ -117,20 +117,13 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { META } from '/@/config/app.config'
-  import { useArchiveStore } from '/@/store/archive'
-  import { useEnhancer } from '/@/app/enhancer'
+  import { Language, LanguageKey } from '/@/language'
   import { useUniversalFetch } from '/@/universal'
-  import { Language } from '/@/language/data'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useArchiveStore } from '/@/store/archive'
+  import { I18nLanguageMap } from '/@/services/i18n'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import {
-    replaceToChineseNumber,
-    toChineseMonth,
-    toEngMonth,
-    firstUpperCase,
-    numberToKilo,
-    numberSplit
-  } from '/@/transforms/text'
+  import { numberToChinese, firstUpperCase, numberToKilo, numberSplit } from '/@/transforms/text'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
   import PageTitle from '/@/components/common/fullpage/title.vue'
 
@@ -181,9 +174,64 @@
         }
       ])
 
+      const monthNameI18ns: Array<I18nLanguageMap<Language>> = [
+        {
+          [Language.Chinese]: '首阳',
+          [Language.English]: 'January'
+        },
+        {
+          [Language.Chinese]: '绀香',
+          [Language.English]: 'February'
+        },
+        {
+          [Language.Chinese]: '莺时',
+          [Language.English]: 'March'
+        },
+        {
+          [Language.Chinese]: '槐序',
+          [Language.English]: 'April'
+        },
+        {
+          [Language.Chinese]: '鸣蜩',
+          [Language.English]: 'May'
+        },
+        {
+          [Language.Chinese]: '季夏',
+          [Language.English]: 'June'
+        },
+        {
+          [Language.Chinese]: '兰秋',
+          [Language.English]: 'July'
+        },
+        {
+          [Language.Chinese]: '南宫',
+          [Language.English]: 'August'
+        },
+        {
+          [Language.Chinese]: '菊月',
+          [Language.English]: 'September'
+        },
+        {
+          [Language.Chinese]: '子春',
+          [Language.English]: 'October'
+        },
+        {
+          [Language.Chinese]: '葭月',
+          [Language.English]: 'November'
+        },
+        {
+          [Language.Chinese]: '季冬',
+          [Language.English]: 'December'
+        }
+      ]
+
+      const getMonthNameI18n = (number: number) => {
+        return monthNameI18ns[number - 1]
+      }
+
       meta(() => {
-        const enTitle = firstUpperCase(i18n.t(LANGUAGE_KEYS.PAGE_ARCHIVE, Language.En)!)
-        const titles = isZhLang.value ? [i18n.t(LANGUAGE_KEYS.PAGE_ARCHIVE), enTitle] : [enTitle]
+        const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_ARCHIVE, Language.English)!)
+        const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ARCHIVE), enTitle] : [enTitle]
         return { pageTitle: titles.join(' | '), description: `${META.title} 数据归档` }
       })
 
@@ -192,11 +240,10 @@
       )
 
       return {
-        LANGUAGE_KEYS,
+        LanguageKey,
+        numberToChinese,
         getArticleDetailRoute,
-        replaceToChineseNumber,
-        toChineseMonth,
-        toEngMonth,
+        getMonthNameI18n,
         statistics,
         archiveStore,
         articleTree,
@@ -259,7 +306,6 @@
       }
 
       .content-warpper {
-        text-transform: capitalize;
         font-size: 1em;
 
         .statistic {

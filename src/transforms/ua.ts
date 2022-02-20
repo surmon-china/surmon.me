@@ -5,7 +5,7 @@
  */
 
 import parser from 'ua-parser-js'
-import { Language } from '/@/language/data'
+import { Language } from '/@/language'
 
 export const uaParser = (userAgent: string) => {
   const parseResult = parser(userAgent || '')
@@ -38,7 +38,7 @@ const isTargetLanguageUser = (language: UaLanguage, targetLang: string) => {
   return false
 }
 export type UaLanguage = string | string[]
-export const isEnUser = (language: UaLanguage) => isTargetLanguageUser(language, Language.En)
+export const isEnUser = (language: UaLanguage) => isTargetLanguageUser(language, Language.English)
 export const isZhUser = (language: UaLanguage) => {
-  return language ? isTargetLanguageUser(language, Language.Zh) : true
+  return language ? isTargetLanguageUser(language, Language.Chinese) : true
 }

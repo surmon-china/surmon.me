@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-export const focusPosition = (element: HTMLElement, position: number = 0) => {
+export const focusPosition = (element: HTMLElement, position = 0) => {
   if (!element) {
     return
   }

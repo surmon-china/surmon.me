@@ -9,9 +9,9 @@
           hybrid: isHybrid
         }"
       >
-        <i18n :lkey="LANGUAGE_KEYS.ORIGIN_ORIGINAL" v-if="isOriginal" />
-        <i18n :lkey="LANGUAGE_KEYS.ORIGIN_REPRINT" v-else-if="isReprint" />
-        <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="isHybrid" />
+        <i18n :k="LanguageKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
+        <i18n :k="LanguageKey.ORIGIN_REPRINT" v-else-if="isReprint" />
+        <i18n :k="LanguageKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
       </span>
       <div
         class="image"
@@ -36,7 +36,7 @@
       <div class="meta">
         <span class="date">
           <i class="iconfont icon-clock"></i>
-          <span>{{ humanlizeDate(article.create_at) }}</span>
+          <udate to="ago" :date="article.create_at" />
         </span>
         <span class="views">
           <i class="iconfont icon-eye"></i>
@@ -57,14 +57,13 @@
 
 <script lang="ts">
   import { defineComponent, computed, PropType } from 'vue'
+  import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { Article } from '/@/store/article'
   import { useUniversalStore } from '/@/store/universal'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getMobileArticleListThumbnailURL } from '/@/transforms/thumbnail'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
-  import { timeAgo } from '/@/transforms/moment'
 
   export default defineComponent({
     name: 'FlowArticleListItem',
@@ -75,16 +74,12 @@
       }
     },
     setup(props) {
-      const { i18n, router, globalState } = useEnhancer()
+      const { router, globalState } = useEnhancer()
       const universalStore = useUniversalStore()
       const isLiked = computed(() => universalStore.isLikedPage(props.article.id))
       const isHybrid = isHybridType(props.article.origin)
       const isReprint = isReprintType(props.article.origin)
       const isOriginal = isOriginalType(props.article.origin)
-
-      const humanlizeDate = (date: string) => {
-        return timeAgo(date, i18n.language.value as any)
-      }
 
       const getThumbnailURL = (thumbURL: string) => {
         return getMobileArticleListThumbnailURL(thumbURL, globalState.imageExt.value.isWebP)
@@ -95,15 +90,14 @@
       }
 
       return {
-        LANGUAGE_KEYS,
+        LanguageKey,
         isLiked,
         isHybrid,
         isReprint,
         isOriginal,
         getThumbnailURL,
         getArticleDetailRoute,
-        handleClick,
-        humanlizeDate
+        handleClick
       }
     }
   })

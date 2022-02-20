@@ -16,9 +16,9 @@
             reprint: isReprint
           }"
         >
-          <i18n :lkey="LANGUAGE_KEYS.ORIGIN_ORIGINAL" v-if="isOriginal" />
-          <i18n :lkey="LANGUAGE_KEYS.ORIGIN_REPRINT" v-else-if="isReprint" />
-          <i18n :lkey="LANGUAGE_KEYS.ORIGIN_HYBRID" v-else-if="isHybrid" />
+          <i18n :k="LanguageKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
+          <i18n :k="LanguageKey.ORIGIN_REPRINT" v-else-if="isReprint" />
+          <i18n :k="LanguageKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
         </span>
         <div
           class="image"
@@ -37,7 +37,7 @@
             >
               {{ article.title }}
             </router-link>
-            <span class="language" v-if="extendsMap.language">{{ extendsMap.language }}</span>
+            <span class="language">{{ getLanguageText(article.lang) }}</span>
           </h5>
           <p
             class="description"
@@ -48,7 +48,7 @@
         <div class="item-meta">
           <span class="date">
             <i class="iconfont icon-clock"></i>
-            <span>{{ humanlizeDate(article.create_at) }}</span>
+            <udate to="ago" :date="article.create_at" />
           </span>
           <span class="views">
             <i class="iconfont icon-eye"></i>
@@ -66,7 +66,7 @@
             <i class="iconfont icon-category"></i>
             <placeholder :transition="false" :data="article.category.length">
               <template #placeholder>
-                <i18n :lkey="LANGUAGE_KEYS.CATEGORY_PLACEHOLDER" />
+                <i18n :k="LanguageKey.CATEGORY_PLACEHOLDER" />
               </template>
               <template #default>
                 <router-link
@@ -87,19 +87,13 @@
 
 <script lang="ts">
   import { defineComponent, computed, PropType } from 'vue'
+  import { Language, LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { Article } from '/@/store/article'
   import { useUniversalStore } from '/@/store/universal'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { getArticleDetailRoute, getTagFlowRoute, getCategoryFlowRoute } from '/@/transforms/route'
+  import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { getArticleListThumbnailURL } from '/@/transforms/thumbnail'
-  import { timeAgo } from '/@/transforms/moment'
-  import {
-    isOriginalType,
-    isHybridType,
-    isReprintType,
-    getExtendsObject
-  } from '/@/transforms/state'
 
   export default defineComponent({
     name: 'FlowArticleListItem',
@@ -110,35 +104,33 @@
       }
     },
     setup(props) {
-      const { globalState, i18n } = useEnhancer()
+      const { globalState } = useEnhancer()
       const universalStore = useUniversalStore()
 
       const isLiked = computed(() => universalStore.isLikedPage(props.article.id))
       const isHybrid = isHybridType(props.article.origin)
       const isReprint = isReprintType(props.article.origin)
       const isOriginal = isOriginalType(props.article.origin)
-      const extendsMap = getExtendsObject(props.article.extends)
-
-      const humanlizeDate = (date: string) => {
-        return timeAgo(date, i18n.language.value as any)
-      }
 
       const getThumbnailURL = (thumbURL: string) => {
         return getArticleListThumbnailURL(thumbURL, globalState.imageExt.value.isWebP)
       }
 
+      const getLanguageText = (language: Language) => {
+        return language === Language.Chinese ? '中文' : 'EN'
+      }
+
       return {
-        LANGUAGE_KEYS,
+        LanguageKey,
         isLiked,
         isHybrid,
         isReprint,
         isOriginal,
-        extendsMap,
         getThumbnailURL,
+        getLanguageText,
         getArticleDetailRoute,
         getCategoryFlowRoute,
-        getTagFlowRoute,
-        humanlizeDate
+        getTagFlowRoute
       }
     }
   })
@@ -273,7 +265,7 @@
           }
 
           .language {
-            opacity: 0.4;
+            opacity: 0.5;
             color: $text-divider;
           }
         }

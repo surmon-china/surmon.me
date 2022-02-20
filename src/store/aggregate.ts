@@ -9,18 +9,24 @@ import { TunnelModule } from '/@/constants/tunnel'
 import tunnel from '/@/services/tunnel'
 import nodepress from '/@/services/nodepress'
 
+type CalendarDay = { date: string; count: number }
+
 export const useArticleCalendarStore = defineStore('articleCalendar', {
   state: () => ({
     fetching: false,
-    data: [] as Array<{ date: string; count: number }>
+    data: [] as Array<CalendarDay>
   }),
   actions: {
     fetch() {
-      this.data = []
+      if (this.data.length) {
+        return Promise.resolve()
+      }
+
       this.fetching = true
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
       return nodepress
-        .get('/article/calendar', { params: { timezone } })
+        .get('/article/calendar', {
+          params: { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone }
+        })
         .then((response) => {
           this.data = response.result
         })
@@ -34,14 +40,41 @@ export const useArticleCalendarStore = defineStore('articleCalendar', {
 export const useTwitterCalendarStore = defineStore('twitterCalendar', {
   state: () => ({
     fetching: false,
-    data: [] as Array<{ date: string; count: number }>
+    data: [] as Array<CalendarDay>
   }),
   actions: {
     fetch() {
-      this.data = []
+      if (this.data.length) {
+        return Promise.resolve()
+      }
+
       this.fetching = true
       return tunnel
         .dispatch(TunnelModule.TwitterCalendar)
+        .then((response) => {
+          this.data = response
+        })
+        .finally(() => {
+          this.fetching = false
+        })
+    }
+  }
+})
+
+export const useInstagramCalendarStore = defineStore('instagramCalendar', {
+  state: () => ({
+    fetching: false,
+    data: [] as Array<CalendarDay>
+  }),
+  actions: {
+    fetch() {
+      if (this.data.length) {
+        return Promise.resolve()
+      }
+
+      this.fetching = true
+      return tunnel
+        .dispatch(TunnelModule.InstagramCalendar)
         .then((response) => {
           this.data = response
         })
@@ -75,7 +108,10 @@ export const useGitHubCalendarStore = defineStore('githubCalendar', {
   },
   actions: {
     fetch() {
-      this.data = []
+      if (this.data) {
+        return Promise.resolve()
+      }
+
       this.fetching = true
       return tunnel
         .dispatch(TunnelModule.GitHubContributions)

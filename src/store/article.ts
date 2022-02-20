@@ -5,16 +5,17 @@
  */
 
 import { defineStore } from 'pinia'
-import { isClient } from '/@/app/environment'
+import { Language } from '/@/language'
 import { LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
 import { OriginState, UniversalExtend } from '/@/constants/state'
 import { getArticleContentHeadingElementID } from '/@/constants/anchor'
-import nodepress from '/@/services/nodepress'
 import { markdownToHTML } from '/@/transforms/markdown'
 import { delayPromise } from '/@/utils/delayer'
 import { useUniversalStore } from './universal'
 import { Category } from './category'
 import { Tag } from './tag'
+import { isClient } from '/@/app/environment'
+import nodepress from '/@/services/nodepress'
 
 export const ARTICLE_API_PATH = '/article'
 
@@ -26,17 +27,18 @@ export interface Article {
   content: string
   keywords: string[]
   thumb: string
+  origin: OriginState
+  tag: Tag[]
+  category: Category[]
+  lang: Language
   disabled_comment: boolean
   meta: {
     likes: number
     views: number
     comments: number
   }
-  origin: OriginState
   update_at: string
   create_at: string
-  tag: Tag[]
-  category: Category[]
   extends: UniversalExtend[]
 }
 

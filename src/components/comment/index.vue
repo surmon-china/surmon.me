@@ -100,11 +100,11 @@
   import { useUniversalStore, UserType } from '/@/store/universal'
   import { useCommentStore, CommentFetchParams, Author } from '/@/store/comment'
   import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
+  import { GAEventCategories } from '/@/constants/gtag'
   import * as ANCHOR from '/@/constants/anchor'
   import { UNDEFINED } from '/@/constants/value'
-  import { GAEventCategories } from '/@/constants/gtag'
   import { SortType } from '/@/constants/state'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { LanguageKey } from '/@/language'
   import { scrollToElementAnchor } from '/@/utils/scroller'
   import { luanchEmojiRain } from './helper'
   import CommentTopbar from './topbar.vue'
@@ -232,10 +232,10 @@
 
         // content length
         if (!payload.content || !payload.content.trim()) {
-          throw `${i18n.t(LANGUAGE_KEYS.COMMENT_POST_CONTENT)} ?`
+          throw `${i18n.t(LanguageKey.COMMENT_POST_CONTENT)} ?`
         }
         if (payload.content.length > 3000) {
-          throw `${i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_CONTENT)} ?`
+          throw `${i18n.t(LanguageKey.COMMENT_POST_ERROR_CONTENT)} ?`
         }
 
         // temp user profile
@@ -243,16 +243,16 @@
         const guestProfileValue = guestProfile.value
         if (isGuest) {
           if (!guestProfileValue.name) {
-            throw i18n.t(LANGUAGE_KEYS.COMMENT_POST_NAME) + '?'
+            throw i18n.t(LanguageKey.COMMENT_POST_NAME) + '?'
           }
           if (!guestProfileValue.email) {
-            throw i18n.t(LANGUAGE_KEYS.COMMENT_POST_EMAIL) + '?'
+            throw i18n.t(LanguageKey.COMMENT_POST_EMAIL) + '?'
           }
           if (!emailRegex.test(guestProfileValue.email)) {
-            throw i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_EMAIL)
+            throw i18n.t(LanguageKey.COMMENT_POST_ERROR_EMAIL)
           }
           if (guestProfileValue.site && !urlRegex.test(guestProfileValue.site)) {
-            throw i18n.t(LANGUAGE_KEYS.COMMENT_POST_ERROR_URL)
+            throw i18n.t(LanguageKey.COMMENT_POST_ERROR_URL)
           }
         }
 

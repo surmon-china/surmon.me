@@ -6,7 +6,7 @@
 
 import { defineStore } from 'pinia'
 import { TunnelModule } from '/@/constants/tunnel'
-import { Language } from '/@/language/data'
+import { Language } from '/@/language'
 import tunnel from '/@/services/tunnel'
 
 export const WALLPAPER_API_PATH = '/wallpaper/list'

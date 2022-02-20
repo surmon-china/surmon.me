@@ -7,7 +7,7 @@
       image="/images/page-lens/banner-1.jpg"
     >
       <template #title>
-        <i18n :lkey="LANGUAGE_KEYS.PAGE_ABOUT" />
+        <i18n :k="LanguageKey.PAGE_ABOUT" />
       </template>
     </page-banner>
     <div class="profile">
@@ -97,13 +97,13 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { LanguageKey } from '/@/language'
+  import { RouteName } from '/@/app/router'
   import { useEnhancer } from '/@/app/enhancer'
   import { useMetaStore } from '/@/store/meta'
-  import { RouteName } from '/@/app/router'
   import { useUniversalFetch } from '/@/universal'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { getPageRoute } from '/@/transforms/route'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
   import { useAboutPageMeta, getAdminAvatar, i18ns } from './helper'
 
@@ -127,7 +127,7 @@
         RouteName,
         getAdminAvatar,
         getPageRoute,
-        LANGUAGE_KEYS,
+        LanguageKey,
         VALUABLE_LINKS
       }
     }

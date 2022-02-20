@@ -1,12 +1,23 @@
+// https://github.com/vuejs/eslint-config-prettier/blob/main/index.js
+// https://github.com/prettier/eslint-config-prettier/blob/main/CHANGELOG.md#version-800-2021-02-21
 module.exports = {
-  extends: ['plugin:vue/vue3-recommended', 'plugin:prettier/recommended'],
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'plugin:vue/vue3-recommended',
+    'plugin:prettier/recommended'
+  ],
   plugins: ['prettier'],
   parser: 'vue-eslint-parser',
   parserOptions: {
-    parser: '@typescript-eslint/parser'
+    parser: '@typescript-eslint/parser',
+    extraFileExtensions: ['.vue']
   },
   rules: {
-    'prettier/prettier': 'error',
+    'prettier/prettier': 'warn',
+    '@typescript-eslint/ban-ts-comment': 0,
+    '@typescript-eslint/no-non-null-assertion': 0,
+    '@typescript-eslint/no-explicit-any': 0,
+    '@typescript-eslint/no-non-null-asserted-optional-chain': 0,
     'no-console': 0,
     'vue/html-self-closing': 0,
     'vue/no-v-html': 0,

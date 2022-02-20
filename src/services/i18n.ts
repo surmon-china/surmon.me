@@ -1,52 +1,58 @@
-/* eslint-disable vue/multi-word-component-names */
 /**
  * @file i18n service
  * @module service.i18n
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import {
-  App,
-  inject,
-  computed,
-  ref,
-  watch,
-  readonly,
-  defineComponent,
-  WatchStopHandle,
-  ObjectDirective
-} from 'vue'
+import { App, inject, computed, ref, readonly, defineComponent } from 'vue'
 
-export interface I18nLanguage {
+export type I18nValueRender = (...args: any[]) => string
+export type I18nLanguageMap<Lang extends string, V = string> = {
+  [code in Lang]: V
+}
+
+export interface I18nLanguage<K extends string> {
   code: string
   iso: string
   name: string
-}
-
-export type I18nRender = (...args: any[]) => string
-export type I18nMap<K extends string | number, L extends string> = {
-  [key in K]: {
-    [language in L]: string | I18nRender
+  data: {
+    [key in K]: string | I18nValueRender
   }
 }
 
-interface Ii18nConfig {
+interface I18nConfig<K extends string> {
   default: string
-  languages: I18nLanguage[]
-  map: I18nMap<string | number, string>
+  keys: Array<K>
+  languages: I18nLanguage<K>[]
 }
 
 const I18nSymbol = Symbol('i18n')
-const createI18nStore = (config: Ii18nConfig) => {
+const createI18nStore = <K extends string>(config: I18nConfig<K>) => {
   const language = ref(config.default)
   const languageCodes = config.languages.map((lang) => lang.code)
   const l = computed(() => config.languages.find((l) => l.code === language.value))
+  const languageMap = config.keys.reduce<{
+    [key in K]: I18nLanguageMap<string, string | I18nValueRender>
+  }>(
+    (map, key) => ({
+      ...map,
+      [key]: config.languages.reduce(
+        (result, language) => ({
+          ...result,
+          [language.code]: language.data[key]
+        }),
+        {}
+      )
+    }),
+    {} as any
+  )
 
   const set = <L extends string = string>(lang: L) => {
     if (languageCodes.includes(lang) && language.value !== lang) {
       language.value = lang
     }
   }
+
   const toggle = () => {
     const currentIndex = languageCodes.findIndex((langCode) => langCode === language.value)
     const nextIndex = currentIndex < languageCodes.length - 1 ? currentIndex + 1 : 0
@@ -54,8 +60,9 @@ const createI18nStore = (config: Ii18nConfig) => {
       set(languageCodes[nextIndex])
     }
   }
-  const translate = <T extends string = string>(key: T, targetLanguage?: string, ...args) => {
-    const content = config.map[key]?.[targetLanguage || language.value]
+
+  const translate = <T extends K>(key: T, targetLanguage?: string | null, ...args) => {
+    const content = languageMap[key]?.[targetLanguage ?? language.value]
     if (!content) {
       return
     }
@@ -73,11 +80,9 @@ const createI18nStore = (config: Ii18nConfig) => {
 }
 
 /**
- * @example <span>{{ t(LANGUAGE_KEYS.SOME_KEY) }}</span>
- * @example <span v-i18n="LANGUAGE_KEYS.SOME_KEY"></span>
- * @example <span v-t="LANGUAGE_KEYS.SOME_KEY"></span>
- * @example <span><i18n :lkey="LANGUAGE_KEYS.SOME_KEY" /></span>
- * @example <span><i18n zh="你好，世界" en="hello, world!" /></span>
+ * @example <span>{{ i18n.t(LanguageKey.SOME_KEY) }}</span>
+ * @example <i18n :k="LanguageKey.SOME_KEY" />
+ * @example <i18n zh="你好，世界" en="hello, world!" />
  * @example (
  *  <i18n>
  *    <template #zh>你好，世界</template>
@@ -86,35 +91,16 @@ const createI18nStore = (config: Ii18nConfig) => {
  * )
  */
 export type I18n = ReturnType<typeof createI18nStore>
-export const createI18n = (config: Ii18nConfig) => {
+export const createI18n = <K extends string>(config: I18nConfig<K>) => {
   const i18nStore = createI18nStore(config)
-
-  interface I18nDirectiveElement extends HTMLElement {
-    _i18nDirectiveStopHandler?: WatchStopHandle
-  }
-  const i18nDirective: ObjectDirective<I18nDirectiveElement> = {
-    beforeMount(element, binding) {
-      element._i18nDirectiveStopHandler = watch(
-        () => i18nStore.language.value,
-        () => {
-          element.textContent = i18nStore.t(binding.value) || ''
-        },
-        { immediate: true }
-      )
-    },
-    beforeUnmount(element) {
-      element?._i18nDirectiveStopHandler?.()
-    }
-  }
-
   const i18nComponent = defineComponent({
     name: 'I18n',
     props: {
-      lkey: [String, Number, Symbol]
+      k: [String, Number, Symbol]
     },
     render() {
-      if (this.$props.lkey) {
-        return i18nStore.t(this.$props.lkey as string)
+      if (this.$props.k) {
+        return i18nStore.t(this.$props.k as K, null, this.$attrs)
       } else {
         const lang = i18nStore.language.value
         return this.$attrs[lang] || this.$slots[lang]?.()
@@ -128,9 +114,6 @@ export const createI18n = (config: Ii18nConfig) => {
       app.config.globalProperties.$i18n = i18nStore
       app.provide(I18nSymbol, i18nStore)
       app.component(i18nComponent.name, i18nComponent)
-      // MARK: SSR not support
-      app.directive('i18n', i18nDirective)
-      app.directive('t', i18nDirective)
     }
   }
 }

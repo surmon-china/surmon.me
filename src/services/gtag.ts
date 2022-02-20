@@ -51,6 +51,7 @@ export const createGtag = (options: GtagPluginConfig) => {
     window.dataLayer = window.dataLayer || []
     // MARK: important! only function
     window.gtag = function () {
+      // eslint-disable-next-line prefer-rest-params
       window.dataLayer.push(arguments)
     }
     window.gtag('js', new Date())

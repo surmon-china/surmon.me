@@ -18,7 +18,9 @@
               </div>
               <span class="published-at">
                 <i class="iconfont icon-clock"></i>
-                <span class="text">{{ humanlizeDate(item.snippet.publishedAt) }}</span>
+                <span class="text">
+                  <udate to="ago" :date="item.snippet.publishedAt" />
+                </span>
               </span>
               <div
                 class="background lozad"
@@ -38,11 +40,10 @@
   import { defineComponent, ref, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useLensStore } from '/@/store/lens'
-  import { LANGUAGE_KEYS } from '/@/language/key'
-  import { GAEventCategories } from '/@/constants/gtag'
+  import { LanguageKey } from '/@/language'
   import { ProxyModule } from '/@/constants/proxy'
+  import { GAEventCategories } from '/@/constants/gtag'
   import { getTargetProxyURL } from '/@/transforms/url'
-  import { timeAgo } from '/@/transforms/moment'
   import ListSwiper from '../swiper.vue'
 
   export enum YoutubeVideoListEvents {
@@ -60,7 +61,7 @@
     },
     emits: [YoutubeVideoListEvents.View],
     setup(props, context) {
-      const { i18n, gtag } = useEnhancer()
+      const { gtag } = useEnhancer()
       const lensStore = useLensStore()
       const isFetching = ref(true)
       const videos = ref<Array<any>>([])
@@ -80,10 +81,6 @@
         return url ? getTargetProxyURL(url, ProxyModule.YouTube) : ''
       }
 
-      const humanlizeDate = (date: number) => {
-        return timeAgo(date, i18n.language.value as any)
-      }
-
       const handleView = (video: any) => {
         context.emit(YoutubeVideoListEvents.View, video)
         gtag?.event('youtube_view', {
@@ -96,10 +93,9 @@
       })
 
       return {
-        LANGUAGE_KEYS,
+        LanguageKey,
         isFetching,
         videos,
-        humanlizeDate,
         getThumbURL,
         handleView
       }

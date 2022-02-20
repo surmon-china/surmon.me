@@ -24,7 +24,7 @@
           </ul>
         </template>
         <template #placeholder>
-          <empty class="empty" :i18n-key="LANGUAGE_KEYS.ARTICLE_PLACEHOLDER" />
+          <empty class="empty" :i18n-key="LanguageKey.ARTICLE_PLACEHOLDER" />
         </template>
         <template #default>
           <div key="list">
@@ -73,9 +73,9 @@
           <i class="iconfont icon-loadmore"></i>
         </span>
         <span class="text" :class="{ en: !isZhLang }">
-          <i18n v-if="fetching" :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADING" />
-          <i18n v-else-if="isLoadMoreEnabled" :lkey="LANGUAGE_KEYS.ARTICLE_LIST_LOADMORE" />
-          <i18n v-else :lkey="LANGUAGE_KEYS.ARTICLE_LIST_NO_MORE" />
+          <i18n v-if="fetching" :k="LanguageKey.ARTICLE_LIST_LOADING" />
+          <i18n v-else-if="isLoadMoreEnabled" :k="LanguageKey.ARTICLE_LIST_LOADMORE" />
+          <i18n v-else :k="LanguageKey.ARTICLE_LIST_NO_MORE" />
         </span>
       </button>
     </div>
@@ -85,8 +85,8 @@
 <script lang="ts">
   import { defineComponent, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LANGUAGE_KEYS } from '/@/language/key'
   import { Article } from '/@/store/article'
+  import { LanguageKey } from '/@/language'
   import ListItem from './item.vue'
 
   export enum Events {
@@ -127,7 +127,7 @@
       }
 
       return {
-        LANGUAGE_KEYS,
+        LanguageKey,
         isZhLang,
         isDarkTheme,
         isLoadMoreEnabled,

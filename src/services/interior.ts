@@ -8,6 +8,7 @@ import { App } from 'vue'
 import Spin from '/@/components/common/spin.vue'
 import Empty from '/@/components/common/empty.vue'
 import Divider from '/@/components/common/divider.vue'
+import Udate from '/@/components/common/udate'
 import Ulink from '/@/components/common/ulink'
 import Uimage from '/@/components/common/uimage'
 import Placeholder from '/@/components/common/placeholder'
@@ -23,6 +24,7 @@ export default function (app: App) {
   app.component(Spin.name as string, Spin)
   app.component(Empty.name as string, Empty)
   app.component(Divider.name as string, Divider)
+  app.component(Udate.name, Udate)
   app.component(Ulink.name, Ulink)
   app.component(Uimage.name, Uimage)
   app.component(Placeholder.name, Placeholder)

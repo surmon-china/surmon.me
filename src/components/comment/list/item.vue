@@ -26,7 +26,7 @@
               {{ firstUpperCase(comment.author.name) }}
             </comment-link>
             <span class="moderator" v-if="isAdminAuthor">
-              <i18n :lkey="LANGUAGE_KEYS.COMMENT_MODERATOR" />
+              <i18n :k="LanguageKey.COMMENT_MODERATOR" />
             </span>
             <template v-if="comment.ip_location">
               <comment-location class="location" :location="comment.ip_location" />
@@ -42,7 +42,7 @@
         <div class="cm-content">
           <p v-if="comment.pid" class="reply">
             <span class="text">
-              <i18n :lkey="LANGUAGE_KEYS.COMMENT_REPLY" />
+              <i18n :k="LanguageKey.COMMENT_REPLY" />
             </span>
             <button class="parent" @click="scrollToCommentItem(comment.pid)">
               {{ getReplyParentCommentText(comment.pid) }}
@@ -55,7 +55,9 @@
         </div>
         <div class="cm-footer">
           <div class="left">
-            <span class="create_at">{{ humanlizeDate(comment.create_at) }}</span>
+            <span class="create_at">
+              <udate to="ago" :date="comment.create_at" />
+            </span>
             <button
               class="vote"
               :class="{
@@ -66,7 +68,7 @@
               @click="handleVote(true)"
             >
               <i class="iconfont icon-like" />
-              <i18n :lkey="LANGUAGE_KEYS.COMMENT_UPVOTE" v-if="!plainVote" />
+              <i18n :k="LanguageKey.COMMENT_UPVOTE" v-if="!plainVote" />
               <span class="count">({{ comment.likes }})</span>
             </button>
             <button
@@ -79,22 +81,22 @@
               @click="handleVote(false)"
             >
               <i class="iconfont icon-dislike" />
-              <i18n :lkey="LANGUAGE_KEYS.COMMENT_DOWNVOTE" v-if="!plainVote" />
+              <i18n :k="LanguageKey.COMMENT_DOWNVOTE" v-if="!plainVote" />
               <span class="count">({{ comment.dislikes }})</span>
             </button>
             <button class="reply" @click="handleCancelReply" v-if="isReply">
               <i class="iconfont icon-cancel" />
-              <i18n :lkey="LANGUAGE_KEYS.COMMENT_REPLY_CANCEL" />
+              <i18n :k="LanguageKey.COMMENT_REPLY_CANCEL" />
             </button>
             <button class="reply" @click="handleReply" v-else>
               <i class="iconfont icon-reply" />
-              <i18n :lkey="LANGUAGE_KEYS.COMMENT_REPLY" />
+              <i18n :k="LanguageKey.COMMENT_REPLY" />
             </button>
           </div>
           <div class="right">
             <button class="delete" :disabled="isDeleting" @click="handleDelete" v-if="isDeleteable">
               <i class="iconfont icon-delete" />
-              <i18n :lkey="LANGUAGE_KEYS.COMMENT_DELETE" />
+              <i18n :k="LanguageKey.COMMENT_DELETE" />
             </button>
           </div>
         </div>
@@ -116,17 +118,16 @@
   import { useUniversalStore, UserType } from '/@/store/universal'
   import { getCommentItemElementID } from '/@/constants/anchor'
   import { UNDEFINED } from '/@/constants/value'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { LanguageKey } from '/@/language'
   import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
-  import { timeAgo } from '/@/transforms/moment'
   import { scrollToElementAnchor } from '/@/utils/scroller'
-  import { CommentEvents, getDisqusUserURL } from '../helper'
   import Markdown from '/@/components/common/markdown.vue'
   import CommentLocation from './location.vue'
   import CommentLink from './link.vue'
   import CommentUa from './ua.vue'
+  import { CommentEvents, getDisqusUserURL } from '../helper'
 
   export default defineComponent({
     name: 'CommentItem',
@@ -238,10 +239,6 @@
         return `${idText} ${nameText}`
       }
 
-      const humanlizeDate = (date: string) => {
-        return timeAgo(date, i18n.language.value as any)
-      }
-
       const handleReply = () => {
         context.emit(CommentEvents.Reply, props.comment.id)
       }
@@ -255,7 +252,7 @@
       }
 
       const handleDelete = () => {
-        if (window.confirm(i18n.t(LANGUAGE_KEYS.COMMENT_DELETE_CONFIRM))) {
+        if (window.confirm(i18n.t(LanguageKey.COMMENT_DELETE_CONFIRM))) {
           context.emit(CommentEvents.Delete, props.comment.id)
         }
       }
@@ -265,8 +262,7 @@
       }
 
       return {
-        LANGUAGE_KEYS,
-        humanlizeDate,
+        LanguageKey,
         isDeleting,
         isDisqusAuthor,
         isAdminAuthor,

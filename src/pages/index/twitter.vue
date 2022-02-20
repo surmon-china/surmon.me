@@ -3,7 +3,7 @@
     <placeholder :data="completedTweets.length" :loading="fetching">
       <template #placeholder>
         <empty class="twitter-empty" key="empty">
-          <i18n :lkey="LANGUAGE_KEYS.EMPTY_PLACEHOLDER" />
+          <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
         </empty>
       </template>
       <template #loading>
@@ -106,7 +106,7 @@
                 </span>
                 <span class="item date">
                   <i class="iconfont icon-clock"></i>
-                  <span>{{ humanlizeDate(t.tweet.created_at) }}</span>
+                  <udate to="ago" :date="t.tweet.created_at" />
                 </span>
                 <span class="item location" :title="t.location" v-if="t.location">
                   <i class="iconfont icon-location"></i>
@@ -135,13 +135,12 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
   import { THIRD_IDS, VALUABLE_LINKS } from '/@/config/app.config'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { LANGUAGE_KEYS } from '/@/language/key'
+  import { LanguageKey } from '/@/language'
+  import { useEnhancer } from '/@/app/enhancer'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
   import { getTwitterTweetDetailURL } from '/@/transforms/media'
-  import { timeAgo } from '/@/transforms/moment'
   import { unescape, padStart } from '/@/transforms/text'
 
   export default defineComponent({
@@ -165,7 +164,7 @@
       }
     },
     setup(props) {
-      const { i18n, gtag } = useEnhancer()
+      const { gtag } = useEnhancer()
       const swiper = ref<SwiperClass>()
       const prevSlide = () => swiper.value?.slidePrev()
       const nextSlide = () => swiper.value?.slideNext()
@@ -181,10 +180,6 @@
         gtag?.event(name, {
           event_category: GAEventCategories.Index
         })
-      }
-
-      const humanlizeDate = (date: string) => {
-        return timeAgo(date, i18n.language.value as any)
       }
 
       const getLocation = (tweet: any) => {
@@ -252,11 +247,10 @@
 
       return {
         VALUABLE_LINKS,
-        LANGUAGE_KEYS,
+        LanguageKey,
         completedTweets,
         activeIndex,
         padStart,
-        humanlizeDate,
         prevSlide,
         nextSlide,
         handleSwiperReady,

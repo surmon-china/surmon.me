@@ -12,17 +12,12 @@ export const ADSENSE_CLIENT_ID = 'ca-pub-4710915636313788'
 
 export const META = Object.freeze({
   title: 'Surmon.me',
-  sub_title: '来苏之望',
-  domain: 'surmon.me',
-  url: 'https://surmon.me',
-  author: 'Surmon'
-})
+  zh_sub_title: '来苏之望',
+  en_sub_title: 'Because the mountain is there',
 
-export const THIRD_IDS = Object.freeze({
-  YOUTUBE_CHANNEL_ID: `UCoL-j6T28PLSJ2U6ZdONS0w`,
-  MUSIC_163_BGM_ALBUM_ID: '638949385',
-  GITHUB_USER_ID: 'surmon-china',
-  TWITTER_USER_ID: 'surmon7788'
+  url: 'https://surmon.me',
+  domain: 'surmon.me',
+  author: 'Surmon'
 })
 
 export const FRIEND_LINKS = Object.freeze([
@@ -59,6 +54,15 @@ export const SPECIAL_LINKS = Object.freeze([
   }
 ])
 
+export const THIRD_IDS = Object.freeze({
+  YOUTUBE_CHANNEL_ID: `UCoL-j6T28PLSJ2U6ZdONS0w`,
+  MUSIC_163_BGM_ALBUM_ID: '638949385',
+  GITHUB_USER_ID: 'surmon-china',
+  TWITTER_USER_ID: 'surmon7788',
+  INSTAGRAM_USERNAME: 'surmon666',
+  INSTAGRAM_FB_ID: '17841405600281893'
+})
+
 export const VALUABLE_LINKS = Object.freeze({
   RSS: '/rss.xml',
   SITE_MAP: '/sitemap.xml',
@@ -94,6 +98,6 @@ export const VALUABLE_LINKS = Object.freeze({
   STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon?tab=profile',
   LEETCODE_CN: 'https://leetcode-cn.com/u/surmon',
   LINKEDIN: 'https://www.linkedin.com/in/surmon',
-  INSTAGRAM: 'https://www.instagram.com/surmon666',
+  INSTAGRAM: `https://www.instagram.com/${THIRD_IDS.INSTAGRAM_USERNAME}`,
   TWITTER: `https://twitter.com/${THIRD_IDS.TWITTER_USER_ID}`
 })
