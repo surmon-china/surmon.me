@@ -48,7 +48,7 @@
               <div class="statistic" v-if="archiveStore.statistic">
                 <div class="item" :key="index" v-for="(s, index) in statistics">
                   <p class="title">
-                    <i class="iconfont" :class="s.icon"></i>
+                    <i class="iconfont" :class="s.icon" v-if="!isMobile"></i>
                     <span class="text">{{ s.title }}</span>
                   </p>
                   <span class="content">{{ s.content }}</span>

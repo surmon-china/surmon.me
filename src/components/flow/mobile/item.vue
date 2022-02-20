@@ -161,6 +161,7 @@
 
       .body {
         padding: $gap;
+        padding-bottom: $sm-gap;
 
         .title {
           margin-top: 0;

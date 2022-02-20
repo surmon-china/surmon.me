@@ -54,6 +54,10 @@ export const i18ns: { [key: string]: I18nLanguageMap<Language> } = {
   TelegramGroup: {
     [Language.Chinese]: `自由报社`,
     [Language.English]: `TG group`
+  },
+  livingNow: {
+    [Language.Chinese]: `暂居上海，养两条狗`,
+    [Language.English]: `I'm living in Shanghai now`
   }
 }
 

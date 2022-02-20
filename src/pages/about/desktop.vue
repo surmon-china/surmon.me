@@ -98,13 +98,13 @@
           @mouseenter="handleGTagEvent(item.class.replace('-', '_') + '_qrcode')"
         >
           <div class="background"></div>
+          <div class="icon">
+            <i class="iconfont" :class="item.icon"></i>
+          </div>
           <span class="qrcode">
             <uimage class="image" cdn :src="item.qrcode" />
           </span>
-          <ulink class="link" :href="item.link">
-            <i v-if="item.icon" class="icon iconfont" :class="item.icon"></i>
-            <span class="text">{{ item.text }}</span>
-          </ulink>
+          <ulink class="link" :href="item.link">{{ item.text }}</ulink>
         </div>
       </div>
       <div class="calendar">
@@ -112,7 +112,13 @@
       </div>
       <div class="maps">
         <div class="location">
-          <iframe class="iframe" src="/partials/location.html" />
+          <div class="map">
+            <iframe class="iframe" src="/partials/location.html" />
+          </div>
+          <div class="living">
+            <i class="iconfont icon-location"></i>
+            <div class="text"><i18n v-bind="i18ns.livingNow" /></div>
+          </div>
         </div>
         <div class="roadmap" :placeholder="isZhLang ? i18ns.roadmap.zh : i18ns.roadmap.en">
           <div class="wrapper">
@@ -223,6 +229,7 @@
         {
           class: 'wechat',
           qrcode: `/images/qrcodes/wechat.jpg`,
+          icon: 'icon-wechat',
           text: 'Friend me on WeChat'
         },
         {
@@ -624,8 +631,27 @@
           left: 0;
           width: 100%;
           height: 6px;
+          text-align: right;
           background: var(--item-primary);
           filter: opacity(0.8);
+        }
+
+        .icon {
+          $size: $font-size-h1 * 8;
+          position: absolute;
+          left: -50%;
+          bottom: -45%;
+          width: $size;
+          height: $size;
+          line-height: $size;
+          display: block;
+          text-align: center;
+          opacity: 0.1;
+
+          .iconfont {
+            font-size: $size;
+            color: var(--item-primary);
+          }
         }
 
         .qrcode {
@@ -644,21 +670,12 @@
           margin-bottom: $sm-gap;
           padding-bottom: 2px;
           border-bottom: 2px solid;
+          font-weight: bold;
           color: var(--item-primary);
           opacity: 0.8;
           transition: opacity $transition-time-fast;
           &:hover {
             opacity: 1;
-          }
-
-          .iconfont {
-            margin-right: $sm-gap;
-            font-size: $font-size-h4;
-          }
-
-          .text {
-            font-weight: bold;
-            color: inherit;
           }
         }
       }
@@ -672,13 +689,14 @@
     }
 
     .maps {
-      $size: 150px;
+      $size: 210px;
       position: relative;
       display: flex;
       width: 100%;
       margin-bottom: $gap * 2;
 
-      .location,
+      .location .map,
+      .location .living,
       .roadmap {
         padding: $sm-gap;
         @include common-bg-module();
@@ -686,19 +704,43 @@
       }
 
       .location {
-        flex: 1;
-        display: block;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 1;
         margin-right: $gap * 2;
+        height: calc(#{$size} + #{$sm-gap * 2});
 
-        .iframe {
+        .map {
+          width: calc(#{$size} + #{$sm-gap});
+
+          .iframe {
+            width: 100%;
+            height: 100%;
+            @include radius-box($xs-radius);
+          }
+        }
+
+        .living {
+          flex-shrink: 0;
+          display: inline-flex;
+          margin-top: $lg-gap;
+          padding: 0 1em;
           width: 100%;
-          height: $size;
-          @include radius-box($xs-radius);
+          height: 4em;
+          line-height: 4em;
+          color: $text-secondary;
+
+          .iconfont {
+            margin-right: $sm-gap;
+          }
+          .text {
+            font-weight: bold;
+          }
         }
       }
 
       .roadmap {
-        width: 70%;
+        flex: 1;
         overflow: hidden;
         @extend .center-placeholder;
 
@@ -711,8 +753,8 @@
 
           .fullscreen {
             position: absolute;
-            top: $sm-gap;
-            right: $sm-gap;
+            top: $gap;
+            right: $gap;
             z-index: $z-index-normal + 1;
             display: block;
             width: 2em;
@@ -722,6 +764,7 @@
             font-size: $font-size-h4;
             color: $text-secondary;
             @include background-transition();
+            @include backdrop-blur(1px);
             &:hover {
               color: $text;
               background-color: $module-bg-opaque;
