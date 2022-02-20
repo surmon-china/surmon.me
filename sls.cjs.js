@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.26
+* Surmon.me v3.6.27
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -53,6 +53,7 @@ isDev ? path__default["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;co
     return html;
 };const enableProdRenderer = async (app, cache) => {
     const template = fs__default["default"].readFileSync(path__default["default"].resolve(DIST_PATH, 'template.html'), 'utf-8');
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { renderApp, renderError } = require(path__default["default"].resolve(PRDO_SERVER_PATH, 'ssr.js'));
     app.use('*', async (request, response) => {
         try {
@@ -204,16 +205,11 @@ const proxyer = () => {
  */
 const META = Object.freeze({
     title: 'Surmon.me',
-    sub_title: '来苏之望',
-    domain: 'surmon.me',
+    zh_sub_title: '来苏之望',
+    en_sub_title: 'Because the mountain is there',
     url: 'https://surmon.me',
+    domain: 'surmon.me',
     author: 'Surmon'
-});
-const THIRD_IDS = Object.freeze({
-    YOUTUBE_CHANNEL_ID: `UCoL-j6T28PLSJ2U6ZdONS0w`,
-    MUSIC_163_BGM_ALBUM_ID: '638949385',
-    GITHUB_USER_ID: 'surmon-china',
-    TWITTER_USER_ID: 'surmon7788'
 });
 Object.freeze([
     {
@@ -247,6 +243,14 @@ Object.freeze([
         url: 'https://disqus.com/'
     }
 ]);
+const THIRD_IDS = Object.freeze({
+    YOUTUBE_CHANNEL_ID: `UCoL-j6T28PLSJ2U6ZdONS0w`,
+    MUSIC_163_BGM_ALBUM_ID: '638949385',
+    GITHUB_USER_ID: 'surmon-china',
+    TWITTER_USER_ID: 'surmon7788',
+    INSTAGRAM_USERNAME: 'surmon666',
+    INSTAGRAM_FB_ID: '17841405600281893'
+});
 Object.freeze({
     RSS: '/rss.xml',
     SITE_MAP: '/sitemap.xml',
@@ -277,7 +281,7 @@ Object.freeze({
     STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon?tab=profile',
     LEETCODE_CN: 'https://leetcode-cn.com/u/surmon',
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
-    INSTAGRAM: 'https://www.instagram.com/surmon666',
+    INSTAGRAM: `https://www.instagram.com/${THIRD_IDS.INSTAGRAM_USERNAME}`,
     TWITTER: `https://twitter.com/${THIRD_IDS.TWITTER_USER_ID}`
 });/**
  * @file Universal Server cache

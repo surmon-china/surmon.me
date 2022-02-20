@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.26
+* Surmon.me v3.6.27
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -30,7 +30,8 @@ var TunnelModule;
     TunnelModule["TwitterCalendar"] = "twitter_calendar";
     TunnelModule["YouTubePlaylist"] = "youtube_playlist";
     TunnelModule["YouTubeVideoList"] = "youtube_video_list";
-    TunnelModule["Instagram"] = "instagram";
+    TunnelModule["InstagramMedias"] = "instagram_medias";
+    TunnelModule["InstagramCalendar"] = "instagram_calendar";
     TunnelModule["Wallpaper"] = "wallpaper";
     TunnelModule["GitHubRepositories"] = "github_repositories";
     TunnelModule["GitHubContributions"] = "github_contributions";
@@ -51,16 +52,11 @@ const getBFFServerPort = () => Number(process.env.PORT || 3000);/**
 const GA_MEASUREMENT_ID = 'UA-84887611-3';
 const META = Object.freeze({
     title: 'Surmon.me',
-    sub_title: '来苏之望',
-    domain: 'surmon.me',
+    zh_sub_title: '来苏之望',
+    en_sub_title: 'Because the mountain is there',
     url: 'https://surmon.me',
+    domain: 'surmon.me',
     author: 'Surmon'
-});
-const THIRD_IDS = Object.freeze({
-    YOUTUBE_CHANNEL_ID: `UCoL-j6T28PLSJ2U6ZdONS0w`,
-    MUSIC_163_BGM_ALBUM_ID: '638949385',
-    GITHUB_USER_ID: 'surmon-china',
-    TWITTER_USER_ID: 'surmon7788'
 });
 Object.freeze([
     {
@@ -94,6 +90,14 @@ Object.freeze([
         url: 'https://disqus.com/'
     }
 ]);
+const THIRD_IDS = Object.freeze({
+    YOUTUBE_CHANNEL_ID: `UCoL-j6T28PLSJ2U6ZdONS0w`,
+    MUSIC_163_BGM_ALBUM_ID: '638949385',
+    GITHUB_USER_ID: 'surmon-china',
+    TWITTER_USER_ID: 'surmon7788',
+    INSTAGRAM_USERNAME: 'surmon666',
+    INSTAGRAM_FB_ID: '17841405600281893'
+});
 Object.freeze({
     RSS: '/rss.xml',
     SITE_MAP: '/sitemap.xml',
@@ -124,7 +128,7 @@ Object.freeze({
     STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon?tab=profile',
     LEETCODE_CN: 'https://leetcode-cn.com/u/surmon',
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
-    INSTAGRAM: 'https://www.instagram.com/surmon666',
+    INSTAGRAM: `https://www.instagram.com/${THIRD_IDS.INSTAGRAM_USERNAME}`,
     TWITTER: `https://twitter.com/${THIRD_IDS.TWITTER_USER_ID}`
 });/**
  * @file BFF Server helper
@@ -169,7 +173,7 @@ const getRSSXML = async (archiveData) => {
     const archive = archiveData || (await getArchiveData());
     const feed = new RSS__default["default"]({
         title: META.title,
-        description: META.sub_title,
+        description: META.zh_sub_title,
         site_url: META.url,
         feed_url: `${META.url}/rss.xml`,
         image_url: `${META.url}/icon.png`,
@@ -438,9 +442,10 @@ const getTwitterTweets = async () => {
 };
 // ---------------------------------------------------------
 // Tweets calendar
-const getPageTweets = async (startTime, pagination_token) => {
+const fetchPageTweets = async (startTime, pagination_token) => {
     const uid = await ensureUID();
-    const response = await axios__default["default"].get(`https://api.twitter.com/2/users/${uid}/tweets`, {
+    return axios__default["default"]
+        .get(`https://api.twitter.com/2/users/${uid}/tweets`, {
         timeout: 8000,
         params: {
             'tweet.fields': `id,created_at`,
@@ -451,16 +456,21 @@ const getPageTweets = async (startTime, pagination_token) => {
         headers: {
             Authorization: `Bearer ${bearerToken}`
         }
+    })
+        .then((response) => {
+        if (response.status === 200) {
+            return response.data;
+        }
+        else {
+            return Promise.reject(response.data);
+        }
+    })
+        .catch((error) => {
+        return Promise.reject(error.toJSON());
     });
-    if (response.status === 200) {
-        return response.data;
-    }
-    else {
-        throw response.data;
-    }
 };
 function doFetchAllTweets({ startTime, nextToken, tweets = [], onSucceed, onFailed }) {
-    getPageTweets(startTime, nextToken)
+    fetchPageTweets(startTime, nextToken)
         .then((result) => {
         tweets.push(...result.data);
         if (result.meta.next_token) {
@@ -478,14 +488,14 @@ function doFetchAllTweets({ startTime, nextToken, tweets = [], onSucceed, onFail
     })
         .catch(onFailed);
 }
-const calendarTemp = {
+const calendarTemp$1 = {
     tweets: [],
     calendar: []
 };
 function fetchAllTweets() {
-    console.info(`[BFF] fetchAllTweets`);
-    calendarTemp.tweets = [];
-    calendarTemp.calendar = [];
+    console.info(`[BFF] twitter.fetchAllTweets`);
+    calendarTemp$1.tweets = [];
+    calendarTemp$1.calendar = [];
     // startTime
     const today = new Date();
     today.setDate(1);
@@ -494,31 +504,23 @@ function fetchAllTweets() {
     doFetchAllTweets({
         startTime: prevYearToday,
         onSucceed: (tweets) => {
-            console.info(`[BFF] fetchAllTweets done, ${tweets.length} tweets. refetch when after 18h`);
+            console.info(`[BFF] twitter.fetchAllTweets done, ${tweets.length} tweets. refetch when after 18h`);
             setTimeout(() => fetchAllTweets(), 18 * 60 * 60 * 1000);
             const map = new Map();
             tweets.forEach((tweet) => {
                 const key = tweet.created_at.slice(0, 10);
-                if (map.has(key)) {
-                    map.set(key, map.get(key) + 1);
-                }
-                else {
-                    map.set(key, 1);
-                }
+                map.has(key) ? map.set(key, map.get(key) + 1) : map.set(key, 1);
             });
-            calendarTemp.calendar = Array.from(map.keys()).map((key) => ({
-                date: key,
-                count: map.get(key)
-            }));
+            calendarTemp$1.calendar = Array.from(map, ([date, count]) => ({ date, count }));
         },
         onFailed: (error) => {
-            console.warn(`[BFF] fetchAllTweets error, retry when after 30s`, error);
+            console.warn(`[BFF] twitter.fetchAllTweets error, retry when after 30s`, error);
             setTimeout(() => fetchAllTweets(), 30 * 1000);
         }
     });
 }
-fetchAllTweets();
-const getTwitterCalendar = async () => calendarTemp.calendar;/**
+const initTwitterCalendar = () => fetchAllTweets();
+const getTwitterCalendar = async () => calendarTemp$1.calendar;/**
  * @file BFF instagram getter
  * @module server.getter.instagram
  * @author Surmon <https://github.com/surmon-china>
@@ -529,9 +531,9 @@ const getTwitterCalendar = async () => calendarTemp.calendar;/**
 // https://developers.facebook.com/docs/instagram-basic-display-api/reference/media#fields
 // 3. TODO: Refresh token
 // https://developers.facebook.com/docs/instagram-basic-display-api/reference/refresh_access_token
-const fields = `id,username,permalink,caption,media_type,media_url,thumbnail_url,timestamp`;
 const token$1 = yargs.argv.instagram_token;
 const getInstagramMedias = async () => {
+    const fields = `id,username,permalink,caption,media_type,media_url,thumbnail_url,timestamp`;
     const response = await axios__default["default"].get(`https://graph.instagram.com/me/media?fields=${fields}&access_token=${token$1}`, { timeout: 8000 });
     if (response.status === 200 && response.data.data) {
         return response.data.data;
@@ -539,7 +541,82 @@ const getInstagramMedias = async () => {
     else {
         throw response.data;
     }
-};/**
+};
+// https://developers.facebook.com/docs/instagram-basic-display-api/reference/user/media
+const fetchPageMedias = (sinceUnix, nextToken) => {
+    return axios__default["default"]
+        .get(`https://graph.instagram.com/v13.0/${THIRD_IDS.INSTAGRAM_FB_ID}/media`, {
+        timeout: 8000,
+        params: {
+            access_token: token$1,
+            fields: `id,timestamp`,
+            limit: 100,
+            since: sinceUnix,
+            after: nextToken
+        }
+    })
+        .then((response) => {
+        if (response.status === 200 && response.data.data) {
+            return response.data;
+        }
+        else {
+            return Promise.reject(response.data);
+        }
+    })
+        .catch((error) => {
+        return Promise.reject(error.toJSON());
+    });
+};
+function doFetchAllMedias({ sinceUnix, nextToken, medias = [], onSucceed, onFailed }) {
+    fetchPageMedias(sinceUnix, nextToken)
+        .then((result) => {
+        medias.push(...result.data);
+        if (result.paging.next) {
+            doFetchAllMedias({
+                sinceUnix,
+                nextToken: result.paging.cursors.after,
+                medias,
+                onSucceed,
+                onFailed
+            });
+        }
+        else {
+            onSucceed?.(medias);
+        }
+    })
+        .catch(onFailed);
+}
+const calendarTemp = {
+    data: []
+};
+function fetchAllMedias() {
+    console.info(`[BFF] instagram.fetchAllMedias`);
+    calendarTemp.data = [];
+    // startTime
+    const today = new Date();
+    today.setDate(1);
+    today.setFullYear(today.getFullYear() - 1);
+    const prevYearToday = Math.round(today.getTime() / 1000);
+    doFetchAllMedias({
+        sinceUnix: prevYearToday,
+        onSucceed: (medias) => {
+            console.info(`[BFF] instagram.fetchAllMedias done, ${medias.length} medias. refetch when after 18h`);
+            setTimeout(() => fetchAllMedias(), 18 * 60 * 60 * 1000);
+            const map = new Map();
+            medias.forEach((tweet) => {
+                const key = tweet.timestamp.slice(0, 10);
+                map.has(key) ? map.set(key, map.get(key) + 1) : map.set(key, 1);
+            });
+            calendarTemp.data = Array.from(map, ([date, count]) => ({ date, count }));
+        },
+        onFailed: (error) => {
+            console.warn(`[BFF] instagram.fetchAllMedias error, retry when after 30s`, error);
+            setTimeout(() => fetchAllMedias(), 30 * 1000);
+        }
+    });
+}
+const initInstagramCalendar = () => fetchAllMedias();
+const getInstagramCalendar = async () => calendarTemp.data;/**
  * @file BFF YouTube getter
  * @module server.getter.instagram
  * @author Surmon <https://github.com/surmon-china>
@@ -684,6 +761,7 @@ const getSongList = async () => {
     });
 };const enableProdRenderer = async (app, cache) => {
     const template = fs__default["default"].readFileSync(path__default["default"].resolve(DIST_PATH, 'template.html'), 'utf-8');
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { renderApp, renderError } = require(path__default["default"].resolve(PRDO_SERVER_PATH, 'ssr.js'));
     app.use('*', async (request, response) => {
         try {
@@ -1033,6 +1111,9 @@ process.noDeprecation = true;
 createExpressApp().then(({ app, server, cache }) => {
     // static
     app.use(express__default["default"].static(PUBLIC_PATH));
+    // init thirds task
+    initTwitterCalendar();
+    initInstagramCalendar();
     // sitemap
     app.get('/sitemap.xml', async (_, response) => {
         try {
@@ -1151,7 +1232,7 @@ createExpressApp().then(({ app, server, cache }) => {
     // Twitter tweets calendar
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterCalendar}`, responser(() => getTwitterCalendar()));
     // Instagram newest medias
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Instagram}`, responser(() => {
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMedias}`, responser(() => {
         return cacher({
             cache,
             key: 'instagram',
@@ -1160,6 +1241,8 @@ createExpressApp().then(({ app, server, cache }) => {
             getter: getInstagramMedias
         });
     }));
+    // Instagram calendar
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramCalendar}`, responser(() => getInstagramCalendar()));
     // YouTube platlists
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`, responser(() => {
         return cacher({
