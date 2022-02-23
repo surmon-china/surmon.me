@@ -101,7 +101,7 @@
   import { LanguageKey } from '/@/language'
   import { RouteName } from '/@/app/router'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useMetaStore } from '/@/store/meta'
+  import { useMetaStore } from '/@/stores/meta'
   import { useUniversalFetch } from '/@/universal'
   import { getPageRoute } from '/@/transforms/route'
   import PageBanner from '/@/components/common/fullpage/banner.vue'

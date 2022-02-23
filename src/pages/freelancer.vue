@@ -81,7 +81,7 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { Language, LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useMetaStore } from '/@/store/meta'
+  import { useMetaStore } from '/@/stores/meta'
   import { firstUpperCase } from '/@/transforms/text'
   import { emailLink } from '/@/transforms/email'
   import PageBanner from '/@/components/common/fullpage/banner.vue'

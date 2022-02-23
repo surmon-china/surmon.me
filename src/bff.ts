@@ -32,7 +32,7 @@ import { getSongList } from './server/getters/netease-music'
 import { enableDevRenderer } from './server/renderer/dev'
 import { enableProdRenderer } from './server/renderer/prod'
 import { PUBLIC_PATH } from './server/helpers/configurer'
-import { responser, erroror } from './server/helpers/responser'
+import { responsor, erroror } from './server/helpers/responsor'
 import { cacher } from './server/helpers/cacher'
 import { createExpressApp } from './server'
 
@@ -63,7 +63,7 @@ createExpressApp().then(({ app, server, cache }) => {
     }
   })
 
-  // rss
+  // RSS
   app.get('/rss.xml', async (_, response) => {
     try {
       const data = await cacher({
@@ -99,7 +99,7 @@ createExpressApp().then(({ app, server, cache }) => {
   // Bing wallpapers
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`,
-    responser(() => {
+    responsor(() => {
       return cacher({
         cache,
         key: 'wallpaper',
@@ -110,10 +110,10 @@ createExpressApp().then(({ app, server, cache }) => {
     })
   )
 
-  // GitHub Repositories
+  // GitHub repositories
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubRepositories}`,
-    responser(() => {
+    responsor(() => {
       return cacher({
         cache,
         key: 'github_repositories',
@@ -124,10 +124,10 @@ createExpressApp().then(({ app, server, cache }) => {
     })
   )
 
-  // GitHub Contributions
+  // GitHub contributions
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubContributions}`,
-    responser(() => {
+    responsor(() => {
       return cacher({
         cache,
         key: 'github_contributions',
@@ -147,7 +147,7 @@ createExpressApp().then(({ app, server, cache }) => {
   // 163 music BGM list
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`,
-    responser(() => {
+    responsor(() => {
       return cacher({
         cache,
         key: 'netease_music',
@@ -161,7 +161,7 @@ createExpressApp().then(({ app, server, cache }) => {
   // Twitter userinfo
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterUserInfo}`,
-    responser(() => {
+    responsor(() => {
       return cacher({
         cache,
         key: 'twitter_userinfo',
@@ -175,7 +175,7 @@ createExpressApp().then(({ app, server, cache }) => {
   // Twitter newest tweets
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterTweets}`,
-    responser(() => {
+    responsor(() => {
       return cacher({
         cache,
         key: 'twitter_tweets',
@@ -189,13 +189,13 @@ createExpressApp().then(({ app, server, cache }) => {
   // Twitter tweets calendar
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterCalendar}`,
-    responser(() => getTwitterCalendar())
+    responsor(() => getTwitterCalendar())
   )
 
   // Instagram newest medias
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMedias}`,
-    responser(() => {
+    responsor(() => {
       return cacher({
         cache,
         key: 'instagram',
@@ -209,13 +209,13 @@ createExpressApp().then(({ app, server, cache }) => {
   // Instagram calendar
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramCalendar}`,
-    responser(() => getInstagramCalendar())
+    responsor(() => getInstagramCalendar())
   )
 
   // YouTube platlists
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`,
-    responser(() => {
+    responsor(() => {
       return cacher({
         cache,
         key: 'youtube_playlist',
@@ -232,7 +232,7 @@ createExpressApp().then(({ app, server, cache }) => {
     if (!playlistID || typeof playlistID !== 'string') {
       return erroror(response, 'Invalid params')
     }
-    responser(() => {
+    responsor(() => {
       return cacher({
         cache,
         key: `youtube_playlist_${playlistID}`,

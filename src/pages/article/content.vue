@@ -75,7 +75,7 @@
   import { defineComponent, ref, computed, nextTick, onMounted, PropType } from 'vue'
   import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
-  import { Article, useArticleDetailStore } from '/@/store/article'
+  import { Article, useArticleDetailStore } from '/@/stores/article'
   import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import Markdown from '/@/components/common/markdown.vue'

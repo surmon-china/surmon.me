@@ -66,7 +66,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName, CategorySlug } from '/@/app/router'
   import { useUniversalFetch } from '/@/universal'
-  import { useMetaStore } from '/@/store/meta'
+  import { useMetaStore } from '/@/stores/meta'
   import { Theme } from '/@/services/theme'
   import { Language, LanguageKey } from '/@/language'
   import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'

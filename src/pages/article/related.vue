@@ -28,7 +28,7 @@
 
 <script lang="ts">
   import { defineComponent, computed, PropType } from 'vue'
-  import { Article } from '/@/store/article'
+  import { Article } from '/@/stores/article'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getMobileArticleListThumbnailURL } from '/@/transforms/thumbnail'
 

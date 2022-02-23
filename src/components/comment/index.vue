@@ -97,8 +97,8 @@
     nextTick
   } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useUniversalStore, UserType } from '/@/store/universal'
-  import { useCommentStore, CommentFetchParams, Author } from '/@/store/comment'
+  import { useUniversalStore, UserType } from '/@/stores/universal'
+  import { useCommentStore, CommentFetchParams, Author } from '/@/stores/comment'
   import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
   import { GAEventCategories } from '/@/constants/gtag'
   import * as ANCHOR from '/@/constants/anchor'

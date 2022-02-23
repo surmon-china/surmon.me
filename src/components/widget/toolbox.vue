@@ -34,7 +34,7 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useMetaStore } from '/@/store/meta'
+  import { useMetaStore } from '/@/stores/meta'
   import { LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
   import { scrollTo, Easing } from '/@/utils/scroller'

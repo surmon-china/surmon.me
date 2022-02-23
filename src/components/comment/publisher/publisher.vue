@@ -69,8 +69,8 @@
 <script lang="ts">
   import { defineComponent, ref, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { Author } from '/@/store/comment'
-  import { useUniversalStore, UserType } from '/@/store/universal'
+  import { Author } from '/@/stores/comment'
+  import { useUniversalStore, UserType } from '/@/stores/universal'
   import { COMMENT_PUBLISHER_ELEMENT_ID } from '/@/constants/anchor'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'

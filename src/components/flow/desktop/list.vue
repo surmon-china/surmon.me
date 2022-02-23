@@ -85,7 +85,7 @@
 <script lang="ts">
   import { defineComponent, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { Article } from '/@/store/article'
+  import { Article } from '/@/stores/article'
   import { LanguageKey } from '/@/language'
   import ListItem from './item.vue'
 

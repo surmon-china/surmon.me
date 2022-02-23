@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { TagMap } from '/@/store/tag'
+import { TagMap } from '/@/stores/tag'
 import { getTagFlowRoute } from './route'
 
 export default (text: string, tagMap: TagMap) => {

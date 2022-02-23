@@ -54,7 +54,7 @@
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useWallpaperStore } from '/@/store/wallpaper'
+  import { useWallpaperStore } from '/@/stores/wallpaper'
   import { Language } from '/@/language'
 
   export enum WallpaperWallEvent {

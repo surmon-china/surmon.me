@@ -120,7 +120,7 @@
   import { Language, LanguageKey } from '/@/language'
   import { useUniversalFetch } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useArchiveStore } from '/@/store/archive'
+  import { useArchiveStore } from '/@/stores/archive'
   import { I18nLanguageMap } from '/@/services/i18n'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { numberToChinese, firstUpperCase, numberToKilo, numberSplit } from '/@/transforms/text'

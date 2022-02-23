@@ -23,7 +23,7 @@
     useTwitterCalendarStore,
     useInstagramCalendarStore,
     useGitHubCalendarStore
-  } from '/@/store/aggregate'
+  } from '/@/stores/aggregate'
   import { GAEventCategories } from '/@/constants/gtag'
   import { dateToHuman, HumanDate, humanDateToYMD } from '/@/transforms/moment'
   import CalendarDay from './day.vue'

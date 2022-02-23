@@ -1,6 +1,6 @@
 /**
- * @file BFF Server responser
- * @module server.responser
+ * @file BFF Server responsor
+ * @module server.responsor
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -13,7 +13,7 @@ export const erroror = (response: Response, error: any) => {
   response.send(error?.message || String(error))
 }
 
-export const responser = (promise: () => Promise<any>): RequestHandler => {
+export const responsor = (promise: () => Promise<any>): RequestHandler => {
   return (_, response) => {
     promise()
       .then((data) => response.send(data))

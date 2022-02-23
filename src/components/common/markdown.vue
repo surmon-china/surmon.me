@@ -11,7 +11,7 @@
 <script lang="ts">
   import { defineComponent, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { TagMap } from '/@/store/tag'
+  import { TagMap } from '/@/stores/tag'
   import { markdownToHTML } from '/@/transforms/markdown'
 
   export default defineComponent({

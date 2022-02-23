@@ -16,7 +16,7 @@
   import { defineComponent, watch, onBeforeMount } from 'vue'
   import { useUniversalFetch, onClient } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useArticleListStore } from '/@/store/article'
+  import { useArticleListStore } from '/@/stores/article'
   import { nextScreen, scrollToTop } from '/@/utils/effects'
   import ArticleListHeader from '/@/components/flow/desktop/header.vue'
   import ArticleList from '/@/components/flow/desktop/list.vue'

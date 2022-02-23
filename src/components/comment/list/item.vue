@@ -114,8 +114,8 @@
 <script lang="ts">
   import { defineComponent, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useCommentStore, Comment } from '/@/store/comment'
-  import { useUniversalStore, UserType } from '/@/store/universal'
+  import { useCommentStore, Comment } from '/@/stores/comment'
+  import { useUniversalStore, UserType } from '/@/stores/universal'
   import { getCommentItemElementID } from '/@/constants/anchor'
   import { UNDEFINED } from '/@/constants/value'
   import { LanguageKey } from '/@/language'

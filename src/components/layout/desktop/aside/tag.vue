@@ -35,7 +35,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { useTagStore, tagEnName, Tag } from '/@/store/tag'
+  import { useTagStore, tagEnName, Tag } from '/@/stores/tag'
   import { LanguageKey } from '/@/language'
   import { getTagFlowRoute } from '/@/transforms/route'
   import { getExtendValue } from '/@/transforms/state'

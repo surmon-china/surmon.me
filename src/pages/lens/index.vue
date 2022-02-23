@@ -74,7 +74,7 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useLensStore } from '/@/store/lens'
+  import { useLensStore } from '/@/stores/lens'
   import { useUniversalFetch, universalRef } from '/@/universal'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import { Language, LanguageKey } from '/@/language'

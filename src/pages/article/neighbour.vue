@@ -43,7 +43,7 @@
 
 <script lang="ts">
   import { defineComponent, PropType } from 'vue'
-  import { Article } from '/@/store/article'
+  import { Article } from '/@/stores/article'
   import { getArticleDetailRoute } from '/@/transforms/route'
 
   export default defineComponent({

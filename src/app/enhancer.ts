@@ -18,7 +18,7 @@ import { useLoading, Loading } from '/@/services/loading'
 import { useGtag, Gtag } from '/@/services/gtag'
 import type { Popup } from '/@/services/popup'
 import { usePopup } from '/@/services/popup/hook'
-import { useMetaStore } from '/@/store/meta'
+import { useMetaStore } from '/@/stores/meta'
 
 export const useEnhancer = () => {
   const route = useRoute()

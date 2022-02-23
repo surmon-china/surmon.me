@@ -39,7 +39,7 @@
 <script lang="ts">
   import { defineComponent, ref, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useLensStore } from '/@/store/lens'
+  import { useLensStore } from '/@/stores/lens'
   import { LanguageKey } from '/@/language'
   import { ProxyModule } from '/@/constants/proxy'
   import { GAEventCategories } from '/@/constants/gtag'

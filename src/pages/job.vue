@@ -39,7 +39,7 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useMetaStore } from '/@/store/meta'
+  import { useMetaStore } from '/@/stores/meta'
   import { GAEventCategories } from '/@/constants/gtag'
   import { Language, LanguageKey } from '/@/language'
   import { getTargetCDNURL } from '/@/transforms/url'

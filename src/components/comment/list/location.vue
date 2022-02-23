@@ -15,7 +15,7 @@
 <script lang="ts">
   import { defineComponent, computed, PropType } from 'vue'
   import countryFlagEmoji from 'country-flag-emoji'
-  import { IPLocation } from '/@/store/comment'
+  import { IPLocation } from '/@/stores/comment'
 
   const municipalitys: string[] = ['Shanghai', 'Beijing', 'Tianjin', 'Chongqing', 'Chungking']
 

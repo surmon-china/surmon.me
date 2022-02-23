@@ -94,7 +94,7 @@
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useUniversalStore, UserType } from '/@/store/universal'
+  import { useUniversalStore, UserType } from '/@/stores/universal'
   import { enableCopyrighter, disableCopyrighter } from '/@/services/copyright'
   import { focusPosition } from '/@/utils/editable'
   import { insertContent } from '/@/utils/editable'

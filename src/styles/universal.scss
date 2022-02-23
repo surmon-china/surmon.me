@@ -14,7 +14,7 @@ body {
   line-height: $line-height-base;
   user-select: none;
   -webkit-font-smoothing: antialiased;
-  // MARK: 为保证 GA 页面跳转广告不错位
+  // WORKAROUND: for Google AdSense layout
   position: relative !important;
   scroll-behavior: smooth;
 

@@ -6,7 +6,7 @@
 
 import sanitizeHTML from 'sanitize-html'
 import { marked, Renderer } from 'marked'
-import { TagMap } from '/@/store/tag'
+import { TagMap } from '/@/stores/tag'
 import { LOZAD_CLASS_NAME } from '/@/services/lozad'
 import highlight from '/@/services/highlight'
 import relink from '/@/transforms/relink'

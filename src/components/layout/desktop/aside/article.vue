@@ -35,7 +35,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { useArticleListStore } from '/@/store/article'
+  import { useArticleListStore } from '/@/stores/article'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { LanguageKey } from '/@/language'
 

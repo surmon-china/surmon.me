@@ -73,7 +73,7 @@
   import { defineComponent, computed } from 'vue'
   import * as ANCHORS from '/@/constants/anchor'
   import { LanguageKey } from '/@/language'
-  import { useArticleDetailStore } from '/@/store/article'
+  import { useArticleDetailStore } from '/@/stores/article'
   import { scrollToElementAnchor } from '/@/utils/scroller'
 
   export default defineComponent({

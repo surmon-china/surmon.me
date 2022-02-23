@@ -17,7 +17,7 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useWallpaperStore } from '/@/store/wallpaper'
+  import { useWallpaperStore } from '/@/stores/wallpaper'
   import { GAEventCategories } from '/@/constants/gtag'
   import { Language } from '/@/language'
   import Wallpapers from './wall.vue'

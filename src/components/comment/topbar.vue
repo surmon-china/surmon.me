@@ -111,7 +111,7 @@
 <script lang="ts">
   import { defineComponent, ref, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { UserType, useUniversalStore } from '/@/store/universal'
+  import { UserType, useUniversalStore } from '/@/stores/universal'
   import { GAEventCategories } from '/@/constants/gtag'
   import { SortType } from '/@/constants/state'
   import { LanguageKey } from '/@/language'
