@@ -28,7 +28,7 @@ export enum SortType {
   Hottest = 2 // 热序
 }
 
-export interface UniversalExtend {
+export interface UniversalKeyValue {
   name: string
   value: string
 }

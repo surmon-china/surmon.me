@@ -7,7 +7,7 @@
 import { defineStore } from 'pinia'
 import { isClient } from '/@/app/environment'
 import { UNDEFINED } from '/@/constants/value'
-import { SortType, UniversalExtend, CommentParentType } from '/@/constants/state'
+import { SortType, UniversalKeyValue, CommentParentType } from '/@/constants/state'
 import { delayPromise } from '/@/utils/delayer'
 import nodepress from '/@/services/nodepress'
 import { useUniversalStore } from './universal'
@@ -44,7 +44,7 @@ export interface Comment {
   ip_location?: IPLocation
   create_at: string
   update_at: string
-  extends: UniversalExtend[]
+  extends: UniversalKeyValue[]
 }
 export interface CommentFetchParams {
   page?: number

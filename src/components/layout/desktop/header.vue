@@ -147,6 +147,7 @@
     height: $header-height;
     z-index: $z-index-header;
     background-color: $module-bg;
+    border-bottom: 1px solid $module-bg-darker-2;
     @include backdrop-blur(5px);
 
     &.enable-nav:hover {

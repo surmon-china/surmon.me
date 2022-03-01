@@ -7,7 +7,7 @@
 import { defineStore } from 'pinia'
 import { Language } from '/@/language'
 import { LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
-import { OriginState, UniversalExtend } from '/@/constants/state'
+import { OriginState, UniversalKeyValue } from '/@/constants/state'
 import { getArticleContentHeadingElementID } from '/@/constants/anchor'
 import { markdownToHTML } from '/@/transforms/markdown'
 import { delayPromise } from '/@/utils/delayer'
@@ -39,7 +39,7 @@ export interface Article {
   }
   update_at: string
   create_at: string
-  extends: UniversalExtend[]
+  extends: UniversalKeyValue[]
 }
 
 export const useArticleListStore = defineStore('article', {

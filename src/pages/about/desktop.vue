@@ -141,10 +141,10 @@
       </div>
       <div class="footer-links">
         <div class="friendlinks">
-          <template v-for="(item, index) in FRIEND_LINKS" :key="index">
+          <template v-for="(link, index) in appOptions?.friend_links || []" :key="index">
             <divider type="vertical" size="lg" v-if="index !== 0" />
-            <a :href="item.url" class="item" target="_blank" rel="external nofollow noopener">
-              {{ item.name }}
+            <a :href="link.value" class="item" target="_blank" rel="external nofollow noopener">
+              {{ link.name }}
             </a>
           </template>
         </div>
@@ -170,7 +170,7 @@
   import { getPageRoute } from '/@/transforms/route'
   import { getTargetStaticURL } from '/@/transforms/url'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { VALUABLE_LINKS, FRIEND_LINKS, SPECIAL_LINKS } from '/@/config/app.config'
+  import { VALUABLE_LINKS, SPECIAL_LINKS } from '/@/config/app.config'
   import { useAboutPageMeta, getAdminAvatar, i18ns } from './helper'
   import AggregateCalendar from './calendar/index.vue'
 
@@ -183,6 +183,7 @@
       const { i18n, gtag, globalState, isZhLang, isDarkTheme } = useEnhancer()
       const metaStore = useMetaStore()
       const adminInfo = computed(() => metaStore.adminInfo.data)
+      const appOptions = computed(() => metaStore.appOptions.data)
 
       const links = [
         {
@@ -271,7 +272,9 @@
       // meta
       useAboutPageMeta()
       // prefetch
-      useUniversalFetch(() => metaStore.fetchAdminInfo())
+      useUniversalFetch(() =>
+        Promise.all([metaStore.fetchAdminInfo(), metaStore.fetchAppOptions()])
+      )
 
       return {
         i18ns,
@@ -279,7 +282,6 @@
         links,
         language: i18n.language,
         VALUABLE_LINKS,
-        FRIEND_LINKS,
         SPECIAL_LINKS,
         getAdminAvatar,
         getPageRoute,
@@ -288,6 +290,7 @@
         isOnRoadMap,
         backgroundVideo,
         adminInfo,
+        appOptions,
         handleGTagEvent,
         handleSponsor,
         handleOpenMap

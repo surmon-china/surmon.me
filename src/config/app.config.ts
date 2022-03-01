@@ -14,22 +14,10 @@ export const META = Object.freeze({
   title: 'Surmon.me',
   zh_sub_title: '来苏之望',
   en_sub_title: 'Because the mountain is there',
-
   url: 'https://surmon.me',
   domain: 'surmon.me',
   author: 'Surmon'
 })
-
-export const FRIEND_LINKS = Object.freeze([
-  {
-    name: '吕立青的博客',
-    url: 'https://blog.jimmylv.info'
-  },
-  {
-    name: `nighca's log`,
-    url: 'https://nighca.me'
-  }
-])
 
 export const SPECIAL_LINKS = Object.freeze([
   {

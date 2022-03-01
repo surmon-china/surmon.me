@@ -6,6 +6,7 @@
 
 import { defineStore } from 'pinia'
 import nodepress from '/@/services/nodepress'
+import { UniversalKeyValue } from '/@/constants/state'
 import { useUniversalStore } from './universal'
 
 export interface MerchItemConfig {
@@ -65,11 +66,13 @@ export interface AppOption {
   sub_title: string
   description: string
   keywords: Array<string>
+  statement: string
   site_url: string
   site_email: string
   meta: {
     likes: number
   }
+  friend_links: Array<UniversalKeyValue>
   ad_config: string
 }
 

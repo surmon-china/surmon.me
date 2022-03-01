@@ -6,7 +6,7 @@
 
 import { defineStore } from 'pinia'
 import { firstUpperCase } from '/@/transforms/text'
-import { UniversalExtend } from '/@/constants/state'
+import { UniversalKeyValue } from '/@/constants/state'
 import nodepress from '/@/services/nodepress'
 
 export type TagMap = Map<string, Tag>
@@ -18,7 +18,7 @@ export interface Tag {
   description: string
   update_at: string
   create_at: string
-  extends: UniversalExtend[]
+  extends: UniversalKeyValue[]
   articles_count: number
 }
 
