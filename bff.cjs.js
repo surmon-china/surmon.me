@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.28
+* Surmon.me v3.6.29
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -58,16 +58,6 @@ const META = Object.freeze({
     domain: 'surmon.me',
     author: 'Surmon'
 });
-Object.freeze([
-    {
-        name: '吕立青的博客',
-        url: 'https://blog.jimmylv.info'
-    },
-    {
-        name: `nighca's log`,
-        url: 'https://nighca.me'
-    }
-]);
 Object.freeze([
     {
         name: 'iconfont',
@@ -794,8 +784,8 @@ const getSongList = async () => {
 const BAD_REQUEST = 400;
 const FORBIDDEN = 403;
 const INVALID_ERROR = 500;/**
- * @file BFF Server responser
- * @module server.responser
+ * @file BFF Server responsor
+ * @module server.responsor
  * @author Surmon <https://github.com/surmon-china>
  */
 const erroror = (response, error) => {
@@ -803,7 +793,7 @@ const erroror = (response, error) => {
     response.status(INVALID_ERROR);
     response.send(error?.message || String(error));
 };
-const responser = (promise) => {
+const responsor = (promise) => {
     return (_, response) => {
         promise()
             .then((data) => response.send(data))
@@ -1130,7 +1120,7 @@ createExpressApp().then(({ app, server, cache }) => {
             erroror(response, error);
         }
     });
-    // rss
+    // RSS
     app.get('/rss.xml', async (_, response) => {
         try {
             const data = await cacher({
@@ -1164,7 +1154,7 @@ createExpressApp().then(({ app, server, cache }) => {
         }
     });
     // Bing wallpapers
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`, responser(() => {
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`, responsor(() => {
         return cacher({
             cache,
             key: 'wallpaper',
@@ -1173,8 +1163,8 @@ createExpressApp().then(({ app, server, cache }) => {
             getter: getAllWallpapers
         });
     }));
-    // GitHub Repositories
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubRepositories}`, responser(() => {
+    // GitHub repositories
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubRepositories}`, responsor(() => {
         return cacher({
             cache,
             key: 'github_repositories',
@@ -1183,8 +1173,8 @@ createExpressApp().then(({ app, server, cache }) => {
             getter: getGitHubRepositories
         });
     }));
-    // GitHub Contributions
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubContributions}`, responser(() => {
+    // GitHub contributions
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubContributions}`, responsor(() => {
         return cacher({
             cache,
             key: 'github_contributions',
@@ -1200,7 +1190,7 @@ createExpressApp().then(({ app, server, cache }) => {
         });
     }));
     // 163 music BGM list
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`, responser(() => {
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`, responsor(() => {
         return cacher({
             cache,
             key: 'netease_music',
@@ -1210,7 +1200,7 @@ createExpressApp().then(({ app, server, cache }) => {
         });
     }));
     // Twitter userinfo
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterUserInfo}`, responser(() => {
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterUserInfo}`, responsor(() => {
         return cacher({
             cache,
             key: 'twitter_userinfo',
@@ -1220,7 +1210,7 @@ createExpressApp().then(({ app, server, cache }) => {
         });
     }));
     // Twitter newest tweets
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterTweets}`, responser(() => {
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterTweets}`, responsor(() => {
         return cacher({
             cache,
             key: 'twitter_tweets',
@@ -1230,9 +1220,9 @@ createExpressApp().then(({ app, server, cache }) => {
         });
     }));
     // Twitter tweets calendar
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterCalendar}`, responser(() => getTwitterCalendar()));
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterCalendar}`, responsor(() => getTwitterCalendar()));
     // Instagram newest medias
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMedias}`, responser(() => {
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMedias}`, responsor(() => {
         return cacher({
             cache,
             key: 'instagram',
@@ -1242,9 +1232,9 @@ createExpressApp().then(({ app, server, cache }) => {
         });
     }));
     // Instagram calendar
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramCalendar}`, responser(() => getInstagramCalendar()));
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramCalendar}`, responsor(() => getInstagramCalendar()));
     // YouTube platlists
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`, responser(() => {
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`, responsor(() => {
         return cacher({
             cache,
             key: 'youtube_playlist',
@@ -1259,7 +1249,7 @@ createExpressApp().then(({ app, server, cache }) => {
         if (!playlistID || typeof playlistID !== 'string') {
             return erroror(response, 'Invalid params');
         }
-        responser(() => {
+        responsor(() => {
             return cacher({
                 cache,
                 key: `youtube_playlist_${playlistID}`,

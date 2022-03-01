@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.28
+* Surmon.me v3.6.29
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -211,16 +211,6 @@ const META = Object.freeze({
     domain: 'surmon.me',
     author: 'Surmon'
 });
-Object.freeze([
-    {
-        name: '吕立青的博客',
-        url: 'https://blog.jimmylv.info'
-    },
-    {
-        name: `nighca's log`,
-        url: 'https://nighca.me'
-    }
-]);
 Object.freeze([
     {
         name: 'iconfont',
