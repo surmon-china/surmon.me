@@ -133,6 +133,9 @@
               universalStore.addFeedback(result.result)
               state.submitted = true
             })
+            .catch((error: any) => {
+              alert(error)
+            })
             .finally(() => {
               state.submitting = false
             })
