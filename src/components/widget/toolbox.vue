@@ -165,7 +165,7 @@
           }
         }
 
-        @keyframes feedback-icon {
+        @keyframes feedback-button {
           0% {
             background-position: 92% 0%;
           }
@@ -179,12 +179,12 @@
 
         .feedback {
           color: $white;
+          opacity: 0.8;
           background-color: $primary-lighter;
           background: linear-gradient(1deg, $surmon, #9d0f98);
           background-size: 400% 400%;
-          animation: feedback-icon 3s ease infinite;
+          animation: feedback-button 3s ease infinite;
           transition: opacity $transition-time-fast;
-          opacity: 0.8;
 
           .iconfont {
             display: inline-block;
