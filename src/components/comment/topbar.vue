@@ -183,7 +183,7 @@
       }
 
       const handleSort = (target: any) => {
-        gtag?.event('sort_switch', {
+        gtag?.event('comment_sort_switch', {
           event_category: GAEventCategories.Comment
         })
 

@@ -56,7 +56,7 @@
       }
 
       const handleFeedback = () => {
-        gtag?.event('feedback', {
+        gtag?.event('feedback_modal', {
           event_category: GAEventCategories.Widget
         })
         globalState.toggleSwitcher('feedback', true)

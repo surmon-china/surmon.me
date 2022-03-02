@@ -271,7 +271,7 @@
 
       const handleFeedback = () => {
         globalState.toggleSwitcher('feedback', true)
-        handleGTagEvent('feedback')
+        handleGTagEvent('feedback_modal')
       }
 
       // MARK: 非常有必要，vite 对 video.source.src 的解析有问题，会将其认为是 asset，而非 static resource，从而编译失败

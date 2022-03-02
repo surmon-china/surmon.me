@@ -59,7 +59,7 @@
       }
 
       const handleHover = () => {
-        gtag?.event('calendar', {
+        gtag?.event('aggregate_calendar', {
           event_category: GAEventCategories.About
         })
       }
