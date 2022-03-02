@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.6.30 (2022-03-02)
+
+**Feature**
+
+- Add feedback widget
+
 ### v3.6.27 (2022-02-20)
 
 **Feature**

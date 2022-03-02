@@ -30,7 +30,7 @@
     setup() {
       const { i18n, gtag, globalState, isDarkTheme } = useEnhancer()
       const wallpaperStore = useWallpaperStore()
-      const isOnWallpaper = computed(() => globalState.switchBox.wallpaper)
+      const isOnWallpaper = computed(() => globalState.switcher.wallpaper)
       const wallpapers = computed(() => wallpaperStore.papers(i18n.language.value as Language))
 
       const toggleWallpaper = () => {
@@ -39,7 +39,7 @@
         })
 
         if (wallpapers.value?.length) {
-          globalState.switchTogglers.wallpaper()
+          globalState.toggleSwitcher('wallpaper', true)
         } else {
           alert('Something went wrong！')
         }

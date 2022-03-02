@@ -34,19 +34,16 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useMetaStore } from '/@/stores/meta'
   import { LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
   import { scrollTo, Easing } from '/@/utils/scroller'
   import { scrollToTop } from '/@/utils/effects'
-  import { emailLink } from '/@/transforms/email'
   import { VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'Toolbox',
     setup() {
-      const { i18n, gtag } = useEnhancer()
-      const metaStore = useMetaStore()
+      const { i18n, gtag, globalState } = useEnhancer()
 
       const animationFrameID = ref(0)
       const isTopButtonMouseOver = ref(false)
@@ -62,8 +59,7 @@
         gtag?.event('feedback', {
           event_category: GAEventCategories.Widget
         })
-
-        window.open(emailLink({ email: metaStore.appOptions.data?.site_email! }))
+        globalState.toggleSwitcher('feedback', true)
       }
 
       const slowMoveToAnyWhere = () => {
@@ -169,10 +165,33 @@
           }
         }
 
+        @keyframes feedback-icon {
+          0% {
+            background-position: 92% 0%;
+          }
+          50% {
+            background-position: 9% 100%;
+          }
+          100% {
+            background-position: 92% 0%;
+          }
+        }
+
         .feedback {
+          color: $white;
           background-color: $primary-lighter;
-          color: $text-reversal;
+          background: linear-gradient(1deg, $surmon, #9d0f98);
+          background-size: 400% 400%;
+          animation: feedback-icon 3s ease infinite;
+          transition: opacity $transition-time-fast;
+          opacity: 0.8;
+
+          .iconfont {
+            display: inline-block;
+          }
+
           &:hover {
+            opacity: 1;
             background-color: $primary;
           }
         }

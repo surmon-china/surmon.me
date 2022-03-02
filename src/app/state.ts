@@ -118,11 +118,15 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     }
   })
 
-  // Switchers
-  const switchBox = reactive({
+  // Global switchers
+  const switcher = reactive({
     wallpaper: false,
-    sponsorModal: false
+    sponsor: false,
+    feedback: false
   })
+  const toggleSwitcher = (key: keyof typeof switcher, value: boolean) => {
+    switcher[key] = value
+  }
 
   // export state
   const toRawState = (): GlobalRawState => ({
@@ -146,16 +150,9 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     // Device state
     userAgent: readonly(userAgent),
     imageExt,
-    // switch
-    switchBox: readonly(switchBox),
-    switchTogglers: {
-      sponsorModal() {
-        switchBox.sponsorModal = !switchBox.sponsorModal
-      },
-      wallpaper() {
-        switchBox.wallpaper = !switchBox.wallpaper
-      }
-    }
+    // Global switchers
+    switcher: readonly(switcher),
+    toggleSwitcher
   }
 
   return {

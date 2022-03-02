@@ -68,6 +68,8 @@ export const enLangMap: LanguageMap = {
   [LanguageKey.COMMENT_POST_ERROR_CONTENT]: 'Content requirements are within 3000 words!',
   [LanguageKey.QUERY_PARAMS_ERROR]: 'Invalid query params: ',
   [LanguageKey.POST_ACTION_ERROR]: 'Failed! Get error detail in console',
+  [LanguageKey.SUBMIT]: 'Submit',
+  [LanguageKey.SUBMITTING]: 'Submitting...',
   [LanguageKey.MOMENT_AM]: 'AM',
   [LanguageKey.MOMENT_PM]: 'PM',
   [LanguageKey.MOMENT_JUST_NOW]: 'Just now',

@@ -1,7 +1,7 @@
 const path = require('path')
 const builtinModules = require('builtin-modules')
-const packageJSON = require('../package.json')
 const { build } = require('vite')
+const packageJSON = require('../package.json')
 
 exports.bundleServerRender = async (paths) => {
   console.info('Server render bundling...\n')

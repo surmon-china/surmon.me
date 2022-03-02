@@ -19,7 +19,7 @@ const tunnel = axios.create({
 
 tunnel.interceptors.response.use((response) => response.data)
 
-const service = {
+export default {
   $: tunnel,
   request: <T = any>(...args: Parameters<AxiosInstance['request']>): Promise<T> => {
     return tunnel.request(...args)
@@ -28,5 +28,3 @@ const service = {
     return tunnel.get(module, { params })
   }
 }
-
-export default service

@@ -111,7 +111,7 @@
       const likes = computed(() => props.article.meta.likes)
 
       const handleOpenSponsor = () => {
-        globalState.switchTogglers.sponsorModal()
+        globalState.toggleSwitcher('sponsor', true)
         gtag?.event('article_sponsor', {
           event_category: GAEventCategories.Article
         })

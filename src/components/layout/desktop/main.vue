@@ -3,11 +3,19 @@
     <background />
     <wallflower />
     <client-only>
-      <popup :visible="isOnSponsorModal" :border="false" @close="handleSponsorModalClose">
+      <popup :visible="switcher.sponsor" :border="false" @close="handleSponsorModalClose">
         <iframe
           :style="{ width: '600px', height: '200px', borderRadius: '4px' }"
           :src="VALUABLE_LINKS.SPONSOR"
         />
+      </popup>
+      <popup
+        :visible="switcher.feedback"
+        :mask-close="false"
+        :scroll-close="false"
+        @close="handleFeedbackModalClose"
+      >
+        <feedback @close="handleFeedbackModalClose" />
       </popup>
     </client-only>
     <template v-if="!layoutColumn.isFull">
@@ -68,11 +76,13 @@
   import Background from '/@/components/widget/background.vue'
   import Share from '/@/components/widget/share.vue'
   import Toolbox from '/@/components/widget/toolbox.vue'
+  import Feedback from '/@/components/widget/feedback.vue'
 
   export default defineComponent({
     name: 'DesktopMain',
     components: {
       Share,
+      Feedback,
       Wallpaper,
       MusicPlayerHandle,
       Toolbox,
@@ -85,22 +95,25 @@
     },
     setup() {
       const { route, globalState } = useEnhancer()
-      const isOnSponsorModal = computed(() => globalState.switchBox.sponsorModal)
-      const handleSponsorModalClose = () => {
-        globalState.switchTogglers.sponsorModal()
-      }
       const handlePageTransitionDone = () => {
         globalState.setLayoutColumn(getLayoutByRouteMeta(route.meta))
+      }
+      const handleSponsorModalClose = () => {
+        globalState.toggleSwitcher('sponsor', false)
+      }
+      const handleFeedbackModalClose = () => {
+        globalState.toggleSwitcher('feedback', false)
       }
 
       return {
         MAIN_ELEMENT_ID,
         MAIN_CONTENT_ELEMENT_ID,
         VALUABLE_LINKS,
-        isOnSponsorModal,
+        switcher: globalState.switcher,
         layoutColumn: globalState.layoutColumn,
         handlePageTransitionDone,
-        handleSponsorModalClose
+        handleSponsorModalClose,
+        handleFeedbackModalClose
       }
     }
   })

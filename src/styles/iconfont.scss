@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
-  src: url('//at.alicdn.com/t/font_64825_er7zbrwbqlq.woff2?t=1645365450300') format('woff2'),
-    url('//at.alicdn.com/t/font_64825_er7zbrwbqlq.woff?t=1645365450300') format('woff'),
-    url('//at.alicdn.com/t/font_64825_er7zbrwbqlq.ttf?t=1645365450300') format('truetype');
+  src: url('//at.alicdn.com/t/font_64825_nat7uap6aq.woff2?t=1646221136409') format('woff2'),
+    url('//at.alicdn.com/t/font_64825_nat7uap6aq.woff?t=1646221136409') format('woff'),
+    url('//at.alicdn.com/t/font_64825_nat7uap6aq.ttf?t=1646221136409') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-feedback:before {
+  content: '\e7da';
 }
 
 .icon-switch:before {

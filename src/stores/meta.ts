@@ -7,7 +7,7 @@
 import { defineStore } from 'pinia'
 import nodepress from '/@/services/nodepress'
 import { UniversalKeyValue } from '/@/constants/state'
-import { useUniversalStore } from './universal'
+import { useUniversalStore, UserType } from './universal'
 
 export interface MerchItemConfig {
   name: string
@@ -104,7 +104,7 @@ export const useMetaStore = defineStore('meta', {
     fetchAdminInfo() {
       this.adminInfo.fetching = true
       return nodepress
-        .get('/auth/admin')
+        .get<AdminInfo>('/auth/admin')
         .then((response) => {
           this.adminInfo.data = response.result
         })
@@ -120,7 +120,7 @@ export const useMetaStore = defineStore('meta', {
 
       this.appOptions.fetching = true
       return nodepress
-        .get('/option')
+        .get<AppOption>('/option')
         .then((response) => {
           this.appOptions.data = response.result
         })
@@ -135,6 +135,17 @@ export const useMetaStore = defineStore('meta', {
         if (this.appOptions.data) {
           this.appOptions.data.meta.likes = response.result
         }
+      })
+    },
+
+    postFeedback(feedback: { emotion: number; content: string }) {
+      const universalStore = useUniversalStore()
+      const authorName = universalStore.author?.name || null
+      return nodepress.post('/feedback', {
+        ...feedback,
+        tid: 0,
+        user_name: authorName ? `${authorName} (${UserType[universalStore.user.type]})` : null,
+        user_email: universalStore.author?.email || null
       })
     }
   }

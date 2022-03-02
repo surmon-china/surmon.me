@@ -67,6 +67,8 @@ export const zhLangMap: LanguageMap = {
   [LanguageKey.COMMENT_POST_ERROR_CONTENT]: '内容需要在 3000 字以内',
   [LanguageKey.QUERY_PARAMS_ERROR]: '请求参数错误：',
   [LanguageKey.POST_ACTION_ERROR]: '操作失败，详细原因 > 控制台',
+  [LanguageKey.SUBMIT]: '提交',
+  [LanguageKey.SUBMITTING]: '提交中...',
   [LanguageKey.MOMENT_AM]: '上午',
   [LanguageKey.MOMENT_PM]: '下午',
   [LanguageKey.MOMENT_JUST_NOW]: '刚刚',

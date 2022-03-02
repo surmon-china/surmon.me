@@ -69,6 +69,8 @@ export enum LanguageKey {
   COMMENT_POST_ERROR_CONTENT = 'comment-submit-failed-of-content-error',
   QUERY_PARAMS_ERROR = 'query-params-error',
   POST_ACTION_ERROR = 'post-requiest-failed-of-other-error',
+  SUBMIT = 'submit-data',
+  SUBMITTING = 'submitting',
   MOMENT_AM = 'moment-am',
   MOMENT_PM = 'moment-pm',
   MOMENT_JUST_NOW = 'moment-just-now',

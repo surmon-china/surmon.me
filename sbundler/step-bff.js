@@ -1,7 +1,7 @@
 const path = require('path')
 const builtinModules = require('builtin-modules')
-const packageJSON = require('../package.json')
 const { bundle } = require('@surmon-china/libundler')
+const packageJSON = require('../package.json')
 
 exports.bundleBFFServer = (paths) => {
   console.log('\nBFF server bundling...\n')

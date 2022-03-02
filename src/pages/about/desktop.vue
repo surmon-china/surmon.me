@@ -73,11 +73,14 @@
           <divider class="divider" type="vertical" />
           <span class="text"><i18n v-bind="i18ns.TelegramGroup" /></span>
         </ulink>
-        <button class="item sponsor" @click="handleSponsor">
-          <i class="iconfont icon-heart" />
-          <divider class="divider" type="vertical" />
-          <span class="text"><i18n zh="赠瑰留香" en="Sponsor Me" /></span>
-        </button>
+        <div class="center">
+          <button class="mini sponsor" @click="handleSponsor">
+            <i class="iconfont icon-heart" />
+          </button>
+          <button class="mini feedback" @click="handleFeedback">
+            <i class="iconfont icon-mail-plane" />
+          </button>
+        </div>
         <ulink class="item spotify" :href="VALUABLE_LINKS.SPOTIFY">
           <i class="iconfont icon-spotify" />
           <divider class="divider" type="vertical" />
@@ -262,8 +265,13 @@
       }
 
       const handleSponsor = () => {
-        globalState.switchTogglers.sponsorModal()
+        globalState.toggleSwitcher('sponsor', true)
         handleGTagEvent('sponsor_modal')
+      }
+
+      const handleFeedback = () => {
+        globalState.toggleSwitcher('feedback', true)
+        handleGTagEvent('feedback')
       }
 
       // MARK: 非常有必要，vite 对 video.source.src 的解析有问题，会将其认为是 asset，而非 static resource，从而编译失败
@@ -293,6 +301,7 @@
         appOptions,
         handleGTagEvent,
         handleSponsor,
+        handleFeedback,
         handleOpenMap
       }
     }
@@ -550,6 +559,30 @@
           font-weight: bold;
         }
       }
+
+      .center {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: $lg-gap;
+
+        .mini {
+          &.sponsor {
+            --item-primary: #{$red};
+          }
+          &.feedback {
+            --item-primary: #{$surmon};
+          }
+
+          @include common-bg-module($transition-time-fast);
+          @include radius-box($lg-radius);
+          color: var(--item-primary);
+          font-size: $font-size-h2;
+          &:hover {
+            color: $white;
+            background-color: var(--item-primary);
+          }
+        }
+      }
     }
 
     .links {
@@ -581,9 +614,6 @@
         }
         &.music-163 {
           --item-primary: #{$music163-primary};
-        }
-        &.sponsor {
-          --item-primary: #{$red};
         }
       }
     }

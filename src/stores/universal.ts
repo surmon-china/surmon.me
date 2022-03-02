@@ -32,7 +32,9 @@ export const useUniversalStore = defineStore('universal', {
       likedPages: [] as number[],
       likedComments: [] as number[],
       dislikedComments: [] as number[]
-    }
+    },
+    // feedback history
+    feedbacks: [] as any[]
   }),
   getters: {
     isLikedPage: (state) => (id: number) => state.vote.likedPages.includes(id),
@@ -60,6 +62,9 @@ export const useUniversalStore = defineStore('universal', {
     },
     likePage(id: number) {
       this.vote.likedPages.push(id)
+    },
+    addFeedback(data) {
+      this.feedbacks.push(data)
     },
     fromStorage() {
       try {

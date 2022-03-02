@@ -1,7 +1,7 @@
 const path = require('path')
 const builtinModules = require('builtin-modules')
-const packageJSON = require('../package.json')
 const { bundle } = require('@surmon-china/libundler')
+const packageJSON = require('../package.json')
 
 exports.bundleSLSServer = (paths) => {
   console.log('\nServerless server bundling...\n')
