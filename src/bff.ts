@@ -98,7 +98,7 @@ createExpressApp().then(({ app, server, cache }) => {
 
   // Bing wallpapers
   app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`,
+    `${BFF_TUNNEL_PREFIX}/${TunnelModule.BingWallpaper}`,
     responsor(() => {
       return cacher({
         cache,

@@ -62,7 +62,7 @@
     </div>
   </div>
   <client-only>
-    <popup :scroll-close="false" :visible="isOnPlayerModel" @close="togglePlayerModel">
+    <popup v-model:visible="isOnPlayerModel" :scroll-close="false">
       <music-player @close="togglePlayerModel" />
     </popup>
   </client-only>

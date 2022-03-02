@@ -9,8 +9,6 @@ import { TunnelModule } from '/@/constants/tunnel'
 import { Language } from '/@/language'
 import tunnel from '/@/services/tunnel'
 
-export const WALLPAPER_API_PATH = '/wallpaper/list'
-
 export const useWallpaperStore = defineStore('wallpaper', {
   state: () => ({
     fetching: false,
@@ -32,7 +30,7 @@ export const useWallpaperStore = defineStore('wallpaper', {
 
       this.fetching = true
       return tunnel
-        .dispatch(TunnelModule.Wallpaper)
+        .dispatch(TunnelModule.BingWallpaper)
         .then((response) => {
           this.wallpapers = response
         })

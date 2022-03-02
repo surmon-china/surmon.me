@@ -12,7 +12,7 @@ export enum TunnelModule {
   YouTubeVideoList = 'youtube_video_list',
   InstagramMedias = 'instagram_medias',
   InstagramCalendar = 'instagram_calendar',
-  Wallpaper = 'wallpaper',
+  BingWallpaper = 'bing_wallpaper',
   GitHubRepositories = 'github_repositories',
   GitHubContributions = 'github_contributions',
   NetEaseMusic = 'netease_music'

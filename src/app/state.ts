@@ -120,7 +120,6 @@ export const createGlobalState = (config: GlobalStateConfig) => {
 
   // Global switchers
   const switcher = reactive({
-    wallpaper: false,
     sponsor: false,
     feedback: false
   })

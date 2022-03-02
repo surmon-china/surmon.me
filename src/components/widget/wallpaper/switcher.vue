@@ -1,6 +1,6 @@
 <template>
   <div id="wallpaper">
-    <div class="switcher" :class="{ dark: isDarkTheme }" @click="toggleWallpaper">
+    <div class="switcher" :class="{ dark: isDarkTheme }" @click="handleOpenWallpaper">
       <div class="title">
         <i class="iconfont icon-bing" />
         <span class="text">BING</span>
@@ -8,14 +8,14 @@
     </div>
   </div>
   <client-only>
-    <popup :visible="isOnWallpaper" @close="toggleWallpaper">
-      <wallpapers @close="toggleWallpaper" />
+    <popup v-model:visible="isOnWallpaper" :mask-close="false" :scroll-close="false">
+      <wallpapers @close="handleCloseWallpaper" />
     </popup>
   </client-only>
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
+  import { defineComponent, ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useWallpaperStore } from '/@/stores/wallpaper'
   import { GAEventCategories } from '/@/constants/gtag'
@@ -28,18 +28,21 @@
       Wallpapers
     },
     setup() {
-      const { i18n, gtag, globalState, isDarkTheme } = useEnhancer()
+      const { i18n, gtag, isDarkTheme } = useEnhancer()
       const wallpaperStore = useWallpaperStore()
-      const isOnWallpaper = computed(() => globalState.switcher.wallpaper)
       const wallpapers = computed(() => wallpaperStore.papers(i18n.language.value as Language))
+      const isOnWallpaper = ref(false)
+      const handleCloseWallpaper = () => {
+        isOnWallpaper.value = false
+      }
 
-      const toggleWallpaper = () => {
-        gtag?.event('wallpaper', {
+      const handleOpenWallpaper = () => {
+        gtag?.event('wallpaper_modal', {
           event_category: GAEventCategories.Widget
         })
 
         if (wallpapers.value?.length) {
-          globalState.toggleSwitcher('wallpaper', true)
+          isOnWallpaper.value = true
         } else {
           alert('Something went wrong！')
         }
@@ -48,7 +51,8 @@
       return {
         isDarkTheme,
         isOnWallpaper,
-        toggleWallpaper
+        handleOpenWallpaper,
+        handleCloseWallpaper
       }
     }
   })
