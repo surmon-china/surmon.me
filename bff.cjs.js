@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.32
+* Surmon.me v3.6.33
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -32,7 +32,7 @@ var TunnelModule;
     TunnelModule["YouTubeVideoList"] = "youtube_video_list";
     TunnelModule["InstagramMedias"] = "instagram_medias";
     TunnelModule["InstagramCalendar"] = "instagram_calendar";
-    TunnelModule["Wallpaper"] = "wallpaper";
+    TunnelModule["BingWallpaper"] = "bing_wallpaper";
     TunnelModule["GitHubRepositories"] = "github_repositories";
     TunnelModule["GitHubContributions"] = "github_contributions";
     TunnelModule["NetEaseMusic"] = "netease_music";
@@ -1154,7 +1154,7 @@ createExpressApp().then(({ app, server, cache }) => {
         }
     });
     // Bing wallpapers
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.Wallpaper}`, responsor(() => {
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.BingWallpaper}`, responsor(() => {
         return cacher({
             cache,
             key: 'wallpaper',
