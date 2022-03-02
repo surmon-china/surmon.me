@@ -10,7 +10,8 @@
           :to="menu.route"
           exact
         >
-          <i class="iconfont" :class="menu.icon"></i>
+          <uimage v-if="menu.imageIcon" class="image-icon" :src="menu.imageIcon" />
+          <i v-else class="iconfont" :class="menu.icon"></i>
           <span class="text">
             <i18n :k="menu.i18nKey" />
           </span>
@@ -116,15 +117,25 @@
         will-change: background-color;
         transition: background-color $transition-time-fast * 0.6;
         @include radius-box($sm-radius);
-
+        &:last-child {
+          margin-bottom: 0;
+        }
         &:hover {
           color: $primary-lighter;
           background-color: $module-bg-translucent;
         }
 
+        &.link-active {
+          color: $primary;
+          background-color: $module-bg-lighter;
+
+          &.guestbook {
+            background: linear-gradient(to bottom, $module-bg-lighter, transparent);
+          }
+        }
+
         .newscript {
           margin-left: $sm-gap;
-
           .iconfont {
             font-size: $font-size-small;
           }
@@ -132,7 +143,6 @@
 
         .superscript {
           margin-left: $sm-gap;
-
           .iconfont {
             width: auto;
             margin-right: 0;
@@ -145,23 +155,14 @@
         }
 
         &.app {
-          color: $primary;
-          .iconfont {
-            color: $primary;
-          }
+          color: $surmon;
         }
 
-        &:last-child {
-          margin-bottom: 0;
-        }
-
-        &.link-active {
-          color: $primary;
-          background-color: $module-bg-lighter;
-
-          &.guestbook {
-            background: linear-gradient(to bottom, $module-bg-lighter, transparent);
-          }
+        .image-icon {
+          width: 1em;
+          height: 1em;
+          margin-right: $gap;
+          border-radius: $xs-radius;
         }
 
         .iconfont {

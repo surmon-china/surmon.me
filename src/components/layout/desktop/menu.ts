@@ -1,12 +1,14 @@
+import { VALUABLE_LINKS } from '/@/config/app.config'
+import { LanguageKey } from '/@/language'
 import { RouteName, CategorySlug } from '/@/app/router'
 import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
-import { LanguageKey } from '../../../language'
-import { VALUABLE_LINKS } from '/@/config/app.config'
+import { getTargetCDNURL } from '/@/transforms/url'
 
 export interface MenuItem {
   id: string
   icon: string
   i18nKey: LanguageKey
+  imageIcon?: string
   divider?: boolean
   newWindow?: boolean
   hot?: boolean
@@ -77,6 +79,7 @@ export const menus: Array<MenuItem> = [
     route: getPageRoute(RouteName.App),
     divider: true,
     icon: 'icon-app',
+    imageIcon: getTargetCDNURL('/images/page-app/logo.png'),
     i18nKey: LanguageKey.PAGE_APP
   },
   {

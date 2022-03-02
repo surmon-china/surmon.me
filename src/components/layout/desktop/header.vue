@@ -41,7 +41,8 @@
             :to="menu.route"
             exact
           >
-            <i class="iconfont" :class="menu.icon"></i>
+            <uimage v-if="menu.imageIcon" class="image-icon" :src="menu.imageIcon" />
+            <i v-else class="iconfont" :class="menu.icon"></i>
             <span class="text">
               <i18n :k="menu.i18nKey" />
             </span>
@@ -294,6 +295,13 @@
               padding-bottom: 4px;
               border-bottom: 2px solid;
             }
+          }
+
+          .image-icon {
+            width: 1em;
+            height: 1em;
+            margin-right: $sm-gap;
+            border-radius: $xs-radius;
           }
 
           > .iconfont {

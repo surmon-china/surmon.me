@@ -24,6 +24,7 @@
       >
         <ulink class="content" :href="ad.url">
           <uimage :src="ad.src" alt="aliyun-ad" />
+          <i class="iconfont icon-ad"></i>
         </ulink>
       </swiper-slide>
     </swiper>
@@ -98,12 +99,21 @@
 
         .swiper-slide {
           .content {
+            display: block;
             width: 100%;
             height: 100%;
+            position: relative;
 
             img {
               width: 100%;
               height: auto;
+            }
+
+            .iconfont {
+              position: absolute;
+              bottom: $sm-gap;
+              right: $gap;
+              color: $white;
             }
           }
         }

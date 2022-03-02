@@ -53,7 +53,7 @@
           <i18n :k="LanguageKey.PAGE_GUESTBOOK" />
         </router-link>
         <router-link class="item app" :to="getPageRoute(RouteName.App)">
-          <i class="iconfont icon-app"></i>
+          <uimage cdn class="icon" src="/images/page-app/logo.png" />
           <i18n :k="LanguageKey.PAGE_APP" />
         </router-link>
       </nav>
@@ -203,12 +203,6 @@
           text-decoration: none;
           font-weight: 700;
           color: $white;
-
-          &.app {
-            margin-top: $gap;
-            color: $surmon;
-          }
-
           &:last-child {
             margin-bottom: 0;
           }
@@ -217,6 +211,19 @@
             color: $primary;
             font-weight: bold;
             background-color: $body-bg;
+          }
+
+          &.app {
+            display: flex;
+            align-items: center;
+            margin-top: $gap;
+            color: $surmon;
+            .icon {
+              width: 1em;
+              height: 1em;
+              margin-right: 1em;
+              border-radius: $xs-radius;
+            }
           }
 
           .iconfont {
