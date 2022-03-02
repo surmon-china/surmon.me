@@ -18,6 +18,14 @@ declare global {
   }
 }
 
+const DEFAULT_STATE = Object.freeze({
+  visible: false,
+  isImage: false,
+  border: true,
+  maskClose: true,
+  scrollClose: true
+})
+
 const createPopupStore = () => {
   const image = reactive({
     src: null as null | string,
@@ -25,14 +33,8 @@ const createPopupStore = () => {
   })
 
   const state = reactive({
-    visible: false,
-    isImage: false,
-    // UI options
-    border: true,
-    maskClose: true,
-    scrollClose: true,
-    // inner
-    $container: null as null | HTMLElement
+    $container: null as null | HTMLElement,
+    ...DEFAULT_STATE
   })
 
   const hidden = (cb?: () => void) => {
@@ -40,8 +42,7 @@ const createPopupStore = () => {
       cb?.()
       return
     }
-    state.visible = false
-    state.isImage = false
+    Object.assign(state, { ...DEFAULT_STATE })
     image.src = null
     image.attrs = null
     if (cb) {
@@ -72,17 +73,15 @@ const createPopupStore = () => {
     })
   }
 
-  const $setRoot = (element: HTMLElement) => {
-    state.$container = element
-  }
-
   return {
     state: readonly(state),
     image: readonly(image),
     visible,
     hidden,
     vImage,
-    $setRoot
+    $setRoot: (element: HTMLElement) => {
+      state.$container = element
+    }
   }
 }
 
@@ -97,11 +96,9 @@ export const createPopup = (): Popup & Plugin => {
     ...popupStore,
     install(app: App, config: PopupPluginConfig) {
       app.provide(PopupSymbol, popupStore)
-      // @ts-ignore
-      app.component(PopupComponent.name as string, PopupComponent)
-      // @ts-ignore
-      app.component(PopupImageComponent.name as string, PopupImageComponent)
-      app.component(PopupRootComponent.name as string, PopupRootComponent)
+      app.component(PopupComponent.name, PopupComponent)
+      app.component(PopupImageComponent.name, PopupImageComponent)
+      app.component(PopupRootComponent.name!, PopupRootComponent)
       if (config?.exportToGlobal) {
         ;(window as any).$popup = popupStore
       }

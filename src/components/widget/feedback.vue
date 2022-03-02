@@ -56,9 +56,8 @@
           "
         ></textarea>
         <div class="buttons">
-          <button class="item cancel" @click="handleClose">
-            <i class="iconfont icon-cancel" />
-            <i18n zh="取消" en="Cancel" />
+          <button class="item cancel" :disabled="state.submitting" @click="handleClose">
+            <span class="text"><i18n zh="取消" en="Cancel" /></span>
           </button>
           <button
             class="item submit"
@@ -66,7 +65,9 @@
             @click="handleSubmit"
           >
             <i class="iconfont icon-mail-plane" />
-            <i18n :k="state.submitting ? LanguageKey.SUBMITTING : LanguageKey.SUBMIT" />
+            <span class="text">
+              <i18n :k="state.submitting ? LanguageKey.SUBMITTING : LanguageKey.SUBMIT" />
+            </span>
           </button>
         </div>
       </div>
@@ -250,34 +251,41 @@
         justify-content: space-between;
 
         .item {
-          width: 30%;
           height: 3rem;
           display: flex;
           justify-content: center;
           align-items: center;
           border-radius: $mini-radius;
+          &[disabled] {
+            opacity: 0.7;
+          }
+          &:not([disabled]):hover {
+            color: $link-hover;
+          }
+
           &.cancel {
-            color: $text-disabled;
-            border: 1px dashed $text-divider;
-            &:hover {
+            width: 7rem;
+            color: $text-secondary;
+            &:not([disabled]):hover {
               color: $link-color;
-              border-color: $text-secondary;
             }
           }
+
           &.submit {
+            width: 12rem;
             color: $text-secondary;
             background-color: $module-bg-darker-2;
-            &[disabled] {
-              opacity: 0.7;
-            }
             &:not([disabled]):hover {
-              color: $link-hover;
               background-color: $module-bg-darker-3;
             }
           }
 
           .iconfont {
             margin-right: 1em;
+          }
+
+          .text {
+            font-weight: bold;
           }
         }
       }
