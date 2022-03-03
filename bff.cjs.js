@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.6.34
+* Surmon.me v3.7.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -246,7 +246,7 @@ const getSitemapXML = async (archiveData) => {
     return sitemap.streamToPromise(stream.Readable.from(sitemapItemList).pipe(sitemapStream)).then((data) => data.toString());
 };/**
  * @file Outside
- * @module service.outside
+ * @module transform.outside
  * @author Surmon <https://github.com/surmon-china>
  */
 const getGAScriptURL = (measurementID) => {
