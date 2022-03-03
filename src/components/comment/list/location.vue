@@ -50,6 +50,11 @@
   .location {
     display: inline-flex;
     align-items: center;
+    &:hover {
+      .emoji {
+        color: $text;
+      }
+    }
 
     .iconfont {
       margin-right: $xs-gap;
@@ -57,9 +62,7 @@
 
     .emoji {
       margin-right: $xs-gap;
-      color: $text;
       font-size: 130%;
-      opacity: 0.8;
     }
 
     .separator {
