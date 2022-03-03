@@ -1,18 +1,18 @@
 /**
  * @file Markdown parser
- * @module transformer.markdown
+ * @module transform.markdown
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import sanitizeHTML from 'sanitize-html'
 import { marked, Renderer } from 'marked'
+import highlight from '/@/effects/highlight'
 import { TagMap } from '/@/stores/tag'
-import { LOZAD_CLASS_NAME } from '/@/services/lozad'
-import highlight from '/@/services/highlight'
-import relink from '/@/transforms/relink'
+import { LOZAD_CLASS_NAME } from '/@/effects/lozad'
 import { escape } from '/@/transforms/text'
-import { META } from '/@/config/app.config'
+import relink from '/@/transforms/relink'
 import API_CONFIG from '/@/config/api.config'
+import { META } from '/@/config/app.config'
 
 const trimHTML = (html: string) => html.replace(/\s+/g, ' ').replace(/\n/g, ' ')
 interface RendererGetterOption {

@@ -1,20 +1,16 @@
 <template>
   <span class="location">
-    <template v-if="emoji && emojiText">
-      <span class="emoji">{{ emojiText }}</span>
-    </template>
-    <template v-else>
-      <i class="iconfont icon-earth"></i>
-      <span>{{ countryText }}</span>
-      <span class="separator">•</span>
-    </template>
+    <span v-if="emojiText" class="emoji">{{ emojiText }}</span>
+    <i v-else class="iconfont icon-earth"></i>
+    <span>{{ countryText }}</span>
+    <span class="separator">•</span>
     <span class="city">{{ cityText }}</span>
   </span>
 </template>
 
 <script lang="ts">
   import { defineComponent, computed, PropType } from 'vue'
-  import countryFlagEmoji from 'country-flag-emoji'
+  import { countryCodeToEmoji } from '/@/transforms/emoji'
   import { IPLocation } from '/@/stores/comment'
 
   const municipalitys: string[] = ['Shanghai', 'Beijing', 'Tianjin', 'Chongqing', 'Chungking']
@@ -25,22 +21,17 @@
       location: {
         type: Object as PropType<IPLocation>,
         required: true
-      },
-      emoji: {
-        type: Boolean,
-        default: false
       }
     },
     setup(props) {
       const countryText = computed(() => props.location.country_code || props.location.country)
-      const emojiText = computed(() => countryFlagEmoji.get(props.location.country_code)?.emoji)
+      const emojiText = computed(() => countryCodeToEmoji(props.location.country_code))
       const cityText = computed(() => {
         if (props.location.country_code === 'CN') {
           if (municipalitys.includes(props.location.region)) {
             return props.location.region
           }
         }
-
         return props.location.city
       })
 
@@ -57,14 +48,18 @@
   @import 'src/styles/init.scss';
 
   .location {
+    display: inline-flex;
+    align-items: center;
+
     .iconfont {
       margin-right: $xs-gap;
     }
 
     .emoji {
-      margin-right: $sm-gap;
-      color: $text-secondary;
-      font-size: $font-size-base;
+      margin-right: $xs-gap;
+      color: $text;
+      font-size: 130%;
+      opacity: 0.8;
     }
 
     .separator {

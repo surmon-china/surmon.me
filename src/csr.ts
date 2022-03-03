@@ -10,25 +10,25 @@ import 'intersection-observer'
 import { createApp, createSSRApp, computed } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { createVueApp } from '/@/app/main'
+import { LayoutColumn } from '/@/app/state'
 import { getSSRContext } from '/@/universal'
-import gtag from '/@/services/gtag'
-import adsense from '/@/services/adsense'
-import amplitude from '/@/services/amplitude'
-import { getHighlightThemeStyle } from '/@/services/highlight'
-import { getClientLocalTheme, Theme } from '/@/services/theme'
-import { LayoutColumn, getLayoutByRouteMeta } from '/@/services/layout'
-import { createDefer } from '/@/services/defer'
-import { createMusic } from '/@/services/music'
-import { createPopup } from '/@/services/popup'
-import { createLoading } from '/@/services/loading'
-import { consoleSlogan } from '/@/services/slogan'
-import { initCopyrighter } from '/@/services/copyright'
-import { enableBaiduSEOer } from '/@/services/baidu-seo-push'
-import { runTitler, resetTitler } from '/@/services/titler'
-import { exportEmojiRainToGlobal } from '/@/services/emoji-23333'
-import { exportStickyEventsToGlobal } from '/@/services/sticky'
-import { exportAppToGlobal } from '/@/services/exporter'
-import { exportLozadToGlobal } from '/@/services/lozad'
+import gtag from '/@/composables/gtag'
+import adsense from '/@/composables/adsense'
+import { createDefer } from '/@/composables/defer'
+import { createMusic } from '/@/composables/music'
+import { createPopup } from '/@/composables/popup'
+import { createLoading } from '/@/composables/loading'
+import { getClientLocalTheme, Theme } from '/@/composables/theme'
+import amplitude from '/@/effects/amplitude'
+import { consoleSlogan } from '/@/effects/slogan'
+import { exportLozadToGlobal } from '/@/effects/lozad'
+import { initCopyrighter } from '/@/effects/copyright'
+import { exportAppToGlobal } from '/@/effects/exporter'
+import { runTitler, resetTitler } from '/@/effects/titler'
+import { exportStickyEventsToGlobal } from '/@/effects/sticky'
+import { getHighlightThemeStyle } from '/@/effects/highlight'
+import { exportEmojiRainToGlobal } from '/@/effects/emoji-23333'
+import { getLayoutByRouteMeta } from '/@/transforms/layout'
 import { getTargetCDNURL } from '/@/transforms/url'
 import { randomNumber } from '/@/utils/random'
 import { isProd } from '/@/environment'
@@ -36,8 +36,8 @@ import { isSSR } from '/@/app/environment'
 import { Language, LanguageKey } from '/@/language'
 import { GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
 
-import '/@/services/swiper/style'
-import '/@/styles/app.scss'
+import './effects/swiper/style'
+import './styles/app.scss'
 
 // app
 const { app, router, globalState, theme, i18n, meta, store } = createVueApp({
@@ -140,7 +140,6 @@ router.isReady().finally(() => {
 
     // production only
     if (isProd) {
-      enableBaiduSEOer(router)
       consoleSlogan(i18n.t(LanguageKey.APP_SLOGAN)!, store.stores.meta.appOptions.data?.site_email)
     }
   })

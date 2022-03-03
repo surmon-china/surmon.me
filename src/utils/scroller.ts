@@ -4,6 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import { nextTick } from 'vue'
 import BezierEasing from 'bezier-easing'
 
 export const Easing = {
@@ -138,4 +139,16 @@ export const scrollToElementAnchor = (
   if (targetElement) {
     scrollTo(targetElement, duration ?? 200, { offset: offset ?? -76 })
   }
+}
+
+export const scrollToTop = () => {
+  scrollTo('body', 300, { easing: Easing.easeIn })
+}
+
+export const nextScreen = () => {
+  nextTick(() => {
+    scrollTo(window.scrollY + window.innerHeight * 0.68, 300, {
+      easing: Easing['ease-in']
+    })
+  })
 }

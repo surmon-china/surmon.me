@@ -1,6 +1,6 @@
 /**
  * @file Outside
- * @module service.outside
+ * @module transform.outside
  * @author Surmon <https://github.com/surmon-china>
  */
 

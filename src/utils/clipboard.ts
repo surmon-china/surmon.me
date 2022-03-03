@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { enableCopyrighter, disableCopyrighter } from '/@/services/copyright'
+import { enableCopyrighter, disableCopyrighter } from '/@/effects/copyright'
 
 export const read = () => navigator.clipboard.readText()
 export const copy = (text: string) => {

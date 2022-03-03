@@ -64,7 +64,7 @@
   import { defineComponent, ref, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { LanguageKey } from '/@/language'
-  import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import Markdown from '/@/components/common/markdown.vue'
 
   export default defineComponent({

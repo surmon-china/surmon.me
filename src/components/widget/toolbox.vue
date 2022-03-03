@@ -37,7 +37,7 @@
   import { LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
   import { scrollTo, Easing } from '/@/utils/scroller'
-  import { scrollToTop } from '/@/utils/effects'
+  import { scrollToTop } from '/@/utils/scroller'
   import { VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({

@@ -9,17 +9,16 @@ import { RouterHistory } from 'vue-router'
 import API_CONFIG from '/@/config/api.config'
 import { META } from '/@/config/app.config'
 import { Language, LanguageKey, languages } from '/@/language'
-import { createUniversalRouter, RouterCreatorOptions } from './router'
 import { rebirthSSRContext } from '/@/universal'
 import { createUniversalStore } from '/@/stores'
-import { createI18n } from '/@/services/i18n'
-import { createMeta } from '/@/services/meta'
-import { createTheme, Theme } from '/@/services/theme'
-import { LayoutColumn } from '/@/services/layout'
-import interior from '/@/services/interior'
-import { createGlobalState } from './state'
+import { createI18n } from '/@/composables/i18n'
+import { createMeta } from '/@/composables/meta'
+import { createTheme, Theme } from '/@/composables/theme'
 import { NODE_ENV } from '/@/environment'
-import { isSSR } from '/@/app/environment'
+import { isSSR } from './environment'
+import { createUniversalRouter, RouterCreatorOptions } from './router'
+import { createGlobalState, LayoutColumn } from './state'
+import component from './component'
 import App from './index.vue'
 
 console.info(`[APP INITED]:`, { NODE_ENV, mode: isSSR ? 'SSR' : 'SPA' }, API_CONFIG)
@@ -96,7 +95,7 @@ export const createVueApp = (context: ICreatorContext) => {
   app.use(i18n)
   app.use(meta)
   app.use(theme)
-  app.use(interior)
+  app.use(component)
 
   return {
     app,
@@ -106,6 +105,6 @@ export const createVueApp = (context: ICreatorContext) => {
     i18n,
     meta,
     theme,
-    interior
+    component
   }
 }

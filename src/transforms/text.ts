@@ -1,6 +1,6 @@
 /**
  * @file Text transformer
- * @module transformer.text
+ * @module transform.text
  * @author Surmon <https://github.com/surmon-china>
  */
 

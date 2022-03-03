@@ -1,4 +1,4 @@
-import type { MetaResult } from '@/services/meta'
+import type { MetaResult } from '@/composables/meta'
 
 export const resolveTemplate = (config: {
   template: string

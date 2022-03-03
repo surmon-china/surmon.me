@@ -1,6 +1,6 @@
 /**
  * @file Validater
- * @module transformer.validate
+ * @module transform.validate
  * @author Surmon <https://github.com/surmon-china>
  */
 

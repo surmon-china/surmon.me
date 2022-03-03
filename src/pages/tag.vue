@@ -39,7 +39,7 @@
   import { useTagStore, tagEnName } from '/@/stores/tag'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
-  import { nextScreen, scrollToTop } from '/@/utils/effects'
+  import { nextScreen, scrollToTop } from '/@/utils/scroller'
   import ArticleListHeader from '/@/components/flow/desktop/header.vue'
   import ArticleList from '/@/components/flow/desktop/list.vue'
 

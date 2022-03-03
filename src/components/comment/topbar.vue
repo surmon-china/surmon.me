@@ -110,15 +110,14 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { UserType, useUniversalStore } from '/@/stores/universal'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import { LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
   import { SortType } from '/@/constants/state'
-  import { LanguageKey } from '/@/language'
-  import nodepress from '/@/services/nodepress'
+  import { UserType, useUniversalStore } from '/@/stores/universal'
+  import { useEnhancer } from '/@/app/enhancer'
   import { openWindow } from '/@/utils/opener'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-  import { META } from '/@/config/app.config'
+  import nodepress from '/@/services/nodepress'
   import { CommentEvents } from './helper'
 
   export default defineComponent({

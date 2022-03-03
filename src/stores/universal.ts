@@ -5,9 +5,9 @@
  */
 
 import { defineStore } from 'pinia'
-import { Author } from './comment'
-import { getJSON, setJSON, remove } from '/@/services/storage'
+import { getJSON, setJSON, remove } from '/@/utils/storage'
 import nodepress from '/@/services/nodepress'
+import { Author } from './comment'
 
 export type UserLocalProfile = Author
 export enum UserType {

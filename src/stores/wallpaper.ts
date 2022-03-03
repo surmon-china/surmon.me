@@ -5,8 +5,8 @@
  */
 
 import { defineStore } from 'pinia'
-import { TunnelModule } from '/@/constants/tunnel'
 import { Language } from '/@/language'
+import { TunnelModule } from '/@/constants/tunnel'
 import tunnel from '/@/services/tunnel'
 
 export const useWallpaperStore = defineStore('wallpaper', {

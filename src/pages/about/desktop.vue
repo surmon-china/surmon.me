@@ -77,6 +77,7 @@
           <button class="mini sponsor" @click="handleSponsor">
             <i class="iconfont icon-heart" />
           </button>
+          <div class="bridge"></div>
           <button class="mini feedback" @click="handleFeedback">
             <i class="iconfont icon-mail-plane" />
           </button>
@@ -561,9 +562,20 @@
       }
 
       .center {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-gap: $lg-gap;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .bridge {
+          width: $gap * 2;
+          height: 2rem;
+          background: linear-gradient(
+            to right,
+            $module-bg-darker-1,
+            $module-bg,
+            $module-bg-darker-1
+          );
+        }
 
         .mini {
           &.sponsor {
@@ -573,10 +585,12 @@
             --item-primary: #{$surmon};
           }
 
-          @include common-bg-module($transition-time-fast);
-          @include radius-box($lg-radius);
+          flex: 1;
+          height: 100%;
           color: var(--item-primary);
           font-size: $font-size-h2;
+          @include common-bg-module($transition-time-fast);
+          @include radius-box($lg-radius);
           &:hover {
             color: $white;
             background-color: var(--item-primary);

@@ -77,10 +77,10 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { isClient } from '/@/app/environment'
-  import { useMusic } from '/@/services/music'
+  import { useMusic } from '/@/composables/music'
   import { get163MusicSongDetailURL } from '/@/transforms/media'
   import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { isClient } from '/@/app/environment'
 
   export default defineComponent({
     name: 'MusicPlayer',

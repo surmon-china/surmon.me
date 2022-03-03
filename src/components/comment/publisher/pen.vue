@@ -95,7 +95,7 @@
   import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalStore, UserType } from '/@/stores/universal'
-  import { enableCopyrighter, disableCopyrighter } from '/@/services/copyright'
+  import { enableCopyrighter, disableCopyrighter } from '/@/effects/copyright'
   import { focusPosition } from '/@/utils/editable'
   import { insertContent } from '/@/utils/editable'
   import { CommentEvents, EMOJIS } from '../helper'

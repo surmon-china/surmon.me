@@ -90,7 +90,7 @@
   import { useArticleListStore, Article } from '/@/stores/article'
   import { useMetaStore } from '/@/stores/meta'
   import { firstUpperCase } from '/@/transforms/text'
-  import { nextScreen } from '/@/utils/effects'
+  import { nextScreen } from '/@/utils/scroller'
   import ListItem from './item.vue'
   import Mammon from './mammon.vue'
 

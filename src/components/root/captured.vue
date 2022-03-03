@@ -13,10 +13,10 @@
 
 <script lang="ts">
   import { defineComponent, onErrorCaptured } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { RouteName } from '/@/app/router'
   import { LanguageKey } from '/@/language'
-  import { getLayoutByRouteMeta } from '/@/services/layout'
+  import { RouteName } from '/@/app/router'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { getLayoutByRouteMeta } from '/@/transforms/layout'
   import ErrorComponent from './error.vue'
 
   export default defineComponent({

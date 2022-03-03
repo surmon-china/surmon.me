@@ -5,9 +5,9 @@
  */
 
 import { defineStore } from 'pinia'
-import nodepress from '/@/services/nodepress'
 import { UniversalKeyValue } from '/@/constants/state'
 import { useUniversalStore, UserType } from './universal'
+import nodepress from '/@/services/nodepress'
 
 export interface MerchItemConfig {
   name: string

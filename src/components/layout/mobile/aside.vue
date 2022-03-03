@@ -63,14 +63,14 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { RouteName, CategorySlug } from '/@/app/router'
-  import { useUniversalFetch } from '/@/universal'
-  import { useMetaStore } from '/@/stores/meta'
-  import { Theme } from '/@/services/theme'
   import { Language, LanguageKey } from '/@/language'
-  import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
+  import { RouteName, CategorySlug } from '/@/app/router'
+  import { Theme } from '/@/composables/theme'
+  import { useUniversalFetch } from '/@/universal'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useMetaStore } from '/@/stores/meta'
   import { getDefaultAvatar } from '/@/transforms/avatar'
+  import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
   import { VALUABLE_LINKS, META } from '/@/config/app.config'
 
   export default defineComponent({

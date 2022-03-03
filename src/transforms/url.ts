@@ -1,6 +1,6 @@
 /**
  * @file Url transformer
- * @module transformer.url
+ * @module transform.url
  * @author Surmon <https://github.com/surmon-china>
  */
 

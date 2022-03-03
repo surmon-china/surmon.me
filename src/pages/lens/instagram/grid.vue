@@ -32,7 +32,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
+  import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/effects/lozad'
   import { getInstagramImage } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import Gallery from './gallery.vue'

@@ -6,7 +6,6 @@
 
 import { App, inject, ref, computed, reactive, readonly } from 'vue'
 import { INVALID_ERROR } from '/@/constants/error'
-import { LayoutColumn } from '/@/services/layout'
 import { uaParser, isZhUser } from '/@/transforms/ua'
 import { universalRef, onClient } from '/@/universal'
 
@@ -19,6 +18,12 @@ export interface RenderError {
 export enum ImageExt {
   WebP = 'webp',
   Jpg = 'jpeg'
+}
+
+export enum LayoutColumn {
+  Normal = 0,
+  Wide = 1, // 3 column
+  Full = 2 // full page
 }
 
 export interface GlobalRawState {

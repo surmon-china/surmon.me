@@ -73,10 +73,10 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, nextTick, onMounted, PropType } from 'vue'
-  import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
+  import { LanguageKey } from '/@/language'
   import { Article, useArticleDetailStore } from '/@/stores/article'
-  import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
+  import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/effects/lozad'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import Markdown from '/@/components/common/markdown.vue'
 

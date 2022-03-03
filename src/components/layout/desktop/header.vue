@@ -76,10 +76,10 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { LanguageKey } from '/@/language'
+  import { Theme } from '/@/composables/theme'
   import { HEADER_ELEMENT_ID } from '/@/constants/anchor'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { LanguageKey } from '/@/language'
-  import { Theme } from '/@/services/theme'
   import { menus } from './menu'
 
   export default defineComponent({

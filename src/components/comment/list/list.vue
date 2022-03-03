@@ -46,10 +46,9 @@
 <script lang="ts">
   import { defineComponent, ref, onMounted, onBeforeUnmount, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LozadObserver } from '/@/services/lozad'
   import { useUniversalStore } from '/@/stores/universal'
   import { useCommentStore, Comment, CommentTreeItem } from '/@/stores/comment'
-  import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
+  import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/effects/lozad'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
   import { CommentEvents } from '../helper'

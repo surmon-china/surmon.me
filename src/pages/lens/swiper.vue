@@ -32,8 +32,8 @@
 
 <script lang="ts">
   import { defineComponent, ref, reactive, onMounted, onBeforeUnmount, PropType } from 'vue'
-  import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
-  import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/services/lozad'
+  import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/effects/lozad'
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
 
   export default defineComponent({
     name: 'LensListSwiper',

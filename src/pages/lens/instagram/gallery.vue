@@ -69,7 +69,7 @@
 <script lang="ts">
   import { defineComponent, ref, computed, PropType } from 'vue'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
-  import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { getInstagramImage } from '/@/transforms/media'
 
   enum GalleryEvents {

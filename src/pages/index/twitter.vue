@@ -139,7 +139,7 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
-  import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { getTwitterTweetDetailURL } from '/@/transforms/media'
   import { unescape, padStart } from '/@/transforms/text'
 

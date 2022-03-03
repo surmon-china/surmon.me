@@ -61,15 +61,11 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { getLayoutByRouteMeta } from '/@/services/layout'
-  import { MAIN_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
+  import { defineComponent } from 'vue'
   import { VALUABLE_LINKS } from '/@/config/app.config'
-  import NavView from './nav.vue'
-  import AsideView from './aside/index.vue'
-  import HeaderView from './header.vue'
-  import FooterView from './footer.vue'
+  import { MAIN_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { getLayoutByRouteMeta } from '/@/transforms/layout'
   import MusicPlayerHandle from '/@/components/widget/music-player/handle.vue'
   import Wallflower from '/@/components/widget/wallflower/garden.vue'
   import Wallpaper from '/@/components/widget/wallpaper/switcher.vue'
@@ -77,6 +73,10 @@
   import Share from '/@/components/widget/share.vue'
   import Toolbox from '/@/components/widget/toolbox.vue'
   import Feedback from '/@/components/widget/feedback.vue'
+  import NavView from './nav.vue'
+  import AsideView from './aside/index.vue'
+  import HeaderView from './header.vue'
+  import FooterView from './footer.vue'
 
   export default defineComponent({
     name: 'DesktopMain',

@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import type { I18nLanguage, I18nValueRender } from '/@/services/i18n'
+import type { I18nLanguage, I18nValueRender } from '/@/composables/i18n'
 export { LanguageKey } from './key'
 import { LanguageKey } from './key'
 import { zhLangMap } from './lang-zh'

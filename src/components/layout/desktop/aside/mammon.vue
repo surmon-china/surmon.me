@@ -34,7 +34,7 @@
 <script lang="ts">
   import { defineComponent, ref } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import SwiperClass, { Swiper, SwiperSlide } from '/@/services/swiper'
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
 
   export enum AsideMammonEvent {
     Ready = 'ready',

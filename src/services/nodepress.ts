@@ -1,6 +1,6 @@
 /**
- * @file HTTP requester service
- * @module service.http
+ * @file NodePress API service
+ * @module service.nodepress
  * @author Surmon <https://github.com/surmon-china>
  */
 

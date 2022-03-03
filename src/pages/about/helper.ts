@@ -1,6 +1,6 @@
 import { useEnhancer } from '/@/app/enhancer'
 import { Language, LanguageKey } from '/@/language'
-import { I18nLanguageMap } from '/@/services/i18n'
+import { I18nLanguageMap } from '/@/composables/i18n'
 import { firstUpperCase } from '/@/transforms/text'
 import { getDefaultAvatar } from '/@/transforms/avatar'
 import { META } from '/@/config/app.config'

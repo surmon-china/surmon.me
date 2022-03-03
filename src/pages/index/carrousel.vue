@@ -86,7 +86,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { Article } from '/@/stores/article'
   import { LanguageKey } from '/@/language'
-  import { Swiper, SwiperSlide } from '/@/services/swiper'
+  import { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getArticleBannerThumbnailURL } from '/@/transforms/thumbnail'
 

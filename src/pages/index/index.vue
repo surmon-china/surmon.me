@@ -32,7 +32,7 @@
   import { useTwitterStore } from '/@/stores/twitter'
   import { useArticleListStore } from '/@/stores/article'
   import { useMetaStore } from '/@/stores/meta'
-  import { nextScreen } from '/@/utils/effects'
+  import { nextScreen } from '/@/utils/scroller'
   import { LanguageKey } from '/@/language'
   import { META } from '/@/config/app.config'
   import ArticleList from '/@/components/flow/desktop/list.vue'

@@ -28,12 +28,14 @@
             <span class="moderator" v-if="isAdminAuthor">
               <i18n :k="LanguageKey.COMMENT_MODERATOR" />
             </span>
-            <template v-if="comment.ip_location">
-              <comment-location class="location" :location="comment.ip_location" />
-            </template>
-            <template v-if="!hiddenUa">
-              <comment-ua class="ua" v-if="comment.agent" :ua="comment.agent" />
-            </template>
+            <span class="author-info">
+              <template v-if="comment.ip_location">
+                <comment-location :location="comment.ip_location" />
+              </template>
+              <template v-if="comment.agent && !hiddenUa">
+                <comment-user-agent :user-agent="comment.agent" />
+              </template>
+            </span>
           </div>
           <div class="right">
             <span class="flool">#{{ comment.id }}</span>
@@ -124,18 +126,18 @@
   import { firstUpperCase } from '/@/transforms/text'
   import { scrollToElementAnchor } from '/@/utils/scroller'
   import Markdown from '/@/components/common/markdown.vue'
-  import CommentLocation from './location.vue'
   import CommentLink from './link.vue'
-  import CommentUa from './ua.vue'
+  import CommentLocation from './location.vue'
+  import CommentUserAgent from './user-agent.vue'
   import { CommentEvents, getDisqusUserURL } from '../helper'
 
   export default defineComponent({
     name: 'CommentItem',
     components: {
       Markdown,
-      CommentLocation,
       CommentLink,
-      CommentUa
+      CommentLocation,
+      CommentUserAgent
     },
     props: {
       comment: {
@@ -414,14 +416,18 @@
           @include radius-box($xs-radius);
         }
 
-        .ua,
-        .location {
-          color: $text-divider;
+        .author-info {
+          display: inline-flex;
+          align-items: center;
           font-size: $font-size-small;
-        }
+          color: $text-divider;
 
-        .location {
-          margin-right: $gap;
+          > * {
+            margin-right: $gap;
+            &:last-child {
+              margin-right: 0;
+            }
+          }
         }
 
         .flool {

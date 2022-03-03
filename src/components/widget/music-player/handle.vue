@@ -70,11 +70,11 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useMusic } from '/@/composables/music'
   import { isClient } from '/@/app/environment'
-  import { useMusic } from '/@/services/music'
   import MusicPlayer from './player.vue'
 
   export default defineComponent({

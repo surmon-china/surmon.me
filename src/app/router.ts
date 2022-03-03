@@ -11,11 +11,11 @@ import {
   RouterHistory,
   createRouter
 } from 'vue-router'
-import { NOT_FOUND, BAD_REQUEST } from '/@/constants/error'
 import { LanguageKey } from '/@/language'
-import { LayoutColumn } from '/@/services/layout'
+import { NOT_FOUND, BAD_REQUEST } from '/@/constants/error'
 import { isValidDateParam } from '/@/transforms/validate'
-import { scrollToTop } from '/@/utils/effects'
+import { scrollToTop } from '/@/utils/scroller'
+import { LayoutColumn } from './state'
 
 // mobile flow
 import MobileFlow from '/@/components/flow/mobile/index.vue'
