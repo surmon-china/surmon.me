@@ -14,10 +14,10 @@
 
 <script lang="ts">
   import { defineComponent, watch, onBeforeMount } from 'vue'
-  import { useUniversalFetch, onClient } from '/@/universal'
+  import { useUniversalFetch } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { useArticleListStore } from '/@/stores/article'
-  import { nextScreen, scrollToTop } from '/@/utils/scroller'
+  import { scrollToNextScreen } from '/@/utils/scroller'
   import ArticleListHeader from '/@/components/flow/desktop/header.vue'
   import ArticleList from '/@/components/flow/desktop/list.vue'
 
@@ -40,7 +40,6 @@
       meta(() => ({ pageTitle: `${props.date} | Date` }))
 
       const fetchArticles = (params: any) => {
-        onClient(scrollToTop)
         return articleListStore.fetchList(params)
       }
 
@@ -48,7 +47,7 @@
         return fetchArticles({
           date: props.date,
           page: articleListStore.list.pagination.current_page + 1
-        }).then(nextScreen)
+        }).then(scrollToNextScreen)
       }
 
       onBeforeMount(() => {

@@ -90,7 +90,7 @@
   import { useArticleListStore, Article } from '/@/stores/article'
   import { useMetaStore } from '/@/stores/meta'
   import { firstUpperCase } from '/@/transforms/text'
-  import { nextScreen } from '/@/utils/scroller'
+  import { scrollToNextScreen } from '/@/utils/scroller'
   import ListItem from './item.vue'
   import Mammon from './mammon.vue'
 
@@ -173,7 +173,7 @@
         await fetchArticles({
           page: articleListStore.list.pagination.current_page + 1
         })
-        onClient(nextScreen)
+        onClient(scrollToNextScreen)
       }
 
       onBeforeMount(() => {

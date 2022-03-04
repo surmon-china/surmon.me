@@ -13,10 +13,11 @@ body {
   font-size: $font-size-base;
   line-height: $line-height-base;
   user-select: none;
+  // MARK: keep false
+  // scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   // WORKAROUND: for Google AdSense layout
   position: relative !important;
-  scroll-behavior: smooth;
 
   @include scrollbar-style(
     $size: $sm-gap,

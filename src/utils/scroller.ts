@@ -15,101 +15,76 @@ export const Easing = {
   easeInOut: [0.42, 0.0, 0.58, 1.0]
 }
 
-enum ElementEvent {
-  scroll = 'scroll',
-  mousedown = 'mousedown',
-  wheel = 'wheel',
-  DOMMouseScroll = 'DOMMouseScroll',
-  mousewheel = 'mousewheel',
-  keyup = 'keyup',
-  touchmove = 'touchmove'
-}
+const triggerEvents: string[] = [
+  'scroll',
+  'mousedown',
+  'wheel',
+  'DOMMouseScroll',
+  'mousewheel',
+  'keyup',
+  'touchmove'
+]
 
-const _ = {
-  $(selector: string) {
-    return document.querySelector(selector)
-  },
-  on(element: Element, events: ElementEvent[], handler: $TODO) {
-    if (!Array.isArray(events)) {
-      events = [events]
-    }
+const listener = {
+  on(element: Element, events: string[], handler: () => void) {
     events.forEach((event) => {
       element.addEventListener(event, handler, { passive: true })
     })
   },
-  off(element: Element, events: ElementEvent[], handler: $TODO) {
-    if (!Array.isArray(events)) {
-      events = [events]
-    }
+  off(element: Element, events: string[], handler: () => void) {
     events.forEach((event) => {
       element.removeEventListener(event, handler)
     })
   }
 }
 
-export const scrollTo = (target: string | number | Element, duration = 500, options: $TODO) => {
-  options = options || {}
-  options.easing = Easing.ease
+export interface ScrollToElementOptions {
+  target: string | Element
+  offset?: number
+  duration?: number
+  easing?: number[]
+  onCancel?(): void
+  onDone?(): void
+}
 
-  const page = _.$('html, body') as Element
-  const events: ElementEvent[] = [
-    ElementEvent.scroll,
-    ElementEvent.mousedown,
-    ElementEvent.wheel,
-    ElementEvent.DOMMouseScroll,
-    ElementEvent.mousewheel,
-    ElementEvent.keyup,
-    ElementEvent.touchmove
-  ]
+export const scrollToElement = (options: ScrollToElementOptions) => {
+  const { target, onCancel, onDone } = options
+  const offset = options.offset ?? 0
+  const duration = options.duration ?? 500
+  const optionEasing = options.easing ?? Easing.ease
+  const targetElement = typeof target === 'string' ? document.querySelector(target)! : target
+  const bodyElement = document.body
 
   let abort = false
-
-  const abortFn = function () {
+  const whenAbort = () => {
     abort = true
   }
 
-  _.on(page, events, abortFn)
+  listener.on(bodyElement, triggerEvents, whenAbort)
 
-  let elementY = 0
-  const initialY = window.pageYOffset
-
-  if (typeof target === 'number') {
-    elementY = target
-  } else {
-    const element = (typeof target === 'string' ? _.$(target) : target) as Element
-    elementY = initialY + element.getBoundingClientRect().top
+  const whenDone = () => {
+    listener.off(bodyElement, triggerEvents, whenAbort)
+    abort ? onCancel?.() : onDone?.()
   }
 
-  let targetY =
+  const initialY = window.pageYOffset
+  const elementY = initialY + targetElement.getBoundingClientRect().top
+  const targetY =
     document.body.scrollHeight - elementY < window.innerHeight
       ? document.body.scrollHeight - window.innerHeight
       : elementY
 
-  if (options.offset) {
-    targetY += options.offset
-  }
-
-  const diff = targetY - initialY
-  const easing = Reflect.apply(BezierEasing, BezierEasing, options.easing)
-  let start: number
-
-  const done = function () {
-    _.off(page, events, abortFn)
-    if (abort && options.onCancel) {
-      options.onCancel()
-    }
-    if (!abort && options.onDone) {
-      options.onDone()
-    }
-  }
-
+  const diff = targetY + offset - initialY
   if (!diff) {
     return
   }
 
+  const easing = Reflect.apply(BezierEasing, BezierEasing, optionEasing)
+  let start: number
+
   window.requestAnimationFrame(function step(timestamp) {
     if (abort) {
-      return done()
+      return whenDone()
     }
     if (!start) {
       start = timestamp
@@ -124,31 +99,40 @@ export const scrollTo = (target: string | number | Element, duration = 500, opti
     if (time < duration) {
       window.requestAnimationFrame(step)
     } else {
-      done()
+      whenDone()
     }
   })
 }
 
-// default offset: header height
-export const scrollToElementAnchor = (
-  elementID: string,
-  offset?: number | null,
-  duration?: number
-) => {
+export const scrollToAnchor = (elementID: string, offset?: number) => {
   const targetElement = document.getElementById(elementID)
   if (targetElement) {
-    scrollTo(targetElement, duration ?? 200, { offset: offset ?? -76 })
+    scrollToElement({
+      target: targetElement,
+      duration: 200,
+      // default offset: header height
+      offset: offset ?? -74
+    })
   }
 }
 
-export const scrollToTop = () => {
-  scrollTo('body', 300, { easing: Easing.easeIn })
+export const scrollToPageTop = () => {
+  scrollToElement({
+    target: document.body,
+    duration: 280,
+    offset: 0,
+    // MARK: keep ease
+    easing: Easing.ease
+  })
 }
 
-export const nextScreen = () => {
+export const scrollToNextScreen = () => {
   nextTick(() => {
-    scrollTo(window.scrollY + window.innerHeight * 0.68, 300, {
-      easing: Easing['ease-in']
+    scrollToElement({
+      target: document.body,
+      offset: window.scrollY + window.innerHeight * 0.68,
+      duration: 300,
+      easing: Easing.easeIn
     })
   })
 }

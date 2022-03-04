@@ -11,7 +11,7 @@
         <button
           class="to-page-top"
           :title="t(LanguageKey.TO_TOP)"
-          @click="scrollToTop"
+          @click="scrollToPageTop"
           @mouseover="setTopButtonState(true, true)"
           @mouseleave="setTopButtonState(false)"
         >
@@ -20,7 +20,7 @@
         <button
           class="to-page-bottom"
           :title="t(LanguageKey.TO_BOTTOM)"
-          @click="toBottom"
+          @click="scrollToNextScreen"
           @mouseover="setBottomButtonState(true, true)"
           @mouseleave="setBottomButtonState(false)"
         >
@@ -36,8 +36,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { scrollTo, Easing } from '/@/utils/scroller'
-  import { scrollToTop } from '/@/utils/scroller'
+  import { scrollToPageTop, scrollToNextScreen } from '/@/utils/scroller'
   import { VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
@@ -96,12 +95,10 @@
         VALUABLE_LINKS,
         LanguageKey,
         t: i18n.translate,
-        scrollToTop,
+        scrollToPageTop,
+        scrollToNextScreen,
         handleFeedback,
         handleRSS,
-        toBottom() {
-          scrollTo(window.scrollY + window.innerHeight, 300, { easing: Easing.easeIn })
-        },
         setTopButtonState(state: boolean, isStartSlow = false) {
           isTopButtonMouseOver.value = state
           window.cancelAnimationFrame(animationFrameID.value)

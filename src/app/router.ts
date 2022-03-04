@@ -14,7 +14,7 @@ import {
 import { LanguageKey } from '/@/language'
 import { NOT_FOUND, BAD_REQUEST } from '/@/constants/error'
 import { isValidDateParam } from '/@/transforms/validate'
-import { scrollToTop } from '/@/utils/scroller'
+import { scrollToPageTop } from '/@/utils/scroller'
 import { LayoutColumn } from './state'
 
 // mobile flow
@@ -347,9 +347,7 @@ export const createUniversalRouter = (options: RouterCreatorOptions) => {
     strict: true,
     history: options.history,
     linkActiveClass: 'link-active',
-    scrollBehavior(_, __, savedPosition) {
-      return savedPosition || scrollToTop()
-    }
+    scrollBehavior: () => scrollToPageTop()
   })
 
   if (options.beforeMiddleware) {

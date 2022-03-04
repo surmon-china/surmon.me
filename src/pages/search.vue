@@ -20,7 +20,7 @@
   import { useUniversalFetch, onClient } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { useArticleListStore } from '/@/stores/article'
-  import { nextScreen, scrollToTop } from '/@/utils/scroller'
+  import { scrollToNextScreen } from '/@/utils/scroller'
   import ArticleListHeader from '/@/components/flow/desktop/header.vue'
   import ArticleList from '/@/components/flow/desktop/list.vue'
 
@@ -43,7 +43,6 @@
       meta(() => ({ pageTitle: `${props.keyword} | Search` }))
 
       const fetchArticles = (params: any) => {
-        onClient(scrollToTop)
         return articleListStore.fetchList(params)
       }
 
@@ -52,7 +51,7 @@
           keyword: props.keyword,
           page: articleListStore.list.pagination.current_page + 1
         })
-        onClient(nextScreen)
+        onClient(scrollToNextScreen)
       }
 
       onBeforeMount(() => {

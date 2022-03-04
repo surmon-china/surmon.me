@@ -124,7 +124,7 @@
   import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
-  import { scrollToElementAnchor } from '/@/utils/scroller'
+  import { scrollToAnchor } from '/@/utils/scroller'
   import Markdown from '/@/components/common/markdown.vue'
   import CommentLink from './link.vue'
   import CommentLocation from './location.vue'
@@ -260,7 +260,7 @@
       }
 
       const scrollToCommentItem = (commentId: number) => {
-        scrollToElementAnchor(getCommentItemElementID(commentId), -300)
+        scrollToAnchor(getCommentItemElementID(commentId), -300)
       }
 
       return {

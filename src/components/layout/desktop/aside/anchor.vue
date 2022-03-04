@@ -74,7 +74,7 @@
   import * as ANCHORS from '/@/constants/anchor'
   import { LanguageKey } from '/@/language'
   import { useArticleDetailStore } from '/@/stores/article'
-  import { scrollToElementAnchor } from '/@/utils/scroller'
+  import { scrollToAnchor } from '/@/utils/scroller'
 
   export default defineComponent({
     name: 'DesktopAsideAnchor',
@@ -94,7 +94,7 @@
       })
 
       const handleAnchor = (elementID: string) => {
-        scrollToElementAnchor(elementID)
+        scrollToAnchor(elementID)
       }
 
       return {

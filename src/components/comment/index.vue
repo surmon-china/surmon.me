@@ -105,7 +105,7 @@
   import { UNDEFINED } from '/@/constants/value'
   import { SortType } from '/@/constants/state'
   import { LanguageKey } from '/@/language'
-  import { scrollToElementAnchor } from '/@/utils/scroller'
+  import { scrollToAnchor } from '/@/utils/scroller'
   import { luanchEmojiRain } from './helper'
   import CommentTopbar from './topbar.vue'
   import CommentMain from './list/main.vue'
@@ -204,7 +204,7 @@
         if (commentState.sort !== sort) {
           commentState.sort = sort
           fetchCommentList()
-          scrollToElementAnchor(ANCHOR.COMMENT_ELEMENT_ID)
+          scrollToAnchor(ANCHOR.COMMENT_ELEMENT_ID)
         }
       }
 
@@ -213,7 +213,7 @@
         const lastCommentID = ANCHOR.getCommentItemElementID(comments[comments.length - 2].id)
         fetchCommentList({ page, loadmore: true }).then(() => {
           nextTick().then(() => {
-            scrollToElementAnchor(lastCommentID, null, 500)
+            scrollToAnchor(lastCommentID)
           })
         })
       }

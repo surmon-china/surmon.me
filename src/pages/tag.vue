@@ -39,7 +39,7 @@
   import { useTagStore, tagEnName } from '/@/stores/tag'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
-  import { nextScreen, scrollToTop } from '/@/utils/scroller'
+  import { scrollToNextScreen } from '/@/utils/scroller'
   import ArticleListHeader from '/@/components/flow/desktop/header.vue'
   import ArticleList from '/@/components/flow/desktop/list.vue'
 
@@ -83,11 +83,10 @@
           tag_slug: props.tagSlug,
           page: articleListStore.list.pagination.current_page + 1
         })
-        onClient(nextScreen)
+        onClient(scrollToNextScreen)
       }
 
       const fetchAllData = (tag_slug: string) => {
-        onClient(scrollToTop)
         return Promise.all([tagStore.fetchAll(), articleListStore.fetchList({ tag_slug })])
       }
 

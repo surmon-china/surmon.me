@@ -32,7 +32,7 @@
   import { useTwitterStore } from '/@/stores/twitter'
   import { useArticleListStore } from '/@/stores/article'
   import { useMetaStore } from '/@/stores/meta'
-  import { nextScreen } from '/@/utils/scroller'
+  import { scrollToNextScreen } from '/@/utils/scroller'
   import { LanguageKey } from '/@/language'
   import { META } from '/@/config/app.config'
   import ArticleList from '/@/components/flow/desktop/list.vue'
@@ -62,7 +62,7 @@
         const targetPage = articleListStore.list.pagination?.current_page + 1
         await articleListStore.fetchList({ page: targetPage })
         if (targetPage > 1) {
-          onClient(nextScreen)
+          onClient(scrollToNextScreen)
         }
       }
 

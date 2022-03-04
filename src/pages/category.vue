@@ -30,12 +30,12 @@
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useUniversalFetch, onClient } from '/@/universal'
+  import { useUniversalFetch } from '/@/universal'
   import { useArticleListStore } from '/@/stores/article'
   import { useCategoryStore } from '/@/stores/category'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
-  import { nextScreen, scrollToTop } from '/@/utils/scroller'
+  import { scrollToNextScreen } from '/@/utils/scroller'
   import ArticleListHeader from '/@/components/flow/desktop/header.vue'
   import ArticleList from '/@/components/flow/desktop/list.vue'
 
@@ -76,16 +76,16 @@
         return { pageTitle: titles.join(' | '), description }
       })
 
-      const loadmoreArticles = async () => {
-        await articleListStore.fetchList({
-          category_slug: props.categorySlug,
-          page: articleListStore.list.pagination.current_page + 1
-        })
-        onClient(nextScreen)
+      const loadmoreArticles = () => {
+        return articleListStore
+          .fetchList({
+            category_slug: props.categorySlug,
+            page: articleListStore.list.pagination.current_page + 1
+          })
+          .then(scrollToNextScreen)
       }
 
       const fetchAllData = (category_slug: string) => {
-        onClient(scrollToTop)
         return Promise.all([
           catrgoryStore.fetchAll(),
           articleListStore.fetchList({ category_slug })
