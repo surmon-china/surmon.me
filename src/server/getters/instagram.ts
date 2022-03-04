@@ -8,7 +8,7 @@ import axios from 'axios'
 import { argv } from 'yargs'
 import { THIRD_IDS } from '@/config/app.config'
 
-// 1. Generate long-lived access tokens for Instagram Testers
+// 1. Generate long-lived access tokens for Instagram Testers (60 days)
 // https://developers.facebook.com/apps/625907498725071/instagram-basic-display/basic-display/
 
 // 2. Get medias useing API
