@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.7.2
+* Surmon.me v3.7.3
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -105,7 +105,7 @@ Object.freeze({
     UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
     MARKDOWN: 'https://daringfireball.net/projects/markdown/',
     GOOGLE_LIVE_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3',
-    QQ_GROUP: 'https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4',
+    DISCORD_GROUP: 'https://discord.gg/cXdGT7Gx86',
     TELEGRAM: 'https://t.me/surmon',
     TELEGRAM_GROUP: 'https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA',
     SPOTIFY: 'https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o',
@@ -113,10 +113,9 @@ Object.freeze({
     YOUTUBE_CHANNEL: `https://www.youtube.com/channel/${THIRD_IDS.YOUTUBE_CHANNEL_ID}`,
     DOUBAN: 'https://www.douban.com/people/nocower',
     ZHIHU: 'https://www.zhihu.com/people/surmon',
-    WEIBO: 'https://weibo.com/surmon',
     QUORA: 'https://www.quora.com/profile/Surmon',
-    STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon?tab=profile',
-    LEETCODE_CN: 'https://leetcode-cn.com/u/surmon',
+    STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon',
+    LEETCODE: 'https://leetcode.com/Surmon',
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
     INSTAGRAM: `https://www.instagram.com/${THIRD_IDS.INSTAGRAM_USERNAME}`,
     TWITTER: `https://twitter.com/${THIRD_IDS.TWITTER_USER_ID}`
@@ -515,7 +514,7 @@ const getTwitterCalendar = async () => calendarTemp$1.calendar;/**
  * @module server.getter.instagram
  * @author Surmon <https://github.com/surmon-china>
  */
-// 1. Generate long-lived access tokens for Instagram Testers
+// 1. Generate long-lived access tokens for Instagram Testers (60 days)
 // https://developers.facebook.com/apps/625907498725071/instagram-basic-display/basic-display/
 // 2. Get medias useing API
 // https://developers.facebook.com/docs/instagram-basic-display-api/reference/media#fields
