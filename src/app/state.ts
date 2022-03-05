@@ -126,7 +126,8 @@ export const createGlobalState = (config: GlobalStateConfig) => {
   // Global switchers
   const switcher = reactive({
     sponsor: false,
-    feedback: false
+    feedback: false,
+    statement: false
   })
   const toggleSwitcher = (key: keyof typeof switcher, value: boolean) => {
     switcher[key] = value

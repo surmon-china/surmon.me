@@ -47,9 +47,9 @@ export const i18ns: { [key: string]: I18nLanguageMap<Language> } = {
     [Language.Chinese]: `给我留言`,
     [Language.English]: `Guestbook`
   },
-  QQGroup: {
-    [Language.Chinese]: `同性联谊`,
-    [Language.English]: `QQ group`
+  DiscordGroup: {
+    [Language.Chinese]: `国际联谊`,
+    [Language.English]: `Discord`
   },
   TelegramGroup: {
     [Language.Chinese]: `自由报社`,

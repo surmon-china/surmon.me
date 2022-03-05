@@ -63,17 +63,21 @@
         </router-link>
       </div>
       <div class="discussion">
-        <ulink class="item qq-group" :href="VALUABLE_LINKS.QQ_GROUP">
-          <i class="iconfont icon-qq"></i>
-          <divider class="divider" type="vertical" />
-          <span class="text"><i18n v-bind="i18ns.QQGroup" /></span>
-        </ulink>
         <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM_GROUP">
           <i class="iconfont icon-telegram"></i>
           <divider class="divider" type="vertical" />
           <span class="text"><i18n v-bind="i18ns.TelegramGroup" /></span>
         </ulink>
+        <ulink class="item discord" :href="VALUABLE_LINKS.DISCORD_GROUP">
+          <i class="iconfont icon-discord"></i>
+          <divider class="divider" type="vertical" />
+          <span class="text"><i18n v-bind="i18ns.DiscordGroup" /></span>
+        </ulink>
         <div class="center">
+          <button class="mini statement" @click="handleStatement">
+            <i class="iconfont icon-faq" />
+          </button>
+          <div class="bridge"></div>
           <button class="mini sponsor" @click="handleSponsor">
             <i class="iconfont icon-heart" />
           </button>
@@ -270,6 +274,11 @@
         handleGTagEvent('sponsor_modal')
       }
 
+      const handleStatement = () => {
+        globalState.toggleSwitcher('statement', true)
+        handleGTagEvent('statement_modal')
+      }
+
       const handleFeedback = () => {
         globalState.toggleSwitcher('feedback', true)
         handleGTagEvent('feedback_modal')
@@ -303,6 +312,7 @@
         handleGTagEvent,
         handleSponsor,
         handleFeedback,
+        handleStatement,
         handleOpenMap
       }
     }
@@ -567,7 +577,7 @@
         align-items: center;
 
         .bridge {
-          width: $gap * 2;
+          width: $lg-gap;
           height: 2rem;
           background: linear-gradient(
             to right,
@@ -581,7 +591,8 @@
           &.sponsor {
             --item-primary: #{$red};
           }
-          &.feedback {
+          &.feedback,
+          &.statement {
             --item-primary: #{$surmon};
           }
 
@@ -617,8 +628,8 @@
           background-color: var(--item-primary);
         }
 
-        &.qq-group {
-          --item-primary: #{$qq-primary};
+        &.discord {
+          --item-primary: #{$discord-primary};
         }
         &.telegram {
           --item-primary: #{$telegram-primary};

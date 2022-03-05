@@ -42,9 +42,9 @@
       </div>
       <divider dashed />
       <div class="list col-2">
-        <ulink class="item qq" :href="VALUABLE_LINKS.QQ_GROUP">
-          <i class="iconfont icon-qq" />
-          <i18n v-bind="i18ns.QQGroup" />
+        <ulink class="item discord" :href="VALUABLE_LINKS.DISCORD_GROUP">
+          <i class="iconfont icon-discord" />
+          <i18n v-bind="i18ns.DiscordGroup" />
         </ulink>
         <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM_GROUP">
           <i class="iconfont icon-telegram" />
@@ -259,8 +259,8 @@
             background: $instagram-gradient;
             @include visibility-transition();
           }
-          &.qq {
-            background-color: $qq-primary;
+          &.discord {
+            background-color: $discord-primary;
           }
           &.telegram {
             background-color: $telegram-primary;

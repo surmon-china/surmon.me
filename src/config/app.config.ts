@@ -70,10 +70,8 @@ export const VALUABLE_LINKS = Object.freeze({
   PAYPAL: 'https://www.paypal.me/surmon',
   UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
   MARKDOWN: 'https://daringfireball.net/projects/markdown/',
-
   GOOGLE_LIVE_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3',
-  QQ_GROUP:
-    'https://shang.qq.com/wpa/qunwpa?idkey=837dc31ccbcd49feeba19430562be7bdc06f4428880f78a391fd61c8af714ce4',
+  DISCORD_GROUP: 'https://discord.gg/cXdGT7Gx86',
   TELEGRAM: 'https://t.me/surmon',
   TELEGRAM_GROUP: 'https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA',
   SPOTIFY: 'https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o',
@@ -81,10 +79,9 @@ export const VALUABLE_LINKS = Object.freeze({
   YOUTUBE_CHANNEL: `https://www.youtube.com/channel/${THIRD_IDS.YOUTUBE_CHANNEL_ID}`,
   DOUBAN: 'https://www.douban.com/people/nocower',
   ZHIHU: 'https://www.zhihu.com/people/surmon',
-  WEIBO: 'https://weibo.com/surmon',
   QUORA: 'https://www.quora.com/profile/Surmon',
-  STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon?tab=profile',
-  LEETCODE_CN: 'https://leetcode-cn.com/u/surmon',
+  STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon',
+  LEETCODE: 'https://leetcode.com/Surmon',
   LINKEDIN: 'https://www.linkedin.com/in/surmon',
   INSTAGRAM: `https://www.instagram.com/${THIRD_IDS.INSTAGRAM_USERNAME}`,
   TWITTER: `https://twitter.com/${THIRD_IDS.TWITTER_USER_ID}`

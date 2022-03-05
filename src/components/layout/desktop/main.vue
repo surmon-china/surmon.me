@@ -17,6 +17,9 @@
       >
         <feedback @close="handleFeedbackModalClose" />
       </popup>
+      <popup :visible="switcher.statement" :scroll-close="false" @close="handleStatementModalClose">
+        <statement />
+      </popup>
     </client-only>
     <template v-if="!layoutColumn.isFull">
       <share class="main-share" />
@@ -73,6 +76,7 @@
   import Share from '/@/components/widget/share.vue'
   import Toolbox from '/@/components/widget/toolbox.vue'
   import Feedback from '/@/components/widget/feedback.vue'
+  import Statement from '/@/components/widget/statement.vue'
   import NavView from './nav.vue'
   import AsideView from './aside/index.vue'
   import HeaderView from './header.vue'
@@ -84,6 +88,7 @@
       Share,
       Feedback,
       Wallpaper,
+      Statement,
       MusicPlayerHandle,
       Toolbox,
       Wallflower,
@@ -104,6 +109,9 @@
       const handleFeedbackModalClose = () => {
         globalState.toggleSwitcher('feedback', false)
       }
+      const handleStatementModalClose = () => {
+        globalState.toggleSwitcher('statement', false)
+      }
 
       return {
         MAIN_ELEMENT_ID,
@@ -113,7 +121,8 @@
         layoutColumn: globalState.layoutColumn,
         handlePageTransitionDone,
         handleSponsorModalClose,
-        handleFeedbackModalClose
+        handleFeedbackModalClose,
+        handleStatementModalClose
       }
     }
   })
