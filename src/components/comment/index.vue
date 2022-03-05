@@ -53,6 +53,7 @@
           <template #reply="payload">
             <comment-publisher
               v-model:profile="guestProfile"
+              :id="ANCHOR.COMMENT_REPLY_PUBLISHER_ELEMENT_ID"
               :disabled="false"
               :bordered="true"
               :default-blossomed="true"
@@ -99,7 +100,6 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalStore, UserType } from '/@/stores/universal'
   import { useCommentStore, CommentFetchParams, Author } from '/@/stores/comment'
-  import { email as emailRegex, url as urlRegex } from '/@/constants/regex'
   import { GAEventCategories } from '/@/constants/gtag'
   import * as ANCHOR from '/@/constants/anchor'
   import { UNDEFINED } from '/@/constants/value'
@@ -248,12 +248,6 @@
           if (!guestProfileValue.email) {
             throw i18n.t(LanguageKey.COMMENT_POST_EMAIL) + '?'
           }
-          if (!emailRegex.test(guestProfileValue.email)) {
-            throw i18n.t(LanguageKey.COMMENT_POST_ERROR_EMAIL)
-          }
-          if (guestProfileValue.site && !urlRegex.test(guestProfileValue.site)) {
-            throw i18n.t(LanguageKey.COMMENT_POST_ERROR_URL)
-          }
         }
 
         const author: Author = isGuest
@@ -294,7 +288,15 @@
         }
       }
 
+      const validateFormByID = (formID: string) => {
+        const formElement = document.getElementById(formID)! as HTMLFormElement
+        const check_status = formElement.checkValidity()
+        formElement.reportValidity()
+        return check_status ? Promise.resolve() : Promise.reject()
+      }
+
       const handleRootSubmit = async (content: string) => {
+        await validateFormByID(ANCHOR.COMMENT_PUBLISHER_ELEMENT_ID)
         postingKey.value = PostKey.Root
         try {
           await createComment({ content, pid: 0 })
@@ -308,6 +310,7 @@
       }
 
       const handleReplySubmit = async (content: string) => {
+        await validateFormByID(ANCHOR.COMMENT_REPLY_PUBLISHER_ELEMENT_ID)
         postingKey.value = PostKey.Reply
         try {
           await createComment({ content, pid: commentState.replyPID })
@@ -336,7 +339,6 @@
         ANCHOR,
         isFetching,
         isLoading,
-        isPosting,
         isRootPosting,
         isReplyPosting,
         commentStore,

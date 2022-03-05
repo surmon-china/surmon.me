@@ -71,7 +71,6 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { Author } from '/@/stores/comment'
   import { useUniversalStore, UserType } from '/@/stores/universal'
-  import { COMMENT_PUBLISHER_ELEMENT_ID } from '/@/constants/anchor'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
   import {
@@ -91,7 +90,7 @@
     props: {
       id: {
         type: String,
-        default: ''
+        required: false
       },
       disabled: {
         type: Boolean,
@@ -162,7 +161,6 @@
         avatar,
         blossomed,
         UserType,
-        COMMENT_PUBLISHER_ELEMENT_ID,
         LanguageKey,
         t: i18n.t,
         firstUpperCase,

@@ -1,6 +1,6 @@
 <template>
   <div class="search">
-    <div class="search-box">
+    <form class="search-box" ref="formElement">
       <input
         id="keyword"
         class="search-input"
@@ -13,10 +13,10 @@
         :placeholder="i18n.t(LanguageKey.SEARCH_PLACEHOLDER)"
         @keyup.enter="handleSearch"
       />
-      <button class="search-btn" @click="handleSearch">
+      <button type="submit" class="search-btn" @click="handleSearch">
         <i class="iconfont icon-search" />
       </button>
-    </div>
+    </form>
     <router-link class="archive-btn" :to="{ name: RouteName.Archive }">
       <i class="iconfont icon-peachblossom" />
     </router-link>
@@ -35,6 +35,7 @@
     name: 'DesktopAsideSearch',
     setup() {
       const { i18n, gtag, route, router } = useEnhancer()
+      const formElement = ref<HTMLFormElement>()
       const keyword = ref('')
 
       onMounted(() => {
@@ -43,7 +44,14 @@
         }
       })
 
-      const handleSearch = () => {
+      const handleSearch = (event) => {
+        event.preventDefault()
+        const check_status = formElement.value?.checkValidity()
+        if (!check_status) {
+          formElement.value?.reportValidity()
+          return
+        }
+
         const inputKeyword = keyword.value
         const paramsKeyword = route.params.keyword as string
         const isSearchPage = isSearchFlow(route.name as string)
@@ -62,6 +70,7 @@
       return {
         LanguageKey,
         RouteName,
+        formElement,
         i18n,
         keyword,
         handleSearch

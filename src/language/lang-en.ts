@@ -63,8 +63,6 @@ export const enLangMap: LanguageMap = {
   [LanguageKey.COMMENT_POST_SITE]: 'site',
   [LanguageKey.COMMENT_POST_CONTENT]: 'content',
   [LanguageKey.COMMENT_POST_PLACEHOLDER]: 'Hit the nail on the head',
-  [LanguageKey.COMMENT_POST_ERROR_EMAIL]: 'Email address is not legitimate!',
-  [LanguageKey.COMMENT_POST_ERROR_URL]: 'Site is not legitimate!',
   [LanguageKey.COMMENT_POST_ERROR_CONTENT]: 'Content requirements are within 3000 words!',
   [LanguageKey.QUERY_PARAMS_ERROR]: 'Invalid query params: ',
   [LanguageKey.POST_ACTION_ERROR]: 'Failed! Get error detail in console',

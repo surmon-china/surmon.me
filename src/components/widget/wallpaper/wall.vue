@@ -158,7 +158,6 @@
         .location {
           .text {
             margin-left: $xs-gap;
-            border-bottom: 1px solid $text;
           }
         }
       }

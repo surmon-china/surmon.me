@@ -64,8 +64,6 @@ export enum LanguageKey {
   COMMENT_POST_SITE = 'comment-author-site-url',
   COMMENT_POST_CONTENT = 'comment-content',
   COMMENT_POST_PLACEHOLDER = 'comment-box-placeholder',
-  COMMENT_POST_ERROR_EMAIL = 'comment-submit-failed-of-email-error',
-  COMMENT_POST_ERROR_URL = 'comment-submit-failed-of-site-url-error',
   COMMENT_POST_ERROR_CONTENT = 'comment-submit-failed-of-content-error',
   QUERY_PARAMS_ERROR = 'query-params-error',
   POST_ACTION_ERROR = 'post-requiest-failed-of-other-error',

@@ -62,8 +62,6 @@ export const zhLangMap: LanguageMap = {
   [LanguageKey.COMMENT_POST_SITE]: '网址',
   [LanguageKey.COMMENT_POST_CONTENT]: '内容',
   [LanguageKey.COMMENT_POST_PLACEHOLDER]: '愿你的见解一针见血',
-  [LanguageKey.COMMENT_POST_ERROR_EMAIL]: '邮箱不合法',
-  [LanguageKey.COMMENT_POST_ERROR_URL]: '网址不合法',
   [LanguageKey.COMMENT_POST_ERROR_CONTENT]: '内容需要在 3000 字以内',
   [LanguageKey.QUERY_PARAMS_ERROR]: '请求参数错误：',
   [LanguageKey.POST_ACTION_ERROR]: '操作失败，详细原因 > 控制台',
