@@ -44,7 +44,8 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/styles/init.scss';
+  @import 'src/styles/variables.scss';
+  @import 'src/styles/mixins.scss';
   .masonry {
     display: flex;
     justify-content: space-between;

@@ -94,9 +94,7 @@ export default defineConfig(({ command, mode }) => {
         'serialize-javascript',
         'cross-env',
         'simple-netease-cloud-music',
-        'wonderful-bing-wallpaper',
-        '@vue/compiler-sfc',
-        '@vue/server-renderer'
+        'wonderful-bing-wallpaper'
       ]
     },
     build: {

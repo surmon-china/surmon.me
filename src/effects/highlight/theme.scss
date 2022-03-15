@@ -1,0 +1,13 @@
+// dynamic style for highlight.js
+// https://github.com/vitejs/vite/issues/3246
+// https://github.com/vitejs/vite/commit/e1de8a888ea9adb9dc415cf74aec43dfa83aa526
+// https://stackoverflow.com/a/71371509/6222535
+@use 'sass:meta';
+
+@mixin highlightLightTheme() {
+  @include meta.load-css('highlight.js/styles/github');
+}
+
+@mixin highlightDarkTheme() {
+  @include meta.load-css('highlight.js/styles/github-dark');
+}

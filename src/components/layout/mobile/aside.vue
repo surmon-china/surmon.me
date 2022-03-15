@@ -82,7 +82,7 @@
 
       const themeIcon = computed(() => {
         const themeIconMap = {
-          [Theme.Default]: 'icon-sun',
+          [Theme.Light]: 'icon-sun',
           [Theme.Dark]: 'icon-moon'
         }
         return themeIconMap[theme.theme.value]
@@ -117,7 +117,8 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/styles/init.scss';
+  @import 'src/styles/variables.scss';
+  @import 'src/styles/mixins.scss';
 
   .aside {
     $border-color: darken($mobile-aside-bg, 5%);

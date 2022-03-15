@@ -43,7 +43,7 @@
   #{--text-divider}: rgba($theme-text, 0.26);
 }
 
-@mixin defaultTheme() {
+@mixin appLightTheme() {
   @include css-var(
     $theme-text: rgba(#000, 0.68),
     $theme-link: rgba(#000, 0.74),
@@ -56,7 +56,7 @@
   );
 }
 
-@mixin darkTheme() {
+@mixin appDarkTheme() {
   @include css-var(
     $theme-text: #f0f0f0,
     $theme-link: rgba(#fff, 0.92),

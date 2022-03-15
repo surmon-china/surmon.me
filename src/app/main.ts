@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { CreateAppFunction } from 'vue'
+import { CreateAppFunction, computed } from 'vue'
 import { RouterHistory } from 'vue-router'
 import API_CONFIG from '/@/config/api.config'
 import { META } from '/@/config/app.config'
@@ -54,7 +54,7 @@ export const createVueApp = (context: ICreatorContext) => {
     afterMiddleware: context.routerAfterMiddleware?.(globalState),
     history: context.historyCreator()
   })
-  // 6. services
+  // 6. composables
   const meta = createMeta({
     titler: (title: string) => `${title} | ${META.title}`
   })
@@ -64,6 +64,16 @@ export const createVueApp = (context: ICreatorContext) => {
     keys: Object.values(LanguageKey),
     languages
   })
+
+  // root attrbute
+  meta.addHeadObjs(
+    computed(() => ({
+      htmlAttrs: {
+        'data-theme': theme.theme.value,
+        'data-device': globalState.userAgent.isMobile ? 'mobile' : 'desktop'
+      }
+    }))
+  )
 
   // handle global error
   app.config.errorHandler = (error) => globalState.setRenderError(error)

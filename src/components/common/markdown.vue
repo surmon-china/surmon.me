@@ -59,7 +59,8 @@
 </script>
 
 <style lang="scss">
-  @import 'src/styles/init.scss';
+  @import 'src/styles/variables.scss';
+  @import 'src/styles/mixins.scss';
 
   .global-markdown-plain {
     p {
@@ -377,7 +378,7 @@
         border-radius: 0;
         border-width: 0 1px 1px 0;
         border-color: $module-bg-darker-1;
-        background-color: transparent;
+        background-color: transparent !important;
       }
     }
 

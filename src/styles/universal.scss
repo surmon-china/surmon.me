@@ -1,12 +1,38 @@
-@import './variables.scss';
 @import './theme.scss';
+@import './variables.scss';
+@import 'src/effects/highlight/theme.scss';
+@import 'src/effects/swiper/variables.scss';
 
-[hidden],
-[v-cloak] {
-  display: none !important;
+:root {
+  background-color: $body-bg;
+  @include swiperVariables();
+
+  // theme
+  &[data-theme='light'] {
+    @include appLightTheme();
+    @include highlightLightTheme();
+  }
+  &[data-theme='dark'] {
+    @include appDarkTheme();
+    @include highlightDarkTheme();
+  }
+
+  // device
+  &[data-device='desktop'] {
+    .container {
+      width: $container-width;
+      margin: 0 auto;
+    }
+  }
+  &[data-device='mobile'] {
+    .container {
+      width: 100%;
+    }
+  }
 }
 
 body {
+  color: $text;
   overflow-x: hidden;
   overflow-y: scroll;
   font-family: $font-family-normal;
@@ -18,22 +44,27 @@ body {
   -webkit-font-smoothing: antialiased;
   // WORKAROUND: for Google AdSense layout
   position: relative !important;
+}
 
+@include scrollbar-style(
+  $size: $sm-gap,
+  $bg: $module-bg,
+  $thumb-bg: $module-bg-darker-3,
+  $thumb-bg-hover: $module-bg-darker-4
+);
+
+body {
   @include scrollbar-style(
-    $size: $sm-gap,
-    $bg: rgba($grey, 60%),
-    $thumb-bg: darken($grey, 20%),
-    $thumb-bg-hover: darken($grey, 40%)
+    $size: $xs-gap,
+    $bg: $module-bg,
+    $thumb-bg: $module-bg-darker-1,
+    $thumb-bg-hover: $module-bg-darker-3
   );
+}
 
-  * {
-    @include scrollbar-style(
-      $size: $sm-gap,
-      $bg: $module-bg,
-      $thumb-bg: $module-bg-darker-1,
-      $thumb-bg-hover: $module-bg-darker-2
-    );
-  }
+[hidden],
+[v-cloak] {
+  display: none !important;
 }
 
 .iconfont {

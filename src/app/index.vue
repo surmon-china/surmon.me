@@ -1,13 +1,13 @@
 <template>
-  <div v-cloak id="app_root" class="app-root" :class="[theme, isMobile ? 'mobile' : 'desktop']">
+  <div v-cloak class="app-root">
     <client-only>
       <progress-bar :spin="!isMobile" />
       <emoji-rain />
       <popup-root />
     </client-only>
     <captured>
-      <desktop-main v-if="!isMobile" />
-      <mobile-main v-else />
+      <mobile-main v-if="isMobile" />
+      <desktop-main v-else />
     </captured>
   </div>
 </template>
@@ -29,43 +29,16 @@
       MobileMain
     },
     setup() {
-      const { theme, isMobile } = useEnhancer()
-      return {
-        isMobile,
-        theme: theme.theme
-      }
+      const { isMobile } = useEnhancer()
+      return { isMobile }
     }
   })
 </script>
 
 <style lang="scss">
-  @import 'src/styles/init.scss';
-  @import 'src/styles/theme.scss';
+  @import 'src/styles/variables.scss';
 
   .app-root {
-    color: $text;
-
-    &.default {
-      @include defaultTheme();
-    }
-
-    &.dark {
-      @include darkTheme();
-    }
-
-    &.desktop {
-      .container {
-        width: $container-width;
-        margin: 0 auto;
-      }
-    }
-
-    &.mobile {
-      .container {
-        width: 100%;
-      }
-    }
-
     &[v-cloak] {
       color: transparent;
       -webkit-text-fill-color: transparent;

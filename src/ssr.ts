@@ -8,7 +8,7 @@ import serialize from 'serialize-javascript'
 import { Request } from 'express'
 import { createSSRApp, ref } from 'vue'
 import { createMemoryHistory } from 'vue-router'
-import { renderToString } from '@vue/server-renderer'
+import { renderToString } from 'vue/server-renderer'
 import { createVueApp, VueApp } from '/@/app/main'
 import { INVALID_ERROR } from '/@/constants/error'
 import { MetaResult } from '/@/composables/meta'
@@ -36,7 +36,7 @@ const createApp = (request: Request): VueApp => {
     historyCreator: createMemoryHistory,
     language: headers['accept-language']!,
     userAgent: headers['user-agent']!,
-    theme: (request as any).cookies[THEME_STORAGE_KEY] || Theme.Default
+    theme: (request as any).cookies[THEME_STORAGE_KEY] || Theme.Light
   })
   // HACK: hack components for SSR fix warn
   const hackComponents = ['progress-bar', 'popup-root', 'popup', 'Adsense']
@@ -69,7 +69,7 @@ const renderHTML = async (vueApp: VueApp, url: string) => {
   devDebug('4. renderToString')
   const ssrContext = {}
   const html = await renderToString(app, ssrContext)
-  // HACK: renderToString 无法被 async setup | onServerPrefetch 中断，导致输出的 HTML 为空壳，所以需要再次根据手工标记判断是否重新渲染
+  // WORKAROUND: renderToString 无法被 async setup | onServerPrefetch 中断，导致输出的 HTML 为空壳，所以需要再次根据手工标记判断是否重新渲染
   if (globalState.renderError.value) {
     const newError = new Error(globalState.renderError.value.message)
     ;(newError as any).code = globalState.renderError.value.code

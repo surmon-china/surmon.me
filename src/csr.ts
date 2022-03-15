@@ -7,7 +7,7 @@
 // polyfills
 import 'intersection-observer'
 
-import { createApp, createSSRApp, computed } from 'vue'
+import { createApp, createSSRApp } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { createVueApp } from '/@/app/main'
 import { LayoutColumn } from '/@/app/state'
@@ -18,29 +18,28 @@ import { createDefer } from '/@/composables/defer'
 import { createMusic } from '/@/composables/music'
 import { createPopup } from '/@/composables/popup'
 import { createLoading } from '/@/composables/loading'
-import { getClientLocalTheme, Theme } from '/@/composables/theme'
+import { getClientLocalTheme } from '/@/composables/theme'
 import amplitude from '/@/effects/amplitude'
+import { runTitler, resetTitler } from '/@/effects/titler'
 import { consoleSlogan } from '/@/effects/slogan'
 import { exportLozadToGlobal } from '/@/effects/lozad'
 import { initCopyrighter } from '/@/effects/copyright'
 import { exportAppToGlobal } from '/@/effects/exporter'
-import { runTitler, resetTitler } from '/@/effects/titler'
 import { exportStickyEventsToGlobal } from '/@/effects/sticky'
-import { getHighlightThemeStyle } from '/@/effects/highlight'
 import { exportEmojiRainToGlobal } from '/@/effects/emoji-23333'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
 import { getTargetCDNURL } from '/@/transforms/url'
 import { randomNumber } from '/@/utils/random'
-import { isProd } from '/@/environment'
-import { isSSR } from '/@/app/environment'
 import { Language, LanguageKey } from '/@/language'
 import { GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
+import { isSSR } from '/@/app/environment'
+import { isProd } from '/@/environment'
 
 import './effects/swiper/style'
 import './styles/app.scss'
 
 // app
-const { app, router, globalState, theme, i18n, meta, store } = createVueApp({
+const { app, router, globalState, i18n, store } = createVueApp({
   historyCreator: createWebHistory,
   appCreator: isSSR ? createSSRApp : createApp,
   language: navigator.language,
@@ -72,24 +71,11 @@ app.use(gtag, {
 isSSR ? store.initOnSSRClient() : store.initOnSPAClient()
 
 // init: services with client
-theme.bindClientSystem()
 exportLozadToGlobal()
 exportEmojiRainToGlobal()
 exportStickyEventsToGlobal()
 exportAppToGlobal(app)
 initCopyrighter()
-
-// init higtlight style
-meta.addHeadObjs(
-  computed(() => ({
-    style: [
-      {
-        key: 'markdown',
-        children: getHighlightThemeStyle(theme.theme.value === Theme.Dark)
-      }
-    ]
-  }))
-)
 
 // init: router loading middleware client only
 router.beforeEach((_, __, next) => {
@@ -104,7 +90,6 @@ router.afterEach((_, __, failure) => {
 router.isReady().finally(() => {
   // UI layout: set UI layout by route (for SPA)
   globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta))
-
   // mount (isHydrate -> (SSR -> true | SPA -> false))
   app.mount('#app', isSSR).$nextTick(() => {
     // set hydrate state
@@ -113,31 +98,22 @@ router.isReady().finally(() => {
     i18n.set(globalState.userAgent.isZhUser ? Language.Chinese : Language.English)
     // init universal user state
     store.stores.universal.initOnClient()
-
-    // desktop only
-    if (!globalState.userAgent.isMobile) {
-      // bing wallpaper
-      defer.addTask(store.stores.wallpaper.fetchPapers)
-      // music player
-      defer.addTask(music.init)
-      // title surprise
-      document.addEventListener(
-        'visibilitychange',
-        (event) => {
-          // @ts-ignore
-          const isHidden = event.target?.hidden || event.target?.webkitHidden
-          const surprises = [
-            { favicon: '🔞', title: 'FBI WARNING' },
-            { favicon: '⭕️', title: 'FBI WARNING' },
-            // tltle: zero width character
-            { favicon: '🌝', title: '​' }
-          ]
-          isHidden ? runTitler(surprises[randomNumber(surprises.length - 1)]) : resetTitler()
-        },
-        false
-      )
-    }
-
+    // title surprise
+    document.addEventListener(
+      'visibilitychange',
+      (event) => {
+        // @ts-ignore
+        const isHidden = event.target?.hidden || event.target?.webkitHidden
+        const surprises = [
+          { favicon: '🔞', title: 'FBI WARNING' },
+          { favicon: '⭕️', title: 'FBI WARNING' },
+          // tltle: zero width character
+          { favicon: '🌝', title: '​' }
+        ]
+        isHidden ? runTitler(surprises[randomNumber(surprises.length - 1)]) : resetTitler()
+      },
+      false
+    )
     // production only
     if (isProd) {
       consoleSlogan(i18n.t(LanguageKey.APP_SLOGAN)!, store.stores.meta.appOptions.data?.site_email)

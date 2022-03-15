@@ -1,16 +1,19 @@
 @charset "UTF-8";
 
-// variables & mixin
-@import './init.scss';
+// variables
+@import './variables.scss';
+
+// mixins
+@import './mixins.scss';
+
+// reset style
+@import './reset.scss';
 
 // font
 @import './font.scss';
 
 // Iconfont
 @import './iconfont.scss';
-
-// reset style
-@import './reset.scss';
 
 // universal style
 @import './universal.scss';

@@ -6,6 +6,8 @@ scripts
 
 dist
 public
+sbundler
 
-*.config.js
+*.js
 *.json
+*.config.js

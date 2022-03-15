@@ -15,8 +15,8 @@ import {
   A11y,
   EffectFade
 } from 'swiper'
-export { Swiper, SwiperSlide } from 'swiper/vue'
 
 SwiperClass.use([Grid, Pagination, Navigation, Mousewheel, Autoplay, A11y, Lazy, EffectFade])
 
 export default SwiperClass
+export { Swiper, SwiperSlide } from 'swiper/vue'

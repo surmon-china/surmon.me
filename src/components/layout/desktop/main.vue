@@ -64,10 +64,12 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { defineComponent, onMounted } from 'vue'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { MAIN_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useMusic } from '/@/composables/music'
+  import { useWallpaperStore } from '/@/stores/wallpaper'
   import { getLayoutByRouteMeta } from '/@/transforms/layout'
   import MusicPlayerHandle from '/@/components/widget/music-player/handle.vue'
   import Wallflower from '/@/components/widget/wallflower/garden.vue'
@@ -99,6 +101,7 @@
       NavView
     },
     setup() {
+      const wallpaperStore = useWallpaperStore()
       const { route, globalState } = useEnhancer()
       const handlePageTransitionDone = () => {
         globalState.setLayoutColumn(getLayoutByRouteMeta(route.meta))
@@ -112,6 +115,13 @@
       const handleStatementModalClose = () => {
         globalState.toggleSwitcher('statement', false)
       }
+
+      onMounted(() => {
+        // bing wallpaper
+        wallpaperStore.fetchPapers()
+        // music player
+        useMusic().init()
+      })
 
       return {
         MAIN_ELEMENT_ID,
@@ -129,7 +139,8 @@
 </script>
 
 <style lang="scss" scoped>
-  @import 'src/styles/init.scss';
+  @import 'src/styles/variables.scss';
+  @import 'src/styles/mixins.scss';
 
   .desktop-main {
     padding-top: $header-height + $lg-gap;

@@ -23,19 +23,23 @@ export interface CacheClient {
 
 const getLRUClient = (): CacheClient => {
   // https://github.com/isaacs/node-lru-cache
-  const lruCache = new LRU({
-    max: Infinity,
-    maxAge: -1 // MARK: default never expire
+  const lruCache = new LRU<string, any>({
+    max: 500,
+    ttl: 0 // MARK: default 0 "no TTL" never expire
   })
 
   return {
-    set: (key: string, value: any, maxAge?: number) => {
-      return maxAge ? lruCache.set(key, value, maxAge * 1000) : lruCache.set(key, value)
+    set: async (key: string, value: any, maxAge?: number) => {
+      if (maxAge) {
+        lruCache.set(key, value, { ttl: maxAge * 1000 })
+      } else {
+        lruCache.set(key, value)
+      }
     },
-    get: (key) => lruCache.get(key),
-    has: (key) => lruCache.has(key),
-    delete: (key) => lruCache.del(key),
-    clear: () => lruCache.reset()
+    get: async (key) => lruCache.get(key)!,
+    has: async (key) => lruCache.has(key),
+    delete: async (key) => lruCache.delete(key),
+    clear: async () => lruCache.clear()
   }
 }
 

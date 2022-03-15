@@ -113,7 +113,8 @@
 
 <style lang="scss" scoped>
   @use 'sass:math';
-  @import 'src/styles/init.scss';
+  @import 'src/styles/variables.scss';
+  @import 'src/styles/mixins.scss';
 
   $announcement-height: 42px;
   $title-width: 10%;

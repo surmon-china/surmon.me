@@ -126,15 +126,15 @@
   $thumb-bg: darken($white, 18%),
   $thumb-bg-hover: darken($white, 26%)
 ) {
-  &::-webkit-scrollbar {
+  ::-webkit-scrollbar {
     width: $size;
     height: $size;
     background: $bg;
   }
-  &::-webkit-scrollbar-track {
+  ::-webkit-scrollbar-track {
     border-radius: 0;
   }
-  &::-webkit-scrollbar-thumb {
+  ::-webkit-scrollbar-thumb {
     border-radius: 0;
     background-color: $thumb-bg;
     @include background-transition();

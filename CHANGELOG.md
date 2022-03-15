@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.8.0 (2022-03-15)
+
+**Feature**
+
+- Upgrade `lru-cache` to [`v7.x`](https://github.com/isaacs/node-lru-cache/blob/main/CHANGELOG.md#v7---2022-02)
+- Improve `highlight.js` themes
+- Improve styles
+
+**Chore**
+
+- Upgrade deps
+- Remove `@vue/x` deps
+
 ### v3.6.30 (2022-03-02)
 
 **Feature**
