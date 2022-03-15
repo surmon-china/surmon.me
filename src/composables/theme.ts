@@ -36,10 +36,11 @@ export const getClientLocalTheme = () => {
 }
 
 const ThemeSymbol = Symbol('theme')
+const themes = [Theme.Light, Theme.Dark]
 export const createTheme = (initTheme: Theme) => {
-  const theme = ref<Theme>(initTheme)
+  const theme = ref<Theme>(initTheme === Theme.Dark ? Theme.Dark : Theme.Light)
   const set = (newTheme: Theme) => {
-    if ([Theme.Light, Theme.Dark].includes(newTheme) && newTheme !== theme.value) {
+    if (themes.includes(newTheme) && newTheme !== theme.value) {
       theme.value = newTheme
       cookies.set(THEME_STORAGE_KEY, newTheme)
       storage.set(THEME_STORAGE_KEY, newTheme)
