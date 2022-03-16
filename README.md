@@ -1,10 +1,6 @@
 <br />
 
 <p align="center">
-  <a href="https://vuejs.org" target="blank">
-    <img src="/presses/vue.png" height="90" alt="vue logo" />
-  </a>
-  <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
   <a href="https://github.com/surmon-china/surmon.me" target="blank">
     <img src="/presses/logo.png" height="90" alt="surmon.me logo" />
   </a>
@@ -25,10 +21,9 @@
 **My personal website and blog, powered by [Vue(3)](https://vuejs.org), API services provided by [NodePress](https://github.com/surmon-china/nodepress).**
 
 
-- **https://surmon.me**
-- **[CHANGELOG.md](/CHANGELOG.md)**
+**🔗 https://surmon.me**
 
----
+**🗒️ [CHANGELOG.md](/CHANGELOG.md)**
 
 **🔥 [Related projects](https://github.com/stars/surmon-china/lists/surmon-me)**
 
