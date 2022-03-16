@@ -13,7 +13,7 @@ exports.bundleSLSServer = (paths) => {
     targets: ['cjs'],
     parser: false,
     sourcemap: true,
-    minimize: false,
+    terser: false,
     alias: {
       entries: {
         '@': path.resolve(__dirname, '..', 'src')
@@ -24,7 +24,7 @@ exports.bundleSLSServer = (paths) => {
       ...Object.keys(packageJSON.dependencies),
       ...Object.keys(packageJSON.devDependencies)
     ],
-    typescript: {
+    ts: {
       tsconfig: path.resolve(__dirname, '..', 'tsconfig.json')
     }
   })
