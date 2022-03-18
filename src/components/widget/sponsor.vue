@@ -8,7 +8,9 @@
           :title="target.title"
           @click="handleSwitch(index)"
         >
-          <uimage class="logo" :alt="target.title" :src="target.logo" cdn />
+          <span class="logo">
+            <uimage class="image" :alt="target.title" :src="target.logo" cdn />
+          </span>
           <span class="title" v-if="!hideTitle">{{ target.title }}</span>
         </button>
       </template>
@@ -38,34 +40,40 @@
           <i class="iconfont icon-heart"></i>
           <span class="text">Sponsor me on GitHub</span>
         </ulink>
-        <p class="total">
-          <i18n>
-            <template #zh>
-              我在 GitHub Sponsors 已得到 {{ ghSponsors?.totalCount || '-' }} 位赞助者的支持。
-            </template>
-            <template #en>
-              I have {{ ghSponsors?.totalCount || '-' }} backers on GitHub Sponsors.
-            </template>
-          </i18n>
-        </p>
-        <div class="users" v-if="ghSponsors?.edges">
-          <ulink
-            class="item"
-            :href="edge.node.url"
-            :title="edge.node.name"
-            v-for="(edge, index) in ghSponsors.edges.slice(0, maxSponsors)"
-            :key="index"
-          >
-            <uimage class="avatar" :src="edge.node.avatarUrl" :alt="edge.node.name" />
-          </ulink>
-          <ulink
-            class="more-link"
-            v-if="ghSponsors.edges.length > maxSponsors"
-            :href="SPONSOR_LINKS.GITHUB_SPONSORS + '#sponsors'"
-          >
-            + {{ ghSponsors.edges.length - maxSponsors }}
-          </ulink>
-        </div>
+        <client-only>
+          <transition name="module">
+            <div v-if="ghSponsors">
+              <p class="total">
+                <i18n>
+                  <template #zh>
+                    我在 GitHub Sponsors 已得到 {{ ghSponsors?.totalCount }} 位赞助者的支持。
+                  </template>
+                  <template #en>
+                    I have {{ ghSponsors?.totalCount }} backers on GitHub Sponsors.
+                  </template>
+                </i18n>
+              </p>
+              <div class="users">
+                <ulink
+                  class="item"
+                  :href="edge.node.url"
+                  :title="edge.node.name"
+                  v-for="(edge, index) in ghSponsors.edges.slice(0, maxSponsors)"
+                  :key="index"
+                >
+                  <uimage class="avatar" :src="edge.node.avatarUrl" :alt="edge.node.name" />
+                </ulink>
+                <ulink
+                  class="more-link"
+                  v-if="ghSponsors.edges.length > maxSponsors"
+                  :href="SPONSOR_LINKS.GITHUB_SPONSORS + '#sponsors'"
+                >
+                  + {{ ghSponsors.edges.length - maxSponsors }}
+                </ulink>
+              </div>
+            </div>
+          </transition>
+        </client-only>
       </div>
     </div>
   </div>
@@ -207,22 +215,38 @@
         height: 5rem;
         min-width: 4rem;
         position: relative;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
 
         .logo {
-          height: 2rem;
+          $size: 2rem;
+          width: $size;
+          height: $size;
+          display: inline-block;
           filter: grayscale(1);
+          text-align: right;
+
+          img {
+            height: $size;
+            object-fit: contain;
+          }
         }
 
         .title {
           font-weight: bold;
           margin-left: $gap;
+          padding: 3px 0;
           color: $text-secondary;
           transition: color $transition-time-fast;
+          border-bottom: 2px solid transparent;
         }
 
         &.github {
           .logo {
-            height: 2.2rem;
+            img {
+              height: 2.2rem;
+            }
           }
         }
 
@@ -233,8 +257,7 @@
           }
           .title {
             color: $link-color;
-            padding-bottom: 4px;
-            border-bottom: 2px solid $link-color;
+            border-color: $link-color;
           }
         }
       }
