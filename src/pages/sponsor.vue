@@ -83,6 +83,7 @@
       text-align: center;
       color: $text-disabled;
       background-color: $module-bg-lighter;
+      letter-spacing: 1px;
     }
 
     .sponsor-wrapper {
