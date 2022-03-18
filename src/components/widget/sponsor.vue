@@ -172,7 +172,6 @@
           .dispatch(TunnelModule.GitHubSponsors)
           .then((response) => {
             ghSponsors.value = response
-            console.log('Sponsor onMounted', ghSponsors.value)
           })
           .finally(() => {
             ghSponsorsLoading.value = false
@@ -181,7 +180,6 @@
 
       onMounted(() => {
         fetchGitHubSponsors()
-        console.log('Sponsor onMounted')
       })
 
       return {
