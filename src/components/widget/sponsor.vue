@@ -46,10 +46,10 @@
               <p class="total">
                 <i18n>
                   <template #zh>
-                    我在 GitHub Sponsors 已得到 {{ ghSponsors?.totalCount }} 位赞助者的支持。
+                    我在 GitHub Sponsors 已得到 {{ ghSponsors.totalCount }} 位赞助者的支持。
                   </template>
                   <template #en>
-                    I have {{ ghSponsors?.totalCount }} backers on GitHub Sponsors.
+                    I have {{ ghSponsors.totalCount }} backers on GitHub Sponsors.
                   </template>
                 </i18n>
               </p>
