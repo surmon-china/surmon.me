@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.8.1
+* Surmon.me v3.8.2
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -33,7 +33,7 @@ var TunnelModule;
     TunnelModule["InstagramMedias"] = "instagram_medias";
     TunnelModule["InstagramCalendar"] = "instagram_calendar";
     TunnelModule["BingWallpaper"] = "bing_wallpaper";
-    TunnelModule["GitHubRepositories"] = "github_repositories";
+    TunnelModule["GitHubSponsors"] = "github_sponsors";
     TunnelModule["GitHubContributions"] = "github_contributions";
     TunnelModule["NetEaseMusic"] = "netease_music";
 })(TunnelModule || (TunnelModule = {}));/**
@@ -58,28 +58,6 @@ const META = Object.freeze({
     domain: 'surmon.me',
     author: 'Surmon'
 });
-Object.freeze([
-    {
-        name: 'iconfont',
-        url: 'https://www.iconfont.cn/'
-    },
-    {
-        name: `GitHub`,
-        url: 'https://github.com'
-    },
-    {
-        name: `PM2`,
-        url: 'https://pm2.keymetrics.io/'
-    },
-    {
-        name: `Vite`,
-        url: 'https://vitejs.dev/'
-    },
-    {
-        name: `Disqus`,
-        url: 'https://disqus.com/'
-    }
-]);
 const THIRD_IDS = Object.freeze({
     YOUTUBE_CHANNEL_ID: `UCoL-j6T28PLSJ2U6ZdONS0w`,
     MUSIC_163_BGM_ALBUM_ID: '638949385',
@@ -89,36 +67,37 @@ const THIRD_IDS = Object.freeze({
     INSTAGRAM_FB_ID: '17841405600281893'
 });
 Object.freeze({
+    PAYPAL: 'https://paypal.me/surmon',
+    GITHUB_SPONSORS: 'https://github.com/sponsors/surmon-china',
+    BTC_ADDRESS: '3EfQ59NRCo33EQngwVsKJxonzz2fkbyopw',
+    ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
+});
+Object.freeze({
     RSS: '/rss.xml',
     SITE_MAP: '/sitemap.xml',
-    SPONSOR: '/sponsor',
     GITHUB_SURMON_ME: 'https://github.com/surmon-china/surmon.me',
     GITHUB_NODEPRESS: 'https://github.com/surmon-china/nodepress',
     GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
     GITHUB_BLOG_STAR_LIST: 'https://github.com/stars/surmon-china/lists/surmon-me',
     APP_APK_FILE: 'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
-    THROW_ERROR: 'https://throwerror.io',
-    FOX_FINDER: 'https://foxfinder.io',
     GITHUB: 'https://github.com/surmon-china',
-    GITHUB_SPONSORS: 'https://github.com/sponsors/surmon-china',
-    PAYPAL: 'https://www.paypal.me/surmon',
     UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
     MARKDOWN: 'https://daringfireball.net/projects/markdown/',
     GOOGLE_LIVE_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3',
     DISCORD_GROUP: 'https://discord.gg/cXdGT7Gx86',
-    TELEGRAM: 'https://t.me/surmon',
     TELEGRAM_GROUP: 'https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA',
     SPOTIFY: 'https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o',
     MUSIC_163: `https://music.163.com/#/playlist?id=${THIRD_IDS.MUSIC_163_BGM_ALBUM_ID}`,
     YOUTUBE_CHANNEL: `https://www.youtube.com/channel/${THIRD_IDS.YOUTUBE_CHANNEL_ID}`,
+    TELEGRAM: 'https://t.me/surmon',
     DOUBAN: 'https://www.douban.com/people/nocower',
     ZHIHU: 'https://www.zhihu.com/people/surmon',
     QUORA: 'https://www.quora.com/profile/Surmon',
-    STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon',
     LEETCODE: 'https://leetcode.com/Surmon',
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
     INSTAGRAM: `https://www.instagram.com/${THIRD_IDS.INSTAGRAM_USERNAME}`,
-    TWITTER: `https://twitter.com/${THIRD_IDS.TWITTER_USER_ID}`
+    TWITTER: `https://twitter.com/${THIRD_IDS.TWITTER_USER_ID}`,
+    STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon'
 });/**
  * @file BFF Server helper
  * @module server.helper
@@ -305,23 +284,52 @@ const getAllWallpapers = async () => {
  */
 // https://github.com/settings/tokens
 const bearerToken$1 = yargs.argv.github_token;
-const getGitHubRepositories = async () => {
-    const response = await axios__default["default"].request({
-        headers: { 'User-Agent': META.title },
-        url: `http://api.github.com/users/${THIRD_IDS.GITHUB_USER_ID}/repos?per_page=168`
+const graphqlGitHub = (query) => {
+    return axios__default["default"]
+        .request({
+        headers: { Authorization: `bearer ${bearerToken$1}` },
+        url: `https://api.github.com/graphql`,
+        method: 'POST',
+        data: JSON.stringify({
+            query: `query {
+        user(login: "${THIRD_IDS.GITHUB_USER_ID}") {
+          ${query}
+        }
+      }`
+        })
+    })
+        .then((response) => {
+        return response.data.errors
+            ? Promise.reject(response.data.errors.map((error) => error.message).join('; '))
+            : Promise.resolve(response.data.data.user);
     });
-    return response.data.map((rep) => ({
-        html_url: rep.html_url,
-        name: rep.name || ' ',
-        fork: rep.fork,
-        forks: rep.forks,
-        forks_count: rep.forks_count,
-        description: rep.description || ' ',
-        open_issues_count: rep.open_issues_count,
-        stargazers_count: rep.stargazers_count,
-        created_at: rep.created_at,
-        language: rep.language
-    }));
+};
+const getGitHubSponsors = async () => {
+    const result = await graphqlGitHub(`
+    sponsors(first: 100) {
+      totalCount
+      edges {
+        node {
+          ... on User {
+            login
+            name
+            company
+            url
+            avatarUrl
+            websiteUrl
+          }
+          ... on Organization {
+            login
+            name
+            url
+            avatarUrl
+            websiteUrl
+          }
+        }
+      }
+    }
+  `);
+    return result.sponsors;
 };
 const isISODateString = (dateString) => {
     if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(dateString))
@@ -332,34 +340,22 @@ const getGitHubContributions = async (from, to) => {
     if (!isISODateString(from) || !isISODateString(to)) {
         return Promise.reject('Invalid date string!');
     }
-    const response = await axios__default["default"].request({
-        headers: { Authorization: `bearer ${bearerToken$1}` },
-        url: `https://api.github.com/graphql`,
-        method: 'POST',
-        data: JSON.stringify({
-            query: `query {
-        user(login: "${THIRD_IDS.GITHUB_USER_ID}") {
-          contributionsCollection(from: "${from}", to: "${to}") {
-            contributionCalendar {
-              totalContributions
-              weeks {
-                contributionDays {
-                  weekday
-                  date
-                  contributionCount
-                  color
-                }
-              }
-            }
+    const result = await graphqlGitHub(`
+    contributionsCollection(from: "${from}", to: "${to}") {
+      contributionCalendar {
+        totalContributions
+        weeks {
+          contributionDays {
+            weekday
+            date
+            contributionCount
+            color
           }
         }
-      }`
-        })
-    });
-    if (response.data.errors) {
-        throw Error(response.data.errors.map((error) => error.message).join('; '));
+      }
     }
-    return response.data.data.user.contributionsCollection.contributionCalendar;
+  `);
+    return result.contributionsCollection.contributionCalendar;
 };/**
  * @file BFF Twitter getter
  * @module server.getter.twitter
@@ -689,7 +685,7 @@ const getSongList = async () => {
         url: `https://music.163.com/song/media/outer/url?id=${song.id}.mp3`
     })));
 };const resolveTemplate = (config) => {
-    const { template, appHTML, metas, scripts, manifest } = config;
+    const { template, appHTML, metas, scripts } = config;
     const bodyScripts = [
         scripts
         // MARK: https://cn.vitejs.dev/config/#build-ssrmanifest
@@ -1167,14 +1163,14 @@ createExpressApp().then(({ app, server, cache }) => {
             getter: getAllWallpapers
         });
     }));
-    // GitHub repositories
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubRepositories}`, responsor(() => {
+    // GitHub sponsors
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubSponsors}`, responsor(() => {
         return cacher({
             cache,
-            key: 'github_repositories',
-            age: 60 * 60 * 2,
-            retryWhen: 60 * 30,
-            getter: getGitHubRepositories
+            key: 'github_sponsors',
+            age: 60 * 60 * 18,
+            retryWhen: 60 * 10,
+            getter: getGitHubSponsors
         });
     }));
     // GitHub contributions

@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.8.1
+* Surmon.me v3.8.2
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -34,7 +34,7 @@ const DIST_PATH = path__default["default"].join(ROOT_PATH, 'dist');
 const PRDO_CLIENT_PATH = path__default["default"].join(DIST_PATH, 'client');
 const PRDO_SERVER_PATH = path__default["default"].join(DIST_PATH, 'server');
 isDev ? path__default["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;const resolveTemplate = (config) => {
-    const { template, appHTML, metas, scripts, manifest } = config;
+    const { template, appHTML, metas, scripts } = config;
     const bodyScripts = [
         scripts
         // MARK: https://cn.vitejs.dev/config/#build-ssrmanifest
@@ -211,28 +211,6 @@ const META = Object.freeze({
     domain: 'surmon.me',
     author: 'Surmon'
 });
-Object.freeze([
-    {
-        name: 'iconfont',
-        url: 'https://www.iconfont.cn/'
-    },
-    {
-        name: `GitHub`,
-        url: 'https://github.com'
-    },
-    {
-        name: `PM2`,
-        url: 'https://pm2.keymetrics.io/'
-    },
-    {
-        name: `Vite`,
-        url: 'https://vitejs.dev/'
-    },
-    {
-        name: `Disqus`,
-        url: 'https://disqus.com/'
-    }
-]);
 const THIRD_IDS = Object.freeze({
     YOUTUBE_CHANNEL_ID: `UCoL-j6T28PLSJ2U6ZdONS0w`,
     MUSIC_163_BGM_ALBUM_ID: '638949385',
@@ -242,36 +220,37 @@ const THIRD_IDS = Object.freeze({
     INSTAGRAM_FB_ID: '17841405600281893'
 });
 Object.freeze({
+    PAYPAL: 'https://paypal.me/surmon',
+    GITHUB_SPONSORS: 'https://github.com/sponsors/surmon-china',
+    BTC_ADDRESS: '3EfQ59NRCo33EQngwVsKJxonzz2fkbyopw',
+    ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
+});
+Object.freeze({
     RSS: '/rss.xml',
     SITE_MAP: '/sitemap.xml',
-    SPONSOR: '/sponsor',
     GITHUB_SURMON_ME: 'https://github.com/surmon-china/surmon.me',
     GITHUB_NODEPRESS: 'https://github.com/surmon-china/nodepress',
     GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
     GITHUB_BLOG_STAR_LIST: 'https://github.com/stars/surmon-china/lists/surmon-me',
     APP_APK_FILE: 'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
-    THROW_ERROR: 'https://throwerror.io',
-    FOX_FINDER: 'https://foxfinder.io',
     GITHUB: 'https://github.com/surmon-china',
-    GITHUB_SPONSORS: 'https://github.com/sponsors/surmon-china',
-    PAYPAL: 'https://www.paypal.me/surmon',
     UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
     MARKDOWN: 'https://daringfireball.net/projects/markdown/',
     GOOGLE_LIVE_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3',
     DISCORD_GROUP: 'https://discord.gg/cXdGT7Gx86',
-    TELEGRAM: 'https://t.me/surmon',
     TELEGRAM_GROUP: 'https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA',
     SPOTIFY: 'https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o',
     MUSIC_163: `https://music.163.com/#/playlist?id=${THIRD_IDS.MUSIC_163_BGM_ALBUM_ID}`,
     YOUTUBE_CHANNEL: `https://www.youtube.com/channel/${THIRD_IDS.YOUTUBE_CHANNEL_ID}`,
+    TELEGRAM: 'https://t.me/surmon',
     DOUBAN: 'https://www.douban.com/people/nocower',
     ZHIHU: 'https://www.zhihu.com/people/surmon',
     QUORA: 'https://www.quora.com/profile/Surmon',
-    STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon',
     LEETCODE: 'https://leetcode.com/Surmon',
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
     INSTAGRAM: `https://www.instagram.com/${THIRD_IDS.INSTAGRAM_USERNAME}`,
-    TWITTER: `https://twitter.com/${THIRD_IDS.TWITTER_USER_ID}`
+    TWITTER: `https://twitter.com/${THIRD_IDS.TWITTER_USER_ID}`,
+    STACK_OVERFLOW: 'https://stackoverflow.com/users/6222535/surmon'
 });/**
  * @file Universal Server cache
  * @module server.cache
@@ -397,7 +376,7 @@ const initializer = async (context, callback) => {
     callback(null, '');
 };
 // MARK
-const handler = (request, response, context) => {
+const handler = (request, response) => {
     // slsServer?.app
     // ...
     console.log('hello world');
