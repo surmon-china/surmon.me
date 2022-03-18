@@ -69,3 +69,26 @@ export const useAboutPageMeta = () => {
     return { pageTitle: titles.join(' | '), description: `关于 ${META.author}` }
   })
 }
+
+export const SPECIAL_LINKS = Object.freeze([
+  {
+    name: 'iconfont',
+    url: 'https://www.iconfont.cn/'
+  },
+  {
+    name: `GitHub`,
+    url: 'https://github.com'
+  },
+  {
+    name: `PM2`,
+    url: 'https://pm2.keymetrics.io/'
+  },
+  {
+    name: `Vite`,
+    url: 'https://vitejs.dev/'
+  },
+  {
+    name: `Disqus`,
+    url: 'https://disqus.com/'
+  }
+])

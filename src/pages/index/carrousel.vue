@@ -208,7 +208,7 @@
       ::v-deep(.swiper-wrapper[style*='300ms']) {
         .swiper-slide-active {
           .content {
-            @include blur-filter('horizontal');
+            @include motion-blur-filter('horizontal');
           }
         }
       }

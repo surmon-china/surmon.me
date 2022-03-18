@@ -34,7 +34,7 @@
       width: 100%;
       height: 100%;
       opacity: 0.3;
-      background: cdn-url('/images/background.png');
+      background: url('/images/background.png');
 
       &.dark {
         opacity: 0.2;

@@ -12,7 +12,7 @@
 }
 
 .swiper-pagination-bullet {
-  border-radius: $xs-radius;
+  border-radius: $xs-radius !important;
   transition: all $transition-time-fast;
   &:hover {
     opacity: 0.8;

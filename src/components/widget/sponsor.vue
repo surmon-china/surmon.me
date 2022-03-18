@@ -1,0 +1,347 @@
+<template>
+  <div class="sponsor">
+    <div class="tab">
+      <template v-for="(target, index) in targets" :key="index">
+        <button
+          class="item"
+          :class="[target.id, { active: activeIndex === index }]"
+          :title="target.title"
+          @click="handleSwitch(index)"
+        >
+          <uimage class="logo" :alt="target.title" :src="target.logo" cdn />
+          <span class="title" v-if="!hideTitle">{{ target.title }}</span>
+        </button>
+      </template>
+    </div>
+    <div class="target" :class="activeTarget.id">
+      <p class="external">
+        <template v-if="activeTarget.link">
+          <ulink class="link" :href="activeTarget.link">
+            <code>{{ activeTarget.link }}</code>
+          </ulink>
+          <i class="iconfont icon-new-window-s"></i>
+        </template>
+        <template v-if="activeTarget.address">
+          <code class="link" @click="handleCopyAddress(activeTarget.address)">
+            {{ activeTarget.address }}
+          </code>
+          <i class="iconfont icon-copy"></i>
+        </template>
+        <template v-if="activeTarget.text">
+          {{ activeTarget.text }}
+          <i class="iconfont icon-qrcode"></i>
+        </template>
+      </p>
+      <uimage class="qrcode" v-if="activeTarget.qrcode" :src="activeTarget.qrcode" cdn />
+      <div class="github-sponsors" v-if="activeTarget.id == 'github'">
+        <ulink class="link" :href="SPONSOR_LINKS.GITHUB_SPONSORS">
+          <i class="iconfont icon-heart"></i>
+          <span class="text">Sponsor me on GitHub</span>
+        </ulink>
+        <p class="total">
+          <i18n>
+            <template #zh>
+              我在 GitHub Sponsors 已得到 {{ ghSponsors?.totalCount || '-' }} 位赞助者的支持。
+            </template>
+            <template #en>
+              I have {{ ghSponsors?.totalCount || '-' }} backers on GitHub Sponsors.
+            </template>
+          </i18n>
+        </p>
+        <div class="users" v-if="ghSponsors?.edges">
+          <ulink
+            class="item"
+            :href="edge.node.url"
+            :title="edge.node.name"
+            v-for="(edge, index) in ghSponsors.edges.slice(0, maxSponsors)"
+            :key="index"
+          >
+            <uimage class="avatar" :src="edge.node.avatarUrl" :alt="edge.node.name" />
+          </ulink>
+          <ulink
+            class="more-link"
+            v-if="ghSponsors.edges.length > maxSponsors"
+            :href="SPONSOR_LINKS.GITHUB_SPONSORS + '#sponsors'"
+          >
+            + {{ ghSponsors.edges.length - maxSponsors }}
+          </ulink>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+  import { defineComponent, ref, computed, onMounted } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { TunnelModule } from '/@/constants/tunnel'
+  import { copy } from '/@/utils/clipboard'
+  import tunnel from '/@/services/tunnel'
+  import { SPONSOR_LINKS } from '/@/config/app.config'
+
+  export default defineComponent({
+    name: 'Sponsor',
+    props: {
+      initIndex: {
+        type: Number,
+        default: 0
+      },
+      maxSponsors: {
+        type: Number,
+        default: 20
+      },
+      hideTitle: {
+        type: Boolean,
+        default: false
+      }
+    },
+    setup(props) {
+      const targets = [
+        {
+          id: 'github',
+          title: 'GitHub Sponsors',
+          logo: '/images/sponsor/github-sponsors-logo.svg'
+        },
+        {
+          id: 'paypal',
+          title: 'PayPal me',
+          link: SPONSOR_LINKS.PAYPAL,
+          logo: '/images/sponsor/paypal-logo.svg',
+          qrcode: '/images/sponsor/paypal-qrcode.png'
+        },
+        {
+          id: 'alipay',
+          title: '支付宝',
+          text: '通过支付宝客户端扫码',
+          logo: '/images/sponsor/alipay-logo.svg',
+          qrcode: '/images/sponsor/alipay-qrcode.png'
+        },
+        {
+          id: 'wechat-pay',
+          title: '微信赞赏',
+          text: '通过微信客户端扫码',
+          logo: '/images/sponsor/wechat-pay-logo.svg',
+          qrcode: '/images/sponsor/wechat-pay-qrcode.jpg'
+        },
+        {
+          id: 'bitcoin',
+          title: 'BTC',
+          address: '3EfQ59NRCo33EQngwVsKJxonzz2fkbyopw',
+          logo: '/images/sponsor/btc-logo.svg',
+          qrcode: '/images/sponsor/btc-qrcode.png'
+        },
+        {
+          id: 'ethereum',
+          title: 'ETH',
+          address: '0xaD556974D449126efdeF23f4FF581861C301cB77',
+          logo: '/images/sponsor/eth-logo.svg',
+          qrcode: '/images/sponsor/eth-qrcode.png'
+        }
+      ]
+
+      const { gtag } = useEnhancer()
+      const activeIndex = ref(props.initIndex)
+      const activeTarget = computed(() => targets[activeIndex.value])
+      const handleSwitch = (index: number) => {
+        activeIndex.value = index
+        gtag?.event('sponsor_modal_switch', {
+          event_category: GAEventCategories.Widget
+        })
+      }
+
+      const handleCopyAddress = (content: any) => {
+        copy(content).then(() => {
+          alert(`Address copied to clipboard`)
+        })
+      }
+
+      const ghSponsors = ref<any>(null)
+      const ghSponsorsLoading = ref<any>(null)
+      const fetchGitHubSponsors = () => {
+        ghSponsorsLoading.value = true
+        tunnel
+          .dispatch(TunnelModule.GitHubSponsors)
+          .then((response) => {
+            ghSponsors.value = response
+            console.log('Sponsor onMounted', ghSponsors.value)
+          })
+          .finally(() => {
+            ghSponsorsLoading.value = false
+          })
+      }
+
+      onMounted(() => {
+        fetchGitHubSponsors()
+        console.log('Sponsor onMounted')
+      })
+
+      return {
+        SPONSOR_LINKS,
+        activeIndex,
+        activeTarget,
+        targets,
+        ghSponsors,
+        ghSponsorsLoading,
+        handleSwitch,
+        handleCopyAddress
+      }
+    }
+  })
+</script>
+
+<style lang="scss" scoped>
+  @import 'src/styles/variables.scss';
+  @import 'src/styles/mixins.scss';
+
+  .sponsor {
+    display: flex;
+    flex-direction: column;
+
+    .tab {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+
+      .item {
+        height: 5rem;
+        min-width: 4rem;
+        position: relative;
+
+        .logo {
+          height: 2rem;
+          filter: grayscale(1);
+        }
+
+        .title {
+          font-weight: bold;
+          margin-left: $gap;
+          color: $text-secondary;
+          transition: color $transition-time-fast;
+        }
+
+        &.github {
+          .logo {
+            height: 2.2rem;
+          }
+        }
+
+        &.active,
+        &:hover {
+          .logo {
+            filter: grayscale(0);
+          }
+          .title {
+            color: $link-color;
+            padding-bottom: 4px;
+            border-bottom: 2px solid $link-color;
+          }
+        }
+      }
+    }
+
+    .target {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      min-height: 18rem;
+
+      .external {
+        margin-bottom: $gap;
+        color: $text-secondary;
+
+        .link {
+          margin-left: $sm-gap;
+          cursor: pointer;
+          text-decoration: underline;
+          color: $text-secondary;
+          &:hover {
+            color: $link-color;
+          }
+        }
+
+        .iconfont {
+          font-size: $font-size-small;
+          color: $text-secondary;
+          margin-left: $xs-gap;
+        }
+      }
+
+      .qrcode {
+        height: 14rem;
+        max-height: 60%;
+        border-radius: $xs-radius;
+      }
+
+      .github-sponsors {
+        text-align: center;
+
+        .link {
+          display: inline-block;
+          margin-bottom: 2rem;
+          padding: 0 1em;
+          line-height: 3em;
+          border-radius: $lg-radius;
+          background: $module-bg-darker-1;
+          transition: background $transition-time-fast;
+          &:hover {
+            background: $module-bg-darker-2;
+            .text {
+              color: $link-color;
+            }
+          }
+
+          .iconfont {
+            margin-right: $sm-gap;
+            color: $github-sponsor-primary;
+          }
+
+          .text {
+            color: $text;
+            font-weight: bold;
+          }
+        }
+
+        .total {
+          margin-bottom: 2rem;
+          font-weight: bold;
+        }
+
+        .users {
+          max-width: 40rem;
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+
+          .more-link {
+            margin-left: $sm-gap;
+            line-height: 2em;
+            font-weight: bold;
+            font-size: $font-size-h4;
+            color: $text-secondary;
+            &:hover {
+              color: $link-color;
+            }
+          }
+
+          .item {
+            display: flex;
+            flex-direction: column;
+            margin: $sm-gap $xs-gap;
+
+            .avatar {
+              width: 3rem;
+              height: 3rem;
+              border-radius: 100%;
+              background-color: $module-bg-darker-1;
+              overflow: hidden;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>

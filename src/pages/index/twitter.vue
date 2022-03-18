@@ -392,7 +392,7 @@
           flex-direction: column;
           &[style*='300ms'] {
             .swiper-slide-active {
-              @include blur-filter('vertical-small');
+              @include motion-blur-filter('vertical-small');
             }
           }
         }

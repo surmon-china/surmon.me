@@ -38,6 +38,7 @@ import AppPage from '/@/pages/app.vue'
 import LensPage from '/@/pages/lens/index.vue'
 import JobPage from '/@/pages/job.vue'
 import MerchPage from '/@/pages/merch/index.vue'
+import SponsorPage from '/@/pages/sponsor.vue'
 import FreelancerPage from '/@/pages/freelancer.vue'
 
 import 'vue-router'
@@ -72,6 +73,7 @@ export enum RouteName {
   Job = 'job',
   Merch = 'merch',
   Lens = 'lens',
+  Sponsor = 'sponsor',
   Error = 'error'
 }
 
@@ -314,6 +316,16 @@ export const routes: RouteRecordRaw[] = [
     path: '/freelancer',
     name: RouteName.Freelancer,
     component: FreelancerPage,
+    meta: {
+      responsive: false,
+      layout: LayoutColumn.Full,
+      ssrCacheAge: Infinity
+    }
+  },
+  {
+    path: '/sponsor',
+    name: RouteName.Sponsor,
+    component: SponsorPage,
     meta: {
       responsive: false,
       layout: LayoutColumn.Full,

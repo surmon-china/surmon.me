@@ -9,14 +9,14 @@
 @font-face {
   font-display: swap;
   font-family: Monda;
-  src: cdn-url('/fonts/Monda-Regular.ttf');
+  src: url('/fonts/Monda-Regular.ttf');
   unicode-range: U+21-3B, U+3D, U+3F-5F, U+61-7D;
 }
 
 @font-face {
   font-display: swap;
   font-family: DINRegular;
-  src: cdn-url('/fonts/DIN-Regular.ttf');
+  src: url('/fonts/DIN-Regular.ttf');
   // CSS Unicode Range Generator https://codepen.io/elifitch/pen/Ljqway
   // abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/.=-;',?!#@$%^&*()_+\|:"[]{}
   unicode-range: U+21-3B, U+3D, U+3F-5F, U+61-7D;
@@ -25,7 +25,7 @@
 @font-face {
   font-display: swap;
   font-family: 'SFMono-Regular';
-  src: cdn-url('/fonts/SFMonoRegular.otf') format('opentype');
+  src: url('/fonts/SFMonoRegular.otf') format('opentype');
 }
 
 // https://www.iconfont.cn/webfont#!/webfont/index

@@ -103,22 +103,6 @@ select:-webkit-autofill {
   color: $text-reversal;
 }
 
-// filters
-.filter {
-  &.motion-blur-horizontal {
-    @include blur-filter('horizontal');
-  }
-  &.motion-blur-horizontal-small {
-    @include blur-filter('horizontal-small');
-  }
-  &.motion-blur-vertical {
-    @include blur-filter('vertical');
-  }
-  &.motion-blur-vertical-small {
-    @include blur-filter('vertical-small');
-  }
-}
-
 .mammon-box {
   @extend .center-placeholder;
 }

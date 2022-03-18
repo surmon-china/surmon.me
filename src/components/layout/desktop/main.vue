@@ -3,11 +3,13 @@
     <background />
     <wallflower />
     <client-only>
-      <popup :visible="switcher.sponsor" :border="false" @close="handleSponsorModalClose">
-        <iframe
-          :style="{ width: '600px', height: '200px', borderRadius: '4px' }"
-          :src="VALUABLE_LINKS.SPONSOR"
-        />
+      <popup :visible="switcher.sponsor" @close="handleSponsorModalClose">
+        <div class="sponsor-modal">
+          <div class="tips">
+            <i18n :k="LanguageKey.SPONSOR_TEXT" />
+          </div>
+          <sponsor class="sponsor" :hide-title="true" :max-sponsors="8" />
+        </div>
       </popup>
       <popup
         :visible="switcher.feedback"
@@ -65,8 +67,8 @@
 
 <script lang="ts">
   import { defineComponent, onMounted } from 'vue'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
   import { MAIN_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
+  import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { useMusic } from '/@/composables/music'
   import { useWallpaperStore } from '/@/stores/wallpaper'
@@ -75,6 +77,7 @@
   import Wallflower from '/@/components/widget/wallflower/garden.vue'
   import Wallpaper from '/@/components/widget/wallpaper/switcher.vue'
   import Background from '/@/components/widget/background.vue'
+  import Sponsor from '/@/components/widget/sponsor.vue'
   import Share from '/@/components/widget/share.vue'
   import Toolbox from '/@/components/widget/toolbox.vue'
   import Feedback from '/@/components/widget/feedback.vue'
@@ -91,6 +94,7 @@
       Feedback,
       Wallpaper,
       Statement,
+      Sponsor,
       MusicPlayerHandle,
       Toolbox,
       Wallflower,
@@ -124,9 +128,9 @@
       })
 
       return {
+        LanguageKey,
         MAIN_ELEMENT_ID,
         MAIN_CONTENT_ELEMENT_ID,
-        VALUABLE_LINKS,
         switcher: globalState.switcher,
         layoutColumn: globalState.layoutColumn,
         handlePageTransitionDone,
@@ -141,6 +145,30 @@
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
   @import 'src/styles/mixins.scss';
+
+  .sponsor-modal {
+    width: 50rem;
+    height: 28rem;
+    display: flex;
+    flex-direction: column;
+    background-color: $module-bg-lighter !important;
+
+    .tips {
+      line-height: 3em;
+      text-align: center;
+      background-color: $module-bg-lighter;
+      border-bottom: 1px dashed $module-bg-darker-1;
+    }
+
+    .sponsor {
+      flex-grow: 1;
+
+      ::v-deep(.tab) {
+        background-color: $module-bg-lighter;
+        border-bottom: 1px solid $module-bg-darker-1;
+      }
+    }
+  }
 
   .desktop-main {
     padding-top: $header-height + $lg-gap;

@@ -20,6 +20,16 @@ import SkeletonParagraph from '/@/components/common/skeleton/paragraph.vue'
 import { Responsive, DesktopOnly } from '/@/components/common/responsive'
 import { ClientOnly } from '/@/components/common/client-only'
 
+declare module 'vue' {
+  export interface GlobalComponents {
+    Spin: typeof Spin
+    Empty: typeof Empty
+    Divider: typeof Divider
+    Ulink: typeof Ulink
+    ClientOnly: typeof ClientOnly
+  }
+}
+
 export default function (app: App) {
   app.component(Spin.name as string, Spin)
   app.component(Empty.name as string, Empty)

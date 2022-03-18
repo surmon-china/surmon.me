@@ -20,7 +20,7 @@ export const initializer = async (context, callback) => {
 }
 
 // MARK
-export const handler = (request, response, context) => {
+export const handler = (request, response) => {
   // slsServer?.app
   // ...
   console.log('hello world')

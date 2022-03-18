@@ -12,7 +12,7 @@ import { getRSSXML } from './server/getters/rss'
 import { getSitemapXML } from './server/getters/sitemap'
 import { getGTagScript } from './server/getters/gtag'
 import { getAllWallpapers } from './server/getters/wallpaper'
-import { getGitHubRepositories, getGitHubContributions } from './server/getters/github'
+import { getGitHubSponsors, getGitHubContributions } from './server/getters/github'
 import {
   getTwitterTweets,
   getTwitterUserinfo,
@@ -110,16 +110,16 @@ createExpressApp().then(({ app, server, cache }) => {
     })
   )
 
-  // GitHub repositories
+  // GitHub sponsors
   app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubRepositories}`,
+    `${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubSponsors}`,
     responsor(() => {
       return cacher({
         cache,
-        key: 'github_repositories',
-        age: 60 * 60 * 2, // 2 hours
-        retryWhen: 60 * 30, // 30 minutes
-        getter: getGitHubRepositories
+        key: 'github_sponsors',
+        age: 60 * 60 * 18, // 18 hours
+        retryWhen: 60 * 10, // 10 minutes
+        getter: getGitHubSponsors
       })
     })
   )

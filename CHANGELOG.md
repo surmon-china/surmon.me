@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.8.2 (2022-03-18)
+
+**Feature**
+
+- Add Sponsor page
+- Upgrade Sponsor component (modal)
+- Remove CSS `source-url` and `cdn-url`
+
 ### v3.8.0 (2022-03-15)
 
 **Feature**

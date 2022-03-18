@@ -178,8 +178,8 @@
   import { getPageRoute } from '/@/transforms/route'
   import { getTargetStaticURL } from '/@/transforms/url'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { VALUABLE_LINKS, SPECIAL_LINKS } from '/@/config/app.config'
-  import { useAboutPageMeta, getAdminAvatar, i18ns } from './helper'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { useAboutPageMeta, getAdminAvatar, i18ns, SPECIAL_LINKS } from './helper'
   import AggregateCalendar from './calendar/index.vue'
 
   export default defineComponent({
@@ -393,7 +393,7 @@
         width: 100%;
         background-color: $module-bg;
         @include radius-box($lg-radius);
-        background-image: cdn-url('/images/page-about/background.png'),
+        background-image: url('/images/page-about/background.png'),
           linear-gradient($module-bg-opaque 40%, #00000000 100%);
         background-size: contain;
         background-repeat: repeat-x;

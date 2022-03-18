@@ -199,7 +199,7 @@
           font-weight: bold;
           color: $text;
           background-clip: text;
-          background-image: cdn-url('/images/page-guestbook/banner.jpg');
+          background-image: url('/images/page-guestbook/banner.jpg');
           background-position: 100% 80%;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;

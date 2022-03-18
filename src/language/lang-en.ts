@@ -15,6 +15,7 @@ export const enLangMap: LanguageMap = {
   [LanguageKey.PAGE_LENS]: 'Lens',
   [LanguageKey.PAGE_JOB]: 'Job',
   [LanguageKey.PAGE_MERCH]: 'Merch',
+  [LanguageKey.PAGE_SPONSOR]: 'Sponsor',
   [LanguageKey.PAGE_FREELANCER]: 'Freelancer',
   [LanguageKey.EMPTY_PLACEHOLDER]: 'No data',
   [LanguageKey.NOT_FOUND]: 'Arrives here at last',
@@ -22,6 +23,8 @@ export const enLangMap: LanguageMap = {
   [LanguageKey.GUESTBOOK_SLOGAN]: 'You have come a long way',
   [LanguageKey.PAGE_FREELANCER_SLOGAN]: 'Talk is cheap. Show me the code',
   [LanguageKey.PAGE_FREELANCER_EMAIL_ME]: 'Email me',
+  [LanguageKey.SPONSOR_TEXT]:
+    'Both monthly-recurring sponsorships and one-time donations are accepted',
   [LanguageKey.AD]: 'AD',
   [LanguageKey.BARRAGE]: 'Barrage',
   [LanguageKey.FEEDBACK]: 'Feedback',

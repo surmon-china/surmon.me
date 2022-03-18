@@ -221,7 +221,7 @@
           &[style*='300ms'] {
             .swiper-slide-active {
               .content {
-                @include blur-filter('vertical-small');
+                @include motion-blur-filter('vertical-small');
               }
             }
           }

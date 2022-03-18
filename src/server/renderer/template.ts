@@ -7,7 +7,7 @@ export const resolveTemplate = (config: {
   scripts?: string
   manifest?: any
 }) => {
-  const { template, appHTML, metas, scripts, manifest } = config
+  const { template, appHTML, metas, scripts } = config
 
   const bodyScripts = [
     scripts

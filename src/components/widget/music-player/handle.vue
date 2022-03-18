@@ -189,7 +189,7 @@
         height: 100%;
         overflow: hidden;
         background-color: $module-bg-darker-1;
-        background-image: cdn-url('/images/page-music/background.jpg');
+        background-image: url('/images/page-music/background.jpg');
         background-size: cover;
       }
 

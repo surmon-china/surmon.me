@@ -1,14 +1,7 @@
 @use 'sass:math';
 
-// url
-$cdn-url: '' !default;
 $source-url: '' !default;
-
-@function cdn-url($uri) {
-  @return url($cdn-url + $uri);
-}
-
-@function force-source-url($uri) {
+@function source-url($uri) {
   @return url($source-url + $uri);
 }
 
@@ -55,53 +48,6 @@ $grey: #c0c0c0;
 $white: #ffffff;
 $black: #000000;
 $mobile-aside-bg: #34393d;
-
-// others
-$en-primary: rgb(0, 43, 127);
-$zh-primary: #f40002;
-$disqus-primary: #2e9fff;
-$qq-primary: #12b7f5;
-$taobao-primary: #ff5000;
-$aliyun-primary: #ff6a00;
-$rss-primary: #f8981d;
-$html5-primary: #d45835;
-$nodejs-primary: #43853d;
-$wechat-primary: #55be69;
-$wechat-channel-primary: #fa9d3b;
-$weibo-primary: rgb(230, 22, 45);
-$qzone-primary: rgb(43, 130, 217);
-$evernote-primary: rgb(85, 182, 25);
-$facebook-primary: rgb(59, 89, 152);
-$telegram-primary: #54a5dd;
-$douban-primary: #00b51d;
-$zhihu-primary: #3582f7;
-$bing-primary: #01809e;
-$discord-primary: #5865f2;
-$stackoverflow-primary: #e6863d;
-$leetcode-primary: #fea116;
-$quora-primary: #b92b27;
-$linkedin-primary: #478cc5;
-$spotify-primary: #1db954;
-$music163-primary: #c20c0c;
-$youtube-primary: #ec3323;
-$paypal-primary: #4599d2;
-$paypal-primary-hover: #293a7c;
-$twitter-primary: #1b95e0;
-$twitter-primary-hover: #0c7abf;
-$github-primary: #24282d;
-$github-primary-hover: #000;
-$github-sponsor-primary: #ea4aaa;
-$bilibili-blue-primary: #00a1d6;
-$bilibili-pink-primary: #fb7299;
-$instagram-primary: #ed4956;
-$instagram-gradient: linear-gradient(
-  45deg,
-  #f09433 0%,
-  #e6683c 25%,
-  #dc2743 50%,
-  #cc2366 75%,
-  #bc1888 100%
-);
 
 // gap
 $gap: 1rem; // ~12px
@@ -173,3 +119,50 @@ $font-size-h5: $font-size-base; // ~14px
 $font-size-h6: $font-size-base * 0.97; // ~13.3px
 
 $line-height-base: 1.4;
+
+// others
+$en-primary: rgb(0, 43, 127);
+$zh-primary: #f40002;
+$disqus-primary: #2e9fff;
+$qq-primary: #12b7f5;
+$taobao-primary: #ff5000;
+$aliyun-primary: #ff6a00;
+$rss-primary: #f8981d;
+$html5-primary: #d45835;
+$nodejs-primary: #43853d;
+$wechat-primary: #55be69;
+$wechat-channel-primary: #fa9d3b;
+$weibo-primary: rgb(230, 22, 45);
+$qzone-primary: rgb(43, 130, 217);
+$evernote-primary: rgb(85, 182, 25);
+$facebook-primary: rgb(59, 89, 152);
+$telegram-primary: #54a5dd;
+$douban-primary: #00b51d;
+$zhihu-primary: #3582f7;
+$bing-primary: #01809e;
+$discord-primary: #5865f2;
+$stackoverflow-primary: #e6863d;
+$leetcode-primary: #fea116;
+$quora-primary: #b92b27;
+$linkedin-primary: #478cc5;
+$spotify-primary: #1db954;
+$music163-primary: #c20c0c;
+$youtube-primary: #ec3323;
+$paypal-primary: #4599d2;
+$paypal-primary-hover: #293a7c;
+$twitter-primary: #1b95e0;
+$twitter-primary-hover: #0c7abf;
+$github-primary: #24282d;
+$github-primary-hover: #000;
+$github-sponsor-primary: #ea4aaa;
+$bilibili-blue-primary: #00a1d6;
+$bilibili-pink-primary: #fb7299;
+$instagram-primary: #ed4956;
+$instagram-gradient: linear-gradient(
+  45deg,
+  #f09433 0%,
+  #e6683c 25%,
+  #dc2743 50%,
+  #cc2366 75%,
+  #bc1888 100%
+);

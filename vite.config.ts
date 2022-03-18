@@ -34,18 +34,6 @@ export default defineConfig(({ command, mode }) => {
         '/@': path.resolve(__dirname, 'src')
       }
     },
-    css: {
-      // https://vitejs.dev/config/#css-preprocessoroptions
-      preprocessorOptions: {
-        scss: {
-          // https://github.com/vitejs/vite/issues/520
-          additionalData: `
-            $cdn-url: '${TARGET_ENV_CONFIG.VITE_CDN_URL}';
-            $source-url: '${TARGET_ENV_CONFIG.VITE_FE_URL}';
-          `
-        }
-      }
-    },
     server: {
       open: true,
       port: 3000,
@@ -54,6 +42,14 @@ export default defineConfig(({ command, mode }) => {
           target: BASE_ENV_CONFIG.VITE_API_ONLINE_URL,
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, '')
+        }
+      }
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          charset: false,
+          additionalData: `$source-url: '${TARGET_ENV_CONFIG.VITE_FE_URL}';`
         }
       }
     },
