@@ -305,7 +305,7 @@
           margin-bottom: 2rem;
           padding: 0 1em;
           line-height: 3em;
-          border-radius: $lg-radius;
+          border-radius: $sm-radius;
           background: $module-bg-darker-1;
           transition: background $transition-time-fast;
           &:hover {
