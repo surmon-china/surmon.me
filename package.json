@@ -62,7 +62,7 @@
     "yargs": "^17.3.1"
   },
   "devDependencies": {
-    "@surmon-china/libundler": "^2.1.0",
+    "@surmon-china/libundler": "^2.1.1",
     "@types/compression": "^1.7.2",
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.13",
