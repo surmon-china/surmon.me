@@ -428,10 +428,10 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
-"@surmon-china/libundler@^2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@surmon-china/libundler/-/libundler-2.1.1.tgz#3bb0d0910f750e020e74818da93d1709573dd2c5"
-  integrity sha512-xmXAQoKAauFaHtFsD6iYT9fZaZetrxUi82B41jHOqTlZiabl1+/kCql5e8M28kxWWURqYJFwdJIMPuT8DWgJYg==
+"@surmon-china/libundler@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@surmon-china/libundler/-/libundler-2.2.0.tgz#e60aa9db97ab5c32ea8d2e0163f45dea4b5ce44d"
+  integrity sha512-GgdLgmRDygvII8k8qlORe308dCUVStc0j1CFC7RCmRQ8uO2bPijEaV4M5jRt1d4yspT2KjMPTGYlCcbE03Dg0A==
   dependencies:
     "@babel/core" "^7.17"
     "@rollup/plugin-alias" "^3.1"
