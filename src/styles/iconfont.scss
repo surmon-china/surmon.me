@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
-  src: url('//at.alicdn.com/t/font_64825_sl8dr73j0a.woff2?t=1647506879036') format('woff2'),
-    url('//at.alicdn.com/t/font_64825_sl8dr73j0a.woff?t=1647506879036') format('woff'),
-    url('//at.alicdn.com/t/font_64825_sl8dr73j0a.ttf?t=1647506879036') format('truetype');
+  src: url('//at.alicdn.com/t/font_64825_v3vi3zc5m5a.woff2?t=1648200386805') format('woff2'),
+    url('//at.alicdn.com/t/font_64825_v3vi3zc5m5a.woff?t=1648200386805') format('woff'),
+    url('//at.alicdn.com/t/font_64825_v3vi3zc5m5a.ttf?t=1648200386805') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-translation:before {
+  content: '\e9cf';
 }
 
 .icon-faq:before {
@@ -641,16 +645,8 @@
   content: '\e8a1';
 }
 
-.icon-v2ex:before {
-  content: '\e6b2';
-}
-
 .icon-zhihu:before {
   content: '\e632';
-}
-
-.icon-juejin:before {
-  content: '\e62e';
 }
 
 .icon-git-issue:before {
@@ -791,10 +787,6 @@
 
 .icon-resize-full:before {
   content: '\e6ae';
-}
-
-.icon-xiami:before {
-  content: '\e6af';
 }
 
 .icon-json:before {
