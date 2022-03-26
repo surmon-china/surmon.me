@@ -4,9 +4,9 @@
       <template v-for="(target, index) in targets" :key="index">
         <button
           class="item"
-          :class="[target.id, { active: activeIndex === index }]"
+          :class="[target.id, { active: activeTid === target.id }]"
           :title="target.title"
-          @click="handleSwitch(index)"
+          @click="handleSwitch(target.id)"
         >
           <span class="logo">
             <uimage class="image" :alt="target.title" :src="target.logo" cdn />
@@ -91,10 +91,7 @@
   export default defineComponent({
     name: 'Sponsor',
     props: {
-      initIndex: {
-        type: Number,
-        default: 0
-      },
+      initId: String,
       maxSponsors: {
         type: Number,
         default: 20
@@ -149,10 +146,10 @@
       ]
 
       const { gtag } = useEnhancer()
-      const activeIndex = ref(props.initIndex)
-      const activeTarget = computed(() => targets[activeIndex.value])
-      const handleSwitch = (index: number) => {
-        activeIndex.value = index
+      const activeTid = ref(targets[0].id)
+      const activeTarget = computed(() => targets.find((t) => t.id === activeTid.value)!)
+      const handleSwitch = (id: string) => {
+        activeTid.value = id
         gtag?.event('sponsor_modal_switch', {
           event_category: GAEventCategories.Widget
         })
@@ -180,11 +177,16 @@
 
       onMounted(() => {
         fetchGitHubSponsors()
+        if (props.initId) {
+          if (targets.map((t) => t.id).includes(props.initId)) {
+            activeTid.value = props.initId
+          }
+        }
       })
 
       return {
         SPONSOR_LINKS,
-        activeIndex,
+        activeTid,
         activeTarget,
         targets,
         ghSponsors,

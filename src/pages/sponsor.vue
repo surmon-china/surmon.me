@@ -21,13 +21,13 @@
       <i18n :k="LanguageKey.SPONSOR_TEXT" />
     </div>
     <div class="sponsor-wrapper">
-      <sponsor class="sponsor" />
+      <sponsor class="sponsor" :init-id="initSponsor" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { defineComponent, computed } from 'vue'
   import { Language, LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { firstUpperCase } from '/@/transforms/text'
@@ -41,14 +41,15 @@
       PageBanner
     },
     setup() {
-      const { i18n, meta, isZhLang } = useEnhancer()
+      const { route, i18n, meta, isZhLang } = useEnhancer()
+      const initSponsor = computed(() => route.hash.replace('#', ''))
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_SPONSOR, Language.English)!)
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_SPONSOR), enTitle] : [enTitle]
         return { pageTitle: titles.join(' | ') }
       })
 
-      return { LanguageKey }
+      return { LanguageKey, initSponsor }
     }
   })
 </script>
