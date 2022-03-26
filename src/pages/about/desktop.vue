@@ -804,7 +804,7 @@
         @extend .center-placeholder;
 
         .wrapper {
-          $google-bar: 60px;
+          $google-bar: 67px;
           position: relative;
           height: $size;
           border-radius: $xs-radius;
