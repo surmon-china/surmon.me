@@ -153,15 +153,13 @@ export const useArticleDetailStore = defineStore('articleDetail', {
         return null
       }
 
-      const halfIndex = Math.floor(this.contentLength / 2)
-      const index =
-        halfIndex >= LONG_ARTICLE_THRESHOLD ? Math.floor(LONG_ARTICLE_THRESHOLD * 0.68) : halfIndex
-      // 坐标优先级：H5 > H4 > H3 > \n\n
-      const shortContent = this.article.content.substring(0, index)
-      const lastH5Index = shortContent.lastIndexOf('\n####')
-      const lastH4Index = shortContent.lastIndexOf('\n####')
-      const lastH3Index = shortContent.lastIndexOf('\n###')
-      const lastLineIndex = shortContent.lastIndexOf('\n\n')
+      const splitLength = Math.min(LONG_ARTICLE_THRESHOLD, Math.floor(this.contentLength / 2))
+      const shortContent = this.article.content.substring(0, splitLength)
+      // 坐标优先级：H5 > H4 > H3 > \n\n\n
+      const lastH5Index = shortContent.lastIndexOf('\n##### ')
+      const lastH4Index = shortContent.lastIndexOf('\n#### ')
+      const lastH3Index = shortContent.lastIndexOf('\n### ')
+      const lastLineIndex = shortContent.lastIndexOf('\n\n\n')
       const splitIndex = Math.max(lastH5Index, lastH4Index, lastH3Index, lastLineIndex)
       // console.log('-----content length', this.contentLength, index, splitIndex)
       return splitIndex
