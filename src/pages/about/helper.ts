@@ -76,10 +76,6 @@ export const SPECIAL_LINKS = Object.freeze([
     url: 'https://www.iconfont.cn/'
   },
   {
-    name: `GitHub`,
-    url: 'https://github.com'
-  },
-  {
     name: `PM2`,
     url: 'https://pm2.keymetrics.io/'
   },

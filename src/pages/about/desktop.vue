@@ -133,11 +133,11 @@
             <button class="fullscreen" @click="handleOpenMap">
               <i class="iconfont icon-fullscreen"></i>
             </button>
-            <iframe class="iframe" :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP" frameborder="0" />
+            <iframe class="iframe" :src="VALUABLE_LINKS.GOOGLE_ROAD_MAP" frameborder="0" />
             <client-only>
               <popup v-model:visible="isOnRoadMap">
                 <iframe
-                  :src="VALUABLE_LINKS.GOOGLE_LIVE_MAP"
+                  :src="VALUABLE_LINKS.GOOGLE_ROAD_MAP"
                   allowfullscreen
                   frameborder="0"
                   class="roadmap-modal"
