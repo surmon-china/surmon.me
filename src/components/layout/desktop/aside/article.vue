@@ -22,10 +22,27 @@
       <template #default>
         <ul class="article-list" key="list">
           <li v-for="item in articles" :key="item.id" class="item">
-            <span class="index"></span>
-            <router-link class="title" :to="getArticleDetailRoute(item.id)" :title="item.title">
-              {{ item.title }}
-            </router-link>
+            <span class="index" :class="{ small: item.i >= 10 }" :data-index="item.i">
+              {{ item.i }}
+            </span>
+            <div class="content">
+              <router-link class="title" :to="getArticleDetailRoute(item.id)" :title="item.title">
+                {{ item.title }}
+              </router-link>
+              <div class="meta">
+                <span class="item">
+                  {{ dateToYMD(item.create_at) }}
+                </span>
+                <span class="item">
+                  <i class="iconfont icon-eye"></i>
+                  {{ numberToKilo(item.meta.views) }}
+                </span>
+                <span class="item">
+                  <i class="iconfont icon-comment"></i>
+                  {{ item.meta.comments }}
+                </span>
+              </div>
+            </div>
           </li>
         </ul>
       </template>
@@ -37,23 +54,32 @@
   import { defineComponent, ref, computed } from 'vue'
   import { useArticleListStore } from '/@/stores/article'
   import { getArticleDetailRoute } from '/@/transforms/route'
+  import { numberToKilo } from '/@/transforms/text'
+  import { dateToYMD } from '/@/transforms/moment'
   import { LanguageKey } from '/@/language'
 
-  const PER_PAGE = 10
+  const PER_PAGE = 8
 
   export default defineComponent({
     name: 'DesktopAsideArticle',
     setup() {
       const articleListStore = useArticleListStore()
       const isFetching = computed(() => articleListStore.hotList.fetching)
+      const articleFullList = computed(() => {
+        return articleListStore.hotList.data
+          .slice(0, PER_PAGE * 2)
+          .map((a, i) => ({ ...a, i: i + 1 }))
+      })
       const hotPage = ref(0)
       const articles = computed(() => {
         const perPage = hotPage.value * PER_PAGE
-        return articleListStore.hotList.data.slice(perPage, perPage + PER_PAGE)
+        return articleFullList.value
+          .map((a, i) => ({ ...a, i: i + 1 }))
+          .slice(perPage, perPage + PER_PAGE)
       })
 
       const switchHotPage = () => {
-        const count = articleListStore.hotList.data.length
+        const count = articleFullList.value.length
         const pages = Math.ceil(count / PER_PAGE)
         if (hotPage.value < pages - 1) {
           hotPage.value++
@@ -63,11 +89,13 @@
       }
 
       return {
+        LanguageKey,
         isFetching,
         articles,
         switchHotPage,
         getArticleDetailRoute,
-        LanguageKey
+        numberToKilo,
+        dateToYMD
       }
     }
   })
@@ -111,7 +139,7 @@
       padding: $gap;
       margin: 0;
 
-      .item {
+      > .item {
         height: 1em;
         margin-bottom: $gap;
         &:last-child {
@@ -124,72 +152,63 @@
       list-style: none;
       padding: $sm-gap 0;
       margin-bottom: 0;
-      counter-reset: hot-article-list;
 
-      .item {
+      > .item {
         display: flex;
-        align-items: center;
-        height: 2.2rem;
         padding: 0 $gap;
         margin-bottom: $sm-gap;
         color: $text-darker;
-
-        &:nth-child(1) {
-          .index {
-            color: $white;
-            background-color: $primary-translucent;
-          }
-        }
-
-        &:nth-child(2) {
-          .index {
-            color: $white;
-            background-color: rgba($accent, 0.6);
-          }
-        }
-
-        &:nth-child(3) {
-          .index {
-            color: $white;
-            background-color: rgba($red, 0.6);
-          }
-        }
-
         &:last-child {
           margin: 0;
         }
 
         .index {
-          $size: 1.5em;
-          flex-shrink: 0;
-          color: $text-disabled;
-          counter-increment: hot-article-list;
-          background-color: $module-bg-darker-1;
-          width: $size;
-          height: $size;
-          line-height: $size;
           display: block;
-          text-align: center;
+          flex-shrink: 0;
+          margin-top: 1px;
           margin-right: $sm-gap;
-          font-size: 1rem;
+          width: 10px;
+          text-align: center;
+          color: $text-divider;
           font-weight: bold;
-          border-radius: $xs-radius;
-
-          &::before {
-            content: counter(hot-article-list);
+          &.small {
+            margin-top: 3px;
+            font-size: $font-size-small - 1;
+          }
+          &[data-index='1'] {
+            color: $surmon;
+          }
+          &[data-index='2'] {
+            color: rgba($accent, 0.7);
+          }
+          &[data-index='3'] {
+            color: rgba($red, 0.6);
           }
         }
 
         .title {
-          display: block;
+          display: inline-block;
           font-size: $font-size-h6;
           border-top: 1px solid transparent;
           border-bottom: 1px solid transparent;
           @include text-overflow();
-
           &:hover {
             text-decoration: none;
             border-bottom-color: initial;
+          }
+        }
+
+        .meta {
+          font-size: $font-size-small;
+          color: $text-disabled;
+
+          .iconfont {
+            color: $text-divider;
+            opacity: 0.6;
+          }
+
+          .item {
+            margin-right: $lg-gap;
           }
         }
       }

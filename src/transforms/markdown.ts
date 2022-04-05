@@ -42,7 +42,14 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
   }
 
   // paragraph
-  renderer.paragraph = (text) => `<p>${text}</p>`
+  renderer.paragraph = (text) => {
+    const trimmed = text.trim()
+    if (trimmed.startsWith(`<figure`) && trimmed.endsWith(`</figure>`)) {
+      return text
+    } else {
+      return `<p>${text}</p>`
+    }
+  }
 
   // checkbox
   renderer.checkbox = (checked) => {
@@ -82,12 +89,12 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
         class="${LOZAD_CLASS_NAME}"
         data-src="${source}"
         title="${title || alt || META.domain}"
-        alt="${alt || title || source}"
+        ${alt ? `alt="${alt}"` : ''}
         onclick="window.$popup?.vImage('${source}')"
       />
     `)
 
-    return !options?.sanitize
+    const sanitizedHTML = !options?.sanitize
       ? imageHTML
       : sanitizeHTML(imageHTML, {
           allowedTags: ['img'],
@@ -95,6 +102,17 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
             img: ['alt', 'onclick', 'class', 'title', 'data-*']
           }
         })
+
+    if (alt) {
+      return trimHTML(`
+        <figure class="image-figure">
+          ${sanitizedHTML}
+          <figcaption>${alt}</figcaption>
+        </figure>
+      `)
+    }
+
+    return sanitizedHTML
   }
 
   // code: line number
