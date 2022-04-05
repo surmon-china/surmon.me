@@ -163,34 +163,48 @@
         }
 
         .index {
-          display: block;
+          $size: $font-size-base;
+          width: $size;
+          height: $size;
+          line-height: $size;
+          margin-top: 4px;
+          display: inline-block;
           flex-shrink: 0;
-          margin-top: 1px;
           margin-right: $sm-gap;
-          width: 10px;
           text-align: center;
-          color: $text-divider;
-          font-weight: bold;
+          background-color: $module-bg-darker-1;
+          border-radius: $xs-radius;
+          color: $text-disabled;
+          font-size: $font-size-small * 0.8;
+          font-weight: 700;
           &.small {
-            margin-top: 3px;
-            font-size: $font-size-small - 1;
+            font-size: $font-size-small * 0.7;
           }
           &[data-index='1'] {
-            color: $surmon;
+            background-color: $surmon;
+            color: $white;
           }
           &[data-index='2'] {
-            color: rgba($accent, 0.7);
+            background-color: rgba($accent, 0.7);
+            color: $white;
           }
           &[data-index='3'] {
-            color: rgba($red, 0.6);
+            background-color: rgba($red, 0.6);
+            color: $white;
           }
+        }
+
+        .content {
+          flex-shrink: 1;
+          overflow: hidden;
         }
 
         .title {
           display: inline-block;
-          font-size: $font-size-h6;
+          max-width: 100%;
           border-top: 1px solid transparent;
           border-bottom: 1px solid transparent;
+          font-size: $font-size-h6;
           @include text-overflow();
           &:hover {
             text-decoration: none;
@@ -203,6 +217,7 @@
           color: $text-disabled;
 
           .iconfont {
+            font-size: $font-size-small - 1;
             color: $text-divider;
             opacity: 0.6;
           }

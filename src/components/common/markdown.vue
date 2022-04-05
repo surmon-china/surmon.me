@@ -172,55 +172,63 @@
       overflow: hidden;
     }
 
+    iframe {
+      width: 100%;
+      margin-bottom: 1em;
+      background-color: $theme-black;
+      border-radius: $xs-radius;
+    }
+
     img {
-      position: relative;
-      max-width: 100%;
       display: block;
+      max-width: 100%;
       margin: 0 auto;
       padding: $sm-gap;
       border: 1px solid $module-bg-darker-1;
+      border-radius: $xs-radius;
       text-align: center;
       cursor: pointer;
-      transition: all $transition-time-normal;
+      transition: opacity $transition-time-fast;
       &:hover {
         opacity: 0.9;
       }
     }
 
-    iframe {
-      width: 100%;
-      margin-bottom: 1em;
-      background-color: $theme-black;
-    }
-
-    img,
-    iframe {
-      border-radius: $sm-radius;
-    }
-
-    .image-figure {
+    figure.image {
       position: relative;
+      margin-bottom: 1em;
+      padding: $sm-gap;
+      border-radius: $xs-radius;
+      border: 1px solid $module-bg-darker-1;
       &:hover {
         figcaption {
           opacity: 1;
         }
       }
 
+      img {
+        padding: 0;
+        border: none;
+        border-radius: 0;
+      }
+
       figcaption {
+        display: block;
         position: absolute;
-        right: 2em;
-        bottom: 2em;
+        bottom: $sm-gap;
+        left: $sm-gap;
+        right: $sm-gap;
         text-align: center;
-        user-select: none;
-        display: inline-block;
-        padding: 0.4em 0.8em;
-        border-radius: $xs-radius;
+        padding: 0.6em 0;
         font-size: $font-size-small;
-        background-color: $module-bg-lighter;
-        color: $link-color;
-        border: 1px solid;
-        opacity: 0.8;
+        background-color: rgba($black, 0.6);
+        background: linear-gradient(to right, transparent, rgba($black, 0.6), transparent);
+        color: $white;
+        opacity: 0.9;
         transition: opacity $transition-time-fast;
+        user-select: none;
+        pointer-events: none;
+        @include title-shadow();
       }
     }
 

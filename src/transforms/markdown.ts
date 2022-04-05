@@ -94,25 +94,27 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
       />
     `)
 
-    const sanitizedHTML = !options?.sanitize
-      ? imageHTML
-      : sanitizeHTML(imageHTML, {
-          allowedTags: ['img'],
-          allowedAttributes: {
-            img: ['alt', 'onclick', 'class', 'title', 'data-*']
-          }
-        })
+    // sanitize > can't render figcaption
+    if (options?.sanitize) {
+      return sanitizeHTML(imageHTML, {
+        allowedTags: ['img'],
+        allowedAttributes: {
+          img: ['alt', 'onclick', 'class', 'title', 'data-*']
+        }
+      })
+    }
 
+    // figure > admin & alt
     if (alt) {
       return trimHTML(`
-        <figure class="image-figure">
-          ${sanitizedHTML}
+        <figure class="image">
+          ${imageHTML}
           <figcaption>${alt}</figcaption>
         </figure>
       `)
     }
 
-    return sanitizedHTML
+    return imageHTML
   }
 
   // code: line number
