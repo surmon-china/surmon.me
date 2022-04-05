@@ -172,25 +172,27 @@
           flex-shrink: 0;
           margin-right: $sm-gap;
           text-align: center;
-          background-color: $module-bg-darker-1;
           border-radius: $xs-radius;
           color: $text-disabled;
-          font-size: $font-size-small * 0.8;
           font-weight: 700;
+          font-size: $font-size-base - 1;
           &.small {
-            font-size: $font-size-small * 0.7;
+            font-size: $font-size-small;
+          }
+          &[data-index='1'],
+          &[data-index='2'],
+          &[data-index='3'] {
+            color: $white;
+            font-size: $font-size-small * 0.8;
           }
           &[data-index='1'] {
             background-color: $surmon;
-            color: $white;
           }
           &[data-index='2'] {
             background-color: rgba($accent, 0.7);
-            color: $white;
           }
           &[data-index='3'] {
             background-color: rgba($red, 0.6);
-            color: $white;
           }
         }
 
