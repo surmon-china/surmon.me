@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.9.2
+* Surmon.me v3.9.3
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -222,7 +222,7 @@ const THIRD_IDS = Object.freeze({
 Object.freeze({
     PAYPAL: 'https://paypal.me/surmon',
     GITHUB_SPONSORS: 'https://github.com/sponsors/surmon-china',
-    BTC_ADDRESS: '3EfQ59NRCo33EQngwVsKJxonzz2fkbyopw',
+    BTC_ADDRESS: 'bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze',
     ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
 });
 Object.freeze({
