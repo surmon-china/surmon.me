@@ -132,14 +132,14 @@
         {
           id: 'bitcoin',
           title: 'BTC',
-          address: '3EfQ59NRCo33EQngwVsKJxonzz2fkbyopw',
+          address: SPONSOR_LINKS.BTC_ADDRESS,
           logo: '/images/sponsor/btc-logo.svg',
           qrcode: '/images/sponsor/btc-qrcode.png'
         },
         {
           id: 'ethereum',
           title: 'ETH',
-          address: '0xaD556974D449126efdeF23f4FF581861C301cB77',
+          address: SPONSOR_LINKS.ETH_ADDRESS,
           logo: '/images/sponsor/eth-logo.svg',
           qrcode: '/images/sponsor/eth-qrcode.png'
         }
