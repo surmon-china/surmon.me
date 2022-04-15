@@ -37,6 +37,10 @@
 
 ![](/presses/mobile.png)
 
+## Project Activity
+
+![Alt](https://repobeats.axiom.co/api/embed/f736455d393d3b7d111eaabe4fbaf5a960ce32e8.svg "Repobeats analytics image")
+
 ## Development Setup
 
 ```bash
