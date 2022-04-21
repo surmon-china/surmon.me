@@ -1,12 +1,12 @@
 <template>
   <span class="user-agent">
     <span class="os">
-      <i v-if="osIconName" class="iconfont" :class="`icon-${osIconName}`" />
+      <i v-if="osIconName" class="iconfont" :class="osIconName" />
       <span>{{ uaResult.result.os.name }}</span>
       <!-- <span>{{ uaResult.result.os.version }}</span> -->
     </span>
     <span class="browser">
-      <i class="iconfont" v-if="browserIconName" :class="`icon-${browserIconName}`" />
+      <i v-if="browserIconName" class="iconfont" :class="browserIconName" />
       <span>{{ uaResult.result.browser.name }}</span>
       <!-- <span>{{ uaResult.result.browser.version }}</span> -->
     </span>
@@ -19,28 +19,27 @@
 
   // https://github.com/faisalman/ua-parser-js#methods
   const osIconsNameMap = {
-    'Mac OS': 'apple',
-    Windows: 'windows',
-    Android: 'android',
-    Ubuntu: 'ubuntu',
-    Linux: 'linux',
-    iOS: 'apple',
-    Unix: 'unix'
+    'Mac OS': 'icon-apple',
+    Windows: 'icon-windows',
+    Android: 'icon-android',
+    Ubuntu: 'icon-ubuntu',
+    Linux: 'icon-linux',
+    iOS: 'icon-apple'
   }
 
   const browersIconsNameMap = {
-    Chrome: 'chrome',
-    Chromium: 'chrome',
-    WeChat: 'wechat',
-    QQ: 'qq',
-    Safari: 'safari',
-    'Mobile Safari': 'safari',
-    UCBrowser: 'uc',
-    Maxthon: 'maxthon',
-    Firefox: 'firefox',
-    IE: 'ie',
-    Opera: 'opera',
-    Edge: 'edge'
+    Chrome: 'icon-chrome',
+    Chromium: 'icon-chrome',
+    WeChat: 'icon-wechat',
+    QQ: 'icon-qq',
+    Safari: 'icon-safari',
+    'Mobile Safari': 'icon-safari',
+    UCBrowser: 'icon-uc',
+    Maxthon: 'icon-maxthon',
+    Firefox: 'icon-firefox',
+    IE: 'icon-ie',
+    Opera: 'icon-opera',
+    Edge: 'icon-edge'
   }
 
   export default defineComponent({

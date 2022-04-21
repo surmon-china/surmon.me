@@ -255,7 +255,6 @@
           width: 100%;
           padding: 2rem;
           margin-bottom: 2rem;
-          background-color: $module-bg;
           @include radius-box($lg-radius);
           &:last-child {
             margin-bottom: 0;
