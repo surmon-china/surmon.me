@@ -61,7 +61,17 @@
           >
             <swiper-slide class="tweet-item" v-for="(t, index) in completedTweets" :key="index">
               <div class="content" :title="t.tweet.text">
-                <div class="reference" v-if="t.tweet.referenced_tweets?.length">[R]</div>
+                <div
+                  class="reference"
+                  v-if="t.tweet.referenced_tweets?.length"
+                  :title="t.tweet.referenced_tweets[0].type"
+                >
+                  <i
+                    class="iconfont icon-retweet"
+                    v-if="['quoted', 'retweeted'].includes(t.tweet.referenced_tweets[0].type)"
+                  ></i>
+                  <i class="iconfont icon-follow-up" v-else></i>
+                </div>
                 <div
                   class="main"
                   :class="{ 'has-media': t.medias.length }"
@@ -219,10 +229,13 @@
             html: unescape(tweet.text)
           }
 
-          // text (urls | image | link)
+          // text (image_url | original_tweet_url | link)
           tweet.entities?.urls?.forEach((url) => {
-            if (url.display_url?.startsWith('pic.twitter.com')) {
-              // remove image urls from text
+            if (
+              // remove image | original urls from text
+              url.display_url?.startsWith('pic.twitter.com/') ||
+              url.display_url?.startsWith('twitter.com/')
+            ) {
               completedTweet.html = completedTweet.html.replace(url.url, '')
             } else {
               // replace link urls to text
@@ -415,6 +428,7 @@
 
             .reference {
               margin-right: $xs-gap;
+              color: $text-secondary;
             }
 
             .main {

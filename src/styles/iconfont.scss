@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
-  src: url('//at.alicdn.com/t/font_64825_5gd69sgfel7.woff2?t=1648985606576') format('woff2'),
-    url('//at.alicdn.com/t/font_64825_5gd69sgfel7.woff?t=1648985606576') format('woff'),
-    url('//at.alicdn.com/t/font_64825_5gd69sgfel7.ttf?t=1648985606576') format('truetype');
+  src: url('//at.alicdn.com/t/font_64825_1fnsssmbh06.woff2?t=1650512730269') format('woff2'),
+    url('//at.alicdn.com/t/font_64825_1fnsssmbh06.woff?t=1650512730269') format('woff'),
+    url('//at.alicdn.com/t/font_64825_1fnsssmbh06.ttf?t=1650512730269') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-follow-up:before {
+  content: '\e6f4';
+}
+
+.icon-at:before {
+  content: '\e6e8';
+}
+
+.icon-retweet:before {
+  content: '\e72b';
 }
 
 .icon-ethereum:before {
@@ -261,10 +273,6 @@
   content: '\e6a7';
 }
 
-.icon-ad-fill:before {
-  content: '\ea32';
-}
-
 .icon-top-menu:before {
   content: '\e6ab';
 }
@@ -349,10 +357,6 @@
   content: '\e696';
 }
 
-.icon-dragon:before {
-  content: '\e6f3';
-}
-
 .icon-terminal:before {
   content: '\e898';
 }
@@ -365,10 +369,6 @@
   content: '\e69a';
 }
 
-.icon-bilibili-full:before {
-  content: '\e65b';
-}
-
 .icon-copyright:before {
   content: '\f879';
 }
@@ -379,10 +379,6 @@
 
 .icon-horse:before {
   content: '\e626';
-}
-
-.icon-at:before {
-  content: '\e7d6';
 }
 
 .icon-tibet:before {
@@ -597,10 +593,6 @@
   content: '\f25f';
 }
 
-.icon-bilibili:before {
-  content: '\e64f';
-}
-
 .icon-aliyun:before {
   content: '\e829';
 }
@@ -611,14 +603,6 @@
 
 .icon-shang:before {
   content: '\e719';
-}
-
-.icon-carema:before {
-  content: '\e6a1';
-}
-
-.icon-carema-disabled:before {
-  content: '\e6b3';
 }
 
 .icon-friend:before {
@@ -769,10 +753,6 @@
   content: '\e602';
 }
 
-.icon-photoshop:before {
-  content: '\e678';
-}
-
 .icon-mongodb:before {
   content: '\e67b';
 }
@@ -857,10 +837,6 @@
   content: '\e672';
 }
 
-.icon-google-full:before {
-  content: '\e674';
-}
-
 .icon-coffee:before {
   content: '\e681';
 }
@@ -895,10 +871,6 @@
 
 .icon-about:before {
   content: '\e697';
-}
-
-.icon-qq:before {
-  content: '\e605';
 }
 
 .icon-douban:before {

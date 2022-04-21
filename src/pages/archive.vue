@@ -27,14 +27,7 @@
           <template #loading>
             <ul class="archive-skeleton" key="skeleton">
               <li v-for="item in 4" :key="item" class="item">
-                <div class="content">
-                  <div class="title">
-                    <skeleton-line />
-                  </div>
-                  <div class="description">
-                    <skeleton-paragraph :lines="6" />
-                  </div>
-                </div>
+                <skeleton-line v-for="i in 3" :key="i" class="line" />
               </li>
             </ul>
           </template>
@@ -48,60 +41,57 @@
               <div class="statistic" v-if="archiveStore.statistic">
                 <div class="item" :key="index" v-for="(s, index) in statistics">
                   <p class="title">
-                    <i class="iconfont" :class="s.icon" v-if="!isMobile"></i>
                     <span class="text">{{ s.title }}</span>
+                    <i class="iconfont" :class="s.icon" v-if="!isMobile"></i>
                   </p>
                   <span class="content">{{ s.content }}</span>
                 </div>
               </div>
-              <ul class="year-list">
-                <li v-for="node in articleTree" :key="node.year" class="year-item">
-                  <page-title class="root-title" :level="1">
+              <hr />
+              <ul class="month-list" v-for="node in articleTree" :key="node.year">
+                <li v-for="mn in node.months" :key="mn.month" class="month">
+                  <page-title class="archive-title" :level="1">
                     <span class="text">
-                      <i18n :zh="numberToChinese(node.year)" :en="node.year" />
+                      <span class="year">{{ node.year }}</span>
+                      <span class="month">
+                        <i18n v-bind="getMonthNameI18n(mn.month)" />
+                      </span>
                     </span>
                   </page-title>
-                  <ul class="month-list">
-                    <li v-for="mn in node.months" :key="mn.month" class="month">
-                      <h4 class="month-title">
-                        <span class="text">
-                          <i18n v-bind="getMonthNameI18n(mn.month)" />
+                  <ul class="article-list">
+                    <li v-for="(article, index) in mn.articles" :key="index" class="article">
+                      <div class="left">
+                        <h3 class="article-title">
+                          <span class="date">
+                            D{{ String(article.createAt.day).padStart(2, '0') }}
+                          </span>
+                          <a
+                            class="link"
+                            target="_blank"
+                            :title="article.title"
+                            :href="getArticleDetailRoute(article.id)"
+                          >
+                            {{ article.title }}
+                          </a>
+                        </h3>
+                        <p class="description" v-html="article.description" />
+                      </div>
+                      <div class="metas" v-if="!isMobile">
+                        <span class="item views">
+                          <i class="iconfont icon-eye"></i>
+                          <span>{{ article.meta.views }}</span>
                         </span>
-                      </h4>
-                      <ul class="article-list">
-                        <li v-for="(article, index) in mn.articles" :key="index" class="article">
-                          <div class="left">
-                            <h4 class="article-title">
-                              <span class="date"> D{{ article.createAt.day }} </span>
-                              <a
-                                class="link"
-                                target="_blank"
-                                :title="article.title"
-                                :href="getArticleDetailRoute(article.id)"
-                              >
-                                {{ article.title }}
-                              </a>
-                            </h4>
-                            <p class="description" v-html="article.description" />
-                          </div>
-                          <div class="metas" v-if="!isMobile">
-                            <span class="item views">
-                              <i class="iconfont icon-eye"></i>
-                              <span>{{ article.meta.views }}</span>
-                            </span>
-                            <divider type="vertical" />
-                            <span class="item likes">
-                              <i class="like-icon iconfont icon-like"></i>
-                              <span>{{ article.meta.likes }}</span>
-                            </span>
-                            <divider type="vertical" />
-                            <span class="item comments">
-                              <i class="iconfont icon-comment"></i>
-                              <span>{{ article.meta.comments }}</span>
-                            </span>
-                          </div>
-                        </li>
-                      </ul>
+                        <divider type="vertical" />
+                        <span class="item likes">
+                          <i class="like-icon iconfont icon-like"></i>
+                          <span>{{ article.meta.likes }}</span>
+                        </span>
+                        <divider type="vertical" />
+                        <span class="item comments">
+                          <i class="iconfont icon-comment"></i>
+                          <span>{{ article.meta.comments }}</span>
+                        </span>
+                      </div>
                     </li>
                   </ul>
                 </li>
@@ -175,55 +165,29 @@
       ])
 
       const monthNameI18ns: Array<I18nLanguageMap<Language>> = [
-        {
-          [Language.Chinese]: '首阳',
-          [Language.English]: 'January'
-        },
-        {
-          [Language.Chinese]: '绀香',
-          [Language.English]: 'February'
-        },
-        {
-          [Language.Chinese]: '莺时',
-          [Language.English]: 'March'
-        },
-        {
-          [Language.Chinese]: '槐序',
-          [Language.English]: 'April'
-        },
-        {
-          [Language.Chinese]: '鸣蜩',
-          [Language.English]: 'May'
-        },
-        {
-          [Language.Chinese]: '季夏',
-          [Language.English]: 'June'
-        },
-        {
-          [Language.Chinese]: '兰秋',
-          [Language.English]: 'July'
-        },
-        {
-          [Language.Chinese]: '南宫',
-          [Language.English]: 'August'
-        },
-        {
-          [Language.Chinese]: '菊月',
-          [Language.English]: 'September'
-        },
-        {
-          [Language.Chinese]: '子春',
-          [Language.English]: 'October'
-        },
-        {
-          [Language.Chinese]: '葭月',
-          [Language.English]: 'November'
-        },
-        {
-          [Language.Chinese]: '季冬',
-          [Language.English]: 'December'
-        }
-      ]
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+      ].map((month, index) => ({
+        [Language.English]: month,
+        [Language.Chinese]:
+          index === 9
+            ? '十月'
+            : index == 10
+            ? '十一月'
+            : index == 11
+            ? '十二月'
+            : numberToChinese(index + 1) + '月'
+      }))
 
       const getMonthNameI18n = (number: number) => {
         return monthNameI18ns[number - 1]
@@ -274,7 +238,6 @@
     .archive-content {
       margin-top: 2rem;
       margin-bottom: 3rem;
-      min-height: $normal-page-active-content-height;
 
       .archive-empty {
         @include radius-box($lg-radius);
@@ -285,22 +248,24 @@
 
       .archive-skeleton {
         list-style: none;
-        padding: 3rem;
-        background-color: $module-bg;
-        @include radius-box($lg-radius);
+        margin: 0;
+        padding: 0;
 
         .item {
           width: 100%;
+          padding: 2rem;
           margin-bottom: 2rem;
+          background-color: $module-bg;
+          @include radius-box($lg-radius);
           &:last-child {
             margin-bottom: 0;
           }
 
-          .content {
-            .title {
-              width: 8rem;
-              height: 2rem;
-              margin-bottom: $gap;
+          .line {
+            height: 2rem;
+            margin-bottom: 2rem;
+            &:last-child {
+              margin-bottom: 0;
             }
           }
         }
@@ -321,12 +286,12 @@
             flex-direction: column;
 
             .title {
-              text-transform: uppercase;
               margin-bottom: 0;
+              text-transform: uppercase;
               color: $text-disabled;
 
               .iconfont {
-                margin-right: $xs-gap;
+                margin-left: $sm-gap;
                 color: $text-divider;
               }
             }
@@ -338,47 +303,35 @@
           }
         }
 
-        .year-item {
-          margin: 0;
-          overflow: hidden;
-        }
-
-        .root-title {
+        .root-title,
+        .archive-title {
           .text {
             padding-bottom: $xs-gap;
             border-bottom: 1px solid;
           }
         }
 
-        .year-list {
-          list-style: none;
-          padding: 0;
-          margin: 0;
+        .archive-title {
+          .month {
+            margin-left: 1em;
+            font-size: 90%;
+          }
         }
 
         .month-list {
-          padding-left: 2em;
-          list-style: circle;
-
-          .month-title {
-            .text {
-              color: $text-disabled;
-            }
-          }
+          list-style: none;
+          padding: 0;
         }
 
         .article-list {
           list-style: none;
-          padding-left: $gap;
+          padding-left: 1em;
 
           .article {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: $gap;
-            padding-left: $gap * 2;
-            margin-bottom: $xs-gap;
-            border-left: 4px dotted $text-divider;
 
             .left {
               .article-title {
@@ -387,9 +340,10 @@
                 .date {
                   display: inline-block;
                   width: 2rem;
-                  margin-right: $sm-gap;
-                  font-size: $font-size-h5;
-                  color: $text-disabled;
+                  margin-right: $gap;
+                  font-size: $font-size-h4;
+                  font-weight: normal;
+                  color: $text-divider;
                 }
 
                 .link {
