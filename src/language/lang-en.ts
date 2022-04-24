@@ -54,7 +54,7 @@ export const enLangMap: LanguageMap = {
   [LanguageKey.ARTICLE_RENDERING]: 'Rendering...',
   [LanguageKey.HOT_ARTICLE_LIST_TITLE]: 'Hottest',
   [LanguageKey.ARTICLE_LIST_LOADMORE]: 'Loadmore',
-  [LanguageKey.ARTICLE_LIST_LOADING]: 'Loading',
+  [LanguageKey.ARTICLE_LIST_LOADING]: 'Loading...',
   [LanguageKey.ARTICLE_LIST_NO_MORE]: 'No more',
   [LanguageKey.COMMENT_LIST_EMPTY]: 'Be the first to comment',
   [LanguageKey.COMMENT_UPVOTE]: 'upvote',

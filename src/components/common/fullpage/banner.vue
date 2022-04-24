@@ -82,6 +82,7 @@
 
       .description {
         font-size: $font-size-h4;
+        font-weight: bold;
       }
     }
 

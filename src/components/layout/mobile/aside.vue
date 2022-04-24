@@ -121,7 +121,7 @@
   @import 'src/styles/mixins.scss';
 
   .aside {
-    $border-color: darken($mobile-aside-bg, 5%);
+    $border-color: darken($mobile-aside-bg, 3%);
     display: block;
     overflow: auto;
     position: relative;
@@ -131,7 +131,7 @@
     color: $white;
 
     .aside-user {
-      $size: 65px;
+      $size: 58px;
       width: 100%;
       display: flex;
       align-items: flex-start;
@@ -145,7 +145,7 @@
 
         img {
           max-width: 100%;
-          border: 3px solid $white;
+          border: 2px solid $white;
           @include radius-box(100%);
         }
       }
@@ -188,6 +188,7 @@
 
     .aside-nav {
       width: 100%;
+      margin-top: $sm-gap;
 
       .nav-list {
         padding: 0;

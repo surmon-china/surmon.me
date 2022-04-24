@@ -72,7 +72,7 @@
   .mobile-main {
     color: $text;
     background-color: $module-bg-hover;
-    $aside-width: 68%;
+    $aside-width: 66%;
 
     .asider {
       width: $aside-width;

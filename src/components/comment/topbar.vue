@@ -300,6 +300,7 @@
         .iconfont {
           display: inline-block;
           width: $topbar-size;
+          height: $topbar-size;
           text-align: center;
           margin-right: $xs-gap;
           background-color: $module-bg-darker-2;

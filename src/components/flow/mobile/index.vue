@@ -297,8 +297,6 @@
 
         .text {
           margin-bottom: $xs-gap;
-          padding-bottom: 3px;
-          border-bottom: 1px solid $text-divider;
         }
 
         .icon {
