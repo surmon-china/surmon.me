@@ -24,7 +24,7 @@
     <div class="links">
       <div class="list col-2">
         <router-link class="item text-only" :to="getPageRoute(RouteName.Archive)">
-          <i class="iconfont icon-peachblossom" />
+          <i class="iconfont icon-quill" />
           <i18n v-bind="i18ns.myArchive" />
         </router-link>
         <router-link class="item text-only" :to="getPageRoute(RouteName.Lens)">

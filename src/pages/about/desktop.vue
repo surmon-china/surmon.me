@@ -183,7 +183,7 @@
   import AggregateCalendar from './calendar/index.vue'
 
   export default defineComponent({
-    name: 'PCAboutPage',
+    name: 'DesktopAboutPage',
     components: {
       AggregateCalendar
     },
@@ -192,7 +192,6 @@
       const metaStore = useMetaStore()
       const adminInfo = computed(() => metaStore.adminInfo.data)
       const appOptions = computed(() => metaStore.appOptions.data)
-
       const links = [
         {
           to: RouteName.Lens,
@@ -206,7 +205,7 @@
         },
         {
           to: RouteName.Archive,
-          icon: `icon-peachblossom`,
+          icon: `icon-quill`,
           i18n: i18ns.myArchive
         },
         {

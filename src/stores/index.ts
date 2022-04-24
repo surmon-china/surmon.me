@@ -9,11 +9,12 @@ import { GlobalState } from '/@/app/state'
 import { getSSRContext } from '/@/universal'
 
 import { useAnnouncementStore } from './announcement'
-import { useArchiveStore } from './archive'
 import { useArticleListStore, useArticleDetailStore } from './article'
 import { useCategoryStore } from './category'
 import { useTagStore } from './tag'
 import { useCommentStore } from './comment'
+import { useArchiveStore } from './archive'
+import { useStatisticStore } from './statistic'
 import { useUniversalStore } from './universal'
 import { useMetaStore } from './meta'
 import { useLensStore } from './lens'
@@ -23,12 +24,13 @@ import { useArticleCalendarStore } from './aggregate'
 
 export const useStores = (_pinia?: Pinia) => ({
   announcement: useAnnouncementStore(_pinia),
-  archive: useArchiveStore(_pinia),
   articleList: useArticleListStore(_pinia),
   articleDetail: useArticleDetailStore(_pinia),
   category: useCategoryStore(_pinia),
   tag: useTagStore(_pinia),
   comment: useCommentStore(_pinia),
+  archive: useArchiveStore(_pinia),
+  statistic: useStatisticStore(_pinia),
   universal: useUniversalStore(_pinia),
   meta: useMetaStore(_pinia),
   lens: useLensStore(_pinia),

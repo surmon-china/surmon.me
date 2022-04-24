@@ -32,7 +32,7 @@ export const menus: Array<MenuItem> = [
   {
     id: CategorySlug.Insight,
     route: getCategoryFlowRoute(CategorySlug.Insight),
-    icon: 'icon-thinking',
+    icon: 'icon-insight',
     i18nKey: LanguageKey.CATEGORY_INSIGHT
   },
   {

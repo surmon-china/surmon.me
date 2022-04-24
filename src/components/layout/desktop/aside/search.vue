@@ -17,7 +17,7 @@
         <i class="iconfont icon-search" />
       </button>
     </form>
-    <router-link class="archive-btn" :to="{ name: RouteName.Archive }">
+    <router-link class="extra-btn" :to="{ name: RouteName.Sponsor }">
       <i class="iconfont icon-peachblossom" />
     </router-link>
   </div>
@@ -93,46 +93,43 @@
 
     .search-input,
     .search-btn,
-    .archive-btn {
+    .extra-btn {
       height: 2em;
       line-height: 2em;
       background-color: $module-bg-darker-1;
       @include background-transition();
-
       &:hover {
         background-color: $module-bg-hover;
       }
     }
 
-    > .search-box {
-      display: flex;
-      flex-grow: 1;
-
+    .search-box {
       .search-input {
+        width: 11em;
         margin-right: 0;
-        flex-grow: 1;
+        padding: 0;
+        text-indent: 0.5em;
         &::-webkit-calendar-picker-indicator {
           display: none;
         }
       }
 
       .search-btn {
-        width: 2em;
-        background-color: $module-bg-darker-3;
+        width: 3em;
+        background-color: $module-bg-hover;
         @include background-transition();
-
         &:hover {
-          background-color: $module-bg-darker-4;
+          background-color: $module-bg-darker-3;
         }
       }
     }
 
-    .archive-btn {
+    .extra-btn {
+      flex-grow: 1;
       display: inline-block;
-      text-align: center;
       margin-left: $sm-gap;
+      text-align: center;
       border-radius: $mini-radius;
-      width: 3em;
 
       .iconfont {
         font-size: $font-size-h4;

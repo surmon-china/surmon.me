@@ -11,15 +11,6 @@ import { Tag } from './tag'
 import { dateToHuman, HumanDate } from '/@/transforms/moment'
 import nodepress from '/@/services/nodepress'
 
-export interface Statistic {
-  tags: number
-  articles: number
-  comments: number
-  todayViews: number
-  totalViews: number
-  totalLikes: number
-}
-
 export interface Archive {
   articles: Article[]
   categories: Category[]
@@ -29,7 +20,6 @@ export interface Archive {
 export const useArchiveStore = defineStore('archive', {
   state: () => ({
     fetching: false,
-    statistic: null as null | Statistic,
     archive: null as null | Archive
   }),
   getters: {
@@ -112,21 +102,6 @@ export const useArchiveStore = defineStore('archive', {
         .get<Archive>('/archive')
         .then((response) => {
           this.archive = response.result
-        })
-        .finally(() => {
-          this.fetching = false
-        })
-    },
-
-    fetchStatistic() {
-      if (this.statistic) {
-        return Promise.resolve()
-      }
-      this.fetching = true
-      return nodepress
-        .get<Statistic>('/expansion/statistic')
-        .then((response) => {
-          this.statistic = response.result
         })
         .finally(() => {
           this.fetching = false

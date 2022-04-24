@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
-  src: url('//at.alicdn.com/t/font_64825_q4d3515t3tr.woff2?t=1650520351455') format('woff2'),
-    url('//at.alicdn.com/t/font_64825_q4d3515t3tr.woff?t=1650520351455') format('woff'),
-    url('//at.alicdn.com/t/font_64825_q4d3515t3tr.ttf?t=1650520351455') format('truetype');
+  src: url('//at.alicdn.com/t/font_64825_r1defl4v78a.woff2?t=1650709131868') format('woff2'),
+    url('//at.alicdn.com/t/font_64825_r1defl4v78a.woff?t=1650709131868') format('woff'),
+    url('//at.alicdn.com/t/font_64825_r1defl4v78a.ttf?t=1650709131868') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-insight:before {
+  content: '\e7d2';
+}
+
+.icon-trend:before {
+  content: '\fbf0';
 }
 
 .icon-follow-up:before {
@@ -485,10 +493,6 @@
   content: '\e6a5';
 }
 
-.icon-thinking:before {
-  content: '\e669';
-}
-
 .icon-experiment:before {
   content: '\e655';
 }
@@ -531,10 +535,6 @@
 
 .icon-taichi:before {
   content: '\e661';
-}
-
-.icon-live:before {
-  content: '\e96d';
 }
 
 .icon-gun-camera:before {
@@ -629,14 +629,6 @@
   content: '\e632';
 }
 
-.icon-git-issue:before {
-  content: '\e683';
-}
-
-.icon-git-fork:before {
-  content: '\e741';
-}
-
 .icon-app:before {
   content: '\e62d';
 }
@@ -671,14 +663,6 @@
 
 .icon-like:before {
   content: '\e614';
-}
-
-.icon-deploy:before {
-  content: '\e677';
-}
-
-.icon-m:before {
-  content: '\e60c';
 }
 
 .icon-quora:before {
@@ -773,10 +757,6 @@
   content: '\e69c';
 }
 
-.icon-segmentfault:before {
-  content: '\e69d';
-}
-
 .icon-java:before {
   content: '\e69f';
 }
@@ -803,10 +783,6 @@
 
 .icon-stackoverflow:before {
   content: '\e6a9';
-}
-
-.icon-address:before {
-  content: '\e658';
 }
 
 .icon-http:before {
@@ -947,14 +923,6 @@
 
 .icon-jquery:before {
   content: '\e64e';
-}
-
-.icon-weibo1:before {
-  content: '\e650';
-}
-
-.icon-python1:before {
-  content: '\e651';
 }
 
 .icon-angularjs:before {

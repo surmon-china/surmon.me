@@ -30,7 +30,7 @@
           <i18n :k="LanguageKey.CATEGORY_CODE" />
         </router-link>
         <router-link class="item" :to="getCategoryFlowRoute(CategorySlug.Insight)">
-          <i class="iconfont icon-thinking"></i>
+          <i class="iconfont icon-insight"></i>
           <i18n :k="LanguageKey.CATEGORY_INSIGHT" />
         </router-link>
         <ulink class="item" :href="VALUABLE_LINKS.GITHUB">
@@ -41,7 +41,7 @@
           </span>
         </ulink>
         <router-link class="item" :to="getPageRoute(RouteName.Archive)">
-          <i class="iconfont icon-peachblossom"></i>
+          <i class="iconfont icon-quill"></i>
           <i18n :k="LanguageKey.PAGE_ARCHIVE" />
         </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.About)">

@@ -28,9 +28,9 @@ import SearchFlowPage from '/@/pages/search.vue'
 
 // core pages
 import ArticleDetailPage from '/@/pages/article/index.vue'
-import ArchivePage from '/@/pages/archive.vue'
 import AboutDesktopPage from '/@/pages/about/desktop.vue'
 import AboutMobilePage from '/@/pages/about/mobile.vue'
+import ArchivePage from '/@/pages/archive.vue'
 import GuestbookPage from '/@/pages/guestbook.vue'
 import AppPage from '/@/pages/app.vue'
 

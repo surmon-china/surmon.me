@@ -4,7 +4,7 @@
       <div class="topbar-skeleton" key="skeleton">
         <div class="left">
           <skeleton-line class="skeleton-item count" />
-          <skeleton-line class="skeleton-item sort" />
+          <skeleton-line class="skeleton-item sort" v-if="!plain" />
         </div>
         <div class="right">
           <skeleton-line class="skeleton-item user" />
@@ -109,7 +109,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, PropType } from 'vue'
+  import { defineComponent, computed, PropType } from 'vue'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import { LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
@@ -163,22 +163,23 @@
         return props.loading ? `···` : `${props.loaded} / ${props.total}`
       })
 
-      const disqusThread = ref<any>()
+      const disqusThreadMap = new Map<number, any>()
       const handleDisqusThread = async () => {
         gtag?.event('disqus_thread_page', {
           event_category: GAEventCategories.Comment,
           event_label: `id: ${props.postId}`
         })
 
-        if (!disqusThread.value) {
+        if (!disqusThreadMap.has(props.postId)) {
           const response = await nodepress.get('/disqus/thread', {
             params: { post_id: props.postId }
           })
-          disqusThread.value = response.result
+          disqusThreadMap.set(props.postId, response.result)
         }
-        window.open(
-          `https://disqus.com/home/discussion/${universalStore.disqusConfig.forum}/${disqusThread.value.slug}/`
-        )
+
+        const forum = universalStore.disqusConfig.forum
+        const slug = disqusThreadMap.get(props.postId).slug
+        window.open(`https://disqus.com/home/discussion/${forum}/${slug}/`)
       }
 
       const handleSort = (target: any) => {

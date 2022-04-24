@@ -4,6 +4,9 @@
       <aside-search />
     </div>
     <div class="module">
+      <aside-statistic />
+    </div>
+    <div class="module">
       <aside-article />
     </div>
     <client-only transition>
@@ -40,6 +43,7 @@
   import { ASIDE_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
   import { isArticleDetail } from '/@/transforms/route'
   import AsideSearch from './search.vue'
+  import AsideStatistic from './statistic.vue'
   import AsideArticle from './article.vue'
   import AsideMammon from './mammon.vue'
   import AsideTag from './tag.vue'
@@ -52,6 +56,7 @@
     name: 'DesktopAside',
     components: {
       AsideSearch,
+      AsideStatistic,
       AsideArticle,
       AsideMammon,
       AsideCalendar,
