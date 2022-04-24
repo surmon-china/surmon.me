@@ -23,9 +23,8 @@ export interface Tag {
 }
 
 export const tagEnName = (tag: Tag) => {
-  const isChineseName = /.*[\u4e00-\u9fa5]+.*$/.test(tag.name)
   // english name
-  if (!isChineseName) {
+  if (!/.*[\u4e00-\u9fa5]+.*$/.test(tag.name)) {
     return tag.name
   }
   // english words

@@ -136,7 +136,7 @@
       display: flex;
       align-items: flex-start;
       padding: $gap * 2;
-      border-bottom: 1px dotted $border-color;
+      border-bottom: 1px solid $border-color;
 
       .avatar {
         width: $size;
@@ -145,7 +145,7 @@
 
         img {
           max-width: 100%;
-          border: 3px solid rgba($grey, 0.8);
+          border: 3px solid $white;
           @include radius-box(100%);
         }
       }

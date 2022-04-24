@@ -1,34 +1,37 @@
 <template>
   <div class="guestbook-page" :class="{ dark: isDarkTheme }">
-    <!-- mobile-banner -->
-    <page-banner
-      v-if="isMobile"
-      class="mobile-banner"
-      :is-mobile="true"
-      :position="70"
-      :blur="false"
-      :image="bannerImage"
-    >
-      <template #title>
-        <i18n :k="LanguageKey.PAGE_GUESTBOOK" />
+    <responsive>
+      <template #desktop>
+        <div class="desktop-banner">
+          <uimage cdn class="image" :src="bannerImage" />
+          <button class="like" :class="{ liked: isLiked }" :disabled="isLiked" @click="handleLike">
+            <i class="icon iconfont icon-heart"></i>
+            <span class="count">{{ isLiked ? `${siteLikes - 1} + 1` : siteLikes }}</span>
+          </button>
+          <span class="slogan">
+            <span class="text">
+              <i18n :k="LanguageKey.GUESTBOOK_SLOGAN" />
+            </span>
+          </span>
+        </div>
       </template>
-      <template #description>
-        <i18n :k="LanguageKey.GUESTBOOK_SLOGAN" />
+      <template #mobile>
+        <page-banner
+          class="mobile-banner"
+          :is-mobile="true"
+          :position="70"
+          :blur="false"
+          :image="bannerImage"
+        >
+          <template #title>
+            <i18n :k="LanguageKey.PAGE_GUESTBOOK" />
+          </template>
+          <template #description>
+            <i18n :k="LanguageKey.GUESTBOOK_SLOGAN" />
+          </template>
+        </page-banner>
       </template>
-    </page-banner>
-    <!-- desktop-banner -->
-    <div class="desktop-banner" v-else>
-      <uimage cdn class="image" :src="bannerImage" />
-      <button class="like" :class="{ liked: isLiked }" :disabled="isLiked" @click="handleLike">
-        <i class="icon iconfont icon-heart"></i>
-        <span class="count">{{ isLiked ? `${siteLikes - 1} + 1` : siteLikes }}</span>
-      </button>
-      <span class="slogan">
-        <span class="text">
-          <i18n :k="LanguageKey.GUESTBOOK_SLOGAN" />
-        </span>
-      </span>
-    </div>
+    </responsive>
     <div class="comment">
       <comment :post-id="0" :plain="isMobile" :fetching="mockCommentLoading" />
     </div>
@@ -191,8 +194,8 @@
         border-bottom-right-radius: $mini-radius;
         opacity: 0.8;
         font-weight: 700;
-        cursor: progress;
         background: linear-gradient(to left, $module-bg-lighter, $module-bg, transparent);
+        cursor: none;
 
         .text {
           letter-spacing: 0.3px;

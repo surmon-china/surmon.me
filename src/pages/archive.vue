@@ -1,26 +1,37 @@
 <template>
   <div class="archive-page" :class="{ mobile: isMobile }">
-    <page-banner
-      v-if="isMobile"
-      :position="70"
-      :blur="false"
-      :is-mobile="true"
-      image="/images/page-archive/banner.jpg"
-    >
-      <template #title><i18n :k="LanguageKey.PAGE_ARCHIVE" /></template>
-      <template #description><i18n v-bind="i18ns.title" /></template>
-    </page-banner>
-    <page-banner v-else :blur="false" :position="75" image="/images/page-archive/banner.jpg">
-      <template #title><i18n v-bind="i18ns.title" /></template>
-      <template #description><i18n v-bind="i18ns.description" /></template>
-    </page-banner>
+    <responsive>
+      <template #desktop>
+        <page-banner :blur="false" :position="75" image="/images/page-archive/banner.jpg">
+          <template #title><i18n v-bind="i18ns.title" /></template>
+          <template #description><i18n v-bind="i18ns.description" /></template>
+        </page-banner>
+      </template>
+      <template #mobile>
+        <page-banner
+          :position="70"
+          :blur="false"
+          :is-mobile="true"
+          image="/images/page-archive/banner.jpg"
+        >
+          <template #title><i18n :k="LanguageKey.PAGE_ARCHIVE" /></template>
+          <template #description><i18n v-bind="i18ns.title" /></template>
+        </page-banner>
+      </template>
+    </responsive>
     <div class="page-content">
       <div class="statistic-warpper">
         <div class="container">
           <transition name="module" mode="out-in">
             <div class="skeletons" v-if="statisticFetching">
-              <skeleton-base v-if="isMobile" class="skeleton" />
-              <skeleton-base v-else class="skeleton" :key="s" v-for="s in statistics.length" />
+              <responsive>
+                <template #desktop>
+                  <skeleton-base class="skeleton" :key="s" v-for="s in statistics.length" />
+                </template>
+                <template #mobile>
+                  <skeleton-base class="skeleton" />
+                </template>
+              </responsive>
             </div>
             <div class="statistics" v-else>
               <div class="item" :key="index" v-for="(s, index) in statistics">
@@ -87,22 +98,24 @@
                           </h3>
                           <p class="description" v-html="article.description" />
                         </div>
-                        <div class="metas" v-if="!isMobile">
-                          <span class="item views">
-                            <i class="iconfont icon-eye"></i>
-                            <span class="text">{{ article.meta.views }}</span>
-                          </span>
-                          <divider type="vertical" />
-                          <span class="item likes">
-                            <i class="like-icon iconfont icon-like"></i>
-                            <span class="text">{{ article.meta.likes }}</span>
-                          </span>
-                          <divider type="vertical" />
-                          <span class="item comments">
-                            <i class="iconfont icon-comment"></i>
-                            <span class="text">{{ article.meta.comments }}</span>
-                          </span>
-                        </div>
+                        <responsive desktop>
+                          <div class="metas">
+                            <span class="item views">
+                              <i class="iconfont icon-eye"></i>
+                              <span class="text">{{ article.meta.views }}</span>
+                            </span>
+                            <divider type="vertical" />
+                            <span class="item likes">
+                              <i class="like-icon iconfont icon-like"></i>
+                              <span class="text">{{ article.meta.likes }}</span>
+                            </span>
+                            <divider type="vertical" />
+                            <span class="item comments">
+                              <i class="iconfont icon-comment"></i>
+                              <span class="text">{{ article.meta.comments }}</span>
+                            </span>
+                          </div>
+                        </responsive>
                       </li>
                     </ul>
                   </li>

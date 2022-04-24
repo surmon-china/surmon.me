@@ -4,12 +4,12 @@
     <div class="header" v-if="tagSlug || categorySlug || date || searchKeyword">
       <div class="content">
         <i18n v-if="categorySlug">
-          <template #zh>分类 “{{ categorySlug }}” 的过滤结果</template>
-          <template #en>Category "{{ categorySlug }}" 's result</template>
+          <template #zh>分类 “{{ category?.name }}” 的过滤结果</template>
+          <template #en>Category "{{ firstUpperCase(category?.slug) }}" 's result</template>
         </i18n>
         <i18n v-if="tagSlug">
-          <template #zh>标签 “{{ tagSlug }}” 的过滤结果</template>
-          <template #en>Tag "{{ tagSlug }}" 's result</template>
+          <template #zh>标签 “{{ tag?.name }}” 的过滤结果</template>
+          <template #en>Tag "{{ tagEnName(tag) }}" 's result</template>
         </i18n>
         <i18n v-if="date">
           <template #zh>日期 “{{ date }}” 的过滤结果</template>
@@ -88,6 +88,8 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch, onClient } from '/@/universal'
   import { useArticleListStore, Article } from '/@/stores/article'
+  import { useCategoryStore } from '/@/stores/category'
+  import { useTagStore, tagEnName } from '/@/stores/tag'
   import { useMetaStore } from '/@/stores/meta'
   import { firstUpperCase } from '/@/transforms/text'
   import { scrollToNextScreen } from '/@/utils/scroller'
@@ -121,7 +123,17 @@
     setup(props) {
       const { meta, i18n } = useEnhancer()
       const metaStore = useMetaStore()
+      const tagStore = useTagStore()
+      const catrgoryStore = useCategoryStore()
       const articleListStore = useArticleListStore()
+      const category = computed(() => {
+        return props.categorySlug
+          ? catrgoryStore.categories.find((category) => category.slug === props.categorySlug)
+          : null
+      })
+      const tag = computed(() => {
+        return props.tagSlug ? tagStore.tags.find((tag) => tag.slug === props.tagSlug) : null
+      })
 
       type ArticleItem = Article & { ad?: true }
       const articles = computed<Array<ArticleItem>>(() => {
@@ -188,10 +200,14 @@
 
       return {
         LanguageKey,
+        tagEnName,
+        tag,
+        category,
         articles,
         articleListStore,
         hasMoreArticles,
-        loadmoreArticles
+        loadmoreArticles,
+        firstUpperCase
       }
     }
   })

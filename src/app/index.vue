@@ -6,8 +6,10 @@
       <popup-root />
     </client-only>
     <captured>
-      <mobile-main v-if="isMobile" />
-      <desktop-main v-else />
+      <responsive>
+        <template #desktop><desktop-main /></template>
+        <template #mobile><mobile-main /></template>
+      </responsive>
     </captured>
   </div>
 </template>
