@@ -124,11 +124,11 @@
       const { meta, i18n } = useEnhancer()
       const metaStore = useMetaStore()
       const tagStore = useTagStore()
-      const catrgoryStore = useCategoryStore()
+      const categoryStore = useCategoryStore()
       const articleListStore = useArticleListStore()
       const category = computed(() => {
         return props.categorySlug
-          ? catrgoryStore.categories.find((category) => category.slug === props.categorySlug)
+          ? categoryStore.categories.find((category) => category.slug === props.categorySlug)
           : null
       })
       const tag = computed(() => {

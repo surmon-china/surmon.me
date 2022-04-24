@@ -54,9 +54,9 @@
     setup(props) {
       const { i18n, meta, isZhLang } = useEnhancer()
       const articleListStore = useArticleListStore()
-      const catrgoryStore = useCategoryStore()
+      const categoryStore = useCategoryStore()
       const currentCategory = computed(() => {
-        return catrgoryStore.categories.find((category) => category.slug === props.categorySlug)
+        return categoryStore.categories.find((category) => category.slug === props.categorySlug)
       })
       const currentCategoryIcon = computed(() => {
         return getExtendValue(currentCategory.value?.extends || [], 'icon') || 'icon-category'
@@ -87,7 +87,7 @@
 
       const fetchAllData = (category_slug: string) => {
         return Promise.all([
-          catrgoryStore.fetchAll(),
+          categoryStore.fetchAll(),
           articleListStore.fetchList({ category_slug })
         ])
       }
