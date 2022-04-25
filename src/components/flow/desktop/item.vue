@@ -52,15 +52,15 @@
           </span>
           <span class="views">
             <i class="iconfont icon-eye"></i>
-            <span>{{ article.meta.views || 0 }}</span>
+            <span>{{ numberSplit(article.meta.views) }}</span>
           </span>
           <span class="comments">
             <i class="iconfont icon-comment"></i>
-            <span>{{ article.meta.comments || 0 }}</span>
+            <span>{{ article.meta.comments }}</span>
           </span>
           <span class="likes">
             <i class="iconfont icon-like" :class="{ liked: isLiked }"></i>
-            <span>{{ article.meta.likes || 0 }}</span>
+            <span>{{ article.meta.likes }}</span>
           </span>
           <span class="categories">
             <i class="iconfont icon-category"></i>
@@ -94,6 +94,7 @@
   import { getArticleDetailRoute, getTagFlowRoute, getCategoryFlowRoute } from '/@/transforms/route'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { getArticleListThumbnailURL } from '/@/transforms/thumbnail'
+  import { numberSplit } from '/@/transforms/text'
 
   export default defineComponent({
     name: 'FlowArticleListItem',
@@ -126,6 +127,7 @@
         isHybrid,
         isReprint,
         isOriginal,
+        numberSplit,
         getThumbnailURL,
         getLanguageText,
         getArticleDetailRoute,
@@ -294,7 +296,7 @@
           color: $text-secondary;
 
           > .views {
-            min-width: 4rem;
+            width: 4em;
           }
 
           > .likes {
@@ -305,7 +307,7 @@
 
           > .likes,
           > .comments {
-            min-width: 3em;
+            width: 3em;
           }
 
           > .date,

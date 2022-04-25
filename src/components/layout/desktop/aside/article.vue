@@ -30,14 +30,14 @@
                 {{ item.title }}
               </router-link>
               <div class="meta">
-                <span class="item">
+                <span class="item date">
                   {{ dateToYMD(item.create_at) }}
                 </span>
-                <span class="item">
+                <span class="item views">
                   <i class="iconfont icon-eye"></i>
                   {{ numberToKilo(item.meta.views) }}
                 </span>
-                <span class="item">
+                <span class="item comments">
                   <i class="iconfont icon-comment"></i>
                   {{ item.meta.comments }}
                 </span>
@@ -225,7 +225,14 @@
           }
 
           .item {
-            margin-right: $lg-gap;
+            display: inline-block;
+            &.date {
+              margin-right: $lg-gap;
+            }
+            &.views {
+              width: 5rem;
+              margin-right: $sm-gap;
+            }
           }
         }
       }

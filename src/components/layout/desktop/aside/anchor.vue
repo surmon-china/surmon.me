@@ -9,9 +9,13 @@
       <div class="read">
         <i18n>
           <template #zh
-            >共 {{ store.contentLength }} 字，需阅读 {{ store.readMinutes }} 分钟</template
+            >共 {{ numberSplit(store.contentLength) }} 字，需阅读
+            {{ store.readMinutes }} 分钟</template
           >
-          <template #en>{{ store.contentLength }} words, {{ store.readMinutes }} min read</template>
+          <template #en
+            >{{ numberSplit(store.contentLength) }} words, {{ store.readMinutes }} min
+            read</template
+          >
         </i18n>
       </div>
     </button>
@@ -45,13 +49,13 @@
       <i18n zh="摁赞" en="Meta" />
       <divider type="vertical" />
       <span class="meta">
-        <i class="iconfont icon-eye"></i>
-        <span class="count">{{ article.meta.views }}</span>
+        <i class="iconfont icon-like"></i>
+        <span class="count">{{ article.meta.likes }}</span>
       </span>
       <divider type="vertical" />
       <span class="meta">
-        <i class="iconfont icon-like"></i>
-        <span class="count">{{ article.meta.likes }}</span>
+        <i class="iconfont icon-eye"></i>
+        <span class="count">{{ numberSplit(article.meta.views) }}</span>
       </span>
     </button>
     <button class="link" @click="handleAnchor(ANCHORS.ARTICLE_RELATED_ELEMENT_ID)">
@@ -75,6 +79,7 @@
   import { LanguageKey } from '/@/language'
   import { useArticleDetailStore } from '/@/stores/article'
   import { scrollToAnchor } from '/@/utils/scroller'
+  import { numberSplit } from '/@/transforms/text'
 
   export default defineComponent({
     name: 'DesktopAsideAnchor',
@@ -104,6 +109,7 @@
         store: articleDetailStore,
         headings,
         minHeadingLevel,
+        numberSplit,
         handleAnchor
       }
     }

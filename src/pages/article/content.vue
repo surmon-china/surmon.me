@@ -22,13 +22,13 @@
           <i18n>
             <template #zh>
               <span
-                >共 {{ articleDetailStore.contentLength }} 字，需阅读
+                >共 {{ numberSplit(articleDetailStore.contentLength) }} 字，需阅读
                 {{ articleDetailStore.readMinutes }} 分钟</span
               >
             </template>
             <template #en>
               <span
-                >{{ articleDetailStore.contentLength }} words,
+                >{{ numberSplit(articleDetailStore.contentLength) }} words,
                 {{ articleDetailStore.readMinutes }} min read</span
               >
             </template>
@@ -41,7 +41,7 @@
           <divider type="vertical" class="vertical" />
           <span>
             <i class="iconfont icon-eye"></i>
-            <span>{{ article.meta.views }}&nbsp;</span>
+            <span>{{ numberSplit(article.meta.views) }}&nbsp;</span>
             <i18n :k="LanguageKey.ARTICLE_VIEWS" />
           </span>
         </div>
@@ -78,6 +78,7 @@
   import { Article, useArticleDetailStore } from '/@/stores/article'
   import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/effects/lozad'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
+  import { numberSplit } from '/@/transforms/text'
   import Markdown from '/@/components/common/markdown.vue'
 
   const ARTICLE_CONTENT_ELEMENT_IDS = {
@@ -140,6 +141,7 @@
       })
 
       return {
+        ARTICLE_CONTENT_ELEMENT_IDS,
         LanguageKey,
         i18n,
         element,
@@ -149,7 +151,7 @@
         articleDetailStore,
         isRenderMoreEnabled,
         isRenderMoreContent,
-        ARTICLE_CONTENT_ELEMENT_IDS,
+        numberSplit,
         handleRenderMore,
         handleRenderMoreAnimateDone
       }
