@@ -6,16 +6,7 @@
       </div>
       <h2 class="title">{{ META.title }}</h2>
       <p class="description">
-        <i18n :k="LanguageKey.APP_SLOGAN" />
-      </p>
-      <p class="rss">
-        <span class="prefix"><i18n zh="（" en="[" /></span>
-        <span class="deprecated"><i18n zh="此项目已废弃！" en="DEPRECATED!" /></span>
-        <i18n zh="建议使用" en="Recommend" />
-        <a class="link" :href="VALUABLE_LINKS.RSS" target="_blank">
-          <i18n zh="RSS 订阅" en="RSS subscription" />
-        </a>
-        <span class="suffix"><i18n zh="）" en="]" /></span>
+        <webfont><i18n :k="LanguageKey.APP_SLOGAN" /></webfont>
       </p>
       <div class="screen">
         <uimage cdn alt="app-hot" class="screen-img" src="/images/page-app/hot.png" />
@@ -49,6 +40,15 @@
           </ulink>
         </div>
       </div>
+      <p class="rss">
+        <span class="prefix"><i18n zh="（" en="[" /></span>
+        <span class="deprecated"><i18n zh="此项目已废弃！" en="DEPRECATED!" /></span>
+        <i18n zh="建议使用" en="Recommend" />
+        <a class="link" :href="VALUABLE_LINKS.RSS" target="_blank">
+          <i18n zh="RSS 订阅" en="RSS subscription" />
+        </a>
+        <span class="suffix"><i18n zh="）" en="]" /></span>
+      </p>
     </div>
   </div>
 </template>
@@ -110,7 +110,6 @@
 
       .logo {
         margin-bottom: $lg-gap * 2;
-
         img {
           width: 6rem;
           border-radius: 1em;
@@ -130,9 +129,14 @@
       }
 
       .rss {
+        margin-top: 2rem;
+        margin-bottom: 0;
+        color: $text-secondary;
+
         .deprecated {
           font-weight: bold;
           margin-right: $xs-gap;
+          color: $red;
         }
 
         .link {

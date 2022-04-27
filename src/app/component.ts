@@ -5,6 +5,7 @@
  */
 
 import { App } from 'vue'
+import Webfont from '/@/components/common/webfont.vue'
 import Spin from '/@/components/common/spin.vue'
 import Empty from '/@/components/common/empty.vue'
 import Divider from '/@/components/common/divider.vue'
@@ -24,6 +25,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     Spin: typeof Spin
     Empty: typeof Empty
+    Webfont: typeof Webfont
     Divider: typeof Divider
     Ulink: typeof Ulink
     ClientOnly: typeof ClientOnly
@@ -31,6 +33,7 @@ declare module 'vue' {
 }
 
 export default function (app: App) {
+  app.component(Webfont.name as string, Webfont)
   app.component(Spin.name as string, Spin)
   app.component(Empty.name as string, Empty)
   app.component(Divider.name as string, Divider)

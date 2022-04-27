@@ -3,9 +3,9 @@
     <div class="header-container container">
       <div class="header-header">
         <uimage cdn src="/images/logo.svg" class="header-logo" />
-        <span class="header-slogan">
+        <webfont class="header-slogan">
           <i18n :k="LanguageKey.APP_SLOGAN" />
-        </span>
+        </webfont>
         <router-link
           to="/"
           class="header-link"
@@ -43,9 +43,9 @@
           >
             <uimage v-if="menu.imageIcon" class="image-icon" :src="menu.imageIcon" />
             <i v-else class="iconfont" :class="menu.icon"></i>
-            <span class="text">
+            <webfont class="text" bolder uppercase>
               <i18n :k="menu.i18nKey" />
-            </span>
+            </webfont>
             <span v-if="menu.hot" class="superscript">
               <i class="iconfont icon-hot-fill"></i>
             </span>
@@ -57,9 +57,9 @@
             :href="menu.url"
           >
             <i class="iconfont" :class="menu.icon"></i>
-            <span class="text">
+            <webfont class="text" bolder uppercase>
               <i18n :k="menu.i18nKey" />
-            </span>
+            </webfont>
             <span class="newscript" v-if="menu.newWindow">
               <i class="iconfont icon-new-window-s"></i>
             </span>
@@ -86,7 +86,7 @@
     name: 'DesktopHeader',
     setup() {
       const { i18n, gtag, theme, globalState } = useEnhancer()
-      // 非常规布局则启用菜单
+      // enable header nav bar when full page layout
       const isEnabledNav = computed(() => !globalState.layoutColumn.value.isNormal)
 
       const themeValue = theme.theme
@@ -193,7 +193,6 @@
         .header-slogan {
           color: $primary;
           font-size: $font-size-h5;
-          font-family: 'webfont-medium', DINRegular;
         }
 
         .header-link {
@@ -247,7 +246,6 @@
 
           &.language {
             font-weight: bold;
-
             &.en {
               &::before {
                 background-color: $en-primary;
@@ -283,19 +281,21 @@
         }
 
         .item {
-          text-transform: uppercase;
           color: $text-reversal;
           @include visibility-transition();
           opacity: 0.7;
           &:hover {
             opacity: 1;
           }
-
           &.link-active {
             .text {
-              padding-bottom: 4px;
+              padding-bottom: 2px;
               border-bottom: 2px solid;
             }
+          }
+
+          > .iconfont {
+            margin-right: $sm-gap;
           }
 
           .image-icon {
@@ -303,10 +303,6 @@
             height: 1em;
             margin-right: $sm-gap;
             border-radius: $xs-radius;
-          }
-
-          > .iconfont {
-            margin-right: $sm-gap;
           }
 
           .newscript,

@@ -3,8 +3,14 @@
     <responsive>
       <template #desktop>
         <page-banner :blur="false" :position="75" image="/images/page-archive/banner.jpg">
-          <template #title><i18n v-bind="i18ns.title" /></template>
-          <template #description><i18n v-bind="i18ns.description" /></template>
+          <template #title>
+            <webfont>
+              <i18n v-bind="i18ns.title" />
+            </webfont>
+          </template>
+          <template #description>
+            <i18n v-bind="i18ns.description" />
+          </template>
         </page-banner>
       </template>
       <template #mobile>

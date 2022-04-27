@@ -3,9 +3,9 @@
     <div class="header">
       <span class="title">
         <i class="iconfont icon-hotfill" />
-        <span class="text">
+        <webfont class="text">
           <i18n :k="LanguageKey.HOT_ARTICLE_LIST_TITLE" />
-        </span>
+        </webfont>
       </span>
       <button class="switch" @click="switchHotPage">
         <i class="iconfont icon-switch" />
@@ -120,9 +120,6 @@
       .title {
         .iconfont {
           margin-right: $sm-gap;
-        }
-        .text {
-          font-weight: bold;
         }
       }
 

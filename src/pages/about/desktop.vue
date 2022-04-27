@@ -10,9 +10,11 @@
         <uimage class="image" :src="getAdminAvatar(adminInfo?.avatar)" />
         <h2 class="name">{{ adminInfo?.name || '-' }}</h2>
         <p class="role">{{ adminInfo?.slogan || '-' }}</p>
-        <div class="bio-text" :class="language">
-          <i18n v-bind="i18ns.biography" />
-        </div>
+        <p class="bio-text">
+          <webfont bolder>
+            <i18n v-bind="i18ns.biography" />
+          </webfont>
+        </p>
         <div class="socials">
           <span class="normal">
             <ulink class="item github" :href="VALUABLE_LINKS.GITHUB">
@@ -188,7 +190,7 @@
       AggregateCalendar
     },
     setup() {
-      const { i18n, gtag, globalState, isZhLang, isDarkTheme } = useEnhancer()
+      const { gtag, globalState, isZhLang, isDarkTheme } = useEnhancer()
       const metaStore = useMetaStore()
       const adminInfo = computed(() => metaStore.adminInfo.data)
       const appOptions = computed(() => metaStore.appOptions.data)
@@ -297,7 +299,6 @@
         i18ns,
         qrcodes,
         links,
-        language: i18n.language,
         VALUABLE_LINKS,
         SPECIAL_LINKS,
         getAdminAvatar,
@@ -421,12 +422,9 @@
         }
 
         .bio-text {
-          line-height: 5rem;
+          margin-bottom: $gap * 3;
+          line-height: 2em;
           font-size: $font-size-h3;
-          font-family: 'webfont-bolder', DINRegular;
-          &.en {
-            font-weight: bold;
-          }
         }
 
         .socials {
@@ -434,7 +432,6 @@
           display: flex;
           justify-content: center;
           height: $button-size;
-          margin-top: $lg-gap;
           margin-bottom: $gap * 2;
 
           .normal {

@@ -2,7 +2,9 @@
   <div class="merch-page">
     <page-banner :blur="false" :position="70" image="/images/page-merch/banner.jpg">
       <template #title>
-        <i18n zh="亲身体验，真实不虚" en="Merch Bar" />
+        <webfont>
+          <i18n zh="亲身体验，真实不虚" en="Merch Bar" />
+        </webfont>
       </template>
       <template #description>
         <i18n zh="手动维护，未用不推" en="Maybe you will like it" />

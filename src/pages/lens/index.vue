@@ -2,7 +2,9 @@
   <div class="lens-page" :class="{ dark: isDarkTheme }">
     <page-banner :blur="false" :position="36" :image="bannerImageURL">
       <template #title>
-        <i18n zh="凡心所向，素履以往" en="Because it's there" />
+        <webfont>
+          <i18n zh="凡心所向，素履以往" en="Because it's there" />
+        </webfont>
       </template>
       <template #description>
         <i18n>

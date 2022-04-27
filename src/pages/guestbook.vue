@@ -9,9 +9,9 @@
             <span class="count">{{ isLiked ? `${siteLikes - 1} + 1` : siteLikes }}</span>
           </button>
           <span class="slogan">
-            <span class="text">
+            <webfont class="text">
               <i18n :k="LanguageKey.GUESTBOOK_SLOGAN" />
-            </span>
+            </webfont>
           </span>
         </div>
       </template>
@@ -147,7 +147,6 @@
       .image {
         margin-top: -($gap * 6);
         transition: all $transition-time-slow;
-
         &:hover {
           transform: rotate(2deg) scale(1.1);
         }
@@ -192,14 +191,12 @@
         padding-left: 3rem;
         border-top-right-radius: $mini-radius;
         border-bottom-right-radius: $mini-radius;
-        opacity: 0.8;
-        font-weight: 700;
         background: linear-gradient(to left, $module-bg-lighter, $module-bg, transparent);
+        opacity: 0.8;
         cursor: none;
 
         .text {
           letter-spacing: 0.3px;
-          font-weight: bold;
           color: $text;
           background-clip: text;
           background-image: url('/images/page-guestbook/banner.jpg');

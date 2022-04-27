@@ -35,11 +35,11 @@ import GuestbookPage from '/@/pages/guestbook.vue'
 import AppPage from '/@/pages/app.vue'
 
 // service pages
-import LensPage from '/@/pages/lens/index.vue'
 import JobPage from '/@/pages/job.vue'
+import FreelancerPage from '/@/pages/freelancer.vue'
+import LensPage from '/@/pages/lens/index.vue'
 import MerchPage from '/@/pages/merch/index.vue'
 import SponsorPage from '/@/pages/sponsor.vue'
-import FreelancerPage from '/@/pages/freelancer.vue'
 
 import 'vue-router'
 

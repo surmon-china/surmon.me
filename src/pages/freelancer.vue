@@ -2,9 +2,9 @@
   <div class="freelancer-page">
     <page-banner :position="66" class="page-banner" image="/images/page-feeelancer/banner.jpg">
       <template #title>
-        <div class="title">
+        <webfont>
           <i18n :k="LanguageKey.PAGE_FREELANCER_SLOGAN" />
-        </div>
+        </webfont>
       </template>
       <template #description>
         <div class="desc">
@@ -256,10 +256,6 @@
     width: 100%;
 
     .page-banner {
-      .title {
-        font-family: 'webfont-normal', DINRegular;
-      }
-
       .desc {
         display: flex;
         flex-direction: column;

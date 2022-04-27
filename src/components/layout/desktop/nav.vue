@@ -1,6 +1,6 @@
 <template>
   <div :id="NAV_ELEMENT_ID" class="desktop-nav">
-    <nav class="nav-list" :class="{ en: !isZhLang }">
+    <nav class="nav-list">
       <template v-for="menu in menus" :key="menu.id">
         <span class="divider" v-if="menu.divider"></span>
         <router-link
@@ -12,9 +12,9 @@
         >
           <uimage v-if="menu.imageIcon" class="image-icon" :src="menu.imageIcon" />
           <i v-else class="iconfont" :class="menu.icon"></i>
-          <span class="text">
+          <webfont class="text" bolder uppercase>
             <i18n :k="menu.i18nKey" />
-          </span>
+          </webfont>
           <span class="superscript" v-if="menu.hot">
             <i class="iconfont icon-hot-fill"></i>
           </span>
@@ -26,9 +26,9 @@
           :href="menu.url"
         >
           <i class="iconfont" :class="menu.icon"></i>
-          <span class="text">
+          <webfont class="text" bolder uppercase>
             <i18n :k="menu.i18nKey" />
-          </span>
+          </webfont>
           <span class="newscript" v-if="menu.newWindow">
             <i class="iconfont icon-new-window-s"></i>
           </span>
@@ -42,13 +42,11 @@
         <span class="divider"></span>
         <ulink class="item" :href="ad.url">
           <i class="iconfont" :class="ad.icon" :style="{ color: ad.color }"></i>
-          <span class="text" :style="{ color: ad.color }">
+          <span class="ad-text" :style="{ color: ad.color }">
             <template v-if="ad.i18n">
               <i18n :zh="ad.i18n.zh" :en="ad.i18n.en" />
             </template>
-            <template v-else>
-              {{ ad.text }}
-            </template>
+            <template v-else>{{ ad.text }}</template>
           </span>
           <span class="superscript">
             <i class="iconfont icon-ad"></i>
@@ -67,12 +65,11 @@
   export default defineComponent({
     name: 'DesktopNav',
     setup() {
-      const { adConfig, isZhLang } = useEnhancer()
+      const { adConfig } = useEnhancer()
       return {
         NAV_ELEMENT_ID,
         menus,
-        adConfig,
-        isZhLang
+        adConfig
       }
     }
   })
@@ -92,14 +89,6 @@
       margin: 0;
       position: fixed;
 
-      &.en {
-        .item {
-          .text {
-            font-size: $font-size-h6;
-          }
-        }
-      }
-
       .item {
         display: block;
         position: relative;
@@ -108,11 +97,8 @@
         line-height: 3em;
         padding: 0 $lg-gap;
         text-decoration: none;
-        text-transform: uppercase;
-        font-weight: bold;
         border-radius: $mini-radius;
         color: $text-secondary;
-        font-family: 'webfont-normal', DINRegular;
         letter-spacing: 0.5px;
         margin-bottom: $sm-gap;
         will-change: background-color;
@@ -125,14 +111,19 @@
           color: $primary-lighter;
           background-color: $module-bg-translucent;
         }
-
         &.link-active {
           color: $primary;
           background-color: $module-bg-lighter;
-
           &.guestbook {
             background: linear-gradient(to bottom, $module-bg-lighter, transparent);
           }
+        }
+
+        &.hot {
+          color: $red;
+        }
+        &.app {
+          color: $surmon;
         }
 
         .newscript {
@@ -151,14 +142,6 @@
           }
         }
 
-        &.hot {
-          color: $red;
-        }
-
-        &.app {
-          color: $surmon;
-        }
-
         .image-icon {
           width: 1em;
           height: 1em;
@@ -170,7 +153,10 @@
           width: 1em;
           margin-right: $gap;
           display: inline-block;
-          font-weight: normal;
+        }
+
+        .ad-text {
+          font-weight: bold;
         }
       }
 

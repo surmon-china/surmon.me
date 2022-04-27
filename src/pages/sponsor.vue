@@ -1,20 +1,18 @@
 <template>
   <div class="sponsor-page">
-    <page-banner class="page-banner" image="/images/page-sponsor/banner.webp" :blur="false">
+    <page-banner image="/images/page-sponsor/banner.webp" :blur="false">
       <template #title>
-        <div class="title">
+        <webfont>
           <i18n zh="赠吾玫瑰，手留余香" en="Become a sponsor to me" />
-        </div>
+        </webfont>
       </template>
       <template #description>
-        <p class="text">
-          <i18n>
-            <template #zh>愿我的输出对你有所帮助，对我来说那是最好的褒奖和鼓励</template>
-            <template #en
-              >Your generous financial support is my motivation to keep moving forward</template
-            >
-          </i18n>
-        </p>
+        <i18n>
+          <template #zh>愿我的输出对你有所帮助，对我来说那是最好的褒奖和鼓励</template>
+          <template #en
+            >Your generous financial support is my motivation to keep moving forward</template
+          >
+        </i18n>
       </template>
     </page-banner>
     <div class="tips">
@@ -63,19 +61,6 @@
     min-height: $full-page-active-content-height;
     display: flex;
     flex-direction: column;
-
-    .page-banner {
-      .title {
-        font-family: 'webfont-normal', DINRegular;
-      }
-
-      .desc {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-    }
 
     .tips {
       width: 100%;

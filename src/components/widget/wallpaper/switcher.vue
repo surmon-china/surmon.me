@@ -96,7 +96,6 @@
         align-items: center;
         width: 100%;
         height: 100%;
-        font-family: 'webfont-bolder', DINRegular;
         writing-mode: tb-rl;
         color: $bing-primary;
         font-size: $font-size-small - 1;

@@ -39,6 +39,7 @@ export const VALUABLE_LINKS = Object.freeze({
   RSS: '/rss.xml',
   SITE_MAP: '/sitemap.xml',
 
+  UPTIME_STATUS: 'https://stats.uptimerobot.com/Q2k7OTXxJN',
   GITHUB_SURMON_ME: 'https://github.com/surmon-china/surmon.me',
   GITHUB_NODEPRESS: 'https://github.com/surmon-china/nodepress',
   GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',

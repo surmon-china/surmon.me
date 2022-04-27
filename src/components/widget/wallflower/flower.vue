@@ -1,6 +1,6 @@
 <template>
   <li class="flower-item" :style="styles" :class="{ playing: state.playing }">
-    {{ options.text }}
+    <webfont bolder>{{ options.text }}</webfont>
   </li>
 </template>
 
@@ -39,7 +39,7 @@
 
       const startAnimation = () => {
         nextTick(() => {
-          // Start animation
+          // start animation
           setTimeout(() => {
             state.playing = true
           })
@@ -79,7 +79,6 @@
     transform: translate3d(-50%, -50%, 0);
     transition: opacity 0.5s;
     color: $primary;
-    font-family: 'webfont-bolder', $font-family-normal;
     font-size: $font-size-h3;
     white-space: nowrap;
 

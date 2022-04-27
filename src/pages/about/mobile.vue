@@ -17,8 +17,10 @@
       <h2 class="name">{{ adminInfo?.name || '-' }}</h2>
       <h5 class="slogan">{{ adminInfo?.slogan || '-' }}</h5>
       <divider dashed />
-      <h4 class="bio" :class="language">
-        <i18n v-bind="i18ns.biography" />
+      <h4 class="bio">
+        <webfont bolder>
+          <i18n v-bind="i18ns.biography" />
+        </webfont>
       </h4>
     </div>
     <div class="links">
@@ -100,7 +102,6 @@
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { LanguageKey } from '/@/language'
   import { RouteName } from '/@/app/router'
-  import { useEnhancer } from '/@/app/enhancer'
   import { useMetaStore } from '/@/stores/meta'
   import { useUniversalFetch } from '/@/universal'
   import { getPageRoute } from '/@/transforms/route'
@@ -113,7 +114,6 @@
       PageBanner
     },
     setup() {
-      const { i18n } = useEnhancer()
       const metaStore = useMetaStore()
       const adminInfo = computed(() => metaStore.adminInfo.data)
 
@@ -122,7 +122,6 @@
 
       return {
         i18ns,
-        language: i18n.language,
         adminInfo,
         RouteName,
         getAdminAvatar,
@@ -186,12 +185,8 @@
 
       .bio {
         margin: 0;
-        font-family: 'webfont-bolder', DINRegular;
         line-height: $line-height-base * 1.4;
         text-align: center;
-        &.en {
-          font-weight: bold;
-        }
       }
     }
 

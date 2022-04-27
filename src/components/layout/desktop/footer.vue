@@ -7,7 +7,7 @@
       <ulink class="item" :href="VALUABLE_LINKS.GITHUB_BLOG_STAR_LIST">NodePress</ulink>
       <i18n zh="、" en=", " />
       <ulink class="item" :href="VALUABLE_LINKS.GITHUB_SURMON_ME">Vue</ulink>
-      <i18n zh=" 和 日月星辰 强力驱动" en=" and solitarily" />
+      <i18n zh=" 和 日月星辰 强力驱动" en="" />
       <divider type="vertical" />
       <i18n>
         <template #zh>
@@ -23,6 +23,10 @@
       <a class="statement" href="javascript:void(0)" @click="handleStatementModal">
         <i18n zh="周知" en="FAQ" />
       </a>
+      <divider type="vertical" />
+      <ulink :href="VALUABLE_LINKS.UPTIME_STATUS">
+        <i18n zh="时态" en="STATUS" />
+      </ulink>
     </div>
   </footer>
 </template>

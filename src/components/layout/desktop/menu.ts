@@ -61,13 +61,13 @@ export const menus: Array<MenuItem> = [
     icon: 'icon-horse',
     i18nKey: LanguageKey.PAGE_JOB
   },
-  */
   {
     id: RouteName.Freelancer,
     route: getPageRoute(RouteName.Freelancer),
     icon: 'icon-coin-s',
     i18nKey: LanguageKey.PAGE_FREELANCER
   },
+  */
   {
     id: RouteName.Guestbook,
     route: getPageRoute(RouteName.Guestbook),

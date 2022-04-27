@@ -72,11 +72,11 @@
         <span class="icon">
           <i class="iconfont icon-loadmore"></i>
         </span>
-        <span class="text" :class="{ en: !isZhLang }">
+        <webfont class="text" bolder uppercase>
           <i18n v-if="fetching" :k="LanguageKey.ARTICLE_LIST_LOADING" />
           <i18n v-else-if="isLoadMoreEnabled" :k="LanguageKey.ARTICLE_LIST_LOADMORE" />
           <i18n v-else :k="LanguageKey.ARTICLE_LIST_NO_MORE" />
-        </span>
+        </webfont>
       </button>
     </div>
   </div>
@@ -115,7 +115,7 @@
     },
     emits: [Events.Loadmore],
     setup(props, context) {
-      const { isZhLang, isDarkTheme } = useEnhancer()
+      const { isDarkTheme } = useEnhancer()
       const isLoadMoreEnabled = computed(() => {
         return props.pagination
           ? props.pagination.current_page < props.pagination.total_page
@@ -128,7 +128,6 @@
 
       return {
         LanguageKey,
-        isZhLang,
         isDarkTheme,
         isLoadMoreEnabled,
         handleLoadmore
@@ -238,11 +237,9 @@
         padding-left: $gap * 2;
         color: $text-reversal;
         @include common-bg-module($transition-time-fast);
-
         &[disabled] {
           opacity: 0.6;
         }
-
         &:not([disabled]):hover {
           .iconfont {
             color: rgba($red, 0.8);
@@ -263,12 +260,7 @@
           height: $button-block-height;
           padding: 0 ($gap * 2) 0 ($gap * 3);
           background: rgba($red, 0.6);
-          font-family: 'webfont-bolder', DINRegular;
-          text-transform: uppercase;
           color: $white;
-          &.en {
-            font-weight: bold;
-          }
 
           &::before {
             $size: 1rem;

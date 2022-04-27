@@ -2,7 +2,9 @@
   <div class="job-page">
     <page-banner :blur="false" image="/images/page-job/banner-2.jpg">
       <template #title>
-        <i18n zh="内推找我，绝对靠谱" en="We work together" />
+        <webfont>
+          <i18n zh="内推找我，绝对靠谱" en="We work together" />
+        </webfont>
       </template>
       <template #description>
         <i18n zh="一手人脉，假一赔万" en="We fight for future together" />
