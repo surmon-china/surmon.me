@@ -29,7 +29,7 @@ export const i18ns: { [key: string]: I18nLanguageMap<Language> } = {
   },
   hireMe: {
     [Language.Chinese]: `与我合作`,
-    [Language.English]: `Hire me`
+    [Language.English]: `Freelancer`
   },
   myArchive: {
     [Language.Chinese]: `我的创作`,
@@ -72,8 +72,8 @@ export const useAboutPageMeta = () => {
 
 export const SPECIAL_LINKS = Object.freeze([
   {
-    name: 'iconfont',
-    url: 'https://www.iconfont.cn/'
+    name: 'GitHub',
+    url: 'https://github.com'
   },
   {
     name: `PM2`,

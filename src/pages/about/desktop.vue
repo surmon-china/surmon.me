@@ -427,7 +427,6 @@
 
         .bio-text {
           margin-bottom: $gap * 2;
-          line-height: 2em;
           font-size: $font-size-h3;
         }
 

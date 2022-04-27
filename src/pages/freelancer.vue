@@ -20,6 +20,10 @@
         </div>
       </template>
     </page-banner>
+    <div class="tip">
+      "Any application that can be written in JavaScript, will eventually be written in JavaScript."
+      - Jeff Atwood
+    </div>
     <div class="module">
       <div class="container">
         <ul class="module-list">
@@ -62,14 +66,6 @@
             </p>
           </li>
         </ul>
-      </div>
-    </div>
-    <div class="rule">
-      <div class="rule-content container">
-        <i18n
-          zh="如果你认为自己的能力足以支撑一位出色、省心、优秀、帅气、完美的的全栈工程师的生产力，请 EMail 我；非常优秀，没有之一"
-          en="Any application that can be written in JavaScript, will eventually be written in JavaScript."
-        />
       </div>
     </div>
   </div>
@@ -300,6 +296,17 @@
       }
     }
 
+    .tip {
+      height: 5rem;
+      line-height: 5rem;
+      background-color: $module-bg;
+      color: $text-divider;
+      text-align: center;
+      font-family: monospace;
+      font-weight: bold;
+      font-size: $font-size-base - 1;
+    }
+
     .module {
       margin: ($gap * 2) auto;
 
@@ -324,10 +331,8 @@
           &:last-child {
             margin-right: 0;
           }
-
           &:hover {
             background-color: $module-bg-opaque;
-
             .desc {
               color: $text;
             }
@@ -374,6 +379,7 @@
 
     .step {
       @include common-bg-module();
+      border-bottom: 1px solid $module-bg-darker-1;
 
       > .step-content {
         > .step-list {
@@ -395,18 +401,6 @@
             }
           }
         }
-      }
-    }
-
-    .rule {
-      height: 5rem;
-      line-height: 5rem;
-      background-color: $primary;
-
-      .rule-content {
-        color: $text-reversal;
-        margin: 0 auto;
-        text-align: center;
       }
     }
   }
