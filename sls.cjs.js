@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.10.3
+* Surmon.me v3.10.4
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -228,6 +228,7 @@ Object.freeze({
 Object.freeze({
     RSS: '/rss.xml',
     SITE_MAP: '/sitemap.xml',
+    UPTIME_STATUS: 'https://stats.uptimerobot.com/Q2k7OTXxJN',
     GITHUB_SURMON_ME: 'https://github.com/surmon-china/surmon.me',
     GITHUB_NODEPRESS: 'https://github.com/surmon-china/nodepress',
     GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
