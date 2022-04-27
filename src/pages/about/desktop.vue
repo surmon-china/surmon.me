@@ -348,7 +348,7 @@
     }
 
     .banner {
-      $banner-height: 22rem;
+      $banner-height: 20rem;
       margin-bottom: $gap * 2;
 
       .background {
@@ -421,8 +421,12 @@
           color: $text;
         }
 
+        .name {
+          margin-top: $sm-gap;
+        }
+
         .bio-text {
-          margin-bottom: $gap * 3;
+          margin-bottom: $gap * 2;
           line-height: 2em;
           font-size: $font-size-h3;
         }
