@@ -1,22 +1,14 @@
 <template>
-  <div id="progress-bar">
+  <div id="progress-bar" :class="{ show: loading.state.show }">
     <div
       class="progress"
       :class="{
-        show: loading.state.show,
         notransition: loading.state.skipTimerCount > 0,
         failed: !loading.state.canSucceed
       }"
       :style="{ width: loading.state.percent + '%' }"
     />
-    <div
-      v-if="spin"
-      class="spin"
-      :class="{
-        show: loading.state.show,
-        failed: !loading.state.canSucceed
-      }"
-    >
+    <div v-if="spin" class="spin" :class="{ failed: !loading.state.canSucceed }">
       <div class="lds-ring">
         <div></div>
         <div></div>
@@ -58,6 +50,11 @@
     height: $size;
     width: 100%;
     z-index: $z-index-progress-bar;
+    @include visibility-transition($transition-time-normal);
+    @include hidden();
+    &.show {
+      @include visible();
+    }
 
     .progress {
       position: absolute;
@@ -66,14 +63,7 @@
       height: $size;
       width: 0%;
       background-color: $primary;
-      @include hidden();
-      transition: width $transition-time-normal, opacity $transition-time-normal,
-        visibility $transition-time-normal;
-      &.show {
-        @include visible();
-        transition: width 0s, opacity $transition-time-fast, visibility $transition-time-fast;
-      }
-
+      transition: width $transition-time-normal;
       &.notransition {
         transition: none;
       }
@@ -86,12 +76,6 @@
       position: absolute;
       top: $lg-gap;
       right: $lg-gap;
-      @include hidden();
-      @include visibility-transition($transition-time-normal);
-      &.show {
-        @include visible();
-      }
-
       &.failed {
         .lds-ring {
           div {

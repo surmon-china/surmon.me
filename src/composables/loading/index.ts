@@ -114,9 +114,9 @@ const createLoadingStore = (options: LoadingOptions = {}) => {
       nextTick().then(() => {
         setTimeout(() => {
           state.percent = 0
-        }, 160)
+        }, 280)
       })
-    }, 500)
+    }, 460)
   }
 
   const set = (percent: number) => {
