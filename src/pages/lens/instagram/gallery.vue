@@ -5,27 +5,22 @@
         <div class="left">
           <span class="timestamp">
             <i class="iconfont icon-clock"></i>
-            <span class="text">
-              <udate to="YMDm" :date="galleryActiveMedia.timestamp" separator="/" />
-            </span>
+            <udate to="YMDm" :date="galleryActiveMedia.timestamp" separator="/" />
           </span>
         </div>
         <div class="center">
           <span class="pagination">{{ galleryActiveIndex + 1 }} / {{ medias.length }}</span>
         </div>
         <div class="right">
-          <span class="caption" v-if="galleryActiveMedia.caption">
+          <span class="caption">
             <i class="iconfont icon-camera"></i>
-            <span class="text">{{ galleryActiveMedia.caption }}</span>
-            <divider type="vertical" />
+            <template v-if="galleryActiveMedia.caption">{{ galleryActiveMedia.caption }}</template>
           </span>
-          <ulink class="link" :href="galleryActiveMedia.permalink">
-            <i class="iconfont instagram icon-instagram"></i>
-            <span class="text">On Instagram</span>
-            <i class="iconfont window icon-new-window-s"></i>
-          </ulink>
         </div>
       </div>
+      <ulink class="postlink" :href="galleryActiveMedia.permalink">
+        <i class="iconfont icon-new-window-s"></i>
+      </ulink>
       <button
         class="navigation prev"
         :disabled="galleryActiveIndex === 0"
@@ -139,7 +134,6 @@
 
     .swiper {
       height: 100%;
-
       .image {
         overflow: hidden;
         width: 100%;
@@ -154,7 +148,7 @@
       top: 0;
       left: 0;
       margin: 0;
-      padding: 0;
+      padding: 0 1em;
       width: 100%;
       height: 4rem;
       display: flex;
@@ -194,38 +188,26 @@
           margin-right: $sm-gap;
         }
       }
+    }
 
-      .timestamp {
-        margin-left: $lg-gap;
-        color: rgba($white, 0.6);
-      }
-
-      .caption {
-        .text {
-          font-weight: bold;
-        }
-      }
-
-      .link {
-        display: inline-flex;
-        align-items: center;
-        height: 28px;
-        padding: 0 $sm-gap;
-        margin-right: $gap;
-        border-radius: $xs-radius;
-        color: $white;
-        background: $instagram-gradient;
-
-        .instagram {
-          margin-right: $sm-gap;
-        }
-        .text {
-          font-size: $font-size-base;
-          font-weight: bold;
-        }
-        .window {
-          margin-left: $sm-gap;
-        }
+    .postlink {
+      $size: 4rem;
+      position: absolute;
+      z-index: $z-index-normal + 2;
+      bottom: 6rem;
+      right: 6rem;
+      width: $size;
+      height: $size;
+      line-height: $size;
+      border-radius: 50%;
+      text-align: center;
+      font-size: $font-size-h4;
+      background: $instagram-gradient;
+      color: $white;
+      opacity: 0.5;
+      transition: opacity $transition-time-fast;
+      &:hover {
+        opacity: 1;
       }
     }
 

@@ -21,17 +21,13 @@
       </template>
       <p class="desc">{{ currentWallpaper.desc }}</p>
       <div class="tools">
-        <transition name="module">
-          <ulink
-            key="location"
-            class="location"
-            :href="currentWallpaper.humanizedCopyrightUrl"
-            :title="currentWallpaper.bsTitle"
-          >
-            <i class="iconfont icon-location"></i>
-            <span class="text" v-if="currentWallpaper.bsTitle">{{ currentWallpaper.bsTitle }}</span>
-          </ulink>
-        </transition>
+        <ulink
+          class="button"
+          :href="currentWallpaper.humanizedCopyrightUrl"
+          :title="currentWallpaper.bsTitle"
+        >
+          <i class="iconfont icon-bing"></i>
+        </ulink>
         <button class="button" title="Prev" :disabled="index <= 0" @click="index--">
           <i class="iconfont icon-prev"></i>
         </button>
@@ -134,15 +130,17 @@
       }
 
       .tools {
-        .location,
+        display: flex;
+        $size: 3rem;
+
         .button {
           display: block;
-          float: left;
-          line-height: 2.5;
-          padding: 0 $gap;
+          width: $size;
+          height: $size;
+          line-height: $size;
           margin-right: $gap;
+          text-align: center;
           background-color: $module-bg;
-          @include background-transition();
           @include radius-box($xs-radius);
 
           &[disabled] {
@@ -153,12 +151,6 @@
             &:hover {
               background-color: $module-bg-darker-1;
             }
-          }
-        }
-
-        .location {
-          .text {
-            margin-left: $xs-gap;
           }
         }
       }

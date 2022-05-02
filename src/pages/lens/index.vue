@@ -1,5 +1,5 @@
 <template>
-  <div class="lens-page" :class="{ dark: isDarkTheme }">
+  <div class="lens-page">
     <page-banner :blur="false" :position="36" :image="bannerImageURL">
       <template #title>
         <webfont>
@@ -99,7 +99,7 @@
       YoutubePlaylist
     },
     setup() {
-      const { i18n, meta, isDarkTheme, isZhLang } = useEnhancer()
+      const { i18n, meta, isZhLang } = useEnhancer()
       const lensStore = useLensStore()
       const instagramMedias = computed(() => {
         return lensStore.instagram.data.filter((plog) => plog.media_type !== 'VIDEO').slice(0, 24)
@@ -136,7 +136,6 @@
         lensStore,
         instagramMedias,
         youtubeLists,
-        isDarkTheme,
         bannerImageURL
       }
     }

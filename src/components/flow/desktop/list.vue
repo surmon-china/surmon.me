@@ -68,7 +68,10 @@
         <span class="right"></span>
       </div>
       <div class="content">
-        <span class="left">{{ articles.length }} / {{ pagination?.total }}</span>
+        <span class="left">
+          <template v-if="fetching">•••</template>
+          <template v-else>{{ articles.length }} / {{ pagination?.total }}</template>
+        </span>
         <span class="right">
           <webfont bolder uppercase>
             <i18n v-if="fetching" :k="LanguageKey.ARTICLE_LIST_LOADING" />

@@ -288,13 +288,9 @@
     display: flex;
   }
 
-  .twitter-empty,
-  .twitter-skeleton {
+  .twitter-empty {
     @include common-bg-module();
     @include radius-box($sm-radius);
-  }
-
-  .twitter-empty {
     .empty-content {
       height: 100%;
       min-height: auto;
@@ -304,6 +300,9 @@
 
   .twitter-skeleton {
     padding: $gap;
+    background-color: $module-bg;
+    @include radius-box($sm-radius);
+
     .left {
       width: $userinfo-width;
       margin-right: $lg-gap;
@@ -322,11 +321,13 @@
     .userinfo {
       width: $userinfo-width;
       height: 100%;
-      margin-right: $gap;
+      margin-right: $sm-gap;
       display: flex;
       justify-content: center;
       align-items: center;
       @include radius-box($sm-radius);
+      border-top-right-radius: $mini-radius;
+      border-bottom-right-radius: $mini-radius;
 
       .logo-link {
         position: relative;
@@ -356,7 +357,6 @@
           align-items: center;
           border-top-left-radius: $xs-radius;
           background-color: rgba($twitter-primary, 0.9);
-          font-size: $font-size-small;
         }
       }
 
@@ -402,9 +402,7 @@
     .tweets {
       flex: 1;
       height: $twitter-height;
-      @include radius-box($sm-radius);
-      border-top-right-radius: $mini-radius;
-      border-bottom-right-radius: $mini-radius;
+      @include radius-box($mini-radius);
 
       ::v-deep(.swiper-wrapper) {
         flex-direction: column;
@@ -562,9 +560,7 @@
         color: $text-disabled;
         @include color-transition();
         @include common-bg-module();
-        @include radius-box($sm-radius);
-        border-top-left-radius: $mini-radius;
-        border-bottom-left-radius: $mini-radius;
+        @include radius-box($mini-radius);
 
         &:not([disabled]):hover {
           color: $link-color;
@@ -577,11 +573,11 @@
 
         &.prev {
           margin-bottom: $sm-gap;
-          border-bottom-right-radius: $mini-radius;
+          border-top-right-radius: $sm-radius;
         }
 
         &.next {
-          border-top-right-radius: $mini-radius;
+          border-bottom-right-radius: $sm-radius;
         }
       }
     }
