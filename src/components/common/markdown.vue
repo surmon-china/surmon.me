@@ -201,11 +201,6 @@
       border: 1px solid $module-bg-darker-1;
       text-indent: 0;
       text-align: center;
-      &:hover {
-        figcaption {
-          color: $text;
-        }
-      }
 
       .placeholder {
         visibility: hidden;
@@ -238,10 +233,10 @@
         text-align: center;
         line-height: $gap * 3;
         font-size: $font-size-small;
-        color: $text-secondary;
+        font-weight: bold;
+        /* font-style: italic; */
         user-select: none;
         pointer-events: none;
-        @include color-transition();
       }
 
       &[data-status='loaded'] {
@@ -340,9 +335,9 @@
     pre {
       $code-header-height: 2.8rem;
       $code-number-width: 3rem;
-      $code-row-line-height: 1.8rem;
-      $code-padding: 1rem;
-      $code-font-size: $font-size-h6;
+      $code-row-line-height: 1.8em;
+      $code-padding: 0.8rem;
+      $code-font-size: $font-size-base;
       position: relative;
       display: flex;
       margin-bottom: 1em;
@@ -367,49 +362,31 @@
       }
 
       .code-lines {
-        user-select: none;
+        z-index: $z-index-normal + 1;
         position: absolute;
         left: 0;
         top: 0;
+        display: block;
         margin: 0;
         padding: 0;
-        display: block;
         padding-top: $code-header-height + $code-padding;
         width: $code-number-width;
         height: 100%;
+        color: $text-divider;
         text-align: center;
-        z-index: $z-index-normal + 1;
+        user-select: none;
 
         .code-line-number {
           padding: 0;
-          border-radius: 0;
-          position: relative;
           list-style-type: none;
           height: $code-row-line-height;
           line-height: $code-row-line-height;
-          transition: none;
-          &:hover {
-            &::before {
-              @include visible();
-            }
-          }
-
-          &::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 66em;
-            height: 100%;
-            background-color: rgba(154, 154, 154, 0.2);
-            @include hidden();
-          }
         }
       }
 
       code {
         margin: 0;
-        padding: $code-padding;
+        padding: $code-padding 1em !important;
         float: left;
         width: 100%;
         height: 100%;
@@ -499,7 +476,6 @@
       }
       .code-lines {
         background-color: $module-bg-darker-1;
-        color: $text-disabled;
       }
       code {
         color: #444;
