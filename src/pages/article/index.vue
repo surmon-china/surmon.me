@@ -202,7 +202,7 @@
       }
 
       .divider {
-        border-top: 2px solid $module-bg-darker-1;
+        border-top: 2px dotted $module-bg-darker-1;
       }
 
       .bridge {

@@ -105,13 +105,13 @@
       &.prev {
         justify-content: flex-start;
         .icon {
-          border-right-width: 2px;
+          border-right-width: 1px;
         }
       }
       &.next {
         justify-content: space-between;
         .icon {
-          border-left-width: 2px;
+          border-left-width: 1px;
         }
       }
 

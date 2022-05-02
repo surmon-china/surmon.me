@@ -42,98 +42,96 @@
               </div>
             </div>
           </div>
-          <div class="tweets">
-            <swiper
-              v-if="completedTweets.length"
-              class="swiper"
-              direction="vertical"
-              :height="66"
-              :mousewheel="true"
-              :allow-touch-move="false"
-              :slides-per-view="1"
-              :prevent-clicks="false"
-              :autoplay="{ delay: 3500, disableOnInteraction: false }"
-              @transition-start="handleSwiperTransitionStart"
-              @swiper="handleSwiperReady"
-            >
-              <swiper-slide class="tweet-item" v-for="(t, index) in completedTweets" :key="index">
-                <div class="content" :title="t.tweet.text">
-                  <div
-                    class="reference"
-                    v-if="t.tweet.referenced_tweets?.length"
-                    :title="t.tweet.referenced_tweets[0].type"
-                  >
-                    <i
-                      class="iconfont icon-retweet"
-                      v-if="['quoted', 'retweeted'].includes(t.tweet.referenced_tweets[0].type)"
-                    ></i>
-                    <i class="iconfont icon-follow-up" v-else></i>
-                  </div>
-                  <div
-                    class="main"
-                    :class="{ 'has-media': t.medias.length }"
-                    v-if="t.html"
-                    v-html="t.html"
-                  ></div>
-                  <ulink
-                    v-if="t.medias.length"
-                    class="end-link"
-                    :class="{ empty: !t.html }"
-                    :href="t.url"
-                    @mousedown="handleGtagEvent('twitter_image_link')"
-                  >
-                    <template v-if="t.medias.find((m) => m.type === 'video')">
-                      <i class="iconfont media icon-video"></i>
-                    </template>
-                    <template v-else>
-                      <i class="iconfont media icon-image"></i>
-                    </template>
-                    <span class="text">[{{ t.medias.length }}]</span>
-                    <i class="iconfont window icon-new-window-s"></i>
-                  </ulink>
+          <swiper
+            v-if="completedTweets.length"
+            class="tweets"
+            direction="vertical"
+            :height="66"
+            :mousewheel="true"
+            :allow-touch-move="false"
+            :slides-per-view="1"
+            :prevent-clicks="false"
+            :autoplay="{ delay: 3500, disableOnInteraction: false }"
+            @transition-start="handleSwiperTransitionStart"
+            @swiper="handleSwiperReady"
+          >
+            <swiper-slide class="tweet-item" v-for="(t, index) in completedTweets" :key="index">
+              <div class="content" :title="t.tweet.text">
+                <div
+                  class="reference"
+                  v-if="t.tweet.referenced_tweets?.length"
+                  :title="t.tweet.referenced_tweets[0].type"
+                >
+                  <i
+                    class="iconfont icon-retweet"
+                    v-if="['quoted', 'retweeted'].includes(t.tweet.referenced_tweets[0].type)"
+                  ></i>
+                  <i class="iconfont icon-follow-up" v-else></i>
                 </div>
-                <div class="meta">
-                  <ulink
-                    class="item link"
-                    title="To Tweet"
-                    :href="t.url"
-                    @mousedown="handleGtagEvent('twitter_detail_link')"
-                  >
-                    <i class="iconfont twitter icon-twitter"></i>
-                    <span>Tweet</span>
-                    <i class="iconfont window icon-new-window-s"></i>
-                  </ulink>
-                  <span class="item reply">
-                    <i class="iconfont icon-comment"></i>
-                    <span>{{ t.tweet.public_metrics.reply_count }}</span>
-                  </span>
-                  <span class="item like">
-                    <i class="iconfont icon-heart"></i>
-                    <span>{{ t.tweet.public_metrics.like_count }}</span>
-                  </span>
-                  <span class="item date">
-                    <i class="iconfont icon-clock"></i>
-                    <udate to="ago" :date="t.tweet.created_at" />
-                  </span>
-                  <!-- <span class="item location" :title="t.location" v-if="t.location">
+                <div
+                  class="main"
+                  :class="{ 'has-media': t.medias.length }"
+                  v-if="t.html"
+                  v-html="t.html"
+                ></div>
+                <ulink
+                  v-if="t.medias.length"
+                  class="end-link"
+                  :class="{ empty: !t.html }"
+                  :href="t.url"
+                  @mousedown="handleGtagEvent('twitter_image_link')"
+                >
+                  <template v-if="t.medias.find((m) => m.type === 'video')">
+                    <i class="iconfont media icon-video"></i>
+                  </template>
+                  <template v-else>
+                    <i class="iconfont media icon-image"></i>
+                  </template>
+                  <span class="text">[{{ t.medias.length }}]</span>
+                  <i class="iconfont window icon-new-window-s"></i>
+                </ulink>
+              </div>
+              <div class="meta">
+                <ulink
+                  class="item link"
+                  title="To Tweet"
+                  :href="t.url"
+                  @mousedown="handleGtagEvent('twitter_detail_link')"
+                >
+                  <i class="iconfont twitter icon-twitter"></i>
+                  <span>Tweet</span>
+                  <i class="iconfont window icon-new-window-s"></i>
+                </ulink>
+                <span class="item reply">
+                  <i class="iconfont icon-comment"></i>
+                  <span>{{ t.tweet.public_metrics.reply_count }}</span>
+                </span>
+                <span class="item like">
+                  <i class="iconfont icon-heart"></i>
+                  <span>{{ t.tweet.public_metrics.like_count }}</span>
+                </span>
+                <span class="item date">
+                  <i class="iconfont icon-clock"></i>
+                  <udate to="ago" :date="t.tweet.created_at" />
+                </span>
+                <!-- <span class="item location" :title="t.location" v-if="t.location">
                   <i class="iconfont icon-location"></i>
                   <span>{{ t.location }}</span>
                 </span> -->
-                </div>
-              </swiper-slide>
-            </swiper>
-            <div class="navigation">
-              <button class="button prev" :disabled="activeIndex === 0" @click="prevSlide">
-                <i class="iconfont icon-totop" />
-              </button>
-              <button
-                class="button next"
-                :disabled="activeIndex === completedTweets.length - 1"
-                @click="nextSlide"
-              >
-                <i class="iconfont icon-tobottom" />
-              </button>
-            </div>
+              </div>
+            </swiper-slide>
+          </swiper>
+          <div class="navigation">
+            <button class="button prev" :disabled="activeIndex === 0" @click="prevSlide">
+              <i class="iconfont icon-totop" />
+            </button>
+            <button
+              class="button next"
+              :disabled="activeIndex === completedTweets.length - 1"
+              @click="nextSlide"
+            >
+              <i class="iconfont icon-tobottom" />
+            </button>
           </div>
         </div>
       </template>
@@ -319,7 +317,6 @@
     .userinfo,
     .tweets {
       @include common-bg-module();
-      @include radius-box($sm-radius);
     }
 
     .userinfo {
@@ -329,6 +326,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      @include radius-box($sm-radius);
 
       .logo-link {
         position: relative;
@@ -403,175 +401,187 @@
 
     .tweets {
       flex: 1;
-      display: flex;
+      height: $twitter-height;
+      @include radius-box($sm-radius);
+      border-top-right-radius: $mini-radius;
+      border-bottom-right-radius: $mini-radius;
 
-      .swiper {
-        flex: 1;
-        height: $twitter-height;
-
-        ::v-deep(.swiper-wrapper) {
-          flex-direction: column;
-          &[style*='300ms'] {
-            .swiper-slide-active {
-              @include motion-blur-filter('vertical-small');
-            }
-          }
-        }
-
-        .tweet-item {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          box-sizing: border-box;
-          width: 100%;
-          height: $twitter-height;
-          padding: 0 $lg-gap;
-
-          .content {
-            display: flex;
-            height: 20px;
-            line-height: 20px;
-            margin-bottom: 6px;
-            $content-gap: 0.3em;
-
-            .reference {
-              margin-right: $xs-gap;
-              color: $text-secondary;
-            }
-
-            .main {
-              max-width: 96%;
-              font-weight: bold;
-              @include text-overflow();
-              &.has-media {
-                max-width: #{calc(100% - 40px)};
-              }
-
-              & + .end-link {
-                margin-left: $content-gap;
-              }
-
-              ::v-deep(.link) {
-                font-weight: normal;
-                font-size: $font-size-base - 1;
-                color: $text-secondary;
-                @include color-transition();
-                &:hover {
-                  color: $link-color;
-                  text-decoration: underline;
-                }
-
-                & + .link {
-                  margin-left: $content-gap;
-                }
-
-                .iconfont {
-                  margin-right: -3px;
-                  color: $text-secondary;
-                }
-              }
-            }
-
-            .end-link {
-              position: relative;
-              color: $text-secondary;
-              &.empty {
-                color: $text;
-              }
-              &:hover {
-                &,
-                .iconfont {
-                  color: $link-color !important;
-                }
-              }
-
-              .text {
-                margin-left: $xs-gap;
-                vertical-align: top;
-                font-size: $font-size-small;
-                @include color-transition();
-              }
-
-              .iconfont {
-                vertical-align: top;
-                @include color-transition();
-
-                &.media {
-                  font-size: $font-size-base + 1;
-                }
-
-                &.window {
-                  color: $text-disabled;
-                  position: absolute;
-                  top: -0.6em;
-                  right: -1.2em;
-                  font-size: 8px;
-                }
-              }
-            }
-          }
-
-          .meta {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            overflow: hidden;
-
-            .item {
-              display: inline-block;
-              margin-right: $lg-gap;
-              font-size: $font-size-small;
-              color: $text-divider;
-              @include color-transition();
-              .iconfont {
-                margin-right: $xs-gap;
-                font-size: $font-size-small - 1;
-              }
-
-              &.link {
-                .window {
-                  margin-right: 0;
-                  margin-left: 2px;
-                  font-size: 10px;
-                }
-
-                &:hover {
-                  color: $text;
-                }
-              }
-
-              &.location {
-                flex: 1;
-                margin-right: 0;
-                @include text-overflow();
-              }
-            }
+      ::v-deep(.swiper-wrapper) {
+        flex-direction: column;
+        &[style*='300ms'] {
+          .swiper-slide-active {
+            @include motion-blur-filter('vertical-small');
           }
         }
       }
 
-      .navigation {
+      .tweet-item {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        width: 3rem;
+        box-sizing: border-box;
+        width: 100%;
         height: $twitter-height;
+        padding: 0 $lg-gap;
 
-        .button {
-          height: 40%;
-          line-height: -#{math.div($twitter-height, 2)};
-          font-size: $font-size-small;
-          text-align: center;
-          color: $text-disabled;
-          @include color-transition();
-          &:not([disabled]):hover {
-            color: $link-color;
+        .content {
+          display: flex;
+          height: 20px;
+          line-height: 20px;
+          margin-bottom: 6px;
+          $content-gap: 0.3em;
+
+          .reference {
+            margin-right: $xs-gap;
+            color: $text-secondary;
           }
-          &[disabled] {
-            opacity: 0.8;
+
+          .main {
+            max-width: 96%;
+            font-weight: bold;
+            @include text-overflow();
+            &.has-media {
+              max-width: #{calc(100% - 40px)};
+            }
+
+            & + .end-link {
+              margin-left: $content-gap;
+            }
+
+            ::v-deep(.link) {
+              font-weight: normal;
+              font-size: $font-size-base - 1;
+              color: $text-secondary;
+              @include color-transition();
+              &:hover {
+                color: $link-color;
+                text-decoration: underline;
+              }
+
+              & + .link {
+                margin-left: $content-gap;
+              }
+
+              .iconfont {
+                margin-right: -3px;
+                color: $text-secondary;
+              }
+            }
+          }
+
+          .end-link {
+            position: relative;
+            color: $text-secondary;
+            &.empty {
+              color: $text;
+            }
+            &:hover {
+              &,
+              .iconfont {
+                color: $link-color !important;
+              }
+            }
+
+            .text {
+              margin-left: $xs-gap;
+              vertical-align: top;
+              font-size: $font-size-small;
+              @include color-transition();
+            }
+
+            .iconfont {
+              vertical-align: top;
+              @include color-transition();
+
+              &.media {
+                font-size: $font-size-base + 1;
+              }
+
+              &.window {
+                color: $text-disabled;
+                position: absolute;
+                top: -0.6em;
+                right: -1.2em;
+                font-size: 8px;
+              }
+            }
+          }
+        }
+
+        .meta {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          overflow: hidden;
+
+          .item {
+            display: inline-block;
+            margin-right: $lg-gap;
+            font-size: $font-size-small;
             color: $text-divider;
-            cursor: no-drop;
+            @include color-transition();
+            .iconfont {
+              margin-right: $xs-gap;
+              font-size: $font-size-small - 1;
+            }
+
+            &.link {
+              .window {
+                margin-right: 0;
+                margin-left: 2px;
+                font-size: 10px;
+              }
+
+              &:hover {
+                color: $text;
+              }
+            }
+
+            &.location {
+              flex: 1;
+              margin-right: 0;
+              @include text-overflow();
+            }
           }
+        }
+      }
+    }
+
+    .navigation {
+      width: 3rem;
+      height: 100%;
+      margin-left: $sm-gap;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .button {
+        flex: 1;
+        font-size: $font-size-small;
+        text-align: center;
+        color: $text-disabled;
+        @include color-transition();
+        @include common-bg-module();
+        @include radius-box($sm-radius);
+        border-top-left-radius: $mini-radius;
+        border-bottom-left-radius: $mini-radius;
+
+        &:not([disabled]):hover {
+          color: $link-color;
+        }
+        &[disabled] {
+          opacity: 0.8;
+          color: $text-divider;
+          cursor: no-drop;
+        }
+
+        &.prev {
+          margin-bottom: $sm-gap;
+          border-bottom-right-radius: $mini-radius;
+        }
+
+        &.next {
+          border-top-right-radius: $mini-radius;
         }
       }
     }
