@@ -2,140 +2,138 @@
   <div class="twitter">
     <placeholder :data="completedTweets.length" :loading="fetching">
       <template #placeholder>
-        <empty class="twitter-empty" key="empty">
-          <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
-        </empty>
+        <div class="twitter-empty" key="empty">
+          <empty class="empty-content">
+            <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
+          </empty>
+        </div>
       </template>
       <template #loading>
         <div class="twitter-skeleton" key="skeleton">
-          <div class="left">
-            <skeleton-line />
-          </div>
-          <div class="right">
-            <skeleton-line />
-          </div>
+          <div class="left"><skeleton-line /></div>
+          <div class="right"><skeleton-line /></div>
         </div>
       </template>
       <template #default>
-        <div class="warpper" key="warpper">
-          <div class="user" v-if="userinfo">
-            <div class="userinfo" :title="userinfo.username">
-              <ulink
-                class="logo-link"
-                :href="VALUABLE_LINKS.TWITTER"
-                @mousedown="handleGtagEvent('twitter_homepage')"
-              >
-                <uimage class="avatar" proxy :src="userinfo.profile_image_url" />
-                <span class="logo">
-                  <i class="iconfont icon-twitter" />
-                </span>
-              </ulink>
-              <div class="counts">
-                <div class="item top">
-                  <span class="count">{{
-                    padStart(userinfo.public_metrics.tweet_count, 3, '0')
-                  }}</span>
-                  <span class="text">TS</span>
-                </div>
-                <div class="item bottom">
-                  <span class="count">{{
-                    padStart(userinfo.public_metrics.followers_count, 3, '0')
-                  }}</span>
-                  <span class="text">FS</span>
-                </div>
+        <div class="twitter-content" key="content">
+          <div class="userinfo" v-if="userinfo" :title="userinfo.username">
+            <ulink
+              class="logo-link"
+              :href="VALUABLE_LINKS.TWITTER"
+              @mousedown="handleGtagEvent('twitter_homepage')"
+            >
+              <uimage class="avatar" proxy :src="userinfo.profile_image_url" />
+              <span class="logo">
+                <i class="iconfont icon-twitter" />
+              </span>
+            </ulink>
+            <div class="counts">
+              <div class="item top">
+                <span class="count">{{
+                  padStart(userinfo.public_metrics.tweet_count, 3, '0')
+                }}</span>
+                <span class="text">TS</span>
+              </div>
+              <div class="item bottom">
+                <span class="count">{{
+                  padStart(userinfo.public_metrics.followers_count, 3, '0')
+                }}</span>
+                <span class="text">FS</span>
               </div>
             </div>
           </div>
-          <swiper
-            v-if="completedTweets.length"
-            class="swiper"
-            direction="vertical"
-            :height="66"
-            :mousewheel="true"
-            :allow-touch-move="false"
-            :slides-per-view="1"
-            :prevent-clicks="false"
-            :autoplay="{ delay: 3500, disableOnInteraction: false }"
-            @transition-start="handleSwiperTransitionStart"
-            @swiper="handleSwiperReady"
-          >
-            <swiper-slide class="tweet-item" v-for="(t, index) in completedTweets" :key="index">
-              <div class="content" :title="t.tweet.text">
-                <div
-                  class="reference"
-                  v-if="t.tweet.referenced_tweets?.length"
-                  :title="t.tweet.referenced_tweets[0].type"
-                >
-                  <i
-                    class="iconfont icon-retweet"
-                    v-if="['quoted', 'retweeted'].includes(t.tweet.referenced_tweets[0].type)"
-                  ></i>
-                  <i class="iconfont icon-follow-up" v-else></i>
+          <div class="tweets">
+            <swiper
+              v-if="completedTweets.length"
+              class="swiper"
+              direction="vertical"
+              :height="66"
+              :mousewheel="true"
+              :allow-touch-move="false"
+              :slides-per-view="1"
+              :prevent-clicks="false"
+              :autoplay="{ delay: 3500, disableOnInteraction: false }"
+              @transition-start="handleSwiperTransitionStart"
+              @swiper="handleSwiperReady"
+            >
+              <swiper-slide class="tweet-item" v-for="(t, index) in completedTweets" :key="index">
+                <div class="content" :title="t.tweet.text">
+                  <div
+                    class="reference"
+                    v-if="t.tweet.referenced_tweets?.length"
+                    :title="t.tweet.referenced_tweets[0].type"
+                  >
+                    <i
+                      class="iconfont icon-retweet"
+                      v-if="['quoted', 'retweeted'].includes(t.tweet.referenced_tweets[0].type)"
+                    ></i>
+                    <i class="iconfont icon-follow-up" v-else></i>
+                  </div>
+                  <div
+                    class="main"
+                    :class="{ 'has-media': t.medias.length }"
+                    v-if="t.html"
+                    v-html="t.html"
+                  ></div>
+                  <ulink
+                    v-if="t.medias.length"
+                    class="end-link"
+                    :class="{ empty: !t.html }"
+                    :href="t.url"
+                    @mousedown="handleGtagEvent('twitter_image_link')"
+                  >
+                    <template v-if="t.medias.find((m) => m.type === 'video')">
+                      <i class="iconfont media icon-video"></i>
+                    </template>
+                    <template v-else>
+                      <i class="iconfont media icon-image"></i>
+                    </template>
+                    <span class="text">[{{ t.medias.length }}]</span>
+                    <i class="iconfont window icon-new-window-s"></i>
+                  </ulink>
                 </div>
-                <div
-                  class="main"
-                  :class="{ 'has-media': t.medias.length }"
-                  v-if="t.html"
-                  v-html="t.html"
-                ></div>
-                <ulink
-                  v-if="t.medias.length"
-                  class="end-link"
-                  :class="{ empty: !t.html }"
-                  :href="t.url"
-                  @mousedown="handleGtagEvent('twitter_image_link')"
-                >
-                  <template v-if="t.medias.find((m) => m.type === 'video')">
-                    <i class="iconfont media icon-video"></i>
-                  </template>
-                  <template v-else>
-                    <i class="iconfont media icon-image"></i>
-                  </template>
-                  <span class="text">[{{ t.medias.length }}]</span>
-                  <i class="iconfont window icon-new-window-s"></i>
-                </ulink>
-              </div>
-              <div class="meta">
-                <ulink
-                  class="item link"
-                  title="To Tweet"
-                  :href="t.url"
-                  @mousedown="handleGtagEvent('twitter_detail_link')"
-                >
-                  <i class="iconfont twitter icon-twitter"></i>
-                  <span>Tweet</span>
-                  <i class="iconfont window icon-new-window-s"></i>
-                </ulink>
-                <span class="item reply">
-                  <i class="iconfont icon-comment"></i>
-                  <span>{{ t.tweet.public_metrics.reply_count }}</span>
-                </span>
-                <span class="item like">
-                  <i class="iconfont icon-heart"></i>
-                  <span>{{ t.tweet.public_metrics.like_count }}</span>
-                </span>
-                <span class="item date">
-                  <i class="iconfont icon-clock"></i>
-                  <udate to="ago" :date="t.tweet.created_at" />
-                </span>
-                <span class="item location" :title="t.location" v-if="t.location">
+                <div class="meta">
+                  <ulink
+                    class="item link"
+                    title="To Tweet"
+                    :href="t.url"
+                    @mousedown="handleGtagEvent('twitter_detail_link')"
+                  >
+                    <i class="iconfont twitter icon-twitter"></i>
+                    <span>Tweet</span>
+                    <i class="iconfont window icon-new-window-s"></i>
+                  </ulink>
+                  <span class="item reply">
+                    <i class="iconfont icon-comment"></i>
+                    <span>{{ t.tweet.public_metrics.reply_count }}</span>
+                  </span>
+                  <span class="item like">
+                    <i class="iconfont icon-heart"></i>
+                    <span>{{ t.tweet.public_metrics.like_count }}</span>
+                  </span>
+                  <span class="item date">
+                    <i class="iconfont icon-clock"></i>
+                    <udate to="ago" :date="t.tweet.created_at" />
+                  </span>
+                  <!-- <span class="item location" :title="t.location" v-if="t.location">
                   <i class="iconfont icon-location"></i>
                   <span>{{ t.location }}</span>
-                </span>
-              </div>
-            </swiper-slide>
-          </swiper>
-          <div class="navigation">
-            <button class="button prev" :disabled="activeIndex === 0" @click="prevSlide">
-              <i class="iconfont icon-totop" />
-            </button>
-            <button
-              class="button next"
-              :disabled="activeIndex === completedTweets.length - 1"
-              @click="nextSlide"
-            >
-              <i class="iconfont icon-tobottom" />
-            </button>
+                </span> -->
+                </div>
+              </swiper-slide>
+            </swiper>
+            <div class="navigation">
+              <button class="button prev" :disabled="activeIndex === 0" @click="prevSlide">
+                <i class="iconfont icon-totop" />
+              </button>
+              <button
+                class="button next"
+                :disabled="activeIndex === completedTweets.length - 1"
+                @click="nextSlide"
+              >
+                <i class="iconfont icon-tobottom" />
+              </button>
+            </div>
           </div>
         </div>
       </template>
@@ -281,121 +279,131 @@
 
   $twitter-height: 66px;
   $content-height: 42px;
-  $userinfo-width: 12rem;
+  $userinfo-width: 140px;
 
-  .twitter {
+  .twitter-empty,
+  .twitter-skeleton,
+  .twitter-content {
     position: relative;
+    width: 100%;
     height: $twitter-height;
+    display: flex;
+  }
+
+  .twitter-empty,
+  .twitter-skeleton {
     @include common-bg-module();
     @include radius-box($sm-radius);
+  }
 
-    .twitter-empty {
+  .twitter-empty {
+    .empty-content {
       height: 100%;
       min-height: auto;
       font-weight: bold;
     }
+  }
 
-    .twitter-skeleton {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      padding: $gap;
+  .twitter-skeleton {
+    padding: $gap;
+    .left {
+      width: $userinfo-width;
+      margin-right: $lg-gap;
+    }
+    .right {
+      flex: 1;
+    }
+  }
 
-      .left {
-        width: $userinfo-width;
-        margin-right: $lg-gap;
-      }
-      .right {
-        flex: 1;
-      }
+  .twitter-content {
+    .userinfo,
+    .tweets {
+      @include common-bg-module();
+      @include radius-box($sm-radius);
     }
 
-    .warpper {
+    .userinfo {
+      width: $userinfo-width;
+      height: 100%;
+      margin-right: $gap;
       display: flex;
+      justify-content: center;
+      align-items: center;
 
-      .user {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      .logo-link {
         position: relative;
-        width: $userinfo-width;
-        height: $twitter-height;
-        border-right: 2px solid $module-bg-darker-1;
+        margin-right: 1.5rem;
+        background-color: $twitter-primary;
+        color: $white;
+        opacity: 0.9;
+        @include radius-box($xs-radius);
+        @include visibility-transition();
+        &:hover {
+          opacity: 1;
+        }
 
-        .userinfo {
+        .avatar {
+          width: $content-height;
+          height: $content-height;
+        }
+
+        .logo {
+          position: absolute;
+          width: 50%;
+          height: 50%;
+          bottom: 0;
+          right: 0;
           display: flex;
+          justify-content: center;
+          align-items: center;
+          border-top-left-radius: $xs-radius;
+          background-color: rgba($twitter-primary, 0.9);
+          font-size: $font-size-small;
+        }
+      }
 
-          .logo-link {
-            position: relative;
-            margin-right: 1.5rem;
-            background-color: $twitter-primary;
-            color: $white;
-            opacity: 0.9;
-            @include radius-box($xs-radius);
-            @include visibility-transition();
-            &:hover {
-              opacity: 1;
-            }
+      .counts {
+        position: relative;
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: $content-height;
+        padding: 0.2em 0.3em 0.26em 0.5em;
+        border-radius: $xs-radius;
+        background-color: $module-bg-darker-1;
+        &::before {
+          $size: 5px;
+          content: '';
+          position: absolute;
+          left: -$size * 2;
+          top: 20%;
+          width: 0;
+          height: 0;
+          border-top: $size solid transparent;
+          border-right: $size * 2 solid $module-bg-darker-1;
+          border-bottom: $size solid transparent;
+        }
 
-            .avatar {
-              width: $content-height;
-              height: $content-height;
-            }
-
-            .logo {
-              position: absolute;
-              width: 50%;
-              height: 50%;
-              bottom: 0;
-              right: 0;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              border-top-left-radius: $xs-radius;
-              background-color: rgba($twitter-primary, 0.9);
-              font-size: $font-size-small;
-            }
+        .item {
+          .count {
+            font-size: $font-size-small + 1;
+            margin-right: 6px;
+            font-weight: bold;
+            color: $text-secondary;
           }
 
-          .counts {
-            position: relative;
-            display: inline-flex;
-            flex-direction: column;
-            justify-content: space-around;
-            height: $content-height;
-            padding: 0.2em 0.3em 0.26em 0.5em;
-            border-radius: $xs-radius;
-            background-color: $module-bg-darker-1;
-            &::before {
-              $size: 5px;
-              content: '';
-              position: absolute;
-              left: -$size * 2;
-              top: 20%;
-              width: 0;
-              height: 0;
-              border-top: $size solid transparent;
-              border-right: $size * 2 solid $module-bg-darker-1;
-              border-bottom: $size solid transparent;
-            }
-
-            .item {
-              .count {
-                font-size: $font-size-small + 1;
-                margin-right: 6px;
-                font-weight: bold;
-                color: $text-secondary;
-              }
-
-              .text {
-                color: $text-disabled;
-                font-size: $font-size-small;
-                letter-spacing: 1px;
-              }
-            }
+          .text {
+            color: $text-disabled;
+            font-size: $font-size-small;
+            letter-spacing: 1px;
           }
         }
       }
+    }
+
+    .tweets {
+      flex: 1;
+      display: flex;
 
       .swiper {
         flex: 1;
@@ -548,7 +556,6 @@
         justify-content: center;
         width: 3rem;
         height: $twitter-height;
-        border-left: 1px solid $module-bg-darker-1;
 
         .button {
           height: 40%;
@@ -560,7 +567,6 @@
           &:not([disabled]):hover {
             color: $link-color;
           }
-
           &[disabled] {
             opacity: 0.8;
             color: $text-divider;

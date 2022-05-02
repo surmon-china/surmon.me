@@ -106,20 +106,20 @@
                         </div>
                         <responsive desktop>
                           <div class="metas">
-                            <span class="item views">
+                            <div class="item views">
                               <i class="iconfont icon-eye"></i>
-                              <span class="text">{{ article.meta.views }}</span>
-                            </span>
+                              <span class="text">{{ numberSplit(article.meta.views) }}</span>
+                            </div>
                             <divider type="vertical" />
-                            <span class="item likes">
+                            <div class="item likes">
                               <i class="like-icon iconfont icon-like"></i>
                               <span class="text">{{ article.meta.likes }}</span>
-                            </span>
+                            </div>
                             <divider type="vertical" />
-                            <span class="item comments">
+                            <div class="item comments">
                               <i class="iconfont icon-comment"></i>
                               <span class="text">{{ article.meta.comments }}</span>
-                            </span>
+                            </div>
                           </div>
                         </responsive>
                       </li>
@@ -228,6 +228,7 @@
 
       return {
         LanguageKey,
+        numberSplit,
         numberToChinese,
         getArticleDetailRoute,
         getMonthNameI18n,
@@ -427,16 +428,18 @@
           }
 
           .metas {
-            z-index: 1;
-            margin-left: 2rem;
+            margin-left: 2em;
             display: inline-flex;
             align-items: center;
             font-size: $font-size-h4;
             color: $text-disabled;
 
             .item {
-              width: 6rem;
+              width: 4em;
               text-align: center;
+              &.views {
+                width: 5em;
+              }
 
               .iconfont {
                 margin-right: $sm-gap;

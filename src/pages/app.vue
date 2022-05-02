@@ -6,7 +6,9 @@
       </div>
       <h2 class="title">{{ META.title }}</h2>
       <p class="description">
-        <webfont><i18n :k="LanguageKey.APP_SLOGAN" /></webfont>
+        <webfont>
+          <i18n :k="LanguageKey.APP_SLOGAN" />
+        </webfont>
       </p>
       <div class="screen">
         <uimage cdn alt="app-hot" class="screen-img" src="/images/page-app/hot.png" />

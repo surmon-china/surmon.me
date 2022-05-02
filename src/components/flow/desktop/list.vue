@@ -1,5 +1,5 @@
 <template>
-  <div class="articles" :class="{ dark: isDarkTheme }">
+  <div class="articles">
     <!-- list -->
     <div class="article-list">
       <placeholder :data="articles.length" :loading="!articles.length && fetching">
