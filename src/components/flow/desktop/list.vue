@@ -14,7 +14,7 @@
                   <skeleton-line />
                 </div>
                 <div class="description">
-                  <div class="line-item" :class="index" :key="index" v-for="(line, index) in 2">
+                  <div class="line-item" :key="line" v-for="line in 2">
                     <skeleton-line />
                   </div>
                 </div>
@@ -61,24 +61,24 @@
         </template>
       </placeholder>
     </div>
-
     <!-- loadmore -->
-    <div class="article-load">
-      <button
-        class="loadmore-button"
-        :disabled="fetching || !isLoadMoreEnabled"
-        @click="handleLoadmore"
-      >
-        <span class="icon">
+    <button class="article-load" :disabled="fetching || !isLoadMoreEnabled" @click="handleLoadmore">
+      <div class="background">
+        <span class="left"></span>
+        <span class="right"></span>
+      </div>
+      <div class="content">
+        <span class="left">{{ articles.length }} / {{ pagination?.total }}</span>
+        <span class="right">
+          <webfont bolder uppercase>
+            <i18n v-if="fetching" :k="LanguageKey.ARTICLE_LIST_LOADING" />
+            <i18n v-else-if="isLoadMoreEnabled" :k="LanguageKey.ARTICLE_LIST_LOADMORE" />
+            <i18n v-else :k="LanguageKey.ARTICLE_LIST_NO_MORE" />
+          </webfont>
           <i class="iconfont icon-loadmore"></i>
         </span>
-        <webfont class="text" bolder uppercase>
-          <i18n v-if="fetching" :k="LanguageKey.ARTICLE_LIST_LOADING" />
-          <i18n v-else-if="isLoadMoreEnabled" :k="LanguageKey.ARTICLE_LIST_LOADMORE" />
-          <i18n v-else :k="LanguageKey.ARTICLE_LIST_NO_MORE" />
-        </webfont>
-      </button>
-    </div>
+      </div>
+    </button>
   </div>
 </template>
 
@@ -224,68 +224,91 @@
     }
 
     .article-load {
-      overflow: hidden;
-      z-index: $z-index-normal;
+      width: 100%;
+      height: $button-block-height;
+      position: relative;
+      display: block;
       @include radius-box($sm-radius);
-
-      .loadmore-button {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        height: $button-block-height;
-        line-height: $button-block-height;
-        padding-left: $gap * 2;
-        color: $text-reversal;
-        @include common-bg-module($transition-time-fast);
-        &[disabled] {
-          opacity: 0.6;
-        }
-        &:not([disabled]):hover {
-          .iconfont {
-            color: rgba($red, 0.8);
+      &[disabled] {
+        opacity: 0.6;
+      }
+      &:not([disabled]):hover {
+        .background {
+          .left {
+            background: $module-bg-opaque;
           }
-          .text {
-            background: rgba($red, 0.8);
+          .right {
+            background: $surmon;
           }
         }
-
-        .icon {
-          font-weight: bold;
-          color: $text-secondary;
-          @include color-transition();
-        }
-
-        .text {
-          position: relative;
-          height: $button-block-height;
-          padding: 0 ($gap * 2) 0 ($gap * 3);
-          background: rgba($red, 0.6);
-          color: $white;
-
-          &::before {
-            $size: 1rem;
-            content: '';
-            display: block;
-            position: absolute;
-            width: $size;
-            height: 200%;
-            top: -50%;
-            left: -#{math.div($size, 2)};
-            background: $body-bg;
-            transform: rotate(18deg);
+        .content {
+          .left {
+            color: $primary;
+          }
+          .right {
+            color: $white;
           }
         }
       }
-    }
 
-    &.dark {
-      .article-load {
-        .loadmore-button {
-          .text {
-            &::before {
-              background: $module-bg-darker-1 !important;
-            }
+      .content {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .left,
+        .right {
+          @include color-transition();
+        }
+
+        .left {
+          font-weight: bold;
+          color: $text-disabled;
+          margin-left: 2em;
+        }
+
+        .right {
+          width: 10rem;
+          color: $text-secondary;
+          .iconfont {
+            margin-left: $gap;
           }
+        }
+      }
+
+      .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: $z-index-normal - 1;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        $skew: -20deg;
+        $skew-offset: $gap;
+
+        .left,
+        .right {
+          height: 100%;
+          border-radius: $xs-radius;
+          @include background-transition();
+        }
+
+        .left {
+          flex: 1;
+          margin-left: -$skew-offset;
+          margin-right: $skew-offset;
+          background: $module-bg;
+          transform: skew($skew);
+        }
+
+        .right {
+          width: 12rem;
+          margin-right: -$skew-offset;
+          background: $module-bg-opaque;
+          transform: skew($skew);
         }
       }
     }
