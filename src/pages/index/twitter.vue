@@ -282,7 +282,6 @@
   .twitter-empty,
   .twitter-skeleton,
   .twitter-content {
-    position: relative;
     width: 100%;
     height: $twitter-height;
     display: flex;
@@ -292,7 +291,6 @@
     @include common-bg-module();
     @include radius-box($sm-radius);
     .empty-content {
-      height: 100%;
       min-height: auto;
       font-weight: bold;
     }
