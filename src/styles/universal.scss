@@ -42,6 +42,7 @@ body {
   // MARK: keep false
   // scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   // WORKAROUND: for Google AdSense layout
   position: relative !important;
 }

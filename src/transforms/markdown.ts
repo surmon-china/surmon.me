@@ -8,7 +8,7 @@ import sanitizeHTML from 'sanitize-html'
 import { marked, Renderer } from 'marked'
 import highlight from '/@/effects/highlight'
 import { TagMap } from '/@/stores/tag'
-import { LOZAD_CLASS_NAME } from '/@/effects/lozad'
+import { LOZAD_CLASS_NAME } from '/@/composables/lozad'
 import { escape } from '/@/transforms/text'
 import relink from '/@/transforms/relink'
 import API_CONFIG from '/@/config/api.config'
@@ -44,11 +44,9 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
   // paragraph
   renderer.paragraph = (text) => {
     const trimmed = text.trim()
-    if (trimmed.startsWith(`<figure`) && trimmed.endsWith(`</figure>`)) {
-      return text
-    } else {
-      return `<p>${text}</p>`
-    }
+    const isFigure = trimmed.startsWith(`<figure`) && trimmed.endsWith(`</figure>`)
+    const isDiv = trimmed.startsWith(`<div`) && trimmed.endsWith(`</div>`)
+    return isFigure || isDiv ? text : `<p>${text}</p>`
   }
 
   // checkbox
@@ -80,41 +78,39 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
         })
   }
 
-  // image: sanitize > popup
+  // image: sanitize(title, alt) > popup
   renderer.image = (src, title, alt) => {
     // HTTP > proxy
     const source = src?.replace(/^http:\/\//gi, `${API_CONFIG.PROXY}/`)
-    const imageHTML = trimHTML(`
-      <img
-        class="${LOZAD_CLASS_NAME}"
-        data-src="${source}"
-        title="${title || alt || META.domain}"
-        ${alt ? `alt="${alt}"` : ''}
-        onclick="window.$popup?.vImage('${source}')"
-      />
-    `)
+    const sTitle = sanitizeHTML(escape(title || alt))
+    const sAlt = sanitizeHTML(escape(alt!))
 
-    // sanitize > can't render figcaption
-    if (options?.sanitize) {
-      return sanitizeHTML(imageHTML, {
-        allowedTags: ['img'],
-        allowedAttributes: {
-          img: ['alt', 'onclick', 'class', 'title', 'data-*']
-        }
-      })
-    }
-
-    // figure > admin & alt
-    if (alt) {
-      return trimHTML(`
-        <figure class="image">
-          ${imageHTML}
-          <figcaption>${alt}</figcaption>
+    // figure > alt
+    return trimHTML(`
+      <div class="figure-wrapper">
+        <figure class="image ${sAlt ? 'caption' : ''}" data-status="loading">
+          <div class="placeholder error">
+            <i class="iconfont icon-image-error"></i>
+          </div>
+          <div class="placeholder loading">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          <img
+            class="${LOZAD_CLASS_NAME}"
+            data-src="${source}"
+            ${sAlt ? `alt="${sAlt}"` : ''}
+            ${sTitle ? `title="${sTitle}"` : ''}
+            onload="this.parentElement.dataset.status = 'loaded'"
+            onerror="this.parentElement.dataset.status = 'error'"
+            onclick="window.$popup.vImage(this.src)"
+          />
+          ${sAlt ? `<figcaption>${sAlt}</figcaption>` : ''}
         </figure>
-      `)
-    }
-
-    return imageHTML
+      </div>
+    `)
   }
 
   // code: line number
@@ -185,22 +181,19 @@ export const markdownToHTML = (markdown: string, options?: MarkdownRenderOption)
     return ''
   }
 
-  const parseOptions: marked.MarkedOptions = {
-    renderer: getRenderer({ headingID: options?.headingIDRenderer })
+  const renderOptions: Partial<RendererGetterOption> = {
+    headingID: options?.headingIDRenderer
   }
 
   // relink
   if (options?.relink) {
-    parseOptions.renderer = getRenderer({
-      text: (text) => relink(text, options.tagMap as TagMap),
-      headingID: options?.headingIDRenderer
-    })
+    renderOptions.text = (text) => relink(text, options.tagMap as TagMap)
   }
 
   // sanitize
   if (options?.sanitize) {
-    parseOptions.renderer = getRenderer({ sanitize: true, headingID: options?.headingIDRenderer })
+    renderOptions.sanitize = true
   }
 
-  return marked.parse(markdown, parseOptions)
+  return marked.parse(markdown, { renderer: getRenderer(renderOptions) })
 }

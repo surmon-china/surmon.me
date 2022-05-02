@@ -12,7 +12,7 @@
     <div>
       <div class="cm-avatar" v-if="!hiddenAvatar">
         <comment-link class="link" :href="authorURL">
-          <img :alt="comment.author.name" :src="authorAvatar" draggable="false" />
+          <img :src="authorAvatar" :alt="comment.author.name" draggable="false" />
           <span class="role" :class="isDisqusAuthor ? 'disqus' : 'anonymous'">
             <i class="iconfont icon-disqus-logo" v-if="isDisqusAuthor"></i>
             <i class="iconfont icon-user" v-else></i>

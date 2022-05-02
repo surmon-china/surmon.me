@@ -2,30 +2,10 @@
   <div :id="NAV_ELEMENT_ID" class="desktop-nav">
     <nav class="nav-list">
       <template v-for="menu in menus" :key="menu.id">
-        <span class="divider" v-if="menu.divider"></span>
-        <router-link
-          v-if="menu.route"
-          class="item"
-          :class="[menu.id, { hot: menu.hot }]"
-          :to="menu.route"
-          exact
-        >
+        <span v-if="menu.divider" class="divider"></span>
+        <ulink class="item" :class="[menu.id, { hot: menu.hot }]" :href="menu.url" :to="menu.route">
           <uimage v-if="menu.imageIcon" class="image-icon" :src="menu.imageIcon" />
-          <i v-else class="iconfont" :class="menu.icon"></i>
-          <webfont class="text" bolder uppercase>
-            <i18n :k="menu.i18nKey" />
-          </webfont>
-          <span class="superscript" v-if="menu.hot">
-            <i class="iconfont icon-hot-fill"></i>
-          </span>
-        </router-link>
-        <ulink
-          v-else-if="menu.url"
-          class="item"
-          :class="[menu.id, { hot: menu.hot }]"
-          :href="menu.url"
-        >
-          <i class="iconfont" :class="menu.icon"></i>
+          <i v-else-if="menu.icon" class="iconfont" :class="menu.icon"></i>
           <webfont class="text" bolder uppercase>
             <i18n :k="menu.i18nKey" />
           </webfont>
@@ -90,17 +70,17 @@
       position: fixed;
 
       .item {
-        display: block;
+        display: flex;
+        align-items: center;
         position: relative;
         width: 100%;
         height: 3em;
-        line-height: 3em;
-        padding: 0 $lg-gap;
-        text-decoration: none;
-        border-radius: $mini-radius;
-        color: $text-secondary;
-        letter-spacing: 0.5px;
         margin-bottom: $sm-gap;
+        padding: 0 $lg-gap;
+        border-radius: $mini-radius;
+        text-decoration: none;
+        letter-spacing: 0.5px;
+        color: $text-secondary;
         will-change: background-color;
         transition: background-color $transition-time-fast * 0.6;
         @include radius-box($sm-radius);
@@ -125,21 +105,31 @@
         &.app {
           color: $surmon;
         }
+        &.opensea {
+          color: $opensea-primary;
+        }
+
+        > .iconfont {
+          &:first-child {
+            width: 1em;
+            margin-right: $gap;
+            display: inline-block;
+          }
+        }
+
+        .newscript,
+        .superscript {
+          margin-left: $sm-gap;
+        }
 
         .newscript {
-          margin-left: $sm-gap;
           .iconfont {
             font-size: $font-size-small;
           }
         }
 
         .superscript {
-          margin-left: $sm-gap;
-          .iconfont {
-            width: auto;
-            margin-right: 0;
-            color: $red;
-          }
+          color: $red;
         }
 
         .image-icon {
@@ -147,12 +137,6 @@
           height: 1em;
           margin-right: $gap;
           border-radius: $xs-radius;
-        }
-
-        .iconfont {
-          width: 1em;
-          margin-right: $gap;
-          display: inline-block;
         }
 
         .ad-text {

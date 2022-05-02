@@ -112,7 +112,7 @@
           }
         }
         font-size: $font-size-h3;
-        animation: skeleton-beccda1e 0.8s linear alternate infinite;
+        animation: skeleton 0.8s linear alternate infinite;
       }
 
       .count {

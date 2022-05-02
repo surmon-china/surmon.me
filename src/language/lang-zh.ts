@@ -8,6 +8,7 @@ export const zhLangMap: LanguageMap = {
   [LanguageKey.CATEGORY_CODE]: '宁静寺',
   [LanguageKey.PAGE_HOME]: '明殿',
   [LanguageKey.PAGE_GITHUB]: '丹青阁',
+  [LanguageKey.PAGE_OPENSEA]: '藏品',
   [LanguageKey.PAGE_ARCHIVE]: '万象殿',
   [LanguageKey.PAGE_ABOUT]: '狂浪生',
   [LanguageKey.PAGE_GUESTBOOK]: '四方馆',

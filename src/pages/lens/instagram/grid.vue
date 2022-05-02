@@ -1,6 +1,6 @@
 <template>
   <div class="instagram-grid">
-    <ul class="medias" ref="listElement">
+    <ul class="medias">
       <li
         class="media"
         :key="index"
@@ -13,7 +13,7 @@
             <i class="iconfont icon-magnifier"></i>
           </span>
         </div>
-        <div class="background lozad" :data-background-image="getInstagramImage(media, 'm')" />
+        <div v-lozad class="background" :data-background-image="getInstagramImage(media, 'm')" />
       </li>
     </ul>
     <client-only>
@@ -28,11 +28,10 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, PropType, onMounted, onBeforeUnmount } from 'vue'
+  import { defineComponent, ref, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/effects/lozad'
   import { getInstagramImage } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import Gallery from './gallery.vue'
@@ -62,29 +61,7 @@
         })
       }
 
-      const listElement = ref<HTMLElement>()
-      const lozadObserver = ref<LozadObserver | null>(null)
-      const observeLozad = () => {
-        const lozadElements = listElement.value?.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
-        if (lozadElements?.length) {
-          lozadObserver.value = window.$lozad(lozadElements, {
-            loaded: (element) => element.classList.add(LOADED_CLASS_NAME)
-          })
-          lozadObserver.value.observe()
-        }
-      }
-
-      onMounted(() => {
-        observeLozad()
-      })
-
-      onBeforeUnmount(() => {
-        lozadObserver.value?.observer.disconnect()
-        lozadObserver.value = null
-      })
-
       return {
-        listElement,
         isOnGallery,
         galleryActiveIndex,
         getInstagramImage,

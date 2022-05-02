@@ -6,14 +6,14 @@ import { getTargetCDNURL } from '/@/transforms/url'
 
 export interface MenuItem {
   id: string
-  icon: string
+  route?: string
+  url?: string
   i18nKey: LanguageKey
+  icon?: string
   imageIcon?: string
   divider?: boolean
   newWindow?: boolean
   hot?: boolean
-  route?: string
-  url?: string
 }
 
 export const menus: Array<MenuItem> = [
@@ -39,8 +39,8 @@ export const menus: Array<MenuItem> = [
     id: 'github',
     url: VALUABLE_LINKS.GITHUB,
     icon: 'icon-github',
-    newWindow: true,
-    i18nKey: LanguageKey.PAGE_GITHUB
+    i18nKey: LanguageKey.PAGE_GITHUB,
+    newWindow: true
   },
   {
     id: RouteName.Lens,
@@ -71,23 +71,30 @@ export const menus: Array<MenuItem> = [
   {
     id: RouteName.Guestbook,
     route: getPageRoute(RouteName.Guestbook),
-    icon: 'icon-comment',
-    i18nKey: LanguageKey.PAGE_GUESTBOOK
+    i18nKey: LanguageKey.PAGE_GUESTBOOK,
+    icon: 'icon-comment'
   },
   {
     id: RouteName.App,
     route: getPageRoute(RouteName.App),
-    divider: true,
-    icon: 'icon-app',
     imageIcon: getTargetCDNURL('/images/page-app/logo.png'),
-    i18nKey: LanguageKey.PAGE_APP
+    i18nKey: LanguageKey.PAGE_APP,
+    divider: true
+  },
+  {
+    id: 'opensea',
+    url: VALUABLE_LINKS.OPENSEA,
+    imageIcon: getTargetCDNURL('/images/third-party/opensea.svg'),
+    i18nKey: LanguageKey.PAGE_OPENSEA,
+    divider: true,
+    newWindow: true
   },
   {
     id: RouteName.Merch,
     route: getPageRoute(RouteName.Merch),
-    divider: true,
-    hot: true,
+    i18nKey: LanguageKey.PAGE_MERCH,
     icon: 'icon-rubik',
-    i18nKey: LanguageKey.PAGE_MERCH
+    divider: true,
+    hot: true
   }
 ]

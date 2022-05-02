@@ -46,11 +46,8 @@
           </span>
         </div>
       </div>
-      <markdown
-        :id="ARTICLE_CONTENT_ELEMENT_IDS.default"
-        :html="articleDetailStore.defaultContent?.html"
-      />
-      <transition name="module" mode="out-in" @after-enter="handleRenderMoreAnimateDone">
+      <markdown :html="articleDetailStore.defaultContent?.html" />
+      <transition name="module" mode="out-in">
         <div :id="readmoreId" v-if="isRenderMoreEnabled" class="readmore">
           <button class="readmore-btn" :disabled="isRenderMoreContent" @click="handleRenderMore">
             <i18n
@@ -63,7 +60,6 @@
         </div>
         <markdown
           v-else-if="articleDetailStore.renderedFullContent"
-          :id="ARTICLE_CONTENT_ELEMENT_IDS.more"
           :html="articleDetailStore.moreContent?.html"
         />
       </transition>
@@ -72,19 +68,13 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, nextTick, onMounted, PropType } from 'vue'
+  import { defineComponent, ref, computed, nextTick, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { LanguageKey } from '/@/language'
   import { Article, useArticleDetailStore } from '/@/stores/article'
-  import { LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/effects/lozad'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { numberSplit } from '/@/transforms/text'
   import Markdown from '/@/components/common/markdown.vue'
-
-  const ARTICLE_CONTENT_ELEMENT_IDS = {
-    default: 'article_content_default',
-    more: 'article_content_more'
-  }
 
   export default defineComponent({
     name: 'ArticleContent',
@@ -122,26 +112,7 @@
         })
       }
 
-      const observeLozad = (elementID: string) => {
-        const contentElement = element.value?.querySelector(`#${elementID}`)
-        const lozadElements =
-          contentElement && contentElement.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
-        if (lozadElements?.length) {
-          const lozadObserver = window.$lozad(lozadElements, {
-            loaded: (element) => element.classList.add(LOADED_CLASS_NAME)
-          })
-          lozadObserver.observe()
-        }
-      }
-
-      const handleRenderMoreAnimateDone = () => observeLozad(ARTICLE_CONTENT_ELEMENT_IDS.more)
-
-      onMounted(() => {
-        observeLozad(ARTICLE_CONTENT_ELEMENT_IDS.default)
-      })
-
       return {
-        ARTICLE_CONTENT_ELEMENT_IDS,
         LanguageKey,
         i18n,
         element,
@@ -152,8 +123,7 @@
         isRenderMoreEnabled,
         isRenderMoreContent,
         numberSplit,
-        handleRenderMore,
-        handleRenderMoreAnimateDone
+        handleRenderMore
       }
     }
   })

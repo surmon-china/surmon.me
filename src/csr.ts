@@ -13,6 +13,7 @@ import { createVueApp } from '/@/app/main'
 import { LayoutColumn } from '/@/app/state'
 import { getSSRContext } from '/@/universal'
 import gtag from '/@/composables/gtag'
+import lozad from '/@/composables/lozad'
 import adsense from '/@/composables/adsense'
 import { createDefer } from '/@/composables/defer'
 import { createMusic } from '/@/composables/music'
@@ -22,7 +23,6 @@ import { getClientLocalTheme } from '/@/composables/theme'
 import amplitude from '/@/effects/amplitude'
 import { runTitler, resetTitler } from '/@/effects/titler'
 import { consoleSlogan } from '/@/effects/slogan'
-import { exportLozadToGlobal } from '/@/effects/lozad'
 import { initCopyrighter } from '/@/effects/copyright'
 import { exportAppToGlobal } from '/@/effects/exporter'
 import { exportStickyEventsToGlobal } from '/@/effects/sticky'
@@ -56,6 +56,7 @@ const music = createMusic({ amplitude, autoInit: false })
 
 // plugins & services
 app.use(music)
+app.use(lozad, { exportToGlobal: true })
 app.use(defer, { exportToGlobal: true })
 app.use(popup, { exportToGlobal: true })
 app.use(loading, { exportToGlobal: true })
@@ -71,7 +72,6 @@ app.use(gtag, {
 isSSR ? store.initOnSSRClient() : store.initOnSPAClient()
 
 // init: services with client
-exportLozadToGlobal()
 exportEmojiRainToGlobal()
 exportStickyEventsToGlobal()
 exportAppToGlobal(app)

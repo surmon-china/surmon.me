@@ -1,6 +1,6 @@
 <template>
-  <ul class="comment-list" :class="isChildList ? 'child' : 'root'" ref="listElement">
-    <transition-group name="list-fade" @after-enter="addCommentAnimateDone">
+  <ul class="comment-list" :class="isChildList ? 'child' : 'root'">
+    <transition-group name="list-fade">
       <comment-item
         v-for="item in comments"
         :key="item.comment.id"
@@ -44,11 +44,10 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, onMounted, onBeforeUnmount, PropType } from 'vue'
+  import { defineComponent, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalStore } from '/@/stores/universal'
   import { useCommentStore, Comment, CommentTreeItem } from '/@/stores/comment'
-  import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/effects/lozad'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
   import { CommentEvents } from '../helper'
@@ -91,25 +90,6 @@
       const commentStore = useCommentStore()
       const universalStore = useUniversalStore()
 
-      const listElement = ref<any>()
-      const lozadObserver = ref<LozadObserver | null>(null)
-
-      const observeLozad = () => {
-        const lozadElements = (listElement.value as HTMLElement)?.querySelectorAll(
-          `.${LOZAD_CLASS_NAME}`
-        )
-        if (lozadElements?.length) {
-          lozadObserver.value = window.$lozad(lozadElements, {
-            loaded: (element) => element.classList.add(LOADED_CLASS_NAME)
-          })
-          lozadObserver.value.observe()
-        }
-      }
-
-      const addCommentAnimateDone = () => {
-        observeLozad()
-      }
-
       const handleReplyComment = (commentID: number) => {
         context.emit(CommentEvents.Reply, commentID)
       }
@@ -150,17 +130,7 @@
         }))
       }
 
-      onMounted(() => {
-        observeLozad()
-      })
-      onBeforeUnmount(() => {
-        lozadObserver.value?.observer.disconnect()
-        lozadObserver.value = null
-      })
-
       return {
-        listElement,
-        addCommentAnimateDone,
         isLikedComment: universalStore.isLikedComment,
         isDislikedComment: universalStore.isDislikedComment,
         handleVoteComment,

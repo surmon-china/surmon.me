@@ -5,11 +5,15 @@
  */
 
 import { AnchorHTMLAttributes, defineComponent, h } from 'vue'
+import { RouterLink, RouterLinkProps } from 'vue-router'
 
 export default defineComponent({
   name: 'Ulink',
   props: {
-    text: String,
+    // @ts-ignore
+    ...RouterLink.props,
+    to: String,
+    href: String,
     external: {
       type: Boolean,
       default: true
@@ -21,24 +25,26 @@ export default defineComponent({
   },
   setup(props, context) {
     return () => {
-      const { text, external, blank, ...linkAttrs } = props
-      const customAttrs: AnchorHTMLAttributes = {}
+      const { to, href, external, blank, ...routerLinkProps } = props
+      const customAttrs: AnchorHTMLAttributes = { ...context.attrs }
 
+      // router link
+      if (to && !to.startsWith('http')) {
+        const ps: RouterLinkProps = {
+          to: to,
+          ...routerLinkProps
+        }
+        return h(RouterLink, ps, context.slots.default)
+      }
+
+      // a link
       if (external) {
         customAttrs.rel = 'external nofollow noopener'
       }
       if (blank) {
         customAttrs.target = '_blank'
       }
-
-      return h(
-        'a',
-        {
-          ...linkAttrs,
-          ...customAttrs
-        },
-        context.slots.default?.() || text
-      )
+      return h('a', { ...customAttrs, href: href || to }, context.slots.default?.())
     }
   }
 })

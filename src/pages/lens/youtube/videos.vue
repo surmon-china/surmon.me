@@ -23,7 +23,8 @@
                 </span>
               </span>
               <div
-                class="background lozad"
+                v-lozad
+                class="background"
                 :data-background-image="getThumbURL(item.snippet.thumbnails)"
               />
             </div>

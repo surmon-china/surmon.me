@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.11.0 (2022-05-01)
+
+**Chore**
+
+- Upgrade deps
+
+**Feature**
+
+- Improve `lozad` directive and composable.
+- Improve `webfont` component.
+- Improve `ulink` component.
+- Improve image loading and error fallback status.
+
 ### v3.8.2 (2022-03-18)
 
 **Feature**

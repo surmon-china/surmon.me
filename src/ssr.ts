@@ -38,8 +38,11 @@ const createApp = (request: Request): VueApp => {
     userAgent: headers['user-agent']!,
     theme: (request as any).cookies[THEME_STORAGE_KEY] || Theme.Light
   })
-  // HACK: hack components for SSR fix warn
+  // HACK: hack components and directives for SSR fix warn
+  // https://github.com/vuejs/core/blob/main/CHANGELOG.md#features
+  const hackDirectives = ['lozad']
   const hackComponents = ['progress-bar', 'popup-root', 'popup', 'Adsense']
+  hackDirectives.forEach((d) => app.app.directive(d, {}))
   hackComponents.forEach((c) => app.app.component(c, {}))
   return app
 }

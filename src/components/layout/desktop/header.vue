@@ -33,39 +33,24 @@
     <div class="header-nav">
       <nav class="nav-list container">
         <template v-for="(menu, index) in menus" :key="menu.id">
-          <span class="divider" v-if="index > 0"></span>
-          <router-link
-            v-if="menu.route"
+          <span v-if="index > 0" class="divider"></span>
+          <ulink
             class="item"
-            :class="[menu.id, { hot: menu.hot }]"
+            :class="[menu.id, { hot: menu.hot, new: menu.newWindow }]"
             :to="menu.route"
-            exact
+            :href="menu.url"
           >
             <uimage v-if="menu.imageIcon" class="image-icon" :src="menu.imageIcon" />
-            <i v-else class="iconfont" :class="menu.icon"></i>
+            <i v-else-if="menu.icon" class="iconfont" :class="menu.icon"></i>
             <webfont class="text" bolder uppercase>
               <i18n :k="menu.i18nKey" />
             </webfont>
             <span v-if="menu.hot" class="superscript">
               <i class="iconfont icon-hot-fill"></i>
             </span>
-          </router-link>
-          <ulink
-            v-else-if="menu.url"
-            class="item"
-            :class="[menu.id, { hot: menu.hot }]"
-            :href="menu.url"
-          >
-            <i class="iconfont" :class="menu.icon"></i>
-            <webfont class="text" bolder uppercase>
-              <i18n :k="menu.i18nKey" />
-            </webfont>
-            <span class="newscript" v-if="menu.newWindow">
+            <sup v-if="menu.newWindow" class="newscript">
               <i class="iconfont icon-new-window-s"></i>
-            </span>
-            <span class="superscript" v-if="menu.hot">
-              <i class="iconfont icon-hot-fill"></i>
-            </span>
+            </sup>
           </ulink>
         </template>
       </nav>
@@ -281,14 +266,18 @@
         }
 
         .item {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
           color: $text-reversal;
-          @include visibility-transition();
           opacity: 0.7;
+          @include visibility-transition();
           &:hover {
             opacity: 1;
           }
           &.link-active {
             .text {
+              padding-top: 4px;
               padding-bottom: 2px;
               border-bottom: 2px solid;
             }
@@ -305,9 +294,20 @@
             border-radius: $xs-radius;
           }
 
-          .newscript,
           .superscript {
             margin-left: $xs-gap;
+          }
+
+          &.new {
+            margin-right: $xs-gap;
+          }
+
+          .newscript {
+            position: absolute;
+            right: -1.2em;
+            top: -0.1em;
+            font-size: $font-size-small - 3;
+            opacity: 0.8;
           }
         }
       }

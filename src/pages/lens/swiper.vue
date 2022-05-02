@@ -31,8 +31,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, reactive, onMounted, onBeforeUnmount, PropType } from 'vue'
-  import { LozadObserver, LOZAD_CLASS_NAME, LOADED_CLASS_NAME } from '/@/effects/lozad'
+  import { defineComponent, ref, reactive, PropType } from 'vue'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
 
   export default defineComponent({
@@ -56,9 +55,9 @@
       }
     },
     setup() {
-      const lozadObserver = ref<LozadObserver | null>(null)
       const listSwiperState = reactive({ canPrev: false, canNext: true })
       const listSwiper = ref<SwiperClass>()
+
       const listPrevSlide = () => listSwiper.value?.slidePrev()
       const listNextSlide = () => listSwiper.value?.slideNext()
       const handleListSlideChange = (_swiper: SwiperClass) => {
@@ -69,25 +68,6 @@
         listSwiper.value = _swiper
         handleListSlideChange(_swiper)
       }
-
-      const observeLozad = () => {
-        const lozadElements = listSwiper.value?.el.querySelectorAll(`.${LOZAD_CLASS_NAME}`)
-        if (lozadElements?.length) {
-          lozadObserver.value = window.$lozad(lozadElements, {
-            loaded: (element) => element.classList.add(LOADED_CLASS_NAME)
-          })
-          lozadObserver.value.observe()
-        }
-      }
-
-      onMounted(() => {
-        observeLozad()
-      })
-
-      onBeforeUnmount(() => {
-        lozadObserver.value?.observer.disconnect()
-        lozadObserver.value = null
-      })
 
       return {
         handleListSwiperReady,

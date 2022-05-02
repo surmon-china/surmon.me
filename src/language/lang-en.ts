@@ -8,6 +8,7 @@ export const enLangMap: LanguageMap = {
   [LanguageKey.CATEGORY_CODE]: 'Code',
   [LanguageKey.PAGE_HOME]: 'Home',
   [LanguageKey.PAGE_GITHUB]: 'GitHub',
+  [LanguageKey.PAGE_OPENSEA]: 'OpenSea',
   [LanguageKey.PAGE_ARCHIVE]: 'Archive',
   [LanguageKey.PAGE_ABOUT]: 'About',
   [LanguageKey.PAGE_GUESTBOOK]: 'Guestbook',

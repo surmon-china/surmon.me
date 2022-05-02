@@ -1,17 +1,19 @@
 <template>
-  <div
+  <section
+    ref="element"
+    v-html="markdownHTML"
     :class="[
       plain ? 'global-markdown-plain' : 'global-markdown-html',
       { compact, dark: isDarkTheme }
     ]"
-    v-html="markdownHTML"
-  ></div>
+  ></section>
 </template>
 
 <script lang="ts">
   import { defineComponent, computed, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
   import { TagMap } from '/@/stores/tag'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useLozad } from '/@/composables/lozad'
   import { markdownToHTML } from '/@/transforms/markdown'
 
   export default defineComponent({
@@ -39,6 +41,8 @@
     },
     setup(props) {
       const { isDarkTheme } = useEnhancer()
+      const { element } = useLozad()
+
       const markdownHTML = computed<string>(() => {
         if (!props.markdown) {
           return props.html || ''
@@ -51,6 +55,7 @@
       })
 
       return {
+        element,
         isDarkTheme,
         markdownHTML
       }
@@ -82,8 +87,7 @@
       margin-bottom: $sm-gap;
     }
 
-    p,
-    figure {
+    p {
       margin-bottom: 1em;
     }
 
@@ -179,56 +183,142 @@
       border-radius: $xs-radius;
     }
 
-    img {
-      display: block;
-      max-width: 100%;
-      margin: 0 auto;
-      padding: $sm-gap;
-      border: 1px solid $module-bg-darker-1;
-      border-radius: $xs-radius;
+    .figure-wrapper {
+      width: 100%;
+      margin-bottom: 1em;
+      display: flex;
+      justify-content: center;
+      overflow: hidden;
       text-align: center;
-      cursor: pointer;
-      transition: opacity $transition-time-fast;
-      &:hover {
-        opacity: 0.9;
+      > figure {
+        display: block;
       }
     }
 
     figure.image {
       position: relative;
-      margin-bottom: 1em;
-      padding: $sm-gap;
       border-radius: $xs-radius;
       border: 1px solid $module-bg-darker-1;
+      text-indent: 0;
+      text-align: center;
       &:hover {
         figcaption {
-          opacity: 1;
+          color: $text;
         }
       }
 
+      .placeholder {
+        visibility: hidden;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+      }
+
       img {
-        padding: 0;
-        border: none;
-        border-radius: 0;
+        display: block;
+        max-width: 100%;
+        padding: $sm-gap;
+        color: transparent;
+        cursor: pointer;
+        transition: opacity $transition-time-fast;
+        &:hover {
+          opacity: 0.9;
+        }
       }
 
       figcaption {
         display: block;
-        position: absolute;
-        bottom: $sm-gap;
-        left: $sm-gap;
-        right: $sm-gap;
+        border-top: 1px dashed $module-bg-darker-1;
         text-align: center;
-        padding: 0.6em 0;
+        line-height: $gap * 3;
         font-size: $font-size-small;
-        background-color: rgba($black, 0.6);
-        background: linear-gradient(to right, transparent, rgba($black, 0.6), transparent);
-        color: $white;
-        opacity: 0.9;
-        transition: opacity $transition-time-fast;
+        color: $text-secondary;
         user-select: none;
         pointer-events: none;
-        @include title-shadow();
+        @include color-transition();
+      }
+
+      &[data-status='loaded'] {
+        width: auto;
+        img {
+          min-width: auto;
+          min-height: auto;
+        }
+      }
+
+      &[data-status='loading'],
+      &[data-status='error'] {
+        width: 100%;
+
+        /* image size */
+        img {
+          min-height: 6rem;
+        }
+
+        /* placeholder size */
+        &.caption {
+          .placeholder {
+            padding-bottom: $gap * 3;
+          }
+        }
+      }
+
+      /* error icon */
+      &[data-status='error'] {
+        .placeholder.error {
+          visibility: visible;
+          font-size: $font-size-h1 * 1.8;
+          color: $text-divider;
+        }
+      }
+
+      /* loading animation */
+      &[data-status='loading'] {
+        .placeholder.loading {
+          visibility: visible;
+
+          @keyframes loading {
+            0% {
+              opacity: 1;
+            }
+            50% {
+              opacity: 0.5;
+            }
+            100% {
+              opacity: 1;
+            }
+          }
+
+          div {
+            width: 2rem;
+            height: 1.2rem;
+            margin: 0 $sm-gap;
+            border-radius: $mini-radius;
+            animation: loading 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            &:nth-child(1) {
+              background: $module-bg-darker-2;
+              animation-delay: -0.6s;
+            }
+            &:nth-child(2) {
+              background: $module-bg-darker-3;
+              animation-delay: -0.4s;
+            }
+            &:nth-child(3) {
+              background: $module-bg-darker-2;
+              animation-delay: -0.2s;
+            }
+            &:nth-child(4) {
+              background: $module-bg-darker-3;
+              animation-delay: -1s;
+            }
+          }
+        }
       }
     }
 
@@ -353,10 +443,16 @@
         border-bottom: 1px solid;
       }
 
-      img {
+      .figure-wrapper {
         margin: 0.5rem 0;
-        max-width: 100%;
+        justify-content: initial;
+      }
+
+      figure.image {
         border-color: $module-bg-darker-2;
+        figcaption {
+          border-color: $module-bg-darker-2;
+        }
       }
 
       ul,

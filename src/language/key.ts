@@ -10,6 +10,7 @@ export enum LanguageKey {
   CATEGORY_CODE = 'code',
   PAGE_HOME = 'home',
   PAGE_GITHUB = 'github',
+  PAGE_OPENSEA = 'opensea',
   PAGE_LENS = 'lens',
   PAGE_JOB = 'job',
   PAGE_MERCH = 'merch',

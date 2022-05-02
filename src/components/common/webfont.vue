@@ -52,6 +52,9 @@
   .webfont {
     &.zh {
       font-weight: normal;
+      /* HACK: for Chinese font */
+      margin-top: -1px;
+
       &.medium {
         font-family: 'webfont-medium';
       }

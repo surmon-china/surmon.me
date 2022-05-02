@@ -106,42 +106,42 @@
         {
           id: 'github',
           title: 'GitHub Sponsors',
-          logo: '/images/sponsor/github-sponsors-logo.svg'
+          logo: '/images/third-party/github-sponsors-logo.svg'
         },
         {
           id: 'paypal',
           title: 'PayPal me',
           link: SPONSOR_LINKS.PAYPAL,
-          logo: '/images/sponsor/paypal-logo.svg',
-          qrcode: '/images/sponsor/paypal-qrcode.png'
+          logo: '/images/third-party/paypal-logo.svg',
+          qrcode: '/images/third-party/paypal-qrcode.png'
         },
         {
           id: 'alipay',
           title: '支付宝',
           text: '通过支付宝客户端扫码',
-          logo: '/images/sponsor/alipay-logo.svg',
-          qrcode: '/images/sponsor/alipay-qrcode.png'
+          logo: '/images/third-party/alipay-logo.svg',
+          qrcode: '/images/third-party/alipay-qrcode.png'
         },
         {
           id: 'wechat-pay',
           title: '微信赞赏',
           text: '通过微信客户端扫码',
-          logo: '/images/sponsor/wechat-pay-logo.svg',
-          qrcode: '/images/sponsor/wechat-pay-qrcode.jpg'
+          logo: '/images/third-party/wechat-pay-logo.svg',
+          qrcode: '/images/third-party/wechat-pay-qrcode.jpg'
         },
         {
           id: 'bitcoin',
           title: 'BTC',
           address: SPONSOR_LINKS.BTC_ADDRESS,
-          logo: '/images/sponsor/btc-logo.svg',
-          qrcode: '/images/sponsor/btc-qrcode.png'
+          logo: '/images/third-party/btc-logo.svg',
+          qrcode: '/images/third-party/btc-qrcode.png'
         },
         {
           id: 'ethereum',
           title: 'ETH',
           address: SPONSOR_LINKS.ETH_ADDRESS,
-          logo: '/images/sponsor/eth-logo.svg',
-          qrcode: '/images/sponsor/eth-qrcode.png'
+          logo: '/images/third-party/eth-logo.svg',
+          qrcode: '/images/third-party/eth-qrcode.png'
         }
       ]
 
