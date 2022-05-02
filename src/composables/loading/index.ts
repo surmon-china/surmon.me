@@ -114,6 +114,7 @@ const createLoadingStore = (options: LoadingOptions = {}) => {
       nextTick().then(() => {
         setTimeout(() => {
           state.percent = 0
+          // MARK: coupling with CSS transition duration
         }, 280)
       })
     }, 460)
