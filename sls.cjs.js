@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.11.6
+* Surmon.me v3.11.7
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -238,7 +238,7 @@ Object.freeze({
     UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
     MARKDOWN: 'https://daringfireball.net/projects/markdown/',
     GOOGLE_ROAD_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3',
-    DISCORD_GROUP: 'https://discord.gg/cXdGT7Gx86',
+    DISCORD_GROUP: 'https://discord.surmon.me',
     TELEGRAM_GROUP: 'https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA',
     SPOTIFY: 'https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o',
     MUSIC_163: `https://music.163.com/#/playlist?id=${THIRD_IDS.MUSIC_163_BGM_ALBUM_ID}`,
