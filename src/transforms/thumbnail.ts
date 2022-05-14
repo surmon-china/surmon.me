@@ -6,16 +6,21 @@
 
 import { getTargetCDNURL } from '/@/transforms/url'
 
+// https://help.aliyun.com/document_detail/209551.html
+// https://help.aliyun.com/document_detail/193593.html
+// MARK: Auto WebP with AlibabaCloud CDN
+const WebP = `format,webp/`
+
 export const getArticleBannerThumbnailURL = (thumb: string, isWebPImage: boolean) => {
   if (!thumb) {
     return getTargetCDNURL(`/images/thumbnail/carrousel.jpg`)
   }
 
-  return `${thumb}?x-oss-process=${
-    isWebPImage
-      ? 'style/blog.list.banner.pc'
-      : 'image/auto-orient,1/resize,m_fill,w_1190,h_420/quality,q_90/format,jpg/watermark,text_U3VybW9uLm1l,type_ZHJvaWRzYW5zZmFsbGJhY2s,color_ffffff,size_32,g_sw,t_26,x_30,y_25'
-  }`
+  const w = 1190
+  const h = 420
+  const format = isWebPImage ? WebP : ''
+  const watermark = `watermark,text_U3VybW9uLm1l,type_bm90b3NhbnM,color_ffffff,size_31,g_sw,t_26,x_30,y_18`
+  return `${thumb}?image_process=${format}quality,q_88/resize,w_${w},h_${h}/crop,mid,w_${w},h_${h}/${watermark}`
 }
 
 export const getMobileArticleListThumbnailURL = (thumb: string, isWebPImage = false) => {
@@ -23,27 +28,26 @@ export const getMobileArticleListThumbnailURL = (thumb: string, isWebPImage = fa
     return ''
   }
 
-  return `${thumb}?x-oss-process=${
-    isWebPImage
-      ? 'style/blog.list.item.mobile'
-      : 'image/auto-orient,1/resize,m_fill,w_700,h_247/quality,q_86/format,jpg/watermark,text_U3VybW9uLm1l,type_ZHJvaWRzYW5zZmFsbGJhY2s,color_ffffff,size_30,g_sw,t_26,x_30,y_25'
-  }`
+  const w = 700
+  const h = 247
+  const format = isWebPImage ? WebP : ''
+  const watermark = `watermark,text_U3VybW9uLm1l,type_bm90b3NhbnM,color_ffffff,size_28,g_sw,t_26,x_28,y_18`
+  return `${thumb}?image_process=${format}quality,q_86/resize,w_${w},h_${h}/crop,mid,w_${w},h_${h}/${watermark}`
 }
 
 export const getArticleListThumbnailURL = (thumb: string, isWebPImage: boolean) => {
   if (!thumb) {
     return ''
   }
-
-  return `${thumb}?x-oss-process=${
-    isWebPImage
-      ? 'style/blog.list.item.pc'
-      : 'image/auto-orient,1/resize,m_fill,w_350,h_238/quality,q_80/format,jpg/watermark,text_U3VybW9uLm1l,type_ZHJvaWRzYW5zZmFsbGJhY2s,color_ffffff,size_20,g_sw,t_24,x_16,y_14'
-  }`
+  const w = 350
+  const h = 238
+  const format = isWebPImage ? WebP : ''
+  return `${thumb}?image_process=${format}quality,q_80/resize,w_${w},h_${h}/crop,mid,w_${w},h_${h}`
 }
 
 export const getArticleSquareThumbnailURL = (thumb: string) => {
+  const size = 320
   return thumb
-    ? `${thumb}?x-oss-process=image/auto-orient,1/resize,m_fill,w_320,h_320/quality,q_84`
+    ? `${thumb}?image_process=quality,q_84/resize,w_${size},h_${size}/crop,mid,w_${size},h_${size}`
     : ''
 }

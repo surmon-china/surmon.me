@@ -3,7 +3,6 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import API_CONFIG from '/@/config/api.config'
 import { ProxyModule } from '/@/constants/proxy'
 import { getTargetCDNURL, getTargetProxyURL } from '/@/transforms/url'
 import { isSPA } from '/@/app/environment'
@@ -18,11 +17,8 @@ export const getGravatarByHash = (hash?: string | null) => {
     return getDefaultAvatar()
   }
 
-  if (isDev) {
-    return `https://www.gravatar.com/avatar/${hash}`
-  }
-
-  return `${API_CONFIG.STATIC}/avatar/${hash}`
+  const target = `https://www.gravatar.com/avatar/${hash}`
+  return isDev ? target : getTargetProxyURL(target, ProxyModule.Default)
 }
 
 export const getDisqusAvatarByUsername = (username: string) => {
