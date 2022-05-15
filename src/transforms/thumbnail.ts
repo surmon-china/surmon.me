@@ -31,8 +31,8 @@ export const getMobileArticleListThumbnailURL = (thumb: string, isWebPImage = fa
   const w = 700
   const h = 247
   const format = isWebPImage ? WebP : ''
-  const watermark = `watermark,text_U3VybW9uLm1l,type_bm90b3NhbnM,color_ffffff,size_28,g_sw,t_26,x_28,y_18`
-  return `${thumb}?image_process=${format}quality,q_86/resize,w_${w},h_${h}/crop,mid,w_${w},h_${h}/${watermark}`
+  const watermark = `watermark,text_U3VybW9uLm1l,type_bm90b3NhbnM,color_ffffff,size_28,g_sw,t_26,x_22,y_18`
+  return `${thumb}?image_process=${format}quality,q_82/resize,w_${w},h_${h}/crop,mid,w_${w},h_${h}/${watermark}`
 }
 
 export const getArticleListThumbnailURL = (thumb: string, isWebPImage: boolean) => {
