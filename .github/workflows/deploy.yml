@@ -37,4 +37,4 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.KEY }}
-          script: sh ${{ secrets.WWW_PATH }}/surmon.me/scripts/deploy.sh
+          script: sh ${{ secrets.WWW_PATH }}/scripts/deploy.sh
