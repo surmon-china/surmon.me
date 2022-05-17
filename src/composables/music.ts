@@ -22,27 +22,18 @@ export interface PlayerConfig {
 const createMusicPlayer = (config: PlayerConfig) => {
   const { amplitude } = config
 
-  // Player state
+  // player state
   const initVolume = config.volume ?? 40
   const state = reactive({
-    // data
-    fetching: false,
+    fetching: false, // data fetching
     songs: [] as Array<Song>,
-    // 是否初始化
     inited: false,
-    // 是否可用
-    ready: false,
-    // 活动项
-    index: 0,
-    // 总数
-    count: 0,
-    // 音量
+    ready: false, // player ready
+    index: 0, // current playing song index
+    count: 0, // total song count
     volume: initVolume,
-    // 图形化
     wave: false,
-    // 播放中
     playing: false,
-    // 进度
     speeds: 0,
     progress: 0
   })
@@ -105,6 +96,7 @@ const createMusicPlayer = (config: PlayerConfig) => {
       volume: state.volume,
       songs,
       start_song: 0,
+      autoplay: false,
       continue_next: true,
       callbacks: {
         initialized: () => {
@@ -138,7 +130,7 @@ const createMusicPlayer = (config: PlayerConfig) => {
           state.playing = false
         },
         error: (error: any) => {
-          console.warn('播放器出现异常，自动下一首！', state.index, error)
+          console.warn('[player] error! auto next song:', state.index, error)
           state.playing = false
           // 播放异常时不再清除音乐，不作 URL 可能不可用的假设
           // amplitude.removeSong(state.index)
@@ -150,19 +142,18 @@ const createMusicPlayer = (config: PlayerConfig) => {
     amplitude.setRepeat(true)
   }
 
-  const init = async () => {
-    try {
-      await fetchSongList()
-      if (!playableSongList.value.length) {
-        state.ready = false
-        console.warn('播放列表为空，未找到有效音乐，无法初始化！')
-        return
-      }
-      initPlayer(playableSongList.value)
-    } catch (error) {
-      state.ready = false
-      console.warn('播放列表请求失败，无法初始化！', error)
-    }
+  const init = () => {
+    return fetchSongList()
+      .then(() => {
+        if (playableSongList.value.length) {
+          initPlayer(playableSongList.value)
+        } else {
+          console.warn('[player] init failed! empty song list.')
+        }
+      })
+      .catch((error) => {
+        console.warn('[player] init failed! fetch error:', error)
+      })
   }
 
   return {
