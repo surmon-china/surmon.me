@@ -264,12 +264,17 @@
         }
       }
 
-      /* error icon */
       &[data-status='error'] {
+        /* show custom failed icon */
         .placeholder.error {
           visibility: visible;
           font-size: $font-size-h1 * 1.8;
           color: $text-divider;
+        }
+        /* hide original image failed icon when error */
+        img {
+          width: 100%;
+          opacity: 0;
         }
       }
 

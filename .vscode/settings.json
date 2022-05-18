@@ -5,8 +5,5 @@
     "source.fixAll": true
   },
   "typescript.tsdk": "node_modules/typescript/lib",
-  "cSpell.enabled": false,
-  "[svg]": {
-    "editor.defaultFormatter": "jock.svg"
-  }
+  "cSpell.enabled": false
 }

@@ -45,7 +45,7 @@ export const zhLangMap: LanguageMap = {
   [LanguageKey.MUSIC_PLACEHOLDER]: '五音六律，七弦八度',
   [LanguageKey.SEARCH_PLACEHOLDER]: '上下求索',
   [LanguageKey.ANNOUNCEMENT_PLACEHOLDER]: '空空如也',
-  [LanguageKey.CATEGORY_PLACEHOLDER]: '未分类',
+  [LanguageKey.CATEGORY_UNCATEGORIZED]: '未分类',
   [LanguageKey.TAG_PLACEHOLDER]: '无标签',
   [LanguageKey.ARTICLE_TITLE]: '文不加点',
   [LanguageKey.ARTICLE_VIEWS]: '次阅读',

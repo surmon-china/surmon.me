@@ -48,7 +48,7 @@ export enum LanguageKey {
   SEARCH_PLACEHOLDER = 'search-input-placeholder',
   HOT_ARTICLE_LIST_TITLE = 'hot-article-list-title',
   ANNOUNCEMENT_PLACEHOLDER = 'announcement-empty-placeholder',
-  CATEGORY_PLACEHOLDER = 'category-empty-placeholder',
+  CATEGORY_UNCATEGORIZED = 'category-uncategorized',
   TAG_PLACEHOLDER = 'tag-placeholder',
   ARTICLE_TITLE = 'article-title',
   ARTICLE_VIEWS = 'article-views',

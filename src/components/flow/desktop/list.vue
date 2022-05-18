@@ -273,7 +273,7 @@
 
         .right {
           width: 10rem;
-          color: $text-secondary;
+          color: $text-disabled;
           .iconfont {
             margin-left: $gap;
           }

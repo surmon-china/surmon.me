@@ -109,7 +109,6 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     }
   }
 
-  // Aliyun OSS: https://oss.console.aliyun.com/bucket/oss-cn-hangzhou/surmon-static/process/img
   // MARK: 微信/Safari/移动端无法精确判断兼容性，使用 jpg 格式
   const imageExt = computed(() => {
     const imageExtValue =

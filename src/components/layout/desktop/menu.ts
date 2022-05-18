@@ -81,6 +81,7 @@ export const menus: Array<MenuItem> = [
     i18nKey: LanguageKey.PAGE_APP,
     divider: true
   },
+  /*
   {
     id: 'opensea',
     url: VALUABLE_LINKS.OPENSEA,
@@ -89,6 +90,7 @@ export const menus: Array<MenuItem> = [
     divider: true,
     newWindow: true
   },
+  */
   {
     id: RouteName.Merch,
     route: getPageRoute(RouteName.Merch),

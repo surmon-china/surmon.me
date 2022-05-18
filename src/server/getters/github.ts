@@ -5,16 +5,14 @@
  */
 
 import axios from 'axios'
-import { argv } from 'yargs'
 import { THIRD_IDS } from '@/config/app.config'
-
-// https://github.com/settings/tokens
-const bearerToken = argv.github_token
+import { GITHUB_BEARER_TOKEN } from '@/config/bff.argv'
 
 const graphqlGitHub = <T = any>(query: string): Promise<T> => {
   return axios
     .request<any>({
-      headers: { Authorization: `bearer ${bearerToken}` },
+      // https://github.com/settings/tokens
+      headers: { Authorization: `bearer ${GITHUB_BEARER_TOKEN}` },
       url: `https://api.github.com/graphql`,
       method: 'POST',
       data: JSON.stringify({

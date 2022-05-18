@@ -5,12 +5,11 @@
  */
 
 import axios from 'axios'
-import { argv } from 'yargs'
 import { THIRD_IDS } from '@/config/app.config'
+import { TWITTER_BEARER_TOKEN } from '@/config/bff.argv'
 
 // 1. Generate tokens
 // https://developer.twitter.com/en/portal/projects-and-apps
-const bearerToken = argv.twitter_bearer_token
 
 // 2. Get userinfo
 // https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by-username-username
@@ -21,7 +20,7 @@ const getTwitterUserinfoByUsername = async (username: string) => {
       'user.fields': `location,url,description,profile_image_url,public_metrics`
     },
     headers: {
-      Authorization: `Bearer ${bearerToken}`
+      Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`
     }
   })
   if (response.status === 200 && response.data.data) {
@@ -46,7 +45,7 @@ const getTwitterTweetsByUID = async (UID: string) => {
       max_results: 46
     },
     headers: {
-      Authorization: `Bearer ${bearerToken}`
+      Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`
     }
   })
   if (response.status === 200) {
@@ -90,7 +89,7 @@ const fetchPageTweets = async (startTime: string, pagination_token?: string) => 
         max_results: 100
       },
       headers: {
-        Authorization: `Bearer ${bearerToken}`
+        Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`
       }
     })
     .then((response) => {

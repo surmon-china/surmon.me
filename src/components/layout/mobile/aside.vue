@@ -6,9 +6,9 @@
       </div>
       <div class="profile">
         <h3 class="name">{{ author }}</h3>
-        <p class="slogan">
+        <webfont class="slogan">
           <i18n :k="LanguageKey.APP_SLOGAN" />
-        </p>
+        </webfont>
       </div>
     </div>
     <div class="aside-tool">
@@ -23,38 +23,54 @@
       <nav class="nav-list">
         <router-link to="/" class="item">
           <i class="iconfont icon-home-fill"></i>
-          <i18n :k="LanguageKey.PAGE_HOME" />
+          <webfont bolder uppercase>
+            <i18n :k="LanguageKey.PAGE_HOME" />
+          </webfont>
         </router-link>
         <router-link class="item" :to="getCategoryFlowRoute(CategorySlug.Code)">
           <i class="iconfont icon-code"></i>
-          <i18n :k="LanguageKey.CATEGORY_CODE" />
+          <webfont bolder uppercase>
+            <i18n :k="LanguageKey.CATEGORY_CODE" />
+          </webfont>
         </router-link>
         <router-link class="item" :to="getCategoryFlowRoute(CategorySlug.Insight)">
           <i class="iconfont icon-insight"></i>
-          <i18n :k="LanguageKey.CATEGORY_INSIGHT" />
+          <webfont bolder uppercase>
+            <i18n :k="LanguageKey.CATEGORY_INSIGHT" />
+          </webfont>
         </router-link>
         <ulink class="item" :href="VALUABLE_LINKS.GITHUB">
           <i class="iconfont icon-github"></i>
-          <i18n :k="LanguageKey.PAGE_GITHUB" />
+          <webfont bolder uppercase>
+            <i18n :k="LanguageKey.PAGE_GITHUB" />
+          </webfont>
           <span class="newscript">
             <i class="iconfont icon-new-window-s"></i>
           </span>
         </ulink>
         <router-link class="item" :to="getPageRoute(RouteName.Archive)">
           <i class="iconfont icon-quill"></i>
-          <i18n :k="LanguageKey.PAGE_ARCHIVE" />
+          <webfont bolder uppercase>
+            <i18n :k="LanguageKey.PAGE_ARCHIVE" />
+          </webfont>
         </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.About)">
           <i class="iconfont icon-swordsman"></i>
-          <i18n :k="LanguageKey.PAGE_ABOUT" />
+          <webfont bolder uppercase>
+            <i18n :k="LanguageKey.PAGE_ABOUT" />
+          </webfont>
         </router-link>
         <router-link class="item guestbook" :to="getPageRoute(RouteName.Guestbook)">
           <i class="iconfont icon-comment"></i>
-          <i18n :k="LanguageKey.PAGE_GUESTBOOK" />
+          <webfont bolder uppercase>
+            <i18n :k="LanguageKey.PAGE_GUESTBOOK" />
+          </webfont>
         </router-link>
         <router-link class="item app" :to="getPageRoute(RouteName.App)">
           <uimage cdn class="icon" src="/images/page-app/logo.png" />
-          <i18n :k="LanguageKey.PAGE_APP" />
+          <webfont bolder uppercase>
+            <i18n :k="LanguageKey.PAGE_APP" />
+          </webfont>
         </router-link>
       </nav>
     </div>
@@ -195,15 +211,14 @@
         margin: 0;
 
         .item {
-          display: block;
+          display: flex;
+          align-items: center;
           width: 100%;
           height: 3em;
-          line-height: 3em;
-          padding: 0 1em;
           margin-bottom: 0.5em;
+          padding: 0 1em;
           border: none;
           text-decoration: none;
-          font-weight: 700;
           color: $white;
           &:last-child {
             margin-bottom: 0;

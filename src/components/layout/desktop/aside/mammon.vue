@@ -23,7 +23,7 @@
         v-for="(ad, _index) in adConfig.PC_ASIDE_SWIPER"
       >
         <ulink class="content" :href="ad.url">
-          <uimage :src="ad.src" alt="aliyun-ad" />
+          <uimage :src="ad.src" alt="aside-swiper-ad" />
           <i class="iconfont icon-ad"></i>
         </ulink>
       </swiper-slide>

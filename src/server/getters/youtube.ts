@@ -5,12 +5,11 @@
  */
 
 import axios from 'axios'
-import { argv } from 'yargs'
 import { THIRD_IDS } from '@/config/app.config'
+import { YOUTUBE_API_KEY } from '@/config/bff.argv'
 
 // 1. Generate API key
 // https://console.cloud.google.com/apis/credentials
-const token = argv.youtube_token
 
 // 2. Get playlist by Channel ID
 // https://developers.google.com/youtube/v3/docs/playlists/list
@@ -21,7 +20,7 @@ export const getYouTubeChannelPlayLists = async () => {
       part: 'snippet,contentDetails',
       maxResults: 50,
       channelId: THIRD_IDS.YOUTUBE_CHANNEL_ID,
-      key: token
+      key: YOUTUBE_API_KEY
     }
   })
   if (response.status === 200 && response.data.items) {
@@ -41,7 +40,7 @@ export const getYouTubeVideoListByPlayerlistID = async (playlistID: string) => {
       part: 'snippet,contentDetails',
       maxResults: 50,
       playlistId: playlistID,
-      key: token
+      key: YOUTUBE_API_KEY
     }
   })
   if (response.status === 200 && response.data.items) {
