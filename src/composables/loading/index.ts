@@ -115,9 +115,9 @@ const createLoadingStore = (options: LoadingOptions = {}) => {
         setTimeout(() => {
           state.percent = 0
           // MARK: coupling with CSS transition duration
-        }, 280)
+        }, 190)
       })
-    }, 460)
+    }, 360)
   }
 
   const set = (percent: number) => {

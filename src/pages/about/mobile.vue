@@ -37,9 +37,9 @@
           <i class="iconfont icon-rubik" />
           <i18n v-bind="i18ns.merchBar" />
         </router-link>
-        <router-link class="item text-only" :to="getPageRoute(RouteName.Freelancer)">
-          <i class="iconfont icon-coin-s" />
-          <i18n v-bind="i18ns.hireMe" />
+        <router-link class="item text-only" :to="getPageRoute(RouteName.Guestbook)">
+          <i class="iconfont icon-comment" />
+          <i18n v-bind="i18ns.guestbook" />
         </router-link>
       </div>
       <divider dashed />
@@ -88,10 +88,12 @@
         </ulink>
       </div>
     </div>
-    <div class="links">
-      <div class="list col-2">
-        <uimage cdn class="image-item" src="/images/qrcodes/wechat.jpg" />
-        <uimage cdn class="image-item" src="/images/qrcodes/wechat-channel.png" />
+    <div class="qrcodes">
+      <div class="item">
+        <uimage cdn class="image" src="/images/qrcodes/wechat.jpg" />
+      </div>
+      <div class="item">
+        <uimage cdn class="image" src="/images/qrcodes/wechat-channel.png" />
       </div>
     </div>
   </div>
@@ -273,6 +275,27 @@
           &.linkedin {
             background-color: $linkedin-primary;
           }
+        }
+      }
+    }
+
+    .qrcodes {
+      margin-top: $lg-gap;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: $lg-gap;
+
+      .item {
+        width: 100%;
+        padding: $gap;
+        border-radius: $lg-radius;
+        overflow: hidden;
+        background-color: $module-bg-opaque;
+
+        .image {
+          width: 100%;
+          height: 100%;
+          border-radius: $xs-radius;
         }
       }
     }

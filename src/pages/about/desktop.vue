@@ -842,7 +842,7 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: $gap * 2;
-      padding: 2rem;
+      padding: 2rem $lg-gap;
       @include common-bg-module();
       @include radius-box($lg-radius);
 

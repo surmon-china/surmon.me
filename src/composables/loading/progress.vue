@@ -63,7 +63,7 @@
       height: $size;
       width: 0%;
       background-color: $primary;
-      transition: width $transition-time-normal;
+      transition: width 160ms;
       &.notransition {
         transition: none;
       }
