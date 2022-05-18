@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.11.8
+* Surmon.me v3.11.9
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -278,16 +278,23 @@ const getAllWallpapers = async () => {
     const [zh, en] = await Promise.all([getZHWallpapers(), getENWallpapers()]);
     return { zh, en };
 };/**
+ * @file BFF argv config
+ * @module config.bff.argv
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const GITHUB_BEARER_TOKEN = yargs.argv.github_token;
+const TWITTER_BEARER_TOKEN = yargs.argv.twitter_bearer_token;
+const INSTAGRAM_TOKEN = yargs.argv.instagram_token;
+const YOUTUBE_API_KEY = yargs.argv.youtube_token;/**
  * @file BFF GitHub getter
  * @module server.getter.github
  * @author Surmon <https://github.com/surmon-china>
  */
-// https://github.com/settings/tokens
-const bearerToken$1 = yargs.argv.github_token;
 const graphqlGitHub = (query) => {
     return axios__default["default"]
         .request({
-        headers: { Authorization: `bearer ${bearerToken$1}` },
+        // https://github.com/settings/tokens
+        headers: { Authorization: `bearer ${GITHUB_BEARER_TOKEN}` },
         url: `https://api.github.com/graphql`,
         method: 'POST',
         data: JSON.stringify({
@@ -363,7 +370,6 @@ const getGitHubContributions = async (from, to) => {
  */
 // 1. Generate tokens
 // https://developer.twitter.com/en/portal/projects-and-apps
-const bearerToken = yargs.argv.twitter_bearer_token;
 // 2. Get userinfo
 // https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by-username-username
 const getTwitterUserinfoByUsername = async (username) => {
@@ -373,7 +379,7 @@ const getTwitterUserinfoByUsername = async (username) => {
             'user.fields': `location,url,description,profile_image_url,public_metrics`
         },
         headers: {
-            Authorization: `Bearer ${bearerToken}`
+            Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`
         }
     });
     if (response.status === 200 && response.data.data) {
@@ -398,7 +404,7 @@ const getTwitterTweetsByUID = async (UID) => {
             max_results: 46
         },
         headers: {
-            Authorization: `Bearer ${bearerToken}`
+            Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`
         }
     });
     if (response.status === 200) {
@@ -439,7 +445,7 @@ const fetchPageTweets = async (startTime, pagination_token) => {
             max_results: 100
         },
         headers: {
-            Authorization: `Bearer ${bearerToken}`
+            Authorization: `Bearer ${TWITTER_BEARER_TOKEN}`
         }
     })
         .then((response) => {
@@ -510,16 +516,9 @@ const getTwitterCalendar = async () => calendarTemp$1.calendar;/**
  * @module server.getter.instagram
  * @author Surmon <https://github.com/surmon-china>
  */
-// 1. Generate long-lived access tokens for Instagram Testers (60 days)
-// https://developers.facebook.com/apps/625907498725071/instagram-basic-display/basic-display/
-// 2. Get medias useing API
-// https://developers.facebook.com/docs/instagram-basic-display-api/reference/media#fields
-// 3. TODO: Refresh token
-// https://developers.facebook.com/docs/instagram-basic-display-api/reference/refresh_access_token
-const token$1 = yargs.argv.instagram_token;
 const getInstagramMedias = async () => {
     const fields = `id,username,permalink,caption,media_type,media_url,thumbnail_url,timestamp`;
-    const response = await axios__default["default"].get(`https://graph.instagram.com/me/media?fields=${fields}&access_token=${token$1}`, { timeout: 8000 });
+    const response = await axios__default["default"].get(`https://graph.instagram.com/me/media?fields=${fields}&access_token=${INSTAGRAM_TOKEN}`, { timeout: 8000 });
     if (response.status === 200 && response.data.data) {
         return response.data.data;
     }
@@ -533,7 +532,7 @@ const fetchPageMedias = (sinceUnix, nextToken) => {
         .get(`https://graph.instagram.com/v13.0/${THIRD_IDS.INSTAGRAM_FB_ID}/media`, {
         timeout: 8000,
         params: {
-            access_token: token$1,
+            access_token: INSTAGRAM_TOKEN,
             fields: `id,timestamp`,
             limit: 100,
             since: sinceUnix,
@@ -608,7 +607,6 @@ const getInstagramCalendar = async () => calendarTemp.data;/**
  */
 // 1. Generate API key
 // https://console.cloud.google.com/apis/credentials
-const token = yargs.argv.youtube_token;
 // 2. Get playlist by Channel ID
 // https://developers.google.com/youtube/v3/docs/playlists/list
 const getYouTubeChannelPlayLists = async () => {
@@ -618,7 +616,7 @@ const getYouTubeChannelPlayLists = async () => {
             part: 'snippet,contentDetails',
             maxResults: 50,
             channelId: THIRD_IDS.YOUTUBE_CHANNEL_ID,
-            key: token
+            key: YOUTUBE_API_KEY
         }
     });
     if (response.status === 200 && response.data.items) {
@@ -638,7 +636,7 @@ const getYouTubeVideoListByPlayerlistID = async (playlistID) => {
             part: 'snippet,contentDetails',
             maxResults: 50,
             playlistId: playlistID,
-            key: token
+            key: YOUTUBE_API_KEY
         }
     });
     if (response.status === 200 && response.data.items) {
