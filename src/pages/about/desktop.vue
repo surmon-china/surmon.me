@@ -35,16 +35,6 @@
             </ulink>
           </span>
           <span class="mini">
-            <button class="item wechat-channel" @click="handleOpenWechatChannel">
-              <i class="iconfont icon-wechat-channel" />
-              <popup v-model:visible="modalState.wechatChannel" :scroll-close="false">
-                <div class="qrcode-modal wechat-channel">
-                  <div class="background"></div>
-                  <uimage class="image" cdn src="/images/qrcodes/wechat-channel.png" />
-                  <span class="text">Follow me on WeChat Channel</span>
-                </div>
-              </popup>
-            </button>
             <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM">
               <i class="iconfont icon-telegram" />
             </ulink>
@@ -235,18 +225,12 @@
 
       const modalState = reactive({
         roadMap: false,
-        wechat: false,
-        wechatChannel: false
+        wechat: false
       })
 
       const handleOpenWechat = () => {
         modalState.wechat = true
         handleGTagEvent('wechat_modal')
-      }
-
-      const handleOpenWechatChannel = () => {
-        modalState.wechatChannel = true
-        handleGTagEvent('wechat_channel_modal')
       }
 
       const handleOpenMap = () => {
@@ -297,8 +281,7 @@
         handleFeedback,
         handleStatement,
         handleOpenMap,
-        handleOpenWechat,
-        handleOpenWechatChannel
+        handleOpenWechat
       }
     }
   })
@@ -318,9 +301,6 @@
     align-items: center;
     &.wechat {
       --item-primary: #{$wechat-primary};
-    }
-    &.wechat-channel {
-      --item-primary: #{$wechat-channel-primary};
     }
 
     .background {
@@ -538,9 +518,6 @@
 
               &.wechat {
                 background-color: $wechat-primary;
-              }
-              &.wechat-channel {
-                background-color: $wechat-channel-primary;
               }
               &.telegram {
                 background-color: $telegram-primary;

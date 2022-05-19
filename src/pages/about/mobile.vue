@@ -70,7 +70,7 @@
         </ulink>
       </div>
       <divider dashed />
-      <div class="list col-5">
+      <div class="list col-4">
         <ulink class="item telegram icon-only" :href="VALUABLE_LINKS.TELEGRAM">
           <i class="iconfont icon-telegram" />
         </ulink>
@@ -82,9 +82,6 @@
         </ulink>
         <ulink class="item douban icon-only" :href="VALUABLE_LINKS.DOUBAN">
           <i class="iconfont icon-douban" />
-        </ulink>
-        <ulink class="item zhihu icon-only" :href="VALUABLE_LINKS.ZHIHU">
-          <i class="iconfont icon-zhihu" />
         </ulink>
       </div>
     </div>
@@ -212,8 +209,8 @@
         &.col-3 {
           grid-template-columns: repeat(3, 1fr);
         }
-        &.col-5 {
-          grid-template-columns: repeat(5, 1fr);
+        &.col-4 {
+          grid-template-columns: repeat(4, 1fr);
         }
 
         .image-item {
@@ -269,9 +266,6 @@
           }
           &.douban {
             background-color: $douban-primary;
-          }
-          &.zhihu {
-            background-color: $zhihu-primary;
           }
           &.youtube {
             background-color: $youtube-primary;
