@@ -35,17 +35,34 @@
             </ulink>
           </span>
           <span class="mini">
+            <button class="item wechat-channel" @click="handleOpenWechatChannel">
+              <i class="iconfont icon-wechat-channel" />
+              <popup v-model:visible="modalState.wechatChannel" :scroll-close="false">
+                <div class="qrcode-modal wechat-channel">
+                  <div class="background"></div>
+                  <uimage class="image" cdn src="/images/qrcodes/wechat-channel.png" />
+                  <span class="text">Follow me on WeChat Channel</span>
+                </div>
+              </popup>
+            </button>
             <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM">
               <i class="iconfont icon-telegram" />
             </ulink>
+            <button class="item wechat" @click="handleOpenWechat">
+              <i class="iconfont icon-wechat" />
+              <popup v-model:visible="modalState.wechat" :scroll-close="false">
+                <div class="qrcode-modal wechat">
+                  <div class="background"></div>
+                  <uimage class="image" cdn src="/images/qrcodes/wechat.jpg" />
+                  <span class="text">👋 &nbsp; Friend me on WeChat</span>
+                </div>
+              </popup>
+            </button>
             <ulink class="item linkedin" :href="VALUABLE_LINKS.LINKEDIN">
               <i class="iconfont icon-linkedin" />
             </ulink>
             <ulink class="item douban" :href="VALUABLE_LINKS.DOUBAN">
               <i class="iconfont icon-douban" />
-            </ulink>
-            <ulink class="item zhihu" :href="VALUABLE_LINKS.ZHIHU">
-              <i class="iconfont icon-zhihu" />
             </ulink>
           </span>
         </div>
@@ -99,23 +116,11 @@
           <span class="text">BGM list</span>
         </ulink>
       </div>
-      <div class="qrcodes">
-        <div
-          class="item"
-          :class="item.class"
-          :key="index"
-          v-for="(item, index) in qrcodes"
-          @mouseenter="handleGTagEvent(item.class.replace('-', '_') + '_qrcode')"
-        >
-          <div class="background"></div>
-          <div class="icon">
-            <i class="iconfont" :class="item.icon"></i>
-          </div>
-          <span class="qrcode">
-            <uimage class="image" cdn :src="item.qrcode" />
-          </span>
-          <ulink class="link" :href="item.link">{{ item.text }}</ulink>
-        </div>
+      <div class="placeholder">
+        <i18n>
+          <template #zh>为了排版协调，这是一个毫无意义的占位符</template>
+          <template #en>Placeholder for typography</template>
+        </i18n>
       </div>
       <div class="calendar">
         <aggregate-calendar />
@@ -137,7 +142,7 @@
             </button>
             <iframe class="iframe" :src="VALUABLE_LINKS.GOOGLE_ROAD_MAP" frameborder="0" />
             <client-only>
-              <popup v-model:visible="isOnRoadMap">
+              <popup v-model:visible="modalState.roadMap">
                 <iframe
                   :src="VALUABLE_LINKS.GOOGLE_ROAD_MAP"
                   allowfullscreen
@@ -172,7 +177,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
+  import { defineComponent, reactive, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
   import { useMetaStore } from '/@/stores/meta'
@@ -222,51 +227,30 @@
         }
       ]
 
-      const qrcodes = [
-        {
-          class: 'douban',
-          qrcode: `/images/qrcodes/douban.png`,
-          icon: 'icon-douban',
-          link: VALUABLE_LINKS.DOUBAN,
-          text: `Douban Archive`
-        },
-        {
-          class: 'wechat-channel',
-          qrcode: `/images/qrcodes/wechat-channel.png`,
-          icon: 'icon-wechat-channel',
-          text: 'WeChat Channel'
-        },
-        {
-          class: 'wechat',
-          qrcode: `/images/qrcodes/wechat.jpg`,
-          icon: 'icon-wechat',
-          text: 'Friend me on WeChat'
-        },
-        {
-          class: 'instagram',
-          qrcode: `/images/qrcodes/instagram.png`,
-          icon: 'icon-instagram',
-          link: VALUABLE_LINKS.INSTAGRAM,
-          text: `Instagram Plogs`
-        },
-        {
-          class: 'youtube',
-          qrcode: `/images/qrcodes/youtube.png`,
-          icon: 'icon-youtube',
-          link: VALUABLE_LINKS.YOUTUBE_CHANNEL,
-          text: 'YouTube Channel'
-        }
-      ]
-
       const handleGTagEvent = (event: string) => {
         gtag?.event(event, {
           event_category: GAEventCategories.About
         })
       }
 
-      const isOnRoadMap = ref(false)
+      const modalState = reactive({
+        roadMap: false,
+        wechat: false,
+        wechatChannel: false
+      })
+
+      const handleOpenWechat = () => {
+        modalState.wechat = true
+        handleGTagEvent('wechat_modal')
+      }
+
+      const handleOpenWechatChannel = () => {
+        modalState.wechatChannel = true
+        handleGTagEvent('wechat_channel_modal')
+      }
+
       const handleOpenMap = () => {
-        isOnRoadMap.value = true
+        modalState.roadMap = true
         handleGTagEvent('roadmap_modal')
       }
 
@@ -297,7 +281,6 @@
 
       return {
         i18ns,
-        qrcodes,
         links,
         VALUABLE_LINKS,
         SPECIAL_LINKS,
@@ -305,7 +288,7 @@
         getPageRoute,
         isZhLang,
         isDarkTheme,
-        isOnRoadMap,
+        modalState,
         backgroundVideo,
         adminInfo,
         appOptions,
@@ -313,7 +296,9 @@
         handleSponsor,
         handleFeedback,
         handleStatement,
-        handleOpenMap
+        handleOpenMap,
+        handleOpenWechat,
+        handleOpenWechatChannel
       }
     }
   })
@@ -322,6 +307,43 @@
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
   @import 'src/styles/mixins.scss';
+
+  .qrcode-modal {
+    width: 23rem;
+    height: 28rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &.wechat {
+      --item-primary: #{$wechat-primary};
+    }
+    &.wechat-channel {
+      --item-primary: #{$wechat-channel-primary};
+    }
+
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: var(--item-primary);
+    }
+
+    .image {
+      z-index: $z-index-normal + 1;
+      width: 70%;
+      margin-bottom: 2rem;
+      @include radius-box($sm-radius);
+    }
+
+    .text {
+      font-weight: bold;
+      color: var(--item-primary);
+    }
+  }
 
   .roadmap-modal {
     width: 88vw;
@@ -407,7 +429,7 @@
           margin-top: $banner-height - 4rem;
           max-width: 100%;
           border-radius: 100%;
-          border: 5px solid $module-bg;
+          border: 8px solid $module-bg;
           box-sizing: content-box;
           transition: transform $transition-time-slow;
           &:hover {
@@ -492,6 +514,8 @@
           }
 
           > .mini {
+            display: flex;
+
             > .item {
               display: inline-block;
               width: $button-size;
@@ -512,14 +536,17 @@
                 font-size: $font-size-h4;
               }
 
+              &.wechat {
+                background-color: $wechat-primary;
+              }
+              &.wechat-channel {
+                background-color: $wechat-channel-primary;
+              }
               &.telegram {
                 background-color: $telegram-primary;
               }
               &.douban {
                 background-color: $douban-primary;
-              }
-              &.zhihu {
-                background-color: $zhihu-primary;
               }
               &.stackoverflow {
                 background-color: $stackoverflow-primary;
@@ -643,100 +670,19 @@
       }
     }
 
-    .qrcodes {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      grid-gap: $gap * 2;
-      width: 100%;
-      height: 18rem;
-      margin-bottom: 2rem;
-
-      .item {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
-        width: 100%;
-        @include common-bg-module();
-        @include radius-box($lg-radius);
-        &.wechat {
-          --item-primary: #{$wechat-primary};
-          .background {
-            height: 45%;
-          }
-        }
-        &.douban {
-          --item-primary: #{$douban-primary};
-        }
-        &.instagram {
-          --item-primary: #{$instagram-primary};
-          .background {
-            background: $instagram-primary;
-            background: $instagram-gradient;
-          }
-        }
-        &.youtube {
-          --item-primary: #{$youtube-primary};
-        }
-        &.wechat-channel {
-          --item-primary: #{$wechat-channel-primary};
-        }
-
-        .background {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 6px;
-          text-align: right;
-          background: var(--item-primary);
-          filter: opacity(0.8);
-        }
-
-        .icon {
-          $size: $font-size-h1 * 8;
-          position: absolute;
-          left: -50%;
-          bottom: -45%;
-          width: $size;
-          height: $size;
-          line-height: $size;
-          display: block;
-          text-align: center;
-          opacity: 0.1;
-
-          .iconfont {
-            font-size: $size;
-            color: var(--item-primary);
-          }
-        }
-
-        .qrcode {
-          margin-top: $lg-gap;
-          z-index: $z-index-normal + 1;
-          .image {
-            width: 12rem;
-            @include radius-box($sm-radius);
-          }
-        }
-
-        .link {
-          display: inline-flex;
-          justify-content: center;
-          align-items: center;
-          margin-bottom: $sm-gap;
-          padding-bottom: 2px;
-          border-bottom: 2px solid;
-          font-weight: bold;
-          color: var(--item-primary);
-          opacity: 0.8;
-          transition: opacity $transition-time-fast;
-          &:hover {
-            opacity: 1;
-          }
-        }
-      }
+    .placeholder {
+      margin-bottom: $gap * 2;
+      height: 10rem;
+      border-radius: $lg-radius;
+      @include common-bg-module();
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: $font-size-h2;
+      font-weight: bold;
+      color: $text-divider;
+      text-transform: uppercase;
+      letter-spacing: 2px;
     }
 
     .calendar {
@@ -782,7 +728,7 @@
           flex-shrink: 0;
           display: inline-flex;
           margin-top: $lg-gap;
-          padding: 0 1em;
+          padding: 0 1rem;
           width: 100%;
           height: 4em;
           line-height: 4em;

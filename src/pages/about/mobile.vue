@@ -173,7 +173,7 @@
           height: $size;
           z-index: $z-index-normal + 2;
           border-radius: 100%;
-          border: 4px solid $module-bg-opaque;
+          border: 6px solid $module-bg-opaque;
           box-sizing: content-box;
         }
       }
@@ -185,9 +185,13 @@
         margin-bottom: $gap;
       }
 
+      .slogan {
+        line-height: $line-height-base * 1.2;
+      }
+
       .bio {
         margin: 0;
-        line-height: $line-height-base * 1.4;
+        line-height: $line-height-base * 1.3;
         text-align: center;
       }
     }
