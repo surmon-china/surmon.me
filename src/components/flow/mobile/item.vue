@@ -47,7 +47,7 @@
           <span>{{ article.meta.comments }}</span>
         </span>
         <span class="likes">
-          <i class="iconfont icon-heart" :class="{ liked: isLiked }"></i>
+          <i class="iconfont icon-like" :class="{ liked: isLiked }"></i>
           <span>{{ article.meta.likes }}</span>
         </span>
       </div>
