@@ -9,17 +9,6 @@
       <ulink class="item" :href="VALUABLE_LINKS.GITHUB_SURMON_ME">Vue</ulink>
       <i18n zh=" 和 日月星辰 强力驱动" en="" />
       <divider type="vertical" />
-      <i18n>
-        <template #zh>
-          <router-link :to="aboutPageUrl">吾之臂躯</router-link>
-          <span> 行针步线</span>
-        </template>
-        <template #en>
-          <span>Designed By </span>
-          <router-link :to="aboutPageUrl">Me</router-link>
-        </template>
-      </i18n>
-      <divider type="vertical" />
       <a class="statement" href="javascript:void(0)" @click="handleStatementModal">
         <i18n zh="周知" en="FAQ" />
       </a>
@@ -34,10 +23,8 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { RouteName } from '/@/app/router'
   import { GAEventCategories } from '/@/constants/gtag'
   import { FOOTER_ELEMENT_ID } from '/@/constants/anchor'
-  import { getPageRoute } from '/@/transforms/route'
   import { VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
@@ -54,7 +41,6 @@
       return {
         FOOTER_ELEMENT_ID,
         VALUABLE_LINKS,
-        aboutPageUrl: getPageRoute(RouteName.About),
         handleStatementModal
       }
     }

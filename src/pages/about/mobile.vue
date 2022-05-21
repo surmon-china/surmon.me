@@ -80,7 +80,7 @@
         <ulink class="item youtube icon-only" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
           <i class="iconfont icon-youtube" />
         </ulink>
-        <ulink class="item douban icon-only" :href="VALUABLE_LINKS.DOUBAN">
+        <ulink class="item douban icon-only" :href="VALUABLE_LINKS.DOUBAN_MOVIE">
           <i class="iconfont icon-douban" />
         </ulink>
       </div>
