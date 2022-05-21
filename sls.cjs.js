@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.11.13
+* Surmon.me v3.11.14
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -246,6 +246,7 @@ Object.freeze({
     TELEGRAM: 'https://t.me/surmon',
     OPENSEA: 'https://opensea.io/surmon',
     DOUBAN: 'https://www.douban.com/people/nocower',
+    DOUBAN_MOVIE: 'https://m.douban.com/people/56647958/movie_charts',
     QUORA: 'https://www.quora.com/profile/Surmon',
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
     INSTAGRAM: `https://www.instagram.com/${THIRD_IDS.INSTAGRAM_USERNAME}`,
