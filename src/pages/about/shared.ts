@@ -1,6 +1,5 @@
 import { useEnhancer } from '/@/app/enhancer'
 import { Language, LanguageKey } from '/@/language'
-import { I18nLanguageMap } from '/@/composables/i18n'
 import { firstUpperCase } from '/@/transforms/text'
 import { getDefaultAvatar } from '/@/transforms/avatar'
 import { META } from '/@/config/app.config'
@@ -14,46 +13,58 @@ export interface AboutI18nConfig {
   [Language.English]: string
 }
 
-export const i18ns: { [key: string]: I18nLanguageMap<Language> } = {
+export const i18ns = {
   biography: {
     [Language.Chinese]: `本是浪蝶游蜂，自留半亩石池，但求直抒胸臆，挥墨九云之中`,
-    [Language.English]: `Either write something worth reading, Do something worth writing.`
+    [Language.English]: `Either write something worth reading, do something worth writing.`
   },
   roadmap: {
     [Language.Chinese]: `路为纸，地成册，行作笔，心当墨；思无界，行有疆`,
-    [Language.English]: `Every path I went astray built up my Rome.`
+    [Language.English]: `Every path i went astray built up my Rome.`
   },
-  hireMe: {
+  freelancer: {
     [Language.Chinese]: `与我合作`,
     [Language.English]: `Freelancer`
   },
-  myArchive: {
-    [Language.Chinese]: `我的创作`,
-    [Language.English]: `My articles`
+  sponsor: {
+    [Language.Chinese]: `向我赞助`,
+    [Language.English]: `Sponsor`
   },
-  myVlogs: {
-    [Language.Chinese]: `我的行摄`,
-    [Language.English]: `My albums`
+  statement: {
+    [Language.Chinese]: `众而周知`,
+    [Language.English]: `Statement`
   },
-  merchBar: {
-    [Language.Chinese]: `我的周边`,
-    [Language.English]: `Merch bar`
+  feedback: {
+    [Language.Chinese]: `向我反馈`,
+    [Language.English]: `Feedback`
+  },
+  archive: {
+    [Language.Chinese]: `笔文存档`,
+    [Language.English]: `Archive`
+  },
+  lens: {
+    [Language.Chinese]: `行行摄摄`,
+    [Language.English]: `Lens view`
   },
   guestbook: {
     [Language.Chinese]: `给我留言`,
     [Language.English]: `Guestbook`
   },
-  DiscordGroup: {
+  merchBar: {
+    [Language.Chinese]: `周边好物`,
+    [Language.English]: `Merch bar`
+  },
+  rss: {
+    [Language.Chinese]: `长期订阅`,
+    [Language.English]: `Subscribe`
+  },
+  discordGroup: {
     [Language.Chinese]: `国际联谊`,
     [Language.English]: `Discord`
   },
-  TelegramGroup: {
+  telegramGroup: {
     [Language.Chinese]: `自由报社`,
     [Language.English]: `TG group`
-  },
-  Rss: {
-    [Language.Chinese]: `长期订阅`,
-    [Language.English]: `Subscribe`
   },
   livingNow: {
     [Language.Chinese]: `暂居上海，养两条狗`,

@@ -220,7 +220,7 @@
         {
           class: 'lens',
           icon: 'icon-lens',
-          i18n: i18ns.myVlogs,
+          i18n: i18ns.lens,
           route: getPageRoute(RouteName.Lens)
         },
         {
@@ -232,7 +232,7 @@
         {
           class: 'archive',
           icon: 'icon-quill',
-          i18n: i18ns.myArchive,
+          i18n: i18ns.archive,
           route: getPageRoute(RouteName.Archive)
         },
         {
@@ -244,46 +244,37 @@
         {
           class: 'feedback',
           icon: 'icon-mail-plane',
-          i18n: {
-            zh: '向我反馈',
-            en: 'Feedback'
-          },
+          i18n: i18ns.feedback,
           onClick: handleFeedback
         },
         {
           class: 'telegram',
           icon: 'icon-telegram',
-          i18n: i18ns.TelegramGroup,
+          i18n: i18ns.telegramGroup,
           href: VALUABLE_LINKS.TELEGRAM_GROUP
         },
         {
           class: 'discord',
           icon: 'icon-discord',
-          i18n: i18ns.DiscordGroup,
+          i18n: i18ns.discordGroup,
           href: VALUABLE_LINKS.DISCORD_GROUP
         },
         {
           class: 'sponsor',
           icon: 'icon-heart',
-          i18n: {
-            zh: '向我赞助',
-            en: 'Sponsor Me'
-          },
+          i18n: i18ns.sponsor,
           onClick: handleSponsor
         },
         {
           class: 'statement',
           icon: 'icon-faq',
-          i18n: {
-            zh: '众而周知',
-            en: 'Statement'
-          },
+          i18n: i18ns.statement,
           onClick: handleStatement
         },
         {
           class: 'rss',
           icon: 'icon-rss',
-          i18n: i18ns.Rss,
+          i18n: i18ns.rss,
           href: VALUABLE_LINKS.RSS
         }
       ]

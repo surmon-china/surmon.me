@@ -27,11 +27,11 @@
       <div class="list col-2">
         <router-link class="item text-only" :to="getPageRoute(RouteName.Archive)">
           <i class="iconfont icon-quill" />
-          <i18n v-bind="i18ns.myArchive" />
+          <i18n v-bind="i18ns.archive" />
         </router-link>
         <router-link class="item text-only" :to="getPageRoute(RouteName.Lens)">
           <i class="iconfont icon-lens" />
-          <i18n v-bind="i18ns.myVlogs" />
+          <i18n v-bind="i18ns.lens" />
         </router-link>
         <router-link class="item text-only" :to="getPageRoute(RouteName.Merch)">
           <i class="iconfont icon-rubik" />
@@ -46,11 +46,11 @@
       <div class="list col-2">
         <ulink class="item discord" :href="VALUABLE_LINKS.DISCORD_GROUP">
           <i class="iconfont icon-discord" />
-          <i18n v-bind="i18ns.DiscordGroup" />
+          <i18n v-bind="i18ns.discordGroup" />
         </ulink>
         <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM_GROUP">
           <i class="iconfont icon-telegram" />
-          <i18n v-bind="i18ns.TelegramGroup" />
+          <i18n v-bind="i18ns.telegramGroup" />
         </ulink>
       </div>
     </div>
@@ -219,13 +219,12 @@
           display: inline-flex;
           align-items: center;
           height: 3rem;
-          padding: 0 $gap;
+          padding: 0 1em;
           border-radius: $sm-radius;
           color: $white;
           &.center {
             justify-content: center;
           }
-
           &.text-only {
             background-color: $surmon;
           }
