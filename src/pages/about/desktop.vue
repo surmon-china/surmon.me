@@ -40,16 +40,18 @@
             </ulink>
             <button class="item wechat" @click="handleOpenWechat">
               <i class="iconfont icon-wechat" />
-              <popup v-model:visible="modalState.wechat" :scroll-close="false">
-                <div class="qrcode-modal wechat">
-                  <div class="background"></div>
-                  <uimage class="image" cdn src="/images/qrcodes/wechat.jpg" />
-                  <span class="text">
-                    👋 &nbsp;
-                    <i18n en="Friend me on WeChat" zh="扫码加微，解锁灵魂"></i18n>
-                  </span>
-                </div>
-              </popup>
+              <client-only>
+                <popup v-model:visible="modalState.wechat" :scroll-close="false">
+                  <div class="qrcode-modal wechat">
+                    <div class="background"></div>
+                    <uimage class="image" cdn src="/images/qrcodes/wechat.jpg" />
+                    <span class="text">
+                      👋 &nbsp;
+                      <i18n en="Friend me on WeChat" zh="扫码加微，解锁灵魂"></i18n>
+                    </span>
+                  </div>
+                </popup>
+              </client-only>
             </button>
             <ulink class="item linkedin" :href="VALUABLE_LINKS.LINKEDIN">
               <i class="iconfont icon-linkedin" />
