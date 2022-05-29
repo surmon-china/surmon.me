@@ -105,7 +105,7 @@
     },
     setup(props) {
       const { i18n, meta, gtag, globalState } = useEnhancer()
-      const { identity, comment, articleDetail: articleDetailStore } = useStores()
+      const { identity, comment: commentStore, articleDetail: articleDetailStore } = useStores()
       const article = computed(() => articleDetailStore.article || UNDEFINED)
       const fetching = computed(() => articleDetailStore.fetching)
       const isLiked = computed(() => {
@@ -141,7 +141,7 @@
       const fetchArticleDetail = (articleID: number) => {
         return Promise.all([
           articleDetailStore.fetchCompleteArticle({ articleID }),
-          comment.fetchList({ post_id: articleID })
+          commentStore.fetchList({ post_id: articleID })
         ])
       }
 

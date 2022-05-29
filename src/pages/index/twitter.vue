@@ -145,7 +145,7 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
-  import { TweeterTweets } from '/@/stores/media'
+  import { TwitterUserinfo, TweeterTweets } from '/@/stores/media'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { getTwitterTweetDetailURL } from '/@/transforms/media'
   import { unescape, padStart } from '/@/transforms/text'
@@ -158,7 +158,7 @@
     },
     props: {
       userinfo: {
-        type: Object as PropType<Record<string, any>>,
+        type: Object as PropType<TwitterUserinfo>,
         default: null
       },
       tweets: {

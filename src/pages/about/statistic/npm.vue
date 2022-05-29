@@ -1,6 +1,5 @@
 <template>
   <statistic-base
-    class="npm"
     brand="npm"
     icon="icon-npm"
     :data="store.data"

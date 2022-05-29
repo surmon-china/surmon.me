@@ -21,7 +21,6 @@ export interface NodePressStatistic {
 export const useNodepressStatisticStore = defineFetchStore({
   id: 'nodepressStatistic',
   initData: null as null | NodePressStatistic,
-  onlyOnce: false,
   fetcher() {
     return nodepress
       .get<NodePressStatistic>('/expansion/statistic')

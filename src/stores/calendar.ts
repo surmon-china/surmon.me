@@ -15,12 +15,11 @@ export const useArticleCalendarStore = defineFetchStore({
   id: 'articleCalendar',
   initData: [] as Array<CalendarDay>,
   onlyOnce: true,
-  fetcher() {
-    return nodepress
-      .get<Array<CalendarDay>>('/article/calendar', {
-        params: { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone }
-      })
-      .then((response) => response.result)
+  async fetcher() {
+    const response = await nodepress.get<Array<CalendarDay>>('/article/calendar', {
+      params: { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone }
+    })
+    return response.result
   }
 })
 

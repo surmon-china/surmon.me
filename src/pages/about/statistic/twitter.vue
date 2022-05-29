@@ -1,6 +1,5 @@
 <template>
   <statistic-base
-    class="twitter"
     brand="twitter"
     icon="icon-twitter"
     :data="store.data"

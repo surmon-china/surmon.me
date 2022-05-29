@@ -2,20 +2,22 @@
   <div class="index-page">
     <carrousel
       class="carrousel"
-      :articles="articleList.list.data"
-      :fetching="articleList.list.fetching"
+      :articles="articleListStore.list.data"
+      :fetching="articleListStore.list.fetching"
     />
     <twitter
       class="twitter"
       :userinfo="twitterUserinfo.data ?? void 0"
       :tweets="twitterTweets.data ?? void 0"
-      :fetching="twitterUserinfo.fetching || twitterTweets.fetching || articleList.list.fetching"
+      :fetching="
+        twitterUserinfo.fetching || twitterTweets.fetching || articleListStore.list.fetching
+      "
     />
     <article-list
       :mammon="false"
-      :fetching="articleList.list.fetching"
-      :articles="articleList.list.data"
-      :pagination="articleList.list.pagination"
+      :fetching="articleListStore.list.fetching"
+      :articles="articleListStore.list.data"
+      :pagination="articleListStore.list.pagination"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -42,16 +44,21 @@
     },
     setup() {
       const { meta, i18n } = useEnhancer()
-      const { articleList, appOption, twitterUserinfo, twitterTweets } = useStores()
+      const {
+        articleList: articleListStore,
+        appOption: appOptionStore,
+        twitterUserinfo,
+        twitterTweets
+      } = useStores()
       meta(() => ({
         title: `${META.title} - ${i18n.t(LanguageKey.APP_SLOGAN)}`,
-        description: appOption.data?.description,
-        keywords: appOption.data?.keywords.join(',')
+        description: appOptionStore.data?.description,
+        keywords: appOptionStore.data?.keywords.join(',')
       }))
 
       const loadmoreArticles = async () => {
-        const targetPage = articleList.list.pagination?.current_page + 1
-        await articleList.fetchList({ page: targetPage })
+        const targetPage = articleListStore.list.pagination?.current_page + 1
+        await articleListStore.fetchList({ page: targetPage })
         if (targetPage > 1) {
           onClient(scrollToNextScreen)
         }
@@ -59,7 +66,7 @@
 
       useUniversalFetch(() => {
         return Promise.all([
-          articleList.fetchList(),
+          articleListStore.fetchList(),
           // eslint-disable-next-line @typescript-eslint/no-empty-function
           twitterUserinfo.fetch().catch(() => {}),
           // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -70,7 +77,7 @@
       return {
         twitterUserinfo,
         twitterTweets,
-        articleList,
+        articleListStore,
         loadmoreArticles
       }
     }

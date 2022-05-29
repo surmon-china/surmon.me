@@ -49,10 +49,11 @@ export const fetchYouTubeVideoList = (playlistID: string) => {
 }
 
 // Twitter userinfo
+export type TwitterUserinfo = Record<string, any>
 export const useTwitterUserinfoStore = defineFetchStore({
   id: 'twitterUserinfo',
-  initData: null as null | Record<string, any>,
-  fetcher: () => tunnel.dispatch<Array<any>>(TunnelModule.TwitterUserInfo)
+  initData: null as null | TwitterUserinfo,
+  fetcher: () => tunnel.dispatch<TwitterUserinfo>(TunnelModule.TwitterUserInfo)
 })
 
 // Twitter tweets
@@ -61,7 +62,6 @@ export interface TweeterTweets {
   includes: Record<string, Array<any>>
   meta: Record<string, any>
 }
-
 export const useTwitterTweetsStore = defineFetchStore({
   id: 'twitterTweets',
   initData: null as null | TweeterTweets,

@@ -1,6 +1,5 @@
 <template>
   <statistic-base
-    class="github"
     brand="github"
     icon="icon-github"
     :data="store.data"

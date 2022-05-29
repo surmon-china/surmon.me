@@ -57,7 +57,7 @@
       useUniversalFetch(() => articleListStore.fetchList({ date: props.date }))
 
       return {
-        articleListStore: articleListStore,
+        articleListStore,
         loadmoreArticles
       }
     }

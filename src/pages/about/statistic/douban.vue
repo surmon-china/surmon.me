@@ -1,6 +1,5 @@
 <template>
   <statistic-base
-    class="douban"
     brand="douban"
     icon="icon-douban"
     :data="store.data"
