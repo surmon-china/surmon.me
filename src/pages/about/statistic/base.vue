@@ -9,8 +9,13 @@
       <template #default>
         <div class="content">
           <ulink class="title" :href="href">
-            <i class="iconfont" :class="icon"></i>
-            <span class="text">{{ platform }}</span>
+            <span class="left">
+              <i class="iconfont" :class="icon"></i>
+              <span class="text">{{ platform }}</span>
+            </span>
+            <span class="right">
+              <i class="iconfont icon-next"></i>
+            </span>
           </ulink>
           <slot></slot>
         </div>
@@ -111,21 +116,39 @@
       color: $text-secondary;
 
       .title {
+        margin-bottom: $gap;
         display: flex;
         align-items: center;
-        margin-bottom: $sm-gap;
-
-        .iconfont {
-          color: var(--s-primary);
-          font-size: $font-size-h1;
-          margin-right: $gap;
+        justify-content: space-between;
+        &:hover {
+          .right {
+            opacity: 1;
+            color: $text;
+          }
         }
 
-        .text {
-          color: $text;
-          font-size: $font-size-h3;
-          font-weight: bold;
-          letter-spacing: 1px;
+        .left {
+          .iconfont {
+            color: var(--s-primary);
+            font-size: $font-size-h2;
+            margin-right: $gap;
+          }
+
+          .text {
+            color: $text;
+            font-size: $font-size-h3;
+            font-weight: bold;
+            letter-spacing: 1px;
+          }
+        }
+
+        .right {
+          color: $text-divider;
+          opacity: 0.4;
+          transition: all $transition-time-fast;
+          .iconfont {
+            margin: 0;
+          }
         }
       }
 

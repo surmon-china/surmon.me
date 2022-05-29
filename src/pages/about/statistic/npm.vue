@@ -87,7 +87,7 @@
   @import 'src/styles/mixins.scss';
 
   .line-1 {
-    margin-top: $gap;
+    margin-top: $lg-gap;
     margin-bottom: 0.7em;
   }
 </style>

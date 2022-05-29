@@ -72,8 +72,13 @@
             :to="item.route"
             @click="item.onClick"
           >
-            <i class="iconfont" :class="item.icon"></i>
-            <span class="text"><i18n v-bind="item.i18n" /></span>
+            <span class="left">
+              <i class="iconfont" :class="item.icon"></i>
+              <span class="text"><i18n v-bind="item.i18n" /></span>
+            </span>
+            <span class="right">
+              <i class="iconfont icon-next"></i>
+            </span>
           </component>
         </template>
       </div>
@@ -570,9 +575,9 @@
       .item {
         height: 5rem;
         display: flex;
-        justify-content: start;
+        justify-content: space-between;
         align-items: center;
-        padding-left: 2.8rem;
+        padding: 0 1em 0 2em;
         @include common-bg-module($transition-time-fast);
         @include radius-box($lg-radius);
         &.discord {
@@ -597,23 +602,39 @@
         }
         &:hover {
           background-color: var(--item-primary, $primary);
-          .iconfont,
-          .text {
+          .left {
+            .iconfont,
+            .text {
+              color: var(--item-hover, $text-reversal);
+            }
+          }
+
+          .right {
+            opacity: 1;
+            transform: translateX(-$sm-gap);
             color: var(--item-hover, $text-reversal);
           }
         }
 
-        .iconfont {
-          font-size: $font-size-h3;
-          margin-right: 1em;
-          color: var(--item-primary, $primary);
+        .left {
+          .iconfont {
+            font-size: $font-size-h3;
+            margin-right: 0.8em;
+            color: var(--item-primary, $primary);
+          }
+
+          .text {
+            letter-spacing: 1px;
+            color: $text-secondary;
+            font-size: $font-size-h4;
+            font-weight: bold;
+          }
         }
 
-        .text {
-          letter-spacing: 1px;
-          color: $text-secondary;
-          font-size: $font-size-h4;
-          font-weight: bold;
+        .right {
+          color: $text-divider;
+          opacity: 0.4;
+          transition: opacity $transition-time-fast, transform $transition-time-normal;
         }
       }
     }
