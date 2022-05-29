@@ -8,7 +8,7 @@
       </div>
       <div class="avatar">
         <uimage class="image" :src="getAdminAvatar(adminInfo.data?.avatar)" />
-        <h2 class="name">{{ adminInfo.data?.name || '-' }}</h2>
+        <h1 class="name">{{ adminInfo.data?.name || '-' }}</h1>
         <p class="role">{{ adminInfo.data?.slogan || '-' }}</p>
         <p class="bio-text">
           <webfont bolder>
@@ -447,6 +447,7 @@
 
         .name {
           margin-top: $sm-gap;
+          margin-bottom: $gap;
         }
 
         .bio-text {
