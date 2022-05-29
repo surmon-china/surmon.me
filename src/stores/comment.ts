@@ -10,7 +10,7 @@ import { UNDEFINED } from '/@/constants/value'
 import { SortType, UniversalKeyValue, CommentParentType } from '/@/constants/state'
 import { delayPromise } from '/@/utils/delayer'
 import nodepress from '/@/services/nodepress'
-import { useUniversalStore } from './universal'
+import { useIdentityStore } from './identity'
 
 export const COMMENT_API_PATH = '/comment'
 export const COMMENT_EMPTY_PID = CommentParentType.Self
@@ -50,7 +50,6 @@ export interface CommentFetchParams {
   page?: number
   per_page?: number
   sort?: SortType
-  loadmore?: boolean
   [key: string]: any
 }
 
@@ -113,12 +112,11 @@ export const useCommentStore = defineStore('comment', {
       this.pagination = null
     },
 
-    fetchList(params: CommentFetchParams = {}) {
+    fetchList(params: CommentFetchParams = {}, loadmore = false) {
       params = {
         page: 1,
         per_page: 50,
         sort: SortType.Desc,
-        loadmore: false,
         ...params
       }
 
@@ -132,7 +130,7 @@ export const useCommentStore = defineStore('comment', {
       return promise
         .then((response) => {
           this.pagination = response.result.pagination
-          if (params.loadmore) {
+          if (loadmore) {
             this.comments.push(...response.result.data)
           } else {
             this.comments = response.result.data
@@ -176,9 +174,9 @@ export const useCommentStore = defineStore('comment', {
     },
 
     postCommentVote(commentID: number, vote: 1 | -1) {
-      const universalStore = useUniversalStore()
+      const identityStore = useIdentityStore()
       return nodepress
-        .post(`/vote/comment`, { comment_id: commentID, vote, author: universalStore.author })
+        .post(`/vote/comment`, { comment_id: commentID, vote, author: identityStore.author })
         .then(() => {
           const comment = this.comments.find((comment) => comment.id === commentID)
           if (comment) {

@@ -56,7 +56,7 @@
       const articleListStore = useArticleListStore()
       const categoryStore = useCategoryStore()
       const currentCategory = computed(() => {
-        return categoryStore.categories.find((category) => category.slug === props.categorySlug)
+        return categoryStore.data.find((category) => category.slug === props.categorySlug)
       })
       const currentCategoryIcon = computed(() => {
         return getExtendValue(currentCategory.value?.extends || [], 'icon') || 'icon-category'
@@ -68,6 +68,14 @@
         return getExtendValue(currentCategory.value?.extends || [], 'bgcolor')
       })
 
+      const loadmoreArticles = async () => {
+        await articleListStore.fetchList({
+          category_slug: props.categorySlug,
+          page: articleListStore.list.pagination.current_page + 1
+        })
+        scrollToNextScreen()
+      }
+
       meta(() => {
         const enTitle = firstUpperCase(props.categorySlug)
         const zhTitle = i18n.t(props.categorySlug)!
@@ -76,40 +84,24 @@
         return { pageTitle: titles.join(' | '), description }
       })
 
-      const loadmoreArticles = () => {
-        return articleListStore
-          .fetchList({
-            category_slug: props.categorySlug,
-            page: articleListStore.list.pagination.current_page + 1
-          })
-          .then(scrollToNextScreen)
-      }
-
-      const fetchAllData = (category_slug: string) => {
-        return Promise.all([
-          categoryStore.fetchAll(),
-          articleListStore.fetchList({ category_slug })
-        ])
-      }
-
       onBeforeMount(() => {
         watch(
           () => props.categorySlug,
-          (categorySlug) => fetchAllData(categorySlug),
+          (category_slug) => articleListStore.fetchList({ category_slug }),
           { flush: 'post' }
         )
       })
 
-      useUniversalFetch(() => fetchAllData(props.categorySlug))
+      useUniversalFetch(() => articleListStore.fetchList({ category_slug: props.categorySlug }))
 
       return {
         articleListStore,
-        firstUpperCase,
         currentCategory,
         currentCategoryIcon,
         currentCategoryImage,
         currentCategoryColor,
-        loadmoreArticles
+        loadmoreArticles,
+        firstUpperCase
       }
     }
   })

@@ -3,14 +3,20 @@
     <!-- header -->
     <div class="header" v-if="tagSlug || categorySlug || date || searchKeyword">
       <div class="content">
-        <i18n v-if="categorySlug">
-          <template #zh>分类 “{{ category?.name }}” 的过滤结果</template>
-          <template #en>Category "{{ firstUpperCase(category?.slug) }}" 's result</template>
-        </i18n>
-        <i18n v-if="tagSlug">
-          <template #zh>标签 “{{ tag?.name }}” 的过滤结果</template>
-          <template #en>Tag "{{ tagEnName(tag) }}" 's result</template>
-        </i18n>
+        <template v-if="categorySlug">
+          <i18n v-if="category">
+            <template #zh>分类 “{{ category.name }}” 的过滤结果</template>
+            <template #en>Category "{{ firstUpperCase(category.slug) }}" 's result</template>
+          </i18n>
+          <span v-else>{{ categorySlug }}</span>
+        </template>
+        <template v-if="tagSlug">
+          <i18n v-if="tag">
+            <template #zh>标签 “{{ tag.name }}” 的过滤结果</template>
+            <template #en>Tag "{{ tagEnName(tag) }}" 's result</template>
+          </i18n>
+          <span v-else>{{ tagSlug }}</span>
+        </template>
         <i18n v-if="date">
           <template #zh>日期 “{{ date }}” 的过滤结果</template>
           <template #en>Date "{{ date }}" 's result</template>
@@ -53,10 +59,12 @@
         <div>
           <!-- list -->
           <transition-group key="list" name="list-fade" tag="div" class="list">
-            <template v-for="(article, index) in articles" :key="index">
-              <mammon class="list-item" v-if="article.ad" />
-              <list-item :article="article" class="list-item" v-else />
-            </template>
+            <list-item
+              class="list-item"
+              :article="article"
+              :key="index"
+              v-for="(article, index) in articles"
+            />
           </transition-group>
           <!-- loadmore -->
           <div class="loadmore">
@@ -88,20 +96,16 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch, onClient } from '/@/universal'
   import { useArticleListStore, Article } from '/@/stores/article'
-  import { useCategoryStore } from '/@/stores/category'
   import { useTagStore, tagEnName } from '/@/stores/tag'
-  import { useMetaStore } from '/@/stores/meta'
+  import { useCategoryStore } from '/@/stores/category'
+  import { useAppOptionStore } from '/@/stores/basic'
   import { firstUpperCase } from '/@/transforms/text'
   import { scrollToNextScreen } from '/@/utils/scroller'
   import ListItem from './item.vue'
-  import Mammon from './mammon.vue'
 
   export default defineComponent({
     name: 'MobileFlowArticleList',
-    components: {
-      ListItem,
-      Mammon
-    },
+    components: { ListItem },
     props: {
       tagSlug: {
         type: String,
@@ -122,30 +126,20 @@
     },
     setup(props) {
       const { meta, i18n } = useEnhancer()
-      const metaStore = useMetaStore()
+      const appOptionStore = useAppOptionStore()
       const tagStore = useTagStore()
       const categoryStore = useCategoryStore()
       const articleListStore = useArticleListStore()
       const category = computed(() => {
         return props.categorySlug
-          ? categoryStore.categories.find((category) => category.slug === props.categorySlug)
+          ? categoryStore.data.find((category) => category.slug === props.categorySlug)!
           : null
       })
       const tag = computed(() => {
-        return props.tagSlug ? tagStore.tags.find((tag) => tag.slug === props.tagSlug) : null
+        return props.tagSlug ? tagStore.data.find((tag) => tag.slug === props.tagSlug) : null
       })
 
-      type ArticleItem = Article & { ad?: true }
-      const articles = computed<Array<ArticleItem>>(() => {
-        const list: ArticleItem[] = [...articleListStore.list.data]
-        if (list.length < 5) {
-          return list
-        } else {
-          list.splice(5, 0, { ad: true } as ArticleItem)
-          return list
-        }
-      })
-
+      const articles = computed<Array<Article>>(() => articleListStore.list.data)
       const hasMoreArticles = computed(() => {
         const pagination = articleListStore.list.pagination
         return pagination ? pagination.current_page < pagination.total_page : false
@@ -166,8 +160,8 @@
         // index page
         return {
           title: `${META.title} - ${i18n.t(LanguageKey.APP_SLOGAN)}`,
-          description: metaStore.appOptions.data?.description,
-          keywords: metaStore.appOptions.data?.keywords.join(',')
+          description: appOptionStore.data?.description,
+          keywords: appOptionStore.data?.keywords.join(',')
         }
       })
 

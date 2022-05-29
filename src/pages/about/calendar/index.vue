@@ -18,12 +18,7 @@
 <script lang="ts">
   import { defineComponent, computed, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import {
-    useArticleCalendarStore,
-    useTwitterCalendarStore,
-    useInstagramCalendarStore,
-    useGitHubCalendarStore
-  } from '/@/stores/aggregate'
+  import { useStores } from '/@/stores'
   import { GAEventCategories } from '/@/constants/gtag'
   import { dateToHuman, HumanDate, humanDateToYMD } from '/@/transforms/moment'
   import CalendarDay from './day.vue'
@@ -35,13 +30,16 @@
     },
     setup() {
       const { gtag } = useEnhancer()
-      const articleCalendar = useArticleCalendarStore()
-      const twitterCalendar = useTwitterCalendarStore()
-      const instagramCalendar = useInstagramCalendarStore()
-      const githubCalendar = useGitHubCalendarStore()
-      const githubContributionsMap = computed(
-        () => new Map(githubCalendar.days.map((day) => [day.date, day]))
-      )
+      const { articleCalendar, twitterCalendar, instagramCalendar, githubCalendar } = useStores()
+      const githubContributionsMap = computed(() => {
+        return new Map(githubCalendar.days.map((day) => [day.date, day]))
+      })
+      const getDayContributions = (date: string) => {
+        return githubContributionsMap.value.get(date)?.count || 0
+      }
+      const getDayGitHubColor = (date: string) => {
+        return githubContributionsMap.value.get(date)?.color
+      }
       const getDayTweets = (date: string) => {
         return twitterCalendar.data.find((i) => i.date === date)?.count || 0
       }
@@ -50,12 +48,6 @@
       }
       const getDayArticles = (date: string) => {
         return articleCalendar.data.find((i) => i.date === date)?.count || 0
-      }
-      const getDayContributions = (date: string) => {
-        return githubContributionsMap.value.get(date)?.count || 0
-      }
-      const getDayGitHubColor = (date: string) => {
-        return githubContributionsMap.value.get(date)?.color
       }
 
       const handleHover = () => {

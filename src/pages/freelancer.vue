@@ -21,8 +21,9 @@
       </template>
     </page-banner>
     <div class="tip">
-      "Any application that can be written in JavaScript, will eventually be written in JavaScript."
-      - Jeff Atwood
+      {{
+        `"Any application that can be written in JavaScript, will eventually be written in JavaScript." - Jeff Atwood`
+      }}
     </div>
     <div class="module">
       <div class="container">
@@ -76,20 +77,18 @@
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import { GAEventCategories } from '/@/constants/gtag'
   import { Language, LanguageKey } from '/@/language'
+  import { useAppOptionStore } from '/@/stores/basic'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useMetaStore } from '/@/stores/meta'
   import { firstUpperCase } from '/@/transforms/text'
   import { emailLink } from '/@/transforms/email'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
 
   export default defineComponent({
     name: 'FreelancerPage',
-    components: {
-      PageBanner
-    },
+    components: { PageBanner },
     setup() {
       const { i18n, meta, gtag, isZhLang } = useEnhancer()
-      const metaStore = useMetaStore()
+      const appOptionStore = useAppOptionStore()
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_FREELANCER, Language.English)!)
@@ -104,7 +103,7 @@
 
         window.open(
           emailLink({
-            email: metaStore.appOptions.data?.site_email!,
+            email: appOptionStore.data?.site_email!,
             subject: isZhLang.value
               ? `嗨！Surmon，久仰大名！`
               : `Technical consultant / ${META.title}`,

@@ -12,10 +12,10 @@
     </page-banner>
     <div class="profile">
       <div class="avatar">
-        <uimage class="image" :src="getAdminAvatar(adminInfo?.avatar)" />
+        <uimage class="image" :src="getAdminAvatar(adminInfo.data?.avatar)" />
       </div>
-      <h2 class="name">{{ adminInfo?.name || '-' }}</h2>
-      <h5 class="slogan">{{ adminInfo?.slogan || '-' }}</h5>
+      <h2 class="name">{{ adminInfo.data?.name || '-' }}</h2>
+      <h5 class="slogan">{{ adminInfo.data?.slogan || '-' }}</h5>
       <divider dashed />
       <h4 class="bio">
         <webfont bolder>
@@ -97,15 +97,15 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
+  import { defineComponent } from 'vue'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { LanguageKey } from '/@/language'
   import { RouteName } from '/@/app/router'
-  import { useMetaStore } from '/@/stores/meta'
+  import { useAdminInfoStore } from '/@/stores/basic'
   import { useUniversalFetch } from '/@/universal'
   import { getPageRoute } from '/@/transforms/route'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
-  import { useAboutPageMeta, getAdminAvatar, i18ns } from './helper'
+  import { useAboutPageMeta, getAdminAvatar, i18ns } from './shared'
 
   export default defineComponent({
     name: 'MobileAboutPage',
@@ -113,11 +113,9 @@
       PageBanner
     },
     setup() {
-      const metaStore = useMetaStore()
-      const adminInfo = computed(() => metaStore.adminInfo.data)
-
+      const adminInfo = useAdminInfoStore()
       useAboutPageMeta()
-      useUniversalFetch(() => metaStore.fetchAdminInfo())
+      useUniversalFetch(() => adminInfo.fetch())
 
       return {
         i18ns,

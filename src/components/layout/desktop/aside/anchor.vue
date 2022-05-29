@@ -75,9 +75,9 @@
 
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
+  import { useArticleDetailStore } from '/@/stores/article'
   import * as ANCHORS from '/@/constants/anchor'
   import { LanguageKey } from '/@/language'
-  import { useArticleDetailStore } from '/@/stores/article'
   import { scrollToAnchor } from '/@/utils/scroller'
   import { numberSplit } from '/@/transforms/text'
 
@@ -86,6 +86,7 @@
     setup() {
       const articleDetailStore = useArticleDetailStore()
       const article = computed(() => articleDetailStore.article)
+
       const headings = computed(() => {
         const result = [...(articleDetailStore.defaultContent?.headings || [])]
         if (articleDetailStore.isLongContent && articleDetailStore.renderedFullContent) {

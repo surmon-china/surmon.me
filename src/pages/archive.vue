@@ -53,10 +53,7 @@
       </div>
       <div class="archive-warpper">
         <div class="container">
-          <placeholder
-            :data="archiveStore.archive?.articles.length"
-            :loading="archiveStore.fetching"
-          >
+          <placeholder :data="archiveStore.data?.articles.length" :loading="archiveStore.fetching">
             <template #placeholder>
               <empty class="archive-empty" key="empty">
                 <i18n :k="LanguageKey.ARTICLE_PLACEHOLDER" />
@@ -142,7 +139,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/universal'
   import { useArchiveStore } from '/@/stores/archive'
-  import { useStatisticStore } from '/@/stores/statistic'
+  import { useNodepressStatisticStore } from '/@/stores/statistic'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { numberToChinese, firstUpperCase, numberSplit } from '/@/transforms/text'
   import { I18nLanguageMap } from '/@/composables/i18n'
@@ -181,50 +178,53 @@
     props: { isMobile: Boolean },
     setup() {
       const { i18n, meta, isZhLang } = useEnhancer()
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_ARCHIVE, Language.English)!)
+        const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ARCHIVE), enTitle] : [enTitle]
+        return {
+          pageTitle: titles.join(' | '),
+          description: `${META.title} 数据归档`
+        }
+      })
+
       const archiveStore = useArchiveStore()
-      const statisticStore = useStatisticStore()
+      const statisticStore = useNodepressStatisticStore()
       const statistics = computed<Array<Record<'icon' | 'title' | 'content', string>>>(() => [
         {
           icon: 'icon-quill',
           title: i18n.t(LanguageKey.STATISTIC_ARTICLES)!,
-          content: numberSplit(statisticStore.statistic?.articles || 0)
+          content: numberSplit(statisticStore.data?.articles || 0)
         },
         {
           icon: 'icon-eye',
           title: i18n.t(LanguageKey.STATISTIC_TODAY_VIEWS)!,
-          content: numberSplit(statisticStore.statistic?.todayViews || 0)
+          content: numberSplit(statisticStore.data?.todayViews || 0)
         },
         {
           icon: 'icon-comment',
           title: i18n.t(LanguageKey.STATISTIC_COMMENTS)!,
-          content: numberSplit(statisticStore.statistic?.comments || 0)
+          content: numberSplit(statisticStore.data?.comments || 0)
         },
         {
           icon: 'icon-like',
           title: i18n.t(LanguageKey.STATISTIC_TOTAL_UPVOTES)!,
-          content: numberSplit(statisticStore.statistic?.totalLikes || 0)
+          content: numberSplit(statisticStore.data?.totalLikes || 0)
         },
         {
           icon: 'icon-emoji',
           title: i18n.t(LanguageKey.STATISTIC_AVERAGE_EMOTION)!,
-          content: String(statisticStore.statistic?.averageEmotion ?? '-')
+          content: String(statisticStore.data?.averageEmotion ?? '-')
         }
       ])
 
-      meta(() => {
-        const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_ARCHIVE, Language.English)!)
-        const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ARCHIVE), enTitle] : [enTitle]
-        return { pageTitle: titles.join(' | '), description: `${META.title} 数据归档` }
-      })
-
       const statisticFetching = ref(true)
       onMounted(() => {
-        statisticStore.fetchStatistic().finally(() => {
+        statisticStore.fetch().finally(() => {
           statisticFetching.value = false
         })
       })
 
-      useUniversalFetch(() => archiveStore.fetchArchive())
+      useUniversalFetch(() => archiveStore.fetch())
 
       return {
         LanguageKey,

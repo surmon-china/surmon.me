@@ -67,10 +67,11 @@
 </template>
 
 <script lang="ts">
+  import { storeToRefs } from 'pinia'
   import { defineComponent, ref, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { Author } from '/@/stores/comment'
-  import { useUniversalStore, UserType } from '/@/stores/universal'
+  import { useIdentityStore, UserType } from '/@/stores/identity'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
   import {
@@ -125,8 +126,7 @@
     emits: [CommentEvents.Blossom, PublisherEvents.UpdateProfile],
     setup(props, context) {
       const { i18n, gtag } = useEnhancer()
-      const universalStore = useUniversalStore()
-      const user = computed(() => universalStore.user)
+      const { user } = storeToRefs(useIdentityStore())
       const avatar = computed(() => {
         // local user
         if (user.value.type === UserType.Local) {

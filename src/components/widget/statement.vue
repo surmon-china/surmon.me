@@ -1,13 +1,13 @@
 <template>
   <div class="statement">
     <div class="content">
-      <markdown :markdown="appOptions?.statement" :compact="true" />
+      <markdown :markdown="appOption.data?.statement" :compact="true" />
       <br />
       <hr />
-      <p v-if="appOptions" class="email">
-        <a :href="emailLink(appOptions.site_email)" class="link" target="_blank">
+      <p v-if="appOption.data" class="email">
+        <a :href="emailLink(appOption.data.site_email)" class="link" target="_blank">
           <i class="iconfont icon-mail"></i>
-          <span class="text">{{ appOptions.site_email }}</span>
+          <span class="text">{{ appOption.data.site_email }}</span>
         </a>
       </p>
     </div>
@@ -15,8 +15,8 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useMetaStore } from '/@/stores/meta'
+  import { defineComponent } from 'vue'
+  import { useStores } from '/@/stores'
   import { emailLink } from '/@/transforms/email'
   import Markdown from '/@/components/common/markdown.vue'
 
@@ -24,9 +24,8 @@
     name: 'Statement',
     components: { Markdown },
     setup() {
-      const metaStore = useMetaStore()
-      const appOptions = computed(() => metaStore.appOptions.data)
-      return { appOptions, emailLink }
+      const { appOption } = useStores()
+      return { appOption, emailLink }
     }
   })
 </script>

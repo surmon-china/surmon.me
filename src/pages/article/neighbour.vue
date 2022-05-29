@@ -39,8 +39,8 @@
 
 <script lang="ts">
   import { defineComponent, PropType } from 'vue'
-  import { Article } from '/@/stores/article'
   import { getArticleDetailRoute } from '/@/transforms/route'
+  import { Article } from '/@/stores/article'
 
   export default defineComponent({
     name: 'ArticleNeighbour',

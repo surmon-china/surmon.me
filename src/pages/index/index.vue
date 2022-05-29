@@ -7,12 +7,10 @@
     />
     <twitter
       class="twitter"
-      :userinfo="twitterStore.userinfo.data || void 0"
-      :tweets="twitterStore.tweets.data || void 0"
+      :userinfo="twitterUserinfo.data ?? void 0"
+      :tweets="twitterTweets.data ?? void 0"
       :fetching="
-        twitterStore.userinfo.fetching ||
-        twitterStore.tweets.fetching ||
-        articleListStore.list.fetching
+        twitterUserinfo.fetching || twitterTweets.fetching || articleListStore.list.fetching
       "
     />
     <article-list
@@ -27,11 +25,9 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
+  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch, onClient } from '/@/universal'
-  import { useTwitterStore } from '/@/stores/twitter'
-  import { useArticleListStore } from '/@/stores/article'
-  import { useMetaStore } from '/@/stores/meta'
   import { scrollToNextScreen } from '/@/utils/scroller'
   import { LanguageKey } from '/@/language'
   import { META } from '/@/config/app.config'
@@ -48,14 +44,16 @@
     },
     setup() {
       const { meta, i18n } = useEnhancer()
-      const metaStore = useMetaStore()
-      const twitterStore = useTwitterStore()
-      const articleListStore = useArticleListStore()
-
+      const {
+        articleList: articleListStore,
+        appOption: appOptionStore,
+        twitterUserinfo,
+        twitterTweets
+      } = useStores()
       meta(() => ({
         title: `${META.title} - ${i18n.t(LanguageKey.APP_SLOGAN)}`,
-        description: metaStore.appOptions.data?.description,
-        keywords: metaStore.appOptions.data?.keywords.join(',')
+        description: appOptionStore.data?.description,
+        keywords: appOptionStore.data?.keywords.join(',')
       }))
 
       const loadmoreArticles = async () => {
@@ -70,14 +68,15 @@
         return Promise.all([
           articleListStore.fetchList(),
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          twitterStore.fetchUserinfo().catch(() => {}),
+          twitterUserinfo.fetch().catch(() => {}),
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          twitterStore.fetchTweets().catch(() => {})
+          twitterTweets.fetch().catch(() => {})
         ])
       })
 
       return {
-        twitterStore,
+        twitterUserinfo,
+        twitterTweets,
         articleListStore,
         loadmoreArticles
       }

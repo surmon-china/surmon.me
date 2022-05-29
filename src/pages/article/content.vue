@@ -19,25 +19,21 @@
         <h2 class="text">{{ article.title }}</h2>
         <div class="meta">
           <i class="iconfont icon-t"></i>
-          <i18n>
-            <template #zh>
-              <span
-                >共 {{ numberSplit(articleDetailStore.contentLength) }} 字，需阅读
-                {{ articleDetailStore.readMinutes }} 分钟</span
-              >
-            </template>
-            <template #en>
-              <span
-                >{{ numberSplit(articleDetailStore.contentLength) }} words,
-                {{ articleDetailStore.readMinutes }} min read</span
-              >
-            </template>
-          </i18n>
-          <divider type="vertical" class="vertical" />
-          <span>
-            <i class="iconfont icon-clock-outline"></i>
-            <udate to="YMDm" :date="article.create_at" separator="/" />
-          </span>
+          <i18n
+            :zh="`共 ${numberSplit(articleDetailStore.contentLength)} 字，需阅读 ${
+              articleDetailStore.readMinutes
+            } 分钟`"
+            :en="`${numberSplit(articleDetailStore.contentLength)} words, ${
+              articleDetailStore.readMinutes
+            } min read`"
+          />
+          <responsive desktop>
+            <divider type="vertical" class="vertical" />
+            <span>
+              <i class="iconfont icon-clock-outline"></i>
+              <udate to="YMDm" :date="article.create_at" separator="/" />
+            </span>
+          </responsive>
           <divider type="vertical" class="vertical" />
           <span>
             <i class="iconfont icon-eye"></i>
@@ -141,7 +137,6 @@
     transition: height $transition-time-normal;
 
     .oirigin {
-      position: absolute;
       position: absolute;
       top: 0.6rem;
       left: -2.4rem;

@@ -27,8 +27,8 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, watch } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
   import { onClient } from '/@/universal'
+  import { useEnhancer } from '/@/app/enhancer'
   import { getPageURL } from '/@/transforms/url'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'

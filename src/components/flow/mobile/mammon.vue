@@ -25,6 +25,7 @@
   import { defineComponent } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
 
+  // MARK: Suspension
   export default defineComponent({
     name: 'MobileFlowMammon',
     setup() {

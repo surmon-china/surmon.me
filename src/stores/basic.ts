@@ -1,12 +1,13 @@
 /**
- * @file App meta options state
- * @module store.meta
+ * @file App basic state
+ * @module store.basic
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import { defineFetchStore } from './_fetch'
 import { defineStore } from 'pinia'
 import { UniversalKeyValue } from '/@/constants/state'
-import { useUniversalStore, UserType } from './universal'
+import { useIdentityStore, UserType } from './identity'
 import nodepress from '/@/services/nodepress'
 
 export interface MerchItemConfig {
@@ -76,20 +77,22 @@ export interface AppOption {
   ad_config: string
 }
 
-export const useMetaStore = defineStore('meta', {
+export const useAdminInfoStore = defineFetchStore({
+  id: 'adminInfo',
+  initData: null as null | AdminInfo,
+  fetcher: () => nodepress.get<AdminInfo>('/auth/admin').then((response) => response.result)
+})
+
+export const useAppOptionStore = defineStore({
+  id: 'appOption',
   state: () => ({
-    adminInfo: {
-      fetching: false,
-      data: null as null | AdminInfo
-    },
-    appOptions: {
-      fetching: false,
-      data: null as null | AppOption
-    }
+    fetched: false,
+    fetching: false,
+    data: null as null | AppOption
   }),
   getters: {
     adConfig: (state) => {
-      const optionAdConfig = state.appOptions.data?.ad_config
+      const optionAdConfig = state.data?.ad_config
       const adConfig: AD_CONFIG = {
         ...defaultAdConfig,
         ...(optionAdConfig ? JSON.parse(optionAdConfig) : {})
@@ -101,51 +104,40 @@ export const useMetaStore = defineStore('meta', {
     }
   },
   actions: {
-    fetchAdminInfo() {
-      this.adminInfo.fetching = true
-      return nodepress
-        .get<AdminInfo>('/auth/admin')
-        .then((response) => {
-          this.adminInfo.data = response.result
-        })
-        .finally(() => {
-          this.adminInfo.fetching = false
-        })
-    },
-
-    fetchAppOptions(force = false) {
-      if (!force && this.appOptions.data) {
+    fetch(force = false) {
+      if (!force && this.fetched) {
         return Promise.resolve()
       }
 
-      this.appOptions.fetching = true
+      this.fetching = true
       return nodepress
         .get<AppOption>('/option')
         .then((response) => {
-          this.appOptions.data = response.result
+          this.data = response.result
+          this.fetched = true
         })
         .finally(() => {
-          this.appOptions.fetching = false
+          this.fetching = false
         })
     },
 
     postSiteLike() {
-      const universalStore = useUniversalStore()
-      return nodepress.post('/vote/site', { author: universalStore.author }).then((response) => {
-        if (this.appOptions.data) {
-          this.appOptions.data.meta.likes = response.result
+      const identityStore = useIdentityStore()
+      return nodepress.post('/vote/site', { author: identityStore.author }).then((response) => {
+        if (this.data) {
+          this.data.meta.likes = response.result
         }
       })
     },
 
     postFeedback(feedback: { emotion: number; content: string }) {
-      const universalStore = useUniversalStore()
-      const authorName = universalStore.author?.name || null
+      const identityStore = useIdentityStore()
+      const authorName = identityStore.author?.name || null
       return nodepress.post('/feedback', {
         ...feedback,
         tid: 0,
-        user_name: authorName ? `${authorName} (${UserType[universalStore.user.type]})` : null,
-        user_email: universalStore.author?.email || null
+        user_name: authorName ? `${authorName} (${UserType[identityStore.user.type]})` : null,
+        user_email: identityStore.author?.email || null
       })
     }
   }

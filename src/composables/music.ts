@@ -46,7 +46,7 @@ const createMusicPlayer = (config: PlayerConfig) => {
     return state.songs.map((song) => ({
       ...song,
       cover_art_url: song.cover_art_url
-        ? getTargetProxyURL(song.cover_art_url + '?param=300y300', ProxyModule.NetEasyMusic)
+        ? getTargetProxyURL(song.cover_art_url + '?param=300y300', ProxyModule.NetEaseMusic)
         : (null as any as string)
     }))
   })

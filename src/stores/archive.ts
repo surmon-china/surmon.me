@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { defineStore } from 'pinia'
+import { defineFetchStore } from './_fetch'
 import { Article } from './article'
 import { Category } from './category'
 import { Tag } from './tag'
@@ -17,18 +17,21 @@ export interface Archive {
   tags: Tag[]
 }
 
-export const useArchiveStore = defineStore('archive', {
-  state: () => ({
-    fetching: false,
-    archive: null as null | Archive
-  }),
+export const useArchiveStore = defineFetchStore({
+  id: 'archive',
+  initData: null as null | Archive,
+  onlyOnce: true,
+  async fetcher() {
+    const response = await nodepress.get<Archive>('/archive')
+    return response.result
+  },
   getters: {
     hydrated: (state) => {
-      if (!state.archive) {
+      if (!state.data) {
         return null
       }
 
-      const { articles, tags, categories } = state.archive
+      const { articles, tags, categories } = state.data
       const tagMap = new Map<string, Tag>(
         tags.map((tag) => [tag._id, { ...tag, articles_count: 0 }])
       )
@@ -62,7 +65,7 @@ export const useArchiveStore = defineStore('archive', {
         }>
       }>
 
-      state.archive?.articles
+      state.data?.articles
         .map((article) => ({
           ...article,
           createAt: dateToHuman(new Date(article.create_at))
@@ -90,22 +93,6 @@ export const useArchiveStore = defineStore('archive', {
           targetMonth.articles.push(article)
         })
       return rootTree
-    }
-  },
-  actions: {
-    fetchArchive() {
-      if (this.archive) {
-        return Promise.resolve()
-      }
-      this.fetching = true
-      return nodepress
-        .get<Archive>('/archive')
-        .then((response) => {
-          this.archive = response.result
-        })
-        .finally(() => {
-          this.fetching = false
-        })
     }
   }
 })

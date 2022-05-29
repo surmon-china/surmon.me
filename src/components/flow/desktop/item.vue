@@ -66,7 +66,7 @@
             <i class="iconfont icon-category"></i>
             <placeholder :transition="false" :data="article.category.length">
               <template #placeholder>
-                <i18n :k="LanguageKey.CATEGORY_PLACEHOLDER" />
+                <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
               </template>
               <template #default>
                 <router-link
@@ -90,7 +90,7 @@
   import { Language, LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { Article } from '/@/stores/article'
-  import { useUniversalStore } from '/@/stores/universal'
+  import { useIdentityStore } from '/@/stores/identity'
   import { getArticleDetailRoute, getTagFlowRoute, getCategoryFlowRoute } from '/@/transforms/route'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { getArticleListThumbnailURL } from '/@/transforms/thumbnail'
@@ -106,9 +106,8 @@
     },
     setup(props) {
       const { globalState } = useEnhancer()
-      const universalStore = useUniversalStore()
-
-      const isLiked = computed(() => universalStore.isLikedPage(props.article.id))
+      const identity = useIdentityStore()
+      const isLiked = computed(() => identity.isLikedPage(props.article.id))
       const isHybrid = isHybridType(props.article.origin)
       const isReprint = isReprintType(props.article.origin)
       const isOriginal = isOriginalType(props.article.origin)

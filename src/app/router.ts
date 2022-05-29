@@ -35,7 +35,6 @@ import GuestbookPage from '/@/pages/guestbook.vue'
 import AppPage from '/@/pages/app.vue'
 
 // service pages
-import JobPage from '/@/pages/job.vue'
 import FreelancerPage from '/@/pages/freelancer.vue'
 import LensPage from '/@/pages/lens/index.vue'
 import MerchPage from '/@/pages/merch/index.vue'
@@ -70,7 +69,6 @@ export enum RouteName {
   About = 'about',
   App = 'app',
   Freelancer = 'freelancer',
-  Job = 'job',
   Merch = 'merch',
   Lens = 'lens',
   Sponsor = 'sponsor',
@@ -300,16 +298,6 @@ export const routes: RouteRecordRaw[] = [
       responsive: false,
       layout: LayoutColumn.Full,
       ssrCacheAge: 60 * 60 * 1 // 1 hours
-    }
-  },
-  {
-    path: '/job',
-    name: RouteName.Job,
-    component: JobPage,
-    meta: {
-      responsive: false,
-      layout: LayoutColumn.Full,
-      ssrCacheAge: Infinity
     }
   },
   {

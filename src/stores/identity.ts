@@ -1,6 +1,6 @@
 /**
- * @file Universal state
- * @module store.universal
+ * @file Identity state
+ * @module store.identity
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -16,8 +16,10 @@ export enum UserType {
   Disqus = 2
 }
 
-const UNIVERSAL_STORGAE_KEY = 'universal-state'
-export const useUniversalStore = defineStore('universal', {
+const LEGACY_STORGAE_KEY = 'universal-state'
+const LOCAL_STORGAE_KEY = 'identity-state'
+
+export const useIdentityStore = defineStore('identity', {
   state: () => ({
     // disqus config
     disqusConfig: null as any,
@@ -68,17 +70,19 @@ export const useUniversalStore = defineStore('universal', {
     },
     fromStorage() {
       try {
-        this.$state = getJSON(UNIVERSAL_STORGAE_KEY) || this.$state
+        const legacy = getJSON(LEGACY_STORGAE_KEY)
+        const now = getJSON(LOCAL_STORGAE_KEY)
+        this.$state = now || legacy || this.$state
       } catch (error) {
-        remove(UNIVERSAL_STORGAE_KEY)
+        remove(LOCAL_STORGAE_KEY)
       }
     },
     initOnClient() {
       // 1. bind client storage
       this.fromStorage()
-      this.$subscribe(() => setJSON(UNIVERSAL_STORGAE_KEY, this.$state))
+      this.$subscribe(() => setJSON(LOCAL_STORGAE_KEY, this.$state))
       window.addEventListener('storage', (event) => {
-        if (event.key === UNIVERSAL_STORGAE_KEY) {
+        if (event.key === LOCAL_STORGAE_KEY) {
           this.fromStorage()
         }
       })

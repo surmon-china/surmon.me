@@ -9,7 +9,7 @@ import { getTargetCDNURL } from '/@/transforms/url'
 // https://help.aliyun.com/document_detail/209551.html
 // https://help.aliyun.com/document_detail/193593.html
 // MARK: Auto WebP with AlibabaCloud CDN
-const WebP = `format,webp/`
+const WebPArgs = `format,webp/`
 
 export const getArticleBannerThumbnailURL = (thumb: string, isWebPImage: boolean) => {
   if (!thumb) {
@@ -18,7 +18,7 @@ export const getArticleBannerThumbnailURL = (thumb: string, isWebPImage: boolean
 
   const w = 1190
   const h = 420
-  const format = isWebPImage ? WebP : ''
+  const format = isWebPImage ? WebPArgs : ''
   const watermark = `watermark,text_U3VybW9uLm1l,type_bm90b3NhbnM,color_ffffff,size_31,g_sw,t_26,x_30,y_18`
   return `${thumb}?image_process=${format}quality,q_88/resize,w_${w},h_${h}/crop,mid,w_${w},h_${h}/${watermark}`
 }
@@ -30,7 +30,7 @@ export const getMobileArticleListThumbnailURL = (thumb: string, isWebPImage = fa
 
   const w = 700
   const h = 247
-  const format = isWebPImage ? WebP : ''
+  const format = isWebPImage ? WebPArgs : ''
   const watermark = `watermark,text_U3VybW9uLm1l,type_bm90b3NhbnM,color_ffffff,size_28,g_sw,t_26,x_22,y_18`
   return `${thumb}?image_process=${format}quality,q_82/resize,w_${w},h_${h}/crop,mid,w_${w},h_${h}/${watermark}`
 }
@@ -41,7 +41,7 @@ export const getArticleListThumbnailURL = (thumb: string, isWebPImage: boolean) 
   }
   const w = 350
   const h = 238
-  const format = isWebPImage ? WebP : ''
+  const format = isWebPImage ? WebPArgs : ''
   return `${thumb}?image_process=${format}quality,q_80/resize,w_${w},h_${h}/crop,mid,w_${w},h_${h}`
 }
 

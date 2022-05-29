@@ -1,6 +1,6 @@
 /**
- * @file Universal Link
- * @description Render Link with external/nofollow/noopener
+ * @file Universal link
+ * @description render Link with external/nofollow/noopener
  * @author Surmon <https://github.com/surmon-china>
  */
 

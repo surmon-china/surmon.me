@@ -12,7 +12,7 @@ import { getArticleContentHeadingElementID } from '/@/constants/anchor'
 import { markdownToHTML } from '/@/transforms/markdown'
 import { delayPromise } from '/@/utils/delayer'
 import { isClient } from '/@/app/environment'
-import { useUniversalStore } from './universal'
+import { useIdentityStore } from './identity'
 import { Category } from './category'
 import { Tag } from './tag'
 import nodepress from '/@/services/nodepress'
@@ -42,7 +42,7 @@ export interface Article {
   extends: UniversalKeyValue[]
 }
 
-export const useArticleListStore = defineStore('article', {
+export const useArticleListStore = defineStore('articleList', {
   state: () => ({
     hotList: {
       fetched: false,
@@ -56,12 +56,12 @@ export const useArticleListStore = defineStore('article', {
     }
   }),
   actions: {
-    // 获取文章列表
+    /** fetch new article list */
     fetchList(params: any = {}) {
       const isRestart = !params.page || params.page === 1
       const isLoadMore = !isRestart && params.page > 1
 
-      // 清空已有数据
+      // clean list
       if (isRestart) {
         this.list.data = []
         this.list.pagination = null
@@ -85,7 +85,7 @@ export const useArticleListStore = defineStore('article', {
         })
     },
 
-    // 获取最热文章列表
+    /** fetch hot article list */
     fetchHottestList() {
       if (this.hotList.fetched) {
         return Promise.resolve()
@@ -228,9 +228,9 @@ export const useArticleDetailStore = defineStore('articleDetail', {
     },
 
     postArticleLike(articleID: number) {
-      const universalStore = useUniversalStore()
+      const identityStore = useIdentityStore()
       return nodepress
-        .post(`/vote/article`, { article_id: articleID, vote: 1, author: universalStore.author })
+        .post(`/vote/article`, { article_id: articleID, vote: 1, author: identityStore.author })
         .then((response) => {
           if (this.article) {
             this.article.meta.likes = response.result

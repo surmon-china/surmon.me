@@ -56,12 +56,6 @@ export const menus: Array<MenuItem> = [
   },
   /*
   {
-    id: RouteName.Job,
-    route: getPageRoute(RouteName.Job),
-    icon: 'icon-horse',
-    i18nKey: LanguageKey.PAGE_JOB
-  },
-  {
     id: RouteName.Freelancer,
     route: getPageRoute(RouteName.Freelancer),
     icon: 'icon-coin-s',

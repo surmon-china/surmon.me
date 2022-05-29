@@ -11,7 +11,7 @@
 
 <script lang="ts">
   import { defineComponent, onMounted } from 'vue'
-  import { useArticleCalendarStore } from '/@/stores/aggregate'
+  import { useStores } from '/@/stores'
   import { humanDateToYMD, HumanDate } from '/@/transforms/moment'
   import { getDateFlowRoute } from '/@/transforms/route'
   import Calendar from '/@/components/widget/calendar.vue'
@@ -20,17 +20,17 @@
     name: 'DesktopAsideCalendar',
     components: { Calendar },
     setup() {
-      const articleCalendarStore = useArticleCalendarStore()
+      const { articleCalendar } = useStores()
       const articlesIn = (targetDate: HumanDate) => {
         const ymd = humanDateToYMD(targetDate)
-        return articleCalendarStore.data.find((item) => item.date === ymd)?.count || 0
+        return articleCalendar.data.find((item) => item.date === ymd)?.count || 0
       }
 
       const getDateRoute = (humanDate: HumanDate) => {
         return getDateFlowRoute(humanDateToYMD(humanDate))
       }
 
-      onMounted(() => articleCalendarStore.fetch())
+      onMounted(() => articleCalendar.fetch())
 
       return {
         articlesIn,

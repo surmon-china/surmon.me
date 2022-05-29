@@ -28,6 +28,8 @@ import {
   getYouTubeChannelPlayLists,
   getYouTubeVideoListByPlayerlistID
 } from './server/getters/youtube'
+import { getGitHubStatistic, getNPMStatistic } from './server/getters/open-srouce'
+import { getDoubanMovies } from './server/getters/douban'
 import { getSongList } from './server/getters/netease-music'
 import { enableDevRenderer } from './server/renderer/dev'
 import { enableProdRenderer } from './server/renderer/prod'
@@ -144,6 +146,33 @@ createExpressApp().then(({ app, server, cache }) => {
     })
   )
 
+  // open-source
+  app.get(
+    `${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceGitHubStatistic}`,
+    responsor(() => {
+      return cacher({
+        cache,
+        key: 'open_source_github_statistic',
+        age: 60 * 60 * 8, // 8 hours
+        retryWhen: 60 * 10, // 10 minutes
+        getter: getGitHubStatistic
+      })
+    })
+  )
+
+  app.get(
+    `${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceNPMStatistic}`,
+    responsor(() => {
+      return cacher({
+        cache,
+        key: 'open_source_npm_statistic',
+        age: 60 * 60 * 8, // 8 hours
+        retryWhen: 60 * 10, // 10 minutes
+        getter: getNPMStatistic
+      })
+    })
+  )
+
   // 163 music BGM list
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`,
@@ -154,6 +183,20 @@ createExpressApp().then(({ app, server, cache }) => {
         age: 60 * 60 * 12, // 12 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getSongList
+      })
+    })
+  )
+
+  // Douban movies
+  app.get(
+    `${BFF_TUNNEL_PREFIX}/${TunnelModule.DoubanMovies}`,
+    responsor(() => {
+      return cacher({
+        cache,
+        key: 'douban_movies',
+        age: 60 * 60 * 32, // 32 hours
+        retryWhen: 60 * 10, // 10 minutes
+        getter: getDoubanMovies
       })
     })
   )

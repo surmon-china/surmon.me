@@ -162,7 +162,7 @@
       padding: $sm-gap $gap;
       padding-right: $lg-gap;
       background-color: var(--background);
-      border-radius: $xs-radius;
+      border-radius: $sm-radius;
       color: $text-reversal;
       @include hidden();
       &::before {

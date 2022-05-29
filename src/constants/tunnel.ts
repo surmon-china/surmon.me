@@ -15,5 +15,8 @@ export enum TunnelModule {
   BingWallpaper = 'bing_wallpaper',
   GitHubSponsors = 'github_sponsors',
   GitHubContributions = 'github_contributions',
-  NetEaseMusic = 'netease_music'
+  NetEaseMusic = 'netease_music',
+  DoubanMovies = 'douban_movies',
+  OpenSourceGitHubStatistic = 'open_source_github_statistic',
+  OpenSourceNPMStatistic = 'open_source_npm_statistic'
 }

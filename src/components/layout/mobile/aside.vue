@@ -84,7 +84,7 @@
   import { Theme } from '/@/composables/theme'
   import { useUniversalFetch } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useMetaStore } from '/@/stores/meta'
+  import { useAdminInfoStore } from '/@/stores/basic'
   import { getDefaultAvatar } from '/@/transforms/avatar'
   import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
   import { VALUABLE_LINKS, META } from '/@/config/app.config'
@@ -93,8 +93,8 @@
     name: 'MobileAside',
     setup() {
       const { theme, i18n } = useEnhancer()
-      const metaStore = useMetaStore()
-      const avatar = computed(() => metaStore.adminInfo.data?.avatar || getDefaultAvatar())
+      const adminInfoStore = useAdminInfoStore()
+      const avatar = computed(() => adminInfoStore.data?.avatar || getDefaultAvatar())
 
       const themeIcon = computed(() => {
         const themeIconMap = {
@@ -112,7 +112,7 @@
         return languageIconMap[i18n.language.value]
       })
 
-      useUniversalFetch(() => metaStore.fetchAdminInfo())
+      useUniversalFetch(() => adminInfoStore.fetch())
 
       return {
         VALUABLE_LINKS,

@@ -60,7 +60,7 @@
   import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { Article } from '/@/stores/article'
-  import { useUniversalStore } from '/@/stores/universal'
+  import { useIdentityStore } from '/@/stores/identity'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getMobileArticleListThumbnailURL } from '/@/transforms/thumbnail'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
@@ -76,8 +76,8 @@
     },
     setup(props) {
       const { router, globalState } = useEnhancer()
-      const universalStore = useUniversalStore()
-      const isLiked = computed(() => universalStore.isLikedPage(props.article.id))
+      const identityStore = useIdentityStore()
+      const isLiked = computed(() => identityStore.isLikedPage(props.article.id))
       const isHybrid = isHybridType(props.article.origin)
       const isReprint = isReprintType(props.article.origin)
       const isOriginal = isOriginalType(props.article.origin)
