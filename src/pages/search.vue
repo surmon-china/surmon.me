@@ -17,7 +17,7 @@
 
 <script lang="ts">
   import { defineComponent, watch, onBeforeMount } from 'vue'
-  import { useUniversalFetch, onClient } from '/@/universal'
+  import { useUniversalFetch } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { useArticleListStore } from '/@/stores/article'
   import { scrollToNextScreen } from '/@/utils/scroller'
@@ -38,31 +38,26 @@
     },
     setup(props) {
       const { meta } = useEnhancer()
-      const articleListStore = useArticleListStore()
-
       meta(() => ({ pageTitle: `${props.keyword} | Search` }))
 
-      const fetchArticles = (params: any) => {
-        return articleListStore.fetchList(params)
-      }
-
+      const articleListStore = useArticleListStore()
       const loadmoreArticles = async () => {
-        await fetchArticles({
+        await articleListStore.fetchList({
           keyword: props.keyword,
           page: articleListStore.list.pagination.current_page + 1
         })
-        onClient(scrollToNextScreen)
+        scrollToNextScreen()
       }
 
       onBeforeMount(() => {
         watch(
           () => props.keyword,
-          (keyword) => fetchArticles({ keyword }),
+          (keyword) => articleListStore.fetchList({ keyword }),
           { flush: 'post' }
         )
       })
 
-      useUniversalFetch(() => fetchArticles({ keyword: props.keyword }))
+      useUniversalFetch(() => articleListStore.fetchList({ keyword: props.keyword }))
 
       return {
         articleListStore,

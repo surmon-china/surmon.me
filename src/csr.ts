@@ -96,8 +96,8 @@ router.isReady().finally(() => {
     globalState.setHydrate()
     // reset: i18n language
     i18n.set(globalState.userAgent.isZhUser ? Language.Chinese : Language.English)
-    // init universal user state
-    store.stores.universal.initOnClient()
+    // init user identity state
+    store.stores.identity.initOnClient()
     // title surprise
     document.addEventListener(
       'visibilitychange',
@@ -116,7 +116,7 @@ router.isReady().finally(() => {
     )
     // production only
     if (isProd) {
-      consoleSlogan(i18n.t(LanguageKey.APP_SLOGAN)!, store.stores.meta.appOptions.data?.site_email)
+      consoleSlogan(i18n.t(LanguageKey.APP_SLOGAN)!, store.stores.appOption.data?.site_email)
     }
   })
 })

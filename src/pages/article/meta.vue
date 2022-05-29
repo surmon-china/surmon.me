@@ -76,7 +76,7 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useUniversalStore } from '/@/stores/universal'
+  import { useIdentityStore } from '/@/stores/identity'
   import { useArticleDetailStore, Article } from '/@/stores/article'
   import { tagEnName } from '/@/stores/tag'
   import { dateToYMD } from '/@/transforms/moment'
@@ -104,9 +104,9 @@
     },
     setup(props) {
       const { i18n, gtag, globalState } = useEnhancer()
-      const universalStore = useUniversalStore()
+      const identityStore = useIdentityStore()
       const articleDetailStore = useArticleDetailStore()
-      const isLiked = computed(() => universalStore.isLikedPage(props.article.id))
+      const isLiked = computed(() => identityStore.isLikedPage(props.article.id))
       const articleURL = computed(() => getPageURL(getArticleDetailRoute(props.article.id)))
       const likes = computed(() => props.article.meta.likes)
 
@@ -128,7 +128,7 @@
 
         try {
           await articleDetailStore.postArticleLike(props.article.id)
-          universalStore.likePage(props.article.id)
+          identityStore.likePage(props.article.id)
         } catch (error) {
           const message = i18n.t(LanguageKey.POST_ACTION_ERROR)
           console.warn(message, error)

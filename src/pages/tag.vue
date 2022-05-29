@@ -33,7 +33,7 @@
 
 <script lang="ts">
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
-  import { useUniversalFetch, onClient } from '/@/universal'
+  import { useUniversalFetch } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { useArticleListStore } from '/@/stores/article'
   import { useTagStore, tagEnName } from '/@/stores/tag'
@@ -59,7 +59,7 @@
       const { meta, isZhLang } = useEnhancer()
       const tagStore = useTagStore()
       const articleListStore = useArticleListStore()
-      const currentTag = computed(() => tagStore.tags.find((tag) => tag.slug === props.tagSlug))
+      const currentTag = computed(() => tagStore.data.find((tag) => tag.slug === props.tagSlug))
       const currentTagIcon = computed(
         () => getExtendValue(currentTag.value?.extends || [], 'icon') || 'icon-tag'
       )
@@ -70,6 +70,14 @@
         getExtendValue(currentTag.value?.extends || [], 'bgcolor')
       )
 
+      const loadmoreArticles = async () => {
+        await articleListStore.fetchList({
+          tag_slug: props.tagSlug,
+          page: articleListStore.list.pagination.current_page + 1
+        })
+        scrollToNextScreen()
+      }
+
       meta(() => {
         const enTitle = firstUpperCase(props.tagSlug)
         const zhTitle = currentTag.value?.name!
@@ -78,27 +86,15 @@
         return { pageTitle: titles.join(' | '), description }
       })
 
-      const loadmoreArticles = async () => {
-        await articleListStore.fetchList({
-          tag_slug: props.tagSlug,
-          page: articleListStore.list.pagination.current_page + 1
-        })
-        onClient(scrollToNextScreen)
-      }
-
-      const fetchAllData = (tag_slug: string) => {
-        return Promise.all([tagStore.fetchAll(), articleListStore.fetchList({ tag_slug })])
-      }
-
       onBeforeMount(() => {
         watch(
           () => props.tagSlug,
-          (tagSlug) => fetchAllData(tagSlug),
+          (tag_slug) => articleListStore.fetchList({ tag_slug }),
           { flush: 'post' }
         )
       })
 
-      useUniversalFetch(() => fetchAllData(props.tagSlug))
+      useUniversalFetch(() => articleListStore.fetchList({ tag_slug: props.tagSlug }))
 
       return {
         articleListStore,

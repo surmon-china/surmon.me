@@ -66,9 +66,7 @@
   import { defineComponent, computed, watch, onBeforeMount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/universal'
-  import { useUniversalStore } from '/@/stores/universal'
-  import { useArticleDetailStore } from '/@/stores/article'
-  import { useCommentStore } from '/@/stores/comment'
+  import { useStores } from '/@/stores'
   import * as ANCHORS from '/@/constants/anchor'
   import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
@@ -107,14 +105,12 @@
     },
     setup(props) {
       const { i18n, meta, gtag, globalState } = useEnhancer()
-      const universalStore = useUniversalStore()
-      const commentStore = useCommentStore()
-      const articleDetailStore = useArticleDetailStore()
+      const { identity, comment, articleDetail: articleDetailStore } = useStores()
       const article = computed(() => articleDetailStore.article || UNDEFINED)
       const fetching = computed(() => articleDetailStore.fetching)
-      const isLiked = computed(() =>
-        Boolean(article.value && universalStore.isLikedPage(article.value.id))
-      )
+      const isLiked = computed(() => {
+        return Boolean(article.value && identity.isLikedPage(article.value.id))
+      })
 
       const handleSponsor = () => {
         globalState.toggleSwitcher('sponsor', true)
@@ -133,7 +129,7 @@
         })
         try {
           await articleDetailStore.postArticleLike(article.value!.id)
-          universalStore.likePage(article.value!.id)
+          identity.likePage(article.value!.id)
           callback?.()
         } catch (error) {
           const message = i18n.t(LanguageKey.POST_ACTION_ERROR)
@@ -142,18 +138,18 @@
         }
       }
 
+      const fetchArticleDetail = (articleID: number) => {
+        return Promise.all([
+          articleDetailStore.fetchCompleteArticle({ articleID }),
+          comment.fetchList({ post_id: articleID })
+        ])
+      }
+
       meta(() => ({
         pageTitle: article.value?.title,
         description: article.value?.description || '',
         keywords: article.value?.keywords?.join(',') || article.value?.title
       }))
-
-      const fetchArticleDetail = (articleID: number) => {
-        return Promise.all([
-          articleDetailStore.fetchCompleteArticle({ articleID }),
-          commentStore.fetchList({ post_id: articleID })
-        ])
-      }
 
       onBeforeMount(() => {
         watch(

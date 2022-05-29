@@ -17,7 +17,7 @@
       <page-title class="module-title instagram" :level="4">
         <ulink class="link" :href="VALUABLE_LINKS.INSTAGRAM">Newest · instagram</ulink>
       </page-title>
-      <placeholder :data="instagramMedias" :loading="lensStore.instagram.fetching">
+      <placeholder :data="insMediasData" :loading="insStore.fetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">
             <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
@@ -34,12 +34,12 @@
         </template>
         <template #default>
           <div class="module-content">
-            <instagram-grid :medias="instagramMedias" />
+            <instagram-grid :medias="insMediasData" />
           </div>
         </template>
       </placeholder>
       <div class="module-content">
-        <youtube-playlist :playlists="youtubeLists">
+        <youtube-playlist :playlists="ytPlaylistData">
           <template #title="{ list }">
             <page-title class="module-title youtube" :level="5">
               <template #left>
@@ -76,7 +76,7 @@
 <script lang="ts">
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useLensStore } from '/@/stores/lens'
+  import { useStores } from '/@/stores'
   import { useUniversalFetch, universalRef } from '/@/universal'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import { Language, LanguageKey } from '/@/language'
@@ -100,42 +100,43 @@
     },
     setup() {
       const { i18n, meta, isZhLang } = useEnhancer()
-      const lensStore = useLensStore()
-      const instagramMedias = computed(() => {
-        return lensStore.instagram.data.filter((plog) => plog.media_type !== 'VIDEO').slice(0, 24)
+      meta(() => {
+        const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_LENS, Language.English)!)
+        const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_LENS), enTitle] : [enTitle]
+        return {
+          pageTitle: titles.join(' | '),
+          description: `${META.author} 的视频创作`
+        }
       })
-      const youtubeLists = computed(() => {
-        return lensStore.youtube.data.filter((list) => list.contentDetails.itemCount > 1)
+
+      const { instagramMedias: insStore, youtubePlayList: ytStore } = useStores()
+      const insMediasData = computed(() => {
+        return insStore.data.filter((plog) => plog.media_type !== 'VIDEO').slice(0, 24)
+      })
+      const ytPlaylistData = computed(() => {
+        return ytStore.data.filter((list) => list.contentDetails.itemCount > 1)
       })
       const bannerImageURL = universalRef(
         'page-lens-banner',
         () => `/images/page-lens/banner-${randomNumber(2)}.jpg`
       )
 
-      meta(() => {
-        const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_LENS, Language.English)!)
-        const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_LENS), enTitle] : [enTitle]
-        return { pageTitle: titles.join(' | '), description: `${META.author} 的视频创作` }
-      })
-
-      const fetchAllData = () => {
+      useUniversalFetch(() => {
         return Promise.all([
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          lensStore.fetchInstagramMedias().catch(() => {}),
+          insStore.fetch().catch(() => {}),
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          lensStore.fetchYouTubePlaylist().catch(() => {})
+          ytStore.fetch().catch(() => {})
         ])
-      }
-
-      useUniversalFetch(() => fetchAllData())
+      })
 
       return {
         VALUABLE_LINKS,
         LanguageKey,
         getYouTubePlaylistURL,
-        lensStore,
-        instagramMedias,
-        youtubeLists,
+        insStore,
+        insMediasData,
+        ytPlaylistData,
         bannerImageURL
       }
     }

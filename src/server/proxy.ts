@@ -24,6 +24,11 @@ const proxys: ProxyConfigItem[] = [
     referer: 'https://surmon.me/'
   },
   {
+    module: ProxyModule.Douban,
+    origin: 'https://www.douban.com',
+    referer: 'https://www.douban.com/'
+  },
+  {
     module: ProxyModule.Instagram,
     origin: 'https://www.instagram.com',
     referer: 'https://www.instagram.com/'
@@ -34,7 +39,7 @@ const proxys: ProxyConfigItem[] = [
     referer: 'https://www.youtube.com/'
   },
   {
-    module: ProxyModule.NetEasyMusic,
+    module: ProxyModule.NetEaseMusic,
     origin: 'https://music.163.com',
     referer: 'https://music.163.com/'
   },

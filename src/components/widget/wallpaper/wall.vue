@@ -63,8 +63,8 @@
     setup(_, context) {
       const { i18n } = useEnhancer()
       const wallpaperStore = useWallpaperStore()
+      const wallpapers = computed(() => wallpaperStore.papers(i18n.language.value as Language)!)
       const index = ref(0)
-      const wallpapers = computed(() => wallpaperStore.papers(i18n.language.value as Language))
       const currentWallpaper = computed(
         () => wallpapers.value?.length && wallpapers.value?.[index.value]
       )

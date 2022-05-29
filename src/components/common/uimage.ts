@@ -1,11 +1,12 @@
 /**
  * @file Universal image
- * @description Render image with CDN/Proxy/Defer
+ * @description render image with CDN/Proxy/Defer
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { defineComponent, ref, h } from 'vue'
+import { defineComponent, ref, h, PropType } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
+import { ProxyModule } from '/@/constants/proxy'
 import { getTargetCDNURL, getTargetProxyURL } from '/@/transforms/url'
 import { onClient } from '/@/universal'
 
@@ -16,9 +17,18 @@ export default defineComponent({
       type: String,
       required: true
     },
-    cdn: Boolean,
-    proxy: Boolean,
-    defer: Boolean
+    cdn: {
+      type: Boolean,
+      default: false
+    },
+    proxy: {
+      type: [Boolean, String] as PropType<ProxyModule | boolean>,
+      default: false
+    },
+    defer: {
+      type: Boolean,
+      default: false
+    }
   },
   setup(props) {
     const { defer } = useEnhancer()
@@ -39,7 +49,7 @@ export default defineComponent({
         imageSrc = getTargetCDNURL(src)
       }
       if (proxy) {
-        imageSrc = getTargetProxyURL(src)
+        imageSrc = getTargetProxyURL(src, proxy === true ? ProxyModule.Default : proxy)
       }
       if (defer && !deferRenderable.value) {
         return null

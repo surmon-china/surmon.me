@@ -19,7 +19,7 @@
         @cancel-reply="handleCancelReply"
       >
         <template #reply>
-          <slot name="reply" :comment="item.comment" :isChild="false"></slot>
+          <slot name="reply" :comment="item.comment" :is-child="false"></slot>
         </template>
         <template #children v-if="item.children.length">
           <comment-list
@@ -34,7 +34,7 @@
             @cancel-reply="handleCancelReply"
           >
             <template #reply>
-              <slot name="reply" :comment="item.comment" :isChild="true"></slot>
+              <slot name="reply" :comment="item.comment" :is-child="true"></slot>
             </template>
           </comment-list>
         </template>
@@ -46,8 +46,8 @@
 <script lang="ts">
   import { defineComponent, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useUniversalStore } from '/@/stores/universal'
-  import { useCommentStore, Comment, CommentTreeItem } from '/@/stores/comment'
+  import { useStores } from '/@/stores'
+  import { Comment, CommentTreeItem } from '/@/stores/comment'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
   import { CommentEvents } from '../helper'
@@ -87,8 +87,7 @@
     emits: [CommentEvents.Reply, CommentEvents.Delete, CommentEvents.CancelReply],
     setup(_, context) {
       const { i18n, gtag } = useEnhancer()
-      const commentStore = useCommentStore()
-      const universalStore = useUniversalStore()
+      const { comment: commentStore, identity } = useStores()
 
       const handleReplyComment = (commentID: number) => {
         context.emit(CommentEvents.Reply, commentID)
@@ -107,15 +106,15 @@
           event_category: GAEventCategories.Comment,
           event_label: isLike ? 'like' : 'dislike'
         })
-        if (isLike && universalStore.isLikedComment(commentID)) {
+        if (isLike && identity.isLikedComment(commentID)) {
           return false
         }
-        if (!isLike && universalStore.isDislikedComment(commentID)) {
+        if (!isLike && identity.isDislikedComment(commentID)) {
           return false
         }
         try {
           await commentStore.postCommentVote(commentID, isLike ? 1 : -1)
-          isLike ? universalStore.likeComment(commentID) : universalStore.dislikeComment(commentID)
+          isLike ? identity.likeComment(commentID) : identity.dislikeComment(commentID)
         } catch (error) {
           const message = i18n.t(LanguageKey.POST_ACTION_ERROR)
           console.warn(message, error)
@@ -131,8 +130,8 @@
       }
 
       return {
-        isLikedComment: universalStore.isLikedComment,
-        isDislikedComment: universalStore.isDislikedComment,
+        isLikedComment: identity.isLikedComment,
+        isDislikedComment: identity.isDislikedComment,
         handleVoteComment,
         handleDeleteComment,
         handleReplyComment,

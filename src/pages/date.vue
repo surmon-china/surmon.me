@@ -35,33 +35,29 @@
     },
     setup(props) {
       const { meta } = useEnhancer()
-      const articleListStore = useArticleListStore()
-
       meta(() => ({ pageTitle: `${props.date} | Date` }))
 
-      const fetchArticles = (params: any) => {
-        return articleListStore.fetchList(params)
-      }
-
-      const loadmoreArticles = () => {
-        return fetchArticles({
+      const articleListStore = useArticleListStore()
+      const loadmoreArticles = async () => {
+        await articleListStore.fetchList({
           date: props.date,
           page: articleListStore.list.pagination.current_page + 1
-        }).then(scrollToNextScreen)
+        })
+        scrollToNextScreen()
       }
 
       onBeforeMount(() => {
         watch(
           () => props.date,
-          (date) => fetchArticles({ date }),
+          (date) => articleListStore.fetchList({ date }),
           { flush: 'post' }
         )
       })
 
-      useUniversalFetch(() => fetchArticles({ date: props.date }))
+      useUniversalFetch(() => articleListStore.fetchList({ date: props.date }))
 
       return {
-        articleListStore,
+        articleListStore: articleListStore,
         loadmoreArticles
       }
     }

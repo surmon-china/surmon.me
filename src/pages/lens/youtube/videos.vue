@@ -1,5 +1,5 @@
 <template>
-  <placeholder :data="videos" :loading="isFetching">
+  <placeholder :data="videos" :loading="fetching">
     <template #placeholder>
       <slot name="empty"></slot>
     </template>
@@ -39,8 +39,8 @@
 
 <script lang="ts">
   import { defineComponent, ref, onMounted } from 'vue'
+  import { fetchYouTubeVideoList } from '/@/stores/media'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useLensStore } from '/@/stores/lens'
   import { LanguageKey } from '/@/language'
   import { ProxyModule } from '/@/constants/proxy'
   import { GAEventCategories } from '/@/constants/gtag'
@@ -63,17 +63,16 @@
     emits: [YoutubeVideoListEvents.View],
     setup(props, context) {
       const { gtag } = useEnhancer()
-      const lensStore = useLensStore()
-      const isFetching = ref(true)
       const videos = ref<Array<any>>([])
+      const fetching = ref(true)
       const fetchVideos = async () => {
         try {
-          isFetching.value = true
-          videos.value = await lensStore.fetchYouTubeVideoList(props.playlistId)
+          fetching.value = true
+          videos.value = await fetchYouTubeVideoList(props.playlistId)
         } catch (error) {
           videos.value = []
         } finally {
-          isFetching.value = false
+          fetching.value = false
         }
       }
 
@@ -95,7 +94,7 @@
 
       return {
         LanguageKey,
-        isFetching,
+        fetching,
         videos,
         getThumbURL,
         handleView

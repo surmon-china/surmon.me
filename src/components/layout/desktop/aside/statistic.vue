@@ -1,21 +1,21 @@
 <template>
   <router-link class="statistic" :to="{ name: RouteName.Archive }">
     <div class="item">
-      <statistic-skeleton :fetching="fetching" :count="store.statistic?.articles" />
+      <statistic-skeleton :fetching="fetching" :count="store.data?.articles" />
       <span class="title">
         <i18n :k="LanguageKey.STATISTIC_ARTICLES" />
       </span>
     </div>
     <divider type="vertical" />
     <div class="item">
-      <statistic-skeleton :fetching="fetching" :count="store.statistic?.todayViews" />
+      <statistic-skeleton :fetching="fetching" :count="store.data?.todayViews" />
       <span class="title">
         <i18n :k="LanguageKey.STATISTIC_TODAY_VIEWS" />
       </span>
     </div>
     <divider type="vertical" />
     <div class="item">
-      <statistic-skeleton :fetching="fetching" :count="store.statistic?.comments" />
+      <statistic-skeleton :fetching="fetching" :count="store.data?.comments" />
       <span class="title">
         <i18n :k="LanguageKey.STATISTIC_COMMENTS" />
       </span>
@@ -25,7 +25,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, h, onMounted, Transition } from 'vue'
-  import { useStatisticStore } from '/@/stores/statistic'
+  import { useNodepressStatisticStore } from '/@/stores/statistic'
   import { RouteName } from '/@/app/router'
   import { LanguageKey } from '/@/language'
 
@@ -50,9 +50,9 @@
     components: { StatisticSkeleton },
     setup() {
       const fetching = ref(true)
-      const statisticStore = useStatisticStore()
+      const statisticStore = useNodepressStatisticStore()
       onMounted(() => {
-        statisticStore.fetchStatistic().finally(() => {
+        statisticStore.fetch().finally(() => {
           fetching.value = false
         })
       })

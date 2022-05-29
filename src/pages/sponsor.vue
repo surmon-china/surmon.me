@@ -7,12 +7,10 @@
         </webfont>
       </template>
       <template #description>
-        <i18n>
-          <template #zh>愿我的输出对你有所帮助，对我来说那是最好的褒奖和鼓励</template>
-          <template #en
-            >Your generous financial support is my motivation to keep moving forward</template
-          >
-        </i18n>
+        <i18n
+          zh="愿我的输出对你有所帮助，对我来说那是最好的褒奖和鼓励"
+          en="Your generous financial support is my motivation to keep moving forward"
+        />
       </template>
     </page-banner>
     <div class="tips">
@@ -41,6 +39,7 @@
     setup() {
       const { route, i18n, meta, isZhLang } = useEnhancer()
       const initSponsor = computed(() => route.hash.replace('#', ''))
+
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_SPONSOR, Language.English)!)
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_SPONSOR), enTitle] : [enTitle]

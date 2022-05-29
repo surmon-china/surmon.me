@@ -83,11 +83,10 @@
 
 <script lang="ts">
   import { defineComponent, reactive, computed, toRaw } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useStores } from '/@/stores'
   import { LanguageKey } from '/@/language/key'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useUniversalStore } from '/@/stores/universal'
-  import { useMetaStore } from '/@/stores/meta'
   import { META } from '/@/config/app.config'
 
   enum Event {
@@ -106,10 +105,9 @@
         { emoji: '🥰', value: 5, en: 'Amazing', zh: '太棒了' }
       ]
 
-      const metaStore = useMetaStore()
-      const universalStore = useUniversalStore()
+      const { appOption, identity } = useStores()
       const { gtag, isZhLang } = useEnhancer()
-      const historyFeedbacks = computed(() => universalStore.feedbacks)
+      const historyFeedbacks = computed(() => identity.feedbacks)
       const state = reactive({
         emotion: null as unknown as number,
         content: '',
@@ -128,10 +126,10 @@
           })
 
           state.submitting = true
-          metaStore
+          appOption
             .postFeedback(toRaw(state))
             .then((result) => {
-              universalStore.addFeedback(result.result)
+              identity.addFeedback(result.result)
               state.submitted = true
             })
             .catch((error: any) => {

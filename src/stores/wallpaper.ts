@@ -4,39 +4,21 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { defineStore } from 'pinia'
+import { defineFetchStore } from './_fetch'
 import { Language } from '/@/language'
 import { TunnelModule } from '/@/constants/tunnel'
 import tunnel from '/@/services/tunnel'
 
-export const useWallpaperStore = defineStore('wallpaper', {
-  state: () => ({
-    fetching: false,
-    wallpapers: null as any as {
-      [lang in Language]: Array<any>
-    }
-  }),
+export type Wallpaper = Record<Language, Array<any>>
+
+export const useWallpaperStore = defineFetchStore({
+  id: 'wallpaper',
+  initData: null as null | Wallpaper,
+  onlyOnce: true,
+  fetcher: () => tunnel.dispatch<Wallpaper>(TunnelModule.BingWallpaper),
   getters: {
     papers: (state) => {
-      return (language: Language) => state.wallpapers?.[language]
-    }
-  },
-  actions: {
-    fetchPapers() {
-      // return data when exists
-      if (this.wallpapers) {
-        return Promise.resolve()
-      }
-
-      this.fetching = true
-      return tunnel
-        .dispatch(TunnelModule.BingWallpaper)
-        .then((response) => {
-          this.wallpapers = response
-        })
-        .finally(() => {
-          this.fetching = false
-        })
+      return (language: Language) => state.data?.[language]
     }
   }
 })

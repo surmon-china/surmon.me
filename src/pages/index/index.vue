@@ -2,24 +2,20 @@
   <div class="index-page">
     <carrousel
       class="carrousel"
-      :articles="articleListStore.list.data"
-      :fetching="articleListStore.list.fetching"
+      :articles="articleList.list.data"
+      :fetching="articleList.list.fetching"
     />
     <twitter
       class="twitter"
-      :userinfo="twitterStore.userinfo.data || void 0"
-      :tweets="twitterStore.tweets.data || void 0"
-      :fetching="
-        twitterStore.userinfo.fetching ||
-        twitterStore.tweets.fetching ||
-        articleListStore.list.fetching
-      "
+      :userinfo="twitterUserinfo.data ?? void 0"
+      :tweets="twitterTweets.data ?? void 0"
+      :fetching="twitterUserinfo.fetching || twitterTweets.fetching || articleList.list.fetching"
     />
     <article-list
       :mammon="false"
-      :fetching="articleListStore.list.fetching"
-      :articles="articleListStore.list.data"
-      :pagination="articleListStore.list.pagination"
+      :fetching="articleList.list.fetching"
+      :articles="articleList.list.data"
+      :pagination="articleList.list.pagination"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -27,11 +23,9 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
+  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch, onClient } from '/@/universal'
-  import { useTwitterStore } from '/@/stores/twitter'
-  import { useArticleListStore } from '/@/stores/article'
-  import { useMetaStore } from '/@/stores/meta'
   import { scrollToNextScreen } from '/@/utils/scroller'
   import { LanguageKey } from '/@/language'
   import { META } from '/@/config/app.config'
@@ -48,19 +42,16 @@
     },
     setup() {
       const { meta, i18n } = useEnhancer()
-      const metaStore = useMetaStore()
-      const twitterStore = useTwitterStore()
-      const articleListStore = useArticleListStore()
-
+      const { articleList, appOption, twitterUserinfo, twitterTweets } = useStores()
       meta(() => ({
         title: `${META.title} - ${i18n.t(LanguageKey.APP_SLOGAN)}`,
-        description: metaStore.appOptions.data?.description,
-        keywords: metaStore.appOptions.data?.keywords.join(',')
+        description: appOption.data?.description,
+        keywords: appOption.data?.keywords.join(',')
       }))
 
       const loadmoreArticles = async () => {
-        const targetPage = articleListStore.list.pagination?.current_page + 1
-        await articleListStore.fetchList({ page: targetPage })
+        const targetPage = articleList.list.pagination?.current_page + 1
+        await articleList.fetchList({ page: targetPage })
         if (targetPage > 1) {
           onClient(scrollToNextScreen)
         }
@@ -68,17 +59,18 @@
 
       useUniversalFetch(() => {
         return Promise.all([
-          articleListStore.fetchList(),
+          articleList.fetchList(),
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          twitterStore.fetchUserinfo().catch(() => {}),
+          twitterUserinfo.fetch().catch(() => {}),
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          twitterStore.fetchTweets().catch(() => {})
+          twitterTweets.fetch().catch(() => {})
         ])
       })
 
       return {
-        twitterStore,
-        articleListStore,
+        twitterUserinfo,
+        twitterTweets,
+        articleList,
         loadmoreArticles
       }
     }

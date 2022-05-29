@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
-  src: url('//at.alicdn.com/t/font_64825_2rrhkj2yuh.woff2?t=1652958403431') format('woff2'),
-    url('//at.alicdn.com/t/font_64825_2rrhkj2yuh.woff?t=1652958403431') format('woff'),
-    url('//at.alicdn.com/t/font_64825_2rrhkj2yuh.ttf?t=1652958403431') format('truetype');
+  src: url('//at.alicdn.com/t/font_64825_fvd6ccdirq.woff2?t=1653817779887') format('woff2'),
+    url('//at.alicdn.com/t/font_64825_fvd6ccdirq.woff?t=1653817779887') format('woff'),
+    url('//at.alicdn.com/t/font_64825_fvd6ccdirq.ttf?t=1653817779887') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,54 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-video-outline:before {
+  content: '\e6b4';
+}
+
+.icon-following:before {
+  content: '\e605';
+}
+
+.icon-people:before {
+  content: '\e65b';
+}
+
+.icon-follower:before {
+  content: '\e640';
+}
+
+.icon-score:before {
+  content: '\e62e';
+}
+
+.icon-week:before {
+  content: '\e632';
+}
+
+.icon-package:before {
+  content: '\e6c7';
+}
+
+.icon-download:before {
+  content: '\e60b';
+}
+
+.icon-star-outline:before {
+  content: '\e60c';
+}
+
+.icon-repository:before {
+  content: '\e6f2';
+}
+
+.icon-organization:before {
+  content: '\e622';
+}
+
+.icon-npm:before {
+  content: '\e686';
 }
 
 .icon-image-error:before {
@@ -815,10 +863,6 @@
 
 .icon-github:before {
   content: '\e689';
-}
-
-.icon-qzone:before {
-  content: '\e68c';
 }
 
 .icon-css3:before {

@@ -17,12 +17,7 @@
         <button class="button menu" v-if="isEnabledNav">
           <i class="iconfont icon-top-menu"></i>
         </button>
-        <button
-          class="button language"
-          title="Switch language"
-          :class="language"
-          @click="tooggleLanguage"
-        >
+        <button class="button language" title="Switch language" @click="tooggleLanguage">
           {{ language || '-' }}
         </button>
         <button class="button theme" :class="theme" @click="toggleTheme">
@@ -205,42 +200,11 @@
           margin: 0 $gap;
           width: 2rem;
           height: 2rem;
-
-          &::before {
-            content: '';
-            display: block;
-            width: 50%;
-            height: 2px;
-            position: absolute;
-            left: 25%;
-            bottom: -2px;
-          }
-
           &.menu {
             cursor: none;
-            &::before {
-              background-color: $black;
-            }
           }
-
-          &.theme {
-            &::before {
-              background-color: $primary;
-            }
-          }
-
           &.language {
             font-weight: bold;
-            &.en {
-              &::before {
-                background-color: $en-primary;
-              }
-            }
-            &.zh {
-              &::before {
-                background-color: $zh-primary;
-              }
-            }
           }
         }
       }

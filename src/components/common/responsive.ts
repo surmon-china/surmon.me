@@ -13,10 +13,10 @@ import { useGlobalState } from '/@/app/state'
  * @example <responsive mobile><component /></responsive>
  * @example <responsive both><component /></responsive>
  * @example
- *  <responsive>
- *    <template #desktop>Desktop</template>
- *    <template #mobile>Mobile</template>
- *  </responsive>
+  <responsive>
+    <template #desktop>Desktop</template>
+    <template #mobile>Mobile</template>
+  </responsive>
  */
 export const Responsive = defineComponent({
   name: 'Responsive',

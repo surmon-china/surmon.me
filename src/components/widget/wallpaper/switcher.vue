@@ -31,11 +31,11 @@
       const { i18n, gtag, isDarkTheme } = useEnhancer()
       const wallpaperStore = useWallpaperStore()
       const wallpapers = computed(() => wallpaperStore.papers(i18n.language.value as Language))
+
       const isOnWallpaper = ref(false)
       const handleCloseWallpaper = () => {
         isOnWallpaper.value = false
       }
-
       const handleOpenWallpaper = () => {
         gtag?.event('wallpaper_modal', {
           event_category: GAEventCategories.Widget

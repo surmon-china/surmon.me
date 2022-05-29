@@ -112,9 +112,9 @@
   import { defineComponent, computed, PropType } from 'vue'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import { LanguageKey } from '/@/language'
-  import { GAEventCategories } from '/@/constants/gtag'
   import { SortType } from '/@/constants/state'
-  import { UserType, useUniversalStore } from '/@/stores/universal'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { UserType, useIdentityStore } from '/@/stores/identity'
   import { useEnhancer } from '/@/app/enhancer'
   import { openWindow } from '/@/utils/opener'
   import nodepress from '/@/services/nodepress'
@@ -157,8 +157,8 @@
     emits: [CommentEvents.Sort],
     setup(props, context) {
       const { gtag } = useEnhancer()
-      const universalStore = useUniversalStore()
-      const user = computed(() => universalStore.user)
+      const identity = useIdentityStore()
+      const user = computed(() => identity.user)
       const statisticsText = computed(() => {
         return props.loading ? `···` : `${props.loaded} / ${props.total}`
       })
@@ -177,7 +177,7 @@
           disqusThreadMap.set(props.postId, response.result)
         }
 
-        const forum = universalStore.disqusConfig.forum
+        const forum = identity.disqusConfig.forum
         const slug = disqusThreadMap.get(props.postId).slug
         window.open(`https://disqus.com/home/discussion/${forum}/${slug}/`)
       }
@@ -199,11 +199,11 @@
           event_label: `id: ${props.postId}`
         })
 
-        openWindow(universalStore.disqusConfig.authorize_url, {
+        openWindow(identity.disqusConfig.authorize_url, {
           name: `Disqus Auth ${META.title}`,
           onClose: () => {
-            universalStore.fetchDisqusUserInfo()
-            console.info('[disqus]', 'logined', universalStore.user)
+            identity.fetchDisqusUserInfo()
+            console.info('[disqus]', 'logined', identity.user)
           }
         })
       }
@@ -214,11 +214,11 @@
           event_label: `id: ${props.postId}`
         })
         console.log('[disqus]', 'logout')
-        universalStore.fetchDisqusLogout()
+        identity.fetchDisqusLogout()
       }
 
       const handleClearLocalProfile = () => {
-        universalStore.removeLocalUser()
+        identity.removeLocalUser()
       }
 
       return {

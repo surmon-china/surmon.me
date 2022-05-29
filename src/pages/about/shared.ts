@@ -23,10 +23,6 @@ export const i18ns: { [key: string]: I18nLanguageMap<Language> } = {
     [Language.Chinese]: `路为纸，地成册，行作笔，心当墨；思无界，行有疆`,
     [Language.English]: `Every path I went astray built up my Rome.`
   },
-  findJob: {
-    [Language.Chinese]: `找我内推`,
-    [Language.English]: `Find job`
-  },
   hireMe: {
     [Language.Chinese]: `与我合作`,
     [Language.English]: `Freelancer`
@@ -55,6 +51,10 @@ export const i18ns: { [key: string]: I18nLanguageMap<Language> } = {
     [Language.Chinese]: `自由报社`,
     [Language.English]: `TG group`
   },
+  Rss: {
+    [Language.Chinese]: `长期订阅`,
+    [Language.English]: `Subscribe`
+  },
   livingNow: {
     [Language.Chinese]: `暂居上海，养两条狗`,
     [Language.English]: `I'm living in Shanghai now`
@@ -66,7 +66,10 @@ export const useAboutPageMeta = () => {
   return meta(() => {
     const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_ABOUT, Language.English)!)
     const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ABOUT), enTitle] : [enTitle]
-    return { pageTitle: titles.join(' | '), description: `关于 ${META.author}` }
+    return {
+      pageTitle: titles.join(' | '),
+      description: `关于 ${META.author}`
+    }
   })
 }
 

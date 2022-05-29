@@ -54,7 +54,10 @@
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_MERCH, Language.English)!)
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_MERCH), enTitle] : [enTitle]
-        return { pageTitle: titles.join(' | '), description: `${META.author} 的周边好物` }
+        return {
+          pageTitle: titles.join(' | '),
+          description: `${META.author} 的周边好物`
+        }
       })
 
       return {

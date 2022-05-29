@@ -122,7 +122,7 @@
 
       onMounted(() => {
         // bing wallpaper
-        wallpaperStore.fetchPapers()
+        wallpaperStore.fetch()
         // music player
         useMusic().init()
       })

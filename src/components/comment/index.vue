@@ -98,7 +98,7 @@
     nextTick
   } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useUniversalStore, UserType } from '/@/stores/universal'
+  import { useIdentityStore, UserType } from '/@/stores/identity'
   import { useCommentStore, CommentFetchParams, Author } from '/@/stores/comment'
   import { GAEventCategories } from '/@/constants/gtag'
   import * as ANCHOR from '/@/constants/anchor'
@@ -142,7 +142,7 @@
     },
     setup(props) {
       const { i18n, gtag, globalState } = useEnhancer()
-      const universalStore = useUniversalStore()
+      const identityStore = useIdentityStore()
       const commentStore = useCommentStore()
 
       const isPosting = computed(() => commentStore.posting)
@@ -192,12 +192,13 @@
         })
       }
 
-      const fetchCommentList = (params: CommentFetchParams = {}) => {
-        return commentStore.fetchList({
+      const fetchCommentList = (params: CommentFetchParams = {}, loadmore?: boolean) => {
+        const _params = {
           ...params,
           sort: commentState.sort,
           post_id: props.postId
-        })
+        }
+        return commentStore.fetchList(_params, loadmore)
       }
 
       const fetchSortComments = (sort: SortType) => {
@@ -211,7 +212,7 @@
       const fetchPageComments = (page: number) => {
         const comments = commentStore.comments
         const lastCommentID = ANCHOR.getCommentItemElementID(comments[comments.length - 2].id)
-        fetchCommentList({ page, loadmore: true }).then(() => {
+        fetchCommentList({ page }, true).then(() => {
           nextTick().then(() => {
             scrollToAnchor(lastCommentID)
           })
@@ -239,7 +240,7 @@
         }
 
         // temp user profile
-        const isGuest = universalStore.user.type === UserType.Null
+        const isGuest = identityStore.user.type === UserType.Null
         const guestProfileValue = guestProfile.value
         if (isGuest) {
           if (!guestProfileValue.name) {
@@ -252,11 +253,11 @@
 
         const author: Author = isGuest
           ? toRaw(guestProfileValue)
-          : universalStore.user.type === UserType.Local
-          ? universalStore.user.localProfile!
+          : identityStore.user.type === UserType.Local
+          ? identityStore.user.localProfile!
           : {
-              name: universalStore.user.disqusProfile.name,
-              site: universalStore.user.disqusProfile.url
+              name: identityStore.user.disqusProfile.name,
+              site: identityStore.user.disqusProfile.url
             }
         if (!author.email) {
           Reflect.deleteProperty(author, 'email')
@@ -275,7 +276,7 @@
           })
           // set user profile
           if (isGuest) {
-            universalStore.saveLocalUser({
+            identityStore.saveLocalUser({
               ...author,
               email_hash: newComment.author.email_hash
             })

@@ -76,7 +76,10 @@
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_APP, Language.English)!)
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_APP), enTitle] : [enTitle]
-        return { pageTitle: titles.join(' | '), description: `${META.title} App 下载` }
+        return {
+          pageTitle: titles.join(' | '),
+          description: `${META.title} App 下载`
+        }
       })
 
       const handleAppEvent = (name: string) => {

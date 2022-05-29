@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.12.0 (2022-05-29)
+
+**Feature**
+
+- Add `fetchStore` in stores
+- Redesign About page
+- Refactoring stores
+- Remove Job page
+- Remove AD in mobile flow page
+
 ### v3.11.0 (2022-05-01)
 
 **Chore**

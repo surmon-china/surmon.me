@@ -91,10 +91,11 @@
 
 <script lang="ts">
   import { defineComponent, ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
+  import { storeToRefs } from 'pinia'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useUniversalStore, UserType } from '/@/stores/universal'
+  import { useIdentityStore, UserType } from '/@/stores/identity'
   import { enableCopyrighter, disableCopyrighter } from '/@/effects/copyright'
   import { focusPosition } from '/@/utils/editable'
   import { insertContent } from '/@/utils/editable'
@@ -144,7 +145,7 @@
     emits: [PenEvents.Update, PenEvents.UpdatePreviewed, CommentEvents.Submit],
     setup(props, context) {
       const { i18n } = useEnhancer()
-      const universalStore = useUniversalStore()
+      const { user } = storeToRefs(useIdentityStore())
       const content = ref(props.modelValue || '')
       const isPreviewed = ref(props.previewed || false)
       const inputElement = ref<HTMLElement>()
@@ -234,7 +235,7 @@
 
       return {
         t: i18n.t,
-        user: universalStore.user,
+        user,
         UserType,
         EMOJIS,
         VALUABLE_LINKS,

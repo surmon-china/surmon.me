@@ -117,7 +117,7 @@
   import { defineComponent, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useCommentStore, Comment } from '/@/stores/comment'
-  import { useUniversalStore, UserType } from '/@/stores/universal'
+  import { useIdentityStore, UserType } from '/@/stores/identity'
   import { getCommentItemElementID } from '/@/constants/anchor'
   import { UNDEFINED } from '/@/constants/value'
   import { LanguageKey } from '/@/language'
@@ -186,7 +186,7 @@
     setup(props, context) {
       const { i18n } = useEnhancer()
       const commentStore = useCommentStore()
-      const universalStore = useUniversalStore()
+      const identityStore = useIdentityStore()
       const isDeleting = computed(() => commentStore.deleting)
 
       const disqusAuthorID = computed(() => {
@@ -200,8 +200,8 @@
       const isAdminAuthor = computed(() => {
         return (
           Boolean(disqusUsername.value) &&
-          Boolean(universalStore.disqusConfig) &&
-          disqusUsername.value === universalStore.disqusConfig.admin_username
+          Boolean(identityStore.disqusConfig) &&
+          disqusUsername.value === identityStore.disqusConfig.admin_username
         )
       })
 
@@ -223,13 +223,12 @@
 
       const isDeleteable = computed(() => {
         // 1. Disqus logined
-        if (universalStore.user.type === UserType.Disqus) {
+        if (identityStore.user.type === UserType.Disqus) {
           // 2. Logined user ID === comment.author.disqus-author-id
           if (disqusAuthorID.value) {
-            return universalStore.user.disqusProfile?.id === disqusAuthorID.value
+            return identityStore.user.disqusProfile?.id === disqusAuthorID.value
           }
         }
-
         return false
       })
 

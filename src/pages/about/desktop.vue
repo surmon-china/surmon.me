@@ -7,9 +7,9 @@
         </video>
       </div>
       <div class="avatar">
-        <uimage class="image" :src="getAdminAvatar(adminInfo?.avatar)" />
-        <h2 class="name">{{ adminInfo?.name || '-' }}</h2>
-        <p class="role">{{ adminInfo?.slogan || '-' }}</p>
+        <uimage class="image" :src="getAdminAvatar(adminInfo.data?.avatar)" />
+        <h2 class="name">{{ adminInfo.data?.name || '-' }}</h2>
+        <p class="role">{{ adminInfo.data?.slogan || '-' }}</p>
         <p class="bio-text">
           <webfont bolder>
             <i18n v-bind="i18ns.biography" />
@@ -44,7 +44,10 @@
                 <div class="qrcode-modal wechat">
                   <div class="background"></div>
                   <uimage class="image" cdn src="/images/qrcodes/wechat.jpg" />
-                  <span class="text">👋 &nbsp; Friend me on WeChat</span>
+                  <span class="text">
+                    👋 &nbsp;
+                    <i18n en="Friend me on WeChat" zh="扫码加微，解锁灵魂"></i18n>
+                  </span>
                 </div>
               </popup>
             </button>
@@ -60,60 +63,28 @@
     </div>
     <div class="container">
       <div class="links">
-        <router-link
-          class="item"
-          v-for="(item, index) in links"
-          :key="index"
-          :to="getPageRoute(item.to)"
-        >
-          <i class="iconfont" :class="item.icon"></i>
-          <divider class="divider" type="vertical" />
-          <span class="text"><i18n v-bind="item.i18n" /></span>
-        </router-link>
+        <template :key="index" v-for="(item, index) in links">
+          <component
+            class="item"
+            :class="item.class"
+            :is="item.onClick ? 'button' : 'ulink'"
+            :href="item.href"
+            :to="item.route"
+            @click="item.onClick"
+          >
+            <i class="iconfont" :class="item.icon"></i>
+            <span class="text"><i18n v-bind="item.i18n" /></span>
+          </component>
+        </template>
       </div>
-      <div class="discussion">
-        <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM_GROUP">
-          <i class="iconfont icon-telegram"></i>
-          <divider class="divider" type="vertical" />
-          <span class="text"><i18n v-bind="i18ns.TelegramGroup" /></span>
-        </ulink>
-        <ulink class="item discord" :href="VALUABLE_LINKS.DISCORD_GROUP">
-          <i class="iconfont icon-discord"></i>
-          <divider class="divider" type="vertical" />
-          <span class="text"><i18n v-bind="i18ns.DiscordGroup" /></span>
-        </ulink>
-        <div class="center">
-          <button class="mini statement" @click="handleStatement">
-            <i class="iconfont icon-faq" />
-          </button>
-          <div class="bridge"></div>
-          <button class="mini sponsor" @click="handleSponsor">
-            <i class="iconfont icon-heart" />
-          </button>
-          <div class="bridge"></div>
-          <button class="mini feedback" @click="handleFeedback">
-            <i class="iconfont icon-mail-plane" />
-          </button>
-        </div>
-        <ulink class="item spotify" :href="VALUABLE_LINKS.SPOTIFY">
-          <i class="iconfont icon-spotify" />
-          <divider class="divider" type="vertical" />
-          <span class="text">My Spotify</span>
-        </ulink>
-        <ulink class="item music-163" :href="VALUABLE_LINKS.MUSIC_163">
-          <i class="iconfont icon-163music-logo" />
-          <divider class="divider" type="vertical" />
-          <span class="text">BGM list</span>
-        </ulink>
+      <div class="statistics">
+        <github-statistic />
+        <npm-statistic />
+        <twitter-statistic />
+        <douban-statistic />
       </div>
-      <div class="placeholder">
-        <i18n>
-          <template #zh>为了排版协调，这是一个毫无意义的占位符</template>
-          <template #en>Placeholder for typography</template>
-        </i18n>
-      </div>
-      <div class="calendar">
-        <aggregate-calendar />
+      <div class="plogs">
+        <instagram-media />
       </div>
       <div class="maps">
         <div class="location">
@@ -144,9 +115,12 @@
           </div>
         </div>
       </div>
+      <div class="calendar">
+        <aggregate-calendar />
+      </div>
       <div class="footer-links">
         <div class="friendlinks">
-          <template v-for="(link, index) in appOptions?.friend_links || []" :key="index">
+          <template v-for="(link, index) in appOption.data?.friend_links || []" :key="index">
             <divider type="vertical" size="lg" v-if="index !== 0" />
             <a :href="link.value" class="item" target="_blank" rel="external nofollow noopener">
               {{ link.name }}
@@ -167,55 +141,36 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, reactive, computed } from 'vue'
+  import { defineComponent, reactive } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
-  import { useMetaStore } from '/@/stores/meta'
+  import { useStores } from '/@/stores'
   import { useUniversalFetch } from '/@/universal'
   import { getPageRoute } from '/@/transforms/route'
   import { getTargetStaticURL } from '/@/transforms/url'
   import { GAEventCategories } from '/@/constants/gtag'
   import { VALUABLE_LINKS } from '/@/config/app.config'
-  import { useAboutPageMeta, getAdminAvatar, i18ns, SPECIAL_LINKS } from './helper'
   import AggregateCalendar from './calendar/index.vue'
+  import InstagramMedia from './media/instagram.vue'
+  import DoubanStatistic from './statistic/douban.vue'
+  import GithubStatistic from './statistic/github.vue'
+  import TwitterStatistic from './statistic/twitter.vue'
+  import NpmStatistic from './statistic/npm.vue'
+  import { useAboutPageMeta, getAdminAvatar, i18ns, SPECIAL_LINKS } from './shared'
 
   export default defineComponent({
     name: 'DesktopAboutPage',
     components: {
-      AggregateCalendar
+      AggregateCalendar,
+      DoubanStatistic,
+      GithubStatistic,
+      NpmStatistic,
+      TwitterStatistic,
+      InstagramMedia
     },
     setup() {
       const { gtag, globalState, isZhLang, isDarkTheme } = useEnhancer()
-      const metaStore = useMetaStore()
-      const adminInfo = computed(() => metaStore.adminInfo.data)
-      const appOptions = computed(() => metaStore.appOptions.data)
-      const links = [
-        {
-          to: RouteName.Lens,
-          icon: `icon-lens`,
-          i18n: i18ns.myVlogs
-        },
-        {
-          to: RouteName.Merch,
-          icon: `icon-rubik`,
-          i18n: i18ns.merchBar
-        },
-        {
-          to: RouteName.Archive,
-          icon: `icon-quill`,
-          i18n: i18ns.myArchive
-        },
-        {
-          to: RouteName.Freelancer,
-          icon: `icon-coin-s`,
-          i18n: i18ns.hireMe
-        },
-        {
-          to: RouteName.Guestbook,
-          icon: `icon-comment`,
-          i18n: i18ns.guestbook
-        }
-      ]
+      const { adminInfo, appOption } = useStores()
 
       const handleGTagEvent = (event: string) => {
         gtag?.event(event, {
@@ -259,25 +214,93 @@
       // meta
       useAboutPageMeta()
       // prefetch
-      useUniversalFetch(() =>
-        Promise.all([metaStore.fetchAdminInfo(), metaStore.fetchAppOptions()])
-      )
+      useUniversalFetch(() => Promise.all([adminInfo.fetch(), appOption.fetch()]))
+
+      const links = [
+        {
+          class: 'lens',
+          icon: 'icon-lens',
+          i18n: i18ns.myVlogs,
+          route: getPageRoute(RouteName.Lens)
+        },
+        {
+          class: 'merch',
+          icon: 'icon-rubik',
+          i18n: i18ns.merchBar,
+          route: getPageRoute(RouteName.Merch)
+        },
+        {
+          class: 'archive',
+          icon: 'icon-quill',
+          i18n: i18ns.myArchive,
+          route: getPageRoute(RouteName.Archive)
+        },
+        {
+          class: 'guestbook',
+          icon: 'icon-comment',
+          i18n: i18ns.guestbook,
+          route: getPageRoute(RouteName.Guestbook)
+        },
+        {
+          class: 'feedback',
+          icon: 'icon-mail-plane',
+          i18n: {
+            zh: '向我反馈',
+            en: 'Feedback'
+          },
+          onClick: handleFeedback
+        },
+        {
+          class: 'telegram',
+          icon: 'icon-telegram',
+          i18n: i18ns.TelegramGroup,
+          href: VALUABLE_LINKS.TELEGRAM_GROUP
+        },
+        {
+          class: 'discord',
+          icon: 'icon-discord',
+          i18n: i18ns.DiscordGroup,
+          href: VALUABLE_LINKS.DISCORD_GROUP
+        },
+        {
+          class: 'sponsor',
+          icon: 'icon-heart',
+          i18n: {
+            zh: '向我赞助',
+            en: 'Sponsor Me'
+          },
+          onClick: handleSponsor
+        },
+        {
+          class: 'statement',
+          icon: 'icon-faq',
+          i18n: {
+            zh: '众而周知',
+            en: 'Statement'
+          },
+          onClick: handleStatement
+        },
+        {
+          class: 'rss',
+          icon: 'icon-rss',
+          i18n: i18ns.Rss,
+          href: VALUABLE_LINKS.RSS
+        }
+      ]
 
       return {
         i18ns,
         links,
         VALUABLE_LINKS,
         SPECIAL_LINKS,
-        getAdminAvatar,
-        getPageRoute,
         isZhLang,
         isDarkTheme,
         modalState,
         backgroundVideo,
         adminInfo,
-        appOptions,
+        appOption,
+        getAdminAvatar,
         handleGTagEvent,
-        handleSponsor,
         handleFeedback,
         handleStatement,
         handleOpenMap,
@@ -292,6 +315,7 @@
   @import 'src/styles/mixins.scss';
 
   .qrcode-modal {
+    $image-size: 16rem;
     width: 23rem;
     height: 28rem;
     position: relative;
@@ -308,14 +332,16 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 50%;
+      height: 45%;
       background: var(--item-primary);
     }
 
     .image {
       z-index: $z-index-normal + 1;
-      width: 70%;
+      width: $image-size;
+      height: $image-size;
       margin-bottom: 2rem;
+      background-color: $module-bg-opaque;
       @include radius-box($sm-radius);
     }
 
@@ -543,8 +569,7 @@
       }
     }
 
-    .links,
-    .discussion {
+    .links {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       grid-gap: $gap * 2;
@@ -556,121 +581,69 @@
         display: flex;
         justify-content: start;
         align-items: center;
+        padding-left: 2.8rem;
         @include common-bg-module($transition-time-fast);
         @include radius-box($lg-radius);
-
-        .iconfont {
-          margin-left: 2.8rem;
-          font-size: $font-size-h3;
+        &.discord {
+          --item-primary: #{$discord-primary};
+          --item-hover: white;
+        }
+        &.telegram {
+          --item-primary: #{$telegram-primary};
+          --item-hover: white;
+        }
+        &.sponsor {
+          --item-primary: #{$red};
+          --item-hover: white;
+        }
+        &.statement {
+          --item-primary: #{$surmon};
+          --item-hover: white;
+        }
+        &.rss {
+          --item-primary: #{$rss-primary};
+          --item-hover: white;
+        }
+        &:hover {
+          background-color: var(--item-primary, $primary);
+          .iconfont,
+          .text {
+            color: var(--item-hover, $text-reversal);
+          }
         }
 
-        .divider {
-          opacity: 0.6;
-          border-color: initial;
+        .iconfont {
+          font-size: $font-size-h3;
+          margin-right: 1em;
+          color: var(--item-primary, $primary);
         }
 
         .text {
+          color: $text-secondary;
           font-size: $font-size-h4;
           font-weight: bold;
         }
       }
-
-      .center {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        .bridge {
-          width: $lg-gap;
-          height: 2rem;
-          background: linear-gradient(
-            to right,
-            $module-bg-darker-1,
-            $module-bg,
-            $module-bg-darker-1
-          );
-        }
-
-        .mini {
-          &.sponsor {
-            --item-primary: #{$red};
-          }
-          &.feedback,
-          &.statement {
-            --item-primary: #{$surmon};
-          }
-
-          flex: 1;
-          height: 100%;
-          color: var(--item-primary);
-          font-size: $font-size-h2;
-          @include common-bg-module($transition-time-fast);
-          @include radius-box($lg-radius);
-          &:hover {
-            color: $white;
-            background-color: var(--item-primary);
-          }
-        }
-      }
     }
 
-    .links {
-      .item {
-        color: $text-secondary;
-        &:hover {
-          color: $text-reversal;
-          background-color: $primary;
-        }
-      }
-    }
-
-    .discussion {
-      .item {
-        color: var(--item-primary);
-        &:hover {
-          color: $white;
-          background-color: var(--item-primary);
-        }
-
-        &.discord {
-          --item-primary: #{$discord-primary};
-        }
-        &.telegram {
-          --item-primary: #{$telegram-primary};
-        }
-        &.spotify {
-          --item-primary: #{$spotify-primary};
-        }
-        &.music-163 {
-          --item-primary: #{$music163-primary};
-        }
-      }
-    }
-
-    .placeholder {
+    .statistics {
       margin-bottom: $gap * 2;
-      height: 10rem;
-      border-radius: $lg-radius;
-      @include common-bg-module();
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: $font-size-h2;
-      font-weight: bold;
-      color: $text-divider;
-      text-transform: uppercase;
-      letter-spacing: 2px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: $gap * 2;
     }
 
+    .plogs,
+    .vlogs,
     .calendar {
       margin-bottom: $gap * 2;
-      padding: $gap;
       border-radius: $lg-radius;
+      padding: $gap;
       @include common-bg-module();
     }
 
     .maps {
-      $size: 210px;
+      $size: 200px;
       position: relative;
       display: flex;
       width: 100%;
