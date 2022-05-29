@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.11.14
+* Surmon.me v3.12.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -92,9 +92,10 @@ const FORBIDDEN = 403;/**
 var ProxyModule;
 (function (ProxyModule) {
     ProxyModule["Default"] = "default";
+    ProxyModule["Douban"] = "douban";
+    ProxyModule["NetEaseMusic"] = "netease-music";
     ProxyModule["Instagram"] = "instagram";
     ProxyModule["YouTube"] = "youtube";
-    ProxyModule["NetEasyMusic"] = "163";
     ProxyModule["Disqus"] = "disqus";
 })(ProxyModule || (ProxyModule = {}));/**
  * @file BFF Server proxy
@@ -108,6 +109,11 @@ const proxys = [
         referer: 'https://surmon.me/'
     },
     {
+        module: ProxyModule.Douban,
+        origin: 'https://www.douban.com',
+        referer: 'https://www.douban.com/'
+    },
+    {
         module: ProxyModule.Instagram,
         origin: 'https://www.instagram.com',
         referer: 'https://www.instagram.com/'
@@ -118,7 +124,7 @@ const proxys = [
         referer: 'https://www.youtube.com/'
     },
     {
-        module: ProxyModule.NetEasyMusic,
+        module: ProxyModule.NetEaseMusic,
         origin: 'https://music.163.com',
         referer: 'https://music.163.com/'
     },
@@ -214,6 +220,7 @@ const META = Object.freeze({
 const THIRD_IDS = Object.freeze({
     YOUTUBE_CHANNEL_ID: 'UCoL-j6T28PLSJ2U6ZdONS0w',
     MUSIC_163_BGM_ALBUM_ID: '638949385',
+    DOUBAN_USER_ID: '56647958',
     GITHUB_USER_ID: 'surmon-china',
     TWITTER_USER_ID: 'surmon7788',
     INSTAGRAM_USERNAME: 'surmon666',
@@ -229,6 +236,7 @@ Object.freeze({
     RSS: '/rss.xml',
     SITE_MAP: '/sitemap.xml',
     UPTIME_STATUS: 'https://stats.uptimerobot.com/Q2k7OTXxJN',
+    NPM_HOMEPAGE: 'https://www.npmjs.com/~surmon',
     GITHUB_SURMON_ME: 'https://github.com/surmon-china/surmon.me',
     GITHUB_NODEPRESS: 'https://github.com/surmon-china/nodepress',
     GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
@@ -240,13 +248,12 @@ Object.freeze({
     GOOGLE_ROAD_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3',
     DISCORD_GROUP: 'https://discord.surmon.me',
     TELEGRAM_GROUP: 'https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA',
-    SPOTIFY: 'https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o',
     MUSIC_163: `https://music.163.com/#/playlist?id=${THIRD_IDS.MUSIC_163_BGM_ALBUM_ID}`,
     YOUTUBE_CHANNEL: `https://www.youtube.com/channel/${THIRD_IDS.YOUTUBE_CHANNEL_ID}`,
     TELEGRAM: 'https://t.me/surmon',
     OPENSEA: 'https://opensea.io/surmon',
     DOUBAN: 'https://www.douban.com/people/nocower',
-    DOUBAN_MOVIE: 'https://m.douban.com/people/56647958/movie_charts',
+    DOUBAN_MOVIE: `https://m.douban.com/people/${THIRD_IDS.DOUBAN_USER_ID}/movie_charts`,
     QUORA: 'https://www.quora.com/profile/Surmon',
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
     INSTAGRAM: `https://www.instagram.com/${THIRD_IDS.INSTAGRAM_USERNAME}`,

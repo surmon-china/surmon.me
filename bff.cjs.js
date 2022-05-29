@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.11.14
+* Surmon.me v3.12.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -36,6 +36,9 @@ var TunnelModule;
     TunnelModule["GitHubSponsors"] = "github_sponsors";
     TunnelModule["GitHubContributions"] = "github_contributions";
     TunnelModule["NetEaseMusic"] = "netease_music";
+    TunnelModule["DoubanMovies"] = "douban_movies";
+    TunnelModule["OpenSourceGitHubStatistic"] = "open_source_github_statistic";
+    TunnelModule["OpenSourceNPMStatistic"] = "open_source_npm_statistic";
 })(TunnelModule || (TunnelModule = {}));/**
  * @file BFF server config
  * @module config.bff
@@ -61,6 +64,7 @@ const META = Object.freeze({
 const THIRD_IDS = Object.freeze({
     YOUTUBE_CHANNEL_ID: 'UCoL-j6T28PLSJ2U6ZdONS0w',
     MUSIC_163_BGM_ALBUM_ID: '638949385',
+    DOUBAN_USER_ID: '56647958',
     GITHUB_USER_ID: 'surmon-china',
     TWITTER_USER_ID: 'surmon7788',
     INSTAGRAM_USERNAME: 'surmon666',
@@ -72,10 +76,11 @@ Object.freeze({
     BTC_ADDRESS: 'bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze',
     ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
 });
-Object.freeze({
+const VALUABLE_LINKS = Object.freeze({
     RSS: '/rss.xml',
     SITE_MAP: '/sitemap.xml',
     UPTIME_STATUS: 'https://stats.uptimerobot.com/Q2k7OTXxJN',
+    NPM_HOMEPAGE: 'https://www.npmjs.com/~surmon',
     GITHUB_SURMON_ME: 'https://github.com/surmon-china/surmon.me',
     GITHUB_NODEPRESS: 'https://github.com/surmon-china/nodepress',
     GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
@@ -87,13 +92,12 @@ Object.freeze({
     GOOGLE_ROAD_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3',
     DISCORD_GROUP: 'https://discord.surmon.me',
     TELEGRAM_GROUP: 'https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA',
-    SPOTIFY: 'https://open.spotify.com/user/v0kz9hpwpbqnmtnrfhbyl812o',
     MUSIC_163: `https://music.163.com/#/playlist?id=${THIRD_IDS.MUSIC_163_BGM_ALBUM_ID}`,
     YOUTUBE_CHANNEL: `https://www.youtube.com/channel/${THIRD_IDS.YOUTUBE_CHANNEL_ID}`,
     TELEGRAM: 'https://t.me/surmon',
     OPENSEA: 'https://opensea.io/surmon',
     DOUBAN: 'https://www.douban.com/people/nocower',
-    DOUBAN_MOVIE: 'https://m.douban.com/people/56647958/movie_charts',
+    DOUBAN_MOVIE: `https://m.douban.com/people/${THIRD_IDS.DOUBAN_USER_ID}/movie_charts`,
     QUORA: 'https://www.quora.com/profile/Surmon',
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
     INSTAGRAM: `https://www.instagram.com/${THIRD_IDS.INSTAGRAM_USERNAME}`,
@@ -646,6 +650,47 @@ const getYouTubeVideoListByPlayerlistID = async (playlistID) => {
         throw response.data;
     }
 };/**
+ * @file BFF open-srouce getter
+ * @module server.getter.open-srouce
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const fetchStatisticJSON = async (fileName) => {
+    const url = `https://raw.githubusercontent.com/${THIRD_IDS.GITHUB_USER_ID}/${THIRD_IDS.GITHUB_USER_ID}/release/${fileName}`;
+    const response = await axios__default["default"].get(url, { timeout: 6000 });
+    if (response.status === 200) {
+        return response.data;
+    }
+    else {
+        throw response.data;
+    }
+};
+const getGitHubStatistic = () => fetchStatisticJSON('github.json');
+const getNPMStatistic = () => fetchStatisticJSON('npm.json');/**
+ * @file BFF douban getter
+ * @module server.getter.douban
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const getDoubanMovies = () => {
+    const URL = `https://m.douban.com/rexxar/api/v2/user/${THIRD_IDS.DOUBAN_USER_ID}/collection_stats?type=movie&for_mobile=1`;
+    return axios__default["default"]
+        .get(URL, {
+        timeout: 6000,
+        headers: {
+            Referer: VALUABLE_LINKS.DOUBAN_MOVIE
+        }
+    })
+        .then((response) => {
+        if (response.status === 200) {
+            return response.data;
+        }
+        else {
+            return Promise.reject(response.data);
+        }
+    })
+        .catch((error) => {
+        return Promise.reject(error.toJSON?.() || error);
+    });
+};/**
  * @file BFF music getter
  * @module server.getter.music
  * @author Surmon <https://github.com/surmon-china>
@@ -872,9 +917,10 @@ const cacher = async (_config) => {
 var ProxyModule;
 (function (ProxyModule) {
     ProxyModule["Default"] = "default";
+    ProxyModule["Douban"] = "douban";
+    ProxyModule["NetEaseMusic"] = "netease-music";
     ProxyModule["Instagram"] = "instagram";
     ProxyModule["YouTube"] = "youtube";
-    ProxyModule["NetEasyMusic"] = "163";
     ProxyModule["Disqus"] = "disqus";
 })(ProxyModule || (ProxyModule = {}));/**
  * @file BFF Server proxy
@@ -888,6 +934,11 @@ const proxys = [
         referer: 'https://surmon.me/'
     },
     {
+        module: ProxyModule.Douban,
+        origin: 'https://www.douban.com',
+        referer: 'https://www.douban.com/'
+    },
+    {
         module: ProxyModule.Instagram,
         origin: 'https://www.instagram.com',
         referer: 'https://www.instagram.com/'
@@ -898,7 +949,7 @@ const proxys = [
         referer: 'https://www.youtube.com/'
     },
     {
-        module: ProxyModule.NetEasyMusic,
+        module: ProxyModule.NetEaseMusic,
         origin: 'https://music.163.com',
         referer: 'https://music.163.com/'
     },
@@ -1187,6 +1238,25 @@ createExpressApp().then(({ app, server, cache }) => {
             }
         });
     }));
+    // open-source
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceGitHubStatistic}`, responsor(() => {
+        return cacher({
+            cache,
+            key: 'open_source_github_statistic',
+            age: 60 * 60 * 8,
+            retryWhen: 60 * 10,
+            getter: getGitHubStatistic
+        });
+    }));
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceNPMStatistic}`, responsor(() => {
+        return cacher({
+            cache,
+            key: 'open_source_npm_statistic',
+            age: 60 * 60 * 8,
+            retryWhen: 60 * 10,
+            getter: getNPMStatistic
+        });
+    }));
     // 163 music BGM list
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`, responsor(() => {
         return cacher({
@@ -1195,6 +1265,16 @@ createExpressApp().then(({ app, server, cache }) => {
             age: 60 * 60 * 12,
             retryWhen: 60 * 10,
             getter: getSongList
+        });
+    }));
+    // Douban movies
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.DoubanMovies}`, responsor(() => {
+        return cacher({
+            cache,
+            key: 'douban_movies',
+            age: 60 * 60 * 32,
+            retryWhen: 60 * 10,
+            getter: getDoubanMovies
         });
     }));
     // Twitter userinfo
