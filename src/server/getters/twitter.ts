@@ -121,7 +121,9 @@ function doFetchAllTweets({
 }: AllTweetsFetchParams) {
   fetchPageTweets(startTime, nextToken)
     .then((result: any) => {
-      tweets.push(...result.data)
+      if (result.data) {
+        tweets.push(...result.data)
+      }
       if (result.meta.next_token) {
         doFetchAllTweets({
           startTime,

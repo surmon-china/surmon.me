@@ -52,8 +52,8 @@ nodepress.interceptors.response.use(
       status: errorInfo.code,
       method: errorJSON.config.method,
       baseURL: errorJSON.config.baseURL,
-      params: errorJSON.config.params,
       url: errorJSON.config.url,
+      params: errorJSON.config.params,
       data: errorJSON.config.data,
       headers: errorJSON.config.headers
     }
