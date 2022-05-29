@@ -13,7 +13,7 @@
         <template #zh>
           <span>发布了</span>
           <statistic-count :count="store.totalPackages" />
-          <span>个软件包</span>
+          <span>个公共软件包</span>
         </template>
         <template #en>
           <statistic-count :count="store.totalPackages" />
@@ -25,9 +25,9 @@
       <i class="iconfont icon-download"></i>
       <i18n>
         <template #zh>
-          <span>共</span>
+          <span>被下载</span>
           <statistic-count large primary split :count="store.totalDownloads" />
-          <span>次下载</span>
+          <span>次</span>
         </template>
         <template #en>
           <statistic-count large primary split :count="store.totalDownloads" />
@@ -88,6 +88,6 @@
 
   .line-1 {
     margin-top: $gap;
-    margin-bottom: $gap;
+    margin-bottom: 0.7em;
   }
 </style>

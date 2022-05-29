@@ -125,6 +125,7 @@
           color: $text;
           font-size: $font-size-h3;
           font-weight: bold;
+          letter-spacing: 1px;
         }
       }
 

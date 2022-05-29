@@ -57,7 +57,7 @@ export const i18ns: { [key: string]: I18nLanguageMap<Language> } = {
   },
   livingNow: {
     [Language.Chinese]: `暂居上海，养两条狗`,
-    [Language.English]: `I'm living in Shanghai now`
+    [Language.English]: `Omicron prison, Shanghai`
   }
 }
 

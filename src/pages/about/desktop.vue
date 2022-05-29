@@ -619,6 +619,7 @@
         }
 
         .text {
+          letter-spacing: 1px;
           color: $text-secondary;
           font-size: $font-size-h4;
           font-weight: bold;
