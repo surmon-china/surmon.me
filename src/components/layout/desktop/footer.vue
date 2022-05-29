@@ -14,7 +14,7 @@
       </a>
       <divider type="vertical" />
       <ulink :href="VALUABLE_LINKS.UPTIME_STATUS">
-        <i18n zh="时态" en="STATUS" />
+        <i18n zh="实态" en="STATUS" />
       </ulink>
     </div>
   </footer>
