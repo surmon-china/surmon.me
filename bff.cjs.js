@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.12.4
+* Surmon.me v3.12.5
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -467,7 +467,9 @@ const fetchPageTweets = async (startTime, pagination_token) => {
 function doFetchAllTweets({ startTime, nextToken, tweets = [], onSucceed, onFailed }) {
     fetchPageTweets(startTime, nextToken)
         .then((result) => {
-        tweets.push(...result.data);
+        if (result.data) {
+            tweets.push(...result.data);
+        }
         if (result.meta.next_token) {
             doFetchAllTweets({
                 startTime,
