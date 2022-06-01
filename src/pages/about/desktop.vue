@@ -430,11 +430,12 @@
           width: $size;
           height: $size;
           z-index: $z-index-normal + 2;
-          margin-top: $banner-height - 4rem;
-          max-width: 100%;
-          border-radius: 100%;
-          border: 8px solid $module-bg;
           box-sizing: content-box;
+          margin-top: $banner-height - 4rem;
+          border: 8px solid $module-bg;
+          border-radius: 100%;
+          overflow: hidden;
+          background-color: $module-bg;
           transition: transform $transition-time-slow;
           &:hover {
             transform: rotate(360deg);
