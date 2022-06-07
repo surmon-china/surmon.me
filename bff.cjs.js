@@ -1,10 +1,10 @@
 /*!
-* Surmon.me v3.12.7
+* Surmon.me v3.13.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
 */
-'use strict';var express=require('express'),RSS=require('rss'),axios=require('axios'),path=require('path'),stream=require('stream'),sitemap=require('sitemap'),WonderfulBingWallpaper=require('wonderful-bing-wallpaper'),yargs=require('yargs'),fs=require('fs'),vite=require('vite'),http=require('http'),compression=require('compression'),cookieParser=require('cookie-parser'),httpProxy=require('http-proxy'),LRU=require('lru-cache'),redis=require('redis');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var express__default=/*#__PURE__*/_interopDefaultLegacy(express);var RSS__default=/*#__PURE__*/_interopDefaultLegacy(RSS);var axios__default=/*#__PURE__*/_interopDefaultLegacy(axios);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var WonderfulBingWallpaper__default=/*#__PURE__*/_interopDefaultLegacy(WonderfulBingWallpaper);var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var http__default=/*#__PURE__*/_interopDefaultLegacy(http);var compression__default=/*#__PURE__*/_interopDefaultLegacy(compression);var cookieParser__default=/*#__PURE__*/_interopDefaultLegacy(cookieParser);var LRU__default=/*#__PURE__*/_interopDefaultLegacy(LRU);/**
+'use strict';var express=require('express'),RSS=require('rss'),axios=require('axios'),path=require('path'),stream=require('stream'),sitemap=require('sitemap'),WonderfulBingWallpaper=require('wonderful-bing-wallpaper'),fastXmlParser=require('fast-xml-parser'),yargs=require('yargs'),fs=require('fs'),vite=require('vite'),http=require('http'),compression=require('compression'),cookieParser=require('cookie-parser'),httpProxy=require('http-proxy'),LRU=require('lru-cache'),redis=require('redis');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var express__default=/*#__PURE__*/_interopDefaultLegacy(express);var RSS__default=/*#__PURE__*/_interopDefaultLegacy(RSS);var axios__default=/*#__PURE__*/_interopDefaultLegacy(axios);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var WonderfulBingWallpaper__default=/*#__PURE__*/_interopDefaultLegacy(WonderfulBingWallpaper);var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var http__default=/*#__PURE__*/_interopDefaultLegacy(http);var compression__default=/*#__PURE__*/_interopDefaultLegacy(compression);var cookieParser__default=/*#__PURE__*/_interopDefaultLegacy(cookieParser);var LRU__default=/*#__PURE__*/_interopDefaultLegacy(LRU);/**
  * @file Dev environment
  * @module environment
  * @author Surmon <https://github.com/surmon-china>
@@ -37,6 +37,7 @@ var TunnelModule;
     TunnelModule["GitHubContributions"] = "github_contributions";
     TunnelModule["NetEaseMusic"] = "netease_music";
     TunnelModule["DoubanMovies"] = "douban_movies";
+    TunnelModule["MyGoogleMap"] = "my_google_map";
     TunnelModule["OpenSourceGitHubStatistic"] = "open_source_github_statistic";
     TunnelModule["OpenSourceNPMStatistic"] = "open_source_npm_statistic";
 })(TunnelModule || (TunnelModule = {}));/**
@@ -52,27 +53,39 @@ const getBFFServerPort = () => Number(process.env.PORT || 3000);/**
  * @module config.app
  * @author Surmon <https://github.com/surmon-china>
  */
-const GA_MEASUREMENT_ID = 'UA-84887611-3';
 const META = Object.freeze({
     title: 'Surmon.me',
     zh_sub_title: '来苏之望',
     en_sub_title: 'Because the mountain is there',
+    zh_biography: '本是浪蝶游蜂，自留半亩石池，但求直抒胸臆，挥墨九云之中',
+    en_biography: 'Either write something worth reading, do something worth writing.',
     url: 'https://surmon.me',
     domain: 'surmon.me',
-    author: 'Surmon'
+    author: 'Surmon',
+    primary: '#0088f5'
 });
-const THIRD_IDS = Object.freeze({
+Object.freeze({
+    zh_title: '苟活于此，养两条狗',
+    en_title: 'Omicron prison, Shanghai',
+    coordinates: [121.55152956275738, 31.215855513780504]
+});
+Object.freeze({
+    TOKEN: 'pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE4YmkzNjB2Z2wzY3F5dWg2M2tqeWIifQ.JhgYGFI4zsuNiX9dH-pBDg',
+    STYLE_LIGHT: 'mapbox://styles/surmon/cl41fktzn000f14pet94oo1u4',
+    STYLE_DARK: 'mapbox://styles/surmon/cl41gy1qo000l15ry20j5ae0k',
+    ZOOM: 11.337439,
+    CENTER: [121.4930539351185, 31.227570979004497]
+});
+const IDENTITIES = Object.freeze({
+    GOOGLE_ANALYTICS_TRACKING_ID: 'UA-84887611-3',
+    GOOGLE_ADSENSE_PUBLISHER_ID: 'ca-pub-4710915636313788',
     YOUTUBE_CHANNEL_ID: 'UCoL-j6T28PLSJ2U6ZdONS0w',
     MUSIC_163_BGM_ALBUM_ID: '638949385',
     DOUBAN_USER_ID: '56647958',
-    GITHUB_USER_ID: 'surmon-china',
-    TWITTER_USER_ID: 'surmon7788',
+    GITHUB_USER_NAME: 'surmon-china',
+    TWITTER_USER_NAME: 'surmon7788',
     INSTAGRAM_USERNAME: 'surmon666',
-    INSTAGRAM_FB_ID: '17841405600281893'
-});
-Object.freeze({
-    PAYPAL: 'https://paypal.me/surmon',
-    GITHUB_SPONSORS: 'https://github.com/sponsors/surmon-china',
+    INSTAGRAM_FB_ID: '17841405600281893',
     BTC_ADDRESS: 'bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze',
     ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
 });
@@ -81,27 +94,30 @@ const VALUABLE_LINKS = Object.freeze({
     SITE_MAP: '/sitemap.xml',
     UPTIME_STATUS: 'https://stats.uptimerobot.com/Q2k7OTXxJN',
     NPM_HOMEPAGE: 'https://www.npmjs.com/~surmon',
+    PAYPAL: 'https://paypal.me/surmon',
+    GITHUB_SPONSORS: `https://github.com/sponsors/${IDENTITIES.GITHUB_USER_NAME}`,
+    GITHUB: `https://github.com/${IDENTITIES.GITHUB_USER_NAME}`,
     GITHUB_SURMON_ME: 'https://github.com/surmon-china/surmon.me',
     GITHUB_NODEPRESS: 'https://github.com/surmon-china/nodepress',
     GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
     GITHUB_BLOG_STAR_LIST: 'https://github.com/stars/surmon-china/lists/surmon-me',
     APP_APK_FILE: 'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
-    GITHUB: 'https://github.com/surmon-china',
     UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
     MARKDOWN: 'https://daringfireball.net/projects/markdown/',
-    GOOGLE_ROAD_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3',
+    GOOGLE_MY_MAP: `https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3`,
+    GOOGLE_MY_MAP_KML: `https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w`,
     DISCORD_GROUP: 'https://discord.surmon.me',
-    TELEGRAM_GROUP: 'https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA',
-    MUSIC_163: `https://music.163.com/#/playlist?id=${THIRD_IDS.MUSIC_163_BGM_ALBUM_ID}`,
-    YOUTUBE_CHANNEL: `https://www.youtube.com/channel/${THIRD_IDS.YOUTUBE_CHANNEL_ID}`,
+    TELEGRAM_GROUP: 'https://t.me/+Z2wsxogVbYM2ZmE1',
+    MUSIC_163: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
+    YOUTUBE_CHANNEL: `https://www.youtube.com/channel/${IDENTITIES.YOUTUBE_CHANNEL_ID}`,
     TELEGRAM: 'https://t.me/surmon',
     OPENSEA: 'https://opensea.io/surmon',
     DOUBAN: 'https://www.douban.com/people/nocower',
-    DOUBAN_MOVIE: `https://m.douban.com/people/${THIRD_IDS.DOUBAN_USER_ID}/movie_charts`,
+    DOUBAN_MOVIE: `https://m.douban.com/people/${IDENTITIES.DOUBAN_USER_ID}/movie_charts`,
     QUORA: 'https://www.quora.com/profile/Surmon',
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
-    INSTAGRAM: `https://www.instagram.com/${THIRD_IDS.INSTAGRAM_USERNAME}`,
-    TWITTER: `https://twitter.com/${THIRD_IDS.TWITTER_USER_ID}`
+    INSTAGRAM: `https://www.instagram.com/${IDENTITIES.INSTAGRAM_USERNAME}`,
+    TWITTER: `https://twitter.com/${IDENTITIES.TWITTER_USER_NAME}`
 });/**
  * @file BFF Server helper
  * @module server.helper
@@ -239,7 +255,9 @@ const getGAScriptURL = (measurementID) => {
  * @author Surmon <https://github.com/surmon-china>
  */
 const getGTagScript = async () => {
-    const response = await axios__default["default"].get(getGAScriptURL(GA_MEASUREMENT_ID), { timeout: 6000 });
+    const response = await axios__default["default"].get(getGAScriptURL(IDENTITIES.GOOGLE_ANALYTICS_TRACKING_ID), {
+        timeout: 6000
+    });
     if (response.status === 200) {
         return response.data;
     }
@@ -282,6 +300,32 @@ const getAllWallpapers = async () => {
     const [zh, en] = await Promise.all([getZHWallpapers(), getENWallpapers()]);
     return { zh, en };
 };/**
+ * @file BFF google map getter
+ * @module server.getter.my-google-map
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const parser = new fastXmlParser.XMLParser({
+    ignoreAttributes: false,
+    allowBooleanAttributes: true,
+    attributeNamePrefix: '@'
+});
+const getMyGoogleMap = () => {
+    return axios__default["default"]
+        .get(VALUABLE_LINKS.GOOGLE_MY_MAP_KML, {
+        timeout: 6000
+    })
+        .then((response) => {
+        if (response.status === 200) {
+            return parser.parse(response.data).kml.Document;
+        }
+        else {
+            return Promise.reject(response.data);
+        }
+    })
+        .catch((error) => {
+        return Promise.reject(error.toJSON?.() || error);
+    });
+};/**
  * @file BFF argv config
  * @module config.bff.argv
  * @author Surmon <https://github.com/surmon-china>
@@ -303,7 +347,7 @@ const graphqlGitHub = (query) => {
         method: 'POST',
         data: JSON.stringify({
             query: `query {
-        user(login: "${THIRD_IDS.GITHUB_USER_ID}") {
+        user(login: "${IDENTITIES.GITHUB_USER_NAME}") {
           ${query}
         }
       }`
@@ -419,7 +463,7 @@ const getTwitterTweetsByUID = async (UID) => {
     }
 };
 const getTwitterUserinfo = () => {
-    return getTwitterUserinfoByUsername(THIRD_IDS.TWITTER_USER_ID);
+    return getTwitterUserinfoByUsername(IDENTITIES.TWITTER_USER_NAME);
 };
 let uidCache = null;
 const ensureUID = async () => {
@@ -535,7 +579,7 @@ const getInstagramMedias = async () => {
 // https://developers.facebook.com/docs/instagram-basic-display-api/reference/user/media
 const fetchPageMedias = (sinceUnix, nextToken) => {
     return axios__default["default"]
-        .get(`https://graph.instagram.com/v13.0/${THIRD_IDS.INSTAGRAM_FB_ID}/media`, {
+        .get(`https://graph.instagram.com/v13.0/${IDENTITIES.INSTAGRAM_FB_ID}/media`, {
         timeout: 8000,
         params: {
             access_token: INSTAGRAM_TOKEN,
@@ -621,7 +665,7 @@ const getYouTubeChannelPlayLists = async () => {
         params: {
             part: 'snippet,contentDetails',
             maxResults: 50,
-            channelId: THIRD_IDS.YOUTUBE_CHANNEL_ID,
+            channelId: IDENTITIES.YOUTUBE_CHANNEL_ID,
             key: YOUTUBE_API_KEY
         }
     });
@@ -657,7 +701,7 @@ const getYouTubeVideoListByPlayerlistID = async (playlistID) => {
  * @author Surmon <https://github.com/surmon-china>
  */
 const fetchStatisticJSON = async (fileName) => {
-    const url = `https://raw.githubusercontent.com/${THIRD_IDS.GITHUB_USER_ID}/${THIRD_IDS.GITHUB_USER_ID}/release/${fileName}`;
+    const url = `https://raw.githubusercontent.com/${IDENTITIES.GITHUB_USER_NAME}/${IDENTITIES.GITHUB_USER_NAME}/release/${fileName}`;
     const response = await axios__default["default"].get(url, { timeout: 6000 });
     if (response.status === 200) {
         return response.data;
@@ -673,7 +717,7 @@ const getNPMStatistic = () => fetchStatisticJSON('npm.json');/**
  * @author Surmon <https://github.com/surmon-china>
  */
 const getDoubanMovies = () => {
-    const URL = `https://m.douban.com/rexxar/api/v2/user/${THIRD_IDS.DOUBAN_USER_ID}/collection_stats?type=movie&for_mobile=1`;
+    const URL = `https://m.douban.com/rexxar/api/v2/user/${IDENTITIES.DOUBAN_USER_ID}/collection_stats?type=movie&for_mobile=1`;
     return axios__default["default"]
         .get(URL, {
         timeout: 6000,
@@ -700,7 +744,7 @@ const getDoubanMovies = () => {
 const PLAY_LIST_LIMIT = 168;
 const getSongList = async () => {
     // https://github.com/Binaryify/NeteaseCloudMusicApi/blob/a0500ec648f22a1dd20fc7b529126f813aa26935/module/playlist_track_all.js
-    const playlistDetail = await axios__default["default"].get(`https://music.163.com/api/v6/playlist/detail?id=${THIRD_IDS.MUSIC_163_BGM_ALBUM_ID}`, { timeout: 6000 });
+    const playlistDetail = await axios__default["default"].get(`https://music.163.com/api/v6/playlist/detail?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`, { timeout: 6000 });
     if (playlistDetail.data.code < 0) {
         throw new Error(playlistDetail.data.message);
     }
@@ -1212,6 +1256,16 @@ createExpressApp().then(({ app, server, cache }) => {
             age: 60 * 60 * 6,
             retryWhen: 60 * 30,
             getter: getAllWallpapers
+        });
+    }));
+    // My GoogleMap
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.MyGoogleMap}`, responsor(() => {
+        return cacher({
+            cache,
+            key: 'my_google_map',
+            age: 60 * 60 * 6,
+            retryWhen: 60 * 30,
+            getter: getMyGoogleMap
         });
     }));
     // GitHub sponsors

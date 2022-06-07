@@ -1,23 +1,23 @@
 {
   "index.html": {
-    "file": "index-859492bf.js",
+    "file": "index-264900a0.js",
     "src": "index.html",
     "isEntry": true,
     "imports": [
-      "_vendor-41409e78.js",
-      "_expansion-df8c0060.js"
+      "_vendor-d1663e6e.js",
+      "_expansion-edf55a78.js"
     ]
   },
-  "_expansion-df8c0060.js": {
-    "file": "expansion-df8c0060.js",
+  "_expansion-edf55a78.js": {
+    "file": "expansion-edf55a78.js",
     "imports": [
-      "_vendor-41409e78.js"
+      "_vendor-d1663e6e.js"
     ]
   },
-  "_vendor-41409e78.js": {
-    "file": "vendor-41409e78.js",
+  "_vendor-d1663e6e.js": {
+    "file": "vendor-d1663e6e.js",
     "imports": [
-      "_expansion-df8c0060.js"
+      "_expansion-edf55a78.js"
     ]
   }
 }
