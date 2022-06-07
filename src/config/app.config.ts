@@ -39,9 +39,7 @@ export const GEO_INFO = Object.freeze({
 })
 
 export const MAPBOX_CONFIG = Object.freeze({
-  // pubbbb
-  TOKEN: 'pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE1N2RwODFncTQzZG80dm0yeDJyNjgifQ.57CxQiLjTw1_1O_so6eUNA',
-  // TOKEN: 'pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE4YmkzNjB2Z2wzY3F5dWg2M2tqeWIifQ.JhgYGFI4zsuNiX9dH-pBDg',
+  TOKEN: 'pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE4YmkzNjB2Z2wzY3F5dWg2M2tqeWIifQ.JhgYGFI4zsuNiX9dH-pBDg',
   STYLE_LIGHT: 'mapbox://styles/surmon/cl41fktzn000f14pet94oo1u4',
   STYLE_DARK: 'mapbox://styles/surmon/cl41gy1qo000l15ry20j5ae0k',
   ZOOM: 11.337439,
