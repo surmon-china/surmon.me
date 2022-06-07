@@ -156,7 +156,7 @@
 
           .empty,
           .placemarks {
-            padding-left: 2em;
+            padding-left: 2rem;
             margin-bottom: $gap;
             color: $text-secondary;
           }
@@ -179,6 +179,7 @@
 
               .text {
                 margin-left: $sm-gap;
+                @include text-overflow();
               }
             }
           }
