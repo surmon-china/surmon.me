@@ -43,7 +43,6 @@ export const IDENTITIES = Object.freeze({
   TWITTER_USER_NAME: 'surmon7788',
   INSTAGRAM_USERNAME: 'surmon666',
   INSTAGRAM_FB_ID: '17841405600281893',
-  MY_GOOGLE_MAP_MID: '1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w',
   BTC_ADDRESS: 'bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze',
   ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
 })
@@ -64,8 +63,8 @@ export const VALUABLE_LINKS = Object.freeze({
     'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
   UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
   MARKDOWN: 'https://daringfireball.net/projects/markdown/',
-  GOOGLE_MY_MAP: `https://www.google.com/maps/d/embed?mid=${IDENTITIES.MY_GOOGLE_MAP_MID}&z=3`,
-  GOOGLE_MY_MAP_KML: `https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=${IDENTITIES.MY_GOOGLE_MAP_MID}`,
+  GOOGLE_MY_MAP: `https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3`,
+  GOOGLE_MY_MAP_KML: `https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w`,
   DISCORD_GROUP: 'https://discord.surmon.me',
   TELEGRAM_GROUP: 'https://t.me/+Z2wsxogVbYM2ZmE1',
   MUSIC_163: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
