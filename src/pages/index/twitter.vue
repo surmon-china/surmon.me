@@ -141,7 +141,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, PropType } from 'vue'
-  import { THIRD_IDS, VALUABLE_LINKS } from '/@/config/app.config'
+  import { IDENTITIES, VALUABLE_LINKS } from '/@/config/app.config'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
@@ -220,7 +220,7 @@
         return tweets.data.map((tweet) => {
           const completedTweet: any = {
             tweet,
-            url: getTwitterTweetDetailURL(THIRD_IDS.TWITTER_USER_ID, tweet.id),
+            url: getTwitterTweetDetailURL(IDENTITIES.TWITTER_USER_NAME, tweet.id),
             location: getLocation(tweet),
             medias: getMedias(tweet),
             html: unescape(tweet.text)

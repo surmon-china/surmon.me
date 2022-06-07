@@ -5,11 +5,16 @@
  */
 
 import axios from 'axios'
-import { GA_MEASUREMENT_ID } from '@/config/app.config'
+import { IDENTITIES } from '@/config/app.config'
 import { getGAScriptURL } from '@/transforms/gtag'
 
 export const getGTagScript = async () => {
-  const response = await axios.get<string>(getGAScriptURL(GA_MEASUREMENT_ID), { timeout: 6000 })
+  const response = await axios.get<string>(
+    getGAScriptURL(IDENTITIES.GOOGLE_ANALYTICS_TRACKING_ID),
+    {
+      timeout: 6000
+    }
+  )
   if (response.status === 200) {
     return response.data
   } else {

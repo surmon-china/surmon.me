@@ -5,7 +5,7 @@
  */
 
 import axios from 'axios'
-import { THIRD_IDS } from '@/config/app.config'
+import { IDENTITIES } from '@/config/app.config'
 import { INSTAGRAM_TOKEN } from '@/config/bff.argv'
 
 // 1. Generate long-lived access tokens for Instagram Testers (60 days)
@@ -44,7 +44,7 @@ export const getInstagramMedias = async () => {
 // https://developers.facebook.com/docs/instagram-basic-display-api/reference/user/media
 const fetchPageMedias = (sinceUnix: number, nextToken?: string) => {
   return axios
-    .get<any>(`https://graph.instagram.com/v13.0/${THIRD_IDS.INSTAGRAM_FB_ID}/media`, {
+    .get<any>(`https://graph.instagram.com/v13.0/${IDENTITIES.INSTAGRAM_FB_ID}/media`, {
       timeout: 8000,
       params: {
         access_token: INSTAGRAM_TOKEN,

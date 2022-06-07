@@ -31,7 +31,7 @@ import { getLayoutByRouteMeta } from '/@/transforms/layout'
 import { getTargetCDNURL } from '/@/transforms/url'
 import { randomNumber } from '/@/utils/random'
 import { Language, LanguageKey } from '/@/language'
-import { GA_MEASUREMENT_ID, ADSENSE_CLIENT_ID } from '/@/config/app.config'
+import { IDENTITIES } from '/@/config/app.config'
 import { isSSR } from '/@/app/environment'
 import { isProd } from '/@/environment'
 
@@ -60,10 +60,10 @@ app.use(lozad, { exportToGlobal: true })
 app.use(defer, { exportToGlobal: true })
 app.use(popup, { exportToGlobal: true })
 app.use(loading, { exportToGlobal: true })
-app.use(adsense, { ID: ADSENSE_CLIENT_ID, enabledAutoAD: true })
+app.use(adsense, { ID: IDENTITIES.GOOGLE_ADSENSE_PUBLISHER_ID, enabledAutoAD: true })
 app.use(gtag, {
   router,
-  id: GA_MEASUREMENT_ID,
+  id: IDENTITIES.GOOGLE_ANALYTICS_TRACKING_ID,
   config: { send_page_view: false },
   customResourceURL: getTargetCDNURL('/effects/gtag')
 })

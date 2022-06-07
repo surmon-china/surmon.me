@@ -7,7 +7,7 @@
   import 'mapbox-gl/dist/mapbox-gl.css'
   import { defineComponent, shallowRef, onMounted, onBeforeUnmount, watch, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { GEO_INFO, MAPBOX_CONFIG } from '/@/config/app.config'
+  import { META, GEO_INFO, MAPBOX_CONFIG } from '/@/config/app.config'
   import { FeatureCollectionJSON, geoJSONFeatureToLayer, newMapboxPopup } from './helper'
 
   mapboxgl.accessToken = MAPBOX_CONFIG.TOKEN
@@ -82,7 +82,7 @@
 
           // living now marker
           new mapboxgl.Marker({
-            color: '#0088f5',
+            color: META.primary,
             anchor: 'bottom'
           })
             .setLngLat(GEO_INFO.coordinates as any)

@@ -5,7 +5,7 @@
  */
 
 import axios from 'axios'
-import { THIRD_IDS } from '@/config/app.config'
+import { IDENTITIES } from '@/config/app.config'
 
 // https://521dimensions.com/open-source/amplitudejs/docs/configuration/playlists.html
 // https://521dimensions.com/open-source/amplitudejs/docs/configuration/song-objects.html#special-keys
@@ -24,7 +24,7 @@ const PLAY_LIST_LIMIT = 168
 export const getSongList = async (): Promise<Array<Song>> => {
   // https://github.com/Binaryify/NeteaseCloudMusicApi/blob/a0500ec648f22a1dd20fc7b529126f813aa26935/module/playlist_track_all.js
   const playlistDetail = await axios.get<any>(
-    `https://music.163.com/api/v6/playlist/detail?id=${THIRD_IDS.MUSIC_163_BGM_ALBUM_ID}`,
+    `https://music.163.com/api/v6/playlist/detail?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
     { timeout: 6000 }
   )
   if (playlistDetail.data.code < 0) {

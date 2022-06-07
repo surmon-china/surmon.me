@@ -5,7 +5,7 @@
  */
 
 import axios from 'axios'
-import { THIRD_IDS } from '@/config/app.config'
+import { IDENTITIES } from '@/config/app.config'
 import { GITHUB_BEARER_TOKEN } from '@/config/bff.argv'
 
 const graphqlGitHub = <T = any>(query: string): Promise<T> => {
@@ -17,7 +17,7 @@ const graphqlGitHub = <T = any>(query: string): Promise<T> => {
       method: 'POST',
       data: JSON.stringify({
         query: `query {
-        user(login: "${THIRD_IDS.GITHUB_USER_ID}") {
+        user(login: "${IDENTITIES.GITHUB_USER_NAME}") {
           ${query}
         }
       }`

@@ -5,7 +5,7 @@
  */
 
 import axios from 'axios'
-import { THIRD_IDS } from '@/config/app.config'
+import { IDENTITIES } from '@/config/app.config'
 import { TWITTER_BEARER_TOKEN } from '@/config/bff.argv'
 
 // 1. Generate tokens
@@ -56,7 +56,7 @@ const getTwitterTweetsByUID = async (UID: string) => {
 }
 
 export const getTwitterUserinfo = () => {
-  return getTwitterUserinfoByUsername(THIRD_IDS.TWITTER_USER_ID)
+  return getTwitterUserinfoByUsername(IDENTITIES.TWITTER_USER_NAME)
 }
 
 let uidCache: string | null = null

@@ -5,7 +5,7 @@
  */
 
 import axios from 'axios'
-import { THIRD_IDS } from '@/config/app.config'
+import { IDENTITIES } from '@/config/app.config'
 import { YOUTUBE_API_KEY } from '@/config/bff.argv'
 
 // 1. Generate API key
@@ -19,7 +19,7 @@ export const getYouTubeChannelPlayLists = async () => {
     params: {
       part: 'snippet,contentDetails',
       maxResults: 50,
-      channelId: THIRD_IDS.YOUTUBE_CHANNEL_ID,
+      channelId: IDENTITIES.YOUTUBE_CHANNEL_ID,
       key: YOUTUBE_API_KEY
     }
   })

@@ -36,7 +36,7 @@
       </p>
       <uimage class="qrcode" v-if="activeTarget.qrcode" :src="activeTarget.qrcode" cdn />
       <div class="github-sponsors" v-if="activeTarget.id == 'github'">
-        <ulink class="link" :href="SPONSOR_LINKS.GITHUB_SPONSORS">
+        <ulink class="link" :href="VALUABLE_LINKS.GITHUB_SPONSORS">
           <i class="iconfont icon-heart"></i>
           <span class="text">Sponsor me on GitHub</span>
         </ulink>
@@ -66,7 +66,7 @@
                 <ulink
                   class="more-link"
                   v-if="ghSponsors.edges.length > maxSponsors"
-                  :href="SPONSOR_LINKS.GITHUB_SPONSORS + '#sponsors'"
+                  :href="VALUABLE_LINKS.GITHUB_SPONSORS + '#sponsors'"
                 >
                   + {{ ghSponsors.edges.length - maxSponsors }}
                 </ulink>
@@ -86,7 +86,7 @@
   import { TunnelModule } from '/@/constants/tunnel'
   import { copy } from '/@/utils/clipboard'
   import tunnel from '/@/services/tunnel'
-  import { SPONSOR_LINKS } from '/@/config/app.config'
+  import { IDENTITIES, VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
     name: 'Sponsor',
@@ -111,7 +111,7 @@
         {
           id: 'paypal',
           title: 'PayPal me',
-          link: SPONSOR_LINKS.PAYPAL,
+          link: VALUABLE_LINKS.PAYPAL,
           logo: '/images/third-party/paypal-logo.svg',
           qrcode: '/images/third-party/paypal-qrcode.png'
         },
@@ -132,14 +132,14 @@
         {
           id: 'bitcoin',
           title: 'BTC',
-          address: SPONSOR_LINKS.BTC_ADDRESS,
+          address: IDENTITIES.BTC_ADDRESS,
           logo: '/images/third-party/btc-logo.svg',
           qrcode: '/images/third-party/btc-qrcode.png'
         },
         {
           id: 'ethereum',
           title: 'ETH',
-          address: SPONSOR_LINKS.ETH_ADDRESS,
+          address: IDENTITIES.ETH_ADDRESS,
           logo: '/images/third-party/eth-logo.svg',
           qrcode: '/images/third-party/eth-qrcode.png'
         }
@@ -185,7 +185,7 @@
       })
 
       return {
-        SPONSOR_LINKS,
+        VALUABLE_LINKS,
         activeTid,
         activeTarget,
         targets,

@@ -5,10 +5,10 @@
  */
 
 import axios from 'axios'
-import { THIRD_IDS, VALUABLE_LINKS } from '@/config/app.config'
+import { IDENTITIES, VALUABLE_LINKS } from '@/config/app.config'
 
 export const getDoubanMovies = () => {
-  const URL = `https://m.douban.com/rexxar/api/v2/user/${THIRD_IDS.DOUBAN_USER_ID}/collection_stats?type=movie&for_mobile=1`
+  const URL = `https://m.douban.com/rexxar/api/v2/user/${IDENTITIES.DOUBAN_USER_ID}/collection_stats?type=movie&for_mobile=1`
   return axios
     .get<any>(URL, {
       timeout: 6000,
