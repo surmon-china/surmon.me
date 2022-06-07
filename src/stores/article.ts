@@ -161,7 +161,7 @@ export const useArticleDetailStore = defineStore('articleDetail', {
       const lastH3Index = shortContent.lastIndexOf('\n### ')
       const lastLineIndex = shortContent.lastIndexOf('\n\n\n')
       const splitIndex = Math.max(lastH5Index, lastH4Index, lastH3Index, lastLineIndex)
-      // console.log('-----content length', this.contentLength, index, splitIndex)
+      // console.log('- content length', this.contentLength, index, splitIndex)
       return splitIndex
     },
     defaultContent(): null | { markdown: string; html: string; headings: ArticleHeading[] } {

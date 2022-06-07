@@ -14,6 +14,8 @@ export const META = Object.freeze({
   title: 'Surmon.me',
   zh_sub_title: '来苏之望',
   en_sub_title: 'Because the mountain is there',
+  zh_biography: '本是浪蝶游蜂，自留半亩石池，但求直抒胸臆，挥墨九云之中',
+  en_biography: 'Either write something worth reading, do something worth writing.',
   url: 'https://surmon.me',
   domain: 'surmon.me',
   author: 'Surmon'
@@ -26,7 +28,24 @@ export const THIRD_IDS = Object.freeze({
   GITHUB_USER_ID: 'surmon-china',
   TWITTER_USER_ID: 'surmon7788',
   INSTAGRAM_USERNAME: 'surmon666',
-  INSTAGRAM_FB_ID: '17841405600281893'
+  INSTAGRAM_FB_ID: '17841405600281893',
+  MY_GOOGLE_MAP_MID: '1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w'
+})
+
+export const GEO_INFO = Object.freeze({
+  zh_title: '苟活于此，养两条狗',
+  en_title: 'Omicron prison, Shanghai',
+  coordinates: [121.55152956275738, 31.215855513780504]
+})
+
+export const MAPBOX_CONFIG = Object.freeze({
+  // pubbbb
+  TOKEN: 'pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE1N2RwODFncTQzZG80dm0yeDJyNjgifQ.57CxQiLjTw1_1O_so6eUNA',
+  // TOKEN: 'pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE4YmkzNjB2Z2wzY3F5dWg2M2tqeWIifQ.JhgYGFI4zsuNiX9dH-pBDg',
+  STYLE_LIGHT: 'mapbox://styles/surmon/cl41fktzn000f14pet94oo1u4',
+  STYLE_DARK: 'mapbox://styles/surmon/cl41gy1qo000l15ry20j5ae0k',
+  ZOOM: 11.337439,
+  CENTER: [121.4930539351185, 31.227570979004497]
 })
 
 export const SPONSOR_LINKS = Object.freeze({
@@ -39,7 +58,6 @@ export const SPONSOR_LINKS = Object.freeze({
 export const VALUABLE_LINKS = Object.freeze({
   RSS: '/rss.xml',
   SITE_MAP: '/sitemap.xml',
-
   UPTIME_STATUS: 'https://stats.uptimerobot.com/Q2k7OTXxJN',
   NPM_HOMEPAGE: 'https://www.npmjs.com/~surmon',
   GITHUB_SURMON_ME: 'https://github.com/surmon-china/surmon.me',
@@ -51,7 +69,8 @@ export const VALUABLE_LINKS = Object.freeze({
   GITHUB: 'https://github.com/surmon-china',
   UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
   MARKDOWN: 'https://daringfireball.net/projects/markdown/',
-  GOOGLE_ROAD_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3',
+  GOOGLE_MY_MAP: `https://www.google.com/maps/d/embed?mid=${THIRD_IDS.MY_GOOGLE_MAP_MID}&z=3`,
+  GOOGLE_MY_MAP_KML: `https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=${THIRD_IDS.MY_GOOGLE_MAP_MID}`,
   DISCORD_GROUP: 'https://discord.surmon.me',
   TELEGRAM_GROUP: 'https://t.me/joinchat/F6wOlxYwSCUpZTYj3WTAWA',
   MUSIC_163: `https://music.163.com/#/playlist?id=${THIRD_IDS.MUSIC_163_BGM_ALBUM_ID}`,

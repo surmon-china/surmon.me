@@ -1,0 +1,165 @@
+<template>
+  <div class="mapbox" ref="mapboxRef"></div>
+</template>
+
+<script lang="ts">
+  import mapboxgl, { Map, LngLatLike } from 'mapbox-gl'
+  import 'mapbox-gl/dist/mapbox-gl.css'
+  import { defineComponent, shallowRef, onMounted, watch, PropType } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { GEO_INFO, MAPBOX_CONFIG } from '/@/config/app.config'
+  import { FeatureCollectionJSON, geoJSONFeatureToLayer, newMapboxPopup } from './helper'
+
+  mapboxgl.accessToken = MAPBOX_CONFIG.TOKEN
+
+  export default defineComponent({
+    name: 'FootprintMapbox',
+    props: { gmGeoJson: Object as PropType<FeatureCollectionJSON> },
+    emits: ['ready'],
+    setup(props, context) {
+      const { isDarkTheme } = useEnhancer()
+      const mapboxRef = shallowRef<HTMLElement>()
+      const map = shallowRef<Map>()
+      const loaded = shallowRef(false)
+
+      const getMapStyle = () => {
+        return isDarkTheme.value ? MAPBOX_CONFIG.STYLE_DARK : MAPBOX_CONFIG.STYLE_LIGHT
+      }
+
+      const makeSureSourceLayer = () => {
+        if (loaded.value) {
+          if (props.gmGeoJson?.features.length) {
+            const _map = map.value!
+            const layerID = 'placemarks'
+            // http://www.mapbox.cn/mapbox-gl-js/example/popup-on-click/
+            // https://docs.mapbox.com/mapbox-gl-js/example/filter-markers-by-input/
+            if (!_map.getLayer(layerID)) {
+              _map.addLayer(
+                geoJSONFeatureToLayer(layerID, {
+                  type: 'geojson',
+                  data: props.gmGeoJson
+                })
+              )
+              _map.on('mouseenter', layerID, () => {
+                _map.getCanvas().style.cursor = 'pointer'
+              })
+              _map.on('mouseleave', layerID, () => {
+                _map.getCanvas().style.cursor = ''
+              })
+              _map.on('click', layerID, (event) => {
+                // @ts-ignore
+                const coordinates = event.features![0].geometry.coordinates.slice()
+                const description = event.features![0].properties!.description
+                while (Math.abs(event.lngLat.lng - coordinates[0]) > 180) {
+                  coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360
+                }
+                newMapboxPopup(coordinates, description).addTo(_map)
+              })
+            }
+          }
+        }
+      }
+
+      watch(
+        () => isDarkTheme.value,
+        () => map.value?.setStyle(getMapStyle())
+      )
+
+      watch(
+        () => props.gmGeoJson,
+        () => makeSureSourceLayer()
+      )
+
+      onMounted(() => {
+        setTimeout(() => {
+          map.value = new mapboxgl.Map({
+            container: mapboxRef.value!,
+            center: MAPBOX_CONFIG.CENTER as LngLatLike,
+            zoom: MAPBOX_CONFIG.ZOOM,
+            attributionControl: false,
+            style: getMapStyle()
+          })
+
+          // living now marker
+          new mapboxgl.Marker({
+            color: '#0088f5',
+            anchor: 'bottom'
+          })
+            .setLngLat(GEO_INFO.coordinates as any)
+            .addTo(map.value)
+
+          // https://stackoverflow.com/questions/36168658/mapbox-gl-setstyle-removes-layers
+          // https://bl.ocks.org/tristen/0c0ed34e210a04e89984
+          map.value.on('style.load', () => {
+            makeSureSourceLayer()
+          })
+
+          // loaded
+          map.value.on('load', () => {
+            loaded.value = true
+            makeSureSourceLayer()
+            context.emit('ready', map.value)
+          })
+        }, 600)
+      })
+
+      return {
+        mapboxRef
+      }
+    }
+  })
+</script>
+
+<style lang="scss" scoped>
+  @import 'src/styles/variables.scss';
+  @import 'src/styles/mixins.scss';
+
+  .mapbox {
+    ::v-deep(.mapboxgl-popup) {
+      &.mapboxgl-popup-anchor-top {
+        .mapboxgl-popup-tip {
+          border-bottom-color: $module-bg-opaque;
+        }
+      }
+      &.mapboxgl-popup-anchor-bottom {
+        .mapboxgl-popup-tip {
+          border-top-color: $module-bg-opaque;
+        }
+      }
+      &.mapboxgl-popup-anchor-left {
+        .mapboxgl-popup-tip {
+          border-right-color: $module-bg-opaque;
+        }
+      }
+      &.mapboxgl-popup-anchor-right {
+        .mapboxgl-popup-tip {
+          border-left-color: $module-bg-opaque;
+        }
+      }
+
+      .mapboxgl-popup-content {
+        background-color: $module-bg-opaque;
+        box-shadow: 0px 0px 14px 4px rgb(0 0 0 / 10%);
+        border-radius: $lg-radius;
+        padding: 0.8em 1em;
+        font-size: $font-size-base;
+        line-height: 1.7;
+        max-height: 260px;
+        overflow-y: auto;
+
+        br {
+          content: '';
+          margin: 2em;
+          display: block;
+          font-size: 24%;
+        }
+        img {
+          display: block;
+          width: 100%;
+          min-height: 2rem;
+          background-color: $module-bg-darker-1;
+        }
+      }
+    }
+  }
+</style>

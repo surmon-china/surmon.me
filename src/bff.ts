@@ -12,6 +12,7 @@ import { getRSSXML } from './server/getters/rss'
 import { getSitemapXML } from './server/getters/sitemap'
 import { getGTagScript } from './server/getters/gtag'
 import { getAllWallpapers } from './server/getters/wallpaper'
+import { getMyGoogleMap } from './server/getters/my-google-map'
 import { getGitHubSponsors, getGitHubContributions } from './server/getters/github'
 import {
   getTwitterTweets,
@@ -108,6 +109,20 @@ createExpressApp().then(({ app, server, cache }) => {
         age: 60 * 60 * 6, // 6 hours
         retryWhen: 60 * 30, // 30 minutes
         getter: getAllWallpapers
+      })
+    })
+  )
+
+  // My GoogleMap
+  app.get(
+    `${BFF_TUNNEL_PREFIX}/${TunnelModule.MyGoogleMap}`,
+    responsor(() => {
+      return cacher({
+        cache,
+        key: 'my_google_map',
+        age: 60 * 60 * 6, // 6 hours
+        retryWhen: 60 * 30, // 30 minutes
+        getter: getMyGoogleMap
       })
     })
   )

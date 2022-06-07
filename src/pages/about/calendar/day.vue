@@ -101,8 +101,8 @@
   @import 'src/styles/mixins.scss';
 
   .day {
-    $size: 10px;
-    $radius: 1px;
+    $size: 11px;
+    $radius: 2px;
     position: relative;
     width: $size;
     height: $size;

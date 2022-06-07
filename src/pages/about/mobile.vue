@@ -18,9 +18,7 @@
       <h5 class="slogan">{{ adminInfo.data?.slogan || '-' }}</h5>
       <divider dashed />
       <h4 class="bio">
-        <webfont bolder>
-          <i18n v-bind="i18ns.biography" />
-        </webfont>
+        <webfont bolder>{{ isZhLang ? META.zh_biography : META.en_biography }}</webfont>
       </h4>
     </div>
     <div class="links">
@@ -98,9 +96,10 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { useEnhancer } from '/@/app/enhancer'
   import { LanguageKey } from '/@/language'
   import { RouteName } from '/@/app/router'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import { useAdminInfoStore } from '/@/stores/basic'
   import { useUniversalFetch } from '/@/universal'
   import { getPageRoute } from '/@/transforms/route'
@@ -113,18 +112,21 @@
       PageBanner
     },
     setup() {
+      const { isZhLang } = useEnhancer()
       const adminInfo = useAdminInfoStore()
       useAboutPageMeta()
       useUniversalFetch(() => adminInfo.fetch())
 
       return {
         i18ns,
-        adminInfo,
-        RouteName,
-        getAdminAvatar,
-        getPageRoute,
+        META,
+        VALUABLE_LINKS,
         LanguageKey,
-        VALUABLE_LINKS
+        RouteName,
+        isZhLang,
+        adminInfo,
+        getAdminAvatar,
+        getPageRoute
       }
     }
   })

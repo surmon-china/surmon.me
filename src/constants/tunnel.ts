@@ -17,6 +17,7 @@ export enum TunnelModule {
   GitHubContributions = 'github_contributions',
   NetEaseMusic = 'netease_music',
   DoubanMovies = 'douban_movies',
+  MyGoogleMap = 'my_google_map',
   OpenSourceGitHubStatistic = 'open_source_github_statistic',
   OpenSourceNPMStatistic = 'open_source_npm_statistic'
 }

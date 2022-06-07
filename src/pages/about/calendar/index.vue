@@ -71,7 +71,6 @@
       }
 
       const months = [
-        getPrevMonthFullDays(todayHuman, 12),
         getPrevMonthFullDays(todayHuman, 11),
         getPrevMonthFullDays(todayHuman, 10),
         getPrevMonthFullDays(todayHuman, 9),
@@ -122,7 +121,7 @@
       grid-template-rows: repeat(7, 1fr);
       grid-auto-flow: column;
       grid-auto-columns: min-content;
-      grid-gap: 4px;
+      grid-gap: 5px;
       @include scroll-snap-item();
     }
   }

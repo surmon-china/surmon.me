@@ -14,11 +14,7 @@ export interface AboutI18nConfig {
 }
 
 export const i18ns = {
-  biography: {
-    [Language.Chinese]: `本是浪蝶游蜂，自留半亩石池，但求直抒胸臆，挥墨九云之中`,
-    [Language.English]: `Either write something worth reading, do something worth writing.`
-  },
-  roadmap: {
+  footprint: {
     [Language.Chinese]: `路为纸，地成册，行作笔，心当墨；思无界，行有疆`,
     [Language.English]: `Every path i went astray built up my Rome.`
   },
@@ -65,10 +61,6 @@ export const i18ns = {
   telegramGroup: {
     [Language.Chinese]: `自由报社`,
     [Language.English]: `TG group`
-  },
-  livingNow: {
-    [Language.Chinese]: `暂居上海，养两条狗`,
-    [Language.English]: `Omicron prison, Shanghai`
   }
 }
 

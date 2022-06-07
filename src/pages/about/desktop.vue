@@ -1,5 +1,5 @@
 <template>
-  <div class="about-page" :class="{ dark: isDarkTheme }">
+  <div class="about-page">
     <div class="banner">
       <div class="background">
         <video class="video" loop muted autoplay :controls="false">
@@ -11,9 +11,7 @@
         <h1 class="name">{{ adminInfo.data?.name || '-' }}</h1>
         <p class="role">{{ adminInfo.data?.slogan || '-' }}</p>
         <p class="bio-text">
-          <webfont bolder>
-            <i18n v-bind="i18ns.biography" />
-          </webfont>
+          <webfont bolder>{{ isZhLang ? META.zh_biography : META.en_biography }}</webfont>
         </p>
         <div class="socials">
           <span class="normal">
@@ -93,34 +91,8 @@
       <div class="plogs">
         <instagram-media />
       </div>
-      <div class="maps">
-        <div class="location">
-          <div class="map">
-            <iframe class="iframe" src="/partials/location.html" />
-          </div>
-          <div class="living">
-            <i class="iconfont icon-location"></i>
-            <div class="text"><i18n v-bind="i18ns.livingNow" /></div>
-          </div>
-        </div>
-        <div class="roadmap" :placeholder="isZhLang ? i18ns.roadmap.zh : i18ns.roadmap.en">
-          <div class="wrapper">
-            <button class="fullscreen" @click="handleOpenMap">
-              <i class="iconfont icon-fullscreen"></i>
-            </button>
-            <iframe class="iframe" :src="VALUABLE_LINKS.GOOGLE_ROAD_MAP" frameborder="0" />
-            <client-only>
-              <popup v-model:visible="modalState.roadMap">
-                <iframe
-                  :src="VALUABLE_LINKS.GOOGLE_ROAD_MAP"
-                  allowfullscreen
-                  frameborder="0"
-                  class="roadmap-modal"
-                />
-              </popup>
-            </client-only>
-          </div>
-        </div>
+      <div class="footprint">
+        <footprint-map />
       </div>
       <div class="calendar">
         <aggregate-calendar />
@@ -156,18 +128,20 @@
   import { getPageRoute } from '/@/transforms/route'
   import { getTargetStaticURL } from '/@/transforms/url'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-  import AggregateCalendar from './calendar/index.vue'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import InstagramMedia from './media/instagram.vue'
   import DoubanStatistic from './statistic/douban.vue'
   import GithubStatistic from './statistic/github.vue'
   import TwitterStatistic from './statistic/twitter.vue'
   import NpmStatistic from './statistic/npm.vue'
+  import AggregateCalendar from './calendar/index.vue'
+  import FootprintMap from './footprint/index.vue'
   import { useAboutPageMeta, getAdminAvatar, i18ns, SPECIAL_LINKS } from './shared'
 
   export default defineComponent({
     name: 'DesktopAboutPage',
     components: {
+      FootprintMap,
       AggregateCalendar,
       DoubanStatistic,
       GithubStatistic,
@@ -186,18 +160,12 @@
       }
 
       const modalState = reactive({
-        roadMap: false,
         wechat: false
       })
 
       const handleOpenWechat = () => {
         modalState.wechat = true
         handleGTagEvent('wechat_modal')
-      }
-
-      const handleOpenMap = () => {
-        modalState.roadMap = true
-        handleGTagEvent('roadmap_modal')
       }
 
       const handleSponsor = () => {
@@ -289,6 +257,7 @@
       return {
         i18ns,
         links,
+        META,
         VALUABLE_LINKS,
         SPECIAL_LINKS,
         isZhLang,
@@ -301,7 +270,6 @@
         handleGTagEvent,
         handleFeedback,
         handleStatement,
-        handleOpenMap,
         handleOpenWechat
       }
     }
@@ -349,29 +317,9 @@
     }
   }
 
-  .roadmap-modal {
-    width: 88vw;
-    height: 88vh;
-  }
-
   .about-page {
     width: 100%;
     overflow: hidden;
-
-    &.dark {
-      .maps {
-        .location {
-          .iframe {
-            filter: invert(1) hue-rotate(200deg) brightness(0.5) contrast(0.9);
-          }
-        }
-        .roadmap {
-          .iframe {
-            filter: invert(1) hue-rotate(200deg) grayscale(60%) contrast(0.9);
-          }
-        }
-      }
-    }
 
     .banner {
       $banner-height: 20rem;
@@ -659,96 +607,9 @@
       @include common-bg-module();
     }
 
-    .maps {
-      $size: 200px;
-      position: relative;
-      display: flex;
+    .footprint {
       width: 100%;
       margin-bottom: $gap * 2;
-
-      .location .map,
-      .location .living,
-      .roadmap {
-        padding: $sm-gap;
-        @include common-bg-module();
-        @include radius-box($lg-radius);
-      }
-
-      .location {
-        display: flex;
-        flex-direction: column;
-        flex-shrink: 1;
-        margin-right: $gap * 2;
-        height: calc(#{$size} + #{$sm-gap * 2});
-
-        .map {
-          width: calc(#{$size} + #{$sm-gap});
-
-          .iframe {
-            width: 100%;
-            height: 100%;
-            @include radius-box($xs-radius);
-          }
-        }
-
-        .living {
-          flex-shrink: 0;
-          display: inline-flex;
-          margin-top: $lg-gap;
-          padding: 0 1rem;
-          width: 100%;
-          height: 4em;
-          line-height: 4em;
-          color: $text-secondary;
-
-          .iconfont {
-            margin-right: $sm-gap;
-          }
-          .text {
-            font-weight: bold;
-          }
-        }
-      }
-
-      .roadmap {
-        flex: 1;
-        overflow: hidden;
-        @extend .center-placeholder;
-
-        .wrapper {
-          $google-bar: 67px;
-          position: relative;
-          height: $size;
-          border-radius: $xs-radius;
-          overflow: hidden;
-
-          .fullscreen {
-            position: absolute;
-            top: $gap;
-            right: $gap;
-            z-index: $z-index-normal + 1;
-            display: block;
-            width: 2em;
-            height: 2em;
-            border-radius: $xs-radius;
-            background-color: $module-bg;
-            font-size: $font-size-h4;
-            color: $text-secondary;
-            @include background-transition();
-            @include backdrop-blur(1px);
-            &:hover {
-              color: $text;
-              background-color: $module-bg-opaque;
-            }
-          }
-
-          .iframe {
-            width: 100%;
-            height: $size + $google-bar;
-            margin-top: -$google-bar;
-          }
-        }
-      }
     }
 
     .footer-links {

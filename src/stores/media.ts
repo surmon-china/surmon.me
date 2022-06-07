@@ -67,3 +67,11 @@ export const useTwitterTweetsStore = defineFetchStore({
   initData: null as null | TweeterTweets,
   fetcher: () => tunnel.dispatch<TweeterTweets>(TunnelModule.TwitterTweets)
 })
+
+// My Google map
+export const useMyGoogleMapStore = defineFetchStore({
+  id: 'myGoogleMap',
+  initData: null,
+  onlyOnce: true,
+  fetcher: () => tunnel.dispatch(TunnelModule.MyGoogleMap)
+})

@@ -18,7 +18,7 @@ import { getLayoutByRouteMeta } from '/@/transforms/layout'
 import type { CacheClient } from '/@/server/cache'
 import { isDev } from '/@/environment'
 
-const devDebug = (...args) => isDev && console.debug(`-----`, ...args)
+const devDebug = (...args) => isDev && console.debug('-', ...args)
 
 const getCacheKey = (vueApp: VueApp, url: string): string => {
   const { i18n, theme, globalState } = vueApp
