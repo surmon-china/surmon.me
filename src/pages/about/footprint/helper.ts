@@ -31,7 +31,10 @@ export const gmmFoldersToGeoJSON = (folders: Array<GoogleMyMapFolder>): FeatureC
           type: 'Point',
           coordinates: placemark.coordinates
         },
-        properties: { ...placemark }
+        properties: {
+          ...placemark,
+          icon: placemark.image ? 'attraction' : 'veterinary'
+        }
       }
     })
 })
@@ -44,8 +47,8 @@ export const geoJSONFeatureToLayer = (layerID: string, source: any): mapboxgl.An
     type: 'symbol',
     layout: {
       'icon-allow-overlap': true,
-      'icon-image': 'attraction',
-      'icon-size': 1.4,
+      'icon-size': 1.2,
+      'icon-image': ['get', 'icon'],
       'text-field': ['get', 'name'],
       'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
       'text-size': 11,

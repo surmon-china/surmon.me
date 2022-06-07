@@ -5,7 +5,7 @@
 <script lang="ts">
   import mapboxgl, { Map, LngLatLike } from 'mapbox-gl'
   import 'mapbox-gl/dist/mapbox-gl.css'
-  import { defineComponent, shallowRef, onMounted, watch, PropType } from 'vue'
+  import { defineComponent, shallowRef, onMounted, onBeforeUnmount, watch, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { GEO_INFO, MAPBOX_CONFIG } from '/@/config/app.config'
   import { FeatureCollectionJSON, geoJSONFeatureToLayer, newMapboxPopup } from './helper'
@@ -103,6 +103,10 @@
         }, 600)
       })
 
+      onBeforeUnmount(() => {
+        map.value?.remove()
+      })
+
       return {
         mapboxRef
       }
@@ -146,6 +150,7 @@
         line-height: 1.7;
         max-height: 260px;
         overflow-y: auto;
+        font-family: $font-family-normal;
 
         br {
           content: '';

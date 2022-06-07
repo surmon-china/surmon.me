@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.13.0 (2022-06-08)
+
+**Feature**
+
+- Redesign About page footprint module
+
 ### v3.12.0 (2022-05-29)
 
 **Feature**

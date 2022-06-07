@@ -2,10 +2,16 @@
   <div class="footprint-map">
     <client-only>
       <popup v-model:visible="modalVisible" :scroll-close="false">
-        <footprint-modal class="footprint-modal" :gm-folders="gmFolders" :gm-geo-json="gmGeoJson" />
+        <footprint-modal
+          class="footprint-modal"
+          :name="gmStore.data?.name"
+          :description="gmStore.data?.description"
+          :gm-folders="gmFolders"
+          :gm-geo-json="gmGeoJson"
+        />
       </popup>
     </client-only>
-    <div class="mapbox-wrapper" placeholder="placeholder">
+    <div class="mapbox-wrapper" :placeholder="isZhLang ? i18ns.footprint.zh : i18ns.footprint.en">
       <mapbox class="mapbox" :gm-geo-json="gmGeoJson" @ready="handleMapboxReady" />
       <div class="toolbar">
         <ulink class="button" :href="VALUABLE_LINKS.GOOGLE_MY_MAP">
@@ -23,7 +29,7 @@
           {{ isZhLang ? GEO_INFO.zh_title : GEO_INFO.en_title }}
         </span>
       </div>
-      <ul class="folders" v-if="mgmStore.data">
+      <ul class="folders" v-if="gmStore.data">
         <li
           class="item"
           :key="index"
@@ -49,6 +55,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useMyGoogleMapStore } from '/@/stores/media'
   import { GEO_INFO, VALUABLE_LINKS } from '/@/config/app.config'
+  import { i18ns } from '../shared'
   import { gmmFoldersToGeoJSON, FeatureCollectionJSON, GoogleMyMapFolder } from './helper'
   import Mapbox from './mapbox.vue'
   import FootprintModal from './modal.vue'
@@ -97,7 +104,7 @@
         const targetFolder = gmFolders.value[index]!
         const [firstPlacemark] = targetFolder.placemarks
         if (firstPlacemark) {
-          map.value?.flyTo({ center: firstPlacemark.coordinates, zoom: 4 })
+          map.value?.flyTo({ center: firstPlacemark.coordinates, zoom: 4, speed: 1.2 })
         }
       }
 
@@ -120,8 +127,9 @@
         GEO_INFO,
         VALUABLE_LINKS,
         isZhLang,
+        i18ns,
         modalVisible,
-        mgmStore: gmStore,
+        gmStore,
         gmFolders,
         gmGeoJson,
         openModal,

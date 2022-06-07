@@ -2,6 +2,10 @@
   <div class="modal">
     <mapbox class="mapbox" :gm-geo-json="gmGeoJson" @ready="handleMapboxReady" />
     <div class="panel">
+      <div class="info">
+        <h3 class="title">{{ name ?? '-' }}</h3>
+        <p class="description">{{ description ?? '-' }}</p>
+      </div>
       <ul class="folders">
         <li class="folder" :key="index" v-for="(folder, index) in gmFolders">
           <div class="title">
@@ -17,7 +21,13 @@
               v-for="(placemark, index) in folder.placemarks"
               @click="handlePlacemarkClick(placemark)"
             >
-              <i class="iconfont icon-location"></i>
+              <uimage
+                class="icon"
+                :cdn="true"
+                :src="`/images/third-party/mapbox-${
+                  placemark.image ? 'attraction' : 'veterinary'
+                }.svg`"
+              />
               <span class="text">{{ placemark.name }}</span>
             </li>
           </ul>
@@ -44,6 +54,8 @@
     name: 'FootprintModal',
     components: { Mapbox },
     props: {
+      name: String,
+      description: String,
       gmGeoJson: Object as PropType<FeatureCollectionJSON>,
       gmFolders: Array as PropType<Array<GoogleMyMapFolder>>
     },
@@ -93,18 +105,44 @@
       right: 3rem;
       top: 3rem;
       bottom: 3rem;
+      display: flex;
+      flex-direction: column;
       width: 22rem;
       padding: $lg-gap $gap $gap $lg-gap;
       background: $module-bg-opaque;
       border-radius: $lg-radius;
-      overflow: auto;
       box-shadow: 0px 0px 8px 4px rgb(0 0 0 / 10%);
 
+      .info {
+        margin-bottom: 2rem;
+        padding-bottom: $lg-gap;
+        border-bottom: 1px solid $module-bg-darker-1;
+
+        .title {
+          margin-top: 0;
+          margin-bottom: $gap;
+        }
+        .description {
+          margin: 0;
+          @include text-overflow();
+        }
+      }
+
       .folders {
+        flex: 1;
         list-style: none;
         padding: 0;
+        overflow: auto;
 
         .folder {
+          &:last-child {
+            .placemarks {
+              &:last-child {
+                margin-bottom: 0;
+              }
+            }
+          }
+
           .title {
             font-size: $font-size-h4;
             margin-bottom: $gap;
@@ -132,6 +170,11 @@
               scroll-snap-align: start;
               &:hover {
                 color: $text;
+              }
+
+              .icon {
+                width: 1.4em;
+                margin-top: -2px;
               }
 
               .text {
