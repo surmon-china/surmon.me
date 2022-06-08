@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.13.0
+* Surmon.me v3.13.1
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon <https://surmon.me>
@@ -58,7 +58,7 @@ const META = Object.freeze({
     zh_sub_title: '来苏之望',
     en_sub_title: 'Because the mountain is there',
     zh_biography: '本是浪蝶游蜂，自留半亩石池，但求直抒胸臆，挥墨九云之中',
-    en_biography: 'Either write something worth reading, do something worth writing.',
+    en_biography: 'Either write something worth reading or do something worth writing.',
     url: 'https://surmon.me',
     domain: 'surmon.me',
     author: 'Surmon',
