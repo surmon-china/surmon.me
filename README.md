@@ -20,12 +20,11 @@
 
 **My personal website and blog, powered by [Vue(3)](https://vuejs.org), API services provided by [NodePress](https://github.com/surmon-china/nodepress).**
 
+**[surmon.me](https://surmon.me)**
 
-**🔗 https://surmon.me**
+---
 
-**🗒️ [CHANGELOG.md](/CHANGELOG.md)**
-
-**🔥 [Related projects](https://github.com/stars/surmon-china/lists/surmon-me)**
+**[Related projects](https://github.com/stars/surmon-china/lists/surmon-me)**
 
 - **RESTful API service for blog:** [`nodepress`](https://github.com/surmon-china/nodepress) powered by nestjs
 - **Blog admin site:** [`veact-admin`](https://github.com/surmon-china/veact-admin) powered by React & [`Veact`](https://github.com/veactjs/veact)
@@ -67,3 +66,12 @@ $ yarn release
 - `Any PR open` → `CI:Build test`
 - `New tag v*` → `CI:Create Release`
 - `New tag | Release created` → `CI:Deploy` → `CI:Execute server script`
+
+### Changelog
+
+Detailed changes for each release are documented in the [release notes](/CHANGELOG.md).
+
+### License
+
+Licensed under the [MIT](/LICENSE) License.
+
