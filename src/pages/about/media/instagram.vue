@@ -1,5 +1,5 @@
 <template>
-  <placeholder :i18n-key="LanguageKey.EMPTY_PLACEHOLDER" :loading="fetching" :data="store.data">
+  <placeholder :i18n-key="LanguageKey.EMPTY_PLACEHOLDER" :loading="fetching" :data="insMedias">
     <template #loading>
       <ul class="list">
         <li class="item" v-for="i in 24" :key="i">
@@ -9,7 +9,7 @@
     </template>
     <template #default>
       <ul class="list">
-        <li class="item" :key="index" v-for="(item, index) in store.data.slice(0, 23)">
+        <li class="item" :key="index" v-for="(item, index) in insMedias">
           <ulink class="link" :href="item.permalink" :title="item.caption">
             <uimage class="cover" :src="getInstagramImage(item, 't')" :alt="item.caption" />
             <div class="mask"><i class="iconfont icon-eye"></i></div>
@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, onMounted } from 'vue'
+  import { defineComponent, ref, computed, onMounted } from 'vue'
   import { useInstagramMediasStore } from '/@/stores/media'
   import { getInstagramImage } from '/@/transforms/media'
   import { VALUABLE_LINKS } from '/@/config/app.config'
@@ -35,6 +35,10 @@
     setup() {
       const fetching = ref(true)
       const store = useInstagramMediasStore()
+      const insMedias = computed(() => {
+        return store.data.filter((plog) => plog.media_type !== 'VIDEO').slice(0, 23)
+      })
+
       onMounted(() => {
         store.fetch().finally(() => {
           fetching.value = false
@@ -46,7 +50,8 @@
         VALUABLE_LINKS,
         getInstagramImage,
         fetching,
-        store
+        store,
+        insMedias
       }
     }
   })
