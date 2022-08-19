@@ -12,11 +12,11 @@
       <i18n>
         <template #zh>
           <span>发布了</span>
-          <statistic-count large primary :count="store.data?.public_metrics.tweet_count" />
+          <statistic-count large primary split :count="store.data?.public_metrics.tweet_count" />
           <span>条推文</span>
         </template>
         <template #en>
-          <statistic-count large primary :count="store.data?.public_metrics.tweet_count" />
+          <statistic-count large primary split :count="store.data?.public_metrics.tweet_count" />
           <span>tweets</span>
         </template>
       </i18n>

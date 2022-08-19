@@ -28,18 +28,10 @@
               </span>
             </ulink>
             <div class="counts">
-              <div class="item top">
-                <span class="count">{{
-                  padStart(userinfo.public_metrics.tweet_count, 3, '0')
-                }}</span>
-                <span class="text">TS</span>
+              <div class="item count">
+                {{ padStart(numberSplit(userinfo.public_metrics.tweet_count), 3, '0') }}
               </div>
-              <div class="item bottom">
-                <span class="count">{{
-                  padStart(userinfo.public_metrics.followers_count, 3, '0')
-                }}</span>
-                <span class="text">FS</span>
-              </div>
+              <div class="item text">Tweets</div>
             </div>
           </div>
           <swiper
@@ -148,7 +140,7 @@
   import { TwitterUserinfo, TweeterTweets } from '/@/stores/media'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { getTwitterTweetDetailURL } from '/@/transforms/media'
-  import { unescape, padStart } from '/@/transforms/text'
+  import { unescape, padStart, numberSplit } from '/@/transforms/text'
 
   export default defineComponent({
     name: 'IndexTwitter',
@@ -260,6 +252,7 @@
         LanguageKey,
         completedTweets,
         activeIndex,
+        numberSplit,
         padStart,
         prevSlide,
         nextSlide,
@@ -365,7 +358,7 @@
         flex-direction: column;
         justify-content: space-around;
         height: $content-height;
-        padding: 0.2em 0.3em 0.26em 0.5em;
+        padding: 0.2em 0.5em 0.26em;
         border-radius: $xs-radius;
         background-color: $module-bg-darker-1;
         &::before {
@@ -382,17 +375,15 @@
         }
 
         .item {
-          .count {
+          &.count {
             font-size: $font-size-small + 1;
-            margin-right: 6px;
             font-weight: bold;
             color: $text-secondary;
           }
 
-          .text {
+          &.text {
             color: $text-disabled;
             font-size: $font-size-small;
-            letter-spacing: 1px;
           }
         }
       }

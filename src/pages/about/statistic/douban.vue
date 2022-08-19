@@ -12,11 +12,11 @@
       <i18n>
         <template #zh>
           <span>标记看过</span>
-          <statistic-count large primary :count="store.data.total_collections" />
+          <statistic-count large primary split :count="store.data.total_collections" />
           <span>部影片</span>
         </template>
         <template #en>
-          <statistic-count large primary :count="store.data.total_collections" />
+          <statistic-count large primary split :count="store.data.total_collections" />
           <span>films marked</span>
         </template>
       </i18n>
