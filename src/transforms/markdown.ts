@@ -4,9 +4,16 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import sanitizeHTML from 'sanitize-html'
-import { marked, Renderer } from 'marked'
+// https://github.com/vitejs/vite/issues/9200
+// https://github.com/vitejs/vite/issues/9238
+// https://github.com/wolfiex/GeoDraw-SvelteKit/issues/2
+// https://github.com/apostrophecms/sanitize-html/issues/560
+// https://github.com/Greenheart/idg.tools/commit/15de4725dc8fdafe2fc86c24b5c32f3646f4cb29
+// https://github.com/kkomelin/isomorphic-dompurify/blob/master/src/index.js
+// MARK: Use dompurify instead of sanitize-html because sanitize-html doesn't work in browser.
+import DOMPurify from 'isomorphic-dompurify'
 import highlight from '/@/effects/highlight'
+import { marked, Renderer } from 'marked'
 import { TagMap } from '/@/stores/tag'
 import { LOZAD_CLASS_NAME } from '/@/composables/lozad'
 import { escape } from '/@/transforms/text'
@@ -15,11 +22,13 @@ import API_CONFIG from '/@/config/api.config'
 import { META } from '/@/config/app.config'
 
 const trimHTML = (html: string) => html.replace(/\s+/g, ' ').replace(/\n/g, ' ')
+
 interface RendererGetterOption {
   sanitize: boolean
   text: (text: string) => string
   headingID: (html: string, level: number, raw: string) => string
 }
+
 const getRenderer = (options?: Partial<RendererGetterOption>) => {
   const renderer = new Renderer()
 
@@ -31,7 +40,7 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
   // html: escape > sanitize
   renderer.html = (html) => {
     // https://github.com/apostrophecms/sanitize-html#default-options
-    return options?.sanitize ? sanitizeHTML(escape(html)) : html
+    return options?.sanitize ? DOMPurify.sanitize(escape(html)) : html
   }
 
   // heading
@@ -59,22 +68,21 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
   // link: sanitize
   renderer.link = (href, title, text) => {
     const isSelf = href?.startsWith(META.url)
-    const textIsImage = text.includes('<img')
+    const isImageLink = text.includes('<img')
     const linkHTML = trimHTML(`<a
       href="${href}"
       target="_blank"
-      class="${textIsImage ? 'image-link' : 'link'}"
-      title="${title || (textIsImage ? href : text)}"
+      class="${isImageLink ? 'image-link' : 'link'}"
+      title="${title || (isImageLink ? href : text)}"
       ${isSelf ? '' : 'rel="external nofollow noopener"'}
     >${text}</a>`)
 
     return !options?.sanitize
       ? linkHTML
-      : sanitizeHTML(linkHTML, {
-          allowedTags: ['a'],
-          allowedAttributes: {
-            a: ['href', 'target', 'class', 'title', 'rel', 'data-*']
-          }
+      : DOMPurify.sanitize(linkHTML, {
+          ALLOWED_TAGS: ['a'],
+          ALLOW_DATA_ATTR: true,
+          ALLOWED_ATTR: ['href', 'target', 'class', 'title', 'rel']
         })
   }
 
@@ -82,8 +90,8 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
   renderer.image = (src, title, alt) => {
     // HTTP > proxy
     const source = src?.replace(/^http:\/\//gi, `${API_CONFIG.PROXY}/`)
-    const sTitle = sanitizeHTML(escape(title || alt))
-    const sAlt = sanitizeHTML(escape(alt!))
+    const sTitle = DOMPurify.sanitize(escape(title || alt))
+    const sAlt = DOMPurify.sanitize(escape(alt!))
 
     // figure > alt
     return trimHTML(`
