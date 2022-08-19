@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.14.0 (2022-08-18)
+
+**Feature**
+
+- Upgrade vite to v3
+- Replace `sanitize-html` with `dompurify` [#9200](https://github.com/vitejs/vite/issues/9200) [#560](https://github.com/apostrophecms/sanitize-html/issues/560)
+
+**Fix**
+
+- Index page Twitter module style
+
 ### v3.13.0 (2022-06-08)
 
 **Feature**
