@@ -1,13 +1,14 @@
 const path = require('path')
-const builtinModules = require('builtin-modules')
 const { build } = require('vite')
-const packageJSON = require('../package.json')
 
 exports.bundleServerRender = async (paths) => {
   console.info('Server render bundling...\n')
   return await build({
     publicDir: false,
     ssr: {
+      target: 'node',
+      // https://cn.vitejs.dev/guide/migration.html#ssr-changes
+      format: 'cjs',
       // https://cn.vitejs.dev/config/#ssr-noexternal
       noExternal: ['swiper']
     },

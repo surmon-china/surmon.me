@@ -19,11 +19,11 @@ declare global {
 }
 
 const DEFAULT_STATE = Object.freeze({
-  visible: false,
-  isImage: false,
-  border: true,
-  maskClose: true,
-  scrollClose: true
+  visible: false as boolean,
+  isImage: false as boolean,
+  border: true as boolean,
+  maskClose: true as boolean,
+  scrollClose: true as boolean
 })
 
 const createPopupStore = () => {

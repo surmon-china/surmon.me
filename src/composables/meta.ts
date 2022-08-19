@@ -6,7 +6,7 @@
  */
 
 import { computed, inject } from 'vue'
-import type { ComputedGetter } from '@vue/reactivity'
+import type { ComputedGetter } from 'vue'
 import { createHead, useHead, HeadObject, HeadAttrs, renderHeadToString } from '@vueuse/head'
 import { useI18n } from '/@/composables/i18n'
 
