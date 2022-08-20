@@ -2,11 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-### v3.14.0 (2022-08-18)
+### v3.14.0 (2022-08-20)
 
 **Feature**
 
 - Upgrade vite to v3
+- Improve about page modules
+- Improve sponsor style
 - Replace `sanitize-html` with `dompurify` [#9200](https://github.com/vitejs/vite/issues/9200) [#560](https://github.com/apostrophecms/sanitize-html/issues/560)
 
 **Fix**
