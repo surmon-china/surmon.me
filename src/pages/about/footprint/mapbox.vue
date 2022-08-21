@@ -3,14 +3,12 @@
 </template>
 
 <script lang="ts">
-  import mapboxgl, { Map, LngLatLike } from 'mapbox-gl'
-  import 'mapbox-gl/dist/mapbox-gl.css'
+  import type { Map, LngLatLike } from 'mapbox-gl'
   import { defineComponent, shallowRef, onMounted, onBeforeUnmount, watch, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { META, GEO_INFO, MAPBOX_CONFIG } from '/@/config/app.config'
   import { FeatureCollectionJSON, geoJSONFeatureToLayer, newMapboxPopup } from './helper'
-
-  mapboxgl.accessToken = MAPBOX_CONFIG.TOKEN
+  import 'mapbox-gl/dist/mapbox-gl.css'
 
   export default defineComponent({
     name: 'FootprintMapbox',
@@ -19,6 +17,7 @@
     setup(props, context) {
       const { isDarkTheme } = useEnhancer()
       const mapboxRef = shallowRef<HTMLElement>()
+      const lib = shallowRef<any>()
       const map = shallowRef<Map>()
       const loaded = shallowRef(false)
 
@@ -53,7 +52,7 @@
                 while (Math.abs(event.lngLat.lng - coordinates[0]) > 180) {
                   coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360
                 }
-                newMapboxPopup(coordinates, description).addTo(_map)
+                newMapboxPopup(lib.value, coordinates, description).addTo(_map)
               })
             }
           }
@@ -71,7 +70,13 @@
       )
 
       onMounted(() => {
-        setTimeout(() => {
+        Promise.all([
+          import('mapbox-gl').then((result) => result.default),
+          new Promise((resolve) => window.setTimeout(resolve, 600))
+        ]).then(([mapboxgl]) => {
+          mapboxgl.accessToken = MAPBOX_CONFIG.TOKEN
+
+          lib.value = mapboxgl
           map.value = new mapboxgl.Map({
             container: mapboxRef.value!,
             center: MAPBOX_CONFIG.CENTER as LngLatLike,
@@ -98,9 +103,9 @@
           map.value.on('load', () => {
             loaded.value = true
             makeSureSourceLayer()
-            context.emit('ready', map.value)
+            context.emit('ready', { map: map.value, lib: lib.value })
           })
-        }, 600)
+        })
       })
 
       onBeforeUnmount(() => {
@@ -158,6 +163,7 @@
           display: block;
           font-size: 24%;
         }
+
         img {
           display: block;
           width: 100%;

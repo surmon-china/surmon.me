@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-  import { Map } from 'mapbox-gl'
+  import type { Map } from 'mapbox-gl'
   import { defineComponent, shallowRef, computed, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useMyGoogleMapStore } from '/@/stores/media'
@@ -108,8 +108,8 @@
         }
       }
 
-      const handleMapboxReady = (mapbox: Map) => {
-        map.value = mapbox
+      const handleMapboxReady = (payload: { map: Map }) => {
+        map.value = payload.map
       }
 
       const handleLivingNow = () => {

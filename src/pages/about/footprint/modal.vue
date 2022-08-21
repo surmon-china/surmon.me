@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-  import { Map } from 'mapbox-gl'
+  import type { Map } from 'mapbox-gl'
   import { defineComponent, shallowRef, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { GEO_INFO, VALUABLE_LINKS } from '/@/config/app.config'
@@ -61,16 +61,20 @@
     },
     setup() {
       const { isZhLang } = useEnhancer()
+      const lib = shallowRef<Map>()
       const map = shallowRef<Map>()
-      const handleMapboxReady = (mapbox: Map) => {
-        map.value = mapbox
+      const handleMapboxReady = (payload: { map: Map; lib: any }) => {
+        lib.value = payload.lib
+        map.value = payload.map
       }
 
       let prevPopup: mapboxgl.Popup | null = null
       const handlePlacemarkClick = (placemark: GoogleMyMapPlacemark) => {
         if (map.value) {
           prevPopup?.remove()
-          prevPopup = newMapboxPopup(placemark.coordinates, placemark.description).addTo(map.value!)
+          prevPopup = newMapboxPopup(lib.value, placemark.coordinates, placemark.description).addTo(
+            map.value
+          )
           map.value.flyTo({ center: placemark.coordinates, zoom: 10, speed: 1.2, curve: 1.2 })
           // https://github.com/mapbox/mapbox-gl-js/issues/1794
           // map.value.once('moveend', () => {})

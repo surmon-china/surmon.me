@@ -1,5 +1,5 @@
 import type GeoJSON from 'geojson'
-import mapboxgl, { LngLatLike } from 'mapbox-gl'
+import type { LngLatLike, AnyLayer } from 'mapbox-gl'
 
 export interface GoogleMyMapPlacemark {
   index: number
@@ -40,7 +40,7 @@ export const gmmFoldersToGeoJSON = (folders: Array<GoogleMyMapFolder>): FeatureC
 })
 
 // https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#layout-symbol-icon-allow-overlap
-export const geoJSONFeatureToLayer = (layerID: string, source: any): mapboxgl.AnyLayer => {
+export const geoJSONFeatureToLayer = (layerID: string, source: any): AnyLayer => {
   return {
     id: layerID,
     source,
@@ -64,7 +64,7 @@ export const geoJSONFeatureToLayer = (layerID: string, source: any): mapboxgl.An
   }
 }
 
-export const newMapboxPopup = (coordinates: LngLatLike, html: string) => {
+export const newMapboxPopup = (mapboxgl: any, coordinates: LngLatLike, html: string) => {
   return new mapboxgl.Popup({ closeButton: false, offset: [0, -16], maxWidth: `280px` })
     .setLngLat(coordinates)
     .setHTML(html)
