@@ -1,8 +1,8 @@
 /*!
-* Surmon.me v3.13.2
+* Surmon.me v3.14.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
-* Surmon <https://surmon.me>
+* Surmon
 */
 'use strict';Object.defineProperty(exports,'__esModule',{value:true});var fs=require('fs'),path=require('path'),http=require('http'),express=require('express'),compression=require('compression'),cookieParser=require('cookie-parser'),httpProxy=require('http-proxy'),LRU=require('lru-cache'),redis=require('redis');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var http__default=/*#__PURE__*/_interopDefaultLegacy(http);var express__default=/*#__PURE__*/_interopDefaultLegacy(express);var compression__default=/*#__PURE__*/_interopDefaultLegacy(compression);var cookieParser__default=/*#__PURE__*/_interopDefaultLegacy(cookieParser);var LRU__default=/*#__PURE__*/_interopDefaultLegacy(LRU);/**
  * @file BFF server config

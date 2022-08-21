@@ -1,23 +1,38 @@
 {
   "index.html": {
-    "file": "index-04dec7cd.js",
+    "file": "index-c889e467.js",
     "src": "index.html",
     "isEntry": true,
     "imports": [
-      "_vendor-d1663e6e.js",
-      "_expansion-edf55a78.js"
+      "_basic-46b52359.js",
+      "_vendor-104f1974.js",
+      "_mapbox-gl-476eae9a.js"
+    ],
+    "dynamicImports": [
+      "_mapbox-gl-476eae9a.js"
     ]
   },
-  "_expansion-edf55a78.js": {
-    "file": "expansion-edf55a78.js",
+  "_basic-46b52359.js": {
+    "file": "basic-46b52359.js",
     "imports": [
-      "_vendor-d1663e6e.js"
+      "_vendor-104f1974.js"
     ]
   },
-  "_vendor-d1663e6e.js": {
-    "file": "vendor-d1663e6e.js",
+  "_mapbox-gl-476eae9a.js": {
+    "file": "mapbox-gl-476eae9a.js",
+    "isDynamicEntry": true,
     "imports": [
-      "_expansion-edf55a78.js"
+      "_basic-46b52359.js"
     ]
+  },
+  "_vendor-104f1974.js": {
+    "file": "vendor-104f1974.js",
+    "imports": [
+      "_basic-46b52359.js"
+    ]
+  },
+  "style.css": {
+    "file": "style-24fda392.css",
+    "src": "style.css"
   }
 }
