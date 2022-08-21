@@ -63,8 +63,8 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
   // heading
   renderer.heading = (html, level, raw) => {
     const idText = options?.headingID ? `id="${options.headingID(html, level, raw)}"` : ''
-    const safeRaw = escape(raw)
-    return `<h${level} ${idText} alt="${safeRaw}" title="${safeRaw}">${html}</h${level}>`
+    const safeedRaw = escape(raw)
+    return `<h${level} ${idText} alt="${safeedRaw}" title="${safeedRaw}">${html}</h${level}>`
   }
 
   // paragraph
