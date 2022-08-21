@@ -6,7 +6,6 @@ exports.bundleServerRender = async (paths) => {
   return await build({
     publicDir: false,
     ssr: {
-      target: 'node',
       // https://cn.vitejs.dev/guide/migration.html#ssr-changes
       format: 'cjs',
       // https://cn.vitejs.dev/config/#ssr-noexternal

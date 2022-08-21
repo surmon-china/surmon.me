@@ -24,6 +24,7 @@
     "release": ". ./scripts/release.sh"
   },
   "dependencies": {
+    "@braintree/sanitize-url": "^6.0.0",
     "@vueuse/head": "^0.7.9",
     "amplitudejs": "^5.3.2",
     "axios": "^0.27.2",
@@ -36,9 +37,7 @@
     "highlight.js": "^11.6.0",
     "http-proxy": "^1.18.1",
     "intersection-observer": "^0.12.2",
-    "isomorphic-dompurify": "^0.20.0",
     "js-cookie": "^3.0.1",
-    "jsdom": "^20.0.0",
     "lodash": "^4.17.21",
     "lozad": "^1.16.0",
     "lru-cache": "^7.14.0",

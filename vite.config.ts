@@ -105,21 +105,26 @@ export default defineConfig(({ command, mode }) => {
           chunkFileNames: '[name]-[hash].js',
           assetFileNames: '[name]-[hash].[ext]',
           manualChunks(id) {
-            if (id.includes('/node_modules/')) {
-              const expansions = [
+            if (id.includes('node_modules')) {
+              const basics = [
                 'swiper',
-                // MARK: important > swiper need dom7
-                'dom7',
+                'dom7', // MARK: important > swiper need dom7
+                'amplitude',
                 'amplitudejs',
                 'emoji-233333',
                 'lozad',
                 'marked',
-                'amplitude',
+                '@braintree/sanitize-url',
+                'serialize-javascript',
                 'highlight.js',
-                'ua-parse-js'
+                'ua-parse-js',
+                'intersection-observer'
               ]
-              if (expansions.some((exp) => id.includes(`/node_modules/${exp}`))) {
-                return 'expansion'
+
+              if (basics.some((exp) => id.includes(`node_modules/${exp}`))) {
+                return 'basic'
+              } else if (id.includes('mapbox-gl')) {
+                return 'mapbox-gl'
               } else {
                 return 'vendor'
               }

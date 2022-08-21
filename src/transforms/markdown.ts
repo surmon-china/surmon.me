@@ -4,16 +4,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-// https://github.com/vitejs/vite/issues/9200
-// https://github.com/vitejs/vite/issues/9238
-// https://github.com/wolfiex/GeoDraw-SvelteKit/issues/2
-// https://github.com/apostrophecms/sanitize-html/issues/560
-// https://github.com/Greenheart/idg.tools/commit/15de4725dc8fdafe2fc86c24b5c32f3646f4cb29
-// https://github.com/kkomelin/isomorphic-dompurify/blob/master/src/index.js
-// MARK: Use dompurify instead of sanitize-html because sanitize-html doesn't work in browser.
-import DOMPurify from 'isomorphic-dompurify'
 import highlight from '/@/effects/highlight'
 import { marked, Renderer } from 'marked'
+import { sanitizeUrl } from '@braintree/sanitize-url'
 import { TagMap } from '/@/stores/tag'
 import { LOZAD_CLASS_NAME } from '/@/composables/lozad'
 import { escape } from '/@/transforms/text'
@@ -22,6 +15,30 @@ import API_CONFIG from '/@/config/api.config'
 import { META } from '/@/config/app.config'
 
 const trimHTML = (html: string) => html.replace(/\s+/g, ' ').replace(/\n/g, ' ')
+
+// MARK: escape vs sanitize https://zhuanlan.zhihu.com/p/421281945
+// sanitize and escape are overlapping, for normal users, no html is allowed, so sanitize is not required.
+// if sanitize is required, you will encounter many problems.
+const sanitizeHTML = (content: string) => content
+
+// sanitize-html:
+// https://github.com/vitejs/vite/issues/9200
+// https://github.com/vitejs/vite/issues/9238
+// https://github.com/wolfiex/GeoDraw-SvelteKit/issues/2
+// https://github.com/apostrophecms/sanitize-html/issues/560
+// https://github.com/Greenheart/idg.tools/commit/15de4725dc8fdafe2fc86c24b5c32f3646f4cb29
+// MARK: Use dompurify instead of sanitize-html because sanitize-html doesn't work in browser.
+// https://github.com/apostrophecms/sanitize-html#browser
+
+// DOMPurify:
+// https://github.com/cure53/DOMPurify#running-dompurify-on-the-server
+// https://github.com/kkomelin/isomorphic-dompurify/blob/master/src/index.js
+// https://github.com/meteor/meteor/issues/10538#issuecomment-489252418
+// https://zhuanlan.zhihu.com/p/52990313
+// https://github.com/Automattic/node-canvas
+// WORKAROUND: `yarn add canvas`
+// OSX: `brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman`
+// Ubuntu: `sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev`
 
 interface RendererGetterOption {
   sanitize: boolean
@@ -40,7 +57,7 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
   // html: escape > sanitize
   renderer.html = (html) => {
     // https://github.com/apostrophecms/sanitize-html#default-options
-    return options?.sanitize ? DOMPurify.sanitize(escape(html)) : html
+    return options?.sanitize ? sanitizeHTML(escape(html)) : html
   }
 
   // heading
@@ -69,34 +86,34 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
   renderer.link = (href, title, text) => {
     const isSelf = href?.startsWith(META.url)
     const isImageLink = text.includes('<img')
-    const linkHTML = trimHTML(`<a
-      href="${href}"
-      target="_blank"
-      class="${isImageLink ? 'image-link' : 'link'}"
-      title="${title || (isImageLink ? href : text)}"
-      ${isSelf ? '' : 'rel="external nofollow noopener"'}
-    >${text}</a>`)
+    const textValue = options?.sanitize ? escape(text) : text
+    const hrefValue = options?.sanitize ? sanitizeUrl(href!) : href
+    const titleValue = options?.sanitize ? escape(title!) : title
 
-    return !options?.sanitize
-      ? linkHTML
-      : DOMPurify.sanitize(linkHTML, {
-          ALLOWED_TAGS: ['a'],
-          ALLOW_DATA_ATTR: true,
-          ALLOWED_ATTR: ['href', 'target', 'class', 'title', 'rel']
-        })
+    return sanitizeHTML(
+      trimHTML(`
+        <a
+          href="${hrefValue}"
+          target="_blank"
+          class="${isImageLink ? 'image-link' : 'link'}"
+          title="${titleValue || (isImageLink ? hrefValue : textValue)}"
+          ${isSelf ? '' : 'rel="external nofollow noopener"'}
+        >${textValue}</a>
+      `)
+    )
   }
 
   // image: sanitize(title, alt) > popup
   renderer.image = (src, title, alt) => {
     // HTTP > proxy
-    const source = src?.replace(/^http:\/\//gi, `${API_CONFIG.PROXY}/`)
-    const sTitle = DOMPurify.sanitize(escape(title || alt))
-    const sAlt = DOMPurify.sanitize(escape(alt!))
+    const source = sanitizeUrl(src!)?.replace(/^http:\/\//gi, `${API_CONFIG.PROXY}/`)
+    const titleValue = sanitizeHTML(escape(title || alt))
+    const altValue = sanitizeHTML(escape(alt!))
 
     // figure > alt
     return trimHTML(`
       <div class="figure-wrapper">
-        <figure class="image ${sAlt ? 'caption' : ''}" data-status="loading">
+        <figure class="image ${altValue ? 'caption' : ''}" data-status="loading">
           <div class="placeholder error">
             <i class="iconfont icon-image-error"></i>
           </div>
@@ -109,13 +126,13 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
           <img
             class="${LOZAD_CLASS_NAME}"
             data-src="${source}"
-            ${sAlt ? `alt="${sAlt}"` : ''}
-            ${sTitle ? `title="${sTitle}"` : ''}
+            ${altValue ? `alt="${altValue}"` : ''}
+            ${titleValue ? `title="${titleValue}"` : ''}
             onload="this.parentElement.dataset.status = 'loaded'"
             onerror="this.parentElement.dataset.status = 'error'"
             onclick="window.$popup.vImage(this.src)"
           />
-          ${sAlt ? `<figcaption>${sAlt}</figcaption>` : ''}
+          ${altValue ? `<figcaption>${altValue}</figcaption>` : ''}
         </figure>
       </div>
     `)
