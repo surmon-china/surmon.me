@@ -11,19 +11,17 @@
       </template>
     </page-banner>
     <div class="container">
-      <page-title class="title" id="products">我在用的推荐好物</page-title>
-      <ul class="product-list">
-        <product-item :key="index" :product="product" v-for="(product, index) in products" />
-      </ul>
-      <page-title class="title" id="brokers">我筛选后在用的港美股券商</page-title>
-      <ul class="product-list">
-        <product-item
-          :key="index"
-          :product="broker"
-          :image-style="{ backgroundSize: '50%' }"
-          v-for="(broker, index) in brokers"
-        />
-      </ul>
+      <template :key="title" v-for="(list, title) in products">
+        <page-title class="title" id="products">{{ title || '-' }}</page-title>
+        <ul class="product-list">
+          <product-item
+            :key="index"
+            :product="product"
+            :image-style="{ backgroundSize: product.size ?? 'cover' }"
+            v-for="(product, index) in list"
+          />
+        </ul>
+      </template>
       <div class="end"></div>
     </div>
   </div>
@@ -49,7 +47,6 @@
     setup() {
       const { i18n, meta, isZhLang, adConfig } = useEnhancer()
       const products = computed(() => adConfig.value.PC_MERCH_PRODUCTS)
-      const brokers = computed(() => adConfig.value.PC_MERCH_BROKERS)
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_MERCH, Language.English)!)
@@ -61,8 +58,7 @@
       })
 
       return {
-        products,
-        brokers
+        products
       }
     }
   })

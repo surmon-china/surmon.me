@@ -178,9 +178,11 @@
 
     iframe {
       width: 100%;
+      min-height: 320px;
       margin-bottom: 1em;
-      background-color: $theme-black;
+      padding: $sm-gap;
       border-radius: $xs-radius;
+      border: 1px solid $module-bg-darker-1;
     }
 
     .figure-wrapper {

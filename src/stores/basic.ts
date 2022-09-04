@@ -14,8 +14,9 @@ export interface MerchItemConfig {
   name: string
   description: string
   detail: string
-  src: string
   url: string
+  src: string
+  size?: string
 }
 
 export interface AD_CONFIG {
@@ -44,16 +45,14 @@ export interface AD_CONFIG {
     url: string
     src: string
   }>
-  PC_MERCH_PRODUCTS: Array<MerchItemConfig>
-  PC_MERCH_BROKERS: Array<MerchItemConfig>
+  PC_MERCH_PRODUCTS: Record<string, Array<MerchItemConfig>>
 }
 
 const defaultAdConfig: AD_CONFIG = {
   PC_CARROUSEL: false,
   PC_NAV: [],
   PC_ASIDE_SWIPER: [],
-  PC_MERCH_PRODUCTS: [],
-  PC_MERCH_BROKERS: []
+  PC_MERCH_PRODUCTS: {}
 }
 
 export interface AdminInfo {

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.14.2 (2022-09-05)
+
+**Feature**
+
+- Improve iframe style
+- Improve merch page data structure
+
 ### v3.14.0 (2022-08-20)
 
 **Feature**
