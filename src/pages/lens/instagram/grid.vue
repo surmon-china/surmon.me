@@ -3,17 +3,22 @@
     <ul class="medias">
       <li
         class="media"
-        :key="index"
         v-for="(media, index) in medias"
+        :key="index"
         :title="media.caption"
-        @click="handleGalleryOpen(index)"
+        :class="isVideoMediaIns(media) ? 'video' : 'photo'"
+        @click="openMediaGallery(index)"
       >
         <div class="mask">
           <span class="icon">
-            <i class="iconfont icon-magnifier"></i>
+            <i class="iconfont icon-music-play" v-if="isVideoMediaIns(media)" />
+            <i class="iconfont icon-eye" v-else></i>
           </span>
         </div>
         <div v-lozad class="background" :data-background-image="getInstagramImage(media, 'm')" />
+        <div class="video-icon" v-if="isVideoMediaIns(media)">
+          <i class="iconfont icon-video"></i>
+        </div>
       </li>
     </ul>
     <client-only>
@@ -21,7 +26,7 @@
         :medias="medias"
         :index="galleryActiveIndex"
         :visible="isOnGallery"
-        @close="handleGalleryClose"
+        @close="closeMediaGallery"
       />
     </client-only>
   </div>
@@ -32,7 +37,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { getInstagramImage } from '/@/transforms/media'
+  import { isVideoMediaIns, getInstagramImage } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import Gallery from './gallery.vue'
 
@@ -51,10 +56,12 @@
       const { gtag } = useEnhancer()
       const galleryActiveIndex = ref<number>()
       const isOnGallery = computed(() => galleryActiveIndex.value !== UNDEFINED)
-      const handleGalleryClose = () => {
+
+      const closeMediaGallery = () => {
         galleryActiveIndex.value = UNDEFINED
       }
-      const handleGalleryOpen = (index: number) => {
+
+      const openMediaGallery = (index: number) => {
         galleryActiveIndex.value = index
         gtag?.event('instagram_view', {
           event_category: GAEventCategories.Lens
@@ -64,9 +71,10 @@
       return {
         isOnGallery,
         galleryActiveIndex,
+        isVideoMediaIns,
         getInstagramImage,
-        handleGalleryOpen,
-        handleGalleryClose
+        openMediaGallery,
+        closeMediaGallery
       }
     }
   })
@@ -94,15 +102,8 @@
       @include radius-box($sm-radius);
       @include common-bg-module();
       &:hover {
-        .background {
-          transform: scale(1.15);
-        }
-
         .mask {
           @include visible();
-          .icon {
-            transform: scale(1);
-          }
         }
       }
 
@@ -111,22 +112,14 @@
         height: 100%;
         background-size: cover;
         background-position: center;
-        transform: scale(1.05);
-        @include transform-transition($transition-time-normal);
       }
 
-      .length {
+      .video-icon {
+        opacity: 0.7;
         position: absolute;
-        bottom: 0;
-        right: 0;
-        z-index: $z-index-normal + 1;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        width: 4rem;
-        height: 2rem;
-        border-top-left-radius: $xs-radius;
-        background-color: $text-divider;
+        top: $xs-gap;
+        right: $sm-gap;
+        font-size: $font-size-h4;
         color: $white;
       }
 
@@ -143,14 +136,11 @@
         z-index: $z-index-normal + 1;
         background-color: rgba(#000, 0.3);
         color: rgba($white, 0.8);
-        @include backdrop-blur(2px);
         @include hidden();
         @include visibility-transition();
 
         .icon {
-          font-size: 3em;
-          transform: scale(1.2);
-          @include transform-transition($transition-time-normal);
+          font-size: 2em;
         }
       }
     }

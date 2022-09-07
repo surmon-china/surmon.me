@@ -115,15 +115,8 @@
     @include common-bg-module();
     &:hover {
       .thumb {
-        .background {
-          transform: scale(1.1);
-        }
-
         .mask {
           @include visible();
-          .button {
-            transform: scale(1);
-          }
         }
       }
 
@@ -144,8 +137,6 @@
         height: 100%;
         background-size: cover;
         background-position: center;
-        transform: scale(1);
-        @include transform-transition($transition-time-normal);
       }
 
       .published-at {
@@ -191,8 +182,6 @@
           font-size: 3em;
           text-align: center;
           color: rgba($white, 0.8);
-          transform: scale(1.2);
-          @include transform-transition($transition-time-normal);
         }
       }
     }

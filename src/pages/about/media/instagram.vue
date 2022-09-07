@@ -9,10 +9,15 @@
     </template>
     <template #default>
       <ul class="list">
-        <li class="item" :key="index" v-for="(item, index) in insMedias">
-          <ulink class="link" :href="item.permalink" :title="item.caption">
-            <uimage class="cover" :src="getInstagramImage(item, 't')" :alt="item.caption" />
-            <div class="mask"><i class="iconfont icon-eye"></i></div>
+        <li class="item" :key="index" v-for="(media, index) in insMedias">
+          <ulink class="link" :href="media.permalink" :title="media.caption">
+            <uimage class="cover" :src="getInstagramImage(media, 't')" :alt="media.caption" />
+            <div class="video-icon" v-if="isVideoMediaIns(media)">
+              <i class="iconfont icon-video"></i>
+            </div>
+            <div class="mask">
+              <i class="iconfont icon-eye"></i>
+            </div>
           </ulink>
         </li>
         <li class="item">
@@ -26,7 +31,7 @@
 <script lang="ts">
   import { defineComponent, ref, computed, onMounted } from 'vue'
   import { useInstagramMediasStore } from '/@/stores/media'
-  import { getInstagramImage } from '/@/transforms/media'
+  import { isVideoMediaIns, getInstagramImage } from '/@/transforms/media'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { LanguageKey } from '/@/language'
 
@@ -35,9 +40,7 @@
     setup() {
       const fetching = ref(true)
       const store = useInstagramMediasStore()
-      const insMedias = computed(() => {
-        return store.data.filter((plog) => plog.media_type !== 'VIDEO').slice(0, 23)
-      })
+      const insMedias = computed(() => store.data.slice(0, 23))
 
       onMounted(() => {
         store.fetch().finally(() => {
@@ -46,9 +49,10 @@
       })
 
       return {
+        isVideoMediaIns,
+        getInstagramImage,
         LanguageKey,
         VALUABLE_LINKS,
-        getInstagramImage,
         fetching,
         store,
         insMedias
@@ -58,6 +62,7 @@
 </script>
 
 <style lang="scss" scoped>
+  @use 'sass:math';
   @import 'src/styles/variables.scss';
   @import 'src/styles/mixins.scss';
 
@@ -98,9 +103,18 @@
         }
 
         .cover {
-          height: $item-size;
-          object-fit: cover;
+          width: 100%;
+          height: 100%;
           border-radius: $xs-radius;
+          object-fit: cover;
+        }
+
+        .video-icon {
+          opacity: 0.7;
+          position: absolute;
+          top: math.div($xs-gap, 2);
+          right: $xs-gap;
+          color: $white;
         }
 
         .mask {

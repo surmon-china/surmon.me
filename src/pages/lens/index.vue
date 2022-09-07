@@ -110,9 +110,7 @@
       })
 
       const { instagramMedias: insStore, youtubePlayList: ytStore } = useStores()
-      const insMediasData = computed(() => {
-        return insStore.data.filter((plog) => plog.media_type !== 'VIDEO').slice(0, 24)
-      })
+      const insMediasData = computed(() => insStore.data.slice(0, 24))
       const ytPlaylistData = computed(() => {
         return ytStore.data.filter((list) => list.contentDetails.itemCount > 1)
       })

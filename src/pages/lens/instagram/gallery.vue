@@ -13,13 +13,14 @@
         </div>
         <div class="right">
           <span class="caption">
-            <i class="iconfont icon-camera"></i>
+            <i class="iconfont icon-video" v-if="isVideoMediaIns(galleryActiveMedia)"></i>
+            <i class="iconfont icon-camera" v-else></i>
             <template v-if="galleryActiveMedia.caption">{{ galleryActiveMedia.caption }}</template>
           </span>
         </div>
       </div>
       <ulink class="postlink" :href="galleryActiveMedia.permalink">
-        <i class="iconfont icon-new-window-s"></i>
+        <i class="iconfont icon-instagram"></i>
       </ulink>
       <button
         class="navigation prev"
@@ -48,13 +49,18 @@
         @swiper="handleGallerySwiperReady"
         @transition-start="handleGallerySwiperTransitionStart"
       >
-        <swiper-slide v-for="(media, i) in medias" :key="i">
-          <div
-            class="image swiper-lazy"
-            :data-background="getInstagramImage(media)"
-            :alt="media.caption"
-          />
-          <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+        <swiper-slide v-for="(media, i) in medias" :key="i" v-slot="{ isActive }">
+          <div class="video" v-if="isVideoMediaIns(media)">
+            <video v-if="isActive" class="player" :src="media.media_url" controls autoplay />
+          </div>
+          <template v-else>
+            <div
+              class="image swiper-lazy"
+              :data-background="getInstagramImage(media)"
+              :alt="media.caption"
+            />
+            <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+          </template>
         </swiper-slide>
       </swiper>
     </div>
@@ -65,7 +71,7 @@
   import { defineComponent, ref, computed, PropType } from 'vue'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
-  import { getInstagramImage } from '/@/transforms/media'
+  import { isVideoMediaIns, getInstagramImage } from '/@/transforms/media'
 
   enum GalleryEvents {
     Close = 'close'
@@ -111,6 +117,7 @@
       return {
         galleryActiveIndex,
         galleryActiveMedia,
+        isVideoMediaIns,
         getInstagramImage,
         handleGalleryClose,
         handleGallerySwiperReady,
@@ -134,12 +141,25 @@
 
     .swiper {
       height: 100%;
+
       .image {
         overflow: hidden;
         width: 100%;
         height: 100%;
         background-size: contain;
         background-position: center;
+      }
+
+      .video {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .player {
+          height: 100%;
+          max-width: 60%;
+        }
       }
     }
 
@@ -191,7 +211,7 @@
     }
 
     .postlink {
-      $size: 4rem;
+      $size: 3rem;
       position: absolute;
       z-index: $z-index-normal + 2;
       bottom: 6rem;
