@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.14.4 (2022-09-08)
+
+**Feature**
+
+- Support Instagram video media
+- Improve Lens page UX
+
 ### v3.14.2 (2022-09-05)
 
 **Feature**
