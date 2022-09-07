@@ -1,6 +1,6 @@
 <template>
   <div class="lens-page">
-    <page-banner :blur="false" :position="36" :image="bannerImageURL">
+    <page-banner :blur="false" :position="36" image="/images/page-lens/banner-2.jpg">
       <template #title>
         <webfont>
           <i18n zh="凡心所向，素履以往" en="Because it's there" />
@@ -77,12 +77,11 @@
   import { defineComponent, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useStores } from '/@/stores'
-  import { useUniversalFetch, universalRef } from '/@/universal'
+  import { useUniversalFetch } from '/@/universal'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import { Language, LanguageKey } from '/@/language'
   import { getYouTubePlaylistURL } from '/@/transforms/media'
   import { firstUpperCase } from '/@/transforms/text'
-  import { randomNumber } from '/@/utils/random'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
   import PageTitle from '/@/components/common/fullpage/title.vue'
   import LensSkeleton from './skeleton.vue'
@@ -114,10 +113,6 @@
       const ytPlaylistData = computed(() => {
         return ytStore.data.filter((list) => list.contentDetails.itemCount > 1)
       })
-      const bannerImageURL = universalRef(
-        'page-lens-banner',
-        () => `/images/page-lens/banner-${randomNumber(2)}.jpg`
-      )
 
       useUniversalFetch(() => {
         return Promise.all([
@@ -134,8 +129,7 @@
         getYouTubePlaylistURL,
         insStore,
         insMediasData,
-        ytPlaylistData,
-        bannerImageURL
+        ytPlaylistData
       }
     }
   })
