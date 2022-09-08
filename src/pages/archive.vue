@@ -2,7 +2,7 @@
   <div class="archive-page" :class="{ mobile: isMobile }">
     <responsive>
       <template #desktop>
-        <page-banner :blur="false" :position="68" image="/images/page-archive/banner.jpeg">
+        <page-banner :blur="false" :position="32" image="/images/page-archive/banner.jpg">
           <template #title>
             <webfont>
               <i18n v-bind="i18ns.title" />
@@ -15,7 +15,7 @@
       </template>
       <template #mobile>
         <page-banner
-          :position="10"
+          :position="80"
           :blur="false"
           :is-mobile="true"
           image="/images/page-archive/banner-mobile.jpg"

@@ -1,6 +1,6 @@
 <template>
   <div class="lens-page">
-    <page-banner :blur="false" :position="36" image="/images/page-lens/banner-2.jpg">
+    <page-banner :blur="false" :position="68" image="/images/page-lens/banner.jpeg">
       <template #title>
         <webfont>
           <i18n zh="凡心所向，素履以往" en="Because it's there" />
@@ -109,7 +109,7 @@
       })
 
       const { instagramMedias: insStore, youtubePlayList: ytStore } = useStores()
-      const insMediasData = computed(() => insStore.data.slice(0, 24))
+      const insMediasData = computed(() => insStore.data.slice(0, 23))
       const ytPlaylistData = computed(() => {
         return ytStore.data.filter((list) => list.contentDetails.itemCount > 1)
       })

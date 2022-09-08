@@ -20,6 +20,9 @@
           <i class="iconfont icon-video"></i>
         </div>
       </li>
+      <li class="media more">
+        <ulink class="link" :href="VALUABLE_LINKS.INSTAGRAM">•••</ulink>
+      </li>
     </ul>
     <client-only>
       <gallery
@@ -34,6 +37,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, PropType } from 'vue'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
   import { useEnhancer } from '/@/app/enhancer'
   import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
@@ -69,6 +73,7 @@
       }
 
       return {
+        VALUABLE_LINKS,
         isOnGallery,
         galleryActiveIndex,
         isVideoMediaIns,
@@ -92,6 +97,17 @@
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-gap: $gap * 2;
+
+    .media.more {
+      .link {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: $font-size-h1;
+      }
+    }
 
     .media {
       position: relative;
