@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.14.6 (2022-09-09)
+
+**Feature**
+
+- Improve lens page
+- Improve page banners
+- Refactoring sponsor component
+
 ### v3.14.4 (2022-09-08)
 
 **Feature**
