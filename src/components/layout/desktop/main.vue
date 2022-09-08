@@ -5,10 +5,10 @@
     <client-only>
       <popup :visible="switcher.sponsor" @close="handleSponsorModalClose">
         <div class="sponsor-modal">
-          <div class="tips">
-            <i18n :k="LanguageKey.SPONSOR_TEXT" />
+          <div class="sponsor">
+            <sponsor-tabs class="tabs" :state="sponsorState" :hide-title="true" />
+            <sponsor-provider class="provider" :state="sponsorState" :max-sponsors="8" />
           </div>
-          <sponsor class="sponsor" :hide-title="true" :max-sponsors="8" />
         </div>
       </popup>
       <popup
@@ -77,7 +77,9 @@
   import Wallflower from '/@/components/widget/wallflower/garden.vue'
   import Wallpaper from '/@/components/widget/wallpaper/switcher.vue'
   import Background from '/@/components/widget/background.vue'
-  import Sponsor from '/@/components/widget/sponsor.vue'
+  import { createSponsorState } from '/@/components/widget/sponsor/state'
+  import SponsorTabs from '/@/components/widget/sponsor/tabs.vue'
+  import SponsorProvider from '/@/components/widget/sponsor/provider.vue'
   import Share from '/@/components/widget/share.vue'
   import Toolbox from '/@/components/widget/toolbox.vue'
   import Feedback from '/@/components/widget/feedback.vue'
@@ -94,7 +96,8 @@
       Feedback,
       Wallpaper,
       Statement,
-      Sponsor,
+      SponsorTabs,
+      SponsorProvider,
       MusicPlayerHandle,
       Toolbox,
       Wallflower,
@@ -105,6 +108,7 @@
       NavView
     },
     setup() {
+      const sponsorState = createSponsorState()
       const wallpaperStore = useWallpaperStore()
       const { route, globalState } = useEnhancer()
       const handlePageTransitionDone = () => {
@@ -133,6 +137,7 @@
         MAIN_CONTENT_ELEMENT_ID,
         switcher: globalState.switcher,
         layoutColumn: globalState.layoutColumn,
+        sponsorState,
         handlePageTransitionDone,
         handleSponsorModalClose,
         handleFeedbackModalClose,
@@ -153,19 +158,18 @@
     flex-direction: column;
     background-color: $module-bg-lighter !important;
 
-    .tips {
-      line-height: 3em;
-      text-align: center;
-      background-color: $module-bg-lighter;
-      border-bottom: 1px dashed $module-bg-darker-1;
-    }
-
     .sponsor {
       flex-grow: 1;
+      display: flex;
+      flex-direction: column;
 
-      ::v-deep(.tab) {
+      .tabs {
         background-color: $module-bg-lighter;
         border-bottom: 1px solid $module-bg-darker-1;
+      }
+
+      .provider {
+        flex: 1;
       }
     }
   }

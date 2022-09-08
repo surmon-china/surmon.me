@@ -33,7 +33,6 @@ export enum LanguageKey {
   GUESTBOOK_SLOGAN = 'guestbook-banner-slogan',
   PAGE_FREELANCER_SLOGAN = 'freelancer-page-banner-slogan',
   PAGE_FREELANCER_EMAIL_ME = 'freelancer-email-me',
-  SPONSOR_TEXT = 'sponsor-text',
   AD = 'ad',
   BARRAGE = 'barrage',
   FEEDBACK = 'feedback',

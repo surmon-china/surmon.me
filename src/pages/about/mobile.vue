@@ -4,7 +4,7 @@
       :position="70"
       :blur="false"
       :is-mobile="true"
-      image="/images/page-lens/banner-1.jpg"
+      image="/images/page-about/banner-mobile.jpg"
     >
       <template #title>
         <i18n :k="LanguageKey.PAGE_ABOUT" />

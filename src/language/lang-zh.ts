@@ -31,7 +31,6 @@ export const zhLangMap: LanguageMap = {
   [LanguageKey.GUESTBOOK_SLOGAN]: '此心光明 亦复何言',
   [LanguageKey.PAGE_FREELANCER_SLOGAN]: '为我一挥手，如临万壑松',
   [LanguageKey.PAGE_FREELANCER_EMAIL_ME]: '放码过来',
-  [LanguageKey.SPONSOR_TEXT]: '你可选择于你最为便捷的方式进行赞助，一次性和周期性赞助均被接受',
   [LanguageKey.AD]: '广而告之',
   [LanguageKey.BARRAGE]: '畅言',
   [LanguageKey.FEEDBACK]: '反馈',

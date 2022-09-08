@@ -18,7 +18,7 @@
           :position="10"
           :blur="false"
           :is-mobile="true"
-          image="/images/page-archive/banner.jpeg"
+          image="/images/page-archive/banner-mobile.jpg"
         >
           <template #title><i18n :k="LanguageKey.PAGE_ARCHIVE" /></template>
           <template #description><i18n v-bind="i18ns.title" /></template>

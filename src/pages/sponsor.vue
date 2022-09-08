@@ -13,32 +13,37 @@
         />
       </template>
     </page-banner>
-    <div class="tips">
-      <i18n :k="LanguageKey.SPONSOR_TEXT" />
-    </div>
     <div class="sponsor-wrapper">
-      <sponsor class="sponsor" :init-id="initSponsor" />
+      <div class="tabs-wrapper">
+        <div class="container">
+          <sponsor-tabs class="tabs" :state="sponsorState" />
+        </div>
+      </div>
+      <sponsor-provider class="provider" :state="sponsorState" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
+  import { defineComponent } from 'vue'
   import { Language, LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { firstUpperCase } from '/@/transforms/text'
-  import Sponsor from '/@/components/widget/sponsor.vue'
+  import { createSponsorState } from '/@/components/widget/sponsor/state'
+  import SponsorTabs from '/@/components/widget/sponsor/tabs.vue'
+  import SponsorProvider from '/@/components/widget/sponsor/provider.vue'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
 
   export default defineComponent({
     name: 'SponsorPage',
     components: {
-      Sponsor,
+      SponsorTabs,
+      SponsorProvider,
       PageBanner
     },
     setup() {
       const { route, i18n, meta, isZhLang } = useEnhancer()
-      const initSponsor = computed(() => route.hash.replace('#', ''))
+      const sponsorState = createSponsorState(route.hash.replace('#', '') as any)
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_SPONSOR, Language.English)!)
@@ -46,7 +51,7 @@
         return { pageTitle: titles.join(' | ') }
       })
 
-      return { LanguageKey, initSponsor }
+      return { LanguageKey, sponsorState }
     }
   })
 </script>
@@ -61,26 +66,24 @@
     display: flex;
     flex-direction: column;
 
-    .tips {
-      width: 100%;
-      height: 3em;
-      line-height: 3em;
-      text-align: center;
-      color: $text-disabled;
-      background-color: $module-bg-lighter;
-      letter-spacing: 1px;
-    }
-
     .sponsor-wrapper {
       flex-grow: 1;
       display: flex;
+      flex-direction: column;
       background-color: $module-bg;
 
-      .sponsor {
-        flex-shrink: 0;
+      .tabs-wrapper {
+        background-color: $module-bg-lighter;
+      }
+
+      .tabs {
+        height: 8rem;
+      }
+
+      .provider {
+        flex: 1;
+        margin: 0 auto;
         width: $container-width;
-        margin: 2rem auto;
-        border-radius: $xs-radius;
         overflow: hidden;
       }
     }
