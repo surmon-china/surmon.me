@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.14.7 (2022-09-18)
+
+**Feature**
+
+- Improve markdown `<u>` style
+
 ### v3.14.6 (2022-09-09)
 
 **Feature**

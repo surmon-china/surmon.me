@@ -110,6 +110,12 @@
       }
     }
 
+    u {
+      text-underline-offset: 0.5em;
+      text-decoration-thickness: from-font;
+      text-decoration-style: dashed;
+    }
+
     h1,
     h2,
     h3,
