@@ -6,7 +6,7 @@
 
 import { defineFetchStore } from './_fetch'
 import { defineStore } from 'pinia'
-import { UniversalKeyValue } from '/@/constants/state'
+import { UniversalKeyValue, CommentPostID } from '/@/constants/state'
 import { useIdentityStore, UserType } from './identity'
 import nodepress from '/@/services/nodepress'
 
@@ -122,11 +122,17 @@ export const useAppOptionStore = defineStore({
 
     postSiteLike() {
       const identityStore = useIdentityStore()
-      return nodepress.post('/vote/site', { author: identityStore.author }).then((response) => {
-        if (this.data) {
-          this.data.meta.likes = response.result
-        }
-      })
+      return nodepress
+        .post('/vote/post', {
+          post_id: CommentPostID.Guestbook,
+          vote: 1,
+          author: identityStore.author
+        })
+        .then((response) => {
+          if (this.data) {
+            this.data.meta.likes = response.result
+          }
+        })
     },
 
     postFeedback(feedback: { emotion: number; content: string }) {

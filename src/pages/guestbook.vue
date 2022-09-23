@@ -45,7 +45,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useStores } from '/@/stores'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { CommentPostType } from '/@/constants/state'
+  import { CommentPostID } from '/@/constants/state'
   import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
   import { META } from '/@/config/app.config'
@@ -65,7 +65,7 @@
       }
     },
     setup() {
-      const GUESTBOOK_POST_ID = CommentPostType.Guestbook
+      const GUESTBOOK_POST_ID = CommentPostID.Guestbook
       const { i18n, meta, gtag, globalState, isDarkTheme, isZhLang } = useEnhancer()
       const { appOption, comment, identity } = useStores()
       // MARK: [SSR & not first page] only

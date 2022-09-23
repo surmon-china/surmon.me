@@ -12,7 +12,7 @@ export enum OriginState {
 }
 
 // 评论宿主页面的 POST_ID 类型
-export enum CommentPostType {
+export enum CommentPostID {
   Guestbook = 0 // 留言板
 }
 

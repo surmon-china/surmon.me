@@ -16,7 +16,6 @@ export enum UserType {
   Disqus = 2
 }
 
-const LEGACY_STORGAE_KEY = 'universal-state'
 const LOCAL_STORGAE_KEY = 'identity-state'
 
 export const useIdentityStore = defineStore('identity', {
@@ -70,9 +69,7 @@ export const useIdentityStore = defineStore('identity', {
     },
     fromStorage() {
       try {
-        const legacy = getJSON(LEGACY_STORGAE_KEY)
-        const now = getJSON(LOCAL_STORGAE_KEY)
-        this.$state = now || legacy || this.$state
+        this.$state = getJSON(LOCAL_STORGAE_KEY) || this.$state
       } catch (error) {
         remove(LOCAL_STORGAE_KEY)
       }

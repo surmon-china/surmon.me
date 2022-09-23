@@ -230,7 +230,7 @@ export const useArticleDetailStore = defineStore('articleDetail', {
     postArticleLike(articleID: number) {
       const identityStore = useIdentityStore()
       return nodepress
-        .post(`/vote/article`, { article_id: articleID, vote: 1, author: identityStore.author })
+        .post(`/vote/post`, { post_id: articleID, vote: 1, author: identityStore.author })
         .then((response) => {
           if (this.article) {
             this.article.meta.likes = response.result

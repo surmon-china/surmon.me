@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.15.0 (2022-09-23)
+
+**Feature**
+
+- Upgrade `site` and `article` vote API
+- Remove `identity` store legacy logic
+
 ### v3.14.7 (2022-09-18)
 
 **Feature**
