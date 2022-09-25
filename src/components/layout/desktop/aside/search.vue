@@ -8,6 +8,7 @@
         type="search"
         name="search"
         maxlength="16"
+        autocomplete="off"
         v-model.trim="keyword"
         :class="i18n.language"
         :placeholder="i18n.t(LanguageKey.SEARCH_PLACEHOLDER)"

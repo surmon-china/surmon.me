@@ -4,6 +4,7 @@
       <input
         class="input"
         ref="inputElement"
+        autocomplete="off"
         type="text"
         maxlength="16"
         required
@@ -16,7 +17,7 @@
       </span>
     </div>
     <transition name="module">
-      <div v-if="searchState.open" class="search-mask"></div>
+      <div v-if="searchState.open" class="search-mask" @click="cancelSearch"></div>
     </transition>
     <nav class="navbar">
       <button class="navbar-menu" @click.stop.prevent="handleMenuToggle">

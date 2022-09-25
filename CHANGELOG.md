@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.16.0 (2022-09-25)
+
+**Feature**
+
+- Improve PC aside search input
+- Improve mobile header search mask
+
 ### v3.15.0 (2022-09-23)
 
 **Feature**
