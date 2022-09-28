@@ -27,8 +27,8 @@
 <script lang="ts">
   import { defineComponent, onMounted } from 'vue'
   import { Language, LanguageKey } from '/@/language'
-  import { useEnhancer } from '/@/app/enhancer'
   import { firstUpperCase } from '/@/transforms/text'
+  import { useEnhancer } from '/@/app/enhancer'
   import { useSponsorState, ProviderId } from '/@/components/widget/sponsor/state'
   import SponsorTabs from '/@/components/widget/sponsor/tabs.vue'
   import SponsorProvider from '/@/components/widget/sponsor/provider.vue'
