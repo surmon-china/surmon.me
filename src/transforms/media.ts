@@ -11,6 +11,10 @@ export const isVideoMediaIns = (media: InstagramMediaItem) => {
   return media.media_type === 'VIDEO'
 }
 
+export const isAlbumMediaIns = (media: InstagramMediaItem) => {
+  return media.media_type === 'CAROUSEL_ALBUM'
+}
+
 // https://www.instagram.com/p/['IMAGE-CODE']/?__a=1
 // https://www.surinderbhomra.com/Blog/2016/05/16/Resize-An-Instagram-Image-Using-A-Media-Query-Parameter
 export const getInstagramImage = (media: InstagramMediaItem, size?: 't' | 'm' | 'l') => {

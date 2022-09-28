@@ -10,7 +10,7 @@
     >
       <i class="iconfont" :class="`icon-${social.class}`" />
     </button>
-    <button class="share-ejector link" @click="copyPageURL">
+    <button class="share-ejector link" title="Copy link" @click="copyPageURL">
       <i class="iconfont icon-link"></i>
     </button>
   </div>
@@ -160,7 +160,7 @@
       }
     },
     setup(props) {
-      const { route, gtag, i18n } = useEnhancer()
+      const { route, gtag, i18n, isZhLang } = useEnhancer()
       const enabledSocials = computed(() => {
         return props.socials?.length
           ? socials.filter((s) => props.socials?.includes(s.id))
@@ -178,7 +178,9 @@
 
       const copyPageURL = () => {
         const content = `${getTitle()} - ${getURL()}`
-        copy(content)
+        copy(content).then(() => {
+          alert(isZhLang.value ? '链接已复制到剪贴板！' : 'Link copied!')
+        })
         gtag?.event('share_copy_url', {
           event_category: GAEventCategories.Share,
           event_label: content

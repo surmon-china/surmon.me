@@ -17,7 +17,7 @@
       <page-title class="module-title instagram" :level="4">
         <ulink class="link" :href="VALUABLE_LINKS.INSTAGRAM">Newest · instagram</ulink>
       </page-title>
-      <placeholder :data="insMediasData" :loading="insStore.fetching">
+      <placeholder :data="instagramMedias" :loading="instagramMedias.fetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">
             <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
@@ -34,12 +34,12 @@
         </template>
         <template #default>
           <div class="module-content">
-            <instagram-grid :medias="insMediasData" />
+            <instagram-grid :medias="instagramMedias.data" :limit="24" />
           </div>
         </template>
       </placeholder>
       <div class="module-content">
-        <youtube-playlist :playlists="ytPlaylistData">
+        <youtube-playlist :playlists="youtubePlaylistData">
           <template #title="{ list }">
             <page-title class="module-title youtube" :level="5">
               <template #left>
@@ -78,8 +78,8 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useStores } from '/@/stores'
   import { useUniversalFetch } from '/@/universal'
-  import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import { Language, LanguageKey } from '/@/language'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import { getYouTubePlaylistURL } from '/@/transforms/media'
   import { firstUpperCase } from '/@/transforms/text'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
@@ -99,6 +99,11 @@
     },
     setup() {
       const { i18n, meta, isZhLang } = useEnhancer()
+      const { instagramMedias, youtubePlayList } = useStores()
+      const youtubePlaylistData = computed(() => {
+        return youtubePlayList.data.filter((list) => list.contentDetails.itemCount > 1)
+      })
+
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_LENS, Language.English)!)
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_LENS), enTitle] : [enTitle]
@@ -108,28 +113,21 @@
         }
       })
 
-      const { instagramMedias: insStore, youtubePlayList: ytStore } = useStores()
-      const insMediasData = computed(() => insStore.data.slice(0, 23))
-      const ytPlaylistData = computed(() => {
-        return ytStore.data.filter((list) => list.contentDetails.itemCount > 1)
-      })
-
       useUniversalFetch(() => {
         return Promise.all([
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          insStore.fetch().catch(() => {}),
+          instagramMedias.fetch().catch(() => {}),
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          ytStore.fetch().catch(() => {})
+          youtubePlayList.fetch().catch(() => {})
         ])
       })
 
       return {
         VALUABLE_LINKS,
         LanguageKey,
-        getYouTubePlaylistURL,
-        insStore,
-        insMediasData,
-        ytPlaylistData
+        instagramMedias,
+        youtubePlaylistData,
+        getYouTubePlaylistURL
       }
     }
   })

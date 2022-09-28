@@ -24,7 +24,7 @@ export const zhLangMap: LanguageMap = {
   [LanguageKey.STATISTIC_TODAY_VIEWS]: '今日阅读',
   [LanguageKey.STATISTIC_TOTAL_VIEWS]: '累计阅读',
   [LanguageKey.STATISTIC_TOTAL_UPVOTES]: '共获点赞',
-  [LanguageKey.STATISTIC_AVERAGE_EMOTION]: '站点评分',
+  [LanguageKey.STATISTIC_AVERAGE_EMOTION]: '匿名评分',
   [LanguageKey.EMPTY_PLACEHOLDER]: '空空如也',
   [LanguageKey.NOT_FOUND]: '众里寻他 我已不再',
   [LanguageKey.BACK_TO_HOME_PAGE]: '山河万里 长歌归故',

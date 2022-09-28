@@ -67,6 +67,7 @@
 <script lang="ts">
   import { defineComponent, PropType } from 'vue'
   import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { useEnhancer } from '/@/app/enhancer'
   import { copy } from '/@/utils/clipboard'
   import { ProviderId, providers, SponsorState } from './state'
   export default defineComponent({
@@ -82,9 +83,10 @@
       }
     },
     setup(props) {
+      const { isZhLang } = useEnhancer()
       const handleCopyAddress = (content: any) => {
         copy(content).then(() => {
-          alert(`Address copied to clipboard`)
+          alert(isZhLang.value ? '地址已复制到剪贴板！' : 'Address copied!')
         })
       }
 

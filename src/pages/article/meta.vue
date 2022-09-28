@@ -44,20 +44,20 @@
       </span>
     </div>
     <div class="line">
-      <i class="icon iconfont icon-copyright"></i>
+      <i class="icon iconfont icon-creative-commons"></i>
       <i18n>
         <template #zh>
           <ulink
             class="link copyright"
-            href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.zh"
+            href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh"
             >自由转载 - 署名 - 非商业性使用</ulink
           >
         </template>
         <template #en>
           <ulink
             class="link copyright"
-            href="https://creativecommons.org/licenses/by-nc/3.0/cn/deed.en"
-            >Creative Commons BY-NC 3.0 CN</ulink
+            href="https://creativecommons.org/licenses/by-nc/4.0/deed.en"
+            >Creative Commons BY-NC 4.0</ulink
           >
         </template>
       </i18n>
@@ -193,7 +193,7 @@
 
       .icon {
         font-weight: normal;
-        font-size: $font-size-small;
+        font-size: $font-size-h6;
         margin-right: $xs-gap;
       }
 

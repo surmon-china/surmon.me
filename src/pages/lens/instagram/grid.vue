@@ -3,30 +3,56 @@
     <ul class="medias">
       <li
         class="media"
-        v-for="(media, index) in medias"
+        v-for="(media, index) in gridMedias"
         :key="index"
         :title="media.caption"
         :class="isVideoMediaIns(media) ? 'video' : 'photo'"
         @click="openMediaGallery(index)"
       >
+        <div v-lozad class="background" :data-background-image="getInstagramImage(media, 'm')" />
         <div class="mask">
           <span class="icon">
-            <i class="iconfont icon-music-play" v-if="isVideoMediaIns(media)" />
+            <i class="iconfont icon-music-play" v-if="isVideoMediaIns(media)"></i>
             <i class="iconfont icon-eye" v-else></i>
           </span>
         </div>
-        <div v-lozad class="background" :data-background-image="getInstagramImage(media, 'm')" />
-        <div class="video-icon" v-if="isVideoMediaIns(media)">
-          <i class="iconfont icon-video"></i>
+        <div class="type-icon">
+          <i class="iconfont icon-video" v-if="isVideoMediaIns(media)"></i>
+          <i class="iconfont icon-album" v-if="isAlbumMediaIns(media)"></i>
         </div>
       </li>
-      <li class="media more">
+      <li class="more">
+        <ulink
+          class="media"
+          v-for="(media, index) in restMedias"
+          :href="media.permalink"
+          :key="index"
+          :title="media.caption"
+          :style="{ backgroundImage: `url(${getInstagramImage(media, 't')})` }"
+        >
+          <div class="mask">
+            <i class="iconfont icon-new-window-s"></i>
+          </div>
+        </ulink>
+        <ulink
+          class="media"
+          v-for="index in 3 - restMedias.length"
+          :href="VALUABLE_LINKS.INSTAGRAM"
+          :key="index"
+          :style="{
+            backgroundImage: `url(${getTargetCDNURL('/images/page-lens/instagram-default.jpg')})`
+          }"
+        >
+          <div class="mask">
+            <i class="iconfont icon-new-window-s"></i>
+          </div>
+        </ulink>
         <ulink class="link" :href="VALUABLE_LINKS.INSTAGRAM">•••</ulink>
       </li>
     </ul>
     <client-only>
       <gallery
-        :medias="medias"
+        :medias="gridMedias"
         :index="galleryActiveIndex"
         :visible="isOnGallery"
         @close="closeMediaGallery"
@@ -41,7 +67,8 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { isVideoMediaIns, getInstagramImage } from '/@/transforms/media'
+  import { getTargetCDNURL } from '/@/transforms/url'
+  import { isVideoMediaIns, isAlbumMediaIns, getInstagramImage } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import Gallery from './gallery.vue'
 
@@ -54,16 +81,22 @@
       medias: {
         type: Array as PropType<Array<InstagramMediaItem>>,
         required: true
+      },
+      limit: {
+        type: Number,
+        required: true
       }
     },
-    setup() {
+    setup(props) {
       const { gtag } = useEnhancer()
       const galleryActiveIndex = ref<number>()
       const isOnGallery = computed(() => galleryActiveIndex.value !== UNDEFINED)
-
-      const closeMediaGallery = () => {
-        galleryActiveIndex.value = UNDEFINED
-      }
+      const gridMedias = computed(() => props.medias.slice(0, props.limit - 1))
+      const restMedias = computed(() => {
+        return gridMedias.value.length > 1
+          ? props.medias.slice(props.limit - 1, props.limit + 2)
+          : []
+      })
 
       const openMediaGallery = (index: number) => {
         galleryActiveIndex.value = index
@@ -72,11 +105,19 @@
         })
       }
 
+      const closeMediaGallery = () => {
+        galleryActiveIndex.value = UNDEFINED
+      }
+
       return {
         VALUABLE_LINKS,
+        gridMedias,
+        restMedias,
         isOnGallery,
         galleryActiveIndex,
         isVideoMediaIns,
+        isAlbumMediaIns,
+        getTargetCDNURL,
         getInstagramImage,
         openMediaGallery,
         closeMediaGallery
@@ -97,15 +138,30 @@
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-gap: $gap * 2;
+    list-style: none;
 
-    .media.more {
+    .more {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      grid-gap: $gap;
+
+      .media {
+        height: auto;
+        background-size: cover;
+      }
+
       .link {
-        width: 100%;
-        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
         font-size: $font-size-h1;
+        /* font line height offset */
+        padding-bottom: 4px;
+        @include common-bg-module();
+        @include radius-box($sm-radius);
       }
     }
 
@@ -130,7 +186,7 @@
         background-position: center;
       }
 
-      .video-icon {
+      .type-icon {
         opacity: 0.7;
         position: absolute;
         top: $xs-gap;
