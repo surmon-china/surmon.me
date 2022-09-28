@@ -8,7 +8,7 @@
       </template>
       <template #description>
         <i18n
-          zh="愿我的输出对你有所帮助，对我来说那是最好的褒奖和鼓励"
+          zh="你的慷慨赞助将是我持续输出的不竭动力"
           en="Your generous financial support is my motivation to keep moving forward"
         />
       </template>
@@ -25,11 +25,11 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { defineComponent, onMounted } from 'vue'
   import { Language, LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { firstUpperCase } from '/@/transforms/text'
-  import { createSponsorState } from '/@/components/widget/sponsor/state'
+  import { useSponsorState, ProviderId } from '/@/components/widget/sponsor/state'
   import SponsorTabs from '/@/components/widget/sponsor/tabs.vue'
   import SponsorProvider from '/@/components/widget/sponsor/provider.vue'
   import PageBanner from '/@/components/common/fullpage/banner.vue'
@@ -43,12 +43,19 @@
     },
     setup() {
       const { route, i18n, meta, isZhLang } = useEnhancer()
-      const sponsorState = createSponsorState(route.hash.replace('#', '') as any)
+      const sponsorState = useSponsorState()
 
       meta(() => {
         const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_SPONSOR, Language.English)!)
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_SPONSOR), enTitle] : [enTitle]
         return { pageTitle: titles.join(' | ') }
+      })
+
+      onMounted(() => {
+        const targetId = route.hash.replace('#', '')
+        if (targetId) {
+          sponsorState.setProviderId(targetId as ProviderId)
+        }
       })
 
       return { LanguageKey, sponsorState }

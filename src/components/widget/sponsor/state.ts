@@ -58,8 +58,8 @@ export const providers = [
   }
 ]
 
-export type SponsorState = ReturnType<typeof createSponsorState>
-export const createSponsorState = (initId?: ProviderId) => {
+export type SponsorState = ReturnType<typeof useSponsorState>
+export const useSponsorState = (initId?: ProviderId) => {
   const { gtag } = useEnhancer()
   const activeId = ref(initId && providerIds.includes(initId) ? initId : providers[0].id)
   const activeProvider = computed(() => providers.find((t) => t.id === activeId.value)!)
@@ -82,6 +82,9 @@ export const createSponsorState = (initId?: ProviderId) => {
   }
 
   const setProviderId = (id: ProviderId) => {
+    if (!providerIds.includes(id)) {
+      return
+    }
     // set provider ID
     activeId.value = id
     // fetch github sponsors

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.16.1 (2022-09-28)
+
+**Fix**
+
+- Fix sponsor page hash ID
+
 ### v3.16.0 (2022-09-25)
 
 **Feature**

@@ -77,7 +77,7 @@
   import Wallflower from '/@/components/widget/wallflower/garden.vue'
   import Wallpaper from '/@/components/widget/wallpaper/switcher.vue'
   import Background from '/@/components/widget/background.vue'
-  import { createSponsorState } from '/@/components/widget/sponsor/state'
+  import { useSponsorState } from '/@/components/widget/sponsor/state'
   import SponsorTabs from '/@/components/widget/sponsor/tabs.vue'
   import SponsorProvider from '/@/components/widget/sponsor/provider.vue'
   import Share from '/@/components/widget/share.vue'
@@ -108,7 +108,7 @@
       NavView
     },
     setup() {
-      const sponsorState = createSponsorState()
+      const sponsorState = useSponsorState()
       const wallpaperStore = useWallpaperStore()
       const { route, globalState } = useEnhancer()
       const handlePageTransitionDone = () => {
