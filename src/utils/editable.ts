@@ -11,8 +11,8 @@ export const focusPosition = (element: HTMLElement, position = 0) => {
 
   // 1. focus
   element.focus()
-  // 2. position
-  // first text position
+
+  // 2. position (first text position)
   if (!position) {
     const range = window.getSelection()?.getRangeAt(0) as Range
     const clone = range.cloneRange()
@@ -20,6 +20,7 @@ export const focusPosition = (element: HTMLElement, position = 0) => {
     clone.setEnd(range.endContainer, range.endOffset)
     return clone.toString().length
   }
+
   // position
   let length = 0
   let abort = false

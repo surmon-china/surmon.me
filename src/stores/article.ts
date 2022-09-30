@@ -7,7 +7,7 @@
 import { defineStore } from 'pinia'
 import { Language } from '/@/language'
 import { LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
-import { OriginState, UniversalKeyValue } from '/@/constants/state'
+import { OriginState, UniversalKeyValue, Pagination } from '/@/constants/state'
 import { getArticleContentHeadingElementID } from '/@/constants/anchor'
 import { markdownToHTML } from '/@/transforms/markdown'
 import { delayPromise } from '/@/utils/delayer'
@@ -52,7 +52,7 @@ export const useArticleListStore = defineStore('articleList', {
     list: {
       fetching: false,
       data: [] as Array<Article>,
-      pagination: null as null | $TODO
+      pagination: null as null | Pagination
     }
   }),
   actions: {

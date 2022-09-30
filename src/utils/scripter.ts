@@ -19,7 +19,7 @@ export const loadScript = (
       src,
       domain,
       type = 'text/javascript',
-      charset = 'utf-8',
+      // charset = 'utf-8',
       defer = false,
       async = false,
       ...restAttrs

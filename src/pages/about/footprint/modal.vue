@@ -17,8 +17,8 @@
           <ul class="placemarks" v-else>
             <li
               class="placemark"
-              :key="index"
-              v-for="(placemark, index) in folder.placemarks"
+              :key="i"
+              v-for="(placemark, i) in folder.placemarks"
               @click="handlePlacemarkClick(placemark)"
             >
               <uimage

@@ -86,14 +86,6 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     isZhUser: isZhUser(config.language),
     ...uaParser(config.userAgent)
   })
-  const setUserAgent = (_userAgent: string) => {
-    userAgent.original = _userAgent
-    Object.assign(userAgent, uaParser(config.userAgent))
-  }
-  const setLanguage = (_language: string) => {
-    userAgent.language = _language
-    userAgent.isZhUser = isZhUser(_language)
-  }
 
   // UI layout
   const layoutValue = ref(config.layout)

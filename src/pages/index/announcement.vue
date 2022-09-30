@@ -64,6 +64,7 @@
   import { defineComponent, ref, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { LanguageKey } from '/@/language'
+  import { Announcement } from '/@/stores/announcement'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import Markdown from '/@/components/common/markdown.vue'
 
@@ -76,7 +77,7 @@
     },
     props: {
       announcements: {
-        type: Array as PropType<Array<$TODO>>,
+        type: Array as PropType<Array<Announcement>>,
         required: true
       },
       fetching: {

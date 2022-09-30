@@ -5,11 +5,11 @@
  */
 
 import { defineStore } from 'pinia'
-import { isClient } from '/@/app/environment'
-import { UNDEFINED } from '/@/constants/value'
-import { SortType, UniversalKeyValue, CommentParentType } from '/@/constants/state'
-import { delayPromise } from '/@/utils/delayer'
 import nodepress from '/@/services/nodepress'
+import { isClient } from '/@/app/environment'
+import { SortType, UniversalKeyValue, CommentParentType, Pagination } from '/@/constants/state'
+import { UNDEFINED } from '/@/constants/value'
+import { delayPromise } from '/@/utils/delayer'
 import { useIdentityStore } from './identity'
 
 export const COMMENT_API_PATH = '/comment'
@@ -64,7 +64,7 @@ export const useCommentStore = defineStore('comment', {
     posting: false,
     deleting: false,
     comments: [] as Array<Comment>,
-    pagination: null as null | $TODO
+    pagination: null as null | Pagination
   }),
   getters: {
     commentTreeList: (state): Array<CommentTreeItem> => {
@@ -165,7 +165,7 @@ export const useCommentStore = defineStore('comment', {
           const index = this.comments.findIndex((comment) => comment.id === commentID)
           if (index > -1) {
             this.comments.splice(index, 1)
-            this.pagination.total--
+            this.pagination!.total--
           }
         })
         .finally(() => {
