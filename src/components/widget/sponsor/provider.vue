@@ -151,10 +151,10 @@
         padding: 0 1em;
         line-height: 3em;
         border-radius: $sm-radius;
-        background: $module-bg-darker-1;
+        background: $module-bg-darker-2;
         transition: background $transition-time-fast;
         &:hover {
-          background: $module-bg-darker-2;
+          background: $module-bg-darker-3;
           .text {
             color: $link-color;
           }

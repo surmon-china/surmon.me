@@ -148,7 +148,10 @@
       meta(() => ({
         pageTitle: article.value?.title,
         description: article.value?.description || '',
-        keywords: article.value?.keywords?.join(',') || article.value?.title
+        keywords: article.value?.keywords?.join(',') || article.value?.title,
+        twitterCard: 'summary_large_image',
+        ogType: 'article',
+        ogImage: article.value?.thumb
       }))
 
       onBeforeMount(() => {

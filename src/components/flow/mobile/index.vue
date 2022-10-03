@@ -1,6 +1,5 @@
 <template>
   <div class="articles">
-    <!-- header -->
     <div class="header" v-if="tagSlug || categorySlug || date || searchKeyword">
       <div class="content">
         <template v-if="categorySlug">
@@ -30,7 +29,6 @@
         <i class="iconfont icon-cancel"></i>
       </router-link>
     </div>
-    <!-- list -->
     <placeholder
       :data="articles.length"
       :loading="!articles.length && articleListStore.list.fetching"
@@ -57,7 +55,6 @@
       </template>
       <template #default>
         <div>
-          <!-- list -->
           <transition-group key="list" name="list-fade" tag="div" class="list">
             <list-item
               class="list-item"
@@ -66,23 +63,11 @@
               v-for="(article, index) in articles"
             />
           </transition-group>
-          <!-- loadmore -->
-          <div class="loadmore">
-            <button
-              class="button"
-              :disabled="articleListStore.list.fetching || !hasMoreArticles"
-              @click="loadmoreArticles"
-            >
-              <div class="text">
-                <i18n v-if="articleListStore.list.fetching" :k="LanguageKey.ARTICLE_LIST_LOADING" />
-                <i18n v-else-if="hasMoreArticles" :k="LanguageKey.ARTICLE_LIST_LOADMORE" />
-                <i18n v-else :k="LanguageKey.ARTICLE_LIST_NO_MORE" />
-              </div>
-              <span class="icon" v-if="hasMoreArticles">
-                <i class="iconfont icon-loadmore"></i>
-              </span>
-            </button>
-          </div>
+          <loadmore
+            :loading="articleListStore.list.fetching"
+            :finished="!hasMoreArticles"
+            @loadmore="loadmoreArticles"
+          />
         </div>
       </template>
     </placeholder>
@@ -101,11 +86,15 @@
   import { useAppOptionStore } from '/@/stores/basic'
   import { firstUpperCase } from '/@/transforms/text'
   import { scrollToNextScreen } from '/@/utils/scroller'
+  import Loadmore from './loadmore.vue'
   import ListItem from './item.vue'
 
   export default defineComponent({
     name: 'MobileFlowArticleList',
-    components: { ListItem },
+    components: {
+      ListItem,
+      Loadmore
+    },
     props: {
       tagSlug: {
         type: String,
@@ -149,14 +138,12 @@
         const titles: string[] = Object.values(props)
           .filter(Boolean)
           .map((prop) => firstUpperCase(prop as string))
-
         // filter page
         if (titles.length) {
           return {
             pageTitle: titles.join(' | ')
           }
         }
-
         // index page
         return {
           title: `${META.title} - ${i18n.t(LanguageKey.APP_SLOGAN)}`,
@@ -177,7 +164,7 @@
 
       const loadmoreArticles = async () => {
         await fetchArticles({
-          page: articleListStore.list.pagination.current_page + 1
+          page: articleListStore.list.pagination!.current_page + 1
         })
         onClient(scrollToNextScreen)
       }
@@ -276,26 +263,6 @@
     .list {
       .list-item {
         margin-bottom: $lg-gap;
-      }
-    }
-
-    .loadmore {
-      .button {
-        width: 50%;
-        margin: 0 auto;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        align-items: center;
-        color: $text-disabled;
-
-        .text {
-          margin-bottom: $xs-gap;
-        }
-
-        .icon {
-          font-size: $font-size-h1;
-        }
       }
     }
   }

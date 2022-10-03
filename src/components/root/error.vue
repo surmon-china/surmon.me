@@ -139,9 +139,8 @@
 
     .link {
       cursor: pointer;
-      border-bottom: 1px solid;
-      padding-bottom: $sm-gap;
       margin-bottom: 4rem;
+      @include text-underline(0.5em);
       @include color-transition();
       &:hover {
         color: $text-darker;

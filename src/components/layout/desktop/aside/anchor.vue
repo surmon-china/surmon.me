@@ -227,10 +227,8 @@
             .iconfont {
               color: $primary;
             }
-
             .text {
               font-weight: bold;
-              border-color: $primary;
             }
           }
 
@@ -240,8 +238,8 @@
           }
 
           .text {
-            padding-bottom: 3px;
-            border-bottom: 1px dotted $text-divider;
+            @include text-underline(0.4em);
+            text-decoration-style: dotted;
           }
 
           &.level-2 {

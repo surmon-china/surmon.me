@@ -16,13 +16,7 @@
         </div>
       </template>
       <template #mobile>
-        <page-banner
-          class="mobile-banner"
-          :is-mobile="true"
-          :position="70"
-          :blur="false"
-          :image="bannerImage"
-        >
+        <page-banner class="mobile-banner" :is-mobile="true" :position="70" :image="bannerImage">
           <template #title>
             <i18n :k="LanguageKey.PAGE_GUESTBOOK" />
           </template>
@@ -48,8 +42,9 @@
   import { CommentPostID } from '/@/constants/state'
   import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
+  import { getTargetCDNURL } from '/@/transforms/url'
   import { META } from '/@/config/app.config'
-  import PageBanner from '/@/components/common/fullpage/banner.vue'
+  import PageBanner from '/@/components/common/banner.vue'
   import Comment from '/@/components/comment/index.vue'
 
   export default defineComponent({
@@ -106,7 +101,10 @@
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_GUESTBOOK), enTitle] : [enTitle]
         return {
           pageTitle: titles.join(' | '),
-          description: `给 ${META.author} 留言`
+          description: `给 ${META.author} 留言`,
+          twitterCard: 'summary_large_image',
+          ogType: 'bbs',
+          ogImage: getTargetCDNURL(bannerImage)
         }
       })
 

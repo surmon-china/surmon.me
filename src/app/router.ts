@@ -27,18 +27,18 @@ import DateFlowPage from '/@/pages/date.vue'
 import SearchFlowPage from '/@/pages/search.vue'
 
 // core pages
+import DesktopArchivePage from '/@/pages/archive/desktop.vue'
+import MobileArchivePage from '/@/pages/archive/mobile.vue'
 import ArticleDetailPage from '/@/pages/article/index.vue'
-import AboutDesktopPage from '/@/pages/about/desktop.vue'
-import AboutMobilePage from '/@/pages/about/mobile.vue'
-import ArchivePage from '/@/pages/archive.vue'
+import DesktopAboutPage from '/@/pages/about/desktop.vue'
+import MobileAboutPage from '/@/pages/about/mobile.vue'
 import GuestbookPage from '/@/pages/guestbook.vue'
 import AppPage from '/@/pages/app.vue'
 
-// service pages
-import FreelancerPage from '/@/pages/freelancer.vue'
-import LensPage from '/@/pages/lens/index.vue'
-import MerchPage from '/@/pages/merch/index.vue'
+// third pages
 import SponsorPage from '/@/pages/sponsor.vue'
+import LensPage from '/@/pages/lens/index.vue'
+import NftPage from '/@/pages/nft.vue'
 
 import 'vue-router'
 
@@ -67,10 +67,9 @@ export enum RouteName {
   Archive = 'archive',
   Guestbook = 'guestbook',
   About = 'about',
-  App = 'app',
-  Freelancer = 'freelancer',
-  Merch = 'merch',
   Lens = 'lens',
+  App = 'app',
+  Nft = 'nft',
   Sponsor = 'sponsor',
   Error = 'error'
 }
@@ -218,13 +217,8 @@ export const routes: RouteRecordRaw[] = [
     path: '/archive',
     name: RouteName.Archive,
     components: {
-      default: ArchivePage,
-      mobile: ArchivePage
-    },
-    props: {
-      mobile: {
-        isMobile: true
-      }
+      default: DesktopArchivePage,
+      mobile: MobileArchivePage
     },
     meta: {
       responsive: true,
@@ -236,8 +230,8 @@ export const routes: RouteRecordRaw[] = [
     path: '/about',
     name: RouteName.About,
     components: {
-      default: AboutDesktopPage,
-      mobile: AboutMobilePage
+      default: DesktopAboutPage,
+      mobile: MobileAboutPage
     },
     meta: {
       responsive: true,
@@ -281,16 +275,6 @@ export const routes: RouteRecordRaw[] = [
     }
   },
   {
-    path: '/merch',
-    name: RouteName.Merch,
-    component: MerchPage,
-    meta: {
-      responsive: false,
-      layout: LayoutColumn.Full,
-      ssrCacheAge: 60 * 60 * 12 // 12 hours
-    }
-  },
-  {
     path: '/lens',
     name: RouteName.Lens,
     component: LensPage,
@@ -301,13 +285,13 @@ export const routes: RouteRecordRaw[] = [
     }
   },
   {
-    path: '/freelancer',
-    name: RouteName.Freelancer,
-    component: FreelancerPage,
+    path: '/nft',
+    name: RouteName.Nft,
+    component: NftPage,
     meta: {
       responsive: false,
       layout: LayoutColumn.Full,
-      ssrCacheAge: Infinity
+      ssrCacheAge: 60 * 60 * 1 // 1 hour
     }
   },
   {

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.18.0 (2022-10-01)
+
+**Feature**
+
+- Remove merch page
+- Remove freelancer page
+- Add NFTs page (opensea.io)
+- Add twitter and og meta
+- Improve fullpage components
+- Improve sponsor page
+- Redesign lens page
+- Refactoring archive page
+- Refactoring mobile flow (infinitescroll)
+
 ### v3.16.1 (2022-09-28)
 
 **Fix**

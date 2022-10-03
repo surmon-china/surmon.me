@@ -198,10 +198,8 @@
       }
 
       .link {
-        border-bottom: 1px solid transparent;
         &:hover {
-          text-decoration: none;
-          border-color: initial;
+          @include text-underline();
         }
 
         &.date,
@@ -227,7 +225,7 @@
         }
 
         &.permalink {
-          border-bottom: 1px solid;
+          @include text-underline();
           cursor: pointer;
         }
       }

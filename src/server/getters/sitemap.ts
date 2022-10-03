@@ -23,11 +23,6 @@ export const getSitemapXML = async (archiveData?: any) => {
       priority: 1
     },
     {
-      url: getPageURL('merch'),
-      changefreq: EnumChangefreq.YEARLY,
-      priority: 1
-    },
-    {
       url: getPageURL('archive'),
       changefreq: EnumChangefreq.ALWAYS,
       priority: 1
@@ -64,7 +59,7 @@ export const getSitemapXML = async (archiveData?: any) => {
     })
   })
 
-  return streamToPromise(Readable.from(sitemapItemList).pipe(sitemapStream)).then((data) =>
-    data.toString()
-  )
+  return streamToPromise(Readable.from(sitemapItemList).pipe(sitemapStream)).then((data) => {
+    return data.toString()
+  })
 }

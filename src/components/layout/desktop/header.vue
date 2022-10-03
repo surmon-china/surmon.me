@@ -2,14 +2,14 @@
   <header :id="HEADER_ELEMENT_ID" class="header" :class="{ 'enable-nav': isEnabledNav }">
     <div class="header-container container">
       <div class="header-header">
-        <uimage cdn src="/images/logo.svg" class="header-logo" />
+        <uimage cdn src="/images/logo.svg" class="header-logo" :alt="META.title" />
         <webfont class="header-slogan">
           <i18n :k="LanguageKey.APP_SLOGAN" />
         </webfont>
         <router-link
           to="/"
           class="header-link"
-          :title="t(LanguageKey.APP_SLOGAN)"
+          :title="META.title"
           @mousedown="handleRootNavEvent"
         />
       </div>
@@ -29,23 +29,18 @@
       <nav class="nav-list container">
         <template v-for="(menu, index) in menus" :key="menu.id">
           <span v-if="index > 0" class="divider"></span>
-          <ulink
-            class="item"
-            :class="[menu.id, { hot: menu.hot, new: menu.newWindow }]"
-            :to="menu.route"
-            :href="menu.url"
-          >
+          <ulink class="item" :class="menu.id" :to="menu.route" :href="menu.url">
             <uimage v-if="menu.imageIcon" class="image-icon" :src="menu.imageIcon" />
-            <i v-else-if="menu.icon" class="iconfont" :class="menu.icon"></i>
-            <webfont class="text" bolder uppercase>
+            <i v-else-if="menu.icon" class="font-icon iconfont" :class="menu.icon"></i>
+            <webfont class="text" bolder :uppercase="!menu.disabledUppercase">
               <i18n :k="menu.i18nKey" />
             </webfont>
             <span v-if="menu.hot" class="superscript">
               <i class="iconfont icon-hot-fill"></i>
             </span>
-            <sup v-if="menu.newWindow" class="newscript">
+            <span v-if="menu.newWindow" class="new-window">
               <i class="iconfont icon-new-window-s"></i>
-            </sup>
+            </span>
           </ulink>
         </template>
       </nav>
@@ -60,6 +55,7 @@
   import { Theme } from '/@/composables/theme'
   import { HEADER_ELEMENT_ID } from '/@/constants/anchor'
   import { GAEventCategories } from '/@/constants/gtag'
+  import { META } from '/@/config/app.config'
   import { menus } from './menu'
 
   export default defineComponent({
@@ -102,6 +98,7 @@
 
       return {
         menus,
+        META,
         HEADER_ELEMENT_ID,
         LanguageKey,
         isEnabledNav,
@@ -247,7 +244,7 @@
             }
           }
 
-          > .iconfont {
+          .font-icon {
             margin-right: $sm-gap;
           }
 
@@ -262,14 +259,10 @@
             margin-left: $xs-gap;
           }
 
-          &.new {
-            margin-right: $xs-gap;
-          }
-
-          .newscript {
-            position: absolute;
-            right: -1.2em;
-            top: -0.1em;
+          .new-window {
+            margin-left: $xs-gap;
+            margin-right: -$xs-gap;
+            margin-top: -$sm-gap;
             font-size: $font-size-small - 3;
             opacity: 0.8;
           }

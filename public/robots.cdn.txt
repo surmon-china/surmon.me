@@ -2,4 +2,4 @@
 User-agent: *
 Disallow: /
 Sitemap: https://surmon.me/sitemap.xml
-Sitemap: https://surmon.me/sitemap
+Sitemap: https://surmon.me/archive

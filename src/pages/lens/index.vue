@@ -1,6 +1,6 @@
 <template>
   <div class="lens-page">
-    <page-banner :blur="false" :position="68" image="/images/page-lens/banner.jpeg">
+    <page-banner class="page-banner" :position="68" image="/images/page-lens/banner.jpeg">
       <template #title>
         <webfont>
           <i18n zh="凡心所向，素履以往" en="Because it's there" />
@@ -13,10 +13,15 @@
         </i18n>
       </template>
     </page-banner>
-    <div class="container">
-      <page-title class="module-title instagram" :level="4">
-        <ulink class="link" :href="VALUABLE_LINKS.INSTAGRAM">Newest · instagram</ulink>
-      </page-title>
+    <container class="page-bridge"></container>
+    <container class="page-content">
+      <h4 class="module-title instagram">
+        <ulink class="link" :href="VALUABLE_LINKS.INSTAGRAM">浮光掠影 | photography</ulink>
+        <ulink class="brand" :href="VALUABLE_LINKS.INSTAGRAM">
+          <i class="iconfont icon-instagram"></i>
+          <span class="text">Instagram</span>
+        </ulink>
+      </h4>
       <placeholder :data="instagramMedias" :loading="instagramMedias.fetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">
@@ -41,17 +46,16 @@
       <div class="module-content">
         <youtube-playlist :playlists="youtubePlaylistData">
           <template #title="{ list }">
-            <page-title class="module-title youtube" :level="5">
-              <template #left>
-                <ulink class="link" :href="getYouTubePlaylistURL(list.id)">
-                  {{ list.snippet.title }}
-                  ({{ list.contentDetails.itemCount }})
-                </ulink>
-              </template>
-              <template #right>
-                <span class="brand">YouTube · Channel</span>
-              </template>
-            </page-title>
+            <h4 class="module-title youtube">
+              <ulink class="link" :href="getYouTubePlaylistURL(list.id)">
+                {{ list.snippet.title }}
+                ({{ list.contentDetails.itemCount }})
+              </ulink>
+              <ulink class="brand" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
+                <i class="iconfont icon-youtube"></i>
+                <span class="text">YouTube · Channel</span>
+              </ulink>
+            </h4>
           </template>
           <template #loading>
             <lens-skeleton
@@ -69,7 +73,7 @@
           </template>
         </youtube-playlist>
       </div>
-    </div>
+    </container>
   </div>
 </template>
 
@@ -82,8 +86,7 @@
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import { getYouTubePlaylistURL } from '/@/transforms/media'
   import { firstUpperCase } from '/@/transforms/text'
-  import PageBanner from '/@/components/common/fullpage/banner.vue'
-  import PageTitle from '/@/components/common/fullpage/title.vue'
+  import PageBanner from '/@/components/common/banner.vue'
   import LensSkeleton from './skeleton.vue'
   import InstagramGrid from './instagram/grid.vue'
   import YoutubePlaylist from './youtube/playlist.vue'
@@ -92,7 +95,6 @@
     name: 'LensPage',
     components: {
       PageBanner,
-      PageTitle,
       LensSkeleton,
       InstagramGrid,
       YoutubePlaylist
@@ -109,7 +111,8 @@
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_LENS), enTitle] : [enTitle]
         return {
           pageTitle: titles.join(' | '),
-          description: `${META.author} 的视频创作`
+          description: `${META.author} 的浮光掠影`,
+          ogType: 'image'
         }
       })
 
@@ -138,34 +141,58 @@
   @import 'src/styles/mixins.scss';
 
   .lens-page {
+    .page-bridge {
+      position: relative;
+      height: 4rem;
+      background-color: $module-bg;
+      &::before {
+        content: '';
+        position: absolute;
+        display: block;
+        height: 1rem;
+        bottom: -0.5rem;
+        left: 0;
+        right: 0;
+        background-image: radial-gradient(circle, transparent 70%, $module-bg 70%);
+        background-size: 0.8em 1em;
+        background-position: 0 -0.5em;
+      }
+    }
+
     .module-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: $text;
+      margin: 3rem 0;
+
+      &.instagram {
+        --brand-primary: #{$instagram-primary};
+      }
+      &.youtube {
+        --brand-primary: #{$youtube-primary};
+      }
+
       .link {
-        color: $text-secondary;
         font-weight: bold;
+        color: $text-secondary;
         &:hover {
           color: $link-color;
         }
       }
 
-      &.instagram {
-        --item-primary: #{$instagram-primary};
-        background: linear-gradient(to right, transparent, $module-bg-opaque, transparent);
-      }
-
-      &.youtube {
-        --item-primary: #{$youtube-primary};
-        background: linear-gradient(to right, $module-bg-opaque, transparent);
-
-        .icon {
-          color: var(--item-primary);
-          margin-right: $sm-gap;
-          font-size: $font-size-h3;
-          font-weight: normal;
+      .brand {
+        font-size: $font-size-small;
+        color: $text-disabled;
+        &:hover {
+          color: var(--brand-primary);
         }
 
-        .brand {
-          color: $text-disabled;
-          font-size: $font-size-small;
+        .iconfont {
+          margin-right: $sm-gap;
+          font-weight: normal;
         }
       }
     }

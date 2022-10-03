@@ -397,11 +397,8 @@
         .username {
           font-weight: bold;
           margin-right: $gap;
-          border-bottom: 1px solid transparent;
-          &.url {
-            &:hover {
-              border-color: inherit;
-            }
+          &.url:hover {
+            @include text-underline();
           }
         }
 

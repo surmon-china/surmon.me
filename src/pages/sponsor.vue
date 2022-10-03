@@ -1,6 +1,6 @@
 <template>
   <div class="sponsor-page">
-    <page-banner image="/images/page-sponsor/banner.webp" :blur="false">
+    <page-banner image="/images/page-sponsor/banner.webp">
       <template #title>
         <webfont>
           <i18n zh="赠吾玫瑰，手留余香" en="Become a sponsor to me" />
@@ -13,13 +13,11 @@
         />
       </template>
     </page-banner>
-    <div class="sponsor-wrapper">
-      <div class="tabs-wrapper">
-        <div class="container">
-          <sponsor-tabs class="tabs" :state="sponsorState" />
-        </div>
-      </div>
-      <sponsor-provider class="provider" :state="sponsorState" />
+    <div class="page-content">
+      <container class="tabs-wrapper">
+        <sponsor-tabs class="sponsor-tabs" :state="sponsorState" />
+      </container>
+      <sponsor-provider class="sponsor-provider" :state="sponsorState" />
     </div>
   </div>
 </template>
@@ -32,7 +30,7 @@
   import { useSponsorState, ProviderId } from '/@/components/widget/sponsor/state'
   import SponsorTabs from '/@/components/widget/sponsor/tabs.vue'
   import SponsorProvider from '/@/components/widget/sponsor/provider.vue'
-  import PageBanner from '/@/components/common/fullpage/banner.vue'
+  import PageBanner from '/@/components/common/banner.vue'
 
   export default defineComponent({
     name: 'SponsorPage',
@@ -73,21 +71,19 @@
     display: flex;
     flex-direction: column;
 
-    .sponsor-wrapper {
+    .page-content {
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      background-color: $module-bg;
 
       .tabs-wrapper {
-        background-color: $module-bg-lighter;
+        background-color: $module-bg-translucent;
+        .sponsor-tabs {
+          height: 8rem;
+        }
       }
 
-      .tabs {
-        height: 8rem;
-      }
-
-      .provider {
+      .sponsor-provider {
         flex: 1;
         margin: 0 auto;
         width: $container-width;

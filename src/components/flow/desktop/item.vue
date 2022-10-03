@@ -254,11 +254,11 @@
             display: block;
             max-width: 26rem;
             margin-left: 0;
-            transition: margin $transition-time-normal;
-            border-bottom: 1px solid transparent;
             text-decoration: none;
-            @include text-overflow();
+            border-bottom: 1px solid transparent;
             color: $text;
+            transition: margin $transition-time-normal;
+            @include text-overflow();
             &:hover {
               color: $link-color;
               border-color: initial;

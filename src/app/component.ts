@@ -13,13 +13,13 @@ import Udate from '/@/components/common/udate'
 import Ulink from '/@/components/common/ulink'
 import Uimage from '/@/components/common/uimage'
 import Placeholder from '/@/components/common/placeholder'
+import ClientOnly from '/@/components/common/client-only'
+import Container from '/@/components/common/container'
+import { Responsive, DesktopOnly } from '/@/components/common/responsive'
 
 import SkeletonBase from '/@/components/common/skeleton/base.vue'
 import SkeletonLine from '/@/components/common/skeleton/line.vue'
 import SkeletonParagraph from '/@/components/common/skeleton/paragraph.vue'
-
-import { Responsive, DesktopOnly } from '/@/components/common/responsive'
-import { ClientOnly } from '/@/components/common/client-only'
 
 declare module 'vue' {
   export interface GlobalComponents {
@@ -29,6 +29,7 @@ declare module 'vue' {
     Divider: typeof Divider
     Ulink: typeof Ulink
     ClientOnly: typeof ClientOnly
+    Container: typeof Container
   }
 }
 
@@ -45,6 +46,7 @@ export default function (app: App) {
   app.component(ClientOnly.name, ClientOnly)
   app.component(Responsive.name, Responsive)
   app.component(DesktopOnly.name, DesktopOnly)
+  app.component(Container.name, Container)
 
   app.component(SkeletonBase.name as string, SkeletonBase)
   app.component(SkeletonLine.name as string, SkeletonLine)

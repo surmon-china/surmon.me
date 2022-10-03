@@ -61,6 +61,7 @@
   import { Language, LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
   import { firstUpperCase } from '/@/transforms/text'
+  import { getTargetCDNURL } from '/@/transforms/url'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
 
   export default defineComponent({
@@ -78,7 +79,9 @@
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_APP), enTitle] : [enTitle]
         return {
           pageTitle: titles.join(' | '),
-          description: `${META.title} App 下载`
+          description: `${META.title} App 下载`,
+          ogType: 'soft',
+          ogImage: getTargetCDNURL('/images/page-app/logo.png')
         }
       })
 
@@ -146,7 +149,7 @@
 
         .link {
           margin-left: $xs-gap;
-          border-bottom: 1px solid;
+          @include text-underline();
         }
 
         .prefix {

@@ -13,6 +13,7 @@ export interface MenuItem {
   imageIcon?: string
   divider?: boolean
   newWindow?: boolean
+  disabledUppercase?: boolean
   hot?: boolean
 }
 
@@ -54,14 +55,6 @@ export const menus: Array<MenuItem> = [
     icon: 'icon-swordsman',
     i18nKey: LanguageKey.PAGE_ABOUT
   },
-  /*
-  {
-    id: RouteName.Freelancer,
-    route: getPageRoute(RouteName.Freelancer),
-    icon: 'icon-coin-s',
-    i18nKey: LanguageKey.PAGE_FREELANCER
-  },
-  */
   {
     id: RouteName.Guestbook,
     route: getPageRoute(RouteName.Guestbook),
@@ -75,22 +68,13 @@ export const menus: Array<MenuItem> = [
     i18nKey: LanguageKey.PAGE_APP,
     divider: true
   },
-  /*
   {
-    id: 'opensea',
-    url: VALUABLE_LINKS.OPENSEA,
+    id: 'nft',
+    route: getPageRoute(RouteName.Nft),
     imageIcon: getTargetCDNURL('/images/third-party/opensea.svg'),
-    i18nKey: LanguageKey.PAGE_OPENSEA,
-    divider: true,
-    newWindow: true
-  },
-  */
-  {
-    id: RouteName.Merch,
-    route: getPageRoute(RouteName.Merch),
-    i18nKey: LanguageKey.PAGE_MERCH,
-    icon: 'icon-rubik',
-    divider: true,
-    hot: true
+    i18nKey: LanguageKey.PAGE_NFT,
+    disabledUppercase: true,
+    hot: true,
+    divider: true
   }
 ]

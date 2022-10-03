@@ -1,6 +1,5 @@
 <template>
   <div class="articles">
-    <!-- list -->
     <div class="article-list">
       <placeholder :data="articles.length" :loading="!articles.length && fetching">
         <template #loading>
@@ -28,7 +27,6 @@
         </template>
         <template #default>
           <div key="list">
-            <!-- list-mammon -->
             <client-only>
               <template v-if="mammon">
                 <Adsense
@@ -61,7 +59,6 @@
         </template>
       </placeholder>
     </div>
-    <!-- loadmore -->
     <button class="article-load" :disabled="fetching || !isLoadMoreEnabled" @click="handleLoadmore">
       <div class="background">
         <span class="left"></span>
@@ -73,11 +70,11 @@
           <template v-else>{{ articles.length }} / {{ pagination?.total }}</template>
         </span>
         <span class="right">
-          <webfont bolder uppercase>
+          <span class="text" :class="{ zh: isZhLang }">
             <i18n v-if="fetching" :k="LanguageKey.ARTICLE_LIST_LOADING" />
             <i18n v-else-if="isLoadMoreEnabled" :k="LanguageKey.ARTICLE_LIST_LOADMORE" />
             <i18n v-else :k="LanguageKey.ARTICLE_LIST_NO_MORE" />
-          </webfont>
+          </span>
           <i class="iconfont icon-loadmore"></i>
         </span>
       </div>
@@ -88,6 +85,7 @@
 <script lang="ts">
   import { defineComponent, computed, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { Pagination } from '/@/constants/state'
   import { Article } from '/@/stores/article'
   import { LanguageKey } from '/@/language'
   import ListItem from './item.vue'
@@ -106,7 +104,10 @@
         type: Array as PropType<Article[]>,
         required: true
       },
-      pagination: Object,
+      pagination: {
+        type: Object as PropType<Pagination | null>,
+        default: null
+      },
       fetching: {
         type: Boolean,
         required: true
@@ -118,7 +119,7 @@
     },
     emits: [Events.Loadmore],
     setup(props, context) {
-      const { isDarkTheme } = useEnhancer()
+      const { isDarkTheme, isZhLang } = useEnhancer()
       const isLoadMoreEnabled = computed(() => {
         return props.pagination
           ? props.pagination.current_page < props.pagination.total_page
@@ -131,6 +132,7 @@
 
       return {
         LanguageKey,
+        isZhLang,
         isDarkTheme,
         isLoadMoreEnabled,
         handleLoadmore
@@ -274,6 +276,13 @@
         .right {
           width: 10rem;
           color: $text-disabled;
+          .text {
+            font-weight: bold;
+            text-transform: uppercase;
+            &:not(.zh) {
+              font-size: 95%;
+            }
+          }
           .iconfont {
             margin-left: $gap;
           }

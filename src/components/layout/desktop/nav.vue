@@ -3,16 +3,16 @@
     <nav class="nav-list">
       <template v-for="menu in menus" :key="menu.id">
         <span v-if="menu.divider" class="divider"></span>
-        <ulink class="item" :class="[menu.id, { hot: menu.hot }]" :href="menu.url" :to="menu.route">
+        <ulink class="item" :class="menu.id" :href="menu.url" :to="menu.route">
           <uimage v-if="menu.imageIcon" class="image-icon" :src="menu.imageIcon" />
-          <i v-else-if="menu.icon" class="iconfont" :class="menu.icon"></i>
-          <webfont class="text" bolder uppercase>
+          <i v-else-if="menu.icon" class="font-icon iconfont" :class="menu.icon"></i>
+          <webfont class="text" bolder :uppercase="!menu.disabledUppercase">
             <i18n :k="menu.i18nKey" />
           </webfont>
-          <span class="newscript" v-if="menu.newWindow">
+          <span class="superscript new-window" v-if="menu.newWindow">
             <i class="iconfont icon-new-window-s"></i>
           </span>
-          <span class="superscript" v-if="menu.hot">
+          <span class="superscript hot" v-if="menu.hot">
             <i class="iconfont icon-hot-fill"></i>
           </span>
         </ulink>
@@ -20,12 +20,10 @@
       <!-- AD -->
       <template v-for="(ad, index) in adConfig.PC_NAV" :key="index">
         <span class="divider"></span>
-        <ulink class="item" :href="ad.url">
-          <i class="iconfont" :class="ad.icon" :style="{ color: ad.color }"></i>
-          <span class="ad-text" :style="{ color: ad.color }">
-            <template v-if="ad.i18n">
-              <i18n :zh="ad.i18n.zh" :en="ad.i18n.en" />
-            </template>
+        <ulink class="item" :href="ad.url" :style="{ color: ad.color }">
+          <i class="font-icon iconfont" :class="ad.icon"></i>
+          <span class="ad-text">
+            <i18n v-if="ad.i18n" :zh="ad.i18n.zh" :en="ad.i18n.en" />
             <template v-else>{{ ad.text }}</template>
           </span>
           <span class="superscript">
@@ -87,10 +85,12 @@
         &:last-child {
           margin-bottom: 0;
         }
+
         &:hover {
           color: $primary-lighter;
           background-color: $module-bg-translucent;
         }
+
         &.link-active {
           color: $primary;
           background-color: $module-bg-lighter;
@@ -99,37 +99,18 @@
           }
         }
 
-        &.hot {
-          color: $red;
-        }
         &.app {
           color: $surmon;
         }
-        &.opensea {
+
+        &.nft {
           color: $opensea-primary;
         }
 
-        > .iconfont {
-          &:first-child {
-            width: 1em;
-            margin-right: $gap;
-            display: inline-block;
-          }
-        }
-
-        .newscript,
-        .superscript {
-          margin-left: $sm-gap;
-        }
-
-        .newscript {
-          .iconfont {
-            font-size: $font-size-small;
-          }
-        }
-
-        .superscript {
-          color: $red;
+        .font-icon {
+          width: 1em;
+          margin-right: $gap;
+          display: inline-block;
         }
 
         .image-icon {
@@ -141,6 +122,15 @@
 
         .ad-text {
           font-weight: bold;
+        }
+
+        .superscript {
+          margin-left: $sm-gap;
+          &.new-window {
+            .iconfont {
+              font-size: $font-size-small;
+            }
+          }
         }
       }
 

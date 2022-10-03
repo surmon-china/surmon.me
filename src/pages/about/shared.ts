@@ -18,10 +18,6 @@ export const i18ns = {
     [Language.Chinese]: `路为纸，地成册，行作笔，心当墨；思无界，行有疆`,
     [Language.English]: `Every path i went astray built up my Rome.`
   },
-  freelancer: {
-    [Language.Chinese]: `与我合作`,
-    [Language.English]: `Freelancer`
-  },
   sponsor: {
     [Language.Chinese]: `向我赞助`,
     [Language.English]: `Sponsor`
@@ -46,9 +42,9 @@ export const i18ns = {
     [Language.Chinese]: `给我留言`,
     [Language.English]: `Guestbook`
   },
-  merchBar: {
-    [Language.Chinese]: `周边好物`,
-    [Language.English]: `Merch bar`
+  nft: {
+    [Language.Chinese]: `数字藏品`,
+    [Language.English]: `NFTs`
   },
   rss: {
     [Language.Chinese]: `长期订阅`,

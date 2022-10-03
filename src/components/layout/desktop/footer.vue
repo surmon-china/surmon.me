@@ -1,23 +1,21 @@
 <template>
-  <footer :id="FOOTER_ELEMENT_ID" class="footer">
-    <div class="container">
-      <ulink class="sitemap-btn" :href="VALUABLE_LINKS.SITE_MAP">sitemap.xml</ulink>
-      <divider type="vertical" />
-      <i18n zh="由 " en="Powered By " />
-      <ulink class="item" :href="VALUABLE_LINKS.GITHUB_BLOG_STAR_LIST">NodePress</ulink>
-      <i18n zh="、" en=", " />
-      <ulink class="item" :href="VALUABLE_LINKS.GITHUB_SURMON_ME">Vue</ulink>
-      <i18n zh=" 和 日月星辰 强力驱动" en="" />
-      <divider type="vertical" />
-      <a class="statement" href="javascript:void(0)" @click="handleStatementModal">
-        <i18n zh="周知" en="FAQ" />
-      </a>
-      <divider type="vertical" />
-      <ulink :href="VALUABLE_LINKS.UPTIME_STATUS">
-        <i18n zh="实态" en="STATUS" />
-      </ulink>
-    </div>
-  </footer>
+  <container tag="footer" :id="FOOTER_ELEMENT_ID" class="footer">
+    <ulink class="sitemap-btn" :href="VALUABLE_LINKS.SITE_MAP">sitemap.xml</ulink>
+    <divider type="vertical" />
+    <i18n zh="由 " en="Powered By " />
+    <ulink class="item" :href="VALUABLE_LINKS.GITHUB_BLOG_STAR_LIST">NodePress</ulink>
+    <i18n zh="、" en=", " />
+    <ulink class="item" :href="VALUABLE_LINKS.GITHUB_SURMON_ME">Vue</ulink>
+    <i18n zh=" 和 日月星辰 强力驱动" en="" />
+    <divider type="vertical" />
+    <a class="statement" href="javascript:void(0)" @click="handleStatementModal">
+      <i18n zh="周知" en="FAQ" />
+    </a>
+    <divider type="vertical" />
+    <ulink :href="VALUABLE_LINKS.UPTIME_STATUS">
+      <i18n zh="实态" en="STATUS" />
+    </ulink>
+  </container>
 </template>
 
 <script lang="ts">
@@ -55,20 +53,14 @@
     display: flex;
     align-items: center;
     height: $footer-height;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: $font-size-h6;
+    color: $text-secondary;
     @include common-bg-module();
 
-    .container {
-      color: $text-secondary;
-      font-size: $font-size-h6;
-      text-align: center;
-      text-transform: uppercase;
-
-      a {
-        border-bottom: 1px solid transparent;
-        &:hover {
-          border-color: initial;
-        }
-      }
+    a:hover {
+      @include text-underline();
     }
   }
 </style>

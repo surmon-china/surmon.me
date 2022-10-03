@@ -152,7 +152,7 @@
 
           .link {
             color: $text-disabled;
-            border-bottom: 1px solid;
+            @include text-underline(0.4em);
           }
         }
 

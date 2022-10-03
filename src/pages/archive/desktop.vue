@@ -1,0 +1,289 @@
+<template>
+  <div class="archive-page">
+    <page-banner :position="32" image="/images/page-archive/banner.jpg">
+      <template #title>
+        <webfont><i18n v-bind="i18ns.title" /></webfont>
+      </template>
+      <template #description>
+        <i18n v-bind="i18ns.description" />
+      </template>
+    </page-banner>
+    <container class="statistic-warpper">
+      <transition name="module" mode="out-in">
+        <div class="skeletons" v-if="statisticFetching">
+          <skeleton-base class="skeleton" :key="s" v-for="s in statistics.length" />
+        </div>
+        <div class="statistics" v-else>
+          <div class="item" :key="index" v-for="(s, index) in statistics">
+            <p class="title">
+              <span class="text">{{ s.title }}</span>
+              <i class="iconfont" :class="s.icon"></i>
+            </p>
+            <div class="content">{{ s.content }}</div>
+          </div>
+        </div>
+      </transition>
+    </container>
+    <container class="archive-warpper">
+      <placeholder :data="archiveStore.data?.articles.length" :loading="archiveStore.fetching">
+        <template #placeholder>
+          <empty class="archive-empty" key="empty">
+            <i18n :k="LanguageKey.ARTICLE_PLACEHOLDER" />
+          </empty>
+        </template>
+        <template #loading>
+          <ul class="archive-skeleton" key="skeleton">
+            <li v-for="item in 3" :key="item" class="item">
+              <skeleton-line v-for="i in 3" :key="i" class="line" />
+            </li>
+          </ul>
+        </template>
+        <template #default>
+          <archive-tree class="archive-content" :tree="archiveStore.tree" key="content">
+            <template #title="{ title }">
+              <h1 class="archive-title">{{ title }}</h1>
+            </template>
+            <template #article="{ article, day }">
+              <div class="archive-article">
+                <div class="left">
+                  <h3 class="title">
+                    <span class="date">D{{ day }}</span>
+                    <a
+                      class="link"
+                      target="_blank"
+                      :title="article.title"
+                      :href="getArticleDetailRoute(article.id)"
+                    >
+                      {{ article.title }}
+                    </a>
+                  </h3>
+                  <p class="description" v-html="article.description" />
+                </div>
+                <div class="metas">
+                  <div class="item views">
+                    <i class="iconfont icon-eye"></i>
+                    <span class="text">{{ numberSplit(article.meta.views) }}</span>
+                  </div>
+                  <divider type="vertical" />
+                  <div class="item likes">
+                    <i class="like-icon iconfont icon-like"></i>
+                    <span class="text">{{ article.meta.likes }}</span>
+                  </div>
+                  <divider type="vertical" />
+                  <div class="item comments">
+                    <i class="iconfont icon-comment"></i>
+                    <span class="text">{{ article.meta.comments }}</span>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </archive-tree>
+        </template>
+      </placeholder>
+    </container>
+  </div>
+</template>
+
+<script lang="ts">
+  import { defineComponent, ref, computed, onMounted } from 'vue'
+  import { useUniversalFetch } from '/@/universal'
+  import { useArchiveStore } from '/@/stores/archive'
+  import { LanguageKey } from '/@/language'
+  import { numberSplit } from '/@/transforms/text'
+  import { getArticleDetailRoute } from '/@/transforms/route'
+  import PageBanner from '/@/components/common/banner.vue'
+  import ArchiveTree from './tree.vue'
+  import { i18ns, useArchivePageMeta, useArchivePageStatistics } from './shared'
+
+  export default defineComponent({
+    name: 'DesktopArchivePage',
+    components: {
+      PageBanner,
+      ArchiveTree
+    },
+    setup() {
+      const archiveStore = useArchiveStore()
+      const statisticState = useArchivePageStatistics()
+      const statisticFetching = ref(true)
+      const statistics = computed(() => [
+        statisticState.statistics.value.articles,
+        statisticState.statistics.value.todayViews,
+        statisticState.statistics.value.comments,
+        statisticState.statistics.value.totalLikes,
+        statisticState.statistics.value.averageEmotion
+      ])
+
+      useArchivePageMeta()
+      useUniversalFetch(() => archiveStore.fetch())
+      onMounted(() => {
+        statisticState.fetch().finally(() => {
+          statisticFetching.value = false
+        })
+      })
+
+      return {
+        LanguageKey,
+        i18ns,
+        getArticleDetailRoute,
+        numberSplit,
+        archiveStore,
+        statisticFetching,
+        statistics
+      }
+    }
+  })
+</script>
+
+<style lang="scss" scoped>
+  @import 'src/styles/variables.scss';
+  @import 'src/styles/mixins.scss';
+
+  .archive-page {
+    .statistic-warpper {
+      padding: 3rem 0;
+      background-color: $module-bg-translucent;
+
+      .skeletons,
+      .statistics {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      .skeleton {
+        width: 5em;
+        height: 2em;
+      }
+
+      .item {
+        display: inline-flex;
+        flex-direction: column;
+
+        .title {
+          display: flex;
+          align-items: center;
+          margin-bottom: 0;
+
+          .text {
+            text-transform: uppercase;
+            color: $text-secondary;
+          }
+
+          .iconfont {
+            margin-left: $sm-gap;
+            font-size: $font-size-h3;
+            color: $text-divider;
+            opacity: 0.5;
+          }
+        }
+
+        .content {
+          font-size: $font-size-h1 * 1.3;
+          font-weight: bold;
+        }
+      }
+    }
+
+    .archive-warpper {
+      padding: 3rem 0;
+      overflow: hidden;
+
+      .archive-empty {
+        min-height: 28rem;
+        font-weight: bold;
+      }
+
+      .archive-skeleton {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        .item {
+          width: 100%;
+          padding: 2rem;
+          margin-bottom: 3rem;
+          background-color: $module-bg-translucent;
+          @include radius-box($lg-radius);
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .line {
+            height: 2rem;
+            margin-bottom: 2rem;
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+
+      .archive-content {
+        margin-top: -1rem;
+
+        .archive-title {
+          margin: 2em 0;
+          text-align: center;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+        }
+
+        .archive-article {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: $gap * 3;
+          padding-left: $gap * 4;
+          padding-right: $gap * 3;
+
+          .left {
+            .title {
+              margin: $gap 0;
+              .date {
+                display: inline-block;
+                width: 2rem;
+                margin-right: $gap;
+                color: $text-divider;
+                font-size: $font-size-h4;
+                font-weight: bold;
+              }
+
+              .link {
+                @include text-underline(0.4em);
+                text-decoration-color: $text-secondary;
+              }
+            }
+
+            .description {
+              margin-bottom: $gap;
+              padding-left: 3rem;
+            }
+          }
+
+          .metas {
+            margin-left: 2em;
+            display: inline-flex;
+            align-items: center;
+            font-size: $font-size-h4;
+            color: $text-disabled;
+
+            .item {
+              width: 4em;
+              text-align: center;
+              &.views {
+                width: 5em;
+              }
+
+              .iconfont {
+                margin-right: $sm-gap;
+              }
+              .text {
+                font-weight: bold;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+</style>

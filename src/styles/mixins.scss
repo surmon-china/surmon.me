@@ -31,6 +31,13 @@
   -webkit-box-orient: vertical;
 }
 
+/// Text underline
+@mixin text-underline($offset: 0.3em) {
+  text-decoration: underline;
+  text-underline-offset: $offset;
+  text-decoration-thickness: from-font;
+}
+
 /// Visible element
 @mixin visible($important: false) {
   opacity: 1 is-important($important);

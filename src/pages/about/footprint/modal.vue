@@ -126,6 +126,7 @@
           margin-top: 0;
           margin-bottom: $gap;
         }
+
         .description {
           margin: 0;
           @include text-overflow();

@@ -71,7 +71,7 @@
       const loadmoreArticles = async () => {
         await articleListStore.fetchList({
           category_slug: props.categorySlug,
-          page: articleListStore.list.pagination.current_page + 1
+          page: articleListStore.list.pagination!.current_page + 1
         })
         scrollToNextScreen()
       }

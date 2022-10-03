@@ -75,7 +75,7 @@
     }
 
     a {
-      border-bottom: 1px solid;
+      @include text-underline();
     }
   }
 
@@ -98,12 +98,8 @@
 
     a {
       margin: 0;
-      border-bottom: 1px solid;
       font-weight: bold;
-      &:hover {
-        text-decoration: none;
-      }
-
+      @include text-underline();
       &.image-link {
         margin: 0;
         border: 0;
@@ -429,8 +425,7 @@
       }
 
       a {
-        text-decoration: none;
-        border-bottom: 1px solid;
+        @include text-underline();
       }
 
       .figure-wrapper {

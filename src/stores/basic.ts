@@ -10,15 +10,6 @@ import { UniversalKeyValue, CommentPostID } from '/@/constants/state'
 import { useIdentityStore, UserType } from './identity'
 import nodepress from '/@/services/nodepress'
 
-export interface MerchItemConfig {
-  name: string
-  description: string
-  detail: string
-  url: string
-  src: string
-  size?: string
-}
-
 export interface AD_CONFIG {
   PC_CARROUSEL:
     | false
@@ -45,14 +36,12 @@ export interface AD_CONFIG {
     url: string
     src: string
   }>
-  PC_MERCH_PRODUCTS: Record<string, Array<MerchItemConfig>>
 }
 
 const defaultAdConfig: AD_CONFIG = {
   PC_CARROUSEL: false,
   PC_NAV: [],
-  PC_ASIDE_SWIPER: [],
-  PC_MERCH_PRODUCTS: {}
+  PC_ASIDE_SWIPER: []
 }
 
 export interface AdminInfo {

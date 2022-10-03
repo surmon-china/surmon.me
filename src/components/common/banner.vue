@@ -1,10 +1,11 @@
 <template>
-  <div
-    class="banner"
-    :class="{ dark: isDarkTheme, mobile: isMobile }"
-    :style="{ backgroundImage: `url(${imageURL})`, backgroundPositionY: `${position}%` }"
-  >
-    <div class="content" :class="{ blur }">
+  <div class="banner" :class="{ mobile: isMobile }">
+    <div
+      class="background"
+      :class="{ dark: isDarkTheme }"
+      :style="{ backgroundImage: `url(${imageURL})`, backgroundPositionY: `${position}%` }"
+    ></div>
+    <div class="content" :class="{ blur: Boolean(blur) }" :style="{ '--blur': `${blur}px` }">
       <h2 class="title">
         <slot name="title"></slot>
       </h2>
@@ -21,19 +22,19 @@
   import { useEnhancer } from '/@/app/enhancer'
 
   export default defineComponent({
-    name: 'FullPageBanner',
+    name: 'PageBanner',
     props: {
-      position: {
-        type: Number,
-        default: 20
-      },
       image: {
         type: String,
         required: true
       },
+      position: {
+        type: Number,
+        default: 20
+      },
       blur: {
-        type: Boolean,
-        default: true
+        type: Number,
+        default: 0
       },
       isMobile: {
         type: Boolean,
@@ -55,13 +56,25 @@
   @import 'src/styles/mixins.scss';
 
   .banner {
+    position: relative;
     height: $full-column-page-banner-height;
-    background-color: $module-bg-darker-1;
-    background-size: cover;
-    background-position-x: center;
-    &.dark {
-      /* background-blend-mode: difference; */
+    z-index: $z-index-normal;
+
+    .background {
+      position: absolute;
+      z-index: $z-index-underground;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: $module-bg-darker-1;
+      background-size: cover;
+      background-position-x: center;
+      &.dark {
+        filter: brightness(0.8);
+      }
     }
+
     .content {
       height: 100%;
       display: flex;
@@ -71,7 +84,7 @@
       text-align: center;
       color: $white;
       &.blur {
-        @include backdrop-blur(3px);
+        @include backdrop-blur(var(--blur));
       }
 
       .title {

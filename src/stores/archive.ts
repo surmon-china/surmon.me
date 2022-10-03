@@ -11,6 +11,14 @@ import { Tag } from './tag'
 import { dateToHuman, HumanDate } from '/@/transforms/moment'
 import nodepress from '/@/services/nodepress'
 
+export type ArchiveTreeList = Array<{
+  year: number
+  months: Array<{
+    month: number
+    articles: Array<Article & { createAt: HumanDate }>
+  }>
+}>
+
 export interface Archive {
   articles: Article[]
   categories: Category[]
@@ -57,13 +65,7 @@ export const useArchiveStore = defineFetchStore({
       }
     },
     tree: (state) => {
-      const rootTree = [] as Array<{
-        year: number
-        months: Array<{
-          month: number
-          articles: Array<Article & { createAt: HumanDate }>
-        }>
-      }>
+      const rootTree: ArchiveTreeList = []
 
       state.data?.articles
         .map((article) => ({
@@ -92,6 +94,7 @@ export const useArchiveStore = defineFetchStore({
           // article
           targetMonth.articles.push(article)
         })
+
       return rootTree
     }
   }

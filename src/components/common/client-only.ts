@@ -21,7 +21,7 @@ import { useEnhancer } from '/@/app/enhancer'
  *    <component />
  * </client-only>
  */
-export const ClientOnly = defineComponent({
+export default defineComponent({
   name: 'ClientOnly',
   props: {
     placeholder: String,

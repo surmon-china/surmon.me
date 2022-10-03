@@ -1,11 +1,6 @@
 <template>
   <div class="about-page">
-    <page-banner
-      :position="70"
-      :blur="false"
-      :is-mobile="true"
-      image="/images/page-about/banner-mobile.jpg"
-    >
+    <page-banner :position="70" :is-mobile="true" image="/images/page-about/banner-mobile.jpg">
       <template #title>
         <i18n :k="LanguageKey.PAGE_ABOUT" />
       </template>
@@ -31,9 +26,9 @@
           <i class="iconfont icon-lens" />
           <i18n v-bind="i18ns.lens" />
         </router-link>
-        <router-link class="item text-only" :to="getPageRoute(RouteName.Merch)">
-          <i class="iconfont icon-rubik" />
-          <i18n v-bind="i18ns.merchBar" />
+        <router-link class="item text-only" :to="getPageRoute(RouteName.Nft)">
+          <i class="iconfont icon-opensea" />
+          <i18n v-bind="i18ns.nft" />
         </router-link>
         <router-link class="item text-only" :to="getPageRoute(RouteName.Guestbook)">
           <i class="iconfont icon-comment" />
@@ -103,7 +98,7 @@
   import { useAdminInfoStore } from '/@/stores/basic'
   import { useUniversalFetch } from '/@/universal'
   import { getPageRoute } from '/@/transforms/route'
-  import PageBanner from '/@/components/common/fullpage/banner.vue'
+  import PageBanner from '/@/components/common/banner.vue'
   import { useAboutPageMeta, getAdminAvatar, i18ns } from './shared'
 
   export default defineComponent({

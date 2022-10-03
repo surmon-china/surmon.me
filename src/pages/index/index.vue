@@ -50,14 +50,16 @@
         twitterUserinfo,
         twitterTweets
       } = useStores()
+
       meta(() => ({
         title: `${META.title} - ${i18n.t(LanguageKey.APP_SLOGAN)}`,
         description: appOptionStore.data?.description,
-        keywords: appOptionStore.data?.keywords.join(',')
+        keywords: appOptionStore.data?.keywords.join(','),
+        twitterCard: 'summary_large_image'
       }))
 
       const loadmoreArticles = async () => {
-        const targetPage = articleListStore.list.pagination?.current_page + 1
+        const targetPage = articleListStore.list.pagination!.current_page + 1
         await articleListStore.fetchList({ page: targetPage })
         if (targetPage > 1) {
           onClient(scrollToNextScreen)

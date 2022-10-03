@@ -8,22 +8,22 @@ import API_CONFIG from '/@/config/api.config'
 import { ProxyModule } from '/@/constants/proxy'
 import { getArticleDetailRoute } from '/@/transforms/route'
 
-export const getTargetCDNURL = (uri: string) => {
-  return `${API_CONFIG.CDN}${uri}`
+export const getTargetCDNURL = (path: string) => {
+  return `${API_CONFIG.CDN}${path}`
 }
 
-export const getTargetProxyURL = (uri: string, module: ProxyModule = ProxyModule.Default) => {
-  return `${API_CONFIG.PROXY}/${module}/${encodeURIComponent(uri)}`
+export const getTargetProxyURL = (path: string, module: ProxyModule = ProxyModule.Default) => {
+  return `${API_CONFIG.PROXY}/${module}/${encodeURIComponent(path)}`
 }
 
-export const getTargetStaticURL = (uri: string) => {
-  return `${API_CONFIG.STATIC}${uri}`
+export const getTargetStaticURL = (path: string) => {
+  return `${API_CONFIG.STATIC}${path}`
 }
 
-export const getPageURL = (uri: string) => {
-  return `${API_CONFIG.FE}${uri}`
+export const getPageURL = (path: string) => {
+  return `${API_CONFIG.FE}${path}`
 }
 
-export const getArticleDetailURL = (IDOrSlug: string | number) => {
-  return getPageURL(getArticleDetailRoute(IDOrSlug))
+export const getArticleDetailURL = (idOrSlug: string | number) => {
+  return getPageURL(getArticleDetailRoute(idOrSlug))
 }

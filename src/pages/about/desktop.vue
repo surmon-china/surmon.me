@@ -1,16 +1,16 @@
 <template>
   <div class="about-page">
-    <div class="banner">
+    <div class="page-banner">
       <div class="background">
         <video class="video" loop muted autoplay :controls="false">
           <source :src="backgroundVideo" type="video/mp4" />
         </video>
       </div>
-      <div class="avatar">
-        <uimage class="image" :src="getAdminAvatar(adminInfo.data?.avatar)" />
+      <div class="content">
+        <uimage class="avatar" :src="getAdminAvatar(adminInfo.data?.avatar)" />
         <h1 class="name">{{ adminInfo.data?.name || '-' }}</h1>
-        <p class="role">{{ adminInfo.data?.slogan || '-' }}</p>
-        <p class="bio-text">
+        <p class="slogan">{{ adminInfo.data?.slogan || '-' }}</p>
+        <p class="biography">
           <webfont bolder>{{ isZhLang ? META.zh_biography : META.en_biography }}</webfont>
         </p>
         <div class="socials">
@@ -61,7 +61,7 @@
         </div>
       </div>
     </div>
-    <div class="container">
+    <container class="page-content">
       <div class="links">
         <template :key="index" v-for="(item, index) in links">
           <component
@@ -115,7 +115,7 @@
           </template>
         </div>
       </div>
-    </div>
+    </container>
   </div>
 </template>
 
@@ -199,10 +199,10 @@
           route: getPageRoute(RouteName.Lens)
         },
         {
-          class: 'merch',
-          icon: 'icon-rubik',
-          i18n: i18ns.merchBar,
-          route: getPageRoute(RouteName.Merch)
+          class: 'nft',
+          icon: 'icon-opensea',
+          i18n: i18ns.nft,
+          route: getPageRoute(RouteName.Nft)
         },
         {
           class: 'archive',
@@ -321,9 +321,8 @@
     width: 100%;
     overflow: hidden;
 
-    .banner {
+    .page-banner {
       $banner-height: 20rem;
-      margin-bottom: $gap * 2;
 
       .background {
         display: block;
@@ -335,7 +334,6 @@
         overflow: hidden;
         z-index: $z-index-normal + 1;
         background-color: $module-bg-darker-1;
-
         &::before {
           content: '';
           position: absolute;
@@ -358,7 +356,7 @@
         }
       }
 
-      .avatar {
+      .content {
         position: relative;
         display: flex;
         align-items: center;
@@ -373,7 +371,7 @@
         background-repeat: repeat-x;
         background-blend-mode: lighten;
 
-        > .image {
+        .avatar {
           $size: 8rem;
           width: $size;
           height: $size;
@@ -391,7 +389,7 @@
         }
 
         .name,
-        .role {
+        .slogan {
           text-align: center;
           color: $text;
         }
@@ -401,7 +399,7 @@
           margin-bottom: $gap;
         }
 
-        .bio-text {
+        .biography {
           margin-bottom: $gap * 2;
           font-size: $font-size-h3;
         }
@@ -517,6 +515,10 @@
       }
     }
 
+    .page-content {
+      margin: $gap * 2 0;
+    }
+
     .links {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -615,14 +617,13 @@
     .footer-links {
       display: flex;
       justify-content: space-between;
-      margin-bottom: $gap * 2;
       padding: 2rem $lg-gap;
       @include common-bg-module();
       @include radius-box($lg-radius);
 
       .item {
         font-weight: bold;
-        border-bottom: 1px solid;
+        @include text-underline();
       }
 
       .speciallinks {
