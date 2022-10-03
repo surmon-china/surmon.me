@@ -55,7 +55,8 @@
         title: `${META.title} - ${i18n.t(LanguageKey.APP_SLOGAN)}`,
         description: appOptionStore.data?.description,
         keywords: appOptionStore.data?.keywords.join(','),
-        twitterCard: 'summary_large_image'
+        twitterCard: 'summary_large_image',
+        ogType: 'article'
       }))
 
       const loadmoreArticles = async () => {

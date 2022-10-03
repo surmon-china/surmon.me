@@ -103,7 +103,7 @@
           pageTitle: titles.join(' | '),
           description: `给 ${META.author} 留言`,
           twitterCard: 'summary_large_image',
-          ogType: 'bbs',
+          ogType: 'article',
           ogImage: getTargetCDNURL(bannerImage)
         }
       })

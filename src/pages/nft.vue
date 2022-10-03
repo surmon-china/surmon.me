@@ -3,19 +3,21 @@
     <page-banner :position="60" image="/images/page-nft/banner.jpg">
       <template #title>
         <webfont>
-          <i18n zh="数字藏品" en="NFT Bar" />
+          <i18n zh="旷古无两，数字典藏" en="NFT Bar" />
         </webfont>
       </template>
       <template #description>
-        <i18n zh="由我铸造发行的独一无二的藏品" en="Unique NFTs created by me" />
+        <i18n zh="由我铸造发行的独一无二的数字藏品" en="Unique NFTs created by me" />
       </template>
     </page-banner>
     <container class="page-profile">
       <!-- TODO -->
     </container>
     <container class="page-content">
-      <!-- TODO -->
-      <span>comming soon</span>
+      <ulink class="comming-soon" :href="VALUABLE_LINKS.OPENSEA">
+        <i class="iconfont icon-opensea"></i>
+        <span class="text">comming soon</span>
+      </ulink>
       <!-- <template :key="title" v-for="(list, title) in products">
         <h3 class="list-title">{{ title || '-' }}</h3>
         <ul class="product-list">
@@ -56,7 +58,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import { Language, LanguageKey } from '/@/language'
-  import { META } from '/@/config/app.config'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import { useEnhancer } from '/@/app/enhancer'
   import { firstUpperCase } from '/@/transforms/text'
   import { GAEventCategories } from '/@/constants/gtag'
@@ -98,6 +100,7 @@
       }
 
       return {
+        VALUABLE_LINKS,
         products,
         handleGTagEvent
       }
@@ -115,8 +118,8 @@
     flex-direction: column;
 
     .page-profile {
-      /* height: 8rem; */
-      /* background-color: $module-bg-translucent; */
+      height: 8rem;
+      background-color: $module-bg-translucent;
     }
 
     .page-content {
@@ -124,11 +127,24 @@
       display: flex;
       align-items: center;
       text-align: center;
-      font-size: $font-size-h2;
-      /* font-weight: bold; */
-      text-transform: uppercase;
-      color: $text-divider;
-      background-color: $module-bg;
+
+      .comming-soon {
+        padding: 1rem 1em;
+        text-transform: uppercase;
+        font-size: $font-size-h4;
+        color: $text-divider;
+        background-color: $module-bg-darker-2;
+        @include radius-box($xs-radius);
+        &:hover {
+          color: $text-disabled;
+          background-color: $module-bg-darker-3;
+        }
+
+        .text {
+          font-weight: bold;
+          margin-left: $sm-gap;
+        }
+      }
     }
 
     .list-title {
