@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.17.0
+* Surmon.me v3.18.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon
@@ -258,7 +258,6 @@ Object.freeze({
     GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
     GITHUB_BLOG_STAR_LIST: 'https://github.com/stars/surmon-china/lists/surmon-me',
     APP_APK_FILE: 'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
-    UPWORK: 'https://www.upwork.com/freelancers/~0142e621258ac1770d',
     MARKDOWN: 'https://daringfireball.net/projects/markdown/',
     GOOGLE_MY_MAP: `https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3`,
     GOOGLE_MY_MAP_KML: `https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w`,
