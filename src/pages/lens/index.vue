@@ -144,19 +144,7 @@
     .page-bridge {
       position: relative;
       height: 4rem;
-      background-color: $module-bg;
-      &::before {
-        content: '';
-        position: absolute;
-        display: block;
-        height: 1rem;
-        bottom: -0.5rem;
-        left: 0;
-        right: 0;
-        background-image: radial-gradient(circle, transparent 70%, $module-bg 70%);
-        background-size: 0.8em 1em;
-        background-position: 0 -0.5em;
-      }
+      background: linear-gradient(to right, transparent, $module-bg-opaque, transparent);
     }
 
     .module-title {

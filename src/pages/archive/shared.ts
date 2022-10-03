@@ -23,7 +23,8 @@ export const useArchivePageMeta = () => {
     const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ARCHIVE), enTitle] : [enTitle]
     return {
       pageTitle: titles.join(' | '),
-      description: `${META.title} 数据归档`
+      description: `${META.title} 数据归档`,
+      twitterCard: 'summary_large_image'
     }
   })
 }

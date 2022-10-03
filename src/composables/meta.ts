@@ -73,6 +73,8 @@ export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
 
     // title | page title
     const _title = title ? title : pageTitle ? titler?.(pageTitle) : ''
+    const _image = ogImage ?? getTargetCDNURL('/images/og-social-card.jpg')
+    const _language = i18n.l.value?.iso ?? ''
 
     // metas
     const _meta = (restSource.meta as HeadAttrs[]) || [
@@ -93,6 +95,16 @@ export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
         key: 'twitter-card',
         name: 'twitter:card',
         content: twitterCard ?? 'summary'
+      },
+      {
+        key: 'twitter-image',
+        name: 'twitter:image',
+        content: _image
+      },
+      {
+        key: 'twitter-site',
+        name: 'twitter:site',
+        content: `@${IDENTITIES.TWITTER_USER_NAME}`
       },
       {
         key: 'twitter-creator',
@@ -123,7 +135,12 @@ export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
       {
         key: 'og-image',
         property: 'og:image',
-        content: ogImage ?? getTargetCDNURL('/images/og-social-card.jpg')
+        content: _image
+      },
+      {
+        key: 'og-locale',
+        property: 'og:locale',
+        content: _language
       }
     ]
 
@@ -132,7 +149,7 @@ export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
       title: _title,
       meta: _meta,
       htmlAttrs: {
-        lang: i18n.l.value?.iso,
+        lang: _language,
         ...restSource.htmlAttrs
       }
     }

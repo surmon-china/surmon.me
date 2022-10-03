@@ -56,7 +56,7 @@ export const i18ns = {
   },
   telegramGroup: {
     [Language.Chinese]: `自由报社`,
-    [Language.English]: `TG group`
+    [Language.English]: `TG Group`
   }
 }
 

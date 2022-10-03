@@ -135,7 +135,7 @@
     .profile {
       position: relative;
       padding: $lg-gap;
-      padding-top: $gap * 6;
+      padding-top: $gap * 5;
       border-bottom-left-radius: $lg-radius;
       border-bottom-right-radius: $lg-radius;
       background-color: $module-bg-opaque;
@@ -155,7 +155,7 @@
       .avatar {
         width: 100%;
         position: absolute;
-        top: -$gap * 3;
+        top: -$gap * 4;
         left: 0;
         text-align: center;
 
