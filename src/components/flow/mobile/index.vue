@@ -148,7 +148,8 @@
         return {
           title: `${META.title} - ${i18n.t(LanguageKey.APP_SLOGAN)}`,
           description: appOptionStore.data?.description,
-          keywords: appOptionStore.data?.keywords.join(',')
+          keywords: appOptionStore.data?.keywords.join(','),
+          ogType: 'blog'
         }
       })
 

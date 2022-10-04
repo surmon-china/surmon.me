@@ -80,7 +80,6 @@
         return {
           pageTitle: titles.join(' | '),
           description: `${META.title} App 下载`,
-          ogType: 'soft',
           ogImage: getTargetCDNURL('/images/page-app/logo.png')
         }
       })

@@ -1,4 +1,5 @@
 import { useEnhancer } from '/@/app/enhancer'
+import { useStores } from '/@/stores'
 import { Language, LanguageKey } from '/@/language'
 import { firstUpperCase } from '/@/transforms/text'
 import { getDefaultAvatar } from '/@/transforms/avatar'
@@ -62,12 +63,15 @@ export const i18ns = {
 
 export const useAboutPageMeta = () => {
   const { i18n, meta, isZhLang } = useEnhancer()
+  const { adminInfo } = useStores()
   return meta(() => {
     const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_ABOUT, Language.English)!)
     const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ABOUT), enTitle] : [enTitle]
     return {
       pageTitle: titles.join(' | '),
-      description: `关于 ${META.author}`
+      description: `关于 ${META.author}`,
+      ogType: 'profile',
+      ogImage: getAdminAvatar(adminInfo.data?.avatar)
     }
   })
 }

@@ -83,7 +83,11 @@
         const zhTitle = currentTag.value?.name!
         const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle, 'Tag']
         const description = currentTag.value?.description || titles.join(',')
-        return { pageTitle: titles.join(' | '), description }
+        return {
+          pageTitle: titles.join(' | '),
+          description,
+          ogType: 'blog'
+        }
       })
 
       onBeforeMount(() => {

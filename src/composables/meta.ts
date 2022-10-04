@@ -9,7 +9,7 @@ import { computed, inject, ComputedGetter } from 'vue'
 import { createHead, useHead, HeadObject, HeadAttrs, renderHeadToString } from '@vueuse/head'
 import { useEnhancer } from '/@/app/enhancer'
 import { getPageURL, getTargetCDNURL } from '/@/transforms/url'
-import { IDENTITIES } from '/@/config/app.config'
+import { META, IDENTITIES } from '/@/config/app.config'
 
 export interface MetaResult {
   readonly headTags: string
@@ -44,9 +44,12 @@ export interface MetaObject extends HeadObject {
   pageTitle?: string
   description?: string
   keywords?: string
+  // https://ogp.me/
   // https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started
+  // https://developers.facebook.com/docs/sharing/webmasters/
+  // https://ahrefs.com/blog/open-graph-meta-tags/
   twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player'
-  ogType?: 'blog' | 'product' | 'bbs' | 'image' | 'article' | 'soft'
+  ogType?: 'website' | 'article' | 'blog' | 'product' | 'bbs' | 'image' | 'profile'
   ogTitle?: string
   ogDescription?: string
   ogImage?: string
@@ -72,6 +75,7 @@ export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
     } = typeof source === 'function' ? source() : source
 
     // title | page title
+    const _pureTitle = title ?? pageTitle
     const _title = title ? title : pageTitle ? titler?.(pageTitle) : ''
     const _language = i18n.l.value?.iso ?? ''
 
@@ -114,12 +118,17 @@ export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
       {
         key: 'og-type',
         property: 'og:type',
-        content: ogType ?? 'blog'
+        content: ogType ?? 'website'
+      },
+      {
+        key: 'og-site-name',
+        property: 'og:site_name',
+        content: META.title
       },
       {
         key: 'og-title',
         property: 'og:title',
-        content: ogTitle ?? _title ?? ''
+        content: ogTitle ?? _pureTitle ?? ''
       },
       {
         key: 'og-description',

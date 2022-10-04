@@ -25,7 +25,7 @@ export const useArchivePageMeta = () => {
       pageTitle: titles.join(' | '),
       description: `${META.title} 数据归档`,
       twitterCard: 'summary_large_image',
-      ogType: 'article'
+      ogType: 'blog'
     }
   })
 }

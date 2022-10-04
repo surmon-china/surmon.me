@@ -35,7 +35,10 @@
     },
     setup(props) {
       const { meta } = useEnhancer()
-      meta(() => ({ pageTitle: `${props.date} | Date` }))
+      meta(() => ({
+        pageTitle: `${props.date} | Date`,
+        ogType: 'blog'
+      }))
 
       const articleListStore = useArticleListStore()
       const loadmoreArticles = async () => {

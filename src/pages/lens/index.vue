@@ -111,8 +111,7 @@
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_LENS), enTitle] : [enTitle]
         return {
           pageTitle: titles.join(' | '),
-          description: `${META.author} 的浮光掠影`,
-          ogType: 'image'
+          description: `${META.author} 的浮光掠影`
         }
       })
 

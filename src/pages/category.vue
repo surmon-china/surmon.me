@@ -81,7 +81,11 @@
         const zhTitle = i18n.t(props.categorySlug)!
         const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle, 'Category']
         const description = currentCategory.value?.description || titles.join(',')
-        return { pageTitle: titles.join(' | '), description }
+        return {
+          pageTitle: titles.join(' | '),
+          description,
+          ogType: 'blog'
+        }
       })
 
       onBeforeMount(() => {

@@ -183,7 +183,7 @@
         handleGTagEvent('feedback_modal')
       }
 
-      // MARK: 非常有必要，vite 对 video.source.src 的解析有问题，会将其认为是 asset，而非 static resource，从而编译失败
+      // MARK: 非常有必要，vite 对 video.source.src 的解析有问题，会将其理解为 asset，而非 static resource，从而编译失败
       const backgroundVideo = getTargetStaticURL('/assets/page-about-background.mp4')
 
       // meta

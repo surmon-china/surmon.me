@@ -38,7 +38,10 @@
     },
     setup(props) {
       const { meta } = useEnhancer()
-      meta(() => ({ pageTitle: `${props.keyword} | Search` }))
+      meta(() => ({
+        pageTitle: `${props.keyword} | Search`,
+        ogType: 'blog'
+      }))
 
       const articleListStore = useArticleListStore()
       const loadmoreArticles = async () => {
