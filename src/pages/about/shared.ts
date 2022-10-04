@@ -82,10 +82,6 @@ export const SPECIAL_LINKS = Object.freeze([
     url: 'https://github.com'
   },
   {
-    name: `PM2`,
-    url: 'https://pm2.keymetrics.io/'
-  },
-  {
     name: `Vite`,
     url: 'https://vitejs.dev/'
   },
