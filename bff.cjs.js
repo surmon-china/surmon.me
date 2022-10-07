@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.18.4
+* Surmon.me v3.19.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon
@@ -25,6 +25,7 @@ const isProd = "production" === NodeEnv.Production;
  */
 var TunnelModule;
 (function (TunnelModule) {
+    TunnelModule["MyGoogleMap"] = "my_google_map";
     TunnelModule["TwitterUserInfo"] = "twitter_userinfo";
     TunnelModule["TwitterTweets"] = "twitter_tweets";
     TunnelModule["TwitterCalendar"] = "twitter_calendar";
@@ -37,7 +38,8 @@ var TunnelModule;
     TunnelModule["GitHubContributions"] = "github_contributions";
     TunnelModule["NetEaseMusic"] = "netease_music";
     TunnelModule["DoubanMovies"] = "douban_movies";
-    TunnelModule["MyGoogleMap"] = "my_google_map";
+    TunnelModule["OpenSeaAssets"] = "opensea_assets";
+    TunnelModule["OpenSeaCollections"] = "opensea_collections";
     TunnelModule["OpenSourceGitHubStatistic"] = "open_source_github_statistic";
     TunnelModule["OpenSourceNPMStatistic"] = "open_source_npm_statistic";
 })(TunnelModule || (TunnelModule = {}));/**
@@ -56,7 +58,7 @@ const getBFFServerPort = () => Number(process.env.PORT || 3000);/**
 const META = Object.freeze({
     title: 'Surmon.me',
     zh_sub_title: '来苏之望',
-    en_sub_title: 'Because the mountain is there',
+    en_sub_title: 'Come into the wild',
     zh_biography: '本是浪蝶游蜂，自留半亩石池，但求直抒胸臆，挥墨九云之中',
     en_biography: 'Either write something worth reading or do something worth writing.',
     url: 'https://surmon.me',
@@ -87,7 +89,8 @@ const IDENTITIES = Object.freeze({
     INSTAGRAM_USERNAME: 'surmon666',
     INSTAGRAM_FB_ID: '17841405600281893',
     BTC_ADDRESS: 'bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze',
-    ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
+    ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77',
+    OPENSEA_ETH: '0xaD556974D449126efdeF23f4FF581861C301cB77'
 });
 const VALUABLE_LINKS = Object.freeze({
     RSS: '/rss.xml',
@@ -708,6 +711,53 @@ const fetchStatisticJSON = async (fileName) => {
 };
 const getGitHubStatistic = () => fetchStatisticJSON('github.json');
 const getNPMStatistic = () => fetchStatisticJSON('npm.json');/**
+ * @file BFF opensea getter
+ * @module server.getter.opensea
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const getOpenSeaAssets = async (cursor) => {
+    // https://docs.opensea.io/reference/getting-assets
+    const response = await axios__default["default"].get(`https://api.opensea.io/api/v1/assets`, {
+        params: {
+            // cursor,
+            owner: IDENTITIES.OPENSEA_ETH,
+            order_direction: 'desc',
+            include_orders: 'false',
+            limit: '30',
+            format: 'json'
+        },
+        headers: {
+            // https://docs.opensea.io/reference/request-an-api-key
+            'x-api-key': ''
+        }
+    });
+    if (response.status === 200) {
+        return response.data;
+    }
+    else {
+        throw response.data;
+    }
+};
+const getOpenSeaCollections = async () => {
+    // https://docs.opensea.io/reference/retrieving-collections
+    const response = await axios__default["default"].get(`https://api.opensea.io/api/v1/collections`, {
+        params: {
+            asset_owner: IDENTITIES.OPENSEA_ETH,
+            limit: '300',
+            format: 'json'
+        },
+        headers: {
+            // https://docs.opensea.io/reference/request-an-api-key
+            'x-api-key': ''
+        }
+    });
+    if (response.status === 200) {
+        return response.data;
+    }
+    else {
+        throw response.data;
+    }
+};/**
  * @file BFF douban getter
  * @module server.getter.douban
  * @author Surmon <https://github.com/surmon-china>
@@ -792,7 +842,7 @@ const getSongList = async () => {
         root: process.cwd(),
         logLevel: 'info',
         server: {
-            middlewareMode: 'ssr',
+            middlewareMode: true,
             watch: {
                 usePolling: true,
                 interval: 100
@@ -1248,7 +1298,7 @@ createExpressApp().then(({ app, server, cache }) => {
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.BingWallpaper}`, responsor(() => {
         return cacher({
             cache,
-            key: 'wallpaper',
+            key: TunnelModule.BingWallpaper,
             age: 60 * 60 * 6,
             retryWhen: 60 * 30,
             getter: getAllWallpapers
@@ -1258,7 +1308,7 @@ createExpressApp().then(({ app, server, cache }) => {
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.MyGoogleMap}`, responsor(() => {
         return cacher({
             cache,
-            key: 'my_google_map',
+            key: TunnelModule.MyGoogleMap,
             age: 60 * 60 * 6,
             retryWhen: 60 * 30,
             getter: getMyGoogleMap
@@ -1268,7 +1318,7 @@ createExpressApp().then(({ app, server, cache }) => {
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubSponsors}`, responsor(() => {
         return cacher({
             cache,
-            key: 'github_sponsors',
+            key: TunnelModule.GitHubSponsors,
             age: 60 * 60 * 18,
             retryWhen: 60 * 10,
             getter: getGitHubSponsors
@@ -1278,7 +1328,7 @@ createExpressApp().then(({ app, server, cache }) => {
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubContributions}`, responsor(() => {
         return cacher({
             cache,
-            key: 'github_contributions',
+            key: TunnelModule.GitHubContributions,
             age: 60 * 60 * 12,
             retryWhen: 60 * 10,
             getter: () => {
@@ -1294,7 +1344,7 @@ createExpressApp().then(({ app, server, cache }) => {
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceGitHubStatistic}`, responsor(() => {
         return cacher({
             cache,
-            key: 'open_source_github_statistic',
+            key: TunnelModule.OpenSourceGitHubStatistic,
             age: 60 * 60 * 8,
             retryWhen: 60 * 10,
             getter: getGitHubStatistic
@@ -1303,7 +1353,7 @@ createExpressApp().then(({ app, server, cache }) => {
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceNPMStatistic}`, responsor(() => {
         return cacher({
             cache,
-            key: 'open_source_npm_statistic',
+            key: TunnelModule.OpenSourceNPMStatistic,
             age: 60 * 60 * 8,
             retryWhen: 60 * 10,
             getter: getNPMStatistic
@@ -1313,7 +1363,7 @@ createExpressApp().then(({ app, server, cache }) => {
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`, responsor(() => {
         return cacher({
             cache,
-            key: 'netease_music',
+            key: TunnelModule.NetEaseMusic,
             age: 60 * 60 * 12,
             retryWhen: 60 * 10,
             getter: getSongList
@@ -1323,7 +1373,7 @@ createExpressApp().then(({ app, server, cache }) => {
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.DoubanMovies}`, responsor(() => {
         return cacher({
             cache,
-            key: 'douban_movies',
+            key: TunnelModule.DoubanMovies,
             age: 60 * 60 * 32,
             retryWhen: 60 * 10,
             getter: getDoubanMovies
@@ -1333,7 +1383,7 @@ createExpressApp().then(({ app, server, cache }) => {
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterUserInfo}`, responsor(() => {
         return cacher({
             cache,
-            key: 'twitter_userinfo',
+            key: TunnelModule.TwitterUserInfo,
             age: 60 * 60 * 12,
             retryWhen: 60 * 10,
             getter: getTwitterUserinfo
@@ -1343,7 +1393,7 @@ createExpressApp().then(({ app, server, cache }) => {
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterTweets}`, responsor(() => {
         return cacher({
             cache,
-            key: 'twitter_tweets',
+            key: TunnelModule.TwitterTweets,
             age: 60 * 60 * 1,
             retryWhen: 60 * 10,
             getter: getTwitterTweets
@@ -1355,7 +1405,7 @@ createExpressApp().then(({ app, server, cache }) => {
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMedias}`, responsor(() => {
         return cacher({
             cache,
-            key: 'instagram',
+            key: TunnelModule.InstagramMedias,
             age: 60 * 60 * 2,
             retryWhen: 60 * 10,
             getter: getInstagramMedias
@@ -1367,7 +1417,7 @@ createExpressApp().then(({ app, server, cache }) => {
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`, responsor(() => {
         return cacher({
             cache,
-            key: 'youtube_playlist',
+            key: TunnelModule.YouTubePlaylist,
             age: 60 * 60 * 24,
             retryWhen: 60 * 10,
             getter: getYouTubeChannelPlayLists
@@ -1389,6 +1439,26 @@ createExpressApp().then(({ app, server, cache }) => {
             });
         })(request, response, next);
     });
+    // OpenSea assets
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSeaAssets}`, responsor(() => {
+        return cacher({
+            cache,
+            key: TunnelModule.OpenSeaAssets,
+            age: 60 * 60 * 1,
+            retryWhen: 60 * 10,
+            getter: getOpenSeaAssets
+        });
+    }));
+    // OpenSea collections
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSeaCollections}`, responsor(() => {
+        return cacher({
+            cache,
+            key: TunnelModule.OpenSeaCollections,
+            age: 60 * 60 * 0.5,
+            retryWhen: 60 * 5,
+            getter: getOpenSeaCollections
+        });
+    }));
     // vue renderer
     isDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache);
     // run
