@@ -15,6 +15,7 @@ import { useArchiveStore } from './archive'
 import { useIdentityStore } from './identity'
 import { useAdminInfoStore, useAppOptionStore } from './basic'
 import { useWallpaperStore } from './wallpaper'
+import { useOpenSeaAssetsStore, useOpenSeaCollectionsStore } from './nft'
 import {
   useNodepressStatisticStore,
   useGitHubStatisticStore,
@@ -60,5 +61,7 @@ export const useStores = (pinia?: Pinia) => ({
   instagramMedias: useInstagramMediasStore(pinia),
   youtubePlayList: useYouTubePlayListStore(pinia),
   twitterUserinfo: useTwitterUserinfoStore(pinia),
-  twitterTweets: useTwitterTweetsStore(pinia)
+  twitterTweets: useTwitterTweetsStore(pinia),
+  openseaAssets: useOpenSeaAssetsStore(pinia),
+  openseaCollections: useOpenSeaCollectionsStore(pinia)
 })

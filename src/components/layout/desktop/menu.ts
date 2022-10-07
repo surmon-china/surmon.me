@@ -21,7 +21,7 @@ export const menus: Array<MenuItem> = [
   {
     id: RouteName.Home,
     route: '/',
-    icon: 'icon-home-fill',
+    icon: 'icon-home',
     i18nKey: LanguageKey.PAGE_HOME
   },
   {

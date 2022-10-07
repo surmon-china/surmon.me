@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.19.0 (2022-10-06)
+
+**Feature**
+
+- NFT page items
+
 ### v3.18.0 (2022-10-01)
 
 **Feature**

@@ -7,50 +7,131 @@
         </webfont>
       </template>
       <template #description>
-        <i18n zh="由我铸造发行的独一无二的数字藏品" en="Unique NFTs created by me" />
+        <i18n zh="由我铸造 / 收藏的独一无二的数字藏品" en="Unique NFTs minted by me" />
       </template>
     </page-banner>
-    <container class="page-profile">
-      <!-- TODO -->
-    </container>
-    <container class="page-content">
-      <ulink class="comming-soon" :href="VALUABLE_LINKS.OPENSEA">
-        <i class="iconfont icon-opensea"></i>
-        <span class="text">comming soon</span>
-      </ulink>
-      <!-- <template :key="title" v-for="(list, title) in products">
-        <h3 class="list-title">{{ title || '-' }}</h3>
-        <ul class="product-list">
-          <li class="product" :key="index" v-for="(product, index) in list">
-            <div
-              class="image"
-              :style="{
-                backgroundImage: `url('${product.src}')`,
-                backgroundSize: product.size ?? 'cover'
-              }"
-            ></div>
-            <div class="content">
-              <ulink class="title" :href="product.url">
-                {{ product.name }}
-              </ulink>
-              <p class="description" v-html="product.description" />
-            </div>
-            <div class="detail">
-              <p class="text">
-                {{ product.detail || '暂无描述' }}
-              </p>
-              <ulink
-                class="link"
-                :href="product.url"
-                @mousedown="handleGTagEvent('nft_product_link', product.name)"
-              >
-                去看看
-                <i class="iconfont icon-new-window"></i>
-              </ulink>
-            </div>
+    <container class="page-statistic">
+      <transition name="module" mode="out-in">
+        <div class="skeletons" v-if="openseaCollections.fetching">
+          <skeleton-base class="item" :key="s" v-for="s in 5" />
+        </div>
+        <ul class="statistics" v-else>
+          <li class="item">
+            <p class="title"><i18n zh="总交易量" en="Total Volume" /></p>
+            <h3 class="count">{{ openseaCollections.totalVolume || '0.00' }}</h3>
+          </li>
+          <li class="item">
+            <p class="title"><i18n zh="总销售量" en="Total Sales" /></p>
+            <h3 class="count">{{ openseaCollections.totalSales || '0.00' }}</h3>
+          </li>
+          <li class="item">
+            <p class="title">
+              <i18n zh="NFTs / 系列" en="Assets / Collections" />
+            </p>
+            <h3 class="count">
+              {{ openseaCollections.assetsCount }}
+              /
+              {{ openseaCollections.data.length }}
+            </h3>
+          </li>
+          <li class="item">
+            <p class="title"><i18n zh="地板价" en="floor price" /></p>
+            <h3 class="count">{{ openseaCollections.floorPrice || '0.00' }}</h3>
+          </li>
+          <li class="item">
+            <p class="title"><i18n zh="平均售价" en="average price" /></p>
+            <h3 class="count">{{ openseaCollections.average_price || '0.00' }}</h3>
           </li>
         </ul>
-      </template> -->
+      </transition>
+    </container>
+    <container class="page-content">
+      <placeholder :data="openseaAssets.assets.length" :loading="openseaAssets.fetching">
+        <template #placeholder>
+          <empty class="asset-empty" key="empty">NULL</empty>
+        </template>
+        <template #loading>
+          <ul class="asset-skeleton" key="skeleton">
+            <li v-for="item in 8" :key="item" class="item">
+              <skeleton-base class="image" />
+              <skeleton-paragraph class="paragraph" :lines="4" :align="true" line-height="1em" />
+            </li>
+          </ul>
+        </template>
+        <template #default>
+          <ul class="asset-list">
+            <li class="asset" :key="index" v-for="(asset, index) in openseaAssets.assets">
+              <div class="image" :style="{ backgroundImage: `url('${asset.image_url}')` }">
+                <ulink
+                  class="contract"
+                  :href="getEtherscanURL(asset.asset_contract.address)"
+                  @click="handleGTagEvent('asset_contract_link', asset.name)"
+                >
+                  <i class="iconfont icon-coin"></i>
+                  <span class="text">{{ asset.asset_contract.schema_name }}</span>
+                </ulink>
+                <ulink
+                  class="external"
+                  v-if="asset.external_link"
+                  :href="asset.external_link"
+                  @click="handleGTagEvent('asset_external_link', asset.name)"
+                >
+                  <i class="iconfont icon-new-window-s"></i>
+                </ulink>
+                <div class="links">
+                  <ulink
+                    class="item"
+                    v-if="asset.collection.discord_url"
+                    :href="asset.collection.discord_url"
+                    @click="handleGTagEvent('asset_collection_discord_url', asset.name)"
+                  >
+                    <i class="iconfont icon-discord"></i>
+                  </ulink>
+                  <ulink
+                    class="item"
+                    v-if="asset.collection.telegram_url"
+                    :href="asset.collection.telegram_url"
+                    @click="handleGTagEvent('asset_collection_telegram_url', asset.name)"
+                  >
+                    <i class="iconfont icon-telegram"></i>
+                  </ulink>
+                </div>
+              </div>
+              <div class="content">
+                <ulink
+                  class="name"
+                  :title="asset.name"
+                  :href="asset.permalink"
+                  @click="handleGTagEvent('asset_name_link', asset.name)"
+                >
+                  {{ asset.name }}
+                </ulink>
+                <ulink
+                  class="collection"
+                  :title="asset.collection.name"
+                  :href="getOpenSeaCollectionURL(asset.collection.slug)"
+                  @click="handleGTagEvent('asset_collection_link', asset.name)"
+                >
+                  {{ asset.collection.name }}
+                </ulink>
+                <p class="description" :title="asset.description">{{ asset.description }}</p>
+              </div>
+            </li>
+          </ul>
+        </template>
+      </placeholder>
+      <div class="viewmore">
+        <ulink class="link" :href="VALUABLE_LINKS.OPENSEA">
+          <i18n>
+            <template #zh>
+              在 <i class="iconfont icon-opensea"></i> OpenSea 查看更多 NFTs
+            </template>
+            <template #en>
+              View all NFTs on <i class="iconfont icon-opensea"></i> OpenSea
+            </template>
+          </i18n>
+        </ulink>
+      </div>
     </container>
   </div>
 </template>
@@ -58,20 +139,13 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import { Language, LanguageKey } from '/@/language'
-  import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import { useUniversalFetch } from '/@/universal'
+  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import { firstUpperCase } from '/@/transforms/text'
+  import { getEtherscanURL, getOpenSeaCollectionURL } from '/@/transforms/nft'
   import { GAEventCategories } from '/@/constants/gtag'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import PageBanner from '/@/components/common/banner.vue'
-
-  export interface NftItemConfig {
-    name: string
-    description: string
-    detail: string
-    url: string
-    src: string
-    size?: string
-  }
 
   export default defineComponent({
     name: 'NftPage',
@@ -80,10 +154,16 @@
     },
     setup() {
       const { i18n, meta, gtag, isZhLang } = useEnhancer()
-      const products: Record<string, Array<NftItemConfig>> = {}
+      const { openseaAssets, openseaCollections } = useStores()
+      const handleGTagEvent = (event: string, label: string) => {
+        gtag?.event(event, {
+          event_category: GAEventCategories.NFT,
+          event_label: label
+        })
+      }
 
       meta(() => {
-        const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_NFT, Language.English)!)
+        const enTitle = i18n.t(LanguageKey.PAGE_NFT, Language.English)!
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_NFT), enTitle] : [enTitle]
         return {
           pageTitle: titles.join(' | '),
@@ -92,16 +172,22 @@
         }
       })
 
-      const handleGTagEvent = (event: string, label: string) => {
-        gtag?.event(event, {
-          event_category: GAEventCategories.Universal,
-          event_label: label
-        })
-      }
+      useUniversalFetch(() => {
+        return Promise.all([
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          openseaAssets.fetch().catch(() => {}),
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          openseaCollections.fetch().catch(() => {})
+        ])
+      })
 
       return {
         VALUABLE_LINKS,
-        products,
+        LanguageKey,
+        openseaAssets,
+        openseaCollections,
+        getEtherscanURL,
+        getOpenSeaCollectionURL,
         handleGTagEvent
       }
     }
@@ -117,136 +203,202 @@
     display: flex;
     flex-direction: column;
 
-    .page-profile {
-      height: 8rem;
+    .page-statistic {
+      padding: 3rem 0;
       background-color: $module-bg-translucent;
-    }
 
-    .page-content {
-      flex-grow: 1;
-      display: flex;
-      align-items: center;
-      text-align: center;
+      .skeletons,
+      .statistics {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
 
-      .comming-soon {
-        padding: 1rem 1em;
-        text-transform: uppercase;
-        font-size: $font-size-h4;
-        color: $text-divider;
-        background-color: $module-bg-darker-2;
-        @include radius-box($xs-radius);
-        &:hover {
-          color: $text-disabled;
-          background-color: $module-bg-darker-3;
+      .skeletons {
+        .item {
+          width: 5em;
+          height: 2em;
         }
+      }
 
-        .text {
-          font-weight: bold;
-          margin-left: $sm-gap;
+      .statistics {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        .item {
+          .title {
+            margin: 0;
+            text-transform: uppercase;
+            color: $text-secondary;
+          }
+
+          .count {
+            margin: 0;
+            font-size: $font-size-h1 * 1.3;
+            font-weight: bold;
+          }
         }
       }
     }
 
-    .list-title {
-      margin: ($gap * 2) 0;
-      height: 5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0 2rem;
-      letter-spacing: 5px;
-      color: $text;
-      background: linear-gradient(to right, transparent, $module-bg-opaque, transparent);
-    }
+    .page-content {
+      flex-grow: 1;
 
-    .product-list {
-      margin: 0;
-      padding: 0;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-gap: $gap * 2;
+      .asset-empty {
+        min-height: 28rem;
+        font-weight: bold;
+      }
 
-      .product {
-        display: block;
-        height: auto;
-        position: relative;
-        @include radius-box($sm-radius);
-        @include common-bg-module();
-        &:hover {
-          .detail {
-            @include visible();
+      .asset-skeleton,
+      .asset-list {
+        list-style: none;
+        margin: 2rem 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: $gap * 2;
+      }
+
+      .asset-skeleton {
+        .item {
+          height: 280px;
+          padding: 1rem;
+          @include radius-box($sm-radius);
+          @include common-bg-module();
+
+          .image {
+            height: 150px;
+            margin-bottom: 1em;
           }
         }
+      }
 
-        .image {
-          width: 100%;
-          height: 245px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          overflow: hidden;
-          background-color: $white;
-          background-size: cover;
-          background-position: center;
-        }
-
-        .content {
-          padding: $lg-gap;
-
-          .title {
-            margin: 0;
-            font-weight: bold;
-            font-size: $font-size-h4;
-            text-transform: capitalize;
-            border-bottom: 1px solid transparent;
-            &:hover {
-              text-decoration: none;
-              border-color: initial;
-            }
-          }
-
-          .description {
-            margin-top: $sm-gap;
-            margin-bottom: 0;
-            line-height: 1.6;
-          }
-        }
-
-        .detail {
+      .asset-list {
+        .asset {
+          position: relative;
           display: block;
-          width: 100%;
-          padding: $gap;
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          background-color: $module-bg;
-          @include backdrop-blur(5px);
-          @include hidden();
-          @include visibility-transition();
+          height: auto;
+          @include radius-box($sm-radius);
+          @include common-bg-module();
 
-          .text {
-            line-height: $line-height-base * 1.4;
+          .image {
+            position: relative;
+            width: 100%;
+            height: 245px;
+            overflow: hidden;
+            background-color: $white;
+            background-size: cover;
+            background-position: center;
+
+            .contract {
+              position: absolute;
+              top: 1em;
+              left: 1em;
+              height: 2rem;
+              padding: 0 0.5em;
+              display: inline-flex;
+              align-items: center;
+              color: $text-secondary;
+              background-color: $module-bg-lighter;
+              @include radius-box($sm-radius);
+              &:hover {
+                color: $link-color;
+              }
+
+              .text {
+                font-weight: bold;
+                font-size: $font-size-small;
+                margin-left: $xs-gap;
+              }
+            }
+
+            .links {
+              position: absolute;
+              right: 1em;
+              bottom: 1em;
+              display: flex;
+
+              .item {
+                display: inline-block;
+                width: 2rem;
+                height: 2rem;
+                line-height: 2rem;
+                text-align: center;
+                margin-left: $sm-gap;
+                color: $text-secondary;
+                background-color: $module-bg-lighter;
+                @include radius-box($sm-radius);
+                &:hover {
+                  color: $link-color;
+                }
+              }
+            }
+
+            .external {
+              position: absolute;
+              top: 1em;
+              right: 1em;
+              color: $white;
+            }
           }
 
-          .link {
-            $height: 2.4em;
-            display: block;
-            width: 100%;
-            margin-top: $lg-gap;
-            line-height: $height;
-            border: 1px solid;
-            border-color: $primary;
-            color: $primary;
-            font-size: $font-size-small;
-            text-align: center;
-            letter-spacing: 1px;
-            transition: color $transition-time-fast, background-color $transition-time-fast;
-            @include radius-box($xs-radius);
+          .content {
+            padding: $lg-gap;
 
-            &:hover {
-              color: $text-reversal;
-              background-color: $primary;
+            .name {
+              display: block;
+              font-weight: bold;
+              font-size: $font-size-h4;
             }
+
+            .collection {
+              display: block;
+              margin-top: $xs-gap;
+            }
+
+            .name,
+            .collection {
+              max-width: 100%;
+              @include text-overflow();
+              &:hover {
+                color: $link-color;
+                @include text-underline();
+              }
+            }
+
+            .description {
+              color: $text-secondary;
+              font-size: $font-size-small;
+              margin-top: $sm-gap;
+              margin-bottom: 0;
+              line-height: 1.6;
+              @include clamp(5);
+            }
+          }
+        }
+      }
+
+      .viewmore {
+        margin: 2rem 0;
+        text-align: center;
+
+        .link {
+          display: inline-block;
+          padding: 1rem 1em;
+          font-weight: bold;
+          font-size: $font-size-h5;
+          color: $text-divider;
+          background-color: $module-bg-darker-2;
+          @include radius-box($sm-radius);
+          &:hover {
+            color: $text-disabled;
+            background-color: $module-bg-darker-3;
+          }
+
+          .iconfont {
+            font-weight: normal;
+            margin: 0.2em 0;
           }
         }
       }

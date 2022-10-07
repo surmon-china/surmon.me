@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
-  src: url('//at.alicdn.com/t/c/font_64825_3h99fzydzd3.woff2?t=1664781388888') format('woff2'),
-    url('//at.alicdn.com/t/c/font_64825_3h99fzydzd3.woff?t=1664781388888') format('woff'),
-    url('//at.alicdn.com/t/c/font_64825_3h99fzydzd3.ttf?t=1664781388888') format('truetype');
+  src: url('//at.alicdn.com/t/c/font_64825_7im0dfnc18v.woff2?t=1665164859630') format('woff2'),
+    url('//at.alicdn.com/t/c/font_64825_7im0dfnc18v.woff?t=1665164859630') format('woff'),
+    url('//at.alicdn.com/t/c/font_64825_7im0dfnc18v.ttf?t=1665164859630') format('truetype');
 }
 
 .iconfont {
@@ -237,7 +237,7 @@
   content: '\e61a';
 }
 
-.icon-coin-s:before {
+.icon-coin:before {
   content: '\e685';
 }
 
@@ -353,7 +353,7 @@
   content: '\e68d';
 }
 
-.icon-home-fill:before {
+.icon-home:before {
   content: '\e62a';
 }
 
@@ -517,10 +517,6 @@
   content: '\e68a';
 }
 
-.icon-11:before {
-  content: '\e688';
-}
-
 .icon-upwork:before {
   content: '\e634';
 }
@@ -583,10 +579,6 @@
 
 .icon-ai:before {
   content: '\e662';
-}
-
-.icon-home:before {
-  content: '\e67c';
 }
 
 .icon-vr:before {

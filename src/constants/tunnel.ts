@@ -5,6 +5,7 @@
  */
 
 export enum TunnelModule {
+  MyGoogleMap = 'my_google_map',
   TwitterUserInfo = 'twitter_userinfo',
   TwitterTweets = 'twitter_tweets',
   TwitterCalendar = 'twitter_calendar',
@@ -17,7 +18,8 @@ export enum TunnelModule {
   GitHubContributions = 'github_contributions',
   NetEaseMusic = 'netease_music',
   DoubanMovies = 'douban_movies',
-  MyGoogleMap = 'my_google_map',
+  OpenSeaAssets = 'opensea_assets',
+  OpenSeaCollections = 'opensea_collections',
   OpenSourceGitHubStatistic = 'open_source_github_statistic',
   OpenSourceNPMStatistic = 'open_source_npm_statistic'
 }

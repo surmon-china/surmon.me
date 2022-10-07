@@ -12,7 +12,7 @@ export const enableDevRenderer = async (app: Express, cache: CacheClient) => {
     root: process.cwd(),
     logLevel: 'info',
     server: {
-      middlewareMode: 'ssr',
+      middlewareMode: true,
       watch: {
         usePolling: true,
         interval: 100

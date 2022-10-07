@@ -30,6 +30,7 @@ import {
   getYouTubeVideoListByPlayerlistID
 } from './server/getters/youtube'
 import { getGitHubStatistic, getNPMStatistic } from './server/getters/open-srouce'
+import { getOpenSeaAssets, getOpenSeaCollections } from './server/getters/opensea'
 import { getDoubanMovies } from './server/getters/douban'
 import { getSongList } from './server/getters/netease-music'
 import { enableDevRenderer } from './server/renderer/dev'
@@ -105,7 +106,7 @@ createExpressApp().then(({ app, server, cache }) => {
     responsor(() => {
       return cacher({
         cache,
-        key: 'wallpaper',
+        key: TunnelModule.BingWallpaper,
         age: 60 * 60 * 6, // 6 hours
         retryWhen: 60 * 30, // 30 minutes
         getter: getAllWallpapers
@@ -119,7 +120,7 @@ createExpressApp().then(({ app, server, cache }) => {
     responsor(() => {
       return cacher({
         cache,
-        key: 'my_google_map',
+        key: TunnelModule.MyGoogleMap,
         age: 60 * 60 * 6, // 6 hours
         retryWhen: 60 * 30, // 30 minutes
         getter: getMyGoogleMap
@@ -133,7 +134,7 @@ createExpressApp().then(({ app, server, cache }) => {
     responsor(() => {
       return cacher({
         cache,
-        key: 'github_sponsors',
+        key: TunnelModule.GitHubSponsors,
         age: 60 * 60 * 18, // 18 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getGitHubSponsors
@@ -147,7 +148,7 @@ createExpressApp().then(({ app, server, cache }) => {
     responsor(() => {
       return cacher({
         cache,
-        key: 'github_contributions',
+        key: TunnelModule.GitHubContributions,
         age: 60 * 60 * 12, // 12 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: () => {
@@ -167,7 +168,7 @@ createExpressApp().then(({ app, server, cache }) => {
     responsor(() => {
       return cacher({
         cache,
-        key: 'open_source_github_statistic',
+        key: TunnelModule.OpenSourceGitHubStatistic,
         age: 60 * 60 * 8, // 8 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getGitHubStatistic
@@ -180,7 +181,7 @@ createExpressApp().then(({ app, server, cache }) => {
     responsor(() => {
       return cacher({
         cache,
-        key: 'open_source_npm_statistic',
+        key: TunnelModule.OpenSourceNPMStatistic,
         age: 60 * 60 * 8, // 8 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getNPMStatistic
@@ -194,7 +195,7 @@ createExpressApp().then(({ app, server, cache }) => {
     responsor(() => {
       return cacher({
         cache,
-        key: 'netease_music',
+        key: TunnelModule.NetEaseMusic,
         age: 60 * 60 * 12, // 12 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getSongList
@@ -208,7 +209,7 @@ createExpressApp().then(({ app, server, cache }) => {
     responsor(() => {
       return cacher({
         cache,
-        key: 'douban_movies',
+        key: TunnelModule.DoubanMovies,
         age: 60 * 60 * 32, // 32 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getDoubanMovies
@@ -222,7 +223,7 @@ createExpressApp().then(({ app, server, cache }) => {
     responsor(() => {
       return cacher({
         cache,
-        key: 'twitter_userinfo',
+        key: TunnelModule.TwitterUserInfo,
         age: 60 * 60 * 12, // 12 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getTwitterUserinfo
@@ -236,7 +237,7 @@ createExpressApp().then(({ app, server, cache }) => {
     responsor(() => {
       return cacher({
         cache,
-        key: 'twitter_tweets',
+        key: TunnelModule.TwitterTweets,
         age: 60 * 60 * 1, // 1 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getTwitterTweets
@@ -256,7 +257,7 @@ createExpressApp().then(({ app, server, cache }) => {
     responsor(() => {
       return cacher({
         cache,
-        key: 'instagram',
+        key: TunnelModule.InstagramMedias,
         age: 60 * 60 * 2, // 2 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getInstagramMedias
@@ -276,7 +277,7 @@ createExpressApp().then(({ app, server, cache }) => {
     responsor(() => {
       return cacher({
         cache,
-        key: 'youtube_playlist',
+        key: TunnelModule.YouTubePlaylist,
         age: 60 * 60 * 24, // 24 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getYouTubeChannelPlayLists
@@ -300,6 +301,34 @@ createExpressApp().then(({ app, server, cache }) => {
       })
     })(request, response, next)
   })
+
+  // OpenSea assets
+  app.get(
+    `${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSeaAssets}`,
+    responsor(() => {
+      return cacher({
+        cache,
+        key: TunnelModule.OpenSeaAssets,
+        age: 60 * 60 * 1, // 1 hours
+        retryWhen: 60 * 10, // 10 minutes
+        getter: getOpenSeaAssets
+      })
+    })
+  )
+
+  // OpenSea collections
+  app.get(
+    `${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSeaCollections}`,
+    responsor(() => {
+      return cacher({
+        cache,
+        key: TunnelModule.OpenSeaCollections,
+        age: 60 * 60 * 0.5, // 30 minutes
+        retryWhen: 60 * 5, // 5 minutes
+        getter: getOpenSeaCollections
+      })
+    })
+  )
 
   // vue renderer
   isDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache)

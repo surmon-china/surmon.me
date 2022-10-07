@@ -22,7 +22,7 @@
     <div class="aside-nav">
       <nav class="nav-list">
         <router-link to="/" class="item">
-          <i class="iconfont icon-home-fill"></i>
+          <i class="iconfont icon-home"></i>
           <webfont bolder uppercase>
             <i18n :k="LanguageKey.PAGE_HOME" />
           </webfont>

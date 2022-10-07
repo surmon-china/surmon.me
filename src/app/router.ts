@@ -291,7 +291,7 @@ export const routes: RouteRecordRaw[] = [
     meta: {
       responsive: false,
       layout: LayoutColumn.Full,
-      ssrCacheAge: 60 * 60 * 1 // 1 hour
+      ssrCacheAge: 60 * 60 * 0.5 // 30 minutes
     }
   },
   {

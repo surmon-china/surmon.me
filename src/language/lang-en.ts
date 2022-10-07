@@ -45,7 +45,7 @@ export const enLangMap: LanguageMap = {
   [LanguageKey.ARTICLE_PLACEHOLDER]: 'No articles',
   [LanguageKey.ARTICLE_TITLE]: 'Articles',
   [LanguageKey.ARTICLE_VIEWS]: 'views',
-  [LanguageKey.ARTICLE_READ_ALL]: 'Render all',
+  [LanguageKey.ARTICLE_READ_ALL]: 'Show Full Article',
   [LanguageKey.ARTICLE_RENDERING]: 'Rendering...',
   [LanguageKey.ARTICLE_LIST_LOADMORE]: 'Loadmore',
   [LanguageKey.ARTICLE_LIST_LOADING]: 'Loading...',

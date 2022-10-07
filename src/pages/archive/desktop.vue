@@ -11,7 +11,7 @@
     <container class="statistic-warpper">
       <transition name="module" mode="out-in">
         <div class="skeletons" v-if="statisticFetching">
-          <skeleton-base class="skeleton" :key="s" v-for="s in statistics.length" />
+          <skeleton-base class="item" :key="s" v-for="s in statistics.length" />
         </div>
         <div class="statistics" v-else>
           <div class="item" :key="index" v-for="(s, index) in statistics">
@@ -150,36 +150,40 @@
         align-items: center;
       }
 
-      .skeleton {
-        width: 5em;
-        height: 2em;
+      .skeletons {
+        .item {
+          width: 5em;
+          height: 2em;
+        }
       }
 
-      .item {
-        display: inline-flex;
-        flex-direction: column;
+      .statistics {
+        .item {
+          display: inline-flex;
+          flex-direction: column;
 
-        .title {
-          display: flex;
-          align-items: center;
-          margin-bottom: 0;
+          .title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
 
-          .text {
-            text-transform: uppercase;
-            color: $text-secondary;
+            .text {
+              text-transform: uppercase;
+              color: $text-secondary;
+            }
+
+            .iconfont {
+              margin-left: $sm-gap;
+              font-size: $font-size-h3;
+              color: $text-divider;
+              opacity: 0.5;
+            }
           }
 
-          .iconfont {
-            margin-left: $sm-gap;
-            font-size: $font-size-h3;
-            color: $text-divider;
-            opacity: 0.5;
+          .content {
+            font-size: $font-size-h1 * 1.3;
+            font-weight: bold;
           }
-        }
-
-        .content {
-          font-size: $font-size-h1 * 1.3;
-          font-weight: bold;
         }
       }
     }

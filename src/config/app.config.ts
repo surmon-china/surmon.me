@@ -10,7 +10,7 @@ export const LONG_ARTICLE_THRESHOLD = 16688
 export const META = Object.freeze({
   title: 'Surmon.me',
   zh_sub_title: '来苏之望',
-  en_sub_title: 'Because the mountain is there',
+  en_sub_title: 'Come into the wild',
   zh_biography: '本是浪蝶游蜂，自留半亩石池，但求直抒胸臆，挥墨九云之中',
   en_biography: 'Either write something worth reading or do something worth writing.',
   url: 'https://surmon.me',
@@ -44,7 +44,8 @@ export const IDENTITIES = Object.freeze({
   INSTAGRAM_USERNAME: 'surmon666',
   INSTAGRAM_FB_ID: '17841405600281893',
   BTC_ADDRESS: 'bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze',
-  ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
+  ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77',
+  OPENSEA_ETH: '0xaD556974D449126efdeF23f4FF581861C301cB77'
 })
 
 export const VALUABLE_LINKS = Object.freeze({
