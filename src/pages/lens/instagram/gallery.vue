@@ -24,15 +24,15 @@
       </ulink>
       <button
         class="navigation prev"
-        :disabled="galleryActiveIndex === 0"
         @click="galleryPrevSlide"
+        :disabled="galleryActiveIndex === 0"
       >
         <i class="iconfont icon-prev" />
       </button>
       <button
         class="navigation next"
-        :disabled="galleryActiveIndex === medias.length - 1"
         @click="galleryNextSlide"
+        :disabled="galleryActiveIndex === medias.length - 1"
       >
         <i class="iconfont icon-next" />
       </button>
@@ -207,6 +207,10 @@
         .iconfont {
           margin-right: $sm-gap;
         }
+      }
+
+      .caption {
+        @include text-overflow();
       }
     }
 
