@@ -21,12 +21,12 @@
             <h3 class="count">{{ openseaCollections.totalVolume || '0.00' }}</h3>
           </li>
           <li class="item">
-            <p class="title"><i18n zh="总销售量" en="Total Sales" /></p>
+            <p class="title"><i18n zh="总售出量" en="Total Sales" /></p>
             <h3 class="count">{{ openseaCollections.totalSales || '0.00' }}</h3>
           </li>
           <li class="item">
             <p class="title">
-              <i18n zh="NFTs / 系列" en="Assets / Collections" />
+              <i18n zh="NFTs / 系列" en="Assets / Colls" />
             </p>
             <h3 class="count">
               {{ openseaCollections.assetsCount }}
@@ -114,7 +114,9 @@
                 >
                   {{ asset.collection.name }}
                 </ulink>
-                <p class="description" :title="asset.description">{{ asset.description }}</p>
+                <div class="description" :title="asset.description">
+                  <markdown :markdown="asset.description" :sanitize="true" :compact="true" />
+                </div>
               </div>
             </li>
           </ul>
@@ -145,12 +147,14 @@
   import { getEtherscanURL, getOpenSeaCollectionURL } from '/@/transforms/nft'
   import { GAEventCategories } from '/@/constants/gtag'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import Markdown from '/@/components/common/markdown.vue'
   import PageBanner from '/@/components/common/banner.vue'
 
   export default defineComponent({
     name: 'NftPage',
     components: {
-      PageBanner
+      PageBanner,
+      Markdown
     },
     setup() {
       const { i18n, meta, gtag, isZhLang } = useEnhancer()
@@ -374,6 +378,23 @@
               margin-bottom: 0;
               line-height: 1.6;
               @include clamp(5);
+
+              ::v-deep(p) {
+                line-height: 1.6em;
+                margin-bottom: $xs-gap !important;
+                &:last-child {
+                  margin-bottom: 0 !important;
+                }
+              }
+
+              ::v-deep(hr) {
+                margin: $sm-gap 0 !important;
+              }
+
+              section,
+              p {
+                font-size: $font-size-small;
+              }
             }
           }
         }

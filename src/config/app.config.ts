@@ -70,7 +70,7 @@ export const VALUABLE_LINKS = Object.freeze({
   MUSIC_163: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
   YOUTUBE_CHANNEL: `https://www.youtube.com/channel/${IDENTITIES.YOUTUBE_CHANNEL_ID}`,
   TELEGRAM: 'https://t.me/surmon',
-  OPENSEA: 'https://opensea.io/surmon',
+  OPENSEA: 'https://opensea.io/Surmon',
   DOUBAN: 'https://www.douban.com/people/nocower',
   DOUBAN_MOVIE: `https://m.douban.com/people/${IDENTITIES.DOUBAN_USER_ID}/movie_charts`,
   QUORA: 'https://www.quora.com/profile/Surmon',
