@@ -48,8 +48,8 @@
     id: SocialMedia
     name: string
     class: string
-    handler?(share: ShareParams): void
-    url?(share: ShareParams): string
+    handler?(params: ShareParams): void
+    url?(params: ShareParams): string
   }
 
   const socials: SocialItem[] = [
@@ -57,8 +57,8 @@
       id: SocialMedia.Wechat,
       name: '微信',
       class: 'wechat',
-      handler: async (share) => {
-        const dataURL = await renderTextToQRCodeDataURL(share.url)
+      handler: async (params) => {
+        const dataURL = await renderTextToQRCodeDataURL(params.url)
         window.$popup.vImage(dataURL)
       }
     },
@@ -66,15 +66,15 @@
       id: SocialMedia.Weibo,
       name: '微博',
       class: 'weibo',
-      url: (share) => {
+      url: (params) => {
         return (
           `https://service.weibo.com/share/share.php?` +
           qs.stringify({
-            url: share.url,
-            source: share.url,
-            sourceUrl: share.url,
-            title: share.title,
-            content: share.description
+            url: params.url,
+            source: params.url,
+            sourceUrl: params.url,
+            title: params.title,
+            content: params.description
           })
         )
       }
@@ -83,12 +83,12 @@
       id: SocialMedia.Twitter,
       name: 'Twitter',
       class: 'twitter',
-      url: (share) => {
+      url: (params) => {
         return (
           `https://twitter.com/share?` +
           qs.stringify({
-            url: share.url,
-            text: share.title
+            url: params.url,
+            text: params.title
           })
         )
       }
@@ -97,11 +97,11 @@
       id: SocialMedia.Facebook,
       name: 'Facebook',
       class: 'facebook',
-      url: (share) => {
+      url: (params) => {
         return (
-          `https://www.facebook.com/sharer/sharer.php?` +
+          `https://www.facebook.com/share.php?` +
           qs.stringify({
-            u: encodeURI(share.url)
+            u: encodeURI(params.url)
           })
         )
       }
@@ -110,11 +110,11 @@
       id: SocialMedia.LinkedIn,
       name: 'LinkedIn',
       class: 'linkedin',
-      url: (share) => {
+      url: (params) => {
         return (
           `https://www.linkedin.com/sharing/share-offsite/?` +
           qs.stringify({
-            url: share.url
+            url: params.url
           })
         )
       }
@@ -123,28 +123,30 @@
       id: SocialMedia.douban,
       name: '豆瓣',
       class: 'douban',
-      url: (share) => {
+      url: (params) => {
         return (
           // https://www.douban.com/service/sharebutton
-          `https://www.douban.com/recommend/?` +
+          `https://www.douban.com/share/service?` +
           qs.stringify({
-            url: share.url,
-            title: share.title,
-            v: 1
+            href: params.url,
+            name: params.title
+            // image: '',
+            // updated: '',
+            // bm: ''
           })
         )
       }
     },
     {
       id: SocialMedia.Evernote,
-      name: '印象笔记',
+      name: 'Evernote',
       class: 'evernote',
-      url: (share) => {
+      url: (params) => {
         return (
           `https://www.evernote.com/clip.action?` +
           qs.stringify({
-            url: share.url,
-            title: share.title
+            url: params.url,
+            title: params.title
           })
         )
       }
