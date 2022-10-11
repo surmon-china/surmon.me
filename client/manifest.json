@@ -1,6 +1,6 @@
 {
   "index.html": {
-    "file": "index-2589efb6.js",
+    "file": "index-317fe9a6.js",
     "src": "index.html",
     "isEntry": true,
     "imports": [
@@ -32,7 +32,7 @@
     ]
   },
   "style.css": {
-    "file": "style-d8795849.css",
+    "file": "style-2ba20d83.css",
     "src": "style.css"
   }
 }
