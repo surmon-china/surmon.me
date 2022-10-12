@@ -56,8 +56,15 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
 
   // html: escape > sanitize
   renderer.html = (html) => {
+    const trimmed = html.trim()
+    if (trimmed.startsWith('<verse ')) {
+      return trimmed.replace('<verse ', '<p class="verse" ')
+    }
+    if (trimmed.startsWith('</verse>')) {
+      return trimmed.replace('</verse>', '</p>')
+    }
     // https://github.com/apostrophecms/sanitize-html#default-options
-    return options?.sanitize ? sanitizeHTML(escape(html)) : html
+    return options?.sanitize ? sanitizeHTML(escape(trimmed)) : trimmed
   }
 
   // heading
@@ -72,7 +79,8 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
     const trimmed = text.trim()
     const isFigure = trimmed.startsWith(`<figure`) && trimmed.endsWith(`</figure>`)
     const isDiv = trimmed.startsWith(`<div`) && trimmed.endsWith(`</div>`)
-    return isFigure || isDiv ? text : `<p>${text}</p>`
+    const isP = trimmed.startsWith(`<p`) && trimmed.endsWith(`</p>`)
+    return isFigure || isDiv || isP ? text : `<p>${text}</p>`
   }
 
   // checkbox

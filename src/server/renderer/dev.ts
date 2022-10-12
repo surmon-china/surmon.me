@@ -11,6 +11,7 @@ export const enableDevRenderer = async (app: Express, cache: CacheClient) => {
   const viteServer = await createServer({
     root: process.cwd(),
     logLevel: 'info',
+    appType: 'custom',
     server: {
       middlewareMode: true,
       watch: {

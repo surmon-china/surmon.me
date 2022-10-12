@@ -88,12 +88,33 @@
     }
 
     p {
-      margin-bottom: 1em;
-    }
-
-    p {
-      line-height: 2.2em;
       text-indent: 2em;
+      line-height: 2.2em;
+
+      &.verse {
+        text-indent: $font-size-base * 2;
+
+        &[zh] {
+          font-size: $font-size-base + 1;
+          font-weight: 700;
+          /* https://zenozeng.github.io/fonts.css */
+          font-family: Georgia, 'Nimbus Roman No9 L', 'Songti SC', 'Noto Serif CJK SC',
+            'Source Han Serif SC', 'Source Han Serif CN', STSong, 'AR PL New Sung',
+            'AR PL SungtiL GB', NSimSun, SimSun, TW-Sung, 'WenQuanYi Bitmap Song', 'AR PL UMing CN',
+            'AR PL UMing HK', 'AR PL UMing TW', 'AR PL UMing TW MBE', PMingLiU, MingLiU, serif;
+        }
+
+        &[py] {
+          font-weight: lighter;
+          font-family: monospace;
+          font-size: $font-size-small;
+          color: $text-secondary;
+        }
+
+        &[heading] {
+          font-size: $font-size-h3;
+        }
+      }
     }
 
     a {

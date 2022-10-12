@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "3.19.3",
+  "version": "3.20.0",
   "description": "Surmon.me blog",
   "author": "Surmon",
   "license": "MIT",
@@ -42,7 +42,7 @@
     "lozad": "^1.16.0",
     "lru-cache": "^7.14.0",
     "mapbox-gl": "^2.9.2",
-    "marked": "^4.0.18",
+    "marked": "^4.1.1",
     "node-schedule": "^2.1.0",
     "pinia": "^2.0.20",
     "qrcode": "^1.5.0",

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.20.0 (2022-10-13)
+
+**Feature**
+
+- Add markdown `<verse>` paragraph support
+
 ### v3.19.0 (2022-10-06)
 
 **Feature**
