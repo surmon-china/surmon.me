@@ -1,38 +1,38 @@
 {
   "index.html": {
-    "file": "index-317fe9a6.js",
+    "file": "index-c1f41eb1.js",
     "src": "index.html",
     "isEntry": true,
     "imports": [
-      "_basic-fd8fb3ad.js",
-      "_vendor-60047077.js",
-      "_mapbox-gl-9bc692a7.js"
+      "_basic-4bcbdf88.js",
+      "_vendor-637880ba.js",
+      "_mapbox-gl-d977fb0b.js"
     ],
     "dynamicImports": [
-      "_mapbox-gl-9bc692a7.js"
+      "_mapbox-gl-d977fb0b.js"
     ]
   },
-  "_basic-fd8fb3ad.js": {
-    "file": "basic-fd8fb3ad.js",
+  "_basic-4bcbdf88.js": {
+    "file": "basic-4bcbdf88.js",
     "imports": [
-      "_vendor-60047077.js"
+      "_vendor-637880ba.js"
     ]
   },
-  "_mapbox-gl-9bc692a7.js": {
-    "file": "mapbox-gl-9bc692a7.js",
+  "_mapbox-gl-d977fb0b.js": {
+    "file": "mapbox-gl-d977fb0b.js",
     "isDynamicEntry": true,
     "imports": [
-      "_basic-fd8fb3ad.js"
+      "_basic-4bcbdf88.js"
     ]
   },
-  "_vendor-60047077.js": {
-    "file": "vendor-60047077.js",
+  "_vendor-637880ba.js": {
+    "file": "vendor-637880ba.js",
     "imports": [
-      "_basic-fd8fb3ad.js"
+      "_basic-4bcbdf88.js"
     ]
   },
   "style.css": {
-    "file": "style-2ba20d83.css",
+    "file": "style-e8be7cb3.css",
     "src": "style.css"
   }
 }

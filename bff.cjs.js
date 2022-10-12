@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.19.3
+* Surmon.me v3.20.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon
@@ -841,6 +841,7 @@ const getSongList = async () => {
     const viteServer = await vite.createServer({
         root: process.cwd(),
         logLevel: 'info',
+        appType: 'custom',
         server: {
             middlewareMode: true,
             watch: {
