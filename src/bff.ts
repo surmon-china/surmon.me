@@ -33,6 +33,7 @@ import { getGitHubStatistic, getNPMStatistic } from './server/getters/open-srouc
 import { getOpenSeaAssets, getOpenSeaCollections } from './server/getters/opensea'
 import { getDoubanMovies } from './server/getters/douban'
 import { getSongList } from './server/getters/netease-music'
+import { getWebFont, WebFontContentType } from './server/getters/webfont'
 import { enableDevRenderer } from './server/renderer/dev'
 import { enableProdRenderer } from './server/renderer/prod'
 import { PUBLIC_PATH } from './server/helpers/configurer'
@@ -94,6 +95,22 @@ createExpressApp().then(({ app, server, cache }) => {
         getter: getGTagScript
       })
       response.header('Content-Type', 'text/javascript')
+      response.send(data)
+    } catch (error) {
+      erroror(response, error)
+    }
+  })
+
+  // WebFont
+  app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.WebFont}`, async (request, response) => {
+    const fontname = decodeURIComponent(String(request.query.fontname)).trim()
+    const text = decodeURIComponent(String(request.query.text)).trim()
+    if (!text || !fontname) {
+      return erroror(response, 'Invalid params')
+    }
+    try {
+      const data = await getWebFont({ fontname, text })
+      response.header('Content-Type', WebFontContentType)
       response.send(data)
     } catch (error) {
       erroror(response, error)

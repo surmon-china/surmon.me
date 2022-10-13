@@ -5,6 +5,7 @@
  */
 
 export enum TunnelModule {
+  WebFont = 'webfont',
   MyGoogleMap = 'my_google_map',
   TwitterUserInfo = 'twitter_userinfo',
   TwitterTweets = 'twitter_tweets',
