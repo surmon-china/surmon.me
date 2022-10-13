@@ -65,7 +65,6 @@
 
 <script lang="ts">
   import { defineComponent, ref, computed, nextTick, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
   import { LanguageKey } from '/@/language'
   import { Article, useArticleDetailStore } from '/@/stores/article'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
@@ -86,7 +85,6 @@
       }
     },
     setup(props) {
-      const { i18n } = useEnhancer()
       const articleDetailStore = useArticleDetailStore()
       const isHybrid = computed(() => isHybridType(props.article.origin!))
       const isReprint = computed(() => isReprintType(props.article.origin!))
@@ -110,7 +108,6 @@
 
       return {
         LanguageKey,
-        i18n,
         element,
         isHybrid,
         isReprint,
