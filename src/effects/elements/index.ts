@@ -8,7 +8,7 @@ export interface CustomElementConfig {
   /** transform custom elements (original) html string to target html string */
   transform: (html: string) => string
   /** specify style for target html element */
-  style?: (element: HTMLElement) => string
+  style?: (element: HTMLElement) => string | null
   /** run side effects for target html element */
   effect?: (element: HTMLElement) => void
 }

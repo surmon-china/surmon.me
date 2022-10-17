@@ -147,10 +147,10 @@
         ])
       }
 
-      const customElementsStyle = shallowRef<string>('')
+      const customElementsStyle = shallowRef<string | null>(null)
       const handleContentRendered = (element: HTMLDivElement) => {
         CUSTOM_ELEMENTS.verse.effect?.(element)
-        customElementsStyle.value = CUSTOM_ELEMENTS.verse.style?.(element) ?? ''
+        customElementsStyle.value = CUSTOM_ELEMENTS.verse.style?.(element) ?? null
       }
 
       meta(() => ({
@@ -160,7 +160,7 @@
         twitterCard: 'summary_large_image',
         ogType: 'article',
         ogImage: article.value?.thumb,
-        style: [{ children: customElementsStyle.value }]
+        style: customElementsStyle.value ? [{ children: customElementsStyle.value }] : []
       }))
 
       onBeforeMount(() => {

@@ -26,7 +26,7 @@ export const verseConfig: CustomElementConfig = {
     const string = nodes.map((node) => node.innerText).join('')
     const words = Array.from(new Set(string.split('')))
     if (!words.length) {
-      return ''
+      return null
     }
 
     const textParams = encodeURIComponent(words.join(''))
