@@ -1,10 +1,10 @@
 /*!
-* Surmon.me v3.20.0
+* Surmon.me v3.20.1
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon
 */
-'use strict';var express=require('express'),RSS=require('rss'),axios=require('axios'),path=require('path'),stream=require('stream'),sitemap=require('sitemap'),WonderfulBingWallpaper=require('wonderful-bing-wallpaper'),fastXmlParser=require('fast-xml-parser'),yargs=require('yargs'),fs=require('fs'),vite=require('vite'),http=require('http'),compression=require('compression'),cookieParser=require('cookie-parser'),httpProxy=require('http-proxy'),LRU=require('lru-cache'),redis=require('redis');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var express__default=/*#__PURE__*/_interopDefaultLegacy(express);var RSS__default=/*#__PURE__*/_interopDefaultLegacy(RSS);var axios__default=/*#__PURE__*/_interopDefaultLegacy(axios);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var WonderfulBingWallpaper__default=/*#__PURE__*/_interopDefaultLegacy(WonderfulBingWallpaper);var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var http__default=/*#__PURE__*/_interopDefaultLegacy(http);var compression__default=/*#__PURE__*/_interopDefaultLegacy(compression);var cookieParser__default=/*#__PURE__*/_interopDefaultLegacy(cookieParser);var LRU__default=/*#__PURE__*/_interopDefaultLegacy(LRU);/**
+'use strict';var express=require('express'),RSS=require('rss'),axios=require('axios'),path=require('path'),stream=require('stream'),sitemap=require('sitemap'),WonderfulBingWallpaper=require('wonderful-bing-wallpaper'),fastXmlParser=require('fast-xml-parser'),yargs=require('yargs'),fs=require('fs-extra'),Fontmin=require('fontmin'),fs$1=require('fs'),vite=require('vite'),http=require('http'),compression=require('compression'),cookieParser=require('cookie-parser'),httpProxy=require('http-proxy'),LRU=require('lru-cache'),redis=require('redis');function _interopDefaultLegacy(e){return e&&typeof e==='object'&&'default'in e?e:{'default':e}}var express__default=/*#__PURE__*/_interopDefaultLegacy(express);var RSS__default=/*#__PURE__*/_interopDefaultLegacy(RSS);var axios__default=/*#__PURE__*/_interopDefaultLegacy(axios);var path__default=/*#__PURE__*/_interopDefaultLegacy(path);var WonderfulBingWallpaper__default=/*#__PURE__*/_interopDefaultLegacy(WonderfulBingWallpaper);var fs__default=/*#__PURE__*/_interopDefaultLegacy(fs);var Fontmin__default=/*#__PURE__*/_interopDefaultLegacy(Fontmin);var fs__default$1=/*#__PURE__*/_interopDefaultLegacy(fs$1);var http__default=/*#__PURE__*/_interopDefaultLegacy(http);var compression__default=/*#__PURE__*/_interopDefaultLegacy(compression);var cookieParser__default=/*#__PURE__*/_interopDefaultLegacy(cookieParser);var LRU__default=/*#__PURE__*/_interopDefaultLegacy(LRU);/**
  * @file Dev environment
  * @module environment
  * @author Surmon <https://github.com/surmon-china>
@@ -25,6 +25,7 @@ const isProd = "production" === NodeEnv.Production;
  */
 var TunnelModule;
 (function (TunnelModule) {
+    TunnelModule["WebFont"] = "webfont";
     TunnelModule["MyGoogleMap"] = "my_google_map";
     TunnelModule["TwitterUserInfo"] = "twitter_userinfo";
     TunnelModule["TwitterTweets"] = "twitter_tweets";
@@ -819,6 +820,41 @@ const getSongList = async () => {
         // https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=%e8%8e%b7%e5%8f%96%e9%9f%b3%e4%b9%90-url
         url: `https://music.163.com/song/media/outer/url?id=${song.id}.mp3`
     })));
+};/**
+ * @file WebFont getter
+ * @module server.getter.webfont
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const WebFontContentType = 'font/woff2';
+const cacheMap = new Map();
+const getWebFont = (options) => {
+    // https://github.com/ecomfe/fontmin
+    const text = Array.from(new Set(options.text.split(''))).join('');
+    const fontPath = path__default["default"].resolve(PUBLIC_PATH, 'fonts', options.fontname);
+    if (!fs__default["default"].existsSync(fontPath)) {
+        return Promise.reject(`Font "${options.fontname}" not found!`);
+    }
+    // memory cache
+    const cacheKey = `${options.fontname}_${text}`;
+    if (cacheMap.has(cacheKey)) {
+        return Promise.resolve(cacheMap.get(cacheKey));
+    }
+    const fontmin = new Fontmin__default["default"]()
+        .src(fontPath)
+        .use(Fontmin__default["default"].glyph({ text, hinting: false }))
+        .use(Fontmin__default["default"].ttf2woff2());
+    return new Promise((resolve, reject) => {
+        fontmin.run((error, files) => {
+            if (error) {
+                reject(error);
+            }
+            else {
+                const fontData = files[0]._contents;
+                cacheMap.set(cacheKey, fontData);
+                resolve(fontData);
+            }
+        });
+    });
 };const resolveTemplate = (config) => {
     const { template, appHTML, metas, scripts } = config;
     const bodyScripts = [
@@ -854,7 +890,7 @@ const getSongList = async () => {
     app.use(viteServer.middlewares);
     app.use('*', async (request, response) => {
         const { renderApp, renderError } = await viteServer.ssrLoadModule('/src/ssr.ts');
-        let template = fs__default["default"].readFileSync(path__default["default"].resolve(ROOT_PATH, 'index.html'), 'utf-8');
+        let template = fs__default$1["default"].readFileSync(path__default["default"].resolve(ROOT_PATH, 'index.html'), 'utf-8');
         try {
             const url = request.originalUrl;
             template = await viteServer.transformIndexHtml(url, template);
@@ -881,7 +917,7 @@ const getSongList = async () => {
         }
     });
 };const enableProdRenderer = async (app, cache) => {
-    const template = fs__default["default"].readFileSync(path__default["default"].resolve(DIST_PATH, 'template.html'), 'utf-8');
+    const template = fs__default$1["default"].readFileSync(path__default["default"].resolve(DIST_PATH, 'template.html'), 'utf-8');
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { renderApp, renderError } = require(path__default["default"].resolve(PRDO_SERVER_PATH, 'ssr.js'));
     app.use('*', async (request, response) => {
@@ -1289,6 +1325,24 @@ createExpressApp().then(({ app, server, cache }) => {
                 getter: getGTagScript
             });
             response.header('Content-Type', 'text/javascript');
+            response.send(data);
+        }
+        catch (error) {
+            erroror(response, error);
+        }
+    });
+    // WebFont
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.WebFont}`, async (request, response) => {
+        const fontname = decodeURIComponent(String(request.query.fontname)).trim();
+        const text = decodeURIComponent(String(request.query.text)).trim();
+        if (!text || !fontname) {
+            return erroror(response, 'Invalid params');
+        }
+        try {
+            const data = await getWebFont({ fontname, text });
+            // never expired
+            response.header('Cache-Control', 'public, max-age=31536000');
+            response.header('Content-Type', WebFontContentType);
             response.send(data);
         }
         catch (error) {
