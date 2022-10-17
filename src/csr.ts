@@ -36,6 +36,7 @@ import { isSSR } from '/@/app/environment'
 import { isProd } from '/@/environment'
 
 import './effects/swiper/style'
+import './effects/elements/index.scss'
 import './styles/app.scss'
 
 // app

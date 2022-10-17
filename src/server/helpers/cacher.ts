@@ -64,7 +64,7 @@ const retryFetch = async (config: CacherConfig) => {
   }
 }
 
-export const cacher = async (_config: CacherConfig) => {
+export const cacher = async <T = any>(_config: CacherConfig): Promise<T> => {
   // key prefix
   const config = {
     ..._config,
@@ -73,7 +73,7 @@ export const cacher = async (_config: CacherConfig) => {
 
   // cached
   if (await config.cache.has(config.key)) {
-    return await config.cache.get(config.key)
+    return await config.cache.get<T>(config.key)
   }
 
   try {

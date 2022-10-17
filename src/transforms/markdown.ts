@@ -5,9 +5,10 @@
  */
 
 import highlight from '/@/effects/highlight'
-import { marked, Renderer } from 'marked'
 import { sanitizeUrl } from '@braintree/sanitize-url'
+import { marked, Renderer } from 'marked'
 import { TagMap } from '/@/stores/tag'
+import { CUSTOM_ELEMENT_LIST } from '/@/effects/elements'
 import { LOZAD_CLASS_NAME } from '/@/composables/lozad'
 import { escape } from '/@/transforms/text'
 import relink from '/@/transforms/relink'
@@ -57,14 +58,9 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
   // html: escape > sanitize
   renderer.html = (html) => {
     const trimmed = html.trim()
-    if (trimmed.startsWith('<verse ')) {
-      return trimmed.replace('<verse ', '<p class="verse" ')
-    }
-    if (trimmed.startsWith('</verse>')) {
-      return trimmed.replace('</verse>', '</p>')
-    }
+    const transformed = CUSTOM_ELEMENT_LIST.reduce((result, ce) => ce.transform(result), trimmed)
     // https://github.com/apostrophecms/sanitize-html#default-options
-    return options?.sanitize ? sanitizeHTML(escape(trimmed)) : trimmed
+    return options?.sanitize ? sanitizeHTML(escape(transformed)) : transformed
   }
 
   // heading
@@ -77,10 +73,10 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
   // paragraph
   renderer.paragraph = (text) => {
     const trimmed = text.trim()
-    const isFigure = trimmed.startsWith(`<figure`) && trimmed.endsWith(`</figure>`)
-    const isDiv = trimmed.startsWith(`<div`) && trimmed.endsWith(`</div>`)
-    const isP = trimmed.startsWith(`<p`) && trimmed.endsWith(`</p>`)
-    return isFigure || isDiv || isP ? text : `<p>${text}</p>`
+    const isBlockChild = ['p', 'div', 'figure'].some((tag) => {
+      return trimmed.startsWith(`<${tag}`) && trimmed.endsWith(`</${tag}>`)
+    })
+    return isBlockChild ? text : `<p>${text}</p>`
   }
 
   // checkbox

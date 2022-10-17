@@ -43,7 +43,7 @@
         </div>
       </div>
       <markdown :html="articleDetailStore.defaultContent?.html" />
-      <transition name="module" mode="out-in">
+      <transition name="module" mode="out-in" @after-enter="handleFullContentRendered">
         <div :id="readmoreId" v-if="isRenderMoreEnabled" class="readmore">
           <button class="readmore-btn" :disabled="isRenderMoreContent" @click="handleRenderMore">
             <i18n
@@ -64,12 +64,16 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, nextTick, PropType } from 'vue'
+  import { defineComponent, ref, computed, nextTick, onMounted, onUpdated, PropType } from 'vue'
   import { LanguageKey } from '/@/language'
   import { Article, useArticleDetailStore } from '/@/stores/article'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { numberSplit } from '/@/transforms/text'
   import Markdown from '/@/components/common/markdown.vue'
+
+  export enum Events {
+    Rendered = 'rendered'
+  }
 
   export default defineComponent({
     name: 'ArticleContent',
@@ -84,7 +88,8 @@
         required: true
       }
     },
-    setup(props) {
+    emits: [Events.Rendered],
+    setup(props, context) {
       const articleDetailStore = useArticleDetailStore()
       const isHybrid = computed(() => isHybridType(props.article.origin!))
       const isReprint = computed(() => isReprintType(props.article.origin!))
@@ -106,6 +111,13 @@
         })
       }
 
+      const handleFullContentRendered = () => {
+        context.emit(Events.Rendered, element.value)
+      }
+
+      onMounted(() => handleFullContentRendered())
+      onUpdated(() => handleFullContentRendered())
+
       return {
         LanguageKey,
         element,
@@ -116,7 +128,8 @@
         isRenderMoreEnabled,
         isRenderMoreContent,
         numberSplit,
-        handleRenderMore
+        handleRenderMore,
+        handleFullContentRendered
       }
     }
   })

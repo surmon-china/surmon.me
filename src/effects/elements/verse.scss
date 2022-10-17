@@ -1,0 +1,22 @@
+@import 'src/styles/variables.scss';
+@import 'src/styles/mixins.scss';
+
+p.verse {
+  text-indent: $font-size-base * 2;
+
+  &[zh] {
+    font-family: verse-zh-font;
+    font-weight: 700;
+  }
+
+  &[py] {
+    font-weight: lighter;
+    font-family: monospace;
+    font-size: $font-size-small;
+    color: $text-secondary;
+  }
+
+  &[heading] {
+    font-size: $font-size-h3;
+  }
+}

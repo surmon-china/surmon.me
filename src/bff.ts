@@ -108,8 +108,11 @@ createExpressApp().then(({ app, server, cache }) => {
     if (!text || !fontname) {
       return erroror(response, 'Invalid params')
     }
+
     try {
       const data = await getWebFont({ fontname, text })
+      // never expired
+      response.header('Cache-Control', 'public, max-age=31536000')
       response.header('Content-Type', WebFontContentType)
       response.send(data)
     } catch (error) {

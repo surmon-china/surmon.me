@@ -11,6 +11,7 @@
               :id="ANCHORS.ARTICLE_CONTENT_ELEMENT_ID"
               :readmore-id="ANCHORS.ARTICLE_READMORE_ELEMENT_ID"
               :article="article"
+              @rendered="handleContentRendered"
             />
             <div class="divider"></div>
             <article-meta
@@ -63,7 +64,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, watch, onBeforeMount } from 'vue'
+  import { defineComponent, computed, watch, shallowRef, onBeforeMount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/universal'
   import { useStores } from '/@/stores'
@@ -71,6 +72,7 @@
   import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
+  import { CUSTOM_ELEMENTS } from '/@/effects/elements'
   import { SocialMedia } from '/@/components/widget/share.vue'
   import Comment from '/@/components/comment/index.vue'
   import ArticleSkeleton from './skeleton.vue'
@@ -145,13 +147,20 @@
         ])
       }
 
+      const customElementsStyle = shallowRef<string>('')
+      const handleContentRendered = (element: HTMLDivElement) => {
+        CUSTOM_ELEMENTS.verse.effect?.(element)
+        customElementsStyle.value = CUSTOM_ELEMENTS.verse.style?.(element) ?? ''
+      }
+
       meta(() => ({
         pageTitle: article.value?.title,
         description: article.value?.description || '',
         keywords: article.value?.keywords?.join(',') || article.value?.title,
         twitterCard: 'summary_large_image',
         ogType: 'article',
-        ogImage: article.value?.thumb
+        ogImage: article.value?.thumb,
+        style: [{ children: customElementsStyle.value }]
       }))
 
       onBeforeMount(() => {
@@ -173,7 +182,8 @@
         fetching,
         isLiked,
         handleLike,
-        handleSponsor
+        handleSponsor,
+        handleContentRendered
       }
     }
   })
