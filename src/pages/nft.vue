@@ -61,7 +61,10 @@
         <template #default>
           <ul class="asset-list">
             <li class="asset" :key="index" v-for="(asset, index) in openseaAssets.assets">
-              <div class="image" :style="{ backgroundImage: `url('${asset.image_url}')` }">
+              <div
+                class="image"
+                :style="{ backgroundImage: `url('${getTargetProxyURL(asset.image_url)}')` }"
+              >
                 <ulink
                   class="contract"
                   :href="getEtherscanURL(asset.asset_contract.address)"
@@ -145,6 +148,7 @@
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { getEtherscanURL, getOpenSeaCollectionURL } from '/@/transforms/nft'
+  import { getTargetProxyURL } from '/@/transforms/url'
   import { GAEventCategories } from '/@/constants/gtag'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import Markdown from '/@/components/common/markdown.vue'
@@ -190,6 +194,7 @@
         LanguageKey,
         openseaAssets,
         openseaCollections,
+        getTargetProxyURL,
         getEtherscanURL,
         getOpenSeaCollectionURL,
         handleGTagEvent
