@@ -8,13 +8,13 @@
 
 # Surmon.me
 
-[![vue](https://img.shields.io/badge/MADE%20WITH-VUE-42a97a?style=for-the-badge&labelColor=35495d)](https://vuejs.org)
-&nbsp;
 [![nodepress](https://raw.githubusercontent.com/surmon-china/nodepress/main/badge.svg)](https://github.com/surmon-china/nodepress)
+&nbsp;
+[![vue](https://img.shields.io/badge/MADE%20WITH-VUE-42a97a?style=for-the-badge&labelColor=35495d)](https://vuejs.org)
 &nbsp;
 [![GitHub stars](https://img.shields.io/github/stars/surmon-china/surmon.me.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me/stargazers)
 &nbsp;
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/surmon-china/surmon.me/Deploy?style=for-the-badge&label=Deploy)](https://github.com/surmon-china/surmon.me/actions?query=workflow:%22Deploy%22)
+[![Uptime Robot ratio (30 days)](https://img.shields.io/uptimerobot/ratio/m791570495-ed407f6804efd6c9f3cd1d18?style=for-the-badge)](https://stats.uptimerobot.com/Q2k7OTXxJN/791570495)
 &nbsp;
 [![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.svg?style=for-the-badge)](/LICENSE)
 
