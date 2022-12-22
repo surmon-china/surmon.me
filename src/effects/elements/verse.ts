@@ -1,11 +1,11 @@
-import { BFF_TUNNEL_PREFIX } from '/@/config/bff.config'
-import { TunnelModule } from '/@/constants/tunnel'
+// import { BFF_TUNNEL_PREFIX } from '/@/config/bff.config'
+// import { TunnelModule } from '/@/constants/tunnel'
 import { CustomElementConfig } from './'
 
 // https://zhuanlan.zhihu.com/p/349267844
 // https://github.com/ecomfe/fontmin
-const VERSE_ZH_FONT_FAMILY = 'verse-zh-font'
-const VERSE_ZH_FONT_FILENAME = 'FZZJ-ZZGKT.ttf'
+// const VERSE_ZH_FONT_FAMILY = 'verse-zh-font'
+// const VERSE_ZH_FONT_FILENAME = 'FZZJ-ZZGKT.ttf'
 
 export const verseConfig: CustomElementConfig = {
   transform(html) {
@@ -16,11 +16,13 @@ export const verseConfig: CustomElementConfig = {
       return html.replace('</verse>', '</p>')
     }
     return html
-  },
+  }
   // new FontFace(...)
   // Since FontFace does not support the size-adjest parameter,
   // if you use JavaScript to manipulate the side effects,
   // you will need to manually maintain the lifecycle to add the global class name
+  // MARK: No custom fonts for now
+  /*
   style(element) {
     const nodes = Array.from(element.querySelectorAll<HTMLParagraphElement>('p.verse[zh]'))
     const string = nodes.map((node) => node.innerText).join('')
@@ -44,4 +46,5 @@ export const verseConfig: CustomElementConfig = {
       }
     `
   }
+  */
 }

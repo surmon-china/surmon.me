@@ -20,9 +20,9 @@ export const META = Object.freeze({
 })
 
 export const GEO_INFO = Object.freeze({
-  zh_title: '苟活于此，养两条狗',
-  en_title: 'Omicron prison, Shanghai',
-  coordinates: [121.55152956275738, 31.215855513780504]
+  zh_title: '巨东半球，靠近赤道',
+  en_title: 'UTC +08:00',
+  coordinates: [103.830391822121, 1.340863]
 })
 
 export const MAPBOX_CONFIG = Object.freeze({
