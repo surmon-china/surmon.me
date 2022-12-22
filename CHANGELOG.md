@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.21.0 (2022-12-23)
+
+**Feature**
+
+- Update various dependencies
+- Improve `@vueuse` composable
+- Improve `<verse>` paragraph style
+- Improve meta tags
+- Keep axios v1.1.3
+  - [AxiosError: unexpected end of file](https://github.com/axios/axios/issues/5346)
+  - [after upgrading to "axios": "^1.2.1"](https://github.com/axios/axios/issues/5357)
+
 ### v3.20.0 (2022-10-13)
 
 **Feature**

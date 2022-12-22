@@ -19,6 +19,7 @@ export const resolveTemplate = (config: {
   const html = template
     // MARK: replace! $ sign & use function replacer
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_string_as_a_parameter
+    // https://github.com/vueuse/head#ssr-rendering
     .replace(/<title>[\s\S]*<\/title>/, '')
     .replace(`<html`, () => `<html ${metas.htmlAttrs} `)
     .replace(`<head>`, () => `<head>\n${metas.headTags}`)

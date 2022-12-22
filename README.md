@@ -74,4 +74,3 @@ Detailed changes for each release are documented in the [release notes](/CHANGEL
 ### License
 
 Licensed under the [MIT](/LICENSE) License.
-

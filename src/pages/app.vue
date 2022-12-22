@@ -160,7 +160,7 @@
       }
 
       .screen {
-        margin-top: 5rem;
+        margin-top: 3rem;
         width: 36rem;
         position: relative;
 

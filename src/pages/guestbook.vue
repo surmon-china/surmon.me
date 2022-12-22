@@ -102,7 +102,6 @@
         return {
           pageTitle: titles.join(' | '),
           description: `给 ${META.author} 留言`,
-          twitterCard: 'summary_large_image',
           ogType: 'bbs',
           ogImage: getTargetCDNURL(bannerImage)
         }

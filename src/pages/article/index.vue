@@ -157,9 +157,10 @@
         pageTitle: article.value?.title,
         description: article.value?.description || '',
         keywords: article.value?.keywords?.join(',') || article.value?.title,
-        twitterCard: 'summary_large_image',
         ogType: 'article',
         ogImage: article.value?.thumb,
+        ogImageWidth: 1190,
+        ogImageHeight: 420,
         style: customElementsStyle.value ? [{ children: customElementsStyle.value }] : []
       }))
 

@@ -6,17 +6,14 @@
  */
 
 import { computed, inject, ComputedGetter } from 'vue'
-import { createHead, useHead, HeadObject, HeadAttrs, renderHeadToString } from '@vueuse/head'
-import { useEnhancer } from '/@/app/enhancer'
+import { createHead, useHead, HeadObject, renderHeadToString } from '@vueuse/head'
 import { getPageURL, getTargetCDNURL } from '/@/transforms/url'
+import { useEnhancer } from '/@/app/enhancer'
 import { META, IDENTITIES } from '/@/config/app.config'
 
-export interface MetaResult {
-  readonly headTags: string
-  readonly htmlAttrs: string
-  readonly bodyAttrs: string
-}
+export type MetaResult = Awaited<ReturnType<typeof renderHeadToString>>
 
+const DEFAULT_OG_IMAGE = getTargetCDNURL('/images/og-social-card.jpg')
 const MetaTitlerSymbol = Symbol('meta-titler')
 type MeatTitler = (title: string) => string
 
@@ -28,7 +25,7 @@ export const createMeta = (metaConfig?: MetaConfig) => {
   const head = createHead()
   return {
     ...head,
-    renderToString(): MetaResult {
+    renderToString() {
       return renderHeadToString(head)
     },
     install(app, ...rest: any[]) {
@@ -48,12 +45,13 @@ export interface MetaObject extends HeadObject {
   // https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started
   // https://developers.facebook.com/docs/sharing/webmasters/
   // https://ahrefs.com/blog/open-graph-meta-tags/
-  twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player'
-  ogType?: 'website' | 'article' | 'blog' | 'product' | 'bbs' | 'image' | 'profile'
+  ogType?: 'website' | 'object' | 'article' | 'blog' | 'product' | 'bbs' | 'image' | 'profile'
+  ogUrl?: string
   ogTitle?: string
   ogDescription?: string
   ogImage?: string
-  ogUrl?: string
+  ogImageWidth?: number
+  ogImageHeight?: number
 }
 
 export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
@@ -65,12 +63,13 @@ export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
       pageTitle,
       keywords,
       description,
-      twitterCard,
       ogType,
+      ogUrl,
       ogTitle,
       ogDescription,
       ogImage,
-      ogUrl,
+      ogImageWidth,
+      ogImageHeight,
       ...restSource
     } = typeof source === 'function' ? source() : source
 
@@ -80,7 +79,7 @@ export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
     const _language = i18n.l.value?.iso ?? ''
 
     // metas
-    const _meta = (restSource.meta as HeadAttrs[]) || [
+    const _meta = (restSource.meta as any[]) || [
       // keywords
       {
         key: 'keywords',
@@ -94,11 +93,6 @@ export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
         content: description ?? ''
       },
       // twitter
-      {
-        key: 'twitter-card',
-        name: 'twitter:card',
-        content: twitterCard ?? 'summary'
-      },
       {
         key: 'twitter-new-widgets',
         name: 'twitter:widgets:new-embed-design',
@@ -114,11 +108,31 @@ export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
         name: 'twitter:creator',
         content: `@${IDENTITIES.TWITTER_USER_NAME}`
       },
+      {
+        key: 'twitter-card',
+        name: 'twitter:card',
+        content: 'summary_large_image'
+      },
+      {
+        key: 'twitter-image-src',
+        name: 'twitter:image:src',
+        content: ogImage ?? DEFAULT_OG_IMAGE
+      },
+      {
+        key: 'twitter-title',
+        name: 'twitter:title',
+        content: ogTitle ?? _title ?? ''
+      },
+      {
+        key: 'twitter-description',
+        name: 'twitter:description',
+        content: ogDescription ?? description ?? ''
+      },
       // og
       {
         key: 'og-type',
         property: 'og:type',
-        content: ogType ?? 'website'
+        content: ogType ?? 'object'
       },
       {
         key: 'og-site-name',
@@ -143,7 +157,22 @@ export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
       {
         key: 'og-image',
         property: 'og:image',
-        content: ogImage ?? getTargetCDNURL('/images/og-social-card.jpg')
+        content: ogImage ?? DEFAULT_OG_IMAGE
+      },
+      {
+        key: 'og-image-alt',
+        property: 'og:image:alt',
+        content: ogTitle ?? _title ?? ''
+      },
+      {
+        key: 'og-image-width',
+        property: 'og:image:width',
+        content: ogImageWidth ?? (ogImage ? '' : '1000')
+      },
+      {
+        key: 'og-image-height',
+        property: 'og:image:height',
+        content: ogImageHeight ?? (ogImage ? '' : '526')
       },
       {
         key: 'og-locale',

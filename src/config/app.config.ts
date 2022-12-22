@@ -20,7 +20,7 @@ export const META = Object.freeze({
 })
 
 export const GEO_INFO = Object.freeze({
-  zh_title: '巨东半球，靠近赤道',
+  zh_title: '居东半球，靠近赤道',
   en_title: 'UTC +08:00',
   coordinates: [103.830391822121, 1.340863]
 })
