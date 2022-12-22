@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.20.3
+* Surmon.me v3.20.4
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon
@@ -221,9 +221,9 @@ const META = Object.freeze({
     primary: '#0088f5'
 });
 Object.freeze({
-    zh_title: '苟活于此，养两条狗',
-    en_title: 'Omicron prison, Shanghai',
-    coordinates: [121.55152956275738, 31.215855513780504]
+    zh_title: '巨东半球，靠近赤道',
+    en_title: 'UTC +08:00',
+    coordinates: [103.830391822121, 1.340863]
 });
 Object.freeze({
     TOKEN: 'pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE4YmkzNjB2Z2wzY3F5dWg2M2tqeWIifQ.JhgYGFI4zsuNiX9dH-pBDg',
