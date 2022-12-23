@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.20.4
+* Surmon.me v3.21.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon
@@ -34,7 +34,7 @@ const DIST_PATH = path__default["default"].join(ROOT_PATH, 'dist');
 const PRDO_CLIENT_PATH = path__default["default"].join(DIST_PATH, 'client');
 const PRDO_SERVER_PATH = path__default["default"].join(DIST_PATH, 'server');
 isDev ? path__default["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;const resolveTemplate = (config) => {
-    const { template, appHTML, metas, scripts } = config;
+    const { template, appHTML, heads, scripts } = config;
     const bodyScripts = [
         scripts
         // MARK: https://cn.vitejs.dev/config/#build-ssrmanifest
@@ -44,11 +44,12 @@ isDev ? path__default["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;co
     const html = template
         // MARK: replace! $ sign & use function replacer
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_string_as_a_parameter
+        // https://github.com/vueuse/head#ssr-rendering
         .replace(/<title>[\s\S]*<\/title>/, '')
-        .replace(`<html`, () => `<html ${metas.htmlAttrs} `)
-        .replace(`<head>`, () => `<head>\n${metas.headTags}`)
+        .replace(`<html`, () => `<html ${heads.htmlAttrs} `)
+        .replace(`<head>`, () => `<head>\n${heads.headTags}`)
         .replace(`<!--app-html-->`, () => appHTML)
-        .replace(`<body>`, () => `<body ${metas.bodyAttrs}>`)
+        .replace(`<body>`, () => `<body ${heads.bodyAttrs}>`)
         .replace(`</body>`, () => `\n${bodyScripts}\n</body>`);
     return html;
 };const enableProdRenderer = async (app, cache) => {
@@ -64,7 +65,7 @@ isDev ? path__default["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;co
                 .end(resolveTemplate({
                 template,
                 appHTML: redered.html,
-                metas: redered.metas,
+                heads: redered.heads,
                 scripts: redered.scripts
             }));
         }
@@ -73,7 +74,7 @@ isDev ? path__default["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;co
             response.status(redered.code).end(resolveTemplate({
                 template,
                 appHTML: redered.html,
-                metas: redered.metas,
+                heads: redered.heads,
                 scripts: redered.scripts
             }));
         }
@@ -221,11 +222,12 @@ const META = Object.freeze({
     primary: '#0088f5'
 });
 Object.freeze({
-    zh_title: '巨东半球，靠近赤道',
+    zh_title: '居东半球，靠近赤道',
     en_title: 'UTC +08:00',
     coordinates: [103.830391822121, 1.340863]
 });
 Object.freeze({
+    // readonly token
     TOKEN: 'pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE4YmkzNjB2Z2wzY3F5dWg2M2tqeWIifQ.JhgYGFI4zsuNiX9dH-pBDg',
     STYLE_LIGHT: 'mapbox://styles/surmon/cl41fktzn000f14pet94oo1u4',
     STYLE_DARK: 'mapbox://styles/surmon/cl41gy1qo000l15ry20j5ae0k',
