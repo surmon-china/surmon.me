@@ -62,9 +62,10 @@ export const i18ns = {
 }
 
 export const useAboutPageMeta = () => {
-  const { i18n, meta, isZhLang } = useEnhancer()
+  const { i18n, head, isZhLang } = useEnhancer()
   const { adminInfo } = useStores()
-  return meta(() => {
+
+  return head(() => {
     const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_ABOUT, Language.English)!)
     const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ABOUT), enTitle] : [enTitle]
     return {

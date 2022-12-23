@@ -40,10 +40,10 @@
       PageBanner
     },
     setup() {
-      const { route, i18n, meta, isZhLang } = useEnhancer()
+      const { route, i18n, head, isZhLang } = useEnhancer()
       const sponsorState = useSponsorState()
 
-      meta(() => {
+      head(() => {
         const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_SPONSOR, Language.English)!)
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_SPONSOR), enTitle] : [enTitle]
         return { pageTitle: titles.join(' | ') }

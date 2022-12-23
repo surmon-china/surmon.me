@@ -34,8 +34,8 @@
       }
     },
     setup(props) {
-      const { meta } = useEnhancer()
-      meta(() => ({
+      const { head } = useEnhancer()
+      head(() => ({
         pageTitle: `${props.date} | Date`,
         ogType: 'blog'
       }))

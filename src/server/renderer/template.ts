@@ -1,13 +1,13 @@
-import type { MetaResult } from '@/composables/meta'
+import type { HeadResult } from '/@/composables/head'
 
 export const resolveTemplate = (config: {
   template: string
   appHTML: string
-  metas: MetaResult
+  heads: HeadResult
   scripts?: string
   manifest?: any
 }) => {
-  const { template, appHTML, metas, scripts } = config
+  const { template, appHTML, heads, scripts } = config
 
   const bodyScripts = [
     scripts
@@ -21,10 +21,10 @@ export const resolveTemplate = (config: {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_string_as_a_parameter
     // https://github.com/vueuse/head#ssr-rendering
     .replace(/<title>[\s\S]*<\/title>/, '')
-    .replace(`<html`, () => `<html ${metas.htmlAttrs} `)
-    .replace(`<head>`, () => `<head>\n${metas.headTags}`)
+    .replace(`<html`, () => `<html ${heads.htmlAttrs} `)
+    .replace(`<head>`, () => `<head>\n${heads.headTags}`)
     .replace(`<!--app-html-->`, () => appHTML)
-    .replace(`<body>`, () => `<body ${metas.bodyAttrs}>`)
+    .replace(`<body>`, () => `<body ${heads.bodyAttrs}>`)
     .replace(`</body>`, () => `\n${bodyScripts}\n</body>`)
 
   return html

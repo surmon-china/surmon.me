@@ -161,7 +161,7 @@
       Markdown
     },
     setup() {
-      const { i18n, meta, gtag, isZhLang } = useEnhancer()
+      const { i18n, head, gtag, isZhLang } = useEnhancer()
       const { openseaAssets, openseaCollections } = useStores()
       const handleGTagEvent = (event: string, label: string) => {
         gtag?.event(event, {
@@ -170,7 +170,7 @@
         })
       }
 
-      meta(() => {
+      head(() => {
         const enTitle = i18n.t(LanguageKey.PAGE_NFT, Language.English)!
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_NFT), enTitle] : [enTitle]
         return {

@@ -1,42 +1,48 @@
 /**
- * @file meta
- * @module composable.meta
+ * @file head
+ * @module composable.head
  * @author Surmon <https://github.com/surmon-china>
  * @link https://github.com/vueuse/head
  */
 
 import { computed, inject, ComputedGetter } from 'vue'
-import { createHead, useHead, HeadObject, renderHeadToString } from '@vueuse/head'
-import { getPageURL, getTargetCDNURL } from '/@/transforms/url'
+import {
+  HeadObject as VueuseHeadObject,
+  createHead as createVueuseHead,
+  useHead as useVueuseHead,
+  useSeoMeta as useVueuseSeoMeta,
+  renderHeadToString
+} from '@vueuse/head'
 import { useEnhancer } from '/@/app/enhancer'
+import { getPageURL, getTargetCDNURL } from '/@/transforms/url'
 import { META, IDENTITIES } from '/@/config/app.config'
 
-export type MetaResult = Awaited<ReturnType<typeof renderHeadToString>>
+export type HeadResult = Awaited<ReturnType<typeof renderHeadToString>>
 
 const DEFAULT_OG_IMAGE = getTargetCDNURL('/images/og-social-card.jpg')
-const MetaTitlerSymbol = Symbol('meta-titler')
-type MeatTitler = (title: string) => string
+const HeadTitlerSymbol = Symbol('head-titler')
+type HeadTitler = (title: string) => string
 
-export interface MetaConfig {
-  titler?: MeatTitler
+export interface HeadConfig {
+  titler?: HeadTitler
 }
 
-export const createMeta = (metaConfig?: MetaConfig) => {
-  const head = createHead()
+export const createHead = (headConfig?: HeadConfig) => {
+  const head = createVueuseHead()
   return {
     ...head,
     renderToString() {
       return renderHeadToString(head)
     },
     install(app, ...rest: any[]) {
-      app.provide(MetaTitlerSymbol, metaConfig?.titler || ((title) => title))
+      app.provide(HeadTitlerSymbol, headConfig?.titler || ((title) => title))
       app.use(head, ...rest)
       return head
     }
   }
 }
 
-export interface MetaObject extends HeadObject {
+export interface HeadObject extends VueuseHeadObject {
   title?: string
   pageTitle?: string
   description?: string
@@ -54,9 +60,9 @@ export interface MetaObject extends HeadObject {
   ogImageHeight?: number
 }
 
-export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
+export function useHead(source: HeadObject | ComputedGetter<HeadObject>) {
   const { i18n, route } = useEnhancer()
-  const titler = inject<MeatTitler>(MetaTitlerSymbol)
+  const titler = inject<HeadTitler>(HeadTitlerSymbol)
   const meta = computed<HeadObject>(() => {
     const {
       title,
@@ -76,7 +82,6 @@ export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
     // title | page title
     const _pureTitle = title ?? pageTitle
     const _title = title ? title : pageTitle ? titler?.(pageTitle) : ''
-    const _language = i18n.l.value?.iso ?? ''
 
     // metas
     const _meta = (restSource.meta as any[]) || [
@@ -177,20 +182,16 @@ export function useMeta(source: MetaObject | ComputedGetter<MetaObject>) {
       {
         key: 'og-locale',
         property: 'og:locale',
-        content: _language
+        content: i18n.l.value?.iso ?? ''
       }
     ]
 
     return {
       ...restSource,
       title: _title,
-      meta: _meta,
-      htmlAttrs: {
-        lang: _language,
-        ...restSource.htmlAttrs
-      }
+      meta: _meta
     }
   })
 
-  return useHead(meta)
+  return useVueuseHead(meta)
 }

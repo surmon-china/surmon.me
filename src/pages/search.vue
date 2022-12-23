@@ -37,8 +37,8 @@
       }
     },
     setup(props) {
-      const { meta } = useEnhancer()
-      meta(() => ({
+      const { head } = useEnhancer()
+      head(() => ({
         pageTitle: `${props.keyword} | Search`,
         ogType: 'blog'
       }))

@@ -56,7 +56,7 @@
       }
     },
     setup(props) {
-      const { meta, isZhLang } = useEnhancer()
+      const { head, isZhLang } = useEnhancer()
       const tagStore = useTagStore()
       const articleListStore = useArticleListStore()
       const currentTag = computed(() => tagStore.data.find((tag) => tag.slug === props.tagSlug))
@@ -78,7 +78,7 @@
         scrollToNextScreen()
       }
 
-      meta(() => {
+      head(() => {
         const enTitle = firstUpperCase(props.tagSlug)
         const zhTitle = currentTag.value?.name!
         const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle, 'Tag']

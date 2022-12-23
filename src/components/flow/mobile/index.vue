@@ -114,7 +114,7 @@
       }
     },
     setup(props) {
-      const { meta, i18n } = useEnhancer()
+      const { head, i18n } = useEnhancer()
       const appOptionStore = useAppOptionStore()
       const tagStore = useTagStore()
       const categoryStore = useCategoryStore()
@@ -134,7 +134,7 @@
         return pagination ? pagination.current_page < pagination.total_page : false
       })
 
-      meta(() => {
+      head(() => {
         const titles: string[] = Object.values(props)
           .filter(Boolean)
           .map((prop) => firstUpperCase(prop as string))

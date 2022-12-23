@@ -21,7 +21,7 @@ export const enableProdRenderer = async (app: Express, cache: CacheClient) => {
           resolveTemplate({
             template,
             appHTML: redered.html,
-            metas: redered.metas,
+            heads: redered.heads,
             scripts: redered.scripts
           })
         )
@@ -31,7 +31,7 @@ export const enableProdRenderer = async (app: Express, cache: CacheClient) => {
         resolveTemplate({
           template,
           appHTML: redered.html,
-          metas: redered.metas,
+          heads: redered.heads,
           scripts: redered.scripts
         })
       )

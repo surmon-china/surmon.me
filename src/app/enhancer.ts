@@ -8,7 +8,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useGlobalState } from '/@/app/state'
 import { useI18n } from '/@/composables/i18n'
-import { useMeta } from '/@/composables/meta'
+import { useHead } from '/@/composables/head'
 import { useGtag, Gtag } from '/@/composables/gtag'
 import { useTheme, Theme } from '/@/composables/theme'
 import { useDefer, Defer } from '/@/composables/defer'
@@ -38,7 +38,7 @@ export const useEnhancer = () => {
     router,
     globalState,
     i18n,
-    meta: useMeta,
+    head: useHead,
     theme,
 
     adConfig,

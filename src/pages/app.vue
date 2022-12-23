@@ -73,8 +73,8 @@
       }
     },
     setup() {
-      const { i18n, meta, gtag, isZhLang } = useEnhancer()
-      meta(() => {
+      const { i18n, head, gtag, isZhLang } = useEnhancer()
+      head(() => {
         const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_APP, Language.English)!)
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_APP), enTitle] : [enTitle]
         return {

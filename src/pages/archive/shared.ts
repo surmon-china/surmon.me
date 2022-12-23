@@ -17,8 +17,8 @@ export const i18ns = {
 } as const
 
 export const useArchivePageMeta = () => {
-  const { i18n, meta, isZhLang } = useEnhancer()
-  meta(() => {
+  const { i18n, head, isZhLang } = useEnhancer()
+  head(() => {
     const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_ARCHIVE, Language.English)!)
     const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ARCHIVE), enTitle] : [enTitle]
     return {

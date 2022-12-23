@@ -61,7 +61,7 @@
     },
     setup() {
       const GUESTBOOK_POST_ID = CommentPostID.Guestbook
-      const { i18n, meta, gtag, globalState, isDarkTheme, isZhLang } = useEnhancer()
+      const { i18n, head, gtag, globalState, isDarkTheme, isZhLang } = useEnhancer()
       const { appOption, comment, identity } = useStores()
       // MARK: [SSR & not first page] only
       const mockCommentLoading = ref(isClient && globalState.isHydrated.value)
@@ -96,7 +96,7 @@
         })
       }
 
-      meta(() => {
+      head(() => {
         const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_GUESTBOOK, Language.English)!)
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_GUESTBOOK), enTitle] : [enTitle]
         return {

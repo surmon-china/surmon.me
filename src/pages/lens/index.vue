@@ -100,13 +100,13 @@
       YoutubePlaylist
     },
     setup() {
-      const { i18n, meta, isZhLang } = useEnhancer()
+      const { i18n, head, isZhLang } = useEnhancer()
       const { instagramMedias, youtubePlayList } = useStores()
       const youtubePlaylistData = computed(() => {
         return youtubePlayList.data.filter((list) => list.contentDetails.itemCount > 1)
       })
 
-      meta(() => {
+      head(() => {
         const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_LENS, Language.English)!)
         const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_LENS), enTitle] : [enTitle]
         return {

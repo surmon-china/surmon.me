@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { CreateAppFunction, computed } from 'vue'
+import { CreateAppFunction } from 'vue'
 import { RouterHistory } from 'vue-router'
 import API_CONFIG from '/@/config/api.config'
 import { META } from '/@/config/app.config'
@@ -12,7 +12,7 @@ import { Language, LanguageKey, languages } from '/@/language'
 import { rebirthSSRContext } from '/@/universal'
 import { createUniversalStore } from '/@/stores'
 import { createI18n } from '/@/composables/i18n'
-import { createMeta } from '/@/composables/meta'
+import { createHead } from '/@/composables/head'
 import { createTheme, Theme } from '/@/composables/theme'
 import { NODE_ENV } from '/@/environment'
 import { isSSR } from './environment'
@@ -55,25 +55,28 @@ export const createVueApp = (context: ICreatorContext) => {
     history: context.historyCreator()
   })
   // 6. composables
-  const meta = createMeta({
-    titler: (title: string) => `${title} | ${META.title}`
-  })
   const theme = createTheme(context.theme)
   const i18n = createI18n({
     default: globalState.userAgent.isZhUser ? Language.Chinese : Language.English,
     keys: Object.values(LanguageKey),
     languages
   })
+  const head = createHead({
+    titler: (title: string) => `${title} | ${META.title}`
+  })
 
   // root attrbute
-  meta.addHeadObjs(
-    computed(() => ({
+  // https://github.com/vueuse/head/blob/main/src/createHead.ts
+  // MARK: head.push does not catch updates to the `theme`
+  head.addReactiveEntry(() => {
+    return {
       htmlAttrs: {
+        lang: i18n.l.value?.iso ?? '',
         'data-theme': theme.theme.value,
         'data-device': globalState.userAgent.isMobile ? 'mobile' : 'desktop'
       }
-    }))
-  )
+    }
+  })
 
   // handle global error
   app.config.errorHandler = (error) => globalState.setRenderError(error)
@@ -103,7 +106,7 @@ export const createVueApp = (context: ICreatorContext) => {
   app.use(store)
   app.use(globalState)
   app.use(i18n)
-  app.use(meta)
+  app.use(head)
   app.use(theme)
   app.use(component)
 
@@ -113,7 +116,7 @@ export const createVueApp = (context: ICreatorContext) => {
     store,
     globalState,
     i18n,
-    meta,
+    head,
     theme,
     component
   }

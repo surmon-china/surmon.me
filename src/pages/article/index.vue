@@ -106,7 +106,7 @@
       }
     },
     setup(props) {
-      const { i18n, meta, gtag, globalState } = useEnhancer()
+      const { i18n, head, gtag, globalState } = useEnhancer()
       const { identity, comment: commentStore, articleDetail: articleDetailStore } = useStores()
       const article = computed(() => articleDetailStore.article || UNDEFINED)
       const fetching = computed(() => articleDetailStore.fetching)
@@ -153,7 +153,7 @@
         customElementsStyle.value = CUSTOM_ELEMENTS.verse.style?.(element) ?? null
       }
 
-      meta(() => ({
+      head(() => ({
         pageTitle: article.value?.title,
         description: article.value?.description || '',
         keywords: article.value?.keywords?.join(',') || article.value?.title,

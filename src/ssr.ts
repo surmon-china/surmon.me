@@ -6,12 +6,12 @@
 
 import serialize from 'serialize-javascript'
 import { Request } from 'express'
-import { createSSRApp, ref } from 'vue'
+import { createSSRApp } from 'vue'
 import { createMemoryHistory } from 'vue-router'
 import { renderToString } from 'vue/server-renderer'
 import { createVueApp, VueApp } from '/@/app/main'
 import { INVALID_ERROR } from '/@/constants/error'
-import { MetaResult } from '/@/composables/meta'
+import { HeadResult } from './composables/head'
 import { Theme, THEME_STORAGE_KEY } from '/@/composables/theme'
 import { renderSSRContextScript, getSSRContextByApp, renderSSRSymbleScript } from '/@/universal'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
@@ -56,7 +56,7 @@ const renderScripts = (data: any) => {
 // https://github.com/nuxt/framework/blob/main/packages/nitro/src/runtime/app/render.ts
 const renderHTML = async (vueApp: VueApp, url: string) => {
   devDebug(`renderHTML: ${url}`)
-  const { app, router, store, meta, theme, globalState } = vueApp
+  const { app, router, store, head, theme, globalState } = vueApp
 
   devDebug('1. route.push.validate')
   await router.push(url)
@@ -79,12 +79,12 @@ const renderHTML = async (vueApp: VueApp, url: string) => {
     throw newError
   }
 
-  devDebug('5. renderMetaString')
-  const metas = await meta.renderToString()
+  devDebug('5. renderHeadString')
+  const heads = await head.renderToString()
 
   devDebug('6. HTML & SSR context script')
   const scripts = renderScripts({
-    metas,
+    heads,
     url,
     layout: globalState.layoutColumn.value.layout,
     theme: theme.theme.value,
@@ -94,7 +94,7 @@ const renderHTML = async (vueApp: VueApp, url: string) => {
 
   return {
     html,
-    metas,
+    heads,
     scripts
   }
 }
@@ -103,7 +103,7 @@ export interface RenderResult {
   code: number
   html: string
   scripts: string
-  metas: MetaResult
+  heads: HeadResult
 }
 
 /**
@@ -113,13 +113,13 @@ export interface RenderResult {
  * 3. router validate/404 error
  */
 export const renderError = async (request: Request, error: Error): Promise<RenderResult> => {
-  const { app, meta, globalState, theme } = createApp(request)
+  const { app, head, globalState, theme } = createApp(request)
   globalState.setRenderError(error)
-  meta.addHeadObjs(ref({ title: `Server Error: ${error.message || String(error) || 'unknow'}` }))
+  head.push({ title: `Server Error: ${error.message || String(error) || 'unknow'}` })
   return {
     code: (error as any).code ?? INVALID_ERROR,
     html: await renderToString(app),
-    metas: await meta.renderToString(),
+    heads: await head.renderToString(),
     scripts: renderScripts({
       theme: theme.theme.value,
       ...getSSRContextByApp(app)

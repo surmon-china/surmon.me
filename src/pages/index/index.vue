@@ -43,7 +43,7 @@
       ArticleList
     },
     setup() {
-      const { meta, i18n } = useEnhancer()
+      const { head, i18n } = useEnhancer()
       const {
         articleList: articleListStore,
         appOption: appOptionStore,
@@ -51,7 +51,7 @@
         twitterTweets
       } = useStores()
 
-      meta(() => ({
+      head(() => ({
         title: `${META.title} - ${i18n.t(LanguageKey.APP_SLOGAN)}`,
         description: appOptionStore.data?.description,
         keywords: appOptionStore.data?.keywords.join(',')

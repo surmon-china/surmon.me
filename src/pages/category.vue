@@ -52,7 +52,7 @@
       }
     },
     setup(props) {
-      const { i18n, meta, isZhLang } = useEnhancer()
+      const { i18n, head, isZhLang } = useEnhancer()
       const articleListStore = useArticleListStore()
       const categoryStore = useCategoryStore()
       const currentCategory = computed(() => {
@@ -76,10 +76,10 @@
         scrollToNextScreen()
       }
 
-      meta(() => {
+      head(() => {
         const enTitle = firstUpperCase(props.categorySlug)
         const zhTitle = i18n.t(props.categorySlug)!
-        const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle, 'Category']
+        const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle]
         const description = currentCategory.value?.description || titles.join(',')
         return {
           pageTitle: titles.join(' | '),

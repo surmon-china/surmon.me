@@ -7,9 +7,9 @@ All notable changes to this project will be documented in this file.
 **Feature**
 
 - Update various dependencies
-- Improve `@vueuse` composable
+- Upgrade `@vueuse/head` composable
 - Improve `<verse>` paragraph style
-- Improve meta tags
+- Improve meta tags `og:*`
 - Keep axios v1.1.3
   - [AxiosError: unexpected end of file](https://github.com/axios/axios/issues/5346)
   - [after upgrading to "axios": "^1.2.1"](https://github.com/axios/axios/issues/5357)
