@@ -1,5 +1,5 @@
 /*!
-* Surmon.me v3.21.0
+* Surmon.me v3.22.0
 * Copyright (c) Surmon. All rights reserved.
 * Released under the MIT License.
 * Surmon
@@ -360,32 +360,49 @@ const graphqlGitHub = (query) => {
             : Promise.resolve(response.data.data.user);
     });
 };
-const getGitHubSponsors = async () => {
-    const result = await graphqlGitHub(`
+const getGitHubSponsors = () => {
+    const SPONSOR_NODE_QUERY = `
+    ... on User {
+      login
+      name
+      url
+      avatarUrl
+      websiteUrl
+    }
+    ... on Organization {
+      login
+      name
+      url
+      avatarUrl
+      websiteUrl
+    }
+  `;
+    // https://github.com/orgs/community/discussions/37234#discussioncomment-4047906
+    // https://github.com/dohooo/get-past-sponsors
+    // https://github.com/community/community/discussions/3818#discussioncomment-2155340
+    // https://docs.github.com/en/graphql/reference/objects#sponsorsactivity
+    // https://docs.github.com/en/graphql/reference/enums#sponsorsactivityaction
+    return graphqlGitHub(`
+    sponsorsActivities(first:100, period: ALL, orderBy: { direction: DESC, field: TIMESTAMP }, actions: [NEW_SPONSORSHIP, CANCELLED_SPONSORSHIP]) {
+      nodes {
+        action,
+        sponsorsTier {
+          isOneTime
+        },
+        sponsor {
+          ${SPONSOR_NODE_QUERY}
+        }
+      }
+    },
     sponsors(first: 100) {
       totalCount
       edges {
         node {
-          ... on User {
-            login
-            name
-            company
-            url
-            avatarUrl
-            websiteUrl
-          }
-          ... on Organization {
-            login
-            name
-            url
-            avatarUrl
-            websiteUrl
-          }
+          ${SPONSOR_NODE_QUERY}
         }
       }
     }
   `);
-    return result.sponsors;
 };
 const isISODateString = (dateString) => {
     if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(dateString))
