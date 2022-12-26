@@ -4,6 +4,7 @@ import { GAEventCategories } from '/@/constants/gtag'
 import { TunnelModule } from '/@/constants/tunnel'
 import tunnel from '/@/services/tunnel'
 import { IDENTITIES, VALUABLE_LINKS } from '/@/config/app.config'
+import type { GitHubSponsorsResponse } from '/@/server/getters/github'
 
 export enum ProviderId {
   GitHub = 'github',
@@ -64,20 +65,40 @@ export const useSponsorState = (initId?: ProviderId) => {
   const activeId = ref(initId && providerIds.includes(initId) ? initId : providers[0].id)
   const activeProvider = computed(() => providers.find((t) => t.id === activeId.value)!)
 
-  const ghSponsors = ref<any>(null)
-  const ghSponsorsLoading = ref<boolean>(false)
+  const githubSponsorsLoading = ref<boolean>(false)
+  const githubSponsorsResponse = ref<GitHubSponsorsResponse | null>(null)
+  const currentGitHubSponsors = computed(() => {
+    return githubSponsorsResponse.value?.sponsors.edges.map((edge) => edge.node) || []
+  })
+  const pastGitHubSponsors = computed(() => {
+    // 1. sort by TIMESTAMP/DESC
+    // 2. filter out current sponsors
+    // 3. the latest user to cancel is at the head of the array
+    // 4. no cancellation events for one-time sponsor
+    const list = githubSponsorsResponse.value?.sponsorsActivities.nodes || []
+    const currentSponsorsLogin = currentGitHubSponsors.value.map((sponsor) => sponsor.login)
+    const pastList = list.filter((node) => {
+      return (
+        !currentSponsorsLogin.includes(node.sponsor.login) &&
+        node.sponsor.login !== 'ghost' &&
+        (node.action === 'CANCELLED_SPONSORSHIP' || node.sponsorsTier.isOneTime)
+      )
+    })
+    return pastList.map((item) => item.sponsor)
+  })
+
   const ensureGitHubSponsors = () => {
-    if (ghSponsors.value || ghSponsorsLoading.value) {
+    if (githubSponsorsResponse.value || githubSponsorsLoading.value) {
       return
     }
-    ghSponsorsLoading.value = true
+    githubSponsorsLoading.value = true
     tunnel
       .dispatch(TunnelModule.GitHubSponsors)
       .then((response) => {
-        ghSponsors.value = response
+        githubSponsorsResponse.value = response
       })
       .finally(() => {
-        ghSponsorsLoading.value = false
+        githubSponsorsLoading.value = false
       })
   }
 
@@ -106,7 +127,9 @@ export const useSponsorState = (initId?: ProviderId) => {
     activeId,
     activeProvider,
     setProviderId,
-    ghSponsors,
-    ghSponsorsLoading
+    githubSponsorsResponse,
+    currentGitHubSponsors,
+    pastGitHubSponsors,
+    githubSponsorsLoading
   }
 }

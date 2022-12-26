@@ -7,7 +7,7 @@
         <div class="sponsor-modal">
           <div class="sponsor">
             <sponsor-tabs class="tabs" :state="sponsorState" :hide-title="true" />
-            <sponsor-provider class="provider" :state="sponsorState" :max-sponsors="8" />
+            <sponsor-provider class="provider" :state="sponsorState" :max-sponsors="9" />
           </div>
         </div>
       </popup>

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v3.22.0 (2022-12-27)
+
+**Feature**
+
+- Improve github sponsors
+
 ### v3.21.0 (2022-12-23)
 
 **Feature**

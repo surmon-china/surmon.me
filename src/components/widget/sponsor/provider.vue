@@ -1,6 +1,6 @@
 <template>
   <div class="sponsor-provider" :class="activeProvider.id">
-    <p class="external">
+    <p class="external" v-if="activeProvider.link || activeProvider.address || activeProvider.text">
       <template v-if="activeProvider.link">
         <ulink class="link" :href="activeProvider.link">
           <code>{{ activeProvider.link }}</code>
@@ -28,34 +28,41 @@
       </ulink>
       <client-only>
         <transition name="module">
-          <div v-if="ghSponsors">
+          <div class="sponsor-box" v-if="allGitHubSponsors.length">
             <p class="total">
               <i18n>
                 <template #zh>
-                  我在 GitHub Sponsors 已得到 {{ ghSponsors.totalCount }} 位赞助者的支持。
+                  我在 GitHub Sponsors 累计已得到 {{ pastGitHubSponsors.length }}
+                  <span class="current-total"> + {{ currentGitHubSponsors.length }}</span>
+                  位赞助者的支持
                 </template>
                 <template #en>
-                  I have {{ ghSponsors.totalCount }} backers on GitHub Sponsors.
+                  I have accumulated {{ pastGitHubSponsors.length }}
+                  <span class="current-total"> + {{ currentGitHubSponsors.length }}</span>
+                  backers on GitHub Sponsors
                 </template>
               </i18n>
             </p>
-            <div class="users">
+            <div class="sponsors">
               <ulink
-                class="item"
-                :href="edge.node.url"
-                :title="edge.node.name"
-                v-for="(edge, index) in ghSponsors.edges.slice(0, maxSponsors)"
+                v-for="(item, index) in allGitHubSponsors.slice(0, maxSponsors)"
+                :href="item.sponsor.url"
+                :title="item.sponsor.name"
+                :class="['item', item.active ? 'active' : 'inactive']"
                 :key="index"
               >
-                <uimage class="avatar" :src="edge.node.avatarUrl" :alt="edge.node.name" />
+                <uimage
+                  class="avatar"
+                  :src="item.sponsor.avatarUrl"
+                  :alt="'@' + item.sponsor.login"
+                />
               </ulink>
               <ulink
                 class="more-link"
-                v-if="ghSponsors.edges.length > maxSponsors"
-                :href="VALUABLE_LINKS.GITHUB_SPONSORS + '#sponsors'"
+                v-if="allGitHubSponsors.length > maxSponsors"
+                :href="VALUABLE_LINKS.GITHUB_SPONSORS"
+                >+ {{ allGitHubSponsors.length - maxSponsors }}</ulink
               >
-                + {{ ghSponsors.edges.length - maxSponsors }}
-              </ulink>
             </div>
           </div>
         </transition>
@@ -65,7 +72,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType } from 'vue'
+  import { defineComponent, computed, PropType } from 'vue'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { useEnhancer } from '/@/app/enhancer'
   import { copy } from '/@/utils/clipboard'
@@ -79,11 +86,27 @@
       },
       maxSponsors: {
         type: Number,
-        default: 20
+        default: 19
       }
     },
     setup(props) {
       const { isZhLang } = useEnhancer()
+      const activeProvider = computed(() => props.state.activeProvider.value)
+      const currentGitHubSponsors = computed(() => props.state.currentGitHubSponsors.value)
+      const pastGitHubSponsors = computed(() => props.state.pastGitHubSponsors.value)
+      const allGitHubSponsors = computed(() => {
+        return [
+          ...currentGitHubSponsors.value.map((sponsor) => ({
+            active: true,
+            sponsor
+          })),
+          ...pastGitHubSponsors.value.map((sponsor) => ({
+            active: false,
+            sponsor
+          }))
+        ]
+      })
+
       const handleCopyAddress = (content: any) => {
         copy(content).then(() => {
           alert(isZhLang.value ? '地址已复制到剪贴板！' : 'Address copied!')
@@ -94,9 +117,10 @@
         VALUABLE_LINKS,
         ProviderId,
         providers,
-        activeProvider: props.state.activeProvider,
-        ghSponsors: props.state.ghSponsors,
-        ghSponsorsLoading: props.state.ghSponsorsLoading,
+        activeProvider,
+        currentGitHubSponsors,
+        pastGitHubSponsors,
+        allGitHubSponsors,
         handleCopyAddress
       }
     }
@@ -147,14 +171,13 @@
 
       .link {
         display: inline-block;
-        margin-bottom: 2rem;
         padding: 0 1em;
         line-height: 3em;
         border-radius: $sm-radius;
-        background: $module-bg-darker-2;
-        transition: background $transition-time-fast;
+        background-color: $module-bg-darker-2;
+        transition: background-color $transition-time-fast;
         &:hover {
-          background: $module-bg-darker-3;
+          background-color: $module-bg-darker-3;
           .text {
             color: $link-color;
           }
@@ -172,40 +195,72 @@
         }
       }
 
-      .total {
-        margin-bottom: 2rem;
-        font-weight: bold;
-      }
+      .sponsor-box {
+        margin-top: 2rem;
+        margin-bottom: $sm-gap;
 
-      .users {
-        max-width: 40rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-
-        .more-link {
-          margin-left: $sm-gap;
-          line-height: 2em;
+        .total {
+          margin-bottom: 2rem;
           font-weight: bold;
-          font-size: $font-size-h4;
-          color: $text-secondary;
-          &:hover {
-            color: $link-color;
+          .current-total {
+            color: $github-sponsor-primary;
           }
         }
 
-        .item {
-          display: flex;
-          flex-direction: column;
-          margin: $sm-gap $xs-gap;
+        .sponsors {
+          display: grid;
+          grid-template-columns: repeat(10, 1fr);
+          grid-column-gap: $sm-gap;
+          grid-row-gap: $gap;
 
-          .avatar {
-            width: 3rem;
-            height: 3rem;
-            border-radius: 100%;
-            background-color: $module-bg-darker-1;
-            overflow: hidden;
+          .item {
+            display: flex;
+            flex-direction: column;
+            &.active {
+              .avatar {
+                padding: 1px;
+                outline: 1px solid $github-sponsor-primary;
+                opacity: 0.8;
+              }
+              &:hover {
+                .avatar {
+                  opacity: 1;
+                }
+              }
+            }
+            &.inactive {
+              .avatar {
+                filter: grayscale(1);
+                opacity: 0.7;
+              }
+              &:hover {
+                .avatar {
+                  filter: grayscale(0);
+                  opacity: 1;
+                }
+              }
+            }
+
+            .avatar {
+              width: 3rem;
+              height: 3rem;
+              border-radius: 100%;
+              overflow: hidden;
+              background-color: $module-bg-darker-1;
+              transition: opacity $transition-time-fast;
+            }
+          }
+
+          .more-link {
+            margin-left: $sm-gap;
+            display: inline-flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: $font-size-h4;
+            color: $text-secondary;
+            &:hover {
+              color: $link-color;
+            }
           }
         }
       }
