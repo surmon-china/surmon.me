@@ -219,6 +219,7 @@
           padding: 0 1em;
           border-radius: $sm-radius;
           color: $white;
+          overflow: hidden;
           &.center {
             justify-content: center;
           }
