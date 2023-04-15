@@ -79,6 +79,8 @@ export const useSponsorState = (initId?: ProviderId) => {
     const currentSponsorsLogin = currentGitHubSponsors.value.map((sponsor) => sponsor.login)
     const pastList = list.filter((node) => {
       return (
+        // Recently, GitHub returned the Ghost user as null
+        Boolean(node) &&
         !currentSponsorsLogin.includes(node.sponsor.login) &&
         node.sponsor.login !== 'ghost' &&
         (node.action === 'CANCELLED_SPONSORSHIP' || node.sponsorsTier.isOneTime)
