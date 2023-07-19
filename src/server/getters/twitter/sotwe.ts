@@ -1,4 +1,4 @@
-import axios, { RawAxiosRequestHeaders, isAxiosError } from 'axios'
+import superagent from 'superagent'
 
 export interface SotweUserInfo {
   name: string
@@ -107,16 +107,18 @@ export const improveSotweTweet = (tweet: SotweTweet, resultHTML = false): string
   return result
 }
 
-export const getSotweAggregate = async (twitterUsername: string): Promise<SotweAggregate> => {
-  try {
-    const url = `https://api.sotwe.com/v3/user/${twitterUsername}`
-    // MARK: Don't try to simulate a browser request, it will be blocked by Cloudflare.
-    const headers: RawAxiosRequestHeaders = {
-      // 'User-Agent': 'PostmanRuntime/7.32.3'
-    }
-    const response = await axios.get<SotweAggregate>(url, { timeout: 8000, headers })
-    return response.data
-  } catch (error: unknown) {
-    throw isAxiosError(error) ? error.toJSON() : error
-  }
+const agent = superagent.agent()
+
+export const getSotweAggregate = (twitterUsername: string): Promise<SotweAggregate> => {
+  return agent
+    .get(`https://api.sotwe.com/v3/user/${twitterUsername}`)
+    .set('referer', 'https://www.sotwe.com/')
+    .set('Origin', 'https://www.sotwe.com')
+    .set('Accept', 'application/json, text/plain, */*')
+    .set('Accept-Language', 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,zh-TW;q=0.6')
+    .set(
+      'User-Agent',
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+    )
+    .then((response) => response.body)
 }
