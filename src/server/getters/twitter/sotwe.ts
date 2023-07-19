@@ -112,7 +112,7 @@ export const getSotweAggregate = async (twitterUsername: string): Promise<SotweA
     const url = `https://api.sotwe.com/v3/user/${twitterUsername}`
     // MARK: Don't try to simulate a browser request, it will be blocked by Cloudflare.
     const headers: RawAxiosRequestHeaders = {
-      'User-Agent': 'PostmanRuntime/7.32.3'
+      // 'User-Agent': 'PostmanRuntime/7.32.3'
     }
     const response = await axios.get<SotweAggregate>(url, { timeout: 8000, headers })
     return response.data
