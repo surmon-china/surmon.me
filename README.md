@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/surmon-china/surmon.me" target="blank">
-    <img src="/screenhots/logo.png" height="90" alt="surmon.me logo" />
+    <img src="/screenhots/logo.png" height="98" alt="surmon.me logo" />
   </a>
 </p>
 
