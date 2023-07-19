@@ -1,3 +1,128 @@
+<script lang="ts" setup>
+  import { reactive } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { RouteName } from '/@/app/router'
+  import { useStores } from '/@/stores'
+  import { useUniversalFetch } from '/@/universal'
+  import { getPageRoute } from '/@/transforms/route'
+  import { getStaticURL } from '/@/transforms/url'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import InstagramMedia from './media/instagram.vue'
+  import DoubanStatistic from './statistic/douban.vue'
+  import GithubStatistic from './statistic/github.vue'
+  import TwitterStatistic from './statistic/twitter.vue'
+  import NpmStatistic from './statistic/npm.vue'
+  import AggregateCalendar from './calendar/index.vue'
+  import FootprintMap from './footprint/index.vue'
+  import { useAboutPageMeta, getAdminAvatar, i18ns, SPECIAL_LINKS } from './shared'
+
+  const { gtag, gState, isZhLang } = useEnhancer()
+  const { adminInfo, appOption, sponsor } = useStores()
+
+  const handleGTagEvent = (event: string) => {
+    gtag?.event(event, {
+      event_category: GAEventCategories.About
+    })
+  }
+
+  const modalState = reactive({
+    wechat: false
+  })
+
+  const handleOpenWechat = () => {
+    modalState.wechat = true
+    handleGTagEvent('wechat_modal')
+  }
+
+  const handleSponsor = () => {
+    sponsor.fetch()
+    gState.toggleSwitcher('sponsor', true)
+    handleGTagEvent('sponsor_modal')
+  }
+
+  const handleStatement = () => {
+    gState.toggleSwitcher('statement', true)
+    handleGTagEvent('statement_modal')
+  }
+
+  const handleFeedback = () => {
+    gState.toggleSwitcher('feedback', true)
+    handleGTagEvent('feedback_modal')
+  }
+
+  // MARK: To prevent vite from parsing video.source.src as an asset instead of a static resource and failing to compile it
+  const backgroundVideo = getStaticURL('/assets/page-about-background.mp4')
+
+  // meta
+  useAboutPageMeta()
+  // prefetch
+  useUniversalFetch(() => Promise.all([adminInfo.fetch(), appOption.fetch()]))
+
+  const links = [
+    {
+      class: 'lens',
+      icon: 'icon-lens',
+      i18n: i18ns.lens,
+      route: getPageRoute(RouteName.Lens)
+    },
+    {
+      class: 'nft',
+      icon: 'icon-opensea',
+      i18n: i18ns.nft,
+      href: VALUABLE_LINKS.OPENSEA
+    },
+    {
+      class: 'archive',
+      icon: 'icon-quill',
+      i18n: i18ns.archive,
+      route: getPageRoute(RouteName.Archive)
+    },
+    {
+      class: 'guestbook',
+      icon: 'icon-comment',
+      i18n: i18ns.guestbook,
+      route: getPageRoute(RouteName.Guestbook)
+    },
+    {
+      class: 'feedback',
+      icon: 'icon-mail-plane',
+      i18n: i18ns.feedback,
+      onClick: handleFeedback
+    },
+    {
+      class: 'telegram',
+      icon: 'icon-telegram',
+      i18n: i18ns.telegramGroup,
+      href: VALUABLE_LINKS.TELEGRAM_GROUP
+    },
+    {
+      class: 'discord',
+      icon: 'icon-discord',
+      i18n: i18ns.discordGroup,
+      href: VALUABLE_LINKS.DISCORD_GROUP
+    },
+    {
+      class: 'sponsor',
+      icon: 'icon-heart',
+      i18n: i18ns.sponsor,
+      onClick: handleSponsor
+    },
+    {
+      class: 'statement',
+      icon: 'icon-faq',
+      i18n: i18ns.statement,
+      onClick: handleStatement
+    },
+    {
+      class: 'rss',
+      icon: 'icon-rss',
+      i18n: i18ns.rss,
+      href: VALUABLE_LINKS.RSS
+    }
+  ]
+</script>
+
 <template>
   <div class="about-page">
     <div class="page-banner">
@@ -118,163 +243,6 @@
     </container>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, reactive } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { RouteName } from '/@/app/router'
-  import { useStores } from '/@/stores'
-  import { useUniversalFetch } from '/@/universal'
-  import { getPageRoute } from '/@/transforms/route'
-  import { getTargetStaticURL } from '/@/transforms/url'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { META, VALUABLE_LINKS } from '/@/config/app.config'
-  import InstagramMedia from './media/instagram.vue'
-  import DoubanStatistic from './statistic/douban.vue'
-  import GithubStatistic from './statistic/github.vue'
-  import TwitterStatistic from './statistic/twitter.vue'
-  import NpmStatistic from './statistic/npm.vue'
-  import AggregateCalendar from './calendar/index.vue'
-  import FootprintMap from './footprint/index.vue'
-  import { useAboutPageMeta, getAdminAvatar, i18ns, SPECIAL_LINKS } from './shared'
-
-  export default defineComponent({
-    name: 'DesktopAboutPage',
-    components: {
-      FootprintMap,
-      AggregateCalendar,
-      DoubanStatistic,
-      GithubStatistic,
-      NpmStatistic,
-      TwitterStatistic,
-      InstagramMedia
-    },
-    setup() {
-      const { gtag, globalState, isZhLang, isDarkTheme } = useEnhancer()
-      const { adminInfo, appOption } = useStores()
-
-      const handleGTagEvent = (event: string) => {
-        gtag?.event(event, {
-          event_category: GAEventCategories.About
-        })
-      }
-
-      const modalState = reactive({
-        wechat: false
-      })
-
-      const handleOpenWechat = () => {
-        modalState.wechat = true
-        handleGTagEvent('wechat_modal')
-      }
-
-      const handleSponsor = () => {
-        globalState.toggleSwitcher('sponsor', true)
-        handleGTagEvent('sponsor_modal')
-      }
-
-      const handleStatement = () => {
-        globalState.toggleSwitcher('statement', true)
-        handleGTagEvent('statement_modal')
-      }
-
-      const handleFeedback = () => {
-        globalState.toggleSwitcher('feedback', true)
-        handleGTagEvent('feedback_modal')
-      }
-
-      // MARK: 非常有必要，vite 对 video.source.src 的解析有问题，会将其理解为 asset，而非 static resource，从而编译失败
-      const backgroundVideo = getTargetStaticURL('/assets/page-about-background.mp4')
-
-      // meta
-      useAboutPageMeta()
-      // prefetch
-      useUniversalFetch(() => Promise.all([adminInfo.fetch(), appOption.fetch()]))
-
-      const links = [
-        {
-          class: 'lens',
-          icon: 'icon-lens',
-          i18n: i18ns.lens,
-          route: getPageRoute(RouteName.Lens)
-        },
-        {
-          class: 'nft',
-          icon: 'icon-opensea',
-          i18n: i18ns.nft,
-          route: getPageRoute(RouteName.Nft)
-        },
-        {
-          class: 'archive',
-          icon: 'icon-quill',
-          i18n: i18ns.archive,
-          route: getPageRoute(RouteName.Archive)
-        },
-        {
-          class: 'guestbook',
-          icon: 'icon-comment',
-          i18n: i18ns.guestbook,
-          route: getPageRoute(RouteName.Guestbook)
-        },
-        {
-          class: 'feedback',
-          icon: 'icon-mail-plane',
-          i18n: i18ns.feedback,
-          onClick: handleFeedback
-        },
-        {
-          class: 'telegram',
-          icon: 'icon-telegram',
-          i18n: i18ns.telegramGroup,
-          href: VALUABLE_LINKS.TELEGRAM_GROUP
-        },
-        {
-          class: 'discord',
-          icon: 'icon-discord',
-          i18n: i18ns.discordGroup,
-          href: VALUABLE_LINKS.DISCORD_GROUP
-        },
-        {
-          class: 'sponsor',
-          icon: 'icon-heart',
-          i18n: i18ns.sponsor,
-          onClick: handleSponsor
-        },
-        {
-          class: 'statement',
-          icon: 'icon-faq',
-          i18n: i18ns.statement,
-          onClick: handleStatement
-        },
-        {
-          class: 'rss',
-          icon: 'icon-rss',
-          i18n: i18ns.rss,
-          href: VALUABLE_LINKS.RSS
-        }
-      ]
-
-      return {
-        i18ns,
-        links,
-        META,
-        VALUABLE_LINKS,
-        SPECIAL_LINKS,
-        isZhLang,
-        isDarkTheme,
-        modalState,
-        backgroundVideo,
-        adminInfo,
-        appOption,
-        getAdminAvatar,
-        handleGTagEvent,
-        handleFeedback,
-        handleStatement,
-        handleOpenWechat
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
@@ -588,7 +556,9 @@
         .right {
           color: $text-divider;
           opacity: 0.4;
-          transition: opacity $transition-time-fast, transform $transition-time-normal;
+          transition:
+            opacity $transition-time-fast,
+            transform $transition-time-normal;
         }
       }
     }
@@ -602,6 +572,7 @@
 
     .plogs,
     .vlogs,
+    .movies,
     .calendar {
       margin-bottom: $gap * 2;
       border-radius: $lg-radius;

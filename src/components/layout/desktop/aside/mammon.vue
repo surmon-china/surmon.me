@@ -1,9 +1,49 @@
+<script lang="ts" setup>
+  import { shallowRef } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
+
+  interface Props {
+    index?: number
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    index: 0
+  })
+
+  enum AsideMammonEvent {
+    Ready = 'ready',
+    UpdateIndex = 'update:index',
+    IndexChange = 'index-change'
+  }
+
+  const emit = defineEmits<{
+    (e: AsideMammonEvent.Ready, swiper: SwiperClass): void
+    (e: AsideMammonEvent.UpdateIndex, index: number | void): void
+    (e: AsideMammonEvent.IndexChange, index: number | void): void
+  }>()
+
+  // emits: [AsideMammonEvent.Ready, AsideMammonEvent.UpdateIndex, AsideMammonEvent.IndexChange]
+  const { adConfig } = useEnhancer()
+  const swiperRef = shallowRef<SwiperClass>()
+  const updateSwiper = (_swiper: SwiperClass) => {
+    swiperRef.value = _swiper
+    emit(AsideMammonEvent.Ready, swiperRef.value)
+  }
+
+  const handleSlideChange = () => {
+    const realIndex = swiperRef.value?.realIndex
+    emit(AsideMammonEvent.UpdateIndex, realIndex)
+    emit(AsideMammonEvent.IndexChange, realIndex)
+  }
+</script>
+
 <template>
   <div class="mammon">
     <swiper
       class="swiper"
       direction="vertical"
-      :initial-slide="index"
+      :initial-slide="props.index"
       :loop="true"
       :simulate-touch="false"
       :autoplay="{ delay: 2800, disableOnInteraction: false }"
@@ -12,16 +52,10 @@
       :auto-height="true"
       :mousewheel="true"
       :observe-parents="true"
-      :preload-images="false"
-      :lazy="true"
       @swiper="updateSwiper"
       @slide-change-transition-end="handleSlideChange"
     >
-      <swiper-slide
-        class="swiper-slide"
-        :key="_index"
-        v-for="(ad, _index) in adConfig.PC_ASIDE_SWIPER"
-      >
+      <swiper-slide class="swiper-slide" :key="_index" v-for="(ad, _index) in adConfig.PC_ASIDE_SWIPER">
         <ulink class="content" :href="ad.url">
           <uimage :src="ad.src" alt="aside-swiper-ad" />
           <i class="iconfont icon-ad"></i>
@@ -30,55 +64,6 @@
     </swiper>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
-
-  export enum AsideMammonEvent {
-    Ready = 'ready',
-    UpdateIndex = 'update:index',
-    IndexChange = 'index-change'
-  }
-  export default defineComponent({
-    name: 'DesktopAsideMammon',
-    components: {
-      Swiper,
-      SwiperSlide
-    },
-    props: {
-      index: {
-        type: Number,
-        default: 0
-      },
-      ready: {
-        type: Object
-      }
-    },
-    emits: [AsideMammonEvent.Ready, AsideMammonEvent.UpdateIndex, AsideMammonEvent.IndexChange],
-    setup(props, context) {
-      const { adConfig } = useEnhancer()
-      const swiper = ref<SwiperClass>()
-      const updateSwiper = (_swiper: SwiperClass) => {
-        swiper.value = _swiper
-        context.emit(AsideMammonEvent.Ready, swiper.value)
-      }
-
-      const handleSlideChange = () => {
-        const realIndex = swiper.value?.realIndex
-        context.emit(AsideMammonEvent.UpdateIndex, realIndex)
-        context.emit(AsideMammonEvent.IndexChange, realIndex)
-      }
-
-      return {
-        adConfig,
-        updateSwiper,
-        handleSlideChange
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

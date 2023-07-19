@@ -39,8 +39,7 @@ export default defineComponent({
       // YYYY-MM-DD mm
       if (props.to === 'YMDm') {
         const ymd = dateToYMD(date, props.separator)
-        const meridiem =
-          date.getHours() > 11 ? i18n.t(LanguageKey.MOMENT_PM) : i18n.t(LanguageKey.MOMENT_AM)
+        const meridiem = date.getHours() > 11 ? i18n.t(LanguageKey.MOMENT_PM) : i18n.t(LanguageKey.MOMENT_AM)
         return `${ymd} ${meridiem}`
       }
 

@@ -1,3 +1,52 @@
+<script lang="ts" setup>
+  import { ref, computed, nextTick, onMounted, onUpdated } from 'vue'
+  import { LanguageKey } from '/@/language'
+  import { Article } from '/@/interfaces/article'
+  import { useArticleDetailStore } from '/@/stores/article'
+  import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
+  import { numberSplit } from '/@/transforms/text'
+  import Markdown from '/@/components/common/markdown.vue'
+
+  enum Events {
+    Rendered = 'rendered'
+  }
+
+  const props = defineProps<{
+    article: Article
+    readmoreId: string
+  }>()
+
+  const emit = defineEmits<{
+    (e: Events.Rendered, v: HTMLDivElement): void
+  }>()
+
+  const ctxStore = useArticleDetailStore()
+  const isHybrid = computed(() => isHybridType(props.article.origin!))
+  const isReprint = computed(() => isReprintType(props.article.origin!))
+  const isOriginal = computed(() => isOriginalType(props.article.origin!))
+
+  const element = ref<HTMLDivElement>()
+  const isRenderMoreContent = ref(false)
+  const isRenderMoreEnabled = computed(() => ctxStore.isLongContent && !ctxStore.renderedFullContent)
+
+  const handleRenderMore = () => {
+    isRenderMoreContent.value = true
+    nextTick(() => {
+      setTimeout(() => {
+        ctxStore.renderFullContent()
+        isRenderMoreContent.value = false
+      }, 0)
+    })
+  }
+
+  const handleFullContentRendered = () => {
+    emit(Events.Rendered, element.value!)
+  }
+
+  onMounted(() => handleFullContentRendered())
+  onUpdated(() => handleFullContentRendered())
+</script>
+
 <template>
   <div ref="element" class="detail">
     <transition name="module">
@@ -20,18 +69,14 @@
         <div class="meta">
           <i class="iconfont icon-t"></i>
           <i18n
-            :zh="`共 ${numberSplit(articleDetailStore.contentLength)} 字，需阅读 ${
-              articleDetailStore.readMinutes
-            } 分钟`"
-            :en="`${numberSplit(articleDetailStore.contentLength)} words, ${
-              articleDetailStore.readMinutes
-            } min read`"
+            :zh="`共 ${numberSplit(ctxStore.contentLength)} 字，需阅读 ${ctxStore.readMinutes} 分钟`"
+            :en="`${numberSplit(ctxStore.contentLength)} words, ${ctxStore.readMinutes} min read`"
           />
           <responsive desktop>
             <divider type="vertical" class="vertical" />
             <span>
               <i class="iconfont icon-clock-outline"></i>
-              <udate to="YMDm" :date="article.create_at" separator="/" />
+              <udate to="YMDm" :date="article.created_at" separator="/" />
             </span>
           </responsive>
           <divider type="vertical" class="vertical" />
@@ -42,98 +87,19 @@
           </span>
         </div>
       </div>
-      <markdown :html="articleDetailStore.defaultContent?.html" />
+      <markdown :html="ctxStore.defaultContent?.html" />
       <transition name="module" mode="out-in" @after-enter="handleFullContentRendered">
         <div :id="readmoreId" v-if="isRenderMoreEnabled" class="readmore">
           <button class="readmore-btn" :disabled="isRenderMoreContent" @click="handleRenderMore">
-            <i18n
-              :k="
-                isRenderMoreContent ? LanguageKey.ARTICLE_RENDERING : LanguageKey.ARTICLE_READ_ALL
-              "
-            />
+            <i18n :k="isRenderMoreContent ? LanguageKey.ARTICLE_RENDERING : LanguageKey.ARTICLE_READ_ALL" />
             <i class="iconfont icon-loadmore"></i>
           </button>
         </div>
-        <markdown
-          v-else-if="articleDetailStore.renderedFullContent"
-          :html="articleDetailStore.moreContent?.html"
-        />
+        <markdown v-else-if="ctxStore.renderedFullContent" :html="ctxStore.moreContent?.html" />
       </transition>
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, computed, nextTick, onMounted, onUpdated, PropType } from 'vue'
-  import { LanguageKey } from '/@/language'
-  import { Article, useArticleDetailStore } from '/@/stores/article'
-  import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
-  import { numberSplit } from '/@/transforms/text'
-  import Markdown from '/@/components/common/markdown.vue'
-
-  export enum Events {
-    Rendered = 'rendered'
-  }
-
-  export default defineComponent({
-    name: 'ArticleContent',
-    components: { Markdown },
-    props: {
-      article: {
-        type: Object as PropType<Article>,
-        required: true
-      },
-      readmoreId: {
-        type: String,
-        required: true
-      }
-    },
-    emits: [Events.Rendered],
-    setup(props, context) {
-      const articleDetailStore = useArticleDetailStore()
-      const isHybrid = computed(() => isHybridType(props.article.origin!))
-      const isReprint = computed(() => isReprintType(props.article.origin!))
-      const isOriginal = computed(() => isOriginalType(props.article.origin!))
-
-      const element = ref<HTMLElement>()
-      const isRenderMoreContent = ref(false)
-      const isRenderMoreEnabled = computed(() => {
-        return articleDetailStore.isLongContent && !articleDetailStore.renderedFullContent
-      })
-
-      const handleRenderMore = () => {
-        isRenderMoreContent.value = true
-        nextTick(() => {
-          setTimeout(() => {
-            articleDetailStore.renderFullContent()
-            isRenderMoreContent.value = false
-          }, 0)
-        })
-      }
-
-      const handleFullContentRendered = () => {
-        context.emit(Events.Rendered, element.value)
-      }
-
-      onMounted(() => handleFullContentRendered())
-      onUpdated(() => handleFullContentRendered())
-
-      return {
-        LanguageKey,
-        element,
-        isHybrid,
-        isReprint,
-        isOriginal,
-        articleDetailStore,
-        isRenderMoreEnabled,
-        isRenderMoreContent,
-        numberSplit,
-        handleRenderMore,
-        handleFullContentRendered
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

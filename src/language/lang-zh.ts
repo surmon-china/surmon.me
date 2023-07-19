@@ -14,7 +14,6 @@ export const zhLangMap: LanguageMap = {
   [LanguageKey.PAGE_SPONSOR]: '赞助',
   [LanguageKey.PAGE_APP]: '客户端',
   [LanguageKey.PAGE_LENS]: '茫涯',
-  [LanguageKey.PAGE_NFT]: '藏品',
   [LanguageKey.STATISTIC_ARTICLES]: '全站文章',
   [LanguageKey.STATISTIC_COMMENTS]: '全站评论',
   [LanguageKey.STATISTIC_TAGS]: '全站标签',

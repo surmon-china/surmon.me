@@ -1,3 +1,20 @@
+<script lang="ts" setup>
+  import { ref, onMounted } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useNpmStatisticStore } from '/@/stores/statistic'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import StatisticBase, { StatisticCount } from './base.vue'
+
+  const { isZhLang } = useEnhancer()
+  const store = useNpmStatisticStore()
+  const fetching = ref(true)
+  onMounted(() => {
+    store.fetch().finally(() => {
+      fetching.value = false
+    })
+  })
+</script>
+
 <template>
   <statistic-base
     brand="npm"
@@ -9,78 +26,27 @@
   >
     <p class="line-1">
       <i class="iconfont icon-package"></i>
-      <i18n>
-        <template #zh>
-          <span>发布了</span>
-          <statistic-count :count="store.totalPackages" />
-          <span>个公共软件包</span>
-        </template>
-        <template #en>
-          <statistic-count :count="store.totalPackages" />
-          <span>packages</span>
-        </template>
-      </i18n>
+      <span v-if="isZhLang">发布了</span>
+      <statistic-count :count="store.totalPackages" />
+      <span v-if="isZhLang">个公共软件包</span>
+      <span v-else>packages</span>
     </p>
     <p>
       <i class="iconfont icon-download"></i>
-      <i18n>
-        <template #zh>
-          <span>被下载</span>
-          <statistic-count large primary split :count="store.totalDownloads" />
-          <span>次</span>
-        </template>
-        <template #en>
-          <statistic-count large primary split :count="store.totalDownloads" />
-          <span>downs</span>
-        </template>
-      </i18n>
+      <span v-if="isZhLang">被下载</span>
+      <statistic-count large primary split :count="store.totalDownloads" />
+      <span v-if="isZhLang">次</span>
+      <span v-else>downs</span>
     </p>
     <p>
       <i class="iconfont icon-score"></i>
-      <i18n>
-        <template #zh>
-          <span>平均评分</span>
-          <statistic-count :count="store.averageScore" />
-          <span>分</span>
-        </template>
-        <template #en>
-          <statistic-count :count="store.averageScore" />
-          <span>average score</span>
-        </template>
-      </i18n>
+      <span v-if="isZhLang">平均评分</span>
+      <statistic-count :count="store.averageScore" />
+      <span v-if="isZhLang">分</span>
+      <span v-else>average score</span>
     </p>
   </statistic-base>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, onMounted } from 'vue'
-  import { useNPMStatisticStore } from '/@/stores/statistic'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-  import StatisticBase, { StatisticCount } from './base.vue'
-
-  export default defineComponent({
-    name: 'AboutPageNPMStatistic',
-    components: { StatisticBase, StatisticCount },
-    setup() {
-      const { isZhLang } = useEnhancer()
-      const fetching = ref(true)
-      const store = useNPMStatisticStore()
-      onMounted(() => {
-        store.fetch().finally(() => {
-          fetching.value = false
-        })
-      })
-
-      return {
-        VALUABLE_LINKS,
-        isZhLang,
-        fetching,
-        store
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

@@ -1,3 +1,48 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { LanguageKey } from '/@/language'
+  import { Theme } from '/@/composables/theme'
+  import { HEADER_ELEMENT_ID } from '/@/constants/anchor'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { META } from '/@/config/app.config'
+  import { menus } from './menu'
+
+  const { i18n: _i18n, gtag, theme, gState } = useEnhancer()
+  // enable header nav bar when full page layout
+  const isEnabledNav = computed(() => !gState.layoutColumn.value.isNormal)
+
+  const themeIcon = computed(() => {
+    const themeIconMap = {
+      [Theme.Light]: 'icon-sun',
+      [Theme.Dark]: 'icon-moon'
+    }
+    return themeIconMap[theme.theme.value]
+  })
+
+  const toggleTheme = () => {
+    theme.toggle()
+    gtag?.event('switch_theme', {
+      event_category: GAEventCategories.Widget,
+      event_label: theme.theme.value
+    })
+  }
+
+  const tooggleLanguage = () => {
+    _i18n.toggle()
+    gtag?.event('switch_language', {
+      event_category: GAEventCategories.Widget,
+      event_label: _i18n.l.value?.name
+    })
+  }
+
+  const handleRootNavEvent = () => {
+    gtag?.event('root_header_home_nav', {
+      event_category: GAEventCategories.Universal
+    })
+  }
+</script>
+
 <template>
   <header :id="HEADER_ELEMENT_ID" class="header" :class="{ 'enable-nav': isEnabledNav }">
     <div class="header-container container">
@@ -6,21 +51,16 @@
         <webfont class="header-slogan">
           <i18n :k="LanguageKey.APP_SLOGAN" />
         </webfont>
-        <router-link
-          to="/"
-          class="header-link"
-          :title="META.title"
-          @mousedown="handleRootNavEvent"
-        />
+        <router-link to="/" class="header-link" :title="META.title" @mousedown="handleRootNavEvent" />
       </div>
       <div class="toolbox">
         <button class="button menu" v-if="isEnabledNav">
           <i class="iconfont icon-top-menu"></i>
         </button>
         <button class="button language" title="Switch language" @click="tooggleLanguage">
-          {{ language || '-' }}
+          {{ _i18n.language.value || '-' }}
         </button>
-        <button class="button theme" :class="theme" @click="toggleTheme">
+        <button class="button theme" :class="theme.theme.value" @click="toggleTheme">
           <i class="iconfont" :class="themeIcon"></i>
         </button>
       </div>
@@ -47,72 +87,6 @@
     </div>
   </header>
 </template>
-
-<script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
-  import { Theme } from '/@/composables/theme'
-  import { HEADER_ELEMENT_ID } from '/@/constants/anchor'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { META } from '/@/config/app.config'
-  import { menus } from './menu'
-
-  export default defineComponent({
-    name: 'DesktopHeader',
-    setup() {
-      const { i18n, gtag, theme, globalState } = useEnhancer()
-      // enable header nav bar when full page layout
-      const isEnabledNav = computed(() => !globalState.layoutColumn.value.isNormal)
-
-      const themeValue = theme.theme
-      const themeIcon = computed(() => {
-        const themeIconMap = {
-          [Theme.Light]: 'icon-sun',
-          [Theme.Dark]: 'icon-moon'
-        }
-        return themeIconMap[themeValue.value]
-      })
-
-      const toggleTheme = () => {
-        theme.toggle()
-        gtag?.event('switch_theme', {
-          event_category: GAEventCategories.Widget,
-          event_label: theme.theme.value
-        })
-      }
-
-      const tooggleLanguage = () => {
-        i18n.toggle()
-        gtag?.event('switch_language', {
-          event_category: GAEventCategories.Widget,
-          event_label: i18n.l.value?.name
-        })
-      }
-
-      const handleRootNavEvent = () => {
-        gtag?.event('root_header_home_nav', {
-          event_category: GAEventCategories.Universal
-        })
-      }
-
-      return {
-        menus,
-        META,
-        HEADER_ELEMENT_ID,
-        LanguageKey,
-        isEnabledNav,
-        handleRootNavEvent,
-        t: i18n.t,
-        language: i18n.language,
-        tooggleLanguage,
-        theme: themeValue,
-        themeIcon,
-        toggleTheme
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

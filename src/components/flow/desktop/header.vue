@@ -1,16 +1,26 @@
+<script lang="ts" setup>
+  import { getCDN_URL } from '/@/transforms/url'
+
+  const props = defineProps<{
+    icon: string
+    backgroundColor?: string
+    backgroundImage?: string
+  }>()
+</script>
+
 <template>
   <div class="header">
     <div
       class="background"
       :style="{
-        backgroundColor,
-        backgroundImage: `url(${backgroundImageUrl})`
+        backgroundColor: props.backgroundColor,
+        backgroundImage: `url(${props.backgroundImage ?? getCDN_URL('/images/thumbnail/carrousel.jpg')})`
       }"
     />
     <div class="content">
       <div class="logo">
         <transition name="module" mode="out-in">
-          <i key="date" class="iconfont" :class="icon"></i>
+          <i key="date" class="iconfont" :class="props.icon"></i>
         </transition>
       </div>
       <div class="title">
@@ -21,40 +31,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { LanguageKey } from '/@/language'
-  import { getTargetCDNURL } from '/@/transforms/url'
-
-  export default defineComponent({
-    name: 'FlowArticleListHeader',
-    props: {
-      backgroundColor: {
-        type: String,
-        default: ''
-      },
-      backgroundImage: {
-        type: String,
-        default: ''
-      },
-      icon: {
-        type: String,
-        required: true
-      }
-    },
-    setup(props) {
-      const backgroundImageUrl = computed(() => {
-        return props.backgroundImage || getTargetCDNURL('/images/thumbnail/carrousel.jpg')
-      })
-
-      return {
-        LanguageKey,
-        backgroundImageUrl
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
@@ -95,7 +71,9 @@
       background-position: center center;
       transform: scale(1.05);
       filter: grayscale(0.3);
-      transition: transform $transition-time-fast, filter $transition-time-fast;
+      transition:
+        transform $transition-time-fast,
+        filter $transition-time-fast;
     }
 
     .content {

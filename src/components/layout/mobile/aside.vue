@@ -1,21 +1,56 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+  import { Language, LanguageKey } from '/@/language'
+  import { RouteName, CategorySlug } from '/@/app/router'
+  import { Theme } from '/@/composables/theme'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useUniversalFetch } from '/@/universal'
+  import { useAdminInfoStore } from '/@/stores/basic'
+  import { getDefaultAvatar } from '/@/transforms/avatar'
+  import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
+  import { VALUABLE_LINKS, META } from '/@/config/app.config'
+
+  const { i18n: _i18n, theme } = useEnhancer()
+  const adminInfoStore = useAdminInfoStore()
+  const avatar = computed(() => adminInfoStore.data?.avatar || getDefaultAvatar())
+
+  const themeIcon = computed(() => {
+    const themeIconMap = {
+      [Theme.Light]: 'icon-sun',
+      [Theme.Dark]: 'icon-moon'
+    }
+    return themeIconMap[theme.theme.value]
+  })
+
+  const languageIcon = computed(() => {
+    const languageIconMap = {
+      [Language.Chinese]: 'icon-chinese',
+      [Language.English]: 'icon-english'
+    }
+    return languageIconMap[_i18n.language.value]
+  })
+
+  useUniversalFetch(() => adminInfoStore.fetch())
+</script>
+
 <template>
   <aside class="aside">
     <div class="aside-user">
       <div class="avatar">
-        <uimage :src="avatar" :alt="author" />
+        <uimage :src="avatar" :alt="META.author" />
       </div>
       <div class="profile">
-        <h3 class="name">{{ author }}</h3>
+        <h3 class="name">{{ META.author }}</h3>
         <webfont class="slogan">
           <i18n :k="LanguageKey.APP_SLOGAN" />
         </webfont>
       </div>
     </div>
     <div class="aside-tool">
-      <div class="item" @click="toggleTheme">
+      <div class="item" @click="theme.toggle">
         <i class="iconfont" :class="themeIcon"></i>
       </div>
-      <div class="item" @click="tooggleLanguage">
+      <div class="item" @click="_i18n.toggle">
         <i class="iconfont" :class="languageIcon"></i>
       </div>
     </div>
@@ -76,61 +111,6 @@
     </div>
   </aside>
 </template>
-
-<script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { Language, LanguageKey } from '/@/language'
-  import { RouteName, CategorySlug } from '/@/app/router'
-  import { Theme } from '/@/composables/theme'
-  import { useUniversalFetch } from '/@/universal'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useAdminInfoStore } from '/@/stores/basic'
-  import { getDefaultAvatar } from '/@/transforms/avatar'
-  import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
-  import { VALUABLE_LINKS, META } from '/@/config/app.config'
-
-  export default defineComponent({
-    name: 'MobileAside',
-    setup() {
-      const { theme, i18n } = useEnhancer()
-      const adminInfoStore = useAdminInfoStore()
-      const avatar = computed(() => adminInfoStore.data?.avatar || getDefaultAvatar())
-
-      const themeIcon = computed(() => {
-        const themeIconMap = {
-          [Theme.Light]: 'icon-sun',
-          [Theme.Dark]: 'icon-moon'
-        }
-        return themeIconMap[theme.theme.value]
-      })
-
-      const languageIcon = computed(() => {
-        const languageIconMap = {
-          [Language.Chinese]: 'icon-chinese',
-          [Language.English]: 'icon-english'
-        }
-        return languageIconMap[i18n.language.value]
-      })
-
-      useUniversalFetch(() => adminInfoStore.fetch())
-
-      return {
-        VALUABLE_LINKS,
-        LanguageKey,
-        RouteName,
-        CategorySlug,
-        getPageRoute,
-        getCategoryFlowRoute,
-        avatar,
-        author: META.author,
-        themeIcon,
-        languageIcon,
-        toggleTheme: theme.toggle,
-        tooggleLanguage: i18n.toggle
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

@@ -1,3 +1,23 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+
+  const props = defineProps<{
+    date: string
+    tweets: number
+    instagrams: number
+    articles: number
+    contributions: number
+    githubColor?: string
+  }>()
+
+  const { isDarkTheme } = useEnhancer()
+  const total = computed(() => props.articles + props.tweets + props.contributions + props.instagrams)
+  const getPointHeightStyle = (value: number) => {
+    return isNaN(value) ? 0 : `${Math.floor(value * 100)}%`
+  }
+</script>
+
 <template>
   <div
     class="day"
@@ -48,53 +68,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-
-  export default defineComponent({
-    name: 'AggregateCalendarDay',
-    props: {
-      date: {
-        type: String,
-        required: true
-      },
-      tweets: {
-        type: Number,
-        required: true
-      },
-      instagrams: {
-        type: Number,
-        required: true
-      },
-      articles: {
-        type: Number,
-        required: true
-      },
-      contributions: {
-        type: Number,
-        required: true
-      },
-      githubColor: String
-    },
-    setup(props) {
-      const { isDarkTheme } = useEnhancer()
-      const total = computed(
-        () => props.articles + props.tweets + props.contributions + props.instagrams
-      )
-      const getPointHeightStyle = (value: number) => {
-        return isNaN(value) ? 0 : `${Math.floor(value * 100)}%`
-      }
-
-      return {
-        isDarkTheme,
-        total,
-        getPointHeightStyle
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
@@ -197,6 +170,8 @@
           }
           &.tweet {
             color: $twitter-primary;
+            /* A token to indicate that twitter is no longer supported */
+            text-decoration: line-through;
           }
           &.instagram {
             color: $instagram-primary;

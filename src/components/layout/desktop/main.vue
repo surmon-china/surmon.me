@@ -1,3 +1,51 @@
+<script lang="ts" setup>
+  import { onMounted } from 'vue'
+  import { MAIN_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useMusic } from '/@/composables/music'
+  import { useWallpaperStore } from '/@/stores/wallpaper'
+  import { getLayoutByRouteMeta } from '/@/transforms/layout'
+  import MusicPlayerHandle from '/@/components/widget/music-player/handle.vue'
+  import Wallflower from '/@/components/widget/wallflower/garden.vue'
+  import Wallpaper from '/@/components/widget/wallpaper/switcher.vue'
+  import Background from '/@/components/widget/background.vue'
+  import { useSponsorState } from '/@/components/widget/sponsor/state'
+  import SponsorTabs from '/@/components/widget/sponsor/tabs.vue'
+  import SponsorProvider from '/@/components/widget/sponsor/provider.vue'
+  import Share from '/@/components/widget/share.vue'
+  import Toolbox from '/@/components/widget/toolbox.vue'
+  import Feedback from '/@/components/widget/feedback.vue'
+  import Statement from '/@/components/widget/statement.vue'
+  import NavView from './nav.vue'
+  import AsideView from './aside/index.vue'
+  import HeaderView from './header.vue'
+  import FooterView from './footer.vue'
+
+  const sponsorState = useSponsorState()
+  const wallpaperStore = useWallpaperStore()
+  const { route, gState } = useEnhancer()
+  const { switcher, layoutColumn } = gState
+  const handlePageTransitionDone = () => {
+    gState.setLayoutColumn(getLayoutByRouteMeta(route.meta))
+  }
+  const handleSponsorModalClose = () => {
+    gState.toggleSwitcher('sponsor', false)
+  }
+  const handleFeedbackModalClose = () => {
+    gState.toggleSwitcher('feedback', false)
+  }
+  const handleStatementModalClose = () => {
+    gState.toggleSwitcher('statement', false)
+  }
+
+  onMounted(() => {
+    // bing wallpaper
+    wallpaperStore.fetch()
+    // music player
+    useMusic().init()
+  })
+</script>
+
 <template>
   <div class="desktop-main">
     <background />
@@ -32,11 +80,7 @@
       </client-only>
     </template>
     <header-view />
-    <main
-      :id="MAIN_ELEMENT_ID"
-      class="main-container"
-      :class="{ 'full-page': layoutColumn.isFull }"
-    >
+    <main :id="MAIN_ELEMENT_ID" class="main-container" :class="{ 'full-page': layoutColumn.isFull }">
       <!-- MARK: keep order > long content > flicker -->
       <nav-view class="nav-view" v-if="layoutColumn.isNormal" />
       <aside-view class="aside-view" v-if="layoutColumn.isNormal" />
@@ -50,11 +94,11 @@
         }"
       >
         <!-- unuse suspense -> async route component -> can't extract style to css file -->
-        <router-view v-slot="{ Component, route }">
+        <router-view v-slot="{ Component, route: r }">
           <div class="router-view">
             <transition name="page" mode="out-in" @before-enter="handlePageTransitionDone">
               <suspense>
-                <component :is="Component" :key="route.name" />
+                <component :is="Component" :key="r.name" />
               </suspense>
             </transition>
           </div>
@@ -64,88 +108,6 @@
     <footer-view class="footer-view" />
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, onMounted } from 'vue'
-  import { MAIN_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
-  import { LanguageKey } from '/@/language'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useMusic } from '/@/composables/music'
-  import { useWallpaperStore } from '/@/stores/wallpaper'
-  import { getLayoutByRouteMeta } from '/@/transforms/layout'
-  import MusicPlayerHandle from '/@/components/widget/music-player/handle.vue'
-  import Wallflower from '/@/components/widget/wallflower/garden.vue'
-  import Wallpaper from '/@/components/widget/wallpaper/switcher.vue'
-  import Background from '/@/components/widget/background.vue'
-  import { useSponsorState } from '/@/components/widget/sponsor/state'
-  import SponsorTabs from '/@/components/widget/sponsor/tabs.vue'
-  import SponsorProvider from '/@/components/widget/sponsor/provider.vue'
-  import Share from '/@/components/widget/share.vue'
-  import Toolbox from '/@/components/widget/toolbox.vue'
-  import Feedback from '/@/components/widget/feedback.vue'
-  import Statement from '/@/components/widget/statement.vue'
-  import NavView from './nav.vue'
-  import AsideView from './aside/index.vue'
-  import HeaderView from './header.vue'
-  import FooterView from './footer.vue'
-
-  export default defineComponent({
-    name: 'DesktopMain',
-    components: {
-      Share,
-      Feedback,
-      Wallpaper,
-      Statement,
-      SponsorTabs,
-      SponsorProvider,
-      MusicPlayerHandle,
-      Toolbox,
-      Wallflower,
-      Background,
-      HeaderView,
-      FooterView,
-      AsideView,
-      NavView
-    },
-    setup() {
-      const sponsorState = useSponsorState()
-      const wallpaperStore = useWallpaperStore()
-      const { route, globalState } = useEnhancer()
-      const handlePageTransitionDone = () => {
-        globalState.setLayoutColumn(getLayoutByRouteMeta(route.meta))
-      }
-      const handleSponsorModalClose = () => {
-        globalState.toggleSwitcher('sponsor', false)
-      }
-      const handleFeedbackModalClose = () => {
-        globalState.toggleSwitcher('feedback', false)
-      }
-      const handleStatementModalClose = () => {
-        globalState.toggleSwitcher('statement', false)
-      }
-
-      onMounted(() => {
-        // bing wallpaper
-        wallpaperStore.fetch()
-        // music player
-        useMusic().init()
-      })
-
-      return {
-        LanguageKey,
-        MAIN_ELEMENT_ID,
-        MAIN_CONTENT_ELEMENT_ID,
-        switcher: globalState.switcher,
-        layoutColumn: globalState.layoutColumn,
-        sponsorState,
-        handlePageTransitionDone,
-        handleSponsorModalClose,
-        handleFeedbackModalClose,
-        handleStatementModalClose
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

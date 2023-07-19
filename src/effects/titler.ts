@@ -6,31 +6,8 @@
 
 import { renderTextToDataURL } from '/@/transforms/text-2-image'
 
-// matcher
-export interface Titler {
-  day: number
-  month: number
-  year: number
-  title: string
-  favicon: string
-}
-
-const matchTitler = (titlers: Array<Titler>) => {
-  const now = new Date()
-  const today = now.getDate()
-  const tomonth = now.getMonth() + 1
-  const toyear = now.getFullYear()
-  return titlers.find((egg) => {
-    const isToday = egg.day === today
-    const isTomonth = egg.month == null || egg.month === tomonth
-    const isToyear = egg.year == null || egg.year === toyear
-    return isToday && isTomonth && isToyear
-  })
-}
-
-// roll
+// title
 let rollTimer: number
-const titleInterval = 366
 const setTitle = (title: string) => {
   document.title = title
   if (title.length <= 10) {
@@ -38,7 +15,7 @@ const setTitle = (title: string) => {
   }
   const [first, ...content] = title.split('')
   const newTitle = [...content, first].join('')
-  rollTimer = window.setTimeout(() => setTitle(newTitle), titleInterval)
+  rollTimer = window.setTimeout(() => setTitle(newTitle), 366)
 }
 
 // favicon
@@ -53,16 +30,20 @@ const setFavicon = async (target) => {
     ?.setAttribute('href', target)
 }
 
-const reallyFavicon = getFavicon()!
-let reallyTitle = document.title
+const cache = {
+  favicon: getFavicon()!,
+  title: document.title
+}
 
 export const resetTitler = () => {
-  document.title = reallyTitle
-  setFavicon(reallyFavicon)
+  setFavicon(cache.favicon)
+  document.title = cache.title
+  window.clearTimeout(rollTimer)
 }
 
 export const runTitler = async ({ favicon, title }) => {
-  reallyTitle = document.title
-  document.title = title
+  cache.title = document.title
+  cache.favicon = getFavicon()!
+  setTitle(title + ' ')
   setFavicon(await renderTextToDataURL(favicon, 28))
 }

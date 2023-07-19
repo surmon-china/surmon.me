@@ -4,52 +4,40 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import dotenv from 'dotenv'
 import express from 'express'
 import { NODE_ENV, isDev } from '@/environment'
-import { TunnelModule } from '@/constants/tunnel'
 import { BFF_TUNNEL_PREFIX, getBFFServerPort } from '@/config/bff.config'
-import { getRSSXML } from './server/getters/rss'
-import { getSitemapXML } from './server/getters/sitemap'
+import { TunnelModule } from '@/constants/tunnel'
+import { BAD_REQUEST } from '@/constants/error'
+import { getRssXml } from './server/getters/rss'
+import { getSitemapXml } from './server/getters/sitemap'
 import { getGTagScript } from './server/getters/gtag'
 import { getAllWallpapers } from './server/getters/wallpaper'
 import { getMyGoogleMap } from './server/getters/my-google-map'
+import { getTwitterAggregate } from './server/getters/twitter'
 import { getGitHubSponsors, getGitHubContributions } from './server/getters/github'
-import {
-  getTwitterTweets,
-  getTwitterUserinfo,
-  getTwitterCalendar,
-  initTwitterCalendar
-} from './server/getters/twitter'
-import {
-  getInstagramMedias,
-  getInstagramCalendar,
-  initInstagramCalendar
-} from './server/getters/instagram'
-import {
-  getYouTubeChannelPlayLists,
-  getYouTubeVideoListByPlayerlistID
-} from './server/getters/youtube'
+import { getInstagramMedias, getInstagramCalendar, initInstagramCalendar } from './server/getters/instagram'
+import { getYouTubeChannelPlayLists, getYouTubeVideoListByPlayerlistId } from './server/getters/youtube'
 import { getGitHubStatistic, getNPMStatistic } from './server/getters/open-srouce'
-import { getOpenSeaAssets, getOpenSeaCollections } from './server/getters/opensea'
 import { getDoubanMovies } from './server/getters/douban'
 import { getSongList } from './server/getters/netease-music'
 import { getWebFont, WebFontContentType } from './server/getters/webfont'
 import { enableDevRenderer } from './server/renderer/dev'
 import { enableProdRenderer } from './server/renderer/prod'
 import { PUBLIC_PATH } from './server/helpers/configurer'
-import { responsor, erroror } from './server/helpers/responsor'
+import { responser, errorer } from './server/helpers/responser'
 import { cacher } from './server/helpers/cacher'
 import { createExpressApp } from './server'
 
-// @ts-expect-error
-process.noDeprecation = true
+// init env variables for BFF server env
+dotenv.config()
 
 // app
-createExpressApp().then(({ app, server, cache }) => {
+createExpressApp().then(async ({ app, server, cache }) => {
   // static
   app.use(express.static(PUBLIC_PATH))
   // init thirds task
-  initTwitterCalendar()
   initInstagramCalendar()
 
   // sitemap
@@ -58,13 +46,13 @@ createExpressApp().then(({ app, server, cache }) => {
       const data = await cacher({
         cache,
         key: 'sitemap',
-        age: 60 * 60 * 1, // 1 hours
-        getter: getSitemapXML
+        ttl: 60 * 60 * 1, // 1 hours
+        getter: getSitemapXml
       })
       response.header('Content-Type', 'application/xml')
       response.send(data)
     } catch (error) {
-      erroror(response, error)
+      errorer(response, { message: error })
     }
   })
 
@@ -74,13 +62,13 @@ createExpressApp().then(({ app, server, cache }) => {
       const data = await cacher({
         cache,
         key: 'rss',
-        age: 60 * 60 * 1, // 1 hours
-        getter: getRSSXML
+        ttl: 60 * 60 * 1, // 1 hours
+        getter: getRssXml
       })
       response.header('Content-Type', 'application/xml')
       response.send(data)
     } catch (error) {
-      erroror(response, error)
+      errorer(response, { message: error })
     }
   })
 
@@ -90,14 +78,14 @@ createExpressApp().then(({ app, server, cache }) => {
       const data = await cacher({
         cache,
         key: 'gtag',
-        age: 60 * 60 * 24, // 24 hours
+        ttl: 60 * 60 * 48, // 48 hours
         retryWhen: 60 * 60 * 1, // 1 hours
         getter: getGTagScript
       })
       response.header('Content-Type', 'text/javascript')
       response.send(data)
     } catch (error) {
-      erroror(response, error)
+      errorer(response, { message: error })
     }
   })
 
@@ -106,7 +94,8 @@ createExpressApp().then(({ app, server, cache }) => {
     const fontname = decodeURIComponent(String(request.query.fontname)).trim()
     const text = decodeURIComponent(String(request.query.text)).trim()
     if (!text || !fontname) {
-      return erroror(response, 'Invalid params')
+      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      return
     }
 
     try {
@@ -116,18 +105,18 @@ createExpressApp().then(({ app, server, cache }) => {
       response.header('Content-Type', WebFontContentType)
       response.send(data)
     } catch (error) {
-      erroror(response, error)
+      errorer(response, { message: error })
     }
   })
 
   // Bing wallpapers
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.BingWallpaper}`,
-    responsor(() => {
+    responser(() => {
       return cacher({
         cache,
         key: TunnelModule.BingWallpaper,
-        age: 60 * 60 * 6, // 6 hours
+        ttl: 60 * 60 * 6, // 6 hours
         retryWhen: 60 * 30, // 30 minutes
         getter: getAllWallpapers
       })
@@ -137,11 +126,11 @@ createExpressApp().then(({ app, server, cache }) => {
   // My GoogleMap
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.MyGoogleMap}`,
-    responsor(() => {
+    responser(() => {
       return cacher({
         cache,
         key: TunnelModule.MyGoogleMap,
-        age: 60 * 60 * 6, // 6 hours
+        ttl: 60 * 60 * 6, // 6 hours
         retryWhen: 60 * 30, // 30 minutes
         getter: getMyGoogleMap
       })
@@ -151,11 +140,11 @@ createExpressApp().then(({ app, server, cache }) => {
   // GitHub sponsors
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubSponsors}`,
-    responsor(() => {
+    responser(() => {
       return cacher({
         cache,
         key: TunnelModule.GitHubSponsors,
-        age: 60 * 60 * 18, // 18 hours
+        ttl: 60 * 60 * 18, // 18 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getGitHubSponsors
       })
@@ -165,11 +154,11 @@ createExpressApp().then(({ app, server, cache }) => {
   // GitHub contributions
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubContributions}`,
-    responsor(() => {
+    responser(() => {
       return cacher({
         cache,
         key: TunnelModule.GitHubContributions,
-        age: 60 * 60 * 12, // 12 hours
+        ttl: 60 * 60 * 8, // 8 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: () => {
           const now = new Date()
@@ -185,11 +174,11 @@ createExpressApp().then(({ app, server, cache }) => {
   // open-source
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceGitHubStatistic}`,
-    responsor(() => {
+    responser(() => {
       return cacher({
         cache,
         key: TunnelModule.OpenSourceGitHubStatistic,
-        age: 60 * 60 * 8, // 8 hours
+        ttl: 60 * 60 * 8, // 8 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getGitHubStatistic
       })
@@ -198,11 +187,11 @@ createExpressApp().then(({ app, server, cache }) => {
 
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceNPMStatistic}`,
-    responsor(() => {
+    responser(() => {
       return cacher({
         cache,
         key: TunnelModule.OpenSourceNPMStatistic,
-        age: 60 * 60 * 8, // 8 hours
+        ttl: 60 * 60 * 8, // 8 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getNPMStatistic
       })
@@ -212,11 +201,11 @@ createExpressApp().then(({ app, server, cache }) => {
   // 163 music BGM list
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`,
-    responsor(() => {
+    responser(() => {
       return cacher({
         cache,
         key: TunnelModule.NetEaseMusic,
-        age: 60 * 60 * 12, // 12 hours
+        ttl: 60 * 60 * 6, // 6 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getSongList
       })
@@ -226,59 +215,39 @@ createExpressApp().then(({ app, server, cache }) => {
   // Douban movies
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.DoubanMovies}`,
-    responsor(() => {
+    responser(() => {
       return cacher({
         cache,
         key: TunnelModule.DoubanMovies,
-        age: 60 * 60 * 32, // 32 hours
+        ttl: 60 * 60 * 32, // 32 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getDoubanMovies
       })
     })
   )
 
-  // Twitter userinfo
+  // Twitter aggregate
   app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterUserInfo}`,
-    responsor(() => {
+    `${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterAggregate}`,
+    responser(() => {
       return cacher({
         cache,
-        key: TunnelModule.TwitterUserInfo,
-        age: 60 * 60 * 12, // 12 hours
+        key: TunnelModule.TwitterAggregate,
+        ttl: 60 * 60 * 1, // 1 hour
         retryWhen: 60 * 10, // 10 minutes
-        getter: getTwitterUserinfo
+        getter: getTwitterAggregate
       })
     })
-  )
-
-  // Twitter newest tweets
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterTweets}`,
-    responsor(() => {
-      return cacher({
-        cache,
-        key: TunnelModule.TwitterTweets,
-        age: 60 * 60 * 1, // 1 hours
-        retryWhen: 60 * 10, // 10 minutes
-        getter: getTwitterTweets
-      })
-    })
-  )
-
-  // Twitter tweets calendar
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterCalendar}`,
-    responsor(() => getTwitterCalendar())
   )
 
   // Instagram newest medias
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMedias}`,
-    responsor(() => {
+    responser(() => {
       return cacher({
         cache,
         key: TunnelModule.InstagramMedias,
-        age: 60 * 60 * 2, // 2 hours
+        ttl: 60 * 60 * 0.5, // 30 minutes
         retryWhen: 60 * 10, // 10 minutes
         getter: getInstagramMedias
       })
@@ -288,17 +257,17 @@ createExpressApp().then(({ app, server, cache }) => {
   // Instagram calendar
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramCalendar}`,
-    responsor(() => getInstagramCalendar())
+    responser(() => getInstagramCalendar())
   )
 
   // YouTube platlists
   app.get(
     `${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`,
-    responsor(() => {
+    responser(() => {
       return cacher({
         cache,
         key: TunnelModule.YouTubePlaylist,
-        age: 60 * 60 * 24, // 24 hours
+        ttl: 60 * 60 * 24, // 24 hours
         retryWhen: 60 * 10, // 10 minutes
         getter: getYouTubeChannelPlayLists
       })
@@ -307,51 +276,25 @@ createExpressApp().then(({ app, server, cache }) => {
 
   // YouTube videos
   app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
-    const playlistID = request.query.id
-    if (!playlistID || typeof playlistID !== 'string') {
-      return erroror(response, 'Invalid params')
+    const playlistId = request.query.id
+    if (!playlistId || typeof playlistId !== 'string') {
+      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      return
     }
-    responsor(() => {
+
+    responser(() => {
       return cacher({
         cache,
-        key: `youtube_playlist_${playlistID}`,
-        age: 60 * 60 * 1, // 1 hours
+        key: `youtube_playlist_${playlistId}`,
+        ttl: 60 * 60 * 1, // 1 hours
         retryWhen: 60 * 10, // 10 minutes
-        getter: () => getYouTubeVideoListByPlayerlistID(playlistID)
+        getter: () => getYouTubeVideoListByPlayerlistId(playlistId)
       })
     })(request, response, next)
   })
 
-  // OpenSea assets
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSeaAssets}`,
-    responsor(() => {
-      return cacher({
-        cache,
-        key: TunnelModule.OpenSeaAssets,
-        age: 60 * 60 * 1, // 1 hours
-        retryWhen: 60 * 10, // 10 minutes
-        getter: getOpenSeaAssets
-      })
-    })
-  )
-
-  // OpenSea collections
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSeaCollections}`,
-    responsor(() => {
-      return cacher({
-        cache,
-        key: TunnelModule.OpenSeaCollections,
-        age: 60 * 60 * 0.5, // 30 minutes
-        retryWhen: 60 * 5, // 5 minutes
-        getter: getOpenSeaCollections
-      })
-    })
-  )
-
   // vue renderer
-  isDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache)
+  await (isDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache))
 
   // run
   server.listen(getBFFServerPort(), () => {

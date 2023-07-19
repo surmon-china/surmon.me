@@ -1,6 +1,41 @@
+<script lang="ts" setup>
+  import { ref, shallowRef } from 'vue'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { LanguageKey } from '/@/language'
+  import { useEnhancer } from '/@/app/enhancer'
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
+  import { getTwitterTweetDetailURL } from '/@/transforms/media'
+  import { unescape, padStart, numberSplit } from '/@/transforms/text'
+  import type { TwitterAggregate } from '/@/server/getters/twitter'
+
+  defineProps<{
+    aggregate: TwitterAggregate | null
+    fetching: boolean
+  }>()
+
+  const { gtag } = useEnhancer()
+  const swiperRef = shallowRef<SwiperClass>()
+  const prevSlide = () => swiperRef.value?.slidePrev()
+  const nextSlide = () => swiperRef.value?.slideNext()
+  const handleSwiperReady = (_swiper: SwiperClass) => {
+    swiperRef.value = _swiper
+  }
+  const activeIndex = ref(0)
+  const handleSwiperTransitionStart = () => {
+    activeIndex.value = swiperRef.value?.activeIndex || 0
+  }
+
+  const handleGtagEvent = (name: string) => {
+    gtag?.event(name, {
+      event_category: GAEventCategories.Index
+    })
+  }
+</script>
+
 <template>
   <div class="twitter">
-    <placeholder :data="completedTweets.length" :loading="fetching">
+    <placeholder :data="!!aggregate?.tweets.length" :loading="fetching">
       <template #placeholder>
         <div class="twitter-empty" key="empty">
           <empty class="empty-content">
@@ -16,26 +51,27 @@
       </template>
       <template #default>
         <div class="twitter-content" key="content">
-          <div class="userinfo" v-if="userinfo" :title="userinfo.username">
-            <ulink
-              class="logo-link"
-              :href="VALUABLE_LINKS.TWITTER"
-              @mousedown="handleGtagEvent('twitter_homepage')"
-            >
-              <uimage class="avatar" proxy :src="userinfo.profile_image_url" />
-              <span class="logo">
-                <i class="iconfont icon-twitter" />
-              </span>
+          <div class="userinfo" v-if="aggregate?.userinfo" :title="aggregate.userinfo.name">
+            <ulink class="link" :href="VALUABLE_LINKS.TWITTER" @mousedown="handleGtagEvent('twitter_homepage')">
+              <uimage class="avatar" proxy :src="aggregate.userinfo.avatar" />
+              <span class="logo"><i class="iconfont icon-twitter" /></span>
             </ulink>
-            <div class="counts">
-              <div class="item count">
-                {{ padStart(numberSplit(userinfo.public_metrics.tweet_count), 3, '0') }}
-              </div>
-              <div class="item text">Tweets</div>
+            <div class="count">
+              <p class="title">
+                <template v-if="aggregate.userinfo.tweetCount">
+                  {{ padStart(numberSplit(aggregate.userinfo.tweetCount), 3, '0') }}
+                </template>
+                <template v-else>
+                  <i18n en="Latest" zh="碎碎" />
+                </template>
+              </p>
+              <p class="secondary">
+                <i18n en="tweets" :zh="aggregate.userinfo.tweetCount ? '碎碎念' : '念念'" />
+              </p>
             </div>
           </div>
           <swiper
-            v-if="completedTweets.length"
+            v-if="aggregate?.tweets.length"
             class="tweets"
             direction="vertical"
             :height="66"
@@ -47,39 +83,26 @@
             @transition-start="handleSwiperTransitionStart"
             @swiper="handleSwiperReady"
           >
-            <swiper-slide class="tweet-item" v-for="(t, index) in completedTweets" :key="index">
-              <div class="content" :title="t.tweet.text">
+            <swiper-slide class="tweet-item" :key="index" v-for="(tweet, index) in aggregate.tweets">
+              <div class="content" :title="tweet.text">
                 <div
-                  class="reference"
-                  v-if="t.tweet.referenced_tweets?.length"
-                  :title="t.tweet.referenced_tweets[0].type"
-                >
-                  <i
-                    class="iconfont icon-retweet"
-                    v-if="['quoted', 'retweeted'].includes(t.tweet.referenced_tweets[0].type)"
-                  ></i>
-                  <i class="iconfont icon-follow-up" v-else></i>
-                </div>
-                <div
-                  class="main"
-                  :class="{ 'has-media': t.medias.length }"
-                  v-if="t.html"
-                  v-html="t.html"
+                  v-if="tweet.html"
+                  v-html="unescape(tweet.html)"
+                  :class="['main', { 'has-media': tweet.mediaCount }]"
                 ></div>
                 <ulink
-                  v-if="t.medias.length"
-                  class="end-link"
-                  :class="{ empty: !t.html }"
-                  :href="t.url"
+                  v-if="tweet.mediaCount"
+                  :class="['medias', { empty: !tweet.text }]"
+                  :href="getTwitterTweetDetailURL(tweet.owner, tweet.id)"
                   @mousedown="handleGtagEvent('twitter_image_link')"
                 >
-                  <template v-if="t.medias.find((m) => m.type === 'video')">
+                  <template v-if="tweet.hasVideo">
                     <i class="iconfont media icon-video"></i>
                   </template>
-                  <template v-else>
+                  <template v-else-if="tweet.hasImage">
                     <i class="iconfont media icon-image"></i>
                   </template>
-                  <span class="text">[{{ t.medias.length }}]</span>
+                  <span class="count">[{{ tweet.mediaCount }}]</span>
                   <i class="iconfont window icon-new-window-s"></i>
                 </ulink>
               </div>
@@ -87,29 +110,31 @@
                 <ulink
                   class="item link"
                   title="To Tweet"
-                  :href="t.url"
+                  :href="getTwitterTweetDetailURL(tweet.owner, tweet.id)"
                   @mousedown="handleGtagEvent('twitter_detail_link')"
                 >
-                  <i class="iconfont twitter icon-twitter"></i>
+                  <i class="iconfont icon-retweet" v-if="tweet.isQuote || tweet.isRetweet"></i>
+                  <i class="iconfont icon-follow-up" v-else-if="tweet.isReply"></i>
+                  <i class="iconfont twitter icon-twitter" v-else></i>
                   <span>Tweet</span>
                   <i class="iconfont window icon-new-window-s"></i>
                 </ulink>
-                <span class="item reply">
+                <span class="item reply" v-if="tweet.commentCount">
                   <i class="iconfont icon-comment"></i>
-                  <span>{{ t.tweet.public_metrics.reply_count }}</span>
+                  <span>{{ tweet.commentCount }}</span>
                 </span>
-                <span class="item like">
+                <span class="item like" v-if="Number.isInteger(tweet.favoriteCount)">
                   <i class="iconfont icon-heart"></i>
-                  <span>{{ t.tweet.public_metrics.like_count }}</span>
+                  <span>{{ tweet.favoriteCount }}</span>
                 </span>
-                <span class="item date">
+                <span class="item date" v-if="tweet.date">
                   <i class="iconfont icon-clock"></i>
-                  <udate to="ago" :date="t.tweet.created_at" />
+                  <udate to="ago" :date="tweet.date" />
                 </span>
-                <!-- <span class="item location" :title="t.location" v-if="t.location">
+                <span class="item location" :title="tweet.location" v-if="tweet.location">
                   <i class="iconfont icon-location"></i>
-                  <span>{{ t.location }}</span>
-                </span> -->
+                  <span>{{ tweet.location }}</span>
+                </span>
               </div>
             </swiper-slide>
           </swiper>
@@ -119,7 +144,7 @@
             </button>
             <button
               class="button next"
-              :disabled="activeIndex === completedTweets.length - 1"
+              :disabled="!!aggregate && activeIndex === aggregate?.tweets.length - 1"
               @click="nextSlide"
             >
               <i class="iconfont icon-tobottom" />
@@ -131,139 +156,6 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, computed, PropType } from 'vue'
-  import { IDENTITIES, VALUABLE_LINKS } from '/@/config/app.config'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { LanguageKey } from '/@/language'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { TwitterUserinfo, TweeterTweets } from '/@/stores/media'
-  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
-  import { getTwitterTweetDetailURL } from '/@/transforms/media'
-  import { unescape, padStart, numberSplit } from '/@/transforms/text'
-
-  export default defineComponent({
-    name: 'IndexTwitter',
-    components: {
-      Swiper,
-      SwiperSlide
-    },
-    props: {
-      userinfo: {
-        type: Object as PropType<TwitterUserinfo>,
-        default: null
-      },
-      tweets: {
-        type: Object as PropType<TweeterTweets>,
-        default: null
-      },
-      fetching: {
-        type: Boolean,
-        required: true
-      }
-    },
-    setup(props) {
-      const { gtag } = useEnhancer()
-      const swiper = ref<SwiperClass>()
-      const prevSlide = () => swiper.value?.slidePrev()
-      const nextSlide = () => swiper.value?.slideNext()
-      const handleSwiperReady = (_swiper: SwiperClass) => {
-        swiper.value = _swiper
-      }
-      const activeIndex = ref(0)
-      const handleSwiperTransitionStart = () => {
-        activeIndex.value = swiper.value?.activeIndex || 0
-      }
-
-      const handleGtagEvent = (name: string) => {
-        gtag?.event(name, {
-          event_category: GAEventCategories.Index
-        })
-      }
-
-      const getLocation = (tweet: any) => {
-        if (tweet.geo?.place_id) {
-          const places = props.tweets.includes.places || []
-          const target = places.find((place) => place.id === tweet.geo?.place_id)
-          if (target) {
-            return `${target.country_code} · ${target.name}`
-          }
-        }
-        return null
-      }
-
-      const getMedias = (tweet: any): any[] => {
-        const mediaKeys = tweet.attachments?.media_keys || []
-        if (mediaKeys.length) {
-          const medias = props.tweets.includes.media || []
-          return mediaKeys
-            .map((key) => medias.find((media) => media.media_key === key))
-            .filter(Boolean)
-        }
-        return []
-      }
-
-      const completedTweets = computed(() => {
-        const tweets = props.tweets
-        if (!tweets?.data) {
-          return []
-        }
-
-        return tweets.data.map((tweet) => {
-          const completedTweet: any = {
-            tweet,
-            url: getTwitterTweetDetailURL(IDENTITIES.TWITTER_USER_NAME, tweet.id),
-            location: getLocation(tweet),
-            medias: getMedias(tweet),
-            html: unescape(tweet.text)
-          }
-
-          // text (image_url | original_tweet_url | link)
-          tweet.entities?.urls?.forEach((url) => {
-            if (
-              // remove image | original urls from text
-              url.display_url?.startsWith('pic.twitter.com/') ||
-              url.display_url?.startsWith('twitter.com/')
-            ) {
-              completedTweet.html = completedTweet.html.replace(url.url, '')
-            } else {
-              // replace link urls to text
-              completedTweet.html = completedTweet.html.replace(
-                url.url,
-                `<a
-                    class="link"
-                    target="_blank"
-                    rel="external nofollow noopener"
-                    title="${url.expanded_url}"
-                    href="${url.url}"
-                  >
-                    <span class="text">[${url.display_url}]</span>
-                  </a>
-                `
-              )
-            }
-          })
-          return completedTweet
-        })
-      })
-
-      return {
-        VALUABLE_LINKS,
-        LanguageKey,
-        completedTweets,
-        activeIndex,
-        numberSplit,
-        padStart,
-        prevSlide,
-        nextSlide,
-        handleSwiperReady,
-        handleSwiperTransitionStart,
-        handleGtagEvent
-      }
-    }
-  })
-</script>
-
 <style lang="scss" scoped>
   @use 'sass:math';
   @import 'src/styles/variables.scss';
@@ -271,7 +163,6 @@
 
   $twitter-height: 66px;
   $content-height: 42px;
-  $userinfo-width: 140px;
 
   .twitter-empty,
   .twitter-skeleton,
@@ -296,7 +187,7 @@
     @include radius-box($sm-radius);
 
     .left {
-      width: $userinfo-width;
+      width: 140px;
       margin-right: $lg-gap;
     }
     .right {
@@ -311,8 +202,9 @@
     }
 
     .userinfo {
-      width: $userinfo-width;
+      width: auto;
       height: 100%;
+      padding: 0 $gap;
       margin-right: $sm-gap;
       display: flex;
       justify-content: center;
@@ -321,9 +213,8 @@
       border-top-right-radius: $mini-radius;
       border-bottom-right-radius: $mini-radius;
 
-      .logo-link {
+      .link {
         position: relative;
-        margin-right: 1.5rem;
         background-color: $twitter-primary;
         color: $white;
         opacity: 0.9;
@@ -352,7 +243,9 @@
         }
       }
 
-      .counts {
+      .count {
+        min-width: 4rem;
+        margin-left: 1.5rem;
         position: relative;
         display: inline-flex;
         flex-direction: column;
@@ -374,17 +267,17 @@
           border-bottom: $size solid transparent;
         }
 
-        .item {
-          &.count {
-            font-size: $font-size-small + 1;
-            font-weight: bold;
-            color: $text-secondary;
-          }
+        .title {
+          margin: 0;
+          font-size: $font-size-small + 1;
+          font-weight: bold;
+          color: $text-secondary;
+        }
 
-          &.text {
-            color: $text-disabled;
-            font-size: $font-size-small;
-          }
+        .secondary {
+          margin: 0;
+          color: $text-disabled;
+          font-size: $font-size-root;
         }
       }
     }
@@ -419,23 +312,27 @@
           margin-bottom: 6px;
           $content-gap: 0.3em;
 
-          .reference {
-            margin-right: $xs-gap;
-            color: $text-secondary;
-          }
-
           .main {
-            max-width: 96%;
             font-weight: bold;
+            max-width: 100%;
             @include text-overflow();
             &.has-media {
               max-width: #{calc(100% - 40px)};
             }
 
-            & + .end-link {
+            & + .medias {
               margin-left: $content-gap;
             }
 
+            ::v-deep(p) {
+              margin: 0;
+              max-width: 100%;
+              @include text-overflow();
+            }
+            ::v-deep(img),
+            ::v-deep(video) {
+              display: none;
+            }
             ::v-deep(.link) {
               font-weight: normal;
               font-size: $font-size-base - 1;
@@ -449,15 +346,10 @@
               & + .link {
                 margin-left: $content-gap;
               }
-
-              .iconfont {
-                margin-right: -3px;
-                color: $text-secondary;
-              }
             }
           }
 
-          .end-link {
+          .medias {
             position: relative;
             color: $text-secondary;
             &.empty {
@@ -468,13 +360,6 @@
               .iconfont {
                 color: $link-color !important;
               }
-            }
-
-            .text {
-              margin-left: $xs-gap;
-              vertical-align: top;
-              font-size: $font-size-small;
-              @include color-transition();
             }
 
             .iconfont {
@@ -492,6 +377,13 @@
                 right: -1.2em;
                 font-size: 8px;
               }
+            }
+
+            .count {
+              margin-left: $xs-gap;
+              vertical-align: top;
+              font-size: $font-size-small;
+              @include color-transition();
             }
           }
         }

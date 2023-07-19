@@ -40,32 +40,26 @@
 
 ```bash
 # install dependencies
-$ yarn
+$ pnpm install
 
-# SSR mode
-$ yarn dev
-$ yarn build
-$ yarn start
-
-# or SPA mode
-$ yarn spa:dev
-$ yarn spa:build
-$ yarn spa:start
+$ pnpm run dev
+$ pnpm run build
+$ pnpm run start
 
 # lint test
-$ yarn lint
+$ pnpm run lint
 
 # release
-$ yarn release
+$ pnpm run release
 ```
 
 ## Actions setup
 
 **Rule:**
 
-- `Any PR open` → `CI:Build test`
-- `New tag v*` → `CI:Create Release`
-- `New tag | Release created` → `CI:Deploy` → `CI:Execute server script`
+- Any PR opend → `CI:Build test`
+- New tag `v*` → `CI:Create Release`
+- Release created → `CI:Deploy` → `CI:Execute server script`
 
 ### Changelog
 

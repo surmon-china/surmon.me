@@ -14,10 +14,7 @@ export interface GoogleMyMapFolder {
   placemarks: Array<GoogleMyMapPlacemark>
 }
 
-export type FeatureCollectionJSON = GeoJSON.FeatureCollection<
-  GeoJSON.Geometry,
-  GoogleMyMapPlacemark
->
+export type FeatureCollectionJSON = GeoJSON.FeatureCollection<GeoJSON.Geometry, GoogleMyMapPlacemark>
 
 export const gmmFoldersToGeoJSON = (folders: Array<GoogleMyMapFolder>): FeatureCollectionJSON => ({
   type: 'FeatureCollection',
@@ -40,9 +37,9 @@ export const gmmFoldersToGeoJSON = (folders: Array<GoogleMyMapFolder>): FeatureC
 })
 
 // https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#layout-symbol-icon-allow-overlap
-export const geoJSONFeatureToLayer = (layerID: string, source: any): AnyLayer => {
+export const geoJSONFeatureToLayer = (layerId: string, source: any): AnyLayer => {
   return {
-    id: layerID,
+    id: layerId,
     source,
     type: 'symbol',
     layout: {

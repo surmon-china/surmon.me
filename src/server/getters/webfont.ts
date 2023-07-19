@@ -19,7 +19,6 @@ export interface IWebFontOptions {
 const cacheMap = new Map<string, any>()
 
 export const getWebFont = (options: IWebFontOptions): Promise<any> => {
-  // https://github.com/ecomfe/fontmin
   const text = Array.from(new Set(options.text.split(''))).join('')
   const fontPath = path.resolve(PUBLIC_PATH, 'fonts', options.fontname)
   if (!fs.existsSync(fontPath)) {
@@ -32,6 +31,7 @@ export const getWebFont = (options: IWebFontOptions): Promise<any> => {
     return Promise.resolve(cacheMap.get(cacheKey))
   }
 
+  // https://github.com/ecomfe/fontmin
   const fontmin = new Fontmin()
     .src(fontPath)
     .use(Fontmin.glyph({ text, hinting: false }))

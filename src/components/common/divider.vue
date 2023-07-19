@@ -1,29 +1,22 @@
+<script lang="ts" setup>
+  interface Props {
+    type?: 'horizontal' | 'vertical'
+    size?: 'default' | 'xs' | 'sm' | 'lg'
+    dashed?: boolean
+  }
+
+  withDefaults(defineProps<Props>(), {
+    type: 'horizontal',
+    size: 'default',
+    dashed: false
+  })
+</script>
+
 <template>
-  <div role="separator" class="divider" :class="[type, size, { dashed }, { slot: $slots.default }]">
+  <div role="separator" class="divider" :class="[type, size, { dashed }, { slot: !!$slots.default }]">
     <slot></slot>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, PropType } from 'vue'
-  export default defineComponent({
-    name: 'Divider',
-    props: {
-      type: {
-        type: String as PropType<'horizontal' | 'vertical'>,
-        default: 'horizontal'
-      },
-      dashed: {
-        type: Boolean,
-        default: false
-      },
-      size: {
-        type: String as PropType<'default' | 'xs' | 'sm' | 'lg'>,
-        default: 'default'
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

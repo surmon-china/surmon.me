@@ -1,35 +1,9 @@
-<template>
-  <router-link class="statistic" :to="{ name: RouteName.Archive }">
-    <div class="item">
-      <statistic-skeleton :fetching="fetching" :count="store.data?.articles" />
-      <span class="title">
-        <i18n :k="LanguageKey.STATISTIC_ARTICLES" />
-      </span>
-    </div>
-    <divider type="vertical" />
-    <div class="item">
-      <statistic-skeleton :fetching="fetching" :count="store.data?.todayViews" />
-      <span class="title">
-        <i18n :k="LanguageKey.STATISTIC_TODAY_VIEWS" />
-      </span>
-    </div>
-    <divider type="vertical" />
-    <div class="item">
-      <statistic-skeleton :fetching="fetching" :count="store.data?.comments" />
-      <span class="title">
-        <i18n :k="LanguageKey.STATISTIC_COMMENTS" />
-      </span>
-    </div>
-  </router-link>
-</template>
-
-<script lang="ts">
+<script lang="ts" setup>
   import { defineComponent, ref, h, onMounted, Transition } from 'vue'
   import { useNodepressStatisticStore } from '/@/stores/statistic'
   import { RouteName } from '/@/app/router'
   import { LanguageKey } from '/@/language'
 
-  /* eslint-disable vue/one-component-per-file */
   const StatisticSkeleton = defineComponent({
     props: {
       fetching: Boolean,
@@ -45,27 +19,40 @@
     }
   })
 
-  export default defineComponent({
-    name: 'DesktopAsideStatistic',
-    components: { StatisticSkeleton },
-    setup() {
-      const fetching = ref(true)
-      const statisticStore = useNodepressStatisticStore()
-      onMounted(() => {
-        statisticStore.fetch().finally(() => {
-          fetching.value = false
-        })
-      })
+  const fetching = ref(true)
+  const statisticStore = useNodepressStatisticStore()
 
-      return {
-        LanguageKey,
-        RouteName,
-        fetching,
-        store: statisticStore
-      }
-    }
+  onMounted(() => {
+    statisticStore.fetch().finally(() => {
+      fetching.value = false
+    })
   })
 </script>
+
+<template>
+  <router-link class="statistic" :to="{ name: RouteName.Archive }">
+    <div class="item">
+      <statistic-skeleton :fetching="fetching" :count="statisticStore.data?.articles" />
+      <span class="title">
+        <i18n :k="LanguageKey.STATISTIC_ARTICLES" />
+      </span>
+    </div>
+    <divider type="vertical" />
+    <div class="item">
+      <statistic-skeleton :fetching="fetching" :count="statisticStore.data?.todayViews" />
+      <span class="title">
+        <i18n :k="LanguageKey.STATISTIC_TODAY_VIEWS" />
+      </span>
+    </div>
+    <divider type="vertical" />
+    <div class="item">
+      <statistic-skeleton :fetching="fetching" :count="statisticStore.data?.comments" />
+      <span class="title">
+        <i18n :k="LanguageKey.STATISTIC_COMMENTS" />
+      </span>
+    </div>
+  </router-link>
+</template>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
@@ -123,6 +110,7 @@
 
       .title {
         font-size: $font-size-small - 2;
+        white-space: nowrap;
         text-transform: uppercase;
         color: $text-secondary;
         @include color-transition();

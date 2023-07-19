@@ -16,13 +16,13 @@ declare global {
 }
 
 export interface AdSenseConfig {
-  ID: string
-  enabledAutoAD?: boolean
+  id: string
+  enabledAutoAd?: boolean
 }
 
 const ADS_SCRIPT = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
 
-const getComponent = (clientID: string) =>
+const getComponent = (clientId: string) =>
   defineComponent({
     name: 'Adsense',
     props: {
@@ -74,7 +74,7 @@ const getComponent = (clientID: string) =>
             h('ins', {
               class: ['adsbygoogle', insClass],
               style: insStyle,
-              'data-ad-client': dataAdClient || clientID,
+              'data-ad-client': dataAdClient || clientId,
               'data-ad-slot': dataAdSlot,
               'data-ad-layout-key': dataAdLayoutKey,
               'data-ad-test': dataAdTest,
@@ -91,14 +91,14 @@ const getComponent = (clientID: string) =>
 
 export default {
   install(app: App, adsenseConfig: AdSenseConfig) {
-    const component = getComponent(adsenseConfig.ID)
+    const component = getComponent(adsenseConfig.id)
     app.component(component.name, component)
-
-    if (adsenseConfig.enabledAutoAD) {
+    // auto ad
+    if (adsenseConfig.enabledAutoAd) {
       loadScript(ADS_SCRIPT, { async: true }).then(() => {
         const adsbygoogle = window.adsbygoogle || []
         adsbygoogle.push({
-          google_ad_client: adsenseConfig.ID,
+          google_ad_client: adsenseConfig.id,
           enable_page_level_ads: true
         })
       })

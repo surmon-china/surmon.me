@@ -1,5 +1,18 @@
+<script lang="ts" setup>
+  import { Tag } from '/@/interfaces/tag'
+  import { useTagStore, getTagEnName } from '/@/stores/tag'
+  import { LanguageKey } from '/@/language'
+  import { getTagFlowRoute } from '/@/transforms/route'
+  import { getExtendValue } from '/@/transforms/state'
+
+  const tagStore = useTagStore()
+  const getTagIcon = (tag: Tag) => {
+    return getExtendValue(tag.extends || [], 'icon') || 'icon-tag'
+  }
+</script>
+
 <template>
-  <div class="tag">
+  <div class="tags">
     <placeholder
       :data="tagStore.sorted.length"
       :fetching="tagStore.fetching"
@@ -16,15 +29,15 @@
         <div class="tag-list" key="list">
           <router-link
             class="item"
-            :title="`${tagEnName(tag)} | ${tag.description}`"
+            :title="`${getTagEnName(tag)} | ${tag.description}`"
             :to="getTagFlowRoute(tag.slug)"
             :key="index"
             v-for="(tag, index) in tagStore.sorted"
           >
             <i class="iconfont" :class="getTagIcon(tag)" />
             <span class="name">
-              <i18n :zh="tag.name" :en="tagEnName(tag)" />
-              <span class="count">({{ tag.articles_count || 0 }})</span>
+              <i18n :zh="tag.name" :en="getTagEnName(tag)" />
+              <span class="count">({{ tag.article_count || 0 }})</span>
             </span>
           </router-link>
         </div>
@@ -33,38 +46,12 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  import { useTagStore, tagEnName, Tag } from '/@/stores/tag'
-  import { LanguageKey } from '/@/language'
-  import { getTagFlowRoute } from '/@/transforms/route'
-  import { getExtendValue } from '/@/transforms/state'
-
-  export default defineComponent({
-    name: 'DesktopAsideTag',
-    setup() {
-      const tagStore = useTagStore()
-      const getTagIcon = (tag: Tag) => {
-        return getExtendValue(tag.extends || [], 'icon') || 'icon-tag'
-      }
-
-      return {
-        LanguageKey,
-        tagStore,
-        tagEnName,
-        getTagIcon,
-        getTagFlowRoute
-      }
-    }
-  })
-</script>
-
 <style lang="scss" scoped>
   @use 'sass:math';
   @import 'src/styles/variables.scss';
   @import 'src/styles/mixins.scss';
 
-  .tag {
+  .tags {
     margin-bottom: 0;
     overflow-y: auto;
     width: 100%;

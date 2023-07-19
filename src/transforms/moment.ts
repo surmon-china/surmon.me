@@ -37,10 +37,7 @@ export const humanToDate = (humanDate: Omit<HumanDate, 'week'>) => {
 }
 
 /** `HumanData` > `YYYY-MM-DD` */
-export const humanDateToYMD = (
-  { year, month, day }: Partial<Omit<HumanDate, 'week'>>,
-  separator = '-'
-) => {
+export const humanDateToYMD = ({ year, month, day }: Partial<Omit<HumanDate, 'week'>>, separator = '-') => {
   const _month = month ? separator + String(month).padStart(2, '0') : ''
   const _day = day ? separator + String(day).padStart(2, '0') : ''
   return `${year}${_month}${_day}`

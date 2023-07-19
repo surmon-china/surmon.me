@@ -1,3 +1,16 @@
+<script lang="ts" setup>
+  defineProps({
+    socialCount: {
+      type: Number,
+      required: true
+    },
+    relatedCount: {
+      type: Number,
+      required: true
+    }
+  })
+</script>
+
 <template>
   <div class="article-skeleton">
     <div class="module">
@@ -12,32 +25,12 @@
       </div>
     </div>
     <div class="module">
-      <ul
-        class="related-skeleton"
-        :style="{ 'grid-template-columns': `repeat(${relatedCount}, 1fr)` }"
-      >
+      <ul class="related-skeleton" :style="{ 'grid-template-columns': `repeat(${relatedCount}, 1fr)` }">
         <skeleton-base v-for="item in relatedCount" :key="item" class="item" />
       </ul>
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  export default defineComponent({
-    name: 'ArticleDetailSkeleton',
-    props: {
-      socialCount: {
-        type: Number,
-        required: true
-      },
-      relatedCount: {
-        type: Number,
-        required: true
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

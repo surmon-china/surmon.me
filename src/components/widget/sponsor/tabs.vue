@@ -1,11 +1,20 @@
+<script lang="ts" setup>
+  import { PROVIDERS, SponsorState } from './state'
+
+  defineProps<{
+    state: SponsorState
+    hideTitle?: boolean
+  }>()
+</script>
+
 <template>
-  <div class="sponsor-tabs" :class="activeId">
-    <template v-for="(provider, index) in providers" :key="index">
+  <div class="sponsor-tabs" :class="state.activeId">
+    <template v-for="(provider, index) in PROVIDERS" :key="index">
       <button
         class="item"
-        :class="[provider.id, { active: activeId === provider.id }]"
+        :class="[provider.id, { active: state.activeId.value === provider.id }]"
         :title="provider.title"
-        @click="handleSwitch(provider.id)"
+        @click="state.setProviderId(provider.id)"
       >
         <span class="logo">
           <uimage class="image" :alt="provider.title" :src="provider.logo" cdn />
@@ -15,31 +24,6 @@
     </template>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, PropType } from 'vue'
-  import { providers, SponsorState } from './state'
-  export default defineComponent({
-    name: 'SponsorTabs',
-    props: {
-      state: {
-        type: Object as PropType<SponsorState>,
-        required: true
-      },
-      hideTitle: {
-        type: Boolean,
-        default: false
-      }
-    },
-    setup(props) {
-      return {
-        providers,
-        activeId: props.state.activeId,
-        handleSwitch: props.state.setProviderId
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

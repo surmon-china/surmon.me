@@ -1,3 +1,27 @@
+<script lang="ts" setup>
+  import { ref, computed } from 'vue'
+  import { UNDEFINED } from '/@/constants/value'
+  import { getYouTubeVideoEmbedURL } from '/@/transforms/media'
+  import YoutubeVideoList from './videos.vue'
+
+  defineProps<{
+    playlists: Array<any>
+  }>()
+
+  const youtubeModalVideo = ref<any>(null)
+  const isOnYouTubeModal = computed(() => Boolean(youtubeModalVideo.value))
+  const youTubeModalURL = computed(() => {
+    const video = youtubeModalVideo.value
+    return video ? getYouTubeVideoEmbedURL(video.snippet.resourceId.videoId, video.snippet.playlistId) : UNDEFINED
+  })
+  const openYouTubeModal = (video: any) => {
+    youtubeModalVideo.value = video
+  }
+  const closeYouTubeModal = () => {
+    youtubeModalVideo.value = null
+  }
+</script>
+
 <template>
   <div class="youtube-playlist">
     <ul class="playlist">
@@ -20,49 +44,6 @@
     </client-only>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, computed, PropType } from 'vue'
-  import { UNDEFINED } from '/@/constants/value'
-  import { getYouTubeVideoEmbedURL } from '/@/transforms/media'
-  import YoutubeVideoList from './videos.vue'
-
-  export default defineComponent({
-    name: 'LensPageYoutubePlaylist',
-    components: {
-      YoutubeVideoList
-    },
-    props: {
-      playlists: {
-        type: Array as PropType<Array<any>>,
-        required: true
-      }
-    },
-    setup() {
-      const youtubeModalVideo = ref<any>(null)
-      const isOnYouTubeModal = computed(() => Boolean(youtubeModalVideo.value))
-      const youTubeModalURL = computed(() => {
-        const video = youtubeModalVideo.value
-        return video
-          ? getYouTubeVideoEmbedURL(video.snippet.resourceId.videoId, video.snippet.playlistId)
-          : UNDEFINED
-      })
-      const openYouTubeModal = (video: any) => {
-        youtubeModalVideo.value = video
-      }
-      const closeYouTubeModal = () => {
-        youtubeModalVideo.value = null
-      }
-
-      return {
-        isOnYouTubeModal,
-        youTubeModalURL,
-        openYouTubeModal,
-        closeYouTubeModal
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

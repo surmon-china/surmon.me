@@ -5,11 +5,17 @@
  */
 
 import RSS from 'rss'
+import axios from 'axios'
 import { META } from '@/config/app.config'
-import { getArchiveData, getArticleURL } from './archive'
+import type { Archive } from '@/interfaces/archive'
+import type { NodePressResult } from '@/services/nodepress'
+import { getNodePressAPI } from '../helpers/configurer'
+import { getArticleURL } from '../helpers/route'
 
-export const getRSSXML = async (archiveData?: any) => {
-  const archive = archiveData || (await getArchiveData())
+export const getRssXml = async () => {
+  const api = `${getNodePressAPI()}/archive`
+  const response = await axios.get<NodePressResult<Archive>>(api, { timeout: 6000 })
+  const archive = response.data.result
   const feed = new RSS({
     title: META.title,
     description: META.zh_sub_title,
@@ -24,19 +30,21 @@ export const getRSSXML = async (archiveData?: any) => {
     language: 'zh',
     ttl: 60
   })
-  archive.articles.forEach((article) =>
-    feed.item({
+
+  archive.articles.forEach((article) => {
+    return feed.item({
       title: article.title,
       description: article.description,
       url: getArticleURL(article.id),
       guid: String(article.id),
-      categories: article.category.map((category) => category.slug),
+      categories: article.categories.map((category) => category.slug),
       author: META.author,
-      date: article.create_at,
+      date: article.created_at,
       enclosure: {
-        url: article.thumb
+        url: article.thumbnail
       }
     })
-  )
+  })
+
   return feed.xml({ indent: true })
 }

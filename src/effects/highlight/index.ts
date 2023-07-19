@@ -17,7 +17,6 @@ import bash from 'highlight.js/lib/languages/bash'
 import less from 'highlight.js/lib/languages/less'
 import scss from 'highlight.js/lib/languages/scss'
 import rust from 'highlight.js/lib/languages/rust'
-import java from 'highlight.js/lib/languages/java'
 import shell from 'highlight.js/lib/languages/shell'
 import nginx from 'highlight.js/lib/languages/nginx'
 import stylus from 'highlight.js/lib/languages/stylus'
@@ -37,7 +36,6 @@ const languages = {
   less,
   scss,
   rust,
-  java,
   shell,
   nginx,
   stylus,

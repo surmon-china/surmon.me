@@ -1,31 +1,19 @@
-const path = require('path')
-const builtinModules = require('builtin-modules')
-const { bundle } = require('@surmon-china/libundler')
-const packageJSON = require('../package.json')
+import fs from 'fs-extra'
+import path from 'path'
+import builtinModules from 'builtin-modules'
+import ncc from '@vercel/ncc'
 
-exports.bundleBFFServer = (paths) => {
-  console.log('\nBFF server bundling...\n')
-  return bundle({
-    libName: 'bff',
-    entry: 'src/bff.ts',
-    outDir: paths.dist,
-    outFileName: 'bff',
-    targets: ['cjs'],
-    parser: false,
-    sourcemap: true,
-    terser: false,
-    alias: {
-      entries: {
-        '@': path.resolve(__dirname, '..', 'src')
-      }
-    },
-    external: [
+export const bundleBFFServer = (paths) => {
+  // https://github.com/vercel/ncc#programmatically-from-nodejs
+  return ncc(path.resolve(paths.src, 'bff.ts'), {
+    sourceMap: false,
+    assetBuilds: false,
+    externals: [
       ...builtinModules,
-      ...Object.keys(packageJSON.dependencies),
-      ...Object.keys(packageJSON.devDependencies)
-    ],
-    ts: {
-      tsconfig: path.resolve(__dirname, '..', 'tsconfig.json')
-    }
+      ...Object.keys(paths.packageJSON.dependencies),
+      ...Object.keys(paths.packageJSON.devDependencies)
+    ]
+  }).then(({ code }) => {
+    fs.writeFileSync(path.resolve(paths.dist, 'bff.js'), code)
   })
 }

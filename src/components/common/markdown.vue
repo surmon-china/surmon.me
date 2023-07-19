@@ -1,67 +1,37 @@
-<template>
-  <section
-    ref="element"
-    v-html="markdownHTML"
-    :class="[
-      plain ? 'global-markdown-plain' : 'global-markdown-html',
-      { compact, dark: isDarkTheme }
-    ]"
-  ></section>
-</template>
-
-<script lang="ts">
-  import { defineComponent, computed, PropType } from 'vue'
-  import { TagMap } from '/@/stores/tag'
+<script lang="ts" setup>
+  import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useLozad } from '/@/composables/lozad'
   import { markdownToHTML } from '/@/transforms/markdown'
 
-  export default defineComponent({
-    name: 'Markdown',
-    props: {
-      markdown: String,
-      html: String,
-      tagMap: Object as PropType<TagMap>,
-      relink: {
-        type: Boolean,
-        default: false
-      },
-      sanitize: {
-        type: Boolean,
-        default: false
-      },
-      plain: {
-        type: Boolean,
-        default: false
-      },
-      compact: {
-        type: Boolean,
-        default: false
-      }
-    },
-    setup(props) {
-      const { isDarkTheme } = useEnhancer()
-      const { element } = useLozad()
+  interface Props {
+    markdown?: string
+    html?: string
+    sanitize?: boolean
+    plain?: boolean
+    compact?: boolean
+  }
 
-      const markdownHTML = computed<string>(() => {
-        if (!props.markdown) {
-          return props.html || ''
-        }
-        return markdownToHTML(props.markdown, {
-          sanitize: props.sanitize,
-          relink: props.relink,
-          tagMap: props.tagMap
-        })
-      })
-
-      return {
-        element,
-        isDarkTheme,
-        markdownHTML
-      }
+  const props = defineProps<Props>()
+  const { element } = useLozad()
+  const { isDarkTheme } = useEnhancer()
+  const markdownHTML = computed<string>(() => {
+    if (!props.markdown) {
+      return props.html || ''
     }
+    return markdownToHTML(props.markdown, {
+      sanitize: props.sanitize
+    })
   })
 </script>
+
+<template>
+  <section
+    ref="element"
+    v-html="markdownHTML"
+    :class="[plain ? 'global-markdown-plain' : 'global-markdown-html', { compact, dark: isDarkTheme }]"
+  ></section>
+</template>
 
 <style lang="scss">
   @import 'src/styles/variables.scss';

@@ -1,3 +1,35 @@
+<script lang="ts" setup>
+  import { ref, computed } from 'vue'
+  import { useHottestArticleListStore } from '/@/stores/article'
+  import { getArticleDetailRoute } from '/@/transforms/route'
+  import { numberToKilo } from '/@/transforms/text'
+  import { dateToYMD } from '/@/transforms/moment'
+  import { LanguageKey } from '/@/language'
+
+  const PER_PAGE = 8
+
+  const hottestArticleListStore = useHottestArticleListStore()
+  const articleFullList = computed(() => {
+    return hottestArticleListStore.data.slice(0, PER_PAGE * 2).map((a, i) => ({ ...a, i: i + 1 }))
+  })
+
+  const hotPage = ref(0)
+  const articles = computed(() => {
+    const perPage = hotPage.value * PER_PAGE
+    return articleFullList.value.map((a, i) => ({ ...a, i: i + 1 })).slice(perPage, perPage + PER_PAGE)
+  })
+
+  const switchHotPage = () => {
+    const count = articleFullList.value.length
+    const pages = Math.ceil(count / PER_PAGE)
+    if (hotPage.value < pages - 1) {
+      hotPage.value++
+    } else {
+      hotPage.value = 0
+    }
+  }
+</script>
+
 <template>
   <div class="article">
     <div class="header">
@@ -11,7 +43,11 @@
         <i class="iconfont icon-switch" />
       </button>
     </div>
-    <placeholder :data="articles" :loading="isFetching" :i18n-key="LanguageKey.ARTICLE_PLACEHOLDER">
+    <placeholder
+      :data="articles"
+      :loading="hottestArticleListStore.fetching"
+      :i18n-key="LanguageKey.ARTICLE_PLACEHOLDER"
+    >
       <template #loading>
         <ul class="article-list-skeleton" key="skeleton">
           <li v-for="item in 5" :key="item" class="item">
@@ -31,7 +67,7 @@
               </router-link>
               <div class="meta">
                 <span class="item date">
-                  {{ dateToYMD(item.create_at) }}
+                  {{ dateToYMD(item.created_at) }}
                 </span>
                 <span class="item views">
                   <i class="iconfont icon-eye"></i>
@@ -49,57 +85,6 @@
     </placeholder>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
-  import { useArticleListStore } from '/@/stores/article'
-  import { getArticleDetailRoute } from '/@/transforms/route'
-  import { numberToKilo } from '/@/transforms/text'
-  import { dateToYMD } from '/@/transforms/moment'
-  import { LanguageKey } from '/@/language'
-
-  const PER_PAGE = 8
-
-  export default defineComponent({
-    name: 'DesktopAsideArticle',
-    setup() {
-      const articleListStore = useArticleListStore()
-      const isFetching = computed(() => articleListStore.hotList.fetching)
-      const articleFullList = computed(() => {
-        return articleListStore.hotList.data
-          .slice(0, PER_PAGE * 2)
-          .map((a, i) => ({ ...a, i: i + 1 }))
-      })
-      const hotPage = ref(0)
-      const articles = computed(() => {
-        const perPage = hotPage.value * PER_PAGE
-        return articleFullList.value
-          .map((a, i) => ({ ...a, i: i + 1 }))
-          .slice(perPage, perPage + PER_PAGE)
-      })
-
-      const switchHotPage = () => {
-        const count = articleFullList.value.length
-        const pages = Math.ceil(count / PER_PAGE)
-        if (hotPage.value < pages - 1) {
-          hotPage.value++
-        } else {
-          hotPage.value = 0
-        }
-      }
-
-      return {
-        LanguageKey,
-        isFetching,
-        articles,
-        switchHotPage,
-        getArticleDetailRoute,
-        numberToKilo,
-        dateToYMD
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

@@ -4,24 +4,19 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { defineFetchStore } from './_fetch'
+import { defineStore } from 'pinia'
+import { useFetchStore } from './_fetch'
+import { Announcement } from '/@/interfaces/announcement'
+import { PaginationList } from '/@/interfaces/common'
 import nodepress from '/@/services/nodepress'
 
-export interface Announcement {
-  id?: number
-  _id?: string
-  state: number
-  content: string
-  update_at: string
-  create_at: string
-}
-
-export const useAnnouncementStore = defineFetchStore({
-  id: 'announcement',
-  initData: [] as Array<Announcement>,
-  cleanWhenRefetch: true,
-  async fetcher(params?: any) {
-    const response = await nodepress.get('/announcement', { params })
-    return response.result.data as Array<Announcement>
-  }
+export const useAnnouncementStore = defineStore('announcement', () => {
+  return useFetchStore<Announcement[]>({
+    data: [],
+    preclean: true,
+    async fetcher(params?: any) {
+      const response = await nodepress.get<PaginationList<Announcement>>('/announcement', { params })
+      return response.result.data
+    }
+  })
 })

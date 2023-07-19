@@ -1,3 +1,21 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+  import { useMusic } from '/@/composables/music'
+  import { get163MusicSongDetailURL } from '/@/transforms/media'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { isClient } from '/@/app/environment'
+
+  const player = isClient ? useMusic() : null
+  const muted = computed(() => Boolean(player?.muted.value))
+  const currentSong = computed(() => player?.currentSong.value)
+  const handlePlayByIndex = (index: number) => player?.play(index)
+  const getSecondsView = (seconds: number) => {
+    const minutesText = String(Math.floor(seconds / 60)).padStart(2, '0')
+    const secondsText = String(Math.floor(seconds % 60)).padStart(2, '0')
+    return `${minutesText}:${secondsText}`
+  }
+</script>
+
 <template>
   <div class="music-player">
     <div class="panel">
@@ -16,31 +34,22 @@
         </div>
       </div>
       <div class="control">
-        <button class="cut-song prev" :disabled="!player?.state?.ready" @click="player?.prevSong()">
+        <button class="cut-song prev" :disabled="!player?.state?.readied" @click="player?.prevSong()">
           <i class="iconfont icon-music-prev"></i>
         </button>
-        <button class="toggle-play" :disabled="!player?.state.ready" @click="player?.togglePlay()">
-          <i
-            class="iconfont"
-            :class="player?.state.playing ? 'icon-music-pause' : 'icon-music-play'"
-          ></i>
+        <button class="toggle-play" :disabled="!player?.state.readied" @click="player?.togglePlay()">
+          <i class="iconfont" :class="player?.state.playing ? 'icon-music-pause' : 'icon-music-play'"></i>
         </button>
-        <button class="cut-song next" :disabled="!player?.state.ready" @click="player?.nextSong()">
+        <button class="cut-song next" :disabled="!player?.state.readied" @click="player?.nextSong()">
           <i class="iconfont icon-music-next"></i>
         </button>
       </div>
       <div class="tools">
-        <span class="indexed" v-if="player">
-          {{ player.state.index + 1 }} / {{ player?.state.count }}
-        </span>
+        <span class="indexed" v-if="player"> {{ player.state.index + 1 }} / {{ player?.state.count }} </span>
         <ulink class="list-link" :href="VALUABLE_LINKS.MUSIC_163">
           <i class="iconfont icon-new-window-s"></i>
         </ulink>
-        <button
-          class="toggle-muted"
-          :disabled="!player?.state.ready"
-          @click="player?.toggleMuted()"
-        >
+        <button class="toggle-muted" :disabled="!player?.state.readied" @click="player?.toggleMuted()">
           <i class="iconfont" :class="muted ? 'icon-music-muted' : 'icon-music-unmuted'" />
         </button>
       </div>
@@ -74,39 +83,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useMusic } from '/@/composables/music'
-  import { get163MusicSongDetailURL } from '/@/transforms/media'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-  import { isClient } from '/@/app/environment'
-
-  export default defineComponent({
-    name: 'MusicPlayer',
-    setup() {
-      const musicPlayer = isClient ? useMusic() : null
-      const muted = computed(() => Boolean(musicPlayer?.muted.value))
-      const currentSong = computed(() => musicPlayer?.currentSong.value)
-      const handlePlayByIndex = (index: number) => musicPlayer?.play(index)
-      const getSecondsView = (seconds: number) => {
-        const minutesText = String(Math.floor(seconds / 60)).padStart(2, '0')
-        const secondsText = String(Math.floor(seconds % 60)).padStart(2, '0')
-        return `${minutesText}:${secondsText}`
-      }
-
-      return {
-        VALUABLE_LINKS,
-        player: musicPlayer,
-        muted,
-        currentSong,
-        handlePlayByIndex,
-        get163MusicSongDetailURL,
-        getSecondsView
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
@@ -205,6 +181,10 @@
         align-items: center;
         padding: $lg-gap;
         font-size: $font-size-h4;
+
+        .toggle-muted {
+          width: 2rem;
+        }
 
         .list-link,
         .toggle-muted {

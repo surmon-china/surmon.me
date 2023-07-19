@@ -1,6 +1,43 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { Pagination } from '/@/interfaces/common'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { COMMENT_FOOTER_ELEMENT_ID } from '/@/constants/anchor'
+  import { CommentEvents } from './helper'
+
+  const props = defineProps<{
+    fetching: boolean
+    remain?: number
+    pagination: Pagination | null
+  }>()
+
+  const emit = defineEmits<{
+    (e: CommentEvents.Page, page: number): void
+  }>()
+
+  const { gtag } = useEnhancer()
+  const hasMore = computed(() => {
+    return (
+      props.pagination &&
+      props.pagination?.total_page > 1 &&
+      props.pagination?.current_page !== props.pagination?.total_page
+    )
+  })
+
+  const handleLoadmore = () => {
+    if (props.pagination) {
+      emit(CommentEvents.Page, props.pagination.current_page + 1)
+      gtag?.event('loadmore', {
+        event_category: GAEventCategories.Comment
+      })
+    }
+  }
+</script>
+
 <template>
-  <transition name="module">
-    <div class="loadmore" :id="COMMENT_FOOTER_ELEMENT_ID">
+  <div class="loadmore" :id="COMMENT_FOOTER_ELEMENT_ID">
+    <transition name="module">
       <button class="button" v-if="hasMore" :disabled="fetching" @click="handleLoadmore">
         <i18n v-if="fetching" zh="加载中..." en="Loading..." />
         <template v-else>
@@ -14,60 +51,9 @@
       <span class="no-more" v-else>
         <i18n zh="水尽山穷" en="NO MORE" />
       </span>
-    </div>
-  </transition>
+    </transition>
+  </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { COMMENT_FOOTER_ELEMENT_ID } from '/@/constants/anchor'
-  import { CommentEvents } from './helper'
-
-  export default defineComponent({
-    name: 'CommentPagination',
-    props: {
-      fetching: {
-        type: Boolean,
-        required: true
-      },
-      remain: {
-        type: Number,
-        required: true
-      },
-      pagination: {
-        type: Object,
-        required: false
-      }
-    },
-    setup(props, context) {
-      const { gtag } = useEnhancer()
-      const hasMore = computed(() => {
-        return (
-          props.pagination?.total_page > 1 &&
-          props.pagination?.current_page !== props.pagination?.total_page
-        )
-      })
-
-      const handleLoadmore = () => {
-        gtag?.event('loadmore', {
-          event_category: GAEventCategories.Comment
-        })
-
-        if (props.pagination) {
-          context.emit(CommentEvents.Page, props.pagination.current_page + 1)
-        }
-      }
-
-      return {
-        COMMENT_FOOTER_ELEMENT_ID,
-        hasMore,
-        handleLoadmore
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

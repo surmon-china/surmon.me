@@ -1,40 +1,28 @@
+<script lang="ts" setup>
+  import { computed, CSSProperties } from 'vue'
+
+  interface Props {
+    width?: number
+    height?: number
+    circle?: boolean
+    radius?: number
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    circle: false,
+    radius: 2
+  })
+
+  const style = computed<CSSProperties>(() => ({
+    borderRadius: props.circle ? '100%' : `${props.radius}px`,
+    ...(props.width && { width: props.width + 'px' }),
+    ...(props.height && { height: props.height + 'px' })
+  }))
+</script>
+
 <template>
   <div class="skeleton base" :style="style"></div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, computed, CSSProperties } from 'vue'
-  export default defineComponent({
-    name: 'SkeletonBase',
-    props: {
-      width: {
-        type: Number
-      },
-      height: {
-        type: Number
-      },
-      circle: {
-        type: Boolean,
-        default: false
-      },
-      radius: {
-        type: Number,
-        default: 2
-      }
-    },
-    setup(props) {
-      const style = computed<CSSProperties>(() => ({
-        borderRadius: props.circle ? '100%' : `${props.radius}px`,
-        ...(props.width && { width: props.width + 'px' }),
-        ...(props.height && { height: props.height + 'px' })
-      }))
-
-      return {
-        style
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

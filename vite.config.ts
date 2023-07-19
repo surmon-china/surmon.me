@@ -7,13 +7,10 @@
 import path from 'path'
 import { loadEnv, defineConfig } from 'vite'
 import vuePlugin from '@vitejs/plugin-vue'
+import UnheadVite from '@unhead/addons/vite'
 
 const CWD = process.cwd()
-
-// env
 const BASE_ENV_CONFIG = loadEnv('', CWD)
-const DEV_ENV_CONFIG = loadEnv('development', CWD)
-const PROD_ENV_CONFIG = loadEnv('production', CWD)
 
 // https://vitejs.dev/config/#conditional-config
 export default defineConfig(({ command, mode }) => {
@@ -25,7 +22,7 @@ export default defineConfig(({ command, mode }) => {
   })
 
   return {
-    plugins: [vuePlugin()],
+    plugins: [vuePlugin(), UnheadVite()],
     root: path.resolve(__dirname),
     base: TARGET_ENV_CONFIG.VITE_CDN_URL + '/',
     publicDir: 'public',
@@ -55,8 +52,6 @@ export default defineConfig(({ command, mode }) => {
     },
     optimizeDeps: {
       include: [
-        'swiper',
-        // Tree shaking
         'highlight.js/lib/core',
         'highlight.js/lib/languages/go',
         'highlight.js/lib/languages/css',
@@ -69,7 +64,6 @@ export default defineConfig(({ command, mode }) => {
         'highlight.js/lib/languages/scss',
         'highlight.js/lib/languages/yaml',
         'highlight.js/lib/languages/rust',
-        'highlight.js/lib/languages/java',
         'highlight.js/lib/languages/shell',
         'highlight.js/lib/languages/nginx',
         'highlight.js/lib/languages/stylus',
@@ -78,18 +72,14 @@ export default defineConfig(({ command, mode }) => {
         'highlight.js/lib/languages/typescript'
       ],
       exclude: [
-        // Effect polyfill
+        // browser
         'intersection-observer',
-        // Tree shaking
-        'highlight.js',
-        // Node
+        // Node.js
         'express',
         'lru-cache',
         'node-schedule',
         'cookie-parser',
         'serialize-javascript',
-        'cross-env',
-        'simple-netease-cloud-music',
         'wonderful-bing-wallpaper'
       ]
     },
@@ -108,9 +98,7 @@ export default defineConfig(({ command, mode }) => {
             if (id.includes('node_modules')) {
               const basics = [
                 'swiper',
-                'dom7', // MARK: important > swiper need dom7
                 'amplitude',
-                'amplitudejs',
                 'emoji-233333',
                 'lozad',
                 'marked',

@@ -6,39 +6,25 @@
 
 import { Pinia } from 'pinia'
 
-import { useTagStore } from './tag'
-import { useCategoryStore } from './category'
-import { useCommentStore } from './comment'
-import { useArticleListStore, useArticleDetailStore } from './article'
+import { useArticleListStore, useHottestArticleListStore, useArticleDetailStore } from './article'
 import { useAnnouncementStore } from './announcement'
 import { useArchiveStore } from './archive'
+import { useCommentStore } from './comment'
+import { useCategoryStore } from './category'
+import { useTagStore } from './tag'
 import { useIdentityStore } from './identity'
-import { useAdminInfoStore, useAppOptionStore } from './basic'
 import { useWallpaperStore } from './wallpaper'
-import { useOpenSeaAssetsStore, useOpenSeaCollectionsStore } from './nft'
-import {
-  useNodepressStatisticStore,
-  useGitHubStatisticStore,
-  useNPMStatisticStore
-} from './statistic'
-import {
-  useArticleCalendarStore,
-  useTwitterCalendarStore,
-  useInstagramCalendarStore,
-  useGitHubCalendarStore
-} from './calendar'
-import {
-  useDoubanMoviesStore,
-  useInstagramMediasStore,
-  useYouTubePlayListStore,
-  useTwitterUserinfoStore,
-  useTwitterTweetsStore
-} from './media'
+import { useSponsorStore } from './sponsor'
+import { useAdminInfoStore, useAppOptionStore } from './basic'
+import { useNodepressStatisticStore, useGitHubStatisticStore, useNpmStatisticStore } from './statistic'
+import { useArticleCalendarStore, useInstagramCalendarStore, useGitHubCalendarStore } from './calendar'
+import { useDoubanMoviesStore, useInstagramMediasStore, useYouTubePlayListStore, useTwitterStore } from './media'
 
 export const useStores = (pinia?: Pinia) => ({
-  announcement: useAnnouncementStore(pinia),
   articleList: useArticleListStore(pinia),
   articleDetail: useArticleDetailStore(pinia),
+  hottestArticleList: useHottestArticleListStore(pinia),
+  announcement: useAnnouncementStore(pinia),
   category: useCategoryStore(pinia),
   tag: useTagStore(pinia),
   comment: useCommentStore(pinia),
@@ -47,21 +33,18 @@ export const useStores = (pinia?: Pinia) => ({
   adminInfo: useAdminInfoStore(pinia),
   appOption: useAppOptionStore(pinia),
   wallpaper: useWallpaperStore(pinia),
+  sponsor: useSponsorStore(pinia),
 
   nodepressStatistic: useNodepressStatisticStore(pinia),
   githubStatistic: useGitHubStatisticStore(pinia),
-  npmStatistic: useNPMStatisticStore(pinia),
+  npmStatistic: useNpmStatisticStore(pinia),
 
   articleCalendar: useArticleCalendarStore(pinia),
-  twitterCalendar: useTwitterCalendarStore(pinia),
   instagramCalendar: useInstagramCalendarStore(pinia),
   githubCalendar: useGitHubCalendarStore(pinia),
 
   doubanMovies: useDoubanMoviesStore(pinia),
   instagramMedias: useInstagramMediasStore(pinia),
   youtubePlayList: useYouTubePlayListStore(pinia),
-  twitterUserinfo: useTwitterUserinfoStore(pinia),
-  twitterTweets: useTwitterTweetsStore(pinia),
-  openseaAssets: useOpenSeaAssetsStore(pinia),
-  openseaCollections: useOpenSeaCollectionsStore(pinia)
+  twitter: useTwitterStore(pinia)
 })

@@ -1,3 +1,71 @@
+<script lang="ts" setup>
+  import { storeToRefs } from 'pinia'
+  import { ref, computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { LanguageKey } from '/@/language'
+  import { Author } from '/@/interfaces/comment'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { useIdentityStore, UserType } from '/@/stores/identity'
+  import { getGravatarByHash, getDefaultAvatar, getDisqusAvatarByUsername } from '/@/transforms/avatar'
+  import { CommentEvents } from '../helper'
+
+  enum PublisherEvents {
+    UpdateProfile = 'update:profile'
+  }
+
+  interface Props {
+    id?: string
+    disabled?: boolean
+    profile: Author
+    total?: number
+    bordered?: boolean
+    defaultBlossomed?: boolean
+    hiddenAvatar?: boolean
+    fixedAvatar?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    total: 0,
+    defaultBlossomed: true
+  })
+
+  const emit = defineEmits<{
+    (e: CommentEvents.Blossom): void
+    (e: PublisherEvents.UpdateProfile, profile: Author): void
+  }>()
+
+  const { i18n: _i18n, gtag } = useEnhancer()
+  const { user } = storeToRefs(useIdentityStore())
+  const avatar = computed(() => {
+    // local user
+    if (user.value.type === UserType.Local) {
+      return getGravatarByHash(user.value.localProfile?.email_hash)
+    }
+    // disqus user
+    if (user.value.type === UserType.Disqus) {
+      return getDisqusAvatarByUsername(user.value.disqusProfile?.username)
+    }
+    // temp user
+    return getDefaultAvatar()
+  })
+
+  const handleUpdateProfile = (key: keyof Author, event: any) => {
+    emit(PublisherEvents.UpdateProfile, {
+      ...props.profile,
+      [key]: event.target.value
+    })
+  }
+
+  const blossomed = ref(props.defaultBlossomed)
+  const handleBlossom = () => {
+    blossomed.value = true
+    emit(CommentEvents.Blossom)
+    gtag?.event('focus_publisher', {
+      event_category: GAEventCategories.Comment
+    })
+  }
+</script>
+
 <template>
   <form
     key="publisher"
@@ -22,7 +90,7 @@
             name="name"
             autocomplete="on"
             :disabled="disabled"
-            :placeholder="t(LanguageKey.COMMENT_POST_NAME) + ' *'"
+            :placeholder="_i18n.t(LanguageKey.COMMENT_POST_NAME) + ' *'"
           />
         </div>
         <div class="email">
@@ -34,7 +102,7 @@
             name="email"
             autocomplete="on"
             :disabled="disabled"
-            :placeholder="t(LanguageKey.COMMENT_POST_EMAIL) + ' *'"
+            :placeholder="_i18n.t(LanguageKey.COMMENT_POST_EMAIL) + ' *'"
           />
         </div>
         <div class="site">
@@ -45,7 +113,7 @@
             name="url"
             autocomplete="on"
             :disabled="disabled"
-            :placeholder="t(LanguageKey.COMMENT_POST_SITE)"
+            :placeholder="_i18n.t(LanguageKey.COMMENT_POST_SITE)"
           />
         </div>
       </div>
@@ -65,111 +133,6 @@
     </div>
   </form>
 </template>
-
-<script lang="ts">
-  import { storeToRefs } from 'pinia'
-  import { defineComponent, ref, computed, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { Author } from '/@/stores/comment'
-  import { useIdentityStore, UserType } from '/@/stores/identity'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { LanguageKey } from '/@/language'
-  import {
-    getGravatarByHash,
-    getDefaultAvatar,
-    getDisqusAvatarByUsername
-  } from '/@/transforms/avatar'
-  import { firstUpperCase } from '/@/transforms/text'
-  import { CommentEvents } from '../helper'
-
-  export enum PublisherEvents {
-    UpdateProfile = 'update:profile'
-  }
-
-  export default defineComponent({
-    name: 'CommentPublisher',
-    props: {
-      id: {
-        type: String,
-        required: false
-      },
-      disabled: {
-        type: Boolean,
-        default: false
-      },
-      profile: {
-        type: Object as PropType<Author>,
-        required: true
-      },
-      total: {
-        type: Number,
-        default: 0,
-        required: false
-      },
-      bordered: {
-        type: Boolean,
-        default: false
-      },
-      defaultBlossomed: {
-        type: Boolean,
-        default: true
-      },
-      hiddenAvatar: {
-        type: Boolean,
-        required: false
-      },
-      fixedAvatar: {
-        type: Boolean,
-        required: false
-      }
-    },
-    emits: [CommentEvents.Blossom, PublisherEvents.UpdateProfile],
-    setup(props, context) {
-      const { i18n, gtag } = useEnhancer()
-      const { user } = storeToRefs(useIdentityStore())
-      const avatar = computed(() => {
-        // local user
-        if (user.value.type === UserType.Local) {
-          return getGravatarByHash(user.value.localProfile?.email_hash)
-        }
-        // disqus user
-        if (user.value.type === UserType.Disqus) {
-          return getDisqusAvatarByUsername(user.value.disqusProfile?.username)
-        }
-        // temp user
-        return getDefaultAvatar()
-      })
-
-      const handleUpdateProfile = (key: keyof Author, event: any) => {
-        context.emit(PublisherEvents.UpdateProfile, {
-          ...props.profile,
-          [key]: event.target.value
-        })
-      }
-
-      const blossomed = ref(props.defaultBlossomed)
-      const handleBlossom = () => {
-        blossomed.value = true
-        context.emit(CommentEvents.Blossom)
-        gtag?.event('focus_publisher', {
-          event_category: GAEventCategories.Comment
-        })
-      }
-
-      return {
-        user,
-        avatar,
-        blossomed,
-        UserType,
-        LanguageKey,
-        t: i18n.t,
-        firstUpperCase,
-        handleUpdateProfile,
-        handleBlossom
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

@@ -1,22 +1,47 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+  import { Article } from '/@/interfaces/article'
+  import { getArticleDetailRoute } from '/@/transforms/route'
+  import { getMobileArticleListThumbnailURL } from '/@/transforms/thumbnail'
+
+  interface Props {
+    articles?: Article[]
+    columns?: number
+    count?: number
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    articles: () => [],
+    columns: 4,
+    count: 8
+  })
+
+  const articleList = computed<Article[]>(() => {
+    const articles = [...props.articles].slice(0, props.count)
+    if (articles.length >= props.count) {
+      return articles
+    }
+    return [
+      ...articles,
+      ...new Array(props.count - articles.length).fill({
+        title: '-',
+        description: '',
+        id: null,
+        _id: '',
+        thumbnail: ''
+      })
+    ]
+  })
+</script>
+
 <template>
   <div class="related">
     <ul class="articles" :style="{ gridTemplateColumns: `repeat(${columns}, 1fr)` }">
-      <li
-        v-for="(article, index) in articleList"
-        :class="{ disabled: !article.id }"
-        :key="index"
-        class="item"
-      >
-        <router-link
-          class="item-article"
-          :title="article.title"
-          :to="getArticleDetailRoute(article.id)"
-        >
+      <li v-for="(article, index) in articleList" :class="{ disabled: !article.id }" :key="index" class="item">
+        <router-link class="item-article" :title="article.title" :to="getArticleDetailRoute(article.id)">
           <div
-            class="thumb"
-            :style="{
-              backgroundImage: `url(${getMobileArticleListThumbnailURL(article.thumb)})`
-            }"
+            class="thumbnail"
+            :style="{ backgroundImage: `url(${getMobileArticleListThumbnailURL(article.thumbnail)})` }"
           ></div>
           <div class="title">{{ article.title }}</div>
           <div class="description">{{ article.description }}</div>
@@ -25,55 +50,6 @@
     </ul>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, computed, PropType } from 'vue'
-  import { Article } from '/@/stores/article'
-  import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getMobileArticleListThumbnailURL } from '/@/transforms/thumbnail'
-
-  export default defineComponent({
-    name: 'ArticleRelated',
-    props: {
-      articles: {
-        type: Array as PropType<Article[]>,
-        default: () => []
-      },
-      columns: {
-        type: Number,
-        default: 4
-      },
-      count: {
-        type: Number,
-        default: 8
-      }
-    },
-    setup(props) {
-      const articleList = computed<Article[]>(() => {
-        const articles = [...props.articles].slice(0, props.count)
-        if (articles.length >= props.count) {
-          return articles
-        }
-        return [
-          ...articles,
-          ...new Array(props.count - articles.length).fill({
-            title: '-',
-            description: '',
-            id: null,
-            _id: '',
-            thumb: ''
-          })
-        ]
-      })
-
-      return {
-        articleList,
-        getArticleDetailRoute,
-        getMobileArticleListThumbnailURL
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
@@ -107,7 +83,7 @@
           position: relative;
           overflow: hidden;
 
-          .thumb {
+          .thumbnail {
             position: relative;
             opacity: 0.88;
             width: 100%;
@@ -123,12 +99,7 @@
             &::before {
               content: '';
               position: absolute;
-              background: linear-gradient(
-                to top,
-                rgba($black, 0.2) 20%,
-                rgba($black, 0.1) 50%,
-                transparent 90%
-              );
+              background: linear-gradient(to top, rgba($black, 0.2) 20%, rgba($black, 0.1) 50%, transparent 90%);
               width: 100%;
               height: 100%;
               top: 0;
@@ -160,7 +131,7 @@
           }
 
           &:hover {
-            .thumb {
+            .thumbnail {
               opacity: 1;
               background-position: 50% 50%;
             }

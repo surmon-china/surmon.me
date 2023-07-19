@@ -6,7 +6,7 @@
 
 import axios from 'axios'
 import { IDENTITIES } from '@/config/app.config'
-import { GITHUB_BEARER_TOKEN } from '@/config/bff.argv'
+import { GITHUB_BEARER_TOKEN } from '@/config/bff.yargs'
 
 const graphqlGitHub = <T = any>(query: string): Promise<T> => {
   return axios
@@ -40,7 +40,7 @@ export interface GitHubSponsorUser {
 
 export interface GitHubSponsorsResponse {
   sponsorsActivities: {
-    nodes: Array<{
+    nodes: Array<null | {
       action: string
       sponsorsTier: {
         isOneTime: boolean

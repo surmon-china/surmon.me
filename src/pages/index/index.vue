@@ -1,30 +1,4 @@
-<template>
-  <div class="index-page">
-    <carrousel
-      class="carrousel"
-      :articles="articleListStore.list.data"
-      :fetching="articleListStore.list.fetching"
-    />
-    <twitter
-      class="twitter"
-      :userinfo="twitterUserinfo.data ?? void 0"
-      :tweets="twitterTweets.data ?? void 0"
-      :fetching="
-        twitterUserinfo.fetching || twitterTweets.fetching || articleListStore.list.fetching
-      "
-    />
-    <article-list
-      :mammon="false"
-      :fetching="articleListStore.list.fetching"
-      :articles="articleListStore.list.data"
-      :pagination="articleListStore.list.pagination"
-      @loadmore="loadmoreArticles"
-    />
-  </div>
-</template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
+<script lang="ts" setup>
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch, onClient } from '/@/universal'
@@ -35,55 +9,45 @@
   import Carrousel from './carrousel.vue'
   import Twitter from './twitter.vue'
 
-  export default defineComponent({
-    name: 'IndexPage',
-    components: {
-      Carrousel,
-      Twitter,
-      ArticleList
-    },
-    setup() {
-      const { head, i18n } = useEnhancer()
-      const {
-        articleList: articleListStore,
-        appOption: appOptionStore,
-        twitterUserinfo,
-        twitterTweets
-      } = useStores()
+  const { seo, i18n: _i18n } = useEnhancer()
+  const { appOption, articleList: articleListStore, twitter: twitterStore } = useStores()
 
-      head(() => ({
-        title: `${META.title} - ${i18n.t(LanguageKey.APP_SLOGAN)}`,
-        description: appOptionStore.data?.description,
-        keywords: appOptionStore.data?.keywords.join(',')
-      }))
+  seo(() => ({
+    title: `${META.title} - ${_i18n.t(LanguageKey.APP_SLOGAN)}`,
+    description: appOption.data?.description,
+    keywords: appOption.data?.keywords.join(',')
+  }))
 
-      const loadmoreArticles = async () => {
-        const targetPage = articleListStore.list.pagination!.current_page + 1
-        await articleListStore.fetchList({ page: targetPage })
-        if (targetPage > 1) {
-          onClient(scrollToNextScreen)
-        }
-      }
-
-      useUniversalFetch(() => {
-        return Promise.all([
-          articleListStore.fetchList(),
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          twitterUserinfo.fetch().catch(() => {}),
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          twitterTweets.fetch().catch(() => {})
-        ])
-      })
-
-      return {
-        twitterUserinfo,
-        twitterTweets,
-        articleListStore,
-        loadmoreArticles
-      }
+  const loadmoreArticles = async () => {
+    const targetPage = articleListStore.pagination!.current_page + 1
+    await articleListStore.fetch({ page: targetPage })
+    if (targetPage > 1) {
+      onClient(scrollToNextScreen)
     }
+  }
+
+  useUniversalFetch(() => {
+    return Promise.all([articleListStore.fetch(), twitterStore.fetch().catch(() => {})])
   })
 </script>
+
+<template>
+  <div class="index-page">
+    <carrousel class="carrousel" :articles="articleListStore.data" :fetching="articleListStore.fetching" />
+    <twitter
+      class="twitter"
+      :aggregate="twitterStore.data"
+      :fetching="twitterStore.fetching || articleListStore.fetching"
+    />
+    <article-list
+      :mammon="false"
+      :fetching="articleListStore.fetching"
+      :articles="articleListStore.data"
+      :pagination="articleListStore.pagination"
+      @loadmore="loadmoreArticles"
+    />
+  </div>
+</template>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

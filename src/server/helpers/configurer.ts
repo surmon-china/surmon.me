@@ -1,14 +1,19 @@
 /**
  * @file BFF Server helper
- * @module server.helper
+ * @module server.helper.configurer
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import path from 'path'
 import { isDev } from '@/environment'
+import { getOnlineApiURL, getLocalApiURL } from '@/config/bff.config'
 
-// MARK: 与非生产资料解耦
-export const NODEPRESS_API = `https://api.surmon.me`
+// Keep it as a function, since the process.env variables are only valid after the application is completely run
+export const getNodePressAPI = () => {
+  const local = getLocalApiURL()
+  const online = getOnlineApiURL()
+  return isDev ? local : online
+}
 
 export const ROOT_PATH = process.cwd()
 export const DIST_PATH = path.join(ROOT_PATH, 'dist')

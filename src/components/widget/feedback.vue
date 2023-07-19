@@ -1,3 +1,63 @@
+<script lang="ts" setup>
+  import { reactive, computed, toRaw } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useStores } from '/@/stores'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { LanguageKey } from '/@/language/key'
+  import { META } from '/@/config/app.config'
+
+  enum Event {
+    Close = 'close'
+  }
+
+  const emit = defineEmits<{
+    (e: Event.Close): void
+  }>()
+
+  const EMOTIONS = [
+    { emoji: '😠', value: 1, en: 'Terrible', zh: '差劲' },
+    { emoji: '🙁', value: 2, en: 'Bad', zh: '不喜欢' },
+    { emoji: '😐', value: 3, en: 'Neutral', zh: '无感' },
+    { emoji: '😃', value: 4, en: 'Great', zh: '喜欢' },
+    { emoji: '🥰', value: 5, en: 'Amazing', zh: '太棒了' }
+  ]
+
+  const { appOption, identity } = useStores()
+  const { gtag, isZhLang } = useEnhancer()
+  const state = reactive({
+    emotion: null as unknown as number,
+    content: '',
+    submitting: false,
+    submitted: false
+  })
+
+  const isSubmitable = computed(() => {
+    return Number.isInteger(state.emotion) && Boolean(state.content)
+  })
+
+  const handleClose = () => emit(Event.Close)
+  const handleSubmit = async () => {
+    if (!isSubmitable.value) {
+      return
+    }
+
+    gtag?.event('submit_feedback', {
+      event_category: GAEventCategories.Widget
+    })
+
+    try {
+      state.submitting = true
+      const response = await appOption.postFeedback(toRaw(state))
+      identity.addFeedback(response.result)
+      state.submitted = true
+    } catch (error) {
+      alert(error)
+    } finally {
+      state.submitting = false
+    }
+  }
+</script>
+
 <template>
   <div class="feedback">
     <template v-if="state.submitted">
@@ -24,7 +84,7 @@
         </i18n>
       </div>
       <div class="emotions">
-        <li class="item" :key="emotion.value" v-for="emotion in emotions">
+        <li class="item" :key="emotion.value" v-for="emotion in EMOTIONS">
           <label>
             <input
               class="radio"
@@ -51,19 +111,13 @@
           rows="10"
           v-model.trim="state.content"
           :disabled="state.submitting"
-          :placeholder="
-            isZhLang ? '你可在此畅所欲言，这将仅对博主可见' : 'Tell me about your opinion...'
-          "
+          :placeholder="isZhLang ? '你可在此畅所欲言，这将仅对博主可见' : 'Tell me about your opinion...'"
         ></textarea>
         <div class="buttons">
           <button class="item cancel" :disabled="state.submitting" @click="handleClose">
             <span class="text"><i18n zh="取消" en="Cancel" /></span>
           </button>
-          <button
-            class="item submit"
-            :disabled="!isSubmitable || state.submitting"
-            @click="handleSubmit"
-          >
+          <button class="item submit" :disabled="!isSubmitable || state.submitting" @click="handleSubmit">
             <i class="iconfont icon-mail-plane" />
             <span class="text">
               <i18n :k="state.submitting ? LanguageKey.SUBMITTING : LanguageKey.SUBMIT" />
@@ -72,89 +126,14 @@
         </div>
       </div>
     </template>
-    <div class="history" v-if="historyFeedbacks.length">
+    <div class="history" v-if="identity.feedbacks.length">
       <i18n>
-        <template #zh>你已进行过 {{ historyFeedbacks.length }} 次反馈。</template>
-        <template #en>You have {{ historyFeedbacks.length }} feedback history.</template>
+        <template #zh>你已进行过 {{ identity.feedbacks.length }} 次反馈。</template>
+        <template #en>You have {{ identity.feedbacks.length }} feedback history.</template>
       </i18n>
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, reactive, computed, toRaw } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useStores } from '/@/stores'
-  import { LanguageKey } from '/@/language/key'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { META } from '/@/config/app.config'
-
-  enum Event {
-    Close = 'close'
-  }
-
-  export default defineComponent({
-    name: 'Feedback',
-    emits: [Event.Close],
-    setup(_, context) {
-      const emotions = [
-        { emoji: '😠', value: 1, en: 'Terrible', zh: '差劲' },
-        { emoji: '🙁', value: 2, en: 'Bad', zh: '不喜欢' },
-        { emoji: '😐', value: 3, en: 'Neutral', zh: '无感' },
-        { emoji: '😃', value: 4, en: 'Great', zh: '喜欢' },
-        { emoji: '🥰', value: 5, en: 'Amazing', zh: '太棒了' }
-      ]
-
-      const { appOption, identity } = useStores()
-      const { gtag, isZhLang } = useEnhancer()
-      const historyFeedbacks = computed(() => identity.feedbacks)
-      const state = reactive({
-        emotion: null as unknown as number,
-        content: '',
-        submitting: false,
-        submitted: false
-      })
-      const isSubmitable = computed(() => {
-        return Number.isInteger(state.emotion) && Boolean(state.content)
-      })
-
-      const handleClose = () => context.emit(Event.Close)
-      const handleSubmit = () => {
-        if (isSubmitable.value) {
-          gtag?.event('submit_feedback', {
-            event_category: GAEventCategories.Widget
-          })
-
-          state.submitting = true
-          appOption
-            .postFeedback(toRaw(state))
-            .then((result) => {
-              identity.addFeedback(result.result)
-              state.submitted = true
-            })
-            .catch((error: any) => {
-              alert(error)
-            })
-            .finally(() => {
-              state.submitting = false
-            })
-        }
-      }
-
-      return {
-        LanguageKey,
-        META,
-        isZhLang,
-        isSubmitable,
-        emotions,
-        state,
-        historyFeedbacks,
-        handleClose,
-        handleSubmit
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

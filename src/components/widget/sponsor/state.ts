@@ -1,10 +1,8 @@
 import { ref, computed } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { GAEventCategories } from '/@/constants/gtag'
-import { TunnelModule } from '/@/constants/tunnel'
-import tunnel from '/@/services/tunnel'
+import { useSponsorStore } from '/@/stores/sponsor'
 import { IDENTITIES, VALUABLE_LINKS } from '/@/config/app.config'
-import type { GitHubSponsorsResponse } from '/@/server/getters/github'
 
 export enum ProviderId {
   GitHub = 'github',
@@ -15,8 +13,8 @@ export enum ProviderId {
   Ethereum = 'ethereum'
 }
 
-export const providerIds = Object.values(ProviderId)
-export const providers = [
+export const PROVIDER_IDS = Object.values(ProviderId)
+export const PROVIDERS = [
   {
     id: ProviderId.GitHub,
     title: 'GitHub Sponsors',
@@ -62,76 +60,23 @@ export const providers = [
 export type SponsorState = ReturnType<typeof useSponsorState>
 export const useSponsorState = (initId?: ProviderId) => {
   const { gtag } = useEnhancer()
-  const activeId = ref(initId && providerIds.includes(initId) ? initId : providers[0].id)
-  const activeProvider = computed(() => providers.find((t) => t.id === activeId.value)!)
-
-  const githubSponsorsLoading = ref<boolean>(false)
-  const githubSponsorsResponse = ref<GitHubSponsorsResponse | null>(null)
-  const currentGitHubSponsors = computed(() => {
-    return githubSponsorsResponse.value?.sponsors.edges.map((edge) => edge.node) || []
-  })
-  const pastGitHubSponsors = computed(() => {
-    // 1. sort by TIMESTAMP/DESC
-    // 2. filter out current sponsors
-    // 3. the latest user to cancel is at the head of the array
-    // 4. no cancellation events for one-time sponsor
-    const list = githubSponsorsResponse.value?.sponsorsActivities.nodes || []
-    const currentSponsorsLogin = currentGitHubSponsors.value.map((sponsor) => sponsor.login)
-    const pastList = list.filter((node) => {
-      return (
-        // Recently, GitHub returned the Ghost user as null
-        Boolean(node) &&
-        !currentSponsorsLogin.includes(node.sponsor.login) &&
-        node.sponsor.login !== 'ghost' &&
-        (node.action === 'CANCELLED_SPONSORSHIP' || node.sponsorsTier.isOneTime)
-      )
-    })
-    return pastList.map((item) => item.sponsor)
-  })
-
-  const ensureGitHubSponsors = () => {
-    if (githubSponsorsResponse.value || githubSponsorsLoading.value) {
-      return
-    }
-    githubSponsorsLoading.value = true
-    tunnel
-      .dispatch(TunnelModule.GitHubSponsors)
-      .then((response) => {
-        githubSponsorsResponse.value = response
-      })
-      .finally(() => {
-        githubSponsorsLoading.value = false
-      })
-  }
+  const githubSponsor = useSponsorStore()
+  const activeId = ref(initId && PROVIDER_IDS.includes(initId) ? initId : PROVIDERS[0].id)
+  const activeProvider = computed(() => PROVIDERS.find((t) => t.id === activeId.value)!)
 
   const setProviderId = (id: ProviderId) => {
-    if (!providerIds.includes(id)) {
-      return
+    if (PROVIDER_IDS.includes(id)) {
+      activeId.value = id
+      gtag?.event('sponsor_tab_switch', {
+        event_category: GAEventCategories.Widget
+      })
     }
-    // set provider ID
-    activeId.value = id
-    // fetch github sponsors
-    if (id === ProviderId.GitHub) {
-      ensureGitHubSponsors()
-    }
-    // push event
-    gtag?.event('sponsor_modal_switch', {
-      event_category: GAEventCategories.Widget
-    })
-  }
-
-  // init github sponsors
-  if (activeId.value === ProviderId.GitHub) {
-    ensureGitHubSponsors()
   }
 
   return {
     activeId,
     activeProvider,
     setProviderId,
-    githubSponsorsResponse,
-    currentGitHubSponsors,
-    pastGitHubSponsors,
-    githubSponsorsLoading
+    githubSponsor
   }
 }

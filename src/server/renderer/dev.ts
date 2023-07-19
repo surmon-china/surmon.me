@@ -8,6 +8,7 @@ import { CacheClient } from '../cache'
 import { resolveTemplate } from './template'
 
 export const enableDevRenderer = async (app: Express, cache: CacheClient) => {
+  // https://vitejs.dev/guide/ssr.html
   const viteServer = await createServer({
     root: process.cwd(),
     logLevel: 'info',

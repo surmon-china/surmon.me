@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - "v*"
+      - 'v*'
 
 jobs:
   build:
@@ -11,17 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@master
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@latest
+        uses: surmon-china/create-release@v1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
-          # body:
-          draft: false
-          prerelease: false
+          body: |
+            Please refer to [CHANGELOG.md](/CHANGELOG.md) for details.

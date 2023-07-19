@@ -8,7 +8,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useGlobalState } from '/@/app/state'
 import { useI18n } from '/@/composables/i18n'
-import { useHead } from '/@/composables/head'
+import { useHead, useSeo } from '/@/composables/head'
 import { useGtag, Gtag } from '/@/composables/gtag'
 import { useTheme, Theme } from '/@/composables/theme'
 import { useDefer, Defer } from '/@/composables/defer'
@@ -26,9 +26,9 @@ export const useEnhancer = () => {
   const i18n = useI18n()
   const theme = useTheme()
   const globalState = useGlobalState()
-  const appOptionState = useAppOptionStore()
+  const appOptionStore = useAppOptionStore()
 
-  const adConfig = computed(() => appOptionState.adConfig)
+  const adConfig = computed(() => appOptionStore.adConfig)
   const isMobile = computed(() => globalState.userAgent.isMobile)
   const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
   const isZhLang = computed(() => i18n.language.value === Language.Chinese)
@@ -36,10 +36,11 @@ export const useEnhancer = () => {
   return {
     route,
     router,
-    globalState,
     i18n,
-    head: useHead,
     theme,
+    seo: useSeo,
+    head: useHead,
+    gState: globalState,
 
     adConfig,
     isMobile,

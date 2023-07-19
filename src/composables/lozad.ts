@@ -20,24 +20,18 @@ export const LOZAD_CLASS_NAME = 'lozad'
 export const LOADED_CLASS_NAME = 'loaded'
 
 const lozadObserve = (target: lozad.Selector) => {
-  const observer = lozad(target, {
-    loaded: (element) => element.classList.add(LOADED_CLASS_NAME)
-  })
+  const observer = lozad(target, { loaded: (element) => element.classList.add(LOADED_CLASS_NAME) })
   observer.observe()
   return observer
 }
 
-export const useLozad = (params?: {
-  elementor?: () => HTMLElement
-  immediate?: boolean
-  className?: string
-}) => {
+export const useLozad = (options?: { elementor?: () => HTMLElement; immediate?: boolean; className?: string }) => {
   const container = ref<HTMLElement>()
   const observer = ref<lozad.Observer | null>(null)
 
   const observe = () => {
-    const tagretClass = params?.className || LOZAD_CLASS_NAME
-    const targetElement = params?.elementor?.() || container.value
+    const tagretClass = options?.className || LOZAD_CLASS_NAME
+    const targetElement = options?.elementor?.() || container.value
     if (targetElement?.querySelectorAll) {
       const lozadElements = targetElement.querySelectorAll(`.${tagretClass}`)
       if (lozadElements?.length) {
@@ -54,7 +48,7 @@ export const useLozad = (params?: {
   }
 
   onMounted(() => {
-    if (params?.immediate ?? true) {
+    if (options?.immediate ?? true) {
       observe()
     }
   })
@@ -86,4 +80,5 @@ const install: Plugin = (app: App, config?: LozadPluginConfig) => {
     window.$lozad = lozad
   }
 }
+
 export default { install }

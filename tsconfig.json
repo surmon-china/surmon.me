@@ -1,11 +1,4 @@
 {
-  "ts-node": {
-    "compilerOptions": {
-      "module": "commonjs",
-      "allowSyntheticDefaultImports": true,
-      "esModuleInterop": true
-    }
-  },
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
@@ -14,17 +7,16 @@
     "noImplicitAny": false,
     "resolveJsonModule": true,
     "jsx": "preserve",
-    "allowSyntheticDefaultImports": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "experimentalDecorators": true,
     "downlevelIteration": true,
-    "suppressImplicitAnyIndexErrors": true,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "allowJs": true,
     "sourceMap": true,
     "strict": true,
-    "noEmit": true,
-    "lib": ["esnext", "esnext.asynciterable", "dom"],
     "baseUrl": ".",
     "paths": {
       "/@/*": ["./src/*"],

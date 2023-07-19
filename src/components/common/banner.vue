@@ -1,9 +1,29 @@
+<script lang="ts" setup>
+  import { getCDN_URL } from '/@/transforms/url'
+  import { useEnhancer } from '/@/app/enhancer'
+
+  interface Props {
+    image: string
+    position?: number
+    blur?: number
+    isMobile?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    position: 20,
+    blur: 0,
+    isMobile: false
+  })
+
+  const { isDarkTheme } = useEnhancer()
+</script>
+
 <template>
   <div class="banner" :class="{ mobile: isMobile }">
     <div
       class="background"
       :class="{ dark: isDarkTheme }"
-      :style="{ backgroundImage: `url(${imageURL})`, backgroundPositionY: `${position}%` }"
+      :style="{ backgroundImage: `url(${getCDN_URL(props.image)})`, backgroundPositionY: `${position}%` }"
     ></div>
     <div class="content" :class="{ blur: Boolean(blur) }" :style="{ '--blur': `${blur}px` }">
       <h2 class="title">
@@ -15,41 +35,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  import { getTargetCDNURL } from '/@/transforms/url'
-  import { useEnhancer } from '/@/app/enhancer'
-
-  export default defineComponent({
-    name: 'PageBanner',
-    props: {
-      image: {
-        type: String,
-        required: true
-      },
-      position: {
-        type: Number,
-        default: 20
-      },
-      blur: {
-        type: Number,
-        default: 0
-      },
-      isMobile: {
-        type: Boolean,
-        default: false
-      }
-    },
-    setup(props) {
-      const { isDarkTheme } = useEnhancer()
-      return {
-        isDarkTheme,
-        imageURL: getTargetCDNURL(props.image)
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

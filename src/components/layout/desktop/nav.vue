@@ -1,3 +1,11 @@
+<script lang="ts" setup>
+  import { NAV_ELEMENT_ID } from '/@/constants/anchor'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { menus } from './menu'
+
+  const { adConfig } = useEnhancer()
+</script>
+
 <template>
   <div :id="NAV_ELEMENT_ID" class="desktop-nav">
     <nav class="nav-list">
@@ -34,24 +42,6 @@
     </nav>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  import { NAV_ELEMENT_ID } from '/@/constants/anchor'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { menus } from './menu'
-  export default defineComponent({
-    name: 'DesktopNav',
-    setup() {
-      const { adConfig } = useEnhancer()
-      return {
-        NAV_ELEMENT_ID,
-        menus,
-        adConfig
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
@@ -103,8 +93,8 @@
           color: $surmon;
         }
 
-        &.nft {
-          color: $opensea-primary;
+        &.sponsor {
+          color: $github-sponsor-primary;
         }
 
         .font-icon {

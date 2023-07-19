@@ -1,7 +1,6 @@
-const { build } = require('vite')
+import { build } from 'vite'
 
-exports.bundleSSRClent = async (paths) => {
-  console.log('\nClient bundling...\n')
+export const bundleSSRClent = async (paths) => {
   await build({
     build: {
       outDir: paths.client,

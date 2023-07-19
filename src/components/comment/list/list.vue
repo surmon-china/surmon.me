@@ -1,3 +1,103 @@
+<script lang="ts">
+  import { defineComponent, PropType } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useStores } from '/@/stores'
+  import { Comment } from '/@/interfaces/comment'
+  import { CommentTreeItem } from '/@/stores/comment'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { LanguageKey } from '/@/language'
+  import { CommentEvents } from '../helper'
+  import CommentItem from './item.vue'
+
+  // MARK: keep this component as `defineComponent` to use for recursive component
+  export default defineComponent({
+    name: 'CommentList',
+    components: {
+      CommentItem
+    },
+    props: {
+      comments: {
+        type: Array as PropType<Array<CommentTreeItem>>,
+        required: true
+      },
+      replyPid: {
+        type: Number,
+        required: true
+      },
+      isChildList: {
+        type: Boolean,
+        default: false
+      },
+      hiddenAvatar: {
+        type: Boolean,
+        default: false
+      },
+      hiddenUa: {
+        type: Boolean,
+        default: false
+      },
+      plainVote: {
+        type: Boolean,
+        default: false
+      }
+    },
+    emits: [CommentEvents.Reply, CommentEvents.Delete, CommentEvents.CancelReply],
+    setup(_, context) {
+      const { i18n: _i18n, gtag } = useEnhancer()
+      const { comment: commentStore, identity } = useStores()
+
+      const buildeCommentTree = (comments: Comment[]): Array<CommentTreeItem> => {
+        return comments.map((comment) => ({
+          comment,
+          children: []
+        }))
+      }
+
+      const handleReplyComment = (commentId: number) => {
+        context.emit(CommentEvents.Reply, commentId)
+      }
+
+      const handleCancelReply = (commentId: number) => {
+        context.emit(CommentEvents.CancelReply, commentId)
+      }
+
+      const handleDeleteComment = async (commentId: number) => {
+        context.emit(CommentEvents.Delete, commentId)
+      }
+
+      const handleVoteComment = async (commentId: number, isLike: boolean) => {
+        gtag?.event('vote_comment', {
+          event_category: GAEventCategories.Comment,
+          event_label: isLike ? 'like' : 'dislike'
+        })
+        if (isLike && identity.isLikedComment(commentId)) {
+          return false
+        }
+        if (!isLike && identity.isDislikedComment(commentId)) {
+          return false
+        }
+        try {
+          await commentStore.postCommentVote(commentId, isLike ? 1 : -1)
+          isLike ? identity.likeComment(commentId) : identity.dislikeComment(commentId)
+        } catch (error) {
+          const message = _i18n.t(LanguageKey.POST_ACTION_ERROR)
+          console.warn(message, error)
+          alert(message)
+        }
+      }
+
+      return {
+        identity,
+        buildeCommentTree,
+        handleReplyComment,
+        handleCancelReply,
+        handleDeleteComment,
+        handleVoteComment
+      }
+    }
+  })
+</script>
+
 <template>
   <ul class="comment-list" :class="isChildList ? 'child' : 'root'">
     <transition-group name="list-fade">
@@ -5,9 +105,9 @@
         v-for="item in comments"
         :key="item.comment.id"
         :comment="item.comment"
-        :liked="isLikedComment(item.comment.id)"
-        :disliked="isDislikedComment(item.comment.id)"
-        :has-child="Boolean(item.children.length)"
+        :liked="identity.isLikedComment(item.comment.id)"
+        :disliked="identity.isDislikedComment(item.comment.id)"
+        :has-child="!!item.children.length"
         :is-child="isChildList"
         :is-reply="replyPid === item.comment.id"
         :hidden-avatar="hiddenAvatar"
@@ -42,105 +142,6 @@
     </transition-group>
   </ul>
 </template>
-
-<script lang="ts">
-  import { defineComponent, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useStores } from '/@/stores'
-  import { Comment, CommentTreeItem } from '/@/stores/comment'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { LanguageKey } from '/@/language'
-  import { CommentEvents } from '../helper'
-  import CommentItem from './item.vue'
-
-  export default defineComponent({
-    name: 'CommentList',
-    components: {
-      CommentItem
-    },
-    props: {
-      comments: {
-        type: Array as PropType<Array<CommentTreeItem>>,
-        required: true
-      },
-      replyPid: {
-        type: Number,
-        required: true
-      },
-      isChildList: {
-        type: Boolean,
-        default: false
-      },
-      hiddenAvatar: {
-        type: Boolean,
-        default: false
-      },
-      hiddenUa: {
-        type: Boolean,
-        default: false
-      },
-      plainVote: {
-        type: Boolean,
-        required: false
-      }
-    },
-    emits: [CommentEvents.Reply, CommentEvents.Delete, CommentEvents.CancelReply],
-    setup(_, context) {
-      const { i18n, gtag } = useEnhancer()
-      const { comment: commentStore, identity } = useStores()
-
-      const handleReplyComment = (commentID: number) => {
-        context.emit(CommentEvents.Reply, commentID)
-      }
-
-      const handleCancelReply = (commentID: number) => {
-        context.emit(CommentEvents.CancelReply, commentID)
-      }
-
-      const handleDeleteComment = async (commentID: number) => {
-        context.emit(CommentEvents.Delete, commentID)
-      }
-
-      const handleVoteComment = async (commentID: number, isLike: boolean) => {
-        gtag?.event('vote_comment', {
-          event_category: GAEventCategories.Comment,
-          event_label: isLike ? 'like' : 'dislike'
-        })
-        if (isLike && identity.isLikedComment(commentID)) {
-          return false
-        }
-        if (!isLike && identity.isDislikedComment(commentID)) {
-          return false
-        }
-        try {
-          await commentStore.postCommentVote(commentID, isLike ? 1 : -1)
-          isLike ? identity.likeComment(commentID) : identity.dislikeComment(commentID)
-        } catch (error) {
-          const message = i18n.t(LanguageKey.POST_ACTION_ERROR)
-          console.warn(message, error)
-          alert(message)
-        }
-      }
-
-      const buildeCommentTree = (comments: Comment[]): Array<CommentTreeItem> => {
-        return comments.map((comment) => ({
-          comment,
-          children: []
-        }))
-      }
-
-      return {
-        isLikedComment: identity.isLikedComment,
-        isDislikedComment: identity.isDislikedComment,
-        handleVoteComment,
-        handleDeleteComment,
-        handleReplyComment,
-        handleCancelReply,
-        buildeCommentTree
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

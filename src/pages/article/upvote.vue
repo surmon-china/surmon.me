@@ -1,3 +1,37 @@
+<script lang="ts" setup>
+  import { ref } from 'vue'
+
+  enum ArticleUpvoteEvents {
+    Like = 'like',
+    Sponsor = 'sponsor'
+  }
+
+  const props = defineProps<{
+    likes: number
+    isLiked: boolean
+    hiddenSponsor?: boolean
+    enabledParkinson?: boolean
+  }>()
+
+  const emit = defineEmits<{
+    (e: ArticleUpvoteEvents.Like, cb: () => void): void
+    (e: ArticleUpvoteEvents.Sponsor): void
+  }>()
+
+  const newliked = ref(false)
+  const handleLike = () => {
+    if (!props.isLiked) {
+      emit(ArticleUpvoteEvents.Like, () => {
+        newliked.value = true
+      })
+    }
+  }
+
+  const handleSponsor = () => {
+    emit(ArticleUpvoteEvents.Sponsor)
+  }
+</script>
+
 <template>
   <div class="upvote">
     <div class="wrapper">
@@ -28,64 +62,6 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-  import { LanguageKey } from '/@/language'
-
-  enum ArticleUpvoteEvents {
-    Like = 'like',
-    Sponsor = 'sponsor'
-  }
-
-  export default defineComponent({
-    name: 'ArticleUpvote',
-    props: {
-      likes: {
-        type: Number,
-        required: true
-      },
-      isLiked: {
-        type: Boolean,
-        required: true
-      },
-      hiddenSponsor: {
-        type: Boolean,
-        default: false
-      },
-      enabledParkinson: {
-        type: Boolean,
-        default: false
-      }
-    },
-    emits: [ArticleUpvoteEvents.Like, ArticleUpvoteEvents.Sponsor],
-    setup(props, context) {
-      const handleSponsor = () => {
-        context.emit(ArticleUpvoteEvents.Sponsor)
-      }
-
-      const newliked = ref(false)
-      const handleLiked = () => {
-        newliked.value = true
-      }
-
-      const handleLike = () => {
-        if (!props.isLiked) {
-          context.emit(ArticleUpvoteEvents.Like, handleLiked)
-        }
-      }
-
-      return {
-        VALUABLE_LINKS,
-        LanguageKey,
-        handleLike,
-        handleSponsor,
-        newliked
-      }
-    }
-  })
-</script>
-
 <style lang="scss" scoped>
   @use 'sass:math';
   @import 'src/styles/variables.scss';
@@ -113,7 +89,9 @@
         border-width: 1px 0;
         border-color: $lighter-red;
         color: $lighter-red;
-        transition: background-color $transition-time-fast, color $transition-time-fast;
+        transition:
+          background-color $transition-time-fast,
+          color $transition-time-fast;
         &[disabled] {
           color: $white;
           background-color: $lighter-red;
@@ -187,7 +165,9 @@
         &.newliked {
           /* parkinson animate */
           .parkinson-mask {
-            transition: opacity $transition-time-normal, visibility $transition-time-normal;
+            transition:
+              opacity $transition-time-normal,
+              visibility $transition-time-normal;
             transition-delay: $transition-time-fast;
             @include visible();
             @keyframes pre-like-icon {
@@ -211,7 +191,9 @@
               }
             }
             .iconfont {
-              transition: transform $transition-time-normal, margin $transition-time-normal;
+              transition:
+                transform $transition-time-normal,
+                margin $transition-time-normal;
               transition-delay: $transition-time-normal * 2;
               transform: rotate(6deg) translateY(-2px) translateX(-50%);
               animation: pre-like-icon 0.2s infinite;

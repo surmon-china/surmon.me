@@ -1,12 +1,22 @@
+<script lang="ts" setup>
+  import { onMounted } from 'vue'
+  import { useYouTubePlayListStore } from '/@/stores/media'
+  import { getYouTubePlaylistURL } from '/@/transforms/media'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+
+  const youtubeStore = useYouTubePlayListStore()
+  onMounted(() => youtubeStore.fetch())
+</script>
+
 <template>
   <div class="youtube">
-    <span v-if="store.fetching"></span>
+    <span v-if="youtubeStore.fetching"></span>
     <ul v-else class="list">
       <li
         class="item"
         :title="item.snippet.title"
         :key="index"
-        v-for="(item, index) in store.data.slice(0, 5)"
+        v-for="(item, index) in youtubeStore.data.slice(0, 5)"
       >
         <ulink class="link" :href="getYouTubePlaylistURL(item.id)">
           <uimage class="cover" :src="item.snippet.thumbnails.medium.url" />
@@ -24,27 +34,6 @@
     </ul>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, onMounted } from 'vue'
-  import { useYouTubePlayListStore } from '/@/stores/media'
-  import { getYouTubePlaylistURL } from '/@/transforms/media'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-
-  export default defineComponent({
-    name: 'AboutPageYoutube',
-    setup() {
-      const store = useYouTubePlayListStore()
-      onMounted(() => store.fetch())
-
-      return {
-        VALUABLE_LINKS,
-        getYouTubePlaylistURL,
-        store
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

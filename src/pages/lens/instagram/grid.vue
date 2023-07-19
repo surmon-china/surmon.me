@@ -1,3 +1,42 @@
+<script lang="ts" setup>
+  import { ref, computed } from 'vue'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { UNDEFINED, isNil } from '/@/constants/value'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { getCDN_URL } from '/@/transforms/url'
+  import { isVideoMediaIns, isAlbumMediaIns, getInstagramImage } from '/@/transforms/media'
+  import type { InstagramMediaItem } from '/@/server/getters/instagram'
+  import Gallery from './gallery.vue'
+
+  const props = defineProps<{
+    medias: Array<InstagramMediaItem>
+    limit: number
+  }>()
+
+  const { gtag } = useEnhancer()
+  const galleryActiveIndex = ref<number>()
+  const galleryActiveMedia = computed(() => {
+    return isNil(galleryActiveIndex.value) ? null : props.medias[galleryActiveIndex.value]
+  })
+
+  const gridMedias = computed(() => props.medias.slice(0, props.limit - 1))
+  const restMedias = computed(() => {
+    return gridMedias.value.length > 1 ? props.medias.slice(props.limit - 1, props.limit + 2) : []
+  })
+
+  const openMediaGallery = (index: number) => {
+    galleryActiveIndex.value = index
+    gtag?.event('instagram_view', {
+      event_category: GAEventCategories.Lens
+    })
+  }
+
+  const closeMediaGallery = () => {
+    galleryActiveIndex.value = UNDEFINED
+  }
+</script>
+
 <template>
   <div class="instagram-grid">
     <ul class="medias">
@@ -18,7 +57,8 @@
         </div>
         <div class="type-icon">
           <i class="iconfont icon-video" v-if="isVideoMediaIns(media)"></i>
-          <i class="iconfont icon-album" v-if="isAlbumMediaIns(media)"></i>
+          <i class="iconfont icon-album" v-else-if="isAlbumMediaIns(media)"></i>
+          <i class="iconfont icon-camera" v-else></i>
         </div>
       </li>
       <li class="more">
@@ -36,12 +76,10 @@
         </ulink>
         <ulink
           class="media"
+          :key="index"
           v-for="index in 3 - restMedias.length"
           :href="VALUABLE_LINKS.INSTAGRAM"
-          :key="index"
-          :style="{
-            backgroundImage: `url(${getTargetCDNURL('/images/page-lens/instagram-default.jpg')})`
-          }"
+          :style="{ backgroundImage: `url(${getCDN_URL('/images/page-lens/instagram-default.jpg')})` }"
         >
           <div class="mask">
             <i class="iconfont icon-new-window-s"></i>
@@ -51,80 +89,17 @@
       </li>
     </ul>
     <client-only>
-      <gallery
-        :medias="gridMedias"
-        :index="galleryActiveIndex"
-        :visible="isOnGallery"
-        @close="closeMediaGallery"
-      />
+      <popup :visible="!!galleryActiveMedia" :scroll-close="false" @close="closeMediaGallery">
+        <gallery
+          v-if="galleryActiveMedia"
+          :media="galleryActiveMedia"
+          :index="galleryActiveIndex!"
+          :count="gridMedias.length"
+        />
+      </popup>
     </client-only>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, computed, PropType } from 'vue'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { UNDEFINED } from '/@/constants/value'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { getTargetCDNURL } from '/@/transforms/url'
-  import { isVideoMediaIns, isAlbumMediaIns, getInstagramImage } from '/@/transforms/media'
-  import type { InstagramMediaItem } from '/@/server/getters/instagram'
-  import Gallery from './gallery.vue'
-
-  export default defineComponent({
-    name: 'LensInstagramGrid',
-    components: {
-      Gallery
-    },
-    props: {
-      medias: {
-        type: Array as PropType<Array<InstagramMediaItem>>,
-        required: true
-      },
-      limit: {
-        type: Number,
-        required: true
-      }
-    },
-    setup(props) {
-      const { gtag } = useEnhancer()
-      const galleryActiveIndex = ref<number>()
-      const isOnGallery = computed(() => galleryActiveIndex.value !== UNDEFINED)
-      const gridMedias = computed(() => props.medias.slice(0, props.limit - 1))
-      const restMedias = computed(() => {
-        return gridMedias.value.length > 1
-          ? props.medias.slice(props.limit - 1, props.limit + 2)
-          : []
-      })
-
-      const openMediaGallery = (index: number) => {
-        galleryActiveIndex.value = index
-        gtag?.event('instagram_view', {
-          event_category: GAEventCategories.Lens
-        })
-      }
-
-      const closeMediaGallery = () => {
-        galleryActiveIndex.value = UNDEFINED
-      }
-
-      return {
-        VALUABLE_LINKS,
-        gridMedias,
-        restMedias,
-        isOnGallery,
-        galleryActiveIndex,
-        isVideoMediaIns,
-        isAlbumMediaIns,
-        getTargetCDNURL,
-        getInstagramImage,
-        openMediaGallery,
-        closeMediaGallery
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

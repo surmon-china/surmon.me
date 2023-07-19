@@ -33,13 +33,13 @@ export const openWindow = (targetURL: string, options: WindowOpenerOptions = {})
   const top = Math.round((screen.availHeight - height) / 2)
   const left = Math.round((screen.availWidth - width) / 2)
   const formParams = { width, height, top, left }
-  const _params = paramsToString({
+  const windowParams = paramsToString({
     ...baseParams,
     ...formParams,
     ...params
   })
 
-  const _window = window.open(targetURL, name, _params)
+  const _window = window.open(targetURL, name, windowParams)
   if (_window) {
     if (onClose) {
       const timer = setInterval(() => {
@@ -50,7 +50,6 @@ export const openWindow = (targetURL: string, options: WindowOpenerOptions = {})
       }, closeInterval)
     }
     _window?.focus()
-
     return _window
   }
 }

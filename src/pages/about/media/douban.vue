@@ -1,7 +1,59 @@
+<script lang="ts" setup>
+  import { computed, onMounted } from 'vue'
+  import { useDoubanMoviesStore } from '/@/stores/media'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+
+  // https://www.douban.com/note/318963783/?_i=3319419SDguZpe
+  const GENRES_CONFIG = {
+    动作: ['Action', '#002b43'],
+    喜剧: ['Comedy', '#be3928'],
+    剧情: ['Drama', '#ee6666'],
+    儿童: ['Children', '#feba07'],
+    青春: ['Young', '#12a182'],
+    家庭: ['Family', '#5d655f'],
+    爱情: ['Romance', '#ec8aa4'],
+    体育: ['Sports', '#fac858'],
+    科幻: ['Sci-Fi', '#112d52'],
+    灾难: ['Disaster', 'black'],
+    恐怖: ['Horror', 'black'],
+    惊悚: ['Thriller', 'black'],
+    悬疑: ['Mystery', '#114e53'],
+    犯罪: ['Crime', '#5470c6'],
+    冒险: ['Adventure', '#3ba272'],
+    黑色: ['Film noir', 'black'],
+    历史: ['Historical', 'gray'],
+    战争: ['War', 'grey'],
+    西部: ['Western', 'brown'],
+    音乐歌舞: ['Musical', '#fc8452'],
+    人物传记: ['Biography', '#73c0de'],
+    动画: ['Animation', 'yellow'],
+    成人: ['Adult', '#e43a61'],
+    古装: ['Costume', '#5d655f']
+  }
+
+  const doubanStore = useDoubanMoviesStore()
+  const count = computed<number>(() => {
+    return doubanStore.data?.genres.reduce((result, item) => result + item.value, 0)
+  })
+  const list = computed(() => {
+    return doubanStore.data?.genres
+      .map((item) => ({
+        value: item.value,
+        zhName: item.name,
+        enName: GENRES_CONFIG[item.name][0],
+        color: GENRES_CONFIG[item.name][1],
+        percent: (item.value / count.value) * 100
+      }))
+      .sort((a, b) => b.value - a.value)
+  })
+
+  onMounted(() => doubanStore.fetch())
+</script>
+
 <template>
   <div class="douban">
-    <span v-if="store.fetching"></span>
-    <template v-else-if="store.data">
+    <span v-if="doubanStore.fetching"></span>
+    <template v-else-if="doubanStore.data">
       <div class="genres">
         <div class="legend">
           <span
@@ -30,7 +82,7 @@
           class="item"
           :title="item.title"
           :key="index"
-          v-for="(item, index) in store.data?.recent_subjects.slice(0, 9)"
+          v-for="(item, index) in doubanStore.data?.recent_subjects.slice(0, 9)"
         >
           <uimage class="cover" proxy="douban" :src="item.cover_url" />
         </li>
@@ -45,79 +97,12 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, computed, onMounted } from 'vue'
-  import { useDoubanMoviesStore } from '/@/stores/media'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-
-  // https://www.douban.com/note/318963783/?_i=3319419SDguZpe
-  const GenresState = {
-    动作: ['Action', '#002b43'],
-    喜剧: ['Comedy', '#be3928'],
-    剧情: ['Drama', '#ee6666'],
-    儿童: ['Children', '#feba07'],
-    青春: ['Young', '#12a182'],
-    家庭: ['Family', '#5d655f'],
-    爱情: ['Romance', '#ec8aa4'],
-    体育: ['Sports', '#fac858'],
-    科幻: ['Sci-Fi', '#112d52'],
-    灾难: ['Disaster', 'black'],
-    恐怖: ['Horror', 'black'],
-    惊悚: ['Thriller', 'black'],
-    悬疑: ['Mystery', '#114e53'],
-    犯罪: ['Crime', '#5470c6'],
-    冒险: ['Adventure', '#3ba272'],
-    黑色: ['Film noir', 'black'],
-    历史: ['Historical', 'gray'],
-    战争: ['War', 'grey'],
-    西部: ['Western', 'brown'],
-    音乐歌舞: ['Musical', '#fc8452'],
-    人物传记: ['Biography', '#73c0de'],
-    动画: ['Animation', 'yellow'],
-    成人: ['Adult', '#e43a61'],
-    古装: ['Costume', '#5d655f']
-  }
-
-  export default defineComponent({
-    name: 'AboutPageDoubanMedia',
-    setup() {
-      const store = useDoubanMoviesStore()
-      const count = computed<number>(() => {
-        return store.data?.genres.reduce((result, item) => result + item.value, 0)
-      })
-      const list = computed(() => {
-        return store.data?.genres
-          .map((item) => ({
-            value: item.value,
-            zhName: item.name,
-            enName: GenresState[item.name][0],
-            color: GenresState[item.name][1],
-            percent: (item.value / count.value) * 100
-          }))
-          .sort((a, b) => b.value - a.value)
-      })
-
-      onMounted(() => store.fetch())
-
-      return {
-        VALUABLE_LINKS,
-        store,
-        list
-      }
-    }
-  })
-</script>
-
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
   @import 'src/styles/mixins.scss';
 
   .douban {
     width: 100%;
-    padding: $gap;
-    border-radius: $lg-radius;
-    margin-bottom: 2rem;
-    @include common-bg-module();
 
     .genres {
       width: 100%;
@@ -125,7 +110,7 @@
 
       .legend {
         width: 100%;
-        height: 14px;
+        height: 13px;
         display: flex;
         margin-bottom: $lg-gap;
         @include radius-box($xs-radius);
@@ -137,14 +122,14 @@
       .labels {
         list-style: none;
         margin: 0;
-        padding: 0 $xs-gap;
+        padding: 0;
         display: flex;
         justify-content: space-between;
 
         .item {
           display: flex;
           align-items: center;
-          font-size: $font-size-base - 1;
+          font-size: $font-size-small;
 
           .color {
             width: 1em;

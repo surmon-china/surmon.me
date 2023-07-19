@@ -1,3 +1,34 @@
+<script lang="ts" setup>
+  import { ref, computed, onMounted } from 'vue'
+  import { useUniversalFetch } from '/@/universal'
+  import { useArchiveStore } from '/@/stores/archive'
+  import { LanguageKey } from '/@/language'
+  import { numberSplit } from '/@/transforms/text'
+  import { getArticleDetailRoute } from '/@/transforms/route'
+  import PageBanner from '/@/components/common/banner.vue'
+  import ArchiveTree from './tree.vue'
+  import { i18ns, useArchivePageMeta, useArchivePageStatistics } from './shared'
+
+  const archiveStore = useArchiveStore()
+  const statisticState = useArchivePageStatistics()
+  const statisticFetching = ref(true)
+  const statistics = computed(() => [
+    statisticState.statistics.value.articles,
+    statisticState.statistics.value.todayViews,
+    statisticState.statistics.value.comments,
+    statisticState.statistics.value.totalLikes,
+    statisticState.statistics.value.averageEmotion
+  ])
+
+  useArchivePageMeta()
+  useUniversalFetch(() => archiveStore.fetch())
+  onMounted(() => {
+    statisticState.fetch().finally(() => {
+      statisticFetching.value = false
+    })
+  })
+</script>
+
 <template>
   <div class="archive-page">
     <page-banner :position="32" image="/images/page-archive/banner.jpg">
@@ -83,56 +114,6 @@
     </container>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, computed, onMounted } from 'vue'
-  import { useUniversalFetch } from '/@/universal'
-  import { useArchiveStore } from '/@/stores/archive'
-  import { LanguageKey } from '/@/language'
-  import { numberSplit } from '/@/transforms/text'
-  import { getArticleDetailRoute } from '/@/transforms/route'
-  import PageBanner from '/@/components/common/banner.vue'
-  import ArchiveTree from './tree.vue'
-  import { i18ns, useArchivePageMeta, useArchivePageStatistics } from './shared'
-
-  export default defineComponent({
-    name: 'DesktopArchivePage',
-    components: {
-      PageBanner,
-      ArchiveTree
-    },
-    setup() {
-      const archiveStore = useArchiveStore()
-      const statisticState = useArchivePageStatistics()
-      const statisticFetching = ref(true)
-      const statistics = computed(() => [
-        statisticState.statistics.value.articles,
-        statisticState.statistics.value.todayViews,
-        statisticState.statistics.value.comments,
-        statisticState.statistics.value.totalLikes,
-        statisticState.statistics.value.averageEmotion
-      ])
-
-      useArchivePageMeta()
-      useUniversalFetch(() => archiveStore.fetch())
-      onMounted(() => {
-        statisticState.fetch().finally(() => {
-          statisticFetching.value = false
-        })
-      })
-
-      return {
-        LanguageKey,
-        i18ns,
-        getArticleDetailRoute,
-        numberSplit,
-        archiveStore,
-        statisticFetching,
-        statistics
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

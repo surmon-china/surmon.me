@@ -6,6 +6,7 @@
 
 import { defineComponent, h, Transition, PropType } from 'vue'
 import { LanguageKey } from '/@/language'
+import { isUndefined } from '/@/constants/value'
 import Empty from './empty.vue'
 import Spin from './spin.vue'
 
@@ -52,13 +53,10 @@ export default defineComponent({
   setup(props, context) {
     return () => {
       const { data, placeholder, i18nKey, loading, transition, transitionName } = props
-      const isEmptyData =
-        data !== undefined && ((Array.isArray(data) && !(data as any).length) || !data)
+      const isEmptyData = !isUndefined(data) && ((Array.isArray(data) && !(data as any).length) || !data)
 
       const getPlaceholderView = () => {
-        return placeholder || i18nKey
-          ? h(Empty, { placeholder, i18nKey })
-          : context.slots.placeholder?.()
+        return placeholder || i18nKey ? h(Empty, { placeholder, i18nKey }) : context.slots.placeholder?.()
       }
 
       const getDataView = () => {

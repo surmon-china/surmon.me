@@ -15,7 +15,6 @@ export enum Theme {
 
 const DARK_THEME_QUERY = '(prefers-color-scheme: dark)'
 const LIGHT_THEME_QUERY = '(prefers-color-scheme: light)'
-const NO_PREFERENCE_QUERY = '(prefers-color-scheme: no-preference)'
 
 export const THEME_STORAGE_KEY = 'theme'
 export const getClientLocalTheme = () => {
@@ -48,12 +47,8 @@ export const createTheme = (initTheme: Theme) => {
   }
   const toggle = () => set(theme.value === Theme.Dark ? Theme.Light : Theme.Dark)
   const bindClientSystem = () => {
-    window
-      .matchMedia(DARK_THEME_QUERY)
-      .addEventListener('change', ({ matches }) => matches && set(Theme.Dark))
-    window
-      .matchMedia(LIGHT_THEME_QUERY)
-      .addEventListener('change', ({ matches }) => matches && set(Theme.Light))
+    window.matchMedia(DARK_THEME_QUERY).addEventListener('change', ({ matches }) => matches && set(Theme.Dark))
+    window.matchMedia(LIGHT_THEME_QUERY).addEventListener('change', ({ matches }) => matches && set(Theme.Light))
   }
 
   const themeState = {

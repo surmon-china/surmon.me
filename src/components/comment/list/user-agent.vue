@@ -1,20 +1,5 @@
-<template>
-  <span class="user-agent">
-    <span class="os">
-      <i v-if="osIconName" class="iconfont" :class="osIconName" />
-      <span>{{ uaResult.result.os.name }}</span>
-      <!-- <span>{{ uaResult.result.os.version }}</span> -->
-    </span>
-    <span class="browser">
-      <i v-if="browserIconName" class="iconfont" :class="browserIconName" />
-      <span>{{ uaResult.result.browser.name }}</span>
-      <!-- <span>{{ uaResult.result.browser.version }}</span> -->
-    </span>
-  </span>
-</template>
-
-<script lang="ts">
-  import { defineComponent, computed } from 'vue'
+<script lang="ts" setup>
+  import { computed } from 'vue'
   import { uaParser } from '/@/transforms/ua'
 
   // https://github.com/faisalman/ua-parser-js#methods
@@ -42,33 +27,35 @@
     Edge: 'icon-edge'
   }
 
-  export default defineComponent({
-    name: 'CommentItemUserAgent',
-    props: {
-      userAgent: {
-        type: String,
-        required: true
-      }
-    },
-    setup(props) {
-      const uaResult = computed(() => uaParser(props.userAgent))
-      const osIconName = computed(() => {
-        const osName = uaResult.value.result.os.name
-        return osName && osIconsNameMap[osName]
-      })
-      const browserIconName = computed(() => {
-        const browserName = uaResult.value.result.browser.name
-        return browserName ? browersIconsNameMap[browserName] : null
-      })
+  const props = defineProps<{
+    userAgent: string
+  }>()
 
-      return {
-        uaResult,
-        osIconName,
-        browserIconName
-      }
-    }
+  const uaResult = computed(() => uaParser(props.userAgent))
+  const osIconName = computed(() => {
+    const osName = uaResult.value.result.os.name
+    return osName && osIconsNameMap[osName]
+  })
+  const browserIconName = computed(() => {
+    const browserName = uaResult.value.result.browser.name
+    return browserName ? browersIconsNameMap[browserName] : null
   })
 </script>
+
+<template>
+  <span class="user-agent">
+    <span class="os">
+      <i v-if="osIconName" class="iconfont" :class="osIconName" />
+      <span>{{ uaResult.result.os.name }}</span>
+      <!-- <span>{{ uaResult.result.os.version }}</span> -->
+    </span>
+    <span class="browser">
+      <i v-if="browserIconName" class="iconfont" :class="browserIconName" />
+      <span>{{ uaResult.result.browser.name }}</span>
+      <!-- <span>{{ uaResult.result.browser.version }}</span> -->
+    </span>
+  </span>
+</template>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

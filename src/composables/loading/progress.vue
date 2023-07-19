@@ -1,14 +1,25 @@
+<script lang="ts" setup>
+  import { useLoading } from './'
+
+  interface Props {
+    spin?: boolean
+  }
+
+  const props = defineProps<Props>()
+  const loading = useLoading()
+</script>
+
 <template>
   <div id="progress-bar" :class="{ show: loading.state.show }">
     <div
       class="progress"
+      :style="{ width: loading.state.percent + '%' }"
       :class="{
         notransition: loading.state.skipTimerCount > 0,
         failed: !loading.state.canSucceed
       }"
-      :style="{ width: loading.state.percent + '%' }"
     />
-    <div v-if="spin" class="spin" :class="{ failed: !loading.state.canSucceed }">
+    <div v-if="props.spin" class="spin" :class="{ failed: !loading.state.canSucceed }">
       <div class="lds-ring">
         <div></div>
         <div></div>
@@ -18,24 +29,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  import { useLoading } from './'
-  export default defineComponent({
-    name: 'ProgressBar',
-    props: {
-      spin: {
-        type: Boolean,
-        default: false
-      }
-    },
-    setup() {
-      const loading = useLoading()
-      return { loading }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

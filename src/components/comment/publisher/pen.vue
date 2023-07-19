@@ -1,3 +1,132 @@
+<script lang="ts" setup>
+  import { ref, watch, onBeforeMount, onMounted, onBeforeUnmount, nextTick } from 'vue'
+  import { storeToRefs } from 'pinia'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { LanguageKey } from '/@/language'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useIdentityStore, UserType } from '/@/stores/identity'
+  import { enableCopyrighter, disableCopyrighter } from '/@/effects/copyright'
+  import { focusPosition } from '/@/utils/editable'
+  import { insertContent } from '/@/utils/editable'
+  import { CommentEvents, EMOJIS } from '../helper'
+  import Markdown from '/@/components/common/markdown.vue'
+
+  enum PenEvents {
+    Update = 'update:modelValue',
+    UpdatePreviewed = 'update:previewed'
+  }
+
+  const props = defineProps<{
+    posting: boolean
+    modelValue?: string
+    disabled?: boolean
+    previewed?: boolean
+    bordered?: boolean
+    autoFocus?: boolean
+    hiddenStationery?: boolean
+  }>()
+
+  const emit = defineEmits<{
+    (e: PenEvents.Update, text: string): void
+    (e: PenEvents.UpdatePreviewed, previewed: boolean): void
+    (e: CommentEvents.Submit, text: string): void
+  }>()
+
+  const { i18n: _i18n } = useEnhancer()
+  const { user } = storeToRefs(useIdentityStore())
+  const content = ref(props.modelValue || '')
+  const isPreviewed = ref(props.previewed || false)
+  const inputElement = ref<HTMLElement>()
+  let inputElementObserver: MutationObserver | null = null
+
+  const handleTogglePreview = () => {
+    isPreviewed.value = !isPreviewed.value
+    emit(PenEvents.UpdatePreviewed, isPreviewed.value)
+  }
+
+  const handleInputChange = () => {
+    const text = inputElement.value?.innerText as string
+    if (text !== content.value) {
+      content.value = text
+      emit(PenEvents.Update, text)
+    }
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    emit(CommentEvents.Submit, content.value)
+  }
+
+  const insertContentToInput = (before: string, after = '') => {
+    insertContent({
+      element: inputElement.value,
+      content: [before, after]
+    })
+    handleInputChange()
+  }
+
+  const insertEmoji = (emoji: any) => {
+    insertContentToInput(` ${emoji} `)
+  }
+  const insertImage = () => {
+    insertContentToInput(` ![`, `](https://) `)
+  }
+  const insertLink = () => {
+    insertContentToInput(` [`, `](https://) `)
+  }
+  const insertCode = () => {
+    insertContentToInput('\n```javascript\n', '\n```\n')
+  }
+
+  onBeforeMount(() => {
+    watch(
+      () => props.modelValue,
+      (value = '') => {
+        if (value !== content.value) {
+          content.value = value
+          if (inputElement.value) {
+            inputElement.value.innerText = value
+          }
+        }
+      }
+    )
+  })
+
+  onBeforeMount(() => {
+    watch(
+      () => props.previewed,
+      (value) => {
+        if (value !== isPreviewed.value) {
+          isPreviewed.value = value
+        }
+      }
+    )
+  })
+
+  onMounted(() => {
+    // auto focus
+    if (props.autoFocus) {
+      nextTick().then(() => {
+        if (inputElement.value) {
+          focusPosition(inputElement.value)
+        }
+      })
+    }
+    // watch element
+    inputElementObserver = new MutationObserver(() => handleInputChange())
+    inputElementObserver.observe(inputElement.value!, {
+      attributes: true,
+      characterData: true,
+      childList: true,
+      subtree: true
+    })
+  })
+
+  onBeforeUnmount(() => {
+    inputElementObserver?.disconnect()
+  })
+</script>
+
 <template>
   <div class="pen" :class="{ bordered }">
     <div class="markdown">
@@ -5,7 +134,7 @@
         ref="inputElement"
         class="markdown-input"
         :contenteditable="!disabled"
-        :placeholder="t(LanguageKey.COMMENT_POST_PLACEHOLDER)"
+        :placeholder="_i18n.t(LanguageKey.COMMENT_POST_PLACEHOLDER)"
         @focus="disableCopyrighter"
         @blur="enableCopyrighter"
       />
@@ -25,40 +154,19 @@
             <i class="iconfont icon-emoji" />
             <div class="emoji-box">
               <ul class="emoji-list">
-                <li
-                  v-for="(emoji, index) in EMOJIS"
-                  v-once
-                  :key="index"
-                  class="item"
-                  @click="insertEmoji(emoji)"
-                >
+                <li v-for="(emoji, index) in EMOJIS" v-once :key="index" class="item" @click="insertEmoji(emoji)">
                   {{ emoji }}
                 </li>
               </ul>
             </div>
           </button>
-          <button
-            class="image"
-            title="image"
-            :disabled="disabled || isPreviewed"
-            @click.prevent="insertImage"
-          >
+          <button class="image" title="image" :disabled="disabled || isPreviewed" @click.prevent="insertImage">
             <i class="iconfont icon-image" />
           </button>
-          <button
-            class="link"
-            title="link"
-            :disabled="disabled || isPreviewed"
-            @click.prevent="insertLink"
-          >
+          <button class="link" title="link" :disabled="disabled || isPreviewed" @click.prevent="insertLink">
             <i class="iconfont icon-link" />
           </button>
-          <button
-            class="code"
-            title="code"
-            :disabled="disabled || isPreviewed"
-            @click.prevent="insertCode"
-          >
+          <button class="code" title="code" :disabled="disabled || isPreviewed" @click.prevent="insertCode">
             <i class="iconfont icon-code" />
           </button>
           <button
@@ -88,174 +196,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
-  import { storeToRefs } from 'pinia'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-  import { LanguageKey } from '/@/language'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useIdentityStore, UserType } from '/@/stores/identity'
-  import { enableCopyrighter, disableCopyrighter } from '/@/effects/copyright'
-  import { focusPosition } from '/@/utils/editable'
-  import { insertContent } from '/@/utils/editable'
-  import { CommentEvents, EMOJIS } from '../helper'
-  import Markdown from '/@/components/common/markdown.vue'
-
-  export enum PenEvents {
-    Update = 'update:modelValue',
-    UpdatePreviewed = 'update:previewed'
-  }
-
-  export default defineComponent({
-    name: 'CommentPen',
-    components: {
-      Markdown
-    },
-    props: {
-      modelValue: {
-        type: String,
-        required: false
-      },
-      disabled: {
-        type: Boolean,
-        default: false
-      },
-      previewed: {
-        type: Boolean,
-        default: false
-      },
-      posting: {
-        type: Boolean,
-        required: true
-      },
-      bordered: {
-        type: Boolean,
-        required: false
-      },
-      autoFocus: {
-        type: Boolean,
-        default: false
-      },
-      hiddenStationery: {
-        type: Boolean,
-        default: false
-      }
-    },
-    emits: [PenEvents.Update, PenEvents.UpdatePreviewed, CommentEvents.Submit],
-    setup(props, context) {
-      const { i18n } = useEnhancer()
-      const { user } = storeToRefs(useIdentityStore())
-      const content = ref(props.modelValue || '')
-      const isPreviewed = ref(props.previewed || false)
-      const inputElement = ref<HTMLElement>()
-      let inputElementObserver: MutationObserver | null = null
-
-      const handleTogglePreview = () => {
-        isPreviewed.value = !isPreviewed.value
-        context.emit(PenEvents.UpdatePreviewed, isPreviewed.value)
-      }
-
-      const handleInputChange = () => {
-        const text = inputElement.value?.innerText as string
-        if (text !== content.value) {
-          content.value = text
-          context.emit(PenEvents.Update, text)
-        }
-      }
-
-      const handleSubmit = (event) => {
-        event.preventDefault()
-        context.emit(CommentEvents.Submit, content.value)
-      }
-
-      const insertContentToInput = (before: string, after = '') => {
-        insertContent({
-          element: inputElement.value,
-          content: [before, after]
-        })
-        handleInputChange()
-      }
-
-      const insertEmoji = (emoji: any) => {
-        insertContentToInput(` ${emoji} `)
-      }
-      const insertImage = () => {
-        insertContentToInput(` ![`, `](https://) `)
-      }
-      const insertLink = () => {
-        insertContentToInput(` [`, `](https://) `)
-      }
-      const insertCode = () => {
-        insertContentToInput('\n```javascript\n', '\n```\n')
-      }
-
-      watch(
-        () => props.modelValue,
-        (value = '') => {
-          if (value !== content.value) {
-            content.value = value
-            if (inputElement.value) {
-              inputElement.value.innerText = value
-            }
-          }
-        }
-      )
-
-      watch(
-        () => props.previewed,
-        (_preview) => {
-          if (_preview !== isPreviewed.value) {
-            isPreviewed.value = _preview
-          }
-        }
-      )
-
-      onMounted(() => {
-        // auto focus
-        if (props.autoFocus) {
-          nextTick().then(() => {
-            if (inputElement.value) {
-              focusPosition(inputElement.value)
-            }
-          })
-        }
-        // watch element
-        inputElementObserver = new MutationObserver(() => handleInputChange())
-        inputElementObserver.observe(inputElement.value!, {
-          attributes: true,
-          characterData: true,
-          childList: true,
-          subtree: true
-        })
-      })
-      onBeforeUnmount(() => {
-        inputElementObserver?.disconnect()
-      })
-
-      return {
-        t: i18n.t,
-        user,
-        UserType,
-        EMOJIS,
-        VALUABLE_LINKS,
-        LanguageKey,
-        inputElement,
-        content,
-        isPreviewed,
-        insertEmoji,
-        insertImage,
-        insertLink,
-        insertCode,
-        handleInputChange,
-        handleTogglePreview,
-        handleSubmit,
-        enableCopyrighter,
-        disableCopyrighter
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

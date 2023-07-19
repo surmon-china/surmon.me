@@ -1,3 +1,24 @@
+<script lang="ts" setup>
+  import { watchEffect, ref } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { usePopupWithRoot } from './hook'
+
+  const element = ref<HTMLElement>(null as any)
+  const { isDarkTheme, isMobile } = useEnhancer()
+  const { state, image, hidden } = usePopupWithRoot(() => element.value)
+  const handleWindowScroll = () => hidden()
+  const handleMaskClick = () => {
+    state.maskClose && hidden()
+  }
+
+  watchEffect(() => {
+    state.visible && state.scrollClose
+      ? // https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md#solution-the-passive-option
+        window.addEventListener('scroll', handleWindowScroll, { passive: true })
+      : window.removeEventListener('scroll', handleWindowScroll)
+  })
+</script>
+
 <template>
   <div id="popup" class="popup" :class="{ mobile: isMobile, dark: isDarkTheme }">
     <transition name="module">
@@ -9,40 +30,6 @@
     </transition>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, watchEffect, ref } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { usePopupWithRoot } from './hook'
-  export default defineComponent({
-    name: 'PopupRoot',
-    setup() {
-      const element = ref<HTMLElement>(null as any)
-      const { isDarkTheme, isMobile } = useEnhancer()
-      const { state, image, hidden } = usePopupWithRoot(() => element.value)
-      const handleWindowScroll = () => hidden()
-      const handleMaskClick = () => {
-        state.maskClose && hidden()
-      }
-
-      watchEffect(() => {
-        state.visible && state.scrollClose
-          ? // https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md#solution-the-passive-option
-            window.addEventListener('scroll', handleWindowScroll, { passive: true })
-          : window.removeEventListener('scroll', handleWindowScroll)
-      })
-
-      return {
-        element,
-        state,
-        image,
-        isDarkTheme,
-        isMobile,
-        handleMaskClick
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

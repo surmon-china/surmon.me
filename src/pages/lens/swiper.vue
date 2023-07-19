@@ -1,12 +1,42 @@
+<script lang="ts" setup>
+  import { reactive, shallowRef } from 'vue'
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
+
+  interface Props {
+    data: Array<any>
+    rows?: number
+    columns?: number
+  }
+
+  withDefaults(defineProps<Props>(), {
+    rows: 2,
+    columns: 5
+  })
+
+  const swiperRef = shallowRef<SwiperClass>()
+  const swiperState = reactive({ canPrev: false, canNext: true })
+
+  const prevSlide = () => swiperRef.value?.slidePrev()
+  const nextSlide = () => swiperRef.value?.slideNext()
+  const handleSlideChange = (_swiper: SwiperClass) => {
+    swiperState.canNext = !_swiper.isEnd
+    swiperState.canPrev = !_swiper.isBeginning
+  }
+  const handleSwiperReady = (_swiper: SwiperClass) => {
+    swiperRef.value = _swiper
+    handleSlideChange(_swiper)
+  }
+</script>
+
 <template>
   <div class="list-swiper">
     <div class="navigation prev">
-      <button class="button" :disabled="!listSwiperState.canPrev" @click="listPrevSlide">
+      <button class="button" :disabled="!swiperState.canPrev" @click="prevSlide">
         <i class="iconfont icon-prev" />
       </button>
     </div>
     <div class="navigation next">
-      <button class="button" :disabled="!listSwiperState.canNext" @click="listNextSlide">
+      <button class="button" :disabled="!swiperState.canNext" @click="nextSlide">
         <i class="iconfont icon-next" />
       </button>
     </div>
@@ -20,8 +50,8 @@
       :slides-per-group="columns"
       :grid="{ rows: rows, fill: 'row' }"
       :space-between="24"
-      @swiper="handleListSwiperReady"
-      @slide-change="handleListSlideChange"
+      @swiper="handleSwiperReady"
+      @slide-change="handleSlideChange"
     >
       <swiper-slide class="slide-item" :key="index" v-for="(item, index) in data">
         <slot name="item" v-bind="{ item, index }"></slot>
@@ -29,56 +59,6 @@
     </swiper>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, reactive, PropType } from 'vue'
-  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
-
-  export default defineComponent({
-    name: 'LensListSwiper',
-    components: {
-      Swiper,
-      SwiperSlide
-    },
-    props: {
-      data: {
-        type: Array as PropType<Array<any>>,
-        required: true
-      },
-      rows: {
-        type: Number,
-        default: 2
-      },
-      columns: {
-        type: Number,
-        default: 5
-      }
-    },
-    setup() {
-      const listSwiperState = reactive({ canPrev: false, canNext: true })
-      const listSwiper = ref<SwiperClass>()
-
-      const listPrevSlide = () => listSwiper.value?.slidePrev()
-      const listNextSlide = () => listSwiper.value?.slideNext()
-      const handleListSlideChange = (_swiper: SwiperClass) => {
-        listSwiperState.canNext = !_swiper.isEnd
-        listSwiperState.canPrev = !_swiper.isBeginning
-      }
-      const handleListSwiperReady = (_swiper: SwiperClass) => {
-        listSwiper.value = _swiper
-        handleListSlideChange(_swiper)
-      }
-
-      return {
-        handleListSwiperReady,
-        handleListSlideChange,
-        listSwiperState,
-        listPrevSlide,
-        listNextSlide
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

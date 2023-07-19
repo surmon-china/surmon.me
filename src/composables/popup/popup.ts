@@ -4,10 +4,11 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { h, defineComponent, watch, Teleport, Fragment, PropType, ExtractPropTypes } from 'vue'
+import { h, defineComponent, watch, Teleport, Fragment, PropType, ExtractPropTypes, onBeforeMount } from 'vue'
 import { usePopup } from './hook'
 
-export const PopupUIProps = {
+export type PopupUiPropsType = Partial<ExtractPropTypes<typeof PopupUiProps>>
+export const PopupUiProps = {
   border: {
     type: Boolean as PropType<boolean>,
     default: true
@@ -22,14 +23,15 @@ export const PopupUIProps = {
   }
 }
 
-export const getOtherProps = ({
-  border,
-  maskClose,
-  scrollClose,
-  ...others
-}: ExtractPropTypes<typeof PopupUIProps>) => others
+export const omitUiProps = <P extends PopupUiPropsType>(
+  p: P
+): Pick<P, Exclude<keyof P, keyof PopupUiPropsType>> => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { border, maskClose, scrollClose, ...rest } = p
+  return rest
+}
 
-enum Event {
+enum PopupEvent {
   Close = 'close',
   UpdateVisible = 'update:visible'
 }
@@ -41,7 +43,6 @@ enum Event {
  *  </popup>
  */
 export default defineComponent({
-  name: 'Popup',
   props: {
     // component options
     visible: {
@@ -52,30 +53,35 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    // UI options
-    ...PopupUIProps
+    // ui options
+    ...PopupUiProps
   },
-  emits: [Event.Close, Event.UpdateVisible],
+  emits: [PopupEvent.Close, PopupEvent.UpdateVisible],
   setup(props, context) {
     const popup = usePopup()
 
-    watch(
-      () => props.visible,
-      (visible) => {
-        const { clone, visible: v, ...popupOptions } = props
-        visible ? popup.visible(popupOptions) : popup.hidden()
-      }
-    )
-
-    watch(
-      () => popup.state.visible,
-      (visible) => {
-        if (!visible && props.visible) {
-          context.emit(Event.UpdateVisible, false)
-          context.emit(Event.Close)
+    onBeforeMount(() => {
+      watch(
+        () => props.visible,
+        (visible) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { clone: _, visible: __, ...popupOptions } = props
+          visible ? popup.visible(popupOptions) : popup.hidden()
         }
-      }
-    )
+      )
+    })
+
+    onBeforeMount(() => {
+      watch(
+        () => popup.state.visible,
+        (visible) => {
+          if (!visible && props.visible) {
+            context.emit(PopupEvent.UpdateVisible, false)
+            context.emit(PopupEvent.Close)
+          }
+        }
+      )
+    })
 
     return () => {
       const renderSlotNode = () => context.slots.default?.()

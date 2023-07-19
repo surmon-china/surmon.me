@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-  /**唯一一个通用矩形广告模块 */
+  /** universal rectangular Ad */
   import { defineComponent } from 'vue'
   export default defineComponent({
     name: 'UAdsense',

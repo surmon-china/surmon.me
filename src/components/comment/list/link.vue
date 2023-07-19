@@ -1,3 +1,7 @@
+<script lang="ts" setup>
+  defineProps<{ href?: string }>()
+</script>
+
 <template>
   <a v-if="href" target="_blank" rel="external nofollow noopener" :href="href" v-bind="$attrs">
     <slot></slot>
@@ -6,13 +10,3 @@
     <slot></slot>
   </span>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  export default defineComponent({
-    name: 'CommentItemLink',
-    props: {
-      href: String
-    }
-  })
-</script>

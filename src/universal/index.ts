@@ -9,7 +9,6 @@ export * from './context'
 export * from './ref'
 export * from './prefetch'
 
-// env only
 export const onClient = (callback: any) => {
   isClient && callback()
 }

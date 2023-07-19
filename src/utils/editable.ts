@@ -30,7 +30,6 @@ export const focusPosition = (element: HTMLElement, position = 0) => {
     for (let i = 0; i < nodes.length; ++i) {
       const node = nodes[i]
       const isNewLine = node.nodeType === 1 && node.tagName === 'BR'
-      // 文本节点且不是换行
       if (node.nodeType !== 3 && !isNewLine) {
         visit(node)
         return
@@ -62,6 +61,7 @@ export interface IncertOption {
   element: HTMLElement | void
   content: string | [string, string]
 }
+
 export const insertContent = (option: IncertOption) => {
   const { element, content } = option
   const [before, after] = Array.isArray(content) ? content : [content]
@@ -70,25 +70,22 @@ export const insertContent = (option: IncertOption) => {
     return false
   }
 
-  // 如果选中了内容，则把选中的内容替换，
+  // If the text is selected, replace the selected text
   const currentText = element.innerText
   const selection = (window.getSelection || document.getSelection)() as Selection
   const selectedText = selection?.toString()
   if (selectedText) {
-    // TODO: 正则可能会匹配到重复的前面的字符，故不可靠
-    // 替换所有选中文本 -> 然后定位到所替换文本的最后一个字符
-    // 对于选中逻辑来说，既定的任何单个字符都理解为替换
+    // Replaces all selected text, and then locates the last character of the replaced text.
+    // For Selected logic, any single character in a given is understood as a substitution
     const isInsertReplace = !!before && !after
     const newSelectedText = isInsertReplace ? before : before + selectedText + after
     const newText = currentText.replace(selectedText, newSelectedText)
-    // console.log('选中插入', newText)
     element.innerText = newText
     focusPosition(element, newText.indexOf(newSelectedText) + newSelectedText.length - 1)
   } else {
-    // 否则追加新内容
+    // Otherwise, add a new element
     const newInsertText = before + after
     const selectedRange = (() => {
-      // eslint-disable-next-line no-empty
       try {
         return selection.getRangeAt(0)
       } catch (error) {}
@@ -96,20 +93,14 @@ export const insertContent = (option: IncertOption) => {
     const startPoint = selectedRange?.startOffset
     const endPoint = selectedRange?.endOffset
 
-    // 若拿到了光标，则在光标位置插入新内容 -> 然后定位到新内容的最后一个字符
+    // Insert new content at the cursor position, then position to the last character of the new content
     if (selectedRange && startPoint === endPoint && startPoint > 0) {
-      const newTexts = [
-        currentText.slice(0, startPoint),
-        newInsertText,
-        currentText.slice(startPoint)
-      ]
-      // console.log('光标插入', startPoint, newTexts)
+      const newTexts = [currentText.slice(0, startPoint), newInsertText, currentText.slice(startPoint)]
       element.innerText = newTexts.join('')
       focusPosition(element, newTexts[0].length + newTexts[1].length - 1)
     } else {
-      // 否则末端追加内容，并定位到最后一个字符
+      // Otherwise append at the end and position to the last character
       const newText = currentText + newInsertText
-      // console.log('尾部插入', newText)
       element.innerText = newText
       focusPosition(element, newText.length - 1)
       // TODO:????

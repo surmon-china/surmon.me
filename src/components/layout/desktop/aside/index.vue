@@ -1,3 +1,53 @@
+<script lang="ts" setup>
+  import { useRoute } from 'vue-router'
+  import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+  import { ASIDE_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
+  import { isArticleDetail } from '/@/transforms/route'
+  import AsideSearch from './search.vue'
+  import AsideStatistic from './statistic.vue'
+  import AsideArticle from './article.vue'
+  import AsideMammon from './mammon.vue'
+  import AsideTag from './tag.vue'
+  import AsideAnchor from './anchor.vue'
+  import AsideCalendar from './calendar.vue'
+
+  const ASIDE_STICKY_ELEMENT_ID = 'aside-sticky-module'
+
+  const route = useRoute()
+  const isArticlePage = computed(() => isArticleDetail(route.name))
+
+  // polyfill sticky event
+  let stickyEvents: any = null
+  const element = ref<HTMLDivElement>(null as any)
+
+  const handleStickyStateChange = () => {
+    // workaround: when (main container height >= aside height) & isSticky -> render sticky ad
+    const targetElement = document.getElementById(MAIN_CONTENT_ELEMENT_ID)?.children?.[0]
+    // const asideElementHeight = element.value.clientHeight
+    if (targetElement) {
+      // const mainContentElementHeight = targetElement.clientHeight
+      // const isFeasible = mainContentElementHeight >= asideElementHeight
+      // console.log(isFeasible && event.detail.isSticky)
+    }
+  }
+
+  onMounted(() => {
+    nextTick(() => {
+      stickyEvents = new window.$StickyEvents({
+        enabled: true,
+        stickySelector: `#${ASIDE_STICKY_ELEMENT_ID}`
+      })
+      stickyEvents.stickyElements?.[0]?.addEventListener(window.$StickyEvents.CHANGE, handleStickyStateChange)
+    })
+  })
+
+  onBeforeUnmount(() => {
+    stickyEvents.stickyElements?.[0]?.removeEventListener(window.$StickyEvents.CHANGE, handleStickyStateChange)
+    stickyEvents.disableEvents(false)
+    stickyEvents = null
+  })
+</script>
+
 <template>
   <aside :id="ASIDE_ELEMENT_ID" class="desktop-aside" ref="element">
     <div class="module">
@@ -36,83 +86,6 @@
     </div>
   </aside>
 </template>
-
-<script lang="ts">
-  import { useRoute } from 'vue-router'
-  import { defineComponent, ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-  import { ASIDE_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
-  import { isArticleDetail } from '/@/transforms/route'
-  import AsideSearch from './search.vue'
-  import AsideStatistic from './statistic.vue'
-  import AsideArticle from './article.vue'
-  import AsideMammon from './mammon.vue'
-  import AsideTag from './tag.vue'
-  import AsideAnchor from './anchor.vue'
-  import AsideCalendar from './calendar.vue'
-
-  const ASIDE_STICKY_ELEMENT_ID = 'aside-sticky-module'
-
-  export default defineComponent({
-    name: 'DesktopAside',
-    components: {
-      AsideSearch,
-      AsideStatistic,
-      AsideArticle,
-      AsideMammon,
-      AsideCalendar,
-      AsideTag,
-      AsideAnchor
-    },
-    setup() {
-      const route = useRoute()
-      const isArticlePage = computed(() => isArticleDetail(route.name))
-
-      // polyfill sticky event
-      let stickyEvents: any = null
-      const element = ref<HTMLDivElement>(null as any)
-
-      const handleStickyStateChange = (event) => {
-        // workaround: when (main container height >= aside height) & isSticky -> render sticky ad
-        const asideElementHeight = element.value.clientHeight
-        const targetElement = document.getElementById(MAIN_CONTENT_ELEMENT_ID)?.children?.[0]
-        if (targetElement) {
-          const mainContentElementHeight = targetElement.clientHeight
-          const isFeasible = mainContentElementHeight >= asideElementHeight
-          // console.log(isFeasible && event.detail.isSticky)
-        }
-      }
-
-      onMounted(() => {
-        nextTick(() => {
-          stickyEvents = new window.$StickyEvents({
-            enabled: true,
-            stickySelector: `#${ASIDE_STICKY_ELEMENT_ID}`
-          })
-          stickyEvents.stickyElements?.[0]?.addEventListener(
-            window.$StickyEvents.CHANGE,
-            handleStickyStateChange
-          )
-        })
-      })
-
-      onBeforeUnmount(() => {
-        stickyEvents.stickyElements?.[0]?.removeEventListener(
-          window.$StickyEvents.CHANGE,
-          handleStickyStateChange
-        )
-        stickyEvents.disableEvents(false)
-        stickyEvents = null
-      })
-
-      return {
-        isArticlePage,
-        ASIDE_ELEMENT_ID,
-        ASIDE_STICKY_ELEMENT_ID,
-        element
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

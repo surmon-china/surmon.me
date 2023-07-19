@@ -11,6 +11,14 @@ import PopupImageComponent from './image'
 import PopupComponent from './popup'
 import { PopupSymbol } from './constant'
 
+declare module 'vue' {
+  export interface GlobalComponents {
+    Popup: typeof PopupComponent
+    PopupRoot: typeof PopupRootComponent
+    PopupImage: typeof PopupImageComponent
+  }
+}
+
 declare global {
   interface Window {
     // @ts-ignore
@@ -96,9 +104,9 @@ export const createPopup = (): Popup & Plugin => {
     ...popupStore,
     install(app: App, config: PopupPluginConfig) {
       app.provide(PopupSymbol, popupStore)
-      app.component(PopupComponent.name, PopupComponent)
-      app.component(PopupImageComponent.name, PopupImageComponent)
-      app.component(PopupRootComponent.name!, PopupRootComponent)
+      app.component('Popup', PopupComponent)
+      app.component('PopupImage', PopupImageComponent)
+      app.component('PopupRoot', PopupRootComponent)
       if (config?.exportToGlobal) {
         ;(window as any).$popup = popupStore
       }

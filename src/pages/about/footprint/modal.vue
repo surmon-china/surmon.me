@@ -1,3 +1,35 @@
+<script lang="ts" setup>
+  import type { Map } from 'mapbox-gl'
+  import { shallowRef } from 'vue'
+  import { GoogleMyMapFolder, FeatureCollectionJSON, GoogleMyMapPlacemark, newMapboxPopup } from './helper'
+  import Mapbox from './mapbox.vue'
+
+  defineProps<{
+    name: string
+    description: string
+    gmGeoJson: FeatureCollectionJSON
+    gmFolders: Array<GoogleMyMapFolder>
+  }>()
+
+  const lib = shallowRef<Map>()
+  const map = shallowRef<Map>()
+  const handleMapboxReady = (payload: { map: Map; lib: any }) => {
+    lib.value = payload.lib
+    map.value = payload.map
+  }
+
+  let prevPopup: mapboxgl.Popup | null = null
+  const handlePlacemarkClick = (placemark: GoogleMyMapPlacemark) => {
+    if (map.value) {
+      prevPopup?.remove()
+      prevPopup = newMapboxPopup(lib.value, placemark.coordinates, placemark.description).addTo(map.value)
+      map.value.flyTo({ center: placemark.coordinates, zoom: 10, speed: 1.2, curve: 1.2 })
+      // https://github.com/mapbox/mapbox-gl-js/issues/1794
+      // map.value.once('moveend', () => {})
+    }
+  }
+</script>
+
 <template>
   <div class="modal">
     <mapbox class="mapbox" :gm-geo-json="gmGeoJson" @ready="handleMapboxReady" />
@@ -24,9 +56,7 @@
               <uimage
                 class="icon"
                 :cdn="true"
-                :src="`/images/third-party/mapbox-${
-                  placemark.image ? 'attraction' : 'veterinary'
-                }.svg`"
+                :src="`/images/third-party/mapbox-${placemark.image ? 'attraction' : 'veterinary'}.svg`"
               />
               <span class="text">{{ placemark.name }}</span>
             </li>
@@ -36,61 +66,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import type { Map } from 'mapbox-gl'
-  import { defineComponent, shallowRef, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { GEO_INFO, VALUABLE_LINKS } from '/@/config/app.config'
-  import {
-    GoogleMyMapFolder,
-    FeatureCollectionJSON,
-    GoogleMyMapPlacemark,
-    newMapboxPopup
-  } from './helper'
-  import Mapbox from './mapbox.vue'
-
-  export default defineComponent({
-    name: 'FootprintModal',
-    components: { Mapbox },
-    props: {
-      name: String,
-      description: String,
-      gmGeoJson: Object as PropType<FeatureCollectionJSON>,
-      gmFolders: Array as PropType<Array<GoogleMyMapFolder>>
-    },
-    setup() {
-      const { isZhLang } = useEnhancer()
-      const lib = shallowRef<Map>()
-      const map = shallowRef<Map>()
-      const handleMapboxReady = (payload: { map: Map; lib: any }) => {
-        lib.value = payload.lib
-        map.value = payload.map
-      }
-
-      let prevPopup: mapboxgl.Popup | null = null
-      const handlePlacemarkClick = (placemark: GoogleMyMapPlacemark) => {
-        if (map.value) {
-          prevPopup?.remove()
-          prevPopup = newMapboxPopup(lib.value, placemark.coordinates, placemark.description).addTo(
-            map.value
-          )
-          map.value.flyTo({ center: placemark.coordinates, zoom: 10, speed: 1.2, curve: 1.2 })
-          // https://github.com/mapbox/mapbox-gl-js/issues/1794
-          // map.value.once('moveend', () => {})
-        }
-      }
-
-      return {
-        GEO_INFO,
-        VALUABLE_LINKS,
-        isZhLang,
-        handlePlacemarkClick,
-        handleMapboxReady
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

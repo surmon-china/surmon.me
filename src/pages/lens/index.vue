@@ -1,3 +1,42 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useStores } from '/@/stores'
+  import { useUniversalFetch } from '/@/universal'
+  import { Language, LanguageKey } from '/@/language'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import { getYouTubePlaylistURL } from '/@/transforms/media'
+  import { firstUpperCase } from '/@/transforms/text'
+  import PageBanner from '/@/components/common/banner.vue'
+  import LensSkeleton from './skeleton.vue'
+  import InstagramGrid from './instagram/grid.vue'
+  import YoutubePlaylist from './youtube/playlist.vue'
+
+  const { i18n: _i18n, seo, isZhLang } = useEnhancer()
+  const { instagramMedias, youtubePlayList } = useStores()
+  const youtubePlaylistData = computed(() => {
+    return youtubePlayList.data.filter((list) => list.contentDetails.itemCount > 1)
+  })
+
+  seo(() => {
+    const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_LENS, Language.English)!)
+    const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_LENS), enTitle] : [enTitle]
+    return {
+      pageTitle: titles.join(' | '),
+      description: `${META.author} 的浮光掠影`
+    }
+  })
+
+  useUniversalFetch(() => {
+    return Promise.all([
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      instagramMedias.fetch().catch(() => {}),
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      youtubePlayList.fetch().catch(() => {})
+    ])
+  })
+</script>
+
 <template>
   <div class="lens-page">
     <page-banner class="page-banner" :position="68" image="/images/page-lens/banner.jpeg">
@@ -22,20 +61,14 @@
           <span class="text">Instagram</span>
         </ulink>
       </h4>
-      <placeholder :data="instagramMedias" :loading="instagramMedias.fetching">
+      <placeholder :data="instagramMedias.data" :loading="instagramMedias.fetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">
             <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
           </empty>
         </template>
         <template #loading>
-          <lens-skeleton
-            :columns="6"
-            :rows="2"
-            :height="155"
-            key="loading"
-            class="module-loading"
-          />
+          <lens-skeleton :columns="6" :rows="2" :height="155" key="loading" class="module-loading" />
         </template>
         <template #default>
           <div class="module-content">
@@ -58,13 +91,7 @@
             </h4>
           </template>
           <template #loading>
-            <lens-skeleton
-              :columns="5"
-              :rows="1"
-              :height="166"
-              key="loading"
-              class="module-loading"
-            />
+            <lens-skeleton :columns="5" :rows="1" :height="166" key="loading" class="module-loading" />
           </template>
           <template #empty>
             <empty class="module-empty" key="empty">
@@ -77,69 +104,13 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useStores } from '/@/stores'
-  import { useUniversalFetch } from '/@/universal'
-  import { Language, LanguageKey } from '/@/language'
-  import { META, VALUABLE_LINKS } from '/@/config/app.config'
-  import { getYouTubePlaylistURL } from '/@/transforms/media'
-  import { firstUpperCase } from '/@/transforms/text'
-  import PageBanner from '/@/components/common/banner.vue'
-  import LensSkeleton from './skeleton.vue'
-  import InstagramGrid from './instagram/grid.vue'
-  import YoutubePlaylist from './youtube/playlist.vue'
-
-  export default defineComponent({
-    name: 'LensPage',
-    components: {
-      PageBanner,
-      LensSkeleton,
-      InstagramGrid,
-      YoutubePlaylist
-    },
-    setup() {
-      const { i18n, head, isZhLang } = useEnhancer()
-      const { instagramMedias, youtubePlayList } = useStores()
-      const youtubePlaylistData = computed(() => {
-        return youtubePlayList.data.filter((list) => list.contentDetails.itemCount > 1)
-      })
-
-      head(() => {
-        const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_LENS, Language.English)!)
-        const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_LENS), enTitle] : [enTitle]
-        return {
-          pageTitle: titles.join(' | '),
-          description: `${META.author} 的浮光掠影`
-        }
-      })
-
-      useUniversalFetch(() => {
-        return Promise.all([
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          instagramMedias.fetch().catch(() => {}),
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          youtubePlayList.fetch().catch(() => {})
-        ])
-      })
-
-      return {
-        VALUABLE_LINKS,
-        LanguageKey,
-        instagramMedias,
-        youtubePlaylistData,
-        getYouTubePlaylistURL
-      }
-    }
-  })
-</script>
-
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
   @import 'src/styles/mixins.scss';
 
   .lens-page {
+    min-height: $full-page-active-content-height;
+
     .page-bridge {
       position: relative;
       height: 4rem;

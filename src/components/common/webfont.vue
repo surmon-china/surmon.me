@@ -1,7 +1,27 @@
+<script lang="ts" setup>
+  import { useEnhancer } from '/@/app/enhancer'
+
+  interface Props {
+    bolder?: boolean
+    boldZh?: boolean
+    boldEn?: boolean
+    uppercase?: boolean
+  }
+
+  withDefaults(defineProps<Props>(), {
+    bolder: false,
+    boldZh: false,
+    boldEn: true,
+    uppercase: false
+  })
+
+  const { isZhLang } = useEnhancer()
+</script>
+
 <template>
   <span
-    class="webfont"
     :class="[
+      'webfont',
       bolder ? 'bolder' : 'medium',
       isZhLang ? 'zh' : 'en',
       { boldZh },
@@ -12,38 +32,6 @@
     <slot></slot>
   </span>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  export default defineComponent({
-    name: 'Webfont',
-    props: {
-      bolder: {
-        type: Boolean,
-        default: false
-      },
-      boldZh: {
-        type: Boolean,
-        default: false
-      },
-      boldEn: {
-        type: Boolean,
-        default: true
-      },
-      uppercase: {
-        type: Boolean,
-        default: false
-      }
-    },
-    setup() {
-      const { isZhLang } = useEnhancer()
-      return {
-        isZhLang
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

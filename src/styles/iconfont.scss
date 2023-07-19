@@ -1,8 +1,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
-  src: url('//at.alicdn.com/t/c/font_64825_7im0dfnc18v.woff2?t=1665164859630') format('woff2'),
-    url('//at.alicdn.com/t/c/font_64825_7im0dfnc18v.woff?t=1665164859630') format('woff'),
-    url('//at.alicdn.com/t/c/font_64825_7im0dfnc18v.ttf?t=1665164859630') format('truetype');
+  src:
+    url('//at.alicdn.com/t/c/font_64825_xl09fc7sbr.woff2?t=1689358214514') format('woff2'),
+    url('//at.alicdn.com/t/c/font_64825_xl09fc7sbr.woff?t=1689358214514') format('woff'),
+    url('//at.alicdn.com/t/c/font_64825_xl09fc7sbr.ttf?t=1689358214514') format('truetype');
 }
 
 .iconfont {
@@ -13,12 +14,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-hammer:before {
-  content: '\e6df';
+.icon-chat-gpt:before {
+  content: '\e644';
 }
 
-.icon-bilibili:before {
-  content: '\e6b6';
+.icon-retweet:before {
+  content: '\e704';
+}
+
+.icon-hammer:before {
+  content: '\e6df';
 }
 
 .icon-opensea:before {
@@ -111,10 +116,6 @@
 
 .icon-at:before {
   content: '\e6e8';
-}
-
-.icon-retweet:before {
-  content: '\e72b';
 }
 
 .icon-ethereum:before {
@@ -829,10 +830,6 @@
   content: '\e6a9';
 }
 
-.icon-http:before {
-  content: '\e659';
-}
-
 .icon-heart:before {
   content: '\e65c';
 }
@@ -879,10 +876,6 @@
 
 .icon-qrcode:before {
   content: '\e693';
-}
-
-.icon-about:before {
-  content: '\e697';
 }
 
 .icon-douban:before {

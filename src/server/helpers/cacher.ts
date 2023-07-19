@@ -1,36 +1,35 @@
 /**
  * @file BFF Server cacher
- * @module server.cacher
+ * @module server.helper.cacher
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import type { CacheClient } from '../cache'
+import type { CacheClient, Seconds } from '../cache'
 
 export interface CacherConfig {
   cache: CacheClient
   getter: () => Promise<any>
-  /** cache key */
   key: string
-  /** cache age [seconds] */
-  age: number
+  /** in seconds */
+  ttl: Seconds
   /** retry when after [seconds] */
-  retryWhen?: number
+  retryWhen?: Seconds
 }
 
 // fetch & cache
 const fetchAndCache = async (config: CacherConfig) => {
   const data = await config.getter()
-  await config.cache.set(config.key, data, config.age)
+  await config.cache.set(config.key, data, config.ttl)
   return data
 }
 
 // timeout prefetch
 const setTimeoutPreRefresh = (config: CacherConfig, preSeconds: number, refreshCount = 1) => {
-  const timeoutSeconds = config.age - preSeconds
+  const timeoutSeconds = config.ttl - preSeconds
   console.info(
     '[cacher] setTimeoutPreRefresh',
     `> ${config.key} + ${refreshCount}`,
-    `> cache expire when after ${config.age}s`,
+    `> cache expire when after ${config.ttl}s`,
     `> pre refresh when after ${timeoutSeconds}s`
   )
 
@@ -39,11 +38,7 @@ const setTimeoutPreRefresh = (config: CacherConfig, preSeconds: number, refreshC
       await fetchAndCache(config)
       setTimeoutPreRefresh(config, preSeconds, refreshCount + 1)
     } catch (error) {
-      console.warn(
-        `[cacher] setTimeoutPreRefresh ERROR!`,
-        `> ${config.key} + ${refreshCount}`,
-        error
-      )
+      console.warn(`[cacher] setTimeoutPreRefresh error:`, `> ${config.key} + ${refreshCount}`, error)
     }
   }, timeoutSeconds * 1000)
 }
@@ -58,18 +53,15 @@ const retryFetch = async (config: CacherConfig) => {
   try {
     await fetchAndCache(config)
   } catch (error) {
-    console.warn('[cacher] retry error:', error)
+    console.warn('[cacher] retryFetch error:', error)
   } finally {
     retryingMap.set(config.key, false)
   }
 }
 
-export const cacher = async <T = any>(_config: CacherConfig): Promise<T> => {
+export const cacher = async <T = any>(configInput: CacherConfig): Promise<T> => {
   // key prefix
-  const config = {
-    ..._config,
-    key: `bff_${_config.key}`
-  }
+  const config: CacherConfig = { ...configInput, key: `bff_${configInput.key}` }
 
   // cached
   if (await config.cache.has(config.key)) {
@@ -79,23 +71,17 @@ export const cacher = async <T = any>(_config: CacherConfig): Promise<T> => {
   try {
     // 1. fetch & cache
     const data = await fetchAndCache(config)
-    // 2. set timeout pre 1 min refresh
+    // 2. refresh 1 minute before ttl expires to get the latest data
     setTimeoutPreRefresh(config, 60)
     // 3. return data
     return data
-  } catch (error: any) {
+  } catch (error: unknown) {
     // retry only once
     if (config.retryWhen && !retryingMap.get(config.key)) {
       retryingMap.set(config.key, true)
       setTimeout(() => retryFetch({ ...config }), config.retryWhen * 1000)
     }
-
-    if (typeof error === 'string') {
-      return Promise.reject(`cacher error > ${error}`)
-    }
-
-    const err = (error as any).toJSON?.() || error
-    err.name = `cacher error > ${err.name || ''}`
-    return Promise.reject(err)
+    // return error
+    throw error
   }
 }

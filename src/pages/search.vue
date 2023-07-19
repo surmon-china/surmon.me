@@ -1,22 +1,5 @@
-<template>
-  <div class="search-flow-page">
-    <article-list-header icon="icon-search">
-      <i18n
-        :zh="`和 “${keyword}” 有关的所有文章`"
-        :en="`Keyword &quot;${keyword}&quot;\'s result`"
-      />
-    </article-list-header>
-    <article-list
-      :fetching="articleListStore.list.fetching"
-      :articles="articleListStore.list.data"
-      :pagination="articleListStore.list.pagination"
-      @loadmore="loadmoreArticles"
-    />
-  </div>
-</template>
-
-<script lang="ts">
-  import { defineComponent, watch, onBeforeMount } from 'vue'
+<script lang="ts" setup>
+  import { watch, onBeforeMount } from 'vue'
   import { useUniversalFetch } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { useArticleListStore } from '/@/stores/article'
@@ -24,48 +7,46 @@
   import ArticleListHeader from '/@/components/flow/desktop/header.vue'
   import ArticleList from '/@/components/flow/desktop/list.vue'
 
-  export default defineComponent({
-    name: 'SearchPage',
-    components: {
-      ArticleListHeader,
-      ArticleList
-    },
-    props: {
-      keyword: {
-        type: String,
-        required: true
-      }
-    },
-    setup(props) {
-      const { head } = useEnhancer()
-      head(() => ({
-        pageTitle: `${props.keyword} | Search`,
-        ogType: 'blog'
-      }))
+  const props = defineProps<{ keyword: string }>()
 
-      const articleListStore = useArticleListStore()
-      const loadmoreArticles = async () => {
-        await articleListStore.fetchList({
-          keyword: props.keyword,
-          page: articleListStore.list.pagination!.current_page + 1
-        })
-        scrollToNextScreen()
-      }
+  const { seo } = useEnhancer()
+  const articleListStore = useArticleListStore()
+  const loadmoreArticles = async () => {
+    await articleListStore.fetch({
+      keyword: props.keyword,
+      page: articleListStore.pagination!.current_page + 1
+    })
+    scrollToNextScreen()
+  }
 
-      onBeforeMount(() => {
-        watch(
-          () => props.keyword,
-          (keyword) => articleListStore.fetchList({ keyword }),
-          { flush: 'post' }
-        )
-      })
+  seo(() => ({
+    pageTitle: `${props.keyword} | Search`,
+    ogType: 'website'
+  }))
 
-      useUniversalFetch(() => articleListStore.fetchList({ keyword: props.keyword }))
+  onBeforeMount(() => {
+    watch(
+      () => props.keyword,
+      (keyword) => articleListStore.fetch({ keyword }),
+      { flush: 'post' }
+    )
+  })
 
-      return {
-        articleListStore,
-        loadmoreArticles
-      }
-    }
+  useUniversalFetch(() => {
+    return articleListStore.fetch({ keyword: props.keyword })
   })
 </script>
+
+<template>
+  <div class="search-flow-page">
+    <article-list-header icon="icon-search">
+      <i18n :zh="`和 “${keyword}” 有关的所有文章`" :en="`Keyword &quot;${keyword}&quot;\'s result`" />
+    </article-list-header>
+    <article-list
+      :fetching="articleListStore.fetching"
+      :articles="articleListStore.data"
+      :pagination="articleListStore.pagination"
+      @loadmore="loadmoreArticles"
+    />
+  </div>
+</template>

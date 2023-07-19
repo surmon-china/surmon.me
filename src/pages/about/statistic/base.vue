@@ -1,3 +1,41 @@
+<script lang="ts">
+  import { defineComponent, h } from 'vue'
+  import { numberToKilo, numberSplit } from '/@/transforms/text'
+  export const StatisticCount = defineComponent({
+    name: 'StatisticCount',
+    props: {
+      count: [Number, String],
+      primary: Boolean,
+      large: Boolean,
+      kilo: Boolean,
+      split: Boolean
+    },
+    render() {
+      const number = Number(this.$props.count)
+      const content = this.kilo ? numberToKilo(number) : this.split ? numberSplit(number) : String(number)
+      const classNames = { primary: this.$props.primary, large: this.large }
+      return h('span', { class: ['count', classNames] }, content)
+    }
+  })
+</script>
+
+<script lang="ts" setup>
+  import { useEnhancer } from '/@/app/enhancer'
+  import { LanguageKey } from '/@/language'
+
+  interface Props {
+    brand?: string
+    icon?: string
+    platform?: string
+    href?: string
+    fetching?: boolean
+    data?: any
+  }
+
+  defineProps<Props>()
+  const { isDarkTheme } = useEnhancer()
+</script>
+
 <template>
   <div class="statistic" :class="[brand, { dark: isDarkTheme }]">
     <placeholder :i18n-key="LanguageKey.EMPTY_PLACEHOLDER" :loading="fetching" :data="data">
@@ -23,51 +61,6 @@
     </placeholder>
   </div>
 </template>
-
-<script lang="ts">
-  /* eslint-disable vue/one-component-per-file */
-  import { defineComponent, h, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
-  import { numberToKilo, numberSplit } from '/@/transforms/text'
-
-  export default defineComponent({
-    name: 'StatisticBase',
-    props: {
-      brand: String,
-      icon: String,
-      platform: String,
-      href: String,
-      fetching: Boolean,
-      data: Object as PropType<any>
-    },
-    setup() {
-      const { isDarkTheme } = useEnhancer()
-      return { LanguageKey, isDarkTheme }
-    }
-  })
-
-  export const StatisticCount = defineComponent({
-    name: 'StatisticCount',
-    props: {
-      count: [Number, String],
-      primary: Boolean,
-      large: Boolean,
-      kilo: Boolean,
-      split: Boolean
-    },
-    render() {
-      const number = Number(this.$props.count)
-      const content = this.kilo
-        ? numberToKilo(number)
-        : this.split
-        ? numberSplit(number)
-        : String(number)
-      const classNames = { primary: this.$props.primary, large: this.large }
-      return h('span', { class: ['count', classNames] }, content)
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
@@ -128,6 +121,9 @@
         }
 
         .left {
+          display: flex;
+          align-items: center;
+
           .iconfont {
             color: var(--s-primary);
             font-size: $font-size-h2;

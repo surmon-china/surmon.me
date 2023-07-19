@@ -1,3 +1,76 @@
+<script lang="ts" setup>
+  import { reactive, ref, watch, onMounted, nextTick } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { RouteName } from '/@/app/router'
+  import { LanguageKey } from '/@/language'
+  import { isSearchFlow } from '/@/transforms/route'
+  import { onBeforeMount } from 'vue'
+
+  enum MobileHeaderEvents {
+    Open = 'open',
+    Close = 'close'
+  }
+
+  const props = defineProps<{
+    opened: boolean
+  }>()
+
+  const emit = defineEmits<{
+    (e: MobileHeaderEvents.Open): void
+    (e: MobileHeaderEvents.Close): void
+  }>()
+
+  const { route, router, i18n: _i18n } = useEnhancer()
+  const inputElement = ref<HTMLInputElement>(null as any)
+  const searchState = reactive({
+    open: false,
+    keyword: ''
+  })
+
+  const handleMenuToggle = () => {
+    props.opened ? emit(MobileHeaderEvents.Close) : emit(MobileHeaderEvents.Open)
+  }
+
+  const openSearch = () => {
+    searchState.open = true
+    nextTick(() => {
+      inputElement.value.focus()
+    })
+  }
+
+  const cancelSearch = () => {
+    searchState.open = false
+  }
+
+  const submitSearch = () => {
+    const keyword = searchState.keyword.trim()
+    if (keyword) {
+      router.push({
+        name: RouteName.SearchFlow,
+        params: { keyword }
+      })
+    }
+  }
+
+  onBeforeMount(() => {
+    watch(
+      () => router.currentRoute.value,
+      () => {
+        nextTick(() => {
+          cancelSearch()
+          emit(MobileHeaderEvents.Close)
+        })
+      }
+    )
+  })
+
+  onMounted(() => {
+    if (isSearchFlow(route.name as string)) {
+      searchState.keyword = route.params.keyword as string
+    }
+  })
+</script>
+
 <template>
   <header class="header">
     <div class="search" :class="{ actived: searchState.open }">
@@ -8,7 +81,7 @@
         type="text"
         maxlength="16"
         required
-        :placeholder="t(LanguageKey.SEARCH_PLACEHOLDER)"
+        :placeholder="_i18n.t(LanguageKey.SEARCH_PLACEHOLDER)"
         v-model.trim="searchState.keyword"
         @keyup.enter.stop.prevent="submitSearch"
       />
@@ -32,90 +105,6 @@
     </nav>
   </header>
 </template>
-
-<script lang="ts">
-  import { defineComponent, reactive, ref, watch, onMounted, nextTick } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { RouteName } from '/@/app/router'
-  import { LanguageKey } from '/@/language'
-  import { isSearchFlow } from '/@/transforms/route'
-
-  export enum MobileHeaderEvents {
-    Open = 'open',
-    Close = 'close'
-  }
-
-  export default defineComponent({
-    name: 'MobileHeader',
-    props: {
-      opened: {
-        type: Boolean,
-        required: true
-      }
-    },
-    emits: [MobileHeaderEvents.Open, MobileHeaderEvents.Close],
-    setup(props, context) {
-      const { i18n, route, router } = useEnhancer()
-      const inputElement = ref<HTMLInputElement>(null as any)
-      const searchState = reactive({
-        open: false,
-        keyword: ''
-      })
-
-      onMounted(() => {
-        if (isSearchFlow(route.name as string)) {
-          searchState.keyword = route.params.keyword as string
-        }
-      })
-
-      const handleMenuToggle = () => {
-        context.emit(props.opened ? MobileHeaderEvents.Close : MobileHeaderEvents.Open)
-      }
-
-      const openSearch = () => {
-        searchState.open = true
-        nextTick(() => {
-          inputElement.value.focus()
-        })
-      }
-
-      const cancelSearch = () => {
-        searchState.open = false
-      }
-
-      const submitSearch = () => {
-        const keyword = searchState.keyword.trim()
-        if (keyword) {
-          router.push({
-            name: RouteName.SearchFlow,
-            params: { keyword }
-          })
-        }
-      }
-
-      watch(
-        () => router.currentRoute.value,
-        () => {
-          nextTick(() => {
-            cancelSearch()
-            context.emit(MobileHeaderEvents.Close)
-          })
-        }
-      )
-
-      return {
-        t: i18n.t,
-        LanguageKey,
-        searchState,
-        inputElement,
-        openSearch,
-        submitSearch,
-        cancelSearch,
-        handleMenuToggle
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

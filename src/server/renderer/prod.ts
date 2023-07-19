@@ -8,8 +8,11 @@ import type { RenderResult } from '@/ssr'
 
 export const enableProdRenderer = async (app: Express, cache: CacheClient) => {
   const template = fs.readFileSync(path.resolve(DIST_PATH, 'template.html'), 'utf-8')
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { renderApp, renderError } = require(path.resolve(PRDO_SERVER_PATH, 'ssr.js'))
+  // Bypass webpack rewrite dynamic import, it will be resolved at runtime.
+  // https://github.com/vercel/ncc/issues/935#issuecomment-1189850042
+  const _import = new Function('p', 'return import(p)')
+  const { renderApp, renderError } = await _import(path.resolve(PRDO_SERVER_PATH, 'ssr.js'))
+  // const { renderApp, renderError } = require(path.resolve(PRDO_SERVER_PATH, 'ssr.js'))
 
   app.use('*', async (request, response) => {
     try {

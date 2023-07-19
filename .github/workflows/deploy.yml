@@ -12,16 +12,25 @@ jobs:
     name: Deploy to server
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
         with:
-          node-version: '14'
-          cache: 'yarn'
+          version: 8
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
+
       - name: SSR build
-        run: yarn build
+        run: pnpm run build
 
       - name: Release branch
         uses: peaceiris/actions-gh-pages@v3

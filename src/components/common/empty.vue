@@ -1,3 +1,12 @@
+<script lang="ts" setup>
+  import { LanguageKey } from '/@/language'
+
+  defineProps<{
+    placeholder?: string
+    i18nKey?: LanguageKey
+  }>()
+</script>
+
 <template>
   <div class="empty">
     <slot>
@@ -8,23 +17,6 @@
     </slot>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, PropType } from 'vue'
-  import { LanguageKey } from '/@/language'
-  export default defineComponent({
-    name: 'Empty',
-    props: {
-      placeholder: String,
-      i18nKey: String as PropType<LanguageKey>
-    },
-    setup() {
-      return {
-        LanguageKey
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

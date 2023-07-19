@@ -1,3 +1,34 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+  import { LanguageKey } from '/@/language'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { Article } from '/@/interfaces/article'
+  import { useIdentityStore } from '/@/stores/identity'
+  import { getArticleDetailRoute } from '/@/transforms/route'
+  import { getMobileArticleListThumbnailURL } from '/@/transforms/thumbnail'
+  import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
+  import { numberSplit } from '/@/transforms/text'
+
+  const props = defineProps<{
+    article: Article
+  }>()
+
+  const { router, gState } = useEnhancer()
+  const identityStore = useIdentityStore()
+  const isLiked = computed(() => identityStore.isLikedPage(props.article.id))
+  const isHybrid = isHybridType(props.article.origin)
+  const isReprint = isReprintType(props.article.origin)
+  const isOriginal = isOriginalType(props.article.origin)
+
+  const getThumbnailURL = (url: string) => {
+    return getMobileArticleListThumbnailURL(url, gState.imageExt.value.isWebP)
+  }
+
+  const handleClick = () => {
+    router.push(getArticleDetailRoute(props.article.id))
+  }
+</script>
+
 <template>
   <div class="article-item" @click="handleClick">
     <div class="thumbnail">
@@ -15,7 +46,8 @@
       </span>
       <div
         class="image"
-        :style="{ backgroundImage: `url(${getThumbnailURL(article.thumb)})` }"
+        loading="lazy"
+        :style="{ backgroundImage: `url(${getThumbnailURL(article.thumbnail)})` }"
         :alt="article.title"
         :title="article.title"
       />
@@ -23,20 +55,16 @@
     <div class="content">
       <div class="body">
         <h4 class="title">
-          <router-link class="link" :to="getArticleDetailRoute(article.id)" :title="article.title">
+          <router-link class="link" :title="article.title" :to="getArticleDetailRoute(article.id)">
             {{ article.title }}
           </router-link>
         </h4>
-        <p
-          class="description"
-          style="-webkit-box-orient: vertical"
-          v-html="article.description"
-        ></p>
+        <p class="description" style="-webkit-box-orient: vertical" v-html="article.description"></p>
       </div>
       <div class="meta">
         <span class="date">
           <i class="iconfont icon-clock"></i>
-          <udate to="ago" :date="article.create_at" />
+          <udate to="ago" :date="article.created_at" />
         </span>
         <span class="views">
           <i class="iconfont icon-eye"></i>
@@ -54,56 +82,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, computed, PropType } from 'vue'
-  import { LanguageKey } from '/@/language'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { Article } from '/@/stores/article'
-  import { useIdentityStore } from '/@/stores/identity'
-  import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getMobileArticleListThumbnailURL } from '/@/transforms/thumbnail'
-  import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
-  import { numberSplit } from '/@/transforms/text'
-
-  export default defineComponent({
-    name: 'FlowArticleListItem',
-    props: {
-      article: {
-        type: Object as PropType<Article>,
-        required: true
-      }
-    },
-    setup(props) {
-      const { router, globalState } = useEnhancer()
-      const identityStore = useIdentityStore()
-      const isLiked = computed(() => identityStore.isLikedPage(props.article.id))
-      const isHybrid = isHybridType(props.article.origin)
-      const isReprint = isReprintType(props.article.origin)
-      const isOriginal = isOriginalType(props.article.origin)
-
-      const getThumbnailURL = (thumbURL: string) => {
-        return getMobileArticleListThumbnailURL(thumbURL, globalState.imageExt.value.isWebP)
-      }
-
-      const handleClick = () => {
-        router.push(getArticleDetailRoute(props.article.id))
-      }
-
-      return {
-        LanguageKey,
-        isLiked,
-        isHybrid,
-        isReprint,
-        isOriginal,
-        numberSplit,
-        getThumbnailURL,
-        getArticleDetailRoute,
-        handleClick
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

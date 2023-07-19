@@ -4,58 +4,59 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import { computed } from 'vue'
+import { defineStore } from 'pinia'
+import { useFetchStore } from './_fetch'
 import { TunnelModule } from '/@/constants/tunnel'
 import nodepress from '/@/services/nodepress'
 import tunnel from '/@/services/tunnel'
-import { defineFetchStore } from './_fetch'
 
 type CalendarDay = { date: string; count: number }
 
-export const useArticleCalendarStore = defineFetchStore({
-  id: 'articleCalendar',
-  initData: [] as Array<CalendarDay>,
-  onlyOnce: true,
-  async fetcher() {
-    const response = await nodepress.get<Array<CalendarDay>>('/article/calendar', {
-      params: { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone }
-    })
-    return response.result
-  }
-})
-
-export const useTwitterCalendarStore = defineFetchStore({
-  id: 'twitterCalendar',
-  initData: [] as Array<CalendarDay>,
-  onlyOnce: true,
-  fetcher: () => tunnel.dispatch<Array<CalendarDay>>(TunnelModule.TwitterCalendar)
-})
-
-export const useInstagramCalendarStore = defineFetchStore({
-  id: 'instagramCalendar',
-  initData: [] as Array<CalendarDay>,
-  onlyOnce: true,
-  fetcher: () => tunnel.dispatch<Array<CalendarDay>>(TunnelModule.InstagramCalendar)
-})
-
-export const useGitHubCalendarStore = defineFetchStore({
-  id: 'githubContributionsCalendar',
-  initData: null,
-  onlyOnce: true,
-  fetcher: () => tunnel.dispatch(TunnelModule.GitHubContributions),
-  getters: {
-    days(state): Array<{ date: string; count: number; color: string }> {
-      if (!state.data) {
-        return []
-      }
-
-      return state.data.weeks
-        .map((week) => week.contributionDays)
-        .flat()
-        .map((day) => ({
-          date: day.date,
-          count: day.contributionCount,
-          color: day.color
-        }))
+export const useArticleCalendarStore = defineStore('articleCalendar', () => {
+  return useFetchStore<CalendarDay[]>({
+    once: true,
+    data: [],
+    async fetcher() {
+      const response = await nodepress.get<Array<CalendarDay>>('/article/calendar', {
+        params: { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone }
+      })
+      return response.result
     }
-  }
+  })
+})
+
+export const useInstagramCalendarStore = defineStore('instagramCalendar', () => {
+  return useFetchStore<CalendarDay[]>({
+    once: true,
+    data: [],
+    fetcher: () => {
+      return tunnel.dispatch<Array<CalendarDay>>(TunnelModule.InstagramCalendar)
+    }
+  })
+})
+
+export const useGitHubCalendarStore = defineStore('githubContributionsCalendar', () => {
+  const fetchStore = useFetchStore({
+    once: true,
+    data: null,
+    fetcher: () => tunnel.dispatch(TunnelModule.GitHubContributions)
+  })
+
+  const days = computed<Array<{ date: string; count: number; color: string }>>(() => {
+    if (!fetchStore.data.value) {
+      return []
+    }
+
+    return fetchStore.data.value.weeks
+      .map((week) => week.contributionDays)
+      .flat()
+      .map((day) => ({
+        date: day.date,
+        count: day.contributionCount,
+        color: day.color
+      }))
+  })
+
+  return { ...fetchStore, days }
 })

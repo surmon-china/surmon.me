@@ -5,8 +5,8 @@
  */
 
 import { onBeforeMount, onServerPrefetch } from 'vue'
+import { isServer, isClient } from '/@/app/environment'
 import { useGlobalState } from '/@/app/state'
-import { isServer, isSPA } from '/@/app/environment'
 
 // onServerPrefetch === async setup
 // onServerPreFetch: https://github.com/vuejs/composition-api/pull/198/files
@@ -16,36 +16,28 @@ import { isServer, isSPA } from '/@/app/environment'
 // https://github.com/nuxt-community/composition-api/blob/main/src/runtime/composables/async.ts
 export const useUniversalFetch = (fetcher: () => Promise<any>) => {
   const globalState = useGlobalState()
-  const doFetchOnBeforeMount = () => {
-    onBeforeMount(() => fetcher())
-  }
 
-  // Client side: SPA
-  if (isSPA) {
-    doFetchOnBeforeMount()
-    return
-  }
-
-  // Server side: SSR
+  // SSR: server
   if (isServer) {
-    onServerPrefetch(() =>
-      fetcher().catch((error) => {
-        // HACK: 因为 onServerPrefetch 或 async setup 都无法中断 renderToString，所以需要在状态被抛出之前就做一个标记
+    onServerPrefetch(() => {
+      return fetcher().catch((error) => {
+        // HACK: Since neither `onServerPrefetch` nor `async setup` can break `renderToString`, so need to mark the status before it's thrown.
         globalState.setRenderError(error)
         return Promise.reject(error)
       })
-    )
-    return
+    })
   }
 
-  // Client side: SSR
-  // Navigation: fetch on before mount
-  if (globalState.isHydrated.value) {
-    doFetchOnBeforeMount()
-  } else {
-    // Hydration: no fetch
-    // onServerPreFetch: https://github.com/vuejs/composition-api/pull/198/files
-    // isHydrating: https://github.com/vuejs/vue-next/issues/1723
-    // isHydrating: https://github.com/vuejs/vue-next/pull/2016
+  // SSR: client
+  if (isClient) {
+    // After the hydration first screen, all client actions, such as navigating to a new page, require a data request.
+    if (globalState.isHydrated.value) {
+      onBeforeMount(() => fetcher())
+    } else {
+      // Hydration: nothing needs to be done, the store data is initialized with the SSR context
+      // onServerPreFetch: https://github.com/vuejs/composition-api/pull/198/files
+      // isHydrating: https://github.com/vuejs/vue-next/issues/1723
+      // isHydrating: https://github.com/vuejs/vue-next/pull/2016
+    }
   }
 }

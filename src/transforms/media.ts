@@ -5,7 +5,7 @@
 
 import type { InstagramMediaItem } from '/@/server/getters/instagram'
 import { ProxyModule } from '/@/constants/proxy'
-import { getTargetProxyURL } from '/@/transforms/url'
+import { getProxyURL } from '/@/transforms/url'
 
 export const isVideoMediaIns = (media: InstagramMediaItem) => {
   return media.media_type === 'VIDEO'
@@ -20,14 +20,14 @@ export const isAlbumMediaIns = (media: InstagramMediaItem) => {
 export const getInstagramImage = (media: InstagramMediaItem, size?: 't' | 'm' | 'l') => {
   // video type media
   if (isVideoMediaIns(media)) {
-    return getTargetProxyURL(media.thumbnail_url!, ProxyModule.Instagram)
+    return getProxyURL(media.thumbnail_url!, ProxyModule.Instagram)
   }
   // image type media with size
   if (size) {
-    return getTargetProxyURL(`${media.permalink}media/?size=${size}`, ProxyModule.Instagram)
+    return getProxyURL(`${media.permalink}media/?size=${size}`, ProxyModule.Instagram)
   }
   // image type media without size
-  return getTargetProxyURL(media.media_url, ProxyModule.Instagram)
+  return getProxyURL(media.media_url, ProxyModule.Instagram)
 }
 
 export const getYouTubePlaylistURL = (id: string) => {
@@ -43,10 +43,10 @@ export const getYouTubeVideoEmbedURL = (id: string, list?: string) => {
   return `https://www.youtube.com/embed/${id}${listParam}`
 }
 
-export const getTwitterTweetDetailURL = (uid: string, id: string) => {
-  return `https://twitter.com/${uid}/status/${id}`
+export const getTwitterTweetDetailURL = (username: string, id: string) => {
+  return `https://twitter.com/${username}/status/${id}`
 }
 
-export const get163MusicSongDetailURL = (songID: string | number) => {
-  return `https://music.163.com/#/song?id=${songID}`
+export const get163MusicSongDetailURL = (songId: string | number) => {
+  return `https://music.163.com/#/song?id=${songId}`
 }

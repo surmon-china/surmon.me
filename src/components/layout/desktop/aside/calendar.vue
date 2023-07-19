@@ -1,44 +1,33 @@
+<script lang="ts" setup>
+  import { onMounted } from 'vue'
+  import { useStores } from '/@/stores'
+  import { humanDateToYMD, HumanDate } from '/@/transforms/moment'
+  import { getDateFlowRoute } from '/@/transforms/route'
+  import Calendar from '/@/components/widget/calendar.vue'
+
+  const { articleCalendar } = useStores()
+  const articlesIn = (targetDate: HumanDate) => {
+    const ymd = humanDateToYMD(targetDate)
+    return articleCalendar.data.find((item) => item.date === ymd)?.count || 0
+  }
+
+  onMounted(() => articleCalendar.fetch())
+</script>
+
 <template>
   <calendar class="calendar">
     <template #day="humanDate">
-      <router-link class="date-link" v-if="articlesIn(humanDate) > 0" :to="getDateRoute(humanDate)">
+      <router-link
+        class="date-link"
+        v-if="articlesIn(humanDate) > 0"
+        :to="getDateFlowRoute(humanDateToYMD(humanDate))"
+      >
         {{ humanDate.day }}
       </router-link>
       <span class="date-span" v-else>{{ humanDate.day }}</span>
     </template>
   </calendar>
 </template>
-
-<script lang="ts">
-  import { defineComponent, onMounted } from 'vue'
-  import { useStores } from '/@/stores'
-  import { humanDateToYMD, HumanDate } from '/@/transforms/moment'
-  import { getDateFlowRoute } from '/@/transforms/route'
-  import Calendar from '/@/components/widget/calendar.vue'
-
-  export default defineComponent({
-    name: 'DesktopAsideCalendar',
-    components: { Calendar },
-    setup() {
-      const { articleCalendar } = useStores()
-      const articlesIn = (targetDate: HumanDate) => {
-        const ymd = humanDateToYMD(targetDate)
-        return articleCalendar.data.find((item) => item.date === ymd)?.count || 0
-      }
-
-      const getDateRoute = (humanDate: HumanDate) => {
-        return getDateFlowRoute(humanDateToYMD(humanDate))
-      }
-
-      onMounted(() => articleCalendar.fetch())
-
-      return {
-        articlesIn,
-        getDateRoute
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @use 'sass:math';

@@ -1,37 +1,19 @@
+<script lang="ts" setup>
+  import { PropType } from 'vue'
+  import BaseShare, { SocialMedia } from '/@/components/widget/share.vue'
+  defineProps({
+    socials: {
+      type: Array as PropType<SocialMedia[]>,
+      default: () => []
+    }
+  })
+</script>
+
 <template>
   <div class="share-box">
     <base-share class="share" :socials="socials" />
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, PropType } from 'vue'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-  import BaseShare, { SocialMedia } from '/@/components/widget/share.vue'
-
-  export default defineComponent({
-    name: 'ArticleLikeShare',
-    components: {
-      BaseShare
-    },
-    props: {
-      socials: {
-        type: Array as PropType<SocialMedia[]>,
-        default: () => []
-      }
-    },
-    setup(props) {
-      const skeletonCount = props.socials.length
-        ? props.socials.length
-        : Object.keys(SocialMedia).length
-
-      return {
-        skeletonCount,
-        VALUABLE_LINKS
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

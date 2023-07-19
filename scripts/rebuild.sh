@@ -6,5 +6,5 @@ cd $SHELL_PATH
 cd ..
 
 echo "[deploy] building..."
-yarn build
+pnpm run build
 echo "[deploy] build done"

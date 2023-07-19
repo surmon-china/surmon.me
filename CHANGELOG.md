@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+### v4.0.0 (2023-07-13)
+
+**Feature**
+
+- Update various dependencies
+- Use `pnpm` instead of `yarn` as a package management tool
+- Replacing the Twitter API Service
+- Using es modules
+- Using [`<script setup>`](https://vuejs.org/api/sfc-script-setup.html)
+- Using [`Setup Store`](https://pinia.vuejs.org/core-concepts/#setup-stores)
+- Remove SPA mode
+- Remove NFT page
+- Remove field `__v` from all models
+- Rename field `create_at` to `created_at` and `update_at` to `updated_at`
+- Rename field `article.thumb` to `article.thumbnail`
+- Rename field `article.tag` to `article.tags`
+- Rename field `article.category` to `article.categories`
+- Rename field `article.disabled_comment` to `article.disabled_comments`
+- Rename field `tag.articles_count` to `tag.article_count`
+- Rename field `category.articles_count` to `category.article_count`
+
 ### v3.22.0 (2022-12-27)
 
 **Feature**

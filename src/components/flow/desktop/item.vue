@@ -1,13 +1,39 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+  import { Language, LanguageKey } from '/@/language'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { Article } from '/@/interfaces/article'
+  import { useIdentityStore } from '/@/stores/identity'
+  import { getArticleDetailRoute, getCategoryFlowRoute } from '/@/transforms/route'
+  import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
+  import { getArticleListThumbnailURL } from '/@/transforms/thumbnail'
+  import { numberSplit } from '/@/transforms/text'
+
+  const props = defineProps<{
+    article: Article
+  }>()
+
+  const { gState } = useEnhancer()
+  const identity = useIdentityStore()
+  const isLiked = computed(() => identity.isLikedPage(props.article.id))
+  const isHybrid = isHybridType(props.article.origin)
+  const isReprint = isReprintType(props.article.origin)
+  const isOriginal = isOriginalType(props.article.origin)
+
+  const getThumbnailURL = (url: string) => {
+    return getArticleListThumbnailURL(url, gState.imageExt.value.isWebP)
+  }
+
+  const getLanguageText = (language: Language) => {
+    return language === Language.Chinese ? '中文' : 'EN'
+  }
+</script>
+
 <template>
   <div class="article-item">
-    <div
-      class="item-background"
-      :style="{
-        backgroundImage: `url(${getThumbnailURL(article.thumb)})`
-      }"
-    />
+    <div class="item-background" :style="{ backgroundImage: `url(${getThumbnailURL(article.thumbnail)})` }" />
     <div class="item-content">
-      <router-link class="item-thumb" :to="getArticleDetailRoute(article.id)">
+      <router-link class="item-thumbnail" :to="getArticleDetailRoute(article.id)">
         <span
           class="item-oirigin"
           :class="{
@@ -22,7 +48,8 @@
         </span>
         <div
           class="image"
-          :style="{ backgroundImage: `url(${getThumbnailURL(article.thumb)})` }"
+          loading="lazy"
+          :style="{ backgroundImage: `url(${getThumbnailURL(article.thumbnail)})` }"
           :alt="article.title"
           :title="article.title"
         />
@@ -30,25 +57,17 @@
       <div class="item-body">
         <div class="item-content">
           <h5 class="title">
-            <router-link
-              class="link"
-              :to="getArticleDetailRoute(article.id)"
-              :title="article.title"
-            >
+            <router-link class="link" :to="getArticleDetailRoute(article.id)" :title="article.title">
               {{ article.title }}
             </router-link>
             <span class="language">{{ getLanguageText(article.lang) }}</span>
           </h5>
-          <p
-            class="description"
-            style="-webkit-box-orient: vertical"
-            v-html="article.description"
-          ></p>
+          <p class="description" style="-webkit-box-orient: vertical" v-html="article.description"></p>
         </div>
         <div class="item-meta">
           <span class="date">
             <i class="iconfont icon-clock"></i>
-            <udate to="ago" :date="article.create_at" />
+            <udate to="ago" :date="article.created_at" />
           </span>
           <span class="views">
             <i class="iconfont icon-eye"></i>
@@ -64,13 +83,13 @@
           </span>
           <span class="categories">
             <i class="iconfont icon-category"></i>
-            <placeholder :transition="false" :data="article.category.length">
+            <placeholder :transition="false" :data="article.categories.length">
               <template #placeholder>
                 <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
               </template>
               <template #default>
                 <router-link
-                  v-for="(category, index) in article.category.slice(0, 1)"
+                  v-for="(category, index) in article.categories.slice(0, 1)"
                   :key="index"
                   :to="getCategoryFlowRoute(category.slug)"
                 >
@@ -84,58 +103,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, computed, PropType } from 'vue'
-  import { Language, LanguageKey } from '/@/language'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { Article } from '/@/stores/article'
-  import { useIdentityStore } from '/@/stores/identity'
-  import { getArticleDetailRoute, getTagFlowRoute, getCategoryFlowRoute } from '/@/transforms/route'
-  import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
-  import { getArticleListThumbnailURL } from '/@/transforms/thumbnail'
-  import { numberSplit } from '/@/transforms/text'
-
-  export default defineComponent({
-    name: 'FlowArticleListItem',
-    props: {
-      article: {
-        type: Object as PropType<Article>,
-        required: true
-      }
-    },
-    setup(props) {
-      const { globalState } = useEnhancer()
-      const identity = useIdentityStore()
-      const isLiked = computed(() => identity.isLikedPage(props.article.id))
-      const isHybrid = isHybridType(props.article.origin)
-      const isReprint = isReprintType(props.article.origin)
-      const isOriginal = isOriginalType(props.article.origin)
-
-      const getThumbnailURL = (thumbURL: string) => {
-        return getArticleListThumbnailURL(thumbURL, globalState.imageExt.value.isWebP)
-      }
-
-      const getLanguageText = (language: Language) => {
-        return language === Language.Chinese ? '中文' : 'EN'
-      }
-
-      return {
-        LanguageKey,
-        isLiked,
-        isHybrid,
-        isReprint,
-        isOriginal,
-        numberSplit,
-        getThumbnailURL,
-        getLanguageText,
-        getArticleDetailRoute,
-        getCategoryFlowRoute,
-        getTagFlowRoute
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
@@ -170,7 +137,7 @@
       @include common-bg-module($transition-time-fast);
 
       &:hover {
-        .item-thumb {
+        .item-thumbnail {
           .item-oirigin {
             opacity: 1;
           }
@@ -182,7 +149,7 @@
         }
       }
 
-      > .item-thumb {
+      > .item-thumbnail {
         flex-shrink: 0;
         /* Google AdSense */
         $width: 186px;
@@ -231,7 +198,9 @@
           background-position: center;
           opacity: 1;
           transform: translateX(0);
-          transition: transform $transition-time-normal, opacity $transition-time-normal;
+          transition:
+            transform $transition-time-normal,
+            opacity $transition-time-normal;
         }
       }
 

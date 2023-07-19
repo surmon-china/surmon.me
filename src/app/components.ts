@@ -27,28 +27,36 @@ declare module 'vue' {
     Empty: typeof Empty
     Webfont: typeof Webfont
     Divider: typeof Divider
+    Udate: typeof Udate
     Ulink: typeof Ulink
+    Uimage: typeof Uimage
+    Placeholder: typeof Placeholder
     ClientOnly: typeof ClientOnly
+    Responsive: typeof Responsive
+    DesktopOnly: typeof DesktopOnly
     Container: typeof Container
+    SkeletonBase: typeof SkeletonBase
+    SkeletonLine: typeof SkeletonLine
+    SkeletonParagraph: typeof SkeletonParagraph
   }
 }
 
 export default function (app: App) {
-  app.component(Webfont.name as string, Webfont)
-  app.component(Spin.name as string, Spin)
-  app.component(Empty.name as string, Empty)
-  app.component(Divider.name as string, Divider)
-  app.component(Udate.name, Udate)
-  app.component(Ulink.name, Ulink)
-  app.component(Uimage.name, Uimage)
-  app.component(Placeholder.name, Placeholder)
+  app.component('Webfont', Webfont)
+  app.component('Spin', Spin)
+  app.component('Empty', Empty)
+  app.component('Divider', Divider)
+  app.component('Udate', Udate)
+  app.component('Ulink', Ulink)
+  app.component('Uimage', Uimage)
+  app.component('Placeholder', Placeholder)
 
-  app.component(ClientOnly.name, ClientOnly)
-  app.component(Responsive.name, Responsive)
-  app.component(DesktopOnly.name, DesktopOnly)
-  app.component(Container.name, Container)
+  app.component('ClientOnly', ClientOnly)
+  app.component('Responsive', Responsive)
+  app.component('DesktopOnly', DesktopOnly)
+  app.component('Container', Container)
 
-  app.component(SkeletonBase.name as string, SkeletonBase)
-  app.component(SkeletonLine.name as string, SkeletonLine)
-  app.component(SkeletonParagraph.name as string, SkeletonParagraph)
+  app.component('SkeletonBase', SkeletonBase)
+  app.component('SkeletonLine', SkeletonLine)
+  app.component('SkeletonParagraph', SkeletonParagraph)
 }

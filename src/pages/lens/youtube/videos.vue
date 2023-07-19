@@ -1,3 +1,53 @@
+<script lang="ts" setup>
+  import { ref, onMounted } from 'vue'
+  import { fetchYouTubeVideoList } from '/@/stores/media'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { ProxyModule } from '/@/constants/proxy'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { getProxyURL } from '/@/transforms/url'
+  import ListSwiper from '../swiper.vue'
+
+  enum YoutubeVideoListEvents {
+    View = 'view'
+  }
+
+  const props = defineProps<{
+    playlistId: string
+  }>()
+
+  const emit = defineEmits<{
+    (e: YoutubeVideoListEvents.View, v: any): void
+  }>()
+
+  const { gtag } = useEnhancer()
+  const videos = ref<Array<any>>([])
+  const fetching = ref(true)
+  const fetchVideos = async () => {
+    try {
+      fetching.value = true
+      videos.value = await fetchYouTubeVideoList(props.playlistId)
+    } catch (error) {
+      videos.value = []
+    } finally {
+      fetching.value = false
+    }
+  }
+
+  const getThumbnailURL = (thumbnails: any) => {
+    const url = thumbnails.high?.url || thumbnails.medium?.url || thumbnails.defult?.url
+    return url ? getProxyURL(url, ProxyModule.YouTube) : ''
+  }
+
+  const handleView = (video: any) => {
+    emit(YoutubeVideoListEvents.View, video)
+    gtag?.event('youtube_view', {
+      event_category: GAEventCategories.Lens
+    })
+  }
+
+  onMounted(() => fetchVideos())
+</script>
+
 <template>
   <placeholder :data="videos" :loading="fetching">
     <template #placeholder>
@@ -10,7 +60,7 @@
       <list-swiper :data="videos">
         <template #item="{ item }">
           <div class="video" @click="handleView(item)">
-            <div class="thumb">
+            <div class="thumbnail">
               <div class="mask">
                 <div class="button">
                   <i class="iconfont icon-music-play" />
@@ -22,11 +72,7 @@
                   <udate to="ago" :date="item.snippet.publishedAt" />
                 </span>
               </span>
-              <div
-                v-lozad
-                class="background"
-                :data-background-image="getThumbURL(item.snippet.thumbnails)"
-              />
+              <div v-lozad class="background" :data-background-image="getThumbnailURL(item.snippet.thumbnails)" />
             </div>
             <h5 class="title">{{ item.snippet.title }}</h5>
             <div class="description">{{ item.snippet.description || '-' }}</div>
@@ -36,72 +82,6 @@
     </template>
   </placeholder>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, onMounted } from 'vue'
-  import { fetchYouTubeVideoList } from '/@/stores/media'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
-  import { ProxyModule } from '/@/constants/proxy'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { getTargetProxyURL } from '/@/transforms/url'
-  import ListSwiper from '../swiper.vue'
-
-  export enum YoutubeVideoListEvents {
-    View = 'view'
-  }
-
-  export default defineComponent({
-    name: 'LensYoutubeVideoList',
-    components: { ListSwiper },
-    props: {
-      playlistId: {
-        type: String,
-        required: true
-      }
-    },
-    emits: [YoutubeVideoListEvents.View],
-    setup(props, context) {
-      const { gtag } = useEnhancer()
-      const videos = ref<Array<any>>([])
-      const fetching = ref(true)
-      const fetchVideos = async () => {
-        try {
-          fetching.value = true
-          videos.value = await fetchYouTubeVideoList(props.playlistId)
-        } catch (error) {
-          videos.value = []
-        } finally {
-          fetching.value = false
-        }
-      }
-
-      const getThumbURL = (thumbnails: any) => {
-        const url = thumbnails.high?.url || thumbnails.medium?.url || thumbnails.defult?.url
-        return url ? getTargetProxyURL(url, ProxyModule.YouTube) : ''
-      }
-
-      const handleView = (video: any) => {
-        context.emit(YoutubeVideoListEvents.View, video)
-        gtag?.event('youtube_view', {
-          event_category: GAEventCategories.Lens
-        })
-      }
-
-      onMounted(() => {
-        fetchVideos()
-      })
-
-      return {
-        LanguageKey,
-        fetching,
-        videos,
-        getThumbURL,
-        handleView
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
@@ -114,7 +94,7 @@
     @include radius-box($sm-radius);
     @include common-bg-module();
     &:hover {
-      .thumb {
+      .thumbnail {
         .mask {
           @include visible();
         }
@@ -125,7 +105,7 @@
       }
     }
 
-    .thumb {
+    .thumbnail {
       width: 100%;
       height: 106px;
       position: relative;

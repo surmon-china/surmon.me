@@ -1,3 +1,41 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { copy } from '/@/utils/clipboard'
+  import { ProviderId, SponsorState } from './state'
+
+  interface Props {
+    state: SponsorState
+    maxSponsors?: number
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    maxSponsors: 19
+  })
+
+  const { isZhLang } = useEnhancer()
+  const activeProvider = computed(() => props.state.activeProvider.value)
+  const allGitHubSponsors = computed(() => {
+    return [
+      ...props.state.githubSponsor.activeSponsors.map((sponsor) => ({
+        active: true,
+        _: sponsor
+      })),
+      ...props.state.githubSponsor.inactiveSponsors.map((sponsor) => ({
+        active: false,
+        _: sponsor
+      }))
+    ]
+  })
+
+  const handleCopyAddress = (content: any) => {
+    copy(content).then(() => {
+      alert(isZhLang.value ? '地址已复制到剪贴板！' : 'Address copied!')
+    })
+  }
+</script>
+
 <template>
   <div class="sponsor-provider" :class="activeProvider.id">
     <p class="external" v-if="activeProvider.link || activeProvider.address || activeProvider.text">
@@ -26,106 +64,45 @@
           <i18n en="Sponsor me on GitHub" zh="通过 GitHub Sponsor 赞助我" />
         </span>
       </ulink>
-      <client-only>
-        <transition name="module">
-          <div class="sponsor-box" v-if="allGitHubSponsors.length">
-            <p class="total">
-              <i18n>
-                <template #zh>
-                  我在 GitHub Sponsors 累计已得到 {{ pastGitHubSponsors.length }}
-                  <span class="current-total"> + {{ currentGitHubSponsors.length }}</span>
-                  位赞助者的支持
-                </template>
-                <template #en>
-                  I have accumulated {{ pastGitHubSponsors.length }}
-                  <span class="current-total"> + {{ currentGitHubSponsors.length }}</span>
-                  backers on GitHub Sponsors
-                </template>
-              </i18n>
-            </p>
-            <div class="sponsors">
-              <ulink
-                v-for="(item, index) in allGitHubSponsors.slice(0, maxSponsors)"
-                :href="item.sponsor.url"
-                :title="item.sponsor.name"
-                :class="['item', item.active ? 'active' : 'inactive']"
-                :key="index"
-              >
-                <uimage
-                  class="avatar"
-                  :src="item.sponsor.avatarUrl"
-                  :alt="'@' + item.sponsor.login"
-                />
-              </ulink>
-              <ulink
-                class="more-link"
-                v-if="allGitHubSponsors.length > maxSponsors"
-                :href="VALUABLE_LINKS.GITHUB_SPONSORS"
-                >+ {{ allGitHubSponsors.length - maxSponsors }}</ulink
-              >
-            </div>
+      <transition name="module">
+        <div class="sponsor-box" v-if="allGitHubSponsors.length">
+          <p class="total">
+            <i18n>
+              <template #zh>
+                我在 GitHub Sponsors 累计已得到
+                <span class="active-total"> {{ state.githubSponsor.activeSponsors.length }} </span>
+                + {{ state.githubSponsor.inactiveSponsors.length }} 位赞助者的支持
+              </template>
+              <template #en>
+                I have accumulated
+                <span class="active-total">{{ state.githubSponsor.activeSponsors.length }}</span>
+                + {{ state.githubSponsor.inactiveSponsors.length }} backers on GitHub Sponsors
+              </template>
+            </i18n>
+          </p>
+          <div class="sponsors">
+            <ulink
+              v-for="({ _: item, active }, index) in allGitHubSponsors.slice(0, maxSponsors)"
+              :href="item.url"
+              :title="item.name"
+              :class="['item', active ? 'active' : 'inactive']"
+              :key="index"
+            >
+              <uimage class="avatar" :src="item.avatarUrl" :alt="'@' + item.login" />
+            </ulink>
+            <ulink
+              class="more-link"
+              v-if="allGitHubSponsors.length > maxSponsors"
+              :href="VALUABLE_LINKS.GITHUB_SPONSORS"
+            >
+              + {{ allGitHubSponsors.length - maxSponsors }}
+            </ulink>
           </div>
-        </transition>
-      </client-only>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, computed, PropType } from 'vue'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { copy } from '/@/utils/clipboard'
-  import { ProviderId, providers, SponsorState } from './state'
-  export default defineComponent({
-    name: 'SponsorProvider',
-    props: {
-      state: {
-        type: Object as PropType<SponsorState>,
-        required: true
-      },
-      maxSponsors: {
-        type: Number,
-        default: 19
-      }
-    },
-    setup(props) {
-      const { isZhLang } = useEnhancer()
-      const activeProvider = computed(() => props.state.activeProvider.value)
-      const currentGitHubSponsors = computed(() => props.state.currentGitHubSponsors.value)
-      const pastGitHubSponsors = computed(() => props.state.pastGitHubSponsors.value)
-      const allGitHubSponsors = computed(() => {
-        return [
-          ...currentGitHubSponsors.value.map((sponsor) => ({
-            active: true,
-            sponsor
-          })),
-          ...pastGitHubSponsors.value.map((sponsor) => ({
-            active: false,
-            sponsor
-          }))
-        ]
-      })
-
-      const handleCopyAddress = (content: any) => {
-        copy(content).then(() => {
-          alert(isZhLang.value ? '地址已复制到剪贴板！' : 'Address copied!')
-        })
-      }
-
-      return {
-        VALUABLE_LINKS,
-        ProviderId,
-        providers,
-        activeProvider,
-        currentGitHubSponsors,
-        pastGitHubSponsors,
-        allGitHubSponsors,
-        handleCopyAddress
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
@@ -202,7 +179,7 @@
         .total {
           margin-bottom: 2rem;
           font-weight: bold;
-          .current-total {
+          .active-total {
             color: $github-sponsor-primary;
           }
         }

@@ -1,3 +1,45 @@
+<script lang="ts" setup>
+  import { ref, onMounted } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { RouteName } from '/@/app/router'
+  import { LanguageKey } from '/@/language'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { isSearchFlow } from '/@/transforms/route'
+
+  const { i18n: _i18n, gtag, route, router } = useEnhancer()
+  const formElement = ref<HTMLFormElement>()
+  const keyword = ref('')
+
+  const handleSearch = (event) => {
+    event.preventDefault()
+    const check_status = formElement.value?.checkValidity()
+    if (!check_status) {
+      formElement.value?.reportValidity()
+      return
+    }
+
+    const inputKeyword = keyword.value
+    const paramsKeyword = route.params.keyword as string
+    const isSearchPage = isSearchFlow(route.name as string)
+    if (inputKeyword && (!isSearchPage || paramsKeyword !== inputKeyword)) {
+      router.push({
+        name: RouteName.SearchFlow,
+        params: { keyword: inputKeyword }
+      })
+      gtag?.event('aside_search', {
+        event_category: GAEventCategories.Universal,
+        event_label: inputKeyword
+      })
+    }
+  }
+
+  onMounted(() => {
+    if (isSearchFlow(route.name as string)) {
+      keyword.value = route.params.keyword as string
+    }
+  })
+</script>
+
 <template>
   <div class="search">
     <form class="search-box" ref="formElement">
@@ -10,8 +52,8 @@
         maxlength="16"
         autocomplete="off"
         v-model.trim="keyword"
-        :class="i18n.language"
-        :placeholder="i18n.t(LanguageKey.SEARCH_PLACEHOLDER)"
+        :class="_i18n.language"
+        :placeholder="_i18n.t(LanguageKey.SEARCH_PLACEHOLDER)"
         @keyup.enter="handleSearch"
       />
       <button type="submit" class="search-btn" @click="handleSearch">
@@ -23,62 +65,6 @@
     </router-link>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, onMounted } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { RouteName } from '/@/app/router'
-  import { LanguageKey } from '/@/language'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { isSearchFlow } from '/@/transforms/route'
-
-  export default defineComponent({
-    name: 'DesktopAsideSearch',
-    setup() {
-      const { i18n, gtag, route, router } = useEnhancer()
-      const formElement = ref<HTMLFormElement>()
-      const keyword = ref('')
-
-      onMounted(() => {
-        if (isSearchFlow(route.name as string)) {
-          keyword.value = route.params.keyword as string
-        }
-      })
-
-      const handleSearch = (event) => {
-        event.preventDefault()
-        const check_status = formElement.value?.checkValidity()
-        if (!check_status) {
-          formElement.value?.reportValidity()
-          return
-        }
-
-        const inputKeyword = keyword.value
-        const paramsKeyword = route.params.keyword as string
-        const isSearchPage = isSearchFlow(route.name as string)
-        if (inputKeyword && (!isSearchPage || paramsKeyword !== inputKeyword)) {
-          router.push({
-            name: RouteName.SearchFlow,
-            params: { keyword: inputKeyword }
-          })
-          gtag?.event('aside_search', {
-            event_category: GAEventCategories.Universal,
-            event_label: inputKeyword
-          })
-        }
-      }
-
-      return {
-        LanguageKey,
-        RouteName,
-        formElement,
-        i18n,
-        keyword,
-        handleSearch
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

@@ -1,5 +1,5 @@
 /**
- * @file NFT url
+ * @file Web3 url
  * @author Surmon <https://github.com/surmon-china>
  */
 

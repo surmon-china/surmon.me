@@ -4,74 +4,70 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { defineFetchStore } from './_fetch'
+import { defineStore } from 'pinia'
+import { useFetchStore } from './_fetch'
 import { TunnelModule } from '/@/constants/tunnel'
 import { isClient } from '/@/app/environment'
 import { delayPromise } from '/@/utils/delayer'
 import type { InstagramMediaItem } from '/@/server/getters/instagram'
+import type { TwitterAggregate } from '/@/server/getters/twitter'
 import tunnel from '/@/services/tunnel'
 
 const LENS_PAGE_FETCH_DELAY = 480
 
 // Douban movies
-export const useDoubanMoviesStore = defineFetchStore({
-  id: 'doubanMovies',
-  initData: null,
-  onlyOnce: true,
-  fetcher: () => tunnel.dispatch(TunnelModule.DoubanMovies)
+export const useDoubanMoviesStore = defineStore('doubanMovies', () => {
+  return useFetchStore({
+    once: true,
+    data: null,
+    fetcher: () => tunnel.dispatch(TunnelModule.DoubanMovies)
+  })
 })
 
 // Instagram medias
-export const useInstagramMediasStore = defineFetchStore({
-  id: 'instagramMedias',
-  initData: [] as Array<InstagramMediaItem>,
-  fetcher() {
-    const _fetch = tunnel.dispatch<Array<InstagramMediaItem>>(TunnelModule.InstagramMedias)
-    return isClient ? delayPromise(LENS_PAGE_FETCH_DELAY, _fetch) : _fetch
-  }
+export const useInstagramMediasStore = defineStore('instagramMedias', () => {
+  return useFetchStore<InstagramMediaItem[]>({
+    data: [],
+    fetcher: () => {
+      const request = tunnel.dispatch<InstagramMediaItem[]>(TunnelModule.InstagramMedias)
+      return isClient ? delayPromise(LENS_PAGE_FETCH_DELAY, request) : request
+    }
+  })
 })
 
 // YouTube playlist
-export const useYouTubePlayListStore = defineFetchStore({
-  id: 'youtubePlaylist',
-  initData: [] as Array<any>,
-  async fetcher() {
-    const response = await tunnel.dispatch<Array<any>>(TunnelModule.YouTubePlaylist)
-    response.sort((a, b) => a.snippet.position - b.snippet.position)
-    return response
-  }
+export const useYouTubePlayListStore = defineStore('youtubePlaylist', () => {
+  return useFetchStore<Array<any>>({
+    data: [],
+    async fetcher() {
+      const response = await tunnel.dispatch<Array<any>>(TunnelModule.YouTubePlaylist)
+      response.sort((a, b) => a.snippet.position - b.snippet.position)
+      return response
+    }
+  })
 })
 
 // YouTube video list
-export const fetchYouTubeVideoList = (playlistID: string) => {
-  const fetch = tunnel.dispatch<Array<any>>(TunnelModule.YouTubeVideoList, { id: playlistID })
+export const fetchYouTubeVideoList = (playlistId: string) => {
+  const fetch = tunnel.dispatch<Array<any>>(TunnelModule.YouTubeVideoList, { id: playlistId })
   return isClient ? delayPromise(LENS_PAGE_FETCH_DELAY, fetch) : fetch
 }
 
 // Twitter userinfo
-export type TwitterUserinfo = Record<string, any>
-export const useTwitterUserinfoStore = defineFetchStore({
-  id: 'twitterUserinfo',
-  initData: null as null | TwitterUserinfo,
-  fetcher: () => tunnel.dispatch<TwitterUserinfo>(TunnelModule.TwitterUserInfo)
-})
-
-// Twitter tweets
-export interface TweeterTweets {
-  data: any[]
-  includes: Record<string, Array<any>>
-  meta: Record<string, any>
-}
-export const useTwitterTweetsStore = defineFetchStore({
-  id: 'twitterTweets',
-  initData: null as null | TweeterTweets,
-  fetcher: () => tunnel.dispatch<TweeterTweets>(TunnelModule.TwitterTweets)
+export const useTwitterStore = defineStore('twitterAggregate', () => {
+  return useFetchStore<TwitterAggregate | null>({
+    data: null,
+    fetcher: () => {
+      return tunnel.dispatch<TwitterAggregate>(TunnelModule.TwitterAggregate)
+    }
+  })
 })
 
 // My Google map
-export const useMyGoogleMapStore = defineFetchStore({
-  id: 'myGoogleMap',
-  initData: null,
-  onlyOnce: true,
-  fetcher: () => tunnel.dispatch(TunnelModule.MyGoogleMap)
+export const useMyGoogleMapStore = defineStore('myGoogleMap', () => {
+  return useFetchStore({
+    once: true,
+    data: null,
+    fetcher: () => tunnel.dispatch(TunnelModule.MyGoogleMap)
+  })
 })

@@ -5,8 +5,8 @@
  */
 
 import { Ref, ref, customRef } from 'vue'
-import { isClient, isSPA } from '/@/app/environment'
 import { setSSRContext, getSSRContext } from './context'
+import { isClient } from '/@/app/environment'
 
 const getRefData = (key: string) => getSSRContext('refs')[key]
 const setRefData = (key: string, value: any) => {
@@ -27,12 +27,6 @@ const isProxyable = (value: unknown): value is Record<string, unknown> => {
 // server write only | client read only
 // https://github.com/nuxt-community/composition-api/blob/main/src/runtime/composables/ssr-ref.ts
 export const universalRef = <T>(key: string, sourceValue: T | (() => T)): Ref<T> => {
-  // SPA
-  if (isSPA) {
-    return ref(getValue(sourceValue)) as Ref<T>
-  }
-
-  // SSR
   let value = isClient ? getRefData(key) ?? getValue(sourceValue) : getValue(sourceValue)
 
   // Client > return ref value

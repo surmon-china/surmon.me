@@ -1,3 +1,20 @@
+<script lang="ts" setup>
+  import { ref, onMounted } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useGitHubStatisticStore } from '/@/stores/statistic'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import StatisticBase, { StatisticCount } from './base.vue'
+
+  const { isZhLang } = useEnhancer()
+  const store = useGitHubStatisticStore()
+  const fetching = ref(true)
+  onMounted(() => {
+    store.fetch().finally(() => {
+      fetching.value = false
+    })
+  })
+</script>
+
 <template>
   <statistic-base
     brand="github"
@@ -9,75 +26,24 @@
   >
     <p>
       <i class="iconfont icon-star-outline"></i>
-      <i18n>
-        <template #zh>
-          <span>共获得</span>
-          <statistic-count large primary split :count="store.data?.statistics.stars" />
-          <span>个 star</span>
-        </template>
-        <template #en>
-          <statistic-count large primary split :count="store.data?.statistics.stars" />
-          <span>stars</span>
-        </template>
-      </i18n>
+      <span v-if="isZhLang">共获得</span>
+      <statistic-count large primary split :count="store.data?.statistics.stars" />
+      <span v-if="isZhLang">个 star</span>
+      <span v-else>stars earned</span>
     </p>
     <p>
       <i class="iconfont icon-repository"></i>
-      <i18n>
-        <template #zh>
-          <span>共维护</span>
-          <statistic-count :count="store.data?.repositories.length" />
-          <span>个开源项目</span>
-        </template>
-        <template #en>
-          <statistic-count :count="store.data?.repositories.length" />
-          <span>repositories</span>
-        </template>
-      </i18n>
+      <span v-if="isZhLang">共维护</span>
+      <statistic-count :count="store.data?.repositories.length" />
+      <span v-if="isZhLang">个开源项目</span>
+      <span v-else>open-source repos</span>
     </p>
     <p>
       <i class="iconfont icon-organization"></i>
-      <i18n>
-        <template #zh>
-          <span>维护/发起</span>
-          <statistic-count :count="store.data?.organizations.length" />
-          <span>个开源组织</span>
-        </template>
-        <template #en>
-          <statistic-count :count="store.data?.organizations.length" />
-          <span>organizations</span>
-        </template>
-      </i18n>
+      <span v-if="isZhLang">维护/发起</span>
+      <statistic-count :count="store.data?.organizations.length" />
+      <span v-if="isZhLang">个开源组织</span>
+      <span v-else>organizations</span>
     </p>
   </statistic-base>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, onMounted } from 'vue'
-  import { useGitHubStatisticStore } from '/@/stores/statistic'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-  import StatisticBase, { StatisticCount } from './base.vue'
-
-  export default defineComponent({
-    name: 'AboutPageGitHubStatistic',
-    components: { StatisticBase, StatisticCount },
-    setup() {
-      const { isZhLang } = useEnhancer()
-      const fetching = ref(true)
-      const store = useGitHubStatisticStore()
-      onMounted(() => {
-        store.fetch().finally(() => {
-          fetching.value = false
-        })
-      })
-
-      return {
-        VALUABLE_LINKS,
-        isZhLang,
-        fetching,
-        store
-      }
-    }
-  })
-</script>

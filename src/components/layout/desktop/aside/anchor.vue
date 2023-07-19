@@ -1,21 +1,33 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+  import { useArticleDetailStore } from '/@/stores/article'
+  import { LanguageKey } from '/@/language'
+  import { scrollToAnchor } from '/@/utils/scroller'
+  import { numberSplit } from '/@/transforms/text'
+  import * as ANCHORS from '/@/constants/anchor'
+
+  const store = useArticleDetailStore()
+  const headings = computed(() => {
+    const result = [...(store.defaultContent?.headings || [])]
+    if (store.isLongContent && store.renderedFullContent) {
+      result.push(...(store.moreContent?.headings || []))
+    }
+    return result
+  })
+
+  const minHeadingLevel = computed(() => {
+    return Math.min(...headings.value.map((heading) => heading.level))
+  })
+</script>
+
 <template>
-  <div class="anchor" v-if="article">
-    <button
-      class="header"
-      :title="article.title"
-      @click="handleAnchor(ANCHORS.ARTICLE_CONTENT_ELEMENT_ID)"
-    >
-      <div class="title">{{ article.title }}</div>
+  <div class="anchor" v-if="store.article">
+    <button class="header" :title="store.article.title" @click="scrollToAnchor(ANCHORS.ARTICLE_CONTENT_ELEMENT_ID)">
+      <div class="title">{{ store.article.title }}</div>
       <div class="read">
         <i18n>
-          <template #zh
-            >共 {{ numberSplit(store.contentLength) }} 字，需阅读
-            {{ store.readMinutes }} 分钟</template
-          >
-          <template #en
-            >{{ numberSplit(store.contentLength) }} words, {{ store.readMinutes }} min
-            read</template
-          >
+          <template #zh>共 {{ numberSplit(store.contentLength) }} 字，需阅读 {{ store.readMinutes }} 分钟</template>
+          <template #en>{{ numberSplit(store.contentLength) }} words, {{ store.readMinutes }} min read</template>
         </i18n>
       </div>
     </button>
@@ -27,7 +39,7 @@
           :title="heading.text"
           :class="`level-${heading.level}`"
           v-for="(heading, index) in headings"
-          @click="handleAnchor(heading.id)"
+          @click="scrollToAnchor(heading.id)"
         >
           <i class="level iconfont" :class="`icon-h-${heading.level}`"></i>
           <span class="text">{{ heading.text }}</span>
@@ -37,85 +49,41 @@
           key="readmore"
           v-if="store.isLongContent && !store.renderedFullContent"
           :class="`level-${minHeadingLevel}`"
-          @click="handleAnchor(ANCHORS.ARTICLE_READMORE_ELEMENT_ID)"
+          @click="scrollToAnchor(ANCHORS.ARTICLE_READMORE_ELEMENT_ID)"
         >
           <i class="level iconfont icon-loadmore"></i>
           <span class="text"><i18n :k="LanguageKey.ARTICLE_READ_ALL" /></span>
         </li>
       </ul>
     </div>
-    <button class="link" @click="handleAnchor(ANCHORS.ARTICLE_META_ELEMENT_ID)">
+    <button class="link" @click="scrollToAnchor(ANCHORS.ARTICLE_META_ELEMENT_ID)">
       <i class="iconfont icon-heart"></i>
       <i18n zh="摁赞" en="Meta" />
       <divider type="vertical" />
       <span class="meta">
         <i class="iconfont icon-like"></i>
-        <span class="count">{{ article.meta.likes }}</span>
+        <span class="count">{{ store.article.meta.likes }}</span>
       </span>
       <divider type="vertical" />
       <span class="meta">
         <i class="iconfont icon-eye"></i>
-        <span class="count">{{ numberSplit(article.meta.views) }}</span>
+        <span class="count">{{ numberSplit(store.article.meta.views) }}</span>
       </span>
     </button>
-    <button class="link" @click="handleAnchor(ANCHORS.ARTICLE_RELATED_ELEMENT_ID)">
+    <button class="link" @click="scrollToAnchor(ANCHORS.ARTICLE_RELATED_ELEMENT_ID)">
       <i class="iconfont icon-category"></i>
       <i18n zh="相关" en="Related" />
       <divider type="vertical" />
       <span class="count">{{ store.relatedArticles.length }}</span>
     </button>
-    <button class="link" @click="handleAnchor(ANCHORS.COMMENT_ELEMENT_ID)">
+    <button class="link" @click="scrollToAnchor(ANCHORS.COMMENT_ELEMENT_ID)">
       <i class="iconfont icon-comment"></i>
       <i18n zh="评论" en="Comments" />
       <divider type="vertical" />
-      <span class="count">{{ article.meta.comments }}</span>
+      <span class="count">{{ store.article.meta.comments }}</span>
     </button>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { useArticleDetailStore } from '/@/stores/article'
-  import * as ANCHORS from '/@/constants/anchor'
-  import { LanguageKey } from '/@/language'
-  import { scrollToAnchor } from '/@/utils/scroller'
-  import { numberSplit } from '/@/transforms/text'
-
-  export default defineComponent({
-    name: 'DesktopAsideAnchor',
-    setup() {
-      const articleDetailStore = useArticleDetailStore()
-      const article = computed(() => articleDetailStore.article)
-
-      const headings = computed(() => {
-        const result = [...(articleDetailStore.defaultContent?.headings || [])]
-        if (articleDetailStore.isLongContent && articleDetailStore.renderedFullContent) {
-          result.push(...(articleDetailStore.moreContent?.headings || []))
-        }
-        return result
-      })
-
-      const minHeadingLevel = computed(() => {
-        return Math.min(...headings.value.map((heading) => heading.level))
-      })
-
-      const handleAnchor = (elementID: string) => {
-        scrollToAnchor(elementID)
-      }
-
-      return {
-        ANCHORS,
-        LanguageKey,
-        article,
-        store: articleDetailStore,
-        headings,
-        minHeadingLevel,
-        numberSplit,
-        handleAnchor
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

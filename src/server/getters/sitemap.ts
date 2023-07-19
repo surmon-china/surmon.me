@@ -4,13 +4,19 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import axios from 'axios'
 import { Readable } from 'stream'
 import { SitemapStream, streamToPromise, SitemapItemLoose, EnumChangefreq } from 'sitemap'
-import { getArchiveData, getArticleURL, getPageURL, getTagURL, getCategoryURL } from './archive'
+import type { Archive } from '@/interfaces/archive'
+import type { NodePressResult } from '@/services/nodepress'
+import { getArticleURL, getPageURL, getTagURL, getCategoryURL } from '../helpers/route'
+import { getNodePressAPI } from '../helpers/configurer'
 import { META } from '@/config/app.config'
 
-export const getSitemapXML = async (archiveData?: any) => {
-  const archive = archiveData || (await getArchiveData())
+export const getSitemapXml = async () => {
+  const api = `${getNodePressAPI()}/archive`
+  const response = await axios.get<NodePressResult<Archive>>(api, { timeout: 6000 })
+  const archive = response.data.result
   const sitemapStream = new SitemapStream({
     hostname: META.url
   })
@@ -55,7 +61,7 @@ export const getSitemapXML = async (archiveData?: any) => {
       priority: 0.8,
       changefreq: EnumChangefreq.DAILY,
       url: getArticleURL(article.id),
-      lastmodISO: new Date(article.update_at).toISOString()
+      lastmodISO: new Date(article.updated_at).toISOString()
     })
   })
 

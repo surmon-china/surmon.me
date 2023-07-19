@@ -164,7 +164,7 @@ export const createLoading = (options?: LoadingOptions) => {
     ...loading,
     install(app: App, config?: { exportToGlobal?: boolean }) {
       app.provide(LoadingSymbol, loading)
-      app.component(ProgressComponent.name as string, ProgressComponent)
+      app.component('ProgressBar', ProgressComponent)
       app.config.globalProperties.$loading = loading
       if (config?.exportToGlobal) {
         window.$loading = loading

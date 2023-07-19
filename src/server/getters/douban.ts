@@ -5,25 +5,14 @@
  */
 
 import axios from 'axios'
-import { IDENTITIES, VALUABLE_LINKS } from '@/config/app.config'
+import { IDENTITIES } from '@/config/app.config'
 
-export const getDoubanMovies = () => {
-  const URL = `https://m.douban.com/rexxar/api/v2/user/${IDENTITIES.DOUBAN_USER_ID}/collection_stats?type=movie&for_mobile=1`
-  return axios
-    .get<any>(URL, {
-      timeout: 6000,
-      headers: {
-        Referer: VALUABLE_LINKS.DOUBAN_MOVIE
-      }
-    })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data
-      } else {
-        return Promise.reject(response.data)
-      }
-    })
-    .catch((error) => {
-      return Promise.reject(error.toJSON?.() || error)
-    })
+export const getDoubanMovies = async () => {
+  const api = `https://m.douban.com/rexxar/api/v2/user/${IDENTITIES.DOUBAN_USER_ID}/collection_stats?type=movie&for_mobile=1`
+  const referer = `https://m.douban.com/people/${IDENTITIES.DOUBAN_USER_ID}/movie_charts`
+  const response = await axios.get<any>(api, {
+    timeout: 1000 * 12,
+    headers: { Referer: referer }
+  })
+  return response.data
 }

@@ -1,3 +1,89 @@
+<script lang="ts" setup>
+  import { computed, watch, onBeforeMount } from 'vue'
+  import { LanguageKey } from '/@/language'
+  import { META } from '/@/config/app.config'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useUniversalFetch, onClient } from '/@/universal'
+  import { useArticleListStore } from '/@/stores/article'
+  import { useTagStore, getTagEnName } from '/@/stores/tag'
+  import { useCategoryStore } from '/@/stores/category'
+  import { useAppOptionStore } from '/@/stores/basic'
+  import { firstUpperCase } from '/@/transforms/text'
+  import { scrollToNextScreen } from '/@/utils/scroller'
+  import Loadmore from './loadmore.vue'
+  import ListItem from './item.vue'
+
+  const props = defineProps<{
+    tagSlug?: string
+    categorySlug?: string
+    searchKeyword?: string
+    date?: string
+  }>()
+
+  const { i18n: _i18n, seo } = useEnhancer()
+  const tagStore = useTagStore()
+  const categoryStore = useCategoryStore()
+  const articleListStore = useArticleListStore()
+  const appOptionStore = useAppOptionStore()
+  const category = computed(() => {
+    return props.categorySlug ? categoryStore.data.find((category) => category.slug === props.categorySlug)! : null
+  })
+  const tag = computed(() => {
+    return props.tagSlug ? tagStore.data.find((tag) => tag.slug === props.tagSlug) : null
+  })
+
+  const hasMoreArticles = computed(() => {
+    const pagination = articleListStore.pagination
+    return pagination ? pagination.current_page < pagination.total_page : false
+  })
+
+  seo(() => {
+    const titles: string[] = Object.values(props)
+      .filter(Boolean)
+      .map((prop) => firstUpperCase(prop as string))
+    // filter page
+    if (titles.length) {
+      return {
+        pageTitle: titles.join(' | ')
+      }
+    }
+    // index page
+    return {
+      title: `${META.title} - ${_i18n.t(LanguageKey.APP_SLOGAN)}`,
+      description: appOptionStore.data?.description,
+      keywords: appOptionStore.data?.keywords.join(','),
+      ogType: 'website'
+    }
+  })
+
+  const fetchArticles = async (params: any = {}) => {
+    await articleListStore.fetch({
+      category_slug: props.categorySlug,
+      tag_slug: props.tagSlug,
+      date: props.date,
+      keyword: props.searchKeyword,
+      ...params
+    })
+  }
+
+  const loadmoreArticles = async () => {
+    await fetchArticles({
+      page: articleListStore.pagination!.current_page + 1
+    })
+    onClient(scrollToNextScreen)
+  }
+
+  onBeforeMount(() => {
+    watch(
+      () => props,
+      () => fetchArticles(),
+      { flush: 'post', deep: true }
+    )
+  })
+
+  useUniversalFetch(() => fetchArticles())
+</script>
+
 <template>
   <div class="articles">
     <div class="header" v-if="tagSlug || categorySlug || date || searchKeyword">
@@ -12,7 +98,7 @@
         <template v-if="tagSlug">
           <i18n v-if="tag">
             <template #zh>标签 “{{ tag.name }}” 的过滤结果</template>
-            <template #en>Tag "{{ tagEnName(tag) }}" 's result</template>
+            <template #en>Tag "{{ getTagEnName(tag) }}" 's result</template>
           </i18n>
           <span v-else>{{ tagSlug }}</span>
         </template>
@@ -30,13 +116,13 @@
       </router-link>
     </div>
     <placeholder
-      :data="articles.length"
-      :loading="!articles.length && articleListStore.list.fetching"
+      :data="articleListStore.data.length"
+      :loading="!articleListStore.data.length && articleListStore.fetching"
     >
       <template #loading>
         <ul class="skeletons" key="skeleton">
           <li v-for="item in 3" :key="item" class="item">
-            <div class="thumb">
+            <div class="thumbnail">
               <skeleton-base />
             </div>
             <div class="content">
@@ -60,11 +146,11 @@
               class="list-item"
               :article="article"
               :key="index"
-              v-for="(article, index) in articles"
+              v-for="(article, index) in articleListStore.data"
             />
           </transition-group>
           <loadmore
-            :loading="articleListStore.list.fetching"
+            :loading="articleListStore.fetching"
             :finished="!hasMoreArticles"
             @loadmore="loadmoreArticles"
           />
@@ -73,127 +159,6 @@
     </placeholder>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, computed, watch, onBeforeMount } from 'vue'
-  import { LanguageKey } from '/@/language'
-  import { META } from '/@/config/app.config'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useUniversalFetch, onClient } from '/@/universal'
-  import { useArticleListStore, Article } from '/@/stores/article'
-  import { useTagStore, tagEnName } from '/@/stores/tag'
-  import { useCategoryStore } from '/@/stores/category'
-  import { useAppOptionStore } from '/@/stores/basic'
-  import { firstUpperCase } from '/@/transforms/text'
-  import { scrollToNextScreen } from '/@/utils/scroller'
-  import Loadmore from './loadmore.vue'
-  import ListItem from './item.vue'
-
-  export default defineComponent({
-    name: 'MobileFlowArticleList',
-    components: {
-      ListItem,
-      Loadmore
-    },
-    props: {
-      tagSlug: {
-        type: String,
-        required: false
-      },
-      categorySlug: {
-        type: String,
-        required: false
-      },
-      searchKeyword: {
-        type: String,
-        required: false
-      },
-      date: {
-        type: String,
-        required: false
-      }
-    },
-    setup(props) {
-      const { head, i18n } = useEnhancer()
-      const appOptionStore = useAppOptionStore()
-      const tagStore = useTagStore()
-      const categoryStore = useCategoryStore()
-      const articleListStore = useArticleListStore()
-      const category = computed(() => {
-        return props.categorySlug
-          ? categoryStore.data.find((category) => category.slug === props.categorySlug)!
-          : null
-      })
-      const tag = computed(() => {
-        return props.tagSlug ? tagStore.data.find((tag) => tag.slug === props.tagSlug) : null
-      })
-
-      const articles = computed<Array<Article>>(() => articleListStore.list.data)
-      const hasMoreArticles = computed(() => {
-        const pagination = articleListStore.list.pagination
-        return pagination ? pagination.current_page < pagination.total_page : false
-      })
-
-      head(() => {
-        const titles: string[] = Object.values(props)
-          .filter(Boolean)
-          .map((prop) => firstUpperCase(prop as string))
-        // filter page
-        if (titles.length) {
-          return {
-            pageTitle: titles.join(' | ')
-          }
-        }
-        // index page
-        return {
-          title: `${META.title} - ${i18n.t(LanguageKey.APP_SLOGAN)}`,
-          description: appOptionStore.data?.description,
-          keywords: appOptionStore.data?.keywords.join(','),
-          ogType: 'blog'
-        }
-      })
-
-      const fetchArticles = async (params: any = {}) => {
-        await articleListStore.fetchList({
-          category_slug: props.categorySlug,
-          tag_slug: props.tagSlug,
-          date: props.date,
-          keyword: props.searchKeyword,
-          ...params
-        })
-      }
-
-      const loadmoreArticles = async () => {
-        await fetchArticles({
-          page: articleListStore.list.pagination!.current_page + 1
-        })
-        onClient(scrollToNextScreen)
-      }
-
-      onBeforeMount(() => {
-        watch(
-          () => props,
-          () => fetchArticles(),
-          { flush: 'post', deep: true }
-        )
-      })
-
-      useUniversalFetch(() => fetchArticles())
-
-      return {
-        LanguageKey,
-        tagEnName,
-        tag,
-        category,
-        articles,
-        articleListStore,
-        hasMoreArticles,
-        loadmoreArticles,
-        firstUpperCase
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @use 'sass:math';
@@ -238,7 +203,7 @@
           margin-bottom: 0;
         }
 
-        .thumb {
+        .thumbnail {
           height: 9rem;
           padding: $gap;
         }

@@ -1,42 +1,54 @@
+<script lang="ts" setup>
+  import { ref, computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useWallpaperStore } from '/@/stores/wallpaper'
+  import { Language } from '/@/language'
+
+  enum WallEvents {
+    Close = 'close'
+  }
+
+  const emit = defineEmits<{
+    (e: WallEvents.Close): void
+  }>()
+
+  const { i18n: _i18n } = useEnhancer()
+  const wallpaperStore = useWallpaperStore()
+  const wallpapers = computed(() => wallpaperStore.papers(_i18n.language.value as Language)!)
+
+  const index = ref(0)
+  const activePaper = computed(() => wallpapers.value?.[index.value])
+  const handleClose = () => emit(WallEvents.Close)
+</script>
+
 <template>
   <div class="wall">
     <transition name="module" mode="out-in">
       <div
         ref="picture-box"
-        :key="currentWallpaper.humanizedImageUrl"
         class="picture-box"
-        :title="currentWallpaper.copyright"
-        :style="{
-          backgroundImage: `url(${currentWallpaper.humanizedImageUrl})`
-        }"
+        :key="activePaper.humanizedImageUrl"
+        :title="activePaper.copyright"
+        :style="{ backgroundImage: `url(${activePaper.humanizedImageUrl})` }"
       />
     </transition>
     <div class="story-box">
-      <template v-if="currentWallpaper.title">
-        <h2 class="title">{{ currentWallpaper.title }}</h2>
-        <p class="sub-title">{{ currentWallpaper.copyright }}</p>
+      <template v-if="activePaper.title">
+        <h2 class="title">{{ activePaper.title }}</h2>
+        <p class="sub-title">{{ activePaper.copyright }}</p>
       </template>
       <template v-else>
-        <h2 class="title lonely">{{ currentWallpaper.copyright }}</h2>
+        <h2 class="title lonely">{{ activePaper.copyright }}</h2>
       </template>
-      <p class="desc">{{ currentWallpaper.desc }}</p>
+      <p class="desc">{{ activePaper.desc }}</p>
       <div class="tools">
-        <ulink
-          class="button"
-          :href="currentWallpaper.humanizedCopyrightUrl"
-          :title="currentWallpaper.bsTitle"
-        >
+        <ulink class="button" :href="activePaper.humanizedCopyrightUrl" :title="activePaper.bsTitle">
           <i class="iconfont icon-bing"></i>
         </ulink>
         <button class="button" title="Prev" :disabled="index <= 0" @click="index--">
           <i class="iconfont icon-prev"></i>
         </button>
-        <button
-          class="button"
-          title="Next"
-          :disabled="index >= wallpapers.length - 1"
-          @click="index++"
-        >
+        <button class="button" title="Next" :disabled="index >= wallpapers.length - 1" @click="index++">
           <i class="iconfont icon-next"></i>
         </button>
         <button class="button" title="Close" @click="handleClose">
@@ -46,40 +58,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useWallpaperStore } from '/@/stores/wallpaper'
-  import { Language } from '/@/language'
-
-  export enum WallpaperWallEvent {
-    Close = 'close'
-  }
-
-  export default defineComponent({
-    name: 'WallpaperWall',
-    emits: [WallpaperWallEvent.Close],
-    setup(_, context) {
-      const { i18n } = useEnhancer()
-      const wallpaperStore = useWallpaperStore()
-      const wallpapers = computed(() => wallpaperStore.papers(i18n.language.value as Language)!)
-      const index = ref(0)
-      const currentWallpaper = computed(
-        () => wallpapers.value?.length && wallpapers.value?.[index.value]
-      )
-
-      const handleClose = () => context.emit(WallpaperWallEvent.Close)
-
-      return {
-        index,
-        wallpapers,
-        currentWallpaper,
-        handleClose
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

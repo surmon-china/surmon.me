@@ -7,28 +7,26 @@
 
 import { App, Plugin, inject, readonly, reactive, computed } from 'vue'
 import type { Song } from '/@/server/getters/netease-music'
-import { UNDEFINED } from '/@/constants/value'
+import { UNDEFINED, isUndefined } from '/@/constants/value'
 import { TunnelModule } from '/@/constants/tunnel'
 import { ProxyModule } from '/@/constants/proxy'
-import { getTargetProxyURL } from '/@/transforms/url'
+import { getProxyURL } from '/@/transforms/url'
 import tunnel from '/@/services/tunnel'
 
 export interface PlayerConfig {
   amplitude: any
   volume?: number
-  autoInit?: boolean
 }
 
 const createMusicPlayer = (config: PlayerConfig) => {
   const { amplitude } = config
 
-  // player state
   const initVolume = config.volume ?? 40
   const state = reactive({
     fetching: false, // data fetching
     songs: [] as Array<Song>,
     inited: false,
-    ready: false, // player ready
+    readied: false,
     index: 0, // current playing song index
     count: 0, // total song count
     volume: initVolume,
@@ -46,7 +44,7 @@ const createMusicPlayer = (config: PlayerConfig) => {
     return state.songs.map((song) => ({
       ...song,
       cover_art_url: song.cover_art_url
-        ? getTargetProxyURL(song.cover_art_url + '?param=300y300', ProxyModule.NetEaseMusic)
+        ? getProxyURL(song.cover_art_url + '?param=300y300', ProxyModule.NetEaseMusic)
         : (null as any as string)
     }))
   })
@@ -66,7 +64,7 @@ const createMusicPlayer = (config: PlayerConfig) => {
   }
 
   const currentSong = computed<Song | void>(() => {
-    if (state.inited && state.index !== undefined) {
+    if (state.inited && !isUndefined(state.index)) {
       return amplitude.getActiveSongMetadata()
     } else {
       return UNDEFINED
@@ -89,7 +87,7 @@ const createMusicPlayer = (config: PlayerConfig) => {
 
   const initPlayer = (songs: Song[]) => {
     amplitude.init({
-      // 歌曲切换之间的延时
+      // There is a delay between song switches
       // https://521dimensions.com/open-source/amplitudejs/docs/configuration/delay.html#public-function
       delay: 668,
       debug: false,
@@ -100,11 +98,11 @@ const createMusicPlayer = (config: PlayerConfig) => {
       continue_next: true,
       callbacks: {
         initialized: () => {
-          state.ready = true
+          state.readied = true
           state.inited = true
         },
         play: () => {
-          state.ready = true
+          state.readied = true
           state.wave = true
           state.playing = true
         },
@@ -132,9 +130,10 @@ const createMusicPlayer = (config: PlayerConfig) => {
         error: (error: any) => {
           console.warn('[player] error! auto next song:', state.index, error)
           state.playing = false
-          // 播放异常时不再清除音乐，不作 URL 可能不可用的假设
+          // No longer clears the music when a playback exception occurs, assuming the URL is always valid
           // amplitude.removeSong(state.index)
-          // MARK: 网络阻塞会导致紧邻的后续请求中断，所以下一首操作需要延时，避免瀑布式请求
+          // Network blocking can cause interruptions to neighboring subsequent requests,
+          // so there needs to be a delay in performing the next operation to avoid waterfall requests.
           window.setTimeout(nextSong, 1668)
         }
       }
@@ -176,10 +175,6 @@ const MusicPlayerSymbol = Symbol('music-player')
 export type Music = ReturnType<typeof createMusicPlayer>
 export const createMusic = (config: PlayerConfig): Music & Plugin => {
   const musicPlayer = createMusicPlayer(config)
-  if (config.autoInit) {
-    musicPlayer.init()
-  }
-
   return {
     ...musicPlayer,
     install(app: App) {

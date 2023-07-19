@@ -1,3 +1,73 @@
+<script lang="ts" setup>
+  import { ref } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { LanguageKey } from '/@/language'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { scrollToPageTop, scrollToNextScreen } from '/@/utils/scroller'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+
+  const { i18n: _i18n, gtag, gState } = useEnhancer()
+
+  const animationFrameId = ref(0)
+  const isTopButtonMouseOver = ref(false)
+  const isBottomButtonMouseOver = ref(false)
+
+  const handleRSS = () => {
+    gtag?.event('rss', {
+      event_category: GAEventCategories.Widget
+    })
+  }
+
+  const handleFeedback = () => {
+    gState.toggleSwitcher('feedback', true)
+    gtag?.event('feedback_modal', {
+      event_category: GAEventCategories.Widget
+    })
+  }
+
+  const slowMoveToAnyWhere = () => {
+    const step = () => {
+      let targetScrollY = window.scrollY
+      const currentScrollY = document.body.scrollHeight - window.innerHeight
+      if (isBottomButtonMouseOver.value) {
+        targetScrollY += 1
+      }
+      if (isTopButtonMouseOver.value) {
+        targetScrollY -= 1
+      }
+      if (targetScrollY < 0) {
+        targetScrollY = 0
+      } else if (targetScrollY >= currentScrollY) {
+        targetScrollY = currentScrollY
+      }
+      const canScrollTo = targetScrollY > 0 && targetScrollY < currentScrollY
+      if (!canScrollTo) {
+        return false
+      }
+      window.scrollTo(0, targetScrollY)
+      if (isBottomButtonMouseOver.value || isTopButtonMouseOver.value) {
+        animationFrameId.value = window.requestAnimationFrame(step)
+      } else {
+        window.cancelAnimationFrame(animationFrameId.value)
+        return false
+      }
+    }
+    animationFrameId.value = window.requestAnimationFrame(step)
+  }
+
+  const setTopButtonState = (state: boolean, isStartSlow = false) => {
+    isTopButtonMouseOver.value = state
+    window.cancelAnimationFrame(animationFrameId.value)
+    isStartSlow && slowMoveToAnyWhere()
+  }
+
+  const setBottomButtonState = (state: boolean, isStartSlow = false) => {
+    isBottomButtonMouseOver.value = state
+    window.cancelAnimationFrame(animationFrameId.value)
+    isStartSlow && slowMoveToAnyWhere()
+  }
+</script>
+
 <template>
   <div id="toolbox">
     <div class="container">
@@ -5,12 +75,12 @@
         <ulink class="rss" :href="VALUABLE_LINKS.RSS" @mousedown="handleRSS">
           <i class="iconfont icon-rss" />
         </ulink>
-        <button class="feedback" :title="t(LanguageKey.FEEDBACK)" @click="handleFeedback">
+        <button class="feedback" :title="_i18n.t(LanguageKey.FEEDBACK)" @click="handleFeedback">
           <i class="iconfont icon-mail-plane" />
         </button>
         <button
           class="to-page-top"
-          :title="t(LanguageKey.TO_TOP)"
+          :title="_i18n.t(LanguageKey.TO_TOP)"
           @click="scrollToPageTop"
           @mouseover="setTopButtonState(true, true)"
           @mouseleave="setTopButtonState(false)"
@@ -19,7 +89,7 @@
         </button>
         <button
           class="to-page-bottom"
-          :title="t(LanguageKey.TO_BOTTOM)"
+          :title="_i18n.t(LanguageKey.TO_BOTTOM)"
           @click="scrollToNextScreen"
           @mouseover="setBottomButtonState(true, true)"
           @mouseleave="setBottomButtonState(false)"
@@ -30,89 +100,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { scrollToPageTop, scrollToNextScreen } from '/@/utils/scroller'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-
-  export default defineComponent({
-    name: 'Toolbox',
-    setup() {
-      const { i18n, gtag, globalState } = useEnhancer()
-
-      const animationFrameID = ref(0)
-      const isTopButtonMouseOver = ref(false)
-      const isBottomButtonMouseOver = ref(false)
-
-      const handleRSS = () => {
-        gtag?.event('rss', {
-          event_category: GAEventCategories.Widget
-        })
-      }
-
-      const handleFeedback = () => {
-        gtag?.event('feedback_modal', {
-          event_category: GAEventCategories.Widget
-        })
-        globalState.toggleSwitcher('feedback', true)
-      }
-
-      const slowMoveToAnyWhere = () => {
-        const step = () => {
-          let targetScrollY = window.scrollY
-          const currentScrollY = document.body.scrollHeight - window.innerHeight
-          if (isBottomButtonMouseOver.value) {
-            targetScrollY += 1
-          }
-          if (isTopButtonMouseOver.value) {
-            targetScrollY -= 1
-          }
-          if (targetScrollY < 0) {
-            targetScrollY = 0
-          } else if (targetScrollY >= currentScrollY) {
-            targetScrollY = currentScrollY
-          }
-          const canScrollTo = targetScrollY > 0 && targetScrollY < currentScrollY
-          if (!canScrollTo) {
-            return false
-          }
-          window.scrollTo(0, targetScrollY)
-          if (isBottomButtonMouseOver.value || isTopButtonMouseOver.value) {
-            animationFrameID.value = window.requestAnimationFrame(step)
-          } else {
-            window.cancelAnimationFrame(animationFrameID.value)
-            return false
-          }
-        }
-        animationFrameID.value = window.requestAnimationFrame(step)
-      }
-
-      return {
-        VALUABLE_LINKS,
-        LanguageKey,
-        t: i18n.translate,
-        scrollToPageTop,
-        scrollToNextScreen,
-        handleFeedback,
-        handleRSS,
-        setTopButtonState(state: boolean, isStartSlow = false) {
-          isTopButtonMouseOver.value = state
-          window.cancelAnimationFrame(animationFrameID.value)
-          isStartSlow && slowMoveToAnyWhere()
-        },
-        setBottomButtonState(state: boolean, isStartSlow = false) {
-          isBottomButtonMouseOver.value = state
-          window.cancelAnimationFrame(animationFrameID.value)
-          isStartSlow && slowMoveToAnyWhere()
-        }
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

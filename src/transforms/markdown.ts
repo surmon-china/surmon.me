@@ -5,22 +5,38 @@
  */
 
 import highlight from '/@/effects/highlight'
+import { Marked, Renderer } from 'marked'
+import { markedHighlight } from 'marked-highlight'
+import { markedXhtml } from 'marked-xhtml'
+import { mangle } from 'marked-mangle'
 import { sanitizeUrl } from '@braintree/sanitize-url'
-import { marked, Renderer } from 'marked'
-import { TagMap } from '/@/stores/tag'
 import { CUSTOM_ELEMENT_LIST } from '/@/effects/elements'
 import { LOZAD_CLASS_NAME } from '/@/composables/lozad'
 import { escape } from '/@/transforms/text'
-import relink from '/@/transforms/relink'
-import API_CONFIG from '/@/config/api.config'
 import { META } from '/@/config/app.config'
+import API_CONFIG from '/@/config/api.config'
 
-const trimHTML = (html: string) => html.replace(/\s+/g, ' ').replace(/\n/g, ' ')
+// https://marked.js.org
+const highlightLangPrefix = 'language-'
+const marked = new Marked(
+  mangle(),
+  markedXhtml(),
+  markedHighlight({
+    langPrefix: highlightLangPrefix,
+    highlight(code, language) {
+      return highlight.getLanguage(language)
+        ? highlight.highlight(code, { language }).value
+        : highlight.highlightAuto(code).value
+    }
+  })
+)
 
-// MARK: escape vs sanitize https://zhuanlan.zhihu.com/p/421281945
-// sanitize and escape are overlapping, for normal users, no html is allowed, so sanitize is not required.
-// if sanitize is required, you will encounter many problems.
-const sanitizeHTML = (content: string) => content
+marked.setOptions({
+  gfm: true,
+  breaks: false,
+  pedantic: false,
+  headerIds: false
+})
 
 // sanitize-html:
 // https://github.com/vitejs/vite/issues/9200
@@ -41,13 +57,20 @@ const sanitizeHTML = (content: string) => content
 // OSX: `brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman`
 // Ubuntu: `sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev`
 
-interface RendererGetterOption {
+// MARK: escape vs sanitize https://zhuanlan.zhihu.com/p/421281945
+// sanitize and escape are overlapping, for normal users, no html is allowed, so sanitize is not required.
+// if sanitize is required, you will encounter many problems.
+const sanitizeHTML = (content: string) => content
+
+const trimHTML = (html: string) => html.replace(/\s+/g, ' ').replace(/\n/g, ' ')
+
+interface RendererCreatorOptions {
   sanitize: boolean
   text: (text: string) => string
-  headingID: (html: string, level: number, raw: string) => string
+  headingId: (html: string, level: number, raw: string) => string
 }
 
-const getRenderer = (options?: Partial<RendererGetterOption>) => {
+const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => {
   const renderer = new Renderer()
 
   // text
@@ -65,7 +88,7 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
 
   // heading
   renderer.heading = (html, level, raw) => {
-    const idText = options?.headingID ? `id="${options.headingID(html, level, raw)}"` : ''
+    const idText = options?.headingId ? `id="${options.headingId(html, level, raw)}"` : ''
     const safeedRaw = escape(raw)
     return `<h${level} ${idText} alt="${safeedRaw}" title="${safeedRaw}">${html}</h${level}>`
   }
@@ -93,7 +116,6 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
     const textValue = options?.sanitize ? escape(text) : text
     const hrefValue = options?.sanitize ? sanitizeUrl(href!) : href
     const titleValue = options?.sanitize ? escape(title!) : title
-
     return sanitizeHTML(
       trimHTML(`
         <a
@@ -144,14 +166,6 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
 
   // code: line number
   renderer.code = function (code, lang, isEscaped) {
-    if (renderer.options.highlight) {
-      const output = renderer.options.highlight(code, lang || '')
-      if (output != null && output !== code) {
-        isEscaped = true
-        code = output
-      }
-    }
-
     const lineNumbers = code
       .split('\n')
       .map((_, i) => `<li class="code-line-number">${i + 1}</li>`.replace(/\s+/g, ' '))
@@ -168,10 +182,9 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
       ? `
         <pre data-lang="${lang}">
           <ul class="code-lines">${lineNumbers}</ul>
-          <code
-            ${readOnlyAttrs}
-            class="${renderer.options.langPrefix}${encodeURI(lang)}"
-          >${isEscaped ? code : encodeURI(code)}\n</code>
+          <code ${readOnlyAttrs} class="${highlightLangPrefix}${encodeURI(lang)}">${
+            isEscaped ? code : encodeURI(code)
+          }\n</code>
         </pre>\n
       `
       : `
@@ -185,44 +198,20 @@ const getRenderer = (options?: Partial<RendererGetterOption>) => {
   return renderer
 }
 
-marked.setOptions({
-  gfm: true,
-  breaks: false,
-  pedantic: false,
-  smartLists: true,
-  smartypants: false,
-  langPrefix: 'hljs language-',
-  highlight(code, language) {
-    return highlight.getLanguage(language)
-      ? highlight.highlight(code, { language }).value
-      : highlight.highlightAuto(code).value
-  }
-})
-
 export interface MarkdownRenderOption {
   sanitize?: boolean
-  relink?: boolean
-  tagMap?: TagMap
-  headingIDRenderer?: RendererGetterOption['headingID']
+  headingIdGetter?: RendererCreatorOptions['headingId']
 }
+
 export const markdownToHTML = (markdown: string, options?: MarkdownRenderOption) => {
   if (!markdown || typeof markdown !== 'string') {
     return ''
   }
 
-  const renderOptions: Partial<RendererGetterOption> = {
-    headingID: options?.headingIDRenderer
+  const renderOptions: Partial<RendererCreatorOptions> = {
+    sanitize: options?.sanitize ?? false,
+    headingId: options?.headingIdGetter
   }
 
-  // relink
-  if (options?.relink) {
-    renderOptions.text = (text) => relink(text, options.tagMap as TagMap)
-  }
-
-  // sanitize
-  if (options?.sanitize) {
-    renderOptions.sanitize = true
-  }
-
-  return marked.parse(markdown, { renderer: getRenderer(renderOptions) })
+  return marked.parse(markdown, { renderer: createRenderer(renderOptions) })
 }

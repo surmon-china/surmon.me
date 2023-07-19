@@ -12,8 +12,14 @@ export default defineComponent({
   props: {
     // @ts-ignore
     ...RouterLink.props,
-    to: String,
-    href: String,
+    to: {
+      type: String,
+      required: false
+    },
+    href: {
+      type: String,
+      required: false
+    },
     external: {
       type: Boolean,
       default: true
@@ -28,7 +34,7 @@ export default defineComponent({
       const { to, href, external, blank, ...routerLinkProps } = props
       const customAttrs: AnchorHTMLAttributes = { ...context.attrs }
 
-      // router link
+      // <router-link>
       if (to && !to.startsWith('http')) {
         const ps: RouterLinkProps = {
           to: to,
@@ -37,14 +43,15 @@ export default defineComponent({
         return h(RouterLink, ps, context.slots.default)
       }
 
-      // a link
+      // <a>
       if (external) {
         customAttrs.rel = 'external nofollow noopener'
       }
       if (blank) {
         customAttrs.target = '_blank'
       }
-      return h('a', { ...customAttrs, href: href || to }, context.slots.default?.())
+
+      return h('a', { ...customAttrs, href }, context.slots.default?.())
     }
   }
 })

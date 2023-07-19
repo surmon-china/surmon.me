@@ -1,3 +1,7 @@
+<script lang="ts" setup>
+  defineProps<{ fetching?: boolean }>()
+</script>
+
 <template>
   <placeholder :loading="fetching">
     <template #loading>
@@ -15,19 +19,6 @@
     </template>
   </placeholder>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  export default defineComponent({
-    name: 'CommentPublisherMain',
-    props: {
-      fetching: {
-        type: Boolean,
-        default: false
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

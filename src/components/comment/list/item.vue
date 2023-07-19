@@ -1,8 +1,135 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useCommentStore } from '/@/stores/comment'
+  import { useIdentityStore, UserType } from '/@/stores/identity'
+  import { getCommentItemElementId } from '/@/constants/anchor'
+  import { LanguageKey } from '/@/language'
+  import { UNDEFINED } from '/@/constants/value'
+  import { Comment } from '/@/interfaces/comment'
+  import { getExtendValue } from '/@/transforms/state'
+  import { firstUpperCase } from '/@/transforms/text'
+  import { scrollToAnchor } from '/@/utils/scroller'
+  import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
+  import Markdown from '/@/components/common/markdown.vue'
+  import CommentLink from './link.vue'
+  import CommentLocation from './location.vue'
+  import CommentUserAgent from './user-agent.vue'
+  import { CommentEvents, getDisqusUserURL } from '../helper'
+
+  interface Props {
+    comment: Comment
+    liked?: boolean
+    disliked?: boolean
+    isReply?: boolean
+    isChild?: boolean
+    hasChild?: boolean
+    hiddenAvatar?: boolean
+    hiddenUa?: boolean
+    plainVote?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    liked: false,
+    disliked: false,
+    isReply: false,
+    isChild: false,
+    hasChild: false,
+    hiddenAvatar: false,
+    hiddenUa: false,
+    plainVote: false
+  })
+
+  const emit = defineEmits<{
+    (e: CommentEvents.Vote, commentId: number, isLike: boolean): void
+    (e: CommentEvents.Delete, commentId: number): void
+    (e: CommentEvents.Reply, commentId: number): void
+    (e: CommentEvents.CancelReply, commentId: number): void
+  }>()
+
+  const { i18n: _i18n } = useEnhancer()
+  const commentStore = useCommentStore()
+  const identityStore = useIdentityStore()
+  const isDeleting = computed(() => commentStore.deleting)
+
+  const disqusAuthorId = computed(() => {
+    return getExtendValue(props.comment.extends, 'disqus-author-id')
+  })
+  const disqusUsername = computed<string | void>(() => {
+    return getExtendValue(props.comment.extends, 'disqus-author-username')
+  })
+
+  const isDisqusAuthor = computed(() => Boolean(disqusAuthorId.value))
+  const isAdminAuthor = computed(() => {
+    return (
+      Boolean(disqusUsername.value) &&
+      Boolean(identityStore.disqusConfig) &&
+      disqusUsername.value === identityStore.disqusConfig.admin_username
+    )
+  })
+
+  const authorAvatar = computed(() => {
+    return disqusUsername.value
+      ? getDisqusAvatarByUsername(disqusUsername.value)
+      : getGravatarByHash(props.comment.author.email_hash)
+  })
+
+  const authorURL = computed(() => {
+    if (props.comment.author.site) {
+      return props.comment.author.site
+    }
+    if (disqusUsername.value) {
+      return getDisqusUserURL(disqusUsername.value)
+    }
+    return UNDEFINED
+  })
+
+  const isDeleteable = computed(() => {
+    // 1. Disqus logined
+    if (identityStore.user.type === UserType.Disqus) {
+      // 2. Logined user ID === comment.author.disqus-author-id
+      if (disqusAuthorId.value) {
+        return identityStore.user.disqusProfile?.id === disqusAuthorId.value
+      }
+    }
+    return false
+  })
+
+  const getReplyParentCommentText = (parentId: number) => {
+    const authorName = commentStore.comments.find((comment) => comment.id === parentId)?.author.name
+    const nameText = authorName ? `@${authorName}` : ''
+    const idText = `#${parentId}`
+    return `${idText} ${nameText}`
+  }
+
+  const handleReply = () => {
+    emit(CommentEvents.Reply, props.comment.id)
+  }
+
+  const handleCancelReply = () => {
+    emit(CommentEvents.CancelReply, props.comment.id)
+  }
+
+  const handleVote = (isLike: boolean) => {
+    emit(CommentEvents.Vote, props.comment.id, isLike)
+  }
+
+  const handleDelete = () => {
+    if (window.confirm(_i18n.t(LanguageKey.COMMENT_DELETE_CONFIRM))) {
+      emit(CommentEvents.Delete, props.comment.id)
+    }
+  }
+
+  const scrollToCommentItem = (commentId: number) => {
+    scrollToAnchor(getCommentItemElementId(commentId), -300)
+  }
+</script>
+
 <template>
   <li
     class="comment-item"
     :key="comment.id"
-    :id="getCommentItemElementID(comment.id)"
+    :id="getCommentItemElementId(comment.id)"
     :class="{
       'hide-avatar': hiddenAvatar,
       'is-child': isChild,
@@ -57,8 +184,8 @@
         </div>
         <div class="cm-footer">
           <div class="left">
-            <span class="create_at">
-              <udate to="ago" :date="comment.create_at" />
+            <span class="create-at">
+              <udate to="ago" :date="comment.created_at" />
             </span>
             <button
               class="vote"
@@ -112,176 +239,6 @@
     </div>
   </li>
 </template>
-
-<script lang="ts">
-  import { defineComponent, computed, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useCommentStore, Comment } from '/@/stores/comment'
-  import { useIdentityStore, UserType } from '/@/stores/identity'
-  import { getCommentItemElementID } from '/@/constants/anchor'
-  import { UNDEFINED } from '/@/constants/value'
-  import { LanguageKey } from '/@/language'
-  import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
-  import { getExtendValue } from '/@/transforms/state'
-  import { firstUpperCase } from '/@/transforms/text'
-  import { scrollToAnchor } from '/@/utils/scroller'
-  import Markdown from '/@/components/common/markdown.vue'
-  import CommentLink from './link.vue'
-  import CommentLocation from './location.vue'
-  import CommentUserAgent from './user-agent.vue'
-  import { CommentEvents, getDisqusUserURL } from '../helper'
-
-  export default defineComponent({
-    name: 'CommentItem',
-    components: {
-      Markdown,
-      CommentLink,
-      CommentLocation,
-      CommentUserAgent
-    },
-    props: {
-      comment: {
-        type: Object as PropType<Comment>,
-        required: true
-      },
-      liked: {
-        type: Boolean,
-        default: false
-      },
-      disliked: {
-        type: Boolean,
-        default: false
-      },
-      isReply: {
-        type: Boolean,
-        default: false
-      },
-      isChild: {
-        type: Boolean,
-        default: false
-      },
-      hasChild: {
-        type: Boolean,
-        default: false
-      },
-      hiddenAvatar: {
-        type: Boolean,
-        default: false
-      },
-      hiddenUa: {
-        type: Boolean,
-        default: false
-      },
-      plainVote: {
-        type: Boolean,
-        default: false
-      }
-    },
-    emits: [
-      CommentEvents.Vote,
-      CommentEvents.Delete,
-      CommentEvents.Reply,
-      CommentEvents.CancelReply
-    ],
-    setup(props, context) {
-      const { i18n } = useEnhancer()
-      const commentStore = useCommentStore()
-      const identityStore = useIdentityStore()
-      const isDeleting = computed(() => commentStore.deleting)
-
-      const disqusAuthorID = computed(() => {
-        return getExtendValue(props.comment.extends, 'disqus-author-id')
-      })
-      const disqusUsername = computed<string | void>(() => {
-        return getExtendValue(props.comment.extends, 'disqus-author-username')
-      })
-
-      const isDisqusAuthor = computed(() => Boolean(disqusAuthorID.value))
-      const isAdminAuthor = computed(() => {
-        return (
-          Boolean(disqusUsername.value) &&
-          Boolean(identityStore.disqusConfig) &&
-          disqusUsername.value === identityStore.disqusConfig.admin_username
-        )
-      })
-
-      const authorAvatar = computed(() => {
-        return disqusUsername.value
-          ? getDisqusAvatarByUsername(disqusUsername.value)
-          : getGravatarByHash(props.comment.author.email_hash)
-      })
-
-      const authorURL = computed(() => {
-        if (props.comment.author.site) {
-          return props.comment.author.site
-        }
-        if (disqusUsername.value) {
-          return getDisqusUserURL(disqusUsername.value)
-        }
-        return UNDEFINED
-      })
-
-      const isDeleteable = computed(() => {
-        // 1. Disqus logined
-        if (identityStore.user.type === UserType.Disqus) {
-          // 2. Logined user ID === comment.author.disqus-author-id
-          if (disqusAuthorID.value) {
-            return identityStore.user.disqusProfile?.id === disqusAuthorID.value
-          }
-        }
-        return false
-      })
-
-      const getReplyParentCommentText = (parentID: number) => {
-        const authorName = commentStore.comments.find((comment) => comment.id === parentID)?.author
-          .name
-        const nameText = authorName ? `@${authorName}` : ''
-        const idText = `#${parentID}`
-        return `${idText} ${nameText}`
-      }
-
-      const handleReply = () => {
-        context.emit(CommentEvents.Reply, props.comment.id)
-      }
-
-      const handleCancelReply = () => {
-        context.emit(CommentEvents.CancelReply, props.comment.id)
-      }
-
-      const handleVote = (isLike: boolean) => {
-        context.emit(CommentEvents.Vote, props.comment.id, isLike)
-      }
-
-      const handleDelete = () => {
-        if (window.confirm(i18n.t(LanguageKey.COMMENT_DELETE_CONFIRM))) {
-          context.emit(CommentEvents.Delete, props.comment.id)
-        }
-      }
-
-      const scrollToCommentItem = (commentId: number) => {
-        scrollToAnchor(getCommentItemElementID(commentId), -300)
-      }
-
-      return {
-        LanguageKey,
-        isDeleting,
-        isDisqusAuthor,
-        isAdminAuthor,
-        isDeleteable,
-        authorAvatar,
-        authorURL,
-        getCommentItemElementID,
-        getReplyParentCommentText,
-        firstUpperCase,
-        handleVote,
-        handleDelete,
-        handleReply,
-        handleCancelReply,
-        scrollToCommentItem
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
@@ -469,7 +426,7 @@
         display: flex;
         justify-content: space-between;
 
-        .create_at,
+        .create-at,
         .reply,
         .vote,
         .delete {

@@ -1,5 +1,5 @@
 /**
- * @file 延时模拟器
+ * @file delay simulator
  * @module util.delayer
  * @author Surmon <https://github.com/surmon-china>
  */

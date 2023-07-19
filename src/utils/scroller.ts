@@ -104,8 +104,8 @@ export const scrollToElement = (options: ScrollToElementOptions) => {
   })
 }
 
-export const scrollToAnchor = (elementID: string, offset?: number) => {
-  const targetElement = document.getElementById(elementID)
+export const scrollToAnchor = (elementId: string, offset?: number) => {
+  const targetElement = document.getElementById(elementId)
   if (targetElement) {
     scrollToElement({
       target: targetElement,

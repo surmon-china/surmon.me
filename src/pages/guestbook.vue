@@ -1,3 +1,71 @@
+<script lang="ts" setup>
+  import { ref, computed } from 'vue'
+  import { isClient } from '/@/app/environment'
+  import { useUniversalFetch } from '/@/universal'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useStores } from '/@/stores'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { CommentPostId } from '/@/constants/state'
+  import { Language, LanguageKey } from '/@/language'
+  import { firstUpperCase } from '/@/transforms/text'
+  import { getCDN_URL } from '/@/transforms/url'
+  import { META } from '/@/config/app.config'
+  import PageBanner from '/@/components/common/banner.vue'
+  import Comment from '/@/components/comment/index.vue'
+
+  const props = defineProps<{
+    isMobile?: boolean
+  }>()
+
+  const { i18n: _i18n, seo, gtag, gState, isDarkTheme, isZhLang } = useEnhancer()
+  const { identity, appOption, comment: commentStore } = useStores()
+  const isLiked = computed(() => identity.isLikedPage(CommentPostId.Guestbook))
+  const siteLikes = computed(() => appOption.data?.meta.likes || 0)
+  // MARK: Only for client-side routing to navigate to this page
+  const isLoading = ref(isClient && gState.isHydrated.value)
+  const bannerImage = `/images/page-guestbook/banner.jpg`
+
+  const handleLike = async () => {
+    if (isLiked.value) {
+      return false
+    }
+
+    gtag?.event('like_site', {
+      event_category: GAEventCategories.Universal
+    })
+
+    try {
+      await appOption.postSiteLike()
+      identity.likePage(CommentPostId.Guestbook)
+    } catch (error) {
+      const message = _i18n.t(LanguageKey.POST_ACTION_ERROR)
+      console.warn(message, error)
+      alert(message)
+    }
+  }
+
+  const fetchAllData = () => {
+    const appOptionRequest = appOption.fetch()
+    const commentRequest = commentStore.fetchList({ post_id: CommentPostId.Guestbook })
+    return Promise.all([appOptionRequest, commentRequest]).then(() => {
+      isLoading.value = false
+    })
+  }
+
+  seo(() => {
+    const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_GUESTBOOK, Language.English)!)
+    const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_GUESTBOOK), enTitle] : [enTitle]
+    return {
+      pageTitle: titles.join(' | '),
+      description: `给 ${META.author} 留言`,
+      ogType: 'website',
+      ogImage: getCDN_URL(bannerImage)
+    }
+  })
+
+  useUniversalFetch(() => fetchAllData())
+</script>
+
 <template>
   <div class="guestbook-page">
     <responsive>
@@ -27,100 +95,10 @@
       </template>
     </responsive>
     <div class="comment">
-      <comment :post-id="0" :plain="isMobile" :fetching="mockCommentLoading" />
+      <comment :post-id="0" :plain="props.isMobile" :fetching="isLoading" />
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
-  import { isClient } from '/@/app/environment'
-  import { useUniversalFetch } from '/@/universal'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useStores } from '/@/stores'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { CommentPostID } from '/@/constants/state'
-  import { Language, LanguageKey } from '/@/language'
-  import { firstUpperCase } from '/@/transforms/text'
-  import { getTargetCDNURL } from '/@/transforms/url'
-  import { META } from '/@/config/app.config'
-  import PageBanner from '/@/components/common/banner.vue'
-  import Comment from '/@/components/comment/index.vue'
-
-  export default defineComponent({
-    name: 'GuestbookPage',
-    components: {
-      PageBanner,
-      Comment
-    },
-    props: {
-      isMobile: {
-        type: Boolean,
-        default: false
-      }
-    },
-    setup() {
-      const GUESTBOOK_POST_ID = CommentPostID.Guestbook
-      const { i18n, head, gtag, globalState, isDarkTheme, isZhLang } = useEnhancer()
-      const { appOption, comment, identity } = useStores()
-      // MARK: [SSR & not first page] only
-      const mockCommentLoading = ref(isClient && globalState.isHydrated.value)
-      const isLiked = computed(() => identity.isLikedPage(GUESTBOOK_POST_ID))
-      const siteLikes = computed(() => appOption.data?.meta.likes || 0)
-      const bannerImage = `/images/page-guestbook/banner.jpg`
-
-      const handleLike = async () => {
-        if (isLiked.value) {
-          return false
-        }
-        gtag?.event('like_site', {
-          event_category: GAEventCategories.Universal
-        })
-
-        try {
-          await appOption.postSiteLike()
-          identity.likePage(GUESTBOOK_POST_ID)
-        } catch (error) {
-          const message = i18n.t(LanguageKey.POST_ACTION_ERROR)
-          console.warn(message, error)
-          alert(message)
-        }
-      }
-
-      const fetchAllData = () => {
-        return Promise.all([
-          appOption.fetch(true),
-          comment.fetchList({ post_id: GUESTBOOK_POST_ID })
-        ]).then(() => {
-          mockCommentLoading.value = false
-        })
-      }
-
-      head(() => {
-        const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_GUESTBOOK, Language.English)!)
-        const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_GUESTBOOK), enTitle] : [enTitle]
-        return {
-          pageTitle: titles.join(' | '),
-          description: `给 ${META.author} 留言`,
-          ogType: 'bbs',
-          ogImage: getTargetCDNURL(bannerImage)
-        }
-      })
-
-      useUniversalFetch(() => fetchAllData())
-
-      return {
-        LanguageKey,
-        bannerImage,
-        mockCommentLoading,
-        isDarkTheme,
-        isLiked,
-        siteLikes,
-        handleLike
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

@@ -1,3 +1,30 @@
+<script lang="ts" setup>
+  import { ref, shallowRef } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { LanguageKey } from '/@/language'
+  import { Announcement } from '/@/interfaces/announcement'
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
+  import Markdown from '/@/components/common/markdown.vue'
+
+  defineProps<{
+    announcements: Array<Announcement>
+    fetching: boolean
+  }>()
+
+  const { isDarkTheme } = useEnhancer()
+  const activeIndex = ref(0)
+  const swiperRef = shallowRef<SwiperClass>()
+  const handleSwiperReady = (_swiper: SwiperClass) => {
+    swiperRef.value = _swiper
+  }
+
+  const prevSlide = () => swiperRef.value?.slidePrev()
+  const nextSlide = () => swiperRef.value?.slideNext()
+  const handleSwiperTransitionStart = () => {
+    activeIndex.value = swiperRef.value?.activeIndex || 0
+  }
+</script>
+
 <template>
   <div class="announcement" :class="{ dark: isDarkTheme }">
     <placeholder :data="announcements.length" :loading="fetching">
@@ -38,7 +65,7 @@
             >
               <swiper-slide v-for="(ann, index) in announcements" :key="index">
                 <markdown class="content" :plain="true" :markdown="ann.content" />
-                <div class="date"><udate to="ago" :date="ann.create_at" /></div>
+                <div class="date"><udate to="ago" :date="ann.created_at" /></div>
               </swiper-slide>
             </swiper>
             <div class="navigation">
@@ -59,58 +86,6 @@
     </placeholder>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
-  import { Announcement } from '/@/stores/announcement'
-  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
-  import Markdown from '/@/components/common/markdown.vue'
-
-  export default defineComponent({
-    name: 'IndexAnnouncement',
-    components: {
-      Swiper,
-      SwiperSlide,
-      Markdown
-    },
-    props: {
-      announcements: {
-        type: Array as PropType<Array<Announcement>>,
-        required: true
-      },
-      fetching: {
-        type: Boolean,
-        required: true
-      }
-    },
-    setup() {
-      const { isDarkTheme } = useEnhancer()
-      const activeIndex = ref(0)
-      const swiper = ref<SwiperClass>()
-      const handleSwiperReady = (_swiper: SwiperClass) => {
-        swiper.value = _swiper
-      }
-
-      const prevSlide = () => swiper.value?.slidePrev()
-      const nextSlide = () => swiper.value?.slideNext()
-      const handleSwiperTransitionStart = () => {
-        activeIndex.value = swiper.value?.activeIndex || 0
-      }
-
-      return {
-        LanguageKey,
-        isDarkTheme,
-        activeIndex,
-        prevSlide,
-        nextSlide,
-        handleSwiperReady,
-        handleSwiperTransitionStart
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @use 'sass:math';

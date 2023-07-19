@@ -1,76 +1,56 @@
 /**
- * @file Base fetch store
+ * @file fetch store enhance
  * @module store.fetch-store
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { UnwrapRef } from 'vue'
-import { defineStore, StateTree, PiniaCustomStateProperties } from 'pinia'
+import { Ref, ref, shallowRef } from 'vue'
+import { isUndefined } from '/@/constants/value'
 
-// https://github.com/vuejs/pinia/blob/v2/packages/pinia/src/types.ts#L538
-type GettersTree<S extends StateTree> = Record<
-  string,
-  ((state: UnwrapRef<S> & UnwrapRef<PiniaCustomStateProperties<S>>) => any) | (() => any)
->
-
-interface StoreState<D> {
-  fetching: boolean
-  fetched: boolean
-  data: D
+export interface FetchStoreOptions<Data> {
+  data: Data
+  fetcher(...args: $TODO): Promise<Data>
+  once?: boolean
+  preclean?: boolean
+  shallow?: boolean
 }
 
-export interface FetchStoreOptions<D, G, A> {
-  id: string
-  fetcher(args?: A): Promise<D>
-  initData: D
-  onlyOnce?: boolean
-  cleanWhenRefetch?: boolean
-  getters?: G
-}
+export const useFetchStore = <Data>(options: FetchStoreOptions<Data>) => {
+  // default: shallow
+  const isShallow = isUndefined(options.shallow) ? true : options.shallow
+  const refWrapper = isShallow ? shallowRef : ref
+  const fetching = ref(false)
+  const fetched = ref(false)
+  const data: Ref<Data> = refWrapper<Data>(options.data) as any
 
-export function defineFetchStore<
-  D = any,
-  G extends GettersTree<StoreState<D>> = GettersTree<StoreState<D>>,
-  A = any
->(options: FetchStoreOptions<D, G, A>) {
-  return defineStore<string, StoreState<D>, G, { fetch: (args?: A) => Promise<void> }>({
-    id: options.id,
-    state: () => ({
-      fetching: false,
-      fetched: false,
-      data: options.initData
-    }),
-    getters: (options.getters ?? {}) as G,
-    actions: {
-      async fetch(args?: A) {
-        if (options.onlyOnce && this.fetched) {
-          return
-        }
-        if (options.cleanWhenRefetch) {
-          // @ts-ignore
-          this.data = options.initData
-        }
-        this.fetching = true
-        try {
-          const result = await options.fetcher(args)
-          // @ts-ignore
-          this.data = result ?? null
-          this.fetched = true
-        } finally {
-          this.fetching = false
-        }
-      }
+  const fetch = async (...args: $TODO) => {
+    // about fetch when fetched
+    if (options.once && fetched.value) {
+      return
     }
-  })
+
+    // change state first
+    fetching.value = true
+
+    // clean data
+    if (options.preclean) {
+      data.value = options.data
+    }
+
+    // fetch data
+    try {
+      const result = await options.fetcher(...args)
+      data.value = result
+      fetched.value = true
+    } finally {
+      fetching.value = false
+    }
+  }
+
+  return {
+    data,
+    fetching,
+    fetched,
+    fetch
+  }
 }
-
-// const useTestStore = defineFetchStore({
-//   id: 'testStore',
-//   initData: [] as Array<{ a: number }>,
-//   fetcher: () => Promise.resolve([]),
-//   getters: { loading: (state) => state.fetching }
-// })
-
-// const testStore = useTestStore()
-// testStore.$state.data
-// testStore.loading

@@ -2,7 +2,7 @@ import { VALUABLE_LINKS } from '/@/config/app.config'
 import { LanguageKey } from '/@/language'
 import { RouteName, CategorySlug } from '/@/app/router'
 import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
-import { getTargetCDNURL } from '/@/transforms/url'
+import { getCDN_URL } from '/@/transforms/url'
 
 export interface MenuItem {
   id: string
@@ -64,16 +64,15 @@ export const menus: Array<MenuItem> = [
   {
     id: RouteName.App,
     route: getPageRoute(RouteName.App),
-    imageIcon: getTargetCDNURL('/images/page-app/logo.png'),
+    imageIcon: getCDN_URL('/images/page-app/logo.png'),
     i18nKey: LanguageKey.PAGE_APP,
     divider: true
   },
   {
-    id: 'nft',
-    route: getPageRoute(RouteName.Nft),
-    imageIcon: getTargetCDNURL('/images/third-party/opensea.svg'),
-    i18nKey: LanguageKey.PAGE_NFT,
-    disabledUppercase: true,
+    id: 'sponsor',
+    route: getPageRoute(RouteName.Sponsor),
+    icon: 'icon-peachblossom',
+    i18nKey: LanguageKey.PAGE_SPONSOR,
     hot: true,
     divider: true
   }

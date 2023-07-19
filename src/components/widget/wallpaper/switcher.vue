@@ -1,3 +1,32 @@
+<script lang="ts" setup>
+  import { ref, computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useWallpaperStore } from '/@/stores/wallpaper'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { Language } from '/@/language'
+  import Wallpapers from './wall.vue'
+
+  const { i18n: _i18n, gtag, isDarkTheme } = useEnhancer()
+  const wallpaperStore = useWallpaperStore()
+  const papers = computed(() => wallpaperStore.papers(_i18n.language.value as Language))
+  const isOnWallpaper = ref(false)
+
+  const handleCloseWallpaper = () => {
+    isOnWallpaper.value = false
+  }
+
+  const handleOpenWallpaper = () => {
+    if (papers.value?.length) {
+      isOnWallpaper.value = true
+    } else {
+      alert('Something went wrong！')
+    }
+    gtag?.event('wallpaper_modal', {
+      event_category: GAEventCategories.Widget
+    })
+  }
+</script>
+
 <template>
   <div id="wallpaper">
     <div class="switcher" :class="{ dark: isDarkTheme }" @click="handleOpenWallpaper">
@@ -13,50 +42,6 @@
     </popup>
   </client-only>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useWallpaperStore } from '/@/stores/wallpaper'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { Language } from '/@/language'
-  import Wallpapers from './wall.vue'
-
-  export default defineComponent({
-    name: 'Wallpaper',
-    components: {
-      Wallpapers
-    },
-    setup() {
-      const { i18n, gtag, isDarkTheme } = useEnhancer()
-      const wallpaperStore = useWallpaperStore()
-      const wallpapers = computed(() => wallpaperStore.papers(i18n.language.value as Language))
-
-      const isOnWallpaper = ref(false)
-      const handleCloseWallpaper = () => {
-        isOnWallpaper.value = false
-      }
-      const handleOpenWallpaper = () => {
-        gtag?.event('wallpaper_modal', {
-          event_category: GAEventCategories.Widget
-        })
-
-        if (wallpapers.value?.length) {
-          isOnWallpaper.value = true
-        } else {
-          alert('Something went wrong！')
-        }
-      }
-
-      return {
-        isDarkTheme,
-        isOnWallpaper,
-        handleOpenWallpaper,
-        handleCloseWallpaper
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

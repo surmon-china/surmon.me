@@ -1,123 +1,124 @@
-<template>
-  <div class="mapbox" ref="mapboxRef"></div>
-</template>
-
-<script lang="ts">
+<script lang="ts" setup>
   import type { Map, LngLatLike } from 'mapbox-gl'
-  import { defineComponent, shallowRef, onMounted, onBeforeUnmount, watch, PropType } from 'vue'
+  import { shallowRef, onBeforeMount, onMounted, onBeforeUnmount, watch } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { META, GEO_INFO, MAPBOX_CONFIG } from '/@/config/app.config'
   import { FeatureCollectionJSON, geoJSONFeatureToLayer, newMapboxPopup } from './helper'
   import 'mapbox-gl/dist/mapbox-gl.css'
 
-  export default defineComponent({
-    name: 'FootprintMapbox',
-    props: { gmGeoJson: Object as PropType<FeatureCollectionJSON> },
-    emits: ['ready'],
-    setup(props, context) {
-      const { isDarkTheme } = useEnhancer()
-      const mapboxRef = shallowRef<HTMLElement>()
-      const lib = shallowRef<any>()
-      const map = shallowRef<Map>()
-      const loaded = shallowRef(false)
+  const props = defineProps<{
+    gmGeoJson: FeatureCollectionJSON
+  }>()
 
-      const getMapStyle = () => {
-        return isDarkTheme.value ? MAPBOX_CONFIG.STYLE_DARK : MAPBOX_CONFIG.STYLE_LIGHT
-      }
+  const emit = defineEmits<{
+    (e: 'ready', v: { map: Map; lib: any }): void
+  }>()
 
-      const makeSureSourceLayer = () => {
-        if (loaded.value) {
-          if (props.gmGeoJson?.features.length) {
-            const _map = map.value!
-            const layerID = 'placemarks'
-            // http://www.mapbox.cn/mapbox-gl-js/example/popup-on-click/
-            // https://docs.mapbox.com/mapbox-gl-js/example/filter-markers-by-input/
-            if (!_map.getLayer(layerID)) {
-              _map.addLayer(
-                geoJSONFeatureToLayer(layerID, {
-                  type: 'geojson',
-                  data: props.gmGeoJson
-                })
-              )
-              _map.on('mouseenter', layerID, () => {
-                _map.getCanvas().style.cursor = 'pointer'
-              })
-              _map.on('mouseleave', layerID, () => {
-                _map.getCanvas().style.cursor = ''
-              })
-              _map.on('click', layerID, (event) => {
-                // @ts-ignore
-                const coordinates = event.features![0].geometry.coordinates.slice()
-                const description = event.features![0].properties!.description
-                while (Math.abs(event.lngLat.lng - coordinates[0]) > 180) {
-                  coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360
-                }
-                newMapboxPopup(lib.value, coordinates, description).addTo(_map)
-              })
+  const { isDarkTheme } = useEnhancer()
+  const mapboxRef = shallowRef<HTMLElement>()
+  const lib = shallowRef<any>()
+  const map = shallowRef<Map>()
+  const loaded = shallowRef(false)
+
+  const getMapStyle = () => {
+    return isDarkTheme.value ? MAPBOX_CONFIG.STYLE_DARK : MAPBOX_CONFIG.STYLE_LIGHT
+  }
+
+  const makeSureSourceLayer = () => {
+    if (loaded.value) {
+      if (props.gmGeoJson?.features.length) {
+        const _map = map.value!
+        const layerId = 'placemarks'
+        // http://www.mapbox.cn/mapbox-gl-js/example/popup-on-click/
+        // https://docs.mapbox.com/mapbox-gl-js/example/filter-markers-by-input/
+        if (!_map.getLayer(layerId)) {
+          _map.addLayer(
+            geoJSONFeatureToLayer(layerId, {
+              type: 'geojson',
+              data: props.gmGeoJson
+            })
+          )
+          _map.on('mouseenter', layerId, () => {
+            _map.getCanvas().style.cursor = 'pointer'
+          })
+          _map.on('mouseleave', layerId, () => {
+            _map.getCanvas().style.cursor = ''
+          })
+          _map.on('click', layerId, (event) => {
+            // @ts-ignore
+            const coordinates = event.features![0].geometry.coordinates.slice()
+            const description = event.features![0].properties!.description
+            while (Math.abs(event.lngLat.lng - coordinates[0]) > 180) {
+              coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360
             }
-          }
+            newMapboxPopup(lib.value, coordinates, description).addTo(_map)
+          })
         }
       }
-
-      watch(
-        () => isDarkTheme.value,
-        () => map.value?.setStyle(getMapStyle())
-      )
-
-      watch(
-        () => props.gmGeoJson,
-        () => makeSureSourceLayer()
-      )
-
-      onMounted(() => {
-        Promise.all([
-          import('mapbox-gl').then((result) => result.default),
-          new Promise((resolve) => window.setTimeout(resolve, 600))
-        ]).then(([mapboxgl]) => {
-          mapboxgl.accessToken = MAPBOX_CONFIG.TOKEN
-
-          lib.value = mapboxgl
-          map.value = new mapboxgl.Map({
-            container: mapboxRef.value!,
-            center: MAPBOX_CONFIG.CENTER as LngLatLike,
-            zoom: MAPBOX_CONFIG.ZOOM,
-            attributionControl: false,
-            style: getMapStyle()
-          })
-
-          // living now marker
-          new mapboxgl.Marker({
-            color: META.primary,
-            anchor: 'bottom'
-          })
-            .setLngLat(GEO_INFO.coordinates as any)
-            .addTo(map.value)
-
-          // https://stackoverflow.com/questions/36168658/mapbox-gl-setstyle-removes-layers
-          // https://bl.ocks.org/tristen/0c0ed34e210a04e89984
-          map.value.on('style.load', () => {
-            makeSureSourceLayer()
-          })
-
-          // loaded
-          map.value.on('load', () => {
-            loaded.value = true
-            makeSureSourceLayer()
-            context.emit('ready', { map: map.value, lib: lib.value })
-          })
-        })
-      })
-
-      onBeforeUnmount(() => {
-        map.value?.remove()
-      })
-
-      return {
-        mapboxRef
-      }
     }
+  }
+
+  onBeforeMount(() => {
+    watch(
+      () => isDarkTheme.value,
+      () => map.value?.setStyle(getMapStyle())
+    )
+  })
+
+  onBeforeMount(() => {
+    watch(
+      () => props.gmGeoJson,
+      () => makeSureSourceLayer()
+    )
+  })
+
+  onMounted(() => {
+    Promise.all([
+      import('mapbox-gl').then((result) => result.default),
+      new Promise((resolve) => window.setTimeout(resolve, 600))
+    ]).then(([mapboxgl]) => {
+      mapboxgl.accessToken = MAPBOX_CONFIG.TOKEN
+
+      lib.value = mapboxgl
+      map.value = new mapboxgl.Map({
+        container: mapboxRef.value!,
+        center: MAPBOX_CONFIG.CENTER as LngLatLike,
+        zoom: MAPBOX_CONFIG.ZOOM,
+        attributionControl: false,
+        style: getMapStyle()
+      })
+
+      // living now marker
+      new mapboxgl.Marker({
+        color: META.primary,
+        anchor: 'bottom'
+      })
+        .setLngLat(GEO_INFO.coordinates as any)
+        .addTo(map.value)
+
+      // https://stackoverflow.com/questions/36168658/mapbox-gl-setstyle-removes-layers
+      // https://bl.ocks.org/tristen/0c0ed34e210a04e89984
+      map.value.on('style.load', () => {
+        makeSureSourceLayer()
+      })
+
+      // loaded
+      map.value.on('load', () => {
+        loaded.value = true
+        makeSureSourceLayer()
+        emit('ready', { map: map.value!, lib: lib.value })
+      })
+    })
+  })
+
+  onBeforeUnmount(() => {
+    map.value?.remove()
   })
 </script>
+
+<template>
+  <div class="mapbox" ref="mapboxRef"></div>
+</template>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

@@ -1,44 +1,63 @@
+<script lang="ts" setup>
+  import { ref, computed } from 'vue'
+  import { LanguageKey } from '/@/language'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useMusic } from '/@/composables/music'
+  import { isClient } from '/@/app/environment'
+  import MusicPlayer from './player.vue'
+
+  const { gtag } = useEnhancer()
+  const player = isClient ? useMusic() : null
+  const muted = computed(() => Boolean(player?.muted.value))
+  const currentSong = computed(() => player?.currentSong.value)
+
+  const isOnPlayerModel = ref(false)
+  const togglePlayerModel = () => {
+    isOnPlayerModel.value = !isOnPlayerModel.value
+  }
+
+  const handleTouchEvent = (label) => {
+    gtag?.event('music_player_widget', {
+      event_category: GAEventCategories.Widget,
+      event_label: label
+    })
+  }
+</script>
+
 <template>
-  <div id="player" :class="{ playing: music.state.playing }" v-if="music?.currentSong.value">
+  <div id="player" :class="{ playing: player.state.playing }" v-if="player?.currentSong.value">
     <div class="panel">
       <div class="control">
         <button
           class="prev-song button"
-          :disabled="!music.state.ready"
-          @click="music.prevSong"
+          :disabled="!player.state.readied"
+          @click="player.prevSong"
           @mousedown="handleTouchEvent('prev song')"
         >
           <i class="iconfont icon-music-prev"></i>
         </button>
         <button
           class="next-song button"
-          :disabled="!music.state.ready"
-          @click="music.nextSong"
+          :disabled="!player.state.readied"
+          @click="player.nextSong"
           @mousedown="handleTouchEvent('next song')"
         >
           <i class="iconfont icon-music-next"></i>
         </button>
         <button
           class="muted-toggle button"
-          :disabled="!music.state.ready"
-          @click="music.toggleMuted"
+          :disabled="!player.state.readied"
+          @click="player.toggleMuted"
           @mousedown="handleTouchEvent('toggle muted')"
         >
           <i class="iconfont" :class="muted ? 'icon-music-muted' : 'icon-music-unmuted'"></i>
         </button>
-        <button
-          class="player button"
-          @click="togglePlayerModel"
-          @mousedown="handleTouchEvent('open player model')"
-        >
+        <button class="player button" @click="togglePlayerModel" @mousedown="handleTouchEvent('open player model')">
           <i class="iconfont icon-netease-music"></i>
         </button>
       </div>
-      <button
-        class="song-link"
-        @click="togglePlayerModel"
-        @mousedown="handleTouchEvent('open player model')"
-      >
+      <button class="song-link" @click="togglePlayerModel" @mousedown="handleTouchEvent('open player model')">
         <span v-if="currentSong">{{ currentSong.name }}</span>
         <i18n v-else :k="LanguageKey.MUSIC_PLACEHOLDER" />
       </button>
@@ -47,14 +66,11 @@
       <img class="image" :src="currentSong?.cover_art_url" />
       <button
         class="toggle-button"
-        :disabled="!music.state.ready"
-        @click="music.togglePlay"
+        :disabled="!player.state.readied"
+        @click="player.togglePlay"
         @mousedown="handleTouchEvent('toggle play')"
       >
-        <i
-          class="iconfont"
-          :class="music.state.playing ? 'icon-music-pause' : 'icon-music-play'"
-        ></i>
+        <i class="iconfont" :class="player.state.playing ? 'icon-music-pause' : 'icon-music-play'"></i>
       </button>
     </div>
     <div class="trigger">
@@ -68,51 +84,6 @@
   </client-only>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, computed } from 'vue'
-  import { LanguageKey } from '/@/language'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useMusic } from '/@/composables/music'
-  import { isClient } from '/@/app/environment'
-  import MusicPlayer from './player.vue'
-
-  export default defineComponent({
-    name: 'MusicPlayerHandle',
-    components: {
-      MusicPlayer
-    },
-    setup() {
-      const { gtag } = useEnhancer()
-      const music = isClient ? useMusic() : null
-      const muted = computed(() => Boolean(music?.muted.value))
-      const currentSong = computed(() => music?.currentSong.value)
-
-      const isOnPlayerModel = ref(false)
-      const togglePlayerModel = () => {
-        isOnPlayerModel.value = !isOnPlayerModel.value
-      }
-
-      const handleTouchEvent = (label) => {
-        gtag?.event('music_player_widget', {
-          event_category: GAEventCategories.Widget,
-          event_label: label
-        })
-      }
-
-      return {
-        LanguageKey,
-        isOnPlayerModel,
-        music,
-        muted,
-        currentSong,
-        togglePlayerModel,
-        handleTouchEvent
-      }
-    }
-  })
-</script>
-
 <style lang="scss" scoped>
   @use 'sass:math';
   @import 'src/styles/variables.scss';
@@ -125,7 +96,8 @@
     left: 0;
     bottom: 18%;
     z-index: $z-index-toolbox;
-    transition: opacity $transition-time-fast,
+    transition:
+      opacity $transition-time-fast,
       transform $transition-time-normal cubic-bezier(0.65, 0.05, 0.36, 1);
     height: $size;
     transform: translateX(-18rem);
@@ -169,7 +141,6 @@
         color: $text-secondary;
         @include color-transition();
         @include text-overflow();
-
         &:hover {
           color: $link-hover;
         }

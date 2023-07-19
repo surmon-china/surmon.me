@@ -1,33 +1,4 @@
-<template>
-  <div class="share">
-    <button
-      class="share-ejector"
-      v-for="(social, index) in enabledSocials"
-      :key="index"
-      :title="'Share to: ' + social.name"
-      :class="social.class"
-      @click="handleShare(social)"
-    >
-      <i class="iconfont" :class="`icon-${social.class}`" />
-    </button>
-    <button class="share-ejector link" title="Copy link" @click="copyPageURL">
-      <i class="iconfont icon-link"></i>
-    </button>
-  </div>
-</template>
-
 <script lang="ts">
-  import qs from 'qs'
-  import { defineComponent, PropType, computed } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
-  import { getPageURL } from '/@/transforms/url'
-  import { openWindow } from '/@/utils/opener'
-  import { copy } from '/@/utils/clipboard'
-  import { META } from '/@/config/app.config'
-
   export enum SocialMedia {
     Wechat = 'wechat',
     Weibo = 'weibo',
@@ -37,6 +8,19 @@
     Facebook = 'facebook',
     LinkedIn = 'linkedin'
   }
+</script>
+
+<script lang="ts" setup>
+  import qs from 'qs'
+  import { computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { LanguageKey } from '/@/language'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
+  import { getPageURL } from '/@/transforms/url'
+  import { openWindow } from '/@/utils/opener'
+  import { copy } from '/@/utils/clipboard'
+  import { META } from '/@/config/app.config'
 
   interface ShareParams {
     url: string
@@ -52,7 +36,7 @@
     url?(params: ShareParams): string
   }
 
-  const socials: SocialItem[] = [
+  const defaultSocials: SocialItem[] = [
     {
       id: SocialMedia.Wechat,
       name: '微信',
@@ -153,69 +137,70 @@
     }
   ]
 
-  export default defineComponent({
-    name: 'Share',
-    props: {
-      socials: {
-        type: Array as PropType<Array<SocialMedia>>,
-        required: false
-      }
-    },
-    setup(props) {
-      const { route, gtag, i18n, isZhLang } = useEnhancer()
-      const enabledSocials = computed(() => {
-        return props.socials?.length
-          ? socials.filter((s) => props.socials?.includes(s.id))
-          : socials
-      })
+  const props = defineProps<{
+    socials?: Array<SocialMedia>
+  }>()
 
-      const getURL = () => getPageURL(route.fullPath)
-      const getTitle = () => document.title || META.title
-      const getDescription = () => {
-        return (
-          document.getElementsByName('description')?.[0]?.getAttribute('content') ||
-          i18n.t(LanguageKey.APP_SLOGAN)!
-        )
-      }
-
-      const copyPageURL = () => {
-        const content = `${getTitle()} - ${getURL()}`
-        copy(content).then(() => {
-          alert(isZhLang.value ? '链接已复制到剪贴板！' : 'Link copied!')
-        })
-        gtag?.event('share_copy_url', {
-          event_category: GAEventCategories.Share,
-          event_label: content
-        })
-      }
-
-      const handleShare = (social: SocialItem) => {
-        gtag?.event('share_social', {
-          event_category: GAEventCategories.Share,
-          event_label: social.id
-        })
-
-        const shareParams: ShareParams = {
-          url: getURL(),
-          title: getTitle(),
-          description: getDescription()
-        }
-
-        if (social.handler) {
-          social.handler(shareParams)
-        } else {
-          openWindow(social.url!(shareParams), { name: `Share: ${META.title}` })
-        }
-      }
-
-      return {
-        enabledSocials,
-        copyPageURL,
-        handleShare
-      }
-    }
+  const { i18n: _i18n, gtag, route, isZhLang } = useEnhancer()
+  const enabledSocials = computed(() => {
+    return props.socials?.length ? defaultSocials.filter((s) => props.socials?.includes(s.id)) : defaultSocials
   })
+
+  const getURL = () => getPageURL(route.fullPath)
+  const getTitle = () => document.title || META.title
+  const getDescription = () => {
+    const pageDescription = document.getElementsByName('description')?.[0]?.getAttribute('content')
+    return pageDescription || _i18n.t(LanguageKey.APP_SLOGAN)!
+  }
+
+  const copyPageURL = () => {
+    const content = `${getTitle()} - ${getURL()}`
+    copy(content).then(() => {
+      alert(isZhLang.value ? '链接已复制到剪贴板！' : 'Link copied!')
+    })
+    gtag?.event('share_copy_url', {
+      event_category: GAEventCategories.Share,
+      event_label: content
+    })
+  }
+
+  const handleShare = (social: SocialItem) => {
+    gtag?.event('share_social', {
+      event_category: GAEventCategories.Share,
+      event_label: social.id
+    })
+
+    const shareParams: ShareParams = {
+      url: getURL(),
+      title: getTitle(),
+      description: getDescription()
+    }
+
+    if (social.handler) {
+      social.handler(shareParams)
+    } else {
+      openWindow(social.url!(shareParams), { name: `Share: ${META.title}` })
+    }
+  }
 </script>
+
+<template>
+  <div class="share">
+    <button
+      class="share-ejector"
+      v-for="(social, index) in enabledSocials"
+      :key="index"
+      :title="'Share to: ' + social.name"
+      :class="social.class"
+      @click="handleShare(social)"
+    >
+      <i class="iconfont" :class="`icon-${social.class}`" />
+    </button>
+    <button class="share-ejector link" title="Copy link" @click="copyPageURL">
+      <i class="iconfont icon-link"></i>
+    </button>
+  </div>
+</template>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

@@ -1,3 +1,18 @@
+<script lang="ts" setup>
+  import { useEnhancer } from '/@/app/enhancer'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { FOOTER_ELEMENT_ID } from '/@/constants/anchor'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+
+  const { gState, gtag } = useEnhancer()
+  const handleStatementModal = () => {
+    gState.toggleSwitcher('statement', true)
+    gtag?.event('statement_modal', {
+      event_category: GAEventCategories.Universal
+    })
+  }
+</script>
+
 <template>
   <container tag="footer" :id="FOOTER_ELEMENT_ID" class="footer">
     <ulink class="sitemap-btn" :href="VALUABLE_LINKS.SITE_MAP">sitemap.xml</ulink>
@@ -17,33 +32,6 @@
     </ulink>
   </container>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { FOOTER_ELEMENT_ID } from '/@/constants/anchor'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-
-  export default defineComponent({
-    name: 'DesktopFooter',
-    setup() {
-      const { globalState, gtag } = useEnhancer()
-      const handleStatementModal = () => {
-        globalState.toggleSwitcher('statement', true)
-        gtag?.event('statement_modal', {
-          event_category: GAEventCategories.Universal
-        })
-      }
-
-      return {
-        FOOTER_ELEMENT_ID,
-        VALUABLE_LINKS,
-        handleStatementModal
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

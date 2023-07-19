@@ -1,14 +1,42 @@
+<script lang="ts" setup>
+  import { useEnhancer } from '/@/app/enhancer'
+  import { Language, LanguageKey } from '/@/language'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { firstUpperCase } from '/@/transforms/text'
+  import { getCDN_URL } from '/@/transforms/url'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
+
+  const props = defineProps<{
+    isMobile?: boolean
+  }>()
+
+  const { i18n: _i18n, seo, gtag, isZhLang } = useEnhancer()
+  const handleAppEvent = (name: string) => {
+    gtag?.event(name, {
+      event_category: GAEventCategories.App
+    })
+  }
+
+  seo(() => {
+    const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_APP, Language.English)!)
+    const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_APP), enTitle] : [enTitle]
+    return {
+      pageTitle: titles.join(' | '),
+      description: `${META.title} App 下载`,
+      ogImage: getCDN_URL('/images/page-app/logo.png')
+    }
+  })
+</script>
+
 <template>
-  <div class="app-page" :class="{ mobile: isMobile }">
+  <div class="app-page" :class="{ mobile: props.isMobile }">
     <div class="app">
       <div class="logo">
         <uimage cdn alt="app-logo" src="/images/page-app/logo.png" />
       </div>
       <h2 class="title">{{ META.title }}</h2>
       <p class="description">
-        <webfont>
-          <i18n :k="LanguageKey.APP_SLOGAN" />
-        </webfont>
+        <webfont><i18n :k="LanguageKey.APP_SLOGAN" /></webfont>
       </p>
       <div class="screen">
         <uimage cdn alt="app-hot" class="screen-img" src="/images/page-app/hot.png" />
@@ -16,7 +44,7 @@
           <uimage cdn class="qrcode" alt="qrcode" src="/images/page-app/qrcode.png" />
           <ulink
             class="button"
-            :href="VALUABLE_LINKS.APP_APK_FILE"
+            :href="VALUABLE_LINKS.GITHUB_SURMON_ME_NATIVE + '#android'"
             @mousedown="handleAppEvent('download_android_app')"
           >
             <i class="icon iconfont icon-android"></i>
@@ -54,51 +82,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { Language, LanguageKey } from '/@/language'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { firstUpperCase } from '/@/transforms/text'
-  import { getTargetCDNURL } from '/@/transforms/url'
-  import { META, VALUABLE_LINKS } from '/@/config/app.config'
-
-  export default defineComponent({
-    name: 'AppPage',
-    props: {
-      isMobile: {
-        type: Boolean,
-        default: false
-      }
-    },
-    setup() {
-      const { i18n, head, gtag, isZhLang } = useEnhancer()
-      head(() => {
-        const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_APP, Language.English)!)
-        const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_APP), enTitle] : [enTitle]
-        return {
-          pageTitle: titles.join(' | '),
-          description: `${META.title} App 下载`,
-          ogImage: getTargetCDNURL('/images/page-app/logo.png')
-        }
-      })
-
-      const handleAppEvent = (name: string) => {
-        gtag?.event(name, {
-          event_category: GAEventCategories.App
-        })
-      }
-
-      return {
-        META,
-        VALUABLE_LINKS,
-        LanguageKey,
-        handleAppEvent
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

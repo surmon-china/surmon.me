@@ -1,6 +1,33 @@
+<script lang="ts" setup>
+  import { onErrorCaptured } from 'vue'
+  import { LanguageKey } from '/@/language'
+  import { RouteName } from '/@/app/router'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { getLayoutByRouteMeta } from '/@/transforms/layout'
+  import ErrorComponent from './error.vue'
+
+  const { router, gState } = useEnhancer()
+  const handleResolveRoute = () => {
+    router.push({ name: RouteName.Home }).then(() => {
+      // MARK: The order is important! Layout must be set first, then rendered, thus avoiding splash screens!
+      gState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta))
+      gState.setRenderError(null)
+    })
+  }
+
+  onErrorCaptured((_error: any) => {
+    gState.setRenderError(_error)
+    return false
+  })
+</script>
+
 <template>
   <div class="captured">
-    <error-component v-if="error" :error="error" @resolve="handleResolveRoute">
+    <error-component
+      v-if="gState.renderError.value"
+      :error="gState.renderError.value"
+      @resolve="handleResolveRoute"
+    >
       <template #resolve-text>
         <i18n :k="LanguageKey.BACK_TO_HOME_PAGE" />
       </template>
@@ -10,40 +37,3 @@
     </template>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, onErrorCaptured } from 'vue'
-  import { LanguageKey } from '/@/language'
-  import { RouteName } from '/@/app/router'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { getLayoutByRouteMeta } from '/@/transforms/layout'
-  import ErrorComponent from './error.vue'
-
-  export default defineComponent({
-    name: 'Captured',
-    components: {
-      ErrorComponent
-    },
-    setup() {
-      const { router, globalState } = useEnhancer()
-      const handleResolveRoute = () => {
-        router.push({ name: RouteName.Home }).then(() => {
-          // MARK: 顺序很重要！要先设置布局，再渲染，避免闪屏
-          globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta))
-          globalState.setRenderError(null)
-        })
-      }
-
-      onErrorCaptured((_error: any) => {
-        globalState.setRenderError(_error)
-        return false
-      })
-
-      return {
-        error: globalState.renderError,
-        handleResolveRoute,
-        LanguageKey
-      }
-    }
-  })
-</script>

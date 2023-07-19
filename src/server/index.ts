@@ -9,11 +9,11 @@ import express from 'express'
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import { PROXY_ROUTE_PATH, proxyer } from './proxy'
-import { initCacheClient } from './cache'
+import { createCacheClient } from './cache'
 
 export const createExpressApp = async () => {
   // init cache client
-  const cache = await initCacheClient()
+  const cache = await createCacheClient()
 
   // init app
   const app = express()

@@ -1,3 +1,50 @@
+<script lang="ts" setup>
+  import { ref, onMounted, onBeforeUnmount } from 'vue'
+  import { LanguageKey } from '/@/language'
+
+  enum Event {
+    Loadmore = 'loadmore'
+  }
+
+  const props = defineProps<{
+    loading?: boolean
+    finished?: boolean
+  }>()
+
+  const emit = defineEmits<{
+    (event: Event.Loadmore): void
+  }>()
+
+  const element = ref<HTMLDivElement | null>(null)
+  const observer = ref<IntersectionObserver | null>(null)
+  const emitLoadEvent = () => {
+    if (!props.loading && !props.finished) {
+      emit(Event.Loadmore)
+    }
+  }
+
+  onMounted(() => {
+    if (element.value) {
+      observer.value = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            emitLoadEvent()
+          }
+        },
+        { threshold: 0.1 }
+      )
+      observer.value.observe(element.value)
+    }
+  })
+
+  onBeforeUnmount(() => {
+    if (element.value && observer.value) {
+      observer.value.unobserve(element.value)
+      observer.value.disconnect()
+    }
+  })
+</script>
+
 <template>
   <div class="loadmore" ref="element">
     <div class="loading" v-if="loading">
@@ -14,66 +61,6 @@
     </span>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue'
-  import { LanguageKey } from '/@/language'
-
-  enum Event {
-    Loadmore = 'loadmore'
-  }
-
-  export default defineComponent({
-    name: 'MobileFlowLoadmore',
-    props: {
-      loading: {
-        type: Boolean,
-        default: false
-      },
-      finished: {
-        type: Boolean,
-        default: false
-      }
-    },
-    emits: [Event.Loadmore],
-    setup(props, context) {
-      const element = ref<HTMLDivElement | null>(null)
-      const observer = ref<IntersectionObserver | null>(null)
-      const emitLoadEvent = () => {
-        if (!props.loading && !props.finished) {
-          context.emit(Event.Loadmore)
-        }
-      }
-
-      onMounted(() => {
-        if (element.value) {
-          observer.value = new IntersectionObserver(
-            (entries) => {
-              if (entries[0].isIntersecting) {
-                emitLoadEvent()
-              }
-            },
-            { threshold: 0.1 }
-          )
-          observer.value.observe(element.value)
-        }
-      })
-
-      onBeforeUnmount(() => {
-        if (element.value && observer.value) {
-          observer.value.unobserve(element.value)
-          observer.value.disconnect()
-        }
-      })
-
-      return {
-        LanguageKey,
-        element,
-        emitLoadEvent
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @use 'sass:math';

@@ -1,12 +1,12 @@
 /**
- * @file GA 统计服务
+ * @file Google analytics
  * @module composable.gtag
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import { App, reactive, readonly, inject, Plugin, nextTick } from 'vue'
 import { Router } from 'vue-router'
-import { getGAScriptURL } from '/@/transforms/gtag'
+import { getGaScriptURL } from '/@/transforms/gtag'
 import { loadScript } from '/@/utils/scripter'
 // MARK: https://zh.nuxtjs.org/faq/ga
 // MARK: https://github.com/nuxt-community/google-gtag/blob/master/lib/plugin.js
@@ -37,7 +37,7 @@ export const createGtag = (options: GtagPluginConfig) => {
     return
   }
 
-  const resourceURL = options.customResourceURL || getGAScriptURL(options.id)
+  const resourceURL = options.customResourceURL || getGaScriptURL(options.id)
   const state = reactive({
     loaded: false,
     disabled: false

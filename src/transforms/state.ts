@@ -4,8 +4,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import { UniversalKeyValue } from '/@/interfaces/common'
 import { UNDEFINED, isNull, isUndefined } from '/@/constants/value'
-import { OriginState, UniversalKeyValue } from '/@/constants/state'
+import { OriginState } from '/@/constants/state'
 
 export const isOriginalType = (originState?: OriginState) => {
   return isNull(originState) || isUndefined(null) || originState === OriginState.Original

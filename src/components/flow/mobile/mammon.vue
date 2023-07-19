@@ -1,3 +1,8 @@
+<script lang="ts" setup>
+  import { useEnhancer } from '/@/app/enhancer'
+  const { isDarkTheme } = useEnhancer()
+</script>
+
 <template>
   <client-only transition>
     <Adsense
@@ -20,22 +25,6 @@
     />
   </client-only>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-
-  // MARK: Suspension
-  export default defineComponent({
-    name: 'MobileFlowMammon',
-    setup() {
-      const { isDarkTheme } = useEnhancer()
-      return {
-        isDarkTheme
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

@@ -17,14 +17,13 @@ export const i18ns = {
 } as const
 
 export const useArchivePageMeta = () => {
-  const { i18n, head, isZhLang } = useEnhancer()
-  head(() => {
+  const { i18n, seo, isZhLang } = useEnhancer()
+  seo(() => {
     const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_ARCHIVE, Language.English)!)
     const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ARCHIVE), enTitle] : [enTitle]
     return {
       pageTitle: titles.join(' | '),
-      description: `${META.title} 数据归档`,
-      ogType: 'blog'
+      description: `${META.title} 数据归档`
     }
   })
 }
@@ -71,8 +70,7 @@ export const useArchivePageStatistics = () => {
   }))
 
   return {
-    store,
-    fetch: store.fetch,
-    statistics
+    statistics,
+    fetch: store.fetch
   }
 }

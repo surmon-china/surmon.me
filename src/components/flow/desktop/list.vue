@@ -1,3 +1,41 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { Article } from '/@/interfaces/article'
+  import { Pagination } from '/@/interfaces/common'
+  import { LanguageKey } from '/@/language'
+  import ListItem from './item.vue'
+
+  enum Events {
+    Loadmore = 'loadmore'
+  }
+
+  interface Props {
+    articles: Article[]
+    pagination: Pagination | null
+    fetching: boolean
+    mammon?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    mammon: true
+  })
+
+  const emit = defineEmits<{
+    (e: Events.Loadmore): void
+  }>()
+
+  const { isDarkTheme, isZhLang } = useEnhancer()
+  const isLoadMoreEnabled = computed(() => {
+    if (!props.pagination) return false
+    return props.pagination.current_page < props.pagination.total_page
+  })
+
+  const handleLoadmore = () => {
+    emit(Events.Loadmore)
+  }
+</script>
+
 <template>
   <div class="articles">
     <div class="article-list">
@@ -5,7 +43,7 @@
         <template #loading>
           <ul class="article-list-skeleton" key="skeleton">
             <li v-for="item in 6" :key="item" class="item">
-              <div class="thumb">
+              <div class="thumbnail">
                 <skeleton-base />
               </div>
               <div class="content">
@@ -82,65 +120,6 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, computed, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { Pagination } from '/@/constants/state'
-  import { Article } from '/@/stores/article'
-  import { LanguageKey } from '/@/language'
-  import ListItem from './item.vue'
-
-  export enum Events {
-    Loadmore = 'loadmore'
-  }
-
-  export default defineComponent({
-    name: 'FlowArticleList',
-    components: {
-      ListItem
-    },
-    props: {
-      articles: {
-        type: Array as PropType<Article[]>,
-        required: true
-      },
-      pagination: {
-        type: Object as PropType<Pagination | null>,
-        default: null
-      },
-      fetching: {
-        type: Boolean,
-        required: true
-      },
-      mammon: {
-        type: Boolean,
-        default: true
-      }
-    },
-    emits: [Events.Loadmore],
-    setup(props, context) {
-      const { isDarkTheme, isZhLang } = useEnhancer()
-      const isLoadMoreEnabled = computed(() => {
-        return props.pagination
-          ? props.pagination.current_page < props.pagination.total_page
-          : false
-      })
-
-      const handleLoadmore = () => {
-        context.emit(Events.Loadmore)
-      }
-
-      return {
-        LanguageKey,
-        isZhLang,
-        isDarkTheme,
-        isLoadMoreEnabled,
-        handleLoadmore
-      }
-    }
-  })
-</script>
-
 <style lang="scss" scoped>
   @use 'sass:math';
   @import 'src/styles/variables.scss';
@@ -164,7 +143,7 @@
           margin-bottom: 0;
         }
 
-        .thumb {
+        .thumbnail {
           height: 100%;
           width: 15rem;
         }

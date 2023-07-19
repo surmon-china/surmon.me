@@ -5,17 +5,16 @@
  */
 
 import { h, defineComponent } from 'vue'
-import { PopupUIProps, getOtherProps } from './popup'
+import { PopupUiProps, omitUiProps } from './popup'
 import { usePopup } from './hook'
 
 /**
  * @example <popup-image src="xxx" class="image" />
  */
 export default defineComponent({
-  name: 'PopupImage',
   props: {
     src: String,
-    ...PopupUIProps
+    ...PopupUiProps
   },
   setup(props, context) {
     const popup = usePopup()
@@ -27,11 +26,12 @@ export default defineComponent({
         return null
       }
 
-      const imageProps = getOtherProps(props)
+      const imageProps = omitUiProps(props)
       const imageAttrs = {
         ...imageProps,
         ...context.attrs
       }
+
       return h('img', {
         ...imageAttrs,
         src,

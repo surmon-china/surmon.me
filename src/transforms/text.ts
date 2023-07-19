@@ -4,11 +4,11 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import _escape from 'lodash/escape'
-import _unescape from 'lodash/unescape'
-import _truncate from 'lodash/truncate'
-import _capitalize from 'lodash/capitalize'
-import _padStart from 'lodash/padStart'
+import _escape from 'lodash-es/escape'
+import _unescape from 'lodash-es/unescape'
+import _truncate from 'lodash-es/truncate'
+import _capitalize from 'lodash-es/capitalize'
+import _padStart from 'lodash-es/padStart'
 
 export const escape = _escape
 export const unescape = _unescape

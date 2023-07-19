@@ -1,3 +1,21 @@
+<script lang="ts" setup>
+  import { ref, computed, onMounted } from 'vue'
+  import { useInstagramMediasStore } from '/@/stores/media'
+  import { isVideoMediaIns, isAlbumMediaIns, getInstagramImage } from '/@/transforms/media'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { LanguageKey } from '/@/language'
+
+  const fetching = ref(true)
+  const insStore = useInstagramMediasStore()
+  const insMedias = computed(() => insStore.data.slice(0, 23))
+
+  onMounted(() => {
+    insStore.fetch().finally(() => {
+      fetching.value = false
+    })
+  })
+</script>
+
 <template>
   <placeholder :i18n-key="LanguageKey.EMPTY_PLACEHOLDER" :loading="fetching" :data="insMedias">
     <template #loading>
@@ -14,7 +32,8 @@
             <uimage class="cover" :src="getInstagramImage(media, 't')" :alt="media.caption" />
             <div class="type-icon">
               <i class="iconfont icon-video" v-if="isVideoMediaIns(media)"></i>
-              <i class="iconfont icon-album" v-if="isAlbumMediaIns(media)"></i>
+              <i class="iconfont icon-album" v-else-if="isAlbumMediaIns(media)"></i>
+              <i class="iconfont icon-camera" v-else></i>
             </div>
             <div class="mask">
               <i class="iconfont icon-music-play" v-if="isVideoMediaIns(media)"></i>
@@ -29,40 +48,6 @@
     </template>
   </placeholder>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, computed, onMounted } from 'vue'
-  import { useInstagramMediasStore } from '/@/stores/media'
-  import { isVideoMediaIns, isAlbumMediaIns, getInstagramImage } from '/@/transforms/media'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
-  import { LanguageKey } from '/@/language'
-
-  export default defineComponent({
-    name: 'AboutPageInstagram',
-    setup() {
-      const fetching = ref(true)
-      const store = useInstagramMediasStore()
-      const insMedias = computed(() => store.data.slice(0, 23))
-
-      onMounted(() => {
-        store.fetch().finally(() => {
-          fetching.value = false
-        })
-      })
-
-      return {
-        isVideoMediaIns,
-        isAlbumMediaIns,
-        getInstagramImage,
-        LanguageKey,
-        VALUABLE_LINKS,
-        fetching,
-        store,
-        insMedias
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @use 'sass:math';

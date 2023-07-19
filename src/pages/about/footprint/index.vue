@@ -1,3 +1,73 @@
+<script lang="ts" setup>
+  import type { Map } from 'mapbox-gl'
+  import { shallowRef, computed, onMounted } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useMyGoogleMapStore } from '/@/stores/media'
+  import { GEO_INFO, VALUABLE_LINKS } from '/@/config/app.config'
+  import { i18ns } from '../shared'
+  import { gmmFoldersToGeoJSON, FeatureCollectionJSON, GoogleMyMapFolder } from './helper'
+  import Mapbox from './mapbox.vue'
+  import FootprintModal from './modal.vue'
+
+  const { isZhLang } = useEnhancer()
+  const map = shallowRef<Map>()
+  const modalVisible = shallowRef(false)
+  const gmStore = useMyGoogleMapStore()
+
+  const gmFolders = computed<Array<GoogleMyMapFolder>>(() => {
+    const folders = [...(gmStore.data?.Folder ?? [])]
+    folders.reverse()
+    return folders.map((folder, fi) => {
+      const placemark = folder.Placemark ?? []
+      const placemarks = Array.isArray(placemark) ? placemark : [placemark]
+      return {
+        name: folder.name,
+        placemarks: placemarks.map((placemark, pi) => {
+          const [longitude, latitude] = placemark.Point.coordinates.split(',').map(Number)
+          const extendedData = placemark.ExtendedData?.Data
+          return {
+            index: pi,
+            id: `placemark-${fi}-${pi}`,
+            name: placemark.name,
+            description: placemark.description,
+            coordinates: [longitude, latitude],
+            image: extendedData?.['@name'] === 'gx_media_links' ? extendedData?.value : null
+          }
+        })
+      }
+    })
+  })
+
+  const gmGeoJson = computed<FeatureCollectionJSON>(() => {
+    return gmmFoldersToGeoJSON(gmFolders.value)
+  })
+
+  const openModal = () => {
+    modalVisible.value = true
+  }
+
+  const handleFolderClick = (index: number) => {
+    const targetFolder = gmFolders.value[index]!
+    const [firstPlacemark] = targetFolder.placemarks
+    if (firstPlacemark) {
+      map.value?.flyTo({ center: firstPlacemark.coordinates, zoom: 4, speed: 1.2 })
+    }
+  }
+
+  const handleMapboxReady = (payload: { map: Map }) => {
+    map.value = payload.map
+  }
+
+  const handleLivingNow = () => {
+    map.value?.flyTo({
+      center: GEO_INFO.coordinates as any,
+      zoom: 14
+    })
+  }
+
+  onMounted(() => gmStore.fetch())
+</script>
+
 <template>
   <div class="footprint-map">
     <client-only>
@@ -48,98 +118,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import type { Map } from 'mapbox-gl'
-  import { defineComponent, shallowRef, computed, onMounted } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useMyGoogleMapStore } from '/@/stores/media'
-  import { GEO_INFO, VALUABLE_LINKS } from '/@/config/app.config'
-  import { i18ns } from '../shared'
-  import { gmmFoldersToGeoJSON, FeatureCollectionJSON, GoogleMyMapFolder } from './helper'
-  import Mapbox from './mapbox.vue'
-  import FootprintModal from './modal.vue'
-
-  export default defineComponent({
-    name: 'AboutPageFootprint',
-    components: { Mapbox, FootprintModal },
-    setup() {
-      const { isZhLang } = useEnhancer()
-      const map = shallowRef<Map>()
-      const modalVisible = shallowRef(false)
-      const gmStore = useMyGoogleMapStore()
-      const gmFolders = computed<Array<GoogleMyMapFolder>>(() => {
-        const folders = [...(gmStore.data?.Folder ?? [])]
-        folders.reverse()
-        return folders.map((folder, fi) => {
-          const placemark = folder.Placemark ?? []
-          const placemarks = Array.isArray(placemark) ? placemark : [placemark]
-          return {
-            name: folder.name,
-            placemarks: placemarks.map((placemark, pi) => {
-              const [longitude, latitude] = placemark.Point.coordinates.split(',').map(Number)
-              const extendedData = placemark.ExtendedData?.Data
-              return {
-                index: pi,
-                id: `placemark-${fi}-${pi}`,
-                name: placemark.name,
-                description: placemark.description,
-                coordinates: [longitude, latitude],
-                image: extendedData?.['@name'] === 'gx_media_links' ? extendedData?.value : null
-              }
-            })
-          }
-        })
-      })
-
-      const gmGeoJson = computed<FeatureCollectionJSON>(() => {
-        return gmmFoldersToGeoJSON(gmFolders.value)
-      })
-
-      const openModal = () => {
-        modalVisible.value = true
-      }
-
-      const handleFolderClick = (index: number) => {
-        const targetFolder = gmFolders.value[index]!
-        const [firstPlacemark] = targetFolder.placemarks
-        if (firstPlacemark) {
-          map.value?.flyTo({ center: firstPlacemark.coordinates, zoom: 4, speed: 1.2 })
-        }
-      }
-
-      const handleMapboxReady = (payload: { map: Map }) => {
-        map.value = payload.map
-      }
-
-      const handleLivingNow = () => {
-        map.value?.flyTo({
-          center: GEO_INFO.coordinates as any,
-          zoom: 14
-        })
-      }
-
-      onMounted(() => {
-        gmStore.fetch()
-      })
-
-      return {
-        GEO_INFO,
-        VALUABLE_LINKS,
-        isZhLang,
-        i18ns,
-        modalVisible,
-        gmStore,
-        gmFolders,
-        gmGeoJson,
-        openModal,
-        handleMapboxReady,
-        handleFolderClick,
-        handleLivingNow
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

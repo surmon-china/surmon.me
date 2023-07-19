@@ -3,7 +3,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { getTargetCDNURL } from '/@/transforms/url'
+import { getCDN_URL } from '/@/transforms/url'
 
 export const EMOJIS = [
   ...['😃', '😂', '😅', '😉', '😌', '😔', '😓', '😢', '😍', '😘', '😜', '😡'],
@@ -38,30 +38,29 @@ export const luanchEmojiRain = (content: string) => {
       speed: 12,
       staggered: true,
       increaseSpeed: 0.4,
-      emoji: getTargetCDNURL('/images/emojis/haha.png')
+      emoji: getCDN_URL('/images/emojis/haha.png')
     })
   } else if (SIX_KEYWORDS.find((keyword) => content.includes(keyword))) {
     luanchRain({
       speed: 12,
       staggered: true,
       increaseSpeed: 0.4,
-      emoji: getTargetCDNURL('/images/emojis/666.png')
+      emoji: getCDN_URL('/images/emojis/666.png')
     })
   } else if (HEHE_KEYWORDS.find((keyword) => content.includes(keyword))) {
     luanchRain({
       staggered: false,
       speed: 8,
       increaseSpeed: 0.04,
-      emoji: getTargetCDNURL('/images/emojis/hehe.png')
+      emoji: getCDN_URL('/images/emojis/hehe.png')
     })
   } else if (Math.random() <= 0.5) {
-    // 否则以 50% 的概率随机出现
     luanchRain({
       scale: 0.6,
       staggered: true,
       speed: 8,
       increaseSpeed: 0.04,
-      emoji: getTargetCDNURL('/images/emojis/doge.png')
+      emoji: getCDN_URL('/images/emojis/doge.png')
     })
   }
 }

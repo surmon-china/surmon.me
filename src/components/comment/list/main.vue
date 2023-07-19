@@ -1,3 +1,18 @@
+<script lang="ts" setup>
+  import { LanguageKey } from '/@/language'
+
+  interface Props {
+    hasData: boolean
+    fetching?: boolean
+    skeletonCount?: number
+  }
+
+  withDefaults(defineProps<Props>(), {
+    fetching: false,
+    skeletonCount: 6
+  })
+</script>
+
 <template>
   <placeholder :loading="fetching" :data="hasData">
     <template #loading>
@@ -25,34 +40,6 @@
     </template>
   </placeholder>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  import { LanguageKey } from '/@/language'
-
-  export default defineComponent({
-    name: 'CommentMain',
-    props: {
-      fetching: {
-        type: Boolean,
-        default: false
-      },
-      hasData: {
-        type: Boolean,
-        required: true
-      },
-      skeletonCount: {
-        type: Number,
-        default: 6
-      }
-    },
-    setup() {
-      return {
-        LanguageKey
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

@@ -18,7 +18,7 @@ export const ARTICLE_SHARE_ELEMENT_ID = 'A_article_share'
 export const ARTICLE_RELATED_ELEMENT_ID = 'A_article_related'
 
 export const ARTICLE_CONTENT_HEADING_ELEMENT_ID_PREFIX = 'A_article_content_heading'
-export const getArticleContentHeadingElementID = (level: number, heading: string) => {
+export const getArticleContentHeadingElementId = (level: number, heading: string) => {
   return `${ARTICLE_CONTENT_HEADING_ELEMENT_ID_PREFIX}_${level}_${heading}`
 }
 
@@ -27,6 +27,6 @@ export const COMMENT_PUBLISHER_ELEMENT_ID = 'A_comment_publisher'
 export const COMMENT_REPLY_PUBLISHER_ELEMENT_ID = 'A_comment_reply_publisher'
 export const COMMENT_FOOTER_ELEMENT_ID = 'A_comment_footer'
 export const COMMENT_ITEM_ELEMENT_ID_PREFIX = 'A_comment_content_item'
-export const getCommentItemElementID = (commentID: string | number) => {
-  return `${COMMENT_ITEM_ELEMENT_ID_PREFIX}_${commentID}`
+export const getCommentItemElementId = (commentId: string | number) => {
+  return `${COMMENT_ITEM_ELEMENT_ID_PREFIX}_${commentId}`
 }

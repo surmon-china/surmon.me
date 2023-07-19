@@ -1,3 +1,11 @@
+<script lang="ts" setup>
+  import { useStores } from '/@/stores'
+  import { emailLink } from '/@/transforms/email'
+  import Markdown from '/@/components/common/markdown.vue'
+
+  const { appOption } = useStores()
+</script>
+
 <template>
   <div class="statement">
     <div class="content">
@@ -13,22 +21,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  import { useStores } from '/@/stores'
-  import { emailLink } from '/@/transforms/email'
-  import Markdown from '/@/components/common/markdown.vue'
-
-  export default defineComponent({
-    name: 'Statement',
-    components: { Markdown },
-    setup() {
-      const { appOption } = useStores()
-      return { appOption, emailLink }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

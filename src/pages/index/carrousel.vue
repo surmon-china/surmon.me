@@ -1,6 +1,60 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { LanguageKey } from '/@/language'
+  import { Article } from '/@/interfaces/article'
+  import { Swiper, SwiperSlide } from '/@/effects/swiper'
+  import { getArticleDetailRoute } from '/@/transforms/route'
+  import { getArticleBannerThumbnailURL } from '/@/transforms/thumbnail'
+
+  interface Props {
+    articles: Array<Article>
+    fetching: boolean
+    count?: number
+  }
+
+  interface CarrouselSlide {
+    title: string
+    imgage: string
+    route?: string
+    url?: string
+    ad?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    count: 9
+  })
+
+  const { gState, adConfig, isDarkTheme } = useEnhancer()
+  const slides = computed<Array<CarrouselSlide>>(() => {
+    // articles
+    const result: CarrouselSlide[] = props.articles.slice(0, props.count).map((article) => ({
+      title: article.title,
+      imgage: getArticleBannerThumbnailURL(article.thumbnail, gState.imageExt.value.isWebP),
+      route: getArticleDetailRoute(article.id),
+      ad: false
+    }))
+    if (!result.length) {
+      return []
+    }
+
+    // advertisement
+    if (adConfig.value.PC_CARROUSEL) {
+      const config = adConfig.value.PC_CARROUSEL
+      result.splice(config.index, 0, {
+        title: config.title,
+        imgage: config.src,
+        route: config.url,
+        ad: true
+      })
+    }
+    return result
+  })
+</script>
+
 <template>
   <div class="carrousel" :class="{ dark: isDarkTheme }">
-    <placeholder :data="articleList.length" :loading="fetching">
+    <placeholder :data="slides.length" :loading="fetching">
       <template #placeholder>
         <empty class="article-empty" key="empty">
           <i18n :k="LanguageKey.ARTICLE_PLACEHOLDER" />
@@ -15,7 +69,7 @@
             <div class="first">
               <skeleton-line />
             </div>
-            <div class="line" v-for="(line, index) in 3" :key="index">
+            <div class="line" v-for="index in 3" :key="index">
               <skeleton-line class="line-item" />
             </div>
           </div>
@@ -24,55 +78,31 @@
       <template #default>
         <swiper
           class="swiper"
+          :loop="true"
           :set-wrapper-size="true"
           :mousewheel="true"
           :observe-parents="true"
           :grab-cursor="false"
           :simulate-touch="false"
-          :preload-images="false"
-          :lazy="false"
           :pagination="{ clickable: true }"
           :autoplay="{ delay: 3500, disableOnInteraction: false }"
         >
-          <swiper-slide v-for="(article, index) in articleList.slice(0, 9)" :key="index">
+          <swiper-slide v-for="(slide, index) in slides.slice(0, 9)" :key="index">
             <div class="content">
-              <template v-if="article.ad">
-                <ulink class="link" :href="article.url">
-                  <img :src="article.src" :alt="article.title" />
-                  <div class="title">
-                    <div class="background"></div>
-                    <div class="prospect">
-                      <span
-                        class="text"
-                        :style="{
-                          backgroundImage: `url('${getThumbURL(article.src)}')`
-                        }"
-                        >{{ article.title }}</span
-                      >
-                    </div>
+              <ulink class="link" :href="slide.url" :to="slide.route">
+                <img :src="slide.imgage" :alt="slide.title" draggable="false" loading="lazy" />
+                <div class="title" :title="slide.title">
+                  <div class="background"></div>
+                  <div class="prospect">
+                    <span class="text" :style="{ backgroundImage: `url('${slide.imgage}')` }">
+                      {{ slide.title }}
+                    </span>
                   </div>
-                  <span class="ad-symbol">
-                    <i18n :k="LanguageKey.AD" />
-                  </span>
-                </ulink>
-              </template>
-              <template v-else>
-                <router-link :to="getArticleDetailRoute(article.id)" class="link">
-                  <img :src="getThumbURL(article.thumb)" :alt="article.title" draggable="false" />
-                  <div class="title">
-                    <div class="background"></div>
-                    <div class="prospect">
-                      <span
-                        class="text"
-                        :style="{
-                          backgroundImage: `url('${getThumbURL(article.thumb)}')`
-                        }"
-                        >{{ article.title }}</span
-                      >
-                    </div>
-                  </div>
-                </router-link>
-              </template>
+                </div>
+                <span class="ad-symbol" v-if="slide.ad">
+                  <i18n :k="LanguageKey.AD" />
+                </span>
+              </ulink>
             </div>
           </swiper-slide>
         </swiper>
@@ -81,67 +111,13 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, computed, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { Article } from '/@/stores/article'
-  import { LanguageKey } from '/@/language'
-  import { Swiper, SwiperSlide } from '/@/effects/swiper'
-  import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getArticleBannerThumbnailURL } from '/@/transforms/thumbnail'
-
-  export default defineComponent({
-    name: 'IndexCarrousel',
-    components: {
-      Swiper,
-      SwiperSlide
-    },
-    props: {
-      articles: {
-        type: Array as PropType<Article[]>,
-        required: true
-      },
-      fetching: {
-        type: Boolean,
-        required: true
-      }
-    },
-    setup(props) {
-      const { globalState, adConfig, isDarkTheme } = useEnhancer()
-      const articleList = computed(() => {
-        const articles: Array<Article | any> = [...props.articles].slice(0, 9)
-        if (adConfig.value.PC_CARROUSEL) {
-          const { index, ...otherConfig } = adConfig.value.PC_CARROUSEL
-          articles.length &&
-            articles.splice(index, 0, {
-              ad: true,
-              ...otherConfig
-            } as any)
-        }
-        return articles
-      })
-
-      const getThumbURL = (thumb: string): string => {
-        return getArticleBannerThumbnailURL(thumb, globalState.imageExt.value.isWebP)
-      }
-
-      return {
-        LanguageKey,
-        isDarkTheme,
-        articleList,
-        getArticleDetailRoute,
-        getThumbURL
-      }
-    }
-  })
-</script>
-
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
   @import 'src/styles/mixins.scss';
 
+  $carrousel-height: 210px;
+
   .carrousel {
-    $carrousel-height: 210px;
     position: relative;
     height: $carrousel-height;
     @include common-bg-module();
@@ -246,11 +222,11 @@
           position: absolute;
           top: 5.6rem;
           right: 2.6rem;
-          font-size: $font-size-small;
-          color: $module-bg;
-          border-radius: $mini-radius;
           padding: 0.1em 0.3em;
+          border-radius: $mini-radius;
           border: 1px solid;
+          font-size: $font-size-root;
+          color: $module-bg;
         }
 
         .title {

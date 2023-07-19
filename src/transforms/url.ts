@@ -1,5 +1,5 @@
 /**
- * @file Url transformer
+ * @file URL transformer
  * @module transform.url
  * @author Surmon <https://github.com/surmon-china>
  */
@@ -8,15 +8,15 @@ import API_CONFIG from '/@/config/api.config'
 import { ProxyModule } from '/@/constants/proxy'
 import { getArticleDetailRoute } from '/@/transforms/route'
 
-export const getTargetCDNURL = (path: string) => {
+export const getCDN_URL = (path: string) => {
   return `${API_CONFIG.CDN}${path}`
 }
 
-export const getTargetProxyURL = (path: string, module: ProxyModule = ProxyModule.Default) => {
+export const getProxyURL = (path: string, module: ProxyModule = ProxyModule.Default) => {
   return `${API_CONFIG.PROXY}/${module}/${encodeURIComponent(path)}`
 }
 
-export const getTargetStaticURL = (path: string) => {
+export const getStaticURL = (path: string) => {
   return `${API_CONFIG.STATIC}${path}`
 }
 

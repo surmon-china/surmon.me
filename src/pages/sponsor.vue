@@ -1,3 +1,34 @@
+<script lang="ts" setup>
+  import { onMounted, onBeforeMount } from 'vue'
+  import { Language, LanguageKey } from '/@/language'
+  import { firstUpperCase } from '/@/transforms/text'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useSponsorState, ProviderId } from '/@/components/widget/sponsor/state'
+  import SponsorTabs from '/@/components/widget/sponsor/tabs.vue'
+  import SponsorProvider from '/@/components/widget/sponsor/provider.vue'
+  import PageBanner from '/@/components/common/banner.vue'
+
+  const { i18n: _i18n, seo, route, isZhLang } = useEnhancer()
+  const sponsorState = useSponsorState()
+
+  seo(() => {
+    const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_SPONSOR, Language.English)!)
+    const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_SPONSOR), enTitle] : [enTitle]
+    return { pageTitle: titles.join(' | ') }
+  })
+
+  onBeforeMount(() => {
+    sponsorState.githubSponsor.fetch()
+  })
+
+  onMounted(() => {
+    const targetId = route.hash.replace('#', '')
+    if (targetId) {
+      sponsorState.setProviderId(targetId as ProviderId)
+    }
+  })
+</script>
+
 <template>
   <div class="sponsor-page">
     <page-banner image="/images/page-sponsor/banner.webp">
@@ -21,45 +52,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, onMounted } from 'vue'
-  import { Language, LanguageKey } from '/@/language'
-  import { firstUpperCase } from '/@/transforms/text'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useSponsorState, ProviderId } from '/@/components/widget/sponsor/state'
-  import SponsorTabs from '/@/components/widget/sponsor/tabs.vue'
-  import SponsorProvider from '/@/components/widget/sponsor/provider.vue'
-  import PageBanner from '/@/components/common/banner.vue'
-
-  export default defineComponent({
-    name: 'SponsorPage',
-    components: {
-      SponsorTabs,
-      SponsorProvider,
-      PageBanner
-    },
-    setup() {
-      const { route, i18n, head, isZhLang } = useEnhancer()
-      const sponsorState = useSponsorState()
-
-      head(() => {
-        const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_SPONSOR, Language.English)!)
-        const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_SPONSOR), enTitle] : [enTitle]
-        return { pageTitle: titles.join(' | ') }
-      })
-
-      onMounted(() => {
-        const targetId = route.hash.replace('#', '')
-        if (targetId) {
-          sponsorState.setProviderId(targetId as ProviderId)
-        }
-      })
-
-      return { LanguageKey, sponsorState }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

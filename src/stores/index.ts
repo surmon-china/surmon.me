@@ -23,12 +23,12 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
       // basic data
       stores.category.fetch(),
       stores.tag.fetch(),
-      // app option (etc. ad_config, site_email, title, keywords)
+      // app options
       stores.appOption.fetch()
     ]
     // fetch hot articles when desktop only
     if (!config.globalState.userAgent.isMobile) {
-      initFetchTasks.push(stores.articleList.fetchHottestList())
+      initFetchTasks.push(stores.hottestArticleList.fetch())
     }
     return Promise.all(initFetchTasks)
   }
@@ -40,18 +40,15 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
     state: pinia.state,
     install: pinia.install,
     serverPrefetch: fetchBasicStore,
-    initOnSSRClient() {
+    hydrate() {
       const contextStore = getSSRContext('store')
       if (contextStore) {
+        // The data passed from the SSR server is used to initialize the pinia
         pinia.state.value = contextStore
       } else {
-        // fallback when SSR page error
+        // fallback: when SSR page error
         fetchBasicStore()
       }
-    },
-    initOnSPAClient() {
-      useStores(pinia).identity.initOnClient()
-      return fetchBasicStore()
     }
   }
 }

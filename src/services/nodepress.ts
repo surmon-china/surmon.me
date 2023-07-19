@@ -66,9 +66,7 @@ nodepress.interceptors.response.use(
 
 type Method = Exclude<Lowercase<AxiosMethod>, 'unlink' | 'purge' | 'link'> | 'request'
 const overwrite = (method: Method) => {
-  return <T = any>(
-    ...args: Parameters<AxiosInstance[typeof method]>
-  ): Promise<NodePressResult<T>> => {
+  return <T = any>(...args: Parameters<AxiosInstance[typeof method]>): Promise<NodePressResult<T>> => {
     return (nodepress[method] as any)(...args)
   }
 }

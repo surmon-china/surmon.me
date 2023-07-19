@@ -1,9 +1,9 @@
-import type { HeadResult } from '/@/composables/head'
+import type { SSRHeadPayload } from '@unhead/ssr'
 
 export const resolveTemplate = (config: {
   template: string
   appHTML: string
-  heads: HeadResult
+  heads: SSRHeadPayload
   scripts?: string
   manifest?: any
 }) => {
@@ -25,6 +25,7 @@ export const resolveTemplate = (config: {
     .replace(`<head>`, () => `<head>\n${heads.headTags}`)
     .replace(`<!--app-html-->`, () => appHTML)
     .replace(`<body>`, () => `<body ${heads.bodyAttrs}>`)
+    .replace(`</body>`, () => `\n${heads.bodyTags}\n</body>`)
     .replace(`</body>`, () => `\n${bodyScripts}\n</body>`)
 
   return html

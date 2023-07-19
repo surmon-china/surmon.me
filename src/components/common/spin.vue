@@ -1,3 +1,30 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+
+  interface Props {
+    loading?: boolean
+    color?: string
+    height?: string
+    width?: string
+    margin?: string
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    loading: true,
+    color: 'rgba(197, 197, 197, 0.4)',
+    height: '15px',
+    width: '15px',
+    margin: '5px'
+  })
+
+  const spinnerStyle = computed(() => ({
+    backgroundColor: props.color,
+    height: props.height,
+    width: props.width,
+    margin: props.margin
+  }))
+</script>
+
 <template>
   <div v-show="loading" class="spinner-box">
     <div class="spinner-inner">
@@ -9,45 +36,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  export default defineComponent({
-    name: 'Spin',
-    props: {
-      loading: {
-        type: Boolean,
-        default: true
-      },
-      color: {
-        type: String,
-        default: 'rgba(197, 197, 197, 0.4)'
-      },
-      height: {
-        type: String,
-        default: '15px'
-      },
-      width: {
-        type: String,
-        default: '15px'
-      },
-      margin: {
-        type: String,
-        default: '5px'
-      }
-    },
-    data() {
-      return {
-        spinnerStyle: {
-          backgroundColor: this.color,
-          height: this.height,
-          width: this.width,
-          margin: this.margin
-        }
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

@@ -1,6 +1,6 @@
 import { verseConfig } from './verse'
 
-export enum CustomElementID {
+export enum CustomElementId {
   Verse = 'verse'
 }
 
@@ -13,8 +13,8 @@ export interface CustomElementConfig {
   effect?: (element: HTMLElement) => void
 }
 
-export const CUSTOM_ELEMENTS: Record<CustomElementID, CustomElementConfig> = {
-  [CustomElementID.Verse]: verseConfig
+export const CUSTOM_ELEMENTS: Record<CustomElementId, CustomElementConfig> = {
+  [CustomElementId.Verse]: verseConfig
 }
 
 export const CUSTOM_ELEMENT_LIST = Object.values(CUSTOM_ELEMENTS)

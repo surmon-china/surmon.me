@@ -1,3 +1,21 @@
+<script lang="ts" setup>
+  import { useEnhancer } from '/@/app/enhancer'
+  import { LanguageKey } from '/@/language'
+  import { RouteName } from '/@/app/router'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import { useAdminInfoStore } from '/@/stores/basic'
+  import { useUniversalFetch } from '/@/universal'
+  import { getPageRoute } from '/@/transforms/route'
+  import PageBanner from '/@/components/common/banner.vue'
+  import { useAboutPageMeta, getAdminAvatar, i18ns } from './shared'
+
+  const { isZhLang } = useEnhancer()
+  const adminInfo = useAdminInfoStore()
+
+  useAboutPageMeta()
+  useUniversalFetch(() => adminInfo.fetch())
+</script>
+
 <template>
   <div class="about-page">
     <page-banner :position="70" :is-mobile="true" image="/images/page-about/banner-mobile.jpg">
@@ -21,14 +39,6 @@
         <router-link class="item text-only" :to="getPageRoute(RouteName.Archive)">
           <i class="iconfont icon-quill" />
           <i18n v-bind="i18ns.archive" />
-        </router-link>
-        <router-link class="item text-only" :to="getPageRoute(RouteName.Lens)">
-          <i class="iconfont icon-lens" />
-          <i18n v-bind="i18ns.lens" />
-        </router-link>
-        <router-link class="item text-only" :to="getPageRoute(RouteName.Nft)">
-          <i class="iconfont icon-opensea" />
-          <i18n v-bind="i18ns.nft" />
         </router-link>
         <router-link class="item text-only" :to="getPageRoute(RouteName.Guestbook)">
           <i class="iconfont icon-comment" />
@@ -88,44 +98,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
-  import { RouteName } from '/@/app/router'
-  import { META, VALUABLE_LINKS } from '/@/config/app.config'
-  import { useAdminInfoStore } from '/@/stores/basic'
-  import { useUniversalFetch } from '/@/universal'
-  import { getPageRoute } from '/@/transforms/route'
-  import PageBanner from '/@/components/common/banner.vue'
-  import { useAboutPageMeta, getAdminAvatar, i18ns } from './shared'
-
-  export default defineComponent({
-    name: 'MobileAboutPage',
-    components: {
-      PageBanner
-    },
-    setup() {
-      const { isZhLang } = useEnhancer()
-      const adminInfo = useAdminInfoStore()
-      useAboutPageMeta()
-      useUniversalFetch(() => adminInfo.fetch())
-
-      return {
-        i18ns,
-        META,
-        VALUABLE_LINKS,
-        LanguageKey,
-        RouteName,
-        isZhLang,
-        adminInfo,
-        getAdminAvatar,
-        getPageRoute
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

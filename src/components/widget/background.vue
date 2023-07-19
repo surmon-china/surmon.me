@@ -1,20 +1,13 @@
+<script lang="ts" setup>
+  import { useEnhancer } from '/@/app/enhancer'
+  const { isDarkTheme } = useEnhancer()
+</script>
+
 <template>
   <div id="background">
     <div class="image" :class="{ dark: isDarkTheme }"></div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  export default defineComponent({
-    name: 'Background',
-    setup() {
-      const { isDarkTheme } = useEnhancer()
-      return { isDarkTheme }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

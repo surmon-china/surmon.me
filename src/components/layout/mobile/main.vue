@@ -1,3 +1,25 @@
+<script lang="ts" setup>
+  import { ref, computed, watch, onMounted } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { getPageURL } from '/@/transforms/url'
+  import HeaderView from './header.vue'
+  import FooterView from './footer.vue'
+  import AsideView from './aside.vue'
+
+  const { route } = useEnhancer()
+  const pageURL = computed(() => getPageURL(route.fullPath))
+
+  const isOpenedAside = ref(false)
+  const openAside = () => (isOpenedAside.value = true)
+  const closeAside = () => (isOpenedAside.value = false)
+
+  onMounted(() => {
+    watch(isOpenedAside, (opened) => {
+      document.body.style.overflow = opened ? 'hidden' : 'auto'
+    })
+  })
+</script>
+
 <template>
   <div class="mobile-main">
     <div class="asider" :class="{ opened: isOpenedAside }">
@@ -24,46 +46,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, ref, computed, watch } from 'vue'
-  import { onClient } from '/@/universal'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { getPageURL } from '/@/transforms/url'
-  import HeaderView from './header.vue'
-  import FooterView from './footer.vue'
-  import AsideView from './aside.vue'
-
-  export default defineComponent({
-    name: 'MobileMain',
-    components: {
-      HeaderView,
-      FooterView,
-      AsideView
-    },
-    setup() {
-      const { route } = useEnhancer()
-      const pageURL = computed(() => getPageURL(route.fullPath))
-
-      const isOpenedAside = ref(false)
-      const openAside = () => (isOpenedAside.value = true)
-      const closeAside = () => (isOpenedAside.value = false)
-
-      watch(isOpenedAside, (opened) => {
-        onClient(() => {
-          document.body.style.overflow = opened ? 'hidden' : 'auto'
-        })
-      })
-
-      return {
-        pageURL,
-        isOpenedAside,
-        openAside,
-        closeAside
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

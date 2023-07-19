@@ -10,7 +10,6 @@ import { createExpressApp } from './server'
 
 let slsServer: Awaited<ReturnType<typeof createExpressApp>> | null = null
 
-// TODO
 export const initializer = async (context, callback) => {
   console.log('serverless initializing')
   slsServer = await createExpressApp()
@@ -19,7 +18,7 @@ export const initializer = async (context, callback) => {
   callback(null, '')
 }
 
-// MARK
+// TODO: Serverless
 export const handler = (request, response) => {
   // slsServer?.app
   // ...

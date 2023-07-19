@@ -20,8 +20,8 @@ export const META = Object.freeze({
 })
 
 export const GEO_INFO = Object.freeze({
-  zh_title: '居东半球，靠近赤道',
-  en_title: 'UTC +08:00',
+  zh_title: '长居亚洲，游走热带',
+  en_title: 'UTC +08:00 ~ +09:00',
   coordinates: [103.830391822121, 1.340863]
 })
 
@@ -45,8 +45,7 @@ export const IDENTITIES = Object.freeze({
   INSTAGRAM_USERNAME: 'surmon666',
   INSTAGRAM_FB_ID: '17841405600281893',
   BTC_ADDRESS: 'bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze',
-  ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77',
-  OPENSEA_ETH: '0xaD556974D449126efdeF23f4FF581861C301cB77'
+  ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
 })
 
 export const VALUABLE_LINKS = Object.freeze({
@@ -61,19 +60,17 @@ export const VALUABLE_LINKS = Object.freeze({
   GITHUB_NODEPRESS: 'https://github.com/surmon-china/nodepress',
   GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
   GITHUB_BLOG_STAR_LIST: 'https://github.com/stars/surmon-china/lists/surmon-me',
-  APP_APK_FILE:
-    'https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk',
   MARKDOWN: 'https://daringfireball.net/projects/markdown/',
   GOOGLE_MY_MAP: `https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3`,
   GOOGLE_MY_MAP_KML: `https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w`,
   DISCORD_GROUP: 'https://discord.surmon.me',
   TELEGRAM_GROUP: 'https://t.me/+Z2wsxogVbYM2ZmE1',
   MUSIC_163: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
-  YOUTUBE_CHANNEL: `https://www.youtube.com/channel/${IDENTITIES.YOUTUBE_CHANNEL_ID}`,
+  YOUTUBE_CHANNEL: 'https://www.youtube.com/@surmon_v',
   TELEGRAM: 'https://t.me/surmon',
   OPENSEA: 'https://opensea.io/Surmon',
   DOUBAN: 'https://www.douban.com/people/nocower',
-  DOUBAN_MOVIE: `https://m.douban.com/people/${IDENTITIES.DOUBAN_USER_ID}/movie_charts`,
+  DOUBAN_MOVIE: `https://movie.douban.com/people/nocower/collect`,
   QUORA: 'https://www.quora.com/profile/Surmon',
   LINKEDIN: 'https://www.linkedin.com/in/surmon',
   INSTAGRAM: `https://www.instagram.com/${IDENTITIES.INSTAGRAM_USERNAME}`,

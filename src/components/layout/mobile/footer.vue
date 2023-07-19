@@ -1,22 +1,14 @@
+<script lang="ts" setup>
+  import { META } from '/@/config/app.config'
+  const year = new Date().getFullYear()
+  const title = META.title
+</script>
+
 <template>
   <footer class="footer">
     <div class="footer-content">©{{ year }}&nbsp;&nbsp;{{ title }}</div>
   </footer>
 </template>
-
-<script lang="ts">
-  import { defineComponent } from 'vue'
-  import { META } from '/@/config/app.config'
-  export default defineComponent({
-    name: 'MobileFooter',
-    setup() {
-      return {
-        title: META.title,
-        year: new Date().getFullYear()
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

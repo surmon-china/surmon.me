@@ -1,11 +1,15 @@
+<script lang="ts" setup>
+  import { Article } from '/@/interfaces/article'
+  import { getArticleDetailRoute } from '/@/transforms/route'
+  defineProps<{
+    prev: Article | null
+    next: Article | null
+  }>()
+</script>
+
 <template>
   <div class="neighbour">
-    <router-link
-      v-if="prev"
-      class="link prev"
-      :title="prev.title"
-      :to="getArticleDetailRoute(prev.id)"
-    >
+    <router-link v-if="prev" class="link prev" :title="prev.title" :to="getArticleDetailRoute(prev.id)">
       <div class="icon">
         <i class="iconfont icon-prev"></i>
       </div>
@@ -17,12 +21,7 @@
     <div v-else class="null">
       <i18n zh="已是最早" en="NULL" />
     </div>
-    <router-link
-      v-if="next"
-      class="link next"
-      :title="next.title"
-      :to="getArticleDetailRoute(next.id)"
-    >
+    <router-link v-if="next" class="link next" :title="next.title" :to="getArticleDetailRoute(next.id)">
       <div class="content">
         <p class="title">{{ next.title }}</p>
         <p class="description">{{ next.description }}</p>
@@ -36,25 +35,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-  import { defineComponent, PropType } from 'vue'
-  import { getArticleDetailRoute } from '/@/transforms/route'
-  import { Article } from '/@/stores/article'
-
-  export default defineComponent({
-    name: 'ArticleNeighbour',
-    props: {
-      prev: Object as PropType<Article | null>,
-      next: Object as PropType<Article | null>
-    },
-    setup() {
-      return {
-        getArticleDetailRoute
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

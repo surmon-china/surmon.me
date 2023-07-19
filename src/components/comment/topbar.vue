@@ -1,3 +1,101 @@
+<script lang="ts" setup>
+  import { computed } from 'vue'
+  import { META } from '/@/config/app.config'
+  import { LanguageKey } from '/@/language'
+  import { SortType } from '/@/constants/state'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { UserType, useIdentityStore } from '/@/stores/identity'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { openWindow } from '/@/utils/opener'
+  import nodepress from '/@/services/nodepress'
+  import { CommentEvents } from './helper'
+
+  interface Props {
+    postId: number
+    sort: SortType
+    fetching: boolean
+    loading: boolean
+    loaded?: number
+    total?: number
+    plain?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    total: 0,
+    loaded: 0,
+    plain: false
+  })
+
+  const emit = defineEmits<{
+    (e: CommentEvents.Sort, sort: SortType): void
+  }>()
+
+  const { gtag } = useEnhancer()
+  const identity = useIdentityStore()
+  const user = computed(() => identity.user)
+  const statisticsText = computed(() => {
+    return props.loading ? `···` : `${props.loaded} / ${props.total}`
+  })
+
+  const disqusThreadMap = new Map<number, any>()
+  const handleDisqusThread = async () => {
+    gtag?.event('disqus_thread_page', {
+      event_category: GAEventCategories.Comment,
+      event_label: `id: ${props.postId}`
+    })
+
+    if (!disqusThreadMap.has(props.postId)) {
+      const response = await nodepress.get('/disqus/thread', {
+        params: { post_id: props.postId }
+      })
+      disqusThreadMap.set(props.postId, response.result)
+    }
+
+    const forum = identity.disqusConfig.forum
+    const slug = disqusThreadMap.get(props.postId).slug
+    window.open(`https://disqus.com/home/discussion/${forum}/${slug}/`)
+  }
+
+  const handleSort = (target: any) => {
+    gtag?.event('comment_sort_switch', {
+      event_category: GAEventCategories.Comment
+    })
+
+    const value = Number(target?.value)
+    if (value !== props.sort) {
+      emit(CommentEvents.Sort, value)
+    }
+  }
+
+  const handleDisqusLogin = () => {
+    gtag?.event('disqus_login', {
+      event_category: GAEventCategories.Comment,
+      event_label: `id: ${props.postId}`
+    })
+
+    openWindow(identity.disqusConfig.authorize_url, {
+      name: `Disqus Auth ${META.title}`,
+      onClose: () => {
+        identity.fetchDisqusUserInfo()
+        console.info('[disqus]', 'logined', identity.user)
+      }
+    })
+  }
+
+  const handleDisqusLogout = () => {
+    identity.fetchDisqusLogout()
+    console.log('[disqus]', 'logout')
+    gtag?.event('disqus_logout', {
+      event_category: GAEventCategories.Comment,
+      event_label: `id: ${props.postId}`
+    })
+  }
+
+  const handleClearLocalProfile = () => {
+    identity.removeLocalUser()
+  }
+</script>
+
 <template>
   <placeholder :loading="fetching">
     <template #loading>
@@ -66,9 +164,7 @@
                     <button class="button" @click="handleDisqusLogin">
                       <i18n>
                         <template #zh>换为<i class="iconfont icon-disqus disqus"></i>登录</template>
-                        <template #en
-                          >Login by <i class="iconfont icon-disqus disqus"></i
-                        ></template>
+                        <template #en>Login by <i class="iconfont icon-disqus disqus"></i></template>
                       </i18n>
                     </button>
                   </li>
@@ -107,136 +203,6 @@
     </template>
   </placeholder>
 </template>
-
-<script lang="ts">
-  import { defineComponent, computed, PropType } from 'vue'
-  import { META, VALUABLE_LINKS } from '/@/config/app.config'
-  import { LanguageKey } from '/@/language'
-  import { SortType } from '/@/constants/state'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { UserType, useIdentityStore } from '/@/stores/identity'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { openWindow } from '/@/utils/opener'
-  import nodepress from '/@/services/nodepress'
-  import { CommentEvents } from './helper'
-
-  export default defineComponent({
-    name: 'CommentTopbar',
-    props: {
-      postId: {
-        type: Number,
-        required: true
-      },
-      sort: {
-        type: Number as PropType<SortType>,
-        required: true
-      },
-      total: {
-        type: Number,
-        default: 0,
-        required: false
-      },
-      loaded: {
-        type: Number,
-        default: 0,
-        required: false
-      },
-      fetching: {
-        type: Boolean,
-        required: true
-      },
-      loading: {
-        type: Boolean,
-        required: true
-      },
-      plain: {
-        type: Boolean,
-        default: false
-      }
-    },
-    emits: [CommentEvents.Sort],
-    setup(props, context) {
-      const { gtag } = useEnhancer()
-      const identity = useIdentityStore()
-      const user = computed(() => identity.user)
-      const statisticsText = computed(() => {
-        return props.loading ? `···` : `${props.loaded} / ${props.total}`
-      })
-
-      const disqusThreadMap = new Map<number, any>()
-      const handleDisqusThread = async () => {
-        gtag?.event('disqus_thread_page', {
-          event_category: GAEventCategories.Comment,
-          event_label: `id: ${props.postId}`
-        })
-
-        if (!disqusThreadMap.has(props.postId)) {
-          const response = await nodepress.get('/disqus/thread', {
-            params: { post_id: props.postId }
-          })
-          disqusThreadMap.set(props.postId, response.result)
-        }
-
-        const forum = identity.disqusConfig.forum
-        const slug = disqusThreadMap.get(props.postId).slug
-        window.open(`https://disqus.com/home/discussion/${forum}/${slug}/`)
-      }
-
-      const handleSort = (target: any) => {
-        gtag?.event('comment_sort_switch', {
-          event_category: GAEventCategories.Comment
-        })
-
-        const value = Number(target?.value)
-        if (value !== props.sort) {
-          context.emit(CommentEvents.Sort, value)
-        }
-      }
-
-      const handleDisqusLogin = () => {
-        gtag?.event('disqus_login', {
-          event_category: GAEventCategories.Comment,
-          event_label: `id: ${props.postId}`
-        })
-
-        openWindow(identity.disqusConfig.authorize_url, {
-          name: `Disqus Auth ${META.title}`,
-          onClose: () => {
-            identity.fetchDisqusUserInfo()
-            console.info('[disqus]', 'logined', identity.user)
-          }
-        })
-      }
-
-      const handleDisqusLogout = () => {
-        gtag?.event('disqus_logout', {
-          event_category: GAEventCategories.Comment,
-          event_label: `id: ${props.postId}`
-        })
-        console.log('[disqus]', 'logout')
-        identity.fetchDisqusLogout()
-      }
-
-      const handleClearLocalProfile = () => {
-        identity.removeLocalUser()
-      }
-
-      return {
-        user,
-        statisticsText,
-        VALUABLE_LINKS,
-        LanguageKey,
-        UserType,
-        SortType,
-        handleSort,
-        handleDisqusLogin,
-        handleDisqusLogout,
-        handleDisqusThread,
-        handleClearLocalProfile
-      }
-    }
-  })
-</script>
 
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';

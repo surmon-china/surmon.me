@@ -4,13 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import {
-  RouteRecordRaw,
-  NavigationGuard,
-  NavigationGuardNext,
-  RouterHistory,
-  createRouter
-} from 'vue-router'
+import { RouteRecordRaw, NavigationGuard, NavigationGuardNext, RouterHistory, createRouter } from 'vue-router'
 import { LanguageKey } from '/@/language'
 import { NOT_FOUND, BAD_REQUEST } from '/@/constants/error'
 import { isValidDateParam } from '/@/transforms/validate'
@@ -38,17 +32,16 @@ import AppPage from '/@/pages/app.vue'
 // third pages
 import SponsorPage from '/@/pages/sponsor.vue'
 import LensPage from '/@/pages/lens/index.vue'
-import NftPage from '/@/pages/nft.vue'
 
+// https://router.vuejs.org/guide/advanced/meta.html#typescript
 import 'vue-router'
-
 declare module 'vue-router' {
   interface RouteMeta {
     responsive?: boolean
     layout?: LayoutColumn
-    validate?: (params: any) => Promise<any>
+    validator?: (params: any) => Promise<any>
     /** seconds | infinity | false: disabled  */
-    ssrCacheAge: number | false
+    ssrCacheTTL: number | false
   }
 }
 
@@ -69,7 +62,6 @@ export enum RouteName {
   About = 'about',
   Lens = 'lens',
   App = 'app',
-  Nft = 'nft',
   Sponsor = 'sponsor',
   Error = 'error'
 }
@@ -84,7 +76,7 @@ export const routes: RouteRecordRaw[] = [
     },
     meta: {
       responsive: true,
-      ssrCacheAge: 60 * 2 // 2 mins
+      ssrCacheTTL: 60 * 2 // 2 mins
     }
   },
   {
@@ -103,8 +95,8 @@ export const routes: RouteRecordRaw[] = [
     },
     meta: {
       responsive: true,
-      ssrCacheAge: 30, // 30 seconds
-      async validate({ route, i18n }) {
+      ssrCacheTTL: 30, // 30 seconds
+      async validator({ route, i18n }) {
         if (!Number.isInteger(Number(route.params.article_id))) {
           return Promise.reject({
             code: BAD_REQUEST,
@@ -127,8 +119,8 @@ export const routes: RouteRecordRaw[] = [
     },
     meta: {
       responsive: true,
-      ssrCacheAge: 60 * 2, // 2 mins
-      async validate({ route, i18n }) {
+      ssrCacheTTL: 60 * 2, // 2 mins
+      async validator({ route, i18n }) {
         const { category_slug } = route.params
         if (!category_slug) {
           return Promise.reject({
@@ -152,8 +144,8 @@ export const routes: RouteRecordRaw[] = [
     },
     meta: {
       responsive: true,
-      ssrCacheAge: 60 * 2, // 2 mins
-      async validate({ route, i18n }) {
+      ssrCacheTTL: 60 * 2, // 2 mins
+      async validator({ route, i18n }) {
         const { tag_slug } = route.params
         if (!tag_slug) {
           return Promise.reject({
@@ -177,8 +169,8 @@ export const routes: RouteRecordRaw[] = [
     },
     meta: {
       responsive: true,
-      ssrCacheAge: 60 * 60 * 24, // 24 hours
-      async validate({ route, i18n }) {
+      ssrCacheTTL: 60 * 60 * 24, // 24 hours
+      async validator({ route, i18n }) {
         const { date } = route.params
         if (!date || !isValidDateParam(date)) {
           return Promise.reject({
@@ -202,8 +194,8 @@ export const routes: RouteRecordRaw[] = [
     },
     meta: {
       responsive: true,
-      ssrCacheAge: false,
-      async validate({ route, i18n }) {
+      ssrCacheTTL: false,
+      async validator({ route, i18n }) {
         if (!route.params.keyword) {
           return Promise.reject({
             code: BAD_REQUEST,
@@ -223,7 +215,7 @@ export const routes: RouteRecordRaw[] = [
     meta: {
       responsive: true,
       layout: LayoutColumn.Full,
-      ssrCacheAge: 60 * 60 // 1 hours
+      ssrCacheTTL: 60 * 60 // 1 hours
     }
   },
   {
@@ -236,7 +228,7 @@ export const routes: RouteRecordRaw[] = [
     meta: {
       responsive: true,
       layout: LayoutColumn.Full,
-      ssrCacheAge: 60 * 60 * 4 // 4 hours
+      ssrCacheTTL: 60 * 60 * 4 // 4 hours
     }
   },
   {
@@ -253,7 +245,7 @@ export const routes: RouteRecordRaw[] = [
     },
     meta: {
       responsive: true,
-      ssrCacheAge: 60 * 1 // 1 mins
+      ssrCacheTTL: 60 * 1 // 1 mins
     }
   },
   {
@@ -271,7 +263,7 @@ export const routes: RouteRecordRaw[] = [
     meta: {
       responsive: true,
       layout: LayoutColumn.Full,
-      ssrCacheAge: Infinity
+      ssrCacheTTL: Infinity
     }
   },
   {
@@ -281,17 +273,7 @@ export const routes: RouteRecordRaw[] = [
     meta: {
       responsive: false,
       layout: LayoutColumn.Full,
-      ssrCacheAge: 60 * 60 * 1 // 1 hours
-    }
-  },
-  {
-    path: '/nft',
-    name: RouteName.Nft,
-    component: NftPage,
-    meta: {
-      responsive: false,
-      layout: LayoutColumn.Full,
-      ssrCacheAge: 60 * 60 * 0.5 // 30 minutes
+      ssrCacheTTL: 60 * 60 * 1 // 1 hours
     }
   },
   {
@@ -301,7 +283,7 @@ export const routes: RouteRecordRaw[] = [
     meta: {
       responsive: false,
       layout: LayoutColumn.Full,
-      ssrCacheAge: Infinity
+      ssrCacheTTL: Infinity
     }
   },
   {
@@ -309,8 +291,8 @@ export const routes: RouteRecordRaw[] = [
     path: '/:error(.*)',
     component: {},
     meta: {
-      ssrCacheAge: false,
-      async validate({ i18n }) {
+      ssrCacheTTL: false,
+      async validator({ i18n }) {
         return Promise.reject({
           code: NOT_FOUND,
           message: i18n.t(LanguageKey.NOT_FOUND)
