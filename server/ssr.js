@@ -767,7 +767,8 @@ const isDev = process.env.NODE_ENV === "development";
 process.env.NODE_ENV === "production";
 process.env.NODE_ENV === "test";
 const API_LOCAL_URL = "http://localhost:8000";
-const DEV_API = API_LOCAL_URL;
+const API_ONLINE_URL = "https://api.surmon.me";
+const DEV_API = API_ONLINE_URL;
 const PROD_API = API_LOCAL_URL;
 const API_CONFIG = {
   FE: "https://surmon.me",

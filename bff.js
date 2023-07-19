@@ -502,7 +502,7 @@ const getSotweAggregate = async (twitterUsername) => {
         const url = `https://api.sotwe.com/v3/user/${twitterUsername}`;
         // MARK: Don't try to simulate a browser request, it will be blocked by Cloudflare.
         const headers = {
-            'User-Agent': 'PostmanRuntime/7.32.3'
+        // 'User-Agent': 'PostmanRuntime/7.32.3'
         };
         const response = await external_axios_namespaceObject["default"].get(url, { timeout: 8000, headers });
         return response.data;
