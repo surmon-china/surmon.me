@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/surmon-china/surmon.me" target="blank">
-    <img src="/presses/logo.png" height="90" alt="surmon.me logo" />
+    <img src="/screenhots/logo.png" height="90" alt="surmon.me logo" />
   </a>
 </p>
 
@@ -32,9 +32,9 @@
 
 ## Screenshot
 
-![](/presses/desktop.png)
+![](/screenhots/desktop.png)
 
-![](/presses/mobile.png)
+![](/screenhots/mobile.png)
 
 ## Development Setup
 
