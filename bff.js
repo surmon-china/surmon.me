@@ -7,7 +7,6 @@ import * as __WEBPACK_EXTERNAL_MODULE_stream__ from "stream";
 import * as __WEBPACK_EXTERNAL_MODULE_sitemap__ from "sitemap";
 import * as __WEBPACK_EXTERNAL_MODULE_wonderful_bing_wallpaper_bd315d6d__ from "wonderful-bing-wallpaper";
 import * as __WEBPACK_EXTERNAL_MODULE_fast_xml_parser_352df6bd__ from "fast-xml-parser";
-import * as __WEBPACK_EXTERNAL_MODULE_superagent__ from "superagent";
 import * as __WEBPACK_EXTERNAL_MODULE_yargs__ from "yargs";
 import * as __WEBPACK_EXTERNAL_MODULE_fs_extra_c99523cd__ from "fs-extra";
 import * as __WEBPACK_EXTERNAL_MODULE_fontmin__ from "fontmin";
@@ -476,11 +475,26 @@ const getMyGoogleMap = () => {
         .then((response) => parser.parse(response.data).kml.Document);
 };
 
-;// CONCATENATED MODULE: external "superagent"
-var external_superagent_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_superagent_y = x => () => x
-const external_superagent_namespaceObject = external_superagent_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_superagent__["default"] });
+;// CONCATENATED MODULE: external "yargs"
+var external_yargs_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
+var external_yargs_y = x => () => x
+const external_yargs_namespaceObject = external_yargs_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_yargs__["default"] });
+;// CONCATENATED MODULE: ./src/config/bff.yargs.ts
+/**
+ * @file BFF yargs config
+ * @module config.bff.yargs
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
+const argv = (0,external_yargs_namespaceObject["default"])(process.argv.slice(2)).argv;
+const GITHUB_BEARER_TOKEN = argv.github_token;
+const INSTAGRAM_TOKEN = argv.instagram_token;
+const YOUTUBE_API_KEY = argv.youtube_token;
+const SOTWE_SCRAPER_TOKEN = argv.sotwe_scraper_token;
+
 ;// CONCATENATED MODULE: ./src/server/getters/twitter/sotwe.ts
+
+
 
 const improveSotweTweet = (tweet, resultHTML = false) => {
     let result = tweet.text.replaceAll('\n', ' ');
@@ -502,16 +516,23 @@ const improveSotweTweet = (tweet, resultHTML = false) => {
     });
     return result;
 };
-const agent = external_superagent_namespaceObject["default"].agent();
-const getSotweAggregate = (twitterUsername) => {
-    return agent
-        .get(`https://api.sotwe.com/v3/user/${twitterUsername}`)
-        .set('referer', 'https://www.sotwe.com/')
-        .set('Origin', 'https://www.sotwe.com')
-        .set('Accept', 'application/json, text/plain, */*')
-        .set('Accept-Language', 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,zh-TW;q=0.6')
-        .set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36')
-        .then((response) => response.body);
+// Don't try to simulate a browser request, it will be blocked by Cloudflare.
+// Can't make requests based on headless browsers because it takes up too much memory
+// So one has to look for third party online services, here are some of the available crawler services:
+// - https://dashboard.scrape.do
+// - https://apilayer.com/marketplace/adv_scraper-api
+// - ...
+const getSotweAggregate = async (twitterUsername) => {
+    try {
+        const target = `https://api.sotwe.com/v3/user/${twitterUsername}`;
+        const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`;
+        // To avoid wasting request credits, tokens are not used in development environments
+        const response = await external_axios_namespaceObject["default"].get(isDev ? target : scraper);
+        return response.data;
+    }
+    catch (error) {
+        throw (0,external_axios_namespaceObject.isAxiosError)(error) ? error.toJSON() : error;
+    }
 };
 
 ;// CONCATENATED MODULE: ./src/server/getters/twitter/nitter.ts
@@ -651,22 +672,6 @@ const getTwitterAggregate = async () => {
     }
     return { userinfo, tweets };
 };
-
-;// CONCATENATED MODULE: external "yargs"
-var external_yargs_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_yargs_y = x => () => x
-const external_yargs_namespaceObject = external_yargs_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_yargs__["default"] });
-;// CONCATENATED MODULE: ./src/config/bff.yargs.ts
-/**
- * @file BFF yargs config
- * @module config.bff.yargs
- * @author Surmon <https://github.com/surmon-china>
- */
-
-const argv = (0,external_yargs_namespaceObject["default"])(process.argv.slice(2)).argv;
-const GITHUB_BEARER_TOKEN = argv.github_token;
-const INSTAGRAM_TOKEN = argv.instagram_token;
-const YOUTUBE_API_KEY = argv.youtube_token;
 
 ;// CONCATENATED MODULE: ./src/server/getters/github.ts
 /**
