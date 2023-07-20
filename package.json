@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Surmon.me blog",
   "author": "Surmon",
   "license": "MIT",
@@ -57,7 +57,6 @@
     "serialize-javascript": "^6.0.1",
     "sitemap": "^7.1.1",
     "sticky-events": "^3.4.12",
-    "superagent": "^8.0.9",
     "swiper": "^10.0.4",
     "ua-parser-js": "^1.0.35",
     "unhead": "^1.1.32",
@@ -84,7 +83,6 @@
     "@types/qrcode": "^1.5.1",
     "@types/rss": "^0.0.30",
     "@types/serialize-javascript": "^5.0.2",
-    "@types/superagent": "^4.1.18",
     "@types/ua-parser-js": "^0.7.36",
     "@typescript-eslint/eslint-plugin": "^6.1.0",
     "@typescript-eslint/parser": "^6.1.0",

@@ -1,4 +1,6 @@
-import superagent from 'superagent'
+import axios, { isAxiosError } from 'axios'
+import { SOTWE_SCRAPER_TOKEN } from '@/config/bff.yargs'
+import { isDev } from '@/environment'
 
 export interface SotweUserInfo {
   name: string
@@ -107,18 +109,20 @@ export const improveSotweTweet = (tweet: SotweTweet, resultHTML = false): string
   return result
 }
 
-const agent = superagent.agent()
-
-export const getSotweAggregate = (twitterUsername: string): Promise<SotweAggregate> => {
-  return agent
-    .get(`https://api.sotwe.com/v3/user/${twitterUsername}`)
-    .set('referer', 'https://www.sotwe.com/')
-    .set('Origin', 'https://www.sotwe.com')
-    .set('Accept', 'application/json, text/plain, */*')
-    .set('Accept-Language', 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,zh-TW;q=0.6')
-    .set(
-      'User-Agent',
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
-    )
-    .then((response) => response.body)
+// Don't try to simulate a browser request, it will be blocked by Cloudflare.
+// Can't make requests based on headless browsers because it takes up too much memory
+// So one has to look for third party online services, here are some of the available crawler services:
+// - https://dashboard.scrape.do
+// - https://apilayer.com/marketplace/adv_scraper-api
+// - ...
+export const getSotweAggregate = async (twitterUsername: string): Promise<SotweAggregate> => {
+  try {
+    const target = `https://api.sotwe.com/v3/user/${twitterUsername}`
+    const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`
+    // To avoid wasting request credits, tokens are not used in development environments
+    const response = await axios.get<SotweAggregate>(isDev ? target : scraper)
+    return response.data
+  } catch (error: unknown) {
+    throw isAxiosError(error) ? error.toJSON() : error
+  }
 }
