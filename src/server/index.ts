@@ -10,10 +10,13 @@ import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import { PROXY_ROUTE_PATH, proxyer } from './proxy'
 import { createCacheClient } from './cache'
+import { META } from '@/config/app.config'
 
 export const createExpressApp = async () => {
   // init cache client
-  const cache = await createCacheClient()
+  const cache = await createCacheClient({
+    namespace: META.domain.replace(/\./gi, '_')
+  })
 
   // init app
   const app = express()

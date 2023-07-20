@@ -6,7 +6,6 @@
 
 import { LRUCache } from 'lru-cache'
 import { createClient } from 'redis'
-import { META } from '@/config/app.config'
 
 export type Seconds = number
 
@@ -38,7 +37,7 @@ const getLRUClient = (): CacheClient => {
   }
 }
 
-const getRedisClient = async (): Promise<CacheClient> => {
+const getRedisClient = async (options?: CacheClientOptions): Promise<CacheClient> => {
   // https://github.com/redis/node-redis
   const client = createClient()
   client.on('connect', () => console.info('[Redis]', 'connecting...'))
@@ -48,8 +47,8 @@ const getRedisClient = async (): Promise<CacheClient> => {
   await client.connect()
 
   const getCacheKey = (key: string) => {
-    const cacheKeyPrefix = META.domain.replace(/\./gi, '_')
-    return `__${cacheKeyPrefix}_${key}`
+    const _namespace = options?.namespace ?? 'ssr_app'
+    return `${_namespace}:${key}`
   }
 
   const set: CacheClient['set'] = async (key, value, ttl) => {
@@ -84,10 +83,14 @@ const getRedisClient = async (): Promise<CacheClient> => {
   return { set, get, has, del, clear }
 }
 
-export const createCacheClient = async () => {
+export interface CacheClientOptions {
+  namespace?: string
+}
+
+export const createCacheClient = async (options?: CacheClientOptions) => {
   let cacheClient: CacheClient | null = null
   try {
-    cacheClient = await getRedisClient()
+    cacheClient = await getRedisClient(options)
     console.info('[cache]', 'Redis store readied.')
   } catch (error) {
     cacheClient = getLRUClient()
