@@ -14,7 +14,7 @@
 </script>
 
 <template>
-  <placeholder :loading="fetching" :data="hasData">
+  <placeholder :loading="fetching" :data="hasData || !!$slots.extra">
     <template #loading>
       <ul class="main-skeleton">
         <li v-for="item in skeletonCount" :key="item" class="item">
@@ -34,6 +34,7 @@
     </template>
     <template #default>
       <div class="main">
+        <slot name="extra"></slot>
         <slot name="list"></slot>
         <slot name="pagination"></slot>
       </div>

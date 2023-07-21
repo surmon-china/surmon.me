@@ -17,7 +17,7 @@
   import CommentUserAgent from './user-agent.vue'
   import { CommentEvents, getDisqusUserURL } from '../helper'
 
-  interface Props {
+  const props = defineProps<{
     comment: Comment
     liked?: boolean
     disliked?: boolean
@@ -26,19 +26,9 @@
     hasChild?: boolean
     hiddenAvatar?: boolean
     hiddenUa?: boolean
+    hiddenLocation?: boolean
     plainVote?: boolean
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    liked: false,
-    disliked: false,
-    isReply: false,
-    isChild: false,
-    hasChild: false,
-    hiddenAvatar: false,
-    hiddenUa: false,
-    plainVote: false
-  })
+  }>()
 
   const emit = defineEmits<{
     (e: CommentEvents.Vote, commentId: number, isLike: boolean): void
@@ -156,7 +146,7 @@
               <i18n :k="LanguageKey.COMMENT_MODERATOR" />
             </span>
             <span class="author-info">
-              <template v-if="comment.ip_location">
+              <template v-if="comment.ip_location && !hiddenLocation">
                 <comment-location :location="comment.ip_location" />
               </template>
               <template v-if="comment.agent && !hiddenUa">

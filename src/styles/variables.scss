@@ -100,8 +100,8 @@ $small-breakpoint: 400px;
 $large-breakpoint: $container-width;
 
 // font
-$font-family-base: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue',
-  'Hiragino Sans GB', 'Segoe UI', 'Microsoft YaHei', '微软雅黑', sans-serif;
+$font-family-base: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Hiragino Sans GB',
+  'Segoe UI', 'Microsoft YaHei', '微软雅黑', sans-serif;
 $font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace;
 $font-family-normal: SpecialSymbol, DINRegular, $font-family-base;
 
@@ -142,6 +142,7 @@ $stackoverflow-primary: #e6863d;
 $leetcode-primary: #fea116;
 $quora-primary: #b92b27;
 $linkedin-primary: #478cc5;
+$chatgpt-primary: #00a67e;
 $spotify-primary: #1db954;
 $music163-primary: #c20c0c;
 $youtube-primary: #ec3323;
@@ -154,11 +155,4 @@ $github-primary: #24282d;
 $github-primary-hover: #000;
 $github-sponsor-primary: #ea4aaa;
 $instagram-primary: #ed4956;
-$instagram-gradient: linear-gradient(
-  45deg,
-  #f09433 0%,
-  #e6683c 25%,
-  #dc2743 50%,
-  #cc2366 75%,
-  #bc1888 100%
-);
+$instagram-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);

@@ -137,6 +137,7 @@
           <button class="disqus" @click="handleDisqusThread">
             <i class="iconfont icon-disqus-logo"></i>
           </button>
+          <slot name="extra"></slot>
         </div>
         <div class="user">
           <div class="unlogin" v-if="user.type === UserType.Null">

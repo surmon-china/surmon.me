@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "4.0.3",
+  "version": "4.1.0",
   "description": "Surmon.me blog",
   "author": "Surmon",
   "license": "MIT",
@@ -96,9 +96,9 @@
     "eslint-plugin-vue": "^9.15.1",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.0",
-    "sass": "^1.63.6",
+    "sass": "^1.64.0",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6",
-    "vite": "^4.4.4"
+    "vite": "^4.4.5"
   }
 }

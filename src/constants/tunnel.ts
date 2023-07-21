@@ -6,6 +6,7 @@
 
 export enum TunnelModule {
   WebFont = 'webfont',
+  ChatGPT = 'chatgpt',
   MyGoogleMap = 'my_google_map',
   TwitterAggregate = 'twitter_aggregate',
   YouTubePlaylist = 'youtube_playlist',

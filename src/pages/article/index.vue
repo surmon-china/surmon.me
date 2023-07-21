@@ -4,11 +4,14 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/universal'
   import { useStores } from '/@/stores'
+  import { useChatGPTStore } from '/@/stores/chatgpt'
   import * as ANCHORS from '/@/constants/anchor'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
   import { CUSTOM_ELEMENTS } from '/@/effects/elements'
   import { SocialMedia } from '/@/components/widget/share.vue'
+  import { getChatGPTShareURL } from '/@/transforms/chatgpt'
+  import { getExtendValue } from '/@/transforms/state'
   import Comment from '/@/components/comment/index.vue'
   import ArticleSkeleton from './skeleton.vue'
   import ArticleContent from './content.vue'
@@ -17,6 +20,7 @@
   import ArticleUpvote from './upvote.vue'
   import ArticleRelated from './related.vue'
   import ArticleNeighbour from './neighbour.vue'
+  import ArticleChatgpt from './chatgpt.vue'
 
   const props = defineProps<{
     articleId: number
@@ -27,6 +31,24 @@
   const { identity, sponsor, comment: commentStore, articleDetail: articleDetailStore } = useStores()
   const { article, fetching, prevArticle, nextArticle, relatedArticles } = storeToRefs(articleDetailStore)
   const isLiked = computed(() => Boolean(article.value && identity.isLikedPage(article.value.id)))
+
+  // fot ChatGPT
+  const chatgptStore = useChatGPTStore()
+  const articleChatGPTShareId = computed(() => {
+    return getExtendValue(article.value?.extends || [], 'chatgpt-share-id')
+  })
+
+  const handleCommentTopBarChatGPTClick = () => {
+    gtag?.event('chatgpt_comemnt_top_bar', {
+      event_category: GAEventCategories.Comment
+    })
+  }
+
+  const handleCommentUsernameChatGPTClick = () => {
+    gtag?.event('chatgpt_comemnt_name_link', {
+      event_category: GAEventCategories.Comment
+    })
+  }
 
   const handleSponsor = () => {
     sponsor.fetch()
@@ -56,10 +78,13 @@
   }
 
   const fetchArticleDetail = (articleId: number) => {
-    return Promise.all([
-      articleDetailStore.fetchCompleteArticle(articleId),
-      commentStore.fetchList({ post_id: articleId })
-    ])
+    const commentRequest = commentStore.fetchList({ post_id: articleId })
+    const articleRequest = articleDetailStore.fetchCompleteArticle(articleId).then(() => {
+      if (articleChatGPTShareId.value) {
+        return chatgptStore.fetch(articleChatGPTShareId.value).catch(() => {})
+      }
+    })
+    return Promise.all([articleRequest, commentRequest])
   }
 
   const customElementsStyle = shallowRef<string | null>(null)
@@ -149,7 +174,25 @@
       </template>
     </placeholder>
     <div class="comment">
-      <comment :plain="isMobile" :fetching="fetching" :post-id="articleId" />
+      <comment :plain="isMobile" :fetching="fetching" :post-id="articleId">
+        <template #topbar-extra v-if="articleChatGPTShareId">
+          <ulink
+            class="chat-gpt-link"
+            :href="getChatGPTShareURL(articleChatGPTShareId)"
+            @click="handleCommentTopBarChatGPTClick"
+          >
+            <i class="iconfont icon-chat-gpt"></i>
+          </ulink>
+        </template>
+        <template #list-top-extra v-if="articleChatGPTShareId && chatgptStore.data">
+          <article-chatgpt
+            :share-id="articleChatGPTShareId"
+            :data="chatgptStore.data"
+            :hidden-avatar="isMobile"
+            @click-link="handleCommentUsernameChatGPTClick"
+          />
+        </template>
+      </comment>
     </div>
   </div>
 </template>
@@ -191,6 +234,19 @@
         }
         &.right {
           right: $distance;
+        }
+      }
+    }
+
+    .comment {
+      .chat-gpt-link {
+        margin-left: 1rem;
+        width: 2em;
+        border-radius: 2px;
+        text-align: center;
+        background-color: $module-bg-darker-1;
+        &:hover {
+          background-color: $chatgpt-primary;
         }
       }
     }

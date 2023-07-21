@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### v4.1.0 (2023-07-21)
+
+**Feature**
+
+- Improve BFF cache
+- Add ChatGPT comment
+
 ### v4.0.0 (2023-07-13)
 
 **Feature**

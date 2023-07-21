@@ -240,7 +240,11 @@
       :plain="plain"
       :sort="commentState.sort"
       @sort="fetchSortComments"
-    />
+    >
+      <template #extra>
+        <slot name="topbar-extra"></slot>
+      </template>
+    </comment-topbar>
     <divider class="divider" size="lg" />
     <comment-publisher-main :fetching="fetching">
       <comment-publisher
@@ -270,6 +274,10 @@
       :skeleton-count="plain ? 3 : 5"
       :has-data="Boolean(commentStore.commentTreeList.length)"
     >
+      <template #extra v-if="!!$slots['list-top-extra']">
+        <slot name="list-top-extra"></slot>
+        <divider class="divider" size="lg" />
+      </template>
       <template #list>
         <comment-list
           :comments="commentStore.commentTreeList"
