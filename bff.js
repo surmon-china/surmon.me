@@ -122,6 +122,7 @@ const getLocalApiURL = () => process.env.VITE_API_LOCAL_URL;
 var TunnelModule;
 (function (TunnelModule) {
     TunnelModule["WebFont"] = "webfont";
+    TunnelModule["ChatGPT"] = "chatgpt";
     TunnelModule["MyGoogleMap"] = "my_google_map";
     TunnelModule["TwitterAggregate"] = "twitter_aggregate";
     TunnelModule["YouTubePlaylist"] = "youtube_playlist";
@@ -473,6 +474,52 @@ const getMyGoogleMap = () => {
     });
     return external_axios_namespaceObject["default"].get(VALUABLE_LINKS.GOOGLE_MY_MAP_KML, { timeout: 6000 })
         .then((response) => parser.parse(response.data).kml.Document);
+};
+
+;// CONCATENATED MODULE: ./src/transforms/chatgpt.ts
+/**
+ * @file ChatGPT url
+ * @author Surmon <https://github.com/surmon-china>
+ */
+// https://help.openai.com/en/articles/7925741-chatgpt-shared-links-faq#h_1ed51a9a7d
+const getChatGPTShareURL = (shareId) => {
+    return `https://chat.openai.com/share/${shareId}`;
+};
+
+;// CONCATENATED MODULE: ./src/server/getters/chatgpt.ts
+/**
+ * @file ChatGPT getter
+ * @module server.getter.chatgpt
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
+
+const getChatGPTShareLink = async (shareId) => {
+    const { data: html } = await external_axios_namespaceObject["default"].get(getChatGPTShareURL(shareId), { timeout: 6000 });
+    if (!html) {
+        throw new Error('ChatGPT share link not found.');
+    }
+    // The code implementation here is coupled to the way the ChatGPT website works, which may change at any time, but exposes a consistent interface to clients
+    const regex = /<script id="__NEXT_DATA__" type="application\/json">([\s\S]*?)<\/script>/;
+    const matched = html.match(regex)?.[0]?.replace(regex, '$1');
+    if (!matched) {
+        throw new Error('ChatGPT data not found.');
+    }
+    const parsedJSON = JSON.parse(matched);
+    const data = parsedJSON.props.pageProps.serverResponse.data;
+    const firstAnswer = data.linear_conversation.find((conversion) => {
+        return conversion?.message?.author?.role === 'assistant';
+    });
+    if (!firstAnswer) {
+        throw new Error('ChatGPT first answer not found.');
+    }
+    return {
+        model: data.model.title,
+        title: data.title,
+        created_at: data.create_time,
+        updated_at: data.update_time,
+        first_answer: firstAnswer.message.content.parts[0]
+    };
 };
 
 ;// CONCATENATED MODULE: external "yargs"
@@ -1379,7 +1426,6 @@ const external_redis_namespaceObject = external_redis_x({ ["createClient"]: () =
  */
 
 
-
 const getLRUClient = () => {
     // https://github.com/isaacs/node-lru-cache
     const lruCache = new external_lru_cache_namespaceObject.LRUCache({ max: 500 });
@@ -1399,7 +1445,7 @@ const getLRUClient = () => {
         clear: async () => lruCache.clear()
     };
 };
-const getRedisClient = async () => {
+const getRedisClient = async (options) => {
     // https://github.com/redis/node-redis
     const client = (0,external_redis_namespaceObject.createClient)();
     client.on('connect', () => console.info('[Redis]', 'connecting...'));
@@ -1408,8 +1454,8 @@ const getRedisClient = async () => {
     client.on('error', (error) => console.warn('[Redis]', 'client error!', error.message || error));
     await client.connect();
     const getCacheKey = (key) => {
-        const cacheKeyPrefix = META.domain.replace(/\./gi, '_');
-        return `__${cacheKeyPrefix}_${key}`;
+        const _namespace = options?.namespace ?? 'ssr_app';
+        return `${_namespace}:${key}`;
     };
     const set = async (key, value, ttl) => {
         const _value = value ? JSON.stringify(value) : '';
@@ -1438,10 +1484,10 @@ const getRedisClient = async () => {
     };
     return { set, get, has, del, clear };
 };
-const createCacheClient = async () => {
+const createCacheClient = async (options) => {
     let cacheClient = null;
     try {
-        cacheClient = await getRedisClient();
+        cacheClient = await getRedisClient(options);
         console.info('[cache]', 'Redis store readied.');
     }
     catch (error) {
@@ -1464,9 +1510,12 @@ const createCacheClient = async () => {
 
 
 
+
 const createExpressApp = async () => {
     // init cache client
-    const cache = await createCacheClient();
+    const cache = await createCacheClient({
+        namespace: META.domain.replace(/\./gi, '_')
+    });
     // init app
     const app = (0,external_express_namespaceObject["default"])();
     const server = external_http_namespaceObject["default"].createServer(app);
@@ -1489,6 +1538,7 @@ const createExpressApp = async () => {
  * @module BFF-server
  * @author Surmon <https://github.com/surmon-china>
  */
+
 
 
 
@@ -1600,6 +1650,23 @@ createExpressApp().then(async ({ app, server, cache }) => {
             getter: getAllWallpapers
         });
     }));
+    // ChatGPT share link
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.ChatGPT}`, (request, response, next) => {
+        const shareId = request.query.id;
+        if (!shareId || typeof shareId !== 'string') {
+            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
+            return;
+        }
+        responser(() => {
+            return cacher({
+                cache,
+                key: `chatgpt_share_${shareId}`,
+                ttl: 60 * 60 * 24 * 7,
+                retryWhen: 60 * 2,
+                getter: () => getChatGPTShareLink(shareId)
+            });
+        })(request, response, next);
+    });
     // My GoogleMap
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.MyGoogleMap}`, responser(() => {
         return cacher({
