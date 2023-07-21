@@ -83,9 +83,9 @@ const external_dotenv_namespaceObject = x({ ["default"]: () => __WEBPACK_EXTERNA
 var external_express_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
 var external_express_y = x => () => x
 const external_express_namespaceObject = external_express_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_express__["default"] });
-;// CONCATENATED MODULE: ./src/environment.ts
+;// CONCATENATED MODULE: ./src/server/environment.ts
 /**
- * @file Dev environment
+ * @file BFF server environment
  * @module environment
  * @author Surmon <https://github.com/surmon-china>
  */
@@ -93,12 +93,10 @@ var NodeEnv;
 (function (NodeEnv) {
     NodeEnv["Development"] = "development";
     NodeEnv["Production"] = "production";
-    NodeEnv["Test"] = "test";
 })(NodeEnv || (NodeEnv = {}));
 const NODE_ENV = process.env.NODE_ENV;
-const isDev = process.env.NODE_ENV === NodeEnv.Development;
-const isProd = process.env.NODE_ENV === NodeEnv.Production;
-const isTest = process.env.NODE_ENV === NodeEnv.Test;
+const isNodeDev = process.env.NODE_ENV === NodeEnv.Development;
+const isNodeProd = process.env.NODE_ENV === NodeEnv.Production;
 
 ;// CONCATENATED MODULE: ./src/config/bff.config.ts
 /**
@@ -192,6 +190,7 @@ const MAPBOX_CONFIG = Object.freeze({
 const IDENTITIES = Object.freeze({
     GOOGLE_ANALYTICS_MEASUREMENT_ID: 'G-R40DDTSYNQ',
     GOOGLE_ADSENSE_CLIENT_ID: 'ca-pub-4710915636313788',
+    SENTRY_PUBLIC_DSN: 'https://4a5f194531fe4527879812e4a4d8cf89@o360897.ingest.sentry.io/4505569138966528',
     YOUTUBE_CHANNEL_ID: 'UCoL-j6T28PLSJ2U6ZdONS0w',
     MUSIC_163_BGM_ALBUM_ID: '638949385',
     DOUBAN_USER_ID: '56647958',
@@ -248,13 +247,13 @@ const external_path_namespaceObject = external_path_x({ ["default"]: () => __WEB
 const getNodePressAPI = () => {
     const local = getLocalApiURL();
     const online = getOnlineApiURL();
-    return isDev ? local : online;
+    return isNodeDev ? local : online;
 };
 const ROOT_PATH = process.cwd();
 const DIST_PATH = external_path_namespaceObject["default"].join(ROOT_PATH, 'dist');
 const PRDO_CLIENT_PATH = external_path_namespaceObject["default"].join(DIST_PATH, 'client');
 const PRDO_SERVER_PATH = external_path_namespaceObject["default"].join(DIST_PATH, 'server');
-const PUBLIC_PATH = isDev ? external_path_namespaceObject["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;
+const PUBLIC_PATH = isNodeDev ? external_path_namespaceObject["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;
 
 ;// CONCATENATED MODULE: ./src/server/helpers/route.ts
 /**
@@ -574,7 +573,7 @@ const getSotweAggregate = async (twitterUsername) => {
         const target = `https://api.sotwe.com/v3/user/${twitterUsername}`;
         const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`;
         // To avoid wasting request credits, tokens are not used in development environments
-        const response = await external_axios_namespaceObject["default"].get(isDev ? target : scraper);
+        const response = await external_axios_namespaceObject["default"].get(isNodeDev ? target : scraper);
         return response.data;
     }
     catch (error) {
@@ -1372,7 +1371,7 @@ const proxyer = () => {
         response.end('Proxy error: ' + error.message);
     });
     return (request, response) => {
-        if (isProd) {
+        if (isNodeProd) {
             const referer = request.headers.referrer || request.headers.referer;
             const origin = request.headers.origin;
             const isAllowedReferer = !referer || BFF_PROXY_ALLOWLIST.some((i) => referer.startsWith(i));
@@ -1792,7 +1791,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
         })(request, response, next);
     });
     // vue renderer
-    await (isDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache));
+    await (isNodeDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache));
     // run
     server.listen(getBFFServerPort(), () => {
         const infos = [

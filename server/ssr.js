@@ -152,6 +152,7 @@ const MAPBOX_CONFIG = Object.freeze({
 const IDENTITIES = Object.freeze({
   GOOGLE_ANALYTICS_MEASUREMENT_ID: "G-R40DDTSYNQ",
   GOOGLE_ADSENSE_CLIENT_ID: "ca-pub-4710915636313788",
+  SENTRY_PUBLIC_DSN: "https://4a5f194531fe4527879812e4a4d8cf89@o360897.ingest.sentry.io/4505569138966528",
   YOUTUBE_CHANNEL_ID: "UCoL-j6T28PLSJ2U6ZdONS0w",
   MUSIC_163_BGM_ALBUM_ID: "638949385",
   DOUBAN_USER_ID: "56647958",
@@ -367,6 +368,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
+const APP_ENV = "production";
 const isServer = true;
 const isClient = !isServer;
 const SSR_CONTEXT_KEY = "__INITIAL_SSR_CONTEXT__";
@@ -762,20 +764,14 @@ const numberToChinese = (text, capital = false) => {
   const targetText = capital ? CHINESE_NUMBER_CAPITAL_TEXT : CHINESE_NUMBER_TEXT;
   return String(text).split("").map((number) => targetText[Number(number)]).join("");
 };
-const NODE_ENV = process.env.NODE_ENV;
-const isDev = process.env.NODE_ENV === "development";
-process.env.NODE_ENV === "production";
-process.env.NODE_ENV === "test";
 const API_LOCAL_URL = "http://localhost:8000";
-const API_ONLINE_URL = "https://api.surmon.me";
-const DEV_API = API_ONLINE_URL;
 const PROD_API = API_LOCAL_URL;
 const API_CONFIG = {
   FE: "https://surmon.me",
   CDN: "https://cdn.surmon.me",
   PROXY: "https://cdn.surmon.me/_proxy",
   STATIC: "https://static.surmon.me",
-  NODEPRESS: isDev ? DEV_API : PROD_API
+  NODEPRESS: PROD_API
 };
 const highlightLangPrefix = "language-";
 const marked = new Marked(
@@ -6476,7 +6472,7 @@ const getGravatarByHash = (hash) => {
     return getDefaultAvatar();
   }
   const target = `https://www.gravatar.com/avatar/${hash}`;
-  return isDev ? target : getProxyURL(target, ProxyModule.Default);
+  return getProxyURL(target, ProxyModule.Default);
 };
 const getDisqusAvatarByUsername = (username) => {
   const target = `https://disqus.com/api/users/avatars/${username}.jpg`;
@@ -13453,6 +13449,9 @@ function useSeo(source) {
     })
   );
 }
+const NODE_ENV = process.env.NODE_ENV;
+process.env.NODE_ENV === "development";
+process.env.NODE_ENV === "production";
 const _sfc_main$B = /* @__PURE__ */ defineComponent({
   __name: "webfont",
   __ssrInlineRender: true,
@@ -17325,7 +17324,7 @@ _sfc_main.setup = (props, ctx) => {
   (ssrContext2.modules || (ssrContext2.modules = /* @__PURE__ */ new Set())).add("src/app/index.vue");
   return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };
-console.info(`[APP INITED]:`, { NODE_ENV }, API_CONFIG);
+console.info(`[APP INITED]:`, { APP_ENV, NODE_ENV }, API_CONFIG);
 const createMainApp = (context) => {
   var _a, _b;
   const app = createSSRApp(_sfc_main);
@@ -17390,7 +17389,6 @@ const createMainApp = (context) => {
     getGlobalHead
   };
 };
-const devDebug = (...args) => isDev && console.debug("-", ...args);
 const getCacheKey = (vueApp, url) => {
   const { i18n, theme, globalState } = vueApp;
   const language = i18n.language.value;
@@ -17421,16 +17419,11 @@ const renderScripts = (data) => {
   ].join("\n");
 };
 const renderHTML = async (mainApp, url) => {
-  devDebug(`renderHTML: ${url}`);
   const { app, router, store, head, theme, globalState } = mainApp;
-  devDebug("1. route.push.validate");
   await router.push(url);
   await router.isReady();
-  devDebug("2. store.serverInit");
   await store.serverPrefetch();
-  devDebug("3. set layout");
   globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta));
-  devDebug("4. renderToString");
   const ssrContext2 = {};
   const html = await renderToString(app, ssrContext2);
   if (globalState.renderError.value) {
@@ -17438,9 +17431,7 @@ const renderHTML = async (mainApp, url) => {
     newError.code = globalState.renderError.value.code;
     throw newError;
   }
-  devDebug("5. renderHeadString");
   const heads = await renderSSRHead(head);
-  devDebug("6. HTML & SSR context script");
   const scripts = renderScripts({
     heads,
     url,
@@ -17472,7 +17463,6 @@ const renderApp = async (request, cache) => {
   const SUCCESS_STATUS = 200;
   const cacheKey = getCacheKey(app, url);
   const isCached = await cache.has(cacheKey);
-  devDebug("cache key:", cacheKey, isCached);
   if (isCached) {
     const cached = await cache.get(cacheKey);
     return { ...cached, code: SUCCESS_STATUS };
