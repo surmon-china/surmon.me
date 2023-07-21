@@ -81,7 +81,9 @@
     const commentRequest = commentStore.fetchList({ post_id: articleId })
     const articleRequest = articleDetailStore.fetchCompleteArticle(articleId).then(() => {
       if (articleChatGPTShareId.value) {
-        return chatgptStore.fetch(articleChatGPTShareId.value).catch(() => {})
+        return chatgptStore.fetch(articleChatGPTShareId.value).catch((error) => {
+          console.warn('[Article] fetch chatgpt error', error?.message ?? error)
+        })
       }
     })
     return Promise.all([articleRequest, commentRequest])
@@ -247,6 +249,7 @@
         background-color: $module-bg-darker-1;
         &:hover {
           background-color: $chatgpt-primary;
+          color: $white;
         }
       }
     }
