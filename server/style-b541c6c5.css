@@ -3887,12 +3887,12 @@
 }
 .gpt-comment.hide-avatar .gpt-body[data-v-3296b32d] {
   padding: 0.618rem 1rem;
-}.center-placeholder[data-v-12179f13] {
+}.center-placeholder[data-v-ede5e051] {
   width: 100%;
   height: auto;
   position: relative;
 }
-.center-placeholder[data-v-12179f13]::before {
+.center-placeholder[data-v-ede5e051]::before {
   content: attr(placeholder);
   position: absolute;
   text-align: center;
@@ -3906,48 +3906,49 @@
   letter-spacing: 0.2em;
   transform: translate(-50%, -50%);
 }
-.article-page .module[data-v-12179f13] {
+.article-page .module[data-v-ede5e051] {
   position: relative;
 }
-.article-page .module.margin[data-v-12179f13] {
+.article-page .module.margin[data-v-ede5e051] {
   margin-bottom: 1.236rem;
 }
-.article-page .module.background[data-v-12179f13] {
+.article-page .module.background[data-v-ede5e051] {
   border-radius: 4px;
   background-color: var(--module-bg);
   transition: background-color 0.25s;
 }
-.article-page .module.background[data-v-12179f13]:hover {
+.article-page .module.background[data-v-ede5e051]:hover {
   background-color: var(--module-bg-opaque);
 }
-.article-page .module.overflow[data-v-12179f13] {
+.article-page .module.overflow[data-v-ede5e051] {
   overflow: hidden;
 }
-.article-page .module .divider[data-v-12179f13] {
+.article-page .module .divider[data-v-ede5e051] {
   border-top: 2px dotted var(--module-bg-darker-1);
 }
-.article-page .module .bridge[data-v-12179f13] {
+.article-page .module .bridge[data-v-ede5e051] {
   position: absolute;
   top: -1.236rem;
   width: 1.236rem;
   height: 1.236rem;
   background: linear-gradient(to bottom, var(--module-bg), var(--module-bg-darker-1));
 }
-.article-page .module .bridge.left[data-v-12179f13] {
+.article-page .module .bridge.left[data-v-ede5e051] {
   left: 3rem;
 }
-.article-page .module .bridge.right[data-v-12179f13] {
+.article-page .module .bridge.right[data-v-ede5e051] {
   right: 3rem;
 }
-.article-page .comment .chat-gpt-link[data-v-12179f13] {
+.article-page .comment .chat-gpt-link[data-v-ede5e051] {
   margin-left: 1rem;
   width: 2em;
   border-radius: 2px;
   text-align: center;
   background-color: var(--module-bg-darker-1);
 }
-.article-page .comment .chat-gpt-link[data-v-12179f13]:hover {
+.article-page .comment .chat-gpt-link[data-v-ede5e051]:hover {
   background-color: #00a67e;
+  color: #ffffff;
 }.center-placeholder[data-v-3e3f29b2] {
   width: 100%;
   height: auto;
