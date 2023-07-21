@@ -1,9 +1,9 @@
 /**
- * @file Outside
- * @module transform.outside
+ * @file Google Analytics
+ * @module transform.gtag
  * @author Surmon <https://github.com/surmon-china>
  */
 
-export const getGaScriptURL = (measurementID: string) => {
-  return `https://www.googletagmanager.com/gtag/js?id=${measurementID}`
+export const getGaScriptURL = (measurementId: string) => {
+  return `https://www.googletagmanager.com/gtag/js?id=${measurementId}`
 }

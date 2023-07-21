@@ -56,10 +56,10 @@ app.use(lozad, { exportToGlobal: true })
 app.use(defer, { exportToGlobal: true })
 app.use(popup, { exportToGlobal: true })
 app.use(loading, { exportToGlobal: true })
-app.use(adsense, { id: IDENTITIES.GOOGLE_ADSENSE_PUBLISHER_ID, enabledAutoAd: true })
+app.use(adsense, { id: IDENTITIES.GOOGLE_ADSENSE_CLIENT_ID, enabledAutoAd: true })
 app.use(gtag, {
   router,
-  id: IDENTITIES.GOOGLE_ANALYTICS_TRACKING_ID,
+  id: IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID,
   config: { send_page_view: false },
   customResourceURL: getCDN_URL('/effects/gtag')
 })
