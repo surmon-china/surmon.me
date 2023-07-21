@@ -1,6 +1,6 @@
 import axios, { isAxiosError } from 'axios'
 import { SOTWE_SCRAPER_TOKEN } from '@/config/bff.yargs'
-import { isDev } from '@/environment'
+import { isNodeDev } from '@/server/environment'
 
 export interface SotweUserInfo {
   name: string
@@ -120,7 +120,7 @@ export const getSotweAggregate = async (twitterUsername: string): Promise<SotweA
     const target = `https://api.sotwe.com/v3/user/${twitterUsername}`
     const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`
     // To avoid wasting request credits, tokens are not used in development environments
-    const response = await axios.get<SotweAggregate>(isDev ? target : scraper)
+    const response = await axios.get<SotweAggregate>(isNodeDev ? target : scraper)
     return response.data
   } catch (error: unknown) {
     throw isAxiosError(error) ? error.toJSON() : error

@@ -9,8 +9,8 @@ import { RequestHandler } from 'express'
 import { ProxyModule } from '@/constants/proxy'
 import { FORBIDDEN, BAD_REQUEST, INVALID_ERROR } from '@/constants/error'
 import { BFF_PROXY_PREFIX, BFF_PROXY_ALLOWLIST } from '@/config/bff.config'
+import { isNodeProd } from '@/server/environment'
 import { META } from '@/config/app.config'
-import { isProd } from '@/environment'
 
 const proxyOriginMap = new Map([
   [ProxyModule.Default, META.url],
@@ -69,7 +69,7 @@ export const proxyer = (): RequestHandler => {
   })
 
   return (request, response) => {
-    if (isProd) {
+    if (isNodeProd) {
       const referer = (request.headers.referrer as string) || request.headers.referer
       const origin = request.headers.origin
       const isAllowedReferer = !referer || BFF_PROXY_ALLOWLIST.some((i) => referer.startsWith(i))

@@ -4,8 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { isDev } from '/@/environment'
-import { isServer } from '/@/app/environment'
+import { isServer, isDev } from '/@/app/environment'
 
 // common
 const API_PROXY_URL = import.meta.env.VITE_API_PROXY_URL as string

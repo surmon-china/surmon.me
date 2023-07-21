@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v4.2.0 (2023-07-22)
+
+**Feature**
+
+- Using Sentry as a monitoring tool
+
 ### v4.1.0 (2023-07-21)
 
 **Feature**

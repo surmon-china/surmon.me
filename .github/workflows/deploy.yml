@@ -31,6 +31,8 @@ jobs:
 
       - name: SSR build
         run: pnpm run build
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Release branch
         uses: peaceiris/actions-gh-pages@v3

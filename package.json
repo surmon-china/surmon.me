@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "4.1.2",
+  "version": "4.2.0",
   "description": "Surmon.me blog",
   "author": "Surmon",
   "license": "MIT",
@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@braintree/sanitize-url": "^6.0.2",
+    "@sentry/vue": "^7.60.0",
     "@unhead/ssr": "^1.1.32",
     "@unhead/vue": "^1.1.32",
     "amplitudejs": "^5.3.2",
@@ -68,6 +69,7 @@
   "devDependencies": {
     "@bleed-believer/path-alias": "^0.15.2",
     "@esbuild-kit/esm-loader": "^2.5.5",
+    "@sentry/vite-plugin": "^2.4.0",
     "@types/compression": "^1.7.2",
     "@types/cookie-parser": "^1.4.3",
     "@types/express": "^4.17.17",

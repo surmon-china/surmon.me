@@ -15,7 +15,7 @@ import { Theme, THEME_STORAGE_KEY } from '/@/composables/theme'
 import { renderSSRContextScript, getSSRContextByApp } from '/@/universal'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
 import type { CacheClient } from '/@/server/cache'
-import { isDev } from '/@/environment'
+import { isDev } from '/@/app/environment'
 
 const devDebug = (...args) => isDev && console.debug('-', ...args)
 

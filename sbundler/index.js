@@ -2,8 +2,8 @@ import fs from 'fs-extra'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { bundleBFFServer } from './step-bff.js'
-import { bundleSSRClent } from './step-client.js'
-import { bundleServerRender } from './step-server-render.js'
+import { bundleClientRender } from './step-client.js'
+import { bundleServerRender } from './step-server.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const packageJSON = fs.readJSONSync(path.resolve(__dirname, '..', 'package.json'))
@@ -34,7 +34,7 @@ const DIR_PATHS = {
 
     // 3. SSR client
     console.log('2. Client render bundling...\n')
-    await bundleSSRClent(DIR_PATHS)
+    await bundleClientRender(DIR_PATHS)
     // rename
     await fs.rename(path.resolve(DIR_PATHS.client, 'index.html'), path.resolve(DIR_PATHS.client, 'template.html'))
     // and move to the dist root dir

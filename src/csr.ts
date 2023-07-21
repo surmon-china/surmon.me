@@ -7,6 +7,7 @@
 // polyfills
 import 'intersection-observer'
 
+import * as Sentry from '@sentry/vue'
 import { computed, watch } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { createMainApp } from '/@/app/main'
@@ -28,8 +29,9 @@ import { exportEmojiRainToGlobal } from '/@/effects/emoji-23333'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
 import { getCDN_URL } from '/@/transforms/url'
 import { Language, LanguageKey } from '/@/language'
+import { APP_ENV, isDev, isProd } from '/@/app/environment'
 import { IDENTITIES } from '/@/config/app.config'
-import { isProd } from '/@/environment'
+import API_CONFIG from '/@/config/api.config'
 
 import './effects/swiper/style'
 import './effects/elements/index.scss'
@@ -85,6 +87,24 @@ router.beforeEach((_, __, next) => {
 })
 router.afterEach((_, __, failure) => {
   failure ? loading.fail(failure) : loading.finish()
+})
+
+// init: sentry
+Sentry.init({
+  app,
+  dsn: IDENTITIES.SENTRY_PUBLIC_DSN,
+  environment: APP_ENV,
+  tracesSampleRate: isDev ? 1.0 : 0.2,
+  replaysSessionSampleRate: isDev ? 0.8 : 0.1,
+  replaysOnErrorSampleRate: 1.0,
+  integrations: [
+    new Sentry.Replay(),
+    new Sentry.BrowserTracing({
+      // https://docs.sentry.io/platforms/javascript/performance/instrumentation/automatic-instrumentation/#tracepropagationtargets
+      tracePropagationTargets: ['localhost', /^\//, new RegExp('^' + API_CONFIG.NODEPRESS.replaceAll('.', '\\.'))],
+      routingInstrumentation: Sentry.vueRouterInstrumentation(router)
+    })
+  ]
 })
 
 // router ready -> mount

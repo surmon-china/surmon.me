@@ -6,7 +6,7 @@
 
 import dotenv from 'dotenv'
 import express from 'express'
-import { NODE_ENV, isDev } from '@/environment'
+import { NODE_ENV, isNodeDev } from '@/server/environment'
 import { BFF_TUNNEL_PREFIX, getBFFServerPort } from '@/config/bff.config'
 import { TunnelModule } from '@/constants/tunnel'
 import { BAD_REQUEST } from '@/constants/error'
@@ -314,7 +314,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   // vue renderer
-  await (isDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache))
+  await (isNodeDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache))
 
   // run
   server.listen(getBFFServerPort(), () => {
