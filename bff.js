@@ -190,8 +190,8 @@ const MAPBOX_CONFIG = Object.freeze({
     CENTER: [121.4930539351185, 31.227570979004497]
 });
 const IDENTITIES = Object.freeze({
-    GOOGLE_ANALYTICS_TRACKING_ID: 'UA-84887611-3',
-    GOOGLE_ADSENSE_PUBLISHER_ID: 'ca-pub-4710915636313788',
+    GOOGLE_ANALYTICS_MEASUREMENT_ID: 'G-R40DDTSYNQ',
+    GOOGLE_ADSENSE_CLIENT_ID: 'ca-pub-4710915636313788',
     YOUTUBE_CHANNEL_ID: 'UCoL-j6T28PLSJ2U6ZdONS0w',
     MUSIC_163_BGM_ALBUM_ID: '638949385',
     DOUBAN_USER_ID: '56647958',
@@ -388,12 +388,12 @@ const getSitemapXml = async () => {
 
 ;// CONCATENATED MODULE: ./src/transforms/gtag.ts
 /**
- * @file Outside
- * @module transform.outside
+ * @file Google Analytics
+ * @module transform.gtag
  * @author Surmon <https://github.com/surmon-china>
  */
-const getGaScriptURL = (measurementID) => {
-    return `https://www.googletagmanager.com/gtag/js?id=${measurementID}`;
+const getGaScriptURL = (measurementId) => {
+    return `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
 };
 
 ;// CONCATENATED MODULE: ./src/server/getters/gtag.ts
@@ -406,7 +406,7 @@ const getGaScriptURL = (measurementID) => {
 
 
 const getGTagScript = async () => {
-    const url = getGaScriptURL(IDENTITIES.GOOGLE_ANALYTICS_TRACKING_ID);
+    const url = getGaScriptURL(IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID);
     const response = await external_axios_namespaceObject["default"].get(url, { timeout: 6000 });
     return response.data;
 };
