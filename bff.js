@@ -1164,6 +1164,7 @@ const enableProdRenderer = async (app, cache) => {
     const { renderApp, renderError } = await _import(external_path_namespaceObject["default"].resolve(PRDO_SERVER_PATH, 'ssr.js'));
     // const { renderApp, renderError } = require(path.resolve(PRDO_SERVER_PATH, 'ssr.js'))
     app.use('*', async (request, response) => {
+        console.log('----request headers', request.headers)
         try {
             const redered = await renderApp(request, cache);
             response
