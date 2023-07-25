@@ -847,6 +847,7 @@ const createRenderer = (options) => {
     const source = (_a = sanitizeUrl(src)) == null ? void 0 : _a.replace(/^http:\/\//gi, `${API_CONFIG.PROXY}/`);
     const titleValue = sanitizeHTML(escape(title || alt));
     const altValue = sanitizeHTML(escape(alt));
+    const sourceValue = (options == null ? void 0 : options.imageSource) ? options.imageSource(source) : source;
     return trimHTML(`
       <div class="figure-wrapper">
         <figure class="image ${altValue ? "caption" : ""}" data-status="loading">
@@ -861,7 +862,7 @@ const createRenderer = (options) => {
           </div>
           <img
             class="${LOZAD_CLASS_NAME}"
-            data-src="${source}"
+            data-src="${sourceValue}"
             ${altValue ? `alt="${altValue}"` : ""}
             ${titleValue ? `title="${titleValue}"` : ""}
             onload="this.parentElement.dataset.status = 'loaded'"
@@ -904,7 +905,8 @@ const markdownToHTML = (markdown, options) => {
   }
   const renderOptions = {
     sanitize: (options == null ? void 0 : options.sanitize) ?? false,
-    headingId: options == null ? void 0 : options.headingIdGetter
+    headingId: options == null ? void 0 : options.headingIdGetter,
+    imageSource: options == null ? void 0 : options.imageSourceGetter
   };
   return marked.parse(markdown, { renderer: createRenderer(renderOptions) });
 };
@@ -1181,10 +1183,11 @@ const useArticleListStore = defineStore("articleList", () => {
     data
   };
 });
-const renderArticleMarkdown = (markdown) => {
+const renderArticleMarkdown = (markdown, imageSourceGetter) => {
   const headings = [];
   const html = markdownToHTML(markdown, {
     sanitize: false,
+    imageSourceGetter,
     headingIdGetter: (_, level, raw) => {
       const text = raw.toLowerCase().replace(/[^a-zA-Z0-9\u4E00-\u9FA5]+/g, "-");
       const id = getArticleContentHeadingElementId(level, text);
@@ -1195,6 +1198,7 @@ const renderArticleMarkdown = (markdown) => {
   return { html, headings };
 };
 const useArticleDetailStore = defineStore("articleDetail", () => {
+  const gState = useGlobalState();
   const fetching = ref(false);
   const article = ref(null);
   const prevArticle = shallowRef(null);
@@ -1225,12 +1229,19 @@ const useArticleDetailStore = defineStore("articleDetail", () => {
     const splitIndex2 = Math.max(lastH5Index, lastH4Index, lastH3Index, lastLineIndex);
     return splitIndex2;
   });
+  const optimizeImageSource = (src) => {
+    if (gState.isCNUser && src.startsWith(API_CONFIG.STATIC_GLO)) {
+      return src.replace(API_CONFIG.STATIC_GLO, API_CONFIG.STATIC_CN);
+    } else {
+      return src;
+    }
+  };
   const defaultContent = computed(() => {
     if (!article.value) {
       return null;
     }
     const markdown = isLongContent.value ? article.value.content.substring(0, splitIndex.value) : article.value.content;
-    const { html, headings } = renderArticleMarkdown(markdown);
+    const { html, headings } = renderArticleMarkdown(markdown, optimizeImageSource);
     return { markdown, html, headings };
   });
   const moreContent = computed(() => {
@@ -1238,7 +1249,7 @@ const useArticleDetailStore = defineStore("articleDetail", () => {
       return null;
     }
     const markdown = article.value.content.substring(splitIndex.value);
-    const { html, headings } = renderArticleMarkdown(markdown);
+    const { html, headings } = renderArticleMarkdown(markdown, optimizeImageSource);
     return { markdown, html, headings };
   });
   const renderFullContent = () => {
@@ -17421,9 +17432,9 @@ const createMainApp = (context) => {
     return {
       htmlAttrs: {
         lang: ((_a2 = i18n.l.value) == null ? void 0 : _a2.iso) ?? "",
-        "data-country": context.country,
         "data-theme": theme.theme.value,
-        "data-device": globalState.userAgent.isMobile ? "mobile" : "desktop"
+        "data-device": globalState.userAgent.isMobile ? "mobile" : "desktop",
+        "data-region": globalState.isCNUser ? "cn" : "global"
       }
     };
   };
@@ -17465,7 +17476,8 @@ const getCacheKey = (vueApp, url) => {
   const language = i18n.language.value;
   const themeValue = theme.theme.value;
   const device = globalState.userAgent.isMobile ? "mobile" : "desktop";
-  return `ssr_${language}_${device}_${themeValue}_${url}`;
+  const region = globalState.isCNUser ? "cn" : "global";
+  return `ssr_${language}_${region}_${device}_${themeValue}_${url}`;
 };
 const createApp = (request) => {
   const { headers } = request;
