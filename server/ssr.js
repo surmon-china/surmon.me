@@ -17352,6 +17352,7 @@ const createMainApp = (context) => {
     return {
       htmlAttrs: {
         lang: ((_a2 = i18n.l.value) == null ? void 0 : _a2.iso) ?? "",
+        "data-country": context.country,
         "data-theme": theme.theme.value,
         "data-device": globalState.userAgent.isMobile ? "mobile" : "desktop"
       }
@@ -17386,6 +17387,7 @@ const createMainApp = (context) => {
     i18n,
     head,
     theme,
+    country: context.country,
     getGlobalHead
   };
 };
@@ -17402,6 +17404,7 @@ const createApp = (request) => {
     historyCreator: createMemoryHistory,
     language: headers["accept-language"],
     userAgent: headers["user-agent"],
+    country: headers["country-code"] || "global",
     theme: request.cookies[THEME_STORAGE_KEY] || Theme.Light
   });
   const hackDirectives = ["lozad"];
@@ -17419,7 +17422,7 @@ const renderScripts = (data) => {
   ].join("\n");
 };
 const renderHTML = async (mainApp, url) => {
-  const { app, router, store, head, theme, globalState } = mainApp;
+  const { app, router, store, head, theme, country, globalState } = mainApp;
   await router.push(url);
   await router.isReady();
   await store.serverPrefetch();
@@ -17435,6 +17438,7 @@ const renderHTML = async (mainApp, url) => {
   const scripts = renderScripts({
     heads,
     url,
+    country,
     layout: globalState.layoutColumn.value.layout,
     theme: theme.theme.value,
     store: store.state.value,
@@ -17443,7 +17447,7 @@ const renderHTML = async (mainApp, url) => {
   return { html, heads, scripts };
 };
 const renderError = async (request, error) => {
-  const { app, head, globalState, theme } = createApp(request);
+  const { app, head, globalState, theme, country } = createApp(request);
   globalState.setRenderError(error);
   head.push({ title: `Server Error: ${(error == null ? void 0 : error.message) || String(error) || "unknow"}` });
   return {
@@ -17451,6 +17455,7 @@ const renderError = async (request, error) => {
     html: await renderToString(app),
     heads: await renderSSRHead(head),
     scripts: renderScripts({
+      country,
       theme: theme.theme.value,
       ...getSSRContextByApp(app)
     })
