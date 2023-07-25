@@ -5141,12 +5141,12 @@
   width: 100%;
   height: 100%;
   border-radius: 2px;
-}.center-placeholder[data-v-97851900] {
+}.center-placeholder[data-v-0817cc60] {
   width: 100%;
   height: auto;
   position: relative;
 }
-.center-placeholder[data-v-97851900]::before {
+.center-placeholder[data-v-0817cc60]::before {
   content: attr(placeholder);
   position: absolute;
   text-align: center;
@@ -5160,10 +5160,10 @@
   letter-spacing: 0.2em;
   transform: translate(-50%, -50%);
 }
-.guestbook-page .mobile-banner[data-v-97851900] {
+.guestbook-page .mobile-banner[data-v-0817cc60] {
   margin-bottom: 1.236rem;
 }
-.guestbook-page .desktop-banner[data-v-97851900] {
+.guestbook-page .desktop-banner[data-v-0817cc60] {
   position: relative;
   margin-bottom: 1.236rem;
   width: 100%;
@@ -5173,34 +5173,34 @@
   border-radius: 6px;
   overflow: hidden;
 }
-.guestbook-page .desktop-banner .image[data-v-97851900] {
+.guestbook-page .desktop-banner .image[data-v-0817cc60] {
   margin-top: -6rem;
   transition: all 0.38s;
 }
-.guestbook-page .desktop-banner .image[data-v-97851900]:hover {
+.guestbook-page .desktop-banner .image[data-v-0817cc60]:hover {
   transform: rotate(2deg) scale(1.1);
 }
-.guestbook-page .desktop-banner .like[data-v-97851900] {
+.guestbook-page .desktop-banner .like[data-v-0817cc60] {
   position: absolute;
   left: 2.472rem;
   bottom: 2rem;
   display: inline-flex;
   align-items: center;
 }
-.guestbook-page .desktop-banner .like.liked .icon[data-v-97851900], .guestbook-page .desktop-banner .like:hover .icon[data-v-97851900] {
+.guestbook-page .desktop-banner .like.liked .icon[data-v-0817cc60], .guestbook-page .desktop-banner .like:hover .icon[data-v-0817cc60] {
   color: #ff5722;
 }
-.guestbook-page .desktop-banner .like .icon[data-v-97851900] {
+.guestbook-page .desktop-banner .like .icon[data-v-0817cc60] {
   margin-right: 0.618rem;
   color: rgba(255, 87, 34, 0.6);
   font-size: 20.3px;
   transition: color 0.1s;
 }
-.guestbook-page .desktop-banner .like .count[data-v-97851900] {
+.guestbook-page .desktop-banner .like .count[data-v-0817cc60] {
   color: rgba(255, 255, 255, 0.8);
   font-weight: bold;
 }
-.guestbook-page .desktop-banner .slogan[data-v-97851900] {
+.guestbook-page .desktop-banner .slogan[data-v-0817cc60] {
   display: block;
   position: absolute;
   right: 2.472rem;
@@ -5215,7 +5215,7 @@
   opacity: 0.8;
   cursor: none;
 }
-.guestbook-page .desktop-banner .slogan .text[data-v-97851900] {
+.guestbook-page .desktop-banner .slogan .text[data-v-0817cc60] {
   letter-spacing: 0.3px;
   color: var(--text-color);
   background-clip: text;
@@ -5224,7 +5224,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.guestbook-page .desktop-banner .slogan .text.dark[data-v-97851900] {
+.guestbook-page .desktop-banner .slogan .text.dark[data-v-0817cc60] {
   -webkit-text-fill-color: var(--text-color) !important;
 }.center-placeholder[data-v-1b9cccf5] {
   width: 100%;

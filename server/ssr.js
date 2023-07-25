@@ -34,7 +34,7 @@ import _unescape from "lodash-es/unescape.js";
 import _capitalize from "lodash-es/capitalize.js";
 import _padStart from "lodash-es/padStart.js";
 import axios, { isAxiosError } from "axios";
-import { useHead as useHead$1, useSeoMeta, createHead } from "@unhead/vue";
+import { useHead as useHead$1, createHead } from "@unhead/vue";
 import cookies from "js-cookie";
 import BezierEasing from "bezier-easing";
 import { Swiper } from "swiper";
@@ -11242,7 +11242,9 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
         pageTitle: titles.join(" | "),
         description: `给 ${META.author} 留言`,
         ogType: "website",
-        ogImage: getCDN_URL(bannerImage)
+        ogImage: getCDN_URL(bannerImage),
+        ogImageWidth: 620,
+        ogImageHeight: 350
       };
     });
     useUniversalFetch(() => fetchAllData());
@@ -11251,17 +11253,17 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
       const _component_uimage = resolveComponent("uimage");
       const _component_webfont = resolveComponent("webfont");
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "guestbook-page" }, _attrs))} data-v-97851900>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "guestbook-page" }, _attrs))} data-v-0817cc60>`);
       _push(ssrRenderComponent(_component_responsive, null, {
         desktop: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="desktop-banner" data-v-97851900${_scopeId}>`);
+            _push2(`<div class="desktop-banner" data-v-0817cc60${_scopeId}>`);
             _push2(ssrRenderComponent(_component_uimage, {
               cdn: "",
               class: "image",
               src: bannerImage
             }, null, _parent2, _scopeId));
-            _push2(`<button class="${ssrRenderClass([{ liked: isLiked.value }, "like"])}"${ssrIncludeBooleanAttr(isLiked.value) ? " disabled" : ""} data-v-97851900${_scopeId}><i class="icon iconfont icon-heart" data-v-97851900${_scopeId}></i><span class="count" data-v-97851900${_scopeId}>${ssrInterpolate(isLiked.value ? `${siteLikes.value - 1} + 1` : siteLikes.value)}</span></button><span class="slogan" data-v-97851900${_scopeId}>`);
+            _push2(`<button class="${ssrRenderClass([{ liked: isLiked.value }, "like"])}"${ssrIncludeBooleanAttr(isLiked.value) ? " disabled" : ""} data-v-0817cc60${_scopeId}><i class="icon iconfont icon-heart" data-v-0817cc60${_scopeId}></i><span class="count" data-v-0817cc60${_scopeId}>${ssrInterpolate(isLiked.value ? `${siteLikes.value - 1} + 1` : siteLikes.value)}</span></button><span class="slogan" data-v-0817cc60${_scopeId}>`);
             _push2(ssrRenderComponent(_component_webfont, {
               class: ["text", { dark: unref(isDarkTheme) }]
             }, {
@@ -11374,7 +11376,7 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="comment" data-v-97851900>`);
+      _push(`<div class="comment" data-v-0817cc60>`);
       _push(ssrRenderComponent(Comment, {
         "post-id": 0,
         plain: props.isMobile,
@@ -11384,14 +11386,14 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const guestbook_vue_vue_type_style_index_0_scoped_97851900_lang = "";
+const guestbook_vue_vue_type_style_index_0_scoped_0817cc60_lang = "";
 const _sfc_setup$N = _sfc_main$N.setup;
 _sfc_main$N.setup = (props, ctx) => {
   const ssrContext2 = useSSRContext();
   (ssrContext2.modules || (ssrContext2.modules = /* @__PURE__ */ new Set())).add("src/pages/guestbook.vue");
   return _sfc_setup$N ? _sfc_setup$N(props, ctx) : void 0;
 };
-const GuestbookPage = /* @__PURE__ */ _export_sfc(_sfc_main$N, [["__scopeId", "data-v-97851900"]]);
+const GuestbookPage = /* @__PURE__ */ _export_sfc(_sfc_main$N, [["__scopeId", "data-v-0817cc60"]]);
 const _sfc_main$M = /* @__PURE__ */ defineComponent({
   __name: "app",
   __ssrInlineRender: true,
@@ -13418,36 +13420,39 @@ const DEFAULT_TITLER = (title) => `${title} | ${META.title}`;
 const DEFAULT_OG_IMAGE = getCDN_URL("/images/og-social-card.jpg");
 function useSeo(source) {
   const { i18n, route } = useEnhancer();
-  return useSeoMeta(
-    computed(() => {
-      var _a;
-      const value = typeof source === "function" ? source() : source;
-      const { title, pageTitle, description, keywords, ...sm } = value;
-      const pureTitle = title ?? pageTitle;
-      const fullTitle = title ? title : pageTitle ? DEFAULT_TITLER(pageTitle) : "";
-      return {
-        title: fullTitle,
-        description: description ?? "",
-        keywords: keywords ?? "",
-        twitterSite: `@${IDENTITIES.TWITTER_USER_NAME}`,
-        twitterCreator: IDENTITIES.TWITTER_USER_NAME,
-        twitterCard: "summary_large_image",
-        twitterImage: (sm == null ? void 0 : sm.ogImage) ?? DEFAULT_OG_IMAGE,
-        twitterTitle: (sm == null ? void 0 : sm.ogTitle) ?? fullTitle ?? "",
-        twitterDescription: (sm == null ? void 0 : sm.ogDescription) ?? description ?? "",
-        ogType: (sm == null ? void 0 : sm.ogType) ?? "website",
-        ogSiteName: META.title,
-        ogTitle: (sm == null ? void 0 : sm.ogTitle) ?? pureTitle ?? "",
-        ogDescription: (sm == null ? void 0 : sm.ogDescription) ?? description ?? "",
-        ogUrl: (sm == null ? void 0 : sm.ogUrl) ?? getPageURL(route.fullPath),
-        ogImage: (sm == null ? void 0 : sm.ogImage) ?? DEFAULT_OG_IMAGE,
-        ogImageAlt: (sm == null ? void 0 : sm.ogImageAlt) ?? (sm == null ? void 0 : sm.ogTitle) ?? fullTitle ?? "",
-        ogImageWidth: (sm == null ? void 0 : sm.ogImageWidth) ?? ((sm == null ? void 0 : sm.ogImage) ? "" : "1000"),
-        ogImageHeight: (sm == null ? void 0 : sm.ogImageHeight) ?? ((sm == null ? void 0 : sm.ogImage) ? "" : "526"),
-        ogLocale: ((_a = i18n.l.value) == null ? void 0 : _a.iso) ?? ""
-      };
-    })
-  );
+  const input = computed(() => {
+    const value = typeof source === "function" ? source() : source;
+    const { title, pageTitle, description, keywords, ...rest } = value;
+    const pureTitle = title ?? pageTitle;
+    const fullTitle = title ? title : pageTitle ? DEFAULT_TITLER(pageTitle) : "";
+    return { pureTitle, fullTitle, description, keywords, _: rest };
+  });
+  return useHead({
+    title: computed(() => input.value.fullTitle),
+    meta: [
+      { name: "description", content: () => input.value.description ?? "" },
+      { name: "keywords", content: () => input.value.keywords ?? "" },
+      { name: "twitter:site", content: `@${IDENTITIES.TWITTER_USER_NAME}` },
+      { name: "twitter:creator", content: IDENTITIES.TWITTER_USER_NAME },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: () => input.value._.ogImage ?? DEFAULT_OG_IMAGE },
+      { name: "twitter:title", content: () => input.value._.ogTitle ?? input.value.fullTitle ?? "" },
+      { name: "twitter:description", content: () => input.value._.ogDescription ?? input.value.description ?? "" },
+      { property: "og:site_name", content: () => META.title },
+      { property: "og:type", content: () => input.value._.ogType ?? "website" },
+      { property: "og:title", content: () => input.value._.ogTitle ?? input.value.pureTitle ?? "" },
+      { property: "og:description", content: () => input.value._.ogDescription ?? input.value.description ?? "" },
+      { property: "og:url", content: () => input.value._.ogUrl ?? getPageURL(route.fullPath) },
+      { property: "og:image", content: () => input.value._.ogImage ?? DEFAULT_OG_IMAGE },
+      { property: "og:image:alt", content: () => input.value._.ogImageAlt ?? input.value._.ogTitle ?? input.value.fullTitle ?? "" },
+      { property: "og:image:width", content: () => input.value._.ogImageWidth ?? (input.value._.ogImage ? "" : "1000") },
+      { property: "og:image:height", content: () => input.value._.ogImageHeight ?? (input.value._.ogImage ? "" : "526") },
+      { property: "og:locale", content: () => {
+        var _a;
+        return ((_a = i18n.l.value) == null ? void 0 : _a.iso) ?? "";
+      } }
+    ]
+  });
 }
 const NODE_ENV = process.env.NODE_ENV;
 process.env.NODE_ENV === "development";
