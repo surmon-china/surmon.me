@@ -9,13 +9,15 @@ import { defineStore } from 'pinia'
 import { useFetchStore } from './_fetch'
 import { LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
 import { getArticleContentHeadingElementId } from '/@/constants/anchor'
+import { useGlobalState } from '/@/app/state'
 import { Article } from '/@/interfaces/article'
 import { Pagination, PaginationList } from '/@/interfaces/common'
-import { markdownToHTML } from '/@/transforms/markdown'
+import { markdownToHTML, MarkdownRenderOption } from '/@/transforms/markdown'
 import { delayPromise } from '/@/utils/delayer'
 import { isClient } from '/@/app/environment'
 import { useIdentityStore } from './identity'
 import nodepress from '/@/services/nodepress'
+import API_CONFIG from '/@/config/api.config'
 
 export const ARTICLE_API_PATH = '/article'
 
@@ -76,10 +78,11 @@ interface ArticleHeading {
 }
 
 // Use the parsing capabilities of the marked renderer to store the results in the store..
-const renderArticleMarkdown = (markdown: string) => {
+const renderArticleMarkdown = (markdown: string, imageSourceGetter: MarkdownRenderOption['imageSourceGetter']) => {
   const headings: Array<ArticleHeading> = []
   const html = markdownToHTML(markdown, {
     sanitize: false,
+    imageSourceGetter,
     headingIdGetter: (_, level, raw) => {
       const text = raw.toLowerCase().replace(/[^a-zA-Z0-9\u4E00-\u9FA5]+/g, '-')
       const id = getArticleContentHeadingElementId(level, text)
@@ -92,6 +95,7 @@ const renderArticleMarkdown = (markdown: string) => {
 }
 
 export const useArticleDetailStore = defineStore('articleDetail', () => {
+  const gState = useGlobalState()
   const fetching = ref(false)
   const article = ref<Article | null>(null)
   const prevArticle = shallowRef<Article | null>(null)
@@ -128,6 +132,14 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
     return splitIndex
   })
 
+  const optimizeImageSource = (src: string) => {
+    if (gState.isCNUser && src.startsWith(API_CONFIG.STATIC_GLO)) {
+      return src.replace(API_CONFIG.STATIC_GLO, API_CONFIG.STATIC_CN)
+    } else {
+      return src
+    }
+  }
+
   const defaultContent = computed(() => {
     if (!article.value) {
       return null
@@ -135,7 +147,7 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
     const markdown = isLongContent.value
       ? article.value.content.substring(0, splitIndex.value!)
       : article.value.content
-    const { html, headings } = renderArticleMarkdown(markdown)
+    const { html, headings } = renderArticleMarkdown(markdown, optimizeImageSource)
     return { markdown, html, headings }
   })
 
@@ -144,7 +156,7 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
       return null
     }
     const markdown = article.value.content.substring(splitIndex.value!)
-    const { html, headings } = renderArticleMarkdown(markdown)
+    const { html, headings } = renderArticleMarkdown(markdown, optimizeImageSource)
     return { markdown, html, headings }
   })
 

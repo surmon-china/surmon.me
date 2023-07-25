@@ -16,6 +16,14 @@ export const getStaticURL = (path: string, isCN?: boolean) => {
   return `${isCN ? API_CONFIG.STATIC_CN : API_CONFIG.STATIC_GLO}${path}`
 }
 
+export const reviseStaticURL = (url: string, isCN?: boolean) => {
+  if (url.startsWith(API_CONFIG.STATIC_GLO)) {
+    return getStaticURL(url.replace(API_CONFIG.STATIC_GLO, ''), isCN)
+  } else {
+    return url
+  }
+}
+
 export const getProxyURL = (path: string, module: ProxyModule = ProxyModule.Default) => {
   return `${API_CONFIG.PROXY}/${module}/${encodeURIComponent(path)}`
 }

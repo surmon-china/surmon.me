@@ -67,9 +67,9 @@ export const createMainApp = (context: ICreatorContext) => {
   const getGlobalHead = (): Head => ({
     htmlAttrs: {
       lang: i18n.l.value?.iso ?? '',
-      'data-country': context.country,
       'data-theme': theme.theme.value,
-      'data-device': globalState.userAgent.isMobile ? 'mobile' : 'desktop'
+      'data-device': globalState.userAgent.isMobile ? 'mobile' : 'desktop',
+      'data-region': globalState.isCNUser ? 'cn' : 'global'
     }
   })
 

@@ -67,6 +67,7 @@ const trimHTML = (html: string) => html.replace(/\s+/g, ' ').replace(/\n/g, ' ')
 interface RendererCreatorOptions {
   sanitize: boolean
   text: (text: string) => string
+  imageSource: (src: string) => string
   headingId: (html: string, level: number, raw: string) => string
 }
 
@@ -135,6 +136,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
     const source = sanitizeUrl(src!)?.replace(/^http:\/\//gi, `${API_CONFIG.PROXY}/`)
     const titleValue = sanitizeHTML(escape(title || alt))
     const altValue = sanitizeHTML(escape(alt!))
+    const sourceValue = options?.imageSource ? options.imageSource(source) : source
 
     // figure > alt
     return trimHTML(`
@@ -151,7 +153,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
           </div>
           <img
             class="${LOZAD_CLASS_NAME}"
-            data-src="${source}"
+            data-src="${sourceValue}"
             ${altValue ? `alt="${altValue}"` : ''}
             ${titleValue ? `title="${titleValue}"` : ''}
             onload="this.parentElement.dataset.status = 'loaded'"
@@ -201,6 +203,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
 export interface MarkdownRenderOption {
   sanitize?: boolean
   headingIdGetter?: RendererCreatorOptions['headingId']
+  imageSourceGetter?: RendererCreatorOptions['imageSource']
 }
 
 export const markdownToHTML = (markdown: string, options?: MarkdownRenderOption) => {
@@ -210,7 +213,8 @@ export const markdownToHTML = (markdown: string, options?: MarkdownRenderOption)
 
   const renderOptions: Partial<RendererCreatorOptions> = {
     sanitize: options?.sanitize ?? false,
-    headingId: options?.headingIdGetter
+    headingId: options?.headingIdGetter,
+    imageSource: options?.imageSourceGetter
   }
 
   return marked.parse(markdown, { renderer: createRenderer(renderOptions) })
