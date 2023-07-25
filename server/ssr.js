@@ -471,6 +471,9 @@ const isTargetLanguageUser = (language, targetLang) => {
 const isZhUser = (language) => {
   return language ? isTargetLanguageUser(language, Language.Chinese) : true;
 };
+const isCNCode = (code) => {
+  return code === "CN";
+};
 var LayoutColumn = /* @__PURE__ */ ((LayoutColumn2) => {
   LayoutColumn2[LayoutColumn2["Normal"] = 0] = "Normal";
   LayoutColumn2[LayoutColumn2["Wide"] = 1] = "Wide";
@@ -525,7 +528,7 @@ const createGlobalState = (config) => {
     }
   };
   const imageExt = computed(() => {
-    const imageExtValue = userAgent.isMobile || userAgent.isWechat || userAgent.isSafari ? "jpeg" : "webp";
+    const imageExtValue = userAgent.isMobile && (userAgent.isWechat || userAgent.isSafari) ? "jpeg" : "webp";
     return {
       ext: imageExtValue,
       isJpg: imageExtValue === "jpeg",
@@ -549,6 +552,9 @@ const createGlobalState = (config) => {
   });
   const globalState = {
     toRawState,
+    // Country state
+    country: config.country,
+    isCNUser: isCNCode(config.country),
     // Render error state
     renderError: readonly(renderError2),
     setRenderError,
@@ -770,7 +776,8 @@ const API_CONFIG = {
   FE: "https://surmon.me",
   CDN: "https://cdn.surmon.me",
   PROXY: "https://cdn.surmon.me/_proxy",
-  STATIC: "https://static.surmon.me",
+  STATIC_CN: "https://static.cn.surmon.me",
+  STATIC_GLO: "https://static.surmon.me",
   NODEPRESS: PROD_API
 };
 const highlightLangPrefix = "language-";
@@ -2262,35 +2269,71 @@ _sfc_main$1C.setup = (props, ctx) => {
   return _sfc_setup$1C ? _sfc_setup$1C(props, ctx) : void 0;
 };
 const Loadmore = /* @__PURE__ */ _export_sfc(_sfc_main$1C, [["__scopeId", "data-v-ecbe8858"]]);
-const WebPArgs = `format,webp/`;
-const getArticleBannerThumbnailURL = (url, isWebPImage) => {
-  if (!url) {
+const WebPFormat = `@webp`;
+const getImgProxyURI = (path, options) => {
+  const resize = `resize:fill:${options.width}:${options.height}:0`;
+  const format = options.webp ? WebPFormat : "";
+  const watermark = options.watermark ? `/${options.watermark}` : "";
+  const filePath = path.startsWith("/") ? path : `/${path}`;
+  return `/imgproxy/${resize}${watermark}/plain${filePath}${format}`;
+};
+const getArticleBannerThumbnailURL = (options) => {
+  if (!options.url) {
     return getCDN_URL(`/images/thumbnail/carrousel.jpg`);
   }
-  const w = 1190;
-  const h2 = 420;
-  const format = isWebPImage ? WebPArgs : "";
-  const watermark = `watermark,text_U3VybW9uLm1l,type_bm90b3NhbnM,color_ffffff,size_31,g_sw,t_26,x_30,y_18`;
-  return `${url}?image_process=${format}quality,q_88/resize,w_${w},h_${h2}/crop,mid,w_${w},h_${h2}/${watermark}`;
+  if (!options.url.startsWith(API_CONFIG.STATIC_GLO)) {
+    return options.url;
+  }
+  const url = getImgProxyURI(options.url.replace(API_CONFIG.STATIC_GLO, ""), {
+    width: 1190,
+    height: 420,
+    webp: options.isWebP,
+    watermark: `watermark:0.36:sowe:18:18:0.15`
+  });
+  return getStaticURL(url, options.isCN);
 };
-const getMobileArticleListThumbnailURL = (url, isWebPImage = false) => {
-  if (!url) {
+const getMobileArticleListThumbnailURL = (options) => {
+  if (!options.url) {
     return "";
   }
-  const w = 700;
-  const h2 = 247;
-  const format = isWebPImage ? WebPArgs : "";
-  const watermark = `watermark,text_U3VybW9uLm1l,type_bm90b3NhbnM,color_ffffff,size_28,g_sw,t_26,x_22,y_18`;
-  return `${url}?image_process=${format}quality,q_82/resize,w_${w},h_${h2}/crop,mid,w_${w},h_${h2}/${watermark}`;
+  if (!options.url.startsWith(API_CONFIG.STATIC_GLO)) {
+    return options.url;
+  }
+  const url = getImgProxyURI(options.url.replace(API_CONFIG.STATIC_GLO, ""), {
+    width: 700,
+    height: 247,
+    webp: options.isWebP,
+    watermark: `watermark:0.38:sowe:18:16:0.16`
+  });
+  return getStaticURL(url, options.isCN);
 };
-const getArticleListThumbnailURL = (url, isWebPImage) => {
-  if (!url) {
+const getReletedArticleListThumbnailURL = (options) => {
+  if (!options.url) {
     return "";
   }
-  const w = 350;
-  const h2 = 238;
-  const format = isWebPImage ? WebPArgs : "";
-  return `${url}?image_process=${format}quality,q_80/resize,w_${w},h_${h2}/crop,mid,w_${w},h_${h2}`;
+  if (!options.url.startsWith(API_CONFIG.STATIC_GLO)) {
+    return options.url;
+  }
+  const url = getImgProxyURI(options.url.replace(API_CONFIG.STATIC_GLO, ""), {
+    width: 466,
+    height: 168,
+    webp: options.isWebP
+  });
+  return getStaticURL(url, options.isCN);
+};
+const getArticleListThumbnailURL = (options) => {
+  if (!options.url) {
+    return "";
+  }
+  if (!options.url.startsWith(API_CONFIG.STATIC_GLO)) {
+    return options.url;
+  }
+  const url = getImgProxyURI(options.url.replace(API_CONFIG.STATIC_GLO, ""), {
+    width: 350,
+    height: 238,
+    webp: options.isWebP
+  });
+  return getStaticURL(url, options.isCN);
 };
 const isOriginalType = (originState) => {
   return isNull(originState) || isUndefined(null) || originState === OriginState.Original;
@@ -2322,17 +2365,21 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
     const isReprint = isReprintType(props.article.origin);
     const isOriginal = isOriginalType(props.article.origin);
     const getThumbnailURL = (url) => {
-      return getMobileArticleListThumbnailURL(url, gState.imageExt.value.isWebP);
+      return getMobileArticleListThumbnailURL({
+        url,
+        isWebP: gState.imageExt.value.isWebP,
+        isCN: gState.isCNUser
+      });
     };
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
       const _component_router_link = resolveComponent("router-link");
       const _component_udate = resolveComponent("udate");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-item" }, _attrs))} data-v-e7d1c4ab><div class="thumbnail" data-v-e7d1c4ab><span class="${ssrRenderClass([{
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-item" }, _attrs))} data-v-b7c97b8b><div class="thumbnail" data-v-b7c97b8b><span class="${ssrRenderClass([{
         original: unref(isOriginal),
         reprint: unref(isReprint),
         hybrid: unref(isHybrid)
-      }, "oirigin"])}" data-v-e7d1c4ab>`);
+      }, "oirigin"])}" data-v-b7c97b8b>`);
       if (unref(isOriginal)) {
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LanguageKey).ORIGIN_ORIGINAL
@@ -2348,7 +2395,7 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`</span><div class="image" loading="lazy" style="${ssrRenderStyle({ backgroundImage: `url(${getThumbnailURL(_ctx.article.thumbnail)})` })}"${ssrRenderAttr("alt", _ctx.article.title)}${ssrRenderAttr("title", _ctx.article.title)} data-v-e7d1c4ab></div></div><div class="content" data-v-e7d1c4ab><div class="body" data-v-e7d1c4ab><h4 class="title" data-v-e7d1c4ab>`);
+      _push(`</span><div class="image" loading="lazy" style="${ssrRenderStyle({ backgroundImage: `url(${getThumbnailURL(_ctx.article.thumbnail)})` })}"${ssrRenderAttr("alt", _ctx.article.title)}${ssrRenderAttr("title", _ctx.article.title)} data-v-b7c97b8b></div></div><div class="content" data-v-b7c97b8b><div class="body" data-v-b7c97b8b><h4 class="title" data-v-b7c97b8b>`);
       _push(ssrRenderComponent(_component_router_link, {
         class: "link",
         title: _ctx.article.title,
@@ -2365,23 +2412,23 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</h4><p class="description" style="${ssrRenderStyle({ "-webkit-box-orient": "vertical" })}" data-v-e7d1c4ab>${_ctx.article.description}</p></div><div class="meta" data-v-e7d1c4ab><span class="date" data-v-e7d1c4ab><i class="iconfont icon-clock" data-v-e7d1c4ab></i>`);
+      _push(`</h4><p class="description" style="${ssrRenderStyle({ "-webkit-box-orient": "vertical" })}" data-v-b7c97b8b>${_ctx.article.description}</p></div><div class="meta" data-v-b7c97b8b><span class="date" data-v-b7c97b8b><i class="iconfont icon-clock" data-v-b7c97b8b></i>`);
       _push(ssrRenderComponent(_component_udate, {
         to: "ago",
         date: _ctx.article.created_at
       }, null, _parent));
-      _push(`</span><span class="views" data-v-e7d1c4ab><i class="iconfont icon-eye" data-v-e7d1c4ab></i><span data-v-e7d1c4ab>${ssrInterpolate(unref(numberSplit)(_ctx.article.meta.views))}</span></span><span class="comments" data-v-e7d1c4ab><i class="iconfont icon-comment" data-v-e7d1c4ab></i><span data-v-e7d1c4ab>${ssrInterpolate(_ctx.article.meta.comments)}</span></span><span class="likes" data-v-e7d1c4ab><i class="${ssrRenderClass([{ liked: isLiked.value }, "iconfont icon-like"])}" data-v-e7d1c4ab></i><span data-v-e7d1c4ab>${ssrInterpolate(_ctx.article.meta.likes)}</span></span></div></div></div>`);
+      _push(`</span><span class="views" data-v-b7c97b8b><i class="iconfont icon-eye" data-v-b7c97b8b></i><span data-v-b7c97b8b>${ssrInterpolate(unref(numberSplit)(_ctx.article.meta.views))}</span></span><span class="comments" data-v-b7c97b8b><i class="iconfont icon-comment" data-v-b7c97b8b></i><span data-v-b7c97b8b>${ssrInterpolate(_ctx.article.meta.comments)}</span></span><span class="likes" data-v-b7c97b8b><i class="${ssrRenderClass([{ liked: isLiked.value }, "iconfont icon-like"])}" data-v-b7c97b8b></i><span data-v-b7c97b8b>${ssrInterpolate(_ctx.article.meta.likes)}</span></span></div></div></div>`);
     };
   }
 });
-const item_vue_vue_type_style_index_0_scoped_e7d1c4ab_lang = "";
+const item_vue_vue_type_style_index_0_scoped_b7c97b8b_lang = "";
 const _sfc_setup$1B = _sfc_main$1B.setup;
 _sfc_main$1B.setup = (props, ctx) => {
   const ssrContext2 = useSSRContext();
   (ssrContext2.modules || (ssrContext2.modules = /* @__PURE__ */ new Set())).add("src/components/flow/mobile/item.vue");
   return _sfc_setup$1B ? _sfc_setup$1B(props, ctx) : void 0;
 };
-const ListItem$1 = /* @__PURE__ */ _export_sfc(_sfc_main$1B, [["__scopeId", "data-v-e7d1c4ab"]]);
+const ListItem$1 = /* @__PURE__ */ _export_sfc(_sfc_main$1B, [["__scopeId", "data-v-b7c97b8b"]]);
 const _sfc_main$1A = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -2726,7 +2773,11 @@ const _sfc_main$1z = /* @__PURE__ */ defineComponent({
     const isReprint = isReprintType(props.article.origin);
     const isOriginal = isOriginalType(props.article.origin);
     const getThumbnailURL = (url) => {
-      return getArticleListThumbnailURL(url, gState.imageExt.value.isWebP);
+      return getArticleListThumbnailURL({
+        url,
+        isCN: gState.isCNUser,
+        isWebP: gState.imageExt.value.isWebP
+      });
     };
     const getLanguageText = (language) => {
       return language === Language.Chinese ? "中文" : "EN";
@@ -2736,7 +2787,7 @@ const _sfc_main$1z = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       const _component_udate = resolveComponent("udate");
       const _component_placeholder = resolveComponent("placeholder");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-item" }, _attrs))} data-v-81032ee6><div class="item-background" style="${ssrRenderStyle({ backgroundImage: `url(${getThumbnailURL(_ctx.article.thumbnail)})` })}" data-v-81032ee6></div><div class="item-content" data-v-81032ee6>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-item" }, _attrs))} data-v-c535da3f><div class="item-background" style="${ssrRenderStyle({ backgroundImage: `url(${getThumbnailURL(_ctx.article.thumbnail)})` })}" data-v-c535da3f></div><div class="item-content" data-v-c535da3f>`);
       _push(ssrRenderComponent(_component_router_link, {
         class: "item-thumbnail",
         to: unref(getArticleDetailRoute)(_ctx.article.id)
@@ -2747,7 +2798,7 @@ const _sfc_main$1z = /* @__PURE__ */ defineComponent({
               original: unref(isOriginal),
               hybrid: unref(isHybrid),
               reprint: unref(isReprint)
-            }, "item-oirigin"])}" data-v-81032ee6${_scopeId}>`);
+            }, "item-oirigin"])}" data-v-c535da3f${_scopeId}>`);
             if (unref(isOriginal)) {
               _push2(ssrRenderComponent(_component_i18n, {
                 k: unref(LanguageKey).ORIGIN_ORIGINAL
@@ -2763,7 +2814,7 @@ const _sfc_main$1z = /* @__PURE__ */ defineComponent({
             } else {
               _push2(`<!---->`);
             }
-            _push2(`</span><div class="image" loading="lazy" style="${ssrRenderStyle({ backgroundImage: `url(${getThumbnailURL(_ctx.article.thumbnail)})` })}"${ssrRenderAttr("alt", _ctx.article.title)}${ssrRenderAttr("title", _ctx.article.title)} data-v-81032ee6${_scopeId}></div>`);
+            _push2(`</span><div class="image" loading="lazy" style="${ssrRenderStyle({ backgroundImage: `url(${getThumbnailURL(_ctx.article.thumbnail)})` })}"${ssrRenderAttr("alt", _ctx.article.title)}${ssrRenderAttr("title", _ctx.article.title)} data-v-c535da3f${_scopeId}></div>`);
           } else {
             return [
               createVNode("span", {
@@ -2796,7 +2847,7 @@ const _sfc_main$1z = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="item-body" data-v-81032ee6><div class="item-content" data-v-81032ee6><h5 class="title" data-v-81032ee6>`);
+      _push(`<div class="item-body" data-v-c535da3f><div class="item-content" data-v-c535da3f><h5 class="title" data-v-c535da3f>`);
       _push(ssrRenderComponent(_component_router_link, {
         class: "link",
         to: unref(getArticleDetailRoute)(_ctx.article.id),
@@ -2813,12 +2864,12 @@ const _sfc_main$1z = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<span class="language" data-v-81032ee6>${ssrInterpolate(getLanguageText(_ctx.article.lang))}</span></h5><p class="description" style="${ssrRenderStyle({ "-webkit-box-orient": "vertical" })}" data-v-81032ee6>${_ctx.article.description}</p></div><div class="item-meta" data-v-81032ee6><span class="date" data-v-81032ee6><i class="iconfont icon-clock" data-v-81032ee6></i>`);
+      _push(`<span class="language" data-v-c535da3f>${ssrInterpolate(getLanguageText(_ctx.article.lang))}</span></h5><p class="description" style="${ssrRenderStyle({ "-webkit-box-orient": "vertical" })}" data-v-c535da3f>${_ctx.article.description}</p></div><div class="item-meta" data-v-c535da3f><span class="date" data-v-c535da3f><i class="iconfont icon-clock" data-v-c535da3f></i>`);
       _push(ssrRenderComponent(_component_udate, {
         to: "ago",
         date: _ctx.article.created_at
       }, null, _parent));
-      _push(`</span><span class="views" data-v-81032ee6><i class="iconfont icon-eye" data-v-81032ee6></i><span data-v-81032ee6>${ssrInterpolate(unref(numberSplit)(_ctx.article.meta.views))}</span></span><span class="comments" data-v-81032ee6><i class="iconfont icon-comment" data-v-81032ee6></i><span data-v-81032ee6>${ssrInterpolate(_ctx.article.meta.comments)}</span></span><span class="likes" data-v-81032ee6><i class="${ssrRenderClass([{ liked: isLiked.value }, "iconfont icon-like"])}" data-v-81032ee6></i><span data-v-81032ee6>${ssrInterpolate(_ctx.article.meta.likes)}</span></span><span class="categories" data-v-81032ee6><i class="iconfont icon-category" data-v-81032ee6></i>`);
+      _push(`</span><span class="views" data-v-c535da3f><i class="iconfont icon-eye" data-v-c535da3f></i><span data-v-c535da3f>${ssrInterpolate(unref(numberSplit)(_ctx.article.meta.views))}</span></span><span class="comments" data-v-c535da3f><i class="iconfont icon-comment" data-v-c535da3f></i><span data-v-c535da3f>${ssrInterpolate(_ctx.article.meta.comments)}</span></span><span class="likes" data-v-c535da3f><i class="${ssrRenderClass([{ liked: isLiked.value }, "iconfont icon-like"])}" data-v-c535da3f></i><span data-v-c535da3f>${ssrInterpolate(_ctx.article.meta.likes)}</span></span><span class="categories" data-v-c535da3f><i class="iconfont icon-category" data-v-c535da3f></i>`);
       _push(ssrRenderComponent(_component_placeholder, {
         transition: false,
         data: _ctx.article.categories.length
@@ -2888,14 +2939,14 @@ const _sfc_main$1z = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const item_vue_vue_type_style_index_0_scoped_81032ee6_lang = "";
+const item_vue_vue_type_style_index_0_scoped_c535da3f_lang = "";
 const _sfc_setup$1z = _sfc_main$1z.setup;
 _sfc_main$1z.setup = (props, ctx) => {
   const ssrContext2 = useSSRContext();
   (ssrContext2.modules || (ssrContext2.modules = /* @__PURE__ */ new Set())).add("src/components/flow/desktop/item.vue");
   return _sfc_setup$1z ? _sfc_setup$1z(props, ctx) : void 0;
 };
-const ListItem = /* @__PURE__ */ _export_sfc(_sfc_main$1z, [["__scopeId", "data-v-81032ee6"]]);
+const ListItem = /* @__PURE__ */ _export_sfc(_sfc_main$1z, [["__scopeId", "data-v-c535da3f"]]);
 const _sfc_main$1y = /* @__PURE__ */ defineComponent({
   __name: "list",
   __ssrInlineRender: true,
@@ -3148,10 +3199,14 @@ const _sfc_main$1x = /* @__PURE__ */ defineComponent({
     const { gState, adConfig, isDarkTheme } = useEnhancer();
     const slides = computed(() => {
       const result = props.articles.slice(0, props.count).map((article) => ({
+        ad: false,
         title: article.title,
-        imgage: getArticleBannerThumbnailURL(article.thumbnail, gState.imageExt.value.isWebP),
         route: getArticleDetailRoute(article.id),
-        ad: false
+        imgage: getArticleBannerThumbnailURL({
+          url: article.thumbnail,
+          isWebP: gState.imageExt.value.isWebP,
+          isCN: gState.isCNUser
+        })
       }));
       if (!result.length) {
         return [];
@@ -3175,7 +3230,7 @@ const _sfc_main$1x = /* @__PURE__ */ defineComponent({
       const _component_ulink = resolveComponent("ulink");
       _push(`<div${ssrRenderAttrs(mergeProps({
         class: ["carrousel", { dark: unref(isDarkTheme) }]
-      }, _attrs))} data-v-3b585a2f>`);
+      }, _attrs))} data-v-7944f553>`);
       _push(ssrRenderComponent(_component_placeholder, {
         data: slides.value.length,
         loading: _ctx.fetching
@@ -3219,13 +3274,13 @@ const _sfc_main$1x = /* @__PURE__ */ defineComponent({
         }),
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="article-skeleton" data-v-3b585a2f${_scopeId}><div class="title" data-v-3b585a2f${_scopeId}>`);
+            _push2(`<div class="article-skeleton" data-v-7944f553${_scopeId}><div class="title" data-v-7944f553${_scopeId}>`);
             _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
-            _push2(`</div><div class="content" data-v-3b585a2f${_scopeId}><div class="first" data-v-3b585a2f${_scopeId}>`);
+            _push2(`</div><div class="content" data-v-7944f553${_scopeId}><div class="first" data-v-7944f553${_scopeId}>`);
             _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
             _push2(`</div><!--[-->`);
             ssrRenderList(3, (index) => {
-              _push2(`<div class="line" data-v-3b585a2f${_scopeId}>`);
+              _push2(`<div class="line" data-v-7944f553${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_line, { class: "line-item" }, null, _parent2, _scopeId));
               _push2(`</div>`);
             });
@@ -3276,7 +3331,7 @@ const _sfc_main$1x = /* @__PURE__ */ defineComponent({
                     _push3(ssrRenderComponent(unref(SwiperSlide), { key: index }, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(`<div class="content" data-v-3b585a2f${_scopeId3}>`);
+                          _push4(`<div class="content" data-v-7944f553${_scopeId3}>`);
                           _push4(ssrRenderComponent(_component_ulink, {
                             class: "link",
                             href: slide.url,
@@ -3284,9 +3339,9 @@ const _sfc_main$1x = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`<img${ssrRenderAttr("src", slide.imgage)}${ssrRenderAttr("alt", slide.title)} draggable="false" loading="lazy" data-v-3b585a2f${_scopeId4}><div class="title"${ssrRenderAttr("title", slide.title)} data-v-3b585a2f${_scopeId4}><div class="background" data-v-3b585a2f${_scopeId4}></div><div class="prospect" data-v-3b585a2f${_scopeId4}><span class="text" style="${ssrRenderStyle({ backgroundImage: `url('${slide.imgage}')` })}" data-v-3b585a2f${_scopeId4}>${ssrInterpolate(slide.title)}</span></div></div>`);
+                                _push5(`<img${ssrRenderAttr("src", slide.imgage)}${ssrRenderAttr("alt", slide.title)} draggable="false" loading="lazy" data-v-7944f553${_scopeId4}><div class="title"${ssrRenderAttr("title", slide.title)} data-v-7944f553${_scopeId4}><div class="background" data-v-7944f553${_scopeId4}></div><div class="prospect" data-v-7944f553${_scopeId4}><span class="text" style="${ssrRenderStyle({ backgroundImage: `url('${slide.imgage}')` })}" data-v-7944f553${_scopeId4}>${ssrInterpolate(slide.title)}</span></div></div>`);
                                 if (slide.ad) {
-                                  _push5(`<span class="ad-symbol" data-v-3b585a2f${_scopeId4}>`);
+                                  _push5(`<span class="ad-symbol" data-v-7944f553${_scopeId4}>`);
                                   _push5(ssrRenderComponent(_component_i18n, {
                                     k: unref(LanguageKey).AD
                                   }, null, _parent5, _scopeId4));
@@ -3495,14 +3550,14 @@ const _sfc_main$1x = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const carrousel_vue_vue_type_style_index_0_scoped_3b585a2f_lang = "";
+const carrousel_vue_vue_type_style_index_0_scoped_7944f553_lang = "";
 const _sfc_setup$1x = _sfc_main$1x.setup;
 _sfc_main$1x.setup = (props, ctx) => {
   const ssrContext2 = useSSRContext();
   (ssrContext2.modules || (ssrContext2.modules = /* @__PURE__ */ new Set())).add("src/pages/index/carrousel.vue");
   return _sfc_setup$1x ? _sfc_setup$1x(props, ctx) : void 0;
 };
-const Carrousel = /* @__PURE__ */ _export_sfc(_sfc_main$1x, [["__scopeId", "data-v-3b585a2f"]]);
+const Carrousel = /* @__PURE__ */ _export_sfc(_sfc_main$1x, [["__scopeId", "data-v-7944f553"]]);
 var GAEventCategories = /* @__PURE__ */ ((GAEventCategories2) => {
   GAEventCategories2["Comment"] = "comment";
   GAEventCategories2["Share"] = "share";
@@ -8501,6 +8556,14 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
+    const { gState } = useEnhancer();
+    const getThumbnailURL = (url) => {
+      return getReletedArticleListThumbnailURL({
+        url,
+        isWebP: gState.imageExt.value.isWebP,
+        isCN: gState.isCNUser
+      });
+    };
     const articleList = computed(() => {
       const articles = [...props.articles].slice(0, props.count);
       if (articles.length >= props.count) {
@@ -8519,9 +8582,9 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_router_link = resolveComponent("router-link");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "related" }, _attrs))} data-v-742db881><ul class="articles" style="${ssrRenderStyle({ gridTemplateColumns: `repeat(${_ctx.columns}, 1fr)` })}" data-v-742db881><!--[-->`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "related" }, _attrs))} data-v-90547b4a><ul class="articles" style="${ssrRenderStyle({ gridTemplateColumns: `repeat(${_ctx.columns}, 1fr)` })}" data-v-90547b4a><!--[-->`);
       ssrRenderList(articleList.value, (article, index) => {
-        _push(`<li class="${ssrRenderClass([{ disabled: !article.id }, "item"])}" data-v-742db881>`);
+        _push(`<li class="${ssrRenderClass([{ disabled: !article.id }, "item"])}" data-v-90547b4a>`);
         _push(ssrRenderComponent(_component_router_link, {
           class: "item-article",
           title: article.title,
@@ -8529,12 +8592,12 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<div class="thumbnail" style="${ssrRenderStyle({ backgroundImage: `url(${unref(getMobileArticleListThumbnailURL)(article.thumbnail)})` })}" data-v-742db881${_scopeId}></div><div class="title" data-v-742db881${_scopeId}>${ssrInterpolate(article.title)}</div><div class="description" data-v-742db881${_scopeId}>${ssrInterpolate(article.description)}</div>`);
+              _push2(`<div class="thumbnail" style="${ssrRenderStyle({ backgroundImage: `url(${getThumbnailURL(article.thumbnail)})` })}" data-v-90547b4a${_scopeId}></div><div class="title" data-v-90547b4a${_scopeId}>${ssrInterpolate(article.title)}</div><div class="description" data-v-90547b4a${_scopeId}>${ssrInterpolate(article.description)}</div>`);
             } else {
               return [
                 createVNode("div", {
                   class: "thumbnail",
-                  style: { backgroundImage: `url(${unref(getMobileArticleListThumbnailURL)(article.thumbnail)})` }
+                  style: { backgroundImage: `url(${getThumbnailURL(article.thumbnail)})` }
                 }, null, 4),
                 createVNode("div", { class: "title" }, toDisplayString(article.title), 1),
                 createVNode("div", { class: "description" }, toDisplayString(article.description), 1)
@@ -8549,14 +8612,14 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const related_vue_vue_type_style_index_0_scoped_742db881_lang = "";
+const related_vue_vue_type_style_index_0_scoped_90547b4a_lang = "";
 const _sfc_setup$12 = _sfc_main$12.setup;
 _sfc_main$12.setup = (props, ctx) => {
   const ssrContext2 = useSSRContext();
   (ssrContext2.modules || (ssrContext2.modules = /* @__PURE__ */ new Set())).add("src/pages/article/related.vue");
   return _sfc_setup$12 ? _sfc_setup$12(props, ctx) : void 0;
 };
-const ArticleRelated = /* @__PURE__ */ _export_sfc(_sfc_main$12, [["__scopeId", "data-v-742db881"]]);
+const ArticleRelated = /* @__PURE__ */ _export_sfc(_sfc_main$12, [["__scopeId", "data-v-90547b4a"]]);
 const _sfc_main$11 = /* @__PURE__ */ defineComponent({
   __name: "neighbour",
   __ssrInlineRender: true,
@@ -10478,7 +10541,7 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
       gState.toggleSwitcher("feedback", true);
       handleGTagEvent("feedback_modal");
     };
-    const backgroundVideo = getStaticURL("/assets/page-about-background.mp4");
+    const backgroundVideo = getCDN_URL("/images/page-about/background.mp4");
     useAboutPageMeta();
     useUniversalFetch(() => Promise.all([adminInfo.fetch(), appOption.fetch()]));
     const links = [
@@ -10553,12 +10616,12 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       const _component_container = resolveComponent("container");
       const _component_divider = resolveComponent("divider");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "about-page" }, _attrs))} data-v-072e96a5><div class="page-banner" data-v-072e96a5><div class="background" data-v-072e96a5><video class="video" loop muted autoplay${ssrIncludeBooleanAttr(false) ? " controls" : ""} data-v-072e96a5><source${ssrRenderAttr("src", unref(backgroundVideo))} type="video/mp4" data-v-072e96a5></video></div><div class="content" data-v-072e96a5>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "about-page" }, _attrs))} data-v-e6e4e02d><div class="page-banner" data-v-e6e4e02d><div class="background" data-v-e6e4e02d><video class="video" loop muted autoplay${ssrIncludeBooleanAttr(false) ? " controls" : ""} data-v-e6e4e02d><source${ssrRenderAttr("src", unref(backgroundVideo))} type="video/mp4" data-v-e6e4e02d></video></div><div class="content" data-v-e6e4e02d>`);
       _push(ssrRenderComponent(_component_uimage, {
         class: "avatar",
         src: unref(getAdminAvatar)((_a = unref(adminInfo).data) == null ? void 0 : _a.avatar)
       }, null, _parent));
-      _push(`<h1 class="name" data-v-072e96a5>${ssrInterpolate(((_b = unref(adminInfo).data) == null ? void 0 : _b.name) || "-")}</h1><p class="slogan" data-v-072e96a5>${ssrInterpolate(((_c = unref(adminInfo).data) == null ? void 0 : _c.slogan) || "-")}</p><p class="biography" data-v-072e96a5>`);
+      _push(`<h1 class="name" data-v-e6e4e02d>${ssrInterpolate(((_b = unref(adminInfo).data) == null ? void 0 : _b.name) || "-")}</h1><p class="slogan" data-v-e6e4e02d>${ssrInterpolate(((_c = unref(adminInfo).data) == null ? void 0 : _c.slogan) || "-")}</p><p class="biography" data-v-e6e4e02d>`);
       _push(ssrRenderComponent(_component_webfont, { bolder: "" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -10571,14 +10634,14 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</p><div class="socials" data-v-072e96a5><span class="normal" data-v-072e96a5>`);
+      _push(`</p><div class="socials" data-v-e6e4e02d><span class="normal" data-v-e6e4e02d>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "item github",
         href: unref(VALUABLE_LINKS).GITHUB
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-github" data-v-072e96a5${_scopeId}></i><span class="text" data-v-072e96a5${_scopeId}>GitHub</span>`);
+            _push2(`<i class="iconfont icon-github" data-v-e6e4e02d${_scopeId}></i><span class="text" data-v-e6e4e02d${_scopeId}>GitHub</span>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-github" }),
@@ -10594,7 +10657,7 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-twitter" data-v-072e96a5${_scopeId}></i><span class="text" data-v-072e96a5${_scopeId}>Twitter</span>`);
+            _push2(`<i class="iconfont icon-twitter" data-v-e6e4e02d${_scopeId}></i><span class="text" data-v-e6e4e02d${_scopeId}>Twitter</span>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-twitter" }),
@@ -10610,7 +10673,7 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-instagram" data-v-072e96a5${_scopeId}></i><span class="text" data-v-072e96a5${_scopeId}>Instagram</span>`);
+            _push2(`<i class="iconfont icon-instagram" data-v-e6e4e02d${_scopeId}></i><span class="text" data-v-e6e4e02d${_scopeId}>Instagram</span>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-instagram" }),
@@ -10626,7 +10689,7 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-youtube" data-v-072e96a5${_scopeId}></i><span class="text" data-v-072e96a5${_scopeId}>YouTube</span>`);
+            _push2(`<i class="iconfont icon-youtube" data-v-e6e4e02d${_scopeId}></i><span class="text" data-v-e6e4e02d${_scopeId}>YouTube</span>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-youtube" }),
@@ -10636,14 +10699,14 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</span><span class="mini" data-v-072e96a5>`);
+      _push(`</span><span class="mini" data-v-e6e4e02d>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "item telegram",
         href: unref(VALUABLE_LINKS).TELEGRAM
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-telegram" data-v-072e96a5${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-telegram" data-v-e6e4e02d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-telegram" })
@@ -10652,7 +10715,7 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<button class="item wechat" data-v-072e96a5><i class="iconfont icon-wechat" data-v-072e96a5></i>`);
+      _push(`<button class="item wechat" data-v-e6e4e02d><i class="iconfont icon-wechat" data-v-e6e4e02d></i>`);
       _push(ssrRenderComponent(_component_client_only, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -10663,13 +10726,13 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="qrcode-modal wechat" data-v-072e96a5${_scopeId2}><div class="background" data-v-072e96a5${_scopeId2}></div>`);
+                  _push3(`<div class="qrcode-modal wechat" data-v-e6e4e02d${_scopeId2}><div class="background" data-v-e6e4e02d${_scopeId2}></div>`);
                   _push3(ssrRenderComponent(_component_uimage, {
                     class: "image",
                     cdn: "",
                     src: "/images/qrcodes/wechat.jpg"
                   }, null, _parent3, _scopeId2));
-                  _push3(`<span class="text" data-v-072e96a5${_scopeId2}> 👋   `);
+                  _push3(`<span class="text" data-v-e6e4e02d${_scopeId2}> 👋   `);
                   _push3(ssrRenderComponent(_component_i18n, {
                     en: "Friend me on WeChat",
                     zh: "扫码加微，解锁灵魂"
@@ -10735,7 +10798,7 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-linkedin" data-v-072e96a5${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-linkedin" data-v-e6e4e02d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-linkedin" })
@@ -10750,7 +10813,7 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-douban" data-v-072e96a5${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-douban" data-v-e6e4e02d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-douban" })
@@ -10764,7 +10827,7 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           var _a2, _b2;
           if (_push2) {
-            _push2(`<div class="links" data-v-072e96a5${_scopeId}><!--[-->`);
+            _push2(`<div class="links" data-v-e6e4e02d${_scopeId}><!--[-->`);
             ssrRenderList(links, (item, index) => {
               ssrRenderVNode(_push2, createVNode(resolveDynamicComponent(item.onClick ? "button" : "ulink"), {
                 class: ["item", item.class],
@@ -10774,9 +10837,9 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
               }, {
                 default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span class="left" data-v-072e96a5${_scopeId2}><i class="${ssrRenderClass([item.icon, "iconfont"])}" data-v-072e96a5${_scopeId2}></i><span class="text" data-v-072e96a5${_scopeId2}>`);
+                    _push3(`<span class="left" data-v-e6e4e02d${_scopeId2}><i class="${ssrRenderClass([item.icon, "iconfont"])}" data-v-e6e4e02d${_scopeId2}></i><span class="text" data-v-e6e4e02d${_scopeId2}>`);
                     _push3(ssrRenderComponent(_component_i18n, item.i18n, null, _parent3, _scopeId2));
-                    _push3(`</span></span><span class="right" data-v-072e96a5${_scopeId2}><i class="iconfont icon-next" data-v-072e96a5${_scopeId2}></i></span>`);
+                    _push3(`</span></span><span class="right" data-v-e6e4e02d${_scopeId2}><i class="iconfont icon-next" data-v-e6e4e02d${_scopeId2}></i></span>`);
                   } else {
                     return [
                       createVNode("span", { class: "left" }, [
@@ -10796,18 +10859,18 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
                 _: 2
               }), _parent2, _scopeId);
             });
-            _push2(`<!--]--></div><div class="statistics" data-v-072e96a5${_scopeId}>`);
+            _push2(`<!--]--></div><div class="statistics" data-v-e6e4e02d${_scopeId}>`);
             _push2(ssrRenderComponent(_sfc_main$X, null, null, _parent2, _scopeId));
             _push2(ssrRenderComponent(NpmStatistic, null, null, _parent2, _scopeId));
             _push2(ssrRenderComponent(_sfc_main$W, null, null, _parent2, _scopeId));
             _push2(ssrRenderComponent(_sfc_main$Y, null, null, _parent2, _scopeId));
-            _push2(`</div><div class="plogs" data-v-072e96a5${_scopeId}>`);
+            _push2(`</div><div class="plogs" data-v-e6e4e02d${_scopeId}>`);
             _push2(ssrRenderComponent(InstagramMedia, null, null, _parent2, _scopeId));
-            _push2(`</div><div class="footprint" data-v-072e96a5${_scopeId}>`);
+            _push2(`</div><div class="footprint" data-v-e6e4e02d${_scopeId}>`);
             _push2(ssrRenderComponent(FootprintMap, null, null, _parent2, _scopeId));
-            _push2(`</div><div class="calendar" data-v-072e96a5${_scopeId}>`);
+            _push2(`</div><div class="calendar" data-v-e6e4e02d${_scopeId}>`);
             _push2(ssrRenderComponent(AggregateCalendar, null, null, _parent2, _scopeId));
-            _push2(`</div><div class="footer-links" data-v-072e96a5${_scopeId}><div class="friendlinks" data-v-072e96a5${_scopeId}><!--[-->`);
+            _push2(`</div><div class="footer-links" data-v-e6e4e02d${_scopeId}><div class="friendlinks" data-v-e6e4e02d${_scopeId}><!--[-->`);
             ssrRenderList(((_a2 = unref(appOption).data) == null ? void 0 : _a2.friend_links) || [], (link, index) => {
               _push2(`<!--[-->`);
               if (index !== 0) {
@@ -10818,9 +10881,9 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
               } else {
                 _push2(`<!---->`);
               }
-              _push2(`<a${ssrRenderAttr("href", link.value)} class="item" target="_blank" rel="external nofollow noopener" data-v-072e96a5${_scopeId}>${ssrInterpolate(link.name)}</a><!--]-->`);
+              _push2(`<a${ssrRenderAttr("href", link.value)} class="item" target="_blank" rel="external nofollow noopener" data-v-e6e4e02d${_scopeId}>${ssrInterpolate(link.name)}</a><!--]-->`);
             });
-            _push2(`<!--]--></div><div class="speciallinks" data-v-072e96a5${_scopeId}><!--[-->`);
+            _push2(`<!--]--></div><div class="speciallinks" data-v-e6e4e02d${_scopeId}><!--[-->`);
             ssrRenderList(unref(SPECIAL_LINKS), (item, index) => {
               _push2(`<!--[-->`);
               if (index !== 0) {
@@ -10831,7 +10894,7 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
               } else {
                 _push2(`<!---->`);
               }
-              _push2(`<a${ssrRenderAttr("href", item.url)} class="item" target="_blank" rel="external nofollow noopener" data-v-072e96a5${_scopeId}>${ssrInterpolate(item.name)}</a><!--]-->`);
+              _push2(`<a${ssrRenderAttr("href", item.url)} class="item" target="_blank" rel="external nofollow noopener" data-v-e6e4e02d${_scopeId}>${ssrInterpolate(item.name)}</a><!--]-->`);
             });
             _push2(`<!--]--></div></div>`);
           } else {
@@ -10922,14 +10985,14 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const desktop_vue_vue_type_style_index_0_scoped_072e96a5_lang = "";
+const desktop_vue_vue_type_style_index_0_scoped_e6e4e02d_lang = "";
 const _sfc_setup$P = _sfc_main$P.setup;
 _sfc_main$P.setup = (props, ctx) => {
   const ssrContext2 = useSSRContext();
   (ssrContext2.modules || (ssrContext2.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop.vue");
   return _sfc_setup$P ? _sfc_setup$P(props, ctx) : void 0;
 };
-const DesktopAboutPage = /* @__PURE__ */ _export_sfc(_sfc_main$P, [["__scopeId", "data-v-072e96a5"]]);
+const DesktopAboutPage = /* @__PURE__ */ _export_sfc(_sfc_main$P, [["__scopeId", "data-v-e6e4e02d"]]);
 const _sfc_main$O = /* @__PURE__ */ defineComponent({
   __name: "mobile",
   __ssrInlineRender: true,
@@ -13400,11 +13463,11 @@ const isSearchFlow = (name) => name === RouteName.SearchFlow;
 const getCDN_URL = (path) => {
   return `${API_CONFIG.CDN}${path}`;
 };
+const getStaticURL = (path, isCN) => {
+  return `${isCN ? API_CONFIG.STATIC_CN : API_CONFIG.STATIC_GLO}${path}`;
+};
 const getProxyURL = (path, module = ProxyModule.Default) => {
   return `${API_CONFIG.PROXY}/${module}/${encodeURIComponent(path)}`;
-};
-const getStaticURL = (path) => {
-  return `${API_CONFIG.STATIC}${path}`;
 };
 const getPageURL = (path) => {
   return `${API_CONFIG.FE}${path}`;
@@ -17335,6 +17398,7 @@ const createMainApp = (context) => {
   const app = createSSRApp(_sfc_main);
   rebirthSSRContext(app);
   const globalState = createGlobalState({
+    country: context.country,
     userAgent: context.userAgent || "",
     language: context.language || "",
     layout: context.layout ?? LayoutColumn.Normal
