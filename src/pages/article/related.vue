@@ -1,8 +1,9 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { Article } from '/@/interfaces/article'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getMobileArticleListThumbnailURL } from '/@/transforms/thumbnail'
+  import { getReletedArticleListThumbnailURL } from '/@/transforms/thumbnail'
 
   interface Props {
     articles?: Article[]
@@ -15,6 +16,15 @@
     columns: 4,
     count: 8
   })
+
+  const { gState } = useEnhancer()
+  const getThumbnailURL = (url: string) => {
+    return getReletedArticleListThumbnailURL({
+      url,
+      isWebP: gState.imageExt.value.isWebP,
+      isCN: gState.isCNUser
+    })
+  }
 
   const articleList = computed<Article[]>(() => {
     const articles = [...props.articles].slice(0, props.count)
@@ -39,10 +49,7 @@
     <ul class="articles" :style="{ gridTemplateColumns: `repeat(${columns}, 1fr)` }">
       <li v-for="(article, index) in articleList" :class="{ disabled: !article.id }" :key="index" class="item">
         <router-link class="item-article" :title="article.title" :to="getArticleDetailRoute(article.id)">
-          <div
-            class="thumbnail"
-            :style="{ backgroundImage: `url(${getMobileArticleListThumbnailURL(article.thumbnail)})` }"
-          ></div>
+          <div class="thumbnail" :style="{ backgroundImage: `url(${getThumbnailURL(article.thumbnail)})` }"></div>
           <div class="title">{{ article.title }}</div>
           <div class="description">{{ article.description }}</div>
         </router-link>

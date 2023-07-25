@@ -41,6 +41,7 @@ export const createMainApp = (context: ICreatorContext) => {
   rebirthSSRContext(app)
   // 3. global state
   const globalState = createGlobalState({
+    country: context.country,
     userAgent: context.userAgent || '',
     language: context.language || '',
     layout: context.layout ?? LayoutColumn.Normal

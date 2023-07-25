@@ -7,6 +7,7 @@
 import { App, inject, ref, computed, reactive, readonly } from 'vue'
 import { INVALID_ERROR } from '/@/constants/error'
 import { uaParser, isZhUser } from '/@/transforms/ua'
+import { isCNCode } from '/@/transforms/country'
 import { universalRef, onClient } from '/@/universal'
 
 type RenderErrorValue = RenderError | null
@@ -36,6 +37,7 @@ export interface GlobalRawState {
 export interface GlobalStateConfig {
   userAgent: string
   language: string
+  country: string
   layout: LayoutColumn
 }
 
@@ -104,7 +106,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
   // MARK: Using `jpg` format on mobile/WeChat/Safari
   const imageExt = computed(() => {
     const imageExtValue =
-      userAgent.isMobile || userAgent.isWechat || userAgent.isSafari
+      userAgent.isMobile && (userAgent.isWechat || userAgent.isSafari)
         ? (ImageExt.Jpg as ImageExt)
         : (ImageExt.WebP as ImageExt)
     return {
@@ -134,6 +136,9 @@ export const createGlobalState = (config: GlobalStateConfig) => {
 
   const globalState = {
     toRawState,
+    // Country state
+    country: config.country,
+    isCNUser: isCNCode(config.country),
     // Render error state
     renderError: readonly(renderError),
     setRenderError,

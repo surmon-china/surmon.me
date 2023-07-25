@@ -21,7 +21,11 @@
   const isOriginal = isOriginalType(props.article.origin)
 
   const getThumbnailURL = (url: string) => {
-    return getMobileArticleListThumbnailURL(url, gState.imageExt.value.isWebP)
+    return getMobileArticleListThumbnailURL({
+      url,
+      isWebP: gState.imageExt.value.isWebP,
+      isCN: gState.isCNUser
+    })
   }
 
   const handleClick = () => {

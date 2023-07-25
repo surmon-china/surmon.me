@@ -29,10 +29,14 @@
   const slides = computed<Array<CarrouselSlide>>(() => {
     // articles
     const result: CarrouselSlide[] = props.articles.slice(0, props.count).map((article) => ({
+      ad: false,
       title: article.title,
-      imgage: getArticleBannerThumbnailURL(article.thumbnail, gState.imageExt.value.isWebP),
       route: getArticleDetailRoute(article.id),
-      ad: false
+      imgage: getArticleBannerThumbnailURL({
+        url: article.thumbnail,
+        isWebP: gState.imageExt.value.isWebP,
+        isCN: gState.isCNUser
+      })
     }))
     if (!result.length) {
       return []

@@ -12,12 +12,12 @@ export const getCDN_URL = (path: string) => {
   return `${API_CONFIG.CDN}${path}`
 }
 
-export const getProxyURL = (path: string, module: ProxyModule = ProxyModule.Default) => {
-  return `${API_CONFIG.PROXY}/${module}/${encodeURIComponent(path)}`
+export const getStaticURL = (path: string, isCN?: boolean) => {
+  return `${isCN ? API_CONFIG.STATIC_CN : API_CONFIG.STATIC_GLO}${path}`
 }
 
-export const getStaticURL = (path: string) => {
-  return `${API_CONFIG.STATIC}${path}`
+export const getProxyURL = (path: string, module: ProxyModule = ProxyModule.Default) => {
+  return `${API_CONFIG.PROXY}/${module}/${encodeURIComponent(path)}`
 }
 
 export const getPageURL = (path: string) => {
