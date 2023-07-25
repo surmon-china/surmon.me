@@ -35,36 +35,34 @@ export interface SeoObject extends UseSeoMetaInput {
 
 export function useSeo(source: SeoObject | ComputedGetter<SeoObject>) {
   const { i18n, route } = useEnhancer()
-  return useUnheadSeoMeta(
-    computed<UseSeoMetaInput>(() => {
-      const value = typeof source === 'function' ? source() : source
-      const { title, pageTitle, description, keywords, ...sm } = value
+  const input = computed(() => {
+    const value = typeof source === 'function' ? source() : source
+    const { title, pageTitle, description, keywords, ...rest } = value
+    // title | page title
+    const pureTitle = title ?? pageTitle
+    const fullTitle = title ? title : pageTitle ? DEFAULT_TITLER(pageTitle) : ''
+    return { pureTitle, fullTitle, description, keywords, _: rest }
+  })
 
-      // title | page title
-      const pureTitle = title ?? pageTitle
-      const fullTitle = title ? title : pageTitle ? DEFAULT_TITLER(pageTitle) : ''
-
-      return {
-        title: fullTitle,
-        description: description ?? '',
-        keywords: keywords ?? '',
-        twitterSite: `@${IDENTITIES.TWITTER_USER_NAME}`,
-        twitterCreator: IDENTITIES.TWITTER_USER_NAME,
-        twitterCard: 'summary_large_image',
-        twitterImage: sm?.ogImage ?? DEFAULT_OG_IMAGE,
-        twitterTitle: sm?.ogTitle ?? fullTitle ?? '',
-        twitterDescription: sm?.ogDescription ?? description ?? '',
-        ogType: sm?.ogType ?? 'website',
-        ogSiteName: META.title,
-        ogTitle: sm?.ogTitle ?? pureTitle ?? '',
-        ogDescription: sm?.ogDescription ?? description ?? '',
-        ogUrl: sm?.ogUrl ?? getPageURL(route.fullPath),
-        ogImage: sm?.ogImage ?? DEFAULT_OG_IMAGE,
-        ogImageAlt: sm?.ogImageAlt ?? sm?.ogTitle ?? fullTitle ?? '',
-        ogImageWidth: sm?.ogImageWidth ?? (sm?.ogImage ? '' : '1000'),
-        ogImageHeight: sm?.ogImageHeight ?? (sm?.ogImage ? '' : '526'),
-        ogLocale: i18n.l.value?.iso ?? ''
-      }
-    })
-  )
+  return useUnheadSeoMeta({
+    title: computed(() => input.value.fullTitle),
+    description: () => input.value.description ?? '',
+    keywords: () => input.value.keywords ?? '',
+    twitterSite: `@${IDENTITIES.TWITTER_USER_NAME}`,
+    twitterCreator: IDENTITIES.TWITTER_USER_NAME,
+    twitterCard: 'summary_large_image',
+    twitterImage: () => input.value._.ogImage ?? DEFAULT_OG_IMAGE,
+    twitterTitle: () => input.value._.ogTitle ?? input.value.fullTitle ?? '',
+    twitterDescription: () => input.value._.ogDescription ?? input.value.description ?? '',
+    ogSiteName: () => META.title,
+    ogType: () => input.value._.ogType ?? 'website',
+    ogTitle: () => input.value._.ogTitle ?? input.value.pureTitle ?? '',
+    ogDescription: () => input.value._.ogDescription ?? input.value.description ?? '',
+    ogUrl: () => input.value._.ogUrl ?? getPageURL(route.fullPath),
+    ogImage: () => input.value._.ogImage ?? DEFAULT_OG_IMAGE,
+    ogImageAlt: () => input.value._.ogImageAlt ?? input.value._.ogTitle ?? input.value.fullTitle ?? '',
+    ogImageWidth: () => input.value._.ogImageWidth ?? (input.value._.ogImage ? '' : '1000'),
+    ogImageHeight: () => input.value._.ogImageHeight ?? (input.value._.ogImage ? '' : '526'),
+    ogLocale: () => i18n.l.value?.iso ?? ''
+  })
 }

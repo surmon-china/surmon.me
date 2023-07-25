@@ -59,7 +59,9 @@
       pageTitle: titles.join(' | '),
       description: `给 ${META.author} 留言`,
       ogType: 'website',
-      ogImage: getCDN_URL(bannerImage)
+      ogImage: getCDN_URL(bannerImage),
+      ogImageWidth: 620,
+      ogImageHeight: 350
     }
   })
 
