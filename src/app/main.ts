@@ -28,6 +28,7 @@ export interface ICreatorContext {
   routerAfterMiddleware?(globalState: any): RouterCreatorOptions['afterMiddleware']
   layout?: LayoutColumn
   theme: Theme
+  country: string
   language: string
   userAgent: string
 }
@@ -65,6 +66,7 @@ export const createMainApp = (context: ICreatorContext) => {
   const getGlobalHead = (): Head => ({
     htmlAttrs: {
       lang: i18n.l.value?.iso ?? '',
+      'data-country': context.country,
       'data-theme': theme.theme.value,
       'data-device': globalState.userAgent.isMobile ? 'mobile' : 'desktop'
     }
@@ -110,6 +112,7 @@ export const createMainApp = (context: ICreatorContext) => {
     i18n,
     head,
     theme,
+    country: context.country,
     getGlobalHead
   }
 }

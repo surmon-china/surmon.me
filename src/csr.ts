@@ -42,6 +42,7 @@ const { app, router, head, globalState, i18n, store, getGlobalHead } = createMai
   historyCreator: createWebHistory,
   language: navigator.language,
   userAgent: navigator.userAgent,
+  country: getSSRContext('country'),
   layout: getSSRContext('layout'),
   theme: getSSRContext('theme')
 })

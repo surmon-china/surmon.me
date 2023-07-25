@@ -34,6 +34,7 @@ const createApp = (request: Request): MainApp => {
     historyCreator: createMemoryHistory,
     language: headers['accept-language']!,
     userAgent: headers['user-agent']!,
+    country: (headers['country-code'] as string) || 'global',
     theme: request.cookies[THEME_STORAGE_KEY] || Theme.Light
   })
   // HACK: hack components and directives for SSR fix warn
@@ -57,7 +58,7 @@ const renderScripts = (data: any) => {
 // https://github.com/nuxt/framework/blob/main/packages/nitro/src/runtime/app/render.ts
 const renderHTML = async (mainApp: MainApp, url: string) => {
   devDebug(`renderHTML: ${url}`)
-  const { app, router, store, head, theme, globalState } = mainApp
+  const { app, router, store, head, theme, country, globalState } = mainApp
 
   devDebug('1. route.push.validate')
   await router.push(url)
@@ -87,6 +88,7 @@ const renderHTML = async (mainApp: MainApp, url: string) => {
   const scripts = renderScripts({
     heads,
     url,
+    country,
     layout: globalState.layoutColumn.value.layout,
     theme: theme.theme.value,
     store: store.state.value,
@@ -110,7 +112,7 @@ export interface RenderResult {
  * 3. router validate/404 error
  */
 export const renderError = async (request: Request, error: Error & { code?: number }): Promise<RenderResult> => {
-  const { app, head, globalState, theme } = createApp(request)
+  const { app, head, globalState, theme, country } = createApp(request)
   globalState.setRenderError(error)
   head.push({ title: `Server Error: ${error?.message || String(error) || 'unknow'}` })
   return {
@@ -118,6 +120,7 @@ export const renderError = async (request: Request, error: Error & { code?: numb
     html: await renderToString(app),
     heads: await renderSSRHead(head),
     scripts: renderScripts({
+      country,
       theme: theme.theme.value,
       ...getSSRContextByApp(app)
     })
