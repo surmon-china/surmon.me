@@ -184,8 +184,8 @@ const MAPBOX_CONFIG = Object.freeze({
     TOKEN: 'pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE4YmkzNjB2Z2wzY3F5dWg2M2tqeWIifQ.JhgYGFI4zsuNiX9dH-pBDg',
     STYLE_LIGHT: 'mapbox://styles/surmon/cl41fktzn000f14pet94oo1u4',
     STYLE_DARK: 'mapbox://styles/surmon/cl41gy1qo000l15ry20j5ae0k',
-    ZOOM: 11.337439,
-    CENTER: [121.4930539351185, 31.227570979004497]
+    ZOOM: 12.4374,
+    CENTER: [103.830391822121, 1.348463]
 });
 const IDENTITIES = Object.freeze({
     GOOGLE_ANALYTICS_MEASUREMENT_ID: 'G-R40DDTSYNQ',
