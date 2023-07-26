@@ -27,6 +27,9 @@ export const getDisqusUserURL = (username: string) => {
   return `https://disqus.com/by/${username}/`
 }
 
+export const MIN_COMMENT_LENGTH = 3
+export const MAX_COMMENT_LENGTH = 3000
+
 const HAHA_KEYWORDS = ['2333', 'haha', '哈哈']
 const SIX_KEYWORDS = ['666', '赞', '棒', '优秀']
 const HEHE_KEYWORDS = ['呵呵']

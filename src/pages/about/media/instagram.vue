@@ -67,7 +67,9 @@
 
     .item {
       position: relative;
+      width: $item-size;
       height: $item-size;
+      overflow: hidden;
 
       .link {
         display: block;

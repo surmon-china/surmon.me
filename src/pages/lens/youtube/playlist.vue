@@ -8,17 +8,26 @@
     playlists: Array<any>
   }>()
 
+  const modelIframeLoaded = ref(false)
   const youtubeModalVideo = ref<any>(null)
   const isOnYouTubeModal = computed(() => Boolean(youtubeModalVideo.value))
   const youTubeModalURL = computed(() => {
     const video = youtubeModalVideo.value
     return video ? getYouTubeVideoEmbedURL(video.snippet.resourceId.videoId, video.snippet.playlistId) : UNDEFINED
   })
+
   const openYouTubeModal = (video: any) => {
+    modelIframeLoaded.value = false
     youtubeModalVideo.value = video
   }
+
   const closeYouTubeModal = () => {
     youtubeModalVideo.value = null
+    modelIframeLoaded.value = false
+  }
+
+  const handleVideoIframeLoaded = () => {
+    modelIframeLoaded.value = true
   }
 </script>
 
@@ -39,7 +48,19 @@
     </ul>
     <client-only>
       <popup :visible="isOnYouTubeModal" :scroll-close="false" @close="closeYouTubeModal">
-        <iframe class="youtube-modal" :src="youTubeModalURL" />
+        <div class="youtube-modal">
+          <iframe
+            class="youtube-iframe"
+            :src="youTubeModalURL"
+            @load="handleVideoIframeLoaded"
+            @error="handleVideoIframeLoaded"
+          />
+          <transition name="module">
+            <div class="loading" v-if="!modelIframeLoaded">
+              <spin />
+            </div>
+          </transition>
+        </div>
       </popup>
     </client-only>
   </div>
@@ -54,6 +75,21 @@
     height: 76vh;
     position: relative;
     background: $black !important;
+
+    .youtube-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .loading {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: $z-index-normal + 2;
+    }
   }
 
   .youtube-playlist {

@@ -4,15 +4,15 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useMyGoogleMapStore } from '/@/stores/media'
   import { GEO_INFO, VALUABLE_LINKS } from '/@/config/app.config'
-  import { i18ns } from '../shared'
   import { gmmFoldersToGeoJSON, FeatureCollectionJSON, GoogleMyMapFolder } from './helper'
+  import { i18ns } from '../shared'
   import Mapbox from './mapbox.vue'
   import FootprintModal from './modal.vue'
 
-  const { isZhLang } = useEnhancer()
   const map = shallowRef<Map>()
   const modalVisible = shallowRef(false)
   const gmStore = useMyGoogleMapStore()
+  const { isZhLang } = useEnhancer()
 
   const gmFolders = computed<Array<GoogleMyMapFolder>>(() => {
     const folders = [...(gmStore.data?.Folder ?? [])]

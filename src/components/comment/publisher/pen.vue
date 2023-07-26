@@ -1,14 +1,12 @@
 <script lang="ts" setup>
-  import { ref, watch, onBeforeMount, onMounted, onBeforeUnmount, nextTick } from 'vue'
+  import { ref, watch, onBeforeMount, onMounted } from 'vue'
   import { storeToRefs } from 'pinia'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore, UserType } from '/@/stores/identity'
   import { enableCopyrighter, disableCopyrighter } from '/@/effects/copyright'
-  import { focusPosition } from '/@/utils/editable'
-  import { insertContent } from '/@/utils/editable'
-  import { CommentEvents, EMOJIS } from '../helper'
+  import { CommentEvents, EMOJIS, MIN_COMMENT_LENGTH, MAX_COMMENT_LENGTH } from '../helper'
   import Markdown from '/@/components/common/markdown.vue'
 
   enum PenEvents {
@@ -34,22 +32,13 @@
 
   const { i18n: _i18n } = useEnhancer()
   const { user } = storeToRefs(useIdentityStore())
-  const content = ref(props.modelValue || '')
-  const isPreviewed = ref(props.previewed || false)
-  const inputElement = ref<HTMLElement>()
-  let inputElementObserver: MutationObserver | null = null
+  const content = ref(props.modelValue ?? '')
+  const isPreviewed = ref(props.previewed ?? false)
+  const textareaRef = ref<HTMLTextAreaElement>()
 
   const handleTogglePreview = () => {
     isPreviewed.value = !isPreviewed.value
     emit(PenEvents.UpdatePreviewed, isPreviewed.value)
-  }
-
-  const handleInputChange = () => {
-    const text = inputElement.value?.innerText as string
-    if (text !== content.value) {
-      content.value = text
-      emit(PenEvents.Update, text)
-    }
   }
 
   const handleSubmit = (event) => {
@@ -57,11 +46,49 @@
     emit(CommentEvents.Submit, content.value)
   }
 
-  const insertContentToInput = (before: string, after = '') => {
-    insertContent({
-      element: inputElement.value,
-      content: [before, after]
-    })
+  const handleInputChange = () => {
+    const newValue = textareaRef.value?.value ?? ''
+    content.value = newValue
+    emit(PenEvents.Update, newValue)
+  }
+
+  const insertContentToInput = (before: string, after = '', singleCursorOffset = 0) => {
+    const textarea = textareaRef.value
+    if (!textarea) {
+      return
+    }
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLTextAreaElement#instance_properties
+    const start = textarea.selectionStart
+    const end = textarea.selectionEnd
+    const selectCount = end - start
+    const startPart = textarea.value.slice(0, start)
+    const endPart = textarea.value.slice(end)
+    const selectedPart = textarea.value.slice(start, end)
+    if (start === end) {
+      // If no character is selected by the cursor,
+      // the behavior is: insert content at the cursor position and position the cursor to the inserted position
+      const newCursorPosition = start + before.length + after.length + singleCursorOffset
+      textarea.value = startPart + before + after + endPart
+      textarea.focus()
+      textarea.selectionStart = newCursorPosition
+      textarea.selectionEnd = newCursorPosition
+    } else {
+      // If the user selects part of the content, the behavior should be:
+      // - If after contains content, the behavior should be: wrap the content and position the cursor to the location of the wrapped content.
+      // - If after does not contain content, the behavior is: replace the selection with before
+      if (after) {
+        textarea.value = startPart + before + selectedPart + after + endPart
+        textarea.focus()
+        textarea.selectionStart = start
+        textarea.selectionEnd = start + before.length + selectCount + after.length
+      } else {
+        textarea.value = startPart + before + endPart
+        textarea.focus()
+        textarea.selectionStart = start
+        textarea.selectionEnd = start + before.length
+      }
+    }
     handleInputChange()
   }
 
@@ -69,24 +96,22 @@
     insertContentToInput(` ${emoji} `)
   }
   const insertImage = () => {
-    insertContentToInput(` ![`, `](https://) `)
+    insertContentToInput(` ![`, `](https://) `, -2)
   }
   const insertLink = () => {
-    insertContentToInput(` [`, `](https://) `)
+    insertContentToInput(` [`, `](https://) `, -2)
   }
   const insertCode = () => {
-    insertContentToInput('\n```javascript\n', '\n```\n')
+    insertContentToInput('\n```javascript\n', '\n```', -4)
   }
 
   onBeforeMount(() => {
     watch(
       () => props.modelValue,
       (value = '') => {
-        if (value !== content.value) {
-          content.value = value
-          if (inputElement.value) {
-            inputElement.value.innerText = value
-          }
+        content.value = value
+        if (textareaRef.value) {
+          textareaRef.value.value = value
         }
       }
     )
@@ -104,40 +129,30 @@
   })
 
   onMounted(() => {
-    // auto focus
     if (props.autoFocus) {
-      nextTick().then(() => {
-        if (inputElement.value) {
-          focusPosition(inputElement.value)
-        }
-      })
+      textareaRef.value?.focus()
     }
-    // watch element
-    inputElementObserver = new MutationObserver(() => handleInputChange())
-    inputElementObserver.observe(inputElement.value!, {
-      attributes: true,
-      characterData: true,
-      childList: true,
-      subtree: true
-    })
-  })
-
-  onBeforeUnmount(() => {
-    inputElementObserver?.disconnect()
   })
 </script>
 
 <template>
   <div class="pen" :class="{ bordered }">
-    <div class="markdown">
-      <div
-        ref="inputElement"
-        class="markdown-input"
-        :contenteditable="!disabled"
-        :placeholder="_i18n.t(LanguageKey.COMMENT_POST_PLACEHOLDER)"
-        @focus="disableCopyrighter"
-        @blur="enableCopyrighter"
-      />
+    <div class="editor">
+      <div class="input-wrapper" :data-replicated-value="content">
+        <textarea
+          ref="textareaRef"
+          class="editor-input"
+          required
+          :disabled="disabled"
+          :autofocus="props.autoFocus"
+          :minlength="MIN_COMMENT_LENGTH"
+          :maxlength="MAX_COMMENT_LENGTH"
+          :placeholder="_i18n.t(LanguageKey.COMMENT_POST_PLACEHOLDER)"
+          @input="handleInputChange"
+          @focus="disableCopyrighter"
+          @blur="enableCopyrighter"
+        ></textarea>
+      </div>
       <transition name="list-fade">
         <div class="preview-content" v-if="isPreviewed">
           <markdown :markdown="content" :sanitize="true" :compact="true" />
@@ -154,7 +169,14 @@
             <i class="iconfont icon-emoji" />
             <div class="emoji-box">
               <ul class="emoji-list">
-                <li v-for="(emoji, index) in EMOJIS" v-once :key="index" class="item" @click="insertEmoji(emoji)">
+                <li
+                  v-for="(emoji, index) in EMOJIS"
+                  v-once
+                  class="item"
+                  :key="index"
+                  :title="emoji"
+                  @click="insertEmoji(emoji)"
+                >
                   {{ emoji }}
                 </li>
               </ul>
@@ -203,7 +225,7 @@
 
   .pen {
     position: relative;
-    @include radius-box($xs-radius);
+    border-radius: $xs-radius;
     &.bordered {
       border: 1px solid $module-bg-darker-3;
       .pencilbox {
@@ -211,31 +233,44 @@
       }
     }
 
-    .markdown {
+    .editor {
       position: relative;
       overflow: hidden;
 
-      .markdown-input {
-        min-height: 6em;
-        max-height: 36em;
-        overflow: auto;
-        outline: none;
-        padding: 0.5em;
-        cursor: auto;
-        font-size: $font-size-h6;
-        line-height: 1.8em;
-        background-color: $module-bg-darker-1;
-        @include background-transition();
+      /* https://css-tricks.com/the-cleanest-trick-for-autogrowing-textareas/ */
+      .input-wrapper {
+        display: grid;
+        &::after {
+          content: attr(data-replicated-value) ' ';
+          white-space: pre-wrap;
+          visibility: hidden;
+        }
 
-        &:empty:before {
-          content: attr(placeholder);
-          color: $text-disabled;
+        &::after,
+        .editor-input {
+          margin: 0;
+          padding: 0.5em;
+          line-height: 1.8em;
+          width: 100%;
+          min-height: 6em;
+          max-height: 32em;
+          font-size: $font-size-h6;
+          overflow-wrap: anywhere;
+          grid-area: 1 / 1 / 2 / 2;
         }
-        &:focus {
-          content: none;
-        }
-        &:hover {
-          background-color: $module-bg-hover;
+
+        .editor-input {
+          resize: none;
+          outline: none;
+          overflow: auto;
+          background-color: $module-bg-darker-1;
+          @include background-transition();
+          &:focus {
+            content: none;
+          }
+          &:hover {
+            background-color: $module-bg-hover;
+          }
         }
       }
 
@@ -302,12 +337,12 @@
           .emoji-box {
             display: none;
             position: absolute;
-            bottom: $size;
             left: 0;
-            top: 0;
+            top: 100%;
             width: 100%;
-            overflow-y: auto;
-            background-color: $module-bg;
+            padding: $xs-gap;
+            z-index: $z-index-normal + 1;
+            background-color: $module-bg-darker-4;
 
             .emoji-list {
               list-style: none;
@@ -315,16 +350,17 @@
               margin: 0;
               font-size: $font-size-h3;
               display: grid;
-              grid-template-columns: repeat(auto-fill, 45px);
+              grid-template-columns: repeat(12, 1fr);
 
               .item {
                 cursor: pointer;
                 padding: $xs-gap 0;
                 font-size: $font-size-h2;
-                border-radius: $sm-radius;
-                @include background-transition();
+                opacity: 0.8;
+                transition: all $transition-time-fast ease;
                 &:hover {
-                  background-color: $module-bg-hover;
+                  opacity: 1;
+                  transform: scale(1.1);
                 }
               }
             }

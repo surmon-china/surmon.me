@@ -7,7 +7,7 @@
   import { getCDN_URL } from '/@/transforms/url'
   import { isVideoMediaIns, isAlbumMediaIns, getInstagramImage } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
-  import Gallery from './gallery.vue'
+  import Iembed from './embed.vue'
 
   const props = defineProps<{
     medias: Array<InstagramMediaItem>
@@ -90,7 +90,7 @@
     </ul>
     <client-only>
       <popup :visible="!!galleryActiveMedia" :scroll-close="false" @close="closeMediaGallery">
-        <gallery
+        <Iembed
           v-if="galleryActiveMedia"
           :media="galleryActiveMedia"
           :index="galleryActiveIndex!"

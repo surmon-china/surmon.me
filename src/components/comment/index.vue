@@ -10,7 +10,7 @@
   import { Author } from '/@/interfaces/comment'
   import { LanguageKey } from '/@/language'
   import { scrollToAnchor } from '/@/utils/scroller'
-  import { luanchEmojiRain } from './helper'
+  import { MAX_COMMENT_LENGTH, luanchEmojiRain } from './helper'
   import CommentTopbar from './topbar.vue'
   import CommentMain from './list/main.vue'
   import CommentList from './list/list.vue'
@@ -124,7 +124,7 @@
     if (!payload.content || !payload.content.trim()) {
       throw `${i18n.t(LanguageKey.COMMENT_POST_CONTENT)} ?`
     }
-    if (payload.content.length > 3000) {
+    if (payload.content.length > MAX_COMMENT_LENGTH) {
       throw `${i18n.t(LanguageKey.COMMENT_POST_ERROR_CONTENT)} ?`
     }
 
