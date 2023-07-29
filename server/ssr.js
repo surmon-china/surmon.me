@@ -303,7 +303,7 @@ const enLangMap = {
   [LanguageKey.ORIGIN_HYBRID]: "HY",
   [LanguageKey.ACTION_ON]: "on",
   [LanguageKey.ACTION_OFF]: "off",
-  [LanguageKey.MUSIC_PLACEHOLDER]: "The music, the soul of man",
+  [LanguageKey.MUSIC_PLACEHOLDER]: "Music player",
   [LanguageKey.SEARCH_PLACEHOLDER]: "Search...",
   [LanguageKey.CATEGORY_UNCATEGORIZED]: "Uncategorized",
   [LanguageKey.ANNOUNCEMENT_PLACEHOLDER]: "No announcements",
@@ -14224,40 +14224,54 @@ const MusicPlayerSymbol = Symbol("music-player");
 const useMusic = () => {
   return inject(MusicPlayerSymbol);
 };
+const getCoverArtURL = (url) => {
+  return !url ? url : getProxyURL(`${url}?param=300y300`, ProxyModule.NetEaseMusic);
+};
 const _sfc_main$r = /* @__PURE__ */ defineComponent({
   __name: "player",
   __ssrInlineRender: true,
   setup(__props) {
-    const player = null;
-    const muted = computed(() => Boolean(player == null ? void 0 : player.muted.value));
-    const currentSong = computed(() => player == null ? void 0 : player.currentSong.value);
+    const player = useMusic();
+    const { state, playlist, currentSong } = player;
+    const songsRef = shallowRef([]);
+    const isUnPlayableSong = (index) => {
+      return playlist.unplayableIndexs.includes(index);
+    };
     const getSecondsView = (seconds) => {
       const minutesText = String(Math.floor(seconds / 60)).padStart(2, "0");
       const secondsText = String(Math.floor(seconds % 60)).padStart(2, "0");
       return `${minutesText}:${secondsText}`;
     };
+    onMounted(() => {
+      watch(
+        () => state.index,
+        (index) => {
+          var _a;
+          return (_a = songsRef.value[index]) == null ? void 0 : _a.scrollIntoView({ behavior: "smooth" });
+        }
+      );
+      nextTick(() => {
+        var _a;
+        (_a = songsRef.value[state.index]) == null ? void 0 : _a.scrollIntoView({ behavior: "instant" });
+      });
+    });
     return (_ctx, _push, _parent, _attrs) => {
-      var _a, _b, _c, _d, _e, _f, _g, _h, _i;
+      var _a;
       const _component_ulink = resolveComponent("ulink");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "music-player" }, _attrs))} data-v-a815c40f><div class="panel" data-v-a815c40f><div class="song" data-v-a815c40f><img class="cover"${ssrRenderAttr("src", (_a = currentSong.value) == null ? void 0 : _a.cover_art_url)} draggable="false" data-v-a815c40f>`);
-      if (currentSong.value && unref(player)) {
-        _push(`<div class="info" data-v-a815c40f><p class="title" data-v-a815c40f><span class="name" data-v-a815c40f>${ssrInterpolate(currentSong.value.name)}</span><span class="artist" data-v-a815c40f>${ssrInterpolate(currentSong.value.artist)}</span></p><p class="duration" data-v-a815c40f><span data-v-a815c40f>${ssrInterpolate(getSecondsView(unref(player).state.speeds))}</span><span data-v-a815c40f> / </span><span data-v-a815c40f>${ssrInterpolate(getSecondsView(currentSong.value.duration / 1e3))}</span></p></div>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "music-player" }, _attrs))} data-v-c7223ddf><div class="panel" data-v-c7223ddf><div class="song" data-v-c7223ddf><img class="cover"${ssrRenderAttr("src", unref(getCoverArtURL)((_a = unref(currentSong)) == null ? void 0 : _a.cover_art_url))} draggable="false" data-v-c7223ddf>`);
+      if (unref(currentSong)) {
+        _push(`<div class="info" data-v-c7223ddf><p class="title" data-v-c7223ddf><span class="name" data-v-c7223ddf>${ssrInterpolate(unref(currentSong).name)}</span><span class="artist" data-v-c7223ddf>${ssrInterpolate(unref(currentSong).artist)}</span></p><p class="duration" data-v-c7223ddf><span data-v-c7223ddf>${ssrInterpolate(getSecondsView(unref(state).currentTime))}</span><span data-v-c7223ddf> / </span><span data-v-c7223ddf>${ssrInterpolate(getSecondsView(unref(currentSong).duration / 1e3))}</span></p></div>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`</div><div class="control" data-v-a815c40f><button class="cut-song prev"${ssrIncludeBooleanAttr(!((_c = (_b = unref(player)) == null ? void 0 : _b.state) == null ? void 0 : _c.readied)) ? " disabled" : ""} data-v-a815c40f><i class="iconfont icon-music-prev" data-v-a815c40f></i></button><button class="toggle-play"${ssrIncludeBooleanAttr(!((_d = unref(player)) == null ? void 0 : _d.state.readied)) ? " disabled" : ""} data-v-a815c40f><i class="${ssrRenderClass([((_e = unref(player)) == null ? void 0 : _e.state.playing) ? "icon-music-pause" : "icon-music-play", "iconfont"])}" data-v-a815c40f></i></button><button class="cut-song next"${ssrIncludeBooleanAttr(!((_f = unref(player)) == null ? void 0 : _f.state.readied)) ? " disabled" : ""} data-v-a815c40f><i class="iconfont icon-music-next" data-v-a815c40f></i></button></div><div class="tools" data-v-a815c40f>`);
-      if (unref(player)) {
-        _push(`<span class="indexed" data-v-a815c40f>${ssrInterpolate(unref(player).state.index + 1)} / ${ssrInterpolate((_g = unref(player)) == null ? void 0 : _g.state.count)}</span>`);
-      } else {
-        _push(`<!---->`);
-      }
+      _push(`</div><div class="control" data-v-c7223ddf><button class="cut-song prev"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-c7223ddf><i class="iconfont icon-music-prev" data-v-c7223ddf></i></button><button class="toggle-play"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-c7223ddf><i class="${ssrRenderClass([unref(state).playing ? "icon-music-pause" : "icon-music-play", "iconfont"])}" data-v-c7223ddf></i></button><button class="cut-song next"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-c7223ddf><i class="iconfont icon-music-next" data-v-c7223ddf></i></button></div><div class="tools" data-v-c7223ddf><span class="indexed" data-v-c7223ddf>${ssrInterpolate(unref(state).index + 1)} / ${ssrInterpolate(unref(playlist).total)}</span>`);
       _push(ssrRenderComponent(_component_ulink, {
-        class: "list-link",
+        class: "playlist-link",
         href: unref(VALUABLE_LINKS).MUSIC_163
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-new-window-s" data-v-a815c40f${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-new-window-s" data-v-c7223ddf${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-new-window-s" })
@@ -14266,20 +14280,13 @@ const _sfc_main$r = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<button class="toggle-muted"${ssrIncludeBooleanAttr(!((_h = unref(player)) == null ? void 0 : _h.state.readied)) ? " disabled" : ""} data-v-a815c40f><i class="${ssrRenderClass([muted.value ? "icon-music-muted" : "icon-music-unmuted", "iconfont"])}" data-v-a815c40f></i></button></div></div><div class="progress" data-v-a815c40f>`);
-      if (unref(player)) {
-        _push(`<div class="played" style="${ssrRenderStyle({ width: `${unref(player).state.progress}%` })}" data-v-a815c40f></div>`);
-      } else {
-        _push(`<!---->`);
-      }
-      _push(`</div><div class="songs" data-v-a815c40f><ul class="list" data-v-a815c40f><!--[-->`);
-      ssrRenderList((_i = unref(player)) == null ? void 0 : _i.state.songs, (song, index) => {
-        var _a2, _b2;
-        _push(`<li class="${ssrRenderClass([{ playing: ((_a2 = unref(player)) == null ? void 0 : _a2.state.index) === index }, "item"])}" data-v-a815c40f><div class="index" data-v-a815c40f>${ssrInterpolate(String(index + 1).padStart(2, "0"))}</div>`);
-        if (((_b2 = unref(player)) == null ? void 0 : _b2.state.index) === index) {
-          _push(`<span class="play" data-v-a815c40f><i class="iconfont icon-music-unmuted" data-v-a815c40f></i></span>`);
+      _push(`<button class="toggle-muted"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-c7223ddf><i class="${ssrRenderClass([unref(state).muted ? "icon-music-muted" : "icon-music-unmuted", "iconfont"])}" data-v-c7223ddf></i></button><input class="volume" type="range" min="0.1" max="1" step="0.1"${ssrRenderAttr("value", unref(state).volume)} data-v-c7223ddf></div></div><div class="progress" data-v-c7223ddf><div class="played" style="${ssrRenderStyle({ width: `${unref(state).progress * 100}%` })}" data-v-c7223ddf></div></div><div class="songs" data-v-c7223ddf><ul class="list" data-v-c7223ddf><!--[-->`);
+      ssrRenderList(unref(playlist).songs, (song, index) => {
+        _push(`<li class="${ssrRenderClass([{ playing: unref(state).index === index, unplayable: isUnPlayableSong(index) }, "item"])}" data-v-c7223ddf><div class="index" data-v-c7223ddf>${ssrInterpolate(String(index + 1).padStart(2, "0"))}</div>`);
+        if (unref(state).index === index) {
+          _push(`<span class="play" data-v-c7223ddf><i class="iconfont icon-music-unmuted" data-v-c7223ddf></i></span>`);
         } else {
-          _push(`<button class="play" data-v-a815c40f><i class="iconfont icon-music-play" data-v-a815c40f></i></button>`);
+          _push(`<button class="play"${ssrIncludeBooleanAttr(isUnPlayableSong(index)) ? " disabled" : ""} data-v-c7223ddf><i class="iconfont icon-music-play" data-v-c7223ddf></i></button>`);
         }
         _push(ssrRenderComponent(_component_ulink, {
           class: "name",
@@ -14288,7 +14295,7 @@ const _sfc_main$r = /* @__PURE__ */ defineComponent({
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<span class="text" data-v-a815c40f${_scopeId}>${ssrInterpolate(song.name)}</span><i class="iconfont icon-new-window-s" data-v-a815c40f${_scopeId}></i>`);
+              _push2(`<span class="text" data-v-c7223ddf${_scopeId}>${ssrInterpolate(song.name)}</span><i class="iconfont icon-new-window-s" data-v-c7223ddf${_scopeId}></i>`);
             } else {
               return [
                 createVNode("span", { class: "text" }, toDisplayString(song.name), 1),
@@ -14298,51 +14305,45 @@ const _sfc_main$r = /* @__PURE__ */ defineComponent({
           }),
           _: 2
         }, _parent));
-        _push(`<div class="artist"${ssrRenderAttr("title", song.artist)} data-v-a815c40f>${ssrInterpolate(song.artist)}</div><div class="duration" data-v-a815c40f>${ssrInterpolate(getSecondsView(song.duration / 1e3))}</div></li>`);
+        _push(`<div class="artist"${ssrRenderAttr("title", song.artist)} data-v-c7223ddf>${ssrInterpolate(song.artist)}</div><div class="duration" data-v-c7223ddf>${ssrInterpolate(getSecondsView(song.duration / 1e3))}</div></li>`);
       });
       _push(`<!--]--></ul></div></div>`);
     };
   }
 });
-const player_vue_vue_type_style_index_0_scoped_a815c40f_lang = "";
+const player_vue_vue_type_style_index_0_scoped_c7223ddf_lang = "";
 const _sfc_setup$r = _sfc_main$r.setup;
 _sfc_main$r.setup = (props, ctx) => {
   const ssrContext2 = useSSRContext();
   (ssrContext2.modules || (ssrContext2.modules = /* @__PURE__ */ new Set())).add("src/components/widget/music-player/player.vue");
   return _sfc_setup$r ? _sfc_setup$r(props, ctx) : void 0;
 };
-const MusicPlayer = /* @__PURE__ */ _export_sfc(_sfc_main$r, [["__scopeId", "data-v-a815c40f"]]);
+const MusicPlayer = /* @__PURE__ */ _export_sfc(_sfc_main$r, [["__scopeId", "data-v-c7223ddf"]]);
 const _sfc_main$q = /* @__PURE__ */ defineComponent({
   __name: "handle",
   __ssrInlineRender: true,
   setup(__props) {
     useEnhancer();
-    const player = null;
-    const muted = computed(() => Boolean(player == null ? void 0 : player.muted.value));
-    const currentSong = computed(() => player == null ? void 0 : player.currentSong.value);
+    const player = useMusic();
+    const { state, currentSong } = player;
     const isOnPlayerModel = ref(false);
     const togglePlayerModel = () => {
       isOnPlayerModel.value = !isOnPlayerModel.value;
     };
     return (_ctx, _push, _parent, _attrs) => {
-      var _a, _b;
+      var _a;
       const _component_i18n = resolveComponent("i18n");
       const _component_client_only = resolveComponent("client-only");
       const _component_popup = resolveComponent("popup");
-      _push(`<!--[-->`);
-      if ((_a = unref(player)) == null ? void 0 : _a.currentSong.value) {
-        _push(`<div id="player" class="${ssrRenderClass({ playing: unref(player).state.playing })}" data-v-7d442602><div class="panel" data-v-7d442602><div class="control" data-v-7d442602><button class="prev-song button"${ssrIncludeBooleanAttr(!unref(player).state.readied) ? " disabled" : ""} data-v-7d442602><i class="iconfont icon-music-prev" data-v-7d442602></i></button><button class="next-song button"${ssrIncludeBooleanAttr(!unref(player).state.readied) ? " disabled" : ""} data-v-7d442602><i class="iconfont icon-music-next" data-v-7d442602></i></button><button class="muted-toggle button"${ssrIncludeBooleanAttr(!unref(player).state.readied) ? " disabled" : ""} data-v-7d442602><i class="${ssrRenderClass([muted.value ? "icon-music-muted" : "icon-music-unmuted", "iconfont"])}" data-v-7d442602></i></button><button class="player button" data-v-7d442602><i class="iconfont icon-netease-music" data-v-7d442602></i></button></div><button class="song-link" data-v-7d442602>`);
-        if (currentSong.value) {
-          _push(`<span data-v-7d442602>${ssrInterpolate(currentSong.value.name)}</span>`);
-        } else {
-          _push(ssrRenderComponent(_component_i18n, {
-            k: unref(LanguageKey).MUSIC_PLACEHOLDER
-          }, null, _parent));
-        }
-        _push(`</button></div><div class="cd" data-v-7d442602><img class="image"${ssrRenderAttr("src", (_b = currentSong.value) == null ? void 0 : _b.cover_art_url)} data-v-7d442602><button class="toggle-button"${ssrIncludeBooleanAttr(!unref(player).state.readied) ? " disabled" : ""} data-v-7d442602><i class="${ssrRenderClass([unref(player).state.playing ? "icon-music-pause" : "icon-music-play", "iconfont"])}" data-v-7d442602></i></button></div><div class="trigger" data-v-7d442602><i class="iconfont icon-music" data-v-7d442602></i></div></div>`);
+      _push(`<!--[--><div id="player" class="${ssrRenderClass({ playing: unref(state).playing })}" data-v-6a15702f><div class="panel" data-v-6a15702f><div class="control" data-v-6a15702f><button class="prev-song button"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-6a15702f><i class="iconfont icon-music-prev" data-v-6a15702f></i></button><button class="next-song button"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-6a15702f><i class="iconfont icon-music-next" data-v-6a15702f></i></button><button class="muted-toggle button"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-6a15702f><i class="${ssrRenderClass([unref(state).muted ? "icon-music-muted" : "icon-music-unmuted", "iconfont"])}" data-v-6a15702f></i></button><button class="player button" data-v-6a15702f><i class="iconfont icon-netease-music" data-v-6a15702f></i></button></div><button class="song-link" data-v-6a15702f>`);
+      if (unref(currentSong)) {
+        _push(`<span data-v-6a15702f>${ssrInterpolate(unref(currentSong).name)}</span>`);
       } else {
-        _push(`<!---->`);
+        _push(ssrRenderComponent(_component_i18n, {
+          k: unref(LanguageKey).MUSIC_PLACEHOLDER
+        }, null, _parent));
       }
+      _push(`</button></div><div class="cd" data-v-6a15702f><img class="image"${ssrRenderAttr("src", unref(getCoverArtURL)((_a = unref(currentSong)) == null ? void 0 : _a.cover_art_url))} data-v-6a15702f><button class="toggle-button"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-6a15702f><i class="${ssrRenderClass([unref(state).playing ? "icon-music-pause" : "icon-music-play", "iconfont"])}" data-v-6a15702f></i></button></div><div class="trigger" data-v-6a15702f><i class="iconfont icon-music" data-v-6a15702f></i></div></div>`);
       _push(ssrRenderComponent(_component_client_only, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -14383,14 +14384,14 @@ const _sfc_main$q = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const handle_vue_vue_type_style_index_0_scoped_7d442602_lang = "";
+const handle_vue_vue_type_style_index_0_scoped_6a15702f_lang = "";
 const _sfc_setup$q = _sfc_main$q.setup;
 _sfc_main$q.setup = (props, ctx) => {
   const ssrContext2 = useSSRContext();
   (ssrContext2.modules || (ssrContext2.modules = /* @__PURE__ */ new Set())).add("src/components/widget/music-player/handle.vue");
   return _sfc_setup$q ? _sfc_setup$q(props, ctx) : void 0;
 };
-const MusicPlayerHandle = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["__scopeId", "data-v-7d442602"]]);
+const MusicPlayerHandle = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["__scopeId", "data-v-6a15702f"]]);
 const _sfc_main$p = /* @__PURE__ */ defineComponent({
   __name: "flower",
   __ssrInlineRender: true,
@@ -16424,14 +16425,18 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
       gState.toggleSwitcher("statement", false);
     };
     onMounted(() => {
-      wallpaperStore.fetch();
-      useMusic().init();
+      wallpaperStore.fetch().catch((error) => {
+        console.warn("[main component] bing wallpaper fetch failed!", error);
+      });
+      useMusic().init().catch((error) => {
+        console.warn("[main component] player init failed!", error);
+      });
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_client_only = resolveComponent("client-only");
       const _component_popup = resolveComponent("popup");
       const _component_router_view = resolveComponent("router-view");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "desktop-main" }, _attrs))} data-v-5a64bc15>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "desktop-main" }, _attrs))} data-v-25cdc7c5>`);
       _push(ssrRenderComponent(Background, null, null, _parent));
       _push(ssrRenderComponent(Wallflower, null, null, _parent));
       _push(ssrRenderComponent(_component_client_only, null, {
@@ -16443,7 +16448,7 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="sponsor-modal" data-v-5a64bc15${_scopeId2}><div class="sponsor" data-v-5a64bc15${_scopeId2}>`);
+                  _push3(`<div class="sponsor-modal" data-v-25cdc7c5${_scopeId2}><div class="sponsor" data-v-25cdc7c5${_scopeId2}>`);
                   _push3(ssrRenderComponent(SponsorTabs, {
                     class: "tabs",
                     state: unref(sponsorState),
@@ -16581,7 +16586,7 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
         _push(`<!---->`);
       }
       _push(ssrRenderComponent(HeaderView$1, null, null, _parent));
-      _push(`<main${ssrRenderAttr("id", unref(MAIN_ELEMENT_ID))} class="${ssrRenderClass([{ "full-page": unref(layoutColumn).isFull }, "main-container"])}" data-v-5a64bc15>`);
+      _push(`<main${ssrRenderAttr("id", unref(MAIN_ELEMENT_ID))} class="${ssrRenderClass([{ "full-page": unref(layoutColumn).isFull }, "main-container"])}" data-v-25cdc7c5>`);
       if (unref(layoutColumn).isNormal) {
         _push(ssrRenderComponent(NavView, { class: "nav-view" }, null, _parent));
       } else {
@@ -16596,11 +16601,11 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
         "layout-normal": unref(layoutColumn).isNormal,
         "layout-wide": unref(layoutColumn).isWide,
         "layout-full": unref(layoutColumn).isFull
-      }, "main-view"])}" data-v-5a64bc15>`);
+      }, "main-view"])}" data-v-25cdc7c5>`);
       _push(ssrRenderComponent(_component_router_view, null, {
         default: withCtx(({ Component, route: r }, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="router-view" data-v-5a64bc15${_scopeId}>`);
+            _push2(`<div class="router-view" data-v-25cdc7c5${_scopeId}>`);
             ssrRenderSuspense(_push2, {
               default: () => {
                 ssrRenderVNode(_push2, createVNode(resolveDynamicComponent(Component), {
@@ -16642,14 +16647,14 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const main_vue_vue_type_style_index_0_scoped_5a64bc15_lang = "";
+const main_vue_vue_type_style_index_0_scoped_25cdc7c5_lang = "";
 const _sfc_setup$5 = _sfc_main$5.setup;
 _sfc_main$5.setup = (props, ctx) => {
   const ssrContext2 = useSSRContext();
   (ssrContext2.modules || (ssrContext2.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/main.vue");
   return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
 };
-const DesktopMain = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-5a64bc15"]]);
+const DesktopMain = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-25cdc7c5"]]);
 const _sfc_main$4 = /* @__PURE__ */ defineComponent({
   __name: "header",
   __ssrInlineRender: true,
