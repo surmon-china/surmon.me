@@ -7,9 +7,6 @@
 import axios from 'axios'
 import { IDENTITIES } from '@/config/app.config'
 
-// https://521dimensions.com/open-source/amplitudejs/docs/configuration/playlists.html
-// https://521dimensions.com/open-source/amplitudejs/docs/configuration/song-objects.html#special-keys
-
 export interface Song {
   id: number
   duration: number

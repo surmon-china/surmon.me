@@ -17,9 +17,6 @@ dependencies:
   '@unhead/vue':
     specifier: ^1.1.32
     version: 1.1.32(vue@3.3.4)
-  amplitudejs:
-    specifier: ^5.3.2
-    version: 5.3.2
   axios:
     specifier: ^1.4.0
     version: 1.4.0
@@ -1743,10 +1740,6 @@ packages:
       json-schema-traverse: 0.4.1
       uri-js: 4.4.1
     dev: true
-
-  /amplitudejs@5.3.2:
-    resolution: {integrity: sha512-aRZqYMzRuZQ0Ua3ZtK5CTECE958meBfwzXZcx2Hn1itu2KwIB8giwsAPW52um0teewYBXZ5aTzy/wxy3E34e0g==}
-    dev: false
 
   /ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}

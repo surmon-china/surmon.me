@@ -40,9 +40,15 @@
 
   onMounted(() => {
     // bing wallpaper
-    wallpaperStore.fetch()
+    wallpaperStore.fetch().catch((error) => {
+      console.warn('[main component] bing wallpaper fetch failed!', error)
+    })
     // music player
-    useMusic().init()
+    useMusic()
+      .init()
+      .catch((error) => {
+        console.warn('[main component] player init failed!', error)
+      })
   })
 </script>
 

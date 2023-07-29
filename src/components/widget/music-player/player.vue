@@ -1,75 +1,104 @@
 <script lang="ts" setup>
-  import { computed } from 'vue'
+  import { shallowRef, onMounted, watch, nextTick } from 'vue'
   import { useMusic } from '/@/composables/music'
   import { get163MusicSongDetailURL } from '/@/transforms/media'
   import { VALUABLE_LINKS } from '/@/config/app.config'
-  import { isClient } from '/@/app/environment'
+  import { getCoverArtURL } from './helper'
 
-  const player = isClient ? useMusic() : null
-  const muted = computed(() => Boolean(player?.muted.value))
-  const currentSong = computed(() => player?.currentSong.value)
-  const handlePlayByIndex = (index: number) => player?.play(index)
+  const player = useMusic()
+  const { state, playlist, currentSong } = player
+
+  const songsRef = shallowRef<Array<HTMLLIElement>>([])
+
+  const isUnPlayableSong = (index: number) => {
+    return playlist.unplayableIndexs.includes(index)
+  }
+
+  const handleSetVolume = (event: any) => {
+    player.setVolume(Number(event.target.value))
+  }
+
   const getSecondsView = (seconds: number) => {
     const minutesText = String(Math.floor(seconds / 60)).padStart(2, '0')
     const secondsText = String(Math.floor(seconds % 60)).padStart(2, '0')
     return `${minutesText}:${secondsText}`
   }
+
+  onMounted(() => {
+    watch(
+      () => state.index,
+      (index) => songsRef.value[index]?.scrollIntoView({ behavior: 'smooth' })
+    )
+    nextTick(() => {
+      songsRef.value[state.index]?.scrollIntoView({ behavior: 'instant' })
+    })
+  })
 </script>
 
 <template>
   <div class="music-player">
     <div class="panel">
       <div class="song">
-        <img class="cover" :src="currentSong?.cover_art_url" draggable="false" />
-        <div class="info" v-if="currentSong && player">
+        <img class="cover" :src="getCoverArtURL(currentSong?.cover_art_url)" draggable="false" />
+        <div class="info" v-if="currentSong">
           <p class="title">
             <span class="name">{{ currentSong.name }}</span>
             <span class="artist">{{ currentSong.artist }}</span>
           </p>
           <p class="duration">
-            <span>{{ getSecondsView(player.state.speeds) }}</span>
+            <span>{{ getSecondsView(state.currentTime) }}</span>
             <span> / </span>
             <span>{{ getSecondsView(currentSong.duration / 1000) }}</span>
           </p>
         </div>
       </div>
       <div class="control">
-        <button class="cut-song prev" :disabled="!player?.state?.readied" @click="player?.prevSong()">
+        <button class="cut-song prev" :disabled="!state.initialized" @click="player.prevSong">
           <i class="iconfont icon-music-prev"></i>
         </button>
-        <button class="toggle-play" :disabled="!player?.state.readied" @click="player?.togglePlay()">
-          <i class="iconfont" :class="player?.state.playing ? 'icon-music-pause' : 'icon-music-play'"></i>
+        <button class="toggle-play" :disabled="!state.initialized" @click="player.togglePlay">
+          <i class="iconfont" :class="state.playing ? 'icon-music-pause' : 'icon-music-play'"></i>
         </button>
-        <button class="cut-song next" :disabled="!player?.state.readied" @click="player?.nextSong()">
+        <button class="cut-song next" :disabled="!state.initialized" @click="player.nextSong">
           <i class="iconfont icon-music-next"></i>
         </button>
       </div>
       <div class="tools">
-        <span class="indexed" v-if="player"> {{ player.state.index + 1 }} / {{ player?.state.count }} </span>
-        <ulink class="list-link" :href="VALUABLE_LINKS.MUSIC_163">
+        <span class="indexed">{{ state.index + 1 }} / {{ playlist.total }}</span>
+        <ulink class="playlist-link" :href="VALUABLE_LINKS.MUSIC_163">
           <i class="iconfont icon-new-window-s"></i>
         </ulink>
-        <button class="toggle-muted" :disabled="!player?.state.readied" @click="player?.toggleMuted()">
-          <i class="iconfont" :class="muted ? 'icon-music-muted' : 'icon-music-unmuted'" />
+        <button class="toggle-muted" :disabled="!state.initialized" @click="player.toggleMuted">
+          <i class="iconfont" :class="state.muted ? 'icon-music-muted' : 'icon-music-unmuted'" />
         </button>
+        <input
+          class="volume"
+          type="range"
+          min="0.1"
+          max="1"
+          step="0.1"
+          :value="state.volume"
+          @input="handleSetVolume($event)"
+        />
       </div>
     </div>
     <div class="progress">
-      <div class="played" :style="{ width: `${player.state.progress}%` }" v-if="player"></div>
+      <div class="played" :style="{ width: `${state.progress * 100}%` }"></div>
     </div>
     <div class="songs">
       <ul class="list">
         <li
+          ref="songsRef"
           class="item"
-          :class="{ playing: player?.state.index === index }"
+          :class="{ playing: state.index === index, unplayable: isUnPlayableSong(index) }"
+          v-for="(song, index) in playlist.songs"
           :key="index"
-          v-for="(song, index) in player?.state.songs"
         >
           <div class="index">{{ String(index + 1).padStart(2, '0') }}</div>
-          <span v-if="player?.state.index === index" class="play">
+          <span v-if="state.index === index" class="play">
             <i class="iconfont icon-music-unmuted"></i>
           </span>
-          <button v-else class="play" @click="handlePlayByIndex(index)">
+          <button v-else class="play" @click="player.play(index)" :disabled="isUnPlayableSong(index)">
             <i class="iconfont icon-music-play"></i>
           </button>
           <ulink class="name" :title="song.name" :href="get163MusicSongDetailURL(song.id)">
@@ -114,6 +143,8 @@
           border-radius: $sm-radius;
           margin-right: $gap;
           background-color: $module-bg-darker-1;
+          background-image: url('/images/page-music/background-40x40.jpg');
+          background-size: cover;
         }
 
         .info {
@@ -133,12 +164,12 @@
 
             .name {
               margin-top: 1px;
-              max-width: 8rem;
+              max-width: 10rem;
               font-size: $font-size-h4;
             }
 
             .artist {
-              max-width: 7rem;
+              max-width: 6rem;
               margin-left: $xs-gap;
               color: $text-disabled;
             }
@@ -179,30 +210,60 @@
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        padding: $lg-gap;
+        padding: 0 $lg-gap;
         font-size: $font-size-h4;
 
-        .toggle-muted {
-          width: 2rem;
+        .indexed {
+          display: block;
+          padding: 0.1em $sm-gap;
+          border-radius: $xs-radius;
+          font-size: $font-size-root;
+          font-weight: bold;
+          color: $text-disabled;
+          background-color: $module-bg-darker-1;
         }
 
-        .list-link,
+        .playlist-link,
         .toggle-muted {
-          margin-left: $lg-gap;
           color: $text-disabled;
           &:hover {
             color: $text;
           }
         }
 
-        .indexed {
-          display: block;
-          padding: $xs-gap $sm-gap;
-          border-radius: $xs-radius;
-          font-size: $font-size-small;
-          font-weight: bold;
-          color: $text-disabled;
-          background-color: $module-bg-darker-1;
+        .toggle-muted {
+          width: 2rem;
+          margin-right: $sm-gap;
+        }
+
+        .playlist-link {
+          margin: 0 $sm-gap;
+        }
+
+        .volume {
+          $size: 12px;
+          width: 4.6rem;
+          height: $size + 2;
+          padding: 0 1px;
+          background: $module-bg-darker-1;
+          outline: none;
+          appearance: none;
+
+          &::-webkit-slider-thumb {
+            width: $size;
+            height: $size;
+            background: $module-bg-darker-3;
+            cursor: pointer;
+            appearance: none;
+          }
+          &::-moz-range-thumb {
+            width: $size;
+            height: $size;
+            border: none;
+            border-radius: 0;
+            background: $module-bg-darker-3;
+            cursor: pointer;
+          }
         }
       }
     }
@@ -251,6 +312,9 @@
               color: $link-color;
             }
           }
+          &.unplayable {
+            opacity: 0.3;
+          }
 
           .index {
             padding-left: 1em;
@@ -261,7 +325,9 @@
           .play {
             text-align: center;
             color: $text-disabled;
-            &:hover {
+          }
+          &:not(.unplayable) {
+            .play:hover {
               color: $text;
             }
           }

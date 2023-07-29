@@ -35,7 +35,7 @@ export const enLangMap: LanguageMap = {
   [LanguageKey.ORIGIN_HYBRID]: 'HY',
   [LanguageKey.ACTION_ON]: 'on',
   [LanguageKey.ACTION_OFF]: 'off',
-  [LanguageKey.MUSIC_PLACEHOLDER]: 'The music, the soul of man',
+  [LanguageKey.MUSIC_PLACEHOLDER]: 'Music player',
   [LanguageKey.SEARCH_PLACEHOLDER]: 'Search...',
   [LanguageKey.CATEGORY_UNCATEGORIZED]: 'Uncategorized',
   [LanguageKey.ANNOUNCEMENT_PLACEHOLDER]: 'No announcements',

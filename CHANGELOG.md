@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v4.5.0 (2023-07-30)
+
+**Feature**
+
+- Remove `amplitudejs` and use native `Audio` instead of a player.
+
 ### v4.2.0 (2023-07-22)
 
 **Feature**

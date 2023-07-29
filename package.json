@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "4.4.0",
+  "version": "4.5.0",
   "description": "Surmon.me blog",
   "author": "Surmon",
   "license": "MIT",
@@ -25,7 +25,6 @@
     "@sentry/vue": "^7.60.0",
     "@unhead/ssr": "^1.1.32",
     "@unhead/vue": "^1.1.32",
-    "amplitudejs": "^5.3.2",
     "axios": "^1.4.0",
     "bezier-easing": "^2.1.0",
     "compression": "^1.7.4",

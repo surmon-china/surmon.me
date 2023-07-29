@@ -1,16 +1,15 @@
 <script lang="ts" setup>
-  import { ref, computed } from 'vue'
+  import { ref } from 'vue'
   import { LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
   import { useEnhancer } from '/@/app/enhancer'
   import { useMusic } from '/@/composables/music'
-  import { isClient } from '/@/app/environment'
+  import { getCoverArtURL } from './helper'
   import MusicPlayer from './player.vue'
 
   const { gtag } = useEnhancer()
-  const player = isClient ? useMusic() : null
-  const muted = computed(() => Boolean(player?.muted.value))
-  const currentSong = computed(() => player?.currentSong.value)
+  const player = useMusic()
+  const { state, currentSong } = player
 
   const isOnPlayerModel = ref(false)
   const togglePlayerModel = () => {
@@ -26,12 +25,12 @@
 </script>
 
 <template>
-  <div id="player" :class="{ playing: player.state.playing }" v-if="player?.currentSong.value">
+  <div id="player" :class="{ playing: state.playing }">
     <div class="panel">
       <div class="control">
         <button
           class="prev-song button"
-          :disabled="!player.state.readied"
+          :disabled="!state.initialized"
           @click="player.prevSong"
           @mousedown="handleTouchEvent('prev song')"
         >
@@ -39,7 +38,7 @@
         </button>
         <button
           class="next-song button"
-          :disabled="!player.state.readied"
+          :disabled="!state.initialized"
           @click="player.nextSong"
           @mousedown="handleTouchEvent('next song')"
         >
@@ -47,11 +46,11 @@
         </button>
         <button
           class="muted-toggle button"
-          :disabled="!player.state.readied"
+          :disabled="!state.initialized"
           @click="player.toggleMuted"
           @mousedown="handleTouchEvent('toggle muted')"
         >
-          <i class="iconfont" :class="muted ? 'icon-music-muted' : 'icon-music-unmuted'"></i>
+          <i class="iconfont" :class="state.muted ? 'icon-music-muted' : 'icon-music-unmuted'"></i>
         </button>
         <button class="player button" @click="togglePlayerModel" @mousedown="handleTouchEvent('open player model')">
           <i class="iconfont icon-netease-music"></i>
@@ -63,14 +62,14 @@
       </button>
     </div>
     <div class="cd">
-      <img class="image" :src="currentSong?.cover_art_url" />
+      <img class="image" :src="getCoverArtURL(currentSong?.cover_art_url)" />
       <button
         class="toggle-button"
-        :disabled="!player.state.readied"
+        :disabled="!state.initialized"
         @click="player.togglePlay"
         @mousedown="handleTouchEvent('toggle play')"
       >
-        <i class="iconfont" :class="player.state.playing ? 'icon-music-pause' : 'icon-music-play'"></i>
+        <i class="iconfont" :class="state.playing ? 'icon-music-pause' : 'icon-music-play'"></i>
       </button>
     </div>
     <div class="trigger">
@@ -160,7 +159,7 @@
         height: 100%;
         overflow: hidden;
         background-color: $module-bg-darker-1;
-        background-image: url('/images/page-music/background.jpg');
+        background-image: url('/images/page-music/background-40x40.jpg');
         background-size: cover;
       }
 

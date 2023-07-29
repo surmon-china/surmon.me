@@ -19,7 +19,6 @@ import { createDefer } from '/@/composables/defer'
 import { createMusic } from '/@/composables/music'
 import { createPopup } from '/@/composables/popup'
 import { createLoading } from '/@/composables/loading'
-import amplitude from '/@/effects/amplitude'
 import { runTitler, resetTitler } from '/@/effects/titler'
 import { consoleSlogan } from '/@/effects/slogan'
 import { initCopyrighter } from '/@/effects/copyright'
@@ -51,7 +50,7 @@ const { app, router, head, globalState, i18n, store, getGlobalHead } = createMai
 const defer = createDefer()
 const popup = createPopup()
 const loading = createLoading()
-const music = createMusic({ amplitude })
+const music = createMusic({ delay: 668, continueNext: true })
 
 // plugins & services
 app.use(music)
