@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { computed } from 'vue'
+  import { computed, toRaw } from 'vue'
   import { META } from '/@/config/app.config'
   import { LanguageKey } from '/@/language'
   import { SortType } from '/@/constants/state'
@@ -77,7 +77,7 @@
       name: `Disqus Auth ${META.title}`,
       onClose: () => {
         identity.fetchDisqusUserInfo()
-        console.info('[disqus]', 'logined', identity.user)
+        console.info('[disqus]', 'logined', toRaw(identity.user))
       }
     })
   }
