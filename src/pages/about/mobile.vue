@@ -29,10 +29,11 @@
       </div>
       <h2 class="name">{{ adminInfo.data?.name || '-' }}</h2>
       <h5 class="slogan">{{ adminInfo.data?.slogan || '-' }}</h5>
-      <divider dashed />
-      <h4 class="bio">
+      <h4 class="description">
         <webfont bolder>{{ isZhLang ? META.zh_description : META.en_description }}</webfont>
       </h4>
+      <divider dashed />
+      <p class="biography" v-html="isZhLang ? i18ns.biography.zh : i18ns.biography.en"></p>
     </div>
     <div class="links">
       <div class="list col-2">
@@ -146,17 +147,29 @@
       .slogan {
         text-align: center;
         margin-top: 0;
-        margin-bottom: $gap;
+        margin-bottom: $xs-gap;
       }
 
       .slogan {
         line-height: $line-height-base * 1.2;
       }
 
-      .bio {
+      .description {
         margin: 0;
         line-height: $line-height-base * 1.3;
         text-align: center;
+      }
+
+      .biography {
+        text-indent: 2em;
+        line-height: $line-height-base * 1.4;
+        margin-bottom: 0;
+
+        ::v-deep(a) {
+          font-weight: bold;
+          text-decoration: underline;
+          text-underline-offset: 0.2em;
+        }
       }
     }
 

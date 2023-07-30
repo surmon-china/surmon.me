@@ -132,10 +132,12 @@
         </video>
       </div>
       <div class="content">
-        <uimage class="avatar" :src="getAdminAvatar(adminInfo.data?.avatar)" />
-        <h1 class="name">{{ adminInfo.data?.name || '-' }}</h1>
-        <p class="slogan">{{ adminInfo.data?.slogan || '-' }}</p>
-        <p class="biography">
+        <div class="profile">
+          <uimage class="avatar" :src="getAdminAvatar(adminInfo.data?.avatar)" />
+          <h1 class="name">{{ adminInfo.data?.name || '-' }}</h1>
+          <p class="slogan">{{ adminInfo.data?.slogan || '-' }}</p>
+        </div>
+        <p class="description">
           <webfont bolder>{{ isZhLang ? META.zh_description : META.en_description }}</webfont>
         </p>
         <div class="socials">
@@ -184,6 +186,8 @@
             </ulink>
           </span>
         </div>
+        <divider dashed />
+        <p class="biography" v-html="isZhLang ? i18ns.biography.zh : i18ns.biography.en"></p>
       </div>
     </div>
     <container class="page-content">
@@ -332,43 +336,49 @@
         justify-content: flex-start;
         width: 100%;
         background-color: $module-bg;
-        @include radius-box($lg-radius);
         background-image: url('/images/page-about/background.png'),
-          linear-gradient($module-bg-opaque 40%, #00000000 100%);
+          linear-gradient($module-bg-opaque 50%, #00000000 100%);
         background-size: contain;
         background-repeat: repeat-x;
         background-blend-mode: lighten;
 
-        .avatar {
-          $size: 8rem;
-          width: $size;
-          height: $size;
+        .profile {
+          margin-top: 3rem;
+          margin-bottom: 5rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
           z-index: $z-index-normal + 2;
-          box-sizing: content-box;
-          margin-top: $banner-height - 4rem;
-          border: 8px solid $module-bg;
-          border-radius: 100%;
-          overflow: hidden;
-          background-color: $module-bg;
-          transition: transform $transition-time-slow;
-          &:hover {
-            transform: rotate(360deg);
+
+          .avatar {
+            $size: 8rem;
+            width: $size;
+            height: $size;
+            box-sizing: content-box;
+            border: 6px solid $module-bg;
+            border-radius: 100%;
+            overflow: hidden;
+            background-color: $module-bg;
+            transition: transform $transition-time-slow;
+            &:hover {
+              transform: rotate(360deg);
+            }
+          }
+
+          .name {
+            color: $white;
+            margin-top: $sm-gap;
+            margin-bottom: $xs-gap;
+          }
+
+          .slogan {
+            font-weight: 600;
+            color: $white;
+            margin: 0;
           }
         }
 
-        .name,
-        .slogan {
-          text-align: center;
-          color: $text;
-        }
-
-        .name {
-          margin-top: $sm-gap;
-          margin-bottom: $gap;
-        }
-
-        .biography {
-          margin-bottom: $gap * 2;
+        .description {
           font-size: $font-size-h3;
         }
 
@@ -377,7 +387,7 @@
           display: flex;
           justify-content: center;
           height: $button-size;
-          margin-bottom: $gap * 2;
+          margin-bottom: $gap;
 
           .normal {
             display: inline-flex;
@@ -479,6 +489,16 @@
               }
             }
           }
+        }
+
+        .biography {
+          width: $container-width;
+          margin-bottom: $lg-gap;
+          padding: 0 $xs-gap;
+          text-indent: 2em;
+          line-height: $line-height-base * 1.8;
+          font-weight: 600;
+          color: $text-secondary;
         }
       }
     }
