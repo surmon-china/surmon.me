@@ -13,7 +13,7 @@
     categorySlug: string
   }>()
 
-  const { i18n: _i18n, seo, isZhLang } = useEnhancer()
+  const { i18n: _i18n, seoMeta, isZhLang } = useEnhancer()
   const { articleList: articleListStore, category: categoryStore } = useStores()
   const currentCategory = computed(() => {
     return categoryStore.data.find((category) => category.slug === props.categorySlug)
@@ -36,7 +36,7 @@
     scrollToNextScreen()
   }
 
-  seo(() => {
+  seoMeta(() => {
     const enTitle = firstUpperCase(props.categorySlug)
     const zhTitle = _i18n.t(props.categorySlug)!
     const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle]

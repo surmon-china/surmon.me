@@ -9,7 +9,7 @@
 
   const props = defineProps<{ keyword: string }>()
 
-  const { seo } = useEnhancer()
+  const { seoMeta } = useEnhancer()
   const articleListStore = useArticleListStore()
   const loadmoreArticles = async () => {
     await articleListStore.fetch({
@@ -19,7 +19,7 @@
     scrollToNextScreen()
   }
 
-  seo(() => ({
+  seoMeta(() => ({
     pageTitle: `${props.keyword} | Search`,
     ogType: 'website'
   }))

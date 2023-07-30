@@ -26,14 +26,14 @@ export const useHead = (source: Head | ComputedGetter<Head>) => {
 const DEFAULT_TITLER = (title: string) => `${title} | ${META.title}`
 const DEFAULT_OG_IMAGE = getCDN_URL('/images/og-social-card.jpg')
 
-export interface SeoObject extends UseSeoMetaInput {
+export interface SeoMetaObject extends UseSeoMetaInput {
   title?: string
   pageTitle?: string
   description?: string
   keywords?: string
 }
 
-export function useSeo(source: SeoObject | ComputedGetter<SeoObject>) {
+export function useSeoMeta(source: SeoMetaObject | ComputedGetter<SeoMetaObject>) {
   const { i18n, route } = useEnhancer()
   const input = computed(() => {
     const value = typeof source === 'function' ? source() : source
@@ -55,7 +55,7 @@ export function useSeo(source: SeoObject | ComputedGetter<SeoObject>) {
     twitterTitle: () => input.value._.ogTitle ?? input.value.fullTitle ?? '',
     twitterDescription: () => input.value._.ogDescription ?? input.value.description ?? '',
     ogSiteName: () => META.title,
-    ogType: () => input.value._.ogType ?? 'website',
+    ogType: () => input.value._.ogType ?? ('object' as any),
     ogTitle: () => input.value._.ogTitle ?? input.value.pureTitle ?? '',
     ogDescription: () => input.value._.ogDescription ?? input.value.description ?? '',
     ogUrl: () => input.value._.ogUrl ?? getPageURL(route.fullPath),

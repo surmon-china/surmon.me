@@ -11,7 +11,7 @@
     date: string
   }>()
 
-  const { seo } = useEnhancer()
+  const { seoMeta } = useEnhancer()
   const { articleList: articleListStore } = useStores()
 
   const loadmoreArticles = async () => {
@@ -22,7 +22,7 @@
     scrollToNextScreen()
   }
 
-  seo(() => ({
+  seoMeta(() => ({
     pageTitle: `${props.date} | Date`,
     ogType: 'website'
   }))

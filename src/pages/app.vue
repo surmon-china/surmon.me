@@ -10,19 +10,19 @@
     isMobile?: boolean
   }>()
 
-  const { i18n: _i18n, seo, gtag, isZhLang } = useEnhancer()
+  const { i18n: _i18n, seoMeta, gtag, isZhLang } = useEnhancer()
   const handleAppEvent = (name: string) => {
     gtag?.event(name, {
       event_category: GAEventCategories.App
     })
   }
 
-  seo(() => {
+  seoMeta(() => {
     const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_APP, Language.English)!)
     const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_APP), enTitle] : [enTitle]
     return {
       pageTitle: titles.join(' | '),
-      description: `${META.title} App 下载`,
+      description: `${META.title} App ${isZhLang.value ? '下载' : 'download'}`,
       ogImage: getCDN_URL('/images/page-app/logo.png')
     }
   })

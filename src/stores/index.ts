@@ -20,11 +20,11 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
     // https://pinia.esm.dev/ssr/#using-the-store-outside-of-setup
     const stores = useStores(pinia)
     const initFetchTasks = [
+      // app basic configuration
+      stores.appOption.fetch(),
       // basic data
       stores.category.fetch(),
-      stores.tag.fetch(),
-      // app options
-      stores.appOption.fetch()
+      stores.tag.fetch()
     ]
     // fetch hot articles when desktop only
     if (!config.globalState.userAgent.isMobile) {

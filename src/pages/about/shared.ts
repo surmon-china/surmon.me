@@ -62,15 +62,16 @@ export const i18ns = {
 }
 
 export const useAboutPageMeta = () => {
-  const { i18n, seo, isZhLang } = useEnhancer()
+  const { i18n, seoMeta, isZhLang } = useEnhancer()
   const { adminInfo } = useStores()
 
-  return seo(() => {
+  return seoMeta(() => {
     const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_ABOUT, Language.English)!)
     const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ABOUT), enTitle] : [enTitle]
+    const description = `${isZhLang.value ? '关于' : 'About'} ${META.author}`
     return {
       pageTitle: titles.join(' | '),
-      description: `关于 ${META.author}`,
+      description,
       ogType: 'profile',
       ogImage: getAdminAvatar(adminInfo.data?.avatar)
     }

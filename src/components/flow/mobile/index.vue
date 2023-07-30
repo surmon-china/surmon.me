@@ -20,7 +20,7 @@
     date?: string
   }>()
 
-  const { i18n: _i18n, seo } = useEnhancer()
+  const { i18n: _i18n, seoMeta, isZhLang } = useEnhancer()
   const tagStore = useTagStore()
   const categoryStore = useCategoryStore()
   const articleListStore = useArticleListStore()
@@ -37,10 +37,11 @@
     return pagination ? pagination.current_page < pagination.total_page : false
   })
 
-  seo(() => {
+  seoMeta(() => {
     const titles: string[] = Object.values(props)
       .filter(Boolean)
       .map((prop) => firstUpperCase(prop as string))
+
     // filter page
     if (titles.length) {
       return {
@@ -50,7 +51,7 @@
     // index page
     return {
       title: `${META.title} - ${_i18n.t(LanguageKey.APP_SLOGAN)}`,
-      description: appOptionStore.data?.description,
+      description: isZhLang.value ? META.zh_description : META.en_description,
       keywords: appOptionStore.data?.keywords.join(','),
       ogType: 'website'
     }

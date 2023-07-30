@@ -31,7 +31,7 @@
       <h5 class="slogan">{{ adminInfo.data?.slogan || '-' }}</h5>
       <divider dashed />
       <h4 class="bio">
-        <webfont bolder>{{ isZhLang ? META.zh_biography : META.en_biography }}</webfont>
+        <webfont bolder>{{ isZhLang ? META.zh_description : META.en_description }}</webfont>
       </h4>
     </div>
     <div class="links">

@@ -12,18 +12,19 @@
   import InstagramGrid from './instagram/grid.vue'
   import YoutubePlaylist from './youtube/playlist.vue'
 
-  const { i18n: _i18n, seo, isZhLang } = useEnhancer()
+  const { i18n: _i18n, seoMeta, isZhLang } = useEnhancer()
   const { instagramMedias, youtubePlayList } = useStores()
   const youtubePlaylistData = computed(() => {
     return youtubePlayList.data.filter((list) => list.contentDetails.itemCount > 1)
   })
 
-  seo(() => {
+  seoMeta(() => {
     const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_LENS, Language.English)!)
     const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_LENS), enTitle] : [enTitle]
+    const description = isZhLang.value ? `${META.author} 的摄影作品` : `${META.author}'s Photography`
     return {
       pageTitle: titles.join(' | '),
-      description: `${META.author} 的浮光掠影`
+      description: description
     }
   })
 

@@ -136,7 +136,7 @@
         <h1 class="name">{{ adminInfo.data?.name || '-' }}</h1>
         <p class="slogan">{{ adminInfo.data?.slogan || '-' }}</p>
         <p class="biography">
-          <webfont bolder>{{ isZhLang ? META.zh_biography : META.en_biography }}</webfont>
+          <webfont bolder>{{ isZhLang ? META.zh_description : META.en_description }}</webfont>
         </p>
         <div class="socials">
           <span class="normal">

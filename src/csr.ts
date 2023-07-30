@@ -29,7 +29,7 @@ import { getLayoutByRouteMeta } from '/@/transforms/layout'
 import { getCDN_URL } from '/@/transforms/url'
 import { Language, LanguageKey } from '/@/language'
 import { APP_ENV, isDev, isProd } from '/@/app/environment'
-import { IDENTITIES } from '/@/config/app.config'
+import { META, IDENTITIES } from '/@/config/app.config'
 import API_CONFIG from '/@/config/api.config'
 
 import './effects/swiper/style'
@@ -126,10 +126,11 @@ router.isReady().finally(() => {
         // @ts-ignore
         const isHidden = event.target?.hidden || event.target?.webkitHidden
         const surprises = [
-          { favicon: '⛔️', title: 'FORBIDDEN' },
-          { favicon: '⭕️', title: 'FBI WARNING' },
           // tltle: zero width character
-          { favicon: '🌝', title: '​' }
+          // { favicon: '🌝', title: '​' },
+          // { favicon: '⛔️', title: 'FORBIDDEN' },
+          // { favicon: '⭕️', title: 'FBI WARNING' },
+          { favicon: '🌱', title: META.title }
         ]
         const index = Math.floor(Math.random() * surprises.length)
         isHidden ? runTitler(surprises[index]) : resetTitler()

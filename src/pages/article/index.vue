@@ -27,7 +27,7 @@
     isMobile?: boolean
   }>()
 
-  const { i18n: _i18n, head, seo, gtag, gState } = useEnhancer()
+  const { i18n: _i18n, head, seoMeta, gtag, gState } = useEnhancer()
   const { identity, sponsor, comment: commentStore, articleDetail: articleDetailStore } = useStores()
   const { article, fetching, prevArticle, nextArticle, relatedArticles } = storeToRefs(articleDetailStore)
   const isLiked = computed(() => Boolean(article.value && identity.isLikedPage(article.value.id)))
@@ -99,7 +99,7 @@
     style: customElementsStyle.value ? [{ children: customElementsStyle.value }] : []
   }))
 
-  seo(() => ({
+  seoMeta(() => ({
     pageTitle: article.value?.title,
     description: article.value?.description || '',
     keywords: article.value?.keywords?.join(',') || article.value?.title,

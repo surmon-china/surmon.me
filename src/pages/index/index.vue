@@ -9,12 +9,12 @@
   import Carrousel from './carrousel.vue'
   import Twitter from './twitter.vue'
 
-  const { seo, i18n: _i18n } = useEnhancer()
+  const { seoMeta, i18n: _i18n, isZhLang } = useEnhancer()
   const { appOption, articleList: articleListStore, twitter: twitterStore } = useStores()
 
-  seo(() => ({
-    title: `${META.title} - ${_i18n.t(LanguageKey.APP_SLOGAN)}`,
-    description: appOption.data?.description,
+  seoMeta(() => ({
+    title: `${META.title} - ${_i18n.t(LanguageKey.APP_SLOGAN)!.replaceAll('，', ' ')}`,
+    description: isZhLang.value ? META.zh_description : META.en_description,
     keywords: appOption.data?.keywords.join(',')
   }))
 

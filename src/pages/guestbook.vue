@@ -17,7 +17,7 @@
     isMobile?: boolean
   }>()
 
-  const { i18n: _i18n, seo, gtag, gState, isDarkTheme, isZhLang } = useEnhancer()
+  const { i18n: _i18n, seoMeta, gtag, gState, isDarkTheme, isZhLang } = useEnhancer()
   const { identity, appOption, comment: commentStore } = useStores()
   const isLiked = computed(() => identity.isLikedPage(CommentPostId.Guestbook))
   const siteLikes = computed(() => appOption.data?.meta.likes || 0)
@@ -52,12 +52,13 @@
     })
   }
 
-  seo(() => {
+  seoMeta(() => {
     const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_GUESTBOOK, Language.English)!)
     const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_GUESTBOOK), enTitle] : [enTitle]
+    const description = isZhLang.value ? `给 ${META.author} 留言` : 'Leave a comment'
     return {
       pageTitle: titles.join(' | '),
-      description: `给 ${META.author} 留言`,
+      description,
       ogType: 'website',
       ogImage: getCDN_URL(bannerImage),
       ogImageWidth: 620,
