@@ -130,7 +130,7 @@ router.isReady().finally(() => {
           // { favicon: '🌝', title: '​' },
           // { favicon: '⛔️', title: 'FORBIDDEN' },
           // { favicon: '⭕️', title: 'FBI WARNING' },
-          { favicon: '🌱', title: META.title }
+          { favicon: '🌱', title: META.en_sub_title }
         ]
         const index = Math.floor(Math.random() * surprises.length)
         isHidden ? runTitler(surprises[index]) : resetTitler()
