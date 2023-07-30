@@ -165,10 +165,10 @@ const DEFAULT_DELAY = 468;
 const LONG_ARTICLE_THRESHOLD = 16688;
 const META = Object.freeze({
     title: 'Surmon.me',
-    zh_sub_title: '来苏之望',
-    en_sub_title: 'Come into the wild',
-    zh_biography: '本是浪蝶游蜂，自留半亩石池，但求直抒胸臆，挥墨九云之中',
-    en_biography: 'Either write something worth reading or do something worth writing.',
+    zh_sub_title: '斯是陋室，唯吾芳馨',
+    en_sub_title: `Surmon's digital garden`,
+    zh_description: '本是浪蝶游蜂，自留半亩石池，但求直抒胸臆，挥墨九云之中',
+    en_description: 'Either write something worth reading or do something worth writing.',
     url: 'https://surmon.me',
     domain: 'surmon.me',
     author: 'Surmon',
