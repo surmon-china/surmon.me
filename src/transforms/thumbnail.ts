@@ -17,7 +17,7 @@ interface ImgProxyOptions {
   watermark?: string
   webp?: boolean
 }
-const getImgProxyURI = (path: string, options: ImgProxyOptions) => {
+const getImgProxyPath = (path: string, options: ImgProxyOptions) => {
   const resize = `resize:fill:${options.width}:${options.height}:0`
   const format = options.webp ? WebPFormat : ''
   const watermark = options.watermark ? `/${options.watermark}` : ''
@@ -38,7 +38,7 @@ export const getArticleBannerThumbnailURL = (options: ThumbnailOptions) => {
     return options.url
   }
 
-  const url = getImgProxyURI(options.url.replace(API_CONFIG.STATIC, ''), {
+  const url = getImgProxyPath(options.url.replace(API_CONFIG.STATIC, ''), {
     width: 1190,
     height: 420,
     webp: options.isWebP,
@@ -56,7 +56,7 @@ export const getMobileArticleListThumbnailURL = (options: ThumbnailOptions) => {
     return options.url
   }
 
-  const url = getImgProxyURI(options.url.replace(API_CONFIG.STATIC, ''), {
+  const url = getImgProxyPath(options.url.replace(API_CONFIG.STATIC, ''), {
     width: 700,
     height: 247,
     webp: options.isWebP,
@@ -74,7 +74,7 @@ export const getReletedArticleListThumbnailURL = (options: ThumbnailOptions) => 
     return options.url
   }
 
-  const url = getImgProxyURI(options.url.replace(API_CONFIG.STATIC, ''), {
+  const url = getImgProxyPath(options.url.replace(API_CONFIG.STATIC, ''), {
     width: 466,
     height: 168,
     webp: options.isWebP
@@ -91,7 +91,7 @@ export const getArticleListThumbnailURL = (options: ThumbnailOptions) => {
     return options.url
   }
 
-  const url = getImgProxyURI(options.url.replace(API_CONFIG.STATIC, ''), {
+  const url = getImgProxyPath(options.url.replace(API_CONFIG.STATIC, ''), {
     width: 350,
     height: 238,
     webp: options.isWebP

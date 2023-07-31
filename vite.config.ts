@@ -8,6 +8,7 @@ import path from 'path'
 import { loadEnv, defineConfig } from 'vite'
 import vuePlugin from '@vitejs/plugin-vue'
 import UnheadVite from '@unhead/addons/vite'
+import packageJSON from './package.json'
 
 const CWD = process.cwd()
 const BASE_ENV_CONFIG = loadEnv('', CWD)
@@ -30,6 +31,9 @@ export default defineConfig(({ command, mode }) => {
       alias: {
         '/@': path.resolve(__dirname, 'src')
       }
+    },
+    define: {
+      __APP_VERSION__: JSON.stringify(packageJSON.version)
     },
     server: {
       open: true,

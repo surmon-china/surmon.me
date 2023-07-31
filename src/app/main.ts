@@ -12,7 +12,7 @@ import { createUniversalStore } from '/@/stores'
 import { createI18n } from '/@/composables/i18n'
 import { createHead, Head } from '/@/composables/head'
 import { createTheme, Theme } from '/@/composables/theme'
-import { APP_ENV } from '/@/app/environment'
+import { APP_ENV, APP_VERSION } from '/@/app/environment'
 import { NODE_ENV } from '/@/server/environment'
 import { createUniversalRouter, RouterCreatorOptions } from './router'
 import { createGlobalState, LayoutColumn } from './state'
@@ -20,7 +20,15 @@ import API_CONFIG from '/@/config/api.config'
 import components from './components'
 import App from './index.vue'
 
-console.info(`[APP INITED]:`, { APP_ENV, NODE_ENV }, API_CONFIG)
+console.group(`[APP INITED]:`)
+console.table({
+  APP_VERSION,
+  APP_ENV,
+  NODE_ENV,
+  '---': '-------',
+  ...API_CONFIG
+})
+console.groupEnd()
 
 export interface ICreatorContext {
   historyCreator(base?: string): RouterHistory

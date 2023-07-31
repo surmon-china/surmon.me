@@ -27,7 +27,7 @@ import { exportStickyEventsToGlobal } from '/@/effects/sticky'
 import { exportEmojiRainToGlobal } from '/@/effects/emoji-23333'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
 import { Language, LanguageKey } from '/@/language'
-import { APP_ENV, isDev, isProd } from '/@/app/environment'
+import { APP_VERSION, APP_ENV, isDev, isProd } from '/@/app/environment'
 import { META, IDENTITIES } from '/@/config/app.config'
 import API_CONFIG from '/@/config/api.config'
 
@@ -93,6 +93,7 @@ Sentry.init({
   app,
   dsn: IDENTITIES.SENTRY_PUBLIC_DSN,
   environment: APP_ENV,
+  release: APP_VERSION,
   tracesSampleRate: isDev ? 1.0 : 0.2,
   replaysSessionSampleRate: isDev ? 0.8 : 0.1,
   replaysOnErrorSampleRate: 1.0,
