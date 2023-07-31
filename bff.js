@@ -106,7 +106,7 @@ const isNodeProd = process.env.NODE_ENV === NodeEnv.Production;
  */
 const BFF_TUNNEL_PREFIX = '/_tunnel';
 const BFF_PROXY_PREFIX = '/_proxy';
-const BFF_PROXY_ALLOWLIST = ['https://surmon.me', 'https://cdn.surmon.me'];
+const BFF_PROXY_ALLOWLIST = ['https://surmon.me', 'https://cdn.surmon.me', 'httos://cdn.cn.surmon.me'];
 const getBFFServerPort = () => Number(process.env.PORT || 3000);
 const getOnlineApiURL = () => process.env.VITE_API_ONLINE_URL;
 const getLocalApiURL = () => process.env.VITE_API_LOCAL_URL;
@@ -1077,26 +1077,49 @@ var external_vite_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; 
 var external_vite_y = x => () => x
 const external_vite_namespaceObject = external_vite_x({ ["createServer"]: () => __WEBPACK_EXTERNAL_MODULE_vite__.createServer });
 ;// CONCATENATED MODULE: ./src/server/renderer/template.ts
-const resolveTemplate = (config) => {
-    const { template, appHTML, heads, scripts } = config;
-    const bodyScripts = [
-        scripts
-        // MARK: https://cn.vitejs.dev/config/#build-ssrmanifest
-        // client output less assets (3 js + 1 css) & built-in HTML
-        // manifest
+// manifest: https://vitejs.dev/guide/backend-integration.html
+// render manifeat json to HTML
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const renderAssetsByManifest = (manifest, prefix) => {
+    const item = Object.values(manifest);
+    const entry = item.find((item) => item.isEntry);
+    if (!entry)
+        return '';
+    const entryScript = entry.file;
+    const entryStyles = entry.css || [];
+    const entryImports = entry.imports || [];
+    const entryDynamicImports = entry.dynamicImports || [];
+    const importFiles = Array.from(new Set([...entryImports, ...entryDynamicImports])).map((key) => manifest[key].file);
+    return [
+        `<script type="module" crossorigin src="${prefix}/${entryScript}"></script>`,
+        ...importFiles.map((item) => `<link rel="modulepreload" crossorigin href="${prefix}/${item}">`),
+        ...entryStyles.map((item) => `<link rel="stylesheet" href="${prefix}/${item}">`)
     ].join('\n');
-    const html = template
+};
+// resolve assets URL prefix
+const resolveAssetsPrefixByManiFest = (html, manifest, prefix) => {
+    // List all the files in the manifest, when any file is matched, replace it with the prefix
+    return Object.values(manifest).reduce((result, { file }) => {
+        return result.replace(new RegExp(`(href|src)="/${file}"`, 'g'), `$1="${prefix}/${file}"`);
+    }, html);
+};
+const resolveTemplate = (input) => {
+    let result = input.template;
+    // deterministically changing file prefixes with manifest
+    if (input.assetPrefix && input.manifest) {
+        result = resolveAssetsPrefixByManiFest(result, input.manifest, input.assetPrefix);
+    }
+    return (result
         // MARK: replace! $ sign & use function replacer
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_string_as_a_parameter
         // https://github.com/vueuse/head#ssr-rendering
         .replace(/<title>[\s\S]*<\/title>/, '')
-        .replace(`<html`, () => `<html ${heads.htmlAttrs} `)
-        .replace(`<head>`, () => `<head>\n${heads.headTags}`)
-        .replace(`<!--app-html-->`, () => appHTML)
-        .replace(`<body>`, () => `<body ${heads.bodyAttrs}>`)
-        .replace(`</body>`, () => `\n${heads.bodyTags}\n</body>`)
-        .replace(`</body>`, () => `\n${bodyScripts}\n</body>`);
-    return html;
+        .replace(`<html`, () => `<html ${input.heads.htmlAttrs} `)
+        .replace(`<head>`, () => `<head>\n${input.heads.headTags}`)
+        .replace(`<body>`, () => `<body ${input.heads.bodyAttrs}>`)
+        .replace(`</body>`, () => `\n${input.heads.bodyTags}\n</body>`)
+        .replace(`</body>`, () => `\n${input.scripts}\n</body>`)
+        .replace(`<!--app-html-->`, () => input.appHTML));
 };
 
 ;// CONCATENATED MODULE: ./src/server/renderer/dev.ts
@@ -1158,6 +1181,9 @@ const enableDevRenderer = async (app, cache) => {
 
 const enableProdRenderer = async (app, cache) => {
     const template = external_fs_namespaceObject["default"].readFileSync(external_path_namespaceObject["default"].resolve(DIST_PATH, 'template.html'), 'utf-8');
+    const manifest = external_fs_namespaceObject["default"].readFileSync(external_path_namespaceObject["default"].resolve(DIST_PATH, 'manifest.json'), 'utf-8');
+    const manifestJSON = JSON.parse(manifest);
+    // remove CSR entry
     // Bypass webpack rewrite dynamic import, it will be resolved at runtime.
     // https://github.com/vercel/ncc/issues/935#issuecomment-1189850042
     const _import = new Function('p', 'return import(p)');
@@ -1171,18 +1197,22 @@ const enableProdRenderer = async (app, cache) => {
                 .set({ 'Content-Type': 'text/html' })
                 .end(resolveTemplate({
                 template,
+                manifest: manifestJSON,
                 appHTML: redered.html,
                 heads: redered.heads,
-                scripts: redered.scripts
+                scripts: redered.scripts,
+                assetPrefix: redered.cdnPrefix
             }));
         }
         catch (error) {
             const redered = await renderError(request, error);
             response.status(redered.code).end(resolveTemplate({
                 template,
+                manifest: manifestJSON,
                 appHTML: redered.html,
                 heads: redered.heads,
-                scripts: redered.scripts
+                scripts: redered.scripts,
+                assetPrefix: redered.cdnPrefix
             }));
         }
     });

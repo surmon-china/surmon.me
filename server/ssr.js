@@ -42,8 +42,7 @@ import { Grid, Pagination, Navigation, Mousewheel, Autoplay, A11y, EffectFade } 
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import qs from "qs";
 import QRCode from "qrcode";
-import "./mapbox-gl.js";
-var LanguageKey = /* @__PURE__ */ ((LanguageKey2) => {
+/* empty css           */var LanguageKey = /* @__PURE__ */ ((LanguageKey2) => {
   LanguageKey2["APP_SLOGAN"] = "app-slogan";
   LanguageKey2["CATEGORY_INSIGHT"] = "insight";
   LanguageKey2["CATEGORY_CODE"] = "code";
@@ -368,6 +367,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
+const APP_VERSION = "4.9.0";
 const APP_ENV = "production";
 const isServer = true;
 const isClient = !isServer;
@@ -2284,7 +2284,7 @@ _sfc_main$1C.setup = (props, ctx) => {
 };
 const Loadmore = /* @__PURE__ */ _export_sfc(_sfc_main$1C, [["__scopeId", "data-v-ecbe8858"]]);
 const WebPFormat = `@webp`;
-const getImgProxyURI = (path, options) => {
+const getImgProxyPath = (path, options) => {
   const resize = `resize:fill:${options.width}:${options.height}:0`;
   const format = options.webp ? WebPFormat : "";
   const watermark = options.watermark ? `/${options.watermark}` : "";
@@ -2297,7 +2297,7 @@ const getArticleBannerThumbnailURL = (options) => {
   if (!options.url.startsWith(API_CONFIG.STATIC)) {
     return options.url;
   }
-  const url = getImgProxyURI(options.url.replace(API_CONFIG.STATIC, ""), {
+  const url = getImgProxyPath(options.url.replace(API_CONFIG.STATIC, ""), {
     width: 1190,
     height: 420,
     webp: options.isWebP,
@@ -2312,7 +2312,7 @@ const getMobileArticleListThumbnailURL = (options) => {
   if (!options.url.startsWith(API_CONFIG.STATIC)) {
     return options.url;
   }
-  const url = getImgProxyURI(options.url.replace(API_CONFIG.STATIC, ""), {
+  const url = getImgProxyPath(options.url.replace(API_CONFIG.STATIC, ""), {
     width: 700,
     height: 247,
     webp: options.isWebP,
@@ -2327,7 +2327,7 @@ const getReletedArticleListThumbnailURL = (options) => {
   if (!options.url.startsWith(API_CONFIG.STATIC)) {
     return options.url;
   }
-  const url = getImgProxyURI(options.url.replace(API_CONFIG.STATIC, ""), {
+  const url = getImgProxyPath(options.url.replace(API_CONFIG.STATIC, ""), {
     width: 466,
     height: 168,
     webp: options.isWebP
@@ -2341,7 +2341,7 @@ const getArticleListThumbnailURL = (options) => {
   if (!options.url.startsWith(API_CONFIG.STATIC)) {
     return options.url;
   }
-  const url = getImgProxyURI(options.url.replace(API_CONFIG.STATIC, ""), {
+  const url = getImgProxyPath(options.url.replace(API_CONFIG.STATIC, ""), {
     width: 350,
     height: 238,
     webp: options.isWebP
@@ -13453,20 +13453,27 @@ const getPageRoute = (routeName) => {
 };
 const isArticleDetail = (name) => name === RouteName.Article;
 const isSearchFlow = (name) => name === RouteName.SearchFlow;
-const getCDN_URL = (isCN) => {
+var CDNPrefix = /* @__PURE__ */ ((CDNPrefix2) => {
+  CDNPrefix2["Assets"] = "assets";
+  CDNPrefix2["Static"] = "static";
+  CDNPrefix2["ImgProxy"] = "imgproxy";
+  return CDNPrefix2;
+})(CDNPrefix || {});
+const getCDNDomain = (isCN) => {
   const _isCN = isCN ?? isCNUser();
   return _isCN ? API_CONFIG.CDN_CN : API_CONFIG.CDN_GLOBAL;
+};
+const getCDNPrefixURL = (prefix, isCN) => {
+  return `${getCDNDomain(isCN)}/${prefix}`;
 };
 const normalizePath = (path) => {
   return path.startsWith("/") ? path : `/${path}`;
 };
 const getAssetURL = (path, isCN) => {
-  {
-    return `${getCDN_URL(isCN)}/assets${normalizePath(path)}`;
-  }
+  return `${getCDNPrefixURL("assets", isCN)}${normalizePath(path)}`;
 };
 const getImgProxyURL = (path, isCN) => {
-  return `${getCDN_URL(isCN)}/imgproxy${normalizePath(path)}`;
+  return `${getCDNPrefixURL("imgproxy", isCN)}${normalizePath(path)}`;
 };
 const getProxyURL = (path, module = ProxyModule.Default) => {
   return `${BFF_PROXY_PREFIX}/${module}/${encodeURIComponent(path)}`;
@@ -17399,7 +17406,15 @@ _sfc_main.setup = (props, ctx) => {
   (ssrContext2.modules || (ssrContext2.modules = /* @__PURE__ */ new Set())).add("src/app/index.vue");
   return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };
-console.info(`[APP INITED]:`, { APP_ENV, NODE_ENV }, API_CONFIG);
+console.group(`[APP INITED]:`);
+console.table({
+  APP_VERSION,
+  APP_ENV,
+  NODE_ENV,
+  "---": "-",
+  ...API_CONFIG
+});
+console.groupEnd();
 const createMainApp = (context) => {
   var _a, _b;
   const app = createSSRApp(_sfc_main);
@@ -17521,7 +17536,12 @@ const renderHTML = async (mainApp, url) => {
     store: store.state.value,
     ...getSSRContextByApp(app)
   });
-  return { html, heads, scripts };
+  return {
+    html,
+    heads,
+    scripts,
+    cdnPrefix: getCDNPrefixURL(CDNPrefix.Assets, globalState.isCNUser)
+  };
 };
 const renderError = async (request, error) => {
   const { app, head, globalState, theme, country } = createApp(request);
@@ -17531,6 +17551,7 @@ const renderError = async (request, error) => {
     code: error.code ?? INVALID_ERROR,
     html: await renderToString(app),
     heads: await renderSSRHead(head),
+    cdnPrefix: getCDNPrefixURL(CDNPrefix.Assets, globalState.isCNUser),
     scripts: renderScripts({
       country,
       theme: theme.theme.value,
