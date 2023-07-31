@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { getCDN_URL } from '/@/transforms/url'
+  import { getAssetURL } from '/@/transforms/url'
   import { useEnhancer } from '/@/app/enhancer'
 
   interface Props {
@@ -23,7 +23,7 @@
     <div
       class="background"
       :class="{ dark: isDarkTheme }"
-      :style="{ backgroundImage: `url(${getCDN_URL(props.image)})`, backgroundPositionY: `${position}%` }"
+      :style="{ backgroundImage: `url(${getAssetURL(props.image)})`, backgroundPositionY: `${position}%` }"
     ></div>
     <div class="content" :class="{ blur: Boolean(blur) }" :style="{ '--blur': `${blur}px` }">
       <h2 class="title">

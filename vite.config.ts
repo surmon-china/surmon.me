@@ -24,7 +24,7 @@ export default defineConfig(({ command, mode }) => {
   return {
     plugins: [vuePlugin(), UnheadVite()],
     root: path.resolve(__dirname),
-    base: TARGET_ENV_CONFIG.VITE_CDN_URL + '/',
+    base: TARGET_ENV_CONFIG.VITE_ASSET_URL + '/',
     publicDir: 'public',
     resolve: {
       alias: {

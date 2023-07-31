@@ -8,7 +8,7 @@
   import { CommentPostId } from '/@/constants/state'
   import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
-  import { getCDN_URL } from '/@/transforms/url'
+  import { getAssetURL } from '/@/transforms/url'
   import { META } from '/@/config/app.config'
   import PageBanner from '/@/components/common/banner.vue'
   import Comment from '/@/components/comment/index.vue'
@@ -60,7 +60,7 @@
       pageTitle: titles.join(' | '),
       description,
       ogType: 'website',
-      ogImage: getCDN_URL(bannerImage),
+      ogImage: getAssetURL(bannerImage),
       ogImageWidth: 620,
       ogImageHeight: 350
     }

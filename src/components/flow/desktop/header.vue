@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { getCDN_URL } from '/@/transforms/url'
+  import { getAssetURL } from '/@/transforms/url'
 
   const props = defineProps<{
     icon: string
@@ -14,7 +14,7 @@
       class="background"
       :style="{
         backgroundColor: props.backgroundColor,
-        backgroundImage: `url(${props.backgroundImage ?? getCDN_URL('/images/thumbnail/carrousel.jpg')})`
+        backgroundImage: `url(${props.backgroundImage ?? getAssetURL('/images/thumbnail/carrousel.jpg')})`
       }"
     />
     <div class="content">

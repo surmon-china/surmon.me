@@ -7,7 +7,7 @@
 import { App, inject, ref, computed, reactive, readonly } from 'vue'
 import { INVALID_ERROR } from '/@/constants/error'
 import { uaParser, isZhUser } from '/@/transforms/ua'
-import { isCNCode } from '/@/transforms/country'
+import { isCNCode } from '../transforms/region'
 import { universalRef, onClient } from '/@/universal'
 
 type RenderErrorValue = RenderError | null

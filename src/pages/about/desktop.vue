@@ -5,7 +5,7 @@
   import { useStores } from '/@/stores'
   import { useUniversalFetch } from '/@/universal'
   import { getPageRoute } from '/@/transforms/route'
-  import { getCDN_URL } from '/@/transforms/url'
+  import { getAssetURL } from '/@/transforms/url'
   import { GAEventCategories } from '/@/constants/gtag'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import InstagramMedia from './media/instagram.vue'
@@ -52,7 +52,7 @@
   }
 
   // MARK: To prevent vite from parsing video.source.src as an asset instead of a static resource and failing to compile it
-  const backgroundVideo = getCDN_URL('/images/page-about/background.mp4')
+  const backgroundVideo = getAssetURL('/images/page-about/background.mp4')
 
   // meta
   useAboutPageMeta()

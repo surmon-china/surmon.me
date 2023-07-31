@@ -3,7 +3,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { getCDN_URL } from '/@/transforms/url'
+import { getAssetURL } from '/@/transforms/url'
 
 export const EMOJIS = [
   ...['😃', '😂', '😅', '😉', '😌', '😔', '😓', '😢', '😍', '😘', '😜', '😡'],
@@ -41,21 +41,21 @@ export const luanchEmojiRain = (content: string) => {
       speed: 12,
       staggered: true,
       increaseSpeed: 0.4,
-      emoji: getCDN_URL('/images/emojis/haha.png')
+      emoji: getAssetURL('/images/emojis/haha.png')
     })
   } else if (SIX_KEYWORDS.find((keyword) => content.includes(keyword))) {
     luanchRain({
       speed: 12,
       staggered: true,
       increaseSpeed: 0.4,
-      emoji: getCDN_URL('/images/emojis/666.png')
+      emoji: getAssetURL('/images/emojis/666.png')
     })
   } else if (HEHE_KEYWORDS.find((keyword) => content.includes(keyword))) {
     luanchRain({
       staggered: false,
       speed: 8,
       increaseSpeed: 0.04,
-      emoji: getCDN_URL('/images/emojis/hehe.png')
+      emoji: getAssetURL('/images/emojis/hehe.png')
     })
   } else if (Math.random() <= 0.5) {
     luanchRain({
@@ -63,7 +63,7 @@ export const luanchEmojiRain = (content: string) => {
       staggered: true,
       speed: 8,
       increaseSpeed: 0.04,
-      emoji: getCDN_URL('/images/emojis/doge.png')
+      emoji: getAssetURL('/images/emojis/doge.png')
     })
   }
 }

@@ -4,11 +4,11 @@
  */
 
 import { ProxyModule } from '/@/constants/proxy'
-import { getCDN_URL, getProxyURL } from '/@/transforms/url'
+import { getAssetURL, getProxyURL } from '/@/transforms/url'
 import { isDev } from '/@/app/environment'
 
 export const getDefaultAvatar = () => {
-  return getCDN_URL('/images/gravatar.png')
+  return getAssetURL('/images/gravatar.png')
 }
 
 export const getGravatarByHash = (hash?: string | null) => {

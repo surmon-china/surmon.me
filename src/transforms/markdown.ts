@@ -14,7 +14,7 @@ import { CUSTOM_ELEMENT_LIST } from '/@/effects/elements'
 import { LOZAD_CLASS_NAME } from '/@/composables/lozad'
 import { escape } from '/@/transforms/text'
 import { META } from '/@/config/app.config'
-import API_CONFIG from '/@/config/api.config'
+import { BFF_PROXY_PREFIX } from '/@/config/bff.config'
 
 // https://marked.js.org
 const highlightLangPrefix = 'language-'
@@ -133,7 +133,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
   // image: sanitize(title, alt) > popup
   renderer.image = (src, title, alt) => {
     // HTTP > proxy
-    const source = sanitizeUrl(src!)?.replace(/^http:\/\//gi, `${API_CONFIG.PROXY}/`)
+    const source = sanitizeUrl(src!)?.replace(/^http:\/\//gi, `${BFF_PROXY_PREFIX}/`)
     const titleValue = sanitizeHTML(escape(title || alt))
     const altValue = sanitizeHTML(escape(alt!))
     const sourceValue = options?.imageSource ? options.imageSource(source) : source

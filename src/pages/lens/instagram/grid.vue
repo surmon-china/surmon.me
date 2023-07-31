@@ -4,7 +4,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { UNDEFINED, isNil } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { getCDN_URL } from '/@/transforms/url'
+  import { getAssetURL } from '/@/transforms/url'
   import { isVideoMediaIns, isAlbumMediaIns, getInstagramImage } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import Iembed from './embed.vue'
@@ -79,7 +79,7 @@
           :key="index"
           v-for="index in 3 - restMedias.length"
           :href="VALUABLE_LINKS.INSTAGRAM"
-          :style="{ backgroundImage: `url(${getCDN_URL('/images/page-lens/instagram-default.jpg')})` }"
+          :style="{ backgroundImage: `url(${getAssetURL('/images/page-lens/instagram-default.jpg')})` }"
         >
           <div class="mask">
             <i class="iconfont icon-new-window-s"></i>

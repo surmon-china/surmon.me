@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ref, reactive, nextTick, onMounted } from 'vue'
-  import { getCDN_URL } from '/@/transforms/url'
+  import { getAssetURL } from '/@/transforms/url'
 
   declare global {
     interface Window {
@@ -30,7 +30,7 @@
             increaseSpeed: 0.4,
             density: 5,
             staggered: true,
-            emoji: getCDN_URL('/images/emojis/funny.png'),
+            emoji: getAssetURL('/images/emojis/funny.png'),
             ...options,
             onStart() {
               state.kichikuing = true

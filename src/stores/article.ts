@@ -133,8 +133,8 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
   })
 
   const optimizeImageSource = (src: string) => {
-    if (gState.isCNUser && src.startsWith(API_CONFIG.STATIC_GLO)) {
-      return src.replace(API_CONFIG.STATIC_GLO, API_CONFIG.STATIC_CN)
+    if (src.startsWith(API_CONFIG.STATIC) && gState.isCNUser) {
+      return src.replace(API_CONFIG.STATIC, `${API_CONFIG.CDN_CN}/static`)
     } else {
       return src
     }

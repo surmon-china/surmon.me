@@ -3,7 +3,7 @@
   import { Language, LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
   import { firstUpperCase } from '/@/transforms/text'
-  import { getCDN_URL } from '/@/transforms/url'
+  import { getAssetURL } from '/@/transforms/url'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
 
   const props = defineProps<{
@@ -23,7 +23,7 @@
     return {
       pageTitle: titles.join(' | '),
       description: `${META.title} App ${isZhLang.value ? '下载' : 'download'}`,
-      ogImage: getCDN_URL('/images/page-app/logo.png')
+      ogImage: getAssetURL('/images/page-app/logo.png')
     }
   })
 </script>

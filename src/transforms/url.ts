@@ -5,27 +5,39 @@
  */
 
 import API_CONFIG from '/@/config/api.config'
+import { BFF_PROXY_PREFIX } from '/@/config/bff.config'
 import { ProxyModule } from '/@/constants/proxy'
+import { isDev } from '/@/app/environment'
+import { isCNUser } from './region'
 import { getArticleDetailRoute } from '/@/transforms/route'
 
-export const getCDN_URL = (path: string) => {
-  return `${API_CONFIG.CDN}${path}`
+export const getCDN_URL = (isCN?: boolean) => {
+  const _isCN = isCN ?? isCNUser()
+  return _isCN ? API_CONFIG.CDN_CN : API_CONFIG.CDN_GLOBAL
 }
 
-export const getStaticURL = (path: string, isCN?: boolean) => {
-  return `${isCN ? API_CONFIG.STATIC_CN : API_CONFIG.STATIC_GLO}${path}`
+export const normalizePath = (path: string) => {
+  return path.startsWith('/') ? path : `/${path}`
 }
 
-export const reviseStaticURL = (url: string, isCN?: boolean) => {
-  if (url.startsWith(API_CONFIG.STATIC_GLO)) {
-    return getStaticURL(url.replace(API_CONFIG.STATIC_GLO, ''), isCN)
+export const getAssetURL = (path: string, isCN?: boolean) => {
+  if (isDev) {
+    return normalizePath(path)
   } else {
-    return url
+    return `${getCDN_URL(isCN)}/assets${normalizePath(path)}`
   }
 }
 
+export const getStaticURL = (path: string, isCN?: boolean) => {
+  return `${getCDN_URL(isCN)}/static${normalizePath(path)}`
+}
+
+export const getImgProxyURL = (path: string, isCN?: boolean) => {
+  return `${getCDN_URL(isCN)}/imgproxy${normalizePath(path)}`
+}
+
 export const getProxyURL = (path: string, module: ProxyModule = ProxyModule.Default) => {
-  return `${API_CONFIG.PROXY}/${module}/${encodeURIComponent(path)}`
+  return `${BFF_PROXY_PREFIX}/${module}/${encodeURIComponent(path)}`
 }
 
 export const getPageURL = (path: string) => {

@@ -7,7 +7,7 @@
 import { defineComponent, ref, h, PropType } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { ProxyModule } from '/@/constants/proxy'
-import { getCDN_URL, getProxyURL } from '/@/transforms/url'
+import { getAssetURL, getProxyURL } from '/@/transforms/url'
 import { onClient } from '/@/universal'
 
 export default defineComponent({
@@ -46,7 +46,7 @@ export default defineComponent({
 
       let imageSrc = src
       if (cdn) {
-        imageSrc = getCDN_URL(src)
+        imageSrc = getAssetURL(src)
       }
       if (proxy) {
         imageSrc = getProxyURL(src, proxy === true ? ProxyModule.Default : proxy)

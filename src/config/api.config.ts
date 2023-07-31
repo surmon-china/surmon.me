@@ -21,10 +21,9 @@ const DEV_API = isServer ? API_ONLINE_URL : API_PROXY_URL
 const PROD_API = isServer ? API_LOCAL_URL : API_ONLINE_URL
 
 export default {
+  NODEPRESS: isDev ? DEV_API : PROD_API,
   FE: import.meta.env.VITE_FE_URL as string,
-  CDN: import.meta.env.VITE_CDN_URL as string,
-  PROXY: import.meta.env.VITE_PROXY_URL as string,
-  STATIC_CN: import.meta.env.VITE_STATIC_CN_URL as string,
-  STATIC_GLO: import.meta.env.VITE_STATIC_GLO_URL as string,
-  NODEPRESS: isDev ? DEV_API : PROD_API
+  STATIC: import.meta.env.VITE_STATIC_URL as string,
+  CDN_CN: import.meta.env.VITE_CDN_CN_URL as string,
+  CDN_GLOBAL: import.meta.env.VITE_CDN_GLOBAL_URL as string
 }
