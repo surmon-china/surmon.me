@@ -86,8 +86,8 @@
             <swiper-slide class="tweet-item" :key="index" v-for="(tweet, index) in aggregate.tweets">
               <div class="content" :title="tweet.text">
                 <div
-                  v-if="tweet.html"
-                  v-html="unescape(tweet.html)"
+                  v-if="tweet.text"
+                  v-html="unescape(tweet.text)"
                   :class="['main', { 'has-media': tweet.mediaCount }]"
                 ></div>
                 <ulink
@@ -324,6 +324,7 @@
               margin-left: $content-gap;
             }
 
+            /* for html */
             ::v-deep(p) {
               margin: 0;
               max-width: 100%;
