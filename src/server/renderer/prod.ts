@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import type { Manifest } from 'vite'
 import { Express } from 'express'
 import { DIST_PATH, PRDO_SERVER_PATH } from '../helpers/configurer'
 import { CacheClient } from '../cache'
@@ -8,6 +9,9 @@ import type { RenderResult } from '@/ssr'
 
 export const enableProdRenderer = async (app: Express, cache: CacheClient) => {
   const template = fs.readFileSync(path.resolve(DIST_PATH, 'template.html'), 'utf-8')
+  const manifest = fs.readFileSync(path.resolve(DIST_PATH, 'manifest.json'), 'utf-8')
+  const manifestJSON: Manifest = JSON.parse(manifest)
+  // remove CSR entry
   // Bypass webpack rewrite dynamic import, it will be resolved at runtime.
   // https://github.com/vercel/ncc/issues/935#issuecomment-1189850042
   const _import = new Function('p', 'return import(p)')
@@ -23,9 +27,11 @@ export const enableProdRenderer = async (app: Express, cache: CacheClient) => {
         .end(
           resolveTemplate({
             template,
+            manifest: manifestJSON,
             appHTML: redered.html,
             heads: redered.heads,
-            scripts: redered.scripts
+            scripts: redered.scripts,
+            assetPrefix: redered.cdnPrefix
           })
         )
     } catch (error: any) {
@@ -33,9 +39,11 @@ export const enableProdRenderer = async (app: Express, cache: CacheClient) => {
       response.status(redered.code).end(
         resolveTemplate({
           template,
+          manifest: manifestJSON,
           appHTML: redered.html,
           heads: redered.heads,
-          scripts: redered.scripts
+          scripts: redered.scripts,
+          assetPrefix: redered.cdnPrefix
         })
       )
     }

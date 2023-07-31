@@ -11,9 +11,19 @@ import { isDev } from '/@/app/environment'
 import { isCNUser } from './region'
 import { getArticleDetailRoute } from '/@/transforms/route'
 
-export const getCDN_URL = (isCN?: boolean) => {
+export enum CDNPrefix {
+  Assets = 'assets',
+  Static = 'static',
+  ImgProxy = 'imgproxy'
+}
+
+export const getCDNDomain = (isCN?: boolean) => {
   const _isCN = isCN ?? isCNUser()
   return _isCN ? API_CONFIG.CDN_CN : API_CONFIG.CDN_GLOBAL
+}
+
+export const getCDNPrefixURL = (prefix: CDNPrefix, isCN?: boolean) => {
+  return `${getCDNDomain(isCN)}/${prefix}`
 }
 
 export const normalizePath = (path: string) => {
@@ -21,19 +31,15 @@ export const normalizePath = (path: string) => {
 }
 
 export const getAssetURL = (path: string, isCN?: boolean) => {
-  if (isDev) {
-    return normalizePath(path)
-  } else {
-    return `${getCDN_URL(isCN)}/assets${normalizePath(path)}`
-  }
+  return isDev ? normalizePath(path) : `${getCDNPrefixURL(CDNPrefix.Assets, isCN)}${normalizePath(path)}`
 }
 
 export const getStaticURL = (path: string, isCN?: boolean) => {
-  return `${getCDN_URL(isCN)}/static${normalizePath(path)}`
+  return `${getCDNPrefixURL(CDNPrefix.Static, isCN)}${normalizePath(path)}`
 }
 
 export const getImgProxyURL = (path: string, isCN?: boolean) => {
-  return `${getCDN_URL(isCN)}/imgproxy${normalizePath(path)}`
+  return `${getCDNPrefixURL(CDNPrefix.ImgProxy, isCN)}${normalizePath(path)}`
 }
 
 export const getProxyURL = (path: string, module: ProxyModule = ProxyModule.Default) => {

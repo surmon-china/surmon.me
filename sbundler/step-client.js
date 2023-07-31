@@ -22,6 +22,7 @@ export const bundleClientRender = async (paths) => {
       outDir: paths.client,
       sourcemap: true,
       minify: true,
+      manifest: true,
       emptyOutDir: false
     }
   })

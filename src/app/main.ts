@@ -25,7 +25,7 @@ console.table({
   APP_VERSION,
   APP_ENV,
   NODE_ENV,
-  '---': '-------',
+  '---': '-',
   ...API_CONFIG
 })
 console.groupEnd()

@@ -1,32 +1,63 @@
 import type { SSRHeadPayload } from '@unhead/ssr'
+import type { Manifest } from 'vite'
 
-export const resolveTemplate = (config: {
-  template: string
-  appHTML: string
-  heads: SSRHeadPayload
-  scripts?: string
-  manifest?: any
-}) => {
-  const { template, appHTML, heads, scripts } = config
+// manifest: https://vitejs.dev/guide/backend-integration.html
+// render manifeat json to HTML
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const renderAssetsByManifest = (manifest: Manifest, prefix: string) => {
+  const item = Object.values(manifest)
+  const entry = item.find((item) => item.isEntry)
+  if (!entry) return ''
 
-  const bodyScripts = [
-    scripts
-    // MARK: https://cn.vitejs.dev/config/#build-ssrmanifest
-    // client output less assets (3 js + 1 css) & built-in HTML
-    // manifest
+  const entryScript = entry.file
+  const entryStyles = entry.css || []
+  const entryImports = entry.imports || []
+  const entryDynamicImports = entry.dynamicImports || []
+  const importFiles = Array.from(new Set([...entryImports, ...entryDynamicImports])).map(
+    (key) => manifest[key].file
+  )
+
+  return [
+    `<script type="module" crossorigin src="${prefix}/${entryScript}"></script>`,
+    ...importFiles.map((item) => `<link rel="modulepreload" crossorigin href="${prefix}/${item}">`),
+    ...entryStyles.map((item) => `<link rel="stylesheet" href="${prefix}/${item}">`)
   ].join('\n')
+}
 
-  const html = template
-    // MARK: replace! $ sign & use function replacer
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_string_as_a_parameter
-    // https://github.com/vueuse/head#ssr-rendering
-    .replace(/<title>[\s\S]*<\/title>/, '')
-    .replace(`<html`, () => `<html ${heads.htmlAttrs} `)
-    .replace(`<head>`, () => `<head>\n${heads.headTags}`)
-    .replace(`<!--app-html-->`, () => appHTML)
-    .replace(`<body>`, () => `<body ${heads.bodyAttrs}>`)
-    .replace(`</body>`, () => `\n${heads.bodyTags}\n</body>`)
-    .replace(`</body>`, () => `\n${bodyScripts}\n</body>`)
+// resolve assets URL prefix
+const resolveAssetsPrefixByManiFest = (html: string, manifest: Manifest, prefix: string): string => {
+  // List all the files in the manifest, when any file is matched, replace it with the prefix
+  return Object.values(manifest).reduce((result, { file }) => {
+    return result.replace(new RegExp(`(href|src)="/${file}"`, 'g'), `$1="${prefix}/${file}"`)
+  }, html)
+}
 
-  return html
+export const resolveTemplate = (input: {
+  template: string
+  heads: SSRHeadPayload
+  appHTML: string
+  scripts?: string
+  manifest?: Manifest
+  assetPrefix?: string
+}) => {
+  let result = input.template
+
+  // deterministically changing file prefixes with manifest
+  if (input.assetPrefix && input.manifest) {
+    result = resolveAssetsPrefixByManiFest(result, input.manifest, input.assetPrefix)
+  }
+
+  return (
+    result
+      // MARK: replace! $ sign & use function replacer
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_string_as_a_parameter
+      // https://github.com/vueuse/head#ssr-rendering
+      .replace(/<title>[\s\S]*<\/title>/, '')
+      .replace(`<html`, () => `<html ${input.heads.htmlAttrs} `)
+      .replace(`<head>`, () => `<head>\n${input.heads.headTags}`)
+      .replace(`<body>`, () => `<body ${input.heads.bodyAttrs}>`)
+      .replace(`</body>`, () => `\n${input.heads.bodyTags}\n</body>`)
+      .replace(`</body>`, () => `\n${input.scripts}\n</body>`)
+      .replace(`<!--app-html-->`, () => input.appHTML)
+  )
 }

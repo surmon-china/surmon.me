@@ -1,9 +1,9 @@
 @use 'sass:math';
 
+// overwrite in vite.config.ts
+// Used to specify absolute URL addresses in CSS, such as in the following svg scenario
+// https://github.com/jonathantneal/svg4everybody/issues/16
 $source-url: '' !default;
-@function source-url($uri) {
-  @return url($source-url + $uri);
-}
 
 // theme colors
 $body-bg: var(--body-bg);

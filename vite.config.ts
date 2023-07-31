@@ -25,7 +25,6 @@ export default defineConfig(({ command, mode }) => {
   return {
     plugins: [vuePlugin(), UnheadVite()],
     root: path.resolve(__dirname),
-    base: TARGET_ENV_CONFIG.VITE_ASSET_URL + '/',
     publicDir: 'public',
     resolve: {
       alias: {
@@ -88,12 +87,13 @@ export default defineConfig(({ command, mode }) => {
       ]
     },
     build: {
-      // https://vitejs.dev/config/#build-csscodesplit
-      // https://vitejs.dev/guide/features.html#css-code-splitting
-      cssCodeSplit: false,
       sourcemap: true,
       manifest: true,
       rollupOptions: {
+        // disable vite warning
+        // https://github.com/vitejs/vite/pull/10331
+        // https://github.com/vitejs/vite/issues/10766
+        external: [/^\/images\/(?:[^/]+\/)*[^/]+$/],
         output: {
           entryFileNames: '[name]-[hash].js',
           chunkFileNames: '[name]-[hash].js',

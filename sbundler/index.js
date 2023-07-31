@@ -24,27 +24,31 @@ const DIR_PATHS = {
 
 ;(async () => {
   try {
-    // 1. empty ./dist
+    // 0. empty ./dist
     await fs.emptyDir(DIST_PATH)
 
-    // 2. BFF server
+    // 1. BFF server
     console.log('1. BFF server bundling...\n')
     await bundleBFFServer(DIR_PATHS)
     console.info('\nBFF bundle done!\n')
 
-    // 3. SSR client
+    // 2. SSR client
     console.log('2. Client render bundling...\n')
     await bundleClientRender(DIR_PATHS)
-    // rename
-    await fs.rename(path.resolve(DIR_PATHS.client, 'index.html'), path.resolve(DIR_PATHS.client, 'template.html'))
-    // and move to the dist root dir
-    await fs.move(path.resolve(DIR_PATHS.client, 'template.html'), path.resolve(DIR_PATHS.dist, 'template.html'))
     console.info('\nClient bundle done!\n')
 
-    // 4. SSR server
+    // 3. SSR server
     console.info('3. Server render bundling...\n')
     await bundleServerRender(DIR_PATHS)
     console.info('\nServer render bundle done!\n')
+
+    // 4. Resolve manifest & template
+    console.info('4. Resolve manifest & template...\n')
+    // 4.1 move manifest to the dist root dir
+    await fs.move(path.resolve(CLIENT_PATH, 'manifest.json'), path.resolve(DIST_PATH, 'manifest.json'))
+    // 4.2 copy index.html to the dist root dir
+    await fs.move(path.resolve(CLIENT_PATH, 'index.html'), path.resolve(DIST_PATH, 'template.html'))
+    console.info('Resolve manifest & template done!\n')
 
     // done
     console.info('Everything done!')

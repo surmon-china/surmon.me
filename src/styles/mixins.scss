@@ -71,7 +71,10 @@
 @mixin title-shadow() {
   $text-color: #efefef;
   color: $text-color;
-  text-shadow: 0px 0px 0px $text-color, 0px 0px 2px rgba($black, 0.6), 0px 0px 4px rgba($black, 0.6);
+  text-shadow:
+    0px 0px 0px $text-color,
+    0px 0px 2px rgba($black, 0.6),
+    0px 0px 4px rgba($black, 0.6);
 }
 
 /// General module background
@@ -90,7 +93,9 @@
 
 /// Visibility transition
 @mixin visibility-transition($time: $transition-time-fast) {
-  transition: opacity $time, visibility $time;
+  transition:
+    opacity $time,
+    visibility $time;
 }
 
 /// Color transition
@@ -109,7 +114,7 @@
 }
 
 @mixin motion-blur-filter($param: 'horizontal') {
-  filter: source-url('/images/filters/motion-blur.svg##{$param}');
+  filter: url($source-url + '/images/filters/motion-blur.svg##{$param}');
 }
 
 /// Text Shadow

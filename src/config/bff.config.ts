@@ -6,7 +6,7 @@
 
 export const BFF_TUNNEL_PREFIX = '/_tunnel'
 export const BFF_PROXY_PREFIX = '/_proxy'
-export const BFF_PROXY_ALLOWLIST = ['https://surmon.me', 'https://cdn.surmon.me']
+export const BFF_PROXY_ALLOWLIST = ['https://surmon.me', 'https://cdn.surmon.me', 'httos://cdn.cn.surmon.me']
 
 export const getBFFServerPort = () => Number(process.env.PORT || 3000)
 export const getOnlineApiURL = () => process.env.VITE_API_ONLINE_URL as string

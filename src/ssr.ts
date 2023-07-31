@@ -14,6 +14,7 @@ import { INVALID_ERROR } from '/@/constants/error'
 import { Theme, THEME_STORAGE_KEY } from '/@/composables/theme'
 import { renderSSRContextScript, getSSRContextByApp } from '/@/universal'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
+import { CDNPrefix, getCDNPrefixURL } from '/@/transforms/url'
 import type { CacheClient } from '/@/server/cache'
 import { isDev } from '/@/app/environment'
 
@@ -96,7 +97,12 @@ const renderHTML = async (mainApp: MainApp, url: string) => {
     ...getSSRContextByApp(app)
   })
 
-  return { html, heads, scripts }
+  return {
+    html,
+    heads,
+    scripts,
+    cdnPrefix: getCDNPrefixURL(CDNPrefix.Assets, globalState.isCNUser)
+  }
 }
 
 export interface RenderResult {
@@ -104,6 +110,7 @@ export interface RenderResult {
   html: string
   scripts: string
   heads: SSRHeadPayload
+  cdnPrefix: string
 }
 
 /**
@@ -120,6 +127,7 @@ export const renderError = async (request: Request, error: Error & { code?: numb
     code: error.code ?? INVALID_ERROR,
     html: await renderToString(app),
     heads: await renderSSRHead(head),
+    cdnPrefix: getCDNPrefixURL(CDNPrefix.Assets, globalState.isCNUser),
     scripts: renderScripts({
       country,
       theme: theme.theme.value,
