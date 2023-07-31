@@ -34,6 +34,18 @@ export default defineConfig(({ command, mode }) => {
     define: {
       __APP_VERSION__: JSON.stringify(packageJSON.version)
     },
+    experimental: {
+      // CDN urls have more layers of subdirectories that need to be added at build time
+      // https://vitejs.dev/guide/build.html#advanced-base-options
+      renderBuiltUrl(filename: string, { hostType, type }) {
+        if (type === 'public' && hostType === 'css') {
+          // ref: transforms / url.ts -> CDNPrefix
+          return '/assets/' + filename
+        } else {
+          return '/' + filename
+        }
+      }
+    },
     server: {
       open: true,
       port: 3000,
