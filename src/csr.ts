@@ -26,7 +26,6 @@ import { exportAppToGlobal } from '/@/effects/exporter'
 import { exportStickyEventsToGlobal } from '/@/effects/sticky'
 import { exportEmojiRainToGlobal } from '/@/effects/emoji-23333'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
-import { getAssetURL } from '/@/transforms/url'
 import { Language, LanguageKey } from '/@/language'
 import { APP_ENV, isDev, isProd } from '/@/app/environment'
 import { META, IDENTITIES } from '/@/config/app.config'
@@ -63,7 +62,7 @@ app.use(gtag, {
   router,
   id: IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID,
   config: { send_page_view: false },
-  customResourceURL: getAssetURL('/effects/gtag')
+  customResourceURL: '/effects/gtag'
 })
 
 // init: store (from SSR context or fetch)
