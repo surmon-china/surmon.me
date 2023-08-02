@@ -31,7 +31,8 @@ import AppPage from '/@/pages/app.vue'
 
 // third pages
 import SponsorPage from '/@/pages/sponsor.vue'
-import LensPage from '/@/pages/lens/index.vue'
+import YoutubePage from '/@/pages/youtube/index.vue'
+import PhotographyPage from '/@/pages/photography/index.vue'
 
 // https://router.vuejs.org/guide/advanced/meta.html#typescript
 import 'vue-router'
@@ -60,9 +61,10 @@ export enum RouteName {
   Archive = 'archive',
   Guestbook = 'guestbook',
   About = 'about',
-  Lens = 'lens',
   App = 'app',
   Sponsor = 'sponsor',
+  Photography = 'photography',
+  YouTube = 'youtube',
   Error = 'error'
 }
 
@@ -267,9 +269,19 @@ export const routes: RouteRecordRaw[] = [
     }
   },
   {
-    path: '/lens',
-    name: RouteName.Lens,
-    component: LensPage,
+    path: '/photography',
+    name: RouteName.Photography,
+    component: PhotographyPage,
+    meta: {
+      responsive: false,
+      layout: LayoutColumn.Full,
+      ssrCacheTTL: 60 * 60 * 1 // 1 hours
+    }
+  },
+  {
+    path: '/youtube',
+    name: RouteName.YouTube,
+    component: YoutubePage,
     meta: {
       responsive: false,
       layout: LayoutColumn.Full,

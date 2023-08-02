@@ -62,10 +62,10 @@
 
   const links = [
     {
-      class: 'lens',
+      class: 'photography',
       icon: 'icon-lens',
-      i18n: i18ns.lens,
-      route: getPageRoute(RouteName.Lens)
+      i18n: i18ns.photography,
+      route: getPageRoute(RouteName.Photography)
     },
     {
       class: 'nft',

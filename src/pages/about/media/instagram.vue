@@ -1,23 +1,23 @@
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue'
-  import { useInstagramMediasStore } from '/@/stores/media'
+  import { useInstagramTimelineStore } from '/@/stores/media'
   import { isVideoMediaIns, isAlbumMediaIns, getInstagramImage } from '/@/transforms/media'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { LanguageKey } from '/@/language'
 
   const fetching = ref(true)
-  const insStore = useInstagramMediasStore()
-  const insMedias = computed(() => insStore.data.slice(0, 23))
+  const igTimelineStore = useInstagramTimelineStore()
+  const igMedias = computed(() => igTimelineStore.data?.data.slice(0, 23) ?? [])
 
   onMounted(() => {
-    insStore.fetch().finally(() => {
+    igTimelineStore.fetch().finally(() => {
       fetching.value = false
     })
   })
 </script>
 
 <template>
-  <placeholder :i18n-key="LanguageKey.EMPTY_PLACEHOLDER" :loading="fetching" :data="insMedias">
+  <placeholder :i18n-key="LanguageKey.EMPTY_PLACEHOLDER" :loading="fetching" :data="igMedias">
     <template #loading>
       <ul class="list">
         <li class="item" v-for="i in 24" :key="i">
@@ -27,7 +27,7 @@
     </template>
     <template #default>
       <ul class="list">
-        <li class="item" :key="index" v-for="(media, index) in insMedias">
+        <li class="item" :key="index" v-for="(media, index) in igMedias">
           <ulink class="link" :href="media.permalink" :title="media.caption">
             <uimage class="cover" :src="getInstagramImage(media, 't')" :alt="media.caption" />
             <div class="type-icon">

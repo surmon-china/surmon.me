@@ -18,7 +18,13 @@ import { useSponsorStore } from './sponsor'
 import { useAdminInfoStore, useAppOptionStore } from './basic'
 import { useNodepressStatisticStore, useGitHubStatisticStore, useNpmStatisticStore } from './statistic'
 import { useArticleCalendarStore, useInstagramCalendarStore, useGitHubCalendarStore } from './calendar'
-import { useDoubanMoviesStore, useInstagramMediasStore, useYouTubePlayListStore, useTwitterStore } from './media'
+import {
+  useDoubanMoviesStore,
+  useInstagramTimelineStore,
+  useInstagramProfileStore,
+  useYouTubePlayListStore,
+  useTwitterStore
+} from './media'
 
 export const useStores = (pinia?: Pinia) => ({
   articleList: useArticleListStore(pinia),
@@ -44,7 +50,8 @@ export const useStores = (pinia?: Pinia) => ({
   githubCalendar: useGitHubCalendarStore(pinia),
 
   doubanMovies: useDoubanMoviesStore(pinia),
-  instagramMedias: useInstagramMediasStore(pinia),
+  instagramProfile: useInstagramProfileStore(pinia),
+  instagramTimeline: useInstagramTimelineStore(pinia),
   youtubePlayList: useYouTubePlayListStore(pinia),
   twitter: useTwitterStore(pinia)
 })

@@ -2,6 +2,7 @@
   import { ref } from 'vue'
   import { isVideoMediaIns, isAlbumMediaIns, getInstagramImage } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
+  import InstagramAlbum from './album.vue'
 
   defineProps<{
     media: InstagramMediaItem
@@ -47,6 +48,17 @@
         autoplay
         @loadeddata="mediaLoaded"
       />
+      <instagram-album v-else-if="isAlbumMediaIns(media)" class="album" :media="media" @load="mediaLoaded">
+        <template #child="{ activeMedia }">
+          <img
+            class="image"
+            :src="activeMedia?.media_url"
+            :alt="activeMedia?.caption"
+            loading="lazy"
+            draggable="false"
+          />
+        </template>
+      </instagram-album>
       <img
         v-else
         class="image"
@@ -79,11 +91,12 @@
       }
 
       .image,
+      .album,
       .video {
         min-width: 28rem;
         min-height: 66vh;
-        max-width: 88vw;
-        max-height: 76vh;
+        max-width: 94vw;
+        max-height: 86vh;
         width: auto;
         height: auto;
         overflow: hidden;
@@ -141,6 +154,7 @@
 
       .timestamp {
         font-size: $font-size-base - 1;
+        font-weight: bold;
       }
 
       .type-link {

@@ -9,11 +9,9 @@ import { useFetchStore } from './_fetch'
 import { TunnelModule } from '/@/constants/tunnel'
 import { isClient } from '/@/app/environment'
 import { delayPromise } from '/@/utils/delayer'
-import type { InstagramMediaItem } from '/@/server/getters/instagram'
+import type { InstagramMediaListResponse, InstagramProfile } from '/@/server/getters/instagram'
 import type { TwitterAggregate } from '/@/server/getters/twitter'
 import tunnel from '/@/services/tunnel'
-
-const LENS_PAGE_FETCH_DELAY = 480
 
 // Douban movies
 export const useDoubanMoviesStore = defineStore('doubanMovies', () => {
@@ -24,14 +22,22 @@ export const useDoubanMoviesStore = defineStore('doubanMovies', () => {
   })
 })
 
-// Instagram medias
-export const useInstagramMediasStore = defineStore('instagramMedias', () => {
-  return useFetchStore<InstagramMediaItem[]>({
-    data: [],
+// Instagram timeline
+export const useInstagramTimelineStore = defineStore('instagramTimeline', () => {
+  return useFetchStore<InstagramMediaListResponse | null>({
+    data: null,
     fetcher: () => {
-      const request = tunnel.dispatch<InstagramMediaItem[]>(TunnelModule.InstagramMedias)
-      return isClient ? delayPromise(LENS_PAGE_FETCH_DELAY, request) : request
+      const request = tunnel.dispatch<InstagramMediaListResponse>(TunnelModule.InstagramMedias)
+      return isClient ? delayPromise(480, request) : request
     }
+  })
+})
+
+// Instagram profile
+export const useInstagramProfileStore = defineStore('instagramProfile', () => {
+  return useFetchStore<InstagramProfile | null>({
+    data: null,
+    fetcher: () => tunnel.dispatch<InstagramProfile>(TunnelModule.InstagramProfile)
   })
 })
 
@@ -50,7 +56,7 @@ export const useYouTubePlayListStore = defineStore('youtubePlaylist', () => {
 // YouTube video list
 export const fetchYouTubeVideoList = (playlistId: string) => {
   const fetch = tunnel.dispatch<Array<any>>(TunnelModule.YouTubeVideoList, { id: playlistId })
-  return isClient ? delayPromise(LENS_PAGE_FETCH_DELAY, fetch) : fetch
+  return isClient ? delayPromise(480, fetch) : fetch
 }
 
 // Twitter userinfo

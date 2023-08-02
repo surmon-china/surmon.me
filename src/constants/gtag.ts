@@ -13,5 +13,6 @@ export enum GAEventCategories {
   Index = 'page_index',
   App = 'page_app',
   About = 'page_about',
-  Lens = 'page_lens'
+  YouTube = 'page_youtube',
+  Photography = 'page_photography'
 }

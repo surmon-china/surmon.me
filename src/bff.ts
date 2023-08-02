@@ -18,7 +18,12 @@ import { getMyGoogleMap } from './server/getters/my-google-map'
 import { getChatGPTShareLink } from './server/getters/chatgpt'
 import { getTwitterAggregate } from './server/getters/twitter'
 import { getGitHubSponsors, getGitHubContributions } from './server/getters/github'
-import { getInstagramMedias, getInstagramCalendar, initInstagramCalendar } from './server/getters/instagram'
+import {
+  getInstagramMedias,
+  getInstagramMediaChildren,
+  getInstagramCalendar,
+  initInstagramCalendar
+} from './server/getters/instagram'
 import { getYouTubeChannelPlayLists, getYouTubeVideoListByPlayerlistId } from './server/getters/youtube'
 import { getGitHubStatistic, getNPMStatistic } from './server/getters/open-srouce'
 import { getDoubanMovies } from './server/getters/douban'
@@ -260,19 +265,44 @@ createExpressApp().then(async ({ app, server, cache }) => {
     })
   )
 
-  // Instagram newest medias
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMedias}`,
+  // Instagram medias
+  app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMedias}`, (request, response, next) => {
+    const afterToken = request.query.after
+    if (afterToken && typeof afterToken !== 'string') {
+      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      return
+    }
+
     responser(() => {
       return cacher({
         cache,
-        key: TunnelModule.InstagramMedias,
-        ttl: 60 * 60 * 0.5, // 30 minutes
+        key: `instagram_medias_page_${afterToken ?? 'first'}`,
+        preRefresh: !afterToken, // Disable pre-refresh when not first pafe
+        ttl: 60 * 60 * 3, // 3 hours
         retryWhen: 60 * 10, // 10 minutes
-        getter: getInstagramMedias
+        getter: () => getInstagramMedias({ after: afterToken })
       })
-    })
-  )
+    })(request, response, next)
+  })
+
+  // Instagram media children
+  app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMediaChildren}`, (request, response, next) => {
+    const mediaId = request.query.id
+    if (!mediaId || typeof mediaId !== 'string') {
+      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      return
+    }
+
+    responser(() => {
+      return cacher({
+        cache,
+        key: `instagram_media_children_${mediaId}`,
+        ttl: 60 * 60 * 24 * 7, // 7 days
+        retryWhen: 60 * 10, // 10 minutes
+        getter: () => getInstagramMediaChildren(mediaId)
+      })
+    })(request, response, next)
+  })
 
   // Instagram calendar
   app.get(

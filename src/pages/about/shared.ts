@@ -36,9 +36,9 @@ export const i18ns = {
     [Language.Chinese]: '笔文存档',
     [Language.English]: 'Archive'
   },
-  lens: {
+  photography: {
     [Language.Chinese]: '行行摄摄',
-    [Language.English]: 'Lens view'
+    [Language.English]: 'PhotoGram'
   },
   guestbook: {
     [Language.Chinese]: '给我留言',

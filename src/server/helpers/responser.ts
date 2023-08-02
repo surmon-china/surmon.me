@@ -20,7 +20,7 @@ export const errorer = (response: Response, { code, message }: ErrorerOptions) =
       ? message
       : message instanceof Error
       ? message.message || message.name
-      : String(message)
+      : JSON.stringify(message)
   )
 }
 

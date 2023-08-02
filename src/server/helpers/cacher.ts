@@ -8,12 +8,14 @@ import type { CacheClient, Seconds } from '../cache'
 
 export interface CacherConfig {
   cache: CacheClient
-  getter: () => Promise<any>
   key: string
   /** in seconds */
   ttl: Seconds
   /** retry when after [seconds] */
   retryWhen?: Seconds
+  /** if `true`, this data will never expire. default: `true` */
+  preRefresh?: boolean
+  getter: () => Promise<any>
 }
 
 // fetch & cache
@@ -71,8 +73,11 @@ export const cacher = async <T = any>(configInput: CacherConfig): Promise<T> => 
   try {
     // 1. fetch & cache
     const data = await fetchAndCache(config)
-    // 2. refresh 1 minute before ttl expires to get the latest data
-    setTimeoutPreRefresh(config, 60)
+    // 2. refresh 1 minute before ttl expires to get the latest data,
+    // This behavior is performed recursively and causes the data to never expire.
+    if (config.preRefresh !== false) {
+      setTimeoutPreRefresh(config, 60)
+    }
     // 3. return data
     return data
   } catch (error: unknown) {

@@ -44,10 +44,10 @@ export const menus: Array<MenuItem> = [
     newWindow: true
   },
   {
-    id: RouteName.Lens,
-    route: getPageRoute(RouteName.Lens),
+    id: RouteName.Photography,
+    route: getPageRoute(RouteName.Photography),
     icon: 'icon-lens',
-    i18nKey: LanguageKey.PAGE_LENS
+    i18nKey: LanguageKey.PAGE_PHOTOGRAPHY
   },
   {
     id: RouteName.About,

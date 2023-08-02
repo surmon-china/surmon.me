@@ -45,7 +45,6 @@ export const IDENTITIES = Object.freeze({
   GITHUB_USER_NAME: 'surmon-china',
   TWITTER_USER_NAME: 'surmon7788',
   INSTAGRAM_USERNAME: 'surmon666',
-  INSTAGRAM_FB_ID: '17841405600281893',
   BTC_ADDRESS: 'bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze',
   ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
 })

@@ -5,7 +5,7 @@
   import { ProxyModule } from '/@/constants/proxy'
   import { GAEventCategories } from '/@/constants/gtag'
   import { getProxyURL } from '/@/transforms/url'
-  import ListSwiper from '../swiper.vue'
+  import ListSwiper from './swiper.vue'
 
   enum YoutubeVideoListEvents {
     View = 'view'
@@ -41,7 +41,7 @@
   const handleView = (video: any) => {
     emit(YoutubeVideoListEvents.View, video)
     gtag?.event('youtube_view', {
-      event_category: GAEventCategories.Lens
+      event_category: GAEventCategories.YouTube
     })
   }
 
