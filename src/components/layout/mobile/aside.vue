@@ -6,13 +6,13 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/universal'
   import { useAdminInfoStore } from '/@/stores/basic'
-  import { getDefaultAvatar } from '/@/transforms/avatar'
+  import { getAssetURL } from '/@/transforms/url'
   import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
   import { VALUABLE_LINKS, META } from '/@/config/app.config'
 
-  const { i18n: _i18n, theme } = useEnhancer()
+  const { i18n: _i18n, theme, cdnDomain } = useEnhancer()
   const adminInfoStore = useAdminInfoStore()
-  const avatar = computed(() => adminInfoStore.data?.avatar || getDefaultAvatar())
+  const defaultAvatar = getAssetURL(cdnDomain, '/images/anonymous.png')
 
   const themeIcon = computed(() => {
     const themeIconMap = {
@@ -36,9 +36,7 @@
 <template>
   <aside class="aside">
     <div class="aside-user">
-      <div class="avatar">
-        <uimage :src="avatar" :alt="META.author" />
-      </div>
+      <uimage class="avatar" :src="adminInfoStore.data?.avatar || defaultAvatar" :alt="META.author" />
       <div class="profile">
         <h3 class="name">{{ META.author }}</h3>
         <webfont class="slogan">
@@ -131,19 +129,17 @@
       width: 100%;
       display: flex;
       align-items: flex-start;
-      padding: $gap * 2;
+      padding: 2rem 1.8rem;
       border-bottom: 1px solid $border-color;
 
       .avatar {
+        flex-shrink: 0;
         width: $size;
         height: $size;
-        flex-shrink: 0;
-
-        img {
-          max-width: 100%;
-          border: 2px solid $white;
-          @include radius-box(100%);
-        }
+        margin-right: $lg-gap;
+        border: 2px solid $white;
+        background-color: $body-bg;
+        @include radius-box(100%);
       }
 
       .profile {
@@ -151,7 +147,8 @@
         display: inline-flex;
         flex-direction: column;
         justify-content: center;
-        margin-left: $lg-gap;
+        flex-grow: 1;
+        overflow: hidden;
 
         .name {
           font-weight: bold;
@@ -161,7 +158,7 @@
 
         .slogan {
           margin: 0;
-          max-width: 10rem;
+          max-width: 100%;
           color: $surmon;
           @include text-overflow();
         }

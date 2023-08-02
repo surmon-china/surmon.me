@@ -4,8 +4,8 @@
   import { RouteName } from '/@/app/router'
   import { useStores } from '/@/stores'
   import { useUniversalFetch } from '/@/universal'
-  import { getPageRoute } from '/@/transforms/route'
   import { getAssetURL } from '/@/transforms/url'
+  import { getPageRoute } from '/@/transforms/route'
   import { GAEventCategories } from '/@/constants/gtag'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import InstagramMedia from './media/instagram.vue'
@@ -15,9 +15,9 @@
   import NpmStatistic from './statistic/npm.vue'
   import AggregateCalendar from './calendar/index.vue'
   import FootprintMap from './footprint/index.vue'
-  import { useAboutPageMeta, getAdminAvatar, i18ns, SPECIAL_LINKS } from './shared'
+  import { useAboutPageMeta, useAdminAvatar, i18ns, SPECIAL_LINKS } from './shared'
 
-  const { gtag, gState, isZhLang } = useEnhancer()
+  const { gtag, gState, isZhLang, cdnDomain } = useEnhancer()
   const { adminInfo, appOption, sponsor } = useStores()
 
   const handleGTagEvent = (event: string) => {
@@ -52,7 +52,7 @@
   }
 
   // MARK: To prevent vite from parsing video.source.src as an asset instead of a static resource and failing to compile it
-  const backgroundVideo = getAssetURL('/images/page-about/background.mp4')
+  const backgroundVideo = getAssetURL(cdnDomain, '/images/page-about/background.mp4')
 
   // meta
   useAboutPageMeta()
@@ -133,7 +133,7 @@
       </div>
       <div class="content">
         <div class="profile">
-          <uimage class="avatar" :src="getAdminAvatar(adminInfo.data?.avatar)" />
+          <uimage class="avatar" :src="useAdminAvatar(adminInfo.data?.avatar)" />
           <h1 class="name">{{ adminInfo.data?.name || '-' }}</h1>
           <p class="slogan">{{ adminInfo.data?.slogan || '-' }}</p>
         </div>

@@ -38,9 +38,10 @@ export const enableDevRenderer = async (app: Express, cache: CacheClient) => {
         .end(
           resolveTemplate({
             template,
-            appHTML: redered.html,
             heads: redered.heads,
-            scripts: redered.scripts
+            appHTML: redered.html,
+            scripts: redered.stateScripts,
+            extraScripts: redered.contextScripts
           })
         )
     } catch (error: any) {
@@ -49,9 +50,10 @@ export const enableDevRenderer = async (app: Express, cache: CacheClient) => {
       response.status(redered.code).end(
         resolveTemplate({
           template,
-          appHTML: redered.html,
           heads: redered.heads,
-          scripts: redered.scripts
+          appHTML: redered.html,
+          scripts: redered.stateScripts,
+          extraScripts: redered.contextScripts
         })
       )
     }

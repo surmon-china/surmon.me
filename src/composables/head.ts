@@ -9,7 +9,7 @@ import { computed, ComputedGetter } from 'vue'
 import { UseSeoMetaInput } from 'unhead'
 import { Head, useHead as useUnhead, useSeoMeta as useUnheadSeoMeta } from '@unhead/vue'
 import { useEnhancer } from '/@/app/enhancer'
-import { getPageURL, getAssetURL } from '/@/transforms/url'
+import { getPageURL } from '/@/transforms/url'
 import { META, IDENTITIES } from '/@/config/app.config'
 
 export type { Head } from '@unhead/vue'
@@ -24,7 +24,7 @@ export const useHead = (source: Head | ComputedGetter<Head>) => {
 }
 
 const DEFAULT_TITLER = (title: string) => `${title} | ${META.title}`
-const DEFAULT_OG_IMAGE = getAssetURL('/images/og-social-card.jpg')
+const DEFAULT_OG_IMAGE = getPageURL('/images/og-social-card.jpg')
 
 export interface SeoMetaObject extends UseSeoMetaInput {
   title?: string

@@ -7,7 +7,7 @@
   import { useUniversalFetch } from '/@/universal'
   import { getPageRoute } from '/@/transforms/route'
   import PageBanner from '/@/components/common/banner.vue'
-  import { useAboutPageMeta, getAdminAvatar, i18ns } from './shared'
+  import { useAboutPageMeta, useAdminAvatar, i18ns } from './shared'
 
   const { isZhLang } = useEnhancer()
   const adminInfo = useAdminInfoStore()
@@ -25,7 +25,7 @@
     </page-banner>
     <div class="profile">
       <div class="avatar">
-        <uimage class="image" :src="getAdminAvatar(adminInfo.data?.avatar)" />
+        <uimage class="image" :src="useAdminAvatar(adminInfo.data?.avatar)" />
       </div>
       <h2 class="name">{{ adminInfo.data?.name || '-' }}</h2>
       <h5 class="slogan">{{ adminInfo.data?.slogan || '-' }}</h5>

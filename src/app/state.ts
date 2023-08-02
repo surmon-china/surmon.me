@@ -5,12 +5,11 @@
  */
 
 import { App, inject, ref, computed, reactive, readonly } from 'vue'
-import { INVALID_ERROR } from '/@/constants/error'
+import { INVALID_ERROR } from '/@/constants/http-code'
 import { uaParser, isZhUser } from '/@/transforms/ua'
-import { isCNCode } from '../transforms/region'
-import { universalRef, onClient } from '/@/universal'
+import { onClient } from '/@/universal'
 
-type RenderErrorValue = RenderError | null
+export type RenderErrorValue = RenderError | null
 export interface RenderError {
   code: number
   message: string
@@ -37,15 +36,15 @@ export interface GlobalRawState {
 export interface GlobalStateConfig {
   userAgent: string
   language: string
-  country: string
   layout: LayoutColumn
+  error?: RenderErrorValue
 }
 
 const GlobalStateSymbol = Symbol('globalState')
 export type GlobalState = ReturnType<typeof createGlobalState>
 export const createGlobalState = (config: GlobalStateConfig) => {
   // Render error
-  const renderError = universalRef<RenderErrorValue>('error', () => null)
+  const renderError = ref<RenderErrorValue>(config.error ?? null)
   const defaultError = { code: INVALID_ERROR }
   const setRenderError = (error: any) => {
     onClient(() => {
@@ -70,7 +69,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
       // error object -> axios | component
       renderError.value = {
         ...error,
-        code: error.status || error.status || defaultError.code
+        code: error.status || error.code || defaultError.code
       }
     }
   }
@@ -136,9 +135,6 @@ export const createGlobalState = (config: GlobalStateConfig) => {
 
   const globalState = {
     toRawState,
-    // Country state
-    country: config.country,
-    isCNUser: isCNCode(config.country),
     // Render error state
     renderError: readonly(renderError),
     setRenderError,

@@ -7,9 +7,8 @@
 import API_CONFIG from '/@/config/api.config'
 import { BFF_PROXY_PREFIX } from '/@/config/bff.config'
 import { ProxyModule } from '/@/constants/proxy'
-import { isDev } from '/@/app/environment'
-import { isCNUser } from './region'
 import { getArticleDetailRoute } from '/@/transforms/route'
+import { isDev } from '/@/app/environment'
 
 export enum CDNPrefix {
   Assets = 'assets',
@@ -17,29 +16,25 @@ export enum CDNPrefix {
   ImgProxy = 'imgproxy'
 }
 
-export const getCDNDomain = (isCN?: boolean) => {
-  const _isCN = isCN ?? isCNUser()
-  return _isCN ? API_CONFIG.CDN_CN : API_CONFIG.CDN_GLOBAL
-}
-
-export const getCDNPrefixURL = (prefix: CDNPrefix, isCN?: boolean) => {
-  return `${getCDNDomain(isCN)}/${prefix}`
+export const getCDNPrefixURL = (domain: string, prefix: CDNPrefix) => {
+  return `${domain}/${prefix}`
 }
 
 export const normalizePath = (path: string) => {
   return path.startsWith('/') ? path : `/${path}`
 }
 
-export const getAssetURL = (path: string, isCN?: boolean) => {
-  return isDev ? normalizePath(path) : `${getCDNPrefixURL(CDNPrefix.Assets, isCN)}${normalizePath(path)}`
+export const getAssetURL = (domain: string, path: string) => {
+  const normalizedPath = normalizePath(path)
+  return isDev ? normalizedPath : `${getCDNPrefixURL(domain, CDNPrefix.Assets)}${normalizedPath}`
 }
 
-export const getStaticURL = (path: string, isCN?: boolean) => {
-  return `${getCDNPrefixURL(CDNPrefix.Static, isCN)}${normalizePath(path)}`
+export const getStaticURL = (domain: string, path: string) => {
+  return `${getCDNPrefixURL(domain, CDNPrefix.Static)}${normalizePath(path)}`
 }
 
-export const getImgProxyURL = (path: string, isCN?: boolean) => {
-  return `${getCDNPrefixURL(CDNPrefix.ImgProxy, isCN)}${normalizePath(path)}`
+export const getImgProxyURL = (domain: string, path: string) => {
+  return `${getCDNPrefixURL(domain, CDNPrefix.ImgProxy)}${normalizePath(path)}`
 }
 
 export const getProxyURL = (path: string, module: ProxyModule = ProxyModule.Default) => {
@@ -47,7 +42,7 @@ export const getProxyURL = (path: string, module: ProxyModule = ProxyModule.Defa
 }
 
 export const getPageURL = (path: string) => {
-  return `${API_CONFIG.FE}${path}`
+  return `${API_CONFIG.FE}${normalizePath(path)}`
 }
 
 export const getArticleDetailURL = (idOrSlug: string | number) => {

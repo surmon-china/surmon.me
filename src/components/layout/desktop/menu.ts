@@ -2,7 +2,7 @@ import { VALUABLE_LINKS } from '/@/config/app.config'
 import { LanguageKey } from '/@/language'
 import { RouteName, CategorySlug } from '/@/app/router'
 import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
-import { getAssetURL } from '/@/transforms/url'
+import { getPageURL } from '/@/transforms/url'
 
 export interface MenuItem {
   id: string
@@ -64,7 +64,7 @@ export const menus: Array<MenuItem> = [
   {
     id: RouteName.App,
     route: getPageRoute(RouteName.App),
-    imageIcon: getAssetURL('/images/page-app/logo.png'),
+    imageIcon: getPageURL('/images/page-app/logo.png'),
     i18nKey: LanguageKey.PAGE_APP,
     divider: true
   },

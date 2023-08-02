@@ -1,12 +1,13 @@
 import { useEnhancer } from '/@/app/enhancer'
+import { useCDNDomain } from '/@/app/context'
 import { useStores } from '/@/stores'
 import { Language, LanguageKey } from '/@/language'
 import { firstUpperCase } from '/@/transforms/text'
-import { getDefaultAvatar } from '/@/transforms/avatar'
+import { getAssetURL } from '/@/transforms/url'
 import { META } from '/@/config/app.config'
 
-export const getAdminAvatar = (avatar?: string) => {
-  return avatar || getDefaultAvatar()
+export const useAdminAvatar = (avatar?: string) => {
+  return avatar || getAssetURL(useCDNDomain(), '/images/anonymous.png')
 }
 
 export interface AboutI18nConfig {
@@ -90,7 +91,7 @@ export const useAboutPageMeta = () => {
       pageTitle: titles.join(' | '),
       description,
       ogType: 'profile',
-      ogImage: getAdminAvatar(adminInfo.data?.avatar)
+      ogImage: adminInfo.data?.avatar
     }
   })
 }

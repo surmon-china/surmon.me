@@ -6,7 +6,8 @@
   import { Author } from '/@/interfaces/comment'
   import { GAEventCategories } from '/@/constants/gtag'
   import { useIdentityStore, UserType } from '/@/stores/identity'
-  import { getGravatarByHash, getDefaultAvatar, getDisqusAvatarByUsername } from '/@/transforms/avatar'
+  import { getGravatarByHash, getDisqusAvatarByUsername, DEFAULT_AVATAR } from '/@/transforms/avatar'
+  import { getAssetURL } from '/@/transforms/url'
   import { CommentEvents } from '../helper'
 
   enum PublisherEvents {
@@ -34,19 +35,21 @@
     (e: PublisherEvents.UpdateProfile, profile: Author): void
   }>()
 
-  const { i18n: _i18n, gtag } = useEnhancer()
+  const { i18n: _i18n, gtag, cdnDomain } = useEnhancer()
   const { user } = storeToRefs(useIdentityStore())
+  const defaultAvatar = getAssetURL(cdnDomain, DEFAULT_AVATAR)
   const avatar = computed(() => {
     // local user
     if (user.value.type === UserType.Local) {
-      return getGravatarByHash(user.value.localProfile?.email_hash)
+      const hash = user.value.localProfile?.email_hash
+      return hash ? getGravatarByHash(hash) : defaultAvatar
     }
     // disqus user
     if (user.value.type === UserType.Disqus) {
       return getDisqusAvatarByUsername(user.value.disqusProfile?.username)
     }
     // temp user
-    return getDefaultAvatar()
+    return defaultAvatar
   })
 
   const handleUpdateProfile = (key: keyof Author, event: any) => {
@@ -56,6 +59,7 @@
     })
   }
 
+  // eslint-disable-next-line vue/no-setup-props-destructure
   const blossomed = ref(props.defaultBlossomed)
   const handleBlossom = () => {
     blossomed.value = true

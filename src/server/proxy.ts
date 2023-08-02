@@ -7,7 +7,7 @@
 import httpProxy from 'http-proxy'
 import { RequestHandler } from 'express'
 import { ProxyModule } from '@/constants/proxy'
-import { FORBIDDEN, BAD_REQUEST, INVALID_ERROR } from '@/constants/error'
+import { FORBIDDEN, BAD_REQUEST, INVALID_ERROR } from '@/constants/http-code'
 import { BFF_PROXY_PREFIX, BFF_PROXY_ALLOWLIST } from '@/config/bff.config'
 import { isNodeProd } from '@/server/environment'
 import { META } from '@/config/app.config'

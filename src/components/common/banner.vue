@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-  import { getAssetURL } from '/@/transforms/url'
+  import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { getAssetURL } from '/@/transforms/url'
 
   interface Props {
     image: string
@@ -15,7 +16,8 @@
     isMobile: false
   })
 
-  const { isDarkTheme } = useEnhancer()
+  const { isDarkTheme, cdnDomain } = useEnhancer()
+  const backgroundImage = computed(() => getAssetURL(cdnDomain, props.image))
 </script>
 
 <template>
@@ -23,7 +25,7 @@
     <div
       class="background"
       :class="{ dark: isDarkTheme }"
-      :style="{ backgroundImage: `url(${getAssetURL(props.image)})`, backgroundPositionY: `${position}%` }"
+      :style="{ backgroundImage: `url(${backgroundImage})`, backgroundPositionY: `${position}%` }"
     ></div>
     <div class="content" :class="{ blur: Boolean(blur) }" :style="{ '--blur': `${blur}px` }">
       <h2 class="title">

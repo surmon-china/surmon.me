@@ -1,11 +1,15 @@
 <script lang="ts" setup>
+  import { useCDNDomain } from '/@/app/context'
   import { getAssetURL } from '/@/transforms/url'
 
-  const props = defineProps<{
+  defineProps<{
     icon: string
     backgroundColor?: string
     backgroundImage?: string
   }>()
+
+  const cdnDomain = useCDNDomain()
+  const defaultImage = getAssetURL(cdnDomain, '/images/thumbnail/carrousel.jpg')
 </script>
 
 <template>
@@ -13,14 +17,14 @@
     <div
       class="background"
       :style="{
-        backgroundColor: props.backgroundColor,
-        backgroundImage: `url(${props.backgroundImage ?? getAssetURL('/images/thumbnail/carrousel.jpg')})`
+        backgroundColor: backgroundColor,
+        backgroundImage: `url(${backgroundImage ?? defaultImage})`
       }"
     />
     <div class="content">
       <div class="logo">
         <transition name="module" mode="out-in">
-          <i key="date" class="iconfont" :class="props.icon"></i>
+          <i key="date" class="iconfont" :class="icon"></i>
         </transition>
       </div>
       <div class="title">

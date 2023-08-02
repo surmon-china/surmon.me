@@ -11,7 +11,6 @@ import * as Sentry from '@sentry/vue'
 import { computed, watch } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { createMainApp } from '/@/app/main'
-import { getSSRContext } from '/@/universal'
 import gtag from '/@/composables/gtag'
 import lozad from '/@/composables/lozad'
 import adsense from '/@/composables/adsense'
@@ -26,6 +25,7 @@ import { exportAppToGlobal } from '/@/effects/exporter'
 import { exportStickyEventsToGlobal } from '/@/effects/sticky'
 import { exportEmojiRainToGlobal } from '/@/effects/emoji-23333'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
+import { getSSRStateValue, getSSRContextData, getSSRContextValue } from '/@/universal'
 import { Language, LanguageKey } from '/@/language'
 import { APP_VERSION, APP_ENV, isDev, isProd } from '/@/app/environment'
 import { META, IDENTITIES } from '/@/config/app.config'
@@ -35,14 +35,19 @@ import './effects/swiper/style'
 import './effects/elements/index.scss'
 import './styles/app.scss'
 
+console.group(`[SSR CONTEXT]:`)
+console.table(getSSRContextData())
+console.groupEnd()
+
 // app
 const { app, router, head, globalState, i18n, store, getGlobalHead } = createMainApp({
   historyCreator: createWebHistory,
   language: navigator.language,
   userAgent: navigator.userAgent,
-  country: getSSRContext('country'),
-  layout: getSSRContext('layout'),
-  theme: getSSRContext('theme')
+  region: getSSRStateValue('region')!,
+  layout: getSSRStateValue('layout')!,
+  theme: getSSRStateValue('theme')!,
+  error: getSSRContextValue('error')
 })
 
 // services

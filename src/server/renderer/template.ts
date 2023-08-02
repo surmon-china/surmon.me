@@ -37,14 +37,15 @@ export const resolveTemplate = (input: {
   heads: SSRHeadPayload
   appHTML: string
   scripts?: string
+  extraScripts?: string
   manifest?: Manifest
-  assetPrefix?: string
+  assetsPrefix?: string
 }) => {
   let result = input.template
 
   // deterministically changing file prefixes with manifest
-  if (input.assetPrefix && input.manifest) {
-    result = resolveAssetsPrefixByManiFest(result, input.manifest, input.assetPrefix)
+  if (input.assetsPrefix && input.manifest) {
+    result = resolveAssetsPrefixByManiFest(result, input.manifest, input.assetsPrefix)
   }
 
   return (
@@ -56,8 +57,7 @@ export const resolveTemplate = (input: {
       .replace(`<html`, () => `<html ${input.heads.htmlAttrs} `)
       .replace(`<head>`, () => `<head>\n${input.heads.headTags}`)
       .replace(`<body>`, () => `<body ${input.heads.bodyAttrs}>`)
-      .replace(`</body>`, () => `\n${input.heads.bodyTags}\n</body>`)
-      .replace(`</body>`, () => `\n${input.scripts}\n</body>`)
+      .replace(`</body>`, () => `\n${input.heads.bodyTags}\n${input.scripts}\n${input.extraScripts}\n</body>`)
       .replace(`<!--app-html-->`, () => input.appHTML)
   )
 }

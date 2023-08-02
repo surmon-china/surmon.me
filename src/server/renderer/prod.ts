@@ -28,10 +28,11 @@ export const enableProdRenderer = async (app: Express, cache: CacheClient) => {
           resolveTemplate({
             template,
             manifest: manifestJSON,
-            appHTML: redered.html,
             heads: redered.heads,
-            scripts: redered.scripts,
-            assetPrefix: redered.cdnPrefix
+            appHTML: redered.html,
+            scripts: redered.stateScripts,
+            extraScripts: redered.contextScripts,
+            assetsPrefix: redered.assetsPrefix
           })
         )
     } catch (error: any) {
@@ -40,10 +41,11 @@ export const enableProdRenderer = async (app: Express, cache: CacheClient) => {
         resolveTemplate({
           template,
           manifest: manifestJSON,
-          appHTML: redered.html,
           heads: redered.heads,
-          scripts: redered.scripts,
-          assetPrefix: redered.cdnPrefix
+          appHTML: redered.html,
+          scripts: redered.stateScripts,
+          extraScripts: redered.contextScripts,
+          assetsPrefix: redered.assetsPrefix
         })
       )
     }

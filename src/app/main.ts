@@ -7,7 +7,6 @@
 import { createSSRApp } from 'vue'
 import { RouterHistory } from 'vue-router'
 import { Language, LanguageKey, languages } from '/@/language'
-import { rebirthSSRContext } from '/@/universal'
 import { createUniversalStore } from '/@/stores'
 import { createI18n } from '/@/composables/i18n'
 import { createHead, Head } from '/@/composables/head'
@@ -15,12 +14,12 @@ import { createTheme, Theme } from '/@/composables/theme'
 import { APP_ENV, APP_VERSION } from '/@/app/environment'
 import { NODE_ENV } from '/@/server/environment'
 import { createUniversalRouter, RouterCreatorOptions } from './router'
-import { createGlobalState, LayoutColumn } from './state'
+import { createGlobalState, LayoutColumn, RenderErrorValue } from './state'
 import API_CONFIG from '/@/config/api.config'
 import components from './components'
 import App from './index.vue'
 
-console.group(`[APP INITED]:`)
+console.group(`[APP INIT]:`)
 console.table({
   APP_VERSION,
   APP_ENV,
@@ -36,33 +35,32 @@ export interface ICreatorContext {
   routerAfterMiddleware?(globalState: any): RouterCreatorOptions['afterMiddleware']
   layout?: LayoutColumn
   theme: Theme
-  country: string
+  region: string
   language: string
   userAgent: string
+  error?: RenderErrorValue
 }
 
 export type MainApp = ReturnType<typeof createMainApp>
 export const createMainApp = (context: ICreatorContext) => {
   // 1. create app
   const app = createSSRApp(App)
-  // 2. reset SSR context
-  rebirthSSRContext(app)
-  // 3. global state
+  // 2. global state
   const globalState = createGlobalState({
-    country: context.country,
     userAgent: context.userAgent || '',
     language: context.language || '',
-    layout: context.layout ?? LayoutColumn.Normal
+    layout: context.layout ?? LayoutColumn.Normal,
+    error: context.error
   })
-  // 4. store
+  // 3. store
   const store = createUniversalStore({ globalState })
-  // 5. router
+  // 4. router
   const router = createUniversalRouter({
     beforeMiddleware: context.routerBeforeMiddleware?.(globalState),
     afterMiddleware: context.routerAfterMiddleware?.(globalState),
     history: context.historyCreator()
   })
-  // 6. composables
+  // 5. composables
   const head = createHead()
   const theme = createTheme(context.theme)
   const i18n = createI18n({
@@ -75,9 +73,9 @@ export const createMainApp = (context: ICreatorContext) => {
   const getGlobalHead = (): Head => ({
     htmlAttrs: {
       lang: i18n.l.value?.iso ?? '',
+      'data-region': context.region,
       'data-theme': theme.theme.value,
-      'data-device': globalState.userAgent.isMobile ? 'mobile' : 'desktop',
-      'data-region': globalState.isCNUser ? 'cn' : 'global'
+      'data-device': globalState.userAgent.isMobile ? 'mobile' : 'desktop'
     }
   })
 
@@ -121,7 +119,6 @@ export const createMainApp = (context: ICreatorContext) => {
     i18n,
     head,
     theme,
-    country: context.country,
     getGlobalHead
   }
 }

@@ -3,9 +3,9 @@
   import { Language, LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
   import { firstUpperCase } from '/@/transforms/text'
-  import { getAssetURL } from '/@/transforms/url'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
 
+  const APP_LOGO_URL = '/images/page-app/logo.png'
   const props = defineProps<{
     isMobile?: boolean
   }>()
@@ -23,7 +23,7 @@
     return {
       pageTitle: titles.join(' | '),
       description: `${META.title} App ${isZhLang.value ? '下载' : 'download'}`,
-      ogImage: getAssetURL('/images/page-app/logo.png')
+      ogImage: APP_LOGO_URL
     }
   })
 </script>
@@ -32,7 +32,7 @@
   <div class="app-page" :class="{ mobile: props.isMobile }">
     <div class="app">
       <div class="logo">
-        <uimage cdn alt="app-logo" src="/images/page-app/logo.png" />
+        <uimage alt="app-logo" :src="APP_LOGO_URL" cdn />
       </div>
       <h2 class="title">{{ META.title }}</h2>
       <p class="description">

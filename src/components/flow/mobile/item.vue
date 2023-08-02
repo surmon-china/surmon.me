@@ -1,35 +1,47 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { LanguageKey } from '/@/language'
-  import { useEnhancer } from '/@/app/enhancer'
   import { Article } from '/@/interfaces/article'
+  import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore } from '/@/stores/identity'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getMobileArticleListThumbnailURL } from '/@/transforms/thumbnail'
+  import { getImgProxyPath } from '/@/transforms/imgproxy'
+  import { getImgProxyURL } from '/@/transforms/url'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { numberSplit } from '/@/transforms/text'
+  import API_CONFIG from '/@/config/api.config'
 
   const props = defineProps<{
     article: Article
   }>()
 
-  const { router, gState } = useEnhancer()
+  const { router, gState, cdnDomain } = useEnhancer()
   const identityStore = useIdentityStore()
   const isLiked = computed(() => identityStore.isLikedPage(props.article.id))
-  const isHybrid = isHybridType(props.article.origin)
-  const isReprint = isReprintType(props.article.origin)
-  const isOriginal = isOriginalType(props.article.origin)
-
-  const getThumbnailURL = (url: string) => {
-    return getMobileArticleListThumbnailURL({
-      url,
-      isWebP: gState.imageExt.value.isWebP,
-      isCN: gState.isCNUser
-    })
-  }
+  const isHybrid = computed(() => isHybridType(props.article.origin))
+  const isReprint = computed(() => isReprintType(props.article.origin))
+  const isOriginal = computed(() => isOriginalType(props.article.origin))
 
   const handleClick = () => {
     router.push(getArticleDetailRoute(props.article.id))
+  }
+
+  const getThumbnailURL = (url?: string) => {
+    if (!url) {
+      return ''
+    }
+    if (!url.startsWith(API_CONFIG.STATIC)) {
+      return url
+    }
+    return getImgProxyURL(
+      cdnDomain,
+      getImgProxyPath(url.replace(API_CONFIG.STATIC, ''), {
+        width: 700,
+        height: 247,
+        webp: gState.imageExt.value.isWebP,
+        watermark: `watermark:0.38:sowe:18:16:0.16`
+      })
+    )
   }
 </script>
 

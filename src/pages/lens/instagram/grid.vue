@@ -14,7 +14,7 @@
     limit: number
   }>()
 
-  const { gtag } = useEnhancer()
+  const { gtag, cdnDomain } = useEnhancer()
   const galleryActiveIndex = ref<number>()
   const galleryActiveMedia = computed(() => {
     return isNil(galleryActiveIndex.value) ? null : props.medias[galleryActiveIndex.value]
@@ -79,7 +79,9 @@
           :key="index"
           v-for="index in 3 - restMedias.length"
           :href="VALUABLE_LINKS.INSTAGRAM"
-          :style="{ backgroundImage: `url(${getAssetURL('/images/page-lens/instagram-default.jpg')})` }"
+          :style="{
+            backgroundImage: `url(${getAssetURL(cdnDomain, '/images/page-lens/instagram-default.jpg')})`
+          }"
         >
           <div class="mask">
             <i class="iconfont icon-new-window-s"></i>

@@ -8,7 +8,6 @@
   import { CommentPostId } from '/@/constants/state'
   import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
-  import { getAssetURL } from '/@/transforms/url'
   import { META } from '/@/config/app.config'
   import PageBanner from '/@/components/common/banner.vue'
   import Comment from '/@/components/comment/index.vue'
@@ -60,7 +59,7 @@
       pageTitle: titles.join(' | '),
       description,
       ogType: 'website',
-      ogImage: getAssetURL(bannerImage),
+      ogImage: bannerImage,
       ogImageWidth: 620,
       ogImageHeight: 350
     }

@@ -4,18 +4,12 @@
  */
 
 import { ProxyModule } from '/@/constants/proxy'
-import { getAssetURL, getProxyURL } from '/@/transforms/url'
+import { getProxyURL } from '/@/transforms/url'
 import { isDev } from '/@/app/environment'
 
-export const getDefaultAvatar = () => {
-  return getAssetURL('/images/gravatar.png')
-}
+export const DEFAULT_AVATAR = '/images/gravatar.png'
 
-export const getGravatarByHash = (hash?: string | null) => {
-  if (!hash) {
-    return getDefaultAvatar()
-  }
-
+export const getGravatarByHash = (hash: string) => {
   const target = `https://www.gravatar.com/avatar/${hash}`
   return isDev ? target : getProxyURL(target, ProxyModule.Default)
 }

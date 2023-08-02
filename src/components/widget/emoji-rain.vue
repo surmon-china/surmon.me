@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { ref, reactive, nextTick, onMounted } from 'vue'
+  import { useCDNDomain } from '/@/app/context'
   import { getAssetURL } from '/@/transforms/url'
 
   declare global {
@@ -8,6 +9,7 @@
     }
   }
 
+  const emojiImage = getAssetURL(useCDNDomain(), '/images/emojis/funny.png')
   const rainBase = ref<HTMLElement>(null as any)
   const state = reactive({
     chambering: false,
@@ -30,7 +32,7 @@
             increaseSpeed: 0.4,
             density: 5,
             staggered: true,
-            emoji: getAssetURL('/images/emojis/funny.png'),
+            emoji: emojiImage,
             ...options,
             onStart() {
               state.kichikuing = true

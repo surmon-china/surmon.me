@@ -6,7 +6,7 @@
 
 import { createPinia } from 'pinia'
 import { GlobalState } from '/@/app/state'
-import { getSSRContext } from '/@/universal'
+import { getSSRStateValue } from '/@/universal'
 import { useStores } from './_hook'
 export { useStores } from './_hook'
 
@@ -41,7 +41,7 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
     install: pinia.install,
     serverPrefetch: fetchBasicStore,
     hydrate() {
-      const contextStore = getSSRContext('store')
+      const contextStore = getSSRStateValue('store')
       if (contextStore) {
         // The data passed from the SSR server is used to initialize the pinia
         pinia.state.value = contextStore

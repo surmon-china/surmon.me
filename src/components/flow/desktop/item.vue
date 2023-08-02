@@ -1,35 +1,46 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { Language, LanguageKey } from '/@/language'
-  import { useEnhancer } from '/@/app/enhancer'
   import { Article } from '/@/interfaces/article'
+  import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore } from '/@/stores/identity'
+  import { getImgProxyPath } from '/@/transforms/imgproxy'
+  import { getImgProxyURL } from '/@/transforms/url'
   import { getArticleDetailRoute, getCategoryFlowRoute } from '/@/transforms/route'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
-  import { getArticleListThumbnailURL } from '/@/transforms/thumbnail'
   import { numberSplit } from '/@/transforms/text'
+  import API_CONFIG from '/@/config/api.config'
 
   const props = defineProps<{
     article: Article
   }>()
 
-  const { gState } = useEnhancer()
+  const { gState, cdnDomain } = useEnhancer()
   const identity = useIdentityStore()
   const isLiked = computed(() => identity.isLikedPage(props.article.id))
-  const isHybrid = isHybridType(props.article.origin)
-  const isReprint = isReprintType(props.article.origin)
-  const isOriginal = isOriginalType(props.article.origin)
-
-  const getThumbnailURL = (url: string) => {
-    return getArticleListThumbnailURL({
-      url,
-      isCN: gState.isCNUser,
-      isWebP: gState.imageExt.value.isWebP
-    })
-  }
+  const isHybrid = computed(() => isHybridType(props.article.origin))
+  const isReprint = computed(() => isReprintType(props.article.origin))
+  const isOriginal = computed(() => isOriginalType(props.article.origin))
 
   const getLanguageText = (language: Language) => {
     return language === Language.Chinese ? '中文' : 'EN'
+  }
+
+  const getThumbnailURL = (url: string) => {
+    if (!url) {
+      return ''
+    }
+    if (!url.startsWith(API_CONFIG.STATIC)) {
+      return url
+    }
+    return getImgProxyURL(
+      cdnDomain,
+      getImgProxyPath(url.replace(API_CONFIG.STATIC, ''), {
+        width: 350,
+        height: 238,
+        webp: gState.imageExt.value.isWebP
+      })
+    )
   }
 </script>
 

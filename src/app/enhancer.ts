@@ -7,6 +7,7 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useGlobalState } from '/@/app/state'
+import { useCDNDomain } from '/@/app/context'
 import { useI18n } from '/@/composables/i18n'
 import { useHead, useSeoMeta } from '/@/composables/head'
 import { useGtag, Gtag } from '/@/composables/gtag'
@@ -41,6 +42,7 @@ export const useEnhancer = () => {
     head: useHead,
     seoMeta: useSeoMeta,
     gState: globalState,
+    cdnDomain: useCDNDomain(),
 
     adConfig,
     isMobile,

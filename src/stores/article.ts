@@ -7,15 +7,15 @@
 import { ref, shallowRef, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useFetchStore } from './_fetch'
-import { LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
-import { getArticleContentHeadingElementId } from '/@/constants/anchor'
-import { useGlobalState } from '/@/app/state'
+import { useIdentityStore } from './identity'
+import { useCDNDomain } from '/@/app/context'
 import { Article } from '/@/interfaces/article'
 import { Pagination, PaginationList } from '/@/interfaces/common'
+import { getArticleContentHeadingElementId } from '/@/constants/anchor'
 import { markdownToHTML, MarkdownRenderOption } from '/@/transforms/markdown'
 import { delayPromise } from '/@/utils/delayer'
 import { isClient } from '/@/app/environment'
-import { useIdentityStore } from './identity'
+import { LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
 import nodepress from '/@/services/nodepress'
 import API_CONFIG from '/@/config/api.config'
 
@@ -95,7 +95,6 @@ const renderArticleMarkdown = (markdown: string, imageSourceGetter: MarkdownRend
 }
 
 export const useArticleDetailStore = defineStore('articleDetail', () => {
-  const gState = useGlobalState()
   const fetching = ref(false)
   const article = ref<Article | null>(null)
   const prevArticle = shallowRef<Article | null>(null)
@@ -133,8 +132,8 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
   })
 
   const optimizeImageSource = (src: string) => {
-    if (src.startsWith(API_CONFIG.STATIC) && gState.isCNUser) {
-      return src.replace(API_CONFIG.STATIC, `${API_CONFIG.CDN_CN}/static`)
+    if (src.startsWith(API_CONFIG.STATIC)) {
+      return src.replace(API_CONFIG.STATIC, `${useCDNDomain()}/static`)
     } else {
       return src
     }

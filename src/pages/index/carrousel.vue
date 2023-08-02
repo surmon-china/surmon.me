@@ -5,7 +5,9 @@
   import { Article } from '/@/interfaces/article'
   import { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getArticleBannerThumbnailURL } from '/@/transforms/thumbnail'
+  import { getAssetURL, getImgProxyURL } from '/@/transforms/url'
+  import { getImgProxyPath } from '/@/transforms/imgproxy'
+  import API_CONFIG from '/@/config/api.config'
 
   interface Props {
     articles: Array<Article>
@@ -15,7 +17,7 @@
 
   interface CarrouselSlide {
     title: string
-    imgage: string
+    image: string
     route?: string
     url?: string
     ad?: boolean
@@ -25,18 +27,32 @@
     count: 9
   })
 
-  const { gState, adConfig, isDarkTheme } = useEnhancer()
+  const { gState, adConfig, cdnDomain, isDarkTheme } = useEnhancer()
+  const getThumbnailURL = (url?: string) => {
+    if (!url) {
+      return getAssetURL(cdnDomain, '/images/thumbnail/carrousel.jpg')
+    }
+    if (!url.startsWith(API_CONFIG.STATIC)) {
+      return url
+    }
+    return getImgProxyURL(
+      cdnDomain,
+      getImgProxyPath(url.replace(API_CONFIG.STATIC, ''), {
+        width: 1190,
+        height: 420,
+        webp: gState.imageExt.value.isWebP,
+        watermark: `watermark:0.36:sowe:18:18:0.15`
+      })
+    )
+  }
+
   const slides = computed<Array<CarrouselSlide>>(() => {
     // articles
     const result: CarrouselSlide[] = props.articles.slice(0, props.count).map((article) => ({
       ad: false,
       title: article.title,
       route: getArticleDetailRoute(article.id),
-      imgage: getArticleBannerThumbnailURL({
-        url: article.thumbnail,
-        isWebP: gState.imageExt.value.isWebP,
-        isCN: gState.isCNUser
-      })
+      image: getThumbnailURL(article.thumbnail)
     }))
     if (!result.length) {
       return []
@@ -47,7 +63,7 @@
       const config = adConfig.value.PC_CARROUSEL
       result.splice(config.index, 0, {
         title: config.title,
-        imgage: config.src,
+        image: config.src,
         route: config.url,
         ad: true
       })
@@ -94,11 +110,11 @@
           <swiper-slide v-for="(slide, index) in slides.slice(0, 9)" :key="index">
             <div class="content">
               <ulink class="link" :href="slide.url" :to="slide.route">
-                <img :src="slide.imgage" :alt="slide.title" draggable="false" loading="lazy" />
+                <img :src="slide.image" :alt="slide.title" draggable="false" loading="lazy" />
                 <div class="title" :title="slide.title">
                   <div class="background"></div>
                   <div class="prospect">
-                    <span class="text" :style="{ backgroundImage: `url('${slide.imgage}')` }">
+                    <span class="text" :style="{ backgroundImage: `url('${slide.image}')` }">
                       {{ slide.title }}
                     </span>
                   </div>

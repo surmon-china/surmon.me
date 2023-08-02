@@ -5,7 +5,7 @@
  */
 
 import axios, { AxiosInstance, Method as AxiosMethod } from 'axios'
-import { BAD_REQUEST } from '/@/constants/error'
+import { BAD_REQUEST } from '/@/constants/http-code'
 import API_CONFIG from '/@/config/api.config'
 import { isClient } from '/@/app/environment'
 

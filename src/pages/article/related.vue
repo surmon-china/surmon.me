@@ -1,9 +1,11 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { Article } from '/@/interfaces/article'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getReletedArticleListThumbnailURL } from '/@/transforms/thumbnail'
+  import { getImgProxyPath } from '/@/transforms/imgproxy'
+  import { getImgProxyURL } from '/@/transforms/url'
+  import { Article } from '/@/interfaces/article'
+  import API_CONFIG from '/@/config/api.config'
 
   interface Props {
     articles?: Article[]
@@ -17,13 +19,22 @@
     count: 8
   })
 
-  const { gState } = useEnhancer()
-  const getThumbnailURL = (url: string) => {
-    return getReletedArticleListThumbnailURL({
-      url,
-      isWebP: gState.imageExt.value.isWebP,
-      isCN: gState.isCNUser
-    })
+  const { gState, cdnDomain } = useEnhancer()
+  const getThumbnailURL = (url?: string) => {
+    if (!url) {
+      return ''
+    }
+    if (!url.startsWith(API_CONFIG.STATIC)) {
+      return url
+    }
+    return getImgProxyURL(
+      cdnDomain,
+      getImgProxyPath(url.replace(API_CONFIG.STATIC, ''), {
+        width: 466,
+        height: 168,
+        webp: gState.imageExt.value.isWebP
+      })
+    )
   }
 
   const articleList = computed<Article[]>(() => {

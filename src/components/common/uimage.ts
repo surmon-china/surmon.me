@@ -31,7 +31,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { defer } = useEnhancer()
+    const { defer, cdnDomain } = useEnhancer()
     const deferRenderable = ref(false)
     if (props.defer) {
       onClient(() => {
@@ -46,7 +46,7 @@ export default defineComponent({
 
       let imageSrc = src
       if (cdn) {
-        imageSrc = getAssetURL(src)
+        imageSrc = getAssetURL(cdnDomain, src)
       }
       if (proxy) {
         imageSrc = getProxyURL(src, proxy === true ? ProxyModule.Default : proxy)

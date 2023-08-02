@@ -1,16 +1,18 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useCDNDomain } from '/@/app/context'
   import { useCommentStore } from '/@/stores/comment'
   import { useIdentityStore, UserType } from '/@/stores/identity'
   import { getCommentItemElementId } from '/@/constants/anchor'
   import { LanguageKey } from '/@/language'
   import { UNDEFINED } from '/@/constants/value'
   import { Comment } from '/@/interfaces/comment'
+  import { getAssetURL } from '/@/transforms/url'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
   import { scrollToAnchor } from '/@/utils/scroller'
-  import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
+  import { getGravatarByHash, getDisqusAvatarByUsername, DEFAULT_AVATAR } from '/@/transforms/avatar'
   import Markdown from '/@/components/common/markdown.vue'
   import CommentLink from './link.vue'
   import CommentLocation from './location.vue'
@@ -61,7 +63,9 @@
   const authorAvatar = computed(() => {
     return disqusUsername.value
       ? getDisqusAvatarByUsername(disqusUsername.value)
-      : getGravatarByHash(props.comment.author.email_hash)
+      : props.comment.author.email_hash
+      ? getGravatarByHash(props.comment.author.email_hash)
+      : getAssetURL(useCDNDomain(), DEFAULT_AVATAR)
   })
 
   const authorURL = computed(() => {

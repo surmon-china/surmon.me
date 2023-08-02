@@ -6,7 +6,7 @@
 
 import { RouteRecordRaw, NavigationGuard, NavigationGuardNext, RouterHistory, createRouter } from 'vue-router'
 import { LanguageKey } from '/@/language'
-import { NOT_FOUND, BAD_REQUEST } from '/@/constants/error'
+import { NOT_FOUND, BAD_REQUEST } from '/@/constants/http-code'
 import { isValidDateParam } from '/@/transforms/validate'
 import { scrollToPageTop } from '/@/utils/scroller'
 import { LayoutColumn } from './state'

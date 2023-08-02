@@ -6,7 +6,7 @@
 
 import { isAxiosError } from 'axios'
 import { RequestHandler, Response } from 'express'
-import { INVALID_ERROR } from '@/constants/error'
+import { INVALID_ERROR } from '@/constants/http-code'
 
 export interface ErrorerOptions {
   message: unknown
