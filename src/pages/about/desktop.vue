@@ -9,6 +9,7 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import InstagramMedia from './media/instagram.vue'
+  import YoutubeMedia from './media/youtube.vue'
   import DoubanStatistic from './statistic/douban.vue'
   import GithubStatistic from './statistic/github.vue'
   import TwitterStatistic from './statistic/twitter.vue'
@@ -219,6 +220,9 @@
       </div>
       <div class="plogs">
         <instagram-media />
+      </div>
+      <div class="vlogs">
+        <youtube-media />
       </div>
       <div class="footprint">
         <footprint-map />
@@ -592,7 +596,6 @@
 
     .plogs,
     .vlogs,
-    .movies,
     .calendar {
       margin-bottom: $gap * 2;
       border-radius: $lg-radius;

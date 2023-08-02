@@ -2,7 +2,7 @@
   import { onMounted } from 'vue'
   import { useYouTubePlayListStore } from '/@/stores/media'
   import { getYouTubePlaylistURL } from '/@/transforms/media'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { IDENTITIES, VALUABLE_LINKS } from '/@/config/app.config'
 
   const youtubeStore = useYouTubePlayListStore()
   onMounted(() => youtubeStore.fetch())
@@ -20,14 +20,23 @@
       >
         <ulink class="link" :href="getYouTubePlaylistURL(item.id)">
           <uimage class="cover" :src="item.snippet.thumbnails.medium.url" />
+          <span class="count">
+            <i class="iconfont icon-video"></i>
+            <span class="number">{{ item.contentDetails.itemCount }}</span>
+          </span>
           <p class="title">
+            <i class="iconfont icon-playlist"></i>
             <span class="text">{{ item.snippet.title }}</span>
           </p>
+          <div class="mask">
+            <i class="iconfont icon-eye"></i>
+          </div>
         </ulink>
       </li>
       <li class="item">
         <ulink class="link more" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
           <i class="iconfont icon-youtube"></i>
+          <span class="username">{{ IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID }}</span>
           <span class="text">•••</span>
         </ulink>
       </li>
@@ -40,26 +49,25 @@
   @import 'src/styles/mixins.scss';
 
   .list {
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    height: 120px;
     list-style: none;
+    margin: 0;
+    padding: 0;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-gap: 1rem;
 
     .item {
       position: relative;
+      overflow: hidden;
 
       .link {
+        $cover-size: 6.8rem;
+        $title-size: 2.6rem;
         display: block;
-        width: 100%;
-        height: 100%;
-        background-color: #000;
+        height: $cover-size + $title-size;
+        background-color: $module-bg-darker-1;
         border-radius: $xs-radius;
         overflow: hidden;
-        color: $white;
         opacity: 0.8;
         @include visibility-transition();
         &:hover {
@@ -69,6 +77,68 @@
           }
         }
 
+        .count {
+          position: absolute;
+          top: $sm-gap;
+          right: $sm-gap;
+          height: 1.8rem;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          padding: 0 $xs-gap;
+          border-radius: $sm-radius;
+          background-color: rgba(#000, 0.3);
+          font-size: $font-size-root;
+          z-index: $z-index-normal + 1;
+          color: $white;
+
+          .number {
+            margin-left: $xs-gap;
+            font-weight: bold;
+          }
+        }
+
+        .cover {
+          width: 100%;
+          height: $cover-size;
+          object-fit: cover;
+          background-color: $module-bg-darker-2;
+        }
+
+        .title {
+          display: flex;
+          align-items: center;
+          margin: 0;
+          padding: 0 1em;
+          height: $title-size;
+          line-height: $title-size;
+          font-size: $font-size-small;
+
+          .iconfont {
+            margin-right: $xs-gap;
+          }
+
+          .text {
+            @include text-overflow();
+          }
+        }
+
+        .mask {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: $cover-size;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: $white;
+          font-size: $font-size-h2;
+          background-color: rgba(0, 0, 0, 0.3);
+          @include visibility-transition();
+          @include hidden();
+        }
+
         &.more {
           display: flex;
           flex-direction: column;
@@ -76,32 +146,16 @@
           align-items: center;
 
           .iconfont {
+            line-height: 1;
             font-size: $font-size-h1 * 1.5;
-            /* color: $youtube-primary; */
+            color: $youtube-primary;
           }
+          .username {
+            font-weight: bold;
+          }
+
           .text {
             font-size: $font-size-h2;
-          }
-        }
-
-        .cover {
-          margin-top: 10px;
-          width: 100%;
-          height: 80px;
-          object-fit: cover;
-        }
-
-        .title {
-          height: 30px;
-          line-height: 30px;
-          margin: 0;
-          font-size: $font-size-small;
-          text-align: center;
-
-          .text {
-            display: inline-block;
-            max-width: 80%;
-            @include text-overflow();
           }
         }
       }
