@@ -125,7 +125,9 @@ var TunnelModule;
     TunnelModule["TwitterAggregate"] = "twitter_aggregate";
     TunnelModule["YouTubePlaylist"] = "youtube_playlist";
     TunnelModule["YouTubeVideoList"] = "youtube_video_list";
+    TunnelModule["InstagramProfile"] = "instagram_profile";
     TunnelModule["InstagramMedias"] = "instagram_medias";
+    TunnelModule["InstagramMediaChildren"] = "instagram_media_children";
     TunnelModule["InstagramCalendar"] = "instagram_calendar";
     TunnelModule["BingWallpaper"] = "bing_wallpaper";
     TunnelModule["GitHubSponsors"] = "github_sponsors";
@@ -188,7 +190,7 @@ const MAPBOX_CONFIG = Object.freeze({
     ZOOM: 12.4374,
     CENTER: [103.830391822121, 1.348463]
 });
-const IDENTITIES = Object.freeze({
+const app_config_IDENTITIES = Object.freeze({
     GOOGLE_ANALYTICS_MEASUREMENT_ID: 'G-R40DDTSYNQ',
     GOOGLE_ADSENSE_CLIENT_ID: 'ca-pub-4710915636313788',
     SENTRY_PUBLIC_DSN: 'https://4a5f194531fe4527879812e4a4d8cf89@o360897.ingest.sentry.io/4505569138966528',
@@ -199,7 +201,6 @@ const IDENTITIES = Object.freeze({
     GITHUB_USER_NAME: 'surmon-china',
     TWITTER_USER_NAME: 'surmon7788',
     INSTAGRAM_USERNAME: 'surmon666',
-    INSTAGRAM_FB_ID: '17841405600281893',
     BTC_ADDRESS: 'bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze',
     ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
 });
@@ -209,8 +210,8 @@ const VALUABLE_LINKS = Object.freeze({
     UPTIME_STATUS: 'https://stats.uptimerobot.com/Q2k7OTXxJN',
     NPM_HOMEPAGE: 'https://www.npmjs.com/~surmon',
     PAYPAL: 'https://paypal.me/surmon',
-    GITHUB_SPONSORS: `https://github.com/sponsors/${IDENTITIES.GITHUB_USER_NAME}`,
-    GITHUB: `https://github.com/${IDENTITIES.GITHUB_USER_NAME}`,
+    GITHUB_SPONSORS: `https://github.com/sponsors/${app_config_IDENTITIES.GITHUB_USER_NAME}`,
+    GITHUB: `https://github.com/${app_config_IDENTITIES.GITHUB_USER_NAME}`,
     GITHUB_SURMON_ME: 'https://github.com/surmon-china/surmon.me',
     GITHUB_NODEPRESS: 'https://github.com/surmon-china/nodepress',
     GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
@@ -220,16 +221,16 @@ const VALUABLE_LINKS = Object.freeze({
     GOOGLE_MY_MAP_KML: `https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w`,
     DISCORD_GROUP: 'https://discord.surmon.me',
     TELEGRAM_GROUP: 'https://t.me/+Z2wsxogVbYM2ZmE1',
-    MUSIC_163: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
-    YOUTUBE_CHANNEL: `https://www.youtube.com/${IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID}`,
+    MUSIC_163: `https://music.163.com/#/playlist?id=${app_config_IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
+    YOUTUBE_CHANNEL: `https://www.youtube.com/${app_config_IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID}`,
     TELEGRAM: 'https://t.me/surmon',
     OPENSEA: 'https://opensea.io/Surmon',
     DOUBAN: 'https://www.douban.com/people/nocower',
     DOUBAN_MOVIE: `https://movie.douban.com/people/nocower/collect`,
     QUORA: 'https://www.quora.com/profile/Surmon',
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
-    INSTAGRAM: `https://www.instagram.com/${IDENTITIES.INSTAGRAM_USERNAME}`,
-    TWITTER: `https://twitter.com/${IDENTITIES.TWITTER_USER_NAME}`
+    INSTAGRAM: `https://www.instagram.com/${app_config_IDENTITIES.INSTAGRAM_USERNAME}`,
+    TWITTER: `https://twitter.com/${app_config_IDENTITIES.TWITTER_USER_NAME}`
 });
 
 ;// CONCATENATED MODULE: external "path"
@@ -407,7 +408,7 @@ const getGaScriptURL = (measurementId) => {
 
 
 const getGTagScript = async () => {
-    const url = getGaScriptURL(IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID);
+    const url = getGaScriptURL(app_config_IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID);
     const response = await external_axios_namespaceObject["default"].get(url, { timeout: 6000 });
     return response.data;
 };
@@ -626,11 +627,11 @@ const getNitterRss = async (twitterUsername) => {
 const getTwitterAggregate = async () => {
     // Use of different public services to ensure high availability
     const [nitter, sotwe] = await Promise.all([
-        getNitterRss(IDENTITIES.TWITTER_USER_NAME).catch((error) => {
+        getNitterRss(app_config_IDENTITIES.TWITTER_USER_NAME).catch((error) => {
             console.warn('[Twitter] nitter rss is empty.', error?.message ?? String(error));
             return null;
         }),
-        getSotweAggregate(IDENTITIES.TWITTER_USER_NAME).catch((error) => {
+        getSotweAggregate(app_config_IDENTITIES.TWITTER_USER_NAME).catch((error) => {
             console.warn('[Twitter] sotwe aggregate is empty.', error?.message ?? String(error));
             return null;
         })
@@ -640,7 +641,7 @@ const getTwitterAggregate = async () => {
     }
     const tweets = [];
     const userinfo = {
-        name: sotwe?.info?.name || nitter?.userinfo.name || IDENTITIES.TWITTER_USER_NAME,
+        name: sotwe?.info?.name || nitter?.userinfo.name || app_config_IDENTITIES.TWITTER_USER_NAME,
         avatar: sotwe?.info?.profileImageOriginal || nitter?.userinfo.avatar || '',
         description: sotwe?.info.description || void 0,
         location: sotwe?.info.location || void 0,
@@ -702,7 +703,7 @@ const getTwitterAggregate = async () => {
             }
             tweets.push({
                 id: tweet.id,
-                owner: IDENTITIES.TWITTER_USER_NAME,
+                owner: app_config_IDENTITIES.TWITTER_USER_NAME,
                 text: improveSotweTweet(tweet, false),
                 html: improveSotweTweet(tweet, true),
                 date: tweet.createdAt,
@@ -738,7 +739,7 @@ const graphqlGitHub = (query) => {
         method: 'POST',
         data: JSON.stringify({
             query: `query {
-        user(login: "${IDENTITIES.GITHUB_USER_NAME}") {
+        user(login: "${app_config_IDENTITIES.GITHUB_USER_NAME}") {
           ${query}
         }
       }`
@@ -821,45 +822,62 @@ const getGitHubContributions = async (from, to) => {
     return result.contributionsCollection.contributionCalendar;
 };
 
-;// CONCATENATED MODULE: ./src/server/getters/instagram.ts
-/**
- * @file BFF instagram getter
- * @module server.getter.instagram
- * @author Surmon <https://github.com/surmon-china>
- */
+;// CONCATENATED MODULE: ./src/server/getters/instagram/media.ts
 
 
-
-const getInstagramMedias = async () => {
-    const fields = `id,username,permalink,caption,media_type,media_url,thumbnail_url,timestamp`;
-    const url = `https://graph.instagram.com/me/media?fields=${fields}&access_token=${INSTAGRAM_TOKEN}`;
-    const response = await external_axios_namespaceObject["default"].get(url, { timeout: 8000 });
-    return response.data.data;
-};
-// https://developers.facebook.com/docs/instagram-basic-display-api/reference/user/media
-const fetchPageMedias = (sinceUnix, nextToken) => {
-    return external_axios_namespaceObject["default"].get(`https://graph.instagram.com/v13.0/${IDENTITIES.INSTAGRAM_FB_ID}/media`, {
-        timeout: 8000,
-        params: {
+// https://developers.facebook.com/docs/instagram-basic-display-api/reference/user/media#reading
+const getInstagramMedias = async (options) => {
+    try {
+        const defaultFields = `id,username,permalink,caption,media_type,media_url,thumbnail_url,timestamp`;
+        const params = {
             access_token: INSTAGRAM_TOKEN,
-            fields: `id,timestamp`,
-            limit: 100,
-            since: sinceUnix,
-            after: nextToken
+            fields: options?.fields ?? defaultFields,
+            // MARK: max 100
+            limit: options?.limit ?? 24
+        };
+        // MARK: unix timestamp
+        if (options?.since) {
+            params.since = options.since;
         }
-    })
-        .then((response) => response.data)
-        .catch((error) => Promise.reject(error.toJSON()));
+        // MARK: cursor
+        if (options?.after) {
+            params.after = options.after;
+        }
+        const response = await external_axios_namespaceObject["default"].get('https://graph.instagram.com/me/media', {
+            timeout: 8000,
+            params
+        });
+        return response.data;
+    }
+    catch (error) {
+        throw (0,external_axios_namespaceObject.isAxiosError)(error) ? error.response?.data?.error ?? error.toJSON() : error;
+    }
 };
-function doFetchAllMedias({ sinceUnix, nextToken, medias = [], onSucceed, onFailed }) {
-    fetchPageMedias(sinceUnix, nextToken)
+// https://developers.facebook.com/docs/instagram-basic-display-api/reference/media/children
+const getInstagramMediaChildren = (mediaId) => {
+    const url = `https://graph.instagram.com/${mediaId}/children`;
+    const params = {
+        access_token: INSTAGRAM_TOKEN,
+        fields: `id,media_type,media_url,thumbnail_url,timestamp`
+    };
+    return external_axios_namespaceObject["default"].get(url, { timeout: 8000, params })
+        .then((response) => response.data.data)
+        .catch((error) => {
+        return Promise.reject((0,external_axios_namespaceObject.isAxiosError)(error) ? error.response?.data?.error ?? error.toJSON() : error);
+    });
+};
+
+;// CONCATENATED MODULE: ./src/server/getters/instagram/calendar.ts
+
+function doFetchAllMedias({ since, after, medias = [], onSucceed, onFailed }) {
+    getInstagramMedias({ fields: 'id,timestamp', limit: 100, since, after })
         .then((result) => {
         medias.push(...result.data);
         if (result.paging.next) {
             doFetchAllMedias({
-                nextToken: result.paging.cursors.after,
-                sinceUnix,
                 medias,
+                since,
+                after: result.paging.cursors.after,
                 onSucceed,
                 onFailed
             });
@@ -882,7 +900,7 @@ function fetchAllMedias() {
     today.setFullYear(today.getFullYear() - 1);
     const prevYearToday = Math.round(today.getTime() / 1000);
     doFetchAllMedias({
-        sinceUnix: prevYearToday,
+        since: prevYearToday,
         onSucceed: (medias) => {
             console.info(`[BFF] instagram.fetchAllMedias done, ${medias.length} medias. refetch when after 18h`);
             setTimeout(() => fetchAllMedias(), 18 * 60 * 60 * 1000);
@@ -901,6 +919,52 @@ function fetchAllMedias() {
 }
 const initInstagramCalendar = () => fetchAllMedias();
 const getInstagramCalendar = async () => calendarTemp.data;
+
+;// CONCATENATED MODULE: ./src/server/getters/instagram/profile.ts
+
+
+// Unstable access to Instagram API
+// https://stackoverflow.com/a/73376216/6222535
+const getInstagramProfile = async () => {
+    try {
+        const url = `https://i.instagram.com/api/v1/users/web_profile_info/?username=${IDENTITIES.INSTAGRAM_USERNAME}`;
+        const agent = 'Instagram 76.0.0.15.395 Android (24/7.0; 640dpi; 1440x2560; samsung; SM-G930F; herolte; samsungexynos8890; en_US; 138226743)';
+        const response = await axios.get(url, { timeout: 8000, headers: { 'User-Agent': agent } });
+        if (response.data.status !== 'ok') {
+            return Promise.reject(response.data);
+        }
+        else {
+            return {
+                name: response.data.data.user.full_name,
+                avatar: response.data.data.user.profile_pic_url_hd,
+                category: response.data.data.user.category_name,
+                biography: response.data.data.user.biography,
+                mediaCount: response.data.data.user.edge_owner_to_timeline_media.count,
+                followerCount: response.data.data.user.edge_followed_by.count,
+                followingCount: response.data.data.user.edge_follow.count
+            };
+        }
+    }
+    catch (error) {
+        throw isAxiosError(error) ? error.toJSON() : error;
+    }
+};
+
+;// CONCATENATED MODULE: ./src/server/getters/instagram/index.ts
+/**
+ * @file BFF instagram getter
+ * @module server.getter.instagram
+ * @author Surmon <https://github.com/surmon-china>
+ */
+// 1. Generate long-lived access tokens for Instagram Testers (60 days)
+// https://developers.facebook.com/apps/625907498725071/instagram-basic-display/basic-display/
+// 2. Get medias useing API
+// https://developers.facebook.com/docs/instagram-basic-display-api/reference/media#fields
+// 3. TODO: Refresh token
+// https://developers.facebook.com/docs/instagram-basic-display-api/reference/refresh_access_token
+
+
+
 
 ;// CONCATENATED MODULE: ./src/server/getters/youtube.ts
 /**
@@ -921,7 +985,7 @@ const getYouTubeChannelPlayLists = async () => {
         params: {
             part: 'snippet,contentDetails',
             maxResults: 50,
-            channelId: IDENTITIES.YOUTUBE_CHANNEL_ID,
+            channelId: app_config_IDENTITIES.YOUTUBE_CHANNEL_ID,
             key: YOUTUBE_API_KEY
         }
     });
@@ -952,7 +1016,7 @@ const getYouTubeVideoListByPlayerlistId = async (playlistId) => {
 
 
 const fetchStatisticJSON = async (fileName) => {
-    const url = `https://raw.githubusercontent.com/${IDENTITIES.GITHUB_USER_NAME}/${IDENTITIES.GITHUB_USER_NAME}/release/${fileName}`;
+    const url = `https://raw.githubusercontent.com/${app_config_IDENTITIES.GITHUB_USER_NAME}/${app_config_IDENTITIES.GITHUB_USER_NAME}/release/${fileName}`;
     const response = await external_axios_namespaceObject["default"].get(url, { timeout: 6000 });
     return response.data;
 };
@@ -968,8 +1032,8 @@ const getNPMStatistic = () => fetchStatisticJSON('npm.json');
 
 
 const getDoubanMovies = async () => {
-    const api = `https://m.douban.com/rexxar/api/v2/user/${IDENTITIES.DOUBAN_USER_ID}/collection_stats?type=movie&for_mobile=1`;
-    const referer = `https://m.douban.com/people/${IDENTITIES.DOUBAN_USER_ID}/movie_charts`;
+    const api = `https://m.douban.com/rexxar/api/v2/user/${app_config_IDENTITIES.DOUBAN_USER_ID}/collection_stats?type=movie&for_mobile=1`;
+    const referer = `https://m.douban.com/people/${app_config_IDENTITIES.DOUBAN_USER_ID}/movie_charts`;
     const response = await external_axios_namespaceObject["default"].get(api, {
         timeout: 1000 * 12,
         headers: { Referer: referer }
@@ -988,7 +1052,7 @@ const getDoubanMovies = async () => {
 const PLAY_LIST_LIMIT = 168;
 const getSongList = async () => {
     // https://github.com/Binaryify/NeteaseCloudMusicApi/blob/a0500ec648f22a1dd20fc7b529126f813aa26935/module/playlist_track_all.js
-    const playlistURL = `https://music.163.com/api/v6/playlist/detail?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`;
+    const playlistURL = `https://music.163.com/api/v6/playlist/detail?id=${app_config_IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`;
     const playlistDetail = await external_axios_namespaceObject["default"].get(playlistURL, { timeout: 6000 });
     if (playlistDetail.data.code < 0) {
         throw new Error(playlistDetail.data.message);
@@ -1238,7 +1302,7 @@ const errorer = (response, { code, message }) => {
         ? message
         : message instanceof Error
             ? message.message || message.name
-            : String(message));
+            : JSON.stringify(message));
 };
 const responser = (promise) => {
     return (_, response) => {
@@ -1300,8 +1364,11 @@ const cacher = async (configInput) => {
     try {
         // 1. fetch & cache
         const data = await fetchAndCache(config);
-        // 2. refresh 1 minute before ttl expires to get the latest data
-        setTimeoutPreRefresh(config, 60);
+        // 2. refresh 1 minute before ttl expires to get the latest data,
+        // This behavior is performed recursively and causes the data to never expire.
+        if (config.preRefresh !== false) {
+            setTimeoutPreRefresh(config, 60);
+        }
         // 3. return data
         return data;
     }
@@ -1786,16 +1853,41 @@ createExpressApp().then(async ({ app, server, cache }) => {
             getter: getTwitterAggregate
         });
     }));
-    // Instagram newest medias
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMedias}`, responser(() => {
-        return cacher({
-            cache,
-            key: TunnelModule.InstagramMedias,
-            ttl: 60 * 60 * 0.5,
-            retryWhen: 60 * 10,
-            getter: getInstagramMedias
-        });
-    }));
+    // Instagram medias
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMedias}`, (request, response, next) => {
+        const afterToken = request.query.after;
+        if (afterToken && typeof afterToken !== 'string') {
+            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
+            return;
+        }
+        responser(() => {
+            return cacher({
+                cache,
+                key: `instagram_medias_page_${afterToken ?? 'first'}`,
+                preRefresh: !afterToken,
+                ttl: 60 * 60 * 3,
+                retryWhen: 60 * 10,
+                getter: () => getInstagramMedias({ after: afterToken })
+            });
+        })(request, response, next);
+    });
+    // Instagram media children
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMediaChildren}`, (request, response, next) => {
+        const mediaId = request.query.id;
+        if (!mediaId || typeof mediaId !== 'string') {
+            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
+            return;
+        }
+        responser(() => {
+            return cacher({
+                cache,
+                key: `instagram_media_children_${mediaId}`,
+                ttl: 60 * 60 * 24 * 7,
+                retryWhen: 60 * 10,
+                getter: () => getInstagramMediaChildren(mediaId)
+            });
+        })(request, response, next);
+    });
     // Instagram calendar
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramCalendar}`, responser(() => getInstagramCalendar()));
     // YouTube platlists
