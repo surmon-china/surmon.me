@@ -136,12 +136,13 @@ var TunnelModule;
     TunnelModule["OpenSourceNPMStatistic"] = "open_source_npm_statistic";
 })(TunnelModule || (TunnelModule = {}));
 
-;// CONCATENATED MODULE: ./src/constants/error.ts
+;// CONCATENATED MODULE: ./src/constants/http-code.ts
 /**
  * @file Error constant
  * @module constant.error
  * @author Surmon <https://github.com/surmon-china>
  */
+const SUCCESS = 200;
 const BAD_REQUEST = 400;
 const FORBIDDEN = 403;
 const NOT_FOUND = 404;
@@ -1106,8 +1107,8 @@ const resolveAssetsPrefixByManiFest = (html, manifest, prefix) => {
 const resolveTemplate = (input) => {
     let result = input.template;
     // deterministically changing file prefixes with manifest
-    if (input.assetPrefix && input.manifest) {
-        result = resolveAssetsPrefixByManiFest(result, input.manifest, input.assetPrefix);
+    if (input.assetsPrefix && input.manifest) {
+        result = resolveAssetsPrefixByManiFest(result, input.manifest, input.assetsPrefix);
     }
     return (result
         // MARK: replace! $ sign & use function replacer
@@ -1117,8 +1118,7 @@ const resolveTemplate = (input) => {
         .replace(`<html`, () => `<html ${input.heads.htmlAttrs} `)
         .replace(`<head>`, () => `<head>\n${input.heads.headTags}`)
         .replace(`<body>`, () => `<body ${input.heads.bodyAttrs}>`)
-        .replace(`</body>`, () => `\n${input.heads.bodyTags}\n</body>`)
-        .replace(`</body>`, () => `\n${input.scripts}\n</body>`)
+        .replace(`</body>`, () => `\n${input.heads.bodyTags}\n${input.scripts}\n${input.extraScripts}\n</body>`)
         .replace(`<!--app-html-->`, () => input.appHTML));
 };
 
@@ -1156,9 +1156,10 @@ const enableDevRenderer = async (app, cache) => {
                 .set({ 'Content-Type': 'text/html' })
                 .end(resolveTemplate({
                 template,
-                appHTML: redered.html,
                 heads: redered.heads,
-                scripts: redered.scripts
+                appHTML: redered.html,
+                scripts: redered.stateScripts,
+                extraScripts: redered.contextScripts
             }));
         }
         catch (error) {
@@ -1166,9 +1167,10 @@ const enableDevRenderer = async (app, cache) => {
             const redered = await renderError(request, error);
             response.status(redered.code).end(resolveTemplate({
                 template,
-                appHTML: redered.html,
                 heads: redered.heads,
-                scripts: redered.scripts
+                appHTML: redered.html,
+                scripts: redered.stateScripts,
+                extraScripts: redered.contextScripts
             }));
         }
     });
@@ -1198,10 +1200,11 @@ const enableProdRenderer = async (app, cache) => {
                 .end(resolveTemplate({
                 template,
                 manifest: manifestJSON,
-                appHTML: redered.html,
                 heads: redered.heads,
-                scripts: redered.scripts,
-                assetPrefix: redered.cdnPrefix
+                appHTML: redered.html,
+                scripts: redered.stateScripts,
+                extraScripts: redered.contextScripts,
+                assetsPrefix: redered.assetsPrefix
             }));
         }
         catch (error) {
@@ -1209,10 +1212,11 @@ const enableProdRenderer = async (app, cache) => {
             response.status(redered.code).end(resolveTemplate({
                 template,
                 manifest: manifestJSON,
-                appHTML: redered.html,
                 heads: redered.heads,
-                scripts: redered.scripts,
-                assetPrefix: redered.cdnPrefix
+                appHTML: redered.html,
+                scripts: redered.stateScripts,
+                extraScripts: redered.contextScripts,
+                assetsPrefix: redered.assetsPrefix
             }));
         }
     });
