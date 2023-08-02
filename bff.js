@@ -106,7 +106,7 @@ const isNodeProd = process.env.NODE_ENV === NodeEnv.Production;
  */
 const BFF_TUNNEL_PREFIX = '/_tunnel';
 const BFF_PROXY_PREFIX = '/_proxy';
-const BFF_PROXY_ALLOWLIST = ['https://surmon.me', 'https://cdn.surmon.me', 'httos://cdn.cn.surmon.me'];
+const BFF_PROXY_ALLOWLIST = ['https://surmon.me'];
 const getBFFServerPort = () => Number(process.env.PORT || 3000);
 const getOnlineApiURL = () => process.env.VITE_API_ONLINE_URL;
 const getLocalApiURL = () => process.env.VITE_API_LOCAL_URL;
@@ -193,6 +193,7 @@ const IDENTITIES = Object.freeze({
     GOOGLE_ADSENSE_CLIENT_ID: 'ca-pub-4710915636313788',
     SENTRY_PUBLIC_DSN: 'https://4a5f194531fe4527879812e4a4d8cf89@o360897.ingest.sentry.io/4505569138966528',
     YOUTUBE_CHANNEL_ID: 'UCoL-j6T28PLSJ2U6ZdONS0w',
+    YOUTUBE_CHANNEL_SHORT_ID: '@surmon_v',
     MUSIC_163_BGM_ALBUM_ID: '638949385',
     DOUBAN_USER_ID: '56647958',
     GITHUB_USER_NAME: 'surmon-china',
@@ -220,7 +221,7 @@ const VALUABLE_LINKS = Object.freeze({
     DISCORD_GROUP: 'https://discord.surmon.me',
     TELEGRAM_GROUP: 'https://t.me/+Z2wsxogVbYM2ZmE1',
     MUSIC_163: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
-    YOUTUBE_CHANNEL: 'https://www.youtube.com/@surmon_v',
+    YOUTUBE_CHANNEL: `https://www.youtube.com/${IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID}`,
     TELEGRAM: 'https://t.me/surmon',
     OPENSEA: 'https://opensea.io/Surmon',
     DOUBAN: 'https://www.douban.com/people/nocower',
