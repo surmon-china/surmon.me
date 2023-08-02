@@ -113,6 +113,7 @@
           height: $title-size;
           line-height: $title-size;
           font-size: $font-size-small;
+          font-weight: bold;
 
           .iconfont {
             margin-right: $xs-gap;
