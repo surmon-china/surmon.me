@@ -496,7 +496,7 @@
           margin-bottom: $lg-gap;
           padding: 0 $xs-gap;
           text-indent: 2em;
-          line-height: $line-height-base * 1.8;
+          line-height: $line-height-base * 1.9;
           font-weight: 600;
           color: $text-secondary;
         }
