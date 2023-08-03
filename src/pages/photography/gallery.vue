@@ -108,7 +108,7 @@
       .image,
       .album,
       .video {
-        min-width: 28rem;
+        min-width: 32rem;
         min-height: 66vh;
         max-width: 94vw;
         max-height: 86vh;
