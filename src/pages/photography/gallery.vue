@@ -1,5 +1,6 @@
 <script lang="ts" setup="">
   import { ref } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { isVideoMediaIns, isAlbumMediaIns } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import { getProxyURL } from '/@/transforms/url'
@@ -11,6 +12,7 @@
     count: number
   }>()
 
+  const { cdnDomain } = useEnhancer()
   const isLoaded = ref(false)
   const mediaLoaded = () => {
     isLoaded.value = true
@@ -45,7 +47,7 @@
       <video
         v-if="isVideoMediaIns(media)"
         class="video"
-        :src="getProxyURL(media.media_url)"
+        :src="getProxyURL(cdnDomain, media.media_url)"
         autoplay
         @loadeddata="mediaLoaded"
       />
@@ -53,7 +55,7 @@
         <template #child="{ activeMedia }">
           <img
             class="image"
-            :src="getProxyURL(activeMedia?.media_url)"
+            :src="getProxyURL(cdnDomain, activeMedia?.media_url)"
             :alt="activeMedia?.caption"
             loading="lazy"
             draggable="false"
@@ -63,7 +65,7 @@
       <img
         v-else
         class="image"
-        :src="getProxyURL(media?.media_url)"
+        :src="getProxyURL(cdnDomain, media?.media_url)"
         :alt="media.caption"
         draggable="false"
         loading="lazy"

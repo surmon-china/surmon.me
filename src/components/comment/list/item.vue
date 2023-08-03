@@ -1,14 +1,13 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useCDNDomain } from '/@/app/context'
   import { useCommentStore } from '/@/stores/comment'
   import { useIdentityStore, UserType } from '/@/stores/identity'
   import { getCommentItemElementId } from '/@/constants/anchor'
   import { LanguageKey } from '/@/language'
   import { UNDEFINED } from '/@/constants/value'
   import { Comment } from '/@/interfaces/comment'
-  import { getAssetURL } from '/@/transforms/url'
+  import { getAssetURL, getProxyURL } from '/@/transforms/url'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
   import { scrollToAnchor } from '/@/utils/scroller'
@@ -39,7 +38,7 @@
     (e: CommentEvents.CancelReply, commentId: number): void
   }>()
 
-  const { i18n: _i18n } = useEnhancer()
+  const { i18n: _i18n, cdnDomain } = useEnhancer()
   const commentStore = useCommentStore()
   const identityStore = useIdentityStore()
   const isDeleting = computed(() => commentStore.deleting)
@@ -62,10 +61,10 @@
 
   const authorAvatar = computed(() => {
     return disqusUsername.value
-      ? getDisqusAvatarByUsername(disqusUsername.value)
+      ? getProxyURL(cdnDomain, getDisqusAvatarByUsername(disqusUsername.value))
       : props.comment.author.email_hash
-      ? getGravatarByHash(props.comment.author.email_hash)
-      : getAssetURL(useCDNDomain(), DEFAULT_AVATAR)
+      ? getProxyURL(cdnDomain, getGravatarByHash(props.comment.author.email_hash))
+      : getAssetURL(cdnDomain, DEFAULT_AVATAR)
   })
 
   const authorURL = computed(() => {

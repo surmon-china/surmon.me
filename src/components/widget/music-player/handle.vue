@@ -4,7 +4,7 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { useEnhancer } from '/@/app/enhancer'
   import { useMusic } from '/@/composables/music'
-  import { getCoverArtURL } from './helper'
+  import { useCoverArtURL } from './helper'
   import MusicPlayer from './player.vue'
 
   const { gtag } = useEnhancer()
@@ -62,7 +62,7 @@
       </button>
     </div>
     <div class="cd">
-      <img class="image" :src="getCoverArtURL(currentSong?.cover_art_url)" />
+      <img class="image" :src="useCoverArtURL(currentSong?.cover_art_url)" />
       <button
         class="toggle-button"
         :disabled="!state.initialized"

@@ -48,7 +48,7 @@ export default defineComponent({
         imageSrc = getAssetURL(cdnDomain, src)
       }
       if (proxy) {
-        imageSrc = getProxyURL(src)
+        imageSrc = getProxyURL(cdnDomain, src)
       }
       if (defer && !deferRenderable.value) {
         return null

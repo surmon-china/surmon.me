@@ -17,7 +17,7 @@
     return (text ? text : caption) || '-'
   }
 
-  const { gtag } = useEnhancer()
+  const { gtag, cdnDomain } = useEnhancer()
   const galleryActiveIndex = ref<number>()
   const galleryActiveMedia = computed(() => {
     return isNil(galleryActiveIndex.value) ? null : props.medias[galleryActiveIndex.value]
@@ -50,7 +50,7 @@
           <div
             v-lozad
             class="background"
-            :data-background-image="getProxyURL(autoInstagramThumbnail(media, 'm'))"
+            :data-background-image="getProxyURL(cdnDomain, autoInstagramThumbnail(media, 'm'))"
           />
           <div class="mask">
             <span class="icon">

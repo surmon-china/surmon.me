@@ -10,6 +10,7 @@ import { getArticleDetailRoute } from '/@/transforms/route'
 import { isDev } from '/@/app/environment'
 
 export enum CDNPrefix {
+  Proxy = 'proxy',
   Assets = 'assets',
   Static = 'static',
   ImgProxy = 'imgproxy'
@@ -36,8 +37,12 @@ export const getImgProxyURL = (domain: string, path: string) => {
   return `${getCDNPrefixURL(domain, CDNPrefix.ImgProxy)}${normalizePath(path)}`
 }
 
-export const getProxyURL = (path: string) => {
-  return `${BFF_PROXY_PREFIX}/${btoa(path)}`
+export const getOriginalProxyURL = (url: string) => {
+  return `${BFF_PROXY_PREFIX}/${btoa(url)}`
+}
+
+export const getProxyURL = (domain: string, url: string) => {
+  return isDev ? getOriginalProxyURL(url) : `${getCDNPrefixURL(domain, CDNPrefix.Proxy)}${btoa(url)}`
 }
 
 export const getPageURL = (path: string) => {

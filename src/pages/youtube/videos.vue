@@ -18,7 +18,7 @@
     (e: YoutubeVideoListEvents.View, v: any): void
   }>()
 
-  const { gtag } = useEnhancer()
+  const { gtag, cdnDomain } = useEnhancer()
   const videos = ref<Array<any>>([])
   const fetching = ref(true)
   const fetchVideos = async () => {
@@ -34,7 +34,7 @@
 
   const getThumbnailURL = (thumbnails: any) => {
     const url = thumbnails.high?.url || thumbnails.medium?.url || thumbnails.defult?.url
-    return url ? getProxyURL(url) : ''
+    return url ? getProxyURL(cdnDomain, url) : ''
   }
 
   const handleView = (video: any) => {

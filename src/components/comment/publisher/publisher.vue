@@ -7,7 +7,7 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { useIdentityStore, UserType } from '/@/stores/identity'
   import { getGravatarByHash, getDisqusAvatarByUsername, DEFAULT_AVATAR } from '/@/transforms/avatar'
-  import { getAssetURL } from '/@/transforms/url'
+  import { getAssetURL, getProxyURL } from '/@/transforms/url'
   import { CommentEvents } from '../helper'
 
   enum PublisherEvents {
@@ -42,11 +42,11 @@
     // local user
     if (user.value.type === UserType.Local) {
       const hash = user.value.localProfile?.email_hash
-      return hash ? getGravatarByHash(hash) : defaultAvatar
+      return hash ? getProxyURL(cdnDomain, getGravatarByHash(hash)) : defaultAvatar
     }
     // disqus user
     if (user.value.type === UserType.Disqus) {
-      return getDisqusAvatarByUsername(user.value.disqusProfile?.username)
+      return getProxyURL(cdnDomain, getDisqusAvatarByUsername(user.value.disqusProfile?.username))
     }
     // temp user
     return defaultAvatar

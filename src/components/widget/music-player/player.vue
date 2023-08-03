@@ -3,7 +3,7 @@
   import { useMusic } from '/@/composables/music'
   import { get163MusicSongDetailURL } from '/@/transforms/media'
   import { VALUABLE_LINKS } from '/@/config/app.config'
-  import { getCoverArtURL } from './helper'
+  import { useCoverArtURL } from './helper'
 
   const player = useMusic()
   const { state, playlist, currentSong } = player
@@ -39,7 +39,7 @@
   <div class="music-player">
     <div class="panel">
       <div class="song">
-        <img class="cover" :src="getCoverArtURL(currentSong?.cover_art_url)" draggable="false" />
+        <img class="cover" :src="useCoverArtURL(currentSong?.cover_art_url)" draggable="false" />
         <div class="info" v-if="currentSong">
           <p class="title">
             <span class="name">{{ currentSong.name }}</span>
