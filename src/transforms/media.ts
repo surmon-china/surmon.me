@@ -4,8 +4,6 @@
  */
 
 import type { InstagramMediaItem } from '/@/server/getters/instagram'
-import { ProxyModule } from '/@/constants/proxy'
-import { getProxyURL } from '/@/transforms/url'
 
 export const isVideoMediaIns = (media: InstagramMediaItem) => {
   return media.media_type === 'VIDEO'
@@ -15,19 +13,20 @@ export const isAlbumMediaIns = (media: InstagramMediaItem) => {
   return media.media_type === 'CAROUSEL_ALBUM'
 }
 
-// https://www.instagram.com/p/['IMAGE-CODE']/?__a=1
-// https://www.surinderbhomra.com/Blog/2016/05/16/Resize-An-Instagram-Image-Using-A-Media-Query-Parameter
-export const getInstagramImage = (media: InstagramMediaItem, size?: 't' | 'm' | 'l') => {
-  // video type media
-  if (isVideoMediaIns(media)) {
-    return getProxyURL(media.thumbnail_url!, ProxyModule.Instagram)
-  }
-  // image type media with size
-  if (size) {
-    return getProxyURL(`${media.permalink}media/?size=${size}`, ProxyModule.Instagram)
-  }
-  // image type media without size
-  return getProxyURL(media.media_url, ProxyModule.Instagram)
+export const getInstagramCoverURL = (media: InstagramMediaItem) => {
+  return isVideoMediaIns(media) ? media.thumbnail_url! : media.media_url
+}
+
+// image type media with size
+export const getInstagramThumbnail = (media: InstagramMediaItem, size?: 't' | 'm' | 'l') => {
+  // https://www.instagram.com/p/['IMAGE-CODE']/?__a=1
+  // https://www.surinderbhomra.com/Blog/2016/05/16/Resize-An-Instagram-Image-Using-A-Media-Query-Parameter
+  return `${media.permalink}media/?size=${size}`
+}
+
+export const autoInstagramThumbnail = (media: InstagramMediaItem, size?: 't' | 'm' | 'l') => {
+  const defaultCover = getInstagramCoverURL(media)
+  return isVideoMediaIns(media) ? defaultCover : size ? getInstagramThumbnail(media, size) : defaultCover
 }
 
 export const getYouTubePlaylistURL = (id: string) => {

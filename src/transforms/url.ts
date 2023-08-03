@@ -6,7 +6,6 @@
 
 import API_CONFIG from '/@/config/api.config'
 import { BFF_PROXY_PREFIX } from '/@/config/bff.config'
-import { ProxyModule } from '/@/constants/proxy'
 import { getArticleDetailRoute } from '/@/transforms/route'
 import { isDev } from '/@/app/environment'
 
@@ -37,8 +36,8 @@ export const getImgProxyURL = (domain: string, path: string) => {
   return `${getCDNPrefixURL(domain, CDNPrefix.ImgProxy)}${normalizePath(path)}`
 }
 
-export const getProxyURL = (path: string, module: ProxyModule = ProxyModule.Default) => {
-  return `${BFF_PROXY_PREFIX}/${module}/${encodeURIComponent(path)}`
+export const getProxyURL = (path: string) => {
+  return `${BFF_PROXY_PREFIX}/${btoa(path)}`
 }
 
 export const getPageURL = (path: string) => {

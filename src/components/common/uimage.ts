@@ -4,9 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { defineComponent, ref, h, PropType } from 'vue'
+import { defineComponent, ref, h } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
-import { ProxyModule } from '/@/constants/proxy'
 import { getAssetURL, getProxyURL } from '/@/transforms/url'
 import { onClient } from '/@/universal'
 
@@ -22,7 +21,7 @@ export default defineComponent({
       default: false
     },
     proxy: {
-      type: [Boolean, String] as PropType<ProxyModule | boolean>,
+      type: Boolean,
       default: false
     },
     defer: {
@@ -49,7 +48,7 @@ export default defineComponent({
         imageSrc = getAssetURL(cdnDomain, src)
       }
       if (proxy) {
-        imageSrc = getProxyURL(src, proxy === true ? ProxyModule.Default : proxy)
+        imageSrc = getProxyURL(src)
       }
       if (defer && !deferRenderable.value) {
         return null

@@ -3,7 +3,8 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { UNDEFINED, isNil } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { isVideoMediaIns, isAlbumMediaIns, getInstagramImage } from '/@/transforms/media'
+  import { getProxyURL } from '/@/transforms/url'
+  import { isVideoMediaIns, isAlbumMediaIns, autoInstagramThumbnail } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import InsGallery from './gallery.vue'
 
@@ -46,7 +47,11 @@
         @click="openMediaGallery(index)"
       >
         <div class="content">
-          <div v-lozad class="background" :data-background-image="getInstagramImage(media, 'm')" />
+          <div
+            v-lozad
+            class="background"
+            :data-background-image="getProxyURL(autoInstagramThumbnail(media, 'm'))"
+          />
           <div class="mask">
             <span class="icon">
               <i class="iconfont icon-music-play" v-if="isVideoMediaIns(media)"></i>

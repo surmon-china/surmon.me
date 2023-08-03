@@ -2,7 +2,6 @@
   import { ref, onMounted } from 'vue'
   import { fetchYouTubeVideoList } from '/@/stores/media'
   import { useEnhancer } from '/@/app/enhancer'
-  import { ProxyModule } from '/@/constants/proxy'
   import { GAEventCategories } from '/@/constants/gtag'
   import { getProxyURL } from '/@/transforms/url'
   import ListSwiper from './swiper.vue'
@@ -35,7 +34,7 @@
 
   const getThumbnailURL = (thumbnails: any) => {
     const url = thumbnails.high?.url || thumbnails.medium?.url || thumbnails.defult?.url
-    return url ? getProxyURL(url, ProxyModule.YouTube) : ''
+    return url ? getProxyURL(url) : ''
   }
 
   const handleView = (video: any) => {

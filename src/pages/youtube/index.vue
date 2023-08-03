@@ -28,7 +28,7 @@
 
 <template>
   <div class="youtube-page">
-    <page-banner class="page-banner" :position="68" image="/images/page-photography/banner.jpeg">
+    <page-banner class="page-banner" :position="32" image="/images/page-photography/banner.jpg">
       <template #title>
         <webfont>
           <i18n zh="欢喜勇猛，向死而生" en="Because it's there" />

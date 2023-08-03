@@ -19,7 +19,7 @@
         v-for="(item, index) in youtubeStore.data.slice(0, 5)"
       >
         <ulink class="link" :href="getYouTubePlaylistURL(item.id)">
-          <uimage class="cover" :src="item.snippet.thumbnails.medium.url" />
+          <uimage class="cover" proxy :src="item.snippet.thumbnails.medium.url" />
           <span class="count">
             <i class="iconfont icon-video"></i>
             <span class="number">{{ item.contentDetails.itemCount }}</span>

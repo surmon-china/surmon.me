@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue'
   import { useInstagramTimelineStore } from '/@/stores/media'
-  import { isVideoMediaIns, isAlbumMediaIns, getInstagramImage } from '/@/transforms/media'
+  import { isVideoMediaIns, isAlbumMediaIns, autoInstagramThumbnail } from '/@/transforms/media'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { LanguageKey } from '/@/language'
 
@@ -29,7 +29,7 @@
       <ul class="list">
         <li class="item" :key="index" v-for="(media, index) in igMedias">
           <ulink class="link" :href="media.permalink" :title="media.caption">
-            <uimage class="cover" :src="getInstagramImage(media, 't')" :alt="media.caption" />
+            <uimage class="cover" :alt="media.caption" proxy :src="autoInstagramThumbnail(media, 't')" />
             <div class="type-icon">
               <i class="iconfont icon-video" v-if="isVideoMediaIns(media)"></i>
               <i class="iconfont icon-album" v-else-if="isAlbumMediaIns(media)"></i>

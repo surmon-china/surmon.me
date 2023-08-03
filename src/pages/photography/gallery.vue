@@ -1,7 +1,8 @@
 <script lang="ts" setup="">
   import { ref } from 'vue'
-  import { isVideoMediaIns, isAlbumMediaIns, getInstagramImage } from '/@/transforms/media'
+  import { isVideoMediaIns, isAlbumMediaIns } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
+  import { getProxyURL } from '/@/transforms/url'
   import InstagramAlbum from './album.vue'
 
   defineProps<{
@@ -44,7 +45,7 @@
       <video
         v-if="isVideoMediaIns(media)"
         class="video"
-        :src="media.media_url"
+        :src="getProxyURL(media.media_url)"
         autoplay
         @loadeddata="mediaLoaded"
       />
@@ -52,7 +53,7 @@
         <template #child="{ activeMedia }">
           <img
             class="image"
-            :src="activeMedia?.media_url"
+            :src="getProxyURL(activeMedia?.media_url)"
             :alt="activeMedia?.caption"
             loading="lazy"
             draggable="false"
@@ -62,7 +63,7 @@
       <img
         v-else
         class="image"
-        :src="getInstagramImage(media)"
+        :src="getProxyURL(media?.media_url)"
         :alt="media.caption"
         draggable="false"
         loading="lazy"
