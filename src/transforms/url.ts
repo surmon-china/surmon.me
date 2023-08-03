@@ -42,7 +42,7 @@ export const getOriginalProxyURL = (url: string) => {
 }
 
 export const getProxyURL = (domain: string, url: string) => {
-  return isDev ? getOriginalProxyURL(url) : `${getCDNPrefixURL(domain, CDNPrefix.Proxy)}${btoa(url)}`
+  return isDev ? getOriginalProxyURL(url) : `${getCDNPrefixURL(domain, CDNPrefix.Proxy)}/${btoa(url)}`
 }
 
 export const getPageURL = (path: string) => {
