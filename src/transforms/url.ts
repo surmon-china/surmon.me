@@ -6,7 +6,6 @@
 
 import API_CONFIG from '/@/config/api.config'
 import { BFF_PROXY_PREFIX } from '/@/config/bff.config'
-import { getArticleDetailRoute } from '/@/transforms/route'
 import { isDev } from '/@/app/environment'
 
 export enum CDNPrefix {
@@ -47,8 +46,4 @@ export const getProxyURL = (domain: string, url: string) => {
 
 export const getPageURL = (path: string) => {
   return `${API_CONFIG.FE}${normalizePath(path)}`
-}
-
-export const getArticleDetailURL = (idOrSlug: string | number) => {
-  return getPageURL(getArticleDetailRoute(idOrSlug))
 }

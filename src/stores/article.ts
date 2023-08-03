@@ -13,6 +13,7 @@ import { Article } from '/@/interfaces/article'
 import { Pagination, PaginationList } from '/@/interfaces/common'
 import { getArticleContentHeadingElementId } from '/@/constants/anchor'
 import { markdownToHTML, MarkdownRenderOption } from '/@/transforms/markdown'
+import { getCDNPrefixURL, CDNPrefix } from '/@/transforms/url'
 import { delayPromise } from '/@/utils/delayer'
 import { isClient } from '/@/app/environment'
 import { LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
@@ -133,7 +134,7 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
 
   const optimizeImageSource = (src: string) => {
     if (src.startsWith(API_CONFIG.STATIC)) {
-      return src.replace(API_CONFIG.STATIC, `${useCDNDomain()}/static`)
+      return src.replace(API_CONFIG.STATIC, getCDNPrefixURL(useCDNDomain(), CDNPrefix.Static))
     } else {
       return src
     }

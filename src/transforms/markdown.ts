@@ -12,9 +12,9 @@ import { mangle } from 'marked-mangle'
 import { sanitizeUrl } from '@braintree/sanitize-url'
 import { CUSTOM_ELEMENT_LIST } from '/@/effects/elements'
 import { LOZAD_CLASS_NAME } from '/@/composables/lozad'
+import { getOriginalProxyURL } from '/@/transforms/url'
 import { escape } from '/@/transforms/text'
 import { META } from '/@/config/app.config'
-import { BFF_PROXY_PREFIX } from '/@/config/bff.config'
 
 // https://marked.js.org
 const highlightLangPrefix = 'language-'
@@ -133,9 +133,10 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
   // image: sanitize(title, alt) > popup
   renderer.image = (src, title, alt) => {
     // HTTP > proxy
-    const source = sanitizeUrl(src!)?.replace(/^http:\/\//gi, `${BFF_PROXY_PREFIX}/`)
     const titleValue = sanitizeHTML(escape(title || alt))
     const altValue = sanitizeHTML(escape(alt!))
+    const sanitized = sanitizeUrl(src!)
+    const source = sanitized.startsWith('http://') ? getOriginalProxyURL(sanitized) : sanitized
     const sourceValue = options?.imageSource ? options.imageSource(source) : source
 
     // figure > alt

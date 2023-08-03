@@ -13,9 +13,7 @@
     <template #description>
       <i18n>
         <template #zh>
-          <span>
-            可在我的 <ulink :href="VALUABLE_LINKS.INSTAGRAM" class="link">Instagram</ulink> 主页查看更多
-          </span>
+          <span>在我的 <ulink :href="VALUABLE_LINKS.INSTAGRAM" class="link">Instagram</ulink> 主页查看更多</span>
         </template>
         <template #en>
           View all photographs on my <ulink :href="VALUABLE_LINKS.INSTAGRAM" class="link">Instagram</ulink>

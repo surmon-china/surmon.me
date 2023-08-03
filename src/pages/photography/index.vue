@@ -115,7 +115,7 @@
 
       .item {
         padding: $gap;
-        height: 20rem;
+        height: 21rem;
         @include radius-box($xs-radius);
         @include common-bg-module();
       }
