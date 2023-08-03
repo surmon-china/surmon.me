@@ -1,7 +1,13 @@
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue'
   import { useInstagramTimelineStore } from '/@/stores/media'
-  import { isVideoMediaIns, isAlbumMediaIns, autoInstagramThumbnail } from '/@/transforms/media'
+  import {
+    isVideoMediaIns,
+    isAlbumMediaIns,
+    getInstagramCoverURL,
+    getInstagramThumbnail
+  } from '/@/transforms/media'
+  import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import { getOriginalProxyURL } from '/@/transforms/url'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { LanguageKey } from '/@/language'
@@ -9,6 +15,11 @@
   const fetching = ref(true)
   const igTimelineStore = useInstagramTimelineStore()
   const igMedias = computed(() => igTimelineStore.data?.data.slice(0, 23) ?? [])
+  const getMediaThumbnail = (media: InstagramMediaItem) => {
+    return getOriginalProxyURL(
+      isVideoMediaIns(media) ? getInstagramCoverURL(media) : getInstagramThumbnail(media, 't')
+    )
+  }
 
   onMounted(() => {
     igTimelineStore.fetch().finally(() => {
@@ -30,11 +41,7 @@
       <ul class="list">
         <li class="item" :key="index" v-for="(media, index) in igMedias">
           <ulink class="link" :href="media.permalink" :title="media.caption">
-            <uimage
-              class="cover"
-              :alt="media.caption"
-              :src="getOriginalProxyURL(autoInstagramThumbnail(media, 't'))"
-            />
+            <uimage class="cover" :alt="media.caption" :src="getMediaThumbnail(media)" />
             <div class="type-icon">
               <i class="iconfont icon-video" v-if="isVideoMediaIns(media)"></i>
               <i class="iconfont icon-album" v-else-if="isAlbumMediaIns(media)"></i>

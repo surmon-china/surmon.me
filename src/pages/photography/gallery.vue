@@ -1,6 +1,8 @@
 <script lang="ts" setup="">
   import { ref } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useCountry } from '/@/app/context'
+  import { isCNCode } from '/@/transforms/region'
   import { isVideoMediaIns, isAlbumMediaIns } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import { IDENTITIES } from '/@/config/app.config'
@@ -17,6 +19,12 @@
   const isLoaded = ref(false)
   const mediaLoaded = () => {
     isLoaded.value = true
+  }
+
+  const getMediaUrl = (url: string) => {
+    const countryCode = useCountry()
+    const isCNUser = Boolean(countryCode && isCNCode(countryCode))
+    return isCNUser ? getProxyURL(cdnDomain, url) : url
   }
 </script>
 
@@ -51,7 +59,7 @@
       <video
         v-if="isVideoMediaIns(media)"
         class="video"
-        :src="getProxyURL(cdnDomain, media.media_url)"
+        :src="getMediaUrl(media.media_url)"
         autoplay
         @loadeddata="mediaLoaded"
       />
@@ -59,7 +67,7 @@
         <template #child="{ activeMedia }">
           <img
             class="image"
-            :src="getProxyURL(cdnDomain, activeMedia?.media_url)"
+            :src="getMediaUrl(activeMedia?.media_url)"
             :alt="activeMedia?.caption"
             loading="lazy"
             draggable="false"
@@ -69,7 +77,7 @@
       <img
         v-else
         class="image"
-        :src="getProxyURL(cdnDomain, media?.media_url)"
+        :src="getMediaUrl(media?.media_url)"
         :alt="media.caption"
         draggable="false"
         loading="lazy"

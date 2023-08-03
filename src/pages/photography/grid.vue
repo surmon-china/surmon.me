@@ -1,10 +1,12 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useCountry } from '/@/app/context'
   import { UNDEFINED, isNil } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { getOriginalProxyURL } from '/@/transforms/url'
-  import { isVideoMediaIns, isAlbumMediaIns, autoInstagramThumbnail } from '/@/transforms/media'
+  import { getProxyURL } from '/@/transforms/url'
+  import { isCNCode } from '/@/transforms/region'
+  import { isVideoMediaIns, isAlbumMediaIns, getInstagramCoverURL } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import InsGallery from './gallery.vue'
 
@@ -12,7 +14,7 @@
     medias: Array<InstagramMediaItem>
   }>()
 
-  const { gtag } = useEnhancer()
+  const { gtag, cdnDomain } = useEnhancer()
   const galleryActiveIndex = ref<number>()
   const galleryActiveMedia = computed(() => {
     return isNil(galleryActiveIndex.value) ? null : props.medias[galleryActiveIndex.value]
@@ -33,6 +35,13 @@
     const text = caption?.split('#')[0].trim().replaceAll('\n', ' ')
     return (text ? text : caption) || '-'
   }
+
+  const getMediaThumbnail = (media: InstagramMediaItem) => {
+    const url = getInstagramCoverURL(media)
+    const countryCode = useCountry()
+    const isCNUser = Boolean(countryCode && isCNCode(countryCode))
+    return isCNUser ? getProxyURL(cdnDomain, url) : url
+  }
 </script>
 
 <template>
@@ -47,11 +56,7 @@
         @click="openMediaGallery(index)"
       >
         <div class="content">
-          <div
-            v-lozad
-            class="background"
-            :data-background-image="getOriginalProxyURL(autoInstagramThumbnail(media, 'm'))"
-          />
+          <div v-lozad class="background" :data-background-image="getMediaThumbnail(media)" />
           <div class="mask">
             <span class="icon">
               <i class="iconfont icon-music-play" v-if="isVideoMediaIns(media)"></i>
