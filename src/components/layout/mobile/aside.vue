@@ -81,15 +81,6 @@
             <i class="iconfont icon-new-window-s"></i>
           </span>
         </ulink>
-        <ulink class="item" :href="VALUABLE_LINKS.INSTAGRAM">
-          <i class="iconfont icon-instagram"></i>
-          <webfont bolder uppercase>
-            <i18n :k="LanguageKey.PAGE_PHOTOGRAPHY" />
-          </webfont>
-          <span class="newscript">
-            <i class="iconfont icon-new-window-s"></i>
-          </span>
-        </ulink>
         <router-link class="item" :to="getPageRoute(RouteName.Archive)">
           <i class="iconfont icon-quill"></i>
           <webfont bolder uppercase>
