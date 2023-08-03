@@ -364,7 +364,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.14.0";
+const APP_VERSION = "4.14.1";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -13814,7 +13814,7 @@ const getProxyURL = (domain, url) => {
     domain,
     "proxy"
     /* Proxy */
-  )}${btoa(url)}`;
+  )}/${btoa(url)}`;
 };
 const getPageURL = (path) => {
   return `${API_CONFIG.FE}${normalizePath(path)}`;
