@@ -1399,22 +1399,6 @@ const external_cookie_parser_namespaceObject = external_cookie_parser_x({ ["defa
 var external_http_proxy_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
 var external_http_proxy_y = x => () => x
 const external_http_proxy_namespaceObject = external_http_proxy_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_http_proxy_7fedf318__["default"] });
-;// CONCATENATED MODULE: ./src/constants/proxy.ts
-/**
- * @file Proxy constant
- * @module constant.proxy
- * @author Surmon <https://github.com/surmon-china>
- */
-var ProxyModule;
-(function (ProxyModule) {
-    ProxyModule["Default"] = "default";
-    ProxyModule["Douban"] = "douban";
-    ProxyModule["NetEaseMusic"] = "netease-music";
-    ProxyModule["Instagram"] = "instagram";
-    ProxyModule["YouTube"] = "youtube";
-    ProxyModule["Disqus"] = "disqus";
-})(ProxyModule || (ProxyModule = {}));
-
 ;// CONCATENATED MODULE: ./src/server/proxy.ts
 /**
  * @file BFF Server proxy
@@ -1425,17 +1409,7 @@ var ProxyModule;
 
 
 
-
-
-const proxyOriginMap = new Map([
-    [ProxyModule.Default, META.url],
-    [ProxyModule.Douban, 'https://www.douban.com'],
-    [ProxyModule.Instagram, 'https://www.instagram.com'],
-    [ProxyModule.YouTube, 'https://www.youtube.com'],
-    [ProxyModule.NetEaseMusic, 'https://music.163.com'],
-    [ProxyModule.Disqus, 'https://surmon.disqus.com']
-]);
-const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/:module/*`;
+const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/*`;
 const proxyer = () => {
     // https://github.com/http-party/node-http-proxy
     const proxy = external_http_proxy_namespaceObject["default"].createProxyServer({
@@ -1451,15 +1425,15 @@ const proxyer = () => {
         request._proxyRequest = proxyRequest;
         proxyRequest.setHeader('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3223.8 Safari/');
     });
-    proxy.on('proxyRes', (proxyResponse, request) => {
+    proxy.on('proxyRes', (proxyResponse) => {
         const statusCode = proxyResponse.statusCode;
         const location = proxyResponse.headers.location;
         if ([301, 302, 307, 308].includes(statusCode) && location) {
-            proxyResponse.headers.location = `${BFF_PROXY_PREFIX}/${request.params.module}/${encodeURIComponent(location)}`;
+            proxyResponse.headers.location = `${BFF_PROXY_PREFIX}/${btoa(location)}`;
         }
         // proxy cache
         if (statusCode === 200) {
-            proxyResponse.headers['cache-control'] = `max-age=315360000`;
+            proxyResponse.headers['cache-control'] = 'max-age=315360000';
         }
     });
     proxy.on('error', (error, request, response, target) => {
@@ -1483,7 +1457,7 @@ const proxyer = () => {
                 return;
             }
         }
-        const targetURL = decodeURIComponent(request.params['0']);
+        const targetURL = atob(request.params['0']);
         let parsedURL = null;
         try {
             parsedURL = new URL(targetURL);
@@ -1493,11 +1467,6 @@ const proxyer = () => {
             return;
         }
         const headers = {};
-        const origin = proxyOriginMap.get(request.params.module);
-        if (origin) {
-            headers.Origin = origin;
-            headers.Referer = `${origin}/`;
-        }
         proxy.web(request, response, {
             target: targetURL,
             changeOrigin: true,
