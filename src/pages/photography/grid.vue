@@ -3,7 +3,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { UNDEFINED, isNil } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { getProxyURL } from '/@/transforms/url'
+  import { getOriginalProxyURL } from '/@/transforms/url'
   import { isVideoMediaIns, isAlbumMediaIns, autoInstagramThumbnail } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import InsGallery from './gallery.vue'
@@ -17,7 +17,7 @@
     return (text ? text : caption) || '-'
   }
 
-  const { gtag, cdnDomain } = useEnhancer()
+  const { gtag } = useEnhancer()
   const galleryActiveIndex = ref<number>()
   const galleryActiveMedia = computed(() => {
     return isNil(galleryActiveIndex.value) ? null : props.medias[galleryActiveIndex.value]
@@ -50,7 +50,7 @@
           <div
             v-lozad
             class="background"
-            :data-background-image="getProxyURL(cdnDomain, autoInstagramThumbnail(media, 'm'))"
+            :data-background-image="getOriginalProxyURL(autoInstagramThumbnail(media, 'm'))"
           />
           <div class="mask">
             <span class="icon">

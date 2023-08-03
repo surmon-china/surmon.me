@@ -7,7 +7,7 @@
   import { LanguageKey } from '/@/language'
   import { UNDEFINED } from '/@/constants/value'
   import { Comment } from '/@/interfaces/comment'
-  import { getAssetURL, getProxyURL } from '/@/transforms/url'
+  import { getAssetURL, getProxyURL, getOriginalProxyURL } from '/@/transforms/url'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
   import { scrollToAnchor } from '/@/utils/scroller'
@@ -61,7 +61,7 @@
 
   const authorAvatar = computed(() => {
     return disqusUsername.value
-      ? getProxyURL(cdnDomain, getDisqusAvatarByUsername(disqusUsername.value))
+      ? getOriginalProxyURL(getDisqusAvatarByUsername(disqusUsername.value))
       : props.comment.author.email_hash
       ? getProxyURL(cdnDomain, getGravatarByHash(props.comment.author.email_hash))
       : getAssetURL(cdnDomain, DEFAULT_AVATAR)

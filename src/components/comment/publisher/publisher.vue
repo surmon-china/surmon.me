@@ -7,7 +7,7 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { useIdentityStore, UserType } from '/@/stores/identity'
   import { getGravatarByHash, getDisqusAvatarByUsername, DEFAULT_AVATAR } from '/@/transforms/avatar'
-  import { getAssetURL, getProxyURL } from '/@/transforms/url'
+  import { getAssetURL, getProxyURL, getOriginalProxyURL } from '/@/transforms/url'
   import { CommentEvents } from '../helper'
 
   enum PublisherEvents {
@@ -46,7 +46,7 @@
     }
     // disqus user
     if (user.value.type === UserType.Disqus) {
-      return getProxyURL(cdnDomain, getDisqusAvatarByUsername(user.value.disqusProfile?.username))
+      return getOriginalProxyURL(getDisqusAvatarByUsername(user.value.disqusProfile?.username))
     }
     // temp user
     return defaultAvatar
