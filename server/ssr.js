@@ -364,7 +364,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.14.2";
+const APP_VERSION = "4.14.3";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -929,6 +929,50 @@ const useLozad = (options) => {
   });
   return { element: container, observer, observe, unobserve };
 };
+const BFF_TUNNEL_PREFIX = "/_tunnel";
+const BFF_PROXY_PREFIX = "/_proxy";
+const getBFFServerPort = () => Number(process.env.PORT || 3e3);
+var CDNPrefix = /* @__PURE__ */ ((CDNPrefix2) => {
+  CDNPrefix2["Proxy"] = "proxy";
+  CDNPrefix2["Assets"] = "assets";
+  CDNPrefix2["Static"] = "static";
+  CDNPrefix2["ImgProxy"] = "imgproxy";
+  return CDNPrefix2;
+})(CDNPrefix || {});
+const getCDNPrefixURL = (domain, prefix) => {
+  return `${domain}/${prefix}`;
+};
+const normalizePath = (path) => {
+  return path.startsWith("/") ? path : `/${path}`;
+};
+const getAssetURL = (domain, path) => {
+  const normalizedPath = normalizePath(path);
+  return `${getCDNPrefixURL(
+    domain,
+    "assets"
+    /* Assets */
+  )}${normalizedPath}`;
+};
+const getImgProxyURL = (domain, path) => {
+  return `${getCDNPrefixURL(
+    domain,
+    "imgproxy"
+    /* ImgProxy */
+  )}${normalizePath(path)}`;
+};
+const getOriginalProxyURL = (url) => {
+  return `${BFF_PROXY_PREFIX}/${btoa(url)}`;
+};
+const getProxyURL = (domain, url) => {
+  return `${getCDNPrefixURL(
+    domain,
+    "proxy"
+    /* Proxy */
+  )}/${btoa(url)}`;
+};
+const getPageURL = (path) => {
+  return `${API_CONFIG.FE}${normalizePath(path)}`;
+};
 const escape = _escape;
 const unescape = _unescape;
 const padStart = _padStart;
@@ -945,9 +989,6 @@ const numberToChinese = (text, capital = false) => {
   const targetText = capital ? CHINESE_NUMBER_CAPITAL_TEXT : CHINESE_NUMBER_TEXT;
   return String(text).split("").map((number) => targetText[Number(number)]).join("");
 };
-const BFF_TUNNEL_PREFIX = "/_tunnel";
-const BFF_PROXY_PREFIX = "/_proxy";
-const getBFFServerPort = () => Number(process.env.PORT || 3e3);
 const highlightLangPrefix = "language-";
 const marked = new Marked(
   mangle(),
@@ -1011,10 +1052,10 @@ const createRenderer = (options) => {
     );
   };
   renderer.image = (src, title, alt) => {
-    var _a;
-    const source = (_a = sanitizeUrl(src)) == null ? void 0 : _a.replace(/^http:\/\//gi, `${BFF_PROXY_PREFIX}/`);
     const titleValue = sanitizeHTML(escape(title || alt));
     const altValue = sanitizeHTML(escape(alt));
+    const sanitized = sanitizeUrl(src);
+    const source = sanitized.startsWith("http://") ? getOriginalProxyURL(sanitized) : sanitized;
     const sourceValue = (options == null ? void 0 : options.imageSource) ? options.imageSource(source) : source;
     return trimHTML(`
       <div class="figure-wrapper">
@@ -1188,7 +1229,7 @@ const useArticleDetailStore = defineStore("articleDetail", () => {
   });
   const optimizeImageSource = (src) => {
     if (src.startsWith(API_CONFIG.STATIC)) {
-      return src.replace(API_CONFIG.STATIC, `${useCDNDomain()}/static`);
+      return src.replace(API_CONFIG.STATIC, getCDNPrefixURL(useCDNDomain(), CDNPrefix.Static));
     } else {
       return src;
     }
@@ -2053,6 +2094,54 @@ const useEnhancer = () => {
     loading: UNDEFINED
   };
 };
+const useHead = (source) => {
+  return useHead$1(
+    computed(() => {
+      return typeof source === "function" ? source() : source;
+    })
+  );
+};
+const DEFAULT_TITLER = (title) => `${title} | ${META.title}`;
+const DEFAULT_OG_IMAGE = getPageURL("/images/og-social-card.jpg");
+function useSeoMeta(source) {
+  const { i18n, route } = useEnhancer();
+  const input = computed(() => {
+    const value = typeof source === "function" ? source() : source;
+    const { title, pageTitle, description, keywords, ...rest } = value;
+    const pureTitle = title ?? pageTitle;
+    const fullTitle = title ? title : pageTitle ? DEFAULT_TITLER(pageTitle) : "";
+    return { pureTitle, fullTitle, description, keywords, _: rest };
+  });
+  return useHead({
+    title: computed(() => input.value.fullTitle),
+    meta: [
+      { name: "description", content: () => input.value.description ?? "" },
+      { name: "keywords", content: () => input.value.keywords ?? "" },
+      { name: "twitter:site", content: `@${IDENTITIES.TWITTER_USER_NAME}` },
+      { name: "twitter:creator", content: IDENTITIES.TWITTER_USER_NAME },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: () => input.value._.ogImage ?? DEFAULT_OG_IMAGE },
+      { name: "twitter:title", content: () => input.value._.ogTitle ?? input.value.fullTitle ?? "" },
+      { name: "twitter:description", content: () => input.value._.ogDescription ?? input.value.description ?? "" },
+      { property: "og:site_name", content: () => META.title },
+      { property: "og:type", content: () => input.value._.ogType ?? "object" },
+      { property: "og:title", content: () => input.value._.ogTitle ?? input.value.pureTitle ?? "" },
+      { property: "og:description", content: () => input.value._.ogDescription ?? input.value.description ?? "" },
+      { property: "og:url", content: () => input.value._.ogUrl ?? getPageURL(route.fullPath) },
+      { property: "og:image", content: () => input.value._.ogImage ?? DEFAULT_OG_IMAGE },
+      { property: "og:image:alt", content: () => input.value._.ogImageAlt ?? input.value._.ogTitle ?? input.value.fullTitle ?? "" },
+      { property: "og:image:width", content: () => input.value._.ogImageWidth ?? (input.value._.ogImage ? "" : "1000") },
+      { property: "og:image:height", content: () => input.value._.ogImageHeight ?? (input.value._.ogImage ? "" : "526") },
+      { property: "og:locale", content: () => {
+        var _a;
+        return ((_a = i18n.l.value) == null ? void 0 : _a.iso) ?? "";
+      } }
+    ]
+  });
+}
+const NODE_ENV = process.env.NODE_ENV;
+process.env.NODE_ENV === "development";
+process.env.NODE_ENV === "production";
 const isValidDateParam = (date) => {
   const dates = date.split("-");
   if (dates.length !== 3) {
@@ -2236,6 +2325,23 @@ _sfc_main$1H.setup = (props, ctx) => {
   return _sfc_setup$1H ? _sfc_setup$1H(props, ctx) : void 0;
 };
 const Loadmore = /* @__PURE__ */ _export_sfc(_sfc_main$1H, [["__scopeId", "data-v-ecbe8858"]]);
+const getTagFlowRoute = (tagSlug) => {
+  return `/tag/${tagSlug}`;
+};
+const getCategoryFlowRoute = (categorySlug) => {
+  return `/category/${categorySlug}`;
+};
+const getDateFlowRoute = (date) => {
+  return `/date/${date}`;
+};
+const getArticleDetailRoute = (articleId) => {
+  return `/article/${articleId}`;
+};
+const getPageRoute = (routeName) => {
+  return `/${routeName}`;
+};
+const isArticleDetail = (name) => name === RouteName.Article;
+const isSearchFlow = (name) => name === RouteName.SearchFlow;
 const WebPFormat = `@webp`;
 const getImgProxyPath = (path, options) => {
   const resize = `resize:fill:${options.width}:${options.height}:0`;
@@ -12815,7 +12921,7 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
             _push2(ssrRenderComponent(_component_i18n, null, {
               zh: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<span data-v-b942bcc5${_scopeId2}> 可在我的 `);
+                  _push3(`<span data-v-64632919${_scopeId2}>在我的 `);
                   _push3(ssrRenderComponent(_component_ulink, {
                     href: unref(VALUABLE_LINKS).INSTAGRAM,
                     class: "link"
@@ -12831,11 +12937,11 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
                     }),
                     _: 1
                   }, _parent3, _scopeId2));
-                  _push3(` 主页查看更多 </span>`);
+                  _push3(` 主页查看更多</span>`);
                 } else {
                   return [
                     createVNode("span", null, [
-                      createTextVNode(" 可在我的 "),
+                      createTextVNode("在我的 "),
                       createVNode(_component_ulink, {
                         href: unref(VALUABLE_LINKS).INSTAGRAM,
                         class: "link"
@@ -12845,7 +12951,7 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
                         ]),
                         _: 1
                       }, 8, ["href"]),
-                      createTextVNode(" 主页查看更多 ")
+                      createTextVNode(" 主页查看更多")
                     ])
                   ];
                 }
@@ -12890,7 +12996,7 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
               createVNode(_component_i18n, null, {
                 zh: withCtx(() => [
                   createVNode("span", null, [
-                    createTextVNode(" 可在我的 "),
+                    createTextVNode("在我的 "),
                     createVNode(_component_ulink, {
                       href: unref(VALUABLE_LINKS).INSTAGRAM,
                       class: "link"
@@ -12900,7 +13006,7 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
                       ]),
                       _: 1
                     }, 8, ["href"]),
-                    createTextVNode(" 主页查看更多 ")
+                    createTextVNode(" 主页查看更多")
                   ])
                 ]),
                 en: withCtx(() => [
@@ -12925,14 +13031,14 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const banner_vue_vue_type_style_index_0_scoped_b942bcc5_lang = "";
+const banner_vue_vue_type_style_index_0_scoped_64632919_lang = "";
 const _sfc_setup$H = _sfc_main$H.setup;
 _sfc_main$H.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/banner.vue");
   return _sfc_setup$H ? _sfc_setup$H(props, ctx) : void 0;
 };
-const InstagramBanner = /* @__PURE__ */ _export_sfc(_sfc_main$H, [["__scopeId", "data-v-b942bcc5"]]);
+const InstagramBanner = /* @__PURE__ */ _export_sfc(_sfc_main$H, [["__scopeId", "data-v-64632919"]]);
 const _sfc_main$G = /* @__PURE__ */ defineComponent({
   __name: "album",
   __ssrInlineRender: true,
@@ -13299,7 +13405,7 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
       const _component_empty = resolveComponent("empty");
       const _component_i18n = resolveComponent("i18n");
       const _component_skeleton_base = resolveComponent("skeleton-base");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "photography-page" }, _attrs))} data-v-83229a1f>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "photography-page" }, _attrs))} data-v-0637748b>`);
       _push(ssrRenderComponent(InstagramBanner, null, null, _parent));
       _push(ssrRenderComponent(_component_container, { class: "page-bridge" }, null, _parent));
       _push(ssrRenderComponent(_component_container, { class: "page-content" }, {
@@ -13349,9 +13455,9 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
               }),
               loading: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="module-loading" data-v-83229a1f${_scopeId2}><!--[-->`);
+                  _push3(`<div class="module-loading" data-v-0637748b${_scopeId2}><!--[-->`);
                   ssrRenderList(4 * 2, (item) => {
-                    _push3(`<div class="item" data-v-83229a1f${_scopeId2}>`);
+                    _push3(`<div class="item" data-v-0637748b${_scopeId2}>`);
                     _push3(ssrRenderComponent(_component_skeleton_base, null, null, _parent3, _scopeId2));
                     _push3(`</div>`);
                   });
@@ -13376,7 +13482,7 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
               }),
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div data-v-83229a1f${_scopeId2}>`);
+                  _push3(`<div data-v-0637748b${_scopeId2}>`);
                   _push3(ssrRenderComponent(InstagramGrid, { medias: allMedias.value }, null, _parent3, _scopeId2));
                   if (!unref(instagramTimeline).fetching && !finished.value) {
                     _push3(ssrRenderComponent(InstagramLoadmore, {
@@ -13460,14 +13566,14 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_83229a1f_lang = "";
+const index_vue_vue_type_style_index_0_scoped_0637748b_lang = "";
 const _sfc_setup$C = _sfc_main$C.setup;
 _sfc_main$C.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/index.vue");
   return _sfc_setup$C ? _sfc_setup$C(props, ctx) : void 0;
 };
-const PhotographyPage = /* @__PURE__ */ _export_sfc(_sfc_main$C, [["__scopeId", "data-v-83229a1f"]]);
+const PhotographyPage = /* @__PURE__ */ _export_sfc(_sfc_main$C, [["__scopeId", "data-v-0637748b"]]);
 var CategorySlug = /* @__PURE__ */ ((CategorySlug2) => {
   CategorySlug2["Code"] = "code";
   CategorySlug2["Insight"] = "insight";
@@ -13761,112 +13867,6 @@ const createUniversalRouter = (options) => {
   }
   return router;
 };
-const getTagFlowRoute = (tagSlug) => {
-  return `/tag/${tagSlug}`;
-};
-const getCategoryFlowRoute = (categorySlug) => {
-  return `/category/${categorySlug}`;
-};
-const getDateFlowRoute = (date) => {
-  return `/date/${date}`;
-};
-const getArticleDetailRoute = (articleId) => {
-  return `/article/${articleId}`;
-};
-const getPageRoute = (routeName) => {
-  return `/${routeName}`;
-};
-const isArticleDetail = (name) => name === RouteName.Article;
-const isSearchFlow = (name) => name === RouteName.SearchFlow;
-var CDNPrefix = /* @__PURE__ */ ((CDNPrefix2) => {
-  CDNPrefix2["Proxy"] = "proxy";
-  CDNPrefix2["Assets"] = "assets";
-  CDNPrefix2["Static"] = "static";
-  CDNPrefix2["ImgProxy"] = "imgproxy";
-  return CDNPrefix2;
-})(CDNPrefix || {});
-const getCDNPrefixURL = (domain, prefix) => {
-  return `${domain}/${prefix}`;
-};
-const normalizePath = (path) => {
-  return path.startsWith("/") ? path : `/${path}`;
-};
-const getAssetURL = (domain, path) => {
-  const normalizedPath = normalizePath(path);
-  return `${getCDNPrefixURL(
-    domain,
-    "assets"
-    /* Assets */
-  )}${normalizedPath}`;
-};
-const getImgProxyURL = (domain, path) => {
-  return `${getCDNPrefixURL(
-    domain,
-    "imgproxy"
-    /* ImgProxy */
-  )}${normalizePath(path)}`;
-};
-const getOriginalProxyURL = (url) => {
-  return `${BFF_PROXY_PREFIX}/${btoa(url)}`;
-};
-const getProxyURL = (domain, url) => {
-  return `${getCDNPrefixURL(
-    domain,
-    "proxy"
-    /* Proxy */
-  )}/${btoa(url)}`;
-};
-const getPageURL = (path) => {
-  return `${API_CONFIG.FE}${normalizePath(path)}`;
-};
-const useHead = (source) => {
-  return useHead$1(
-    computed(() => {
-      return typeof source === "function" ? source() : source;
-    })
-  );
-};
-const DEFAULT_TITLER = (title) => `${title} | ${META.title}`;
-const DEFAULT_OG_IMAGE = getPageURL("/images/og-social-card.jpg");
-function useSeoMeta(source) {
-  const { i18n, route } = useEnhancer();
-  const input = computed(() => {
-    const value = typeof source === "function" ? source() : source;
-    const { title, pageTitle, description, keywords, ...rest } = value;
-    const pureTitle = title ?? pageTitle;
-    const fullTitle = title ? title : pageTitle ? DEFAULT_TITLER(pageTitle) : "";
-    return { pureTitle, fullTitle, description, keywords, _: rest };
-  });
-  return useHead({
-    title: computed(() => input.value.fullTitle),
-    meta: [
-      { name: "description", content: () => input.value.description ?? "" },
-      { name: "keywords", content: () => input.value.keywords ?? "" },
-      { name: "twitter:site", content: `@${IDENTITIES.TWITTER_USER_NAME}` },
-      { name: "twitter:creator", content: IDENTITIES.TWITTER_USER_NAME },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: () => input.value._.ogImage ?? DEFAULT_OG_IMAGE },
-      { name: "twitter:title", content: () => input.value._.ogTitle ?? input.value.fullTitle ?? "" },
-      { name: "twitter:description", content: () => input.value._.ogDescription ?? input.value.description ?? "" },
-      { property: "og:site_name", content: () => META.title },
-      { property: "og:type", content: () => input.value._.ogType ?? "object" },
-      { property: "og:title", content: () => input.value._.ogTitle ?? input.value.pureTitle ?? "" },
-      { property: "og:description", content: () => input.value._.ogDescription ?? input.value.description ?? "" },
-      { property: "og:url", content: () => input.value._.ogUrl ?? getPageURL(route.fullPath) },
-      { property: "og:image", content: () => input.value._.ogImage ?? DEFAULT_OG_IMAGE },
-      { property: "og:image:alt", content: () => input.value._.ogImageAlt ?? input.value._.ogTitle ?? input.value.fullTitle ?? "" },
-      { property: "og:image:width", content: () => input.value._.ogImageWidth ?? (input.value._.ogImage ? "" : "1000") },
-      { property: "og:image:height", content: () => input.value._.ogImageHeight ?? (input.value._.ogImage ? "" : "526") },
-      { property: "og:locale", content: () => {
-        var _a;
-        return ((_a = i18n.l.value) == null ? void 0 : _a.iso) ?? "";
-      } }
-    ]
-  });
-}
-const NODE_ENV = process.env.NODE_ENV;
-process.env.NODE_ENV === "development";
-process.env.NODE_ENV === "production";
 const _sfc_main$B = /* @__PURE__ */ defineComponent({
   __name: "webfont",
   __ssrInlineRender: true,
