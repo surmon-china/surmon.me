@@ -364,7 +364,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.14.3";
+const APP_VERSION = "4.14.4";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -13061,9 +13061,9 @@ const _sfc_main$G = /* @__PURE__ */ defineComponent({
       fetchMediaChildren(props.media.id).finally(() => emit("load"));
     });
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "album-box" }, _attrs))} data-v-cd067ca0><div class="navigation prev" data-v-cd067ca0><button class="button"${ssrIncludeBooleanAttr(!canGoPrev.value) ? " disabled" : ""} data-v-cd067ca0><i class="iconfont icon-prev" data-v-cd067ca0></i></button></div><div class="navigation next" data-v-cd067ca0><button class="button"${ssrIncludeBooleanAttr(!canGoNext.value) ? " disabled" : ""} data-v-cd067ca0><i class="iconfont icon-next" data-v-cd067ca0></i></button></div><div class="pagination" data-v-cd067ca0><!--[-->`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "album-box" }, _attrs))} data-v-da05acb9><div class="navigation prev" data-v-da05acb9><button class="button"${ssrIncludeBooleanAttr(!canGoPrev.value) ? " disabled" : ""} data-v-da05acb9><i class="iconfont icon-prev" data-v-da05acb9></i></button></div><div class="navigation next" data-v-da05acb9><button class="button"${ssrIncludeBooleanAttr(!canGoNext.value) ? " disabled" : ""} data-v-da05acb9><i class="iconfont icon-next" data-v-da05acb9></i></button></div><div class="pagination" data-v-da05acb9><!--[-->`);
       ssrRenderList(mediaChildren.value.length, (index) => {
-        _push(`<span class="${ssrRenderClass([{ active: index === activeIndex.value + 1 }, "index"])}" data-v-cd067ca0></span>`);
+        _push(`<span class="${ssrRenderClass([{ active: index === activeIndex.value + 1 }, "index"])}" data-v-da05acb9></span>`);
       });
       _push(`<!--]--></div>`);
       ssrRenderSlot(_ctx.$slots, "child", { activeIndex: activeIndex.value, activeMedia: mediaChildren.value[activeIndex.value] }, null, _push, _parent);
@@ -13071,14 +13071,14 @@ const _sfc_main$G = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const album_vue_vue_type_style_index_0_scoped_cd067ca0_lang = "";
+const album_vue_vue_type_style_index_0_scoped_da05acb9_lang = "";
 const _sfc_setup$G = _sfc_main$G.setup;
 _sfc_main$G.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/album.vue");
   return _sfc_setup$G ? _sfc_setup$G(props, ctx) : void 0;
 };
-const InstagramAlbum = /* @__PURE__ */ _export_sfc(_sfc_main$G, [["__scopeId", "data-v-cd067ca0"]]);
+const InstagramAlbum = /* @__PURE__ */ _export_sfc(_sfc_main$G, [["__scopeId", "data-v-da05acb9"]]);
 const _sfc_main$F = /* @__PURE__ */ defineComponent({
   __name: "gallery",
   __ssrInlineRender: true,
@@ -13098,7 +13098,7 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
       const _component_ulink = resolveComponent("ulink");
       const _component_udate = resolveComponent("udate");
       const _component_spin = resolveComponent("spin");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "instagram-gallery" }, _attrs))} data-v-e93f4b01><div class="topbar" data-v-e93f4b01><div class="left" data-v-e93f4b01>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "instagram-gallery" }, _attrs))} data-v-29620178><div class="topbar" data-v-29620178><div class="left" data-v-29620178>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "type-link",
         href: _ctx.media.permalink
@@ -13106,11 +13106,11 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             if (unref(isVideoMediaIns)(_ctx.media)) {
-              _push2(`<i class="iconfont icon-video" data-v-e93f4b01${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-video" data-v-29620178${_scopeId}></i>`);
             } else if (unref(isAlbumMediaIns)(_ctx.media)) {
-              _push2(`<i class="iconfont icon-album" data-v-e93f4b01${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-album" data-v-29620178${_scopeId}></i>`);
             } else {
-              _push2(`<i class="iconfont icon-camera" data-v-e93f4b01${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-camera" data-v-29620178${_scopeId}></i>`);
             }
           } else {
             return [
@@ -13129,22 +13129,37 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</div><div class="center" data-v-e93f4b01><span class="pagination" data-v-e93f4b01>${ssrInterpolate(_ctx.index + 1)} / ${ssrInterpolate(_ctx.count)}</span></div><div class="right" data-v-e93f4b01><span class="timestamp" data-v-e93f4b01>`);
+      _push(ssrRenderComponent(_component_ulink, {
+        class: "username-link",
+        href: _ctx.media.permalink
+      }, {
+        default: withCtx((_, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(`<span data-v-29620178${_scopeId}>@${ssrInterpolate(unref(IDENTITIES).INSTAGRAM_USERNAME)}</span>`);
+          } else {
+            return [
+              createVNode("span", null, "@" + toDisplayString(unref(IDENTITIES).INSTAGRAM_USERNAME), 1)
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+      _push(`</div><div class="center" data-v-29620178><span class="pagination" data-v-29620178>${ssrInterpolate(_ctx.index + 1)} / ${ssrInterpolate(_ctx.count)}</span></div><div class="right" data-v-29620178><span class="timestamp" data-v-29620178>`);
       _push(ssrRenderComponent(_component_udate, {
         to: "YMDm",
         date: _ctx.media.timestamp,
         separator: "/"
       }, null, _parent));
-      _push(`</span></div></div><div class="content" data-v-e93f4b01>`);
+      _push(`</span></div></div><div class="content" data-v-29620178>`);
       if (!isLoaded.value) {
-        _push(`<div class="loading" data-v-e93f4b01>`);
+        _push(`<div class="loading" data-v-29620178>`);
         _push(ssrRenderComponent(_component_spin, null, null, _parent));
         _push(`</div>`);
       } else {
         _push(`<!---->`);
       }
       if (unref(isVideoMediaIns)(_ctx.media)) {
-        _push(`<video class="video"${ssrRenderAttr("src", unref(getProxyURL)(unref(cdnDomain), _ctx.media.media_url))} autoplay data-v-e93f4b01></video>`);
+        _push(`<video class="video"${ssrRenderAttr("src", unref(getProxyURL)(unref(cdnDomain), _ctx.media.media_url))} autoplay data-v-29620178></video>`);
       } else if (unref(isAlbumMediaIns)(_ctx.media)) {
         _push(ssrRenderComponent(InstagramAlbum, {
           class: "album",
@@ -13153,7 +13168,7 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
         }, {
           child: withCtx(({ activeMedia }, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<img class="image"${ssrRenderAttr("src", unref(getProxyURL)(unref(cdnDomain), activeMedia == null ? void 0 : activeMedia.media_url))}${ssrRenderAttr("alt", activeMedia == null ? void 0 : activeMedia.caption)} loading="lazy" draggable="false" data-v-e93f4b01${_scopeId}>`);
+              _push2(`<img class="image"${ssrRenderAttr("src", unref(getProxyURL)(unref(cdnDomain), activeMedia == null ? void 0 : activeMedia.media_url))}${ssrRenderAttr("alt", activeMedia == null ? void 0 : activeMedia.caption)} loading="lazy" draggable="false" data-v-29620178${_scopeId}>`);
             } else {
               return [
                 createVNode("img", {
@@ -13169,10 +13184,10 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
           _: 1
         }, _parent));
       } else {
-        _push(`<img class="image"${ssrRenderAttr("src", unref(getProxyURL)(unref(cdnDomain), (_a = _ctx.media) == null ? void 0 : _a.media_url))}${ssrRenderAttr("alt", _ctx.media.caption)} draggable="false" loading="lazy" data-v-e93f4b01>`);
+        _push(`<img class="image"${ssrRenderAttr("src", unref(getProxyURL)(unref(cdnDomain), (_a = _ctx.media) == null ? void 0 : _a.media_url))}${ssrRenderAttr("alt", _ctx.media.caption)} draggable="false" loading="lazy" data-v-29620178>`);
       }
       if (_ctx.media.caption) {
-        _push(`<p class="caption" data-v-e93f4b01>${_ctx.media.caption.replaceAll("\n", "<br>")}</p>`);
+        _push(`<p class="caption" data-v-29620178>${_ctx.media.caption.replaceAll("\n", "<br>")}</p>`);
       } else {
         _push(`<!---->`);
       }
@@ -13180,14 +13195,14 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const gallery_vue_vue_type_style_index_0_scoped_e93f4b01_lang = "";
+const gallery_vue_vue_type_style_index_0_scoped_29620178_lang = "";
 const _sfc_setup$F = _sfc_main$F.setup;
 _sfc_main$F.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/gallery.vue");
   return _sfc_setup$F ? _sfc_setup$F(props, ctx) : void 0;
 };
-const InsGallery = /* @__PURE__ */ _export_sfc(_sfc_main$F, [["__scopeId", "data-v-e93f4b01"]]);
+const InsGallery = /* @__PURE__ */ _export_sfc(_sfc_main$F, [["__scopeId", "data-v-29620178"]]);
 const _sfc_main$E = /* @__PURE__ */ defineComponent({
   __name: "grid",
   __ssrInlineRender: true,
@@ -13196,10 +13211,6 @@ const _sfc_main$E = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
-    const getPureCaption = (caption) => {
-      const text = caption == null ? void 0 : caption.split("#")[0].trim().replaceAll("\n", " ");
-      return (text ? text : caption) || "-";
-    };
     useEnhancer();
     const galleryActiveIndex = ref();
     const galleryActiveMedia = computed(() => {
@@ -13208,28 +13219,32 @@ const _sfc_main$E = /* @__PURE__ */ defineComponent({
     const closeMediaGallery = () => {
       galleryActiveIndex.value = UNDEFINED;
     };
+    const getPureCaption = (caption) => {
+      const text = caption == null ? void 0 : caption.split("#")[0].trim().replaceAll("\n", " ");
+      return (text ? text : caption) || "-";
+    };
     return (_ctx, _push, _parent, _attrs) => {
       const _component_client_only = resolveComponent("client-only");
       const _component_popup = resolveComponent("popup");
       const _directive_lozad = resolveDirective("lozad");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "instagram-grid" }, _attrs))} data-v-93bc1eae><ul class="medias" data-v-93bc1eae><!--[-->`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "instagram-grid" }, _attrs))} data-v-73855995><ul class="medias" data-v-73855995><!--[-->`);
       ssrRenderList(_ctx.medias, (media, index) => {
-        _push(`<li${ssrRenderAttr("title", getPureCaption(media.caption))} class="${ssrRenderClass([unref(isVideoMediaIns)(media) ? "video" : "photo", "item"])}" data-v-93bc1eae><div class="content" data-v-93bc1eae><div${ssrRenderAttrs(mergeProps({
+        _push(`<li${ssrRenderAttr("title", getPureCaption(media.caption))} class="${ssrRenderClass([unref(isVideoMediaIns)(media) ? "video" : "photo", "item"])}" data-v-73855995><div class="content" data-v-73855995><div${ssrRenderAttrs(mergeProps({
           class: "background",
           "data-background-image": unref(getOriginalProxyURL)(unref(autoInstagramThumbnail)(media, "m"))
-        }, ssrGetDirectiveProps(_ctx, _directive_lozad)))} data-v-93bc1eae></div><div class="mask" data-v-93bc1eae><span class="icon" data-v-93bc1eae>`);
+        }, ssrGetDirectiveProps(_ctx, _directive_lozad)))} data-v-73855995></div><div class="mask" data-v-73855995><span class="icon" data-v-73855995>`);
         if (unref(isVideoMediaIns)(media)) {
-          _push(`<i class="iconfont icon-music-play" data-v-93bc1eae></i>`);
+          _push(`<i class="iconfont icon-music-play" data-v-73855995></i>`);
         } else {
-          _push(`<i class="iconfont icon-eye" data-v-93bc1eae></i>`);
+          _push(`<i class="iconfont icon-eye" data-v-73855995></i>`);
         }
-        _push(`</span></div><div class="type-icon" data-v-93bc1eae>`);
+        _push(`</span></div><div class="type-icon" data-v-73855995>`);
         if (unref(isVideoMediaIns)(media)) {
-          _push(`<i class="iconfont icon-video" data-v-93bc1eae></i>`);
+          _push(`<i class="iconfont icon-video" data-v-73855995></i>`);
         } else if (unref(isAlbumMediaIns)(media)) {
-          _push(`<i class="iconfont icon-album" data-v-93bc1eae></i>`);
+          _push(`<i class="iconfont icon-album" data-v-73855995></i>`);
         } else {
-          _push(`<i class="iconfont icon-camera" data-v-93bc1eae></i>`);
+          _push(`<i class="iconfont icon-camera" data-v-73855995></i>`);
         }
         _push(`</div></div></li>`);
       });
@@ -13292,14 +13307,14 @@ const _sfc_main$E = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const grid_vue_vue_type_style_index_0_scoped_93bc1eae_lang = "";
+const grid_vue_vue_type_style_index_0_scoped_73855995_lang = "";
 const _sfc_setup$E = _sfc_main$E.setup;
 _sfc_main$E.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/grid.vue");
   return _sfc_setup$E ? _sfc_setup$E(props, ctx) : void 0;
 };
-const InstagramGrid = /* @__PURE__ */ _export_sfc(_sfc_main$E, [["__scopeId", "data-v-93bc1eae"]]);
+const InstagramGrid = /* @__PURE__ */ _export_sfc(_sfc_main$E, [["__scopeId", "data-v-73855995"]]);
 const _sfc_main$D = /* @__PURE__ */ defineComponent({
   __name: "loadmore",
   __ssrInlineRender: true,
