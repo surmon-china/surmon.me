@@ -12,11 +12,6 @@
     medias: Array<InstagramMediaItem>
   }>()
 
-  const getPureCaption = (caption?: string) => {
-    const text = caption?.split('#')[0].trim().replaceAll('\n', ' ')
-    return (text ? text : caption) || '-'
-  }
-
   const { gtag } = useEnhancer()
   const galleryActiveIndex = ref<number>()
   const galleryActiveMedia = computed(() => {
@@ -32,6 +27,11 @@
 
   const closeMediaGallery = () => {
     galleryActiveIndex.value = UNDEFINED
+  }
+
+  const getPureCaption = (caption?: string) => {
+    const text = caption?.split('#')[0].trim().replaceAll('\n', ' ')
+    return (text ? text : caption) || '-'
   }
 </script>
 

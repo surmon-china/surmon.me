@@ -3,6 +3,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { isVideoMediaIns, isAlbumMediaIns } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
+  import { IDENTITIES } from '/@/config/app.config'
   import { getProxyURL } from '/@/transforms/url'
   import InstagramAlbum from './album.vue'
 
@@ -27,6 +28,9 @@
           <i class="iconfont icon-video" v-if="isVideoMediaIns(media)"></i>
           <i class="iconfont icon-album" v-else-if="isAlbumMediaIns(media)"></i>
           <i class="iconfont icon-camera" v-else></i>
+        </ulink>
+        <ulink class="username-link" :href="media.permalink">
+          <span>@{{ IDENTITIES.INSTAGRAM_USERNAME }}</span>
         </ulink>
       </div>
       <div class="center">
@@ -162,6 +166,14 @@
 
       .type-link {
         color: $white;
+      }
+
+      .username-link {
+        margin-left: $sm-gap;
+        color: $white;
+        font-size: $font-size-base - 1;
+        font-family: system-ui;
+        font-weight: bold;
       }
     }
   }
