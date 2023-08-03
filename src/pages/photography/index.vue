@@ -1,15 +1,42 @@
 <script lang="ts" setup>
+  import { ref, shallowRef, shallowReactive, computed } from 'vue'
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/universal'
   import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
   import { META } from '/@/config/app.config'
+  import type { InstagramMediaItem, InstagramMediaListResponse } from '/@/server/getters/instagram'
+  import { TunnelModule } from '/@/constants/tunnel'
+  import tunnel from '/@/services/tunnel'
   import InstagramBanner from './banner.vue'
   import InstagramGrid from './grid.vue'
+  import InstagramLoadmore from './loadmore.vue'
 
   const { instagramTimeline } = useStores()
   const { i18n: _i18n, seoMeta, isZhLang } = useEnhancer()
+
+  const loading = ref(false)
+  const medias = shallowReactive<Array<InstagramMediaItem>>([])
+  const lastPaging = shallowRef<InstagramMediaListResponse['paging'] | null>(null)
+  const finished = computed(() => Boolean(lastPaging.value && !lastPaging.value.next))
+  const fetchMoreMedias = async () => {
+    try {
+      loading.value = true
+      const response = await tunnel.dispatch<InstagramMediaListResponse>(TunnelModule.InstagramMedias, {
+        after: lastPaging.value?.cursors.after ?? instagramTimeline.data?.paging?.cursors.after
+      })
+      medias.push(...response.data)
+      lastPaging.value = response.paging
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const allMedias = computed(() => {
+    const timeline = instagramTimeline.data?.data ?? []
+    return [...timeline, ...medias]
+  })
 
   seoMeta(() => {
     const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_PHOTOGRAPHY, Language.English)!)
@@ -44,7 +71,15 @@
           </div>
         </template>
         <template #default>
-          <instagram-grid :medias="instagramTimeline.data?.data ?? []" />
+          <div>
+            <instagram-grid :medias="allMedias" />
+            <instagram-loadmore
+              v-if="!instagramTimeline.fetching && !finished"
+              class="loadmore"
+              :loading="loading"
+              @loadmore="fetchMoreMedias"
+            />
+          </div>
         </template>
       </placeholder>
     </container>
@@ -66,6 +101,10 @@
 
     .page-content {
       margin: 4rem 0;
+
+      .loadmore {
+        margin-top: 4rem;
+      }
     }
 
     .module-loading {

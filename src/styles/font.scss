@@ -35,8 +35,8 @@
   font-family: 'webfont-medium';
   font-display: swap;
   src:
-    url('/webfont-medium/font.woff2') format('woff2'),
-    url('/webfont-medium/font.woff') format('woff');
+    url('/webfont-medium/font.woff2?t=230803') format('woff2'),
+    url('/webfont-medium/font.woff?t=230803') format('woff');
 }
 
 // 阿里巴巴普惠体 2.0 95 ExtraBold
@@ -46,6 +46,6 @@
   font-family: 'webfont-bolder';
   font-display: swap;
   src:
-    url('/webfont-bolder/font.woff2') format('woff2'),
-    url('/webfont-bolder/font.woff') format('woff');
+    url('/webfont-bolder/font.woff2?t=230803') format('woff2'),
+    url('/webfont-bolder/font.woff?t=230803') format('woff');
 }
