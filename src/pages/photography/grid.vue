@@ -123,6 +123,7 @@
           height: 100%;
           background-size: cover;
           background-position: center;
+          background-color: $module-bg-darker-1;
         }
 
         .type-icon {
