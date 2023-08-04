@@ -364,7 +364,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.14.8";
+const APP_VERSION = "4.14.10";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -12897,9 +12897,9 @@ const _sfc_main$G = /* @__PURE__ */ defineComponent({
       fetchMediaChildren(props.media.id).finally(() => emit("load"));
     });
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "album-box" }, _attrs))} data-v-da05acb9><div class="navigation prev" data-v-da05acb9><button class="button"${ssrIncludeBooleanAttr(!canGoPrev.value) ? " disabled" : ""} data-v-da05acb9><i class="iconfont icon-prev" data-v-da05acb9></i></button></div><div class="navigation next" data-v-da05acb9><button class="button"${ssrIncludeBooleanAttr(!canGoNext.value) ? " disabled" : ""} data-v-da05acb9><i class="iconfont icon-next" data-v-da05acb9></i></button></div><div class="pagination" data-v-da05acb9><!--[-->`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "album-box" }, _attrs))} data-v-e9faa00f><div class="navigation prev" data-v-e9faa00f><button class="button"${ssrIncludeBooleanAttr(!canGoPrev.value) ? " disabled" : ""} data-v-e9faa00f><i class="iconfont icon-prev" data-v-e9faa00f></i></button></div><div class="navigation next" data-v-e9faa00f><button class="button"${ssrIncludeBooleanAttr(!canGoNext.value) ? " disabled" : ""} data-v-e9faa00f><i class="iconfont icon-next" data-v-e9faa00f></i></button></div><div class="pagination" data-v-e9faa00f><!--[-->`);
       ssrRenderList(mediaChildren.value.length, (index) => {
-        _push(`<span class="${ssrRenderClass([{ active: index === activeIndex.value + 1 }, "index"])}" data-v-da05acb9></span>`);
+        _push(`<span class="${ssrRenderClass([{ active: index === activeIndex.value + 1 }, "index"])}" data-v-e9faa00f></span>`);
       });
       _push(`<!--]--></div>`);
       ssrRenderSlot(_ctx.$slots, "child", { activeIndex: activeIndex.value, activeMedia: mediaChildren.value[activeIndex.value] }, null, _push, _parent);
@@ -12907,14 +12907,14 @@ const _sfc_main$G = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const album_vue_vue_type_style_index_0_scoped_da05acb9_lang = "";
+const album_vue_vue_type_style_index_0_scoped_e9faa00f_lang = "";
 const _sfc_setup$G = _sfc_main$G.setup;
 _sfc_main$G.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/album.vue");
   return _sfc_setup$G ? _sfc_setup$G(props, ctx) : void 0;
 };
-const InstagramAlbum = /* @__PURE__ */ _export_sfc(_sfc_main$G, [["__scopeId", "data-v-da05acb9"]]);
+const InstagramAlbum = /* @__PURE__ */ _export_sfc(_sfc_main$G, [["__scopeId", "data-v-e9faa00f"]]);
 const _sfc_main$F = /* @__PURE__ */ defineComponent({
   __name: "gallery",
   __ssrInlineRender: true,
@@ -13075,26 +13075,26 @@ const _sfc_main$E = /* @__PURE__ */ defineComponent({
       const _component_client_only = resolveComponent("client-only");
       const _component_popup = resolveComponent("popup");
       const _directive_lozad = resolveDirective("lozad");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "instagram-grid" }, _attrs))} data-v-74175834><ul class="medias" data-v-74175834><!--[-->`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "instagram-grid" }, _attrs))} data-v-6aff6a62><ul class="medias" data-v-6aff6a62><!--[-->`);
       ssrRenderList(_ctx.medias, (media, index) => {
-        _push(`<li${ssrRenderAttr("title", getPureCaption(media.caption))} class="${ssrRenderClass([unref(isVideoMediaIns)(media) ? "video" : "photo", "item"])}" data-v-74175834><div class="content" data-v-74175834><div${ssrRenderAttrs(mergeProps({
+        _push(`<li${ssrRenderAttr("title", getPureCaption(media.caption))} class="${ssrRenderClass([unref(isVideoMediaIns)(media) ? "video" : "photo", "item"])}" data-v-6aff6a62><div class="content" data-v-6aff6a62><div${ssrRenderAttrs(mergeProps({
           class: "background",
           "data-background-image": getMediaThumbnail(media)
-        }, ssrGetDirectiveProps(_ctx, _directive_lozad)))} data-v-74175834></div><div class="mask" data-v-74175834><span class="icon" data-v-74175834>`);
+        }, ssrGetDirectiveProps(_ctx, _directive_lozad)))} data-v-6aff6a62></div><div class="mask" data-v-6aff6a62><span class="icon" data-v-6aff6a62>`);
         if (unref(isVideoMediaIns)(media)) {
-          _push(`<i class="iconfont icon-music-play" data-v-74175834></i>`);
+          _push(`<i class="iconfont icon-music-play" data-v-6aff6a62></i>`);
         } else {
-          _push(`<i class="iconfont icon-eye" data-v-74175834></i>`);
+          _push(`<i class="iconfont icon-eye" data-v-6aff6a62></i>`);
         }
-        _push(`</span></div><div class="type-icon" data-v-74175834>`);
+        _push(`</span></div><div class="type-icon" data-v-6aff6a62>`);
         if (unref(isVideoMediaIns)(media)) {
-          _push(`<i class="iconfont icon-video" data-v-74175834></i>`);
+          _push(`<i class="iconfont icon-video" data-v-6aff6a62></i>`);
         } else if (unref(isAlbumMediaIns)(media)) {
-          _push(`<i class="iconfont icon-album" data-v-74175834></i>`);
+          _push(`<i class="iconfont icon-album" data-v-6aff6a62></i>`);
         } else {
-          _push(`<i class="iconfont icon-camera" data-v-74175834></i>`);
+          _push(`<i class="iconfont icon-camera" data-v-6aff6a62></i>`);
         }
-        _push(`</div><span class="time" data-v-74175834>`);
+        _push(`</div><span class="time" data-v-6aff6a62>`);
         _push(ssrRenderComponent(_component_udate, {
           to: "YMD",
           date: media.timestamp,
@@ -13161,14 +13161,14 @@ const _sfc_main$E = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const grid_vue_vue_type_style_index_0_scoped_74175834_lang = "";
+const grid_vue_vue_type_style_index_0_scoped_6aff6a62_lang = "";
 const _sfc_setup$E = _sfc_main$E.setup;
 _sfc_main$E.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/grid.vue");
   return _sfc_setup$E ? _sfc_setup$E(props, ctx) : void 0;
 };
-const InstagramGrid = /* @__PURE__ */ _export_sfc(_sfc_main$E, [["__scopeId", "data-v-74175834"]]);
+const InstagramGrid = /* @__PURE__ */ _export_sfc(_sfc_main$E, [["__scopeId", "data-v-6aff6a62"]]);
 const _sfc_main$D = /* @__PURE__ */ defineComponent({
   __name: "loadmore",
   __ssrInlineRender: true,
