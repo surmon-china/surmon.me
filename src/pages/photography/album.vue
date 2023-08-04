@@ -95,10 +95,10 @@
       top: 50%;
       transform: translateY(-50%);
       &.prev {
-        left: $gap;
+        left: $lg-gap;
       }
       &.next {
-        right: $gap;
+        right: $lg-gap;
       }
 
       .button {
