@@ -5,11 +5,13 @@
   import { useUniversalFetch } from '/@/universal'
   import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
-  import { META } from '/@/config/app.config'
+  import { getOriginalProxyURL } from '/@/transforms/url'
+  import { isVideoMediaIns } from '/@/transforms/media'
+  import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import type { InstagramMediaItem, InstagramMediaListResponse } from '/@/server/getters/instagram'
   import { TunnelModule } from '/@/constants/tunnel'
   import tunnel from '/@/services/tunnel'
-  import InstagramBanner from './banner.vue'
+  import PageBanner from '/@/components/common/banner.vue'
   import InstagramGrid from './grid.vue'
   import InstagramLoadmore from './loadmore.vue'
 
@@ -38,6 +40,15 @@
     return [...timeline, ...medias]
   })
 
+  const ramdomPosition = Math.floor(Math.random() * 70 + 10)
+  const randomBannerImage = computed(() => {
+    const data = instagramTimeline.data?.data ?? []
+    const allImages = data.filter((media) => !isVideoMediaIns(media))
+    const lucky = allImages[Math.floor(Math.random() * allImages.length)]
+    const source = lucky?.media_url
+    return source ? getOriginalProxyURL(source) : '/images/page-photography/banner.jpg'
+  })
+
   seoMeta(() => {
     const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_PHOTOGRAPHY, Language.English)!)
     const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_PHOTOGRAPHY), enTitle] : [enTitle]
@@ -54,7 +65,23 @@
 
 <template>
   <div class="photography-page">
-    <instagram-banner />
+    <page-banner class="page-banner" :cdn="false" :position="ramdomPosition" :image="randomBannerImage">
+      <template #title>
+        <webfont>
+          <i18n zh="大千同在，万象共栖" :en="`${META.author}'s photographs`" />
+        </webfont>
+      </template>
+      <template #description>
+        <i18n>
+          <template #zh>
+            <span>在我的 <ulink :href="VALUABLE_LINKS.INSTAGRAM" class="link">Instagram</ulink> 主页查看更多</span>
+          </template>
+          <template #en>
+            View all photographs on my <ulink :href="VALUABLE_LINKS.INSTAGRAM" class="link">Instagram</ulink>
+          </template>
+        </i18n>
+      </template>
+    </page-banner>
     <container class="page-bridge"></container>
     <container class="page-content">
       <placeholder :data="instagramTimeline.data?.data" :loading="instagramTimeline.fetching">
@@ -92,6 +119,13 @@
 
   .photography-page {
     min-height: $full-page-active-content-height;
+
+    .page-banner {
+      .link {
+        color: $white;
+        text-decoration: underline;
+      }
+    }
 
     .page-bridge {
       position: relative;

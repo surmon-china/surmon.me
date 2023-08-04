@@ -50,7 +50,7 @@
         </span>
       </div>
     </div>
-    <div class="content" :key="media.permalink">
+    <div class="content" :class="{ loaded: isLoaded }">
       <transition name="module">
         <div class="loading" v-if="!isLoaded">
           <spin />
@@ -109,12 +109,24 @@
       .album,
       .video {
         min-width: 32rem;
-        min-height: 66vh;
-        max-width: 94vw;
-        max-height: 86vh;
+        max-width: 32rem;
+        min-height: 48vh;
+        max-height: 48vh;
         width: auto;
         height: auto;
         overflow: hidden;
+        transition:
+          max-width 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+          max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      &.loaded {
+        .image,
+        .album,
+        .video {
+          max-width: 94vw;
+          max-height: 86vh;
+        }
       }
 
       .caption {

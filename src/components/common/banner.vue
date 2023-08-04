@@ -7,17 +7,19 @@
     image: string
     position?: number
     blur?: number
+    cdn?: boolean
     isMobile?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     position: 20,
     blur: 0,
+    cdn: true,
     isMobile: false
   })
 
   const { isDarkTheme, cdnDomain } = useEnhancer()
-  const backgroundImage = computed(() => getAssetURL(cdnDomain, props.image))
+  const backgroundImage = computed(() => (props.cdn ? getAssetURL(cdnDomain, props.image) : props.image))
 </script>
 
 <template>

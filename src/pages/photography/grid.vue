@@ -68,6 +68,9 @@
             <i class="iconfont icon-album" v-else-if="isAlbumMediaIns(media)"></i>
             <i class="iconfont icon-camera" v-else></i>
           </div>
+          <span class="time">
+            <udate to="YMD" :date="media.timestamp" separator="/" />
+          </span>
         </div>
       </li>
     </ul>
@@ -129,6 +132,17 @@
           right: $sm-gap;
           font-size: $font-size-h4;
           color: $white;
+        }
+
+        .time {
+          opacity: 0.8;
+          position: absolute;
+          bottom: $sm-gap;
+          left: $gap;
+          color: $white;
+          font-size: $font-size-small;
+          font-family: monospace;
+          font-weight: bold;
         }
 
         .mask {
