@@ -29,7 +29,7 @@
 
 <template>
   <div class="archive-page">
-    <page-banner :position="80" :is-mobile="true" image="/images/page-archive/banner-mobile.jpg">
+    <page-banner :is-mobile="true" image="/images/page-archive/banner-mobile.webp" :image-position="80" cdn>
       <template #title><i18n :k="LanguageKey.PAGE_ARCHIVE" /></template>
       <template #description><i18n v-bind="i18ns.title" /></template>
     </page-banner>

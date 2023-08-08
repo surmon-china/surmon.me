@@ -1,34 +1,62 @@
 <script lang="ts" setup>
+  import type { CSSProperties } from 'vue'
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { getAssetURL } from '/@/transforms/url'
 
   interface Props {
-    image: string
-    position?: number
+    image?: string
+    imagePosition?: number
+    video?: string
+    videoPosition?: number
     blur?: number
     cdn?: boolean
     isMobile?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    position: 20,
+    imagePosition: 20,
+    videoPosition: 48,
     blur: 0,
-    cdn: true,
+    cdn: false,
     isMobile: false
   })
 
   const { isDarkTheme, cdnDomain } = useEnhancer()
-  const backgroundImage = computed(() => (props.cdn ? getAssetURL(cdnDomain, props.image) : props.image))
+  const backgroundImage = computed(() => {
+    return props.cdn && props.image ? getAssetURL(cdnDomain, props.image) : props.image
+  })
+
+  const backgroundImageStyle = computed<CSSProperties>(() => {
+    if (!backgroundImage.value) {
+      return {}
+    }
+
+    return {
+      backgroundImage: `url(${backgroundImage.value})`,
+      backgroundPositionY: `${props.imagePosition}%`
+    }
+  })
+
+  const videoSource = computed(() => {
+    return props.cdn && props.video ? getAssetURL(cdnDomain, props.video) : props.video
+  })
 </script>
 
 <template>
   <div class="banner" :class="{ mobile: isMobile }">
-    <div
-      class="background"
-      :class="{ dark: isDarkTheme }"
-      :style="{ backgroundImage: `url(${backgroundImage})`, backgroundPositionY: `${position}%` }"
-    ></div>
+    <div class="background" :class="{ dark: isDarkTheme }" :style="backgroundImageStyle">
+      <video
+        class="video"
+        loop
+        muted
+        autoplay
+        :controls="false"
+        :style="{ objectPosition: `0% ${props.videoPosition}%` }"
+        :src="videoSource"
+        v-if="videoSource"
+      ></video>
+    </div>
     <div class="content" :class="{ blur: Boolean(blur) }" :style="{ '--blur': `${blur}px` }">
       <h2 class="title">
         <slot name="title"></slot>
@@ -61,6 +89,13 @@
       background-position-x: center;
       &.dark {
         filter: brightness(0.8);
+      }
+
+      .video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
       }
     }
 

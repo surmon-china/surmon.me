@@ -31,7 +31,7 @@
 
 <template>
   <div class="archive-page">
-    <page-banner :position="46" image="/images/page-archive/banner.jpg">
+    <page-banner image="/images/page-archive/banner.webp" :image-position="34" cdn>
       <template #title>
         <webfont><i18n v-bind="i18ns.title" /></webfont>
       </template>

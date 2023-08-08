@@ -52,9 +52,6 @@
     handleGTagEvent('feedback_modal')
   }
 
-  // MARK: To prevent vite from parsing video.source.src as an asset instead of a static resource and failing to compile it
-  const backgroundVideo = getAssetURL(cdnDomain, '/images/page-about/background.mp4')
-
   // meta
   useAboutPageMeta()
   // prefetch
@@ -128,9 +125,14 @@
   <div class="about-page">
     <div class="page-banner">
       <div class="background">
-        <video class="video" loop muted autoplay :controls="false">
-          <source :src="backgroundVideo" type="video/mp4" />
-        </video>
+        <video
+          class="video"
+          loop
+          muted
+          autoplay
+          :controls="false"
+          :src="getAssetURL(cdnDomain, '/videos/clips/ocean-1.mp4')"
+        ></video>
       </div>
       <div class="content">
         <div class="profile">

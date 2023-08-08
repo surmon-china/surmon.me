@@ -40,15 +40,6 @@
     return [...timeline, ...medias]
   })
 
-  const ramdomPosition = Math.floor(Math.random() * 70 + 10)
-  const randomBannerImage = computed(() => {
-    const data = instagramTimeline.data?.data ?? []
-    const allImages = data.filter((media) => !isVideoMediaIns(media))
-    const lucky = allImages[Math.floor(Math.random() * allImages.length)]
-    const source = lucky?.media_url
-    return source ? getOriginalProxyURL(source) : '/images/page-photography/banner.jpg'
-  })
-
   seoMeta(() => {
     const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_PHOTOGRAPHY, Language.English)!)
     const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_PHOTOGRAPHY), enTitle] : [enTitle]
@@ -65,7 +56,7 @@
 
 <template>
   <div class="photography-page">
-    <page-banner class="page-banner" :cdn="false" :position="ramdomPosition" :image="randomBannerImage">
+    <page-banner class="page-banner" video="/videos/clips/ocean-4.mp4" :video-position="68" cdn>
       <template #title>
         <webfont>
           <i18n zh="大千同在，万象共栖" :en="`${META.author}'s photographs`" />

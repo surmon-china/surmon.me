@@ -22,7 +22,7 @@
   const siteLikes = computed(() => appOption.data?.meta.likes || 0)
   // MARK: Only for client-side routing to navigate to this page
   const isLoading = ref(isClient && gState.isHydrated.value)
-  const bannerImage = `/images/page-guestbook/banner.jpg`
+  const bannerImage = `/images/page-guestbook/banner.webp`
 
   const handleLike = async () => {
     if (isLiked.value) {
@@ -73,7 +73,7 @@
     <responsive>
       <template #desktop>
         <div class="desktop-banner">
-          <uimage cdn class="image" :src="bannerImage" />
+          <uimage class="image" :src="bannerImage" cdn />
           <button class="like" :class="{ liked: isLiked }" :disabled="isLiked" @click="handleLike">
             <i class="icon iconfont icon-heart"></i>
             <span class="count">{{ isLiked ? `${siteLikes - 1} + 1` : siteLikes }}</span>
@@ -86,7 +86,7 @@
         </div>
       </template>
       <template #mobile>
-        <page-banner class="mobile-banner" :is-mobile="true" :position="70" :image="bannerImage">
+        <page-banner class="mobile-banner" :is-mobile="true" :image="bannerImage" :image-position="70" cdn>
           <template #title>
             <i18n :k="LanguageKey.PAGE_GUESTBOOK" />
           </template>
@@ -121,7 +121,10 @@
       @include radius-box($lg-radius);
 
       .image {
-        margin-top: -($gap * 6);
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 0% 60%;
         transition: all $transition-time-slow;
         &:hover {
           transform: rotate(2deg) scale(1.1);
@@ -175,7 +178,7 @@
           letter-spacing: 0.3px;
           color: $text;
           background-clip: text;
-          background-image: url('/images/page-guestbook/banner.jpg');
+          background-image: url('/images/page-guestbook/banner.webp');
           background-position: 100% 80%;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;

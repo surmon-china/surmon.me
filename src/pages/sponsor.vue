@@ -31,7 +31,7 @@
 
 <template>
   <div class="sponsor-page">
-    <page-banner image="/images/page-sponsor/banner.webp">
+    <page-banner image="/images/page-sponsor/banner.webp" cdn>
       <template #title>
         <webfont>
           <i18n zh="赠吾玫瑰，手留余香" en="Become a sponsor to me" />

@@ -39,9 +39,9 @@
         <webfont><i18n :k="LanguageKey.APP_SLOGAN" /></webfont>
       </p>
       <div class="screen">
-        <uimage cdn alt="app-hot" class="screen-img" src="/images/page-app/hot.png" />
+        <uimage alt="app-hot" class="screen-img" src="/images/page-app/hot.webp" cdn />
         <div class="download">
-          <uimage cdn class="qrcode" alt="qrcode" src="/images/page-app/qrcode.png" />
+          <uimage class="qrcode" alt="qrcode" src="/images/page-app/qrcode.png" cdn />
           <ulink
             class="button"
             :href="VALUABLE_LINKS.GITHUB_SURMON_ME_NATIVE + '#android'"

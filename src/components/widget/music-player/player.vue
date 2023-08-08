@@ -143,7 +143,7 @@
           border-radius: $sm-radius;
           margin-right: $gap;
           background-color: $module-bg-darker-1;
-          background-image: url('/images/page-music/background-40x40.jpg');
+          background-image: url('/images/music.webp');
           background-size: cover;
         }
 

@@ -18,7 +18,7 @@
 
 <template>
   <div class="about-page">
-    <page-banner :position="70" :is-mobile="true" image="/images/page-about/banner-mobile.jpg">
+    <page-banner :is-mobile="true" image="/images/page-about/banner-mobile.jpg" :image-position="70" cdn>
       <template #title>
         <i18n :k="LanguageKey.PAGE_ABOUT" />
       </template>
