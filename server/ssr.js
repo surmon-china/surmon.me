@@ -364,7 +364,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.14.12";
+const APP_VERSION = "4.15.0";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -1004,8 +1004,7 @@ const marked = new Marked(
 marked.setOptions({
   gfm: true,
   breaks: false,
-  pedantic: false,
-  headerIds: false
+  pedantic: false
 });
 const sanitizeHTML = (content) => content;
 const trimHTML = (html) => html.replace(/\s+/g, " ").replace(/\n/g, " ");
@@ -1022,7 +1021,7 @@ const createRenderer = (options) => {
   renderer.heading = (html, level, raw) => {
     const idText = (options == null ? void 0 : options.headingId) ? `id="${options.headingId(html, level, raw)}"` : "";
     const safeedRaw = escape(raw);
-    return `<h${level} ${idText} alt="${safeedRaw}" title="${safeedRaw}">${html}</h${level}>`;
+    return `<h${level} ${idText} title="${safeedRaw}">${html}</h${level}>`;
   };
   renderer.paragraph = (text) => {
     const trimmed = text.trim();
@@ -9356,13 +9355,13 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_ulink = resolveComponent("ulink");
       const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "youtube" }, _attrs))} data-v-42f69325>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "youtube" }, _attrs))} data-v-7d39f407>`);
       if (unref(youtubeStore).fetching) {
-        _push(`<span data-v-42f69325></span>`);
+        _push(`<span data-v-7d39f407></span>`);
       } else {
-        _push(`<ul class="list" data-v-42f69325><!--[-->`);
+        _push(`<ul class="list" data-v-7d39f407><!--[-->`);
         ssrRenderList(unref(youtubeStore).data.slice(0, 5), (item, index) => {
-          _push(`<li class="item"${ssrRenderAttr("title", item.snippet.title)} data-v-42f69325>`);
+          _push(`<li class="item"${ssrRenderAttr("title", item.snippet.title)} data-v-7d39f407>`);
           _push(ssrRenderComponent(_component_ulink, {
             class: "link",
             href: unref(getYouTubePlaylistURL)(item.id)
@@ -9374,7 +9373,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
                   proxy: "",
                   src: item.snippet.thumbnails.medium.url
                 }, null, _parent2, _scopeId));
-                _push2(`<span class="count" data-v-42f69325${_scopeId}><i class="iconfont icon-video" data-v-42f69325${_scopeId}></i><span class="number" data-v-42f69325${_scopeId}>${ssrInterpolate(item.contentDetails.itemCount)}</span></span><p class="title" data-v-42f69325${_scopeId}><i class="iconfont icon-playlist" data-v-42f69325${_scopeId}></i><span class="text" data-v-42f69325${_scopeId}>${ssrInterpolate(item.snippet.title)}</span></p><div class="mask" data-v-42f69325${_scopeId}><i class="iconfont icon-eye" data-v-42f69325${_scopeId}></i></div>`);
+                _push2(`<span class="count" data-v-7d39f407${_scopeId}><i class="iconfont icon-video" data-v-7d39f407${_scopeId}></i><span class="number" data-v-7d39f407${_scopeId}>${ssrInterpolate(item.contentDetails.itemCount)}</span></span><p class="title" data-v-7d39f407${_scopeId}><i class="iconfont icon-playlist" data-v-7d39f407${_scopeId}></i><span class="text" data-v-7d39f407${_scopeId}>${ssrInterpolate(item.snippet.title)}</span></p><div class="mask" data-v-7d39f407${_scopeId}><i class="iconfont icon-eye" data-v-7d39f407${_scopeId}></i></div>`);
               } else {
                 return [
                   createVNode(_component_uimage, {
@@ -9400,14 +9399,14 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
           }, _parent));
           _push(`</li>`);
         });
-        _push(`<!--]--><li class="item" data-v-42f69325>`);
+        _push(`<!--]--><li class="item" data-v-7d39f407>`);
         _push(ssrRenderComponent(_component_ulink, {
           class: "link more",
           href: unref(VALUABLE_LINKS).YOUTUBE_CHANNEL
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<i class="iconfont icon-youtube" data-v-42f69325${_scopeId}></i><span class="username" data-v-42f69325${_scopeId}>${ssrInterpolate(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID)}</span><span class="text" data-v-42f69325${_scopeId}>•••</span>`);
+              _push2(`<i class="iconfont icon-youtube" data-v-7d39f407${_scopeId}></i><span class="username" data-v-7d39f407${_scopeId}>${ssrInterpolate(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID)}</span><span class="text" data-v-7d39f407${_scopeId}>•••</span>`);
             } else {
               return [
                 createVNode("i", { class: "iconfont icon-youtube" }),
@@ -9424,14 +9423,14 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const youtube_vue_vue_type_style_index_0_scoped_42f69325_lang = "";
+const youtube_vue_vue_type_style_index_0_scoped_7d39f407_lang = "";
 const _sfc_setup$11 = _sfc_main$11.setup;
 _sfc_main$11.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/media/youtube.vue");
   return _sfc_setup$11 ? _sfc_setup$11(props, ctx) : void 0;
 };
-const YoutubeMedia = /* @__PURE__ */ _export_sfc(_sfc_main$11, [["__scopeId", "data-v-42f69325"]]);
+const YoutubeMedia = /* @__PURE__ */ _export_sfc(_sfc_main$11, [["__scopeId", "data-v-7d39f407"]]);
 const StatisticCount = defineComponent({
   name: "StatisticCount",
   props: {
@@ -15166,9 +15165,9 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "feedback" }, _attrs))} data-v-3cf17bb5>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "feedback" }, _attrs))} data-v-d1c14a77>`);
       if (state.submitted) {
-        _push(`<div class="submitted" data-v-3cf17bb5><div class="icon" data-v-3cf17bb5><i class="iconfont icon-success" data-v-3cf17bb5></i></div><div class="text" data-v-3cf17bb5>`);
+        _push(`<div class="submitted" data-v-d1c14a77><div class="icon" data-v-d1c14a77><i class="iconfont icon-success" data-v-d1c14a77></i></div><div class="text" data-v-d1c14a77>`);
         _push(ssrRenderComponent(_component_i18n, null, {
           zh: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
@@ -15190,14 +15189,14 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
           }),
           _: 1
         }, _parent));
-        _push(`</div><button class="close" data-v-3cf17bb5>`);
+        _push(`</div><button class="close" data-v-d1c14a77>`);
         _push(ssrRenderComponent(_component_i18n, {
           zh: "关闭窗口",
           en: "Close"
         }, null, _parent));
         _push(`</button></div>`);
       } else {
-        _push(`<!--[--><div class="title" data-v-3cf17bb5>`);
+        _push(`<!--[--><div class="title" data-v-d1c14a77>`);
         _push(ssrRenderComponent(_component_i18n, null, {
           zh: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
@@ -15219,34 +15218,34 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
           }),
           _: 1
         }, _parent));
-        _push(`</div><div class="emotions" data-v-3cf17bb5><!--[-->`);
+        _push(`</div><div class="emotions" data-v-d1c14a77><!--[-->`);
         ssrRenderList(EMOTIONS, (emotion) => {
-          _push(`<li class="item" data-v-3cf17bb5><label data-v-3cf17bb5><input class="radio" type="radio"${ssrRenderAttr("value", emotion.value)}${ssrIncludeBooleanAttr(state.submitting) ? " disabled" : ""}${ssrIncludeBooleanAttr(ssrLooseEqual(state.emotion, emotion.value)) ? " checked" : ""} data-v-3cf17bb5><div class="${ssrRenderClass([{ activated: state.emotion === emotion.value }, "button"])}" data-v-3cf17bb5><span class="emoji" data-v-3cf17bb5>${ssrInterpolate(emotion.emoji)}</span><span class="text" data-v-3cf17bb5>`);
+          _push(`<li class="item" data-v-d1c14a77><label data-v-d1c14a77><input class="radio" type="radio"${ssrRenderAttr("value", emotion.value)}${ssrIncludeBooleanAttr(state.submitting) ? " disabled" : ""}${ssrIncludeBooleanAttr(ssrLooseEqual(state.emotion, emotion.value)) ? " checked" : ""} data-v-d1c14a77><div class="${ssrRenderClass([{ activated: state.emotion === emotion.value }, "button"])}" data-v-d1c14a77><span class="emoji" data-v-d1c14a77>${ssrInterpolate(emotion.emoji)}</span><span class="text" data-v-d1c14a77>`);
           _push(ssrRenderComponent(_component_i18n, {
             zh: emotion.zh,
             en: emotion.en
           }, null, _parent));
           _push(`</span></div></label>`);
           if (state.emotion === emotion.value) {
-            _push(`<div class="arrow" data-v-3cf17bb5></div>`);
+            _push(`<div class="arrow" data-v-d1c14a77></div>`);
           } else {
             _push(`<!---->`);
           }
           _push(`</li>`);
         });
-        _push(`<!--]--></div><div class="input" data-v-3cf17bb5><textarea class="textarea" name="feedback" id="feedback" rows="10"${ssrIncludeBooleanAttr(state.submitting) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(isZhLang) ? "你可在此畅所欲言，这将仅对博主可见" : "Tell me about your opinion...")} data-v-3cf17bb5>${ssrInterpolate(state.content)}</textarea><div class="buttons" data-v-3cf17bb5><button class="item cancel"${ssrIncludeBooleanAttr(state.submitting) ? " disabled" : ""} data-v-3cf17bb5><span class="text" data-v-3cf17bb5>`);
+        _push(`<!--]--></div><div class="input" data-v-d1c14a77><textarea class="textarea" name="feedback" id="feedback" rows="10" autofocus${ssrIncludeBooleanAttr(state.submitting) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(isZhLang) ? "你可在此畅所欲言，这将仅对博主可见" : "Tell me about your opinion...")} data-v-d1c14a77>${ssrInterpolate(state.content)}</textarea><div class="buttons" data-v-d1c14a77><button class="item cancel"${ssrIncludeBooleanAttr(state.submitting) ? " disabled" : ""} data-v-d1c14a77><span class="text" data-v-d1c14a77>`);
         _push(ssrRenderComponent(_component_i18n, {
           zh: "取消",
           en: "Cancel"
         }, null, _parent));
-        _push(`</span></button><button class="item submit"${ssrIncludeBooleanAttr(!isSubmitable.value || state.submitting) ? " disabled" : ""} data-v-3cf17bb5><i class="iconfont icon-mail-plane" data-v-3cf17bb5></i><span class="text" data-v-3cf17bb5>`);
+        _push(`</span></button><button class="item submit"${ssrIncludeBooleanAttr(!isSubmitable.value || state.submitting) ? " disabled" : ""} data-v-d1c14a77><i class="iconfont icon-mail-plane" data-v-d1c14a77></i><span class="text" data-v-d1c14a77>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: state.submitting ? unref(LanguageKey).SUBMITTING : unref(LanguageKey).SUBMIT
         }, null, _parent));
         _push(`</span></button></div></div><!--]-->`);
       }
       if (unref(identity).feedbacks.length) {
-        _push(`<div class="history" data-v-3cf17bb5>`);
+        _push(`<div class="history" data-v-d1c14a77>`);
         _push(ssrRenderComponent(_component_i18n, null, {
           zh: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
@@ -15276,14 +15275,14 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const feedback_vue_vue_type_style_index_0_scoped_3cf17bb5_lang = "";
+const feedback_vue_vue_type_style_index_0_scoped_d1c14a77_lang = "";
 const _sfc_setup$j = _sfc_main$j.setup;
 _sfc_main$j.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/feedback.vue");
   return _sfc_setup$j ? _sfc_setup$j(props, ctx) : void 0;
 };
-const Feedback = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["__scopeId", "data-v-3cf17bb5"]]);
+const Feedback = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["__scopeId", "data-v-d1c14a77"]]);
 const emailLink = (email) => {
   if (typeof email === "string") {
     return `mailto:${email}`;
