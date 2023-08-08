@@ -140,7 +140,7 @@
       grid-gap: $gap * 5;
 
       .item {
-        padding: $gap;
+        padding: $lg-gap;
         height: 21rem;
         @include radius-box($xs-radius);
         @include common-bg-module();
