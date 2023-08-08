@@ -364,7 +364,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.15.1";
+const APP_VERSION = "4.15.2";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -13309,7 +13309,7 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
       const _component_placeholder = resolveComponent("placeholder");
       const _component_empty = resolveComponent("empty");
       const _component_skeleton_base = resolveComponent("skeleton-base");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "photography-page" }, _attrs))} data-v-d5c51903>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "photography-page" }, _attrs))} data-v-d30c8ab5>`);
       _push(ssrRenderComponent(PageBanner, {
         class: "page-banner",
         video: "/videos/clips/ocean-4.mp4",
@@ -13355,7 +13355,7 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
             _push2(ssrRenderComponent(_component_i18n, null, {
               zh: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<span data-v-d5c51903${_scopeId2}>在我的 `);
+                  _push3(`<span data-v-d30c8ab5${_scopeId2}>在我的 `);
                   _push3(ssrRenderComponent(_component_ulink, {
                     href: unref(VALUABLE_LINKS).INSTAGRAM,
                     class: "link"
@@ -13510,9 +13510,9 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
               }),
               loading: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="module-loading" data-v-d5c51903${_scopeId2}><!--[-->`);
+                  _push3(`<div class="module-loading" data-v-d30c8ab5${_scopeId2}><!--[-->`);
                   ssrRenderList(4 * 2, (item) => {
-                    _push3(`<div class="item" data-v-d5c51903${_scopeId2}>`);
+                    _push3(`<div class="item" data-v-d30c8ab5${_scopeId2}>`);
                     _push3(ssrRenderComponent(_component_skeleton_base, null, null, _parent3, _scopeId2));
                     _push3(`</div>`);
                   });
@@ -13537,7 +13537,7 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
               }),
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div data-v-d5c51903${_scopeId2}>`);
+                  _push3(`<div data-v-d30c8ab5${_scopeId2}>`);
                   _push3(ssrRenderComponent(InstagramGrid, { medias: allMedias.value }, null, _parent3, _scopeId2));
                   if (!unref(instagramTimeline).fetching && !finished.value) {
                     _push3(ssrRenderComponent(InstagramLoadmore, {
@@ -13621,14 +13621,14 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_d5c51903_lang = "";
+const index_vue_vue_type_style_index_0_scoped_d30c8ab5_lang = "";
 const _sfc_setup$C = _sfc_main$C.setup;
 _sfc_main$C.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/index.vue");
   return _sfc_setup$C ? _sfc_setup$C(props, ctx) : void 0;
 };
-const PhotographyPage = /* @__PURE__ */ _export_sfc(_sfc_main$C, [["__scopeId", "data-v-d5c51903"]]);
+const PhotographyPage = /* @__PURE__ */ _export_sfc(_sfc_main$C, [["__scopeId", "data-v-d30c8ab5"]]);
 var CategorySlug = /* @__PURE__ */ ((CategorySlug2) => {
   CategorySlug2["Code"] = "code";
   CategorySlug2["Insight"] = "insight";
