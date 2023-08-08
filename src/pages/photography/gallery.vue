@@ -37,9 +37,6 @@
           <i class="iconfont icon-album" v-else-if="isAlbumMediaIns(media)"></i>
           <i class="iconfont icon-camera" v-else></i>
         </ulink>
-        <ulink class="username-link" :href="media.permalink">
-          <span>@{{ IDENTITIES.INSTAGRAM_USERNAME }}</span>
-        </ulink>
       </div>
       <div class="center">
         <span class="pagination">{{ index + 1 }} / {{ count }}</span>
@@ -84,6 +81,7 @@
         @load="mediaLoaded"
       />
       <p v-if="media.caption" class="caption" v-html="media.caption.replaceAll('\n', '<br>')"></p>
+      <ulink class="username-link" :href="media.permalink">@{{ IDENTITIES.INSTAGRAM_USERNAME }}</ulink>
     </div>
   </div>
 </template>
@@ -115,6 +113,7 @@
         width: auto;
         height: auto;
         overflow: hidden;
+        will-change: width, height;
         transition:
           max-width 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
           max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -132,12 +131,25 @@
       .caption {
         position: absolute;
         left: 0;
-        bottom: 0;
+        bottom: 2em;
         margin: 0;
         width: 100%;
         padding: 2em;
         font-size: $font-size-base + 1;
         @include title-shadow();
+      }
+
+      .username-link {
+        position: absolute;
+        left: 2em;
+        bottom: 2em;
+        margin: 0;
+        font-weight: bold;
+        font-size: $font-size-base + 1;
+        @include title-shadow();
+        &:first-letter {
+          font-family: system-ui;
+        }
       }
     }
 
@@ -186,14 +198,6 @@
 
       .type-link {
         color: $white;
-      }
-
-      .username-link {
-        margin-left: $sm-gap;
-        color: $white;
-        font-size: $font-size-base - 1;
-        font-family: system-ui;
-        font-weight: bold;
       }
     }
   }

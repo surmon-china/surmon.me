@@ -53,12 +53,6 @@ export const useYouTubePlayListStore = defineStore('youtubePlaylist', () => {
   })
 })
 
-// YouTube video list
-export const fetchYouTubeVideoList = (playlistId: string) => {
-  const fetch = tunnel.dispatch<Array<any>>(TunnelModule.YouTubeVideoList, { id: playlistId })
-  return isClient ? delayPromise(480, fetch) : fetch
-}
-
 // Twitter userinfo
 export const useTwitterStore = defineStore('twitterAggregate', () => {
   return useFetchStore<TwitterAggregate | null>({

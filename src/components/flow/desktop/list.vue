@@ -26,7 +26,7 @@
   }>()
 
   const { isDarkTheme, isZhLang } = useEnhancer()
-  const isLoadMoreEnabled = computed(() => {
+  const hasMoreData = computed(() => {
     if (!props.pagination) return false
     return props.pagination.current_page < props.pagination.total_page
   })
@@ -97,7 +97,7 @@
         </template>
       </placeholder>
     </div>
-    <button class="article-load" :disabled="fetching || !isLoadMoreEnabled" @click="handleLoadmore">
+    <button class="article-load" :disabled="fetching || !hasMoreData" @click="handleLoadmore">
       <div class="background">
         <span class="left"></span>
         <span class="right"></span>
@@ -110,10 +110,11 @@
         <span class="right">
           <span class="text" :class="{ zh: isZhLang }">
             <i18n v-if="fetching" :k="LanguageKey.ARTICLE_LIST_LOADING" />
-            <i18n v-else-if="isLoadMoreEnabled" :k="LanguageKey.ARTICLE_LIST_LOADMORE" />
+            <i18n v-else-if="hasMoreData" :k="LanguageKey.ARTICLE_LIST_LOADMORE" />
             <i18n v-else :k="LanguageKey.ARTICLE_LIST_NO_MORE" />
           </span>
-          <i class="iconfont icon-loadmore"></i>
+          <i v-if="fetching || hasMoreData" class="iconfont icon-loadmore"></i>
+          <i v-else class="iconfont icon-stop"></i>
         </span>
       </div>
     </button>

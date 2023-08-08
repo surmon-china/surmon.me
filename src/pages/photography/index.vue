@@ -5,10 +5,10 @@
   import { useUniversalFetch } from '/@/universal'
   import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
-  import { getOriginalProxyURL } from '/@/transforms/url'
-  import { isVideoMediaIns } from '/@/transforms/media'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
   import type { InstagramMediaItem, InstagramMediaListResponse } from '/@/server/getters/instagram'
+  import { isClient } from '/@/app/environment'
+  import { delayPromise } from '/@/utils/delayer'
   import { TunnelModule } from '/@/constants/tunnel'
   import tunnel from '/@/services/tunnel'
   import PageBanner from '/@/components/common/banner.vue'
@@ -25,9 +25,10 @@
   const fetchMoreMedias = async () => {
     try {
       loading.value = true
-      const response = await tunnel.dispatch<InstagramMediaListResponse>(TunnelModule.InstagramMedias, {
+      const request = tunnel.dispatch<InstagramMediaListResponse>(TunnelModule.InstagramMedias, {
         after: lastPaging.value?.cursors.after ?? instagramTimeline.data?.paging?.cursors.after
       })
+      const response = await (isClient ? delayPromise(360, request) : request)
       medias.push(...response.data)
       lastPaging.value = response.paging
     } finally {

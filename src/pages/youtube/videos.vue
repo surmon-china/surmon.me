@@ -1,9 +1,12 @@
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue'
-  import { fetchYouTubeVideoList } from '/@/stores/media'
   import { useEnhancer } from '/@/app/enhancer'
+  import { isClient } from '/@/app/environment'
   import { GAEventCategories } from '/@/constants/gtag'
+  import { TunnelModule } from '/@/constants/tunnel'
   import { getProxyURL } from '/@/transforms/url'
+  import { delayPromise } from '/@/utils/delayer'
+  import tunnel from '/@/services/tunnel'
   import ListSwiper from './swiper.vue'
 
   enum YoutubeVideoListEvents {
@@ -24,7 +27,8 @@
   const fetchVideos = async () => {
     try {
       fetching.value = true
-      videos.value = await fetchYouTubeVideoList(props.playlistId)
+      const request = tunnel.dispatch<Array<any>>(TunnelModule.YouTubeVideoList, { id: props.playlistId })
+      videos.value = await (isClient ? delayPromise(480, request) : request)
     } catch (error) {
       videos.value = []
     } finally {
