@@ -113,13 +113,13 @@
           height: $title-size;
           line-height: $title-size;
           font-size: $font-size-small;
-          font-weight: bold;
 
           .iconfont {
             margin-right: $xs-gap;
           }
 
           .text {
+            font-weight: bold;
             @include text-overflow();
           }
         }
@@ -153,6 +153,9 @@
           }
           .username {
             font-weight: bold;
+            &:first-letter {
+              font-family: system-ui;
+            }
           }
 
           .text {

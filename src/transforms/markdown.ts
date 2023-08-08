@@ -34,8 +34,7 @@ const marked = new Marked(
 marked.setOptions({
   gfm: true,
   breaks: false,
-  pedantic: false,
-  headerIds: false
+  pedantic: false
 })
 
 // sanitize-html:
@@ -91,7 +90,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
   renderer.heading = (html, level, raw) => {
     const idText = options?.headingId ? `id="${options.headingId(html, level, raw)}"` : ''
     const safeedRaw = escape(raw)
-    return `<h${level} ${idText} alt="${safeedRaw}" title="${safeedRaw}">${html}</h${level}>`
+    return `<h${level} ${idText} title="${safeedRaw}">${html}</h${level}>`
   }
 
   // paragraph

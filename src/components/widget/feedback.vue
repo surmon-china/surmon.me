@@ -109,6 +109,7 @@
           name="feedback"
           id="feedback"
           rows="10"
+          autofocus
           v-model.trim="state.content"
           :disabled="state.submitting"
           :placeholder="isZhLang ? '你可在此畅所欲言，这将仅对博主可见' : 'Tell me about your opinion...'"
