@@ -41,6 +41,7 @@ export const getWebFont = (options: IWebFontOptions): Promise<any> => {
       if (error) {
         reject(error)
       } else {
+        // @ts-ignore
         const fontData = files[0]._contents
         cacheMap.set(cacheKey, fontData)
         resolve(fontData)
