@@ -2,8 +2,8 @@
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getImgProxyPath } from '/@/transforms/imgproxy'
-  import { getImgProxyURL } from '/@/transforms/url'
+  import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
+  import { getImgProxyURL, isOriginalStaticURL } from '/@/transforms/url'
   import { Article } from '/@/interfaces/article'
   import API_CONFIG from '/@/config/api.config'
 
@@ -20,18 +20,17 @@
   })
 
   const { cdnDomain } = useEnhancer()
-  const getThumbnailURL = (url?: string) => {
-    if (!url) {
+  const getThumbnailURL = (url: string, format?: ImgProxyFormat) => {
+    if (!isOriginalStaticURL(url)) {
       return ''
-    }
-    if (!url.startsWith(API_CONFIG.STATIC)) {
-      return url
     }
     return getImgProxyURL(
       cdnDomain,
       getImgProxyPath(url.replace(API_CONFIG.STATIC, ''), {
+        resize: true,
         width: 466,
-        height: 168
+        height: 168,
+        format
       })
     )
   }
@@ -59,9 +58,21 @@
     <ul class="articles" :style="{ gridTemplateColumns: `repeat(${columns}, 1fr)` }">
       <li v-for="(article, index) in articleList" :class="{ disabled: !article.id }" :key="index" class="item">
         <router-link class="item-article" :title="article.title" :to="getArticleDetailRoute(article.id)">
-          <div class="thumbnail" :style="{ backgroundImage: `url(${getThumbnailURL(article.thumbnail)})` }"></div>
+          <picture class="thumbnail">
+            <template v-if="isOriginalStaticURL(article.thumbnail)">
+              <source :srcset="getThumbnailURL(article.thumbnail, 'avif')" type="image/avif" />
+              <source :srcset="getThumbnailURL(article.thumbnail, 'webp')" type="image/webp" />
+            </template>
+            <img
+              class="image"
+              loading="lazy"
+              draggable="false"
+              :alt="article.title"
+              :src="getThumbnailURL(article.thumbnail)"
+            />
+          </picture>
           <div class="title">{{ article.title }}</div>
-          <div class="description">{{ article.description }}</div>
+          <div class="description" :title="article.description">{{ article.description }}</div>
         </router-link>
       </li>
     </ul>
@@ -102,25 +113,28 @@
 
           .thumbnail {
             position: relative;
-            opacity: 0.88;
+            display: block;
             width: 100%;
             height: 7rem;
+            opacity: 0.88;
             background-color: $module-bg-darker-2;
-            background-size: cover;
-            background-position: 50% 46%;
             transition: all $transition-time-fast;
-            display: flex;
-            flex-direction: column;
-            justify-content: end;
 
-            &::before {
+            &::after {
               content: '';
               position: absolute;
-              background: linear-gradient(to top, rgba($black, 0.2) 20%, rgba($black, 0.1) 50%, transparent 90%);
               width: 100%;
               height: 100%;
               top: 0;
               left: 0;
+              background: linear-gradient(to top, rgba($black, 0.2) 20%, rgba($black, 0.1) 50%, transparent 90%);
+            }
+
+            .image {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: center;
             }
           }
 
@@ -150,7 +164,6 @@
           &:hover {
             .thumbnail {
               opacity: 1;
-              background-position: 50% 50%;
             }
 
             .title {

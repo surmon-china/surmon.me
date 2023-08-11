@@ -5,8 +5,8 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore } from '/@/stores/identity'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getImgProxyPath } from '/@/transforms/imgproxy'
-  import { getImgProxyURL } from '/@/transforms/url'
+  import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
+  import { getImgProxyURL, isOriginalStaticURL } from '/@/transforms/url'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { numberSplit } from '/@/transforms/text'
   import API_CONFIG from '/@/config/api.config'
@@ -26,19 +26,18 @@
     router.push(getArticleDetailRoute(props.article.id))
   }
 
-  const getThumbnailURL = (url?: string) => {
-    if (!url) {
-      return ''
-    }
-    if (!url.startsWith(API_CONFIG.STATIC)) {
+  const getThumbnailURL = (url: string, format?: ImgProxyFormat) => {
+    if (!isOriginalStaticURL(url)) {
       return url
     }
     return getImgProxyURL(
       cdnDomain,
       getImgProxyPath(url.replace(API_CONFIG.STATIC, ''), {
+        resize: true,
         width: 700,
         height: 247,
-        watermark: `watermark:0.38:sowe:18:16:0.16`
+        watermark: `watermark:0.38:sowe:18:16:0.16`,
+        format
       })
     )
   }
@@ -59,13 +58,20 @@
         <i18n :k="LanguageKey.ORIGIN_REPRINT" v-else-if="isReprint" />
         <i18n :k="LanguageKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
       </span>
-      <div
-        class="image"
-        loading="lazy"
-        :style="{ backgroundImage: `url(${getThumbnailURL(article.thumbnail)})` }"
-        :alt="article.title"
-        :title="article.title"
-      />
+      <picture class="picture">
+        <template v-if="isOriginalStaticURL(article.thumbnail)">
+          <source :srcset="getThumbnailURL(article.thumbnail, 'avif')" type="image/avif" />
+          <source :srcset="getThumbnailURL(article.thumbnail, 'webp')" type="image/webp" />
+        </template>
+        <img
+          class="image"
+          loading="lazy"
+          draggable="false"
+          :src="getThumbnailURL(article.thumbnail)"
+          :alt="article.title"
+          :title="article.title"
+        />
+      </picture>
     </div>
     <div class="content">
       <div class="body">
@@ -145,10 +151,11 @@
       }
 
       .image {
+        width: 100%;
         min-height: calc((100vw - 2rem) * 0.34);
         max-height: 12rem;
-        background-size: cover;
-        background-position: center;
+        object-fit: cover;
+        object-position: center;
       }
     }
 

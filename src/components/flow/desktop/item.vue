@@ -4,8 +4,8 @@
   import { Article } from '/@/interfaces/article'
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore } from '/@/stores/identity'
-  import { getImgProxyPath } from '/@/transforms/imgproxy'
-  import { getImgProxyURL } from '/@/transforms/url'
+  import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
+  import { getImgProxyURL, isOriginalStaticURL } from '/@/transforms/url'
   import { getArticleDetailRoute, getCategoryFlowRoute } from '/@/transforms/route'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { numberSplit } from '/@/transforms/text'
@@ -26,18 +26,17 @@
     return language === Language.Chinese ? '中文' : 'EN'
   }
 
-  const getThumbnailURL = (url: string) => {
-    if (!url) {
-      return ''
-    }
-    if (!url.startsWith(API_CONFIG.STATIC)) {
+  const getThumbnailURL = (url: string, format?: ImgProxyFormat) => {
+    if (!isOriginalStaticURL(url)) {
       return url
     }
     return getImgProxyURL(
       cdnDomain,
       getImgProxyPath(url.replace(API_CONFIG.STATIC, ''), {
+        resize: true,
         width: 350,
-        height: 238
+        height: 238,
+        format
       })
     )
   }
@@ -45,7 +44,15 @@
 
 <template>
   <div class="article-item">
-    <div class="item-background" :style="{ backgroundImage: `url(${getThumbnailURL(article.thumbnail)})` }" />
+    <div
+      class="item-background"
+      :class="isOriginalStaticURL(article.thumbnail) ? 'enhancement' : 'degradation'"
+      :style="{
+        '--original': `url('${getThumbnailURL(article.thumbnail)}')`,
+        '--avif': `url('${getThumbnailURL(article.thumbnail, 'avif')}')`,
+        '--webp': `url('${getThumbnailURL(article.thumbnail, 'webp')}')`
+      }"
+    ></div>
     <div class="item-content">
       <router-link class="item-thumbnail" :to="getArticleDetailRoute(article.id)">
         <span
@@ -60,13 +67,20 @@
           <i18n :k="LanguageKey.ORIGIN_REPRINT" v-else-if="isReprint" />
           <i18n :k="LanguageKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
         </span>
-        <div
-          class="image"
-          loading="lazy"
-          :style="{ backgroundImage: `url(${getThumbnailURL(article.thumbnail)})` }"
-          :alt="article.title"
-          :title="article.title"
-        />
+        <picture class="picture">
+          <template v-if="isOriginalStaticURL(article.thumbnail)">
+            <source :srcset="getThumbnailURL(article.thumbnail, 'avif')" type="image/avif" />
+            <source :srcset="getThumbnailURL(article.thumbnail, 'webp')" type="image/webp" />
+          </template>
+          <img
+            class="image"
+            loading="lazy"
+            draggable="false"
+            :src="getThumbnailURL(article.thumbnail)"
+            :alt="article.title"
+            :title="article.title"
+          />
+        </picture>
       </router-link>
       <div class="item-body">
         <div class="item-content">
@@ -137,7 +151,18 @@
       z-index: -1;
       background-size: 120%;
       background-position: 0% 50%;
-      opacity: 0.06;
+      opacity: 0.08;
+      &.degradation {
+        background-image: var(--original);
+      }
+      &.enhancement {
+        /* https://stackoverflow.com/a/72582316/6222535 */
+        /* https://css-tricks.com/using-performant-next-gen-images-in-css-with-image-set/ */
+        /* https://developer.mozilla.org/en-US/docs/Web/CSS/image/image-set */
+        background-image: var(--original);
+        background-image: -webkit-image-set(var(--avif) type('image/avif'), var(--webp) type('image/webp'));
+        background-image: image-set(var(--avif) type('image/avif'), var(--webp) type('image/webp'));
+      }
     }
 
     > .item-content {
@@ -208,8 +233,8 @@
           max-width: $width + 3px;
           border-color: transparent;
           background-color: $module-bg-hover;
-          background-size: cover;
-          background-position: center;
+          object-fit: cover;
+          object-position: center;
           opacity: 1;
           transform: translateX(0);
           transition:

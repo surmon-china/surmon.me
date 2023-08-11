@@ -5,8 +5,8 @@
   import { Article } from '/@/interfaces/article'
   import { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getAssetURL, getImgProxyURL } from '/@/transforms/url'
-  import { getImgProxyPath } from '/@/transforms/imgproxy'
+  import { getAssetURL, getImgProxyURL, isOriginalStaticURL } from '/@/transforms/url'
+  import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
   import API_CONFIG from '/@/config/api.config'
 
   interface Props {
@@ -28,19 +28,18 @@
   })
 
   const { adConfig, cdnDomain, isDarkTheme } = useEnhancer()
-  const getThumbnailURL = (url?: string) => {
-    if (!url) {
-      return getAssetURL(cdnDomain, '/images/thumbnail/carrousel.jpg')
-    }
-    if (!url.startsWith(API_CONFIG.STATIC)) {
+  const getPictureURL = (url: string, format?: ImgProxyFormat) => {
+    if (!isOriginalStaticURL(url)) {
       return url
     }
     return getImgProxyURL(
       cdnDomain,
       getImgProxyPath(url.replace(API_CONFIG.STATIC, ''), {
+        resize: true,
         width: 1190,
         height: 420,
-        watermark: `watermark:0.36:sowe:18:18:0.15`
+        watermark: `watermark:0.36:sowe:18:18:0.15`,
+        format
       })
     )
   }
@@ -51,7 +50,7 @@
       ad: false,
       title: article.title,
       route: getArticleDetailRoute(article.id),
-      image: getThumbnailURL(article.thumbnail)
+      image: article.thumbnail || getAssetURL(cdnDomain, '/images/thumbnail/carrousel.jpg')
     }))
     if (!result.length) {
       return []
@@ -109,11 +108,31 @@
           <swiper-slide v-for="(slide, index) in slides.slice(0, 9)" :key="index">
             <div class="content">
               <ulink class="link" :href="slide.url" :to="slide.route">
-                <img :src="slide.image" :alt="slide.title" draggable="false" loading="lazy" />
+                <picture class="picture">
+                  <template v-if="isOriginalStaticURL(slide.image)">
+                    <source :srcset="getPictureURL(slide.image, 'avif')" type="image/avif" />
+                    <source :srcset="getPictureURL(slide.image, 'webp')" type="image/webp" />
+                  </template>
+                  <img
+                    class="image"
+                    loading="lazy"
+                    draggable="false"
+                    :alt="slide.title"
+                    :src="getPictureURL(slide.image)"
+                  />
+                </picture>
                 <div class="title" :title="slide.title">
                   <div class="background"></div>
                   <div class="prospect">
-                    <span class="text" :style="{ backgroundImage: `url('${slide.image}')` }">
+                    <span
+                      class="text"
+                      :class="isOriginalStaticURL(slide.image) ? 'enhancement' : 'degradation'"
+                      :style="{
+                        '--original': `url('${getPictureURL(slide.image)}')`,
+                        '--avif': `url('${getPictureURL(slide.image, 'avif')}')`,
+                        '--webp': `url('${getPictureURL(slide.image, 'webp')}')`
+                      }"
+                    >
                       {{ slide.title }}
                     </span>
                   </div>
@@ -226,11 +245,13 @@
           height: 100%;
         }
 
-        img {
+        .image {
           width: 100%;
-          transform: scale(1);
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
           transition: transform $transition-time-normal;
-
+          transform: scale(1);
           &:hover {
             transform: scale(1.06);
           }
@@ -287,6 +308,14 @@
               background-clip: text;
               -webkit-background-clip: text;
               -webkit-text-fill-color: transparent;
+              &.degradation {
+                background-image: var(--original);
+              }
+              &.enhancement {
+                background-image: var(--original);
+                background-image: -webkit-image-set(var(--avif) type('image/avif'), var(--webp) type('image/webp'));
+                background-image: image-set(var(--avif) type('image/avif'), var(--webp) type('image/webp'));
+              }
             }
           }
 

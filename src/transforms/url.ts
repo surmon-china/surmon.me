@@ -28,6 +28,10 @@ export const getAssetURL = (domain: string, path: string) => {
   return isDev ? normalizedPath : `${getCDNPrefixURL(domain, CDNPrefix.Assets)}${normalizedPath}`
 }
 
+export const isOriginalStaticURL = (url?: string) => {
+  return url?.startsWith(API_CONFIG.STATIC)
+}
+
 export const getStaticURL = (domain: string, path: string) => {
   return `${getCDNPrefixURL(domain, CDNPrefix.Static)}${normalizePath(path)}`
 }
