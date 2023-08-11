@@ -364,7 +364,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.16.0";
+const APP_VERSION = "4.16.1";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -576,7 +576,7 @@ const API_CONFIG = {
   NODEPRESS: PROD_API,
   FE: "https://surmon.me",
   STATIC: "https://static.surmon.me",
-  CDN_CN: "https://cdn.cn.surmon.me",
+  CDN_CN: "https://ccdn.surmon.me",
   CDN_GLOBAL: "https://cdn.surmon.me"
 };
 const nodepress = axios.create({
@@ -2331,7 +2331,8 @@ const isSearchFlow = (name) => name === RouteName.SearchFlow;
 const getImgProxyPath = (path, options) => {
   const resize = `resize:fill:${options.width}:${options.height}:0`;
   const watermark = options.watermark ? `/${options.watermark}` : "";
-  return `/${resize}${watermark}/plain${normalizePath(path)}`;
+  const format = options.format ? `@${options.format}` : "";
+  return `/${resize}${watermark}/plain${normalizePath(path)}${format}`;
 };
 const isOriginalType = (originState) => {
   return isNull(originState) || isUndefined(null) || originState === OriginState.Original;
