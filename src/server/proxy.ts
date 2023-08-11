@@ -35,12 +35,15 @@ export const proxyer = (): RequestHandler => {
   proxy.on('proxyRes', (proxyResponse) => {
     const statusCode = proxyResponse.statusCode as number
     const location = proxyResponse.headers.location
+    // If the target resource redirects, the proxy server still needs to encode the format of the redirection
     if ([301, 302, 307, 308].includes(statusCode) && location) {
       proxyResponse.headers.location = `${BFF_PROXY_PREFIX}/${btoa(location)}`
     }
-    // proxy cache
     if (statusCode === 200) {
-      proxyResponse.headers['cache-control'] = 'max-age=315360000'
+      // If the target resource does not specify a Cache-Control, set it to a 1-year max-age
+      if (!proxyResponse.headers['cache-control']) {
+        proxyResponse.headers['cache-control'] = 'public, max-age=31536000'
+      }
     }
   })
 
@@ -56,24 +59,26 @@ export const proxyer = (): RequestHandler => {
   })
 
   return (request, response) => {
-    if (isNodeProd) {
-      const referer = (request.headers.referrer as string) || request.headers.referer
-      const origin = request.headers.origin
-      const isAllowedReferer = !referer || BFF_PROXY_ALLOWLIST.some((i) => referer.startsWith(i))
-      const isAllowedOrigin = !origin || BFF_PROXY_ALLOWLIST.some((i) => origin.startsWith(i))
-      if (!isAllowedReferer || !isAllowedOrigin) {
-        response.status(FORBIDDEN).send()
-        return
-      }
-    }
-
     const targetURL = atob(request.params['0'])
+    response.setHeader('x-original-url', targetURL)
+
     let parsedURL: URL | null = null
     try {
       parsedURL = new URL(targetURL)
     } catch (_) {
       response.status(BAD_REQUEST).send('Proxy error: invalid url')
       return
+    }
+
+    if (isNodeProd) {
+      const referer = (request.headers.referrer as string) || request.headers.referer
+      const origin = request.headers.origin
+      const isAllowedReferer = !referer || BFF_PROXY_ALLOWLIST.some((i) => referer.startsWith(i))
+      const isAllowedOrigin = !origin || BFF_PROXY_ALLOWLIST.some((i) => origin.startsWith(i))
+      if (!isAllowedReferer || !isAllowedOrigin) {
+        response.status(FORBIDDEN).send('Proxy error: forbidden')
+        return
+      }
     }
 
     const headers: Record<string, string> = {}
