@@ -1126,6 +1126,7 @@ const getWebFont = (options) => {
                 reject(error);
             }
             else {
+                // @ts-ignore
                 const fontData = files[0]._contents;
                 cacheMap.set(cacheKey, fontData);
                 resolve(fontData);
