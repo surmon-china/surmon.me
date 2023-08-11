@@ -15,10 +15,12 @@ export interface ImgProxyOptions {
   width: number
   height: number
   watermark?: string
+  format?: 'webp' | 'avif'
 }
 
 export const getImgProxyPath = (path: string, options: ImgProxyOptions) => {
   const resize = `resize:fill:${options.width}:${options.height}:0`
   const watermark = options.watermark ? `/${options.watermark}` : ''
-  return `/${resize}${watermark}/plain${normalizePath(path)}`
+  const format = options.format ? `@${options.format}` : ''
+  return `/${resize}${watermark}/plain${normalizePath(path)}${format}`
 }
