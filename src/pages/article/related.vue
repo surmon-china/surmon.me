@@ -19,7 +19,7 @@
     count: 8
   })
 
-  const { gState, cdnDomain } = useEnhancer()
+  const { cdnDomain } = useEnhancer()
   const getThumbnailURL = (url?: string) => {
     if (!url) {
       return ''
@@ -31,8 +31,7 @@
       cdnDomain,
       getImgProxyPath(url.replace(API_CONFIG.STATIC, ''), {
         width: 466,
-        height: 168,
-        webp: gState.imageExt.value.isWebP
+        height: 168
       })
     )
   }

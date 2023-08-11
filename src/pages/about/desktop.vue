@@ -28,12 +28,18 @@
   }
 
   const modalState = reactive({
-    wechat: false
+    wechat: false,
+    wechatChannel: false
   })
 
   const handleOpenWechat = () => {
     modalState.wechat = true
     handleGTagEvent('wechat_modal')
+  }
+
+  const handleOpenWechatChannel = () => {
+    modalState.wechatChannel = true
+    handleGTagEvent('wechat_channel_modal')
   }
 
   const handleSponsor = () => {
@@ -157,12 +163,11 @@
               <i class="iconfont icon-instagram" />
               <span class="text">Instagram</span>
             </ulink>
-            <ulink class="item youtube" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
-              <i class="iconfont icon-youtube" />
-              <span class="text">YouTube</span>
-            </ulink>
           </span>
           <span class="mini">
+            <ulink class="item youtube" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
+              <i class="iconfont icon-youtube" />
+            </ulink>
             <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM">
               <i class="iconfont icon-telegram" />
             </ulink>
@@ -172,10 +177,24 @@
                 <popup v-model:visible="modalState.wechat" :scroll-close="false">
                   <div class="qrcode-modal wechat">
                     <div class="background"></div>
-                    <uimage class="image" cdn src="/images/qrcodes/wechat.jpg" />
+                    <uimage class="image" cdn src="/images/qrcodes/wechat.webp" />
                     <span class="text">
                       👋 &nbsp;
                       <i18n en="Friend me on WeChat" zh="扫码加微，解锁灵魂"></i18n>
+                    </span>
+                  </div>
+                </popup>
+              </client-only>
+            </button>
+            <button class="item wechat-channel" @click="handleOpenWechatChannel">
+              <i class="iconfont icon-wechat-channel" />
+              <client-only>
+                <popup v-model:visible="modalState.wechatChannel" :scroll-close="false">
+                  <div class="qrcode-modal wechat-channel">
+                    <div class="background"></div>
+                    <uimage class="image" cdn src="/images/qrcodes/wechat-channel.webp" />
+                    <span class="text">
+                      <i18n en="Follow me on  WeChat Channel" zh="扫一扫，关注我的微信视频号"></i18n>
                     </span>
                   </div>
                 </popup>
@@ -269,6 +288,9 @@
     align-items: center;
     &.wechat {
       --item-primary: #{$wechat-primary};
+    }
+    &.wechat-channel {
+      --item-primary: #{$wechat-channel-primary};
     }
 
     .background {
@@ -409,6 +431,9 @@
               border-radius: $sm-radius;
               color: $white;
               transition: all $transition-time-fast;
+              &:last-child {
+                margin: 0;
+              }
 
               .iconfont {
                 font-size: $font-size-h4;
@@ -432,7 +457,6 @@
                 }
               }
               &.youtube {
-                margin: 0;
                 background-color: $youtube-primary;
                 &:hover {
                   background-color: mix($black, $youtube-primary, 8%);
@@ -474,6 +498,12 @@
 
               &.wechat {
                 background-color: $wechat-primary;
+              }
+              &.wechat-channel {
+                background-color: $wechat-channel-primary;
+              }
+              &.youtube {
+                background-color: $youtube-primary;
               }
               &.telegram {
                 background-color: $telegram-primary;

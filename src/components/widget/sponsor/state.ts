@@ -25,35 +25,35 @@ export const PROVIDERS = [
     title: 'PayPal me',
     link: VALUABLE_LINKS.PAYPAL,
     logo: '/images/third-party/paypal-logo.svg',
-    qrcode: '/images/third-party/paypal-qrcode.png'
+    qrcode: '/images/third-party/paypal-qrcode.webp'
   },
   {
     id: ProviderId.Alipay,
     title: '支付宝',
     text: '通过支付宝客户端扫码',
     logo: '/images/third-party/alipay-logo.svg',
-    qrcode: '/images/third-party/alipay-qrcode.png'
+    qrcode: '/images/third-party/alipay-qrcode.webp'
   },
   {
     id: ProviderId.WeChatPay,
     title: '微信赞赏',
     text: '通过微信客户端扫码',
     logo: '/images/third-party/wechat-pay-logo.svg',
-    qrcode: '/images/third-party/wechat-pay-qrcode.jpg'
+    qrcode: '/images/third-party/wechat-pay-qrcode.webp'
   },
   {
     id: ProviderId.BitCoin,
     title: 'BTC',
     address: IDENTITIES.BTC_ADDRESS,
     logo: '/images/third-party/btc-logo.svg',
-    qrcode: '/images/third-party/btc-qrcode.png'
+    qrcode: '/images/third-party/btc-qrcode.webp'
   },
   {
     id: ProviderId.Ethereum,
     title: 'ETH',
     address: IDENTITIES.ETH_ADDRESS,
     logo: '/images/third-party/eth-logo.svg',
-    qrcode: '/images/third-party/eth-qrcode.png'
+    qrcode: '/images/third-party/eth-qrcode.webp'
   }
 ]
 

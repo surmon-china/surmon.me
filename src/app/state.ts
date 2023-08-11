@@ -15,11 +15,6 @@ export interface RenderError {
   message: string
 }
 
-export enum ImageExt {
-  WebP = 'webp',
-  Jpg = 'jpeg'
-}
-
 export enum LayoutColumn {
   Normal = 0,
   Wide = 1, // 3 column
@@ -102,19 +97,6 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     }
   }
 
-  // MARK: Using `jpg` format on mobile/WeChat/Safari
-  const imageExt = computed(() => {
-    const imageExtValue =
-      userAgent.isMobile && (userAgent.isWechat || userAgent.isSafari)
-        ? (ImageExt.Jpg as ImageExt)
-        : (ImageExt.WebP as ImageExt)
-    return {
-      ext: imageExtValue,
-      isJpg: imageExtValue === ImageExt.Jpg,
-      isWebP: imageExtValue === ImageExt.WebP
-    }
-  })
-
   // Global switchers
   const switcher = reactive({
     sponsor: false,
@@ -146,7 +128,6 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     setLayoutColumn,
     // Device state
     userAgent: readonly(userAgent),
-    imageExt,
     // Global switchers
     switcher: readonly(switcher),
     toggleSwitcher

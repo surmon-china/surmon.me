@@ -18,7 +18,7 @@
 
 <template>
   <div class="about-page">
-    <page-banner :is-mobile="true" image="/images/page-about/banner-mobile.jpg" :image-position="70" cdn>
+    <page-banner :is-mobile="true" image="/images/page-about/banner-mobile.webp" :image-position="70" cdn>
       <template #title>
         <i18n :k="LanguageKey.PAGE_ABOUT" />
       </template>
@@ -91,10 +91,10 @@
     </div>
     <div class="qrcodes">
       <div class="item">
-        <uimage cdn class="image" src="/images/qrcodes/wechat.jpg" />
+        <uimage cdn class="image" src="/images/qrcodes/wechat.webp" />
       </div>
       <div class="item">
-        <uimage cdn class="image" src="/images/qrcodes/wechat-channel.png" />
+        <uimage cdn class="image" src="/images/qrcodes/wechat-channel.webp" />
       </div>
     </div>
   </div>

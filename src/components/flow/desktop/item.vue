@@ -15,7 +15,7 @@
     article: Article
   }>()
 
-  const { gState, cdnDomain } = useEnhancer()
+  const { cdnDomain } = useEnhancer()
   const identity = useIdentityStore()
   const isLiked = computed(() => identity.isLikedPage(props.article.id))
   const isHybrid = computed(() => isHybridType(props.article.origin))
@@ -37,8 +37,7 @@
       cdnDomain,
       getImgProxyPath(url.replace(API_CONFIG.STATIC, ''), {
         width: 350,
-        height: 238,
-        webp: gState.imageExt.value.isWebP
+        height: 238
       })
     )
   }

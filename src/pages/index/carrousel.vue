@@ -27,7 +27,7 @@
     count: 9
   })
 
-  const { gState, adConfig, cdnDomain, isDarkTheme } = useEnhancer()
+  const { adConfig, cdnDomain, isDarkTheme } = useEnhancer()
   const getThumbnailURL = (url?: string) => {
     if (!url) {
       return getAssetURL(cdnDomain, '/images/thumbnail/carrousel.jpg')
@@ -40,7 +40,6 @@
       getImgProxyPath(url.replace(API_CONFIG.STATIC, ''), {
         width: 1190,
         height: 420,
-        webp: gState.imageExt.value.isWebP,
         watermark: `watermark:0.36:sowe:18:18:0.15`
       })
     )
