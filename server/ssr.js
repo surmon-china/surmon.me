@@ -364,7 +364,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.16.2";
+const APP_VERSION = "4.17.0";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -944,8 +944,12 @@ const getAssetURL = (domain, path) => {
     /* Assets */
   )}${normalizedPath}`;
 };
-const isOriginalStaticURL = (url) => {
-  return url == null ? void 0 : url.startsWith(API_CONFIG.STATIC);
+const getStaticURL = (domain, path) => {
+  return `${getCDNPrefixURL(
+    domain,
+    "static"
+    /* Static */
+  )}${normalizePath(path)}`;
 };
 const getImgProxyURL = (domain, path) => {
   return `${getCDNPrefixURL(
@@ -953,6 +957,12 @@ const getImgProxyURL = (domain, path) => {
     "imgproxy"
     /* ImgProxy */
   )}${normalizePath(path)}`;
+};
+const isOriginalStaticURL = (url) => {
+  return url == null ? void 0 : url.startsWith(API_CONFIG.STATIC);
+};
+const getStaticPath = (url) => {
+  return url.replace(API_CONFIG.STATIC, "");
 };
 const getOriginalProxyURL = (url) => {
   return `${BFF_PROXY_PREFIX}/${btoa(url)}`;
@@ -1048,8 +1058,10 @@ const createRenderer = (options) => {
     const titleValue = sanitizeHTML(escape(title || alt));
     const altValue = sanitizeHTML(escape(alt));
     const sanitized = sanitizeUrl(src);
-    const source = sanitized.startsWith("http://") ? getOriginalProxyURL(sanitized) : sanitized;
-    const sourceValue = (options == null ? void 0 : options.imageSource) ? options.imageSource(source) : source;
+    const original = sanitized.startsWith("http://") ? getOriginalProxyURL(sanitized) : sanitized;
+    const parsed = (options == null ? void 0 : options.imageSource) ? options.imageSource(original) : original;
+    const srcValue = typeof parsed === "object" ? parsed.src : parsed;
+    const sourcesValue = typeof parsed === "object" ? parsed.sources : [];
     return trimHTML(`
       <div class="figure-wrapper">
         <figure class="image ${altValue ? "caption" : ""}" data-status="loading">
@@ -1062,15 +1074,19 @@ const createRenderer = (options) => {
             <div></div>
             <div></div>
           </div>
-          <img
-            class="${LOZAD_CLASS_NAME}"
-            data-src="${sourceValue}"
-            ${altValue ? `alt="${altValue}"` : ""}
-            ${titleValue ? `title="${titleValue}"` : ""}
-            onload="this.parentElement.dataset.status = 'loaded'"
-            onerror="this.parentElement.dataset.status = 'error'"
-            onclick="window.$popup.vImage(this.src)"
-          />
+          <picture>
+            ${sourcesValue.map((s) => `<source srcset="${s.srcset}" type="${s.type}" />`).join("\n")}
+            <img
+              class="${LOZAD_CLASS_NAME}"
+              data-src="${srcValue}"
+              draggable="false"
+              ${altValue ? `alt="${altValue}"` : ""}
+              ${titleValue ? `title="${titleValue}"` : ""}
+              onload="this.parentElement.parentElement.dataset.status = 'loaded'"
+              onerror="this.parentElement.parentElement.dataset.status = 'error'"
+              onclick="window.$popup.vImage(this.currentSrc || this.src)"
+            />
+          </picture>
           ${altValue ? `<figcaption>${altValue}</figcaption>` : ""}
         </figure>
       </div>
@@ -1111,6 +1127,12 @@ const markdownToHTML = (markdown, options) => {
     imageSource: options == null ? void 0 : options.imageSourceGetter
   };
   return marked.parse(markdown, { renderer: createRenderer(renderOptions) });
+};
+const getImgProxyPath = (path, options) => {
+  const resize = options.resize ? `resize:fill:${options.width || ""}:${options.height || ""}:0` : "";
+  const watermark = options.watermark ? `/${options.watermark}` : "";
+  const format = options.format ? `@${options.format}` : "";
+  return `/${resize}${watermark}/plain${normalizePath(path)}${format}`.replaceAll("//", "/");
 };
 const delayer = (ms = DEFAULT_DELAY) => {
   const start = (/* @__PURE__ */ new Date()).getTime();
@@ -1221,11 +1243,18 @@ const useArticleDetailStore = defineStore("articleDetail", () => {
     return splitIndex2;
   });
   const optimizeImageSource = (src) => {
-    if (src.startsWith(API_CONFIG.STATIC)) {
-      return src.replace(API_CONFIG.STATIC, getCDNPrefixURL(useCDNDomain(), CDNPrefix.Static));
-    } else {
+    if (!isOriginalStaticURL(src)) {
       return src;
     }
+    const cdnDomain = useCDNDomain();
+    const path = getStaticPath(src);
+    return {
+      src: getStaticURL(cdnDomain, path),
+      sources: [
+        { type: "image/avif", srcset: getImgProxyURL(cdnDomain, getImgProxyPath(path, { format: "avif" })) },
+        { type: "image/webp", srcset: getImgProxyURL(cdnDomain, getImgProxyPath(path, { format: "webp" })) }
+      ]
+    };
   };
   const defaultContent = computed(() => {
     if (!article.value) {
@@ -2331,12 +2360,6 @@ const getPageRoute = (routeName) => {
 };
 const isArticleDetail = (name) => name === RouteName.Article;
 const isSearchFlow = (name) => name === RouteName.SearchFlow;
-const getImgProxyPath = (path, options) => {
-  const resize = `resize:fill:${options.width || ""}:${options.height || ""}:0`;
-  const watermark = options.watermark ? `/${options.watermark}` : "";
-  const format = options.format ? `@${options.format}` : "";
-  return `/${options.resize ? resize : ""}${watermark}/plain${normalizePath(path)}${format}`;
-};
 const isOriginalType = (originState) => {
   return isNull(originState) || isUndefined(null) || originState === OriginState.Original;
 };
@@ -2372,7 +2395,7 @@ const _sfc_main$1F = /* @__PURE__ */ defineComponent({
       }
       return getImgProxyURL(
         cdnDomain,
-        getImgProxyPath(url.replace(API_CONFIG.STATIC, ""), {
+        getImgProxyPath(getStaticPath(url), {
           resize: true,
           width: 700,
           height: 247,
@@ -2385,11 +2408,11 @@ const _sfc_main$1F = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       const _component_router_link = resolveComponent("router-link");
       const _component_udate = resolveComponent("udate");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-item" }, _attrs))} data-v-8d74619a><div class="thumbnail" data-v-8d74619a><span class="${ssrRenderClass([{
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-item" }, _attrs))} data-v-272f95bf><div class="thumbnail" data-v-272f95bf><span class="${ssrRenderClass([{
         original: isOriginal.value,
         reprint: isReprint.value,
         hybrid: isHybrid.value
-      }, "oirigin"])}" data-v-8d74619a>`);
+      }, "oirigin"])}" data-v-272f95bf>`);
       if (isOriginal.value) {
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LanguageKey).ORIGIN_ORIGINAL
@@ -2405,13 +2428,13 @@ const _sfc_main$1F = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`</span><picture class="picture" data-v-8d74619a>`);
+      _push(`</span><picture class="picture" data-v-272f95bf>`);
       if (unref(isOriginalStaticURL)(_ctx.article.thumbnail)) {
-        _push(`<!--[--><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "avif"))} type="image/avif" data-v-8d74619a><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "webp"))} type="image/webp" data-v-8d74619a><!--]-->`);
+        _push(`<!--[--><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "avif"))} type="image/avif" data-v-272f95bf><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "webp"))} type="image/webp" data-v-272f95bf><!--]-->`);
       } else {
         _push(`<!---->`);
       }
-      _push(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("src", getThumbnailURL(_ctx.article.thumbnail))}${ssrRenderAttr("alt", _ctx.article.title)}${ssrRenderAttr("title", _ctx.article.title)} data-v-8d74619a></picture></div><div class="content" data-v-8d74619a><div class="body" data-v-8d74619a><h4 class="title" data-v-8d74619a>`);
+      _push(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("src", getThumbnailURL(_ctx.article.thumbnail))}${ssrRenderAttr("alt", _ctx.article.title)}${ssrRenderAttr("title", _ctx.article.title)} data-v-272f95bf></picture></div><div class="content" data-v-272f95bf><div class="body" data-v-272f95bf><h4 class="title" data-v-272f95bf>`);
       _push(ssrRenderComponent(_component_router_link, {
         class: "link",
         title: _ctx.article.title,
@@ -2428,23 +2451,23 @@ const _sfc_main$1F = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</h4><p class="description" style="${ssrRenderStyle({ "-webkit-box-orient": "vertical" })}" data-v-8d74619a>${_ctx.article.description}</p></div><div class="meta" data-v-8d74619a><span class="date" data-v-8d74619a><i class="iconfont icon-clock" data-v-8d74619a></i>`);
+      _push(`</h4><p class="description" style="${ssrRenderStyle({ "-webkit-box-orient": "vertical" })}" data-v-272f95bf>${_ctx.article.description}</p></div><div class="meta" data-v-272f95bf><span class="date" data-v-272f95bf><i class="iconfont icon-clock" data-v-272f95bf></i>`);
       _push(ssrRenderComponent(_component_udate, {
         to: "ago",
         date: _ctx.article.created_at
       }, null, _parent));
-      _push(`</span><span class="views" data-v-8d74619a><i class="iconfont icon-eye" data-v-8d74619a></i><span data-v-8d74619a>${ssrInterpolate(unref(numberSplit)(_ctx.article.meta.views))}</span></span><span class="comments" data-v-8d74619a><i class="iconfont icon-comment" data-v-8d74619a></i><span data-v-8d74619a>${ssrInterpolate(_ctx.article.meta.comments)}</span></span><span class="likes" data-v-8d74619a><i class="${ssrRenderClass([{ liked: isLiked.value }, "iconfont icon-like"])}" data-v-8d74619a></i><span data-v-8d74619a>${ssrInterpolate(_ctx.article.meta.likes)}</span></span></div></div></div>`);
+      _push(`</span><span class="views" data-v-272f95bf><i class="iconfont icon-eye" data-v-272f95bf></i><span data-v-272f95bf>${ssrInterpolate(unref(numberSplit)(_ctx.article.meta.views))}</span></span><span class="comments" data-v-272f95bf><i class="iconfont icon-comment" data-v-272f95bf></i><span data-v-272f95bf>${ssrInterpolate(_ctx.article.meta.comments)}</span></span><span class="likes" data-v-272f95bf><i class="${ssrRenderClass([{ liked: isLiked.value }, "iconfont icon-like"])}" data-v-272f95bf></i><span data-v-272f95bf>${ssrInterpolate(_ctx.article.meta.likes)}</span></span></div></div></div>`);
     };
   }
 });
-const item_vue_vue_type_style_index_0_scoped_8d74619a_lang = "";
+const item_vue_vue_type_style_index_0_scoped_272f95bf_lang = "";
 const _sfc_setup$1F = _sfc_main$1F.setup;
 _sfc_main$1F.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/flow/mobile/item.vue");
   return _sfc_setup$1F ? _sfc_setup$1F(props, ctx) : void 0;
 };
-const ListItem$1 = /* @__PURE__ */ _export_sfc(_sfc_main$1F, [["__scopeId", "data-v-8d74619a"]]);
+const ListItem$1 = /* @__PURE__ */ _export_sfc(_sfc_main$1F, [["__scopeId", "data-v-272f95bf"]]);
 const _sfc_main$1E = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -2797,7 +2820,7 @@ const _sfc_main$1D = /* @__PURE__ */ defineComponent({
       }
       return getImgProxyURL(
         cdnDomain,
-        getImgProxyPath(url.replace(API_CONFIG.STATIC, ""), {
+        getImgProxyPath(getStaticPath(url), {
           resize: true,
           width: 350,
           height: 238,
@@ -2810,11 +2833,11 @@ const _sfc_main$1D = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       const _component_udate = resolveComponent("udate");
       const _component_placeholder = resolveComponent("placeholder");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-item" }, _attrs))} data-v-3b7be371><div class="${ssrRenderClass([unref(isOriginalStaticURL)(_ctx.article.thumbnail) ? "enhancement" : "degradation", "item-background"])}" style="${ssrRenderStyle({
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-item" }, _attrs))} data-v-c0217027><div class="${ssrRenderClass([unref(isOriginalStaticURL)(_ctx.article.thumbnail) ? "enhancement" : "degradation", "item-background"])}" style="${ssrRenderStyle({
         "--original": `url('${getThumbnailURL(_ctx.article.thumbnail)}')`,
         "--avif": `url('${getThumbnailURL(_ctx.article.thumbnail, "avif")}')`,
         "--webp": `url('${getThumbnailURL(_ctx.article.thumbnail, "webp")}')`
-      })}" data-v-3b7be371></div><div class="item-content" data-v-3b7be371>`);
+      })}" data-v-c0217027></div><div class="item-content" data-v-c0217027>`);
       _push(ssrRenderComponent(_component_router_link, {
         class: "item-thumbnail",
         to: unref(getArticleDetailRoute)(_ctx.article.id)
@@ -2825,7 +2848,7 @@ const _sfc_main$1D = /* @__PURE__ */ defineComponent({
               original: isOriginal.value,
               hybrid: isHybrid.value,
               reprint: isReprint.value
-            }, "item-oirigin"])}" data-v-3b7be371${_scopeId}>`);
+            }, "item-oirigin"])}" data-v-c0217027${_scopeId}>`);
             if (isOriginal.value) {
               _push2(ssrRenderComponent(_component_i18n, {
                 k: unref(LanguageKey).ORIGIN_ORIGINAL
@@ -2841,13 +2864,13 @@ const _sfc_main$1D = /* @__PURE__ */ defineComponent({
             } else {
               _push2(`<!---->`);
             }
-            _push2(`</span><picture class="picture" data-v-3b7be371${_scopeId}>`);
+            _push2(`</span><picture class="picture" data-v-c0217027${_scopeId}>`);
             if (unref(isOriginalStaticURL)(_ctx.article.thumbnail)) {
-              _push2(`<!--[--><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "avif"))} type="image/avif" data-v-3b7be371${_scopeId}><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "webp"))} type="image/webp" data-v-3b7be371${_scopeId}><!--]-->`);
+              _push2(`<!--[--><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "avif"))} type="image/avif" data-v-c0217027${_scopeId}><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "webp"))} type="image/webp" data-v-c0217027${_scopeId}><!--]-->`);
             } else {
               _push2(`<!---->`);
             }
-            _push2(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("src", getThumbnailURL(_ctx.article.thumbnail))}${ssrRenderAttr("alt", _ctx.article.title)}${ssrRenderAttr("title", _ctx.article.title)} data-v-3b7be371${_scopeId}></picture>`);
+            _push2(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("src", getThumbnailURL(_ctx.article.thumbnail))}${ssrRenderAttr("alt", _ctx.article.title)}${ssrRenderAttr("title", _ctx.article.title)} data-v-c0217027${_scopeId}></picture>`);
           } else {
             return [
               createVNode("span", {
@@ -2893,7 +2916,7 @@ const _sfc_main$1D = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="item-body" data-v-3b7be371><div class="item-content" data-v-3b7be371><h5 class="title" data-v-3b7be371>`);
+      _push(`<div class="item-body" data-v-c0217027><div class="item-content" data-v-c0217027><h5 class="title" data-v-c0217027>`);
       _push(ssrRenderComponent(_component_router_link, {
         class: "link",
         to: unref(getArticleDetailRoute)(_ctx.article.id),
@@ -2910,12 +2933,12 @@ const _sfc_main$1D = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<span class="language" data-v-3b7be371>${ssrInterpolate(getLanguageText(_ctx.article.lang))}</span></h5><p class="description" style="${ssrRenderStyle({ "-webkit-box-orient": "vertical" })}" data-v-3b7be371>${_ctx.article.description}</p></div><div class="item-meta" data-v-3b7be371><span class="date" data-v-3b7be371><i class="iconfont icon-clock" data-v-3b7be371></i>`);
+      _push(`<span class="language" data-v-c0217027>${ssrInterpolate(getLanguageText(_ctx.article.lang))}</span></h5><p class="description" style="${ssrRenderStyle({ "-webkit-box-orient": "vertical" })}" data-v-c0217027>${_ctx.article.description}</p></div><div class="item-meta" data-v-c0217027><span class="date" data-v-c0217027><i class="iconfont icon-clock" data-v-c0217027></i>`);
       _push(ssrRenderComponent(_component_udate, {
         to: "ago",
         date: _ctx.article.created_at
       }, null, _parent));
-      _push(`</span><span class="views" data-v-3b7be371><i class="iconfont icon-eye" data-v-3b7be371></i><span data-v-3b7be371>${ssrInterpolate(unref(numberSplit)(_ctx.article.meta.views))}</span></span><span class="comments" data-v-3b7be371><i class="iconfont icon-comment" data-v-3b7be371></i><span data-v-3b7be371>${ssrInterpolate(_ctx.article.meta.comments)}</span></span><span class="likes" data-v-3b7be371><i class="${ssrRenderClass([{ liked: isLiked.value }, "iconfont icon-like"])}" data-v-3b7be371></i><span data-v-3b7be371>${ssrInterpolate(_ctx.article.meta.likes)}</span></span><span class="categories" data-v-3b7be371><i class="iconfont icon-category" data-v-3b7be371></i>`);
+      _push(`</span><span class="views" data-v-c0217027><i class="iconfont icon-eye" data-v-c0217027></i><span data-v-c0217027>${ssrInterpolate(unref(numberSplit)(_ctx.article.meta.views))}</span></span><span class="comments" data-v-c0217027><i class="iconfont icon-comment" data-v-c0217027></i><span data-v-c0217027>${ssrInterpolate(_ctx.article.meta.comments)}</span></span><span class="likes" data-v-c0217027><i class="${ssrRenderClass([{ liked: isLiked.value }, "iconfont icon-like"])}" data-v-c0217027></i><span data-v-c0217027>${ssrInterpolate(_ctx.article.meta.likes)}</span></span><span class="categories" data-v-c0217027><i class="iconfont icon-category" data-v-c0217027></i>`);
       _push(ssrRenderComponent(_component_placeholder, {
         transition: false,
         data: _ctx.article.categories.length
@@ -2985,14 +3008,14 @@ const _sfc_main$1D = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const item_vue_vue_type_style_index_0_scoped_3b7be371_lang = "";
+const item_vue_vue_type_style_index_0_scoped_c0217027_lang = "";
 const _sfc_setup$1D = _sfc_main$1D.setup;
 _sfc_main$1D.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/flow/desktop/item.vue");
   return _sfc_setup$1D ? _sfc_setup$1D(props, ctx) : void 0;
 };
-const ListItem = /* @__PURE__ */ _export_sfc(_sfc_main$1D, [["__scopeId", "data-v-3b7be371"]]);
+const ListItem = /* @__PURE__ */ _export_sfc(_sfc_main$1D, [["__scopeId", "data-v-c0217027"]]);
 const _sfc_main$1C = /* @__PURE__ */ defineComponent({
   __name: "list",
   __ssrInlineRender: true,
@@ -3255,7 +3278,7 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
       }
       return getImgProxyURL(
         cdnDomain,
-        getImgProxyPath(url.replace(API_CONFIG.STATIC, ""), {
+        getImgProxyPath(getStaticPath(url), {
           resize: true,
           width: 1190,
           height: 420,
@@ -3293,7 +3316,7 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
       const _component_ulink = resolveComponent("ulink");
       _push(`<div${ssrRenderAttrs(mergeProps({
         class: ["carrousel", { dark: unref(isDarkTheme) }]
-      }, _attrs))} data-v-c36e2d09>`);
+      }, _attrs))} data-v-b265517d>`);
       _push(ssrRenderComponent(_component_placeholder, {
         data: slides.value.length,
         loading: _ctx.fetching
@@ -3337,13 +3360,13 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
         }),
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="article-skeleton" data-v-c36e2d09${_scopeId}><div class="title" data-v-c36e2d09${_scopeId}>`);
+            _push2(`<div class="article-skeleton" data-v-b265517d${_scopeId}><div class="title" data-v-b265517d${_scopeId}>`);
             _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
-            _push2(`</div><div class="content" data-v-c36e2d09${_scopeId}><div class="first" data-v-c36e2d09${_scopeId}>`);
+            _push2(`</div><div class="content" data-v-b265517d${_scopeId}><div class="first" data-v-b265517d${_scopeId}>`);
             _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
             _push2(`</div><!--[-->`);
             ssrRenderList(3, (index) => {
-              _push2(`<div class="line" data-v-c36e2d09${_scopeId}>`);
+              _push2(`<div class="line" data-v-b265517d${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_line, { class: "line-item" }, null, _parent2, _scopeId));
               _push2(`</div>`);
             });
@@ -3394,7 +3417,7 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
                     _push3(ssrRenderComponent(unref(SwiperSlide), { key: index }, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(`<div class="content" data-v-c36e2d09${_scopeId3}>`);
+                          _push4(`<div class="content" data-v-b265517d${_scopeId3}>`);
                           _push4(ssrRenderComponent(_component_ulink, {
                             class: "link",
                             href: slide.url,
@@ -3402,19 +3425,19 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`<picture class="picture" data-v-c36e2d09${_scopeId4}>`);
+                                _push5(`<picture class="picture" data-v-b265517d${_scopeId4}>`);
                                 if (unref(isOriginalStaticURL)(slide.image)) {
-                                  _push5(`<!--[--><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "avif"))} type="image/avif" data-v-c36e2d09${_scopeId4}><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "webp"))} type="image/webp" data-v-c36e2d09${_scopeId4}><!--]-->`);
+                                  _push5(`<!--[--><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "avif"))} type="image/avif" data-v-b265517d${_scopeId4}><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "webp"))} type="image/webp" data-v-b265517d${_scopeId4}><!--]-->`);
                                 } else {
                                   _push5(`<!---->`);
                                 }
-                                _push5(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("alt", slide.title)}${ssrRenderAttr("src", getPictureURL(slide.image))} data-v-c36e2d09${_scopeId4}></picture><div class="title"${ssrRenderAttr("title", slide.title)} data-v-c36e2d09${_scopeId4}><div class="background" data-v-c36e2d09${_scopeId4}></div><div class="prospect" data-v-c36e2d09${_scopeId4}><span class="${ssrRenderClass([unref(isOriginalStaticURL)(slide.image) ? "enhancement" : "degradation", "text"])}" style="${ssrRenderStyle({
+                                _push5(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("alt", slide.title)}${ssrRenderAttr("src", getPictureURL(slide.image))} data-v-b265517d${_scopeId4}></picture><div class="title"${ssrRenderAttr("title", slide.title)} data-v-b265517d${_scopeId4}><div class="background" data-v-b265517d${_scopeId4}></div><div class="prospect" data-v-b265517d${_scopeId4}><span class="${ssrRenderClass([unref(isOriginalStaticURL)(slide.image) ? "enhancement" : "degradation", "text"])}" style="${ssrRenderStyle({
                                   "--original": `url('${getPictureURL(slide.image)}')`,
                                   "--avif": `url('${getPictureURL(slide.image, "avif")}')`,
                                   "--webp": `url('${getPictureURL(slide.image, "webp")}')`
-                                })}" data-v-c36e2d09${_scopeId4}>${ssrInterpolate(slide.title)}</span></div></div>`);
+                                })}" data-v-b265517d${_scopeId4}>${ssrInterpolate(slide.title)}</span></div></div>`);
                                 if (slide.ad) {
-                                  _push5(`<span class="ad-symbol" data-v-c36e2d09${_scopeId4}>`);
+                                  _push5(`<span class="ad-symbol" data-v-b265517d${_scopeId4}>`);
                                   _push5(ssrRenderComponent(_component_i18n, {
                                     k: unref(LanguageKey).AD
                                   }, null, _parent5, _scopeId4));
@@ -3691,14 +3714,14 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const carrousel_vue_vue_type_style_index_0_scoped_c36e2d09_lang = "";
+const carrousel_vue_vue_type_style_index_0_scoped_b265517d_lang = "";
 const _sfc_setup$1B = _sfc_main$1B.setup;
 _sfc_main$1B.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/index/carrousel.vue");
   return _sfc_setup$1B ? _sfc_setup$1B(props, ctx) : void 0;
 };
-const Carrousel = /* @__PURE__ */ _export_sfc(_sfc_main$1B, [["__scopeId", "data-v-c36e2d09"]]);
+const Carrousel = /* @__PURE__ */ _export_sfc(_sfc_main$1B, [["__scopeId", "data-v-b265517d"]]);
 var GAEventCategories = /* @__PURE__ */ ((GAEventCategories2) => {
   GAEventCategories2["Comment"] = "comment";
   GAEventCategories2["Share"] = "share";
@@ -8658,7 +8681,7 @@ const _sfc_main$16 = /* @__PURE__ */ defineComponent({
       }
       return getImgProxyURL(
         cdnDomain,
-        getImgProxyPath(url.replace(API_CONFIG.STATIC, ""), {
+        getImgProxyPath(getStaticPath(url), {
           resize: true,
           width: 466,
           height: 168,
@@ -8684,9 +8707,9 @@ const _sfc_main$16 = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_router_link = resolveComponent("router-link");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "related" }, _attrs))} data-v-5c53e715><ul class="articles" style="${ssrRenderStyle({ gridTemplateColumns: `repeat(${_ctx.columns}, 1fr)` })}" data-v-5c53e715><!--[-->`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "related" }, _attrs))} data-v-ac5683b5><ul class="articles" style="${ssrRenderStyle({ gridTemplateColumns: `repeat(${_ctx.columns}, 1fr)` })}" data-v-ac5683b5><!--[-->`);
       ssrRenderList(articleList.value, (article, index) => {
-        _push(`<li class="${ssrRenderClass([{ disabled: !article.id }, "item"])}" data-v-5c53e715>`);
+        _push(`<li class="${ssrRenderClass([{ disabled: !article.id }, "item"])}" data-v-ac5683b5>`);
         _push(ssrRenderComponent(_component_router_link, {
           class: "item-article",
           title: article.title,
@@ -8694,13 +8717,13 @@ const _sfc_main$16 = /* @__PURE__ */ defineComponent({
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<picture class="thumbnail" data-v-5c53e715${_scopeId}>`);
+              _push2(`<picture class="thumbnail" data-v-ac5683b5${_scopeId}>`);
               if (unref(isOriginalStaticURL)(article.thumbnail)) {
-                _push2(`<!--[--><source${ssrRenderAttr("srcset", getThumbnailURL(article.thumbnail, "avif"))} type="image/avif" data-v-5c53e715${_scopeId}><source${ssrRenderAttr("srcset", getThumbnailURL(article.thumbnail, "webp"))} type="image/webp" data-v-5c53e715${_scopeId}><!--]-->`);
+                _push2(`<!--[--><source${ssrRenderAttr("srcset", getThumbnailURL(article.thumbnail, "avif"))} type="image/avif" data-v-ac5683b5${_scopeId}><source${ssrRenderAttr("srcset", getThumbnailURL(article.thumbnail, "webp"))} type="image/webp" data-v-ac5683b5${_scopeId}><!--]-->`);
               } else {
                 _push2(`<!---->`);
               }
-              _push2(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("alt", article.title)}${ssrRenderAttr("src", getThumbnailURL(article.thumbnail))} data-v-5c53e715${_scopeId}></picture><div class="title" data-v-5c53e715${_scopeId}>${ssrInterpolate(article.title)}</div><div class="description"${ssrRenderAttr("title", article.description)} data-v-5c53e715${_scopeId}>${ssrInterpolate(article.description)}</div>`);
+              _push2(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("alt", article.title)}${ssrRenderAttr("src", getThumbnailURL(article.thumbnail))} data-v-ac5683b5${_scopeId}></picture><div class="title" data-v-ac5683b5${_scopeId}>${ssrInterpolate(article.title)}</div><div class="description"${ssrRenderAttr("title", article.description)} data-v-ac5683b5${_scopeId}>${ssrInterpolate(article.description)}</div>`);
             } else {
               return [
                 createVNode("picture", { class: "thumbnail" }, [
@@ -8738,14 +8761,14 @@ const _sfc_main$16 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const related_vue_vue_type_style_index_0_scoped_5c53e715_lang = "";
+const related_vue_vue_type_style_index_0_scoped_ac5683b5_lang = "";
 const _sfc_setup$16 = _sfc_main$16.setup;
 _sfc_main$16.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/related.vue");
   return _sfc_setup$16 ? _sfc_setup$16(props, ctx) : void 0;
 };
-const ArticleRelated = /* @__PURE__ */ _export_sfc(_sfc_main$16, [["__scopeId", "data-v-5c53e715"]]);
+const ArticleRelated = /* @__PURE__ */ _export_sfc(_sfc_main$16, [["__scopeId", "data-v-ac5683b5"]]);
 const _sfc_main$15 = /* @__PURE__ */ defineComponent({
   __name: "neighbour",
   __ssrInlineRender: true,
