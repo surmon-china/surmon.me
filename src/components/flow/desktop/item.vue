@@ -5,11 +5,10 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore } from '/@/stores/identity'
   import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
-  import { getImgProxyURL, isOriginalStaticURL } from '/@/transforms/url'
+  import { getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
   import { getArticleDetailRoute, getCategoryFlowRoute } from '/@/transforms/route'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
   import { numberSplit } from '/@/transforms/text'
-  import API_CONFIG from '/@/config/api.config'
 
   const props = defineProps<{
     article: Article
@@ -32,7 +31,7 @@
     }
     return getImgProxyURL(
       cdnDomain,
-      getImgProxyPath(url.replace(API_CONFIG.STATIC, ''), {
+      getImgProxyPath(getStaticPath(url), {
         resize: true,
         width: 350,
         height: 238,

@@ -13,12 +13,12 @@ import { Article } from '/@/interfaces/article'
 import { Pagination, PaginationList } from '/@/interfaces/common'
 import { getArticleContentHeadingElementId } from '/@/constants/anchor'
 import { markdownToHTML, MarkdownRenderOption } from '/@/transforms/markdown'
-import { getCDNPrefixURL, CDNPrefix } from '/@/transforms/url'
+import { getStaticURL, getStaticPath, getImgProxyURL, isOriginalStaticURL } from '/@/transforms/url'
+import { getImgProxyPath } from '/@/transforms/imgproxy'
 import { delayPromise } from '/@/utils/delayer'
 import { isClient } from '/@/app/environment'
 import { LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
 import nodepress from '/@/services/nodepress'
-import API_CONFIG from '/@/config/api.config'
 
 export const ARTICLE_API_PATH = '/article'
 
@@ -133,10 +133,18 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
   })
 
   const optimizeImageSource = (src: string) => {
-    if (src.startsWith(API_CONFIG.STATIC)) {
-      return src.replace(API_CONFIG.STATIC, getCDNPrefixURL(useCDNDomain(), CDNPrefix.Static))
-    } else {
+    if (!isOriginalStaticURL(src)) {
       return src
+    }
+
+    const cdnDomain = useCDNDomain()
+    const path = getStaticPath(src)
+    return {
+      src: getStaticURL(cdnDomain, path),
+      sources: [
+        { type: 'image/avif', srcset: getImgProxyURL(cdnDomain, getImgProxyPath(path, { format: 'avif' })) },
+        { type: 'image/webp', srcset: getImgProxyURL(cdnDomain, getImgProxyPath(path, { format: 'webp' })) }
+      ]
     }
   }
 

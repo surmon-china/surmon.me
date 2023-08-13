@@ -66,8 +66,8 @@ const trimHTML = (html: string) => html.replace(/\s+/g, ' ').replace(/\n/g, ' ')
 interface RendererCreatorOptions {
   sanitize: boolean
   text: (text: string) => string
-  imageSource: (src: string) => string
   headingId: (html: string, level: number, raw: string) => string
+  imageSource: (src: string) => string | { src: string; sources: Array<{ srcset: string; type: string }> }
 }
 
 const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => {
@@ -135,8 +135,12 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
     const titleValue = sanitizeHTML(escape(title || alt))
     const altValue = sanitizeHTML(escape(alt!))
     const sanitized = sanitizeUrl(src!)
-    const source = sanitized.startsWith('http://') ? getOriginalProxyURL(sanitized) : sanitized
-    const sourceValue = options?.imageSource ? options.imageSource(source) : source
+    const original = sanitized.startsWith('http://') ? getOriginalProxyURL(sanitized) : sanitized
+    const parsed = options?.imageSource ? options.imageSource(original) : original
+    // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture
+    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/currentSrc
+    const srcValue = typeof parsed === 'object' ? parsed.src : parsed
+    const sourcesValue = typeof parsed === 'object' ? parsed.sources : []
 
     // figure > alt
     return trimHTML(`
@@ -151,15 +155,19 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
             <div></div>
             <div></div>
           </div>
-          <img
-            class="${LOZAD_CLASS_NAME}"
-            data-src="${sourceValue}"
-            ${altValue ? `alt="${altValue}"` : ''}
-            ${titleValue ? `title="${titleValue}"` : ''}
-            onload="this.parentElement.dataset.status = 'loaded'"
-            onerror="this.parentElement.dataset.status = 'error'"
-            onclick="window.$popup.vImage(this.src)"
-          />
+          <picture>
+            ${sourcesValue.map((s) => `<source srcset="${s.srcset}" type="${s.type}" />`).join('\n')}
+            <img
+              class="${LOZAD_CLASS_NAME}"
+              data-src="${srcValue}"
+              draggable="false"
+              ${altValue ? `alt="${altValue}"` : ''}
+              ${titleValue ? `title="${titleValue}"` : ''}
+              onload="this.parentElement.parentElement.dataset.status = 'loaded'"
+              onerror="this.parentElement.parentElement.dataset.status = 'error'"
+              onclick="window.$popup.vImage(this.currentSrc || this.src)"
+            />
+          </picture>
           ${altValue ? `<figcaption>${altValue}</figcaption>` : ''}
         </figure>
       </div>
@@ -217,5 +225,5 @@ export const markdownToHTML = (markdown: string, options?: MarkdownRenderOption)
     imageSource: options?.imageSourceGetter
   }
 
-  return marked.parse(markdown, { renderer: createRenderer(renderOptions) })
+  return marked.parse(markdown, { renderer: createRenderer(renderOptions) }) as string
 }

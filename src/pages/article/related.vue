@@ -3,9 +3,8 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
-  import { getImgProxyURL, isOriginalStaticURL } from '/@/transforms/url'
+  import { getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
   import { Article } from '/@/interfaces/article'
-  import API_CONFIG from '/@/config/api.config'
 
   interface Props {
     articles?: Article[]
@@ -26,7 +25,7 @@
     }
     return getImgProxyURL(
       cdnDomain,
-      getImgProxyPath(url.replace(API_CONFIG.STATIC, ''), {
+      getImgProxyPath(getStaticPath(url), {
         resize: true,
         width: 466,
         height: 168,

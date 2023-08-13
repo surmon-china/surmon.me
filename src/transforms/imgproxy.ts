@@ -22,8 +22,8 @@ export interface ImgProxyOptions {
 }
 
 export const getImgProxyPath = (path: string, options: ImgProxyOptions) => {
-  const resize = `resize:fill:${options.width || ''}:${options.height || ''}:0`
+  const resize = options.resize ? `resize:fill:${options.width || ''}:${options.height || ''}:0` : ''
   const watermark = options.watermark ? `/${options.watermark}` : ''
   const format = options.format ? `@${options.format}` : ''
-  return `/${options.resize ? resize : ''}${watermark}/plain${normalizePath(path)}${format}`
+  return `/${resize}${watermark}/plain${normalizePath(path)}${format}`.replaceAll('//', '/')
 }

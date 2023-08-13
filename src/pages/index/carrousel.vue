@@ -5,9 +5,8 @@
   import { Article } from '/@/interfaces/article'
   import { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getAssetURL, getImgProxyURL, isOriginalStaticURL } from '/@/transforms/url'
+  import { getAssetURL, getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
   import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
-  import API_CONFIG from '/@/config/api.config'
 
   interface Props {
     articles: Array<Article>
@@ -34,7 +33,7 @@
     }
     return getImgProxyURL(
       cdnDomain,
-      getImgProxyPath(url.replace(API_CONFIG.STATIC, ''), {
+      getImgProxyPath(getStaticPath(url), {
         resize: true,
         width: 1190,
         height: 420,
