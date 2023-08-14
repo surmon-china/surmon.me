@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { computed } from 'vue'
+  import { computed, shallowRef, onMounted } from 'vue'
   import { Language, LanguageKey } from '/@/language'
   import { Article } from '/@/interfaces/article'
   import { useEnhancer } from '/@/app/enhancer'
@@ -21,6 +21,12 @@
   const isReprint = computed(() => isReprintType(props.article.origin))
   const isOriginal = computed(() => isOriginalType(props.article.origin))
 
+  const imageRef = shallowRef<HTMLImageElement | null>(null)
+  const finallyThumbnailURL = shallowRef<string | null>(null)
+  const setFinallyThumbnailURL = () => {
+    finallyThumbnailURL.value = imageRef.value?.currentSrc ?? null
+  }
+
   const getLanguageText = (language: Language) => {
     return language === Language.Chinese ? '中文' : 'EN'
   }
@@ -39,18 +45,19 @@
       })
     )
   }
+
+  onMounted(() => {
+    if (imageRef.value?.complete) {
+      setFinallyThumbnailURL()
+    }
+  })
 </script>
 
 <template>
   <div class="article-item">
     <div
       class="item-background"
-      :class="isOriginalStaticURL(article.thumbnail) ? 'enhancement' : 'degradation'"
-      :style="{
-        '--original': `url('${getThumbnailURL(article.thumbnail)}')`,
-        '--avif': `url('${getThumbnailURL(article.thumbnail, 'avif')}')`,
-        '--webp': `url('${getThumbnailURL(article.thumbnail, 'webp')}')`
-      }"
+      :style="{ backgroundImage: finallyThumbnailURL ? `url('${finallyThumbnailURL}')` : 'none' }"
     ></div>
     <div class="item-content">
       <router-link class="item-thumbnail" :to="getArticleDetailRoute(article.id)">
@@ -75,9 +82,11 @@
             class="image"
             loading="lazy"
             draggable="false"
-            :src="getThumbnailURL(article.thumbnail)"
+            ref="imageRef"
             :alt="article.title"
             :title="article.title"
+            :src="getThumbnailURL(article.thumbnail)"
+            @load="setFinallyThumbnailURL"
           />
         </picture>
       </router-link>
@@ -151,17 +160,6 @@
       background-size: 120%;
       background-position: 0% 50%;
       opacity: 0.08;
-      &.degradation {
-        background-image: var(--original);
-      }
-      &.enhancement {
-        /* https://stackoverflow.com/a/72582316/6222535 */
-        /* https://css-tricks.com/using-performant-next-gen-images-in-css-with-image-set/ */
-        /* https://developer.mozilla.org/en-US/docs/Web/CSS/image/image-set */
-        background-image: var(--original);
-        background-image: -webkit-image-set(var(--avif) type('image/avif'), var(--webp) type('image/webp'));
-        background-image: image-set(var(--avif) type('image/avif'), var(--webp) type('image/webp'));
-      }
     }
 
     > .item-content {

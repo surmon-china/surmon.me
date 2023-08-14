@@ -70,7 +70,7 @@
 </script>
 
 <template>
-  <div class="carrousel" :class="{ dark: isDarkTheme }">
+  <div class="carrousel">
     <placeholder :data="slides.length" :loading="fetching">
       <template #placeholder>
         <empty class="article-empty" key="empty">
@@ -120,20 +120,10 @@
                     :src="getPictureURL(slide.image)"
                   />
                 </picture>
-                <div class="title" :title="slide.title">
+                <div class="title" :class="{ dark: isDarkTheme }" :title="slide.title">
                   <div class="background"></div>
                   <div class="prospect">
-                    <span
-                      class="text"
-                      :class="isOriginalStaticURL(slide.image) ? 'enhancement' : 'degradation'"
-                      :style="{
-                        '--original': `url('${getPictureURL(slide.image)}')`,
-                        '--avif': `url('${getPictureURL(slide.image, 'avif')}')`,
-                        '--webp': `url('${getPictureURL(slide.image, 'webp')}')`
-                      }"
-                    >
-                      {{ slide.title }}
-                    </span>
+                    <span class="text">{{ slide.title }}</span>
                   </div>
                 </div>
                 <span class="ad-symbol" v-if="slide.ad">
@@ -200,19 +190,6 @@
       }
     }
 
-    &.dark {
-      .swiper-slide {
-        .title {
-          .prospect {
-            .text {
-              color: $link-color !important;
-              -webkit-text-fill-color: $link-color !important;
-            }
-          }
-        }
-      }
-    }
-
     .swiper {
       width: 595px;
       height: $carrousel-height;
@@ -256,37 +233,25 @@
           }
         }
 
-        .ad-symbol {
-          display: block;
-          position: absolute;
-          top: 5.6rem;
-          right: 2.6rem;
-          padding: 0.1em 0.3em;
-          border-radius: $mini-radius;
-          border: 1px solid;
-          font-size: $font-size-root;
-          color: $module-bg;
-        }
+        $title-right: 2.6rem;
+        $title-offset: 3px;
 
         .title {
-          $offset: 3px;
           display: block;
           position: absolute;
           top: 2rem;
-          right: 2.6rem;
-          opacity: 0.8;
-          transition: opacity $transition-time-normal;
+          right: $title-right;
 
           .background {
             content: '';
             position: absolute;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: 0;
             top: 0;
             left: 0;
-            background-color: $module-bg;
-            transform: translate3d($offset, -$offset, 0);
+            background-color: rgba(0, 0, 0, 0.2);
+            transform: translate3d($title-offset, -$title-offset, 0);
             transition: transform $transition-time-fast;
           }
 
@@ -294,39 +259,57 @@
             padding: 0 1em;
             height: 2em;
             line-height: 2em;
+            background-color: $module-bg-lighter;
+            mix-blend-mode: screen;
+            transform: translate3d(-$title-offset, $title-offset, 0);
+            transition:
+              transform $transition-time-fast,
+              background-color $transition-time-fast;
             @include text-overflow;
-            background-color: $module-bg-opaque;
-            background-position: top right;
-            transform: translate3d(-$offset, $offset, 0);
-            transition: transform $transition-time-fast;
 
             .text {
               letter-spacing: 0.3px;
               font-weight: bold;
-              color: $text;
-              background-clip: text;
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-              &.degradation {
-                background-image: var(--original);
-              }
-              &.enhancement {
-                background-image: var(--original);
-                background-image: -webkit-image-set(var(--avif) type('image/avif'), var(--webp) type('image/webp'));
-                background-image: image-set(var(--avif) type('image/avif'), var(--webp) type('image/webp'));
-              }
+              color: black;
             }
           }
 
           &:hover {
-            opacity: 1;
             .background {
               transform: translate3d(0, 0, 0);
             }
             .prospect {
+              background-color: $module-bg-opaque;
               transform: translate3d(0, 0, 0);
             }
+
+            & + .ad-symbol {
+              transform: translate3d(0, -$title-offset, 0);
+            }
           }
+
+          &.dark {
+            .prospect {
+              mix-blend-mode: normal;
+              .text {
+                color: $link-color;
+              }
+            }
+          }
+        }
+
+        .ad-symbol {
+          display: block;
+          position: absolute;
+          top: 5.6rem;
+          right: $title-right;
+          padding: 0.1em 0.3em;
+          border: 1px solid;
+          border-radius: $mini-radius;
+          font-size: $font-size-root;
+          color: $white;
+          transform: translate3d(-$title-offset, 0, 0);
+          transition: transform $transition-time-fast;
         }
       }
     }
