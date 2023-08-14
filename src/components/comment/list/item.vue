@@ -28,6 +28,7 @@
     hiddenAvatar?: boolean
     hiddenUa?: boolean
     hiddenLocation?: boolean
+    localtionCityEllipsis?: boolean
     plainVote?: boolean
   }>()
 
@@ -150,7 +151,7 @@
             </span>
             <span class="author-info">
               <template v-if="comment.ip_location && !hiddenLocation">
-                <comment-location :location="comment.ip_location" />
+                <comment-location :location="comment.ip_location" :city-ellipsis="localtionCityEllipsis" />
               </template>
               <template v-if="comment.agent && !hiddenUa">
                 <comment-user-agent :user-agent="comment.agent" />

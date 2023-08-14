@@ -42,8 +42,8 @@
         <i18n v-if="fetching" zh="加载中..." en="Loading..." />
         <template v-else>
           <i18n>
-            <template #zh>加载更多评论（剩 {{ remain }} 条）</template>
-            <template #en>Loadmore (remain {{ remain }})</template>
+            <template #zh>加载更多评论（还有 {{ remain }} 条）</template>
+            <template #en>Loadmore (remain of {{ remain }} comments)</template>
           </i18n>
           <i class="iconfont icon-loadmore"></i>
         </template>

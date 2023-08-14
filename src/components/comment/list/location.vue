@@ -5,6 +5,7 @@
 
   const props = defineProps<{
     location: IPLocation
+    cityEllipsis?: boolean
   }>()
 
   const municipalitys: string[] = ['Shanghai', 'Beijing', 'Tianjin', 'Chongqing', 'Chungking']
@@ -22,11 +23,11 @@
 
 <template>
   <span class="location">
-    <span v-if="emojiText" class="emoji">{{ emojiText }}</span>
+    <span v-if="emojiText" class="emoji" :title="props.location.country">{{ emojiText }}</span>
     <i v-else class="iconfont icon-earth"></i>
-    <span>{{ countryText }}</span>
+    <span :title="props.location.country">{{ countryText }}</span>
     <span class="separator">•</span>
-    <span class="city">{{ cityText }}</span>
+    <span class="city" :class="{ ellipsis: cityEllipsis }" :title="cityText">{{ cityText }}</span>
   </span>
 </template>
 
@@ -54,6 +55,13 @@
 
     .separator {
       margin: 0 3px;
+    }
+
+    .city {
+      &.ellipsis {
+        max-width: 8rem;
+        @include text-overflow();
+      }
     }
   }
 </style>
