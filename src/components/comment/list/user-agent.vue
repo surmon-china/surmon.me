@@ -62,6 +62,8 @@
   @import 'src/styles/mixins.scss';
 
   .user-agent {
+    white-space: nowrap;
+
     .iconfont {
       margin-right: $xs-gap;
     }

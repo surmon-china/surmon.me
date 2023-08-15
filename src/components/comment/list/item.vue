@@ -28,7 +28,6 @@
     hiddenAvatar?: boolean
     hiddenUa?: boolean
     hiddenLocation?: boolean
-    localtionCityEllipsis?: boolean
     plainVote?: boolean
   }>()
 
@@ -151,7 +150,7 @@
             </span>
             <span class="author-info">
               <template v-if="comment.ip_location && !hiddenLocation">
-                <comment-location :location="comment.ip_location" :city-ellipsis="localtionCityEllipsis" />
+                <comment-location :location="comment.ip_location" />
               </template>
               <template v-if="comment.agent && !hiddenUa">
                 <comment-user-agent :user-agent="comment.agent" />
@@ -343,6 +342,11 @@
         .left {
           display: flex;
           align-items: center;
+          overflow: hidden;
+        }
+
+        .right {
+          padding-left: 1em;
         }
 
         .username {
@@ -358,10 +362,11 @@
           margin-left: -$sm-gap;
           margin-right: $sm-gap;
           padding: 0 $xs-gap 0.1em;
+          white-space: nowrap;
           font-size: 11px;
           color: $text-reversal;
           background-color: $primary-lighter;
-          @include radius-box($xs-radius);
+          border-radius: $xs-radius;
         }
 
         .author-info {

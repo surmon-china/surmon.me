@@ -109,7 +109,6 @@
         :disliked="identity.isDislikedComment(item.comment.id)"
         :has-child="!!item.children.length"
         :is-child="isChildList"
-        :localtion-city-ellipsis="isChildList"
         :is-reply="replyPid === item.comment.id"
         :hidden-avatar="hiddenAvatar"
         :hidden-ua="hiddenUa"
