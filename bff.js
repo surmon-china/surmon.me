@@ -106,7 +106,7 @@ const isNodeProd = process.env.NODE_ENV === NodeEnv.Production;
  */
 const BFF_TUNNEL_PREFIX = '/_tunnel';
 const BFF_PROXY_PREFIX = '/_proxy';
-const BFF_PROXY_ALLOWLIST = ['https://surmon.me'];
+const BFF_PROXY_ALLOWLIST_REGEXP = /^https:\/\/([a-z0-9-]+\.)*surmon\.me/;
 const getBFFServerPort = () => Number(process.env.PORT || 3000);
 const getOnlineApiURL = () => process.env.VITE_API_ONLINE_URL;
 const getLocalApiURL = () => process.env.VITE_API_LOCAL_URL;
@@ -1464,8 +1464,8 @@ const proxyer = () => {
         if (isNodeProd) {
             const referer = request.headers.referrer || request.headers.referer;
             const origin = request.headers.origin;
-            const isAllowedReferer = !referer || BFF_PROXY_ALLOWLIST.some((i) => referer.startsWith(i));
-            const isAllowedOrigin = !origin || BFF_PROXY_ALLOWLIST.some((i) => origin.startsWith(i));
+            const isAllowedReferer = !referer || BFF_PROXY_ALLOWLIST_REGEXP.test(referer);
+            const isAllowedOrigin = !origin || BFF_PROXY_ALLOWLIST_REGEXP.test(origin);
             if (!isAllowedReferer || !isAllowedOrigin) {
                 response.status(FORBIDDEN).send('Proxy error: forbidden');
                 return;
