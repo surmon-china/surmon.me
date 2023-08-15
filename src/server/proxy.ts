@@ -7,7 +7,7 @@
 import httpProxy from 'http-proxy'
 import { RequestHandler } from 'express'
 import { FORBIDDEN, BAD_REQUEST, INVALID_ERROR } from '@/constants/http-code'
-import { BFF_PROXY_PREFIX, BFF_PROXY_ALLOWLIST } from '@/config/bff.config'
+import { BFF_PROXY_PREFIX, BFF_PROXY_ALLOWLIST_REGEXP } from '@/config/bff.config'
 import { isNodeProd } from '@/server/environment'
 
 export const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/*`
@@ -73,8 +73,8 @@ export const proxyer = (): RequestHandler => {
     if (isNodeProd) {
       const referer = (request.headers.referrer as string) || request.headers.referer
       const origin = request.headers.origin
-      const isAllowedReferer = !referer || BFF_PROXY_ALLOWLIST.some((i) => referer.startsWith(i))
-      const isAllowedOrigin = !origin || BFF_PROXY_ALLOWLIST.some((i) => origin.startsWith(i))
+      const isAllowedReferer = !referer || BFF_PROXY_ALLOWLIST_REGEXP.test(referer)
+      const isAllowedOrigin = !origin || BFF_PROXY_ALLOWLIST_REGEXP.test(origin)
       if (!isAllowedReferer || !isAllowedOrigin) {
         response.status(FORBIDDEN).send('Proxy error: forbidden')
         return
