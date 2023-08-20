@@ -6,7 +6,7 @@
  */
 
 import { computed, ComputedGetter } from 'vue'
-import { UseSeoMetaInput } from 'unhead'
+import { UseSeoMetaInput } from '@unhead/schema'
 import { Head, useHead as useUnhead, useSeoMeta as useUnheadSeoMeta } from '@unhead/vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { getPageURL } from '/@/transforms/url'
@@ -26,7 +26,7 @@ export const useHead = (source: Head | ComputedGetter<Head>) => {
 const DEFAULT_TITLER = (title: string) => `${title} | ${META.title}`
 const DEFAULT_OG_IMAGE = getPageURL('/images/og-social-card.jpg')
 
-export interface SeoMetaObject extends UseSeoMetaInput {
+export interface SeoMetaObject extends Omit<UseSeoMetaInput, 'title'> {
   title?: string
   pageTitle?: string
   description?: string

@@ -29,9 +29,9 @@
       <div v-if="isOpenedAside" class="close-mask" @click="closeAside" />
       <header-view :opened="isOpenedAside" @close="closeAside" @open="openAside" />
       <main class="main-container">
-        <router-view name="mobile" v-slot="{ Component, route }">
-          <div class="route-view" v-if="route.meta.responsive">
-            <component :is="Component" :key="route.name" />
+        <router-view name="mobile" v-slot="{ Component, route: r }">
+          <div class="route-view" v-if="r.meta.responsive">
+            <component :is="Component" :key="r.name" />
           </div>
           <div class="fallback" v-else>
             <i class="iconfont icon-desktop"></i>
