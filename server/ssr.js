@@ -365,7 +365,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.17.4";
+const APP_VERSION = "4.18.1";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -1129,12 +1129,6 @@ const markdownToHTML = (markdown, options) => {
   };
   return marked.parse(markdown, { renderer: createRenderer(renderOptions) });
 };
-const getImgProxyPath = (path, options) => {
-  const resize = options.resize ? `resize:fill:${options.width || ""}:${options.height || ""}:0` : "";
-  const watermark = options.watermark ? `/${options.watermark}` : "";
-  const format = options.format ? `@${options.format}` : "";
-  return `/${resize}${watermark}/plain${normalizePath(path)}${format}`.replaceAll("//", "/");
-};
 const delayer = (ms = DEFAULT_DELAY) => {
   const start = (/* @__PURE__ */ new Date()).getTime();
   return (action) => {
@@ -1249,13 +1243,7 @@ const useArticleDetailStore = defineStore("articleDetail", () => {
     }
     const cdnDomain = useCDNDomain();
     const path = getStaticPath(src);
-    return {
-      src: getStaticURL(cdnDomain, path),
-      sources: [
-        { type: "image/avif", srcset: getImgProxyURL(cdnDomain, getImgProxyPath(path, { format: "avif" })) },
-        { type: "image/webp", srcset: getImgProxyURL(cdnDomain, getImgProxyPath(path, { format: "webp" })) }
-      ]
-    };
+    return getStaticURL(cdnDomain, path);
   };
   const defaultContent = computed(() => {
     if (!article.value) {
@@ -2361,6 +2349,12 @@ const getPageRoute = (routeName) => {
 };
 const isArticleDetail = (name) => name === RouteName.Article;
 const isSearchFlow = (name) => name === RouteName.SearchFlow;
+const getImgProxyPath = (path, options) => {
+  const resize = options.resize ? `resize:fill:${options.width || ""}:${options.height || ""}:0` : "";
+  const watermark = options.watermark ? `/${options.watermark}` : "";
+  const format = options.format ? `@${options.format}` : "";
+  return `/${resize}${watermark}/plain${normalizePath(path)}${format}`.replaceAll("//", "/");
+};
 const isOriginalType = (originState) => {
   return isNull(originState) || isUndefined(null) || originState === OriginState.Original;
 };
@@ -9267,7 +9261,7 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
       );
     };
     onMounted(() => {
-      igTimelineStore.fetch().finally(() => {
+      igTimelineStore.fetch().catch(() => null).finally(() => {
         fetching.value = false;
       });
     });
@@ -9283,9 +9277,9 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
       }, _attrs), {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<ul class="list" data-v-3acbed62${_scopeId}><!--[-->`);
+            _push2(`<ul class="list" data-v-f5dc4ac0${_scopeId}><!--[-->`);
             ssrRenderList(24, (i) => {
-              _push2(`<li class="item" data-v-3acbed62${_scopeId}>`);
+              _push2(`<li class="item" data-v-f5dc4ac0${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_base, null, null, _parent2, _scopeId));
               _push2(`</li>`);
             });
@@ -9307,9 +9301,9 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
         }),
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<ul class="list" data-v-3acbed62${_scopeId}><!--[-->`);
+            _push2(`<ul class="list" data-v-f5dc4ac0${_scopeId}><!--[-->`);
             ssrRenderList(igMedias.value, (media, index) => {
-              _push2(`<li class="item" data-v-3acbed62${_scopeId}>`);
+              _push2(`<li class="item" data-v-f5dc4ac0${_scopeId}>`);
               _push2(ssrRenderComponent(_component_ulink, {
                 class: "link",
                 href: media.permalink,
@@ -9322,19 +9316,19 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
                       alt: media.caption,
                       src: getMediaThumbnail(media)
                     }, null, _parent3, _scopeId2));
-                    _push3(`<div class="type-icon" data-v-3acbed62${_scopeId2}>`);
+                    _push3(`<div class="type-icon" data-v-f5dc4ac0${_scopeId2}>`);
                     if (unref(isVideoMediaIns)(media)) {
-                      _push3(`<i class="iconfont icon-video" data-v-3acbed62${_scopeId2}></i>`);
+                      _push3(`<i class="iconfont icon-video" data-v-f5dc4ac0${_scopeId2}></i>`);
                     } else if (unref(isAlbumMediaIns)(media)) {
-                      _push3(`<i class="iconfont icon-album" data-v-3acbed62${_scopeId2}></i>`);
+                      _push3(`<i class="iconfont icon-album" data-v-f5dc4ac0${_scopeId2}></i>`);
                     } else {
-                      _push3(`<i class="iconfont icon-camera" data-v-3acbed62${_scopeId2}></i>`);
+                      _push3(`<i class="iconfont icon-camera" data-v-f5dc4ac0${_scopeId2}></i>`);
                     }
-                    _push3(`</div><div class="mask" data-v-3acbed62${_scopeId2}>`);
+                    _push3(`</div><div class="mask" data-v-f5dc4ac0${_scopeId2}>`);
                     if (unref(isVideoMediaIns)(media)) {
-                      _push3(`<i class="iconfont icon-music-play" data-v-3acbed62${_scopeId2}></i>`);
+                      _push3(`<i class="iconfont icon-music-play" data-v-f5dc4ac0${_scopeId2}></i>`);
                     } else {
-                      _push3(`<i class="iconfont icon-eye" data-v-3acbed62${_scopeId2}></i>`);
+                      _push3(`<i class="iconfont icon-eye" data-v-f5dc4ac0${_scopeId2}></i>`);
                     }
                     _push3(`</div>`);
                   } else {
@@ -9372,7 +9366,7 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
               }, _parent2, _scopeId));
               _push2(`</li>`);
             });
-            _push2(`<!--]--><li class="item" data-v-3acbed62${_scopeId}>`);
+            _push2(`<!--]--><li class="item" data-v-f5dc4ac0${_scopeId}>`);
             _push2(ssrRenderComponent(_component_ulink, {
               class: "link more",
               href: unref(VALUABLE_LINKS).INSTAGRAM
@@ -9454,30 +9448,33 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const instagram_vue_vue_type_style_index_0_scoped_3acbed62_lang = "";
+const instagram_vue_vue_type_style_index_0_scoped_f5dc4ac0_lang = "";
 const _sfc_setup$12 = _sfc_main$12.setup;
 _sfc_main$12.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/media/instagram.vue");
   return _sfc_setup$12 ? _sfc_setup$12(props, ctx) : void 0;
 };
-const InstagramMedia = /* @__PURE__ */ _export_sfc(_sfc_main$12, [["__scopeId", "data-v-3acbed62"]]);
+const InstagramMedia = /* @__PURE__ */ _export_sfc(_sfc_main$12, [["__scopeId", "data-v-f5dc4ac0"]]);
 const _sfc_main$11 = /* @__PURE__ */ defineComponent({
   __name: "youtube",
   __ssrInlineRender: true,
   setup(__props) {
     const youtubeStore = useYouTubePlayListStore();
-    onMounted(() => youtubeStore.fetch());
+    onMounted(() => youtubeStore.fetch().catch(() => []));
     return (_ctx, _push, _parent, _attrs) => {
+      const _component_empty = resolveComponent("empty");
       const _component_ulink = resolveComponent("ulink");
       const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "youtube" }, _attrs))} data-v-7d39f407>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "youtube" }, _attrs))} data-v-e23b95e2>`);
       if (unref(youtubeStore).fetching) {
-        _push(`<span data-v-7d39f407></span>`);
+        _push(`<span data-v-e23b95e2></span>`);
+      } else if (!unref(youtubeStore).data.length) {
+        _push(ssrRenderComponent(_component_empty, null, null, _parent));
       } else {
-        _push(`<ul class="list" data-v-7d39f407><!--[-->`);
+        _push(`<ul class="list" data-v-e23b95e2><!--[-->`);
         ssrRenderList(unref(youtubeStore).data.slice(0, 5), (item, index) => {
-          _push(`<li class="item"${ssrRenderAttr("title", item.snippet.title)} data-v-7d39f407>`);
+          _push(`<li class="item"${ssrRenderAttr("title", item.snippet.title)} data-v-e23b95e2>`);
           _push(ssrRenderComponent(_component_ulink, {
             class: "link",
             href: unref(getYouTubePlaylistURL)(item.id)
@@ -9489,7 +9486,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
                   proxy: "",
                   src: item.snippet.thumbnails.medium.url
                 }, null, _parent2, _scopeId));
-                _push2(`<span class="count" data-v-7d39f407${_scopeId}><i class="iconfont icon-video" data-v-7d39f407${_scopeId}></i><span class="number" data-v-7d39f407${_scopeId}>${ssrInterpolate(item.contentDetails.itemCount)}</span></span><p class="title" data-v-7d39f407${_scopeId}><i class="iconfont icon-playlist" data-v-7d39f407${_scopeId}></i><span class="text" data-v-7d39f407${_scopeId}>${ssrInterpolate(item.snippet.title)}</span></p><div class="mask" data-v-7d39f407${_scopeId}><i class="iconfont icon-eye" data-v-7d39f407${_scopeId}></i></div>`);
+                _push2(`<span class="count" data-v-e23b95e2${_scopeId}><i class="iconfont icon-video" data-v-e23b95e2${_scopeId}></i><span class="number" data-v-e23b95e2${_scopeId}>${ssrInterpolate(item.contentDetails.itemCount)}</span></span><p class="title" data-v-e23b95e2${_scopeId}><i class="iconfont icon-playlist" data-v-e23b95e2${_scopeId}></i><span class="text" data-v-e23b95e2${_scopeId}>${ssrInterpolate(item.snippet.title)}</span></p><div class="mask" data-v-e23b95e2${_scopeId}><i class="iconfont icon-eye" data-v-e23b95e2${_scopeId}></i></div>`);
               } else {
                 return [
                   createVNode(_component_uimage, {
@@ -9515,14 +9512,14 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
           }, _parent));
           _push(`</li>`);
         });
-        _push(`<!--]--><li class="item" data-v-7d39f407>`);
+        _push(`<!--]--><li class="item" data-v-e23b95e2>`);
         _push(ssrRenderComponent(_component_ulink, {
           class: "link more",
           href: unref(VALUABLE_LINKS).YOUTUBE_CHANNEL
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<i class="iconfont icon-youtube" data-v-7d39f407${_scopeId}></i><span class="username" data-v-7d39f407${_scopeId}>${ssrInterpolate(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID)}</span><span class="text" data-v-7d39f407${_scopeId}>•••</span>`);
+              _push2(`<i class="iconfont icon-youtube" data-v-e23b95e2${_scopeId}></i><span class="username" data-v-e23b95e2${_scopeId}>${ssrInterpolate(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID)}</span><span class="text" data-v-e23b95e2${_scopeId}>•••</span>`);
             } else {
               return [
                 createVNode("i", { class: "iconfont icon-youtube" }),
@@ -9539,14 +9536,14 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const youtube_vue_vue_type_style_index_0_scoped_7d39f407_lang = "";
+const youtube_vue_vue_type_style_index_0_scoped_e23b95e2_lang = "";
 const _sfc_setup$11 = _sfc_main$11.setup;
 _sfc_main$11.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/media/youtube.vue");
   return _sfc_setup$11 ? _sfc_setup$11(props, ctx) : void 0;
 };
-const YoutubeMedia = /* @__PURE__ */ _export_sfc(_sfc_main$11, [["__scopeId", "data-v-7d39f407"]]);
+const YoutubeMedia = /* @__PURE__ */ _export_sfc(_sfc_main$11, [["__scopeId", "data-v-e23b95e2"]]);
 const StatisticCount = defineComponent({
   name: "StatisticCount",
   props: {
@@ -13489,8 +13486,7 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
         description
       };
     });
-    useUniversalFetch(() => instagramTimeline.fetch().catch(() => {
-    }));
+    useUniversalFetch(() => instagramTimeline.fetch());
     return (_ctx, _push, _parent, _attrs) => {
       const _component_webfont = resolveComponent("webfont");
       const _component_i18n = resolveComponent("i18n");
@@ -13499,7 +13495,7 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
       const _component_placeholder = resolveComponent("placeholder");
       const _component_empty = resolveComponent("empty");
       const _component_skeleton_base = resolveComponent("skeleton-base");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "photography-page" }, _attrs))} data-v-d30c8ab5>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "photography-page" }, _attrs))} data-v-5ef3b08f>`);
       _push(ssrRenderComponent(PageBanner, {
         class: "page-banner",
         video: "/videos/clips/ocean-4.mp4",
@@ -13545,7 +13541,7 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
             _push2(ssrRenderComponent(_component_i18n, null, {
               zh: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<span data-v-d30c8ab5${_scopeId2}>在我的 `);
+                  _push3(`<span data-v-5ef3b08f${_scopeId2}>在我的 `);
                   _push3(ssrRenderComponent(_component_ulink, {
                     href: unref(VALUABLE_LINKS).INSTAGRAM,
                     class: "link"
@@ -13700,9 +13696,9 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
               }),
               loading: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="module-loading" data-v-d30c8ab5${_scopeId2}><!--[-->`);
+                  _push3(`<div class="module-loading" data-v-5ef3b08f${_scopeId2}><!--[-->`);
                   ssrRenderList(4 * 2, (item) => {
-                    _push3(`<div class="item" data-v-d30c8ab5${_scopeId2}>`);
+                    _push3(`<div class="item" data-v-5ef3b08f${_scopeId2}>`);
                     _push3(ssrRenderComponent(_component_skeleton_base, null, null, _parent3, _scopeId2));
                     _push3(`</div>`);
                   });
@@ -13727,7 +13723,7 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
               }),
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div data-v-d30c8ab5${_scopeId2}>`);
+                  _push3(`<div data-v-5ef3b08f${_scopeId2}>`);
                   _push3(ssrRenderComponent(InstagramGrid, { medias: allMedias.value }, null, _parent3, _scopeId2));
                   if (!unref(instagramTimeline).fetching && !finished.value) {
                     _push3(ssrRenderComponent(InstagramLoadmore, {
@@ -13811,14 +13807,14 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_d30c8ab5_lang = "";
+const index_vue_vue_type_style_index_0_scoped_5ef3b08f_lang = "";
 const _sfc_setup$C = _sfc_main$C.setup;
 _sfc_main$C.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/index.vue");
   return _sfc_setup$C ? _sfc_setup$C(props, ctx) : void 0;
 };
-const PhotographyPage = /* @__PURE__ */ _export_sfc(_sfc_main$C, [["__scopeId", "data-v-d30c8ab5"]]);
+const PhotographyPage = /* @__PURE__ */ _export_sfc(_sfc_main$C, [["__scopeId", "data-v-5ef3b08f"]]);
 var CategorySlug = /* @__PURE__ */ ((CategorySlug2) => {
   CategorySlug2["Code"] = "code";
   CategorySlug2["Insight"] = "insight";
@@ -17832,11 +17828,11 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_router_view = resolveComponent("router-view");
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "mobile-main" }, _attrs))} data-v-79e58447><div class="${ssrRenderClass([{ opened: isOpenedAside.value }, "asider"])}" data-v-79e58447>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "mobile-main" }, _attrs))} data-v-2e01474f><div class="${ssrRenderClass([{ opened: isOpenedAside.value }, "asider"])}" data-v-2e01474f>`);
       _push(ssrRenderComponent(AsideView, { class: "aside" }, null, _parent));
-      _push(`</div><div class="${ssrRenderClass([{ opened: isOpenedAside.value }, "main"])}" data-v-79e58447>`);
+      _push(`</div><div class="${ssrRenderClass([{ opened: isOpenedAside.value }, "main"])}" data-v-2e01474f>`);
       if (isOpenedAside.value) {
-        _push(`<div class="close-mask" data-v-79e58447></div>`);
+        _push(`<div class="close-mask" data-v-2e01474f></div>`);
       } else {
         _push(`<!---->`);
       }
@@ -17845,32 +17841,32 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
         onClose: closeAside,
         onOpen: openAside
       }, null, _parent));
-      _push(`<main class="main-container" data-v-79e58447>`);
+      _push(`<main class="main-container" data-v-2e01474f>`);
       _push(ssrRenderComponent(_component_router_view, { name: "mobile" }, {
-        default: withCtx(({ Component, route: route2 }, _push2, _parent2, _scopeId) => {
+        default: withCtx(({ Component, route: r }, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            if (route2.meta.responsive) {
-              _push2(`<div class="route-view" data-v-79e58447${_scopeId}>`);
+            if (r.meta.responsive) {
+              _push2(`<div class="route-view" data-v-2e01474f${_scopeId}>`);
               ssrRenderVNode(_push2, createVNode(resolveDynamicComponent(Component), {
-                key: route2.name
+                key: r.name
               }, null), _parent2, _scopeId);
               _push2(`</div>`);
             } else {
-              _push2(`<div class="fallback" data-v-79e58447${_scopeId}><i class="iconfont icon-desktop" data-v-79e58447${_scopeId}></i><p class="text" data-v-79e58447${_scopeId}>`);
+              _push2(`<div class="fallback" data-v-2e01474f${_scopeId}><i class="iconfont icon-desktop" data-v-2e01474f${_scopeId}></i><p class="text" data-v-2e01474f${_scopeId}>`);
               _push2(ssrRenderComponent(_component_i18n, {
                 zh: "请在 PC 端访问以获得最佳体验",
                 en: "This page only support visit on PC"
               }, null, _parent2, _scopeId));
-              _push2(`</p><a class="link"${ssrRenderAttr("href", pageURL.value)} data-v-79e58447${_scopeId}>${ssrInterpolate(pageURL.value)}</a></div>`);
+              _push2(`</p><a class="link"${ssrRenderAttr("href", pageURL.value)} data-v-2e01474f${_scopeId}>${ssrInterpolate(pageURL.value)}</a></div>`);
             }
           } else {
             return [
-              route2.meta.responsive ? (openBlock(), createBlock("div", {
+              r.meta.responsive ? (openBlock(), createBlock("div", {
                 key: 0,
                 class: "route-view"
               }, [
                 (openBlock(), createBlock(resolveDynamicComponent(Component), {
-                  key: route2.name
+                  key: r.name
                 }))
               ])) : (openBlock(), createBlock("div", {
                 key: 1,
@@ -17899,14 +17895,14 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const main_vue_vue_type_style_index_0_scoped_79e58447_lang = "";
+const main_vue_vue_type_style_index_0_scoped_2e01474f_lang = "";
 const _sfc_setup$1 = _sfc_main$1.setup;
 _sfc_main$1.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/mobile/main.vue");
   return _sfc_setup$1 ? _sfc_setup$1(props, ctx) : void 0;
 };
-const MobileMain = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-79e58447"]]);
+const MobileMain = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-2e01474f"]]);
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
