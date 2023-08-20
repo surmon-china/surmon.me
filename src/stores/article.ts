@@ -13,8 +13,7 @@ import { Article } from '/@/interfaces/article'
 import { Pagination, PaginationList } from '/@/interfaces/common'
 import { getArticleContentHeadingElementId } from '/@/constants/anchor'
 import { markdownToHTML, MarkdownRenderOption } from '/@/transforms/markdown'
-import { getStaticURL, getStaticPath, getImgProxyURL, isOriginalStaticURL } from '/@/transforms/url'
-import { getImgProxyPath } from '/@/transforms/imgproxy'
+import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
 import { delayPromise } from '/@/utils/delayer'
 import { isClient } from '/@/app/environment'
 import { LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
@@ -139,13 +138,7 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
 
     const cdnDomain = useCDNDomain()
     const path = getStaticPath(src)
-    return {
-      src: getStaticURL(cdnDomain, path),
-      sources: [
-        { type: 'image/avif', srcset: getImgProxyURL(cdnDomain, getImgProxyPath(path, { format: 'avif' })) },
-        { type: 'image/webp', srcset: getImgProxyURL(cdnDomain, getImgProxyPath(path, { format: 'webp' })) }
-      ]
-    }
+    return getStaticURL(cdnDomain, path)
   }
 
   const defaultContent = computed(() => {
