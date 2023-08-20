@@ -22,9 +22,12 @@
   }
 
   onMounted(() => {
-    igTimelineStore.fetch().finally(() => {
-      fetching.value = false
-    })
+    igTimelineStore
+      .fetch()
+      .catch(() => null)
+      .finally(() => {
+        fetching.value = false
+      })
   })
 </script>
 

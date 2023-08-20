@@ -51,8 +51,7 @@
     }
   })
 
-  // Page errors are not considered even if the request fails
-  useUniversalFetch(() => instagramTimeline.fetch().catch(() => {}))
+  useUniversalFetch(() => instagramTimeline.fetch())
 </script>
 
 <template>

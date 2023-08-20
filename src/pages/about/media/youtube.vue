@@ -5,12 +5,13 @@
   import { IDENTITIES, VALUABLE_LINKS } from '/@/config/app.config'
 
   const youtubeStore = useYouTubePlayListStore()
-  onMounted(() => youtubeStore.fetch())
+  onMounted(() => youtubeStore.fetch().catch(() => []))
 </script>
 
 <template>
   <div class="youtube">
     <span v-if="youtubeStore.fetching"></span>
+    <empty v-else-if="!youtubeStore.data.length" />
     <ul v-else class="list">
       <li
         class="item"
