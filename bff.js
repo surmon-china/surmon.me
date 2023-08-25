@@ -106,7 +106,7 @@ const isNodeProd = process.env.NODE_ENV === NodeEnv.Production;
  */
 const BFF_TUNNEL_PREFIX = '/_tunnel';
 const BFF_PROXY_PREFIX = '/_proxy';
-const BFF_PROXY_ALLOWLIST_REGEXP = /^https:\/\/([a-z0-9-]+\.)*surmon\.me/;
+const BFF_PROXY_ALLOWLIST_REGEXP = /^https:\/\/([a-z0-9-]+\.)*surmon\.(me|cn)/;
 const getBFFServerPort = () => Number(process.env.PORT || 3000);
 const getOnlineApiURL = () => process.env.VITE_API_ONLINE_URL;
 const getLocalApiURL = () => process.env.VITE_API_LOCAL_URL;
