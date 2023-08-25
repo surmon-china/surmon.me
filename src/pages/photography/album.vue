@@ -58,7 +58,11 @@
         :key="index"
       ></span>
     </div>
-    <slot name="child" v-bind="{ activeIndex, activeMedia: mediaChildren[activeIndex] }"></slot>
+    <slot
+      name="child"
+      v-if="mediaChildren[activeIndex]"
+      v-bind="{ activeIndex, activeMedia: mediaChildren[activeIndex] }"
+    ></slot>
   </div>
 </template>
 
@@ -74,6 +78,7 @@
       bottom: 2rem;
       left: 50%;
       transform: translateX(-50%);
+      z-index: $z-index-normal + 1;
 
       .index {
         $size: 8px;
@@ -94,6 +99,7 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
+      z-index: $z-index-normal + 1;
       &.prev {
         left: $lg-gap;
       }

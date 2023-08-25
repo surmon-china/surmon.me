@@ -3,7 +3,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useCountry } from '/@/app/context'
   import { isCNCode } from '/@/transforms/region'
-  import { isVideoMediaIns, isAlbumMediaIns } from '/@/transforms/media'
+  import { isImageMediaIns, isVideoMediaIns, isAlbumMediaIns } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import { IDENTITIES } from '/@/config/app.config'
   import { getProxyURL } from '/@/transforms/url'
@@ -63,11 +63,18 @@
       <instagram-album v-else-if="isAlbumMediaIns(media)" class="album" :media="media" @load="mediaLoaded">
         <template #child="{ activeMedia }">
           <img
+            v-if="isImageMediaIns(activeMedia)"
             class="image"
             :src="getMediaUrl(activeMedia?.media_url)"
             :alt="activeMedia?.caption"
             loading="lazy"
             draggable="false"
+          />
+          <video
+            v-if="isVideoMediaIns(activeMedia)"
+            class="video"
+            autoplay
+            :src="getMediaUrl(activeMedia?.media_url)"
           />
         </template>
       </instagram-album>

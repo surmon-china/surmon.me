@@ -5,6 +5,10 @@
 
 import type { InstagramMediaItem } from '/@/server/getters/instagram'
 
+export const isImageMediaIns = (media: InstagramMediaItem) => {
+  return media.media_type === 'IMAGE'
+}
+
 export const isVideoMediaIns = (media: InstagramMediaItem) => {
   return media.media_type === 'VIDEO'
 }
