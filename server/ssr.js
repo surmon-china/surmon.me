@@ -365,7 +365,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.19.5";
+const APP_VERSION = "4.19.6";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -3320,7 +3320,7 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       const _component_skeleton_line = resolveComponent("skeleton-line");
       const _component_ulink = resolveComponent("ulink");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "carrousel" }, _attrs))} data-v-eddda157>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "carrousel" }, _attrs))} data-v-ca0db13e>`);
       _push(ssrRenderComponent(_component_placeholder, {
         data: slides.value.length,
         loading: _ctx.fetching
@@ -3364,13 +3364,13 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
         }),
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="article-skeleton" data-v-eddda157${_scopeId}><div class="title" data-v-eddda157${_scopeId}>`);
+            _push2(`<div class="article-skeleton" data-v-ca0db13e${_scopeId}><div class="title" data-v-ca0db13e${_scopeId}>`);
             _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
-            _push2(`</div><div class="content" data-v-eddda157${_scopeId}><div class="first" data-v-eddda157${_scopeId}>`);
+            _push2(`</div><div class="content" data-v-ca0db13e${_scopeId}><div class="first" data-v-ca0db13e${_scopeId}>`);
             _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
             _push2(`</div><!--[-->`);
             ssrRenderList(3, (index) => {
-              _push2(`<div class="line" data-v-eddda157${_scopeId}>`);
+              _push2(`<div class="line" data-v-ca0db13e${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_line, { class: "line-item" }, null, _parent2, _scopeId));
               _push2(`</div>`);
             });
@@ -3421,7 +3421,7 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
                     _push3(ssrRenderComponent(unref(SwiperSlide), { key: index }, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(`<div class="content" data-v-eddda157${_scopeId3}>`);
+                          _push4(`<div class="content" data-v-ca0db13e${_scopeId3}>`);
                           _push4(ssrRenderComponent(_component_ulink, {
                             class: "link",
                             href: slide.url,
@@ -3429,15 +3429,15 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`<picture class="picture" data-v-eddda157${_scopeId4}>`);
+                                _push5(`<picture class="picture" data-v-ca0db13e${_scopeId4}>`);
                                 if (unref(isOriginalStaticURL)(slide.image)) {
-                                  _push5(`<!--[--><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "avif"))} type="image/avif" data-v-eddda157${_scopeId4}><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "webp"))} type="image/webp" data-v-eddda157${_scopeId4}><!--]-->`);
+                                  _push5(`<!--[--><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "avif"))} type="image/avif" data-v-ca0db13e${_scopeId4}><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "webp"))} type="image/webp" data-v-ca0db13e${_scopeId4}><!--]-->`);
                                 } else {
                                   _push5(`<!---->`);
                                 }
-                                _push5(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("alt", slide.title)}${ssrRenderAttr("src", getPictureURL(slide.image))} data-v-eddda157${_scopeId4}></picture><div class="${ssrRenderClass([{ dark: unref(isDarkTheme) }, "title"])}"${ssrRenderAttr("title", slide.title)} data-v-eddda157${_scopeId4}><div class="background" data-v-eddda157${_scopeId4}></div><div class="prospect" data-v-eddda157${_scopeId4}><span class="text" data-v-eddda157${_scopeId4}>${ssrInterpolate(slide.title)}</span></div></div>`);
+                                _push5(`<img class="image" draggable="false"${ssrRenderAttr("alt", slide.title)}${ssrRenderAttr("src", getPictureURL(slide.image))} data-v-ca0db13e${_scopeId4}></picture><div class="${ssrRenderClass([{ dark: unref(isDarkTheme) }, "title"])}"${ssrRenderAttr("title", slide.title)} data-v-ca0db13e${_scopeId4}><div class="background" data-v-ca0db13e${_scopeId4}></div><div class="prospect" data-v-ca0db13e${_scopeId4}><span class="text" data-v-ca0db13e${_scopeId4}>${ssrInterpolate(slide.title)}</span></div></div>`);
                                 if (slide.ad) {
-                                  _push5(`<span class="ad-symbol" data-v-eddda157${_scopeId4}>`);
+                                  _push5(`<span class="ad-symbol" data-v-ca0db13e${_scopeId4}>`);
                                   _push5(ssrRenderComponent(_component_i18n, {
                                     k: unref(LanguageKey).AD
                                   }, null, _parent5, _scopeId4));
@@ -3460,7 +3460,6 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
                                     ], 64)) : createCommentVNode("", true),
                                     createVNode("img", {
                                       class: "image",
-                                      loading: "lazy",
                                       draggable: "false",
                                       alt: slide.title,
                                       src: getPictureURL(slide.image)
@@ -3511,7 +3510,6 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
                                     ], 64)) : createCommentVNode("", true),
                                     createVNode("img", {
                                       class: "image",
-                                      loading: "lazy",
                                       draggable: "false",
                                       alt: slide.title,
                                       src: getPictureURL(slide.image)
@@ -3570,7 +3568,6 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
                                   ], 64)) : createCommentVNode("", true),
                                   createVNode("img", {
                                     class: "image",
-                                    loading: "lazy",
                                     draggable: "false",
                                     alt: slide.title,
                                     src: getPictureURL(slide.image)
@@ -3643,7 +3640,6 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
                                 ], 64)) : createCommentVNode("", true),
                                 createVNode("img", {
                                   class: "image",
-                                  loading: "lazy",
                                   draggable: "false",
                                   alt: slide.title,
                                   src: getPictureURL(slide.image)
@@ -3686,14 +3682,14 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const carrousel_vue_vue_type_style_index_0_scoped_eddda157_lang = "";
+const carrousel_vue_vue_type_style_index_0_scoped_ca0db13e_lang = "";
 const _sfc_setup$1B = _sfc_main$1B.setup;
 _sfc_main$1B.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/index/carrousel.vue");
   return _sfc_setup$1B ? _sfc_setup$1B(props, ctx) : void 0;
 };
-const Carrousel = /* @__PURE__ */ _export_sfc(_sfc_main$1B, [["__scopeId", "data-v-eddda157"]]);
+const Carrousel = /* @__PURE__ */ _export_sfc(_sfc_main$1B, [["__scopeId", "data-v-ca0db13e"]]);
 var GAEventCategories = /* @__PURE__ */ ((GAEventCategories2) => {
   GAEventCategories2["Comment"] = "comment";
   GAEventCategories2["Share"] = "share";
