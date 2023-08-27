@@ -365,7 +365,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.18.2";
+const APP_VERSION = "4.19.0";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -10341,6 +10341,28 @@ const geoJSONFeatureToLayer = (layerId, source) => {
 const newMapboxPopup = (mapboxgl, coordinates, html) => {
   return new mapboxgl.Popup({ closeButton: false, offset: [0, -16], maxWidth: `280px` }).setLngLat(coordinates).setHTML(html);
 };
+const GOOGLE_MAP_LINKS = [
+  {
+    zh: "我的美食地图",
+    en: `My Foodie Map`,
+    url: "https://goo.gl/maps/fzHHMCjuSbbJgBVt9"
+  },
+  {
+    zh: "我的地图评价",
+    en: "My map reviews",
+    url: "https://google.com/maps/contrib/101107919754452588990/reviews"
+  },
+  {
+    zh: "我去过的地方",
+    en: `Places I've been to`,
+    url: "https://goo.gl/maps/kLVRWTMhZbbY4DNa7"
+  },
+  {
+    zh: "我想去的地方",
+    en: `Places I want to go`,
+    url: "https://goo.gl/maps/SpB4JJm9HYUiqjtc6"
+  }
+];
 const useAdminAvatar = (avatar) => {
   return avatar || getAssetURL(useCDNDomain(), "/images/anonymous.png");
 };
@@ -10649,7 +10671,8 @@ const _sfc_main$T = /* @__PURE__ */ defineComponent({
       const _component_client_only = resolveComponent("client-only");
       const _component_popup = resolveComponent("popup");
       const _component_ulink = resolveComponent("ulink");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "footprint-map" }, _attrs))} data-v-755cf9ee>`);
+      const _component_i18n = resolveComponent("i18n");
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "footprint-map" }, _attrs))} data-v-286d9d8f>`);
       _push(ssrRenderComponent(_component_client_only, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -10708,20 +10731,20 @@ const _sfc_main$T = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="mapbox-wrapper"${ssrRenderAttr("placeholder", unref(isZhLang) ? unref(i18ns).footprint.zh : unref(i18ns).footprint.en)} data-v-755cf9ee>`);
+      _push(`<div class="mapbox-wrapper"${ssrRenderAttr("placeholder", unref(isZhLang) ? unref(i18ns).footprint.zh : unref(i18ns).footprint.en)} data-v-286d9d8f>`);
       _push(ssrRenderComponent(Mapbox, {
         class: "mapbox",
         "gm-geo-json": gmGeoJson.value,
         onReady: handleMapboxReady
       }, null, _parent));
-      _push(`<div class="toolbar" data-v-755cf9ee>`);
+      _push(`<div class="toolbar" data-v-286d9d8f>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "button",
         href: unref(VALUABLE_LINKS).GOOGLE_MY_MAP
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-google-maps" data-v-755cf9ee${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-google-maps" data-v-286d9d8f${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-google-maps" })
@@ -10730,13 +10753,23 @@ const _sfc_main$T = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<button class="button" data-v-755cf9ee><i class="iconfont icon-fullscreen" data-v-755cf9ee></i></button></div></div><div class="legends" data-v-755cf9ee><div class="now" data-v-755cf9ee><i class="iconfont icon-location" data-v-755cf9ee></i><span class="text" data-v-755cf9ee>${ssrInterpolate(unref(isZhLang) ? unref(GEO_INFO).zh_title : unref(GEO_INFO).en_title)}</span></div>`);
+      _push(`<button class="button" data-v-286d9d8f><i class="iconfont icon-fullscreen" data-v-286d9d8f></i></button></div></div><div class="legends" data-v-286d9d8f><div class="now" data-v-286d9d8f><i class="iconfont icon-location" data-v-286d9d8f></i><span class="text" data-v-286d9d8f>${ssrInterpolate(unref(isZhLang) ? unref(GEO_INFO).zh_title : unref(GEO_INFO).en_title)}</span></div>`);
       if (unref(gmStore).data) {
-        _push(`<ul class="folders" data-v-755cf9ee><!--[-->`);
-        ssrRenderList(gmFolders.value.slice(0, 4), (folder, index) => {
-          _push(`<li class="item" data-v-755cf9ee><i class="iconfont icon-route" data-v-755cf9ee></i><span class="text" data-v-755cf9ee>${ssrInterpolate(folder.name)}</span><span class="count" data-v-755cf9ee>(${ssrInterpolate(folder.placemarks.length)})</span></li>`);
+        _push(`<ul class="folders" data-v-286d9d8f><li class="item" data-v-286d9d8f><i class="iconfont icon-route" data-v-286d9d8f></i><span class="text" data-v-286d9d8f>`);
+        _push(ssrRenderComponent(_component_i18n, {
+          zh: "我的旅行足迹",
+          en: "My footprints"
+        }, null, _parent));
+        _push(`</span></li><!--[-->`);
+        ssrRenderList(unref(GOOGLE_MAP_LINKS), (link, index) => {
+          _push(`<li class="item" data-v-286d9d8f><i class="iconfont icon-google-maps" data-v-286d9d8f></i><span class="text" data-v-286d9d8f>`);
+          _push(ssrRenderComponent(_component_i18n, {
+            zh: link.zh,
+            en: link.en
+          }, null, _parent));
+          _push(`<i class="new-window-icon iconfont icon-new-window-s" data-v-286d9d8f></i></span></li>`);
         });
-        _push(`<!--]--><li class="item" data-v-755cf9ee><i class="iconfont icon-route" data-v-755cf9ee></i><span class="text" data-v-755cf9ee>•••</span></li></ul>`);
+        _push(`<!--]--></ul>`);
       } else {
         _push(`<!---->`);
       }
@@ -10744,14 +10777,14 @@ const _sfc_main$T = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_755cf9ee_lang = "";
+const index_vue_vue_type_style_index_0_scoped_286d9d8f_lang = "";
 const _sfc_setup$T = _sfc_main$T.setup;
 _sfc_main$T.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/footprint/index.vue");
   return _sfc_setup$T ? _sfc_setup$T(props, ctx) : void 0;
 };
-const FootprintMap = /* @__PURE__ */ _export_sfc(_sfc_main$T, [["__scopeId", "data-v-755cf9ee"]]);
+const FootprintMap = /* @__PURE__ */ _export_sfc(_sfc_main$T, [["__scopeId", "data-v-286d9d8f"]]);
 const _sfc_main$S = /* @__PURE__ */ defineComponent({
   __name: "desktop",
   __ssrInlineRender: true,
