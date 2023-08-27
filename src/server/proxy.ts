@@ -6,9 +6,10 @@
 
 import httpProxy from 'http-proxy'
 import { RequestHandler } from 'express'
+import { isNodeProd } from '@/server/environment'
 import { FORBIDDEN, BAD_REQUEST, INVALID_ERROR } from '@/constants/http-code'
 import { BFF_PROXY_PREFIX, BFF_PROXY_ALLOWLIST_REGEXP } from '@/config/bff.config'
-import { isNodeProd } from '@/server/environment'
+import { META } from '@/config/app.config'
 
 export const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/*`
 
@@ -60,14 +61,22 @@ export const proxyer = (): RequestHandler => {
 
   return (request, response) => {
     const targetURL = atob(request.params['0'])
-    response.setHeader('x-original-url', targetURL)
+
+    try {
+      response.setHeader('x-original-url', targetURL)
+    } catch (_) {
+      return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL "${targetURL}"`)
+    }
 
     let parsedURL: URL | null = null
     try {
       parsedURL = new URL(targetURL)
     } catch (_) {
-      response.status(BAD_REQUEST).send('Proxy error: invalid url')
-      return
+      return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL`)
+    }
+
+    if (parsedURL.hostname.endsWith(META.domain)) {
+      return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL`)
     }
 
     if (isNodeProd) {
@@ -76,8 +85,7 @@ export const proxyer = (): RequestHandler => {
       const isAllowedReferer = !referer || BFF_PROXY_ALLOWLIST_REGEXP.test(referer)
       const isAllowedOrigin = !origin || BFF_PROXY_ALLOWLIST_REGEXP.test(origin)
       if (!isAllowedReferer || !isAllowedOrigin) {
-        response.status(FORBIDDEN).send('Proxy error: forbidden')
-        return
+        return response.status(FORBIDDEN).send('Proxy error: forbidden')
       }
     }
 
