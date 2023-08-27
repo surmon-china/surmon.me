@@ -1410,6 +1410,7 @@ const external_http_proxy_namespaceObject = external_http_proxy_x({ ["default"]:
 
 
 
+
 const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/*`;
 const proxyer = () => {
     // https://github.com/http-party/node-http-proxy
@@ -1452,14 +1453,21 @@ const proxyer = () => {
     });
     return (request, response) => {
         const targetURL = atob(request.params['0']);
-        response.setHeader('x-original-url', targetURL);
+        try {
+            response.setHeader('x-original-url', targetURL);
+        }
+        catch (_) {
+            return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL "${targetURL}"`);
+        }
         let parsedURL = null;
         try {
             parsedURL = new URL(targetURL);
         }
         catch (_) {
-            response.status(BAD_REQUEST).send('Proxy error: invalid url');
-            return;
+            return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL`);
+        }
+        if (parsedURL.hostname.endsWith(META.domain)) {
+            return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL`);
         }
         if (isNodeProd) {
             const referer = request.headers.referrer || request.headers.referer;
@@ -1467,8 +1475,7 @@ const proxyer = () => {
             const isAllowedReferer = !referer || BFF_PROXY_ALLOWLIST_REGEXP.test(referer);
             const isAllowedOrigin = !origin || BFF_PROXY_ALLOWLIST_REGEXP.test(origin);
             if (!isAllowedReferer || !isAllowedOrigin) {
-                response.status(FORBIDDEN).send('Proxy error: forbidden');
-                return;
+                return response.status(FORBIDDEN).send('Proxy error: forbidden');
             }
         }
         const headers = {};
