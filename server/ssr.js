@@ -365,7 +365,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.19.1";
+const APP_VERSION = "4.19.2";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -4501,7 +4501,7 @@ const _sfc_main$1x = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
-    const { i18n: _i18n, seoMeta, isZhLang } = useEnhancer();
+    const { i18n: _i18n, seoMeta, cdnDomain, isZhLang } = useEnhancer();
     const { articleList: articleListStore, category: categoryStore } = useStores();
     const currentCategory = computed(() => {
       return categoryStore.data.find((category) => category.slug === props.categorySlug);
@@ -4510,13 +4510,18 @@ const _sfc_main$1x = /* @__PURE__ */ defineComponent({
       var _a;
       return getExtendValue(((_a = currentCategory.value) == null ? void 0 : _a.extends) || [], "icon") || "icon-category";
     });
-    const currentCategoryImage = computed(() => {
-      var _a;
-      return getExtendValue(((_a = currentCategory.value) == null ? void 0 : _a.extends) || [], "background");
-    });
     const currentCategoryColor = computed(() => {
       var _a;
       return getExtendValue(((_a = currentCategory.value) == null ? void 0 : _a.extends) || [], "bgcolor");
+    });
+    const currentCategoryImage = computed(() => {
+      var _a;
+      const value = getExtendValue(((_a = currentCategory.value) == null ? void 0 : _a.extends) || [], "background");
+      if (isOriginalStaticURL(value)) {
+        return getStaticURL(cdnDomain, getStaticPath(value));
+      } else {
+        return value;
+      }
     });
     const loadmoreArticles = async () => {
       await articleListStore.fetch({
@@ -4550,7 +4555,7 @@ const _sfc_main$1x = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
       const _component_divider = resolveComponent("divider");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "category-flow-page" }, _attrs))} data-v-694c54f7>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "category-flow-page" }, _attrs))} data-v-50f7f3d3>`);
       _push(ssrRenderComponent(ArticleListHeader, {
         "background-color": currentCategoryColor.value,
         "background-image": currentCategoryImage.value,
@@ -4562,12 +4567,12 @@ const _sfc_main$1x = /* @__PURE__ */ defineComponent({
               _push2(ssrRenderComponent(_component_i18n, null, {
                 zh: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span data-v-694c54f7${_scopeId2}>${ssrInterpolate(currentCategory.value.name)}</span>`);
+                    _push3(`<span data-v-50f7f3d3${_scopeId2}>${ssrInterpolate(currentCategory.value.name)}</span>`);
                     _push3(ssrRenderComponent(_component_divider, {
                       class: "divider",
                       type: "vertical"
                     }, null, _parent3, _scopeId2));
-                    _push3(`<span data-v-694c54f7${_scopeId2}>${ssrInterpolate(currentCategory.value.description || "...")}</span>`);
+                    _push3(`<span data-v-50f7f3d3${_scopeId2}>${ssrInterpolate(currentCategory.value.description || "...")}</span>`);
                   } else {
                     return [
                       createVNode("span", null, toDisplayString(currentCategory.value.name), 1),
@@ -4581,12 +4586,12 @@ const _sfc_main$1x = /* @__PURE__ */ defineComponent({
                 }),
                 en: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span data-v-694c54f7${_scopeId2}>Category</span>`);
+                    _push3(`<span data-v-50f7f3d3${_scopeId2}>Category</span>`);
                     _push3(ssrRenderComponent(_component_divider, {
                       class: "divider",
                       type: "vertical"
                     }, null, _parent3, _scopeId2));
-                    _push3(`<span data-v-694c54f7${_scopeId2}>${ssrInterpolate(unref(firstUpperCase)(currentCategory.value.slug))}</span>`);
+                    _push3(`<span data-v-50f7f3d3${_scopeId2}>${ssrInterpolate(unref(firstUpperCase)(currentCategory.value.slug))}</span>`);
                   } else {
                     return [
                       createVNode("span", null, "Category"),
@@ -4639,14 +4644,14 @@ const _sfc_main$1x = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const category_vue_vue_type_style_index_0_scoped_694c54f7_lang = "";
+const category_vue_vue_type_style_index_0_scoped_50f7f3d3_lang = "";
 const _sfc_setup$1x = _sfc_main$1x.setup;
 _sfc_main$1x.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/category.vue");
   return _sfc_setup$1x ? _sfc_setup$1x(props, ctx) : void 0;
 };
-const CategoryFlowPage = /* @__PURE__ */ _export_sfc(_sfc_main$1x, [["__scopeId", "data-v-694c54f7"]]);
+const CategoryFlowPage = /* @__PURE__ */ _export_sfc(_sfc_main$1x, [["__scopeId", "data-v-50f7f3d3"]]);
 const _sfc_main$1w = /* @__PURE__ */ defineComponent({
   __name: "tag",
   __ssrInlineRender: true,
@@ -4655,7 +4660,7 @@ const _sfc_main$1w = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
-    const { seoMeta, isZhLang } = useEnhancer();
+    const { seoMeta, cdnDomain, isZhLang } = useEnhancer();
     const articleListStore = useArticleListStore();
     const tagStore = useTagStore();
     const currentTag = computed(() => tagStore.data.find((tag) => tag.slug === props.tagSlug));
@@ -4663,13 +4668,18 @@ const _sfc_main$1w = /* @__PURE__ */ defineComponent({
       var _a;
       return getExtendValue(((_a = currentTag.value) == null ? void 0 : _a.extends) || [], "icon") || "icon-tag";
     });
-    const currentTagImage = computed(() => {
-      var _a;
-      return getExtendValue(((_a = currentTag.value) == null ? void 0 : _a.extends) || [], "background");
-    });
     const currentTagColor = computed(() => {
       var _a;
       return getExtendValue(((_a = currentTag.value) == null ? void 0 : _a.extends) || [], "bgcolor");
+    });
+    const currentTagImage = computed(() => {
+      var _a;
+      const value = getExtendValue(((_a = currentTag.value) == null ? void 0 : _a.extends) || [], "background");
+      if (isOriginalStaticURL(value)) {
+        return getStaticURL(cdnDomain, getStaticPath(value));
+      } else {
+        return value;
+      }
     });
     const loadmoreArticles = async () => {
       await articleListStore.fetch({
@@ -4702,7 +4712,7 @@ const _sfc_main$1w = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
       const _component_divider = resolveComponent("divider");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "tag-flow-page" }, _attrs))} data-v-db42cf1e>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "tag-flow-page" }, _attrs))} data-v-f01496d3>`);
       _push(ssrRenderComponent(ArticleListHeader, {
         "background-color": currentTagColor.value,
         "background-image": currentTagImage.value,
@@ -4711,16 +4721,16 @@ const _sfc_main$1w = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             if (currentTag.value) {
-              _push2(`<span class="header" data-v-db42cf1e${_scopeId}>`);
+              _push2(`<span class="header" data-v-f01496d3${_scopeId}>`);
               _push2(ssrRenderComponent(_component_i18n, null, {
                 zh: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span data-v-db42cf1e${_scopeId2}>#${ssrInterpolate(currentTag.value.name)}</span>`);
+                    _push3(`<span data-v-f01496d3${_scopeId2}>#${ssrInterpolate(currentTag.value.name)}</span>`);
                     _push3(ssrRenderComponent(_component_divider, {
                       class: "divider",
                       type: "vertical"
                     }, null, _parent3, _scopeId2));
-                    _push3(`<span data-v-db42cf1e${_scopeId2}>${ssrInterpolate(currentTag.value.description || "...")}</span>`);
+                    _push3(`<span data-v-f01496d3${_scopeId2}>${ssrInterpolate(currentTag.value.description || "...")}</span>`);
                   } else {
                     return [
                       createVNode("span", null, "#" + toDisplayString(currentTag.value.name), 1),
@@ -4734,12 +4744,12 @@ const _sfc_main$1w = /* @__PURE__ */ defineComponent({
                 }),
                 en: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span data-v-db42cf1e${_scopeId2}>Tag</span>`);
+                    _push3(`<span data-v-f01496d3${_scopeId2}>Tag</span>`);
                     _push3(ssrRenderComponent(_component_divider, {
                       class: "divider",
                       type: "vertical"
                     }, null, _parent3, _scopeId2));
-                    _push3(`<span data-v-db42cf1e${_scopeId2}>#${ssrInterpolate(unref(getTagEnName)(currentTag.value))}</span>`);
+                    _push3(`<span data-v-f01496d3${_scopeId2}>#${ssrInterpolate(unref(getTagEnName)(currentTag.value))}</span>`);
                   } else {
                     return [
                       createVNode("span", null, "Tag"),
@@ -4798,14 +4808,14 @@ const _sfc_main$1w = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const tag_vue_vue_type_style_index_0_scoped_db42cf1e_lang = "";
+const tag_vue_vue_type_style_index_0_scoped_f01496d3_lang = "";
 const _sfc_setup$1w = _sfc_main$1w.setup;
 _sfc_main$1w.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/tag.vue");
   return _sfc_setup$1w ? _sfc_setup$1w(props, ctx) : void 0;
 };
-const TagFlowPage = /* @__PURE__ */ _export_sfc(_sfc_main$1w, [["__scopeId", "data-v-db42cf1e"]]);
+const TagFlowPage = /* @__PURE__ */ _export_sfc(_sfc_main$1w, [["__scopeId", "data-v-f01496d3"]]);
 const _sfc_main$1v = /* @__PURE__ */ defineComponent({
   __name: "date",
   __ssrInlineRender: true,
