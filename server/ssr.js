@@ -365,7 +365,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.19.3";
+const APP_VERSION = "4.19.4";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -577,7 +577,7 @@ const API_CONFIG = {
   NODEPRESS: PROD_API,
   FE: "https://surmon.me",
   STATIC: "https://static.surmon.me",
-  CDN_CN: "https://ccdn.surmon.me",
+  CDN_CN: "https://cdn.surmon.cn",
   CDN_GLOBAL: "https://cdn.surmon.me"
 };
 const nodepress = axios.create({
