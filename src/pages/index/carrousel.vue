@@ -112,13 +112,7 @@
                     <source :srcset="getPictureURL(slide.image, 'avif')" type="image/avif" />
                     <source :srcset="getPictureURL(slide.image, 'webp')" type="image/webp" />
                   </template>
-                  <img
-                    class="image"
-                    loading="lazy"
-                    draggable="false"
-                    :alt="slide.title"
-                    :src="getPictureURL(slide.image)"
-                  />
+                  <img class="image" draggable="false" :alt="slide.title" :src="getPictureURL(slide.image)" />
                 </picture>
                 <div class="title" :class="{ dark: isDarkTheme }" :title="slide.title">
                   <div class="background"></div>
