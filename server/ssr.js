@@ -365,7 +365,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.19.4";
+const APP_VERSION = "4.19.5";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -10682,7 +10682,7 @@ const _sfc_main$T = /* @__PURE__ */ defineComponent({
       const _component_popup = resolveComponent("popup");
       const _component_ulink = resolveComponent("ulink");
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "footprint-map" }, _attrs))} data-v-286d9d8f>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "footprint-map" }, _attrs))} data-v-37b8a87b>`);
       _push(ssrRenderComponent(_component_client_only, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -10741,20 +10741,20 @@ const _sfc_main$T = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="mapbox-wrapper"${ssrRenderAttr("placeholder", unref(isZhLang) ? unref(i18ns).footprint.zh : unref(i18ns).footprint.en)} data-v-286d9d8f>`);
+      _push(`<div class="mapbox-wrapper"${ssrRenderAttr("placeholder", unref(isZhLang) ? unref(i18ns).footprint.zh : unref(i18ns).footprint.en)} data-v-37b8a87b>`);
       _push(ssrRenderComponent(Mapbox, {
         class: "mapbox",
         "gm-geo-json": gmGeoJson.value,
         onReady: handleMapboxReady
       }, null, _parent));
-      _push(`<div class="toolbar" data-v-286d9d8f>`);
+      _push(`<div class="toolbar" data-v-37b8a87b>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "button",
         href: unref(VALUABLE_LINKS).GOOGLE_MY_MAP
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-google-maps" data-v-286d9d8f${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-google-maps" data-v-37b8a87b${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-google-maps" })
@@ -10763,21 +10763,21 @@ const _sfc_main$T = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<button class="button" data-v-286d9d8f><i class="iconfont icon-fullscreen" data-v-286d9d8f></i></button></div></div><div class="legends" data-v-286d9d8f><div class="now" data-v-286d9d8f><i class="iconfont icon-location" data-v-286d9d8f></i><span class="text" data-v-286d9d8f>${ssrInterpolate(unref(isZhLang) ? unref(GEO_INFO).zh_title : unref(GEO_INFO).en_title)}</span></div>`);
+      _push(`<button class="button" data-v-37b8a87b><i class="iconfont icon-fullscreen" data-v-37b8a87b></i></button></div></div><div class="legends" data-v-37b8a87b><div class="now" data-v-37b8a87b><i class="iconfont icon-location" data-v-37b8a87b></i><span class="text" data-v-37b8a87b>${ssrInterpolate(unref(isZhLang) ? unref(GEO_INFO).zh_title : unref(GEO_INFO).en_title)}</span></div>`);
       if (unref(gmStore).data) {
-        _push(`<ul class="folders" data-v-286d9d8f><li class="item" data-v-286d9d8f><i class="iconfont icon-route" data-v-286d9d8f></i><span class="text" data-v-286d9d8f>`);
+        _push(`<ul class="folders" data-v-37b8a87b><li class="item" data-v-37b8a87b><i class="iconfont icon-route" data-v-37b8a87b></i><span class="text" data-v-37b8a87b>`);
         _push(ssrRenderComponent(_component_i18n, {
           zh: "我的旅行足迹",
           en: "My footprints"
         }, null, _parent));
         _push(`</span></li><!--[-->`);
         ssrRenderList(unref(GOOGLE_MAP_LINKS), (link, index) => {
-          _push(`<li class="item" data-v-286d9d8f><i class="iconfont icon-google-maps" data-v-286d9d8f></i><span class="text" data-v-286d9d8f>`);
+          _push(`<li class="item" data-v-37b8a87b><i class="iconfont icon-map" data-v-37b8a87b></i><span class="text" data-v-37b8a87b>`);
           _push(ssrRenderComponent(_component_i18n, {
             zh: link.zh,
             en: link.en
           }, null, _parent));
-          _push(`<i class="new-window-icon iconfont icon-new-window-s" data-v-286d9d8f></i></span></li>`);
+          _push(`<i class="new-window-icon iconfont icon-new-window-s" data-v-37b8a87b></i></span></li>`);
         });
         _push(`<!--]--></ul>`);
       } else {
@@ -10787,14 +10787,14 @@ const _sfc_main$T = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_286d9d8f_lang = "";
+const index_vue_vue_type_style_index_0_scoped_37b8a87b_lang = "";
 const _sfc_setup$T = _sfc_main$T.setup;
 _sfc_main$T.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/footprint/index.vue");
   return _sfc_setup$T ? _sfc_setup$T(props, ctx) : void 0;
 };
-const FootprintMap = /* @__PURE__ */ _export_sfc(_sfc_main$T, [["__scopeId", "data-v-286d9d8f"]]);
+const FootprintMap = /* @__PURE__ */ _export_sfc(_sfc_main$T, [["__scopeId", "data-v-37b8a87b"]]);
 const _sfc_main$S = /* @__PURE__ */ defineComponent({
   __name: "desktop",
   __ssrInlineRender: true,
