@@ -137,7 +137,7 @@ const META = Object.freeze({
 });
 const GEO_INFO = Object.freeze({
   zh_title: "长居亚洲，游走热带",
-  en_title: "UTC +08:00 ~ +09:00",
+  en_title: "UTC +07:00 ~ +09:00",
   coordinates: [103.830391822121, 1.340863]
 });
 const MAPBOX_CONFIG = Object.freeze({
@@ -365,7 +365,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.19.0";
+const APP_VERSION = "4.19.1";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -10589,27 +10589,27 @@ const _sfc_main$U = /* @__PURE__ */ defineComponent({
     };
     return (_ctx, _push, _parent, _attrs) => {
       const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-19fccf59>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-203f7863>`);
       _push(ssrRenderComponent(Mapbox, {
         class: "mapbox",
         "gm-geo-json": _ctx.gmGeoJson,
         onReady: handleMapboxReady
       }, null, _parent));
-      _push(`<div class="panel" data-v-19fccf59><div class="info" data-v-19fccf59><h3 class="title" data-v-19fccf59>${ssrInterpolate(_ctx.name ?? "-")}</h3><p class="description" data-v-19fccf59>${ssrInterpolate(_ctx.description ?? "-")}</p></div><ul class="folders" data-v-19fccf59><!--[-->`);
+      _push(`<div class="panel" data-v-203f7863><div class="info" data-v-203f7863><h3 class="title" data-v-203f7863>${ssrInterpolate(_ctx.name ?? "-")}</h3><p class="description" data-v-203f7863>${ssrInterpolate(_ctx.description ?? "-")}</p></div><ul class="folders" data-v-203f7863><!--[-->`);
       ssrRenderList(_ctx.gmFolders, (folder, index) => {
-        _push(`<li class="folder" data-v-19fccf59><div class="title" data-v-19fccf59><i class="iconfont icon-route" data-v-19fccf59></i><span class="text" data-v-19fccf59>${ssrInterpolate(folder.name)}</span><span class="count" data-v-19fccf59>(${ssrInterpolate(folder.placemarks.length)})</span></div>`);
+        _push(`<li class="folder" data-v-203f7863><div class="title" data-v-203f7863><i class="iconfont icon-route" data-v-203f7863></i><span class="text" data-v-203f7863>${ssrInterpolate(folder.name)}</span><span class="count" data-v-203f7863>(${ssrInterpolate(folder.placemarks.length)})</span></div>`);
         if (!folder.placemarks.length) {
-          _push(`<div class="empty" data-v-19fccf59>null</div>`);
+          _push(`<div class="empty" data-v-203f7863>null</div>`);
         } else {
-          _push(`<ul class="placemarks" data-v-19fccf59><!--[-->`);
+          _push(`<ul class="placemarks" data-v-203f7863><!--[-->`);
           ssrRenderList(folder.placemarks, (placemark, i) => {
-            _push(`<li class="placemark" data-v-19fccf59>`);
+            _push(`<li class="placemark" data-v-203f7863>`);
             _push(ssrRenderComponent(_component_uimage, {
               class: "icon",
               cdn: true,
               src: `/images/third-party/mapbox-${placemark.image ? "attraction" : "veterinary"}.svg`
             }, null, _parent));
-            _push(`<span class="text" data-v-19fccf59>${ssrInterpolate(placemark.name)}</span></li>`);
+            _push(`<span class="text" data-v-203f7863>${ssrInterpolate(placemark.name)}</span></li>`);
           });
           _push(`<!--]--></ul>`);
         }
@@ -10619,14 +10619,14 @@ const _sfc_main$U = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const modal_vue_vue_type_style_index_0_scoped_19fccf59_lang = "";
+const modal_vue_vue_type_style_index_0_scoped_203f7863_lang = "";
 const _sfc_setup$U = _sfc_main$U.setup;
 _sfc_main$U.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/footprint/modal.vue");
   return _sfc_setup$U ? _sfc_setup$U(props, ctx) : void 0;
 };
-const FootprintModal = /* @__PURE__ */ _export_sfc(_sfc_main$U, [["__scopeId", "data-v-19fccf59"]]);
+const FootprintModal = /* @__PURE__ */ _export_sfc(_sfc_main$U, [["__scopeId", "data-v-203f7863"]]);
 const _sfc_main$T = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
