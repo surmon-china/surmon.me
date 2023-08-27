@@ -5,6 +5,7 @@
   import { useStores } from '/@/stores'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
+  import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
   import { scrollToNextScreen } from '/@/utils/scroller'
   import ArticleListHeader from '/@/components/flow/desktop/header.vue'
   import ArticleList from '/@/components/flow/desktop/list.vue'
@@ -13,7 +14,7 @@
     categorySlug: string
   }>()
 
-  const { i18n: _i18n, seoMeta, isZhLang } = useEnhancer()
+  const { i18n: _i18n, seoMeta, cdnDomain, isZhLang } = useEnhancer()
   const { articleList: articleListStore, category: categoryStore } = useStores()
   const currentCategory = computed(() => {
     return categoryStore.data.find((category) => category.slug === props.categorySlug)
@@ -21,11 +22,16 @@
   const currentCategoryIcon = computed(() => {
     return getExtendValue(currentCategory.value?.extends || [], 'icon') || 'icon-category'
   })
-  const currentCategoryImage = computed(() => {
-    return getExtendValue(currentCategory.value?.extends || [], 'background')
-  })
   const currentCategoryColor = computed(() => {
     return getExtendValue(currentCategory.value?.extends || [], 'bgcolor')
+  })
+  const currentCategoryImage = computed(() => {
+    const value = getExtendValue(currentCategory.value?.extends || [], 'background')
+    if (isOriginalStaticURL(value)) {
+      return getStaticURL(cdnDomain, getStaticPath(value!))
+    } else {
+      return value
+    }
   })
 
   const loadmoreArticles = async () => {

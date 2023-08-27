@@ -6,6 +6,7 @@
   import { useTagStore, getTagEnName } from '/@/stores/tag'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
+  import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
   import { scrollToNextScreen } from '/@/utils/scroller'
   import ArticleListHeader from '/@/components/flow/desktop/header.vue'
   import ArticleList from '/@/components/flow/desktop/list.vue'
@@ -14,13 +15,20 @@
     tagSlug: string
   }>()
 
-  const { seoMeta, isZhLang } = useEnhancer()
+  const { seoMeta, cdnDomain, isZhLang } = useEnhancer()
   const articleListStore = useArticleListStore()
   const tagStore = useTagStore()
   const currentTag = computed(() => tagStore.data.find((tag) => tag.slug === props.tagSlug))
   const currentTagIcon = computed(() => getExtendValue(currentTag.value?.extends || [], 'icon') || 'icon-tag')
-  const currentTagImage = computed(() => getExtendValue(currentTag.value?.extends || [], 'background'))
   const currentTagColor = computed(() => getExtendValue(currentTag.value?.extends || [], 'bgcolor'))
+  const currentTagImage = computed(() => {
+    const value = getExtendValue(currentTag.value?.extends || [], 'background')
+    if (isOriginalStaticURL(value)) {
+      return getStaticURL(cdnDomain, getStaticPath(value!))
+    } else {
+      return value
+    }
+  })
 
   const loadmoreArticles = async () => {
     await articleListStore.fetch({
