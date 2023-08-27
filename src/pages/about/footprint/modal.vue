@@ -143,11 +143,13 @@
 
           .placemarks {
             list-style: none;
+            overflow: hidden;
 
             .placemark {
-              line-height: 2;
-              cursor: pointer;
+              display: flex;
               scroll-snap-align: start;
+              line-height: 2.2;
+              cursor: pointer;
               &:hover {
                 color: $text;
               }
@@ -159,6 +161,7 @@
 
               .text {
                 margin-left: $sm-gap;
+                max-width: 80%;
                 @include text-overflow();
               }
             }

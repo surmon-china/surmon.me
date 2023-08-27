@@ -21,7 +21,7 @@ export const META = Object.freeze({
 
 export const GEO_INFO = Object.freeze({
   zh_title: '长居亚洲，游走热带',
-  en_title: 'UTC +08:00 ~ +09:00',
+  en_title: 'UTC +07:00 ~ +09:00',
   coordinates: [103.830391822121, 1.340863]
 })
 
