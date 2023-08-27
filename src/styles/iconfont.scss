@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
   src:
-    url('//at.alicdn.com/t/c/font_64825_cuizjf441a.woff2?t=1692553111588') format('woff2'),
-    url('//at.alicdn.com/t/c/font_64825_cuizjf441a.woff?t=1692553111588') format('woff'),
-    url('//at.alicdn.com/t/c/font_64825_cuizjf441a.ttf?t=1692553111588') format('truetype');
+    url('//at.alicdn.com/t/c/font_64825_zv4wno6spbc.woff2?t=1693159631155') format('woff2'),
+    url('//at.alicdn.com/t/c/font_64825_zv4wno6spbc.woff?t=1693159631155') format('woff'),
+    url('//at.alicdn.com/t/c/font_64825_zv4wno6spbc.ttf?t=1693159631155') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-tencent-cloud:before {
+  content: '\e64f';
 }
 
 .icon-wan:before {
@@ -116,10 +120,6 @@
 
 .icon-insight:before {
   content: '\e7d2';
-}
-
-.icon-trend:before {
-  content: '\fbf0';
 }
 
 .icon-follow-up:before {
@@ -446,10 +446,6 @@
   content: '\e630';
 }
 
-.icon-jingdong:before {
-  content: '\e8dd';
-}
-
 .icon-paypal:before {
   content: '\ea0d';
 }
@@ -460,10 +456,6 @@
 
 .icon-brush:before {
   content: '\e696';
-}
-
-.icon-terminal:before {
-  content: '\e898';
 }
 
 .icon-eye-close:before {

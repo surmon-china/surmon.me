@@ -109,7 +109,7 @@
           v-for="(link, index) in GOOGLE_MAP_LINKS"
           @click="handleGoogleMapLinkClick(link.url)"
         >
-          <i class="iconfont icon-google-maps"></i>
+          <i class="iconfont icon-map"></i>
           <span class="text">
             <i18n :zh="link.zh" :en="link.en"></i18n>
             <i class="new-window-icon iconfont icon-new-window-s"></i>
