@@ -5,6 +5,7 @@
   import { useMyGoogleMapStore } from '/@/stores/media'
   import { GEO_INFO, VALUABLE_LINKS } from '/@/config/app.config'
   import { gmmFoldersToGeoJSON, FeatureCollectionJSON, GoogleMyMapFolder } from './helper'
+  import { GOOGLE_MAP_LINKS } from './google-map'
   import { i18ns } from '../shared'
   import Mapbox from './mapbox.vue'
   import FootprintModal from './modal.vue'
@@ -46,14 +47,6 @@
     modalVisible.value = true
   }
 
-  const handleFolderClick = (index: number) => {
-    const targetFolder = gmFolders.value[index]!
-    const [firstPlacemark] = targetFolder.placemarks
-    if (firstPlacemark) {
-      map.value?.flyTo({ center: firstPlacemark.coordinates, zoom: 4, speed: 1.2 })
-    }
-  }
-
   const handleMapboxReady = (payload: { map: Map }) => {
     map.value = payload.map
   }
@@ -63,6 +56,10 @@
       center: GEO_INFO.coordinates as any,
       zoom: 14
     })
+  }
+
+  const handleGoogleMapLinkClick = (url: string) => {
+    window.open(url, '_blank')
   }
 
   onMounted(() => gmStore.fetch())
@@ -100,19 +97,23 @@
         </span>
       </div>
       <ul class="folders" v-if="gmStore.data">
+        <li class="item" @click="openModal">
+          <i class="iconfont icon-route"></i>
+          <span class="text">
+            <i18n zh="我的旅行足迹" en="My footprints"></i18n>
+          </span>
+        </li>
         <li
           class="item"
           :key="index"
-          v-for="(folder, index) in gmFolders.slice(0, 4)"
-          @click="handleFolderClick(index)"
+          v-for="(link, index) in GOOGLE_MAP_LINKS"
+          @click="handleGoogleMapLinkClick(link.url)"
         >
-          <i class="iconfont icon-route"></i>
-          <span class="text">{{ folder.name }}</span>
-          <span class="count">({{ folder.placemarks.length }})</span>
-        </li>
-        <li class="item" @click="openModal">
-          <i class="iconfont icon-route"></i>
-          <span class="text">•••</span>
+          <i class="iconfont icon-google-maps"></i>
+          <span class="text">
+            <i18n :zh="link.zh" :en="link.en"></i18n>
+            <i class="new-window-icon iconfont icon-new-window-s"></i>
+          </span>
         </li>
       </ul>
     </div>
@@ -184,9 +185,21 @@
           .iconfont {
             margin-right: $gap;
           }
+
           .text {
+            display: inline-block;
+            position: relative;
             font-weight: bold;
-            margin-right: $xs-gap;
+
+            .new-window-icon {
+              margin: 0;
+              font-size: 10px;
+              font-weight: normal;
+              position: absolute;
+              top: -0.5em;
+              right: -1.2em;
+              color: $text-divider;
+            }
           }
         }
       }
