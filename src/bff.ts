@@ -141,8 +141,9 @@ createExpressApp().then(async ({ app, server, cache }) => {
       return cacher({
         cache,
         key: `chatgpt_share_${shareId}`,
-        ttl: 60 * 60 * 24 * 7, // 7 days
-        retryWhen: 60 * 2, // 2 minutes
+        ttl: 60 * 60 * 24 * 30, // 30 days
+        retryWhen: 0, // never retry
+        preRefresh: false,
         getter: () => getChatGPTShareLink(shareId)
       })
     })(request, response, next)
