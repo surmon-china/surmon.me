@@ -169,15 +169,8 @@
             <i class="iconfont icon-emoji" />
             <div class="emoji-box">
               <ul class="emoji-list">
-                <li
-                  v-for="(emoji, index) in EMOJIS"
-                  v-once
-                  class="item"
-                  :key="index"
-                  :title="emoji"
-                  @click="insertEmoji(emoji)"
-                >
-                  {{ emoji }}
+                <li v-for="(emoji, index) in EMOJIS" v-once class="item" :key="index" @click="insertEmoji(emoji)">
+                  <span>{{ emoji }}</span>
                 </li>
               </ul>
             </div>
@@ -355,12 +348,16 @@
               .item {
                 cursor: pointer;
                 padding: $xs-gap 0;
-                font-size: $font-size-h2;
-                opacity: 0.8;
-                transition: all $transition-time-fast ease;
+                > span {
+                  display: block;
+                  font-size: $font-size-h2;
+                  opacity: 0.8;
+                }
                 &:hover {
-                  opacity: 1;
-                  transform: scale(1.1);
+                  > span {
+                    opacity: 1;
+                    transform: scale(1.4);
+                  }
                 }
               }
             }

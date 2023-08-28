@@ -1,12 +1,13 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import type { ChatGPTShareLink } from '/@/server/getters/chatgpt'
   import { getChatGPTShareURL } from '/@/transforms/chatgpt'
   import Markdown from '/@/components/common/markdown.vue'
 
   const props = defineProps<{
-    shareId: string
-    data: ChatGPTShareLink
+    gptId: string
+    gptResponse: string
+    gptModel?: string
+    gptTimestamp?: string
     hiddenAvatar?: boolean
   }>()
 
@@ -19,41 +20,36 @@
   }
 
   const avatarURL = computed(() => {
-    const fileName = props.data.model.includes('4') ? '4.0' : '3.5'
+    const fileName = props.gptModel?.includes('4') ? '4.0' : '3.5'
     return `/images/chatgpt/${fileName}.png`
-  })
-
-  const htmlContent = computed(() => {
-    const content = props.data.first_answer ?? ''
-    return '<p>' + content.replaceAll('\n\n', '</p><p>') + '</p>'
   })
 </script>
 
 <template>
   <div class="gpt-comment" :class="{ 'hide-avatar': hiddenAvatar }">
     <div class="gpt-avatar" v-if="!hiddenAvatar">
-      <ulink class="link" :href="getChatGPTShareURL(shareId)" @click="handleLinkClick">
-        <uimage cdn :src="avatarURL" :alt="data.model" draggable="false" />
+      <ulink class="link" :href="getChatGPTShareURL(gptId)" @click="handleLinkClick">
+        <uimage cdn :src="avatarURL" :alt="gptModel" draggable="false" />
       </ulink>
     </div>
     <div class="gpt-body">
       <div class="gpt-header">
         <div class="left">
-          <ulink class="username" :href="getChatGPTShareURL(shareId)" @click="handleLinkClick">ChatGPT</ulink>
-          <span class="model">
+          <ulink class="username" :href="getChatGPTShareURL(gptId)" @click="handleLinkClick">ChatGPT</ulink>
+          <span class="model" v-if="gptModel">
             <i class="iconfont icon-cpu"></i>
-            <span>{{ data.model }}</span>
+            <span>{{ gptModel }}</span>
           </span>
         </div>
         <div class="right">
-          <span class="created">
-            <udate :date="data.created_at * 1000" to="ago" />
+          <span class="created" v-if="gptTimestamp">
+            <udate :date="Number(gptTimestamp) * 1000" to="ago" />
           </span>
         </div>
       </div>
       <div class="gpt-content">
         <div class="markdown">
-          <markdown :html="htmlContent" :sanitize="true" :compact="true" />
+          <markdown :markdown="props.gptResponse" :sanitize="true" :compact="true" />
         </div>
       </div>
     </div>

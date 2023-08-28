@@ -15,7 +15,6 @@ import { getSitemapXml } from './server/getters/sitemap'
 import { getGTagScript } from './server/getters/gtag'
 import { getAllWallpapers } from './server/getters/wallpaper'
 import { getMyGoogleMap } from './server/getters/my-google-map'
-import { getChatGPTShareLink } from './server/getters/chatgpt'
 import { getTwitterAggregate } from './server/getters/twitter'
 import { getGitHubSponsors, getGitHubContributions } from './server/getters/github'
 import {
@@ -128,26 +127,6 @@ createExpressApp().then(async ({ app, server, cache }) => {
       })
     })
   )
-
-  // ChatGPT share link
-  app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.ChatGPT}`, (request, response, next) => {
-    const shareId = request.query.id
-    if (!shareId || typeof shareId !== 'string') {
-      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
-      return
-    }
-
-    responser(() => {
-      return cacher({
-        cache,
-        key: `chatgpt_share_${shareId}`,
-        ttl: 60 * 60 * 24 * 30, // 30 days
-        retryWhen: 0, // never retry
-        preRefresh: false,
-        getter: () => getChatGPTShareLink(shareId)
-      })
-    })(request, response, next)
-  })
 
   // My GoogleMap
   app.get(

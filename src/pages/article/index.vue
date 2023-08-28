@@ -4,7 +4,6 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/universal'
   import { useStores } from '/@/stores'
-  import { useChatGPTStore } from '/@/stores/chatgpt'
   import * as ANCHORS from '/@/constants/anchor'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
@@ -31,12 +30,13 @@
   const { identity, sponsor, comment: commentStore, articleDetail: articleDetailStore } = useStores()
   const { article, fetching, prevArticle, nextArticle, relatedArticles } = storeToRefs(articleDetailStore)
   const isLiked = computed(() => Boolean(article.value && identity.isLikedPage(article.value.id)))
+  const articleExtends = computed(() => article.value?.extends || [])
 
   // fot ChatGPT
-  const chatgptStore = useChatGPTStore()
-  const articleChatGPTShareId = computed(() => {
-    return getExtendValue(article.value?.extends || [], 'chatgpt-share-id')
-  })
+  const articleGPTId = computed(() => getExtendValue(articleExtends.value, 'chatgpt-conversation-id'))
+  const articleGPTResponse = computed(() => getExtendValue(articleExtends.value, 'chatgpt-conversation-response'))
+  const articleGPTTimestamp = computed(() => getExtendValue(articleExtends.value, 'chatgpt-conversation-timestamp'))
+  const articleGPTModel = computed(() => getExtendValue(articleExtends.value, 'chatgpt-conversation-model'))
 
   const handleCommentTopBarChatGPTClick = () => {
     gtag?.event('chatgpt_comemnt_top_bar', {
@@ -79,13 +79,7 @@
 
   const fetchArticleDetail = (articleId: number) => {
     const commentRequest = commentStore.fetchList({ post_id: articleId })
-    const articleRequest = articleDetailStore.fetchCompleteArticle(articleId).then(() => {
-      if (articleChatGPTShareId.value) {
-        return chatgptStore.fetch(articleChatGPTShareId.value).catch((error) => {
-          console.warn('[Article] fetch chatgpt error', error?.message ?? error)
-        })
-      }
-    })
+    const articleRequest = articleDetailStore.fetchCompleteArticle(articleId)
     return Promise.all([articleRequest, commentRequest])
   }
 
@@ -177,19 +171,21 @@
     </placeholder>
     <div class="comment">
       <comment :plain="isMobile" :fetching="fetching" :post-id="articleId">
-        <template #topbar-extra v-if="articleChatGPTShareId">
+        <template #topbar-extra v-if="articleGPTId">
           <ulink
             class="chat-gpt-link"
-            :href="getChatGPTShareURL(articleChatGPTShareId)"
+            :href="getChatGPTShareURL(articleGPTId)"
             @click="handleCommentTopBarChatGPTClick"
           >
             <i class="iconfont icon-chat-gpt"></i>
           </ulink>
         </template>
-        <template #list-top-extra v-if="articleChatGPTShareId && chatgptStore.data">
+        <template #list-top-extra v-if="articleGPTId && articleGPTResponse">
           <article-chatgpt
-            :share-id="articleChatGPTShareId"
-            :data="chatgptStore.data"
+            :gpt-id="articleGPTId"
+            :gpt-response="articleGPTResponse"
+            :gpt-timestamp="articleGPTTimestamp"
+            :gpt-model="articleGPTModel"
             :hidden-avatar="isMobile"
             @click-link="handleCommentUsernameChatGPTClick"
           />
