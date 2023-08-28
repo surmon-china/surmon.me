@@ -478,52 +478,6 @@ const getMyGoogleMap = () => {
         .then((response) => parser.parse(response.data).kml.Document);
 };
 
-;// CONCATENATED MODULE: ./src/transforms/chatgpt.ts
-/**
- * @file ChatGPT url
- * @author Surmon <https://github.com/surmon-china>
- */
-// https://help.openai.com/en/articles/7925741-chatgpt-shared-links-faq#h_1ed51a9a7d
-const getChatGPTShareURL = (shareId) => {
-    return `https://chat.openai.com/share/${shareId}`;
-};
-
-;// CONCATENATED MODULE: ./src/server/getters/chatgpt.ts
-/**
- * @file ChatGPT getter
- * @module server.getter.chatgpt
- * @author Surmon <https://github.com/surmon-china>
- */
-
-
-const getChatGPTShareLink = async (shareId) => {
-    const { data: html } = await external_axios_namespaceObject["default"].get(getChatGPTShareURL(shareId), { timeout: 6000 });
-    if (!html) {
-        throw new Error('ChatGPT share link not found.');
-    }
-    // The code implementation here is coupled to the way the ChatGPT website works, which may change at any time, but exposes a consistent interface to clients
-    const regex = /<script id="__NEXT_DATA__" type="application\/json">([\s\S]*?)<\/script>/;
-    const matched = html.match(regex)?.[0]?.replace(regex, '$1');
-    if (!matched) {
-        throw new Error('ChatGPT data not found.');
-    }
-    const parsedJSON = JSON.parse(matched);
-    const data = parsedJSON.props.pageProps.serverResponse.data;
-    const firstAnswer = data.linear_conversation.find((conversion) => {
-        return conversion?.message?.author?.role === 'assistant';
-    });
-    if (!firstAnswer) {
-        throw new Error('ChatGPT first answer not found.');
-    }
-    return {
-        model: data.model.title,
-        title: data.title,
-        created_at: data.create_time,
-        updated_at: data.update_time,
-        first_answer: firstAnswer.message.content.parts[0]
-    };
-};
-
 ;// CONCATENATED MODULE: external "yargs"
 var external_yargs_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
 var external_yargs_y = x => () => x
@@ -1645,7 +1599,6 @@ const createExpressApp = async () => {
 
 
 
-
 // init env variables for BFF server env
 external_dotenv_namespaceObject["default"].config();
 // app
@@ -1732,24 +1685,6 @@ createExpressApp().then(async ({ app, server, cache }) => {
             getter: getAllWallpapers
         });
     }));
-    // ChatGPT share link
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.ChatGPT}`, (request, response, next) => {
-        const shareId = request.query.id;
-        if (!shareId || typeof shareId !== 'string') {
-            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
-            return;
-        }
-        responser(() => {
-            return cacher({
-                cache,
-                key: `chatgpt_share_${shareId}`,
-                ttl: 60 * 60 * 24 * 30,
-                retryWhen: 0,
-                preRefresh: false,
-                getter: () => getChatGPTShareLink(shareId)
-            });
-        })(request, response, next);
-    });
     // My GoogleMap
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.MyGoogleMap}`, responser(() => {
         return cacher({

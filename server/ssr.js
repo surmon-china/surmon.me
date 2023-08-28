@@ -365,7 +365,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.19.7";
+const APP_VERSION = "4.20.0";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -5906,15 +5906,6 @@ _sfc_main$1q.setup = (props, ctx) => {
   return _sfc_setup$1q ? _sfc_setup$1q(props, ctx) : void 0;
 };
 const MobileArchivePage = /* @__PURE__ */ _export_sfc(_sfc_main$1q, [["__scopeId", "data-v-81376269"]]);
-const useChatGPTStore = defineStore("chatgpt", () => {
-  return useFetchStore({
-    data: null,
-    preclean: true,
-    fetcher(shareId) {
-      return tunnel$1.dispatch(TunnelModule.ChatGPT, { id: shareId });
-    }
-  });
-});
 async function renderTextToQRCodeDataURL(value, options) {
   return await QRCode.toDataURL(value, {
     errorCorrectionLevel: "H",
@@ -6086,14 +6077,14 @@ _sfc_main$1p.setup = (props, ctx) => {
   return _sfc_setup$1p ? _sfc_setup$1p(props, ctx) : void 0;
 };
 const Share = /* @__PURE__ */ _export_sfc(_sfc_main$1p, [["__scopeId", "data-v-f9ac03a7"]]);
-const getChatGPTShareURL = (shareId) => {
-  return `https://chat.openai.com/share/${shareId}`;
+const getChatGPTShareURL = (conversationId) => {
+  return `https://chat.openai.com/share/${conversationId}`;
 };
 const EMOJIS = [
   ...["😃", "😂", "😅", "😉", "😌", "😔", "😓", "😢", "😍", "😘", "😜", "😡"],
   ...["😤", "😭", "😱", "😳", "😵", "🌚"],
-  ...["🙏", "👆", "👇", "👌", "🤘", "👍", "👎", "💪", "👏"],
-  ...["🌻", "🌹", "💊", "🐶", "❤️‍🔥", "💔", "💩", "👻", "🚩"]
+  ...["🙏", "💪", "👌", "🤘", "👍", "👎", "👏"],
+  ...["🌻", "🌹", "💊", "🐶", "🐈", "✨", "❤️‍🔥", "💔", "💩", "👻", "🚩"]
 ];
 var CommentEvents = /* @__PURE__ */ ((CommentEvents2) => {
   CommentEvents2["Sort"] = "sort";
@@ -7574,9 +7565,9 @@ const _sfc_main$1d = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       _push(`<div${ssrRenderAttrs(mergeProps({
         class: ["pen", { bordered: _ctx.bordered }]
-      }, _attrs))} data-v-89f2f272><div class="editor" data-v-89f2f272><div class="input-wrapper"${ssrRenderAttr("data-replicated-value", content.value)} data-v-89f2f272><textarea class="editor-input" required${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""}${ssrIncludeBooleanAttr(props.autoFocus) ? " autofocus" : ""}${ssrRenderAttr("minlength", unref(MIN_COMMENT_LENGTH))}${ssrRenderAttr("maxlength", unref(MAX_COMMENT_LENGTH))}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).COMMENT_POST_PLACEHOLDER))} data-v-89f2f272></textarea></div>`);
+      }, _attrs))} data-v-74ab723e><div class="editor" data-v-74ab723e><div class="input-wrapper"${ssrRenderAttr("data-replicated-value", content.value)} data-v-74ab723e><textarea class="editor-input" required${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""}${ssrIncludeBooleanAttr(props.autoFocus) ? " autofocus" : ""}${ssrRenderAttr("minlength", unref(MIN_COMMENT_LENGTH))}${ssrRenderAttr("maxlength", unref(MAX_COMMENT_LENGTH))}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).COMMENT_POST_PLACEHOLDER))} data-v-74ab723e></textarea></div>`);
       if (isPreviewed.value) {
-        _push(`<div class="preview-content" data-v-89f2f272>`);
+        _push(`<div class="preview-content" data-v-74ab723e>`);
         _push(ssrRenderComponent(_sfc_main$1m, {
           markdown: content.value,
           sanitize: true,
@@ -7586,7 +7577,7 @@ const _sfc_main$1d = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`</div><div class="pencilbox" data-v-89f2f272><div class="stationery" data-v-89f2f272>`);
+      _push(`</div><div class="pencilbox" data-v-74ab723e><div class="stationery" data-v-74ab723e>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "markdown",
         title: "markdown",
@@ -7594,7 +7585,7 @@ const _sfc_main$1d = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-markdown" data-v-89f2f272${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-markdown" data-v-74ab723e${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-markdown" })
@@ -7604,15 +7595,15 @@ const _sfc_main$1d = /* @__PURE__ */ defineComponent({
         _: 1
       }, _parent));
       if (!_ctx.hiddenStationery) {
-        _push(`<!--[--><button class="emoji" title="emoji" type="button"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-89f2f272><i class="iconfont icon-emoji" data-v-89f2f272></i><div class="emoji-box" data-v-89f2f272><ul class="emoji-list" data-v-89f2f272><!--[-->`);
+        _push(`<!--[--><button class="emoji" title="emoji" type="button"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-74ab723e><i class="iconfont icon-emoji" data-v-74ab723e></i><div class="emoji-box" data-v-74ab723e><ul class="emoji-list" data-v-74ab723e><!--[-->`);
         ssrRenderList(unref(EMOJIS), (emoji, index) => {
-          _push(`<li class="item"${ssrRenderAttr("title", emoji)} data-v-89f2f272>${ssrInterpolate(emoji)}</li>`);
+          _push(`<li class="item" data-v-74ab723e><span data-v-74ab723e>${ssrInterpolate(emoji)}</span></li>`);
         });
-        _push(`<!--]--></ul></div></button><button class="image" title="image"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-89f2f272><i class="iconfont icon-image" data-v-89f2f272></i></button><button class="link" title="link"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-89f2f272><i class="iconfont icon-link" data-v-89f2f272></i></button><button class="code" title="code"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-89f2f272><i class="iconfont icon-code" data-v-89f2f272></i></button><button title="preview" class="${ssrRenderClass([{ actived: isPreviewed.value }, "preview"])}"${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""} data-v-89f2f272><i class="${ssrRenderClass([isPreviewed.value ? "icon-eye-close" : "icon-eye", "iconfont"])}" data-v-89f2f272></i></button><!--]-->`);
+        _push(`<!--]--></ul></div></button><button class="image" title="image"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-74ab723e><i class="iconfont icon-image" data-v-74ab723e></i></button><button class="link" title="link"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-74ab723e><i class="iconfont icon-link" data-v-74ab723e></i></button><button class="code" title="code"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-74ab723e><i class="iconfont icon-code" data-v-74ab723e></i></button><button title="preview" class="${ssrRenderClass([{ actived: isPreviewed.value }, "preview"])}"${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""} data-v-74ab723e><i class="${ssrRenderClass([isPreviewed.value ? "icon-eye-close" : "icon-eye", "iconfont"])}" data-v-74ab723e></i></button><!--]-->`);
       } else {
         _push(`<!---->`);
       }
-      _push(`</div><button type="submit" class="submit"${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""} data-v-89f2f272>`);
+      _push(`</div><button type="submit" class="submit"${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""} data-v-74ab723e>`);
       if (_ctx.posting) {
         _push(ssrRenderComponent(_component_i18n, {
           zh: "发布中...",
@@ -7672,18 +7663,18 @@ const _sfc_main$1d = /* @__PURE__ */ defineComponent({
           en: "Publish"
         }, null, _parent));
       }
-      _push(`<i class="iconfont icon-mail-plane" data-v-89f2f272></i></button></div></div>`);
+      _push(`<i class="iconfont icon-mail-plane" data-v-74ab723e></i></button></div></div>`);
     };
   }
 });
-const pen_vue_vue_type_style_index_0_scoped_89f2f272_lang = "";
+const pen_vue_vue_type_style_index_0_scoped_74ab723e_lang = "";
 const _sfc_setup$1d = _sfc_main$1d.setup;
 _sfc_main$1d.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/publisher/pen.vue");
   return _sfc_setup$1d ? _sfc_setup$1d(props, ctx) : void 0;
 };
-const CommentPen = /* @__PURE__ */ _export_sfc(_sfc_main$1d, [["__scopeId", "data-v-89f2f272"]]);
+const CommentPen = /* @__PURE__ */ _export_sfc(_sfc_main$1d, [["__scopeId", "data-v-74ab723e"]]);
 const _sfc_main$1c = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -8840,8 +8831,10 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
   __name: "chatgpt",
   __ssrInlineRender: true,
   props: {
-    shareId: {},
-    data: {},
+    gptId: {},
+    gptResponse: {},
+    gptModel: {},
+    gptTimestamp: {},
     hiddenAvatar: { type: Boolean }
   },
   emits: ["click-link"],
@@ -8851,12 +8844,9 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
       emit("click-link");
     };
     const avatarURL = computed(() => {
-      const fileName = props.data.model.includes("4") ? "4.0" : "3.5";
+      var _a;
+      const fileName = ((_a = props.gptModel) == null ? void 0 : _a.includes("4")) ? "4.0" : "3.5";
       return `/images/chatgpt/${fileName}.png`;
-    });
-    const htmlContent = computed(() => {
-      const content = props.data.first_answer ?? "";
-      return "<p>" + content.replaceAll("\n\n", "</p><p>") + "</p>";
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_ulink = resolveComponent("ulink");
@@ -8864,12 +8854,12 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
       const _component_udate = resolveComponent("udate");
       _push(`<div${ssrRenderAttrs(mergeProps({
         class: ["gpt-comment", { "hide-avatar": _ctx.hiddenAvatar }]
-      }, _attrs))} data-v-3296b32d>`);
+      }, _attrs))} data-v-fb21c672>`);
       if (!_ctx.hiddenAvatar) {
-        _push(`<div class="gpt-avatar" data-v-3296b32d>`);
+        _push(`<div class="gpt-avatar" data-v-fb21c672>`);
         _push(ssrRenderComponent(_component_ulink, {
           class: "link",
-          href: unref(getChatGPTShareURL)(_ctx.shareId),
+          href: unref(getChatGPTShareURL)(_ctx.gptId),
           onClick: handleLinkClick
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
@@ -8877,7 +8867,7 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
               _push2(ssrRenderComponent(_component_uimage, {
                 cdn: "",
                 src: avatarURL.value,
-                alt: _ctx.data.model,
+                alt: _ctx.gptModel,
                 draggable: "false"
               }, null, _parent2, _scopeId));
             } else {
@@ -8885,7 +8875,7 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
                 createVNode(_component_uimage, {
                   cdn: "",
                   src: avatarURL.value,
-                  alt: _ctx.data.model,
+                  alt: _ctx.gptModel,
                   draggable: "false"
                 }, null, 8, ["src", "alt"])
               ];
@@ -8897,10 +8887,10 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<div class="gpt-body" data-v-3296b32d><div class="gpt-header" data-v-3296b32d><div class="left" data-v-3296b32d>`);
+      _push(`<div class="gpt-body" data-v-fb21c672><div class="gpt-header" data-v-fb21c672><div class="left" data-v-fb21c672>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "username",
-        href: unref(getChatGPTShareURL)(_ctx.shareId),
+        href: unref(getChatGPTShareURL)(_ctx.gptId),
         onClick: handleLinkClick
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
@@ -8914,14 +8904,25 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<span class="model" data-v-3296b32d><i class="iconfont icon-cpu" data-v-3296b32d></i><span data-v-3296b32d>${ssrInterpolate(_ctx.data.model)}</span></span></div><div class="right" data-v-3296b32d><span class="created" data-v-3296b32d>`);
-      _push(ssrRenderComponent(_component_udate, {
-        date: _ctx.data.created_at * 1e3,
-        to: "ago"
-      }, null, _parent));
-      _push(`</span></div></div><div class="gpt-content" data-v-3296b32d><div class="markdown" data-v-3296b32d>`);
+      if (_ctx.gptModel) {
+        _push(`<span class="model" data-v-fb21c672><i class="iconfont icon-cpu" data-v-fb21c672></i><span data-v-fb21c672>${ssrInterpolate(_ctx.gptModel)}</span></span>`);
+      } else {
+        _push(`<!---->`);
+      }
+      _push(`</div><div class="right" data-v-fb21c672>`);
+      if (_ctx.gptTimestamp) {
+        _push(`<span class="created" data-v-fb21c672>`);
+        _push(ssrRenderComponent(_component_udate, {
+          date: Number(_ctx.gptTimestamp) * 1e3,
+          to: "ago"
+        }, null, _parent));
+        _push(`</span>`);
+      } else {
+        _push(`<!---->`);
+      }
+      _push(`</div></div><div class="gpt-content" data-v-fb21c672><div class="markdown" data-v-fb21c672>`);
       _push(ssrRenderComponent(_sfc_main$1m, {
-        html: htmlContent.value,
+        markdown: props.gptResponse,
         sanitize: true,
         compact: true
       }, null, _parent));
@@ -8929,14 +8930,14 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const chatgpt_vue_vue_type_style_index_0_scoped_3296b32d_lang = "";
+const chatgpt_vue_vue_type_style_index_0_scoped_fb21c672_lang = "";
 const _sfc_setup$14 = _sfc_main$14.setup;
 _sfc_main$14.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/chatgpt.vue");
   return _sfc_setup$14 ? _sfc_setup$14(props, ctx) : void 0;
 };
-const ArticleChatgpt = /* @__PURE__ */ _export_sfc(_sfc_main$14, [["__scopeId", "data-v-3296b32d"]]);
+const ArticleChatgpt = /* @__PURE__ */ _export_sfc(_sfc_main$14, [["__scopeId", "data-v-fb21c672"]]);
 const _sfc_main$13 = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -8950,11 +8951,14 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
     const { identity, sponsor, comment: commentStore, articleDetail: articleDetailStore } = useStores();
     const { article, fetching, prevArticle, nextArticle, relatedArticles } = storeToRefs(articleDetailStore);
     const isLiked = computed(() => Boolean(article.value && identity.isLikedPage(article.value.id)));
-    const chatgptStore = useChatGPTStore();
-    const articleChatGPTShareId = computed(() => {
+    const articleExtends = computed(() => {
       var _a;
-      return getExtendValue(((_a = article.value) == null ? void 0 : _a.extends) || [], "chatgpt-share-id");
+      return ((_a = article.value) == null ? void 0 : _a.extends) || [];
     });
+    const articleGPTId = computed(() => getExtendValue(articleExtends.value, "chatgpt-conversation-id"));
+    const articleGPTResponse = computed(() => getExtendValue(articleExtends.value, "chatgpt-conversation-response"));
+    const articleGPTTimestamp = computed(() => getExtendValue(articleExtends.value, "chatgpt-conversation-timestamp"));
+    const articleGPTModel = computed(() => getExtendValue(articleExtends.value, "chatgpt-conversation-model"));
     const handleCommentTopBarChatGPTClick = () => {
       gtag == null ? void 0 : gtag.event("chatgpt_comemnt_top_bar", {
         event_category: GAEventCategories.Comment
@@ -8991,13 +8995,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
     };
     const fetchArticleDetail = (articleId) => {
       const commentRequest = commentStore.fetchList({ post_id: articleId });
-      const articleRequest = articleDetailStore.fetchCompleteArticle(articleId).then(() => {
-        if (articleChatGPTShareId.value) {
-          return chatgptStore.fetch(articleChatGPTShareId.value).catch((error) => {
-            console.warn("[Article] fetch chatgpt error", (error == null ? void 0 : error.message) ?? error);
-          });
-        }
-      });
+      const articleRequest = articleDetailStore.fetchCompleteArticle(articleId);
       return Promise.all([articleRequest, commentRequest]);
     };
     const customElementsStyle = shallowRef(null);
@@ -9034,7 +9032,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_placeholder = resolveComponent("placeholder");
       const _component_ulink = resolveComponent("ulink");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-page" }, _attrs))} data-v-86946de5>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-page" }, _attrs))} data-v-58bb9a21>`);
       _push(ssrRenderComponent(_component_placeholder, { loading: unref(fetching) }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -9055,14 +9053,14 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
           var _a, _b, _c, _d;
           if (_push2) {
             if (unref(article)) {
-              _push2(`<div data-v-86946de5${_scopeId}><div class="module margin background overflow" data-v-86946de5${_scopeId}>`);
+              _push2(`<div data-v-58bb9a21${_scopeId}><div class="module margin background overflow" data-v-58bb9a21${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleContent, {
                 id: ARTICLE_CONTENT_ELEMENT_ID,
                 "readmore-id": ARTICLE_READMORE_ELEMENT_ID,
                 article: unref(article),
                 onRendered: handleContentRendered
               }, null, _parent2, _scopeId));
-              _push2(`<div class="divider" data-v-86946de5${_scopeId}></div>`);
+              _push2(`<div class="divider" data-v-58bb9a21${_scopeId}></div>`);
               _push2(ssrRenderComponent(ArticleMeta, {
                 id: ARTICLE_META_ELEMENT_ID,
                 article: unref(article),
@@ -9093,19 +9091,19 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
                 }),
                 _: 1
               }, _parent2, _scopeId));
-              _push2(`</div><div class="module margin background" data-v-86946de5${_scopeId}><div class="bridge left" data-v-86946de5${_scopeId}></div><div class="bridge right" data-v-86946de5${_scopeId}></div>`);
+              _push2(`</div><div class="module margin background" data-v-58bb9a21${_scopeId}><div class="bridge left" data-v-58bb9a21${_scopeId}></div><div class="bridge right" data-v-58bb9a21${_scopeId}></div>`);
               _push2(ssrRenderComponent(ArticleShare, {
                 id: ARTICLE_SHARE_ELEMENT_ID,
                 "article-id": _ctx.articleId,
                 likes: ((_b = (_a = unref(article)) == null ? void 0 : _a.meta) == null ? void 0 : _b.likes) || 0,
                 socials: _ctx.isMobile ? [unref(SocialMedia).Wechat, unref(SocialMedia).Weibo, unref(SocialMedia).Twitter] : []
               }, null, _parent2, _scopeId));
-              _push2(`</div><div class="module margin overflow" data-v-86946de5${_scopeId}>`);
+              _push2(`</div><div class="module margin overflow" data-v-58bb9a21${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleNeighbour, {
                 prev: unref(prevArticle),
                 next: unref(nextArticle)
               }, null, _parent2, _scopeId));
-              _push2(`</div><div class="module margin overflow" data-v-86946de5${_scopeId}>`);
+              _push2(`</div><div class="module margin overflow" data-v-58bb9a21${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleRelated, {
                 id: ARTICLE_RELATED_ELEMENT_ID,
                 columns: _ctx.isMobile ? 2 : 3,
@@ -9175,24 +9173,24 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="comment" data-v-86946de5>`);
+      _push(`<div class="comment" data-v-58bb9a21>`);
       _push(ssrRenderComponent(Comment, {
         plain: _ctx.isMobile,
         fetching: unref(fetching),
         "post-id": _ctx.articleId
       }, createSlots({ _: 2 }, [
-        articleChatGPTShareId.value ? {
+        articleGPTId.value ? {
           name: "topbar-extra",
           fn: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
               _push2(ssrRenderComponent(_component_ulink, {
                 class: "chat-gpt-link",
-                href: unref(getChatGPTShareURL)(articleChatGPTShareId.value),
+                href: unref(getChatGPTShareURL)(articleGPTId.value),
                 onClick: handleCommentTopBarChatGPTClick
               }, {
                 default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<i class="iconfont icon-chat-gpt" data-v-86946de5${_scopeId2}></i>`);
+                    _push3(`<i class="iconfont icon-chat-gpt" data-v-58bb9a21${_scopeId2}></i>`);
                   } else {
                     return [
                       createVNode("i", { class: "iconfont icon-chat-gpt" })
@@ -9205,7 +9203,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
               return [
                 createVNode(_component_ulink, {
                   class: "chat-gpt-link",
-                  href: unref(getChatGPTShareURL)(articleChatGPTShareId.value),
+                  href: unref(getChatGPTShareURL)(articleGPTId.value),
                   onClick: handleCommentTopBarChatGPTClick
                 }, {
                   default: withCtx(() => [
@@ -9218,24 +9216,28 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
           }),
           key: "0"
         } : void 0,
-        articleChatGPTShareId.value && unref(chatgptStore).data ? {
+        articleGPTId.value && articleGPTResponse.value ? {
           name: "list-top-extra",
           fn: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
               _push2(ssrRenderComponent(ArticleChatgpt, {
-                "share-id": articleChatGPTShareId.value,
-                data: unref(chatgptStore).data,
+                "gpt-id": articleGPTId.value,
+                "gpt-response": articleGPTResponse.value,
+                "gpt-timestamp": articleGPTTimestamp.value,
+                "gpt-model": articleGPTModel.value,
                 "hidden-avatar": _ctx.isMobile,
                 onClickLink: handleCommentUsernameChatGPTClick
               }, null, _parent2, _scopeId));
             } else {
               return [
                 createVNode(ArticleChatgpt, {
-                  "share-id": articleChatGPTShareId.value,
-                  data: unref(chatgptStore).data,
+                  "gpt-id": articleGPTId.value,
+                  "gpt-response": articleGPTResponse.value,
+                  "gpt-timestamp": articleGPTTimestamp.value,
+                  "gpt-model": articleGPTModel.value,
                   "hidden-avatar": _ctx.isMobile,
                   onClickLink: handleCommentUsernameChatGPTClick
-                }, null, 8, ["share-id", "data", "hidden-avatar"])
+                }, null, 8, ["gpt-id", "gpt-response", "gpt-timestamp", "gpt-model", "hidden-avatar"])
               ];
             }
           }),
@@ -9246,14 +9248,14 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_86946de5_lang = "";
+const index_vue_vue_type_style_index_0_scoped_58bb9a21_lang = "";
 const _sfc_setup$13 = _sfc_main$13.setup;
 _sfc_main$13.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/index.vue");
   return _sfc_setup$13 ? _sfc_setup$13(props, ctx) : void 0;
 };
-const ArticleDetailPage = /* @__PURE__ */ _export_sfc(_sfc_main$13, [["__scopeId", "data-v-86946de5"]]);
+const ArticleDetailPage = /* @__PURE__ */ _export_sfc(_sfc_main$13, [["__scopeId", "data-v-58bb9a21"]]);
 const _sfc_main$12 = /* @__PURE__ */ defineComponent({
   __name: "instagram",
   __ssrInlineRender: true,
