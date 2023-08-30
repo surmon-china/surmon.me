@@ -60,19 +60,15 @@ export const proxyer = (): RequestHandler => {
   })
 
   return (request, response) => {
-    const targetURL = atob(request.params['0'])
-
-    try {
-      response.setHeader('x-original-url', targetURL)
-    } catch (_) {
-      return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL "${targetURL}"`)
-    }
-
+    let targetURL: string | null = null
     let parsedURL: URL | null = null
+
     try {
+      targetURL = atob(request.params['0'])
+      response.setHeader('x-original-url', targetURL)
       parsedURL = new URL(targetURL)
-    } catch (_) {
-      return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL`)
+    } catch (error: any) {
+      return response.status(BAD_REQUEST).send(`Proxy error: "${error?.message || String(error)}"`)
     }
 
     if (parsedURL.hostname.endsWith(META.domain)) {
