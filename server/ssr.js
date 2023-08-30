@@ -365,7 +365,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.20.0";
+const APP_VERSION = "4.20.1";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -1573,7 +1573,6 @@ const useTagStore = defineStore("tag", () => {
 });
 var TunnelModule = /* @__PURE__ */ ((TunnelModule2) => {
   TunnelModule2["WebFont"] = "webfont";
-  TunnelModule2["ChatGPT"] = "chatgpt";
   TunnelModule2["MyGoogleMap"] = "my_google_map";
   TunnelModule2["TwitterAggregate"] = "twitter_aggregate";
   TunnelModule2["YouTubePlaylist"] = "youtube_playlist";

@@ -120,7 +120,6 @@ const getLocalApiURL = () => process.env.VITE_API_LOCAL_URL;
 var TunnelModule;
 (function (TunnelModule) {
     TunnelModule["WebFont"] = "webfont";
-    TunnelModule["ChatGPT"] = "chatgpt";
     TunnelModule["MyGoogleMap"] = "my_google_map";
     TunnelModule["TwitterAggregate"] = "twitter_aggregate";
     TunnelModule["YouTubePlaylist"] = "youtube_playlist";
@@ -1406,19 +1405,15 @@ const proxyer = () => {
         response.end('Proxy error: ' + error.message);
     });
     return (request, response) => {
-        const targetURL = atob(request.params['0']);
-        try {
-            response.setHeader('x-original-url', targetURL);
-        }
-        catch (_) {
-            return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL "${targetURL}"`);
-        }
+        let targetURL = null;
         let parsedURL = null;
         try {
+            targetURL = atob(request.params['0']);
+            response.setHeader('x-original-url', targetURL);
             parsedURL = new URL(targetURL);
         }
-        catch (_) {
-            return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL`);
+        catch (error) {
+            return response.status(BAD_REQUEST).send(`Proxy error: "${error?.message || String(error)}"`);
         }
         if (parsedURL.hostname.endsWith(META.domain)) {
             return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL`);
