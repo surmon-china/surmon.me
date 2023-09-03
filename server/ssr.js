@@ -365,7 +365,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.20.1";
+const APP_VERSION = "4.20.2";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -8647,9 +8647,6 @@ const _sfc_main$16 = /* @__PURE__ */ defineComponent({
     const props = __props;
     const { cdnDomain } = useEnhancer();
     const getThumbnailURL = (url, format) => {
-      if (!isOriginalStaticURL(url)) {
-        return "";
-      }
       return getImgProxyURL(
         cdnDomain,
         getImgProxyPath(getStaticPath(url), {
@@ -8668,19 +8665,19 @@ const _sfc_main$16 = /* @__PURE__ */ defineComponent({
       return [
         ...articles,
         ...new Array(props.count - articles.length).fill({
+          _id: "",
+          id: null,
           title: "-",
           description: "",
-          id: null,
-          _id: "",
-          thumbnail: ""
+          thumbnail: null
         })
       ];
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_router_link = resolveComponent("router-link");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "related" }, _attrs))} data-v-ac5683b5><ul class="articles" style="${ssrRenderStyle({ gridTemplateColumns: `repeat(${_ctx.columns}, 1fr)` })}" data-v-ac5683b5><!--[-->`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "related" }, _attrs))} data-v-100233cf><ul class="articles" style="${ssrRenderStyle({ gridTemplateColumns: `repeat(${_ctx.columns}, 1fr)` })}" data-v-100233cf><!--[-->`);
       ssrRenderList(articleList.value, (article, index) => {
-        _push(`<li class="${ssrRenderClass([{ disabled: !article.id }, "item"])}" data-v-ac5683b5>`);
+        _push(`<li class="${ssrRenderClass([{ disabled: !article.id }, "item"])}" data-v-100233cf>`);
         _push(ssrRenderComponent(_component_router_link, {
           class: "item-article",
           title: article.title,
@@ -8688,13 +8685,18 @@ const _sfc_main$16 = /* @__PURE__ */ defineComponent({
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<picture class="thumbnail" data-v-ac5683b5${_scopeId}>`);
+              _push2(`<picture class="thumbnail" data-v-100233cf${_scopeId}>`);
               if (unref(isOriginalStaticURL)(article.thumbnail)) {
-                _push2(`<!--[--><source${ssrRenderAttr("srcset", getThumbnailURL(article.thumbnail, "avif"))} type="image/avif" data-v-ac5683b5${_scopeId}><source${ssrRenderAttr("srcset", getThumbnailURL(article.thumbnail, "webp"))} type="image/webp" data-v-ac5683b5${_scopeId}><!--]-->`);
+                _push2(`<!--[--><source${ssrRenderAttr("srcset", getThumbnailURL(article.thumbnail, "avif"))} type="image/avif" data-v-100233cf${_scopeId}><source${ssrRenderAttr("srcset", getThumbnailURL(article.thumbnail, "webp"))} type="image/webp" data-v-100233cf${_scopeId}><!--]-->`);
               } else {
                 _push2(`<!---->`);
               }
-              _push2(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("alt", article.title)}${ssrRenderAttr("src", getThumbnailURL(article.thumbnail))} data-v-ac5683b5${_scopeId}></picture><div class="title" data-v-ac5683b5${_scopeId}>${ssrInterpolate(article.title)}</div><div class="description"${ssrRenderAttr("title", article.description)} data-v-ac5683b5${_scopeId}>${ssrInterpolate(article.description)}</div>`);
+              if (article.thumbnail) {
+                _push2(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("alt", article.title)}${ssrRenderAttr("src", unref(isOriginalStaticURL)(article.thumbnail) ? getThumbnailURL(article.thumbnail) : article.thumbnail)} data-v-100233cf${_scopeId}>`);
+              } else {
+                _push2(`<!---->`);
+              }
+              _push2(`</picture><div class="title" data-v-100233cf${_scopeId}>${ssrInterpolate(article.title)}</div><div class="description"${ssrRenderAttr("title", article.description)} data-v-100233cf${_scopeId}>${ssrInterpolate(article.description)}</div>`);
             } else {
               return [
                 createVNode("picture", { class: "thumbnail" }, [
@@ -8708,13 +8710,14 @@ const _sfc_main$16 = /* @__PURE__ */ defineComponent({
                       type: "image/webp"
                     }, null, 8, ["srcset"])
                   ], 64)) : createCommentVNode("", true),
-                  createVNode("img", {
+                  article.thumbnail ? (openBlock(), createBlock("img", {
+                    key: 1,
                     class: "image",
                     loading: "lazy",
                     draggable: "false",
                     alt: article.title,
-                    src: getThumbnailURL(article.thumbnail)
-                  }, null, 8, ["alt", "src"])
+                    src: unref(isOriginalStaticURL)(article.thumbnail) ? getThumbnailURL(article.thumbnail) : article.thumbnail
+                  }, null, 8, ["alt", "src"])) : createCommentVNode("", true)
                 ]),
                 createVNode("div", { class: "title" }, toDisplayString(article.title), 1),
                 createVNode("div", {
@@ -8732,14 +8735,14 @@ const _sfc_main$16 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const related_vue_vue_type_style_index_0_scoped_ac5683b5_lang = "";
+const related_vue_vue_type_style_index_0_scoped_100233cf_lang = "";
 const _sfc_setup$16 = _sfc_main$16.setup;
 _sfc_main$16.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/related.vue");
   return _sfc_setup$16 ? _sfc_setup$16(props, ctx) : void 0;
 };
-const ArticleRelated = /* @__PURE__ */ _export_sfc(_sfc_main$16, [["__scopeId", "data-v-ac5683b5"]]);
+const ArticleRelated = /* @__PURE__ */ _export_sfc(_sfc_main$16, [["__scopeId", "data-v-100233cf"]]);
 const _sfc_main$15 = /* @__PURE__ */ defineComponent({
   __name: "neighbour",
   __ssrInlineRender: true,

@@ -541,7 +541,7 @@ const getSotweAggregate = async (twitterUsername) => {
 
 
 const getNitterRss = async (twitterUsername) => {
-    const url = `https://singapore.unofficialbird.com/${twitterUsername}/rss`;
+    const url = `https://twiiit.com/${twitterUsername}/rss`;
     const response = await external_axios_namespaceObject["default"].get(url, { timeout: 8000 });
     const xmlParser = new external_fast_xml_parser_namespaceObject.XMLParser();
     const { rss: result } = xmlParser.parse(response.data);
