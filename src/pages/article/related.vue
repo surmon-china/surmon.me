@@ -20,9 +20,6 @@
 
   const { cdnDomain } = useEnhancer()
   const getThumbnailURL = (url: string, format?: ImgProxyFormat) => {
-    if (!isOriginalStaticURL(url)) {
-      return ''
-    }
     return getImgProxyURL(
       cdnDomain,
       getImgProxyPath(getStaticPath(url), {
@@ -42,11 +39,11 @@
     return [
       ...articles,
       ...new Array(props.count - articles.length).fill({
+        _id: '',
+        id: null,
         title: '-',
         description: '',
-        id: null,
-        _id: '',
-        thumbnail: ''
+        thumbnail: null
       })
     ]
   })
@@ -63,11 +60,12 @@
               <source :srcset="getThumbnailURL(article.thumbnail, 'webp')" type="image/webp" />
             </template>
             <img
+              v-if="article.thumbnail"
               class="image"
               loading="lazy"
               draggable="false"
               :alt="article.title"
-              :src="getThumbnailURL(article.thumbnail)"
+              :src="isOriginalStaticURL(article.thumbnail) ? getThumbnailURL(article.thumbnail) : article.thumbnail"
             />
           </picture>
           <div class="title">{{ article.title }}</div>

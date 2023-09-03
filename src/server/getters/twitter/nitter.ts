@@ -26,7 +26,7 @@ export interface NitterRss {
 }
 
 export const getNitterRss = async (twitterUsername: string): Promise<NitterRss> => {
-  const url = `https://singapore.unofficialbird.com/${twitterUsername}/rss`
+  const url = `https://twiiit.com/${twitterUsername}/rss`
   const response = await axios.get<string>(url, { timeout: 8000 })
   const xmlParser = new XMLParser()
   const { rss: result } = xmlParser.parse(response.data)
