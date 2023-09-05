@@ -1,8 +1,29 @@
-import { Language } from '/@/language'
 import { OriginState } from '/@/constants/state'
+import { Language } from '/@/language'
 import { UniversalKeyValue } from './common'
 import { Category } from './category'
 import { Tag } from './tag'
+
+export enum ArticleLang {
+  Chinese = 'zh', // 简体中文
+  English = 'en', // English
+  Mixed = 'mix' // 多语言混合
+}
+
+export const ArticleLangI18n: Record<ArticleLang, Record<Language, string>> = {
+  [ArticleLang.Chinese]: {
+    [Language.Chinese]: '中文',
+    [Language.English]: 'ZH'
+  },
+  [ArticleLang.English]: {
+    [Language.Chinese]: '英文',
+    [Language.English]: 'EN'
+  },
+  [ArticleLang.Mixed]: {
+    [Language.Chinese]: '双语',
+    [Language.English]: 'MIX'
+  }
+}
 
 export interface Article {
   _id: string
@@ -13,7 +34,7 @@ export interface Article {
   content: string
   thumbnail: string
   origin: OriginState
-  lang: Language
+  lang: ArticleLang
   disabled_comments: boolean
   tags: Tag[]
   categories: Category[]

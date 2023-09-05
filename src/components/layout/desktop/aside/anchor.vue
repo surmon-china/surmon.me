@@ -2,6 +2,7 @@
   import { computed } from 'vue'
   import { useArticleDetailStore } from '/@/stores/article'
   import { LanguageKey } from '/@/language'
+  import { ArticleLangI18n } from '/@/interfaces/article'
   import { scrollToAnchor } from '/@/utils/scroller'
   import { numberSplit } from '/@/transforms/text'
   import * as ANCHORS from '/@/constants/anchor'
@@ -25,6 +26,8 @@
     <button class="header" :title="store.article.title" @click="scrollToAnchor(ANCHORS.ARTICLE_CONTENT_ELEMENT_ID)">
       <div class="title">{{ store.article.title }}</div>
       <div class="read">
+        <i18n v-bind="ArticleLangI18n[store.article.lang]" />
+        <i18n zh="，" en=", " />
         <i18n>
           <template #zh>共 {{ numberSplit(store.contentLength) }} 字，需阅读 {{ store.readMinutes }} 分钟</template>
           <template #en>{{ numberSplit(store.contentLength) }} words, {{ store.readMinutes }} min read</template>

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
   import { computed, shallowRef, onMounted } from 'vue'
-  import { Language, LanguageKey } from '/@/language'
-  import { Article } from '/@/interfaces/article'
+  import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore } from '/@/stores/identity'
+  import { Article, ArticleLang, ArticleLangI18n } from '/@/interfaces/article'
   import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
   import { getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
   import { getArticleDetailRoute, getCategoryFlowRoute } from '/@/transforms/route'
@@ -14,7 +14,7 @@
     article: Article
   }>()
 
-  const { cdnDomain } = useEnhancer()
+  const { cdnDomain, isZhLang } = useEnhancer()
   const identity = useIdentityStore()
   const isLiked = computed(() => identity.isLikedPage(props.article.id))
   const isHybrid = computed(() => isHybridType(props.article.origin))
@@ -27,8 +27,9 @@
     finallyThumbnailURL.value = imageRef.value?.currentSrc ?? null
   }
 
-  const getLanguageText = (language: Language) => {
-    return language === Language.Chinese ? '中文' : 'EN'
+  const getLanguageText = (language: ArticleLang) => {
+    const targetI18n = ArticleLangI18n[language]
+    return isZhLang.value ? targetI18n.zh : targetI18n.en
   }
 
   const getThumbnailURL = (url: string, format?: ImgProxyFormat) => {

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { LanguageKey } from '/@/language'
-  import { Article } from '/@/interfaces/article'
+  import { Article, ArticleLangI18n } from '/@/interfaces/article'
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore } from '/@/stores/identity'
   import { getArticleDetailRoute } from '/@/transforms/route'
@@ -78,6 +78,9 @@
           <router-link class="link" :title="article.title" :to="getArticleDetailRoute(article.id)">
             {{ article.title }}
           </router-link>
+          <span class="language">
+            <i18n v-bind="ArticleLangI18n[article.lang]" />
+          </span>
         </h4>
         <p class="description" style="-webkit-box-orient: vertical" v-html="article.description"></p>
       </div>
@@ -169,10 +172,18 @@
           margin-top: 0;
           margin-bottom: $sm-gap;
           font-weight: bold;
-          @include text-overflow();
+          display: flex;
+          justify-content: space-between;
 
           .link {
             text-decoration: none;
+            max-width: calc(100% - 3em);
+            @include text-overflow();
+          }
+
+          .language {
+            opacity: 0.4;
+            color: $text-divider;
           }
         }
 

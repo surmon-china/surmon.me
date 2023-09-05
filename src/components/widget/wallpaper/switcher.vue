@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, computed } from 'vue'
+  import { ref } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useWallpaperStore } from '/@/stores/wallpaper'
   import { GAEventCategories } from '/@/constants/gtag'
@@ -8,7 +8,6 @@
 
   const { i18n: _i18n, gtag, isDarkTheme } = useEnhancer()
   const wallpaperStore = useWallpaperStore()
-  const papers = computed(() => wallpaperStore.papers(_i18n.language.value as Language))
   const isOnWallpaper = ref(false)
 
   const handleCloseWallpaper = () => {
@@ -16,7 +15,7 @@
   }
 
   const handleOpenWallpaper = () => {
-    if (papers.value?.length) {
+    if (wallpaperStore.papers(_i18n.language.value as Language)?.length) {
       isOnWallpaper.value = true
     } else {
       alert('Something went wrong！')
