@@ -424,9 +424,9 @@ const external_wonderful_bing_wallpaper_namespaceObject = external_wonderful_bin
  */
 
 const getWallpapers = async (params) => {
-    const wbw = new external_wonderful_bing_wallpaper_namespaceObject["default"]();
-    const wallpaperJSON = await wbw.getWallpapers({ ...params, size: 8 });
     try {
+        const wbw = new external_wonderful_bing_wallpaper_namespaceObject["default"]();
+        const wallpaperJSON = await wbw.getWallpapers({ ...params, size: 8 });
         return wbw.humanizeWallpapers(wallpaperJSON);
     }
     catch (error) {
