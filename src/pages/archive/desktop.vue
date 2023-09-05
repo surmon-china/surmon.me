@@ -17,7 +17,7 @@
     statisticState.statistics.value.todayViews,
     statisticState.statistics.value.comments,
     statisticState.statistics.value.totalLikes,
-    statisticState.statistics.value.averageEmotion
+    statisticState.statistics.value.totalViews
   ])
 
   useArchivePageMeta()

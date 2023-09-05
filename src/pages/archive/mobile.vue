@@ -13,9 +13,8 @@
   const statisticFetching = ref(true)
   const statistics = computed(() => [
     statisticState.statistics.value.articles,
-    statisticState.statistics.value.todayViews,
-    statisticState.statistics.value.comments,
-    statisticState.statistics.value.averageEmotion
+    statisticState.statistics.value.totalViews,
+    statisticState.statistics.value.comments
   ])
 
   useArchivePageMeta()

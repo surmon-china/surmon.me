@@ -18,7 +18,7 @@ export const zhLangMap: LanguageMap = {
   [LanguageKey.STATISTIC_COMMENTS]: '全站评论',
   [LanguageKey.STATISTIC_TAGS]: '全站标签',
   [LanguageKey.STATISTIC_TODAY_VIEWS]: '今日阅读',
-  [LanguageKey.STATISTIC_TOTAL_VIEWS]: '累计阅读',
+  [LanguageKey.STATISTIC_TOTAL_VIEWS]: '累计被阅读',
   [LanguageKey.STATISTIC_TOTAL_UPVOTES]: '共获点赞',
   [LanguageKey.STATISTIC_AVERAGE_EMOTION]: '匿名评分',
   [LanguageKey.EMPTY_PLACEHOLDER]: '空空如也',

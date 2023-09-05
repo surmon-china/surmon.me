@@ -12,9 +12,9 @@ export interface IWallpaper {
 }
 
 export const getWallpapers = async (params?: WonderfulBingWallpaperOption): Promise<any> => {
-  const wbw = new WonderfulBingWallpaper()
-  const wallpaperJSON = await wbw.getWallpapers({ ...params, size: 8 })
   try {
+    const wbw = new WonderfulBingWallpaper()
+    const wallpaperJSON = await wbw.getWallpapers({ ...params, size: 8 })
     return wbw.humanizeWallpapers(wallpaperJSON)
   } catch (error) {
     throw 'wallpaper parsing JSON failed: ' + String(error)

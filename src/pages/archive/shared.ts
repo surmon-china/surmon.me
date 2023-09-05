@@ -53,7 +53,7 @@ export const useArchivePageStatistics = () => {
       content: numberSplit(store.data?.todayViews || 0)
     },
     totalViews: {
-      icon: 'icon-like',
+      icon: 'icon-eye',
       title: i18n.t(LanguageKey.STATISTIC_TOTAL_VIEWS)!,
       content: numberSplit(store.data?.totalViews || 0)
     },
