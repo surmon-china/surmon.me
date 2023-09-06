@@ -226,7 +226,6 @@ const VALUABLE_LINKS = Object.freeze({
     OPENSEA: 'https://opensea.io/Surmon',
     DOUBAN: 'https://www.douban.com/people/nocower',
     DOUBAN_MOVIE: `https://movie.douban.com/people/nocower/collect`,
-    QUORA: 'https://www.quora.com/profile/Surmon',
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
     INSTAGRAM: `https://www.instagram.com/${app_config_IDENTITIES.INSTAGRAM_USERNAME}`,
     TWITTER: `https://twitter.com/${app_config_IDENTITIES.TWITTER_USER_NAME}`
