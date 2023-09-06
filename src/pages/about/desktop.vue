@@ -517,9 +517,6 @@
               &.algorithm {
                 background-color: $leetcode-primary;
               }
-              &.quora {
-                background-color: $quora-primary;
-              }
               &.linkedin {
                 background-color: $linkedin-primary;
               }

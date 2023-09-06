@@ -20,7 +20,7 @@ export const ArticleLangI18n: Record<ArticleLang, Record<Language, string>> = {
     [Language.English]: 'EN'
   },
   [ArticleLang.Mixed]: {
-    [Language.Chinese]: '双语',
+    [Language.Chinese]: '多语',
     [Language.English]: 'MIX'
   }
 }
