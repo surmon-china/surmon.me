@@ -27,6 +27,7 @@
   const inputElement = ref<HTMLInputElement>(null as any)
   const searchState = reactive({
     open: false,
+    focused: false,
     keyword: ''
   })
 
@@ -99,13 +100,15 @@
           :placeholder="_i18n.t(LanguageKey.SEARCH_PLACEHOLDER)"
           v-model.trim="searchState.keyword"
           @keyup.enter.stop.prevent="submitSearch"
+          @focus="searchState.focused = true"
+          @blur="searchState.focused = false"
         />
         <span class="close" @click.stop.prevent="cancelSearch">
           <i class="iconfont icon-cancel"></i>
         </span>
       </div>
       <div class="search-tags" @click="cancelSearch">
-        <div class="tag-list" v-if="tagStore.sorted">
+        <div class="tag-list" :class="{ 'input-focused': searchState.focused }" v-if="tagStore.sorted">
           <router-link
             class="item"
             :title="`${getTagEnName(tag)} | ${tag.description}`"
@@ -205,6 +208,11 @@
           padding: 0;
           overflow: hidden;
           list-style: none;
+          &.input-focused {
+            .item {
+              margin-bottom: $gap;
+            }
+          }
 
           .item {
             $height: 2em;
@@ -217,6 +225,7 @@
             font-size: $font-size-h6;
             font-family: $font-family-normal;
             background-color: $module-bg-darker-1;
+            transition: margin-bottom $transition-time-fast;
             @include radius-box($xs-radius);
 
             .name {
