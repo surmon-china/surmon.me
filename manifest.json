@@ -1,27 +1,27 @@
 {
-  "_basic-8b110188.js": {
+  "_basic-17edc1dc.js": {
     "css": [
       "basic-e8b3596c.css"
     ],
-    "file": "basic-8b110188.js",
+    "file": "basic-17edc1dc.js",
     "imports": [
-      "_vendor-4f9bc441.js"
+      "_vendor-37f3425b.js"
     ]
   },
-  "_mapbox-gl-60412154.js": {
+  "_mapbox-gl-509d3fb2.js": {
     "css": [
       "mapbox-gl-c4636267.css"
     ],
-    "file": "mapbox-gl-60412154.js",
+    "file": "mapbox-gl-509d3fb2.js",
     "imports": [
-      "_basic-8b110188.js"
+      "_basic-17edc1dc.js"
     ],
     "isDynamicEntry": true
   },
-  "_vendor-4f9bc441.js": {
-    "file": "vendor-4f9bc441.js",
+  "_vendor-37f3425b.js": {
+    "file": "vendor-37f3425b.js",
     "imports": [
-      "_basic-8b110188.js"
+      "_basic-17edc1dc.js"
     ]
   },
   "basic.css": {
@@ -29,21 +29,21 @@
     "src": "basic.css"
   },
   "index.css": {
-    "file": "index-f652dedb.css",
+    "file": "index-86be783d.css",
     "src": "index.css"
   },
   "index.html": {
     "css": [
-      "index-f652dedb.css"
+      "index-86be783d.css"
     ],
     "dynamicImports": [
-      "_mapbox-gl-60412154.js"
+      "_mapbox-gl-509d3fb2.js"
     ],
-    "file": "index-96253bce.js",
+    "file": "index-04807e00.js",
     "imports": [
-      "_basic-8b110188.js",
-      "_vendor-4f9bc441.js",
-      "_mapbox-gl-60412154.js"
+      "_basic-17edc1dc.js",
+      "_vendor-37f3425b.js",
+      "_mapbox-gl-509d3fb2.js"
     ],
     "isEntry": true,
     "src": "index.html"
