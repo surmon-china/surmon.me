@@ -143,6 +143,7 @@
       opacity: 0;
       background-color: $text-reversal;
       transform: translateY(-100%);
+      border-bottom: 1px solid $module-bg-darker-2;
 
       > .input {
         width: 80%;
@@ -170,6 +171,7 @@
       position: relative;
       align-items: center;
       justify-content: space-between;
+      border-bottom: 1px solid $module-bg-darker-2;
 
       .navbar-menu,
       .navbar-search {

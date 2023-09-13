@@ -57,8 +57,8 @@
     }
   })
 
-  const fetchArticles = async (params: any = {}) => {
-    await articleListStore.fetch({
+  const fetchArticles = (params: any = {}) => {
+    return articleListStore.fetch({
       category_slug: props.categorySlug,
       tag_slug: props.tagSlug,
       date: props.date,
@@ -67,11 +67,12 @@
     })
   }
 
-  const loadmoreArticles = async () => {
-    await fetchArticles({
+  const loadmoreArticles = () => {
+    fetchArticles({
       page: articleListStore.pagination!.current_page + 1
+    }).then(() => {
+      onClient(scrollToNextScreen)
     })
-    onClient(scrollToNextScreen)
   }
 
   onBeforeMount(() => {

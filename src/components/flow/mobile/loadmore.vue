@@ -104,27 +104,24 @@
       }
 
       > div {
-        width: 0.6rem;
+        width: 1.6rem;
+        height: 1rem;
         margin: 0 $sm-gap;
         border-radius: $mini-radius;
         animation: loading 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
         &:nth-child(1) {
-          height: 1.6rem;
           background: $module-bg-darker-3;
           animation-delay: -0.6s;
         }
         &:nth-child(2) {
-          height: 1rem;
           background: $module-bg-darker-3;
           animation-delay: -0.4s;
         }
         &:nth-child(3) {
-          height: 1rem;
           background: $module-bg-darker-4;
           animation-delay: -0.2s;
         }
         &:nth-child(4) {
-          height: 1.6rem;
           background: $module-bg-darker-3;
           animation-delay: -1s;
         }
