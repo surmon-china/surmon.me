@@ -1,9 +1,11 @@
 <script lang="ts" setup>
   import { reactive, ref, watch, onMounted, nextTick } from 'vue'
+  import { useTagStore, getTagEnName, getTagIconName } from '/@/stores/tag'
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
   import { LanguageKey } from '/@/language'
   import { isSearchFlow } from '/@/transforms/route'
+  import { getTagFlowRoute } from '/@/transforms/route'
   import { onBeforeMount } from 'vue'
 
   enum MobileHeaderEvents {
@@ -21,6 +23,7 @@
   }>()
 
   const { route, router, i18n: _i18n } = useEnhancer()
+  const tagStore = useTagStore()
   const inputElement = ref<HTMLInputElement>(null as any)
   const searchState = reactive({
     open: false,
@@ -73,25 +76,6 @@
 
 <template>
   <header class="header">
-    <div class="search" :class="{ actived: searchState.open }">
-      <input
-        class="input"
-        ref="inputElement"
-        autocomplete="off"
-        type="text"
-        maxlength="16"
-        required
-        :placeholder="_i18n.t(LanguageKey.SEARCH_PLACEHOLDER)"
-        v-model.trim="searchState.keyword"
-        @keyup.enter.stop.prevent="submitSearch"
-      />
-      <span class="close" @click.stop.prevent="cancelSearch">
-        <i class="iconfont icon-cancel"></i>
-      </span>
-    </div>
-    <transition name="module">
-      <div v-if="searchState.open" class="search-mask" @click="cancelSearch"></div>
-    </transition>
     <nav class="navbar">
       <button class="navbar-menu" @click.stop.prevent="handleMenuToggle">
         <i class="iconfont icon-menu"></i>
@@ -103,6 +87,41 @@
         <i class="iconfont icon-search"></i>
       </button>
     </nav>
+    <div class="search" v-if="searchState.open">
+      <div class="search-bar">
+        <input
+          class="input"
+          ref="inputElement"
+          autocomplete="off"
+          type="text"
+          maxlength="24"
+          required
+          :placeholder="_i18n.t(LanguageKey.SEARCH_PLACEHOLDER)"
+          v-model.trim="searchState.keyword"
+          @keyup.enter.stop.prevent="submitSearch"
+        />
+        <span class="close" @click.stop.prevent="cancelSearch">
+          <i class="iconfont icon-cancel"></i>
+        </span>
+      </div>
+      <div class="search-tags" @click="cancelSearch">
+        <div class="tag-list" v-if="tagStore.sorted">
+          <router-link
+            class="item"
+            :title="`${getTagEnName(tag)} | ${tag.description}`"
+            :to="getTagFlowRoute(tag.slug)"
+            :key="index"
+            v-for="(tag, index) in tagStore.sorted"
+          >
+            <i class="iconfont" :class="getTagIconName(tag)" />
+            <span class="name">
+              <i18n :zh="tag.name" :en="getTagEnName(tag)" />
+              <span class="count">({{ tag.article_count || 0 }})</span>
+            </span>
+          </router-link>
+        </div>
+      </div>
+    </div>
   </header>
 </template>
 
@@ -119,50 +138,6 @@
     background-color: $module-bg;
     z-index: $z-index-header;
     @include backdrop-blur(5px);
-
-    .search-mask {
-      position: fixed;
-      z-index: $z-index-normal;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      touch-action: none;
-      background-color: $module-bg-translucent;
-      @include backdrop-blur(3px);
-    }
-
-    .search {
-      position: absolute;
-      display: flex;
-      z-index: $z-index-normal + 1;
-      width: 100%;
-      height: $mobile-header-height;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      background-color: $text-reversal;
-      transform: translateY(-100%);
-      border-bottom: 1px solid $module-bg-darker-2;
-
-      > .input {
-        width: 80%;
-        height: 100%;
-        padding: 1em;
-      }
-
-      > .close {
-        width: 20%;
-        height: 100%;
-        line-height: $mobile-header-height;
-        text-align: center;
-      }
-
-      &.actived {
-        opacity: 1;
-        transform: translateY(0%);
-      }
-    }
 
     .navbar {
       width: 100%;
@@ -186,6 +161,87 @@
 
         .image {
           filter: $theme-logo-rotate;
+        }
+      }
+    }
+
+    .search {
+      position: fixed;
+      z-index: $z-index-normal + 1;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+
+      .search-bar {
+        width: 100%;
+        height: $mobile-header-height;
+        display: flex;
+        background-color: $text-reversal;
+        border-bottom: 1px solid $module-bg-darker-2;
+
+        > .input {
+          width: 80%;
+          height: 100%;
+          padding: 1em;
+        }
+
+        > .close {
+          width: 20%;
+          height: 100%;
+          line-height: $mobile-header-height;
+          text-align: center;
+        }
+      }
+
+      .search-tags {
+        flex: 1;
+        padding: $lg-gap;
+        touch-action: none;
+        background-color: $module-bg-translucent;
+        @include backdrop-blur(3px);
+
+        .tag-list {
+          padding: 0;
+          overflow: hidden;
+          list-style: none;
+
+          .item {
+            $height: 2em;
+            display: inline-flex;
+            padding: 0 $sm-gap;
+            margin-right: $lg-gap;
+            margin-bottom: $lg-gap;
+            height: $height;
+            line-height: $height;
+            font-size: $font-size-h6;
+            font-family: $font-family-normal;
+            background-color: $module-bg-darker-1;
+            @include radius-box($xs-radius);
+
+            .name {
+              margin-left: $sm-gap;
+            }
+
+            .count {
+              margin-left: $xs-gap;
+              color: $text-secondary;
+            }
+
+            &.link-active {
+              color: $text-reversal;
+              background-color: $primary;
+
+              .name {
+                font-weight: bold;
+              }
+              .count {
+                color: $text-reversal;
+              }
+            }
+          }
         }
       }
     }

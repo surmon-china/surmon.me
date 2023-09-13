@@ -8,8 +8,13 @@ import { computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useFetchStore } from './_fetch'
 import { firstUpperCase } from '/@/transforms/text'
+import { getExtendValue } from '/@/transforms/state'
 import { Tag } from '/@/interfaces/tag'
 import nodepress from '/@/services/nodepress'
+
+export const getTagIconName = (tag: Tag) => {
+  return getExtendValue(tag.extends || [], 'icon') || 'icon-tag'
+}
 
 export const getTagEnName = (tag: Tag) => {
   // english name

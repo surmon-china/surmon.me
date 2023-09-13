@@ -1,14 +1,9 @@
 <script lang="ts" setup>
-  import { Tag } from '/@/interfaces/tag'
-  import { useTagStore, getTagEnName } from '/@/stores/tag'
   import { LanguageKey } from '/@/language'
+  import { useTagStore, getTagEnName, getTagIconName } from '/@/stores/tag'
   import { getTagFlowRoute } from '/@/transforms/route'
-  import { getExtendValue } from '/@/transforms/state'
 
   const tagStore = useTagStore()
-  const getTagIcon = (tag: Tag) => {
-    return getExtendValue(tag.extends || [], 'icon') || 'icon-tag'
-  }
 </script>
 
 <template>
@@ -34,7 +29,7 @@
             :key="index"
             v-for="(tag, index) in tagStore.sorted"
           >
-            <i class="iconfont" :class="getTagIcon(tag)" />
+            <i class="iconfont" :class="getTagIconName(tag)" />
             <span class="name">
               <i18n :zh="tag.name" :en="getTagEnName(tag)" />
               <span class="count">({{ tag.article_count || 0 }})</span>
