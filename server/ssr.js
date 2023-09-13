@@ -364,7 +364,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.21.0";
+const APP_VERSION = "4.21.1";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -17410,7 +17410,7 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
       const _component_router_link = resolveComponent("router-link");
       const _component_uimage = resolveComponent("uimage");
       const _component_i18n = resolveComponent("i18n");
-      _push(`<header${ssrRenderAttrs(mergeProps({ class: "header" }, _attrs))} data-v-c506d647><nav class="navbar" data-v-c506d647><button class="navbar-menu" data-v-c506d647><i class="iconfont icon-menu" data-v-c506d647></i></button>`);
+      _push(`<header${ssrRenderAttrs(mergeProps({ class: "header" }, _attrs))} data-v-da940f94><nav class="navbar" data-v-da940f94><button class="navbar-menu" data-v-da940f94><i class="iconfont icon-menu" data-v-da940f94></i></button>`);
       _push(ssrRenderComponent(_component_router_link, {
         to: "/",
         class: "navbar-logo"
@@ -17434,11 +17434,11 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<button class="navbar-search" data-v-c506d647><i class="iconfont icon-search" data-v-c506d647></i></button></nav>`);
+      _push(`<button class="navbar-search" data-v-da940f94><i class="iconfont icon-search" data-v-da940f94></i></button></nav>`);
       if (searchState.open) {
-        _push(`<div class="search" data-v-c506d647><div class="search-bar" data-v-c506d647><input class="input" autocomplete="off" type="text" maxlength="24" required${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).SEARCH_PLACEHOLDER))}${ssrRenderAttr("value", searchState.keyword)} data-v-c506d647><span class="close" data-v-c506d647><i class="iconfont icon-cancel" data-v-c506d647></i></span></div><div class="search-tags" data-v-c506d647>`);
+        _push(`<div class="search" data-v-da940f94><div class="search-bar" data-v-da940f94><input class="input" autocomplete="off" type="text" maxlength="24" required${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).SEARCH_PLACEHOLDER))}${ssrRenderAttr("value", searchState.keyword)} data-v-da940f94><span class="close" data-v-da940f94><i class="iconfont icon-cancel" data-v-da940f94></i></span></div><div class="search-tags" data-v-da940f94>`);
         if (unref(tagStore).sorted) {
-          _push(`<div class="tag-list" data-v-c506d647><!--[-->`);
+          _push(`<div class="tag-list" data-v-da940f94><!--[-->`);
           ssrRenderList(unref(tagStore).sorted, (tag, index) => {
             _push(ssrRenderComponent(_component_router_link, {
               class: "item",
@@ -17448,12 +17448,12 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_, _push2, _parent2, _scopeId) => {
                 if (_push2) {
-                  _push2(`<i class="${ssrRenderClass([unref(getTagIconName)(tag), "iconfont"])}" data-v-c506d647${_scopeId}></i><span class="name" data-v-c506d647${_scopeId}>`);
+                  _push2(`<i class="${ssrRenderClass([unref(getTagIconName)(tag), "iconfont"])}" data-v-da940f94${_scopeId}></i><span class="name" data-v-da940f94${_scopeId}>`);
                   _push2(ssrRenderComponent(_component_i18n, {
                     zh: tag.name,
                     en: unref(getTagEnName)(tag)
                   }, null, _parent2, _scopeId));
-                  _push2(`<span class="count" data-v-c506d647${_scopeId}>(${ssrInterpolate(tag.article_count || 0)})</span></span>`);
+                  _push2(`</span><span class="count" data-v-da940f94${_scopeId}>(${ssrInterpolate(tag.article_count || 0)})</span>`);
                 } else {
                   return [
                     createVNode("i", {
@@ -17463,9 +17463,9 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
                       createVNode(_component_i18n, {
                         zh: tag.name,
                         en: unref(getTagEnName)(tag)
-                      }, null, 8, ["zh", "en"]),
-                      createVNode("span", { class: "count" }, "(" + toDisplayString(tag.article_count || 0) + ")", 1)
-                    ])
+                      }, null, 8, ["zh", "en"])
+                    ]),
+                    createVNode("span", { class: "count" }, "(" + toDisplayString(tag.article_count || 0) + ")", 1)
                   ];
                 }
               }),
@@ -17484,14 +17484,14 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const header_vue_vue_type_style_index_0_scoped_c506d647_lang = "";
+const header_vue_vue_type_style_index_0_scoped_da940f94_lang = "";
 const _sfc_setup$4 = _sfc_main$4.setup;
 _sfc_main$4.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/mobile/header.vue");
   return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
 };
-const HeaderView = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-c506d647"]]);
+const HeaderView = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-da940f94"]]);
 const _sfc_main$3 = /* @__PURE__ */ defineComponent({
   __name: "footer",
   __ssrInlineRender: true,
