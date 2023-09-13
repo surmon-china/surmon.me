@@ -111,7 +111,7 @@
           <span class="text" :class="{ zh: isZhLang }">
             <i18n v-if="fetching" :k="LanguageKey.ARTICLE_LIST_LOADING" />
             <i18n v-else-if="hasMoreData" :k="LanguageKey.ARTICLE_LIST_LOADMORE" />
-            <i18n v-else :k="LanguageKey.ARTICLE_LIST_NO_MORE" />
+            <i18n v-else :k="LanguageKey.LIST_NO_MORE_DATA" />
           </span>
           <i v-if="fetching || hasMoreData" class="iconfont icon-loadmore"></i>
           <i v-else class="iconfont icon-stop"></i>

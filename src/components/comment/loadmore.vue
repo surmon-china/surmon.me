@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
+  import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { Pagination } from '/@/interfaces/common'
   import { GAEventCategories } from '/@/constants/gtag'
@@ -37,21 +38,17 @@
 
 <template>
   <div class="loadmore" :id="COMMENT_FOOTER_ELEMENT_ID">
-    <transition name="module">
-      <button class="button" v-if="hasMore" :disabled="fetching" @click="handleLoadmore">
-        <i18n v-if="fetching" zh="加载中..." en="Loading..." />
-        <template v-else>
-          <i18n>
-            <template #zh>加载更多评论（还有 {{ remain }} 条）</template>
-            <template #en>Loadmore (remain of {{ remain }} comments)</template>
-          </i18n>
-          <i class="iconfont icon-loadmore"></i>
-        </template>
-      </button>
-      <span class="no-more" v-else>
-        <i18n zh="水尽山穷" en="NO MORE" />
-      </span>
-    </transition>
+    <indicator class="loading" v-if="fetching" width="2rem" height="1rem" gap="0.8rem" />
+    <button class="button" v-else-if="hasMore" @click="handleLoadmore">
+      <i class="iconfont icon-loadmore"></i>
+      <i18n>
+        <template #zh>加载更多（{{ remain }} 条）评论</template>
+        <template #en>Loadmore (remain of {{ remain }} comments)</template>
+      </i18n>
+    </button>
+    <span class="finished" v-else>
+      <i18n :k="LanguageKey.LIST_NO_MORE_DATA" />
+    </span>
   </div>
 </template>
 
@@ -66,25 +63,29 @@
     justify-content: center;
     align-items: center;
 
+    .loading {
+      margin: $xs-gap 0;
+    }
+
     .button {
+      position: relative;
       min-width: 10rem;
       height: 2.8rem;
       padding: 0 $lg-gap;
       border-radius: $xs-radius;
       background-color: $module-bg-darker-1;
       color: $text-disabled;
-      &:not([disabled]):hover {
+      &:hover {
         color: $link-color;
         background-color: $module-bg-hover;
       }
 
       .iconfont {
-        margin-left: $sm-gap;
+        margin-right: $sm-gap;
       }
     }
 
-    .no-more {
-      padding-top: $xs-gap;
+    .finished {
       color: $text-disabled;
     }
   }

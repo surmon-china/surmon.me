@@ -12,8 +12,8 @@
   import { TunnelModule } from '/@/constants/tunnel'
   import tunnel from '/@/services/tunnel'
   import PageBanner from '/@/components/common/banner.vue'
+  import Loadmore from '/@/components/common/loadmore.vue'
   import InstagramGrid from './grid.vue'
-  import InstagramLoadmore from './loadmore.vue'
 
   const { instagramTimeline } = useStores()
   const { i18n: _i18n, seoMeta, isZhLang } = useEnhancer()
@@ -91,12 +91,21 @@
         <template #default>
           <div>
             <instagram-grid :medias="allMedias" />
-            <instagram-loadmore
+            <loadmore
               v-if="!instagramTimeline.fetching && !finished"
               class="loadmore"
               :loading="loading"
               @loadmore="fetchMoreMedias"
-            />
+            >
+              <template #normal>
+                <button class="normal" @click="fetchMoreMedias">
+                  <i class="iconfont icon-loadmore"></i>
+                </button>
+              </template>
+              <template #loading>
+                <indicator class="loading" width="2.4rem" height="1.4rem" gap="1rem" />
+              </template>
+            </loadmore>
           </div>
         </template>
       </placeholder>
@@ -129,6 +138,13 @@
 
       .loadmore {
         margin-top: 4rem;
+        color: $text-disabled;
+        .normal {
+          font-size: $font-size-h1;
+        }
+        .loading {
+          margin: $sm-gap 0;
+        }
       }
     }
 

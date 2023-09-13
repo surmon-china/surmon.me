@@ -252,42 +252,6 @@
       &[data-status='loading'] {
         .placeholder.loading {
           visibility: visible;
-
-          @keyframes loading {
-            0% {
-              opacity: 1;
-            }
-            50% {
-              opacity: 0.5;
-            }
-            100% {
-              opacity: 1;
-            }
-          }
-
-          div {
-            width: 2rem;
-            height: 1.2rem;
-            margin: 0 $sm-gap;
-            border-radius: $mini-radius;
-            animation: loading 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-            &:nth-child(1) {
-              background: $module-bg-darker-2;
-              animation-delay: -0.6s;
-            }
-            &:nth-child(2) {
-              background: $module-bg-darker-3;
-              animation-delay: -0.4s;
-            }
-            &:nth-child(3) {
-              background: $module-bg-darker-2;
-              animation-delay: -0.2s;
-            }
-            &:nth-child(4) {
-              background: $module-bg-darker-3;
-              animation-delay: -1s;
-            }
-          }
         }
       }
     }

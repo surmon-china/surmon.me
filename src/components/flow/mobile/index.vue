@@ -10,7 +10,7 @@
   import { useAppOptionStore } from '/@/stores/basic'
   import { firstUpperCase } from '/@/transforms/text'
   import { scrollToNextScreen } from '/@/utils/scroller'
-  import Loadmore from './loadmore.vue'
+  import Loadmore from '/@/components/common/loadmore.vue'
   import ListItem from './item.vue'
 
   const props = defineProps<{
@@ -152,10 +152,25 @@
             />
           </transition-group>
           <loadmore
+            class="loadmore"
             :loading="articleListStore.fetching"
             :finished="!hasMoreArticles"
             @loadmore="loadmoreArticles"
-          />
+          >
+            <template #normal>
+              <button class="normal" @click="loadmoreArticles">
+                <i class="iconfont icon-loadmore"></i>
+              </button>
+            </template>
+            <template #loading>
+              <indicator class="loading" width="2rem" height="1.2rem" gap="0.68rem" />
+            </template>
+            <template #finished>
+              <span class="finished">
+                <i18n :k="LanguageKey.LIST_NO_MORE_DATA" />
+              </span>
+            </template>
+          </loadmore>
         </div>
       </template>
     </placeholder>
@@ -231,6 +246,25 @@
     .list {
       .list-item {
         margin-bottom: $lg-gap;
+      }
+    }
+
+    .loadmore {
+      color: $text-disabled;
+
+      .normal {
+        width: 100%;
+        font-size: $font-size-h2;
+      }
+
+      .loading {
+        margin: $sm-gap 0;
+      }
+
+      .finished {
+        margin: $xs-gap 0;
+        color: $text-divider;
+        font-weight: bold;
       }
     }
   }

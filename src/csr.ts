@@ -33,6 +33,7 @@ import API_CONFIG from '/@/config/api.config'
 
 import './effects/swiper/style'
 import './effects/elements/index.scss'
+import './components/common/indicator/index.scss'
 import './styles/app.scss'
 
 console.group(`[SSR CONTEXT]:`)
