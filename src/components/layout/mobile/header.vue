@@ -114,10 +114,8 @@
             v-for="(tag, index) in tagStore.sorted"
           >
             <i class="iconfont" :class="getTagIconName(tag)" />
-            <span class="name">
-              <i18n :zh="tag.name" :en="getTagEnName(tag)" />
-              <span class="count">({{ tag.article_count || 0 }})</span>
-            </span>
+            <span class="name"><i18n :zh="tag.name" :en="getTagEnName(tag)" /></span>
+            <span class="count">({{ tag.article_count || 0 }})</span>
           </router-link>
         </div>
       </div>
@@ -201,7 +199,7 @@
         padding: $lg-gap;
         touch-action: none;
         background-color: $module-bg-translucent;
-        @include backdrop-blur(3px);
+        @include backdrop-blur(5px);
 
         .tag-list {
           padding: 0;
@@ -210,7 +208,7 @@
 
           .item {
             $height: 2em;
-            display: inline-flex;
+            display: inline-block;
             padding: 0 $sm-gap;
             margin-right: $lg-gap;
             margin-bottom: $lg-gap;
@@ -222,7 +220,7 @@
             @include radius-box($xs-radius);
 
             .name {
-              margin-left: $sm-gap;
+              margin-left: $xs-gap;
             }
 
             .count {
