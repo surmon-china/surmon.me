@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { useNodepressStatisticStore } from '/@/stores/statistic'
-import { numberSplit, firstUpperCase } from '/@/transforms/text'
+import { numberSplit, numberToKilo, firstUpperCase } from '/@/transforms/text'
 import { Language, LanguageKey } from '/@/language'
 import { META } from '/@/config/app.config'
 
@@ -55,7 +55,7 @@ export const useArchivePageStatistics = () => {
     totalViews: {
       icon: 'icon-eye',
       title: i18n.t(LanguageKey.STATISTIC_TOTAL_VIEWS)!,
-      content: numberSplit(store.data?.totalViews || 0)
+      content: numberToKilo(store.data?.totalViews || 0)
     },
     totalLikes: {
       icon: 'icon-like',

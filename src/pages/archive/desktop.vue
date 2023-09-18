@@ -13,8 +13,8 @@
   const statisticState = useArchivePageStatistics()
   const statisticFetching = ref(true)
   const statistics = computed(() => [
-    statisticState.statistics.value.articles,
     statisticState.statistics.value.todayViews,
+    statisticState.statistics.value.articles,
     statisticState.statistics.value.comments,
     statisticState.statistics.value.totalLikes,
     statisticState.statistics.value.totalViews
@@ -48,7 +48,9 @@
           <div class="item" :key="index" v-for="(s, index) in statistics">
             <p class="title">
               <span class="text">{{ s.title }}</span>
-              <i class="iconfont" :class="s.icon"></i>
+              <span class="icon">
+                <i class="iconfont" :class="s.icon"></i>
+              </span>
             </p>
             <div class="content">{{ s.content }}</div>
           </div>
@@ -153,11 +155,11 @@
               color: $text-secondary;
             }
 
-            .iconfont {
+            .icon {
               margin-left: $sm-gap;
-              font-size: $font-size-h3;
+              display: inline-block;
+              font-size: $font-size-h6;
               color: $text-divider;
-              opacity: 0.5;
             }
           }
 
