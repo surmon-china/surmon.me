@@ -364,7 +364,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.22.0";
+const APP_VERSION = "4.23.0";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -1791,32 +1791,11 @@ const useGitHubStatisticStore = defineStore("githubStatistic", () => {
   });
 });
 const useNpmStatisticStore = defineStore("npmStatistic", () => {
-  const fetchStore = useFetchStore({
+  return useFetchStore({
     once: true,
     data: null,
     fetcher: () => tunnel$1.dispatch(TunnelModule.OpenSourceNPMStatistic)
   });
-  const totalPackages = computed(() => {
-    return fetchStore.data.value ? Object.keys(fetchStore.data.value.downloads).length : 0;
-  });
-  const totalDownloads = computed(() => {
-    return fetchStore.data.value ? Object.values(fetchStore.data.value.downloads).reduce((p, c) => p + c, 0) : 0;
-  });
-  const averageScore = computed(() => {
-    var _a;
-    const packages = (_a = fetchStore.data.value) == null ? void 0 : _a.packages;
-    if (!(packages == null ? void 0 : packages.length)) {
-      return 0;
-    }
-    const totalScore = packages.reduce((p, c) => p + c.score.final, 0);
-    return (totalScore / packages.length).toFixed(3);
-  });
-  return {
-    ...fetchStore,
-    totalPackages,
-    totalDownloads,
-    averageScore
-  };
 });
 const useArticleCalendarStore = defineStore("articleCalendar", () => {
   return useFetchStore({
@@ -5733,7 +5712,6 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
     const statisticState = useArchivePageStatistics();
     const statisticFetching = ref(true);
     const statistics = computed(() => [
-      statisticState.statistics.value.todayViews,
       statisticState.statistics.value.articles,
       statisticState.statistics.value.comments,
       statisticState.statistics.value.totalLikes
@@ -5752,7 +5730,7 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
       const _component_placeholder = resolveComponent("placeholder");
       const _component_empty = resolveComponent("empty");
       const _component_skeleton_line = resolveComponent("skeleton-line");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "archive-page" }, _attrs))} data-v-0bedf881>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "archive-page" }, _attrs))} data-v-6201772a>`);
       _push(ssrRenderComponent(PageBanner, {
         "is-mobile": true,
         image: "/images/page-archive/banner-mobile.webp",
@@ -5783,13 +5761,13 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="page-content" data-v-0bedf881>`);
+      _push(`<div class="page-content" data-v-6201772a>`);
       _push(ssrRenderComponent(_component_container, { class: "statistic-warpper" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             _push2(``);
             if (statisticFetching.value) {
-              _push2(`<div class="skeletons" data-v-0bedf881${_scopeId}><!--[-->`);
+              _push2(`<div class="skeletons" data-v-6201772a${_scopeId}><!--[-->`);
               ssrRenderList(statistics.value.length, (s) => {
                 _push2(ssrRenderComponent(_component_skeleton_base, {
                   class: "skeleton",
@@ -5798,9 +5776,9 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
               });
               _push2(`<!--]--></div>`);
             } else {
-              _push2(`<div class="statistics" data-v-0bedf881${_scopeId}><!--[-->`);
+              _push2(`<div class="statistics" data-v-6201772a${_scopeId}><!--[-->`);
               ssrRenderList(statistics.value, (s, index) => {
-                _push2(`<div class="item" data-v-0bedf881${_scopeId}><p class="title" data-v-0bedf881${_scopeId}>${ssrInterpolate(s.title)}</p><div class="content" data-v-0bedf881${_scopeId}>${ssrInterpolate(s.content)}</div></div>`);
+                _push2(`<div class="item" data-v-6201772a${_scopeId}><p class="title" data-v-6201772a${_scopeId}>${ssrInterpolate(s.title)}</p><div class="content" data-v-6201772a${_scopeId}>${ssrInterpolate(s.content)}</div></div>`);
               });
               _push2(`<!--]--></div>`);
             }
@@ -5890,7 +5868,7 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
               }),
               loading: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="archive-skeleton" data-v-0bedf881${_scopeId2}><!--[-->`);
+                  _push3(`<div class="archive-skeleton" data-v-6201772a${_scopeId2}><!--[-->`);
                   ssrRenderList(6, (s) => {
                     _push3(ssrRenderComponent(_component_skeleton_line, {
                       class: "item",
@@ -5923,7 +5901,7 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
                   }, {
                     title: withCtx(({ title }, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`<h3 class="archive-title" data-v-0bedf881${_scopeId3}>${ssrInterpolate(title)}</h3>`);
+                        _push4(`<h3 class="archive-title" data-v-6201772a${_scopeId3}>${ssrInterpolate(title)}</h3>`);
                       } else {
                         return [
                           createVNode("h3", { class: "archive-title" }, toDisplayString(title), 1)
@@ -5932,7 +5910,7 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
                     }),
                     article: withCtx(({ article, day }, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`<div class="archive-article" data-v-0bedf881${_scopeId3}><h4 class="title" data-v-0bedf881${_scopeId3}><span class="date" data-v-0bedf881${_scopeId3}>D${ssrInterpolate(day)}</span><a class="link" target="_blank"${ssrRenderAttr("title", article.title)}${ssrRenderAttr("href", unref(getArticleDetailRoute)(article.id))} data-v-0bedf881${_scopeId3}>${ssrInterpolate(article.title)}</a></h4><p class="description" data-v-0bedf881${_scopeId3}>${article.description}</p></div>`);
+                        _push4(`<div class="archive-article" data-v-6201772a${_scopeId3}><h4 class="title" data-v-6201772a${_scopeId3}><span class="date" data-v-6201772a${_scopeId3}>D${ssrInterpolate(day)}</span><a class="link" target="_blank"${ssrRenderAttr("title", article.title)}${ssrRenderAttr("href", unref(getArticleDetailRoute)(article.id))} data-v-6201772a${_scopeId3}>${ssrInterpolate(article.title)}</a></h4><p class="description" data-v-6201772a${_scopeId3}>${article.description}</p></div>`);
                       } else {
                         return [
                           createVNode("div", { class: "archive-article" }, [
@@ -6061,14 +6039,14 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const mobile_vue_vue_type_style_index_0_scoped_0bedf881_lang = "";
+const mobile_vue_vue_type_style_index_0_scoped_6201772a_lang = "";
 const _sfc_setup$1p = _sfc_main$1p.setup;
 _sfc_main$1p.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/archive/mobile.vue");
   return _sfc_setup$1p ? _sfc_setup$1p(props, ctx) : void 0;
 };
-const MobileArchivePage = /* @__PURE__ */ _export_sfc(_sfc_main$1p, [["__scopeId", "data-v-0bedf881"]]);
+const MobileArchivePage = /* @__PURE__ */ _export_sfc(_sfc_main$1p, [["__scopeId", "data-v-6201772a"]]);
 async function renderTextToQRCodeDataURL(value, options) {
   return await QRCode.toDataURL(value, {
     errorCorrectionLevel: "H",
@@ -10028,7 +10006,7 @@ const _sfc_main$Z = /* @__PURE__ */ defineComponent({
               large: "",
               primary: "",
               split: "",
-              count: (_a = unref(store).data) == null ? void 0 : _a.statistics.stars
+              count: (_a = unref(store).data) == null ? void 0 : _a.totalStarCount
             }, null, _parent2, _scopeId));
             if (unref(isZhLang)) {
               _push2(`<span${_scopeId}>个 star</span>`);
@@ -10042,7 +10020,7 @@ const _sfc_main$Z = /* @__PURE__ */ defineComponent({
               _push2(`<!---->`);
             }
             _push2(ssrRenderComponent(unref(StatisticCount), {
-              count: (_b = unref(store).data) == null ? void 0 : _b.repositories.length
+              count: (_b = unref(store).data) == null ? void 0 : _b.repositoryCount
             }, null, _parent2, _scopeId));
             if (unref(isZhLang)) {
               _push2(`<span${_scopeId}>个开源项目</span>`);
@@ -10056,7 +10034,7 @@ const _sfc_main$Z = /* @__PURE__ */ defineComponent({
               _push2(`<!---->`);
             }
             _push2(ssrRenderComponent(unref(StatisticCount), {
-              count: (_c = unref(store).data) == null ? void 0 : _c.organizations.length
+              count: (_c = unref(store).data) == null ? void 0 : _c.organizationCount
             }, null, _parent2, _scopeId));
             if (unref(isZhLang)) {
               _push2(`<span${_scopeId}>个开源组织</span>`);
@@ -10073,7 +10051,7 @@ const _sfc_main$Z = /* @__PURE__ */ defineComponent({
                   large: "",
                   primary: "",
                   split: "",
-                  count: (_d = unref(store).data) == null ? void 0 : _d.statistics.stars
+                  count: (_d = unref(store).data) == null ? void 0 : _d.totalStarCount
                 }, null, 8, ["count"]),
                 unref(isZhLang) ? (openBlock(), createBlock("span", { key: 1 }, "个 star")) : (openBlock(), createBlock("span", { key: 2 }, "stars earned"))
               ]),
@@ -10081,7 +10059,7 @@ const _sfc_main$Z = /* @__PURE__ */ defineComponent({
                 createVNode("i", { class: "iconfont icon-repository" }),
                 unref(isZhLang) ? (openBlock(), createBlock("span", { key: 0 }, "共维护")) : createCommentVNode("", true),
                 createVNode(unref(StatisticCount), {
-                  count: (_e = unref(store).data) == null ? void 0 : _e.repositories.length
+                  count: (_e = unref(store).data) == null ? void 0 : _e.repositoryCount
                 }, null, 8, ["count"]),
                 unref(isZhLang) ? (openBlock(), createBlock("span", { key: 1 }, "个开源项目")) : (openBlock(), createBlock("span", { key: 2 }, "open-source repos"))
               ]),
@@ -10089,7 +10067,7 @@ const _sfc_main$Z = /* @__PURE__ */ defineComponent({
                 createVNode("i", { class: "iconfont icon-organization" }),
                 unref(isZhLang) ? (openBlock(), createBlock("span", { key: 0 }, "维护/发起")) : createCommentVNode("", true),
                 createVNode(unref(StatisticCount), {
-                  count: (_f = unref(store).data) == null ? void 0 : _f.organizations.length
+                  count: (_f = unref(store).data) == null ? void 0 : _f.organizationCount
                 }, null, 8, ["count"]),
                 unref(isZhLang) ? (openBlock(), createBlock("span", { key: 1 }, "个开源组织")) : (openBlock(), createBlock("span", { key: 2 }, "organizations"))
               ])
@@ -10246,24 +10224,25 @@ const _sfc_main$X = /* @__PURE__ */ defineComponent({
         platform: unref(isZhLang) ? "我在 NPM" : "NPM"
       }, _attrs), {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
+          var _a, _b, _c, _d, _e, _f;
           if (_push2) {
-            _push2(`<p class="line-1" data-v-409e1bf5${_scopeId}><i class="iconfont icon-package" data-v-409e1bf5${_scopeId}></i>`);
+            _push2(`<p class="line-1" data-v-8fec2308${_scopeId}><i class="iconfont icon-package" data-v-8fec2308${_scopeId}></i>`);
             if (unref(isZhLang)) {
-              _push2(`<span data-v-409e1bf5${_scopeId}>发布了</span>`);
+              _push2(`<span data-v-8fec2308${_scopeId}>发布了</span>`);
             } else {
               _push2(`<!---->`);
             }
             _push2(ssrRenderComponent(unref(StatisticCount), {
-              count: unref(store).totalPackages
+              count: (_a = unref(store).data) == null ? void 0 : _a.totalPackages
             }, null, _parent2, _scopeId));
             if (unref(isZhLang)) {
-              _push2(`<span data-v-409e1bf5${_scopeId}>个公共软件包</span>`);
+              _push2(`<span data-v-8fec2308${_scopeId}>个公共软件包</span>`);
             } else {
-              _push2(`<span data-v-409e1bf5${_scopeId}>packages</span>`);
+              _push2(`<span data-v-8fec2308${_scopeId}>packages</span>`);
             }
-            _push2(`</p><p data-v-409e1bf5${_scopeId}><i class="iconfont icon-download" data-v-409e1bf5${_scopeId}></i>`);
+            _push2(`</p><p data-v-8fec2308${_scopeId}><i class="iconfont icon-download" data-v-8fec2308${_scopeId}></i>`);
             if (unref(isZhLang)) {
-              _push2(`<span data-v-409e1bf5${_scopeId}>被下载</span>`);
+              _push2(`<span data-v-8fec2308${_scopeId}>被下载</span>`);
             } else {
               _push2(`<!---->`);
             }
@@ -10271,26 +10250,26 @@ const _sfc_main$X = /* @__PURE__ */ defineComponent({
               large: "",
               primary: "",
               split: "",
-              count: unref(store).totalDownloads
+              count: (_b = unref(store).data) == null ? void 0 : _b.totalDownloads
             }, null, _parent2, _scopeId));
             if (unref(isZhLang)) {
-              _push2(`<span data-v-409e1bf5${_scopeId}>次</span>`);
+              _push2(`<span data-v-8fec2308${_scopeId}>次</span>`);
             } else {
-              _push2(`<span data-v-409e1bf5${_scopeId}>downs</span>`);
+              _push2(`<span data-v-8fec2308${_scopeId}>downs</span>`);
             }
-            _push2(`</p><p data-v-409e1bf5${_scopeId}><i class="iconfont icon-score" data-v-409e1bf5${_scopeId}></i>`);
+            _push2(`</p><p data-v-8fec2308${_scopeId}><i class="iconfont icon-score" data-v-8fec2308${_scopeId}></i>`);
             if (unref(isZhLang)) {
-              _push2(`<span data-v-409e1bf5${_scopeId}>平均评分</span>`);
+              _push2(`<span data-v-8fec2308${_scopeId}>平均评分</span>`);
             } else {
               _push2(`<!---->`);
             }
             _push2(ssrRenderComponent(unref(StatisticCount), {
-              count: unref(store).averageScore
+              count: (_c = unref(store).data) == null ? void 0 : _c.averageScore
             }, null, _parent2, _scopeId));
             if (unref(isZhLang)) {
-              _push2(`<span data-v-409e1bf5${_scopeId}>分</span>`);
+              _push2(`<span data-v-8fec2308${_scopeId}>分</span>`);
             } else {
-              _push2(`<span data-v-409e1bf5${_scopeId}>average score</span>`);
+              _push2(`<span data-v-8fec2308${_scopeId}>average score</span>`);
             }
             _push2(`</p>`);
           } else {
@@ -10299,7 +10278,7 @@ const _sfc_main$X = /* @__PURE__ */ defineComponent({
                 createVNode("i", { class: "iconfont icon-package" }),
                 unref(isZhLang) ? (openBlock(), createBlock("span", { key: 0 }, "发布了")) : createCommentVNode("", true),
                 createVNode(unref(StatisticCount), {
-                  count: unref(store).totalPackages
+                  count: (_d = unref(store).data) == null ? void 0 : _d.totalPackages
                 }, null, 8, ["count"]),
                 unref(isZhLang) ? (openBlock(), createBlock("span", { key: 1 }, "个公共软件包")) : (openBlock(), createBlock("span", { key: 2 }, "packages"))
               ]),
@@ -10310,7 +10289,7 @@ const _sfc_main$X = /* @__PURE__ */ defineComponent({
                   large: "",
                   primary: "",
                   split: "",
-                  count: unref(store).totalDownloads
+                  count: (_e = unref(store).data) == null ? void 0 : _e.totalDownloads
                 }, null, 8, ["count"]),
                 unref(isZhLang) ? (openBlock(), createBlock("span", { key: 1 }, "次")) : (openBlock(), createBlock("span", { key: 2 }, "downs"))
               ]),
@@ -10318,7 +10297,7 @@ const _sfc_main$X = /* @__PURE__ */ defineComponent({
                 createVNode("i", { class: "iconfont icon-score" }),
                 unref(isZhLang) ? (openBlock(), createBlock("span", { key: 0 }, "平均评分")) : createCommentVNode("", true),
                 createVNode(unref(StatisticCount), {
-                  count: unref(store).averageScore
+                  count: (_f = unref(store).data) == null ? void 0 : _f.averageScore
                 }, null, 8, ["count"]),
                 unref(isZhLang) ? (openBlock(), createBlock("span", { key: 1 }, "分")) : (openBlock(), createBlock("span", { key: 2 }, "average score"))
               ])
@@ -10330,14 +10309,14 @@ const _sfc_main$X = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const npm_vue_vue_type_style_index_0_scoped_409e1bf5_lang = "";
+const npm_vue_vue_type_style_index_0_scoped_8fec2308_lang = "";
 const _sfc_setup$X = _sfc_main$X.setup;
 _sfc_main$X.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/statistic/npm.vue");
   return _sfc_setup$X ? _sfc_setup$X(props, ctx) : void 0;
 };
-const NpmStatistic = /* @__PURE__ */ _export_sfc(_sfc_main$X, [["__scopeId", "data-v-409e1bf5"]]);
+const NpmStatistic = /* @__PURE__ */ _export_sfc(_sfc_main$X, [["__scopeId", "data-v-8fec2308"]]);
 const _sfc_main$W = /* @__PURE__ */ defineComponent({
   __name: "day",
   __ssrInlineRender: true,
@@ -14303,8 +14282,7 @@ const routes = [
     meta: {
       responsive: false,
       layout: LayoutColumn.Full,
-      ssrCacheTTL: 60 * 60 * 1
-      // 1 hours
+      ssrCacheTTL: false
     }
   },
   {

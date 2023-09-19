@@ -536,37 +536,6 @@ const getSotweAggregate = async (twitterUsername) => {
     }
 };
 
-;// CONCATENATED MODULE: ./src/server/getters/twitter/nitter.ts
-
-
-const getNitterRss = async (twitterUsername) => {
-    const url = `https://twiiit.com/${twitterUsername}/rss`;
-    const response = await external_axios_namespaceObject["default"].get(url, { timeout: 8000 });
-    const xmlParser = new external_fast_xml_parser_namespaceObject.XMLParser();
-    const { rss: result } = xmlParser.parse(response.data);
-    return {
-        userinfo: {
-            name: result.channel.title.split(' / ')?.[0]?.trim() || null,
-            avatar: result.channel.image.url
-        },
-        tweets: result.channel.item.map((item) => {
-            const linkURL = new URL(item.link);
-            const urlParts = linkURL.pathname.split('/');
-            return {
-                id: urlParts[urlParts.length - 1],
-                owner: urlParts[1],
-                text: item.title.replaceAll('\n', ' '),
-                html: item.description.replaceAll('\n', ' ').replaceAll('<br>', ' '),
-                date: new Date(item.pubDate).getTime(),
-                hasImage: item.description.includes('<img'),
-                isReply: item.title.startsWith('R to '),
-                isRetweet: item.title.startsWith('RT '),
-                mediaCount: item.description.match(/<(img|video)/g)?.length || 0
-            };
-        })
-    };
-};
-
 ;// CONCATENATED MODULE: ./src/server/getters/twitter/index.ts
 /**
  * @file BFF Twitter getter
@@ -575,26 +544,18 @@ const getNitterRss = async (twitterUsername) => {
  */
 
 
-
 const getTwitterAggregate = async () => {
-    // Use of different public services to ensure high availability
-    const [nitter, sotwe] = await Promise.all([
-        getNitterRss(app_config_IDENTITIES.TWITTER_USER_NAME).catch((error) => {
-            console.warn('[Twitter] nitter rss is empty.', error?.message ?? String(error));
-            return null;
-        }),
-        getSotweAggregate(app_config_IDENTITIES.TWITTER_USER_NAME).catch((error) => {
-            console.warn('[Twitter] sotwe aggregate is empty.', error?.message ?? String(error));
-            return null;
-        })
-    ]);
-    if (!nitter && !sotwe) {
+    const sotwe = await getSotweAggregate(app_config_IDENTITIES.TWITTER_USER_NAME).catch((error) => {
+        console.warn('[Twitter] sotwe aggregate is empty.', error?.message ?? String(error));
+        return null;
+    });
+    if (!sotwe) {
         return Promise.reject('[Twitter] aggregate data is empty.');
     }
     const tweets = [];
     const userinfo = {
-        name: sotwe?.info?.name || nitter?.userinfo.name || app_config_IDENTITIES.TWITTER_USER_NAME,
-        avatar: sotwe?.info?.profileImageOriginal || nitter?.userinfo.avatar || '',
+        name: sotwe?.info?.name || app_config_IDENTITIES.TWITTER_USER_NAME,
+        avatar: sotwe?.info?.profileImageOriginal || '',
         description: sotwe?.info.description || void 0,
         location: sotwe?.info.location || void 0,
         tweetCount: sotwe?.info.postCount ?? void 0,
@@ -611,66 +572,37 @@ const getTwitterAggregate = async () => {
             }
         });
     }
-    // 1. nitter & sotwe > mix
-    // 2. nitter only
-    if (nitter?.tweets.length) {
-        nitter.tweets.forEach((tweet) => {
-            // No longer reserved for reprinting retweet, as it causes data to be inconsistent in both the model and the front-end
-            if (tweet.isRetweet) {
-                return;
-            }
-            const found = sotweTweets.find((item) => item.id === tweet.id);
-            tweets.push({
-                id: tweet.id,
-                owner: tweet.owner,
-                text: found ? improveSotweTweet(found, false) : tweet.text,
-                html: found ? improveSotweTweet(found, true) : tweet.html,
-                date: found?.createdAt || tweet.date,
-                location: found?.location?.name || void 0,
-                favoriteCount: found?.favoriteCount ?? void 0,
-                retweetCount: found?.retweetCount ?? void 0,
-                mediaCount: found?.mediaEntities?.length ?? tweet.mediaCount ?? 0,
-                isReply: (found?.inReplyToUserId ? true : tweet.isReply) ?? void 0,
-                isQuote: found ? !!found?.quotedStatus : void 0,
-                isRetweet: (found?.retweetedStatus ? true : tweet.isRetweet) ?? void 0,
-                hasVideo: found?.mediaEntities?.some((media) => media.type === 'video'),
-                hasImage: found?.mediaEntities?.some((media) => media.type === 'photo') || tweet.hasImage
-            });
+    // 3. sotwe only
+    sotweTweets.forEach((tweet) => {
+        // not retweet
+        if (tweet.retweetedStatus) {
+            return;
+        }
+        // not reply to other
+        if (tweet.inReplyToUserId && tweet.inReplyToUserId !== sotwe.info.id) {
+            return;
+        }
+        // not your own tweet
+        if (tweet.user && tweet.user.id !== sotwe.info.id) {
+            return;
+        }
+        tweets.push({
+            id: tweet.id,
+            owner: app_config_IDENTITIES.TWITTER_USER_NAME,
+            text: improveSotweTweet(tweet, false),
+            html: improveSotweTweet(tweet, true),
+            date: tweet.createdAt,
+            location: tweet.location?.name || void 0,
+            favoriteCount: tweet.favoriteCount ?? void 0,
+            retweetCount: tweet.retweetCount ?? void 0,
+            mediaCount: tweet.mediaEntities?.length ?? 0,
+            isReply: !!tweet.inReplyToUserId,
+            isQuote: !!tweet.quotedStatus,
+            isRetweet: !!tweet.retweetedStatus,
+            hasVideo: tweet.mediaEntities?.some((media) => media.type === 'video'),
+            hasImage: tweet.mediaEntities?.some((media) => media.type === 'photo')
         });
-        // 3. sotwe only
-    }
-    else if (sotwe && sotweTweets.length) {
-        sotweTweets.forEach((tweet) => {
-            // not retweet
-            if (tweet.retweetedStatus) {
-                return;
-            }
-            // not reply to other
-            if (tweet.inReplyToUserId && tweet.inReplyToUserId !== sotwe.info.id) {
-                return;
-            }
-            // not your own tweet
-            if (tweet.user && tweet.user.id !== sotwe.info.id) {
-                return;
-            }
-            tweets.push({
-                id: tweet.id,
-                owner: app_config_IDENTITIES.TWITTER_USER_NAME,
-                text: improveSotweTweet(tweet, false),
-                html: improveSotweTweet(tweet, true),
-                date: tweet.createdAt,
-                location: tweet.location?.name || void 0,
-                favoriteCount: tweet.favoriteCount ?? void 0,
-                retweetCount: tweet.retweetCount ?? void 0,
-                mediaCount: tweet.mediaEntities?.length ?? 0,
-                isReply: !!tweet.inReplyToUserId,
-                isQuote: !!tweet.quotedStatus,
-                isRetweet: !!tweet.retweetedStatus,
-                hasVideo: tweet.mediaEntities?.some((media) => media.type === 'video'),
-                hasImage: tweet.mediaEntities?.some((media) => media.type === 'photo')
-            });
-        });
-    }
+    });
     return { userinfo, tweets };
 };
 
@@ -972,8 +904,37 @@ const fetchStatisticJSON = async (fileName) => {
     const response = await external_axios_namespaceObject["default"].get(url, { timeout: 6000 });
     return response.data;
 };
-const getGitHubStatistic = () => fetchStatisticJSON('github.json');
-const getNPMStatistic = () => fetchStatisticJSON('npm.json');
+const getGitHubStatistic = () => {
+    return fetchStatisticJSON('github.json').then((data) => ({
+        followerCount: data.userinfo.followers,
+        followingCount: data.userinfo.following,
+        gistCount: data.userinfo.public_gists,
+        repositoryCount: data.userinfo.public_repos,
+        organizationCount: data.organizations.length,
+        totalStarCount: data.statistics.stars,
+        totalCodeSize: data.statistics.size
+    }));
+};
+const getNPMStatistic = () => {
+    return fetchStatisticJSON('npm.json').then((data) => {
+        const totalPackages = data ? Object.keys(data.downloads).length : 0;
+        const totalDownloads = data ? Object.values(data.downloads).reduce((p, c) => p + c, 0) : 0;
+        const averageScore = (() => {
+            const packages = data?.packages;
+            if (!packages?.length) {
+                return 0;
+            }
+            // https://itnext.io/increasing-an-npm-packages-search-score-fb557f859300
+            const totalScore = packages.reduce((p, c) => p + c.score.final, 0);
+            return (totalScore / packages.length).toFixed(3);
+        })();
+        return {
+            totalPackages,
+            totalDownloads,
+            averageScore
+        };
+    });
+};
 
 ;// CONCATENATED MODULE: ./src/server/getters/douban.ts
 /**
@@ -1604,14 +1565,8 @@ createExpressApp().then(async ({ app, server, cache }) => {
     // sitemap
     app.get('/sitemap.xml', async (_, response) => {
         try {
-            const data = await cacher({
-                cache,
-                key: 'sitemap',
-                ttl: 60 * 60 * 1,
-                getter: getSitemapXml
-            });
             response.header('Content-Type', 'application/xml');
-            response.send(data);
+            response.send(await getSitemapXml());
         }
         catch (error) {
             errorer(response, { message: error });
@@ -1620,14 +1575,8 @@ createExpressApp().then(async ({ app, server, cache }) => {
     // RSS
     app.get('/rss.xml', async (_, response) => {
         try {
-            const data = await cacher({
-                cache,
-                key: 'rss',
-                ttl: 60 * 60 * 1,
-                getter: getRssXml
-            });
             response.header('Content-Type', 'application/xml');
-            response.send(data);
+            response.send(await getRssXml());
         }
         catch (error) {
             errorer(response, { message: error });
