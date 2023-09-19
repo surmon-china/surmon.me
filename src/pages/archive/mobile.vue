@@ -12,7 +12,6 @@
   const statisticState = useArchivePageStatistics()
   const statisticFetching = ref(true)
   const statistics = computed(() => [
-    statisticState.statistics.value.todayViews,
     statisticState.statistics.value.articles,
     statisticState.statistics.value.comments,
     statisticState.statistics.value.totalLikes

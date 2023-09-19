@@ -4,10 +4,10 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useFetchStore } from './_fetch'
 import { TunnelModule } from '/@/constants/tunnel'
+import type { GitHubStatistic, NpmStatistic } from '/@/server/getters/open-srouce'
 import nodepress from '/@/services/nodepress'
 import tunnel from '/@/services/tunnel'
 
@@ -32,49 +32,17 @@ export const useNodepressStatisticStore = defineStore('nodepressStatistic', () =
 })
 
 export const useGitHubStatisticStore = defineStore('githubStatistic', () => {
-  return useFetchStore<any>({
+  return useFetchStore<GitHubStatistic | null>({
     once: true,
     data: null,
     fetcher: () => tunnel.dispatch(TunnelModule.OpenSourceGitHubStatistic)
   })
 })
 
-export interface NpmStatistic {
-  downloads: Record<string, number>
-  packages: Array<any>
-}
-
 export const useNpmStatisticStore = defineStore('npmStatistic', () => {
-  const fetchStore = useFetchStore<NpmStatistic | null>({
+  return useFetchStore<NpmStatistic | null>({
     once: true,
     data: null,
     fetcher: () => tunnel.dispatch<NpmStatistic>(TunnelModule.OpenSourceNPMStatistic)
   })
-
-  const totalPackages = computed(() => {
-    return fetchStore.data.value ? Object.keys(fetchStore.data.value.downloads).length : 0
-  })
-
-  const totalDownloads = computed(() => {
-    return fetchStore.data.value
-      ? Object.values<number>(fetchStore.data.value.downloads).reduce((p, c) => p + c, 0)
-      : 0
-  })
-
-  const averageScore = computed(() => {
-    const packages = fetchStore.data.value?.packages
-    if (!packages?.length) {
-      return 0
-    }
-    // https://itnext.io/increasing-an-npm-packages-search-score-fb557f859300
-    const totalScore = packages.reduce((p, c) => p + c.score.final, 0)
-    return (totalScore / packages.length).toFixed(3)
-  })
-
-  return {
-    ...fetchStore,
-    totalPackages,
-    totalDownloads,
-    averageScore
-  }
 })

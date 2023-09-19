@@ -48,14 +48,8 @@ createExpressApp().then(async ({ app, server, cache }) => {
   // sitemap
   app.get('/sitemap.xml', async (_, response) => {
     try {
-      const data = await cacher({
-        cache,
-        key: 'sitemap',
-        ttl: 60 * 60 * 1, // 1 hours
-        getter: getSitemapXml
-      })
       response.header('Content-Type', 'application/xml')
-      response.send(data)
+      response.send(await getSitemapXml())
     } catch (error) {
       errorer(response, { message: error })
     }
@@ -64,14 +58,8 @@ createExpressApp().then(async ({ app, server, cache }) => {
   // RSS
   app.get('/rss.xml', async (_, response) => {
     try {
-      const data = await cacher({
-        cache,
-        key: 'rss',
-        ttl: 60 * 60 * 1, // 1 hours
-        getter: getRssXml
-      })
       response.header('Content-Type', 'application/xml')
-      response.send(data)
+      response.send(await getRssXml())
     } catch (error) {
       errorer(response, { message: error })
     }

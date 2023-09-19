@@ -3,9 +3,11 @@ import { XMLParser } from 'fast-xml-parser'
 
 // https://github.com/zedeus/nitter
 // https://github.com/zedeus/nitter/wiki/Instances
-// https://nitter.net/${username}
-// https://twiiit.com/${username}/rss
-// https://singapore.unofficialbird.com/${username}/rss
+// ✅ https://nitter.net/${username}
+// ❌ https://nitter.net/${username}/rss
+// ❌ https://twiiit.com/${username}/rss
+// ❌ https://singapore.unofficialbird.com/${username}
+// ❌ https://singapore.unofficialbird.com/${username}/rss
 
 export interface NitterRss {
   userinfo: {

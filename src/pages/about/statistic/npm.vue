@@ -27,21 +27,21 @@
     <p class="line-1">
       <i class="iconfont icon-package"></i>
       <span v-if="isZhLang">发布了</span>
-      <statistic-count :count="store.totalPackages" />
+      <statistic-count :count="store.data?.totalPackages" />
       <span v-if="isZhLang">个公共软件包</span>
       <span v-else>packages</span>
     </p>
     <p>
       <i class="iconfont icon-download"></i>
       <span v-if="isZhLang">被下载</span>
-      <statistic-count large primary split :count="store.totalDownloads" />
+      <statistic-count large primary split :count="store.data?.totalDownloads" />
       <span v-if="isZhLang">次</span>
       <span v-else>downs</span>
     </p>
     <p>
       <i class="iconfont icon-score"></i>
       <span v-if="isZhLang">平均评分</span>
-      <statistic-count :count="store.averageScore" />
+      <statistic-count :count="store.data?.averageScore" />
       <span v-if="isZhLang">分</span>
       <span v-else>average score</span>
     </p>

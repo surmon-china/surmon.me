@@ -27,21 +27,21 @@
     <p>
       <i class="iconfont icon-star-outline"></i>
       <span v-if="isZhLang">共获得</span>
-      <statistic-count large primary split :count="store.data?.statistics.stars" />
+      <statistic-count large primary split :count="store.data?.totalStarCount" />
       <span v-if="isZhLang">个 star</span>
       <span v-else>stars earned</span>
     </p>
     <p>
       <i class="iconfont icon-repository"></i>
       <span v-if="isZhLang">共维护</span>
-      <statistic-count :count="store.data?.repositories.length" />
+      <statistic-count :count="store.data?.repositoryCount" />
       <span v-if="isZhLang">个开源项目</span>
       <span v-else>open-source repos</span>
     </p>
     <p>
       <i class="iconfont icon-organization"></i>
       <span v-if="isZhLang">维护/发起</span>
-      <statistic-count :count="store.data?.organizations.length" />
+      <statistic-count :count="store.data?.organizationCount" />
       <span v-if="isZhLang">个开源组织</span>
       <span v-else>organizations</span>
     </p>
