@@ -20,7 +20,7 @@
 </script>
 
 <template>
-  <div id="popup" class="popup" :class="{ mobile: isMobile, dark: isDarkTheme }">
+  <div id="popup" class="popup" :class="{ mobile: isMobile, dark: isDarkTheme }" v-disabled-wallflower>
     <transition name="module">
       <div class="mask" v-show="state.visible" @click.self="handleMaskClick">
         <div ref="element" class="warpper" :class="{ border: state.border }">

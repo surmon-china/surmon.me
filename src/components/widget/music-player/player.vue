@@ -36,7 +36,7 @@
 </script>
 
 <template>
-  <div class="music-player">
+  <div class="music-player" v-disabled-wallflower>
     <div class="panel">
       <div class="song">
         <img class="cover" :src="useCoverArtURL(currentSong?.cover_art_url)" draggable="false" />

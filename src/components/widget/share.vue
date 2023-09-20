@@ -185,7 +185,7 @@
 </script>
 
 <template>
-  <div class="share">
+  <div class="share" v-disabled-wallflower>
     <button
       class="share-ejector"
       v-for="(social, index) in enabledSocials"

@@ -49,7 +49,7 @@
 </script>
 
 <template>
-  <aside :id="ASIDE_ELEMENT_ID" class="desktop-aside" ref="element">
+  <aside :id="ASIDE_ELEMENT_ID" class="desktop-aside" ref="element" v-disabled-wallflower>
     <div class="module">
       <aside-search />
     </div>

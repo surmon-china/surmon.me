@@ -25,7 +25,7 @@
 </script>
 
 <template>
-  <div id="player" :class="{ playing: state.playing }">
+  <div id="player" :class="{ playing: state.playing }" v-disabled-wallflower>
     <div class="panel">
       <div class="control">
         <button

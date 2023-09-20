@@ -14,7 +14,7 @@
 </script>
 
 <template>
-  <container tag="footer" :id="FOOTER_ELEMENT_ID" class="footer">
+  <container tag="footer" :id="FOOTER_ELEMENT_ID" v-disabled-wallflower class="footer">
     <ulink class="sitemap-btn" :href="VALUABLE_LINKS.SITE_MAP">sitemap.xml</ulink>
     <divider type="vertical" />
     <i18n zh="由 " en="Powered By " />

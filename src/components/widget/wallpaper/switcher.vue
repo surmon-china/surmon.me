@@ -27,7 +27,7 @@
 </script>
 
 <template>
-  <div id="wallpaper">
+  <div id="wallpaper" v-disabled-wallflower>
     <div class="switcher" :class="{ dark: isDarkTheme }" @click="handleOpenWallpaper">
       <div class="title">
         <i class="iconfont icon-bing" />

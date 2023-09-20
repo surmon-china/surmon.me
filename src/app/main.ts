@@ -11,6 +11,10 @@ import { createUniversalStore } from '/@/stores'
 import { createI18n } from '/@/composables/i18n'
 import { createHead, Head } from '/@/composables/head'
 import { createTheme, Theme } from '/@/composables/theme'
+import {
+  vDisabledWallflower,
+  DIRECTIVE_NAME as disabledWallflowerDirectiveName
+} from '/@/components/widget/wallflower/directive'
 import { APP_ENV, APP_VERSION } from '/@/app/environment'
 import { NODE_ENV } from '/@/server/environment'
 import { createUniversalRouter, RouterCreatorOptions } from './router'
@@ -110,6 +114,9 @@ export const createMainApp = (context: ICreatorContext) => {
   app.use(head)
   app.use(theme)
   app.use(components)
+
+  // directives
+  app.directive(disabledWallflowerDirectiveName, vDisabledWallflower)
 
   return {
     app,

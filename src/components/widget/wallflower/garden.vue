@@ -2,6 +2,7 @@
   import { reactive, onMounted, onBeforeUnmount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import Flower, { Props as FlowerProps } from './flower.vue'
+  import { ATTRBUTE_NAME } from './directive'
 
   const EN_FLOWERS = ['💙', '🤍', '❤️']
   const ZH_FLOWERS = [
@@ -17,6 +18,14 @@
   })
 
   const handleClick = (event: MouseEvent) => {
+    let currentElement = event?.target as HTMLElement | null
+    while (currentElement) {
+      if (currentElement.getAttribute(ATTRBUTE_NAME) != null) {
+        return
+      }
+      currentElement = currentElement.parentElement
+    }
+
     const flowers = isZhLang.value ? ZH_FLOWERS : EN_FLOWERS
     state.contentIndex++
     if (state.contentIndex >= flowers.length) {

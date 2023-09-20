@@ -22,7 +22,7 @@
 </script>
 
 <template>
-  <div class="wall">
+  <div class="wall" v-disabled-wallflower>
     <transition name="module" mode="out-in">
       <div
         ref="picture-box"

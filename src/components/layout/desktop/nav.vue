@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <div :id="NAV_ELEMENT_ID" class="desktop-nav">
+  <div :id="NAV_ELEMENT_ID" class="desktop-nav" v-disabled-wallflower>
     <nav class="nav-list">
       <template v-for="menu in menus" :key="menu.id">
         <span v-if="menu.divider" class="divider"></span>

@@ -69,7 +69,7 @@
 </script>
 
 <template>
-  <div id="toolbox">
+  <div id="toolbox" v-disabled-wallflower>
     <div class="container">
       <div class="tools">
         <ulink class="rss" :href="VALUABLE_LINKS.RSS" @mousedown="handleRSS">

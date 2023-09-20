@@ -44,7 +44,7 @@
 </script>
 
 <template>
-  <header :id="HEADER_ELEMENT_ID" class="header" :class="{ 'enable-nav': isEnabledNav }">
+  <header :id="HEADER_ELEMENT_ID" v-disabled-wallflower class="header" :class="{ 'enable-nav': isEnabledNav }">
     <div class="header-container container">
       <div class="header-header">
         <uimage cdn src="/images/logo.svg" class="header-logo" :alt="META.title" />

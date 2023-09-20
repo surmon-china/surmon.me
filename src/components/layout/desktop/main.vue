@@ -16,10 +16,10 @@
   import Toolbox from '/@/components/widget/toolbox.vue'
   import Feedback from '/@/components/widget/feedback.vue'
   import Statement from '/@/components/widget/statement.vue'
-  import NavView from './nav.vue'
-  import AsideView from './aside/index.vue'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
+  import AsideView from './aside/index.vue'
+  import NavView from './nav.vue'
 
   const sponsorState = useSponsorState()
   const wallpaperStore = useWallpaperStore()
@@ -101,7 +101,7 @@
       >
         <!-- unuse suspense -> async route component -> can't extract style to css file -->
         <router-view v-slot="{ Component, route: r }">
-          <div class="router-view">
+          <div class="router-view" v-disabled-wallflower>
             <transition name="page" mode="out-in" @before-enter="handlePageTransitionDone">
               <suspense>
                 <component :is="Component" :key="r.name" />
