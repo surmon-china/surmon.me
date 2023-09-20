@@ -171,7 +171,7 @@ export const routes: RouteRecordRaw[] = [
     },
     meta: {
       responsive: true,
-      ssrCacheTTL: 60 * 60 * 24, // 24 hours
+      ssrCacheTTL: false,
       async validator({ route, i18n }) {
         const { date } = route.params
         if (!date || !isValidDateParam(date)) {
