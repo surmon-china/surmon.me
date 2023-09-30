@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
   src:
-    url('//at.alicdn.com/t/c/font_64825_zv4wno6spbc.woff2?t=1693159631155') format('woff2'),
-    url('//at.alicdn.com/t/c/font_64825_zv4wno6spbc.woff?t=1693159631155') format('woff'),
-    url('//at.alicdn.com/t/c/font_64825_zv4wno6spbc.ttf?t=1693159631155') format('truetype');
+    url('//at.alicdn.com/t/c/font_64825_nqvouxikj7p.woff2?t=1696096965137') format('woff2'),
+    url('//at.alicdn.com/t/c/font_64825_nqvouxikj7p.woff?t=1696096965137') format('woff'),
+    url('//at.alicdn.com/t/c/font_64825_nqvouxikj7p.ttf?t=1696096965137') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-image-share:before {
+  content: '\e650';
 }
 
 .icon-tencent-cloud:before {

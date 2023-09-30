@@ -36,14 +36,16 @@
     url?(params: ShareParams): string
   }
 
+  // https://sharethis.com/platform/share-buttons/
   const defaultSocials: SocialItem[] = [
     {
       id: SocialMedia.Wechat,
       name: '微信',
       class: 'wechat',
-      handler: async (params) => {
-        const dataURL = await renderTextToQRCodeDataURL(params.url)
-        window.$popup.vImage(dataURL)
+      handler: (params) => {
+        renderTextToQRCodeDataURL(params.url).then((dataURL) => {
+          window.$popup.vImage(dataURL)
+        })
       }
     },
     {
@@ -69,7 +71,7 @@
       class: 'twitter',
       url: (params) => {
         return (
-          `https://twitter.com/share?` +
+          `https://twitter.com/intent/tweet?` +
           qs.stringify({
             url: params.url,
             text: params.title
@@ -85,6 +87,7 @@
         return (
           `https://www.facebook.com/share.php?` +
           qs.stringify({
+            t: params.title,
             u: encodeURI(params.url)
           })
         )
@@ -96,8 +99,9 @@
       class: 'linkedin',
       url: (params) => {
         return (
-          `https://www.linkedin.com/sharing/share-offsite/?` +
+          `https://www.linkedin.com/shareArticle?` +
           qs.stringify({
+            title: params.title,
             url: params.url
           })
         )
@@ -110,10 +114,10 @@
       url: (params) => {
         return (
           // https://www.douban.com/service/sharebutton
-          `https://www.douban.com/share/service?` +
+          `https://www.douban.com/recommend/?` +
           qs.stringify({
-            href: params.url,
-            name: params.title
+            url: params.url,
+            title: params.title
             // image: '',
             // updated: '',
             // bm: ''
@@ -139,6 +143,12 @@
 
   const props = defineProps<{
     socials?: Array<SocialMedia>
+    disabledCopyLink?: boolean
+    disabledImageShare?: boolean
+  }>()
+
+  const emit = defineEmits<{
+    (e: 'shareAsImage'): void
   }>()
 
   const { i18n: _i18n, gtag, route, isZhLang } = useEnhancer()
@@ -161,6 +171,14 @@
     gtag?.event('share_copy_url', {
       event_category: GAEventCategories.Share,
       event_label: content
+    })
+  }
+
+  const shareAsImage = () => {
+    emit('shareAsImage')
+    gtag?.event('share_as_image', {
+      event_category: GAEventCategories.Share,
+      event_label: `${getTitle()} - ${getURL()}`
     })
   }
 
@@ -196,7 +214,15 @@
     >
       <i class="iconfont" :class="`icon-${social.class}`" />
     </button>
-    <button class="share-ejector link" title="Copy link" @click="copyPageURL">
+    <button
+      v-if="!props.disabledImageShare"
+      class="share-ejector share-as-image"
+      title="Share as image"
+      @click="shareAsImage"
+    >
+      <i class="iconfont icon-image-share"></i>
+    </button>
+    <button v-if="!props.disabledCopyLink" class="share-ejector copy-link" title="Copy link" @click="copyPageURL">
       <i class="iconfont icon-link"></i>
     </button>
   </div>
@@ -236,7 +262,10 @@
       &.linkedin:hover {
         background-color: $linkedin-primary !important;
       }
-      &.link:hover {
+      &.share-as-image:hover {
+        background-color: $rss-primary !important;
+      }
+      &.copy-link:hover {
         background-color: $surmon !important;
       }
 

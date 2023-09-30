@@ -150,9 +150,8 @@
             <div class="bridge right"></div>
             <article-share
               :id="ANCHORS.ARTICLE_SHARE_ELEMENT_ID"
-              :article-id="articleId"
-              :likes="article?.meta?.likes || 0"
-              :socials="isMobile ? [SocialMedia.Wechat, SocialMedia.Weibo, SocialMedia.Twitter] : []"
+              :article="article"
+              :socials="isMobile ? [SocialMedia.Wechat, SocialMedia.Twitter] : []"
             />
           </div>
           <div class="module margin overflow">

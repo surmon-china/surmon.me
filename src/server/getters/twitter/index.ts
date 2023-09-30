@@ -72,7 +72,6 @@ export const getTwitterAggregate = async (): Promise<TwitterAggregate> => {
     })
   }
 
-  // 3. sotwe only
   sotweTweets.forEach((tweet) => {
     // not retweet
     if (tweet.retweetedStatus) {

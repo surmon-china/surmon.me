@@ -1,17 +1,26 @@
 <script lang="ts" setup>
   import { PropType } from 'vue'
+  import { Article } from '/@/interfaces/article'
   import BaseShare, { SocialMedia } from '/@/components/widget/share.vue'
-  defineProps({
+  const props = defineProps({
+    article: {
+      type: Object as PropType<Article>,
+      required: true
+    },
     socials: {
       type: Array as PropType<SocialMedia[]>,
       default: () => []
     }
   })
+
+  const handleImageShare = () => {
+    // TODO: share as image
+  }
 </script>
 
 <template>
   <div class="share-box">
-    <base-share class="share" :socials="socials" />
+    <base-share class="share" :socials="props.socials" @share-as-image="handleImageShare" />
   </div>
 </template>
 

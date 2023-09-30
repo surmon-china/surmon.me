@@ -78,7 +78,7 @@
       </popup>
     </client-only>
     <template v-if="!layoutColumn.isFull">
-      <share class="main-share" />
+      <share class="main-share" disabled-image-share />
       <wallpaper />
       <toolbox />
       <client-only>
