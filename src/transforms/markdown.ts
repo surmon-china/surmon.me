@@ -66,6 +66,7 @@ const trimHTML = (html: string) => html.replace(/\s+/g, ' ').replace(/\n/g, ' ')
 
 interface RendererCreatorOptions {
   sanitize: boolean
+  lazyLoadImage: boolean
   text: (text: string) => string
   headingId: (html: string, level: number, raw: string) => string
   imageSource: (src: string) => string | { src: string; sources: Array<{ srcset: string; type: string }> }
@@ -160,9 +161,9 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
           <picture>
             ${sourcesValue.map((s) => `<source srcset="${s.srcset}" type="${s.type}" />`).join('\n')}
             <img
-              class="${LOZAD_CLASS_NAME}"
-              data-src="${srcValue}"
               draggable="false"
+              class="${options?.lazyLoadImage ? LOZAD_CLASS_NAME : ''}"
+              ${options?.lazyLoadImage ? `data-src="${srcValue}"` : `src="${srcValue}"`}
               ${altValue ? `alt="${altValue}"` : ''}
               ${titleValue ? `title="${titleValue}"` : ''}
               onload="this.parentElement.parentElement.dataset.status = 'loaded'"
@@ -212,6 +213,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
 
 export interface MarkdownRenderOption {
   sanitize?: boolean
+  lazyLoadImage?: boolean
   headingIdGetter?: RendererCreatorOptions['headingId']
   imageSourceGetter?: RendererCreatorOptions['imageSource']
 }
@@ -223,6 +225,7 @@ export const markdownToHTML = (markdown: string, options?: MarkdownRenderOption)
 
   const renderOptions: Partial<RendererCreatorOptions> = {
     sanitize: options?.sanitize ?? false,
+    lazyLoadImage: options?.lazyLoadImage ?? true,
     headingId: options?.headingIdGetter,
     imageSource: options?.imageSourceGetter
   }
