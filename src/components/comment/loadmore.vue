@@ -38,7 +38,7 @@
 
 <template>
   <div class="loadmore" :id="COMMENT_FOOTER_ELEMENT_ID">
-    <indicator class="loading" v-if="fetching" width="2rem" height="1rem" gap="0.8rem" />
+    <indicator class="loading" v-if="fetching" width="2rem" height="1.2rem" gap="0.8rem" />
     <button class="button" v-else-if="hasMore" @click="handleLoadmore">
       <i class="iconfont icon-loadmore"></i>
       <i18n>
@@ -64,7 +64,7 @@
     align-items: center;
 
     .loading {
-      margin: $xs-gap 0;
+      margin: $sm-gap 0;
     }
 
     .button {

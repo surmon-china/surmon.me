@@ -2,14 +2,14 @@
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useLozad } from '/@/composables/lozad'
-  import { markdownToHTML } from '/@/transforms/markdown'
+  import { markdownToHTML, MarkdownRenderOption } from '/@/transforms/markdown'
 
   interface Props {
     markdown?: string
     html?: string
-    sanitize?: boolean
     plain?: boolean
     compact?: boolean
+    renderOptions?: MarkdownRenderOption
   }
 
   const props = defineProps<Props>()
@@ -20,7 +20,7 @@
       return props.html || ''
     }
     return markdownToHTML(props.markdown, {
-      sanitize: props.sanitize
+      ...props.renderOptions
     })
   })
 </script>

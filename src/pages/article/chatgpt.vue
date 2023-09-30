@@ -49,7 +49,7 @@
       </div>
       <div class="gpt-content">
         <div class="markdown">
-          <markdown :markdown="props.gptResponse" :sanitize="true" :compact="true" />
+          <markdown :markdown="props.gptResponse" :compact="true" :render-options="{ sanitize: true }" />
         </div>
       </div>
     </div>
