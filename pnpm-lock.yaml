@@ -56,6 +56,9 @@ dependencies:
   highlight.js:
     specifier: ^11.8.0
     version: 11.8.0
+  html-to-image:
+    specifier: ^1.11.11
+    version: 1.11.11
   http-proxy:
     specifier: ^1.18.1
     version: 1.18.1
@@ -3198,6 +3201,10 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       lru-cache: 6.0.0
+    dev: false
+
+  /html-to-image@1.11.11:
+    resolution: {integrity: sha512-9gux8QhvjRO/erSnDPv28noDZcPZmYE7e1vFsBLKLlRlKDSqNJYebj6Qz1TGd5lsRV+X+xYyjCKjuZdABinWjA==}
     dev: false
 
   /http-cache-semantics@4.1.1:

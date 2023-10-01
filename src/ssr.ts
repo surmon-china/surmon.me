@@ -28,7 +28,7 @@ const devDebug = (...args) => isDev && console.debug('-', ...args)
 const createSSRContext = (request: Request, error?: RenderErrorValue): SSRContext => {
   const { headers, cookies, originalUrl } = request
   const country = headers['country-code'] as string
-  const cdnDomain = isCNCode(country) ? API_CONFIG.CDN_CN : API_CONFIG.CDN_GLOBAL
+  const cdnDomain = isCNCode(country) ? API_CONFIG.CDN_CHINA : API_CONFIG.CDN_GLOBAL
   const assetsPrefix = getCDNPrefixURL(cdnDomain, CDNPrefix.Assets)
   return {
     requestURL: originalUrl,

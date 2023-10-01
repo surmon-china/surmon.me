@@ -24,6 +24,6 @@ export default {
   NODEPRESS: isDev ? DEV_API : PROD_API,
   FE: import.meta.env.VITE_FE_URL as string,
   STATIC: import.meta.env.VITE_STATIC_URL as string,
-  CDN_CN: import.meta.env.VITE_CDN_CN_URL as string,
+  CDN_CHINA: import.meta.env.VITE_CDN_CHINA_URL as string,
   CDN_GLOBAL: import.meta.env.VITE_CDN_GLOBAL_URL as string
 }

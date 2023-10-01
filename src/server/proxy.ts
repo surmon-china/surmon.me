@@ -8,7 +8,7 @@ import httpProxy from 'http-proxy'
 import { RequestHandler } from 'express'
 import { isNodeProd } from '@/server/environment'
 import { FORBIDDEN, BAD_REQUEST, INVALID_ERROR } from '@/constants/http-code'
-import { BFF_PROXY_PREFIX, BFF_PROXY_ALLOWLIST_REGEXP } from '@/config/bff.config'
+import { BFF_PROXY_PREFIX, BFF_PROXY_ALLOWLIST_REGEXP, getStaticURL } from '@/config/bff.config'
 import { META } from '@/config/app.config'
 
 export const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/*`
@@ -72,7 +72,10 @@ export const proxyer = (): RequestHandler => {
     }
 
     if (parsedURL.hostname.endsWith(META.domain)) {
-      return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL`)
+      const staticUrl = new URL(getStaticURL())
+      if (parsedURL.hostname !== staticUrl.hostname) {
+        return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL`)
+      }
     }
 
     if (isNodeProd) {

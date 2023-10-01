@@ -36,6 +36,7 @@
     "fs-extra": "^11.1.1",
     "geojson": "^0.5.0",
     "highlight.js": "^11.8.0",
+    "html-to-image": "^1.11.11",
     "http-proxy": "^1.18.1",
     "intersection-observer": "^0.12.2",
     "js-cookie": "^3.0.5",
