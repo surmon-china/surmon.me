@@ -30,7 +30,9 @@
         <i18n zh="，" en=", " />
         <i18n>
           <template #zh>共 {{ numberSplit(store.contentLength) }} 字，需阅读 {{ store.readMinutes }} 分钟</template>
-          <template #en>{{ numberSplit(store.contentLength) }} words, {{ store.readMinutes }} min read</template>
+          <template #en>
+            {{ numberSplit(store.contentLength) }} characters, {{ store.readMinutes }} min read
+          </template>
         </i18n>
       </div>
     </button>

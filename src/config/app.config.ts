@@ -5,7 +5,8 @@
  */
 
 export const DEFAULT_DELAY = 468
-export const LONG_ARTICLE_THRESHOLD = 16688
+export const IMAGE_SHARE_LONG_ARTICLE_THRESHOLD = 6688
+export const RENDER_LONG_ARTICLE_THRESHOLD = 16688
 
 export const META = Object.freeze({
   title: 'Surmon.me',

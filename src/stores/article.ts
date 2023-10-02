@@ -12,11 +12,11 @@ import { useCDNDomain } from '/@/app/context'
 import { Article } from '/@/interfaces/article'
 import { Pagination, PaginationList } from '/@/interfaces/common'
 import { getArticleContentHeadingElementId } from '/@/constants/anchor'
-import { markdownToHTML, MarkdownRenderOption } from '/@/transforms/markdown'
 import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
+import { markdownToHTML, getMarkdownSplitIndex, MarkdownRenderOption } from '/@/transforms/markdown'
 import { delayPromise } from '/@/utils/delayer'
 import { isClient } from '/@/app/environment'
-import { LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
+import { RENDER_LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
 import nodepress from '/@/services/nodepress'
 
 export const ARTICLE_API_PATH = '/article'
@@ -112,23 +112,17 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
   })
 
   const isLongContent = computed(() => {
-    return Boolean(article.value && contentLength.value >= LONG_ARTICLE_THRESHOLD)
+    return Boolean(article.value && contentLength.value >= RENDER_LONG_ARTICLE_THRESHOLD)
   })
 
   const splitIndex = computed(() => {
     if (!article.value || !isLongContent.value) {
       return null
     }
-    const splitLength = Math.min(LONG_ARTICLE_THRESHOLD, Math.floor(contentLength.value / 2))
-    const shortContent = article.value.content.substring(0, splitLength)
-    // breakpoint priority: H5 > H4 > H3 > \n\n\n
-    const lastH5Index = shortContent.lastIndexOf('\n##### ')
-    const lastH4Index = shortContent.lastIndexOf('\n#### ')
-    const lastH3Index = shortContent.lastIndexOf('\n### ')
-    const lastLineIndex = shortContent.lastIndexOf('\n\n\n')
-    const splitIndex = Math.max(lastH5Index, lastH4Index, lastH3Index, lastLineIndex)
-    // console.log('- content length', contentLength.value, index, splitIndex)
-    return splitIndex
+    return getMarkdownSplitIndex(
+      article.value.content,
+      Math.min(RENDER_LONG_ARTICLE_THRESHOLD, Math.floor(contentLength.value / 2))
+    )
   })
 
   const optimizeImageSource = (src: string) => {

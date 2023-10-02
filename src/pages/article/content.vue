@@ -70,7 +70,7 @@
           <i class="iconfont icon-t"></i>
           <i18n
             :zh="`共 ${numberSplit(ctxStore.contentLength)} 字，需阅读 ${ctxStore.readMinutes} 分钟`"
-            :en="`${numberSplit(ctxStore.contentLength)} words, ${ctxStore.readMinutes} min read`"
+            :en="`${numberSplit(ctxStore.contentLength)} characters, ${ctxStore.readMinutes} min read`"
           />
           <responsive desktop>
             <divider type="vertical" class="vertical" />
