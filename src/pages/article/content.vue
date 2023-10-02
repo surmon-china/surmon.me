@@ -146,8 +146,7 @@
         text-align: center;
 
         .text {
-          font-weight: 700;
-          font-size: $font-size-h2 * 0.95;
+          margin-top: 0;
           margin-bottom: $gap;
         }
 
