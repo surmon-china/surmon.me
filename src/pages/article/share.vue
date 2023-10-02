@@ -20,6 +20,10 @@
     socials: {
       type: Array as PropType<SocialMedia[]>,
       default: () => []
+    },
+    disabledImageShare: {
+      type: Boolean,
+      default: false
     }
   })
 
@@ -99,7 +103,12 @@
 
 <template>
   <div class="share-box">
-    <base-share class="share" :socials="props.socials" @share-as-image="openImageSharePopop" />
+    <base-share
+      class="share"
+      :socials="props.socials"
+      :disabled-image-share="disabledImageShare"
+      @share-as-image="openImageSharePopop"
+    />
     <popup :visible="shareImageVisibility" :scroll-close="false" @close="closeImageSharePopop">
       <div class="share-as-image-modal" :class="{ rendered: isRenderedShareImage }">
         <div

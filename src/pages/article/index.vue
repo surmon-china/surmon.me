@@ -151,7 +151,8 @@
             <article-share
               :id="ANCHORS.ARTICLE_SHARE_ELEMENT_ID"
               :article="article"
-              :socials="isMobile ? [SocialMedia.Wechat, SocialMedia.Twitter] : []"
+              :disabled-image-share="isMobile"
+              :socials="isMobile ? [SocialMedia.Wechat, SocialMedia.Weibo, SocialMedia.Twitter] : []"
             />
           </div>
           <div class="module margin overflow">
