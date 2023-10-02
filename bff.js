@@ -110,6 +110,7 @@ const BFF_PROXY_ALLOWLIST_REGEXP = /^https:\/\/([a-z0-9-]+\.)*surmon\.(me|cn)/;
 const getBFFServerPort = () => Number(process.env.PORT || 3000);
 const getOnlineApiURL = () => process.env.VITE_API_ONLINE_URL;
 const getLocalApiURL = () => process.env.VITE_API_LOCAL_URL;
+const getStaticURL = () => process.env.VITE_STATIC_URL;
 
 ;// CONCATENATED MODULE: ./src/constants/tunnel.ts
 /**
@@ -164,7 +165,8 @@ const external_axios_namespaceObject = external_axios_x({ ["default"]: () => __W
  * @author Surmon <https://github.com/surmon-china>
  */
 const DEFAULT_DELAY = 468;
-const LONG_ARTICLE_THRESHOLD = 16688;
+const IMAGE_SHARE_LONG_ARTICLE_THRESHOLD = 6688;
+const RENDER_LONG_ARTICLE_THRESHOLD = 16688;
 const META = Object.freeze({
     title: 'Surmon.me',
     zh_sub_title: '斯是陋室，唯吾芳馨',
@@ -572,7 +574,6 @@ const getTwitterAggregate = async () => {
             }
         });
     }
-    // 3. sotwe only
     sotweTweets.forEach((tweet) => {
         // not retweet
         if (tweet.retweetedStatus) {
@@ -1376,7 +1377,10 @@ const proxyer = () => {
             return response.status(BAD_REQUEST).send(`Proxy error: "${error?.message || String(error)}"`);
         }
         if (parsedURL.hostname.endsWith(META.domain)) {
-            return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL`);
+            const staticUrl = new URL(getStaticURL());
+            if (parsedURL.hostname !== staticUrl.hostname) {
+                return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL`);
+            }
         }
         if (isNodeProd) {
             const referer = request.headers.referrer || request.headers.referer;
