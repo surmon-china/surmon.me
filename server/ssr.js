@@ -365,7 +365,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.25.0";
+const APP_VERSION = "4.25.1";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -8503,6 +8503,10 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
     socials: {
       type: Array,
       default: () => []
+    },
+    disabledImageShare: {
+      type: Boolean,
+      default: false
     }
   },
   setup(__props) {
@@ -8573,10 +8577,11 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       const _component_uimage = resolveComponent("uimage");
       const _component_indicator = resolveComponent("indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "share-box" }, _attrs))} data-v-69a5081e>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "share-box" }, _attrs))} data-v-f90ef198>`);
       _push(ssrRenderComponent(Share, {
         class: "share",
         socials: props.socials,
+        "disabled-image-share": __props.disabledImageShare,
         onShareAsImage: openImageSharePopop
       }, null, _parent));
       _push(ssrRenderComponent(_component_popup, {
@@ -8586,9 +8591,9 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="${ssrRenderClass([{ rendered: isRenderedShareImage.value }, "share-as-image-modal"])}" data-v-69a5081e${_scopeId}>`);
+            _push2(`<div class="${ssrRenderClass([{ rendered: isRenderedShareImage.value }, "share-as-image-modal"])}" data-v-f90ef198${_scopeId}>`);
             if (!isRenderedShareImage.value) {
-              _push2(`<div class="${ssrRenderClass([unref(theme).theme.value, "share-template"])}" data-v-69a5081e${_scopeId}><div class="content" data-v-69a5081e${_scopeId}><div class="header" data-v-69a5081e${_scopeId}><h1 class="title" data-v-69a5081e${_scopeId}>${ssrInterpolate(props.article.title)}</h1><p class="meta-info" data-v-69a5081e${_scopeId}>`);
+              _push2(`<div class="${ssrRenderClass([unref(theme).theme.value, "share-template"])}" data-v-f90ef198${_scopeId}><div class="content" data-v-f90ef198${_scopeId}><div class="header" data-v-f90ef198${_scopeId}><h1 class="title" data-v-f90ef198${_scopeId}>${ssrInterpolate(props.article.title)}</h1><p class="meta-info" data-v-f90ef198${_scopeId}>`);
               _push2(ssrRenderComponent(_component_udate, {
                 to: "YMDm",
                 date: __props.article.created_at,
@@ -8618,11 +8623,11 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
                 "render-options": { lazyLoadImage: false, imageSourceGetter: unref(getOriginalProxyURL) }
               }, null, _parent2, _scopeId));
               if (isLongArticle.value) {
-                _push2(`<div class="readmore-mask" data-v-69a5081e${_scopeId}></div>`);
+                _push2(`<div class="readmore-mask" data-v-f90ef198${_scopeId}></div>`);
               } else {
                 _push2(`<!---->`);
               }
-              _push2(`</div><div class="footer" data-v-69a5081e${_scopeId}><p class="tip" data-v-69a5081e${_scopeId}>`);
+              _push2(`</div><div class="footer" data-v-f90ef198${_scopeId}><p class="tip" data-v-f90ef198${_scopeId}>`);
               _push2(ssrRenderComponent(_component_i18n, {
                 zh: "长按识别二维码，阅读全文，参与评论",
                 en: "Long-press the QR code to read and discuss"
@@ -8645,7 +8650,7 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
               _push2(`<!---->`);
             }
             if (!isRenderedShareImage.value) {
-              _push2(`<div class="share-rendering" data-v-69a5081e${_scopeId}>`);
+              _push2(`<div class="share-rendering" data-v-f90ef198${_scopeId}>`);
               _push2(ssrRenderComponent(_component_indicator, {
                 width: "1.8rem",
                 height: "1.2rem"
@@ -8655,7 +8660,7 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
               _push2(`<!---->`);
             }
             if (isRenderedShareImage.value) {
-              _push2(`<div class="share-image" data-v-69a5081e${_scopeId}><img class="image"${ssrRenderAttr("src", shareImageUrl.value)}${ssrRenderAttr("alt", props.article.title)} data-v-69a5081e${_scopeId}></div>`);
+              _push2(`<div class="share-image" data-v-f90ef198${_scopeId}><img class="image"${ssrRenderAttr("src", shareImageUrl.value)}${ssrRenderAttr("alt", props.article.title)} data-v-f90ef198${_scopeId}></div>`);
             } else {
               _push2(`<!---->`);
             }
@@ -8757,14 +8762,14 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const share_vue_vue_type_style_index_0_scoped_69a5081e_lang = "";
+const share_vue_vue_type_style_index_0_scoped_f90ef198_lang = "";
 const _sfc_setup$18 = _sfc_main$18.setup;
 _sfc_main$18.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/share.vue");
   return _sfc_setup$18 ? _sfc_setup$18(props, ctx) : void 0;
 };
-const ArticleShare = /* @__PURE__ */ _export_sfc(_sfc_main$18, [["__scopeId", "data-v-69a5081e"]]);
+const ArticleShare = /* @__PURE__ */ _export_sfc(_sfc_main$18, [["__scopeId", "data-v-f90ef198"]]);
 const _sfc_main$17 = /* @__PURE__ */ defineComponent({
   __name: "meta",
   __ssrInlineRender: true,
@@ -9454,7 +9459,7 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_placeholder = resolveComponent("placeholder");
       const _component_ulink = resolveComponent("ulink");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-page" }, _attrs))} data-v-3cf48722>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-page" }, _attrs))} data-v-56be7fd7>`);
       _push(ssrRenderComponent(_component_placeholder, { loading: unref(fetching) }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -9474,14 +9479,14 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             if (unref(article)) {
-              _push2(`<div data-v-3cf48722${_scopeId}><div class="module margin background overflow" data-v-3cf48722${_scopeId}>`);
+              _push2(`<div data-v-56be7fd7${_scopeId}><div class="module margin background overflow" data-v-56be7fd7${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleContent, {
                 id: ARTICLE_CONTENT_ELEMENT_ID,
                 "readmore-id": ARTICLE_READMORE_ELEMENT_ID,
                 article: unref(article),
                 onRendered: handleContentRendered
               }, null, _parent2, _scopeId));
-              _push2(`<div class="divider" data-v-3cf48722${_scopeId}></div>`);
+              _push2(`<div class="divider" data-v-56be7fd7${_scopeId}></div>`);
               _push2(ssrRenderComponent(ArticleMeta, {
                 id: ARTICLE_META_ELEMENT_ID,
                 article: unref(article),
@@ -9512,18 +9517,19 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
                 }),
                 _: 1
               }, _parent2, _scopeId));
-              _push2(`</div><div class="module margin background" data-v-3cf48722${_scopeId}><div class="bridge left" data-v-3cf48722${_scopeId}></div><div class="bridge right" data-v-3cf48722${_scopeId}></div>`);
+              _push2(`</div><div class="module margin background" data-v-56be7fd7${_scopeId}><div class="bridge left" data-v-56be7fd7${_scopeId}></div><div class="bridge right" data-v-56be7fd7${_scopeId}></div>`);
               _push2(ssrRenderComponent(ArticleShare, {
                 id: ARTICLE_SHARE_ELEMENT_ID,
                 article: unref(article),
-                socials: _ctx.isMobile ? [unref(SocialMedia).Wechat, unref(SocialMedia).Twitter] : []
+                "disabled-image-share": _ctx.isMobile,
+                socials: _ctx.isMobile ? [unref(SocialMedia).Wechat, unref(SocialMedia).Weibo, unref(SocialMedia).Twitter] : []
               }, null, _parent2, _scopeId));
-              _push2(`</div><div class="module margin overflow" data-v-3cf48722${_scopeId}>`);
+              _push2(`</div><div class="module margin overflow" data-v-56be7fd7${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleNeighbour, {
                 prev: unref(prevArticle),
                 next: unref(nextArticle)
               }, null, _parent2, _scopeId));
-              _push2(`</div><div class="module margin overflow" data-v-3cf48722${_scopeId}>`);
+              _push2(`</div><div class="module margin overflow" data-v-56be7fd7${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleRelated, {
                 id: ARTICLE_RELATED_ELEMENT_ID,
                 columns: _ctx.isMobile ? 2 : 3,
@@ -9569,8 +9575,9 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
                   createVNode(ArticleShare, {
                     id: ARTICLE_SHARE_ELEMENT_ID,
                     article: unref(article),
-                    socials: _ctx.isMobile ? [unref(SocialMedia).Wechat, unref(SocialMedia).Twitter] : []
-                  }, null, 8, ["id", "article", "socials"])
+                    "disabled-image-share": _ctx.isMobile,
+                    socials: _ctx.isMobile ? [unref(SocialMedia).Wechat, unref(SocialMedia).Weibo, unref(SocialMedia).Twitter] : []
+                  }, null, 8, ["id", "article", "disabled-image-share", "socials"])
                 ]),
                 createVNode("div", { class: "module margin overflow" }, [
                   createVNode(ArticleNeighbour, {
@@ -9592,7 +9599,7 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="comment" data-v-3cf48722>`);
+      _push(`<div class="comment" data-v-56be7fd7>`);
       _push(ssrRenderComponent(Comment, {
         plain: _ctx.isMobile,
         fetching: unref(fetching),
@@ -9609,7 +9616,7 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
               }, {
                 default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<i class="iconfont icon-chat-gpt" data-v-3cf48722${_scopeId2}></i>`);
+                    _push3(`<i class="iconfont icon-chat-gpt" data-v-56be7fd7${_scopeId2}></i>`);
                   } else {
                     return [
                       createVNode("i", { class: "iconfont icon-chat-gpt" })
@@ -9667,14 +9674,14 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_3cf48722_lang = "";
+const index_vue_vue_type_style_index_0_scoped_56be7fd7_lang = "";
 const _sfc_setup$12 = _sfc_main$12.setup;
 _sfc_main$12.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/index.vue");
   return _sfc_setup$12 ? _sfc_setup$12(props, ctx) : void 0;
 };
-const ArticleDetailPage = /* @__PURE__ */ _export_sfc(_sfc_main$12, [["__scopeId", "data-v-3cf48722"]]);
+const ArticleDetailPage = /* @__PURE__ */ _export_sfc(_sfc_main$12, [["__scopeId", "data-v-56be7fd7"]]);
 const _sfc_main$11 = /* @__PURE__ */ defineComponent({
   __name: "instagram",
   __ssrInlineRender: true,
