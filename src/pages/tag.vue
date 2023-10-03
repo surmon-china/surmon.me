@@ -16,8 +16,9 @@
   }>()
 
   const { seoMeta, cdnDomain, isZhLang } = useEnhancer()
-  const articleListStore = useArticleListStore()
+
   const tagStore = useTagStore()
+  const articleListStore = useArticleListStore()
   const currentTag = computed(() => tagStore.data.find((tag) => tag.slug === props.tagSlug))
   const currentTagIcon = computed(() => getExtendValue(currentTag.value?.extends || [], 'icon') || 'icon-tag')
   const currentTagColor = computed(() => getExtendValue(currentTag.value?.extends || [], 'bgcolor'))

@@ -198,7 +198,7 @@
 
   .share-as-image-modal {
     position: relative;
-    width: 420px;
+    width: 460px;
     &.rendered {
       overflow-y: auto !important;
     }
@@ -252,7 +252,7 @@
           }
 
           .meta-info {
-            font-size: $font-size-small;
+            font-size: $font-size-h6;
             color: $text-secondary;
           }
         }
