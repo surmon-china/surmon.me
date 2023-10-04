@@ -15,7 +15,7 @@ import Uimage from '/@/components/common/uimage'
 import Placeholder from '/@/components/common/placeholder'
 import ClientOnly from '/@/components/common/client-only'
 import Container from '/@/components/common/container'
-import { IndicatorComponent } from '/@/components/common/indicator'
+import { LoadingIndicator } from '/@/components/common/loading-indicator'
 import { Responsive, DesktopOnly } from '/@/components/common/responsive'
 
 import SkeletonBase from '/@/components/common/skeleton/base.vue'
@@ -31,11 +31,11 @@ declare module 'vue' {
     Udate: typeof Udate
     Ulink: typeof Ulink
     Uimage: typeof Uimage
-    Indicator: typeof IndicatorComponent
     Placeholder: typeof Placeholder
     ClientOnly: typeof ClientOnly
     Responsive: typeof Responsive
     DesktopOnly: typeof DesktopOnly
+    LoadingIndicator: typeof LoadingIndicator
     Container: typeof Container
     SkeletonBase: typeof SkeletonBase
     SkeletonLine: typeof SkeletonLine
@@ -52,7 +52,7 @@ export default function (app: App) {
   app.component('Ulink', Ulink)
   app.component('Uimage', Uimage)
   app.component('Placeholder', Placeholder)
-  app.component('Indicator', IndicatorComponent)
+  app.component('LoadingIndicator', LoadingIndicator)
 
   app.component('ClientOnly', ClientOnly)
   app.component('Responsive', Responsive)

@@ -1,6 +1,6 @@
 import { defineComponent, h, ExtractPropTypes } from 'vue'
 
-export const IndicatorProps = {
+export const LoadingIndicatorProps = {
   width: {
     type: String,
     default: '1.6rem'
@@ -19,9 +19,9 @@ export const IndicatorProps = {
   }
 }
 
-export const IndicatorComponent = defineComponent({
-  name: 'Indicator',
-  props: IndicatorProps,
+export const LoadingIndicator = defineComponent({
+  name: 'LoadingIndicator',
+  props: LoadingIndicatorProps,
   setup(props) {
     return () => {
       const style = {
@@ -33,24 +33,24 @@ export const IndicatorComponent = defineComponent({
 
       return h(
         'div',
-        { class: 'global-indicator', style },
+        { class: 'global-loading-indicator', style },
         Array.from({ length: 4 }).map(() => h('div'))
       )
     }
   }
 })
 
-export interface IndicatorOptions extends Partial<ExtractPropTypes<typeof IndicatorProps>> {
+export interface LoadingIndicatorOptions extends Partial<ExtractPropTypes<typeof LoadingIndicatorProps>> {
   class?: string
 }
 
-export const getIndicatorHTML = (options: IndicatorOptions = {}) => {
-  const classNames = ['global-indicator', options.class].filter(Boolean).join(' ')
+export const getLoadingIndicatorHTML = (options: LoadingIndicatorOptions = {}) => {
+  const classNames = ['global-loading-indicator', options.class].filter(Boolean).join(' ')
   const styles = {
-    '--indicator-width': options.width || IndicatorProps.width.default,
-    '--indicator-height': options.height || IndicatorProps.height.default,
-    '--indicator-gap': options.gap || IndicatorProps.gap.default,
-    '--indicator-radius': options.radius || IndicatorProps.radius.default
+    '--indicator-width': options.width || LoadingIndicatorProps.width.default,
+    '--indicator-height': options.height || LoadingIndicatorProps.height.default,
+    '--indicator-gap': options.gap || LoadingIndicatorProps.gap.default,
+    '--indicator-radius': options.radius || LoadingIndicatorProps.radius.default
   }
 
   return `

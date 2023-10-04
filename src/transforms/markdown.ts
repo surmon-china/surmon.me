@@ -11,8 +11,8 @@ import { markedXhtml } from 'marked-xhtml'
 import { mangle } from 'marked-mangle'
 import { sanitizeUrl } from '@braintree/sanitize-url'
 import { CUSTOM_ELEMENT_LIST } from '/@/effects/elements'
-import { getIndicatorHTML } from '/@/components/common/indicator'
 import { LOZAD_CLASS_NAME } from '/@/composables/lozad'
+import { getLoadingIndicatorHTML } from '/@/components/common/loading-indicator'
 import { getOriginalProxyURL } from '/@/transforms/url'
 import { escape } from '/@/transforms/text'
 import { META } from '/@/config/app.config'
@@ -151,7 +151,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
           <div class="placeholder error">
             <i class="iconfont icon-image-error"></i>
           </div>
-          ${getIndicatorHTML({
+          ${getLoadingIndicatorHTML({
             class: 'placeholder loading',
             width: '2rem',
             height: '1.2rem',

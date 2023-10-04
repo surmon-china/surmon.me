@@ -1,11 +1,11 @@
 @import 'src/styles/variables.scss';
 @import 'src/styles/mixins.scss';
 
-.global-indicator {
+.global-loading-indicator {
   display: flex;
   align-items: center;
 
-  @keyframes indicator {
+  @keyframes loading-indicator {
     0% {
       opacity: 1;
     }
@@ -22,7 +22,7 @@
     height: var(--indicator-height);
     margin: 0 var(--indicator-gap);
     border-radius: var(--indicator-radius);
-    animation: indicator 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    animation: loading-indicator 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     &:nth-child(1) {
       background: $module-bg-darker-3;
       animation-delay: -0.6s;

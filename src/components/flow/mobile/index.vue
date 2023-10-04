@@ -163,7 +163,7 @@
               </button>
             </template>
             <template #loading>
-              <indicator class="loading" width="2rem" height="1.2rem" gap="0.68rem" />
+              <loading-indicator class="loading" width="2rem" height="1.2rem" gap="0.68rem" />
             </template>
             <template #finished>
               <span class="finished">

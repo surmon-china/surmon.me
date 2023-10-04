@@ -103,7 +103,7 @@
                 </button>
               </template>
               <template #loading>
-                <indicator class="loading" width="2.4rem" height="1.4rem" gap="1rem" />
+                <loading-indicator class="loading" width="2.4rem" height="1.4rem" gap="1rem" />
               </template>
             </loadmore>
           </div>

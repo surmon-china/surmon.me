@@ -149,7 +149,7 @@
         </div>
         <transition name="module">
           <div v-if="!isRenderedShareImage" class="share-rendering">
-            <indicator width="1.8rem" height="1.2rem" />
+            <loading-indicator width="1.8rem" height="1.2rem" />
           </div>
         </transition>
         <div v-if="isRenderedShareImage" class="share-image">
