@@ -118,7 +118,7 @@
           >
             <i class="iconfont" :class="getTagIconName(tag)" />
             <span class="name"><i18n :zh="tag.name" :en="getTagEnName(tag)" /></span>
-            <span class="count">({{ tag.article_count || 0 }})</span>
+            <span class="count">{{ tag.article_count || 0 }}</span>
           </router-link>
         </div>
       </div>
@@ -215,18 +215,20 @@
           }
 
           .item {
-            $height: 2em;
             display: inline-block;
             padding: 0 $sm-gap;
             margin-right: $lg-gap;
             margin-bottom: $lg-gap;
-            height: $height;
-            line-height: $height;
+            line-height: 2em;
             font-size: $font-size-h6;
             font-family: $font-family-normal;
             background-color: $module-bg-darker-1;
             transition: margin-bottom $transition-time-fast;
             @include radius-box($xs-radius);
+
+            .iconfont {
+              font-size: $font-size-small;
+            }
 
             .name {
               margin-left: $xs-gap;
@@ -234,6 +236,7 @@
 
             .count {
               margin-left: $xs-gap;
+              font-size: $font-size-small;
               color: $text-secondary;
             }
 
