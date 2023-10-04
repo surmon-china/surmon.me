@@ -17,7 +17,6 @@ import adsense from '/@/composables/adsense'
 import { createDefer } from '/@/composables/defer'
 import { createMusic } from '/@/composables/music'
 import { createPopup } from '/@/composables/popup'
-import { createLoading } from '/@/composables/loading'
 import { runTitler, resetTitler } from '/@/effects/titler'
 import { consoleSlogan } from '/@/effects/slogan'
 import { initCopyrighter } from '/@/effects/copyright'
@@ -54,7 +53,6 @@ const { app, router, head, globalState, i18n, store, getGlobalHead } = createMai
 // services
 const defer = createDefer()
 const popup = createPopup()
-const loading = createLoading()
 const music = createMusic({ delay: 668, continueNext: true })
 
 // plugins & services
@@ -62,7 +60,6 @@ app.use(music)
 app.use(lozad, { exportToGlobal: true })
 app.use(defer, { exportToGlobal: true })
 app.use(popup, { exportToGlobal: true })
-app.use(loading, { exportToGlobal: true })
 app.use(adsense, { id: IDENTITIES.GOOGLE_ADSENSE_CLIENT_ID, enabledAutoAd: true })
 app.use(gtag, {
   router,
@@ -84,15 +81,6 @@ initCopyrighter()
 const globalHead = computed(() => getGlobalHead())
 const mainHead = head.push(globalHead, { mode: 'client' })
 watch(globalHead, (newValue) => mainHead.patch(newValue))
-
-// init: router loading middleware client only
-router.beforeEach((_, __, next) => {
-  loading.start()
-  next()
-})
-router.afterEach((_, __, failure) => {
-  failure ? loading.fail(failure) : loading.finish()
-})
 
 // init: sentry
 Sentry.init({

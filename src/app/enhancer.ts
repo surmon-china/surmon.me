@@ -13,7 +13,6 @@ import { useHead, useSeoMeta } from '/@/composables/head'
 import { useGtag, Gtag } from '/@/composables/gtag'
 import { useTheme, Theme } from '/@/composables/theme'
 import { useDefer, Defer } from '/@/composables/defer'
-import { useLoading, Loading } from '/@/composables/loading'
 import type { Popup } from '/@/composables/popup'
 import { usePopup } from '/@/composables/popup/hook'
 import { useAppOptionStore } from '/@/stores/basic'
@@ -51,7 +50,6 @@ export const useEnhancer = () => {
 
     defer: (isClient ? useDefer() : UNDEFINED) as Defer,
     popup: (isClient ? usePopup() : UNDEFINED) as Popup,
-    gtag: (isClient ? useGtag() : UNDEFINED) as Gtag,
-    loading: (isClient ? useLoading() : UNDEFINED) as Loading
+    gtag: (isClient ? useGtag() : UNDEFINED) as Gtag
   }
 }

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
+  import NavProgress from '/@/components/widget/navigation-progress/index.vue'
   import EmojiRain from '/@/components/widget/emoji-rain.vue'
   import Captured from '/@/components/root/captured.vue'
   import DesktopMain from '/@/components/layout/desktop/main.vue'
@@ -9,9 +10,9 @@
 </script>
 
 <template>
-  <div v-cloak class="app-root">
+  <div class="app-root" v-cloak>
     <client-only>
-      <progress-bar :spin="!isMobile" />
+      <nav-progress :spin="!isMobile" />
       <emoji-rain />
       <popup-root />
     </client-only>

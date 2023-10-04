@@ -1,26 +1,49 @@
 <script lang="ts" setup>
-  import { useLoading } from './'
+  import { onBeforeUnmount } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { UNDEFINED } from '/@/constants/value'
+  import { createNavigationProgress } from './state'
 
-  interface Props {
-    spin?: boolean
-  }
+  const props = defineProps({
+    spin: Boolean,
+    color: String,
+    height: {
+      type: Number,
+      default: 3
+    }
+  })
 
-  const props = defineProps<Props>()
-  const loading = useLoading()
+  const router = useRouter()
+  const state = createNavigationProgress()
+
+  router.beforeEach((_, __, next) => {
+    state.start()
+    next()
+  })
+
+  router.afterEach(() => state.finish())
+  router.onError(() => state.finish())
+
+  onBeforeUnmount(() => {
+    state.clear()
+  })
 </script>
 
 <template>
-  <div id="progress-bar" :class="{ show: loading.state.show }">
+  <div
+    id="navigation-progress"
+    :class="{ visible: state.isLoading.value }"
+    :style="{ '--height': props.height + 'px' }"
+  >
     <div
       class="progress"
-      :style="{ width: loading.state.percent + '%' }"
-      :class="{
-        notransition: loading.state.skipTimerCount > 0,
-        failed: !loading.state.canSucceed
+      :style="{
+        background: props.color || UNDEFINED,
+        transform: `scaleX(${state.progress.value}%)`
       }"
     />
-    <div v-if="props.spin" class="spin" :class="{ failed: !loading.state.canSucceed }">
-      <div class="lds-ring">
+    <div v-if="props.spin" class="spin">
+      <div class="spin-ring">
         <div></div>
         <div></div>
         <div></div>
@@ -34,18 +57,17 @@
   @import 'src/styles/variables.scss';
   @import 'src/styles/mixins.scss';
 
-  #progress-bar {
-    $size: 3px;
-    $failed: $red;
+  #navigation-progress {
     position: fixed;
     top: 0;
     left: 0;
-    height: $size;
-    width: 100%;
-    z-index: $z-index-progress-bar;
+    right: 0;
+    height: var(--height);
+    pointer-events: none;
+    z-index: $z-index-navigation-progress;
     @include visibility-transition($transition-time-normal);
     @include hidden();
-    &.show {
+    &.visible {
       @include visible();
     }
 
@@ -53,38 +75,29 @@
       position: absolute;
       top: 0;
       left: 0;
-      height: $size;
-      width: 0%;
+      right: 0;
+      height: var(--height);
+      width: auto;
       background-color: $primary;
-      transition: width 160ms;
-      &.notransition {
-        transition: none;
-      }
-      &.failed {
-        background-color: $failed;
-      }
+      transform-origin: left;
+      transition-property: transform;
+      transition-duration: $transition-time-fast;
+      transition-timing-function: ease;
     }
 
     .spin {
       position: absolute;
       top: $lg-gap;
       right: $lg-gap;
-      &.failed {
-        .lds-ring {
-          div {
-            border-top-color: $failed;
-          }
-        }
-      }
 
-      .lds-ring {
+      .spin-ring {
         $size: 3rem;
         display: inline-block;
         position: relative;
         width: $size;
         height: $size;
 
-        @keyframes lds-ring {
+        @keyframes spin-ring {
           0% {
             transform: rotate(0deg);
           }
@@ -105,7 +118,7 @@
           border: $border solid transparent;
           border-top-color: $primary;
           border-radius: 50%;
-          animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+          animation: spin-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
           &:nth-child(1) {
             animation-delay: -0.45s;
           }
