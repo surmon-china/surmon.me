@@ -67,7 +67,6 @@
   }
 
   const renderShareImage = async (element: HTMLElement) => {
-    console.groupCollapsed('share-as-image')
     const htmlToImage = await import('html-to-image')
     const blob = await htmlToImage.toBlob(element, {
       quality: 1,
@@ -82,7 +81,6 @@
       throw new Error('Failed to generate share image')
     } else {
       shareImageUrl.value = URL.createObjectURL(blob)
-      console.groupEnd()
     }
   }
 
