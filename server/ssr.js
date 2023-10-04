@@ -365,7 +365,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.25.1";
+const APP_VERSION = "4.25.2";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -4814,8 +4814,8 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
   setup(__props) {
     const props = __props;
     const { seoMeta, cdnDomain, isZhLang } = useEnhancer();
-    const articleListStore = useArticleListStore();
     const tagStore = useTagStore();
+    const articleListStore = useArticleListStore();
     const currentTag = computed(() => tagStore.data.find((tag) => tag.slug === props.tagSlug));
     const currentTagIcon = computed(() => {
       var _a;
@@ -4865,7 +4865,7 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
       const _component_divider = resolveComponent("divider");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "tag-flow-page" }, _attrs))} data-v-f01496d3>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "tag-flow-page" }, _attrs))} data-v-ae67a8cf>`);
       _push(ssrRenderComponent(ArticleListHeader, {
         "background-color": currentTagColor.value,
         "background-image": currentTagImage.value,
@@ -4874,16 +4874,16 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             if (currentTag.value) {
-              _push2(`<span class="header" data-v-f01496d3${_scopeId}>`);
+              _push2(`<span class="header" data-v-ae67a8cf${_scopeId}>`);
               _push2(ssrRenderComponent(_component_i18n, null, {
                 zh: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span data-v-f01496d3${_scopeId2}>#${ssrInterpolate(currentTag.value.name)}</span>`);
+                    _push3(`<span data-v-ae67a8cf${_scopeId2}>#${ssrInterpolate(currentTag.value.name)}</span>`);
                     _push3(ssrRenderComponent(_component_divider, {
                       class: "divider",
                       type: "vertical"
                     }, null, _parent3, _scopeId2));
-                    _push3(`<span data-v-f01496d3${_scopeId2}>${ssrInterpolate(currentTag.value.description || "...")}</span>`);
+                    _push3(`<span data-v-ae67a8cf${_scopeId2}>${ssrInterpolate(currentTag.value.description || "...")}</span>`);
                   } else {
                     return [
                       createVNode("span", null, "#" + toDisplayString(currentTag.value.name), 1),
@@ -4897,12 +4897,12 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
                 }),
                 en: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span data-v-f01496d3${_scopeId2}>Tag</span>`);
+                    _push3(`<span data-v-ae67a8cf${_scopeId2}>Tag</span>`);
                     _push3(ssrRenderComponent(_component_divider, {
                       class: "divider",
                       type: "vertical"
                     }, null, _parent3, _scopeId2));
-                    _push3(`<span data-v-f01496d3${_scopeId2}>#${ssrInterpolate(unref(getTagEnName)(currentTag.value))}</span>`);
+                    _push3(`<span data-v-ae67a8cf${_scopeId2}>#${ssrInterpolate(unref(getTagEnName)(currentTag.value))}</span>`);
                   } else {
                     return [
                       createVNode("span", null, "Tag"),
@@ -4961,14 +4961,14 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const tag_vue_vue_type_style_index_0_scoped_f01496d3_lang = "";
+const tag_vue_vue_type_style_index_0_scoped_ae67a8cf_lang = "";
 const _sfc_setup$1v = _sfc_main$1v.setup;
 _sfc_main$1v.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/tag.vue");
   return _sfc_setup$1v ? _sfc_setup$1v(props, ctx) : void 0;
 };
-const TagFlowPage = /* @__PURE__ */ _export_sfc(_sfc_main$1v, [["__scopeId", "data-v-f01496d3"]]);
+const TagFlowPage = /* @__PURE__ */ _export_sfc(_sfc_main$1v, [["__scopeId", "data-v-ae67a8cf"]]);
 const _sfc_main$1u = /* @__PURE__ */ defineComponent({
   __name: "date",
   __ssrInlineRender: true,
@@ -8512,7 +8512,6 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
   setup(__props) {
     const props = __props;
     const { theme } = useEnhancer();
-    const { articleDetail } = useStores();
     const isLongArticle = computed(() => props.article.content.length > IMAGE_SHARE_LONG_ARTICLE_THRESHOLD);
     const templateMarkdown = computed(() => {
       const content = props.article.content;
@@ -8542,6 +8541,7 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
       await new Promise((resolve) => setTimeout(resolve, DEFAULT_DELAY));
     };
     const renderShareImage = async (element) => {
+      console.groupCollapsed("share-as-image");
       const htmlToImage = await import("html-to-image");
       const blob = await htmlToImage.toBlob(element, {
         quality: 1,
@@ -8554,6 +8554,7 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
         throw new Error("Failed to generate share image");
       } else {
         shareImageUrl.value = URL.createObjectURL(blob);
+        console.groupEnd();
       }
     };
     const closeImageSharePopop = () => {
@@ -8572,12 +8573,12 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
     };
     return (_ctx, _push, _parent, _attrs) => {
       const _component_popup = resolveComponent("popup");
+      const _component_i18n = resolveComponent("i18n");
       const _component_udate = resolveComponent("udate");
       const _component_divider = resolveComponent("divider");
-      const _component_i18n = resolveComponent("i18n");
       const _component_uimage = resolveComponent("uimage");
       const _component_indicator = resolveComponent("indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "share-box" }, _attrs))} data-v-f90ef198>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "share-box" }, _attrs))} data-v-08ecb2ae>`);
       _push(ssrRenderComponent(Share, {
         class: "share",
         socials: props.socials,
@@ -8591,9 +8592,13 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="${ssrRenderClass([{ rendered: isRenderedShareImage.value }, "share-as-image-modal"])}" data-v-f90ef198${_scopeId}>`);
+            _push2(`<div class="${ssrRenderClass([{ rendered: isRenderedShareImage.value }, "share-as-image-modal"])}" data-v-08ecb2ae${_scopeId}>`);
             if (!isRenderedShareImage.value) {
-              _push2(`<div class="${ssrRenderClass([unref(theme).theme.value, "share-template"])}" data-v-f90ef198${_scopeId}><div class="content" data-v-f90ef198${_scopeId}><div class="header" data-v-f90ef198${_scopeId}><h1 class="title" data-v-f90ef198${_scopeId}>${ssrInterpolate(props.article.title)}</h1><p class="meta-info" data-v-f90ef198${_scopeId}>`);
+              _push2(`<div class="${ssrRenderClass([unref(theme).theme.value, "share-template"])}" data-v-08ecb2ae${_scopeId}><div class="content" data-v-08ecb2ae${_scopeId}><div class="header" data-v-08ecb2ae${_scopeId}><h1 class="title" data-v-08ecb2ae${_scopeId}>${ssrInterpolate(__props.article.title)}</h1><p class="meta-info" data-v-08ecb2ae${_scopeId}>`);
+              _push2(ssrRenderComponent(_component_i18n, {
+                zh: "发布于 ",
+                en: "Created at "
+              }, null, _parent2, _scopeId));
               _push2(ssrRenderComponent(_component_udate, {
                 to: "YMDm",
                 date: __props.article.created_at,
@@ -8604,8 +8609,8 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
                 size: "sm"
               }, null, _parent2, _scopeId));
               _push2(ssrRenderComponent(_component_i18n, {
-                zh: `共 ${unref(numberSplit)(unref(articleDetail).contentLength)} 字，需阅读 ${unref(articleDetail).readMinutes} 分钟`,
-                en: `${unref(numberSplit)(unref(articleDetail).contentLength)} characters, ${unref(articleDetail).readMinutes} min read`
+                zh: `全文共 ${unref(numberSplit)(__props.article.content.length)} 字`,
+                en: `${unref(numberSplit)(__props.article.content.length)} characters`
               }, null, _parent2, _scopeId));
               _push2(`</p>`);
               if (shareTemplateQRCode.value) {
@@ -8623,11 +8628,11 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
                 "render-options": { lazyLoadImage: false, imageSourceGetter: unref(getOriginalProxyURL) }
               }, null, _parent2, _scopeId));
               if (isLongArticle.value) {
-                _push2(`<div class="readmore-mask" data-v-f90ef198${_scopeId}></div>`);
+                _push2(`<div class="readmore-mask" data-v-08ecb2ae${_scopeId}></div>`);
               } else {
                 _push2(`<!---->`);
               }
-              _push2(`</div><div class="footer" data-v-f90ef198${_scopeId}><p class="tip" data-v-f90ef198${_scopeId}>`);
+              _push2(`</div><div class="footer" data-v-08ecb2ae${_scopeId}><p class="tip" data-v-08ecb2ae${_scopeId}>`);
               _push2(ssrRenderComponent(_component_i18n, {
                 zh: "长按识别二维码，阅读全文，参与评论",
                 en: "Long-press the QR code to read and discuss"
@@ -8650,7 +8655,7 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
               _push2(`<!---->`);
             }
             if (!isRenderedShareImage.value) {
-              _push2(`<div class="share-rendering" data-v-f90ef198${_scopeId}>`);
+              _push2(`<div class="share-rendering" data-v-08ecb2ae${_scopeId}>`);
               _push2(ssrRenderComponent(_component_indicator, {
                 width: "1.8rem",
                 height: "1.2rem"
@@ -8660,7 +8665,7 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
               _push2(`<!---->`);
             }
             if (isRenderedShareImage.value) {
-              _push2(`<div class="share-image" data-v-f90ef198${_scopeId}><img class="image"${ssrRenderAttr("src", shareImageUrl.value)}${ssrRenderAttr("alt", props.article.title)} data-v-f90ef198${_scopeId}></div>`);
+              _push2(`<div class="share-image" data-v-08ecb2ae${_scopeId}><img class="image"${ssrRenderAttr("src", shareImageUrl.value)}${ssrRenderAttr("alt", __props.article.title)} data-v-08ecb2ae${_scopeId}></div>`);
             } else {
               _push2(`<!---->`);
             }
@@ -8678,8 +8683,12 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
                 }, [
                   createVNode("div", { class: "content" }, [
                     createVNode("div", { class: "header" }, [
-                      createVNode("h1", { class: "title" }, toDisplayString(props.article.title), 1),
+                      createVNode("h1", { class: "title" }, toDisplayString(__props.article.title), 1),
                       createVNode("p", { class: "meta-info" }, [
+                        createVNode(_component_i18n, {
+                          zh: "发布于 ",
+                          en: "Created at "
+                        }),
                         createVNode(_component_udate, {
                           to: "YMDm",
                           date: __props.article.created_at,
@@ -8690,8 +8699,8 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
                           size: "sm"
                         }),
                         createVNode(_component_i18n, {
-                          zh: `共 ${unref(numberSplit)(unref(articleDetail).contentLength)} 字，需阅读 ${unref(articleDetail).readMinutes} 分钟`,
-                          en: `${unref(numberSplit)(unref(articleDetail).contentLength)} characters, ${unref(articleDetail).readMinutes} min read`
+                          zh: `全文共 ${unref(numberSplit)(__props.article.content.length)} 字`,
+                          en: `${unref(numberSplit)(__props.article.content.length)} characters`
                         }, null, 8, ["zh", "en"])
                       ]),
                       shareTemplateQRCode.value ? (openBlock(), createBlock(_component_uimage, {
@@ -8749,7 +8758,7 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
                   createVNode("img", {
                     class: "image",
                     src: shareImageUrl.value,
-                    alt: props.article.title
+                    alt: __props.article.title
                   }, null, 8, ["src", "alt"])
                 ])) : createCommentVNode("", true)
               ], 2)
@@ -8762,14 +8771,14 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const share_vue_vue_type_style_index_0_scoped_f90ef198_lang = "";
+const share_vue_vue_type_style_index_0_scoped_08ecb2ae_lang = "";
 const _sfc_setup$18 = _sfc_main$18.setup;
 _sfc_main$18.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/share.vue");
   return _sfc_setup$18 ? _sfc_setup$18(props, ctx) : void 0;
 };
-const ArticleShare = /* @__PURE__ */ _export_sfc(_sfc_main$18, [["__scopeId", "data-v-f90ef198"]]);
+const ArticleShare = /* @__PURE__ */ _export_sfc(_sfc_main$18, [["__scopeId", "data-v-08ecb2ae"]]);
 const _sfc_main$17 = /* @__PURE__ */ defineComponent({
   __name: "meta",
   __ssrInlineRender: true,
