@@ -245,7 +245,7 @@
 
     .list {
       .list-item {
-        margin-bottom: $lg-gap;
+        margin-bottom: 1.4rem;
       }
     }
 

@@ -154,6 +154,7 @@
 
       .image {
         width: 100%;
+        height: 10rem;
         min-height: calc((100vw - 2rem) * 0.34);
         max-height: 12rem;
         object-fit: cover;
