@@ -73,6 +73,7 @@
       quality: 1,
       skipAutoScale: true,
       cacheBust: true,
+      skipFonts: true,
       fetchRequestInit: { mode: 'no-cors', cache: 'no-cache' },
       filter: (element) => !['IFRAME', 'VIDEO', 'AUDIO'].includes(element.tagName)
     })
@@ -201,6 +202,8 @@
     }
 
     .share-template {
+      font-family: system-ui, sans-serif;
+
       &.light {
         .content {
           background-color: $white;
@@ -269,7 +272,7 @@
       }
 
       .footer {
-        padding: $gap * 2;
+        padding: $gap * 2 0;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -281,7 +284,7 @@
         }
 
         .qrcode {
-          width: 42%;
+          width: 13rem;
           border: 1px solid;
           border-radius: $lg-radius;
         }
