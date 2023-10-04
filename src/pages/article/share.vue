@@ -1,9 +1,8 @@
 <script lang="ts" setup>
   import { shallowRef, computed, nextTick, PropType } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useStores } from '/@/stores'
   import { DEFAULT_DELAY, IMAGE_SHARE_LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
   import { Article } from '/@/interfaces/article'
+  import { useEnhancer } from '/@/app/enhancer'
   import { numberSplit } from '/@/transforms/text'
   import { getMarkdownSplitIndex } from '/@/transforms/markdown'
   import { getArticleDetailRoute } from '/@/transforms/route'
@@ -28,7 +27,6 @@
   })
 
   const { theme } = useEnhancer()
-  const { articleDetail } = useStores()
 
   // article content
   const isLongArticle = computed(() => props.article.content.length > IMAGE_SHARE_LONG_ARTICLE_THRESHOLD)
@@ -69,6 +67,7 @@
   }
 
   const renderShareImage = async (element: HTMLElement) => {
+    console.groupCollapsed('share-as-image')
     const htmlToImage = await import('html-to-image')
     const blob = await htmlToImage.toBlob(element, {
       quality: 1,
@@ -82,6 +81,7 @@
       throw new Error('Failed to generate share image')
     } else {
       shareImageUrl.value = URL.createObjectURL(blob)
+      console.groupEnd()
     }
   }
 
@@ -119,17 +119,14 @@
         >
           <div class="content">
             <div class="header">
-              <h1 class="title">{{ props.article.title }}</h1>
+              <h1 class="title">{{ article.title }}</h1>
               <p class="meta-info">
+                <i18n zh="发布于 " en="Created at " />
                 <udate to="YMDm" :date="article.created_at" separator="/" />
                 <divider type="vertical" size="sm" />
                 <i18n
-                  :zh="`共 ${numberSplit(articleDetail.contentLength)} 字，需阅读 ${
-                    articleDetail.readMinutes
-                  } 分钟`"
-                  :en="`${numberSplit(articleDetail.contentLength)} characters, ${
-                    articleDetail.readMinutes
-                  } min read`"
+                  :zh="`全文共 ${numberSplit(article.content.length)} 字`"
+                  :en="`${numberSplit(article.content.length)} characters`"
                 />
               </p>
               <uimage v-if="shareTemplateQRCode" class="qrcode" :src="shareTemplateQRCode" />
@@ -155,7 +152,7 @@
           </div>
         </transition>
         <div v-if="isRenderedShareImage" class="share-image">
-          <img class="image" :src="shareImageUrl!" :alt="props.article.title" />
+          <img class="image" :src="shareImageUrl!" :alt="article.title" />
         </div>
       </div>
     </popup>
@@ -290,8 +287,10 @@
         }
 
         .logo {
+          filter: $theme-logo-rotate;
+          width: 9rem;
+          margin-right: $xs-gap;
           margin-top: $gap * 2;
-          width: 30%;
         }
       }
     }
