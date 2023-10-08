@@ -365,7 +365,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.26.0";
+const APP_VERSION = "4.26.1";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -793,6 +793,26 @@ const useCDNDomain = () => {
     return domain;
   }
 };
+var OriginState = /* @__PURE__ */ ((OriginState2) => {
+  OriginState2[OriginState2["Original"] = 0] = "Original";
+  OriginState2[OriginState2["Reprint"] = 1] = "Reprint";
+  OriginState2[OriginState2["Hybrid"] = 2] = "Hybrid";
+  return OriginState2;
+})(OriginState || {});
+var CommentPostId = /* @__PURE__ */ ((CommentPostId2) => {
+  CommentPostId2[CommentPostId2["Guestbook"] = 0] = "Guestbook";
+  return CommentPostId2;
+})(CommentPostId || {});
+var CommentParentId = /* @__PURE__ */ ((CommentParentId2) => {
+  CommentParentId2[CommentParentId2["Self"] = 0] = "Self";
+  return CommentParentId2;
+})(CommentParentId || {});
+var SortType = /* @__PURE__ */ ((SortType2) => {
+  SortType2[SortType2["Asc"] = 1] = "Asc";
+  SortType2[SortType2["Desc"] = -1] = "Desc";
+  SortType2[SortType2["Hottest"] = 2] = "Hottest";
+  return SortType2;
+})(SortType || {});
 const HEADER_ELEMENT_ID = "A_header";
 const NAV_ELEMENT_ID = "A_nav";
 const MAIN_ELEMENT_ID = "A_main";
@@ -1211,15 +1231,25 @@ const delayPromise = (ms, promise) => {
   });
 };
 const ARTICLE_API_PATH = "/article";
-const useHottestArticleListStore = defineStore("hottestArticleList", () => {
+const createSpecialArticleListStore = (_params, perPage = 8) => {
   return useFetchStore({
     once: true,
     data: [],
     async fetcher() {
-      const response = await nodepress$1.get(`${ARTICLE_API_PATH}/hottest`);
-      return response.result;
+      const params = { ..._params, per_page: perPage };
+      const response = await nodepress$1.get(ARTICLE_API_PATH, { params });
+      return response.result.data;
     }
   });
+};
+defineStore("latestArticleList", () => {
+  return createSpecialArticleListStore({});
+});
+const useHottestArticleListStore = defineStore("hottestArticleList", () => {
+  return createSpecialArticleListStore({ sort: SortType.Hottest });
+});
+defineStore("featuredArticleList", () => {
+  return createSpecialArticleListStore({ featured: true });
 });
 const useArticleListStore = defineStore("articleList", () => {
   const fetching = ref(false);
@@ -1455,26 +1485,6 @@ const useArchiveStore = defineStore("archive", () => {
     tree
   };
 });
-var OriginState = /* @__PURE__ */ ((OriginState2) => {
-  OriginState2[OriginState2["Original"] = 0] = "Original";
-  OriginState2[OriginState2["Reprint"] = 1] = "Reprint";
-  OriginState2[OriginState2["Hybrid"] = 2] = "Hybrid";
-  return OriginState2;
-})(OriginState || {});
-var CommentPostId = /* @__PURE__ */ ((CommentPostId2) => {
-  CommentPostId2[CommentPostId2["Guestbook"] = 0] = "Guestbook";
-  return CommentPostId2;
-})(CommentPostId || {});
-var CommentParentId = /* @__PURE__ */ ((CommentParentId2) => {
-  CommentParentId2[CommentParentId2["Self"] = 0] = "Self";
-  return CommentParentId2;
-})(CommentParentId || {});
-var SortType = /* @__PURE__ */ ((SortType2) => {
-  SortType2[SortType2["Asc"] = 1] = "Asc";
-  SortType2[SortType2["Desc"] = -1] = "Desc";
-  SortType2[SortType2["Hottest"] = 2] = "Hottest";
-  return SortType2;
-})(SortType || {});
 const COMMENT_API_PATH = "/comment";
 const useCommentStore = defineStore("comment", () => {
   const fetching = ref(false);
@@ -8503,7 +8513,6 @@ const _sfc_main$19 = /* @__PURE__ */ defineComponent({
       await new Promise((resolve) => setTimeout(resolve, DEFAULT_DELAY));
     };
     const renderShareImage = async (element) => {
-      console.groupCollapsed("share-as-image");
       const htmlToImage = await import("html-to-image");
       const blob = await htmlToImage.toBlob(element, {
         quality: 1,
@@ -8517,7 +8526,6 @@ const _sfc_main$19 = /* @__PURE__ */ defineComponent({
         throw new Error("Failed to generate share image");
       } else {
         shareImageUrl.value = URL.createObjectURL(blob);
-        console.groupEnd();
       }
     };
     const closeImageSharePopop = () => {
@@ -8541,7 +8549,7 @@ const _sfc_main$19 = /* @__PURE__ */ defineComponent({
       const _component_divider = resolveComponent("divider");
       const _component_uimage = resolveComponent("uimage");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "share-box" }, _attrs))} data-v-c27a2927>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "share-box" }, _attrs))} data-v-193b423c>`);
       _push(ssrRenderComponent(Share, {
         class: "share",
         socials: props.socials,
@@ -8555,9 +8563,9 @@ const _sfc_main$19 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="${ssrRenderClass([{ rendered: isRenderedShareImage.value }, "share-as-image-modal"])}" data-v-c27a2927${_scopeId}>`);
+            _push2(`<div class="${ssrRenderClass([{ rendered: isRenderedShareImage.value }, "share-as-image-modal"])}" data-v-193b423c${_scopeId}>`);
             if (!isRenderedShareImage.value) {
-              _push2(`<div class="${ssrRenderClass([unref(theme).theme.value, "share-template"])}" data-v-c27a2927${_scopeId}><div class="content" data-v-c27a2927${_scopeId}><div class="header" data-v-c27a2927${_scopeId}><h1 class="title" data-v-c27a2927${_scopeId}>${ssrInterpolate(__props.article.title)}</h1><p class="meta-info" data-v-c27a2927${_scopeId}>`);
+              _push2(`<div class="${ssrRenderClass([unref(theme).theme.value, "share-template"])}" data-v-193b423c${_scopeId}><div class="content" data-v-193b423c${_scopeId}><div class="header" data-v-193b423c${_scopeId}><h1 class="title" data-v-193b423c${_scopeId}>${ssrInterpolate(__props.article.title)}</h1><p class="meta-info" data-v-193b423c${_scopeId}>`);
               _push2(ssrRenderComponent(_component_i18n, {
                 zh: "发布于 ",
                 en: "Created at "
@@ -8591,11 +8599,11 @@ const _sfc_main$19 = /* @__PURE__ */ defineComponent({
                 "render-options": { lazyLoadImage: false, imageSourceGetter: unref(getOriginalProxyURL) }
               }, null, _parent2, _scopeId));
               if (isLongArticle.value) {
-                _push2(`<div class="readmore-mask" data-v-c27a2927${_scopeId}></div>`);
+                _push2(`<div class="readmore-mask" data-v-193b423c${_scopeId}></div>`);
               } else {
                 _push2(`<!---->`);
               }
-              _push2(`</div><div class="footer" data-v-c27a2927${_scopeId}><p class="tip" data-v-c27a2927${_scopeId}>`);
+              _push2(`</div><div class="footer" data-v-193b423c${_scopeId}><p class="tip" data-v-193b423c${_scopeId}>`);
               _push2(ssrRenderComponent(_component_i18n, {
                 zh: "长按识别二维码，阅读全文，参与评论",
                 en: "Long-press the QR code to read and discuss"
@@ -8618,7 +8626,7 @@ const _sfc_main$19 = /* @__PURE__ */ defineComponent({
               _push2(`<!---->`);
             }
             if (!isRenderedShareImage.value) {
-              _push2(`<div class="share-rendering" data-v-c27a2927${_scopeId}>`);
+              _push2(`<div class="share-rendering" data-v-193b423c${_scopeId}>`);
               _push2(ssrRenderComponent(_component_loading_indicator, {
                 width: "1.8rem",
                 height: "1.2rem"
@@ -8628,7 +8636,7 @@ const _sfc_main$19 = /* @__PURE__ */ defineComponent({
               _push2(`<!---->`);
             }
             if (isRenderedShareImage.value) {
-              _push2(`<div class="share-image" data-v-c27a2927${_scopeId}><img class="image"${ssrRenderAttr("src", shareImageUrl.value)}${ssrRenderAttr("alt", __props.article.title)} data-v-c27a2927${_scopeId}></div>`);
+              _push2(`<div class="share-image" data-v-193b423c${_scopeId}><img class="image"${ssrRenderAttr("src", shareImageUrl.value)}${ssrRenderAttr("alt", __props.article.title)} data-v-193b423c${_scopeId}></div>`);
             } else {
               _push2(`<!---->`);
             }
@@ -8734,14 +8742,14 @@ const _sfc_main$19 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const share_vue_vue_type_style_index_0_scoped_c27a2927_lang = "";
+const share_vue_vue_type_style_index_0_scoped_193b423c_lang = "";
 const _sfc_setup$19 = _sfc_main$19.setup;
 _sfc_main$19.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/share.vue");
   return _sfc_setup$19 ? _sfc_setup$19(props, ctx) : void 0;
 };
-const ArticleShare = /* @__PURE__ */ _export_sfc(_sfc_main$19, [["__scopeId", "data-v-c27a2927"]]);
+const ArticleShare = /* @__PURE__ */ _export_sfc(_sfc_main$19, [["__scopeId", "data-v-193b423c"]]);
 const _sfc_main$18 = /* @__PURE__ */ defineComponent({
   __name: "meta",
   __ssrInlineRender: true,
