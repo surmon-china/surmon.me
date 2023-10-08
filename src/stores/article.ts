@@ -11,6 +11,7 @@ import { useIdentityStore } from './identity'
 import { useCDNDomain } from '/@/app/context'
 import { Article } from '/@/interfaces/article'
 import { Pagination, PaginationList } from '/@/interfaces/common'
+import { SortType } from '/@/constants/state'
 import { getArticleContentHeadingElementId } from '/@/constants/anchor'
 import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
 import { markdownToHTML, getMarkdownSplitIndex, MarkdownRenderOption } from '/@/transforms/markdown'
@@ -21,15 +22,28 @@ import nodepress from '/@/services/nodepress'
 
 export const ARTICLE_API_PATH = '/article'
 
-export const useHottestArticleListStore = defineStore('hottestArticleList', () => {
+const createSpecialArticleListStore = (_params: Record<string, any>, perPage: number = 8) => {
   return useFetchStore<Article[]>({
     once: true,
     data: [],
     async fetcher() {
-      const response = await nodepress.get<Article[]>(`${ARTICLE_API_PATH}/hottest`)
-      return response.result
+      const params = { ..._params, per_page: perPage }
+      const response = await nodepress.get<PaginationList<Article>>(ARTICLE_API_PATH, { params })
+      return response.result.data
     }
   })
+}
+
+export const useLatestArticleListStore = defineStore('latestArticleList', () => {
+  return createSpecialArticleListStore({})
+})
+
+export const useHottestArticleListStore = defineStore('hottestArticleList', () => {
+  return createSpecialArticleListStore({ sort: SortType.Hottest })
+})
+
+export const useFeaturedArticleListStore = defineStore('featuredArticleList', () => {
+  return createSpecialArticleListStore({ featured: true })
 })
 
 export const useArticleListStore = defineStore('articleList', () => {
