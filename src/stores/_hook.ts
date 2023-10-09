@@ -6,7 +6,6 @@
 
 import { Pinia } from 'pinia'
 
-import { useArticleListStore, useHottestArticleListStore, useArticleDetailStore } from './article'
 import { useAnnouncementStore } from './announcement'
 import { useArchiveStore } from './archive'
 import { useCommentStore } from './comment'
@@ -25,11 +24,21 @@ import {
   useYouTubePlayListStore,
   useTwitterStore
 } from './media'
+import {
+  useArticleListStore,
+  useArticleDetailStore,
+  useHottestArticleListStore,
+  useFeaturedArticleListStore,
+  useLatestArticleListStore
+} from './article'
 
 export const useStores = (pinia?: Pinia) => ({
+  hottestArticleList: useHottestArticleListStore(pinia),
+  featuredArticleList: useFeaturedArticleListStore(pinia),
+  latestArticleList: useLatestArticleListStore(pinia),
+
   articleList: useArticleListStore(pinia),
   articleDetail: useArticleDetailStore(pinia),
-  hottestArticleList: useHottestArticleListStore(pinia),
   announcement: useAnnouncementStore(pinia),
   category: useCategoryStore(pinia),
   tag: useTagStore(pinia),

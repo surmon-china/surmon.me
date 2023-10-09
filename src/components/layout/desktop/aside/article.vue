@@ -1,31 +1,46 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue'
-  import { useHottestArticleListStore } from '/@/stores/article'
+  import { useStores } from '/@/stores'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { numberToKilo } from '/@/transforms/text'
   import { dateToYMD } from '/@/transforms/moment'
   import { LanguageKey } from '/@/language'
 
-  const PER_PAGE = 8
+  const { hottestArticleList, latestArticleList, featuredArticleList } = useStores()
+  const tabs = computed(() => [
+    {
+      zh_title: '最近更新',
+      en_title: 'Latest',
+      zh_label: '最新',
+      en_label: 'latest',
+      icon: 'icon-clock',
+      store: latestArticleList
+    },
+    {
+      zh_title: '热门趋势',
+      en_title: 'Trending',
+      zh_label: '热门',
+      en_label: 'trend',
+      icon: 'icon-fire',
+      store: hottestArticleList
+    },
+    {
+      zh_title: '群贤毕至',
+      en_title: 'Featured',
+      zh_label: '推荐',
+      en_label: 'feat',
+      icon: 'icon-windmill',
+      store: featuredArticleList
+    }
+  ])
 
-  const hottestArticleListStore = useHottestArticleListStore()
-  const articleFullList = computed(() => {
-    return hottestArticleListStore.data.slice(0, PER_PAGE * 2).map((a, i) => ({ ...a, i: i + 1 }))
-  })
-
-  const hotPage = ref(0)
-  const articles = computed(() => {
-    const perPage = hotPage.value * PER_PAGE
-    return articleFullList.value.map((a, i) => ({ ...a, i: i + 1 })).slice(perPage, perPage + PER_PAGE)
-  })
-
-  const switchHotPage = () => {
-    const count = articleFullList.value.length
-    const pages = Math.ceil(count / PER_PAGE)
-    if (hotPage.value < pages - 1) {
-      hotPage.value++
-    } else {
-      hotPage.value = 0
+  const activatedTabIndex = ref(tabs.value.length - 1)
+  const activatedTab = computed(() => tabs.value[activatedTabIndex.value])
+  const switchTabList = (index: number) => {
+    activatedTabIndex.value = index
+    const tab = tabs.value[index]
+    if (!tab.store.fetched && !tab.store.fetching) {
+      tab.store.fetch()
     }
   }
 </script>
@@ -34,18 +49,23 @@
   <div class="article">
     <div class="header">
       <span class="title">
-        <i class="iconfont icon-hotfill" />
-        <webfont class="text">
-          <i18n :k="LanguageKey.HOT_ARTICLE_LIST_TITLE" />
-        </webfont>
+        <i class="iconfont" :class="activatedTab.icon" />
+        <span class="text">
+          <i18n :zh="activatedTab.zh_title" :en="activatedTab.en_title" />
+        </span>
       </span>
-      <button class="switch" @click="switchHotPage">
-        <i class="iconfont icon-switch" />
-      </button>
+      <div class="types">
+        <template :key="index" v-for="(tab, index) in tabs">
+          <span class="item" :class="{ activated: index === activatedTabIndex }" @click="switchTabList(index)">
+            <i18n :zh="tab.zh_label" :en="tab.en_label" />
+          </span>
+          <divider type="vertical" v-if="index !== tabs.length - 1" />
+        </template>
+      </div>
     </div>
     <placeholder
-      :data="articles"
-      :loading="hottestArticleListStore.fetching"
+      :data="activatedTab.store.data"
+      :loading="activatedTab.store.fetching"
       :i18n-key="LanguageKey.ARTICLE_PLACEHOLDER"
     >
       <template #loading>
@@ -57,25 +77,25 @@
       </template>
       <template #default>
         <ul class="article-list" key="list">
-          <li v-for="item in articles" :key="item.id" class="item">
-            <span class="index" :class="{ small: item.i >= 10 }" :data-index="item.i">
-              {{ item.i }}
-            </span>
+          <li v-for="(article, i) in activatedTab.store.data.slice(0, 8)" :key="article.id" class="item">
+            <span class="index" :data-index="i + 1">{{ i + 1 }}{{ i > 2 ? '.' : '' }}</span>
             <div class="content">
-              <router-link class="title" :to="getArticleDetailRoute(item.id)" :title="item.title">
-                {{ item.title }}
+              <router-link class="title" :to="getArticleDetailRoute(article.id)" :title="article.title">
+                {{ article.title }}
               </router-link>
               <div class="meta">
-                <span class="item date">
-                  {{ dateToYMD(item.created_at) }}
-                </span>
+                <span class="item date">{{ dateToYMD(article.created_at).slice(0, -3) }}</span>
                 <span class="item views">
                   <i class="iconfont icon-eye"></i>
-                  {{ numberToKilo(item.meta.views) }}
+                  {{ numberToKilo(article.meta.views) }}
                 </span>
                 <span class="item comments">
                   <i class="iconfont icon-comment"></i>
-                  {{ item.meta.comments }}
+                  {{ article.meta.comments }}
+                </span>
+                <span class="item likes">
+                  <i class="iconfont icon-like"></i>
+                  {{ article.meta.likes }}
                 </span>
               </div>
             </div>
@@ -96,6 +116,7 @@
     .header {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       height: 3em;
       line-height: 3em;
       margin: 0;
@@ -103,15 +124,26 @@
       border-bottom: 1px dotted $module-bg-darker-1;
 
       .title {
+        .text {
+          font-weight: bold;
+        }
         .iconfont {
           margin-right: $sm-gap;
         }
       }
 
-      .switch {
-        color: $text-secondary;
-        &:hover {
-          color: $text;
+      .types {
+        .item {
+          font-size: $font-size-base - 1;
+          color: $text-secondary;
+          cursor: pointer;
+          &.activated {
+            font-weight: 600;
+          }
+          &.activated,
+          &:hover {
+            color: $text;
+          }
         }
       }
     }
@@ -158,9 +190,6 @@
           color: $text-disabled;
           font-weight: 700;
           font-size: $font-size-base - 1;
-          &.small {
-            font-size: $font-size-small;
-          }
           &[data-index='1'],
           &[data-index='2'],
           &[data-index='3'] {
@@ -180,6 +209,7 @@
 
         .content {
           flex-shrink: 1;
+          flex-grow: 1;
           overflow: hidden;
         }
 
@@ -212,8 +242,10 @@
               margin-right: $lg-gap;
             }
             &.views {
-              width: 5rem;
-              margin-right: $sm-gap;
+              width: 5.4rem;
+            }
+            &.comments {
+              width: 4rem;
             }
           }
         }

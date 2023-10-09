@@ -35,6 +35,7 @@ export interface Article {
   thumbnail: string
   origin: OriginState
   lang: ArticleLang
+  featured: boolean
   disabled_comments: boolean
   tags: Tag[]
   categories: Category[]

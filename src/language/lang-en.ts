@@ -39,7 +39,6 @@ export const enLangMap: LanguageMap = {
   [LanguageKey.CATEGORY_UNCATEGORIZED]: 'Uncategorized',
   [LanguageKey.ANNOUNCEMENT_PLACEHOLDER]: 'No announcements',
   [LanguageKey.TAG_PLACEHOLDER]: 'No tags',
-  [LanguageKey.HOT_ARTICLE_LIST_TITLE]: 'Hottest',
   [LanguageKey.LIST_NO_MORE_DATA]: 'No more',
   [LanguageKey.ARTICLE_PLACEHOLDER]: 'No articles',
   [LanguageKey.ARTICLE_TITLE]: 'Articles',

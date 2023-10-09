@@ -28,7 +28,7 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
     ]
     // fetch hot articles when desktop only
     if (!config.globalState.userAgent.isMobile) {
-      initFetchTasks.push(stores.hottestArticleList.fetch())
+      initFetchTasks.push(stores.featuredArticleList.fetch())
     }
     return Promise.all(initFetchTasks)
   }

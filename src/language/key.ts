@@ -38,7 +38,6 @@ export enum LanguageKey {
   ACTION_OFF = 'off',
   MUSIC_PLACEHOLDER = 'music-placeholder',
   SEARCH_PLACEHOLDER = 'search-input-placeholder',
-  HOT_ARTICLE_LIST_TITLE = 'hot-article-list-title',
   ANNOUNCEMENT_PLACEHOLDER = 'announcement-empty-placeholder',
   CATEGORY_UNCATEGORIZED = 'category-uncategorized',
   TAG_PLACEHOLDER = 'tag-placeholder',

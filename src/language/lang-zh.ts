@@ -44,7 +44,6 @@ export const zhLangMap: LanguageMap = {
   [LanguageKey.ARTICLE_PLACEHOLDER]: '空空如也',
   [LanguageKey.ARTICLE_READ_ALL]: '阅读余下全文',
   [LanguageKey.ARTICLE_RENDERING]: '渲染中..',
-  [LanguageKey.HOT_ARTICLE_LIST_TITLE]: '群贤毕至',
   [LanguageKey.LIST_NO_MORE_DATA]: '没有更多',
   [LanguageKey.ARTICLE_LIST_LOADMORE]: '加载更多',
   [LanguageKey.ARTICLE_LIST_LOADING]: '加载中...',

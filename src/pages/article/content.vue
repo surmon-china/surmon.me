@@ -75,7 +75,7 @@
           <responsive desktop>
             <divider type="vertical" class="vertical" />
             <span>
-              <i class="iconfont icon-clock-outline"></i>
+              <i class="iconfont icon-clock-outlined"></i>
               <udate to="YMDm" :date="article.created_at" separator="/" />
             </span>
           </responsive>

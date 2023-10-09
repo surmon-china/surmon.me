@@ -25,7 +25,7 @@
     :platform="isZhLang ? '我在 GitHub' : 'GitHub'"
   >
     <p>
-      <i class="iconfont icon-star-outline"></i>
+      <i class="iconfont icon-star-outlined"></i>
       <span v-if="isZhLang">共获得</span>
       <statistic-count large primary split :count="store.data?.totalStarCount" />
       <span v-if="isZhLang">个 star</span>

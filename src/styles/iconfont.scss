@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
   src:
-    url('//at.alicdn.com/t/c/font_64825_nqvouxikj7p.woff2?t=1696096965137') format('woff2'),
-    url('//at.alicdn.com/t/c/font_64825_nqvouxikj7p.woff?t=1696096965137') format('woff'),
-    url('//at.alicdn.com/t/c/font_64825_nqvouxikj7p.ttf?t=1696096965137') format('truetype');
+    url('//at.alicdn.com/t/c/font_64825_ueufs74if2.woff2?t=1696877991146') format('woff2'),
+    url('//at.alicdn.com/t/c/font_64825_ueufs74if2.woff?t=1696877991146') format('woff'),
+    url('//at.alicdn.com/t/c/font_64825_ueufs74if2.ttf?t=1696877991146') format('truetype');
 }
 
 .iconfont {
@@ -70,7 +70,7 @@
   content: '\e616';
 }
 
-.icon-video-outline:before {
+.icon-video-outlined:before {
   content: '\e6b4';
 }
 
@@ -102,7 +102,7 @@
   content: '\e60b';
 }
 
-.icon-star-outline:before {
+.icon-star-outlined:before {
   content: '\e60c';
 }
 
@@ -162,10 +162,6 @@
   content: '\e63f';
 }
 
-.icon-feedback:before {
-  content: '\e7da';
-}
-
 .icon-switch:before {
   content: '\e665';
 }
@@ -194,10 +190,6 @@
   content: '\e6ad';
 }
 
-.icon-magnifier:before {
-  content: '\e6e7';
-}
-
 .icon-windmill:before {
   content: '\e61e';
 }
@@ -214,7 +206,7 @@
   content: '\e6e9';
 }
 
-.icon-clock-outline:before {
+.icon-clock-outlined:before {
   content: '\e815';
 }
 
@@ -478,10 +470,6 @@
   content: '\e69e';
 }
 
-.icon-horse:before {
-  content: '\e626';
-}
-
 .icon-tibet:before {
   content: '\e691';
 }
@@ -546,20 +534,12 @@
   content: '\e619';
 }
 
-.icon-beiyesihei:before {
-  content: '\e680';
-}
-
 .icon-emoji:before {
   content: '\e713';
 }
 
 .icon-binarycode:before {
   content: '\e675';
-}
-
-.icon-social:before {
-  content: '\e66e';
 }
 
 .icon-mood-neutral-solid:before {
@@ -614,7 +594,7 @@
   content: '\e646';
 }
 
-.icon-hotfill:before {
+.icon-fire:before {
   content: '\e757';
 }
 
@@ -678,10 +658,6 @@
   content: '\e8a1';
 }
 
-.icon-app:before {
-  content: '\e62d';
-}
-
 .icon-vuejs:before {
   content: '\e62b';
 }
@@ -692,10 +668,6 @@
 
 .icon-database:before {
   content: '\e6ac';
-}
-
-.icon-r:before {
-  content: '\e61c';
 }
 
 .icon-go:before {
@@ -728,10 +700,6 @@
 
 .icon-facebook:before {
   content: '\e6b0';
-}
-
-.icon-renren:before {
-  content: '\e608';
 }
 
 .icon-linkedin:before {
@@ -792,10 +760,6 @@
 
 .icon-git:before {
   content: '\e67e';
-}
-
-.icon-json:before {
-  content: '\e69b';
 }
 
 .icon-redis:before {

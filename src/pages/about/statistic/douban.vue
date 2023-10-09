@@ -27,14 +27,14 @@
     :platform="isZhLang ? '我在豆瓣' : 'Douban Movie'"
   >
     <p>
-      <i class="iconfont icon-video-outline"></i>
+      <i class="iconfont icon-video-outlined"></i>
       <span v-if="isZhLang">标记看过</span>
       <statistic-count large primary split :count="store.data.total_collections" />
       <span v-if="isZhLang">部影片</span>
       <span v-else>films marked</span>
     </p>
     <p>
-      <i class="iconfont icon-clock-outline"></i>
+      <i class="iconfont icon-clock-outlined"></i>
       <span v-if="isZhLang">累计花费</span>
       <statistic-count split :count="totalSpent" />
       <span v-if="isZhLang">小时</span>
