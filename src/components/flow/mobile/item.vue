@@ -57,6 +57,9 @@
         <i18n :k="LanguageKey.ORIGIN_REPRINT" v-else-if="isReprint" />
         <i18n :k="LanguageKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
       </span>
+      <span class="featured" v-if="article.featured">
+        <i18n :k="LanguageKey.ARTICLE_FEATURED" />
+      </span>
       <picture class="picture">
         <template v-if="isOriginalStaticURL(article.thumbnail)">
           <source :srcset="getThumbnailURL(article.thumbnail, 'avif')" type="image/avif" />
@@ -132,15 +135,13 @@
         z-index: $z-index-normal + 1;
         padding: 0 $lg-gap;
         border-bottom-left-radius: $xs-radius;
-        opacity: 0.7;
+        opacity: 0.8;
         line-height: 2.3rem;
         font-size: $font-size-small;
         font-weight: bold;
         color: $white;
         text-align: center;
         text-transform: uppercase;
-        @include visibility-transition();
-
         &.original {
           background-color: rgba($surmon, $opacity);
         }
@@ -150,6 +151,22 @@
         &.reprint {
           background-color: rgba($red, $opacity);
         }
+      }
+
+      .featured {
+        $opacity: 0.7;
+        position: absolute;
+        z-index: $z-index-normal + 1;
+        right: 1rem;
+        bottom: 1rem;
+        border: 1px solid;
+        border-radius: $xs-radius;
+        padding: 0 $xs-gap;
+        opacity: 0.8;
+        line-height: 1.6rem;
+        font-size: $font-size-base - 1;
+        color: $white;
+        text-transform: capitalize;
       }
 
       .image {

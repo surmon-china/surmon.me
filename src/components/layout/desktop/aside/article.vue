@@ -1,11 +1,13 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue'
   import { useStores } from '/@/stores'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { Language, LanguageKey } from '/@/language'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { numberToKilo } from '/@/transforms/text'
   import { dateToYMD } from '/@/transforms/moment'
-  import { LanguageKey } from '/@/language'
 
+  const { i18n: _i18n } = useEnhancer()
   const { hottestArticleList, latestArticleList, featuredArticleList } = useStores()
   const tabs = computed(() => [
     {
@@ -27,8 +29,8 @@
     {
       zh_title: '群贤毕至',
       en_title: 'Featured',
-      zh_label: '推荐',
-      en_label: 'feat',
+      zh_label: _i18n.t(LanguageKey.ARTICLE_FEATURED_SHORT, Language.Chinese),
+      en_label: _i18n.t(LanguageKey.ARTICLE_FEATURED_SHORT, Language.English),
       icon: 'icon-windmill',
       store: featuredArticleList
     }

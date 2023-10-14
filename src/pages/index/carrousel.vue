@@ -4,6 +4,7 @@
   import { LanguageKey } from '/@/language'
   import { Article } from '/@/interfaces/article'
   import { Swiper, SwiperSlide } from '/@/effects/swiper'
+  import { UNDEFINED } from '/@/constants/value'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getAssetURL, getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
   import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
@@ -19,14 +20,14 @@
     image: string
     route?: string
     url?: string
-    ad?: boolean
+    subscript?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
     count: 9
   })
 
-  const { adConfig, cdnDomain, isDarkTheme } = useEnhancer()
+  const { i18n: _i18n, adConfig, cdnDomain, isDarkTheme } = useEnhancer()
   const getPictureURL = (url: string, format?: ImgProxyFormat) => {
     if (!isOriginalStaticURL(url)) {
       return url
@@ -46,10 +47,10 @@
   const slides = computed<Array<CarrouselSlide>>(() => {
     // articles
     const result: CarrouselSlide[] = props.articles.slice(0, props.count).map((article) => ({
-      ad: false,
       title: article.title,
       route: getArticleDetailRoute(article.id),
-      image: article.thumbnail || getAssetURL(cdnDomain, '/images/thumbnail/carrousel.jpg')
+      image: article.thumbnail || getAssetURL(cdnDomain, '/images/thumbnail/carrousel.jpg'),
+      subscript: article.featured ? _i18n.t(LanguageKey.ARTICLE_FEATURED) : UNDEFINED
     }))
     if (!result.length) {
       return []
@@ -62,7 +63,7 @@
         title: config.title,
         image: config.src,
         route: config.url,
-        ad: true
+        subscript: _i18n.t(LanguageKey.AD)
       })
     }
     return result
@@ -120,9 +121,7 @@
                     <span class="text">{{ slide.title }}</span>
                   </div>
                 </div>
-                <span class="ad-symbol" v-if="slide.ad">
-                  <i18n :k="LanguageKey.AD" />
-                </span>
+                <span class="subscript" v-if="slide.subscript">{{ slide.subscript }}</span>
               </ulink>
             </div>
           </swiper-slide>
@@ -277,7 +276,8 @@
               transform: translate3d(0, 0, 0);
             }
 
-            & + .ad-symbol {
+            & + .subscript {
+              opacity: 1;
               transform: translate3d(0, -$title-offset, 0);
             }
           }
@@ -292,7 +292,7 @@
           }
         }
 
-        .ad-symbol {
+        .subscript {
           display: block;
           position: absolute;
           top: 5.6rem;
@@ -301,9 +301,13 @@
           border: 1px solid;
           border-radius: $mini-radius;
           font-size: $font-size-root;
+          text-transform: capitalize;
           color: $white;
+          opacity: 0.8;
           transform: translate3d(-$title-offset, 0, 0);
-          transition: transform $transition-time-fast;
+          transition:
+            opacity $transition-time-fast,
+            transform $transition-time-fast;
         }
       }
     }

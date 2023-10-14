@@ -49,6 +49,8 @@ export enum LanguageKey {
   ARTICLE_RENDERING = 'rendering',
   ARTICLE_LIST_LOADMORE = 'loadmore',
   ARTICLE_LIST_LOADING = 'loading',
+  ARTICLE_FEATURED = 'article-featured',
+  ARTICLE_FEATURED_SHORT = 'article-featured-short',
   COMMENT_LIST_EMPTY = 'comment-list-placeholder',
   COMMENT_UPVOTE = 'comment-likes',
   COMMENT_DOWNVOTE = 'comment-dislikes',

@@ -14,7 +14,7 @@
     article: Article
   }>()
 
-  const { cdnDomain, isZhLang } = useEnhancer()
+  const { i18n: _i18n, cdnDomain, isZhLang } = useEnhancer()
   const identity = useIdentityStore()
   const isLiked = computed(() => identity.isLikedPage(props.article.id))
   const isHybrid = computed(() => isHybridType(props.article.origin))
@@ -73,6 +73,9 @@
           <i18n :k="LanguageKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
           <i18n :k="LanguageKey.ORIGIN_REPRINT" v-else-if="isReprint" />
           <i18n :k="LanguageKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
+        </span>
+        <span class="item-featured" v-if="article.featured" :title="_i18n.t(LanguageKey.ARTICLE_FEATURED)">
+          <i class="iconfont icon-windmill"></i>
         </span>
         <picture class="picture">
           <template v-if="isOriginalStaticURL(article.thumbnail)">
@@ -178,6 +181,9 @@
           .item-oirigin {
             opacity: 1;
           }
+          .item-featured {
+            opacity: 1;
+          }
 
           .image {
             opacity: 0.88;
@@ -207,10 +213,10 @@
           z-index: $z-index-normal + 1;
           padding: 0 $sm-gap;
           border-bottom-right-radius: $xs-radius;
-          opacity: 0.5;
           font-size: $font-size-small;
           color: $white;
           text-align: center;
+          opacity: 0.5;
           @include visibility-transition();
 
           &.original {
@@ -222,6 +228,16 @@
           &.reprint {
             background-color: rgba($red, $opacity);
           }
+        }
+
+        .item-featured {
+          position: absolute;
+          left: $xs-gap;
+          bottom: $xs-gap;
+          z-index: $z-index-normal + 1;
+          color: $white;
+          opacity: 0.5;
+          @include visibility-transition();
         }
 
         .image {

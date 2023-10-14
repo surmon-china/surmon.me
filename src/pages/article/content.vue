@@ -64,28 +64,31 @@
       </div>
     </transition>
     <div class="knowledge" key="knowledge">
-      <div class="title">
-        <h2 class="text">{{ article.title }}</h2>
-        <div class="meta">
-          <i class="iconfont icon-t"></i>
-          <i18n
-            :zh="`共 ${numberSplit(ctxStore.contentLength)} 字，需阅读 ${ctxStore.readMinutes} 分钟`"
-            :en="`${numberSplit(ctxStore.contentLength)} characters, ${ctxStore.readMinutes} min read`"
-          />
-          <responsive desktop>
-            <divider type="vertical" class="vertical" />
-            <span>
-              <i class="iconfont icon-clock-outlined"></i>
-              <udate to="YMDm" :date="article.created_at" separator="/" />
-            </span>
-          </responsive>
+      <h2 class="title">
+        <span class="text">{{ article.title }}</span>
+        <span class="featured" v-if="article.featured">
+          <i18n :k="LanguageKey.ARTICLE_FEATURED_SHORT" />
+        </span>
+      </h2>
+      <div class="meta">
+        <i class="iconfont icon-t"></i>
+        <i18n
+          :zh="`共 ${numberSplit(ctxStore.contentLength)} 字，需阅读 ${ctxStore.readMinutes} 分钟`"
+          :en="`${numberSplit(ctxStore.contentLength)} characters, ${ctxStore.readMinutes} min read`"
+        />
+        <responsive desktop>
           <divider type="vertical" class="vertical" />
           <span>
-            <i class="iconfont icon-eye"></i>
-            <span>{{ numberSplit(article.meta.views) }}&nbsp;</span>
-            <i18n :k="LanguageKey.ARTICLE_VIEWS" />
+            <i class="iconfont icon-clock-outlined"></i>
+            <udate to="YMDm" :date="article.created_at" separator="/" />
           </span>
-        </div>
+        </responsive>
+        <divider type="vertical" class="vertical" />
+        <span>
+          <i class="iconfont icon-eye"></i>
+          <span>{{ numberSplit(article.meta.views) }}&nbsp;</span>
+          <i18n :k="LanguageKey.ARTICLE_VIEWS" />
+        </span>
       </div>
       <markdown :html="ctxStore.defaultContent?.html" />
       <transition name="module" mode="out-in" @after-enter="handleFullContentRendered">
@@ -142,26 +145,37 @@
       position: relative;
 
       .title {
-        margin: 1em 0 1.5em 0;
+        margin-top: $gap;
+        margin-bottom: $gap;
         text-align: center;
 
-        .text {
-          margin-top: 0;
-          margin-bottom: $gap;
-        }
-
-        .meta {
+        .featured {
           display: inline-block;
-          color: $text-disabled;
+          border: 1px solid;
+          border-radius: $xs-radius;
+          margin-left: $sm-gap;
+          padding: 0 2px;
+          font-weight: normal;
+          text-transform: capitalize;
           font-size: $font-size-small;
+          color: $text-secondary;
+          transform: translateY(-2px);
           user-select: none;
-          line-height: 2;
-          .iconfont {
-            margin-right: $xs-gap;
-          }
-          .vertical {
-            top: -1px;
-          }
+        }
+      }
+
+      .meta {
+        margin-bottom: $lg-gap;
+        text-align: center;
+        color: $text-disabled;
+        font-size: $font-size-small;
+        user-select: none;
+        line-height: 2;
+        .iconfont {
+          margin-right: $xs-gap;
+        }
+        .vertical {
+          top: -1px;
         }
       }
 

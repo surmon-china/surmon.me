@@ -47,6 +47,8 @@ export const zhLangMap: LanguageMap = {
   [LanguageKey.LIST_NO_MORE_DATA]: '没有更多',
   [LanguageKey.ARTICLE_LIST_LOADMORE]: '加载更多',
   [LanguageKey.ARTICLE_LIST_LOADING]: '加载中...',
+  [LanguageKey.ARTICLE_FEATURED]: '精选',
+  [LanguageKey.ARTICLE_FEATURED_SHORT]: '精选',
   [LanguageKey.COMMENT_LIST_EMPTY]: '期待你的捷足先登',
   [LanguageKey.COMMENT_UPVOTE]: '赞',
   [LanguageKey.COMMENT_DOWNVOTE]: '踩',
