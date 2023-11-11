@@ -114,7 +114,6 @@ export default defineConfig(({ command, mode }) => {
             if (id.includes('node_modules')) {
               const basics = [
                 'swiper',
-                'amplitude',
                 'emoji-233333',
                 'lozad',
                 'marked',

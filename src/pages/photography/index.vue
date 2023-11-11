@@ -56,7 +56,7 @@
 
 <template>
   <div class="photography-page">
-    <page-banner class="page-banner" video="/videos/clips/ocean-4.mp4" :video-position="68" cdn>
+    <page-banner class="page-banner" video="/videos/clips/ocean-5.mp4" :video-position="72" cdn>
       <template #title>
         <webfont>
           <i18n zh="大千同在，万象共栖" :en="`${META.author}'s photographs`" />

@@ -90,7 +90,6 @@
 <style lang="scss" scoped>
   @import 'src/styles/variables.scss';
   @import 'src/styles/mixins.scss';
-  $size: 280px;
 
   .medias {
     margin: 0;
@@ -109,7 +108,7 @@
 
       .content {
         position: relative;
-        height: $size;
+        height: 260px;
         cursor: pointer;
 
         &:hover {
