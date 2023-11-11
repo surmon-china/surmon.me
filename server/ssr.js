@@ -368,7 +368,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.29.0";
+const APP_VERSION = "4.29.1";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -17024,7 +17024,7 @@ const _sfc_main$c = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_ulink = resolveComponent("ulink");
       const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "mammon" }, _attrs))} data-v-275fff60>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "mammon" }, _attrs))} data-v-710a5ba8>`);
       _push(ssrRenderComponent(unref(Swiper$1), {
         class: "swiper",
         direction: "vertical",
@@ -17041,9 +17041,9 @@ const _sfc_main$c = /* @__PURE__ */ defineComponent({
       }, {
         "container-end": withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="swiper-pagination" data-v-275fff60${_scopeId}><!--[-->`);
+            _push2(`<div class="swiper-pagination" data-v-710a5ba8${_scopeId}><!--[-->`);
             ssrRenderList(unref(adConfig).PC_ASIDE_SWIPER, (__, index) => {
-              _push2(`<div${ssrRenderAttr("aria-label", `Go to slide ${index}`)} class="${ssrRenderClass([{ active: index === activeIndex.value }, "swiper-pagination-bullet"])}" role="button" data-v-275fff60${_scopeId}><span class="bullet-progress" data-v-275fff60${_scopeId}></span></div>`);
+              _push2(`<div${ssrRenderAttr("aria-label", `Go to slide ${index}`)} class="${ssrRenderClass([{ active: index === activeIndex.value }, "swiper-pagination-bullet"])}" role="button" data-v-710a5ba8${_scopeId}><span class="bullet-progress" data-v-710a5ba8${_scopeId}></span></div>`);
             });
             _push2(`<!--]--></div>`);
           } else {
@@ -17083,7 +17083,7 @@ const _sfc_main$c = /* @__PURE__ */ defineComponent({
                             src: ad.src,
                             alt: "aside-swiper-ad"
                           }, null, _parent4, _scopeId3));
-                          _push4(`<i class="iconfont icon-ad" data-v-275fff60${_scopeId3}></i>`);
+                          _push4(`<i class="iconfont icon-ad" data-v-710a5ba8${_scopeId3}></i>`);
                         } else {
                           return [
                             createVNode(_component_uimage, {
@@ -17152,14 +17152,14 @@ const _sfc_main$c = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const mammon_vue_vue_type_style_index_0_scoped_275fff60_lang = "";
+const mammon_vue_vue_type_style_index_0_scoped_710a5ba8_lang = "";
 const _sfc_setup$c = _sfc_main$c.setup;
 _sfc_main$c.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/aside/mammon.vue");
   return _sfc_setup$c ? _sfc_setup$c(props, ctx) : void 0;
 };
-const AsideMammon = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["__scopeId", "data-v-275fff60"]]);
+const AsideMammon = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["__scopeId", "data-v-710a5ba8"]]);
 const _sfc_main$b = /* @__PURE__ */ defineComponent({
   __name: "tag",
   __ssrInlineRender: true,
