@@ -24,7 +24,7 @@
     "@unhead/schema": "^1.7.5",
     "@unhead/ssr": "^1.7.4",
     "@unhead/vue": "^1.7.4",
-    "axios": "^1.5.1",
+    "axios": "^1.6.0",
     "bezier-easing": "^2.1.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
