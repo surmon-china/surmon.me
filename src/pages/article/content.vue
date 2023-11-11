@@ -49,20 +49,18 @@
 
 <template>
   <div ref="element" class="detail">
-    <transition name="module">
-      <div
-        class="oirigin"
-        :class="{
-          original: isOriginal,
-          reprint: isReprint,
-          hybrid: isHybrid
-        }"
-      >
-        <i18n :k="LanguageKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
-        <i18n :k="LanguageKey.ORIGIN_REPRINT" v-else-if="isReprint" />
-        <i18n :k="LanguageKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
-      </div>
-    </transition>
+    <div
+      class="oirigin"
+      :class="{
+        original: isOriginal,
+        reprint: isReprint,
+        hybrid: isHybrid
+      }"
+    >
+      <i18n :k="LanguageKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
+      <i18n :k="LanguageKey.ORIGIN_REPRINT" v-else-if="isReprint" />
+      <i18n :k="LanguageKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
+    </div>
     <div class="knowledge" key="knowledge">
       <h2 class="title">
         <span class="text">{{ article.title }}</span>

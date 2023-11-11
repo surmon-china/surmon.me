@@ -23,14 +23,10 @@
     />
     <div class="content">
       <div class="logo">
-        <transition name="module" mode="out-in">
-          <i key="date" class="iconfont" :class="icon"></i>
-        </transition>
+        <i key="date" class="iconfont" :class="icon"></i>
       </div>
       <div class="title">
-        <transition name="module" mode="out-in">
-          <div class="text"><slot></slot></div>
-        </transition>
+        <div class="text"><slot></slot></div>
       </div>
     </div>
   </div>
