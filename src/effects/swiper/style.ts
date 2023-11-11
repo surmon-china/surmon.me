@@ -7,10 +7,6 @@
 // https://swiperjs.com/swiper-api#css-styles
 import 'swiper/scss'
 import 'swiper/scss/grid'
-import 'swiper/scss/a11y'
-import 'swiper/scss/effect-fade'
 import 'swiper/scss/autoplay'
 import 'swiper/scss/mousewheel'
-import 'swiper/scss/manipulation'
-import 'swiper/scss/navigation'
-import 'swiper/scss/pagination'
+import 'swiper/scss/effect-fade'

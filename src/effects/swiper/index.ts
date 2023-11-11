@@ -5,9 +5,9 @@
  */
 
 import { Swiper as SwiperClass } from 'swiper'
-import { Pagination, Navigation, Grid, Mousewheel, Autoplay, A11y, EffectFade } from 'swiper/modules'
+import { Autoplay, Mousewheel, Grid, EffectFade } from 'swiper/modules'
 
-SwiperClass.use([Grid, Pagination, Navigation, Mousewheel, Autoplay, A11y, EffectFade])
+SwiperClass.use([Autoplay, Mousewheel, Mousewheel, Grid, EffectFade])
 
 export default SwiperClass
 export { Swiper, SwiperSlide } from 'swiper/vue'

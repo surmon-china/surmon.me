@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-  import { computed } from 'vue'
+  import { shallowRef, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { LanguageKey } from '/@/language'
   import { Article } from '/@/interfaces/article'
-  import { Swiper, SwiperSlide } from '/@/effects/swiper'
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { UNDEFINED } from '/@/constants/value'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getAssetURL, getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
@@ -42,6 +42,23 @@
         format
       })
     )
+  }
+
+  const INITIAL_SLIDE_INDEX = 0
+  const swiperRef = shallowRef<SwiperClass>()
+  const activatedSlideIndex = shallowRef(INITIAL_SLIDE_INDEX)
+  const setSwiper = (_swiper: SwiperClass) => {
+    swiperRef.value = _swiper
+  }
+  const goToSlide = (index: number) => {
+    if (swiperRef.value) {
+      swiperRef.value.slideToLoop(index)
+    }
+  }
+  const updateActivatedSlideIndex = () => {
+    if (swiperRef.value) {
+      activatedSlideIndex.value = swiperRef.value.realIndex
+    }
   }
 
   const slides = computed<Array<CarrouselSlide>>(() => {
@@ -96,14 +113,17 @@
       <template #default>
         <swiper
           class="swiper"
+          :autoplay="{ delay: 3500, disableOnInteraction: false }"
+          :style="{ '--slide-delay': `${3500}ms` }"
           :loop="true"
           :set-wrapper-size="true"
           :mousewheel="true"
           :observe-parents="true"
           :grab-cursor="false"
           :simulate-touch="false"
-          :pagination="{ clickable: true }"
-          :autoplay="{ delay: 3500, disableOnInteraction: false }"
+          :initial-slide="INITIAL_SLIDE_INDEX"
+          @slide-change="updateActivatedSlideIndex"
+          @swiper="setSwiper"
         >
           <swiper-slide v-for="(slide, index) in slides.slice(0, 9)" :key="index">
             <div class="content">
@@ -125,6 +145,23 @@
               </ulink>
             </div>
           </swiper-slide>
+          <template #container-end>
+            <client-only>
+              <div class="swiper-pagination">
+                <div
+                  v-for="(slide, index) in slides.slice(0, 9)"
+                  :key="index"
+                  :aria-label="`Go to article ${slide.title}`"
+                  :class="{ active: index === activatedSlideIndex }"
+                  class="swiper-pagination-bullet"
+                  role="button"
+                  @click="goToSlide(index)"
+                >
+                  <span class="bullet-progress"></span>
+                </div>
+              </div>
+            </client-only>
+          </template>
         </swiper>
       </template>
     </placeholder>
@@ -196,9 +233,57 @@
         }
       }
 
-      ::v-deep(.swiper-pagination) {
-        .swiper-pagination-bullet-active {
-          width: 2rem;
+      .swiper-pagination {
+        z-index: $z-index-normal + 1;
+        position: absolute;
+        width: 100%;
+        left: 0;
+        bottom: $lg-gap;
+        text-align: center;
+
+        .swiper-pagination-bullet {
+          $size: 8px;
+          position: relative;
+          display: inline-block;
+          width: $size;
+          height: $size;
+          border-radius: $xs-radius;
+          overflow: hidden;
+          margin: 0 0.4rem;
+          background-color: rgba(white, 0.4);
+          transition: all $transition-time-fast;
+          cursor: pointer;
+          &:hover,
+          &.active {
+            background-color: rgba(white, 0.7);
+          }
+          &.active {
+            width: 2rem;
+            cursor: unset;
+
+            .bullet-progress {
+              animation: bullet-progress var(--slide-delay) linear forwards;
+              @keyframes bullet-progress {
+                0% {
+                  transform: scaleX(0);
+                }
+                100% {
+                  transform: scaleX(1);
+                }
+              }
+            }
+          }
+
+          .bullet-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background-color: rgba(white, 0.7);
+            transform-origin: left;
+            transform: scaleX(0);
+          }
         }
       }
 

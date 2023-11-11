@@ -18,7 +18,7 @@
   const swiperRef = shallowRef<SwiperClass>()
   const prevSlide = () => swiperRef.value?.slidePrev()
   const nextSlide = () => swiperRef.value?.slideNext()
-  const handleSwiperReady = (_swiper: SwiperClass) => {
+  const setSwiper = (_swiper: SwiperClass) => {
     swiperRef.value = _swiper
   }
   const activeIndex = ref(0)
@@ -81,7 +81,7 @@
             :prevent-clicks="false"
             :autoplay="{ delay: 3500, disableOnInteraction: false }"
             @transition-start="handleSwiperTransitionStart"
-            @swiper="handleSwiperReady"
+            @swiper="setSwiper"
           >
             <swiper-slide class="tweet-item" :key="index" v-for="(tweet, index) in aggregate.tweets">
               <div class="content" :title="tweet.text">

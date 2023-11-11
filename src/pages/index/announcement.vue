@@ -14,7 +14,7 @@
   const { isDarkTheme } = useEnhancer()
   const activeIndex = ref(0)
   const swiperRef = shallowRef<SwiperClass>()
-  const handleSwiperReady = (_swiper: SwiperClass) => {
+  const setSwiper = (_swiper: SwiperClass) => {
     swiperRef.value = _swiper
   }
 
@@ -61,7 +61,7 @@
               :set-wrapper-size="true"
               :autoplay="{ delay: 3500, disableOnInteraction: false }"
               @transition-start="handleSwiperTransitionStart"
-              @swiper="handleSwiperReady"
+              @swiper="setSwiper"
             >
               <swiper-slide v-for="(ann, index) in announcements" :key="index">
                 <markdown class="content" :plain="true" :markdown="ann.content" />

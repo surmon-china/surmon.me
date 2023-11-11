@@ -22,7 +22,7 @@
     swiperState.canNext = !_swiper.isEnd
     swiperState.canPrev = !_swiper.isBeginning
   }
-  const handleSwiperReady = (_swiper: SwiperClass) => {
+  const setSwiper = (_swiper: SwiperClass) => {
     swiperRef.value = _swiper
     handleSlideChange(_swiper)
   }
@@ -50,8 +50,8 @@
       :slides-per-group="columns"
       :grid="{ rows: rows, fill: 'row' }"
       :space-between="24"
-      @swiper="handleSwiperReady"
       @slide-change="handleSlideChange"
+      @swiper="setSwiper"
     >
       <swiper-slide class="slide-item" :key="index" v-for="(item, index) in data">
         <slot name="item" v-bind="{ item, index }"></slot>

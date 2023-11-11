@@ -1,11 +1,9 @@
 @import './theme.scss';
 @import './variables.scss';
 @import 'src/effects/highlight/theme.scss';
-@import 'src/effects/swiper/variables.scss';
 
 :root {
   background-color: $body-bg;
-  @include swiperVariables();
 
   // theme
   &[data-theme='light'] {
@@ -129,7 +127,9 @@ select:-webkit-autofill {
 // for page transition
 .page-enter-active,
 .page-leave-active {
-  transition: width 0s, opacity $transition-time-fast * 0.3 linear;
+  transition:
+    width 0s,
+    opacity $transition-time-fast * 0.3 linear;
 }
 .page-enter-from,
 .page-leave-to {
