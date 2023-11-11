@@ -66,20 +66,18 @@
         </ulink>
       </swiper-slide>
       <template #container-end>
-        <client-only>
-          <div class="swiper-pagination">
-            <div
-              v-for="(__, index) in adConfig.PC_ASIDE_SWIPER"
-              :key="index"
-              :aria-label="`Go to slide ${index}`"
-              :class="{ active: index === activeIndex }"
-              class="swiper-pagination-bullet"
-              role="button"
-            >
-              <span class="bullet-progress"></span>
-            </div>
+        <div class="swiper-pagination">
+          <div
+            v-for="(__, index) in adConfig.PC_ASIDE_SWIPER"
+            :key="index"
+            :aria-label="`Go to slide ${index}`"
+            :class="{ active: index === activeIndex }"
+            class="swiper-pagination-bullet"
+            role="button"
+          >
+            <span class="bullet-progress"></span>
           </div>
-        </client-only>
+        </div>
       </template>
     </swiper>
   </div>
