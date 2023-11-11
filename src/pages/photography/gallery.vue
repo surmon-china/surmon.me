@@ -67,7 +67,6 @@
             class="image"
             :src="getMediaUrl(activeMedia?.media_url)"
             :alt="activeMedia?.caption"
-            loading="lazy"
             draggable="false"
           />
           <video
