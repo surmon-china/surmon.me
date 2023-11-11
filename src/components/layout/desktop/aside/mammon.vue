@@ -142,10 +142,10 @@
           border-radius: $mini-radius;
           overflow: hidden;
           margin: $xs-gap 0;
-          background-color: rgba(white, 0.4);
+          background-color: rgba(white, 0.2);
           &.active {
             flex-grow: 1;
-            background-color: rgba(white, 0.7);
+            background-color: rgba(white, 0.4);
             .bullet-progress {
               animation: bullet-progress var(--slide-delay) linear forwards;
               @keyframes bullet-progress {
@@ -165,7 +165,7 @@
             left: 0;
             height: 100%;
             width: 100%;
-            background-color: rgba(white, 0.7);
+            background-color: rgba(white, 0.4);
             transform-origin: top;
             transform: scaleY(0);
           }
