@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 SHELL_PATH=$(dirname $0)
