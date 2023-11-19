@@ -15,7 +15,7 @@ echo "[deploy] stop pm2 app..."
 pm2 stop "$PM2_APP_NAME" -s
 
 # Navigate to the project root directory
-cd "$SHELL_PATH" || exit 1
+cd "$SHELL_PATH"
 cd ..
 
 # Print information
@@ -36,7 +36,7 @@ echo "[deploy] release downloading..."
 # Download and unzip the release package
 rm -rf dist
 mkdir -p dist
-cd dist || exit 1
+cd dist
 curl -sOL https://github.com/surmon-china/surmon.me/archive/refs/heads/release.zip && unzip -q release.zip
 mv surmon.me-release/* ./
 rm -rf surmon.me-release
