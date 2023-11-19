@@ -47,5 +47,6 @@ jobs:
           command_timeout: 4m
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
-          key: ${{ secrets.DEPLOY_KEY }}
+          # key: ${{ secrets.DEPLOY_KEY }}
+          password: ${{ secrets.DEPLOY_PASSWORD }}
           script: sh ${{ secrets.DEPLOY_ROOT_PATH }}/scripts/deploy.sh
