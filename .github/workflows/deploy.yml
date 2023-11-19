@@ -48,7 +48,4 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
-          password: ''
-          passphrase: ''
-          port: 22
           script: sh ${{ secrets.DEPLOY_ROOT_PATH }}/scripts/deploy.sh
