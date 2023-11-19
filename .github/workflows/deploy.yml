@@ -45,7 +45,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           command_timeout: 4m
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.KEY }}
-          script: sh ${{ secrets.WWW_PATH }}/scripts/deploy.sh
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: sh ${{ secrets.DEPLOY_ROOT_PATH }}/scripts/deploy.sh
