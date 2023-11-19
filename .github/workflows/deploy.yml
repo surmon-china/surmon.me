@@ -48,9 +48,4 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
-          script: |
-            whoami
-            pwd
-            ls -l ${{ secrets.DEPLOY_ROOT_PATH }}
-            pm2 ls
-            sh ${{ secrets.DEPLOY_ROOT_PATH }}/scripts/deploy.sh
+          script: sh ${{ secrets.DEPLOY_ROOT_PATH }}/scripts/deploy.sh
