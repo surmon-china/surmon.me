@@ -1,5 +1,4 @@
 #!/bin/sh
-
 set -e
 
 PKG_VERSION=$(jq -r '.version' package.json)
