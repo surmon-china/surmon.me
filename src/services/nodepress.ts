@@ -6,8 +6,9 @@
 
 import axios, { AxiosInstance, Method as AxiosMethod } from 'axios'
 import { BAD_REQUEST } from '/@/constants/http-code'
-import API_CONFIG from '/@/config/api.config'
 import { isClient } from '/@/app/environment'
+import API_CONFIG from '/@/config/api.config'
+import logger from '/@/utils/logger'
 
 export enum NodePressResponseStatus {
   Error = 'error',
@@ -58,7 +59,7 @@ nodepress.interceptors.response.use(
       headers: errorJSON.config.headers
     }
 
-    console.debug('axios error:', isClient ? error : serverErrorInfo)
+    logger.debug('axios error:', isClient ? error : serverErrorInfo)
 
     return Promise.reject(errorInfo)
   }

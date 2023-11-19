@@ -14,13 +14,10 @@ const CWD = process.cwd()
 const BASE_ENV_CONFIG = loadEnv('', CWD)
 
 // https://vitejs.dev/config/#conditional-config
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default defineConfig(({ command, mode }) => {
   const TARGET_ENV_CONFIG = loadEnv(mode, CWD)
-  console.info('vite config', {
-    command,
-    mode,
-    TARGET_ENV_CONFIG
-  })
+  // console.info('vite config', { command, mode, TARGET_ENV_CONFIG })
 
   return {
     plugins: [vuePlugin(), UnheadVite()],

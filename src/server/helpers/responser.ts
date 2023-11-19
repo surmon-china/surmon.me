@@ -7,20 +7,22 @@
 import { isAxiosError } from 'axios'
 import { RequestHandler, Response } from 'express'
 import { INVALID_ERROR } from '@/constants/http-code'
+import { bffLogger } from '@/server/logger'
 
 export interface ErrorerOptions {
   message: unknown
   code?: number
 }
+
 export const errorer = (response: Response, { code, message }: ErrorerOptions) => {
-  console.warn(`[BFF] error:`, isAxiosError(message) ? message.toJSON() : message)
+  bffLogger.warn(`error:`, isAxiosError(message) ? message.toJSON() : message)
   response.status(code ?? INVALID_ERROR)
   response.send(
     typeof message === 'string'
       ? message
       : message instanceof Error
-      ? message.message || message.name
-      : JSON.stringify(message)
+        ? message.message || message.name
+        : JSON.stringify(message)
   )
 }
 

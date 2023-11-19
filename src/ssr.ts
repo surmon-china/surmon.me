@@ -20,10 +20,12 @@ import { CDNPrefix, getCDNPrefixURL } from '/@/transforms/url'
 import { isCNCode } from '/@/transforms/region'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
 import type { CacheClient } from '/@/server/cache'
+import { createLogger } from '/@/utils/logger'
 import { isDev } from '/@/app/environment'
 import API_CONFIG from '/@/config/api.config'
 
-const devDebug = (...args) => isDev && console.debug('-', ...args)
+const renderLogger = createLogger('SSR:Render')
+const devDebug = (...messages: any[]) => isDev && renderLogger.debug(...messages)
 
 const createSSRContext = (request: Request, error?: RenderErrorValue): SSRContext => {
   const { headers, cookies, originalUrl } = request
@@ -81,21 +83,21 @@ const createApp = (ssrContext: SSRContext): MainApp => {
 
 // https://github.com/nuxt/framework/blob/main/packages/nitro/src/runtime/app/render.ts
 const renderHTML = async (mainApp: MainApp, ssrContext: SSRContext): Promise<Omit<RenderResult, 'code'>> => {
-  devDebug(`renderHTML: ${ssrContext.requestURL}`)
+  devDebug(`route: ${ssrContext.requestURL}`)
   const { app, router, store, head, theme, globalState } = mainApp
 
-  devDebug('1. route.push.validate')
+  devDebug('- 1. route.push.validate')
   await router.push(ssrContext.requestURL)
   await router.isReady()
 
-  devDebug('2. store.serverInit')
+  devDebug('- 2. store.serverInit')
   await store.serverPrefetch()
 
+  devDebug('- 3. set layout')
   // because the layout func set has by animation done
-  devDebug('3. set layout')
   globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta))
 
-  devDebug('4. renderToString')
+  devDebug('- 4. renderToString')
   const html = await renderToString(app, ssrContext)
   // WORKAROUND: `async setup` | `onServerPrefetch` can't break `renderToString`, resulting in empty HTML, so need to re-render based on manual markup.
   if (globalState.renderError.value) {
@@ -104,10 +106,10 @@ const renderHTML = async (mainApp: MainApp, ssrContext: SSRContext): Promise<Omi
     throw newError
   }
 
-  devDebug('5. renderHeadString')
+  devDebug('- 5. renderSSRHead')
   const heads = await renderSSRHead(head)
 
-  devDebug('6. HTML & SSR context script')
+  devDebug('- 6. SSR State & SSR context script')
   const stateScripts = renderSSRStateScript(
     serialize({
       store: store.state.value,
@@ -178,7 +180,7 @@ export const renderApp = async (request: Request, cache: CacheClient): Promise<R
   // render from cache
   const cacheKey = getCacheKey(app, ssrContext)
   const isCached = await cache.has(cacheKey)
-  devDebug('cache key:', cacheKey, isCached)
+  devDebug('cache:', cacheKey, '|', isCached)
   if (isCached) {
     return {
       ...(await cache.get<RenderResult>(cacheKey)),

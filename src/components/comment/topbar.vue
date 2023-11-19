@@ -8,7 +8,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { openWindow } from '/@/utils/opener'
   import nodepress from '/@/services/nodepress'
-  import { CommentEvents } from './helper'
+  import { logger, CommentEvents } from './helper'
 
   interface Props {
     postId: number
@@ -77,14 +77,14 @@
       name: `Disqus Auth ${META.title}`,
       onClose: () => {
         identity.fetchDisqusUserInfo()
-        console.info('[disqus]', 'logined', toRaw(identity.user))
+        logger.info('disqus logined', toRaw(identity.user))
       }
     })
   }
 
   const handleDisqusLogout = () => {
     identity.fetchDisqusLogout()
-    console.log('[disqus]', 'logout')
+    logger.log('disqus logout')
     gtag?.event('disqus_logout', {
       event_category: GAEventCategories.Comment,
       event_label: `id: ${props.postId}`

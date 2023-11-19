@@ -93,7 +93,9 @@ dump.rdb
 .s
 code
 
+# vite dev
 dev.js
+vite.config.ts.timestamp-*.mjs
 
 # Sentry Auth Token
 .env.sentry-build-plugin

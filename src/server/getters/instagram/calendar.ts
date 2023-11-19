@@ -1,4 +1,6 @@
+import { INSTAGRAM_TOKEN } from '@/config/bff.yargs'
 import { getInstagramMedias } from './media'
+import { getterLogger } from '@/server/logger'
 
 interface InstagramBasicMediaItem {
   id: string
@@ -37,7 +39,7 @@ const calendarTemp = {
 }
 
 function fetchAllMedias() {
-  console.info('[BFF] instagram.fetchAllMedias...')
+  getterLogger.info('instagram.fetchAllMedias...')
   calendarTemp.data = []
 
   // startTime: Only get the most recent 12 months of data
@@ -49,7 +51,7 @@ function fetchAllMedias() {
   doFetchAllMedias({
     since: prevYearToday,
     onSucceed: (medias) => {
-      console.info(`[BFF] instagram.fetchAllMedias done, ${medias.length} medias. refetch when after 18h`)
+      getterLogger.info(`instagram.fetchAllMedias done, ${medias.length} medias. refetch when after 18h`)
       setTimeout(() => fetchAllMedias(), 18 * 60 * 60 * 1000)
       const map = new Map<string, number>()
       medias.forEach((media) => {
@@ -59,11 +61,13 @@ function fetchAllMedias() {
       calendarTemp.data = Array.from(map, ([date, count]) => ({ date, count }))
     },
     onFailed: (error) => {
-      console.warn(`[BFF] instagram.fetchAllMedias failed, retry when after 30s`, error)
+      getterLogger.warn(`instagram.fetchAllMedias failed, retry when after 30s`, error)
       setTimeout(() => fetchAllMedias(), 30 * 1000)
     }
   })
 }
 
-export const initInstagramCalendar = () => fetchAllMedias()
 export const getInstagramCalendar = async () => calendarTemp.data
+export const initInstagramCalendar = () => {
+  INSTAGRAM_TOKEN ? fetchAllMedias() : getterLogger.warn('instagram.fetchAllMedias skipped, no token.')
+}

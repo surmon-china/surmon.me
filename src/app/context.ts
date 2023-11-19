@@ -2,6 +2,7 @@ import { useSSRContext, getCurrentInstance } from 'vue'
 import { getSSRContextValue } from '/@/universal'
 import type { RenderErrorValue } from './state'
 import { isServer } from './environment'
+import logger from '/@/utils/logger'
 
 export interface SSRContext {
   requestURL: string
@@ -19,7 +20,7 @@ export interface SSRContext {
 export const useSSRContextValue = <T = any>(key: keyof SSRContext): T | void => {
   if (isServer) {
     if (!getCurrentInstance()) {
-      console.warn(`useSSRContextValue() can only be used inside setup().`)
+      logger.warn(`useSSRContextValue() can only be used inside setup().`)
     }
     return useSSRContext<SSRContext>()?.[key]
   } else {

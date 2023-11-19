@@ -5,6 +5,7 @@
  */
 
 import { IDENTITIES } from '@/config/app.config'
+import { getterLogger } from '@/server/logger'
 import { getSotweAggregate, improveSotweTweet, SotweTweet } from './sotwe'
 
 export interface TwitterUserinfo {
@@ -42,12 +43,12 @@ export interface TwitterAggregate {
 
 export const getTwitterAggregate = async (): Promise<TwitterAggregate> => {
   const sotwe = await getSotweAggregate(IDENTITIES.TWITTER_USER_NAME).catch((error) => {
-    console.warn('[Twitter] sotwe aggregate is empty.', error?.message ?? String(error))
+    getterLogger.warn('Twitter sotwe aggregate is empty.', error?.message ?? String(error))
     return null
   })
 
   if (!sotwe) {
-    return Promise.reject('[Twitter] aggregate data is empty.')
+    return Promise.reject('Twitter aggregate data is empty.')
   }
 
   const tweets: Array<TwitterTweet> = []

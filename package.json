@@ -11,7 +11,7 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon --exec 'node --loader @esbuild-kit/esm-loader' src/bff.ts",
+    "dev": "NODE_ENV=development tsx watch --ignore vite.config.ts.timestamp-*.mjs ./src/bff.ts",
     "build": "node ./sbundler/index.js",
     "start": "NODE_ENV=production node ./dist/bff.js",
     "lint": "eslint --ext .ts,.js,.vue src",
@@ -65,7 +65,6 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@esbuild-kit/esm-loader": "^2.6.5",
     "@sentry/vite-plugin": "^2.10.1",
     "@types/compression": "^1.7.5",
     "@types/cookie-parser": "^1.4.6",
@@ -91,9 +90,9 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-vue": "^9.18.1",
-    "nodemon": "^3.0.1",
     "prettier": "^3.1.0",
     "sass": "^1.69.5",
+    "tsx": "^4.1.4",
     "typescript": "^5.2.2",
     "vite": "^5.0.0"
   }

@@ -35,7 +35,7 @@ import './effects/elements/index.scss'
 import './components/common/loading-indicator/index.scss'
 import './styles/app.scss'
 
-console.group(`[SSR CONTEXT]:`)
+console.group(`[SSR:CONTEXT]`)
 console.table(getSSRContextData())
 console.groupEnd()
 

@@ -11,6 +11,7 @@
   import { SocialMedia } from '/@/components/widget/share.vue'
   import { getChatGPTShareURL } from '/@/transforms/chatgpt'
   import { getExtendValue } from '/@/transforms/state'
+  import logger from '/@/utils/logger'
   import Comment from '/@/components/comment/index.vue'
   import ArticleSkeleton from './skeleton.vue'
   import ArticleContent from './content.vue'
@@ -72,7 +73,7 @@
       callback?.()
     } catch (error) {
       const message = _i18n.t(LanguageKey.POST_ACTION_ERROR)
-      console.warn(message, error)
+      logger.warn(message, error)
       alert(message)
     }
   }

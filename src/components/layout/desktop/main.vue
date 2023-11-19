@@ -5,6 +5,7 @@
   import { useMusic } from '/@/composables/music'
   import { useWallpaperStore } from '/@/stores/wallpaper'
   import { getLayoutByRouteMeta } from '/@/transforms/layout'
+  import logger from '/@/utils/logger'
   import MusicPlayerHandle from '/@/components/widget/music-player/handle.vue'
   import Wallflower from '/@/components/widget/wallflower/garden.vue'
   import Wallpaper from '/@/components/widget/wallpaper/switcher.vue'
@@ -41,13 +42,13 @@
   onMounted(() => {
     // bing wallpaper
     wallpaperStore.fetch().catch((error) => {
-      console.warn('[main component] bing wallpaper fetch failed!', error)
+      logger.warn('bing wallpaper fetch failed!', error)
     })
     // music player
     useMusic()
       .init()
       .catch((error) => {
-        console.warn('[main component] player init failed!', error)
+        logger.warn('player init failed!', error)
       })
   })
 </script>

@@ -5,6 +5,9 @@
 
 import { useCDNDomain } from '/@/app/context'
 import { getAssetURL } from '/@/transforms/url'
+import { createLogger } from '/@/utils/logger'
+
+export const logger = createLogger('APP:Comment')
 
 export const EMOJIS = [
   ...['😃', '😂', '😅', '😉', '😌', '😔', '😓', '😢', '😍', '😘', '😜', '😡'],

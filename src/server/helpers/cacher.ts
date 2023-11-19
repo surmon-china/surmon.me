@@ -5,6 +5,7 @@
  */
 
 import type { CacheClient, Seconds } from '../cache'
+import { cacherLogger } from '../logger'
 
 export interface CacherConfig {
   cache: CacheClient
@@ -28,8 +29,8 @@ const fetchAndCache = async (config: CacherConfig) => {
 // timeout prefetch
 const setTimeoutPreRefresh = (config: CacherConfig, preSeconds: number, refreshCount = 1) => {
   const timeoutSeconds = config.ttl - preSeconds
-  console.info(
-    '[cacher] setTimeoutPreRefresh',
+  cacherLogger.info(
+    'setTimeoutPreRefresh',
     `> ${config.key} + ${refreshCount}`,
     `> cache expire when after ${config.ttl}s`,
     `> pre refresh when after ${timeoutSeconds}s`
@@ -40,7 +41,7 @@ const setTimeoutPreRefresh = (config: CacherConfig, preSeconds: number, refreshC
       await fetchAndCache(config)
       setTimeoutPreRefresh(config, preSeconds, refreshCount + 1)
     } catch (error) {
-      console.warn(`[cacher] setTimeoutPreRefresh error:`, `> ${config.key} + ${refreshCount}`, error)
+      cacherLogger.warn(`setTimeoutPreRefresh error:`, `> ${config.key} + ${refreshCount}`, error)
     }
   }, timeoutSeconds * 1000)
 }
@@ -55,7 +56,7 @@ const retryFetch = async (config: CacherConfig) => {
   try {
     await fetchAndCache(config)
   } catch (error) {
-    console.warn('[cacher] retryFetch error:', error)
+    cacherLogger.warn('retryFetch error:', error)
   } finally {
     retryingMap.set(config.key, false)
   }

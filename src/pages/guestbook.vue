@@ -4,11 +4,12 @@
   import { useUniversalFetch } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { useStores } from '/@/stores'
+  import { Language, LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
   import { CommentPostId } from '/@/constants/state'
-  import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
   import { META } from '/@/config/app.config'
+  import logger from '/@/utils/logger'
   import PageBanner from '/@/components/common/banner.vue'
   import Comment from '/@/components/comment/index.vue'
 
@@ -38,7 +39,7 @@
       identity.likePage(CommentPostId.Guestbook)
     } catch (error) {
       const message = _i18n.t(LanguageKey.POST_ACTION_ERROR)
-      console.warn(message, error)
+      logger.warn(message, error)
       alert(message)
     }
   }

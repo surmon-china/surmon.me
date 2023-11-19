@@ -6,6 +6,7 @@
 
 import { LRUCache } from 'lru-cache'
 import { createClient } from 'redis'
+import { cacheLogger } from './logger'
 
 export type Seconds = number
 
@@ -40,10 +41,10 @@ const getLRUClient = (): CacheClient => {
 const getRedisClient = async (options?: CacheClientOptions): Promise<CacheClient> => {
   // https://github.com/redis/node-redis
   const client = createClient()
-  client.on('connect', () => console.info('[Redis]', 'connecting...'))
-  client.on('reconnecting', () => console.info('[Redis]', 'reconnecting...'))
-  client.on('ready', () => console.info('[Redis]', 'readied.'))
-  client.on('error', (error) => console.warn('[Redis]', 'client error!', error.message || error))
+  client.on('connect', () => cacheLogger.info('Redis connecting...'))
+  client.on('reconnecting', () => cacheLogger.info('Redis reconnecting...'))
+  client.on('ready', () => cacheLogger.info('Redis readied.'))
+  client.on('error', (error) => cacheLogger.warn('Redis client error!', error.message || error))
   await client.connect()
 
   const getCacheKey = (key: string) => {
@@ -91,10 +92,10 @@ export const createCacheClient = async (options?: CacheClientOptions) => {
   let cacheClient: CacheClient | null = null
   try {
     cacheClient = await getRedisClient(options)
-    console.info('[cache]', 'Redis store readied.')
+    cacheLogger.info('Redis store readied.')
   } catch (error) {
     cacheClient = getLRUClient()
-    console.info('[cache]', 'LRU store readied.')
+    cacheLogger.info('LRU store readied.')
   }
   await cacheClient.clear()
   return cacheClient

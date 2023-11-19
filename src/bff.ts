@@ -33,6 +33,7 @@ import { enableProdRenderer } from './server/renderer/prod'
 import { PUBLIC_PATH } from './server/helpers/configurer'
 import { responser, errorer } from './server/helpers/responser'
 import { cacher } from './server/helpers/cacher'
+import { bffLogger } from './server/logger'
 import { createExpressApp } from './server'
 
 // init env variables for BFF server env
@@ -321,6 +322,6 @@ createExpressApp().then(async ({ app, server, cache }) => {
       `at ${new Date().toLocaleString()}`,
       `listening on ${JSON.stringify(server.address())}`
     ]
-    console.info('[surmon.me]', `Run! ${infos.join(', ')}.`)
+    bffLogger.info(`Run! ${infos.join(', ')}.`)
   })
 })

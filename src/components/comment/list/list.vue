@@ -6,7 +6,7 @@
   import { CommentTreeItem } from '/@/stores/comment'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
-  import { CommentEvents } from '../helper'
+  import { CommentEvents, logger } from '../helper'
   import CommentItem from './item.vue'
 
   // MARK: keep this component as `defineComponent` to use for recursive component
@@ -81,7 +81,7 @@
           isLike ? identity.likeComment(commentId) : identity.dislikeComment(commentId)
         } catch (error) {
           const message = _i18n.t(LanguageKey.POST_ACTION_ERROR)
-          console.warn(message, error)
+          logger.warn(message, error)
           alert(message)
         }
       }

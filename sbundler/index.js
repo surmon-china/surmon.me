@@ -45,7 +45,8 @@ const DIR_PATHS = {
     // 4. Resolve manifest & template
     console.info('4. Resolve manifest & template...\n')
     // 4.1 move manifest to the dist root dir
-    await fs.move(path.resolve(CLIENT_PATH, 'manifest.json'), path.resolve(DIST_PATH, 'manifest.json'))
+    // https://vitejs.dev/guide/migration.html#manifest-files-are-now-generated-in-vite-directory-by-default
+    await fs.move(path.resolve(CLIENT_PATH, '.vite', 'manifest.json'), path.resolve(DIST_PATH, 'manifest.json'))
     // 4.2 copy index.html to the dist root dir
     await fs.move(path.resolve(CLIENT_PATH, 'index.html'), path.resolve(DIST_PATH, 'template.html'))
     console.info('Resolve manifest & template done!\n')

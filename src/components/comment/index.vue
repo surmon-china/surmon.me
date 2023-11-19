@@ -10,7 +10,7 @@
   import { Author } from '/@/interfaces/comment'
   import { LanguageKey } from '/@/language'
   import { scrollToAnchor } from '/@/utils/scroller'
-  import { MAX_COMMENT_LENGTH, luanchEmojiRain } from './helper'
+  import { MAX_COMMENT_LENGTH, luanchEmojiRain, logger } from './helper'
   import CommentTopbar from './topbar.vue'
   import CommentMain from './list/main.vue'
   import CommentList from './list/list.vue'
@@ -110,7 +110,7 @@
 
   const handleDeleteComment = (commentId: number) => {
     commentStore.deleteComment(commentId).catch((error) => {
-      console.warn('delete comment failed', error)
+      logger.warn('delete comment failed', error)
       alert(error.message)
     })
   }
@@ -143,11 +143,11 @@
     const author: Author = isGuest
       ? toRaw(guestProfileValue)
       : identityStore.user.type === UserType.Local
-      ? identityStore.user.localProfile!
-      : {
-          name: identityStore.user.disqusProfile.name,
-          site: identityStore.user.disqusProfile.url
-        }
+        ? identityStore.user.localProfile!
+        : {
+            name: identityStore.user.disqusProfile.name,
+            site: identityStore.user.disqusProfile.url
+          }
     if (!author.email) {
       Reflect.deleteProperty(author, 'email')
     }
@@ -173,7 +173,7 @@
       // random emoji rain
       luanchEmojiRain(payload.content)
     } catch (error: any) {
-      console.warn('submit comment failed:', error)
+      logger.warn('submit comment failed:', error)
       throw error.message
     }
   }

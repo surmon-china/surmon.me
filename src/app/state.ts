@@ -8,6 +8,7 @@ import { App, inject, ref, computed, reactive, readonly } from 'vue'
 import { INVALID_ERROR } from '/@/constants/http-code'
 import { uaParser, isZhUser } from '/@/transforms/ua'
 import { onClient } from '/@/universal'
+import logger from '/@/utils/logger'
 
 export type RenderErrorValue = RenderError | null
 export interface RenderError {
@@ -43,7 +44,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
   const defaultError = { code: INVALID_ERROR }
   const setRenderError = (error: any) => {
     onClient(() => {
-      console.warn('App error:', error)
+      logger.warn('error:', error)
     })
     if (!error) {
       // clear error

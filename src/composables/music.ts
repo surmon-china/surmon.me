@@ -8,7 +8,10 @@ import { App, Plugin, inject, readonly, reactive, computed, unref, toRaw } from 
 import type { Song } from '/@/server/getters/netease-music'
 import { UNDEFINED, isUndefined } from '/@/constants/value'
 import { TunnelModule } from '/@/constants/tunnel'
+import { createLogger } from '/@/utils/logger'
 import tunnel from '/@/services/tunnel'
+
+const logger = createLogger('APP:MusicPlayer')
 
 export interface PlayerConfig {
   index?: number
@@ -125,7 +128,7 @@ const createMusicPlayer = (config: PlayerConfig) => {
   })
 
   audio.addEventListener('error', () => {
-    console.warn('[player] something error! auto next', toRaw(unref(currentSong.value)))
+    logger.warn('something error! auto next', toRaw(unref(currentSong.value)))
     state.playing = false
     // No longer clears the music when a playback exception occurs, assuming the URL is always valid
     // amplitude.removeSong(state.index)
