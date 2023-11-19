@@ -43,7 +43,8 @@ import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import qs from "qs";
 import QRCode from "qrcode";
-/* empty css           */var LanguageKey = /* @__PURE__ */ ((LanguageKey2) => {
+/* empty css          */
+var LanguageKey = /* @__PURE__ */ ((LanguageKey2) => {
   LanguageKey2["APP_SLOGAN"] = "app-slogan";
   LanguageKey2["CATEGORY_INSIGHT"] = "insight";
   LanguageKey2["CATEGORY_CODE"] = "code";
@@ -368,7 +369,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.29.1";
+const APP_VERSION = "4.30.0";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -420,6 +421,14 @@ const isTargetLanguageUser = (language, targetLang) => {
 const isZhUser = (language) => {
   return language ? isTargetLanguageUser(language, Language.Chinese) : true;
 };
+const createLogger = (scope) => ({
+  log: (...messages) => console.log(`[${scope}]`, ...messages),
+  info: (...messages) => console.info(`[${scope}]`, ...messages),
+  warn: (...messages) => console.warn(`[${scope}]`, ...messages),
+  error: (...messages) => console.error(`[${scope}]`, ...messages),
+  debug: (...messages) => console.debug(`[${scope}]`, ...messages)
+});
+const logger$1 = createLogger("APP");
 var LayoutColumn = /* @__PURE__ */ ((LayoutColumn2) => {
   LayoutColumn2[LayoutColumn2["Normal"] = 0] = "Normal";
   LayoutColumn2[LayoutColumn2["Wide"] = 1] = "Wide";
@@ -604,7 +613,7 @@ nodepress.interceptors.response.use(
       data: errorJSON.config.data,
       headers: errorJSON.config.headers
     };
-    console.debug("axios error:", serverErrorInfo);
+    logger$1.debug("axios error:", serverErrorInfo);
     return Promise.reject(errorInfo);
   }
 );
@@ -1339,7 +1348,7 @@ const useSSRContextValue = (key) => {
   var _a;
   {
     if (!getCurrentInstance()) {
-      console.warn(`useSSRContextValue() can only be used inside setup().`);
+      logger$1.warn(`useSSRContextValue() can only be used inside setup().`);
     }
     return (_a = useSSRContext()) == null ? void 0 : _a[key];
   }
@@ -2360,7 +2369,6 @@ const _sfc_main$1G = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const loadmore_vue_vue_type_style_index_0_scoped_e0a093c0_lang = "";
 const _export_sfc = (sfc, props) => {
   const target = sfc.__vccOpts || sfc;
   for (const [key, val] of props) {
@@ -2518,7 +2526,6 @@ const _sfc_main$1F = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const item_vue_vue_type_style_index_0_scoped_f4fe2433_lang = "";
 const _sfc_setup$1F = _sfc_main$1F.setup;
 _sfc_main$1F.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -2928,7 +2935,6 @@ const _sfc_main$1E = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_2d826369_lang = "";
 const _sfc_setup$1E = _sfc_main$1E.setup;
 _sfc_main$1E.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -3172,7 +3178,6 @@ const _sfc_main$1D = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const item_vue_vue_type_style_index_0_scoped_8112ce32_lang = "";
 const _sfc_setup$1D = _sfc_main$1D.setup;
 _sfc_main$1D.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -3416,7 +3421,6 @@ const _sfc_main$1C = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const list_vue_vue_type_style_index_0_scoped_fe377592_lang = "";
 const _sfc_setup$1C = _sfc_main$1C.setup;
 _sfc_main$1C.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -3916,7 +3920,6 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const carrousel_vue_vue_type_style_index_0_scoped_19b1a904_lang = "";
 const _sfc_setup$1B = _sfc_main$1B.setup;
 _sfc_main$1B.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -4633,7 +4636,6 @@ const _sfc_main$1A = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const twitter_vue_vue_type_style_index_0_scoped_98d3af65_lang = "";
 const _sfc_setup$1A = _sfc_main$1A.setup;
 _sfc_main$1A.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -4686,7 +4688,6 @@ const _sfc_main$1z = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_648d28c5_lang = "";
 const _sfc_setup$1z = _sfc_main$1z.setup;
 _sfc_main$1z.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -4715,7 +4716,6 @@ const _sfc_main$1y = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const header_vue_vue_type_style_index_0_scoped_a4e8bae7_lang = "";
 const _sfc_setup$1y = _sfc_main$1y.setup;
 _sfc_main$1y.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -4874,7 +4874,6 @@ const _sfc_main$1x = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const category_vue_vue_type_style_index_0_scoped_50f7f3d3_lang = "";
 const _sfc_setup$1x = _sfc_main$1x.setup;
 _sfc_main$1x.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -5038,7 +5037,6 @@ const _sfc_main$1w = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const tag_vue_vue_type_style_index_0_scoped_ae67a8cf_lang = "";
 const _sfc_setup$1w = _sfc_main$1w.setup;
 _sfc_main$1w.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -5229,7 +5227,6 @@ const _sfc_main$1t = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const banner_vue_vue_type_style_index_0_scoped_ead93e66_lang = "";
 const _sfc_setup$1t = _sfc_main$1t.setup;
 _sfc_main$1t.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -5281,7 +5278,6 @@ const _sfc_main$1s = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const tree_vue_vue_type_style_index_0_scoped_abe9f2f9_lang = "";
 const _sfc_setup$1s = _sfc_main$1s.setup;
 _sfc_main$1s.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -5790,7 +5786,6 @@ const _sfc_main$1r = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const desktop_vue_vue_type_style_index_0_scoped_62e667da_lang = "";
 const _sfc_setup$1r = _sfc_main$1r.setup;
 _sfc_main$1r.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -6133,7 +6128,6 @@ const _sfc_main$1q = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const mobile_vue_vue_type_style_index_0_scoped_6201772a_lang = "";
 const _sfc_setup$1q = _sfc_main$1q.setup;
 _sfc_main$1q.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -6322,7 +6316,6 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const share_vue_vue_type_style_index_0_scoped_c3469100_lang = "";
 const _sfc_setup$1p = _sfc_main$1p.setup;
 _sfc_main$1p.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -6333,6 +6326,7 @@ const Share = /* @__PURE__ */ _export_sfc(_sfc_main$1p, [["__scopeId", "data-v-c
 const getChatGPTShareURL = (conversationId) => {
   return `https://chat.openai.com/share/${conversationId}`;
 };
+const logger = createLogger("APP:Comment");
 const EMOJIS = [
   ...["😃", "😂", "😅", "😉", "😌", "😔", "😓", "😢", "😍", "😘", "😜", "😡"],
   ...["😤", "😭", "😱", "😳", "😵", "🌚"],
@@ -6446,13 +6440,13 @@ const _sfc_main$1o = /* @__PURE__ */ defineComponent({
         name: `Disqus Auth ${META.title}`,
         onClose: () => {
           identity.fetchDisqusUserInfo();
-          console.info("[disqus]", "logined", toRaw(identity.user));
+          logger.info("disqus logined", toRaw(identity.user));
         }
       });
     };
     const handleDisqusLogout = () => {
       identity.fetchDisqusLogout();
-      console.log("[disqus]", "logout");
+      logger.log("disqus logout");
       gtag == null ? void 0 : gtag.event("disqus_logout", {
         event_category: GAEventCategories.Comment,
         event_label: `id: ${props.postId}`
@@ -6470,14 +6464,14 @@ const _sfc_main$1o = /* @__PURE__ */ defineComponent({
       _push(ssrRenderComponent(_component_placeholder, mergeProps({ loading: _ctx.fetching }, _attrs), {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="topbar-skeleton" data-v-8616ee63${_scopeId}><div class="left" data-v-8616ee63${_scopeId}>`);
+            _push2(`<div class="topbar-skeleton" data-v-3b7c7b69${_scopeId}><div class="left" data-v-3b7c7b69${_scopeId}>`);
             _push2(ssrRenderComponent(_component_skeleton_line, { class: "skeleton-item count" }, null, _parent2, _scopeId));
             if (!_ctx.plain) {
               _push2(ssrRenderComponent(_component_skeleton_line, { class: "skeleton-item sort" }, null, _parent2, _scopeId));
             } else {
               _push2(`<!---->`);
             }
-            _push2(`</div><div class="right" data-v-8616ee63${_scopeId}>`);
+            _push2(`</div><div class="right" data-v-3b7c7b69${_scopeId}>`);
             _push2(ssrRenderComponent(_component_skeleton_line, { class: "skeleton-item user" }, null, _parent2, _scopeId));
             _push2(`</div></div>`);
           } else {
@@ -6503,11 +6497,11 @@ const _sfc_main$1o = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           var _a, _b, _c, _d;
           if (_push2) {
-            _push2(`<div class="${ssrRenderClass([{ plain: _ctx.plain }, "topbar"])}" data-v-8616ee63${_scopeId}><div class="statistics" data-v-8616ee63${_scopeId}><div class="${ssrRenderClass([{ loading: _ctx.loading }, "total"])}" data-v-8616ee63${_scopeId}><i class="iconfont icon-discussion" data-v-8616ee63${_scopeId}></i>`);
+            _push2(`<div class="${ssrRenderClass([{ plain: _ctx.plain }, "topbar"])}" data-v-3b7c7b69${_scopeId}><div class="statistics" data-v-3b7c7b69${_scopeId}><div class="${ssrRenderClass([{ loading: _ctx.loading }, "total"])}" data-v-3b7c7b69${_scopeId}><i class="iconfont icon-discussion" data-v-3b7c7b69${_scopeId}></i>`);
             _push2(ssrRenderComponent(_component_i18n, null, {
               zh: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(` 共 <span class="count" data-v-8616ee63${_scopeId2}>${ssrInterpolate(statisticsText.value)}</span> 条看法 `);
+                  _push3(` 共 <span class="count" data-v-3b7c7b69${_scopeId2}>${ssrInterpolate(statisticsText.value)}</span> 条看法 `);
                 } else {
                   return [
                     createTextVNode(" 共 "),
@@ -6518,7 +6512,7 @@ const _sfc_main$1o = /* @__PURE__ */ defineComponent({
               }),
               en: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<span class="count" data-v-8616ee63${_scopeId2}>${ssrInterpolate(statisticsText.value)}</span> comments `);
+                  _push3(`<span class="count" data-v-3b7c7b69${_scopeId2}>${ssrInterpolate(statisticsText.value)}</span> comments `);
                 } else {
                   return [
                     createVNode("span", { class: "count" }, toDisplayString(statisticsText.value), 1),
@@ -6528,23 +6522,23 @@ const _sfc_main$1o = /* @__PURE__ */ defineComponent({
               }),
               _: 1
             }, _parent2, _scopeId));
-            _push2(`</div><select class="sort" name="sort"${ssrRenderAttr("value", _ctx.sort)} data-v-8616ee63${_scopeId}><option${ssrRenderAttr("value", unref(SortType).Desc)} data-v-8616ee63${_scopeId}>`);
+            _push2(`</div><select class="sort" name="sort"${ssrRenderAttr("value", _ctx.sort)} data-v-3b7c7b69${_scopeId}><option${ssrRenderAttr("value", unref(SortType).Desc)} data-v-3b7c7b69${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, {
               k: unref(LanguageKey).COMMENT_SORT_NEW
             }, null, _parent2, _scopeId));
-            _push2(`</option><option${ssrRenderAttr("value", unref(SortType).Hottest)} data-v-8616ee63${_scopeId}>`);
+            _push2(`</option><option${ssrRenderAttr("value", unref(SortType).Hottest)} data-v-3b7c7b69${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, {
               k: unref(LanguageKey).COMMENT_SORT_HOT
             }, null, _parent2, _scopeId));
-            _push2(`</option><option${ssrRenderAttr("value", unref(SortType).Asc)} data-v-8616ee63${_scopeId}>`);
+            _push2(`</option><option${ssrRenderAttr("value", unref(SortType).Asc)} data-v-3b7c7b69${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, {
               k: unref(LanguageKey).COMMENT_SORT_OLD
             }, null, _parent2, _scopeId));
-            _push2(`</option></select><button class="disqus" data-v-8616ee63${_scopeId}><i class="iconfont icon-disqus-logo" data-v-8616ee63${_scopeId}></i></button>`);
+            _push2(`</option></select><button class="disqus" data-v-3b7c7b69${_scopeId}><i class="iconfont icon-disqus-logo" data-v-3b7c7b69${_scopeId}></i></button>`);
             ssrRenderSlot(_ctx.$slots, "extra", {}, null, _push2, _parent2, _scopeId);
-            _push2(`</div><div class="user" data-v-8616ee63${_scopeId}>`);
+            _push2(`</div><div class="user" data-v-3b7c7b69${_scopeId}>`);
             if (user.value.type === unref(UserType).Null) {
-              _push2(`<div class="unlogin" data-v-8616ee63${_scopeId}><span class="guest" data-v-8616ee63${_scopeId}>`);
+              _push2(`<div class="unlogin" data-v-3b7c7b69${_scopeId}><span class="guest" data-v-3b7c7b69${_scopeId}>`);
               _push2(ssrRenderComponent(_component_i18n, {
                 zh: "访客身份",
                 en: "Guest"
@@ -6554,11 +6548,11 @@ const _sfc_main$1o = /* @__PURE__ */ defineComponent({
                 type: "vertical",
                 size: "sm"
               }, null, _parent2, _scopeId));
-              _push2(`<button class="disqus" data-v-8616ee63${_scopeId}>`);
+              _push2(`<button class="disqus" data-v-3b7c7b69${_scopeId}>`);
               _push2(ssrRenderComponent(_component_i18n, null, {
                 zh: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`使用<i class="iconfont icon-disqus" data-v-8616ee63${_scopeId2}></i>登录`);
+                    _push3(`使用<i class="iconfont icon-disqus" data-v-3b7c7b69${_scopeId2}></i>登录`);
                   } else {
                     return [
                       createTextVNode("使用"),
@@ -6569,7 +6563,7 @@ const _sfc_main$1o = /* @__PURE__ */ defineComponent({
                 }),
                 en: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`Login by<i class="iconfont icon-disqus right" data-v-8616ee63${_scopeId2}></i>`);
+                    _push3(`Login by<i class="iconfont icon-disqus right" data-v-3b7c7b69${_scopeId2}></i>`);
                   } else {
                     return [
                       createTextVNode("Login by"),
@@ -6581,13 +6575,13 @@ const _sfc_main$1o = /* @__PURE__ */ defineComponent({
               }, _parent2, _scopeId));
               _push2(`</button></div>`);
             } else {
-              _push2(`<div class="logined" data-v-8616ee63${_scopeId}>`);
+              _push2(`<div class="logined" data-v-3b7c7b69${_scopeId}>`);
               if (user.value.type === unref(UserType).Local) {
-                _push2(`<!--[--><div class="name" data-v-8616ee63${_scopeId}><i class="icon guest iconfont icon-user" data-v-8616ee63${_scopeId}></i><span class="text" data-v-8616ee63${_scopeId}>${ssrInterpolate(((_a = user.value.localProfile) == null ? void 0 : _a.name) || "")}</span><i class="arrow iconfont icon-down-arrow" data-v-8616ee63${_scopeId}></i></div><div class="user-menu" data-v-8616ee63${_scopeId}><ul class="menus" data-v-8616ee63${_scopeId}><li class="item" data-v-8616ee63${_scopeId}><button class="button" data-v-8616ee63${_scopeId}>`);
+                _push2(`<!--[--><div class="name" data-v-3b7c7b69${_scopeId}><i class="icon guest iconfont icon-user" data-v-3b7c7b69${_scopeId}></i><span class="text" data-v-3b7c7b69${_scopeId}>${ssrInterpolate(((_a = user.value.localProfile) == null ? void 0 : _a.name) || "")}</span><i class="arrow iconfont icon-down-arrow" data-v-3b7c7b69${_scopeId}></i></div><div class="user-menu" data-v-3b7c7b69${_scopeId}><ul class="menus" data-v-3b7c7b69${_scopeId}><li class="item" data-v-3b7c7b69${_scopeId}><button class="button" data-v-3b7c7b69${_scopeId}>`);
                 _push2(ssrRenderComponent(_component_i18n, null, {
                   zh: withCtx((_2, _push3, _parent3, _scopeId2) => {
                     if (_push3) {
-                      _push3(`换为<i class="iconfont icon-disqus disqus" data-v-8616ee63${_scopeId2}></i>登录`);
+                      _push3(`换为<i class="iconfont icon-disqus disqus" data-v-3b7c7b69${_scopeId2}></i>登录`);
                     } else {
                       return [
                         createTextVNode("换为"),
@@ -6598,7 +6592,7 @@ const _sfc_main$1o = /* @__PURE__ */ defineComponent({
                   }),
                   en: withCtx((_2, _push3, _parent3, _scopeId2) => {
                     if (_push3) {
-                      _push3(`Login by <i class="iconfont icon-disqus disqus" data-v-8616ee63${_scopeId2}></i>`);
+                      _push3(`Login by <i class="iconfont icon-disqus disqus" data-v-3b7c7b69${_scopeId2}></i>`);
                     } else {
                       return [
                         createTextVNode("Login by "),
@@ -6608,14 +6602,14 @@ const _sfc_main$1o = /* @__PURE__ */ defineComponent({
                   }),
                   _: 1
                 }, _parent2, _scopeId));
-                _push2(`</button></li><li class="item" data-v-8616ee63${_scopeId}><button class="button" data-v-8616ee63${_scopeId}>`);
+                _push2(`</button></li><li class="item" data-v-3b7c7b69${_scopeId}><button class="button" data-v-3b7c7b69${_scopeId}>`);
                 _push2(ssrRenderComponent(_component_i18n, {
                   zh: "退出本地访客身份",
                   en: "Clean local profile"
                 }, null, _parent2, _scopeId));
                 _push2(`</button></li></ul></div><!--]-->`);
               } else if (user.value.type === unref(UserType).Disqus) {
-                _push2(`<!--[--><div class="name" data-v-8616ee63${_scopeId}><i class="icon disqus iconfont icon-disqus-logo" data-v-8616ee63${_scopeId}></i><span class="text" data-v-8616ee63${_scopeId}>${ssrInterpolate(((_b = user.value.disqusProfile) == null ? void 0 : _b.name) || "")}</span><i class="arrow iconfont icon-down-arrow" data-v-8616ee63${_scopeId}></i></div><div class="user-menu" data-v-8616ee63${_scopeId}><ul class="menus" data-v-8616ee63${_scopeId}><li class="item" data-v-8616ee63${_scopeId}>`);
+                _push2(`<!--[--><div class="name" data-v-3b7c7b69${_scopeId}><i class="icon disqus iconfont icon-disqus-logo" data-v-3b7c7b69${_scopeId}></i><span class="text" data-v-3b7c7b69${_scopeId}>${ssrInterpolate(((_b = user.value.disqusProfile) == null ? void 0 : _b.name) || "")}</span><i class="arrow iconfont icon-down-arrow" data-v-3b7c7b69${_scopeId}></i></div><div class="user-menu" data-v-3b7c7b69${_scopeId}><ul class="menus" data-v-3b7c7b69${_scopeId}><li class="item" data-v-3b7c7b69${_scopeId}>`);
                 _push2(ssrRenderComponent(_component_ulink, {
                   class: "button",
                   href: user.value.disqusProfile.profileUrl
@@ -6637,7 +6631,7 @@ const _sfc_main$1o = /* @__PURE__ */ defineComponent({
                   }),
                   _: 1
                 }, _parent2, _scopeId));
-                _push2(`</li><li class="item" data-v-8616ee63${_scopeId}><button class="button" data-v-8616ee63${_scopeId}>`);
+                _push2(`</li><li class="item" data-v-3b7c7b69${_scopeId}><button class="button" data-v-3b7c7b69${_scopeId}>`);
                 _push2(ssrRenderComponent(_component_i18n, {
                   zh: "注销授权身份",
                   en: "Disqus logout"
@@ -6832,14 +6826,13 @@ const _sfc_main$1o = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const topbar_vue_vue_type_style_index_0_scoped_8616ee63_lang = "";
 const _sfc_setup$1o = _sfc_main$1o.setup;
 _sfc_main$1o.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/topbar.vue");
   return _sfc_setup$1o ? _sfc_setup$1o(props, ctx) : void 0;
 };
-const CommentTopbar = /* @__PURE__ */ _export_sfc(_sfc_main$1o, [["__scopeId", "data-v-8616ee63"]]);
+const CommentTopbar = /* @__PURE__ */ _export_sfc(_sfc_main$1o, [["__scopeId", "data-v-3b7c7b69"]]);
 const _sfc_main$1n = /* @__PURE__ */ defineComponent({
   __name: "main",
   __ssrInlineRender: true,
@@ -6928,7 +6921,6 @@ const _sfc_main$1n = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const main_vue_vue_type_style_index_0_scoped_1de2c897_lang = "";
 const _sfc_setup$1n = _sfc_main$1n.setup;
 _sfc_main$1n.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -6974,7 +6966,6 @@ const _sfc_main$1m = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const markdown_vue_vue_type_style_index_0_lang = "";
 const _sfc_setup$1m = _sfc_main$1m.setup;
 _sfc_main$1m.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -7045,7 +7036,6 @@ const _sfc_main$1k = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const location_vue_vue_type_style_index_0_scoped_6e3ba93a_lang = "";
 const _sfc_setup$1k = _sfc_main$1k.setup;
 _sfc_main$1k.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -7109,7 +7099,6 @@ const _sfc_main$1j = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const userAgent_vue_vue_type_style_index_0_scoped_5a9d85fe_lang = "";
 const _sfc_setup$1j = _sfc_main$1j.setup;
 _sfc_main$1j.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -7356,7 +7345,6 @@ const _sfc_main$1i = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const item_vue_vue_type_style_index_0_scoped_72036260_lang = "";
 const _sfc_setup$1i = _sfc_main$1i.setup;
 _sfc_main$1i.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -7430,7 +7418,7 @@ const _sfc_main$1h = defineComponent({
         isLike ? identity.likeComment(commentId) : identity.dislikeComment(commentId);
       } catch (error) {
         const message = _i18n.t(LanguageKey.POST_ACTION_ERROR);
-        console.warn(message, error);
+        logger.warn(message, error);
         alert(message);
       }
     };
@@ -7444,13 +7432,12 @@ const _sfc_main$1h = defineComponent({
     };
   }
 });
-const list_vue_vue_type_style_index_0_scoped_86d32752_lang = "";
 function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
   const _component_comment_item = resolveComponent("comment-item");
   const _component_comment_list = resolveComponent("comment-list");
   _push(`<ul${ssrRenderAttrs(mergeProps({
     class: ["comment-list", _ctx.isChildList ? "child" : "root"]
-  }, _attrs))} data-v-86d32752><!--[-->`);
+  }, _attrs))} data-v-17501654><!--[-->`);
   ssrRenderList(_ctx.comments, (item) => {
     _push(ssrRenderComponent(_component_comment_item, {
       key: item.comment.id,
@@ -7553,7 +7540,7 @@ _sfc_main$1h.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/list/list.vue");
   return _sfc_setup$1h ? _sfc_setup$1h(props, ctx) : void 0;
 };
-const CommentList = /* @__PURE__ */ _export_sfc(_sfc_main$1h, [["ssrRender", _sfc_ssrRender], ["__scopeId", "data-v-86d32752"]]);
+const CommentList = /* @__PURE__ */ _export_sfc(_sfc_main$1h, [["ssrRender", _sfc_ssrRender], ["__scopeId", "data-v-17501654"]]);
 const _sfc_main$1g = /* @__PURE__ */ defineComponent({
   __name: "loadmore",
   __ssrInlineRender: true,
@@ -7618,7 +7605,6 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const loadmore_vue_vue_type_style_index_0_scoped_0e9c0d43_lang = "";
 const _sfc_setup$1g = _sfc_main$1g.setup;
 _sfc_main$1g.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -7674,7 +7660,6 @@ const _sfc_main$1f = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const main_vue_vue_type_style_index_0_scoped_f2da7c39_lang = "";
 const _sfc_setup$1f = _sfc_main$1f.setup;
 _sfc_main$1f.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -7758,7 +7743,6 @@ const _sfc_main$1e = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const publisher_vue_vue_type_style_index_0_scoped_6966ea65_lang = "";
 const _sfc_setup$1e = _sfc_main$1e.setup;
 _sfc_main$1e.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -7919,7 +7903,6 @@ const _sfc_main$1d = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const pen_vue_vue_type_style_index_0_scoped_f558d4e6_lang = "";
 const _sfc_setup$1d = _sfc_main$1d.setup;
 _sfc_main$1d.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -8008,7 +7991,7 @@ const _sfc_main$1c = /* @__PURE__ */ defineComponent({
     };
     const handleDeleteComment = (commentId) => {
       commentStore.deleteComment(commentId).catch((error) => {
-        console.warn("delete comment failed", error);
+        logger.warn("delete comment failed", error);
         alert(error.message);
       });
     };
@@ -8058,7 +8041,7 @@ const _sfc_main$1c = /* @__PURE__ */ defineComponent({
         }
         luanchEmojiRain(payload.content);
       } catch (error) {
-        console.warn("submit comment failed:", error);
+        logger.warn("submit comment failed:", error);
         throw error.message;
       }
     };
@@ -8112,7 +8095,7 @@ const _sfc_main$1c = /* @__PURE__ */ defineComponent({
       _push(`<div${ssrRenderAttrs(mergeProps({
         id: COMMENT_ELEMENT_ID,
         class: "comment-box"
-      }, _attrs))} data-v-4590a078>`);
+      }, _attrs))} data-v-a41e1e68>`);
       _push(ssrRenderComponent(CommentTopbar, {
         total: (_a = unref(commentStore).pagination) == null ? void 0 : _a.total,
         loaded: unref(commentStore).comments.length,
@@ -8385,14 +8368,13 @@ const _sfc_main$1c = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_4590a078_lang = "";
 const _sfc_setup$1c = _sfc_main$1c.setup;
 _sfc_main$1c.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/index.vue");
   return _sfc_setup$1c ? _sfc_setup$1c(props, ctx) : void 0;
 };
-const Comment = /* @__PURE__ */ _export_sfc(_sfc_main$1c, [["__scopeId", "data-v-4590a078"]]);
+const Comment = /* @__PURE__ */ _export_sfc(_sfc_main$1c, [["__scopeId", "data-v-a41e1e68"]]);
 const _sfc_main$1b = /* @__PURE__ */ defineComponent({
   __name: "skeleton",
   __ssrInlineRender: true,
@@ -8436,7 +8418,6 @@ const _sfc_main$1b = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const skeleton_vue_vue_type_style_index_0_scoped_1493b3f6_lang = "";
 const _sfc_setup$1b = _sfc_main$1b.setup;
 _sfc_main$1b.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -8573,7 +8554,6 @@ const _sfc_main$1a = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const content_vue_vue_type_style_index_0_scoped_28c41e89_lang = "";
 const _sfc_setup$1a = _sfc_main$1a.setup;
 _sfc_main$1a.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -8859,7 +8839,6 @@ const _sfc_main$19 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const share_vue_vue_type_style_index_0_scoped_193b423c_lang = "";
 const _sfc_setup$19 = _sfc_main$19.setup;
 _sfc_main$19.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -9090,7 +9069,6 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const meta_vue_vue_type_style_index_0_scoped_4d178c75_lang = "";
 const _sfc_setup$18 = _sfc_main$18.setup;
 _sfc_main$18.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -9149,7 +9127,6 @@ const _sfc_main$17 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const upvote_vue_vue_type_style_index_0_scoped_b5f92408_lang = "";
 const _sfc_setup$17 = _sfc_main$17.setup;
 _sfc_main$17.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -9257,7 +9234,6 @@ const _sfc_main$16 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const related_vue_vue_type_style_index_0_scoped_100233cf_lang = "";
 const _sfc_setup$16 = _sfc_main$16.setup;
 _sfc_main$16.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -9343,7 +9319,6 @@ const _sfc_main$15 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const neighbour_vue_vue_type_style_index_0_scoped_d4fcd861_lang = "";
 const _sfc_setup$15 = _sfc_main$15.setup;
 _sfc_main$15.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -9455,7 +9430,6 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const chatgpt_vue_vue_type_style_index_0_scoped_923dad5c_lang = "";
 const _sfc_setup$14 = _sfc_main$14.setup;
 _sfc_main$14.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -9514,7 +9488,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
         callback == null ? void 0 : callback();
       } catch (error) {
         const message = _i18n.t(LanguageKey.POST_ACTION_ERROR);
-        console.warn(message, error);
+        logger$1.warn(message, error);
         alert(message);
       }
     };
@@ -9557,7 +9531,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_placeholder = resolveComponent("placeholder");
       const _component_ulink = resolveComponent("ulink");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-page" }, _attrs))} data-v-56be7fd7>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-page" }, _attrs))} data-v-9a57c65a>`);
       _push(ssrRenderComponent(_component_placeholder, { loading: unref(fetching) }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -9577,14 +9551,14 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             if (unref(article)) {
-              _push2(`<div data-v-56be7fd7${_scopeId}><div class="module margin background overflow" data-v-56be7fd7${_scopeId}>`);
+              _push2(`<div data-v-9a57c65a${_scopeId}><div class="module margin background overflow" data-v-9a57c65a${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleContent, {
                 id: ARTICLE_CONTENT_ELEMENT_ID,
                 "readmore-id": ARTICLE_READMORE_ELEMENT_ID,
                 article: unref(article),
                 onRendered: handleContentRendered
               }, null, _parent2, _scopeId));
-              _push2(`<div class="divider" data-v-56be7fd7${_scopeId}></div>`);
+              _push2(`<div class="divider" data-v-9a57c65a${_scopeId}></div>`);
               _push2(ssrRenderComponent(ArticleMeta, {
                 id: ARTICLE_META_ELEMENT_ID,
                 article: unref(article),
@@ -9615,19 +9589,19 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
                 }),
                 _: 1
               }, _parent2, _scopeId));
-              _push2(`</div><div class="module margin background" data-v-56be7fd7${_scopeId}><div class="bridge left" data-v-56be7fd7${_scopeId}></div><div class="bridge right" data-v-56be7fd7${_scopeId}></div>`);
+              _push2(`</div><div class="module margin background" data-v-9a57c65a${_scopeId}><div class="bridge left" data-v-9a57c65a${_scopeId}></div><div class="bridge right" data-v-9a57c65a${_scopeId}></div>`);
               _push2(ssrRenderComponent(ArticleShare, {
                 id: ARTICLE_SHARE_ELEMENT_ID,
                 article: unref(article),
                 "disabled-image-share": _ctx.isMobile,
                 socials: _ctx.isMobile ? [unref(SocialMedia).Wechat, unref(SocialMedia).Weibo, unref(SocialMedia).Twitter] : []
               }, null, _parent2, _scopeId));
-              _push2(`</div><div class="module margin overflow" data-v-56be7fd7${_scopeId}>`);
+              _push2(`</div><div class="module margin overflow" data-v-9a57c65a${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleNeighbour, {
                 prev: unref(prevArticle),
                 next: unref(nextArticle)
               }, null, _parent2, _scopeId));
-              _push2(`</div><div class="module margin overflow" data-v-56be7fd7${_scopeId}>`);
+              _push2(`</div><div class="module margin overflow" data-v-9a57c65a${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleRelated, {
                 id: ARTICLE_RELATED_ELEMENT_ID,
                 columns: _ctx.isMobile ? 2 : 3,
@@ -9697,7 +9671,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="comment" data-v-56be7fd7>`);
+      _push(`<div class="comment" data-v-9a57c65a>`);
       _push(ssrRenderComponent(Comment, {
         plain: _ctx.isMobile,
         fetching: unref(fetching),
@@ -9714,7 +9688,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
               }, {
                 default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<i class="iconfont icon-chat-gpt" data-v-56be7fd7${_scopeId2}></i>`);
+                    _push3(`<i class="iconfont icon-chat-gpt" data-v-9a57c65a${_scopeId2}></i>`);
                   } else {
                     return [
                       createVNode("i", { class: "iconfont icon-chat-gpt" })
@@ -9772,14 +9746,13 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_56be7fd7_lang = "";
 const _sfc_setup$13 = _sfc_main$13.setup;
 _sfc_main$13.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/index.vue");
   return _sfc_setup$13 ? _sfc_setup$13(props, ctx) : void 0;
 };
-const ArticleDetailPage = /* @__PURE__ */ _export_sfc(_sfc_main$13, [["__scopeId", "data-v-56be7fd7"]]);
+const ArticleDetailPage = /* @__PURE__ */ _export_sfc(_sfc_main$13, [["__scopeId", "data-v-9a57c65a"]]);
 const _sfc_main$12 = /* @__PURE__ */ defineComponent({
   __name: "instagram",
   __ssrInlineRender: true,
@@ -9983,7 +9956,6 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const instagram_vue_vue_type_style_index_0_scoped_f5dc4ac0_lang = "";
 const _sfc_setup$12 = _sfc_main$12.setup;
 _sfc_main$12.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -10071,7 +10043,6 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const youtube_vue_vue_type_style_index_0_scoped_e23b95e2_lang = "";
 const _sfc_setup$11 = _sfc_main$11.setup;
 _sfc_main$11.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -10202,7 +10173,6 @@ const _sfc_main$10 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const base_vue_vue_type_style_index_0_scoped_b864e91a_lang = "";
 const _sfc_setup$10 = _sfc_main$10.setup;
 _sfc_main$10.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -10691,7 +10661,6 @@ const _sfc_main$Y = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const npm_vue_vue_type_style_index_0_scoped_8fec2308_lang = "";
 const _sfc_setup$Y = _sfc_main$Y.setup;
 _sfc_main$Y.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -10739,7 +10708,6 @@ const _sfc_main$X = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const day_vue_vue_type_style_index_0_scoped_6234f1db_lang = "";
 const _sfc_setup$X = _sfc_main$X.setup;
 _sfc_main$X.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -10824,7 +10792,6 @@ const _sfc_main$W = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_8146b157_lang = "";
 const _sfc_setup$W = _sfc_main$W.setup;
 _sfc_main$W.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -11097,7 +11064,6 @@ const _sfc_main$V = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const mapbox_vue_vue_type_style_index_0_scoped_148642d7_lang = "";
 const _sfc_setup$V = _sfc_main$V.setup;
 _sfc_main$V.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -11153,7 +11119,6 @@ const _sfc_main$U = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const modal_vue_vue_type_style_index_0_scoped_203f7863_lang = "";
 const _sfc_setup$U = _sfc_main$U.setup;
 _sfc_main$U.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -11311,7 +11276,6 @@ const _sfc_main$T = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_37b8a87b_lang = "";
 const _sfc_setup$T = _sfc_main$T.setup;
 _sfc_main$T.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -11870,7 +11834,6 @@ const _sfc_main$S = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const desktop_vue_vue_type_style_index_0_scoped_0ea376ff_lang = "";
 const _sfc_setup$S = _sfc_main$S.setup;
 _sfc_main$S.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -12136,7 +12099,6 @@ const _sfc_main$R = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const mobile_vue_vue_type_style_index_0_scoped_c1f3bb37_lang = "";
 const _sfc_setup$R = _sfc_main$R.setup;
 _sfc_main$R.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -12173,7 +12135,7 @@ const _sfc_main$Q = /* @__PURE__ */ defineComponent({
         identity.likePage(CommentPostId.Guestbook);
       } catch (error) {
         const message = _i18n.t(LanguageKey.POST_ACTION_ERROR);
-        console.warn(message, error);
+        logger$1.warn(message, error);
         alert(message);
       }
     };
@@ -12203,17 +12165,17 @@ const _sfc_main$Q = /* @__PURE__ */ defineComponent({
       const _component_uimage = resolveComponent("uimage");
       const _component_webfont = resolveComponent("webfont");
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "guestbook-page" }, _attrs))} data-v-f760f8c7>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "guestbook-page" }, _attrs))} data-v-b188c7c7>`);
       _push(ssrRenderComponent(_component_responsive, null, {
         desktop: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="desktop-banner" data-v-f760f8c7${_scopeId}>`);
+            _push2(`<div class="desktop-banner" data-v-b188c7c7${_scopeId}>`);
             _push2(ssrRenderComponent(_component_uimage, {
               class: "image",
               src: bannerImage,
               cdn: ""
             }, null, _parent2, _scopeId));
-            _push2(`<button class="${ssrRenderClass([{ liked: isLiked.value }, "like"])}"${ssrIncludeBooleanAttr(isLiked.value) ? " disabled" : ""} data-v-f760f8c7${_scopeId}><i class="icon iconfont icon-heart" data-v-f760f8c7${_scopeId}></i><span class="count" data-v-f760f8c7${_scopeId}>${ssrInterpolate(isLiked.value ? `${siteLikes.value - 1} + 1` : siteLikes.value)}</span></button><span class="slogan" data-v-f760f8c7${_scopeId}>`);
+            _push2(`<button class="${ssrRenderClass([{ liked: isLiked.value }, "like"])}"${ssrIncludeBooleanAttr(isLiked.value) ? " disabled" : ""} data-v-b188c7c7${_scopeId}><i class="icon iconfont icon-heart" data-v-b188c7c7${_scopeId}></i><span class="count" data-v-b188c7c7${_scopeId}>${ssrInterpolate(isLiked.value ? `${siteLikes.value - 1} + 1` : siteLikes.value)}</span></button><span class="slogan" data-v-b188c7c7${_scopeId}>`);
             _push2(ssrRenderComponent(_component_webfont, {
               class: ["text", { dark: unref(isDarkTheme) }]
             }, {
@@ -12328,7 +12290,7 @@ const _sfc_main$Q = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="comment" data-v-f760f8c7>`);
+      _push(`<div class="comment" data-v-b188c7c7>`);
       _push(ssrRenderComponent(Comment, {
         "post-id": 0,
         plain: props.isMobile,
@@ -12338,14 +12300,13 @@ const _sfc_main$Q = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const guestbook_vue_vue_type_style_index_0_scoped_f760f8c7_lang = "";
 const _sfc_setup$Q = _sfc_main$Q.setup;
 _sfc_main$Q.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/guestbook.vue");
   return _sfc_setup$Q ? _sfc_setup$Q(props, ctx) : void 0;
 };
-const GuestbookPage = /* @__PURE__ */ _export_sfc(_sfc_main$Q, [["__scopeId", "data-v-f760f8c7"]]);
+const GuestbookPage = /* @__PURE__ */ _export_sfc(_sfc_main$Q, [["__scopeId", "data-v-b188c7c7"]]);
 const APP_LOGO_URL = "/images/page-app/logo.png";
 const _sfc_main$P = /* @__PURE__ */ defineComponent({
   __name: "app",
@@ -12496,7 +12457,6 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const app_vue_vue_type_style_index_0_scoped_7402bf1c_lang = "";
 const _sfc_setup$P = _sfc_main$P.setup;
 _sfc_main$P.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -12609,7 +12569,6 @@ const _sfc_main$O = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const tabs_vue_vue_type_style_index_0_scoped_c19ca129_lang = "";
 const _sfc_setup$O = _sfc_main$O.setup;
 _sfc_main$O.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -12808,7 +12767,6 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const provider_vue_vue_type_style_index_0_scoped_49f9d048_lang = "";
 const _sfc_setup$N = _sfc_main$N.setup;
 _sfc_main$N.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -12923,7 +12881,6 @@ const _sfc_main$M = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const sponsor_vue_vue_type_style_index_0_scoped_857966d4_lang = "";
 const _sfc_setup$M = _sfc_main$M.setup;
 _sfc_main$M.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -12955,7 +12912,6 @@ const _sfc_main$L = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const skeleton_vue_vue_type_style_index_0_scoped_773679c4_lang = "";
 const _sfc_setup$L = _sfc_main$L.setup;
 _sfc_main$L.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -13040,7 +12996,6 @@ const _sfc_main$K = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const swiper_vue_vue_type_style_index_0_scoped_92f16a86_lang = "";
 const _sfc_setup$K = _sfc_main$K.setup;
 _sfc_main$K.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -13203,7 +13158,6 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const videos_vue_vue_type_style_index_0_scoped_21ec8283_lang = "";
 const _sfc_setup$J = _sfc_main$J.setup;
 _sfc_main$J.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -13355,7 +13309,6 @@ const _sfc_main$I = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const playlist_vue_vue_type_style_index_0_scoped_df930883_lang = "";
 const _sfc_setup$I = _sfc_main$I.setup;
 _sfc_main$I.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -13654,7 +13607,6 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_d2e57c5a_lang = "";
 const _sfc_setup$H = _sfc_main$H.setup;
 _sfc_main$H.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -13702,7 +13654,6 @@ const _sfc_main$G = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const album_vue_vue_type_style_index_0_scoped_4830c8dd_lang = "";
 const _sfc_setup$G = _sfc_main$G.setup;
 _sfc_main$G.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -13846,7 +13797,6 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const gallery_vue_vue_type_style_index_0_scoped_3dad3d25_lang = "";
 const _sfc_setup$F = _sfc_main$F.setup;
 _sfc_main$F.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -13971,7 +13921,6 @@ const _sfc_main$E = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const grid_vue_vue_type_style_index_0_scoped_fb873718_lang = "";
 const _sfc_setup$E = _sfc_main$E.setup;
 _sfc_main$E.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -14410,7 +14359,6 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_ac35eeed_lang = "";
 const _sfc_setup$D = _sfc_main$D.setup;
 _sfc_main$D.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -14736,7 +14684,6 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const webfont_vue_vue_type_style_index_0_scoped_985ff19f_lang = "";
 const _sfc_setup$C = _sfc_main$C.setup;
 _sfc_main$C.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -14770,7 +14717,6 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const spin_vue_vue_type_style_index_0_scoped_94e22883_lang = "";
 const _sfc_setup$B = _sfc_main$B.setup;
 _sfc_main$B.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -14802,7 +14748,6 @@ const _sfc_main$A = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const empty_vue_vue_type_style_index_0_scoped_8245bbd6_lang = "";
 const _sfc_setup$A = _sfc_main$A.setup;
 _sfc_main$A.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -14829,7 +14774,6 @@ const _sfc_main$z = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const divider_vue_vue_type_style_index_0_scoped_59d5e242_lang = "";
 const _sfc_setup$z = _sfc_main$z.setup;
 _sfc_main$z.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -15178,7 +15122,6 @@ const _sfc_main$y = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const base_vue_vue_type_style_index_0_scoped_64cb8c6f_lang = "";
 const _sfc_setup$y = _sfc_main$y.setup;
 _sfc_main$y.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -15209,7 +15152,6 @@ const _sfc_main$x = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const line_vue_vue_type_style_index_0_scoped_fcaf01ec_lang = "";
 const _sfc_setup$x = _sfc_main$x.setup;
 _sfc_main$x.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -15387,7 +15329,6 @@ const _sfc_main$v = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_7d47d217_lang = "";
 const _sfc_setup$v = _sfc_main$v.setup;
 _sfc_main$v.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -15447,7 +15388,6 @@ const _sfc_main$u = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const emojiRain_vue_vue_type_style_index_0_scoped_f13c3623_lang = "";
 const _sfc_setup$u = _sfc_main$u.setup;
 _sfc_main$u.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -15493,7 +15433,6 @@ const _sfc_main$t = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const error_vue_vue_type_style_index_0_scoped_038af2a9_lang = "";
 const _sfc_setup$t = _sfc_main$t.setup;
 _sfc_main$t.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -15644,7 +15583,6 @@ const _sfc_main$r = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const player_vue_vue_type_style_index_0_scoped_e97fccfb_lang = "";
 const _sfc_setup$r = _sfc_main$r.setup;
 _sfc_main$r.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -15721,7 +15659,6 @@ const _sfc_main$q = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const handle_vue_vue_type_style_index_0_scoped_a5b6f8b7_lang = "";
 const _sfc_setup$q = _sfc_main$q.setup;
 _sfc_main$q.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -15794,7 +15731,6 @@ const _sfc_main$p = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const flower_vue_vue_type_style_index_0_scoped_aab00827_lang = "";
 const _sfc_setup$p = _sfc_main$p.setup;
 _sfc_main$p.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -15868,7 +15804,6 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const garden_vue_vue_type_style_index_0_scoped_592dc5a4_lang = "";
 const _sfc_setup$o = _sfc_main$o.setup;
 _sfc_main$o.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -15918,7 +15853,6 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const wall_vue_vue_type_style_index_0_scoped_f5ca2072_lang = "";
 const _sfc_setup$n = _sfc_main$n.setup;
 _sfc_main$n.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -15983,7 +15917,6 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const switcher_vue_vue_type_style_index_0_scoped_fd8fe047_lang = "";
 const _sfc_setup$m = _sfc_main$m.setup;
 _sfc_main$m.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -16001,7 +15934,6 @@ const _sfc_main$l = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const background_vue_vue_type_style_index_0_scoped_1f6e3f9b_lang = "";
 const _sfc_setup$l = _sfc_main$l.setup;
 _sfc_main$l.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -16046,7 +15978,6 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const toolbox_vue_vue_type_style_index_0_scoped_4d18dc68_lang = "";
 const _sfc_setup$k = _sfc_main$k.setup;
 _sfc_main$k.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -16188,7 +16119,6 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const feedback_vue_vue_type_style_index_0_scoped_d1c14a77_lang = "";
 const _sfc_setup$j = _sfc_main$j.setup;
 _sfc_main$j.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -16225,7 +16155,6 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const statement_vue_vue_type_style_index_0_scoped_a70a439b_lang = "";
 const _sfc_setup$i = _sfc_main$i.setup;
 _sfc_main$i.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -16456,7 +16385,6 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const header_vue_vue_type_style_index_0_scoped_f07c3043_lang = "";
 const _sfc_setup$h = _sfc_main$h.setup;
 _sfc_main$h.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -16647,7 +16575,6 @@ const _sfc_main$g = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const footer_vue_vue_type_style_index_0_scoped_c86e5ecb_lang = "";
 const _sfc_setup$g = _sfc_main$g.setup;
 _sfc_main$g.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -16689,7 +16616,6 @@ const _sfc_main$f = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const search_vue_vue_type_style_index_0_scoped_d355d98f_lang = "";
 const _sfc_setup$f = _sfc_main$f.setup;
 _sfc_main$f.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -16809,7 +16735,6 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const statistic_vue_vue_type_style_index_0_scoped_2e611067_lang = "";
 const _sfc_setup$e = _sfc_main$e.setup;
 _sfc_main$e.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -16988,7 +16913,6 @@ const _sfc_main$d = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const article_vue_vue_type_style_index_0_scoped_35eae653_lang = "";
 const _sfc_setup$d = _sfc_main$d.setup;
 _sfc_main$d.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -17152,7 +17076,6 @@ const _sfc_main$c = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const mammon_vue_vue_type_style_index_0_scoped_710a5ba8_lang = "";
 const _sfc_setup$c = _sfc_main$c.setup;
 _sfc_main$c.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -17278,7 +17201,6 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const tag_vue_vue_type_style_index_0_scoped_587e1d6e_lang = "";
 const _sfc_setup$b = _sfc_main$b.setup;
 _sfc_main$b.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -17380,7 +17302,6 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const anchor_vue_vue_type_style_index_0_scoped_86a97435_lang = "";
 const _sfc_setup$a = _sfc_main$a.setup;
 _sfc_main$a.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -17459,7 +17380,6 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const calendar_vue_vue_type_style_index_0_scoped_ead14c8a_lang = "";
 const _sfc_setup$9 = _sfc_main$9.setup;
 _sfc_main$9.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -17525,7 +17445,6 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const calendar_vue_vue_type_style_index_0_scoped_b7d53c96_lang = "";
 const _sfc_setup$8 = _sfc_main$8.setup;
 _sfc_main$8.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -17638,7 +17557,6 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_scoped_d9dc4267_lang = "";
 const _sfc_setup$7 = _sfc_main$7.setup;
 _sfc_main$7.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -17804,7 +17722,6 @@ const _sfc_main$6 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const nav_vue_vue_type_style_index_0_scoped_fcf49e96_lang = "";
 const _sfc_setup$6 = _sfc_main$6.setup;
 _sfc_main$6.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -17834,10 +17751,10 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
     };
     onMounted(() => {
       wallpaperStore.fetch().catch((error) => {
-        console.warn("[main component] bing wallpaper fetch failed!", error);
+        logger$1.warn("bing wallpaper fetch failed!", error);
       });
       useMusic().init().catch((error) => {
-        console.warn("[main component] player init failed!", error);
+        logger$1.warn("player init failed!", error);
       });
     });
     return (_ctx, _push, _parent, _attrs) => {
@@ -17845,7 +17762,7 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
       const _component_popup = resolveComponent("popup");
       const _component_router_view = resolveComponent("router-view");
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "desktop-main" }, _attrs))} data-v-eedad6ef>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "desktop-main" }, _attrs))} data-v-8a4fbbbd>`);
       _push(ssrRenderComponent(Background, null, null, _parent));
       _push(ssrRenderComponent(Wallflower, null, null, _parent));
       _push(ssrRenderComponent(_component_client_only, null, {
@@ -17857,7 +17774,7 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="sponsor-modal" data-v-eedad6ef${_scopeId2}><div class="sponsor" data-v-eedad6ef${_scopeId2}>`);
+                  _push3(`<div class="sponsor-modal" data-v-8a4fbbbd${_scopeId2}><div class="sponsor" data-v-8a4fbbbd${_scopeId2}>`);
                   _push3(ssrRenderComponent(SponsorTabs, {
                     class: "tabs",
                     state: unref(sponsorState),
@@ -17998,7 +17915,7 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
         _push(`<!---->`);
       }
       _push(ssrRenderComponent(HeaderView$1, null, null, _parent));
-      _push(`<main${ssrRenderAttr("id", unref(MAIN_ELEMENT_ID))} class="${ssrRenderClass([{ "full-page": unref(layoutColumn).isFull }, "main-container"])}" data-v-eedad6ef>`);
+      _push(`<main${ssrRenderAttr("id", unref(MAIN_ELEMENT_ID))} class="${ssrRenderClass([{ "full-page": unref(layoutColumn).isFull }, "main-container"])}" data-v-8a4fbbbd>`);
       if (unref(layoutColumn).isNormal) {
         _push(ssrRenderComponent(NavView, { class: "nav-view" }, null, _parent));
       } else {
@@ -18013,11 +17930,11 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
         "layout-normal": unref(layoutColumn).isNormal,
         "layout-wide": unref(layoutColumn).isWide,
         "layout-full": unref(layoutColumn).isFull
-      }, "main-view"])}" data-v-eedad6ef>`);
+      }, "main-view"])}" data-v-8a4fbbbd>`);
       _push(ssrRenderComponent(_component_router_view, null, {
         default: withCtx(({ Component, route: r }, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div${ssrRenderAttrs(mergeProps({ class: "router-view" }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-eedad6ef${_scopeId}>`);
+            _push2(`<div${ssrRenderAttrs(mergeProps({ class: "router-view" }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-8a4fbbbd${_scopeId}>`);
             ssrRenderSuspense(_push2, {
               default: () => {
                 ssrRenderVNode(_push2, createVNode(resolveDynamicComponent(Component), {
@@ -18061,14 +17978,13 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const main_vue_vue_type_style_index_0_scoped_eedad6ef_lang = "";
 const _sfc_setup$5 = _sfc_main$5.setup;
 _sfc_main$5.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/main.vue");
   return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
 };
-const DesktopMain = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-eedad6ef"]]);
+const DesktopMain = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-8a4fbbbd"]]);
 const _sfc_main$4 = /* @__PURE__ */ defineComponent({
   __name: "header",
   __ssrInlineRender: true,
@@ -18185,7 +18101,6 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const header_vue_vue_type_style_index_0_scoped_a3bedecf_lang = "";
 const _sfc_setup$4 = _sfc_main$4.setup;
 _sfc_main$4.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -18204,7 +18119,6 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const footer_vue_vue_type_style_index_0_scoped_6842ceee_lang = "";
 const _sfc_setup$3 = _sfc_main$3.setup;
 _sfc_main$3.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -18641,7 +18555,6 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const aside_vue_vue_type_style_index_0_scoped_6025f522_lang = "";
 const _sfc_setup$2 = _sfc_main$2.setup;
 _sfc_main$2.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -18733,7 +18646,6 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const main_vue_vue_type_style_index_0_scoped_2e01474f_lang = "";
 const _sfc_setup$1 = _sfc_main$1.setup;
 _sfc_main$1.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
@@ -18815,21 +18727,17 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const index_vue_vue_type_style_index_0_lang = "";
 const _sfc_setup = _sfc_main.setup;
 _sfc_main.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/app/index.vue");
   return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };
-console.group(`[APP INIT]:`);
-console.table({
-  APP_VERSION,
-  APP_ENV,
-  NODE_ENV,
-  "---": "-",
-  ...API_CONFIG
-});
+console.group(`[APP:INIT]`);
+console.table({ APP_VERSION, APP_ENV, NODE_ENV });
+console.groupEnd();
+console.group(`[APP:API]`);
+console.table(API_CONFIG);
 console.groupEnd();
 const createMainApp = (context) => {
   var _a, _b;
@@ -18897,7 +18805,7 @@ const createMainApp = (context) => {
     getGlobalHead
   };
 };
-const devDebug = (...args) => isDev;
+const devDebug = (...messages) => isDev;
 const createSSRContext = (request, error) => {
   const { headers, cookies: cookies2, originalUrl } = request;
   const country = headers["country-code"];
@@ -18942,7 +18850,7 @@ const createApp = (ssrContext) => {
   return mainApp;
 };
 const renderHTML = async (mainApp, ssrContext) => {
-  devDebug(`renderHTML: ${ssrContext.requestURL}`);
+  devDebug(`route: ${ssrContext.requestURL}`);
   const { app, router, store, head, theme, globalState } = mainApp;
   await router.push(ssrContext.requestURL);
   await router.isReady();

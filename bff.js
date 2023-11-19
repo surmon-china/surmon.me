@@ -478,6 +478,29 @@ const getMyGoogleMap = () => {
         .then((response) => parser.parse(response.data).kml.Document);
 };
 
+;// CONCATENATED MODULE: ./src/utils/logger.ts
+/**
+ * @file App logger
+ * @module utils/logger
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const createLogger = (scope) => ({
+    log: (...messages) => console.log(`[${scope}]`, ...messages),
+    info: (...messages) => console.info(`[${scope}]`, ...messages),
+    warn: (...messages) => console.warn(`[${scope}]`, ...messages),
+    error: (...messages) => console.error(`[${scope}]`, ...messages),
+    debug: (...messages) => console.debug(`[${scope}]`, ...messages)
+});
+/* harmony default export */ const logger = (createLogger('APP'));
+
+;// CONCATENATED MODULE: ./src/server/logger.ts
+
+const bffLogger = createLogger('BFF');
+const cacheLogger = createLogger('BFF:Cache');
+const proxyLogger = createLogger('BFF:Proxy');
+const cacherLogger = createLogger('BFF:Cacher');
+const getterLogger = createLogger('BFF:Getter');
+
 ;// CONCATENATED MODULE: external "yargs"
 var external_yargs_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
 var external_yargs_y = x => () => x
@@ -546,13 +569,14 @@ const getSotweAggregate = async (twitterUsername) => {
  */
 
 
+
 const getTwitterAggregate = async () => {
     const sotwe = await getSotweAggregate(app_config_IDENTITIES.TWITTER_USER_NAME).catch((error) => {
-        console.warn('[Twitter] sotwe aggregate is empty.', error?.message ?? String(error));
+        getterLogger.warn('Twitter sotwe aggregate is empty.', error?.message ?? String(error));
         return null;
     });
     if (!sotwe) {
-        return Promise.reject('[Twitter] aggregate data is empty.');
+        return Promise.reject('Twitter aggregate data is empty.');
     }
     const tweets = [];
     const userinfo = {
@@ -754,6 +778,8 @@ const getInstagramMediaChildren = (mediaId) => {
 
 ;// CONCATENATED MODULE: ./src/server/getters/instagram/calendar.ts
 
+
+
 function doFetchAllMedias({ since, after, medias = [], onSucceed, onFailed }) {
     getInstagramMedias({ fields: 'id,timestamp', limit: 100, since, after })
         .then((result) => {
@@ -777,7 +803,7 @@ const calendarTemp = {
     data: []
 };
 function fetchAllMedias() {
-    console.info('[BFF] instagram.fetchAllMedias...');
+    getterLogger.info('instagram.fetchAllMedias...');
     calendarTemp.data = [];
     // startTime: Only get the most recent 12 months of data
     const today = new Date();
@@ -787,7 +813,7 @@ function fetchAllMedias() {
     doFetchAllMedias({
         since: prevYearToday,
         onSucceed: (medias) => {
-            console.info(`[BFF] instagram.fetchAllMedias done, ${medias.length} medias. refetch when after 18h`);
+            getterLogger.info(`instagram.fetchAllMedias done, ${medias.length} medias. refetch when after 18h`);
             setTimeout(() => fetchAllMedias(), 18 * 60 * 60 * 1000);
             const map = new Map();
             medias.forEach((media) => {
@@ -797,13 +823,15 @@ function fetchAllMedias() {
             calendarTemp.data = Array.from(map, ([date, count]) => ({ date, count }));
         },
         onFailed: (error) => {
-            console.warn(`[BFF] instagram.fetchAllMedias failed, retry when after 30s`, error);
+            getterLogger.warn(`instagram.fetchAllMedias failed, retry when after 30s`, error);
             setTimeout(() => fetchAllMedias(), 30 * 1000);
         }
     });
 }
-const initInstagramCalendar = () => fetchAllMedias();
 const getInstagramCalendar = async () => calendarTemp.data;
+const initInstagramCalendar = () => {
+    INSTAGRAM_TOKEN ? fetchAllMedias() : getterLogger.warn('instagram.fetchAllMedias skipped, no token.');
+};
 
 ;// CONCATENATED MODULE: ./src/server/getters/instagram/profile.ts
 
@@ -1210,8 +1238,9 @@ const enableProdRenderer = async (app, cache) => {
  */
 
 
+
 const errorer = (response, { code, message }) => {
-    console.warn(`[BFF] error:`, (0,external_axios_namespaceObject.isAxiosError)(message) ? message.toJSON() : message);
+    bffLogger.warn(`error:`, (0,external_axios_namespaceObject.isAxiosError)(message) ? message.toJSON() : message);
     response.status(code ?? INVALID_ERROR);
     response.send(typeof message === 'string'
         ? message
@@ -1233,6 +1262,7 @@ const responser = (promise) => {
  * @module server.helper.cacher
  * @author Surmon <https://github.com/surmon-china>
  */
+
 // fetch & cache
 const fetchAndCache = async (config) => {
     const data = await config.getter();
@@ -1242,14 +1272,14 @@ const fetchAndCache = async (config) => {
 // timeout prefetch
 const setTimeoutPreRefresh = (config, preSeconds, refreshCount = 1) => {
     const timeoutSeconds = config.ttl - preSeconds;
-    console.info('[cacher] setTimeoutPreRefresh', `> ${config.key} + ${refreshCount}`, `> cache expire when after ${config.ttl}s`, `> pre refresh when after ${timeoutSeconds}s`);
+    cacherLogger.info('setTimeoutPreRefresh', `> ${config.key} + ${refreshCount}`, `> cache expire when after ${config.ttl}s`, `> pre refresh when after ${timeoutSeconds}s`);
     setTimeout(async () => {
         try {
             await fetchAndCache(config);
             setTimeoutPreRefresh(config, preSeconds, refreshCount + 1);
         }
         catch (error) {
-            console.warn(`[cacher] setTimeoutPreRefresh error:`, `> ${config.key} + ${refreshCount}`, error);
+            cacherLogger.warn(`setTimeoutPreRefresh error:`, `> ${config.key} + ${refreshCount}`, error);
         }
     }, timeoutSeconds * 1000);
 };
@@ -1263,7 +1293,7 @@ const retryFetch = async (config) => {
         await fetchAndCache(config);
     }
     catch (error) {
-        console.warn('[cacher] retryFetch error:', error);
+        cacherLogger.warn('retryFetch error:', error);
     }
     finally {
         retryingMap.set(config.key, false);
@@ -1325,6 +1355,7 @@ const external_http_proxy_namespaceObject = external_http_proxy_x({ ["default"]:
 
 
 
+
 const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/*`;
 const proxyer = () => {
     // https://github.com/http-party/node-http-proxy
@@ -1361,7 +1392,7 @@ const proxyer = () => {
         if (request.socket.destroyed && error.code === 'ECONNRESET') {
             request._proxyRequest?.abort?.();
         }
-        console.warn(`[BFF] proxy error: ${error.message} > ${target?.href}`);
+        proxyLogger.warn(`error: ${error.message} > ${target?.href}`);
         response.writeHead(INVALID_ERROR, { 'Content-Type': 'text/plain' });
         response.end('Proxy error: ' + error.message);
     });
@@ -1421,6 +1452,7 @@ const external_redis_namespaceObject = external_redis_x({ ["createClient"]: () =
  */
 
 
+
 const getLRUClient = () => {
     // https://github.com/isaacs/node-lru-cache
     const lruCache = new external_lru_cache_namespaceObject.LRUCache({ max: 500 });
@@ -1443,10 +1475,10 @@ const getLRUClient = () => {
 const getRedisClient = async (options) => {
     // https://github.com/redis/node-redis
     const client = (0,external_redis_namespaceObject.createClient)();
-    client.on('connect', () => console.info('[Redis]', 'connecting...'));
-    client.on('reconnecting', () => console.info('[Redis]', 'reconnecting...'));
-    client.on('ready', () => console.info('[Redis]', 'readied.'));
-    client.on('error', (error) => console.warn('[Redis]', 'client error!', error.message || error));
+    client.on('connect', () => cacheLogger.info('Redis connecting...'));
+    client.on('reconnecting', () => cacheLogger.info('Redis reconnecting...'));
+    client.on('ready', () => cacheLogger.info('Redis readied.'));
+    client.on('error', (error) => cacheLogger.warn('Redis client error!', error.message || error));
     await client.connect();
     const getCacheKey = (key) => {
         const _namespace = options?.namespace ?? 'ssr_app';
@@ -1483,11 +1515,11 @@ const createCacheClient = async (options) => {
     let cacheClient = null;
     try {
         cacheClient = await getRedisClient(options);
-        console.info('[cache]', 'Redis store readied.');
+        cacheLogger.info('Redis store readied.');
     }
     catch (error) {
         cacheClient = getLRUClient();
-        console.info('[cache]', 'LRU store readied.');
+        cacheLogger.info('LRU store readied.');
     }
     await cacheClient.clear();
     return cacheClient;
@@ -1533,6 +1565,7 @@ const createExpressApp = async () => {
  * @module BFF-server
  * @author Surmon <https://github.com/surmon-china>
  */
+
 
 
 
@@ -1790,7 +1823,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
             `at ${new Date().toLocaleString()}`,
             `listening on ${JSON.stringify(server.address())}`
         ];
-        console.info('[surmon.me]', `Run! ${infos.join(', ')}.`);
+        bffLogger.info(`Run! ${infos.join(', ')}.`);
     });
 });
 

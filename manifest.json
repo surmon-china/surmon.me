@@ -1,57 +1,53 @@
 {
-  "_basic-2d0d6c82.js": {
+  "_basic-!~{002}~.js": {
+    "file": "basic-rQNOYIii.css",
+    "src": "_basic-!~{002}~.js"
+  },
+  "_basic-fOPdjbG3.js": {
     "css": [
-      "basic-2cd779a8.css"
+      "basic-rQNOYIii.css"
     ],
-    "file": "basic-2d0d6c82.js",
+    "file": "basic-fOPdjbG3.js",
     "imports": [
-      "_vendor-a7073b6a.js"
+      "_vendor-BWS31S0T.js"
     ]
   },
-  "_mapbox-gl-2efb6614.js": {
+  "_mapbox-gl-!~{004}~.js": {
+    "file": "mapbox-gl-FoS6h1ZB.css",
+    "src": "_mapbox-gl-!~{004}~.js"
+  },
+  "_mapbox-gl-iOEhVT_n.js": {
     "css": [
-      "mapbox-gl-c4636267.css"
+      "mapbox-gl-FoS6h1ZB.css"
     ],
-    "file": "mapbox-gl-2efb6614.js",
+    "file": "mapbox-gl-iOEhVT_n.js",
     "imports": [
-      "_basic-2d0d6c82.js"
+      "_basic-fOPdjbG3.js"
     ],
     "isDynamicEntry": true
   },
-  "_vendor-a7073b6a.js": {
-    "file": "vendor-a7073b6a.js",
+  "_vendor-BWS31S0T.js": {
+    "file": "vendor-BWS31S0T.js",
     "imports": [
-      "_basic-2d0d6c82.js"
+      "_basic-fOPdjbG3.js"
     ],
     "isDynamicEntry": true
-  },
-  "basic.css": {
-    "file": "basic-2cd779a8.css",
-    "src": "basic.css"
-  },
-  "index.css": {
-    "file": "index-a667731e.css",
-    "src": "index.css"
   },
   "index.html": {
     "css": [
-      "index-a667731e.css"
+      "index-aFt6fKao.css"
     ],
     "dynamicImports": [
-      "_vendor-a7073b6a.js",
-      "_mapbox-gl-2efb6614.js"
+      "_vendor-BWS31S0T.js",
+      "_mapbox-gl-iOEhVT_n.js"
     ],
-    "file": "index-b7d1188e.js",
+    "file": "index-Dx0GIkOr.js",
     "imports": [
-      "_basic-2d0d6c82.js",
-      "_vendor-a7073b6a.js",
-      "_mapbox-gl-2efb6614.js"
+      "_basic-fOPdjbG3.js",
+      "_vendor-BWS31S0T.js",
+      "_mapbox-gl-iOEhVT_n.js"
     ],
     "isEntry": true,
     "src": "index.html"
-  },
-  "mapbox-gl.css": {
-    "file": "mapbox-gl-c4636267.css",
-    "src": "mapbox-gl.css"
   }
 }
