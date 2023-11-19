@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # scripts directory
 SHELL_PATH=$(dirname "$0")
