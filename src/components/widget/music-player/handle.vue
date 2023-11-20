@@ -159,7 +159,7 @@
         height: 100%;
         overflow: hidden;
         background-color: $module-bg-darker-1;
-        background-image: url('/images/music.webp');
+        background-image: surl('/images/music.webp');
         background-size: cover;
       }
 

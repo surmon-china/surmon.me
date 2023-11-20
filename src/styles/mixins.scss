@@ -114,7 +114,8 @@
 }
 
 @mixin motion-blur-filter($param: 'horizontal') {
-  filter: url($source-url + '/images/filters/motion-blur.svg##{$param}');
+  // https://github.com/jonathantneal/svg4everybody/issues/16
+  filter: surl('/images/filters/motion-blur.svg##{$param}');
 }
 
 /// Text Shadow

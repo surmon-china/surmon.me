@@ -1,11 +1,17 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
-  const { isDarkTheme } = useEnhancer()
+  import { getAssetURL } from '/@/transforms/url'
+  const { cdnDomain, isDarkTheme } = useEnhancer()
+  const backgroundImage = getAssetURL(cdnDomain, '/images/background.png')
 </script>
 
 <template>
   <div id="background">
-    <div class="image" :class="{ dark: isDarkTheme }"></div>
+    <div
+      class="image"
+      :class="{ dark: isDarkTheme }"
+      :style="{ backgroundImage: `url('${backgroundImage}')` }"
+    ></div>
   </div>
 </template>
 
@@ -27,8 +33,6 @@
       width: 100%;
       height: 100%;
       opacity: 0.3;
-      background: url('/images/background.png');
-
       &.dark {
         opacity: 0.2;
       }

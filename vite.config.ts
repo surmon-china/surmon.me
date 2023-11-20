@@ -2,6 +2,7 @@
  * @file vite config
  * @module vite.config
  * @author Surmon <https://github.com/surmon-china>
+ * @reference https://vitejs.dev/config/#conditional-config
  */
 
 import path from 'path'
@@ -13,9 +14,7 @@ import packageJSON from './package.json'
 const CWD = process.cwd()
 const BASE_ENV_CONFIG = loadEnv('', CWD)
 
-// https://vitejs.dev/config/#conditional-config
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(({ mode }) => {
   const TARGET_ENV_CONFIG = loadEnv(mode, CWD)
   // console.info('vite config', { command, mode, TARGET_ENV_CONFIG })
 
@@ -30,18 +29,6 @@ export default defineConfig(({ command, mode }) => {
     },
     define: {
       __APP_VERSION__: JSON.stringify(packageJSON.version)
-    },
-    experimental: {
-      // CDN urls have more layers of subdirectories that need to be added at build time
-      // https://vitejs.dev/guide/build.html#advanced-base-options
-      renderBuiltUrl(filename: string, { hostType, type }) {
-        if (type === 'public' && hostType === 'css') {
-          // ref: transforms / url.ts -> CDNPrefix
-          return '/assets/' + filename
-        } else {
-          return '/' + filename
-        }
-      }
     },
     server: {
       open: true,
@@ -86,10 +73,9 @@ export default defineConfig(({ command, mode }) => {
       exclude: [
         // browser
         'intersection-observer',
-        // Node.js
+        // server
         'express',
         'lru-cache',
-        'node-schedule',
         'cookie-parser',
         'serialize-javascript',
         'wonderful-bing-wallpaper'
@@ -111,14 +97,14 @@ export default defineConfig(({ command, mode }) => {
             if (id.includes('node_modules')) {
               const basics = [
                 'swiper',
-                'emoji-233333',
                 'lozad',
                 'marked',
-                '@braintree/sanitize-url',
-                'serialize-javascript',
+                'emoji-233333',
                 'highlight.js',
                 'ua-parse-js',
-                'intersection-observer'
+                'intersection-observer',
+                'serialize-javascript',
+                '@braintree/sanitize-url'
               ]
 
               if (basics.some((exp) => id.includes(`node_modules/${exp}`))) {

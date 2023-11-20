@@ -2,8 +2,10 @@
 
 // overwrite in vite.config.ts
 // Used to specify absolute URL addresses in CSS, such as in the following svg scenario
-// https://github.com/jonathantneal/svg4everybody/issues/16
 $source-url: '' !default;
+@function surl($path) {
+  @return url('#{$source-url}#{$path}');
+}
 
 // theme colors
 $body-bg: var(--body-bg);

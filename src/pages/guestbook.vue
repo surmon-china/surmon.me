@@ -17,7 +17,7 @@
     isMobile?: boolean
   }>()
 
-  const { i18n: _i18n, seoMeta, gtag, gState, isDarkTheme, isZhLang } = useEnhancer()
+  const { i18n: _i18n, seoMeta, gtag, gState, isZhLang } = useEnhancer()
   const { identity, appOption, comment: commentStore } = useStores()
   const isLiked = computed(() => identity.isLikedPage(CommentPostId.Guestbook))
   const siteLikes = computed(() => appOption.data?.meta.likes || 0)
@@ -80,7 +80,7 @@
             <span class="count">{{ isLiked ? `${siteLikes - 1} + 1` : siteLikes }}</span>
           </button>
           <span class="slogan">
-            <webfont class="text" :class="{ dark: isDarkTheme }">
+            <webfont class="text">
               <i18n :k="LanguageKey.GUESTBOOK_SLOGAN" />
             </webfont>
           </span>
@@ -172,20 +172,13 @@
         border-top-right-radius: $mini-radius;
         border-bottom-right-radius: $mini-radius;
         background: linear-gradient(to left, $module-bg-lighter, $module-bg, transparent);
+        mix-blend-mode: screen;
         opacity: 0.8;
         cursor: none;
 
         .text {
           letter-spacing: 0.3px;
-          color: $text;
-          background-clip: text;
-          background-image: url('/images/page-guestbook/banner.webp');
-          background-position: 100% 80%;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          &.dark {
-            -webkit-text-fill-color: $text !important;
-          }
+          color: $text-darker;
         }
       }
     }
