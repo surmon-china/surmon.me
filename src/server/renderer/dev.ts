@@ -5,7 +5,7 @@ import { createServer } from 'vite'
 import type { RenderResult } from '@/ssr'
 import { ROOT_PATH } from '../helpers/configurer'
 import { CacheClient } from '../cache'
-import { resolveTemplate } from './template'
+import { resolveTemplate } from './_template'
 
 export const enableDevRenderer = async (app: Express, cache: CacheClient) => {
   // https://vitejs.dev/guide/ssr.html
