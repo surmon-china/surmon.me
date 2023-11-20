@@ -34,12 +34,10 @@ pnpm install --frozen-lockfile
 echo "[deploy] release downloading..."
 
 # Download and unzip the release package
+curl -sOL https://github.com/surmon-china/surmon.me/archive/refs/heads/release.zip
+unzip -q release.zip
 rm -rf dist
-mkdir -p dist
-cd dist
-curl -sOL https://github.com/surmon-china/surmon.me/archive/refs/heads/release.zip && unzip -q release.zip
-mv surmon.me-release/* ./
-rm -rf surmon.me-release
+mv surmon.me-release dist
 rm -rf release.zip
 
 # Restart the PM2 application

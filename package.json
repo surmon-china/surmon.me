@@ -10,6 +10,7 @@
     "url": "https://github.com/surmon-china/surmon.me.git"
   },
   "type": "module",
+  "main": "dist/bff.js",
   "scripts": {
     "dev": "NODE_ENV=development tsx watch --ignore vite.config.ts.timestamp-*.mjs ./src/bff.ts",
     "build": "node ./sbundler/index.js",
