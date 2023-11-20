@@ -15,7 +15,7 @@ echo "[deploy] stop pm2 app..."
 pm2 stop "$PM2_APP_NAME" -s
 
 # Upgrade source code & release package
-sh ${SHELL_PATH}/upgrade.sh
+sh ${SHELL_PATH}/upgrade-on-server.sh
 
 # Restart the PM2 application
 echo "[deploy] restart pm2 app..."

@@ -48,4 +48,4 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
-          script: sh ${{ secrets.DEPLOY_ROOT_PATH }}/scripts/deploy.sh
+          script: sh ${{ secrets.DEPLOY_ROOT_PATH }}/scripts/deploy-on-server.sh
