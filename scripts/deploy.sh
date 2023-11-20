@@ -1,11 +1,13 @@
 #!/bin/bash
 set -e
 
+# PM2 application name
+PM2_APP_NAME=surmon.me
+
 # scripts directory
 SHELL_PATH=$(dirname "$0")
 
-# PM2 application name
-PM2_APP_NAME=surmon.me
+echo "[deploy] starting..."
 
 # Stop the PM2 application
 # pm2 -s –silent: hide all messages
@@ -19,4 +21,4 @@ sh ${SHELL_PATH}/upgrade.sh
 echo "[deploy] restart pm2 app..."
 pm2 restart "$PM2_APP_NAME" -s
 
-echo "[deploy] finished"
+echo "[deploy] finished."

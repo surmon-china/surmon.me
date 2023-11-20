@@ -4,7 +4,7 @@ set -e
 # scripts directory
 SHELL_PATH=$(dirname "$0")
 
-echo "[upgrade] start..."
+echo "[upgrade] starting..."
 
 cd "$SHELL_PATH"
 cd ..
@@ -35,11 +35,4 @@ else
   git clone --depth 1 -b release https://github.com/surmon-china/surmon.me.git ./dist
 fi
 
-# echo "[upgrade] release downloading..."
-# curl -sOL https://github.com/surmon-china/surmon.me/archive/refs/heads/release.zip
-# unzip -q release.zip
-# rm -rf dist
-# mv surmon.me-release dist
-# rm -rf release.zip
-
-echo "[upgrade] finished"
+echo "[upgrade] finished."
