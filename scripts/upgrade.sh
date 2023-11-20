@@ -6,29 +6,40 @@ SHELL_PATH=$(dirname "$0")
 
 echo "[upgrade] start..."
 
-# Navigate to the project root directory
 cd "$SHELL_PATH"
 cd ..
 
-# Print information
-echo "[upgrade] pulling source code..."
+echo "[upgrade] pulling latest source code..."
 
-# Fetch the latest code
-git fetch --all && git reset --hard origin/main && git pull
-git checkout main
+# latest source code
+git fetch origin main
+git reset --hard origin/main
+git pull origin main --depth 1
 
-# Install dependencies
 echo "[upgrade] pnpm installing..."
+
+# install dependencies
 pnpm install --frozen-lockfile
 
-# Print information
-echo "[upgrade] release downloading..."
+# latest release code
+if [ -d "./dist/.git" ]; then
+  echo "[upgrade] pulling latest release code..."
+  cd ./dist
+  git fetch origin release
+  git reset --hard origin/release
+  git pull origin release --depth 1
+else
+  echo "[upgrade] cloning latest release code..."
+  rm -rf ./dist
+  mkdir -p dist
+  git clone --depth 1 -b release https://github.com/surmon-china/surmon.me.git ./dist
+fi
 
-# Download and unzip the release package
-curl -sOL https://github.com/surmon-china/surmon.me/archive/refs/heads/release.zip
-unzip -q release.zip
-rm -rf dist
-mv surmon.me-release dist
-rm -rf release.zip
+# echo "[upgrade] release downloading..."
+# curl -sOL https://github.com/surmon-china/surmon.me/archive/refs/heads/release.zip
+# unzip -q release.zip
+# rm -rf dist
+# mv surmon.me-release dist
+# rm -rf release.zip
 
 echo "[upgrade] finished"
