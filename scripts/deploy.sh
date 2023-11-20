@@ -8,8 +8,8 @@ SHELL_PATH=$(dirname "$0")
 PM2_APP_NAME=surmon.me
 
 # Stop the PM2 application
+# pm2 -s –silent: hide all messages
 echo "[deploy] stop pm2 app..."
-# -s –silent: hide all messages
 pm2 stop "$PM2_APP_NAME" -s
 
 # Upgrade source code & release package
