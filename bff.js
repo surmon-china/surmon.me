@@ -1085,40 +1085,9 @@ const external_fs_namespaceObject = external_fs_x({ ["default"]: () => __WEBPACK
 var external_vite_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
 var external_vite_y = x => () => x
 const external_vite_namespaceObject = external_vite_x({ ["createServer"]: () => __WEBPACK_EXTERNAL_MODULE_vite__.createServer });
-;// CONCATENATED MODULE: ./src/server/renderer/template.ts
-// manifest: https://vitejs.dev/guide/backend-integration.html
-// render manifeat json to HTML
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const renderAssetsByManifest = (manifest, prefix) => {
-    const item = Object.values(manifest);
-    const entry = item.find((item) => item.isEntry);
-    if (!entry)
-        return '';
-    const entryScript = entry.file;
-    const entryStyles = entry.css || [];
-    const entryImports = entry.imports || [];
-    const entryDynamicImports = entry.dynamicImports || [];
-    const importFiles = Array.from(new Set([...entryImports, ...entryDynamicImports])).map((key) => manifest[key].file);
-    return [
-        `<script type="module" crossorigin src="${prefix}/${entryScript}"></script>`,
-        ...importFiles.map((item) => `<link rel="modulepreload" crossorigin href="${prefix}/${item}">`),
-        ...entryStyles.map((item) => `<link rel="stylesheet" href="${prefix}/${item}">`)
-    ].join('\n');
-};
-// resolve assets URL prefix
-const resolveAssetsPrefixByManiFest = (html, manifest, prefix) => {
-    // List all the files in the manifest, when any file is matched, replace it with the prefix
-    return Object.values(manifest).reduce((result, { file }) => {
-        return result.replace(new RegExp(`(href|src)="/${file}"`, 'g'), `$1="${prefix}/${file}"`);
-    }, html);
-};
+;// CONCATENATED MODULE: ./src/server/renderer/_template.ts
 const resolveTemplate = (input) => {
-    let result = input.template;
-    // deterministically changing file prefixes with manifest
-    if (input.assetsPrefix && input.manifest) {
-        result = resolveAssetsPrefixByManiFest(result, input.manifest, input.assetsPrefix);
-    }
-    return (result
+    return (input.template
         // MARK: replace! $ sign & use function replacer
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_string_as_a_parameter
         // https://github.com/vueuse/head#ssr-rendering
@@ -1184,7 +1153,46 @@ const enableDevRenderer = async (app, cache) => {
     });
 };
 
+;// CONCATENATED MODULE: ./src/server/renderer/_manifest.ts
+// manifest: https://vitejs.dev/guide/backend-integration.html
+// render manifeat json to HTML
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const renderAssetsByManifest = (manifest, prefix) => {
+    const item = Object.values(manifest);
+    const entry = item.find((item) => item.isEntry);
+    if (!entry)
+        return '';
+    const entryScript = entry.file;
+    const entryStyles = entry.css || [];
+    const entryImports = entry.imports || [];
+    const entryDynamicImports = entry.dynamicImports || [];
+    const importFiles = Array.from(new Set([...entryImports, ...entryDynamicImports])).map((key) => manifest[key].file);
+    return [
+        `<script type="module" crossorigin src="${prefix}/${entryScript}"></script>`,
+        ...importFiles.map((item) => `<link rel="modulepreload" crossorigin href="${prefix}/${item}">`),
+        ...entryStyles.map((item) => `<link rel="stylesheet" href="${prefix}/${item}">`)
+    ].join('\n');
+};
+const getManifestFlatFiles = (manifest) => {
+    const files = new Set();
+    Object.values(manifest).forEach((item) => {
+        files.add(item.file);
+        item.css?.forEach((css) => files.add(css));
+        item.imports?.forEach((imports) => files.add(imports));
+        item.dynamicImports?.forEach((dynamicImports) => files.add(dynamicImports));
+    });
+    return Array.from(files);
+};
+// deterministically resolve file URL prefixes with manifest
+const resolveAssetsPrefix = (html, manifestFiles, filePrefix) => {
+    // List all the files in the manifest, when any file is matched, replace it with the prefix
+    return manifestFiles.reduce((result, file) => {
+        return result.replace(new RegExp(`(href|src)="/${file}"`, 'g'), `$1="${filePrefix}/${file}"`);
+    }, html);
+};
+
 ;// CONCATENATED MODULE: ./src/server/renderer/prod.ts
+
 
 
 
@@ -1193,6 +1201,7 @@ const enableProdRenderer = async (app, cache) => {
     const template = external_fs_namespaceObject["default"].readFileSync(external_path_namespaceObject["default"].resolve(DIST_PATH, 'template.html'), 'utf-8');
     const manifest = external_fs_namespaceObject["default"].readFileSync(external_path_namespaceObject["default"].resolve(DIST_PATH, 'manifest.json'), 'utf-8');
     const manifestJSON = JSON.parse(manifest);
+    const manifestFiles = getManifestFlatFiles(manifestJSON);
     // remove CSR entry
     // Bypass webpack rewrite dynamic import, it will be resolved at runtime.
     // https://github.com/vercel/ncc/issues/935#issuecomment-1189850042
@@ -1206,25 +1215,21 @@ const enableProdRenderer = async (app, cache) => {
                 .status(redered.code)
                 .set({ 'Content-Type': 'text/html' })
                 .end(resolveTemplate({
-                template,
-                manifest: manifestJSON,
+                template: resolveAssetsPrefix(template, manifestFiles, redered.assetsPrefix),
                 heads: redered.heads,
                 appHTML: redered.html,
                 scripts: redered.stateScripts,
-                extraScripts: redered.contextScripts,
-                assetsPrefix: redered.assetsPrefix
+                extraScripts: redered.contextScripts
             }));
         }
         catch (error) {
             const redered = await renderError(request, error);
             response.status(redered.code).end(resolveTemplate({
-                template,
-                manifest: manifestJSON,
+                template: resolveAssetsPrefix(template, manifestFiles, redered.assetsPrefix),
                 heads: redered.heads,
                 appHTML: redered.html,
                 scripts: redered.stateScripts,
-                extraScripts: redered.contextScripts,
-                assetsPrefix: redered.assetsPrefix
+                extraScripts: redered.contextScripts
             }));
         }
     });
