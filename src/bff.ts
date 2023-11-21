@@ -5,12 +5,11 @@
  */
 
 import dotenv from 'dotenv'
-import express from 'express'
+import { META } from '@/config/app.config'
+import { BFF_TUNNEL_PREFIX as TUN, getBFFServerPort } from '@/config/bff.config'
 import { NODE_ENV, isNodeDev } from '@/server/environment'
-import { BFF_TUNNEL_PREFIX as TUNNEL, getBFFServerPort } from '@/config/bff.config'
-import { TunnelModule } from '@/constants/tunnel'
 import { BAD_REQUEST } from '@/constants/http-code'
-import { PUBLIC_PATH } from './server/config'
+import { TunnelModule } from '@/constants/tunnel'
 import { getRssXml } from './server/getters/rss'
 import { getSitemapXml } from './server/getters/sitemap'
 import { getGTagScript } from './server/getters/gtag'
@@ -36,11 +35,8 @@ export const logger = createLogger('BFF')
 // init env variables for BFF server env
 dotenv.config()
 
-// app
+// create http server app
 createExpressApp().then(async ({ app, server, cache }) => {
-  // static
-  app.use(express.static(PUBLIC_PATH))
-
   // sitemap.xml
   app.get('/sitemap.xml', async (_, response) => {
     try {
@@ -89,7 +85,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   app.get(
-    `${TUNNEL}/${TunnelModule.TwitterAggregate}`,
+    `${TUN}/${TunnelModule.TwitterAggregate}`,
     responser(() => getTwitterAggregateCache())
   )
 
@@ -103,7 +99,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   app.get(
-    `${TUNNEL}/${TunnelModule.BingWallpaper}`,
+    `${TUN}/${TunnelModule.BingWallpaper}`,
     responser(() => getWallpaperCache())
   )
 
@@ -117,7 +113,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   app.get(
-    `${TUNNEL}/${TunnelModule.GitHubSponsors}`,
+    `${TUN}/${TunnelModule.GitHubSponsors}`,
     responser(() => getSponsorsCache())
   )
 
@@ -131,7 +127,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   app.get(
-    `${TUNNEL}/${TunnelModule.NetEaseMusic}`,
+    `${TUN}/${TunnelModule.NetEaseMusic}`,
     responser(() => get163MusicCache())
   )
 
@@ -145,7 +141,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   // Instagram medias route
-  app.get(`${TUNNEL}/${TunnelModule.InstagramMedias}`, (request, response, next) => {
+  app.get(`${TUN}/${TunnelModule.InstagramMedias}`, (request, response, next) => {
     const afterToken = request.query.after
     if (afterToken && typeof afterToken !== 'string') {
       errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
@@ -164,7 +160,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   // Instagram media children
-  app.get(`${TUNNEL}/${TunnelModule.InstagramMediaChildren}`, (request, response, next) => {
+  app.get(`${TUN}/${TunnelModule.InstagramMediaChildren}`, (request, response, next) => {
     const mediaId = request.query.id
     if (!mediaId || typeof mediaId !== 'string') {
       errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
@@ -190,7 +186,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   app.get(
-    `${TUNNEL}/${TunnelModule.InstagramCalendar}`,
+    `${TUN}/${TunnelModule.InstagramCalendar}`,
     responser(() => getInsCalendarCache())
   )
 
@@ -204,12 +200,12 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   app.get(
-    `${TUNNEL}/${TunnelModule.YouTubePlaylist}`,
+    `${TUN}/${TunnelModule.YouTubePlaylist}`,
     responser(() => getYouTubePlaylistsCache())
   )
 
   // YouTube videos
-  app.get(`${TUNNEL}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
+  app.get(`${TUN}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
     const playlistId = request.query.id
     if (!playlistId || typeof playlistId !== 'string') {
       errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
@@ -227,7 +223,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // GitHub contributions
   app.get(
-    `${TUNNEL}/${TunnelModule.GitHubContributions}`,
+    `${TUN}/${TunnelModule.GitHubContributions}`,
     responser(() => {
       return cacher.passive(cache, {
         key: TunnelModule.GitHubContributions,
@@ -245,7 +241,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // GitHub statistic
   app.get(
-    `${TUNNEL}/${TunnelModule.OpenSourceGitHubStatistic}`,
+    `${TUN}/${TunnelModule.OpenSourceGitHubStatistic}`,
     responser(() => {
       return cacher.passive(cache, {
         key: TunnelModule.OpenSourceGitHubStatistic,
@@ -257,7 +253,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // NPM statistic
   app.get(
-    `${TUNNEL}/${TunnelModule.OpenSourceNPMStatistic}`,
+    `${TUN}/${TunnelModule.OpenSourceNPMStatistic}`,
     responser(() => {
       return cacher.passive(cache, {
         key: TunnelModule.OpenSourceNPMStatistic,
@@ -269,7 +265,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // Douban movies
   app.get(
-    `${TUNNEL}/${TunnelModule.DoubanMovies}`,
+    `${TUN}/${TunnelModule.DoubanMovies}`,
     responser(() => {
       return cacher.passive(cache, {
         key: TunnelModule.DoubanMovies,
@@ -281,7 +277,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // GoogleMaps - My Maps
   app.get(
-    `${TUNNEL}/${TunnelModule.MyGoogleMap}`,
+    `${TUN}/${TunnelModule.MyGoogleMap}`,
     responser(() => {
       return cacher.passive(cache, {
         key: TunnelModule.MyGoogleMap,
@@ -292,7 +288,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   )
 
   // WebFont
-  app.get(`${TUNNEL}/${TunnelModule.WebFont}`, async (request, response) => {
+  app.get(`${TUN}/${TunnelModule.WebFont}`, async (request, response) => {
     const fontname = decodeURIComponent(String(request.query.fontname)).trim()
     const text = decodeURIComponent(String(request.query.text)).trim()
     if (!text || !fontname) {
@@ -316,11 +312,13 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // run
   server.listen(getBFFServerPort(), () => {
-    const infos = [
-      `in ${NODE_ENV}`,
-      `at ${new Date().toLocaleString()}`,
-      `listening on ${JSON.stringify(server.address())}`
-    ]
-    logger.success(`Run! ${infos.join(', ')}.`)
+    const address = server.address()
+    const port = typeof address === 'string' ? address : address?.port ?? getBFFServerPort()
+    logger.success(
+      `${META.title} app is running!`,
+      `| env: ${NODE_ENV}`,
+      `| port: ${port}`,
+      `| ${new Date().toLocaleString()}`
+    )
   })
 })
