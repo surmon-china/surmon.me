@@ -182,7 +182,7 @@ export const renderApp = async (request: Request, cache: CacheClient): Promise<R
   // render from cache
   const cacheKey = getCacheKey(app, ssrContext)
   const isCached = await cache.has(cacheKey)
-  devDebug('cache:', cacheKey, '|', `hit: ${isCached}`)
+  devDebug(`cache: "${cacheKey}" | hit:`, isCached)
   if (isCached) {
     return {
       ...(await cache.get<RenderResult>(cacheKey)),
