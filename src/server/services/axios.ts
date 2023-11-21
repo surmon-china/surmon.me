@@ -1,3 +1,9 @@
+/**
+ * @file BFF Server fetcher
+ * @module server.service.axios
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
 import _axios from 'axios'
 import Agent, { HttpsAgent } from 'agentkeepalive'
 
