@@ -44,7 +44,7 @@ export const createGlobalState = (config: GlobalStateConfig) => {
   const defaultError = { code: INVALID_ERROR }
   const setRenderError = (error: any) => {
     onClient(() => {
-      logger.warn('error:', error)
+      logger.failure('error:', error)
     })
     if (!error) {
       // clear error

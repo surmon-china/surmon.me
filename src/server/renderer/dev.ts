@@ -3,8 +3,8 @@ import path from 'path'
 import { Express } from 'express'
 import { createServer } from 'vite'
 import type { RenderResult } from '@/ssr'
-import { ROOT_PATH } from '../helpers/configurer'
-import { CacheClient } from '../cache'
+import { ROOT_PATH } from '../config'
+import { CacheClient } from '../services/cache'
 import { resolveTemplate } from './_template'
 
 export const enableDevRenderer = async (app: Express, cache: CacheClient) => {

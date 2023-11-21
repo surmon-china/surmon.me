@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '@/server/services/axios'
 import { XMLParser } from 'fast-xml-parser'
 
 // https://github.com/zedeus/nitter

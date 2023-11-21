@@ -5,12 +5,12 @@
  */
 
 import RSS from 'rss'
-import axios from 'axios'
+import axios from '@/server/services/axios'
 import { META } from '@/config/app.config'
 import type { Archive } from '@/interfaces/archive'
 import type { NodePressResult } from '@/services/nodepress'
-import { getNodePressAPI } from '../helpers/configurer'
-import { getArticleURL } from '../helpers/route'
+import { getNodePressAPI } from '../config'
+import { getArticleURL } from '../route'
 
 export const getRssXml = async () => {
   const api = `${getNodePressAPI()}/archive`

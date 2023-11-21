@@ -110,7 +110,7 @@
 
   const handleDeleteComment = (commentId: number) => {
     commentStore.deleteComment(commentId).catch((error) => {
-      logger.warn('delete comment failed', error)
+      logger.failure('delete comment failed', error)
       alert(error.message)
     })
   }
@@ -173,7 +173,7 @@
       // random emoji rain
       luanchEmojiRain(payload.content)
     } catch (error: any) {
-      logger.warn('submit comment failed:', error)
+      logger.failure('submit comment failed:', error)
       throw error.message
     }
   }

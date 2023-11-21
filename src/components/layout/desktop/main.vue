@@ -42,13 +42,13 @@
   onMounted(() => {
     // bing wallpaper
     wallpaperStore.fetch().catch((error) => {
-      logger.warn('bing wallpaper fetch failed!', error)
+      logger.failure('bing wallpaper fetch failed!', error)
     })
     // music player
     useMusic()
       .init()
       .catch((error) => {
-        logger.warn('player init failed!', error)
+        logger.failure('player init failed!', error)
       })
   })
 </script>

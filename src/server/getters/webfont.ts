@@ -7,7 +7,7 @@
 import path from 'path'
 import fs from 'fs-extra'
 import Fontmin from 'fontmin'
-import { PUBLIC_PATH } from '../helpers/configurer'
+import { PUBLIC_PATH } from '../config'
 
 export const WebFontContentType = 'font/woff2'
 

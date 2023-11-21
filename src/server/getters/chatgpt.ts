@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import axios from 'axios'
+import axios from '@/server/services/axios'
 import { getChatGPTShareURL } from '@/transforms/chatgpt'
 
 export interface ChatGPTShareLink {

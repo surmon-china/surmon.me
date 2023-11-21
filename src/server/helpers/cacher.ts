@@ -4,90 +4,101 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import type { CacheClient, Seconds } from '../cache'
-import { cacherLogger } from '../logger'
+import type { CacheClient, Seconds } from '../services/cache'
+import { getErrorMessage } from './responser'
+import { createLogger } from '@/utils/logger'
 
-export interface CacherConfig {
-  cache: CacheClient
-  key: string
-  /** in seconds */
-  ttl: Seconds
-  /** retry when after [seconds] */
-  retryWhen?: Seconds
-  /** if `true`, this data will never expire. default: `true` */
-  preRefresh?: boolean
-  getter: () => Promise<any>
+export const logger = createLogger('BFF:Cacher')
+
+export const minutes = (m: number): Seconds => m * 60
+export const hours = (h: number): Seconds => h * minutes(60)
+export const days = (d: number): Seconds => d * hours(24)
+
+const humanizeSeconds = (s: number): string => {
+  const hours = Math.floor(s / 3600)
+  const minutes = Math.floor((s % 3600) / 60)
+  const seconds = s % 60
+  const formattedHours = hours > 0 ? `${hours}h ` : ''
+  const formattedMinutes = minutes > 0 ? `${minutes}m ` : ''
+  const formattedSeconds = seconds > 0 ? `${seconds}s` : ''
+  return formattedHours + formattedMinutes + formattedSeconds
 }
 
-// fetch & cache
-const fetchAndCache = async (config: CacherConfig) => {
-  const data = await config.getter()
-  await config.cache.set(config.key, data, config.ttl)
+export interface CacherOptions<T> {
+  key: string
+  ttl: Seconds
+  getter(): Promise<T>
+}
+
+const getCacheKey = (key: string): string => `bff:${key}`
+
+/** Execute the getter and store the data into the cache. */
+const execute = async <T>(cache: CacheClient, options: CacherOptions<T>) => {
+  const data = await options.getter()
+  await cache.set(options.key, data, options.ttl)
   return data
 }
 
-// timeout prefetch
-const setTimeoutPreRefresh = (config: CacherConfig, preSeconds: number, refreshCount = 1) => {
-  const timeoutSeconds = config.ttl - preSeconds
-  cacherLogger.info(
-    'setTimeoutPreRefresh',
-    `> ${config.key} + ${refreshCount}`,
-    `> cache expire when after ${config.ttl}s`,
-    `> pre refresh when after ${timeoutSeconds}s`
-  )
-
-  setTimeout(async () => {
-    try {
-      await fetchAndCache(config)
-      setTimeoutPreRefresh(config, preSeconds, refreshCount + 1)
-    } catch (error) {
-      cacherLogger.warn(`setTimeoutPreRefresh error:`, `> ${config.key} + ${refreshCount}`, error)
-    }
-  }, timeoutSeconds * 1000)
-}
-
-const retryingMap = new Map<string, boolean>()
-const retryFetch = async (config: CacherConfig) => {
-  if (await config.cache.has(config.key)) {
-    retryingMap.set(config.key, false)
-    return
+const passive = async <T = any>(cache: CacheClient, opts: CacherOptions<T>): Promise<T> => {
+  const options = { ...opts, key: getCacheKey(opts.key) }
+  if (await cache.has(options.key)) {
+    return await cache.get<T>(options.key)
   }
 
   try {
-    await fetchAndCache(config)
+    const result = await execute(cache, options)
+    logger.success('passive succeed:', opts.key, '|', `ttl: ${humanizeSeconds(options.ttl)}`)
+    return result
   } catch (error) {
-    cacherLogger.warn('retryFetch error:', error)
-  } finally {
-    retryingMap.set(config.key, false)
+    logger.failure(
+      'passive failure:',
+      `${opts.key} |`,
+      `ttl: ${humanizeSeconds(options.ttl)} |`,
+      `"${getErrorMessage(error)}"`
+    )
+    return Promise.reject(error)
   }
 }
 
-export const cacher = async <T = any>(configInput: CacherConfig): Promise<T> => {
-  // key prefix
-  const config: CacherConfig = { ...configInput, key: `bff_${configInput.key}` }
+export interface IntervalCacherOptions<T> extends CacherOptions<T> {
+  interval: Seconds
+  retry: Seconds
+}
 
-  // cached
-  if (await config.cache.has(config.key)) {
-    return await config.cache.get<T>(config.key)
+const interval = <T>(cache: CacheClient, opts: IntervalCacherOptions<T>) => {
+  const options = { ...opts, key: getCacheKey(opts.key) }
+  const execInterval = async (refreshCount = 1) => {
+    try {
+      await execute(cache, options)
+      setTimeout(() => execInterval(refreshCount + 1), options.interval * 1000)
+      logger.success(
+        'interval succeed:',
+        `${refreshCount}+ ${opts.key} |`,
+        `ttl: ${humanizeSeconds(options.ttl)} |`,
+        `next: ${humanizeSeconds(options.interval)}`
+      )
+    } catch (error) {
+      setTimeout(() => execInterval(refreshCount + 1), options.retry * 1000)
+      logger.failure(
+        'interval failure:',
+        `${refreshCount}+ ${opts.key} |`,
+        `retry: ${humanizeSeconds(options.retry)} |`,
+        `"${getErrorMessage(error)}"`
+      )
+    }
   }
 
-  try {
-    // 1. fetch & cache
-    const data = await fetchAndCache(config)
-    // 2. refresh 1 minute before ttl expires to get the latest data,
-    // This behavior is performed recursively and causes the data to never expire.
-    if (config.preRefresh !== false) {
-      setTimeoutPreRefresh(config, 60)
+  execInterval()
+  return async () => {
+    if (await cache.has(options.key)) {
+      return await cache.get(options.key)
+    } else {
+      throw `No cached data for "${opts.key}".`
     }
-    // 3. return data
-    return data
-  } catch (error: unknown) {
-    // retry only once
-    if (config.retryWhen && !retryingMap.get(config.key)) {
-      retryingMap.set(config.key, true)
-      setTimeout(() => retryFetch({ ...config }), config.retryWhen * 1000)
-    }
-    // return error
-    throw error
   }
+}
+
+export default {
+  passive,
+  interval
 }

@@ -23,11 +23,11 @@ import API_CONFIG from '/@/config/api.config'
 import components from './components'
 import App from './index.vue'
 
-console.group(`[APP:INIT]`)
+console.group(`🔵 [APP:INIT]`)
 console.table({ APP_VERSION, APP_ENV, NODE_ENV })
 console.groupEnd()
 
-console.group(`[APP:API]`)
+console.group(`🔵 [APP:API]`)
 console.table(API_CONFIG)
 console.groupEnd()
 

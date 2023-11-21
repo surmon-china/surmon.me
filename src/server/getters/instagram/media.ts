@@ -1,4 +1,4 @@
-import axios, { isAxiosError } from 'axios'
+import axios, { isAxiosError } from '@/server/services/axios'
 import { INSTAGRAM_TOKEN } from '@/config/bff.yargs'
 
 export interface InstagramMediaItem {

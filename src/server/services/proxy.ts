@@ -10,7 +10,9 @@ import { isNodeProd } from '@/server/environment'
 import { FORBIDDEN, BAD_REQUEST, INVALID_ERROR } from '@/constants/http-code'
 import { BFF_PROXY_PREFIX, BFF_PROXY_ALLOWLIST_REGEXP, getStaticURL } from '@/config/bff.config'
 import { META } from '@/config/app.config'
-import { proxyLogger } from './logger'
+import { createLogger } from '@/utils/logger'
+
+export const logger = createLogger('BFF:Proxy')
 
 export const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/*`
 
@@ -55,7 +57,7 @@ export const proxyer = (): RequestHandler => {
     if (request.socket.destroyed && error.code === 'ECONNRESET') {
       request._proxyRequest?.abort?.()
     }
-    proxyLogger.warn(`error: ${error.message} > ${target?.href}`)
+    logger.failure(`error: ${error.message} > ${target?.href}`)
     response.writeHead(INVALID_ERROR, { 'Content-Type': 'text/plain' })
     response.end('Proxy error: ' + error.message)
   })

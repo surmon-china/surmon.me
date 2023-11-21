@@ -19,7 +19,7 @@ import { SUCCESS, INVALID_ERROR } from './constants/http-code'
 import { CDNPrefix, getCDNPrefixURL } from '/@/transforms/url'
 import { isCNCode } from '/@/transforms/region'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
-import type { CacheClient } from '/@/server/cache'
+import type { CacheClient } from '@/server/services/cache'
 import { createLogger } from '/@/utils/logger'
 import { isDev } from '/@/app/environment'
 import API_CONFIG from '/@/config/api.config'
@@ -85,6 +85,7 @@ const createApp = (ssrContext: SSRContext): MainApp => {
 const renderHTML = async (mainApp: MainApp, ssrContext: SSRContext): Promise<Omit<RenderResult, 'code'>> => {
   devDebug(`route: ${ssrContext.requestURL}`)
   const { app, router, store, head, theme, globalState } = mainApp
+  const startTime = Date.now()
 
   devDebug('- 1. route.push.validate')
   await router.push(ssrContext.requestURL)
@@ -125,6 +126,7 @@ const renderHTML = async (mainApp: MainApp, ssrContext: SSRContext): Promise<Omi
     })
   )
 
+  devDebug('rendered:', Date.now() - startTime, 'ms')
   return {
     html,
     heads,
@@ -180,7 +182,7 @@ export const renderApp = async (request: Request, cache: CacheClient): Promise<R
   // render from cache
   const cacheKey = getCacheKey(app, ssrContext)
   const isCached = await cache.has(cacheKey)
-  devDebug('cache:', cacheKey, '|', isCached)
+  devDebug('cache:', cacheKey, '|', `hit: ${isCached}`)
   if (isCached) {
     return {
       ...(await cache.get<RenderResult>(cacheKey)),

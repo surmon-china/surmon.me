@@ -8,8 +8,8 @@ import http from 'http'
 import express from 'express'
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
-import { PROXY_ROUTE_PATH, proxyer } from './proxy'
-import { createCacheClient } from './cache'
+import { PROXY_ROUTE_PATH, proxyer } from './services/proxy'
+import { createCacheClient } from './services/cache'
 import { META } from '@/config/app.config'
 
 export const createExpressApp = async () => {

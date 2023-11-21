@@ -81,7 +81,7 @@
           isLike ? identity.likeComment(commentId) : identity.dislikeComment(commentId)
         } catch (error) {
           const message = _i18n.t(LanguageKey.POST_ACTION_ERROR)
-          logger.warn(message, error)
+          logger.failure(message, error)
           alert(message)
         }
       }

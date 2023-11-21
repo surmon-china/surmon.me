@@ -1,4 +1,4 @@
-import axios, { isAxiosError } from 'axios'
+import axios, { isAxiosError } from '@/server/services/axios'
 import { SOTWE_SCRAPER_TOKEN } from '@/config/bff.yargs'
 import { isNodeDev } from '@/server/environment'
 

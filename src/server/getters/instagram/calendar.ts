@@ -1,6 +1,4 @@
-import { INSTAGRAM_TOKEN } from '@/config/bff.yargs'
 import { getInstagramMedias } from './media'
-import { getterLogger } from '@/server/logger'
 
 interface InstagramBasicMediaItem {
   id: string
@@ -10,64 +8,65 @@ interface InstagramBasicMediaItem {
 interface AllMediasFetchParams {
   since: number
   after?: string
-  medias?: Array<InstagramBasicMediaItem>
-  onSucceed?(medias: Array<InstagramBasicMediaItem>)
-  onFailed?(error: unknown)
+  medias?: InstagramBasicMediaItem[]
+  onSucceeded?(medias: InstagramBasicMediaItem[]): void
+  onFailed?(error: unknown): void
 }
 
-function doFetchAllMedias({ since, after, medias = [], onSucceed, onFailed }: AllMediasFetchParams) {
-  getInstagramMedias<InstagramBasicMediaItem>({ fields: 'id,timestamp', limit: 100, since, after })
-    .then((result) => {
-      medias.push(...result.data)
-      if (result.paging.next) {
-        doFetchAllMedias({
-          medias,
-          since,
-          after: result.paging.cursors.after,
-          onSucceed,
-          onFailed
-        })
-      } else {
-        onSucceed?.(medias)
+async function fetchAllMedias({
+  since,
+  after,
+  medias = [],
+  onSucceeded,
+  onFailed
+}: AllMediasFetchParams): Promise<void> {
+  try {
+    const result = await getInstagramMedias<InstagramBasicMediaItem>({
+      fields: 'id,timestamp',
+      limit: 100,
+      since,
+      after
+    })
+
+    if (result.paging.next) {
+      await fetchAllMedias({
+        since,
+        after: result.paging.cursors.after,
+        medias: [...medias, ...result.data],
+        onSucceeded,
+        onFailed
+      })
+    } else {
+      onSucceeded?.([...medias, ...result.data])
+    }
+  } catch (error) {
+    onFailed?.(error)
+  }
+}
+
+export interface InstagramCalendarItem {
+  date: string
+  count: number
+}
+
+export const getInstagramCalendar = () => {
+  return new Promise<Array<InstagramCalendarItem>>((resolve, reject) => {
+    // startTime: Only get the most recent 12 months of data
+    const today = new Date()
+    today.setDate(1)
+    today.setFullYear(today.getFullYear() - 1)
+    const prevYearToday = Math.round(today.getTime() / 1000)
+
+    fetchAllMedias({
+      since: prevYearToday,
+      onFailed: reject,
+      onSucceeded: (medias) => {
+        const mediaMap = medias.reduce((accumulator, media) => {
+          const key = media.timestamp.slice(0, 10)
+          return accumulator.set(key, (accumulator.get(key) || 0) + 1)
+        }, new Map<string, number>())
+        resolve(Array.from(mediaMap, ([date, count]) => ({ date, count })))
       }
     })
-    .catch(onFailed)
-}
-
-const calendarTemp = {
-  data: [] as Array<{ date: string; count: number }>
-}
-
-function fetchAllMedias() {
-  getterLogger.info('instagram.fetchAllMedias...')
-  calendarTemp.data = []
-
-  // startTime: Only get the most recent 12 months of data
-  const today = new Date()
-  today.setDate(1)
-  today.setFullYear(today.getFullYear() - 1)
-  const prevYearToday = Math.round(today.getTime() / 1000)
-
-  doFetchAllMedias({
-    since: prevYearToday,
-    onSucceed: (medias) => {
-      getterLogger.info(`instagram.fetchAllMedias done, ${medias.length} medias. refetch when after 18h`)
-      setTimeout(() => fetchAllMedias(), 18 * 60 * 60 * 1000)
-      const map = new Map<string, number>()
-      medias.forEach((media) => {
-        const key = media.timestamp.slice(0, 10)
-        map.has(key) ? map.set(key, map.get(key)! + 1) : map.set(key, 1)
-      })
-      calendarTemp.data = Array.from(map, ([date, count]) => ({ date, count }))
-    },
-    onFailed: (error) => {
-      getterLogger.warn(`instagram.fetchAllMedias failed, retry when after 30s`, error)
-      setTimeout(() => fetchAllMedias(), 30 * 1000)
-    }
   })
-}
-
-export const getInstagramCalendar = async () => calendarTemp.data
-export const initInstagramCalendar = () => {
-  INSTAGRAM_TOKEN ? fetchAllMedias() : getterLogger.warn('instagram.fetchAllMedias skipped, no token.')
 }

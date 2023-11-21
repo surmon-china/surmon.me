@@ -4,13 +4,13 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import axios from 'axios'
+import axios from '@/server/services/axios'
 import { Readable } from 'stream'
 import { SitemapStream, streamToPromise, SitemapItemLoose, EnumChangefreq } from 'sitemap'
 import type { Archive } from '@/interfaces/archive'
 import type { NodePressResult } from '@/services/nodepress'
-import { getArticleURL, getPageURL, getTagURL, getCategoryURL } from '../helpers/route'
-import { getNodePressAPI } from '../helpers/configurer'
+import { getArticleURL, getPageURL, getTagURL, getCategoryURL } from '../route'
+import { getNodePressAPI } from '../config'
 import { META } from '@/config/app.config'
 
 export const getSitemapXml = async () => {

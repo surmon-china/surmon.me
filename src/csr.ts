@@ -35,7 +35,7 @@ import './effects/elements/index.scss'
 import './components/common/loading-indicator/index.scss'
 import './styles/app.scss'
 
-console.group(`[SSR:CONTEXT]`)
+console.group(`🔵 [SSR:CONTEXT]`)
 console.table(getSSRContextData())
 console.groupEnd()
 
@@ -65,7 +65,7 @@ app.use(gtag, {
   router,
   id: IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID,
   config: { send_page_view: false },
-  customResourceURL: '/effects/gtag'
+  customResourceURL: '/gtag-script'
 })
 
 // init: store (from SSR context or fetch)

@@ -4,10 +4,22 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import isObject from 'lodash-es/isObject'
 import { isAxiosError } from 'axios'
 import { RequestHandler, Response } from 'express'
 import { INVALID_ERROR } from '@/constants/http-code'
-import { bffLogger } from '@/server/logger'
+import { createLogger } from '@/utils/logger'
+
+export const logger = createLogger('BFF')
+
+export const getErrorMessage = (_error: unknown) => {
+  const error = isAxiosError(_error) ? _error.toJSON() : _error
+  return typeof error === 'string'
+    ? error
+    : error instanceof Error || isObject(error)
+      ? (error as any).message || (error as any)?.name
+      : JSON.stringify(error)
+}
 
 export interface ErrorerOptions {
   message: unknown
@@ -15,15 +27,9 @@ export interface ErrorerOptions {
 }
 
 export const errorer = (response: Response, { code, message }: ErrorerOptions) => {
-  bffLogger.warn(`error:`, isAxiosError(message) ? message.toJSON() : message)
+  logger.failure(`Error:`, isAxiosError(message) ? message.toJSON() : message)
   response.status(code ?? INVALID_ERROR)
-  response.send(
-    typeof message === 'string'
-      ? message
-      : message instanceof Error
-        ? message.message || message.name
-        : JSON.stringify(message)
-  )
+  response.send(getErrorMessage(message))
 }
 
 export const responser = (promise: () => Promise<any>): RequestHandler => {

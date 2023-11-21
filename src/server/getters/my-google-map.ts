@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import axios from 'axios'
+import axios from '@/server/services/axios'
 import { XMLParser } from 'fast-xml-parser'
 import { VALUABLE_LINKS } from '@/config/app.config'
 

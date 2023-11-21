@@ -7,9 +7,10 @@
 import dotenv from 'dotenv'
 import express from 'express'
 import { NODE_ENV, isNodeDev } from '@/server/environment'
-import { BFF_TUNNEL_PREFIX, getBFFServerPort } from '@/config/bff.config'
+import { BFF_TUNNEL_PREFIX as TUNNEL, getBFFServerPort } from '@/config/bff.config'
 import { TunnelModule } from '@/constants/tunnel'
 import { BAD_REQUEST } from '@/constants/http-code'
+import { PUBLIC_PATH } from './server/config'
 import { getRssXml } from './server/getters/rss'
 import { getSitemapXml } from './server/getters/sitemap'
 import { getGTagScript } from './server/getters/gtag'
@@ -17,12 +18,7 @@ import { getAllWallpapers } from './server/getters/wallpaper'
 import { getMyGoogleMap } from './server/getters/my-google-map'
 import { getTwitterAggregate } from './server/getters/twitter'
 import { getGitHubSponsors, getGitHubContributions } from './server/getters/github'
-import {
-  getInstagramMedias,
-  getInstagramMediaChildren,
-  getInstagramCalendar,
-  initInstagramCalendar
-} from './server/getters/instagram'
+import { getInstagramMedias, getInstagramMediaChildren, getInstagramCalendar } from './server/getters/instagram'
 import { getYouTubeChannelPlayLists, getYouTubeVideoListByPlayerlistId } from './server/getters/youtube'
 import { getGitHubStatistic, getNPMStatistic } from './server/getters/open-srouce'
 import { getDoubanMovies } from './server/getters/douban'
@@ -30,11 +26,12 @@ import { getSongList } from './server/getters/netease-music'
 import { getWebFont, WebFontContentType } from './server/getters/webfont'
 import { enableDevRenderer } from './server/renderer/dev'
 import { enableProdRenderer } from './server/renderer/prod'
-import { PUBLIC_PATH } from './server/helpers/configurer'
 import { responser, errorer } from './server/helpers/responser'
-import { cacher } from './server/helpers/cacher'
-import { bffLogger } from './server/logger'
+import cacher, { minutes, hours, days } from './server/helpers/cacher'
 import { createExpressApp } from './server'
+import { createLogger } from '@/utils/logger'
+
+export const logger = createLogger('BFF')
 
 // init env variables for BFF server env
 dotenv.config()
@@ -43,10 +40,8 @@ dotenv.config()
 createExpressApp().then(async ({ app, server, cache }) => {
   // static
   app.use(express.static(PUBLIC_PATH))
-  // init thirds task
-  initInstagramCalendar()
 
-  // sitemap
+  // sitemap.xml
   app.get('/sitemap.xml', async (_, response) => {
     try {
       response.header('Content-Type', 'application/xml')
@@ -56,7 +51,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
     }
   })
 
-  // RSS
+  // rss.xml
   app.get('/rss.xml', async (_, response) => {
     try {
       response.header('Content-Type', 'application/xml')
@@ -66,25 +61,238 @@ createExpressApp().then(async ({ app, server, cache }) => {
     }
   })
 
-  // gtag
-  app.get('/effects/gtag', async (_, response) => {
+  // gtag script
+  const getGtagCache = cacher.interval(cache, {
+    key: 'gtag',
+    ttl: days(7),
+    interval: days(3),
+    retry: hours(1),
+    getter: getGTagScript
+  })
+
+  app.get('/gtag-script', async (_, response) => {
     try {
-      const data = await cacher({
-        cache,
-        key: 'gtag',
-        ttl: 60 * 60 * 48, // 48 hours
-        retryWhen: 60 * 60 * 1, // 1 hours
-        getter: getGTagScript
-      })
       response.header('Content-Type', 'text/javascript')
-      response.send(data)
+      response.send(await getGtagCache())
     } catch (error) {
       errorer(response, { message: error })
     }
   })
 
+  // Twitter aggregate
+  const getTwitterAggregateCache = cacher.interval(cache, {
+    key: TunnelModule.TwitterAggregate,
+    ttl: hours(8),
+    interval: hours(2),
+    retry: minutes(10),
+    getter: getTwitterAggregate
+  })
+
+  app.get(
+    `${TUNNEL}/${TunnelModule.TwitterAggregate}`,
+    responser(() => getTwitterAggregateCache())
+  )
+
+  // Bing wallpapers
+  const getWallpaperCache = cacher.interval(cache, {
+    key: TunnelModule.BingWallpaper,
+    ttl: days(1),
+    interval: hours(6),
+    retry: minutes(30),
+    getter: getAllWallpapers
+  })
+
+  app.get(
+    `${TUNNEL}/${TunnelModule.BingWallpaper}`,
+    responser(() => getWallpaperCache())
+  )
+
+  // GitHub sponsors
+  const getSponsorsCache = cacher.interval(cache, {
+    key: TunnelModule.GitHubSponsors,
+    ttl: days(3),
+    interval: hours(18),
+    retry: minutes(10),
+    getter: getGitHubSponsors
+  })
+
+  app.get(
+    `${TUNNEL}/${TunnelModule.GitHubSponsors}`,
+    responser(() => getSponsorsCache())
+  )
+
+  // 163 music BGM list
+  const get163MusicCache = cacher.interval(cache, {
+    key: TunnelModule.NetEaseMusic,
+    ttl: days(2),
+    interval: hours(12),
+    retry: minutes(10),
+    getter: getSongList
+  })
+
+  app.get(
+    `${TUNNEL}/${TunnelModule.NetEaseMusic}`,
+    responser(() => get163MusicCache())
+  )
+
+  // Instagram medias cache
+  const getInsFirstPageMediasCache = cacher.interval(cache, {
+    key: 'instagram_medias_page_first',
+    ttl: hours(12),
+    interval: hours(3),
+    retry: minutes(10),
+    getter: getInstagramMedias
+  })
+
+  // Instagram medias route
+  app.get(`${TUNNEL}/${TunnelModule.InstagramMedias}`, (request, response, next) => {
+    const afterToken = request.query.after
+    if (afterToken && typeof afterToken !== 'string') {
+      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      return
+    }
+
+    responser(() => {
+      return !afterToken
+        ? getInsFirstPageMediasCache()
+        : cacher.passive(cache, {
+            key: `instagram_medias_page_${afterToken}`,
+            ttl: hours(12),
+            getter: () => getInstagramMedias({ after: afterToken })
+          })
+    })(request, response, next)
+  })
+
+  // Instagram media children
+  app.get(`${TUNNEL}/${TunnelModule.InstagramMediaChildren}`, (request, response, next) => {
+    const mediaId = request.query.id
+    if (!mediaId || typeof mediaId !== 'string') {
+      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      return
+    }
+
+    responser(() => {
+      return cacher.passive(cache, {
+        key: `instagram_media_children_${mediaId}`,
+        ttl: days(7),
+        getter: () => getInstagramMediaChildren(mediaId)
+      })
+    })(request, response, next)
+  })
+
+  // Instagram calendar
+  const getInsCalendarCache = cacher.interval(cache, {
+    key: TunnelModule.InstagramCalendar,
+    ttl: hours(36),
+    interval: hours(18),
+    retry: minutes(2),
+    getter: getInstagramCalendar
+  })
+
+  app.get(
+    `${TUNNEL}/${TunnelModule.InstagramCalendar}`,
+    responser(() => getInsCalendarCache())
+  )
+
+  // YouTube playlists
+  const getYouTubePlaylistsCache = cacher.interval(cache, {
+    key: TunnelModule.YouTubePlaylist,
+    ttl: days(3),
+    interval: hours(24),
+    retry: minutes(10),
+    getter: getYouTubeChannelPlayLists
+  })
+
+  app.get(
+    `${TUNNEL}/${TunnelModule.YouTubePlaylist}`,
+    responser(() => getYouTubePlaylistsCache())
+  )
+
+  // YouTube videos
+  app.get(`${TUNNEL}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
+    const playlistId = request.query.id
+    if (!playlistId || typeof playlistId !== 'string') {
+      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      return
+    }
+
+    responser(() => {
+      return cacher.passive(cache, {
+        key: `youtube_playlist_${playlistId}`,
+        ttl: hours(1),
+        getter: () => getYouTubeVideoListByPlayerlistId(playlistId)
+      })
+    })(request, response, next)
+  })
+
+  // GitHub contributions
+  app.get(
+    `${TUNNEL}/${TunnelModule.GitHubContributions}`,
+    responser(() => {
+      return cacher.passive(cache, {
+        key: TunnelModule.GitHubContributions,
+        ttl: hours(8),
+        getter: () => {
+          const now = new Date()
+          const end = now.toISOString()
+          now.setFullYear(now.getFullYear() - 1)
+          const start = now.toISOString()
+          return getGitHubContributions(start, end)
+        }
+      })
+    })
+  )
+
+  // GitHub statistic
+  app.get(
+    `${TUNNEL}/${TunnelModule.OpenSourceGitHubStatistic}`,
+    responser(() => {
+      return cacher.passive(cache, {
+        key: TunnelModule.OpenSourceGitHubStatistic,
+        ttl: hours(8),
+        getter: getGitHubStatistic
+      })
+    })
+  )
+
+  // NPM statistic
+  app.get(
+    `${TUNNEL}/${TunnelModule.OpenSourceNPMStatistic}`,
+    responser(() => {
+      return cacher.passive(cache, {
+        key: TunnelModule.OpenSourceNPMStatistic,
+        ttl: hours(8),
+        getter: getNPMStatistic
+      })
+    })
+  )
+
+  // Douban movies
+  app.get(
+    `${TUNNEL}/${TunnelModule.DoubanMovies}`,
+    responser(() => {
+      return cacher.passive(cache, {
+        key: TunnelModule.DoubanMovies,
+        ttl: days(3),
+        getter: getDoubanMovies
+      })
+    })
+  )
+
+  // GoogleMaps - My Maps
+  app.get(
+    `${TUNNEL}/${TunnelModule.MyGoogleMap}`,
+    responser(() => {
+      return cacher.passive(cache, {
+        key: TunnelModule.MyGoogleMap,
+        ttl: hours(6),
+        getter: getMyGoogleMap
+      })
+    })
+  )
+
   // WebFont
-  app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.WebFont}`, async (request, response) => {
+  app.get(`${TUNNEL}/${TunnelModule.WebFont}`, async (request, response) => {
     const fontname = decodeURIComponent(String(request.query.fontname)).trim()
     const text = decodeURIComponent(String(request.query.text)).trim()
     if (!text || !fontname) {
@@ -103,215 +311,6 @@ createExpressApp().then(async ({ app, server, cache }) => {
     }
   })
 
-  // Bing wallpapers
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.BingWallpaper}`,
-    responser(() => {
-      return cacher({
-        cache,
-        key: TunnelModule.BingWallpaper,
-        ttl: 60 * 60 * 6, // 6 hours
-        retryWhen: 60 * 30, // 30 minutes
-        getter: getAllWallpapers
-      })
-    })
-  )
-
-  // My GoogleMap
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.MyGoogleMap}`,
-    responser(() => {
-      return cacher({
-        cache,
-        key: TunnelModule.MyGoogleMap,
-        ttl: 60 * 60 * 6, // 6 hours
-        retryWhen: 60 * 30, // 30 minutes
-        getter: getMyGoogleMap
-      })
-    })
-  )
-
-  // GitHub sponsors
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubSponsors}`,
-    responser(() => {
-      return cacher({
-        cache,
-        key: TunnelModule.GitHubSponsors,
-        ttl: 60 * 60 * 18, // 18 hours
-        retryWhen: 60 * 10, // 10 minutes
-        getter: getGitHubSponsors
-      })
-    })
-  )
-
-  // GitHub contributions
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubContributions}`,
-    responser(() => {
-      return cacher({
-        cache,
-        key: TunnelModule.GitHubContributions,
-        ttl: 60 * 60 * 8, // 8 hours
-        retryWhen: 60 * 10, // 10 minutes
-        getter: () => {
-          const now = new Date()
-          const end = now.toISOString()
-          now.setFullYear(now.getFullYear() - 1)
-          const start = now.toISOString()
-          return getGitHubContributions(start, end)
-        }
-      })
-    })
-  )
-
-  // open-source
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceGitHubStatistic}`,
-    responser(() => {
-      return cacher({
-        cache,
-        key: TunnelModule.OpenSourceGitHubStatistic,
-        ttl: 60 * 60 * 8, // 8 hours
-        retryWhen: 60 * 10, // 10 minutes
-        getter: getGitHubStatistic
-      })
-    })
-  )
-
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceNPMStatistic}`,
-    responser(() => {
-      return cacher({
-        cache,
-        key: TunnelModule.OpenSourceNPMStatistic,
-        ttl: 60 * 60 * 8, // 8 hours
-        retryWhen: 60 * 10, // 10 minutes
-        getter: getNPMStatistic
-      })
-    })
-  )
-
-  // 163 music BGM list
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`,
-    responser(() => {
-      return cacher({
-        cache,
-        key: TunnelModule.NetEaseMusic,
-        ttl: 60 * 60 * 6, // 6 hours
-        retryWhen: 60 * 10, // 10 minutes
-        getter: getSongList
-      })
-    })
-  )
-
-  // Douban movies
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.DoubanMovies}`,
-    responser(() => {
-      return cacher({
-        cache,
-        key: TunnelModule.DoubanMovies,
-        ttl: 60 * 60 * 32, // 32 hours
-        retryWhen: 60 * 10, // 10 minutes
-        getter: getDoubanMovies
-      })
-    })
-  )
-
-  // Twitter aggregate
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterAggregate}`,
-    responser(() => {
-      return cacher({
-        cache,
-        key: TunnelModule.TwitterAggregate,
-        ttl: 60 * 60 * 1, // 1 hour
-        retryWhen: 60 * 10, // 10 minutes
-        getter: getTwitterAggregate
-      })
-    })
-  )
-
-  // Instagram medias
-  app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMedias}`, (request, response, next) => {
-    const afterToken = request.query.after
-    if (afterToken && typeof afterToken !== 'string') {
-      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
-      return
-    }
-
-    responser(() => {
-      return cacher({
-        cache,
-        key: `instagram_medias_page_${afterToken ?? 'first'}`,
-        preRefresh: !afterToken, // Disable pre-refresh when not first pafe
-        ttl: 60 * 60 * 3, // 3 hours
-        retryWhen: 60 * 10, // 10 minutes
-        getter: () => getInstagramMedias({ after: afterToken })
-      })
-    })(request, response, next)
-  })
-
-  // Instagram media children
-  app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMediaChildren}`, (request, response, next) => {
-    const mediaId = request.query.id
-    if (!mediaId || typeof mediaId !== 'string') {
-      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
-      return
-    }
-
-    responser(() => {
-      return cacher({
-        cache,
-        key: `instagram_media_children_${mediaId}`,
-        ttl: 60 * 60 * 24 * 7, // 7 days
-        retryWhen: 60 * 10, // 10 minutes
-        getter: () => getInstagramMediaChildren(mediaId)
-      })
-    })(request, response, next)
-  })
-
-  // Instagram calendar
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramCalendar}`,
-    responser(() => getInstagramCalendar())
-  )
-
-  // YouTube platlists
-  app.get(
-    `${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`,
-    responser(() => {
-      return cacher({
-        cache,
-        key: TunnelModule.YouTubePlaylist,
-        ttl: 60 * 60 * 24, // 24 hours
-        retryWhen: 60 * 10, // 10 minutes
-        getter: getYouTubeChannelPlayLists
-      })
-    })
-  )
-
-  // YouTube videos
-  app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
-    const playlistId = request.query.id
-    if (!playlistId || typeof playlistId !== 'string') {
-      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
-      return
-    }
-
-    responser(() => {
-      return cacher({
-        cache,
-        key: `youtube_playlist_${playlistId}`,
-        ttl: 60 * 60 * 1, // 1 hours
-        retryWhen: 60 * 10, // 10 minutes
-        getter: () => getYouTubeVideoListByPlayerlistId(playlistId)
-      })
-    })(request, response, next)
-  })
-
   // vue renderer
   await (isNodeDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache))
 
@@ -322,6 +321,6 @@ createExpressApp().then(async ({ app, server, cache }) => {
       `at ${new Date().toLocaleString()}`,
       `listening on ${JSON.stringify(server.address())}`
     ]
-    bffLogger.info(`Run! ${infos.join(', ')}.`)
+    logger.success(`Run! ${infos.join(', ')}.`)
   })
 })

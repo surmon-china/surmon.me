@@ -15,6 +15,7 @@
 
 export { getInstagramMedias, getInstagramMediaChildren } from './media'
 export type { InstagramMediaItem, InstagramMediaListResponse } from './media'
-export { initInstagramCalendar, getInstagramCalendar } from './calendar'
+export { getInstagramCalendar } from './calendar'
+export type { InstagramCalendarItem } from './calendar'
 export { getInstagramProfile } from './profile'
 export type { InstagramProfile } from './profile'
