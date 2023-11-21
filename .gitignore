@@ -83,6 +83,7 @@ sw.*
 
 # ecosystem
 ecosystem.config.js
+ecosystem.config.cjs
 
 # Redis
 dump.rdb
