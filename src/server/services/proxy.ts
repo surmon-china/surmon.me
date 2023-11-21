@@ -57,7 +57,7 @@ export const proxyer = (): RequestHandler => {
     if (request.socket.destroyed && error.code === 'ECONNRESET') {
       request._proxyRequest?.abort?.()
     }
-    logger.failure(`error: ${error.message} > ${target?.href}`)
+    logger.failure(`Error: "${error.message || '-'}" > ${target?.href}`)
     response.writeHead(INVALID_ERROR, { 'Content-Type': 'text/plain' })
     response.end('Proxy error: ' + error.message)
   })
