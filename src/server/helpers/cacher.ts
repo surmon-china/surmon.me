@@ -47,12 +47,12 @@ const passive = async <T = any>(cache: CacheClient, opts: CacherOptions<T>): Pro
 
   try {
     const result = await execute(cache, options)
-    logger.success('passive succeed:', opts.key, '|', `ttl: ${humanizeSeconds(options.ttl)}`)
+    logger.success('passive succeed:', `"${opts.key}" | ttl: ${humanizeSeconds(options.ttl)}`)
     return result
   } catch (error) {
     logger.failure(
       'passive failure:',
-      `${opts.key} |`,
+      `"${opts.key}" |`,
       `ttl: ${humanizeSeconds(options.ttl)} |`,
       `"${getErrorMessage(error)}"`
     )
@@ -73,7 +73,7 @@ const interval = <T>(cache: CacheClient, opts: IntervalCacherOptions<T>) => {
       setTimeout(() => execInterval(refreshCount + 1), options.interval * 1000)
       logger.success(
         'interval succeed:',
-        `${refreshCount}+ ${opts.key} |`,
+        `${refreshCount}+ "${opts.key}" |`,
         `ttl: ${humanizeSeconds(options.ttl)} |`,
         `next: ${humanizeSeconds(options.interval)}`
       )
@@ -81,7 +81,7 @@ const interval = <T>(cache: CacheClient, opts: IntervalCacherOptions<T>) => {
       setTimeout(() => execInterval(refreshCount + 1), options.retry * 1000)
       logger.failure(
         'interval failure:',
-        `${refreshCount}+ ${opts.key} |`,
+        `${refreshCount}+ "${opts.key}" |`,
         `retry: ${humanizeSeconds(options.retry)} |`,
         `"${getErrorMessage(error)}"`
       )
