@@ -14,6 +14,7 @@ import Agent, { HttpsAgent } from 'agentkeepalive'
 // https://github.com/node-fetch/node-fetch/issues/1295
 const axios = _axios.create({
   httpAgent: new Agent({
+    keepAlive: true,
     maxSockets: 160,
     maxFreeSockets: 160,
     timeout: 60000,
@@ -21,6 +22,7 @@ const axios = _axios.create({
     keepAliveMsecs: 60000
   }),
   httpsAgent: new HttpsAgent({
+    keepAlive: true,
     maxSockets: 160,
     maxFreeSockets: 160,
     timeout: 60000,
