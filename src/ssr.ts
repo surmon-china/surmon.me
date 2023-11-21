@@ -54,7 +54,7 @@ const getCacheKey = (vueApp: MainApp, ssrContext: SSRContext): string => {
   const themeValue = theme.theme.value
   const device = globalState.userAgent.isMobile ? 'mobile' : 'desktop'
   const region = getRegionByCode(ssrContext.country)
-  return `ssr_${language}_${region}_${device}_${themeValue}_${ssrContext.requestURL}`
+  return `ssr:${language}_${region}_${device}_${themeValue}_${ssrContext.requestURL}`
 }
 
 // app creater

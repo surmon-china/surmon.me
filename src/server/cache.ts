@@ -9,6 +9,9 @@ import { createClient } from 'redis'
 import { cacheLogger } from './logger'
 
 export type Seconds = number
+export const minutes = (m: number): Seconds => m * 60
+export const hours = (h: number): Seconds => h * minutes(60)
+export const days = (d: number): Seconds => d * hours(24)
 
 export interface CacheClient {
   set(key: string, value: any, ttl?: Seconds): Promise<void>
