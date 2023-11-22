@@ -120,7 +120,7 @@
 
   onMounted(() => {
     const urlHash = route.hash.slice(1)
-    if (urlHash) return
+    if (!urlHash) return
 
     const articleHeadings = [
       ...(articleDetailStore.defaultContent?.headings ?? []),
