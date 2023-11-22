@@ -11,6 +11,6 @@ export const getLayoutByRouteMeta = (routeMeta: RouteMeta) => {
   return routeMeta.layout === LayoutColumn.Wide
     ? LayoutColumn.Wide
     : routeMeta.layout === LayoutColumn.Full
-    ? LayoutColumn.Full
-    : LayoutColumn.Normal
+      ? LayoutColumn.Full
+      : LayoutColumn.Normal
 }
