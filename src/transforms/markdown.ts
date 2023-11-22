@@ -16,6 +16,7 @@ import { getLoadingIndicatorHTML } from '/@/components/common/loading-indicator'
 import { getOriginalProxyURL } from '/@/transforms/url'
 import { escape } from '/@/transforms/text'
 import { META } from '/@/config/app.config'
+import API_CONFIG from '/@/config/api.config'
 
 // https://marked.js.org
 const highlightLangPrefix = 'language-'
@@ -91,8 +92,10 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
   // heading
   renderer.heading = (html, level, raw) => {
     const idText = options?.headingId ? `id="${options.headingId(html, level, raw)}"` : ''
-    const safeedRaw = escape(raw)
-    return `<h${level} ${idText} title="${safeedRaw}">${html}</h${level}>`
+    const url = `'${API_CONFIG.FE}' + window.location.pathname + '#${encodeURIComponent(raw)}'`
+    const copy = `window.navigator.clipboard?.writeText(${url})`
+    const anchor = `<span class="anchor" onclick="${copy}">#</span>`
+    return `<h${level} ${idText} title="${escape(raw)}">${anchor}${html}</h${level}>`
   }
 
   // paragraph

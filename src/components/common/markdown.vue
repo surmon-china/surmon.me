@@ -87,6 +87,18 @@
       line-height: 1.8em;
       font-weight: 700;
       text-indent: 0;
+      &:hover {
+        .anchor {
+          color: $primary;
+        }
+      }
+
+      .anchor {
+        margin-right: $xs-gap;
+        color: $text-secondary;
+        user-select: none;
+        cursor: pointer;
+      }
     }
 
     blockquote {

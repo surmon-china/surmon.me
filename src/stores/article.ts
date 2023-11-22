@@ -98,8 +98,8 @@ const renderArticleMarkdown = (markdown: string, imageSourceGetter: MarkdownRend
     sanitize: false,
     imageSourceGetter,
     headingIdGetter: (_, level, raw) => {
-      const text = raw.toLowerCase().replace(/[^a-zA-Z0-9\u4E00-\u9FA5]+/g, '-')
-      const id = getArticleContentHeadingElementId(level, text)
+      const escaped = raw.toLowerCase().replace(/[^a-zA-Z0-9\u4E00-\u9FA5]+/g, '-')
+      const id = getArticleContentHeadingElementId(level, escaped)
       headings.push({ level, id, text: raw })
       return id
     }
