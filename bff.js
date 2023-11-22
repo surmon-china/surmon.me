@@ -1,7 +1,7 @@
 import * as __WEBPACK_EXTERNAL_MODULE_dotenv__ from "dotenv";
-import * as __WEBPACK_EXTERNAL_MODULE_express__ from "express";
 import * as __WEBPACK_EXTERNAL_MODULE_rss__ from "rss";
 import * as __WEBPACK_EXTERNAL_MODULE_axios__ from "axios";
+import * as __WEBPACK_EXTERNAL_MODULE_agentkeepalive__ from "agentkeepalive";
 import * as __WEBPACK_EXTERNAL_MODULE_path__ from "path";
 import * as __WEBPACK_EXTERNAL_MODULE_stream__ from "stream";
 import * as __WEBPACK_EXTERNAL_MODULE_sitemap__ from "sitemap";
@@ -12,12 +12,14 @@ import * as __WEBPACK_EXTERNAL_MODULE_fs_extra_c99523cd__ from "fs-extra";
 import * as __WEBPACK_EXTERNAL_MODULE_fontmin__ from "fontmin";
 import * as __WEBPACK_EXTERNAL_MODULE_fs__ from "fs";
 import * as __WEBPACK_EXTERNAL_MODULE_vite__ from "vite";
+import * as __WEBPACK_EXTERNAL_MODULE_crypto__ from "crypto";
 import * as __WEBPACK_EXTERNAL_MODULE_http__ from "http";
+import * as __WEBPACK_EXTERNAL_MODULE_express__ from "express";
 import * as __WEBPACK_EXTERNAL_MODULE_compression__ from "compression";
 import * as __WEBPACK_EXTERNAL_MODULE_cookie_parser_591162dd__ from "cookie-parser";
-import * as __WEBPACK_EXTERNAL_MODULE_http_proxy_7fedf318__ from "http-proxy";
 import * as __WEBPACK_EXTERNAL_MODULE_lru_cache_883435dc__ from "lru-cache";
 import * as __WEBPACK_EXTERNAL_MODULE_redis__ from "redis";
+import * as __WEBPACK_EXTERNAL_MODULE_http_proxy_7fedf318__ from "http-proxy";
 /******/ var __webpack_modules__ = ({});
 /************************************************************************/
 /******/ // The module cache
@@ -75,89 +77,15 @@ import * as __WEBPACK_EXTERNAL_MODULE_redis__ from "redis";
 /************************************************************************/
 var __webpack_exports__ = {};
 
+// EXPORTS
+__nccwpck_require__.d(__webpack_exports__, {
+  "k": () => (/* binding */ bff_logger)
+});
+
 ;// CONCATENATED MODULE: external "dotenv"
 var x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
 var y = x => () => x
 const external_dotenv_namespaceObject = x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_dotenv__["default"] });
-;// CONCATENATED MODULE: external "express"
-var external_express_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_express_y = x => () => x
-const external_express_namespaceObject = external_express_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_express__["default"] });
-;// CONCATENATED MODULE: ./src/server/environment.ts
-/**
- * @file BFF server environment
- * @module environment
- * @author Surmon <https://github.com/surmon-china>
- */
-var NodeEnv;
-(function (NodeEnv) {
-    NodeEnv["Development"] = "development";
-    NodeEnv["Production"] = "production";
-})(NodeEnv || (NodeEnv = {}));
-const NODE_ENV = process.env.NODE_ENV;
-const isNodeDev = process.env.NODE_ENV === NodeEnv.Development;
-const isNodeProd = process.env.NODE_ENV === NodeEnv.Production;
-
-;// CONCATENATED MODULE: ./src/config/bff.config.ts
-/**
- * @file BFF server config
- * @module config.bff
- * @author Surmon <https://github.com/surmon-china>
- */
-const BFF_TUNNEL_PREFIX = '/_tunnel';
-const BFF_PROXY_PREFIX = '/_proxy';
-const BFF_PROXY_ALLOWLIST_REGEXP = /^https:\/\/([a-z0-9-]+\.)*surmon\.(me|cn)/;
-const getBFFServerPort = () => Number(process.env.PORT || 3000);
-const getOnlineApiURL = () => process.env.VITE_API_ONLINE_URL;
-const getLocalApiURL = () => process.env.VITE_API_LOCAL_URL;
-const getStaticURL = () => process.env.VITE_STATIC_URL;
-
-;// CONCATENATED MODULE: ./src/constants/tunnel.ts
-/**
- * @file Tunnel constant
- * @module constant.tunnel
- * @author Surmon <https://github.com/surmon-china>
- */
-var TunnelModule;
-(function (TunnelModule) {
-    TunnelModule["WebFont"] = "webfont";
-    TunnelModule["MyGoogleMap"] = "my_google_map";
-    TunnelModule["TwitterAggregate"] = "twitter_aggregate";
-    TunnelModule["YouTubePlaylist"] = "youtube_playlist";
-    TunnelModule["YouTubeVideoList"] = "youtube_video_list";
-    TunnelModule["InstagramProfile"] = "instagram_profile";
-    TunnelModule["InstagramMedias"] = "instagram_medias";
-    TunnelModule["InstagramMediaChildren"] = "instagram_media_children";
-    TunnelModule["InstagramCalendar"] = "instagram_calendar";
-    TunnelModule["BingWallpaper"] = "bing_wallpaper";
-    TunnelModule["GitHubSponsors"] = "github_sponsors";
-    TunnelModule["GitHubContributions"] = "github_contributions";
-    TunnelModule["NetEaseMusic"] = "netease_music";
-    TunnelModule["DoubanMovies"] = "douban_movies";
-    TunnelModule["OpenSourceGitHubStatistic"] = "open_source_github_statistic";
-    TunnelModule["OpenSourceNPMStatistic"] = "open_source_npm_statistic";
-})(TunnelModule || (TunnelModule = {}));
-
-;// CONCATENATED MODULE: ./src/constants/http-code.ts
-/**
- * @file Error constant
- * @module constant.error
- * @author Surmon <https://github.com/surmon-china>
- */
-const SUCCESS = 200;
-const BAD_REQUEST = 400;
-const FORBIDDEN = 403;
-const NOT_FOUND = 404;
-const INVALID_ERROR = 500;
-
-;// CONCATENATED MODULE: external "rss"
-var external_rss_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_rss_y = x => () => x
-const external_rss_namespaceObject = external_rss_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_rss__["default"] });
-;// CONCATENATED MODULE: external "axios"
-var external_axios_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_axios_y = x => () => x
-const external_axios_namespaceObject = external_axios_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_axios__["default"], ["isAxiosError"]: () => __WEBPACK_EXTERNAL_MODULE_axios__.isAxiosError });
 ;// CONCATENATED MODULE: ./src/config/app.config.ts
 /**
  * @file App config
@@ -233,11 +161,124 @@ const VALUABLE_LINKS = Object.freeze({
     TWITTER: `https://twitter.com/${app_config_IDENTITIES.TWITTER_USER_NAME}`
 });
 
+;// CONCATENATED MODULE: ./src/config/bff.config.ts
+/**
+ * @file BFF server config
+ * @module config.bff
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const BFF_TUNNEL_PREFIX = '/_tunnel';
+const BFF_PROXY_PREFIX = '/_proxy';
+const BFF_PROXY_ALLOWLIST_REGEXP = /^https:\/\/([a-z0-9-]+\.)*surmon\.(me|cn)/;
+const getBFFServerPort = () => Number(process.env.PORT || 3000);
+const getOnlineApiURL = () => process.env.VITE_API_ONLINE_URL;
+const getLocalApiURL = () => process.env.VITE_API_LOCAL_URL;
+const getStaticURL = () => process.env.VITE_STATIC_URL;
+
+;// CONCATENATED MODULE: ./src/server/environment.ts
+/**
+ * @file BFF server environment
+ * @module environment
+ * @author Surmon <https://github.com/surmon-china>
+ */
+var NodeEnv;
+(function (NodeEnv) {
+    NodeEnv["Development"] = "development";
+    NodeEnv["Production"] = "production";
+})(NodeEnv || (NodeEnv = {}));
+const NODE_ENV = process.env.NODE_ENV;
+const isNodeDev = process.env.NODE_ENV === NodeEnv.Development;
+const isNodeProd = process.env.NODE_ENV === NodeEnv.Production;
+
+;// CONCATENATED MODULE: ./src/constants/http-code.ts
+/**
+ * @file Error constant
+ * @module constant.error
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const SUCCESS = 200;
+const BAD_REQUEST = 400;
+const FORBIDDEN = 403;
+const NOT_FOUND = 404;
+const INVALID_ERROR = 500;
+
+;// CONCATENATED MODULE: ./src/constants/tunnel.ts
+/**
+ * @file Tunnel constant
+ * @module constant.tunnel
+ * @author Surmon <https://github.com/surmon-china>
+ */
+var TunnelModule;
+(function (TunnelModule) {
+    TunnelModule["WebFont"] = "webfont";
+    TunnelModule["MyGoogleMap"] = "my_google_map";
+    TunnelModule["TwitterAggregate"] = "twitter_aggregate";
+    TunnelModule["YouTubePlaylist"] = "youtube_playlist";
+    TunnelModule["YouTubeVideoList"] = "youtube_video_list";
+    TunnelModule["InstagramProfile"] = "instagram_profile";
+    TunnelModule["InstagramMedias"] = "instagram_medias";
+    TunnelModule["InstagramMediaChildren"] = "instagram_media_children";
+    TunnelModule["InstagramCalendar"] = "instagram_calendar";
+    TunnelModule["BingWallpaper"] = "bing_wallpaper";
+    TunnelModule["GitHubSponsors"] = "github_sponsors";
+    TunnelModule["GitHubContributions"] = "github_contributions";
+    TunnelModule["NetEaseMusic"] = "netease_music";
+    TunnelModule["DoubanMovies"] = "douban_movies";
+    TunnelModule["OpenSourceGitHubStatistic"] = "open_source_github_statistic";
+    TunnelModule["OpenSourceNPMStatistic"] = "open_source_npm_statistic";
+})(TunnelModule || (TunnelModule = {}));
+
+;// CONCATENATED MODULE: external "rss"
+var external_rss_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
+var external_rss_y = x => () => x
+const external_rss_namespaceObject = external_rss_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_rss__["default"] });
+;// CONCATENATED MODULE: external "axios"
+var external_axios_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
+var external_axios_y = x => () => x
+const external_axios_namespaceObject = external_axios_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_axios__["default"], ["isAxiosError"]: () => __WEBPACK_EXTERNAL_MODULE_axios__.isAxiosError });
+;// CONCATENATED MODULE: external "agentkeepalive"
+var external_agentkeepalive_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
+var external_agentkeepalive_y = x => () => x
+const external_agentkeepalive_namespaceObject = external_agentkeepalive_x({ ["HttpsAgent"]: () => __WEBPACK_EXTERNAL_MODULE_agentkeepalive__.HttpsAgent, ["default"]: () => __WEBPACK_EXTERNAL_MODULE_agentkeepalive__["default"] });
+;// CONCATENATED MODULE: ./src/server/services/axios.ts
+/**
+ * @file BFF Server fetcher
+ * @module server.service.axios
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
+
+// https://stackoverflow.com/a/63585550/6222535
+// https://stackoverflow.com/a/74375876/6222535
+// https://github.com/node-modules/agentkeepalive
+// https://github.com/axios/axios?tab=readme-ov-file#request-config
+// https://github.com/node-fetch/node-fetch/issues/1295
+const axios_axios = external_axios_namespaceObject["default"].create({
+    httpAgent: new external_agentkeepalive_namespaceObject["default"]({
+        keepAlive: true,
+        maxSockets: 160,
+        maxFreeSockets: 160,
+        timeout: 60000,
+        freeSocketTimeout: 30000,
+        keepAliveMsecs: 60000
+    }),
+    httpsAgent: new external_agentkeepalive_namespaceObject.HttpsAgent({
+        keepAlive: true,
+        maxSockets: 160,
+        maxFreeSockets: 160,
+        timeout: 60000,
+        freeSocketTimeout: 30000,
+        keepAliveMsecs: 60000
+    })
+});
+/* harmony default export */ const services_axios = (axios_axios);
+
+
 ;// CONCATENATED MODULE: external "path"
 var external_path_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
 var external_path_y = x => () => x
 const external_path_namespaceObject = external_path_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_path__["default"] });
-;// CONCATENATED MODULE: ./src/server/helpers/configurer.ts
+;// CONCATENATED MODULE: ./src/server/config.ts
 /**
  * @file BFF Server helper
  * @module server.helper.configurer
@@ -258,7 +299,7 @@ const PRDO_CLIENT_PATH = external_path_namespaceObject["default"].join(DIST_PATH
 const PRDO_SERVER_PATH = external_path_namespaceObject["default"].join(DIST_PATH, 'server');
 const PUBLIC_PATH = isNodeDev ? external_path_namespaceObject["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;
 
-;// CONCATENATED MODULE: ./src/server/helpers/route.ts
+;// CONCATENATED MODULE: ./src/server/route.ts
 /**
  * @file BFF route helper
  * @module server.helper.route
@@ -283,7 +324,7 @@ const getPageURL = (page) => `${META.url}/${page}`;
 
 const getRssXml = async () => {
     const api = `${getNodePressAPI()}/archive`;
-    const response = await external_axios_namespaceObject["default"].get(api, { timeout: 6000 });
+    const response = await services_axios.get(api, { timeout: 6000 });
     const archive = response.data.result;
     const feed = new external_rss_namespaceObject["default"]({
         title: META.title,
@@ -338,7 +379,7 @@ const external_sitemap_namespaceObject = external_sitemap_x({ ["EnumChangefreq"]
 
 const getSitemapXml = async () => {
     const api = `${getNodePressAPI()}/archive`;
-    const response = await external_axios_namespaceObject["default"].get(api, { timeout: 6000 });
+    const response = await services_axios.get(api, { timeout: 6000 });
     const archive = response.data.result;
     const sitemapStream = new external_sitemap_namespaceObject.SitemapStream({
         hostname: META.url
@@ -409,7 +450,7 @@ const getGaScriptURL = (measurementId) => {
 
 const getGTagScript = async () => {
     const url = getGaScriptURL(app_config_IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID);
-    const response = await external_axios_namespaceObject["default"].get(url, { timeout: 6000 });
+    const response = await services_axios.get(url, { timeout: 6000 });
     return response.data;
 };
 
@@ -474,32 +515,9 @@ const getMyGoogleMap = () => {
         allowBooleanAttributes: true,
         attributeNamePrefix: '@'
     });
-    return external_axios_namespaceObject["default"].get(VALUABLE_LINKS.GOOGLE_MY_MAP_KML, { timeout: 6000 })
+    return services_axios.get(VALUABLE_LINKS.GOOGLE_MY_MAP_KML, { timeout: 6000 })
         .then((response) => parser.parse(response.data).kml.Document);
 };
-
-;// CONCATENATED MODULE: ./src/utils/logger.ts
-/**
- * @file App logger
- * @module utils/logger
- * @author Surmon <https://github.com/surmon-china>
- */
-const createLogger = (scope) => ({
-    log: (...messages) => console.log(`[${scope}]`, ...messages),
-    info: (...messages) => console.info(`[${scope}]`, ...messages),
-    warn: (...messages) => console.warn(`[${scope}]`, ...messages),
-    error: (...messages) => console.error(`[${scope}]`, ...messages),
-    debug: (...messages) => console.debug(`[${scope}]`, ...messages)
-});
-/* harmony default export */ const logger = (createLogger('APP'));
-
-;// CONCATENATED MODULE: ./src/server/logger.ts
-
-const bffLogger = createLogger('BFF');
-const cacheLogger = createLogger('BFF:Cache');
-const proxyLogger = createLogger('BFF:Proxy');
-const cacherLogger = createLogger('BFF:Cacher');
-const getterLogger = createLogger('BFF:Getter');
 
 ;// CONCATENATED MODULE: external "yargs"
 var external_yargs_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
@@ -553,7 +571,7 @@ const getSotweAggregate = async (twitterUsername) => {
         const target = `https://api.sotwe.com/v3/user/${twitterUsername}`;
         const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`;
         // To avoid wasting request credits, tokens are not used in development environments
-        const response = await external_axios_namespaceObject["default"].get(isNodeDev ? target : scraper);
+        const response = await services_axios.get(isNodeDev ? target : scraper);
         return response.data;
     }
     catch (error) {
@@ -569,15 +587,8 @@ const getSotweAggregate = async (twitterUsername) => {
  */
 
 
-
 const getTwitterAggregate = async () => {
-    const sotwe = await getSotweAggregate(app_config_IDENTITIES.TWITTER_USER_NAME).catch((error) => {
-        getterLogger.warn('Twitter sotwe aggregate is empty.', error?.message ?? String(error));
-        return null;
-    });
-    if (!sotwe) {
-        return Promise.reject('Twitter aggregate data is empty.');
-    }
+    const sotwe = await getSotweAggregate(app_config_IDENTITIES.TWITTER_USER_NAME);
     const tweets = [];
     const userinfo = {
         name: sotwe?.info?.name || app_config_IDENTITIES.TWITTER_USER_NAME,
@@ -641,7 +652,7 @@ const getTwitterAggregate = async () => {
 
 
 const graphqlGitHub = (query) => {
-    return external_axios_namespaceObject["default"].request({
+    return services_axios.request({
         // https://github.com/settings/tokens
         headers: { Authorization: `bearer ${GITHUB_BEARER_TOKEN}` },
         url: `https://api.github.com/graphql`,
@@ -752,7 +763,7 @@ const getInstagramMedias = async (options) => {
         if (options?.after) {
             params.after = options.after;
         }
-        const response = await external_axios_namespaceObject["default"].get('https://graph.instagram.com/me/media', {
+        const response = await services_axios.get('https://graph.instagram.com/me/media', {
             timeout: 8000,
             params
         });
@@ -769,7 +780,7 @@ const getInstagramMediaChildren = (mediaId) => {
         access_token: INSTAGRAM_TOKEN,
         fields: `id,media_type,media_url,thumbnail_url,timestamp`
     };
-    return external_axios_namespaceObject["default"].get(url, { timeout: 8000, params })
+    return services_axios.get(url, { timeout: 8000, params })
         .then((response) => response.data.data)
         .catch((error) => {
         return Promise.reject((0,external_axios_namespaceObject.isAxiosError)(error) ? error.response?.data?.error ?? error.toJSON() : error);
@@ -778,59 +789,50 @@ const getInstagramMediaChildren = (mediaId) => {
 
 ;// CONCATENATED MODULE: ./src/server/getters/instagram/calendar.ts
 
-
-
-function doFetchAllMedias({ since, after, medias = [], onSucceed, onFailed }) {
-    getInstagramMedias({ fields: 'id,timestamp', limit: 100, since, after })
-        .then((result) => {
-        medias.push(...result.data);
+async function fetchAllMedias({ since, after, medias = [], onSucceeded, onFailed }) {
+    try {
+        const result = await getInstagramMedias({
+            fields: 'id,timestamp',
+            limit: 100,
+            since,
+            after
+        });
         if (result.paging.next) {
-            doFetchAllMedias({
-                medias,
+            await fetchAllMedias({
                 since,
                 after: result.paging.cursors.after,
-                onSucceed,
+                medias: [...medias, ...result.data],
+                onSucceeded,
                 onFailed
             });
         }
         else {
-            onSucceed?.(medias);
+            onSucceeded?.([...medias, ...result.data]);
         }
-    })
-        .catch(onFailed);
+    }
+    catch (error) {
+        onFailed?.(error);
+    }
 }
-const calendarTemp = {
-    data: []
-};
-function fetchAllMedias() {
-    getterLogger.info('instagram.fetchAllMedias...');
-    calendarTemp.data = [];
-    // startTime: Only get the most recent 12 months of data
-    const today = new Date();
-    today.setDate(1);
-    today.setFullYear(today.getFullYear() - 1);
-    const prevYearToday = Math.round(today.getTime() / 1000);
-    doFetchAllMedias({
-        since: prevYearToday,
-        onSucceed: (medias) => {
-            getterLogger.info(`instagram.fetchAllMedias done, ${medias.length} medias. refetch when after 18h`);
-            setTimeout(() => fetchAllMedias(), 18 * 60 * 60 * 1000);
-            const map = new Map();
-            medias.forEach((media) => {
-                const key = media.timestamp.slice(0, 10);
-                map.has(key) ? map.set(key, map.get(key) + 1) : map.set(key, 1);
-            });
-            calendarTemp.data = Array.from(map, ([date, count]) => ({ date, count }));
-        },
-        onFailed: (error) => {
-            getterLogger.warn(`instagram.fetchAllMedias failed, retry when after 30s`, error);
-            setTimeout(() => fetchAllMedias(), 30 * 1000);
-        }
+const getInstagramCalendar = () => {
+    return new Promise((resolve, reject) => {
+        // startTime: Only get the most recent 12 months of data
+        const today = new Date();
+        today.setDate(1);
+        today.setFullYear(today.getFullYear() - 1);
+        const prevYearToday = Math.round(today.getTime() / 1000);
+        fetchAllMedias({
+            since: prevYearToday,
+            onFailed: reject,
+            onSucceeded: (medias) => {
+                const mediaMap = medias.reduce((accumulator, media) => {
+                    const key = media.timestamp.slice(0, 10);
+                    return accumulator.set(key, (accumulator.get(key) || 0) + 1);
+                }, new Map());
+                resolve(Array.from(mediaMap, ([date, count]) => ({ date, count })));
+            }
+        });
     });
-}
-const getInstagramCalendar = async () => calendarTemp.data;
-const initInstagramCalendar = () => {
-    INSTAGRAM_TOKEN ? fetchAllMedias() : getterLogger.warn('instagram.fetchAllMedias skipped, no token.');
 };
 
 ;// CONCATENATED MODULE: ./src/server/getters/instagram/profile.ts
@@ -893,7 +895,7 @@ const getInstagramProfile = async () => {
 // 2. Get playlist by Channel ID
 // https://developers.google.com/youtube/v3/docs/playlists/list
 const getYouTubeChannelPlayLists = async () => {
-    const response = await external_axios_namespaceObject["default"].get(`https://www.googleapis.com/youtube/v3/playlists`, {
+    const response = await services_axios.get(`https://www.googleapis.com/youtube/v3/playlists`, {
         timeout: 8000,
         params: {
             part: 'snippet,contentDetails',
@@ -908,7 +910,7 @@ const getYouTubeChannelPlayLists = async () => {
 // https://developers.google.com/youtube/v3/docs/playlistItems/list
 // MARK: can't order by date, max results 50
 const getYouTubeVideoListByPlayerlistId = async (playlistId) => {
-    const response = await external_axios_namespaceObject["default"].get(`https://www.googleapis.com/youtube/v3/playlistItems`, {
+    const response = await services_axios.get(`https://www.googleapis.com/youtube/v3/playlistItems`, {
         timeout: 8000,
         params: {
             part: 'snippet,contentDetails',
@@ -930,7 +932,7 @@ const getYouTubeVideoListByPlayerlistId = async (playlistId) => {
 
 const fetchStatisticJSON = async (fileName) => {
     const url = `https://raw.githubusercontent.com/${app_config_IDENTITIES.GITHUB_USER_NAME}/${app_config_IDENTITIES.GITHUB_USER_NAME}/release/${fileName}`;
-    const response = await external_axios_namespaceObject["default"].get(url, { timeout: 6000 });
+    const response = await services_axios.get(url, { timeout: 6000 });
     return response.data;
 };
 const getGitHubStatistic = () => {
@@ -976,7 +978,7 @@ const getNPMStatistic = () => {
 const getDoubanMovies = async () => {
     const api = `https://m.douban.com/rexxar/api/v2/user/${app_config_IDENTITIES.DOUBAN_USER_ID}/collection_stats?type=movie&for_mobile=1`;
     const referer = `https://m.douban.com/people/${app_config_IDENTITIES.DOUBAN_USER_ID}/movie_charts`;
-    const response = await external_axios_namespaceObject["default"].get(api, {
+    const response = await services_axios.get(api, {
         timeout: 1000 * 12,
         headers: { Referer: referer }
     });
@@ -995,7 +997,7 @@ const PLAY_LIST_LIMIT = 168;
 const getSongList = async () => {
     // https://github.com/Binaryify/NeteaseCloudMusicApi/blob/a0500ec648f22a1dd20fc7b529126f813aa26935/module/playlist_track_all.js
     const playlistURL = `https://music.163.com/api/v6/playlist/detail?id=${app_config_IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`;
-    const playlistDetail = await external_axios_namespaceObject["default"].get(playlistURL, { timeout: 6000 });
+    const playlistDetail = await services_axios.get(playlistURL, { timeout: 6000 });
     if (playlistDetail.data.code < 0) {
         throw new Error(playlistDetail.data.message);
     }
@@ -1005,7 +1007,7 @@ const getSongList = async () => {
         .map((id) => `{id:${id.id}}`)
         .join(',');
     const songListURL = `https://music.163.com/api/v3/song/detail?c=[${idsParams}]`;
-    const songListDetail = await external_axios_namespaceObject["default"].get(songListURL, { timeout: 6000 });
+    const songListDetail = await services_axios.get(songListURL, { timeout: 6000 });
     if (!songListDetail.data.songs) {
         throw new Error(songListDetail.data);
     }
@@ -1235,6 +1237,58 @@ const enableProdRenderer = async (app, cache) => {
     });
 };
 
+;// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.21/node_modules/lodash-es/isObject.js
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return value != null && (type == 'object' || type == 'function');
+}
+
+/* harmony default export */ const lodash_es_isObject = (isObject);
+
+;// CONCATENATED MODULE: ./src/utils/logger.ts
+/**
+ * @file App logger
+ * @module utils/logger
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const createLogger = (scope) => ({
+    // levels
+    log: (...messages) => console.log('⚪', `[${scope}]`, ...messages),
+    info: (...messages) => console.info('🔵', `[${scope}]`, ...messages),
+    warn: (...messages) => console.warn('🟠', `[${scope}]`, ...messages),
+    error: (...messages) => console.error('🔴', `[${scope}]`, ...messages),
+    debug: (...messages) => console.debug('🟤', `[${scope}]`, ...messages),
+    // aliases
+    success: (...messages) => console.log('🟢', `[${scope}]`, ...messages),
+    failure: (...messages) => console.warn('🔴', `[${scope}]`, ...messages)
+});
+/* harmony default export */ const logger = (createLogger('APP'));
+
 ;// CONCATENATED MODULE: ./src/server/helpers/responser.ts
 /**
  * @file BFF Server responser
@@ -1244,14 +1298,20 @@ const enableProdRenderer = async (app, cache) => {
 
 
 
+
+const responser_logger = createLogger('BFF');
+const getErrorMessage = (_error) => {
+    const error = (0,external_axios_namespaceObject.isAxiosError)(_error) ? _error.toJSON() : _error;
+    return typeof error === 'string'
+        ? error
+        : error instanceof Error || lodash_es_isObject(error)
+            ? error.message || error?.name
+            : JSON.stringify(error);
+};
 const errorer = (response, { code, message }) => {
-    bffLogger.warn(`error:`, (0,external_axios_namespaceObject.isAxiosError)(message) ? message.toJSON() : message);
+    responser_logger.failure(`Error:`, (0,external_axios_namespaceObject.isAxiosError)(message) ? message.toJSON() : message);
     response.status(code ?? INVALID_ERROR);
-    response.send(typeof message === 'string'
-        ? message
-        : message instanceof Error
-            ? message.message || message.name
-            : JSON.stringify(message));
+    response.send(getErrorMessage(message));
 };
 const responser = (promise) => {
     return (_, response) => {
@@ -1261,6 +1321,10 @@ const responser = (promise) => {
     };
 };
 
+;// CONCATENATED MODULE: external "crypto"
+var external_crypto_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
+var external_crypto_y = x => () => x
+const external_crypto_namespaceObject = external_crypto_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_crypto__["default"] });
 ;// CONCATENATED MODULE: ./src/server/helpers/cacher.ts
 /**
  * @file BFF Server cacher
@@ -1268,75 +1332,113 @@ const responser = (promise) => {
  * @author Surmon <https://github.com/surmon-china>
  */
 
-// fetch & cache
-const fetchAndCache = async (config) => {
-    const data = await config.getter();
-    await config.cache.set(config.key, data, config.ttl);
+
+
+const cacher_logger = createLogger('BFF:Cacher');
+const minutes = (m) => m * 60;
+const hours = (h) => h * minutes(60);
+const days = (d) => d * hours(24);
+const humanizeSeconds = (s) => {
+    const hours = Math.floor(s / 3600);
+    const minutes = Math.floor((s % 3600) / 60);
+    const seconds = s % 60;
+    const formattedHours = hours > 0 ? `${hours}h ` : '';
+    const formattedMinutes = minutes > 0 ? `${minutes}m ` : '';
+    const formattedSeconds = seconds > 0 ? `${seconds}s` : '';
+    return formattedHours + formattedMinutes + formattedSeconds;
+};
+const getCacheKey = (key) => `bff:${key}`;
+const getLockCacheKey = (key) => `bff:interval-lock:${key}`;
+/** Execute the getter and store the data into the cache. */
+const execute = async (cache, options) => {
+    const data = await options.getter();
+    await cache.set(options.key, data, options.ttl);
     return data;
 };
-// timeout prefetch
-const setTimeoutPreRefresh = (config, preSeconds, refreshCount = 1) => {
-    const timeoutSeconds = config.ttl - preSeconds;
-    cacherLogger.info('setTimeoutPreRefresh', `> ${config.key} + ${refreshCount}`, `> cache expire when after ${config.ttl}s`, `> pre refresh when after ${timeoutSeconds}s`);
-    setTimeout(async () => {
+const passive = async (cache, opts) => {
+    const options = { ...opts, key: getCacheKey(opts.key) };
+    if (await cache.has(options.key)) {
+        return await cache.get(options.key);
+    }
+    try {
+        const result = await execute(cache, options);
+        cacher_logger.success('passive succeed:', `"${opts.key}" | ttl: ${humanizeSeconds(options.ttl)}`);
+        return result;
+    }
+    catch (error) {
+        cacher_logger.failure('passive failure:', `"${opts.key}"`, `| ttl: ${humanizeSeconds(options.ttl)}`, `| "${getErrorMessage(error)}"`);
+        return Promise.reject(error);
+    }
+};
+// Unique ID for interval task lock
+const UNIQUE_INTERVAL_LOCK_ID = external_crypto_namespaceObject["default"].randomBytes(8).toString('hex');
+const interval = (cache, opts) => {
+    const options = { ...opts, key: getCacheKey(opts.key) };
+    const intervalLockKey = getLockCacheKey(opts.key);
+    // In normal mode: the only instance performs the interval task.
+    // In cluster mode: only one instance performs the interval task at the same time.
+    const execInterval = async (succeedCount = 0, failureCount = 0) => {
+        // 1. Acquire locks before executing tasks to determine execution privileges.
+        const lock = await cache.get(intervalLockKey);
+        const executable = !lock || lock === UNIQUE_INTERVAL_LOCK_ID;
+        // logger.debug('execInterval', { lock, executable, intervalLockKey })
         try {
-            await fetchAndCache(config);
-            setTimeoutPreRefresh(config, preSeconds, refreshCount + 1);
+            // 2. Execute the task only in the (no lock) (self-locking) cases.
+            if (executable) {
+                // Temporarily set permanent survival for locks to prevent them from expiring during task execution.
+                await cache.set(intervalLockKey, UNIQUE_INTERVAL_LOCK_ID);
+                await execute(cache, options);
+                // Incrementing the value of the count
+                ++succeedCount;
+                cacher_logger.success('interval succeed:', `${failureCount}/${succeedCount}`, `| "${opts.key}"`, `| ttl: ${humanizeSeconds(options.ttl)}`, `| next: ${humanizeSeconds(options.interval)}`);
+                // After the task succeeds, update the lock's lifecycle to be consistent with the interval of the task.
+                // Since JavaScript timeout is subject to uncertainty, allow some time for fault tolerance.
+                await cache.set(intervalLockKey, UNIQUE_INTERVAL_LOCK_ID, options.interval + 2);
+            }
+            else {
+                // 3. If the current task is already occupied by another instance, skip it
+                // logger.debug('interval skip:', `"${opts.key}"`, `| lock: "${lock}"`)
+            }
+            // Regardless of whether the task is actually performed or not,
+            // the timing check is performed again after an interval of time.
+            // logger.debug('new interval:', `"${opts.key}"`, options.interval)
+            setTimeout(() => execInterval(succeedCount, failureCount), options.interval * 1000);
         }
         catch (error) {
-            cacherLogger.warn(`setTimeoutPreRefresh error:`, `> ${config.key} + ${refreshCount}`, error);
+            // Incrementing the value of the count
+            ++failureCount;
+            cacher_logger.failure('interval failure:', `${failureCount}/${succeedCount}`, `| "${opts.key}"`, `| retry: ${humanizeSeconds(options.retry)}`, `| "${getErrorMessage(error)}"`);
+            // If the task execution fails, the timing check will be executed again after the retry time.
+            setTimeout(() => execInterval(succeedCount, failureCount), options.retry * 1000);
+            // It should also update the lock's lifecycle to be consistent with the time of the retry.
+            await cache.set(intervalLockKey, UNIQUE_INTERVAL_LOCK_ID, options.retry + 2);
         }
-    }, timeoutSeconds * 1000);
-};
-const retryingMap = new Map();
-const retryFetch = async (config) => {
-    if (await config.cache.has(config.key)) {
-        retryingMap.set(config.key, false);
-        return;
-    }
-    try {
-        await fetchAndCache(config);
-    }
-    catch (error) {
-        cacherLogger.warn('retryFetch error:', error);
-    }
-    finally {
-        retryingMap.set(config.key, false);
-    }
-};
-const cacher = async (configInput) => {
-    // key prefix
-    const config = { ...configInput, key: `bff_${configInput.key}` };
-    // cached
-    if (await config.cache.has(config.key)) {
-        return await config.cache.get(config.key);
-    }
-    try {
-        // 1. fetch & cache
-        const data = await fetchAndCache(config);
-        // 2. refresh 1 minute before ttl expires to get the latest data,
-        // This behavior is performed recursively and causes the data to never expire.
-        if (config.preRefresh !== false) {
-            setTimeoutPreRefresh(config, 60);
+    };
+    // Immediate execution of interval task
+    execInterval();
+    // Always only get data from the cache
+    return async () => {
+        if (await cache.has(options.key)) {
+            return await cache.get(options.key);
         }
-        // 3. return data
-        return data;
-    }
-    catch (error) {
-        // retry only once
-        if (config.retryWhen && !retryingMap.get(config.key)) {
-            retryingMap.set(config.key, true);
-            setTimeout(() => retryFetch({ ...config }), config.retryWhen * 1000);
+        else {
+            throw `No cached data for "${opts.key}".`;
         }
-        // return error
-        throw error;
-    }
+    };
 };
+/* harmony default export */ const cacher = ({
+    passive,
+    interval
+});
 
 ;// CONCATENATED MODULE: external "http"
 var external_http_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
 var external_http_y = x => () => x
 const external_http_namespaceObject = external_http_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_http__["default"] });
+;// CONCATENATED MODULE: external "express"
+var external_express_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
+var external_express_y = x => () => x
+const external_express_namespaceObject = external_express_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_express__["default"] });
 ;// CONCATENATED MODULE: external "compression"
 var external_compression_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
 var external_compression_y = x => () => x
@@ -1345,14 +1447,104 @@ const external_compression_namespaceObject = external_compression_x({ ["default"
 var external_cookie_parser_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
 var external_cookie_parser_y = x => () => x
 const external_cookie_parser_namespaceObject = external_cookie_parser_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_cookie_parser_591162dd__["default"] });
+;// CONCATENATED MODULE: external "lru-cache"
+var external_lru_cache_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
+var external_lru_cache_y = x => () => x
+const external_lru_cache_namespaceObject = external_lru_cache_x({ ["LRUCache"]: () => __WEBPACK_EXTERNAL_MODULE_lru_cache_883435dc__.LRUCache });
+;// CONCATENATED MODULE: external "redis"
+var external_redis_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
+var external_redis_y = x => () => x
+const external_redis_namespaceObject = external_redis_x({ ["createClient"]: () => __WEBPACK_EXTERNAL_MODULE_redis__.createClient });
+;// CONCATENATED MODULE: ./src/server/services/cache.ts
+/**
+ * @file Universal Server cache
+ * @module server.service.cache
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
+
+
+const cache_logger = createLogger('BFF:Cache');
+const getLRUClient = () => {
+    // https://github.com/isaacs/node-lru-cache
+    const lruCache = new external_lru_cache_namespaceObject.LRUCache({ max: 500 });
+    const set = async (key, value, ttl) => {
+        if (ttl) {
+            await lruCache.set(key, value, { ttl: ttl * 1000 });
+        }
+        else {
+            await lruCache.set(key, value);
+        }
+    };
+    return {
+        set,
+        get: async (key) => lruCache.get(key),
+        has: async (key) => lruCache.has(key),
+        del: async (key) => lruCache.delete(key),
+        clear: async () => lruCache.clear()
+    };
+};
+const getRedisClient = async (options) => {
+    // https://github.com/redis/node-redis
+    const client = (0,external_redis_namespaceObject.createClient)();
+    client.on('connect', () => cache_logger.info('Redis connecting...'));
+    client.on('reconnecting', () => cache_logger.info('Redis reconnecting...'));
+    client.on('ready', () => cache_logger.success('Redis readied.'));
+    client.on('error', (error) => cache_logger.failure('Redis client error!', error.message || error));
+    await client.connect();
+    const getCacheKey = (key) => {
+        const _namespace = options?.namespace ?? 'ssr_app';
+        return `${_namespace}:${key}`;
+    };
+    const set = async (key, value, ttl) => {
+        const _value = value ? JSON.stringify(value) : '';
+        if (ttl) {
+            // EX — Set the specified expire time, in seconds.
+            await client.set(getCacheKey(key), _value, { EX: ttl });
+        }
+        else {
+            await client.set(getCacheKey(key), _value);
+        }
+    };
+    const get = async (key) => {
+        const value = await client.get(getCacheKey(key));
+        return value ? JSON.parse(value) : value;
+    };
+    const has = async (key) => {
+        const value = await client.exists(getCacheKey(key));
+        return Boolean(value);
+    };
+    const del = (key) => client.del(getCacheKey(key));
+    const clear = async () => {
+        const keys = await client.keys(getCacheKey('*'));
+        if (keys.length) {
+            await client.del(keys);
+        }
+    };
+    return { set, get, has, del, clear };
+};
+const createCacheClient = async (options) => {
+    let cacheClient = null;
+    try {
+        cacheClient = await getRedisClient(options);
+        cache_logger.info('Redis store readied.');
+    }
+    catch (error) {
+        cacheClient = getLRUClient();
+        cache_logger.info('LRU store readied.');
+    }
+    await cacheClient.clear();
+    return cacheClient;
+};
+
 ;// CONCATENATED MODULE: external "http-proxy"
 var external_http_proxy_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
 var external_http_proxy_y = x => () => x
 const external_http_proxy_namespaceObject = external_http_proxy_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_http_proxy_7fedf318__["default"] });
-;// CONCATENATED MODULE: ./src/server/proxy.ts
+;// CONCATENATED MODULE: ./src/server/services/proxy.ts
 /**
  * @file BFF Server proxy
- * @module server.proxy
+ * @module server.service.proxy
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -1361,6 +1553,7 @@ const external_http_proxy_namespaceObject = external_http_proxy_x({ ["default"]:
 
 
 
+const proxy_logger = createLogger('BFF:Proxy');
 const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/*`;
 const proxyer = () => {
     // https://github.com/http-party/node-http-proxy
@@ -1397,7 +1590,7 @@ const proxyer = () => {
         if (request.socket.destroyed && error.code === 'ECONNRESET') {
             request._proxyRequest?.abort?.();
         }
-        proxyLogger.warn(`error: ${error.message} > ${target?.href}`);
+        proxy_logger.failure(`Error: "${error.message || '-'}" > ${target?.href}`);
         response.writeHead(INVALID_ERROR, { 'Content-Type': 'text/plain' });
         response.end('Proxy error: ' + error.message);
     });
@@ -1441,95 +1634,6 @@ const proxyer = () => {
     };
 };
 
-;// CONCATENATED MODULE: external "lru-cache"
-var external_lru_cache_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_lru_cache_y = x => () => x
-const external_lru_cache_namespaceObject = external_lru_cache_x({ ["LRUCache"]: () => __WEBPACK_EXTERNAL_MODULE_lru_cache_883435dc__.LRUCache });
-;// CONCATENATED MODULE: external "redis"
-var external_redis_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_redis_y = x => () => x
-const external_redis_namespaceObject = external_redis_x({ ["createClient"]: () => __WEBPACK_EXTERNAL_MODULE_redis__.createClient });
-;// CONCATENATED MODULE: ./src/server/cache.ts
-/**
- * @file Universal Server cache
- * @module server.cache
- * @author Surmon <https://github.com/surmon-china>
- */
-
-
-
-const getLRUClient = () => {
-    // https://github.com/isaacs/node-lru-cache
-    const lruCache = new external_lru_cache_namespaceObject.LRUCache({ max: 500 });
-    const set = async (key, value, ttl) => {
-        if (ttl) {
-            await lruCache.set(key, value, { ttl: ttl * 1000 });
-        }
-        else {
-            await lruCache.set(key, value);
-        }
-    };
-    return {
-        set,
-        get: async (key) => lruCache.get(key),
-        has: async (key) => lruCache.has(key),
-        del: async (key) => lruCache.delete(key),
-        clear: async () => lruCache.clear()
-    };
-};
-const getRedisClient = async (options) => {
-    // https://github.com/redis/node-redis
-    const client = (0,external_redis_namespaceObject.createClient)();
-    client.on('connect', () => cacheLogger.info('Redis connecting...'));
-    client.on('reconnecting', () => cacheLogger.info('Redis reconnecting...'));
-    client.on('ready', () => cacheLogger.info('Redis readied.'));
-    client.on('error', (error) => cacheLogger.warn('Redis client error!', error.message || error));
-    await client.connect();
-    const getCacheKey = (key) => {
-        const _namespace = options?.namespace ?? 'ssr_app';
-        return `${_namespace}:${key}`;
-    };
-    const set = async (key, value, ttl) => {
-        const _value = value ? JSON.stringify(value) : '';
-        if (ttl) {
-            // EX — Set the specified expire time, in seconds.
-            await client.set(getCacheKey(key), _value, { EX: ttl });
-        }
-        else {
-            await client.set(getCacheKey(key), _value);
-        }
-    };
-    const get = async (key) => {
-        const value = await client.get(getCacheKey(key));
-        return value ? JSON.parse(value) : value;
-    };
-    const has = async (key) => {
-        const value = await client.exists(getCacheKey(key));
-        return Boolean(value);
-    };
-    const del = (key) => client.del(getCacheKey(key));
-    const clear = async () => {
-        const keys = await client.keys(getCacheKey('*'));
-        if (keys.length) {
-            await client.del(keys);
-        }
-    };
-    return { set, get, has, del, clear };
-};
-const createCacheClient = async (options) => {
-    let cacheClient = null;
-    try {
-        cacheClient = await getRedisClient(options);
-        cacheLogger.info('Redis store readied.');
-    }
-    catch (error) {
-        cacheClient = getLRUClient();
-        cacheLogger.info('LRU store readied.');
-    }
-    await cacheClient.clear();
-    return cacheClient;
-};
-
 ;// CONCATENATED MODULE: ./src/server/index.ts
 /**
  * @file BFF Server main
@@ -1543,20 +1647,23 @@ const createCacheClient = async (options) => {
 
 
 
+
 const createExpressApp = async () => {
-    // init cache client
-    const cache = await createCacheClient({
-        namespace: META.domain.replace(/\./gi, '_')
-    });
     // init app
     const app = (0,external_express_namespaceObject["default"])();
     const server = external_http_namespaceObject["default"].createServer(app);
-    // app proxy
-    app.use(PROXY_ROUTE_PATH, proxyer());
     // app middlewares
     app.use(external_express_namespaceObject["default"].json());
     app.use((0,external_cookie_parser_namespaceObject["default"])());
     app.use((0,external_compression_namespaceObject["default"])());
+    // app proxy
+    app.use(PROXY_ROUTE_PATH, proxyer());
+    // app static
+    app.use(external_express_namespaceObject["default"]["static"](PUBLIC_PATH));
+    // init cache client
+    const cache = await createCacheClient({
+        namespace: META.domain.replace(/\./gi, '_')
+    });
     return {
         app,
         server,
@@ -1595,16 +1702,12 @@ const createExpressApp = async () => {
 
 
 
-
+const bff_logger = createLogger('BFF');
 // init env variables for BFF server env
 external_dotenv_namespaceObject["default"].config();
-// app
+// create http server app
 createExpressApp().then(async ({ app, server, cache }) => {
-    // static
-    app.use(external_express_namespaceObject["default"]["static"](PUBLIC_PATH));
-    // init thirds task
-    initInstagramCalendar();
-    // sitemap
+    // sitemap.xml
     app.get('/sitemap.xml', async (_, response) => {
         try {
             response.header('Content-Type', 'application/xml');
@@ -1614,7 +1717,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
             errorer(response, { message: error });
         }
     });
-    // RSS
+    // rss.xml
     app.get('/rss.xml', async (_, response) => {
         try {
             response.header('Content-Type', 'application/xml');
@@ -1624,23 +1727,178 @@ createExpressApp().then(async ({ app, server, cache }) => {
             errorer(response, { message: error });
         }
     });
-    // gtag
-    app.get('/effects/gtag', async (_, response) => {
+    // gtag script
+    const getGtagCache = cacher.interval(cache, {
+        key: 'gtag',
+        ttl: days(7),
+        interval: days(3),
+        retry: hours(1),
+        getter: getGTagScript
+    });
+    app.get('/gtag-script', async (_, response) => {
         try {
-            const data = await cacher({
-                cache,
-                key: 'gtag',
-                ttl: 60 * 60 * 48,
-                retryWhen: 60 * 60 * 1,
-                getter: getGTagScript
-            });
             response.header('Content-Type', 'text/javascript');
-            response.send(data);
+            response.send(await getGtagCache());
         }
         catch (error) {
             errorer(response, { message: error });
         }
     });
+    // Twitter aggregate
+    const getTwitterAggregateCache = cacher.interval(cache, {
+        key: TunnelModule.TwitterAggregate,
+        ttl: hours(8),
+        interval: hours(2),
+        retry: minutes(10),
+        getter: getTwitterAggregate
+    });
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterAggregate}`, responser(() => getTwitterAggregateCache()));
+    // Bing wallpapers
+    const getWallpaperCache = cacher.interval(cache, {
+        key: TunnelModule.BingWallpaper,
+        ttl: days(1),
+        interval: hours(6),
+        retry: minutes(30),
+        getter: getAllWallpapers
+    });
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.BingWallpaper}`, responser(() => getWallpaperCache()));
+    // GitHub sponsors
+    const getSponsorsCache = cacher.interval(cache, {
+        key: TunnelModule.GitHubSponsors,
+        ttl: days(3),
+        interval: hours(18),
+        retry: minutes(10),
+        getter: getGitHubSponsors
+    });
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubSponsors}`, responser(() => getSponsorsCache()));
+    // 163 music BGM list
+    const get163MusicCache = cacher.interval(cache, {
+        key: TunnelModule.NetEaseMusic,
+        ttl: days(2),
+        interval: hours(12),
+        retry: minutes(10),
+        getter: getSongList
+    });
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`, responser(() => get163MusicCache()));
+    // Instagram medias cache
+    const getInsFirstPageMediasCache = cacher.interval(cache, {
+        key: 'instagram_medias_page_first',
+        ttl: hours(12),
+        interval: hours(3),
+        retry: minutes(10),
+        getter: getInstagramMedias
+    });
+    // Instagram medias route
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMedias}`, (request, response, next) => {
+        const afterToken = request.query.after;
+        if (afterToken && typeof afterToken !== 'string') {
+            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
+            return;
+        }
+        responser(() => {
+            return !afterToken
+                ? getInsFirstPageMediasCache()
+                : cacher.passive(cache, {
+                    key: `instagram_medias_page_${afterToken}`,
+                    ttl: hours(12),
+                    getter: () => getInstagramMedias({ after: afterToken })
+                });
+        })(request, response, next);
+    });
+    // Instagram media children
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMediaChildren}`, (request, response, next) => {
+        const mediaId = request.query.id;
+        if (!mediaId || typeof mediaId !== 'string') {
+            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
+            return;
+        }
+        responser(() => {
+            return cacher.passive(cache, {
+                key: `instagram_media_children_${mediaId}`,
+                ttl: days(7),
+                getter: () => getInstagramMediaChildren(mediaId)
+            });
+        })(request, response, next);
+    });
+    // Instagram calendar
+    const getInsCalendarCache = cacher.interval(cache, {
+        key: TunnelModule.InstagramCalendar,
+        ttl: hours(36),
+        interval: hours(18),
+        retry: minutes(2),
+        getter: getInstagramCalendar
+    });
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramCalendar}`, responser(() => getInsCalendarCache()));
+    // YouTube playlists
+    const getYouTubePlaylistsCache = cacher.interval(cache, {
+        key: TunnelModule.YouTubePlaylist,
+        ttl: days(3),
+        interval: hours(24),
+        retry: minutes(10),
+        getter: getYouTubeChannelPlayLists
+    });
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`, responser(() => getYouTubePlaylistsCache()));
+    // YouTube videos
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
+        const playlistId = request.query.id;
+        if (!playlistId || typeof playlistId !== 'string') {
+            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
+            return;
+        }
+        responser(() => {
+            return cacher.passive(cache, {
+                key: `youtube_playlist_${playlistId}`,
+                ttl: hours(1),
+                getter: () => getYouTubeVideoListByPlayerlistId(playlistId)
+            });
+        })(request, response, next);
+    });
+    // GitHub contributions
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubContributions}`, responser(() => {
+        return cacher.passive(cache, {
+            key: TunnelModule.GitHubContributions,
+            ttl: hours(8),
+            getter: () => {
+                const now = new Date();
+                const end = now.toISOString();
+                now.setFullYear(now.getFullYear() - 1);
+                const start = now.toISOString();
+                return getGitHubContributions(start, end);
+            }
+        });
+    }));
+    // GitHub statistic
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceGitHubStatistic}`, responser(() => {
+        return cacher.passive(cache, {
+            key: TunnelModule.OpenSourceGitHubStatistic,
+            ttl: hours(8),
+            getter: getGitHubStatistic
+        });
+    }));
+    // NPM statistic
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceNPMStatistic}`, responser(() => {
+        return cacher.passive(cache, {
+            key: TunnelModule.OpenSourceNPMStatistic,
+            ttl: hours(8),
+            getter: getNPMStatistic
+        });
+    }));
+    // Douban movies
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.DoubanMovies}`, responser(() => {
+        return cacher.passive(cache, {
+            key: TunnelModule.DoubanMovies,
+            ttl: days(3),
+            getter: getDoubanMovies
+        });
+    }));
+    // GoogleMaps - My Maps
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.MyGoogleMap}`, responser(() => {
+        return cacher.passive(cache, {
+            key: TunnelModule.MyGoogleMap,
+            ttl: hours(6),
+            getter: getMyGoogleMap
+        });
+    }));
     // WebFont
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.WebFont}`, async (request, response) => {
         const fontname = decodeURIComponent(String(request.query.fontname)).trim();
@@ -1660,175 +1918,15 @@ createExpressApp().then(async ({ app, server, cache }) => {
             errorer(response, { message: error });
         }
     });
-    // Bing wallpapers
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.BingWallpaper}`, responser(() => {
-        return cacher({
-            cache,
-            key: TunnelModule.BingWallpaper,
-            ttl: 60 * 60 * 6,
-            retryWhen: 60 * 30,
-            getter: getAllWallpapers
-        });
-    }));
-    // My GoogleMap
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.MyGoogleMap}`, responser(() => {
-        return cacher({
-            cache,
-            key: TunnelModule.MyGoogleMap,
-            ttl: 60 * 60 * 6,
-            retryWhen: 60 * 30,
-            getter: getMyGoogleMap
-        });
-    }));
-    // GitHub sponsors
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubSponsors}`, responser(() => {
-        return cacher({
-            cache,
-            key: TunnelModule.GitHubSponsors,
-            ttl: 60 * 60 * 18,
-            retryWhen: 60 * 10,
-            getter: getGitHubSponsors
-        });
-    }));
-    // GitHub contributions
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubContributions}`, responser(() => {
-        return cacher({
-            cache,
-            key: TunnelModule.GitHubContributions,
-            ttl: 60 * 60 * 8,
-            retryWhen: 60 * 10,
-            getter: () => {
-                const now = new Date();
-                const end = now.toISOString();
-                now.setFullYear(now.getFullYear() - 1);
-                const start = now.toISOString();
-                return getGitHubContributions(start, end);
-            }
-        });
-    }));
-    // open-source
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceGitHubStatistic}`, responser(() => {
-        return cacher({
-            cache,
-            key: TunnelModule.OpenSourceGitHubStatistic,
-            ttl: 60 * 60 * 8,
-            retryWhen: 60 * 10,
-            getter: getGitHubStatistic
-        });
-    }));
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceNPMStatistic}`, responser(() => {
-        return cacher({
-            cache,
-            key: TunnelModule.OpenSourceNPMStatistic,
-            ttl: 60 * 60 * 8,
-            retryWhen: 60 * 10,
-            getter: getNPMStatistic
-        });
-    }));
-    // 163 music BGM list
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`, responser(() => {
-        return cacher({
-            cache,
-            key: TunnelModule.NetEaseMusic,
-            ttl: 60 * 60 * 6,
-            retryWhen: 60 * 10,
-            getter: getSongList
-        });
-    }));
-    // Douban movies
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.DoubanMovies}`, responser(() => {
-        return cacher({
-            cache,
-            key: TunnelModule.DoubanMovies,
-            ttl: 60 * 60 * 32,
-            retryWhen: 60 * 10,
-            getter: getDoubanMovies
-        });
-    }));
-    // Twitter aggregate
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterAggregate}`, responser(() => {
-        return cacher({
-            cache,
-            key: TunnelModule.TwitterAggregate,
-            ttl: 60 * 60 * 1,
-            retryWhen: 60 * 10,
-            getter: getTwitterAggregate
-        });
-    }));
-    // Instagram medias
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMedias}`, (request, response, next) => {
-        const afterToken = request.query.after;
-        if (afterToken && typeof afterToken !== 'string') {
-            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
-            return;
-        }
-        responser(() => {
-            return cacher({
-                cache,
-                key: `instagram_medias_page_${afterToken ?? 'first'}`,
-                preRefresh: !afterToken,
-                ttl: 60 * 60 * 3,
-                retryWhen: 60 * 10,
-                getter: () => getInstagramMedias({ after: afterToken })
-            });
-        })(request, response, next);
-    });
-    // Instagram media children
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramMediaChildren}`, (request, response, next) => {
-        const mediaId = request.query.id;
-        if (!mediaId || typeof mediaId !== 'string') {
-            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
-            return;
-        }
-        responser(() => {
-            return cacher({
-                cache,
-                key: `instagram_media_children_${mediaId}`,
-                ttl: 60 * 60 * 24 * 7,
-                retryWhen: 60 * 10,
-                getter: () => getInstagramMediaChildren(mediaId)
-            });
-        })(request, response, next);
-    });
-    // Instagram calendar
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramCalendar}`, responser(() => getInstagramCalendar()));
-    // YouTube platlists
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubePlaylist}`, responser(() => {
-        return cacher({
-            cache,
-            key: TunnelModule.YouTubePlaylist,
-            ttl: 60 * 60 * 24,
-            retryWhen: 60 * 10,
-            getter: getYouTubeChannelPlayLists
-        });
-    }));
-    // YouTube videos
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
-        const playlistId = request.query.id;
-        if (!playlistId || typeof playlistId !== 'string') {
-            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
-            return;
-        }
-        responser(() => {
-            return cacher({
-                cache,
-                key: `youtube_playlist_${playlistId}`,
-                ttl: 60 * 60 * 1,
-                retryWhen: 60 * 10,
-                getter: () => getYouTubeVideoListByPlayerlistId(playlistId)
-            });
-        })(request, response, next);
-    });
     // vue renderer
     await (isNodeDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache));
     // run
     server.listen(getBFFServerPort(), () => {
-        const infos = [
-            `in ${NODE_ENV}`,
-            `at ${new Date().toLocaleString()}`,
-            `listening on ${JSON.stringify(server.address())}`
-        ];
-        bffLogger.info(`Run! ${infos.join(', ')}.`);
+        const address = server.address();
+        const port = typeof address === 'string' ? address : address?.port ?? getBFFServerPort();
+        bff_logger.success(`${META.title} app is running!`, `| env: ${NODE_ENV}`, `| port: ${port}`, `| ${new Date().toLocaleString()}`);
     });
 });
 
+var __webpack_exports__logger = __webpack_exports__.k;
+export { __webpack_exports__logger as logger };

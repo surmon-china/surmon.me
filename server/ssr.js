@@ -369,7 +369,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.30.6";
+const APP_VERSION = "4.31.0";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -422,11 +422,15 @@ const isZhUser = (language) => {
   return language ? isTargetLanguageUser(language, Language.Chinese) : true;
 };
 const createLogger = (scope) => ({
-  log: (...messages) => console.log(`[${scope}]`, ...messages),
-  info: (...messages) => console.info(`[${scope}]`, ...messages),
-  warn: (...messages) => console.warn(`[${scope}]`, ...messages),
-  error: (...messages) => console.error(`[${scope}]`, ...messages),
-  debug: (...messages) => console.debug(`[${scope}]`, ...messages)
+  // levels
+  log: (...messages) => console.log("⚪", `[${scope}]`, ...messages),
+  info: (...messages) => console.info("🔵", `[${scope}]`, ...messages),
+  warn: (...messages) => console.warn("🟠", `[${scope}]`, ...messages),
+  error: (...messages) => console.error("🔴", `[${scope}]`, ...messages),
+  debug: (...messages) => console.debug("🟤", `[${scope}]`, ...messages),
+  // aliases
+  success: (...messages) => console.log("🟢", `[${scope}]`, ...messages),
+  failure: (...messages) => console.warn("🔴", `[${scope}]`, ...messages)
 });
 const logger$1 = createLogger("APP");
 var LayoutColumn = /* @__PURE__ */ ((LayoutColumn2) => {
@@ -7418,7 +7422,7 @@ const _sfc_main$1h = defineComponent({
         isLike ? identity.likeComment(commentId) : identity.dislikeComment(commentId);
       } catch (error) {
         const message = _i18n.t(LanguageKey.POST_ACTION_ERROR);
-        logger.warn(message, error);
+        logger.failure(message, error);
         alert(message);
       }
     };
@@ -7437,7 +7441,7 @@ function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $op
   const _component_comment_list = resolveComponent("comment-list");
   _push(`<ul${ssrRenderAttrs(mergeProps({
     class: ["comment-list", _ctx.isChildList ? "child" : "root"]
-  }, _attrs))} data-v-17501654><!--[-->`);
+  }, _attrs))} data-v-81840c7c><!--[-->`);
   ssrRenderList(_ctx.comments, (item) => {
     _push(ssrRenderComponent(_component_comment_item, {
       key: item.comment.id,
@@ -7540,7 +7544,7 @@ _sfc_main$1h.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/list/list.vue");
   return _sfc_setup$1h ? _sfc_setup$1h(props, ctx) : void 0;
 };
-const CommentList = /* @__PURE__ */ _export_sfc(_sfc_main$1h, [["ssrRender", _sfc_ssrRender], ["__scopeId", "data-v-17501654"]]);
+const CommentList = /* @__PURE__ */ _export_sfc(_sfc_main$1h, [["ssrRender", _sfc_ssrRender], ["__scopeId", "data-v-81840c7c"]]);
 const _sfc_main$1g = /* @__PURE__ */ defineComponent({
   __name: "loadmore",
   __ssrInlineRender: true,
@@ -7991,7 +7995,7 @@ const _sfc_main$1c = /* @__PURE__ */ defineComponent({
     };
     const handleDeleteComment = (commentId) => {
       commentStore.deleteComment(commentId).catch((error) => {
-        logger.warn("delete comment failed", error);
+        logger.failure("delete comment failed", error);
         alert(error.message);
       });
     };
@@ -8041,7 +8045,7 @@ const _sfc_main$1c = /* @__PURE__ */ defineComponent({
         }
         luanchEmojiRain(payload.content);
       } catch (error) {
-        logger.warn("submit comment failed:", error);
+        logger.failure("submit comment failed:", error);
         throw error.message;
       }
     };
@@ -8095,7 +8099,7 @@ const _sfc_main$1c = /* @__PURE__ */ defineComponent({
       _push(`<div${ssrRenderAttrs(mergeProps({
         id: COMMENT_ELEMENT_ID,
         class: "comment-box"
-      }, _attrs))} data-v-a41e1e68>`);
+      }, _attrs))} data-v-3bfb1e70>`);
       _push(ssrRenderComponent(CommentTopbar, {
         total: (_a = unref(commentStore).pagination) == null ? void 0 : _a.total,
         loaded: unref(commentStore).comments.length,
@@ -8374,7 +8378,7 @@ _sfc_main$1c.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/index.vue");
   return _sfc_setup$1c ? _sfc_setup$1c(props, ctx) : void 0;
 };
-const Comment = /* @__PURE__ */ _export_sfc(_sfc_main$1c, [["__scopeId", "data-v-a41e1e68"]]);
+const Comment = /* @__PURE__ */ _export_sfc(_sfc_main$1c, [["__scopeId", "data-v-3bfb1e70"]]);
 const _sfc_main$1b = /* @__PURE__ */ defineComponent({
   __name: "skeleton",
   __ssrInlineRender: true,
@@ -9488,7 +9492,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
         callback == null ? void 0 : callback();
       } catch (error) {
         const message = _i18n.t(LanguageKey.POST_ACTION_ERROR);
-        logger$1.warn(message, error);
+        logger$1.failure(message, error);
         alert(message);
       }
     };
@@ -9531,7 +9535,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_placeholder = resolveComponent("placeholder");
       const _component_ulink = resolveComponent("ulink");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-page" }, _attrs))} data-v-9a57c65a>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-page" }, _attrs))} data-v-2e867fd7>`);
       _push(ssrRenderComponent(_component_placeholder, { loading: unref(fetching) }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -9551,14 +9555,14 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             if (unref(article)) {
-              _push2(`<div data-v-9a57c65a${_scopeId}><div class="module margin background overflow" data-v-9a57c65a${_scopeId}>`);
+              _push2(`<div data-v-2e867fd7${_scopeId}><div class="module margin background overflow" data-v-2e867fd7${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleContent, {
                 id: ARTICLE_CONTENT_ELEMENT_ID,
                 "readmore-id": ARTICLE_READMORE_ELEMENT_ID,
                 article: unref(article),
                 onRendered: handleContentRendered
               }, null, _parent2, _scopeId));
-              _push2(`<div class="divider" data-v-9a57c65a${_scopeId}></div>`);
+              _push2(`<div class="divider" data-v-2e867fd7${_scopeId}></div>`);
               _push2(ssrRenderComponent(ArticleMeta, {
                 id: ARTICLE_META_ELEMENT_ID,
                 article: unref(article),
@@ -9589,19 +9593,19 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
                 }),
                 _: 1
               }, _parent2, _scopeId));
-              _push2(`</div><div class="module margin background" data-v-9a57c65a${_scopeId}><div class="bridge left" data-v-9a57c65a${_scopeId}></div><div class="bridge right" data-v-9a57c65a${_scopeId}></div>`);
+              _push2(`</div><div class="module margin background" data-v-2e867fd7${_scopeId}><div class="bridge left" data-v-2e867fd7${_scopeId}></div><div class="bridge right" data-v-2e867fd7${_scopeId}></div>`);
               _push2(ssrRenderComponent(ArticleShare, {
                 id: ARTICLE_SHARE_ELEMENT_ID,
                 article: unref(article),
                 "disabled-image-share": _ctx.isMobile,
                 socials: _ctx.isMobile ? [unref(SocialMedia).Wechat, unref(SocialMedia).Weibo, unref(SocialMedia).Twitter] : []
               }, null, _parent2, _scopeId));
-              _push2(`</div><div class="module margin overflow" data-v-9a57c65a${_scopeId}>`);
+              _push2(`</div><div class="module margin overflow" data-v-2e867fd7${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleNeighbour, {
                 prev: unref(prevArticle),
                 next: unref(nextArticle)
               }, null, _parent2, _scopeId));
-              _push2(`</div><div class="module margin overflow" data-v-9a57c65a${_scopeId}>`);
+              _push2(`</div><div class="module margin overflow" data-v-2e867fd7${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleRelated, {
                 id: ARTICLE_RELATED_ELEMENT_ID,
                 columns: _ctx.isMobile ? 2 : 3,
@@ -9671,7 +9675,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="comment" data-v-9a57c65a>`);
+      _push(`<div class="comment" data-v-2e867fd7>`);
       _push(ssrRenderComponent(Comment, {
         plain: _ctx.isMobile,
         fetching: unref(fetching),
@@ -9688,7 +9692,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
               }, {
                 default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<i class="iconfont icon-chat-gpt" data-v-9a57c65a${_scopeId2}></i>`);
+                    _push3(`<i class="iconfont icon-chat-gpt" data-v-2e867fd7${_scopeId2}></i>`);
                   } else {
                     return [
                       createVNode("i", { class: "iconfont icon-chat-gpt" })
@@ -9752,7 +9756,7 @@ _sfc_main$13.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/index.vue");
   return _sfc_setup$13 ? _sfc_setup$13(props, ctx) : void 0;
 };
-const ArticleDetailPage = /* @__PURE__ */ _export_sfc(_sfc_main$13, [["__scopeId", "data-v-9a57c65a"]]);
+const ArticleDetailPage = /* @__PURE__ */ _export_sfc(_sfc_main$13, [["__scopeId", "data-v-2e867fd7"]]);
 const _sfc_main$12 = /* @__PURE__ */ defineComponent({
   __name: "instagram",
   __ssrInlineRender: true,
@@ -17748,10 +17752,10 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
     };
     onMounted(() => {
       wallpaperStore.fetch().catch((error) => {
-        logger$1.warn("bing wallpaper fetch failed!", error);
+        logger$1.failure("bing wallpaper fetch failed!", error);
       });
       useMusic().init().catch((error) => {
-        logger$1.warn("player init failed!", error);
+        logger$1.failure("player init failed!", error);
       });
     });
     return (_ctx, _push, _parent, _attrs) => {
@@ -17759,7 +17763,7 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
       const _component_popup = resolveComponent("popup");
       const _component_router_view = resolveComponent("router-view");
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "desktop-main" }, _attrs))} data-v-8a4fbbbd>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "desktop-main" }, _attrs))} data-v-a3b0221e>`);
       _push(ssrRenderComponent(Background, null, null, _parent));
       _push(ssrRenderComponent(Wallflower, null, null, _parent));
       _push(ssrRenderComponent(_component_client_only, null, {
@@ -17771,7 +17775,7 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="sponsor-modal" data-v-8a4fbbbd${_scopeId2}><div class="sponsor" data-v-8a4fbbbd${_scopeId2}>`);
+                  _push3(`<div class="sponsor-modal" data-v-a3b0221e${_scopeId2}><div class="sponsor" data-v-a3b0221e${_scopeId2}>`);
                   _push3(ssrRenderComponent(SponsorTabs, {
                     class: "tabs",
                     state: unref(sponsorState),
@@ -17912,7 +17916,7 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
         _push(`<!---->`);
       }
       _push(ssrRenderComponent(HeaderView$1, null, null, _parent));
-      _push(`<main${ssrRenderAttr("id", unref(MAIN_ELEMENT_ID))} class="${ssrRenderClass([{ "full-page": unref(layoutColumn).isFull }, "main-container"])}" data-v-8a4fbbbd>`);
+      _push(`<main${ssrRenderAttr("id", unref(MAIN_ELEMENT_ID))} class="${ssrRenderClass([{ "full-page": unref(layoutColumn).isFull }, "main-container"])}" data-v-a3b0221e>`);
       if (unref(layoutColumn).isNormal) {
         _push(ssrRenderComponent(NavView, { class: "nav-view" }, null, _parent));
       } else {
@@ -17927,11 +17931,11 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
         "layout-normal": unref(layoutColumn).isNormal,
         "layout-wide": unref(layoutColumn).isWide,
         "layout-full": unref(layoutColumn).isFull
-      }, "main-view"])}" data-v-8a4fbbbd>`);
+      }, "main-view"])}" data-v-a3b0221e>`);
       _push(ssrRenderComponent(_component_router_view, null, {
         default: withCtx(({ Component, route: r }, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div${ssrRenderAttrs(mergeProps({ class: "router-view" }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-8a4fbbbd${_scopeId}>`);
+            _push2(`<div${ssrRenderAttrs(mergeProps({ class: "router-view" }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-a3b0221e${_scopeId}>`);
             ssrRenderSuspense(_push2, {
               default: () => {
                 ssrRenderVNode(_push2, createVNode(resolveDynamicComponent(Component), {
@@ -17981,7 +17985,7 @@ _sfc_main$5.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/main.vue");
   return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
 };
-const DesktopMain = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-8a4fbbbd"]]);
+const DesktopMain = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-a3b0221e"]]);
 const _sfc_main$4 = /* @__PURE__ */ defineComponent({
   __name: "header",
   __ssrInlineRender: true,
@@ -18730,10 +18734,10 @@ _sfc_main.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/app/index.vue");
   return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };
-console.group(`[APP:INIT]`);
+console.group(`🔵 [APP:INIT]`);
 console.table({ APP_VERSION, APP_ENV, NODE_ENV });
 console.groupEnd();
-console.group(`[APP:API]`);
+console.group(`🔵 [APP:API]`);
 console.table(API_CONFIG);
 console.groupEnd();
 const createMainApp = (context) => {
@@ -18828,7 +18832,7 @@ const getCacheKey = (vueApp, ssrContext) => {
   const themeValue = theme.theme.value;
   const device = globalState.userAgent.isMobile ? "mobile" : "desktop";
   const region = getRegionByCode(ssrContext.country);
-  return `ssr_${language}_${region}_${device}_${themeValue}_${ssrContext.requestURL}`;
+  return `ssr:${language}_${region}_${device}_${themeValue}_${ssrContext.requestURL}`;
 };
 const createApp = (ssrContext) => {
   const mainApp = createMainApp({
@@ -18847,8 +18851,8 @@ const createApp = (ssrContext) => {
   return mainApp;
 };
 const renderHTML = async (mainApp, ssrContext) => {
-  devDebug(`route: ${ssrContext.requestURL}`);
   const { app, router, store, head, theme, globalState } = mainApp;
+  devDebug(`- 1. route.push.validate: ${ssrContext.requestURL}`);
   await router.push(ssrContext.requestURL);
   await router.isReady();
   await store.serverPrefetch();
