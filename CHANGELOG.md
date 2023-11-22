@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+### v4.31.0 (2023-11-22)
+
+**Feature**
+
+- New log output
+- Refactoring the BFF `cacher` module (cluster)
+- Refactoring the `deploy` scripts
+
 ### v4.5.0 (2023-07-30)
 
 **Feature**
