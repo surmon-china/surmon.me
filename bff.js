@@ -519,6 +519,37 @@ const getMyGoogleMap = () => {
         .then((response) => parser.parse(response.data).kml.Document);
 };
 
+;// CONCATENATED MODULE: ./src/constants/value.ts
+/**
+ * @file Value constant
+ * @module constant.value
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const NULL = null;
+const UNDEFINED = void 0;
+const isNull = (value) => value === NULL;
+const isUndefined = (value) => value === UNDEFINED;
+const isNil = (value) => isNull(value) || isUndefined(value);
+
+;// CONCATENATED MODULE: ./src/utils/logger.ts
+/**
+ * @file App logger
+ * @module utils/logger
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const createLogger = (scope) => ({
+    // levels
+    log: (...messages) => console.log('⚪', `[${scope}]`, ...messages),
+    info: (...messages) => console.info('🔵', `[${scope}]`, ...messages),
+    warn: (...messages) => console.warn('🟠', `[${scope}]`, ...messages),
+    error: (...messages) => console.error('🔴', `[${scope}]`, ...messages),
+    debug: (...messages) => console.debug('🟤', `[${scope}]`, ...messages),
+    // aliases
+    success: (...messages) => console.log('🟢', `[${scope}]`, ...messages),
+    failure: (...messages) => console.warn('🔴', `[${scope}]`, ...messages)
+});
+/* harmony default export */ const logger = (createLogger('APP'));
+
 ;// CONCATENATED MODULE: external "yargs"
 var external_yargs_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
 var external_yargs_y = x => () => x
@@ -536,62 +567,45 @@ const INSTAGRAM_TOKEN = argv.instagram_token;
 const YOUTUBE_API_KEY = argv.youtube_token;
 const SOTWE_SCRAPER_TOKEN = argv.sotwe_scraper_token;
 
-;// CONCATENATED MODULE: ./src/server/getters/twitter/sotwe.ts
+;// CONCATENATED MODULE: ./src/server/getters/twitter/sotwe-api.ts
 
 
 
-const improveSotweTweet = (tweet, resultHTML = false) => {
-    let result = tweet.text.replaceAll('\n', ' ');
-    // remove media urls
-    tweet.mediaEntities?.forEach((media) => {
-        result = result.replace(media.url, '');
-    });
-    // replace url with link
-    tweet.urlEntities?.forEach((url) => {
-        result = result.replace(url.url, !resultHTML
-            ? url.text
-            : `<a
-            class="link"
-            target="_blank"
-            rel="external nofollow noopener"
-            title="${url.expandedURL}"
-            href="${url.expandedURL}"
-          >${url.displayURL}</a>`);
-    });
-    return result;
-};
 // Don't try to simulate a browser request, it will be blocked by Cloudflare.
 // Can't make requests based on headless browsers because it takes up too much memory
 // So one has to look for third party online services, here are some of the available crawler services:
 // - https://dashboard.scrape.do
 // - https://apilayer.com/marketplace/adv_scraper-api
 // - ...
-const getSotweAggregate = async (twitterUsername) => {
+const fetchSotweAggregate = async (twitterUsername) => {
     try {
         const target = `https://api.sotwe.com/v3/user/${twitterUsername}`;
         const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`;
         // To avoid wasting request credits, tokens are not used in development environments
-        const response = await services_axios.get(isNodeDev ? target : scraper);
+        const response = await services_axios.get(isNodeDev ? target : scraper, { timeout: 18000 });
         return response.data;
     }
     catch (error) {
         throw (0,external_axios_namespaceObject.isAxiosError)(error) ? error.toJSON() : error;
     }
 };
-
-;// CONCATENATED MODULE: ./src/server/getters/twitter/index.ts
-/**
- * @file BFF Twitter getter
- * @module server.getter.twitter
- * @author Surmon <https://github.com/surmon-china>
- */
-
-
-const getTwitterAggregate = async () => {
-    const sotwe = await getSotweAggregate(app_config_IDENTITIES.TWITTER_USER_NAME);
+const improveSotweTweet = (tweet) => {
+    let result = tweet.text.replaceAll('\n', ' ').replace(/ +/g, ' ');
+    // remove media urls
+    tweet.mediaEntities?.forEach((media) => {
+        result = result.replace(media.url, '');
+    });
+    // replace url with link
+    tweet.urlEntities?.forEach((url) => {
+        result = result.replace(url.url, url.text);
+    });
+    return result;
+};
+const getSotweTwitterAggregate = async (twitterUsername) => {
+    const sotwe = await fetchSotweAggregate(twitterUsername);
     const tweets = [];
     const userinfo = {
-        name: sotwe?.info?.name || app_config_IDENTITIES.TWITTER_USER_NAME,
+        name: sotwe?.info?.name || twitterUsername,
         avatar: sotwe?.info?.profileImageOriginal || '',
         description: sotwe?.info.description || void 0,
         location: sotwe?.info.location || void 0,
@@ -624,9 +638,8 @@ const getTwitterAggregate = async () => {
         }
         tweets.push({
             id: tweet.id,
-            owner: app_config_IDENTITIES.TWITTER_USER_NAME,
-            text: improveSotweTweet(tweet, false),
-            html: improveSotweTweet(tweet, true),
+            owner: twitterUsername,
+            text: improveSotweTweet(tweet),
             date: tweet.createdAt,
             location: tweet.location?.name || void 0,
             favoriteCount: tweet.favoriteCount ?? void 0,
@@ -640,6 +653,136 @@ const getTwitterAggregate = async () => {
         });
     });
     return { userinfo, tweets };
+};
+
+;// CONCATENATED MODULE: ./src/server/getters/twitter/nitter-html.ts
+
+
+
+
+const fetchNitterTweets = async (twitterUsername) => {
+    try {
+        const target = `https://nitter.net/${twitterUsername}?scroll=true`;
+        const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`;
+        // To avoid wasting request credits, tokens are not used in development environments
+        const response = await services_axios.get(isNodeDev ? target : scraper, { timeout: 30000 });
+        return response.data;
+    }
+    catch (error) {
+        throw (0,external_axios_namespaceObject.isAxiosError)(error) ? error.toJSON() : error;
+    }
+};
+const parseUTCDate = (str) => {
+    const parts = str.split('·').map((part) => part.trim());
+    // date
+    const dateParts = parts[0].split(' ');
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const month = monthNames.indexOf(dateParts[0]) + 1;
+    const day = parseInt(dateParts[1].replace(',', ''));
+    const year = parseInt(dateParts[2]);
+    // time
+    const timeParts = parts[1].split(' ')[0].split(':');
+    let hours = parseInt(timeParts[0]);
+    const minutes = parseInt(timeParts[1]);
+    const ampm = parts[1].split(' ')[1];
+    // 12h > 24h
+    if (ampm === 'PM' && hours !== 12)
+        hours += 12;
+    if (ampm === 'AM' && hours === 12)
+        hours = 0;
+    return new Date(Date.UTC(year, month - 1, day, hours, minutes));
+};
+const getNitterTweets = async (twitterUsername) => {
+    const html = await fetchNitterTweets(twitterUsername);
+    const parser = new external_fast_xml_parser_namespaceObject.XMLParser({
+        ignoreAttributes: false,
+        attributeNamePrefix: '',
+        parseAttributeValue: true,
+        processEntities: true,
+        htmlEntities: true
+    });
+    return parser
+        .parse(html)
+        .div.div.filter((item) => item.class.includes('timeline-item'))
+        .map((item) => {
+        const bodyParts = item.div.div;
+        const itemHeader = bodyParts[0].div;
+        const itemContent = bodyParts.find((i) => i.class?.includes('tweet-content'));
+        const itemStates = bodyParts.find((i) => i.class?.includes('tweet-stats'))?.span;
+        const getItemState = (name) => {
+            const state = itemStates.find((i) => i.div.span.class.includes(name));
+            return state.div['#text'];
+        };
+        // attachments
+        const itemAttachments = [];
+        const attNode = bodyParts.find((i) => i.class?.includes('attachments'))?.div;
+        if (Array.isArray(attNode)) {
+            attNode.forEach((att) => {
+                itemAttachments.push(...(Array.isArray(att.div) ? att.div : [att.div]));
+            });
+        }
+        else {
+            if (Array.isArray(attNode?.div)) {
+                itemAttachments.push(...attNode.div);
+            }
+            else if (attNode) {
+                itemAttachments.push(attNode?.div ?? attNode);
+            }
+        }
+        return {
+            id: item.a.href.match(/\/status\/(\d+)#/)?.[1],
+            owner: twitterUsername,
+            text: itemContent?.['#text']?.replaceAll('\n', ' ')?.replace(/ +/g, ' ') || '',
+            date: parseUTCDate(itemHeader.div.span.a.title).getTime(),
+            commentCount: getItemState('icon-comment') || 0,
+            favoriteCount: getItemState('icon-heart') || 0,
+            retweetCount: getItemState('icon-quote') || 0,
+            mediaCount: itemAttachments.length,
+            hasImage: itemAttachments.find((i) => i.class?.includes('image')) ? true : false,
+            hasVideo: itemAttachments.find((i) => i.class?.includes('video')) ? true : false,
+            isQuote: false,
+            isRetweet: false,
+            isReply: false
+        };
+    });
+};
+
+;// CONCATENATED MODULE: ./src/server/getters/twitter/index.ts
+/**
+ * @file BFF Twitter getter
+ * @module server.getter.twitter
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
+
+
+
+
+const twitter_logger = createLogger('BFF:Twitter');
+const getTwitterAggregate = async () => {
+    const [sotwe, nitter] = await Promise.allSettled([
+        getSotweTwitterAggregate(app_config_IDENTITIES.TWITTER_USER_NAME),
+        getNitterTweets(app_config_IDENTITIES.TWITTER_USER_NAME)
+    ]);
+    if (sotwe.status === 'rejected') {
+        throw sotwe.reason;
+    }
+    if (nitter.status === 'rejected') {
+        twitter_logger.failure('Get Nitter tweets failed:', nitter.reason);
+        return sotwe.value;
+    }
+    const sotweAggregate = sotwe.value;
+    const nitterTweets = nitter.value;
+    const resolvedTweets = sotweAggregate.tweets.map((tweet) => {
+        const found = nitterTweets.find((t) => t.id === tweet.id);
+        return {
+            ...tweet,
+            text: found?.text ?? tweet.text,
+            commentCount: found?.commentCount ?? tweet.commentCount ?? UNDEFINED,
+            favoriteCount: found?.favoriteCount ?? tweet.favoriteCount ?? UNDEFINED
+        };
+    });
+    return { ...sotweAggregate, tweets: resolvedTweets };
 };
 
 ;// CONCATENATED MODULE: ./src/server/getters/github.ts
@@ -1269,25 +1412,6 @@ function isObject(value) {
 }
 
 /* harmony default export */ const lodash_es_isObject = (isObject);
-
-;// CONCATENATED MODULE: ./src/utils/logger.ts
-/**
- * @file App logger
- * @module utils/logger
- * @author Surmon <https://github.com/surmon-china>
- */
-const createLogger = (scope) => ({
-    // levels
-    log: (...messages) => console.log('⚪', `[${scope}]`, ...messages),
-    info: (...messages) => console.info('🔵', `[${scope}]`, ...messages),
-    warn: (...messages) => console.warn('🟠', `[${scope}]`, ...messages),
-    error: (...messages) => console.error('🔴', `[${scope}]`, ...messages),
-    debug: (...messages) => console.debug('🟤', `[${scope}]`, ...messages),
-    // aliases
-    success: (...messages) => console.log('🟢', `[${scope}]`, ...messages),
-    failure: (...messages) => console.warn('🔴', `[${scope}]`, ...messages)
-});
-/* harmony default export */ const logger = (createLogger('APP'));
 
 ;// CONCATENATED MODULE: ./src/server/helpers/responser.ts
 /**
