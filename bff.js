@@ -1747,7 +1747,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
     // Twitter aggregate
     const getTwitterAggregateCache = cacher.interval(cache, {
         key: TunnelModule.TwitterAggregate,
-        ttl: hours(8),
+        ttl: hours(12),
         interval: hours(2),
         retry: minutes(10),
         getter: getTwitterAggregate
