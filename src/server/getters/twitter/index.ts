@@ -5,7 +5,7 @@
  */
 
 import { IDENTITIES } from '@/config/app.config'
-import { getSotweAggregate, improveSotweTweet, SotweTweet } from './sotwe'
+import { getSotweAggregate, improveSotweTweet, SotweTweet } from './sotwe-api'
 
 export interface TwitterUserinfo {
   name: string
