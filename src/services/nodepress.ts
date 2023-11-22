@@ -45,21 +45,23 @@ nodepress.interceptors.response.use(
       message: error.response?.data?.error || error.response?.statusText || errorJSON.message
     }
 
-    const serverErrorInfo = {
-      axiosName: errorJSON.name,
-      axiosMessage: errorJSON.message,
-      npError: errorInfo.message,
-      npMessage: error.response?.data?.message || '',
-      status: errorInfo.code,
-      method: errorJSON.config.method,
-      baseURL: errorJSON.config.baseURL,
-      url: errorJSON.config.url,
-      params: errorJSON.config.params,
-      data: errorJSON.config.data,
-      headers: errorJSON.config.headers
-    }
+    // const serverErrorInfo = {
+    //   axiosName: errorJSON.name,
+    //   axiosMessage: errorJSON.message,
+    //   npError: errorInfo.message,
+    //   npMessage: error.response?.data?.message || '',
+    //   status: errorInfo.code,
+    //   method: errorJSON.config.method,
+    //   baseURL: errorJSON.config.baseURL,
+    //   url: errorJSON.config.url,
+    //   params: errorJSON.config.params,
+    //   data: errorJSON.config.data,
+    //   headers: errorJSON.config.headers
+    // }
 
-    logger.debug('axios error:', isClient ? error : serverErrorInfo)
+    if (isClient) {
+      logger.debug('axios error:', error)
+    }
 
     return Promise.reject(errorInfo)
   }
