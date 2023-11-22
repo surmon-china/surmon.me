@@ -133,7 +133,7 @@ const interval = <T>(cache: CacheClient, opts: IntervalCacherOptions<T>) => {
   // Always only get data from the cache
   return async () => {
     if (await cache.has(options.key)) {
-      return await cache.get(options.key)
+      return await cache.get<T>(options.key)
     } else {
       throw `No cached data for "${opts.key}".`
     }
