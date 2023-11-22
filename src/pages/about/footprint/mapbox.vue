@@ -84,6 +84,7 @@
         container: mapboxRef.value!,
         center: MAPBOX_CONFIG.CENTER as LngLatLike,
         zoom: MAPBOX_CONFIG.ZOOM,
+        minZoom: 2.2,
         attributionControl: false,
         style: getMapStyle()
       })
