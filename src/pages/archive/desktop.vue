@@ -66,7 +66,7 @@
         </template>
         <template #loading>
           <ul class="archive-skeleton" key="skeleton">
-            <li v-for="item in 3" :key="item" class="item">
+            <li v-for="item in 9" :key="item" class="item">
               <skeleton-line v-for="i in 3" :key="i" class="line" />
             </li>
           </ul>
@@ -183,11 +183,13 @@
         list-style: none;
         margin: 0;
         padding: 0;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 3rem;
 
         .item {
           width: 100%;
           padding: 2rem;
-          margin-bottom: 3rem;
           background-color: $module-bg-translucent;
           @include radius-box($lg-radius);
           &:last-child {
