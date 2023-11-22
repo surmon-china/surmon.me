@@ -61,7 +61,7 @@
           </ul>
         </template>
         <template #placeholder>
-          <empty class="empty" :i18n-key="LanguageKey.ARTICLE_PLACEHOLDER" />
+          <empty class="empty" bold size="large" :i18n-key="LanguageKey.ARTICLE_PLACEHOLDER" />
         </template>
         <template #default>
           <div key="list">
@@ -194,8 +194,6 @@
 
       .empty {
         height: $gap * 10;
-        font-size: $font-size-h4;
-        font-weight: bold;
         @include common-bg-module();
         @include radius-box($sm-radius);
       }

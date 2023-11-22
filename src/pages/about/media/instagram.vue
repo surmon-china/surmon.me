@@ -10,7 +10,6 @@
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import { getOriginalProxyURL } from '/@/transforms/url'
   import { VALUABLE_LINKS } from '/@/config/app.config'
-  import { LanguageKey } from '/@/language'
 
   const fetching = ref(true)
   const igTimelineStore = useInstagramTimelineStore()
@@ -32,13 +31,16 @@
 </script>
 
 <template>
-  <placeholder :i18n-key="LanguageKey.EMPTY_PLACEHOLDER" :loading="fetching" :data="igMedias">
+  <placeholder :loading="fetching" :data="igMedias">
     <template #loading>
       <ul class="list">
         <li class="item" v-for="i in 24" :key="i">
           <skeleton-base />
         </li>
       </ul>
+    </template>
+    <template #placeholder>
+      <empty size="large" bold />
     </template>
     <template #default>
       <ul class="list">

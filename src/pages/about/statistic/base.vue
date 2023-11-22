@@ -44,7 +44,7 @@
         </ul>
       </template>
       <template #placeholder>
-        <empty class="empty" />
+        <empty bold size="large" />
       </template>
       <template #default>
         <div class="content">
@@ -92,11 +92,6 @@
     &.github.dark {
       #{--s-primary}: $link-color;
       #{--brand-color}: $text-reversal;
-    }
-
-    .empty {
-      font-weight: bold;
-      font-size: $font-size-h4;
     }
 
     .skeletons {

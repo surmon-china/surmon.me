@@ -91,7 +91,7 @@
   <div class="carrousel">
     <placeholder :data="slides.length" :loading="fetching">
       <template #placeholder>
-        <empty class="article-empty" key="empty">
+        <empty class="article-empty" bold key="empty">
           <i18n :k="LanguageKey.ARTICLE_PLACEHOLDER" />
         </empty>
       </template>
@@ -182,7 +182,6 @@
 
     .article-empty {
       font-size: $font-size-h1;
-      font-weight: bold;
     }
 
     .article-skeleton {

@@ -139,7 +139,7 @@
         </ul>
       </template>
       <template #placeholder>
-        <empty class="empty" :i18n-key="LanguageKey.ARTICLE_PLACEHOLDER" />
+        <empty bold :i18n-key="LanguageKey.ARTICLE_PLACEHOLDER" />
       </template>
       <template #default>
         <div>

@@ -2,7 +2,6 @@
   import { ref, shallowRef } from 'vue'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { getTwitterTweetDetailURL } from '/@/transforms/media'
@@ -37,11 +36,7 @@
   <div class="twitter">
     <placeholder :data="!!aggregate?.tweets.length" :loading="fetching">
       <template #placeholder>
-        <div class="twitter-empty" key="empty">
-          <empty class="empty-content">
-            <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
-          </empty>
-        </div>
+        <empty class="twitter-empty" bold key="empty" />
       </template>
       <template #loading>
         <div class="twitter-skeleton" key="skeleton">
@@ -175,10 +170,6 @@
   .twitter-empty {
     @include common-bg-module();
     @include radius-box($sm-radius);
-    .empty-content {
-      min-height: auto;
-      font-weight: bold;
-    }
   }
 
   .twitter-skeleton {

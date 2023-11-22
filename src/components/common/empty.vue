@@ -4,11 +4,13 @@
   defineProps<{
     placeholder?: string
     i18nKey?: LanguageKey
+    bold?: boolean
+    size?: 'small' | 'default' | 'large'
   }>()
 </script>
 
 <template>
-  <div class="empty">
+  <div class="empty" :class="[size, { bold }]">
     <slot>
       <template v-if="placeholder">{{ placeholder }}</template>
       <template v-else>
@@ -33,5 +35,17 @@
     align-items: center;
     color: $text-divider;
     letter-spacing: 0.1em;
+    &.bold {
+      font-weight: bold;
+    }
+    &.small {
+      font-size: $font-size-root;
+    }
+    &.default {
+      font-size: $font-size-base;
+    }
+    &.large {
+      font-size: $font-size-h4;
+    }
   }
 </style>

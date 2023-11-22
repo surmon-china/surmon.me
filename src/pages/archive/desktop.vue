@@ -60,7 +60,7 @@
     <container class="archive-warpper">
       <placeholder :data="archiveStore.data?.articles.length" :loading="archiveStore.fetching">
         <template #placeholder>
-          <empty class="archive-empty" key="empty">
+          <empty class="archive-empty" bold key="empty">
             <i18n :k="LanguageKey.ARTICLE_PLACEHOLDER" />
           </empty>
         </template>
@@ -177,7 +177,6 @@
 
       .archive-empty {
         min-height: 28rem;
-        font-weight: bold;
       }
 
       .archive-skeleton {
