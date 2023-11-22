@@ -96,7 +96,7 @@
           {{ isZhLang ? GEO_INFO.zh_title : GEO_INFO.en_title }}
         </span>
       </div>
-      <ul class="folders" v-if="gmStore.data">
+      <ul class="folders">
         <li class="item" @click="openModal">
           <i class="iconfont icon-route"></i>
           <span class="text">
