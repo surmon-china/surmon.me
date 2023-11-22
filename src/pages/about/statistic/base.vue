@@ -21,7 +21,6 @@
 
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
 
   interface Props {
     brand?: string
@@ -38,11 +37,14 @@
 
 <template>
   <div class="statistic" :class="[brand, { dark: isDarkTheme }]">
-    <placeholder :i18n-key="LanguageKey.EMPTY_PLACEHOLDER" :loading="fetching" :data="data">
+    <placeholder :loading="fetching" :data="data">
       <template #loading>
         <ul class="skeletons">
           <skeleton-base v-for="i in 3" :key="i" class="item" />
         </ul>
+      </template>
+      <template #placeholder>
+        <empty class="empty" />
       </template>
       <template #default>
         <div class="content">
@@ -90,6 +92,11 @@
     &.github.dark {
       #{--s-primary}: $link-color;
       #{--brand-color}: $text-reversal;
+    }
+
+    .empty {
+      font-weight: bold;
+      font-size: $font-size-h4;
     }
 
     .skeletons {
