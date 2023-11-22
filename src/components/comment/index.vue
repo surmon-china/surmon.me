@@ -1,10 +1,22 @@
 <script lang="ts" setup>
-  import { ref, reactive, computed, watch, toRaw, onBeforeMount, onBeforeUnmount, onUnmounted, nextTick } from 'vue'
+  import {
+    ref,
+    reactive,
+    computed,
+    watch,
+    toRaw,
+    onBeforeMount,
+    onMounted,
+    onBeforeUnmount,
+    onUnmounted,
+    nextTick
+  } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore, UserType } from '/@/stores/identity'
   import { useCommentStore, CommentFetchParams } from '/@/stores/comment'
   import { GAEventCategories } from '/@/constants/gtag'
-  import * as ANCHOR from '/@/constants/anchor'
+  import * as ANCHORS from '/@/constants/anchor'
+  import * as URL_HASHS from '/@/constants/url-hash'
   import { UNDEFINED } from '/@/constants/value'
   import { SortType } from '/@/constants/state'
   import { Author } from '/@/interfaces/comment'
@@ -30,7 +42,7 @@
     plain: false
   })
 
-  const { i18n, gtag, gState } = useEnhancer()
+  const { i18n, gtag, gState, route } = useEnhancer()
   const identityStore = useIdentityStore()
   const commentStore = useCommentStore()
 
@@ -94,13 +106,13 @@
     if (commentState.sort !== sort) {
       commentState.sort = sort
       fetchCommentList()
-      scrollToAnchor(ANCHOR.COMMENT_ELEMENT_ID)
+      scrollToAnchor(ANCHORS.COMMENT_ELEMENT_ID)
     }
   }
 
   const fetchPageComments = (page: number) => {
     const comments = commentStore.comments
-    const lastCommentId = ANCHOR.getCommentItemElementId(comments[comments.length - 2].id)
+    const lastCommentId = ANCHORS.getCommentItemElementId(comments[comments.length - 2].id)
     fetchCommentList({ page }, true).then(() => {
       nextTick().then(() => {
         scrollToAnchor(lastCommentId)
@@ -186,7 +198,7 @@
   }
 
   const handleRootSubmit = async (content: string) => {
-    await validateFormById(ANCHOR.COMMENT_PUBLISHER_ELEMENT_ID)
+    await validateFormById(ANCHORS.COMMENT_PUBLISHER_ELEMENT_ID)
     postingKey.value = PostKey.Root
     try {
       await createComment({ content, pid: 0 })
@@ -200,7 +212,7 @@
   }
 
   const handleReplySubmit = async (content: string) => {
-    await validateFormById(ANCHOR.COMMENT_REPLY_PUBLISHER_ELEMENT_ID)
+    await validateFormById(ANCHORS.COMMENT_REPLY_PUBLISHER_ELEMENT_ID)
     postingKey.value = PostKey.Reply
     try {
       await createComment({ content, pid: commentState.replyPId })
@@ -213,24 +225,35 @@
   }
 
   onBeforeMount(() => {
-    watch(isLoading, (isFetching) => {
-      if (isFetching) {
+    watch(isLoading, (loading) => {
+      if (loading) {
         cancelCommentReply()
       }
     })
+  })
+
+  onBeforeUnmount(() => {
+    cancelCommentReply()
   })
 
   onUnmounted(() => {
     commentStore.clearList()
   })
 
-  onBeforeUnmount(() => {
-    cancelCommentReply()
+  onMounted(() => {
+    const urlHash = route.hash.slice(1)
+    if (urlHash.startsWith(URL_HASHS.COMMENT_ITEM_URL_HASH_PREFIX)) {
+      const commentID = URL_HASHS.getCommentIdByUrlHash(urlHash)
+      const elementID = ANCHORS.getCommentItemElementId(commentID)
+      if (elementID && document.getElementById(elementID)) {
+        setTimeout(() => scrollToAnchor(elementID), 400)
+      }
+    }
   })
 </script>
 
 <template>
-  <div :id="ANCHOR.COMMENT_ELEMENT_ID" class="comment-box">
+  <div :id="ANCHORS.COMMENT_ELEMENT_ID" class="comment-box">
     <comment-topbar
       :total="commentStore.pagination?.total"
       :loaded="commentStore.comments.length"
@@ -249,7 +272,7 @@
     <comment-publisher-main :fetching="fetching">
       <comment-publisher
         v-model:profile="guestProfile"
-        :id="ANCHOR.COMMENT_PUBLISHER_ELEMENT_ID"
+        :id="ANCHORS.COMMENT_PUBLISHER_ELEMENT_ID"
         :disabled="isLoading || isRootPosting"
         :total="commentStore.pagination?.total"
         :default-blossomed="plain ? true : false"
@@ -292,7 +315,7 @@
           <template #reply="payload">
             <comment-publisher
               v-model:profile="guestProfile"
-              :id="ANCHOR.COMMENT_REPLY_PUBLISHER_ELEMENT_ID"
+              :id="ANCHORS.COMMENT_REPLY_PUBLISHER_ELEMENT_ID"
               :disabled="false"
               :bordered="true"
               :default-blossomed="true"

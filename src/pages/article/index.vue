@@ -1,16 +1,18 @@
 <script lang="ts" setup>
-  import { computed, watch, shallowRef, onBeforeMount } from 'vue'
+  import { computed, watch, shallowRef, onBeforeMount, onMounted } from 'vue'
   import { storeToRefs } from 'pinia'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/universal'
   import { useStores } from '/@/stores'
   import * as ANCHORS from '/@/constants/anchor'
+  import * as URL_HASHS from '/@/constants/url-hash'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
   import { CUSTOM_ELEMENTS } from '/@/effects/elements'
   import { SocialMedia } from '/@/components/widget/share.vue'
   import { getChatGPTShareURL } from '/@/transforms/chatgpt'
   import { getExtendValue } from '/@/transforms/state'
+  import { scrollToAnchor } from '/@/utils/scroller'
   import logger from '/@/utils/logger'
   import Comment from '/@/components/comment/index.vue'
   import ArticleSkeleton from './skeleton.vue'
@@ -27,7 +29,7 @@
     isMobile?: boolean
   }>()
 
-  const { i18n: _i18n, head, seoMeta, gtag, gState } = useEnhancer()
+  const { i18n: _i18n, head, seoMeta, route, gtag, gState } = useEnhancer()
   const { identity, sponsor, comment: commentStore, articleDetail: articleDetailStore } = useStores()
   const { article, fetching, prevArticle, nextArticle, relatedArticles } = storeToRefs(articleDetailStore)
   const isLiked = computed(() => Boolean(article.value && identity.isLikedPage(article.value.id)))
@@ -104,6 +106,10 @@
     ogImageHeight: 420
   }))
 
+  useUniversalFetch(() => {
+    return fetchArticleDetail(props.articleId)
+  })
+
   onBeforeMount(() => {
     watch(
       () => props.articleId,
@@ -112,8 +118,23 @@
     )
   })
 
-  useUniversalFetch(() => {
-    return fetchArticleDetail(props.articleId)
+  onMounted(() => {
+    const urlHash = route.hash.slice(1)
+    if (urlHash) return
+
+    const articleHeadings = [
+      ...(articleDetailStore.defaultContent?.headings ?? []),
+      ...(articleDetailStore.moreContent?.headings ?? [])
+    ]
+    const elementID =
+      urlHash === URL_HASHS.COMMENTS_URL_HASH
+        ? ANCHORS.COMMENT_ELEMENT_ID
+        : articleHeadings.find(({ text }) => text === urlHash)?.id
+
+    if (elementID && document.getElementById(elementID)) {
+      // Allow a certain amount of time to ensure that the browser is rendered.
+      setTimeout(() => scrollToAnchor(elementID), 400)
+    }
   })
 </script>
 

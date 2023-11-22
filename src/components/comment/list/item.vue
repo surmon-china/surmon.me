@@ -4,14 +4,16 @@
   import { useCommentStore } from '/@/stores/comment'
   import { useIdentityStore, UserType } from '/@/stores/identity'
   import { getCommentItemElementId } from '/@/constants/anchor'
+  import { getCommentUrlHashById } from '/@/constants/url-hash'
   import { LanguageKey } from '/@/language'
   import { UNDEFINED } from '/@/constants/value'
   import { Comment } from '/@/interfaces/comment'
-  import { getAssetURL, getProxyURL, getOriginalProxyURL } from '/@/transforms/url'
+  import { getGravatarByHash, getDisqusAvatarByUsername, DEFAULT_AVATAR } from '/@/transforms/avatar'
+  import { getPageURL, getAssetURL, getProxyURL, getOriginalProxyURL } from '/@/transforms/url'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
   import { scrollToAnchor } from '/@/utils/scroller'
-  import { getGravatarByHash, getDisqusAvatarByUsername, DEFAULT_AVATAR } from '/@/transforms/avatar'
+  import { copy } from '/@/utils/clipboard'
   import Markdown from '/@/components/common/markdown.vue'
   import CommentLink from './link.vue'
   import CommentLocation from './location.vue'
@@ -38,7 +40,7 @@
     (e: CommentEvents.CancelReply, commentId: number): void
   }>()
 
-  const { i18n: _i18n, cdnDomain } = useEnhancer()
+  const { route, i18n: _i18n, cdnDomain } = useEnhancer()
   const commentStore = useCommentStore()
   const identityStore = useIdentityStore()
   const isDeleting = computed(() => commentStore.deleting)
@@ -63,8 +65,8 @@
     return disqusUsername.value
       ? getOriginalProxyURL(getDisqusAvatarByUsername(disqusUsername.value))
       : props.comment.author.email_hash
-      ? getProxyURL(cdnDomain, getGravatarByHash(props.comment.author.email_hash))
-      : getAssetURL(cdnDomain, DEFAULT_AVATAR)
+        ? getProxyURL(cdnDomain, getGravatarByHash(props.comment.author.email_hash))
+        : getAssetURL(cdnDomain, DEFAULT_AVATAR)
   })
 
   const authorURL = computed(() => {
@@ -113,6 +115,10 @@
     }
   }
 
+  const handleCopyFloor = () => {
+    copy(getPageURL(route.path, getCommentUrlHashById(props.comment.id)))
+  }
+
   const scrollToCommentItem = (commentId: number) => {
     scrollToAnchor(getCommentItemElementId(commentId), -300)
   }
@@ -158,7 +164,7 @@
             </span>
           </div>
           <div class="right">
-            <span class="flool">#{{ comment.id }}</span>
+            <button class="floor" @click="handleCopyFloor">#{{ comment.id }}</button>
           </div>
         </div>
         <div class="cm-content">
@@ -383,10 +389,15 @@
           }
         }
 
-        .flool {
+        .floor {
           color: $text-divider;
           font-size: $font-size-small;
           font-weight: bold;
+          &:hover {
+            color: $link-color;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+          }
         }
       }
 

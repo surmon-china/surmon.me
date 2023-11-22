@@ -52,6 +52,7 @@ export const getProxyURL = (domain: string, url: string) => {
   return isDev ? getOriginalProxyURL(url) : `${getCDNPrefixURL(domain, CDNPrefix.Proxy)}/${btoa(url)}`
 }
 
-export const getPageURL = (path: string) => {
-  return `${API_CONFIG.FE}${normalizePath(path)}`
+export const getPageURL = (path: string, hash?: string) => {
+  const targetPath = hash ? `${path}#${hash}` : path
+  return `${API_CONFIG.FE}${normalizePath(targetPath)}`
 }
