@@ -58,7 +58,7 @@
     "serialize-javascript": "^6.0.1",
     "sitemap": "^7.1.1",
     "sticky-events": "^3.4.12",
-    "swiper": "^11.0.4",
+    "swiper": "^11.0.5",
     "ua-parser-js": "^1.0.37",
     "vue": "^3.3.8",
     "vue-router": "^4.2.5",
@@ -92,7 +92,7 @@
     "eslint-plugin-vue": "^9.18.1",
     "prettier": "^3.1.0",
     "sass": "^1.69.5",
-    "tsx": "^4.2.0",
+    "tsx": "^4.2.1",
     "typescript": "^5.3.2",
     "vite": "^5.0.2"
   }

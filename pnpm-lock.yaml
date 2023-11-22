@@ -120,8 +120,8 @@ dependencies:
     specifier: ^3.4.12
     version: 3.4.12
   swiper:
-    specifier: ^11.0.4
-    version: 11.0.4
+    specifier: ^11.0.5
+    version: 11.0.5
   ua-parser-js:
     specifier: ^1.0.37
     version: 1.0.37
@@ -218,8 +218,8 @@ devDependencies:
     specifier: ^1.69.5
     version: 1.69.5
   tsx:
-    specifier: ^4.2.0
-    version: 4.2.0
+    specifier: ^4.2.1
+    version: 4.2.1
   typescript:
     specifier: ^5.3.2
     version: 5.3.2
@@ -4916,8 +4916,8 @@ packages:
       has-flag: 4.0.0
     dev: true
 
-  /swiper@11.0.4:
-    resolution: {integrity: sha512-qtUxILrD4aD++rpKzGrkz3IAWL92f9uTrDwjb6HaNLmPvJhZCE/83DL+9w4kIgDDJeF6QKalV47rMBN77UOVYQ==}
+  /swiper@11.0.5:
+    resolution: {integrity: sha512-rhCwupqSyRnWrtNzWzemnBLMoyYuoDgGgspAm/8iBD3jCvAWycPLH4Z3TB0O5520DHLzMx94yUMH/B9Efpa48w==}
     engines: {node: '>= 4.7.0'}
     dev: false
 
@@ -5031,8 +5031,8 @@ packages:
     resolution: {integrity: sha512-7At1WUettjcSRHXCyYtTselblcHl9PJFFVKiCAy/bY97+BPZXSQ2wbq0P9s8tK2G7dFQfNnlJnPAiArVBVBsfA==}
     dev: true
 
-  /tsx@4.2.0:
-    resolution: {integrity: sha512-hvAXAz4KUYNyjXOjJJgyjT7YOGFUNLC8jnODI6Omc/wGKaZ7z0FvW5d2haqg1GLfX49H3nZOpLYRlHMYGI8Wbw==}
+  /tsx@4.2.1:
+    resolution: {integrity: sha512-rvRrYn6Q5/97TjafXgye7/yrR5oEBlKgOfNXcqpZ87Tu5lh7DFcq/VtznTbpbnV7XMj6Ghvf8j8PlYTQse/SKA==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dependencies:
