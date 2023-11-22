@@ -1,11 +1,11 @@
 <script lang="ts" setup>
   import { ref, shallowRef } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { useEnhancer } from '/@/app/enhancer'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
-  import { getTwitterTweetDetailURL } from '/@/transforms/media'
   import { unescape, padStart, numberSplit } from '/@/transforms/text'
+  import { getTwitterTweetDetailURL } from '/@/transforms/media'
   import type { TwitterAggregate } from '/@/server/getters/twitter'
 
   defineProps<{
@@ -114,7 +114,7 @@
                   <span>Tweet</span>
                   <i class="iconfont window icon-new-window-s"></i>
                 </ulink>
-                <span class="item reply" v-if="tweet.commentCount">
+                <span class="item reply" v-if="Number.isInteger(tweet.commentCount)">
                   <i class="iconfont icon-comment"></i>
                   <span>{{ tweet.commentCount }}</span>
                 </span>

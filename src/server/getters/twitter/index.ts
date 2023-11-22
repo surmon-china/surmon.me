@@ -5,7 +5,12 @@
  */
 
 import { IDENTITIES } from '@/config/app.config'
-import { getSotweAggregate, improveSotweTweet, SotweTweet } from './sotwe-api'
+import { UNDEFINED } from '@/constants/value'
+import { createLogger } from '@/utils/logger'
+import { getSotweTwitterAggregate } from './sotwe-api'
+import { getNitterTweets } from './nitter-html'
+
+const logger = createLogger('BFF:Twitter')
 
 export interface TwitterUserinfo {
   name: string
@@ -21,7 +26,6 @@ export interface TwitterTweet {
   id: string
   owner: string
   text: string
-  html: string
   date: number
   location?: string
   mediaCount: number
@@ -41,60 +45,32 @@ export interface TwitterAggregate {
 }
 
 export const getTwitterAggregate = async (): Promise<TwitterAggregate> => {
-  const sotwe = await getSotweAggregate(IDENTITIES.TWITTER_USER_NAME)
-  const tweets: Array<TwitterTweet> = []
-  const userinfo: TwitterUserinfo = {
-    name: sotwe?.info?.name || IDENTITIES.TWITTER_USER_NAME,
-    avatar: sotwe?.info?.profileImageOriginal || '',
-    description: sotwe?.info.description || void 0,
-    location: sotwe?.info.location || void 0,
-    tweetCount: sotwe?.info.postCount ?? void 0,
-    followerCount: sotwe?.info.followerCount ?? void 0,
-    followingCount: sotwe?.info.followingCount ?? void 0
+  const [sotwe, nitter] = await Promise.allSettled([
+    getSotweTwitterAggregate(IDENTITIES.TWITTER_USER_NAME),
+    getNitterTweets(IDENTITIES.TWITTER_USER_NAME)
+  ])
+
+  if (sotwe.status === 'rejected') {
+    throw sotwe.reason
   }
 
-  // sotwe all tweets
-  const sotweTweets: SotweTweet[] = []
-  if (sotwe?.data.length) {
-    sotwe.data.forEach((item) => {
-      sotweTweets.push(item)
-      if (item.conversation?.length) {
-        sotweTweets.push(...item.conversation)
-      }
-    })
+  if (nitter.status === 'rejected') {
+    logger.failure('Get Nitter tweets failed:', nitter.reason)
+    return sotwe.value
   }
 
-  sotweTweets.forEach((tweet) => {
-    // not retweet
-    if (tweet.retweetedStatus) {
-      return
-    }
-    // not reply to other
-    if (tweet.inReplyToUserId && tweet.inReplyToUserId !== sotwe.info.id) {
-      return
-    }
-    // not your own tweet
-    if (tweet.user && tweet.user.id !== sotwe.info.id) {
-      return
-    }
+  const sotweAggregate = sotwe.value
+  const nitterTweets = nitter.value
 
-    tweets.push({
-      id: tweet.id,
-      owner: IDENTITIES.TWITTER_USER_NAME,
-      text: improveSotweTweet(tweet, false),
-      html: improveSotweTweet(tweet, true),
-      date: tweet.createdAt,
-      location: tweet.location?.name || void 0,
-      favoriteCount: tweet.favoriteCount ?? void 0,
-      retweetCount: tweet.retweetCount ?? void 0,
-      mediaCount: tweet.mediaEntities?.length ?? 0,
-      isReply: !!tweet.inReplyToUserId,
-      isQuote: !!tweet.quotedStatus,
-      isRetweet: !!tweet.retweetedStatus,
-      hasVideo: tweet.mediaEntities?.some((media) => media.type === 'video'),
-      hasImage: tweet.mediaEntities?.some((media) => media.type === 'photo')
-    })
+  const resolvedTweets = sotweAggregate.tweets.map((tweet) => {
+    const found = nitterTweets.find((t) => t.id === tweet.id)
+    return {
+      ...tweet,
+      text: found?.text ?? tweet.text,
+      commentCount: found?.commentCount ?? tweet.commentCount ?? UNDEFINED,
+      favoriteCount: found?.favoriteCount ?? tweet.favoriteCount ?? UNDEFINED
+    }
   })
 
-  return { userinfo, tweets }
+  return { ...sotweAggregate, tweets: resolvedTweets }
 }
