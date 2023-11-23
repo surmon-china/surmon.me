@@ -6,9 +6,9 @@
 
 import highlight from '/@/effects/highlight'
 import { Marked, Renderer } from 'marked'
-import { markedHighlight } from 'marked-highlight'
-import { markedXhtml } from 'marked-xhtml'
 import { mangle } from 'marked-mangle'
+import { markedXhtml } from 'marked-xhtml'
+import { markedHighlight } from 'marked-highlight'
 import { sanitizeUrl } from '@braintree/sanitize-url'
 import { CUSTOM_ELEMENT_LIST } from '/@/effects/elements'
 import { LOZAD_CLASS_NAME } from '/@/composables/lozad'
@@ -16,7 +16,6 @@ import { getLoadingIndicatorHTML } from '/@/components/common/loading-indicator'
 import { getOriginalProxyURL } from '/@/transforms/url'
 import { escape } from '/@/transforms/text'
 import { META } from '/@/config/app.config'
-import API_CONFIG from '/@/config/api.config'
 
 // https://marked.js.org
 const highlightLangPrefix = 'language-'
@@ -68,18 +67,12 @@ const trimHTML = (html: string) => html.replace(/\s+/g, ' ').replace(/\n/g, ' ')
 interface RendererCreatorOptions {
   sanitize: boolean
   lazyLoadImage: boolean
-  text: (text: string) => string
-  headingId: (html: string, level: number, raw: string) => string
-  imageSource: (src: string) => string | { src: string; sources: Array<{ srcset: string; type: string }> }
+  headingIdentifierGetter(html: string, level: number, raw: string): { anchor?: string; id?: string }
+  imageSourceGetter(src: string): string | { src: string; sources: Array<{ srcset: string; type: string }> }
 }
 
 const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => {
   const renderer = new Renderer()
-
-  // text
-  renderer.text = (text) => {
-    return options?.text ? options.text(text) : text
-  }
 
   // html: escape > sanitize
   renderer.html = (html) => {
@@ -91,11 +84,21 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
 
   // heading
   renderer.heading = (html, level, raw) => {
-    const idText = options?.headingId ? `id="${options.headingId(html, level, raw)}"` : ''
-    const url = `'${API_CONFIG.FE}' + window.location.pathname + '#${encodeURIComponent(raw)}'`
-    const copy = `window.navigator.clipboard?.writeText(${url})`
-    const anchor = `<span class="anchor" onclick="${copy}">#</span>`
-    return `<h${level} ${idText} title="${escape(raw)}">${anchor}${html}</h${level}>`
+    const getAnchorWithLink = (anchor: string) => {
+      const preventDefault = `event.preventDefault()`
+      const copy = `window.navigator.clipboard?.writeText(this.href)`
+      const onclick = `onclick="${preventDefault};${copy}"`
+      const href = `href="#${anchor}"`
+      return `<a class="anchor link" ${href} ${onclick}">#</a>`
+    }
+
+    const identifier = options?.headingIdentifierGetter?.(html, level, raw)
+    const idAttr = identifier?.id ? `id="${identifier.id}"` : ''
+    const titleAttr = `title="${escape(raw)}"`
+    const anchorElement = identifier?.anchor
+      ? getAnchorWithLink(identifier.anchor)
+      : `<span class="anchor static">#</span>`
+    return `<h${level} ${idAttr} ${titleAttr}>${anchorElement}${html}</h${level}>`
   }
 
   // paragraph
@@ -141,7 +144,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
     const altValue = sanitizeHTML(escape(alt!))
     const sanitized = sanitizeUrl(src!)
     const original = sanitized.startsWith('http://') ? getOriginalProxyURL(sanitized) : sanitized
-    const parsed = options?.imageSource ? options.imageSource(original) : original
+    const parsed = options?.imageSourceGetter ? options.imageSourceGetter(original) : original
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture
     // https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/currentSrc
     const srcValue = typeof parsed === 'object' ? parsed.src : parsed
@@ -187,12 +190,12 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
       .map((_, i) => `<li class="code-line-number">${i + 1}</li>`.replace(/\s+/g, ' '))
       .join('')
 
-    const readOnlyAttrs = `
-      contenteditable="true"
-      oncut="return false"
-      onpaste="return false"
-      onkeydown="if(event.metaKey) return true; return false;"
-    `
+    const readOnlyAttrs = [
+      `contenteditable="true"`,
+      `oncut="return false"`,
+      `onpaste="return false"`,
+      `onkeydown="if(event.metaKey) return true; return false;"`
+    ].join(' ')
 
     return lang
       ? `
@@ -214,23 +217,16 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
   return renderer
 }
 
-export interface MarkdownRenderOption {
-  sanitize?: boolean
-  lazyLoadImage?: boolean
-  headingIdGetter?: RendererCreatorOptions['headingId']
-  imageSourceGetter?: RendererCreatorOptions['imageSource']
-}
-
+export interface MarkdownRenderOption extends Partial<RendererCreatorOptions> {}
 export const markdownToHTML = (markdown: string, options?: MarkdownRenderOption) => {
   if (!markdown || typeof markdown !== 'string') {
     return ''
   }
 
   const renderOptions: Partial<RendererCreatorOptions> = {
+    ...options,
     sanitize: options?.sanitize ?? false,
-    lazyLoadImage: options?.lazyLoadImage ?? true,
-    headingId: options?.headingIdGetter,
-    imageSource: options?.imageSourceGetter
+    lazyLoadImage: options?.lazyLoadImage ?? true
   }
 
   return marked.parse(markdown, { renderer: createRenderer(renderOptions) }) as string

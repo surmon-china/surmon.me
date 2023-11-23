@@ -5,7 +5,7 @@
   import { useUniversalFetch } from '/@/universal'
   import { useStores } from '/@/stores'
   import * as ANCHORS from '/@/constants/anchor'
-  import * as URL_HASHS from '/@/constants/url-hash'
+  import * as URL_HASHS from '/@/constants/anchor'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
   import { CUSTOM_ELEMENTS } from '/@/effects/elements'
@@ -129,7 +129,7 @@
     const elementID =
       urlHash === URL_HASHS.COMMENTS_URL_HASH
         ? ANCHORS.COMMENT_ELEMENT_ID
-        : articleHeadings.find(({ text }) => text === urlHash)?.id
+        : articleHeadings.find(({ anchor }) => anchor === urlHash)?.id
 
     if (elementID && document.getElementById(elementID)) {
       // Allow a certain amount of time to ensure that the browser is rendered.

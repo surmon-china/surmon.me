@@ -6,7 +6,7 @@
 
 import { computed } from 'vue'
 import { defineStore } from 'pinia'
-import { useFetchStore } from './_fetch'
+import { createFetchStore } from './_fetch'
 import { Archive } from '/@/interfaces/archive'
 import { Article } from '/@/interfaces/article'
 import { dateToHuman, HumanDate } from '/@/transforms/moment'
@@ -21,7 +21,7 @@ export type ArchiveTreeList = Array<{
 }>
 
 export const useArchiveStore = defineStore('archive', () => {
-  const fetchStore = useFetchStore<Archive | null>({
+  const fetchStore = createFetchStore<Archive | null>({
     data: null,
     once: true,
     async fetcher() {

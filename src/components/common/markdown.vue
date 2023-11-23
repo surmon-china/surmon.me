@@ -88,16 +88,20 @@
       font-weight: 700;
       text-indent: 0;
       &:hover {
-        .anchor {
+        .anchor.static {
+          color: $text;
+        }
+        .anchor.link {
           color: $primary;
+          cursor: pointer;
         }
       }
 
       .anchor {
         margin-right: $xs-gap;
         color: $text-secondary;
+        text-decoration: none;
         user-select: none;
-        cursor: pointer;
       }
     }
 

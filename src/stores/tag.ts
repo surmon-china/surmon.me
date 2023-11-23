@@ -6,7 +6,7 @@
 
 import { computed } from 'vue'
 import { defineStore } from 'pinia'
-import { useFetchStore } from './_fetch'
+import { createFetchStore } from './_fetch'
 import { firstUpperCase } from '/@/transforms/text'
 import { getExtendValue } from '/@/transforms/state'
 import { Tag } from '/@/interfaces/tag'
@@ -31,7 +31,7 @@ export const getTagEnName = (tag: Tag) => {
 
 export type TagMap = Map<string, Tag>
 export const useTagStore = defineStore('tag', () => {
-  const fetchStore = useFetchStore<Tag[]>({
+  const fetchStore = createFetchStore<Tag[]>({
     once: true,
     data: [],
     fetcher: async () => {

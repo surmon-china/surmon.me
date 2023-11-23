@@ -15,7 +15,7 @@ export interface FetchStoreOptions<Data> {
   shallow?: boolean
 }
 
-export const useFetchStore = <Data>(options: FetchStoreOptions<Data>) => {
+export const createFetchStore = <Data>(options: FetchStoreOptions<Data>) => {
   // default: shallow
   const isShallow = isUndefined(options.shallow) ? true : options.shallow
   const refWrapper = isShallow ? shallowRef : ref

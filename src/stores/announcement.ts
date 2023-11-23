@@ -5,13 +5,13 @@
  */
 
 import { defineStore } from 'pinia'
-import { useFetchStore } from './_fetch'
+import { createFetchStore } from './_fetch'
 import { Announcement } from '/@/interfaces/announcement'
 import { PaginationList } from '/@/interfaces/common'
 import nodepress from '/@/services/nodepress'
 
 export const useAnnouncementStore = defineStore('announcement', () => {
-  return useFetchStore<Announcement[]>({
+  return createFetchStore<Announcement[]>({
     data: [],
     preclean: true,
     async fetcher(params?: any) {

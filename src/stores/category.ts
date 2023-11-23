@@ -5,13 +5,13 @@
  */
 
 import { defineStore } from 'pinia'
-import { useFetchStore } from './_fetch'
+import { createFetchStore } from './_fetch'
 import { Category } from '/@/interfaces/category'
 import { PaginationList } from '/@/interfaces/common'
 import nodepress from '/@/services/nodepress'
 
 export const useCategoryStore = defineStore('category', () => {
-  return useFetchStore<Category[]>({
+  return createFetchStore<Category[]>({
     data: [],
     once: true,
     fetcher() {

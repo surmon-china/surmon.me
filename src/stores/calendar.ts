@@ -6,7 +6,7 @@
 
 import { computed } from 'vue'
 import { defineStore } from 'pinia'
-import { useFetchStore } from './_fetch'
+import { createFetchStore } from './_fetch'
 import { TunnelModule } from '/@/constants/tunnel'
 import nodepress from '/@/services/nodepress'
 import tunnel from '/@/services/tunnel'
@@ -14,7 +14,7 @@ import tunnel from '/@/services/tunnel'
 type CalendarDay = { date: string; count: number }
 
 export const useArticleCalendarStore = defineStore('articleCalendar', () => {
-  return useFetchStore<CalendarDay[]>({
+  return createFetchStore<CalendarDay[]>({
     once: true,
     data: [],
     async fetcher() {
@@ -27,7 +27,7 @@ export const useArticleCalendarStore = defineStore('articleCalendar', () => {
 })
 
 export const useInstagramCalendarStore = defineStore('instagramCalendar', () => {
-  return useFetchStore<CalendarDay[]>({
+  return createFetchStore<CalendarDay[]>({
     once: true,
     data: [],
     fetcher: () => {
@@ -37,7 +37,7 @@ export const useInstagramCalendarStore = defineStore('instagramCalendar', () => 
 })
 
 export const useGitHubCalendarStore = defineStore('githubContributionsCalendar', () => {
-  const fetchStore = useFetchStore({
+  const fetchStore = createFetchStore({
     once: true,
     data: null,
     fetcher: () => tunnel.dispatch(TunnelModule.GitHubContributions)

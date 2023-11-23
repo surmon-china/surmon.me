@@ -5,7 +5,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { useFetchStore } from './_fetch'
+import { createFetchStore } from './_fetch'
 import { TunnelModule } from '/@/constants/tunnel'
 import type { GitHubStatistic, NpmStatistic } from '/@/server/getters/open-srouce'
 import nodepress from '/@/services/nodepress'
@@ -22,7 +22,7 @@ export interface NodePressStatistic {
 }
 
 export const useNodepressStatisticStore = defineStore('nodepressStatistic', () => {
-  return useFetchStore<NodePressStatistic | null>({
+  return createFetchStore<NodePressStatistic | null>({
     data: null,
     fetcher: async () => {
       const response = await nodepress.get<NodePressStatistic>('/expansion/statistic')
@@ -32,7 +32,7 @@ export const useNodepressStatisticStore = defineStore('nodepressStatistic', () =
 })
 
 export const useGitHubStatisticStore = defineStore('githubStatistic', () => {
-  return useFetchStore<GitHubStatistic | null>({
+  return createFetchStore<GitHubStatistic | null>({
     once: true,
     data: null,
     fetcher: () => tunnel.dispatch(TunnelModule.OpenSourceGitHubStatistic)
@@ -40,7 +40,7 @@ export const useGitHubStatisticStore = defineStore('githubStatistic', () => {
 })
 
 export const useNpmStatisticStore = defineStore('npmStatistic', () => {
-  return useFetchStore<NpmStatistic | null>({
+  return createFetchStore<NpmStatistic | null>({
     once: true,
     data: null,
     fetcher: () => tunnel.dispatch<NpmStatistic>(TunnelModule.OpenSourceNPMStatistic)

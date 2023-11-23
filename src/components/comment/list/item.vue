@@ -4,7 +4,7 @@
   import { useCommentStore } from '/@/stores/comment'
   import { useIdentityStore, UserType } from '/@/stores/identity'
   import { getCommentItemElementId } from '/@/constants/anchor'
-  import { getCommentUrlHashById } from '/@/constants/url-hash'
+  import { getCommentUrlHashById } from '/@/constants/anchor'
   import { LanguageKey } from '/@/language'
   import { UNDEFINED } from '/@/constants/value'
   import { Comment } from '/@/interfaces/comment'

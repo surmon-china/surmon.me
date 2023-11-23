@@ -6,7 +6,7 @@
 
 import { computed } from 'vue'
 import { defineStore } from 'pinia'
-import { useFetchStore } from './_fetch'
+import { createFetchStore } from './_fetch'
 import { CommentPostId } from '/@/constants/state'
 import { UNDEFINED } from '/@/constants/value'
 import { AdminInfo, AppOption, AppAdConfig } from '/@/interfaces/option'
@@ -14,7 +14,7 @@ import { useIdentityStore, UserType } from './identity'
 import nodepress from '/@/services/nodepress'
 
 export const useAdminInfoStore = defineStore('adminInfo', () => {
-  return useFetchStore<AdminInfo | null>({
+  return createFetchStore<AdminInfo | null>({
     data: null,
     async fetcher() {
       const response = await nodepress.get<AdminInfo>('/auth/admin')
@@ -24,7 +24,7 @@ export const useAdminInfoStore = defineStore('adminInfo', () => {
 })
 
 export const useAppOptionStore = defineStore('appOption', () => {
-  const fetchStore = useFetchStore<AppOption | null>({
+  const fetchStore = createFetchStore<AppOption | null>({
     shallow: false,
     data: null,
     async fetcher() {

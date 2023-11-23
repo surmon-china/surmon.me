@@ -6,15 +6,15 @@
 
 import { ref, shallowRef, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { useFetchStore } from './_fetch'
+import { createFetchStore } from './_fetch'
 import { useIdentityStore } from './identity'
 import { useCDNDomain } from '/@/app/context'
+import { SortType } from '/@/constants/state'
 import { Article } from '/@/interfaces/article'
 import { Pagination, PaginationList } from '/@/interfaces/common'
-import { SortType } from '/@/constants/state'
-import { getArticleContentHeadingElementId } from '/@/constants/anchor'
-import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
+import { getArticleContentHeadingElementId, getArticleHeadingUrlHash } from '/@/constants/anchor'
 import { markdownToHTML, getMarkdownSplitIndex, MarkdownRenderOption } from '/@/transforms/markdown'
+import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
 import { delayPromise } from '/@/utils/delayer'
 import { isClient } from '/@/app/environment'
 import { RENDER_LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
@@ -23,7 +23,7 @@ import nodepress from '/@/services/nodepress'
 export const ARTICLE_API_PATH = '/article'
 
 const createSpecialArticleListStore = (_params: Record<string, any>, perPage: number = 8) => {
-  return useFetchStore<Article[]>({
+  return createFetchStore<Article[]>({
     once: true,
     data: [],
     async fetcher() {
@@ -86,8 +86,9 @@ export const useArticleListStore = defineStore('articleList', () => {
 })
 
 interface ArticleHeading {
-  text: string
   level: number
+  text: string
+  anchor: string
   id: string
 }
 
@@ -97,11 +98,11 @@ const renderArticleMarkdown = (markdown: string, imageSourceGetter: MarkdownRend
   const html = markdownToHTML(markdown, {
     sanitize: false,
     imageSourceGetter,
-    headingIdGetter: (_, level, raw) => {
-      const escaped = raw.toLowerCase().replace(/[^a-zA-Z0-9\u4E00-\u9FA5]+/g, '-')
-      const id = getArticleContentHeadingElementId(level, escaped)
-      headings.push({ level, id, text: raw })
-      return id
+    headingIdentifierGetter: (_, level, raw) => {
+      const anchor = getArticleHeadingUrlHash(raw)
+      const id = getArticleContentHeadingElementId(level, anchor)
+      headings.push({ level, text: raw, id, anchor })
+      return { id, anchor }
     }
   })
 
@@ -143,7 +144,6 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
     if (!isOriginalStaticURL(src)) {
       return src
     }
-
     const cdnDomain = useCDNDomain()
     const path = getStaticPath(src)
     return getStaticURL(cdnDomain, path)

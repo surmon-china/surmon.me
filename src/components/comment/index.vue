@@ -16,7 +16,7 @@
   import { useCommentStore, CommentFetchParams } from '/@/stores/comment'
   import { GAEventCategories } from '/@/constants/gtag'
   import * as ANCHORS from '/@/constants/anchor'
-  import * as URL_HASHS from '/@/constants/url-hash'
+  import * as URL_HASHS from '/@/constants/anchor'
   import { UNDEFINED } from '/@/constants/value'
   import { SortType } from '/@/constants/state'
   import { Author } from '/@/interfaces/comment'

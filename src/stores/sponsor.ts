@@ -6,13 +6,13 @@
 
 import { computed } from 'vue'
 import { defineStore } from 'pinia'
-import { useFetchStore } from './_fetch'
+import { createFetchStore } from './_fetch'
 import type { GitHubSponsorsResponse, GitHubSponsorUser } from '/@/server/getters/github'
 import { TunnelModule } from '/@/constants/tunnel'
 import tunnel from '/@/services/tunnel'
 
 export const useSponsorStore = defineStore('githubSponsor', () => {
-  const fetchStore = useFetchStore<GitHubSponsorsResponse | null>({
+  const fetchStore = createFetchStore<GitHubSponsorsResponse | null>({
     fetcher: () => tunnel.dispatch<GitHubSponsorsResponse>(TunnelModule.GitHubSponsors),
     once: true,
     data: null
