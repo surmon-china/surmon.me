@@ -369,7 +369,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.33.1";
+const APP_VERSION = "4.33.2";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -1626,7 +1626,7 @@ const createRenderer = (options) => {
       const copy = `window.navigator.clipboard?.writeText(this.href)`;
       const onclick = `onclick="${preventDefault};${copy}"`;
       const href = `href="#${anchor}"`;
-      return `<a class="anchor link" ${href} ${onclick}">#</a>`;
+      return `<a class="anchor link" ${href} ${onclick}>#</a>`;
     };
     const identifier = (_a = options == null ? void 0 : options.headingIdentifierGetter) == null ? void 0 : _a.call(options, html, level, raw);
     const idAttr = (identifier == null ? void 0 : identifier.id) ? `id="${identifier.id}"` : "";
