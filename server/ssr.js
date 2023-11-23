@@ -30,9 +30,9 @@ import python from "highlight.js/lib/languages/python";
 import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { Marked, Renderer } from "marked";
-import { markedHighlight } from "marked-highlight";
-import { markedXhtml } from "marked-xhtml";
 import { mangle } from "marked-mangle";
+import { markedXhtml } from "marked-xhtml";
+import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import lozad from "lozad";
 import { useHead as useHead$1, createHead } from "@unhead/vue";
@@ -369,7 +369,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.33.0";
+const APP_VERSION = "4.33.1";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -543,7 +543,7 @@ const UNDEFINED = void 0;
 const isNull = (value) => value === NULL;
 const isUndefined = (value) => value === UNDEFINED;
 const isNil = (value) => isNull(value) || isUndefined(value);
-const useFetchStore = (options) => {
+const createFetchStore = (options) => {
   const isShallow = isUndefined(options.shallow) ? true : options.shallow;
   const refWrapper = isShallow ? shallowRef : ref;
   const fetching = ref(false);
@@ -624,7 +624,7 @@ const nodepress$1 = {
   options: overwrite("options")
 };
 const useAnnouncementStore = defineStore("announcement", () => {
-  return useFetchStore({
+  return createFetchStore({
     data: [],
     preclean: true,
     async fetcher(params) {
@@ -668,7 +668,7 @@ const dateToYMD = (date, separator) => {
   return humanDateToYMD(dateToHuman(_date), separator);
 };
 const useArchiveStore = defineStore("archive", () => {
-  const fetchStore = useFetchStore({
+  const fetchStore = createFetchStore({
     data: null,
     once: true,
     async fetcher() {
@@ -1011,7 +1011,7 @@ const useCommentStore = defineStore("comment", () => {
   };
 });
 const useCategoryStore = defineStore("category", () => {
-  return useFetchStore({
+  return createFetchStore({
     data: [],
     once: true,
     fetcher() {
@@ -1063,7 +1063,7 @@ const getTagEnName = (tag) => {
   return firstUpperCase(tag.slug);
 };
 const useTagStore = defineStore("tag", () => {
-  const fetchStore = useFetchStore({
+  const fetchStore = createFetchStore({
     once: true,
     data: [],
     fetcher: async () => {
@@ -1123,7 +1123,7 @@ const tunnel$1 = {
   dispatch: (module, params) => tunnel.get(module, { params })
 };
 const useWallpaperStore = defineStore("wallpaper", () => {
-  const fetchStore = useFetchStore({
+  const fetchStore = createFetchStore({
     fetcher: () => tunnel$1.dispatch(TunnelModule.BingWallpaper),
     once: true,
     data: null
@@ -1137,7 +1137,7 @@ const useWallpaperStore = defineStore("wallpaper", () => {
   return { ...fetchStore, papers };
 });
 const useSponsorStore = defineStore("githubSponsor", () => {
-  const fetchStore = useFetchStore({
+  const fetchStore = createFetchStore({
     fetcher: () => tunnel$1.dispatch(TunnelModule.GitHubSponsors),
     once: true,
     data: null
@@ -1168,7 +1168,7 @@ const useSponsorStore = defineStore("githubSponsor", () => {
   };
 });
 const useAdminInfoStore = defineStore("adminInfo", () => {
-  return useFetchStore({
+  return createFetchStore({
     data: null,
     async fetcher() {
       const response = await nodepress$1.get("/auth/admin");
@@ -1177,7 +1177,7 @@ const useAdminInfoStore = defineStore("adminInfo", () => {
   });
 });
 const useAppOptionStore = defineStore("appOption", () => {
-  const fetchStore = useFetchStore({
+  const fetchStore = createFetchStore({
     shallow: false,
     data: null,
     async fetcher() {
@@ -1226,7 +1226,7 @@ const useAppOptionStore = defineStore("appOption", () => {
   };
 });
 const useNodepressStatisticStore = defineStore("nodepressStatistic", () => {
-  return useFetchStore({
+  return createFetchStore({
     data: null,
     fetcher: async () => {
       const response = await nodepress$1.get("/expansion/statistic");
@@ -1235,21 +1235,21 @@ const useNodepressStatisticStore = defineStore("nodepressStatistic", () => {
   });
 });
 const useGitHubStatisticStore = defineStore("githubStatistic", () => {
-  return useFetchStore({
+  return createFetchStore({
     once: true,
     data: null,
     fetcher: () => tunnel$1.dispatch(TunnelModule.OpenSourceGitHubStatistic)
   });
 });
 const useNpmStatisticStore = defineStore("npmStatistic", () => {
-  return useFetchStore({
+  return createFetchStore({
     once: true,
     data: null,
     fetcher: () => tunnel$1.dispatch(TunnelModule.OpenSourceNPMStatistic)
   });
 });
 const useArticleCalendarStore = defineStore("articleCalendar", () => {
-  return useFetchStore({
+  return createFetchStore({
     once: true,
     data: [],
     async fetcher() {
@@ -1261,7 +1261,7 @@ const useArticleCalendarStore = defineStore("articleCalendar", () => {
   });
 });
 const useInstagramCalendarStore = defineStore("instagramCalendar", () => {
-  return useFetchStore({
+  return createFetchStore({
     once: true,
     data: [],
     fetcher: () => {
@@ -1270,7 +1270,7 @@ const useInstagramCalendarStore = defineStore("instagramCalendar", () => {
   });
 });
 const useGitHubCalendarStore = defineStore("githubContributionsCalendar", () => {
-  const fetchStore = useFetchStore({
+  const fetchStore = createFetchStore({
     once: true,
     data: null,
     fetcher: () => tunnel$1.dispatch(TunnelModule.GitHubContributions)
@@ -1288,14 +1288,14 @@ const useGitHubCalendarStore = defineStore("githubContributionsCalendar", () => 
   return { ...fetchStore, days };
 });
 const useDoubanMoviesStore = defineStore("doubanMovies", () => {
-  return useFetchStore({
+  return createFetchStore({
     once: true,
     data: null,
     fetcher: () => tunnel$1.dispatch(TunnelModule.DoubanMovies)
   });
 });
 const useInstagramTimelineStore = defineStore("instagramTimeline", () => {
-  return useFetchStore({
+  return createFetchStore({
     data: null,
     fetcher: () => {
       const request = tunnel$1.dispatch(TunnelModule.InstagramMedias);
@@ -1304,13 +1304,13 @@ const useInstagramTimelineStore = defineStore("instagramTimeline", () => {
   });
 });
 const useInstagramProfileStore = defineStore("instagramProfile", () => {
-  return useFetchStore({
+  return createFetchStore({
     data: null,
     fetcher: () => tunnel$1.dispatch(TunnelModule.InstagramProfile)
   });
 });
 const useYouTubePlayListStore = defineStore("youtubePlaylist", () => {
-  return useFetchStore({
+  return createFetchStore({
     data: [],
     async fetcher() {
       const response = await tunnel$1.dispatch(TunnelModule.YouTubePlaylist);
@@ -1320,7 +1320,7 @@ const useYouTubePlayListStore = defineStore("youtubePlaylist", () => {
   });
 });
 const useTwitterStore = defineStore("twitterAggregate", () => {
-  return useFetchStore({
+  return createFetchStore({
     data: null,
     fetcher: () => {
       return tunnel$1.dispatch(TunnelModule.TwitterAggregate);
@@ -1328,7 +1328,7 @@ const useTwitterStore = defineStore("twitterAggregate", () => {
   });
 });
 const useMyGoogleMapStore = defineStore("myGoogleMap", () => {
-  return useFetchStore({
+  return createFetchStore({
     once: true,
     data: null,
     fetcher: () => tunnel$1.dispatch(TunnelModule.MyGoogleMap)
@@ -1364,8 +1364,11 @@ const ARTICLE_META_ELEMENT_ID = "A_article_meta";
 const ARTICLE_SHARE_ELEMENT_ID = "A_article_share";
 const ARTICLE_RELATED_ELEMENT_ID = "A_article_related";
 const ARTICLE_CONTENT_HEADING_ELEMENT_ID_PREFIX = "A_article_content_heading";
-const getArticleContentHeadingElementId = (level, heading) => {
-  return `${ARTICLE_CONTENT_HEADING_ELEMENT_ID_PREFIX}_${level}_${heading}`;
+const getArticleContentHeadingElementId = (level, anchor) => {
+  return `${ARTICLE_CONTENT_HEADING_ELEMENT_ID_PREFIX}_${level}_${anchor}`;
+};
+const getArticleHeadingUrlHash = (heading) => {
+  return heading.replace(/[^\p{L}\d\s\-_]/gu, "").toLowerCase().replace(/\s+/g, "-");
 };
 const COMMENT_ELEMENT_ID = "A_comment_warpper";
 const COMMENT_PUBLISHER_ELEMENT_ID = "A_comment_publisher";
@@ -1375,60 +1378,10 @@ const COMMENT_ITEM_ELEMENT_ID_PREFIX = "A_comment_content_item";
 const getCommentItemElementId = (commentId) => {
   return `${COMMENT_ITEM_ELEMENT_ID_PREFIX}_${commentId}`;
 };
-var CDNPrefix = /* @__PURE__ */ ((CDNPrefix2) => {
-  CDNPrefix2["Proxy"] = "proxy";
-  CDNPrefix2["Assets"] = "assets";
-  CDNPrefix2["Static"] = "static";
-  CDNPrefix2["ImgProxy"] = "imgproxy";
-  return CDNPrefix2;
-})(CDNPrefix || {});
-const getCDNPrefixURL = (domain, prefix) => {
-  return `${domain}/${prefix}`;
-};
-const normalizePath = (path) => {
-  return path.startsWith("/") ? path : `/${path}`;
-};
-const getAssetURL = (domain, path) => {
-  const normalizedPath = normalizePath(path);
-  return `${getCDNPrefixURL(
-    domain,
-    "assets"
-    /* Assets */
-  )}${normalizedPath}`;
-};
-const getStaticURL = (domain, path) => {
-  return `${getCDNPrefixURL(
-    domain,
-    "static"
-    /* Static */
-  )}${normalizePath(path)}`;
-};
-const getImgProxyURL = (domain, path) => {
-  return `${getCDNPrefixURL(
-    domain,
-    "imgproxy"
-    /* ImgProxy */
-  )}${normalizePath(path)}`;
-};
-const isOriginalStaticURL = (url) => {
-  return url == null ? void 0 : url.startsWith(API_CONFIG.STATIC);
-};
-const getStaticPath = (url) => {
-  return url.replace(API_CONFIG.STATIC, "");
-};
-const getOriginalProxyURL = (url) => {
-  return `${BFF_PROXY_PREFIX}/${btoa(url)}`;
-};
-const getProxyURL = (domain, url) => {
-  return `${getCDNPrefixURL(
-    domain,
-    "proxy"
-    /* Proxy */
-  )}/${btoa(url)}`;
-};
-const getPageURL = (path, hash) => {
-  const targetPath = hash ? `${path}#${hash}` : path;
-  return `${API_CONFIG.FE}${normalizePath(targetPath)}`;
+const COMMENTS_URL_HASH = "comments";
+const COMMENT_ITEM_URL_HASH_PREFIX = "comment-";
+const getCommentIdByUrlHash = (hash) => {
+  return hash.replace(COMMENT_ITEM_URL_HASH_PREFIX, "");
 };
 const languages = {
   go,
@@ -1586,6 +1539,61 @@ const getLoadingIndicatorHTML = (options = {}) => {
     </div>
   `;
 };
+var CDNPrefix = /* @__PURE__ */ ((CDNPrefix2) => {
+  CDNPrefix2["Proxy"] = "proxy";
+  CDNPrefix2["Assets"] = "assets";
+  CDNPrefix2["Static"] = "static";
+  CDNPrefix2["ImgProxy"] = "imgproxy";
+  return CDNPrefix2;
+})(CDNPrefix || {});
+const getCDNPrefixURL = (domain, prefix) => {
+  return `${domain}/${prefix}`;
+};
+const normalizePath = (path) => {
+  return path.startsWith("/") ? path : `/${path}`;
+};
+const getAssetURL = (domain, path) => {
+  const normalizedPath = normalizePath(path);
+  return `${getCDNPrefixURL(
+    domain,
+    "assets"
+    /* Assets */
+  )}${normalizedPath}`;
+};
+const getStaticURL = (domain, path) => {
+  return `${getCDNPrefixURL(
+    domain,
+    "static"
+    /* Static */
+  )}${normalizePath(path)}`;
+};
+const getImgProxyURL = (domain, path) => {
+  return `${getCDNPrefixURL(
+    domain,
+    "imgproxy"
+    /* ImgProxy */
+  )}${normalizePath(path)}`;
+};
+const isOriginalStaticURL = (url) => {
+  return url == null ? void 0 : url.startsWith(API_CONFIG.STATIC);
+};
+const getStaticPath = (url) => {
+  return url.replace(API_CONFIG.STATIC, "");
+};
+const getOriginalProxyURL = (url) => {
+  return `${BFF_PROXY_PREFIX}/${btoa(url)}`;
+};
+const getProxyURL = (domain, url) => {
+  return `${getCDNPrefixURL(
+    domain,
+    "proxy"
+    /* Proxy */
+  )}/${btoa(url)}`;
+};
+const getPageURL = (path, hash) => {
+  const targetPath = hash ? `${path}#${hash}` : path;
+  return `${API_CONFIG.FE}${normalizePath(targetPath)}`;
+};
 const highlightLangPrefix = "language-";
 const marked = new Marked(
   mangle(),
@@ -1606,20 +1614,25 @@ const sanitizeHTML = (content) => content;
 const trimHTML = (html) => html.replace(/\s+/g, " ").replace(/\n/g, " ");
 const createRenderer = (options) => {
   const renderer = new Renderer();
-  renderer.text = (text) => {
-    return (options == null ? void 0 : options.text) ? options.text(text) : text;
-  };
   renderer.html = (html) => {
     const trimmed = html.trim();
     const transformed = CUSTOM_ELEMENT_LIST.reduce((result, ce) => ce.transform(result), trimmed);
     return (options == null ? void 0 : options.sanitize) ? sanitizeHTML(escape(transformed)) : transformed;
   };
   renderer.heading = (html, level, raw) => {
-    const idText = (options == null ? void 0 : options.headingId) ? `id="${options.headingId(html, level, raw)}"` : "";
-    const url = `'${API_CONFIG.FE}' + window.location.pathname + '#${encodeURIComponent(raw)}'`;
-    const copy = `window.navigator.clipboard?.writeText(${url})`;
-    const anchor = `<span class="anchor" onclick="${copy}">#</span>`;
-    return `<h${level} ${idText} title="${escape(raw)}">${anchor}${html}</h${level}>`;
+    var _a;
+    const getAnchorWithLink = (anchor) => {
+      const preventDefault = `event.preventDefault()`;
+      const copy = `window.navigator.clipboard?.writeText(this.href)`;
+      const onclick = `onclick="${preventDefault};${copy}"`;
+      const href = `href="#${anchor}"`;
+      return `<a class="anchor link" ${href} ${onclick}">#</a>`;
+    };
+    const identifier = (_a = options == null ? void 0 : options.headingIdentifierGetter) == null ? void 0 : _a.call(options, html, level, raw);
+    const idAttr = (identifier == null ? void 0 : identifier.id) ? `id="${identifier.id}"` : "";
+    const titleAttr = `title="${escape(raw)}"`;
+    const anchorElement = (identifier == null ? void 0 : identifier.anchor) ? getAnchorWithLink(identifier.anchor) : `<span class="anchor static">#</span>`;
+    return `<h${level} ${idAttr} ${titleAttr}>${anchorElement}${html}</h${level}>`;
   };
   renderer.paragraph = (text) => {
     const trimmed = text.trim();
@@ -1654,7 +1667,7 @@ const createRenderer = (options) => {
     const altValue = sanitizeHTML(escape(alt));
     const sanitized = sanitizeUrl(src);
     const original = sanitized.startsWith("http://") ? getOriginalProxyURL(sanitized) : sanitized;
-    const parsed = (options == null ? void 0 : options.imageSource) ? options.imageSource(original) : original;
+    const parsed = (options == null ? void 0 : options.imageSourceGetter) ? options.imageSourceGetter(original) : original;
     const srcValue = typeof parsed === "object" ? parsed.src : parsed;
     const sourcesValue = typeof parsed === "object" ? parsed.sources : [];
     return trimHTML(`
@@ -1690,12 +1703,12 @@ const createRenderer = (options) => {
   };
   renderer.code = function(code, lang, isEscaped) {
     const lineNumbers = code.split("\n").map((_, i) => `<li class="code-line-number">${i + 1}</li>`.replace(/\s+/g, " ")).join("");
-    const readOnlyAttrs = `
-      contenteditable="true"
-      oncut="return false"
-      onpaste="return false"
-      onkeydown="if(event.metaKey) return true; return false;"
-    `;
+    const readOnlyAttrs = [
+      `contenteditable="true"`,
+      `oncut="return false"`,
+      `onpaste="return false"`,
+      `onkeydown="if(event.metaKey) return true; return false;"`
+    ].join(" ");
     return lang ? `
         <pre data-lang="${lang}">
           <ul class="code-lines">${lineNumbers}</ul>
@@ -1718,10 +1731,9 @@ const markdownToHTML = (markdown, options) => {
     return "";
   }
   const renderOptions = {
+    ...options,
     sanitize: (options == null ? void 0 : options.sanitize) ?? false,
-    lazyLoadImage: (options == null ? void 0 : options.lazyLoadImage) ?? true,
-    headingId: options == null ? void 0 : options.headingIdGetter,
-    imageSource: options == null ? void 0 : options.imageSourceGetter
+    lazyLoadImage: (options == null ? void 0 : options.lazyLoadImage) ?? true
   };
   return marked.parse(markdown, { renderer: createRenderer(renderOptions) });
 };
@@ -1736,7 +1748,7 @@ const getMarkdownSplitIndex = (markdown, index) => {
 };
 const ARTICLE_API_PATH = "/article";
 const createSpecialArticleListStore = (_params, perPage = 8) => {
-  return useFetchStore({
+  return createFetchStore({
     once: true,
     data: [],
     async fetcher() {
@@ -1793,11 +1805,11 @@ const renderArticleMarkdown = (markdown, imageSourceGetter) => {
   const html = markdownToHTML(markdown, {
     sanitize: false,
     imageSourceGetter,
-    headingIdGetter: (_, level, raw) => {
-      const escaped = raw.toLowerCase().replace(/[^a-zA-Z0-9\u4E00-\u9FA5]+/g, "-");
-      const id = getArticleContentHeadingElementId(level, escaped);
-      headings.push({ level, id, text: raw });
-      return id;
+    headingIdentifierGetter: (_, level, raw) => {
+      const anchor = getArticleHeadingUrlHash(raw);
+      const id = getArticleContentHeadingElementId(level, anchor);
+      headings.push({ level, text: raw, id, anchor });
+      return { id, anchor };
     }
   });
   return { html, headings };
@@ -6116,11 +6128,6 @@ _sfc_main$1q.setup = (props, ctx) => {
   return _sfc_setup$1q ? _sfc_setup$1q(props, ctx) : void 0;
 };
 const MobileArchivePage = /* @__PURE__ */ _export_sfc(_sfc_main$1q, [["__scopeId", "data-v-6201772a"]]);
-const COMMENTS_URL_HASH = "comments";
-const COMMENT_ITEM_URL_HASH_PREFIX = "comment-";
-const getCommentIdByUrlHash = (hash) => {
-  return hash.replace(COMMENT_ITEM_URL_HASH_PREFIX, "");
-};
 async function renderTextToQRCodeDataURL(value, options) {
   return await QRCode.toDataURL(value, {
     errorCorrectionLevel: "H",
@@ -7162,20 +7169,20 @@ const _sfc_main$1i = /* @__PURE__ */ defineComponent({
         }],
         key: _ctx.comment.id,
         id: unref(getCommentItemElementId)(_ctx.comment.id)
-      }, _attrs))} data-v-6f63edf0><div data-v-6f63edf0>`);
+      }, _attrs))} data-v-6c301220><div data-v-6c301220>`);
       if (!_ctx.hiddenAvatar) {
-        _push(`<div class="cm-avatar" data-v-6f63edf0>`);
+        _push(`<div class="cm-avatar" data-v-6c301220>`);
         _push(ssrRenderComponent(_sfc_main$1l, {
           class: "link",
           href: authorURL.value
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<img${ssrRenderAttr("src", authorAvatar.value)}${ssrRenderAttr("alt", _ctx.comment.author.name)} draggable="false" data-v-6f63edf0${_scopeId}><span class="${ssrRenderClass([isDisqusAuthor.value ? "disqus" : "anonymous", "role"])}" data-v-6f63edf0${_scopeId}>`);
+              _push2(`<img${ssrRenderAttr("src", authorAvatar.value)}${ssrRenderAttr("alt", _ctx.comment.author.name)} draggable="false" data-v-6c301220${_scopeId}><span class="${ssrRenderClass([isDisqusAuthor.value ? "disqus" : "anonymous", "role"])}" data-v-6c301220${_scopeId}>`);
               if (isDisqusAuthor.value) {
-                _push2(`<i class="iconfont icon-disqus-logo" data-v-6f63edf0${_scopeId}></i>`);
+                _push2(`<i class="iconfont icon-disqus-logo" data-v-6c301220${_scopeId}></i>`);
               } else {
-                _push2(`<i class="iconfont icon-user" data-v-6f63edf0${_scopeId}></i>`);
+                _push2(`<i class="iconfont icon-user" data-v-6c301220${_scopeId}></i>`);
               }
               _push2(`</span>`);
             } else {
@@ -7205,7 +7212,7 @@ const _sfc_main$1i = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<div class="cm-body" data-v-6f63edf0><div class="cm-header" data-v-6f63edf0><div class="left" data-v-6f63edf0>`);
+      _push(`<div class="cm-body" data-v-6c301220><div class="cm-header" data-v-6c301220><div class="left" data-v-6c301220>`);
       _push(ssrRenderComponent(_sfc_main$1l, {
         class: ["username", { url: Boolean(authorURL.value) }],
         href: authorURL.value
@@ -7222,7 +7229,7 @@ const _sfc_main$1i = /* @__PURE__ */ defineComponent({
         _: 1
       }, _parent));
       if (isAdminAuthor.value) {
-        _push(`<span class="moderator" data-v-6f63edf0>`);
+        _push(`<span class="moderator" data-v-6c301220>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LanguageKey).COMMENT_MODERATOR
         }, null, _parent));
@@ -7230,7 +7237,7 @@ const _sfc_main$1i = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<span class="author-info" data-v-6f63edf0>`);
+      _push(`<span class="author-info" data-v-6c301220>`);
       if (_ctx.comment.ip_location && !_ctx.hiddenLocation) {
         _push(ssrRenderComponent(CommentLocation, {
           location: _ctx.comment.ip_location
@@ -7245,13 +7252,13 @@ const _sfc_main$1i = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`</span></div><div class="right" data-v-6f63edf0><button class="floor" data-v-6f63edf0>#${ssrInterpolate(_ctx.comment.id)}</button></div></div><div class="cm-content" data-v-6f63edf0>`);
+      _push(`</span></div><div class="right" data-v-6c301220><button class="floor" data-v-6c301220>#${ssrInterpolate(_ctx.comment.id)}</button></div></div><div class="cm-content" data-v-6c301220>`);
       if (_ctx.comment.pid) {
-        _push(`<p class="reply" data-v-6f63edf0><span class="text" data-v-6f63edf0>`);
+        _push(`<p class="reply" data-v-6c301220><span class="text" data-v-6c301220>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LanguageKey).COMMENT_REPLY
         }, null, _parent));
-        _push(`</span><button class="parent" data-v-6f63edf0>${ssrInterpolate(getReplyParentCommentText(_ctx.comment.pid))}</button>`);
+        _push(`</span><button class="parent" data-v-6c301220>${ssrInterpolate(getReplyParentCommentText(_ctx.comment.pid))}</button>`);
         _push(ssrRenderComponent(_component_i18n, {
           zh: "：",
           en: ":"
@@ -7260,13 +7267,13 @@ const _sfc_main$1i = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<div class="markdown" data-v-6f63edf0>`);
+      _push(`<div class="markdown" data-v-6c301220>`);
       _push(ssrRenderComponent(_sfc_main$1m, {
         markdown: _ctx.comment.content,
         compact: true,
         "render-options": { sanitize: true }
       }, null, _parent));
-      _push(`</div></div><div class="cm-footer" data-v-6f63edf0><div class="left" data-v-6f63edf0><span class="create-at" data-v-6f63edf0>`);
+      _push(`</div></div><div class="cm-footer" data-v-6c301220><div class="left" data-v-6c301220><span class="create-at" data-v-6c301220>`);
       _push(ssrRenderComponent(_component_udate, {
         to: "ago",
         date: _ctx.comment.created_at
@@ -7274,7 +7281,7 @@ const _sfc_main$1i = /* @__PURE__ */ defineComponent({
       _push(`</span><button class="${ssrRenderClass([{
         actived: _ctx.liked,
         alived: Boolean(_ctx.comment.likes)
-      }, "vote"])}"${ssrIncludeBooleanAttr(_ctx.liked) ? " disabled" : ""} data-v-6f63edf0><i class="iconfont icon-like" data-v-6f63edf0></i>`);
+      }, "vote"])}"${ssrIncludeBooleanAttr(_ctx.liked) ? " disabled" : ""} data-v-6c301220><i class="iconfont icon-like" data-v-6c301220></i>`);
       if (!_ctx.plainVote) {
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LanguageKey).COMMENT_UPVOTE
@@ -7282,10 +7289,10 @@ const _sfc_main$1i = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<span class="count" data-v-6f63edf0>(${ssrInterpolate(_ctx.comment.likes)})</span></button><button class="${ssrRenderClass([{
+      _push(`<span class="count" data-v-6c301220>(${ssrInterpolate(_ctx.comment.likes)})</span></button><button class="${ssrRenderClass([{
         actived: _ctx.disliked,
         alived: Boolean(_ctx.comment.dislikes)
-      }, "vote"])}"${ssrIncludeBooleanAttr(_ctx.disliked) ? " disabled" : ""} data-v-6f63edf0><i class="iconfont icon-dislike" data-v-6f63edf0></i>`);
+      }, "vote"])}"${ssrIncludeBooleanAttr(_ctx.disliked) ? " disabled" : ""} data-v-6c301220><i class="iconfont icon-dislike" data-v-6c301220></i>`);
       if (!_ctx.plainVote) {
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LanguageKey).COMMENT_DOWNVOTE
@@ -7293,23 +7300,23 @@ const _sfc_main$1i = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<span class="count" data-v-6f63edf0>(${ssrInterpolate(_ctx.comment.dislikes)})</span></button>`);
+      _push(`<span class="count" data-v-6c301220>(${ssrInterpolate(_ctx.comment.dislikes)})</span></button>`);
       if (_ctx.isReply) {
-        _push(`<button class="reply" data-v-6f63edf0><i class="iconfont icon-cancel" data-v-6f63edf0></i>`);
+        _push(`<button class="reply" data-v-6c301220><i class="iconfont icon-cancel" data-v-6c301220></i>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LanguageKey).COMMENT_REPLY_CANCEL
         }, null, _parent));
         _push(`</button>`);
       } else {
-        _push(`<button class="reply" data-v-6f63edf0><i class="iconfont icon-reply" data-v-6f63edf0></i>`);
+        _push(`<button class="reply" data-v-6c301220><i class="iconfont icon-reply" data-v-6c301220></i>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LanguageKey).COMMENT_REPLY
         }, null, _parent));
         _push(`</button>`);
       }
-      _push(`</div><div class="right" data-v-6f63edf0>`);
+      _push(`</div><div class="right" data-v-6c301220>`);
       if (isDeleteable.value) {
-        _push(`<button class="delete"${ssrIncludeBooleanAttr(isDeleting.value) ? " disabled" : ""} data-v-6f63edf0><i class="iconfont icon-delete" data-v-6f63edf0></i>`);
+        _push(`<button class="delete"${ssrIncludeBooleanAttr(isDeleting.value) ? " disabled" : ""} data-v-6c301220><i class="iconfont icon-delete" data-v-6c301220></i>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LanguageKey).COMMENT_DELETE
         }, null, _parent));
@@ -7319,13 +7326,13 @@ const _sfc_main$1i = /* @__PURE__ */ defineComponent({
       }
       _push(`</div></div>`);
       if (_ctx.isReply) {
-        _push(`<div class="cm-reply" data-v-6f63edf0>`);
+        _push(`<div class="cm-reply" data-v-6c301220>`);
         ssrRenderSlot(_ctx.$slots, "reply", {}, null, _push, _parent);
         _push(`</div>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`<div class="cm-children" data-v-6f63edf0>`);
+      _push(`<div class="cm-children" data-v-6c301220>`);
       ssrRenderSlot(_ctx.$slots, "children", {}, null, _push, _parent);
       _push(`</div></div></div></li>`);
     };
@@ -7337,7 +7344,7 @@ _sfc_main$1i.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/list/item.vue");
   return _sfc_setup$1i ? _sfc_setup$1i(props, ctx) : void 0;
 };
-const CommentItem = /* @__PURE__ */ _export_sfc(_sfc_main$1i, [["__scopeId", "data-v-6f63edf0"]]);
+const CommentItem = /* @__PURE__ */ _export_sfc(_sfc_main$1i, [["__scopeId", "data-v-6c301220"]]);
 const _sfc_main$1h = defineComponent({
   name: "CommentList",
   components: {
@@ -8091,7 +8098,7 @@ const _sfc_main$1c = /* @__PURE__ */ defineComponent({
       _push(`<div${ssrRenderAttrs(mergeProps({
         id: COMMENT_ELEMENT_ID,
         class: "comment-box"
-      }, _attrs))} data-v-8b02bfa5>`);
+      }, _attrs))} data-v-2894a208>`);
       _push(ssrRenderComponent(CommentTopbar, {
         total: (_a = unref(commentStore).pagination) == null ? void 0 : _a.total,
         loaded: unref(commentStore).comments.length,
@@ -8370,7 +8377,7 @@ _sfc_main$1c.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/index.vue");
   return _sfc_setup$1c ? _sfc_setup$1c(props, ctx) : void 0;
 };
-const Comment = /* @__PURE__ */ _export_sfc(_sfc_main$1c, [["__scopeId", "data-v-8b02bfa5"]]);
+const Comment = /* @__PURE__ */ _export_sfc(_sfc_main$1c, [["__scopeId", "data-v-2894a208"]]);
 const _sfc_main$1b = /* @__PURE__ */ defineComponent({
   __name: "skeleton",
   __ssrInlineRender: true,
@@ -9533,7 +9540,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
         ...((_a = articleDetailStore.defaultContent) == null ? void 0 : _a.headings) ?? [],
         ...((_b = articleDetailStore.moreContent) == null ? void 0 : _b.headings) ?? []
       ];
-      const elementID = urlHash === COMMENTS_URL_HASH ? COMMENT_ELEMENT_ID : (_c = articleHeadings.find(({ text }) => text === urlHash)) == null ? void 0 : _c.id;
+      const elementID = urlHash === COMMENTS_URL_HASH ? COMMENT_ELEMENT_ID : (_c = articleHeadings.find(({ anchor }) => anchor === urlHash)) == null ? void 0 : _c.id;
       if (elementID && document.getElementById(elementID)) {
         setTimeout(() => scrollToAnchor(elementID), 400);
       }
@@ -9541,7 +9548,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_placeholder = resolveComponent("placeholder");
       const _component_ulink = resolveComponent("ulink");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-page" }, _attrs))} data-v-fe452412>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-page" }, _attrs))} data-v-f9dce88c>`);
       _push(ssrRenderComponent(_component_placeholder, { loading: unref(fetching) }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -9561,14 +9568,14 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             if (unref(article)) {
-              _push2(`<div data-v-fe452412${_scopeId}><div class="module margin background overflow" data-v-fe452412${_scopeId}>`);
+              _push2(`<div data-v-f9dce88c${_scopeId}><div class="module margin background overflow" data-v-f9dce88c${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleContent, {
                 id: ARTICLE_CONTENT_ELEMENT_ID,
                 "readmore-id": ARTICLE_READMORE_ELEMENT_ID,
                 article: unref(article),
                 onRendered: handleContentRendered
               }, null, _parent2, _scopeId));
-              _push2(`<div class="divider" data-v-fe452412${_scopeId}></div>`);
+              _push2(`<div class="divider" data-v-f9dce88c${_scopeId}></div>`);
               _push2(ssrRenderComponent(ArticleMeta, {
                 id: ARTICLE_META_ELEMENT_ID,
                 article: unref(article),
@@ -9599,19 +9606,19 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
                 }),
                 _: 1
               }, _parent2, _scopeId));
-              _push2(`</div><div class="module margin background" data-v-fe452412${_scopeId}><div class="bridge left" data-v-fe452412${_scopeId}></div><div class="bridge right" data-v-fe452412${_scopeId}></div>`);
+              _push2(`</div><div class="module margin background" data-v-f9dce88c${_scopeId}><div class="bridge left" data-v-f9dce88c${_scopeId}></div><div class="bridge right" data-v-f9dce88c${_scopeId}></div>`);
               _push2(ssrRenderComponent(ArticleShare, {
                 id: ARTICLE_SHARE_ELEMENT_ID,
                 article: unref(article),
                 "disabled-image-share": _ctx.isMobile,
                 socials: _ctx.isMobile ? [unref(SocialMedia).Wechat, unref(SocialMedia).Weibo, unref(SocialMedia).Twitter] : []
               }, null, _parent2, _scopeId));
-              _push2(`</div><div class="module margin overflow" data-v-fe452412${_scopeId}>`);
+              _push2(`</div><div class="module margin overflow" data-v-f9dce88c${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleNeighbour, {
                 prev: unref(prevArticle),
                 next: unref(nextArticle)
               }, null, _parent2, _scopeId));
-              _push2(`</div><div class="module margin overflow" data-v-fe452412${_scopeId}>`);
+              _push2(`</div><div class="module margin overflow" data-v-f9dce88c${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleRelated, {
                 id: ARTICLE_RELATED_ELEMENT_ID,
                 columns: _ctx.isMobile ? 2 : 3,
@@ -9681,7 +9688,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="comment" data-v-fe452412>`);
+      _push(`<div class="comment" data-v-f9dce88c>`);
       _push(ssrRenderComponent(Comment, {
         plain: _ctx.isMobile,
         fetching: unref(fetching),
@@ -9698,7 +9705,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
               }, {
                 default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<i class="iconfont icon-chat-gpt" data-v-fe452412${_scopeId2}></i>`);
+                    _push3(`<i class="iconfont icon-chat-gpt" data-v-f9dce88c${_scopeId2}></i>`);
                   } else {
                     return [
                       createVNode("i", { class: "iconfont icon-chat-gpt" })
@@ -9762,7 +9769,7 @@ _sfc_main$13.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/index.vue");
   return _sfc_setup$13 ? _sfc_setup$13(props, ctx) : void 0;
 };
-const ArticleDetailPage = /* @__PURE__ */ _export_sfc(_sfc_main$13, [["__scopeId", "data-v-fe452412"]]);
+const ArticleDetailPage = /* @__PURE__ */ _export_sfc(_sfc_main$13, [["__scopeId", "data-v-f9dce88c"]]);
 const _sfc_main$12 = /* @__PURE__ */ defineComponent({
   __name: "instagram",
   __ssrInlineRender: true,
