@@ -89,7 +89,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
       const copy = `window.navigator.clipboard?.writeText(this.href)`
       const onclick = `onclick="${preventDefault};${copy}"`
       const href = `href="#${anchor}"`
-      return `<a class="anchor link" ${href} ${onclick}">#</a>`
+      return `<a class="anchor link" ${href} ${onclick}>#</a>`
     }
 
     const identifier = options?.headingIdentifierGetter?.(html, level, raw)
