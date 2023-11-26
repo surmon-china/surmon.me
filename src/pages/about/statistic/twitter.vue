@@ -40,9 +40,9 @@
     </p>
     <p>
       <i class="iconfont icon-follower"></i>
-      <span v-if="isZhLang">收获了</span>
+      <span v-if="isZhLang">获得了</span>
       <statistic-count split :count="store.data?.userinfo.followerCount || '-'" />
-      <span v-if="isZhLang">个粉丝</span>
+      <span v-if="isZhLang">位关注者</span>
       <span v-else>followers</span>
     </p>
   </statistic-base>
