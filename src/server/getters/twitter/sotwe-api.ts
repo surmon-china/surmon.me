@@ -96,10 +96,10 @@ export interface SotweAggregate {
 const fetchSotweAggregate = async (twitterUsername: string): Promise<SotweAggregate> => {
   try {
     const target = `https://api.sotwe.com/v3/user/${twitterUsername}`
-    // const _scrape_do = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`
-    const _scraper_api = `https://api.scraperapi.com/?api_key=${SOTWE_SCRAPER_TOKEN}&url=${target}`
+    // const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`
+    const scraper = `https://api.scraperapi.com/?api_key=${SOTWE_SCRAPER_TOKEN}&url=${target}`
     // To avoid wasting request credits, tokens are not used in development environments
-    const response = await axios.get<SotweAggregate>(isNodeDev ? target : _scraper_api, { timeout: 28000 })
+    const response = await axios.get<SotweAggregate>(isNodeDev ? target : scraper, { timeout: 28000 })
     return response.data
   } catch (error: unknown) {
     throw isAxiosError(error) ? error.toJSON() : error
