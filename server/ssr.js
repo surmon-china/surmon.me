@@ -369,7 +369,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.33.2";
+const APP_VERSION = "4.34.0";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -10545,7 +10545,7 @@ const _sfc_main$Z = /* @__PURE__ */ defineComponent({
             }
             _push2(`</p><p${_scopeId}><i class="iconfont icon-follower"${_scopeId}></i>`);
             if (unref(isZhLang)) {
-              _push2(`<span${_scopeId}>收获了</span>`);
+              _push2(`<span${_scopeId}>获得了</span>`);
             } else {
               _push2(`<!---->`);
             }
@@ -10554,7 +10554,7 @@ const _sfc_main$Z = /* @__PURE__ */ defineComponent({
               count: ((_c = unref(store).data) == null ? void 0 : _c.userinfo.followerCount) || "-"
             }, null, _parent2, _scopeId));
             if (unref(isZhLang)) {
-              _push2(`<span${_scopeId}>个粉丝</span>`);
+              _push2(`<span${_scopeId}>位关注者</span>`);
             } else {
               _push2(`<span${_scopeId}>followers</span>`);
             }
@@ -10583,12 +10583,12 @@ const _sfc_main$Z = /* @__PURE__ */ defineComponent({
               ]),
               createVNode("p", null, [
                 createVNode("i", { class: "iconfont icon-follower" }),
-                unref(isZhLang) ? (openBlock(), createBlock("span", { key: 0 }, "收获了")) : createCommentVNode("", true),
+                unref(isZhLang) ? (openBlock(), createBlock("span", { key: 0 }, "获得了")) : createCommentVNode("", true),
                 createVNode(unref(StatisticCount), {
                   split: "",
                   count: ((_f = unref(store).data) == null ? void 0 : _f.userinfo.followerCount) || "-"
                 }, null, 8, ["count"]),
-                unref(isZhLang) ? (openBlock(), createBlock("span", { key: 1 }, "个粉丝")) : (openBlock(), createBlock("span", { key: 2 }, "followers"))
+                unref(isZhLang) ? (openBlock(), createBlock("span", { key: 1 }, "位关注者")) : (openBlock(), createBlock("span", { key: 2 }, "followers"))
               ])
             ];
           }

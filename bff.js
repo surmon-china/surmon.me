@@ -187,7 +187,7 @@ var NodeEnv;
     NodeEnv["Production"] = "production";
 })(NodeEnv || (NodeEnv = {}));
 const NODE_ENV = process.env.NODE_ENV;
-const isNodeDev = process.env.NODE_ENV === NodeEnv.Development;
+const environment_isNodeDev = process.env.NODE_ENV === NodeEnv.Development;
 const isNodeProd = process.env.NODE_ENV === NodeEnv.Production;
 
 ;// CONCATENATED MODULE: ./src/constants/http-code.ts
@@ -291,13 +291,13 @@ const external_path_namespaceObject = external_path_x({ ["default"]: () => __WEB
 const getNodePressAPI = () => {
     const local = getLocalApiURL();
     const online = getOnlineApiURL();
-    return isNodeDev ? local : online;
+    return environment_isNodeDev ? local : online;
 };
 const ROOT_PATH = process.cwd();
 const DIST_PATH = external_path_namespaceObject["default"].join(ROOT_PATH, 'dist');
 const PRDO_CLIENT_PATH = external_path_namespaceObject["default"].join(DIST_PATH, 'client');
 const PRDO_SERVER_PATH = external_path_namespaceObject["default"].join(DIST_PATH, 'server');
-const PUBLIC_PATH = isNodeDev ? external_path_namespaceObject["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;
+const PUBLIC_PATH = environment_isNodeDev ? external_path_namespaceObject["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;
 
 ;// CONCATENATED MODULE: ./src/server/route.ts
 /**
@@ -526,9 +526,9 @@ const getMyGoogleMap = () => {
  * @author Surmon <https://github.com/surmon-china>
  */
 const NULL = null;
-const UNDEFINED = void 0;
+const value_UNDEFINED = void 0;
 const isNull = (value) => value === NULL;
-const isUndefined = (value) => value === UNDEFINED;
+const isUndefined = (value) => value === value_UNDEFINED;
 const isNil = (value) => isNull(value) || isUndefined(value);
 
 ;// CONCATENATED MODULE: ./src/utils/logger.ts
@@ -565,7 +565,7 @@ const argv = (0,external_yargs_namespaceObject["default"])(process.argv.slice(2)
 const GITHUB_BEARER_TOKEN = argv.github_token;
 const INSTAGRAM_TOKEN = argv.instagram_token;
 const YOUTUBE_API_KEY = argv.youtube_token;
-const SOTWE_SCRAPER_TOKEN = argv.sotwe_scraper_token;
+const bff_yargs_SOTWE_SCRAPER_TOKEN = argv.sotwe_scraper_token;
 
 ;// CONCATENATED MODULE: ./src/server/getters/twitter/sotwe-api.ts
 
@@ -573,16 +573,18 @@ const SOTWE_SCRAPER_TOKEN = argv.sotwe_scraper_token;
 
 // Don't try to simulate a browser request, it will be blocked by Cloudflare.
 // Can't make requests based on headless browsers because it takes up too much memory
-// So one has to look for third party online services, here are some of the available crawler services:
+// So one has to look for third party online services, here are some of the available scraper services:
 // - https://dashboard.scrape.do
+// - https://dashboard.scraperapi.com
 // - https://apilayer.com/marketplace/adv_scraper-api
 // - ...
 const fetchSotweAggregate = async (twitterUsername) => {
     try {
         const target = `https://api.sotwe.com/v3/user/${twitterUsername}`;
-        const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`;
+        // const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`
+        const scraper = `https://api.scraperapi.com/?api_key=${bff_yargs_SOTWE_SCRAPER_TOKEN}&url=${target}`;
         // To avoid wasting request credits, tokens are not used in development environments
-        const response = await services_axios.get(isNodeDev ? target : scraper, { timeout: 18000 });
+        const response = await services_axios.get(environment_isNodeDev ? target : scraper, { timeout: 28000 });
         return response.data;
     }
     catch (error) {
@@ -590,7 +592,9 @@ const fetchSotweAggregate = async (twitterUsername) => {
     }
 };
 const improveSotweTweet = (tweet) => {
-    let result = tweet.text.replaceAll('\n', ' ').replace(/ +/g, ' ');
+    // remove new lines and multiple spaces
+    // replace unknown characters
+    let result = tweet.text.replaceAll('\n', ' ').replace(/ +/g, ' ').replaceAll('�', '_');
     // remove media urls
     tweet.mediaEntities?.forEach((media) => {
         result = result.replace(media.url, '');
@@ -601,7 +605,7 @@ const improveSotweTweet = (tweet) => {
     });
     return result;
 };
-const getSotweTwitterAggregate = async (twitterUsername) => {
+const sotwe_api_getSotweTwitterAggregate = async (twitterUsername) => {
     const sotwe = await fetchSotweAggregate(twitterUsername);
     const tweets = [];
     const userinfo = {
@@ -665,11 +669,11 @@ const fetchNitterTweets = async (twitterUsername) => {
         const target = `https://nitter.net/${twitterUsername}?scroll=true`;
         const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`;
         // To avoid wasting request credits, tokens are not used in development environments
-        const response = await services_axios.get(isNodeDev ? target : scraper, { timeout: 30000 });
+        const response = await axios.get(isNodeDev ? target : scraper, { timeout: 30000 });
         return response.data;
     }
     catch (error) {
-        throw (0,external_axios_namespaceObject.isAxiosError)(error) ? error.toJSON() : error;
+        throw isAxiosError(error) ? error.toJSON() : error;
     }
 };
 const parseUTCDate = (str) => {
@@ -692,9 +696,9 @@ const parseUTCDate = (str) => {
         hours = 0;
     return new Date(Date.UTC(year, month - 1, day, hours, minutes));
 };
-const getNitterTweets = async (twitterUsername) => {
+const nitter_html_getNitterTweets = async (twitterUsername) => {
     const html = await fetchNitterTweets(twitterUsername);
-    const parser = new external_fast_xml_parser_namespaceObject.XMLParser({
+    const parser = new XMLParser({
         ignoreAttributes: false,
         attributeNamePrefix: '',
         parseAttributeValue: true,
@@ -760,9 +764,14 @@ const getNitterTweets = async (twitterUsername) => {
 
 const twitter_logger = createLogger('BFF:Twitter');
 const getTwitterAggregate = async () => {
+    return sotwe_api_getSotweTwitterAggregate(app_config_IDENTITIES.TWITTER_USER_NAME);
+};
+// MARK: Nitter is over https://nitter.cz/
+// https://github.com/zedeus/nitter/issues/1171
+const getTwitterAggregateLegacy = async () => {
     const [sotwe, nitter] = await Promise.allSettled([
-        getSotweTwitterAggregate(app_config_IDENTITIES.TWITTER_USER_NAME),
-        getNitterTweets(app_config_IDENTITIES.TWITTER_USER_NAME)
+        getSotweTwitterAggregate(IDENTITIES.TWITTER_USER_NAME),
+        getNitterTweets(IDENTITIES.TWITTER_USER_NAME)
     ]);
     if (sotwe.status === 'rejected') {
         throw sotwe.reason;
@@ -1872,7 +1881,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
     const getTwitterAggregateCache = cacher.interval(cache, {
         key: TunnelModule.TwitterAggregate,
         ttl: hours(12),
-        interval: hours(2.5),
+        interval: hours(1.6),
         retry: minutes(10),
         getter: getTwitterAggregate
     });
@@ -2043,7 +2052,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
         }
     });
     // vue renderer
-    await (isNodeDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache));
+    await (environment_isNodeDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache));
     // run
     server.listen(getBFFServerPort(), () => {
         const address = server.address();
