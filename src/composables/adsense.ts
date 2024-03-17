@@ -22,8 +22,8 @@ export interface AdSenseConfig {
 
 const ADS_SCRIPT = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
 
-const getComponent = (clientId: string) =>
-  defineComponent({
+const getComponent = (clientId: string) => {
+  return defineComponent({
     name: 'Adsense',
     props: {
       class: String,
@@ -88,11 +88,12 @@ const getComponent = (clientId: string) =>
       }
     }
   })
+}
 
 export default {
   install(app: App, adsenseConfig: AdSenseConfig) {
     const component = getComponent(adsenseConfig.id)
-    app.component(component.name, component)
+    app.component(component.name!, component)
     // auto ad
     if (adsenseConfig.enabledAutoAd) {
       loadScript(ADS_SCRIPT, { async: true }).then(() => {

@@ -113,7 +113,7 @@ export const createI18n = <K extends string>(config: I18nConfig<K>) => {
     install(app: App) {
       app.config.globalProperties.$i18n = i18nStore
       app.provide(I18nSymbol, i18nStore)
-      app.component(i18nComponent.name, i18nComponent)
+      app.component(i18nComponent.name!, i18nComponent)
     }
   }
 }
