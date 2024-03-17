@@ -212,9 +212,9 @@ const zhLangMap = {
   [LanguageKey.STATISTIC_TOTAL_UPVOTES]: "累计获赞",
   [LanguageKey.STATISTIC_AVERAGE_EMOTION]: "平均评分",
   [LanguageKey.EMPTY_PLACEHOLDER]: "空空如也",
-  [LanguageKey.NOT_FOUND]: "众里寻他 我已不再",
-  [LanguageKey.BACK_TO_HOME_PAGE]: "山河万里 长歌归故",
-  [LanguageKey.GUESTBOOK_SLOGAN]: "此心光明 亦复何言",
+  [LanguageKey.NOT_FOUND]: "众里寻他，我已不再",
+  [LanguageKey.BACK_TO_HOME_PAGE]: "山河万里，长歌归故",
+  [LanguageKey.GUESTBOOK_SLOGAN]: "此心光明，亦复何言",
   [LanguageKey.AD]: "广而告之",
   [LanguageKey.FEEDBACK]: "反馈",
   [LanguageKey.TO_TOP]: "回到顶部",
@@ -293,7 +293,7 @@ const enLangMap = {
   [LanguageKey.EMPTY_PLACEHOLDER]: "NULL",
   [LanguageKey.NOT_FOUND]: "Arrives here at last",
   [LanguageKey.BACK_TO_HOME_PAGE]: "Drive by",
-  [LanguageKey.GUESTBOOK_SLOGAN]: "You have come a long way",
+  [LanguageKey.GUESTBOOK_SLOGAN]: "Chop wood, Carry water",
   [LanguageKey.AD]: "AD",
   [LanguageKey.FEEDBACK]: "Feedback",
   [LanguageKey.TO_TOP]: "To top",
@@ -369,7 +369,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.34.0";
+const APP_VERSION = "4.34.1";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
