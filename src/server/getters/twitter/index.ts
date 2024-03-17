@@ -45,6 +45,12 @@ export interface TwitterAggregate {
 }
 
 export const getTwitterAggregate = async (): Promise<TwitterAggregate> => {
+  return getSotweTwitterAggregate(IDENTITIES.TWITTER_USER_NAME)
+}
+
+// MARK: Nitter is over https://nitter.cz/
+// https://github.com/zedeus/nitter/issues/1171
+export const getTwitterAggregateLegacy = async (): Promise<TwitterAggregate> => {
   const [sotwe, nitter] = await Promise.allSettled([
     getSotweTwitterAggregate(IDENTITIES.TWITTER_USER_NAME),
     getNitterTweets(IDENTITIES.TWITTER_USER_NAME)

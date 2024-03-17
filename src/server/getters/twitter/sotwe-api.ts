@@ -88,16 +88,18 @@ export interface SotweAggregate {
 
 // Don't try to simulate a browser request, it will be blocked by Cloudflare.
 // Can't make requests based on headless browsers because it takes up too much memory
-// So one has to look for third party online services, here are some of the available crawler services:
+// So one has to look for third party online services, here are some of the available scraper services:
 // - https://dashboard.scrape.do
+// - https://dashboard.scraperapi.com
 // - https://apilayer.com/marketplace/adv_scraper-api
 // - ...
 const fetchSotweAggregate = async (twitterUsername: string): Promise<SotweAggregate> => {
   try {
     const target = `https://api.sotwe.com/v3/user/${twitterUsername}`
-    const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`
+    // const _scrape_do = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`
+    const _scraper_api = `https://api.scraperapi.com/?api_key=${SOTWE_SCRAPER_TOKEN}&url=${target}`
     // To avoid wasting request credits, tokens are not used in development environments
-    const response = await axios.get<SotweAggregate>(isNodeDev ? target : scraper, { timeout: 18000 })
+    const response = await axios.get<SotweAggregate>(isNodeDev ? target : _scraper_api, { timeout: 28000 })
     return response.data
   } catch (error: unknown) {
     throw isAxiosError(error) ? error.toJSON() : error
@@ -105,7 +107,9 @@ const fetchSotweAggregate = async (twitterUsername: string): Promise<SotweAggreg
 }
 
 const improveSotweTweet = (tweet: SotweTweet): string => {
-  let result = tweet.text.replaceAll('\n', ' ').replace(/ +/g, ' ')
+  // remove new lines and multiple spaces
+  // replace unknown characters
+  let result = tweet.text.replaceAll('\n', ' ').replace(/ +/g, ' ').replaceAll('�', '_')
   // remove media urls
   tweet.mediaEntities?.forEach((media) => {
     result = result.replace(media.url, '')
