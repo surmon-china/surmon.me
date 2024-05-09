@@ -33,6 +33,8 @@
       width: 100%;
       height: 100%;
       opacity: 0.3;
+      background-size: cover;
+      background-position: top center;
       &.dark {
         opacity: 0.2;
       }
