@@ -228,6 +228,10 @@
         white-space: nowrap;
         word-wrap: normal;
 
+        > span {
+          display: inline-flex;
+        }
+
         .iconfont {
           margin-right: $sm-gap;
         }

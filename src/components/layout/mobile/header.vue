@@ -215,7 +215,7 @@
           }
 
           .item {
-            display: inline-block;
+            display: inline-flex;
             padding: 0 $sm-gap;
             margin-right: $lg-gap;
             margin-bottom: $lg-gap;
