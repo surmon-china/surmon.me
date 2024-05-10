@@ -63,7 +63,7 @@
     </div>
     <button class="link" @click="scrollToAnchor(ANCHORS.ARTICLE_META_ELEMENT_ID)">
       <i class="iconfont icon-heart"></i>
-      <i18n zh="摁赞" en="Meta" />
+      <i18n zh="随喜" en="Sponsor" />
       <divider type="vertical" />
       <span class="meta">
         <i class="iconfont icon-like"></i>

@@ -21,7 +21,7 @@ export const i18ns = {
     [Language.English]: 'Every path i went astray built up my Rome.'
   },
   sponsor: {
-    [Language.Chinese]: '向我赞助',
+    [Language.Chinese]: '随喜赞助',
     [Language.English]: 'Sponsor'
   },
   statement: {

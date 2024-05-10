@@ -7,12 +7,12 @@ import { META } from '/@/config/app.config'
 
 export const i18ns = {
   title: {
-    [Language.Chinese]: '万物之中，希望至美',
-    [Language.English]: 'Hope is a good thing'
+    [Language.Chinese]: '出入平等，了了分明',
+    [Language.English]: `Surmon's writing archive`
   },
   description: {
-    [Language.Chinese]: '至美之物，永不凋零',
-    [Language.English]: 'Maybe the best of things and no good thing ever dies'
+    [Language.Chinese]: `书字字之方便，开众善之法门`,
+    [Language.English]: 'Either write something worth reading or do something worth writing'
   }
 } as const
 
