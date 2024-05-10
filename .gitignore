@@ -9,6 +9,7 @@ yarn-error.log*
 
 # test
 test.*
+!*github/workflows/test.yml
 
 # Runtime data
 pids
