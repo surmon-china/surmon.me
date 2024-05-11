@@ -31,13 +31,19 @@
     <page-banner class="page-banner" video="/videos/clips/lake-1.mp4" :video-position="58" cdn>
       <template #title>
         <webfont>
-          <i18n zh="欢喜勇猛，向死而生" en="Because it's there" />
+          <i18n zh="山河入梦，春尽江南" :en="`${META.author}'s YouTube videos`" />
         </webfont>
       </template>
       <template #description>
         <i18n>
-          <template #zh>鲜衣怒马，不负韶华</template>
-          <template #en>"why did you want to climb mount Everest?"</template>
+          <template #zh>
+            <span>
+              在我的 <ulink :href="VALUABLE_LINKS.YOUTUBE_CHANNEL" class="link">YouTube 频道</ulink> 查看更多
+            </span>
+          </template>
+          <template #en>
+            View all videos on my <ulink :href="VALUABLE_LINKS.YOUTUBE_CHANNEL" class="link">YouTube Channel</ulink>
+          </template>
         </i18n>
       </template>
     </page-banner>
@@ -77,6 +83,13 @@
 
   .youtube-page {
     min-height: $full-page-active-content-height;
+
+    .page-banner {
+      .link {
+        color: $white;
+        text-decoration: underline;
+      }
+    }
 
     .page-bridge {
       position: relative;

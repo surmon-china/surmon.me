@@ -95,8 +95,8 @@
   .youtube-playlist {
     .playlist {
       padding: 0;
-      margin: 0;
       list-style: none;
+      margin: 0 0 4rem 0;
     }
   }
 </style>
