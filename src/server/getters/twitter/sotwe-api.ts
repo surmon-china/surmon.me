@@ -92,6 +92,7 @@ export interface SotweAggregate {
 // - https://dashboard.scrape.do
 // - https://dashboard.scraperapi.com
 // - https://apilayer.com/marketplace/adv_scraper-api
+// - https://app.zenrows.com
 // - ...
 const fetchSotweAggregate = async (twitterUsername: string): Promise<SotweAggregate> => {
   try {
