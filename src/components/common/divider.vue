@@ -30,13 +30,13 @@
       #{--divider-gap}: $gap;
     }
     &.xs {
-      #{--divider-gap}: $xs-gap;
+      #{--divider-gap}: $gap-xs;
     }
     &.sm {
-      #{--divider-gap}: $sm-gap;
+      #{--divider-gap}: $gap-sm;
     }
     &.lg {
-      #{--divider-gap}: $lg-gap;
+      #{--divider-gap}: $gap-lg;
     }
 
     &.horizontal {
@@ -45,7 +45,7 @@
       clear: both;
       width: 100%;
       margin: var(--divider-gap) 0;
-      border-top: 1px solid $text-divider;
+      border-top: 1px solid $color-text-divider;
       &.slot {
         border-top: none;
       }
@@ -58,7 +58,7 @@
       height: 0.9em;
       margin: 0 var(--divider-gap);
       vertical-align: middle;
-      border-left: 1px solid $text-divider;
+      border-left: 1px solid $color-text-divider;
 
       &.slot {
         display: inline-flex;

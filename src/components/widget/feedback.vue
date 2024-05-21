@@ -152,7 +152,7 @@
       align-items: center;
       font-size: $font-size-h3;
       font-weight: bold;
-      color: $text-secondary;
+      color: $color-text-secondary;
       border-bottom: 1px solid $module-bg-darker-1;
     }
 
@@ -220,7 +220,7 @@
         height: 18rem;
         padding: 1em;
         margin-bottom: 2rem;
-        border-radius: $xs-radius;
+        border-radius: $radius-xs;
         background-color: $module-bg-darker-1;
         resize: none;
       }
@@ -234,25 +234,25 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          border-radius: $mini-radius;
+          border-radius: $radius-mini;
           &[disabled] {
             opacity: 0.7;
           }
           &:not([disabled]):hover {
-            color: $link-hover;
+            color: $color-link-hover;
           }
 
           &.cancel {
             width: 7rem;
-            color: $text-secondary;
+            color: $color-text-secondary;
             &:not([disabled]):hover {
-              color: $link-color;
+              color: $color-link;
             }
           }
 
           &.submit {
             width: 12rem;
-            color: $text-secondary;
+            color: $color-text-secondary;
             background-color: $module-bg-darker-2;
             &:not([disabled]):hover {
               background-color: $module-bg-darker-3;
@@ -288,7 +288,7 @@
         text-align: center;
         background-color: $primary;
         font-size: $font-size-h3;
-        color: $text-reversal;
+        color: $color-text-reversal;
       }
 
       .text {
@@ -299,10 +299,10 @@
         margin-top: 2rem;
         padding: 0 2em;
         line-height: 2.4em;
-        border-radius: $xs-radius;
+        border-radius: $radius-xs;
         background-color: $module-bg-darker-1;
         &:hover {
-          color: $link-hover;
+          color: $color-link-hover;
           background-color: $module-bg-darker-2;
         }
       }
@@ -314,7 +314,7 @@
       line-height: 2.8em;
       text-align: center;
       font-size: $font-size-small;
-      color: $text-disabled;
+      color: $color-text-disabled;
     }
   }
 </style>

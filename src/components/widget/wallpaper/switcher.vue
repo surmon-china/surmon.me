@@ -62,10 +62,10 @@
       border-style: solid;
       border-color: $bing-primary;
       border-top-width: 4px;
-      border-top-left-radius: $xs-radius;
-      border-bottom-left-radius: $xs-radius;
+      border-top-left-radius: $radius-xs;
+      border-bottom-left-radius: $radius-xs;
       opacity: 0.5;
-      transition: opacity $transition-time-fast;
+      transition: opacity $motion-duration-fast;
       background-color: #ffffff;
       &.dark {
         background-color: #ececec;
@@ -85,11 +85,11 @@
         font-size: $font-size-small - 1;
         letter-spacing: 2px;
         text-align: center;
-        transition: width $transition-time-fast;
+        transition: width $motion-duration-fast;
 
         .iconfont {
           font-size: 16px;
-          margin-bottom: $xs-gap;
+          margin-bottom: $gap-xs;
         }
 
         .text {

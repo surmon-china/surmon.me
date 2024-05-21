@@ -183,7 +183,7 @@
         line-height: $share-size;
         margin-right: $gap;
         font-size: $font-size-h4;
-        border-radius: $xs-radius;
+        border-radius: $radius-xs;
         background-color: $module-bg-darker-1;
         &:last-child {
           margin-right: 0;
@@ -239,19 +239,19 @@
             right: 0;
             height: 100%;
             border: 1px solid $module-bg-darker-1;
-            border-radius: $xs-radius;
+            border-radius: $radius-xs;
           }
 
           .title {
             margin-top: 0;
-            margin-bottom: $sm-gap;
+            margin-bottom: $gap-sm;
             max-width: 80%;
             @include text-overflow();
           }
 
           .meta-info {
             font-size: $font-size-h6;
-            color: $text-secondary;
+            color: $color-text-secondary;
           }
         }
 
@@ -284,13 +284,13 @@
         .qrcode {
           width: 13rem;
           border: 1px solid;
-          border-radius: $lg-radius;
+          border-radius: $radius-lg;
         }
 
         .logo {
           filter: $theme-logo-rotate;
           width: 9rem;
-          margin-right: $xs-gap;
+          margin-right: $gap-xs;
           margin-top: $gap * 2;
         }
       }

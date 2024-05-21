@@ -119,7 +119,7 @@
         display: flex;
         position: relative;
         align-items: center;
-        padding-left: $sm-gap;
+        padding-left: $gap-sm;
         width: 29em;
         overflow: hidden;
 
@@ -204,7 +204,7 @@
           position: relative;
           display: inline-flex;
           align-items: center;
-          color: $text-reversal;
+          color: $color-text-reversal;
           opacity: 0.7;
           @include visibility-transition();
           &:hover {
@@ -219,24 +219,24 @@
           }
 
           .font-icon {
-            margin-right: $sm-gap;
+            margin-right: $gap-sm;
           }
 
           .image-icon {
             width: 1em;
             height: 1em;
-            margin-right: $sm-gap;
-            border-radius: $xs-radius;
+            margin-right: $gap-sm;
+            border-radius: $radius-xs;
           }
 
           .superscript {
-            margin-left: $xs-gap;
+            margin-left: $gap-xs;
           }
 
           .new-window {
-            margin-left: $xs-gap;
-            margin-right: -$xs-gap;
-            margin-top: -$sm-gap;
+            margin-left: $gap-xs;
+            margin-right: -$gap-xs;
+            margin-top: -$gap-sm;
             font-size: $font-size-small - 3;
             opacity: 0.8;
           }

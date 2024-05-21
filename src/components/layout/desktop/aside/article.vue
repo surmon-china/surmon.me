@@ -130,21 +130,21 @@
           font-weight: bold;
         }
         .iconfont {
-          margin-right: $sm-gap;
+          margin-right: $gap-sm;
         }
       }
 
       .types {
         .item {
           font-size: $font-size-base - 1;
-          color: $text-secondary;
+          color: $color-text-secondary;
           cursor: pointer;
           &.activated {
             font-weight: 600;
           }
           &.activated,
           &:hover {
-            color: $text;
+            color: $color-text;
           }
         }
       }
@@ -166,14 +166,14 @@
 
     .article-list {
       list-style: none;
-      padding: $sm-gap 0;
+      padding: $gap-sm 0;
       margin-bottom: 0;
 
       > .item {
         display: flex;
         padding: 0 $gap;
-        margin-bottom: $sm-gap;
-        color: $text-darker;
+        margin-bottom: $gap-sm;
+        color: $color-text-darker;
         &:last-child {
           margin: 0;
         }
@@ -186,10 +186,10 @@
           margin-top: 4px;
           display: inline-block;
           flex-shrink: 0;
-          margin-right: $sm-gap;
+          margin-right: $gap-sm;
           text-align: center;
-          border-radius: $xs-radius;
-          color: $text-disabled;
+          border-radius: $radius-xs;
+          color: $color-text-disabled;
           font-weight: 700;
           font-size: $font-size-base - 1;
           &[data-index='1'],
@@ -230,18 +230,18 @@
 
         .meta {
           font-size: $font-size-small;
-          color: $text-disabled;
+          color: $color-text-disabled;
 
           .iconfont {
             font-size: $font-size-small - 1;
-            color: $text-divider;
+            color: $color-text-divider;
             opacity: 0.6;
           }
 
           .item {
             display: inline-block;
             &.date {
-              margin-right: $lg-gap;
+              margin-right: $gap-lg;
             }
             &.views {
               width: 5.4rem;

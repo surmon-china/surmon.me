@@ -30,7 +30,7 @@
 }
 
 body {
-  color: $text;
+  color: $color-text;
   overflow-x: hidden;
   overflow-y: scroll;
   font-family: $font-family-normal;
@@ -48,7 +48,7 @@ body {
 }
 
 @include scrollbar-style(
-  $size: $sm-gap,
+  $size: $gap-sm,
   $bg: $module-bg,
   $thumb-bg: $module-bg-darker-3,
   $thumb-bg-hover: $module-bg-darker-4
@@ -56,7 +56,7 @@ body {
 
 body {
   @include scrollbar-style(
-    $size: $xs-gap,
+    $size: $gap-xs,
     $bg: $module-bg,
     $thumb-bg: $module-bg-darker-1,
     $thumb-bg-hover: $module-bg-darker-3
@@ -81,7 +81,7 @@ body {
 }
 
 .placeholder {
-  color: $text-secondary;
+  color: $color-text-secondary;
 }
 
 input {
@@ -101,7 +101,7 @@ select:-webkit-autofill {
 ::-moz-selection,
 ::-webkit-selection {
   background: $primary;
-  color: $text-reversal;
+  color: $color-text-reversal;
 }
 
 .mammon-box {
@@ -111,11 +111,11 @@ select:-webkit-autofill {
 // for module transition
 .module-enter-active,
 .module-leave-active {
-  transition: opacity $transition-time-normal ease;
+  transition: opacity $motion-duration-mid ease;
 }
 .module-slow-enter-active,
 .module-slow-leave-active {
-  transition: opacity $transition-time-slow ease;
+  transition: opacity $motion-duration-slow ease;
 }
 .module-enter-from,
 .module-leave-to,
@@ -129,7 +129,7 @@ select:-webkit-autofill {
 .page-leave-active {
   transition:
     width 0s,
-    opacity $transition-time-fast * 0.3 linear;
+    opacity $motion-duration-fast * 0.3 linear;
 }
 .page-enter-from,
 .page-leave-to {
@@ -139,22 +139,22 @@ select:-webkit-autofill {
 // for list transition
 .list-fade-enter-active,
 .list-fade-leave-active {
-  transition: opacity $transition-time-normal;
+  transition: opacity $motion-duration-mid;
 }
 .list-fade-enter,
 .list-fade-leave-active {
   opacity: 0;
 }
 .list-fade-move {
-  transition: transform $transition-time-normal;
+  transition: transform $motion-duration-mid;
 }
 
 // for client only component transition
 .client-only-enter-active {
-  transition: opacity $transition-time-normal linear !important;
+  transition: opacity $motion-duration-mid linear !important;
 }
 .client-only-leave-active {
-  transition: opacity $transition-time-normal * 0.6 linear !important;
+  transition: opacity $motion-duration-mid * 0.6 linear !important;
 }
 .client-only-enter-from,
 .client-only-leave-to {

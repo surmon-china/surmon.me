@@ -185,7 +185,7 @@
           line-height: 2em;
           text-indent: 3px;
           background-color: $module-bg-darker-1;
-          @include radius-box($mini-radius);
+          @include radius-box($radius-mini);
           @include background-transition();
 
           &:focus,
@@ -215,7 +215,7 @@
         width: $avatar-size;
         height: $avatar-size;
         background-color: $module-bg-darker-1;
-        @include radius-box($xs-radius);
+        @include radius-box($radius-xs);
 
         img {
           width: 100%;
@@ -239,7 +239,7 @@
         align-items: center;
         font-size: $font-size-h4;
         cursor: text;
-        @include radius-box($xs-radius);
+        @include radius-box($radius-xs);
         background-color: $module-bg-darker-1;
         &:hover {
           background-color: $module-bg-darker-3;

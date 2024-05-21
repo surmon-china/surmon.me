@@ -152,14 +152,14 @@
 
             .text {
               text-transform: uppercase;
-              color: $text-secondary;
+              color: $color-text-secondary;
             }
 
             .icon {
-              margin-left: $sm-gap;
+              margin-left: $gap-sm;
               display: inline-block;
               font-size: $font-size-h6;
-              color: $text-divider;
+              color: $color-text-divider;
             }
           }
 
@@ -191,7 +191,7 @@
           width: 100%;
           padding: 2rem;
           background-color: $module-bg-translucent;
-          @include radius-box($lg-radius);
+          @include radius-box($radius-lg);
           &:last-child {
             margin-bottom: 0;
           }
@@ -231,14 +231,14 @@
                 display: inline-block;
                 width: 2rem;
                 margin-right: $gap;
-                color: $text-divider;
+                color: $color-text-divider;
                 font-size: $font-size-h4;
                 font-weight: bold;
               }
 
               .link {
                 @include text-underline(0.4em);
-                text-decoration-color: $text-secondary;
+                text-decoration-color: $color-text-secondary;
               }
             }
 
@@ -253,7 +253,7 @@
             display: inline-flex;
             align-items: center;
             font-size: $font-size-h4;
-            color: $text-disabled;
+            color: $color-text-disabled;
 
             .item {
               width: 4em;
@@ -263,7 +263,7 @@
               }
 
               .iconfont {
-                margin-right: $sm-gap;
+                margin-right: $gap-sm;
               }
               .text {
                 font-weight: bold;

@@ -218,7 +218,7 @@
 
   .pen {
     position: relative;
-    border-radius: $xs-radius;
+    border-radius: $radius-xs;
     &.bordered {
       border: 1px solid $module-bg-darker-3;
       .pencilbox {
@@ -333,7 +333,7 @@
             left: 0;
             top: 100%;
             width: 100%;
-            padding: $xs-gap;
+            padding: $gap-xs;
             z-index: $z-index-normal + 1;
             background-color: $module-bg-darker-4;
 
@@ -347,7 +347,7 @@
 
               .item {
                 cursor: pointer;
-                padding: $xs-gap 0;
+                padding: $gap-xs 0;
                 > span {
                   display: block;
                   font-size: $font-size-h2;
@@ -371,16 +371,16 @@
         padding: 0 $gap;
         font-weight: bold;
         font-size: $font-size-small;
-        color: $text-disabled;
+        color: $color-text-disabled;
         background-color: $module-bg-darker-3;
         @include background-transition();
         &:hover {
-          color: $text-secondary;
+          color: $color-text-secondary;
           background-color: $module-bg-darker-4;
         }
 
         .iconfont {
-          margin-left: $sm-gap;
+          margin-left: $gap-sm;
         }
       }
     }

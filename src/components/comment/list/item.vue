@@ -246,16 +246,16 @@
   .comment-item {
     position: relative;
     padding-left: 2rem;
-    margin-top: $lg-gap;
+    margin-top: $gap-lg;
     &:first-child {
       margin-top: 0;
     }
 
     /* reply */
     .cm-reply {
-      padding-top: $lg-gap;
-      padding-bottom: $sm-gap;
-      padding-right: $sm-gap;
+      padding-top: $gap-lg;
+      padding-bottom: $gap-sm;
+      padding-right: $gap-sm;
     }
 
     &.has-child {
@@ -265,8 +265,8 @@
     }
 
     &.is-child {
-      margin-top: $xs-gap;
-      padding-top: $xs-gap;
+      margin-top: $gap-xs;
+      padding-top: $gap-xs;
       border-top: 1px dashed $module-bg-darker-3;
       .cm-reply {
         padding-right: 0;
@@ -278,12 +278,12 @@
           padding-bottom: 0;
         }
         .cm-reply {
-          padding-bottom: $sm-gap;
+          padding-bottom: $gap-sm;
         }
       }
 
       .cm-avatar {
-        top: $lg-gap * 2;
+        top: $gap-lg * 2;
       }
     }
 
@@ -300,13 +300,13 @@
         width: $size;
         height: $size;
         border: 4px solid $module-bg-lighter;
-        border-radius: $sm-radius;
+        border-radius: $radius-sm;
         background-color: $module-bg-darker-2;
 
         img {
           width: 100%;
           height: 100%;
-          border-radius: $xs-radius;
+          border-radius: $radius-xs;
         }
 
         .role {
@@ -319,7 +319,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          border-top-left-radius: $sm-radius;
+          border-top-left-radius: $radius-sm;
           color: $white;
           &.disqus {
             background-color: rgba($disqus-primary, 0.5);
@@ -335,9 +335,9 @@
       display: block;
       width: 100%;
       height: 100%;
-      padding: $sm-gap $sm-gap $sm-gap ($lg-gap * 3);
+      padding: $gap-sm $gap-sm $gap-sm ($gap-lg * 3);
       background-color: $module-bg-darker-1;
-      border-radius: $xs-radius;
+      border-radius: $radius-xs;
       @include background-transition();
 
       > .cm-header {
@@ -365,21 +365,21 @@
 
         .moderator {
           display: inline-block;
-          margin-left: -$sm-gap;
-          margin-right: $sm-gap;
-          padding: 0 $xs-gap 0.1em;
+          margin-left: -$gap-sm;
+          margin-right: $gap-sm;
+          padding: 0 $gap-xs 0.1em;
           white-space: nowrap;
           font-size: 11px;
-          color: $text-reversal;
+          color: $color-text-reversal;
           background-color: $primary-lighter;
-          border-radius: $xs-radius;
+          border-radius: $radius-xs;
         }
 
         .author-info {
           display: inline-flex;
           align-items: center;
           font-size: $font-size-small;
-          color: $text-divider;
+          color: $color-text-divider;
 
           > * {
             margin-right: $gap;
@@ -390,11 +390,11 @@
         }
 
         .floor {
-          color: $text-divider;
+          color: $color-text-divider;
           font-size: $font-size-small;
           font-weight: bold;
           &:hover {
-            color: $link-color;
+            color: $color-link;
             text-decoration: underline;
             text-underline-offset: 2px;
           }
@@ -402,33 +402,33 @@
       }
 
       > .cm-content {
-        padding-right: $xs-gap;
+        padding-right: $gap-xs;
         user-select: text;
 
         .reply {
           display: flex;
           align-items: center;
-          margin-top: $sm-gap;
-          margin-bottom: -$xs-gap;
+          margin-top: $gap-sm;
+          margin-bottom: -$gap-xs;
           font-size: $font-size-h6;
           font-weight: bold;
-          color: $text-disabled;
+          color: $color-text-disabled;
 
           .text {
-            margin-right: $xs-gap;
+            margin-right: $gap-xs;
           }
 
           .parent {
             font-weight: bold;
-            color: $link-color;
+            color: $color-link;
             &:hover {
-              color: $link-hover;
+              color: $color-link-hover;
             }
           }
         }
 
         .markdown {
-          margin: $sm-gap 0;
+          margin: $gap-sm 0;
         }
       }
 
@@ -440,18 +440,18 @@
         .reply,
         .vote,
         .delete {
-          color: $text-disabled;
+          color: $color-text-disabled;
           font-size: $font-size-small;
           margin-right: $gap;
 
           .iconfont {
-            margin-right: $xs-gap;
+            margin-right: $gap-xs;
           }
         }
 
         .reply {
           &:hover {
-            color: $link-color;
+            color: $color-link;
           }
         }
 
@@ -473,7 +473,7 @@
         }
 
         .delete {
-          color: $text-divider;
+          color: $color-text-divider;
           margin: 0;
           &:hover {
             color: $red;
@@ -499,7 +499,7 @@
       }
 
       .cm-body {
-        padding: $sm-gap $gap;
+        padding: $gap-sm $gap;
       }
     }
   }

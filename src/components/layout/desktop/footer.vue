@@ -44,7 +44,7 @@
     text-align: center;
     text-transform: uppercase;
     font-size: $font-size-h6;
-    color: $text-secondary;
+    color: $color-text-secondary;
     @include common-bg-module();
 
     a:hover {

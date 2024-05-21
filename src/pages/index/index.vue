@@ -56,7 +56,7 @@
   .index-page {
     .carrousel,
     .twitter {
-      margin-bottom: $lg-gap;
+      margin-bottom: $gap-lg;
     }
   }
 </style>

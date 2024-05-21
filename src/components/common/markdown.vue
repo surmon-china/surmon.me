@@ -54,7 +54,7 @@
 
     /* for google adsense */
     .google-auto-placed {
-      margin-bottom: $sm-gap;
+      margin-bottom: $gap-sm;
     }
 
     p {
@@ -89,7 +89,7 @@
       text-indent: 0;
       &:hover {
         .anchor.static {
-          color: $text;
+          color: $color-text;
         }
         .anchor.link {
           color: $primary;
@@ -98,15 +98,15 @@
       }
 
       .anchor {
-        margin-right: $xs-gap;
-        color: $text-secondary;
+        margin-right: $gap-xs;
+        color: $color-text-secondary;
         text-decoration: none;
         user-select: none;
       }
     }
 
     blockquote {
-      border-radius: $xs-radius;
+      border-radius: $radius-xs;
       p {
         &:last-child {
           margin-bottom: 0;
@@ -123,7 +123,7 @@
       > li {
         line-height: 2em;
         padding: 0.5em 0.8em;
-        border-radius: $xs-radius;
+        border-radius: $radius-xs;
         &:hover {
           background-color: $module-bg-darker-1;
         }
@@ -140,7 +140,7 @@
         > ol {
           list-style: circle;
           padding-left: 2em;
-          margin-top: $sm-gap;
+          margin-top: $gap-sm;
           &:last-child {
             margin-bottom: 0;
           }
@@ -149,14 +149,14 @@
         &:last-child {
           > ul,
           > ol {
-            margin-bottom: -$sm-gap;
+            margin-bottom: -$gap-sm;
           }
         }
       }
     }
 
     table {
-      border-radius: $xs-radius;
+      border-radius: $radius-xs;
       overflow: hidden;
     }
 
@@ -164,8 +164,8 @@
       width: 100%;
       min-height: 320px;
       margin-bottom: 1em;
-      padding: $sm-gap;
-      border-radius: $xs-radius;
+      padding: $gap-sm;
+      border-radius: $radius-xs;
       border: 1px solid $module-bg-darker-1;
     }
 
@@ -183,7 +183,7 @@
 
     figure.image {
       position: relative;
-      border-radius: $xs-radius;
+      border-radius: $radius-xs;
       border: 1px solid $module-bg-darker-1;
       text-indent: 0;
       text-align: center;
@@ -204,10 +204,10 @@
       img {
         display: block;
         max-width: 100%;
-        padding: $sm-gap;
+        padding: $gap-sm;
         color: transparent;
         cursor: pointer;
-        transition: opacity $transition-time-fast;
+        transition: opacity $motion-duration-fast;
         &:hover {
           opacity: 0.9;
         }
@@ -255,7 +255,7 @@
         .placeholder.error {
           visibility: visible;
           font-size: $font-size-h1 * 1.8;
-          color: $text-divider;
+          color: $color-text-divider;
         }
         /* hide original image failed icon when error */
         img {
@@ -273,7 +273,7 @@
     }
 
     .checkbox {
-      margin: 0 $xs-gap;
+      margin: 0 $gap-xs;
       &.checked {
         color: $theme-black;
       }
@@ -283,7 +283,7 @@
       vertical-align: middle;
       padding: 0.2em 0.4em 0.14em;
       margin: 0;
-      border-radius: $sm-radius;
+      border-radius: $radius-sm;
       font-size: 95%;
     }
 
@@ -298,7 +298,7 @@
       margin-bottom: 1em;
       padding-top: $code-header-height;
       padding-left: $code-number-width;
-      border-radius: $xs-radius;
+      border-radius: $radius-xs;
       overflow: hidden;
       font-size: $code-font-size;
 
@@ -327,7 +327,7 @@
         padding-top: $code-header-height + $code-padding;
         width: $code-number-width;
         height: 100%;
-        color: $text-divider;
+        color: $color-text-divider;
         text-align: center;
         user-select: none;
 
@@ -420,7 +420,7 @@
     code {
       border: 1px solid $module-bg-darker-2;
       background-color: $module-bg-darker-1;
-      color: $link-color;
+      color: $color-link;
     }
 
     pre {

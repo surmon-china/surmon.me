@@ -65,7 +65,7 @@
     height: var(--height);
     pointer-events: none;
     z-index: $z-index-navigation-progress;
-    @include visibility-transition($transition-time-normal);
+    @include visibility-transition($motion-duration-mid);
     @include hidden();
     &.visible {
       @include visible();
@@ -81,14 +81,14 @@
       background-color: $primary;
       transform-origin: left;
       transition-property: transform;
-      transition-duration: $transition-time-fast;
+      transition-duration: $motion-duration-fast;
       transition-timing-function: ease;
     }
 
     .spin {
       position: absolute;
-      top: $lg-gap;
-      right: $lg-gap;
+      top: $gap-lg;
+      right: $gap-lg;
 
       .spin-ring {
         $size: 3rem;

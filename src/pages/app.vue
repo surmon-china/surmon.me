@@ -99,7 +99,7 @@
       text-align: center;
 
       .logo {
-        margin-bottom: $lg-gap * 2;
+        margin-bottom: $gap-lg * 2;
         img {
           width: 6rem;
           border-radius: 1em;
@@ -114,31 +114,31 @@
       }
 
       .version {
-        color: $text-divider;
+        color: $color-text-divider;
         text-decoration: line-through;
       }
 
       .rss {
         margin-top: 2rem;
         margin-bottom: 0;
-        color: $text-secondary;
+        color: $color-text-secondary;
 
         .deprecated {
           font-weight: bold;
-          margin-right: $xs-gap;
+          margin-right: $gap-xs;
           color: $red;
         }
 
         .link {
-          margin-left: $xs-gap;
+          margin-left: $gap-xs;
           @include text-underline();
         }
 
         .prefix {
-          margin-right: $xs-gap;
+          margin-right: $gap-xs;
         }
         .suffix {
-          margin-left: $xs-gap;
+          margin-left: $gap-xs;
         }
       }
 
@@ -159,7 +159,7 @@
 
         .screen-img {
           width: 100%;
-          @include visibility-transition($transition-time-normal);
+          @include visibility-transition($motion-duration-mid);
         }
 
         .download {
@@ -175,12 +175,12 @@
           align-items: center;
           @include hidden();
           @include backdrop-blur(3px);
-          @include visibility-transition($transition-time-normal);
+          @include visibility-transition($motion-duration-mid);
 
           .qrcode {
             width: $size;
             height: auto;
-            @include radius-box($sm-radius);
+            @include radius-box($radius-sm);
           }
 
           .button {
@@ -191,23 +191,23 @@
             margin-top: 2rem;
             padding: 0 1em;
             border: 1px solid $primary;
-            border-radius: $xs-radius;
+            border-radius: $radius-xs;
             background: $module-bg;
             color: $primary;
-            transition: all $transition-time-fast;
+            transition: all $motion-duration-fast;
             &:hover {
-              color: $text-reversal;
+              color: $color-text-reversal;
               border-color: $primary-translucent;
               background: $primary-lighter;
             }
 
             .icon {
               font-size: $font-size-h4;
-              margin-right: $sm-gap;
+              margin-right: $gap-sm;
             }
 
             .new-window {
-              margin-left: $xs-gap;
+              margin-left: $gap-xs;
               font-size: $font-size-small;
             }
           }
@@ -215,13 +215,13 @@
           .source-code {
             margin-top: 2rem;
             border-bottom: 1px solid;
-            color: $text;
+            color: $color-text;
             &:hover {
               color: $primary;
             }
 
             .iconfont {
-              margin-right: $xs-gap;
+              margin-right: $gap-xs;
             }
           }
         }
@@ -230,7 +230,7 @@
 
     &.mobile {
       min-height: 53rem;
-      height: calc(100vh - #{$mobile-header-height + $lg-gap + $lg-gap + $mobile-footer-height});
+      height: calc(100vh - #{$mobile-header-height + $gap-lg + $gap-lg + $mobile-footer-height});
 
       .app {
         .screen {

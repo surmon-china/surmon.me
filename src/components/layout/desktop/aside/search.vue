@@ -71,7 +71,7 @@
   @import 'src/styles/mixins.scss';
 
   .search {
-    padding: $sm-gap;
+    padding: $gap-sm;
     width: 100%;
     height: 3em;
     overflow: hidden;
@@ -114,9 +114,9 @@
     .extra-btn {
       flex-grow: 1;
       display: inline-block;
-      margin-left: $sm-gap;
+      margin-left: $gap-sm;
       text-align: center;
-      border-radius: $mini-radius;
+      border-radius: $radius-mini;
 
       .iconfont {
         font-size: $font-size-h4;

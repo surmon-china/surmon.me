@@ -97,8 +97,8 @@
     width: $aside-width;
 
     .module {
-      margin-bottom: $lg-gap;
-      @include radius-box($sm-radius);
+      margin-bottom: $gap-lg;
+      @include radius-box($radius-sm);
       @include common-bg-module();
 
       &.mammon {
@@ -119,13 +119,13 @@
       }
 
       .sticky-module {
-        max-height: calc(100vh - 250px - #{$header-height + $lg-gap * 4});
+        max-height: calc(100vh - 250px - #{$header-height + $gap-lg * 4});
       }
     }
 
     .aside-sticky-box {
       position: sticky;
-      top: $header-height + $lg-gap;
+      top: $header-height + $gap-lg;
       width: $aside-width;
     }
   }

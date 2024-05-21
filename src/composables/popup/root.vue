@@ -80,8 +80,8 @@
         }
 
         &.border > ::v-deep(*) {
-          border: $sm-gap solid $module-bg-darker-1;
-          @include radius-box($sm-radius);
+          border: $gap-sm solid $module-bg-darker-1;
+          @include radius-box($radius-sm);
         }
       }
     }

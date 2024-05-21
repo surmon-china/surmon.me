@@ -112,15 +112,15 @@
         .cover {
           width: 100%;
           height: 100%;
-          border-radius: $xs-radius;
+          border-radius: $radius-xs;
           object-fit: cover;
         }
 
         .type-icon {
           opacity: 0.7;
           position: absolute;
-          top: math.div($xs-gap, 2);
-          right: $xs-gap;
+          top: math.div($gap-xs, 2);
+          right: $gap-xs;
           color: $white;
         }
 

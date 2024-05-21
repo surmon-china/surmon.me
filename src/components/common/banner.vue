@@ -114,7 +114,7 @@
       .title {
         font-size: 3em;
         margin-top: 0;
-        margin-bottom: $lg-gap * 2;
+        margin-bottom: $gap-lg * 2;
       }
 
       .description {
@@ -125,7 +125,7 @@
 
     &.mobile {
       height: $mobile-banner-height;
-      margin-top: -$lg-gap;
+      margin-top: -$gap-lg;
       margin-left: -$gap;
       margin-right: -$gap;
 

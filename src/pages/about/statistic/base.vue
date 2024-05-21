@@ -72,7 +72,7 @@
     width: 100%;
     height: 14rem;
     padding: 1em 1.8em 1.2em 1.8em;
-    border-radius: $lg-radius;
+    border-radius: $radius-lg;
     @include common-bg-module();
     position: relative;
     overflow: hidden;
@@ -90,8 +90,8 @@
       #{--s-primary}: $github-primary;
     }
     &.github.dark {
-      #{--s-primary}: $link-color;
-      #{--brand-color}: $text-reversal;
+      #{--s-primary}: $color-link;
+      #{--brand-color}: $color-text-reversal;
     }
 
     .skeletons {
@@ -108,7 +108,7 @@
     }
 
     .content {
-      color: $text-secondary;
+      color: $color-text-secondary;
 
       .title {
         margin-bottom: $gap;
@@ -118,7 +118,7 @@
         &:hover {
           .right {
             opacity: 1;
-            color: $text;
+            color: $color-text;
           }
         }
 
@@ -133,7 +133,7 @@
           }
 
           .text {
-            color: $text;
+            color: $color-text;
             font-size: $font-size-h3;
             font-weight: bold;
             letter-spacing: 1px;
@@ -141,9 +141,9 @@
         }
 
         .right {
-          color: $text-divider;
+          color: $color-text-divider;
           opacity: 0.4;
-          transition: all $transition-time-fast;
+          transition: all $motion-duration-fast;
           .iconfont {
             margin: 0;
           }
@@ -151,9 +151,9 @@
       }
 
       ::v-deep(.count) {
-        color: $text;
+        color: $color-text;
         font-weight: bold;
-        margin: 0 $xs-gap;
+        margin: 0 $gap-xs;
         &.large {
           font-size: $font-size-h2;
         }
@@ -163,8 +163,8 @@
       }
 
       ::v-deep(.iconfont) {
-        color: $text-disabled;
-        margin-right: $sm-gap;
+        color: $color-text-disabled;
+        margin-right: $gap-sm;
       }
     }
   }

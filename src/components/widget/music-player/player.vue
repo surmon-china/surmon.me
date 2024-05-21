@@ -140,7 +140,7 @@
           $size: 4rem;
           width: $size;
           height: $size;
-          border-radius: $sm-radius;
+          border-radius: $radius-sm;
           margin-right: $gap;
           background-color: $module-bg-darker-1;
           background-image: surl('/images/music.webp');
@@ -153,7 +153,7 @@
           .title {
             display: flex;
             align-items: baseline;
-            margin-bottom: $xs-gap;
+            margin-bottom: $gap-xs;
             white-space: nowrap;
 
             .name,
@@ -170,14 +170,14 @@
 
             .artist {
               max-width: 6rem;
-              margin-left: $xs-gap;
-              color: $text-disabled;
+              margin-left: $gap-xs;
+              color: $color-text-disabled;
             }
           }
 
           .duration {
             margin: 0;
-            color: $text-disabled;
+            color: $color-text-disabled;
           }
         }
       }
@@ -188,20 +188,20 @@
         align-items: center;
 
         .toggle-play {
-          margin: 0 $lg-gap;
+          margin: 0 $gap-lg;
           font-size: $font-size-h1 * 1.2;
-          transition: all $transition-time-fast;
+          transition: all $motion-duration-fast;
           &:hover {
-            color: $link-color;
+            color: $color-link;
           }
         }
 
         .cut-song {
           width: 3rem;
           font-size: $font-size-h3;
-          color: $text-disabled;
+          color: $color-text-disabled;
           &:hover {
-            color: $text;
+            color: $color-text;
           }
         }
       }
@@ -210,34 +210,34 @@
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        padding: 0 $lg-gap;
+        padding: 0 $gap-lg;
         font-size: $font-size-h4;
 
         .indexed {
           display: block;
-          padding: 0.1em $sm-gap;
-          border-radius: $xs-radius;
+          padding: 0.1em $gap-sm;
+          border-radius: $radius-xs;
           font-size: $font-size-root;
           font-weight: bold;
-          color: $text-disabled;
+          color: $color-text-disabled;
           background-color: $module-bg-darker-1;
         }
 
         .playlist-link,
         .toggle-muted {
-          color: $text-disabled;
+          color: $color-text-disabled;
           &:hover {
-            color: $text;
+            color: $color-text;
           }
         }
 
         .toggle-muted {
           width: 2rem;
-          margin-right: $sm-gap;
+          margin-right: $gap-sm;
         }
 
         .playlist-link {
-          margin: 0 $sm-gap;
+          margin: 0 $gap-sm;
         }
 
         .volume {
@@ -271,7 +271,7 @@
     .progress {
       position: relative;
       width: 100%;
-      height: $sm-gap;
+      height: $gap-sm;
       box-sizing: content-box;
       background-color: $module-bg-darker-1;
 
@@ -281,7 +281,7 @@
         top: 0;
         left: 0;
         background-color: $module-bg-darker-3;
-        transition: width $transition-time-fast;
+        transition: width $motion-duration-fast;
         will-change: width;
       }
     }
@@ -309,7 +309,7 @@
           }
           &.playing {
             .play {
-              color: $link-color;
+              color: $color-link;
             }
           }
           &.unplayable {
@@ -319,16 +319,16 @@
           .index {
             padding-left: 1em;
             font-weight: bold;
-            color: $text-disabled;
+            color: $color-text-disabled;
           }
 
           .play {
             text-align: center;
-            color: $text-disabled;
+            color: $color-text-disabled;
           }
           &:not(.unplayable) {
             .play:hover {
-              color: $text;
+              color: $color-text;
             }
           }
 
@@ -344,32 +344,32 @@
             &:hover {
               .text {
                 text-decoration: underline;
-                color: $link-color;
+                color: $color-link;
               }
               .iconfont {
-                color: $text;
+                color: $color-text;
               }
             }
 
             .text {
               display: inline-block;
               font-weight: bold;
-              color: $text;
+              color: $color-text;
             }
             .iconfont {
-              margin-left: $xs-gap;
+              margin-left: $gap-xs;
               font-size: $font-size-small;
-              color: $text-disabled;
+              color: $color-text-disabled;
             }
           }
 
           .artist {
-            color: $text-secondary;
+            color: $color-text-secondary;
           }
 
           .duration {
             text-align: center;
-            color: $text-divider;
+            color: $color-text-divider;
           }
         }
       }

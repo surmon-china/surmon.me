@@ -144,7 +144,7 @@
   }
 
   .desktop-main {
-    padding-top: $header-height + $lg-gap;
+    padding-top: $header-height + $gap-lg;
 
     @media screen and (max-width: 1200px) {
       #theme,
@@ -174,9 +174,9 @@
         height: $height;
         line-height: $height;
         font-size: $font-size-h4;
-        border-top-right-radius: $xs-radius;
-        border-bottom-right-radius: $xs-radius;
-        transition: width $transition-time-fast;
+        border-top-right-radius: $radius-xs;
+        border-bottom-right-radius: $radius-xs;
+        transition: width $motion-duration-fast;
         &:hover {
           width: 120%;
         }
@@ -196,13 +196,13 @@
       .nav-view {
         order: 1;
         flex-shrink: 0;
-        margin-right: $lg-gap;
+        margin-right: $gap-lg;
       }
 
       .aside-view {
         order: 3;
         flex-shrink: 0;
-        margin-left: $lg-gap;
+        margin-left: $gap-lg;
       }
 
       .main-view {
@@ -237,13 +237,13 @@
         &.layout-full {
           flex-grow: unset;
           width: 100%;
-          margin: -$lg-gap 0;
+          margin: -$gap-lg 0;
         }
       }
     }
 
     .footer-view {
-      margin-top: $lg-gap;
+      margin-top: $gap-lg;
     }
   }
 </style>

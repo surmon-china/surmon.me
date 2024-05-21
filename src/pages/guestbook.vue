@@ -109,24 +109,24 @@
 
   .guestbook-page {
     .mobile-banner {
-      margin-bottom: $lg-gap;
+      margin-bottom: $gap-lg;
     }
 
     .desktop-banner {
       position: relative;
-      margin-bottom: $lg-gap;
+      margin-bottom: $gap-lg;
       width: 100%;
       height: 19rem;
       border: 0;
       background-color: $module-bg;
-      @include radius-box($lg-radius);
+      @include radius-box($radius-lg);
 
       .image {
         width: 100%;
         height: 100%;
         object-fit: cover;
         object-position: 0% 60%;
-        transition: all $transition-time-slow;
+        transition: all $motion-duration-slow;
         &:hover {
           transform: rotate(2deg) scale(1.1);
         }
@@ -134,7 +134,7 @@
 
       .like {
         position: absolute;
-        left: $lg-gap * 2;
+        left: $gap-lg * 2;
         bottom: $gap * 2;
         display: inline-flex;
         align-items: center;
@@ -147,7 +147,7 @@
         }
 
         .icon {
-          margin-right: $sm-gap;
+          margin-right: $gap-sm;
           color: rgba($red, 0.6);
           font-size: $font-size-h2;
           @include color-transition();
@@ -163,14 +163,14 @@
         $size: 2em;
         display: block;
         position: absolute;
-        right: $lg-gap * 2;
+        right: $gap-lg * 2;
         bottom: $gap * 2;
         height: $size;
         line-height: $size;
-        padding: 0 $sm-gap;
+        padding: 0 $gap-sm;
         padding-left: 3rem;
-        border-top-right-radius: $mini-radius;
-        border-bottom-right-radius: $mini-radius;
+        border-top-right-radius: $radius-mini;
+        border-bottom-right-radius: $radius-mini;
         background: linear-gradient(to left, $module-bg-lighter, $module-bg, transparent);
         mix-blend-mode: screen;
         opacity: 0.8;
@@ -178,7 +178,7 @@
 
         .text {
           letter-spacing: 0.3px;
-          color: $text-darker;
+          color: $color-text-darker;
         }
       }
     }

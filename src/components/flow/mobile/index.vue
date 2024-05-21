@@ -190,8 +190,8 @@
       line-height: $size;
       margin-left: -$gap;
       margin-right: -$gap;
-      margin-top: -$lg-gap;
-      margin-bottom: $lg-gap;
+      margin-top: -$gap-lg;
+      margin-bottom: $gap-lg;
       text-align: center;
       background-color: $module-bg-darker-1;
 
@@ -214,8 +214,8 @@
 
       .item {
         background-color: $module-bg;
-        @include radius-box($sm-radius);
-        margin-bottom: $lg-gap;
+        @include radius-box($radius-sm);
+        margin-bottom: $gap-lg;
         &:last-child {
           margin-bottom: 0;
         }
@@ -250,7 +250,7 @@
     }
 
     .loadmore {
-      color: $text-disabled;
+      color: $color-text-disabled;
 
       .normal {
         width: 100%;
@@ -258,12 +258,12 @@
       }
 
       .loading {
-        margin: $sm-gap 0;
+        margin: $gap-sm 0;
       }
 
       .finished {
-        margin: $xs-gap 0;
-        color: $text-divider;
+        margin: $gap-xs 0;
+        color: $color-text-divider;
         font-weight: bold;
       }
     }

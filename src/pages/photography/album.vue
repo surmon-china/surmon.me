@@ -101,10 +101,10 @@
       transform: translateY(-50%);
       z-index: $z-index-normal + 1;
       &.prev {
-        left: $lg-gap;
+        left: $gap-lg;
       }
       &.next {
-        right: $lg-gap;
+        right: $gap-lg;
       }
 
       .button {
@@ -113,14 +113,14 @@
         height: $size;
         border-radius: 100%;
         background-color: $module-bg;
-        transition: all $transition-time-fast;
+        transition: all $motion-duration-fast;
 
         &[disabled] {
           opacity: 0.7;
-          color: $text-divider;
+          color: $color-text-divider;
         }
         &:not([disabled]):hover {
-          color: $text;
+          color: $color-text;
           background-color: $module-bg-darker-1;
         }
       }

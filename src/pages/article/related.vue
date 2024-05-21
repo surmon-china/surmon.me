@@ -96,7 +96,7 @@
       .item {
         width: auto;
         @include common-bg-module();
-        @include radius-box($sm-radius);
+        @include radius-box($radius-sm);
 
         &.disabled {
           pointer-events: none;
@@ -115,7 +115,7 @@
             height: 7rem;
             opacity: 0.88;
             background-color: $module-bg-darker-2;
-            transition: all $transition-time-fast;
+            transition: all $motion-duration-fast;
 
             &::after {
               content: '';
@@ -139,23 +139,23 @@
           .description {
             display: block;
             width: 100%;
-            padding: 0 $sm-gap;
-            transition: color $transition-time-fast;
+            padding: 0 $gap-sm;
+            transition: color $motion-duration-fast;
             @include text-overflow();
           }
 
           .title {
             font-size: $font-size-h6;
-            margin-top: $sm-gap;
-            margin-bottom: $xs-gap;
+            margin-top: $gap-sm;
+            margin-bottom: $gap-xs;
             font-weight: bold;
-            color: $text;
+            color: $color-text;
           }
 
           .description {
-            margin-bottom: $sm-gap;
+            margin-bottom: $gap-sm;
             font-size: $font-size-small;
-            color: $text-disabled;
+            color: $color-text-disabled;
           }
 
           &:hover {
@@ -164,10 +164,10 @@
             }
 
             .title {
-              color: $link-color;
+              color: $color-link;
             }
             .description {
-              color: $text-secondary;
+              color: $color-text-secondary;
             }
           }
         }

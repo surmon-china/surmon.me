@@ -137,9 +137,9 @@
         display: flex;
         height: 10rem;
         padding: $gap;
-        margin-bottom: $lg-gap;
+        margin-bottom: $gap-lg;
         @include common-bg-module();
-        @include radius-box($sm-radius);
+        @include radius-box($radius-sm);
         &:last-child {
           margin-bottom: 0;
         }
@@ -150,7 +150,7 @@
         }
 
         .content {
-          margin-left: $lg-gap;
+          margin-left: $gap-lg;
           flex-grow: 1;
 
           .title {
@@ -160,14 +160,14 @@
           .description {
             .line-item {
               width: 100%;
-              height: $lg-gap;
-              margin-top: $sm-gap;
+              height: $gap-lg;
+              margin-top: $gap-sm;
             }
           }
           .meta {
             width: 68%;
-            height: $lg-gap;
-            margin-top: $lg-gap;
+            height: $gap-lg;
+            margin-top: $gap-lg;
           }
         }
       }
@@ -176,30 +176,30 @@
     .article-list-mammon {
       width: 100%;
       min-height: 10rem;
-      padding: $sm-gap;
-      margin-bottom: $lg-gap;
+      padding: $gap-sm;
+      margin-bottom: $gap-lg;
       @include common-bg-module();
-      @include radius-box($sm-radius);
+      @include radius-box($radius-sm);
 
       &::v-deep(.mammon-ins) {
-        margin: $xs-gap 0;
+        margin: $gap-xs 0;
         height: 100px;
       }
     }
 
     .article-list {
-      margin-bottom: $lg-gap;
-      min-height: $lg-gap;
+      margin-bottom: $gap-lg;
+      min-height: $gap-lg;
       overflow: hidden;
 
       .empty {
         height: $gap * 10;
         @include common-bg-module();
-        @include radius-box($sm-radius);
+        @include radius-box($radius-sm);
       }
 
       .list-item {
-        margin-bottom: $lg-gap;
+        margin-bottom: $gap-lg;
         &:last-child {
           margin-bottom: 0;
         }
@@ -208,10 +208,10 @@
 
     .article-load {
       width: 100%;
-      height: $button-block-height;
+      height: 3.4rem;
       position: relative;
       display: block;
-      @include radius-box($sm-radius);
+      @include radius-box($radius-sm);
       &[disabled] {
         opacity: 0.6;
       }
@@ -247,13 +247,13 @@
 
         .left {
           font-weight: bold;
-          color: $text-disabled;
+          color: $color-text-disabled;
           margin-left: 2em;
         }
 
         .right {
           width: 10rem;
-          color: $text-disabled;
+          color: $color-text-disabled;
           .text {
             font-weight: bold;
             text-transform: uppercase;
@@ -282,7 +282,7 @@
         .left,
         .right {
           height: 100%;
-          border-radius: $xs-radius;
+          border-radius: $radius-xs;
           @include background-transition();
         }
 

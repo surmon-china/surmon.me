@@ -7,40 +7,6 @@ $source-url: '' !default;
   @return url('#{$source-url}#{$path}');
 }
 
-// theme colors
-$body-bg: var(--body-bg);
-$theme-black: var(--theme-black);
-$theme-logo-rotate: var(--theme-logo-rotate);
-
-$primary: var(--primary-color);
-$primary-lighter: var(--primary-color-lighter);
-$primary-translucent: var(--primary-color-translucent);
-
-$module-bg-darker-1: var(--module-bg-darker-1);
-$module-bg-darker-2: var(--module-bg-darker-2);
-$module-bg-darker-3: var(--module-bg-darker-3);
-$module-bg-darker-4: var(--module-bg-darker-4);
-$module-bg-darker-5: var(--module-bg-darker-5);
-
-$module-bg: var(--module-bg);
-$module-bg-opaque: var(--module-bg-opaque);
-$module-bg-lighter: var(--module-bg-lighter);
-$module-bg-translucent: var(--module-bg-translucent);
-$module-bg-hover: $module-bg-darker-2;
-
-// text colors
-$text: var(--text-color);
-$text-lighter: var(--text-lighter);
-$text-darker: var(--text-darker);
-$text-secondary: var(--text-secondary);
-$text-disabled: var(--text-disabled);
-$text-divider: var(--text-divider);
-$text-reversal: var(--text-reversal);
-
-// link colors
-$link-color: var(--link-color);
-$link-hover: var(--link-hover);
-
 // colors
 $surmon: #0088f5;
 $accent: #4caf50;
@@ -49,24 +15,57 @@ $yellow: #ffeb3b;
 $grey: #c0c0c0;
 $white: #ffffff;
 $black: #000000;
-$mobile-aside-bg: #34393d;
+
+// theme colors
+$primary: var(--color-primary);
+$primary-lighter: var(--color-primary-lighter);
+$primary-translucent: var(--color-primary-translucent);
+
+$body-bg: var(--body-bg);
+$theme-black: var(--theme-black);
+$theme-logo-rotate: var(--theme-logo-rotate);
+
+$module-bg: var(--module-bg);
+$module-bg-hover: var(--module-bg-darker-2);
+$module-bg-opaque: var(--module-bg-opaque);
+$module-bg-lighter: var(--module-bg-lighter);
+$module-bg-translucent: var(--module-bg-translucent);
+
+$module-bg-darker-1: var(--module-bg-darker-1);
+$module-bg-darker-2: var(--module-bg-darker-2);
+$module-bg-darker-3: var(--module-bg-darker-3);
+$module-bg-darker-4: var(--module-bg-darker-4);
+$module-bg-darker-5: var(--module-bg-darker-5);
+
+// text colors
+$color-text: var(--color-text);
+$color-text-lighter: var(--color-text-lighter);
+$color-text-darker: var(--color-text-darker);
+$color-text-secondary: var(--color-text-secondary);
+$color-text-disabled: var(--color-text-disabled);
+$color-text-divider: var(--color-text-divider);
+$color-text-reversal: var(--color-text-reversal);
+
+// link colors
+$color-link: var(--color-link);
+$color-link-hover: var(--color-link-hover);
 
 // gap
 $gap: 1rem; // ~12px
-$sm-gap: $gap * 0.618; // ~8px
-$xs-gap: math.div($sm-gap, 2); // ~4px
-$lg-gap: $sm-gap * 2; // ~14px
+$gap-sm: $gap * 0.618; // ~8px
+$gap-xs: math.div($gap-sm, 2); // ~4px
+$gap-lg: $gap-sm * 2; // ~14px
 
 // radius
-$lg-radius: 6px;
-$sm-radius: 4px;
-$xs-radius: 2px;
-$mini-radius: 1px;
+$radius-mini: 1px;
+$radius-xs: 2px;
+$radius-sm: 4px;
+$radius-lg: 6px;
 
-// times
-$transition-time-fast: 0.1s;
-$transition-time-normal: 0.25s;
-$transition-time-slow: 0.38s;
+// durations
+$motion-duration-fast: 0.1s;
+$motion-duration-mid: 0.25s;
+$motion-duration-slow: 0.36s;
 
 // Z index
 $z-index-navigation-progress: 999999;
@@ -82,24 +81,24 @@ $footer-height: 6rem;
 $container-width: 1050px;
 $navbar-width: 160px;
 $aside-width: 266px;
-$button-block-height: 3.4rem;
 $full-column-page-banner-height: 28rem;
 
 $full-page-occupied-height: $header-height + $footer-height;
 $full-page-active-content-height: calc(100vh - #{$full-page-occupied-height});
 
-$normal-page-occupied-height: $full-page-occupied-height + $lg-gap * 2;
+$normal-page-occupied-height: $full-page-occupied-height + $gap-lg * 2;
 $normal-page-active-content-height: calc(100vh - #{$normal-page-occupied-height});
 
 // mobile
 $mobile-header-height: 5rem;
 $mobile-banner-height: 16rem;
-$mobile-footer-height: $lg-gap * 4;
-$mobile-aside-transition: all $transition-time-slow ease-out;
+$mobile-footer-height: $gap-lg * 4;
+$mobile-aside-bg: #34393d;
+$mobile-aside-transition: all $motion-duration-slow ease-out;
 
 // breakpoints
-$small-breakpoint: 400px;
-$large-breakpoint: $container-width;
+$breakpoint-small: 400px;
+$breakpoint-large: $container-width;
 
 // font
 $font-family-base: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Hiragino Sans GB',
@@ -123,8 +122,6 @@ $font-size-h6: $font-size-base * 0.97; // 13.3px
 $line-height-base: 1.4;
 
 // others
-$en-primary: rgb(0, 43, 127);
-$zh-primary: #f40002;
 $rss-primary: #f8981d;
 $html5-primary: #d45835;
 $nodejs-primary: #43853d;

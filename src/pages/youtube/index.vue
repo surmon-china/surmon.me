@@ -104,25 +104,25 @@
       text-transform: uppercase;
       margin: 3rem 0;
       letter-spacing: 4px;
-      color: $text;
+      color: $color-text;
 
       .link {
         font-weight: bold;
-        color: $text-secondary;
+        color: $color-text-secondary;
         &:hover {
-          color: $link-color;
+          color: $color-link;
         }
       }
 
       .brand {
         font-size: $font-size-small;
-        color: $text-disabled;
+        color: $color-text-disabled;
         &:hover {
           color: $youtube-primary;
         }
 
         .iconfont {
-          margin-right: $sm-gap;
+          margin-right: $gap-sm;
           font-weight: normal;
         }
       }
@@ -133,7 +133,7 @@
       margin-bottom: $gap * 2;
       font-weight: bold;
       font-size: $font-size-h3;
-      @include radius-box($sm-radius);
+      @include radius-box($radius-sm);
       @include common-bg-module();
     }
 

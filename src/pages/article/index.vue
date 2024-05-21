@@ -226,11 +226,11 @@
       position: relative;
 
       &.margin {
-        margin-bottom: $lg-gap;
+        margin-bottom: $gap-lg;
       }
 
       &.background {
-        border-radius: $sm-radius;
+        border-radius: $radius-sm;
         @include common-bg-module();
       }
 
@@ -245,9 +245,9 @@
       .bridge {
         $distance: 3rem;
         position: absolute;
-        top: -$lg-gap;
-        width: $lg-gap;
-        height: $lg-gap;
+        top: -$gap-lg;
+        width: $gap-lg;
+        height: $gap-lg;
         background: linear-gradient(to bottom, $module-bg, $module-bg-darker-1);
         &.left {
           left: $distance;

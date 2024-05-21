@@ -136,7 +136,7 @@
         flex-shrink: 0;
         width: $size;
         height: $size;
-        margin-right: $lg-gap;
+        margin-right: $gap-lg;
         border: 2px solid $white;
         background-color: $body-bg;
         @include radius-box(100%);
@@ -153,7 +153,7 @@
         .name {
           font-weight: bold;
           margin-top: 0;
-          margin-bottom: $sm-gap;
+          margin-bottom: $gap-sm;
         }
 
         .slogan {
@@ -181,7 +181,7 @@
 
     .aside-nav {
       width: 100%;
-      margin-top: $sm-gap;
+      margin-top: $gap-sm;
 
       .nav-list {
         padding: 0;
@@ -216,7 +216,7 @@
               width: 1em;
               height: 1em;
               margin-right: 1em;
-              border-radius: $xs-radius;
+              border-radius: $radius-xs;
             }
           }
 
@@ -228,7 +228,7 @@
           }
 
           .newscript {
-            margin-left: $sm-gap;
+            margin-left: $gap-sm;
             font-size: $font-size-small;
           }
         }

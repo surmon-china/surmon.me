@@ -111,7 +111,7 @@
     position: relative;
     overflow: hidden;
     height: auto;
-    transition: height $transition-time-normal;
+    transition: height $motion-duration-mid;
 
     .oirigin {
       position: absolute;
@@ -150,27 +150,27 @@
         .featured {
           display: inline-block;
           border: 1px solid;
-          border-radius: $xs-radius;
-          margin-left: $sm-gap;
+          border-radius: $radius-xs;
+          margin-left: $gap-sm;
           padding: 0 2px;
           font-weight: normal;
           text-transform: capitalize;
           font-size: $font-size-small;
-          color: $text-secondary;
+          color: $color-text-secondary;
           transform: translateY(-2px);
           user-select: none;
         }
       }
 
       .meta {
-        margin-bottom: $lg-gap;
+        margin-bottom: $gap-lg;
         text-align: center;
-        color: $text-disabled;
+        color: $color-text-disabled;
         font-size: $font-size-small;
         user-select: none;
         line-height: 2;
         .iconfont {
-          margin-right: $xs-gap;
+          margin-right: $gap-xs;
         }
         .vertical {
           top: -1px;
@@ -193,10 +193,10 @@
           margin-top: 2rem;
           line-height: 3rem;
           text-align: center;
-          color: $text-reversal;
+          color: $color-text-reversal;
           background-color: $primary-lighter;
           @include background-transition();
-          @include radius-box($xs-radius);
+          @include radius-box($radius-xs);
 
           &[disabled] {
             cursor: no-drop;
@@ -207,7 +207,7 @@
           }
 
           .iconfont {
-            margin-left: $sm-gap;
+            margin-left: $gap-sm;
           }
         }
       }

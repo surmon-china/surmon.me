@@ -139,7 +139,7 @@
     .legends .folders,
     .legends .now {
       @include common-bg-module();
-      @include radius-box($lg-radius);
+      @include radius-box($radius-lg);
     }
 
     .legends {
@@ -150,18 +150,18 @@
       .now {
         flex-shrink: 0;
         display: inline-flex;
-        margin-bottom: $lg-gap;
+        margin-bottom: $gap-lg;
         padding: 0 $gap;
         width: 100%;
         line-height: 3.4em;
         cursor: pointer;
-        color: $text-secondary;
+        color: $color-text-secondary;
         &:hover {
-          color: $text;
+          color: $color-text;
         }
 
         .iconfont {
-          margin-right: $sm-gap;
+          margin-right: $gap-sm;
         }
         .text {
           font-weight: bold;
@@ -172,14 +172,14 @@
         flex: 1;
         list-style: none;
         margin: 0;
-        padding: $sm-gap $gap;
+        padding: $gap-sm $gap;
 
         .item {
           line-height: 2.4em;
           cursor: pointer;
-          color: $text-secondary;
+          color: $color-text-secondary;
           &:hover {
-            color: $text;
+            color: $color-text;
           }
 
           .iconfont {
@@ -198,7 +198,7 @@
               position: absolute;
               top: -0.5em;
               right: -1.2em;
-              color: $text-divider;
+              color: $color-text-divider;
             }
           }
         }
@@ -209,7 +209,7 @@
       position: relative;
       padding: $gap;
       @include common-bg-module();
-      @include radius-box($lg-radius);
+      @include radius-box($radius-lg);
 
       .mapbox {
         width: $map-width;
@@ -219,26 +219,26 @@
 
       .toolbar {
         position: absolute;
-        top: $lg-gap * 2;
-        right: $lg-gap * 2;
+        top: $gap-lg * 2;
+        right: $gap-lg * 2;
         z-index: $z-index-normal + 1;
         display: flex;
 
         .button {
-          margin-left: $lg-gap;
+          margin-left: $gap-lg;
           display: block;
           $size: 2em;
           width: $size;
           height: $size;
           line-height: $size;
-          border-radius: $xs-radius;
+          border-radius: $radius-xs;
           text-align: center;
           background-color: $module-bg;
           font-size: $font-size-h4;
-          color: $text-secondary;
+          color: $color-text-secondary;
           @include backdrop-blur(1px);
           &:hover {
-            color: $link-color;
+            color: $color-link;
             background-color: $module-bg-opaque;
           }
         }

@@ -94,13 +94,13 @@
       .item {
         $height: 2em;
         display: inline-flex;
-        margin-right: $sm-gap;
+        margin-right: $gap-sm;
         margin-top: $gap;
         height: $height;
         line-height: $height;
         font-size: $font-size-h6;
         font-family: $font-family-normal;
-        @include radius-box($xs-radius);
+        @include radius-box($radius-xs);
 
         .iconfont {
           width: 2em;
@@ -111,12 +111,12 @@
 
         .name {
           display: block;
-          padding: 0 $sm-gap;
+          padding: 0 $gap-sm;
           @include background-transition();
 
           .count {
-            margin-left: $xs-gap;
-            color: $text-secondary;
+            margin-left: $gap-xs;
+            color: $color-text-secondary;
           }
         }
 
@@ -127,10 +127,10 @@
           }
           .name {
             font-weight: bold;
-            color: $text-reversal;
+            color: $color-text-reversal;
             background-color: $primary;
             .count {
-              color: $text-reversal;
+              color: $color-text-reversal;
             }
           }
         }

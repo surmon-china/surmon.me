@@ -108,7 +108,7 @@
     }
 
     .actions {
-      margin-top: $sm-gap;
+      margin-top: $gap-sm;
       margin-bottom: 2rem;
     }
 
@@ -116,9 +116,9 @@
       $size: 2rem;
       height: $size;
       line-height: $size;
-      margin-bottom: $lg-gap;
+      margin-bottom: $gap-lg;
       font-weight: bold;
-      color: $text-secondary;
+      color: $color-text-secondary;
       &:last-child {
         margin: 0;
       }
@@ -136,10 +136,10 @@
         &.date,
         &.category,
         &.tag {
-          margin: 0 $xs-gap;
-          color: $text;
+          margin: 0 $gap-xs;
+          color: $color-text;
           &:hover {
-            color: $link-hover;
+            color: $color-link-hover;
           }
         }
 
@@ -149,9 +149,9 @@
 
         &.copyright,
         &.permalink {
-          color: $text-secondary;
+          color: $color-text-secondary;
           &:hover {
-            color: $text;
+            color: $color-text;
           }
         }
 

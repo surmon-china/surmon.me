@@ -95,8 +95,8 @@
     .statistic-warpper {
       padding: 2rem;
       background-color: $module-bg-translucent;
-      border-bottom-left-radius: $lg-radius;
-      border-bottom-right-radius: $lg-radius;
+      border-bottom-left-radius: $radius-lg;
+      border-bottom-right-radius: $radius-lg;
 
       .skeletons,
       .statistics {
@@ -120,10 +120,10 @@
           flex-direction: column;
 
           .title {
-            margin-bottom: $xs-gap;
+            margin-bottom: $gap-xs;
             text-transform: uppercase;
             font-size: $font-size-small;
-            color: $text-secondary;
+            color: $color-text-secondary;
           }
 
           .content {
@@ -136,7 +136,7 @@
 
     .archive-warpper {
       overflow: hidden;
-      margin-top: $lg-gap;
+      margin-top: $gap-lg;
 
       .archive-empty {
         font-weight: bold;
@@ -145,7 +145,7 @@
       .archive-skeleton,
       .archive-content {
         background-color: $module-bg-translucent;
-        @include radius-box($lg-radius);
+        @include radius-box($radius-lg);
       }
 
       .archive-skeleton {
@@ -173,7 +173,7 @@
 
           .title {
             margin-top: 0;
-            margin-bottom: $sm-gap;
+            margin-bottom: $gap-sm;
             max-width: 75vw;
             @include text-overflow();
 
@@ -181,14 +181,14 @@
               display: inline-block;
               width: 2rem;
               margin-right: 1rem;
-              color: $text-divider;
+              color: $color-text-divider;
             }
           }
 
           .description {
             margin-bottom: 0;
             padding-left: 3rem;
-            color: $text-disabled;
+            color: $color-text-disabled;
           }
         }
       }

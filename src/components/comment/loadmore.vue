@@ -57,36 +57,36 @@
   @import 'src/styles/mixins.scss';
 
   .loadmore {
-    margin-top: $lg-gap;
-    margin-bottom: $sm-gap;
+    margin-top: $gap-lg;
+    margin-bottom: $gap-sm;
     display: flex;
     justify-content: center;
     align-items: center;
 
     .loading {
-      margin: $sm-gap 0;
+      margin: $gap-sm 0;
     }
 
     .button {
       position: relative;
       min-width: 10rem;
       height: 2.8rem;
-      padding: 0 $lg-gap;
-      border-radius: $xs-radius;
+      padding: 0 $gap-lg;
+      border-radius: $radius-xs;
       background-color: $module-bg-darker-1;
-      color: $text-disabled;
+      color: $color-text-disabled;
       &:hover {
-        color: $link-color;
+        color: $color-link;
         background-color: $module-bg-hover;
       }
 
       .iconfont {
-        margin-right: $sm-gap;
+        margin-right: $gap-sm;
       }
     }
 
     .finished {
-      color: $text-disabled;
+      color: $color-text-disabled;
     }
   }
 </style>

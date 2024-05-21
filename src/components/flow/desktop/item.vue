@@ -150,7 +150,7 @@
 
   .article-item {
     position: relative;
-    @include radius-box($sm-radius);
+    @include radius-box($radius-sm);
 
     &:last-child {
       margin: 0;
@@ -168,13 +168,13 @@
 
     > .item-content {
       $height: $gap * 11;
-      $padding: $sm-gap;
+      $padding: $gap-sm;
       $content-height: $height - ($padding * 2);
       display: flex;
       height: $height;
       padding: $padding;
       overflow: hidden;
-      @include common-bg-module($transition-time-fast);
+      @include common-bg-module($motion-duration-fast);
 
       &:hover {
         .item-thumbnail {
@@ -198,9 +198,9 @@
         $width: 186px;
         width: $width;
         height: $content-height;
-        margin-right: $lg-gap;
+        margin-right: $gap-lg;
         position: relative;
-        @include radius-box($xs-radius);
+        @include radius-box($radius-xs);
 
         .item-oirigin {
           $height: 2.1rem;
@@ -211,8 +211,8 @@
           height: $height;
           line-height: $height;
           z-index: $z-index-normal + 1;
-          padding: 0 $sm-gap;
-          border-bottom-right-radius: $xs-radius;
+          padding: 0 $gap-sm;
+          border-bottom-right-radius: $radius-xs;
           font-size: $font-size-small;
           color: $white;
           text-align: center;
@@ -232,8 +232,8 @@
 
         .item-featured {
           position: absolute;
-          left: $xs-gap;
-          bottom: $xs-gap;
+          left: $gap-xs;
+          bottom: $gap-xs;
           z-index: $z-index-normal + 1;
           color: $white;
           opacity: 0.5;
@@ -252,8 +252,8 @@
           opacity: 1;
           transform: translateX(0);
           transition:
-            transform $transition-time-normal,
-            opacity $transition-time-normal;
+            transform $motion-duration-mid,
+            opacity $motion-duration-mid;
         }
       }
 
@@ -263,13 +263,13 @@
         flex-direction: column;
         justify-content: space-between;
         height: $content-height;
-        padding-right: $xs-gap;
+        padding-right: $gap-xs;
 
         .title {
           display: flex;
           justify-content: space-between;
           margin-top: 3px;
-          margin-bottom: $sm-gap;
+          margin-bottom: $gap-sm;
           font-weight: bold;
 
           .link {
@@ -278,19 +278,19 @@
             margin-left: 0;
             text-decoration: none;
             border-bottom: 1px solid transparent;
-            color: $text;
-            transition: margin $transition-time-normal;
+            color: $color-text;
+            transition: margin $motion-duration-mid;
             @include text-overflow();
             &:hover {
-              color: $link-color;
+              color: $color-link;
               border-color: initial;
-              margin-left: $xs-gap;
+              margin-left: $gap-xs;
             }
           }
 
           .language {
             opacity: 0.5;
-            color: $text-divider;
+            color: $color-text-divider;
           }
         }
 
@@ -314,7 +314,7 @@
           white-space: nowrap;
           text-overflow: ellipsis;
           word-wrap: normal;
-          color: $text-secondary;
+          color: $color-text-secondary;
 
           > .views {
             width: 4em;
@@ -338,15 +338,15 @@
           > .tags,
           > .categories {
             > .iconfont {
-              margin-right: $xs-gap;
+              margin-right: $gap-xs;
             }
           }
 
           > .categories {
             a {
-              color: $text-secondary;
+              color: $color-text-secondary;
               text-transform: capitalize;
-              margin-right: $sm-gap;
+              margin-right: $gap-sm;
 
               &:last-child {
                 margin-right: 0;

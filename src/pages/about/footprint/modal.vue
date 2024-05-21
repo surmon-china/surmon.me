@@ -87,14 +87,14 @@
       display: flex;
       flex-direction: column;
       width: 22rem;
-      padding: $lg-gap $gap $gap $lg-gap;
+      padding: $gap-lg $gap $gap $gap-lg;
       background: $module-bg-opaque;
-      border-radius: $lg-radius;
+      border-radius: $radius-lg;
       box-shadow: 0px 0px 8px 4px rgb(0 0 0 / 10%);
 
       .info {
         margin-bottom: 2rem;
-        padding-bottom: $lg-gap;
+        padding-bottom: $gap-lg;
         border-bottom: 1px solid $module-bg-darker-1;
 
         .title {
@@ -129,7 +129,7 @@
             scroll-snap-align: start;
 
             .text {
-              margin-left: $sm-gap;
+              margin-left: $gap-sm;
               font-weight: bold;
             }
           }
@@ -138,7 +138,7 @@
           .placemarks {
             padding-left: 2rem;
             margin-bottom: $gap;
-            color: $text-secondary;
+            color: $color-text-secondary;
           }
 
           .placemarks {
@@ -151,7 +151,7 @@
               line-height: 2.2;
               cursor: pointer;
               &:hover {
-                color: $text;
+                color: $color-text;
               }
 
               .icon {
@@ -160,7 +160,7 @@
               }
 
               .text {
-                margin-left: $sm-gap;
+                margin-left: $gap-sm;
                 max-width: 80%;
                 @include text-overflow();
               }

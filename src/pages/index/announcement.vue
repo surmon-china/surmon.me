@@ -99,13 +99,13 @@
 
   .announcement {
     position: relative;
-    margin-bottom: $lg-gap;
+    margin-bottom: $gap-lg;
     height: $announcement-height;
     line-height: $announcement-height;
     font-size: $font-size-h6;
-    color: $text-secondary;
+    color: $color-text-secondary;
     @include common-bg-module();
-    @include radius-box($xs-radius);
+    @include radius-box($radius-xs);
 
     .announcement-empty {
       height: 100%;
@@ -116,7 +116,7 @@
       display: flex;
       width: 100%;
       height: 100%;
-      padding: $sm-gap;
+      padding: $gap-sm;
 
       .left {
         width: 68%;
@@ -217,8 +217,8 @@
           }
 
           .date {
-            color: $text-divider;
-            margin-right: $xs-gap;
+            color: $color-text-divider;
+            margin-right: $gap-xs;
           }
         }
       }
@@ -232,17 +232,17 @@
         .button {
           height: 50%;
           text-align: center;
-          color: $text-divider;
+          color: $color-text-divider;
           cursor: pointer;
           @include color-transition();
 
           &:hover {
-            color: $text;
+            color: $color-text;
           }
 
           &.disabled {
             opacity: 0.8;
-            color: $text-divider;
+            color: $color-text-divider;
             cursor: no-drop;
           }
 

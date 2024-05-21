@@ -119,7 +119,7 @@
           margin-right: $gap;
           text-align: center;
           background-color: $module-bg;
-          @include radius-box($xs-radius);
+          @include radius-box($radius-xs);
 
           &[disabled] {
             opacity: 0.6;

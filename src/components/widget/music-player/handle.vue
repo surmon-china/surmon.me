@@ -96,14 +96,14 @@
     bottom: 18%;
     z-index: $z-index-toolbox;
     transition:
-      opacity $transition-time-fast,
-      transform $transition-time-normal cubic-bezier(0.65, 0.05, 0.36, 1);
+      opacity $motion-duration-fast,
+      transform $motion-duration-mid cubic-bezier(0.65, 0.05, 0.36, 1);
     height: $size;
     transform: translateX(-18rem);
     display: flex;
     align-items: center;
-    border-top-right-radius: $sm-radius;
-    border-bottom-right-radius: $sm-radius;
+    border-top-right-radius: $radius-sm;
+    border-bottom-right-radius: $radius-sm;
     background-color: $module-bg-opaque;
     overflow: hidden;
     opacity: 0.5;
@@ -122,12 +122,12 @@
       .control {
         display: flex;
         justify-content: flex-start;
-        margin-bottom: $xs-gap;
+        margin-bottom: $gap-xs;
 
         > .button {
-          margin-right: $lg-gap;
+          margin-right: $gap-lg;
           &:hover {
-            color: $link-hover;
+            color: $color-link-hover;
           }
           &.player {
             color: $music163-primary;
@@ -137,11 +137,11 @@
 
       .song-link {
         max-width: 11rem;
-        color: $text-secondary;
+        color: $color-text-secondary;
         @include color-transition();
         @include text-overflow();
         &:hover {
-          color: $link-hover;
+          color: $color-link-hover;
         }
       }
     }

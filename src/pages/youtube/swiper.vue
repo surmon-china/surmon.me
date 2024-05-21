@@ -81,7 +81,7 @@
       display: flex;
       align-items: center;
       opacity: 0;
-      transition: all $transition-time-fast;
+      transition: all $motion-duration-fast;
       &.prev {
         left: -$size;
         justify-content: start;
@@ -93,12 +93,12 @@
 
       .button {
         font-size: $font-size-h2 * 2;
-        color: $text-disabled;
+        color: $color-text-disabled;
         &[disabled] {
-          color: $text-divider;
+          color: $color-text-divider;
         }
         &:not([disabled]):hover {
-          color: $text;
+          color: $color-text;
         }
       }
     }

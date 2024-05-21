@@ -38,8 +38,8 @@
 
   .article-skeleton {
     .module {
-      margin-bottom: $lg-gap;
-      @include radius-box($sm-radius);
+      margin-bottom: $gap-lg;
+      @include radius-box($radius-sm);
       @include common-bg-module();
     }
 
@@ -77,7 +77,7 @@
       margin: 0;
       display: grid;
       grid-gap: $gap;
-      @include radius-box($sm-radius);
+      @include radius-box($radius-sm);
       @include common-bg-module();
 
       .item {

@@ -112,7 +112,7 @@
     bottom: 28rem;
 
     .container {
-      $size: $lg-gap * 2.8;
+      $size: $gap-lg * 2.8;
       position: relative;
 
       .tools {
@@ -122,12 +122,12 @@
         overflow: hidden;
 
         &:first-child {
-          border-top-left-radius: $xs-radius;
-          border-top-right-radius: $xs-radius;
+          border-top-left-radius: $radius-xs;
+          border-top-right-radius: $radius-xs;
         }
         &:last-child {
-          border-bottom-left-radius: $xs-radius;
-          border-bottom-right-radius: $xs-radius;
+          border-bottom-left-radius: $radius-xs;
+          border-bottom-right-radius: $radius-xs;
         }
 
         .rss,
@@ -139,7 +139,7 @@
           height: $size;
           line-height: $size;
           text-align: center;
-          @include common-bg-module($transition-time-fast);
+          @include common-bg-module($motion-duration-fast);
         }
 
         .rss {
@@ -169,7 +169,7 @@
           background: linear-gradient(1deg, $surmon, #9d0f98);
           background-size: 400% 400%;
           animation: feedback-button 3s ease infinite;
-          transition: opacity $transition-time-fast;
+          transition: opacity $motion-duration-fast;
 
           .iconfont {
             display: inline-block;

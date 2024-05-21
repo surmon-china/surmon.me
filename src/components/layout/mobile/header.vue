@@ -180,7 +180,7 @@
         width: 100%;
         height: $mobile-header-height;
         display: flex;
-        background-color: $text-reversal;
+        background-color: $color-text-reversal;
         border-bottom: 1px solid $module-bg-darker-2;
 
         > .input {
@@ -199,7 +199,7 @@
 
       .search-tags {
         flex: 1;
-        padding: $lg-gap;
+        padding: $gap-lg;
         touch-action: none;
         background-color: $module-bg-translucent;
         @include backdrop-blur(5px);
@@ -216,39 +216,39 @@
 
           .item {
             display: inline-flex;
-            padding: 0 $sm-gap;
-            margin-right: $lg-gap;
-            margin-bottom: $lg-gap;
+            padding: 0 $gap-sm;
+            margin-right: $gap-lg;
+            margin-bottom: $gap-lg;
             line-height: 2em;
             font-size: $font-size-h6;
             font-family: $font-family-normal;
             background-color: $module-bg-darker-1;
-            transition: margin-bottom $transition-time-fast;
-            @include radius-box($xs-radius);
+            transition: margin-bottom $motion-duration-fast;
+            @include radius-box($radius-xs);
 
             .iconfont {
               font-size: $font-size-small;
             }
 
             .name {
-              margin-left: $xs-gap;
+              margin-left: $gap-xs;
             }
 
             .count {
-              margin-left: $xs-gap;
+              margin-left: $gap-xs;
               font-size: $font-size-small;
-              color: $text-secondary;
+              color: $color-text-secondary;
             }
 
             &.link-active {
-              color: $text-reversal;
+              color: $color-text-reversal;
               background-color: $primary;
 
               .name {
                 font-weight: bold;
               }
               .count {
-                color: $text-reversal;
+                color: $color-text-reversal;
               }
             }
           }

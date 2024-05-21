@@ -118,29 +118,29 @@
 
     .external {
       margin-bottom: $gap;
-      color: $text-secondary;
+      color: $color-text-secondary;
 
       .link {
-        margin-left: $sm-gap;
+        margin-left: $gap-sm;
         cursor: pointer;
         text-decoration: underline;
-        color: $text-secondary;
+        color: $color-text-secondary;
         &:hover {
-          color: $link-color;
+          color: $color-link;
         }
       }
 
       .iconfont {
         font-size: $font-size-small;
-        color: $text-secondary;
-        margin-left: $xs-gap;
+        color: $color-text-secondary;
+        margin-left: $gap-xs;
       }
     }
 
     .qrcode {
       height: 14rem;
       max-height: 60%;
-      border-radius: $xs-radius;
+      border-radius: $radius-xs;
     }
 
     .github-sponsors {
@@ -150,31 +150,31 @@
         display: inline-block;
         padding: 0 1em;
         line-height: 3em;
-        border-radius: $sm-radius;
+        border-radius: $radius-sm;
         background-color: $module-bg-darker-2;
-        transition: background-color $transition-time-fast;
+        transition: background-color $motion-duration-fast;
         &:hover {
           background-color: $module-bg-darker-3;
           .text {
-            color: $link-color;
+            color: $color-link;
           }
         }
 
         .iconfont {
-          margin-right: $sm-gap;
+          margin-right: $gap-sm;
           font-size: $font-size-h4;
           color: $github-sponsor-primary;
         }
 
         .text {
-          color: $text;
+          color: $color-text;
           font-weight: bold;
         }
       }
 
       .sponsor-box {
         margin-top: 2rem;
-        margin-bottom: $sm-gap;
+        margin-bottom: $gap-sm;
 
         .total {
           margin-bottom: 2rem;
@@ -187,7 +187,7 @@
         .sponsors {
           display: grid;
           grid-template-columns: repeat(10, 1fr);
-          grid-column-gap: $sm-gap;
+          grid-column-gap: $gap-sm;
           grid-row-gap: $gap;
 
           .item {
@@ -224,19 +224,19 @@
               border-radius: 100%;
               overflow: hidden;
               background-color: $module-bg-darker-1;
-              transition: opacity $transition-time-fast;
+              transition: opacity $motion-duration-fast;
             }
           }
 
           .more-link {
-            margin-left: $sm-gap;
+            margin-left: $gap-sm;
             display: inline-flex;
             align-items: center;
             font-weight: bold;
             font-size: $font-size-h4;
-            color: $text-secondary;
+            color: $color-text-secondary;
             &:hover {
-              color: $link-color;
+              color: $color-link;
             }
           }
         }

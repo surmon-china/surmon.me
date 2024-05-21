@@ -61,7 +61,7 @@
   .statistic {
     width: 100%;
     height: 5em;
-    padding: $sm-gap;
+    padding: $gap-sm;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -69,10 +69,10 @@
     &:hover {
       .item {
         .count {
-          color: $link-color;
+          color: $color-link;
         }
         .title {
-          color: $text;
+          color: $color-text;
         }
       }
     }
@@ -92,10 +92,10 @@
       .skeleton {
         @keyframes skeleton {
           from {
-            color: $text-divider;
+            color: $color-text-divider;
           }
           to {
-            color: $link-color;
+            color: $color-link;
           }
         }
         font-size: $font-size-h3;
@@ -105,14 +105,14 @@
       .count {
         font-size: $font-size-h2;
         font-weight: bold;
-        color: $text;
+        color: $color-text;
       }
 
       .title {
         font-size: $font-size-small - 2;
         white-space: nowrap;
         text-transform: uppercase;
-        color: $text-secondary;
+        color: $color-text-secondary;
         @include color-transition();
       }
     }

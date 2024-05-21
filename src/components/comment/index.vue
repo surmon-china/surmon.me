@@ -354,7 +354,7 @@
   .comment-box {
     padding: $gap;
     @include common-bg-module();
-    @include radius-box($lg-radius);
+    @include radius-box($radius-lg);
 
     .divider {
       border-color: $module-bg-darker-1 !important;

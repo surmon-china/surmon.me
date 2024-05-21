@@ -104,7 +104,7 @@
       display: block;
       padding: 1rem;
       background-color: $module-bg;
-      @include radius-box($xs-radius);
+      @include radius-box($radius-xs);
 
       .content {
         position: relative;
@@ -128,8 +128,8 @@
         .type-icon {
           opacity: 0.8;
           position: absolute;
-          top: $xs-gap;
-          right: $sm-gap;
+          top: $gap-xs;
+          right: $gap-sm;
           font-size: $font-size-h4;
           color: $white;
         }
@@ -137,7 +137,7 @@
         .date {
           opacity: 0.8;
           position: absolute;
-          bottom: $sm-gap;
+          bottom: $gap-sm;
           left: $gap;
           color: $white;
           font-size: $font-size-root;

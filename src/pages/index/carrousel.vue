@@ -178,7 +178,7 @@
     position: relative;
     height: $carrousel-height;
     @include common-bg-module();
-    @include radius-box($lg-radius);
+    @include radius-box($radius-lg);
 
     .article-empty {
       font-size: $font-size-h1;
@@ -204,7 +204,7 @@
         .line {
           .line-item {
             width: 14rem;
-            height: $lg-gap;
+            height: $gap-lg;
             margin-bottom: $gap;
           }
         }
@@ -237,7 +237,7 @@
         position: absolute;
         width: 100%;
         left: 0;
-        bottom: $lg-gap;
+        bottom: $gap-lg;
         text-align: center;
 
         .swiper-pagination-bullet {
@@ -246,11 +246,11 @@
           display: inline-block;
           width: $size;
           height: $size;
-          border-radius: $xs-radius;
+          border-radius: $radius-xs;
           overflow: hidden;
           margin: 0 0.4rem;
           background-color: rgba(white, 0.4);
-          transition: all $transition-time-fast;
+          transition: all $motion-duration-fast;
           cursor: pointer;
           &:hover,
           &.active {
@@ -303,7 +303,7 @@
           height: 100%;
           object-fit: cover;
           object-position: center;
-          transition: transform $transition-time-normal;
+          transition: transform $motion-duration-mid;
           transform: scale(1);
           &:hover {
             transform: scale(1.06);
@@ -329,7 +329,7 @@
             left: 0;
             background-color: rgba(0, 0, 0, 0.2);
             transform: translate3d($title-offset, -$title-offset, 0);
-            transition: transform $transition-time-fast;
+            transition: transform $motion-duration-fast;
           }
 
           .prospect {
@@ -340,8 +340,8 @@
             mix-blend-mode: screen;
             transform: translate3d(-$title-offset, $title-offset, 0);
             transition:
-              transform $transition-time-fast,
-              background-color $transition-time-fast;
+              transform $motion-duration-fast,
+              background-color $motion-duration-fast;
             @include text-overflow;
 
             .text {
@@ -370,7 +370,7 @@
             .prospect {
               mix-blend-mode: normal;
               .text {
-                color: $link-color;
+                color: $color-link;
               }
             }
           }
@@ -383,15 +383,15 @@
           right: $title-right;
           padding: 0.1em 0.3em;
           border: 1px solid;
-          border-radius: $mini-radius;
+          border-radius: $radius-mini;
           font-size: $font-size-root;
           text-transform: capitalize;
           color: $white;
           opacity: 0.8;
           transform: translate3d(-$title-offset, 0, 0);
           transition:
-            opacity $transition-time-fast,
-            transform $transition-time-fast;
+            opacity $motion-duration-fast,
+            transform $motion-duration-fast;
         }
       }
     }

@@ -218,11 +218,7 @@ iframe,
 img,
 svg,
 video {
-  vertical-align: if(
-    variable-exists(media-element-vertical-align),
-    $media-element-vertical-align,
-    middle
-  );
+  vertical-align: if(variable-exists(media-element-vertical-align), $media-element-vertical-align, middle);
 }
 
 // specify the background color of form elements
@@ -231,11 +227,7 @@ button,
 input,
 select,
 textarea {
-  background-color: if(
-    variable-exists(form-element-background-color),
-    $form-element-background-color,
-    transparent
-  );
+  background-color: if(variable-exists(form-element-background-color), $form-element-background-color, transparent);
   color: if(variable-exists(form-element-color), $form-element-color, inherit);
 }
 
@@ -297,7 +289,7 @@ img {
   height: auto;
 }
 
-@media screen and (max-width: $small-breakpoint) {
+@media screen and (max-width: $breakpoint-small) {
   article,
   section,
   aside {
@@ -354,14 +346,14 @@ h5 {
 }
 
 h6 {
-  color: $text-secondary;
+  color: $color-text-secondary;
   font-size: $font-size-h6;
   font-weight: 400;
   margin: 1em 0;
 }
 
 small {
-  color: $text-secondary;
+  color: $color-text-secondary;
   vertical-align: bottom;
   font-size: $font-size-small;
 }
@@ -382,11 +374,11 @@ code {
 }
 
 a {
-  color: $link-color;
+  color: $color-link;
 
   &:hover,
   &:focus {
-    color: $link-hover;
+    color: $color-link-hover;
   }
 }
 
@@ -460,14 +452,14 @@ input[type='search'],
 input[type='tel'],
 select {
   background: $module-bg;
-  color: $text;
+  color: $color-text;
   display: inline-block;
-  padding: $xs-gap;
+  padding: $gap-xs;
   vertical-align: middle;
 }
 
 input[type='color'] {
-  background: $text-reversal;
+  background: $color-text-reversal;
   display: inline-block;
   vertical-align: middle;
 }
@@ -505,7 +497,7 @@ input:not([type]):focus {
 input[type='file']:focus,
 input[type='radio']:focus,
 input[type='checkbox']:focus {
-  outline: 1px thin $text-divider;
+  outline: 1px thin $color-text-divider;
 }
 
 input[type='text'][disabled],
@@ -524,22 +516,22 @@ input[type='tel'][disabled],
 input[type='color'][disabled],
 select[disabled],
 textarea[disabled] {
-  background-color: $text-divider;
-  color: $text-secondary;
+  background-color: $color-text-divider;
+  color: $color-text-secondary;
   cursor: not-allowed;
 }
 
 input:not([type])[disabled] {
-  background-color: $text-divider;
-  color: $text-secondary;
+  background-color: $color-text-divider;
+  color: $color-text-secondary;
   cursor: not-allowed;
 }
 
 input[readonly],
 select[readonly],
 textarea[readonly] {
-  border-color: $text-divider;
-  color: $text-secondary;
+  border-color: $color-text-divider;
+  color: $color-text-secondary;
 }
 
 input:focus:invalid,
@@ -571,20 +563,20 @@ label {
 fieldset {
   border: 0;
   margin: 0;
-  padding: $sm-gap 0;
+  padding: $gap-sm 0;
 }
 
 legend {
   border-bottom: 1px solid $module-bg-darker-1;
-  color: $text;
+  color: $color-text;
   display: block;
-  margin-bottom: $sm-gap;
-  padding: $sm-gap 0;
+  margin-bottom: $gap-sm;
+  padding: $gap-sm 0;
   width: 100%;
 }
 
 textarea {
-  background: $text-reversal;
+  background: $color-text-reversal;
   display: block;
   margin-bottom: 1em;
   max-width: 100%;
@@ -620,7 +612,7 @@ button:focus {
 
 input[type='submit']:disabled,
 button:disabled {
-  color: $text-disabled;
+  color: $color-text-disabled;
   cursor: not-allowed;
 }
 
@@ -633,7 +625,7 @@ table {
 }
 
 caption {
-  padding: $sm-gap 0;
+  padding: $gap-sm 0;
 }
 
 thead th {
@@ -643,7 +635,7 @@ thead th {
 }
 
 tr {
-  margin-bottom: $sm-gap;
+  margin-bottom: $gap-sm;
 }
 
 th,
@@ -659,8 +651,8 @@ tfoot tr {
 }
 
 tfoot td {
-  color: $text-secondary;
-  font-size: $sm-gap;
+  color: $color-text-secondary;
+  font-size: $gap-sm;
   font-style: italic;
-  padding: 1em $xs-gap;
+  padding: 1em $gap-xs;
 }

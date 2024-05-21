@@ -107,10 +107,10 @@
   .about-page {
     .profile {
       position: relative;
-      padding: $lg-gap;
+      padding: $gap-lg;
       padding-top: $gap * 5;
-      border-bottom-left-radius: $lg-radius;
-      border-bottom-right-radius: $lg-radius;
+      border-bottom-left-radius: $radius-lg;
+      border-bottom-right-radius: $radius-lg;
       background-color: $module-bg-opaque;
       &::before {
         content: '';
@@ -147,7 +147,7 @@
       .slogan {
         text-align: center;
         margin-top: 0;
-        margin-bottom: $xs-gap;
+        margin-bottom: $gap-xs;
       }
 
       .slogan {
@@ -174,15 +174,15 @@
     }
 
     .links {
-      margin-top: $lg-gap;
+      margin-top: $gap-lg;
       padding: $gap;
-      border-radius: $lg-radius;
+      border-radius: $radius-lg;
       background-color: $module-bg-opaque;
       overflow: hidden;
 
       .list {
         display: grid;
-        grid-gap: $lg-gap;
+        grid-gap: $gap-lg;
         &.col-2 {
           grid-template-columns: repeat(2, 1fr);
         }
@@ -202,7 +202,7 @@
           align-items: center;
           height: 3rem;
           padding: 0 1em;
-          border-radius: $sm-radius;
+          border-radius: $radius-sm;
           color: $white;
           overflow: hidden;
           &.center {
@@ -220,7 +220,7 @@
           }
 
           .iconfont {
-            margin-right: $sm-gap;
+            margin-right: $gap-sm;
           }
 
           .text {
@@ -258,22 +258,22 @@
     }
 
     .qrcodes {
-      margin-top: $lg-gap;
+      margin-top: $gap-lg;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      grid-gap: $lg-gap;
+      grid-gap: $gap-lg;
 
       .item {
         width: 100%;
         padding: $gap;
-        border-radius: $lg-radius;
+        border-radius: $radius-lg;
         overflow: hidden;
         background-color: $module-bg-opaque;
 
         .image {
           width: 100%;
           height: 100%;
-          border-radius: $xs-radius;
+          border-radius: $radius-xs;
         }
       }
     }

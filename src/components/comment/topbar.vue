@@ -256,9 +256,9 @@
         padding: 0;
         padding-right: 0.6em;
         background-color: $module-bg-darker-1;
-        @include radius-box($xs-radius);
+        @include radius-box($radius-xs);
         will-change: width;
-        transition: all $transition-time-fast;
+        transition: all $motion-duration-fast;
         max-width: 180px;
         &.loading {
           max-width: 130px;
@@ -269,14 +269,14 @@
           width: $topbar-size;
           height: $topbar-size;
           text-align: center;
-          margin-right: $xs-gap;
+          margin-right: $gap-xs;
           background-color: $module-bg-darker-2;
           @include background-transition();
         }
 
         .count {
           font-weight: bold;
-          margin: 0 $xs-gap;
+          margin: 0 $gap-xs;
         }
       }
 
@@ -284,7 +284,7 @@
       .disqus {
         margin-left: $gap;
         background-color: $module-bg-darker-1;
-        @include radius-box($xs-radius);
+        @include radius-box($radius-xs);
         cursor: pointer;
         &:hover {
           background-color: $module-bg-darker-2;
@@ -292,7 +292,7 @@
       }
 
       .sort {
-        padding: 0 $xs-gap;
+        padding: 0 $gap-xs;
         font-weight: bold;
       }
 
@@ -321,11 +321,11 @@
               font-weight: normal;
             }
             font-weight: bold;
-            border-bottom-color: $text-secondary;
+            border-bottom-color: $color-text-secondary;
           }
 
           .iconfont {
-            margin: 0 $sm-gap;
+            margin: 0 $gap-sm;
             color: $disqus-primary;
             font-size: $font-size-small;
             &.right {
@@ -354,7 +354,7 @@
           display: flex;
           align-items: center;
           background-color: $module-bg-darker-1;
-          @include radius-box($xs-radius);
+          @include radius-box($radius-xs);
 
           .icon {
             &.disqus {
@@ -364,13 +364,13 @@
           }
 
           .text {
-            margin-right: $xs-gap;
-            margin-left: $sm-gap;
+            margin-right: $gap-xs;
+            margin-left: $gap-sm;
             font-weight: bold;
           }
 
           .arrow {
-            color: $text-divider;
+            color: $color-text-divider;
             font-size: $font-size-small;
           }
         }
@@ -385,7 +385,7 @@
             margin: 0;
             padding: 0;
             list-style: none;
-            @include radius-box($xs-radius);
+            @include radius-box($radius-xs);
 
             .item {
               .button {
@@ -405,7 +405,7 @@
                   &.disqus {
                     color: $disqus-primary;
                     font-size: 10px;
-                    margin: 0 $xs-gap;
+                    margin: 0 $gap-xs;
                   }
                 }
               }

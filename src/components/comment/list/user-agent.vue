@@ -65,11 +65,11 @@
     white-space: nowrap;
 
     .iconfont {
-      margin-right: $xs-gap;
+      margin-right: $gap-xs;
     }
 
     .os {
-      margin-right: $sm-gap;
+      margin-right: $gap-sm;
     }
   }
 </style>

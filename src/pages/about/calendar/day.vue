@@ -87,7 +87,7 @@
         filter: brightness(86%);
       }
       .tooltip {
-        color: $text-reversal;
+        color: $color-text-reversal;
         #{--background}: rgba($white, 0.9);
       }
     }
@@ -132,11 +132,11 @@
       transform: translateY(-50%);
       white-space: nowrap;
       z-index: $z-index-normal + 1;
-      padding: $sm-gap $gap;
-      padding-right: $lg-gap;
+      padding: $gap-sm $gap;
+      padding-right: $gap-lg;
       background-color: var(--background);
-      border-radius: $sm-radius;
-      color: $text-reversal;
+      border-radius: $radius-sm;
+      color: $color-text-reversal;
       @include hidden();
       &::before {
         $size: 4px;
@@ -154,7 +154,7 @@
 
       .date {
         font-weight: bold;
-        margin-bottom: $xs-gap;
+        margin-bottom: $gap-xs;
       }
 
       .counts {
@@ -178,7 +178,7 @@
           }
 
           .count {
-            margin-left: $sm-gap;
+            margin-left: $gap-sm;
             font-weight: bold;
           }
         }

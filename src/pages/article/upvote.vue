@@ -71,7 +71,7 @@
     display: flex;
     justify-content: center;
     $button-size: 3rem;
-    $button-radius: $sm-radius;
+    $button-radius: $radius-sm;
     $like-icon-size: $font-size-h2;
     /* https://github.com/ant-design/ant-design/blob/master/components/style/themes/variable.less#L121 */
     $lighter-red: mix($white, $red, 10%);
@@ -90,8 +90,8 @@
         border-color: $lighter-red;
         color: $lighter-red;
         transition:
-          background-color $transition-time-fast,
-          color $transition-time-fast;
+          background-color $motion-duration-fast,
+          color $motion-duration-fast;
         &[disabled] {
           color: $white;
           background-color: $lighter-red;
@@ -126,7 +126,7 @@
             font-size: $like-icon-size;
           }
           .text {
-            margin-left: $sm-gap;
+            margin-left: $gap-sm;
             font-weight: bold;
           }
         }
@@ -157,7 +157,7 @@
           color: $red;
           font-size: 100px;
           font-weight: bold;
-          transition: all $transition-time-normal;
+          transition: all $motion-duration-mid;
           @include hidden();
         }
 
@@ -166,9 +166,9 @@
           /* parkinson animate */
           .parkinson-mask {
             transition:
-              opacity $transition-time-normal,
-              visibility $transition-time-normal;
-            transition-delay: $transition-time-fast;
+              opacity $motion-duration-mid,
+              visibility $motion-duration-mid;
+            transition-delay: $motion-duration-fast;
             @include visible();
             @keyframes pre-like-icon {
               0% {
@@ -192,12 +192,12 @@
             }
             .iconfont {
               transition:
-                transform $transition-time-normal,
-                margin $transition-time-normal;
-              transition-delay: $transition-time-normal * 2;
+                transform $motion-duration-mid,
+                margin $motion-duration-mid;
+              transition-delay: $motion-duration-mid * 2;
               transform: rotate(6deg) translateY(-2px) translateX(-50%);
               animation: pre-like-icon 0.2s infinite;
-              animation-delay: $transition-time-normal * 3;
+              animation-delay: $motion-duration-mid * 3;
               margin-left: 50%;
             }
           }

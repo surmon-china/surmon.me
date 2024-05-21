@@ -14,9 +14,20 @@
   #{--theme-black}: $theme-black;
   #{--theme-logo-rotate}: $logo-rotate;
 
-  #{--primary-color}: $theme-primary;
-  #{--primary-color-lighter}: rgba($theme-primary, 0.8);
-  #{--primary-color-translucent}: rgba($theme-primary, 0.5);
+  #{--color-primary}: $theme-primary;
+  #{--color-primary-lighter}: rgba($theme-primary, 0.8);
+  #{--color-primary-translucent}: rgba($theme-primary, 0.5);
+
+  #{--color-link}: $theme-link;
+  #{--color-link-hover}: $theme-link-hover;
+
+  #{--color-text}: $theme-text;
+  #{--color-text-lighter}: lighter($theme-text, 20%);
+  #{--color-text-darker}: darken($theme-text, 20%);
+  #{--color-text-secondary}: rgba($theme-text, 0.5);
+  #{--color-text-disabled}: rgba($theme-text, 0.38);
+  #{--color-text-divider}: rgba($theme-text, 0.26);
+  #{--color-text-reversal}: rgba($theme-white, 0.9);
 
   $module-bg: rgba($theme-white, 0.6);
   $module-bg-opaque: rgba($theme-white, 1);
@@ -29,18 +40,6 @@
   #{--module-bg-darker-3}: darken($module-bg-opaque, 19%);
   #{--module-bg-darker-4}: darken($module-bg-opaque, 24%);
   #{--module-bg-darker-5}: darken($module-bg-opaque, 29%);
-
-  #{--text-reversal}: rgba($theme-white, 0.9);
-
-  #{--link-color}: $theme-link;
-  #{--link-hover}: $theme-link-hover;
-
-  #{--text-color}: $theme-text;
-  #{--text-lighter}: lighter($theme-text, 20%);
-  #{--text-darker}: darken($theme-text, 20%);
-  #{--text-secondary}: rgba($theme-text, 0.5);
-  #{--text-disabled}: rgba($theme-text, 0.38);
-  #{--text-divider}: rgba($theme-text, 0.26);
 }
 
 @mixin appLightTheme() {

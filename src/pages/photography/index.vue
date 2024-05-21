@@ -138,12 +138,12 @@
 
       .loadmore {
         margin-top: 4rem;
-        color: $text-disabled;
+        color: $color-text-disabled;
         .normal {
           font-size: $font-size-h1;
         }
         .loading {
-          margin: $sm-gap 0;
+          margin: $gap-sm 0;
         }
       }
     }
@@ -155,9 +155,9 @@
       grid-gap: $gap * 5;
 
       .item {
-        padding: $lg-gap;
+        padding: $gap-lg;
         height: 21rem;
-        @include radius-box($xs-radius);
+        @include radius-box($radius-xs);
         @include common-bg-module();
       }
     }

@@ -118,7 +118,7 @@
     flex-direction: column;
     position: relative;
     background-color: $module-bg;
-    @include radius-box($sm-radius);
+    @include radius-box($radius-sm);
 
     .thumbnail {
       width: 100%;
@@ -133,8 +133,8 @@
         right: 0;
         top: 0;
         z-index: $z-index-normal + 1;
-        padding: 0 $lg-gap;
-        border-bottom-left-radius: $xs-radius;
+        padding: 0 $gap-lg;
+        border-bottom-left-radius: $radius-xs;
         opacity: 0.8;
         line-height: 2.3rem;
         font-size: $font-size-small;
@@ -160,8 +160,8 @@
         right: 1rem;
         bottom: 1rem;
         border: 1px solid;
-        border-radius: $xs-radius;
-        padding: 0 $xs-gap;
+        border-radius: $radius-xs;
+        padding: 0 $gap-xs;
         opacity: 0.8;
         line-height: 1.6rem;
         font-size: $font-size-base - 1;
@@ -184,11 +184,11 @@
 
       .body {
         padding: $gap;
-        padding-bottom: $sm-gap;
+        padding-bottom: $gap-sm;
 
         .title {
           margin-top: 0;
-          margin-bottom: $sm-gap;
+          margin-bottom: $gap-sm;
           font-weight: bold;
           display: flex;
           justify-content: space-between;
@@ -201,7 +201,7 @@
 
           .language {
             opacity: 0.4;
-            color: $text-divider;
+            color: $color-text-divider;
           }
         }
 
@@ -209,7 +209,7 @@
           margin: 0;
           line-height: 2em;
           overflow: hidden;
-          color: $text-secondary;
+          color: $color-text-secondary;
           text-overflow: ellipsis;
           @include clamp(3);
         }
@@ -222,7 +222,7 @@
         padding: $gap;
         border-top: 1px dashed $module-bg-darker-3;
         overflow: hidden;
-        color: $text-disabled;
+        color: $color-text-disabled;
         font-size: $font-size-small;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -233,7 +233,7 @@
         }
 
         .iconfont {
-          margin-right: $sm-gap;
+          margin-right: $gap-sm;
         }
 
         .views {

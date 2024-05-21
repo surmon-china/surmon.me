@@ -59,9 +59,9 @@
       &:hover,
       &.link-active {
         background-color: $primary;
-        color: $text-reversal;
+        color: $color-text-reversal;
         &::before {
-          background-color: $text-reversal;
+          background-color: $color-text-reversal;
         }
       }
     }

@@ -105,7 +105,7 @@
       display: block;
       width: 100%;
       border: 1px dashed $module-bg-hover;
-      border-radius: $sm-radius;
+      border-radius: $radius-sm;
       margin-bottom: $gap;
       text-align: left;
     }
@@ -136,7 +136,7 @@
       }
 
       .iconfont {
-        margin-right: $sm-gap;
+        margin-right: $gap-sm;
       }
     }
 
@@ -145,7 +145,7 @@
       flex-direction: column;
       justify-content: space-evenly;
       flex-shrink: 0;
-      padding: $xs-gap $gap;
+      padding: $gap-xs $gap;
       height: 6rem;
 
       .title {
@@ -162,7 +162,7 @@
 
     .catalogue {
       max-height: 36rem;
-      padding: $sm-gap $gap;
+      padding: $gap-sm $gap;
       overflow-y: auto;
       @include scroll-snap-y();
       &:hover {
@@ -173,7 +173,7 @@
         padding: 0;
         margin: 0;
         list-style: none;
-        padding-left: $xs-gap;
+        padding-left: $gap-xs;
         &.indent-2 {
           margin-left: -$font-size-h4;
         }
@@ -206,8 +206,8 @@
           }
 
           .level {
-            margin-right: $xs-gap;
-            color: $text-disabled;
+            margin-right: $gap-xs;
+            color: $color-text-disabled;
           }
 
           .text {
@@ -232,7 +232,7 @@
           }
 
           &.readmore {
-            margin-top: $xs-gap;
+            margin-top: $gap-xs;
             .text {
               font-weight: bold;
             }

@@ -9,8 +9,8 @@ p.verse {
     text-decoration: underline;
     text-decoration-style: dotted;
     text-decoration-thickness: from-font;
-    text-underline-offset: $sm-gap;
-    text-decoration-color: $text-disabled;
+    text-underline-offset: $gap-sm;
+    text-decoration-color: $color-text-disabled;
   }
 
   &[heading] {
@@ -23,6 +23,6 @@ p.verse {
     font-weight: lighter;
     font-family: monospace;
     font-size: $font-size-small;
-    color: $text-secondary;
+    color: $color-text-secondary;
   }
 }

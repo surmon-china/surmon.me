@@ -151,7 +151,7 @@
         &.arrow {
           width: 2em;
           background-color: $module-bg-darker-1;
-          border-radius: $xs-radius;
+          border-radius: $radius-xs;
           cursor: pointer;
           @include background-transition();
 
@@ -172,7 +172,7 @@
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       margin: 0;
-      margin-bottom: $sm-gap;
+      margin-bottom: $gap-sm;
       padding: 0;
       overflow: hidden;
 
@@ -213,7 +213,7 @@
           }
 
           &.active {
-            color: $text-reversal;
+            color: $color-text-reversal;
             background-color: $primary;
           }
 

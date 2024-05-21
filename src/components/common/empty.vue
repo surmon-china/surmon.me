@@ -33,7 +33,7 @@
     text-align: center;
     justify-content: center;
     align-items: center;
-    color: $text-divider;
+    color: $color-text-divider;
     letter-spacing: 0.1em;
     &.bold {
       font-weight: bold;

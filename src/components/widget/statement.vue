@@ -37,17 +37,17 @@
 
       .email {
         .link {
-          color: $text-secondary;
+          color: $color-text-secondary;
 
           .iconfont {
-            margin-right: $xs-gap;
+            margin-right: $gap-xs;
           }
           .text {
             font-weight: bold;
           }
 
           &:hover {
-            color: $link-hover;
+            color: $color-link-hover;
           }
         }
       }

@@ -35,7 +35,7 @@
     align-items: center;
     width: 100%;
     text-align: center;
-    color: $text-disabled;
+    color: $color-text-disabled;
     letter-spacing: 1px;
 
     .item {
@@ -63,8 +63,8 @@
       .title {
         font-weight: bold;
         margin-left: $gap;
-        color: $text-secondary;
-        transition: color $transition-time-fast;
+        color: $color-text-secondary;
+        transition: color $motion-duration-fast;
       }
 
       &.github {
@@ -81,7 +81,7 @@
           filter: grayscale(0);
         }
         .title {
-          color: $link-color;
+          color: $color-link;
         }
       }
     }

@@ -94,7 +94,7 @@
     display: block;
     height: 166px;
     cursor: pointer;
-    @include radius-box($sm-radius);
+    @include radius-box($radius-sm);
     @include common-bg-module();
     &:hover {
       .thumbnail {
@@ -104,7 +104,7 @@
       }
 
       .title {
-        color: $link-color;
+        color: $color-link;
       }
     }
 
@@ -124,21 +124,21 @@
 
       .published-at {
         position: absolute;
-        bottom: $sm-gap;
+        bottom: $gap-sm;
         right: 1rem;
         z-index: $z-index-normal + 1;
         display: inline-flex;
         justify-content: center;
         align-items: center;
         height: 2rem;
-        padding: 0 $sm-gap;
-        border-radius: $sm-radius;
+        padding: 0 $gap-sm;
+        border-radius: $radius-sm;
         background-color: rgba(#000, 0.3);
         font-size: $font-size-small;
         color: $white;
 
         .iconfont {
-          margin-right: $xs-gap;
+          margin-right: $gap-xs;
         }
 
         .text {
@@ -175,10 +175,10 @@
     }
 
     .title {
-      margin-top: $sm-gap;
+      margin-top: $gap-sm;
       margin-bottom: 0.4em;
       font-weight: bold;
-      color: $text;
+      color: $color-text;
       max-width: 90%;
       @include text-overflow();
     }
@@ -186,7 +186,7 @@
     .description {
       max-width: 95%;
       font-size: $font-size-h5 - 1;
-      color: $text-secondary;
+      color: $color-text-secondary;
       @include text-overflow();
     }
   }

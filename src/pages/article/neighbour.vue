@@ -55,14 +55,14 @@
       display: flex;
       position: relative;
       overflow: hidden;
-      @include radius-box($sm-radius);
+      @include radius-box($radius-sm);
     }
 
     .null {
       justify-content: center;
       align-items: center;
       background-color: $module-bg;
-      color: $text-divider;
+      color: $color-text-divider;
       cursor: no-drop;
     }
 
@@ -70,14 +70,14 @@
       @include common-bg-module();
       &:hover {
         .icon {
-          color: $text;
+          color: $color-text;
         }
         .content {
           .title {
-            color: $link-color;
+            color: $color-link;
           }
           .description {
-            color: $text-secondary;
+            color: $color-text-secondary;
           }
         }
       }
@@ -101,36 +101,36 @@
         align-items: center;
         width: 3rem;
         height: 100%;
-        color: $text-secondary;
+        color: $color-text-secondary;
         border-style: solid;
         border-color: $module-bg-darker-1;
-        transition: all $transition-time-fast;
+        transition: all $motion-duration-fast;
       }
 
       .content {
         width: calc(100% - 3rem);
-        padding: $sm-gap $gap;
+        padding: $gap-sm $gap;
 
         .title,
         .description {
           display: block;
           width: 100%;
-          transition: color $transition-time-fast;
+          transition: color $motion-duration-fast;
           @include text-overflow();
         }
 
         .title {
           font-size: $font-size-h6;
           margin-top: 0;
-          margin-bottom: $xs-gap;
+          margin-bottom: $gap-xs;
           font-weight: bold;
-          color: $text;
+          color: $color-text;
         }
 
         .description {
           margin-bottom: 0;
           font-size: $font-size-small;
-          color: $text-disabled;
+          color: $color-text-disabled;
         }
       }
     }

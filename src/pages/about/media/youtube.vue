@@ -67,7 +67,7 @@
         display: block;
         height: $cover-size + $title-size;
         background-color: $module-bg-darker-1;
-        border-radius: $xs-radius;
+        border-radius: $radius-xs;
         overflow: hidden;
         opacity: 0.8;
         @include visibility-transition();
@@ -80,21 +80,21 @@
 
         .count {
           position: absolute;
-          top: $sm-gap;
-          right: $sm-gap;
+          top: $gap-sm;
+          right: $gap-sm;
           height: 1.8rem;
           display: inline-flex;
           justify-content: center;
           align-items: center;
-          padding: 0 $xs-gap;
-          border-radius: $sm-radius;
+          padding: 0 $gap-xs;
+          border-radius: $radius-sm;
           background-color: rgba(#000, 0.3);
           font-size: $font-size-root;
           z-index: $z-index-normal + 1;
           color: $white;
 
           .number {
-            margin-left: $xs-gap;
+            margin-left: $gap-xs;
             font-weight: bold;
           }
         }
@@ -116,7 +116,7 @@
           font-size: $font-size-small;
 
           .iconfont {
-            margin-right: $xs-gap;
+            margin-right: $gap-xs;
           }
 
           .text {

@@ -40,16 +40,16 @@
     white-space: nowrap;
     &:hover {
       .emoji {
-        color: $text;
+        color: $color-text;
       }
     }
 
     .iconfont {
-      margin-right: $xs-gap;
+      margin-right: $gap-xs;
     }
 
     .emoji {
-      margin-right: $xs-gap;
+      margin-right: $gap-xs;
       font-size: 130%;
     }
 

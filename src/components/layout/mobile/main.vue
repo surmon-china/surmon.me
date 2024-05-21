@@ -52,7 +52,7 @@
   @import 'src/styles/mixins.scss';
 
   .mobile-main {
-    color: $text;
+    color: $color-text;
     background-color: $module-bg-hover;
     $aside-width: 66%;
 
@@ -109,8 +109,8 @@
         width: 100%;
         min-height: calc(100vh - $mobile-header-height);
         margin: 0;
-        padding: $lg-gap $gap;
-        padding-top: $mobile-header-height + $lg-gap;
+        padding: $gap-lg $gap;
+        padding-top: $mobile-header-height + $gap-lg;
         transition: width 0.35s;
         display: flex;
 
@@ -123,17 +123,17 @@
           justify-content: center;
 
           .iconfont {
-            color: $text-divider;
+            color: $color-text-divider;
             font-size: 12rem;
           }
 
           .text {
             font-size: $font-size-h4;
-            margin-bottom: $lg-gap;
+            margin-bottom: $gap-lg;
           }
 
           .link {
-            color: $text-disabled;
+            color: $color-text-disabled;
             @include text-underline(0.4em);
           }
         }

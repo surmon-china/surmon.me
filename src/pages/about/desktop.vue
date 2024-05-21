@@ -308,7 +308,7 @@
       height: $image-size;
       margin-bottom: 2rem;
       background-color: $module-bg-opaque;
-      @include radius-box($sm-radius);
+      @include radius-box($radius-sm);
     }
 
     .text {
@@ -342,7 +342,7 @@
           bottom: -0.5rem;
           left: 0;
           right: 0;
-          background-image: radial-gradient(circle, transparent 70%, $text-reversal 70%);
+          background-image: radial-gradient(circle, transparent 70%, $color-text-reversal 70%);
           background-size: 0.7em 1em;
           background-position: 0 -0.5em;
         }
@@ -387,7 +387,7 @@
             border-radius: 100%;
             overflow: hidden;
             background-color: $module-bg;
-            transition: transform $transition-time-slow;
+            transition: transform $motion-duration-slow;
             &:hover {
               transform: rotate(360deg);
             }
@@ -395,8 +395,8 @@
 
           .name {
             color: $white;
-            margin-top: $sm-gap;
-            margin-bottom: $xs-gap;
+            margin-top: $gap-sm;
+            margin-bottom: $gap-xs;
           }
 
           .slogan {
@@ -428,16 +428,16 @@
               height: 100%;
               display: inline-flex;
               align-items: center;
-              border-radius: $sm-radius;
+              border-radius: $radius-sm;
               color: $white;
-              transition: all $transition-time-fast;
+              transition: all $motion-duration-fast;
               &:last-child {
                 margin: 0;
               }
 
               .iconfont {
                 font-size: $font-size-h4;
-                margin-right: $sm-gap;
+                margin-right: $gap-sm;
               }
 
               .text {
@@ -483,10 +483,10 @@
               line-height: $button-size;
               margin-right: $gap;
               text-align: center;
-              border-radius: $sm-radius;
+              border-radius: $radius-sm;
               color: $white;
               opacity: 0.8;
-              transition: all $transition-time-fast;
+              transition: all $motion-duration-fast;
 
               &:hover {
                 opacity: 1;
@@ -526,12 +526,12 @@
 
         .biography {
           width: $container-width;
-          margin-bottom: $lg-gap;
-          padding: 0 $xs-gap;
+          margin-bottom: $gap-lg;
+          padding: 0 $gap-xs;
           text-indent: 2em;
           line-height: $line-height-base * 1.9;
           font-weight: 600;
-          color: $text-secondary;
+          color: $color-text-secondary;
         }
       }
     }
@@ -553,8 +553,8 @@
         justify-content: space-between;
         align-items: center;
         padding: 0 1em 0 2em;
-        @include common-bg-module($transition-time-fast);
-        @include radius-box($lg-radius);
+        @include common-bg-module($motion-duration-fast);
+        @include radius-box($radius-lg);
         &.discord {
           --item-primary: #{$discord-primary};
           --item-hover: white;
@@ -580,14 +580,14 @@
           .left {
             .iconfont,
             .text {
-              color: var(--item-hover, $text-reversal);
+              color: var(--item-hover, $color-text-reversal);
             }
           }
 
           .right {
             opacity: 1;
-            transform: translateX(-$sm-gap);
-            color: var(--item-hover, $text-reversal);
+            transform: translateX(-$gap-sm);
+            color: var(--item-hover, $color-text-reversal);
           }
         }
 
@@ -600,18 +600,18 @@
 
           .text {
             letter-spacing: 1px;
-            color: $text-secondary;
+            color: $color-text-secondary;
             font-size: $font-size-h4;
             font-weight: bold;
           }
         }
 
         .right {
-          color: $text-divider;
+          color: $color-text-divider;
           opacity: 0.4;
           transition:
-            opacity $transition-time-fast,
-            transform $transition-time-normal;
+            opacity $motion-duration-fast,
+            transform $motion-duration-mid;
         }
       }
     }
@@ -627,7 +627,7 @@
     .vlogs,
     .calendar {
       margin-bottom: $gap * 2;
-      border-radius: $lg-radius;
+      border-radius: $radius-lg;
       padding: $gap;
       @include common-bg-module();
     }
@@ -640,9 +640,9 @@
     .footer-links {
       display: flex;
       justify-content: space-between;
-      padding: 2rem $lg-gap;
+      padding: 2rem $gap-lg;
       @include common-bg-module();
-      @include radius-box($lg-radius);
+      @include radius-box($radius-lg);
 
       .item {
         font-weight: bold;
@@ -651,9 +651,9 @@
 
       .speciallinks {
         .item {
-          color: $text-disabled;
+          color: $color-text-disabled;
           &:hover {
-            color: $text;
+            color: $color-text;
           }
         }
       }

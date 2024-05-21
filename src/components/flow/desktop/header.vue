@@ -40,9 +40,9 @@
     position: relative;
     width: 100%;
     height: 16.4rem;
-    margin-bottom: $lg-gap;
+    margin-bottom: $gap-lg;
     color: $white;
-    @include radius-box($lg-radius);
+    @include radius-box($radius-lg);
 
     &:hover {
       .background {
@@ -72,8 +72,8 @@
       transform: scale(1.05);
       filter: grayscale(0.3);
       transition:
-        transform $transition-time-fast,
-        filter $transition-time-fast;
+        transform $motion-duration-fast,
+        filter $motion-duration-fast;
     }
 
     .content {
@@ -96,7 +96,7 @@
           font-size: 5em;
           display: inline-block;
           transform: scale(1.01);
-          @include transform-transition($transition-time-normal);
+          @include transform-transition($motion-duration-mid);
         }
       }
 

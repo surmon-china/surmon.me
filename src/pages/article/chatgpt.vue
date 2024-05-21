@@ -63,7 +63,7 @@
   .gpt-comment {
     position: relative;
     padding-left: 2rem;
-    margin-top: $lg-gap;
+    margin-top: $gap-lg;
     &:hover {
       .gpt-body {
         background-color: $module-bg-hover;
@@ -83,13 +83,13 @@
         width: $size;
         height: $size;
         border: 4px solid $module-bg-lighter;
-        border-radius: $sm-radius;
+        border-radius: $radius-sm;
         background-color: $module-bg-darker-2;
 
         img {
           width: 100%;
           height: 100%;
-          border-radius: $xs-radius;
+          border-radius: $radius-xs;
         }
       }
     }
@@ -98,9 +98,9 @@
       display: block;
       width: 100%;
       height: 100%;
-      padding: $sm-gap $sm-gap $sm-gap ($lg-gap * 3);
+      padding: $gap-sm $gap-sm $gap-sm ($gap-lg * 3);
       background-color: $module-bg-darker-1;
-      border-radius: $xs-radius;
+      border-radius: $radius-xs;
       @include background-transition();
 
       > .gpt-header {
@@ -125,26 +125,26 @@
           display: inline-flex;
           align-items: center;
           font-size: $font-size-small;
-          color: $text-divider;
+          color: $color-text-divider;
 
           .iconfont {
-            margin-right: $xs-gap;
+            margin-right: $gap-xs;
           }
         }
 
         .created {
-          color: $text-divider;
+          color: $color-text-divider;
           font-size: $font-size-small;
           font-weight: bold;
         }
       }
 
       > .gpt-content {
-        padding-right: $xs-gap;
+        padding-right: $gap-xs;
         user-select: text;
 
         .markdown {
-          margin: $sm-gap 0;
+          margin: $gap-sm 0;
         }
       }
     }
@@ -154,7 +154,7 @@
       margin-top: $gap;
 
       .gpt-body {
-        padding: $sm-gap $gap;
+        padding: $gap-sm $gap;
       }
     }
   }

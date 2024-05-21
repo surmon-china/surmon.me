@@ -53,7 +53,7 @@
       display: flex;
       justify-content: space-around;
       align-items: center;
-      margin-bottom: $lg-gap;
+      margin-bottom: $gap-lg;
 
       .avatar {
         width: 5rem;
@@ -67,7 +67,7 @@
   }
 
   .list-empty {
-    color: $text-secondary;
+    color: $color-text-secondary;
     font-weight: bold;
     text-align: center;
     line-height: 4rem;

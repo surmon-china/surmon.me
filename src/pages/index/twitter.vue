@@ -169,17 +169,17 @@
 
   .twitter-empty {
     @include common-bg-module();
-    @include radius-box($sm-radius);
+    @include radius-box($radius-sm);
   }
 
   .twitter-skeleton {
     padding: $gap;
     background-color: $module-bg;
-    @include radius-box($sm-radius);
+    @include radius-box($radius-sm);
 
     .left {
       width: 140px;
-      margin-right: $lg-gap;
+      margin-right: $gap-lg;
     }
     .right {
       flex: 1;
@@ -196,20 +196,20 @@
       width: auto;
       height: 100%;
       padding: 0 $gap;
-      margin-right: $sm-gap;
+      margin-right: $gap-sm;
       display: flex;
       justify-content: center;
       align-items: center;
-      @include radius-box($sm-radius);
-      border-top-right-radius: $mini-radius;
-      border-bottom-right-radius: $mini-radius;
+      @include radius-box($radius-sm);
+      border-top-right-radius: $radius-mini;
+      border-bottom-right-radius: $radius-mini;
 
       .link {
         position: relative;
         background-color: $twitter-primary;
         color: $white;
         opacity: 0.9;
-        @include radius-box($xs-radius);
+        @include radius-box($radius-xs);
         @include visibility-transition();
         &:hover {
           opacity: 1;
@@ -229,7 +229,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          border-top-left-radius: $xs-radius;
+          border-top-left-radius: $radius-xs;
           background-color: rgba($twitter-primary, 0.9);
         }
       }
@@ -243,7 +243,7 @@
         justify-content: space-around;
         height: $content-height;
         padding: 0.2em 0.5em 0.26em;
-        border-radius: $xs-radius;
+        border-radius: $radius-xs;
         background-color: $module-bg-darker-1;
         &::before {
           $size: 5px;
@@ -262,12 +262,12 @@
           margin: 0;
           font-size: $font-size-small + 1;
           font-weight: bold;
-          color: $text-secondary;
+          color: $color-text-secondary;
         }
 
         .secondary {
           margin: 0;
-          color: $text-disabled;
+          color: $color-text-disabled;
           font-size: $font-size-root;
         }
       }
@@ -276,7 +276,7 @@
     .tweets {
       flex: 1;
       height: $twitter-height;
-      @include radius-box($mini-radius);
+      @include radius-box($radius-mini);
 
       ::v-deep(.swiper-wrapper) {
         flex-direction: column;
@@ -294,7 +294,7 @@
         box-sizing: border-box;
         width: 100%;
         height: $twitter-height;
-        padding: 0 $lg-gap;
+        padding: 0 $gap-lg;
 
         .content {
           display: flex;
@@ -328,10 +328,10 @@
             ::v-deep(.link) {
               font-weight: normal;
               font-size: $font-size-base - 1;
-              color: $text-secondary;
+              color: $color-text-secondary;
               @include color-transition();
               &:hover {
-                color: $link-color;
+                color: $color-link;
                 text-decoration: underline;
               }
 
@@ -343,14 +343,14 @@
 
           .medias {
             position: relative;
-            color: $text-secondary;
+            color: $color-text-secondary;
             &.empty {
-              color: $text;
+              color: $color-text;
             }
             &:hover {
               &,
               .iconfont {
-                color: $link-color !important;
+                color: $color-link !important;
               }
             }
 
@@ -363,7 +363,7 @@
               }
 
               &.window {
-                color: $text-disabled;
+                color: $color-text-disabled;
                 position: absolute;
                 top: -0.6em;
                 right: -1.2em;
@@ -372,7 +372,7 @@
             }
 
             .count {
-              margin-left: $xs-gap;
+              margin-left: $gap-xs;
               vertical-align: top;
               font-size: $font-size-small;
               @include color-transition();
@@ -388,12 +388,12 @@
 
           .item {
             display: inline-block;
-            margin-right: $lg-gap;
+            margin-right: $gap-lg;
             font-size: $font-size-small;
-            color: $text-divider;
+            color: $color-text-divider;
             @include color-transition();
             .iconfont {
-              margin-right: $xs-gap;
+              margin-right: $gap-xs;
               font-size: $font-size-small - 1;
             }
 
@@ -405,7 +405,7 @@
               }
 
               &:hover {
-                color: $text;
+                color: $color-text;
               }
             }
 
@@ -422,7 +422,7 @@
     .navigation {
       width: 3rem;
       height: 100%;
-      margin-left: $sm-gap;
+      margin-left: $gap-sm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -431,27 +431,27 @@
         flex: 1;
         font-size: $font-size-small;
         text-align: center;
-        color: $text-disabled;
+        color: $color-text-disabled;
         @include color-transition();
         @include common-bg-module();
-        @include radius-box($mini-radius);
+        @include radius-box($radius-mini);
 
         &:not([disabled]):hover {
-          color: $link-color;
+          color: $color-link;
         }
         &[disabled] {
           opacity: 0.8;
-          color: $text-divider;
+          color: $color-text-divider;
           cursor: no-drop;
         }
 
         &.prev {
-          margin-bottom: $sm-gap;
-          border-top-right-radius: $sm-radius;
+          margin-bottom: $gap-sm;
+          border-top-right-radius: $radius-sm;
         }
 
         &.next {
-          border-bottom-right-radius: $sm-radius;
+          border-bottom-right-radius: $radius-sm;
         }
       }
     }

@@ -52,7 +52,7 @@
     &.dark {
       background-color: $module-bg-opaque;
       .message {
-        color: $text-darker;
+        color: $color-text-darker;
       }
     }
 
@@ -78,8 +78,8 @@
     .code,
     .link,
     .message {
-      color: $text-secondary;
-      animation: error-item ease-out both 0.6s $transition-time-normal;
+      color: $color-text-secondary;
+      animation: error-item ease-out both 0.6s $motion-duration-mid;
     }
 
     @keyframes code-wave {
@@ -114,8 +114,8 @@
       -webkit-background-clip: text;
       color: rgba(darken($white, 30%), 20%);
       animation:
-        error-item ease-out both 0.6s $transition-time-normal,
-        code-wave ease-out both 0.6s $transition-time-normal,
+        error-item ease-out both 0.6s $motion-duration-mid,
+        code-wave ease-out both 0.6s $motion-duration-mid,
         code-wave-play linear 2s infinite;
     }
 
@@ -131,7 +131,7 @@
       @include text-underline(0.5em);
       @include color-transition();
       &:hover {
-        color: $text-darker;
+        color: $color-text-darker;
       }
     }
   }

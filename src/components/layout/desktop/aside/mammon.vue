@@ -116,8 +116,8 @@
 
             .iconfont {
               position: absolute;
-              bottom: $sm-gap;
-              right: $lg-gap;
+              bottom: $gap-sm;
+              right: $gap-lg;
               color: $white;
             }
           }
@@ -129,19 +129,19 @@
         position: absolute;
         height: 100%;
         top: 0;
-        right: $sm-gap;
+        right: $gap-sm;
         display: flex;
         flex-direction: column;
-        padding: $sm-gap 0;
+        padding: $gap-sm 0;
 
         .swiper-pagination-bullet {
           position: relative;
           display: inline-block;
           width: 3px;
           height: 1rem;
-          border-radius: $mini-radius;
+          border-radius: $radius-mini;
           overflow: hidden;
-          margin: $xs-gap 0;
+          margin: $gap-xs 0;
           background-color: rgba(white, 0.2);
           &.active {
             flex-grow: 1;

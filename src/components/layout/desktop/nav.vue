@@ -63,15 +63,15 @@
         position: relative;
         width: 100%;
         height: 3em;
-        margin-bottom: $sm-gap;
-        padding: 0 $lg-gap;
-        border-radius: $mini-radius;
+        margin-bottom: $gap-sm;
+        padding: 0 $gap-lg;
+        border-radius: $radius-mini;
         text-decoration: none;
         letter-spacing: 0.5px;
-        color: $text-secondary;
+        color: $color-text-secondary;
         will-change: background-color;
-        transition: background-color $transition-time-fast * 0.6;
-        @include radius-box($sm-radius);
+        transition: background-color $motion-duration-fast * 0.6;
+        @include radius-box($radius-sm);
         &:last-child {
           margin-bottom: 0;
         }
@@ -107,7 +107,7 @@
           width: 1em;
           height: 1em;
           margin-right: $gap;
-          border-radius: $xs-radius;
+          border-radius: $radius-xs;
         }
 
         .ad-text {
@@ -115,7 +115,7 @@
         }
 
         .superscript {
-          margin-left: $sm-gap;
+          margin-left: $gap-sm;
           &.new-window {
             .iconfont {
               font-size: $font-size-small;
@@ -129,7 +129,7 @@
         height: 0;
         background-color: transparent;
         border-top: 1px dotted $module-bg-darker-2;
-        margin-bottom: $sm-gap;
+        margin-bottom: $gap-sm;
       }
     }
   }

@@ -29,7 +29,7 @@
 
     .item {
       padding: $gap;
-      @include radius-box($sm-radius);
+      @include radius-box($radius-sm);
       @include common-bg-module();
     }
   }
