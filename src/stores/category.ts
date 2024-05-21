@@ -7,7 +7,6 @@
 import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
 import { Category } from '/@/interfaces/category'
-import { PaginationList } from '/@/interfaces/common'
 import nodepress from '/@/services/nodepress'
 
 export const useCategoryStore = defineStore('category', () => {
@@ -15,9 +14,9 @@ export const useCategoryStore = defineStore('category', () => {
     data: [],
     once: true,
     fetcher() {
-      return nodepress
-        .get<PaginationList<Category>>('/category', { params: { per_page: 50 } })
-        .then((response) => response.result.data)
+      return nodepress.get<Category[]>('/category/all').then((response) => {
+        return response.result
+      })
     }
   })
 })
