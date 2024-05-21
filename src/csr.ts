@@ -92,13 +92,12 @@ Sentry.init({
   replaysSessionSampleRate: isDev ? 0.8 : 0.1,
   replaysOnErrorSampleRate: 1.0,
   integrations: [
-    new Sentry.Replay(),
-    new Sentry.BrowserTracing({
-      // https://docs.sentry.io/platforms/javascript/performance/instrumentation/automatic-instrumentation/#tracepropagationtargets
-      tracePropagationTargets: ['localhost', /^\//, new RegExp('^' + API_CONFIG.NODEPRESS.replaceAll('.', '\\.'))],
-      routingInstrumentation: Sentry.vueRouterInstrumentation(router)
-    })
-  ]
+    Sentry.replayIntegration(),
+    Sentry.browserTracingIntegration({ router })
+    // TODO: feedback
+    // https://docs.sentry.io/platforms/javascript/guides/vue/user-feedback/#user-feedback-widget
+  ],
+  tracePropagationTargets: ['localhost', /^\//, new RegExp('^' + API_CONFIG.NODEPRESS.replaceAll('.', '\\.'))]
 })
 
 // router ready -> mount
