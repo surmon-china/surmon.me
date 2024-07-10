@@ -90,7 +90,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   )
 
   // Twitter latest tweets
-  const getLatestTwitterTweetsCache = cacher.interval(cache, {
+  const getTwitterLatestTweetsCache = cacher.interval(cache, {
     key: 'twitter_tweets_page_latest',
     ttl: hours(12),
     interval: minutes(20),
@@ -104,7 +104,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
       // loadmore or latest cache
       return request.query.cursor || request.query.count
         ? getTwitterTweets(request.query)
-        : getLatestTwitterTweetsCache()
+        : getTwitterLatestTweetsCache()
     })(request, response, next)
   })
 
