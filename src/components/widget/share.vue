@@ -32,6 +32,7 @@
     id: SocialMedia
     name: string
     class: string
+    iconfont?: string
     handler?(params: ShareParams): void
     url?(params: ShareParams): string
   }
@@ -69,6 +70,7 @@
       id: SocialMedia.Twitter,
       name: 'Twitter',
       class: 'twitter',
+      iconfont: 'twitter-x',
       url: (params) => {
         return (
           `https://twitter.com/intent/tweet?` +
@@ -212,7 +214,7 @@
       :class="social.class"
       @click="handleShare(social)"
     >
-      <i class="iconfont" :class="`icon-${social.class}`" />
+      <i class="iconfont" :class="`icon-${social.iconfont ?? social.class}`" />
     </button>
     <button
       v-if="!props.disabledImageShare"
@@ -254,7 +256,7 @@
         background-color: $evernote-primary !important;
       }
       &.twitter:hover {
-        background-color: $twitter-primary-hover !important;
+        background-color: $twitter-x-primary !important;
       }
       &.facebook:hover {
         background-color: $facebook-primary !important;

@@ -10,13 +10,7 @@
   import Twitter from './twitter.vue'
 
   const { seoMeta, i18n: _i18n, isZhLang } = useEnhancer()
-  const { appOption, articleList: articleListStore, twitter: twitterStore } = useStores()
-
-  seoMeta(() => ({
-    title: `${META.title} - ${_i18n.t(LanguageKey.APP_SLOGAN)!.replaceAll('，', ' ')}`,
-    description: isZhLang.value ? META.zh_description : META.en_description,
-    keywords: appOption.data?.keywords.join(',')
-  }))
+  const { appOption, articleList: articleListStore, twitterProfile, twitterTweets } = useStores()
 
   const loadmoreArticles = async () => {
     const targetPage = articleListStore.pagination!.current_page + 1
@@ -26,8 +20,18 @@
     }
   }
 
+  seoMeta(() => ({
+    title: `${META.title} - ${_i18n.t(LanguageKey.APP_SLOGAN)!.replaceAll('，', ' ')}`,
+    description: isZhLang.value ? META.zh_description : META.en_description,
+    keywords: appOption.data?.keywords.join(',')
+  }))
+
   useUniversalFetch(() => {
-    return Promise.all([articleListStore.fetch(), twitterStore.fetch().catch(() => {})])
+    return Promise.all([
+      articleListStore.fetch(),
+      twitterProfile.fetch().catch(() => {}),
+      twitterTweets.fetch().catch(() => {})
+    ])
   })
 </script>
 
@@ -36,8 +40,9 @@
     <carrousel class="carrousel" :articles="articleListStore.data" :fetching="articleListStore.fetching" />
     <twitter
       class="twitter"
-      :aggregate="twitterStore.data"
-      :fetching="twitterStore.fetching || articleListStore.fetching"
+      :profile="twitterProfile.data"
+      :tweets="twitterTweets.data?.data ?? []"
+      :fetching="twitterTweets.fetching || twitterProfile.fetching || articleListStore.fetching"
     />
     <article-list
       :mammon="false"

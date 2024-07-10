@@ -155,13 +155,13 @@
               <i class="iconfont icon-github" />
               <span class="text">GitHub</span>
             </ulink>
-            <ulink class="item twitter" :href="VALUABLE_LINKS.TWITTER">
-              <i class="iconfont icon-twitter" />
-              <span class="text">Twitter</span>
-            </ulink>
             <ulink class="item instagram" :href="VALUABLE_LINKS.INSTAGRAM">
               <i class="iconfont icon-instagram" />
               <span class="text">Instagram</span>
+            </ulink>
+            <ulink class="item twitter" :href="VALUABLE_LINKS.TWITTER">
+              <i class="iconfont icon-twitter-x" />
+              <span class="text">Twitter</span>
             </ulink>
           </span>
           <span class="mini">
@@ -371,8 +371,8 @@
         background-blend-mode: lighten;
 
         .profile {
-          margin-top: 3rem;
-          margin-bottom: 5rem;
+          margin-top: 2.6rem;
+          margin-bottom: 4.2rem;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -395,8 +395,8 @@
 
           .name {
             color: $white;
-            margin-top: $gap-sm;
-            margin-bottom: $gap-xs;
+            margin-top: $gap;
+            margin-bottom: $gap-sm;
           }
 
           .slogan {
@@ -451,9 +451,9 @@
                 }
               }
               &.twitter {
-                background-color: $twitter-primary;
+                background-color: $twitter-x-primary;
                 &:hover {
-                  background-color: $twitter-primary-hover;
+                  background-color: $twitter-x-primary-hover;
                 }
               }
               &.youtube {

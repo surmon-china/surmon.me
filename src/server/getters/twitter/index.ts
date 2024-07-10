@@ -5,16 +5,13 @@
  */
 
 import { IDENTITIES } from '@/config/app.config'
-import { UNDEFINED } from '@/constants/value'
-import { createLogger } from '@/utils/logger'
-import { getSotweTwitterAggregate } from './sotwe-api'
-import { getNitterTweets } from './nitter-html'
+import { getWebTwitterProfile, getWebTwitterUserTweets, GetTweetsParams } from './web-api'
 
-const logger = createLogger('BFF:Twitter')
-
-export interface TwitterUserinfo {
+export interface TwitterProfile {
+  id: string
   name: string
   avatar: string
+  createdAt?: number
   description?: string
   location?: string
   tweetCount?: number
@@ -26,57 +23,40 @@ export interface TwitterTweet {
   id: string
   owner: string
   text: string
+  html: string
   date: number
   location?: string
   mediaCount: number
   favoriteCount?: number
-  retweetCount?: number
   commentCount?: number
+  retweetCount?: number
+  quoteCount?: number
+  viewCount?: number
   hasImage?: boolean
   hasVideo?: boolean
   isQuote?: boolean
   isReply: boolean
   isRetweet: boolean
+  ref?: TwitterTweet
+}
+
+export interface TwitterTweetListResponse<T = TwitterTweet> {
+  data: Array<T>
+  cursors: {
+    top?: string
+    bottom?: string
+  }
 }
 
 export interface TwitterAggregate {
-  userinfo: TwitterUserinfo
+  profile: TwitterProfile
   tweets: Array<TwitterTweet>
 }
 
-export const getTwitterAggregate = async (): Promise<TwitterAggregate> => {
-  return getSotweTwitterAggregate(IDENTITIES.TWITTER_USER_NAME)
+export const getTwitterProfile = (): Promise<TwitterProfile> => {
+  return getWebTwitterProfile(IDENTITIES.TWITTER_USER_NAME)
 }
 
-// MARK: Nitter is over https://nitter.cz/
-// https://github.com/zedeus/nitter/issues/1171
-export const getTwitterAggregateLegacy = async (): Promise<TwitterAggregate> => {
-  const [sotwe, nitter] = await Promise.allSettled([
-    getSotweTwitterAggregate(IDENTITIES.TWITTER_USER_NAME),
-    getNitterTweets(IDENTITIES.TWITTER_USER_NAME)
-  ])
-
-  if (sotwe.status === 'rejected') {
-    throw sotwe.reason
-  }
-
-  if (nitter.status === 'rejected') {
-    logger.failure('Get Nitter tweets failed:', nitter.reason)
-    return sotwe.value
-  }
-
-  const sotweAggregate = sotwe.value
-  const nitterTweets = nitter.value
-
-  const resolvedTweets = sotweAggregate.tweets.map((tweet) => {
-    const found = nitterTweets.find((t) => t.id === tweet.id)
-    return {
-      ...tweet,
-      text: found?.text ?? tweet.text,
-      commentCount: found?.commentCount ?? tweet.commentCount ?? UNDEFINED,
-      favoriteCount: found?.favoriteCount ?? tweet.favoriteCount ?? UNDEFINED
-    }
-  })
-
-  return { ...sotweAggregate, tweets: resolvedTweets }
+export const getTwitterTweets = (params?: GetTweetsParams): Promise<TwitterTweetListResponse> => {
+  return getWebTwitterUserTweets(IDENTITIES.TWITTER_USER_ID, params)
 }

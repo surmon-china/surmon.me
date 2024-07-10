@@ -1,15 +1,15 @@
 import axios, { isAxiosError } from '@/server/services/axios'
-import { SOTWE_SCRAPER_TOKEN } from '@/config/bff.yargs'
+import { WEB_SCRAPER_TOKEN } from '@/config/bff.yargs'
 import { isNodeDev } from '@/server/environment'
-import type { TwitterTweet, TwitterUserinfo, TwitterAggregate } from './index'
+import type { TwitterTweet, TwitterProfile, TwitterAggregate } from './index'
 
 export interface SotweUserInfo {
+  id: string
   name: string
   screenName: string
   profileImageMedium: string
   profileImageOriginal: string
   verified: boolean
-  id: string
   location: string
   description: string
   urlEntity: {
@@ -97,8 +97,8 @@ export interface SotweAggregate {
 const fetchSotweAggregate = async (twitterUsername: string): Promise<SotweAggregate> => {
   try {
     const target = `https://api.sotwe.com/v3/user/${twitterUsername}`
-    // const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`
-    const scraper = `https://api.scraperapi.com/?api_key=${SOTWE_SCRAPER_TOKEN}&url=${target}`
+    // const scraper = `http://api.scrape.do/?token=${WEB_SCRAPER_TOKEN}&url=${target}`
+    const scraper = `https://api.scraperapi.com/?api_key=${WEB_SCRAPER_TOKEN}&url=${target}`
     // To avoid wasting request credits, tokens are not used in development environments
     const response = await axios.get<SotweAggregate>(isNodeDev ? target : scraper, { timeout: 28000 })
     return response.data
@@ -125,7 +125,8 @@ const improveSotweTweet = (tweet: SotweTweet): string => {
 export const getSotweTwitterAggregate = async (twitterUsername: string): Promise<TwitterAggregate> => {
   const sotwe = await fetchSotweAggregate(twitterUsername)
   const tweets: Array<TwitterTweet> = []
-  const userinfo: TwitterUserinfo = {
+  const profile: TwitterProfile = {
+    id: sotwe?.info?.id,
     name: sotwe?.info?.name || twitterUsername,
     avatar: sotwe?.info?.profileImageOriginal || '',
     description: sotwe?.info.description || void 0,
@@ -164,6 +165,7 @@ export const getSotweTwitterAggregate = async (twitterUsername: string): Promise
       id: tweet.id,
       owner: twitterUsername,
       text: improveSotweTweet(tweet),
+      html: improveSotweTweet(tweet),
       date: tweet.createdAt,
       location: tweet.location?.name || void 0,
       favoriteCount: tweet.favoriteCount ?? void 0,
@@ -177,5 +179,5 @@ export const getSotweTwitterAggregate = async (twitterUsername: string): Promise
     })
   })
 
-  return { userinfo, tweets }
+  return { profile, tweets }
 }

@@ -9,8 +9,8 @@ import { createFetchStore } from './_fetch'
 import { TunnelModule } from '/@/constants/tunnel'
 import { isClient } from '/@/app/environment'
 import { delayPromise } from '/@/utils/delayer'
-import type { InstagramMediaListResponse, InstagramProfile } from '/@/server/getters/instagram'
-import type { TwitterAggregate } from '/@/server/getters/twitter'
+import type { TwitterProfile, TwitterTweetListResponse } from '/@/server/getters/twitter'
+import type { InstagramProfile, InstagramMediaListResponse } from '/@/server/getters/instagram'
 import tunnel from '/@/services/tunnel'
 
 // Douban movies
@@ -19,6 +19,32 @@ export const useDoubanMoviesStore = defineStore('doubanMovies', () => {
     once: true,
     data: null,
     fetcher: () => tunnel.dispatch(TunnelModule.DoubanMovies)
+  })
+})
+
+// Twitter profile
+export const useTwitterProfileStore = defineStore('twitterProfile', () => {
+  return createFetchStore<TwitterProfile | null>({
+    data: null,
+    fetcher: () => tunnel.dispatch<TwitterProfile>(TunnelModule.TwitterProfile)
+  })
+})
+
+// Twitter tweets
+export const useTwitterTweetsStore = defineStore('twitterTweets', () => {
+  return createFetchStore<TwitterTweetListResponse | null>({
+    data: null,
+    fetcher(params?: any) {
+      return tunnel.dispatch<TwitterTweetListResponse>(TunnelModule.TwitterTweets, params)
+    }
+  })
+})
+
+// Instagram profile
+export const useInstagramProfileStore = defineStore('instagramProfile', () => {
+  return createFetchStore<InstagramProfile | null>({
+    data: null,
+    fetcher: () => tunnel.dispatch<InstagramProfile>(TunnelModule.InstagramProfile)
   })
 })
 
@@ -33,14 +59,6 @@ export const useInstagramTimelineStore = defineStore('instagramTimeline', () => 
   })
 })
 
-// Instagram profile
-export const useInstagramProfileStore = defineStore('instagramProfile', () => {
-  return createFetchStore<InstagramProfile | null>({
-    data: null,
-    fetcher: () => tunnel.dispatch<InstagramProfile>(TunnelModule.InstagramProfile)
-  })
-})
-
 // YouTube playlist
 export const useYouTubePlayListStore = defineStore('youtubePlaylist', () => {
   return createFetchStore<Array<any>>({
@@ -49,16 +67,6 @@ export const useYouTubePlayListStore = defineStore('youtubePlaylist', () => {
       const response = await tunnel.dispatch<Array<any>>(TunnelModule.YouTubePlaylist)
       response.sort((a, b) => a.snippet.position - b.snippet.position)
       return response
-    }
-  })
-})
-
-// Twitter userinfo
-export const useTwitterStore = defineStore('twitterAggregate', () => {
-  return createFetchStore<TwitterAggregate | null>({
-    data: null,
-    fetcher: () => {
-      return tunnel.dispatch<TwitterAggregate>(TunnelModule.TwitterAggregate)
     }
   })
 })

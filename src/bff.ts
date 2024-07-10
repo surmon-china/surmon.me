@@ -15,7 +15,7 @@ import { getSitemapXml } from './server/getters/sitemap'
 import { getGTagScript } from './server/getters/gtag'
 import { getAllWallpapers } from './server/getters/wallpaper'
 import { getMyGoogleMap } from './server/getters/my-google-map'
-import { getTwitterAggregate } from './server/getters/twitter'
+import { getTwitterProfile, getTwitterTweets } from './server/getters/twitter'
 import { getGitHubSponsors, getGitHubContributions } from './server/getters/github'
 import { getInstagramMedias, getInstagramMediaChildren, getInstagramCalendar } from './server/getters/instagram'
 import { getYouTubeChannelPlayLists, getYouTubeVideoListByPlayerlistId } from './server/getters/youtube'
@@ -75,19 +75,38 @@ createExpressApp().then(async ({ app, server, cache }) => {
     }
   })
 
-  // Twitter aggregate
-  const getTwitterAggregateCache = cacher.interval(cache, {
-    key: TunnelModule.TwitterAggregate,
-    ttl: hours(12),
-    interval: hours(1.6),
-    retry: minutes(10),
-    getter: getTwitterAggregate
+  // Twitter profile
+  const getTwitterProfileCache = cacher.interval(cache, {
+    key: TunnelModule.TwitterProfile,
+    ttl: days(7),
+    interval: hours(12),
+    retry: hours(1),
+    getter: getTwitterProfile
   })
 
   app.get(
-    `${TUN}/${TunnelModule.TwitterAggregate}`,
-    responser(() => getTwitterAggregateCache())
+    `${TUN}/${TunnelModule.TwitterProfile}`,
+    responser(() => getTwitterProfileCache())
   )
+
+  // Twitter latest tweets
+  const getLatestTwitterTweetsCache = cacher.interval(cache, {
+    key: 'twitter_tweets_page_latest',
+    ttl: hours(12),
+    interval: minutes(20),
+    retry: minutes(5),
+    getter: getTwitterTweets
+  })
+
+  // Twitter tweets route
+  app.get(`${TUN}/${TunnelModule.TwitterTweets}`, (request, response, next) => {
+    responser(() => {
+      // loadmore or latest cache
+      return request.query.cursor || request.query.count
+        ? getTwitterTweets(request.query)
+        : getLatestTwitterTweetsCache()
+    })(request, response, next)
+  })
 
   // Bing wallpapers
   const getWallpaperCache = cacher.interval(cache, {
@@ -131,7 +150,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
     responser(() => get163MusicCache())
   )
 
-  // Instagram medias cache
+  // Instagram first page medias cache
   const getInsFirstPageMediasCache = cacher.interval(cache, {
     key: 'instagram_medias_page_first',
     ttl: hours(12),

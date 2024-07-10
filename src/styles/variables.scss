@@ -101,8 +101,8 @@ $breakpoint-small: 400px;
 $breakpoint-large: $container-width;
 
 // font
-$font-family-base: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Hiragino Sans GB',
-  'Segoe UI', 'Microsoft YaHei', '微软雅黑', sans-serif;
+// prettier-ignore
+$font-family-base: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Hiragino Sans GB', 'Segoe UI', 'Microsoft YaHei', '微软雅黑', sans-serif;
 $font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace;
 $font-family-normal: SpecialSymbol, DINRegular, $font-family-base;
 
@@ -149,6 +149,8 @@ $paypal-primary: #4599d2;
 $paypal-primary-hover: #293a7c;
 $twitter-primary: #1b95e0;
 $twitter-primary-hover: #0c7abf;
+$twitter-x-primary: #000000;
+$twitter-x-primary-hover: #181919;
 $npm-primary: #bb161b;
 $github-primary: #24282d;
 $github-primary-hover: #000;

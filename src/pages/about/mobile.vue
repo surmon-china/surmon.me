@@ -64,13 +64,13 @@
           <i class="iconfont icon-github" />
           <span class="text">GitHub</span>
         </ulink>
-        <ulink class="item center twitter" :href="VALUABLE_LINKS.TWITTER">
-          <i class="iconfont icon-twitter" />
-          <span class="text">Twitter</span>
-        </ulink>
         <ulink class="item center instagram" :href="VALUABLE_LINKS.INSTAGRAM">
           <i class="iconfont icon-instagram" />
           <span class="text">Instagram</span>
+        </ulink>
+        <ulink class="item center twitter" :href="VALUABLE_LINKS.TWITTER">
+          <i class="iconfont icon-twitter-x" />
+          <span class="text">Twitter</span>
         </ulink>
       </div>
       <divider dashed />
@@ -231,7 +231,7 @@
             background-color: $github-primary;
           }
           &.twitter {
-            background-color: $twitter-primary;
+            background-color: $twitter-x-primary;
           }
           &.instagram {
             background: $instagram-primary;

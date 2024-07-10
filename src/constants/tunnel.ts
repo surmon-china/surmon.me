@@ -7,7 +7,8 @@
 export enum TunnelModule {
   WebFont = 'webfont',
   MyGoogleMap = 'my_google_map',
-  TwitterAggregate = 'twitter_aggregate',
+  TwitterProfile = 'twitter_profile',
+  TwitterTweets = 'twitter_tweets',
   YouTubePlaylist = 'youtube_playlist',
   YouTubeVideoList = 'youtube_video_list',
   InstagramProfile = 'instagram_profile',

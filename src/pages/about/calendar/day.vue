@@ -50,7 +50,7 @@
           articles
         </li>
         <li class="item tweet">
-          <i class="iconfont icon-twitter"></i>
+          <i class="iconfont icon-twitter-x"></i>
           <span class="count">{{ tweets }}</span>
           tweets
         </li>
@@ -116,7 +116,7 @@
           background-color: $rss-primary;
         }
         &.tweet {
-          background-color: $twitter-primary;
+          background-color: $twitter-x-primary;
         }
         &.instagram {
           background-color: $instagram-primary;
@@ -169,7 +169,7 @@
             color: $rss-primary;
           }
           &.tweet {
-            color: $twitter-primary;
+            color: $color-text-reversal;
             /* A token to indicate that twitter is no longer supported */
             text-decoration: line-through;
           }
@@ -245,7 +245,7 @@
     &:not([data-tweet-count='0']) {
       .point {
         .tweet {
-          background-color: $twitter-primary;
+          background-color: $twitter-x-primary;
         }
       }
     }
@@ -253,7 +253,7 @@
     &[data-tweet-count='1'] {
       .point {
         .tweet {
-          background-color: lighten($twitter-primary, 22%);
+          background-color: lighten($twitter-x-primary, 22%);
         }
       }
     }
@@ -263,7 +263,7 @@
     &[data-tweet-count='4'] {
       .point {
         .tweet {
-          background-color: lighten($twitter-primary, 16%);
+          background-color: lighten($twitter-x-primary, 16%);
         }
       }
     }
@@ -274,7 +274,7 @@
     &[data-tweet-count='8'] {
       .point {
         .tweet {
-          background-color: lighten($twitter-primary, 8%);
+          background-color: lighten($twitter-x-primary, 8%);
         }
       }
     }

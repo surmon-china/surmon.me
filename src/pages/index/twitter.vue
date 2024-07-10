@@ -6,10 +6,11 @@
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { unescape, padStart, numberSplit } from '/@/transforms/text'
   import { getTwitterTweetDetailURL } from '/@/transforms/media'
-  import type { TwitterAggregate } from '/@/server/getters/twitter'
+  import type { TwitterProfile, TwitterTweet } from '/@/server/getters/twitter'
 
   defineProps<{
-    aggregate: TwitterAggregate | null
+    profile: TwitterProfile | null
+    tweets: Array<TwitterTweet>
     fetching: boolean
   }>()
 
@@ -20,6 +21,7 @@
   const setSwiper = (_swiper: SwiperClass) => {
     swiperRef.value = _swiper
   }
+
   const activeIndex = ref(0)
   const handleSwiperTransitionStart = () => {
     activeIndex.value = swiperRef.value?.activeIndex || 0
@@ -34,7 +36,7 @@
 
 <template>
   <div class="twitter">
-    <placeholder :data="!!aggregate?.tweets.length" :loading="fetching">
+    <placeholder :data="profile" :loading="fetching">
       <template #placeholder>
         <empty class="twitter-empty" bold key="empty" />
       </template>
@@ -46,100 +48,104 @@
       </template>
       <template #default>
         <div class="twitter-content" key="content">
-          <div class="userinfo" v-if="aggregate?.userinfo" :title="aggregate.userinfo.name">
+          <div class="profile" v-if="profile" :title="profile.name">
             <ulink class="link" :href="VALUABLE_LINKS.TWITTER" @mousedown="handleGtagEvent('twitter_homepage')">
-              <uimage class="avatar" proxy :src="aggregate.userinfo.avatar" />
-              <span class="logo"><i class="iconfont icon-twitter" /></span>
+              <uimage class="avatar" proxy :src="profile.avatar" />
+              <span class="logo"><i class="iconfont icon-twitter-x" /></span>
             </ulink>
             <div class="count">
               <p class="title">
-                <template v-if="aggregate.userinfo.tweetCount">
-                  {{ padStart(numberSplit(aggregate.userinfo.tweetCount), 3, '0') }}
+                <template v-if="profile.tweetCount">
+                  {{ padStart(numberSplit(profile.tweetCount), 3, '0') }}
                 </template>
                 <template v-else>
                   <i18n en="Latest" zh="碎碎" />
                 </template>
               </p>
               <p class="secondary">
-                <i18n en="tweets" :zh="aggregate.userinfo.tweetCount ? '碎碎念' : '念念'" />
+                <i18n en="tweets" :zh="profile.tweetCount ? '碎碎念' : '念念'" />
               </p>
             </div>
           </div>
-          <swiper
-            v-if="aggregate?.tweets.length"
-            class="tweets"
-            direction="vertical"
-            :height="66"
-            :mousewheel="true"
-            :allow-touch-move="false"
-            :slides-per-view="1"
-            :prevent-clicks="false"
-            :autoplay="{ delay: 3500, disableOnInteraction: false }"
-            @transition-start="handleSwiperTransitionStart"
-            @swiper="setSwiper"
-          >
-            <swiper-slide class="tweet-item" :key="index" v-for="(tweet, index) in aggregate.tweets">
-              <div class="content" :title="tweet.text">
-                <div
-                  v-if="tweet.text"
-                  v-html="unescape(tweet.text)"
-                  :class="['main', { 'has-media': tweet.mediaCount }]"
-                ></div>
-                <ulink
-                  v-if="tweet.mediaCount"
-                  :class="['medias', { empty: !tweet.text }]"
-                  :href="getTwitterTweetDetailURL(tweet.owner, tweet.id)"
-                  @mousedown="handleGtagEvent('twitter_image_link')"
-                >
-                  <template v-if="tweet.hasVideo">
-                    <i class="iconfont media icon-video"></i>
-                  </template>
-                  <template v-else-if="tweet.hasImage">
-                    <i class="iconfont media icon-image"></i>
-                  </template>
-                  <span class="count">[{{ tweet.mediaCount }}]</span>
-                  <i class="iconfont window icon-new-window-s"></i>
-                </ulink>
-              </div>
-              <div class="meta">
-                <ulink
-                  class="item link"
-                  title="To Tweet"
-                  :href="getTwitterTweetDetailURL(tweet.owner, tweet.id)"
-                  @mousedown="handleGtagEvent('twitter_detail_link')"
-                >
-                  <i class="iconfont icon-retweet" v-if="tweet.isQuote || tweet.isRetweet"></i>
-                  <i class="iconfont icon-follow-up" v-else-if="tweet.isReply"></i>
-                  <i class="iconfont twitter icon-twitter" v-else></i>
-                  <span>Tweet</span>
-                  <i class="iconfont window icon-new-window-s"></i>
-                </ulink>
-                <span class="item reply" v-if="Number.isInteger(tweet.commentCount)">
-                  <i class="iconfont icon-comment"></i>
-                  <span>{{ tweet.commentCount }}</span>
-                </span>
-                <span class="item like" v-if="Number.isInteger(tweet.favoriteCount)">
-                  <i class="iconfont icon-heart"></i>
-                  <span>{{ tweet.favoriteCount }}</span>
-                </span>
-                <span class="item date" v-if="tweet.date">
-                  <i class="iconfont icon-clock"></i>
-                  <udate to="ago" :date="tweet.date" />
-                </span>
-                <span class="item location" :title="tweet.location" v-if="tweet.location">
-                  <i class="iconfont icon-location"></i>
-                  <span>{{ tweet.location }}</span>
-                </span>
-              </div>
-            </swiper-slide>
-          </swiper>
+          <div class="tweets">
+            <empty v-if="!tweets.length" class="tweets-empty" bold key="empty" />
+            <swiper
+              v-else
+              class="tweets-swiper"
+              direction="vertical"
+              :height="66"
+              :mousewheel="true"
+              :allow-touch-move="false"
+              :slides-per-view="1"
+              :prevent-clicks="false"
+              :autoplay="{ delay: 3500, disableOnInteraction: false }"
+              @transition-start="handleSwiperTransitionStart"
+              @swiper="setSwiper"
+            >
+              <swiper-slide class="tweet-item" :key="index" v-for="(tweet, index) in tweets">
+                <div class="content">
+                  <div
+                    v-if="tweet.text"
+                    v-html="unescape(tweet.html)"
+                    :title="tweet.text"
+                    :class="['main', { 'has-media': tweet.mediaCount }]"
+                  ></div>
+                  <ulink
+                    v-if="tweet.mediaCount"
+                    :class="['medias', { empty: !tweet.text }]"
+                    :href="getTwitterTweetDetailURL(tweet.owner, tweet.id)"
+                    @mousedown="handleGtagEvent('twitter_image_link')"
+                  >
+                    <template v-if="tweet.hasVideo">
+                      <i class="iconfont media icon-video"></i>
+                    </template>
+                    <template v-else-if="tweet.hasImage">
+                      <i class="iconfont media icon-image"></i>
+                    </template>
+                    <span class="count">[{{ tweet.mediaCount }}]</span>
+                    <i class="iconfont window icon-new-window-s"></i>
+                  </ulink>
+                </div>
+                <div class="meta">
+                  <ulink
+                    class="item link"
+                    title="To Tweet"
+                    :href="getTwitterTweetDetailURL(tweet.owner, tweet.id)"
+                    @mousedown="handleGtagEvent('twitter_detail_link')"
+                  >
+                    <i class="iconfont icon-retweet" v-if="tweet.isQuote || tweet.isRetweet"></i>
+                    <i class="iconfont icon-follow-up" v-else-if="tweet.isReply"></i>
+                    <i class="iconfont twitter icon-twitter-x" v-else></i>
+                    <span>Tweet</span>
+                    <i class="iconfont window icon-new-window-s"></i>
+                  </ulink>
+                  <span class="item replies" v-if="Number.isInteger(tweet.commentCount)">
+                    <i class="iconfont icon-comment"></i>
+                    <span>{{ tweet.commentCount }}</span>
+                  </span>
+                  <span class="item likes" v-if="Number.isInteger(tweet.favoriteCount)">
+                    <i class="iconfont icon-heart"></i>
+                    <span>{{ tweet.favoriteCount }}</span>
+                  </span>
+                  <span class="item date" v-if="tweet.date">
+                    <i class="iconfont icon-clock"></i>
+                    <udate to="ago" :date="tweet.date" />
+                  </span>
+                  <span class="item location" :title="tweet.location" v-if="tweet.location">
+                    <i class="iconfont icon-location"></i>
+                    <span>{{ tweet.location }}</span>
+                  </span>
+                </div>
+              </swiper-slide>
+            </swiper>
+          </div>
           <div class="navigation">
-            <button class="button prev" :disabled="activeIndex === 0" @click="prevSlide">
+            <button class="button prev" :disabled="!tweets.length || activeIndex === 0" @click="prevSlide">
               <i class="iconfont icon-totop" />
             </button>
             <button
               class="button next"
-              :disabled="!!aggregate && activeIndex === aggregate?.tweets.length - 1"
+              :disabled="!tweets.length || activeIndex === tweets.length - 1"
               @click="nextSlide"
             >
               <i class="iconfont icon-tobottom" />
@@ -187,12 +193,12 @@
   }
 
   .twitter-content {
-    .userinfo,
+    .profile,
     .tweets {
       @include common-bg-module();
     }
 
-    .userinfo {
+    .profile {
       width: auto;
       height: 100%;
       padding: 0 $gap;
@@ -206,7 +212,7 @@
 
       .link {
         position: relative;
-        background-color: $twitter-primary;
+        background-color: $module-bg-darker-2;
         color: $white;
         opacity: 0.9;
         @include radius-box($radius-xs);
@@ -222,15 +228,16 @@
 
         .logo {
           position: absolute;
-          width: 50%;
-          height: 50%;
-          bottom: 0;
+          width: 38%;
+          height: 38%;
           right: 0;
+          bottom: 0;
           display: flex;
           justify-content: center;
           align-items: center;
+          font-size: $font-size-root;
           border-top-left-radius: $radius-xs;
-          background-color: rgba($twitter-primary, 0.9);
+          background-color: rgba($twitter-x-primary, 0.7);
         }
       }
 
@@ -278,11 +285,17 @@
       height: $twitter-height;
       @include radius-box($radius-mini);
 
-      ::v-deep(.swiper-wrapper) {
-        flex-direction: column;
-        &[style*='300ms'] {
-          .swiper-slide-active {
-            @include motion-blur-filter('vertical-small');
+      .tweets-empty {
+        min-height: auto;
+      }
+
+      .tweets-swiper {
+        ::v-deep(.swiper-wrapper) {
+          flex-direction: column;
+          &[style*='300ms'] {
+            .swiper-slide-active {
+              @include motion-blur-filter('vertical-small');
+            }
           }
         }
       }
@@ -310,7 +323,6 @@
             &.has-media {
               max-width: #{calc(100% - 40px)};
             }
-
             & + .medias {
               margin-left: $content-gap;
             }

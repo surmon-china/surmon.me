@@ -84,7 +84,8 @@
       #{--s-primary}: $npm-primary;
     }
     &.twitter {
-      #{--s-primary}: $twitter-primary;
+      #{--s-primary}: $color-link;
+      #{--brand-color}: $color-text-reversal;
     }
     &.github {
       #{--s-primary}: $github-primary;

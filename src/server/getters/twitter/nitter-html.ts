@@ -1,5 +1,5 @@
 import { XMLParser } from 'fast-xml-parser'
-import { SOTWE_SCRAPER_TOKEN } from '@/config/bff.yargs'
+import { WEB_SCRAPER_TOKEN } from '@/config/bff.yargs'
 import { isNodeDev } from '@/server/environment'
 import axios, { isAxiosError } from '@/server/services/axios'
 
@@ -22,7 +22,7 @@ export interface NitterTweet {
 const fetchNitterTweets = async (twitterUsername: string): Promise<string> => {
   try {
     const target = `https://nitter.net/${twitterUsername}?scroll=true`
-    const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`
+    const scraper = `http://api.scrape.do/?token=${WEB_SCRAPER_TOKEN}&url=${target}`
     // To avoid wasting request credits, tokens are not used in development environments
     const response = await axios.get<string>(isNodeDev ? target : scraper, { timeout: 30000 })
     return response.data
